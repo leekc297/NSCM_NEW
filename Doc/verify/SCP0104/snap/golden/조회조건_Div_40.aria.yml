@@ -1,0 +1,35 @@
+- text: Operation group
+- combobox: Electrode
+- button "Open"
+- text: Material
+- textbox
+- button
+- text: Active
+- combobox: ALL
+- button "Open"
+- text: Div
+- combobox: 81 Automotive Battery
+- button "Open"
+- text: Plan Month
+- combobox: "{YM}"
+- button "Open"
+- text: Ver.
+- combobox: "1"
+- button "Open"
+- textbox [disabled]: RP
+- text: Site
+- combobox "ALL"
+- button "Open"
+- text: Plant
+- combobox "ALL"
+- button "Open"
+- button "Search(F5)"
+- button
+- separator
+- text: Building
+- combobox "ALL"
+- button "Open"
+- text: Line
+- combobox "ALL"
+- button "Open"
+# visual-order: Operation group > Div > Site > Plant > Building > Line

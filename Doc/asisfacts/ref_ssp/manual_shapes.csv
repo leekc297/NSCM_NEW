@@ -1,0 +1,159 @@
+﻿slide,id,name,group,group_path,geom,x,y,w,h,text,fill,fill_raw
+1,2,제목 1,,,,217631,116729,7432431,593891,Master Flow,,
+1,5,직사각형 4,,,rect,236756,233105,10752822,6293530,,,
+1,12,자유형: 도형 11,164,164,,5152490,2431608,2065064,1032532,6. Project Route(생산지 설정),70AD47,"schemeClr:accent6(lumMod=20000,lumOff=80000)"
+1,14,자유형: 도형 13,164,164,,5152490,1207182,2065064,1032532,5. Plant Site(생산 도시),ED7D31,"schemeClr:accent2(lumMod=40000,lumOff=60000)"
+1,37,자유형: 도형 36,164,164,,2724826,2439673,2065064,1032532,4. MKT FCST(도착지 설정),FFC000,"schemeClr:accent4(lumMod=20000,lumOff=80000)"
+1,39,자유형: 도형 38,164,164,,353567,1253169,2065064,1032532,1. Sales Site(도착 도시),FFC000,"schemeClr:accent4(lumMod=20000,lumOff=80000)"
+1,41,자유형: 도형 40,164,164,,360810,2447230,2065064,1032532,2. Sales Site / Project Model,FFC000,"schemeClr:accent4(lumMod=20000,lumOff=80000)"
+1,51,자유형: 도형 50,164,164,,353567,3635551,2065064,1032532,3. Sales Price,FFC000,"schemeClr:accent4(lumMod=20000,lumOff=80000)"
+1,56,자유형: 도형 55,164,164,,5152490,3656034,2065065,1032532,7. Distribution Route / (출발도시/도착도시/ / 운송수단/항차/LT),4472C4,"schemeClr:accent5(lumMod=20000,lumOff=80000)"
+1,70,사각형: 둥근 모서리 69,69,164>69,roundRect,7587711,1207182,2065064,1032532,,4472C4,"schemeClr:accent5(lumMod=20000,lumOff=80000)"
+1,71,사각형: 둥근 모서리 4,69,164>69,rect,7617953,1237424,2004580,972048,"8. BOD    (생산 Site, 도착 Site,     운송수단, 인코텀즈)",,
+1,73,사각형: 둥근 모서리 72,72,164>72,roundRect,7610396,3635359,2065064,1032532,,44546A,"schemeClr:tx2(lumMod=60000,lumOff=40000)"
+1,74,사각형: 둥근 모서리 4,72,164>72,rect,7640638,3665601,2004580,972048,9. BOD ITEM  (Item별 BOD),,
+1,76,사각형: 둥근 모서리 75,75,164>75,roundRect,9921499,2431608,2065064,1032532,,,
+1,77,사각형: 둥근 모서리 4,75,164>75,rect,9951741,2461850,2004580,972048,10. SSP / Shipment Plan,,
+1,153,사각형: 둥근 모서리 152,152,168>152,roundRect,360810,6094643,259050,158502,,5B9BD5,"srgbClr:5B9BD5(lumMod=20000,lumOff=80000)"
+1,154,TextBox 153,152,168>152,rect,608319,6086254,939681,215444,물류기획팀 관리,,
+1,156,사각형: 둥근 모서리 155,155,168>155,roundRect,360810,5478653,259050,158502,,FFC000,"srgbClr:FFC000(lumMod=20000,lumOff=80000)"
+1,157,TextBox 156,155,168>155,rect,608319,5470264,837089,215444,마케팅팀 관리,,
+1,159,사각형: 둥근 모서리 158,158,168>158,roundRect,360810,5889313,259050,158502,,70AD47,"srgbClr:70AD47(lumMod=20000,lumOff=80000)"
+1,160,TextBox 159,158,168>158,rect,608319,5880924,745718,215444,SCM팀 관리,,
+1,162,사각형: 둥근 모서리 161,161,168>161,roundRect,360810,5683983,259050,158502,,ED7D31,"schemeClr:accent2(lumMod=40000,lumOff=60000)"
+1,163,TextBox 162,161,168>161,rect,608321,5675594,731288,215444,SCP PI 관리,,
+1,166,사각형: 둥근 모서리 165,165,168>165,roundRect,360810,6299974,259050,158502,,44546A,"schemeClr:tx2(lumMod=60000,lumOff=40000)"
+1,167,TextBox 166,165,168>165,rect,608320,6291585,976549,215444,시스템 자동 설정,,
+1,169,TextBox 168,,,rect,9705526,1253169,2405081,711071,Shipment Change Request의 New로 입력 필요 시 / BOD 등록이 필수 임 / From /To 신규 등록 건(Status : Required)에 대해서 / 물류기획팀에서 BOD를 등록 완료(Status : Completed) 가능,,
+1,47,실행 단추: 앞으로 또는 다음으로 이동 46,,,actionButtonForwardNext,2042345,1327255,251670,251670,,,
+1,48,실행 단추: 앞으로 또는 다음으로 이동 47,,,actionButtonForwardNext,2093928,2541981,251670,251670,,,
+1,49,실행 단추: 앞으로 또는 다음으로 이동 48,,,actionButtonForwardNext,2093928,3715493,251670,251670,,,
+1,50,실행 단추: 앞으로 또는 다음으로 이동 49,,,actionButtonForwardNext,4451445,2510399,251670,251670,,,
+1,52,실행 단추: 앞으로 또는 다음으로 이동 51,,,actionButtonForwardNext,6876153,1262897,251670,251670,,,
+1,53,실행 단추: 앞으로 또는 다음으로 이동 52,,,actionButtonForwardNext,6876153,2510399,251670,251670,,,
+1,54,실행 단추: 앞으로 또는 다음으로 이동 53,,,actionButtonForwardNext,6876153,3665601,253982,242103,,,
+1,55,실행 단추: 앞으로 또는 다음으로 이동 54,,,actionButtonForwardNext,9318459,1262897,251670,251670,,,
+1,57,실행 단추: 앞으로 또는 다음으로 이동 56,,,actionButtonForwardNext,9330561,3686277,251670,251670,,,
+2,2,제목 1,,,,,,,,Sales Site,,
+2,4,오각형 3,,,homePlate,3849561,620688,1528615,252000,기준정보 관리,000000,schemeClr:tx1
+2,6,오각형 5,,,homePlate,5444816,620688,1528615,252000,수요계획 수립,FFFFFF,schemeClr:bg1(lumMod=85000)
+2,7,오각형 6,,,homePlate,7040070,620688,1528615,252000,매출계획 산출,FFFFFF,schemeClr:bg1(lumMod=85000)
+2,8,오각형 7,,,homePlate,8635324,620688,1528615,252000,수요관리 리포트,FFFFFF,schemeClr:bg1(lumMod=85000)
+2,9,직사각형 8,,,rect,3118403,1124744,531751,1008112,Sales / Site,000000,schemeClr:tx1
+2,10,직사각형 9,,,rect,3118403,2276872,531751,1008112,Model / Mapping,FFFFFF,schemeClr:bg1(lumMod=85000)
+2,18,직사각형 17,,,rect,8723011,2026665,3235759,4210649,"Sales Site / ① Sales Site 생성 / - Division, Sold-To Customer, Country, City / 선택 후 저장. [Sales Site 자동 생성] / - Division, Sold Customer의 구분으로 조직, / 그룹 별 권한 관리 가능 / ② Sales Customer 매핑 / - Sales Site와 Sold-To, Ship-To 정보 매핑. / - Sold-To : Ship-To = 1 : N 매핑시 Rep 컬럼을   통해 대표 Ship-To를 설정함 / ③ Sales Location 매핑 / - Sales Site : Location Mapping 관리 / ④ Sales Bucket / - Sales Site의 Incoterms 조건 설정과 Bucket / (주별 수요 수량 Split 단위) 정보 설정",,
+2,20,직사각형 19,,,rect,3792410,2029024,4895202,4208288,,,
+2,21,타원 20,,,ellipse,3792411,2172370,211015,228600,1,,
+2,23,직사각형 22,,,rect,3847659,2469086,4744993,1491049,,,
+2,24,타원 23,,,ellipse,3796212,3980574,211015,228600,2,,
+2,25,직사각형 24,,,rect,3828648,4236099,4414215,317160,,,
+2,26,타원 25,,,ellipse,3777201,4553103,211015,228600,3,,
+2,28,직사각형 27,,,rect,3809637,4808628,4414215,469558,,,
+2,33,타원 32,,,ellipse,3773398,5282155,211015,228600,4,,
+2,34,직사각형 33,,,rect,3805834,5537680,4414215,469558,,,
+2,32,실행 단추: 홈으로 이동 31,,,actionButtonHome,11558736,102865,406743,406743,,,sysClr:window
+3,4,오각형 3,,,homePlate,3866339,620688,1528615,252000,기준정보 관리,000000,schemeClr:tx1
+3,6,오각형 5,,,homePlate,5461763,620688,1528615,252000,수요계획 수립,FFFFFF,schemeClr:bg1(lumMod=85000)
+3,7,오각형 6,,,homePlate,7057018,620688,1528615,252000,매출계획 산출,FFFFFF,schemeClr:bg1(lumMod=85000)
+3,8,오각형 7,,,homePlate,8652272,620688,1528615,252000,수요관리 리포트,FFFFFF,schemeClr:bg1(lumMod=85000)
+3,9,직사각형 8,,,rect,3135181,1124744,531751,1008112,Sales / Site,FFFFFF,schemeClr:bg1(lumMod=85000)
+3,10,직사각형 9,,,rect,3135181,2276872,531751,1008112,Model / Mapping,000000,schemeClr:tx1
+3,18,직사각형 17,,,rect,8739789,2026665,3235759,4210649,"Sales Site Project Model / ① Sales Site Model 매핑 정보 생성 / - Cust Group, End Customer, Owner, / Sales Site, Model, Cust Group Detail, Application, / Channel, Currency, Active 입력 후 저장.",,
+3,20,직사각형 19,,,rect,3809188,2029024,4895202,4208288,,,
+3,32,타원 31,,,ellipse,3823368,2204194,212277,237026,1,,
+3,36,직사각형 35,,,rect,3878615,2500911,4695602,352027,,,
+3,22,실행 단추: 홈으로 이동 21,,,actionButtonHome,11558736,102865,406743,406743,,,sysClr:window
+3,23,제목 1,,,rect,399135,113438,2654106,453183,Sales Site Project Model,,
+4,4,오각형 3,,,homePlate,3816004,620688,1528615,252000,기준정보 관리,FFFFFF,schemeClr:bg1(lumMod=85000)
+4,6,오각형 5,,,homePlate,5411260,620688,1528615,252000,수요계획 수립,FFFFFF,schemeClr:bg1(lumMod=85000)
+4,7,오각형 6,,,homePlate,7006515,620688,1528615,252000,매출계획 산출,000000,schemeClr:tx1
+4,8,오각형 7,,,homePlate,8601769,620688,1528615,252000,수요관리 리포트,FFFFFF,schemeClr:bg1(lumMod=85000)
+4,10,직사각형 9,,,rect,3084846,1124744,531751,1008112,Sales / Price,000000,schemeClr:tx1
+4,21,직사각형 20,,,rect,8689456,2026667,3235759,4210649,"Sales Price / ② Sales Price 생성 / - Team, End Customer, Sales Site, Model / Incoterms, FCST Type 등 노란색 활성화 부분         설정 후 저장 / ③ Sales Price 재계산 / - Exchange Rate가 변경됐다면 Set Price를          Click하면 재 설정 기준으로 Currency별 값    재 계산됨. / ④ Sales Plan 반영 / - Sales Price가 Sales Plan의 매출액(Sales AMT)    산출 시 반영됨",,
+4,32,직사각형 31,,,rect,3758853,2029024,4895202,4208288,,,
+4,33,직사각형 32,,,rect,3839237,3062744,4762531,435159,,,
+4,34,타원 33,,,ellipse,3816004,2802006,211015,228600,2,,
+4,36,타원 35,,,ellipse,7604735,2768352,211015,228600,3,,
+4,38,타원 37,,,ellipse,8269422,2768352,211015,228600,4,,
+4,40,직사각형 39,,,rect,3084846,2276872,531751,1008112,Sales / Plan,FFFFFF,schemeClr:bg1(lumMod=85000)
+4,28,실행 단추: 홈으로 이동 27,,,actionButtonHome,11558736,93137,406743,406743,,,sysClr:window
+4,29,제목 1,,,rect,399135,113438,2654106,453183,Sales Price,,
+5,2,제목 1,,,,249369,116683,3559802,453183,수요계획(MKT FCST) 수립(1/2),,
+5,4,오각형 3,,,homePlate,3832783,620688,1528615,252000,기준정보 관리,FFFFFF,schemeClr:bg1(lumMod=85000)
+5,6,오각형 5,,,homePlate,5428207,620688,1528615,252000,수요계획 수립,000000,schemeClr:tx1
+5,7,오각형 6,,,homePlate,7023463,620688,1528615,252000,매출계획 산출,FFFFFF,schemeClr:bg1(lumMod=85000)
+5,8,오각형 7,,,homePlate,8618717,620688,1528615,252000,수요관리 리포트,FFFFFF,schemeClr:bg1(lumMod=85000)
+5,10,직사각형 9,,,rect,3101625,1124744,531751,1008112,MKT / FCST,000000,schemeClr:tx1
+5,18,직사각형 17,,,rect,8706234,2026667,3235759,4210649,"MKT FCST 조회/수정 / ① MKT FCST 관리단위 기준인 End Customer, / Sales-Site, Model, Incoterms, 수책 구분, / FCST Type 기준으로 값 조회 및 수정이 가능함. / ② Period : MKT FCST 조회/수정하고자 하는 구간을 / 변경해서 조회 가능함. 과거구간에 대한 FCST는 / 수정이 불가능함. / ③ Bucket : 결과 Data에 Bucket을 Daily–Weekly– / Monthly로 조회 필요 없이 Grid 결과값이 변경됨. / ④ Sum : 결과값에 Sum Column을 숨기거나 표시하는 / 기능을 수행 / ⑤ Edit 기능으로 MKT FCST에 값을 수정 가능함. / 수정된 값은 Site 별 Bucket Conversion Rule에 / 따라서 Daily로 자동 Split됨. / ※ RTF Measure는 SCP Open 전까지 Edit 가능하며, / 추후 불가능하게 변경 예정임.",,
+5,53,직사각형 52,,,rect,3775632,2029024,4895202,4208288,,,
+5,66,타원 65,,,ellipse,4821073,2636912,208150,228600,1,,
+5,67,타원 66,,,ellipse,7754449,2060848,208150,228600,2,,
+5,68,타원 67,,,ellipse,6890353,2060848,208150,228600,3,,
+5,69,타원 68,,,ellipse,6757415,2492896,208150,228600,4,,
+5,70,타원 69,,,ellipse,5760381,3212976,208150,228600,5,,
+5,22,실행 단추: 홈으로 이동 21,,,actionButtonHome,11558736,68819,406743,406743,,,sysClr:window
+5,23,TextBox 22,,,rect,226181,951503,3130985,4247317,"MKT FCST가 입력이 안되어 있어서 발생하는Case가 많습니다. / 임시 출하라고 하더라도, 나머지 기준정보등을만들기 위해서 도착지에 대한 설정을 해야 하므로입력해줘야 합니다. / 자주 받는 문의는 다음과 같습니다. Q. 임시로 발생한 인코텀즈인데 등록해야 하나요?A. 네 등록해야 BOD 생성이 됩니다. Q. 지난주에 입력해놓은 MKT FCST인데 사라졌어요.A. 다른 기준정보들은 미래구간만 봅니다. Q. MKT FCST가 입력이 안되요.A. 아래 Manual인 Sales Site Project Model과      Sales Site, Sales Price등을 확인해주세요Q. MKT FCST를 입력했는데, Project Route에서     검색할 수 없다고 해요.A. Sales Site를 열어서 VMI Y인지 확인해봅니다.      VMI가 Y이면 VMI In Request를 등록해줍니다.",,
+6,2,제목 1,,,,266147,116683,3559802,453183,수요계획(MKT FCST) 수립(2/2),,
+6,4,오각형 3,,,homePlate,3832783,620688,1528615,252000,기준정보 관리,FFFFFF,schemeClr:bg1(lumMod=85000)
+6,6,오각형 5,,,homePlate,5428039,620688,1528615,252000,수요계획 수립,000000,schemeClr:tx1
+6,7,오각형 6,,,homePlate,7023293,620688,1528615,252000,매출계획 산출,FFFFFF,schemeClr:bg1(lumMod=85000)
+6,8,오각형 7,,,homePlate,8618547,620688,1528615,252000,수요관리 리포트,FFFFFF,schemeClr:bg1(lumMod=85000)
+6,10,직사각형 9,,,rect,3101625,1124744,531751,1008112,MKT / FCST,000000,schemeClr:tx1
+6,18,직사각형 17,,,rect,8706234,2026667,3235759,4210649,"MKT FCST 추가 / Edit Mode에서 Insert 기능을 사용하여 신규 MKT FCST 입력 가능함. / ① Team : 해당 소속팀 선택 / ② End-Customer : End-Customer 선택. / ③ Sales-Site : Sales-Site 선택. / ④ Model : 더블 클릭 후 Pop-Up 창을 통해 모델 선택. / ⑤ Incoterms : EXW, FOB, DDP등 거래조건 선택. / ⑥ FCST Type : 양산, 유/무상 Sample, A/S 등 선택. / ⑦ Customs Handbook : 수책 여부 선택. / ⑧ Measure : CUST FCST, MKT FCST, / RTF 선택 가능. / ※ RTF Measure는 SCP Open 전까지 Edit 가능하며, / 추후 불가능하게 변경 예정임.",,
+6,53,직사각형 52,,,rect,3775632,2029024,4895202,4208288,,,
+6,40,타원 39,,,ellipse,4298067,3416424,211015,228600,1,,
+6,42,타원 41,,,ellipse,4763348,3416424,211015,228600,2,,
+6,43,타원 42,,,ellipse,5162163,3416424,211015,228600,3,,
+6,44,타원 43,,,ellipse,5693913,3416424,211015,228600,4,,
+6,45,타원 44,,,ellipse,6150583,3416424,211015,228600,5,,
+6,30,타원 29,,,ellipse,6416458,3416424,211015,228600,6,,
+6,31,타원 30,,,ellipse,6682335,3416424,211015,228600,7,,
+6,32,타원 31,,,ellipse,6936602,3416424,211015,228600,8,,
+6,28,실행 단추: 홈으로 이동 27,,,actionButtonHome,11558736,93137,406743,406743,,,sysClr:window
+7,2,제목 1,,,,,,,,Plant Site,,
+7,6,직사각형 5,,,rect,8036754,1649990,3937114,4027999,"● Plant Site Master 정보 조회 및 수정 / 조회조건(Division, Plant/Vendor, Plant Site, Outsourcing, Valid) 선택 후 Plant Site 정보 조회 / 그리드 목록을 더블클릭하여 Location, Customer, Location (OSP)목록을 조회 / Location : 상단 그리드 더블클릭으로 선택 시 하단 그리드 Location에 정보가 표시되고 사용자가 수작업으로 데이터 추가 할 수 있음. Storage 값 입력하면 앞 입력된 Building code ~ Elctrode Type에 기 입력된 값은 삭제된다. / Edit버튼을 클릭하여 그리드를 수정 모드로 변경 / 신규 입력이 필요할 경우 Insert버튼 클릭 (외주 Packer는 자동 생성이 되지 않으므로 수작업으로 Add 하여야 함) / ※ 필수조회 조건 : N/A",,
+7,8,직사각형 7,,,rect,2695271,1652351,5303136,4027999,,,
+7,12,타원 11,,,ellipse,7112523,2536779,228600,228600,1,,
+7,13,타원 12,,,ellipse,4580864,3314700,228600,228600,2,,
+7,14,타원 13,,,ellipse,5746293,1936277,228600,228600,4,,
+7,15,타원 14,,,ellipse,3031843,4505468,228600,228600,3,,
+7,19,타원 18,,,ellipse,5995365,1936277,228600,228600,5,,
+7,16,실행 단추: 홈으로 이동 15,,,actionButtonHome,11558736,141777,406743,406743,,,
+8,2,제목 1,,,,,,,,Project Route,,
+8,6,직사각형 5,,,rect,8028365,1649990,3937114,4027999,"● Project, Item별로 대표 Plant Site를 등록 / 조회조건(Division, Project, Model, Period) 선택 후 Project별 Model 조회 / 그리드 목록을 더블클릭하여 BOM Explosion 목록을 조회 / BOM Explosion목록을 더블 클릭하여 Plant Assign 정보를 조회 / Plant Assign 그리드에서 Plant Site, Valid, Priority, From, To 정보를 입력한 후 저장 / Input All 버튼 클릭하면 일괄 등록할 수 있는 Pop up창 표시됨 / ※ 6) Priority, From, To 입력 규칙 / - Priority는 1부터 시작되고 Palnt Site중 반드시 1이 / 존재해야 함. / - 동일한 기간(From, To)에 Plant는 중복되면 안됨 / - 기간이 다를 경우 연속적으로 입력되어야 하며 중간에 / 빈 기간이 생기면 안됨. / - Plant/Item 0/2 이면은 0은 등록된 개수로 미등록을 의미     하고 BOM Not Exist는 BOM 미등록되어 있음을 의미함",,
+8,8,직사각형 7,,,rect,2686882,1652351,5303136,4027999,,,
+8,12,타원 11,,,ellipse,4687026,2545951,228600,228600,1,,
+8,13,타원 12,,,ellipse,3544026,3435388,228600,228600,2,,
+8,14,타원 13,,,ellipse,3421930,4724184,228600,228600,3,,
+8,15,타원 14,,,ellipse,5477374,4496398,228600,228600,4,,
+8,19,타원 18,,,ellipse,7418518,4724184,228600,228600,6,,
+8,21,타원 20,,,ellipse,7212051,2545951,228600,228600,5,,
+8,16,실행 단추: 홈으로 이동 15,,,actionButtonHome,11558736,141777,406743,406743,,,
+8,18,TextBox 17,,,rect,226181,951503,2621230,3939540,"Project Route (신규 모델일 경우)발생하는 Case가 많습니다. / Project Route는 MKT FCST와 자재와 BOM이 확장되어 있어야 합니다. / MKT FCST의 경우, To-Site가 VMI일 경우에는 MKT FCST Measure가 아닌VMI In Request가 등록되어 있어야 합니다. / 등록 문의는 자동차/소형/ESS SCM팀담당자에 문의하세요. / 자주 받는 문의는 다음과 같습니다. Q. MKT FCST등록했는데     Project Route대상에 안나와요.A1. VMI 대상인지 확인합니다.      VMI라면 VMI In Request가 있어야      합니다.A2. BOM이 생성되어 있는지,      자재 확장이 되어 있는지      확인 부탁 드립니다.",,
+9,2,제목 1,,,,,,,,Distribution Route,,
+9,6,직사각형 5,,,rect,8019975,1649990,3937114,4027999,"● From ~ To City 기준으로 수행되는 Port와 소요 기간을 등록 / 조회조건(From Country, City, To City 등) 선택 후 조회 / 수정 또는 입력이 필요할 경우 Edit Click 후 수정하고 입력 필요시 Insert(F8) 후 입력하고 Save한다.  출발 가능한 일자 관리 / 운송 모드 (SEA, AIR, TRK 등) / BOD 정보 수정 변경시 Mass Excel up-load 수정 가능 / ※ 입력 규칙 / - Priority는 1부터 시작되고 동일 From ~ TO City내의   동일 조건에서는 우선 순위가 겹치지 않아야 함 / ※ Distribution Route 가 등록된 건에 대해서 BOD Master를 설정 할 수 있으며, 해당 기준으로 Incoterms기준 L/T 계산됨 / ※ 정보 관리 주관 : 전지 물류 기획팀 (이상달 선임)",,
+9,8,직사각형 7,,,rect,2678492,1652351,5303136,4027999,,,
+9,12,타원 11,,,ellipse,2710775,2459312,228600,228600,1,,
+9,13,타원 12,,,ellipse,2939375,3757860,228600,228600,2,,
+9,14,타원 13,,,ellipse,6072146,1884289,228600,228600,3,,
+9,16,타원 15,,,ellipse,6453146,2560521,228600,228600,4,,
+9,17,실행 단추: 홈으로 이동 16,,,actionButtonHome,11558736,141777,406743,406743,,,
+10,2,제목 1,,,,,,,,BOD,,
+10,6,직사각형 5,,,rect,8036753,1649990,3937114,4027999,"● BOD 정보 조회 및 등록,수정 / 조회조건(Division, From Site, To Site, Incoterms, Trans Mode, Input Status, Valid) 선택 후 Distribution Route  정보 조회 / Edit버튼을 클릭하여 그리드를 수정 모드로 변경 (Priority, BOD Valid 수정 가능) / 신규 입력이 필요할 경우 Insert버튼 클릭 (Input Status 가 Completed 인 경우만 가능) / 4) Route Count 가 0인 경우는 Distribution Route가     없으므로 물류에 요청하여 등록하게 하여야 함 / 5) Required 는 BOD를 등록하지 않은 것으로 반드시    Planning 전에 확인하고 없는 것은 사전 등록하여야 함 / (Required 대상은 MKT FCST의 신규 Sales Site에 대해서 / 선정되며, 해당 From, To city에 대해 Distribution Route에     등록이 안되어 있는 경우 Distribution Route 등록이 선행     되어야 함) / ※ 필수조회 조건 : Division / ※ 정보 관리 주관 : 전지 물류 기획팀 (이상달 선임)",,
+10,8,직사각형 7,,,rect,2695270,1652351,5303136,4027999,,,
+10,12,타원 11,,,ellipse,6662146,2693727,228600,228600,1,,
+10,13,타원 12,,,ellipse,5420768,1936277,228600,228600,2,,
+10,14,타원 13,,,ellipse,5680644,1936277,228600,228600,3,,
+10,15,타원 14,,,ellipse,5968968,3064860,228600,228600,4,,
+10,17,타원 16,,,ellipse,4712696,2731224,228600,228600,4,,
+10,18,실행 단추: 홈으로 이동 17,,,actionButtonHome,11558736,141777,406743,406743,,,
+10,19,TextBox 18,,,rect,226181,951503,2597186,2862322,"BOD (임시 운송수단, 인코텀즈일 경우)발생하는 Case가 많습니다. / BOD는 MKT FCST와 Project Route가 등록되어 있어야 생성이 됩니다. / MKT FCST의 경우, To-Site가 VMI일 경우에는 MKT FCST Measure가 아닌VMI In Request가 등록되어 있어야 합니다 . / MKT FCST과 Project Route가 입력되어있으면 ④ Required에 자동 생성되며등록은 물류기획팀에서 확인 후 등록합니다. / 급한경우 물류기획팀에 문의하시기 바랍니다.",,
+11,2,제목 1,,,,,,,,BOD ITEM,,
+11,6,직사각형 5,,,rect,8028365,1649990,3937114,4027999,"● BOD ITEM 정보 조회 및 수정 / 조회조건 선택 후 정보 조회 / Edit버튼을 클릭하여 그리드를 수정 모드로 변경 / From, To, Priority, BOD Item Valid 항목 수정가능 / Insert 버튼을 통해 신규 기간 추가 / ※ From ~ To 신규 기간 추가시 기존에 등록된 기간과 연속해야 하고 중복되서는 안된다. / ( 기존 등록된 기간을 단축 후 신규 입력 가능 )",,
+11,8,직사각형 7,,,rect,2686882,1652351,5303136,4027999,,,
+11,12,타원 11,,,ellipse,2798925,2541745,228600,228600,1,,
+11,13,타원 12,,,ellipse,5405759,1914640,228600,228600,2,,
+11,14,타원 13,,,ellipse,6209782,3435387,228600,228600,3,,
+11,15,타원 14,,,ellipse,5672706,1906402,228600,228600,4,,
+11,3,실행 단추: 홈으로 이동 2,,,actionButtonHome,11558736,141777,406743,406743,,,
+11,16,TextBox 15,,,rect,226181,951503,2576346,2862322,"에러메시지가 발생하면 이 화면에목적지 (To Site)와 Item을 입력하셔서조회하세요. / Shipment Plan에 입력한 값과 BOD Item에 등록되어 있는 값이 달라서 오류가 나는 Case가 많습니다. / 여기에 등록되지 않은 경우 대 부분이다음 문제로 인하여 발생하오니차례대로 확인해주 세요. MKT FCST (신규 고객일 경우)Project Route (신규 모델일 경우)BOD (임시 운송수단, 인코텀즈일 경우)를 차례대로 확인합니다. / 위의 내용이 모두 입력되어 있으면30분에 한번씩 자동생성 합니다.",,

@@ -1,160 +1,187 @@
-﻿# SSP0015 화면 컴포넌트 매핑 (WinForms → React/Wijmo)
+﻿# SSP0015 웹 컴포넌트 매핑 (React + Wijmo)
 
-> 라벨은 props.csv의 LayoutControlItem.Text 또는 컨트롤 Text 원문입니다. props.csv가 잘려서 라벨을 확인하지 못한 항목은 '확인 필요'로 표기했습니다.
+## 1. 컨트롤 → React/Wijmo 매핑
 
-## 1. 화면 배치
+라벨은 props.csv의 원문이다. LayoutControlItem.Text 또는 컨트롤 Text를 그대로 옮겼다. props.csv가 일부 잘린 탓에 라벨을 못 찾은 항목은 **확인 필요**로 적었다.
 
-| 영역 | As-is | 크기 근거 | TO-BE 권장 |
-|---|---|---|---|
-| 조회조건 | usrConditionPanel1 (Dock Top, HidePanel 타입) > usrLayoutControl2 (Dock Top) | Size(1370,79) / (1370,73) | 접이식 SearchCondition 영역 |
-| 본문 | splitContainer1 (Dock Fill, **Orientation=Horizontal → 상/하 분할**) | Size(1370,570), SplitterDistance=301 | 상/하 Splitter |
-| 상단 패널(Panel1) | spdMain (Dock Fill) | 301 / 570 ≈ **52.8%** | 상단 Grid (시트 탭 2개) |
-| 하단 패널(Panel2) | usrLayoutControl3 (Dock Top, 높이 40) + spdDetail (Dock Fill, 높이 225) | 나머지 ≈ **47.2%** (spliter 두께 포함 정확 값 확인 필요) | 하단 Detail 조회조건 바 + 탭 Grid (시트 11개) |
-| 팝업 | SSP0015_ShipmentPSICommentsPopup | 크기 확인 필요 | Modal (Comments) |
+### 1-1. 조회조건 영역 (usrConditionPanel1 > usrLayoutControl2)
 
-## 2. 컨트롤 → 컴포넌트 매핑
-
-### 2-1. 상단 조회조건 (usrLayoutControl2)
-| As-is 컨트롤 | 유형 | 라벨(원문) | 크기 | TO-BE 후보 | 비고 |
-|---|---|---|---|---|---|
-| clbDivision | UsrCombo | `Division*` (lblCombo1) | 162×20 | ComboBox (필수) | 이름은 clb지만 타입은 UsrCombo. 변경 시 PlanDate / DayRange 갱신 |
-| cboPlanDate | UsrCombo | `Plan-date*` (PlanDate) | 150×20 | ComboBox (필수) | 공통코드 PlanDateShip. 변경 시 GetDayRange |
-| drpPeriod | UsrDateRangePicker | `Period*` (layoutControlItem6) | 205×20 | DateRange (필수) | 기본값은 SCM0001_GET_SCP_DAY_PERIOD |
-| clbPlantSite | UsrCheckedList | `From Site` (layoutControlItem7) | 189×21 | MultiSelect | 데이터 원천 확인 필요 (GetSSPInnerTable 가능성) |
-| cboBucketType | UsrCombo | `Bucket` (lblBucket) | 137×20 | ComboBox | DM0003_GET_BUCKET_TYPE_CODE. DAILY/WEEKLY/MONTHLY 컬럼 전환 |
-| chkSum | UsrCheckBox | `Sum` (Text) | 84×25 | CheckBox | Sum 컬럼 Visible 제어 |
-| btnMeasure | UsrButton | 라벨 없음 (layoutControlItem10) | 39×25 | IconButton | 클릭 시 InitSpread 재구성. Measure 선택 팝업 여부 확인 필요 |
-| txtItemId | UsrMultiLineEditor | `Model` (lblItemId) | 100×21 | MultiLine Text | |
-| btnItemId | UsrButton | 라벨 없음 (layoutControlItem2) | 39×24 | 팝업 버튼 | Model 선택 팝업으로 보이나 확인 필요 |
-| chkMyModel | UsrCheckBox | `My Model` / Checked=true / **Visible=false** | 110×23 | (숨김) | LayoutItem Text "layoutControlItem8" |
-| chkPartLeader | UsrCheckBox | `Part Leader` / **Visible=false** | 110×23 | (숨김) | |
-| chkTeamLeader | UsrCheckBox | `Team Leader` / **Visible=false** | 110×23 | (숨김) | |
-| chkDelegateeModel | UsrCheckBox | `Delegatee Model` / **Visible=false** | 136×23 | (숨김) | |
-| usrButton1 | UsrButton | 확인 필요 | 75×23 | — | parent 없음. 미사용 가능성 → 확인 필요 |
-
-### 2-2. 하단 Detail 조회 바 (usrLayoutControl3, Panel2 상단)
-| As-is 컨트롤 | 유형 | 라벨(원문) | 크기 | TO-BE 후보 |
+| 컨트롤 | AS-IS 유형 | 라벨(원문) | Size | TO-BE 후보 |
 |---|---|---|---|---|
-| drpPeriod2 | UsrDateRangePicker | `Shipment Date` (layoutControlItem11) | 197×20 | DateRange |
-| txtRequestor | UsrTextBox | LayoutItem `Requestor` (Text 원문 확인 필요) | 20×20 | Text |
-| btnRequestor | UsrButton | 라벨 없음 (layoutControlItem9) | 39×24 | 사용자 선택 팝업 버튼 |
+| clbDivision | UsrCombo (이름은 clb지만 유형은 Combo) | `Division*` (lblCombo1) | 162×20 | ComboBox (필수) |
+| cboPlanDate | UsrCombo | `Plan-date*` (PlanDate) | 150×20 | ComboBox (필수) |
+| drpPeriod | UsrDateRangePicker | `Period*` (layoutControlItem6) | 205×20 | DateRange (InputDate 2개) |
+| cboBucketType | UsrCombo | `Bucket` (lblBucket) | 137×20 | ComboBox |
+| chkSum | UsrCheckBox | `Sum` | 84×25 | CheckBox |
+| btnMeasure | UsrButton | 확인 필요 (Text 미추출) | 39×25 | Button (측정 항목 선택) |
+| clbPlantSite | UsrCheckedList | `From Site` (layoutControlItem7) | 189×21 | MultiSelect |
+| txtItemId | UsrMultiLineEditor | `Model` (lblItemId) | 100×21 | 멀티라인 입력 |
+| btnItemId | UsrButton | 확인 필요 | 39×24 | Button (Model 팝업) |
+| chkMyModel | UsrCheckBox | `My Model` (Checked=true, Visible=false) | 110×23 | 숨김 |
+| chkPartLeader | UsrCheckBox | `Part Leader` (Visible=false) | 110×23 | 숨김 |
+| chkTeamLeader | UsrCheckBox | `Team Leader` (Visible=false) | 110×23 | 숨김 |
+| chkDelegateeModel | UsrCheckBox | `Delegatee Model` (Visible=false) | 136×23 | 숨김 |
+| usrButton1 | UsrButton | 확인 필요 (부모 없음) | 75×23 | 확인 필요 |
+
+### 1-2. 상세 영역 조회조건 (splitContainer1.Panel2 > usrLayoutControl3)
+
+| 컨트롤 | AS-IS 유형 | 라벨(원문) | Size | TO-BE 후보 |
+|---|---|---|---|---|
 | clbResultType | UsrCheckedList | 확인 필요 | 104×21 | MultiSelect |
-| txtModel2 | UsrMultiLineEditor | 확인 필요 | 264×21 | MultiLine Text |
-| btnItemID2 | UsrButton | 확인 필요 | 39×25 | 팝업 버튼 |
+| txtRequestor | UsrTextBox | LayoutControlItem 이름은 `Requestor`, Text는 확인 필요 | 20×20 | Input |
+| btnRequestor | UsrButton | 확인 필요 | 39×24 | Button (사용자 팝업) |
+| txtModel2 | UsrMultiLineEditor | 확인 필요 | 264×21 | 멀티라인 입력 |
+| btnItemID2 | UsrButton | 확인 필요 | 39×25 | Button (Model 팝업) |
+| drpPeriod2 | UsrDateRangePicker | `Shipment Date` (layoutControlItem11) | 197×20 | DateRange |
 | drpPeriod3 | UsrDateRangePicker | 확인 필요 | 197×20 | DateRange |
-| txtLotID | UsrMultiLineEditor | 확인 필요 | 207×21 | MultiLine Text |
-| btnSearch | SimpleButton | `Search` | 47×25 | Button (Detail 시트별 조회) |
+| txtLotID | UsrMultiLineEditor | 확인 필요 | 207×21 | 멀티라인 입력 |
+| btnSearch | DevExpress SimpleButton | `Search` | 47×25 | Button (상세 시트 조회) |
 
-> layoutControlItem4 / 5 / 14 / 15 / 3 / 17의 Text와 Control 매핑은 props.csv가 잘려서 확인하지 못했습니다 → 확인 필요.
+### 1-3. Grid
 
-### 2-3. Grid
-| As-is | 유형 | TO-BE |
+| 컨트롤 | AS-IS | TO-BE 후보 |
 |---|---|---|
-| spdMain (+spdMain_Sheet1) | FpSpread, 시트 2 | Wijmo FlexGrid + 시트 탭, 3단 컬럼헤더, MergePolicy Always → allowMerging |
-| spdDetail (+spdDetail_Sheet1) | FpSpread, 시트 11 | Wijmo FlexGrid + 시트 탭 (탭별 Grid) |
+| spdMain | FpSpread (Panel1, Dock Fill, 1370×301) | Wijmo FlexGrid + 시트 탭 (PSI 시트 2개, 3단 헤더, 셀 병합) |
+| spdDetail | FpSpread (Panel2, Dock Fill, 1370×225) | Wijmo FlexGrid + 시트 탭 (Detail 시트 11개) |
 
-### 2-4. Comments 팝업 (SSP0015_ShipmentPSICommentsPopup)
-| As-is 컨트롤 | 유형 | TO-BE 후보 | 비고 |
+### 1-4. 팝업 SSP0015_ShipmentPSICommentsPopup
+
+| 컨트롤 | AS-IS 유형 | 라벨 | TO-BE 후보 |
 |---|---|---|---|
-| txtDivision_ID, txtFrom_Site, txtItem_ID, txtPlan_Date, txtDate, txtMeasure | UsrTextBox | ReadOnly Text (추정) | 라벨 원문 확인 필요 |
-| txtGap_Qty, txtBefore_Qty, txtProd_Qty, txtWHin_Qty, txtCurrent_Qty | UsrTextBox | Number Text | TextChanged 핸들러 있음 |
-| txtChange_Qty | UsrTextBox | Number Input | TextChanged + KeyPress(입력 제한으로 보이나 확인 필요) |
-| rtxComments | RichTextBox | TextArea | |
-| usrLabel1 | UsrLabel | Label | Text 확인 필요 |
-| btnButtonList | UsrButtonList | 버튼 그룹 (저장) | → SSP0015_SAVE_SHIPMENT_PSI_COMMENTS |
+| txtGap_Qty, txtBefore_Qty, txtProd_Qty, txtWHin_Qty, txtCurrent_Qty, txtChange_Qty | UsrTextBox | 확인 필요 (props.csv 잘림) | Input (수량, txtChange_Qty는 KeyPress로 입력 제한 — 내용 확인 필요) |
+| txtMeasure, txtFrom_Site, txtDivision_ID, txtDate, txtItem_ID, txtPlan_Date | UsrTextBox | 확인 필요 | 읽기전용 Input 후보 (ReadOnly 여부는 확인 필요) |
+| rtxComments | RichTextBox | 확인 필요 | TextArea |
+| usrLabel1 | UsrLabel | 확인 필요 | Label |
+| btnButtonList | UsrButtonList | – | 버튼 그룹 (저장 → `SSP0015_SAVE_SHIPMENT_PSI_COMMENTS`) |
 
-## 3. 시트별 Grid 컬럼 (grid_effective 기준)
+## 2. 화면 배치
 
-규칙: 메타 `DIVISION_ID` 빈값 = 전체, VISIBLE_FLAG/VALID_YN='Y', USER_SELECTABLE_FLAG='N' = 필수, DEFAULT_FLAG='Y' = 기본. **14개 division 모두 같은 결과**이므로 division 열은 생략했습니다.
+| 영역 | 근거(props.csv) | 크기와 비율 |
+|---|---|---|
+| 조회조건 패널 | usrConditionPanel1: Dock=Top, Size 1370×79, UsrPanelType=HidePanel / usrLayoutControl2: Dock=Top, 1370×73 | 상단 고정 (높이 79) |
+| 본문 분할 | splitContainer1: Dock=Fill, **Orientation=Horizontal**, Size 1370×570, **SplitterDistance=301** | **상/하 분할**. 상단 301 / 전체 570 = 약 52.8%. 하단은 나머지(약 47.2%)이며 스플리터 폭이 포함된다. 스플리터 폭은 미추출 |
+| 상단 Panel1 | spdMain Dock=Fill, 1370×301 | Main Grid |
+| 하단 Panel2 | usrLayoutControl3 Dock=Top 1370×40 + spdDetail Dock=Fill 1370×225 | 상세 조회조건(40) + Detail Grid(225) |
 
-### 3-1. `Shipment PSI(Mobility & IT)` — spdMain 시트 0 / META+코드연결 / 표시 10
-- 표시(기본): DIVISION_ID `Div`, FIGURE `Figure`, FROM_SITE_NM `From Site`, ITEM_ID `Model`, LT_DAY `Aging L/T`, MEASURE_NAME `Measure`, NICK_NAME `Nick Name`, PSI_NAME `PSI`, TYPE `TYPE`, YEILD `Yield(%)`
-- 숨김: FROM_SITE `Site`, LT_UPDATE_YN, MEASURE, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, SHIP_FROZEN
-- 코드: SetSheetHeaderColumn(헤더 3행), InitSpreadDateColumn(일자 컬럼 DB루프), SetSpreadColumn(Bucket/Sum), MergePolicy.Always
-- Measure 메타(SCM_MST_SHEET_MEASURE): 필수+기본 12 / 선택 1
+- 하단 내부 비율은 조회조건 40 : Grid 225이다(약 15% : 85%).
+- 301 + 40 + 225 = 566이고, 570과의 차이 4는 스플리터 폭으로 보인다. 스플리터 폭이 미추출이라 이것도 **확인 필요**하다.
 
-### 3-2. `Shipment PSI(Packer)` — spdMain 시트 1 / META+코드연결 / 표시 8
-- 표시: DIVISION_ID `Div`, FIGURE `Figure`, FROM_SITE_NM `From Site`, ITEM_ID `Model`, MEASURE `Measure`, NICK_NAME `Nick Name`, PSI_NAME `PSI`, TYPE `TYPE`
-- 숨김: FROM_SITE, LT_DAY, LT_UPDATE_YN, MEASURE_NAME, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, SHIP_FROZEN, YEILD
-- Mobility 시트와 다른 점: MEASURE를 표시하고 MEASURE_NAME은 숨김. LT_DAY / YEILD 숨김
-- Measure 메타: 6 / 0
-- SetSoNoColumnVisible: ichkbtn==1이면 Packer 시트 Width 80, 다른 시트 0 (반대 조건에서는 반대). 대상 컬럼명 확인 필요
+## 3. 시트별 Grid 컬럼
 
-### 3-3. `Shipment PSI(IT & Mobile)` — 메타 정의만 있고 코드 미참조(미사용 가능) / 표시 10
-- 표시: DIVISION_ID, FIGURE, FROM_SITE_NM, ITEM_ID, LT_DAY, MEASURE_NAME, NICK_NAME, PSI_NAME, TYPE, YEILD `Yeild(%)`
-- CreateSpread에서 생성되지 않습니다. TO-BE 이관 대상인지 확인 필요
+기준은 grid_effective.csv다. 모든 시트에서 14개 division의 값이 같아서 division별 표시 차이는 **없다**. "숨김"은 메타 VISIBLE_FLAG 기준이고, "→숨김"은 코드가 숨긴 것이다.
 
-### 3-4. `Shipment Confirm Detail` — spdDetail / META+코드연결 / 표시 40 (메타 필수+기본 39 — 차이 확인 필요)
-- 표시(기본): ATTRIBUTE10, attribute3 `PLM status`, attribute6 `OQC Result`, CHANGE_REASON_CODE `Change Reason`, CHANGE_REASON_DETAIL `Reason Detail`, CHANGE_REQ_NO `Change Request No`, CONFIRM_ID `Confirm/Plan ID`, DIVISION_ID `Division`, END_CUSTOMER, ERP_SO_NO `SO No`, ETA, ETD, Expected_Shipping_Date, FCST_TYPE, FROM_SITE_DESCRIPTION `From Site`, INCOTERMS, ITEM_ID `Model`, LT_DAY `L/T(Day)`, MODEL_USER `Model PIC`, MTK_OWNER `MKT Owner`, NICK_NAME, REMARKS, REMARKS2 `Building`, REMARKS3 `Customer Requirement`, REQUESTOR `Shipment Requestor`, RTF3 `RTF`, RTF4 `RTF ETD`, RTF5 `RTF QTY`, RTF6 `RTF Detail`, SHIPMENT_CONFIRM_QTY `Shipment Qty`, SHIPMENT_DATE, SHIPMENT_STATUS `Status`, SOLDTO_DESCRIPTION `Sold To Party`, TEAM, TO_SITE_DESCRIPTION `To Site`, TO_SITE_SHIPTO_CODE `Ship to`, TO_SITE_SOLDTO_CODE `Sold to`, TRANSPORT_MODE `Trans Mode`, UPDATED_BY, UPDATED_DATE
-- 기본 → 코드에서 숨김: SHIPTO_DESCRIPTION `Ship To Party`
-- 숨김(메타): BEFORE_QTY, BOD_ID, CHANGE_TYPE, CHECK_NEED_YN, CHK `ALL`, EDIT_MAIN, EDIT_REMARKS, ELECTRODE_TYPE, ELECTRODE_YN, ERP_STATUS, FROM_SITE, NEW_A_COUNTRY, NEW_A_PORT_CODE, NEW_BOD_ID, NEW_CUSTOMER_LT, NEW_D_COUNTRY, NEW_D_PORT_CODE, NEW_ETA, NEW_ETD, NEW_INCOTERMS, NEW_LT_DAY, NEW_ROUTE_ID, NEW_SHIPMENT_DATE `Shipment Date*`, NEW_TO_CITY, NEW_TO_COUNTRY, NEW_TRANSPORT_MODE, ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, PROJECT_CODE, PROJECT_NAME, TO_SITE
-- 코드: FindData_Detail / _btnSearch / _Packer_btnSearch에서 Visible=false 다수(대상 확인 필요). SpdDetail_CellClick 헤더 CheckBox 토글. TransMode / ShipToCodeByDivision 셀 콤보
-- 메타 별도 프로그램: `SSP0015_TEMP2`의 Shipment Confirm Detail 31컬럼(사용 여부 확인 필요)
+### 3-1. spdMain
 
-### 3-5. `Shipment Request Detail` — META+코드연결 / 표시 34 / 행높이 60
-- 표시: ATTRIBUTE3 `RTF`, ATTRIBUTE4 `RTF ETD`, ATTRIBUTE5 `RTF QTY`, ATTRIBUTE6 `RTF Detail`, BOD_ID, CHANGE_REQUEST_NO, DIVISION_ID `Div*`, EDIT_FLAG, END_CUSTOMER, ETA_DATE `ETA`, ETD_DATE `ETD`, EXPECTED_SHIP_DATE, FCST_TYPE `FCST Type*`, FROM_SITE `From Site*`, INCOTERMS `Incoterms*`, LAST_UPDATED_BY `Requestor`, LAST_UPDATED_DATE `Request Date`, LT_TOTAL `L/T(Day)`, MKT_OWMER `MKT Owner`, MODEL_ID `Model*`, MODEL_PIC, NICK_NAME, ORDER_TYPE_DETAIL, QTY `Qty*`, REMARK, REQUEST_ID `Confrim/Plan ID`, SHIPTO_CODE `Ship to*`, SHIPTO_NAME, SITE_DESCRIPTION `Plant Site`, SOLDTO_CODE `Sold to`, STATUS, TO_SITE `To Site*`, TR_MODE `Trans Mode*`, YYYYMMDD `Shipment Date*`
-- 원천: SSP0026_GET_REQUEST_DETAIL_PACK
+#### `Shipment PSI(Mobility & IT)` — META+코드연결, 표시 10
 
-### 3-6. `W/H stock` — META+코드연결 / 메타 필수+기본 19
-- 원천: SSP0015_GET_WH_STOCK. 컬럼 상세는 grid_effective.csv가 잘려 있음 → CSV 원문 확인 필요
+- **표시(기본)**: DIVISION_ID(Div), FIGURE(Figure), FROM_SITE_NM(From Site), ITEM_ID(Model), LT_DAY(Aging L/T), MEASURE_NAME(Measure), NICK_NAME(Nick Name), PSI_NAME(PSI), TYPE(TYPE), YEILD(Yield(%))
+- **숨김**: FROM_SITE(Site), LT_UPDATE_YN, MEASURE, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, SHIP_FROZEN
+- **코드 →숨김**: SHIP_TO, SHIPTO_DESCRIPTION (시트 연결이 맞는지 확인 필요, analysis.md 6장 4번)
+- **코드 추가**:
+  - 날짜 컬럼: InitSpreadDateColumn이 SCP0009_GET_SHEET_CALENDAR_3SPAN 결과로 만든다. `B_` 컬럼은 숨김 Text, 그 밖은 Num(폭 70)이며 SAT는 Blue, SUN은 Red다.
+  - Bucket/Sum 표시 규칙: SetSpreadColumn(D_/W_/M_)
+  - MergePolicy.Always
+- **Measure 메타**: SCM_MST_SHEET_MEASURE 12/1 (필수 12, 선택 1)
 
-### 3-7. `W/H stock Detail` — META+코드연결 / 메타 25
-- 컬럼 상세 확인 필요 (CSV 잘림). 원천 SP도 Fact Pack 흐름에 따로 표시되지 않음 → 확인 필요
+#### `Shipment PSI(Packer)` — META+코드연결, 표시 8
 
-### 3-8. `Hold stock` — META+코드연결 / 표시 10
-- 표시: DIVISION_ID `Div`, FROM_SITE_NM `From Site`, HOLD_QTY `Amend Qty*`, HOLD_YYYYMMDD `Start Date`, ITEM_ID `Model`, LAST_UPDATE_DATE, LAST_UPDATED_BY, NICK_NAME, RELEASE_YYYYMMDD `End Date*`, REMARKS
-- 숨김: FROM_SITE, HOLD_ID
-- 원천 SSP0015_GET_BLOCK_STOCK, 저장 SSP0015_SAVE_BLOCK_STOCK_DATA
+- **표시**: DIVISION_ID(Div), FIGURE(Figure), FROM_SITE_NM(From Site), ITEM_ID(Model), MEASURE(Measure), NICK_NAME(Nick Name), PSI_NAME(PSI), TYPE(TYPE)
+- **숨김**: FROM_SITE, LT_DAY, LT_UPDATE_YN, MEASURE_NAME, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, SHIP_FROZEN, YEILD
+- **코드**:
+  - 날짜 컬럼 DB루프, SetSpreadColumn, MergePolicy.Always
+  - SetSoNoColumnVisible이 이 시트이면 Width 80 또는 0을 준다(ichkbtn에 따라 다름)
+- **Measure 메타**: 6/0
 
-### 3-9. `Hold stock Detail` — META+코드연결 / 표시 10
-- Hold stock과 같은 컬럼이며, 라벨만 다름: `Amend Qty`, `End Date` (필수 `*` 없음 → 조회 전용으로 보이나 확인 필요)
+#### `Shipment PSI(IT & Mobile)` — 메타 정의만 있고 코드는 참조하지 않음(미사용 가능), 메타상 표시 10
 
-### 3-10. `Stock Detail` — META+코드연결 / 표시 26 (sheet 변수 shtMesStock)
-- 표시: AVAILABLE_YN, DIVISION_ID, FCS_HOLD_YN, FCS_SPECIAL_QTY, FROM_SITE `Site`, ITEM_ID, JUDG_VLD_DATE, LAST_UPDATE_DATE, LAST_UPDATED_BY, LONGTERM_HOLD_YN, LOT_ID, LOT_QTY_FCS, LOT_QTY_MES, LOT_QTY_MES_NG, LOT_QTY_TOT, LOT_TYPE, MES_CHANGE_STATUS, MES_HOLD_RELEASE, MES_HOLD_YN, NICK_NAME, OWMS_STOCK_QTY, QMS_HOLD_RELEASE, QMS_HOLD_YN, REMARKS, USER_MOD_RELEASE_DATE `User Modified Release Date*`, YYYYMMDD_LOT_ID_APPLIED_LT `D Day(Expected)`
-- 원천 SSP0015_GET_MES_STOCK, 저장 SSP0015_SAVE_MES_STOCK
+- 컬럼 구성은 Mobility & IT와 같고 라벨만 `Yeild(%)` 철자가 다르다.
+- **Measure 메타**: 12/1
+- 코드에서 AddSheet하지 않는다. TO-BE에 넣을지는 **확인 필요**하다.
 
-### 3-11. `MES Stock Detail` — 메타 정의만 있고 코드 미참조(미사용 가능) / 표시 24
-- Stock Detail에서 LONGTERM_HOLD_YN, LOT_QTY_MES_NG를 뺀 24컬럼. TO-BE 이관 대상인지 확인 필요
+### 3-2. spdDetail
 
-### 3-12. `SCS Stock Detail` — META+코드연결 / 표시 9
-- 표시: CUTOFF_DATE, DIVISION_ID, HOLD_YN `Hold Y/N`, LAST_UPDATE_DATE `Update Date`, MODEL_ID `Model`, PLANT_ID, PLANT_NAME, PROD_DATE `Production Date`, QTY
-- 원천 SSP0015_GET_SCS_STOCK
+#### `Shipment Confirm Detail` — META+코드연결, 표시 40 (메타 규칙 집계는 39/0)
 
-### 3-13. `Stock Location Detail` — META+코드연결 / 메타 20
-- 일부 확인: AVAILABLE_DATE, AVAILABLE_QTY, COMPANY_ID, CUTOFF_DATE, DEFECT_QTY `Deffect Qty`, DIVISION_ID … 나머지는 CSV 잘림 → 확인 필요
-- 원천 SSP0015_GET_STOCK_LOCATION_DETAIL (+ SSP0002_GET_NERP_CODE)
+- **표시**: ATTRIBUTE10, attribute3(PLM status), attribute6(OQC Result), CHANGE_REASON_CODE(Change Reason), CHANGE_REASON_DETAIL(Reason Detail), CHANGE_REQ_NO(Change Request No), CONFIRM_ID(Confirm/Plan ID), DIVISION_ID(Division), END_CUSTOMER(End Customer), ERP_SO_NO(SO No), ETA, ETD, Expected_Shipping_Date(Expected Shipping Date), FCST_TYPE(FCST Type), FROM_SITE_DESCRIPTION(From Site), INCOTERMS(Incoterms), ITEM_ID(Model), LT_DAY(L/T(Day)), MODEL_USER(Model PIC), MTK_OWNER(MKT Owner), NICK_NAME(Nick Name), REMARKS(Remarks), REMARKS2(Building), REMARKS3(Customer Requirement), REQUESTOR(Shipment Requestor), RTF3(RTF), RTF4(RTF ETD), RTF5(RTF QTY), RTF6(RTF Detail), SHIPMENT_CONFIRM_QTY(Shipment Qty), SHIPMENT_DATE(Shipment Date), SHIPMENT_STATUS(Status), SOLDTO_DESCRIPTION(Sold To Party), TEAM(Team), TO_SITE_DESCRIPTION(To Site), TO_SITE_SHIPTO_CODE(Ship to), TO_SITE_SOLDTO_CODE(Sold to), TRANSPORT_MODE(Trans Mode), UPDATED_BY(Updated By), UPDATED_DATE(Updated Date)
+- **기본이지만 코드가 →숨김**: SHIPTO_DESCRIPTION(Ship To Party)
+- **숨김**: BEFORE_QTY, BOD_ID, CHANGE_TYPE, CHECK_NEED_YN, CHK(ALL), EDIT_MAIN, EDIT_REMARKS, ELECTRODE_TYPE, ELECTRODE_YN, ERP_STATUS, FROM_SITE, NEW_A_COUNTRY, NEW_A_PORT_CODE, NEW_BOD_ID, NEW_CUSTOMER_LT, NEW_D_COUNTRY, NEW_D_PORT_CODE, NEW_ETA, NEW_ETD, NEW_INCOTERMS, NEW_LT_DAY, NEW_ROUTE_ID, NEW_SHIPMENT_DATE(Shipment Date*), NEW_TO_CITY, NEW_TO_COUNTRY, NEW_TRANSPORT_MODE, ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, PROJECT_CODE, PROJECT_NAME, TO_SITE
+- **코드**:
+  - FindData_Detail, FindData_Detail_btnSearch, FindData_Detail_Packer_btnSearch에 Visible=false가 있다. 대상 컬럼은 확인 필요하다.
+  - SpdDetail_CellClick이 헤더 CheckBox로 전체를 선택하거나 해제한다.
+  - TransMode와 ShipToCodeByDivision 콤보를 공통코드에서 채운다.
+- 별도 메타 프로그램 `SSP0015_TEMP2`에 같은 이름의 시트(31/0)가 있다. 용도는 확인 필요하다.
 
-### 3-14. `WH In Plan Detail` — META+코드연결 / 메타 11
-- **`drPgmAuthId != null`일 때만 시트를 생성**(권한 의존). 컬럼 상세는 확인 필요
-- 원천 SSP0015_GET_SHIPMENT_PSI_COMMENTS
+#### `Shipment Request Detail` — META+코드연결, 표시 34
 
-### 3-15. `Shipment Result` — META+코드연결 / 메타 19 → 표시 17
-- 표시: CONFIRM_ID, DIVISION_ID, END_CUSTOMER, ERP_SO_NO `SO No`, ETA_DATE, ETD_DATE, FROM_SITE, INCOTERMS, ITEM_ID, NICK_NAME, QTY `Shipment Qty`, SHIP_TYPE, TEAM, TO_SITE, TRANSPORT_MODE, TYPE `Status`, YYYYMMDD `Shipment Date`
-- 코드 숨김(4991/4992): SHIP_TO `Ship to`, SHIPTO_DESCRIPTION `Ship to Name`
-- 원천 SSP0015_GET_SHIPMENT_RESULT / SSP0015_GET_SHIPMENT_RESULT_PACKER(SCS)
+- **표시**: ATTRIBUTE3(RTF), ATTRIBUTE4(RTF ETD), ATTRIBUTE5(RTF QTY), ATTRIBUTE6(RTF Detail), BOD_ID, CHANGE_REQUEST_NO, DIVISION_ID(Div*), EDIT_FLAG, END_CUSTOMER, ETA_DATE(ETA), ETD_DATE(ETD), EXPECTED_SHIP_DATE, FCST_TYPE(FCST Type*), FROM_SITE(From Site*), INCOTERMS(Incoterms*), LAST_UPDATED_BY(Requestor), LAST_UPDATED_DATE(Request Date), LT_TOTAL(L/T(Day)), MKT_OWMER(MKT Owner), MODEL_ID(Model*), MODEL_PIC, NICK_NAME, ORDER_TYPE_DETAIL, QTY(Qty*), REMARK, REQUEST_ID(Confrim/Plan ID), SHIPTO_CODE(Ship to*), SHIPTO_NAME, SITE_DESCRIPTION(Plant Site), SOLDTO_CODE(Sold to), STATUS, TO_SITE(To Site*), TR_MODE(Trans Mode*), YYYYMMDD(Shipment Date*)
+- **코드 →숨김**: SHIP_TO, SHIPTO_DESCRIPTION
 
-> 참고: grid_effective에서 SHIP_TO / SHIPTO_DESCRIPTION `CODE_ONLY_CHANGE →숨김`이 Hold stock, Hold stock Detail, SCS Stock Detail, Shipment Confirm Detail, Shipment PSI(Mobility & IT), Shipment PSI(Packer), Shipment Request Detail, Stock Detail, Stock Location Detail에도 붙어 있습니다. 근거 코드는 Shipment Result 전용 메서드(4991/4992)이므로 정적 분석의 시트 귀속 한계로 보입니다 → 확인 필요.
+#### `W/H stock` — META+코드연결, 메타 19/0
+
+- 컬럼 상세는 grid_effective.csv가 잘려 **확인 필요**하다.
+
+#### `W/H stock Detail` — META+코드연결, 메타 25/0
+
+- 컬럼 상세는 **확인 필요**하다(CSV 잘림).
+
+#### `Hold stock` — META+코드연결, 표시 10
+
+- **표시**: DIVISION_ID(Div), FROM_SITE_NM(From Site), HOLD_QTY(Amend Qty*), HOLD_YYYYMMDD(Start Date), ITEM_ID(Model), LAST_UPDATE_DATE, LAST_UPDATED_BY, NICK_NAME, RELEASE_YYYYMMDD(End Date*), REMARKS
+- **숨김**: FROM_SITE, HOLD_ID
+- **코드 →숨김**: SHIP_TO, SHIPTO_DESCRIPTION
+- 저장 SP는 `SSP0015_SAVE_BLOCK_STOCK_DATA`다.
+
+#### `Hold stock Detail` — META+코드연결, 표시 10
+
+- 컬럼은 Hold stock과 같다. 차이는 라벨에서 `Amend Qty`와 `End Date`에 `*`가 없다는 점이다.
+
+#### `Stock Detail` — META+코드연결 (코드상 shtMesStock), 메타 26/0
+
+- **표시(CSV에서 확인된 범위)**: AVAILABLE_YN, DIVISION_ID, FCS_HOLD_YN, FCS_SPECIAL_QTY, FROM_SITE(Site), ITEM_ID, JUDG_VLD_DATE, LAST_UPDATE_DATE, LAST_UPDATED_BY, LONGTERM_HOLD_YN, LOT_ID, LOT_QTY_FCS, LOT_QTY_MES, LOT_QTY_MES_NG, LOT_QTY_TOT, LOT_TYPE, MES_CHANGE_STATUS, MES_HOLD_RELEASE, MES_HOLD_YN, NICK_NAME, OWMS_STOCK_QTY, QMS_HOLD_RELEASE, QMS_HOLD_YN, REMARKS, USER_MOD_RELEASE_DATE(User Modified Release Date*), YYYYMMDD_LOT_ID_APPLIED_LT(D Day(Expected))
+- **코드 →숨김**: SHIP_TO, SHIPTO_DESCRIPTION
+- 저장 SP는 `SSP0015_SAVE_MES_STOCK`다.
+
+#### `MES Stock Detail` — 메타 정의만 있고 코드는 참조하지 않음(미사용 가능), 메타 24
+
+- 컬럼은 Stock Detail에서 LONGTERM_HOLD_YN과 LOT_QTY_MES_NG를 뺀 구성이다.
+- TO-BE에 넣을지는 **확인 필요**하다.
+
+#### `SCS Stock Detail` — META+코드연결, 표시 9
+
+- **표시**: CUTOFF_DATE, DIVISION_ID, HOLD_YN, LAST_UPDATE_DATE(Update Date), MODEL_ID(Model), PLANT_ID, PLANT_NAME, PROD_DATE, QTY
+- **코드 →숨김**: SHIP_TO, SHIPTO_DESCRIPTION
+
+#### `Stock Location Detail` — META+코드연결, 메타 20/0
+
+- **확인된 표시 컬럼**: AVAILABLE_DATE, AVAILABLE_QTY, COMPANY_ID, CUTOFF_DATE, DEFECT_QTY(Deffect Qty), DIVISION_ID 등
+- 나머지는 **확인 필요**하다(CSV 잘림).
+
+#### `WH In Plan Detail` — META+코드연결, 메타 11/0
+
+- AddSheet 조건이 `if(drPgmAuthId != null)`이다(CreateSpread:680).
+- 컬럼 상세는 **확인 필요**하다.
+
+#### `Shipment Result` — META+코드연결, 표시 17 (메타 19 − 코드 숨김 2)
+
+- **표시**: CONFIRM_ID, DIVISION_ID, END_CUSTOMER, ERP_SO_NO(SO No), ETA_DATE, ETD_DATE, FROM_SITE, INCOTERMS, ITEM_ID, NICK_NAME, QTY(Shipment Qty), SHIP_TYPE, TEAM, TO_SITE, TRANSPORT_MODE, TYPE(Status), YYYYMMDD(Shipment Date)
+- **기본이지만 코드가 →숨김**: SHIP_TO(Ship to), SHIPTO_DESCRIPTION(Ship to Name) (4991/4992줄)
 
 ## 4. 시트 연결 규칙
 
-| 시트 | Spread | 연결 규칙 | 생성 조건 |
+| 시트 | Spread | 코드 상수 | 조회 메서드 → 엔드포인트 (메서드명 기준이라 확인 필요 포함) |
 |---|---|---|---|
-| Shipment PSI(Mobility & IT) | spdMain | META+코드연결 | 항상 (CreateSpread:656) |
-| Shipment PSI(Packer) | spdMain | META+코드연결 | 항상 (660) |
-| Shipment Confirm Detail | spdDetail | META+코드연결 | 항상 (665) |
-| Shipment Request Detail | spdDetail | META+코드연결 | 항상 (666) |
-| W/H stock | spdDetail | META+코드연결 | 항상 (668) |
-| W/H stock Detail | spdDetail | META+코드연결 | 항상 (669) |
-| Hold stock | spdDetail | META+코드연결 | 항상 (670) |
-| Hold stock Detail | spdDetail | META+코드연결 | 항상 (671) |
-| Stock Detail | spdDetail | META+코드연결 | 항상 (672) |
-| SCS Stock Detail | spdDetail | META+코드연결 | 항상 (673) |
-| Stock Location Detail | spdDetail | META+코드연결 | 항상 (674) |
-| WH In Plan Detail | spdDetail | META+코드연결 | `drPgmAuthId != null` (680) |
-| Shipment Result | spdDetail | META+코드연결 | 항상 (683) |
-| Shipment PSI(IT & Mobile) | — | 메타 정의만, 코드 미참조(미사용 가능) | 생성 안 함 |
-| MES Stock Detail | — | 메타 정의만, 코드 미참조(미사용 가능) | 생성 안 함 |
+| Shipment PSI(Mobility & IT) | spdMain | SpdSheet.shtMain | FindButton > FindData_Main → `SSP.SSP0015_GET_SHIPMENT_PSI` |
+| Shipment PSI(Packer) | spdMain | SpdSheet.shtPacker | FindButton > FindData_Main_Packer / FindData_Main_Packer_Past → `SSP.SSP0015_GET_SHIPMENT_PSI_PACKER` / `_PACKER_PAST` |
+| Shipment Confirm Detail | spdDetail | shtDetail | SpdMain_CellDoubleClick > FindData_Detail, BtnSearch_Click > FindData_Detail_btnSearch → `SSP0015_GET_SHIPMENT_CONFIRM_DETAIL` / FindData_Detail_Packer_btnSearch → `..._PACKER` |
+| Shipment Request Detail | spdDetail | shtRequestDetail | FindData_Request_Detail → `SSP.SSP0026_GET_REQUEST_DETAIL_PACK` |
+| W/H stock | spdDetail | shtWHstock | FindData_WHstock → `SSP.SSP0015_GET_WH_STOCK` |
+| W/H stock Detail | spdDetail | shtWHstockDetail | 확인 필요 |
+| Hold stock / Hold stock Detail | spdDetail | shtBolckStock / shtBolckStockDetail | FindData_block_stock / FindData_BolckStockDetail_btnSearch → `SSP.SSP0015_GET_BLOCK_STOCK` |
+| Stock Detail | spdDetail | shtMesStock | FindData_mes_stock / FindData_MesStock_btnSearch → `SSP.SSP0015_GET_MES_STOCK` |
+| SCS Stock Detail | spdDetail | shtScsStock | FindData_ScsStock_btnSearch → `SSP.SSP0015_GET_SCS_STOCK` |
+| Stock Location Detail | spdDetail | shtStockLocationDetail | FindData_shtStockLocationDetail_btnSearch → `SSP.SSP0015_GET_STOCK_LOCATION_DETAIL` (+ GetNERPCode) |
+| WH In Plan Detail | spdDetail | shtWHinPlanDetail | FindData_WHinPlanDetail_btnSearch → `SSP.SSP0015_GET_SHIPMENT_PSI_COMMENTS` |
+| Shipment Result | spdDetail | shtShipmentResult | FindData_ShipmentResult_btnSearch → `SSP0015_GET_SHIPMENT_RESULT` / FindData_ShipmentSCSResult_btnSearch → `..._RESULT_PACKER` |
 
-- 상단 → 하단 연결: SpdMain_CellDoubleClick이 클릭한 셀의 row(DIVISION_ID / SITE / ITEM_ID / YYYYMMDD)로 하단 시트를 조회합니다(Confirm Detail, W/H stock, Stock Detail, Hold stock, Stock Location Detail, SCS Stock Detail). 셀/Measure별로 어느 시트를 고르는지는 확인 필요합니다.
-- 상단 시트 전환(SpdMain_ActiveSheetChanged) 시 LookupCommon 공통코드, PlanDateShip, DayRange, 시트 재구성(GetSpdTitle)을 다시 호출합니다.
-- CreateSpread 마지막 ChangeSheet 순서: W/H stock(740) → Shipment Confirm Detail(741) → Shipment PSI(Mobility & IT)(746). 따라서 초기 활성 시트는 Shipment Confirm Detail / Shipment PSI(Mobility & IT)로 보입니다(확인 필요).
+- CreateSpread는 마지막에 ChangeSheet를 W/H stock(740줄), Shipment Confirm Detail(741줄), Shipment PSI(Mobility & IT)(746줄) 순서로 부른다. 그래서 초기 활성 시트는 Main이 Mobility & IT, Detail이 Shipment Confirm Detail로 추정된다. 실행으로 **확인 필요**하다.
+- Main에서 셀을 더블클릭하면 행의 DIVISION_ID, SITE, ITEM_ID, YYYYMMDD 값으로 Detail을 조회한다(8290~8293줄).

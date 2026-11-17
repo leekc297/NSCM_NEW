@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 334,
+  "at": "2026-11-13T20:57:56.868Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 패널·버튼 바 aria ×Div"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 449,
+  "at": "2026-11-13T20:57:56.990Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 패널·버튼 바 aria ×Div"
+ }
+]

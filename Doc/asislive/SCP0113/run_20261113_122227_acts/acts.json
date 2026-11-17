@@ -1,0 +1,90 @@
+{
+ "id": "SCP0113",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0113-Sac510b"
+   ]
+  },
+  {
+   "control": "btnProcessLongTerm",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCP0113_LongTermProcessPopup",
+     "title": "SCP0113_LongTermProcessPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+    "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "SCP0113-Sef27a5"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnClose",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "btnCreatePlan",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnDownloadExcel",
+   "why": "파일·Excel·인쇄 버튼(이름 규칙)",
+   "scenarios": 1
+  },
+  {
+   "control": "btnFind",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 13
+  },
+  {
+   "control": "btnImport",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnRelease",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 74
+  },
+  {
+   "control": "btnSearch",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 6
+  }
+ ],
+ "at": "2026-11-13 12:19:44.604",
+ "fills": 0,
+ "fill_left": []
+}

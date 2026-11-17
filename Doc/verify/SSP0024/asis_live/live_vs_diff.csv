@@ -1,0 +1,4 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SSP0024_GET_SHIP_MASTER,PKG_SSP0024.P_SSP0024_GET_SHIP_MASTER,GET,17,DIFF:9 ROWS_ONLY:8,,1,find,190,"{""p_division_id"": ""81"", ""p_plant_site_id"": ""HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E"", ""p_material_id"": """", ""p_nick_name"": """", ""p_model_id"": """"}",BOTH,차등 검증·실측 모두 있음
+SSP0024_SAVE_SHIP_MASTER,PKG_SSP0024.P_SSP0024_SAVE_SHIP_MASTER,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0002_GET_USER_INFO_LIST,PKG_SSP0002.P_SSP0002_GET_USER_INFO_LIST,GET,1,SKIP:1,인자 미해결(UNRESOLVED): Search — param_map.csv 에 값/대응 지정,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP

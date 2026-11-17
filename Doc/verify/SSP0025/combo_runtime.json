@@ -1,5 +1,5 @@
 {
- "at": "2026-11-09T02:13:50.137Z",
+ "at": "2026-11-14T19:14:39.381Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -739,73 +739,164 @@
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0025\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0025\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 8,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "81",
-     "v": "81 Automotive Battery"
-    },
-    {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
-    {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"PlantCell\",\"mnuId\":\"SSP0025\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 36,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AC00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AT00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AZ00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "HD00-A",
+     "v": "ES Honda JV Auto Assy/Pack-Cell"
+    },
+    {
+     "c": "HG00-A",
+     "v": "ESHG Auto Assy-Cell"
+    },
+    {
+     "c": "GM01-A",
+     "v": "GM2_TN Auto Assy-Cell"
+    },
+    {
+     "c": "G675-A",
+     "v": "GM3_LS Auto Assy-Cell"
+    },
+    {
+     "c": "HM00-A",
+     "v": "HM Auto Assy-Cell"
+    },
+    {
+     "c": "HQ11-A",
+     "v": "HQ OC2 Auto Prod-Cell"
+    },
+    {
+     "c": "HQ10-A",
+     "v": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "c": "MI00-A",
+     "v": "LGESMI Cell MI00"
+    },
+    {
+     "c": "NA00-A",
+     "v": "LGESNA Cell NA00"
+    },
+    {
+     "c": "NB01-A",
+     "v": "LGESNB Cell NB01"
+    },
+    {
+     "c": "NB02-A",
+     "v": "LGESNB ESS-Cell"
+    },
+    {
+     "c": "NJ01-A",
+     "v": "LGESNJ Cell NJ01"
+    },
+    {
+     "c": "NJ02-A",
+     "v": "LGESNJ Cell NJ02"
+    },
+    {
+     "c": "HQ06-A",
+     "v": "LGESOC Cell HQ06"
+    },
+    {
+     "c": "HQ07-A",
+     "v": "LGESOC Cell HQ07"
+    },
+    {
+     "c": "AC00-A",
+     "v": "LGESOC Cell HQ07"
+    },
+    {
+     "c": "MT00-A",
+     "v": "LGESOC Cell HQ07"
+    },
+    {
+     "c": "HQ08-A",
+     "v": "LGESOC Cell HQ08"
+    },
+    {
+     "c": "AC00-A",
+     "v": "LGESOC Cell HQ08"
+    },
+    {
+     "c": "WA00-A",
+     "v": "LGESWA Cell WA00"
+    },
+    {
+     "c": "MI01-A",
+     "v": "MI ESS Assy-Cell"
+    },
+    {
+     "c": "MH00-A",
+     "v": "MI ESS Assy-Cell"
+    },
+    {
+     "c": "MI02-A",
+     "v": "MI_LS Auto Assy/Pack-Cell"
+    },
+    {
+     "c": "ST00-A",
+     "v": "OT Auto Assy/Pack-Cell"
+    },
+    {
+     "c": "WA01-A",
+     "v": "PL WRO ESS Prod-Cell"
+    },
+    {
+     "c": "AC00-A",
+     "v": "Ultium Cells (A) - Lordstown-Cell"
+    },
+    {
+     "c": "GM00-A",
+     "v": "Ultium Cells (A) - Lordstown-Cell"
+    },
+    {
+     "c": "GT00-A",
+     "v": "Ultium Cells (A) - Lordstown-Cell"
+    },
+    {
+     "c": "VP_GM01-A",
+     "v": "virtual plant(GM01)-Cell"
+    },
+    {
+     "c": "VP_HD00-A",
+     "v": "virtual plant(HD00)-Cell"
+    },
+    {
+     "c": "VP_MI02-A",
+     "v": "virtual plant(MI02)-Cell"
+    },
+    {
+     "c": "VP_ST00-A",
+     "v": "virtual plant(ST00)-Cell"
+    },
+    {
+     "c": "G484-A",
+     "v": "WA ESS Assy-Cell"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantCell\",\"divisionId\":\"''\",\"mnuId\":\"SSP0025\"}",
    "status": 200,
    "n": 36,
    "keys": [
@@ -1006,158 +1097,67 @@
    "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"PlantCell\",\"divisionId\":\"''\",\"mnuId\":\"SSP0025\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0025\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 36,
+   "n": 8,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "AC00-A",
-     "v": "AZ Mobile Assy-Cell"
+     "c": "81",
+     "v": "81 Automotive Battery"
     },
     {
-     "c": "AT00-A",
-     "v": "AZ Mobile Assy-Cell"
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
     },
     {
-     "c": "AZ00-A",
-     "v": "AZ Mobile Assy-Cell"
+     "c": "82",
+     "v": "82 ESS Battery"
     },
     {
-     "c": "HD00-A",
-     "v": "ES Honda JV Auto Assy/Pack-Cell"
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
     },
     {
-     "c": "HG00-A",
-     "v": "ESHG Auto Assy-Cell"
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
     },
     {
-     "c": "GM01-A",
-     "v": "GM2_TN Auto Assy-Cell"
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
     },
     {
-     "c": "G675-A",
-     "v": "GM3_LS Auto Assy-Cell"
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
     },
     {
-     "c": "HM00-A",
-     "v": "HM Auto Assy-Cell"
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0025\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
     },
     {
-     "c": "HQ11-A",
-     "v": "HQ OC2 Auto Prod-Cell"
-    },
-    {
-     "c": "HQ10-A",
-     "v": "HQ OC2 Mobile Prod-Cell"
-    },
-    {
-     "c": "MI00-A",
-     "v": "LGESMI Cell MI00"
-    },
-    {
-     "c": "NA00-A",
-     "v": "LGESNA Cell NA00"
-    },
-    {
-     "c": "NB01-A",
-     "v": "LGESNB Cell NB01"
-    },
-    {
-     "c": "NB02-A",
-     "v": "LGESNB ESS-Cell"
-    },
-    {
-     "c": "NJ01-A",
-     "v": "LGESNJ Cell NJ01"
-    },
-    {
-     "c": "NJ02-A",
-     "v": "LGESNJ Cell NJ02"
-    },
-    {
-     "c": "HQ06-A",
-     "v": "LGESOC Cell HQ06"
-    },
-    {
-     "c": "HQ07-A",
-     "v": "LGESOC Cell HQ07"
-    },
-    {
-     "c": "AC00-A",
-     "v": "LGESOC Cell HQ07"
-    },
-    {
-     "c": "MT00-A",
-     "v": "LGESOC Cell HQ07"
-    },
-    {
-     "c": "HQ08-A",
-     "v": "LGESOC Cell HQ08"
-    },
-    {
-     "c": "AC00-A",
-     "v": "LGESOC Cell HQ08"
-    },
-    {
-     "c": "WA00-A",
-     "v": "LGESWA Cell WA00"
-    },
-    {
-     "c": "MI01-A",
-     "v": "MI ESS Assy-Cell"
-    },
-    {
-     "c": "MH00-A",
-     "v": "MI ESS Assy-Cell"
-    },
-    {
-     "c": "MI02-A",
-     "v": "MI_LS Auto Assy/Pack-Cell"
-    },
-    {
-     "c": "ST00-A",
-     "v": "OT Auto Assy/Pack-Cell"
-    },
-    {
-     "c": "WA01-A",
-     "v": "PL WRO ESS Prod-Cell"
-    },
-    {
-     "c": "AC00-A",
-     "v": "Ultium Cells (A) - Lordstown-Cell"
-    },
-    {
-     "c": "GM00-A",
-     "v": "Ultium Cells (A) - Lordstown-Cell"
-    },
-    {
-     "c": "GT00-A",
-     "v": "Ultium Cells (A) - Lordstown-Cell"
-    },
-    {
-     "c": "VP_GM01-A",
-     "v": "virtual plant(GM01)-Cell"
-    },
-    {
-     "c": "VP_HD00-A",
-     "v": "virtual plant(HD00)-Cell"
-    },
-    {
-     "c": "VP_MI02-A",
-     "v": "virtual plant(MI02)-Cell"
-    },
-    {
-     "c": "VP_ST00-A",
-     "v": "virtual plant(ST00)-Cell"
-    },
-    {
-     "c": "G484-A",
-     "v": "WA ESS Assy-Cell"
+     "c": "N",
+     "v": "N"
     }
    ],
    "user": "minyonglee1"
@@ -1365,27 +1365,6 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0025\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"PlantCell\",\"mnuId\":\"SSP0025\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 9,
@@ -1429,6 +1408,27 @@
     {
      "c": "MI02-A",
      "v": "MI_LS Auto Assy/Pack-Cell"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0025\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
     }
    ],
    "user": "minyonglee1"

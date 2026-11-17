@@ -1,0 +1,260 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdAssign[PLANT_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdAssign[FACTORY_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdAssign[LINE_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdAssign[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdAssign[PLANT_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdAssign[FACTORY_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdAssign[LINE_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdAssign[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdAssign[NICK_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-17 16:34:28",
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 7,
+   "named_cols": [
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME"
+   ],
+   "used": [
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  },
+  {
+   "kind": "dbl",
+   "scenarios": 9,
+   "named_cols": [],
+   "used": [
+    "DIVISION_ID",
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME",
+    "ITEM_ID",
+    "NICK_NAME"
+   ],
+   "rule": "이름이 나온 열이 없어 앞쪽 보이는 열 6개"
+  }
+ ]
+}

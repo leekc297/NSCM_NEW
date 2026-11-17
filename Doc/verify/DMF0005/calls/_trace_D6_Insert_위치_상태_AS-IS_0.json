@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 328,
+  "at": "2026-11-13T21:03:48.851Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 375,
+  "at": "2026-11-13T21:03:48.866Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2322,
+  "at": "2026-11-13T21:03:53.667Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ }
+]

@@ -1,0 +1,17 @@
+{
+ "id": "SCP0016",
+ "rule": "tobe",
+ "set": [
+  {
+   "name": "clbVersion",
+   "prop": "ControlValues",
+   "value": "SP_W_20260824",
+   "param": "version_no",
+   "from": "SP_W_20260817",
+   "sheet": "main",
+   "kept": true
+  }
+ ],
+ "unresolved": [],
+ "skipped": []
+}

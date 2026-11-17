@@ -1,0 +1,199 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 17:07:29.455",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 5.27,
+   "params": {
+    "Code": "SCPPlanPeriod",
+    "Param1": "20260824",
+    "Param2": "81",
+    "Param3": "MONTHLY",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='SCPPlanPeriod', @Param1='20260824', @Param2='81', @Param3='MONTHLY', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:07:29.582",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 439,
+   "rows_kind": "DataSet rows",
+   "ms": 14.46,
+   "params": {
+    "p_start_yyyymmdd": "20260824",
+    "p_end_yyyymmdd": "20270822"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260824', @p_end_yyyymmdd='20270822'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:07:29.604",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 18,
+   "rows_kind": "DataSet rows",
+   "ms": 4.09,
+   "params": {
+    "p_program_id": "SCP0031",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Global PSI"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0031', @p_user_id='jaeuk.shin', @p_sheet_name='Global PSI'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:09:30.593",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0031_GET_GLOBAL_PSI",
+   "sp": "SCP0031_GET_GLOBAL_PSI",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 120779.95,
+   "params": {
+    "p_from_yyyymmdd": "20260824",
+    "p_to_yyyymmdd": "20270822",
+    "p_division_id": "81",
+    "p_item_id": "",
+    "p_nick_name": "",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_plan_start_yyyymmdd": "20260824",
+    "p_plan_type": "MA",
+    "p_seq": "3",
+    "p_program_id": "SCP0031",
+    "p_sheet_name": "Global PSI",
+    "p_bucket": "MONTHLY",
+    "p_chk_all": "N",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0031_GET_GLOBAL_PSI @p_from_yyyymmdd='20260824', @p_to_yyyymmdd='20270822', @p_division_id='81', @p_item_id='', @p_nick_name='', @p_from_site='', @p_to_site='', @p_plan_start_yyyymmdd='20260824', @p_plan_type='MA', @p_seq='3', @p_program_id='SCP0031', @p_sheet_name='Global PSI', @p_bucket='MONTHLY', @p_chk_all='N', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:09:30.709",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 10.91,
+   "params": {
+    "p_menu_id": "SCP0031",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "120.787",
+    "p_ui_time": "0.09",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0031', @p_log_type='FIND', @p_log_cnt='', @p_db_time='120.787', @p_ui_time='0.09', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:09:33.835",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 5.06,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-14 17:09:34.408",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 422.68,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0031"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0031'",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-14 17:09:49.520",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.96,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-14 17:09:50.081",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 424.19,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0031"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0031'",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-14 17:10:05.024",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 18.76,
+   "params": {
+    "p_program_id": "SCP0031",
+    "p_sheet_name": "Global PSI",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0031', @p_sheet_name='Global PSI', @p_column_type='M', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnMeasure"
+  }
+ ]
+}

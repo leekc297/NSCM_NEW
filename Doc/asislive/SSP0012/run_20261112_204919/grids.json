@@ -1,0 +1,783 @@
+{
+ "id": "SSP0012",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Shipment Plan Confirm Detail",
+     "rows": 0,
+     "cols": 47,
+     "visible": "True",
+     "frozen_cols": "13",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "From Site",
+        "From Site"
+       ],
+       "label": "From Site",
+       "tag": "FROM_SITE_DESCRIPTION",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FROM_SITE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Biz Name",
+        "Biz Name"
+       ],
+       "label": "Biz Name",
+       "tag": "BIZ_TYPE_NAME",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BIZ_TYPE_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Project Name",
+        "Project Name"
+       ],
+       "label": "Project Name",
+       "tag": "PROJECT_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PROJECT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "FCST Type",
+        "FCST Type"
+       ],
+       "label": "FCST Type",
+       "tag": "FCST_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FCST_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Model",
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "ITEM_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "To Site",
+        "To Site"
+       ],
+       "label": "To Site",
+       "tag": "TO_SITE_DESCRIPTION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TO_SITE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "MKT Owner",
+        "MKT Owner"
+       ],
+       "label": "MKT Owner",
+       "tag": "MTK_OWNER",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MTK_OWNER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Sold To Party",
+        "Sold To Party"
+       ],
+       "label": "Sold To Party",
+       "tag": "SOLDTO_DESCRIPTION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SOLDTO_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Ship To Party",
+        "Ship To Party"
+       ],
+       "label": "Ship To Party",
+       "tag": "SHIPTO_DESCRIPTION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SHIPTO_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Incoterms",
+        "Incoterms"
+       ],
+       "label": "Incoterms",
+       "tag": "INCOTERMS",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "L/T(Day)",
+        "L/T(Day)"
+       ],
+       "label": "L/T(Day)",
+       "tag": "LT_DAY",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_DAY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "ETD",
+        "ETD"
+       ],
+       "label": "ETD",
+       "tag": "ETD",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ETD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "ETA",
+        "ETA"
+       ],
+       "label": "ETA",
+       "tag": "ETA",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ETA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Trans Mode",
+        "Trans Mode"
+       ],
+       "label": "Trans Mode",
+       "tag": "TRANSPORT_MODE",
+       "width": "45",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TRANSPORT_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "L/T Type",
+        "L/T Type"
+       ],
+       "label": "L/T Type",
+       "tag": "LT_TYPE",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LT_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Shipment Date(GI)",
+        "Shipment Date(GI)"
+       ],
+       "label": "Shipment Date(GI)",
+       "tag": "PLAN_DATE",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLAN_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Expected Shipping Date",
+        "Expected Shipping Date"
+       ],
+       "label": "Expected Shipping Date",
+       "tag": "Expected_Shipping_Date",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "Expected_Shipping_Date",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Confirm ID",
+        "Confirm ID"
+       ],
+       "label": "Confirm ID",
+       "tag": "CONFIRM_ID",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CONFIRM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Confirmed Qty",
+        "Confirmed Qty"
+       ],
+       "label": "Confirmed Qty",
+       "tag": "CONFIRM_QTY",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CONFIRM_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "SO No",
+        "SO No"
+       ],
+       "label": "SO No",
+       "tag": "ERP_SO_NO",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ERP_SO_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Change Request No",
+        "Change Request No"
+       ],
+       "label": "Change Request No",
+       "tag": "CHANGE_REQ_NO",
+       "width": "125",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CHANGE_REQ_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Departure Port",
+        "Port*"
+       ],
+       "label": "Port*",
+       "tag": "D_PORT_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "D_PORT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Departure Port",
+        "Country*"
+       ],
+       "label": "Country*",
+       "tag": "D_COUNTRY",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Departure Port",
+        "Port Code*"
+       ],
+       "label": "Port Code*",
+       "tag": "D_PORT_CODE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Arrival Port",
+        "Port*"
+       ],
+       "label": "Port*",
+       "tag": "A_PORT_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "A_PORT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Arrival Port",
+        "Country*"
+       ],
+       "label": "Country*",
+       "tag": "A_COUNTRY",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Arrival Port",
+        "Port Code*"
+       ],
+       "label": "Port Code*",
+       "tag": "A_PORT_CODE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Departure days",
+        "MON"
+       ],
+       "label": "MON",
+       "tag": "DAYS_MON",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_MON",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Departure days",
+        "TUE"
+       ],
+       "label": "TUE",
+       "tag": "DAYS_TUE",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_TUE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "Departure days",
+        "WED"
+       ],
+       "label": "WED",
+       "tag": "DAYS_WED",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_WED",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "Departure days",
+        "THU"
+       ],
+       "label": "THU",
+       "tag": "DAYS_THU",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_THU",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "Departure days",
+        "FRI"
+       ],
+       "label": "FRI",
+       "tag": "DAYS_FRI",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_FRI",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Departure days",
+        "SAT"
+       ],
+       "label": "SAT",
+       "tag": "DAYS_SAT",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_SAT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "Departure days",
+        "SUN"
+       ],
+       "label": "SUN",
+       "tag": "DAYS_SUN",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DAYS_SUN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "Lead Time",
+        "Departure Inland"
+       ],
+       "label": "Departure Inland",
+       "tag": "LT_DEPARTURE_INLAND",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_DEPARTURE_INLAND",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "Lead Time",
+        "Waiting For Shipping"
+       ],
+       "label": "Waiting For Shipping",
+       "tag": "LT_WAIT_SHIPPING",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_WAIT_SHIPPING",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "Lead Time",
+        "Voyage"
+       ],
+       "label": "Voyage",
+       "tag": "LT_VOYAGE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_VOYAGE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "Lead Time",
+        "Lay Off/Customs Clearance"
+       ],
+       "label": "Lay Off/Customs Clearance",
+       "tag": "LT_LAY_OFF_CLEARANCE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_LAY_OFF_CLEARANCE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "Lead Time",
+        "Arrival Inland"
+       ],
+       "label": "Arrival Inland",
+       "tag": "LT_ARRIVAL_INLAND",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_ARRIVAL_INLAND",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "Lead Time",
+        "Total L/T"
+       ],
+       "label": "Total L/T",
+       "tag": "LT_SUM",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_SUM",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "Last Updated By",
+        "Last Updated By"
+       ],
+       "label": "Last Updated By",
+       "tag": "LAST_UPDATED_BY",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "Last Update Date",
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "LAST_UPDATE_DATE",
+       "width": "125",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LAST_UPDATE_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "bod_id",
+        "bod_id"
+       ],
+       "label": "bod_id",
+       "tag": "BOD_ID",
+       "width": "110",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BOD_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_FROM_DIVISION_ID"
+       ],
+       "label": "ORIGIN_FROM_DIVISION_ID",
+       "tag": "ORIGIN_FROM_DIVISION_ID",
+       "width": "110",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORIGIN_FROM_DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

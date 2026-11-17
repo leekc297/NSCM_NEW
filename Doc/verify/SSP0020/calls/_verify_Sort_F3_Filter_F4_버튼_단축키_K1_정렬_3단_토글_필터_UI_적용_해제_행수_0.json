@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 101,
+  "at": "2026-11-16T17:56:06.867Z",
+  "user": "minyonglee1",
+  "test": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 246,
+  "at": "2026-11-16T17:56:06.962Z",
+  "user": "minyonglee1",
+  "test": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 90,
+  "at": "2026-11-16T17:56:08.079Z",
+  "user": "minyonglee1",
+  "test": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수"
+ }
+]

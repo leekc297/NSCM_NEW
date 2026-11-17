@@ -1,0 +1,155 @@
+{
+ "id": "SCP0111",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+   "save_sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+   "status": "키 일부 미대응",
+   "table": "SCP_ANL_PSI_INTEGRATION",
+   "pk": [
+    "PLAN_START_YYYYMMDD",
+    "SEQ",
+    "OPERATION_GROUP",
+    "COMPANY_ID",
+    "PLANT_ID",
+    "DIVISION_ID",
+    "FROM_SITE",
+    "CELL_ITEM_ID",
+    "ITEM_ID",
+    "MEASURE",
+    "VALUE_TYPE",
+    "TO_PRODUCT",
+    "LINE_ID",
+    "TO_SITE",
+    "INCOTERMS",
+    "YYYYMM"
+   ],
+   "match": {
+    "OPERATION_GROUP": "OPERATION_GROUP",
+    "COMPANY_ID": "COMPANY_ID",
+    "PLANT_ID": "PLANT_ID",
+    "DIVISION_ID": "DIVISION_ID",
+    "CELL_ITEM_ID": "CELL_ITEM_ID",
+    "ITEM_ID": "ITEM_ID",
+    "MEASURE": "MEASURE",
+    "VALUE_TYPE": "VALUE_TYPE",
+    "TO_PRODUCT": "TO_PRODUCT",
+    "LINE_ID": "LINE_ID",
+    "TO_SITE": "TO_SITE",
+    "INCOTERMS": "INCOTERMS"
+   },
+   "unmatched_pk": [
+    "PLAN_START_YYYYMMDD",
+    "SEQ",
+    "FROM_SITE",
+    "YYYYMM"
+   ],
+   "edit": {
+    "col": "BOH_QTY",
+    "db_col": "BOH_QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Integration PSI",
+   "writes": {
+    "SCP_ANL_PSI_INTEGRATION": [
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0111_SAVE_INTEGRATION_PSI_ADMIN → SP SCP0111_SAVE_INTEGRATION_PSI_ADMIN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PLAN_START_YYYYMMDD": "p_plan_start_yyyymmdd←(그리드 열에서 오지 않음)",
+    "SEQ": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "FROM_SITE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMM": "p_yyyymm←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": [
+    {
+     "col": "BOH_QTY",
+     "db_col": "BOH_QTY",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0111_SAVE_INTEGRATION_PSI",
+   "save_sp": "SCP0111_SAVE_INTEGRATION_PSI",
+   "status": "키 일부 미대응",
+   "table": "SCP_ANL_PSI_INTEGRATION",
+   "pk": [
+    "PLAN_START_YYYYMMDD",
+    "SEQ",
+    "OPERATION_GROUP",
+    "COMPANY_ID",
+    "PLANT_ID",
+    "DIVISION_ID",
+    "FROM_SITE",
+    "CELL_ITEM_ID",
+    "ITEM_ID",
+    "MEASURE",
+    "VALUE_TYPE",
+    "TO_PRODUCT",
+    "LINE_ID",
+    "TO_SITE",
+    "INCOTERMS",
+    "YYYYMM"
+   ],
+   "match": {
+    "OPERATION_GROUP": "OPERATION_GROUP",
+    "COMPANY_ID": "COMPANY_ID",
+    "PLANT_ID": "PLANT_ID",
+    "DIVISION_ID": "DIVISION_ID",
+    "CELL_ITEM_ID": "CELL_ITEM_ID",
+    "ITEM_ID": "ITEM_ID",
+    "MEASURE": "MEASURE",
+    "VALUE_TYPE": "VALUE_TYPE",
+    "TO_PRODUCT": "TO_PRODUCT",
+    "LINE_ID": "LINE_ID",
+    "TO_SITE": "TO_SITE",
+    "INCOTERMS": "INCOTERMS"
+   },
+   "unmatched_pk": [
+    "PLAN_START_YYYYMMDD",
+    "SEQ",
+    "FROM_SITE",
+    "YYYYMM"
+   ],
+   "edit": {
+    "col": "BOH_QTY",
+    "db_col": "BOH_QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Integration PSI",
+   "writes": {
+    "SCP_ANL_PSI_INTEGRATION": [
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "X": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0111_SAVE_INTEGRATION_PSI → SP SCP0111_SAVE_INTEGRATION_PSI 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PLAN_START_YYYYMMDD": "p_plan_start_yyyymmdd←(그리드 열에서 오지 않음)",
+    "SEQ": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "FROM_SITE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMM": "p_yyyymm←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": [
+    {
+     "col": "BOH_QTY",
+     "db_col": "BOH_QTY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

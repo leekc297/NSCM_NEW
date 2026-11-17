@@ -1,0 +1,662 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-14T20:11:43+09:00",
+ "producer": "run_verify",
+ "id": "SSP0003",
+ "skip_e2e": false,
+ "started": "2026-11-14 19:21:58",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-671736f1",
+   "class": "I1",
+   "msg": "SSP0003 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1c17dc27",
+   "class": "A5",
+   "msg": "SSP0003 Division 컬럼 40/Shipment Change Request Confirm",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d8f9377c",
+   "class": "A5",
+   "msg": "SSP0003 Division 컬럼 82/Shipment Change Request Confirm",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1863646b",
+   "class": "F10",
+   "msg": "PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a32bb846",
+   "class": "F10",
+   "msg": "PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM_40",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7de95ca4",
+   "class": "B2",
+   "msg": "조회조건 From Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5f6e4f5f",
+   "class": "B3",
+   "msg": "조회조건 Status",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS SSP0003 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d9d1430b",
+   "class": "G8",
+   "msg": "조회조건 Requestor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7bc634c0",
+   "class": "B3",
+   "msg": "조회조건 Change Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS SSP0003 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8a809465",
+   "class": "G1",
+   "msg": "조회조건 Requestor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c8e2561a",
+   "class": "G8",
+   "msg": "조회조건 Requestor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-db80e551",
+   "class": "G1",
+   "msg": "SSP0003 텍스트 부분일치 Requestor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0768539f",
+   "class": "E3",
+   "msg": "DataUtil.checkRequiredOfSearch",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7fe9c065",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-49030be2",
+   "class": "B2",
+   "msg": "[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1a64e39d",
+   "class": "B2",
+   "msg": "[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-36134a59",
+   "class": "A5",
+   "msg": "[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-19417dd8",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fbf198ff",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] MKT_FCST[R+P] 편집",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0a8525b3",
+   "class": "A5",
+   "msg": "[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c978074f",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d69337ae",
+   "class": "G1",
+   "msg": "usrConditionPanel1(조회조건 7종) · `ShipmentChangeRequestConfirmSsp0003Form`(SearchArea, 메인 5: Division/F",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ca09b9b4",
+   "class": "G1",
+   "msg": "btnApproval/btnReject/btnSelfReject(우상단 area1, 초기 숨김) · **의도적 드리프트(사용자 지시 2026-09-30)** — 조회영역 `SearchArea.extraButtons` 에 3버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-208d18f2",
+   "class": "G1",
+   "msg": "G2 · CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-608d7738",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-480cb374",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c08bef17",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8a6dfa76",
+   "class": "B3",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.GetDayRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-526660ef",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-089b59ce",
+   "class": "G6",
+   "msg": "cboStatus / Status",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7e8d9dd9",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ede4d855",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f0b94966",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2ae17403",
+   "class": "X-ROW",
+   "msg": "SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-84381a3c",
+   "class": "J3",
+   "msg": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-1d38b2d9",
+   "class": "D1",
+   "msg": "SSP0003 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4b3d426d",
+   "class": "J3",
+   "msg": "SSP0003 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6230e783",
+   "class": "D1",
+   "msg": "SSP0003 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-8bd860ad",
+   "class": "J3",
+   "msg": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4074d7b9",
+   "class": "D1",
+   "msg": "SSP0003 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6d8aa7c5",
+   "class": "J3",
+   "msg": "SSP0003 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-906c6e13",
+   "class": "D1",
+   "msg": "SSP0003 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-3dad7d81",
+   "class": "J3",
+   "msg": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/81/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-1cac48b9",
+   "class": "D1",
+   "msg": "SSP0003 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/81/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-f3395aa3",
+   "class": "J3",
+   "msg": "SSP0003 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/81/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-855d394d",
+   "class": "D1",
+   "msg": "SSP0003 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/81/SSP Viewer · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-7cca8605",
+   "class": "J3",
+   "msg": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/82/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-84b126e2",
+   "class": "D1",
+   "msg": "SSP0003 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/82/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6dadea6c",
+   "class": "J3",
+   "msg": "SSP0003 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/82/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6da461e4",
+   "class": "D1",
+   "msg": "SSP0003 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/82/SSP Planner · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 20:11"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 F1, F2, F6, K-SA, A6, C5 — Doc/verify/SSP0003/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 2064,
+  "PASS": 411,
+  "FAIL": 50,
+  "판정필요": 35,
+  "미검증": 617,
+  "해당없음": 951,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 905,
+   "없음(미검증)": 617,
+   "사람": 2,
+   "기계(상속·집계)": 500,
+   "없음(판정 대기)": 35,
+   "출처 미기록": 5
+  },
+  "fail_listed": 50,
+  "coverage": {
+   "rules": 90,
+   "measured": 334,
+   "not_run_error": 468,
+   "na": 368,
+   "suspect_na100": [
+    "F1",
+    "F2",
+    "F6",
+    "K-SA",
+    "A6",
+    "C5"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SSP0003_ShipmentChangeRequestConfirm_CheckList_v6.xlsx",
+  "ActionItemList": "Doc/CheckList/SSP0003_ShipmentChangeRequestConfirm_ActionItemList_v6.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0003/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F1, F2, F6, K-SA, A6, C5 — Doc/verify/SSP0003/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

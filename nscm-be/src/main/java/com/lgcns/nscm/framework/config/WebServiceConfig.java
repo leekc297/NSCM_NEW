@@ -26,8 +26,9 @@ public class WebServiceConfig {
     public SaajSoapMessageFactory messageFactory() {
         SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
 
-        // SOAP 1.2 세팅 (기본값은 SOAP 1.1)
-        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
+        // SOAP 1.1 — AS-IS ERP ASMX(UIC0001/UIC0003, WsiProfiles.BasicProfile1_1)와 규약 일치.
+        //   (종전 SOAP_12 는 ASMX document/literal 서비스와 버전 불일치로 호출 실패 위험이었음.)
+        messageFactory.setSoapVersion(SoapVersion.SOAP_11);
         return messageFactory;
     }
 }

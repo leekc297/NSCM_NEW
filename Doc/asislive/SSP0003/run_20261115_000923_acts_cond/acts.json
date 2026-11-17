@@ -1,0 +1,51 @@
+{
+ "id": "SSP0003",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 11개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0200_GET_PLANT_SITE_BY_DIVISION"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      99,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      30,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0003-S5dcee3",
+    "SSP0003-Sa16183",
+    "SSP0003-S8e0a78"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 00:09:06"
+}

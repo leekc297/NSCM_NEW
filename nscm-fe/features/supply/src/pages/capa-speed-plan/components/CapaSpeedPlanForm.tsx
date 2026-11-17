@@ -186,14 +186,14 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
           {/* 2단 — Version(+Plan Type) / Status / Site / Plant */}
           {/* Version(Seq) + Plan Type 를 한 칸(size=3)에 Box flex 50:50 으로 묶는다 — 자매 SCP0104/0108
               패턴(사용자 확정 2026-10-26). size=2+1 로 쪼개면 조회조건 그리드(전 칸 size=3·min-width 290)가
-              뒤틀려 콤보 폭이 들쭉날쭉해진다(사용자 지적 2026-10-27). Version 라벨 "Ver." 는 리터럴
-              (사용자 결정): `SCM_ADM_MSG_M` 에 "Ver." 0건이고 근사코드 LBL00031="Version." 재사용은 표기
-              불일치라 신규 채번 대신 하드코딩(같은 파일 'Module/Pack' 선례). 정식 LBL 채번 시 t() 로 교체.
+              뒤틀려 콤보 폭이 들쭉날쭉해진다(사용자 지적 2026-10-27). Version 라벨 'Ver.' = LBL01275
+              (KO/EN/CN 'Ver.', DB 등록 2026-11-12, MSG_TP_CD='LBL'). 과거 리터럴 하드코딩은 다국어
+              미처리라 i18n 코드로 교체(LBL00031="Version." 은 표기 불일치라 못 씀).
               Plan Type 은 조회 파라미터가 아니라 파생 표시다(`txtPlanType.Enabled=false`). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label='Ver.'
+              label={t('LBL01275', '_Ver.')}
               labelAlign='right'
               render={() => (
                 <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>

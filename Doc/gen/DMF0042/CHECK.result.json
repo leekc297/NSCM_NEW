@@ -1,6 +1,6 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T02:53:34.285Z",
+ "ts": "2026-11-17T06:13:46.816Z",
  "producer": "check.js",
  "id": "DMF0042",
  "final": true,
@@ -9,7 +9,7 @@
  "verdict": "fail",
  "summary": {
   "block": 25,
-  "warn": 102
+  "warn": 103
  },
  "issues": [
   {
@@ -106,7 +106,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 FAIL 15행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
+   "msg": "대조표 FAIL 322행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
    "where": "",
    "evidence": [
     {
@@ -119,7 +119,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 미검증 8756행 — 검사 사유 ERROR 6956 · NOT_RUN 18677 · REVIEW 968 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
+   "msg": "대조표 미검증 8449행 — 검사 사유 ERROR 6761 · NOT_RUN 17782 · REVIEW 465 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
    "where": "",
    "evidence": [
     {
@@ -132,7 +132,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "작업 원장 미완료 1235건 / 검사 인스턴스 1275 — W2 15 · W3 1 · W4 8 · W5 96 · W6 476 · W7 639 · 구현 의심 10 (Doc/verify/DMF0042/work_ledger.md)",
+   "msg": "작업 원장 미완료 952건 / 검사 인스턴스 2338 — W3 20 · W5 62 · W6 339 · W7 96 · W9 435 · 구현 의심 6 (Doc/verify/DMF0042/work_ledger.md)",
    "where": "",
    "evidence": [
     {
@@ -159,7 +159,7 @@
    "id": "R05",
    "class": "BLOCK",
    "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
-   "where": "components/BusinessPlanGrid.tsx:149",
+   "where": "components/BusinessPlanGrid.tsx:150",
    "evidence": [
     {
      "kind": "exec",
@@ -327,7 +327,7 @@
   {
    "id": "S01",
    "class": "BLOCK",
-   "msg": "정적 게이트(run_verify.py --static) 실행 — 실행 결과 없음(rc=1) —                                                     ^^^ | UnboundLocalError: cannot access local variable 'mid' where it is not associated with a value",
+   "msg": "정적 게이트 직접 FAIL 0(정적 판정 3801행 · ERROR 2551) — FAIL 1: I4×1 — Doc/verify/DMF0042/static_gate.md",
    "where": "",
    "evidence": [
     {

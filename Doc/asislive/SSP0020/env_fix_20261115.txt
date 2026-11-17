@@ -1,0 +1,5 @@
+SSP0020 실행 환경 보완 2026-11-15 09:19
+- TB_FX_ProgramInfo(LGCE_SCMDEV) SSP0020 ProgramPath = SSP\Plan\SSP0020_Delegate.UIL.dll, ClassName = GSCM.SSP.Plan.UIL.SSP0020_Delegate, ProgramPath2·3 = GSCM.SSP.Plan.UIL.dll
+- 소스에 SSP0020_Delegate.UIL csproj 없음(menu_missing_dll.txt 24행). 클래스 원문 = 06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs(GSCM.SSP.Plan.UIL.csproj 353행)
+- 조치: bin\Debug\SSP\Plan\GSCM.SSP.Plan.UIL.dll(11-12 16:17 빌드)을 SSP0020_Delegate.UIL.dll 이름으로 복사. 원본 소스·csproj·DB 변경 없음
+- 되돌리기: bin\Debug\SSP\Plan\SSP0020_Delegate.UIL.dll·.pdb 삭제

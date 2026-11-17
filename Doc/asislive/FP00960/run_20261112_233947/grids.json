@@ -1,0 +1,436 @@
+{
+ "id": "FP00960",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 62.846s, UI : 0.007s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "AgingInventory",
+     "rows": 0,
+     "cols": 27,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Bld."
+       ],
+       "label": "Bld.",
+       "tag": "FACTORY_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FACTORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Lot ID"
+       ],
+       "label": "Lot ID",
+       "tag": "LOT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "LOT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Prod. Type"
+       ],
+       "label": "Prod. Type",
+       "tag": "PRODUCTION_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRODUCTION_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Route"
+       ],
+       "label": "Route",
+       "tag": "ROUTE_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "ROUTE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Route Desc."
+       ],
+       "label": "Route Desc.",
+       "tag": "ROUTE_DESC",
+       "width": "160",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ROUTE_DESC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Operation"
+       ],
+       "label": "Operation",
+       "tag": "OPERATION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPERATION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Operation Name"
+       ],
+       "label": "Operation Name",
+       "tag": "OPERATION_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPERATION_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Line"
+       ],
+       "label": "Line",
+       "tag": "LINE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LINE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Tray Operation Status"
+       ],
+       "label": "Tray Operation Status",
+       "tag": "TRAY_OP_STATUS",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TRAY_OP_STATUS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Aging Input Date"
+       ],
+       "label": "Aging Input Date",
+       "tag": "FCS_INPUT_DATE",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FCS_INPUT_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Current Op Start Time"
+       ],
+       "label": "Current Op Start Time",
+       "tag": "OP_START_TIME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OP_START_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Remain Lead Time(Day)"
+       ],
+       "label": "Remain Lead Time(Day)",
+       "tag": "REMAIN_LEAD_TIME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "REMAIN_LEAD_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Degas End Date"
+       ],
+       "label": "Degas End Date",
+       "tag": "DEGAS_END_DATE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DEGAS_END_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Exp. Formation End Date(90)"
+       ],
+       "label": "Exp. Formation End Date(90)",
+       "tag": "AVAILABLE_DATE2",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "AVAILABLE_DATE2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Hold YN"
+       ],
+       "label": "Hold YN",
+       "tag": "WIPHOLD_YN",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "WIPHOLD_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Special YN"
+       ],
+       "label": "Special YN",
+       "tag": "SPECIAL_YN",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SPECIAL_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Unhold Exp Date"
+       ],
+       "label": "Unhold Exp Date",
+       "tag": "UNHOLD_EXP_DATE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UNHOLD_EXP_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "QTY"
+       ],
+       "label": "QTY",
+       "tag": "QTY",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Org. QTY"
+       ],
+       "label": "Org. QTY",
+       "tag": "ORIGINAL_QTY",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "ORIGINAL_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "UPDATE_TIME",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "UPDATE_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Last Update User"
+       ],
+       "label": "Last Update User",
+       "tag": "UPDATE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "UPDATE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

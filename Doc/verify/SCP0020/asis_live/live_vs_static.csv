@@ -1,0 +1,43 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0027_GET_DM_DYNAMIC_QUERYS,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SCM_SYS_GET_SPREAD_TITLE,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0020_GET_TACT_TIME_OSP,SCP0020_TactTime.cs:980 Find_Packer,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,7회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0020_GET_TACT_TIME,SCP0020_TactTime.cs:1067 FindData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_GET_TACT_TIME_EXCEPT,SCP0020_TactTime.cs:1397 FindData_Except,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_GET_TACT_TIME_EXCEPT_OSP,SCP0020_TactTime.cs:1321 FindData_Except_Packer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_SAVE_TACT_TIME,SCP0020_TactTime.cs:1797 SaveData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_SAVE_TACT_TIME_EXCEPT,SCP0020_TactTime.cs:2227 SaveData_Except,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_SAVE_TACT_TIME_EXCEPT_OSP,SCP0020_TactTime.cs:2023 SaveData_Except_Packer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0020_SAVE_TACT_TIME_OSP,SCP0020_TactTime.cs:1560 SaveData_Packer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),26개,25개,INFO,공통 12 · 선언만 14 · 실측만 13
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbLine,Y,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboValid,Y,Valid,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cboOperationGroup,Y,Operation Group* [필수],LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Plant,정적 컬럼 사실 33행(시트 미지정 포함),컬럼 30(보임 23) · 헤더 1단 · 행 0 · 고정 7,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdMain/Packer,정적 컬럼 사실 18행(시트 미지정 포함),컬럼 20(보임 14) · 헤더 1단 · 행 855 · 고정 6,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdExcept/Tact Time Except,정적 컬럼 사실 27행(시트 미지정 포함),컬럼 28(보임 16) · 헤더 1단 · 행 0 · 고정 7,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

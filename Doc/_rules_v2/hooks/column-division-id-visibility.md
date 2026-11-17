@@ -64,10 +64,10 @@
 | 제약 | 사유 |
 |---|---|
 | ❌ 공유 SP `PKG_NSCM_UI_COM_MENU` 변경 금지 | 전 화면 공용 → 회귀 위험. (`feedback_be_no_modification_rule`) |
-| ❌ BE `GridColumn` DTO / Java 변경 금지 | BE 무변경 룰. |
-| ✅ DIVISION_ID 값을 free attribute 로 **복사** (관례 `ATTRIBUTE3`) | `attribute1~10` 은 이미 DTO 노출 → FE 전달 가능. 화면별 attribute 매핑 확인 후 free 선택 (DMF0020: attribute1=modalKey / attribute2=comboKey / attribute3=free). |
+| ❌ BE `GridColumn` DTO / Java 변경 금지 | BE 무변경 룰. (2026-11-13 정정: BE 수정 가부는 작업 모드를 따름. `tools/Harness/harness.json` repairScope 가 DB MODE(DB_ONLY)면 직접 수정 금지, UI/DB MODE(DB_FE)면 직접 수정. CLAUDE.md §1-8) |
+| ✅ DIVISION_ID 값을 free attribute 로 **복사** (관례 `ATTRIBUTE3`) | `attribute1~10` 은 이미 DTO 노출 → FE 전달 가능. 화면별 attribute 매핑 확인 후 free 선택 (DMF0020: attribute1=modalKey / attribute2=comboKey / attribute3=free). (2026-11-13 정정: ✅ 의무 → **DEPRECATED** — 머리말 2026-07-10 개정대로 신규 화면은 ATTRIBUTE3 복사 금지, `divisionId` 를 컬럼 조회 body 로 전달해 서버측 토큰 필터 사용. 정본 DMF0074) |
 | ✅ 메타 복사는 **기존 DIVISION_ID 실데이터만** | 임의 division 값 생성 금지 (#78). 공란은 그대로 공란. |
-| ✅ FE **클라이언트 측 토큰 필터** | division 변경 시 재fetch 없이 즉시 재필터. |
+| ✅ FE **클라이언트 측 토큰 필터** | division 변경 시 재fetch 없이 즉시 재필터. (11-13 정정: 현행은 서버측 필터 + Division 변경 후 컬럼 **재fetch 필수**(`fetchStaticColumns` 재호출) — 클라이언트 토큰 필터는 fallback 하드코딩 스냅샷 경로에만) |
 
 ---
 
@@ -127,6 +127,7 @@ const visibleColumns = useMemo(
 
 ```bash
 # (1) division 토큰 필터 존재
+# (2026-11-13 정정: `_divisionAllow` 는 fallback 하드코딩 스냅샷 경로에만 남는 방식. 머리말 2026-07-10 개정 기준 신규 화면은 컬럼 조회 body 의 `divisionId` 전달 여부를 확인한다)
 grep -n "_divisionAllow" features/**/components/*Grid.tsx
 # (2) visibleColumns deps 에 divisionId 포함
 grep -nA12 "visibleColumns = useMemo" features/**/components/*Grid.tsx | grep "divisionId"

@@ -3,14 +3,14 @@
 > ⭐ **한 줄 요약**: 로컬 Docker Oracle Free Edition (12 GB 한도) 에 사용자 제공 CSV 를 적재할 때의 표준 패턴 + 사고 회피 절차.
 > 작성: 2026-05-30
 > 관련 룰: [21_TROUBLESHOOTING.md](21_TROUBLESHOOTING.md) §10 / [22_PACKAGE_ARTIFACTS.md](22_PACKAGE_ARTIFACTS.md)
-> 관련 hook: [hooks/anti-simplification.md](hooks/anti-simplification.md)
+> 관련 hook: [anti-simplification.md](../_rules_v2/anti-simplification.md) (2026-11-13 정정: 링크 `hooks/anti-simplification.md` → `Doc/_rules_v2/anti-simplification.md`)
 > 적용 시점: 사용자 폴더 (예: `C:\TRANFILE\DB\DATA\`) 에 받은 CSV/DDL 을 로컬 컨테이너에 적재할 때
 
 ---
 
 ## §1. 배경
 
-NSCM 로컬 개발 환경은 사내 클라우드 Oracle 대신 **Docker `gvenzl/oracle-free:23-slim-faststart`** 를 사용. Oracle Database Free Edition 의 라이센스 한도 (12 GB user data, single-pluggable-DB) 와 사용자 제공 CSV 의 데이터 형태 (multi-line SQL, `\r\n` line ending, 한글 UTF-8) 가 결합되어 매 적재마다 동일한 패턴의 사고가 반복됨.
+NSCM 로컬 개발 환경은 사내 클라우드 Oracle 대신 **Docker `gvenzl/oracle-free:23-slim-faststart`** 를 사용 (2026-11-13 정정: 이 문장은 작성 시점(2026-05-30) 기준 — 2026-06-10 부터 기본 DB 는 사내 Oracle 직접 연결이고 로컬 Docker 는 보조/실험용. 근거 `32_CLAUDE_ORACLE_DIRECT.md` 대상 DB 표 · `_artifacts/local-docker-oracle/start-all.ps1` 머리말). Oracle Database Free Edition 의 라이센스 한도 (12 GB user data, single-pluggable-DB) 와 사용자 제공 CSV 의 데이터 형태 (multi-line SQL, `\r\n` line ending, 한글 UTF-8) 가 결합되어 매 적재마다 동일한 패턴의 사고가 반복됨.
 
 본 룰은 그 패턴을 표준화하여 다음 적재 작업이 첫 시도에서 성공하도록 함.
 

@@ -779,15 +779,23 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (newRows.length > 0) GridAction.addRowSet(grid, newRows);
   };
 
-  const activeColumns = staticColumns[activeSheet];
+  // 컬럼 설정(P04)은 **항상 Assign 시트**를 대상으로 한다(아래 ColumnLayoutModal 주석 참조).
+  const columnSettingColumns = staticColumns[assignSheet];
 
   /**
-   * ELTR/ASSEMBLY 하위 탭 라벨 — 표시 전용(사용자 지시 2026-11-04).
+   * 하위 탭 라벨 — 표시 전용(사용자 지시 2026-11-04).
    * AS-IS 는 Division Type(Electrode/Cell/Module-Pack) 라디오로 시트를 '교체'한다(둘 다 띄우지 않는다).
-   * 그 거동 그대로, 현재 모드 1개만(`isEltr ? ELTR : ASSEMBLY`) 안쪽 TabWrapper 에 넣어 탭 아래 탭으로
-   * 보이게 하고(SCP0055 Shipment(Allo) Report 와 동일한 중첩 TabWrapper 패턴), Division 변경 시 라벨만 바뀐다.
+   * 그 거동 그대로, 현재 모드 1개만 안쪽 TabWrapper 에 넣어 탭 아래 탭으로 보이게 하고
+   * (SCP0055 Shipment(Allo) Report 와 동일한 중첩 TabWrapper 패턴), Division 변경 시 라벨만 바뀐다.
+   *
+   * 라벨은 AS-IS FarPoint 시트명과 일치시킨다(사용자 지시 2026-11-10 — 설계 기준 정합).
+   *   · Line Assign 탭: `spdAssign` 시트명 = ELTR / ASSEMBLY
+   *   · SOP 탭:        `spdSOP`    시트명 = SOP_ELTR / SOP_ASSEMBLY (= 'SOP_' + Assign 시트명)
+   * 근거: 01_layout §1.1(AddSheet SOP_ELTR/SOP_ASSEMBLY, cs:2067-2068) ·
+   *       02_search-combo(p_sheet_name = 'SOP_' + _sheet_name).
    */
   const modeTabLabel = isEltr ? TAB_MODE_LABEL.ELTR : TAB_MODE_LABEL.ASSEMBLY;
+  const sopModeTabLabel = `SOP_${modeTabLabel}`;
 
   return (
     <>
@@ -846,7 +854,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
           {/* SOP 탭 라벨은 `SCM_ADM_MSG_M` 에 등가 LBL 이 없다 — 임의 등록 금지, 영문 fallback 유지. */}
           <TabItem label={FALLBACK_LABEL.TAB_SOP}>
             <TabWrapper>
-              <TabItem label={modeTabLabel}>
+              <TabItem label={sopModeTabLabel}>
                 <CapaLineSopGrid
                   sheet={sopSheet}
                   data={sopRows}
@@ -919,19 +927,24 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         저장 후 그리드를 비우고 Search 를 재유도한다 — 설정이 바뀌면 이전 조회 rows 는 무효다
         (design 03 §2.4 T6 / 01 §3.3 결론3). 조회·저장·복원의 sheetName/columnType 3점이 일치해야
         "저장은 되는데 재진입 시 원복" 사고가 나지 않는다(§5-9).
+
+        **스코프 = 항상 Assign 시트**(activeSheet 아님 — 사용자 지시 2026-11-10, AS-IS 파리티).
+        AS-IS `btnColumn_Click`(cs:6096-6105)은 탭과 무관하게 `_sheet_name`(=Division Type, ELTR/ASSEMBLY)
+        으로 팝업을 열고 OK 시 `BeforeFindDataAssign()` 로 **Assign 그리드만** 재구성한다(design 03 T6).
+        SOP 그리드는 AS-IS 에서 개인화 대상이 아니다. 그래서 SOP 탭에서 열어도 Assign 시트를 설정한다.
       */}
       <ColumnLayoutModal
         open={openColumnSetting}
         modalClose={() => setOpenColumnSetting(false)}
         menuId={MENU_ID}
-        sheetName={activeSheet}
+        sheetName={assignSheet}
         columnType={TITLESET_COLUMN_TYPE}
         divisionId={sc.divisionId}
         // AS-IS 가 SCP0104 에서만 가리던 ID/NAME 컬럼 — 공용 팝업에 화면 전용으로 전달(cs:349-357).
         hiddenColumns={[...COLUMN_SETTING_HIDDEN_COLUMNS]}
-        fallbackColumns={toLayoutFallback(activeColumns)}
+        fallbackColumns={toLayoutFallback(columnSettingColumns)}
         onSave={settings => {
-          const sheet = activeSheet;
+          const sheet = assignSheet;
           applyColumnLayout(
             sheet,
             settings.map(setting => ({

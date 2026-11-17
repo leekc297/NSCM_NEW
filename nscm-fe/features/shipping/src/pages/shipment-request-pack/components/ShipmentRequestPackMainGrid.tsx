@@ -16,6 +16,8 @@ import {
   dailyKeysOfWeek,
   distributeToDaily,
   monthKeyOfDaily,
+  splitMonthlyByDefaultDay,
+  splitWeeklyByDefaultDay,
   sumValues,
   weekKeyOfDaily,
   weekKeysOfMonth,
@@ -54,6 +56,37 @@ const measureColorToCss = (raw: string | undefined): string => {
   return `rgb(${parts[0]}, ${parts[1]}, ${parts[2]})`;
 };
 
+// ── [ROLLBACK:ssp0026-measure-requestor-swap · 2026-11-09] ─────────────────────────────────
+//   사용자 지시(2026-11-09): 메인 그리드에서 Measure 와 Requestor(LAST_UPDATED_BY)의 좌우 위치를
+//   교체한다(AS-IS SSP0026 순서 = Measure, Requestor). DMF0045 swapMeasureBeforeRequestor 파리티 —
+//   데이터/개인화/머지는 건드리지 않는 **표시(display) 전용** 교체다.
+//
+//   왜 '표시만' 바꾸고 머지(SpreadHeaderMergeManager)는 원본 순서로 두나:
+//     · 좌측 정적 컬럼 세로병합은 fixedBindings 순서로 leftBindings 계층을 만든다(spreadHeader.ts:196).
+//       원본 순서(Requestor 가 Measure 앞)에서 Requestor 는 같은 레코드의 measure 행들에서 세로병합되고
+//       MEASURE 는 행마다 값이 달라 병합되지 않는다. 표시만 Measure 를 앞으로 옮기면 병합은 binding
+//       이름·세로 범위 기준이라 그대로 유지된다(DMF0045 동일 논리).
+//
+//   왜 fixed 재부여가 필요한가:
+//     · MEASURE 가 frozen 앵커(공용 DataGrid frozenColumns=findLastIndex(_fixed)+1)인데 Measure 를 앞으로
+//       옮기면 뒤로 간 Requestor 가 고정영역 밖으로 빠진다 → 새 마지막(Requestor)에 fixed:true 를 부여해
+//       정적 블록 전체 frozen 을 유지한다.
+//
+//   롤백: 이 함수 호출(displayStaticColumns)을 벗겨 DataGrid staticColumns 를 원본 staticColumns 로 되돌린다.
+const swapMeasureBeforeRequestor = (
+  cols: RawFlexGridColumnConfig[]
+): RawFlexGridColumnConfig[] => {
+  const mi = cols.findIndex(c => c.colNm === 'MEASURE');
+  const ri = cols.findIndex(c => c.colNm === 'LAST_UPDATED_BY');
+  // 둘 다 존재하고 아직 '원래 순서'(Requestor 가 Measure 앞)일 때만 교체 — 멱등(이미 바뀐 상태/부재 시 무변경).
+  if (mi < 0 || ri < 0 || ri > mi) return cols;
+  const next = cols.slice();
+  const [measure] = next.splice(mi, 1); // Measure 추출
+  next.splice(ri, 0, measure); // Requestor 자리(앞)에 삽입 → [..., Measure, Requestor]
+  // 고정경계 유지: 새 마지막(Requestor)도 frozen. Measure 의 fixed:true 는 그대로 둔다.
+  return next.map(c => (c.colNm === 'LAST_UPDATED_BY' ? { ...c, fixed: true } : c));
+};
+
 interface Props<Row extends PackRow | CellRow> {
   sheet: SHEETS.PACK | SHEETS.CELL;
   rows: Row[];
@@ -84,6 +117,8 @@ interface Props<Row extends PackRow | CellRow> {
   confirmDay?: string;
   // 셀 콤보(@divisionId/@mnuId) 바인드 해소용 — Cell Biz FromSite/ToSite 콤보 SQL @키 치환.
   comboParams?: Record<string, string>;
+  // 기본요일 코드(MON/TUE/.../SUN) — W→D/M→D 배분 기준(AS-IS DefaultBucketDay). 미확보('')면 균등분배 폴백.
+  defaultBucketDay?: string;
 }
 
 /**
@@ -121,7 +156,21 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
   onBodCellDblClick,
   confirmDay,
   comboParams,
+  defaultBucketDay,
 }: Props<Row>) => {
+  // Auto-Sync 핸들러는 1회 등록(빈 deps)이라 최신 기본요일을 ref 로 읽는다.
+  const defaultBucketDayRef = useRef(defaultBucketDay ?? '');
+  defaultBucketDayRef.current = defaultBucketDay ?? '';
+  // 주말 D_ leaf 헤더 색 맵 ref — 선언은 여기(formatItem useEffect 앞)에 둬 use-before-define 를 없앤다.
+  //   실제 값(.current)은 아래 dynColMetas 가 준비된 뒤 할당한다. formatItem 콜백은 렌더 후 실행돼 최신값을 읽는다.
+  const weekendColorRef = useRef<Map<string, string>>(new Map());
+  // 표시 전용 컬럼 — Measure 를 Requestor 앞으로 교체(item 1, AS-IS/DMF0045 파리티). 머지(mergeManager)·
+  //   blueRange·편집가드는 원본 staticColumns 를 그대로 쓴다(병합은 binding·세로 기준이라 표시 위치와 무관).
+  const displayStaticColumns = useMemo(
+    () => swapMeasureBeforeRequestor(staticColumns),
+    [staticColumns]
+  );
+
   // MEASURE 셀 raw 값 → 배경색. 코드(colNm)와 표시명(colLblNm) 둘 다 키로 둬 raw 값이 어느 쪽이든 매칭.
   //   formatItem(빈 deps)이 ref 로 최신 맵을 읽는다 — measures 가 async 로 와도 stale 안 됨.
   const colorMapRef = useRef<Record<string, string>>({});
@@ -227,26 +276,30 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
       };
       const rowKeys = Object.keys(row);
 
+      const defaultDay = defaultBucketDayRef.current;
       if (tag.bucket === 'D') {
         const weekKey = weekKeyOfDaily(rowKeys, binding);
         if (weekKey) setCell(weekKey, sumValues(dailyKeysOfWeek(rowKeys, weekKey).map(k => row[k])));
         const monthKey = monthKeyOfDaily(rowKeys, binding);
         if (monthKey) setCell(monthKey, sumValues(dailyKeysOfMonth(rowKeys, monthKey).map(k => row[k])));
       } else if (tag.bucket === 'W') {
+        // W→D: AS-IS DefaultBucketDay 배분 — 그 주 기본요일 1일에 전량(나머지 0). 기본요일 미확보 시 균등분배 폴백.
+        //   음수는 되돌리지 않고 그대로 배분한다(AS-IS 는 저장검증 V6/MSG00699 에서 차단, validateMainSave).
         const dayKeys = dailyKeysOfWeek(rowKeys, binding);
         const weekVal = Number(String(row[binding]).replace(/,/g, '')) || 0;
-        if (weekVal < 0) {
-          setCell(binding, sumValues(dayKeys.map(k => row[k])));
+        if (dayKeys.length > 0 && defaultDay) {
+          splitWeeklyByDefaultDay(dayKeys, weekVal, defaultDay).forEach(({ key, qty }) => setCell(key, qty));
         } else if (dayKeys.length > 0) {
           distributeToDaily(weekVal, dayKeys.length).forEach((v, i) => setCell(dayKeys[i], v));
         }
         const monthKey = dayKeys.length > 0 ? monthKeyOfDaily(rowKeys, dayKeys[0]) : undefined;
         if (monthKey) setCell(monthKey, sumValues(dailyKeysOfMonth(rowKeys, monthKey).map(k => row[k])));
       } else if (tag.bucket === 'M') {
+        // M→D: AS-IS DefaultBucketDay 배분 — 그 달 기본요일 날짜들에 균등분배(+나머지 마지막). 폴백 균등분배.
         const dayKeys = dailyKeysOfMonth(rowKeys, binding);
         const monthVal = Number(String(row[binding]).replace(/,/g, '')) || 0;
-        if (monthVal < 0) {
-          setCell(binding, sumValues(dayKeys.map(k => row[k])));
+        if (dayKeys.length > 0 && defaultDay) {
+          splitMonthlyByDefaultDay(dayKeys, monthVal, defaultDay).forEach(({ key, qty }) => setCell(key, qty));
         } else if (dayKeys.length > 0) {
           distributeToDaily(monthVal, dayKeys.length).forEach((v, i) => setCell(dayKeys[i], v));
         }
@@ -328,7 +381,22 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
         });
       toggleClass(e.cell, 'wj-cell-editable', editable);
       if (parseDynamicColumnTag(binding)) {
-        toggleClass(e.cell, 'wj-cell-non-editable', isMainGridDateConfirmed(binding, confirmDay));
+        // 확정구간 회색 밴드 — 행별 확정일 기준(AS-IS 신세대 [E20250819-000452] cs:4236/4248):
+        //   Pack=행 CONFIRM_DAY(= SYSDATE + 확정일수 - 1), Cell=행 SHIP_FROZEN(= plan_start + 확정일수 - 1).
+        //   둘 다 SP 가 yyyymmdd 로 내린다. 종전엔 콤보(Plan_InforPacker_SCP) 단일값(Pack=오늘/Cell=오늘+20)을
+        //   전 행에 적용해 공장별 확정일수(3/11/14일)가 무시됐다(정성한 2026-11-10 신고 — DB/AS-IS/SP 대조 확정).
+        //   2026-11-11 정정: Pack 프로시저 출력 밴드 컬럼은 CONFIRM_DAY, Cell 은 SHIP_FROZEN 이다(PKG_SSP0026
+        //   PACK=AS CONFIRM_DAY / CELL=AS SHIP_FROZEN 실측). 종전 매핑이 반대라 Pack 은 r.SHIP_FROZEN(미존재)을
+        //   읽어 음영이 전혀 안 떴다(정성한 2026-11-11 신고). 시트별 컬럼을 SP 출력에 맞게 교정한다.
+        const r = row as Record<string, unknown>;
+        // unknown 필드를 그대로 String() 하면 strict lint(no-base-to-string)가 막으므로 primitive 로 캐스팅한다.
+        const rowConfirmRaw = (sheet === SHEETS.CELL ? r.SHIP_FROZEN : r.CONFIRM_DAY) as
+          | string
+          | number
+          | null
+          | undefined;
+        const rowConfirmDay = String(rowConfirmRaw ?? '').replace(/-/g, '');
+        toggleClass(e.cell, 'wj-cell-non-editable', isMainGridDateConfirmed(binding, rowConfirmDay));
         // 음수 = 빨간 글자(공용 paintNegativeText) — 동적 수량 셀만, 배경/하이라이트와 공존(글자색만).
         paintNegativeText(e.cell, toGridNumber((row as Record<string, unknown>)[binding]));
       } else {
@@ -387,7 +455,7 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
   );
   const dynamicColumns = useMemo(() => buildDynamicColumns(dynColMetas), [dynColMetas]);
   // 주말 D_ leaf 헤더 색(토 파랑 / 일 빨강, AS-IS cs:542) — formatItem(헤더)이 ref 로 최신 맵을 읽는다.
-  const weekendColorRef = useRef<Map<string, string>>(new Map());
+  //   weekendColorRef 선언은 위(defaultBucketDayRef 옆)로 올렸고 여기선 값만 할당한다(dynColMetas 준비 후).
   weekendColorRef.current = useMemo(() => buildWeekendColorByBinding(dynColMetas), [dynColMetas]);
 
   // 버킷 드릴다운(design 01 R16, AS-IS SetSpreadColumn + 더블클릭 — DMF0045 동일). 전 버킷(M/W/D)을
@@ -539,7 +607,8 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
           onDrillDetail(modelId, toSite, null);
           return;
         }
-        const num = Number(String(row[binding] ?? '').replace(/,/g, ''));
+        const rawVal = row[binding] as string | number | null | undefined;
+        const num = Number(String(rawVal ?? '').replace(/,/g, ''));
         if (!Number.isFinite(num) || num === 0) return; // 0/빈 값 셀 제외(동적 수량 셀만)
         onDrillDetail(modelId, toSite, tag.bucket === 'D' ? tag.yyyymmdd : null);
         return;
@@ -587,7 +656,7 @@ export const ShipmentRequestPackMainGrid = <Row extends PackRow | CellRow>({
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
       itemsSource={rows}
-      staticColumns={staticColumns}
+      staticColumns={displayStaticColumns}
       dynamicColumns={dynamicColumns}
       sheetName={ADMIN_SHEET_NAME[sheet]}
       comboParams={comboParams}

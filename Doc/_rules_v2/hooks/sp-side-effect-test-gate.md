@@ -40,4 +40,4 @@ SELECT LINE, TEXT FROM ALL_SOURCE ... LIKE '%INSERT INTO%' OR '%UPDATE %' OR '%D
 2. ❌ rollback 검증 스크립트에 내부 COMMIT 확인 단계 생략 (rollback 무효인데 무생성으로 오인)
 3. ❌ 반대로 — 부작용 없음을 실측하고도 "위험해서 검증 생략" (검증 가능한 것은 검증 의무, anti-simplification)
 
-레퍼런스: `_deploy_packages/DMF0003_PR_20260703/04_VERIFY/verify_save_rollback.py` (①단계에서 COMMIT 발견 → 중단 분기 내장).
+레퍼런스: `_deploy_packages/DMF0003_PR_20260703/04_VERIFY/verify_save_rollback.py` (①단계에서 COMMIT 발견 → 중단 분기 내장). (2026-11-13: 이 파일은 현재 저장소에 없음 — `_artifacts/_deploy_packages/DMF0003_PR_20260703` 폴더·`verify_save_rollback.py` 모두 미존재)

@@ -1,0 +1,522 @@
+{
+ "id": "GSCM_PROGRAMINFO",
+ "from": "dump_find.json",
+ "total": "Total : 370",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "ProgramInfo",
+     "rows": 370,
+     "cols": 6,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Program ID*"
+       ],
+       "label": "Program ID*",
+       "tag": "ProgramID",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ProgramID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Program Name*"
+       ],
+       "label": "Program Name*",
+       "tag": "ProgramName",
+       "width": "200",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ProgramName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Program Path*"
+       ],
+       "label": "Program Path*",
+       "tag": "ProgramPath",
+       "width": "250",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ProgramPath",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Class Name*"
+       ],
+       "label": "Class Name*",
+       "tag": "ClassName",
+       "width": "350",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ClassName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Use YN"
+       ],
+       "label": "Use YN",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 50,
+     "data": [
+      [
+       "",
+       "DM0003",
+       "Mkt Fcst",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DM0003_MktFcst",
+       "Y"
+      ],
+      [
+       "",
+       "DM0004",
+       "Sales Site",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.DM0004_SalesSite",
+       "Y"
+      ],
+      [
+       "",
+       "DM0005",
+       "Sales Site Project Model",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.DM0005_SaleSite_PjtModelMapping",
+       "Y"
+      ],
+      [
+       "",
+       "DM0006",
+       "Customer Model Mapping",
+       "GSCM.DM.Master.UIL.dll",
+       "GCSM.DM.Master.UIL.DM0006_CustomerModelMapping",
+       "Y"
+      ],
+      [
+       "",
+       "DM0015",
+       "BOD Master",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.DM0015_BOD",
+       "Y"
+      ],
+      [
+       "",
+       "DM0020",
+       "Sales Future Price",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DM0020_SalesFuturePrice",
+       "Y"
+      ],
+      [
+       "",
+       "DM0021",
+       "Sales Plan",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DM0021_SalesPlan",
+       "Y"
+      ],
+      [
+       "",
+       "DM0022",
+       "Sales Plan Waterfall",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DM0022_SalesPlanWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DM0035",
+       "Mkt Fcst Waterfall",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DM0035_MktFcstWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DM0036",
+       "Capacity Allocation",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.DM0036_Capacity_Allocation",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0001",
+       "Customer Fcst Master",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.CustFcstMaster",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0002",
+       "Bucket Conversion",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.BucketConversion",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0003",
+       "Mkt Fcst2",
+       "DM/Plan/DMF0003_MktFcst.dll",
+       "GSCM.DM.Plan.UIL.DMF0003_MktFcst",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0003_1",
+       "Mkt Fcst(Auto)",
+       "DM/Plan/DMF0003_1_MktFcst.dll",
+       "GSCM.DM.Plan.UIL.DMF0003_1_MktFcst",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0004",
+       "Sales Site2",
+       "DM/Master/DMF0004_SalesSite.dll",
+       "GSCM.DM.Master.UIL.DMF0004_SalesSite",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0005",
+       "Sales Site Project Model2",
+       "DM/Master/DMF0005_SaleSite_PjtModelMapping.dll",
+       "GSCM.DM.Master.UIL.DMF0005_SaleSite_PjtModelMapping",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0006",
+       "Customer Model Mapping",
+       "DM/Master/DMF0006_CustomerModelMapping.dll",
+       "GCSM.DM.Master.UIL.DMF0006_CustomerModelMapping",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0007",
+       "Customer Fcst",
+       "DM/Master/DMF0007_CustFcstMaster.dll",
+       "GSCM.DM.Master.UIL.DMF0007_CustFcstMaster",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0008",
+       "ERP EDI MASTER",
+       "DM/Master/DMF0008_ErpEdiMaster.dll",
+       "GSCM.DM.Master.UIL.DMF0008_ErpEdiMaster",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0009",
+       "Biz Plan Price(Input)",
+       "DM\\Master\\DMF0009_BizPlanPrice_Input.dll",
+       "GSCM.DM.Master.UIL.DMF0009_BizPlanPrice_Input",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0010",
+       "Biz Plan Price",
+       "DM/Master/DMF0010_BizPlanPrice.dll",
+       "GSCM.DM.Master.UIL.DMF0010_BizPlanPrice",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0013",
+       "Customer Psi Upload",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0013_CustPsiUpload",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0014",
+       "Customer Fcst Upload",
+       "DM/Plan/DMF0014_CustFcstUpload.dll",
+       "GSCM.DM.Plan.UIL.DMF0014_CustFcstUpload",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0020",
+       "Sales Future Price2",
+       "DM/Master/DMF0020_SalesFuturePrice.dll",
+       "GSCM.DM.Master.UIL.DMF0020_SalesFuturePrice",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0021",
+       "Sales Plan2",
+       "DM/Plan/DMF0021_SalesPlan.dll",
+       "GSCM.DM.Plan.UIL.DMF0021_SalesPlan",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0022",
+       "Sales Plan Waterfall2",
+       "DM/Plan/DMF0022_SalesPlanWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0022_SalesPlanWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0026",
+       "ESS Channel PSI",
+       "DM/Plan/DM0026_ESSChannelPSI.dll",
+       "GSCM.DM.Plan.UIL.DM0026_ESSChannelPSI",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0035",
+       "Mkt Fcst Waterfall2",
+       "DM/Plan/DMF0035_MktFcstWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0035_MktFcstWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0039",
+       "ESS Shipment Priority",
+       "GSCM.DM.Master.UIL.dll",
+       "GSCM.DM.Master.UIL.DMF0039_ESS_Shipment_Priority",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0040",
+       "Mkt Fcst Comparison",
+       "DM/Plan/DMF0040_MktFcst_Comparison.dll",
+       "GSCM.DM.Plan.UIL.DMF0040_MktFcst_Comparison",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0041",
+       "MDF Simulator",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0041_MDF_Simulator",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0042",
+       "Biz Plan",
+       "DM/Plan/DMF0042_BizPlan.dll",
+       "GSCM.DM.Plan.UIL.DMF0042_BizPlan",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0043",
+       "해외법인 기여율 등록",
+       "DM/Master/DMF0043_Contribute_Main.dll",
+       "GSCM.DM.Master.UIL.DMF0043_Contribute_Main",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0043_01",
+       "Contribute View",
+       "DM/Master/DMF0043_Contribute_View.dll",
+       "GSCM.DM.Master.UIL.DMF0043_Contribute_View",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0044",
+       "Sales Reports",
+       "DM/Plan/DMF0044_Sales_Reports.dll",
+       "GSCM.DM.Plan.UIL.DMF0044_Sales_Reports",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0045",
+       "Shipment Request",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0045_ShipmentRequest",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0046",
+       "MktFcst",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0046_MktFcst",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0048",
+       "Sales Monitoring",
+       "DM/Plan/DMF0048_SalesMonitoring.dll",
+       "GSCM.DM.Plan.UIL.DMF0048_SalesMonitoring",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0049",
+       "ETC Sales Report",
+       "DM/Plan/DMF0049_Sales_ETC_Reports.dll",
+       "GSCM.DM.Plan.UIL.DMF0049_Sales_ETC_Reports",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0050",
+       "EDI Waterfall",
+       "DM/Plan/DMF0050_EDIWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0050_EDIWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0051",
+       "Biz Plan Waterfall",
+       "DM/Plan/DMF0051_BizPlanWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0051_BizPlanWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0051_1",
+       "Biz Plan Confirm",
+       "DM/Plan/DMF0051_1_BizPlanWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0051_1_BizPlanWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0052",
+       "EDI Summary",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0052_EDISummary",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0053",
+       "Cust Fcst Waterfall",
+       "DM/Plan/DMF0053_CustFcstWaterfall.dll",
+       "GSCM.DM.Plan.UIL.DMF0053_CustFcstWaterfall",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0066",
+       "Shipment Request JV",
+       "GSCM.DM.Plan.UIL.dll",
+       "GSCM.DM.Plan.UIL.DMF0066_ShipmentRequest_JV",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0068",
+       "Demand Manager",
+       "DM/Plan/DMF0068_DemandManager40.dll",
+       "GSCM.DM.Plan.UIL.DMF0068_DemandManager40",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0069",
+       "History Data Managing Board",
+       "DM/Plan/DMF0069_HistoryDataManagingBoard.dll",
+       "GSCM.DM.Plan.UIL.DMF0069_HistoryDataManagingBoard",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0070",
+       "Auto PR Check",
+       "DM/Plan/DMF0070_PRRequestAuto.dll",
+       "GSCM.DM.Plan.UIL.DMF0070_PRRequestAuto",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0072",
+       "N: N Master Mapping",
+       "DM/Master/DMF0072_NNMasterMapping.dll",
+       "GSCM.DM.Master.UIL.DMF0072_NNMasterMapping",
+       "Y"
+      ],
+      [
+       "",
+       "DMF0074",
+       "Metal Link Price",
+       "DM/Plan/DMF0074_MetalLinkPrice.dll",
+       "GSCM.DM.Plan.UIL.DMF0074_MetalLinkPrice",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

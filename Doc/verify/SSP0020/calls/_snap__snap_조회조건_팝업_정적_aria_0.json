@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 86,
+  "at": "2026-11-16T17:41:15.605Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 292,
+  "at": "2026-11-16T17:41:15.774Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 304,
+  "at": "2026-11-16T17:41:17.113Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

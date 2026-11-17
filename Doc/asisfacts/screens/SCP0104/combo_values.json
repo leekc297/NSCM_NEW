@@ -1,0 +1,1505 @@
+{
+ "screen": "SCP0104",
+ "generated": "2026-11-17 17:29:01",
+ "vars": {
+  "dtDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0104_CAPA_Line.cs:447 ← SCP0104_CAPA_Line_Assign.cs:46",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtVersionSeq": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "CapaVersion",
+   "targets": [
+    "SEARCH:cboVersionSeq"
+   ],
+   "ref": "SCP0104_CAPA_Line_Assign.cs:1560 ← SCP0104_CAPA_Line_Assign.cs:47",
+   "rows": [
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    },
+    {
+     "CODE": "202610",
+     "NAME": "202610"
+    },
+    {
+     "CODE": "202609",
+     "NAME": "202609"
+    },
+    {
+     "CODE": "202608",
+     "NAME": "202608"
+    },
+    {
+     "CODE": "202607",
+     "NAME": "202607"
+    },
+    {
+     "CODE": "202606",
+     "NAME": "202606"
+    },
+    {
+     "CODE": "202605",
+     "NAME": "202605"
+    },
+    {
+     "CODE": "202604",
+     "NAME": "202604"
+    },
+    {
+     "CODE": "202603",
+     "NAME": "202603"
+    },
+    {
+     "CODE": "202602",
+     "NAME": "202602"
+    },
+    {
+     "CODE": "202601",
+     "NAME": "202601"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202512",
+     "NAME": "202512"
+    },
+    {
+     "CODE": "202511",
+     "NAME": "202511"
+    },
+    {
+     "CODE": "202510",
+     "NAME": "202510"
+    },
+    {
+     "CODE": "202509",
+     "NAME": "202509"
+    },
+    {
+     "CODE": "202508",
+     "NAME": "202508"
+    },
+    {
+     "CODE": "202507",
+     "NAME": "202507"
+    },
+    {
+     "CODE": "202506",
+     "NAME": "202506"
+    },
+    {
+     "CODE": "202505",
+     "NAME": "202505"
+    },
+    {
+     "CODE": "202504",
+     "NAME": "202504"
+    },
+    {
+     "CODE": "202503",
+     "NAME": "202503"
+    },
+    {
+     "CODE": "202502",
+     "NAME": "202502"
+    },
+    {
+     "CODE": "202501",
+     "NAME": "202501"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202412",
+     "NAME": "202412"
+    },
+    {
+     "CODE": "202411",
+     "NAME": "202411"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202410",
+     "NAME": "202410"
+    },
+    {
+     "CODE": "202409",
+     "NAME": "202409"
+    },
+    {
+     "CODE": "202408",
+     "NAME": "202408"
+    }
+   ]
+  },
+  "dtOperation": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "CapaOperationByLine",
+   "targets": [
+    "SEARCH:clbOperation"
+   ],
+   "ref": "SCP0104_CAPA_Line_Assign.cs:1715 ← SCP0104_CAPA_Line_Assign.cs:61",
+   "rows": [
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    },
+    {
+     "CODE": "E2000",
+     "NAME": "E2000 Coating"
+    }
+   ]
+  },
+  "dtElectrode": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "OperationElectrodeType",
+   "targets": [
+    "SEARCH:clbElectrodeType"
+   ],
+   "ref": "SCP0104_CAPA_Line_Assign.cs:1730 ← SCP0104_CAPA_Line_Assign.cs:62",
+   "rows": [
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "A",
+     "NAME": "A"
+    },
+    {
+     "CODE": "C",
+     "NAME": "C"
+    },
+    {
+     "CODE": "Half",
+     "NAME": "Half"
+    },
+    {
+     "CODE": "Mono",
+     "NAME": "Mono"
+    },
+    {
+     "CODE": "Anode",
+     "NAME": "Anode"
+    },
+    {
+     "CODE": "Cathode",
+     "NAME": "Cathode"
+    },
+    {
+     "CODE": "Folding",
+     "NAME": "Folding"
+    },
+    {
+     "CODE": "Stacking",
+     "NAME": "Stacking"
+    },
+    {
+     "CODE": "AZS Stacking",
+     "NAME": "AZS Stacking"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "S",
+     "NAME": "S"
+    },
+    {
+     "CODE": "W",
+     "NAME": "W"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    },
+    {
+     "CODE": "-",
+     "NAME": "-"
+    }
+   ]
+  }
+ }
+}

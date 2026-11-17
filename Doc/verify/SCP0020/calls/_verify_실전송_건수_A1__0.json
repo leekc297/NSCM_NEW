@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3531,
+  "at": "2026-11-14T01:22:26.046Z",
+  "user": "minyonglee1",
+  "test": "실전송 건수(A1)"
+ }
+]

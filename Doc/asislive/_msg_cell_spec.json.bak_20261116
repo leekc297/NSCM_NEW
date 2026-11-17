@@ -1,0 +1,176 @@
+{
+ "_src": "2026-11-15 경로 메시지 셀 입력 시나리오. 값은 원문 분기 조건에서 정함. 저장하지 않고 닫음(대화상자 정책 no · 닫기 close)",
+ "SCP0020": [
+  {
+   "handler": "CheckDigitValueEntered",
+   "expect": "MSG00203",
+   "edit": true,
+   "why": "SCP0020_TactTime.cs:2877 nVal > checkMaxValue || nVal < nMinTactTime || TryParse 실패 · 검사 호출은 활성 시트 shtMain(Plant)일 때만(2612행) · Find 는 활성 시트로 Plant/Packer 조회를 나눔",
+   "steps": [
+    {
+     "cell": "TACT_TIME",
+     "value": "-1",
+     "mode": "value"
+    }
+   ],
+   "pre_set": [
+    {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "0",
+     "wait": 1
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ActiveSheetChanged"
+     },
+     "wait": 2
+    }
+   ]
+  }
+ ],
+ "SCP0041": [
+  {
+   "handler": "ActiveSheet_CellChanged",
+   "expect": "MSG00108",
+   "edit": false,
+   "why": "SCP0041_StockOSP.cs:828 nDate1(DATE_FORECAST_START) > nDate2(DATE_FORECAST_FINISH) · 날짜 열은 Pack Hold Stock 시트(SCP0041_GET_PACK_HOLD_STOCK)에만 있음 · 원천 SCM_DNM_STOCK_LOT_CONTROL Division 82 1,621행 CUTOFF 20221211~20241227(11-15 조회) · 처리기는 InitEvent(224행) 시점 활성 시트에만 연결 · EditButton 은 iFocusTabIndex == 1 일 때만 Pack 시트 잠금 해제(259행) · iFocusTabIndex 는 SheetTabClick→SetTabIndex(855행)",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "SheetTabClick",
+      "index": "1"
+     }
+    },
+    {
+     "act": {
+      "cell": "0,1",
+      "double": "0",
+      "grid": "spdMain",
+      "sheet": "1"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cell": "DATE_FORECAST_FINISH",
+     "value": "2026-01-01",
+     "mode": "value"
+    },
+    {
+     "cell": "DATE_FORECAST_START",
+     "value": "2099-12-31",
+     "mode": "value"
+    }
+   ],
+   "pre_set": [
+    {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "1",
+     "wait": 2
+    },
+    {
+     "name": "dCalendar",
+     "prop": "Value1",
+     "value": "20220101"
+    },
+    {
+     "name": "dCalendar",
+     "prop": "Value2",
+     "value": "20261231"
+    },
+    {
+     "name": "dCalendarCutoff",
+     "prop": "Value1",
+     "value": "20221201"
+    },
+    {
+     "name": "dCalendarCutoff",
+     "prop": "Value2",
+     "value": "20241231"
+    }
+   ],
+   "grid": "spdMain",
+   "sheet": 1
+  }
+ ],
+ "SCP0005": [
+  {
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "edit": true,
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999",
+   "steps": [
+    {
+     "cell": "LT_ARRIVAL_INLAND",
+     "value": "1000",
+     "mode": "value"
+    }
+   ]
+  }
+ ],
+ "SSP0200": [
+  {
+   "handler": "SpdMain_CellClick",
+   "expect": "MSG00098",
+   "edit": true,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5265 새 행 DIVISION_ID 빈 값에서 FROM_SITE_DESCRIPTION 클릭",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "DIVISION_ID",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "click": "FROM_SITE_DESCRIPTION",
+     "row": "new"
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_CellClick",
+   "expect": "MSG00002",
+   "edit": true,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5473 INCOTERMS 빈 값에서 TRANSPORT_MODE 클릭",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "INCOTERMS",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "click": "TRANSPORT_MODE",
+     "row": "new"
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_EditChange",
+   "expect": "MSG00287",
+   "edit": true,
+   "why": "SSP0200_ShipmentChangeRequest.cs:6367 CHANGE_REASON_CODE 빈 값('-' 포함)에서 CHANGE_REASON_DETAIL 입력",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "CHANGE_REASON_DETAIL",
+     "value": "ASISLIVE",
+     "row": "new"
+    }
+   ]
+  }
+ ]
+}

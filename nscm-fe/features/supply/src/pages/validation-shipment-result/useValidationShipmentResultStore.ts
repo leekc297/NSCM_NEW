@@ -38,9 +38,10 @@ interface Action {
   fetchStaticColumns: () => Promise<void>;
 }
 
-// Result Date 기본값 — AS-IS GetDayRange(cs:160~170 → SP GET_DATE_RANGE_YESTERDAY_BEFORE_1MONTH).
-//   SP 명은 "1MONTH" 이나 실제 SQL(SCM.foxml) 은 From/To 둘 다 DATEADD(DAY,-1) = 어제로 반환(이름이 거짓).
-//   From=To=어제. 로컬 dayjs 계산(toISOString UTC 금지, nscm-patterns §5-12).
+// Result Date 기본값(폴백) — 1차 경로는 Form 이 전역 콤보 SCM0001_GET_DATE_RANGE_YESTERDAY(AS-IS
+//   GET_DATE_RANGE_YESTERDAY_BEFORE_1MONTH foxml SQL 변환)로 사용자 timezone 기준 어제를 서버 산출해 덮는다
+//   (FN_MULTY_TIME(session.tmzCd)-1, 2026-11-12). 아래 dayjs 는 그 콤보가 도착 전이거나 빈값/tmzCd 미보유일
+//   때의 폴백 기본값(브라우저 로컬 어제)으로만 남는다. SP 명 "1MONTH" 는 거짓=실제 -1일(From=To=어제).
 const yesterday = dayjs().subtract(1, 'day');
 const initState: State = {
   initialized: false,

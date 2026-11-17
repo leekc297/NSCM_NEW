@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 216,
+  "at": "2026-11-17T05:15:25.092Z",
+  "user": "minyonglee1",
+  "test": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)"
+ }
+]

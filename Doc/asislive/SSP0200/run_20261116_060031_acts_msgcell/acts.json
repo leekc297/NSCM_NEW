@@ -1,0 +1,567 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5085~5102 새 행(Action I) ITEM_ID 더블클릭 · Division 빈 값 → MSG00098(Div)",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "click": "ITEM_ID",
+      "double": 1,
+      "row": "new",
+      "wait": 6
+     },
+     "row": 0,
+     "col": 7,
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "SCM0002_ItembyDivisionPopup",
+       "rows": null
+      }
+     ]
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5148~5162 새 행 PROJECT_CODE 더블클릭 · Division 빈 값 → MSG00098(Div)",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "click": "PROJECT_CODE",
+      "double": 1,
+      "row": "new",
+      "wait": 6
+     },
+     "row": 0,
+     "col": 9,
+     "ok": false,
+     "error": "InvalidOperationException: celldbl:0,9 failed: InvalidOperationException: cell not visible: 0,9",
+     "popups": []
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": false
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5592~5602 새 행 TO_SITE_DESCRIPTION 콤보 변경 · FROM_SITE 빈 값 → MSG00098(From Site)",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "ComboSelChange",
+       "row": "new",
+       "col_tag": "TO_SITE_DESCRIPTION",
+       "wait": "4"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=14)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0026_GET_BOD_ITEM"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5685~5702 새 행 INCOTERMS 콤보 변경 · DIVISION_ID 빈 값 → MSG00098(Div*)",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "ComboSelChange",
+       "row": "new",
+       "col_tag": "INCOTERMS",
+       "wait": "4"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=15)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0026_GET_BOD_ITEM"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:56:24",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "done": [
+   {
+    "set": {
+     "name": "cboChangeType",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Confirm",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 4.92,
+   "at": "2026-11-16 05:56:47.399",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 4.68,
+   "at": "2026-11-16 05:56:47.555",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 101.77,
+   "at": "2026-11-16 05:56:47.719",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 7325.2,
+   "at": "2026-11-16 05:56:54.885",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 4.84,
+   "at": "2026-11-16 05:57:57.233",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 6.33,
+   "at": "2026-11-16 05:57:57.395",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 97.3,
+   "at": "2026-11-16 05:57:57.535",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 5591.63,
+   "at": "2026-11-16 05:58:02.991",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 5.61,
+   "at": "2026-11-16 05:58:54.636",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 5.07,
+   "at": "2026-11-16 05:58:54.779",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 98.2,
+   "at": "2026-11-16 05:58:54.921",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2944.54,
+   "at": "2026-11-16 05:58:57.727",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 4.52,
+   "at": "2026-11-16 05:59:52.508",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 5.4,
+   "at": "2026-11-16 05:59:52.667",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 103.86,
+   "at": "2026-11-16 05:59:52.822",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2857.92,
+   "at": "2026-11-16 05:59:55.531",
+   "phase": "find+post_find"
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  }
+ ]
+}

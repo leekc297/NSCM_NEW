@@ -7,8 +7,8 @@
   "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
   "status": 200,
   "rows": 440,
-  "dur": 185,
-  "at": "2026-11-07T13:03:51.477Z",
+  "dur": 123,
+  "at": "2026-11-14T01:13:20.472Z",
   "user": "minyonglee1",
   "test": "동적 칸 정렬·방향키 응답(K1·L1)"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "postData": "{\"divisionId\":\"81\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
   "status": 200,
-  "rows": 437,
-  "dur": 3286,
-  "at": "2026-11-07T13:03:54.457Z",
+  "rows": 991,
+  "dur": 7984,
+  "at": "2026-11-14T01:13:28.018Z",
   "user": "minyonglee1",
   "test": "동적 칸 정렬·방향키 응답(K1·L1)"
  }

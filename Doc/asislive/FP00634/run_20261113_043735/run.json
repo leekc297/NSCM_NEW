@@ -1,0 +1,409 @@
+{
+ "id": "FP00634",
+ "started": "2026-11-13 04:37:35.847",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 04:37:36.097",
+   "in_menu": true,
+   "open_timed_out": true,
+   "form_type": "GSCM.FP.Planning.UIL.FP00634_Tray_Simulation",
+   "form_text": "Tray Simulation",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00634_Tray_Simulation.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:40:05.067"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 04:40:08.460",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00634\\run_20261113_043735\\dump_load.json",
+   "control_count": 85,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:40:08.466"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 04:40:08.776",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00634\\run_20261113_043735\\shots\\FP00634_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:40:08.934"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-13 04:41:05.272",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00634\\run_20261113_043735\\shots\\FP00634_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:41:05.433"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 04:41:05.910",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:41:06.689"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 04:42:12.259",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00634\\run_20261113_043735\\dump_find.json",
+   "control_count": 85,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 60.704s, UI : 0.011s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:42:12.265"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 04:42:12.426",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00634\\run_20261113_043735\\shots\\FP00634_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:42:12.592"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 04:42:13.080",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:42:13.643"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 309,
+  "calls_with_params": 309
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00634_Tray_Simulation",
+  "form_text": "Tray Simulation",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00634_Tray_Simulation.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 계획 날짜 1번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 2번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 3번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 4번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 5번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 6번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 7번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 8번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 9번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 10번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 11번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 12번째 최근(SCM_FP_PLAN_H · Plan Group KR_FORM_A)",
+   "set": {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "Plan ID 목록 없음 → Rel.(확정 계획) 체크(FP Plan ID)",
+   "set": {
+    "name": "chk_rel",
+    "prop": "Checked",
+    "value": "true"
+   },
+   "ok": true,
+   "applied": "prop:Checked",
+   "error": null
+  },
+  {
+   "rule": "Division 체크 목록에서 1번째만 체크(목록이 채워지는지 확인)",
+   "set": {
+    "name": "mcbo_division",
+    "check": "0",
+    "only": "1"
+   },
+   "ok": true,
+   "applied": "check:0:(81)Automotive Battery",
+   "error": null
+  },
+  {
+   "rule": "Division 체크 목록에서 2번째만 체크(목록이 채워지는지 확인)",
+   "set": {
+    "name": "mcbo_division",
+    "check": "1",
+    "only": "1"
+   },
+   "ok": true,
+   "applied": "check:1:(82)Advanced Battery ESS",
+   "error": null
+  }
+ ],
+ "fill_left": [
+  "cbo_fpplanid[FP Plan ID·UsrCombo] 비어 있음(항목 0개)"
+ ],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   {
+    "name": "dp_plan_date",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   {
+    "name": "chk_rel",
+    "prop": "Checked",
+    "value": "true"
+   },
+   {
+    "name": "mcbo_division",
+    "check": "0",
+    "only": "1"
+   },
+   {
+    "name": "mcbo_division",
+    "check": "1",
+    "only": "1"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 60.704s, UI : 0.011s",
+  "total": "",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 56
+ },
+ "t_open": "2026-11-13 04:37:36.057",
+ "t_find": "2026-11-13 04:41:05.555",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 85,
+  "layout_items": 16,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 23,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 309,
+  "calls_screen": 309,
+  "calls_find": 24,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 04:42:13.930",
+ "exit": 0
+}

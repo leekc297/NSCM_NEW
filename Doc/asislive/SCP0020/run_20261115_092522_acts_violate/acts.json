@@ -1,0 +1,664 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Packer",
+     "rows_before": 855,
+     "rows_after": 856,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRIORITY",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "YIELD",
+       "before": "1.00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAILY_CAPACITY",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TACT_TIME",
+       "before": "140.2597",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "lgsoo",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2021-08-17 15:41:05",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "minyonglee1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2026-10-26 15:57:42",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "INPUT_STATUS",
+       "before": "M",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "EXCEPT_YN",
+       "before": "Y",
+       "after": "N"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "EM048063P3N2",
+       "after": "EM048063P3N1"
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "-",
+       "after": "M4863P3N1"
+      },
+      {
+       "row": 1,
+       "col": "YIELD",
+       "before": "100.00",
+       "after": "1.00"
+      },
+      {
+       "row": 1,
+       "col": "DAILY_CAPACITY",
+       "before": "616",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "guminkim",
+       "after": "lgsoo"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "2020-12-21 09:51:58",
+       "after": "2021-08-17 15:41:05"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "guminkim",
+       "after": "minyonglee1"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-12-21 09:51:58",
+       "after": "2026-10-26 15:57:42"
+      },
+      {
+       "row": 1,
+       "col": "EXCEPT_YN",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "EM048063P3N3",
+       "after": "EM048063P3N2"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "M4863P3N3ITOCHU",
+       "after": "-"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "hwwoonins",
+       "after": "guminkim"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "2020-01-22 14:46:28",
+       "after": "2020-12-21 09:51:58"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-06-11 15:46:25",
+       "after": "2020-12-21 09:51:58"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "EM048063P3S4",
+       "after": "EM048063P3N3"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "STANDALONE1P-S4",
+       "after": "M4863P3N3ITOCHU"
+      },
+      {
+       "row": 3,
+       "col": "DAILY_CAPACITY",
+       "before": "600",
+       "after": "616"
+      },
+      {
+       "row": 3,
+       "col": "TACT_TIME",
+       "before": "144.0000",
+       "after": "140.2597"
+      },
+      {
+       "row": 3,
+       "col": "CREATED_BY",
+       "before": "guminkim",
+       "after": "hwwoonins"
+      },
+      {
+       "row": 3,
+       "col": "CREATION_DATE",
+       "before": "2024-09-02 11:09:24",
+       "after": "2020-01-22 14:46:28"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-09-02 11:09:24",
+       "after": "2020-06-11 15:46:25"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "EM048063P3S5",
+       "after": "EM048063P3S4"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "STANDALONE1P-S5",
+       "after": "STANDALONE1P-S4"
+      },
+      {
+       "row": 5,
+       "col": "ITEM_ID",
+       "before": "EM048063P3S5-A01",
+       "after": "EM048063P3S5"
+      },
+      {
+       "row": 5,
+       "col": "NICK_NAME",
+       "before": "SUMITOMO",
+       "after": "STANDALONE1P-S5"
+      },
+      {
+       "row": 6,
+       "col": "ITEM_ID",
+       "before": "EM048064P6B3",
+       "after": "EM048063P3S5-A01"
+      },
+      {
+       "row": 6,
+       "col": "NICK_NAME",
+       "before": "M4864P6B3",
+       "after": "SUMITOMO"
+      },
+      {
+       "row": 6,
+       "col": "DAILY_CAPACITY",
+       "before": "616",
+       "after": "600"
+      },
+      {
+       "row": 6,
+       "col": "TACT_TIME",
+       "before": "140.2597",
+       "after": "144.0000"
+      },
+      {
+       "row": 6,
+       "col": "CREATED_BY",
+       "before": "hwwoonins",
+       "after": "guminkim"
+      },
+      {
+       "row": 6,
+       "col": "CREATION_DATE",
+       "before": "2020-01-22 14:46:28",
+       "after": "2024-09-02 11:09:24"
+      },
+      {
+       "row": 6,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-06-11 15:46:25",
+       "after": "2024-09-02 11:09:24"
+      },
+      {
+       "row": 7,
+       "col": "ITEM_ID",
+       "before": "EM048064P6B4",
+       "after": "EM048064P6B3"
+      },
+      {
+       "row": 7,
+       "col": "NICK_NAME",
+       "before": "M4864P6B4",
+       "after": "M4864P6B3"
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "EM048064P8N1",
+       "after": "EM048064P6B4"
+      },
+      {
+       "row": 8,
+       "col": "NICK_NAME",
+       "before": "M4864P8N-ACP-JP",
+       "after": "M4864P6B4"
+      },
+      {
+       "row": 8,
+       "col": "DAILY_CAPACITY",
+       "before": "594",
+       "after": "616"
+      },
+      {
+       "row": 8,
+       "col": "TACT_TIME",
+       "before": "145.4546",
+       "after": "140.2597"
+      },
+      {
+       "row": 8,
+       "col": "CREATED_BY",
+       "before": "guminkim",
+       "after": "hwwoonins"
+      },
+      {
+       "row": 8,
+       "col": "CREATION_DATE",
+       "before": "2024-09-03 09:22:06",
+       "after": "2020-01-22 14:46:28"
+      },
+      {
+       "row": 8,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-09-03 09:22:06",
+       "after": "2020-06-11 15:46:25"
+      },
+      {
+       "row": 9,
+       "col": "ITEM_ID",
+       "before": "EM048064P8N2",
+       "after": "EM048064P8N1"
+      },
+      {
+       "row": 9,
+       "col": "NICK_NAME",
+       "before": "M4864P8N-ITOCHU",
+       "after": "M4864P8N-ACP-JP"
+      },
+      {
+       "row": 9,
+       "col": "CREATION_DATE",
+       "before": "2024-09-03 09:22:38",
+       "after": "2024-09-03 09:22:06"
+      },
+      {
+       "row": 9,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-09-03 09:22:38",
+       "after": "2024-09-03 09:22:06"
+      },
+      {
+       "row": 10,
+       "col": "ITEM_ID",
+       "before": "EM048126P3B6",
+       "after": "EM048064P8N2"
+      },
+      {
+       "row": 10,
+       "col": "NICK_NAME",
+       "before": "M48126P3B1-WDI",
+       "after": "M4864P8N-ITOCHU"
+      },
+      {
+       "row": 10,
+       "col": "DAILY_CAPACITY",
+       "before": "616",
+       "after": "594"
+      }
+     ],
+     "more": 203
+    }
+   ],
+   "new_rows": {
+    "spdMain/Packer": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:25:01.583",
+    "grid": "spdMain",
+    "sheet_index": 1,
+    "sheet_name": "Packer",
+    "sheet": "Packer",
+    "rows_total": 856,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "SITE_DESCRIPTION",
+      "label": "Plant Site*",
+      "data_field": "SITE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "LINE_ID",
+      "label": "Line*",
+      "data_field": "LINE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "PRIORITY",
+      "label": "Priority*",
+      "data_field": "PRIORITY",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "YIELD",
+      "label": "Yield(%)*",
+      "data_field": "YIELD",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "DAILY_CAPACITY",
+      "label": "Daily Capacity*",
+      "data_field": "DAILY_CAPACITY",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "TACT_TIME",
+      "label": "Tact Time*",
+      "data_field": "TACT_TIME",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "OPERATION_ID",
+      "label": "OPERATION_ID",
+      "data_field": "OPERATION_ID",
+      "visible": "False"
+     },
+     {
+      "index": 16,
+      "tag": "PLANT_SITE_ID",
+      "label": "PLANT_SITE_ID",
+      "data_field": "PLANT_SITE_ID",
+      "visible": "False"
+     },
+     {
+      "index": 17,
+      "tag": "INPUT_STATUS",
+      "label": "INPUT_STATUS",
+      "data_field": "INPUT_STATUS",
+      "visible": "False"
+     },
+     {
+      "index": 18,
+      "tag": "EXCEPT_YN",
+      "label": "EXCEPT_YN",
+      "data_field": "except_yn",
+      "visible": "False"
+     },
+     {
+      "index": 19,
+      "tag": "OSP_YN",
+      "label": "OSP_YN",
+      "data_field": "OSP_YN",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "10111100001111111111"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "82",
+      "Peopleworks_CN",
+      "EM048063P3N1",
+      "M4863P3N1",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "CN00249500",
+      "CN00249500-P",
+      "I",
+      "N",
+      "Y"
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:25:01.583"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Line* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:22:35",
+ "edit_focus": "누르지 못함",
+ "edit_mode": true
+}

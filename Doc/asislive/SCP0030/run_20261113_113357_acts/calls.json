@@ -1,0 +1,55 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 11:33:39.330",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 5.13,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 11:33:39.377",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2559,
+   "rows_kind": "DataSet rows",
+   "ms": 38.32,
+   "params": {
+    "p_division_id": "ALL",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='ALL', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 11:33:47.091",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156657,
+   "rows_kind": "DataSet rows",
+   "ms": 7357.59,
+   "params": {
+    "p_division_id": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

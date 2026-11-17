@@ -202,7 +202,8 @@ export const findDuplicateScheduledReceiptRows = (
     const crud = str(row.CRUD_TYPE);
     if (crud !== 'I' && crud !== 'C') continue;
     const key = keyOf(row);
-    if (seen.has(key)) return { msgId: MSG.DUPLICATE_EXISTS, message: '_이미 존재하는 데이터입니다.' };
+    if (seen.has(key))
+      return { msgId: MSG.DUPLICATE_EXISTS, message: '_신규 입력 데이터 중 중복된 데이터가 있습니다.' };
     seen.add(key);
   }
   return null;

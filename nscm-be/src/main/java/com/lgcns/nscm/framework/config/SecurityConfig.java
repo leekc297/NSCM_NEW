@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -21,6 +22,7 @@ import com.lgcns.nscm.framework.security.CustomAuthenticationProvider;
 import com.lgcns.nscm.framework.security.CustomAuthorizationManager;
 import com.lgcns.nscm.framework.security.filter.ExceptionHandlingFilter;
 import com.lgcns.nscm.framework.security.filter.JsonLoginFilter;
+import com.lgcns.nscm.framework.security.filter.SqlInjectionGuardFilter;
 import com.lgcns.nscm.framework.security.handler.AccessDeniedExceptionHandler;
 import com.lgcns.nscm.framework.security.handler.AuthenticationExceptionHandler;
 import com.lgcns.nscm.framework.security.handler.LoginFailureHandler;
@@ -110,12 +112,14 @@ public class SecurityConfig {
                     )
                 );
 
+        http.addFilterAfter(new SqlInjectionGuardFilter(), AuthorizationFilter.class);
+
         return http.build();
     }
 
 
     private JsonLoginFilter _getJsonLoginFilter(SecurityContextRepository repository) throws Exception {
-        JsonLoginFilter filter = new JsonLoginFilter();
+        JsonLoginFilter filter = new JsonLoginFilter(commonProperties.getSecurity().isIdLoginDisabled());
         filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
         filter.setFilterProcessesUrl("/user/login");
         filter.setSecurityContextRepository(repository);

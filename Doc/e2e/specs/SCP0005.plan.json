@@ -1,0 +1,655 @@
+{
+  "id": "SCP0005",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 없음)",
+  "menuId": "SCP0005",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Division",
+    "Div."
+  ],
+  "condOrder": [],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "DistributionRoute",
+  "routePath": "shipping/distribution-route",
+  "asisName": "DistributionRoute",
+  "fields": [
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active",
+        "Valid"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode",
+      "tobeLabel": "Trans Mode",
+      "catalog": "",
+      "labels": [
+        "Trans Mode"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromCountry",
+      "label": "From Country",
+      "lbl": "LBL00074",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtFromCountry",
+      "tobeLabel": "From Country",
+      "catalog": "",
+      "labels": [
+        "From Country"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromCity",
+      "label": "From City",
+      "lbl": "LBL00070",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtFromCity",
+      "tobeLabel": "From City",
+      "catalog": "",
+      "labels": [
+        "From City"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "toCountry",
+      "label": "To Country",
+      "lbl": "LBL00075",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtToCountry",
+      "tobeLabel": "To Country",
+      "catalog": "",
+      "labels": [
+        "To Country"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "toCity",
+      "label": "To City",
+      "lbl": "LBL00071",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtToCity",
+      "tobeLabel": "To City",
+      "catalog": "",
+      "labels": [
+        "To City"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 2,
+    "spans": 1,
+    "literals": [],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\distribution-route\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "toSrch",
+      "label": "To Srch",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnToSrch"
+    },
+    {
+      "key": "fromSrch",
+      "label": "From Srch",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnFromSrch"
+    },
+    {
+      "key": "eaxelUpload",
+      "label": "Upload",
+      "lbl": "LBL01130",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnEaxel_Upload"
+    },
+    {
+      "key": "excelForm",
+      "label": "Excel Form",
+      "lbl": "LBL00762",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnExcel_Form"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Distribution Route",
+      "key": "DISTRIBUTION_ROUTE",
+      "labels": [
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Created By",
+        "Creation Date",
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "City*",
+        "City Name",
+        "Country*",
+        "Last Update Date",
+        "Last Updated By",
+        "Arrival Inland",
+        "Departure Inland",
+        "Lay Off/Customs Clearance",
+        "Total L/T",
+        "L/T Type*",
+        "Voyage",
+        "Waiting For Shipping",
+        "Pick Up Cost",
+        "Priority*",
+        "Route Id",
+        "Shipping Document Preparation Date",
+        "Forwarder*",
+        "Delivery Cost",
+        "City*",
+        "City Name",
+        "Country*",
+        "Trans Mode*",
+        "Freight Cost",
+        "Valid*"
+      ]
+    }
+  ],
+  "popupSheets": [
+    "POPUP"
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Distribution Route",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Distribution Route",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0005.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+      "entries": [
+        "event:this.btnEaxel_Upload.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_COUNTRY_CITY",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Distribution Route": {
+      "40": [
+        "Route Id",
+        "L/T Type*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Trans Mode*",
+        "Priority*",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Forwarder*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Shipping Document Preparation Date",
+        "Departure Inland",
+        "Waiting For Shipping",
+        "Voyage",
+        "Lay Off/Customs Clearance",
+        "Arrival Inland",
+        "Total L/T",
+        "Pick Up Cost",
+        "Freight Cost",
+        "Delivery Cost",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Route Id",
+        "L/T Type*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Trans Mode*",
+        "Priority*",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Forwarder*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Shipping Document Preparation Date",
+        "Departure Inland",
+        "Waiting For Shipping",
+        "Voyage",
+        "Lay Off/Customs Clearance",
+        "Arrival Inland",
+        "Total L/T",
+        "Pick Up Cost",
+        "Freight Cost",
+        "Delivery Cost",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Route Id",
+        "L/T Type*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Trans Mode*",
+        "Priority*",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Country*",
+        "Port Code*",
+        "Forwarder*",
+        "City Name",
+        "Country*",
+        "City*",
+        "Shipping Document Preparation Date",
+        "Departure Inland",
+        "Waiting For Shipping",
+        "Voyage",
+        "Lay Off/Customs Clearance",
+        "Arrival Inland",
+        "Total L/T",
+        "Pick Up Cost",
+        "Freight Cost",
+        "Delivery Cost",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "UPLOAD_SAVE",
+        "UPLOAD",
+        "SEARCH",
+        "SEARCH_ROUTEID",
+        "SEARCH_CITY",
+        "INSERT",
+        "SAVE",
+        "DELETE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY",
+      "INSERT",
+      "SAVE",
+      "DELETE"
+    ],
+    "CAPA Planner": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "INSERT",
+      "SAVE",
+      "SEARCH_ROUTEID",
+      "DELETE",
+      "SEARCH_CITY"
+    ],
+    "DM ADMIN": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SEARCH_CITY",
+      "INSERT",
+      "DELETE",
+      "SEARCH_ROUTEID",
+      "SAVE"
+    ],
+    "DM Planner": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY"
+    ],
+    "DM Planner (W/S)": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SEARCH_CITY",
+      "SEARCH_ROUTEID",
+      "DELETE",
+      "INSERT",
+      "SAVE"
+    ],
+    "DM Viewer": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SAVE",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY",
+      "INSERT",
+      "DELETE"
+    ],
+    "FP Planner": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "INSERT",
+      "SEARCH_ROUTEID",
+      "DELETE",
+      "SAVE",
+      "SEARCH_CITY"
+    ],
+    "FP Viewer": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "INSERT",
+      "SEARCH_ROUTEID",
+      "DELETE",
+      "SEARCH_CITY",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SEARCH_ROUTEID",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "SEARCH_CITY"
+    ],
+    "SCM Viewer": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SEARCH_CITY",
+      "INSERT",
+      "SEARCH_ROUTEID",
+      "SAVE",
+      "DELETE"
+    ],
+    "SCP Planner": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "SEARCH_CITY",
+      "SEARCH_ROUTEID"
+    ],
+    "SCP Tester": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY",
+      "SAVE",
+      "INSERT",
+      "DELETE"
+    ],
+    "SSP ADMIN": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SEARCH_ROUTEID",
+      "SAVE",
+      "SEARCH_CITY",
+      "DELETE",
+      "INSERT"
+    ],
+    "SSP Planner": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "INSERT",
+      "SEARCH_CITY",
+      "DELETE",
+      "SEARCH_ROUTEID",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SAVE",
+      "SEARCH_ROUTEID",
+      "INSERT",
+      "SEARCH_CITY",
+      "DELETE"
+    ]
+  },
+  "menuBtnCodes": [
+    "UPLOAD_SAVE",
+    "UPLOAD",
+    "SEARCH",
+    "SEARCH_ROUTEID",
+    "SEARCH_CITY",
+    "INSERT",
+    "SAVE",
+    "DELETE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

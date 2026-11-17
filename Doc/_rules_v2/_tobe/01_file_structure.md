@@ -54,7 +54,7 @@ nscm-fe/features/{domain}/src/pages/{kebab-case-screen-name}/
 
 | 최상위 MNU_ID | features 폴더 | 자식 메뉴 예 |
 |---|---|---|
-| `Master` | `features/master/` | DMF0004 sales-site / DMF0005 sales-site-project-model / DMF0006 customer-model-mapping / DMF0007 customer-fcst-master / DMF0008 erp-edi-master / DMF0020 sales-future-price / DMF0043/0043_01 contribute-main/view / DMF0072 nn-master-mapping |
+| `Master` | `features/master/` | DMF0004 sales-site / DMF0005 sales-site-project-model / DMF0006 customer-model-mapping / DMF0007 customer-forecast-master (2026-11-13 정정: customer-fcst-master → 실제 폴더명 customer-forecast-master) / DMF0008 erp-edi-master / DMF0020 sales-future-price / DMF0043/0043_01 contribute-main/view / DMF0072 nn-master-mapping |
 | `Demand` | `features/demand/` | DMF0014 customer-fcst-upload / DMF0082 forecast-price |
 | `Report` | `features/report/` | DMF0022 sales-plan-waterfall |
 | `Admin` | `features/admin/` | SYS0001 message-management / SYS0002 user-management / SYS0003 menu-management / SYS0005 procedure-management / SYS0006 api-management / SYS0010 lookup / SYS0013 dynamic-query |
@@ -76,9 +76,11 @@ sqlplus> WITH parents AS (
 
 # 2. 최상위 MNU_ID → features 폴더 매핑 (§1.3 표)
 
-# 3. Router.tsx import 검색 (기존 작성 여부)
-rg -nE "from '@(admin|authority|master|demand|report|supply|shipping|factory)/{kebab-case}'" \
-    nscm-fe/apps/web/src/core/Router.tsx
+# 3. 페이지 폴더 검색 (기존 작성 여부)
+#    (2026-11-13 정정: Router.tsx import grep → 페이지 폴더 확인. 현재 Router.tsx 는 feature import 가 없고
+#     화면은 apps/web/src/mdi/viewRegistry.tsx 가 features/*/src/pages/*/index.ts 를 자동 수집 +
+#     DB SCM_ADM_MNU_M.ROUTE_PATH('<도메인>/<페이지폴더>') 로 연결하므로 옛 grep 은 항상 0건)
+ls nscm-fe/features/*/src/pages/{kebab-case}/index.ts
 # 결과 ≥ 1 → 기존 작성됨 → cross-check 만 (신규 작성 금지)
 
 # 4. features/{layer}/src/pages/ 인벤토리 grep (자매 화면 + 표준 패턴)
@@ -92,7 +94,7 @@ ls nscm-fe/features/{layer}/src/pages/
 ### §1.5 components/ 폴더 의무 + 진입 페이지 분리 원칙 (2026-06-09 신규 — DMF0008 사고 후)
 
 > 사용자 요구 (2026-06-09): "DMF0004, DMF0005, DMF0006 처럼 폴더 내 컴포넌트를 생성하고 컴포넌트를 사용하는 것을 RULE 로 생성하고 따르도록 해주세요."
-> **CLAUDE.md §3 원칙 1 "한 사람이 개발한 것처럼"** 의 구체적 적용.
+> **CLAUDE.md §1-2 "한 사람이 개발한 것처럼"** 의 구체적 적용. (2026-11-13 정정: `§3 원칙 1` → `§1-2` — CLAUDE.md 2026-10-12 재구성 뒤 §3 은 작업 라우팅, 이 원칙은 §1 절대 원칙 2번)
 
 #### §1.5.1 의무 매트릭스
 
@@ -222,7 +224,7 @@ export { CustomerModelMapping } from './CustomerModelMapping';
 | DMF0006 (single sheet) | 2 | Form + Grid |
 | DMF0004 (4 sheet) | 5 | Form + Grid + CustomerGrid + LocationGrid + BucketGrid |
 | DMF0005 (2 sheet) | 3 | Form + Grid + PurchaseGrid |
-| DMF0007 (2 sheet + dynamic) | 3 | Form + FcstGrid + PsiGrid |
+| DMF0007 (2 sheet + dynamic) | 3 | Form + FcstGrid + PsiGrid (2026-11-13: `CustomerFcstMasterPsiGrid.tsx` 는 현재 저장소에 없음 — `customer-forecast-master/componenets/` 에는 Form · FcstGrid 2개) |
 
 → sheet 별로 별도 Grid 컴포넌트 분리. 메인 grid 외 sheet 는 명시적 이름 (Customer/Location/Bucket/Purchase/Fcst/Psi).
 
@@ -255,12 +257,12 @@ features/master/src/pages/customer-model-mapping/   ✅
 
 ### §3.2 sub-component 인라인 정의
 
-**금지**: 메인 컴포넌트 안에 Form / Grid 컴포넌트 인라인 정의. 200 lines 이상 시 분할 의무.
+**금지**: 메인 컴포넌트 안에 Form / Grid 컴포넌트 인라인 정의. 200 lines 이상 시 분할 의무. (2026-11-13 정정: 진입 페이지의 정량 한도는 §1.5.1 — 강제 400 · 권장 300. "200 lines" 는 하위 컴포넌트 파일 권장값)
 
 ### §3.3 *.module.scss 외의 CSS 파일
 
 **금지**: `.css` 또는 `.scss` (global) 신규 작성.
-**의무**: SCSS Module (`*.module.scss`) 만 사용. global CSS 는 `_tobe/14_error_handling.md` § styling 참조.
+**의무**: SCSS Module (`*.module.scss`) 만 사용. global CSS 는 `_tobe/14_error_handling.md` § styling 참조. (2026-11-13: 이 파일은 현재 저장소에 없음 — `_tobe/` 는 00~13 + `__TEMPLATE__` 만 존재)
 
 ### §3.4 알리아스 이외 상대 경로 import
 

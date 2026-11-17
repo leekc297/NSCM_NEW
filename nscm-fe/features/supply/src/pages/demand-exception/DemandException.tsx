@@ -19,7 +19,8 @@ import { demandExceptionInsertDefaults } from './utils/demandExceptionEditLock';
 import { submitDemandExceptionSave } from './utils/demandExceptionSaveRequest';
 import {
   findSafetyStockBlockedRows,
-  validateDemandExceptionRow,
+  validateRequiredFields,
+  validateRowDetails,
 } from './utils/demandExceptionSaveValidation';
 
 /**
@@ -155,17 +156,26 @@ export const DemandException = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    // design 01 §2 규칙#1(MSG00260, 안전재고 존재 시 저장 차단) — 신규행이 이미 조회된 기존행과
-    //   7컬럼 완전일치하면 저장 차단(클라 로컬 비교, PKG_SCP0129 미배포로 서버측 대사는 후속).
-    const blocked = findSafetyStockBlockedRows(dirtyRows, rows);
-    if (blocked) {
-      void setAlert({ type: 'alert', content: t(blocked.msgId, blocked.message) });
-      return;
-    }
+    // AS-IS 저장 루프(.cs:579~710) 순서 1:1 재현 — 행마다 공백(필수) → 중복 → 날짜/모델 순으로
+    //   검사하고 첫 위반에서 멈춘다. 중복이 날짜/모델보다 앞, 필수가 중복보다 앞이다(2026-11-10
+    //   사용자 지시, 완전 일치). 중복은 신규행(CRUD_TYPE='I')만 대상이라 findSafetyStockBlockedRows
+    //   가 내부에서 걸러낸다 — 기존행은 통과(AS-IS `action == FlagI` 가드와 동일).
     for (const row of dirtyRows) {
-      const violation = validateDemandExceptionRow(row);
-      if (violation) {
-        void setAlert({ type: 'alert', content: t(violation.msgId, violation.message) });
+      const required = validateRequiredFields(row);
+      if (required) {
+        void setAlert({ type: 'alert', content: t(required.msgId, required.message) });
+        return;
+      }
+      // design 01 §2 규칙#1(MSG00428) — 신규행이 이미 조회된 기존행과 7컬럼 완전일치하면 차단
+      //   (클라 로컬 비교, PKG_SCP0129 미배포로 서버측 대사는 후속).
+      const blocked = findSafetyStockBlockedRows([row], rows);
+      if (blocked) {
+        void setAlert({ type: 'alert', content: t(blocked.msgId, blocked.message) });
+        return;
+      }
+      const details = validateRowDetails(row);
+      if (details) {
+        void setAlert({ type: 'alert', content: t(details.msgId, details.message) });
         return;
       }
     }

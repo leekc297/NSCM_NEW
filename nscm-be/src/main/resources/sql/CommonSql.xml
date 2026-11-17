@@ -36,6 +36,12 @@
     <resultMap id="data6" type="com.lgcns.nscm.framework.model.CustomMap" />
     <resultMap id="data7" type="com.lgcns.nscm.framework.model.CustomMap" />
     <resultMap id="data8" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <!-- OUT 커서가 8개를 넘는 프로시저 지원. procExec 는 커서 수(rtnNum)만큼 resultMap=data{N} 을
+         참조하므로(BaseService.makeProcQuery), data{N} 이 없으면 MyBatis 가
+         "Result Maps collection does not contain value for data{N}" 로 실패한다.
+         현재 배포된 SP 최대 커서 수 = 10 (예: PKG_SCP0125.P_SCP0125_GET_SEARCH_INFO 는 9개, DB 실측 2026-09-30). -->
+    <resultMap id="data9" type="com.lgcns.nscm.framework.model.CustomMap" />
+    <resultMap id="data10" type="com.lgcns.nscm.framework.model.CustomMap" />
     <select id="callProc" statementType="CALLABLE" resultType="java.util.HashMap">
         ${procExec}
     </select>

@@ -2,7 +2,7 @@ import { FileExceluploadIcon } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MeasureSelectModal, ModelByDivisionPopup } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
@@ -19,7 +19,7 @@ import {
 } from '@shared/hooks';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/ExcelUploadModal';
 import { BodItemRouteModal, type BodItemReturn } from './components/modals/BodItemRouteModal';
@@ -191,6 +191,21 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
   const planRow = planPeriod?.[0] as Record<string, string> | undefined;
   const confirmDayPack = String(planRow?.NAME ?? '').replace(/-/g, '');
   const confirmDayCell = String(planRow?.CONFIRM_DAY ?? '').replace(/-/g, '');
+
+  // 기본요일(DEFAULT_BUCKET_DAY) — W→D/M→D 배분 기준 요일(AS-IS DefaultBucketDay, cs:2665/2727). division별
+  //   요일(40=MON, 81/82=FRI). 전 division 에 WEEKLY=MONTHLY 동일 요일이라 활성 bucketType 으로 한 번 조회.
+  //   CODE/NAME 동일(요일코드 MON 등). 메인 그리드(Cell Biz)의 Auto-Sync W→D/M→D 가 이 요일에 배분한다.
+  const [defaultBucketDayRows] = useTabComboQueries({
+    filters: [
+      {
+        comboId: COMBO.DEFAULT_BUCKET_DAY,
+        divisionId: searchParams.divisionId,
+        bucketType: searchParams.bucketType,
+      },
+    ],
+  });
+  const defaultBucketDay =
+    (defaultBucketDayRows?.[0] as { CODE?: string } | undefined)?.CODE ?? '';
 
   // 그리드 셀 콤보 바인드 파라미터(@divisionId/@mnuId) — 공용 DataGrid 가 콤보 SQL @키 치환에 쓴다.
   //   값은 인용 포함(working 예시 customer-fcst-upload GRID_COMBO_PARAMS 동형). 미전달 시 @divisionId
@@ -791,6 +806,28 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // item 3(공통버튼 하단 그리드 미작동) — 공통 툴바 Sort(F3)/Filter(F4) 와 키보드 단축키 가드는 SubTitle
+  //   의 grid/gridFilter prop 을 대상으로 삼는데, 종전엔 메인(pack/cell)에 고정돼 하단 Request/Result
+  //   Detail 에서 동작하지 않았다. 포커스된 그리드(activeGrid: onFocus/gotFocus 추적)로 grid/gridFilter 를
+  //   메인↔하단으로 라우팅한다(SSP0201/0202/DMF0008 focusedSheet 패턴 동형). 건수(countGrid)·Excel 은
+  //   메인에 고정해 포커스로 인한 회귀를 막는다(Insert/Delete/Save 는 아래 hotkeyConfig 가 activeGrid 로 분기).
+  const mainGridRef = activeMainSheet === 'pack' ? gridRefPack : gridRefCell;
+  const mainGridFilterRef = activeMainSheet === 'pack' ? gridFilterRefPack : gridFilterRefCell;
+  const focusedGridRef = (
+    activeGrid === 'spdDetail'
+      ? activeDetailSheet === 'requestDetail'
+        ? gridRefRequest
+        : gridRefResult
+      : mainGridRef
+  ) as RefObject<FlexGrid | undefined>;
+  const focusedGridFilterRef = (
+    activeGrid === 'spdDetail'
+      ? activeDetailSheet === 'requestDetail'
+        ? gridFilterRefRequest
+        : gridFilterRefResult
+      : mainGridFilterRef
+  ) as RefObject<FlexGridFilter | undefined>;
+
   // 편집계 버튼(Insert/Delete/Save)은 버튼권한 + 편집권한(canEdit) 둘 다 있어야 노출한다
   //   (convert-core §2.4 — 편집 기본 ON, 권한은 화면 오픈 시 1회).
   const hotkeyConfig: HotkeyConfig = {
@@ -798,6 +835,12 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: canEdit && hasButton('INSERT') ? handleInsert : (() => undefined),
     delete: canEdit && hasButton('DELETE') ? handleDelete : (() => undefined),
     save: canEdit && hasButton('SAVE') ? () => void handleSave() : (() => undefined),
+    // Excel 다운로드는 포커스와 무관하게 항상 활성 메인 그리드(pack/cell)를 받는다 — grid prop 이 포커스로
+    //   바뀌어 하단 그리드가 다운로드되는 회귀 방지(SSP0202 선례). 파일명은 SubTitle 기본과 동일.
+    excel: () => {
+      const g = mainGridRef.current as FlexGrid | undefined;
+      if (g) void GridAction.excelDownload(g, 'Shipment Request Pack', useUIStore.getState().setProgress);
+    },
     manual: false,
     upload: false,
   };
@@ -813,8 +856,11 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
       {isOpenSearchArea && <ShipmentRequestPackForm onSearch={handleSearch} />}
       <SubTitle
         menuId={MENU_ID}
-        grid={activeMainSheet === 'pack' ? gridRefPack : gridRefCell}
-        gridFilter={activeMainSheet === 'pack' ? gridFilterRefPack : gridFilterRefCell}
+        // item 3: Sort(F3)/Filter(F4)·키보드 가드를 포커스된 그리드(메인↔하단 Request/Result Detail)로 라우팅.
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
+        // 건수 배지는 활성 메인 그리드에 고정(포커스가 하단으로 가도 메인 건수 유지).
+        countGrid={mainGridRef as RefObject<FlexGrid | undefined>}
         dataCount={activeRows.length}
         excelFileName='Shipment Request Pack'
         useHotkey
@@ -865,6 +911,7 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
                   isEditMode={canEdit}
                   confirmDay={confirmDayCell}
                   comboParams={gridComboParams}
+                  defaultBucketDay={defaultBucketDay}
                   onFocus={() => setActiveGrid('spdMain')}
                   onCellModelDblClick={handleCellModelDblClick}
                   onBodCellDblClick={handleBodCellDblClick}

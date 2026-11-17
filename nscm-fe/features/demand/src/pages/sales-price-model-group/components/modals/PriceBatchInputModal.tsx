@@ -332,7 +332,7 @@ export const PriceBatchInputModal = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00662', '_Price Batch Input')}</h2>
+          <h2 className='headerTitle'>{t('LBL01274', '_Price Bulk Input')}</h2>
         </div>
       }
       customContentArea={

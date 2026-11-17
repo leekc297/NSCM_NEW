@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3394,
+  "at": "2026-11-14T01:48:10.449Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"EP096636PFB1-CG0\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 3455,
+  "at": "2026-11-14T01:48:14.991Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ep096636pfb1-cg0\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 3536,
+  "at": "2026-11-14T01:48:19.349Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"P096636PFB1-CG\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 3535,
+  "at": "2026-11-14T01:48:24.013Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"EP096636PFB1-CG0,EP096636PFBA-AA0\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 5,
+  "dur": 3721,
+  "at": "2026-11-14T01:48:28.508Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

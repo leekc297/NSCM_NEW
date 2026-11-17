@@ -1,0 +1,23 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999",
+   "steps": [],
+   "dialogs": [],
+   "ok": false,
+   "error": "수정 모드가 켜지지 않음"
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:39:26",
+ "_pre_set": [],
+ "edit_focus": "행 없음",
+ "edit_mode": null,
+ "note": "수정 모드가 켜지지 않음"
+}

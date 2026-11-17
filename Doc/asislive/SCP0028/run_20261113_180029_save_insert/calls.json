@@ -1,0 +1,32 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 18:01:42.033",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 30016.87,
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_operation_group": "A",
+    "p_from_site": "HQ07-A",
+    "p_to_site": "Club Car_US_AGS",
+    "p_item_id": "ACEP2065I-B1",
+    "p_transport_mode": "AIR",
+    "p_lot_size": "1",
+    "p_increment": "1",
+    "p_split_yn": "N",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0028_SAVE_SHIPMENT_LOT_SIZE @p_active_flag='M', @p_division_id='81', @p_operation_group='A', @p_from_site='HQ07-A', @p_to_site='Club Car_US_AGS', @p_item_id='ACEP2065I-B1', @p_transport_mode='AIR', @p_lot_size='1', @p_increment='1', @p_split_yn='N', @p_valid_yn='Y', @p_user_id='jaeuk.shin', @debug_mode='F'\nEXCEPTION            :   실행 제한 시간을 초과했습니다. 작업이 완료되기 전에 실행 제한 시간이 지났거나 서버가 응답하지 않습니다.",
+   "phase": "action:save"
+  }
+ ]
+}

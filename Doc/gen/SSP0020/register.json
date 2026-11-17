@@ -1,0 +1,83 @@
+{
+  "menuId": "SSP0020",
+  "screenName": "Delegate",
+  "feature": "shipping",
+  "pageDir": "delegate",
+  "routePath": "shipping/delegate",
+  "sheets": [
+    {
+      "sheetName": "Delegate",
+      "rule": "META+코드연결",
+      "columns": 8,
+      "popup": false
+    },
+    {
+      "sheetName": "Delegated List",
+      "rule": "META+코드연결",
+      "columns": 8,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SSP.SSP0020_GET_DELEGATE",
+      "asis_sp": "SSP0020_GET_DELEGATE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:btnSave.Click",
+        "event:btnUnSet.Click",
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0020.P_SSP0020_GET_DELEGATE",
+      "sheet": "Delegate",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0020_SAVE_DELEGATE",
+      "asis_sp": "SSP0020_SAVE_DELEGATE",
+      "status": "MATCH",
+      "entries": [
+        "event:btnSave.Click"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0020.P_SSP0020_SAVE_DELEGATE",
+      "sheet": "Delegate",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0020_SAVE_UNSET",
+      "asis_sp": "SSP0020_SAVE_UNSET",
+      "status": "MATCH",
+      "entries": [
+        "event:btnUnSet.Click"
+      ],
+      "methods": [
+        "UnSet"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0020.P_SSP0020_SAVE_UNSET",
+      "sheet": "Delegate",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.UP_FX_GetSSPUserUseInfoList",
+      "asis_sp": "UP_FX_GetSSPUserUseInfoList",
+      "status": "MATCH",
+      "entries": [
+        "event:btnSave.Click"
+      ],
+      "methods": [
+        "UserName_Search"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0020.P_UP_FX_GETSSPUSERUSEINFOLIST",
+      "sheet": "Delegate",
+      "btn": "ACTION"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

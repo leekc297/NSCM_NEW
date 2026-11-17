@@ -60,7 +60,7 @@ V-88e999bf,H10,SCP0127 시나리오 [자동] 조회 중 Loading 토스트 없음
 V-a74448d6,D6,SCP0127 시나리오 [자동] 선택 행 위로 Insert,PASS,[자동] 선택 행 위로 Insert: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출1·요청11 → insert,2026-11-06 19:43,,,
 V-a0fbe9fa,F1,SCP0127 시나리오 [자동] 기존 행 Delete → D 저장 요청,PASS,[자동] 기존 행 Delete → D 저장 요청: 기대대로 · 저장 요청 1 · 편집기 null · search:0행·신규0·호출1·요청11 →,2026-11-06 19:43,,,
 V-3b785b4d,C1,SCP0127 시나리오 [자동] VALUE_TYPE 셀 콤보 후보 있음,PASS,[자동] VALUE_TYPE 셀 콤보 후보 있음: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출1·요청11 →,2026-11-06 19:43,,,
-V-a6f67e63,F3,SCP0127 시나리오 [자동] VALUE_TYPE 신규 행 콤보 붙여넣기 — 후보 값 반영,판정필요,[시험 검사 CM-013 — FAIL 승격 전(화면 2개 이상 사용자 확인 뒤 check_maturity.csv status=confirmed),2026-11-06 19:43,,,
+V-a6f67e63,F3,SCP0127 시나리오 [자동] VALUE_TYPE 신규 행 콤보 붙여넣기 — 후보 값 반영,PASS,[사용자판정] PASS — 2번 VALUE_TYPE 신규 행 콤보 붙여넣기 — 사용자 확인 '정상 동작'(2026-11-09). 검사기 결함 T,2026-11-12 05:19,사용자(대화),2026-11-12 05:19,user
 V-71f30c1a,F3,SCP0127 시나리오 [자동] VALUE_TYPE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부,PASS,[자동] VALUE_TYPE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·,2026-11-06 19:43,,,
 V-e8d98e0d,F3,SCP0127 시나리오 [자동] VALUE_TYPE 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조),PASS,[자동] VALUE_TYPE 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조): 기대대로 · 저장 요청 0 · 편집기 null · se,2026-11-06 19:43,,,
 V-9e318af8,C1,SCP0127 시나리오 [자동] OPMZ_PLAN_GR_ID 셀 콤보 후보 있음,PASS,[자동] OPMZ_PLAN_GR_ID 셀 콤보 후보 있음: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출1·요,2026-11-06 19:43,,,
@@ -1616,6 +1616,6 @@ EG-9ca016a9,B8,SCP0127 Team 원천 PKG_SCP0127,PASS,PKG_SCP0127 OWNER 경유 없
 V-1c246f7d,G4,SCP0127 스냅샷 조회조건 Div 40,NA,[재실측 스냅샷 조회조건] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0127\snap\received\조회조건_D,2026-11-06 22:16,,,checker
 V-fd59482f,K4,SCP0127 스냅샷 버튼 Div 40,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0127\snap\golden\버튼_Div_40.aria.yml@757a887e,2026-11-06 22:21,사용자(대화),2026-11-06 22:21,user
 V-113b69fa,A5,SCP0127 스냅샷 헤더 PRECEDE / SAFETY STOCK DAY,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0127\snap\golden\헤더_PRECEDE_SAFETY_STOCK_DAY,2026-11-06 22:21,사용자(대화),2026-11-06 22:21,user
-V-0bd48c8a,H6,SCP0127 스냅샷 팝업 Model/Nickname,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0127\snap\golden\팝업_Model_Nickname.aria.yml@,2026-11-06 22:21,사용자(대화),2026-11-06 22:21,user
-V-c158fd73,H4,SCP0127 스냅샷 화면샷 1920,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0127\snap\golden\화면샷_1920.png@e76d7b57 — 1-c,2026-11-06 22:21,사용자(대화),2026-11-06 22:21,user
-V-1ea28358,H4,SCP0127 스냅샷 화면샷 1366,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0127\snap\golden\화면샷_1366.png@6018db4b — 1-c,2026-11-06 22:21,사용자(대화),2026-11-06 22:21,user
+V-0bd48c8a,H6,SCP0127 스냅샷 팝업 Model/Nickname,PASS,[재실측 스냅샷 팝업] 기준 Doc\verify\SCP0127\snap\golden\팝업_Model_Nickname.aria.yml ↔ 실측 일,2026-11-13 04:30,사용자(대화),2026-11-13 04:30,user
+V-c158fd73,H4,SCP0127 스냅샷 화면샷 1920,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0127\snap\golden\화면샷_1920.png ↔ 실측 C:\Projects\NS,2026-11-12 05:19,사용자(대화),2026-11-12 05:19,user
+V-1ea28358,H4,SCP0127 스냅샷 화면샷 1366,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0127\snap\golden\화면샷_1366.png ↔ 실측 C:\Projects\NS,2026-11-12 05:19,사용자(대화),2026-11-12 05:19,user

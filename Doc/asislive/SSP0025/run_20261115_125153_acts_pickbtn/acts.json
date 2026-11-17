@@ -1,0 +1,272 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0025_ItembyDivisionPopup",
+    "title": "Item by DivisionPopup",
+    "rows": 3872
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "FROM_SITE_CODE",
+     "FROM_SITE",
+     "ITEM_ID",
+     "MODEL_ID",
+     "CELL_TYPE",
+     "NICK_NAME",
+     "ELECTRODE_TYPE",
+     "ITEM_UOM",
+     "UOM_CONVERT_IN_TACT_TIME"
+    ],
+    "row": [
+     "",
+     "81",
+     "",
+     "HQ07-E",
+     "LGESOC Elec HQ07",
+     "APCAN0506B",
+     "ECE0630N1-02",
+     "Pouch",
+     "JH3",
+     "ANODE",
+     "M",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SSP0025_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SSP0025_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemId",
+      "type": "UsrMultiLineEditor",
+      "label": "Material",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivisionId",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbFromSiteId",
+      "type": "UsrCheckedList",
+      "label": "From Site",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 3872,
+      "cols": [
+       "DIVISION_ID",
+       "FROM_SITE_CODE",
+       "FROM_SITE",
+       "ITEM_ID",
+       "MODEL_ID",
+       "CELL_TYPE",
+       "NICK_NAME",
+       "ELECTRODE_TYPE",
+       "ITEM_UOM",
+       "UOM_CONVERT_IN_TACT_TIME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#1",
+     "before": "",
+     "after": "APCAN0506B"
+    },
+    {
+     "control": "txtItemId#0",
+     "before": "",
+     "after": "APCAN0506B"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SSP0025_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnModelId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0025_ItembyDivisionPopup",
+    "title": "Item by DivisionPopup",
+    "rows": 3872
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "FROM_SITE_CODE",
+     "FROM_SITE",
+     "ITEM_ID",
+     "MODEL_ID",
+     "CELL_TYPE",
+     "NICK_NAME",
+     "ELECTRODE_TYPE",
+     "ITEM_UOM",
+     "UOM_CONVERT_IN_TACT_TIME"
+    ],
+    "row": [
+     "",
+     "81",
+     "",
+     "HQ07-E",
+     "LGESOC Elec HQ07",
+     "APCAN0506B",
+     "ECE0630N1-02",
+     "Pouch",
+     "JH3",
+     "ANODE",
+     "M",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SSP0025_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SSP0025_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtModelId",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivisionId",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbFromSiteId",
+      "type": "UsrCheckedList",
+      "label": "From Site",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 3872,
+      "cols": [
+       "DIVISION_ID",
+       "FROM_SITE_CODE",
+       "FROM_SITE",
+       "ITEM_ID",
+       "MODEL_ID",
+       "CELL_TYPE",
+       "NICK_NAME",
+       "ELECTRODE_TYPE",
+       "ITEM_UOM",
+       "UOM_CONVERT_IN_TACT_TIME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "ECE0630N1-02"
+    },
+    {
+     "control": "txtModelId#0",
+     "before": "",
+     "after": "ECE0630N1-02"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SSP0025_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnItemId": {
+   "forms": [
+    "SSP0025_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125916_acts"
+  },
+  "btnModelId": {
+   "forms": [
+    "SSP0025_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "scenarios_src:SSP0025-S71002b"
+  }
+ },
+ "at": "2026-11-15 12:50:50"
+}

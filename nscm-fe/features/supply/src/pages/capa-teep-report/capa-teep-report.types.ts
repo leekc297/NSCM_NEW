@@ -34,7 +34,7 @@ export interface ComboOption {
 }
 
 /**
- * 동적 기간 헤더 1행 — `PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE` 반환(03 §2.1).
+ * 동적 기간 헤더 1행 — `PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE`(SCP0107 자체 proc, 배포·VALID) 반환(03 §2.1).
  * 반환 6컬럼 중 실사용은 4건이고 `DAY_CODE`(TVF 가 항상 `''`)·`SORT_ORDER_NO`(정렬 전용)는 표시에
  *쓰지 않는다. `MMDD_LABEL_NAME` 은 TVF 반환에 아예 없다(03 §2.1 미사용 2 / §7.2).
  * SCP0107 은 lookup `SCP_CAPA_RPT_CODE`(SEGMENT1='SCP0107', SEGMENT2 ∈ {ASSEMBLY, ELTR}) 2행이 있어
@@ -95,9 +95,10 @@ export interface CapaTeepRow {
  * **키는 camelCase 다** — `SCM_ADM_PROC_M.COL_NM` 이 이 키와 정확히 일치해야 바인딩된다(불일치는
  * 에러 없이 NULL 바인딩, 메모리 `generic-callproc-param-key-must-match-proc-m-colnm`). SCP 도메인
  * 실등록이 camelCase 다(`PKG_SCP0100.P_SCP0100_GET_GLOBAL_PSI_REPORT` = `divisionId`/`programId`/
- * `bucket`). 자매 `capa-loss-plan`/`capa-speed-plan` 은 snake(`p_from_yyyymm`)로 보내고 있어
- * `PKG_SCP0104` 배포 시 한쪽은 NULL 바인딩된다 — `convert-sp` 인계 사항이며 자매 화면 수정은
- * Hard Boundary 밖이다(자매 SCP0108 iter-1 G-07 과 동일 관측).
+ * `bucket`). **SCP0107 은 자체 `PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE` 을 쓰므로** 공용
+ * `PKG_SCP0104` 와 PROC_M 을 공유하지 않는다 — 자매 `capa-loss-plan`/`capa-speed-plan` 의 snake
+ * (`p_from_yyyymm`) 키 충돌(공용 SPREAD_TITLE NULL 바인딩)은 **SCP0107 에 해당하지 않는다**(그 건은
+ * 자매 화면·convert-sp 소관, Hard Boundary 밖).
  */
 export interface CapaTeepFilters {
   version: string; // 1 P_VERSION      Plan Month(VER_ID, yyyyMM)

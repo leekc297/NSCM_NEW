@@ -1,0 +1,50 @@
+{
+ "id": "SCP0097",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0097_SAVE_SCP_BOM_ELEC",
+   "save_sp": "SCP0097_SAVE_SCP_BOM_ELEC",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_BOM_ELEC",
+   "pk": [
+    "DIVISION_ID",
+    "PARENT_ITEM_ID",
+    "CHILD_ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PARENT_ITEM_ID": "PARENT_ITEM_ID",
+    "CHILD_ITEM_ID": "CHILD_ITEM_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "USAGE",
+    "db_col": "USAGE",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/SCP BOM Elec",
+   "writes": {
+    "SCP_MST_BOM_ELEC": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0097_SAVE_SCP_BOM_ELEC → SP SCP0097_SAVE_SCP_BOM_ELEC 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "USAGE",
+     "db_col": "USAGE",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "ERROR",
+    "note": "셀 값·변경 표시가 기대대로 바뀌지 않음 — 저장하지 않음",
+    "at": "2026-11-13 22:01:38"
+   }
+  }
+ ]
+}

@@ -1,0 +1,130 @@
+{
+ "id": "SSP0021",
+ "started": "2026-11-12 18:01:16.064",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:01:35.292",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0021_ShipmentPlan",
+   "form_text": "Shipment Plan(Auto & ESS)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0021_ShipmentPlan.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:41.828"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:01:45.189",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0021\\run_20261112_180116\\dump_load.json",
+   "control_count": 87,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:45.212"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:01:45.372",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0021\\run_20261112_180116\\shots\\SSP0021_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:45.501"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:01:45.965",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:46.867"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:01:52.936",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0021\\run_20261112_180116\\dump_find.json",
+   "control_count": 87,
+   "grid_count": 2,
+   "total": "Total : 108",
+   "time_status": "DB : 1.676s, UI : 0.112s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:53.012"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:01:53.181",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0021\\run_20261112_180116\\shots\\SSP0021_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:01:53.315"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 98,
+  "calls_with_params": 97
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0021_ShipmentPlan",
+  "form_text": "Shipment Plan(Auto & ESS)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0021_ShipmentPlan.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 1.676s, UI : 0.112s",
+  "total": "Total : 108",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:01:35.259",
+ "t_find": "2026-11-12 18:01:45.672",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 87,
+  "layout_items": 26,
+  "grids": 2,
+  "sheets": 7,
+  "header_cols": 244,
+  "data_rows": 50,
+  "grid_rows": 108,
+  "calls_total": 107,
+  "calls_screen": 98,
+  "calls_find": 18,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 18:01:54.328",
+ "exit": 0
+}

@@ -1,7 +1,20 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_popup",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--pass-with-no-tests",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +27,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0028/eg/popup/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,9 +45,60 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -72,13 +125,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 77019,
+                  "duration": 56277,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T05:57:28.503Z",
+                  "startTime": "2026-11-13T20:42:17.382Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -87,7 +142,7 @@
           ],
           "id": "85feec5f8d5a0014d343-82709bc5fbb8e2cb1e2d",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         },
         {
@@ -106,13 +161,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13465,
+                  "duration": 3980,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T05:58:55.460Z",
+                  "startTime": "2026-11-13T20:43:16.095Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -121,7 +178,7 @@
           ],
           "id": "85feec5f8d5a0014d343-77c984d52d4906990d35",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         },
         {
@@ -140,13 +197,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 145099,
+                  "duration": 50213,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T05:59:17.003Z",
+                  "startTime": "2026-11-13T20:43:22.934Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -155,7 +214,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9a437d8e0cf9850a2a04",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         },
         {
@@ -174,13 +233,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 23423,
+                  "duration": 76944,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T06:01:50.535Z",
+                  "startTime": "2026-11-13T20:44:16.013Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -189,7 +250,7 @@
           ],
           "id": "85feec5f8d5a0014d343-e2e56b3b6a86d6717fde",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         },
         {
@@ -208,13 +269,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22234,
+                  "duration": 11343,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T06:02:23.066Z",
+                  "startTime": "2026-11-13T20:45:35.841Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -223,7 +286,7 @@
           ],
           "id": "85feec5f8d5a0014d343-40bba1058edd3e1f6259",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         },
         {
@@ -242,13 +305,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 21050,
+                  "duration": 9708,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T06:02:55.301Z",
+                  "startTime": "2026-11-13T20:45:50.040Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -257,7 +322,7 @@
           ],
           "id": "85feec5f8d5a0014d343-8b672d71e3d24a4f8ec4",
           "file": "eg_popup.spec.ts",
-          "line": 878,
+          "line": 906,
           "column": 9
         }
       ]
@@ -265,8 +330,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-02T05:57:26.752Z",
-    "duration": 360276.826,
+    "startTime": "2026-11-13T20:42:16.977Z",
+    "duration": 225960.271,
     "expected": 6,
     "skipped": 0,
     "unexpected": 0,

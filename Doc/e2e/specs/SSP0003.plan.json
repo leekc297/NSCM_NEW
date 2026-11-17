@@ -1,0 +1,1004 @@
+{
+  "id": "SSP0003",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SSP0003",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "From Site",
+    "Status",
+    "Request Date",
+    "Requestor",
+    "Model/Nickname",
+    "Change Type",
+    "Dept Name",
+    "Approval",
+    "Title",
+    "Change Reason",
+    "Reason Detail",
+    "Reject Reason"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "ShipmentChangeRequestConfirmSsp0003",
+  "routePath": "shipping/shipment-change-request-confirm-ssp0003",
+  "asisName": "ShipmentChangeRequestConfirm",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite",
+      "tobeLabel": "From Site",
+      "catalog": "",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboStatus",
+      "tobeLabel": "Status",
+      "catalog": "",
+      "labels": [
+        "Status"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "approval",
+      "label": "Approval",
+      "lbl": "LBL01052",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtApproval",
+      "tobeLabel": "Approval",
+      "catalog": "",
+      "labels": [
+        "Approval"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Request Date",
+      "lbl": "LBL00747",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "Request Date",
+        "From",
+        "To",
+        "Period",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "request",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequest",
+      "tobeLabel": "Requestor",
+      "catalog": "",
+      "labels": [
+        "Requestor"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemId",
+      "label": "sItemId",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemID",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "sItemId"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "changeType",
+      "label": "Change Type",
+      "lbl": "LBL01061",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboChangeType",
+      "tobeLabel": "Change Type",
+      "catalog": "",
+      "labels": [
+        "Change Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "requestNo",
+      "label": "Request No",
+      "lbl": "LBL00744",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestNo",
+      "tobeLabel": "Request No",
+      "catalog": "",
+      "labels": [
+        "Request No"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "requestDeptName",
+      "label": "Dept Name",
+      "lbl": "LBL01071",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestDeptName",
+      "tobeLabel": "Dept Name",
+      "catalog": "",
+      "labels": [
+        "Dept Name"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "title",
+      "label": "Title",
+      "lbl": "LBL01125",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtTitle",
+      "tobeLabel": "Title",
+      "catalog": "",
+      "labels": [
+        "Title"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "changeReason",
+      "label": "Change Reason",
+      "lbl": "LBL01060",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtChangeReason",
+      "tobeLabel": "Change Reason",
+      "catalog": "",
+      "labels": [
+        "Change Reason"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "reasonDetail",
+      "label": "Reason Detail",
+      "lbl": "LBL01104",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtReasonDetail",
+      "tobeLabel": "Reason Detail",
+      "catalog": "",
+      "labels": [
+        "Reason Detail"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "rejectReason",
+      "label": "Reject Reason",
+      "lbl": "LBL00628",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRejectReason",
+      "tobeLabel": "Reject Reason",
+      "catalog": "",
+      "labels": [
+        "Reject Reason"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 2,
+    "spans": 42,
+    "literals": [
+      "Plan",
+      "Confirm",
+      "L/T(Day)",
+      "ETD",
+      "ETA",
+      "Trans Mode",
+      "Shipment Date",
+      "Qty",
+      "Shipment Date*",
+      "Qty*",
+      "Confirmed",
+      "Change"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-change-request-confirm-ssp0003\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "selfReject",
+      "label": "Self Reject",
+      "lbl": "LBL01113",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSelfReject"
+    },
+    {
+      "key": "reject",
+      "label": "Reject",
+      "lbl": "LBL00624",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnReject"
+    },
+    {
+      "key": "approval",
+      "label": "Approval",
+      "lbl": "LBL01052",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnApproval"
+    },
+    {
+      "key": "requestUser",
+      "label": "Request User",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRequestUser"
+    },
+    {
+      "key": "itemId",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "field-popup",
+      "tobe": "FunctionSearchIcon",
+      "asis": "btnItemId"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Shipment Change Request Confirm",
+      "key": "SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "labels": [
+        "",
+        "Approval Dept Name",
+        "Approval Date",
+        "Approval",
+        "Approval",
+        "Change Reason",
+        "Request No",
+        "Change Type",
+        "Delegatee Dept Name",
+        "Delegatee",
+        "Delegatee",
+        "Division",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Reject Reason",
+        "Requestor Dept Name",
+        "Request Date",
+        "Title",
+        "Requestor",
+        "Requestor",
+        "Status",
+        "To Site"
+      ]
+    },
+    {
+      "name": "Shipment Change Request Confirm Detail",
+      "key": "SHIPMENT_CHANGE_REQUEST_CONFIRM_DETAIL",
+      "labels": [
+        "A Country",
+        "A Port",
+        "BOD",
+        "change_req_no",
+        "ALL",
+        "Confirm ID",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "division",
+        "Consignee Name",
+        "Contact Point",
+        "Lot",
+        "SO No",
+        "ETA",
+        "ETD",
+        "FCST Type",
+        "From Site",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "L/T(Day)",
+        "A Country",
+        "A Port",
+        "NEW_BASE_CONFIRM_YN",
+        "BOD",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "Incoterms",
+        "L/T(Day)",
+        "Route",
+        "Qty*",
+        "Shipment Date*",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "new_yn"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "SSP0200_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0200_GET_SHIPMENT_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0003.P_",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0003.P_",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ]
+    },
+    {
+      "sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ]
+    },
+    {
+      "sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ]
+    },
+    {
+      "sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "event:btnApproval.Click"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "event:btnApproval.Click"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0003.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SSP_PLAN_PROCESSING_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "entries": [
+        "event:btnApproval.Click"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0200_GET_SHIPMENT_STATUS",
+      "entries": [
+        "event:btnApproval.Click"
+      ]
+    },
+    {
+      "sp": "SSP0003_GET_DELEGATEE_LOAD",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "DELEGATEE_LOAD",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SSP0003_GET_DELEGATEE_LOAD",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0003.P_SCM0001_GET_SCP_DAY_PERIOD",
+      "entries": [
+        "event:this.Load"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Shipment Change Request Confirm": {
+      "40": [
+        "Div",
+        "From Site",
+        "To Site",
+        "Change Type",
+        "Request No",
+        "Status",
+        "Model",
+        "Nick Name",
+        "Title",
+        "Change Reason",
+        "Requestor",
+        "Requestor Dept Name",
+        "Request Date",
+        "Approval",
+        "Approval Dept Name",
+        "Delegatee",
+        "Delegatee Dept Name",
+        "Approval Date",
+        "Reject Reason"
+      ],
+      "81": [
+        "Div",
+        "From Site",
+        "To Site",
+        "Change Type",
+        "Request No",
+        "Status",
+        "Model",
+        "Nick Name",
+        "Title",
+        "Change Reason",
+        "Requestor",
+        "Requestor Dept Name",
+        "Request Date",
+        "Approval",
+        "Approval Dept Name",
+        "Delegatee",
+        "Delegatee Dept Name",
+        "Approval Date",
+        "Reject Reason"
+      ],
+      "82": [
+        "Div",
+        "From Site",
+        "To Site",
+        "Change Type",
+        "Request No",
+        "Status",
+        "Model",
+        "Nick Name",
+        "Title",
+        "Change Reason",
+        "Requestor",
+        "Requestor Dept Name",
+        "Request Date",
+        "Approval",
+        "Approval Dept Name",
+        "Delegatee",
+        "Delegatee Dept Name",
+        "Approval Date",
+        "Reject Reason"
+      ]
+    },
+    "Shipment Change Request Confirm Detail": {
+      "40": [
+        "ALL",
+        "SO No",
+        "Project Name",
+        "FCST Type",
+        "Model",
+        "From Site",
+        "To Site",
+        "Incoterms",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date",
+        "Qty",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date*",
+        "Qty*",
+        "Building",
+        "Remarks",
+        "Customer requirement",
+        "Confirm ID",
+        "Consignee Name",
+        "Contact Point",
+        "Lot",
+        "Status Detail",
+        "Reject Reason"
+      ],
+      "81": [
+        "ALL",
+        "SO No",
+        "Project Name",
+        "FCST Type",
+        "Model",
+        "From Site",
+        "To Site",
+        "Incoterms",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date",
+        "Qty",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date*",
+        "Qty*",
+        "Building",
+        "Remarks",
+        "Customer requirement",
+        "Confirm ID",
+        "Consignee Name",
+        "Contact Point",
+        "Lot",
+        "Status Detail",
+        "Reject Reason"
+      ],
+      "82": [
+        "ALL",
+        "SO No",
+        "Project Name",
+        "FCST Type",
+        "Model",
+        "From Site",
+        "To Site",
+        "Incoterms",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date",
+        "Qty",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Trans Mode",
+        "Shipment Date*",
+        "Qty*",
+        "Building",
+        "Remarks",
+        "Customer requirement",
+        "Confirm ID",
+        "Consignee Name",
+        "Contact Point",
+        "Lot",
+        "Status Detail",
+        "Reject Reason"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "SAVE_DE",
+        "SAVE_40",
+        "SCS_CHECK",
+        "ERP_ERROR_CONFIRM",
+        "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+        "SAVE",
+        "PLAN_CHECK",
+        "INSERT",
+        "IF_CHECK",
+        "EDIT"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "ERP_ERROR_CONFIRM",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE_DE",
+      "SCS_CHECK",
+      "SAVE_40",
+      "SAVE",
+      "PLAN_CHECK",
+      "INSERT",
+      "IF_CHECK",
+      "EDIT"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "SAVE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "PLAN_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "IF_CHECK",
+      "SCS_CHECK",
+      "SAVE_DE",
+      "INSERT",
+      "SAVE_40"
+    ],
+    "DM ADMIN": [
+      "SEARCH",
+      "SAVE_40",
+      "SAVE_DE",
+      "SCS_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE",
+      "PLAN_CHECK",
+      "INSERT",
+      "EDIT",
+      "IF_CHECK"
+    ],
+    "DM Planner": [
+      "SEARCH",
+      "EDIT",
+      "IF_CHECK",
+      "INSERT",
+      "ERP_ERROR_CONFIRM",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SCS_CHECK",
+      "SAVE_DE",
+      "SAVE_40",
+      "SAVE",
+      "PLAN_CHECK"
+    ],
+    "DM Planner (W/S)": [
+      "SEARCH",
+      "IF_CHECK",
+      "INSERT",
+      "PLAN_CHECK",
+      "SAVE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE_DE",
+      "SCS_CHECK",
+      "EDIT",
+      "SAVE_40",
+      "ERP_ERROR_CONFIRM"
+    ],
+    "FP Planner": [
+      "SEARCH",
+      "ERP_ERROR_CONFIRM",
+      "SAVE",
+      "INSERT",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SCS_CHECK",
+      "PLAN_CHECK",
+      "IF_CHECK",
+      "SAVE_40",
+      "SAVE_DE"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "IF_CHECK",
+      "PLAN_CHECK",
+      "SCS_CHECK",
+      "SAVE_40",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "INSERT",
+      "ERP_ERROR_CONFIRM",
+      "SAVE",
+      "SAVE_DE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "SCS_CHECK",
+      "SAVE_DE",
+      "SAVE_40",
+      "SAVE",
+      "ERP_ERROR_CONFIRM",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "PLAN_CHECK",
+      "INSERT",
+      "IF_CHECK",
+      "EDIT"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "SCS_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "SAVE_DE",
+      "SAVE_40",
+      "PLAN_CHECK",
+      "SAVE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "INSERT",
+      "IF_CHECK"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVE_DE",
+      "INSERT",
+      "SAVE",
+      "IF_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "SAVE_40",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SCS_CHECK",
+      "PLAN_CHECK"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "SAVE_DE",
+      "INSERT",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE",
+      "ERP_ERROR_CONFIRM",
+      "SAVE_40",
+      "IF_CHECK",
+      "PLAN_CHECK",
+      "SCS_CHECK"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "SAVE_DE",
+      "IF_CHECK",
+      "SAVE",
+      "PLAN_CHECK",
+      "INSERT",
+      "SCS_CHECK",
+      "SAVE_40",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "SAVE_DE",
+      "SAVE_40",
+      "SCS_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE",
+      "PLAN_CHECK",
+      "INSERT",
+      "IF_CHECK",
+      "EDIT"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "SAVE_DE",
+      "SCS_CHECK",
+      "SAVE",
+      "SAVE_40",
+      "ERP_ERROR_CONFIRM",
+      "IF_CHECK",
+      "PLAN_CHECK",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "INSERT"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "ERP_ERROR_CONFIRM",
+    "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+    "SAVE_DE",
+    "SCS_CHECK",
+    "SAVE_40",
+    "SAVE",
+    "PLAN_CHECK",
+    "INSERT",
+    "IF_CHECK",
+    "EDIT"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

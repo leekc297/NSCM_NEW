@@ -38,9 +38,21 @@ export function judgeBlankUpload(s: { hasForm: boolean; button: boolean; req: st
 }
 
 /** 양식 입력 버킷 ↔ 메인 기간 — buckets YYYYMM[DD] · from·to 메인 기간 숫자 (EG283) */
-export function judgeFormBucket(s: { download: boolean; buckets: string[]; from: string; to: string }): J {
+//   2026-11-10 T206(SSP0023 G5 허위 FAIL '메인 기간 202610~202609'): 종전 호출부가 조회조건의 날짜 입력값 앞 2개를 시작·끝으로 썼다 —
+//   Plan Date(단일 날짜 칸)와 Period(시작·끝 2칸)의 시작이 짝지어졌다. 이제 ranges = '날짜 입력 2개를 가진 조회조건 칸'(PeriodField 1칸 = FormItem 1개) 목록.
+//   1개면 그 칸 · 여러 개면 버킷이 모두 들어가는 칸이 있으면 그 칸(이름 기록) · 어느 칸에도 안 들어가면 FAIL(전 칸 나열) · 0개면 ERROR.
+export function judgeFormBucket(s: { download: boolean; buckets: string[]; from?: string; to?: string; ranges?: { label: string; from: string; to: string }[] }): J {
   if (!s.download) return { result: 'NA', why: '양식 파일 없음' };
   if (!s.buckets.length) return { result: 'NA', why: '양식에 날짜형 버킷 칸 없음' };
+  const rg = (s.ranges || (s.from && s.to ? [{ label: '', from: s.from, to: s.to }] : [])).filter(r => r.from && r.to);
+  if (!rg.length) return { result: 'ERROR', why: `[측정 경로 없음] 메인 기간(시작·끝 2칸 조회조건)을 못 읽음 · 버킷 ${s.buckets.length}개` };
+  if (rg.length > 1) {
+    const ymx = (v: string) => v.slice(0, 6); const inside = rg.filter(r => s.buckets.every(x => ymx(x) >= ymx(r.from) && ymx(x) <= ymx(r.to)));
+    const bs = [...s.buckets].sort(); const pick = inside.find(r => ymx(bs[0]) === ymx(r.from) || ymx(bs[bs.length - 1]) === ymx(r.to)) || inside[0] || null; /* 양 끝이 맞는 칸 우선 */ const all = rg.map(r => `${r.label || '?'} ${ymx(r.from)}~${ymx(r.to)}`).join(' · ');
+    if (!pick) return { result: 'FAIL', why: `양식 버킷 ${s.buckets.length}개(${[...s.buckets].sort()[0]}~${[...s.buckets].sort().slice(-1)[0]})가 화면 기간 조건 ${rg.length}개 어디에도 안 들어감: ${all}` };
+    const j = judgeFormBucket({ download: true, buckets: s.buckets, ranges: [pick] }); return { ...j, why: `${j.why} · 기간 조건 ${rg.length}개 중 '${pick.label}' 기준(${all})` };
+  }
+  s = { ...s, from: rg[0].from, to: rg[0].to };
   if (!s.from || !s.to) return { result: 'ERROR', why: `[측정 경로 없음] 메인 기간을 못 읽음 · 버킷 ${s.buckets.length}개` };
   const ym = (v: string) => v.slice(0, 6); const b = [...s.buckets].sort(); const lo = ym(s.from), hi = ym(s.to);
   const out = b.filter(x => ym(x) < lo || ym(x) > hi);

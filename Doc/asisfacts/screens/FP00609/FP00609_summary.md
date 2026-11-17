@@ -139,7 +139,7 @@
 | GetUOMType | dtUOMType.Rows[1] | CODE |
 | GoEditMode | row | DATA_TYPE, CATEGORY_ID, IS_ROLE, D0_BACK |
 | GoEditMode | Filter | PLAN_TYPE, RELEASE_FLAG |
-| InitSpread | Filter | CONFIRM_AREA, PROGRAM_ID, SHEET_NAME |
+| InitSpread | Filter | PROGRAM_ID, SHEET_NAME, CONFIRM_AREA |
 | InsertButton | Filter | DONOTEDIT, PLAN_TYPE, RELEASE_FLAG |
 | InsertButton | row | DATA_TYPE, DIVISION_ID, SITE_ID, LINE_ID |
 | InsertButton | popup.Filter | DIVISION_ID, SITE_ID, LINE_ID, FP_PLAN_ID, PLAN_ID |
@@ -192,10 +192,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:121 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:137 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:192 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:193 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:121 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:158 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:172 |
@@ -252,25 +248,29 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:1513 |
 | this.btnCategory | Click | btnCatagory_Click | InitializeComponent:1551 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:1589 |
+| this | Load | Form_Load | .ctor:121 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:137 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:192 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:193 |
 
 ## 6. 컨트롤 (97개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 18 | layoutControlItem2, lblSql, lblData, lblInstance, lblInstance3, lblInstance4, @__Material, lblInstance1, S, layoutControlItem14, lblPlanID, lblDivision, lblItem1, layoutControlItem1, lblItem … |
-| UsrButton | 12 | btnClose, usrButton1, usrButton2, usrButton1, usrButton2, btnToggleSave, btnSql, usrButton2, btnPlanInfo, btnBucket, btnCategory, btnColumn |
+| LayoutControlItem | 18 | lblSql, lblData, lblInstance, lblInstance3, lblInstance4, @__Material, lblInstance1, S, layoutControlItem14, lblPlanID, lblDivision, lblItem1, layoutControlItem1, lblItem, @__Material1 … |
+| UsrButton | 12 | usrButton1, usrButton2, usrButton1, usrButton2, btnToggleSave, btnSql, usrButton2, btnPlanInfo, btnBucket, btnCategory, btnColumn, btnClose |
 | CheckBox | 11 | chk_month, chk_week, chk_day, chk_inv, chk_coater, chk_coaterBatch, chk_post, chk_assy, chk_subtotal, chk_total, chk_omit_zero |
 | Panel | 8 | panel1, panel1, panel3, panel2, panel5, panel3, panel4, panel1 |
 | UsrCombo | 6 | cboInstance, cboPlanId, cboUOMType, cboUnit, cboCellType, cboPancakeType |
-| EmptySpaceItem | 5 | emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem2 |
+| EmptySpaceItem | 5 | emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
 | UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| FpSpread | 4 | spdMain, spdMain, spdEdit, spdInfo |
-| SheetView | 4 | spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1 |
 | UsrTextBox | 4 | txtModel, txtModelNickName, txtMaterial, txtNickName |
+| FpSpread | 4 | spdMain, spdEdit, spdInfo, spdMain |
+| SheetView | 4 | spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1 |
 | Label | 3 | label1, label2, label1 |
 | UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
-| ImageList | 2 | imageList1, imageList1 |
 | UsrLabel | 2 | lblCoaterPlan, usrLabel1 |
+| ImageList | 2 | imageList1, imageList1 |
 | UsrCheckBox | 1 | chk_rel |
 | UsrDateRangePicker2 | 1 | drpPeriod |
 | UsrDatePicker2 | 1 | drpPlanDate |
@@ -308,8 +308,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: PlanInfoPopup, Amend
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:166, SetSheetHeaderColumn_FP@InitSpread:393, SetSheetHeaderColumn_FP@RefreshHeaderOnly:584
+- 코드에서 생성하는 시트: Amend, PlanInfoPopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:393, SetSheetHeaderColumn_FP@RefreshHeaderOnly:584, SetSheetHeaderColumn_FP@InitSpread:166
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

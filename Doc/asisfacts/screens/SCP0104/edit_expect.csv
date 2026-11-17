@@ -1,0 +1,95 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+VER_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+VER_SEQ,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+DIVISION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+SITE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+SITE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+COMPANY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+COMPANY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+PLANT_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+PLANT_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+FACTORY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+FACTORY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+LINE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+LINE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+ITEM_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+NICK_NAME,Y,COND,UNKNOWN,"RULES:[{""g"": ""RAW(_division_type == 0)"", ""lock"": ""Y"", ""ref"": ""Insert_Row_Assign:5421""}]","해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,신규행 SCP0104_CAPA_Line_Assign:5421 LockRange,,ELTR
+OPERATION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+OPERATION_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+EQUIPMENT_ID,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+EQUIPMENT_NAME,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+ELTR_LN_TP_CD,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+LANE_QTY,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,기존행 SCP0104_CAPA_Line_Assign:3995 LockRange2,,ELTR
+VALID_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,기존행 SCP0104_CAPA_Line_Assign:4000 LockRange2 | 기존행 SCP0104_CAPA_Line_Assign:4053 LockRange2,,ELTR
+DUMMY_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,,,ELTR
+SOP_DT,,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd · SetLockColumnsAllAssign:4009 SheetUtils.SetLockAllRows(_siAssign, true)",,기존행 SCP0104_CAPA_Line_Assign:4057 LockRange2,,ELTR
+VER_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+VER_SEQ,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+DIVISION_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+SITE_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+SITE_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+COMPANY_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+COMPANY_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+PLANT_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+PLANT_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+FACTORY_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+FACTORY_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+LINE_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+LINE_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+ITEM_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+NICK_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+OPERATION_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+OPERATION_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+EQUIPMENT_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+EQUIPMENT_NAME,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+ELTR_LN_TP_CD,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+LANE_QTY,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+VALID_YN,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+DUMMY_YN,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,,SheetUtils,ELTR
+VER_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+VER_SEQ,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+DIVISION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+SITE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+SITE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+COMPANY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+COMPANY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+PLANT_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+PLANT_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+FACTORY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+FACTORY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+LINE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+LINE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+ITEM_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+NICK_NAME,Y,COND,UNKNOWN,"RULES:[{""g"": ""RAW(_division_type == 0)"", ""lock"": ""Y"", ""ref"": ""Insert_Row_Assign:5421""}]","해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,신규행 SCP0104_CAPA_Line_Assign:5421 LockRange,_siAssign,ELTR
+OPERATION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+OPERATION_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+EQUIPMENT_ID,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+EQUIPMENT_NAME,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+ELTR_LN_TP_CD,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+LANE_QTY,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,기존행 SCP0104_CAPA_Line_Assign:3995 LockRange2,_siAssign,ELTR
+VALID_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,기존행 SCP0104_CAPA_Line_Assign:4000 LockRange2,_siAssign,ELTR
+DUMMY_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllAssign:3985 _siAssign.LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, i · SetLockColumnsAllAssign:4004 _siAssign.LockRange2(0, dateStartColIdx, rowCnt - 1, dateEnd",,,_siAssign,ELTR
+VER_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+VER_SEQ,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+DIVISION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+SITE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+SITE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+COMPANY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+COMPANY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+PLANT_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+PLANT_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+FACTORY_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+FACTORY_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+LINE_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+LINE_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+ITEM_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+NICK_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+OPERATION_ID,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+OPERATION_NAME,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+EQUIPMENT_ID,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+EQUIPMENT_NAME,N,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+ELTR_LN_TP_CD,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+LANE_QTY,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+VALID_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,기존행 SCP0104_CAPA_Line_Assign:4053 LockRange2,_siSop,ELTR
+DUMMY_YN,Y,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,,_siSop,ELTR
+SOP_DT,,Y,UNKNOWN,,"해석 못 한 잠금: SetLockColumnsAllSOP:4048 _siSop.LockRange2(0, _fixed_column_idx, rowCnt - 1, _fixed_c",,기존행 SCP0104_CAPA_Line_Assign:4057 LockRange2,_siSop,ELTR

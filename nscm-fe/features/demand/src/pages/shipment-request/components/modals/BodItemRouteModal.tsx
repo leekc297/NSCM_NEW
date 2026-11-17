@@ -131,13 +131,17 @@ export const BodItemRouteModal = ({ open, modalClose, setSelectedValue, preSearc
   const staticColumns = useMemo(() => [buildNoColumn(t(LBL.NO, '_No')), ...POPUP_COLUMNS], [t]);
 
   // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 BOD 팝업 반환 컬럼 → c_* 매핑.
-  //   SCP0030(supply)은 사이트 '명'(FROM_SITE_NAME/TO_SITE_NAME)을 주고 END_CUSTOMER/DEPT 는 반환하지 않는다
-  //   → 그 2칸은 ''(A안 수용). 원복 시 DMF0046 컬럼명(FROM_SITE/TO_SITE/…/END_CUSTOMER/DEPT_NAME_KO)으로.
+  //   SCP0030(supply) 반환 커서는 사이트 **코드**(FROM_SITE/TO_SITE)와 **명**(FROM_SITE_NAME/TO_SITE_NAME)을
+  //   둘 다 준다(ora.py 실측 2026-11-10: o_rc1 컬럼에 FROM_SITE·FROM_SITE_NAME·TO_SITE·TO_SITE_NAME 공존).
+  //   END_CUSTOMER/DEPT 는 반환하지 않아 그 2칸은 ''(A안 수용). 원복 시 DMF0046 컬럼명으로.
+  //   From/To Site 셀은 **코드**(SCM_SITE_ID)로 채운다 — 명(_NAME)을 넣으면 SHIP_FROZEN 조회
+  //   (SCM_MST_SITE.SCM_SITE_ID = FROM_SITE, SP line 196)·저장이 매칭 실패해 Frozen 구간이 안 잡힌다
+  //   (사용자 신고 2026-11-10, AS-IS 는 c_FROM_SITE=코드를 SetText — DMF0045_ShipmentRequest.cs:1346/1358).
   const toSelection = (row: BodPopupRow): BodItemReturn => {
     const r = row as unknown as Record<string, string | undefined>;
     return {
-      c_FROM_SITE: r.FROM_SITE_NAME ?? '',
-      c_TO_SITE: r.TO_SITE_NAME ?? '',
+      c_FROM_SITE: r.FROM_SITE ?? '', // 코드(SCM_SITE_ID) — 명 FROM_SITE_NAME 아님
+      c_TO_SITE: r.TO_SITE ?? '', // 코드(SCM_SITE_ID) — 명 TO_SITE_NAME 아님
       c_INCOTERMS: r.INCOTERMS ?? '',
       c_TRANSPORT_MODE: r.TRANSPORT_MODE ?? '',
       c_BOD_ID: r.BOD_ID ?? '',

@@ -1,0 +1,634 @@
+{
+ "id": "SCP0127",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/PRECEDE / SAFETY STOCK DAY",
+     "rows_before": 534,
+     "rows_after": 535,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "VALUE_TYPE",
+       "before": "MAX",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "E129A_E128A",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SCM_SITE_ID",
+       "before": "WA00-A",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "AAEN4128I-A1-000",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "STAGE",
+       "before": "ASSY",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2025-04-21",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "2026-12-31",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TYPE_APPLY_DAY",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "SYSTEM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "SYSTEM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASSY|20250421|20261231",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "STAGE",
+       "before": "ASY_AGING",
+       "after": "ASSY"
+      },
+      {
+       "row": 1,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASY_AGING|20250421|20261231",
+       "after": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASSY|20250421|20261231"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "AAEN4129I-A1-300",
+       "after": "AAEN4128I-A1-000"
+      },
+      {
+       "row": 2,
+       "col": "STAGE",
+       "before": "ASSY",
+       "after": "ASY_AGING"
+      },
+      {
+       "row": 2,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASSY|20250421|20261231",
+       "after": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASY_AGING|20250421|20261231"
+      },
+      {
+       "row": 3,
+       "col": "STAGE",
+       "before": "ASY_AGING",
+       "after": "ASSY"
+      },
+      {
+       "row": 3,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASY_AGING|20250421|20261231",
+       "after": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASSY|20250421|20261231"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "ACEN4128I-A1-000",
+       "after": "AAEN4129I-A1-300"
+      },
+      {
+       "row": 4,
+       "col": "STAGE",
+       "before": "CHAR",
+       "after": "ASY_AGING"
+      },
+      {
+       "row": 4,
+       "col": "FROM_YYYYMMDD",
+       "before": "2025-09-08",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 4,
+       "col": "TO_YYYYMMDD",
+       "before": "2099-12-31",
+       "after": "2026-12-31"
+      },
+      {
+       "row": 4,
+       "col": "TYPE_APPLY_DAY",
+       "before": "360",
+       "after": "0"
+      },
+      {
+       "row": 4,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-A|ACEN4128I-A1-000|CHAR|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASY_AGING|20250421|20261231"
+      },
+      {
+       "row": 5,
+       "col": "SCM_SITE_ID",
+       "before": "WA00-P",
+       "after": "WA00-A"
+      },
+      {
+       "row": 5,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|ACEN4128I-A1-000|CHAR|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-A|ACEN4128I-A1-000|CHAR|20250908|20991231"
+      },
+      {
+       "row": 6,
+       "col": "ITEM_ID",
+       "before": "AMDAU0702A",
+       "after": "ACEN4128I-A1-000"
+      },
+      {
+       "row": 6,
+       "col": "STAGE",
+       "before": "SUBMDLE",
+       "after": "CHAR"
+      },
+      {
+       "row": 6,
+       "col": "TYPE_APPLY_DAY",
+       "before": "0",
+       "after": "360"
+      },
+      {
+       "row": 6,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0702A|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|ACEN4128I-A1-000|CHAR|20250908|20991231"
+      },
+      {
+       "row": 7,
+       "col": "ITEM_ID",
+       "before": "AMDAU0702B",
+       "after": "AMDAU0702A"
+      },
+      {
+       "row": 7,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0702B|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0702A|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "AMDAU0702C",
+       "after": "AMDAU0702B"
+      },
+      {
+       "row": 8,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0702C|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0702B|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 9,
+       "col": "ITEM_ID",
+       "before": "AMDAU0702E",
+       "after": "AMDAU0702C"
+      },
+      {
+       "row": 9,
+       "col": "CREATED_BY",
+       "before": "fran.d.k",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 9,
+       "col": "CREATION_DATE",
+       "before": "2026-04-29 오후 5:49:27",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 9,
+       "col": "LAST_UPDATED_BY",
+       "before": "fran.d.k",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 9,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2026-04-29 오후 5:49:27",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 9,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0702E|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0702C|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 10,
+       "col": "ITEM_ID",
+       "before": "AMDAU0707A",
+       "after": "AMDAU0702E"
+      },
+      {
+       "row": 10,
+       "col": "CREATED_BY",
+       "before": "SYSTEM",
+       "after": "fran.d.k"
+      },
+      {
+       "row": 10,
+       "col": "CREATION_DATE",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "2026-04-29 오후 5:49:27"
+      },
+      {
+       "row": 10,
+       "col": "LAST_UPDATED_BY",
+       "before": "SYSTEM",
+       "after": "fran.d.k"
+      },
+      {
+       "row": 10,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "2026-04-29 오후 5:49:27"
+      },
+      {
+       "row": 10,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0707A|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0702E|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 11,
+       "col": "ITEM_ID",
+       "before": "AMDAU0707B",
+       "after": "AMDAU0707A"
+      },
+      {
+       "row": 11,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0707B|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0707A|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 12,
+       "col": "ITEM_ID",
+       "before": "AMDAU0723A",
+       "after": "AMDAU0707B"
+      },
+      {
+       "row": 12,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMDAU0723A|SUBMDLE|20250908|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0707B|SUBMDLE|20250908|20991231"
+      },
+      {
+       "row": 13,
+       "col": "ITEM_ID",
+       "before": "AMRSAEV20-E2",
+       "after": "AMDAU0723A"
+      },
+      {
+       "row": 13,
+       "col": "STAGE",
+       "before": "INSP",
+       "after": "SUBMDLE"
+      },
+      {
+       "row": 13,
+       "col": "FROM_YYYYMMDD",
+       "before": "2025-04-21",
+       "after": "2025-09-08"
+      },
+      {
+       "row": 13,
+       "col": "TYPE_APPLY_DAY",
+       "before": "16",
+       "after": "0"
+      },
+      {
+       "row": 13,
+       "col": "LAST_UPDATED_BY",
+       "before": "fran.d.k",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 13,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2026-04-29 오전 9:47:17",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 13,
+       "col": "PRE_KEY_VALUES",
+       "before": "MAX|81|PG0001|WA00-P|AMRSAEV20-E2|INSP|20250421|20991231",
+       "after": "MAX|81|PG0001|WA00-P|AMDAU0723A|SUBMDLE|20250908|20991231"
+      }
+     ],
+     "more": 149
+    }
+   ],
+   "new_rows": {
+    "spdMain/PRECEDE / SAFETY STOCK DAY": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:38:10.162",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "PRECEDE / SAFETY STOCK DAY",
+    "sheet": "PRECEDE / SAFETY STOCK DAY",
+    "rows_total": 535,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "VALUE_TYPE",
+      "label": "Type*",
+      "data_field": "VALUE_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "OPMZ_PLAN_GR_ID",
+      "label": "Plan Group*",
+      "data_field": "OPMZ_PLAN_GR_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "SCM_SITE_ID",
+      "label": "SCM site*",
+      "data_field": "SCM_SITE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "STAGE",
+      "label": "Stage*",
+      "data_field": "STAGE",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "FROM_YYYYMMDD",
+      "label": "Valid From*",
+      "data_field": "FROM_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "TO_YYYYMMDD",
+      "label": "Valid To*",
+      "data_field": "TO_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "TYPE_APPLY_DAY",
+      "label": "Day*",
+      "data_field": "TYPE_APPLY_DAY",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "VALUE_DESCRIPTION",
+      "label": "Description",
+      "data_field": "VALUE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "VALID_YN",
+      "label": "Valid",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "CREATED_BY",
+      "label": "Create By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Update By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "PRE_KEY_VALUES",
+      "label": "PRE_KEY_VALUES",
+      "data_field": "PRE_KEY_VALUES",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "10100000000011110"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "81",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:38:10.170"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "모든 항목은 필수 입력입니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:37:20",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

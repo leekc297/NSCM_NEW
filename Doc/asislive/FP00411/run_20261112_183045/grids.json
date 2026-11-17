@@ -1,0 +1,351 @@
+{
+ "id": "FP00411",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Main",
+     "rows": 0,
+     "cols": 20,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site",
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Building",
+        "Building"
+       ],
+       "label": "Building",
+       "tag": "FACTORY_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Line",
+        "Line"
+       ],
+       "label": "Line",
+       "tag": "LINE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Material",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Operation",
+        "Operation"
+       ],
+       "label": "Operation",
+       "tag": "OPERATION_ID",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Before Degas",
+        "Route"
+       ],
+       "label": "Route",
+       "tag": "BEFORE_DEGAS_ROUTE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Before Degas",
+        "L/T (min)"
+       ],
+       "label": "L/T (min)",
+       "tag": "BEFORE_DEGAS_LT",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Before Degas",
+        "L/T (day)"
+       ],
+       "label": "L/T (day)",
+       "tag": "BEFORE_DEGAS_LT_DAY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "After Degas",
+        "Route"
+       ],
+       "label": "Route",
+       "tag": "AFTER_DEGAS_ROUTE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "After Degas",
+        "L/T (min)"
+       ],
+       "label": "L/T (min)",
+       "tag": "AFTER_DEGAS_LT",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "After Degas",
+        "L/T (day)"
+       ],
+       "label": "L/T (day)",
+       "tag": "AFTER_DEGAS_LT_DAY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Total L/T",
+        "Total L/T"
+       ],
+       "label": "Total L/T",
+       "tag": "TOTAL_LT",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Change L/T (day)",
+        "Change L/T (day)"
+       ],
+       "label": "Change L/T (day)",
+       "tag": "SHORTER_LT",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Total L/T (change)",
+        "Total L/T (change)"
+       ],
+       "label": "Total L/T (change)",
+       "tag": "TOTAL_CHG_LT",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Update Time",
+        "Update Time"
+       ],
+       "label": "Update Time",
+       "tag": "UPDATE_TIME",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Update ID",
+        "Update ID"
+       ],
+       "label": "Update ID",
+       "tag": "UPDATE_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

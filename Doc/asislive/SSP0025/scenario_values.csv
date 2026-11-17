@@ -1,0 +1,3 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SSP0025-S5588d6,DIVISION,,,,값 미도출,if (siMain.IsLock(siMain.SheetName) == false) ▸ if (string.IsNullOrEmpty(sDivisionId) && e.Column != siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SSP0025-S0ecdd1,DIVISION,,,,값 미도출,"if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CAppSetting.FlagI) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID))",

@@ -1,6 +1,6 @@
 {
 "id": "SCP0084",
-"at": "2026-11-07 18:44:38",
+"at": "2026-11-14 13:11:44",
 "asis": {
 "insertStmts": [],
 "headerSpan": [],
@@ -94,102 +94,6 @@
 ],
 "btnAuth": [
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SCM PI Admin",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
@@ -202,10 +106,28 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
 },
 {
 "user_gr_id": "SCM Viewer",
@@ -214,13 +136,31 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
+"user_gr_id": "FP Planner",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
@@ -232,10 +172,70 @@
 "use_yn": "N"
 },
 {
-"user_gr_id": "SCP Tester",
+"user_gr_id": "DM Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
 }
 ],
 "columns": [
@@ -978,9 +978,9 @@
 }
 ],
 "now": {
-"now_": "2026-11-07 18:44",
+"now_": "2026-11-14 13:11",
 "dow": "SAT",
-"hm": "1844"
+"hm": "1311"
 }
 },
 "accounts": [
@@ -1019,6 +1019,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -1029,8 +1030,10 @@
 "DMF0005_01",
 "DMF0007",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0045",
@@ -1040,6 +1043,7 @@
 "Demand_Plan",
 "Demand_Waterfall",
 "Popup",
+"Report",
 "SCM Supply",
 "SCM0002",
 "SCM0014",
@@ -1084,13 +1088,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0120",
 "SCP0121",
 "SCP0123",
@@ -1132,8 +1131,7 @@
 "Supply_OPT_Plan",
 "Supply_Plan",
 "Supply_Waterfall",
-"TEST",
-"Waterfall"
+"TEST"
 ],
 "titleset": 0
 },
@@ -1202,6 +1200,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -1214,9 +1213,12 @@
 "DMF0008",
 "DMF0014",
 "DMF0020",
+"DMF0020_01",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0043_01",
@@ -1235,6 +1237,7 @@
 "Demand_Plan",
 "Demand_Waterfall",
 "Popup",
+"Report",
 "SCM Supply",
 "SCM0002",
 "SCM0014",
@@ -1279,13 +1282,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0134",
 "SSP0003",
 "SSP0005",
@@ -1315,8 +1313,7 @@
 "Supply_Master",
 "Supply_Plan",
 "Supply_Waterfall",
-"TEST",
-"Waterfall"
+"TEST"
 ],
 "titleset": 0
 },
@@ -1354,6 +1351,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -1364,6 +1362,7 @@
 "DMF0005_01",
 "DMF0007",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0045",
 "DMF0082",
@@ -1411,13 +1410,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0134",
 "SSP0003",
 "SSP0005",
@@ -1501,6 +1495,7 @@
 "Admin_Menu",
 "Auth_Mgmt",
 "Authority",
+"CAPA LineMaster",
 "COM0001",
 "COM0002",
 "COM0003",
@@ -1512,9 +1507,12 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
+"Capa Plan",
 "CommonPopup",
+"DMD0001",
 "DMF0003",
 "DMF0003_01",
 "DMF0004",
@@ -1525,9 +1523,12 @@
 "DMF0008",
 "DMF0014",
 "DMF0020",
+"DMF0020_01",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0043",
@@ -1542,11 +1543,15 @@
 "DMF0074",
 "DMF0082",
 "DMF0083",
+"Dashboard",
 "Demand",
 "Demand_Master",
 "Demand_Plan",
 "Demand_Waterfall",
+"LOB Report",
+"Loss Plan",
 "Popup",
+"Report",
 "SCM Supply",
 "SCM0002",
 "SCM0007",
@@ -1594,13 +1599,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0120",
 "SCP0121",
 "SCP0122",
@@ -1655,6 +1655,7 @@
 "Shipping",
 "Shipping_Master",
 "Shipping_Schedule",
+"Speed Plan",
 "Supply",
 "SupplyPopup",
 "Supply_Master",
@@ -1663,8 +1664,8 @@
 "Supply_Validation",
 "Supply_Waterfall",
 "System",
-"TEST",
-"Waterfall"
+"TEEP Report",
+"TEST"
 ],
 "titleset": 0
 },
@@ -1728,6 +1729,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -1739,9 +1741,12 @@
 "DMF0007",
 "DMF0014",
 "DMF0020",
+"DMF0020_01",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0043_01",
@@ -1804,13 +1809,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0120",
 "SCP0121",
 "SCP0122",
@@ -1920,6 +1920,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -1930,8 +1931,10 @@
 "DMF0005_01",
 "DMF0007",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0045",
@@ -1941,6 +1944,7 @@
 "Demand_Plan",
 "Demand_Waterfall",
 "Popup",
+"Report",
 "SCM Supply",
 "SCM0002",
 "SCM0014",
@@ -1985,13 +1989,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0120",
 "SCP0121",
 "SCP0123",
@@ -2033,8 +2032,7 @@
 "Supply_OPT_Plan",
 "Supply_Plan",
 "Supply_Waterfall",
-"TEST",
-"Waterfall"
+"TEST"
 ],
 "titleset": 0
 },
@@ -2072,6 +2070,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -2082,6 +2081,7 @@
 "DMF0005_01",
 "DMF0007",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0045",
 "DMF0082",
@@ -2129,13 +2129,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0134",
 "SSP0003",
 "SSP0005",
@@ -2207,6 +2202,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -2218,9 +2214,12 @@
 "DMF0007",
 "DMF0014",
 "DMF0020",
+"DMF0020_01",
 "DMF0021",
+"DMF0021_01",
 "DMF0022",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0042",
 "DMF0043_01",
@@ -2283,13 +2282,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0120",
 "SCP0121",
 "SCP0122",
@@ -2386,6 +2380,7 @@
 "COM0009",
 "COM0010",
 "COM0011",
+"COM0012",
 "COM0013",
 "COM0014",
 "CommonPopup",
@@ -2396,6 +2391,7 @@
 "DMF0005_01",
 "DMF0007",
 "DMF0035",
+"DMF0035_01",
 "DMF0040",
 "DMF0045",
 "DMF0082",
@@ -2443,13 +2439,8 @@
 "SCP0100",
 "SCP0101",
 "SCP0104",
-"SCP0105",
-"SCP0106",
-"SCP0107",
-"SCP0108",
 "SCP0110",
 "SCP0111",
-"SCP0114",
 "SCP0134",
 "SSP0003",
 "SSP0005",

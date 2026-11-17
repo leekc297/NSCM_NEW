@@ -1,0 +1,98 @@
+{
+ "menu_id": "SSP0060",
+ "at": "2026-11-11 15:03:43",
+ "verdict": "NOT_READY",
+ "rc": 2,
+ "counts": {
+  "PASS": 8,
+  "FAIL": 2,
+  "ERROR": 1,
+  "INFO": 1
+ },
+ "rows": [
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "endpoints.csv",
+   "result": "PASS",
+   "detail": "55행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "controls.csv",
+   "result": "PASS",
+   "detail": "110행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "events.csv",
+   "result": "PASS",
+   "detail": "43행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "actions.csv",
+   "result": "PASS",
+   "detail": "4913행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "grid_columns_asis.csv",
+   "result": "PASS",
+   "detail": "297행",
+   "todo": ""
+  },
+  {
+   "check": "R2 AS-IS SP 원문",
+   "target": "23개",
+   "result": "PASS",
+   "detail": "화면 호출 SP 전부 원문 있음",
+   "todo": ""
+  },
+  {
+   "check": "R3 AS-IS 호출 해석",
+   "target": "1곳",
+   "result": "FAIL",
+   "detail": "풀리지 않은 호출: SSP0060_ShipmentPlan.cs:3460 SaveData_Detail(NOT_IN_FOXQUERY)",
+   "todo": "해당 호출의 SP 를 원문에서 확인해 endpoints 보강(추측으로 배선 금지)"
+  },
+  {
+   "check": "R4 AS-IS 컬럼 메타",
+   "target": "SCM_MST_SHEET_COLUMNS",
+   "result": "PASS",
+   "detail": "196행",
+   "todo": ""
+  },
+  {
+   "check": "R5 분석 문서",
+   "target": "3종",
+   "result": "PASS",
+   "detail": "있음",
+   "todo": ""
+  },
+  {
+   "check": "R6 TO-BE 사내 DB · M2 FE 호출 배선",
+   "target": "(식이 풀리지 않은 호출)",
+   "result": "ERROR",
+   "detail": "[측정 경로 없음] 시트·버튼이 식이라 대조 불가 9곳: shipment-plan.erpChain.ts:175, shipment-plan.erpChain.ts:231, shipment-plan.erpChain.ts:258, shipment-plan.erpChain.ts:365, shipment-plan.erpChain.ts:508",
+   "todo": "FE 호출의 시트·버튼을 MNU_BTN_MPG_M 에 등록"
+  },
+  {
+   "check": "R6 TO-BE 사내 DB · M5 컬럼 메타",
+   "target": "Shipment Plan Detail",
+   "result": "FAIL",
+   "detail": "AS-IS 71 · TO-BE 71컬럼 · TO-BE 에 없는 컬럼 1: MKT_OWNER · TO-BE 에만 있는 컬럼 1: MTK_OWNER · 대소문자만 다름 1: Expected_Shipping_Date",
+   "todo": "컬럼 메타를 AS-IS 와 맞춤(🧾 META)"
+  },
+  {
+   "check": "R6 TO-BE 사내 DB",
+   "target": "58항목",
+   "result": "INFO",
+   "detail": "meta_live_check 58항목 중 FAIL·ERROR 2",
+   "todo": ""
+  }
+ ]
+}

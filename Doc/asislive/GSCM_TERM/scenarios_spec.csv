@@ -1,0 +1,7 @@
+﻿scenario_id,type,trigger,precond,guard,observe,driver,driver_note,asis,asis_cov,tobe_e2e_checks,tobe_popup,tobe_steps,linked_rows,src
+GSCM_TERM-S207f89,저장,화면 열기 | 화면 열기,,,그리드 구성 2,정의 필요,저장 계열 — Doc/asislive/GSCM_TERM/save_scenario.json 작성 필요,AS-IS 미실행,NO_CALL_EVIDENCE,,,,0,TermInfo.cs:101
+GSCM_TERM-Sc79aa7,기타,수정 모드 켜기,,,잠금 2 · 잠금:siMain.SwitchLock ; 잠금:siMain.LockColumn,실행기 있음,기본 실측(열기·조회)·수정 모드로 실행,AS-IS 미실행,NO_CALL_EVIDENCE,,,,0,TermInfo.cs:145
+GSCM_TERM-S5bc1f8,조회,조회 | 저장,,,"서버 호출 3, 데이터 처리 3, 잠금 1, 그리드 구성 1 · SystemManager.UP_FX_GetTermInfoList · 잠금:siMain.LockColumn",정의 필요,저장 계열 — Doc/asislive/GSCM_TERM/save_scenario.json 작성 필요,연결 없음,EXECUTED,,,search;…;save,0,TermInfo.cs:166
+GSCM_TERM-S96bd28,초기,조회 | 저장 | 화면 열기 | 화면 열기,,,그리드 구성 9,정의 필요,저장 계열 — Doc/asislive/GSCM_TERM/save_scenario.json 작성 필요,AS-IS 미실행,NO_CALL_EVIDENCE,,,search;…;save,0,TermInfo.cs:110
+GSCM_TERM-S27eab7,저장,행 추가,시트·탭 · 화면 상태,if (siMain != null && siMain.IsLock(siMain.SheetName) == false),"데이터 처리 7, 그리드 값·서식 1",정의 필요,저장 계열 — Doc/asislive/GSCM_TERM/save_scenario.json 작성 필요,AS-IS 미실행,NO_CALL_EVIDENCE,,,search;insert,0,TermInfo.cs:292
+GSCM_TERM-S1bb36d,저장,저장,시트·탭 · 데이터(행·셀) 상태 · 화면 상태,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),"표시·활성 4, 서버 호출 2, 데이터 처리 1, 메시지 1 · 표시·활성:request.InsertQueryId ; 표시·활성:request.DeleteQueryId ; 표시·활성:request.UpdateQueryId ; 표시·활성:request.DataSet",정의 필요,저장 계열 — Doc/asislive/GSCM_TERM/save_scenario.json 작성 필요,AS-IS 미실행,NO_CALL_EVIDENCE,,,search;…;save,0,TermInfo.cs:227

@@ -1,0 +1,175 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 06:59:46.855",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 21.31,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:FROM_CITY"
+  },
+  {
+   "at": "2026-11-15 06:59:46.871",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.69,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:FROM_CITY"
+  },
+  {
+   "at": "2026-11-15 06:59:47.129",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 117.22,
+   "params": {
+    "p_country": "CA",
+    "p_city": "CAWND"
+   },
+   "inline": "EXEC SCM0002_GET_CITY_BY_COUNTY_POPUP @p_country='CA', @p_city='CAWND'",
+   "phase": "action:pick:FROM_CITY"
+  },
+  {
+   "at": "2026-11-15 07:00:03.666",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.53,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:FROM_COUNTRY"
+  },
+  {
+   "at": "2026-11-15 07:00:03.673",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.41,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:FROM_COUNTRY"
+  },
+  {
+   "at": "2026-11-15 07:00:03.875",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 116.46,
+   "params": {
+    "p_country": "CA",
+    "p_city": "CAWND"
+   },
+   "inline": "EXEC SCM0002_GET_CITY_BY_COUNTY_POPUP @p_country='CA', @p_city='CAWND'",
+   "phase": "action:pick:FROM_COUNTRY"
+  },
+  {
+   "at": "2026-11-15 07:00:29.896",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.7,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:TO_CITY"
+  },
+  {
+   "at": "2026-11-15 07:00:29.909",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.36,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:pick:TO_CITY"
+  },
+  {
+   "at": "2026-11-15 07:00:30.164",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 116.91,
+   "params": {
+    "p_country": "CA",
+    "p_city": "CAWND"
+   },
+   "inline": "EXEC SCM0002_GET_CITY_BY_COUNTY_POPUP @p_country='CA', @p_city='CAWND'",
+   "phase": "action:pick:TO_CITY"
+  }
+ ]
+}

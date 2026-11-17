@@ -1,4 +1,4 @@
-# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-11-09)
+# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-11-13)
 
 원천: packages/foundation/src · packages/shared/src · features/master/src/components · apps/web/src/mdi — export 516건. 사용 수 = features/*/src/pages 의 import 등장 횟수. As-is 대응 = tools/Harness/rules 사전.
 

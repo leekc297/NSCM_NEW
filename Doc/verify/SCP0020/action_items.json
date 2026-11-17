@@ -1,32 +1,67 @@
 [
  {
-  "row_id": "V-6c947c4c",
-  "rule_id": "A5",
+  "row_id": "V-3207cf0e",
+  "rule_id": "K3",
   "target": "SCP0020 화면",
-  "same": [
-   "T-6b72d463"
-  ]
- },
- {
-  "row_id": "V-c8a74bd1",
-  "rule_id": "B2",
-  "target": "조회조건 Line",
   "same": []
  },
  {
-  "row_id": "V-91f5dc2a",
-  "rule_id": "G5",
-  "target": "조회조건 Model/Nickname",
+  "row_id": "V-cbdbcee5",
+  "rule_id": "F1",
+  "target": "SCP0020 시나리오 [자동] 기존 행 Delete → D 저장 요청",
   "same": []
  },
  {
-  "row_id": "V-56a410c3",
-  "rule_id": "E1",
-  "target": "Packer.PRIORITY (Priority*)",
+  "row_id": "V-b54abdfd",
+  "rule_id": "F6",
+  "target": "SCP0020 시나리오 [자동] YIELD 소수 2자리 저장 요청 유지",
+  "same": []
+ },
+ {
+  "row_id": "V-108ec20d",
+  "rule_id": "E4",
+  "target": "SCP0020 시나리오 [자동] 기존 행 PRIORITY 수정 저장 → 입력된 필수 칸 오탐 없음",
+  "same": []
+ },
+ {
+  "row_id": "V-c9980418",
+  "rule_id": "F8",
+  "target": "SCP0020 이력 행 값",
+  "same": []
+ },
+ {
+  "row_id": "V-639db3d0",
+  "rule_id": "H12",
+  "target": "SCP0020 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-d38ffb6e",
+  "rule_id": "D1",
+  "target": "Plant.LINE_ID (Line*)",
+  "same": []
+ },
+ {
+  "row_id": "V-cd782314",
+  "rule_id": "D1",
+  "target": "Plant.DAILY_CAPACITY (Daily Capacity)",
   "same": [
-   "V-bee68f3d",
-   "V-694fb5a7"
+   "V-b2b749fb"
   ]
+ },
+ {
+  "row_id": "V-981382e4",
+  "rule_id": "D1",
+  "target": "Plant.TACT_TIME (Tact Time*)",
+  "same": [
+   "V-115fb8dc"
+  ]
+ },
+ {
+  "row_id": "V-eacbd820",
+  "rule_id": "D3",
+  "target": "DAILY_CAPACITY,UOM_CONVERT_VALUE",
+  "same": []
  },
  {
   "row_id": "V-00c36130",
@@ -37,27 +72,235 @@
   ]
  },
  {
-  "row_id": "T-6b72d463",
-  "rule_id": "A5",
-  "target": "",
-  "folded_into": "V-6c947c4c"
+  "row_id": "V-321e106a",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
  },
  {
-  "row_id": "V-bee68f3d",
-  "rule_id": "E1",
-  "target": "",
-  "folded_into": "V-56a410c3"
+  "row_id": "V-54ddf1fb",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
  },
  {
-  "row_id": "V-694fb5a7",
-  "rule_id": "E1",
+  "row_id": "T-2e417e77",
+  "rule_id": "D1",
+  "target": "OSP_YN",
+  "same": []
+ },
+ {
+  "row_id": "EG-a0f8c3a0",
+  "rule_id": "J3",
+  "target": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Planner · Div 82",
+  "same": [
+   "EG-7264e17c",
+   "EG-b2362cbf",
+   "EG-4bbad56e"
+  ]
+ },
+ {
+  "row_id": "EG-6357a1ba",
+  "rule_id": "J3",
+  "target": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Tester · Div 82",
+  "same": [
+   "EG-c929a169",
+   "EG-3c6b1cc1",
+   "EG-fcd97f4f"
+  ]
+ },
+ {
+  "row_id": "EG-23641786",
+  "rule_id": "J3",
+  "target": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 82",
+  "same": [
+   "EG-2c7aae1b",
+   "EG-450ec54b",
+   "EG-271ace3e"
+  ]
+ },
+ {
+  "row_id": "EG-9789abc6",
+  "rule_id": "J3",
+  "target": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 82",
+  "same": [
+   "EG-a0d2e9d7",
+   "EG-4af9ff07",
+   "EG-25cea60f",
+   "EG-ed60c204",
+   "EG-60b86eca",
+   "EG-a91015b7",
+   "EG-c5af69ef",
+   "EG-068f40be",
+   "EG-91f85682",
+   "EG-df1c5d4c",
+   "EG-38c7cb22",
+   "EG-8683a787",
+   "EG-f82cfd77",
+   "EG-bb7f7382",
+   "EG-2364c1b3"
+  ]
+ },
+ {
+  "row_id": "V-b2b749fb",
+  "rule_id": "D1",
   "target": "",
-  "folded_into": "V-56a410c3"
+  "folded_into": "V-cd782314"
+ },
+ {
+  "row_id": "V-115fb8dc",
+  "rule_id": "D1",
+  "target": "",
+  "folded_into": "V-981382e4"
  },
  {
   "row_id": "V-c7a15bd8",
   "rule_id": "E4",
   "target": "",
   "folded_into": "V-00c36130"
+ },
+ {
+  "row_id": "EG-7264e17c",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a0f8c3a0"
+ },
+ {
+  "row_id": "EG-b2362cbf",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a0f8c3a0"
+ },
+ {
+  "row_id": "EG-4bbad56e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a0f8c3a0"
+ },
+ {
+  "row_id": "EG-c929a169",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-6357a1ba"
+ },
+ {
+  "row_id": "EG-3c6b1cc1",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-6357a1ba"
+ },
+ {
+  "row_id": "EG-fcd97f4f",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-6357a1ba"
+ },
+ {
+  "row_id": "EG-2c7aae1b",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-23641786"
+ },
+ {
+  "row_id": "EG-450ec54b",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-23641786"
+ },
+ {
+  "row_id": "EG-271ace3e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-23641786"
+ },
+ {
+  "row_id": "EG-a0d2e9d7",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-4af9ff07",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-25cea60f",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-ed60c204",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-60b86eca",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-a91015b7",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-c5af69ef",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-068f40be",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-91f85682",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-df1c5d4c",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-38c7cb22",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-8683a787",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-f82cfd77",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-bb7f7382",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
+ },
+ {
+  "row_id": "EG-2364c1b3",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-9789abc6"
  }
 ]

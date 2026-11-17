@@ -1,0 +1,85 @@
+{
+ "id": "SCP0041",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(2 → 3)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:3:81_UC Automotive Battery(UC)",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      11,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0041-S5dcee3"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(2)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:2:82 ESS Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      11,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0041-S5dcee3"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 23:45:25"
+}

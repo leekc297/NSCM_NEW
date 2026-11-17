@@ -1,0 +1,2043 @@
+{
+  "id": "SSP0060",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SSP0060",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Company",
+    "From Site",
+    "Bucket",
+    "Plan Date",
+    "Total PSI",
+    "Period",
+    "Model/Nickname",
+    "Product Level1"
+  ],
+  "condGone": [
+    {
+      "name": "NoName_이미지3",
+      "usage": "COMMON_BUTTON"
+    }
+  ],
+  "condNotUse": [
+    {
+      "asis": "cboPlanDate",
+      "key": "planDate",
+      "labels": [
+        "Plan Date"
+      ]
+    }
+  ],
+  "page": "ShipmentPlan",
+  "routePath": "shipping/shipment-plan",
+  "asisName": "ShipmentPlan",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbDivision_ID",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "companyId",
+      "label": "Company",
+      "lbl": "LBL00047",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbCompany_ID",
+      "tobeLabel": "Company",
+      "catalog": "",
+      "labels": [
+        "Company"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite",
+      "tobeLabel": "From Site",
+      "catalog": "",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType",
+      "tobeLabel": "Bucket",
+      "catalog": "",
+      "labels": [
+        "Bucket"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum(Week)",
+      "lbl": "",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "Sum(Week)"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate",
+      "tobeLabel": "Plan Date",
+      "catalog": "",
+      "labels": [
+        "Plan Date"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "totPsi",
+      "label": "Total PSI",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkTotPSI",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "Total PSI"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "productLevel11",
+      "label": "Product Level1",
+      "lbl": "LBL01144",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbProductLevel11",
+      "tobeLabel": "Product Level1",
+      "catalog": "",
+      "labels": [
+        "Product Level1"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod",
+      "tobeLabel": "Period",
+      "catalog": "",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod2",
+      "tobeLabel": "Shipment Date",
+      "catalog": "",
+      "labels": [
+        "Period",
+        "Shipment Date",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "model2",
+      "label": "Model/Nickname",
+      "lbl": "LBL00618",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtModel2",
+      "tobeLabel": "Model/Nickname",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "requestor",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestor",
+      "tobeLabel": "Requestor",
+      "catalog": "",
+      "labels": [
+        "Requestor"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "boxId",
+      "label": "Box ID",
+      "lbl": "LBL01057",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtBoxID",
+      "tobeLabel": "Box ID",
+      "catalog": "",
+      "labels": [
+        "Box ID"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "productLevel12",
+      "label": "Product Level1",
+      "lbl": "LBL01144",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbProductLevel12",
+      "tobeLabel": "Product Level1",
+      "catalog": "",
+      "labels": [
+        "Product Level1"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod3",
+      "tobeLabel": "Shipment Date",
+      "catalog": "",
+      "labels": [
+        "Period",
+        "Shipment Date",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "resultType",
+      "label": "Result Type",
+      "lbl": "LBL01109",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbResultType",
+      "tobeLabel": "Result Type",
+      "catalog": "",
+      "labels": [
+        "Result Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 3,
+    "spans": 10,
+    "literals": [
+      "SUM"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-plan\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "simulation",
+      "label": "Simulation",
+      "lbl": "LBL01119",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSimulation"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "requestor",
+      "label": "Dept Name",
+      "lbl": "LBL01071",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRequestor"
+    },
+    {
+      "key": "search",
+      "label": "Search",
+      "lbl": "LBL00112",
+      "kind": "search",
+      "tobe": "SearchArea.onSearch",
+      "asis": "btnSearch"
+    },
+    {
+      "key": "itemId2",
+      "label": "Request No",
+      "lbl": "LBL00744",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItemID2"
+    },
+    {
+      "key": "new",
+      "label": "NEW",
+      "lbl": "LBL00770",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.insert",
+      "asis": "btnNew"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Hold stock",
+      "key": "HOLD_STOCK",
+      "labels": [
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty*",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date*",
+        "Remarks"
+      ]
+    },
+    {
+      "name": "Hold stock Detail",
+      "key": "HOLD_STOCK_DETAIL",
+      "labels": [
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date",
+        "Remarks"
+      ]
+    },
+    {
+      "name": "MES Stock",
+      "key": "MES_STOCK",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Available Stock",
+        "Before OQC",
+        "Model",
+        "Nick Name",
+        "OQC Complete",
+        "OQC Insp Request",
+        "OQC NG",
+        "QMS/MES Hold",
+        "Total"
+      ]
+    },
+    {
+      "name": "MES Stock Detail",
+      "key": "MES_STOCK_DETAIL",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Available stock YN",
+        "Box ID",
+        "Exp Insp Vaild Date",
+        "Lot Qty",
+        "Lot ID",
+        "MES Hold YN",
+        "MES Unhold Sched Date",
+        "OQC Insp Result",
+        "Nick Name",
+        "Prod Valid Date",
+        "Model",
+        "QMS Hold YN",
+        "QMS Unhold Sched Date"
+      ]
+    },
+    {
+      "name": "oWMS Detail",
+      "key": "OWMS_DETAIL",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Allocation Qty",
+        "Available Qty",
+        "Capa. Grade",
+        "Customer Code",
+        "Customer Name",
+        "Div",
+        "Expiration Qty",
+        "Grade",
+        "Hold Qty",
+        "Model",
+        "Long-term Qty",
+        "Lot ID",
+        "Lot Issue Date",
+        "Moving Qty",
+        "Nick Name",
+        "Packing Qty",
+        "Packing Status",
+        "Pallet ID",
+        "Plant ID",
+        "Reciving Qty",
+        "SOC",
+        "Stock Qty",
+        "Inventory Status",
+        "Storage",
+        "Undecided Qty"
+      ]
+    },
+    {
+      "name": "Shipment Plan",
+      "key": "SHIPMENT_PLAN",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Back Color",
+        "BOH_QTY",
+        "BOH_TYPE",
+        "Confrim Day",
+        "Div",
+        "FCST Type",
+        "Site",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Lot_YN",
+        "Measure",
+        "Measure",
+        "Nick Name",
+        "Product Level1",
+        "PSI",
+        "To Site",
+        "Transmode"
+      ]
+    },
+    {
+      "name": "Shipment Plan Detail",
+      "key": "SHIPMENT_PLAN_DETAIL",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "A Contry",
+        "A Port Code",
+        "A Port Name",
+        "ATTRIBUTE10",
+        "bod_id",
+        "Change Reason*",
+        "Reason Detail*",
+        "Change Request No",
+        "CHANGE_TYPE",
+        "Checked",
+        "City Name",
+        "Confirm/Plan ID",
+        "Country Name",
+        "Div",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "End Customer",
+        "DO No",
+        "SO No",
+        "erp_status",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "FCST Type*",
+        "From Site ID",
+        "From Site*",
+        "Incoterms*",
+        "Model*",
+        "L/T(Day)",
+        "MKT Owner",
+        "Model PIC",
+        "A Country",
+        "A Port",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port"
+      ]
+    },
+    {
+      "name": "Shipment Result",
+      "key": "SHIPMENT_RESULT",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Confirm/Plan ID",
+        "Div",
+        "End Customer",
+        "SO No",
+        "ETA",
+        "ETD",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Nick Name",
+        "Shipment Qty",
+        "Ship Type",
+        "To Site",
+        "Trans Mode",
+        "Status",
+        "Shipment Date"
+      ]
+    },
+    {
+      "name": "Stock Location Detail",
+      "key": "STOCK_LOCATION_DETAIL",
+      "labels": [
+        "E{?dr[DefColumns.COLUMN_LABEL_NAME]}",
+        "Available Date",
+        "Available Qty",
+        "Company",
+        "Cutoff Date",
+        "Deffect Qty",
+        "Div",
+        "From Site",
+        "Holding Date",
+        "Model",
+        "Moving Qty",
+        "Nick Name",
+        "Outsourcing Factory",
+        "Outsourcing Flag",
+        "Plant",
+        "Qty Uom",
+        "Stock Type",
+        "Storage",
+        "Storage ID",
+        "Total Qty",
+        "Wiphold Yn"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0060.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "sheet": "Request Info",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "sheet": "Hold stock",
+      "btn": "SSP_PLAN_PROCESSING_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_ERP_SO_NO_CNT",
+      "sheet": "Hold stock",
+      "btn": "ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_ERP_SO_NO_CNT",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Plan",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_STATUS",
+      "entries": [
+        "event:this.usrButtonList1.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0060_SAVE_SHIPMENT_PLAN",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_PLAN",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0060.P_",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_PLAN",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_PLAN",
+      "entries": [
+        "event:this.chkTotPSI.CheckedChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_PLAN_DETAIL",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_PLAN_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_STOCK_LOCATION_DETAIL",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_STOCK_LOCATION_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_OWMS_DETAIL",
+      "sheet": "oWMS Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_OWMS_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_SHIPMENT_RESULT",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_SHIPMENT_RESULT",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_HOLD_STOCK",
+      "sheet": "Hold stock",
+      "btn": "HOLD_STOCK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_HOLD_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_MES_STOCK",
+      "sheet": "MES Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_MES_STOCK",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0060_GET_MES_STOCK_DETAIL",
+      "sheet": "MES Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0060_GET_MES_STOCK_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_NERP_CODE",
+      "sheet": "Hold stock",
+      "btn": "NERP_CODE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0002_GET_NERP_CODE",
+      "entries": [
+        "event:clbDivision_ID.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:this.chkTotPSI.CheckedChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "event:clbCompany_ID.SelectedIndexChanged",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Hold stock",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0060.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Hold stock": {
+      "40": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date*",
+        "Amend Qty*",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ],
+      "81": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date*",
+        "Amend Qty*",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ],
+      "82": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date*",
+        "Amend Qty*",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ]
+    },
+    "Hold stock Detail": {
+      "40": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date",
+        "Amend Qty",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ],
+      "81": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date",
+        "Amend Qty",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ],
+      "82": [
+        "Div",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "Start Date",
+        "End Date",
+        "Amend Qty",
+        "Remarks",
+        "Last Updated By",
+        "Last Updated Date"
+      ]
+    },
+    "MES Stock": {
+      "40": [
+        "Model",
+        "Nick Name",
+        "OQC Insp Request",
+        "Before OQC",
+        "OQC NG",
+        "QMS/MES Hold",
+        "OQC Complete",
+        "Total",
+        "Available Stock"
+      ],
+      "81": [
+        "Model",
+        "Nick Name",
+        "OQC Insp Request",
+        "Before OQC",
+        "OQC NG",
+        "QMS/MES Hold",
+        "OQC Complete",
+        "Total",
+        "Available Stock"
+      ],
+      "82": [
+        "Model",
+        "Nick Name",
+        "OQC Insp Request",
+        "Before OQC",
+        "OQC NG",
+        "QMS/MES Hold",
+        "OQC Complete",
+        "Total",
+        "Available Stock"
+      ]
+    },
+    "MES Stock Detail": {
+      "40": [
+        "Box ID",
+        "Model",
+        "Nick Name",
+        "Available stock YN",
+        "OQC Insp Result",
+        "Lot ID",
+        "Lot Qty",
+        "Prod Valid Date",
+        "Exp Insp Vaild Date",
+        "MES Hold YN",
+        "QMS Hold YN",
+        "MES Unhold Sched Date",
+        "QMS Unhold Sched Date"
+      ],
+      "81": [
+        "Box ID",
+        "Model",
+        "Nick Name",
+        "Available stock YN",
+        "OQC Insp Result",
+        "Lot ID",
+        "Lot Qty",
+        "Prod Valid Date",
+        "Exp Insp Vaild Date",
+        "MES Hold YN",
+        "QMS Hold YN",
+        "MES Unhold Sched Date",
+        "QMS Unhold Sched Date"
+      ],
+      "82": [
+        "Box ID",
+        "Model",
+        "Nick Name",
+        "Available stock YN",
+        "OQC Insp Result",
+        "Lot ID",
+        "Lot Qty",
+        "Prod Valid Date",
+        "Exp Insp Vaild Date",
+        "MES Hold YN",
+        "QMS Hold YN",
+        "MES Unhold Sched Date",
+        "QMS Unhold Sched Date"
+      ]
+    },
+    "oWMS Detail": {
+      "40": [
+        "Div",
+        "Plant ID",
+        "Storage",
+        "Model",
+        "Nick Name",
+        "Inventory Status",
+        "Grade",
+        "Capa. Grade",
+        "SOC",
+        "Lot ID",
+        "Pallet ID",
+        "Stock Qty",
+        "Available Qty",
+        "Undecided Qty",
+        "Allocation Qty",
+        "Hold Qty",
+        "Packing Qty",
+        "Moving Qty",
+        "Reciving Qty",
+        "Expiration Qty",
+        "Long-term Qty",
+        "Packing Status",
+        "Customer Code",
+        "Customer Name",
+        "Lot Issue Date"
+      ],
+      "81": [
+        "Div",
+        "Plant ID",
+        "Storage",
+        "Model",
+        "Nick Name",
+        "Inventory Status",
+        "Grade",
+        "Capa. Grade",
+        "SOC",
+        "Lot ID",
+        "Pallet ID",
+        "Stock Qty",
+        "Available Qty",
+        "Undecided Qty",
+        "Allocation Qty",
+        "Hold Qty",
+        "Packing Qty",
+        "Moving Qty",
+        "Reciving Qty",
+        "Expiration Qty",
+        "Long-term Qty",
+        "Packing Status",
+        "Customer Code",
+        "Customer Name",
+        "Lot Issue Date"
+      ],
+      "82": [
+        "Div",
+        "Plant ID",
+        "Storage",
+        "Model",
+        "Nick Name",
+        "Inventory Status",
+        "Grade",
+        "Capa. Grade",
+        "SOC",
+        "Lot ID",
+        "Pallet ID",
+        "Stock Qty",
+        "Available Qty",
+        "Undecided Qty",
+        "Allocation Qty",
+        "Hold Qty",
+        "Packing Qty",
+        "Moving Qty",
+        "Reciving Qty",
+        "Expiration Qty",
+        "Long-term Qty",
+        "Packing Status",
+        "Customer Code",
+        "Customer Name",
+        "Lot Issue Date"
+      ]
+    },
+    "Shipment Plan": {
+      "40": [
+        "Div",
+        "From Site",
+        "Product Level1",
+        "Model",
+        "Nick Name",
+        "BOH",
+        "BOH",
+        "PSI",
+        "Measure",
+        "To Site",
+        "Transmode",
+        "Incoterms",
+        "FCST Type"
+      ],
+      "81": [
+        "Div",
+        "From Site",
+        "Product Level1",
+        "Model",
+        "Nick Name",
+        "BOH",
+        "BOH",
+        "PSI",
+        "Measure",
+        "To Site",
+        "Transmode",
+        "Incoterms",
+        "FCST Type"
+      ],
+      "82": [
+        "Div",
+        "From Site",
+        "Product Level1",
+        "Model",
+        "Nick Name",
+        "BOH",
+        "BOH",
+        "PSI",
+        "Measure",
+        "To Site",
+        "Transmode",
+        "Incoterms",
+        "FCST Type"
+      ]
+    },
+    "Shipment Plan Detail": {
+      "40": [
+        "Div",
+        "Confirm/Plan ID",
+        "SO No",
+        "DO No",
+        "Status",
+        "Product Level1",
+        "Model*",
+        "Nick Name",
+        "From Site*",
+        "To Site*",
+        "Project Code",
+        "Project Name",
+        "End Customer",
+        "Incoterms*",
+        "FCST Type*",
+        "Shipment Qty*",
+        "Shipment Date*",
+        "Trans Mode*",
+        "Building",
+        "Remarks",
+        "Change Reason*",
+        "Reason Detail*",
+        "MKT Owner",
+        "Team",
+        "Shipment Requestor",
+        "Customer Requirement",
+        "Sold To Party",
+        "Ship To Party",
+        "A Contry",
+        "A Port Code",
+        "A Port Name",
+        "Country Name",
+        "City Name",
+        "Ship To Region Name",
+        "Ship To City Name",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Expected Shipping Date",
+        "Updated By"
+      ],
+      "81": [
+        "Div",
+        "Confirm/Plan ID",
+        "SO No",
+        "DO No",
+        "Status",
+        "Product Level1",
+        "Model*",
+        "Nick Name",
+        "From Site*",
+        "To Site*",
+        "Project Code",
+        "Project Name",
+        "End Customer",
+        "Incoterms*",
+        "FCST Type*",
+        "Shipment Qty*",
+        "Shipment Date*",
+        "Trans Mode*",
+        "Building",
+        "Remarks",
+        "Change Reason*",
+        "Reason Detail*",
+        "MKT Owner",
+        "Team",
+        "Shipment Requestor",
+        "Customer Requirement",
+        "Sold To Party",
+        "Ship To Party",
+        "A Contry",
+        "A Port Code",
+        "A Port Name",
+        "Country Name",
+        "City Name",
+        "Ship To Region Name",
+        "Ship To City Name",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Expected Shipping Date",
+        "Updated By"
+      ],
+      "82": [
+        "Div",
+        "Confirm/Plan ID",
+        "SO No",
+        "DO No",
+        "Status",
+        "Product Level1",
+        "Model*",
+        "Nick Name",
+        "From Site*",
+        "To Site*",
+        "Project Code",
+        "Project Name",
+        "End Customer",
+        "Incoterms*",
+        "FCST Type*",
+        "Shipment Qty*",
+        "Shipment Date*",
+        "Trans Mode*",
+        "Building",
+        "Remarks",
+        "Change Reason*",
+        "Reason Detail*",
+        "MKT Owner",
+        "Team",
+        "Shipment Requestor",
+        "Customer Requirement",
+        "Sold To Party",
+        "Ship To Party",
+        "A Contry",
+        "A Port Code",
+        "A Port Name",
+        "Country Name",
+        "City Name",
+        "Ship To Region Name",
+        "Ship To City Name",
+        "L/T(Day)",
+        "ETD",
+        "ETA",
+        "Expected Shipping Date",
+        "Updated By"
+      ]
+    },
+    "Shipment Result": {
+      "40": [
+        "Div",
+        "Status",
+        "SO No",
+        "Confirm/Plan ID",
+        "Model",
+        "Nick Name",
+        "From Site",
+        "To Site",
+        "End Customer",
+        "Shipment Qty",
+        "Shipment Date",
+        "Trans Mode",
+        "Incoterms",
+        "ETD",
+        "ETA",
+        "Ship Type"
+      ],
+      "81": [
+        "Div",
+        "Status",
+        "SO No",
+        "Confirm/Plan ID",
+        "Model",
+        "Nick Name",
+        "From Site",
+        "To Site",
+        "End Customer",
+        "Shipment Qty",
+        "Shipment Date",
+        "Trans Mode",
+        "Incoterms",
+        "ETD",
+        "ETA",
+        "Ship Type"
+      ],
+      "82": [
+        "Div",
+        "Status",
+        "SO No",
+        "Confirm/Plan ID",
+        "Model",
+        "Nick Name",
+        "From Site",
+        "To Site",
+        "End Customer",
+        "Shipment Qty",
+        "Shipment Date",
+        "Trans Mode",
+        "Incoterms",
+        "ETD",
+        "ETA",
+        "Ship Type"
+      ]
+    },
+    "Stock Location Detail": {
+      "40": [
+        "Div",
+        "Company",
+        "Cutoff Date",
+        "From Site",
+        "Plant",
+        "Model",
+        "Nick Name",
+        "Stock Type",
+        "Storage ID",
+        "Storage",
+        "Total Qty",
+        "Available Qty",
+        "Deffect Qty",
+        "Moving Qty",
+        "Qty Uom",
+        "Wiphold Yn",
+        "Holding Date",
+        "Available Date",
+        "Outsourcing Flag",
+        "Outsourcing Factory"
+      ],
+      "81": [
+        "Div",
+        "Company",
+        "Cutoff Date",
+        "From Site",
+        "Plant",
+        "Model",
+        "Nick Name",
+        "Stock Type",
+        "Storage ID",
+        "Storage",
+        "Total Qty",
+        "Available Qty",
+        "Deffect Qty",
+        "Moving Qty",
+        "Qty Uom",
+        "Wiphold Yn",
+        "Holding Date",
+        "Available Date",
+        "Outsourcing Flag",
+        "Outsourcing Factory"
+      ],
+      "82": [
+        "Div",
+        "Company",
+        "Cutoff Date",
+        "From Site",
+        "Plant",
+        "Model",
+        "Nick Name",
+        "Stock Type",
+        "Storage ID",
+        "Storage",
+        "Total Qty",
+        "Available Qty",
+        "Deffect Qty",
+        "Moving Qty",
+        "Qty Uom",
+        "Wiphold Yn",
+        "Holding Date",
+        "Available Date",
+        "Outsourcing Flag",
+        "Outsourcing Factory"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [
+      "InitSpreadDateColumn:893",
+      "InitSpreadDateColumn:897",
+      "InitSpreadDateColumn:903",
+      "InitSpreadDateColumn:909"
+    ],
+    "titleSheets": [
+      "calendar"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "calendar",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "DIVISION_ID",
+      "FROM_SITE",
+      "FROM_SITE_NM",
+      "ITEM_ID",
+      "NICK_NAME",
+      "HOLD_YYYYMMDD",
+      "RELEASE_YYYYMMDD",
+      "HOLD_QTY",
+      "REMARKS",
+      "LAST_UPDATED_BY",
+      "LAST_UPDATE_DATE",
+      "HOLD_ID",
+      "OQC_INSP_REQUEST",
+      "BEFORE_OQC",
+      "OQC_NG",
+      "QMS_MES_HOLD",
+      "OQC_COMPLETE",
+      "TOTAL",
+      "AVAILABLE_STOCK",
+      "BOXID",
+      "PRODID",
+      "PRJT_NAME",
+      "AVAILABLE_YN",
+      "OQC_INSP_RESULT",
+      "LOTID",
+      "LOT_QTY",
+      "PROD_VALID_DATE",
+      "EXP_INSP_VALID_DATE",
+      "MES_HOLD_YN",
+      "QMS_HOLD_YN",
+      "MES_UNHOLD_SCHD_DATE",
+      "QMS_UNHOLD_SCHD_DATE",
+      "FROM_SITE_DESCRIPTION",
+      "PRODUCT_LEVEL1",
+      "BOH_TYPE",
+      "BOH_QTY",
+      "PSI",
+      "BACK_COLOR",
+      "CONFIRM_DAY",
+      "LOT_YN",
+      "MEASURE_NAME",
+      "MEASURE",
+      "TO_SITE",
+      "TRANSPORT_MODE",
+      "INCOTERMS",
+      "FCST_TYPE",
+      "CONFIRM_ID",
+      "ERP_SO_NO",
+      "ERP_DO_NO",
+      "SHIPMENT_STATUS",
+      "TO_SITE_DESCRIPTION",
+      "PROJECT_CODE",
+      "PROJECT_NAME",
+      "END_CUSTOMER",
+      "SHIPMENT_CONFIRM_QTY",
+      "SHIPMENT_DATE",
+      "REMARKS2",
+      "CHANGE_REASON_CODE",
+      "CHANGE_REASON_DETAIL",
+      "MTK_OWNER",
+      "TEAM",
+      "REQUESTOR",
+      "REMARKS3",
+      "SOLDTO_DESCRIPTION",
+      "SHIPTO_DESCRIPTION",
+      "A_COUNTRY",
+      "A_PORT_CODE",
+      "A_PORT_NAME",
+      "COUNTRY_NAME",
+      "CITY_NAME",
+      "SHIPTO_REGION_NAME",
+      "SHIPTO_CITY_NAME",
+      "LT_DAY",
+      "ETD",
+      "ETA",
+      "EXPECTED_SHIPPING_DATE",
+      "UPDATED_BY",
+      "UPDATED_DATE",
+      "CHANGE_REQ_NO",
+      "CHECK_NEED_YN",
+      "ATTRIBUTE10",
+      "MODEL_USER",
+      "ERP_STATUS",
+      "BOD_ID",
+      "CHANGE_TYPE",
+      "NEW_ROUTE_ID",
+      "NEW_BOD_ID",
+      "NEW_INCOTERMS",
+      "NEW_D_COUNTRY",
+      "NEW_D_PORT_CODE",
+      "NEW_A_COUNTRY",
+      "NEW_A_PORT_CODE",
+      "NEW_CUSTOMER_LT",
+      "NEW_TO_COUNTRY",
+      "NEW_TO_CITY",
+      "NEW_ETA",
+      "NEW_ETD",
+      "NEW_LT_DAY",
+      "NEW_TRANSPORT_MODE",
+      "NEW_SHIPMENT_DATE",
+      "EDIT_REMARKS",
+      "EDIT_MAIN",
+      "ELECTRODE_YN",
+      "ELECTRODE_TYPE",
+      "ORIGIN_FROM_DIVISION_ID",
+      "ORIGIN_TO_DIVISION_ID",
+      "TYPE",
+      "QTY",
+      "YYYYMMDD",
+      "ETD_DATE",
+      "ETA_DATE",
+      "SHIP_TYPE",
+      "COMPANY_ID",
+      "CUTOFF_DATE",
+      "PLANT_ID",
+      "STOCK_TYPE",
+      "STORAGE_ID",
+      "STORAGE_DESCRIPTION",
+      "TOTAL_QTY",
+      "AVAILABLE_QTY",
+      "DEFECT_QTY",
+      "MOVING_QTY",
+      "QTY_UOM",
+      "WIPHOLD_YN",
+      "HOLDING_DATE",
+      "AVAILABLE_DATE",
+      "OUTSOURCING_FLAG",
+      "OUTSOURCING_FACTORY",
+      "STOCK_STATUS",
+      "GRADE",
+      "CAPA_GRADE",
+      "SOC",
+      "LOT_ID",
+      "PALLET_ID",
+      "STOCK_QTY",
+      "UNDECIDED_QTY",
+      "ALLOCATION_QTY",
+      "PACKING_QTY",
+      "RECEIVING_QTY",
+      "EXPIRATION_QTY",
+      "LONG_TERM_QTY",
+      "PACKING_STATUS",
+      "CUSTOMER_CODE",
+      "CUSTOMER_NAME",
+      "LOT_ISSUE_DATE"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "IF_CHECK",
+        "SAVE_SHIPMENT_REQUEST_DRAFTING",
+        "CHECK_CONFIRM_CHANGETIME",
+        "GET_ERP_SO_NO_CNT",
+        "GET_SHIPMENT_STATUS",
+        "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+        "CHECK_CONFIRM_CHANGETIME_DE",
+        "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+        "ERP_ERROR_CONFIRM",
+        "USER_CHECK",
+        "SAVE",
+        "INSERT",
+        "GET_ORDER_DETAIL",
+        "EDIT",
+        "DELETE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM",
+      "GET_ORDER_DETAIL",
+      "GET_SHIPMENT_STATUS",
+      "EDIT",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "GET_ERP_SO_NO_CNT",
+      "USER_CHECK",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "IF_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "CHECK_CONFIRM_CHANGETIME"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ORDER_DETAIL",
+      "SAVE",
+      "GET_ERP_SO_NO_CNT",
+      "INSERT",
+      "DELETE",
+      "USER_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "IF_CHECK",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "GET_SHIPMENT_STATUS"
+    ],
+    "DM ADMIN": [
+      "SEARCH",
+      "IF_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "GET_SHIPMENT_STATUS",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "USER_CHECK",
+      "ERP_ERROR_CONFIRM",
+      "GET_ORDER_DETAIL",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "DELETE",
+      "CHECK_CONFIRM_CHANGETIME",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "INSERT",
+      "SAVE",
+      "GET_ERP_SO_NO_CNT"
+    ],
+    "DM Planner": [
+      "SEARCH",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM",
+      "CHECK_CONFIRM_CHANGETIME",
+      "IF_CHECK",
+      "SAVE",
+      "USER_CHECK",
+      "INSERT",
+      "GET_ERP_SO_NO_CNT",
+      "GET_SHIPMENT_STATUS",
+      "GET_ORDER_DETAIL",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "DELETE",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C"
+    ],
+    "DM Planner (W/S)": [
+      "SEARCH",
+      "USER_CHECK",
+      "GET_ERP_SO_NO_CNT",
+      "DELETE",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "INSERT",
+      "CHECK_CONFIRM_CHANGETIME",
+      "IF_CHECK",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM",
+      "SAVE",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "GET_ORDER_DETAIL",
+      "GET_SHIPMENT_STATUS"
+    ],
+    "DM Viewer": [
+      "SEARCH",
+      "GET_ERP_SO_NO_CNT",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ORDER_DETAIL",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "SAVE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "DELETE",
+      "GET_SHIPMENT_STATUS",
+      "ERP_ERROR_CONFIRM",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "INSERT",
+      "IF_CHECK",
+      "USER_CHECK",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C"
+    ],
+    "FP Planner": [
+      "SEARCH",
+      "EDIT",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "GET_SHIPMENT_STATUS",
+      "GET_ERP_SO_NO_CNT",
+      "CHECK_CONFIRM_CHANGETIME",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "IF_CHECK",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "ERP_ERROR_CONFIRM",
+      "GET_ORDER_DETAIL",
+      "USER_CHECK"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "INSERT",
+      "GET_SHIPMENT_STATUS",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ORDER_DETAIL",
+      "SAVE",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "IF_CHECK",
+      "USER_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "ERP_ERROR_CONFIRM",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "DELETE",
+      "GET_ERP_SO_NO_CNT"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ERP_SO_NO_CNT",
+      "GET_SHIPMENT_STATUS",
+      "ERP_ERROR_CONFIRM",
+      "GET_ORDER_DETAIL",
+      "IF_CHECK",
+      "INSERT",
+      "SAVE",
+      "EDIT",
+      "DELETE",
+      "USER_CHECK"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "GET_ORDER_DETAIL",
+      "SAVE",
+      "USER_CHECK",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "DELETE",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "IF_CHECK",
+      "INSERT",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "ERP_ERROR_CONFIRM",
+      "GET_ERP_SO_NO_CNT",
+      "GET_SHIPMENT_STATUS",
+      "CHECK_CONFIRM_CHANGETIME"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_SHIPMENT_STATUS",
+      "INSERT",
+      "GET_ORDER_DETAIL",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "IF_CHECK",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "SAVE",
+      "GET_ERP_SO_NO_CNT",
+      "DELETE",
+      "USER_CHECK",
+      "ERP_ERROR_CONFIRM"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "USER_CHECK",
+      "CHECK_CONFIRM_CHANGETIME",
+      "INSERT",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "SAVE",
+      "GET_SHIPMENT_STATUS",
+      "GET_ORDER_DETAIL",
+      "DELETE",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "IF_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "ERP_ERROR_CONFIRM",
+      "GET_ERP_SO_NO_CNT"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ORDER_DETAIL",
+      "GET_SHIPMENT_STATUS",
+      "USER_CHECK",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "IF_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "SAVE",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "DELETE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM",
+      "INSERT",
+      "GET_ERP_SO_NO_CNT"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "IF_CHECK",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "CHECK_CONFIRM_CHANGETIME",
+      "GET_ERP_SO_NO_CNT",
+      "GET_SHIPMENT_STATUS",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "ERP_ERROR_CONFIRM",
+      "USER_CHECK",
+      "SAVE",
+      "INSERT",
+      "GET_ORDER_DETAIL",
+      "EDIT",
+      "DELETE"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "IF_CHECK",
+      "GET_ORDER_DETAIL",
+      "GET_ERP_SO_NO_CNT",
+      "SAVE",
+      "GET_SHIPMENT_STATUS",
+      "ERP_ERROR_CONFIRM",
+      "USER_CHECK",
+      "INSERT",
+      "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+      "SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "DELETE",
+      "CHECK_CONFIRM_CHANGETIME_DE",
+      "CHECK_CONFIRM_CHANGETIME"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+    "ERP_ERROR_CONFIRM",
+    "GET_ORDER_DETAIL",
+    "GET_SHIPMENT_STATUS",
+    "EDIT",
+    "DELETE",
+    "INSERT",
+    "SAVE",
+    "GET_ERP_SO_NO_CNT",
+    "USER_CHECK",
+    "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+    "CHECK_CONFIRM_CHANGETIME_DE",
+    "IF_CHECK",
+    "SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "CHECK_CONFIRM_CHANGETIME"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

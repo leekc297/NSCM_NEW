@@ -19,6 +19,18 @@
 | button:SaveButton | SaveButton > SaveData > FindData_Main | 280 | DM.DM0098_GET_SCM_MST_CUSTOMER_TEST | MATCH | SP DM0098_GET_SCM_MST_CUSTOMER_TEST |
 | button:SaveButton | SaveButton > SaveData > FindData_Sub | 339 | DM.DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | MATCH | SP DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST |
 | button:SaveButton | SaveButton > SaveData > FindData_Sub | 341 | DM.DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | MATCH | SP DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST |
+| button:SaveButton | SaveButton > SaveData | 421 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 422 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 423 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 423 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 424 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 425 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 501 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 502 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 503 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 503 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 504 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 505 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 | event:this.Load | Form_Load > InitControls | 138 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 139 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
 | event:this.spdMain.CellClick | SpdMain_CellClick > FindData_Sub | 341 | DM.DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | MATCH | SP DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST |
@@ -33,6 +45,9 @@
 | biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
 | DM.DM0098_GET_SCM_MST_CUSTOMER_TEST | MATCH | 2 | SP DM0098_GET_SCM_MST_CUSTOMER_TEST | EXEC:DM0098_GET_SCM_MST_CUSTOMER_TEST | ⚠ DB에 SP 없음 |
 | DM.DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | MATCH | 2 | SP DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | EXEC:DM0098_GET_SCM_MST_SITE_CUSTOMER_TEST | ⚠ DB에 SP 없음 |
+| xxxx.DeleteQueryId | NOT_IN_FOXQUERY | 4 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.InsertQueryId | NOT_IN_FOXQUERY | 4 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.UpdateQueryId | NOT_IN_FOXQUERY | 4 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -72,9 +87,21 @@
 | UsrCombo | 2 | cmbActive, cmbActive2 |
 | LayoutControlItem | 2 | layoutControlItem1, layoutControlItem2 |
 
-## 7. 확인 필요 (0건)
+## 7. 확인 필요 (12건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 423 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 424 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 425 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 503 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 504 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 505 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 421 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 422 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 423 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 501 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 502 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 503 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

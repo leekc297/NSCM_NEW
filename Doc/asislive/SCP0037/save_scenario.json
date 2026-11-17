@@ -1,0 +1,46 @@
+{
+ "table": "SCP_MST_OPERATION_LT",
+ "pk": [
+  "DIVISION_ID",
+  "SCM_SITE_ID",
+  "ITEM_ID",
+  "LT_OPERATION"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "SCM_SITE_ID": "SCM_SITE_ID",
+  "ITEM_ID": "ITEM_ID",
+  "LT_OPERATION": "LT_OPERATION"
+ },
+ "save_sp": "SCP0037_SAVE_OPERATION_LT",
+ "side": [
+  {
+   "table": "SCP_MST_OPERATION_LT_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [],
+ "basis": "foxml SCP0037_SAVE_OPERATION_LT → SP SCP0037_SAVE_OPERATION_LT 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = MERGE SCP_MST_OPERATION_LT(키 4컬럼) · SCP_MST_OPERATION_LT_H 이력 INSERT(SP 본문과 PR_SCP_MST_OPERATION_LT_HIST) · 그리드의 SCM_SITE_ID, LT_OPERATION 은 표시 글자와 원래 값이 달라 원래 값으로 DB 행을 찾음 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 LT_DAY 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "LT_DAY",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "LT_DAY",
+      "db_col": "LT_DAY",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

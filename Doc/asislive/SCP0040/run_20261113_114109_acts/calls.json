@@ -1,0 +1,70 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 11:40:39.034",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.53,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:BtnItemId"
+  },
+  {
+   "at": "2026-11-13 11:40:42.983",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1845,
+   "rows_kind": "DataSet rows",
+   "ms": 3835.41,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0040"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0040'",
+   "phase": "action:BtnItemId"
+  },
+  {
+   "at": "2026-11-13 11:40:52.763",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.9,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 11:40:54.655",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1845,
+   "rows_kind": "DataSet rows",
+   "ms": 1788.28,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0040"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0040'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

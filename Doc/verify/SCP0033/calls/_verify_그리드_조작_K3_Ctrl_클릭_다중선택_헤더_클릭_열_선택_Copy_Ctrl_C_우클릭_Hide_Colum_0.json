@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 122,
+  "at": "2026-11-14T02:42:11.610Z",
+  "user": "minyonglee1",
+  "test": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회"
+ }
+]

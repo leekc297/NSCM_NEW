@@ -55,8 +55,12 @@ export interface PivotCellChange {
 }
 
 /**
- * EditTracker 가 추적한 변경 셀 중 D_/W_/M_ pivot 바인딩만 저장 라인으로 펼친다.
- * 한 행에 바뀐 날짜 칼럼이 여러 개면 그 수만큼 라인이 늘어난다(AS-IS CString.AppendString 1:1).
+ * EditTracker 가 추적한 변경 셀 중 **D_(일) pivot 바인딩만** 저장 라인으로 펼친다.
+ * W_/M_(주/월) 은 화면 집계값이라 저장하지 않는다 — AS-IS SaveData(cs:1621)가 `Tag.IndexOf("D_")==0`
+ * 컬럼만 수집하는 것과 동일(사용자 지시 2026-11-09). Weekly/Monthly 편집은 Auto-Sync 가 기본요일 기준으로
+ * D_ 에 배분(storeChange)해 두므로, 그 배분된 일자값만 저장된다. 종전엔 W_/M_ 집계 라인까지 함께 보내
+ * 프로시저가 주/월 시작일에도 기록해 꼬였다(item 2 "Weekly 저장 안 됨").
+ * 한 행에 바뀐 일자 칼럼이 여러 개면 그 수만큼 라인이 늘어난다(AS-IS CString.AppendString 1:1).
  */
 export const collectPivotChanges = <T extends PackRow | CellRow>(
   rows: T[],
@@ -71,7 +75,7 @@ export const collectPivotChanges = <T extends PackRow | CellRow>(
     const record = row as unknown as Record<string, unknown>;
     Object.keys(editItem).forEach(binding => {
       const tag = parseDynamicColumnTag(binding);
-      if (!tag) return;
+      if (!tag || tag.bucket !== 'D') return; // D_(일) 만 저장 — W_/M_ 집계는 제외(AS-IS 동일)
       changes.push({
         activeFlag: row.CRUD_TYPE === CRUD_TYPE.INSERT ? CRUD_TYPE.INSERT : CRUD_TYPE.MODIFY,
         divisionId,

@@ -191,6 +191,24 @@
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:213 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:321 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:322 |
+| this | Load | Form_Load | .ctor:114 |
+| cboInstance | SelectedIndexChanged | cboInstance_changed | InitEvent:242 |
+| drpPlanDate | DateTimeChanged | drpPlanDate_changed | InitEvent:243 |
+| cboPlanId | SelectedIndexChanged | cboPlanId_changed | InitEvent:244 |
+| cboFormInstance | SelectedIndexChanged | cboFormInstance_changed | InitEvent:246 |
+| cboFormPlanId | SelectedIndexChanged | cboFormPlanId_changed | InitEvent:247 |
+| clbDivision | SelectedIndexChanged | clbDivision_changed | InitEvent:249 |
+| cboSite | SelectedIndexChanged | cboSite_changed | InitEvent:250 |
+| txtGroupName | TextChanged | txtGroupName_TextChanged | InitEvent:253 |
+| txtCellCode | TextChanged | txtCellCode_TextChanged | InitEvent:254 |
+| txtNickName | TextChanged | txtNickName_TextChanged | InitEvent:255 |
+| drpPeriod | ValueChanged | drpPeriod_changed | InitEvent:257 |
+| chkRelPack | CheckedChanged | chkRelPack_CheckedChanged | InitEvent:259 |
+| chkRelForm | CheckedChanged | chkRelForm_CheckedChanged | InitEvent:260 |
+| chkLineAssign | CheckedChanged | chkLineAssign_CheckedChanged | InitEvent:261 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1179 |
+| drpPlanDate | DateTimeChanged | drpPlanDate_changed | drpPlanDate_changed:2563 |
+| drpPlanDate | DateTimeChanged | drpPlanDate_changed | drpPlanDate_changed:2579 |
 | this.cboFormPlanId | DropDown | cboFormPlanId_DropDown | InitializeComponent:480 |
 | this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:627 |
 | this.cboPlanId | DropDown | cboPlanId_DropDown | InitializeComponent:740 |
@@ -219,24 +237,6 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:1233 |
 | this.btnCategory | Click | btnCatagory_Click | InitializeComponent:1271 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:1309 |
-| this | Load | Form_Load | .ctor:114 |
-| cboInstance | SelectedIndexChanged | cboInstance_changed | InitEvent:242 |
-| drpPlanDate | DateTimeChanged | drpPlanDate_changed | InitEvent:243 |
-| cboPlanId | SelectedIndexChanged | cboPlanId_changed | InitEvent:244 |
-| cboFormInstance | SelectedIndexChanged | cboFormInstance_changed | InitEvent:246 |
-| cboFormPlanId | SelectedIndexChanged | cboFormPlanId_changed | InitEvent:247 |
-| clbDivision | SelectedIndexChanged | clbDivision_changed | InitEvent:249 |
-| cboSite | SelectedIndexChanged | cboSite_changed | InitEvent:250 |
-| txtGroupName | TextChanged | txtGroupName_TextChanged | InitEvent:253 |
-| txtCellCode | TextChanged | txtCellCode_TextChanged | InitEvent:254 |
-| txtNickName | TextChanged | txtNickName_TextChanged | InitEvent:255 |
-| drpPeriod | ValueChanged | drpPeriod_changed | InitEvent:257 |
-| chkRelPack | CheckedChanged | chkRelPack_CheckedChanged | InitEvent:259 |
-| chkRelForm | CheckedChanged | chkRelForm_CheckedChanged | InitEvent:260 |
-| chkLineAssign | CheckedChanged | chkLineAssign_CheckedChanged | InitEvent:261 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1179 |
-| drpPlanDate | DateTimeChanged | drpPlanDate_changed | drpPlanDate_changed:2563 |
-| drpPlanDate | DateTimeChanged | drpPlanDate_changed | drpPlanDate_changed:2579 |
 
 ## 6. 컨트롤 (141개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |

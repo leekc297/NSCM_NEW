@@ -1,7 +1,7 @@
 # DMF0005_01 — To-Be Fact Pack 요약
 
 - page_key: `master/sales-site-project-model-01` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 38 · 컴포넌트 사용 63 · 하드코딩 컬럼 3 · 메시지 26
+- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 40 · 컴포넌트 사용 68 · 하드코딩 컬럼 3 · 메시지 26
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
@@ -10,37 +10,37 @@
 | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.module.scss | style | 37 |
 | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | page | 223 |
 | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.module.scss | style | 41 |
-| features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | page | 427 |
+| features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | page | 461 |
 | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx | page | 664 |
 | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01PurchaseGrid.tsx | page | 131 |
 | features/master/src/pages/sales-site-project-model-01/index.ts | index | 2 |
-| features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.constants.ts | constants | 131 |
+| features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.constants.ts | constants | 146 |
 | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.editBaseline.ts | other | 103 |
 | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.gridCombos.ts | other | 285 |
 | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.salesCompanyGuard.ts | other | 675 |
 | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.scpGuard.ts | other | 83 |
 | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.siteInfo.ts | other | 48 |
-| features/master/src/pages/sales-site-project-model-01/SalesSiteProjectModel01.module.scss | style | 21 |
+| features/master/src/pages/sales-site-project-model-01/SalesSiteProjectModel01.module.scss | style | 36 |
 | features/master/src/pages/sales-site-project-model-01/SalesSiteProjectModel01.tsx | page | 328 |
 | features/master/src/pages/sales-site-project-model-01/useSalesSiteProjectModel01Save.ts | hook | 84 |
-| features/master/src/pages/sales-site-project-model-01/useSalesSiteProjectModel01Store.ts | store | 164 |
+| features/master/src/pages/sales-site-project-model-01/useSalesSiteProjectModel01Store.ts | store | 187 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | SalesSiteProjectModel01Form.tsx:59 sales-site-project-model-01.gridCombos.ts:185 |
+| (useTabComboQueries) | hook | 2 | Y | SalesSiteProjectModel01Form.tsx:71 sales-site-project-model-01.gridCombos.ts:185 |
 | {?{comboId,...rowParamValues(bindings,row)}} | http | 1 | N | sales-site-project-model-01.salesCompanyGuard.ts:311 |
 | {?{comboId:SITE_INFO_COMBO_ID,divisionId:cellText(row.DIVISION_ID),scmSiteId:site,} | http | 1 | N | sales-site-project-model-01.salesCompanyGuard.ts:366 |
 | DMF0005_01/production//call-proc | hook | 1 | Y | SalesSiteProjectModel01.tsx:71 |
 | DMF0005_01/purchase//call-proc | hook | 1 | Y | SalesSiteProjectModel01.tsx:79 |
 | DMF0005_01/{sheetName}/SAVE/call-proc | http | 1 | N | useSalesSiteProjectModel01Save.ts:52 |
-| /admin/menu/DMF0005_01/column | http | 2 | Y | useSalesSiteProjectModel01Store.ts:125 useSalesSiteProjectModel01Store.ts:129 |
-| /admin/menu/DMF0005_01/search-conditions | http | 1 | Y | useSalesSiteProjectModel01Store.ts:142 |
+| /admin/menu/DMF0005_01/column | http | 2 | Y | useSalesSiteProjectModel01Store.ts:148 useSalesSiteProjectModel01Store.ts:152 |
+| /admin/menu/DMF0005_01/search-conditions | http | 1 | Y | useSalesSiteProjectModel01Store.ts:165 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| production | divisionId deptId endCustomer salesSite projectCode itemId activeFlag owner | production | PKG_DMF0005_01 |
+| production | divisionId deptId endCustomer salesSite projectCode itemId activeFlag owner endCustReportYn projectInfoYn | production | PKG_DMF0005_01 |
 | purchase | divisionId salesSite projectCode activeFlag | purchase | PKG_DMF0005_01 |
 | modelChange |  | modelChange | PKG_DMF0005_01 P_DMF0005_01_SAVE_MODEL_CHANGE_POPUP P_DATA P_USER_ID |
 
@@ -52,19 +52,21 @@
 | Button | onClick | handleDelete | jsx | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | 196 |
 | Button | onClick | handleSave | jsx | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | 206 |
 | Button | onClick | modalClose | jsx | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | 215 |
-| SearchArea | onSearch | onSubmit | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 151 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 167 |
-| CustomDropdown | onChange | <arrow> setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 208 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 239 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 271 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 301 |
-| Button | onClick | <arrow> setOpenProjectByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 297 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 327 |
-| Button | onClick | <arrow> setOpenItemByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 323 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 352 |
-| Button | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 348 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 376 |
-| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 389 |
+| SearchArea | onSearch | onSubmit | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 163 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 179 |
+| CustomDropdown | onChange | <arrow> setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 220 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 251 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 283 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 313 |
+| Button | onClick | <arrow> setOpenProjectByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 309 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 339 |
+| Button | onClick | <arrow> setOpenItemByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 335 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 364 |
+| Button | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 360 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 388 |
+| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 401 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 420 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx | 427 |
 | grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx | 172 |
 | grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx | 173 |
 | grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx | 174 |
@@ -89,13 +91,15 @@
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
+| Grid | 9 |
 | FormItem | 9 |
 | Button | 8 |
-| Grid | 8 |
 | CustomDropdown | 5 |
 | DataGrid | 3 |
 | InputField | 3 |
 | FunctionSearchIcon | 3 |
+| Checkbox | 3 |
+| Label | 3 |
 | ItemByDivisionModal | 2 |
 | OwnerModal | 2 |
 | Panel | 2 |
@@ -104,8 +108,6 @@
 | FileExceldownloadIcon | 1 |
 | ControlConfirmIcon | 1 |
 | SearchArea | 1 |
-| Checkbox | 1 |
-| Label | 1 |
 | ProjectByDivisionModal | 1 |
 | OwnerByDivisionModal | 1 |
 | TeamModal | 1 |
@@ -123,7 +125,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | MODEL_CHANGE_COLUMNS | ITEM_ID_BEFORE | BEFORE | 250 |  |  |  | meta-shape | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | 44 |
 | MODEL_CHANGE_COLUMNS | ITEM_ID_AFTER | AFTER | 250 |  |  |  | meta-shape | features/master/src/pages/sales-site-project-model-01/componenets/ModelCodeChangeModal01.tsx | 45 |
-| MODEL_POPUP_COLUMNS | ITEM_TYPE_NAME\|ITEM_TYPE | Type | 80 |  |  |  | meta-shape | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.constants.ts | 77 |
+| MODEL_POPUP_COLUMNS | ITEM_TYPE_NAME\|ITEM_TYPE | Type | 80 |  |  |  | meta-shape | features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.constants.ts | 92 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -154,8 +156,8 @@
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0005(7), COM0008(3), DMF0006(2), DMF0007(2), DMF0042(1)
-- SP/PKG: PKG_DMF0005(5), SCM0001_GET_SITE_INFO_BY_DIVISION(2), P_DMF0005_SAVE_MODEL_CHANGE_POPUP(1), DMF0005_SAVE_MODEL_CHANGE_POPUP(1), P_DATA(1), P_USER_ID(1), PR_CHECK_MNU_BTN_AUTH(1)
+- 화면ID: DMF0005(8), COM0008(3), DMF0006(2), DMF0007(2), DMF0042(1)
+- SP/PKG: PKG_DMF0005(5), SCM0001_GET_SITE_INFO_BY_DIVISION(2), P_DMF0005_SAVE_MODEL_CHANGE_POPUP(1), DMF0005_SAVE_MODEL_CHANGE_POPUP(1), P_DATA(1), P_USER_ID(1), PKG_DMF0005_01(1), PR_CHECK_MNU_BTN_AUTH(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

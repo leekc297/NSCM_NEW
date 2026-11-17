@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 346,
+  "at": "2026-11-13T21:02:21.570Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 446,
+  "at": "2026-11-13T21:02:21.608Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2449,
+  "at": "2026-11-13T21:02:26.549Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ }
+]

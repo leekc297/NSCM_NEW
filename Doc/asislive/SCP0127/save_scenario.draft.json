@@ -1,0 +1,62 @@
+{
+ "id": "SCP0127",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+   "save_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID",
+    "STAGE",
+    "ITEM_ID",
+    "VALUE_TYPE",
+    "FROM_YYYYMMDD",
+    "TO_YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "STAGE": "STAGE",
+    "ITEM_ID": "ITEM_ID",
+    "VALUE_TYPE": "VALUE_TYPE",
+    "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+    "TO_YYYYMMDD": "TO_YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "TYPE_APPLY_DAY",
+    "db_col": "TYPE_APPLY_DAY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/PRECEDE / SAFETY STOCK DAY",
+   "writes": {
+    "SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY → SP SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "TYPE_APPLY_DAY",
+     "db_col": "TYPE_APPLY_DAY",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 22:03:48"
+   }
+  }
+ ]
+}

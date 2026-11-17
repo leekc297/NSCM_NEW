@@ -117,15 +117,22 @@ def main():
         for menu in menus:
             rows = []
             # ① PROC_M 배선
-            for r in [x for x in pm if x['menu_id'].upper() == menu and x.get('proc') and (x.get('use_yn') or 'Y') != 'N']:
+            # 2026-11-13 사용자: 한 화면이 여러 메뉴에 등록돼 있으면 '사용 가능한 메뉴에 등록된 화면' 기준으로 본다.
+            #   이 화면(MNU_ID) 행이 USE_YN=N 이어도 같은 화면 경로(ROUTE_PATH)의 다른 메뉴 행이 USE_YN=Y 면 사용 화면이다 → 메뉴·배선을 '없음' 으로 보지 않는다(배선은 이 MNU_ID 행 것을 그대로 쓴다)
+            _mrows = rd('menu.csv'); _me = next((x for x in _mrows if (x.get('mnu_id') or '').upper() == menu), None)
+            _route = ((_me or {}).get('route_path') or '').strip()
+            _alias = [x.get('mnu_id') for x in _mrows if _route and not _route.startswith('-') and (x.get('route_path') or '').strip() == _route and (x.get('mnu_id') or '').upper() != menu and (x.get('use_yn') or 'Y') != 'N']
+            _use_ok = lambda u: (u or 'Y') != 'N' or bool(_alias)
+            for r in [x for x in pm if x['menu_id'].upper() == menu and x.get('proc') and _use_ok(x.get('use_yn'))]:
                 callee = r['pkg'] or r['proc'].split('.')[0]
                 v, path, tgt = resolve(callee, 'EXEC')
                 rows.append({'menu_id': menu, 'kind': 'PROC', 'source': f"{r['sheet']}/{r['btn']}", 'name': r['proc'], 'resolved': tgt, 'verdict': v, 'path': path, 'error_if_called': {'SYN_MISSING': 'PLS-00201 / ORA-06550', 'PRIV_MISSING': 'PLS-00201 / ORA-01031', 'TARGET_MISSING': 'ORA-00980', 'INVALID': 'ORA-04063 / ORA-06508'}.get(v, '')})
             # ①-b 메타(CR-076, 2026-10-29): 메뉴·PROC_M(SEARCH)·SHEET_COLUMNS 가 없으면 화면이 뜨지도/조회되지도 않는다 → META_MISSING(차단)
-            menus_meta = {m['mnu_id'].upper() for m in rd('menu.csv') if (m.get('use_yn') or 'Y') != 'N'}
-            if menu not in menus_meta:
+            menus_meta = {m['mnu_id'].upper() for m in _mrows if (m.get('use_yn') or 'Y') != 'N'}
+            if _alias and menu not in menus_meta: print(f"   [INFO] {menu}: 메뉴 행은 USE_YN=N 이지만 같은 화면 경로({_route})의 사용 메뉴 {', '.join(str(a) for a in _alias)} 가 있어 사용 화면으로 봄")
+            if menu not in menus_meta and not _alias:
                 rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_ADM_MNU_M', 'name': f'MENU {menu}', 'resolved': '', 'verdict': 'META_MISSING', 'path': '메뉴 메타(SCM_ADM_MNU_M) 에 이 화면 행이 없음(또는 USE_YN=N)', 'error_if_called': '메뉴 미노출 · 화면 진입 불가'})
-            pm_menu = [x for x in pm if x['menu_id'].upper() == menu and x.get('proc') and (x.get('use_yn') or 'Y') != 'N']
+            pm_menu = [x for x in pm if x['menu_id'].upper() == menu and x.get('proc') and _use_ok(x.get('use_yn'))]
             if not pm_menu:
                 rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_ADM_PROC_M/API_M', 'name': f'PROC_M {menu}', 'resolved': '', 'verdict': 'META_MISSING', 'path': '이 화면의 PROC_M/API_M 배선 행이 없음', 'error_if_called': '조회·저장 call-proc 전부 실패'})
             elif not any((x.get('btn') or '').upper().startswith('SEARCH') for x in pm_menu):

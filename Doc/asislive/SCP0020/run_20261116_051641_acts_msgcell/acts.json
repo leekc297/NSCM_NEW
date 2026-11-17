@@ -1,0 +1,195 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "InsertButton",
+   "expect": "MSG00002",
+   "why": "SCP0020_TactTime.cs InsertButton fps=spdExcept · nMainSelRow 행(SpdMain_CellDoubleClick 258행)의 LINE_ID 빈 값 → MSG00002('Line') · DB 에 LINE_ID 빈 Packer 행 없음(사업부 82 857행 중 0, 11-16 05:12) → 주 그리드 새 행(LINE_ID 빈 값)을 더블클릭 · 행 추가는 활성 행 위치에 들어감(siMain.Insert) → 0행 클릭 뒤 추가하면 새 행 = 0행 · 예외 그리드 수정은 주 그리드 수정 모드(Action 열 표시)면 MSG00199 로 막힘(659행) → 주 그리드 수정 모드를 다시 눌러 끈 뒤 시도",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickInsertButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickInsertButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "click": "DIVISION_ID",
+      "double": 1,
+      "row": 0,
+      "wait": 6
+     },
+     "row": 0,
+     "col": 2,
+     "ok": true,
+     "error": null,
+     "popups": []
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdExcept",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdExcept.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickInsertButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickInsertButton",
+     "raised": null,
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Line 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0020_GET_TACT_TIME_EXCEPT_OSP"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:15:09",
+ "_pre_set": [],
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0020",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Packer"
+   },
+   "rows": 18,
+   "ms": 4.04,
+   "at": "2026-11-16 05:15:20.568",
+   "phase": "find"
+  },
+  {
+   "sp": "DMF0027_GET_DM_DYNAMIC_QUERYS",
+   "params": {
+    "v_sql_text": "SELECT MAX(tact_time) * 1.5 AS tact_time_max\n                           FROM   SCP_MST_TACT_TIME_OSP with(nolock)\n                           WHERE  division_id     = '82'"
+   },
+   "rows": 1,
+   "ms": 3.03,
+   "at": "2026-11-16 05:15:20.617",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0020_GET_TACT_TIME_OSP",
+   "params": {
+    "p_division_id": "82",
+    "p_plant_site_id": "",
+    "p_line_id": "",
+    "p_operation_group_id": "P",
+    "p_item_id": "",
+    "debug_mode": "F"
+   },
+   "rows": 855,
+   "ms": 2168.37,
+   "at": "2026-11-16 05:15:22.757",
+   "phase": "find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0020",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Tact Time Except"
+   },
+   "rows": 27,
+   "ms": 28.77,
+   "at": "2026-11-16 05:15:22.932",
+   "phase": "find"
+  }
+ ]
+}

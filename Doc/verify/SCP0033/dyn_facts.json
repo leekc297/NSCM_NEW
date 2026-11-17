@@ -1,0 +1,244 @@
+{
+ "combos": {
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'DEPARTURE_DAY'\",\"mnuId\":\"SCP0033\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "MON",
+    "v": "MON"
+   },
+   {
+    "c": "TUE",
+    "v": "TUE"
+   },
+   {
+    "c": "WED",
+    "v": "WED"
+   },
+   {
+    "c": "THU",
+    "v": "THU"
+   },
+   {
+    "c": "FRI",
+    "v": "FRI"
+   },
+   {
+    "c": "SAT",
+    "v": "SAT"
+   },
+   {
+    "c": "SUN",
+    "v": "SUN"
+   }
+  ],
+  "{\"comboId\":\"MyDivisionInEE\",\"mnuId\":\"SCP0033\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "EE Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0033\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   },
+   {
+    "c": "E",
+    "v": "Electrode"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0033\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"MyDivisionInEE\",\"mnuId\":\"SCP0033\"}": [
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "EE Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0033\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0033\"}": [
+   {
+    "c": "40",
+    "v": "Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "Electrode(UC)"
+   }
+  ]
+ },
+ "popupFields": {},
+ "at": "2026-11-14T02:17:15.040Z"
+}

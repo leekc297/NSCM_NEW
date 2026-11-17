@@ -1,0 +1,141 @@
+{
+ "id": "SCP0033",
+ "started": "2026-11-12 20:01:23.717",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 20:01:23.968",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0033_Shipment_semi_dept_day",
+   "form_text": "Shipment Semi Dept Day",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0033_Shipment_semi_dept_day.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:01:32.210"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 20:01:35.905",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0033\\run_20261112_200123\\dump_load.json",
+   "control_count": 21,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:01:35.929"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 20:01:36.088",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0033\\run_20261112_200123\\shots\\SCP0033_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:01:36.288"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 20:01:36.621",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:01:37.093"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 20:02:06.584",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0033\\run_20261112_200123\\dump_find.json",
+   "control_count": 21,
+   "grid_count": 1,
+   "total": "Total : 54",
+   "time_status": "DB : 22.114s, UI : 0.099s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:02:06.622"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 20:02:06.782",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0033\\run_20261112_200123\\shots\\SCP0033_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:02:07.000"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 20:02:07.332",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:02:08.412"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 16,
+  "calls_with_params": 16
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0033_Shipment_semi_dept_day",
+  "form_text": "Shipment Semi Dept Day",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0033_Shipment_semi_dept_day.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 22.114s, UI : 0.099s",
+  "total": "Total : 54",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 20:01:23.922",
+ "t_find": "2026-11-12 20:01:36.367",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 21,
+  "layout_items": 5,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 12,
+  "data_rows": 50,
+  "grid_rows": 54,
+  "calls_total": 16,
+  "calls_screen": 16,
+  "calls_find": 7,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:50.810",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:50"
+}

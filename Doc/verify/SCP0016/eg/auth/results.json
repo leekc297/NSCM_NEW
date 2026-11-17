@@ -124,12 +124,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -138,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 40827,
+                      "duration": 47082,
                       "errors": [],
                       "stdout": [
                         {
@@ -156,13 +151,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:25:33.620Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T01:48:32.418Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -183,12 +173,7 @@
               "tests": [
                 {
                   "timeout": 1500000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -197,14 +182,14 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 617551,
+                      "duration": 632659,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 17s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 16s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -213,7 +198,7 @@
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 18s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 22s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -243,16 +228,16 @@
                           "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20260831\",\"endYyyymmdd\":\"20270829\"}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 157s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 156s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 17s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 23s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -261,7 +246,7 @@
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 18s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 23s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -273,7 +258,7 @@
                           "text": "[eg_auth] SCP/81/SCP Planner 23s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
                           "text": "[required] Ver. value: 칸 없음(Ver. value) ← 'Ver. value is required. Confirm'\n"
@@ -300,7 +285,7 @@
                           "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20260831\",\"endYyyymmdd\":\"20270829\"}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 157s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 158s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -336,16 +321,16 @@
                           "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20260831\",\"endYyyymmdd\":\"20270829\"}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 183s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 182s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
+                          "text": "[required] Ver.: 선택 'SP_W_20260817 (W34)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 26s\n"
+                          "text": "[eg_auth] SCP/82/SCM Viewer 27s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0016 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -356,13 +341,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:26:17.318Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T01:49:22.647Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -383,12 +363,7 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -397,32 +372,17 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 43030,
+                      "duration": 43257,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[eg_auth] SCP0016 {\"EG022 PASS\":14,\"EG402 PASS\":14,\"EG160 FAIL\":14}\n"
                         },
                         {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 40] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
                           "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HD] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HG] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HM] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_ST] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_UC] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 40] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
                           "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 82] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
@@ -431,30 +391,40 @@
                           "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_HD] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_UC] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_HG] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_UC] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        },
+                        {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HM] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
                           "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_HM] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_ST] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        },
+                        {
                           "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_ST] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         },
                         {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_UC] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HD] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        },
+                        {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_HD] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        },
+                        {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div 81_HG] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        },
+                        {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Waterfall Shipment Plan) [Div EE_HG] 기대 메타 필수 13개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Operation Group, BOH (To Site), Div, From Site, Incoterms, Model · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:36:39.072Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T01:59:59.452Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -463,7 +433,7 @@
               ],
               "id": "fce9d8edbd378244cae8-8f34db02c8414b553c9e",
               "file": "eg_auth.spec.ts",
-              "line": 362,
+              "line": 366,
               "column": 7
             },
             {
@@ -475,12 +445,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -489,7 +454,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 11195,
+                      "duration": 16341,
                       "errors": [],
                       "stdout": [
                         {
@@ -501,13 +466,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:37:26.331Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T02:00:46.773Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -516,7 +476,7 @@
               ],
               "id": "fce9d8edbd378244cae8-60e7e4e91b28d1ed3741",
               "file": "eg_auth.spec.ts",
-              "line": 413,
+              "line": 417,
               "column": 7
             },
             {
@@ -537,7 +497,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 307,
+                      "duration": 302,
                       "errors": [],
                       "stdout": [
                         {
@@ -546,7 +506,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:37:41.729Z",
+                      "startTime": "2026-11-14T02:01:07.143Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -556,7 +516,7 @@
               ],
               "id": "fce9d8edbd378244cae8-948fbb0edde06f16ab83",
               "file": "eg_auth.spec.ts",
-              "line": 484,
+              "line": 488,
               "column": 7
             },
             {
@@ -568,12 +528,7 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -582,7 +537,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10567,
+                      "duration": 15971,
                       "errors": [],
                       "stdout": [
                         {
@@ -594,13 +549,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:37:46.227Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T02:01:11.390Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -609,7 +559,7 @@
               ],
               "id": "fce9d8edbd378244cae8-05f33b913c3f398cc0a5",
               "file": "eg_auth.spec.ts",
-              "line": 554,
+              "line": 558,
               "column": 7
             },
             {
@@ -630,7 +580,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 294,
+                      "duration": 313,
                       "errors": [],
                       "stdout": [
                         {
@@ -642,7 +592,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:38:00.955Z",
+                      "startTime": "2026-11-14T02:01:31.399Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -652,7 +602,7 @@
               ],
               "id": "fce9d8edbd378244cae8-c997a1440838c7a6ea15",
               "file": "eg_auth.spec.ts",
-              "line": 570,
+              "line": 574,
               "column": 7
             },
             {
@@ -664,12 +614,7 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -678,28 +623,20 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20018,
+                      "duration": 18988,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0016 {\"EG395 ERROR\":1}\n"
-                        },
-                        {
-                          "text": "  EG395 ERROR 설정 저장 직후 그리드 [조회 436행] 기대 저장 직후 그리드 비움 → 재조회로 구성 적용 — GAP-356 · 실측 저장 요청 0건(서버 미전송: ) · 직후 행 436 · GAP-356(문서 확정 2026-08-05) 실제 저장 구성대로 표시·복원은 실저장 필요 — integration.md\n"
+                          "text": "[eg_auth] SCP0016 {\"EG395 PASS\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:38:05.461Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T02:01:35.643Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -708,7 +645,7 @@
               ],
               "id": "fce9d8edbd378244cae8-dab277c4e304fe6ae0ce",
               "file": "eg_auth.spec.ts",
-              "line": 600,
+              "line": 604,
               "column": 7
             },
             {
@@ -729,7 +666,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 301,
+                      "duration": 285,
                       "errors": [],
                       "stdout": [
                         {
@@ -741,7 +678,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T13:38:29.555Z",
+                      "startTime": "2026-11-14T02:01:58.625Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -751,7 +688,7 @@
               ],
               "id": "fce9d8edbd378244cae8-2c3cc103e9f0f2f4f36c",
               "file": "eg_auth.spec.ts",
-              "line": 625,
+              "line": 629,
               "column": 7
             }
           ]
@@ -761,8 +698,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-07T13:25:33.057Z",
-    "duration": 784280.61,
+    "startTime": "2026-11-14T01:48:31.842Z",
+    "duration": 813110.009,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

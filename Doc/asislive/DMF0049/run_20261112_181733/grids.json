@@ -1,0 +1,661 @@
+{
+ "id": "DMF0049",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "MDF Reports",
+     "rows": 0,
+     "cols": 42,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Edit Flag"
+       ],
+       "label": "Edit Flag",
+       "tag": "EDIT_FLAG",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "EDIT_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Department*"
+       ],
+       "label": "Department*",
+       "tag": "DEPARTMENT_ID",
+       "width": "160",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DEPARTMENT_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Department*"
+       ],
+       "label": "Department*",
+       "tag": "T_DEPARTMENT_ID",
+       "width": "160",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "T_DEPARTMENT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Department Name"
+       ],
+       "label": "Department Name",
+       "tag": "T_DEPARTMENT_NAME",
+       "width": "160",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "T_DEPARTMENT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Team"
+       ],
+       "label": "Team",
+       "tag": "DEPT_ID",
+       "width": "160",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DEPT_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Team"
+       ],
+       "label": "Team",
+       "tag": "T_DEPT_ID",
+       "width": "160",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "T_DEPT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Team Name"
+       ],
+       "label": "Team Name",
+       "tag": "T_DEPT_NAME",
+       "width": "160",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "T_DEPT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Cust. (Report)"
+       ],
+       "label": "Cust. (Report)",
+       "tag": "CUST_REPORT",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CUST_REPORT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "End Cust.(Report)"
+       ],
+       "label": "End Cust.(Report)",
+       "tag": "END_CUST_REPORT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "END_CUST_REPORT",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Sold-To"
+       ],
+       "label": "Sold-To",
+       "tag": "SOLDTO_CODE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SOLDTO_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Sold-To Cust.(Report)"
+       ],
+       "label": "Sold-To Cust.(Report)",
+       "tag": "SOLDTO_CUST_REPORT",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SOLDTO_CUST_REPORT",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Product Gr.(Report)"
+       ],
+       "label": "Product Gr.(Report)",
+       "tag": "PRODUCT_GROUP",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PRODUCT_GROUP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "ITEM_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "NICK_NAME"
+       ],
+       "label": "NICK_NAME",
+       "tag": "NICK_NAME",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Product Details (Report)"
+       ],
+       "label": "Product Details (Report)",
+       "tag": "PRODUCT_DETAILS",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PRODUCT_DETAILS",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "DATA_SEQ"
+       ],
+       "label": "DATA_SEQ",
+       "tag": "DATA_SEQ",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DATA_SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Currency"
+       ],
+       "label": "Currency",
+       "tag": "CURRENCY",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CURRENCY",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Company Id*"
+       ],
+       "label": "Company Id*",
+       "tag": "COMPANY_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "COMPANY_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Biz.Type"
+       ],
+       "label": "Biz.Type",
+       "tag": "BIZ_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BIZ_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Application Gr"
+       ],
+       "label": "Application Gr",
+       "tag": "APPLICATION_GR",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "APPLICATION_GR",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Application"
+       ],
+       "label": "Application",
+       "tag": "APPLICATION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "APPLICATION",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Country Name"
+       ],
+       "label": "Country Name",
+       "tag": "COUNTRY_CODE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "COUNTRY_CODE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Cell Model"
+       ],
+       "label": "Cell Model",
+       "tag": "CELL_MODEL",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CELL_MODEL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Cell Model Info"
+       ],
+       "label": "Cell Model Info",
+       "tag": "CELL_MODEL_INFO",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CELL_MODEL_INFO",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Version"
+       ],
+       "label": "Version",
+       "tag": "VERSION_NO",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "VERSION_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "PROJECT_CODE"
+       ],
+       "label": "PROJECT_CODE",
+       "tag": "PROJECT_CODE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PROJECT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Sales Site"
+       ],
+       "label": "Sales Site",
+       "tag": "SCM_SITE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SCM_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Measure"
+       ],
+       "label": "Measure",
+       "tag": "MEASURE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEASURE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "2026-01"
+       ],
+       "label": "2026-01",
+       "tag": "M_202601",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202601",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "2026-02"
+       ],
+       "label": "2026-02",
+       "tag": "M_202602",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202602",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "2026-03"
+       ],
+       "label": "2026-03",
+       "tag": "M_202603",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202603",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "2026-04"
+       ],
+       "label": "2026-04",
+       "tag": "M_202604",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202604",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "2026-05"
+       ],
+       "label": "2026-05",
+       "tag": "M_202605",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202605",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "2026-06"
+       ],
+       "label": "2026-06",
+       "tag": "M_202606",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202606",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "2026-07"
+       ],
+       "label": "2026-07",
+       "tag": "M_202607",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202607",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "2026-08"
+       ],
+       "label": "2026-08",
+       "tag": "M_202608",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202608",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "2026-09"
+       ],
+       "label": "2026-09",
+       "tag": "M_202609",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202609",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "2026-10"
+       ],
+       "label": "2026-10",
+       "tag": "M_202610",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202610",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "2026-11"
+       ],
+       "label": "2026-11",
+       "tag": "M_202611",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202611",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "2026-12"
+       ],
+       "label": "2026-12",
+       "tag": "M_202612",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202612",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

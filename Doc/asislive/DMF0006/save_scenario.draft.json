@@ -1,0 +1,75 @@
+{
+ "id": "DMF0006",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+   "save_sp": "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+   "status": "키 대응 완료",
+   "table": "DM_MST_CUSTOMER_MODEL",
+   "pk": [
+    "DIVISION_ID",
+    "CUSTOMER_PROJECT_CODE",
+    "CUSTOMER_MODEL",
+    "SCM_SITE_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "CUSTOMER_PROJECT_CODE": "CUSTOMER_PROJECT_CODE",
+    "CUSTOMER_MODEL": "CUSTOMER_MODEL",
+    "SCM_SITE_ID": "SCM_SITE_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CONVERT_QTY_PACK",
+    "db_col": "CONVERT_QTY_PACK",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "DM_MST_CUSTOMER_MODEL_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Customer Model Mapping",
+   "writes": {
+    "DM_MST_CUSTOMER_MODEL": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA → SP PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_MST_CUSTOMER_MODEL_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "CONVERT_QTY_PACK",
+     "db_col": "CONVERT_QTY_PACK",
+     "rule": "plus1"
+    },
+    {
+     "col": "CONVERT_QTY_MODULE",
+     "db_col": "CONVERT_QTY_MODULE",
+     "rule": "plus1"
+    },
+    {
+     "col": "CONVERT_QTY_CELL",
+     "db_col": "CONVERT_QTY_CELL",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 21:56:44"
+   }
+  }
+ ]
+}

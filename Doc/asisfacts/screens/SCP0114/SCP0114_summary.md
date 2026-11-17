@@ -19,6 +19,9 @@
 | button:FindButton | FindButton > FindData | 442 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | SP SCP0114_GET_CAPA_LINE_MASTER |
 | button:FindButton | FindButton > FindData | 729 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | SP SCP0114_GET_CAPA_LINE_MASTER |
 | button:SaveButton | SaveButton > SaveData > FindData | 442 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | SP SCP0114_GET_CAPA_LINE_MASTER |
+| button:SaveButton | SaveButton > SaveData | 578 | SystemManager.UP_FX_SaveMenuItemInfo | MATCH | SP UP_FX_SaveMenuItemInfo |
+| button:SaveButton | SaveButton > SaveData | 579 | SystemManager.UP_FX_DeleteMenuItemInfo | MATCH | SP UP_FX_DeleteMenuItemInfo |
+| button:SaveButton | SaveButton > SaveData | 580 | SystemManager.UP_FX_SaveMenuItemInfo | MATCH | SP UP_FX_SaveMenuItemInfo |
 | button:SaveButton | SaveButton > SaveData > FindData | 729 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | SP SCP0114_GET_CAPA_LINE_MASTER |
 | button:SaveButton | SaveButton > SaveData | 908 | SCP.SCP0114_SAVE_CAPA_LINE_MASTER | MATCH | SP SCP0114_SAVE_CAPA_LINE_MASTER |
 | event:this.cboDivision.SelectedIndexChanged | cboDivision_SelectedIndexChanged > FindData | 442 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | SP SCP0114_GET_CAPA_LINE_MASTER |
@@ -42,6 +45,8 @@
 | biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
 | SCP.SCP0114_GET_CAPA_LINE_MASTER | MATCH | 2 | SP SCP0114_GET_CAPA_LINE_MASTER | EXEC:SCP0114_GET_CAPA_LINE_MASTER, SELECT:SCP_MST_CAPA_LINE, SELECT:SCP_MST_CAPA_ELTR_LINE |  |
 | SCP.SCP0114_SAVE_CAPA_LINE_MASTER | MATCH | 1 | SP SCP0114_SAVE_CAPA_LINE_MASTER | EXEC:SCP0114_SAVE_CAPA_LINE_MASTER, REF:FN_MULTY_TIME, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:SP_EXECUTESQL, INSERT:SCP_MST_CAPA_LINE, INSERT:SCP_MST_CAPA_ELTR_LINE, UPDATE:SCP_MST_CAPA_LINE, UPDATE:SCP_MST_CAPA_ELTR_LINE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, INSERT:SCM_SYS_LOG_BATCH, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE |  |
+| SystemManager.UP_FX_DeleteMenuItemInfo | MATCH | 1 | SP UP_FX_DeleteMenuItemInfo | EXEC:UP_FX_DELETEMENUITEMINFO, DELETE:TB_FX_MENUTITLEINFO, DELETE:TB_FX_MENUITEMINFO, DELETE:TB_FX_USERMENUAUTH, DELETE:TB_FX_USERMENUAUTHEXTENSION, DELETE:TB_FX_GROUPMENUAUTH, DELETE:TB_FX_GROUPMENUAUTHEXTENSION |  |
+| SystemManager.UP_FX_SaveMenuItemInfo | MATCH | 2 | SP UP_FX_SaveMenuItemInfo | EXEC:UP_FX_SAVEMENUITEMINFO, SELECT:TB_FX_MENUITEMINFO, MERGE:TB_FX_MENUITEMINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -56,31 +61,13 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | FindButton:348, cboDivision_SelectedIndexChanged:1839, rgrpSearchLevel_SelectedIndexChanged:1849, FindButton:331, cboDivision_SelectedIndexChanged:1507 | CString.GetCheckedListValue | CODE |
-| SaveData | SaveButton:671, SaveButton:388 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| GetCheckedListValue | FindButton:331, cboDivision_SelectedIndexChanged:1507, FindButton:348, cboDivision_SelectedIndexChanged:1839, rgrpSearchLevel_SelectedIndexChanged:1849 | CString.GetCheckedListValue | CODE |
+| SaveData | SaveButton:388, SaveButton:671 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
 | GetChanges | SaveData:581 | FPExtensions.GetChanges | ROW_ID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:147 |
-| this.spdLevel1 | CellDoubleClick | SpdLevel1_CellDoubleClick | .ctor:149 |
-| this.spdLevel2 | CellDoubleClick | SpdLevel2_CellDoubleClick | .ctor:150 |
-| this.spdLevel3 | CellDoubleClick | SpdLevel3_CellDoubleClick | .ctor:151 |
-| this.spdLevel4 | CellDoubleClick | SpdLevel4_CellDoubleClick | .ctor:152 |
-| this.spdLevel5 | CellDoubleClick | SpdLevel5_CellDoubleClick | .ctor:153 |
-| this.spdLevel1 | Change | spdAssign_Change | .ctor:155 |
-| this.spdLevel2 | Change | spdAssign_Change | .ctor:156 |
-| this.spdLevel3 | Change | spdAssign_Change | .ctor:157 |
-| this.spdLevel4 | Change | spdAssign_Change | .ctor:158 |
-| this.spdLevel5 | Change | spdAssign_Change | .ctor:159 |
-| this.cboDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | .ctor:161 |
-| this.rgrpSearchLevel | SelectedIndexChanged | rgrpSearchLevel_SelectedIndexChanged | .ctor:162 |
-| this.spdLevel1 | ClipboardPasted | spdLevel1_ClipboardPasted | .ctor:163 |
-| this.spdLevel2 | ClipboardPasted | spdLevel2_ClipboardPasted | .ctor:164 |
-| this.spdLevel3 | ClipboardPasted | spdLevel3_ClipboardPasted | .ctor:165 |
-| this.spdLevel4 | ClipboardPasted | spdLevel4_ClipboardPasted | .ctor:166 |
-| this.spdLevel5 | ClipboardPasted | spdLevel5_ClipboardPasted | .ctor:167 |
 | this | Load | Form_Load | .ctor:138 |
 | this.spdLevel1 | CellClick | spdLevel1_CellClick | .ctor:139 |
 | this.spdLevel2 | CellClick | spdLevel2_CellClick | .ctor:140 |
@@ -101,15 +88,33 @@
 | this.spdLevel5 | ComboSelChange | spdAssign_ComboSelChange | .ctor:157 |
 | this.cboDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | .ctor:159 |
 | _defaultDataModel | Changed | _defaultDataModel_Changed | spdAssign_ComboSelChange:1305 |
+| this | Load | Form_Load | .ctor:147 |
+| this.spdLevel1 | CellDoubleClick | SpdLevel1_CellDoubleClick | .ctor:149 |
+| this.spdLevel2 | CellDoubleClick | SpdLevel2_CellDoubleClick | .ctor:150 |
+| this.spdLevel3 | CellDoubleClick | SpdLevel3_CellDoubleClick | .ctor:151 |
+| this.spdLevel4 | CellDoubleClick | SpdLevel4_CellDoubleClick | .ctor:152 |
+| this.spdLevel5 | CellDoubleClick | SpdLevel5_CellDoubleClick | .ctor:153 |
+| this.spdLevel1 | Change | spdAssign_Change | .ctor:155 |
+| this.spdLevel2 | Change | spdAssign_Change | .ctor:156 |
+| this.spdLevel3 | Change | spdAssign_Change | .ctor:157 |
+| this.spdLevel4 | Change | spdAssign_Change | .ctor:158 |
+| this.spdLevel5 | Change | spdAssign_Change | .ctor:159 |
+| this.cboDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | .ctor:161 |
+| this.rgrpSearchLevel | SelectedIndexChanged | rgrpSearchLevel_SelectedIndexChanged | .ctor:162 |
+| this.spdLevel1 | ClipboardPasted | spdLevel1_ClipboardPasted | .ctor:163 |
+| this.spdLevel2 | ClipboardPasted | spdLevel2_ClipboardPasted | .ctor:164 |
+| this.spdLevel3 | ClipboardPasted | spdLevel3_ClipboardPasted | .ctor:165 |
+| this.spdLevel4 | ClipboardPasted | spdLevel4_ClipboardPasted | .ctor:166 |
+| this.spdLevel5 | ClipboardPasted | spdLevel5_ClipboardPasted | .ctor:167 |
 
 ## 6. 컨트롤 (50개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| FpSpread | 10 | spdLevel3, spdLevel2, spdLevel1, spdLevel5, spdLevel4, spdLevel3, spdLevel4, spdLevel1, spdLevel2, spdLevel5 |
-| SheetView | 10 | spdLevel3_Sheet1, spdLevel2_Sheet1, spdLevel1_Sheet1, spdLevel5_Sheet1, spdLevel4_Sheet1, spdLevel3_Sheet1, spdLevel4_Sheet1, spdLevel1_Sheet1, spdLevel2_Sheet1, spdLevel5_Sheet1 |
+| FpSpread | 10 | spdLevel3, spdLevel4, spdLevel1, spdLevel2, spdLevel5, spdLevel3, spdLevel2, spdLevel1, spdLevel5, spdLevel4 |
+| SheetView | 10 | spdLevel3_Sheet1, spdLevel4_Sheet1, spdLevel1_Sheet1, spdLevel2_Sheet1, spdLevel5_Sheet1, spdLevel3_Sheet1, spdLevel2_Sheet1, spdLevel1_Sheet1, spdLevel5_Sheet1, spdLevel4_Sheet1 |
 | EmptySpaceItem | 8 | emptySpaceItem3, emptySpaceItem9, emptySpaceItem8, emptySpaceItem1, emptySpaceItem3, emptySpaceItem9, emptySpaceItem8, emptySpaceItem1 |
 | Panel | 6 | panel6, panel5, panel4, panel3, panel2, panel1 |
-| SplitContainer | 4 | splitContainer1, splitContainer1, splitContainer3, splitContainer2 |
+| SplitContainer | 4 | splitContainer1, splitContainer3, splitContainer2, splitContainer1 |
 | UsrConditionPanel | 2 | usrPanel, usrPanel |
 | UsrLayoutControl | 2 | usrLayoutControl2, usrLayoutControl2 |
 | UsrCombo | 2 | cboDivision, cboDivision |
@@ -131,10 +136,13 @@
 | dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 
-## 9. 주석/비활성 처리된 호출 (1건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (4건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 1117 |  | commented:EMPTY |
+| 1129 | SCP.SCP0114_SAVE_CAPA_LINE_MASTER | commented:MATCH |
+| 1130 | SCP.SCP0114_SAVE_CAPA_LINE_MASTER | commented:MATCH |
+| 1131 | SCP.SCP0114_SAVE_CAPA_LINE_MASTER | commented:MATCH |
 
 ## 10. Division별 Grid 정의
 메타 테이블에 이 화면 PROGRAM_ID 행이 없습니다.

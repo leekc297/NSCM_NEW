@@ -1,0 +1,431 @@
+{
+ "id": "SCP0108",
+ "window": [
+  "2026-11-12 20:31:17.673",
+  "2026-11-12 20:32:01.845"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 20:31:18.027",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 22.06,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:18.042",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 232,
+   "rows_kind": "DataSet rows",
+   "ms": 5.74,
+   "params": {
+    "Code": "CapaVersion",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='CapaVersion', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:18.051",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.34,
+   "params": {
+    "Code": "CapaProgressStatus",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='CapaProgressStatus', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:25.139",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 10506,
+   "rows_kind": "DataSet rows",
+   "ms": 7083.0,
+   "params": {
+    "Code": "CapaLineMaster",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='CapaLineMaster', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:25.402",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 4.93,
+   "params": {
+    "Code": "YearFromThisYear",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='YearFromThisYear', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:25.802",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.26,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0108"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0108'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:25.829",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 18.74,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:26.723",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 15.48,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "MAIN"
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0108', @p_sheet_name='MAIN'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:26.999",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 263.97,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:27.028",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 14.01,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:27.059",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 13.48,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "MAIN"
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0108', @p_sheet_name='MAIN'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:27.076",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 12.19,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:27.100",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 16.14,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:30.365",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 3117.77,
+   "params": {
+    "MenuID": "LOB Report",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='LOB Report', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:30.906",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 6.0,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0108"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0108'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:31:39.751",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 14.45,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "MAIN"
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0108', @p_sheet_name='MAIN'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:31:39.766",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 11.9,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:31:39.786",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 11.55,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:31:52.600",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0108_GET_CAPA_LOB_CURRENT",
+   "sp": "SCP0108_GET_CAPA_LOB_CURRENT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 318,
+   "rows_kind": "DataSet rows",
+   "ms": 12789.87,
+   "params": {
+    "p_version": "202610",
+    "p_version_seq": "1",
+    "p_division_id": "81",
+    "p_site_id": "A001,A002,A003,A004",
+    "p_plant_id": "HQ07,MI00,MI02,NA00,NB01,WA00",
+    "p_factory_id": "A2,A3,A4,A5,A6,A7,A8,A9,AA,AC,AH,AI",
+    "p_line_id": "A2A10,A2A13,A2A14,A3A01,A3A02,A3A03,A3A04,A3A05,A3A06,A3A07,A3A08,A4A01,A4A05,A4A06,A4A07,A5A01,A5A03,A6A04,A6A05,A6A06,A6A25,A7A08,A7A09,A7A10,A7A11,A7A12,A7A13,A7A14,A7A15,A7A16,A7A17,A7A18,A7A19,A7A20,A7A21,A7A22,A7A23,A7A24,A8A03,A8A04,A8A07,A8AA1,A8AA2,A8AB1,A8AB2,A8AF1,A8AF2,A9A01,AAA11,AAA13,AAA14,ACA26,ACA27,ACA28,AHAH1,AIA08,AIA09,DMY_3851,DMY_3852,DMY_3853,DMY_3854,DMY_3855,DMY_3856,DMY_3857,DMY_3858,DMY_3859",
+    "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF",
+    "p_nick_name": "",
+    "p_electrode_type": "Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking,-",
+    "p_bottleneck_flag": "",
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "CURRENT",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0108_GET_CAPA_LOB_CURRENT @p_version='202610', @p_version_seq=1, @p_division_id='81', @p_site_id='A001,A002,A003,A004', @p_plant_id='HQ07,MI00,MI02,NA00,NB01,WA00', @p_factory_id='A2,A3,A4,A5,A6,A7,A8,A9,AA,AC,AH,AI', @p_line_id='A2A10,A2A13,A2A14,A3A01,A3A02,A3A03,A3A04,A3A05,A3A06,A3A07,A3A08,A4A01,A4A05,A4A06,A4A07,A5A01,A5A03,A6A04,A6A05,A6A06,A6A25,A7A08,A7A09,A7A10,A7A11,A7A12,A7A13,A7A14,A7A15,A7A16,A7A17,A7A18,A7A19,A7A20,A7A21,A7A22,A7A23,A7A24,A8A03,A8A04,A8A07,A8AA1,A8AA2,A8AB1,A8AB2,A8AF1,A8AF2,A9A01,AAA11,AAA13,AAA14,ACA26,ACA27,ACA28,AHAH1,AIA08,AIA09,DMY_3851,DMY_3852,DMY_3853,DMY_3854,DMY_3855,DMY_3856,DMY_3857,DMY_3858,DMY_3859', @p_operation_id='A5000,A7000,A7400,A8000,A8400,A9000,AFFFF', @p_nick_name='', @p_electrode_type='Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking,-', @p_bottleneck_flag='', @p_program_id='SCP0108', @p_sheet_name='CURRENT', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:31:54.904",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 434.17,
+   "params": {
+    "p_menu_id": "SCP0108",
+    "p_log_type": "FIND",
+    "p_log_cnt": "318",
+    "p_db_time": "12.964",
+    "p_ui_time": "1.838",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0108', @p_log_type='FIND', @p_log_cnt='318', @p_db_time='12.964', @p_ui_time='1.838', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:32:00.590",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 5.56,
+   "params": {
+    "MenuID": "LOB Report",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='LOB Report', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

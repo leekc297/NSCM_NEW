@@ -1,0 +1,54 @@
+{
+ "id": "SCP0114",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0114_SAVE_CAPA_LINE_MASTER",
+   "save_sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+   "status": "키 일부 미대응",
+   "table": "SCP_MST_CAPA_ELTR_LINE",
+   "pk": [
+    "DIVISION_ID",
+    "COMPANY_ID",
+    "SITE_ID",
+    "PLANT_ID",
+    "FACTORY_ID",
+    "LINE_ID",
+    "OPERATION_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "COMPANY_ID": "COMPANY_ID",
+    "SITE_ID": "SITE_ID",
+    "PLANT_ID": "PLANT_ID",
+    "FACTORY_ID": "FACTORY_ID",
+    "LINE_ID": "LINE_ID"
+   },
+   "unmatched_pk": [
+    "OPERATION_ID"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdLevel5/Level5",
+   "writes": {
+    "SCP_MST_CAPA_LINE": [
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "SCP_MST_CAPA_ELTR_LINE": [
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0114_SAVE_CAPA_LINE_MASTER → SP SCP0114_SAVE_CAPA_LINE_MASTER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SCP_MST_CAPA_LINE"
+   ],
+   "unmatched_why": {
+    "OPERATION_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

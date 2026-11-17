@@ -1,17 +1,17 @@
 - dialog:
   - heading "Item by DivisionPopup" [level=2]
-  - text: Div
+  - text: Div.
   - combobox [disabled]: Automotive Battery
   - button "Open" [disabled]
   - text: Item
   - textbox
   - button "Search"
   - paragraph
-  - text: 총{N}건
+  - text: {TOTAL}rows
   - grid:
     - rowgroup:
-      - row "No Div Operation Group Operation Item Id Item Name Nickname Deselect All Rows":
-        - columnheader "No"
+      - row "序号 Div Operation Group Operation Item Id Item Name Nickname Deselect All Rows":
+        - columnheader "序号"
         - columnheader "Div"
         - columnheader "Operation Group"
         - columnheader "Operation"

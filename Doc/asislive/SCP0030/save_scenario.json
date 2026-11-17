@@ -1,0 +1,40 @@
+{
+ "table": "SCP_MST_BOD_ITEM",
+ "pk": [
+  "SEQ"
+ ],
+ "match": {
+  "SEQ": "SEQ"
+ },
+ "save_sp": "SCP0030_SAVE_BOD_ITEM",
+ "side": [
+  {
+   "table": "scp_mst_bod_item_h",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [],
+ "basis": "foxml SCP0030_SAVE_BOD_ITEM → SP SCP0030_SAVE_BOD_ITEM 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = MERGE SCP_MST_BOD_ITEM(SEQ) · PR_SCP_MST_BOD_ITEM_HIST 가 scp_mst_bod_item_h 에 이력 INSERT · PRIORITY 는 화면에서 잠긴 열(21:59 연습 실행) · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 SAFETY_STOCK 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "SAFETY_STOCK",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "SAFETY_STOCK",
+      "db_col": "SAFETY_STOCK",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 266,
+  "dur": 148,
+  "at": "2026-11-13T20:23:03.159Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 1941,
+  "dur": 263,
+  "at": "2026-11-13T20:23:07.194Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 281,
+  "dur": 176,
+  "at": "2026-11-13T20:23:11.233Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ }
+]

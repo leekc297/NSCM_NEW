@@ -1,0 +1,157 @@
+- paragraph: Shipment Change Request Confirm
+- text: Shipping Shipping Schedule Shipment Change Request Confirm Search Area
+- switch [checked]
+- button "Full screen"
+- text: Div
+- combobox "ALL"
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: Status
+- combobox: Drafting
+- button "Open"
+- img
+- text: Request Date
+- textbox "YYYY.MM.DD": 2026.10.31
+- text: ~
+- textbox "YYYY.MM.DD": 2026.11.14
+- text: Requestor
+- textbox
+- button
+- text: Model/Nickname
+- textbox
+- button
+- text: Change Type
+- combobox: ALL
+- button "Open"
+- button "Search(F5)"
+- paragraph
+- button "Approval" [disabled]
+- button "Reject" [disabled]
+- button "Self Reject" [disabled]
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- grid:
+  - rowgroup:
+    - row "Div From Site To Site Change Type Request No Status Model Nick Name Title Change Reason Requestor Requestor Dept Name Request Date Approval No":
+      - columnheader "Div"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Change Type"
+      - columnheader "Request No"
+      - columnheader "Status"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "Title"
+      - columnheader "Change Reason"
+      - columnheader "Requestor"
+      - columnheader "Requestor Dept Name"
+      - columnheader "Request Date"
+      - columnheader "Approval"
+      - gridcell "No"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDateTime Input": {DATE} 19:27:03
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDateTime Input": {DATE} 19:27:03
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDateTime Input": {DATE} 19:27:04
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDateTime Input": {DATE} 19:27:04
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- separator
+- text: Request Confirm Detail Request No
+- textbox [disabled]
+- text: Requestor
+- textbox [disabled]
+- text: Dept Name
+- textbox [disabled]
+- text: Approval
+- textbox [disabled]
+- text: Dept Name
+- textbox [disabled]
+- text: Title
+- textbox [disabled]
+- text: Change Reason
+- textbox [disabled]
+- text: Reason Detail
+- textbox [disabled]
+- text: Reject Reason
+- textbox [disabled]
+- grid:
+  - rowgroup:
+    - row "SO No Project Name FCST Type Model From Site To Site Incoterms Confirmed Change Building Remarks No":
+      - columnheader:
+        - checkbox
+      - columnheader "SO No"
+      - columnheader "Project Name"
+      - columnheader "FCST Type"
+      - columnheader "Model"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Incoterms"
+      - columnheader "Confirmed"
+      - columnheader "Change"
+      - columnheader "Building"
+      - columnheader "Remarks"
+      - gridcell "No"
+    - row "L/T(Day) ETD ETA Trans Mode Shipment Date Qty L/T(Day) ETD ETA Trans Mode Shipment Date Qty":
+      - columnheader "L/T(Day)"
+      - columnheader "ETD"
+      - columnheader "ETA"
+      - columnheader "Trans Mode"
+      - columnheader "Shipment Date"
+      - columnheader "Qty"
+      - columnheader "L/T(Day)"
+      - columnheader "ETD"
+      - columnheader "ETA"
+      - columnheader "Trans Mode"
+      - columnheader "Shipment Date"
+      - columnheader "Qty"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+# visual-order: Div > From Site > Status > Request Date > Requestor > Change Type > Request No > Dept Name > Approval > Title > Change Reason > Reason Detail > Reject Reason

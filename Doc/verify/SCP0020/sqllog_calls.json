@@ -1,0 +1,5371 @@
+{
+ "menu_id": "SCP0020",
+ "at": "2026-11-14 10:58:34",
+ "windows": [
+  [
+   5865738,
+   5896615,
+   "2026-11-14 08:30",
+   "2026-11-14 10:53"
+  ]
+ ],
+ "rows_scanned": 30878,
+ "pkgs": [
+  "PKG_SCP0020"
+ ],
+ "user": "",
+ "calls": [
+  {
+   "seq": 5885388,
+   "at": "2026-11-14 09:58:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885485,
+   "at": "2026-11-14 09:58:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885494,
+   "at": "2026-11-14 09:58:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "PL01279700_82-P",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885501,
+   "at": "2026-11-14 09:58:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "PL01279700_82-P",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "A",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885552,
+   "at": "2026-11-14 09:58:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "PL01279700_82-P",
+    "lineId": "PLS01",
+    "itemId": "ALL",
+    "operationGroupId": "A",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885575,
+   "at": "2026-11-14 09:59:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "PL01279700_82-P",
+    "lineId": "PLS01",
+    "itemId": "EAE0074N5-01",
+    "operationGroupId": "A",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885669,
+   "at": "2026-11-14 09:59:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885685,
+   "at": "2026-11-14 09:59:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886024,
+   "at": "2026-11-14 10:00:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886153,
+   "at": "2026-11-14 10:00:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886203,
+   "at": "2026-11-14 10:01:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886503,
+   "at": "2026-11-14 10:02:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886560,
+   "at": "2026-11-14 10:02:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886606,
+   "at": "2026-11-14 10:03:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886663,
+   "at": "2026-11-14 10:03:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886709,
+   "at": "2026-11-14 10:03:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886755,
+   "at": "2026-11-14 10:03:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886801,
+   "at": "2026-11-14 10:04:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886856,
+   "at": "2026-11-14 10:04:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886863,
+   "at": "2026-11-14 10:04:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886894,
+   "at": "2026-11-14 10:04:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886901,
+   "at": "2026-11-14 10:04:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "CN05104100_82-P",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886908,
+   "at": "2026-11-14 10:04:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "PL01279700_82-P,KR00697200_82-P,CN00249500-P,KR00797800-P,KR04851000-P,KR32625300_82-P,US02279100_82-P,US02182600_82-P,US02562600_82-P,CN05104100_82-P",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886939,
+   "at": "2026-11-14 10:05:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886946,
+   "at": "2026-11-14 10:05:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886953,
+   "at": "2026-11-14 10:05:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "A",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886960,
+   "at": "2026-11-14 10:05:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "E",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886991,
+   "at": "2026-11-14 10:06:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886998,
+   "at": "2026-11-14 10:06:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "SHP01",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887005,
+   "at": "2026-11-14 10:06:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "AZL01,AZP01,AZPL01,AZPL02,C1D01,C1D01x,C1P01,C1P02,C1P03,C1P04,C1P05,C1P06,C1P07,C1P08,C1P09,C1P10,C1P11,C1P12,C1P13,C1R01,CHP01,CHP02,CHP03,CHP04,K2B01,K2B02,K2D01,K2P05,K2P06,K2P11,K2P12,K2P13,K2P15,K2P16,K2P17,K2R01,K3D01,PLS01,PLS02,PMS01,POS01,POS02,POS03,PWAZL01,SBP01,SBP02,SBP03,SHL01,SHP01",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887060,
+   "at": "2026-11-14 10:06:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887067,
+   "at": "2026-11-14 10:06:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887074,
+   "at": "2026-11-14 10:06:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887120,
+   "at": "2026-11-14 10:07:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887127,
+   "at": "2026-11-14 10:07:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887276,
+   "at": "2026-11-14 10:07:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887318,
+   "at": "2026-11-14 10:08:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887322,
+   "at": "2026-11-14 10:08:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887355,
+   "at": "2026-11-14 10:08:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887359,
+   "at": "2026-11-14 10:08:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887370,
+   "at": "2026-11-14 10:08:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887374,
+   "at": "2026-11-14 10:08:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887378,
+   "at": "2026-11-14 10:08:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887382,
+   "at": "2026-11-14 10:08:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887455,
+   "at": "2026-11-14 10:08:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887510,
+   "at": "2026-11-14 10:08:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887611,
+   "at": "2026-11-14 10:09:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887615,
+   "at": "2026-11-14 10:09:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887626,
+   "at": "2026-11-14 10:09:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887630,
+   "at": "2026-11-14 10:09:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887634,
+   "at": "2026-11-14 10:09:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887638,
+   "at": "2026-11-14 10:09:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887644,
+   "at": "2026-11-14 10:09:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887648,
+   "at": "2026-11-14 10:09:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887747,
+   "at": "2026-11-14 10:10:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887808,
+   "at": "2026-11-14 10:10:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887819,
+   "at": "2026-11-14 10:10:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887823,
+   "at": "2026-11-14 10:10:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887827,
+   "at": "2026-11-14 10:10:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887831,
+   "at": "2026-11-14 10:10:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887837,
+   "at": "2026-11-14 10:10:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887841,
+   "at": "2026-11-14 10:10:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887852,
+   "at": "2026-11-14 10:10:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887909,
+   "at": "2026-11-14 10:11:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887913,
+   "at": "2026-11-14 10:11:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887917,
+   "at": "2026-11-14 10:11:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887921,
+   "at": "2026-11-14 10:11:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887925,
+   "at": "2026-11-14 10:11:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887929,
+   "at": "2026-11-14 10:11:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887933,
+   "at": "2026-11-14 10:11:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887937,
+   "at": "2026-11-14 10:11:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887941,
+   "at": "2026-11-14 10:11:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5887998,
+   "at": "2026-11-14 10:12:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888082,
+   "at": "2026-11-14 10:12:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888086,
+   "at": "2026-11-14 10:12:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888090,
+   "at": "2026-11-14 10:12:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"lgsoo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":0,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":1,\"CREATION_DATE\":\"2021-08-17 15:41:05\",\"ITEM_ID\":\"EM048063P3N1\",\"PRIORITY\":2,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"M4863P3N1\",\"LAST_UPDATE_DATE\":\"2026-11-12 23:31:08\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"Y\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888096,
+   "at": "2026-11-14 10:12:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888100,
+   "at": "2026-11-14 10:12:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888150,
+   "at": "2026-11-14 10:12:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888155,
+   "at": "2026-11-14 10:12:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888159,
+   "at": "2026-11-14 10:12:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"lgsoo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":0,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":1,\"CREATION_DATE\":\"2021-08-17 15:41:05\",\"ITEM_ID\":\"EM048063P3N1\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"M4863P3N1\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:12:31\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"Y\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888165,
+   "at": "2026-11-14 10:12:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888174,
+   "at": "2026-11-14 10:12:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888181,
+   "at": "2026-11-14 10:12:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888280,
+   "at": "2026-11-14 10:13:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888349,
+   "at": "2026-11-14 10:13:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888362,
+   "at": "2026-11-14 10:13:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888394,
+   "at": "2026-11-14 10:13:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":2,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-12 23:35:32\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888400,
+   "at": "2026-11-14 10:13:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888402,
+   "at": "2026-11-14 10:13:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888438,
+   "at": "2026-11-14 10:14:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888442,
+   "at": "2026-11-14 10:14:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888457,
+   "at": "2026-11-14 10:14:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:13:56\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888463,
+   "at": "2026-11-14 10:14:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888498,
+   "at": "2026-11-14 10:14:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888512,
+   "at": "2026-11-14 10:14:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888516,
+   "at": "2026-11-14 10:14:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888554,
+   "at": "2026-11-14 10:14:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888558,
+   "at": "2026-11-14 10:14:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888564,
+   "at": "2026-11-14 10:14:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":99,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:14:07\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888570,
+   "at": "2026-11-14 10:14:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888579,
+   "at": "2026-11-14 10:15:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888590,
+   "at": "2026-11-14 10:15:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888594,
+   "at": "2026-11-14 10:15:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888598,
+   "at": "2026-11-14 10:15:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:14:58\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888604,
+   "at": "2026-11-14 10:15:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888608,
+   "at": "2026-11-14 10:15:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888619,
+   "at": "2026-11-14 10:15:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888632,
+   "at": "2026-11-14 10:15:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888636,
+   "at": "2026-11-14 10:15:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":617,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:15:09\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.03241,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888642,
+   "at": "2026-11-14 10:15:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888644,
+   "at": "2026-11-14 10:15:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888651,
+   "at": "2026-11-14 10:15:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888655,
+   "at": "2026-11-14 10:15:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888659,
+   "at": "2026-11-14 10:15:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:15:20\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888665,
+   "at": "2026-11-14 10:15:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888667,
+   "at": "2026-11-14 10:15:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888674,
+   "at": "2026-11-14 10:15:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888678,
+   "at": "2026-11-14 10:15:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888685,
+   "at": "2026-11-14 10:16:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888689,
+   "at": "2026-11-14 10:16:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888722,
+   "at": "2026-11-14 10:16:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888726,
+   "at": "2026-11-14 10:16:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888730,
+   "at": "2026-11-14 10:16:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":99,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:15:31\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888736,
+   "at": "2026-11-14 10:16:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888738,
+   "at": "2026-11-14 10:17:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888745,
+   "at": "2026-11-14 10:17:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888749,
+   "at": "2026-11-14 10:17:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888753,
+   "at": "2026-11-14 10:17:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:16:59\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888759,
+   "at": "2026-11-14 10:17:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888761,
+   "at": "2026-11-14 10:17:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888768,
+   "at": "2026-11-14 10:17:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888775,
+   "at": "2026-11-14 10:17:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888779,
+   "at": "2026-11-14 10:17:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888783,
+   "at": "2026-11-14 10:17:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N3",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888787,
+   "at": "2026-11-14 10:17:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":2,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:17:09\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"},{\"CREATED_BY\":\"hwwoonins\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-01-22 14:46:28\",\"ITEM_ID\":\"EM048063P3N3\",\"PRIORITY\":2,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"M4863P3N3ITOCHU\",\"LAST_UPDATE_DATE\":\"2026-11-12 23:35:32\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.2597,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888793,
+   "at": "2026-11-14 10:17:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N3",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888799,
+   "at": "2026-11-14 10:17:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888815,
+   "at": "2026-11-14 10:17:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888826,
+   "at": "2026-11-14 10:17:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888834,
+   "at": "2026-11-14 10:17:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N3",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888843,
+   "at": "2026-11-14 10:17:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+   "kind": "SAVE",
+   "fe": {
+    "data": "[{\"CREATED_BY\":\"guminkim\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-12-21 09:51:58\",\"ITEM_ID\":\"EM048063P3N2\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"-\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:17:26\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.25974,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"},{\"CREATED_BY\":\"hwwoonins\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":616,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":100,\"CREATION_DATE\":\"2020-01-22 14:46:28\",\"ITEM_ID\":\"EM048063P3N3\",\"PRIORITY\":1,\"SITE_DESCRIPTION\":\"Peopleworks_CN\",\"NICK_NAME\":\"M4863P3N3ITOCHU\",\"LAST_UPDATE_DATE\":\"2026-11-14 10:17:26\",\"OSP_YN\":\"Y\",\"LINE_ID\":\"C1P05\",\"INPUT_STATUS\":\"M\",\"EXCEPT_YN\":\"N\",\"DIVISION_ID\":\"82\",\"TACT_TIME\":140.2597,\"LINE_ORDER\":\"2\",\"OPERATION_ID\":\"CN00249500\",\"CRUD_TYPE\":\"M\"}]"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888849,
+   "at": "2026-11-14 10:17:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N3",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888879,
+   "at": "2026-11-14 10:17:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888893,
+   "at": "2026-11-14 10:17:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5888985,
+   "at": "2026-11-14 10:17:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889109,
+   "at": "2026-11-14 10:18:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889146,
+   "at": "2026-11-14 10:18:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889153,
+   "at": "2026-11-14 10:19:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889157,
+   "at": "2026-11-14 10:19:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889163,
+   "at": "2026-11-14 10:19:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889165,
+   "at": "2026-11-14 10:19:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889172,
+   "at": "2026-11-14 10:19:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889176,
+   "at": "2026-11-14 10:19:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889182,
+   "at": "2026-11-14 10:19:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N2",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889184,
+   "at": "2026-11-14 10:19:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889191,
+   "at": "2026-11-14 10:19:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889195,
+   "at": "2026-11-14 10:19:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889202,
+   "at": "2026-11-14 10:19:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889209,
+   "at": "2026-11-14 10:19:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889255,
+   "at": "2026-11-14 10:20:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889262,
+   "at": "2026-11-14 10:20:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889269,
+   "at": "2026-11-14 10:20:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889315,
+   "at": "2026-11-14 10:20:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889319,
+   "at": "2026-11-14 10:21:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889326,
+   "at": "2026-11-14 10:21:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889330,
+   "at": "2026-11-14 10:21:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889336,
+   "at": "2026-11-14 10:22:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "C1P05",
+    "itemId": "EM048063P3N1",
+    "plantSite": "CN00249500-P",
+    "operationId": "CN00249500",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889338,
+   "at": "2026-11-14 10:22:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889345,
+   "at": "2026-11-14 10:22:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889352,
+   "at": "2026-11-14 10:22:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889409,
+   "at": "2026-11-14 10:22:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889455,
+   "at": "2026-11-14 10:22:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889501,
+   "at": "2026-11-14 10:22:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889508,
+   "at": "2026-11-14 10:22:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889515,
+   "at": "2026-11-14 10:23:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889522,
+   "at": "2026-11-14 10:23:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889709,
+   "at": "2026-11-14 10:23:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889732,
+   "at": "2026-11-14 10:23:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889755,
+   "at": "2026-11-14 10:24:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889817,
+   "at": "2026-11-14 10:24:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889848,
+   "at": "2026-11-14 10:24:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889879,
+   "at": "2026-11-14 10:24:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889910,
+   "at": "2026-11-14 10:24:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889941,
+   "at": "2026-11-14 10:24:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5889987,
+   "at": "2026-11-14 10:25:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890033,
+   "at": "2026-11-14 10:25:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890079,
+   "at": "2026-11-14 10:25:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890125,
+   "at": "2026-11-14 10:25:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890132,
+   "at": "2026-11-14 10:25:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890139,
+   "at": "2026-11-14 10:25:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "E2E",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890222,
+   "at": "2026-11-14 10:27:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890343,
+   "at": "2026-11-14 10:27:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890391,
+   "at": "2026-11-14 10:28:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890446,
+   "at": "2026-11-14 10:28:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890621,
+   "at": "2026-11-14 10:28:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890666,
+   "at": "2026-11-14 10:28:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890721,
+   "at": "2026-11-14 10:29:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5890785,
+   "at": "2026-11-14 10:29:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892320,
+   "at": "2026-11-14 10:38:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892360,
+   "at": "2026-11-14 10:38:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892391,
+   "at": "2026-11-14 10:38:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892431,
+   "at": "2026-11-14 10:38:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892435,
+   "at": "2026-11-14 10:38:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892466,
+   "at": "2026-11-14 10:38:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892497,
+   "at": "2026-11-14 10:39:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892537,
+   "at": "2026-11-14 10:39:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892568,
+   "at": "2026-11-14 10:39:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892608,
+   "at": "2026-11-14 10:39:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892639,
+   "at": "2026-11-14 10:40:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892670,
+   "at": "2026-11-14 10:40:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892708,
+   "at": "2026-11-14 10:40:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892766,
+   "at": "2026-11-14 10:40:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892815,
+   "at": "2026-11-14 10:40:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892892,
+   "at": "2026-11-14 10:40:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892932,
+   "at": "2026-11-14 10:41:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892936,
+   "at": "2026-11-14 10:41:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892967,
+   "at": "2026-11-14 10:41:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5892971,
+   "at": "2026-11-14 10:41:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893002,
+   "at": "2026-11-14 10:41:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893033,
+   "at": "2026-11-14 10:41:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893044,
+   "at": "2026-11-14 10:41:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893156,
+   "at": "2026-11-14 10:42:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893308,
+   "at": "2026-11-14 10:42:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893312,
+   "at": "2026-11-14 10:42:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893316,
+   "at": "2026-11-14 10:42:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893320,
+   "at": "2026-11-14 10:42:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893324,
+   "at": "2026-11-14 10:42:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893416,
+   "at": "2026-11-14 10:42:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893420,
+   "at": "2026-11-14 10:43:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "kind": "GET",
+   "fe": {
+    "lineId": "AZL01",
+    "itemId": "EP096636PFB1-CG0",
+    "plantSite": "US02182600_82-P",
+    "operationId": "US02182600",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893541,
+   "at": "2026-11-14 10:43:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893581,
+   "at": "2026-11-14 10:43:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893612,
+   "at": "2026-11-14 10:43:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893658,
+   "at": "2026-11-14 10:43:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893743,
+   "at": "2026-11-14 10:44:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893774,
+   "at": "2026-11-14 10:44:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893813,
+   "at": "2026-11-14 10:44:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893888,
+   "at": "2026-11-14 10:44:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893912,
+   "at": "2026-11-14 10:44:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "SHP01,AZP01",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894011,
+   "at": "2026-11-14 10:45:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894101,
+   "at": "2026-11-14 10:45:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894153,
+   "at": "2026-11-14 10:45:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894170,
+   "at": "2026-11-14 10:45:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894231,
+   "at": "2026-11-14 10:45:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894360,
+   "at": "2026-11-14 10:46:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894406,
+   "at": "2026-11-14 10:46:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894452,
+   "at": "2026-11-14 10:46:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894517,
+   "at": "2026-11-14 10:47:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894711,
+   "at": "2026-11-14 10:47:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894757,
+   "at": "2026-11-14 10:47:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894832,
+   "at": "2026-11-14 10:47:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894863,
+   "at": "2026-11-14 10:47:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894870,
+   "at": "2026-11-14 10:47:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "SHP01",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894917,
+   "at": "2026-11-14 10:47:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894991,
+   "at": "2026-11-14 10:48:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5894998,
+   "at": "2026-11-14 10:48:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895005,
+   "at": "2026-11-14 10:48:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ep096636pfb1-cg0",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895012,
+   "at": "2026-11-14 10:48:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "P096636PFB1-CG",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895019,
+   "at": "2026-11-14 10:48:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "EP096636PFB1-CG0,EP096636PFBA-AA0",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895109,
+   "at": "2026-11-14 10:48:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895460,
+   "at": "2026-11-14 10:50:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "EA019170PC01",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895740,
+   "at": "2026-11-14 10:51:07",
+   "by": "dana.robot",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "dana.robot"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895804,
+   "at": "2026-11-14 10:51:21",
+   "by": "lucky-alex",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "lucky-alex"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895925,
+   "at": "2026-11-14 10:51:53",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895998,
+   "at": "2026-11-14 10:52:07",
+   "by": "jinseon_ahn",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jinseon_ahn"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5896062,
+   "at": "2026-11-14 10:52:22",
+   "by": "jsh96",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jsh96"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5896250,
+   "at": "2026-11-14 10:52:54",
+   "by": "wangyucnb",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "wangyucnb"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5896332,
+   "at": "2026-11-14 10:53:09",
+   "by": "kang_huichan",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "kang_huichan"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5896492,
+   "at": "2026-11-14 10:53:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5896582,
+   "at": "2026-11-14 10:53:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+   "kind": "GET",
+   "fe": {
+    "plantSiteId": "ALL",
+    "lineId": "ALL",
+    "itemId": "ALL",
+    "operationGroupId": "P",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  }
+ ]
+}

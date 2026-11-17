@@ -1,0 +1,74 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0200\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 198,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0200\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(199줄 · formItem 공통 조상) · 시각 순서 14칸",
+  "at": "2026-11-14T20:42:11.249Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0200\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 12,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0200\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,이 이민용,Home,Shipment Change Request,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),New,Insert Multiple,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Choose Date,Toggle Calendar,Toggle Time List,Request Complete,Cancel",
+  "at": "2026-11-14T20:42:11.428Z"
+ },
+ {
+  "key": "헤더_Change_Request",
+  "kind": "헤더",
+  "scope": "Change Request",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0200\\snap\\received\\헤더_Change_Request.txt",
+  "diff": "",
+  "lines": 1,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0200\\snap\\received\\헤더_Change_Request.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 1행 · 칸 28",
+  "at": "2026-11-14T20:42:19.809Z"
+ },
+ {
+  "key": "헤더_Shipment_Change_Request",
+  "kind": "헤더",
+  "scope": "Shipment Change Request",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0200\\snap\\received\\헤더_Shipment_Change_Request.txt",
+  "diff": "",
+  "lines": 2,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0200\\snap\\received\\헤더_Shipment_Change_Request.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 2행 · 칸 25",
+  "at": "2026-11-14T20:42:19.839Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SSP0200\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SSP0200\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ }
+]

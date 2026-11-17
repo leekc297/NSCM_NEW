@@ -1,0 +1,7 @@
+﻿lang,result,why
+KO,PASS,KO 문구 15건 일치 · 사전에 없는 문구 9건
+EN,PASS,EN 문구 16건 일치 · 사전에 없는 문구 9건
+EN 데이터,ERROR,[확인 대상] 그리드 칸 한글 LINE_ID 178행 — 명칭 칸이면 언어 미반영
+CN,FAIL,CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 9건
+CN 데이터,ERROR,[확인 대상] 그리드 칸 한글 LINE_ID 178행 — 명칭 칸이면 언어 미반영
+조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

@@ -4,7 +4,7 @@
 > **한 줄**: ① **`SELECT DISTINCT` 는 중복 제거 수단이 아니다** — 감사·시각 컬럼이 섞이면 무력화된다.
 > PK 가 있으면 **PK 기준 dedup** 을 명시하라. ② 하위 프로시저의 **`WHEN OTHERS THEN ROLLBACK`** 은
 > 호출자 트랜잭션까지 되돌리고 정상 종료해 **허위 성공**을 만든다 — `RAISE` 로 전파하라.
-> **연관**: #99 · #127(NVL 안티패턴) · #131(저장 멱등·읽기검증) · save-sp-direct-call-commits
+> **연관**: #99 · #127(NVL 안티패턴) · #131(저장 멱등·읽기검증) · save-sp-direct-call-commits (2026-11-13: 이 이름의 hook 파일은 현재 저장소에 없음 — 메모리 항목 `feedback_save_sp_direct_call_commits.md` 의 이름)
 
 ---
 

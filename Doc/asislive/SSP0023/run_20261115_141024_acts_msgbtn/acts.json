@@ -1,0 +1,70 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "msgbtn": true,
+ "acts": [
+  {
+   "control": "BtnMeasure",
+   "kind": "msgbtn",
+   "state": "선택 없음",
+   "select": null,
+   "ok": true,
+   "error": null,
+   "expect": [
+    "MSG00007"
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "save_calls": [],
+   "popups": [
+    "SCM0002_TitleSetForm_Popup"
+   ]
+  },
+  {
+   "control": "BtnMeasure",
+   "kind": "msgbtn",
+   "state": "첫 행 선택",
+   "select": {
+    "ok": true,
+    "how": "첫 셀 클릭(CHK 열 없음)"
+   },
+   "ok": true,
+   "error": null,
+   "expect": [
+    "MSG00007"
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "save_calls": [],
+   "popups": [
+    "SCM0002_TitleSetForm_Popup"
+   ]
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnMeasure_Click": [
+   "MSG00007"
+  ]
+ },
+ "at": "2026-11-15 14:08:57",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ }
+}

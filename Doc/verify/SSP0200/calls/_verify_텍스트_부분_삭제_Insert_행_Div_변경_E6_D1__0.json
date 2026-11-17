@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 211,
+  "at": "2026-11-14T21:06:04.174Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"ALL\",\"erpSoNo\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"Invalid Date\",\"toYyyymmdd\":\"Invalid Date\",\"status\":\"ALL\",\"changeType\":\"C\",\"language\":\"KO\",\"debugMode\":\"F\",\"toSite\":\"ALL\",\"confirmId\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 102,
+  "at": "2026-11-14T21:06:08.062Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "SSP0200",
+  "sheet": "sub",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0200/sub/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"\",\"toSite\":\"\",\"erpSoNo\":\"\",\"itemId\":\"\",\"bodId\":\"\",\"incoterms\":\"\",\"transportMode\":\"\",\"projectCode\":\"\",\"fcstType\":\"\",\"confirmId\":\"\",\"fromYyyymmdd\":\"Invalid Date\",\"toYyyymmdd\":\"Invalid Date\",\"changeRequestNo\":\"\",\"requestUserId\":\"minyonglee1\",\"requestStatus\":\"D\",\"language\":\"KO\",\"changeType\":\"C\",\"debugMode\":\"F\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 214,
+  "at": "2026-11-14T21:06:08.166Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ }
+]

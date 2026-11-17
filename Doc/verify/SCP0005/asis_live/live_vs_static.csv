@@ -1,0 +1,34 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0005_GET_COUNTRY_CITY,SCP0005_DistributionRoute.cs:916 GetData_Country,1회 · 구간 find,MATCH,
+SP,SCP0005_GET_DISTRIBUTION_ROUTE,SCP0005_DistributionRoute.cs:424 FindDataMain,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,7회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0005_GET_DISTRIBUTION_ROUTEID,SCP0005_DistributionRoute.cs:499 FindDataReceive,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0005_SAVE_DISTRIBUTION_ROUTE,SCP0005_DistributionRoute.cs:752 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),30개,23개,INFO,공통 13 · 선언만 17 · 실측만 10
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,btnToSrch,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnFromSrch,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboValidYN,Y,Valid,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTransMode,Y,Trans Mode,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtFromCountry,Y,From Country,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtFromCity,Y,From City,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtToCountry,Y,To Country,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtToCity,Y,To City,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnEaxel_Upload,Y,layoutControlItem9,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnExcel_Form,Y,layoutControlItem10,LIVE,layout=usrLayoutControl2 visible=False
+GRID,spdMain/Distribution Route,정적 컬럼 사실 39행(시트 미지정 포함),컬럼 40(보임 39) · 헤더 2단 · 행 8036 · 고정 2,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

@@ -1,7 +1,21 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "@verify|@trace|@snap",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +28,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0028/e2e/artifacts",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,13 +46,229 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
   "suites": [
+    {
+      "title": "_snap.spec.ts",
+      "file": "_snap.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "@snap 스냅샷 형상 검사",
+          "file": "_snap.spec.ts",
+          "line": 60,
+          "column": 6,
+          "specs": [
+            {
+              "title": "@snap 조회조건 패널·버튼 바 aria ×Div",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2727,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:04:06.300Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-74c995e979b472a2d796",
+              "file": "_snap.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "@snap 그리드 헤더 텍스트(모델) ×시트",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:04:11.437Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-399ba7d6116eaaa3a887",
+              "file": "_snap.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "@snap 조회조건 팝업 정적 aria",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3177,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:04:19.745Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-95b89906c95d0086fb4b",
+              "file": "_snap.spec.ts",
+              "line": 114,
+              "column": 7
+            },
+            {
+              "title": "@snap 화면샷 패널+헤더 띠 1920/1366",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6270,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:04:25.545Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
+              "file": "_snap.spec.ts",
+              "line": 137,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
     {
       "title": "_trace.spec.ts",
       "file": "_trace.spec.ts",
@@ -60,7 +279,7 @@
         {
           "title": "검증엔진 SCP0028 @trace",
           "file": "_trace.spec.ts",
-          "line": 105,
+          "line": 129,
           "column": 6,
           "specs": [
             {
@@ -79,13 +298,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 36037,
+                      "duration": 12281,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:52:00.702Z",
+                      "startTime": "2026-11-13T20:04:35.111Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -94,7 +315,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-a215b3e911d4d21983ab",
               "file": "_trace.spec.ts",
-              "line": 130,
+              "line": 155,
               "column": 7
             },
             {
@@ -113,13 +334,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 16387,
+                      "duration": 5579,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:52:46.834Z",
+                      "startTime": "2026-11-13T20:04:50.063Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -128,7 +351,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-93a0ecf621a1126b9bac",
               "file": "_trace.spec.ts",
-              "line": 198,
+              "line": 229,
               "column": 7
             },
             {
@@ -147,13 +370,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 102634,
+                      "duration": 59777,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:53:14.012Z",
+                      "startTime": "2026-11-13T20:04:58.370Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -162,7 +387,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-def5f559270779917b8a",
               "file": "_trace.spec.ts",
-              "line": 234,
+              "line": 265,
               "column": 7
             },
             {
@@ -181,13 +406,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26121,
+                      "duration": 15098,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:55:04.822Z",
+                      "startTime": "2026-11-13T20:06:00.851Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -196,7 +427,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-fd52a83ea6f225a99e9a",
               "file": "_trace.spec.ts",
-              "line": 319,
+              "line": 352,
               "column": 7
             },
             {
@@ -215,13 +446,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1227,
+                      "duration": 300,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:55:41.406Z",
+                      "startTime": "2026-11-13T20:06:18.658Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -230,7 +463,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-3bff554570473973d5dc",
               "file": "_trace.spec.ts",
-              "line": 547,
+              "line": 592,
               "column": 7
             },
             {
@@ -249,13 +482,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 19047,
+                      "duration": 6447,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:55:51.569Z",
+                      "startTime": "2026-11-13T20:06:21.648Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -264,7 +499,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-c3a28228f74805af6226",
               "file": "_trace.spec.ts",
-              "line": 622,
+              "line": 667,
               "column": 7
             },
             {
@@ -283,13 +518,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 24511,
+                      "duration": 14023,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:56:20.061Z",
+                      "startTime": "2026-11-13T20:06:30.787Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -298,7 +539,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-5df0e33aaa3fe3b9ec4b",
               "file": "_trace.spec.ts",
-              "line": 684,
+              "line": 729,
               "column": 7
             },
             {
@@ -317,13 +558,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2159,
+                      "duration": 307,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:56:54.278Z",
+                      "startTime": "2026-11-13T20:06:47.532Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -332,7 +575,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-7fab27dd0e9dfd8222db",
               "file": "_trace.spec.ts",
-              "line": 774,
+              "line": 844,
               "column": 7
             },
             {
@@ -351,13 +594,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 19070,
+                      "duration": 6513,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:57:05.135Z",
+                      "startTime": "2026-11-13T20:06:50.524Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -366,7 +611,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-5e84d56361bc014e91fa",
               "file": "_trace.spec.ts",
-              "line": 823,
+              "line": 916,
               "column": 7
             },
             {
@@ -385,13 +630,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 46483,
+                      "duration": 18714,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:57:35.587Z",
+                      "startTime": "2026-11-13T20:06:59.738Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -400,7 +651,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-4d68a0d9eafa156f4308",
               "file": "_trace.spec.ts",
-              "line": 878,
+              "line": 971,
               "column": 7
             },
             {
@@ -419,13 +670,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25857,
+                      "duration": 14272,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:58:32.359Z",
+                      "startTime": "2026-11-13T20:07:21.153Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -434,7 +691,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-7ff674e7f50e4d4dc552",
               "file": "_trace.spec.ts",
-              "line": 1119,
+              "line": 1230,
               "column": 7
             },
             {
@@ -453,13 +710,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 819325,
+                      "duration": 105194,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T04:59:09.505Z",
+                      "startTime": "2026-11-13T20:07:38.193Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -468,7 +727,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-a5f992607d7656768110",
               "file": "_trace.spec.ts",
-              "line": 1147,
+              "line": 1259,
               "column": 7
             },
             {
@@ -487,13 +746,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 153579,
+                      "duration": 19488,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:12:58.583Z",
+                      "startTime": "2026-11-13T20:09:26.180Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -502,7 +767,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-81afde2674f639eaa02c",
               "file": "_trace.spec.ts",
-              "line": 1575,
+              "line": 1709,
               "column": 7
             },
             {
@@ -521,13 +786,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 932,
+                      "duration": 304,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:15:40.211Z",
+                      "startTime": "2026-11-13T20:09:48.438Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -536,7 +803,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-411a508ac9a8f02b480b",
               "file": "_trace.spec.ts",
-              "line": 1922,
+              "line": 2065,
               "column": 7
             }
           ]
@@ -553,7 +820,7 @@
         {
           "title": "정합검증 SCP0028 @verify",
           "file": "_verify.spec.ts",
-          "line": 183,
+          "line": 252,
           "column": 6,
           "specs": [
             {
@@ -572,13 +839,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15178,
+                      "duration": 5614,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:15:49.778Z",
+                      "startTime": "2026-11-13T20:09:51.933Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -587,7 +856,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-a8fa5cdc6dfa7ec4fc6d",
               "file": "_verify.spec.ts",
-              "line": 207,
+              "line": 280,
               "column": 7
             },
             {
@@ -606,60 +875,64 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 65886,
+                      "duration": 44433,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[lap] 기존행 편집(D1) 13s\n"
+                          "text": "[lap] 기존행 편집(D1) 4s\n"
                         },
                         {
-                          "text": "[lap] 신규행 16s\n"
+                          "text": "[lap] 신규행 5s\n"
                         },
                         {
-                          "text": "[lap] 입력 프로브 행 18s\n"
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
                         },
                         {
-                          "text": "[lap] 연쇄 프로브 행 18s\n"
+                          "text": "[lap] 입력 프로브 행 12s\n"
                         },
                         {
-                          "text": "[lap] 콤보 후보+재편집 18s\n"
+                          "text": "[lap] 연쇄 프로브 행 12s\n"
                         },
                         {
-                          "text": "[lap] E1 18s\n"
+                          "text": "[lap] 콤보 후보+재편집 12s\n"
                         },
                         {
-                          "text": "[lap] H13 39s\n"
+                          "text": "[lap] E1 12s\n"
                         },
                         {
-                          "text": "[lap] E2 39s\n"
+                          "text": "[lap] H13 27s\n"
                         },
                         {
-                          "text": "[lap] C3 53s\n"
+                          "text": "[lap] E2 27s\n"
                         },
                         {
-                          "text": "[lap] D5 53s\n"
+                          "text": "[lap] C3 40s\n"
                         },
                         {
-                          "text": "[lap] K5 53s\n"
+                          "text": "[lap] D5 40s\n"
                         },
                         {
-                          "text": "[lap] H2 53s\n"
+                          "text": "[lap] K5 40s\n"
                         },
                         {
-                          "text": "[lap] A2 54s\n"
+                          "text": "[lap] H2 40s\n"
                         },
                         {
-                          "text": "[lap] C2 54s\n"
+                          "text": "[lap] A2 40s\n"
                         },
                         {
-                          "text": "[lap] C6 54s\n"
+                          "text": "[lap] C2 40s\n"
                         },
                         {
-                          "text": "[lap] E5 54s\n"
+                          "text": "[lap] C6 40s\n"
                         },
                         {
-                          "text": "[lap] E7 63s\n"
+                          "text": "[lap] E5 40s\n"
+                        },
+                        {
+                          "text": "[lap] E7 44s\n"
                         }
                       ],
                       "stderr": [
@@ -671,7 +944,8 @@
                         }
                       ],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:16:12.392Z",
+                      "startTime": "2026-11-13T20:10:00.270Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -680,7 +954,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-cadf052bd9e9082e4329",
               "file": "_verify.spec.ts",
-              "line": 229,
+              "line": 302,
               "column": 65
             },
             {
@@ -699,13 +973,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1272,
+                      "duration": 279,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:17:25.510Z",
+                      "startTime": "2026-11-13T20:10:47.378Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -714,7 +990,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-7dd6e2b50cb4af61f4a4",
               "file": "_verify.spec.ts",
-              "line": 707,
+              "line": 839,
               "column": 7
             },
             {
@@ -729,7 +1005,7 @@
                   "annotations": [
                     {
                       "type": "crud",
-                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=N found=Y updated=Y cleaned=Y restored=N saveCalls=0 errors=SAVE: 0보다 큰 정수를 입력하십시오. · 수정 저장 경로 강제(edit-save) · [2s] 수정 입력 완료 · [62s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [182s] 재조회 · [183s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름"
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=N found=Y updated=Y cleaned=Y restored=N saveCalls=0 errors=SAVE: 0보다 큰 정수를 입력하십시오. · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [181s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -738,13 +1014,24 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 201032,
+                      "duration": 219778,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[save-sheet] AS-IS Save 대상 시트 'Shipment Lot Size'(SaveButton→SaveData · shtMain=\"Shipment Lot Size\" (SCP0028_Shipment_Lot_Size.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 15개 중 100% 가 'Shipment Lot Size'(정의 18컬럼) · DOM 그리드 #0(T224)\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:17:40.384Z",
+                      "startTime": "2026-11-13T20:10:50.301Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=N found=Y updated=Y cleaned=Y restored=N saveCalls=0 errors=SAVE: 0보다 큰 정수를 입력하십시오. · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [181s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름"
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
@@ -753,7 +1040,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ed96ea3ab5a3c1d97216",
               "file": "_verify.spec.ts",
-              "line": 770,
+              "line": 904,
               "column": 7
             },
             {
@@ -772,38 +1059,43 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 297965,
+                      "duration": 242309,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[저장 세부] 05:22:47 LOT_SIZE r3 시작\n"
+                          "text": "[save-sheet] AS-IS Save 대상 시트 'Shipment Lot Size'(SaveButton→SaveData · shtMain=\"Shipment Lot Size\" (SCP0028_Shipment_Lot_Size.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 15개 중 100% 가 'Shipment Lot Size'(정의 18컬럼) · DOM 그리드 #0(T224)\n"
                         },
                         {
-                          "text": "[저장 세부] 05:23:04 LOT_SIZE 끝\n"
+                          "text": "[저장 세부] 20:15:39 LOT_SIZE r3 시작\n"
                         },
                         {
-                          "text": "[저장 세부] 05:23:06 INCREMENT r3 시작\n"
+                          "text": "[저장 세부] 20:15:51 LOT_SIZE 끝\n"
                         },
                         {
-                          "text": "[저장 세부] 05:23:56 INCREMENT 끝\n"
+                          "text": "[저장 세부] 20:15:52 INCREMENT r3 시작\n"
                         },
                         {
-                          "text": "[저장 세부] 05:23:56 VALID_YN r3 시작\n"
+                          "text": "[저장 세부] 20:16:39 INCREMENT 끝\n"
                         },
                         {
-                          "text": "[저장 세부] 05:24:09 VALID_YN 끝\n"
+                          "text": "[저장 세부] 20:16:39 VALID_YN r3 시작\n"
                         },
                         {
-                          "text": "[저장 세부] 05:24:10 SPLIT_YN r3 시작\n"
+                          "text": "[저장 세부] 20:16:48 VALID_YN 끝\n"
                         },
                         {
-                          "text": "[저장 세부] 05:24:24 SPLIT_YN 끝\n"
+                          "text": "[저장 세부] 20:16:48 SPLIT_YN r3 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 20:16:57 SPLIT_YN 끝\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:21:11.116Z",
+                      "startTime": "2026-11-13T20:14:32.783Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -812,7 +1104,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-9bb726994e2458b4a524",
               "file": "_verify.spec.ts",
-              "line": 1378,
+              "line": 1534,
               "column": 7
             },
             {
@@ -824,25 +1116,22 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 SCP0028/main/SAVE/call-proc) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 159078,
+                      "duration": 104254,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:26:17.266Z",
+                      "startTime": "2026-11-13T20:18:37.868Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -851,7 +1140,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-16a79b876eb6b9a89f6b",
               "file": "_verify.spec.ts",
-              "line": 1474,
+              "line": 1634,
               "column": 7
             },
             {
@@ -870,13 +1159,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17494,
+                      "duration": 6107,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:29:06.467Z",
+                      "startTime": "2026-11-13T20:20:24.915Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -885,7 +1176,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-15c9d183ca9a77397d68",
               "file": "_verify.spec.ts",
-              "line": 1570,
+              "line": 1745,
               "column": 7
             },
             {
@@ -904,13 +1195,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 283162,
+                      "duration": 122837,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:29:32.360Z",
+                      "startTime": "2026-11-13T20:20:33.799Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -919,7 +1212,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-08660f2fc0212d614ab5",
               "file": "_verify.spec.ts",
-              "line": 1671,
+              "line": 1847,
               "column": 7
             },
             {
@@ -938,13 +1231,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2340,
+                      "duration": 291,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:34:23.837Z",
+                      "startTime": "2026-11-13T20:22:39.455Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -953,7 +1248,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b63156ce260097fbe28d",
               "file": "_verify.spec.ts",
-              "line": 1715,
+              "line": 1891,
               "column": 7
             },
             {
@@ -972,13 +1267,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25324,
+                      "duration": 4753,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:34:37.318Z",
+                      "startTime": "2026-11-13T20:22:42.417Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -987,7 +1284,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-623b36f3d6feeee9517b",
               "file": "_verify.spec.ts",
-              "line": 1727,
+              "line": 1903,
               "column": 7
             },
             {
@@ -1006,13 +1303,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15175,
+                      "duration": 4235,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:35:13.493Z",
+                      "startTime": "2026-11-13T20:22:49.894Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1021,7 +1320,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-648772e8f6274a67e926",
               "file": "_verify.spec.ts",
-              "line": 1738,
+              "line": 1916,
               "column": 7
             },
             {
@@ -1040,13 +1339,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26875,
+                      "duration": 15021,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:35:38.032Z",
+                      "startTime": "2026-11-13T20:22:56.846Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1055,7 +1356,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-426bab9916a1a0bee0cb",
               "file": "_verify.spec.ts",
-              "line": 1765,
+              "line": 1943,
               "column": 7
             },
             {
@@ -1074,13 +1375,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14495,
+                      "duration": 4928,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:36:12.941Z",
+                      "startTime": "2026-11-13T20:23:14.590Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1089,7 +1392,43 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8b6e817fb0e78c711089",
               "file": "_verify.spec.ts",
-              "line": 1782,
+              "line": 1972,
+              "column": 7
+            },
+            {
+              "title": "Excel 2단계 차단(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3121,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:23:22.195Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f3cc1784844aa1a7d70b",
+              "file": "_verify.spec.ts",
+              "line": 1985,
               "column": 7
             },
             {
@@ -1108,13 +1447,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 12281,
+                      "duration": 2970,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:36:35.360Z",
+                      "startTime": "2026-11-13T20:23:27.973Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1123,7 +1464,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b075dc0b76f83de654ac",
               "file": "_verify.spec.ts",
-              "line": 1795,
+              "line": 1999,
               "column": 7
             },
             {
@@ -1142,13 +1483,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1003,
+                      "duration": 281,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:36:55.692Z",
+                      "startTime": "2026-11-13T20:23:33.695Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1157,7 +1500,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-faf2ee34ca700c9540f9",
               "file": "_verify.spec.ts",
-              "line": 1827,
+              "line": 2033,
               "column": 7
             },
             {
@@ -1176,13 +1519,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1092,
+                      "duration": 289,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:37:05.243Z",
+                      "startTime": "2026-11-13T20:23:36.736Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1191,7 +1536,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d770e313050bc1f2d795",
               "file": "_verify.spec.ts",
-              "line": 1893,
+              "line": 2100,
               "column": 7
             },
             {
@@ -1210,13 +1555,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 39978,
+                      "duration": 18208,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[langlock] SCP0028 I2 단독 실행 0s 대기 후 언어 잠금 획득\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:37:14.784Z",
+                      "startTime": "2026-11-13T20:23:39.736Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1225,7 +1576,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-66620e4d6bef6570fa6c",
               "file": "_verify.spec.ts",
-              "line": 1939,
+              "line": 2155,
               "column": 7
             },
             {
@@ -1236,7 +1587,7 @@
               ],
               "tests": [
                 {
-                  "timeout": 420000,
+                  "timeout": 440240,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -1244,13 +1595,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 62918,
+                      "duration": 30237,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:38:03.598Z",
+                      "startTime": "2026-11-13T20:24:00.679Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1259,7 +1616,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dc25d2993e5358852810",
               "file": "_verify.spec.ts",
-              "line": 1963,
+              "line": 2182,
               "column": 7
             },
             {
@@ -1278,13 +1635,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18795,
+                      "duration": 12474,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:39:16.128Z",
+                      "startTime": "2026-11-13T20:24:33.635Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1293,7 +1656,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b870addd09aef4a424c6",
               "file": "_verify.spec.ts",
-              "line": 1999,
+              "line": 2224,
               "column": 7
             },
             {
@@ -1312,13 +1675,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 24386,
+                      "duration": 9176,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:39:43.442Z",
+                      "startTime": "2026-11-13T20:24:48.824Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1327,7 +1692,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-bab272b9e28907025ed6",
               "file": "_verify.spec.ts",
-              "line": 2011,
+              "line": 2236,
               "column": 7
             },
             {
@@ -1346,13 +1711,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 52265,
+                      "duration": 24538,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:40:16.847Z",
+                      "startTime": "2026-11-13T20:25:00.681Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1361,7 +1728,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8fa87eb01d7a3b600ffc",
               "file": "_verify.spec.ts",
-              "line": 2028,
+              "line": 2253,
               "column": 7
             },
             {
@@ -1380,13 +1747,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 124667,
+                      "duration": 102502,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:41:25.859Z",
+                      "startTime": "2026-11-13T20:25:27.879Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1395,7 +1764,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-96c9754c8026213647ef",
               "file": "_verify.spec.ts",
-              "line": 2050,
+              "line": 2277,
               "column": 7
             },
             {
@@ -1414,13 +1783,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14436,
+                      "duration": 4638,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:43:46.054Z",
+                      "startTime": "2026-11-13T20:27:13.080Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1429,7 +1800,615 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-49159fd3652d83e41c3f",
               "file": "_verify.spec.ts",
-              "line": 2062,
+              "line": 2289,
+              "column": 7
+            },
+            {
+              "title": "Team 값 덤프(B8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4458,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:27:20.440Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6097458d478c7b02db3d",
+              "file": "_verify.spec.ts",
+              "line": 2299,
+              "column": 7
+            },
+            {
+              "title": "Insert 행 Division(D4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11562,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:27:27.606Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fd3dbe3c53494fad7d8e",
+              "file": "_verify.spec.ts",
+              "line": 2304,
+              "column": 7
+            },
+            {
+              "title": "동적 칸 정렬·방향키 응답(K1·L1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9064,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:27:41.835Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5376de492a799b9ecf29",
+              "file": "_verify.spec.ts",
+              "line": 2313,
+              "column": 7
+            },
+            {
+              "title": "기간 조건 글자·역전(E2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6832,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:27:53.667Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d0916f2f4a2009136841",
+              "file": "_verify.spec.ts",
+              "line": 2324,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 147637,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:28:03.146Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3e865bd1181e9fe20733",
+              "file": "_verify.spec.ts",
+              "line": 2334,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12171,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:30:33.410Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2be54424ac67cd3e6dc5",
+              "file": "_verify.spec.ts",
+              "line": 2342,
+              "column": 7
+            },
+            {
+              "title": "편집 모드 구분(D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5178,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:30:48.364Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1e9a7484bf3807c481d6",
+              "file": "_verify.spec.ts",
+              "line": 2350,
+              "column": 7
+            },
+            {
+              "title": "실적 구간 색(H2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 294,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:30:56.282Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-32a993a11c8ab1ccc03f",
+              "file": "_verify.spec.ts",
+              "line": 2366,
+              "column": 7
+            },
+            {
+              "title": "이름·ID 조건 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 277,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:30:59.276Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b5a39f68fa9285433a6a",
+              "file": "_verify.spec.ts",
+              "line": 2378,
+              "column": 7
+            },
+            {
+              "title": "Sum 체크박스(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 289,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:31:02.240Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ce00ec2f5d01084b8781",
+              "file": "_verify.spec.ts",
+              "line": 2390,
+              "column": 7
+            },
+            {
+              "title": "숫자 표시 형식(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 283,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:31:05.302Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5861094594757487c6d7",
+              "file": "_verify.spec.ts",
+              "line": 2401,
+              "column": 7
+            },
+            {
+              "title": "문서 표시 문구(H5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 285,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:31:08.302Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5b8281c203a1afd0015e",
+              "file": "_verify.spec.ts",
+              "line": 2410,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 3150000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 346672,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SCP0028 'CN 언어 조회 건수 총/건 표기' 시작 05:31:14\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 'KO 변경 없이 저장 → KO 수정사항 없음 알림' 시작 05:31:34\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 'KO Increment > Lot Size 저장 → KO 검증 문구' 시작 05:33:08\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 조회 중 Loading 토스트 없음' 시작 05:33:35\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 선택 행 위로 Insert' 시작 05:33:41\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 05:33:49\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 05:33:57\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 05:34:06\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 05:34:15\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 05:34:23\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 05:34:32\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 05:34:39\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 05:34:47\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 05:34:57\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 05:35:05\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 05:35:14\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 05:35:23\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 기존 행 LOT_SIZE 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 05:35:30\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0' 시작 05:35:41\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙)' 시작 05:36:50\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 조회조건 콤보 6종 = 콤보' 시작 05:36:57\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:31:11.365Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5a2030dae99662721778",
+              "file": "_verify.spec.ts",
+              "line": 2423,
+              "column": 7
+            },
+            {
+              "title": "0 표시 규칙(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 284,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:37:00.838Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7397f0e08863de88f739",
+              "file": "_verify.spec.ts",
+              "line": 2670,
+              "column": 7
+            },
+            {
+              "title": "문서 조건별 버튼·컬럼 노출(K4·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 286,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-13T20:37:03.840Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fded1ec8078905555331",
+              "file": "_verify.spec.ts",
+              "line": 2677,
               "column": 7
             },
             {
@@ -1448,13 +2427,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 36237,
+                      "duration": 15837,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:44:09.107Z",
+                      "startTime": "2026-11-13T20:37:06.838Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1463,7 +2448,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d2b5963597660eed3d01",
               "file": "_verify.spec.ts",
-              "line": 2072,
+              "line": 2684,
               "column": 7
             },
             {
@@ -1482,13 +2467,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 910,
+                      "duration": 293,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:44:53.675Z",
+                      "startTime": "2026-11-13T20:37:25.414Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1497,7 +2484,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-bf5206ccc7639fe51ac2",
               "file": "_verify.spec.ts",
-              "line": 2097,
+              "line": 2711,
               "column": 7
             },
             {
@@ -1516,13 +2503,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3743,
+                      "duration": 289,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:45:02.715Z",
+                      "startTime": "2026-11-13T20:37:28.466Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1531,7 +2520,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-f3d289c8d8ce327db120",
               "file": "_verify.spec.ts",
-              "line": 2109,
+              "line": 2723,
               "column": 7
             },
             {
@@ -1550,13 +2539,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 37486,
+                      "duration": 20671,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:45:16.374Z",
+                      "startTime": "2026-11-13T20:37:31.438Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1565,7 +2560,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-10e5da0a25462fe153a1",
               "file": "_verify.spec.ts",
-              "line": 2135,
+              "line": 2749,
               "column": 7
             },
             {
@@ -1584,13 +2579,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15372,
+                      "duration": 4302,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:46:03.291Z",
+                      "startTime": "2026-11-13T20:37:54.820Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1599,7 +2596,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0055f7d54a5a0677a3c1",
               "file": "_verify.spec.ts",
-              "line": 2172,
+              "line": 2789,
               "column": 7
             },
             {
@@ -1618,13 +2615,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17017,
+                      "duration": 3867,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:46:27.369Z",
+                      "startTime": "2026-11-13T20:38:01.851Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1633,7 +2632,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-612afc7bcbbfe9837a2f",
               "file": "_verify.spec.ts",
-              "line": 2183,
+              "line": 2800,
               "column": 7
             },
             {
@@ -1652,13 +2651,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 111308,
+                      "duration": 55434,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:46:53.651Z",
+                      "startTime": "2026-11-13T20:38:08.415Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1667,7 +2668,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-01328591bd14f4315723",
               "file": "_verify.spec.ts",
-              "line": 2194,
+              "line": 2814,
               "column": 7
             },
             {
@@ -1686,13 +2687,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26455,
+                      "duration": 5739,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:48:55.452Z",
+                      "startTime": "2026-11-13T20:39:06.516Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1701,7 +2704,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-28749f3ca06b9861d5c7",
               "file": "_verify.spec.ts",
-              "line": 2222,
+              "line": 2856,
               "column": 7
             },
             {
@@ -1720,13 +2723,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 31364,
+                      "duration": 9578,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:49:31.514Z",
+                      "startTime": "2026-11-13T20:39:14.989Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1735,7 +2740,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ff5ff458986c03a3651c",
               "file": "_verify.spec.ts",
-              "line": 2239,
+              "line": 2873,
               "column": 7
             },
             {
@@ -1754,13 +2759,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20340,
+                      "duration": 11307,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:50:13.663Z",
+                      "startTime": "2026-11-13T20:39:27.348Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1769,7 +2776,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0f02d9a92f0c609243de",
               "file": "_verify.spec.ts",
-              "line": 2271,
+              "line": 2905,
               "column": 7
             },
             {
@@ -1788,13 +2795,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1887,
+                      "duration": 296,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:50:45.387Z",
+                      "startTime": "2026-11-13T20:39:41.358Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1803,7 +2812,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0a3710fc75fe7111159c",
               "file": "_verify.spec.ts",
-              "line": 2379,
+              "line": 3018,
               "column": 7
             },
             {
@@ -1822,13 +2831,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2105,
+                      "duration": 299,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:50:57.976Z",
+                      "startTime": "2026-11-13T20:39:44.350Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1837,7 +2848,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-f6a5cd5f9f24f282aab2",
               "file": "_verify.spec.ts",
-              "line": 2448,
+              "line": 3087,
               "column": 7
             },
             {
@@ -1856,13 +2867,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 22078,
+                      "duration": 4221,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:51:10.281Z",
+                      "startTime": "2026-11-13T20:39:47.340Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1871,7 +2884,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-bce43d6eab2c6173df52",
               "file": "_verify.spec.ts",
-              "line": 2479,
+              "line": 3118,
               "column": 7
             },
             {
@@ -1890,13 +2903,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44924,
+                      "duration": 19767,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:51:42.960Z",
+                      "startTime": "2026-11-13T20:39:54.264Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1905,7 +2920,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b6773262adc68b2b0c0c",
               "file": "_verify.spec.ts",
-              "line": 2522,
+              "line": 3161,
               "column": 7
             },
             {
@@ -1924,13 +2939,19 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 22047,
+                      "duration": 11713,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1940 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:52:37.985Z",
+                      "startTime": "2026-11-13T20:40:16.752Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1939,7 +2960,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-67df523cf44dea0f9d00",
               "file": "_verify.spec.ts",
-              "line": 2658,
+              "line": 3305,
               "column": 7
             },
             {
@@ -1958,13 +2979,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25914,
+                      "duration": 11978,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:53:10.515Z",
+                      "startTime": "2026-11-13T20:40:31.289Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1973,7 +2996,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-309a4260c5ed458f6c51",
               "file": "_verify.spec.ts",
-              "line": 2763,
+              "line": 3414,
               "column": 7
             },
             {
@@ -1992,13 +3015,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 101949,
+                      "duration": 49131,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:53:45.692Z",
+                      "startTime": "2026-11-13T20:40:45.979Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2007,7 +3032,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-3a07df2e4c25d5b139eb",
               "file": "_verify.spec.ts",
-              "line": 2815,
+              "line": 3466,
               "column": 7
             },
             {
@@ -2026,13 +3051,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 29624,
+                      "duration": 10540,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:55:37.850Z",
+                      "startTime": "2026-11-13T20:41:37.877Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2041,7 +3068,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-389720d759426cd17adc",
               "file": "_verify.spec.ts",
-              "line": 2938,
+              "line": 3601,
               "column": 7
             },
             {
@@ -2060,13 +3087,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 34256,
+                      "duration": 17214,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T05:56:16.615Z",
+                      "startTime": "2026-11-13T20:41:51.107Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2075,7 +3104,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b95816f84bf9504ab057",
               "file": "_verify.spec.ts",
-              "line": 3024,
+              "line": 3695,
               "column": 7
             }
           ]
@@ -2085,9 +3114,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-02T04:51:55.372Z",
-    "duration": 3916727.133,
-    "expected": 56,
+    "startTime": "2026-11-13T20:04:04.333Z",
+    "duration": 2291108.434,
+    "expected": 76,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

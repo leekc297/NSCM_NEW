@@ -14,6 +14,7 @@ import {
   isPastPeriodKey,
   MONTH_KEY_RE,
   numberOf,
+  originBundleKeyOf,
   WEEK_KEY_RE,
 } from './sales-price-model-group.util';
 
@@ -36,6 +37,13 @@ type Originals = Map<ModelGroupRow, Record<string, WijmoPrimitive>> | undefined;
 // NO_PRICE : 판가대표 Y 로 저장하려는데 이번 주 이후 LOC 가격이 하나도 없다(MSG00328).
 // NO_LOC_INPUT : 그 밖에 저장할 값을 만들지 못한 경우(MSG00013).
 export type SaveBuildError = 'NO_PRICE' | 'NO_LOC_INPUT' | 'NO_FUTURE_WEEK';
+
+// 묶음의 Currency 를 고쳤는가 — 그리드가 묶음 전 행에 CURRENCY 변경 기록을 남긴다(Grid cellEditEnded).
+const isCurrencyChanged = (bundle: ModelGroupRow[], originals: Originals): boolean =>
+  bundle.some(r => {
+    const rec = originals?.get(r);
+    return !!rec && 'CURRENCY' in rec;
+  });
 
 export type SaveBuildResult =
   | { ok: true; entries: SaveEntry[] }
@@ -153,10 +161,40 @@ const writeMarker = (
   return false;
 };
 
+// Currency 를 바꾼 N 묶음 — 조회 기간의 이번 주 이후 값 있는 주를 새 통화로 모두 보낸다(LOC · KRW · USD, M).
+//   패키지 3-0 은 받은 주 · Measure 의 다른 통화 행만 지우고 3-3 이 새 통화로 넣는다(Sales Price 와 같은 방식, 2026-11-12 변경).
+//   그래서 KRW · USD 도 함께 보내야 한다 — LOC 만 보내면 그 주의 KRW · USD 는 옛 통화로 남는다(N 은 2-5 보충 대상이 아니다).
+//   N 묶음의 0 은 "판가 없음"으로 저장된 값이라 삭제(D)로 바꾸지 않고 0 그대로 옮긴다(Y 의 0 = 삭제와 다르다).
+const writeCurrencyWeeksN = (w: LocWriter, loc: ModelGroupRow, monday: string): boolean => {
+  let written = false;
+  const division = cellOf(loc, 'DIVISION_ID');
+  const currency = cellOf(loc, 'CURRENCY');
+  for (const key of Object.keys(loc).filter(k => WEEK_KEY_RE.test(k)).sort()) {
+    if (isPastPeriodKey(key, monday)) continue;
+    const price = numberOf(loc[key]);
+    if (price === null) continue;
+    const yyyymmdd = key.slice(2);
+    for (const measure of [MEASURE_CODE.LOC, MEASURE_CODE.KRW, MEASURE_CODE.USD]) {
+      const value = convertLocPrice(w.rateMap, division, currency, measure, yyyymmdd.slice(0, 6), price);
+      written =
+        w.collector.add({
+          keyRow: w.keyRow,
+          flag: CRUD_TYPE.MODIFY,
+          yyyymmdd,
+          measure,
+          price: String(value),
+          prcRpsn: w.prcRpsn,
+        }) || written;
+    }
+  }
+  return written;
+};
+
 const bundlesOf = (rows: ModelGroupRow[]): ModelGroupRow[][] => {
   const map = new Map<string, ModelGroupRow[]>();
   for (const row of rows) {
-    const key = isInsertRow(row) ? `I:${cellOf(row, INSERT_GROUP_ID)}` : `E:${bundleKeyOf(row)}`;
+    // 기존 행은 조회 시점 묶음 키로 묶는다 — Currency 를 고친 묶음이 같은 6키의 다른 통화 묶음과 섞이지 않게.
+    const key = isInsertRow(row) ? `I:${cellOf(row, INSERT_GROUP_ID)}` : `E:${originBundleKeyOf(row)}`;
     const list = map.get(key) ?? [];
     list.push(row);
     map.set(key, list);
@@ -180,6 +218,12 @@ export interface MainSaveInput {
 //   신규 N : 조회 기간의 이번 주 이후 주를 빈 값으로 I (패키지가 0 으로 저장).
 //   기존 Y : 고친 LOC 칸을 M (0 · 빈 값은 D). N → Y 로 바꾼 묶음은 이번 주 이후 값 있는 LOC 칸도 함께 M.
 //   기존 N : PRC_RPSN 을 Y → N 으로 바꿨을 때만 표식 행 1개. LOC 는 바꾸지 않는다(Y → N 은 PRC_RPSN 만 바뀜).
+//   Currency 를 고친 기존 묶음 (2026-11-12, DMF0020 과 같은 "조회 기간 안만 변경" 방식 — LHS 프로시저 수정 후):
+//     패키지 3-0 은 받은 주 · Measure 의 다른 통화 행만 지우고 새 통화로 넣는다. 받지 않은 주는 옛 통화 그대로다.
+//     그래서 화면에 보이는(조회 기간) 이번 주 이후 값 있는 주를 전부 새 통화로 보낸다. 지난 주 · 조회 기간 밖은 옛 통화로 남는다.
+//     Y : 이번 주 이후 값 있는 LOC 칸을 모두 M(0 은 D — Y 의 0 = 삭제). KRW · USD 는 새 통화 환율로 계산해 함께. N → Y 와 같은 방식이다.
+//     N : 이번 주 이후 값 있는 주의 LOC · KRW · USD 를 모두 M (writeCurrencyWeeksN).
+//     보낼 이번 주 이후 값이 없으면 막는다 — 그리드가 그런 묶음의 Currency 편집을 미리 막으므로 평소에는 오지 않는다.
 export const buildMainSaveEntries = (input: MainSaveInput): SaveBuildResult => {
   const { rows, originals, weeksByMonth, monday, rateMap } = input;
   const collector = new SaveCollector();
@@ -213,12 +257,17 @@ export const buildMainSaveEntries = (input: MainSaveInput): SaveBuildResult => {
       const rec = originals?.get(r);
       return !!rec && 'PRC_RPSN' in rec;
     });
+    const curChanged = isCurrencyChanged(bundle, originals);
     const locRec = originals?.get(loc);
     const changedLocKeys = locRec ? Object.keys(locRec).filter(k => WEEK_KEY_RE.test(k) || MONTH_KEY_RE.test(k)) : [];
-    if (!prcChanged && changedLocKeys.length === 0) continue;
+    if (!prcChanged && !curChanged && changedLocKeys.length === 0) continue;
 
     if (prcRpsn !== PRC_RPSN.YES) {
-      if (prcChanged && !writeMarker(collector, bundle, loc, prcRpsn, originals)) {
+      if (curChanged) {
+        if (!writeCurrencyWeeksN(writer, loc, monday)) {
+          return { ok: false, error: 'NO_PRICE', row: loc };
+        }
+      } else if (prcChanged && !writeMarker(collector, bundle, loc, prcRpsn, originals)) {
         return { ok: false, error: 'NO_LOC_INPUT', row: loc };
       }
       continue;
@@ -232,17 +281,27 @@ export const buildMainSaveEntries = (input: MainSaveInput): SaveBuildResult => {
         written = writeLocWeek(writer, week, value, CRUD_TYPE.MODIFY) || written;
       }
     }
-    if (prcChanged) {
+    if (prcChanged || curChanged) {
       for (const key of orderPeriodKeys(Object.keys(loc)).filter(k => WEEK_KEY_RE.test(k))) {
         if (isPastPeriodKey(key, monday)) continue;
         const value = numberOf(loc[key]);
         if (value === null) continue;
         written = writeLocWeek(writer, key.slice(2), value, CRUD_TYPE.MODIFY) || written;
       }
-      if (!written && !writeMarker(collector, bundle, loc, prcRpsn, originals)) {
+      // Currency 를 바꾼 Y 묶음은 표식 행으로 대신하지 않는다 — 받은 주만 통화가 바뀌므로 위 루프가 전부다.
+      if (!written && (curChanged || !writeMarker(collector, bundle, loc, prcRpsn, originals))) {
         // N → Y 로 바꿨는데 가격이 하나도 없다 — 신규 Y 와 같은 경우다.
         return { ok: false, error: 'NO_PRICE', row: loc };
       }
+    }
+    // Currency 를 바꾼 묶음은 새 통화 키의 수정(M) 행이 있어야 패키지가 통화 변경으로 처리한다.
+    //   보낸 것이 삭제(D — LOC 0)뿐이면 옛 통화 행이 그대로 남으므로 막는다.
+    if (curChanged) {
+      const key = bundleKeyOf(loc);
+      const hasModify = collector
+        .list()
+        .some(e => e.flag === CRUD_TYPE.MODIFY && bundleKeyOf(e.keyRow) === key);
+      if (!hasModify) return { ok: false, error: 'NO_PRICE', row: loc };
     }
   }
   return { ok: true, entries: collector.list() };

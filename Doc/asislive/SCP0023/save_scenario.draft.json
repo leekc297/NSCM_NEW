@@ -1,0 +1,59 @@
+{
+ "id": "SCP0023",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0023_SAVE_OUTSOURCING_CAPA",
+   "save_sp": "SCP0023_SAVE_OUTSOURCING_CAPA",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_OUTSOURCING_CAPA",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "division_id",
+    "PLANT_SITE_ID": "scm_site_id",
+    "ITEM_ID": "item_id"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "daily_capa_qty",
+    "db_col": "DAILY_CAPA_QTY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_OUTSOURCING_CAPA_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Outsourcing Capacity",
+   "writes": {
+    "SCP_MST_OUTSOURCING_CAPA": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0023_SAVE_OUTSOURCING_CAPA → SP SCP0023_SAVE_OUTSOURCING_CAPA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_OUTSOURCING_CAPA_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "match_basis": {
+    "PLANT_SITE_ID": "PLANT_SITE_ID ← @p_plant_site_id(SP 114줄(@v_plant_site_id AS PLANT_SITE_ID) ← 86줄) ← 그리드 열 SCM_SITE_ID(SCP0023_OutsourcingCapacity.cs:281)"
+   },
+   "edit_candidates": [
+    {
+     "col": "daily_capa_qty",
+     "db_col": "DAILY_CAPA_QTY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

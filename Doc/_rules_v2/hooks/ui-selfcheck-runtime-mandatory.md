@@ -43,7 +43,7 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
 | E 조회 | FE 실사용 버튼 + 부가 배선 × division | 500/오류 = FAIL, 조회전용 division EDIT_FLAG≠'N' = FAIL |
 | F 저장 | SAVE 왕복(+1→재조회→원복) + 조회전용 거부 | 미반영/미원복 = FAIL |
 | G 모달 | **모달 시트 API 전수**(§4) | 오류/0커서 = FAIL |
-| H **권한별** | **Division×역할 로스터 전 계정**(§5) | auth 목록 ↔ 실호출 불일치 = FAIL |
+| H **권한별** | **Division×역할 로스터 전 계정**(§5) (11-13 정정: 사용자 지정 화면만 — 기본은 계정 1개) | auth 목록 ↔ 실호출 불일치 = FAIL |
 
 ⚠️ 함정 4종(전부 실측 2026-08-07):
 1. 로그인 Content-Type 은 정확히 `application/json` (`equals` 비교 — charset 붙이면 실패)
@@ -71,7 +71,7 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
 
 | # | 축 | 확인 내용 | 근거 형식 |
 |---|---|---|---|
-| 1 | **DESIGN** | AS-IS 레이아웃 1:1 — **조회조건 항목 누락 0**(AS-IS 에 있는 조건은 전부 존재) · 표준 컴포넌트 사용(Division/Period/일자/년월 = `@master/searchFields` 카탈로그, raw InputField 금지) · 36px · P9 footer · No. 코너 · 3색 · 아이콘 순서 | 파일:라인 + AS-IS `.cs`/캡쳐 대조 |
+| 1 | **DESIGN** | AS-IS 레이아웃 1:1 — **조회조건 항목 누락 0**(AS-IS 에 있는 조건은 전부 존재 — 2026-11-13 정정: SCP·SSP 화면은 조회조건 기준표 USE 항목 기준이라 기준표가 제외·이동한 AS-IS 조건 부재는 결함 아님(NA · CR-071), 공용 검색 모달은 모달이 받는 인자만 연동(CR-096)) · 표준 컴포넌트 사용(Division/Period/일자/년월 = `@master/searchFields` 카탈로그, raw InputField 금지) · 36px · P9 footer · No. 코너 · 3색 · 아이콘 순서 | 파일:라인 + AS-IS `.cs`/캡쳐 대조 |
 | 2 | **기능(OPERATION)** | AS-IS 버튼·액션 **전수**를 **각각 1회 이상 실행**. 분기(Type/모드/division)가 있으면 **분기별로** 실행 | 실행 로그(HTTP status + 결과) |
 | 3 | **VALIDATION** | AS-IS 검증 메시지 전수(MSG ID·발동 조건) ↔ TO-BE 1:1, **실제 발동 확인** | MSG ID + 발동 지점 파일:라인 |
 | 4 | **EXPRESSION** | 잠금/활성·표시조건·자동세팅(LockRange·SetValue·ControlDisplay 계열) 1:1 | AS-IS 라인 + TO-BE 판정 함수 |
@@ -85,7 +85,7 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
   모달도 **그대로** 쓴다. 모달만 다른 판정식(그룹명 하드코딩, prop 로 내려받은 boolean 등)을 쓰면 위반.
 - ⛔ **그룹명 하드코딩 금지** (`'ADMIN'`, `'DM ADMIN'` 문자열 비교). AS-IS 가 그룹명을 하드코딩했더라도
   TO-BE 이관 vehicle 은 **버튼 권한 메타**(`SCM_ADM_MNU_BTN_M` + `SCM_ADM_USER_GR_BTN_MPG_M`)다.
-  ⇒ AS-IS 의 "ADMIN·DM ADMIN 만 Edit/Insert/Save" 는 **그 버튼 코드를 해당 그룹에만 부여**하는 메타로 이관한다.
+  ⇒ AS-IS 의 "ADMIN·DM ADMIN 만 Edit/Insert/Save" 는 **그 버튼 코드를 해당 그룹에만 부여**하는 메타로 이관한다. (11-13 정정: Edit 은 제외 — TO-BE 는 편집 버튼이 없고 조회 즉시 편집(CR-093·CR-103). 버튼 코드 이관 대상은 Insert/Save 등 TO-BE 에 있는 버튼)
 - ⛔ **`session.groupId` 로 판정 금지** — 유령 필드다. 그룹 판정이 불가피하면 **보유 권한그룹 합집합**
   (AUTHUNION, 2026-08-04 확정)만 사용한다. [[feedback_session_groupid_ghost_field]]
 - ⚠ **AS-IS 팝업의 `IsPopup = true` 를 "권한 없음"으로 오독 금지.** AS-IS 에서 이 플래그는
@@ -115,6 +115,7 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
 ## §5. ⭐ 권한별(Division×역할) 테스트 의무 — 공식 로스터 (사용자 지정 2026-08-07)
 
 러너 `ROSTER` 상수에 등재된 **Division별 5역할 계정 전수**로 실행한다(기본 `--users` 값):
+(2026-11-13 정정: 전 화면 로스터 전수 의무 → **검증 기본 = ADMIN/PLANNER 계정 1개**(single, 2026-10-27 — `--users <계정>` 로 지정). 아래 로스터 전수(권한×Division)는 **사용자가 지정한 화면만** 실행한다. 러너의 `--users` 기본값 자체는 아직 로스터 전체다 — `_artifacts/_diagnostics/ui_http_e2e.py` `DEFAULT_USERS`)
 
 | Division | DM Admin | DM Planner | DM Planner(W/S) | DM Viewer | SCP Planner |
 |---|---|---|---|---|---|
@@ -140,7 +141,7 @@ python _artifacts/_diagnostics/ui_http_e2e.py --menu {MNU_ID}
                   CRUD 왕복: _apply_corporate/CRUD_ROUNDTRIP_{MNU}_{날짜}.txt
                   잔여(사용자 최종 테스트): 화면 렌더링·조작감·레이아웃
 ```
-위 3 산출물 경로가 없는 완료 보고 = **미완료 간주**.
+위 3 산출물 경로가 없는 완료 보고 = **미완료 간주**. (2026-11-14 정정: 2026-10-30 부터 화면 대조와 보완 기준은 CheckList. 완료 근거는 `Doc/verify/<ID>/fixlist.csv` 의 조치 필요 0행. E2E 는 CheckList 안에서만 실행(2026-11-04). 이 3 산출물 요구는 그 전 절차. `ui_gate_runner.py` 와 `ui_http_e2e.py` 는 현행 체인에서 부르지 않음)
 
 관련: #124(선행 분석 md 우산) · screen-completion-gate(8 게이트·G6) · asis-coverage-check(EID·CRUD·모달 매트릭스) · #104(클라우드/파급 SP 는 여전히 실행 게이트) · [[feedback_local_save_sp_direct_execution]]
 

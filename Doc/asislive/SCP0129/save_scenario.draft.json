@@ -1,0 +1,45 @@
+{
+ "id": "SCP0129",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0129_SAVE_DEMAND_EXCEPTION",
+   "save_sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_OPMZ_DEMAND_EXCEPTION",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID",
+    "ITEM_ID",
+    "STAGE",
+    "FROM_YYYYMMDD",
+    "TO_YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "ITEM_ID": "ITEM_ID",
+    "STAGE": "STAGE",
+    "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+    "TO_YYYYMMDD": "TO_YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/DEMAND EXCEPTION",
+   "writes": {
+    "SCP_OPMZ_DEMAND_EXCEPTION": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0129_SAVE_DEMAND_EXCEPTION → SP SCP0129_SAVE_DEMAND_EXCEPTION 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

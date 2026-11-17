@@ -46,18 +46,24 @@ const toMultiArray = (picked: unknown): string[] =>
 //   (design 02 §3 "필터방식으로 잠정 추정" — 재조회방식으로 확정되면 comboId 파라미터화가 필요).
 //   Warehouse 는 전용 콤보/lookup 원천이 DB에 없어(design 02 §2.6 확인 필요) 옵션 없이 자유 입력
 //   텍스트로만 남긴다 — 추측으로 원천을 만들지 않는다(anti-simplification §1).
+//   정렬: SCM Site/Plan Group/WH Name 콤보는 sortBy 를 주지 않아 서버 ORDER BY(FN_ASIS_SORT_KEY=
+//   NLSSORT 이진) 순서를 그대로 쓴다. AS-IS 는 clbSite/clbPlanGroup/clbWarehouse 를 setListBox 로
+//   DB 순서 그대로 채우고 클라 재정렬이 없으므로(SCP0133_WarehouseCapacity.cs), sortBy='label'
+//   (JS localeCompare numeric)로 재정렬하면 AS-IS/그리드 셀 콤보와 순서가 어긋난다
+//   (예: E129A↔E62B, LV15AB↔LV9.8A). 2026-11-11 사용자 지시로 sortBy 제거.
 export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: Props) => {
   const { t } = useTranslation();
 
   const sc = useWarehouseCapacityStore(s => s.searchCondition);
   const set = useWarehouseCapacityStore(s => s.setSearchCondition);
   const setDivision = useWarehouseCapacityStore(s => s.setDivision);
+  const setPlanGroup = useWarehouseCapacityStore(s => s.setPlanGroup);
   const openSearchArea = useWarehouseCapacityStore(s => s.openSearchArea);
 
   const tabId = useTabid();
 
-  const [divisions, planGroups, sites, warehouses] = useTabComboQueries({
-    filters: [COMBO.DIVISION, COMBO.PLAN_GROUP, COMBO.SITE, COMBO.WAREHOUSE],
+  const [divisions, planGroups, planGroupsItemMapping, sites, warehouses] = useTabComboQueries({
+    filters: [COMBO.DIVISION, COMBO.PLAN_GROUP, COMBO.PLAN_GROUP_ITEM_MAPPING, COMBO.SITE, COMBO.WAREHOUSE],
   });
 
   // Stage — lookup master(OPMZ_STAGE_CD, design 02 §2.4 강한 후보·확인 필요). SEGMENT1=division,
@@ -78,13 +84,18 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
 
   // PlanGroup — PlanGroup_SCP_ALL 은 전량 조회 + DIVISION_ID 컬럼 반환(design 02 §2.3) → 클라에서
   //   선택된 division 으로 좁힌다(AS-IS DBUtils.Filter 재현, filterCalls#1).
+  //   사용자 보고(2026-11-09 QA I-03): AS-IS 는 활성 시트에 따라 Plan Group 원천 자체가 다르다
+  //   (spdMain_ActiveSheetChanged .cs:1397/1412) — Warehouse Capacity 탭은 전체 마스터(PLAN_GROUP),
+  //   Warehouse Item Mapping 탭은 창고용량에 실제 등록된 Plan Group 만(PLAN_GROUP_ITEM_MAPPING,
+  //   09_itemmap_plan_group_registered_source.sql). 두 콤보 다 DIVISION_ID 컬럼을 반환하므로 선택
+  //   division 으로 동일하게 클라 필터한다.
   const planGroupOptions = useMemo(() => {
-    const rows = (planGroups ?? []);
+    const rows = activeSheet === 1 ? (planGroupsItemMapping ?? []) : (planGroups ?? []);
     const filtered = sc.divisionId
       ? rows.filter(r => str(r.DIVISION_ID) === sc.divisionId)
       : rows;
     return toOptions(filtered);
-  }, [planGroups, sc.divisionId]);
+  }, [planGroups, planGroupsItemMapping, activeSheet, sc.divisionId]);
 
   // Site — 'Site' 콤보가 DIVISION_ID 컬럼을 전량 반환(ora.py SQL 실측, @token 없음) → 선택
   //   division 으로 클라 필터. 단 AS-IS RefreshSiteByDivision 의 EE 분기(EE→81/40/82, EE_*→81_*)를
@@ -125,16 +136,13 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
   const validOptions = useMemo(() => toOptions(validRows), [validRows]);
 
   // Warehouse(Name) — AS-IS RefreshWarehouse(.cs:384-407) 재현: 'Warehose' 콤보(전량 반환)를
-  //   division = 선택 division(EE 확장 없음 — 저장테이블이 'EE' 를 그대로 보유) + plan group 선택 시
-  //   OPMZ_PLAN_GR_ID 포함으로 클라 필터. 같은 WH_NM 이 plan group/site/stage 조합마다 중복 행으로
-  //   오므로 value(WH_NM) 기준 중복 제거(AS-IS 체크리스트는 중복을 그대로 노출하나 다중선택 콤보에선
-  //   중복 value 가 불안정하므로 dedup).
+  //   division = 선택 division(EE 확장 없음 — 저장테이블이 'EE' 를 그대로 보유)으로만 클라 필터.
+  //   사용자 보고(2026-11-09, QA I-02): GSCM 은 Division 만 적용하고 Plan Group 은 WH Name cascade
+  //   대상에서 제외한다(NSCM 이 Plan Group 까지 추가로 좁혀 과잉 cascading 이었음) — Plan Group 조건
+  //   제거. 같은 WH_NM 이 plan group/site/stage 조합마다 중복 행으로 오므로 value(WH_NM) 기준 중복
+  //   제거(AS-IS 체크리스트는 중복을 그대로 노출하나 다중선택 콤보에선 중복 value 가 불안정하므로 dedup).
   const warehouseOptions = useMemo(() => {
-    const rows = (warehouses ?? []).filter(
-      r =>
-        str(r.DIVISION_ID) === sc.divisionId &&
-        (sc.planGroupIds.length === 0 || sc.planGroupIds.includes(str(r.OPMZ_PLAN_GR_ID)))
-    );
+    const rows = (warehouses ?? []).filter(r => str(r.DIVISION_ID) === sc.divisionId);
     const opts = toOptions(rows);
     const seen = new Set<string>();
     return opts.filter(o => {
@@ -142,7 +150,7 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
       seen.add(o.value);
       return true;
     });
-  }, [warehouses, sc.divisionId, sc.planGroupIds]);
+  }, [warehouses, sc.divisionId]);
 
   return (
     <SearchArea
@@ -193,7 +201,6 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
                   allOption
                   useClearIcon
                   limitTags={1}
-                  sortBy='label'
                   value={toMultiValue(sc.siteIds.join(','))}
                   options={siteOptions}
                   onChange={(_, picked) => set({ siteIds: toMultiArray(picked) })}
@@ -251,10 +258,17 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
                   allOption
                   useClearIcon
                   limitTags={1}
-                  sortBy='label'
                   value={toMultiValue(sc.planGroupIds.join(','))}
                   options={planGroupOptions}
-                  onChange={(_, picked) => set({ planGroupIds: toMultiArray(picked) })}
+                  onChange={(_, picked) => {
+                    // Plan Group 변경 = SCM Site 초기화 + 그리드 Clear(store setPlanGroup, 사용자
+                    //   보고 2026-11-09 QA I-01 — GSCM 정합). Division 변경과 동형으로 편집중(dirty)이면
+                    //   MSG00704 confirm 후에만 실행하고, 취소 시 controlled 콤보가 이전 선택으로 복귀.
+                    const next = toMultiArray(picked);
+                    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                      if (ok) setPlanGroup(next);
+                    });
+                  }}
                 />
               )}
             />
@@ -277,7 +291,6 @@ export const WarehouseCapacityForm = ({ onSearch, onItemSearch, activeSheet }: P
                       allOption
                       useClearIcon
                       limitTags={1}
-                      sortBy='label'
                       value={toMultiValue(sc.warehouses.join(','))}
                       options={warehouseOptions}
                       onChange={(_, picked) => set({ warehouses: toMultiArray(picked) })}

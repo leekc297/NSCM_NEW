@@ -1,0 +1,426 @@
+# -*- coding: utf-8 -*-
+"""save_diff.py — EN-02 ③ 저장 SP 실행 대조 (2026-11-11 · 플랜 '추측 대신 실행' M1 · 사용자 승인 2026-11-11 "AS-IS DEV 저장 SP 트랜잭션+ROLLBACK 대조 허용")
+
+화면이 실제로 보낸 저장 본문(사내 호출 로그 sqllog_calls.json)으로 AS-IS 저장 SP 와 TO-BE 저장 PROC 을 각각 **되돌릴 트랜잭션 안에서** 실행하고,
+그 트랜잭션 안에서 바뀐 행을 읽어 양쪽을 대조한 뒤 ROLLBACK 한다. 끝나고 양쪽에 남은 행이 0 인지 다시 센다(잔여 증명).
+
+대상   Doc/verify/_save_diff_targets.csv 의 TARGET_ROLLBACK 만(연계 표·메일·TO-BE COMMIT 경로는 제외 목록 그대로 제외)
+안전   · 기본은 계획만 출력(--run 이 있어야 실행)
+       · AS-IS 원문(피호출 포함)의 COMMIT 수 > BEGIN TRAN 수이면 제외(바깥 트랜잭션까지 확정될 수 있음)
+       · AS-IS: 자동 확정 끔 + 바깥 BEGIN TRAN 2겹 → EXEC → @@TRANCOUNT 확인 → 측정 → 전부 ROLLBACK · TO-BE: 실행 → 측정 → ROLLBACK
+       · 실행 전 기준 수(같은 조건으로 미리 센 수)와 ROLLBACK 뒤 수가 다르면 RESIDUE 로 즉시 중단(exit 4)
+측정   AS-IS 원문의 DML 대상 표마다: 전후 COUNT(*) · 감사 컬럼(LAST_UPDATE_DATE ≥ 실행 직전 시각)으로 이번에 쓴 행(최대 200행)
+       감사 컬럼이 없는 표는 행 수 변화만 잰다. 로그 표(_LOG·SYS_LOG)는 대조에서 빼고 수만 적는다.
+판정   PASS       표마다 행 수 변화가 같고, 쓴 행의 공통 컬럼 값(감사 컬럼 제외)이 같다
+       DIFF       같은 조건에서 행 수 변화 또는 값이 다르다
+       ROWS_ONLY  한쪽만 0행을 썼다(= 두 DB 의 기존 데이터가 달라 같은 본문이 다른 일을 함 · 판정필요)
+       SKIP       인자 미해결 · 저장 본문 포착 없음 · 안전 조건 미충족(사유 명시) — 통과로 세지 않는다
+       ERR        실행 오류(양쪽 오류 문구를 그대로 적는다)
+
+  python tools/Harness/verify/save_diff.py <MENU_ID>            계획만(무엇을 어떤 본문으로 실행할지 · 제외 사유)
+  python tools/Harness/verify/save_diff.py <MENU_ID> --run [--max 2]   실행(PROC 마다 서로 다른 본문 최근 N건)
+  python tools/Harness/verify/save_diff.py --selftest
+출력: Doc/verify/<ID>/save_diff/summary.csv · <PROC>__<n>.md · 종료코드 0 / 2(DIFF·ERR 있음) / 3(실행 0건) / 4(RESIDUE — 잔여 발견)
+"""
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
+csv.field_size_limit(10 ** 8)
+AUDIT = {'CREATION_DATE', 'LAST_UPDATE_DATE', 'CREATED_BY', 'LAST_UPDATED_BY', 'CREATE_DATE', 'UPDATE_DATE'}
+RX_LOG = re.compile(r'(_LOG$|SYS_LOG|_LOG_)', re.I)
+COLS = ['call_no', 'asis_sp', 'tobe_proc', 'log_seq', 'log_at', 'verdict', 'note', 'tables', 'asis_effect', 'tobe_effect', 'asis_msg', 'tobe_msg', 'residue', 'md', 'measured_at']
+
+
+def rd(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def strip_comments(t):
+    t = re.sub(r'/\*.*?\*/', ' ', t, flags=re.S)
+    return re.sub(r'--[^\n]*', ' ', t)
+
+
+def tran_balance(text):
+    """(BEGIN TRAN 수, COMMIT 수) — 주석 제외. COMMIT 이 더 많으면 바깥 트랜잭션이 확정될 수 있다"""
+    b = strip_comments(text or '')
+    begins = len(re.findall(r'\bBEGIN\s+TRAN(?:SACTION)?\b', b, re.I))
+    commits = len(re.findall(r'\bCOMMIT\b(?!\s*;?\s*--)', b, re.I))
+    return begins, commits
+
+
+def norm_val(v):
+    if v is None:
+        return ''
+    s = str(v).strip()
+    if re.fullmatch(r'-?\d+\.0+', s):
+        s = s.split('.')[0]
+    if re.fullmatch(r'-?\d+\.\d*?0+', s):
+        s = s.rstrip('0').rstrip('.')
+    return '' if s in ('-', '/') else s
+
+
+def effect_compare(a, t):
+    """a·t = {table: {'delta': int|None, 'rows': [dict(col→val)]|None, 'cols': [..]}} → (verdict, 설명 목록)"""
+    notes, worst = [], 'PASS'
+    rank = {'PASS': 0, 'ROWS_ONLY': 1, 'DIFF': 2}
+
+    def bump(v):
+        nonlocal worst
+        if rank[v] > rank[worst]:
+            worst = v
+    for tb in sorted(set(a) | set(t)):
+        if RX_LOG.search(tb):
+            notes.append(f"{tb}: 로그 표 — 대조 제외(행 수 변화 AS-IS {a.get(tb, {}).get('delta')} / TO-BE {t.get(tb, {}).get('delta')})")
+            continue
+        ea, et = a.get(tb), t.get(tb)
+        if ea is None or et is None:
+            notes.append(f"{tb}: {'TO-BE' if et is None else 'AS-IS'} 에 표 없음 — 대조 불가(미측정)")
+            bump('ROWS_ONLY')
+            continue
+        da, dt = ea.get('delta'), et.get('delta')
+        ra, rt = ea.get('rows'), et.get('rows')
+        na = len(ra) if ra is not None else None
+        nt = len(rt) if rt is not None else None
+        if da is not None and dt is not None and da != dt:
+            if (na == 0) != (nt == 0) and na is not None and nt is not None:
+                notes.append(f"{tb}: 행 수 변화 AS-IS {da:+d} / TO-BE {dt:+d} · 쓴 행 AS-IS {na} / TO-BE {nt} — 한쪽만 0행(기존 데이터 차이 가능)")
+                bump('ROWS_ONLY')
+            else:
+                notes.append(f"{tb}: 행 수 변화 다름 AS-IS {da:+d} / TO-BE {dt:+d}")
+                bump('DIFF')
+            continue
+        if ra is None or rt is None:
+            notes.append(f"{tb}: 행 수 변화 같음({da}) · 감사 컬럼 없음 — 값 대조 미측정")
+            continue
+        if (na == 0) != (nt == 0):
+            notes.append(f"{tb}: 쓴 행 AS-IS {na} / TO-BE {nt} — 한쪽만 0행(기존 데이터 차이 가능)")
+            bump('ROWS_ONLY')
+            continue
+        common = [c for c in ea.get('cols', []) if c in set(et.get('cols', [])) and c not in AUDIT]
+        ka = sorted(tuple(norm_val(r.get(c)) for c in common) for r in ra)
+        kt = sorted(tuple(norm_val(r.get(c)) for c in common) for r in rt)
+        if ka == kt:
+            notes.append(f"{tb}: 쓴 행 {na}행 · 공통 컬럼 {len(common)}개 값 일치 · 행 수 변화 {da}")
+        else:
+            only_a = [x for x in ka if x not in kt][:2]
+            only_t = [x for x in kt if x not in ka][:2]
+            dc = []
+            if len(ka) == len(kt):
+                for x, y in zip(ka, kt):
+                    dc += [common[i] for i in range(len(common)) if x[i] != y[i]]
+            notes.append(f"{tb}: 쓴 행 값 다름 AS-IS {na} / TO-BE {nt}행 · 다른 컬럼 {sorted(set(dc))[:8]} · AS-IS 예 {only_a} / TO-BE 예 {only_t}"[:900])
+            bump('DIFF')
+    return worst, notes
+
+
+def selftest():
+    st = {'ok': 0, 'n': 0}
+
+    def t(name, cond):
+        st['n'] += 1
+        st['ok'] += bool(cond)
+        print(('PASS ' if cond else 'FAIL ') + name)
+    t('BEGIN TRAN 1 · COMMIT 1 = 균형', tran_balance("BEGIN TRAN; UPDATE T SET A=1; COMMIT TRAN;") == (1, 1))
+    t('주석 안 COMMIT 은 세지 않는다', tran_balance("BEGIN TRAN; -- COMMIT WORK;\n/* COMMIT */ COMMIT TRAN") == (1, 1))
+    t('BEGIN 없는 COMMIT(변이) = 불균형 검출', tran_balance("UPDATE T SET A=1; COMMIT;")[1] > tran_balance("UPDATE T SET A=1; COMMIT;")[0])
+    R = lambda **k: dict(k)
+    a = {'T1': {'delta': 0, 'rows': [R(K='1', V='10.0', LAST_UPDATE_DATE='x')], 'cols': ['K', 'V', 'LAST_UPDATE_DATE']}}
+    b = {'T1': {'delta': 0, 'rows': [R(K='1', V='10', LAST_UPDATE_DATE='y')], 'cols': ['K', 'V', 'LAST_UPDATE_DATE']}}
+    t('같은 행·감사 컬럼만 다름 → PASS(숫자 표기 10.0=10)', effect_compare(a, b)[0] == 'PASS')
+    b2 = {'T1': {'delta': 0, 'rows': [R(K='1', V='11')], 'cols': ['K', 'V']}}
+    t('값이 다름(변이) → DIFF', effect_compare(a, b2)[0] == 'DIFF')
+    b3 = {'T1': {'delta': 1, 'rows': [R(K='1', V='10')], 'cols': ['K', 'V']}}
+    t('행 수 변화 다름(변이) → DIFF', effect_compare(a, b3)[0] == 'DIFF')
+    b4 = {'T1': {'delta': 0, 'rows': [], 'cols': ['K', 'V']}}
+    t('한쪽만 0행 → ROWS_ONLY(통과 아님)', effect_compare(a, b4)[0] == 'ROWS_ONLY')
+    t('한쪽에 표 없음 → ROWS_ONLY(미측정 표시)', effect_compare(a, {})[0] == 'ROWS_ONLY')
+    lg = {'SCM_SYS_LOG_BATCH': {'delta': 1, 'rows': None, 'cols': []}}
+    t('로그 표 차이는 판정에서 제외', effect_compare(dict(a, **lg), dict(b, SCM_SYS_LOG_BATCH={'delta': 0, 'rows': None, 'cols': []}))[0] == 'PASS')
+    na = {'T1': {'delta': 2, 'rows': None, 'cols': []}}
+    v, n = effect_compare(na, {'T1': {'delta': 2, 'rows': None, 'cols': []}})
+    t('감사 컬럼 없는 표 = 행 수만 같으면 PASS 이되 값 미측정 표기', v == 'PASS' and '미측정' in n[0])
+    t('숫자·센티널 정규화', norm_val('12.50') == '12.5' and norm_val('-') == '' and norm_val(None) == '')
+    print(f"{st['ok']}/{st['n']}")
+    return 0 if st['ok'] == st['n'] else 1
+
+
+# ───────────────────────── 실행부 ─────────────────────────
+def asis_cols(cur, tb):
+    cur.execute("SELECT UPPER(COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ORDER BY ORDINAL_POSITION", tb)
+    return [r[0] for r in cur.fetchall()]
+
+
+def tobe_cols(cur, tb):
+    cur.execute("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = 'SCM_MGR' AND TABLE_NAME = :1 ORDER BY COLUMN_ID", [tb])
+    return [r[0] for r in cur.fetchall()]
+
+
+def measure(cur, side, tb, cols, t0, users, fetch_rows):
+    """(count, touched_n, rows|None) — side 'asis'|'tobe'. cols 가 비면 표 없음 → None"""
+    if not cols:
+        return None
+    q = f"[{tb}]" if side == 'asis' else f"SCM_MGR.{tb}"
+    cur.execute(f"SELECT COUNT(*) FROM {q}")
+    cnt = cur.fetchone()[0]
+    if 'LAST_UPDATE_DATE' not in cols:
+        return cnt, None, None
+    w = "LAST_UPDATE_DATE >= ?" if side == 'asis' else "LAST_UPDATE_DATE >= :t0"
+    args = [t0]
+    us = [u for u in users if u]
+    if side == 'tobe' and 'LAST_UPDATED_BY' in cols and us:
+        w += " AND LAST_UPDATED_BY IN (" + ', '.join(f":u{i}" for i in range(len(us))) + ")"
+        args += us
+    cur.execute(f"SELECT COUNT(*) FROM {q} WHERE {w}", args)
+    n = cur.fetchone()[0]
+    rows = None
+    if fetch_rows:
+        top = "TOP 200 " if side == 'asis' else ''
+        tail = '' if side == 'asis' else ' FETCH FIRST 200 ROWS ONLY'
+        cur.execute(f"SELECT {top}* FROM {q} WHERE {w}{tail}", args)
+        names = [d[0].upper() for d in cur.description]
+        rows = [dict(zip(names, r)) for r in cur.fetchall()]
+    return cnt, n, rows
+
+
+def run_asis(cx, sp, aps, tables, users):
+    """반환 {'effect': {...}, 'msg': str, 'err': str, 'residue': {tb: n}, 'trancount': n}"""
+    out = {'effect': {}, 'msg': '', 'err': '', 'residue': {}, 'trancount': None}
+    cx.autocommit = False
+    cur = cx.cursor()
+    cols = {tb: asis_cols(cur, tb) for tb in tables}
+    cur.execute("SELECT DATEADD(second, -1, SYSDATETIME())")
+    t0 = cur.fetchone()[0]
+    base = {tb: measure(cur, 'asis', tb, cols[tb], t0, users, False) for tb in tables}
+    cx.rollback()
+    try:
+        cur.execute("BEGIN TRAN")
+        cur.execute("BEGIN TRAN")
+        ps = list(aps.items())
+        try:
+            cur.execute(f"EXEC dbo.[{sp}] " + ', '.join(f'@{k}=?' for k, _ in ps), [v for _, v in ps])
+            msgs = []
+            while True:
+                if cur.description:
+                    names = [d[0] for d in cur.description]
+                    for r in cur.fetchmany(5):
+                        msgs.append(dict(zip(names, [str(x)[:120] for x in r])))
+                if not cur.nextset():
+                    break
+            out['msg'] = json.dumps(msgs, ensure_ascii=False)[:600]
+        except Exception as e:  # noqa: BLE001 — SP 오류도 결과다(문구 그대로)
+            out['err'] = str(e).splitlines()[0][:400]
+        cur = cx.cursor()
+        try:
+            cur.execute("SELECT @@TRANCOUNT")
+            out['trancount'] = cur.fetchone()[0]
+        except Exception as e:  # noqa: BLE001
+            out['err'] = (out['err'] + ' · @@TRANCOUNT 조회 실패 ' + str(e)[:120]).strip(' ·')
+        if not out['err']:
+            for tb in tables:
+                m = measure(cur, 'asis', tb, cols[tb], t0, users, True)
+                b = base[tb]
+                if m is None or b is None:
+                    continue
+                out['effect'][tb] = {'delta': m[0] - b[0], 'rows': m[2], 'cols': cols[tb], 'base_touched': b[1]}
+    finally:
+        try:
+            cx.cursor().execute("WHILE @@TRANCOUNT > 0 ROLLBACK TRAN")
+        except Exception:  # noqa: BLE001
+            pass
+        cx.rollback()
+    cur = cx.cursor()
+    for tb in tables:
+        m = measure(cur, 'asis', tb, cols[tb], t0, users, False)
+        b = base[tb]
+        if m is not None and b is not None and (m[0] != b[0] or (m[1] or 0) != (b[1] or 0)):
+            out['residue'][tb] = f"행 수 {b[0]}→{m[0]} · 이번 시각 이후 쓴 행 {b[1]}→{m[1]}"
+    cx.rollback()
+    return out
+
+
+def run_tobe(cx, proc, body, tables, users, golden, bind):
+    out = {'effect': {}, 'msg': '', 'err': '', 'residue': {}}
+    cur = cx.cursor()
+    cols = {tb: tobe_cols(cur, tb) for tb in tables}
+    cur.execute("SELECT SYSDATE - 1/86400 FROM DUAL")
+    t0 = cur.fetchone()[0]
+    base = {tb: measure(cur, 'tobe', tb, cols[tb], t0, users, False) for tb in tables}
+    cx.rollback()
+    try:
+        try:
+            sets, missing = golden.run_tobe(cx, proc, bind(cx, proc, body))
+            msgs = [{'cursor': s[0], 'rows': [dict(zip(s[1], [str(x)[:120] for x in r])) for r in s[2][:5]]} for s in sets]
+            out['msg'] = (json.dumps(msgs, ensure_ascii=False)[:600] + (f" · NULL 전달 인자 {missing}" if missing else ''))
+        except Exception as e:  # noqa: BLE001
+            out['err'] = str(e).splitlines()[0][:400]
+        if not out['err']:
+            cur = cx.cursor()
+            for tb in tables:
+                m = measure(cur, 'tobe', tb, cols[tb], t0, users, True)
+                b = base[tb]
+                if m is None or b is None:
+                    continue
+                out['effect'][tb] = {'delta': m[0] - b[0], 'rows': m[2], 'cols': cols[tb], 'base_touched': b[1]}
+    finally:
+        cx.rollback()
+    cur = cx.cursor()
+    for tb in tables:
+        m = measure(cur, 'tobe', tb, cols[tb], t0, users, False)
+        b = base[tb]
+        if m is not None and b is not None and (m[0] != b[0] or (m[1] or 0) != (b[1] or 0)):
+            out['residue'][tb] = f"행 수 {b[0]}→{m[0]} · 이번 시각 이후 쓴 행 {b[1]}→{m[1]}"
+    cx.rollback()
+    return out
+
+
+def main():
+    a = sys.argv[1:]
+    if '--selftest' in a:
+        return selftest()
+    if not a or a[0].startswith('--'):
+        print(__doc__)
+        return 3
+    mid = a[0].upper().strip('/')
+    if not re.fullmatch(r'[A-Z0-9_]+', mid):
+        print(f'[save_diff] 화면 ID 형식 아님: {mid}')
+        return 3
+    do_run = '--run' in a
+    mx = int(a[a.index('--max') + 1]) if '--max' in a else 2
+    import save_diff_targets as sdt
+    import diff_verify as dv
+    targets = [r for r in rd(os.path.join(ROOT, 'Doc', 'verify', '_save_diff_targets.csv')) if r['menu_id'].upper() == mid]
+    if not targets:
+        print(f'[save_diff] {mid}: 대상 목록에 이 화면 없음 — save_diff_targets.py 먼저')
+        return 3
+    try:
+        calls = [c for c in json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'sqllog_calls.json'), encoding='utf-8')).get('calls', []) if c.get('kind') == 'SAVE' and c.get('params_parsed')]
+    except (OSError, ValueError):
+        calls = []
+    pmap = {}
+    for r in rd(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'param_map.csv')):
+        pmap.setdefault((r.get('tobe_proc') or '').upper(), []).append(r)
+    plan = []
+    for tg in targets:
+        proc, sp = tg['tobe_proc'], tg['asis_sp']
+        if tg['decision'] != 'TARGET_ROLLBACK':
+            plan.append((tg, None, f"제외 — {tg['decision']}: {tg['reason'][:140]}"))
+            continue
+        sc = sdt.scan(sp)
+        texts = [sdt.default_reader(x) or '' for x in [sp] + list(dict.fromkeys(sc['callees']))]
+        bg = sum(tran_balance(x)[0] for x in texts)
+        cm = sum(tran_balance(x)[1] for x in texts)
+        if cm > bg:
+            plan.append((tg, None, f"제외 — AS-IS 원문 COMMIT {cm} > BEGIN TRAN {bg}(바깥 트랜잭션 확정 위험)"))
+            continue
+        mine, seen = [], set()
+        for c in sorted([c for c in calls if c['proc'] == proc.upper()], key=lambda c: -c['seq']):
+            k = json.dumps(c['fe'], ensure_ascii=False, sort_keys=True)
+            if k not in seen:
+                seen.add(k)
+                mine.append(c)
+        if not mine:
+            plan.append((tg, None, 'SKIP — 호출 로그에 이 PROC 의 저장 본문 없음(E2E 저장 시험이 없었거나 수집 시각대 밖 · sqllog_calls.py)'))
+            continue
+        for c in mine[:mx]:
+            plan.append((tg, c, sorted(sc['dml'])))
+    print(f"[save_diff] {mid}: 저장 SP 짝 {len(targets)}건 · 실행 계획 {sum(1 for p in plan if p[1])}건 · 제외/SKIP {sum(1 for p in plan if not p[1])}건")
+    for tg, c, info in plan:
+        if c:
+            print(f"   실행 {tg['asis_sp']} ↔ {tg['tobe_proc']} · 로그 #{c['seq']} {c['at']} {c['by']} · 대상 표 {info}")
+            print(f"        본문 {json.dumps(c['fe'], ensure_ascii=False)[:260]}")
+        else:
+            print(f"   {tg['asis_sp']}: {info}")
+    if not do_run:
+        print('[save_diff] 계획만 출력했다(실행 없음). 실행 = --run')
+        return 0 if any(p[1] for p in plan) else 3
+    import dbconn, golden
+    od = os.path.join(ROOT, 'Doc', 'verify', mid, 'save_diff')
+    os.makedirs(od, exist_ok=True)
+    cfg = dbconn.load_cfg()
+    ca = dbconn.connect('asis', cfg)
+    ct = dbconn.connect('tobe', cfg)
+    rows, n, residue_hit = [], 0, False
+    try:
+        for tg, c, info in plan:
+            n += 1
+            now = time.strftime('%Y-%m-%d %H:%M:%S')
+            row = {'call_no': n, 'asis_sp': tg['asis_sp'], 'tobe_proc': tg['tobe_proc'], 'measured_at': now, 'log_seq': c['seq'] if c else '', 'log_at': c['at'] if c else ''}
+            if not c:
+                row.update(verdict='SKIP', note=str(info))
+                rows.append(row)
+                continue
+            body = dict(c['fe'], **(c.get('ses') or {}))
+            aps, unresolved, notes = dv.translate(body, pmap.get(tg['tobe_proc'].upper(), []))
+            short = re.sub(r'^PKG_\w+\.', '', tg['tobe_proc'])
+            md = [f"# {mid} 저장 대조 · {tg['asis_sp']} ↔ {tg['tobe_proc']}", '', f"- 실행 {now} · 본문 = 사내 호출 로그 #{c['seq']} ({c['at']} · {c['by']})",
+                  f"- TO-BE 본문: `{json.dumps(body, ensure_ascii=False)[:1500]}`", f"- AS-IS 인자(번역): `{json.dumps(aps, ensure_ascii=False)[:1500]}`"]
+            if unresolved:
+                row.update(verdict='SKIP', note='인자 미해결: ' + ','.join(unresolved))
+                rows.append(row)
+                continue
+            tables = [tb for tb in info if re.fullmatch(r'[A-Z0-9_]+', tb)]
+            users = [str(body.get(k) or '') for k in ('sesUserId', 'userId', 'createId')]
+            ra = run_asis(ca, tg['asis_sp'], aps, tables, users)
+            rt = run_tobe(ct, tg['tobe_proc'], body, tables, users, golden, dv.bind_like_be)
+            res = {**{f'AS-IS {k}': v for k, v in ra['residue'].items()}, **{f'TO-BE {k}': v for k, v in rt['residue'].items()}}
+            eff = lambda e: ' · '.join(f"{tb} Δ{v['delta']:+d}/쓴 행 {len(v['rows']) if v['rows'] is not None else '?'}" for tb, v in sorted(e.items()))
+            row.update(tables=' '.join(tables), asis_effect=eff(ra['effect']), tobe_effect=eff(rt['effect']), asis_msg=(ra['err'] or ra['msg'])[:400], tobe_msg=(rt['err'] or rt['msg'])[:400],
+                       residue=json.dumps(res, ensure_ascii=False) if res else '0')
+            md += [f"- AS-IS: @@TRANCOUNT(EXEC 직후) {ra['trancount']} · 결과 {ra['err'] or ra['msg']}", f"- TO-BE: 결과 {rt['err'] or rt['msg']}",
+                   f"- 잔여(ROLLBACK 뒤 기준 수와 차이): {json.dumps(res, ensure_ascii=False) if res else '0 — 양쪽 모두 실행 전과 같음'}"]
+            if res:
+                row.update(verdict='RESIDUE', note='ROLLBACK 뒤 잔여 발견 — 즉시 중단: ' + json.dumps(res, ensure_ascii=False)[:300])
+                residue_hit = True
+            elif ra['err'] or rt['err']:
+                both = bool(ra['err']) and bool(rt['err'])
+                row.update(verdict='ERR', note=('양쪽 모두 오류' if both else ('AS-IS 만 오류' if ra['err'] else 'TO-BE 만 오류')) + f" — AS-IS: {ra['err'] or '정상'} / TO-BE: {rt['err'] or '정상'}"[:500])
+            else:
+                v, ns = effect_compare(ra['effect'], rt['effect'])
+                row.update(verdict=v, note=' | '.join(ns)[:900])
+                md += ['', '## 표별 대조'] + [f'- {x}' for x in ns]
+            md.insert(3, f"- **판정 {row['verdict']}** — {row['note'][:400]}")
+            mp = os.path.join(od, f'{short}__{n}.md')
+            with open(mp, 'w', encoding='utf-8') as f:
+                f.write('\n'.join(md) + '\n')
+            row['md'] = os.path.relpath(mp, ROOT)
+            rows.append(row)
+            print(f"   [{row['verdict']}] #{n} {tg['asis_sp']} — {row['note'][:200]} · 잔여 {row['residue']}")
+            if residue_hit:
+                break
+    finally:
+        try:
+            ca.rollback()
+            ca.close()
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            ct.rollback()
+            ct.close()
+        except Exception:  # noqa: BLE001
+            pass
+    with open(os.path.join(od, 'summary.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=COLS)
+        w.writeheader()
+        w.writerows([{k: r.get(k, '') for k in COLS} for r in rows])
+    c = {}
+    for r in rows:
+        c[r['verdict']] = c.get(r['verdict'], 0) + 1
+    print(f"[save_diff] {mid}: " + ' · '.join(f'{k} {v}' for k, v in sorted(c.items())) + f" → Doc/verify/{mid}/save_diff/summary.csv")
+    if residue_hit:
+        return 4
+    ran = [r for r in rows if r['verdict'] not in ('SKIP',)]
+    return 3 if not ran else (2 if any(r['verdict'] in ('DIFF', 'ERR') for r in rows) else 0)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

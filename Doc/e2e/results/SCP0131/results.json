@@ -120,7 +120,7 @@
         {
           "title": "SCP0131 SalesSitePriority 스모크 @smoke",
           "file": "SCP0131.smoke.spec.ts",
-          "line": 8,
+          "line": 9,
           "column": 6,
           "specs": [
             {
@@ -151,15 +151,11 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,94,694]]"
+                      "description": "[[\"main\",\"SEARCH\",200,94,1494]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -170,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5183,
+                      "duration": 6336,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T10:43:17.940Z",
+                      "startTime": "2026-11-14T09:23:55.893Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -195,15 +191,11 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,94,694]]"
+                          "description": "[[\"main\",\"SEARCH\",200,94,1494]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -214,7 +206,7 @@
               ],
               "id": "1a2b97f23f78f4552728-7a18b2ce391e7b6618fd",
               "file": "SCP0131.smoke.spec.ts",
-              "line": 10,
+              "line": 11,
               "column": 7
             },
             {
@@ -249,7 +241,7 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] Period(period) — 기간 '2026.11.02' ~ '2027.11.01' → 조회 정상"
+                      "description": "[OK] Period(period) — 기간 '2026.11.09' ~ '2027.11.08' → 조회 정상"
                     },
                     {
                       "type": "cond",
@@ -257,15 +249,11 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] (기준표 순서)(order) — div → plangroup → scmsite → modelnickname → period → active"
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → plangroup → scmsite → modelnickname → period → active"
                     },
                     {
                       "type": "condsum",
-                      "description": "7/8 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "6/7 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -276,12 +264,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 43441,
+                      "duration": 45992,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T10:43:25.668Z",
+                      "startTime": "2026-11-14T09:24:04.785Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -305,7 +293,7 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Period(period) — 기간 '2026.11.02' ~ '2027.11.01' → 조회 정상"
+                          "description": "[OK] Period(period) — 기간 '2026.11.09' ~ '2027.11.08' → 조회 정상"
                         },
                         {
                           "type": "cond",
@@ -313,15 +301,11 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] (기준표 순서)(order) — div → plangroup → scmsite → modelnickname → period → active"
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → plangroup → scmsite → modelnickname → period → active"
                         },
                         {
                           "type": "condsum",
-                          "description": "7/8 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "6/7 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                         }
                       ],
                       "attachments": []
@@ -332,12 +316,12 @@
               ],
               "id": "1a2b97f23f78f4552728-410d9799621f014da74c",
               "file": "SCP0131.smoke.spec.ts",
-              "line": 102,
+              "line": 106,
               "column": 7
             },
             {
               "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "smoke"
               ],
@@ -367,7 +351,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[FAIL] Condition(F6) Period 비저장(기간 조건 제외)(common) — 기간 키 저장됨: fromDate, toDate (공통 요건 11 · CR-029: 기간 조건은 저장 제외)"
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — [참고·결함 아님] 기간 키가 저장 데이터에 있음: fromDate, toDate — 기간 조건은 Condition 저장 대상 제외(CR-029)이며 복원 비교에서도 제외(사용자 판정 2026-11-09 SCP0131)"
                     },
                     {
                       "type": "common",
@@ -383,7 +367,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'SalesSitePriority_20261107_074507.xlsx' 6567B"
+                      "description": "[OK] Excel 다운로드(common) — 'SalesSitePriority_20261114_062515.xlsx' 6561B"
                     },
                     {
                       "type": "common",
@@ -399,11 +383,7 @@
                     },
                     {
                       "type": "commonsum",
-                      "description": "10/11 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -413,32 +393,13 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 26718,
-                      "error": {
-                        "message": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts:117:121",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                          "column": 121,
-                          "line": 117
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 115 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 117 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 118 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 119 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                            "column": 121,
-                            "line": 117
-                          },
-                          "message": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  115 |     const s = record(test.info(), 'common', items);\n  116 |     await nscm.snapshot(`${MENU}_common`);\n> 117 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  118 |   });\n  119 | });\n  120 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts:117:121"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 21877,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T10:44:11.909Z",
+                      "startTime": "2026-11-14T09:24:53.906Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -462,7 +423,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[FAIL] Condition(F6) Period 비저장(기간 조건 제외)(common) — 기간 키 저장됨: fromDate, toDate (공통 요건 11 · CR-029: 기간 조건은 저장 제외)"
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — [참고·결함 아님] 기간 키가 저장 데이터에 있음: fromDate, toDate — 기간 조건은 Condition 저장 대상 제외(CR-029)이며 복원 비교에서도 제외(사용자 판정 2026-11-09 SCP0131)"
                         },
                         {
                           "type": "common",
@@ -478,7 +439,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'SalesSitePriority_20261107_074434.xlsx' 6567B"
+                          "description": "[OK] Excel 다운로드(common) — 'SalesSitePriority_20261114_062515.xlsx' 6561B"
                         },
                         {
                           "type": "common",
@@ -494,157 +455,18 @@
                         },
                         {
                           "type": "commonsum",
-                          "description": "10/11 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
                         }
                       ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                        "column": 121,
-                        "line": 117
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 25847,
-                      "error": {
-                        "message": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts:117:121",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                          "column": 121,
-                          "line": 117
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 115 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 117 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 118 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 119 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                            "column": 121,
-                            "line": 117
-                          },
-                          "message": "Error: 공통 기능 FAIL 1: Condition(F6) Period 비저장(기간 조건 제외)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  115 |     const s = record(test.info(), 'common', items);\n  116 |     await nscm.snapshot(`${MENU}_common`);\n> 117 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  118 |   });\n  119 | });\n  120 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts:117:121"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-11-07T10:44:46.153Z",
-                      "annotations": [
-                        {
-                          "type": "common",
-                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 94"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[FAIL] Condition(F6) Period 비저장(기간 조건 제외)(common) — 기간 키 저장됨: fromDate, toDate (공통 요건 11 · CR-029: 기간 조건은 저장 제외)"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 6개 유지"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'SalesSitePriority_20261107_074507.xlsx' 6567B"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
-                        },
-                        {
-                          "type": "commonsum",
-                          "description": "10/11 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium-retry1\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0131\\artifacts\\SCP0131.smoke-SCP0131-Sale-f9639-·Columns·Search-Area·Manual-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0131.smoke.spec.ts",
-                        "column": 121,
-                        "line": 117
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "1a2b97f23f78f4552728-90035acc0b4c219ae27c",
               "file": "SCP0131.smoke.spec.ts",
-              "line": 111,
+              "line": 115,
               "column": 7
             }
           ]
@@ -654,11 +476,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-07T10:43:17.437Z",
-    "duration": 120903.055,
-    "expected": 2,
+    "startTime": "2026-11-14T09:23:55.210Z",
+    "duration": 83997.15,
+    "expected": 3,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

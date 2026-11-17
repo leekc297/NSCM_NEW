@@ -1,0 +1,7 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0007-S9b79d9,기타,SetImageCell,SCP0007_BOD.cs:1017,주석 안에서만 호출,SCP0007_DistributionRoutePopup.cs:459; SCP0007_BOD.cs:404; SCP0007_BOD.cs:584,
+SCP0007-S60f544,조회,GetBodType,SCP0007_DistributionRoutePopup.cs:569,호출 없음,,
+SCP0007-Sbf4efb,조회,GetDivision,SCP0007_DistributionRoutePopup.cs:540,호출 없음,,
+SCP0007-S12c82a,조회,GetFromSitebyDivision,SCP0007_DistributionRoutePopup.cs:549,주석 안에서만 호출,SCP0007_BOD.cs:946,
+SCP0007-Sa4f5dd,조회,GetToSitebyDivision,SCP0007_DistributionRoutePopup.cs:557,주석 안에서만 호출,SCP0007_BOD.cs:947,
+SCP0007-Scb8db3,조회,GetTransMode,SCP0007_DistributionRoutePopup.cs:579,호출 없음,,

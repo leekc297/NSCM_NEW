@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1952,
+  "at": "2026-11-13T21:38:18.130Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 1309,
+  "at": "2026-11-13T21:38:18.606Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 811,
+  "at": "2026-11-13T21:38:22.118Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"E2E\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 100,
+  "at": "2026-11-13T21:38:24.807Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 938,
+  "at": "2026-11-13T21:39:57.134Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ }
+]

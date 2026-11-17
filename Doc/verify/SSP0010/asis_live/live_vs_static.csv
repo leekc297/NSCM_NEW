@@ -1,0 +1,50 @@
+﻿kind,item,static,live,verdict,note
+SP,DM0003_GET_BUCKET_TYPE_CODE,SSP0010_Shipment_Plan_SEMI.cs:1262 GetBucketType,1회 · 구간 load,MATCH,
+SP,SCM0001_GET_SCP_DAY_PERIOD,SSP0010_Shipment_Plan_SEMI.cs:2681 GetDayRange,3회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0009_GET_SHEET_CALENDAR_3SPAN,SSP0010_Shipment_Plan_SEMI.cs:2662 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SSP0010_GET_SHIPMENT_PLAN_SEMI_SSP,SSP0010_Shipment_Plan_SEMI.cs:763 FindData_Main,1회 · 구간 find,MATCH,
+SP,UP_FX_GETCOMMONDATALIST,,23회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI,SSP0010_Shipment_Plan_SEMI.cs:1928 SaveData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX,SSP0010_Shipment_Plan_SEMI.cs:2513 SaveData_FixInfo,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP_GET_LAST_PLAN_VERSION,SSP0010_Shipment_Plan_SEMI.cs:656 GetLastPlanVersion,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),36개,35개,INFO,공통 17 · 선언만 19 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboOperGroup,Y,Operation Group* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem3,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItem_Id,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanDate,Y,Plan date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanType,Y,Plan type* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanSeq,Y,Seq* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkSum,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnFix,Y,Fix,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnUnfix,Y,Unfix,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,clbElectrode,Y,Electrode,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Shipment Plan SEMI,정적 컬럼 사실 26행(시트 미지정 포함),컬럼 95(보임 66) · 헤더 3단 · 행 0 · 고정 15,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

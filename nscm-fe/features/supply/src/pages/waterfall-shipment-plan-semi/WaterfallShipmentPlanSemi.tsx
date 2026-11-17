@@ -4,6 +4,7 @@ import { MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcMeasureSelect } from '@foundation/assets';
+import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
@@ -116,21 +117,58 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
   // Division 변경 시 검색조건 초기화 + 그리드 초기화는 store setDivision(Form onChange)이 수행한다
   //   (TO-BE 공통 요건, SCP0025 선례). clearData 는 Measure 모달 적용 시 재조회 유도로만 쓴다.
 
-  // FindData_Main 이중 필수값 체크 재현 — Division/Version/Period 최소 필수(§6#7).
-  //   필수검증을 session 가드보다 먼저 수행해 미입력 시 반드시 알럿(MSG00013)이 뜨게 한다.
-  //   Version 은 'ALL' sentinel(allOption 구버전 persist 잔존 가능)을 미선택으로 간주해 거른다
-  //   — AS-IS Version 은 addAll=false 라 ALL 이 유효값이 아니다(선택 강제).
+  // FindData_Main 필수값 체크 재현 — AS-IS DataUtil.checkRequired(pnlCondition) 는 필수(*) 필드를
+  //   순서대로 훑어 '첫 빈 값' 하나를 MSG00002("{0} 값은 필수 입력입니다", arg=필드 라벨)로 안내한다.
+  //   SCP0018 필수(*): Division/Operation Group/Version/Period. Division/OperGroup/Period 는 기본값이
+  //   자동세팅되므로 실질 첫 빈 값은 Version(addAll=false·기본 공백)이라 "Version 값은 필수 입력..." 이 뜬다.
+  //   TO-BE 는 동 문구가 MSG00429 로 재채번되어(§4.1) {0} 에 필드명을 끼워 필드별 메시지를 낸다.
+  //   Version 의 {0} 은 화면 표기 라벨('Ver.')과 통일한다 — LBL.VER(=LBL01275, KO/EN/CN 모두 'Ver.',
+  //   DB 등록 2026-11-12) 라벨 코드로 쓴다(Division/Period 와 동일 방식 — 하드코딩 회피·다국어 반영).
+  //   (과거 LBL01231 참조는 실제 "요청일"/"Date of Request" 오매핑이라 LBL01275 로 교정. AS-IS 는 full
+  //   term 'Version' 이었으나 사용자 요청으로 화면 라벨 'Ver.' 에 맞춤.)
+  //   Version 은 'ALL' sentinel(allOption 구버전 persist 잔존 가능)을 미선택으로 간주해 거른다.
   const handleSubmit = () => {
     const selectedVersions = searchParams.versionNos.filter(v => v && v.toUpperCase() !== 'ALL');
-    if (
-      !searchParams.divisionId ||
-      selectedVersions.length === 0 ||
-      !searchParams.startYyyymmdd ||
-      !searchParams.endYyyymmdd
-    ) {
-      void setAlert({ type: 'alert', content: t(MSG.REQUIRED_INPUT, '_Please enter the required fields.') });
+    const missingField = !searchParams.divisionId
+      ? t(LBL.DIVISION, 'Division')
+      : selectedVersions.length === 0
+        ? t(LBL.VER, '_Ver.')
+        : !searchParams.startYyyymmdd || !searchParams.endYyyymmdd
+          ? t(LBL.PERIOD, 'Period')
+          : '';
+    if (missingField) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', missingField),
+      });
       return;
     }
+
+    // Period 범위 검증 — AS-IS DataUtil.checkRequired 통과 후 DateUtil.Check_PeriodDate(dCalendar) 재현(cs:645).
+    //   날짜는 YYYYMMDD(PeriodField mode='date') → ISO 조립 후 dayjs 파싱(customParseFormat 미등록, store 관용구 동일).
+    //   빈값/형식(AS-IS MSG00049)은 위 필수값 체크가 선행 차단하므로 생략(AS-IS 도 checkRequired 선행, cs:642).
+    const toIso = (s: string) => `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+    const fromDate = dayjs(toIso(searchParams.startYyyymmdd));
+    const toDate = dayjs(toIso(searchParams.endYyyymmdd));
+    // 시작일 > 종료일 — AS-IS nDate1 > nDate2 → MSG00108(TO-BE MSG01135).
+    if (toDate.isBefore(fromDate)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_START_AFTER_END, '_The start date can not be later than the end date.'),
+      });
+      return;
+    }
+    // 최대 조회기간 — AS-IS GetDateAdd(from,1,'Y') + GetDateAdd(_,7,'D') = from + 1년 + 7일.
+    //   종료일이 그 이상이면(nDate2 >= nDate1After1Year) 차단, 메시지 인자는 AS-IS 하드코딩 '371'(364+7).
+    const maxEndExclusive = fromDate.add(1, 'year').add(7, 'day');
+    if (!toDate.isBefore(maxEndExclusive)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.MAX_PERIOD, '_Maximum Period is From Date + {0}.').replace('{0}', '371'),
+      });
+      return;
+    }
+
     if (!session.userId) return;
     setFilters({ userId: session.userId });
   };

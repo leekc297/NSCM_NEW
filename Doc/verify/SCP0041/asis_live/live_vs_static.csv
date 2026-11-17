@@ -1,0 +1,46 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM0001_GET_LOOKUP_VALUES,SCP0041_StockOSP.cs:165 GetLookupData,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0041_GET_STOCK_OSP,SCP0041_StockOSP.cs:662 FindData_Main,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0040_SAVE_CHARACTERISTIC_CAPA,SCP0041_StockOSP.cs:354 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0041_GET_PACK_HOLD_STOCK,SCP0041_StockOSP.cs:740 FindData_Pack,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0041_SAVE_PACKER_HOLD_STOCK,SCP0041_StockOSP.cs:469 SaveDataPacker,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),27개,31개,INFO,공통 13 · 선언만 14 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnExcelUpload,Y,Upload,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,formDown,Y,Excel Form,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dCalendar,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtInspection,Y,관리번호,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cboStatus,Y,Status,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,dCalendarCutoff,Y,Cutoff Date,LIVE,layout=usrLayoutControl2 visible=False
+GRID,spdMain/Osp Stock,정적 컬럼 사실 14행(시트 미지정 포함),컬럼 15(보임 14) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdMain/Pack Hold Stock,정적 컬럼 사실 15행(시트 미지정 포함),컬럼 16(보임 15) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

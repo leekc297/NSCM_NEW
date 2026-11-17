@@ -1,0 +1,36 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 07:27:01",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 06:23:47~06:34:54 실측: SSP0015_GET_SHIPMENT_PSI(p_division_id=40, p_plan_start_yyyymmdd=20261010, 20261010~20261109) 23행 667초 · 최근 PLAN_START_YYYYMMDD 20261010(3,002,714건)",
+  "why": "기본 사업부 81 은 SSP_ANL_SHIP_PLAN_40 에 행 없음(테이블 전체가 DIVISION_ID=40·PLAN_TYPE=SP·SEQ=1, 5,480,002건). 사업부 40(clbDivision 0번)으로 바꾸면 clbDivision_SelectedIndexChanged(SSP0015_ShipmentPSI.cs:7897)가 Plan date 목록을 다시 불러옴 → 0번(최근) 선택",
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "0"
+    },
+    "ok": true,
+    "applied": "combo:0:40 Mobility & IT Battery",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "cboPlanDate",
+     "index": "0"
+    },
+    "ok": false,
+    "applied": null,
+    "error": "InvalidOperationException: combo index out of range: 0/0"
+   }
+  ]
+ },
+ "edit_focus": "행 없음",
+ "edit_mode": false,
+ "note": "수정 모드가 켜지지 않음"
+}

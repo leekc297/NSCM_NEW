@@ -1,0 +1,63 @@
+{
+ "id": "SCP0107",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0107-S96bd28",
+    "SCP0107-S85522d",
+    "SCP0107-S20acca",
+    "SCP0107-S47156c",
+    "SCP0107-Sac510b"
+   ]
+  },
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0107-S30fcb6",
+    "SCP0107-S9f52d6",
+    "SCP0107-S98491c",
+    "SCP0107-S575e43"
+   ]
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0107-S30fcb6",
+    "SCP0107-S9f52d6",
+    "SCP0107-S98491c",
+    "SCP0107-S575e43"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:15:23.188",
+ "fills": 0,
+ "fill_left": []
+}

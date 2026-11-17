@@ -1,0 +1,69 @@
+﻿kind,item,static,live,verdict,note
+SP,DM0003_GET_BUCKET_TYPE_CODE,SCP0009_Shipment_Plan_FG.cs:537 GetBucketType,1회 · 구간 load,MATCH,
+SP,SCM0001_GET_SCP_DAILY_PLAN_PERIOD,SCP0009_Shipment_Plan_FG.cs:4043 GetLastRange,2회 · 구간 load,MATCH,
+SP,SCM0001_GET_SCP_DAY_PERIOD,SCP0009_Shipment_Plan_FG.cs:4057 GetDayRange,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0009_GET_SHEET_CALENDAR_3SPAN,SCP0009_Shipment_Plan_FG.cs:4011 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,SCP0009_GET_SHIPMENT_PLAN_FG,SCP0009_Shipment_Plan_FG.cs:1438 FindData_Main,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_SCM_SYS_LOG_BATCH,SCP0009_Shipment_Plan_FG.cs:4707 SCM_SYS_LOG_BATCH,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING,SCP0009_Shipment_Plan_FG.cs:3832 FindData_PeggingInfo,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0009_GET_SHIPMENT_PLAN_FG_PROBLEM,SCP0009_Shipment_Plan_FG.cs:3900 FindData_PlanProblem,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL,SCP0009_Shipment_Plan_FG.cs:1486 FindData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET,SCP0009_Shipment_Plan_FG.cs:4587 SaveData_FixInfo,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY,SCP0009_Shipment_Plan_FG.cs:3364 SaveData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0013_GET_PLAN_TYPE_SAVE_YN,SCP0009_Shipment_Plan_FG.cs:3682 Get_IsSaveYn,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),75개,51개,INFO,공통 34 · 선언만 41 · 실측만 17
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnOK,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,txtProject,Y,Project,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkSum,Y,layoutControlItem9,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBizType,Y,Operation Group* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnProject,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItem_Id,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanDate,Y,Plan date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanType,Y,Plan type* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItem_Id,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanSeq,Y,Seq* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnUnfix,Y,Unfix,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnFix,Y,Fix,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbElecType,Y,Electrode,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnNew,Y,New,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbToSite,Y,To Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbCustomer,Y,lEnd Customer,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnWLast,Y,W84,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnW26,Y,W26,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnW52,Y,W52,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkAll,Y,lbchkAll,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dCalendar,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Shipment Request,정적 컬럼 사실 46행(시트 미지정 포함),컬럼 400(보임 68) · 헤더 3단 · 행 0 · 고정 40,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdPeggingInfo/Pegging Info,정적 컬럼 사실 26행(시트 미지정 포함),컬럼 25(보임 19) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdPlanProblem/Plan Problem,정적 컬럼 사실 14행(시트 미지정 포함),컬럼 13(보임 12) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

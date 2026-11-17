@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 92,
+  "at": "2026-11-17T08:37:42.543Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 SOP_MODEL_ASSEMBLY] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 137,
+  "at": "2026-11-17T08:37:47.158Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 SOP_MODEL_ASSEMBLY] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 88,
+  "at": "2026-11-17T08:37:48.839Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 SOP_MODEL_ASSEMBLY] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "SOP_MODEL_ASSEMBLY",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/SOP_MODEL_ASSEMBLY/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81_HG\",\"p_site_id\":\"A003\",\"p_plant_id\":\"HG00\",\"p_factory_id\":\"AK\",\"p_line_id\":\"AKA02_01,AKA02_02,AKA01,DMY_9429,DMY_9430,DMY_9431,DMY_9432,DMY_9433,DMY_9434,DMY_9435,DMY_9436,DMY_9437\",\"p_operation_id\":\"A5000,A7000,A7400,A8000,A8400,A9000,AFFFF\",\"p_item_id\":\"\",\"p_electrode_type\":\"Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"SOP_MODEL_ASSEMBLY\",\"debug_mode\":\"F\"}",
+  "status": 200,
+  "rows": 28,
+  "dur": 113,
+  "at": "2026-11-17T08:37:52.637Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 SOP_MODEL_ASSEMBLY] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ }
+]

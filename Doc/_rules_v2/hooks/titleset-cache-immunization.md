@@ -32,7 +32,7 @@ AND U.COLUMN_NAME IN ( /* MF_BASE 산출 whitelist — SP 원문 SELECT 리스�
 - whitelist 는 같은 SP 의 MF_BASE SELECT 리스트와 **동기 유지 의무** 주석 명기.
 
 ### §1.2 L2 — FE 모달 정합
-- ColumnSettingModal `columnType='C'` (TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE — 시트명 전달 금지).
+- ColumnSettingModal `columnType='C'` (TITLESET_USER.USER_INQUIRY_COLUMN_TYPE_CODE — 시트명 전달 금지). (2026-11-13 정정: 대상 모달 = 현행 정본 `ColumnLayoutModal`(`@shared/components`, 같은 `columnType` prop). `ColumnSettingModal` 은 2026-08-13 신규 사용 금지·DEPRECATED — hook #132 §2-1)
 - **COLUMN_NAME dedup**(무조건) + `selectableOnly` opt-in(고정컬럼+USER_SELECTABLE≠'Y' 후보 제외 — shared 기본값 보존).
 - MeasureSelectModal colNm dedup 동일 (measure 는 메인 SP 가 SHEET_MEASURE VALID 조인으로 이미 면역).
 

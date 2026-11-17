@@ -1,0 +1,74 @@
+{
+ "id": "DMF0051",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0051_1_SAVE_DM_PLN_BIZ_PLAN_WATERFALL",
+   "save_sp": "DMF0051_1_SAVE_DM_PLN_BIZ_PLAN_WATERFALL",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_BIZPLAN_C",
+   "pk": [
+    "SEQ",
+    "DIVISION_ID",
+    "VERSION_NO",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "PLANT_SITE_ID",
+    "FCST_TYPE",
+    "DOM_EXP",
+    "INCOTERMS",
+    "CURRENCY",
+    "MEASURE",
+    "YYYYMM"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "VERSION_NO": "VERSION_NO",
+    "PROJECT_CODE": "END_CUSTOMER40",
+    "SCM_SITE_ID": "SCM_SITE_ID40",
+    "ITEM_ID": "ITEM_ID40",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "CURRENCY": "CURRENCY",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "SEQ",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "PLANT_SITE_ID",
+    "DOM_EXP",
+    "YYYYMM"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Biz Plan Waterfall",
+   "writes": {
+    "DM_PLN_BIZPLAN_C": [
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml DMF0051_1_SAVE_DM_PLN_BIZ_PLAN_WATERFALL → SP DMF0051_1_SAVE_DM_PLN_BIZ_PLAN_WATERFALL 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "SEQ": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "END_CUSTOMER": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "BIZ_TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "DOM_EXP": "p_DOM_EXP←DOM_EXP(변수)",
+    "YYYYMM": "p_YYYYMM←YYYYMM(변수)"
+   },
+   "match_basis": {
+    "PROJECT_CODE": "PROJECT_CODE ← @p_PROJECT_CODE(SP 536줄(@v_PROJECT_CODE) ← 321줄) ← 변수 pProjectCode ← DMF0051_1_BizPlanWaterfall.cs:2511 ← 그리드 열 END_CUSTOMER40 · 소스의 다른 분기는 열 PROJECT_CODE 를 넣음(그리드 덤프에 없음 — 사람이 확인)",
+    "SCM_SITE_ID": "SCM_SITE_ID ← @p_SCM_SITE_ID(SP 537줄(@v_SCM_SITE_ID) ← 315줄) ← 변수 pScm_Site_Id ← DMF0051_1_BizPlanWaterfall.cs:2517 ← 그리드 열 SCM_SITE_ID40 · 소스의 다른 분기는 열 SCM_SITE_ID81,SCM_SITE_ID82,SCM_SITE_ID 를 넣음(그리드 덤프에 없음 — 사람이 확인)",
+    "ITEM_ID": "ITEM_ID ← @p_ITEM_ID(SP 537줄(@v_ITEM_ID) ← 324줄) ← 변수 pItem_Id ← DMF0051_1_BizPlanWaterfall.cs:2518 ← 그리드 열 ITEM_ID40 · 소스의 다른 분기는 열 ITEM_ID 를 넣음(그리드 덤프에 없음 — 사람이 확인)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

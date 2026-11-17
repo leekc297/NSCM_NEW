@@ -1,0 +1,567 @@
+{
+ "id": "DMF0082",
+ "window": [
+  "2026-11-12 18:22:00.617",
+  "2026-11-12 18:22:51.251"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 18:22:01.024",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 6.33,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "DMF0082"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='DMF0082'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.047",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 18.22,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.326",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.PR_GET_DAY_RANGE",
+   "sp": "PR_GET_DAY_RANGE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 10.26,
+   "params": {
+    "p_created_by": "jaeuk.shin",
+    "p_month": "6"
+   },
+   "inline": "EXEC PR_GET_DAY_RANGE @p_created_by='jaeuk.shin', @p_month=6",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.441",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0003_GET_BUCKET_TYPE_CODE",
+   "sp": "DMF0003_GET_BUCKET_TYPE_CODE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 5.16,
+   "params": {},
+   "inline": "EXEC DMF0003_GET_BUCKET_TYPE_CODE",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.510",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+   "sp": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1872,
+   "rows_kind": "DataSet rows",
+   "ms": 43.19,
+   "params": {
+    "p_start_yyyymmdd": "20261101",
+    "p_end_yyyymmdd": "20270401"
+   },
+   "inline": "EXEC DMF0082_POPUP_GET_FUTUREPRICE_INFO @p_start_yyyymmdd='20261101', @p_end_yyyymmdd='20270401'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.679",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0082_GET_SPREAD_TITLE",
+   "sp": "DMF0082_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 234,
+   "rows_kind": "DataSet rows",
+   "ms": 146.88,
+   "params": {
+    "p_start_yyyymmdd": "20261101",
+    "p_end_yyyymmdd": "20270430",
+    "p_created_by": "jaeuk.shin",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0082_GET_SPREAD_TITLE @p_start_yyyymmdd='20261101', @p_end_yyyymmdd='20270430', @p_created_by='jaeuk.shin', @p_division_id='40'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.727",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 227,
+   "rows_kind": "DataSet rows",
+   "ms": 39.42,
+   "params": {
+    "Code": "DeptId",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='DeptId', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.846",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1098,
+   "rows_kind": "DataSet rows",
+   "ms": 111.0,
+   "params": {
+    "Code": "EndCustomerByDivision40",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivision40', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.928",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2494,
+   "rows_kind": "DataSet rows",
+   "ms": 73.66,
+   "params": {
+    "Code": "SiteByEndCustomer",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='SiteByEndCustomer', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.953",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 3.59,
+   "params": {
+    "Code": "Incoterms",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Incoterms', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.960",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 3.31,
+   "params": {
+    "Code": "FCST_TYPE_NOT_ETC",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FCST_TYPE_NOT_ETC', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:01.968",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 3.35,
+   "params": {
+    "Code": "DOM_EXP",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='DOM_EXP', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:09.929",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 7955.06,
+   "params": {
+    "Code": "CELL_PROD_SITE_ID",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CELL_PROD_SITE_ID', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:09.936",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 10,
+   "rows_kind": "DataSet rows",
+   "ms": 3.5,
+   "params": {
+    "Code": "CURRENCY_LIST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CURRENCY_LIST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:09.970",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36,
+   "rows_kind": "DataSet rows",
+   "ms": 27.8,
+   "params": {
+    "Code": "Measure",
+    "Param1": "DMF0082",
+    "Param2": "FcstNPrice",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Measure', @Param1='DMF0082', @Param2='FcstNPrice', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:10.212",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 83.18,
+   "params": {
+    "MenuID": "Fcst&Price MGMT",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Fcst&Price MGMT', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:10.288",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 2.77,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "DMF0082"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='DMF0082'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 18:22:19.448",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0082_GET_SPREAD_TITLE",
+   "sp": "DMF0082_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 234,
+   "rows_kind": "DataSet rows",
+   "ms": 14.11,
+   "params": {
+    "p_start_yyyymmdd": "20261101",
+    "p_end_yyyymmdd": "20270430",
+    "p_created_by": "jaeuk.shin",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0082_GET_SPREAD_TITLE @p_start_yyyymmdd='20261101', @p_end_yyyymmdd='20270430', @p_created_by='jaeuk.shin', @p_division_id='40'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.514",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 227,
+   "rows_kind": "DataSet rows",
+   "ms": 41.88,
+   "params": {
+    "Code": "DeptId",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='DeptId', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.625",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1098,
+   "rows_kind": "DataSet rows",
+   "ms": 106.8,
+   "params": {
+    "Code": "EndCustomerByDivision40",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivision40', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.712",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2494,
+   "rows_kind": "DataSet rows",
+   "ms": 77.44,
+   "params": {
+    "Code": "SiteByEndCustomer",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='SiteByEndCustomer', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.735",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 3.8,
+   "params": {
+    "Code": "Incoterms",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Incoterms', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.744",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 4.54,
+   "params": {
+    "Code": "FCST_TYPE_NOT_ETC",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FCST_TYPE_NOT_ETC', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:19.753",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 4.57,
+   "params": {
+    "Code": "DOM_EXP",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='DOM_EXP', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:20.538",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 780.31,
+   "params": {
+    "Code": "CELL_PROD_SITE_ID",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CELL_PROD_SITE_ID', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:20.545",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 10,
+   "rows_kind": "DataSet rows",
+   "ms": 3.06,
+   "params": {
+    "Code": "CURRENCY_LIST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CURRENCY_LIST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 18:22:20.557",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36,
+   "rows_kind": "DataSet rows",
+   "ms": 4.13,
+   "params": {
+    "Code": "Measure",
+    "Param1": "DMF0082",
+    "Param2": "FcstNPrice",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Measure', @Param1='DMF0082', @Param2='FcstNPrice', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  }
+ ]
+}

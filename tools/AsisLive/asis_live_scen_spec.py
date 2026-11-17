@@ -1,0 +1,171 @@
+# -*- coding: utf-8 -*-
+"""소스 분기 전부에 대한 시나리오 명세 — 분기마다 "무엇을 해야 그 분기를 타는지 · 그 조작을 실행할 수단이 있는지 · AS-IS/TO-BE 에서 실행됐는지"
+(2026-11-13 · 사용자 "각 화면별 시나리오는 저장뿐만 아니라 소스 분기의 모든 케이스에 대해서 시나리오 작성되어야 합니다")
+
+  python tools/AsisLive/asis_live_scen_spec.py [ID ...]      (ID 생략 = scenarios_src.csv 가 있는 전 화면 + 전체 요약)
+입력  Doc/asislive/<ID>/scenarios_cov.csv(없으면 scenarios_src.csv) · scenario_compare.csv(있으면) · save_scenario.json(있으면)
+      Doc/verify/<ID>/asis_live/scen_link.csv(분기 ↔ 대조표 행·검사 결과) · tools/Harness/verify/mapping_checkdefs.csv(검사가 E2E 로 실행되는지)
+분기 1개 = 명세 1줄(빠지는 분기 없음 — 분모 = 도출된 분기 수)
+  trigger    그 분기를 일으키는 조작(진입점에서 읽음): 화면 열기 · 조회 · 버튼 <이름> · 조건 <컨트롤> 값 변경 · 셀 값 입력 · 셀 클릭/더블클릭 · 키 입력 · 붙여넣기 · 시트 탭 · 저장 · 행 추가 …
+  precond    분기 조건이 요구하는 전제(축): Division 값 · 그룹(권한) · 조회 조건 값 · 데이터(행·셀) 상태 · 화면 상태 · 시트
+  guard      소스의 분기 조건식 그대로(어떤 값이어야 타는지는 이 식이 기준)
+  driver     실행 수단 상태
+               실행기 있음        지금 도구로 그 조작을 일으킨다(조회·화면 열기·버튼 누르기·수정 모드·저장 시나리오 정의가 있는 저장)
+               실행기 있음(값 도출됨)   전제가 Division·그룹·조회 조건뿐이고 그 값을 조건식과 화면 항목에서 뽑았다(asis_live_scen_values.py --run 으로 실행)
+               실행기 있음(전제 값 지정 필요)   조작은 일으키지만 분기 조건을 만족시키는 값(Division·그룹·조건·데이터)은 사람이 정해 넣어야 한다
+               정의 필요          저장 계열 — 화면별 save_scenario.json 을 작성해야 실행된다
+               명령만 있음        런처 명령(set·cell·act)은 있으나 이 분기를 겨냥한 실행 흐름·값 선택이 없다
+               건너뜀 규칙        안전 규칙으로 누르지 않는 버튼(상태 변경·파일 계열 이름)
+               드라이버 없음      셀 클릭·더블클릭·키 입력·붙여넣기 등 그 조작을 일으키는 명령이 아직 없다
+               경로 없음          소스에서 진입 경로를 찾지 못했다(부르는 메서드가 진입점을 가지면 그것을 물려받아 다른 상태로 간다)
+               실행 대상 아님     현행 소스에서 그 메서드를 부르는 곳이 없거나 주석 안에서만 부른다(asis_live_scen_unreached.py · 이름 검색 기준)
+  asis       AS-IS 실행 결과(scenario_compare.csv 의 판정) · tobe  TO-BE 근거: 연결된 대조표 검사 중 E2E 로 실제 실행된 것의 결과 수 · 팝업 실행 결과
+  tobe_steps TO-BE E2E 단계 형식(scenario.ts)으로 옮길 수 있는 조작만 적는다(조회·행 추가·저장) — 나머지는 TO-BE 화면 요소 대응이 없어 비운다
+산출  Doc/asislive/<ID>/scenarios_spec.csv · Doc/asislive/_scenarios_spec_summary.csv
+한계  trigger·precond 는 진입점 이름과 조건식 문자열에서 규칙으로 읽은 것이다. 분기를 타게 하는 **구체 값**은 자동으로 정하지 않는다(guard 열이 기준).
+"""
+import csv, glob, json, os, re, sys, collections
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+for _s in (sys.stdout, sys.stderr):
+    try: _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception: pass
+sys.path.insert(0, HERE)
+
+SAVE = re.compile(r"save|delete|insert|upload|confirm|copy|create|apply|release|approve|reject|import|send|interface|i/?f\b", re.I)
+SKIPNAME = re.compile(r"excel|export|download|upload|print|file|import|report", re.I)
+RISKY = re.compile(r"update|chg|change|calc|status|run|exec|close|open|lock|reset|init|clear|sync|batch|plan", re.I)
+AXN = {"DIVISION": "Division 값", "AUTH": "그룹(권한)", "COND": "조회 조건 값", "DATA": "데이터(행·셀) 상태", "STATE": "화면 상태", "SHEET": "시트·탭", "OTHER": "기타 조건"}
+EV = [(re.compile(r"^(Load|ctor|Shown|OnShown)$"), "화면 열기", "open"),
+      (re.compile(r"^(SelectedIndexChanged|ComboSelChange|CheckedChanged|ValueChanged|TextChanged|ComboCloseUp|SelectionChanged|EditValueChanged|SelectedValueChanged)$"), "조건 값 변경", "set"),
+      (re.compile(r"^(Change|Changed|EditChange|EditModeOff|LeaveCell|CellChanged)$"), "셀 값 입력", "cell"),
+      (re.compile(r"^(ActiveSheetChanged|ActiveSheetChanging)$"), "시트 전환", "sheet"), (re.compile(r"^(SheetTabClick)$"), "시트 탭 마우스 클릭", None),
+      (re.compile(r"^(SelectedPageChanged|SelectedTabChanged)$"), "탭 전환", "tab"),
+      (re.compile(r"^(CellDoubleClick)$"), "셀 더블클릭", "cellclick"), (re.compile(r"^(CellClick)$"), "셀 클릭", "cellclick"),
+      (re.compile(r"^(DoubleClick)$"), "더블클릭", None), (re.compile(r"^(ButtonClicked|ItemClicked)$"), "셀 안 단추·항목 클릭", None),
+      (re.compile(r"^(KeyDown|KeyUp|KeyPress)$"), "키 입력", "evt"), (re.compile(r"^(ClipboardPasted|ClipboardPasting)$"), "붙여넣기", "evt"),
+      (re.compile(r"^(TopChange|LeftChange)$"), "스크롤", "evt"),
+      (re.compile(r"^(Detected)$"), "버튼 목록 클릭", None), (re.compile(r"^(FormClosing|FormClosed)$"), "화면 닫기", "close")]
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def e2e_codes():
+    return {r["check"] for r in rd(P("tools", "Harness", "verify", "mapping_checkdefs.csv")) if "E2E" in (r.get("method") or "") or (r.get("runner") or "") in ("verify", "trace", "smoke", "verify|trace", "smoke|verify")}
+
+
+def trig(entry):
+    """진입점 1개 → (조작 설명, 수단 종류, 대상 이름)"""
+    e = entry.strip()
+    if not e: return ("", "none", "")
+    k, _, body = e.partition(":")
+    if k == "button":
+        b = body.strip()
+        return {"FindButton": ("조회", "find", ""), "SaveButton": ("저장", "save", ""), "EditButton": ("수정 모드 켜기", "edit", ""), "InsertButton": ("행 추가", "insert", ""),
+                "DeleteButton": ("행 삭제", "delete", ""), "ExcelButton": ("Excel 내려받기", "excel", "")}.get(b, ("공통 버튼 " + b, "cmd", b))
+    m = re.match(r"^(?:this\.)?(\w+)\.(\w+)$", body) or re.match(r"^(\w+?)_(\w+)$", body)
+    ctl, ev = (m.group(1), m.group(2)) if m else ("", body)
+    if ev == "Click": return ("버튼 %s 누르기" % ctl, "click", ctl)
+    for rx, name, kind in EV:
+        if rx.match(ev): return ("%s%s" % (name, (" (" + ctl + ")") if ctl and kind not in ("open", "close") else ""), kind or "nodriver", ctl)
+    return ("이벤트 %s%s" % (ev, (" (" + ctl + ")") if ctl else ""), "nodriver", ctl)
+
+
+def one(mid, E2E):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    if not sc: return None
+    cmpd = {r["scenario_id"]: r for r in rd(P("Doc", "asislive", mid, "scenario_compare.csv"))}
+    link = collections.defaultdict(list)
+    for r in rd(P("Doc", "verify", mid, "asis_live", "scen_link.csv")):
+        for sid in [x.strip() for x in re.split(r"[;|,\s]+", r.get("scenario_ids") or "") if x.strip()]: link[sid].append(r)
+    has_save = os.path.exists(P("Doc", "asislive", mid, "save_scenario.json")); rows = []
+    try: dj = json.load(open(P("Doc", "asislive", mid, "save_scenario.draft.json"), encoding="utf-8")).get("drafts") or []
+    except Exception: dj = []
+    d_ok = [x for x in dj if x.get("status") == "키 대응 완료"]; d_dry = [x for x in d_ok if (x.get("dry") or {}).get("status") == "DRY_OK"]
+    vals = collections.defaultdict(list)                      # 조건식에서 도출한 Division·그룹 값(asis_live_scen_values.py)
+    for r in rd(P("Doc", "asislive", mid, "scenario_values.csv")): vals[r["scenario_id"]].append(r)
+    unr = {r["scenario_id"]: r for r in rd(P("Doc", "asislive", mid, "scenarios_unreached.csv"))}      # 진입 경로 없는 분기 분류(asis_live_scen_unreached.py)
+    m_ent = collections.defaultdict(list)                        # 메서드 → 그 메서드 분기들의 진입점
+    for s in sc:
+        for x in (s.get("entry") or "").split("|"):
+            if x.strip() and x.strip() not in m_ent[s.get("method") or ""]: m_ent[s.get("method") or ""].append(x.strip())
+    for s in sc:
+        u = unr.get(s["scenario_id"]) or {}; inherit = ""
+        if s.get("status") == "UNREACHED" and u.get("class") in ("같은 파일에서 호출", "다른 파일에서 호출"):
+            got = []                                              # 부르는 메서드가 진입점을 가지면 그것을 물려받는다(부르는 줄 = callers)
+            for cm in [x for x in (u.get("caller_methods") or "").split(",") if x]:
+                got += [e for e in m_ent.get(cm) or [] if e not in got]
+            if got: s = dict(s, entry=" | ".join(got[:6]), status="INHERITED"); inherit = "부르는 메서드(%s)의 진입점을 물려받음 · 부르는 줄 %s" % (u.get("caller_methods"), (u.get("callers") or "")[:80])
+        ents = [x for x in (s.get("entry") or "").split("|") if x.strip()]; ts = [trig(x) for x in ents] or [("", "none", "")]
+        axes = [a for a in (s.get("axes") or "").split("+") if a and a != "NONE"]; pre = [AXN.get(a, a) for a in axes]
+        typ = s.get("type") or ""; kinds = {t[1] for t in ts}; names = " | ".join(t[0] for t in ts if t[0])[:200]
+        is_save = typ == "저장" or "save" in kinds or any(SAVE.search(e) for e in (s.get("endpoints") or "").split(";") if e)
+        if s.get("status") == "UNREACHED" and u.get("class") in ("호출 없음", "주석 안에서만 호출"): drv, why = "실행 대상 아님", "현행 소스에서 이 메서드(%s)를 부르는 곳이 없음 — %s%s" % (s.get("method"), u.get("class"), (" · " + u.get("callers")) if u.get("callers") else "")
+        elif s.get("status") == "UNREACHED" or kinds == {"none"}: drv, why = "경로 없음", "소스에서 진입 경로를 찾지 못함" + ((" — " + u.get("class") + (" · 부르는 메서드 " + u.get("caller_methods") if u.get("caller_methods") else "")) if u.get("class") else "")
+        elif is_save and not has_save and d_dry: drv, why = "정의 초안 연습 통과", "저장 정의 초안(%s)으로 셀 입력·변경 표시 확인됨 — 사람이 확인해 save_scenario.json 으로 옮기면 실행" % d_dry[0].get("save_sp")
+        elif is_save and not has_save and d_ok: drv, why = "정의 초안 있음", "저장 정의 초안(%s · 키 대응 완료) 있음 — 연습 실행 전" % d_ok[0].get("save_sp")
+        elif is_save: drv, why = ("실행기 있음(전제 값 지정 필요)" if has_save else "정의 필요"), ("저장 시나리오 정의 있음 — 이 분기를 타는 값은 정의에 적어야 함" if has_save else "저장 계열 — Doc/asislive/%s/save_scenario.json 작성 필요" % mid)
+        elif kinds & {"find", "open", "edit", "close"}: drv, why = ("실행기 있음(전제 값 지정 필요)" if pre else "실행기 있음"), "기본 실측(열기·조회)·수정 모드로 실행"
+        elif "click" in kinds:
+            cs = [t[2] for t in ts if t[1] == "click"]
+            if all(SAVE.search(c) or SKIPNAME.search(c) or RISKY.search(c) for c in cs): drv, why = "건너뜀 규칙", "버튼 이름이 저장·상태 변경·파일 계열(%s) — 안전 규칙으로 누르지 않음" % ",".join(cs)[:60]
+            else: drv, why = ("실행기 있음(전제 값 지정 필요)" if pre else "실행기 있음"), "버튼 분기 실행기(asis_live_scen_run.py)"
+        elif "cellclick" in kinds: drv, why = "실행기 있음(전제 값 지정 필요)", "셀 클릭 분기 실행기(asis_live_scen_run.py --cells) — 첫 행·조건식에 나온 열만 누른다(어느 행·열이어야 하는지는 조건식이 기준)"
+        elif "set" in kinds: drv, why = ("실행기 있음(전제 값 지정 필요)" if [a for a in axes if a != "COND"] else "실행기 있음"), "조건 값 변경 분기 실행기(asis_live_scen_run.py --conds · 콤보·체크 상자·체크 목록)"
+        elif "cell" in kinds: drv, why = "실행기 있음(전제 값 지정 필요)", "셀 값 입력 분기 실행기(asis_live_scen_input.py --input) — 수정 모드 첫 행에서 조건식에 나온 열에 값을 넣고 저장 없이 닫는다(어느 값이어야 그 분기를 타는지는 조건식이 기준)"
+        elif "sheet" in kinds: drv, why = ("실행기 있음(전제 값 지정 필요)" if [a for a in axes if a != "SHEET"] else "실행기 있음"), "시트 전환 분기 실행기(asis_live_scen_input.py --tabs) — 그리드의 시트를 차례로 활성화"
+        elif "evt" in kinds: drv, why = ("실행기 있음(전제 값 지정 필요)" if pre else "실행기 있음"), "스크롤·키 입력·붙여넣기 분기 실행기(asis_live_scen_event.py) — 그리드의 보이는 첫 행을 옮기고, 키·붙여넣기는 화면 처리기를 직접 부른다(컨트롤 기본 동작은 일어나지 않음 · 사용자 클립보드 사용 안 함)"
+        elif kinds & {"set", "cell", "tab", "insert", "delete", "excel", "cmd"}: drv, why = "명령만 있음", "런처 명령(%s)은 있으나 이 분기를 겨냥한 실행 흐름·값 선택이 없음" % ",".join(sorted(kinds & {"set", "cell", "tab", "insert", "delete", "excel", "cmd"}))
+        else: drv, why = "드라이버 없음", "이 조작(%s)을 일으키는 런처 명령이 아직 없음" % names[:60]
+        if inherit: why += " · " + inherit
+        vr = vals.get(s["scenario_id"]) or []
+        if drv == "실행기 있음(전제 값 지정 필요)" and axes and set(axes) <= {"DIVISION", "AUTH", "COND"} and vr and all(x["status"] in ("실행함", "실행 대상") for x in vr):
+            drv = "실행기 있음(값 도출됨)"; why += " · 도출 값 " + "; ".join("%s=%s(%s)" % (x["axis"], x["run_values"], x["status"]) for x in vr)
+        c = cmpd.get(sid := s["scenario_id"]) or {}
+        ex = collections.Counter()
+        for r in link.get(sid) or []:
+            for m in re.finditer(r"([A-Za-z0-9\-]+)=(PASS|FAIL|REVIEW|ERROR|NA)", r.get("checks") or ""):
+                if m.group(1) in E2E: ex["실행" if m.group(2) in ("PASS", "FAIL", "REVIEW") else "미실행"] += 1; ex[m.group(2)] += 1
+        steps = "search" if kinds == {"find"} else "search;insert" if "insert" in kinds else "search;…;save" if "save" in kinds else ""
+        rows.append({"scenario_id": sid, "type": typ, "trigger": names, "precond": " · ".join(pre), "guard": (s.get("guard") or "")[:300], "observe": (s.get("observe") or "")[:160],
+                     "driver": drv, "driver_note": why, "asis": c.get("result") or ("(대조 전)" if not cmpd else ""), "asis_cov": s.get("cov") or "",
+                     "tobe_e2e_checks": ("실행 %d(PASS %d·FAIL %d·판정필요 %d) · 미실행 %d" % (ex["실행"], ex["PASS"], ex["FAIL"], ex["REVIEW"], ex["미실행"])) if ex else "",
+                     "tobe_popup": (c.get("tobe_popup") or "")[:200], "tobe_steps": steps, "linked_rows": len(link.get(sid) or []), "src": s.get("src")})
+    with open(P("Doc", "asislive", mid, "scenarios_spec.csv"), "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
+    d = collections.Counter(r["driver"] for r in rows); a = collections.Counter("실행" if r["asis"] in ("양쪽 확인", "TO-BE 룰 차이", "판정필요", "차이(오류 후보)", "TO-BE 미검증") or r["asis_cov"] in ("EXECUTED", "EXECUTED_AMBIG") else "미실행" for r in rows)
+    return {"id": mid, "scenarios": len(rows), "실행기 있음": d["실행기 있음"], "실행기 있음(값 도출됨)": d["실행기 있음(값 도출됨)"], "실행기 있음(전제 값 지정 필요)": d["실행기 있음(전제 값 지정 필요)"], "정의 초안 연습 통과": d["정의 초안 연습 통과"], "정의 초안 있음": d["정의 초안 있음"], "정의 필요": d["정의 필요"], "명령만 있음": d["명령만 있음"],
+            "건너뜀 규칙": d["건너뜀 규칙"], "드라이버 없음": d["드라이버 없음"], "경로 없음": d["경로 없음"], "실행 대상 아님": d["실행 대상 아님"], "asis_실행": a["실행"], "asis_미실행": a["미실행"],
+            "tobe_e2e_근거 있음": sum(1 for r in rows if r["tobe_e2e_checks"].startswith("실행") and not r["tobe_e2e_checks"].startswith("실행 0")), "save_def": has_save}
+
+
+def main():
+    ids = [a.upper() for a in sys.argv[1:] if not a.startswith("-")]; ALL = not ids
+    if not ids: ids = sorted(os.path.basename(os.path.dirname(f)) for f in glob.glob(P("Doc", "asislive", "*", "scenarios_src.csv")))
+    E2E = e2e_codes(); out = [x for x in (one(i, E2E) for i in ids) if x]
+    K = ["실행기 있음", "실행기 있음(값 도출됨)", "실행기 있음(전제 값 지정 필요)", "정의 초안 연습 통과", "정의 초안 있음", "정의 필요", "명령만 있음", "건너뜀 규칙", "드라이버 없음", "경로 없음", "실행 대상 아님"]
+    for s in out if not ALL else []:
+        print("[%s] 분기 %d = %s · AS-IS 실행 %d · TO-BE E2E 근거 있음 %d" % (s["id"], s["scenarios"], " · ".join("%s %d" % (k, s[k]) for k in K if s[k]), s["asis_실행"], s["tobe_e2e_근거 있음"]))
+        print("@@LINK 📄 분기 시나리오 명세|Doc/asislive/%s/scenarios_spec.csv" % s["id"])
+    if ALL and out:
+        with open(P("Doc", "asislive", "_scenarios_spec_summary.csv"), "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(out[0].keys())); w.writeheader(); w.writerows(out)
+        t = collections.Counter()
+        for s in out:
+            for k, v in s.items():
+                if k not in ("id", "save_def"): t[k] += v
+        print("화면 %d · 분기(시나리오 명세) %d" % (len(out), t["scenarios"]))
+        print("실행 수단: " + " · ".join("%s %d" % (k, t[k]) for k in K))
+        print("AS-IS 실행 %d · 미실행 %d · TO-BE E2E 근거 있음 %d · 저장 정의가 있는 화면 %d" % (t["asis_실행"], t["asis_미실행"], t["tobe_e2e_근거 있음"], sum(1 for s in out if s["save_def"])))
+        print("@@LINK 📄 분기 시나리오 명세 요약|Doc/asislive/_scenarios_spec_summary.csv")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

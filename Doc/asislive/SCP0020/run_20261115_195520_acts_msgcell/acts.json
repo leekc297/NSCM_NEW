@@ -1,0 +1,83 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "CheckDigitValueEntered",
+   "expect": "MSG00203",
+   "why": "SCP0020_TactTime.cs:2877 nVal > checkMaxValue || nVal < nMinTactTime || TryParse 실패 · 검사 호출은 활성 시트 shtMain(Plant)일 때만(2612행) · Find 는 활성 시트로 Plant/Packer 조회를 나눔",
+   "steps": [
+    {
+     "sheet": "Packer",
+     "row": 0,
+     "col": 10,
+     "before": "140.2597",
+     "after": "-1.0000",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "TACT_TIME",
+      "value": "-1",
+      "mode": "value"
+     }
+    }
+   ],
+   "dialogs": [],
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:54:21",
+ "_pre_set": [
+  {
+   "name": "spdMain",
+   "prop": "ActiveSheetIndex",
+   "value": "0",
+   "wait": 1
+  },
+  {
+   "act": {
+    "target": "spdMain",
+    "raise": "ActiveSheetChanged"
+   },
+   "wait": 2
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "0"
+    },
+    "ok": true,
+    "applied": "prop:ActiveSheetIndex",
+    "error": null
+   },
+   {
+    "set": {
+     "act": {
+      "target": "spdMain",
+      "raise": "ActiveSheetChanged"
+     }
+    },
+    "ok": true,
+    "applied": "raise:spdMain.ActiveSheetChanged",
+    "error": null
+   }
+  ]
+ },
+ "edit_focus": "셀 0,2",
+ "edit_mode": true
+}

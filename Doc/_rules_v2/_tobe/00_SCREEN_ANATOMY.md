@@ -126,7 +126,7 @@ import 그룹    : 외부(@mescius, react) → @foundation → @shared → 로�
 5) <SearchArea onSearch={...} isHidden={!openSearchArea} conditions={searchFields...} extraConditions={...} />
 6) 공용 Modal (ProjectByDivisionModal / ItemByDivisionModal / OwnerByDivisionModal ...)
 ```
-검색 필드는 `@master/searchFields` 카탈로그 우선 사용(#69). onSearch = `setXxxFilters()`(+ 필요시 `fetchStaticColumns()`).
+검색 필드는 `features/master/src/components` (searchFields 카탈로그) 우선 사용(#69). (2026-11-13 정정: `@master/searchFields` → `features/master/src/components` — `@master/*` 별칭은 `pages/*/index.ts` 로만 풀려 해당 경로가 없음 · 실제 import 는 `from 'features/master/src/components'`) onSearch = `setXxxFilters()`(+ 필요시 `fetchStaticColumns()`).
 
 ### 3.5 `XxxGrid.tsx` (블록 순서) — components/
 ```
@@ -257,9 +257,9 @@ return (<><MainTitle/><XxxForm setActiveTab={setActiveTab} openDetailGrid={openD
 | 셸 | `MainTitle` `SubTitle` `TabWrapper/TabItem` | `@shared/components` | #61 / #64 |
 | 셸 | `Panel` `PanelGroup` | `@shared/panel` | #61 |
 | 검색 | `SearchArea` `CustomDropdown` `InputField` | `@shared/components` / `@shared/lges` | #69 / `_tobe/06` |
-| 검색필드 | `DivisionField`/`TeamField`/... | `@master/searchFields` | #69 |
+| 검색필드 | `DivisionField`/`TeamField`/... | `features/master/src/components` (11-13 정정) | #69 |
 | 그리드 | `DataGrid` | `@shared/components` | #60 / `_tobe/07` |
-| 모달 | `CustomDialog` + 공용 *Modal | `@shared/components` / `@master/...Modal` | #67 |
+| 모달 | `CustomDialog` + 공용 *Modal | `@shared/components` / `features/master/src/components` (11-13 정정) | #67 |
 | hooks | `useTabProcQuery`/`useProcMutation`/`useTabComboQueries`/`useSaveWithValidation`/`useTabBtnPermissions` | `@shared/hooks` | `_tobe/03` |
 | store | `createPersistedStoreWithTab` `useSessionStore` | `@shared/stores` | `_tobe/04` |
 | utils | `GridAction`/`EditTracker`/`CustomMergeManager`/`GridUtils` | `@foundation/utils` | #60 |

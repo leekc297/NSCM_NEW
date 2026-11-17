@@ -1,0 +1,36 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+공통요건,D4,번역투,사업부마다 보여지는 컬럼이,이중 피동 → '~된' · '보인' · '쓰인',사업부마다 보여지는 컬럼이 다른지 확인하고 As-is와 동일한지 확인
+공통요건,D5,번역투,보여지는 data,이중 피동 → '~된' · '보인' · '쓰인',보여지는 data가 같은지 확인 (다른 경우는 분석필요)
+공통요건,D17,수식어,BE에서는 기본적으로 EDIT 상,삭제,각 GRID에서 AS-IS에서 EDIT(F2)를 눌렀을때 EDIT 되는 컬럼이 TO-BE에서는 기본적으로 EDIT 상태로 조회 되는지
+공통요건,D20,번역투,팝업이 있는 경우 동일하게,'~의 경우' → '~은' · '~이면' · '~할 때',Combo / 팝업이 있는 경우 동일하게 구성되는지
+공통요건,D24,번역투,-in이 되는 경우 Combo,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - Combo에서 key-in이 되는 경우 Combo 내에서 없는 값이면 초기화 되기
+공통요건,D25,번역투,-in이 되는 경우 잘못된 값,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수
+검증내역,G9,기호,재조회 없음 → 목록 다시,문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),"[대조표] clbLine / Line
+[오류] 상위 조회조건을 바꾸면 하위 선택이 초기화되는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : 'Line' → 'E5DP1 Elec Pilot #1-01' 변경, 목록 다시 불러오기 1건, 하위 (없음), 화면에서 못 찾은 AS-IS 하위 조건 clbElectrodeType,clbOperation, AS-IS 핸들러 -= clbLine_SelectedIndexChanged,clbLine_SelectedIndexChanged, AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 목록 다시 불러오기 0건 정상)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SCP0104_CAPA_Line.cs:489 SCP0104_CAPA_Line_Assign.cs:1701 SCP0104_CAPA_Line_Assign_Model.cs:597"
+검증내역,G10,기호,재조회 없음 → 목록 다시,문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),"[대조표] cboVersion / Plan Month / Version / Ver.
+[오류] 상위 조회조건을 바꾸면 하위 선택이 초기화되는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : 'Plan Month' → '202609' 변경, 목록 다시 불러오기 0건, 하위 cboVersionSeq '1 | RP'→'1 | RP' 후보 1→1(동일), 화면에서 못 찾은 AS-IS 하위 조건 txtPlanType, AS-IS 핸들러 cboVersion_SelectedIndexChanged, AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 목록 다시 불러오기 0건 정상)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SCP0104_CAPA_Line_Assign.cs:1549"
+검증내역,G33,추상어,팝업에서 여러 행을 고르고,'일부 컬럼' → 컬럼명·건수 적기,"[대조표] NICK_NAME / Nickname
+[오류] 팝업에서 고른 값이 행에 반영되는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : [정적 판정] AS-IS 는 Item 팝업에서 여러 행을 고르고 OK 하면 고른 건수만큼 Assign 행을 추가함. TO-BE 그리드 셀 경로는 단일 선택이라 1건만 현재 행에 반영함. CapaLineAssign.tsx:900-907 주석의 OK 버튼 없음 설명은 Designer 원문과 다름. 규칙 근거 없음, AS-IS SC
+- AS-IS 근거 : SCP0104_CAPA_Line_Assign.cs:5699 SCP0104_CAPA_Line_Assign.cs:5700 SCP0104_CAPA_Line_Assign.cs:5702 SCP0104_CAPA_Line_Assign.cs:5703 SCP0104_CAPA_Line_Assign.cs:5705 SCP0104_CAPA_Line_Assign.cs:5709 SC"
+검증내역,G34,추상어,팝업에서 여러 행을 고르고,'일부 컬럼' → 컬럼명·건수 적기,"[대조표] ITEM_ID / Model
+[오류] 팝업에서 고른 값이 행에 반영되는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : [정적 판정] AS-IS 는 Item 팝업에서 여러 행을 고르고 OK 하면 고른 건수만큼 Assign 행을 추가함. TO-BE 그리드 셀 경로는 단일 선택이라 1건만 현재 행에 반영함. CapaLineAssign.tsx:900-907 주석의 OK 버튼 없음 설명은 Designer 원문과 다름. 규칙 근거 없음. 1건 선택 시 I
+- AS-IS 근거 : SCP0104_CAPA_Line_Assign.cs:5714 SCP0104_CAPA_Line_Assign.cs:5716 SCP0104_CAPA_Line_Assign.cs:5719 SCP0104_CAPA_Line_Assign.cs:5721 SCP0104_CAPA_Line_Assign.cs:5723 SCP0104_CAPA_Line_Assign.cs:5725 SC"
+검증내역,G66,수식어,기간 값이 모두 빈 행(L,삭제 — 범위는 수량·조건으로(예: 3건 모두 일치 → 3건 일치 · 정확히 일치 → 일치),"[저장] SCP0104 컬럼별 저장 왕복
+[오류] 저장이 DB 에 반영되는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : [정적 판정] 컬럼별 저장 왕복 31컬럼 중 30 OK, Y_2031 1건 실패. 기간 값이 모두 빈 행(Line FP_E6M02_A, Item A7, 기간 행 29개 전부 우선순위 0)에 Y_2031 만 1 을 넣고 저장하면 ORA-01840 '저장에 실패하였습니다.'(BE 로그 11-16 17:24·19:07·20:57·23:4x 매회 재현). 원인 위치 미확인(결정 37), 판정 검증엔진 세션 2026-11-17, 원 판정(ERROR): 편집 가능 31컬럼 중 왕복 31, 입력 경로 실패 0, 변경 인식 실패 0, 업무 검증 차단·사유 불명 0, 값 불일치 1, 수동 원복 확인 필요, Y_2031 원값 '' (1번째 행), 이후 컬럼 중단, 'Lane Number'(LANE_QTY) 60번째 행 '2'→'3'…"
+검증내역,G68,기호,"뉴 권한 있음 → 접근, 실",문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),"[eg-auth] SCP0104 EG382 직접 접근 SCP/40/SCP Planner
+[오류] 권한 없는 기능 차단: AS-IS 와 다르게 나왔음
+- 측정 기록 : 기대 메뉴 권한 있음 → 접근, 실제 authorized=false notFound=false, AS-IS SCM_ADM_USER_GR_MNU_MPG_M
+- 참고 : 같은 문제가 3곳에서 나왔음(SCP0104 EG382 직접 접근 SCP/40/SCM Viewer, SCP0104 EG382 직접 접근 SCP/40/SCP Tester) 이번 실행에서 처음 나온 결과임. 다시 실행해 같은 결과가 나오는지 확인이 필요함."
+검증내역,G69,수식어,7행 값은 모두 같고 행,삭제 — 범위는 수량·조건으로(예: 3건 모두 일치 → 3건 일치 · 정확히 일치 → 일치),"[차등 검증] SCP0104 SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY 공통·유일 행 상대 순서
+[오류] 조회 결과 행 순서(정렬): AS-IS 와 다르게 나왔음
+- AS-IS : [정적 판정] [권장안 적용, 결정 2(CR-105)] SOP_ASSEMBLY 조회 결과 27행 값은 모두 같고 행 순서만 다름(차등 검증 #37), 11-16 답변 CR-105(공통 행 순서 차이 = FAIL) 적용. 10-30 지시(정렬 기준 차이는 사람이 판정)와 겹쳐 질의 대상, 판정 검증엔진 세션 2026-11-17, 원 판정(판정필요): [SORT 기준 차이 → 판정필요] 정렬 기준이 AS-IS 와 다름, 결함 여부는 사람이 판정(사용자 지…
+- TO-BE : PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY, 판정 PASS, 공통 27행 전 컬럼 일치, 키(db_resultsets.csv is_nullable=0) 'Div'(DIVISI"

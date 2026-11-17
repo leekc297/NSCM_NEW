@@ -10,7 +10,7 @@
 
 NSCM 로컬 환경은 4개의 독립 자산으로 구성됨:
 
-1. **소스 코드** — git 관리 (GitHub `leekc297/NSCM` 백업 됨)
+1. **소스 코드** — git 관리 (GitHub `leekc297/NSCM_NEW` 백업 됨) (2026-11-13 정정: 원격 저장소 `leekc297/NSCM` → 현재 origin `leekc297/NSCM_NEW`)
 2. **FE `node_modules`** — 사내 registry 접속 불가 환경. pnpm install 으로 재생성 불가
 3. **BE config-local + 빌드 산출물** — `nscm-be/src/main/resources/config/config-local.yml` 등
 4. **Docker Oracle PDB FREEPDB1** — DDL + 데이터 (113 테이블 적재됨)
@@ -57,7 +57,7 @@ D:\NSCM_backup\
 
 ## 3.5 GitHub 메타 미러 (`_backup_metadata/`) — 2026-05-30 신규
 
-D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NSCM` (private) 에 **메타 4종** 미러.
+D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NSCM_NEW` (private) 에 **메타 4종** 미러. (11-13 정정)
 
 ### 미러 대상 (총 < 100 KB / 백업, 2026-06-07 정책 변경)
 | 파일 | 크기 | 용도 |
@@ -68,7 +68,7 @@ D 드라이브 손상 시 백업 자체도 잃을 위험 → GitHub `leekc297/NS
 | `git-dirty.txt` | <1 KB | 백업 시 미커밋 파일 목록 (있는 경우) |
 
 ### ⚠️ 절대 미러 X (D 드라이브 보관, 로컬 한정)
-- ⛔ `source.bundle` (~22 MB ~ 127 MB+) — **점진 증가 → 100MB 한도 초과 시 push 차단** (2026-06-06 사고: 127MB 로 인해 force-push history rewrite 필요). 2026-06-07 부터 GitHub mirror 제외. 소스 복원이 필요하면 `git clone https://github.com/leekc297/NSCM.git` 으로 충분 (mirror 가 곧 source).
+- ⛔ `source.bundle` (~22 MB ~ 127 MB+) — **점진 증가 → 100MB 한도 초과 시 push 차단** (2026-06-06 사고: 127MB 로 인해 force-push history rewrite 필요). 2026-06-07 부터 GitHub mirror 제외. 소스 복원이 필요하면 `git clone https://github.com/leekc297/NSCM_NEW.git` 으로 충분 (mirror 가 곧 source). (11-13 정정)
 - `fe-node-modules.tar` (~414 MB) — GitHub 100MB 단일파일 제한 + 사내 registry 자산
 - `oracle-full.dmp` (~1.2 GB) — 100MB 제한 + 회사 데이터 외부 노출 우려
 - `fe-config/.env.local` — 환경 변수 (민감)
@@ -113,7 +113,7 @@ _backup_metadata/**/*.zip
 C:\Projects\NSCM\_backup_metadata\
   ├── README.md                              (폴더 사용법)
   ├── 2026-05-30_1842_post-figma-stage1\     (백업별 subfolder)
-  │    ├── source.bundle
+  │    ├── source.bundle                     (2026-11-13 정정: 2026-06-07 부터 미러 제외 — 이 폴더에 두지 않음. 위 '절대 미러 X'·.gitignore 참조)
   │    ├── manifest.json
   │    ├── oracle-full.log
   │    └── git-head.txt
@@ -128,7 +128,7 @@ C:\Projects\NSCM\_backup_metadata\
 
 ### Private repo 한정
 - public repo 로 변경 금지 (회사 객체명 + git-head + bundle 노출 위험)
-- `gh repo view leekc297/NSCM --json visibility` 로 확인 후 진행
+- `gh repo view leekc297/NSCM_NEW --json visibility` 로 확인 후 진행 (11-13 정정)
 
 ---
 
@@ -136,7 +136,7 @@ C:\Projects\NSCM\_backup_metadata\
 
 ### 4.1 자동 (Windows Task Scheduler)
 
-- Task 이름: **`NSCM_Daily_Backup`**
+- Task 이름: **`NSCM_Daily_Backup`** (2026-11-13: 현 PC 에는 이 예약 작업이 등록돼 있지 않음 — `schtasks /query /tn NSCM_Daily_Backup` 결과 없음. `D:\NSCM_backup\`·`C:\Projects\NSCM\_backup_metadata\` 폴더도 현재 없음. 스크립트는 `_artifacts/local-docker-oracle/` 에 있음)
 - 매일 **02:00** 실행
 - LogonType: `S4U` (사용자 로그아웃 상태에서도 동작)
 - 실패 시 10분 간격 최대 3회 재시도
@@ -171,7 +171,7 @@ manifest.json 정합성 확인
 ```
 
 ### 5.2 안전장치
-- **사용자 확인 prompt**: `YES` 입력 시에만 진행 (-Force 로 우회 가능)
+- **사용자 확인 prompt**: `YES` 입력 시에만 진행 (-Force 로 우회 가능) (2026-11-13 정정: `-Force` 는 스크립트 옵션일 뿐 — Claude 는 사용자 승인 없이 `-Force` 로 확인을 생략하지 않는다. §5.3 · CLAUDE.md §1-7 `reset --hard` 전 사용자 승인 의무)
 - **현재 변경사항 자동 stash**: 원복 후 `git stash pop` 으로 복귀 가능
 - **DryRun 모드**: `-DryRun` 으로 실제 변경 없이 액션만 출력
 - **부분 원복**: `-SkipSource` / `-SkipFeTar` / `-SkipOracleDmp` 옵션
@@ -198,6 +198,7 @@ manifest.json 정합성 확인
 백업 시작 전 콘솔에:
 - 예상 시간 (~40~70분)
 - 예상 용량 (~5-8GB)
+  (2026-11-13 정정: 추정 소요·용량 보고는 CLAUDE.md §1-9(감·예측 답변 금지)와 어긋남 → 직전 백업 `manifest.json` 의 실측값(`elapsedSec`·크기)을 출처·시각과 함께 인용하고, 실측값이 없으면 '미측정'으로 적는다)
 - 영향 받는 파일
 
 원복 시작 전 콘솔에:

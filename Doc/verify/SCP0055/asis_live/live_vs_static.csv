@@ -1,0 +1,55 @@
+﻿kind,item,static,live,verdict,note
+SP,DM0003_GET_BUCKET_TYPE_CODE,SCP0055_Shipment_Allo_Report.cs:271 GetBucketType,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0053_GET_SCP_BOM,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SCP0055_GET_SHIPMENT_ALLO_NOTE,SCP0055_Shipment_Allo_Report.cs:1049 RefreshNote,82회 · 구간 find,MATCH,
+SP,SCP0055_GET_SHIPMENT_ALLO_PLAN,SCP0055_Shipment_Allo_Report.cs:779 RefreshGrid,2회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_SCM_SYS_LOG_BATCH,SCP0055_Shipment_Allo_Report.cs:1431 SCM_SYS_LOG_BATCH,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0055_SAVE_SHIPMENT_ALLO_PLAN,SCP0055_Shipment_Allo_Report.cs:1274 SaveData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),59개,43개,INFO,공통 24 · 선언만 35 · 실측만 19
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnOK,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbMonth,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lblYYYY,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,picLeft,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,picRight,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboOperationGroup,Y,Operation Group* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtModel_ID,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanDate,Y,Plan Date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnModel_ID,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboCellTypeGr,Y,Cell Type GR,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboGapDate,Y,Gap Date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtNickName,Y,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnNickName,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umpMonthFrom,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umpMonthTo,Y,~,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,ulPlanType_Seq1,Y,layoutControlItem10,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,ulPlanType_Seq2,Y,layoutControlItem11,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkFCST,Y,layoutFCST,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Shipment(Allo) Report,정적 컬럼 사실 14행(시트 미지정 포함),컬럼 20(보임 18) · 헤더 2단 · 행 97 · 고정 1,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdGap/Shipment(Allo) Report,정적 컬럼 사실 14행(시트 미지정 포함),컬럼 19(보임 18) · 헤더 2단 · 행 63 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

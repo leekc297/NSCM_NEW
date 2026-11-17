@@ -1,0 +1,26 @@
+{
+ "screen": "SSP0014",
+ "generated": "2026-11-14 20:13:08",
+ "vars": {
+  "dtFromSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "PlantSiteByDivision",
+   "targets": [
+    "GRID:FROM_SITE",
+    "PARAM:PlantSiteByDivision",
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SSP0014_ShipmentModelPIC.cs:203 ← SSP0014_ShipmentModelPIC.cs:202",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:OPERATION_GROUP"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0014/Shipment Model PIC/OPERATION_GROUP ← SCM_MST_SHEET_COLUMNS SSP0014/Shipment Model PIC/OPERATION_GROUP",
+   "rows": []
+  }
+ }
+}

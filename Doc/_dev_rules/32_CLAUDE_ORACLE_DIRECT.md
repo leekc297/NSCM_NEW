@@ -8,7 +8,7 @@
 
 | 환경 | 접속 | 비고 |
 |---|---|---|
-| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP / 2026-06-17 Service Name / 2026-07-27 IP:PORT / 2026-09-02 IP:PORT / 2026-09-05 DB 교체 / ⭐ 2026-09-07 DB명 ZIOUI1) | `175.211.29.206:2521/ZIOUI1`, user `SCM_MGR` | 검증 기준 DB (SERVER_HOST=itx · Oracle 26ai). 구 `AJS` 는 **별개 DB로 잔존** — 적용분 자동 승계 안 됨 |
+| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP / 2026-06-17 Service Name / 2026-07-27 IP:PORT / 2026-09-02 IP:PORT / 2026-09-05 DB 교체 / ⭐ 2026-09-07 DB명 ZIOUI1) | `175.211.29.206:2521/ZIOUI1`, user `SCM_MGR` (2026-11-14 정정: 현행 접속 값은 `.env.asis` 의 TOBE_DB_* 가 정본. 이 표의 주소는 갱신하지 않음) | 검증 기준 DB (SERVER_HOST=itx · Oracle 26ai). 구 `AJS` 는 **별개 DB로 잔존** — 적용분 자동 승계 안 됨 |
 | ↳ 이전 접속 (보관/DEPRECATED) | `175.211.29.206:3521/OCGSCMD_P01` (~2026-09-05) · `100.65.143.121:1521/OCGSCMD_P01` (~2026-09-02) · `121.162.245.167:2521/OCGSCMD_P01` (~2026-07-27) | 사용 금지 |
 | 로컬 Docker | `localhost:1521/FREEPDB1` (container `nscm-oracle`) | 보조/실험용 |
 
@@ -54,7 +54,7 @@ python _artifacts/_diagnostics/ora.py exec _artifacts/52_xxx/01_sp_body.sql
 
 ## 옵션 C — docker exec sqlplus (기존 검증된 경로 — 대량 적용용)
 
-Windows Instant Client 미설치 우회책으로 이미 운용 중. 사내 일괄 적용(82 SQL)에 실적 보유.
+Windows Instant Client 미설치 우회책으로 이미 운용 중. 사내 일괄 적용(82 SQL)에 실적 보유. (2026-11-14 정정: 현행 접속 도구는 `tools/DbConn`(python-oracledb thin). `C:\oracle\instantclient_23_0\sqlplus.exe` 는 2026-11-13 18:50 확인 때 없음)
 
 ```bash
 _artifacts/_diagnostics/run_sql.sh file.sql            # 1회 실행 (CRLF 자동 제거)
@@ -78,7 +78,7 @@ _artifacts/_apply_corporate/apply.sh ...               # 사내 적용 (Known er
 
 ## 안전 수칙 (의무)
 
-1. SELECT/조회성 메타 질의 = 자유 / **INSERT·UPDATE·DELETE·DDL = 실행 전 사용자에게 대상·건수 보고 후 승인** (사내 DB 는 공유 환경)
+1. SELECT/조회성 메타 질의 = 자유 / **INSERT·UPDATE·DELETE·DDL = 실행 전 사용자에게 대상·건수 보고 후 승인** (사내 DB 는 공유 환경) (2026-11-14 정정: 사내 개발 DB(ZIOUI1)는 상시 허용(2026-09-14). 적용 SQL, 원복 SQL, README 를 만든 뒤 적용하고 검증한다. 클라우드는 이관 패키지만 만든다. 정합검증 단계에서는 보완을 실행하지 않는다(2026-10-28))
 2. 모든 변경성 SQL 은 `_artifacts/` 에 멱등 파일로 보존 후 실행 (재실행 안전 — NOT EXISTS/MERGE)
 3. 실행 로그는 `_artifacts/_apply_corporate/_logs/` 규약 준수
 4. 접속 정보는 환경변수/.env.asis/SQLcl secure store — 문서·코드에 평문 금지 (기존 평문 잔존분은 점진 제거 대상)

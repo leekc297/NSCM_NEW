@@ -1,0 +1,32 @@
+{
+ "id": "SSP0022",
+ "run_dir": "Doc/asislive/SSP0022/run_20261112_205349",
+ "live_at": "2026-11-12 20:53:49.809",
+ "user": "jaeuk.shin",
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 20.515s, UI : 0.138s",
+  "total": "Total : 384",
+  "how": "status"
+ },
+ "mixed_risk": true,
+ "live_calls": 47,
+ "live_sp_distinct": 12,
+ "static_vs_live": {
+  "SP:MATCH": 3,
+  "SP:FRAMEWORK": 8,
+  "SP:INLINE": 1,
+  "SP:NOT_CALLED": 7,
+  "CONTROL:INFO": 1,
+  "CONTROL:LIVE_ONLY": 18,
+  "CONDITION:LIVE": 34,
+  "GRID:LIVE": 4
+ },
+ "diff_gap": {},
+ "param_hints": 0,
+ "limits": [
+  "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
+  "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",
+  "원장 행 미생성(같은 조건 실측 전에는 판정 근거 없음)"
+ ]
+}

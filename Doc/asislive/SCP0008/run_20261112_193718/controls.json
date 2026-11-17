@@ -1,0 +1,1521 @@
+{
+ "id": "SCP0008",
+ "from": "dump_find.json",
+ "screen": {
+  "type": "GSCM.SCP.Master.UIL.SCP0008_ItemMaster",
+  "text": "Item Master",
+  "width": 1459,
+  "height": 834
+ },
+ "controls": [
+  {
+   "name": "spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/spdMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 71,
+   "w": 1459,
+   "h": 763,
+   "tab": 11
+  },
+  {
+   "name": "usrConditionPanel1",
+   "type": "GSCM.Windows.Forms.Controls.UsrConditionPanel",
+   "path": "/usrConditionPanel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 71,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "usrLayoutControl2",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1439,
+   "h": 71,
+   "tab": 0,
+   "text": "usrLayoutControl2"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 71,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 17,
+   "h": 71,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 71,
+   "w": 1439,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clbMaterialType",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType",
+   "visible": true,
+   "enabled": true,
+   "x": 696,
+   "y": 37,
+   "w": 203,
+   "h": 21,
+   "tab": 14,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 203,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 84,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 84,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "-",
+     "checked": false
+    },
+    {
+     "text": "H",
+     "checked": false
+    },
+    {
+     "text": "P",
+     "checked": false
+    },
+    {
+     "text": "Q",
+     "checked": false
+    },
+    {
+     "text": "R",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbMaterialType/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "clbClass2",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2",
+   "visible": true,
+   "enabled": true,
+   "x": 382,
+   "y": 37,
+   "w": 224,
+   "h": 21,
+   "tab": 13,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 224,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "-",
+     "checked": false
+    },
+    {
+     "text": "ADC/DAC",
+     "checked": false
+    },
+    {
+     "text": "Addition Agent",
+     "checked": false
+    },
+    {
+     "text": "ADHESIVE",
+     "checked": false
+    },
+    {
+     "text": "Adhesive",
+     "checked": false
+    },
+    {
+     "text": "Alternative Model",
+     "checked": false
+    },
+    {
+     "text": "Amplifier & Comparator",
+     "checked": false
+    },
+    {
+     "text": "ANGLE BEAD",
+     "checked": false
+    },
+    {
+     "text": "Anode Active Material",
+     "checked": false
+    },
+    {
+     "text": "ASIC",
+     "checked": false
+    },
+    {
+     "text": "Aspalt Primer",
+     "checked": false
+    },
+    {
+     "text": "Assembly",
+     "checked": false
+    },
+    {
+     "text": "Automotive",
+     "checked": false
+    },
+    {
+     "text": "Automotive LEAD Assembly",
+     "checked": false
+    },
+    {
+     "text": "AZS-H Cell",
+     "checked": false
+    },
+    {
+     "text": "BAG",
+     "checked": false
+    },
+    {
+     "text": "BAND",
+     "checked": false
+    },
+    {
+     "text": "BAR",
+     "checked": false
+    },
+    {
+     "text": "Bare PCB",
+     "checked": false
+    },
+    {
+     "text": "Bi-Cell",
+     "checked": false
+    },
+    {
+     "text": "Binder",
+     "checked": false
+    },
+    {
+     "text": "BMS ASSY",
+     "checked": false
+    },
+    {
+     "text": "BOLT",
+     "checked": false
+    },
+    {
+     "text": "BOND",
+     "checked": false
+    },
+    {
+     "text": "BOX",
+     "checked": false
+    },
+    {
+     "text": "BOX",
+     "checked": false
+    },
+    {
+     "text": "BRACKET",
+     "checked": false
+    },
+    {
+     "text": "BUSBAR",
+     "checked": false
+    },
+    {
+     "text": "BUSHING",
+     "checked": false
+    },
+    {
+     "text": "BUTTON",
+     "checked": false
+    },
+    {
+     "text": "CABLE & WIRE",
+     "checked": false
+    },
+    {
+     "text": "CAN",
+     "checked": false
+    },
+    {
+     "text": "CAP",
+     "checked": false
+    },
+    {
+     "text": "Capacitor",
+     "checked": false
+    },
+    {
+     "text": "Carbon Powder Dispersion",
+     "checked": false
+    },
+    {
+     "text": "CARTON PAD",
+     "checked": false
+    },
+    {
+     "text": "CARTRIDGE",
+     "checked": false
+    },
+    {
+     "text": "CASE",
+     "checked": false
+    },
+    {
+     "text": "Cathode Active Material",
+     "checked": false
+    },
+    {
+     "text": "Cell Assembly",
+     "checked": false
+    },
+    {
+     "text": "Cell Extra Assembly",
+     "checked": false
+    },
+    {
+     "text": "Chip Antenna",
+     "checked": false
+    },
+    {
+     "text": "CLIP",
+     "checked": false
+    },
+    {
+     "text": "Clock & Timer",
+     "checked": false
+    },
+    {
+     "text": "Comm. Isolator",
+     "checked": false
+    },
+    {
+     "text": "Comm. Translator",
+     "checked": false
+    },
+    {
+     "text": "Conducting Material",
+     "checked": false
+    },
+    {
+     "text": "CONNECTOR",
+     "checked": false
+    },
+    {
+     "text": "Connector - Electro",
+     "checked": false
+    },
+    {
+     "text": "COOLING",
+     "checked": false
+    },
+    {
+     "text": "COVER",
+     "checked": false
+    },
+    {
+     "text": "Current Meas",
+     "checked": false
+    },
+    {
+     "text": "Current Sensor",
+     "checked": false
+    },
+    {
+     "text": "Cylinderical Top Cap Assembly",
+     "checked": false
+    },
+    {
+     "text": "De-PKGed Cell",
+     "checked": false
+    },
+    {
+     "text": "DESICCANT",
+     "checked": false
+    },
+    {
+     "text": "DIE",
+     "checked": false
+    },
+    {
+     "text": "Digital Logic",
+     "checked": false
+    },
+    {
+     "text": "Diode",
+     "checked": false
+    },
+    {
+     "text": "DUCT",
+     "checked": false
+    },
+    {
+     "text": "Electrical Relay",
+     "checked": false
+    },
+    {
+     "text": "Electrode Biz. Assembly",
+     "checked": false
+    },
+    {
+     "text": "Electrolyte",
+     "checked": false
+    },
+    {
+     "text": "Electronics Kit",
+     "checked": false
+    },
+    {
+     "text": "Electronics Other",
+     "checked": false
+    },
+    {
+     "text": "ENCLOSURE",
+     "checked": false
+    },
+    {
+     "text": "ESS",
+     "checked": false
+    },
+    {
+     "text": "EVENT",
+     "checked": false
+    },
+    {
+     "text": "FILM",
+     "checked": false
+    },
+    {
+     "text": "FILM",
+     "checked": false
+    },
+    {
+     "text": "FILTER",
+     "checked": false
+    },
+    {
+     "text": "FOAM",
+     "checked": false
+    },
+    {
+     "text": "FOAM",
+     "checked": false
+    },
+    {
+     "text": "FOIL",
+     "checked": false
+    },
+    {
+     "text": "Folded Cell",
+     "checked": false
+    },
+    {
+     "text": "FPCB",
+     "checked": false
+    },
+    {
+     "text": "FRAME",
+     "checked": false
+    },
+    {
+     "text": "FUSE",
+     "checked": false
+    },
+    {
+     "text": "GASKET",
+     "checked": false
+    },
+    {
+     "text": "Glue",
+     "checked": false
+    },
+    {
+     "text": "Half-Cell",
+     "checked": false
+    },
+    {
+     "text": "HANDLE",
+     "checked": false
+    },
+    {
+     "text": "HEAT SINK",
+     "checked": false
+    },
+    {
+     "text": "HOLDER",
+     "checked": false
+    },
+    {
+     "text": "HOSE",
+     "checked": false
+    },
+    {
+     "text": "HOUSING",
+     "checked": false
+    },
+    {
+     "text": "Inductor",
+     "checked": false
+    },
+    {
+     "text": "INSERTION KIT",
+     "checked": false
+    },
+    {
+     "text": "INSULATOR",
+     "checked": false
+    },
+    {
+     "text": "Jelly Roll",
+     "checked": false
+    },
+    {
+     "text": "JIG",
+     "checked": false
+    },
+    {
+     "text": "Jumbo Roll",
+     "checked": false
+    },
+    {
+     "text": "KNOB",
+     "checked": false
+    },
+    {
+     "text": "LABEL",
+     "checked": false
+    },
+    {
+     "text": "LABEL",
+     "checked": false
+    },
+    {
+     "text": "LABEL",
+     "checked": false
+    },
+    {
+     "text": "LATCH",
+     "checked": false
+    },
+    {
+     "text": "Leak Checked Cell",
+     "checked": false
+    },
+    {
+     "text": "LENS",
+     "checked": false
+    },
+    {
+     "text": "MANIFOLD",
+     "checked": false
+    },
+    {
+     "text": "Material",
+     "checked": false
+    },
+    {
+     "text": "M-COVERLAY",
+     "checked": false
+    },
+    {
+     "text": "MCU",
+     "checked": false
+    },
+    {
+     "text": "Mechanical Kit",
+     "checked": false
+    },
+    {
+     "text": "Mechanical Switch",
+     "checked": false
+    },
+    {
+     "text": "Memory",
+     "checked": false
+    },
+    {
+     "text": "Metal",
+     "checked": false
+    },
+    {
+     "text": "Mobile",
+     "checked": false
+    },
+    {
+     "text": "Mobility&IT LEAD Assembly",
+     "checked": false
+    },
+    {
+     "text": "Module Assembly",
+     "checked": false
+    },
+    {
+     "text": "MONO",
+     "checked": false
+    },
+    {
+     "text": "Mono-Cell",
+     "checked": false
+    },
+    {
+     "text": "Notched Cut",
+     "checked": false
+    },
+    {
+     "text": "Notched Pancake",
+     "checked": false
+    },
+    {
+     "text": "NUT",
+     "checked": false
+    },
+    {
+     "text": "OTHER",
+     "checked": false
+    },
+    {
+     "text": "OTHER",
+     "checked": false
+    },
+    {
+     "text": "PACK",
+     "checked": false
+    },
+    {
+     "text": "Pack Assembly",
+     "checked": false
+    },
+    {
+     "text": "PAD",
+     "checked": false
+    },
+    {
+     "text": "Paired Cell",
+     "checked": false
+    },
+    {
+     "text": "PALLET",
+     "checked": false
+    },
+    {
+     "text": "Pancake",
+     "checked": false
+    },
+    {
+     "text": "PANEL",
+     "checked": false
+    },
+    {
+     "text": "PCB ASSY",
+     "checked": false
+    },
+    {
+     "text": "PIN",
+     "checked": false
+    },
+    {
+     "text": "PLASTIC COVER",
+     "checked": false
+    },
+    {
+     "text": "PLATE",
+     "checked": false
+    },
+    {
+     "text": "Platter CAN Assembly",
+     "checked": false
+    },
+    {
+     "text": "PORT",
+     "checked": false
+    },
+    {
+     "text": "POUCH",
+     "checked": false
+    },
+    {
+     "text": "Pre Dispersion Slurry",
+     "checked": false
+    },
+    {
+     "text": "Pre-PKGed Cell",
+     "checked": false
+    },
+    {
+     "text": "Prismatic CAN",
+     "checked": false
+    },
+    {
+     "text": "Prismatic Cap Assembly",
+     "checked": false
+    },
+    {
+     "text": "PTC",
+     "checked": false
+    },
+    {
+     "text": "RACK",
+     "checked": false
+    },
+    {
+     "text": "REINFORCEMENT",
+     "checked": false
+    },
+    {
+     "text": "Relay",
+     "checked": false
+    },
+    {
+     "text": "Resin",
+     "checked": false
+    },
+    {
+     "text": "Resistor",
+     "checked": false
+    },
+    {
+     "text": "RIVET",
+     "checked": false
+    },
+    {
+     "text": "Riveting CAN Assembly",
+     "checked": false
+    },
+    {
+     "text": "RUBBER",
+     "checked": false
+    },
+    {
+     "text": "SCREW",
+     "checked": false
+    },
+    {
+     "text": "SEAL",
+     "checked": false
+    },
+    {
+     "text": "SEAL BALL",
+     "checked": false
+    },
+    {
+     "text": "SEAL BALL COMPONENT",
+     "checked": false
+    },
+    {
+     "text": "Security",
+     "checked": false
+    },
+    {
+     "text": "Separator",
+     "checked": false
+    },
+    {
+     "text": "SHEET",
+     "checked": false
+    },
+    {
+     "text": "Sheet",
+     "checked": false
+    },
+    {
+     "text": "SHEET",
+     "checked": false
+    },
+    {
+     "text": "SHIELD",
+     "checked": false
+    },
+    {
+     "text": "Slurry",
+     "checked": false
+    },
+    {
+     "text": "SOFTWARE",
+     "checked": false
+    },
+    {
+     "text": "Solvent",
+     "checked": false
+    },
+    {
+     "text": "SPACER",
+     "checked": false
+    },
+    {
+     "text": "SPONGE",
+     "checked": false
+    },
+    {
+     "text": "SPRING",
+     "checked": false
+    },
+    {
+     "text": "Stackable pack Assembly",
+     "checked": false
+    },
+    {
+     "text": "Stacked Cell",
+     "checked": false
+    },
+    {
+     "text": "STRAP",
+     "checked": false
+    },
+    {
+     "text": "STRIP",
+     "checked": false
+    },
+    {
+     "text": "Switching Control",
+     "checked": false
+    },
+    {
+     "text": "TAB",
+     "checked": false
+    },
+    {
+     "text": "TAPE",
+     "checked": false
+    },
+    {
+     "text": "TCO",
+     "checked": false
+    },
+    {
+     "text": "Temp Component",
+     "checked": false
+    },
+    {
+     "text": "Temp. Sensor",
+     "checked": false
+    },
+    {
+     "text": "Thermal Breaker",
+     "checked": false
+    },
+    {
+     "text": "TIE",
+     "checked": false
+    },
+    {
+     "text": "TIM",
+     "checked": false
+    },
+    {
+     "text": "Transceiver",
+     "checked": false
+    },
+    {
+     "text": "Transistor",
+     "checked": false
+    },
+    {
+     "text": "TRAY",
+     "checked": false
+    },
+    {
+     "text": "TRAY",
+     "checked": false
+    },
+    {
+     "text": "TUBE",
+     "checked": false
+    },
+    {
+     "text": "Unit Cell",
+     "checked": false
+    },
+    {
+     "text": "VALVE",
+     "checked": false
+    },
+    {
+     "text": "VENT",
+     "checked": false
+    },
+    {
+     "text": "Voltage Sensor",
+     "checked": false
+    },
+    {
+     "text": "Voltage Source",
+     "checked": false
+    },
+    {
+     "text": "WASHER",
+     "checked": false
+    },
+    {
+     "text": "WIP Cell",
+     "checked": false
+    },
+    {
+     "text": "Wrap Assy",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass2/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "clbClass1",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1",
+   "visible": true,
+   "enabled": true,
+   "x": 49,
+   "y": 37,
+   "w": 284,
+   "h": 21,
+   "tab": 12,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 284,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 148,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 148,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "Assembly",
+     "checked": false
+    },
+    {
+     "text": "Electronics",
+     "checked": false
+    },
+    {
+     "text": "ETC",
+     "checked": false
+    },
+    {
+     "text": "Etc.",
+     "checked": false
+    },
+    {
+     "text": "LG Chem",
+     "checked": false
+    },
+    {
+     "text": "Mechanical",
+     "checked": false
+    },
+    {
+     "text": "Model",
+     "checked": false
+    },
+    {
+     "text": "Raw Material",
+     "checked": false
+    },
+    {
+     "text": "Wrapping",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbClass1/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "txtClass",
+   "type": "GSCM.Windows.Forms.Controls.UsrTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtClass",
+   "visible": true,
+   "enabled": true,
+   "x": 941,
+   "y": 12,
+   "w": 272,
+   "h": 20,
+   "tab": 7,
+   "text": "",
+   "control_values": "",
+   "read_only": "False"
+  },
+  {
+   "name": "txtScmSite",
+   "type": "GSCM.Windows.Forms.Controls.UsrTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtScmSite",
+   "visible": true,
+   "enabled": true,
+   "x": 671,
+   "y": 12,
+   "w": 228,
+   "h": 20,
+   "tab": 6,
+   "text": "",
+   "control_values": "",
+   "read_only": "False"
+  },
+  {
+   "name": "txtSite",
+   "type": "GSCM.Windows.Forms.Controls.UsrTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtSite",
+   "visible": true,
+   "enabled": true,
+   "x": 371,
+   "y": 12,
+   "w": 235,
+   "h": 20,
+   "tab": 5,
+   "text": "",
+   "control_values": "",
+   "read_only": "False"
+  },
+  {
+   "name": "cboDivision",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision",
+   "visible": true,
+   "enabled": true,
+   "x": 33,
+   "y": 12,
+   "w": 300,
+   "h": 21,
+   "tab": 1,
+   "text": "81 Automotive Battery",
+   "selected_index": 0,
+   "selected_text": "81 Automotive Battery",
+   "selected_value": "81",
+   "items": [
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "81_UC Automotive Battery(UC)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)"
+   ],
+   "item_count": 8,
+   "control_values": "81"
+  },
+  {
+   "name": "txtMaterial",
+   "type": "GSCM.Windows.Forms.Controls.UsrMultiLineEditor",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtMaterial",
+   "visible": true,
+   "enabled": true,
+   "x": 1015,
+   "y": 37,
+   "w": 198,
+   "h": 21,
+   "tab": 44,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "pictureBox1",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtMaterial/pictureBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 180,
+   "y": 3,
+   "w": 16,
+   "h": 15,
+   "tab": 7,
+   "text": ""
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtMaterial/pnlMain",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "textBox2",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtMaterial/pnlMain/textBox2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtMaterial/textBox1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 198,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/Panel",
+   "visible": true,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 20,
+   "h": 71,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "Change",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/Panel/Change",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 56,
+   "w": 20,
+   "h": 15,
+   "tab": 0,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "statusStripBaseForm",
+   "type": "System.Windows.Forms.StatusStrip",
+   "path": "/statusStripBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 538,
+   "w": 875,
+   "h": 26,
+   "tab": 1,
+   "text": "statusStrip1"
+  },
+  {
+   "name": "pnlBaseForm",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/pnlBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 31,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "BaseRibbonCtl",
+   "type": "DevExpress.XtraBars.Ribbon.RibbonControl",
+   "path": "/pnlBaseForm/BaseRibbonCtl",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 78,
+   "tab": 0,
+   "text": ""
+  }
+ ],
+ "layout_items": [
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlGroup2",
+   "label": "layoutControlGroup2",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem1",
+   "label": "emptySpaceItem1",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem2",
+   "label": "Site",
+   "control": "txtSite",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem3",
+   "label": "SCM Site",
+   "control": "txtScmSite",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem4",
+   "label": "Class",
+   "control": "txtClass",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem9",
+   "label": "Class1",
+   "control": "clbClass1",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem5",
+   "label": "Class2",
+   "control": "clbClass2",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem6",
+   "label": "Material Type",
+   "control": "clbMaterialType",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "Division",
+   "label": "Div",
+   "control": "cboDivision",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem2",
+   "label": "emptySpaceItem2",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem1",
+   "label": "Material ID/Name*",
+   "control": "txtMaterial",
+   "required": true,
+   "visible": "True",
+   "text_visible": "True"
+  }
+ ]
+}

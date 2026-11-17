@@ -1,0 +1,13 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+MyDivisionInEE_SCP,"{""comboId"":""MyDivisionInEE_SCP"",""mnuId"":""SSP0003""}",14,14,,,PASS,응답 14건 = DB 14건
+PlantSiteByDivision_SCP,"{""comboId"":""PlantSiteByDivision_SCP"",""divisionId"":""''"",""mnuId"":""SSP0003""}",108,105,,,PASS,응답 105건 = DB 105건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SSP0003""}",14,14,,,PASS,응답 14건 = DB 14건
+LookupCommon3,"{""comboId"":""LookupCommon3"",""lookupType"":""'CHANGE_REASON_CODE'"",""mnuId"":""SSP0003"",""divisionId"":""''"",""validYn"":""'Y'""}",7,7,,,PASS,응답 7건 = DB 7건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SALES_TYPE_CODE'"",""mnuId"":""SSP0003"",""divisionId"":""''"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+Dept,"{""comboId"":""Dept"",""mnuId"":""SSP0003"",""divisionId"":""''"",""validYn"":""'Y'""}",21470,21470,,,PASS,응답 21470건(수집 상한으로 코드 비교 생략) ↔ DB 21470건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'CHANGE_REQ_STATUS'"",""mnuId"":""SSP0003"",""divisionId"":""''"",""validYn"":""'Y'""}",8,8,,,PASS,응답 8건 = DB 8건
+PlantSiteByDivision_SCP,"{""comboId"":""PlantSiteByDivision_SCP"",""divisionId"":""'40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC'"",""mnuId"":""SSP0003""}",108,105,,,PASS,응답 105건 = DB 105건
+LookupCommon3,"{""comboId"":""LookupCommon3"",""lookupType"":""'CHANGE_REASON_CODE'"",""mnuId"":""SSP0003"",""divisionId"":""'40'"",""validYn"":""'Y'""}",7,7,,,PASS,응답 7건 = DB 7건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SALES_TYPE_CODE'"",""mnuId"":""SSP0003"",""divisionId"":""'40'"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'CHANGE_REQ_STATUS'"",""mnuId"":""SSP0003"",""divisionId"":""'40'"",""validYn"":""'Y'""}",8,8,,,PASS,응답 8건 = DB 8건
+Dept,"{""comboId"":""Dept"",""mnuId"":""SSP0003"",""divisionId"":""'40'"",""validYn"":""'Y'""}",21470,21470,,,PASS,응답 21470건(수집 상한으로 코드 비교 생략) ↔ DB 21470건

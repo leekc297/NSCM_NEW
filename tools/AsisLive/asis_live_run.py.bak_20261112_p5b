@@ -1,0 +1,378 @@
+# -*- coding: utf-8 -*-
+"""AS-IS 실측 실행기 (2026-11-12 · 승인 플랜 velvet-conjuring-lake P0)
+
+AS-IS GSCM 런처를 호스트(AsisLive.Host.exe)로 실제 구동해 화면 1개를 열고 조회한 뒤 증거를 남긴다.
+  사용: python tools/AsisLive/asis_live_run.py <화면ID> [--find-timeout 200] [--rows 50] [--no-find] [--keep]
+  산출: Doc/asislive/<ID>/run_<yyyymmdd_HHMMSS>/ (run.json · calls.json · controls.json · grids.json · shots/*.png · summary.md)
+        Doc/asislive/<ID>/latest.json
+  종료코드: 0 정상 · 2 FAIL(화면 열기·조회 실패) · 3 미측정(환경 미비 · 증거 일부 없음) · 5 로컬 서버(8086) 미기동
+AS-IS 소스는 수정하지 않는다. 비밀번호는 읽지도 입력하지도 않는다(로그인 창 OK 만 누름).
+"""
+import argparse, datetime as dt, glob, json, os, re, shutil, socket, subprocess, sys, time
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+GSCM = os.path.join(ROOT, "GSCM")
+LAUNCH_DIR = os.path.join(GSCM, "02.Launcher", "GSCM.Launcher", "bin", "Debug")
+WSL_COPY = os.path.join(GSCM, "_asis_local", "04.WSL")
+HOST_SRC = os.path.join(ROOT, "tools", "AsisLive", "host", "AsisLiveHost.cs")
+HOST_BIN = os.path.join(ROOT, "tools", "AsisLive", "host", "bin", "AsisLive.Host.exe")
+HOST_EXE = os.path.join(LAUNCH_DIR, "AsisLive.Host.exe")
+CSC = r"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\Roslyn\csc.exe"
+REFASM = r"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1"
+PORT = 8086
+
+for s in (sys.stdout, sys.stderr):
+    try: s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception: pass
+
+STEP = {"i": 0, "n": 4}
+def step(msg):
+    STEP["i"] += 1
+    print("[세부 %d/%d] %s" % (STEP["i"], STEP["n"], msg), flush=True)
+def now(): return dt.datetime.now()
+def ts(t=None): return (t or now()).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+
+def port_open(port):
+    with socket.socket() as s:
+        s.settimeout(2)
+        return s.connect_ex(("127.0.0.1", port)) == 0
+
+def build_host():
+    """소스가 더 새로우면 컴파일하고, Launcher 폴더에 exe·config 를 맞춘다."""
+    if not os.path.isfile(HOST_BIN) or os.path.getmtime(HOST_BIN) < os.path.getmtime(HOST_SRC):
+        os.makedirs(os.path.dirname(HOST_BIN), exist_ok=True)
+        refs = ["mscorlib", "System", "System.Core", "System.Drawing", "System.Windows.Forms", "System.Web.Extensions"]
+        cmd = [CSC, "/nologo", "/target:winexe", "/platform:anycpu", "/optimize+", "/langversion:7.3", "/nostdlib+", "/noconfig",
+               "/out:" + HOST_BIN] + ["/r:%s\\%s.dll" % (REFASM, r) for r in refs] + [HOST_SRC]
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if r.returncode != 0:
+            print("[ERROR] 호스트 컴파일 실패\n" + (r.stdout or "") + (r.stderr or "")); return False
+    if not os.path.isfile(HOST_EXE) or os.path.getmtime(HOST_EXE) < os.path.getmtime(HOST_BIN):
+        shutil.copy2(HOST_BIN, HOST_EXE)
+    src_cfg = os.path.join(LAUNCH_DIR, "GSCM.Launcher.exe.config")
+    if os.path.isfile(src_cfg):
+        shutil.copy2(src_cfg, HOST_EXE + ".config")
+    return True
+
+def client_base_url():
+    f = os.path.join(LAUNCH_DIR, "ClientConfig.xml")
+    try:
+        t = re.sub(r"<!--.*?-->", "", open(f, encoding="utf-8-sig", errors="ignore").read(), flags=re.S)
+        m = re.search(r'<address\s+name="GSCM"\s+baseUrl="([^"]+)"', t)
+        return m.group(1) if m else ""
+    except OSError:
+        return ""
+
+def other_launchers():
+    """실행 중인 다른 AS-IS 런처(GSCM.Launcher / AsisLive.Host) 목록 'name(pid)'."""
+    try:
+        out = subprocess.run(["tasklist", "/FO", "CSV", "/NH"], capture_output=True, text=True, encoding="cp949", errors="replace").stdout
+    except OSError:
+        return []
+    res = []
+    for line in out.splitlines():
+        p = [x.strip('"') for x in line.split('","')]
+        if len(p) > 1 and p[0].lower() in ("gscm.launcher.exe", "asislive.host.exe"): res.append("%s(%s)" % (p[0], p[1]))
+    return res
+
+class Host:
+    def __init__(self, cmddir):
+        self.cmddir = cmddir; self.seq = 0; self.proc = None
+    def start(self):
+        os.makedirs(self.cmddir, exist_ok=True)
+        self.proc = subprocess.Popen([HOST_EXE, "--cmddir", self.cmddir], cwd=LAUNCH_DIR)
+        t0 = time.time()
+        while time.time() - t0 < 30:
+            if os.path.isfile(os.path.join(self.cmddir, "_ready.txt")): return True
+            if self.proc.poll() is not None: return False
+            time.sleep(0.2)
+        return False
+    def send(self, cmd, timeout=120, **kw):
+        self.seq += 1
+        base = os.path.join(self.cmddir, "%03d" % self.seq)
+        with open(base + ".tmp", "w", encoding="utf-8") as f:
+            f.write(cmd + "\n" + "".join("%s=%s\n" % (k, v) for k, v in kw.items()))
+        os.replace(base + ".tmp", base + ".req")
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            if os.path.isfile(base + ".res.json"):
+                for _ in range(20):
+                    try: return json.load(open(base + ".res.json", encoding="utf-8"))
+                    except (ValueError, OSError): time.sleep(0.1)
+            if self.proc.poll() is not None:
+                err = os.path.join(self.cmddir, "_host_error.txt")
+                return {"ok": False, "error": "host exited (code %s)%s" % (self.proc.returncode, (" · " + open(err, encoding="utf-8").read()[:400]) if os.path.isfile(err) else "")}
+            time.sleep(0.2)
+        return {"ok": False, "error": "no response within %ss (cmd=%s)" % (timeout, cmd)}
+    def stop(self):
+        if self.proc and self.proc.poll() is None:
+            self.send("quit", timeout=10)
+            try: self.proc.wait(10)
+            except subprocess.TimeoutExpired: self.proc.kill()
+
+# ───────────────────────── DbProfile 로그 → 호출 목록 ─────────────────────────
+ENTRY = re.compile(r"^I (\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d+) \[TheOne\.Data\.DbProfile\]", re.M)
+def parse_dbprofile(since, until):
+    calls = []
+    day = {since.strftime("%Y-%m-%d"), until.strftime("%Y-%m-%d")}
+    for f in glob.glob(os.path.join(WSL_COPY, "**", "DbProfile_*.log"), recursive=True):
+        if not any(d in os.path.basename(f) for d in day): continue
+        try: text = open(f, encoding="cp949", errors="replace").read()
+        except OSError: continue
+        service = os.path.basename(os.path.dirname(f))
+        ms = list(ENTRY.finditer(text))
+        for i, m in enumerate(ms):
+            at = dt.datetime.strptime(m.group(1)[:26], "%Y-%m-%d %H:%M:%S.%f")
+            if not (since <= at <= until): continue
+            body = text[m.end(): ms[i + 1].start() if i + 1 < len(ms) else len(text)]
+            def fld(name):
+                x = re.search(r"^%s\s*:[ \t]*(.*)$" % re.escape(name), body, re.M)
+                return x.group(1).strip() if x else ""
+            def block(name, nxt):
+                x = re.search(r"^%s\s*:[ \t]*\n(.*?)(?=^%s\s*:|\Z)" % (re.escape(name), re.escape(nxt)), body, re.M | re.S)
+                return x.group(1).strip() if x else ""
+            ptxt = block("PARAMETERS", "INLINE_QUERY")
+            params = {}
+            for pm in re.finditer(r"(\w+)=('(?:[^']|'')*'|NULL|[^,]*)(?:,\s*|$)", ptxt):
+                v = pm.group(2).strip()
+                params[pm.group(1)] = None if v == "NULL" else (v[1:-1].replace("''", "'") if v.startswith("'") else v)
+            res = fld("RESULT"); rm = re.match(r"(-?\d+)\s*\((.*?)\)", res)
+            em = re.match(r"([\d,\.]+)\s*msec", fld("EXECUTION_TIME"))
+            fq = fld("FOXQUERY_ID")
+            calls.append({"at": ts(at), "service": service, "foxquery_id": fq, "sp": block("QUERY", "PARAMETERS").split("\n")[0].strip() or fq.split(".")[-1],
+                          "caller": fld("CALLER"), "exec_type": fld("EXECUTION_TYPE"), "rows": int(rm.group(1)) if rm else None, "rows_kind": rm.group(2) if rm else res,
+                          "ms": float(em.group(1).replace(",", "")) if em else None, "params": params, "inline": block("INLINE_QUERY", "\x00")[:2000]})
+    calls.sort(key=lambda c: c["at"])
+    return calls
+
+def wait_quiet(since, quiet_sec=3, max_sec=60):
+    """DbProfile 에 새 호출이 quiet_sec 동안 없을 때까지 기다린다."""
+    t0 = time.time(); last_n = -1; last_change = time.time()
+    while time.time() - t0 < max_sec:
+        n = len(parse_dbprofile(since, now()))
+        if n != last_n: last_n = n; last_change = time.time()
+        elif time.time() - last_change >= quiet_sec: return True
+        time.sleep(1)
+    return False
+
+def acquire_lock(tag):
+    """동시 실행 잠금 — 실측 2개가 겹치면 DbProfile 시간 구간이 섞인다. 반환 False = 10분 대기 초과"""
+    lock = os.path.join(ROOT, "Doc", "asislive", "_run.lock"); os.makedirs(os.path.dirname(lock), exist_ok=True); t_lock = time.time()
+    while True:
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY); os.write(fd, ("%d %s %s" % (os.getpid(), tag, ts())).encode()); os.close(fd); break
+        except FileExistsError:
+            try:
+                if time.time() - os.path.getmtime(lock) > 900: os.remove(lock); continue      # 15분 넘게 갱신 없는 잠금 = 죽은 실행
+            except OSError: continue
+            if time.time() - t_lock > 600: return False
+            if int(time.time() - t_lock) % 30 == 0: print("[대기] 다른 AS-IS 실측 실행 중 — 끝나면 시작", flush=True)
+            time.sleep(1)
+    import atexit; atexit.register(lambda: os.path.exists(lock) and os.remove(lock))
+    globals()["_LOCK"] = lock
+    return True
+
+def touch_lock():
+    try: os.utime(globals().get("_LOCK"), None)
+    except (OSError, TypeError): pass
+
+def env_ready():
+    """(code, why, base_url) — code 0 이면 준비됨"""
+    if not port_open(PORT): return 5, "로컬 AS-IS 서버(%d) 미기동 — VM '🖥 AS-IS IIS Start' 먼저" % PORT, ""
+    base = client_base_url()
+    if "localhost:%d" % PORT not in base and "127.0.0.1:%d" % PORT not in base: return 3, "ClientConfig.xml 접속 주소가 로컬이 아님: %s" % base, base
+    if not build_host(): return 3, "호스트 준비 실패", base
+    return 0, "", base
+
+def start_session(cmddir):
+    """호스트 기동 → 로그인 → 메인 대기 → 최대화. 반환 (host|None, info, why)"""
+    host = Host(cmddir); info = {}
+    if not host.start(): return None, info, "호스트 기동 실패"
+    r = host.send("login", timeout=90)
+    if not r.get("ok"): host.stop(); return None, info, "로그인 창 처리 실패: " + str(r.get("error"))
+    info["user_id"] = r.get("userId")
+    r = host.send("wait_main", timeout=240)
+    if not r.get("ok"): host.stop(); return None, info, "메인 화면 대기 실패: " + str(r.get("error"))
+    info["main"] = {k: r.get(k) for k in ("title", "user", "menu_count")}
+    # 메뉴 목록은 서버 조회로 채워진다(SP 수 초~수십 초) — 비어 있으면 화면을 열 수 없으므로 채워질 때까지 기다린다(2026-11-12 일괄 1차: 다시 띄운 세션의 메뉴 0건 → 169 화면 '메뉴에 없음')
+    t0 = time.time(); n = info["main"].get("menu_count") or 0
+    while n == 0 and time.time() - t0 < 90:
+        time.sleep(3); n = len(host.send("menu", timeout=60).get("items") or [])
+    info["main"]["menu_count"] = n
+    if n == 0: host.stop(); return None, info, "메뉴 목록이 비어 있음(메뉴 조회 실패·권한 없음) — 화면을 열 수 없음"
+    host.send("maximize", timeout=30)
+    return host, info, ""
+
+def wait_find(host, t_find, dlg_before, find_timeout):
+    """조회 완료 대기 — 상태바 신호 / 대화상자 뒤 정지 / 호출 없음 정지 중 먼저 오는 것. 반환 dict(signaled, time_status, total, how)"""
+    t0 = time.time(); res = {"signaled": False, "time_status": "", "total": None, "how": "timeout"}
+    while time.time() - t0 < find_timeout:
+        r = host.send("wait_idle", timeout=30, wait=4)
+        if not r.get("ok") and "host exited" in str(r.get("error")): res["how"] = "host_exited"; return res
+        if r.get("signaled"): res.update(signaled=True, time_status=r.get("time_status"), total=r.get("total"), how="status"); return res
+        cs = parse_dbprofile(t_find, now())
+        last = max([c["at"] for c in cs], default=ts(t_find))
+        idle = (now() - dt.datetime.strptime(last, "%Y-%m-%d %H:%M:%S.%f")).total_seconds()
+        if (r.get("dialog_count") or 0) > dlg_before and idle >= 6: res["how"] = "dialog"; return res
+        if idle >= 25 and time.time() - t0 >= 25: res["how"] = "no_signal"; return res
+    return res
+
+def measure(host, sid, run_dir, a, run, scenario=None, close_after=False):
+    """열린 세션에서 화면 1개 실측. run(dict)에 기록. 반환 (code, status, why)"""
+    shots = os.path.join(run_dir, "shots"); os.makedirs(shots, exist_ok=True)
+    def rec(name, r):
+        run["steps"].append(dict(step=name, **{k: v for k, v in r.items() if k != "data"})); return r
+    code, status, why = 0, "OK", ""
+    dlg0 = (host.send("ping", timeout=20).get("dialog_count") or 0)
+    t_open = now()
+    r = rec("open", host.send("open", timeout=180, id=sid))
+    run["gate"]["opened"] = bool(r.get("ok"))
+    if not r.get("ok"):
+        code, status, why = 2, "FAIL", "화면 열기 실패: " + str(r.get("error"))
+    else:
+        run["screen"] = {k: r.get(k) for k in ("form_type", "form_text", "assembly")}
+        wait_quiet(t_open, 3, 60)
+        rec("dump_load", host.send("dump", timeout=120, path=os.path.join(run_dir, "dump_load.json"), rows=a.rows))
+        rec("shot_load", host.send("shot", timeout=60, path=os.path.join(shots, sid + "_01_load.png")))
+        for st in (scenario or {}).get("set") or []:      # 조건 시나리오: 조회 전에 조회조건 값을 넣는다
+            t_set = now()
+            rs = rec("set", host.send("set", timeout=60, name=st["name"], value=st.get("value", "")))
+            if not rs.get("ok"): code, status, why = 3, "ERROR", "조건 설정 실패(%s): %s" % (st["name"], rs.get("error"))
+            wait_quiet(t_set, 2, 30)
+        t_find = now()
+        if not a.no_find and code == 0:
+            dlg1 = (host.send("ping", timeout=20).get("dialog_count") or 0)
+            r = rec("find", host.send("find", timeout=60))
+            if not r.get("ok"): code, status, why = 2, "FAIL", "조회 실행 실패: " + str(r.get("error"))
+            run["find"] = wait_find(host, t_find, dlg1, a.find_timeout)
+            wait_quiet(t_find, 3, 60)
+            rec("dump_find", host.send("dump", timeout=180, path=os.path.join(run_dir, "dump_find.json"), rows=a.rows))
+            rec("shot_find", host.send("shot", timeout=60, path=os.path.join(shots, sid + "_02_find.png")))
+        run["t_open"], run["t_find"] = ts(t_open), ts(t_find)
+    run["dialogs"] = host.send("dialogs", timeout=20, **{"from": dlg0}).get("dialogs", [])
+    if close_after:
+        rc = rec("close_screen", host.send("close_screen", timeout=60))
+        if rc.get("open_screens") not in (0, None): run["close_left"] = rc.get("open_screens")
+    return code, status, why
+
+def collect(sid, run_dir, run, t0, t1, a, code, status, why):
+    """서버 호출 기록·덤프 정리·요약·게이트. 반환 (code, status, why)"""
+    shots = os.path.join(run_dir, "shots")
+    calls = parse_dbprofile(t0, t1)
+    t_open_s, t_find_s = run.get("t_open"), run.get("t_find")
+    for c in calls:
+        c["phase"] = "login" if not t_open_s or c["at"] < t_open_s else ("load" if a.no_find or c["at"] < t_find_s else "find")
+    json.dump({"id": sid, "window": [ts(t0), ts(t1)], "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)", "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+               "mixed_risk": bool(run.get("other_launchers")), "other_launchers": run.get("other_launchers") or [],
+               "calls": calls}, open(os.path.join(run_dir, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    dump = {}
+    for name in ("dump_find.json", "dump_load.json"):
+        p = os.path.join(run_dir, name)
+        if os.path.isfile(p):
+            try: dump = json.load(open(p, encoding="utf-8")); run["dump_used"] = name; break
+            except ValueError: pass
+    grids = dump.get("grids") or []
+    json.dump({"id": sid, "from": run.get("dump_used"), "screen": dump.get("screen"), "controls": dump.get("controls") or [], "layout_items": dump.get("layout_items") or []},
+              open(os.path.join(run_dir, "controls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    json.dump({"id": sid, "from": run.get("dump_used"), "total": dump.get("total"), "time_status": dump.get("time_status"), "grids": grids},
+              open(os.path.join(run_dir, "grids.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    sheets = [s for g in grids for s in (g.get("sheets") or [])]
+    hdr_cols = sum(1 for s in sheets for c in (s.get("columns") or []) if any(h for h in (c.get("header") or [])))
+    data_rows = sum(s.get("data_rows") or 0 for s in sheets); grid_rows = sum(s.get("rows") or 0 for s in sheets)
+    pngs = [f for f in glob.glob(os.path.join(shots, "*.png")) if os.path.getsize(f) > 2000]
+    scr_calls = [c for c in calls if c["phase"] in ("load", "find")]
+    g = run["gate"]
+    g["grid_headers"] = hdr_cols > 0; g["grid_rows"] = data_rows > 0; g["shots"] = len(pngs); g["calls"] = len(scr_calls)
+    g["calls_with_params"] = sum(1 for c in scr_calls if c["params"])
+    run["counts"] = {"controls": len(dump.get("controls") or []), "layout_items": len(dump.get("layout_items") or []), "grids": len(grids), "sheets": len(sheets),
+                     "header_cols": hdr_cols, "data_rows": data_rows, "grid_rows": grid_rows, "calls_total": len(calls), "calls_screen": len(scr_calls),
+                     "calls_find": sum(1 for c in scr_calls if c["phase"] == "find"), "dialogs": len(run.get("dialogs") or [])}
+    fnd = run.get("find") or {}; scr = run.get("screen") or {}
+    L = ["# AS-IS 실측 요약 — %s" % sid, "", "- 실행: %s ~ %s · 계정 %s · 상태 %s" % (run["started"], ts(t1), run.get("user_id"), status),
+         "- 화면: %s (%s)" % (scr.get("form_text"), scr.get("form_type")),
+         "- 조회 결과: %s · %s · 완료 판단 %s" % (fnd.get("total"), fnd.get("time_status"), fnd.get("how")),
+         "- 조건: %s" % (("시나리오 " + json.dumps(run.get("scenario"), ensure_ascii=False)) if run.get("scenario") else "AS-IS 화면 기본값"), "", "## 호출된 SP (화면 로드·조회)", "",
+         "| 시각 | 구간 | 서비스 | SP | 건수 | ms | 인자 |", "|---|---|---|---|---|---|---|"]
+    for c in scr_calls:
+        ps = ", ".join("%s=%s" % (k, v) for k, v in c["params"].items())[:300].replace("|", "/")
+        L.append("| %s | %s | %s | %s | %s | %s | %s |" % (c["at"][11:], c["phase"], c["service"], c["sp"], c["rows"], c["ms"], ps))
+    L += ["", "## 조회조건 (LayoutControl 라벨)", "", "| 라벨 | 컨트롤 | 필수 |", "|---|---|---|"]
+    for it in dump.get("layout_items") or []:
+        if it.get("control"): L.append("| %s | %s | %s |" % (it.get("label"), it.get("control"), "Y" if it.get("required") else ""))
+    L += ["", "## 그리드", ""]
+    for gr in grids:
+        for s in gr.get("sheets") or []:
+            vis = [c for c in s.get("columns") or [] if str(c.get("visible")) != "False"]
+            L.append("- %s / %s: 행 %s · 컬럼 %s(보임 %s) · 헤더 %s단 · 고정 컬럼 %s" % (gr.get("name"), s.get("name"), s.get("rows"), s.get("cols"), len(vis), s.get("header_rows"), s.get("frozen_cols")))
+    if run.get("other_launchers"):
+        L += ["", "> 주의: 실행 중 다른 AS-IS 런처가 떠 있었음(%s) — 호출 기록에 그쪽 호출이 섞였을 수 있음" % ", ".join(run["other_launchers"])]
+    if run.get("dialogs"):
+        L += ["", "## 대화상자", ""] + ["- %s [%s] %s → %s" % (d.get("at"), d.get("caption"), " / ".join((d.get("text") or "").splitlines())[:200], d.get("action")) for d in run["dialogs"]]
+    with open(os.path.join(run_dir, "summary.md"), "w", encoding="utf-8") as f:
+        f.write(chr(10).join(L) + chr(10))
+    if code == 0:
+        miss = [k for k, ok in (("화면 열림", g.get("opened")), ("그리드 헤더", g["grid_headers"] or not grids), ("캡처", g["shots"] > 0), ("서버 호출 기록", g["calls"] > 0)) if not ok]
+        if miss: code, status, why = 3, "ERROR", "증거 미측정: " + ", ".join(miss)
+    return code, status, why
+
+def rel(p): return os.path.relpath(p, ROOT).replace(os.sep, "/")
+
+def save_run(sid, run_dir, run, code, status, why, links=True):
+    run["status"] = status; run["why"] = why; run["ended"] = ts(); run["exit"] = code
+    json.dump(run, open(os.path.join(run_dir, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    json.dump({"id": sid, "run_dir": rel(run_dir), "status": status, "at": run["ended"]},
+              open(os.path.join(ROOT, "Doc", "asislive", sid, "latest.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    if links:
+        print("@@LINK 📂 AS-IS 실측 폴더|" + rel(run_dir))
+        if os.path.isfile(os.path.join(run_dir, "summary.md")):
+            print("@@LINK 📄 AS-IS 실측 요약|" + rel(os.path.join(run_dir, "summary.md")))
+        print("[%s] %s AS-IS 실측 %s%s (exit %d)" % ("OK" if code == 0 else ("FAIL" if code == 2 else "ERROR"), sid, status, (" — " + why) if why else "", code), flush=True)
+    return code
+
+def new_run(sid, started):
+    run_dir = os.path.join(ROOT, "Doc", "asislive", sid, "run_" + started.strftime("%Y%m%d_%H%M%S"))
+    os.makedirs(os.path.join(run_dir, "shots"), exist_ok=True)
+    return run_dir, {"id": sid, "started": ts(started), "tool": "asis_live_run.py", "steps": [], "status": "ERROR", "gate": {}}
+
+def load_scenario(path):
+    """조건 시나리오 JSON: {"name": "...", "set": [{"name": "<컨트롤 이름>", "value": "<값>"}, ...]} — 조회 전에 순서대로 넣는다"""
+    if not path: return None
+    with open(path, encoding="utf-8") as f: return json.load(f)
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("id"); ap.add_argument("--find-timeout", type=int, default=200); ap.add_argument("--rows", type=int, default=50)
+    ap.add_argument("--no-find", action="store_true"); ap.add_argument("--keep", action="store_true", help="끝나도 런처를 닫지 않음")
+    ap.add_argument("--scenario", default="", help="조건 시나리오 JSON 경로")
+    a = ap.parse_args()
+    sid = a.id.strip().upper(); started = now()
+    run_dir, run = new_run(sid, started)
+    step("환경 점검 (로컬 서버 %d · 접속 주소 · 호스트)" % PORT)
+    c0, w0, base = env_ready(); run["client_base_url"] = base
+    if c0: return save_run(sid, run_dir, run, c0, "ERROR", w0)
+    if not acquire_lock(sid): return save_run(sid, run_dir, run, 3, "ERROR", "다른 AS-IS 실측이 끝나지 않음(잠금 10분 대기 초과)")
+    run["other_launchers"] = other_launchers()
+    if run["other_launchers"]:
+        print("[WARN] 다른 AS-IS 런처가 실행 중(%s) — 그 런처를 조작하면 호출 기록(calls.json)에 섞입니다" % ", ".join(run["other_launchers"]), flush=True)
+    try:
+        scenario = load_scenario(a.scenario); run["scenario"] = scenario
+    except (OSError, ValueError) as e:
+        return save_run(sid, run_dir, run, 3, "ERROR", "시나리오 파일을 읽지 못함: %s" % e)
+    step("런처 기동·로그인 (저장된 값으로 OK)")
+    host, info, why = start_session(os.path.join(run_dir, "_cmd")); run.update(info)
+    if not host: return save_run(sid, run_dir, run, 2, "FAIL", why)
+    try:
+        step("화면 열기·조회·덤프·캡처 %s" % sid)
+        code, status, why = measure(host, sid, run_dir, a, run, scenario)
+    finally:
+        if not a.keep: host.stop()
+        ended = now()
+    step("서버 호출 기록 수집·산출물 정리·게이트 판정")
+    code, status, why = collect(sid, run_dir, run, started, ended, a, code, status, why)
+    g, c = run["gate"], run["counts"]
+    print("게이트: 열림=%s · 그리드 헤더 컬럼=%d · 데이터 행=%d · 캡처=%d · 화면 호출=%d(인자 있음 %d) · 대화상자=%d" % (
+        g.get("opened"), c["header_cols"], c["data_rows"], g["shots"], c["calls_screen"], g["calls_with_params"], c["dialogs"]), flush=True)
+    return save_run(sid, run_dir, run, code, status, why)
+
+if __name__ == "__main__":
+    sys.exit(main())

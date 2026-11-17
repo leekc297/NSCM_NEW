@@ -2,7 +2,7 @@
  "menu_id": "SSP0200",
  "asis_id": "SSP0200",
  "area": "SSP",
- "generated": "2026-11-05 06:14:41",
+ "generated": "2026-11-15 05:40:57",
  "division_cond": {
   "present": true,
   "labels": [
@@ -98,9 +98,15 @@
  ],
  "bucket_cond": "",
  "observed": {
-  "source": "e2e_results.json 없음",
-  "max_rows_after_search": null,
-  "zero_row_failures": []
+  "source": "e2e_results.json 2026-11-13 15:04 · 행 수 근거 42행",
+  "max_rows_after_search": 21,
+  "zero_row_failures": [
+   {
+    "row_id": "V-8d112ea8",
+    "via": "[측정 경로 없음] 조회 0행"
+   }
+  ],
+  "zero_row_count": 1
  },
  "warnings": []
 }

@@ -1,0 +1,115 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnDelegatee",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "UserInfoPopup"
+   ],
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 0,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 8587
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "CWA JULIA NOWAKOWSKA 요청"
+    },
+    {
+     "control": "txtDelegatee#0",
+     "before": "",
+     "after": "CWA JULIA NOWAKOWSKA 요청"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnDelegatee": {
+   "forms": [
+    "UserInfoPopup"
+   ],
+   "edit": false,
+   "src": "scenarios_src:SSP0020-Sb0f217"
+  }
+ },
+ "at": "2026-11-15 12:48:25",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:24 실측: 추가 뒤 SP 결과 1·1행 · 적용 SQL tools/AsisLocal/sql/20261115_SSP0020_DELEGATE_TEST_ROWS.sql(ATTRIBUTE10=ASISLIVE_TEST_20261115, 되돌리기 포함)",
+  "why": "SSP0020_GET_DELEGATE 조회 인자 = 로그인 사용자(p_user_id)·언어뿐. SSP_MST_DELEGATE 699행 중 jaeuk.shin 관련 0행이라 조회 0행. 시험 행 2개 추가(위임한 1·위임받은 1)",
+  "done": []
+ }
+}

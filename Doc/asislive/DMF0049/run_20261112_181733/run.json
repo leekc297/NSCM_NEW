@@ -1,0 +1,151 @@
+{
+ "id": "DMF0049",
+ "started": "2026-11-12 18:17:33.320",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:17:33.583",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0049_Sales_ETC_Reports",
+   "form_text": "ETC Sales Reports",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0049_Sales_ETC_Reports.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:17:40.654"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:17:44.030",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0049\\run_20261112_181733\\dump_load.json",
+   "control_count": 23,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:17:44.047"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:17:44.212",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0049\\run_20261112_181733\\shots\\DMF0049_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:17:44.319"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:17:44.655",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:14.664"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:18:22.313",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0049\\run_20261112_181733\\dump_find.json",
+   "control_count": 23,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:22.318"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:18:22.630",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0049\\run_20261112_181733\\shots\\DMF0049_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:22.741"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:18:23.224",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:23.815"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 30,
+  "calls_with_params": 30
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0049_Sales_ETC_Reports",
+  "form_text": "ETC Sales Reports",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0049_Sales_ETC_Reports.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 18:17:33.528",
+ "t_find": "2026-11-12 18:17:44.405",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:17:45.526",
+   "caption": "GSCM",
+   "text": "Version을 선택하고 조회하세요.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 23,
+  "layout_items": 9,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 42,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 30,
+  "calls_screen": 30,
+  "calls_find": 2,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:16.450",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:16"
+}

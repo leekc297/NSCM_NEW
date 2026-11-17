@@ -1,0 +1,422 @@
+{
+ "id": "SSP0060",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+   "save_sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml SCM_SSP_CHECK_CONFIRM_CHANGETIME → SP SCM_SSP_CHECK_CONFIRM_CHANGETIME 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE",
+   "save_sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE → SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+   "save_sp": "SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING → SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+   "save_sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "pk": [
+    "CHANGE_REQ_NO"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_ERP_ERROR_CONFIRM": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ": [
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM → SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+    "SSP_ANL_SHIP_ERP_ERROR_CONFIRM"
+   ]
+  },
+  {
+   "endpoint": "SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "save_sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM",
+   "pk": [
+    "CONFIRM_ID"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de": [
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM": [
+     "DELETE FROM",
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ],
+    "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM → SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de"
+   ]
+  },
+  {
+   "endpoint": "SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "save_sp": "SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "pk": [
+    "CHANGE_REQ_NO"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ": [
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING → SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de"
+   ]
+  },
+  {
+   "endpoint": "SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+   "save_sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "pk": [
+    "CHANGE_REQ_NO",
+    "CONFIRM_ID",
+    "NEW_YN"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "LOGIC": [
+     "INSERT"
+    ],
+    "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH → SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": []
+  },
+  {
+   "endpoint": "SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C",
+   "save_sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "pk": [
+    "CHANGE_REQ_NO",
+    "CONFIRM_ID",
+    "NEW_YN"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "LOGIC": [
+     "INSERT"
+    ],
+    "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C → SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": []
+  },
+  {
+   "endpoint": "SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "save_sp": "SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "pk": [
+    "CHANGE_REQ_NO"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de": [
+     "INSERT"
+    ]
+   },
+   "basis": "foxml SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING → SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "LOGIC": [
+     "INSERT"
+    ],
+    "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de"
+   ]
+  },
+  {
+   "endpoint": "SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN",
+   "save_sp": "SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "pk": [
+    "CHANGE_REQ_NO"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ": [
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN → SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE"
+   ]
+  },
+  {
+   "endpoint": "SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+   "save_sp": "SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM",
+   "pk": [
+    "CONFIRM_ID"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SSP_ANL_SHIP_CONFIRM_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SSP_ANL_SHIP_CONFIRM_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ],
+    "SSP_ANL_SHIP_CONFIRM": [
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "SSP_MST_SEND_MAIL_REQ": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_H": [
+     "INSERT INTO"
+    ],
+    "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM → SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_PLN_MKT_FCST_CONFIRM": [
+     "INSERT INTO"
+    ],
+    "DM_PLN_MKT_FCST": [
+     "INSERT INTO",
+     "MERGE INTO"
+    ],
+    "LOGIC": [
+     "INSERT"
+    ],
+    "XIF_SCS_PACK_SHIP_PLAN_S_SN": [
+     "INSERT INTO"
+    ],
+    "Date": [
+     "UPDATE"
+    ],
+    "XIF_FP_SSP_SALES_EXFACTORY_S_SN": [
+     "INSERT INTO"
+    ],
+    "SCP_PLN_INTERFACE_SEND_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+    "SSP_MST_SEND_MAIL_REQ"
+   ]
+  },
+  {
+   "endpoint": "SSP.SSP0060_SAVE_HOLD_STOCK_DATA",
+   "save_sp": "SSP0060_SAVE_HOLD_STOCK_DATA",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml SSP0060_SAVE_HOLD_STOCK_DATA → SP SSP0060_SAVE_HOLD_STOCK_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  },
+  {
+   "endpoint": "SSP.SSP0060_SAVE_SHIPMENT_PLAN",
+   "save_sp": "SSP0060_SAVE_SHIPMENT_PLAN",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "pk": [
+    "CHANGE_REQ_NO",
+    "CONFIRM_ID",
+    "NEW_YN"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "INSERT"
+    ]
+   },
+   "basis": "foxml SSP0060_SAVE_SHIPMENT_PLAN → SP SSP0060_SAVE_SHIPMENT_PLAN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ"
+   ]
+  },
+  {
+   "endpoint": "SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+   "save_sp": "SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+   "status": "그리드 덤프 없음",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de",
+   "pk": [
+    "CHANGE_REQ_NO",
+    "CONFIRM_ID",
+    "NEW_YN"
+   ],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK → SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "LOGIC": [
+     "INSERT"
+    ],
+    "XIF_ERP_PACK_SHIP_PLAN_S_SN": [
+     "INSERT INTO"
+    ],
+    "XIF_SCS_PACK_SHIP_PLAN_S_SN": [
+     "INSERT INTO"
+    ],
+    "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE": [
+     "UPDATE"
+    ]
+   },
+   "other_tables": []
+  }
+ ]
+}

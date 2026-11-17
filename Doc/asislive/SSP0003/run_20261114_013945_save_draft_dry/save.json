@@ -1,0 +1,141 @@
+{
+ "id": "SSP0003",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de",
+  "pk": [
+   "CHANGE_REQ_NO",
+   "CONFIRM_ID",
+   "NEW_YN"
+  ],
+  "match": {
+   "CHANGE_REQ_NO": "CHANGE_REQ_NO",
+   "CONFIRM_ID": "CONFIRM_ID",
+   "NEW_YN": "NEW_YN"
+  },
+  "save_sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+  "side": [],
+  "basis": "foxml SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK → SP SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "ROUTE_ID",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "ROUTE_ID",
+     "db_col": "ROUTE_ID",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "ROUTE_ID",
+    "db_col": "ROUTE_ID",
+    "rule": "plus1"
+   },
+   {
+    "col": "CUSTOMER_LT",
+    "db_col": "CUSTOMER_LT",
+    "rule": "plus1"
+   },
+   {
+    "col": "NEW_CUSTOMER_LT",
+    "db_col": "NEW_CUSTOMER_LT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-14 01:39:45",
+ "status": "ERROR",
+ "steps": [],
+ "division_derive": {
+  "table_divisions": [
+   [
+    "81",
+    361493
+   ],
+   [
+    "40",
+    304662
+   ],
+   [
+    "82",
+    48220
+   ],
+   [
+    "81_UC",
+    24504
+   ],
+   [
+    "81_ST",
+    1142
+   ],
+   [
+    "81_HM",
+    742
+   ],
+   [
+    "81_HG",
+    238
+   ],
+   [
+    "81_HD",
+    18
+   ]
+  ],
+  "screen_list": [
+   "40",
+   "81",
+   "81_HD",
+   "81_HG",
+   "81_HM",
+   "81_UC",
+   "82",
+   "EE_HD",
+   "EE_HG",
+   "EE_HM",
+   "EE_UC"
+  ],
+  "tried": [
+   {
+    "division": "81",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "40",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "82",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_UC",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_HM",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_HG",
+    "set": true,
+    "rows": 0
+   }
+  ]
+ },
+ "find_dialogs": [],
+ "note": "Division 도출 {\"table_divisions\": [[\"81\", 361493], [\"40\", 304662], [\"82\", 48220], [\"81_UC\", 24504], [\"81_ST\", 1142], [\"81_HM\", 742], [\"81_HG\", 238], [\"81_HD\", 18]], \"screen_list\": [\"40\", \"81\", \"81_HD\", \"81_HG\", \"81_HM\", \"81_UC\", \"82\", \"EE_HD\", \"EE_HG\", \"EE_HM\", \"EE_UC\"], \"tried\": [{\"division\": \"81\", \"set\": true,  · 조회 결과 행 없음(메시지 [])"
+}

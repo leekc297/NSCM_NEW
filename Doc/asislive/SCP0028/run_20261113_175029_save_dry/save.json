@@ -1,0 +1,143 @@
+{
+ "id": "SCP0028",
+ "dry": true,
+ "scenario": {
+  "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+  "pk": [
+   "DIVISION_ID",
+   "OPERATION_GROUP",
+   "FROM_SITE",
+   "TO_SITE",
+   "ITEM_ID",
+   "TRANSPORT_MODE"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "FROM_SITE": "FROM_SITE",
+   "TO_SITE": "TO_SITE",
+   "ITEM_ID": "ITEM_ID",
+   "TRANSPORT_MODE": "TRANS_MODE_CODE"
+  },
+  "pick": {
+   "col": "LOT_SIZE",
+   "nonempty": true
+  },
+  "edit": {
+   "col": "LOT_SIZE",
+   "db_col": "LOT_SIZE",
+   "rule": "plus1"
+  },
+  "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+  "basis": "SCP0028_Shipment_Lot_Size.cs:575 SaveData · :659 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE · SP 원문(MERGE/DELETE SCP_MST_SHIPMENT_LOT_SIZE · PK 6컬럼 · 트리거 0 — 11-13 실측)"
+ },
+ "at": "2026-11-13 17:50:29",
+ "status": "DRY_OK",
+ "steps": [],
+ "grid_row": {
+  "index": 3,
+  "values": {
+   "Action": "",
+   "COLMERGE": "X",
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP_ID": "Cell",
+   "FROM_SITE_DESCRIPTION": "LGESOC Cell HQ07",
+   "TO_SITE_DESCRIPTION": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "NICK_NAME": "E65D",
+   "TRANS_MODE_NAME": "SEA",
+   "LOT_SIZE": "12,800",
+   "INCREMENT": "12,800",
+   "VALID_YN": "Y",
+   "SPLIT_YN": "N",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "TRANS_MODE_CODE": "SEA"
+  }
+ },
+ "where": {
+  "DIVISION_ID": "81",
+  "FROM_SITE": "HQ07-A",
+  "TO_SITE": "Club Car_US_AGS",
+  "ITEM_ID": "ACEP2065I-B1",
+  "TRANSPORT_MODE": "SEA"
+ },
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ],
+ "edit": {
+  "col": "LOT_SIZE",
+  "old": "12800",
+  "new": "12801"
+ },
+ "edit_mode": true,
+ "cell": {
+  "ok": true,
+  "error": null,
+  "before": "12,800",
+  "after": "12,801",
+  "action_before": "",
+  "action_after": "M",
+  "locked": false,
+  "entered": true,
+  "how": "edit",
+  "is_change": true,
+  "edit_error": null
+ },
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ]
+}

@@ -26,6 +26,7 @@
     "Active"
   ],
   "condGone": [],
+  "condNotUse": [],
   "page": "Bod",
   "routePath": "supply/bod",
   "asisName": "BOD",
@@ -225,45 +226,6 @@
         "Trans Mode",
         "To Site VMI"
       ]
-    },
-    {
-      "name": "Distribution Route",
-      "key": "DISTRIBUTION_ROUTE",
-      "labels": [
-        "Country",
-        "Port Code",
-        "Port",
-        "Country",
-        "Port Code",
-        "Port",
-        "Departure Days",
-        "Fri",
-        "Mon",
-        "Sat",
-        "Sun",
-        "Thu",
-        "Tue",
-        "Wed",
-        "City",
-        "City Name",
-        "Country",
-        "Arrival Inland",
-        "Departure Inland",
-        "Lay Off/Customs Clearance",
-        "Sum",
-        "L/T Type",
-        "Sea/Air Ferry",
-        "Waiting For Shipping",
-        "Priority",
-        "Route Id",
-        "Shipping Document Preparation Data",
-        "Shipping Company",
-        "City",
-        "City Name",
-        "Country",
-        "Trans Mode",
-        "Valid"
-      ]
     }
   ],
   "popupSheets": [],
@@ -452,11 +414,6 @@
         "Last Updated By",
         "Last Update Date"
       ]
-    },
-    "Distribution Route": {
-      "40": [],
-      "81": [],
-      "82": []
     }
   },
   "hasMeta": true,
@@ -498,9 +455,9 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "DELETE",
+        "SEARCH",
         "INSERT",
-        "SAVE",
-        "SEARCH"
+        "SAVE"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -525,64 +482,100 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "DELETE",
+      "SEARCH",
       "INSERT",
+      "SAVE"
+    ],
+    "CAPA Planner": [
       "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "DELETE",
+      "INSERT"
     ],
     "DM ADMIN": [
-      "SEARCH"
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "INSERT"
     ],
     "DM Planner": [
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "INSERT"
+    ],
+    "DM Planner (W/S)": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE"
+    ],
+    "DM Viewer": [
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "INSERT"
+    ],
+    "FP Planner": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "DELETE"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
       "DELETE",
       "INSERT",
       "SEARCH",
       "SAVE"
     ],
-    "DM Planner (W/S)": [
-      "SEARCH"
-    ],
-    "DM Viewer": [
-      "SEARCH"
-    ],
-    "FP Planner": [
-      "SEARCH"
-    ],
-    "FP Viewer": [
-      "SEARCH"
-    ],
-    "SCM PI Admin": [
-      "SEARCH",
-      "DELETE",
-      "SAVE",
-      "INSERT"
-    ],
     "SCM Viewer": [
+      "INSERT",
+      "SAVE",
+      "DELETE",
       "SEARCH"
     ],
     "SCP Planner": [
+      "DELETE",
+      "SAVE",
+      "INSERT",
       "SEARCH"
     ],
     "SCP Tester": [
-      "SEARCH"
-    ],
-    "SSP Planner": [
-      "SEARCH",
-      "SAVE",
       "DELETE",
-      "INSERT"
-    ],
-    "SSP Viewer": [
       "SEARCH",
       "INSERT",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "INSERT",
+      "SAVE",
+      "SEARCH",
+      "DELETE"
+    ],
+    "SSP Planner": [
       "DELETE",
+      "INSERT",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
       "SAVE"
     ]
   },
   "menuBtnCodes": [
     "DELETE",
+    "SEARCH",
     "INSERT",
-    "SAVE",
-    "SEARCH"
+    "SAVE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

@@ -1,0 +1,874 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15318,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_SITE_CODE",
+       "before": "AZ00-E",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_CITY",
+       "before": "USAAZ",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE_CODE",
+       "before": "AZ00-A",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_CITY",
+       "before": "USAAZ",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "INCOTERMS",
+       "before": "DAP",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "INCOTERMS_SSP",
+       "before": "DAP",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRIORITY",
+       "before": "4",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ROUTE_CNT",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TRANSPORT_MODE",
+       "before": "TRUCK",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ROUTE_ID",
+       "before": "10583",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_TYPE",
+       "before": "AVERAGE",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_MON",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_TUE",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_WED",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_THU",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_FRI",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LEAD_TIME",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIS_TOTAL_LEAD_TIME",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BOD_ID",
+       "before": "20290",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-03-16",
+       "after": "2026-11-16"
+      },
+      {
+       "row": 0,
+       "col": "ROUTE_VALID",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "hwayoung.lim",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2026-03-18 13:36:47",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "CSR",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2026-04-07 17:40:09",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_COUNTRY",
+       "before": "US",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_COUNTRY",
+       "before": "US",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ROUTE_CHK",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "FROM_SITE_CODE",
+       "before": "CN00732500_40-P",
+       "after": "AZ00-E"
+      },
+      {
+       "row": 1,
+       "col": "FROM_CITY",
+       "before": "CNCKG",
+       "after": "USAAZ"
+      },
+      {
+       "row": 1,
+       "col": "TO_SITE_CODE",
+       "before": "CN00732500_40-P",
+       "after": "AZ00-A"
+      },
+      {
+       "row": 1,
+       "col": "TO_CITY",
+       "before": "CNCKG",
+       "after": "USAAZ"
+      },
+      {
+       "row": 1,
+       "col": "SAFETY_STOCK",
+       "before": "0.0",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "PRIORITY",
+       "before": "1",
+       "after": "4"
+      },
+      {
+       "row": 1,
+       "col": "ROUTE_CNT",
+       "before": "2",
+       "after": "1"
+      },
+      {
+       "row": 1,
+       "col": "ROUTE_ID",
+       "before": "3396",
+       "after": "10583"
+      },
+      {
+       "row": 1,
+       "col": "LT_TYPE",
+       "before": "",
+       "after": "AVERAGE"
+      },
+      {
+       "row": 1,
+       "col": "DAYS_SAT",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "BOD_ID",
+       "before": "7673",
+       "after": "20290"
+      },
+      {
+       "row": 1,
+       "col": "FROM_YYYYMMDD",
+       "before": "2021-01-04",
+       "after": "2026-03-16"
+      },
+      {
+       "row": 1,
+       "col": "TO_YYYYMMDD",
+       "before": "2100-12-26",
+       "after": "2099-12-27"
+      },
+      {
+       "row": 1,
+       "col": "BOD_VALID",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "yangwon_kim",
+       "after": "hwayoung.lim"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "2021-05-10 08:59:35",
+       "after": "2026-03-18 13:36:47"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "yangwon_kim",
+       "after": "CSR"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2021-05-10 08:59:35",
+       "after": "2026-04-07 17:40:09"
+      },
+      {
+       "row": 1,
+       "col": "FROM_COUNTRY",
+       "before": "CN",
+       "after": "US"
+      },
+      {
+       "row": 1,
+       "col": "TO_COUNTRY",
+       "before": "CN",
+       "after": "US"
+      },
+      {
+       "row": 2,
+       "col": "FROM_SITE_CODE",
+       "before": "HQ06-A",
+       "after": "CN00732500_40-P"
+      },
+      {
+       "row": 2,
+       "col": "FROM_CITY",
+       "before": "KRCOJ",
+       "after": "CNCKG"
+      },
+      {
+       "row": 2,
+       "col": "TO_SITE_CODE",
+       "before": "CN00254300_40-P",
+       "after": "CN00732500_40-P"
+      },
+      {
+       "row": 2,
+       "col": "TO_CITY",
+       "before": "CNNKG",
+       "after": "CNCKG"
+      },
+      {
+       "row": 2,
+       "col": "TRANSPORT_MODE",
+       "before": "FERRY",
+       "after": "TRUCK"
+      },
+      {
+       "row": 2,
+       "col": "ROUTE_ID",
+       "before": "4666",
+       "after": "3396"
+      },
+      {
+       "row": 2,
+       "col": "LT_TYPE",
+       "before": "AVERAGE",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "DAYS_MON",
+       "before": "",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "DAYS_WED",
+       "before": "",
+       "after": "Y"
+      }
+     ],
+     "more": 837
+    }
+   ],
+   "new_rows": {
+    "spdMain/BOD": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:20:49.242",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "BOD",
+    "sheet": "BOD",
+    "rows_total": 15318,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "CUSTOMER",
+      "label": "Customer",
+      "data_field": "CUSTOMER",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "FROM_SITE_CODE",
+      "label": "From Site*",
+      "data_field": "FROM_SITE_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "FROM_CITY",
+      "label": "From City",
+      "data_field": "FROM_CITY",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "TO_SITE_CODE",
+      "label": "To Site*",
+      "data_field": "TO_SITE_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "TO_CITY",
+      "label": "To City",
+      "data_field": "TO_CITY",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "VMI_YN",
+      "label": "To Site VMI",
+      "data_field": "vmi_yn",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "INCOTERMS",
+      "label": "Incoterms*",
+      "data_field": "INCOTERMS",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "INCOTERMS_SSP",
+      "label": "Incoterms SSP*",
+      "data_field": "INCOTERMS_SSP",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "SAFETY_STOCK",
+      "label": "Safety Stock",
+      "data_field": "SAFETY_STOCK",
+      "visible": "False"
+     },
+     {
+      "index": 12,
+      "tag": "PRIORITY",
+      "label": "Priority*",
+      "data_field": "PRIORITY",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "ROUTE_CNT",
+      "label": "Route Count",
+      "data_field": "route_cnt",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "TRANSPORT_MODE",
+      "label": "Trans Mode",
+      "data_field": "transport_mode",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "ROUTE_ID",
+      "label": "Route Id*",
+      "data_field": "ROUTE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "LT_TYPE",
+      "label": "L/T Type",
+      "data_field": "LT_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "DAYS_MON",
+      "label": "MON",
+      "data_field": "DAYS_MON",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "DAYS_TUE",
+      "label": "TUE",
+      "data_field": "DAYS_TUE",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "DAYS_WED",
+      "label": "WED",
+      "data_field": "DAYS_WED",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "DAYS_THU",
+      "label": "THU",
+      "data_field": "DAYS_THU",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "DAYS_FRI",
+      "label": "FRI",
+      "data_field": "DAYS_FRI",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "DAYS_SAT",
+      "label": "SAT",
+      "data_field": "DAYS_SAT",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "DAYS_SUN",
+      "label": "SUN",
+      "data_field": "DAYS_SUN",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "LEAD_TIME",
+      "label": "Lead Time",
+      "data_field": "LEAD_TIME",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "DIS_TOTAL_LEAD_TIME",
+      "label": "Distribution Total Lead Time",
+      "data_field": "DIS_TOTAL_LEAD_TIME",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "BOD_ID",
+      "label": "BOD_ID",
+      "data_field": "BOD_ID",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "BEFORE_LEAD_TIME",
+      "label": "Before",
+      "data_field": "BEFORE_LEAD_TIME",
+      "visible": "False"
+     },
+     {
+      "index": 28,
+      "tag": "AFTER_LEAD_TIME",
+      "label": "Additional Lead Time",
+      "data_field": "AFTER_LEAD_TIME",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "FROM_YYYYMMDD",
+      "label": "From*",
+      "data_field": "FROM_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "TO_YYYYMMDD",
+      "label": "To*",
+      "data_field": "TO_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "REMARKS",
+      "label": "Remarks",
+      "data_field": "REMARKS",
+      "visible": "True"
+     },
+     {
+      "index": 32,
+      "tag": "BOD_VALID",
+      "label": "BOD Valid*",
+      "data_field": "BOD_VALID",
+      "visible": "True"
+     },
+     {
+      "index": 33,
+      "tag": "ROUTE_VALID",
+      "label": "Route Valid",
+      "data_field": "ROUTE_VALID",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 36,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 37,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 38,
+      "tag": "FROM_COUNTRY",
+      "label": "FROM_COUNTRY",
+      "data_field": "FROM_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 39,
+      "tag": "TO_COUNTRY",
+      "label": "TO_COUNTRY",
+      "data_field": "TO_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 40,
+      "tag": "ROUTE_CHK",
+      "label": "ROUTE_CHK",
+      "data_field": "ROUTE_CHK",
+      "visible": "False"
+     }
+    ],
+    "locked": [
+     "10010101000101011111111111100000011111111"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "N",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "0",
+      "0",
+      "2026-11-16",
+      "2099-12-27",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:20:49.246"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Div* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:19:44",
+ "edit_focus": "누르지 못함",
+ "edit_mode": true
+}

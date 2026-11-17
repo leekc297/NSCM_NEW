@@ -300,8 +300,8 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "SEARCH",
-        "SAVE",
         "INSERT",
+        "SAVE",
         "DELETE"
       ],
       "matrix": [],
@@ -326,27 +326,27 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "SEARCH",
-      "SAVE",
       "INSERT",
+      "SAVE",
       "DELETE"
     ],
     "SCM PI Admin": [
       "SEARCH",
+      "SAVE",
       "INSERT",
-      "DELETE",
-      "SAVE"
+      "DELETE"
     ],
     "SCP Planner": [
       "SEARCH",
-      "SAVE",
+      "INSERT",
       "DELETE",
-      "INSERT"
+      "SAVE"
     ]
   },
   "menuBtnCodes": [
     "SEARCH",
-    "SAVE",
     "INSERT",
+    "SAVE",
     "DELETE"
   ],
   "menuAuth": "menu.csv",

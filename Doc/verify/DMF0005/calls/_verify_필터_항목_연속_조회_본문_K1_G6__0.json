@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 460,
+  "at": "2026-11-13T22:22:39.990Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 502,
+  "at": "2026-11-13T22:22:40.155Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2461,
+  "at": "2026-11-13T22:22:43.029Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2452,
+  "at": "2026-11-13T22:22:46.970Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"E2E\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 970,
+  "at": "2026-11-13T22:22:50.132Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2156,
+  "at": "2026-11-13T22:24:23.555Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ }
+]

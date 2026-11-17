@@ -1,0 +1,73 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 13:29:44.585",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.88,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 13:29:44.614",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1294,
+   "rows_kind": "DataSet rows",
+   "ms": 19.37,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 13:29:44.730",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1294,
+   "rows_kind": "DataSet rows",
+   "ms": 18.69,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 13:29:46.410",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29575,
+   "rows_kind": "DataSet rows",
+   "ms": 1414.43,
+   "params": {
+    "p_division_id": "40",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='40', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

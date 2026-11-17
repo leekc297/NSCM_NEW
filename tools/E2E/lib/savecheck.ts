@@ -1,6 +1,6 @@
 // 저장 전후 DB 스냅샷 판정(2026-10-31 엔진 갭 E05) — 순수 함수. 변이 입증은 tools/E2E/lib/savecheck.selftest.ts
 export type Snap = { tables: Record<string, { keys: string[]; pk: string[]; n: number; rows: Record<string, string | null>[] }>; skipped: Record<string, string> };
-export type SaveJudge = { result: 'PASS' | 'FAIL' | 'ERROR'; evidence: string };
+export type SaveJudge = { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; evidence: string };  // NA = T222 대상 아님
 const AUDIT = /^(CREATION_DATE|CREATED_BY|LAST_UPDATE_DATE|LAST_UPDATED_BY)$/;
 const isHist = (t: string) => /_H$|_HIST|HISTORY/i.test(t);
 const rowKey = (r: Record<string, string | null>, pk: string[]) => (pk.length ? pk : Object.keys(r).filter(k => !AUDIT.test(k))).map(k => String(r[k] ?? '')).join('\u0001');
@@ -20,13 +20,16 @@ export function diffSnap(a: Snap, b: Snap): SaveDiff[] {
 }
 
 /** 수정 저장 1회의 행 수 불변 — 이력 표(_H)가 아닌 표에 새 행이 생기거나 사라지면 FAIL(같은 키 수정이 중복 행을 만든 것) · 키가 PK 일부뿐이면 다른 행 변화도 섞일 수 있어 근거에 키를 적는다 */
-export function judgeRowCount(d: SaveDiff[], sk: Record<string, string>): SaveJudge {
+// 2026-11-10 T222(SSP0060 V-b07e6278 'CHG_REQ_DE 추가 1 — 수정인데 행 수가 바뀜'): T212 append 표(AS-IS 저장 SP 가 저장마다 새 키로 INSERT)는 행 증가가 AS-IS 동작 — 추가만 있으면 제외
+export function judgeRowCount(d: SaveDiff[], sk: Record<string, string>, append: Map<string, string> = new Map()): SaveJudge {
   const biz = d.filter(x => !isHist(x.table));
   if (!biz.length) return { result: 'ERROR', evidence: `[측정 경로 누락] 비교 가능한 업무 표 없음 · ${JSON.stringify(sk).slice(0, 200)}` };
-  const bad = biz.filter(x => x.added.length || x.removed.length);
+  const app = (t: string) => append.get(t.split('.').pop()!.toUpperCase());
+  const excused = biz.filter(x => x.added.length && !x.removed.length && app(x.table));
+  const bad = biz.filter(x => (x.added.length && !app(x.table)) || x.removed.length);
   const ev = biz.map(x => `${x.table}(키 ${x.keys.join(',')}): 추가 ${x.added.length} · 삭제 ${x.removed.length} · 변경 ${x.changed.length}`).join(' / ');
   if (!biz.some(x => x.changed.length || x.added.length || x.removed.length)) return { result: 'ERROR', evidence: `[측정 경로 누락] 저장했으나 비교 범위 안에 변화 없음(키 매핑 범위 밖 표에 저장했을 수 있음) · ${ev}` };
-  return { result: bad.length ? 'FAIL' : 'PASS', evidence: `수정 저장 1회 DB 전후 대조 — ${ev}${bad.length ? ' — 수정인데 행 수가 바뀜(같은 키 중복 생성·삭제 의심 · 저장 SP MERGE 키 확인)' : ''}` };
+  return { result: bad.length ? 'FAIL' : 'PASS', evidence: `수정 저장 1회 DB 전후 대조 — ${ev}${bad.length ? ' — 수정인데 행 수가 바뀜(같은 키 중복 생성·삭제 의심 · 저장 SP MERGE 키 확인)' : ''}${excused.length ? ` · AS-IS 도 저장마다 새 키로 행 추가: ${excused.map(x => `${x.table}(${app(x.table)})`).join(', ')}(T222)` : ''}` };
 }
 
 /** 수정 저장 감사 컬럼 — 바뀐 행: LAST_UPDATED_BY=계정 · LAST_UPDATE_DATE 갱신 · CREATED_BY/CREATION_DATE 불변 */
@@ -53,8 +56,12 @@ export function linkedSummary(d: SaveDiff[], sk: Record<string, string>): string
 }
 
 /** EG237 저장 대상 이력 표에 행이 생기는가 — 대상 표는 저장 SP DML 에서 뽑은 cleanup_spec 이 원천. 이력 표가 없으면 판정 불가 */
-export function judgeHistory(d: SaveDiff[], sk: Record<string, string>): SaveJudge {
-  const hs = d.filter(x => isHist(x.table));
+// 2026-11-10 T222(SSP0060 V-112e89f2 'SSP_ANL_SHIP_CONFIRM_H +0 — 수정 저장인데 이력 행 없음'): 이번에 호출된 AS-IS 저장 SP 체인이 INSERT 하는 표(asisIns · append_tables.csv 전체 행)가
+//   주어지면, 그 체인이 쓰지 않는 이력 표는 기대 대상이 아니다(AS-IS SAVE_SHIPMENT_PLAN 은 _H 에 쓰지 않음 — _H 는 REQUEST_CONFIRM SP 만)
+export function judgeHistory(d: SaveDiff[], sk: Record<string, string>, asisIns?: Set<string>): SaveJudge {
+  const hs0 = d.filter(x => isHist(x.table)); const tn = (t: string) => t.split('.').pop()!.toUpperCase();
+  const hs = asisIns && asisIns.size ? hs0.filter(x => asisIns.has(tn(x.table))) : hs0;
+  if (asisIns && asisIns.size && hs0.length && !hs.length) return { result: 'NA', evidence: `이번 저장의 AS-IS SP 체인이 이력 표(${hs0.map(x => x.table).join(',')})에 쓰지 않음 — AS-IS INSERT 대상 ${[...asisIns].slice(0, 6).join(',')}(T222) · 실측 ${linkedSummary(d, sk)}` };
   if (!hs.length) return { result: 'ERROR', evidence: `[측정 경로 없음] 저장 대상에 이력 표 없음 · 실측 ${linkedSummary(d, sk)}` };
   const none = hs.filter(x => !x.added.length);
   return { result: none.length ? 'FAIL' : 'PASS', evidence: `${hs.map(x => `${x.table} +${x.added.length}`).join(' · ')}${none.length ? ` — 수정 저장인데 이력 행 없음(${none.map(x => x.table).join(',')})` : ''} · ${linkedSummary(d, sk)}` };
@@ -73,10 +80,13 @@ export function judgeHistValues(d: SaveDiff[]): SaveJudge {
 }
 
 /** EG235 같은 행 2회 저장 — 업무 표 행 수 불변 */
-export function judgeTwice(d: SaveDiff[], saves: number): SaveJudge {
+// 2026-11-10 T212(SSP0060 v4 F7 허위 FAIL): append = AS-IS 저장 SP(이번에 호출된 저장의 체인)가 저장마다 새 키(NEXT VALUE FOR 등)로 INSERT 하는 표
+//   (facts_append_tables.py → Doc/asisfacts/screens/<ID>/append_tables.csv) — 재저장 때 행이 느는 것이 AS-IS 동작이므로 '행 수 불변' 대상에서 뺀다(삭제가 생기면 그대로 FAIL)
+export function judgeTwice(d: SaveDiff[], saves: number, append: Map<string, string> = new Map()): SaveJudge {
   if (saves < 2) return { result: 'ERROR', evidence: `[측정 경로 없음] 저장 ${saves}회` };
-  const biz = d.filter(x => !isHist(x.table)); const bad = biz.filter(x => x.added.length || x.removed.length);
-  return { result: bad.length ? 'FAIL' : 'PASS', evidence: `저장 ${saves}회 뒤 ${biz.map(x => `${x.table}: 추가 ${x.added.length} · 삭제 ${x.removed.length}`).join(' / ')}${bad.length ? ' — 같은 행 재저장이 행 수를 바꿈' : ''}` };
+  const biz = d.filter(x => !isHist(x.table)); const app = (t: string) => append.get(t.split('.').pop()!.toUpperCase());
+  const bad = biz.filter(x => (x.added.length && !app(x.table)) || x.removed.length); const excused = biz.filter(x => x.added.length && app(x.table) && !x.removed.length);
+  return { result: bad.length ? 'FAIL' : 'PASS', evidence: `저장 ${saves}회 뒤 ${biz.map(x => `${x.table}: 추가 ${x.added.length} · 삭제 ${x.removed.length}`).join(' / ')}${bad.length ? ' — 같은 행 재저장이 행 수를 바꿈' : ''}${excused.length ? ` · AS-IS 도 저장마다 새 키로 행 추가: ${excused.map(x => `${x.table}(${app(x.table)})`).join(', ')}(T212)` : ''}` };
 }
 
 /** EG415 저장 응답 시간 — 문서 기준 3초. 부하를 빼려고 저장들 중 가장 빠른 값으로 판정 */

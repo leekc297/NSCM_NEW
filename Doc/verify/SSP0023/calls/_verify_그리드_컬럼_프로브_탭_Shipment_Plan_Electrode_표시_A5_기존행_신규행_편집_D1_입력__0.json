@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 409,
+  "at": "2026-11-14T15:06:44.060Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 Shipment Plan(Electrode)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 111,
+  "at": "2026-11-14T15:06:46.333Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 Shipment Plan(Electrode)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1792,
+  "at": "2026-11-14T15:06:47.918Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 [탭 Shipment Plan(Electrode)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ }
+]

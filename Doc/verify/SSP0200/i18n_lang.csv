@@ -1,0 +1,7 @@
+﻿lang,result,why
+KO,FAIL,KO 화면에 다른 언어 문구 1건: 'New'→'신규'(버튼) · 사전에 없는 문구 16건
+EN,PASS,EN 문구 31건 일치 · 사전에 없는 문구 16건
+EN 데이터,ERROR,[확인 대상] 그리드 칸 한글 REMARKS3 2행 — 명칭 칸이면 언어 미반영
+CN,FAIL,"CN 화면에 다른 언어 문구 2건: 'Condition'→'条件'(버튼), 'Request Date'→'申请日期'(그리드 헤더 = 메타 Shipment Change Request.REQUEST_DATE 컬럼 라벨) · 사전에 없는 문구 16건"
+CN 데이터,ERROR,[확인 대상] 그리드 칸 한글 REMARKS3 2행 — 명칭 칸이면 언어 미반영
+조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

@@ -35,7 +35,9 @@ def main():
     # 팝업
     pd = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup'); fresh(pd)
     run([py, '-I', os.path.join(HERE, 'facts_popup.py'), asis]); run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
-    rc_p = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
+    # 2026-11-13 점검: 팝업 호출이 없는 화면은 eg_popup 스펙이 테스트를 하나도 만들지 않아 Playwright 가 'Error: No tests found.' rc 1 로 끝났다
+    #   (11-13 SCP0084·SCP0122·SSP0005 — calls 0). 오류가 아니라 '대상 없음' 이므로 --pass-with-no-tests 로 넘기고 아래에서 사유를 한 줄로 알린다.
+    rc_p = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--pass-with-no-tests', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
                env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json')))
     if os.path.exists(os.path.join(pd, 'popup_rowsets.json')):
         run([py, '-I', os.path.join(HERE, 'facts_popup_golden.py'), pd, mid])
@@ -46,6 +48,8 @@ def main():
                env=dict(base, CL_RESULTS=os.path.join(ad, 'e2e.json'), E2E_RESULTS=ad, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(ad, 'results.json')))
     if os.path.exists(os.path.join(ad, 'eg_combos.json')):
         run([py, '-I', os.path.join(HERE, 'facts_auth_combo.py'), mid, ad])
+    if not os.path.exists(os.path.join(pd, 'popup_results.json')):
+        print(f'[eg_chain] {mid} 팝업 검사 결과(popup_results.json) 없음 — 팝업 테스트가 만들어지지 않았거나(팝업 호출 0) 실행 전에 끝남 · 팝업 행은 미측정으로 남는다', flush=True)
     print(f'[eg_chain] {mid} 팝업 rc={rc_p} · 권한 rc={rc_a}', flush=True)
     return 0
 

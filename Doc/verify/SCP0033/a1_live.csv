@@ -1,0 +1,4 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SCP0033,main|같은 사용자,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,ERROR,0,55,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+SCP0033,main,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,REVIEW,0,55,"AS-IS 0행 · TO-BE 55행 · 키 ['DIVISION_ID', 'OPERATION_GROUP', 'ITEM_ID', 'NICK_NAME', 'DEPARTURE_DAY', 'VALID_YN'] AS-IS 전용 0 · TO-BE 전용 55","미대응 인자 ['p_division_id', 'p_item_id', 'p_valid']"
+SCP0033,main · AS-IS 실구동,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,REVIEW,54,55,"AS-IS 를 실제로 띄워 조회한 결과 54건 ↔ TO-BE 같은 조건 조회 결과 55건 — 건수 차이 1건(소량 기준 10건 이하 = max(10건, 5%) · 판정필요: 두 DB 의 데이터 시점 차이일 수 있음) · 키 대조: 공통 54 · AS-IS 에만 0 · TO-BE 에만 1",AS-IS 실구동 run_20261114_120512 · SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY · 조건 같음(인자 3개 일치)

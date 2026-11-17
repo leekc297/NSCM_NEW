@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 98,
+  "at": "2026-11-16T17:41:27.794Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 270,
+  "at": "2026-11-16T17:41:27.910Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 97,
+  "at": "2026-11-16T17:41:31.037Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 100,
+  "at": "2026-11-16T17:41:33.557Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 272,
+  "at": "2026-11-16T17:41:33.668Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ }
+]

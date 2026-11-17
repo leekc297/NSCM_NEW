@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 393,
+  "at": "2026-11-14T11:40:11.531Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7670,
+  "dur": 470,
+  "at": "2026-11-14T11:40:12.810Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 433,
+  "at": "2026-11-14T11:40:15.636Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7670,
+  "dur": 469,
+  "at": "2026-11-14T11:40:16.344Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 468,
+  "at": "2026-11-14T11:40:19.157Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7670,
+  "dur": 452,
+  "at": "2026-11-14T11:40:19.885Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ }
+]

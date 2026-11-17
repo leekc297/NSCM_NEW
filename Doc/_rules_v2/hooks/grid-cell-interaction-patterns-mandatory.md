@@ -206,7 +206,7 @@ const projectName = projectsNames?.split(',')[0] ?? '';
 ## 5. 다른 화면 popup 의 `ResponseData` 인용 패턴 (DMF0005 OwnerModal)
 
 ```tsx
-import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
+import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';   // (2026-11-14 정정: 화면 밖 경로라 비상대 경로 대상. 공용 index(features/master/src/components/index.ts)가 MODAL_OWNER 를 export 하지 않아 지금은 이 경로를 쓴다. index 에 export 를 추가한 뒤 'features/master/src/components' 로 바꾼다)
 
 const handleOwnerSelected = (
   selectedUsers: ResponseData<MODAL_OWNER, 'owner', 'o_rc1'>[]   // ⭐ 다른 화면(MODAL_OWNER)의 ResponseData 인용

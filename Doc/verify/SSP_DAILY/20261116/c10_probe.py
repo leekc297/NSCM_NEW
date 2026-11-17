@@ -1,0 +1,131 @@
+"""C10 실행 전 확인 항목 조회 (SELECT 전용). 사용: python c10_probe.py asis|tobe"""
+import sys, json, time, datetime
+sys.path.insert(0, r'C:\Projects\NSCM\tools\DbConn')
+from dbconn import connect
+
+ENV = sys.argv[1]
+cx = connect(ENV)
+if ENV == 'asis':
+    cx.timeout = 180
+else:
+    cx.call_timeout = 180000
+cur = cx.cursor()
+OUT = {}
+
+def q(key, sql):
+    t = time.time()
+    try:
+        cur.execute(sql)
+        cols = [d[0] for d in cur.description]
+        rows = [[str(v) if v is not None else None for v in r] for r in cur.fetchall()]
+        OUT[key] = {'cols': cols, 'rows': rows, 'sec': round(time.time() - t, 1)}
+    except Exception as e:
+        OUT[key] = {'error': str(e)[:300], 'sec': round(time.time() - t, 1)}
+    print(key, OUT[key].get('sec'), 'ERR' if 'error' in OUT[key] else len(OUT[key]['rows']), flush=True)
+
+M = ENV == 'asis'
+NL = ' WITH(NOLOCK)' if M else ''
+L = 'SCM_ADM_LOOKUP_MASTER_DETAIL'
+
+q('now', "SELECT CONVERT(CHAR(8),GETDATE(),112) d, CONVERT(VARCHAR(19),GETDATE(),120) t, dbo.FN_GET_BUCKET_YYYYMMDD(-5) floor5" if M
+  else "SELECT TO_CHAR(SYSDATE,'YYYYMMDD') d, TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') t, FN_GET_BUCKET_YYYYMMDD(-5) floor5 FROM DUAL")
+
+# C1 사업부별 최신 FN 버전
+q('C1_fn_version', f"""SELECT DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, PLAN_SEQ, PLAN_ID
+FROM (SELECT A.*, ROW_NUMBER() OVER (PARTITION BY DIVISION_ID ORDER BY PLAN_START_YYYYMMDD DESC, PLAN_SEQ DESC) RN
+      FROM SCP_PLAN_VERSION_V A WHERE PLAN_TYPE = 'FN') X WHERE RN <= 2 ORDER BY DIVISION_ID, PLAN_START_YYYYMMDD DESC""")
+q('C1_ship_plan_last', f"""SELECT DIVISION_ID, PLAN_TYPE, MAX(PLAN_START_YYYYMMDD) MAX_START FROM SCP_PLN_SHIPMENT_PLAN{NL}
+WHERE PLAN_TYPE = 'FN' GROUP BY DIVISION_ID, PLAN_TYPE ORDER BY 1""")
+q('C1_pegging_last', f"""SELECT DIVISION_ID, MAX(PLAN_START_YYYYMMDD) MAX_START FROM SCP_PLN_SHIPMENT_PLAN_PEGGING{NL}
+WHERE PLAN_TYPE = 'FN' GROUP BY DIVISION_ID ORDER BY 1""")
+q('C1_semi_last', f"""SELECT DIVISION_ID, MAX(PLAN_START_YYYYMMDD) MAX_START FROM SCP_ANL_SHIPMENT_PLAN_SEMI{NL}
+WHERE PLAN_TYPE = 'FN' AND MEASURE = 'SHIP_PLAN_AMEND' GROUP BY DIVISION_ID ORDER BY 1""")
+q('C1_interface_yn', f"SELECT * FROM SCP_PLN_INTERFACE_YN{NL}")
+q('C1_etc_setting', f"""SELECT SEGMENT1, SEGMENT2, VALID_YN FROM {L}{NL} WHERE LOOKUP_TYPE = 'DM_ETC_SETTING'
+AND SEGMENT1 LIKE 'PLAN_START_YYYYMMDD_%' ORDER BY SEGMENT1""")
+q('C1_shipreq_last', f"""SELECT DIVISION_ID, SITE_TYPE, MAX(PLAN_START_YYYYMMDD) MAX_START, COUNT(*) CNT FROM DM_PLN_SHIPMENT_REQ{NL}
+GROUP BY DIVISION_ID, SITE_TYPE ORDER BY 1, 2""")
+
+# C2 일정 행
+for t in ('SSP_MST_SHIP_PLAN_SCHEDULE', 'SSP_MST_SHIP_PLAN_SCHEDULE_EE'):
+    today = "CONVERT(CHAR(8),GETDATE(),112)" if M else "TO_CHAR(SYSDATE,'YYYYMMDD')"
+    q(f'C2_{t}', f"""SELECT COMPANY_ID, MIN(PLAN_START_YYYYMMDD) MIN_D, MAX(PLAN_START_YYYYMMDD) MAX_D,
+MAX(CASE WHEN CONFIRM_CREATE_YN = 'Y' THEN PLAN_START_YYYYMMDD END) MAX_CONFIRM_Y,
+SUM(CASE WHEN PLAN_START_YYYYMMDD >= {today} THEN 1 ELSE 0 END) FUTURE_ROWS, COUNT(*) CNT
+FROM {t}{NL} GROUP BY COMPANY_ID ORDER BY 1""")
+    q(f'C2_{t}_last_rows', f"""SELECT * FROM {t}{NL} WHERE PLAN_START_YYYYMMDD = (SELECT MAX(PLAN_START_YYYYMMDD) FROM {t}{NL})""")
+q('C2_esoc', f"SELECT SEGMENT1, SEGMENT2, VALID_YN FROM {L}{NL} WHERE LOOKUP_TYPE = 'SSP_PLAN_VERSION_V'")
+
+# C3 룩업
+q('C3_if_stock_check', f"""SELECT SEGMENT1, SEGMENT2, SEGMENT3, SEGMENT4, SEGMENT5, ATTRIBUTE1, VALID_YN FROM {L}{NL}
+WHERE LOOKUP_TYPE = 'IF_STOCK_CHECK' ORDER BY SEGMENT1, SEGMENT3, SEGMENT4, SEGMENT2""")
+q('C3_packer_lookup', f"SELECT SEGMENT1, ATTRIBUTE1, VALID_YN FROM {L}{NL} WHERE LOOKUP_TYPE = 'SSP_ANL_SHIP_PLAN_P'")
+q('C3_basis_start_time', f"SELECT SEGMENT1, SEGMENT2, SEGMENT4, VALID_YN FROM {L}{NL} WHERE LOOKUP_TYPE = 'BASIS_START_TIME_PLANT' ORDER BY SEGMENT4, SEGMENT1")
+if M:
+    q('C3_auto_plan_call_flag', """SELECT SEGMENT1, SEGMENT2, ATTRIBUTE1, ACTIVE_FLAG FROM [LGCE_FPDEV_TR].[DBO].[SCM_SYS_LOOKUP_VALUE] WITH(NOLOCK)
+WHERE LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG' ORDER BY SEGMENT1""")
+else:
+    q('C3_auto_plan_call_flag_src', """SELECT LINE, TEXT FROM ALL_SOURCE WHERE OWNER = 'SCM_MGR' AND NAME = 'PR_SSP_ANL_SHIP_PLAN_EE'
+AND UPPER(TEXT) LIKE '%AUTO_PLAN_CALL_FLAG%' ORDER BY LINE""")
+
+# C4 재고·결과 테이블 최신 일자
+DATECOLS = ['CUTOFF_DATE', 'PLAN_START_YYYYMMDD', 'BASIS_YYYYMMDD', 'YYYYMMDD', 'STOCK_DATE']
+TABLES = ['SSP_DNM_OWMS_STOCK', 'SSP_DNM_GMES_STOCK_40', 'SSP_DNM_GMES_STOCK_81_82', 'SSP_DNM_STOCK_C',
+          'SSP_ANL_FORMATION_C', 'SSP_ANL_MES_FCS_STOCK_40_C', 'SSP_ANL_OWMS_STOCK_C', 'SSP_ANL_TCO_STOCK_C',
+          'SSP_ANL_OWMS_STOCK_C2', 'SSP_DNM_FP_PLAN_FROZEN', 'SCM_DNM_SCS_STOCK', 'SCM_DNM_MES_STOCK',
+          'SSP_ANL_SHIP_PLAN_40', 'SSP_ANL_SHIP_PLAN_C', 'SSP_ANL_SHIP_PLAN_EE', 'SSP_ANL_SHIP_PLAN_P',
+          'SSP_ANL_SHIP_PLAN_ALL', 'SSP_ANL_SHIP_REQ_P', 'SSP_ANL_SHIP_REQ_EE', 'SSP_ANL_HOLD_STOCK',
+          'SSP_ANL_SHIP_CONFIRM']
+if M:
+    TABLES += ['SCM_DNM_STOCK_SN']
+for t in TABLES:
+    if M:
+        base = t
+        cols_sql = f"SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('dbo.{t}')"
+        if t.endswith('_SN'):
+            cols_sql = "SELECT COLUMN_NAME FROM [LGCE_FPDEV_TR].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'SCM_STOCK_H'"
+    else:
+        cols_sql = f"SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = 'SCM_MGR' AND TABLE_NAME = '{t}'"
+    try:
+        cur.execute(cols_sql)
+        cols = {r[0].upper() for r in cur.fetchall()}
+    except Exception as e:
+        OUT[f'C4_{t}'] = {'error': str(e)[:200]}
+        continue
+    if not cols:
+        OUT[f'C4_{t}'] = {'error': 'table not found'}
+        print('C4', t, 'not found'); continue
+    dc = [c for c in DATECOLS if c in cols]
+    if not dc:
+        OUT[f'C4_{t}'] = {'error': 'no date col', 'cols': sorted(cols)[:40]}; continue
+    c = dc[0]
+    has15 = 'ATTRIBUTE15' in cols
+    top = f"SELECT TOP 3 {c} D, COUNT(*) CNT FROM {t}{NL} GROUP BY {c} ORDER BY {c} DESC" if M else \
+          f"SELECT * FROM (SELECT {c} D, COUNT(*) CNT FROM {t} GROUP BY {c} ORDER BY {c} DESC) WHERE ROWNUM <= 3"
+    q(f'C4_{t}', top)
+    OUT[f'C4_{t}']['datecol'] = c
+    OUT[f'C4_{t}']['has_attribute15'] = has15
+    OUT[f'C4_{t}']['has_attribute10'] = 'ATTRIBUTE10' in cols
+
+# 화면 Plan date 현재 상태
+q('V_ssp_plan_version', f"""SELECT DIVISION_ID, MAX(PLAN_START_YYYYMMDD) MAX_D, COUNT(*) CNT FROM SSP_PLAN_VERSION_V GROUP BY DIVISION_ID ORDER BY 1""")
+q('V_daily_plan', f"""SELECT DIVISION_ID, MAX(PLAN_NAME) MAX_DAILY FROM SCM_MST_PLAN{NL} WHERE PLAN_CYCLE = 'DAILY' GROUP BY DIVISION_ID ORDER BY 1""")
+q('V_weekly_plan', f"""SELECT DIVISION_ID, MAX(PLAN_NAME) MAX_WEEKLY FROM SCM_MST_PLAN{NL} WHERE PLAN_CYCLE = 'WEEKLY' GROUP BY DIVISION_ID ORDER BY 1""")
+
+# C8 잡 상태·객체 상태 (TO-BE)
+if not M:
+    q('C8_jobs', """SELECT OWNER, JOB_NAME, ENABLED, STATE, TO_CHAR(LAST_START_DATE,'YYYY-MM-DD HH24:MI') LAST_START, REPEAT_INTERVAL
+FROM ALL_SCHEDULER_JOBS WHERE JOB_NAME LIKE '%SSP%' OR JOB_NAME LIKE '%SCMPROD%' OR JOB_NAME LIKE '%PLAN_ID%' ORDER BY JOB_NAME""")
+    q('C8_objects', """SELECT OBJECT_NAME, OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI') DDL FROM ALL_OBJECTS
+WHERE OWNER = 'SCM_MGR' AND OBJECT_TYPE IN ('PROCEDURE','PACKAGE BODY') AND OBJECT_NAME IN (
+'PR_SCM_MST_PLAN','PR_SCP_PLN_INTERFACE_PLAN','PR_SSP_ANL_SHIP_REQ_SEMI','PR_SSP_ANL_SHIP_REQ_P','PR_SSP_ANL_SHIP_REQ_FG',
+'PR_SSP_ANL_SHIP_PLAN_P','PR_SSP_ANL_SHIP_CONFIRM_P','PR_SSP_ANL_SHIP_PLAN_40_BALANCE','PR_SSP_ANL_SHIP_CONFIRM_BATCH_40',
+'PR_SSP_ANL_SHIP_PLAN_40','PR_SSP_ANL_INVENTORY_RAW','PR_SSP_PLN_SHIP_PLAN_CUTOFF','PR_SSP_ANL_SHIP_PLAN_CUTOFF',
+'PR_SSP_ANL_SHIP_PLAN_CUTOFF_FP_AUTO','PR_SSP_ANL_SHIP_CONFIRM_BATCH_N','PR_SSP_ANL_SHIP_CONFIRM_BATCH_N_FP_AUTO',
+'PR_SSP_ANL_SHIP_PLAN_EE','PR_SSP_ANL_SHIP_PLAN_ALL') ORDER BY 1""")
+    q('C8_cutoff_src_filter', """SELECT LINE, TEXT FROM ALL_SOURCE WHERE OWNER = 'SCM_MGR' AND NAME = 'PR_SSP_PLN_SHIP_PLAN_CUTOFF'
+AND (TEXT LIKE '%PLAN_START_YYYYMMDD%' OR TEXT LIKE '%COMPANY_ID%=%''%' OR UPPER(TEXT) LIKE '%ERP_STOCK_CNT%:=%' OR TEXT LIKE '%CURRENT_PLAN_DATE_YN%') AND LINE < 200 ORDER BY LINE""")
+
+out = rf'C:\Users\LG\AppData\Local\Temp\claude\47795e279550c665\f4e1d597-dc56-44a1-a357-057190fdae48\scratchpad\c10_{ENV}.json'
+json.dump(OUT, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+print('saved', out, datetime.datetime.now().isoformat(timespec='seconds'))

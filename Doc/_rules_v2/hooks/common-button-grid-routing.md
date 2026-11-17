@@ -7,8 +7,8 @@
 ---
 
 ## §1. 공통버튼은 SubTitle `hotkeyConfig` 만으로 표시 (권한 비-gating)
-- `SubTitle`(packages/shared/.../sub-title/SubTitle.tsx)은 `buttonActions.insert/delete/save !== false` 면 **무조건 렌더**. 별도 권한 gating 없음.
-- 즉 **공통 INSERT/DELETE 추가 = `hotkeyConfig.insert/delete = handler` 만** 하면 됨. 버튼 메타(`SCM_ADM_MNU_BTN_MPG_M`) 변경은 표시 조건이 아님(권한 일관성 위해 등록은 권장이나 표시엔 불필요).
+- `SubTitle`(packages/shared/.../sub-title/SubTitle.tsx)은 `buttonActions.insert/delete/save !== false` 면 **무조건 렌더**. 별도 권한 gating 없음. (2026-11-13 정정: 권한 gating 없음 → CR-070(2026-10-26) 으로 권한 게이트 있음 — `SubTitle.tsx` `gateByAuth('SAVE'/'INSERT'/'DELETE')` 가 버튼 코드가 메타에 정의돼 있고 사용자에게 그 권한이 없으면 숨긴다. 즉 화면에 기능(handler)이 있고 버튼 코드 권한이 있을 때만 노출.)
+- 즉 **공통 INSERT/DELETE 추가 = `hotkeyConfig.insert/delete = handler` 만** 하면 됨. 버튼 메타(`SCM_ADM_MNU_BTN_MPG_M`) 변경은 표시 조건이 아님(권한 일관성 위해 등록은 권장이나 표시엔 불필요). (11-13 정정: 버튼 메타·권한은 이제 표시 조건 — CR-070)
 - ❌ **그리드 모듈 안/상단(TitleArea rightButtons·자체 toolbar div)에 Add/Delete 버튼 신설 금지** → 상단 공통버튼으로 일원화 (SYS0011 myAuthList / SYS0013 columns·parameters toolbar 제거).
 
 ## §2. 다중 그리드 — 공통 Insert/Delete 를 활성(focused) 그리드로 라우팅

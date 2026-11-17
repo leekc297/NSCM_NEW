@@ -1,0 +1,73 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0003_GET_BUCKET_TYPE_CODE,DMF0003_1_MktFcst.cs:5585 GetBucketType,1회 · 구간 load,MATCH,
+SP,DMF0003_GET_MKT_FCST_DATA,DMF0003_1_MktFcst.cs:1502 FindData,1회 · 구간 find,MATCH,
+SP,DMF0003_GET_SPREAD_TITLE,DMF0003_1_MktFcst.cs:5532 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,PR_GET_DAY_RANGE,DMF0003_1_MktFcst.cs:5516 GetDayRange,1회 · 구간 load,MATCH,
+SP,SCM0001_GET_LOOKUP_VALUES,DMF0003_1_MktFcst.cs:5597 GetItemType,1회 · 구간 load,MATCH,
+SP,SQL: Declare @AuthTypePara varchar(100) = 'D';,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,15회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_DM,DMF0003_1_MktFcst.cs:6086 GetFcstType,1회 · 구간 load,MATCH,
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0003_GET_DM_ANL_CAR_PROPERTY,DMF0003_1_MktFcst.cs:6639 CAR_PROPERTY,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_DM_ANL_CAR_REF,DMF0003_1_MktFcst.cs:6536 CAR_REF_DATA,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC,DMF0003_1_MktFcst.cs:6948 PSI_FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_DM_ANL_MKT_PSI_DATA,DMF0003_1_MktFcst.cs:2796 spdMain_CellDoubleClick,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_MKT_FCST_COMPARE_POPUP,DMF0003_1_MktFcst.cs:2969 spdMain_CellDoubleClick,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_SPREAD_TITLE_CAR,DMF0003_1_MktFcst.cs:5568 GetSpdTitle_Car,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_GET_SPREAD_TITLE_PSI,DMF0003_1_MktFcst.cs:5549 GetSpdTitle_PSI,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0003_SAVE_MKT_FCST,DMF0003_1_MktFcst.cs:1787 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_BIZ_TYPE_BY_DIVISION,DMF0003_1_MktFcst.cs:5650 GetBizTypebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_CUSTOMER_BY_DIVISION,DMF0003_1_MktFcst.cs:5636 GetCustomerbyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_DIVISION,DMF0003_1_MktFcst.cs:5472 GetDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER,DMF0003_1_MktFcst.cs:5501 GetPlantSitebyEndCustomer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_BY_DIVISION,DMF0003_1_MktFcst.cs:5486 GetScmSitebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_TEAM_BY_DIVISION,DMF0003_1_MktFcst.cs:5623 GetTeambyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),109개,46개,INFO,공통 28 · 선언만 81 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbCustomer,Y,End Customer,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbBizType,Y,Biz Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,Y,Period,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbSalesSite,Y,Sales Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model / Nickname,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtProject,Y,Project,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnProject,Y,layoutControlItem3,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkSum,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbItemType,Y,Item Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtOwner,Y,Owner,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnOwner,Y,layoutControlItem8,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboQty,Y,.,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnIncotermsChg,Y,Master Chg,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboCellQty,Y,.,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,checkInvalidExec,Y,layoutControlItem11,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cboAS,Y,lciASCheck,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkColor,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbEDISender,Y,Sender Code,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Mkt Fcst,정적 컬럼 사실 87행(시트 미지정 포함),컬럼 239(보임 50) · 헤더 3단 · 행 1476 · 고정 22,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

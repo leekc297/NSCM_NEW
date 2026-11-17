@@ -1,0 +1,159 @@
+{
+ "id": "SCP0108",
+ "started": "2026-11-13 05:32:10.572",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:32:10.793",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Report.UIL.SCP0108_CAPA_LOB_Report",
+   "form_text": "LOB Report",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0108_CAPA_LOB_Report.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:16.658"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:32:20.176",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0108\\run_20261113_053210\\dump_load.json",
+   "control_count": 64,
+   "grid_count": 1,
+   "total": "Total : 127",
+   "time_status": "DB : 0.344s, UI : 0.069s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:20.184"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:32:20.493",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0108\\run_20261113_053210\\shots\\SCP0108_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:20.612"
+  },
+  {
+   "step": "set",
+   "cmd": "set",
+   "at": "2026-11-13 05:32:20.770",
+   "applied": "prop:ControlValues",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:21.158"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 05:32:24.090",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:24.660"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 05:32:31.686",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0108\\run_20261113_053210\\dump_find.json",
+   "control_count": 64,
+   "grid_count": 1,
+   "total": "Total : 214",
+   "time_status": "DB : 1.775s, UI : 0.757s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:31.724"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 05:32:31.882",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0108\\run_20261113_053210\\shots\\SCP0108_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:32.062"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:32:32.539",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:32:33.220"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 33,
+  "calls_with_params": 33
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Report.UIL.SCP0108_CAPA_LOB_Report",
+  "form_text": "LOB Report",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0108_CAPA_LOB_Report.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 1.775s, UI : 0.757s",
+  "total": "Total : 214",
+  "how": "status"
+ },
+ "t_open": "2026-11-13 05:32:10.785",
+ "t_find": "2026-11-13 05:32:23.815",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 64,
+  "layout_items": 20,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 44,
+  "data_rows": 50,
+  "grid_rows": 214,
+  "calls_total": 33,
+  "calls_screen": 33,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 05:32:33.530",
+ "exit": 0
+}

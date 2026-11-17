@@ -1,0 +1,254 @@
+{
+ "id": "FP00631",
+ "started": "2026-11-13 04:51:29.586",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 04:51:29.898",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00631_Cell_Simul_Cell_Pack",
+   "form_text": "Cell Simulation(Cell~Pack)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00631_Cell_Simul_Cell_Pack.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:51:35.712"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 04:51:39.410",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00631\\run_20261113_045129\\dump_load.json",
+   "control_count": 70,
+   "grid_count": 2,
+   "total": "Total : ",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:51:39.416"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 04:51:39.582",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00631\\run_20261113_045129\\shots\\FP00631_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:51:39.835"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-13 04:51:55.724",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00631\\run_20261113_045129\\shots\\FP00631_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 04:51:55.914"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 04:51:56.395",
+   "call_timed_out": true,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:52:26.405"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 04:52:34.222",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00631\\run_20261113_045129\\dump_find.json",
+   "control_count": 70,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:52:34.228"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 04:52:34.391",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00631\\run_20261113_045129\\shots\\FP00631_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:52:34.532"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 04:52:35.013",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:52:35.622"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 86,
+  "calls_with_params": 83
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00631_Cell_Simul_Cell_Pack",
+  "form_text": "Cell Simulation(Cell~Pack)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00631_Cell_Simul_Cell_Pack.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 계획 날짜 1번째 최근(SCM_FP_PLAN_H · Plan Group US_FORM_A)",
+   "set": {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 2번째 최근(SCM_FP_PLAN_H · Plan Group US_FORM_A)",
+   "set": {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 3번째 최근(SCM_FP_PLAN_H · Plan Group US_FORM_A)",
+   "set": {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 4번째 최근(SCM_FP_PLAN_H · Plan Group US_FORM_A)",
+   "set": {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 5번째 최근(SCM_FP_PLAN_H · Plan Group US_FORM_A)",
+   "set": {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   {
+    "name": "date_instance",
+    "prop": "DateTime",
+    "value": "20260914"
+   }
+  ]
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-13 04:51:29.796",
+ "t_find": "2026-11-13 04:51:56.065",
+ "dialogs": [
+  {
+   "at": "2026-11-13 04:52:12.053",
+   "caption": "GSCM",
+   "text": "시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 70,
+  "layout_items": 26,
+  "grids": 2,
+  "sheets": 1,
+  "header_cols": 20,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 86,
+  "calls_screen": 86,
+  "calls_find": 13,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-13 04:52:35.858",
+ "exit": 0
+}

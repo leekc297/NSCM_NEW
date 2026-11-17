@@ -1,0 +1,118 @@
+﻿pattern,rule_ids,note,scope,level,source,msg_id
+읽기\s*전용입니다\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00109
+Read\-only\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00109
+이전\s*Plan은\s*편집할\s*수\s*없습니다\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00170
+You\s*can\s*not\s*edit\s*the\s*old\s*Plan\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00170
+SSP\s*Planner\s*권한이\s*없는\s*사용자\s*입니다\s*\.\s*\s*User\s*ID\s*:,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00251
+This\s*user\s*does\s*not\s*have\s*permission\s*to\s*the\s*SSP\s*Planner\.\s*\s*User\s*ID\s*:,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00251
+필수\s*입력\s*컬럼이\s*없습니다,DD-003,Project Code 컬럼(PROJECT_CODE) 필수 검사 MSG00429 · 필수 컬럼 조회 결과 포함,DMF0003,candidate,원장:MSG 코드,MSG00429
+There\s*are\s*no\s*mandatory\s*input\s*columns,DD-003,Project Code 컬럼(PROJECT_CODE) 필수 검사 MSG00429 · 필수 컬럼 조회 결과 포함,DMF0003,candidate,원장:MSG 코드,MSG00429
+INSERT\s*모드에서는\s*저장\s*후\s*Bucket\s*변경이\s*가능합니다\.,DD-006,조회조건 Bucket 콤보(BUCKET) 변경 시 Insert 행 존재 검사 MSG00227,DMF0003,candidate,원장:MSG 코드,MSG00227
+"In\s*INSERT\s*mode,\s*you\s*can\s*change\s*the\s*Bucket\s*after\s*saving\.",DD-006,조회조건 Bucket 콤보(BUCKET) 변경 시 Insert 행 존재 검사 MSG00227,DMF0003,candidate,원장:MSG 코드,MSG00227
+해당\s*사업부\s*편집은\s*\s*Demand\s*\-\s*Demand\s*Plan\s*\-\s*FcstPrice\s*MGMT\s*\s*에서\s*할\s*수\s*있습니다\.,DD-012,Insert·Delete·Save 버튼 노출(편집 불가 사업부 DM_UI_EDITABLE_DIVISION · MSG00448),DMF0003,candidate,원장:MSG 코드,MSG00448
+"고객향\s*Sales\s*Site이며\s*FCST\s*Type이\s*WS,\s*AS\s*종류인\s*경우,\s*AS\s*From\s*Site\s*컬럼은\s*필수\s*입력\s*대상입니다\.",DD-016,저장 필수 검사 AS From Site(AS_FROM_SITE · FCST_TYPE AS/WS · MSG00476) 적용 그룹,DMF0003,candidate,원장:MSG 코드,MSG00476
+"If\s*this\s*is\s*a\s*customer\-facing\s*sales\s*site\s*and\s*the\s*FCST\s*type\s*is\s*WS\s*or\s*AS,\s*the\s*""AS\s*From\s*Site""\s*column\s*is\s*required\.",DD-016,저장 필수 검사 AS From Site(AS_FROM_SITE · FCST_TYPE AS/WS · MSG00476) 적용 그룹,DMF0003,candidate,원장:MSG 코드,MSG00476
+값은\s*필수\s*입력입니다,DD-020,Sales Customer 신규 행 Rep(REP_YN) · Sales Site 신규 행 Ship Plan Auto(SHIP_,DMF0004,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-020,Sales Customer 신규 행 Rep(REP_YN) · Sales Site 신규 행 Ship Plan Auto(SHIP_,DMF0004,candidate,원장:MSG 코드,MSG00002
+필수\s*입력\s*컬럼이\s*없습니다,DD-028,저장 필수 검사 Owner(PM)(PRJ_OWNR_ID)·Team(DEPT_ID) INPUT_TP_CD M · MSG00429,DMF0005,candidate,원장:MSG 코드,MSG00429
+There\s*are\s*no\s*mandatory\s*input\s*columns,DD-028,저장 필수 검사 Owner(PM)(PRJ_OWNR_ID)·Team(DEPT_ID) INPUT_TP_CD M · MSG00429,DMF0005,candidate,원장:MSG 코드,MSG00429
+값은\s*필수\s*입력입니다,DD-041,Insert 행 Measure 셀(MEASURE) 기본값 — CUST_FCST_MEASURE 목록 값 'Customer FCS,DMF0007,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-041,Insert 행 Measure 셀(MEASURE) 기본값 — CUST_FCST_MEASURE 목록 값 'Customer FCS,DMF0007,candidate,원장:MSG 코드,MSG00002
+Sales\s*Site\s*UI에서\s*Sales\s*Site를\s*추가하시기\s*바랍니다\.,DD-054,정비 목록 확인필요 셀(Sales Site·SSPM) 색 표시 + 마우스 오버 안내 MSG00445·MSG00446,DMF0008,candidate,원장:MSG 코드,MSG00445
+Add\s*a\s*Sales\s*Site\s*in\s*the\s*Sales\s*Site\s*UI\.,DD-054,정비 목록 확인필요 셀(Sales Site·SSPM) 색 표시 + 마우스 오버 안내 MSG00445·MSG00446,DMF0008,candidate,원장:MSG 코드,MSG00445
+Sales\s*Site\s*Project\s*Model\s*UI에서\s*데이터를\s*추가하시기\s*바랍니다\.,DD-054,정비 목록 확인필요 셀(Sales Site·SSPM) 색 표시 + 마우스 오버 안내 MSG00445·MSG00446,DMF0008,candidate,원장:MSG 코드,MSG00446
+Add\s*a\s*Sales\s*Site\s*Project\s*Model\s*in\s*the\s*Sales\s*Site\s*Project\s*Model\s*UI\.,DD-054,정비 목록 확인필요 셀(Sales Site·SSPM) 색 표시 + 마우스 오버 안내 MSG00445·MSG00446,DMF0008,candidate,원장:MSG 코드,MSG00446
+조회\s*기간은\s*3년\s*이상\s*설정\s*할\s*수\s*없습니다\.,DD-063,조회조건 Period(기간) 한도 검사 MSG00164 「조회 기간은 3년 이내로 입력해주세요.」(보정 없이 차단),DMF0014,candidate,원장:MSG 코드,MSG00164
+Searching\s*period\s*can't\s*be\s*set\s*more\s*than\s*3\s*years\.,DD-063,조회조건 Period(기간) 한도 검사 MSG00164 「조회 기간은 3년 이내로 입력해주세요.」(보정 없이 차단),DMF0014,candidate,원장:MSG 코드,MSG00164
+"직접\s*INSERT\s*불가한\s*화면이므로,\s*엑셀\s*업로드를\s*이용해\s*주시기\s*바랍니다\.",DD-064,Insert · Delete 단추(INSERT · DELETE) 미노출(직접 추가 불가 화면),DMF0014,candidate,원장:MSG 코드,MSG00380
+"This\s*screen\s*does\s*not\s*allow\s*direct\s*INSERT,\s*so\s*please\s*use\s*the\s*Excel\s*upload\.",DD-064,Insert · Delete 단추(INSERT · DELETE) 미노출(직접 추가 불가 화면),DMF0014,candidate,원장:MSG 코드,MSG00380
+저장\s*하였습니다\.,DD-069,공용 업로드 창(Upload) 2단계 업로드 — 파일 선택 즉시 검증 · 오류 있으면 OK 비활성 · MSG00657,DMF0014,candidate,원장:MSG 코드,MSG00020
+Saved\s*it\.,DD-069,공용 업로드 창(Upload) 2단계 업로드 — 파일 선택 즉시 검증 · 오류 있으면 OK 비활성 · MSG00657,DMF0014,candidate,원장:MSG 코드,MSG00020
+,DD-069,메시지 사전에 MSG00657 없음 — 패턴을 만들지 못함,DMF0014,unusable,원장:MSG 코드,MSG00657
+필수\s*입력\s*컬럼이\s*없습니다,DD-083,신규 행 Project(PROJECT_CODE) 필수 검사 · MSG00429,DMF0021,candidate,원장:MSG 코드,MSG00429
+There\s*are\s*no\s*mandatory\s*input\s*columns,DD-083,신규 행 Project(PROJECT_CODE) 필수 검사 · MSG00429,DMF0021,candidate,원장:MSG 코드,MSG00429
+값은\s*필수\s*입력입니다,DD-085,저장 완료 안내 메시지(Save → MSG00002 / AS-IS MSG00004 · MSG00672 건수 자리),DMF0021,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-085,저장 완료 안내 메시지(Save → MSG00002 / AS-IS MSG00004 · MSG00672 건수 자리),DMF0021,candidate,원장:MSG 코드,MSG00002
+개의\s*데이터가\s*저장되었습니다\.,DD-085,저장 완료 안내 메시지(Save → MSG00002 / AS-IS MSG00004 · MSG00672 건수 자리),DMF0021,candidate,원장:MSG 코드,MSG00004
+data\s*saved\.,DD-085,저장 완료 안내 메시지(Save → MSG00002 / AS-IS MSG00004 · MSG00672 건수 자리),DMF0021,candidate,원장:MSG 코드,MSG00004
+,DD-085,메시지 사전에 MSG00672 없음 — 패턴을 만들지 못함,DMF0021,unusable,원장:MSG 코드,MSG00672
+"라인\s*\[.{0,60}\]\s*날짜\(Daily\)가\s*값이\s*없습니다\.",DD-086,값 없는 신규 행 저장 검증 메시지(Save → MSG00670 / AS-IS MSG00146 · MSG01164 행 번호 자,DMF0021,candidate,원장:MSG 코드,MSG00146
+"The\s*line\s*\[.{0,60}\]\s*date\s*has\s*no\s*value\.",DD-086,값 없는 신규 행 저장 검증 메시지(Save → MSG00670 / AS-IS MSG00146 · MSG01164 행 번호 자,DMF0021,candidate,원장:MSG 코드,MSG00146
+,DD-086,메시지 사전에 MSG00670 없음 — 패턴을 만들지 못함,DMF0021,unusable,원장:MSG 코드,MSG00670
+,DD-086,메시지 사전에 MSG01164 없음 — 패턴을 만들지 못함,DMF0021,unusable,원장:MSG 코드,MSG01164
+값은\s*필수\s*입력입니다,DD-104,조회조건 Version(VERSION_NO) 기본값 CURRENT · 세 Plan Type 필수(미선택 시 MSG00283),DMF0035,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-104,조회조건 Version(VERSION_NO) 기본값 CURRENT · 세 Plan Type 필수(미선택 시 MSG00283),DMF0035,candidate,원장:MSG 코드,MSG00002
+Version을\s*선택하고\s*조회하세요\.,DD-104,조회조건 Version(VERSION_NO) 기본값 CURRENT · 세 Plan Type 필수(미선택 시 MSG00283),DMF0035,candidate,원장:MSG 코드,MSG00283
+Select\s*Version\s*to\s*view\.,DD-104,조회조건 Version(VERSION_NO) 기본값 CURRENT · 세 Plan Type 필수(미선택 시 MSG00283),DMF0035,candidate,원장:MSG 코드,MSG00283
+값은\s*필수\s*입력입니다,DD-125,기여율 Save 저장 확인창 없음 · 결과 성공 토스트(MSG00002) + 재조회(실패 시에도 재조회) — AS-IS MSG,DMF0043,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-125,기여율 Save 저장 확인창 없음 · 결과 성공 토스트(MSG00002) + 재조회(실패 시에도 재조회) — AS-IS MSG,DMF0043,candidate,원장:MSG 코드,MSG00002
+개의\s*데이터가\s*저장되었습니다\.,DD-125,기여율 Save 저장 확인창 없음 · 결과 성공 토스트(MSG00002) + 재조회(실패 시에도 재조회) — AS-IS MSG,DMF0043,candidate,원장:MSG 코드,MSG00004
+data\s*saved\.,DD-125,기여율 Save 저장 확인창 없음 · 결과 성공 토스트(MSG00002) + 재조회(실패 시에도 재조회) — AS-IS MSG,DMF0043,candidate,원장:MSG 코드,MSG00004
+해외법인\s*기여도\s*미\s*맵핑된\s*마스터가\s*존재합니다\.,DD-133,정합성 체크 메시지 코드 MSG00307(AS-IS) ↔ MSG00631(TO-BE) 「해외법인 기여도 미 맵핑된 마스터가 존,DMF0043_01,candidate,원장:MSG 코드,MSG00307
+There\s*is\s*an\s*unmapped\s*master\s*who\s*contributes\s*overseas\.,DD-133,정합성 체크 메시지 코드 MSG00307(AS-IS) ↔ MSG00631(TO-BE) 「해외법인 기여도 미 맵핑된 마스터가 존,DMF0043_01,candidate,원장:MSG 코드,MSG00307
+,DD-133,메시지 사전에 MSG00631 없음 — 패턴을 만들지 못함,DMF0043_01,unusable,원장:MSG 코드,MSG00631
+조회\s*기간은\s*3년\s*이상\s*설정\s*할\s*수\s*없습니다\.,DD-147,조회 기간(From~To · PERIOD) 3년 초과 입력 시 MSG00164(Please enter a period with,DMF0048,candidate,원장:MSG 코드,MSG00164
+Searching\s*period\s*can't\s*be\s*set\s*more\s*than\s*3\s*years\.,DD-147,조회 기간(From~To · PERIOD) 3년 초과 입력 시 MSG00164(Please enter a period with,DMF0048,candidate,원장:MSG 코드,MSG00164
+,DD-151,메시지 사전에 MSG00676 없음 — 패턴을 만들지 못함,DMF0049,unusable,원장:MSG 코드,MSG00676
+값은\s*필수\s*입력입니다,DD-154,저장 완료 안내 — 하단 토스트 MSG00002 「성공적으로 저장되었습니다.」(건수 없음),DMF0049,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-154,저장 완료 안내 — 하단 토스트 MSG00002 「성공적으로 저장되었습니다.」(건수 없음),DMF0049,candidate,원장:MSG 코드,MSG00002
+개의\s*데이터가\s*저장되었습니다\.,DD-154,저장 완료 안내 — 하단 토스트 MSG00002 「성공적으로 저장되었습니다.」(건수 없음),DMF0049,candidate,원장:MSG 코드,MSG00004
+data\s*saved\.,DD-154,저장 완료 안내 — 하단 토스트 MSG00002 「성공적으로 저장되었습니다.」(건수 없음),DMF0049,candidate,원장:MSG 코드,MSG00004
+값은\s*필수\s*입력입니다,DD-157,Save·Delete 완료 안내 — MSG00002 「성공적으로 저장되었습니다.」 1회(건수 안내 MSG00004/MSG006,DMF0068,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-157,Save·Delete 완료 안내 — MSG00002 「성공적으로 저장되었습니다.」 1회(건수 안내 MSG00004/MSG006,DMF0068,candidate,원장:MSG 코드,MSG00002
+개의\s*데이터가\s*저장되었습니다\.,DD-157,Save·Delete 완료 안내 — MSG00002 「성공적으로 저장되었습니다.」 1회(건수 안내 MSG00004/MSG006,DMF0068,candidate,원장:MSG 코드,MSG00004
+data\s*saved\.,DD-157,Save·Delete 완료 안내 — MSG00002 「성공적으로 저장되었습니다.」 1회(건수 안내 MSG00004/MSG006,DMF0068,candidate,원장:MSG 코드,MSG00004
+,DD-157,메시지 사전에 MSG00672 없음 — 패턴을 만들지 못함,DMF0068,unusable,원장:MSG 코드,MSG00672
+변경된\s*사항이\s*없습니다\.,DD-163,빈 신규 행(ITEM_ID · Valid From · Valid To 모두 빈 행) 저장 처리 — 필수 입력 검사 MSG006,DMF0072,candidate,원장:MSG 코드,MSG00017
+There\s*are\s*no\s*changes\.,DD-163,빈 신규 행(ITEM_ID · Valid From · Valid To 모두 빈 행) 저장 처리 — 필수 입력 검사 MSG006,DMF0072,candidate,원장:MSG 코드,MSG00017
+,DD-163,메시지 사전에 MSG00610 없음 — 패턴을 만들지 못함,DMF0072,unusable,원장:MSG 코드,MSG00610
+값은\s*필수\s*입력입니다,DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00002
+변경된\s*사항이\s*없습니다\.,DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00017
+There\s*are\s*no\s*changes\.,DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00017
+저장\s*하였습니다\.,DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00020
+Saved\s*it\.,DD-164,저장 결과 메시지 — 성공 MSG00002 토스트 · 변경 없음 MSG_NO_CHANGE(수정한 내용이 없습니다.) — AS-,DMF0072,candidate,원장:MSG 코드,MSG00020
+개의\s*데이터가\s*저장되었습니다\.,DD-169,Version 팝업(Sales Price Version) Edit · Save — Monthly Rolling Forecast,DMF0074,candidate,원장:MSG 코드,MSG00004
+data\s*saved\.,DD-169,Version 팝업(Sales Price Version) Edit · Save — Monthly Rolling Forecast,DMF0074,candidate,원장:MSG 코드,MSG00004
+실행중\s*에러가\s*발생했습니다\.,DD-169,Version 팝업(Sales Price Version) Edit · Save — Monthly Rolling Forecast,DMF0074,candidate,원장:MSG 코드,MSG00284
+Error\s*occurred\s*during\s*execution\.,DD-169,Version 팝업(Sales Price Version) Edit · Save — Monthly Rolling Forecast,DMF0074,candidate,원장:MSG 코드,MSG00284
+Version을\s*선택하고\s*조회하세요\.,DD-170,조회조건 Team(TEAM) 변경 시 cascade — End Customer · Sales Site · Version · P,DMF0074,candidate,원장:MSG 코드,MSG00283
+Select\s*Version\s*to\s*view\.,DD-170,조회조건 Team(TEAM) 변경 시 cascade — End Customer · Sales Site · Version · P,DMF0074,candidate,원장:MSG 코드,MSG00283
+,DD-179,메시지 사전에 MSG01014 없음 — 패턴을 만들지 못함,DMF0082,unusable,원장:MSG 코드,MSG01014
+값은\s*필수\s*입력입니다,DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00002
+신규\s*입력\s*데이터\s*중\s*중복된\s*데이터가\s*있습니다\.,DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00260
+There\s*is\s*duplicated\s*data\s*among\s*new\s*input\s*data\.,DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00260
+필수\s*입력\s*컬럼이\s*없습니다,DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00429
+There\s*are\s*no\s*mandatory\s*input\s*columns,DD-181,신규 행 필수(MSG00429) · 신규 행끼리 중복(MSG00260) 검사 시점 = Save,DMF0082,candidate,원장:MSG 코드,MSG00429
+,DD-184,메시지 사전에 MSG00680 없음 — 패턴을 만들지 못함,DMF0082,unusable,원장:MSG 코드,MSG00680
+값은\s*필수\s*입력입니다,DD-192,Save 성공 메시지(MSG00002 「성공적으로 저장되었습니다.」 — 저장 건수 미표시),SYS0014,candidate,원장:MSG 코드,MSG00002
+"Value.{0,60}is\s*a\s*required\s*input\.",DD-192,Save 성공 메시지(MSG00002 「성공적으로 저장되었습니다.」 — 저장 건수 미표시),SYS0014,candidate,원장:MSG 코드,MSG00002
+Model은\s*한개만\s*선택하여\s*입력해주세요\.,DD-201,그리드 Model 칸(ITEM_ID) 팝업 다중 선택 처리 — 첫 모델만 입력(MSG01443 미표시),DMF0005,candidate,원장:MSG 코드,MSG00471
+Please\s*select\s*only\s*one\s*Model,DD-201,그리드 Model 칸(ITEM_ID) 팝업 다중 선택 처리 — 첫 모델만 입력(MSG01443 미표시),DMF0005,candidate,원장:MSG 코드,MSG00471
+,DD-201,메시지 사전에 MSG01443 없음 — 패턴을 만들지 못함,DMF0005,unusable,원장:MSG 코드,MSG01443
+수정모드가\s*아니므로\s*추가할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00008
+Can\s*not\s*add\s*as\s*it\s*is\s*not\s*in\s*modify\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00008
+수정모드가\s*아니므로\s*삭제할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00009
+Can\s*not\s*delete\s*as\s*it\s*is\s*not\s*in\s*modify\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00009
+수정모드가\s*아니므로\s*저장할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00010
+Can\s*not\s*save\s*as\s*it\s*is\s*not\s*in\s*modify\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00010
+Allow\s*Group일\s*경우\s*수정모드로\s*변경할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00115
+"If\s*it\s*is\s*allowed\s*group,\s*it\s*is\s*not\s*possible\s*to\s*change\s*to\s*modify\s*mode\.",CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00115
+수정모드가\s*아니므로\s*입력할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00135
+Can\s*not\s*be\s*entered\s*as\s*it\s*is\s*not\s*in\s*modify\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00135
+Sort\s*상태에서는\s*수정모드를\s*할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00139
+Modification\s*mode\s*is\s*not\s*allowed\s*in\s*the\s*Sort\s*state\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00139
+수정모드에서는\s*Sort를\s*할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00140
+Sort\s*is\s*not\s*allowed\s*in\s*modify\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00140
+Edit\s*Mode\s*에서는\s*수행할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00142
+No\s*alterations\s*are\s*allowed\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00142
+Edit\s*Mode\s*에서만\s*수행이\s*가능합니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00144
+It\s*can\s*be\s*executed\s*in\s*the\s*change\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00144
+Sort\s*후에는\s*조회\s*후\s*수정모드로\s*가능합니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00162
+"After\s*Sort,\s*you\s*can\s*inquire\s*and\s*modify\s*the\s*mode\.",CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,confirmed,편집 모드 계열(소스 경로 확인 BaseForm.cs),MSG00162
+조회\s*후\s*수정모드로\s*가능합니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00259
+You\s*can\s*inquire\s*and\s*modify\s*the\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00259
+수정모드에서는\s*진행할\s*수\s*없습니다\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00266
+You\s*can\s*not\s*proceed\s*in\s*edit\s*mode\.,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00266
+수정모드에서는\s*입력할\s*수\s*없습니다,CR-093;CR-084;CR-103,AS-IS 는 수정 모드(Edit F2)가 있어야 하는 동작 — TO-BE 는 편집 버튼 없이 상시 편집(편집 버튼 경로 안내 메시지는 TO-BE 에 없어도 정상),ALL,candidate,편집 모드 계열(메시지 사전 문구만 — 경로 미확인),MSG00408

@@ -1,6 +1,6 @@
 # SCP0016 · SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN
 
-- 실행 2026-11-07 22:38:37 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-14 11:04:13 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 439행 전 컬럼 일치 · 키 원천 auto · 키 COLUMN_NAME · golden 집합 판정 PASS
 - 호출 #1 sheet=spreadTitle btn=SEARCH user=minyonglee1 FE 응답 행 440 · 원천 Doc\verify\SCP0016\calls\_snap__snap_그리드_헤더_텍스트_모델_시트_0.json
 - TO-BE 인자(FE 본문): `{"startYyyymmdd": "20260824", "endYyyymmdd": "20270822", "versionNo": "SP_W_20260608"}`

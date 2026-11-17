@@ -9,6 +9,7 @@
       "1",
       "--retries",
       "0",
+      "--pass-with-no-tests",
       "--reporter=list,json"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
@@ -22,14 +23,18 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 0
+    },
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0122/eg/popup/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 0
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -47,7 +52,9 @@
         "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0122\\eg\\popup\\artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 0
+        },
         "name": "chromium",
         "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
         "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
@@ -96,15 +103,10 @@
     "webServer": null
   },
   "suites": [],
-  "errors": [
-    {
-      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
-      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
-    }
-  ],
+  "errors": [],
   "stats": {
-    "startTime": "2026-11-07T10:31:13.579Z",
-    "duration": 511.6980000000003,
+    "startTime": "2026-11-14T08:48:52.878Z",
+    "duration": 72.86000000000001,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

@@ -1,0 +1,450 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 05:12:08",
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 05:13:02.673",
+  "sheet": "Shipment PSI(Mobility & IT)",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "FROM_SITE",
+    "label": "Site",
+    "data_field": "FROM_SITE",
+    "visible": "False"
+   },
+   {
+    "index": 3,
+    "tag": "FROM_SITE_NM",
+    "label": "From Site",
+    "data_field": "from_site_nm",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "ITEM_ID",
+    "label": "Model",
+    "data_field": "ITEM_ID",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "NICK_NAME",
+    "label": "Nick Name",
+    "data_field": "nick_name",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "LT_DAY",
+    "label": "Aging L/T",
+    "data_field": "LT_DAY",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "LT_UPDATE_YN",
+    "label": "LT_UPDATE_YN",
+    "data_field": "LT_UPDATE_YN",
+    "visible": "False"
+   },
+   {
+    "index": 8,
+    "tag": "YEILD",
+    "label": "Yield(%)",
+    "data_field": "YEILD",
+    "visible": "True"
+   },
+   {
+    "index": 9,
+    "tag": "TYPE",
+    "label": "BOH",
+    "data_field": "TYPE",
+    "visible": "True"
+   },
+   {
+    "index": 10,
+    "tag": "FIGURE",
+    "label": "BOH",
+    "data_field": "FIGURE",
+    "visible": "True"
+   },
+   {
+    "index": 11,
+    "tag": "PSI_NAME",
+    "label": "PSI",
+    "data_field": "PSI_NAME",
+    "visible": "True"
+   },
+   {
+    "index": 12,
+    "tag": "SHIP_FROZEN",
+    "label": "ship_frozen",
+    "data_field": "ship_frozen",
+    "visible": "False"
+   },
+   {
+    "index": 13,
+    "tag": "PLAN_TYPE",
+    "label": "PLAN_TYPE",
+    "data_field": "PLAN_TYPE",
+    "visible": "False"
+   },
+   {
+    "index": 14,
+    "tag": "SEQ",
+    "label": "SEQ",
+    "data_field": "SEQ",
+    "visible": "False"
+   },
+   {
+    "index": 15,
+    "tag": "PLAN_START_YYYYMMDD",
+    "label": "PLAN_START_YYYYMMDD",
+    "data_field": "PLAN_START_YYYYMMDD",
+    "visible": "False"
+   },
+   {
+    "index": 16,
+    "tag": "MEASURE_NAME",
+    "label": "Measure",
+    "data_field": "MEASURE_NAME",
+    "visible": "True"
+   },
+   {
+    "index": 17,
+    "tag": "MEASURE",
+    "label": "Measure",
+    "data_field": "MEASURE",
+    "visible": "False"
+   },
+   {
+    "index": 18,
+    "tag": "M_202610",
+    "label": "SUM",
+    "data_field": "M_202610",
+    "visible": "False"
+   },
+   {
+    "index": 19,
+    "tag": "W_20261041",
+    "label": "SUM",
+    "data_field": "W_20261041",
+    "visible": "False"
+   },
+   {
+    "index": 20,
+    "tag": "D_20261009",
+    "label": "09",
+    "data_field": "D_20261009",
+    "visible": "True"
+   },
+   {
+    "index": 21,
+    "tag": "D_20261010",
+    "label": "10",
+    "data_field": "D_20261010",
+    "visible": "True"
+   },
+   {
+    "index": 22,
+    "tag": "D_20261011",
+    "label": "11",
+    "data_field": "D_20261011",
+    "visible": "True"
+   },
+   {
+    "index": 23,
+    "tag": "W_20261042",
+    "label": "SUM",
+    "data_field": "W_20261042",
+    "visible": "False"
+   },
+   {
+    "index": 24,
+    "tag": "D_20261012",
+    "label": "12",
+    "data_field": "D_20261012",
+    "visible": "True"
+   },
+   {
+    "index": 25,
+    "tag": "D_20261013",
+    "label": "13",
+    "data_field": "D_20261013",
+    "visible": "True"
+   },
+   {
+    "index": 26,
+    "tag": "D_20261014",
+    "label": "14",
+    "data_field": "D_20261014",
+    "visible": "True"
+   },
+   {
+    "index": 27,
+    "tag": "D_20261015",
+    "label": "15",
+    "data_field": "D_20261015",
+    "visible": "True"
+   },
+   {
+    "index": 28,
+    "tag": "D_20261016",
+    "label": "16",
+    "data_field": "D_20261016",
+    "visible": "True"
+   },
+   {
+    "index": 29,
+    "tag": "D_20261017",
+    "label": "17",
+    "data_field": "D_20261017",
+    "visible": "True"
+   },
+   {
+    "index": 30,
+    "tag": "D_20261018",
+    "label": "18",
+    "data_field": "D_20261018",
+    "visible": "True"
+   },
+   {
+    "index": 31,
+    "tag": "W_20261043",
+    "label": "SUM",
+    "data_field": "W_20261043",
+    "visible": "False"
+   },
+   {
+    "index": 32,
+    "tag": "D_20261019",
+    "label": "19",
+    "data_field": "D_20261019",
+    "visible": "True"
+   },
+   {
+    "index": 33,
+    "tag": "D_20261020",
+    "label": "20",
+    "data_field": "D_20261020",
+    "visible": "True"
+   },
+   {
+    "index": 34,
+    "tag": "D_20261021",
+    "label": "21",
+    "data_field": "D_20261021",
+    "visible": "True"
+   },
+   {
+    "index": 35,
+    "tag": "D_20261022",
+    "label": "22",
+    "data_field": "D_20261022",
+    "visible": "True"
+   },
+   {
+    "index": 36,
+    "tag": "D_20261023",
+    "label": "23",
+    "data_field": "D_20261023",
+    "visible": "True"
+   },
+   {
+    "index": 37,
+    "tag": "D_20261024",
+    "label": "24",
+    "data_field": "D_20261024",
+    "visible": "True"
+   },
+   {
+    "index": 38,
+    "tag": "D_20261025",
+    "label": "25",
+    "data_field": "D_20261025",
+    "visible": "True"
+   },
+   {
+    "index": 39,
+    "tag": "W_20261044",
+    "label": "SUM",
+    "data_field": "W_20261044",
+    "visible": "False"
+   },
+   {
+    "index": 40,
+    "tag": "D_20261026",
+    "label": "26",
+    "data_field": "D_20261026",
+    "visible": "True"
+   },
+   {
+    "index": 41,
+    "tag": "D_20261027",
+    "label": "27",
+    "data_field": "D_20261027",
+    "visible": "True"
+   },
+   {
+    "index": 42,
+    "tag": "D_20261028",
+    "label": "28",
+    "data_field": "D_20261028",
+    "visible": "True"
+   },
+   {
+    "index": 43,
+    "tag": "D_20261029",
+    "label": "29",
+    "data_field": "D_20261029",
+    "visible": "True"
+   },
+   {
+    "index": 44,
+    "tag": "D_20261030",
+    "label": "30",
+    "data_field": "D_20261030",
+    "visible": "True"
+   },
+   {
+    "index": 45,
+    "tag": "D_20261031",
+    "label": "31",
+    "data_field": "D_20261031",
+    "visible": "True"
+   },
+   {
+    "index": 46,
+    "tag": "M_202611",
+    "label": "SUM",
+    "data_field": "M_202611",
+    "visible": "False"
+   },
+   {
+    "index": 47,
+    "tag": "W_20261144",
+    "label": "SUM",
+    "data_field": "W_20261144",
+    "visible": "False"
+   },
+   {
+    "index": 48,
+    "tag": "D_20261101",
+    "label": "01",
+    "data_field": "D_20261101",
+    "visible": "True"
+   },
+   {
+    "index": 49,
+    "tag": "W_20261145",
+    "label": "SUM",
+    "data_field": "W_20261145",
+    "visible": "False"
+   },
+   {
+    "index": 50,
+    "tag": "D_20261102",
+    "label": "02",
+    "data_field": "D_20261102",
+    "visible": "True"
+   },
+   {
+    "index": 51,
+    "tag": "D_20261103",
+    "label": "03",
+    "data_field": "D_20261103",
+    "visible": "True"
+   },
+   {
+    "index": 52,
+    "tag": "D_20261104",
+    "label": "04",
+    "data_field": "D_20261104",
+    "visible": "True"
+   },
+   {
+    "index": 53,
+    "tag": "D_20261105",
+    "label": "05",
+    "data_field": "D_20261105",
+    "visible": "True"
+   },
+   {
+    "index": 54,
+    "tag": "D_20261106",
+    "label": "06",
+    "data_field": "D_20261106",
+    "visible": "True"
+   },
+   {
+    "index": 55,
+    "tag": "D_20261107",
+    "label": "07",
+    "data_field": "D_20261107",
+    "visible": "True"
+   },
+   {
+    "index": 56,
+    "tag": "D_20261108",
+    "label": "08",
+    "data_field": "D_20261108",
+    "visible": "True"
+   },
+   {
+    "index": 57,
+    "tag": "W_20261146",
+    "label": "SUM",
+    "data_field": "W_20261146",
+    "visible": "False"
+   },
+   {
+    "index": 58,
+    "tag": "D_20261109",
+    "label": "09",
+    "data_field": "D_20261109",
+    "visible": "True"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 05:13:02.677"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 59,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

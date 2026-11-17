@@ -1,0 +1,227 @@
+'use strict';
+// Vibe_Manager 1.3.1 — FLOW 진척 패널: 화면별 단계(파싱→문서→GAP→생성→게이트→수선→PKG→등록→E2E) 상태를 산출물로 판정해 표 + 진행률로 보여준다.
+//   판정은 전부 파일 기반(기록 신뢰 X): Fact Pack / agent _gate.csv / Doc/documents xlsx / Doc/gap csv / Doc/gen(GEN_NOTES·CHECK·DOD·REPAIR·CHECK_PKG·_registration·_revert·PIPELINE) / 페이지 폴더 / Doc/e2e/results/_summary.csv
+// 2.0.2(2026-11-11 사용자 지시): FLOW 표 다시 구성 — 문서+Excel → '문서' 1칸 · Smoke/CRUD/Auth/Auth×CRUD → 'Test' 1칸 · '수선' → '보완' ·
+//   머리글 고정(요약 영역 + 표 머리글) · Doc/gen 버튼 삭제 · '★ 끝까지' → 'Batch Run' · 단일 색상 점·선 아이콘 디자인 ·
+//   머리글 영문 · 파이프라인 열 삭제 · 열 순서 = 현재 일괄 작업 체인 순서 · Cloud(이관) 열 추가.
+//   판정(stageStatus)과 STAGES(내보내기 — UI Status·CSV 가 사용)는 13단계 그대로. 합친 칸은 화면 표시만 묶는다.
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const STAGES = [
+  { key: 'pack', label: '1 파싱', task: 'S1.packone' },
+  { key: 'docs', label: '2 문서', task: 'S3.agent' },
+  { key: 'xlsx', label: '2x Excel', task: 'S3.xlsx' },
+  { key: 'chk', label: '3 CheckList', task: 'S8.verify' }, // 2026-10-30 GAP 분석 폐지 → CheckList(fixlist.csv 조치 필요 행)
+  { key: 'gen', label: '4 생성', task: 'S5.pipelinedry' },
+  { key: 'gate', label: '5 게이트', task: 'S5.final' },
+  { key: 'repair', label: '6 보완', task: 'S5.pipeline' }, // 2026-11-11: 수선 → 보완 (사용자 지시)
+  { key: 'pkg', label: '7 PKG', task: 'S5.pkgrepair' },
+  { key: 'reg', label: '8 등록SQL', task: 'S5.regsql' },
+  // 1.8.8: 테스트 단계 4종 — smoke · crud · auth · authcrud(계정별 권한 CRUD). 판정 = Doc/e2e/results/_summary.csv 의 kind 열
+  { key: 'smoke', label: '9 Smoke', task: 'S7.smoke' },
+  { key: 'crud', label: '10 CRUD', task: 'S7.crud' },
+  { key: 'auth', label: '11 Auth', task: 'S7.auth' },
+  { key: 'authcrud', label: '12 Auth×CRUD', task: 'S7.authcrud' },
+];
+const E2E_KINDS = ['smoke', 'crud', 'auth', 'authcrud'];
+const parseCsv = text => { text = text.replace(/^﻿/, ''); const rows = []; let row = [], f = '', q = false; for (let i = 0; i < text.length; i++) { const ch = text[i]; if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(f); f = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(f); f = ''; if (row.length > 1 || row[0] !== '') rows.push(row); row = []; } else f += ch; } if (f !== '' || row.length) { row.push(f); rows.push(row); } return rows; };
+const csvObjs = file => { if (!fs.existsSync(file)) return []; const r = parseCsv(fs.readFileSync(file, 'utf8')); const h = r[0] || []; return r.slice(1).map(x => Object.fromEntries(h.map((k, i) => [k, x[i] || '']))); };
+const has = f => fs.existsSync(f);
+const rd = f => has(f) ? fs.readFileSync(f, 'utf8') : '';
+
+function targets(p) {
+  // 대상 = Recon 대조표 in_target=Y 또는 status 가 누락-ToBe/OK/재확인 + Doc/gen 에 있는 ID (검증용 포함)
+  const rec = csvObjs(path.join(p.reconOutDir, '대사표_화면.csv'));
+  const ids = new Map();
+  for (const r of rec) { const id = (r.tobe_id || r.asis_id || '').toUpperCase(); if (!id) continue; const tgt = r.in_target === 'Y' || /누락-ToBe|^OK|재확인|검토필요/.test(r.status || ''); if (tgt) ids.set(id, { id, asis: r.asis_id, title: r.title || '', status: r.status || '', reason: r.reason || '' }); }
+  if (has(p.genDir)) for (const d of fs.readdirSync(p.genDir)) if (/^[A-Z]{2,4}\d{4}/.test(d) && !ids.has(d)) ids.set(d, { id: d, asis: d, title: '', status: '(Doc/gen)', reason: '' });
+  return [...ids.values()].sort((a, b) => a.id.localeCompare(b.id));
+}
+function pageDirOf(p, id) { try { const r = JSON.parse(rd(path.join(p.genDir, id, 'register.json'))); return path.join(p.tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir); } catch { return ''; } }
+function stageStatus(p, id) {
+  const g = path.join(p.genDir, id); const s = {};
+  const pack = path.join(p.outDir, 'screens', id); s.pack = has(path.join(pack, `${id}_summary.md`)) ? 'ok' : (has(pack) ? 'warn' : 'none');
+  const gate = path.join(p.outDir, 'agent', id, '_gate.csv');
+  if (has(gate)) { const rows = csvObjs(gate); const bad = rows.filter(r => /FAIL|BLOCK/i.test(r.status || r.result || '')).length; s.docs = bad ? 'warn' : 'ok'; } else s.docs = has(path.join(p.outDir, 'agent', id, 'analysis.md')) ? 'warn' : 'none';
+  const xd = path.join(p.root, 'Doc', 'documents', id); s.xlsx = has(xd) && fs.readdirSync(xd).some(f => /\.xlsx$/.test(f)) ? 'ok' : 'none';
+  const fxF = path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv'); if (has(fxF)) { const rows = csvObjs(fxF).filter(r => (r.action_needed || '').toUpperCase() === 'Y'); const open = rows.filter(r => !/^(적용|검증완료)/.test(r.status || '')).length; s.chk = open ? 'warn' : 'ok'; s.chkN = `${rows.length - open}/${rows.length}`; } else s.chk = 'none';
+  s.gen = has(path.join(g, 'GEN_NOTES.md')) ? (pageDirOf(p, id) && has(pageDirOf(p, id)) ? 'ok' : 'warn') : 'none';
+  const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\d+) \/ WARN (\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none'; s.gateN = m ? `${m[1]}/${m[2]}` : '';
+  const dod = rd(path.join(g, 'DOD.md')).match(/(\d+)\/(\d+) 충족/); s.dod = dod ? `${dod[1]}/${dod[2]}` : '';
+  const rep = rd(path.join(g, 'REPAIR.md')); s.repair = /\*\*PASS\*\*/.test(rep) ? 'ok' : (/NEEDS_HUMAN|사람 확인 큐/.test(rep) ? 'bad' : (rep ? 'warn' : 'none'));
+  const pk = rd(path.join(g, 'CHECK_PKG.md')).match(/BLOCK (\d+) \/ WARN (\d+)/); s.pkg = pk ? (Number(pk[1]) === 0 ? 'ok' : 'bad') : (has(path.join(g, `${id}_PKG.sql`)) ? 'warn' : 'none'); s.pkgN = pk ? `${pk[1]}/${pk[2]}` : '';
+  s.reg = has(path.join(g, `${id}_registration.sql`)) ? (has(path.join(g, `${id}_revert.sql`)) ? 'ok' : 'warn') : 'none';
+  // 1.9.42(2026-11-06): 화면 폴더 요약 Doc/e2e/results/<ID>/_summary.csv 우선 · 없으면(전환 전) 공용 색인
+  const e2eF = [path.join(p.e2eOutDir, 'results', id, '_summary.csv'), path.join(p.e2eOutDir, 'results', '_summary.csv')].find(f => has(f)) || '';
+  const e2e = csvObjs(e2eF).filter(r => (r.menu_id || '').toUpperCase() === id);
+  // 종류별: 결과 있음 → PASS 비율로 ok/warn/bad · 결과 없고 스펙만 있음 → warn(미실행) · 스펙도 없음 → none. s.e2e = 전체 합(구 호환)
+  for (const k of E2E_KINDS) {
+    const rows = e2e.filter(r => (r.kind || '').toLowerCase() === k);
+    if (rows.length) { const pass = rows.filter(r => /pass/i.test(r.status)).length; s[k] = pass === rows.length ? 'ok' : (pass ? 'warn' : 'bad'); s[k + 'N'] = `${pass}/${rows.length}`; }
+    else s[k] = has(path.join(p.e2eOutDir, 'specs', `${id}.${k}.spec.ts`)) ? 'warn' : 'none';
+  }
+  if (e2e.length) { const pass = e2e.filter(r => /pass/i.test(r.status)).length; s.e2e = pass === e2e.length ? 'ok' : (pass ? 'warn' : 'bad'); s.e2eN = `${pass}/${e2e.length}`; } else s.e2e = has(path.join(p.e2eOutDir, 'specs', `${id}.smoke.spec.ts`)) ? 'warn' : 'none';
+  // 2.0.2: 클라우드 이관 — tools/CloudPkg/cloud_pkg.py 상태 파일(_artifacts/_deploy_packages/_cloud_state/<ID>.json).
+  //   패키지 생성 기록 없음 → none · 생성했으나 이관 완료 표시가 없거나 그 뒤에 다시 생성 → warn · 마지막 생성분까지 이관 완료 표시 → ok
+  try { const cs = JSON.parse(rd(path.join(p.root, '_artifacts', '_deploy_packages', '_cloud_state', `${id}.json`)) || 'null');
+    if (cs) { const built = Object.values(cs.built || {}).map(b => b.built || '').concat(cs.built_at || '').filter(Boolean).sort().pop() || ''; const ap = cs.applied_at || '';
+      s.cloud = built || ap ? (ap && ap >= built ? 'ok' : 'warn') : 'none'; s.cloudN = (ap || built).slice(5, 10); s.cloudTip = `built ${built || '-'} · applied ${ap || '-'}`; } else s.cloud = 'none';
+  } catch { s.cloud = 'none'; }
+  const pl = rd(path.join(g, 'PIPELINE.md')).match(/^# PIPELINE \S+ — ([\d-]+ [\d:]+) (✅|⚠)/m); s.pipeline = pl ? `${pl[2]} ${pl[1]}` : '';
+  return s;
+}
+const SYM = { ok: '●', warn: '◐', bad: '✖', none: '○' };
+const CLS = { ok: 'ok', warn: 'warn', bad: 'bad', none: 'none' };
+
+// ───────────────────────── FLOW 표 열 (표시 전용 묶음) ─────────────────────────
+//   parts = 묶는 판정 키. 묶음 상태 = 전부 ok → ok · 하나라도 bad → bad · 전부 none → none · 그 외 warn.
+//   클릭 = 한 칸짜리는 그 단계 작업 · 문서 = 아직 ok 가 아닌 첫 부분의 작업(문서 → S3.agent, Excel → S3.xlsx) · Test = S7.all(4종 한 번에)
+const COLS = [ // 순서 = 현재 일괄 작업 체인(quick.json 'ID 하나로 전체'): 파싱 → 분석 문서 → 생성(골격·게이트·PKG·META) → CheckList → 보완 → 테스트 → 클라우드 이관. 머리글은 언어 설정과 무관하게 영문(사용자 2026-11-11)
+  { key: 'pack', ko: '파싱', en: 'Parse', parts: ['pack'] },
+  { key: 'doc', ko: '문서', en: 'Docs', parts: ['docs', 'xlsx'] },
+  { key: 'gen', ko: '생성', en: 'Build', parts: ['gen'] },
+  { key: 'gate', ko: '게이트', en: 'Gate', parts: ['gate'] },
+  { key: 'pkg', ko: 'PKG', en: 'PKG', parts: ['pkg'] },
+  { key: 'reg', ko: '등록SQL', en: 'META', parts: ['reg'] },
+  { key: 'chk', ko: 'CheckList', en: 'CheckList', parts: ['chk'] },
+  { key: 'repair', ko: '보완', en: 'Fix', parts: ['repair'] },
+  { key: 'test', ko: 'Test', en: 'Test', parts: E2E_KINDS, task: 'S7.all' },
+  { key: 'cloud', ko: '클라우드 이관', en: 'Cloud', parts: ['cloud'], task: 'S5.cloudMod' },
+];
+const PART = { docs: ['문서', 'Docs'], xlsx: ['Excel', 'Excel'], smoke: ['Smoke', 'Smoke'], crud: ['CRUD', 'CRUD'], auth: ['Auth', 'Auth'], authcrud: ['Auth×CRUD', 'Auth×CRUD'] };
+const taskOf = key => (STAGES.find(st => st.key === key) || {}).task || '';
+function cell(col, s, en) {
+  const vs = col.parts.map(k => s[k] || 'none');
+  const v = vs.every(x => x === 'ok') ? 'ok' : vs.some(x => x === 'bad') ? 'bad' : vs.every(x => x === 'none') ? 'none' : 'warn';
+  let n = '';
+  if (col.parts.length === 1) n = s[col.key + 'N'] || (col.key === 'gate' && s.dod ? `DoD ${s.dod}` : '');
+  else { let a = 0, b = 0; for (const k of col.parts) { const m = /^(\d+)\/(\d+)$/.exec(s[k + 'N'] || ''); if (m) { a += Number(m[1]); b += Number(m[2]); } } if (b) n = `${a}/${b}`; }
+  const task = col.task || taskOf(col.parts.find(k => (s[k] || 'none') !== 'ok') || col.parts[0]);
+  const tip = col.parts.length === 1 ? (s[col.key + 'Tip'] || '') : col.parts.map(k => `${PART[k][en ? 1 : 0]} ${SYM[s[k] || 'none']}${s[k + 'N'] ? ' ' + s[k + 'N'] : ''}`).join(' · ');
+  return { v, n, task, tip };
+}
+const IC = {
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+  refresh: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-3.5M4 4v4h4M4 13a8 8 0 0 0 14.5 3.5M20 20v-4h-4"/></svg>',
+  search: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>',
+  save: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 11l4.5 4.5 4.5-4.5M5 19.5h14"/></svg>'
+};
+// 워크벤치 탭과 독립 패널이 같이 쓰는 스타일 — 요약 영역은 위에 고정, 표만 스크롤(표 머리글 sticky)
+const FLOW_CSS = `
+.flow-root{--fa:var(--vscode-textLink-foreground,#3794ff);--fl:var(--vscode-editorWidget-border,rgba(128,128,128,.3));--fd:var(--vscode-descriptionForeground,#9d9d9d);--fok:var(--vscode-testing-iconPassed,#3fb950);--fwarn:var(--vscode-testing-iconQueued,#d29922);--fbad:var(--vscode-testing-iconFailed,#f85149);
+display:flex;flex-direction:column;height:100%;min-height:0;font:12px/1.4 var(--vscode-font-family);color:var(--vscode-foreground)}
+.flow-root svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.flow-root .fl-head{flex:none;padding:10px 12px 8px;border-bottom:1px solid var(--fl)}
+.flow-root .fl-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.flow-root h3{margin:0;font-size:14px;font-weight:650;letter-spacing:-.01em}
+.flow-root .fl-meta{color:var(--fd);font-size:11.5px;font-variant-numeric:tabular-nums}.flow-root .fl-meta b{color:var(--vscode-foreground);font-weight:600}
+.flow-root .fl-sp{flex:1}
+.flow-root .fl-find{position:relative;display:inline-flex;align-items:center}
+.flow-root .fl-find svg{position:absolute;left:9px;font-size:13px;color:var(--fd);pointer-events:none}
+.flow-root .fl-find input{width:170px;height:26px;border-radius:13px;border:1px solid var(--fl);background:var(--vscode-input-background);color:var(--vscode-input-foreground);padding:0 10px 0 28px;font:inherit;font-size:11.5px}
+.flow-root .fl-find input:focus{outline:0;border-color:var(--vscode-focusBorder,var(--fa))}
+.flow-root .fl-ib{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;margin:0;border-radius:13px;border:1px solid var(--fl);background:transparent;color:var(--vscode-foreground);font-size:11.5px;cursor:pointer}
+.flow-root .fl-ib:hover{background:color-mix(in srgb,var(--fa) 12%,transparent);border-color:var(--fa);color:var(--fa)}
+.flow-root .bar{height:4px;background:color-mix(in srgb,var(--vscode-foreground) 10%,transparent);border:0;border-radius:2px;overflow:hidden;margin:9px 0 8px}
+.flow-root .bar div{height:100%;background:var(--fok);border-radius:2px}
+.flow-root .stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:6px;margin:0}
+.flow-root .stages .sg{border:0;border-radius:8px;padding:6px 9px 7px;background:color-mix(in srgb,var(--vscode-foreground) 5%,transparent);min-width:0}
+.flow-root .stages .sl{display:block;font-size:10.5px;color:var(--fd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.flow-root .stages .sv{font-size:13px;font-weight:650;font-variant-numeric:tabular-nums}.flow-root .stages .sv i{font-style:normal;font-weight:400;font-size:10.5px;color:var(--fd)}
+.flow-root .stages .sb{display:block;height:3px;border-radius:2px;background:color-mix(in srgb,var(--vscode-foreground) 10%,transparent);margin-top:4px;overflow:hidden}
+.flow-root .stages .sb span{display:block;height:100%;background:var(--fa);border-radius:2px}
+.flow-root .legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:8px 0 0;font-size:11px;color:var(--fd)}
+.flow-root .legend span{display:inline-flex;align-items:center;gap:5px}
+.flow-root .fl-wrap{flex:1;min-height:0;overflow:auto}
+.flow-root .dot{display:inline-block;width:11px;height:11px;border-radius:50%;box-sizing:border-box;vertical-align:middle}
+.flow-root .dot.ok{background:var(--fok)}
+.flow-root .dot.warn{border:2px solid var(--fwarn);background:linear-gradient(90deg,var(--fwarn) 50%,transparent 50%)}
+.flow-root .dot.bad{background:var(--fbad);border-radius:3px;transform:rotate(45deg) scale(.9)}
+.flow-root .dot.none{border:1.5px solid color-mix(in srgb,var(--vscode-foreground) 42%,transparent)}
+.flow-tbl{border-collapse:separate;border-spacing:0;width:100%;margin:0;font-size:11.5px}
+.flow-tbl th,.flow-tbl td{border:0;border-bottom:1px solid var(--fl);padding:5px 8px;vertical-align:middle;text-align:left}
+.flow-tbl th{position:sticky;top:0;z-index:2;background:var(--vscode-editor-background);font-size:10.5px;font-weight:600;color:var(--fd);letter-spacing:.02em;white-space:nowrap;box-shadow:0 1px 0 var(--fl)}
+.flow-tbl th.c{text-align:center}
+.flow-tbl tbody tr:hover td{background:color-mix(in srgb,var(--vscode-foreground) 4%,transparent)}
+.flow-tbl td.id{white-space:nowrap;font-weight:650;font-variant-numeric:tabular-nums}
+.flow-tbl td.t{min-width:150px}
+.flow-tbl .sub{font-size:10.5px;font-weight:400;color:var(--fd)}
+.flow-tbl td.fc{text-align:center;cursor:pointer;width:64px;padding:5px 4px}
+.flow-tbl td.fc:hover{background:color-mix(in srgb,var(--fa) 14%,transparent)}
+.flow-tbl td.fc .n{font-size:10px;color:var(--fd);font-variant-numeric:tabular-nums;margin-top:2px;line-height:1.1}
+.flow-tbl td.fc.bad .n{color:var(--fbad)}.flow-tbl td.fc.warn .n{color:var(--fwarn)}
+.flow-tbl .pl{white-space:nowrap;font-size:10.5px;color:var(--fd);font-variant-numeric:tabular-nums}
+.flow-tbl .fact{white-space:nowrap;text-align:right;width:1%}
+.flow-tbl .fbtn{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;margin:0;border-radius:12px;border:1px solid color-mix(in srgb,var(--fa) 55%,transparent);background:transparent;color:var(--fa);font-size:11px;font-weight:600;cursor:pointer}
+.flow-tbl .fbtn:hover{background:var(--fa);color:var(--vscode-editor-background)}
+.flow-tbl .fbtn svg{font-size:11px;fill:currentColor;stroke:none}
+.flow-tbl td.hint{text-align:center;color:var(--fd);padding:24px}
+`;
+
+// 표 본문(워크벤치 탭·독립 패널 공용). opts.csv = CSV 저장 버튼(독립 패널만)
+function body(p, rows, filter, opts) {
+  const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const en = p.language === 'en'; const L = (ko, e) => en ? e : ko;
+  const calc = rows.map(r => ({ r, cs: COLS.map(c => cell(c, r.s, en)) }));
+  const total = rows.length; const done = calc.filter(x => x.cs.every(c => c.v === 'ok')).length; const pct = total ? Math.round(done * 100 / total) : 0;
+  const per = COLS.map((c, i) => ({ c, n: calc.filter(x => x.cs[i].v === 'ok').length }));
+  const trs = calc.map(({ r, cs }) => `<tr data-id="${esc(r.id)}"><td class="id">${esc(r.id)}${r.asis && r.asis !== r.id ? `<div class="sub">As-is ${esc(r.asis)}</div>` : ''}</td><td class="t">${esc(r.title)}<div class="sub">${esc(r.status)}</div></td>${COLS.map((c, i) => { const x = cs[i]; const name = c.en; return `<td class="fc c ${CLS[x.v]}" title="${esc(name)}${x.tip ? ' — ' + esc(x.tip) : ''} — ${L('클릭', 'click')}: ${esc(x.task)}" data-task="${esc(x.task)}" data-id="${esc(r.id)}"><span class="dot ${CLS[x.v]}"></span>${x.n ? `<div class="n">${esc(x.n)}</div>` : ''}</td>`; }).join('')}<td class="fact act"><button class="fbtn" data-act="pipeline" data-id="${esc(r.id)}" title="${L('일괄 작업 — 페이지 있음 → 자동 보완 → 테스트·문서까지 / 없음 → 새 화면 전체', 'Batch run — existing page → auto fix → tests & docs / none → whole new-screen flow')}">${IC.play}Batch Run</button></td></tr>`).join('');
+  return `<div class="flow-root">
+  <div class="fl-head">
+    <div class="fl-top"><h3>NSCM Migration Flow</h3><span class="fl-meta">${L('화면', 'Screens')} <b>${total}</b> · ${L('전 단계 완료', 'All stages done')} <b>${done}</b> (${pct}%)</span><span class="fl-sp"></span>
+      <span class="fl-find">${IC.search}<input id="flow-f" placeholder="${L('ID/제목 필터 — Enter', 'Filter by ID/title — Enter')}" value="${esc(filter || '')}"></span>
+      <button class="fl-ib" id="flow-rf" title="${L('새로고침', 'Refresh')}">${IC.refresh}${L('새로고침', 'Refresh')}</button>${opts && opts.csv ? `<button class="fl-ib" id="flow-csv" title="CSV">${IC.save}CSV</button>` : ''}</div>
+    <div class="bar"><div style="width:${pct}%"></div></div>
+    <div class="stages">${per.map(x => `<div class="sg" title="${esc(x.c.en)}${en ? '' : ' (' + esc(x.c.ko) + ')'} ${x.n}/${total}"><span class="sl">${esc(x.c.en)}</span><span class="sv">${x.n}<i> / ${total}</i></span><span class="sb"><span style="width:${total ? Math.round(x.n * 100 / total) : 0}%"></span></span></div>`).join('')}</div>
+    <div class="legend"><span><i class="dot ok"></i>${L('완료', 'Done')}</span><span><i class="dot warn"></i>${L('부분/확인', 'Partial / check')}</span><span><i class="dot bad"></i>${L('실패(BLOCK/NEEDS_HUMAN)', 'Failed (BLOCK/NEEDS_HUMAN)')}</span><span><i class="dot none"></i>${L('없음', 'None')}</span><span>${L('셀 클릭 = 그 단계 작업 실행', 'Click a cell to run that stage')}</span></div>
+  </div>
+  <div class="fl-wrap"><table class="flow-tbl"><thead><tr><th>Screen</th><th>Title / Status</th>${COLS.map(c => `<th class="c">${esc(c.en)}</th>`).join('')}<th></th></tr></thead><tbody>${trs || `<tr><td colspan="99" class="hint">${L('대상 없음 — 대조표/Doc/gen 미생성', 'No targets — recon table / Doc/gen not generated')}</td></tr>`}</tbody></table></div>
+</div>`;
+}
+function loadRows(p, filter) {
+  let rows = targets(p).map(t => Object.assign(t, { s: stageStatus(p, t.id) }));
+  if (filter) { const f = filter.toLowerCase(); rows = rows.filter(r => r.id.toLowerCase().includes(f) || (r.title || '').toLowerCase().includes(f) || (r.status || '').includes(filter)); }
+  return rows;
+}
+
+function html(p, rows, filter) {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{height:100%}body{margin:0;padding:0;background:var(--vscode-editor-background);overflow:hidden}
+${FLOW_CSS}</style></head><body>
+${body(p, rows, filter, { csv: true })}
+<script>const vscode=acquireVsCodeApi();
+document.querySelectorAll('td.fc').forEach(td=>td.onclick=()=>vscode.postMessage({type:'task',task:td.dataset.task,id:td.dataset.id}));
+document.querySelectorAll('button[data-act]').forEach(b=>b.onclick=()=>vscode.postMessage({type:b.dataset.act,id:b.dataset.id}));
+document.getElementById('flow-rf').onclick=()=>vscode.postMessage({type:'refresh',filter:document.getElementById('flow-f').value});
+document.getElementById('flow-csv').onclick=()=>vscode.postMessage({type:'csv'});
+document.getElementById('flow-f').addEventListener('keydown',e=>{if(e.key==='Enter')vscode.postMessage({type:'refresh',filter:e.target.value});});
+</script></body></html>`;
+}
+
+let panel = null;
+function open(api) {
+  const render = (filter) => {
+    const p = api.paths(); const rows = loadRows(p, filter);
+    panel.webview.html = html(p, rows, filter); panel._rows = rows;
+  };
+  if (panel) { panel.reveal(); render(panel._filter || ''); return; }
+  panel = vscode.window.createWebviewPanel('vibeManager.flow', 'NSCM FLOW 진척 — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+  panel.onDidDispose(() => { panel = null; });
+  panel.webview.onDidReceiveMessage(async m => {
+    const p = api.paths();
+    if (m.type === 'refresh') { panel._filter = m.filter || ''; render(panel._filter); }
+    else if (m.type === 'task') await api.runTaskById(m.task, { id: m.id, ids: m.id, dir: pageDirOf(p, m.id) });
+    else if (m.type === 'pipeline') { if (!(await require('./workbench').runFlowEnd(m.id))) vscode.window.showWarningMessage('Vibe_Manager: Workbench 를 열 수 없어 Batch Run 을 실행하지 못했습니다'); } // 2026-10-22: 기존 화면 🚒 / 새 화면 🚀
+    else if (m.type === 'open') api.openPath(path.join(p.genDir, m.id));
+    else if (m.type === 'csv') { const out = path.join(p.vibeDir, 'reports', `flow_${require('./history').nowLocal().slice(0, 10)}.csv`); fs.mkdirSync(path.dirname(out), { recursive: true }); const rows = panel._rows || []; const head = ['id', 'asis', 'title', 'status', ...STAGES.map(s => s.key), 'dod', 'pipeline']; fs.writeFileSync(out, '﻿' + [head.join(','), ...rows.map(r => [r.id, r.asis, r.title, r.status, ...STAGES.map(s => r.s[s.key]), r.s.dod, r.s.pipeline].map(v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`).join(','))].join('\n'), 'utf8'); vscode.window.showInformationMessage(`FLOW CSV → ${out}`); }
+  });
+  render('');
+}
+function refresh() { if (panel) open._api && open(open._api); }
+
+// 워크벤치 내부 탭용: 전체 HTML 문서가 아닌 콘텐츠 영역만 반환
+function innerHtml(p, filter) { return body(p, loadRows(p, filter), filter, {}); }
+
+module.exports = { open, refresh, STAGES, COLS, stageStatus, targets, innerHtml, FLOW_CSS };

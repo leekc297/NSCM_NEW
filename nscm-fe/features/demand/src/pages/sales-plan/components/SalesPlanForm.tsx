@@ -30,7 +30,7 @@ interface SalesPlanFormProps {
   // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset —
   //   재조회는 Search 버튼). 부모(SalesPlan.tsx)가 insertedRows/EditTracker/조회 게이트 reset 수행.
   onDivisionChange: () => void;
-  // ⭐ Bucket 변경 가드 — 변경분(신규 행/수정 셀) 존재 시 MSG00227 차단 (AS-IS cboBucketType_Click L5475).
+  // ⭐ Bucket 변경 가드 — 변경분(신규 행/수정 셀) 존재 시 MSG00680 차단 (AS-IS cboBucketType_Click L5475 MSG00227).
   //   EditTracker(ref, 비반응형)를 클릭 시점에 평가하도록 함수로 전달.
   hasPendingChanges: () => boolean;
   validation: ReturnType<typeof useSalesPlanValidation>;
@@ -377,7 +377,7 @@ export const SalesPlanForm = ({
                   value={sc.bucketType}
                   options={bucketOptions}
                   onChange={(_, option) => {
-                    // 변경분 존재 시 Bucket 변경 차단 (AS-IS cboBucketType_Click L5475 MSG00227)
+                    // 변경분 존재 시 Bucket 변경 차단 (AS-IS cboBucketType_Click L5475 MSG00227 → TO-BE MSG00680)
                     if (!validation.validateBucketChange(hasPendingChanges()).ok) return;
                     // Daily 전환만 그리드 초기화 + 헤더를 일자까지 펼친다 (Weekly/Monthly 는 종전대로).
                     //   setSearchCondition 이 아니라 전용 액션 — 조건과 filters 를 한 번에 바꿔야

@@ -109,7 +109,7 @@ export const HomeNscm = () => {
     toggleFavorite(mnuId, false);
   };
 
-  // 미로그인(운영): ID 로그인 폼은 BACKDOOR_PATH 로만 노출한다. 부팅 시 자동 SSO 이동이 막혔거나
+  // 미로그인(운영): ID 로그인 폼을 두지 않는다. 부팅 시 자동 SSO 이동이 막혔거나
   //   로그아웃 직후에 여기 남으므로 SSO 진입 버튼만 둔다(core/ssoLogin.ts).
   if (!isLogin && IS_SSO_ONLY) {
     return (

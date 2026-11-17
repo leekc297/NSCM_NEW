@@ -1,0 +1,1423 @@
+{
+ "id": "FP00605",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 11.66s, UI : 0.093s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitter/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Amend",
+     "rows": 0,
+     "cols": 87,
+     "visible": "True",
+     "frozen_cols": "20",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site",
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Pjt Group Name",
+        "Pjt Group Name"
+       ],
+       "label": "Pjt Group Name",
+       "tag": "CELL_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Model",
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "TOP_ITEM_ID",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Material",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Item Type",
+        "Item Type"
+       ],
+       "label": "Item Type",
+       "tag": "ITEM_TYPE",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Oper.",
+        "Oper."
+       ],
+       "label": "Oper.",
+       "tag": "OPERATION_ID",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Oper.Name",
+        "Oper.Name"
+       ],
+       "label": "Oper.Name",
+       "tag": "OPERATION_NAME",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Market",
+        "Market"
+       ],
+       "label": "Market",
+       "tag": "MARKET",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Prod. Type",
+        "Prod. Type"
+       ],
+       "label": "Prod. Type",
+       "tag": "PRODUCTION_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Customer",
+        "Customer"
+       ],
+       "label": "Customer",
+       "tag": "CUSTOMER_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Bld.",
+        "Bld."
+       ],
+       "label": "Bld.",
+       "tag": "FACTORY_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Loc.",
+        "Loc."
+       ],
+       "label": "Loc.",
+       "tag": "LOCATION",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Line",
+        "Line"
+       ],
+       "label": "Line",
+       "tag": "LINE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Line Name",
+        "Line Name"
+       ],
+       "label": "Line Name",
+       "tag": "LINE_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Elec.Type",
+        "Elec.Type"
+       ],
+       "label": "Elec.Type",
+       "tag": "ELECTRODE_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Category",
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "2026W46",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W0",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W0",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "2026W46",
+        "11-09(Mon)"
+       ],
+       "label": "11-09(Mon)",
+       "tag": "D0",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D0",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "2026W46",
+        "11-10(Tue)"
+       ],
+       "label": "11-10(Tue)",
+       "tag": "D1",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "2026W46",
+        "11-11(Wed)"
+       ],
+       "label": "11-11(Wed)",
+       "tag": "D2",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "2026W46",
+        "11-12(Thu)"
+       ],
+       "label": "11-12(Thu)",
+       "tag": "D3",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D3",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "2026W46",
+        "11-13(Fri)"
+       ],
+       "label": "11-13(Fri)",
+       "tag": "D4",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D4",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "2026W46",
+        "11-14(Sat)"
+       ],
+       "label": "11-14(Sat)",
+       "tag": "D5",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D5",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "2026W46",
+        "11-15(Sun)"
+       ],
+       "label": "11-15(Sun)",
+       "tag": "D6",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D6",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "2026W47",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W1",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "2026W47",
+        "11-16(Mon)"
+       ],
+       "label": "11-16(Mon)",
+       "tag": "D7",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D7",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "2026W47",
+        "11-17(Tue)"
+       ],
+       "label": "11-17(Tue)",
+       "tag": "D8",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D8",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "2026W47",
+        "11-18(Wed)"
+       ],
+       "label": "11-18(Wed)",
+       "tag": "D9",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D9",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "2026W47",
+        "11-19(Thu)"
+       ],
+       "label": "11-19(Thu)",
+       "tag": "D10",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D10",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "2026W47",
+        "11-20(Fri)"
+       ],
+       "label": "11-20(Fri)",
+       "tag": "D11",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D11",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "2026W47",
+        "11-21(Sat)"
+       ],
+       "label": "11-21(Sat)",
+       "tag": "D12",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D12",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "2026W47",
+        "11-22(Sun)"
+       ],
+       "label": "11-22(Sun)",
+       "tag": "D13",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D13",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "2026W48",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W2",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "2026W48",
+        "11-23(Mon)"
+       ],
+       "label": "11-23(Mon)",
+       "tag": "D14",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D14",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "2026W48",
+        "11-24(Tue)"
+       ],
+       "label": "11-24(Tue)",
+       "tag": "D15",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D15",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "2026W48",
+        "11-25(Wed)"
+       ],
+       "label": "11-25(Wed)",
+       "tag": "D16",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D16",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "2026W48",
+        "11-26(Thu)"
+       ],
+       "label": "11-26(Thu)",
+       "tag": "D17",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D17",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "2026W48",
+        "11-27(Fri)"
+       ],
+       "label": "11-27(Fri)",
+       "tag": "D18",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D18",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "2026W48",
+        "11-28(Sat)"
+       ],
+       "label": "11-28(Sat)",
+       "tag": "D19",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D19",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "2026W48",
+        "11-29(Sun)"
+       ],
+       "label": "11-29(Sun)",
+       "tag": "D20",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D20",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "2026W49",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W3",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W3",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "2026W49",
+        "11-30(Mon)"
+       ],
+       "label": "11-30(Mon)",
+       "tag": "D21",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D21",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "2026W49",
+        "12-01(Tue)"
+       ],
+       "label": "12-01(Tue)",
+       "tag": "D22",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D22",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "2026W49",
+        "12-02(Wed)"
+       ],
+       "label": "12-02(Wed)",
+       "tag": "D23",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D23",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "2026W49",
+        "12-03(Thu)"
+       ],
+       "label": "12-03(Thu)",
+       "tag": "D24",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D24",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "2026W49",
+        "12-04(Fri)"
+       ],
+       "label": "12-04(Fri)",
+       "tag": "D25",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D25",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "2026W49",
+        "12-05(Sat)"
+       ],
+       "label": "12-05(Sat)",
+       "tag": "D26",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D26",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "2026W49",
+        "12-06(Sun)"
+       ],
+       "label": "12-06(Sun)",
+       "tag": "D27",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D27",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "2026W50",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W4",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W4",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "2026W50",
+        "12-07(Mon)"
+       ],
+       "label": "12-07(Mon)",
+       "tag": "D28",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D28",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "2026W50",
+        "12-08(Tue)"
+       ],
+       "label": "12-08(Tue)",
+       "tag": "D29",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D29",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "2026W50",
+        "12-09(Wed)"
+       ],
+       "label": "12-09(Wed)",
+       "tag": "D30",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D30",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "2026W50",
+        "12-10(Thu)"
+       ],
+       "label": "12-10(Thu)",
+       "tag": "D31",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D31",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "2026W50",
+        "12-11(Fri)"
+       ],
+       "label": "12-11(Fri)",
+       "tag": "D32",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D32",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "2026W50",
+        "12-12(Sat)"
+       ],
+       "label": "12-12(Sat)",
+       "tag": "D33",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D33",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "2026W50",
+        "12-13(Sun)"
+       ],
+       "label": "12-13(Sun)",
+       "tag": "D34",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D34",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 60,
+       "header": [
+        "2026W51",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W5",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W5",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 61,
+       "header": [
+        "2026W51",
+        "12-14(Mon)"
+       ],
+       "label": "12-14(Mon)",
+       "tag": "D35",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D35",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 62,
+       "header": [
+        "2026W51",
+        "12-15(Tue)"
+       ],
+       "label": "12-15(Tue)",
+       "tag": "D36",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D36",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 63,
+       "header": [
+        "2026W51",
+        "12-16(Wed)"
+       ],
+       "label": "12-16(Wed)",
+       "tag": "D37",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D37",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 64,
+       "header": [
+        "2026W51",
+        "12-17(Thu)"
+       ],
+       "label": "12-17(Thu)",
+       "tag": "D38",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D38",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 65,
+       "header": [
+        "2026W51",
+        "12-18(Fri)"
+       ],
+       "label": "12-18(Fri)",
+       "tag": "D39",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D39",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 66,
+       "header": [
+        "2026W51",
+        "12-19(Sat)"
+       ],
+       "label": "12-19(Sat)",
+       "tag": "D40",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D40",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 67,
+       "header": [
+        "2026W51",
+        "12-20(Sun)"
+       ],
+       "label": "12-20(Sun)",
+       "tag": "D41",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D41",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 68,
+       "header": [
+        "2026W52",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W6",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W6",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 69,
+       "header": [
+        "2026W52",
+        "12-21(Mon)"
+       ],
+       "label": "12-21(Mon)",
+       "tag": "D42",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D42",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 70,
+       "header": [
+        "2026W52",
+        "12-22(Tue)"
+       ],
+       "label": "12-22(Tue)",
+       "tag": "D43",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D43",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 71,
+       "header": [
+        "2026W52",
+        "12-23(Wed)"
+       ],
+       "label": "12-23(Wed)",
+       "tag": "D44",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D44",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 72,
+       "header": [
+        "2026W52",
+        "12-24(Thu)"
+       ],
+       "label": "12-24(Thu)",
+       "tag": "D45",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D45",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 73,
+       "header": [
+        "2026W52",
+        "12-25(Fri)"
+       ],
+       "label": "12-25(Fri)",
+       "tag": "D46",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D46",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 74,
+       "header": [
+        "2026W52",
+        "12-26(Sat)"
+       ],
+       "label": "12-26(Sat)",
+       "tag": "D47",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D47",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 75,
+       "header": [
+        "2026W52",
+        "12-27(Sun)"
+       ],
+       "label": "12-27(Sun)",
+       "tag": "D48",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D48",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 76,
+       "header": [
+        "2026W53",
+        "Week Sum"
+       ],
+       "label": "Week Sum",
+       "tag": "W7",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "W7",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 77,
+       "header": [
+        "2026W53",
+        "12-28(Mon)"
+       ],
+       "label": "12-28(Mon)",
+       "tag": "D49",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D49",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 78,
+       "header": [
+        "2026W53",
+        "12-29(Tue)"
+       ],
+       "label": "12-29(Tue)",
+       "tag": "D50",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D50",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 79,
+       "header": [
+        "2026W53",
+        "12-30(Wed)"
+       ],
+       "label": "12-30(Wed)",
+       "tag": "D51",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D51",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 80,
+       "header": [
+        "2026W53",
+        "12-31(Thu)"
+       ],
+       "label": "12-31(Thu)",
+       "tag": "D52",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D52",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 81,
+       "header": [
+        "2026W53",
+        "01-01(Fri)"
+       ],
+       "label": "01-01(Fri)",
+       "tag": "D53",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D53",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 82,
+       "header": [
+        "2026W53",
+        "01-02(Sat)"
+       ],
+       "label": "01-02(Sat)",
+       "tag": "D54",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D54",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 83,
+       "header": [
+        "2026W53",
+        "01-03(Sun)"
+       ],
+       "label": "01-03(Sun)",
+       "tag": "D55",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D55",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 84,
+       "header": [
+        "2026-Nov",
+        "2026-Nov"
+       ],
+       "label": "2026-Nov",
+       "tag": "M0",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "M0",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 85,
+       "header": [
+        "2026-Dec",
+        "2026-Dec"
+       ],
+       "label": "2026-Dec",
+       "tag": "M1",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "M1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 86,
+       "header": [
+        "2027-Jan",
+        "2027-Jan"
+       ],
+       "label": "2027-Jan",
+       "tag": "M2",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "M2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

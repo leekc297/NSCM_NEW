@@ -184,10 +184,13 @@
 | dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 
-## 9. 주석/비활성 처리된 호출 (6건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (9건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 2505 |  | commented:EMPTY |
+| 2515 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
+| 2516 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
+| 2517 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
 | 2561 | SCP.SCM0001_GET_SCP_DAY_PERIOD | commented:MATCH |
 | 3538 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX | commented:MATCH |
 | 3863 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |

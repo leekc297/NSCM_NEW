@@ -1,0 +1,45 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ITEM_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 07:11:47",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "has_else": false
+  }
+ ]
+}

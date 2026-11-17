@@ -1,0 +1,25 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 09:23:40.831",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.93,
+   "params": {
+    "CODE": "SALES_PLANT",
+    "PARAM1": "40",
+    "PARAM2": "NJ00",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='SALES_PLANT', @PARAM1='40', @PARAM2='NJ00', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:raise:spdMain.ClipboardPasted:SALES_COMPANY"
+  }
+ ]
+}

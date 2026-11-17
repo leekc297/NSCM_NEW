@@ -1,0 +1,153 @@
+{
+ "id": "SCP0009",
+ "started": "2026-11-12 23:51:24.010",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:51:24.360",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0009_Shipment_Plan_FG",
+   "form_text": "Shipment Plan FG",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0009_Shipment_Plan_FG.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:51:31.949"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:51:36.839",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0009\\run_20261112_235124\\dump_load.json",
+   "control_count": 98,
+   "grid_count": 3,
+   "total": "Total : 163",
+   "time_status": "DB : 268.958s, UI : 0.13s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:51:36.849"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:51:37.006",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0009\\run_20261112_235124\\shots\\SCP0009_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:51:37.178"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:51:37.818",
+   "call_timed_out": true,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:52:07.829"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:53:46.826",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0009\\run_20261112_235124\\dump_find.json",
+   "control_count": 98,
+   "grid_count": 3,
+   "total": "Total : ",
+   "time_status": "DB : 122.201s, UI : 0.096s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:53:46.846"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:53:47.008",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0009\\run_20261112_235124\\shots\\SCP0009_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:53:47.214"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:53:47.542",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:53:48.654"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 32,
+  "calls_with_params": 31
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0009_Shipment_Plan_FG",
+  "form_text": "Shipment Plan FG",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0009_Shipment_Plan_FG.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 122.201s, UI : 0.096s",
+  "total": "Total : ",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 121
+ },
+ "t_open": "2026-11-12 23:51:24.224",
+ "t_find": "2026-11-12 23:51:37.571",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 98,
+  "layout_items": 34,
+  "grids": 3,
+  "sheets": 3,
+  "header_cols": 438,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 32,
+  "calls_screen": 32,
+  "calls_find": 7,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:53:49.177",
+ "exit": 0
+}

@@ -1,0 +1,60 @@
+{
+ "id": "SSP0202",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de",
+  "pk": [
+   "CHANGE_REQ_NO",
+   "CONFIRM_ID",
+   "NEW_YN"
+  ],
+  "match": {
+   "CHANGE_REQ_NO": "CHANGE_REQ_NO",
+   "CONFIRM_ID": "CONFIRM_ID",
+   "NEW_YN": "NEW_YN"
+  },
+  "save_sp": "SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+  "side": [],
+  "basis": "foxml SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK → SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "ROUTE_ID",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "ROUTE_ID",
+     "db_col": "ROUTE_ID",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "ROUTE_ID",
+    "db_col": "ROUTE_ID",
+    "rule": "plus1"
+   },
+   {
+    "col": "CUSTOMER_LT",
+    "db_col": "CUSTOMER_LT",
+    "rule": "plus1"
+   },
+   {
+    "col": "NEW_CUSTOMER_LT",
+    "db_col": "NEW_CUSTOMER_LT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:08:56",
+ "status": "ERROR",
+ "steps": [],
+ "find_dialogs": [],
+ "note": "조회 결과 행 없음(메시지 [])"
+}

@@ -1,0 +1,141 @@
+{
+ "id": "FP02320N",
+ "started": "2026-11-12 19:23:02.135",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:23:02.442",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP02320_Pancake_Master",
+   "form_text": "Pancake Master",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP02320_Pancake_Master.UIL.dll",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:07.195"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:23:10.779",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02320N\\run_20261112_192302\\dump_load.json",
+   "control_count": 67,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 0.341s, UI : 8.677s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:10.804"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:23:10.962",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02320N\\run_20261112_192302\\shots\\FP02320N_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:11.216"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:23:11.548",
+   "call_timed_out": false,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:12.498"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:23:35.906",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02320N\\run_20261112_192302\\dump_find.json",
+   "control_count": 67,
+   "grid_count": 1,
+   "total": "Total : 10,542",
+   "time_status": "DB : 3.277s, UI : 15.681s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:35.987"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:23:36.150",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02320N\\run_20261112_192302\\shots\\FP02320N_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:36.486"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:23:36.975",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:23:37.709"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 25,
+  "calls_with_params": 25
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP02320_Pancake_Master",
+  "form_text": "Pancake Master",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP02320_Pancake_Master.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 3.277s, UI : 15.681s",
+  "total": "Total : 10,542",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:23:02.342",
+ "t_find": "2026-11-12 19:23:11.307",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 67,
+  "layout_items": 16,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 29,
+  "data_rows": 50,
+  "grid_rows": 10542,
+  "calls_total": 25,
+  "calls_screen": 25,
+  "calls_find": 8,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:36.068",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:36"
+}

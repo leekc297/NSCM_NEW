@@ -1,0 +1,294 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Plan(Electrode)",
+     "rows_before": 308,
+     "rows_after": 308,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 15,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 16,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 17,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 18,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 19,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0023-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Plan(Electrode)",
+     "rows_before": 308,
+     "rows_after": 308,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 15,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 16,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 17,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 18,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 19,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0023-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0023-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0023-S1946f5"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 MODEL_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": false,
+   "error": "InvalidOperationException: raise:spdMain.ClipboardPasted failed: FormatException: 입력 문자열의 형식이 잘못되었습니다.",
+   "scenarios": [
+    "SSP0023-S1946f5"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 NICK_NAME 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 5, 1, 1,dataObject=null)",
+   "ok": false,
+   "error": "InvalidOperationException: raise:spdMain.ClipboardPasted failed: FormatException: 입력 문자열의 형식이 잘못되었습니다.",
+   "scenarios": [
+    "SSP0023-S1946f5"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 FROM_SITE 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 7, 1, 1,dataObject=null)",
+   "ok": false,
+   "error": "InvalidOperationException: raise:spdMain.ClipboardPasted failed: FormatException: 입력 문자열의 형식이 잘못되었습니다.",
+   "scenarios": [
+    "SSP0023-S1946f5"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdDetail",
+   "why": "조회 결과 행이 없어 붙여넣을 셀이 없음",
+   "scenarios": [
+    "SSP0023-S883faf",
+    "SSP0023-S3d2022",
+    "SSP0023-S645e1a",
+    "SSP0023-S9725f0",
+    "SSP0023-Se0e1f4",
+    "SSP0023-Sab8a96",
+    "SSP0023-Sbfa08e",
+    "SSP0023-S38abe0",
+    "SSP0023-S4560f0",
+    "SSP0023-Sae5dd5",
+    "SSP0023-S4161cc",
+    "SSP0023-Sa77114",
+    "SSP0023-S0d6c02",
+    "SSP0023-S187269",
+    "SSP0023-S4785a3",
+    "SSP0023-Sc35670",
+    "SSP0023-S26713c",
+    "SSP0023-S837469",
+    "SSP0023-Sc8ee92"
+   ]
+  }
+ ],
+ "at": "2026-11-15 02:06:18",
+ "edit_mode": true
+}

@@ -1,0 +1,51 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,13회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP00518_SHIPPING_PLAN,FP00518_Shipping_Plan.cs:826 Find_Data_ShippingPlan,1회 · 구간 find,MATCH,
+SP,PR_UI_FP_MASTER_FORM_CODE,FP00518_Shipping_Plan.cs:160 InitControls,6회 · 구간 load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONTROL,(선언 ↔ 실측),41개,40개,INFO,공통 17 · 선언만 24 · 실측만 23
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,FoxProgressDialog,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCancel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnOK,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,loadingCircle,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,progressPanel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboSite,Y,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanGroup,Y,Plan Group,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemName,Y,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemID,Y,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboCellType,Y,Cell Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkWPP,Y,layoutControlItem9,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboWppWeek,Y,WPP Week,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cboWppSeq,Y,WPP Seq,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,clbPlant,Y,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,Y,Start/End Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnImport,Y,lblExcelImport,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnSql,Y,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnCreateWPP,Y,layoutControlItem12,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/ShippingPlan,정적 컬럼 사실 24행(시트 미지정 포함),컬럼 25(보임 15) · 헤더 1단 · 행 0 · 고정 7,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

@@ -1,0 +1,3739 @@
+{
+ "menu_id": "SCP0033",
+ "at": "2026-11-14 11:51:30",
+ "windows": [
+  [
+   5882869,
+   5906630,
+   "2026-11-14 09:41",
+   "2026-11-14 11:48"
+  ]
+ ],
+ "rows_scanned": 23762,
+ "pkgs": [
+  "PKG_SCM0002",
+  "PKG_SCP0033"
+ ],
+ "user": "",
+ "calls": [
+  {
+   "seq": 5883109,
+   "at": "2026-11-14 09:42:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5883111,
+   "at": "2026-11-14 09:42:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5883416,
+   "at": "2026-11-14 09:45:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885566,
+   "at": "2026-11-14 09:58:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "A"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5885568,
+   "at": "2026-11-14 09:58:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "A"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5886071,
+   "at": "2026-11-14 10:00:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893230,
+   "at": "2026-11-14 10:42:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893328,
+   "at": "2026-11-14 10:42:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893340,
+   "at": "2026-11-14 10:42:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "ECR3512F1-01-T02",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893354,
+   "at": "2026-11-14 10:42:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "CR3512F1-01-T0",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893364,
+   "at": "2026-11-14 10:42:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "ecr3512f1-01-t02",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893382,
+   "at": "2026-11-14 10:42:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "ECR3512F1-01-T02,ECR3512F1-01-T01",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893414,
+   "at": "2026-11-14 10:42:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893491,
+   "at": "2026-11-14 10:43:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893511,
+   "at": "2026-11-14 10:43:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893806,
+   "at": "2026-11-14 10:44:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893893,
+   "at": "2026-11-14 10:44:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893897,
+   "at": "2026-11-14 10:44:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893906,
+   "at": "2026-11-14 10:44:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893910,
+   "at": "2026-11-14 10:44:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893916,
+   "at": "2026-11-14 10:44:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893965,
+   "at": "2026-11-14 10:44:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5893969,
+   "at": "2026-11-14 10:44:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "ELFP-000",
+    "scpModuleType": "SCP0016",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895227,
+   "at": "2026-11-14 10:49:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895251,
+   "at": "2026-11-14 10:49:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895270,
+   "at": "2026-11-14 10:49:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "EU0410N00B11",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895280,
+   "at": "2026-11-14 10:49:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "U0410N00B1",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895312,
+   "at": "2026-11-14 10:49:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "eu0410n00b11",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895316,
+   "at": "2026-11-14 10:49:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "EU0410N00B11,EU0407N00B13",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895327,
+   "at": "2026-11-14 10:49:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895447,
+   "at": "2026-11-14 10:49:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895451,
+   "at": "2026-11-14 10:49:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895472,
+   "at": "2026-11-14 10:50:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895575,
+   "at": "2026-11-14 10:50:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895579,
+   "at": "2026-11-14 10:50:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895583,
+   "at": "2026-11-14 10:50:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895587,
+   "at": "2026-11-14 10:50:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895591,
+   "at": "2026-11-14 10:50:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895635,
+   "at": "2026-11-14 10:50:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5895639,
+   "at": "2026-11-14 10:50:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "JF1 CMA",
+    "scpModuleType": "SCP0020",
+    "divisionId": "82",
+    "operationGroup": "P"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898135,
+   "at": "2026-11-14 11:09:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898178,
+   "at": "2026-11-14 11:09:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898185,
+   "at": "2026-11-14 11:10:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0033",
+    "divisionId": "40",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898186,
+   "at": "2026-11-14 11:10:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0033",
+    "divisionId": "40",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898192,
+   "at": "2026-11-14 11:10:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "AMDAU0348A",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898197,
+   "at": "2026-11-14 11:10:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "AMDAU0348A",
+    "p_valid": "Y"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898240,
+   "at": "2026-11-14 11:10:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898245,
+   "at": "2026-11-14 11:10:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898710,
+   "at": "2026-11-14 11:11:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898760,
+   "at": "2026-11-14 11:11:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0037",
+    "divisionId": "40",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898762,
+   "at": "2026-11-14 11:11:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0037",
+    "divisionId": "40",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898767,
+   "at": "2026-11-14 11:11:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0033",
+    "divisionId": "ALL",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898815,
+   "at": "2026-11-14 11:11:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898908,
+   "at": "2026-11-14 11:11:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899123,
+   "at": "2026-11-14 11:12:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899177,
+   "at": "2026-11-14 11:12:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899220,
+   "at": "2026-11-14 11:12:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899263,
+   "at": "2026-11-14 11:12:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899306,
+   "at": "2026-11-14 11:12:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899349,
+   "at": "2026-11-14 11:12:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899392,
+   "at": "2026-11-14 11:12:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899442,
+   "at": "2026-11-14 11:13:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899514,
+   "at": "2026-11-14 11:13:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899557,
+   "at": "2026-11-14 11:13:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899612,
+   "at": "2026-11-14 11:13:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "scpModuleType": "SCP0037",
+    "divisionId": "81",
+    "operationGroup": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899662,
+   "at": "2026-11-14 11:13:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899763,
+   "at": "2026-11-14 11:13:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899771,
+   "at": "2026-11-14 11:13:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899812,
+   "at": "2026-11-14 11:13:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": "Y"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899817,
+   "at": "2026-11-14 11:13:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": "N"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899890,
+   "at": "2026-11-14 11:13:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899978,
+   "at": "2026-11-14 11:14:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900604,
+   "at": "2026-11-14 11:17:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900697,
+   "at": "2026-11-14 11:17:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900835,
+   "at": "2026-11-14 11:18:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900907,
+   "at": "2026-11-14 11:18:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": null,
+    "projectCode": null,
+    "scmSiteId": null,
+    "divisionId": null
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900911,
+   "at": "2026-11-14 11:18:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "projectCode": "",
+    "scmSiteId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900949,
+   "at": "2026-11-14 11:18:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900953,
+   "at": "2026-11-14 11:18:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "SAVE",
+   "fe": {
+    "departureDay": "MON",
+    "creationDate": null,
+    "itemId": "APCAN0842A",
+    "createdBy": null,
+    "sValidYn": "Y",
+    "createId": "minyonglee1",
+    "validYn": "N",
+    "divisionId": "40",
+    "debugMode": null,
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900957,
+   "at": "2026-11-14 11:18:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900962,
+   "at": "2026-11-14 11:18:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901005,
+   "at": "2026-11-14 11:18:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901010,
+   "at": "2026-11-14 11:19:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901014,
+   "at": "2026-11-14 11:19:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "SAVE",
+   "fe": {
+    "departureDay": "TUE",
+    "creationDate": null,
+    "itemId": "APCAN0842A",
+    "createdBy": null,
+    "sValidYn": "N",
+    "createId": "minyonglee1",
+    "validYn": "N",
+    "divisionId": "40",
+    "debugMode": null,
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901018,
+   "at": "2026-11-14 11:19:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901023,
+   "at": "2026-11-14 11:19:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901027,
+   "at": "2026-11-14 11:19:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "SAVE",
+   "fe": {
+    "departureDay": "MON",
+    "creationDate": null,
+    "itemId": "APCAN0842A",
+    "createdBy": null,
+    "sValidYn": "N",
+    "createId": "minyonglee1",
+    "validYn": "N",
+    "divisionId": "40",
+    "debugMode": null,
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901031,
+   "at": "2026-11-14 11:19:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901036,
+   "at": "2026-11-14 11:19:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901045,
+   "at": "2026-11-14 11:19:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "SAVE",
+   "fe": {
+    "departureDay": "MON",
+    "creationDate": null,
+    "itemId": "APCAN0842A",
+    "createdBy": null,
+    "sValidYn": "N",
+    "createId": "minyonglee1",
+    "validYn": "Y",
+    "divisionId": "40",
+    "debugMode": null,
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901049,
+   "at": "2026-11-14 11:19:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901055,
+   "at": "2026-11-14 11:19:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901088,
+   "at": "2026-11-14 11:19:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "SAVE",
+   "fe": {
+    "departureDay": "MON",
+    "creationDate": null,
+    "itemId": "APCAN0842A",
+    "createdBy": null,
+    "sValidYn": "Y",
+    "createId": "minyonglee1",
+    "validYn": "N",
+    "divisionId": "40",
+    "debugMode": null,
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901092,
+   "at": "2026-11-14 11:19:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901102,
+   "at": "2026-11-14 11:19:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901190,
+   "at": "2026-11-14 11:19:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901205,
+   "at": "2026-11-14 11:19:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901277,
+   "at": "2026-11-14 11:19:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901320,
+   "at": "2026-11-14 11:19:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901325,
+   "at": "2026-11-14 11:19:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901330,
+   "at": "2026-11-14 11:19:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901335,
+   "at": "2026-11-14 11:20:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901339,
+   "at": "2026-11-14 11:20:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901344,
+   "at": "2026-11-14 11:20:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901348,
+   "at": "2026-11-14 11:20:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901353,
+   "at": "2026-11-14 11:20:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901358,
+   "at": "2026-11-14 11:20:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901401,
+   "at": "2026-11-14 11:20:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901406,
+   "at": "2026-11-14 11:20:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901449,
+   "at": "2026-11-14 11:20:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901454,
+   "at": "2026-11-14 11:20:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901458,
+   "at": "2026-11-14 11:20:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901463,
+   "at": "2026-11-14 11:20:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901468,
+   "at": "2026-11-14 11:21:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901481,
+   "at": "2026-11-14 11:21:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901488,
+   "at": "2026-11-14 11:21:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901504,
+   "at": "2026-11-14 11:21:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901597,
+   "at": "2026-11-14 11:21:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901640,
+   "at": "2026-11-14 11:21:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901683,
+   "at": "2026-11-14 11:21:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902275,
+   "at": "2026-11-14 11:28:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902303,
+   "at": "2026-11-14 11:28:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902331,
+   "at": "2026-11-14 11:28:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902359,
+   "at": "2026-11-14 11:28:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902387,
+   "at": "2026-11-14 11:28:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902430,
+   "at": "2026-11-14 11:28:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902473,
+   "at": "2026-11-14 11:29:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902577,
+   "at": "2026-11-14 11:29:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902628,
+   "at": "2026-11-14 11:29:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "EE_ST",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902966,
+   "at": "2026-11-14 11:31:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902971,
+   "at": "2026-11-14 11:31:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902976,
+   "at": "2026-11-14 11:31:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "E2E",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902981,
+   "at": "2026-11-14 11:32:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903062,
+   "at": "2026-11-14 11:32:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903105,
+   "at": "2026-11-14 11:33:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903148,
+   "at": "2026-11-14 11:33:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903252,
+   "at": "2026-11-14 11:33:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903257,
+   "at": "2026-11-14 11:33:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903262,
+   "at": "2026-11-14 11:33:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903267,
+   "at": "2026-11-14 11:33:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903272,
+   "at": "2026-11-14 11:33:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903277,
+   "at": "2026-11-14 11:33:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903282,
+   "at": "2026-11-14 11:33:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903287,
+   "at": "2026-11-14 11:33:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903292,
+   "at": "2026-11-14 11:34:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903335,
+   "at": "2026-11-14 11:34:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903378,
+   "at": "2026-11-14 11:34:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903478,
+   "at": "2026-11-14 11:34:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903526,
+   "at": "2026-11-14 11:35:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "CN"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903572,
+   "at": "2026-11-14 11:36:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903600,
+   "at": "2026-11-14 11:36:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903628,
+   "at": "2026-11-14 11:36:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903672,
+   "at": "2026-11-14 11:36:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903804,
+   "at": "2026-11-14 11:36:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903907,
+   "at": "2026-11-14 11:36:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903980,
+   "at": "2026-11-14 11:36:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904058,
+   "at": "2026-11-14 11:36:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904097,
+   "at": "2026-11-14 11:37:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904164,
+   "at": "2026-11-14 11:37:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904197,
+   "at": "2026-11-14 11:37:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904225,
+   "at": "2026-11-14 11:37:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904253,
+   "at": "2026-11-14 11:37:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904281,
+   "at": "2026-11-14 11:37:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904309,
+   "at": "2026-11-14 11:37:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904337,
+   "at": "2026-11-14 11:38:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904365,
+   "at": "2026-11-14 11:38:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904393,
+   "at": "2026-11-14 11:38:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904421,
+   "at": "2026-11-14 11:38:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904449,
+   "at": "2026-11-14 11:38:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904477,
+   "at": "2026-11-14 11:38:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904625,
+   "at": "2026-11-14 11:39:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904690,
+   "at": "2026-11-14 11:39:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904718,
+   "at": "2026-11-14 11:39:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904746,
+   "at": "2026-11-14 11:39:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904789,
+   "at": "2026-11-14 11:40:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904870,
+   "at": "2026-11-14 11:40:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904875,
+   "at": "2026-11-14 11:40:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904908,
+   "at": "2026-11-14 11:40:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904947,
+   "at": "2026-11-14 11:40:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904986,
+   "at": "2026-11-14 11:40:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": "N"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905082,
+   "at": "2026-11-14 11:40:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905198,
+   "at": "2026-11-14 11:41:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905313,
+   "at": "2026-11-14 11:41:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905357,
+   "at": "2026-11-14 11:41:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905415,
+   "at": "2026-11-14 11:41:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905555,
+   "at": "2026-11-14 11:42:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905648,
+   "at": "2026-11-14 11:42:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905746,
+   "at": "2026-11-14 11:42:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905834,
+   "at": "2026-11-14 11:42:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905919,
+   "at": "2026-11-14 11:42:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905924,
+   "at": "2026-11-14 11:43:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905952,
+   "at": "2026-11-14 11:43:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905980,
+   "at": "2026-11-14 11:43:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906023,
+   "at": "2026-11-14 11:43:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906028,
+   "at": "2026-11-14 11:43:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "APCAN0842A",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906033,
+   "at": "2026-11-14 11:43:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "apcan0842a",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906038,
+   "at": "2026-11-14 11:43:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "PCAN0842",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906043,
+   "at": "2026-11-14 11:43:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "APCAN0842A,APCAN2441A",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906086,
+   "at": "2026-11-14 11:43:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906167,
+   "at": "2026-11-14 11:44:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906210,
+   "at": "2026-11-14 11:44:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906253,
+   "at": "2026-11-14 11:45:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "kind": "GET",
+   "fe": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "p_item_id": "",
+    "p_valid": ""
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  }
+ ]
+}

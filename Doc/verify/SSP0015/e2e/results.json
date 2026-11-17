@@ -1,0 +1,4394 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "@verify|@trace|@snap",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SSP0015/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0015\\e2e\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_snap.spec.ts",
+      "file": "_snap.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "@snap 스냅샷 형상 검사",
+          "file": "_snap.spec.ts",
+          "line": 60,
+          "column": 6,
+          "specs": [
+            {
+              "title": "@snap 조회조건 패널·버튼 바 aria ×Div",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4918,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:31:37.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-74c995e979b472a2d796",
+              "file": "_snap.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "@snap 그리드 헤더 텍스트(모델) ×시트",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18734,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:31:45.282Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-399ba7d6116eaaa3a887",
+              "file": "_snap.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "@snap 조회조건 팝업 정적 aria",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11945,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:32:06.627Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-95b89906c95d0086fb4b",
+              "file": "_snap.spec.ts",
+              "line": 114,
+              "column": 7
+            },
+            {
+              "title": "@snap 화면샷 패널+헤더 띠 1920/1366",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11101,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:32:21.267Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "SSP0015\\snap\\golden\\화면샷_1366-expected.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0015\\snap\\golden\\화면샷_1366.png"
+                        },
+                        {
+                          "name": "SSP0015\\snap\\golden\\화면샷_1366-actual.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0015\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\SSP0015\\snap\\golden\\화면샷_1366-actual.png"
+                        },
+                        {
+                          "name": "SSP0015\\snap\\golden\\화면샷_1366-diff.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0015\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\SSP0015\\snap\\golden\\화면샷_1366-diff.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
+              "file": "_snap.spec.ts",
+              "line": 137,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SSP0015 @trace",
+          "file": "_trace.spec.ts",
+          "line": 129,
+          "column": 6,
+          "specs": [
+            {
+              "title": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19058,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:32:35.684Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-550755c6b31296fbed90",
+              "file": "_trace.spec.ts",
+              "line": 155,
+              "column": 7
+            },
+            {
+              "title": "G6 조회조건 초기값 = AS-IS 로드 문장",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7843,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:32:57.503Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-85530c094cbd490232e7",
+              "file": "_trace.spec.ts",
+              "line": 229,
+              "column": 7
+            },
+            {
+              "title": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 55129,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:33:08.101Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-e5dab2d506a7f22bddde",
+              "file": "_trace.spec.ts",
+              "line": 265,
+              "column": 7
+            },
+            {
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22711,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:34:05.985Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-de9496c01279ae89beee",
+              "file": "_trace.spec.ts",
+              "line": 352,
+              "column": 7
+            },
+            {
+              "title": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 394,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:34:31.479Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-b34c1f142df8908dff34",
+              "file": "_trace.spec.ts",
+              "line": 592,
+              "column": 7
+            },
+            {
+              "title": "W4 D3 행 조건부 잠금 = AS-IS lock_rules",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10819,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:34:34.561Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-0bbd1b684da78037a539",
+              "file": "_trace.spec.ts",
+              "line": 667,
+              "column": 7
+            },
+            {
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19076,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:34:48.101Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-02b65ad6a59a0a5dfb6c",
+              "file": "_trace.spec.ts",
+              "line": 729,
+              "column": 7
+            },
+            {
+              "title": "W4 M4 팝업 선택값 반영 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23791,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:35:09.922Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-493a4e0b229e67af741c",
+              "file": "_trace.spec.ts",
+              "line": 844,
+              "column": 7
+            },
+            {
+              "title": "A6 조회 결과 행 순서 = AS-IS ORDER BY",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:35:36.450Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-84c36bbfbfd43f806bbe",
+              "file": "_trace.spec.ts",
+              "line": 916,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 30953,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:35:49.414Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-38067520de23b791e24d",
+              "file": "_trace.spec.ts",
+              "line": 971,
+              "column": 7
+            },
+            {
+              "title": "D6 Insert 위치·상태 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19200,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:36:23.112Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-21692005d15eb203dbce",
+              "file": "_trace.spec.ts",
+              "line": 1230,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 253473,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:36:45.012Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-3827bc79a4e275df9996",
+              "file": "_trace.spec.ts",
+              "line": 1259,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 21315,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:41:01.367Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-ef72ae630b67c8b573c0",
+              "file": "_trace.spec.ts",
+              "line": 1709,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 402,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:41:25.479Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-cba9dfa318478eb420ca",
+              "file": "_trace.spec.ts",
+              "line": 2065,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SSP0015 @verify",
+          "file": "_verify.spec.ts",
+          "line": 252,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7233,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:41:29.423Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e3287ba3b57c3ec45a2f",
+              "file": "_verify.spec.ts",
+              "line": 280,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23363,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 12s\n"
+                        },
+                        {
+                          "text": "[lap] E1 12s\n"
+                        },
+                        {
+                          "text": "[lap] H13 12s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 20s\n"
+                        },
+                        {
+                          "text": "[lap] K5 20s\n"
+                        },
+                        {
+                          "text": "[lap] H2 20s\n"
+                        },
+                        {
+                          "text": "[lap] A2 21s\n"
+                        },
+                        {
+                          "text": "[lap] C2 21s\n"
+                        },
+                        {
+                          "text": "[lap] C6 21s\n"
+                        },
+                        {
+                          "text": "[lap] E5 21s\n"
+                        },
+                        {
+                          "text": "[lap] E7 23s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:41:39.339Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-db9b556df9b1ce58ebdc",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Hold stock Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16332,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 13s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 14s\n"
+                        },
+                        {
+                          "text": "[lap] A2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C6 14s\n"
+                        },
+                        {
+                          "text": "[lap] E5 14s\n"
+                        },
+                        {
+                          "text": "[lap] E7 16s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:42:05.355Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6db05402c2b63d1af252",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 MES Stock Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15920,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 12s\n"
+                        },
+                        {
+                          "text": "[lap] E1 12s\n"
+                        },
+                        {
+                          "text": "[lap] H13 12s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 13s\n"
+                        },
+                        {
+                          "text": "[lap] A2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C6 14s\n"
+                        },
+                        {
+                          "text": "[lap] E5 14s\n"
+                        },
+                        {
+                          "text": "[lap] E7 16s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:42:24.386Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-445de4afa591d5a839df",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 SCS Stock Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15867,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 13s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 13s\n"
+                        },
+                        {
+                          "text": "[lap] A2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C6 13s\n"
+                        },
+                        {
+                          "text": "[lap] E5 13s\n"
+                        },
+                        {
+                          "text": "[lap] E7 16s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:42:43.062Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e6a6905f187cde9300fa",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment Confirm Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 91978,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 83s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 87s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 87s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 87s\n"
+                        },
+                        {
+                          "text": "[lap] E1 87s\n"
+                        },
+                        {
+                          "text": "[lap] H13 87s\n"
+                        },
+                        {
+                          "text": "[lap] E2 87s\n"
+                        },
+                        {
+                          "text": "[lap] C3 88s\n"
+                        },
+                        {
+                          "text": "[lap] D5 88s\n"
+                        },
+                        {
+                          "text": "[lap] K5 88s\n"
+                        },
+                        {
+                          "text": "[lap] H2 88s\n"
+                        },
+                        {
+                          "text": "[lap] A2 89s\n"
+                        },
+                        {
+                          "text": "[lap] C2 89s\n"
+                        },
+                        {
+                          "text": "[lap] C6 89s\n"
+                        },
+                        {
+                          "text": "[lap] E5 89s\n"
+                        },
+                        {
+                          "text": "[lap] E7 91s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:43:01.775Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-58e44584734f66cec21b",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment PSI(IT & Mobile)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 28048,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 7s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 12s\n"
+                        },
+                        {
+                          "text": "[lap] E1 12s\n"
+                        },
+                        {
+                          "text": "[lap] H13 18s\n"
+                        },
+                        {
+                          "text": "[lap] E2 18s\n"
+                        },
+                        {
+                          "text": "[lap] C3 18s\n"
+                        },
+                        {
+                          "text": "[lap] D5 18s\n"
+                        },
+                        {
+                          "text": "[lap] K5 18s\n"
+                        },
+                        {
+                          "text": "[lap] H2 19s\n"
+                        },
+                        {
+                          "text": "[lap] A2 19s\n"
+                        },
+                        {
+                          "text": "[lap] C2 19s\n"
+                        },
+                        {
+                          "text": "[lap] C6 19s\n"
+                        },
+                        {
+                          "text": "[lap] E5 19s\n"
+                        },
+                        {
+                          "text": "[lap] E7 28s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] FIGURE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] MEASURE_NAME: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:44:36.529Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f198bac59f5478e59d7a",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment PSI(Mobility & IT)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 190582,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[required] 필수 입력란: 칸 없음(필수 입력란) ← '필수 입력란을 입력해 주세요. Confirm'\n"
+                        },
+                        {
+                          "text": "[required] 필수 입력란: 칸 없음(필수 입력란) ← '필수 입력란을 입력해 주세요. Confirm'\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
+                        },
+                        {
+                          "text": "[required] 필수 입력란: 칸 없음(필수 입력란) ← '필수 입력란을 입력해 주세요. Confirm'\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
+                        },
+                        {
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14,2024.11.14~):0행 · 기간 5년 확대(2021.11.14,2021.11.14~):0행 전부 0행 · 필수 조건 필수 입력란: 칸 없음(필수 입력란) ← '필수 입력란을 입력해 주세요. Confirm' / 필수 입력란: 칸 없음(필수 입력란) ← '필수 입력란을 입력해 주세요. Confirm'\n"
+                        },
+                        {
+                          "text": "[lap] 기존행 편집(D1) 184s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 184s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 0, 0 · 탭 0개 / 행이 있는 그리드 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 190s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 190s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 190s\n"
+                        },
+                        {
+                          "text": "[lap] E1 190s\n"
+                        },
+                        {
+                          "text": "[lap] H13 190s\n"
+                        },
+                        {
+                          "text": "[lap] E2 190s\n"
+                        },
+                        {
+                          "text": "[lap] C3 190s\n"
+                        },
+                        {
+                          "text": "[lap] D5 190s\n"
+                        },
+                        {
+                          "text": "[lap] K5 190s\n"
+                        },
+                        {
+                          "text": "[lap] H2 190s\n"
+                        },
+                        {
+                          "text": "[lap] A2 190s\n"
+                        },
+                        {
+                          "text": "[lap] C2 190s\n"
+                        },
+                        {
+                          "text": "[lap] C6 190s\n"
+                        },
+                        {
+                          "text": "[lap] E5 190s\n"
+                        },
+                        {
+                          "text": "[lap] E7 190s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:45:07.357Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a471d1ad1c4ead9085ca",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment PSI(Packer)] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 34873,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 10s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 10s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 198, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 19s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 19s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 19s\n"
+                        },
+                        {
+                          "text": "[lap] E1 19s\n"
+                        },
+                        {
+                          "text": "[lap] H13 25s\n"
+                        },
+                        {
+                          "text": "[lap] E2 25s\n"
+                        },
+                        {
+                          "text": "[lap] C3 25s\n"
+                        },
+                        {
+                          "text": "[lap] D5 25s\n"
+                        },
+                        {
+                          "text": "[lap] K5 25s\n"
+                        },
+                        {
+                          "text": "[lap] H2 26s\n"
+                        },
+                        {
+                          "text": "[lap] A2 26s\n"
+                        },
+                        {
+                          "text": "[lap] C2 26s\n"
+                        },
+                        {
+                          "text": "[lap] C6 26s\n"
+                        },
+                        {
+                          "text": "[lap] E5 26s\n"
+                        },
+                        {
+                          "text": "[lap] E7 35s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] FIGURE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] MEASURE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:48:20.653Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0dbe7c5c1e00c5844f93",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment Request Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15755,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 7s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 12s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 12s\n"
+                        },
+                        {
+                          "text": "[lap] E1 12s\n"
+                        },
+                        {
+                          "text": "[lap] H13 12s\n"
+                        },
+                        {
+                          "text": "[lap] E2 12s\n"
+                        },
+                        {
+                          "text": "[lap] C3 12s\n"
+                        },
+                        {
+                          "text": "[lap] D5 12s\n"
+                        },
+                        {
+                          "text": "[lap] K5 12s\n"
+                        },
+                        {
+                          "text": "[lap] H2 12s\n"
+                        },
+                        {
+                          "text": "[lap] A2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C6 13s\n"
+                        },
+                        {
+                          "text": "[lap] E5 13s\n"
+                        },
+                        {
+                          "text": "[lap] E7 15s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:48:58.296Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7c070a71ccef535f64a3",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Shipment Result] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16437,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 13s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 14s\n"
+                        },
+                        {
+                          "text": "[lap] A2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C6 14s\n"
+                        },
+                        {
+                          "text": "[lap] E5 14s\n"
+                        },
+                        {
+                          "text": "[lap] E7 16s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:49:16.946Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1ccbab07710ff9a6b932",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Stock Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17423,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 14s\n"
+                        },
+                        {
+                          "text": "[lap] E2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C3 14s\n"
+                        },
+                        {
+                          "text": "[lap] D5 14s\n"
+                        },
+                        {
+                          "text": "[lap] K5 14s\n"
+                        },
+                        {
+                          "text": "[lap] H2 14s\n"
+                        },
+                        {
+                          "text": "[lap] A2 15s\n"
+                        },
+                        {
+                          "text": "[lap] C2 15s\n"
+                        },
+                        {
+                          "text": "[lap] C6 15s\n"
+                        },
+                        {
+                          "text": "[lap] E5 15s\n"
+                        },
+                        {
+                          "text": "[lap] E7 17s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:49:36.113Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-30a9e12a677a8307b0f2",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Stock Location Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16954,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 13s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 14s\n"
+                        },
+                        {
+                          "text": "[lap] A2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C6 14s\n"
+                        },
+                        {
+                          "text": "[lap] E5 14s\n"
+                        },
+                        {
+                          "text": "[lap] E7 17s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:49:56.199Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1f31f9cc4568fab2177f",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 W/H stock] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18132,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 10s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 14s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 14s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 14s\n"
+                        },
+                        {
+                          "text": "[lap] E1 14s\n"
+                        },
+                        {
+                          "text": "[lap] H13 14s\n"
+                        },
+                        {
+                          "text": "[lap] E2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C3 14s\n"
+                        },
+                        {
+                          "text": "[lap] D5 14s\n"
+                        },
+                        {
+                          "text": "[lap] K5 14s\n"
+                        },
+                        {
+                          "text": "[lap] H2 15s\n"
+                        },
+                        {
+                          "text": "[lap] A2 15s\n"
+                        },
+                        {
+                          "text": "[lap] C2 16s\n"
+                        },
+                        {
+                          "text": "[lap] C6 16s\n"
+                        },
+                        {
+                          "text": "[lap] E5 16s\n"
+                        },
+                        {
+                          "text": "[lap] E7 18s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:50:15.888Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-aca09ed83402d6056a18",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 W/H stock Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18183,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 10s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 14s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 14s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 14s\n"
+                        },
+                        {
+                          "text": "[lap] E1 14s\n"
+                        },
+                        {
+                          "text": "[lap] H13 14s\n"
+                        },
+                        {
+                          "text": "[lap] E2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C3 14s\n"
+                        },
+                        {
+                          "text": "[lap] D5 14s\n"
+                        },
+                        {
+                          "text": "[lap] K5 14s\n"
+                        },
+                        {
+                          "text": "[lap] H2 15s\n"
+                        },
+                        {
+                          "text": "[lap] A2 16s\n"
+                        },
+                        {
+                          "text": "[lap] C2 16s\n"
+                        },
+                        {
+                          "text": "[lap] C6 16s\n"
+                        },
+                        {
+                          "text": "[lap] E5 16s\n"
+                        },
+                        {
+                          "text": "[lap] E7 18s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:50:36.736Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-46b8e246142822443999",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 WH In Plan Detail] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16144,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 9s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Hold stock' 선택(InsertRow:7694 · shtBolckStock=\"Hold stock\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 13s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 13s\n"
+                        },
+                        {
+                          "text": "[lap] E1 13s\n"
+                        },
+                        {
+                          "text": "[lap] H13 13s\n"
+                        },
+                        {
+                          "text": "[lap] E2 13s\n"
+                        },
+                        {
+                          "text": "[lap] C3 13s\n"
+                        },
+                        {
+                          "text": "[lap] D5 13s\n"
+                        },
+                        {
+                          "text": "[lap] K5 13s\n"
+                        },
+                        {
+                          "text": "[lap] H2 14s\n"
+                        },
+                        {
+                          "text": "[lap] A2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C2 14s\n"
+                        },
+                        {
+                          "text": "[lap] C6 14s\n"
+                        },
+                        {
+                          "text": "[lap] E5 14s\n"
+                        },
+                        {
+                          "text": "[lap] E7 16s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:50:57.698Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b5d2702276ecc99ddd95",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8546,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:51:16.567Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ebc7d530ad530201f416",
+              "file": "_verify.spec.ts",
+              "line": 839,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 수정 저장 경로 강제(edit-save) · wj-cell-editable 없음 → 컬럼 정의 기준 후보 · 저장 키 컬럼 제외 32셀 · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 NICK_NAME · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 가능 셀 24개 시도 — 값이 바뀌는 셀 없음"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22391,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:51:27.822Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 수정 저장 경로 강제(edit-save) · wj-cell-editable 없음 → 컬럼 정의 기준 후보 · 저장 키 컬럼 제외 32셀 · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 NICK_NAME · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 개시 안 됨 제외 TYPE · 편집 개시 안 됨 제외 FIGURE · 편집 개시 안 됨 제외 FROM_SITE_NM · 편집 가능 셀 24개 시도 — 값이 바뀌는 셀 없음"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-9cc4fd1c25d8443b5d7e",
+              "file": "_verify.spec.ts",
+              "line": 904,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 256049,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 2: DIVISION_ID,ITEM_ID\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:51:52.951Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-eff9ac78dbfdefe7eab4",
+              "file": "_verify.spec.ts",
+              "line": 1534,
+              "column": 7
+            },
+            {
+              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 255692,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:56:11.676Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-da7adeae69dd5df99343",
+              "file": "_verify.spec.ts",
+              "line": 1634,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11514,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:00:30.081Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-02954f7b99d331e3a55d",
+              "file": "_verify.spec.ts",
+              "line": 1745,
+              "column": 7
+            },
+            {
+              "title": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 58191,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:00:44.334Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-600fad512236549a2d75",
+              "file": "_verify.spec.ts",
+              "line": 1847,
+              "column": 7
+            },
+            {
+              "title": "기간 동적 컬럼(A8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7774,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:01:45.238Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a320edd368d098e4b257",
+              "file": "_verify.spec.ts",
+              "line": 1891,
+              "column": 7
+            },
+            {
+              "title": "실전송 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7935,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:01:55.775Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-032cc50c629ebab45d76",
+              "file": "_verify.spec.ts",
+              "line": 1903,
+              "column": 7
+            },
+            {
+              "title": "합계 값(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7720,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:02:06.425Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-96bfe42a36b57a0fc294",
+              "file": "_verify.spec.ts",
+              "line": 1916,
+              "column": 7
+            },
+            {
+              "title": "Division 컬럼(A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 909452,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:02:16.833Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b5ac991203c290b22150",
+              "file": "_verify.spec.ts",
+              "line": 1943,
+              "column": 7
+            },
+            {
+              "title": "조회조건 겹침(H4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7052,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:17:29.008Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-25d414486e7392831a8f",
+              "file": "_verify.spec.ts",
+              "line": 1972,
+              "column": 7
+            },
+            {
+              "title": "Excel 2단계 차단(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4835,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:17:38.756Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-47f6d08196a8ebed098e",
+              "file": "_verify.spec.ts",
+              "line": 1985,
+              "column": 7
+            },
+            {
+              "title": "Excel 양식·업로드(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5336,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:17:46.289Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3a00c485d66a52468083",
+              "file": "_verify.spec.ts",
+              "line": 1999,
+              "column": 7
+            },
+            {
+              "title": "셀 연쇄 초기화(C2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12877,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:17:54.382Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f128dbc87d772130fbde",
+              "file": "_verify.spec.ts",
+              "line": 2033,
+              "column": 7
+            },
+            {
+              "title": "컬럼 설정 필수 컬럼(K2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13262,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:18:10.022Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-486bf035867a482914e1",
+              "file": "_verify.spec.ts",
+              "line": 2100,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 75703,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langlock] SSP0015 I2: 다른 화면 E2E 실행 중(SSP0005) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[langlock] SSP0015 I2 단독 실행 50s 대기 후 언어 잠금 획득\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:18:26.019Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d370487a1c7eca1b66dc",
+              "file": "_verify.spec.ts",
+              "line": 2155,
+              "column": 7
+            },
+            {
+              "title": "병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 460555,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 51790,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:19:44.430Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c9dfa18b83d1df953016",
+              "file": "_verify.spec.ts",
+              "line": 2182,
+              "column": 7
+            },
+            {
+              "title": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17490,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:20:38.942Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2d2d0c22e664ea414f53",
+              "file": "_verify.spec.ts",
+              "line": 2224,
+              "column": 7
+            },
+            {
+              "title": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12803,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:20:59.111Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-9ce6b6b3de7915a8708c",
+              "file": "_verify.spec.ts",
+              "line": 2236,
+              "column": 7
+            },
+            {
+              "title": "레이아웃·조회 묶음(H4·N1·G1·L2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 24441,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:21:14.613Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2d95b6e4e7649e507ad4",
+              "file": "_verify.spec.ts",
+              "line": 2253,
+              "column": 7
+            },
+            {
+              "title": "필터 항목·연속 조회 본문(K1·G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 111651,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:21:41.761Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cf0712be8a97c3713ff9",
+              "file": "_verify.spec.ts",
+              "line": 2277,
+              "column": 7
+            },
+            {
+              "title": "조회조건 초기값·Division 변경 뒤 Version(G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9608,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:23:36.153Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c2c9268cfc82a4bba873",
+              "file": "_verify.spec.ts",
+              "line": 2289,
+              "column": 7
+            },
+            {
+              "title": "Team 값 덤프(B8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7921,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:23:48.523Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-82da06db4d3c17fb4cdf",
+              "file": "_verify.spec.ts",
+              "line": 2299,
+              "column": 7
+            },
+            {
+              "title": "Insert 행 Division(D4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15905,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:23:59.182Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7277a8bbe9d5912ee02c",
+              "file": "_verify.spec.ts",
+              "line": 2304,
+              "column": 7
+            },
+            {
+              "title": "동적 칸 정렬·방향키 응답(K1·L1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27639,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:24:17.740Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d1eb3186f991f7261c51",
+              "file": "_verify.spec.ts",
+              "line": 2313,
+              "column": 7
+            },
+            {
+              "title": "기간 조건 글자·역전(E2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15242,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:24:48.107Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4968eb3d2647cb6d8f7a",
+              "file": "_verify.spec.ts",
+              "line": 2324,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11010,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:06.116Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6a604e1ebac0a78c32d1",
+              "file": "_verify.spec.ts",
+              "line": 2334,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7718,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:19.861Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-152318001d5ca93ca6e3",
+              "file": "_verify.spec.ts",
+              "line": 2342,
+              "column": 7
+            },
+            {
+              "title": "편집 모드 구분(D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16614,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:30.286Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-aaa0e61d87250d84a051",
+              "file": "_verify.spec.ts",
+              "line": 2350,
+              "column": 7
+            },
+            {
+              "title": "실적 구간 색(H2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1666,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:49.642Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f5bd574321c8015054f4",
+              "file": "_verify.spec.ts",
+              "line": 2366,
+              "column": 7
+            },
+            {
+              "title": "이름·ID 조건 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 293,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:54.029Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1303b2eaa142e8c683cb",
+              "file": "_verify.spec.ts",
+              "line": 2378,
+              "column": 7
+            },
+            {
+              "title": "Sum 체크박스(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15775,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:25:57.064Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-565da39fee58fcaaaaac",
+              "file": "_verify.spec.ts",
+              "line": 2390,
+              "column": 7
+            },
+            {
+              "title": "숫자 표시 형식(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 285,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:26:15.544Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cdef8067a948732ecafa",
+              "file": "_verify.spec.ts",
+              "line": 2401,
+              "column": 7
+            },
+            {
+              "title": "문서 표시 문구(H5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 298,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:26:18.530Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-134ead6070f1a3d40705",
+              "file": "_verify.spec.ts",
+              "line": 2410,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1350000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 370062,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 22:26:24\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] CN 언어 조회 건수 총/건 표기' 시작 22:27:53\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 조회 중 Loading 토스트 없음' 시작 22:28:16\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 선택 행 위로 Insert' 시작 22:28:27\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 22:28:39\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 당주 구분선(rail) = 이번 주(Weekly)' 시작 22:31:24\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 값 있는 편집 구간 수량 셀 편집' 시작 22:31:38\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] Bucket 반복 전환 조회 SQL 오류 0' 시작 22:31:59\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0015 '[자동] 조회조건 콤보 4종 = 콤보' 시작 22:32:27\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:26:21.620Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0c08bd56eae5fa8e718f",
+              "file": "_verify.spec.ts",
+              "line": 2423,
+              "column": 7
+            },
+            {
+              "title": "0 표시 규칙(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:32:34.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-eba030f52bc48eb736da",
+              "file": "_verify.spec.ts",
+              "line": 2670,
+              "column": 7
+            },
+            {
+              "title": "문서 조건별 버튼·컬럼 노출(K4·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:32:37.528Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ab307b87732438338c7a",
+              "file": "_verify.spec.ts",
+              "line": 2677,
+              "column": 7
+            },
+            {
+              "title": "셀 편집 표시·값 유지(A2·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16278,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:32:40.594Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b18f59af2403aa78c1e2",
+              "file": "_verify.spec.ts",
+              "line": 2684,
+              "column": 7
+            },
+            {
+              "title": "재조회 하위 시트 초기화(A4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:32:59.649Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fa38320c89299f5766c0",
+              "file": "_verify.spec.ts",
+              "line": 2711,
+              "column": 7
+            },
+            {
+              "title": "월 Bucket 합계(F1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17277,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:33:02.755Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b811c3858a49234f5dc4",
+              "file": "_verify.spec.ts",
+              "line": 2723,
+              "column": 7
+            },
+            {
+              "title": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 50116,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        },
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        },
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:33:22.776Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-86a63397532d67888fd2",
+              "file": "_verify.spec.ts",
+              "line": 2749,
+              "column": 7
+            },
+            {
+              "title": "그리드 표시 묶음(N1·H8·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7656,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:34:15.715Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-93540dd6574ef37535cc",
+              "file": "_verify.spec.ts",
+              "line": 2789,
+              "column": 7
+            },
+            {
+              "title": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5636,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:34:26.147Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-64b00c95036a0d0d68dc",
+              "file": "_verify.spec.ts",
+              "line": 2800,
+              "column": 7
+            },
+            {
+              "title": "선택 조회 복수·단일·전체 왕복(G2·B6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 347322,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:34:34.573Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d7914b7c978c0e1f5752",
+              "file": "_verify.spec.ts",
+              "line": 2814,
+              "column": 7
+            },
+            {
+              "title": "Excel 다운로드 내용(H7)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:40:24.881Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e681ba528be951e250ff",
+              "file": "_verify.spec.ts",
+              "line": 2856,
+              "column": 7
+            },
+            {
+              "title": "필터 유지 재조회(K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14955,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:40:37.159Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7d7b22ee8db4c258c639",
+              "file": "_verify.spec.ts",
+              "line": 2873,
+              "column": 7
+            },
+            {
+              "title": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13054,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:40:54.785Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3887b13cbaad9b3b164e",
+              "file": "_verify.spec.ts",
+              "line": 2905,
+              "column": 7
+            },
+            {
+              "title": "주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 35397,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:41:10.655Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4a0c1c5cd53ab73a18fd",
+              "file": "_verify.spec.ts",
+              "line": 3018,
+              "column": 7
+            },
+            {
+              "title": "권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 297,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:41:48.759Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-bf2da1e63f15cf588aac",
+              "file": "_verify.spec.ts",
+              "line": 3087,
+              "column": 7
+            },
+            {
+              "title": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 20686,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:41:51.725Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-39b957c1482de0055947",
+              "file": "_verify.spec.ts",
+              "line": 3118,
+              "column": 7
+            },
+            {
+              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19248,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:42:15.110Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4890f4a6ebbeb1cfa6fc",
+              "file": "_verify.spec.ts",
+              "line": 3161,
+              "column": 7
+            },
+            {
+              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15745,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[Insert 전제] SSP0015 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 90, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 / AS-IS Insert 분기 시트 'Hold stock' 탭 없음(T303) / AS-IS Insert 분기 시트 'Shipment Confirm Detail' 탭 없음(T303)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:42:36.972Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0b177a5c41c4354bb1fa",
+              "file": "_verify.spec.ts",
+              "line": 3305,
+              "column": 7
+            },
+            {
+              "title": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15447,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:42:55.498Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b94913d701c711b6a797",
+              "file": "_verify.spec.ts",
+              "line": 3414,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 78424,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:43:13.599Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b323262e86661faa939b",
+              "file": "_verify.spec.ts",
+              "line": 3466,
+              "column": 7
+            },
+            {
+              "title": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 25122,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:44:34.744Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-989d2c3aeb9995e68f5c",
+              "file": "_verify.spec.ts",
+              "line": 3601,
+              "column": 7
+            },
+            {
+              "title": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 20722,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T13:45:02.476Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1e514655e69bafbda559",
+              "file": "_verify.spec.ts",
+              "line": 3695,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T12:31:36.875Z",
+    "duration": 4436291.669000001,
+    "expected": 90,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

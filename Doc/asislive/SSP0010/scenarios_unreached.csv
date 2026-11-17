@@ -1,0 +1,38 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0010-Se3ea39,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:2967,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-Sf75ae8,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:2974,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-S3062f3,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:2994,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-S10fc78,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:3001,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-S6198d9,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:3027,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-Sbdca8a,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:3043,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-S946751,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:3050,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-Scc83dd,기타,SetCalcMeasure,SSP0010_Shipment_Plan_SEMI.cs:3085,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1549; SSP0010_Shipment_Plan_SEMI.cs:1556,HandleBindingDataSet
+SSP0010-S397185,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:1981,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-S1c317c,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:1995,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-S22e6ad,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:2008,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-Sfe7fe0,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:2017,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-Se9c3e6,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:2022,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-Sb79054,기타,BlockCellsChecking,SSP0010_Shipment_Plan_SEMI.cs:2029,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:2288,InsertRow
+SSP0010-S1d7d4f,조회,GetLastPlanVersion,SSP0010_Shipment_Plan_SEMI.cs:656,호출 없음,,
+SSP0010-S0af853,조회,GetLastPlanVersion,SSP0010_Shipment_Plan_SEMI.cs:671,호출 없음,,
+SSP0010-Sdd4b8d,저장,InsertRow,SSP0010_Shipment_Plan_SEMI.cs:2136,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:74; SSP0010_Shipment_Plan_SEMI.cs:2290; SSP0010_Shipment_Plan_SEMI.cs:2714,
+SSP0010-Sf4f384,저장,InsertRow,SSP0010_Shipment_Plan_SEMI.cs:2189,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:74; SSP0010_Shipment_Plan_SEMI.cs:2290; SSP0010_Shipment_Plan_SEMI.cs:2714,
+SSP0010-Sad1b29,저장,InsertRow,SSP0010_Shipment_Plan_SEMI.cs:2235,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:74; SSP0010_Shipment_Plan_SEMI.cs:2290; SSP0010_Shipment_Plan_SEMI.cs:2714,
+SSP0010-S1c2203,저장,SaveData_Main,SSP0010_Shipment_Plan_SEMI.cs:1693,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:711,
+SSP0010-S6456a7,저장,SaveData_Main,SSP0010_Shipment_Plan_SEMI.cs:1928,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:711,
+SSP0010-S3b5dcd,저장,SaveData_Main,SSP0010_Shipment_Plan_SEMI.cs:1946,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:711,
+SSP0010-Sd2f3b0,기타,SetChangedPeriod,SSP0010_Shipment_Plan_SEMI.cs:2639,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:280,
+SSP0010-Sb69d72,기타,SetChangedPeriod,SSP0010_Shipment_Plan_SEMI.cs:2643,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:280,
+SSP0010-Sc2c5b0,기타,SetChangedPeriod,SSP0010_Shipment_Plan_SEMI.cs:2650,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:280,
+SSP0010-S22c226,저장,Set_InsertColumnsFont,SSP0010_Shipment_Plan_SEMI.cs:2300,호출 없음,,
+SSP0010-S5ffe94,저장,Set_InsertColumnsFont,SSP0010_Shipment_Plan_SEMI.cs:2304,호출 없음,,
+SSP0010-Sd01f57,기타,TotalCellsMerge,SSP0010_Shipment_Plan_SEMI.cs:1206,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:801,
+SSP0010-S226b80,기타,TotalCellsMerge,SSP0010_Shipment_Plan_SEMI.cs:1212,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:801,
+SSP0010-S2b563e,기타,TotalCellsMerge,SSP0010_Shipment_Plan_SEMI.cs:1243,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:801,
+SSP0010-S2d4777,기타,TotalCellsMerge,SSP0010_Shipment_Plan_SEMI.cs:1249,주석 안에서만 호출,SSP0010_Shipment_Plan_SEMI.cs:801,
+SSP0010-S6dee7c,기타,ValidateUserInput,SSP0010_Shipment_Plan_SEMI.cs:2075,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1718; SSP0010_Shipment_Plan_SEMI.cs:1728; SSP0010_Shipment_Plan_SEMI.cs:1745; SSP0010_Shipment_Plan_SEMI.cs:1952,SaveData_Main
+SSP0010-Sfb81c3,기타,ValidateUserInput,SSP0010_Shipment_Plan_SEMI.cs:2082,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1718; SSP0010_Shipment_Plan_SEMI.cs:1728; SSP0010_Shipment_Plan_SEMI.cs:1745; SSP0010_Shipment_Plan_SEMI.cs:1952,SaveData_Main
+SSP0010-S91c283,기타,ValidateUserInput,SSP0010_Shipment_Plan_SEMI.cs:2096,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1718; SSP0010_Shipment_Plan_SEMI.cs:1728; SSP0010_Shipment_Plan_SEMI.cs:1745; SSP0010_Shipment_Plan_SEMI.cs:1952,SaveData_Main
+SSP0010-Sb51291,기타,ValidateUserInput,SSP0010_Shipment_Plan_SEMI.cs:2104,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1718; SSP0010_Shipment_Plan_SEMI.cs:1728; SSP0010_Shipment_Plan_SEMI.cs:1745; SSP0010_Shipment_Plan_SEMI.cs:1952,SaveData_Main
+SSP0010-S5a5a45,기타,ValidateUserInput,SSP0010_Shipment_Plan_SEMI.cs:2111,같은 파일에서 호출,SSP0010_Shipment_Plan_SEMI.cs:1718; SSP0010_Shipment_Plan_SEMI.cs:1728; SSP0010_Shipment_Plan_SEMI.cs:1745; SSP0010_Shipment_Plan_SEMI.cs:1952,SaveData_Main
+SSP0010-Seff0c0,기타,spdMain_TopChange,SSP0010_Shipment_Plan_SEMI.cs:2576,호출 없음,,

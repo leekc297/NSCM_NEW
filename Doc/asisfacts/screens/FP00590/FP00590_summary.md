@@ -74,8 +74,8 @@
 | event:popSql.OnSql | RunSqlSource > Insert_Is_Running_Release | 2149 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
 | event:popSql.OnSql | RunSqlSource > Insert_Is_Running_Release | 2196 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
 | event:popSql.OnSql | RunSqlSource > Delete_Is_Running_Release | 2220 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
-| event:popSql.OnSql | RunSqlSource > Find_Confirm_Valid | 2267 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:popSql.OnSql | RunSqlSource > Delete_Is_Running_Release | 2267 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
+| event:popSql.OnSql | RunSqlSource > Find_Confirm_Valid | 2267 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:popSql.OnSql | RunSqlSource > Find_Confirm_Valid | 2301 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
 | event:popSql.OnSql | RunSqlSource > Find_Confirm_Valid | 2314 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:popSql.OnSql | RunSqlSource > Find_Confirm_Valid | 2348 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
@@ -151,8 +151,8 @@
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Exec_Release_Plan | 1609 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Exec_Release_Plan | 1638 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Exec_Send_Mail_Quantity_Check | 1651 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
-| event:this.btnSave.Click | btnRelease_Click > Save_Release > Find_Release_Valid | 1701 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Exec_Send_Mail_Quantity_Check | 1701 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
+| event:this.btnSave.Click | btnRelease_Click > Save_Release > Find_Release_Valid | 1701 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Find_Release_Valid | 1738 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Find_Release_Valid | 1750 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Find_Release_Valid | 1785 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
@@ -167,8 +167,8 @@
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Check_Exec_IsRunningEngine > Insert_Is_Running_Release | 2149 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Check_Exec_IsRunningEngine > Insert_Is_Running_Release | 2196 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Check_Exec_IsRunningEngine > Delete_Is_Running_Release | 2220 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
-| event:this.btnSave.Click | btnRelease_Click > Save_Release > Check_ConfirmValidation > Find_Confirm_Valid | 2267 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Exec_Release_Main > Check_Exec_IsRunningEngine > Delete_Is_Running_Release | 2267 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
+| event:this.btnSave.Click | btnRelease_Click > Save_Release > Check_ConfirmValidation > Find_Confirm_Valid | 2267 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Check_ConfirmValidation > Find_Confirm_Valid | 2301 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_RELEASE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Check_ConfirmValidation > Find_Confirm_Valid | 2314 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.btnSave.Click | btnRelease_Click > Save_Release > Check_ConfirmValidation > Find_Confirm_Valid | 2348 | FP_Planning.PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE | MATCH | SP PR_UI_FP00590_PLAN_CONTROL_GROUP_RELEASE |
@@ -357,8 +357,8 @@
 | GetStepValid | dtStepValid.Rows[0] | CHECK_FLAG |
 | GetUserGroupByDataTable | dRow | STEP_ID, COL_VALUE, USER_GROUP_ID |
 | GetUserGroupByDataTable | dtResult.Rows[0] | USER_GROUP_ID |
-| InitControls | dtPlanInfo.Rows[0] | PLAN_END_TIME, PLAN_TYPE, PRE_FIX_TYPE, BASIS_PLAN_ID, DESCRIPTION, PRE_FIX_DATE, AMEND_FIX_DATE, PLAN_START_TIME, PLAN_HORIZON, CONFIG_SET_ID, DEMAND_HORIZON |
 | InitControls | dtInstance.Rows[0] | USE_WOW_STATUS |
+| InitControls | dtPlanInfo.Rows[0] | PLAN_TYPE, PLAN_START_TIME, PLAN_END_TIME, PLAN_HORIZON, PRE_FIX_TYPE, PRE_FIX_DATE, CONFIG_SET_ID, BASIS_PLAN_ID, DEMAND_HORIZON, AMEND_FIX_DATE, DESCRIPTION |
 | InitControls | inFilter | LOOKUP_TYPE_CODE, SEGMENT1, SEGMENT2, SEGMENT3, SEGMENT4, SEGMENT5 |
 | InitControls | dsLookUpInfo.Tables[0].Rows[i] | ATTRIBUTE11 |
 | InitControls | dtLookupByInstance.Rows[0] | END_DATE |
@@ -400,35 +400,11 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | InitControls:217, InitControls:223, SetChangedControl:268, SetChangedControl:273, FindData_Main:519, FindData_Main:520, btnFind_Click:1076, dtpPlanDate_ValueChanged:1189 | CString.GetCheckedListValue | CODE |
+| GetCheckedListValue | Save_Data_PlanInfo:281, btnCreatePlan_ClickAsync:706, SetDsinDataByControl:1020, SetDsinDataByControl:1023, cboPlanID_SelectedIndexChanged:1824, cboOperation_SelectedIndexChanged:2048, chkStatus_Click:2114, SetPreFixDate:2317 | CString.GetCheckedListValue | CODE |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.spdMain | CellClick | SpdMain_CellClick | InitializeComponent:123 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:124 |
-| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitializeComponent:125 |
-| this.btnWowStatus | Click | btnWowStatus_Click | InitializeComponent:224 |
-| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:262 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:358 |
-| this.btnPlanInfo | Click | btnPlanInfo_Click | InitializeComponent:690 |
-| this.chkStatus | CheckedChanged | chkStatus_CheckedChanged | InitializeComponent:764 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:803 |
-| this | Activated | FP00590_Plan_Control_Activated | InitializeComponent:916 |
-| this | Deactivate | FP00590_Plan_Control_Deactivate | InitializeComponent:917 |
-| this | FormClosing | FP00590_Plan_Control_FormClosing | InitializeComponent:918 |
-| this | Load | Form_Load | .ctor:152 |
-| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:173 |
-| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:174 |
-| this | Deactivate | FP00590_Plan_Control_Deactivate | InitEvent:176 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1176 |
-| this | _DoEngineRunSelectEvent1 | DisplayEngineRunData | ChartThread_Start:1305 |
-| this | Load | Form_Load | .ctor:171 |
-| this | Load | Form_Load | .ctor:216 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:609 |
-| EngineCheckTimer | Elapsed | <lambda> | chkStatus_Click:1108 |
-| this | Load | Form_Load | .ctor:160 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:3147 |
 | this | Load | Form_Load | .ctor:112 |
 | this.btnRelease | Click | btnRelease_Click | InitializeComponent:314 |
 | this.btnCancel | Click | btnCancel_Click | InitializeComponent:351 |
@@ -436,29 +412,8 @@
 | this.btnClose | Click | btnClose_Click | InitializeComponent:495 |
 | this.btnSave | Click | btnRelease_Click | InitializeComponent:532 |
 | this.btnFind | Click | btnFind_Click | InitializeComponent:569 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:766 |
-| this | FormClosing | FP00590_ReleaseTotalPopup_FormClosing | InitializeComponent:869 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:191 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:495 |
-| this.btnSave | Click | btnRelease_Click | InitializeComponent:532 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:569 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:756 |
 | this | FormClosing | FP00590_GroupReleaseTotalPopup_FormClosing | InitializeComponent:869 |
-| this | Load | Form_Load | .ctor:103 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:208 |
-| this.btnExport | Click | btnExport_Click | InitializeComponent:365 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:199 |
-| this.cboSyncPlanID | SelectionChangeCommitted | cboSyncPlanID_SelectionChangeCommitted | InitializeComponent:235 |
-| this.cboSyncPlanID | Click | cboSyncPlanID_Click | InitializeComponent:236 |
-| this.cboDraftPlanID | SelectionChangeCommitted | cboDraftPlanID_SelectionChangeCommitted | InitializeComponent:272 |
-| this.cboDraftPlanID | Click | cboDraftPlanID_Click | InitializeComponent:273 |
-| this.cboDraftPlanID | MouseHover | cboDraftPlanID_MouseHover | InitializeComponent:274 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:314 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:550 |
-| this.btnReset | Click | btnReset_Click | InitializeComponent:588 |
-| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:799 |
-| this | Load | Form_Load | .ctor:175 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:905 |
 | this | Load | Form_Load | .ctor:160 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:3193 |
 | this | Load | Form_Load | .ctor:108 |
@@ -497,28 +452,73 @@
 | this.chkStatus | Click | chkStatus_Click | InitializeComponent:1425 |
 | this.btnRun | Click | btnRun_Click | InitializeComponent:1499 |
 | this | FormClosing | FP00590_RePlanTotalPopup_FormClosing | InitializeComponent:1600 |
+| this | Load | Form_Load | .ctor:171 |
+| this | Load | Form_Load | .ctor:216 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:609 |
+| EngineCheckTimer | Elapsed | <lambda> | chkStatus_Click:1108 |
+| this | Load | Form_Load | .ctor:160 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:3147 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:191 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:495 |
+| this.btnSave | Click | btnRelease_Click | InitializeComponent:532 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:569 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:766 |
+| this | FormClosing | FP00590_ReleaseTotalPopup_FormClosing | InitializeComponent:869 |
+| this | Load | Form_Load | .ctor:103 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:208 |
+| this.btnExport | Click | btnExport_Click | InitializeComponent:365 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:199 |
+| this.cboSyncPlanID | SelectionChangeCommitted | cboSyncPlanID_SelectionChangeCommitted | InitializeComponent:235 |
+| this.cboSyncPlanID | Click | cboSyncPlanID_Click | InitializeComponent:236 |
+| this.cboDraftPlanID | SelectionChangeCommitted | cboDraftPlanID_SelectionChangeCommitted | InitializeComponent:272 |
+| this.cboDraftPlanID | Click | cboDraftPlanID_Click | InitializeComponent:273 |
+| this.cboDraftPlanID | MouseHover | cboDraftPlanID_MouseHover | InitializeComponent:274 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:314 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:550 |
+| this.btnReset | Click | btnReset_Click | InitializeComponent:588 |
+| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:799 |
+| this | Load | Form_Load | .ctor:175 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:905 |
+| this.spdMain | CellClick | SpdMain_CellClick | InitializeComponent:123 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:124 |
+| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitializeComponent:125 |
+| this.btnWowStatus | Click | btnWowStatus_Click | InitializeComponent:224 |
+| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:262 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:358 |
+| this.btnPlanInfo | Click | btnPlanInfo_Click | InitializeComponent:690 |
+| this.chkStatus | CheckedChanged | chkStatus_CheckedChanged | InitializeComponent:764 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:803 |
+| this | Activated | FP00590_Plan_Control_Activated | InitializeComponent:916 |
+| this | Deactivate | FP00590_Plan_Control_Deactivate | InitializeComponent:917 |
+| this | FormClosing | FP00590_Plan_Control_FormClosing | InitializeComponent:918 |
+| this | Load | Form_Load | .ctor:152 |
+| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:173 |
+| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:174 |
+| this | Deactivate | FP00590_Plan_Control_Deactivate | InitEvent:176 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1176 |
+| this | _DoEngineRunSelectEvent1 | DisplayEngineRunData | ChartThread_Start:1305 |
 
 ## 6. 컨트롤 (373개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 142 | lblSql, layoutControlItem8, lblSite, layoutControlItem2, layoutControlItem9, layoutControlItem5, layoutControlItem1, layoutControlItem6, layoutControlItem7, layoutControlItem3, layoutControlItem7, layoutControlItem1, layoutControlItem2, layoutControlItem6, layoutControlItem4 … |
-| UsrLabel | 53 | usrLabel2, usrLabel1, lblTitle, usrLabel4, usrLabel3, usrLabel1, usrLabel2, usrLabel4, usrLabel3, usrLabel1, usrLabel2, lblTitle, usrLabel4, usrLabel3, usrLabel1 … |
-| UsrButton | 35 | btnWowStatus, btnSql, btnPlanInfo, btnFind, btnRelease, btnCancel, btnSql, btnClose, btnSave, btnFind, btnSql, btnClose, btnSave, btnFind, btnClose … |
-| UsrLayoutControl | 20 | usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 … |
-| LayoutControlGroup | 20 | layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 … |
+| LayoutControlItem | 142 | layoutControlItem7, layoutControlItem1, layoutControlItem2, layoutControlItem6, layoutControlItem4, layoutControlItem3, layoutControlItem8, layoutControlItem9, layoutControlItem10, layoutControlItem1, layoutControlItem2, layoutControlItem5, lblSql, layoutControlItem11, layoutControlItem7 … |
+| UsrLabel | 53 | lblTitle, usrLabel4, usrLabel3, usrLabel1, usrLabel2, lblTitle, usrLabel11, usrLabel10, usrLabel9, usrLabel8, usrLabel7, usrLabel6, usrLabel4, usrLabel2, usrLabel1 … |
+| UsrButton | 35 | btnRelease, btnCancel, btnSql, btnClose, btnSave, btnFind, btnOK, btnExport, btnClose, btnFind, btnSql, btnClose, btnSave, btnClose, btnNoFixDate2 … |
+| UsrLayoutControl | 20 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 … |
+| LayoutControlGroup | 20 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 … |
 | UsrTextBox | 16 | txtFixDate, txtPlanHorizon, txtBasisPlan, txtEndDate, txtPlanType, txtFixOption, txtStartDate, txtAmendFixDate, txtDemandHorizon, txtConfigSet, txtPlanGroup, txtSite, txtBasePlanID, txtPlanID, txtPlanGroup … |
-| UsrConditionPanel | 12 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel2, usrConditionPanel1, usrConditionPanel2 |
-| FpSpread | 10 | spdMain, spdSub, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdSub, spdSub |
-| SheetView | 10 | spdMain_Sheet1, spdSub_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdSub_Sheet1, spdSub_Sheet1 |
+| UsrConditionPanel | 12 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel2, usrConditionPanel1, usrConditionPanel2, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
 | ImageList | 10 | imageList1, imageList1, imageList1, imageList1, imageList1, imageList1, imageList1, imageList1, imageList1, imageList1 |
-| UsrCombo | 8 | cboPlanGroup, cboSite, cboSyncPlanID, cboDraftPlanID, cboPlanID, cboOperation, cboBasePlanID, cboPlanID |
-| UsrCheckBox | 7 | chkStatus, chk_MRP, chk_MRP, chkPreFix2, chkPreFix, chkStatus, chkStatus |
+| FpSpread | 10 | spdMain, spdMain, spdMain, spdSub, spdSub, spdMain, spdMain, spdMain, spdMain, spdSub |
+| SheetView | 10 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdSub_Sheet1, spdSub_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdSub_Sheet1 |
+| UsrCombo | 8 | cboPlanID, cboOperation, cboBasePlanID, cboPlanID, cboSyncPlanID, cboDraftPlanID, cboPlanGroup, cboSite |
 | UsrMultiLineEditor | 7 | txtPlanGroup, txtDescription, txtPlanID, txtPlanGroup, txtDescription, txtPlanID, txtTargetTime |
+| UsrCheckBox | 7 | chk_MRP, chkPreFix2, chkPreFix, chkStatus, chkStatus, chk_MRP, chkStatus |
 | DateTimePicker | 5 | dtpFixDate1, dtpFixDate2, dtp_MstChk_EndDate, dtpFixDate1, dtpFixDate2 |
 | RadioGroup | 5 | rdoGroup3, rdoGroup2, rdoGroup1, rdoGroup2, rdoGroup1 |
+| TextBox | 3 | txtDescription, txtDescription, txtSCPTargetID |
 | EmptySpaceItem | 3 | emptySpaceItem7, emptySpaceItem7, emptySpaceItem7 |
 | Panel | 3 | StockPanel, StockPanel, StockPanel |
-| TextBox | 3 | txtSCPTargetID, txtDescription, txtDescription |
 | UsrDateRangePicker2 | 2 | drpPeriod, drpPeriod |
 | UsrDatePicker2 | 1 | dtpPlanDate |
 | Splitter | 1 | splitter1 |
@@ -565,8 +565,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: PlanControl, EngineRun, ReleaseTotalPoup || ReleaseTotalPopup, {?sSheetName}, WoWStatusPopup, ReleaseTotalPoup || ReleaseGroupTotalPopup
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:324, SetSheetHeaderColumn_FP@InitSpread:363, SetSheetHeaderColumn_FP@InitSpread:497, SetSheetHeaderColumn_FP@SetSpreadInit:303, SetSheetHeaderColumn_FP@SetSpreadInit:188, SetSheetHeaderColumn_FP@SetSpreadInit:199, SetSheetHeaderColumn_FP@InitSpread:615
+- 코드에서 생성하는 시트: {?sSheetName}, ReleaseTotalPoup || ReleaseGroupTotalPopup, EngineRun, ReleaseTotalPoup || ReleaseTotalPopup, WoWStatusPopup, PlanControl
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:188, SetSheetHeaderColumn_FP@SetSpreadInit:303, SetSheetHeaderColumn_FP@InitSpread:615, SetSheetHeaderColumn_FP@InitSpread:497, SetSheetHeaderColumn_FP@SetSpreadInit:199, SetSheetHeaderColumn_FP@InitSpread:324, SetSheetHeaderColumn_FP@InitSpread:363
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

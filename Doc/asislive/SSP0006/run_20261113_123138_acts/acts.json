@@ -1,0 +1,89 @@
+{
+ "id": "SSP0006",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItemId failed: InvalidOperationException: control not found: btnItemId",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0006-Sea1449",
+    "SSP0006-Sec3442"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0006-Sea1449",
+    "SSP0006-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnMeasure failed: InvalidOperationException: control not found: btnMeasure",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0006-S003e1c",
+    "SSP0006-Se9875e",
+    "SSP0006-S2ed806",
+    "SSP0006-S687343",
+    "SSP0006-S8d6334",
+    "SSP0006-Sfed153",
+    "SSP0006-S0bab83",
+    "SSP0006-S3e4aef",
+    "SSP0006-S955b86"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0006-S287784",
+    "SSP0006-S6ab4d3"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:30:24.064",
+ "fills": 3,
+ "fill_left": []
+}

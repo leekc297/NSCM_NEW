@@ -35,6 +35,20 @@ export function judgeEditMode(s: { save: boolean; editBtn: boolean; rows: number
   return { result: 'PASS', why: `Edit 버튼 없이 조회 직후 편집 가능 칸 ${s.editable.length}개` };
 }
 
+/** 2026-11-12 CR-103(C1-26): 편집 권한 계정으로 조회한 뒤 AS-IS 편집 가능 컬럼이 TO-BE 에서 실제로 편집되는가.
+ *  asisEdit = AS-IS 가 기존 행에서 조건 없이 편집 가능으로 두는 컬럼 수(edit_expect existing_row=EDIT) · asisCond = 행 조건부(COND) 컬럼 수
+ *  measured = 그 컬럼들을 실제로 열어 본 칸 수 · editable = 편집기가 열린 컬럼 · sheets = 잰 시트 · account = 계정(증거용)
+ *  권한 있는 계정인데 무조건 편집 컬럼이 하나도 안 열리면 FAIL. 조건부 컬럼만 있고 안 열리면 조건 맞는 행을 못 찾은 것 — 미검증(ERROR). */
+export function judgeEditAfterSearch(s: { save: boolean; editBtn: boolean; rows: number; asisEdit: number; asisCond: number; measured: number; editable: string[]; sheets: string[]; account: string }): { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string } {
+  const at = `${s.sheets.length ? '시트 ' + s.sheets.join(', ') : '시트 미상'} · 계정 ${s.account || '?'}`;
+  if (s.editBtn) return { result: 'FAIL', why: `툴바에 Edit 버튼 노출 — TO-BE 는 Edit 없이 상시 편집(CR-093)` };
+  if (s.asisEdit + s.asisCond <= 0) return { result: 'NA', why: 'AS-IS 편집 가능 컬럼 사실(edit_expect) 없음 — 화면 단위 편집 가능 판정은 종전 검사로' };
+  if (s.rows <= 0) return { result: 'ERROR', why: `[측정 경로 없음] AS-IS 편집 가능 시트에 조회 행 0 — 편집 가능 여부 판정 불가(${at})` };
+  if (s.measured <= 0) return { result: 'ERROR', why: `[측정 경로 없음] AS-IS 편집 가능 컬럼을 TO-BE 그리드에서 찾지 못함(${at})` };
+  if (s.editable.length) return { result: 'PASS', why: `조회 직후 편집 가능 컬럼 ${s.editable.length}개(${s.editable.slice(0, 5).join(', ')}) — AS-IS 편집 가능 ${s.asisEdit}개·조건부 ${s.asisCond}개 중 · ${at}` };
+  if (s.asisEdit > 0) return { result: 'FAIL', why: `권한 있는 계정으로 조회했는데 편집 가능 컬럼 0 — AS-IS 는 조건 없이 편집 가능 ${s.asisEdit}개(편집 모드 기준 CR-093) · ${s.measured}칸 확인 · ${at} (CR-103: 권한 있는 사용자가 조회 후 편집 불가면 오류)` };
+  return { result: 'ERROR', why: `[미검증] AS-IS 편집 가능 컬럼이 전부 행 조건부(${s.asisCond}개)이고 확인한 ${s.measured}칸은 모두 잠김 — 조건에 맞는 행을 찾지 못함(${at})` };
+}
 /** 값 0·빈 값의 표시 — want '0' 빈 값도 0 으로 보임 · 'blank' 0 은 빈칸 (EG348 · 기준 Doc/verify/zero_display_expect.csv) */
 export function judgeZeroShow(s: { want: string; cols: string[]; zeroCells: number; blankShown: number; zeroShown: number; ex: string }): { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string } {
   if (!s.cols.length) return { result: 'ERROR', why: '[측정 경로 없음] 기준표 칸이 그리드에 없음' };

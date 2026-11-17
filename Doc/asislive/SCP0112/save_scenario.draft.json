@@ -1,0 +1,49 @@
+{
+ "id": "SCP0112",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0112_SAVE_CELL_TRAY_SIMULATION",
+   "save_sp": "SCP0112_SAVE_CELL_TRAY_SIMULATION",
+   "status": "키 일부 미대응",
+   "table": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+   "pk": [
+    "LOOKUP_TYPE",
+    "SEGMENT1",
+    "SEGMENT2",
+    "SEGMENT3",
+    "SEGMENT4",
+    "SEGMENT5"
+   ],
+   "match": {},
+   "unmatched_pk": [
+    "LOOKUP_TYPE",
+    "SEGMENT1",
+    "SEGMENT2",
+    "SEGMENT3",
+    "SEGMENT4",
+    "SEGMENT5"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Cell Tray Simulation",
+   "writes": {
+    "SCM_ADM_LOOKUP_MASTER_DETAIL": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0112_SAVE_CELL_TRAY_SIMULATION → SP SCP0112_SAVE_CELL_TRAY_SIMULATION 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "LOOKUP_TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SEGMENT1": "p_from_site←(그리드 열에서 오지 않음)",
+    "SEGMENT2": "p_to_site←(그리드 열에서 오지 않음)",
+    "SEGMENT3": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SEGMENT4": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SEGMENT5": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

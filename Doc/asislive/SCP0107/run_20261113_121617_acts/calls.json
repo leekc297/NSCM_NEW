@@ -1,0 +1,23 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 12:15:47.488",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 25.95,
+   "params": {
+    "p_program_id": "SCP0107",
+    "p_sheet_name": "ELTR",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0107', @p_sheet_name='ELTR', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnColumn"
+  }
+ ]
+}

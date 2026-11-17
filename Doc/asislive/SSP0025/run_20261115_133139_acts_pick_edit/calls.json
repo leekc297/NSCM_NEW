@@ -1,0 +1,58 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 13:29:47.848",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 170.56,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:PART_LEADER"
+  },
+  {
+   "at": "2026-11-15 13:30:28.063",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 162.17,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:TEAM_LEADER"
+  },
+  {
+   "at": "2026-11-15 13:31:08.123",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 160.17,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:USER_ID"
+  }
+ ]
+}

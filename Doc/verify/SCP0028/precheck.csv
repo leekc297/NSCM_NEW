@@ -1,0 +1,11 @@
+﻿check,target,result,detail,todo
+R1 AS-IS 사실 묶음,endpoints.csv,PASS,10행,
+R1 AS-IS 사실 묶음,controls.csv,PASS,32행,
+R1 AS-IS 사실 묶음,events.csv,PASS,7행,
+R1 AS-IS 사실 묶음,actions.csv,PASS,330행,
+R1 AS-IS 사실 묶음,grid_columns_asis.csv,PASS,18행,
+R2 AS-IS SP 원문,3개,PASS,화면 호출 SP 전부 원문 있음,
+R3 AS-IS 호출 해석,10행,PASS,풀리지 않은 호출 0,
+R4 AS-IS 컬럼 메타,SCM_MST_SHEET_COLUMNS,PASS,18행,
+R5 분석 문서,3종,PASS,있음,
+R6 TO-BE 사내 DB,16항목,PASS,meta_live_check 16항목 중 FAIL·ERROR 0,

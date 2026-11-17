@@ -1,0 +1,195 @@
+{
+  "asisRoot": "C:\\Projects\\NSCM\\GSCM",
+  "outDir": "C:\\Projects\\NSCM\\Doc\\asisfacts",
+  "foxQueryRoot": "04.WSL\\FoxQuery",
+  "preprocessorSymbols": [
+    "TRACE"
+  ],
+  "excludeDirs": [
+    "bin",
+    "obj",
+    "packages",
+    ".vs",
+    "unvell.ReoGrid",
+    "Simplexcel",
+    "00.Assemblies",
+    "99.Install",
+    "GDC",
+    "WSDL",
+    "10.ERD"
+  ],
+  "screenIdPatterns": [
+    "(?<![A-Z0-9])(DMF\\d{4}|SCPF\\d{4}|DM\\d{4}|SCP\\d{4}|SSP\\d{4}|SCM\\d{4}|FPC\\d{4}|FP\\d{5}|NSD\\d{4}|NMM\\d{4}|NPP\\d{4}|NLE\\d{4}|NEIF\\d{4}|GSD\\d{4}|FDM\\d{4}|FM\\d{4}|MM\\d{4})(?![0-9])"
+  ],
+  "sinks": {
+    "ctor": [
+      {
+        "type": "FoxDataRequest",
+        "arg": 0,
+        "kind": "fox"
+      },
+      {
+        "type": "FoxBizRequest",
+        "arg": 0,
+        "arg2": 1,
+        "kind": "biz"
+      }
+    ],
+    "invoke": [
+      {
+        "method": "ExecuteDataSet",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteDataTable",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteNonQuery",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteScalar",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteQueryDataSet",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteQueryNonQuery",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteQueryScalar",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "ExecuteQueryDataTable",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "CreateCommand",
+        "arg": 0,
+        "kind": "fox",
+        "stringOnly": true
+      },
+      {
+        "method": "GetBatchDefinition",
+        "arg": 0,
+        "arg2": 1,
+        "kind": "sqls",
+        "stringOnly": true
+      }
+    ],
+    "propertyAssign": [
+      {
+        "property": "QueryID",
+        "kind": "fox"
+      }
+    ],
+    "requestParams": [
+      "pagePath",
+      "batchId",
+      "procedure",
+      "procedureName",
+      "sqlId",
+      "queryId",
+      "code",
+      "baseCode",
+      "methodID",
+      "QueryID",
+      "SPName",
+      "spName"
+    ]
+  },
+  "db": {
+    "envFile": "C:\\Projects\\NSCM\\.env.asis",
+    "envKeys": {
+      "host": "ASIS_DB_HOST",
+      "port": "ASIS_DB_PORT",
+      "database": "ASIS_DB_NAME",
+      "user": "ASIS_DB_USER",
+      "password": "ASIS_DB_PASS"
+    },
+    "integratedSecurity": false,
+    "commandTimeoutSec": 300,
+    "metaSourceModules": [
+      "%SPREAD_TITLE%",
+      "%SPD_TITLE%",
+      "UP_FX_GetGSCMSecurityACL",
+      "UP_FX_GetGSCMAuthenticationMenuList",
+      "UP_FX_GetCommonDataList%",
+      "UP_FX_GetUserGroupAuth%",
+      "UP_FX_GetGroupMenuAuth%",
+      "%GET_AUTHORITY%",
+      "%_GET_UI_CATEGORY%",
+      "%MEASUREINFO%"
+    ],
+    "metaTablePatterns": [
+      "TB_FX_%",
+      "SCM_ADM_%",
+      "%SPREAD%",
+      "%SHEET%COL%",
+      "%UI_CATEGORY%",
+      "%MEASURE%SETUP%"
+    ],
+    "metaTables": [],
+    "maxRowsPerTable": 300000,
+    "gridSpPatterns": [
+      "%SPREAD_TITLE%",
+      "%SPD_TITLE%"
+    ],
+    "gridParamDefaults": {
+      "p_bucket": "W",
+      "p_bucket_type": "W"
+    },
+    "gridUser": "__ASISFACTS__",
+    "gridExecTimeoutSec": 60,
+    "gridMetaTables": [
+      "SCM_MST_SHEET_COLUMNS",
+      "SCM_MST_SHEET_MEASURE"
+    ]
+  },
+  "gridApiPatterns": [
+    "^Add\\w*Column\\w*$",
+    "^ColumnHeaderSpan\\w*$",
+    "^SetColumnHeader\\w*$",
+    "^SetSpreadHeaderSpan\\w*$",
+    "^VisibleColumns?$",
+    "^SetVisibleSheetColumn$",
+    "^SetColumnVisible$",
+    "^HiddenColumns?$",
+    "^AddSheet$",
+    "^CreateSheetHeaderColumn\\w*$",
+    "^SetSheetHeaderColumn\\w*$",
+    "^SetSpreadColumn\\w*$",
+    "^InitSpreadDateColumn\\w*$",
+    "^SetCellTypeCombo\\w*$",
+    "^SetComboColumn\\w*$",
+    "^Add\\w*Measure\\w*$",
+    "^SetMeasure\\w*$",
+    "^ChangeSheet$",
+    "^ChangeActiveSheet$",
+    "^InitSheet$",
+    "^GetSheetInfo$",
+    "^SetColumnLabel\\w*$",
+    "^SetColumnWidth\\w*$"
+  ]
+}

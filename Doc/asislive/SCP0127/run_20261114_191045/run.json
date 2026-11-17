@@ -1,0 +1,130 @@
+{
+ "id": "SCP0127",
+ "started": "2026-11-14 19:10:45.291",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-14 19:11:01.921",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0127_PrecedeSafetyStockDay",
+   "form_text": "Precede/Safety Stock Day",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0127_PrecedeSafetyStockDay.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:10.095"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-14 19:11:14.172",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0127\\run_20261114_191045\\dump_load.json",
+   "control_count": 46,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:14.221"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-14 19:11:14.391",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0127\\run_20261114_191045\\shots\\SCP0127_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:14.651"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-14 19:11:14.976",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:16.066"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-14 19:11:21.049",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0127\\run_20261114_191045\\dump_find.json",
+   "control_count": 46,
+   "grid_count": 1,
+   "total": "Total : 534",
+   "time_status": "DB : 0.066s, UI : 0.079s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:21.118"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-14 19:11:21.280",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0127\\run_20261114_191045\\shots\\SCP0127_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 19:11:21.602"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 12,
+  "calls_with_params": 12
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "AsisLive.Host.exe(10920)"
+ ],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0127_PrecedeSafetyStockDay",
+  "form_text": "Precede/Safety Stock Day",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0127_PrecedeSafetyStockDay.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.066s, UI : 0.079s",
+  "total": "Total : 534",
+  "how": "status"
+ },
+ "t_open": "2026-11-14 19:11:01.838",
+ "t_find": "2026-11-14 19:11:14.745",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 46,
+  "layout_items": 15,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 17,
+  "data_rows": 50,
+  "grid_rows": 534,
+  "calls_total": 21,
+  "calls_screen": 12,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-14 19:11:23.129",
+ "exit": 0
+}

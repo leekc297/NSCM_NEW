@@ -1,0 +1,586 @@
+{
+ "id": "SCP0132",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Constraint Of Shipment Qty",
+     "rows_before": 288,
+     "rows_after": 288,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "87_MID_439",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 0,
+       "col": "MDL_GR_NM",
+       "before": "AMRSAEV20-E1",
+       "after": "87_MID_439"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "INSP",
+       "after": "AMRSAEV20-E1"
+      },
+      {
+       "row": 0,
+       "col": "STAGE",
+       "before": "WA00-P",
+       "after": "INSP"
+      },
+      {
+       "row": 0,
+       "col": "FROM_STE_ID",
+       "before": "Ampere Electricity_FR_DOI",
+       "after": "WA00-P"
+      },
+      {
+       "row": 0,
+       "col": "TO_STE_ID",
+       "before": "2026-11-09",
+       "after": "Ampere Electricity_FR_DOI"
+      },
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-11-09"
+      },
+      {
+       "row": 0,
+       "col": "SIPM_MIN_QYT",
+       "before": "5400",
+       "after": "0"
+      },
+      {
+       "row": 0,
+       "col": "SIPM_MAX_QTY",
+       "before": "",
+       "after": "5400"
+      },
+      {
+       "row": 0,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "A",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "VAL_TP_CD",
+       "before": "SYSTEM",
+       "after": "A"
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0001|87_MID_439|AMRSAEV20-E1",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 0,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0001|87_MID_439|AMRSAEV20-E1"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "87_MID_439",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 1,
+       "col": "MDL_GR_NM",
+       "before": "AMRSAEV20-F1",
+       "after": "87_MID_439"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "INSP",
+       "after": "AMRSAEV20-F1"
+      },
+      {
+       "row": 1,
+       "col": "STAGE",
+       "before": "WA00-P",
+       "after": "INSP"
+      },
+      {
+       "row": 1,
+       "col": "FROM_STE_ID",
+       "before": "Ampere Electricity_FR_DOI",
+       "after": "WA00-P"
+      },
+      {
+       "row": 1,
+       "col": "TO_STE_ID",
+       "before": "2026-11-09",
+       "after": "Ampere Electricity_FR_DOI"
+      },
+      {
+       "row": 1,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-11-09"
+      },
+      {
+       "row": 1,
+       "col": "SIPM_MIN_QYT",
+       "before": "5400",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "SIPM_MAX_QTY",
+       "before": "",
+       "after": "5400"
+      },
+      {
+       "row": 1,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "VALID_YN",
+       "before": "A",
+       "after": "Y"
+      },
+      {
+       "row": 1,
+       "col": "VAL_TP_CD",
+       "before": "SYSTEM",
+       "after": "A"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0001|87_MID_439|AMRSAEV20-F1",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 1,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0001|87_MID_439|AMRSAEV20-F1"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "87_MID_440",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 2,
+       "col": "MDL_GR_NM",
+       "before": "AMRSAEV20-E1",
+       "after": "87_MID_440"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "INSP",
+       "after": "AMRSAEV20-E1"
+      },
+      {
+       "row": 2,
+       "col": "STAGE",
+       "before": "WA00-P",
+       "after": "INSP"
+      },
+      {
+       "row": 2,
+       "col": "FROM_STE_ID",
+       "before": "Ampere Electricity_FR_DOI",
+       "after": "WA00-P"
+      },
+      {
+       "row": 2,
+       "col": "TO_STE_ID",
+       "before": "2026-11-10",
+       "after": "Ampere Electricity_FR_DOI"
+      },
+      {
+       "row": 2,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-11-10"
+      },
+      {
+       "row": 2,
+       "col": "SIPM_MIN_QYT",
+       "before": "5400",
+       "after": "0"
+      },
+      {
+       "row": 2,
+       "col": "SIPM_MAX_QTY",
+       "before": "",
+       "after": "5400"
+      },
+      {
+       "row": 2,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "VALID_YN",
+       "before": "A",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "VAL_TP_CD",
+       "before": "SYSTEM",
+       "after": "A"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-05 09:54:28",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0001|87_MID_440|AMRSAEV20-E1",
+       "after": "2025-12-05 09:54:28"
+      },
+      {
+       "row": 2,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0001|87_MID_440|AMRSAEV20-E1"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "87_MID_440",
+       "after": "E129A_E128A"
+      }
+     ],
+     "more": 1096
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Constraint Of Shipment Qty",
+     "rows_before": 288,
+     "rows_after": 288,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 36,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 37,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyDown 처리기 직접 호출 · 키 Delete · 활성 셀 첫 행 SAT_SIPM_MIN_QTY · KeyEventArgs(Delete)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Sf1aeba",
+    "SCP0132-Sc11fc8"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 OPMZ_PLAN_GR_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=null,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=null,pasteOption=All,cellRange=CellRange: 0, 1, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 MDL_GR_NM 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=null,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 ITEM_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=null,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0132-Se6364d"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 01:46:14",
+ "edit_mode": true
+}

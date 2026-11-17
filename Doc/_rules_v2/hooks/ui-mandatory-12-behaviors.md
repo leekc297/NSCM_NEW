@@ -1,4 +1,4 @@
-# Hook #149 — ui-mandatory-12-behaviors ⭐⭐⭐ (사용자 명시 2026-08-28)
+# Hook #156 — ui-mandatory-12-behaviors ⭐⭐⭐ (사용자 명시 2026-08-28)
 
 > **트리거**: nscm-fe UI **신규 생성(T01)·보완(T01M) 전부** — 조회조건(Division/Team/End Customer/Biz.Type/Plant Site/기간/Bucket) ·
 > 그리드(헤더·숫자 서식·필터·합계) 를 만들거나 고치는 모든 작업. 12항목 중 하나라도 "안 봤다" = 누락.
@@ -19,7 +19,7 @@
 2. **판정 근거 = 코드 증거(EV/FE 신호)** — "공용 필드가 담당" 같은 산문만으로 '구현' 을 쓰지 않는다 (DMF0053 `EndCustomerByDivision(Dept)` "정합" 허위 기재 사고).
 3. **AS-IS 가 심판** — 각 항목의 정본은 AS-IS `.cs` 핸들러/프레임워크(`SpreadInfo.cs`)다. 사용자 결정이 AS-IS 와 다른 항목(UM-01 default·UM-09)은 본 hook 에 결정 원문을 남긴다.
 4. **해당없음 규약** — Bucket 이 없는 화면은 UM-08~11 을 `해당없음(bucket 없음)` 으로 명시해야 통과. 조회 전용 화면의 "CRUD reset" 은 `해당없음(편집 축 없음)`.
-5. **런타임 실측** — HTTP 러너(`ui_http_e2e.py`)는 UI 행동을 못 본다. `um12_browser_probe.py`(Playwright, 활성 뷰 스코프)로 UM-01/06/07/08/09/11 을 DOM 실측하고 결과를 대사표 근거에 남긴다.
+5. **런타임 실측** — HTTP 러너(`ui_http_e2e.py`)는 UI 행동을 못 본다. `um12_browser_probe.py`(Playwright, 활성 뷰 스코프)로 UM-01/06/07/08/09/11 을 DOM 실측하고 결과를 대조표 근거에 남긴다. (2026-11-13 정정: 용어 대사표 → 대조표)
 
 ## §1. 12행동 표 (판정 기준·정본·EV 신호)
 
@@ -49,7 +49,7 @@
 
 ### UM-02 Team → End Customer
 - `EndCustomerField` 는 `cascade` prop 을 이미 지원한다(`SearchFields.tsx` L371). **strict:true 필수** — 'EndCustomer' 콤보는 DEPT_ID 공란 행이 대다수라 관대 매칭이면 팀을 골라도 목록이 그대로다(MktFcstForm/BusinessPlanForm 실사고 2회).
-- 대사표에 "공용 필드 내부 전달" 같은 산문으로 '구현' 을 쓰지 않는다 — `cascade={{ DEPT_ID` 가 파일에 있어야 구현이다.
+- 대조표에 "공용 필드 내부 전달" 같은 산문으로 '구현' 을 쓰지 않는다 — `cascade={{ DEPT_ID` 가 파일에 있어야 구현이다.
 
 ### UM-04 자릿수
 - 타이틀 SP 의 `DATA_SCALE_NUMBER`/`COLUMN_WIDTH` 를 **폐기하지 말 것**(`SpreadTitleRow` 타입에 추가). fallback 은 화면별 SP 실측값(DMF0040 0 · DMF0053 3 · DMF0035 0+NOTATION). 정적 컬럼은 `columnMapping.getFormat(scale)` 이 이미 소비 — 동적 컬럼만 하드코딩되는 불일치를 금지.
@@ -64,7 +64,7 @@
 - 위반 예: 월을 주차 위로 병합(2단) — 사용자가 "주차와 날짜값이 1:1" 을 요구한 이유.
 
 ### UM-11/12 합계
-- footer 는 bucket 조건에 넣지 않는다(항상). 서식 n3·LightGray 는 formatItem ColumnFooter 분기. 합계 기준은 클라이언트 합(필터·숨김 제외) — SP 합계행을 만들지 않는다.
+- footer 는 bucket 조건에 넣지 않는다(항상). (2026-11-13 정정: '항상' = bucket 종류와 무관하다는 뜻 — 조회 전 빈 그리드에는 Sum/Subtotal 행을 표시하지 않는다, CR-047) 서식 n3·LightGray 는 formatItem ColumnFooter 분기. 합계 기준은 클라이언트 합(필터·숨김 제외) — SP 합계행을 만들지 않는다.
 
 ## §3. PRE-WRITE / POST-WRITE 점검
 
@@ -93,3 +93,5 @@ grep -rn "columnFooters\|showRowTotals"       # UM-11
 - OLAP 피벗: `features/report/src/pages/demand-plan-waterfall/` (DMF0035) — `OlapPivotGrid` `extraFields/onLayoutChange/onGridInit`, 레일 `FilterEditorPopover`
 - 공용 정정: `packages/shared/.../data-grid/DataGrid.tsx` 헤더 row 높이 row 단위 강제(#93 실측 정정)
 - 원장: `Doc/단위테스트_보완대상/보완요청_원장.md` `REQ:CHAT-20260828-UM{01..12}-{DMF0040|DMF0053|DMF0035}`
+
+> 2026-11-13 번호 정정: #149 → **#156** — RULESET_MASTER §4 의 #149 는 `remediation-closure-symptom-reproduction` 이라 충돌했고, 본 hook 은 카탈로그에 등재돼 있지 않았다(본문 불변).

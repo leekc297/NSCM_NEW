@@ -1,0 +1,634 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "spdSub",
+     "before": [],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "btnModelChange",
+     "before": [
+      "Model Code change",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "Model Code change"
+     ],
+     "after": []
+    },
+    {
+     "control": "btnProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "chkDetail",
+     "before": [],
+     "after": [
+      "Detail",
+      null,
+      null,
+      true,
+      true,
+      true,
+      "Y"
+     ]
+    },
+    {
+     "control": "chkEndCust",
+     "before": [
+      "End Customer(Report) Null",
+      null,
+      null,
+      false,
+      true,
+      true,
+      "ALL"
+     ],
+     "after": []
+    },
+    {
+     "control": "chkProjectInfo",
+     "before": [
+      "Project Null",
+      null,
+      null,
+      false,
+      true,
+      true,
+      "ALL"
+     ],
+     "after": []
+    },
+    {
+     "control": "clbEndCustomer(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      80,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      347,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbTeam(clb)",
+     "before": [
+      "",
+      17,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      109,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "textBox1",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0005-Se9843f",
+    "DMF0005-Scf3183",
+    "DMF0005-S9623cc",
+    "DMF0005-S9c803d",
+    "DMF0005-Sefbf72",
+    "DMF0005-Sefbf72",
+    "DMF0005-S81b48d",
+    "DMF0005-S81b48d",
+    "DMF0005-S2d6162",
+    "DMF0005-S2d6162",
+    "DMF0005-Sb4147b",
+    "DMF0005-Sb4147b",
+    "DMF0005-S11f857",
+    "DMF0005-S11f857"
+   ]
+  },
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "spdSub",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "btnModelChange",
+     "before": [],
+     "after": [
+      "Model Code change",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "Model Code change"
+     ]
+    },
+    {
+     "control": "btnProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "chkDetail",
+     "before": [
+      "Detail",
+      null,
+      null,
+      true,
+      true,
+      true,
+      "Y"
+     ],
+     "after": []
+    },
+    {
+     "control": "chkEndCust",
+     "before": [],
+     "after": [
+      "End Customer(Report) Null",
+      null,
+      null,
+      false,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "chkProjectInfo",
+     "before": [],
+     "after": [
+      "Project Null",
+      null,
+      null,
+      false,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbEndCustomer(clb)",
+     "before": [
+      "",
+      80,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      347,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbTeam(clb)",
+     "before": [
+      "",
+      109,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      17,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "textBox1",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0005-Se9843f",
+    "DMF0005-Scf3183",
+    "DMF0005-S9623cc",
+    "DMF0005-S9c803d",
+    "DMF0005-Sefbf72",
+    "DMF0005-Sefbf72",
+    "DMF0005-S81b48d",
+    "DMF0005-S81b48d",
+    "DMF0005-S2d6162",
+    "DMF0005-S2d6162",
+    "DMF0005-Sb4147b",
+    "DMF0005-Sb4147b",
+    "DMF0005-S11f857",
+    "DMF0005-S11f857"
+   ]
+  },
+  {
+   "control": "clbEndCustomer",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 500개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:-",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0005-Se9843f",
+    "DMF0005-Scf3183",
+    "DMF0005-S9623cc",
+    "DMF0005-S9c803d",
+    "DMF0005-Sfbbe35",
+    "DMF0005-Sfbbe35"
+   ]
+  },
+  {
+   "control": "clbTeam",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 17개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:소형.마케팅.신시장.신시장1팀",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbEndCustomer",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "-"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbEndCustomer(cbo)",
+     "before": [
+      "-",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbEndCustomer(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      66,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      78,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0005-S7bdd59",
+    "DMF0005-Se9843f",
+    "DMF0005-Scf3183",
+    "DMF0005-S9623cc",
+    "DMF0005-S9c803d"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "chkDetail",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "chkEndCust",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(UsrCheckBox)",
+   "scenarios": 1
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 21
+  },
+  {
+   "control": "spdSub",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 6
+  }
+ ],
+ "at": "2026-11-14 09:10:07"
+}

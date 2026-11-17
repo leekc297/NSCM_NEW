@@ -1,0 +1,474 @@
+{
+ "id": "SCP0016",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BtnColumn",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "title": "Column Setting",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdUser/User",
+    "cols": [
+     "COLUMN_NAME",
+     "LARGE_CLASS_LABEL_NAME",
+     "SMALL_CLASS_LABEL_NAME",
+     "COLUMN_LABEL_NAME",
+     "SORT_METHOD_CODE",
+     "SORT_ORDER_NO",
+     "USER_SORT_METHOD_CODE",
+     "SUB_TOTAL_FLAG",
+     "USER_SELECTABLE_FLAG"
+    ],
+    "row": [
+     "DIVISION_ID",
+     "Division",
+     "Division",
+     "Division",
+     "",
+     "1.00",
+     "ASC",
+     "",
+     "N"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "controls": [],
+    "grids": [
+     {
+      "grid": "spdBase",
+      "sheet": "Base",
+      "rows": 0,
+      "cols": [
+       "LARGE_CLASS_LABEL_NAME",
+       "SMALL_CLASS_LABEL_NAME",
+       "COLUMN_LABEL_NAME"
+      ]
+     },
+     {
+      "grid": "spdUser",
+      "sheet": "User",
+      "rows": 20,
+      "cols": [
+       "LARGE_CLASS_LABEL_NAME",
+       "SMALL_CLASS_LABEL_NAME",
+       "COLUMN_LABEL_NAME",
+       "USER_SORT_METHOD_CODE"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 20
+    }
+   },
+   "pick_act": {
+    "ok": false,
+    "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7"
+   },
+   "pick_button": "ButtonItem OK",
+   "pick_ok": {
+    "ok": true,
+    "closed": true,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP",
+    "SCM0002_SET_TITLESET_POPUP",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": [
+    {
+     "text": "저장 하였습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  },
+  {
+   "control": "BtnItem_Id",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 60187
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "81",
+     "Automotive Battery",
+     "A23US4001",
+     "Indego 50",
+     "Aeonus_KR_GUN",
+     "Aeonus_KR_GUN",
+     "AAEN1078I-A1-G00",
+     "ACEN1078I-A1-G00 P",
+     "H",
+     "E78-G00",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 60187,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#1",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    },
+    {
+     "control": "txtItem_Id#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "BtnProject",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ProjectbyDivisionPopup",
+    "title": "Project by Division",
+    "rows": 1091
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "PROJECT_STATUS",
+     "BIZ_TYPE",
+     "CURRENCY",
+     "PROJECT_VER_SEQ",
+     "PROJECT_OWNER"
+    ],
+    "row": [
+     "",
+     "81",
+     "Automotive Battery",
+     "A20DR1007",
+     "[Daimler]PB340_Cell_EVO",
+     "REG",
+     "Battery Cell",
+     "",
+     "0000000001",
+     "HUN.CHOI"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ProjectbyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ProjectbyDivisionPopup",
+    "controls": [
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 1091,
+      "cols": [
+       "DIVISION_ID",
+       "DIVISION_NAME",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "PROJECT_STATUS",
+       "BIZ_TYPE",
+       "CURRENCY",
+       "PROJECT_VER_SEQ",
+       "PROJECT_OWNER"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#2",
+     "before": "",
+     "after": "A20DR1007"
+    },
+    {
+     "control": "txtProject#0",
+     "before": "",
+     "after": "A20DR1007"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnMeasure",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "title": "Measure Setting",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdUser/User",
+    "cols": [
+     "COLUMN_NAME",
+     "LARGE_CLASS_LABEL_NAME",
+     "SMALL_CLASS_LABEL_NAME",
+     "COLUMN_LABEL_NAME",
+     "SORT_METHOD_CODE",
+     "SORT_ORDER_NO",
+     "USER_SORT_METHOD_CODE",
+     "SUB_TOTAL_FLAG",
+     "USER_SELECTABLE_FLAG"
+    ],
+    "row": [
+     "MKT_FCST",
+     "",
+     "",
+     "MKT FCST",
+     "",
+     "1.00",
+     "",
+     "",
+     "Y"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "controls": [],
+    "grids": [
+     {
+      "grid": "spdBase",
+      "sheet": "Base",
+      "rows": 0,
+      "cols": [
+       "COLUMN_LABEL_NAME"
+      ]
+     },
+     {
+      "grid": "spdUser",
+      "sheet": "User",
+      "rows": 8,
+      "cols": [
+       "COLUMN_LABEL_NAME"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 8
+    }
+   },
+   "pick_act": {
+    "ok": false,
+    "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7"
+   },
+   "pick_button": "ButtonItem OK",
+   "pick_ok": {
+    "ok": true,
+    "closed": true,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP",
+    "SCM0002_SET_TITLESET_POPUP",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": [
+    {
+     "text": "저장 하였습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnColumn": {
+   "forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "edit": false,
+   "src": "run_20261113_111608_acts"
+  },
+  "BtnItem_Id": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_111608_acts"
+  },
+  "BtnProject": {
+   "forms": [
+    "SCM0002_ProjectbyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_111608_acts"
+  },
+  "btnMeasure": {
+   "forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "edit": false,
+   "src": "run_20261113_111608_acts"
+  }
+ },
+ "at": "2026-11-15 12:06:31"
+}

@@ -1,0 +1,654 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-15T04:00:56+09:00",
+ "producer": "run_verify",
+ "id": "SSP0021",
+ "skip_e2e": false,
+ "started": "2026-11-14 22:31:26",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-e5a58b4b",
+   "class": "I1",
+   "msg": "SSP0021 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META SCM_ADM_MSG_M · nscm-fe\\features\\shipping\\src\\pages\\shipment-plan-auto-ess"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e5f95653",
+   "class": "F10",
+   "msg": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b93a10f3",
+   "class": "F10",
+   "msg": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b9d670a4",
+   "class": "B6",
+   "msg": "조회조건 Company",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c8f09f4b",
+   "class": "M4",
+   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d8dcaf4f",
+   "class": "G4",
+   "msg": "D00-1-021 · §1 usrConditionPanel1 / UsrConditionPanel",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e5896ed8",
+   "class": "G4",
+   "msg": "D00-1-028 · §1 usrLayoutControl2 / UsrLayoutControl",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-526e2cf4",
+   "class": "G4",
+   "msg": "D00-1-029 · §1 usrLayoutControl3 / UsrLayoutControl",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4fc30204",
+   "class": "C1",
+   "msg": "cboPlanDate / Plan-date / Plan Date",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9b9c574b",
+   "class": "G4",
+   "msg": "COMMON:UC-06 · Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1daf91b1",
+   "class": "G4",
+   "msg": "Division/Company · `SSP0021_GET_SHIPMENT_DIVISION`(2결과셋, VP UNION·NERP·81_UC)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-56003678",
+   "class": "G4",
+   "msg": "From Site · `Com_FromSite_SCP`",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b3447518",
+   "class": "G4",
+   "msg": "Plan Date · `Plan_Infor_SCP` @companyId",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5f85ab83",
+   "class": "G4",
+   "msg": "Period · PlanDate 파생 FROM_DATE/TO_DATE1",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4ed36ae8",
+   "class": "G4",
+   "msg": "Result Type · lookup `SSP_SHIPMENT_RESULT_TYPE`",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-50f95d9e",
+   "class": "G4",
+   "msg": "Requestor · UserInfoPopup(single)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d5314e68",
+   "class": "G4",
+   "msg": "Box ID · 자유입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-106a9c23",
+   "class": "G4",
+   "msg": "Measure · SCM0002_TitleSetForm_Popup",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a6ed2f39",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.BtnMeasure_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e80fa120",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.EditButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-86d2012f",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6dcf2a62",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.FindData_Detail",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1c594385",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-68929ad7",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.FindData_Shipment_Result",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-db445a52",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7da1bef5",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.NonSoNo",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9eb01ede",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.Plan_Current_Check",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1262e5dc",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SaveData_Detail",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-35124956",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.Simulation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-76f71f99",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SoNo",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f77657eb",
+   "class": "M4",
+   "msg": "DIVISION_ID / Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2bdfa178",
+   "class": "M4",
+   "msg": "ERP_SO_NO / SO No",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1eacfd50",
+   "class": "M4",
+   "msg": "CONFIRM_ID / Confirm/Plan ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0b96ede9",
+   "class": "M4",
+   "msg": "SHIPMENT_DATE / Shipment Date",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a6b72e08",
+   "class": "M4",
+   "msg": "REMARKS2 / Building",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-82243f93",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdDetail_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f1afe53b",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdDetail_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-95ddb6af",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdDetail_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6dae67af",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdDetail_EditChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-00f86c94",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4f61c06e",
+   "class": "M4",
+   "msg": "BOH_QTY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b7afeaa2",
+   "class": "M4",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 03:59"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5c797950",
+   "class": "M4",
+   "msg": "SSP0021_ShipmentPlan.SpdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9d95cf1d",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c55983cb",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.Validation_Check",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c24506b6",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.checkValidN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-47e327c3",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.chkERPIFBlockYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-16e1ed8c",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.clbCompanyID_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-761cd271",
+   "class": "X-ROW",
+   "msg": "SSP0021_ShipmentPlan.shtDetail_Change",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 D1, E1, F2, F6, G3, K-SA, D2, C5, H13, K6 — Doc/verify/SSP0021/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 3676,
+  "PASS": 889,
+  "FAIL": 49,
+  "판정필요": 78,
+  "미검증": 1318,
+  "해당없음": 1342,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1718,
+   "없음(미검증)": 1318,
+   "없음(판정 대기)": 78,
+   "사람": 2,
+   "기계(상속·집계)": 542,
+   "출처 미기록": 18
+  },
+  "fail_listed": 49,
+  "coverage": {
+   "rules": 96,
+   "measured": 775,
+   "not_run_error": 1099,
+   "na": 824,
+   "suspect_na100": [
+    "D1",
+    "E1",
+    "F2",
+    "F6",
+    "G3",
+    "K-SA",
+    "D2",
+    "C5",
+    "H13",
+    "K6"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SSP0021_ShipmentPlanAutoEss_CheckList_v7.xlsx",
+  "ActionItemList": "Doc/CheckList/SSP0021_ShipmentPlanAutoEss_ActionItemList_v7.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0021/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 D1, E1, F2, F6, G3, K-SA, D2, C5, H13, K6 — Doc/verify/SSP0021/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

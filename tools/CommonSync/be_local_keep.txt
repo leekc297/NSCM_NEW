@@ -1,0 +1,7 @@
+# BE(nscm-be) 로컬 필수 유지 소스 — Source Download & Merge(BE) 가 작업 모드와 무관하게 로컬 파일을 그대로 둔다.
+# 로컬 환경 파일(항상 로컬 유지)과 '한 쌍'으로 동작하는 소스만 적는다. 한 줄에 경로 하나(nscm-be 기준 · fnmatch 패턴 가능). '#' = 주석.
+# 공통과 다르면 보고서에 '공통과 다름 — 필요하면 직접 반영' 으로 나온다.
+
+# 2026-11-12: 로컬 mybatis-config.xml 의 callSettersOnNulls=true 와 한 쌍 — put() 의 null 가드가 없으면 NULL 컬럼이 있는 모든 조회가
+#   NullPointerException("value" is null)으로 실패한다(11-12 10:28 실사고: DB MODE 다운로드가 공통 원문으로 덮어써 전 화면 SQL ERROR).
+src/main/java/com/lgcns/nscm/framework/model/CustomMap.java

@@ -1,7 +1,7 @@
 # SCP0105 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-speed-plan` · feature: supply · As-is Fact Pack 있음
-- 파일 23 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 30 · 컴포넌트 사용 53 · 하드코딩 컬럼 1 · 메시지 24
+- 파일 23 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 30 · 컴포넌트 사용 53 · 하드코딩 컬럼 1 · 메시지 25
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -125,6 +125,7 @@
 | LBL00027 | 1 |
 | LBL00618 | 1 |
 | LBL00053 | 1 |
+| LBL01275 | 1 |
 | LBL00014 | 1 |
 | LBL00015 | 1 |
 | LBL00030 | 1 |

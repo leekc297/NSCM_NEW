@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3386,
+  "at": "2026-11-14T01:45:41.483Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ }
+]

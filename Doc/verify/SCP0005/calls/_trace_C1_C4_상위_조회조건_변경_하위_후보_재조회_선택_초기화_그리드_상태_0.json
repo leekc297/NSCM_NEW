@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1913,
+  "at": "2026-11-13T20:56:32.090Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1893,
+  "at": "2026-11-13T20:56:39.759Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1920,
+  "at": "2026-11-13T20:56:47.181Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 827,
+  "at": "2026-11-13T20:56:49.333Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ }
+]

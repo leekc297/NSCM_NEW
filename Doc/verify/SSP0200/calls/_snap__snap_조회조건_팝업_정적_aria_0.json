@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 214,
+  "at": "2026-11-14T20:42:25.251Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

@@ -62,7 +62,7 @@
  {
   "row_id": "V-e3db601d",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요 · 전제 Div - · calls 1 · rows -1 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1493 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0084\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 1 · rows -1 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "76e850b6",
   "mctx": {
@@ -82,7 +82,7 @@
  {
   "row_id": "V-e59b135d",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요 · 전제 Div - · calls 1 · rows -1 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1493 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0084\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 1 · rows -1 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "dd9a0f7d",
   "mctx": {
@@ -109,19 +109,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-5ebb12ee",
   "result": "PASS",
-  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0(공통 접속 로그 5xx 1건 제외 — 화면 무관 · /api/admin/log/menu-access) · 재오픈 직후 행 0(최초 진입 0)",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
   "tobe_ref": "E2E @trace",
   "cond": "f092268c",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-a124547c",
@@ -133,7 +135,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-16b03290",
@@ -145,7 +148,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-018e1d63",
@@ -157,7 +161,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-46cdbd59",
@@ -169,7 +174,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-e6adf7d1",
@@ -181,7 +187,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-51da184d",
@@ -193,7 +200,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-ea96e630",
@@ -205,7 +213,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-764a45d1",
@@ -217,7 +226,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-40f85377",
@@ -229,7 +239,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-695ee0f7",
@@ -241,7 +252,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-e10eea6a",
@@ -253,7 +265,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-1cd56030",
@@ -265,19 +278,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-3408d1cb",
   "result": "PASS",
-  "evidence": "PKG_SCP0084.P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET: 저장 호출 1회 HTTP 200 · SQL 오류 없음 · main/SAVE:200 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
+  "evidence": "PKG_SCP0084.P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET: 저장 호출 2회 HTTP 200 · SQL 오류 없음 · main/SAVE:200 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}} | main/SAVE:200 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
   "tobe_ref": "E2E @verify CRUD 실저장",
   "cond": "abe34a40",
   "mctx": {
-   "calls": 4,
+   "calls": 7,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-74601cc9",
@@ -289,7 +304,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-f230fcbd",
@@ -301,90 +317,254 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
-  "row_id": "T-71c43700",
+  "row_id": "T-ee7e76fe",
   "result": "PASS",
-  "evidence": "PLANT_ID: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "evidence": "YYYYMM: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "55c7a24a",
+  "cond": "a488ab0c",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-73540be1",
   "result": "PASS",
   "evidence": "DIVISION_ID: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "a1d89324",
+  "cond": "9bf58f9e",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
-  "row_id": "T-fe421603",
+  "row_id": "T-c8533f53",
   "result": "PASS",
-  "evidence": "PLANT_ID: AS-IS 'Plant' = TO-BE 헤더 'Plant'",
+  "evidence": "PLANT_DESCRIPTION: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "55c7a24a",
+  "cond": "33f8a029",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-71c43700",
+  "result": "PASS",
+  "evidence": "PLANT_ID: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "202b285e",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-fd267742",
+  "result": "PASS",
+  "evidence": "YYYYMM: AS-IS 'YY.MM' = TO-BE 헤더 'YY.MM'",
+  "tobe_ref": "E2E @trace",
+  "cond": "a488ab0c",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-592f579b",
   "result": "PASS",
   "evidence": "DIVISION_ID: AS-IS 'DIV' = TO-BE 헤더 'DIV'",
   "tobe_ref": "E2E @trace",
-  "cond": "a1d89324",
+  "cond": "9bf58f9e",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-63c03a62",
+  "result": "PASS",
+  "evidence": "PLANT_DESCRIPTION: AS-IS 'Plant Site' = TO-BE 헤더 'Plant Site'",
+  "tobe_ref": "E2E @trace",
+  "cond": "33f8a029",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-fe421603",
+  "result": "PASS",
+  "evidence": "PLANT_ID: AS-IS 'Plant' = TO-BE 헤더 'Plant'",
+  "tobe_ref": "E2E @trace",
+  "cond": "202b285e",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-30041f39",
+  "result": "PASS",
+  "evidence": "ITEM_UOM: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "de4e608f",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-694370b1",
+  "result": "PASS",
+  "evidence": "ITEM_UOM: AS-IS 'Unit' = TO-BE 헤더 'Unit'",
+  "tobe_ref": "E2E @trace",
+  "cond": "de4e608f",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-91e2e28b",
   "result": "PASS",
   "evidence": "MEMO: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "f765a5c5",
+  "cond": "d2380181",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-6d631bca",
   "result": "PASS",
   "evidence": "MEMO: AS-IS 'Memo' = TO-BE 헤더 'Memo'",
   "tobe_ref": "E2E @trace",
-  "cond": "f765a5c5",
+  "cond": "d2380181",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-5f450715",
+  "result": "PASS",
+  "evidence": "OCCR_RSN_CD: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c3b5f4d5",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-35116c0f",
+  "result": "PASS",
+  "evidence": "EXHT_TP_CD: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "e91626c2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-0c211ddf",
+  "result": "PASS",
+  "evidence": "QTY_1: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7ea968b2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-fb6a5481",
+  "result": "PASS",
+  "evidence": "OCCR_RSN_CD: AS-IS '발생사유 유형' = TO-BE 헤더 '발생사유 유형'",
+  "tobe_ref": "E2E @trace",
+  "cond": "c3b5f4d5",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-009163ea",
+  "result": "PASS",
+  "evidence": "EXHT_TP_CD: AS-IS '소진방안 유형' = TO-BE 헤더 '소진방안 유형'",
+  "tobe_ref": "E2E @trace",
+  "cond": "e91626c2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-56715629",
+  "result": "PASS",
+  "evidence": "QTY_1: AS-IS 'QTY_1' = TO-BE 헤더 'QTY_1'",
+  "tobe_ref": "E2E @trace",
+  "cond": "7ea968b2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f2f88791",
   "result": "PASS",
-  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 3컬럼 대조): 누락 없음 · 추가 없음",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 9컬럼 대조): 누락 없음 · 추가 없음",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4dc88ac7",
@@ -396,19 +576,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c0295816",
   "result": "PASS",
-  "evidence": "Long Term Stock · Div 40 대조 59컬럼 일치",
+  "evidence": "Long Term Stock · 시트 확정: 메타 정의 대조 — 그리드 컬럼 46개 중 100% 가 'Long Term Stock'(정의 57컬럼) · Div 40 대조 59컬럼 일치",
   "tobe_ref": "E2E @verify Division 컬럼",
   "cond": "78bc6edc",
   "mctx": {
    "calls": 1,
    "rows": 2038,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2fb7b571",
@@ -420,7 +602,8 @@
    "calls": 1,
    "rows": 2038,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c777baf5",
@@ -432,67 +615,255 @@
    "calls": 1,
    "rows": 2038,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-4ecd13f3",
   "result": "PASS",
   "evidence": "기존행 r0 MEMO 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "e48cc8e2",
+  "cond": "44a722b9",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
-  "row_id": "T-09d20858",
-  "result": "PASS",
-  "evidence": "PLANT_ID: 기존행 편집=false 표시 일치",
+  "row_id": "T-352cf5a4",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음",
   "tobe_ref": "E2E @trace",
-  "cond": "55c7a24a",
+  "cond": "a7899761",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-6c27e428",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "2eb23b90",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-ade9edce",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "b5deab8c",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-901e5ddd",
+  "result": "PASS",
+  "evidence": "YYYYMM: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "a488ab0c",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-cc222770",
   "result": "PASS",
   "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "a1d89324",
+  "cond": "9bf58f9e",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-13a0edd3",
+  "result": "PASS",
+  "evidence": "PLANT_DESCRIPTION: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "33f8a029",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-09d20858",
+  "result": "PASS",
+  "evidence": "PLANT_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "202b285e",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-e1add64d",
+  "result": "PASS",
+  "evidence": "ITEM_UOM: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "de4e608f",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-1cef9004",
   "result": "PASS",
   "evidence": "MEMO: 기존행 편집=true 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "f765a5c5",
+  "cond": "d2380181",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-6a01db9f",
+  "result": "NA",
+  "evidence": "OCCR_RSN_CD 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "c3b5f4d5",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-acc01456",
+  "result": "NA",
+  "evidence": "EXHT_TP_CD 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "e91626c2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-81b75947",
+  "result": "NA",
+  "evidence": "QTY_1 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "7ea968b2",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-31a47125",
+  "result": "판정필요",
+  "evidence": "LONG_TERM_STOCK_QTY 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "d519caec",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-3ff3faf4",
+  "result": "판정필요",
+  "evidence": "LONG_TERM_STOCK_AMOUNT 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "c00f53da",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-5d6662af",
+  "result": "판정필요",
+  "evidence": "LONG_TERM_STOCK_AMOUNT_XLS 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "2f8cf20d",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-4e7583c4",
+  "result": "판정필요",
+  "evidence": "LONG_TERM_STOCK_QTY_XLS 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "a5785d46",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-1a8ec3b0",
   "result": "FAIL",
   "evidence": "r0  → MEMO 편집=true (AS-IS 잠금 EditButton:242) NG · r1  → MEMO 편집=true (AS-IS 잠금 EditButton:242) NG · r0  → MEMO 편집=true (AS-IS 해제 EditButton:249) OK · r1  → MEMO 편집=true (AS-IS 해제 EditButton:249) OK",
   "tobe_ref": "E2E @trace",
-  "cond": "d3305925",
+  "cond": "c1fb8b5e",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-e81bb3c3",
+  "result": "NA",
+  "evidence": "checkRequiredOfSearch: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "278fe60a",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-ab25515c",
@@ -504,43 +875,73 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
-  "row_id": "T-a0653811",
+  "row_id": "T-39ff0e51",
   "result": "NA",
-  "evidence": "PLANT_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "evidence": "YYYYMM: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "47a974c5",
+  "cond": "01d9e4bc",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-7c874f34",
   "result": "NA",
   "evidence": "DIVISION_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "69c87add",
+  "cond": "59606bd8",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-27fa1912",
+  "result": "NA",
+  "evidence": "PLANT_DESCRIPTION: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "e85952cc",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-a0653811",
+  "result": "NA",
+  "evidence": "PLANT_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "d37ec967",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-2320aeda",
   "result": "NA",
   "evidence": "MEMO: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "fad8fffe",
+  "cond": "015e7853",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-60c557d3",
@@ -552,7 +953,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-672e0253",
@@ -564,7 +966,60 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-cbcb9e42",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-b72a6032",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-27d6f458",
+  "result": "NA",
+  "evidence": "cboDivision: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "14a7a4f8",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-c3fde271",
+  "result": "NA",
+  "evidence": "clbPlant: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9c0d0b8a",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-d24b773b",
@@ -576,7 +1031,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-68975b32",
@@ -588,7 +1044,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-f4ba1ec1",
@@ -600,7 +1057,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-fac4f2c2",
@@ -612,19 +1070,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
- },
- {
-  "row_id": "T-e81bb3c3",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "aed28b7d",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-6633e007",
@@ -636,7 +1083,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-e974ecbb",
@@ -648,126 +1096,85 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-5eb7ae09",
   "result": "판정필요",
-  "evidence": "MSG00100 — ExcelButton 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(ExcelButton)에서 판정",
+  "evidence": "MSG00100 — ExcelButton 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(ExcelButton)에서 판정",
   "tobe_ref": "E2E @trace",
   "cond": "298f4128",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-4a0d3125",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "result": "판정필요",
+  "evidence": "MSG00100 — ExcelButton 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(ExcelButton)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "4485c728",
+  "cond": "c941722f",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-8cf7f35b",
   "result": "NA",
   "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace",
-  "cond": "8566053a",
+  "cond": "d484f52f",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-1ec2ec55",
   "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "evidence": "MSG00004: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (result != null && result.Rows.Count > 0 && result.Rows[0][\"result_code\"].ToString().Equals(\"S\"))' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
-  "cond": "90a0043c",
+  "cond": "7f6cdf87",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-c686967d",
   "result": "NA",
   "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace",
-  "cond": "8566053a",
+  "cond": "d484f52f",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
- },
- {
-  "row_id": "T-cbcb9e42",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "44694b77",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-b72a6032",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "44694b77",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-27d6f458",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "491c5349",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-c3fde271",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "4bcffbb1",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8a056ad0",
   "result": "판정필요",
-  "evidence": "MSG00100 — ExcelButton 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(ExcelButton)에서 판정",
+  "evidence": "MSG00100 — ExcelButton 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(ExcelButton)에서 판정",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-77be1078",
@@ -778,7 +1185,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d95d50c8",
@@ -789,7 +1197,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b7834ea4",
@@ -800,7 +1209,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a7c693c9",
@@ -811,7 +1221,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-de3dcfeb",
@@ -822,7 +1233,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-d475b28f",
@@ -834,7 +1246,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-efd41c33",
@@ -846,7 +1259,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-b24e72de",
@@ -858,7 +1272,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-64557d04",
@@ -869,7 +1284,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1ef15dc6",
@@ -880,31 +1296,60 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
-  "row_id": "T-388e3376",
+  "row_id": "T-698d30a3",
   "result": "PASS",
-  "evidence": "PLANT_ID: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 'AZ00' 세로 병합됨(rowSpan=40) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=1 · column.allowMerging=true",
+  "evidence": "YYYYMM: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 '‘26.09' 세로 병합됨(rowSpan=40) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=1 · column.allowMerging=true",
   "tobe_ref": "E2E @trace",
-  "cond": "59ac6bf7",
+  "cond": "e7a8b8f3",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-ea3c44af",
   "result": "PASS",
   "evidence": "DIVISION_ID: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 '40' 세로 병합됨(rowSpan=40) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=1 · column.allowMerging=true",
   "tobe_ref": "E2E @trace",
-  "cond": "e5503e4a",
+  "cond": "76510977",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-0be12ddb",
+  "result": "PASS",
+  "evidence": "PLANT_DESCRIPTION: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 'AZ Arizona Mobile Prod' 세로 병합됨(rowSpan=40) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=1 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace",
+  "cond": "343d0ecb",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
+ },
+ {
+  "row_id": "T-388e3376",
+  "result": "PASS",
+  "evidence": "PLANT_ID: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 'AZ00' 세로 병합됨(rowSpan=40) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=1 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace",
+  "cond": "4c3a1d08",
+  "mctx": {
+   "calls": 1,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-15ce3a4f",
@@ -915,7 +1360,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2049ff84",
@@ -927,7 +1373,8 @@
    "calls": 2,
    "rows": 80,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1651a9dc",
@@ -939,7 +1386,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d384c6e7",
@@ -951,7 +1399,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0fcb0471",
@@ -963,7 +1412,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f33ab31a",
@@ -975,7 +1425,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-96456e30",
@@ -986,7 +1437,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2fcfba97",
@@ -998,19 +1450,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f8ae66ab",
-  "result": "PASS",
-  "evidence": "MEMO 수정 'M' → 원값 복원 뒤 상태 해제",
+  "result": "NA",
+  "evidence": "값 있는 편집 가능 칸 없음 — 수정 기능 없는 화면",
   "tobe_ref": "E2E @verify 병합 셀",
   "cond": "0c603b16",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-6bf7aa09",
@@ -1022,7 +1476,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-89772bc9",
@@ -1033,7 +1488,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "T-5e3aa0f7",
@@ -1045,7 +1501,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-52ab41c1",
@@ -1056,7 +1513,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-264e4f35",
@@ -1067,7 +1525,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-603d64ac",
@@ -1078,7 +1537,8 @@
    "calls": 3,
    "rows": 2038,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d56bfe63",
@@ -1089,7 +1549,8 @@
    "calls": 3,
    "rows": 2038,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-907975a9",
@@ -1100,7 +1561,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-09513841",
@@ -1111,7 +1573,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1a1458be",
@@ -1122,7 +1585,8 @@
    "calls": 3,
    "rows": 1299,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-61a14539",
@@ -1133,7 +1597,8 @@
    "calls": 3,
    "rows": 1299,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-36f7297f",
@@ -1144,7 +1609,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8f799e17",
@@ -1155,7 +1621,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5c49e1b9",
@@ -1166,7 +1633,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4f1fcab6",
@@ -1177,7 +1645,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-089abac5",
@@ -1188,7 +1657,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d8b7f520",
@@ -1199,7 +1669,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-97ca23a8",
@@ -1210,7 +1681,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0dd402d7",
@@ -1221,7 +1693,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ad53d1fb",
@@ -1232,7 +1705,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1386a8c1",
@@ -1243,7 +1717,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d2147ae3",
@@ -1254,7 +1729,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f04fdc38",
@@ -1265,7 +1741,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2d0ecf9b",
@@ -1276,7 +1753,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c246bf49",
@@ -1287,7 +1765,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-92c52de4",
@@ -1298,7 +1777,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-339fd9f0",
@@ -1309,7 +1789,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ce55855f",
@@ -1320,7 +1801,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e39f2266",
@@ -1331,7 +1813,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f7909cab",
@@ -1342,7 +1825,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bb577791",
@@ -1353,7 +1837,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b475994e",
@@ -1365,7 +1850,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d1a7b6f7",
@@ -1376,7 +1862,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-edbf42cc",
@@ -1387,7 +1874,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ccfacf42",
@@ -1398,7 +1886,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-62ca59ae",
@@ -1409,7 +1898,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bb7aa82d",
@@ -1420,7 +1910,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-aae569c7",
@@ -1431,7 +1922,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-829e893d",
@@ -1442,7 +1934,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-641ad9f6",
@@ -1453,7 +1946,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0fd3f39d",
@@ -1464,7 +1958,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2b97bfce",
@@ -1475,7 +1970,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4a3a4a32",
@@ -1486,7 +1982,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a1ee113c",
@@ -1497,7 +1994,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3792b252",
@@ -1508,7 +2006,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1fc98f4c",
@@ -1519,7 +2018,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a89ead12",
@@ -1530,7 +2030,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-54c8f550",
@@ -1541,7 +2042,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-53131c9c",
@@ -1552,7 +2054,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2c8870cd",
@@ -1563,7 +2066,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-53cd7cca",
@@ -1574,7 +2078,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e0d2a7f9",
@@ -1585,7 +2090,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-427b8b33",
@@ -1596,7 +2102,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a9b774de",
@@ -1607,7 +2114,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f160e136",
@@ -1618,7 +2126,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d926c683",
@@ -1629,7 +2138,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b8633db8",
@@ -1640,7 +2150,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-264a1db4",
@@ -1651,7 +2162,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9e69680b",
@@ -1662,7 +2174,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d46301b2",
@@ -1673,7 +2186,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-eca5f60b",
@@ -1684,7 +2198,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-58299689",
@@ -1695,7 +2210,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-af6826a5",
@@ -1706,7 +2222,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-744e00e7",
@@ -1717,7 +2234,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ebe0b6df",
@@ -1728,29 +2246,32 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-38a3fbc7",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 1325ms(요청~응답 1325ms · 벽시계 1149ms) · 10274행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 1234ms(요청~응답 1234ms · 벽시계 1725ms) · 10274행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0a737807",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 1325ms(요청~응답 1325ms · 벽시계 1149ms) · 10274행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 1234ms(요청~응답 1234ms · 벽시계 1725ms) · 10274행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8dc83c0b",
@@ -1762,7 +2283,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fc2b2ca2",
@@ -1773,7 +2295,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-40db4fa2",
@@ -1784,7 +2307,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3e015a9f",
@@ -1795,7 +2319,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-18bd9154",
@@ -1806,7 +2331,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-90b54b52",
@@ -1817,7 +2343,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fa581acd",
@@ -1828,7 +2355,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1bb8608f",
@@ -1839,7 +2367,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c62bc843",
@@ -1850,7 +2379,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-681619c6",
@@ -1861,7 +2391,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8d834537",
@@ -1873,7 +2404,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5b0ebeee",
@@ -1885,7 +2417,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-21e6fbef",
@@ -1897,7 +2430,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-35a0696b",
@@ -1908,7 +2442,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-687596b6",
@@ -1920,7 +2455,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c62249af",
@@ -1931,7 +2467,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b418fe4b",
@@ -1942,7 +2479,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-12f7a41c",
@@ -1953,7 +2491,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-aa518fdb",
@@ -1964,7 +2503,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-88e1edfd",
@@ -1976,7 +2516,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3249d3b7",
@@ -1988,7 +2529,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ef3486f8",
@@ -1999,7 +2541,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f5443b84",
@@ -2010,7 +2553,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bd85804e",
@@ -2021,7 +2565,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-da965328",
@@ -2032,7 +2577,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ac72fab2",
@@ -2043,7 +2589,8 @@
    "calls": 2,
    "rows": 4111,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d7a28771",
@@ -2055,7 +2602,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cde36668",
@@ -2067,7 +2615,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-51059f21",
@@ -2079,7 +2628,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3e4712c2",
@@ -2091,7 +2641,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6e0d6956",
@@ -2103,7 +2654,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c3deeb54",
@@ -2115,7 +2667,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5b4a2b71",
@@ -2127,7 +2680,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-425f4b22",
@@ -2139,7 +2693,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-73ebf4e2",
@@ -2151,7 +2706,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fd6fa3b1",
@@ -2163,7 +2719,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-43cb9135",
@@ -2175,7 +2732,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7bf1a2fc",
@@ -2187,7 +2745,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fe3ff4cd",
@@ -2199,7 +2758,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-728240ad",
@@ -2211,7 +2771,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-85870e95",
@@ -2223,7 +2784,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b900881a",
@@ -2235,7 +2797,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cfeab070",
@@ -2247,7 +2810,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4a89d9be",
@@ -2259,7 +2823,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b6e695af",
@@ -2271,7 +2836,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9d0e36bd",
@@ -2283,7 +2849,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-206caf8d",
@@ -2295,7 +2862,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b924b7a1",
@@ -2307,7 +2875,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c75ec88b",
@@ -2319,7 +2888,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-70313d59",
@@ -2331,7 +2901,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-17015b11",
@@ -2343,7 +2914,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-895ab699",
@@ -2355,7 +2927,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b3c6643b",
@@ -2367,7 +2940,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-80b8502f",
@@ -2379,7 +2953,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9a04fa95",
@@ -2391,7 +2966,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6dec37aa",
@@ -2403,7 +2979,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a34e4641",
@@ -2415,7 +2992,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-090df612",
@@ -2427,7 +3005,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cef74330",
@@ -2439,7 +3018,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e3abd0ff",
@@ -2451,7 +3031,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-50368fbc",
@@ -2463,7 +3044,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f0eac178",
@@ -2475,7 +3057,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-21c3ff91",
@@ -2487,7 +3070,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-113da444",
@@ -2499,7 +3083,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6ebeff78",
@@ -2511,7 +3096,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-78f7b2af",
@@ -2523,7 +3109,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a3838f77",
@@ -2535,7 +3122,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-081acb2e",
@@ -2547,7 +3135,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a4687cdd",
@@ -2559,7 +3148,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f0e1496b",
@@ -2571,7 +3161,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-404aed29",
@@ -2583,7 +3174,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7d0f1bc8",
@@ -2595,7 +3187,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-78da81fc",
@@ -2607,7 +3200,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bde7b7d3",
@@ -2619,7 +3213,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a40ca601",
@@ -2631,7 +3226,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-00556d19",
@@ -2643,7 +3239,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-322968e8",
@@ -2655,7 +3252,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c7658336",
@@ -2667,7 +3265,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-23ffb006",
@@ -2679,7 +3278,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-da1d0a71",
@@ -2691,7 +3291,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2368b723",
@@ -2703,7 +3304,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-76d0225e",
@@ -2715,7 +3317,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6ac94f60",
@@ -2727,7 +3330,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2232d8d0",
@@ -2739,7 +3343,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-73c0c03a",
@@ -2751,7 +3356,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f54fbc36",
@@ -2763,7 +3369,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f284d065",
@@ -2775,7 +3382,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d4f31dab",
@@ -2787,7 +3395,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b8432ff9",
@@ -2799,7 +3408,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-552386bc",
@@ -2811,7 +3421,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c5a15b03",
@@ -2823,7 +3434,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-789c32cb",
@@ -2835,7 +3447,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ac301db4",
@@ -2847,7 +3460,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-209118c6",
@@ -2859,7 +3473,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e6800b84",
@@ -2871,7 +3486,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b9c8281f",
@@ -2883,7 +3499,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f402c5aa",
@@ -2895,7 +3512,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-886b894a",
@@ -2907,7 +3525,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c66ea4ad",
@@ -2919,7 +3538,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-938c52ef",
@@ -2931,7 +3551,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ace6f80c",
@@ -2943,7 +3564,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ebd7372e",
@@ -2955,7 +3577,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1c8b9d97",
@@ -2967,7 +3590,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2b706c58",
@@ -2979,7 +3603,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-62ec78a6",
@@ -2991,7 +3616,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8beeb28f",
@@ -3003,7 +3629,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-625e3c48",
@@ -3015,7 +3642,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ad6e85f7",
@@ -3027,7 +3655,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4495d61b",
@@ -3039,7 +3668,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b8c5cfbb",
@@ -3051,7 +3681,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-58930682",
@@ -3063,7 +3694,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7798bb5c",
@@ -3075,7 +3707,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f5771291",
@@ -3087,7 +3720,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-28cce858",
@@ -3099,7 +3733,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1e9a0c89",
@@ -3111,7 +3746,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3caa5bd4",
@@ -3123,7 +3759,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b7880215",
@@ -3135,7 +3772,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fe4c190f",
@@ -3147,7 +3785,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8f9d2b61",
@@ -3159,7 +3798,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d340c997",
@@ -3171,7 +3811,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fb0082bc",
@@ -3183,7 +3824,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f63495d4",
@@ -3195,7 +3837,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d8f2bf34",
@@ -3207,7 +3850,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-82ff6661",
@@ -3219,7 +3863,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4729d063",
@@ -3231,7 +3876,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-62b9cc36",
@@ -3243,7 +3889,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-92ad6491",
@@ -3255,7 +3902,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-283b54c3",
@@ -3267,7 +3915,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3a7e840e",
@@ -3279,7 +3928,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b9ebdc6f",
@@ -3291,7 +3941,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a8ab15ed",
@@ -3303,7 +3954,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-98908e3b",
@@ -3315,7 +3967,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-692a9c14",
@@ -3327,7 +3980,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-61cadf14",
@@ -3339,7 +3993,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-942efa40",
@@ -3351,7 +4006,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-235023d2",
@@ -3363,7 +4019,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-139c807f",
@@ -3375,7 +4032,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c2b258f5",
@@ -3387,7 +4045,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5c6644b6",
@@ -3399,7 +4058,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d2db36e9",
@@ -3411,7 +4071,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-229f2991",
@@ -3423,7 +4084,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5f04d505",
@@ -3435,7 +4097,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-975ca84c",
@@ -3447,7 +4110,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0e594345",
@@ -3459,7 +4123,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f521acf8",
@@ -3471,7 +4136,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a18d8d46",
@@ -3483,7 +4149,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-622f2810",
@@ -3495,7 +4162,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1b23c485",
@@ -3507,7 +4175,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ccce5d04",
@@ -3519,7 +4188,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a5df0edd",
@@ -3531,7 +4201,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fffcdcd3",
@@ -3543,7 +4214,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a7222f15",
@@ -3555,7 +4227,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-dddb1a5b",
@@ -3567,7 +4240,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6dcc719b",
@@ -3579,7 +4253,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-634dbdfa",
@@ -3591,7 +4266,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-28360426",
@@ -3603,7 +4279,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7b7c3c67",
@@ -3615,31 +4292,34 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b7dc76f5",
-  "result": "PASS",
-  "evidence": "LEVEL_2_NAME: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "LEVEL_2_NAME 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-238918e4",
-  "result": "PASS",
-  "evidence": "LEVEL_3_NAME: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "LEVEL_3_NAME 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3476d8f9",
@@ -3651,19 +4331,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f98ff8ac",
-  "result": "PASS",
-  "evidence": "VALUATION_CLASS: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "VALUATION_CLASS 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e718c6f6",
@@ -3675,7 +4357,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-de3f6fd5",
@@ -3687,7 +4370,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-553bbc8a",
@@ -3699,7 +4383,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-49fa47ab",
@@ -3711,7 +4396,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a3bb5a45",
@@ -3723,7 +4409,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b31b505b",
@@ -3735,7 +4422,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a7218005",
@@ -3747,7 +4435,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1a0b7ec3",
@@ -3759,7 +4448,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4385b9b8",
@@ -3771,7 +4461,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1582055b",
@@ -3783,7 +4474,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bebe5b41",
@@ -3795,7 +4487,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2954779d",
@@ -3807,7 +4500,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-51ab91a5",
@@ -3819,7 +4513,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a766bf57",
@@ -3831,7 +4526,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-83b52458",
@@ -3843,7 +4539,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a97a2a6e",
@@ -3855,31 +4552,34 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7190b897",
-  "result": "PASS",
-  "evidence": "QTY_3: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "QTY_3 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-290cc649",
-  "result": "PASS",
-  "evidence": "QTY_4: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "QTY_4 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1dd32755",
@@ -3891,7 +4591,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-125022e4",
@@ -3903,7 +4604,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7f569a08",
@@ -3915,19 +4617,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b2e85cc8",
-  "result": "PASS",
-  "evidence": "QTY_8: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "QTY_8 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-51f5bc7c",
@@ -3939,7 +4643,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7f1c70eb",
@@ -3951,7 +4656,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8c9d8ecb",
@@ -3963,19 +4669,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6b8e7493",
-  "result": "PASS",
-  "evidence": "QTY_12: 기존행 편집=false 표시 일치",
+  "result": "NA",
+  "evidence": "QTY_12 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bee9409b",
@@ -3987,19 +4695,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b6a3890b",
   "result": "ERROR",
-  "evidence": "[측정 경로 누락] 비교 가능한 업무 표 없음 · {\"*\":\"cleanup_spec 에 대상 테이블 없음\"}",
+  "evidence": "[측정 경로 누락] 저장했으나 비교 범위 안에 변화 없음(키 매핑 범위 밖 표에 저장했을 수 있음) · SCP_ANL_LONG_TERM_STOCK(키 YYYYMM,PLANT_ID,DIVISION_ID,ITEM_ID,CHARG,DEVALUATION_AGE): 추가 0 · 삭제 0 · 변경 0",
   "tobe_ref": "E2E @verify 저장 세부 DB",
   "cond": "4fbac3a1",
   "mctx": {
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-087af0bd",
@@ -4011,31 +4721,34 @@
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a2488d74",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] 저장 대상에 이력 표 없음 · 실측  · 미측정 표: *(cleanup_spec 에 대상 테이블 없음)",
+  "evidence": "[측정 경로 없음] 저장 대상에 이력 표 없음 · 실측 SCP_ANL_LONG_TERM_STOCK: +0 -0 ~0",
   "tobe_ref": "E2E @verify 저장 세부 DB",
   "cond": "4fbac3a1",
   "mctx": {
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-62ec1a9b",
   "result": "PASS",
-  "evidence": "수정 저장 1회 SQL 오류 없음 — main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programI 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
+  "evidence": "수정 저장 2회 SQL 오류 없음 — main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programI 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}} | main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"\",\"userId\":\"minyonglee1\",\"programId 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 4,
+   "calls": 7,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0e679ed6",
@@ -4047,7 +4760,8 @@
    "calls": 9,
    "rows": 4111,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b227f034",
@@ -4059,67 +4773,73 @@
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f42de3e7",
   "result": "PASS",
-  "evidence": "수정 저장 성공(Save 1회) — 수정 저장 경로 강제(edit-save) · 편집 표시 셀이 화면 밖 → 편집 개시되는 첫 칸 MEMO 로 스크롤 후 후보 40셀 · 값 있는 편집 칸 없음 — 빈 칸 왕복 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programId\":\"SCP0084\",\"debugM 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\" · main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programI 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
+  "evidence": "수정 저장 성공(Save 1회) — 수정 저장 경로 강제(edit-save) · 편집 표시 셀이 화면 밖 → 편집 개시되는 첫 칸 MEMO 로 스크롤 후 후보 40셀 · 값 있는 편집 칸 없음 — 빈 칸 왕복 · 편집 컬럼 = 행 데이터 변화로 확정 MEMO(메타 순번 이름 PIC 아님 · T143) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programId\":\"SCP0084\",\"debugM 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_r · main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programI 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}} | main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluatio",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 4,
+   "calls": 7,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b8408c5e",
   "result": "ERROR",
-  "evidence": "MEMO r0 '1' ← 붙여넣기 '2'(이 컬럼에 없는 값) · 붙여넣은 뒤 칸 '1' · [입력 경로 실패] 붙여넣기 값이 셀에 안 들어감(기대 '2')",
+  "evidence": "MEMO r0 '' ← 붙여넣기 '1'(이 컬럼에 없는 값) · 붙여넣은 뒤 칸 '' · [입력 경로 실패] 붙여넣기 값이 셀에 안 들어감(기대 '1')",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "fd28131e",
   "mctx": {
    "calls": 13,
    "rows": 1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c9d3bd14",
-  "result": "FAIL",
-  "evidence": "저장 성공 응답 후 재조회에 수정값이 없음 — 허위 성공 의심 · 수정 저장 경로 강제(edit-save) · 편집 표시 셀이 화면 밖 → 편집 개시되는 첫 칸 MEMO 로 스크롤 후 후보 40셀 · 값 있는 편집 칸 없음 — 빈 칸 왕복 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programId\":\"SCP0084\",\"debugM 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\" · main/SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programI 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
+  "result": "PASS",
+  "evidence": "저장 후 재조회에 수정값 반영 — DB 반영 확인 · 원복 저장·복원 확인(정리 완료) · 수정 저장 경로 강제(edit-save) · 편집 표시 셀이 화면 밖 → 편집 개시되는 첫 칸 MEMO 로 스크롤 후 후보 40셀 · 값 있는 편집 칸 없음 — 빈 칸 왕복 · 편집 컬럼 = 행 데이터 변화로 확정 MEMO(메타 순번 이름 PIC 아님 · T143) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programId\":\"SCP0084\",\"debugM 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_r",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 4,
+   "calls": 7,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e34556f7",
   "result": "PASS",
-  "evidence": "MEMO r0 → 2 · 실패 문구 표시 '[저장 경로 시험] 강제 실패'",
+  "evidence": "MEMO r0 → 1 · 실패 문구 표시 '[저장 경로 시험] 강제 실패'",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "56594782",
   "mctx": {
    "calls": 3,
    "rows": 1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-922eb524",
-  "result": "NA",
-  "evidence": "저장 행을 찾지 못해 값 보존 확인 불가(F1 참조)",
+  "result": "PASS",
+  "evidence": "수정값·원복값 모두 재조회에 그대로(변형 없음) · 수정 저장 경로 강제(edit-save) · 편집 표시 셀이 화면 밖 → 편집 개시되는 첫 칸 MEMO 로 스크롤 후 후보 40셀 · 값 있는 편집 칸 없음 — 빈 칸 왕복 · 편집 컬럼 = 행 데이터 변화로 확정 MEMO(메타 순번 이름 PIC 아님 · T143) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"yyyymm\":\"202609\",\"plantId\":\"AZ00\",\"divisionId\":\"40\",\"itemId\":\"AJRJR1212A\",\"charg\":\"DUMMY\",\"devaluationAge\":\"GRM01\",\"memo\":\"1\",\"userId\":\"minyonglee1\",\"programId\":\"SCP0084\",\"debugM 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_r",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 4,
+   "calls": 7,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-39b8853b",
@@ -4131,7 +4851,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-22626ee5",
@@ -4143,31 +4864,34 @@
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-adfbb913",
   "result": "PASS",
-  "evidence": "저장 2회 뒤 ",
+  "evidence": "저장 2회 뒤 SCP_ANL_LONG_TERM_STOCK: 추가 0 · 삭제 0",
   "tobe_ref": "E2E @verify 저장 세부 DB",
   "cond": "dd928257",
   "mctx": {
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c4427e25",
   "result": "PASS",
-  "evidence": "편집 가능 1컬럼 중 왕복 1 · 입력 경로 실패 0 · 변경 인식 실패 0 · 업무 검증 차단·사유 불명 0 · 값 불일치 0 — MEMO r0 '1'→'2' 재조회 '2' OK · 원복 OK",
+  "evidence": "편집 가능 1컬럼 중 왕복 1 · 입력 경로 실패 0 · 변경 인식 실패 0 · 업무 검증 차단·사유 불명 0 · 값 불일치 0 — MEMO r0 ''→'1' 재조회 '1' OK · 원복 OK · 원값 빈칸 — 입력·저장 후 지워서 저장까지 왕복",
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "0f1387ec",
   "mctx": {
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2fd45166",
@@ -4179,7 +4903,8 @@
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-73a21b12",
@@ -4191,55 +4916,60 @@
    "calls": 8,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2828d9b5",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] MEMO r1: 원값 빈칸 — DB 행이 없을 수 있어 제외",
+  "evidence": "[측정 경로 없음] MEMO r0: 원값 빈칸 — DB 행이 없을 수 있어 제외",
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "92f0eb0a",
   "mctx": {
    "calls": 9,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c086afd7",
   "result": "PASS",
-  "evidence": "저장 2회 소요 175·163ms · 최소 163ms · 기준 3000ms",
+  "evidence": "저장 2회 소요 109·124ms · 최소 109ms · 기준 3000ms",
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "338fc284",
   "mctx": {
    "calls": 9,
    "rows": 2,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-27405f80",
   "result": "FAIL",
-  "evidence": "MEMO r0 → 2 · 저장 요청 1.5초 지연 동안 로딩 표시 0회 · 대조군 조회 지연 때는 30회 관측 · 표본 34개·저장 구간 1502ms",
+  "evidence": "MEMO r0 → 1 · 저장 요청 1.5초 지연 동안 로딩 표시 0회 · 대조군 조회 지연 때는 31회 관측 · 표본 32개·저장 구간 1509ms",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "670b4701",
   "mctx": {
    "calls": 8,
    "rows": 1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-08bbce11",
   "result": "NA",
-  "evidence": "MEMO r0 → 2 · 확인창 없음 · AS-IS 저장 경로에도 확인 코드 없음",
+  "evidence": "MEMO r0 → 1 · 확인창 없음 · AS-IS 저장 경로에도 확인 코드 없음",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "e5202097",
   "mctx": {
    "calls": 11,
    "rows": 1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ab6136ed",
@@ -4251,7 +4981,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cb791d12",
@@ -4263,7 +4994,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-69f0f22f",
@@ -4275,7 +5007,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b4cb2f7a",
@@ -4287,7 +5020,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bb0d4048",
@@ -4299,7 +5033,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8c63f98a",
@@ -4311,7 +5046,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2d22c60c",
@@ -4323,7 +5059,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-918a898c",
@@ -4335,7 +5072,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d4272807",
@@ -4347,7 +5085,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3a577adc",
@@ -4359,7 +5098,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-828a4981",
@@ -4371,7 +5111,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d8d53162",
@@ -4383,7 +5124,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9a923aba",
@@ -4395,7 +5137,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-69db8294",
@@ -4407,7 +5150,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-11635bed",
@@ -4419,7 +5163,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-46e263c9",
@@ -4431,7 +5176,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fcde7d2a",
@@ -4443,7 +5189,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e7f49b15",
@@ -4455,7 +5202,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-620fd324",
@@ -4467,7 +5215,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fbca7374",
@@ -4479,7 +5228,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d7c5fc65",
@@ -4491,7 +5241,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9f56f203",
@@ -4503,7 +5254,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-5a304c4b",
@@ -4515,7 +5267,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-73aedb67",
@@ -4527,7 +5280,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2c56a5b0",
@@ -4539,7 +5293,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9ffe44e2",
@@ -4551,7 +5306,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-80991c32",
@@ -4563,7 +5319,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-995eeb30",
@@ -4575,7 +5332,8 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6869b1f5",
@@ -4587,7 +5345,8 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8377800d",
@@ -4599,7 +5358,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2e88df7c",
@@ -4611,7 +5371,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bb967fe4",
@@ -4623,19 +5384,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f171366d",
   "result": "PASS",
-  "evidence": "방향키 40회 — 앞 10회 평균 144ms · 뒤 10회 149ms · 누적 지연 없음",
+  "evidence": "방향키 40회 — 앞 10회 평균 50ms · 뒤 10회 47ms · 누적 지연 없음",
   "tobe_ref": "E2E @verify 동적·응답",
   "cond": "f0a74fbd",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-36b2b2b7",
@@ -4647,7 +5410,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-875a13e0",
@@ -4659,7 +5423,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d2551f84",
@@ -4671,7 +5436,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-24fa6f95",
@@ -4683,7 +5449,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8af1a69f",
@@ -4695,7 +5462,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-eb8bf778",
@@ -4707,19 +5475,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-afbf57f8",
-  "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] CN 언어 조회 건수 총/건 표기: 언어 변경 실패(KOR→KOR) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청4 → 언어 복원 → KOR → 끝:0행·신규0·호출0·요청4 · 문서 자동 생성 P02 · btn_auth SEARCH",
+  "result": "FAIL",
+  "evidence": "[자동] CN 언어 조회 건수 총/건 표기: 화면 글자에 /(总|共|合计)\\s*[\\d,]+\\s*(条|行|件|个)/ 없음 — 근처 '​ Long Term Type ​ Search(F5) Total10,274rows Save(F7) ' · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청4 → 언어 KOR→CHN → search:0행·신규0·호출0·요청8 → pagetext:10274행·신규0·호출1·요청10 → 언어 복원 → KOR → 끝:10274행·신규0·호출1·요청10 · 문서 자동 생성 P02 · btn_auth SEARCH",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "b4253da6",
   "mctx": {
-   "calls": 0,
+   "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a78681a5",
@@ -4731,7 +5501,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b00868ed",
@@ -4743,7 +5514,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c7a0e1f8",
@@ -4755,7 +5527,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-54caa624",
@@ -4767,7 +5540,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9829cde2",
@@ -4779,7 +5553,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a950ab73",
@@ -4791,7 +5566,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-19531bf9",
@@ -4803,7 +5579,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-21d0f626",
@@ -4815,7 +5592,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-68de40c8",
@@ -4827,7 +5605,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-82971d67",
@@ -4839,7 +5618,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bc39b265",
@@ -4851,7 +5631,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d0d0e9da",
@@ -4863,7 +5644,8 @@
    "calls": 2,
    "rows": 6148,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-099b0d09",
@@ -4875,7 +5657,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-fa845cb0",
@@ -4887,7 +5670,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d577cff5",
@@ -4899,7 +5683,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6a4bcd45",
@@ -4911,7 +5696,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c1aa149b",
@@ -4923,7 +5709,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-46a7b2e4",
@@ -4935,7 +5722,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0fa88be2",
@@ -4947,19 +5735,21 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-06ed392e",
   "result": "PASS",
-  "evidence": "조회 클릭 → 로딩 표시 관측 6회(100ms 폴링) · 응답 1095ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "evidence": "조회 클릭 → 로딩 표시 관측 8회(100ms 폴링) · 응답 1631ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f6373d63",
@@ -4971,7 +5761,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a58e0f4b",
@@ -4983,7 +5774,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-654a07e1",
@@ -4995,19 +5787,21 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-bc91a37c",
-  "result": "FAIL",
-  "evidence": "copy FAIL: 선택 0,11,0,11 · 0행 GPLM_CELL_MODEL 표시값 '' · Ctrl+C 클립보드 ''(일치) · 우클릭 Copy '__K3__'(불일치) | ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(GPLM_CELL_MODEL) 클릭 → 선택 행 0~10273/10274 · 열 11~11(시험 열 11) — 열 전체 선택 | hide PASS: 헤더(GPLM_CELL_MODEL) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "result": "PASS",
+  "evidence": "copy PASS: 선택 0,12,0,12 · 0행 MDM_NICK_NAME 표시값 'N32S2' · Ctrl+C 클립보드 'N32S2'(일치) · 우클릭 Copy 'N32S2'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(MDM_NICK_NAME) 클릭 → 선택 행 0~10273/10274 · 열 12~12(시험 열 12) — 열 전체 선택 | hide PASS: 헤더(MDM_NICK_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-775b061b",
@@ -5019,79 +5813,86 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a99c0a00",
   "result": "판정필요",
-  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
   "tobe_ref": "E2E @verify",
   "cond": "0351e52e",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9dfd93b4",
   "result": "PASS",
-  "evidence": "hdr PASS: 헤더(GPLM_CELL_MODEL) 클릭 → 선택 행 0~10273/10274 · 열 11~11(시험 열 11) — 열 전체 선택",
+  "evidence": "hdr PASS: 헤더(MDM_NICK_NAME) 클릭 → 선택 행 0~10273/10274 · 열 12~12(시험 열 12) — 열 전체 선택",
   "tobe_ref": "E2E @verify",
   "cond": "e96c3a35",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c5d206d9",
   "result": "판정필요",
-  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy FAIL: 선택 0,11,0,11 · 0행 GPLM_CELL_MODEL 표시값 '' · Ctrl+C 클립보드 ''(일치) · 우클릭 Copy '__K3__'(불일치) | ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(GPLM_CELL_MODEL) 클릭 → 선택 행 0~10273/10274 · 열 11~11(시험 열 11) — 열 전체 선택 | hide PASS: 헤더(GPLM_CELL_MODEL) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,12,0,12 · 0행 MDM_NICK_NAME 표시값 'N32S2' · Ctrl+C 클립보드 'N32S2'(일치) · 우클릭 Copy 'N32S2'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(MDM_NICK_NAME) 클릭 → 선택 행 0~10273/10274 · 열 12~12(시험 열 12) — 열 전체 선택 | hide PASS: 헤더(MDM_NICK_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
   "tobe_ref": "E2E @verify",
   "cond": "3b134d2e",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-44a22597",
   "result": "판정필요",
-  "evidence": "hide PASS: 헤더(GPLM_CELL_MODEL) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
+  "evidence": "hide PASS: 헤더(MDM_NICK_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
   "tobe_ref": "E2E @verify",
   "cond": "b6fc94a4",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4e36063c",
-  "result": "FAIL",
-  "evidence": "copy FAIL: 선택 0,11,0,11 · 0행 GPLM_CELL_MODEL 표시값 '' · Ctrl+C 클립보드 ''(일치) · 우클릭 Copy '__K3__'(불일치) | hide PASS: 헤더(GPLM_CELL_MODEL) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "result": "판정필요",
+  "evidence": "copy PASS: 선택 0,12,0,12 · 0행 MDM_NICK_NAME 표시값 'N32S2' · Ctrl+C 클립보드 'N32S2'(일치) · 우클릭 Copy 'N32S2'(일치) | hide PASS: 헤더(MDM_NICK_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
   "tobe_ref": "E2E @verify",
   "cond": "567536cd",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9072167d",
   "result": "판정필요",
-  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy FAIL: 선택 0,11,0,11 · 0행 GPLM_CELL_MODEL 표시값 '' · Ctrl+C 클립보드 ''(일치) · 우클릭 Copy '__K3__'(불일치) | ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(GPLM_CELL_MODEL) 클릭 → 선택 행 0~10273/10274 · 열 11~11(시험 열 11) — 열 전체 선택 | hide PASS: 헤더(GPLM_CELL_MODEL) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,12,0,12 · 0행 MDM_NICK_NAME 표시값 'N32S2' · Ctrl+C 클립보드 'N32S2'(일치) · 우클릭 Copy 'N32S2'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(MDM_NICK_NAME) 클릭 → 선택 행 0~10273/10274 · 열 12~12(시험 열 12) — 열 전체 선택 | hide PASS: 헤더(MDM_NICK_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
   "tobe_ref": "E2E @verify",
   "cond": "0e8dbe71",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0abbe296",
@@ -5103,7 +5904,8 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4682e11c",
@@ -5115,79 +5917,73 @@
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-077cd743",
   "result": "PASS",
-  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택",
   "tobe_ref": "E2E @verify",
   "cond": "794a7155",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-44673a10",
   "result": "판정필요",
-  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(GPLM_CELL_MODEL) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(MDM_NICK_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-f378f412",
   "result": "PASS",
-  "evidence": "hdr PASS: 헤더(GPLM_CELL_MODEL) 클릭 → 선택 행 0~10273/10274 · 열 11~11(시험 열 11) — 열 전체 선택",
+  "evidence": "hdr PASS: 헤더(MDM_NICK_NAME) 클릭 → 선택 행 0~10273/10274 · 열 12~12(시험 열 12) — 열 전체 선택",
   "tobe_ref": "E2E @verify",
   "cond": "e96c3a35",
   "mctx": {
    "calls": 2,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-6b49b2e5",
   "result": "NA",
-  "evidence": "ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '1' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음",
+  "evidence": "ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
- },
- {
-  "row_id": "V-a1422db3",
-  "result": "NA",
-  "evidence": "ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '1' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음 [전체: ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '1' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP I]",
-  "tobe_ref": "E2E @verify",
-  "cond": "e5cf1e91",
-  "mctx": {
-   "calls": 1,
-   "rows": -1,
-   "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-71c0fd1d",
   "result": "NA",
-  "evidence": "ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '1' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음 · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '1' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP I]",
+  "evidence": "ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음 · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime NA: 기존행 MEMO 선택(편집기 닫힘·포커스 DIV.wj-cell wj-state-selected wj-s) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IM]",
   "tobe_ref": "E2E @verify",
   "cond": "0e8dbe71",
   "mctx": {
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-af73ea1d",
@@ -5199,7 +5995,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1c958d3f",
@@ -5211,7 +6008,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a23774f6",
@@ -5223,7 +6021,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a9fd5c83",
@@ -5235,7 +6034,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-3d7ec51f",
@@ -5247,7 +6047,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1538e407",
@@ -5259,7 +6060,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a0332784",
@@ -5271,7 +6073,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2c6affe0",
@@ -5283,7 +6086,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b20ad328",
@@ -5295,7 +6099,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cc9a8bed",
@@ -5307,7 +6112,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e96b7472",
@@ -5319,7 +6125,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-28cf7a2e",
@@ -5331,7 +6138,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-22c19a77",
@@ -5343,7 +6151,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2e4f2b1d",
@@ -5355,7 +6164,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-84273470",
@@ -5367,7 +6177,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7bfc011f",
@@ -5379,7 +6190,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-7ae08e84",
@@ -5391,7 +6203,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d74997e3",
@@ -5403,7 +6216,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2b1d440f",
@@ -5415,7 +6229,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-72b0e444",
@@ -5427,7 +6242,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-77031858",
@@ -5439,7 +6255,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a1033617",
@@ -5451,7 +6268,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-9edd652b",
@@ -5463,7 +6281,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c945bdc8",
@@ -5475,7 +6294,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-32f665f5",
@@ -5487,7 +6307,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-cc3848bf",
@@ -5499,7 +6320,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-c8dd9b18",
@@ -5511,7 +6333,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-252f182e",
@@ -5523,7 +6346,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-59eddc79",
@@ -5535,7 +6359,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-8fab55a2",
@@ -5547,7 +6372,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-dfe98712",
@@ -5559,7 +6385,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-0e9ab1af",
@@ -5571,7 +6398,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-daa3c0af",
@@ -5583,7 +6411,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-39f4e350",
@@ -5595,7 +6424,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-81a4d021",
@@ -5607,7 +6437,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-e8f5956c",
@@ -5619,7 +6450,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-1bc2c0e0",
@@ -5631,7 +6463,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-ca32b983",
@@ -5643,7 +6476,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-72200e72",
@@ -5655,7 +6489,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-2a57f8af",
@@ -5667,7 +6502,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b3805e08",
@@ -5679,7 +6515,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-be061d91",
@@ -5691,7 +6528,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-4984cd0a",
@@ -5703,7 +6541,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-a335d21d",
@@ -5715,7 +6554,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-b7271dd4",
@@ -5727,7 +6567,8 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "V-d6e445fb",
@@ -5739,12 +6580,13 @@
    "calls": 1,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261113010606"
  },
  {
   "row_id": "AD-a6f982c0",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
+  "result": "PASS",
+  "evidence": "[KEYSET] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__1.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -5759,8 +6601,8 @@
  },
  {
   "row_id": "AD-b4448e59",
-  "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
+  "result": "판정필요",
+  "evidence": "[VALUES] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__1.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -5776,7 +6618,7 @@
  {
   "row_id": "AD-d962bad7",
   "result": "판정필요",
-  "evidence": "[COLSET] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
+  "evidence": "[COLSET] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__1.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -5792,7 +6634,7 @@
  {
   "row_id": "AD-f05da7f8",
   "result": "판정필요",
-  "evidence": "[ORDER] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
+  "evidence": "[ORDER] [차등 검증 #1] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__1.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__1.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -5807,8 +6649,8 @@
  },
  {
   "row_id": "AD-70feee5d",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 718행 전 컬럼 일치 · 단독행 AS-IS 1319 / TO-BE 1319 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
+  "result": "PASS",
+  "evidence": "[KEYSET] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 718행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__2.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -5823,8 +6665,8 @@
  },
  {
   "row_id": "AD-e015ed31",
-  "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 718행 전 컬럼 일치 · 단독행 AS-IS 1319 / TO-BE 1319 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
+  "result": "판정필요",
+  "evidence": "[VALUES] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 718행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__2.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -5840,7 +6682,7 @@
  {
   "row_id": "AD-625506e3",
   "result": "판정필요",
-  "evidence": "[COLSET] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 718행 전 컬럼 일치 · 단독행 AS-IS 1319 / TO-BE 1319 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
+  "evidence": "[COLSET] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 718행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__2.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -5856,7 +6698,7 @@
  {
   "row_id": "AD-52b4165b",
   "result": "판정필요",
-  "evidence": "[ORDER] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 718행 전 컬럼 일치 · 단독행 AS-IS 1319 / TO-BE 1319 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
+  "evidence": "[ORDER] [차등 검증 #2] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 718행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__2.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 2037행 ↔ TO-BE 2037행 · 공통 718 · 단독 AS-IS 1319 / TO-BE 1319 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__2.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -5871,8 +6713,8 @@
  },
  {
   "row_id": "AD-155803c8",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 516행 전 컬럼 일치 · 단독행 AS-IS 782 / TO-BE 782 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
+  "result": "PASS",
+  "evidence": "[KEYSET] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 516행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__3.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -5887,8 +6729,8 @@
  },
  {
   "row_id": "AD-5a9e004c",
-  "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 516행 전 컬럼 일치 · 단독행 AS-IS 782 / TO-BE 782 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
+  "result": "판정필요",
+  "evidence": "[VALUES] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 516행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__3.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -5904,7 +6746,7 @@
  {
   "row_id": "AD-0bc5cd4f",
   "result": "판정필요",
-  "evidence": "[COLSET] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 516행 전 컬럼 일치 · 단독행 AS-IS 782 / TO-BE 782 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
+  "evidence": "[COLSET] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 516행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__3.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -5920,7 +6762,7 @@
  {
   "row_id": "AD-83f47484",
   "result": "판정필요",
-  "evidence": "[ORDER] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 516행 전 컬럼 일치 · 단독행 AS-IS 782 / TO-BE 782 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
+  "evidence": "[ORDER] [차등 검증 #3] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 516행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__3.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 1298행 ↔ TO-BE 1298행 · 공통 516 · 단독 AS-IS 782 / TO-BE 782 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_5\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__3.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -5935,8 +6777,8 @@
  },
  {
   "row_id": "AD-d66f580e",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
+  "result": "PASS",
+  "evidence": "[KEYSET] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__4.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -5951,8 +6793,8 @@
  },
  {
   "row_id": "AD-85c32a59",
-  "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
+  "result": "판정필요",
+  "evidence": "[VALUES] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__4.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -5968,7 +6810,7 @@
  {
   "row_id": "AD-e494a4b8",
   "result": "판정필요",
-  "evidence": "[COLSET] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
+  "evidence": "[COLSET] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__4.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -5984,7 +6826,7 @@
  {
   "row_id": "AD-89b38a83",
   "result": "판정필요",
-  "evidence": "[ORDER] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 4716행 전 컬럼 일치 · 단독행 AS-IS 5558 / TO-BE 5558 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
+  "evidence": "[ORDER] [차등 검증 #4] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 4716행 중 불일치 셀 12 — diff/P_SCP0084_GET_LONG_TERM_STOCK__4.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 10274행 ↔ TO-BE 10274행 · 공통 4716 · 단독 AS-IS 5558 / TO-BE 5558 · 불일치 셀 12 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"CODE_2,CODE_5,CODE_6\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__4.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -6127,8 +6969,8 @@
  },
  {
   "row_id": "AD-15fca2e9",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 1825행 전 컬럼 일치 · 단독행 AS-IS 4322 / TO-BE 4322 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
+  "result": "PASS",
+  "evidence": "[KEYSET] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 1825행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__7.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -6143,8 +6985,8 @@
  },
  {
   "row_id": "AD-43b0637a",
-  "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 1825행 전 컬럼 일치 · 단독행 AS-IS 4322 / TO-BE 4322 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
+  "result": "판정필요",
+  "evidence": "[VALUES] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 1825행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__7.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -6160,7 +7002,7 @@
  {
   "row_id": "AD-f2bc32a2",
   "result": "판정필요",
-  "evidence": "[COLSET] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 1825행 전 컬럼 일치 · 단독행 AS-IS 4322 / TO-BE 4322 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
+  "evidence": "[COLSET] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 1825행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__7.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -6176,7 +7018,7 @@
  {
   "row_id": "AD-c6d72fb2",
   "result": "판정필요",
-  "evidence": "[ORDER] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 PASS · 공통 1825행 전 컬럼 일치 · 단독행 AS-IS 4322 / TO-BE 4322 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 0 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
+  "evidence": "[ORDER] [차등 검증 #7] main/SEARCH AS-IS SCP0084_GET_LONG_TERM_STOCK ↔ TO-BE PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK · 판정 DIFF · 공통 1825행 중 불일치 셀 3 — diff/P_SCP0084_GET_LONG_TERM_STOCK__7.csv · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키(db_resultsets.csv is_nullable=0) DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · AS-IS 6147행 ↔ TO-BE 6147행 · 공통 1825 · 단독 AS-IS 4322 / TO-BE 4322 · 불일치 셀 3 · 순서 DIFF · 전제: AS-IS 인자 {\"p_yyyymm\": \"202609\", \"p_division_id\": \"40,81\", \"p_plant_id\": \"\", \"p_long_term_type_code\": \"\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SCP0084\\diff\\P_SCP0084_GET_LONG_TERM_STOCK__7.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -6247,7 +7089,7 @@
  {
   "row_id": "EG-97c0575b",
   "result": "PASS",
-  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 1건 별도) · AS-IS ",
+  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 0건 별도) · AS-IS ",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 0,
@@ -7467,8 +8309,8 @@
  },
  {
   "row_id": "EG-9a6166a7",
-  "result": "PASS",
-  "evidence": "AS-IS 10274행 · TO-BE 10274행 · 키 ['PLANT_DESCRIPTION', 'PLANT_ID', 'ITEM_ID', 'ITEM_NAME', 'ITEM_UOM', 'LONG_TERM_TYPE', 'ITEM_TYPE', 'PROCESS_GROUP'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 56164칸(숫자 컬럼 11) · 불일치 컬럼 0",
+  "result": "판정필요",
+  "evidence": "AS-IS 10274행 · TO-BE 10274행 · 키 ['PLANT_DESCRIPTION', 'PLANT_ID', 'ITEM_ID', 'ITEM_NAME', 'ITEM_UOM', 'LONG_TERM_TYPE', 'ITEM_TYPE', 'PROCESS_GROUP'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 56164칸(숫자 컬럼 10) · 불일치 컬럼 1 · GPLM_CELL_CONVERSION_FACTOR 1건 예 10080.0↔336.0",
   "tobe_ref": "E2E @a1-live",
   "mctx": {
    "calls": 0,
@@ -7587,61 +8429,6 @@
   }
  },
  {
-  "row_id": "EG-5040880d",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[CN] 保存失败。'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-bdcf5fa4",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[EN] Failed to save.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-7f313f6c",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[KO] 저장에 실패하였습니다.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-8b3e9b2a",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[KO] 수정한 내용이 없습니다.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-aa0e5e61",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[CN] 没有修改的内容.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
   "row_id": "EG-4199f938",
   "result": "판정필요",
   "evidence": "[SORT 기준 차이 → 판정필요] 문자 키 3/3건 AS-IS 콜레이션과 다를 수 있음: DIVISION_ID(대소문자 무시·NULL 먼저 없음), PLANT_ID(대소문자 무시·NULL 먼저 없음), ITEM_ID(대소문자 무시·NULL 먼저 없음)",
@@ -7730,9 +8517,9 @@
   }
  },
  {
-  "row_id": "EG-acbeadf2",
+  "row_id": "EG-287c71ff",
   "result": "PASS",
-  "evidence": "응답 28건 = DB 28건",
+  "evidence": "응답 14건 = DB 14건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -7741,9 +8528,9 @@
   }
  },
  {
-  "row_id": "EG-287c71ff",
+  "row_id": "EG-acbeadf2",
   "result": "PASS",
-  "evidence": "응답 14건 = DB 14건",
+  "evidence": "응답 28건 = DB 28건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -7765,7 +8552,7 @@
  {
   "row_id": "EG-be2744f2",
   "result": "ERROR",
-  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 61건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
+  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 64건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
   "tobe_ref": "E2E @master_sweep",
   "mctx": {
    "calls": 0,

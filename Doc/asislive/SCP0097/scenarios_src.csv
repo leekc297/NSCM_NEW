@@ -1,0 +1,17 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+SCP0097-Sb1fa6c,연쇄,OTHER,event:this.spdMain.EditChange,CheckScpYN,if (scpYN_Cnt > 1),그리드 값·서식 1,,1,SCP0097_SCP_BOM_Elec.cs:568,DERIVED
+SCP0097-Seb6c4c,기타,OTHER,,ClearUsrCheckedList,if (dt != null),목록 다시 채움 1,,1,SCP0097_SCP_BOM_Elec.cs:165,UNREACHED
+SCP0097-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 2,,2,SCP0097_SCP_BOM_Elec.cs:176,DERIVED
+SCP0097-See08bd,기타,SHEET,button:EditButton,EditButton,"if (fps != null) ▸ if (fps.Name == ""spdMain"" && spdMain.ActiveSheetIndex == 0)",잠금 3 · 잠금:siMain.SwitchLock ; 잠금:siMain.LockColumn ; 잠금:siMain.LockColumn,,3,SCP0097_SCP_BOM_Elec.cs:251,DERIVED
+SCP0097-S1d366f,기타,SHEET+DATA,button:EditButton,EditButton,"if (fps != null) ▸ if (fps.Name == ""spdMain"" && spdMain.ActiveSheetIndex == 0) ▸ for (iRow < siMain.ActiveSheet.Rows.Count) ▸ if ((sTemp.ToUpper() != ""Y"") && (sTemp.ToUpper() != ""N""))",그리드 값·서식 2,,2,SCP0097_SCP_BOM_Elec.cs:266,DERIVED
+SCP0097-Sed3e1e,조회,NONE,button:FindButton | button:SaveButton,FindData_Main,,"데이터 처리 4, 서버 호출 3, 팝업 2, 그리드 구성 2, 표시·활성 2, 잠금 1, 메시지 1 · SCP.SCP0097_GET_SCP_BOM_ELEC · 팝업:new GSCM.Windows.Forms.UI.ProgressForm ; 팝업:prg.Show ; 표시·활성:asyncProxy.ShowProgress ; 표시·활성:request.CommandTimeout",SCP.SCP0097_GET_SCP_BOM_ELEC,15,SCP0097_SCP_BOM_Elec.cs:280,DERIVED
+SCP0097-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,목록 다시 채움 1,,1,SCP0097_SCP_BOM_Elec.cs:116,DERIVED
+SCP0097-S96bd28,초기,NONE,event:ClbDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,InitSpread,,그리드 구성 2,,2,SCP0097_SCP_BOM_Elec.cs:187,DERIVED
+SCP0097-S58da91,저장,SHEET+DATA+STATE,button:SaveButton,SaveData_Main,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false) ▸ if (iCount > 0)","데이터 처리 8, 서버 호출 2, 메시지 1 · SCP.SCP0097_SAVE_SCP_BOM_ELEC · 메시지:MessageHelper.GMessageBoxForException",SCP.SCP0097_SAVE_SCP_BOM_ELEC,11,SCP0097_SCP_BOM_Elec.cs:401,DERIVED
+SCP0097-S4f3837,저장,SHEET+DATA+STATE,button:SaveButton,SaveData_Main,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false) ▸ if (iCount > 0) ▸ if (response.DataSet.Tables[0].Rows[0][0].ToString() == ""S"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0097_SCP_BOM_Elec.cs:417,DERIVED
+SCP0097-S98d365,저장,SHEET+DATA+STATE,button:SaveButton,SaveData_Main,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false) ▸ if (iCount > 0) ▸ else of (response.DataSet.Tables[0].Rows[0][0].ToString() == ""S"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0097_SCP_BOM_Elec.cs:428,DERIVED
+SCP0097-S31d173,조회,OTHER,event:OnShown,SelectCombo,if (iIdx >= 0),값 자동 세팅 1 · 값 자동 세팅:cCombo.SelectedIndex,,1,SCP0097_SCP_BOM_Elec.cs:137,DERIVED
+SCP0097-S0bebb3,초기,SHEET+DATA,button:FindButton | button:SaveButton | event:ClbDivision_SelectedIndexChanged | event:Form_Load,SetSpreadInit,if (sheetName.Equals(SpdSheet.shtMain)),그리드 구성 5,,5,SCP0097_SCP_BOM_Elec.cs:195,DERIVED
+SCP0097-S765eed,연쇄,NONE,event:this.spdMain.EditChange,ShowMessage,,메시지 1 · 메시지:MessageBox.Show,,1,SCP0097_SCP_BOM_Elec.cs:579,DERIVED
+SCP0097-Sa02cf9,연쇄,SHEET+DATA,event:this.spdMain.ActiveSheetChanged,SpdMain_ActiveSheetChanged,if (((FarPoint.Win.Spread.FpSpread)sender).ActiveSheet.SheetName == SpdSheet.shtMain),그리드 구성 2,,2,SCP0097_SCP_BOM_Elec.cs:499,DERIVED
+SCP0097-Sb39c49,연쇄,NONE,event:spdMain.TopChange,SpdMain_TopChange,,그리드 구성 1,,1,SCP0097_SCP_BOM_Elec.cs:156,DERIVED

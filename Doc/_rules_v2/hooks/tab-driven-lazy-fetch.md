@@ -1,6 +1,6 @@
 # Hook — Tab 전환 시 sub-grid lazy fetch (multi-tab + row-context 화면)
 
-> **Trigger**: T01 (신규 화면) + T07 (데이터 조회) — 다단 grid + 하단 multi-tab sub-grid 패턴 화면
+> **Trigger**: T01 (신규 화면) + T07 (Button / CRUD / SubTitle hotkey) (2026-11-13 정정: T07 라벨 "데이터 조회" → `TRIGGER_ROUTER.md` T07 정의) — 다단 grid + 하단 multi-tab sub-grid 패턴 화면
 > **PR 차단 강도**: ⭐⭐ (사용자가 tab 전환 시 빈 grid 경험 — UX 사고)
 > **신설일**: 2026-06-22 (DMF0008 V13 사용자 명시 — "sspm tab 선택 시 sspm 데이터 조회 + 상단 조회 후 tabpage 변경 시 데이터 표시")
 > **Reference**: `nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx` (V13)

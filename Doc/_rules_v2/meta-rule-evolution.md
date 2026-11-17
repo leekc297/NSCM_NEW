@@ -37,7 +37,7 @@
 |---|---|
 | BE 의 표준 Spring Boot Controller/Service/ServiceImpl 구조 적용 | ❌ NSCM 은 단일 GeneralController + 동적 SP routing (Java 코드 0줄) |
 | → 신규 화면당 Java 파일 5개 작성 = **over-engineering** | 사용자 명시 지적 ("BE 는 추가될 것이 없어 보이는데") |
-| → 5 파일 `_archive_be_phase6_wrong/` 이동 | 룰 11 전면 재작성 (NSCM dynamic SP routing 표준) |
+| → 5 파일 `_archive_be_phase6_wrong/` 이동 *(2026-11-13 폴더째 `Doc/_archive/rules_v2_archive_be_phase6_wrong/` 로 보관 이동)* | 룰 11 전면 재작성 (NSCM dynamic SP routing 표준) |
 | **메타-룰 #1** | **표준 (§1) 작성 전 reference 화면의 BE 구조 cross-check 의무** |
 | **메타-룰 #2** | **PoC 의 결함 = 룰의 결함 — PoC 가 작동하면 룰이 작동** |
 

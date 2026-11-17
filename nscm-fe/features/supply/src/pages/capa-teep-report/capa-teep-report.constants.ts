@@ -10,11 +10,11 @@ export type MENU_ID = typeof MENU_ID;
 //   복사하면 전부 오답이다(goal ④-2 S-1). 그래서 이 화면에는 다음이 존재하지 않는다:
 //     `useProcMutation`/`useSaveWithValidation`/`EditTracker`/`CRUD_TYPE` · `isEditMode` state ·
 //     `*.editLock.ts`/`*.recalc.ts`/`*.save.ts` · Edit 버튼 · 셀 콤보 · 시트 탭 UI.
-//   - GET  SP : SCP.SCP0107_GET_CAPA_TEEP_ASSEMBLY / SCP.SCP0107_GET_CAPA_TEEP_ELTR (IN 13 / OUT 커서 1)
+//   - GET  SP : PKG_SCP0107.P_SCP0107_GET_CAPA_TEEP_ASSEMBLY / _ELTR (IN 13 / OUT 커서 2 — O_RC1·O_RESULT_CURSOR)
 //   - SAVE SP : 없음(`SetQueryInfoSave*` 0건, 03 §4.4)
-//   - TITLE SP: PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE (SCP0104/0105/0106/0107/0108 공용)
-//   - SP 미배포(goal ②): `PKG_SCP0107`·`PKG_SCP0104` ALL_OBJECTS 0건(2026-09-25 ora.py 재확인)
-//     -> 조회·동적 헤더 런타임 미완(convert-sp 후속)
+//   - TITLE SP: PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE (SCP0107 자체 proc — 동적 월/연 헤더)
+//   - SP 배포·VALID: `PKG_SCP0107`·`PKG_SCP0104` PACKAGE+BODY VALID(ora.py 2026-11-09). DB 실측으로
+//     조회(ELTR/ASSEMBLY)·기간컬럼 생성 확인 — 색·병합·48px 육안만 미확인
 
 /**
  * 런타임 시트 2종(동시 1개만 표시) + 헤더 메타용 1종.
@@ -33,7 +33,7 @@ export type GridSheet = typeof SHEETS.ASSEMBLY | typeof SHEETS.ELTR;
 
 /**
  * OUT 커서 ↔ 응답 key. GET SP 는 **결과셋 1개**다(`AfterFindData` 가 `lst[0].Tables[0]` 만 쓴다, 03 §1.6).
- * `PKG_SCP0107` 미배포라 실제 OUT 파라미터 이름을 실측할 수 없다 — 소비부는
+ * `PKG_SCP0107` 배포 후 OUT = `O_RC1`(데이터)+`O_RESULT_CURSOR`(상태) 2커서로 실측됐다 — 소비부는
  * `utils/capaTeepReport.cursors.ts` 의 fallback chain 으로 읽는다(03 §4.5, hook #80).
  * 자매 SCP0105/0106 처럼 상수 하나만 믿고 `?? []` 로 넘기면 커서 이름이 다를 때 화면이 조용히 0건이 된다.
  */
@@ -145,8 +145,11 @@ export const DIVISION_EXCLUDE_ATTRIBUTE3 = 'EE';
 /**
  * Formation 더미 Operation.
  * **이 화면은 ELTR 과 CELL 양쪽에서 제외한다** — `GetFilterOperation` 이 ELTR 분기에서 걸고
- * 화면이 CELL 분기에서 한 번 더 붙인다(02 §2.6 Operation 행, cs:1083~1093). 결과적으로
- * **Module/Pack 만 Formation 이 후보에 남는다**.
+ * 화면이 CELL 분기에서 한 번 더 붙인다(02 §2.6 Operation 행, cs:1083~1093).
+ * **세 경로 모두 Formation(AFFFF)이 후보에 없다** — 콤보가 AFFFF 를 SHOP_GROUP_ID='A' 라인에만
+ * 합성하고 그 행 SHOP_GROUP_ID 도 'A' 가 되므로(R10 실측 2026-11-09: A 2018 / B 258 / F 498 / **P 0 / E 0**),
+ * Module/Pack(SHOP_GROUP='P')·Electrode(EE 콤보)엔 원천 0건이고 Cell('A')은 이 필터로 제외된다
+ * (gap-resolve iter-1 — "Module/Pack 만 남는다" 는 코드 추정이 AS-IS 실측으로 반증됨).
  * 주의: 자매 SCP0106/SCP0108 은 **ELTR 만** 제외한다 — 그 코드를 복사하면 Cell 후보가 넓어진다.
  */
 export const FORMATION_OPERATION_ID = 'AFFFF';
@@ -331,9 +334,9 @@ export const LBL_MODULE_PACK = 'LBL01143';
  */
 export const LBL_DIVISION = 'LBL00001';
 
-// Version 라벨은 `components/CapaTeepReportForm.tsx` 에서 `Ver.` 리터럴로 하드코딩한다
-//   (사용자 지시 2026-10-29). `SCM_ADM_MSG_M` 에 `Ver.` 문구 LBL 코드가 0건이라 i18n 경유를
-//   쓰지 않는다 — DB 에 채번·등록되면 그때 `t('<신규코드>','_Ver.')` 로 되돌린다.
+// Version 라벨은 `components/CapaTeepReportForm.tsx` 에서 `t('LBL01275', '_Ver.')` 로 i18n 배선한다.
+//   LBL01275=KO/EN/CN 'Ver.'(DB 등록 2026-11-12, MSG_TP_CD='LBL'). 과거 LBL01231 참조는 오매핑으로,
+//   LBL01231 은 실제 "요청일"/"Date of Request"(ora.py 2026-11-12 재실측)라 LBL01275 로 교정했다.
 
 // ====================================================================================
 // 컬럼 개인화 (ColumnLayoutModal) — 03 §0.2 / V-33·V-34

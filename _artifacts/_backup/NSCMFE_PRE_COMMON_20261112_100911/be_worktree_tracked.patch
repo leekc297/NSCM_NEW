@@ -1,0 +1,1586 @@
+diff --git a/build.gradle b/build.gradle
+index 65aa1d3..142e207 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -10,17 +10,20 @@ plugins {
+ group = 'com.lgcns'
+ version = '0.0.1-SNAPSHOT'
+ description = 'nscm'
+-java.sourceCompatibility = JavaVersion.VERSION_21
++// ⭐ [로컬 2026-08-14] 이 PC 에는 JDK 17 만 설치돼 있어 21 로는 'invalid source release: 21' 로 컴파일 불가.
++//   ⚠ 클라우드 배포 시 VERSION_21 로 되돌릴 것 (아래 줄과 교체).
++// java.sourceCompatibility = JavaVersion.VERSION_21
++java.sourceCompatibility = JavaVersion.VERSION_17
+ 
+ repositories {
+-    maven {
+-        allowInsecureProtocol true
+-        credentials {
+-            username "anonymous"
+-            //password "anonymous"
+-        }
+-        url "http://10.94.57.6:8081/repository/maven-public/"
+-    }
++    // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
++    //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 mavenCentral() 을 주석 처리할 것.
++    mavenCentral()
++    // maven {
++    //     allowInsecureProtocol true
++    //     credentials { username "anonymous" }
++    //     url "http://10.94.57.6:8081/repository/maven-public/"
++    // }
+ }
+ 
+ configurations.all {
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+index 9db6d3d..967d0a7 100644
+--- a/gradle/wrapper/gradle-wrapper.properties
++++ b/gradle/wrapper/gradle-wrapper.properties
+@@ -1,6 +1,10 @@
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+-//distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-bin.zip
+-distributionUrl=http\://10.94.57.6:8081/repository/maven-releases/org/gradle/services/distributions/gradle/8.8/gradle-8.8-bin.zip
++# ⭐ [로컬 2026-08-14] 사내망에서는 클라우드 Nexus(10.94.57.6)에 도달할 수 없어 배포본 내려받기가
++#   무한 대기한다(실제로 dists/…/gradle-8.8-bin.zip.part 만 남아 있었다).
++#   공식 URL 로 되돌린다 — 이 URL 로 받은 dist(dl7vupf4psengwqhwktix4v1)가 이미 캐시에 있어 재다운로드도 없다.
++#   ⚠ 클라우드 배포 시에는 아래 두 줄을 서로 바꿔야 한다.
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-bin.zip
++#distributionUrl=http\://10.94.57.6:8081/repository/maven-releases/org/gradle/services/distributions/gradle/8.8/gradle-8.8-bin.zip
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+diff --git a/settings.gradle b/settings.gradle
+index cd46396..12441b4 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1,14 +1,14 @@
+ pluginManagement {
+     repositories {
+-        //maven { url "https://plugins.gradle.org/m2/" }
+-        maven {
+-            url "http://10.94.57.6:8081/repository/maven-public/"
+-            credentials {
+-                username "anonymous"
+-                //password "anonymous"
+-            }
+-            allowInsecureProtocol true
+-        }
++        // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
++        //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 이 두 줄을 주석 처리할 것.
++        gradlePluginPortal()
++        mavenCentral()
++        // maven {
++        //     url "http://10.94.57.6:8081/repository/maven-public/"
++        //     credentials { username "anonymous" }
++        //     allowInsecureProtocol true
++        // }
+     }
+ }
+ 
+diff --git a/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java b/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
+index 9db7437..63686cc 100644
+--- a/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
++++ b/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
+@@ -9,6 +9,7 @@ public interface AuthService {
+ 	boolean checkMenuAuth(String userId, String mnuId) throws Exception;
+ 	boolean checkMenuBtnAuth(String userId, String mnuId, String shtNm, String mnuBtnCd) throws Exception;
+ 	List<String> retrieveMenuBtnAuth(String userId, String mnuId) throws Exception;
++	List<String> retrieveMenuBtnAuth(String userId, String mnuId, String divisionId) throws Exception;
+ 	List<UnitDto> retrieveUnitAuth(String userId, String mnuId) throws Exception;
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
+index 9810761..534a333 100644
+--- a/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
+@@ -57,11 +57,18 @@ public class AuthServiceImpl extends BaseService implements AuthService {
+ 
+ 	@Override
+ 	public List<String> retrieveMenuBtnAuth(String userId, String mnuId) throws Exception {
++		return retrieveMenuBtnAuth(userId, mnuId, null);
++	}
++
++	@Override
++	public List<String> retrieveMenuBtnAuth(String userId, String mnuId, String divisionId) throws Exception {
++		// divisionId: 단일 Division 이면 그 Division 단위권한 그룹 기준, NULL/'ALL'/복수(',')면 그룹 합집합 — SP 가 분기 (2026-10-26)
+ 		Map<String, Object> params = new HashMap<String, Object>();
+ 		params.put("userId", userId);
+ 		params.put("mnuId", mnuId);
++		params.put("divisionId", divisionId);
+ 
+-		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuth", params);
++		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuthDiv", params);
+ 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
+ 
+ 		List<String> mnuBtnAuth = data.stream()
+diff --git a/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
+index a678661..1ba2eb3 100644
+--- a/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
+@@ -77,6 +77,9 @@ public class LookupServiceImpl extends BaseService implements LookupService {
+ 
+ 		params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
+ 		params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++		// mnuId 는 FE 가 raw 로 보내므로 @sesUserId 처럼 여기서 홑따옴표를 붙인다. 미전달/빈 값은 건드리지
++		//   않아 makeComboQuery 가 '' 로 치환하게 두고, 이미 인용된 값(구 화면 quoteParam)은 그대로 둔다.
++		if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
+ 		String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT)).get(0).get("SQL_DTL_CTN").toString(), params);
+ 		queryMap.put("sQuery", query);
+ 		result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
+@@ -98,7 +101,10 @@ public class LookupServiceImpl extends BaseService implements LookupService {
+ 			if(NullUtils.isNone(queryMap)) throw new BusinessException("Query is not exist.");
+ 
+ 			params.put("userId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
++			params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
+ 			params.put("langCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++			params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++			if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
+ 			String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT))
+ 										.get(0).get("SQL_DTL_CTN").toString()
+ 										, params);
+@@ -110,4 +116,16 @@ public class LookupServiceImpl extends BaseService implements LookupService {
+ 
+ 
+ 
++	/**
++	 * makeComboQuery 의 @키 는 bind 가 아니라 raw 문자열 치환이라, 문자열 값은 홑따옴표로 감싸야 SQL
++	 * 리터럴이 된다(@sesUserId 와 동일 규약). 이미 홑따옴표로 감싼 값은 그대로 둔다 — 이중 인용 방지.
++	 * @MethodName : quoteLiteral
++	 * @param      : value 감쌀 값(호출부에서 null/공백 여부는 미리 거른다)
++	 * @return     : String 홑따옴표로 감싼 리터럴
++	 */
++	private String quoteLiteral(Object value) {
++		String v = value.toString().trim();
++		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'")) ? v : "'" + v + "'";
++	}
++
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
+index 8832ec6..b743735 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
+@@ -1,6 +1,7 @@
+ package com.lgcns.nscm.admin.menu;
+ 
+ import java.util.List;
++import java.util.Map;
+ 
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.security.access.AccessDeniedException;
+@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PathVariable;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
++import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.RestController;
+ 
+ import com.lgcns.nscm.admin.auth.AuthService;
+@@ -23,6 +25,8 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuAuthDto;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.LoginUser;
+ import com.lgcns.nscm.framework.base.BaseController;
+@@ -59,11 +63,13 @@ public class MenuController extends BaseController {
+ 		return successResponseEntity();
+     }
+ 
+-	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다.")
++	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다. divisionId(단일 Division)를 주면 그 Division 권한 그룹 기준의 버튼만 돌려준다(없음/ALL/복수 = 그룹 합집합).")
+ 	@GetMapping(value="/admin/menu/{mnuId}/auth", produces = "application/json; charset=UTF-8")
+-    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
++    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId,
++    		@RequestParam(required = false) String divisionId) throws Exception {
+ 
+-		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId);
++		// 공통버튼 노출 = 사용자 × 선택 Division 권한 (2026-10-26) — PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV
++		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId, divisionId);
+ 		List<UnitDto> unitAuth = authService.retrieveUnitAuth(userSession.getUserId(), mnuId);
+ 		MenuAuthDto mnuAuthDto = MenuAuthDto.builder()
+ 			.mnuBtnAuth(mnuBtnAuth)
+@@ -113,6 +119,18 @@ public class MenuController extends BaseController {
+ 		return successResponseEntity();
+ 	}
+ 
++	@Operation(summary = "컬럼 개인화 조회", description = "공용 Column 팝업의 저장된 컬럼 개인화를 조회합니다.")
++	@PostMapping(value="/admin/menu/{mnuId}/titleset/search", produces = "application/json; charset=UTF-8")
++	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> retrieveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSearchRequest dto) throws Exception {
++		return successResponseEntity(menuService.retrieveTitleSet(userSession.getUserId(), mnuId, dto));
++	}
++
++	@Operation(summary = "컬럼 개인화 저장", description = "공용 Column 팝업의 컬럼 표시/순서/폭/색을 저장합니다.")
++	@PostMapping(value="/admin/menu/{mnuId}/titleset", produces = "application/json; charset=UTF-8")
++	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> saveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSaveRequest dto) throws Exception {
++		return successResponseEntity(menuService.saveTitleSet(userSession.getUserId(), mnuId, dto));
++	}
++
+ 	@Operation(summary = "검색조건 초기화", description = "검색조건을 초기화합니다.")
+ 	@PostMapping(value="/admin/menu/{mnuId}/search-conditions/reset", produces = "application/json; charset=UTF-8")
+ 	public ResponseEntity<BaseResponse<Void>> resetSearchConditions(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
+index f844122..321eeca 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
+@@ -1,11 +1,14 @@
+ package com.lgcns.nscm.admin.menu;
+ 
+ import java.util.List;
++import java.util.Map;
+ 
+ import com.lgcns.nscm.admin.menu.dto.GridColumn;
+ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
+ 
+ public interface MenuService {
+ 
+@@ -17,5 +20,8 @@ public interface MenuService {
+ 	List<SearchCondition> retrieveSearchCondition(String userId, String mnuId) throws Exception;
+ 	void saveSearchCondition(String userId, String mnuId, List<SearchCondition> searchConditions) throws Exception;
+ 	void resetSearchCondition(String userId, String mnuId) throws Exception;
++	List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetSearchRequest request) throws Exception;
++
++	List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception;
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
+index e61320e..9987919 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
+@@ -18,6 +18,8 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+ import com.lgcns.nscm.admin.menu.dto.SearchConditionForDB;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
+ import com.lgcns.nscm.framework.base.BaseService;
+ import com.lgcns.nscm.framework.security.CustomUserDetails;
+ 
+@@ -137,4 +139,60 @@ public class MenuServiceImpl extends BaseService implements MenuService {
+ 
+ 		return;
+ 	}
++
++	/**
++	 * 컬럼 개인화(titleSet) 조회 — 공용 Column 팝업 전용.
++	 *
++	 * <p>DMF0002_GET_TITLESET_POPUP 고정 매핑 — call-proc 경로는 화면마다
++	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SEARCH') 등록이 필요해 미등록 화면이 403 이 난다.
++	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
++	 */
++	@SuppressWarnings("unchecked")
++	@Override
++	public List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetSearchRequest request) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("programId", mnuId);
++		params.put("sheetName", request.getSheetName());
++		params.put("columnType", request.getColumnType());
++		params.put("sesUserId", userId);
++		params.put("divisionId", request.getDivisionId());
++		params.put("menuId", mnuId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveTitleSet", params);
++
++		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
++	}
++
++	/**
++	 * 컬럼 개인화(titleSet) 저장 — 공용 Column 팝업 전용.
++	 *
++	 * <p>프로시저가 programId/sheetName 을 인자로 받아 메뉴 종속이 없으므로, 화면마다
++	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SAVE') 를 등록하는 대신 고정 매핑을 쓴다.
++	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
++	 *
++	 * <p>반환값 = 프로시저 첫 OUT 커서 행. 호출측(FE)이 기존과 동일하게 CODE 로 성공 여부를 판정한다.
++	 */
++	@SuppressWarnings("unchecked")
++	@Override
++	public List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("programId", mnuId);
++		params.put("sheetName", request.getSheetName());
++		params.put("columnType", request.getColumnType());
++		params.put("activeFlag", request.getActiveFlag());
++		params.put("columnName", request.getColumnName());
++		params.put("sortOrderNo", request.getSortOrderNo());
++		params.put("subTotalFlag", request.getSubTotalFlag());
++		params.put("sortMethodCode", request.getSortMethodCode());
++		params.put("sesUserId", userId);
++		params.put("columnWidth", request.getColumnWidth());
++		params.put("cellColor", request.getCellColor());
++		params.put("textColor", request.getTextColor());
++
++		Map<String, Object> result = selectList(nameSpace + "saveTitleSet", params);
++
++		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
++	}
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
+index 41c90ed..2b9655c 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
+@@ -21,6 +21,7 @@ public class MenuDto {
+     private String mnuId;
+     private String upprMnuId;
+     private String mnuUrl;
++    private String routePath;
+     private String mnuMsgId;
+     private String mnuDesc;
+     private BigDecimal sortOrd;
+@@ -37,6 +38,7 @@ public class MenuDto {
+     		.mnuId((String) data.get("MNU_ID"))
+     		.upprMnuId((String) data.get("UPPR_MNU_ID"))
+     		.mnuUrl((String) data.get("MNU_URL"))
++            .routePath((String) data.get("ROUTE_PATH"))
+     		.mnuMsgId((String) data.get("MNU_MSG_ID"))
+     		.mnuDesc((String) data.get("MNU_DESC"))
+     		.sortOrd((BigDecimal) data.get("SORT_ORD"))
+diff --git a/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java b/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
+index 9a51cbd..7220e2c 100644
+--- a/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
++++ b/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
+@@ -2,6 +2,7 @@ package com.lgcns.nscm.framework.aspect;
+ 
+ import java.lang.reflect.Method;
+ import java.sql.Timestamp;
++import java.util.Collection;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+@@ -12,6 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
+ import org.slf4j.MDC;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.core.annotation.AnnotationUtils;
++import org.springframework.http.ResponseEntity;
+ import org.springframework.security.core.Authentication;
+ import org.springframework.stereotype.Component;
+ 
+@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.github.f4b6a3.ulid.UlidCreator;
+ import com.lgcns.nscm.framework.annotation.SystemLog;
+ import com.lgcns.nscm.framework.interceptor.LogInterceptor;
++import com.lgcns.nscm.framework.model.BaseResponse;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+ import com.lgcns.nscm.framework.utils.SecurityUtil;
+ import com.lgcns.nscm.framework.utils.StringUtils;
+@@ -68,9 +71,8 @@ public class SystemLogAspect {
+         Object result = null;
+         try {
+             result = joinPoint.proceed();
+-            String resultJson = toJson(result);
+             if(bLog) log.info("END: {}.{}() | Result: {} | Time: {}ms",
+-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++                     className, methodName, summarizeResult(result), (System.currentTimeMillis() - startTime));
+ 
+             return result;
+         } catch (Throwable throwable) {
+@@ -148,9 +150,8 @@ public class SystemLogAspect {
+         try {
+ 
+             result = joinPoint.proceed();
+-            String resultJson = toJson(result);
+             log.info("END: {}.{}() | Result: {} | Time: {}ms",
+-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++                     className, methodName, summarizeResult(result), (System.currentTimeMillis() - startTime));
+ 
+             return result;
+         } catch (Throwable throwable) {
+@@ -186,6 +187,42 @@ public class SystemLogAspect {
+         }
+     }
+ 
++    /**
++     * [E20261015-LOGRESULT] 결과 로그 요약.
++     * 기존에는 응답 전체를 JSON 으로 한 번 더 직렬화해 INFO 한 줄로 기록했다 — 대량 조회(SCP0030 289,551행 x 37컬럼)는
++     * 응답과 같은 234MB 를 다시 만들고 로그에 써서 BE 시간·메모리를 크게 잡아먹었다.
++     * 이제 구조만 남긴다: 목록은 건수, Map 은 키별 요약, 나머지(작은 값)는 JSON 앞부분 RESULT_LOG_MAX_LEN 자.
++     */
++    private static final int RESULT_LOG_MAX_LEN = 1000;
++
++    private String summarizeResult(Object obj) {
++        if (obj == null) return "";
++        Object target = obj;
++        if (target instanceof ResponseEntity<?> re) target = re.getBody();
++        if (target instanceof BaseResponse<?> br) {
++            return "{code=" + br.getCode() + ", message=" + br.getMessage() + ", result=" + summarizeValue(br.getResult(), 0) + "}";
++        }
++        return summarizeValue(target, 0);
++    }
++
++    private String summarizeValue(Object v, int depth) {
++        if (v == null) return "null";
++        if (v instanceof Collection<?> c) return "[" + c.size() + " rows]";
++        if (v instanceof Map<?, ?> m) {
++            if (depth >= 1) return "{" + m.size() + " keys}";
++            StringBuilder sb = new StringBuilder("{");
++            int i = 0;
++            for (Map.Entry<?, ?> e : m.entrySet()) {
++                if (i++ > 0) sb.append(", ");
++                if (i > 20) { sb.append("..."); break; }
++                sb.append(e.getKey()).append('=').append(summarizeValue(e.getValue(), depth + 1));
++            }
++            return sb.append('}').toString();
++        }
++        String json = toJson(v);
++        return json.length() > RESULT_LOG_MAX_LEN ? json.substring(0, RESULT_LOG_MAX_LEN) + "...(" + json.length() + " chars)" : json;
++    }
++
+     private String getAnnoType(ProceedingJoinPoint joinPoint) {
+ 
+ 	    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+diff --git a/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java b/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
+index 683fb8d..06798a4 100644
+--- a/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
++++ b/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
+@@ -18,6 +18,9 @@ public class CorsConfig {
+         // 허용할 Origin 설정
+         configuration.setAllowedOriginPatterns(List.of(
+             "http://localhost:3000",
++            "http://127.0.0.1:3000",
++            "http://localhost:5173",
++            "http://127.0.0.1:5173",
+             "http://10.34.220.80:8090",
+             "http://10.32.192.50:8090",
+             "http://10.34.220.74:8090",
+diff --git a/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java b/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
+index 4c93b25..0d9b945 100644
+--- a/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
++++ b/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
+@@ -196,7 +196,10 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 
+ 				// 3. [성능 최적화] 페치 사이즈 (Fetch Size)
+ 				// 한 번의 네트워크 통신으로 가져올 로우(Row) 수를 늘려 조회 속도를 높입니다.
+-				prop.setProperty("defaultRowPrefetch", "100");
++				// [E20261015-ROWPREFETCH] 100 -> 1000. SP OUT 커서(REF CURSOR)는 mybatis-config 의 defaultFetchSize(1000)가
++				//   적용되지 않고 이 연결 기본값을 따른다. SCP0030 BOD ITEM(289,551행 x 37컬럼) 실측:
++				//   100 = 38.5s / 500 = 13.5s / 1000 = 10.5s / 2000 = 8.9s / 5000 = 8.2s (1000 이후 체감 감소, 풀 전체 메모리 고려해 1000).
++				prop.setProperty("defaultRowPrefetch", "1000");
+ 				hikariConfig.setDataSourceProperties(prop);
+ 
+ 				HikariDataSource ds = new HikariDataSource(hikariConfig);
+diff --git a/src/main/java/com/lgcns/nscm/framework/handler/GlobalExceptionHandler.java b/src/main/java/com/lgcns/nscm/framework/handler/GlobalExceptionHandler.java
+index 96efaf5..b280bd5 100644
+--- a/src/main/java/com/lgcns/nscm/framework/handler/GlobalExceptionHandler.java
++++ b/src/main/java/com/lgcns/nscm/framework/handler/GlobalExceptionHandler.java
+@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(MethodArgumentNotValidException.class)
+     public ResponseEntity badRequestException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.SERVER_ERROR)
+     			.message(BaseConstants.SERVER_ERROR_MSG)
+@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(AuthenticationException.class)
+     public ResponseEntity authenticationException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.AUTHENTICATION_ERROR)
+     			.message(BaseConstants.AUTHENTICATION_ERROR_MSG)
+@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(AccessDeniedException.class)
+     public ResponseEntity forbiddenException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.AUTHORIZATION_ERROR)
+     			.message(BaseConstants.AUTHORIZATION_ERROR_MSG)
+@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(NoHandlerFoundException.class)
+     public ResponseEntity notFoundException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.SERVER_ERROR)
+     			.message(BaseConstants.SERVER_ERROR_MSG)
+@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler({NullPointerException.class, QueryTimeoutException.class, RuntimeException.class})
+     public ResponseEntity internalServerErrorException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.SERVER_ERROR)
+     			.message(BaseConstants.SERVER_ERROR_MSG)
+@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(SystemException.class)
+     public ResponseEntity systemException(SystemException e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	String code = BaseConstants.SYSTEM_ERROR;
+     	String message = BaseConstants.SYSTEM_ERROR_MSG;
+     	if(e.getCode() != null) code = e.getCode();
+@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(BusinessException.class)
+     public ResponseEntity businessException(BusinessException e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	String code = BaseConstants.BUSINESS_ERROR;
+     	String message = BaseConstants.BUSINESS_ERROR_MSG;
+     	if(e.getCode() != null) code = e.getCode();
+@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(SqlException.class)
+     public ResponseEntity sqlException(SqlException e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	String code = BaseConstants.SQL_ERROR;
+     	String message = BaseConstants.SQL_ERROR_MSG;
+ //    	if(e.getSqlCode() != null) code = e.getSqlCode();
+@@ -135,7 +135,7 @@ public class GlobalExceptionHandler {
+ 
+     @ExceptionHandler(Exception.class)
+     public ResponseEntity defaultException(Exception e) {
+-    	log.error("Error: {}", e.getMessage());
++    	log.error("SQL Error - cause: {}", e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), e);
+     	ErrorResponse error = ErrorResponse.builder()
+     			.code(BaseConstants.SERVER_ERROR)
+     			.message(BaseConstants.SERVER_ERROR_MSG)
+diff --git a/src/main/java/com/lgcns/nscm/framework/interceptor/LogInterceptor.java b/src/main/java/com/lgcns/nscm/framework/interceptor/LogInterceptor.java
+index 2a1b86f..209b2b3 100644
+--- a/src/main/java/com/lgcns/nscm/framework/interceptor/LogInterceptor.java
++++ b/src/main/java/com/lgcns/nscm/framework/interceptor/LogInterceptor.java
+@@ -8,7 +8,7 @@ import org.slf4j.MDC;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.scheduling.annotation.Async;
+ import org.springframework.stereotype.Component;
+-import org.springframework.web.servlet.HandlerInterceptor;
++import org.springframework.web.servlet.AsyncHandlerInterceptor;
+ 
+ import com.github.f4b6a3.ulid.Ulid;
+ import com.github.f4b6a3.ulid.UlidCreator;
+@@ -19,6 +19,7 @@ import com.lgcns.nscm.framework.exception.SqlException;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+ import com.lgcns.nscm.framework.utils.SecurityUtil;
+ 
++import jakarta.servlet.DispatcherType;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import lombok.extern.slf4j.Slf4j;
+@@ -38,11 +39,27 @@ import lombok.extern.slf4j.Slf4j;
+  */
+ @Slf4j
+ @Component
+-public class LogInterceptor implements HandlerInterceptor {
++public class LogInterceptor implements AsyncHandlerInterceptor {
+ 
+ 	@Autowired
+     protected NCommonDAO ncommondao;
+ 
++	/**
++	 * [E20261015-STREAMPROC] 비동기 응답(StreamingResponseBody — call-proc-stream) 대응.
++	 * 비동기 요청은 1차 디스패치 끝에 afterCompletion 대신 afterConcurrentHandlingStarted 가 불리고, 전송이 끝난 뒤
++	 * ASYNC 2차 디스패치에서 preHandle → afterCompletion 이 다시 돈다. 그대로 두면 2차 preHandle 이 MDC 를 초기화해
++	 * typeCd(=BUTTON) 를 잃고 시스템 로그가 남지 않는다 → 1차 MDC 를 요청 속성에 보관했다가 2차에서 복원한다.
++	 * 동기 요청(기존 전부)은 dispatcherType=REQUEST 라 동작 무변경.
++	 */
++	private static final String MDC_SNAPSHOT_ATTR = LogInterceptor.class.getName() + ".MDC_SNAPSHOT";
++
++	@Override
++	public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) {
++		Map<String, String> snapshot = MDC.getCopyOfContextMap();
++		if(snapshot != null) request.setAttribute(MDC_SNAPSHOT_ATTR, snapshot);
++		MDC.clear();
++	}
++
+ 	/**
+ 	 * @MethodName : preHandle
+ 	 * @Description: 로그 핸들링용 Interceptor(로그용 init 데이터 추가)
+@@ -55,6 +72,14 @@ public class LogInterceptor implements HandlerInterceptor {
+ 	 */
+     @Override
+     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
++        // 비동기 2차 디스패치 — 1차에서 보관한 MDC 복원(afterConcurrentHandlingStarted 참조)
++        if (request.getDispatcherType() == DispatcherType.ASYNC
++                && request.getAttribute(MDC_SNAPSHOT_ATTR) instanceof Map<?, ?> snapshot) {
++            Map<String, String> restored = new HashMap<>();
++            snapshot.forEach((k, v) -> restored.put(String.valueOf(k), v == null ? null : String.valueOf(v)));
++            MDC.setContextMap(restored);
++            return true;
++        }
+         // ULID 기반 Trace ID 생성 (없을 경우에만 생성)
+         String traceId = request.getHeader("x-request-id");
+ //        String traceId = request.getHeader("X-Request-ID");
+diff --git a/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java b/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
+index e44bb0e..742f853 100644
+--- a/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
++++ b/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
+@@ -162,9 +162,47 @@ public class QueryLogInterceptor implements Interceptor {
+         }
+     }
+ 
++    /** [E20260824-LOGPARAM] PARAMS 로그 상한. 초과분은 잘라 기록한다(안전망). */
++    private static final int PARAMS_MAX_LEN = 4000;
++
++    /**
++     * [E20260824-LOGPARAM] 파라미터 로그 직렬화.
++     *
++     * <p>종전 문제: MyBatis 는 실행 후 <b>OUT 파라미터(REF CURSOR 매핑 결과)를 파라미터 맵에 되돌려
++     * 넣는다</b>. 이 메서드는 finally 에서 호출되므로 그 시점 맵에는 조회 결과 전체가 들어 있었고,
++     * 결과적으로 조회 1회마다 결과셋을 통째로 JSON 으로 만들어 SCM_COM_SQL_LOG.PARAMS(CLOB) 에
++     * INSERT 했다. DMF0020 실측(2026-08-24, div82/12개월/10,524행 x 102컬럼):
++     * <b>PARAMS 길이 20,535,281 bytes(19.6MB)</b> — 직렬화 + 원격 DB CLOB 왕복이 조회 지연의
++     * 지배적 요인이었다(DB 자체는 13초).
++     *
++     * <p>조치: ① OUT 파라미터 키('@' 시작)와 MyBatis 결과 홀더(DATARESULT)를 제외해 <b>입력만</b>
++     * 남긴다(로그 목적 = 어떤 파라미터로 호출했는가). ② 그래도 커지면 PARAMS_MAX_LEN 으로 절단한다.
++     */
+     private String toJsonSafe(Object parameter) {
+         try {
+-            return parameter == null ? null : objectMapper.writeValueAsString(parameter);
++            if (parameter == null) return null;
++            Object target = parameter;
++            if (parameter instanceof Map<?, ?> map) {
++                Map<String, Object> in = new java.util.LinkedHashMap<>();
++                for (Map.Entry<?, ?> e : map.entrySet()) {
++                    String k = String.valueOf(e.getKey());
++                    // OUT 커서(@o_rc1, @O_RESULT_CURSOR ...) 와 결과 홀더는 로그 대상이 아니다
++                    if (k.startsWith("@") || "DATARESULT".equals(k)) continue;
++                    Object v = e.getValue();
++                    // 방어: 결과 컬렉션이 다른 키로 섞여 들어와도 통째로 담지 않는다
++                    if (v instanceof java.util.Collection<?> c) {
++                        in.put(k, "[collection size=" + c.size() + "]");
++                    } else {
++                        in.put(k, v);
++                    }
++                }
++                target = in;
++            }
++            String json = objectMapper.writeValueAsString(target);
++            if (json != null && json.length() > PARAMS_MAX_LEN) {
++                json = json.substring(0, PARAMS_MAX_LEN) + "...(truncated, total=" + json.length() + ")";
++            }
++            return json;
+         } catch (Exception e) {
+             return "param to json error: " + e.getMessage();
+         }
+diff --git a/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java b/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
+index 0a2d492..f02363b 100644
+--- a/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
++++ b/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
+@@ -22,6 +22,13 @@ public class CustomMap extends HashMap<String, Object> {
+ 	 */
+     public Object put(String key, Object value) {
+ 
++        // callSettersOnNulls=true(mybatis-config.xml) 이면 커서의 NULL 컬럼도 여기로 들어온다.
++        // 아래 value.getClass() 가 NPE 를 내므로 null 은 변환 없이 그대로 담는다.
++        // 필수: 이 가드와 callSettersOnNulls 설정은 한 쌍이다 — 가드 없이 설정만 켜면 모든 조회가 NPE 로 실패한다.
++        if (value == null) {
++            return super.put(key, null);
++        }
++
+     	// CLOB 변환 로직
+         if (value instanceof java.sql.Clob) {
+         	try {
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java b/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
+index 2b66190..4c3436f 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
+@@ -80,6 +80,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
+ 
+         if (lookupPath == null
+         		|| (!pathMatcher.match("/*/*/*/call-proc", lookupPath)
++        		&& !pathMatcher.match("/*/*/*/call-proc-stream", lookupPath)   // [E20261015-STREAMPROC] call-proc 와 같은 버튼 권한 검사
+         		&& !pathMatcher.match("/*/*/*/excel-upload", lookupPath))) {
+             return new AuthorizationDecision(false);
+         }
+diff --git a/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java b/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
+index afe017c..cfeb36f 100644
+--- a/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
++++ b/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
+@@ -39,12 +39,79 @@ public class ExcelUtils {
+         return resultList;
+     }
+ 
++    /**
++     * 2단 헤더(그룹행 + 하위행) 엑셀을 List&lt;Map&gt; 구조로 변환한다.
++     * DMF0074(Metal Link Price) 전용 — Excel Form 다운로드가 그리드 그대로 내보내는
++     * 2단 헤더(1행 그룹명 병합 + 2행 원소명)를 그대로 재업로드할 수 있도록 지원한다.
++     *
++     * 그룹행(0)은 병합 셀이라 그룹의 첫 칸에만 값이 있고 나머지는 공란 — 좌측 값을 이어 채운다
++     * (forward-fill). 하위행(1)에 값이 있으면 "{그룹}_{하위}" 를, 없으면(그룹만 있는 단일 컬럼)
++     * 그룹값 그대로를 헤더키로 쓴다 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 토큰과 1:1.
++     * 데이터는 헤더 2행 다음(인덱스 2, 엑셀 3행)부터 읽는다.
++     */
++    public static List<Map<String, Object>> convertExcelToJsonTwoHeaderRows(MultipartFile file) throws Exception {
++        List<Map<String, Object>> resultList = new ArrayList<>();
++
++        try (InputStream is = file.getInputStream();
++             Workbook workbook = new XSSFWorkbook(is)) {
++
++            Sheet sheet = workbook.getSheetAt(0);
++            Row groupRow = sheet.getRow(0);
++            Row subRow = sheet.getRow(1);
++            // 그룹행은 병합 셀이라 getPhysicalNumberOfCells() 로 세면 병합 구간의 빈 셀이 누락돼
++            //   실제보다 적게 잡힐 수 있다 — 두 헤더행의 getLastCellNum()(마지막 셀 인덱스+1) 중
++            //   큰 값을 쓴다(빈 셀도 Cell 객체로 존재하면 포함되므로 병합에 더 안전).
++            int columnCount = Math.max(
++                    groupRow.getLastCellNum(),
++                    subRow != null ? subRow.getLastCellNum() : 0);
++
++            String[] columnHeaders = new String[columnCount];
++            String lastGroup = "";
++            for (int j = 0; j < columnCount; j++) {
++                String group = getHeaderCellValue(groupRow.getCell(j));
++                if (!group.isEmpty()) lastGroup = group;
++                String sub = subRow != null ? getHeaderCellValue(subRow.getCell(j)) : "";
++                columnHeaders[j] = sub.isEmpty() ? lastGroup : lastGroup + "_" + sub;
++            }
++
++            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
++                Row currentRow = sheet.getRow(i);
++                if (currentRow == null) continue;
++
++                Map<String, Object> rowData = new HashMap<>();
++                for (int j = 0; j < columnCount; j++) {
++                    Cell cell = currentRow.getCell(j);
++                    rowData.put(columnHeaders[j], getCellValue(cell));
++                }
++                resultList.add(rowData);
++            }
++        }
++        return resultList;
++    }
++
++    // 헤더 셀 문자열 추출 — 헤더는 항상 텍스트이나 병합으로 비는 셀(null)도 안전하게 처리
++    private static String getHeaderCellValue(Cell cell) {
++        if (cell == null) return "";
++        return switch (cell.getCellType()) {
++            case STRING -> cell.getStringCellValue().trim();
++            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
++            default -> "";
++        };
++    }
++
+     // 셀 타입별 데이터 추출 헬퍼 함수
+     private static Object getCellValue(Cell cell) {
+         if (cell == null) return "";
+         return switch (cell.getCellType()) {
+             case STRING -> cell.getStringCellValue();
+-            case NUMERIC -> DateUtil.isCellDateFormatted(cell) ? cell.getDateCellValue() : cell.getNumericCellValue();
++            case NUMERIC -> {
++                if (DateUtil.isCellDateFormatted(cell)) yield cell.getDateCellValue();
++                double d = cell.getNumericCellValue();
++                // 정수는 지수표기/소수점 없이 문자열화 (예: 20260720, 777).
++                //   double.toString 이면 20260720 -> "2.026072E7" 로 깨져 TO_DATE/TO_NUMBER 파싱 실패.
++                if (d == Math.rint(d) && !Double.isInfinite(d)) yield String.valueOf((long) d);
++                yield java.math.BigDecimal.valueOf(d).stripTrailingZeros().toPlainString();
++            }
+             case BOOLEAN -> cell.getBooleanCellValue();
+             case FORMULA -> cell.getCellFormula();
+             default -> "";
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralController.java b/src/main/java/com/lgcns/nscm/general/GeneralController.java
+index 78c6b75..1894e3d 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralController.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralController.java
+@@ -3,11 +3,13 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
++import org.springframework.http.MediaType;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.PathVariable;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RestController;
++import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+ 
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.AuthCheck;
+@@ -60,6 +62,39 @@ public class GeneralController extends BaseController {
+     	return successResponseEntity(generalService.execBtn(params));
+     }
+ 
++    /**
++     * @MethodName : callProcStream
++     * @Description: [E20261015-STREAMPROC] 대량 조회 스트리밍 — call-proc 과 같은 메타·권한으로 같은 프로시저를 실행하고
++     *               결과 커서를 묶음 단위 NDJSON 으로 흘려보낸다(FE 는 첫 묶음부터 표시).
++     *               응답이 스트림이라 successResponseEntity(JSON 한 덩어리) 형식을 쓸 수 없어 ResponseEntity 로 감싼다.
++     *               세션 키(sesUserId/sesLangCd)는 전송 스레드가 아닌 요청 스레드에서 미리 담는다.
++     * @param      : params 전달파라미터 / mnuId 메뉴아이디 / shtNm 시트명 / mnuBtnCd 메뉴의버튼코드
++     * @return     : ResponseEntity<StreamingResponseBody>
++     */
++    @SystemLog(LogType.BUTTON)
++    @AuthCheck(Type.ALL)
++    @PostMapping(value="/{mnuId}/{shtNm}/{mnuBtnCd}/call-proc-stream", produces = "application/x-ndjson; charset=UTF-8")
++    public ResponseEntity<StreamingResponseBody> callProcStream(@LoginUser UserSession userSession
++    		, @RequestBody(required = false) Map<String, Object>  params
++    		, @PathVariable String mnuId
++    		, @PathVariable String shtNm
++    		, @PathVariable String mnuBtnCd
++    		) throws Exception {
++    	if(NullUtils.isNone(params)) params = new HashMap<String, Object>();
++    	params.put("mnuId", mnuId);
++    	params.put("shtNm", shtNm);
++    	params.put("mnuBtnCd", mnuBtnCd);
++    	if(userSession != null) {
++    		if(!NullUtils.isNone(userSession.getUserId())) params.put("sesUserId", userSession.getUserId());
++    		if(!NullUtils.isNone(userSession.getLangCd())) params.put("sesLangCd", userSession.getLangCd());
++    	}
++    	return ResponseEntity.ok()
++    			.contentType(MediaType.parseMediaType("application/x-ndjson; charset=UTF-8"))
++    			.header("X-Accel-Buffering", "no")
++    			.header("Cache-Control", "no-cache")
++    			.body(generalService.execBtnStream(params));
++    }
++
+     /**
+      * @MethodName : retrieveGeneral
+      * @Description: 일반적인 조회쿼리 실행 Controller
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralService.java b/src/main/java/com/lgcns/nscm/general/GeneralService.java
+index 5c3f253..86235ba 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralService.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralService.java
+@@ -30,6 +30,17 @@ public interface GeneralService {
+ 	 */
+ 	Map<String, Object> execBtn(Map<String, Object> params) throws Exception;
+ 
++	/**
++	 * 버튼별 api 호출 — 스트리밍(대량 조회용)
++	 * @MethodName : execBtnStream
++	 * @Description: execBtn 과 같은 메타(SCM_ADM_MNU_BTN_MPG_M → API_M → PROC_M)로 프로시저를 찾아 실행하고,
++	 *               OUT 커서를 읽는 즉시 묶음 단위 NDJSON 으로 내보낸다. 메타 해석은 호출 스레드에서 끝내고
++	 *               실행·전송은 반환한 StreamingResponseBody 안에서 한다. [E20261015-STREAMPROC]
++	 * @param      : @param params (mnuId/shtNm/mnuBtnCd/sesUserId/sesLangCd 포함)
++	 * @return     : StreamingResponseBody
++	 */
++	org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody execBtnStream(Map<String, Object> params) throws Exception;
++
+ 	/**
+ 	 *  select 처리
+ 	 * @MethodName : retrieveSql
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java b/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
+index 3f639dc..354c2c0 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
+@@ -1,14 +1,32 @@
+ package com.lgcns.nscm.general;
+ 
++import java.math.BigDecimal;
++import java.sql.CallableStatement;
++import java.sql.Clob;
++import java.sql.Connection;
++import java.sql.ResultSet;
++import java.sql.ResultSetMetaData;
++import java.sql.SQLException;
++import java.sql.Types;
++import java.text.SimpleDateFormat;
++import java.util.ArrayList;
++import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
+ 
++import org.apache.ibatis.session.SqlSession;
+ import org.springframework.stereotype.Service;
++import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+ 
++import com.fasterxml.jackson.core.JsonEncoding;
++import com.fasterxml.jackson.core.JsonGenerator;
++import com.fasterxml.jackson.databind.ObjectMapper;
++import com.fasterxml.jackson.databind.SerializationFeature;
+ import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseService;
++import com.lgcns.nscm.framework.model.CustomMap;
+ import com.lgcns.nscm.framework.utils.MapUtils;
+ 
+ import lombok.extern.slf4j.Slf4j;
+@@ -47,6 +65,219 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
+     	return selectList("callProc", makeProcedure(params, procParam));
+     }
+ 
++    /* ======================================================================================================
++     * [E20261015-STREAMPROC] 대량 조회 스트리밍
++     *  - 기존 call-proc 는 OUT 커서 전량을 List<CustomMap> 으로 모은 뒤 한 번에 JSON 직렬화한다
++     *    (SCP0030 289,551행 x 37컬럼 = 234MB → 화면 표시까지 50~85초, 그동안 화면은 빈 상태).
++     *  - 스트리밍은 같은 메타로 같은 SP 를 1회 실행하고, 커서를 읽는 즉시 묶음 단위 NDJSON 한 줄씩 흘려보낸다.
++     *    FE 는 첫 묶음부터 그리드에 표시한다. 값 변환은 기존과 동일(CustomMap + 동일 날짜 포맷)해서 행 내용이 같다.
++     *  - 응답 줄 형식(줄마다 JSON 1개):
++     *      {"t":"cursor","c":"<COL_NM>","cols":[...]}       커서 시작
++     *      {"t":"rows","c":"<COL_NM>","rows":[{...},...]}   행 묶음
++     *      {"t":"cursorEnd","c":"<COL_NM>","count":N}       커서 끝
++     *      {"t":"out","c":"<COL_NM>","v":값}                 커서 아닌 OUT 파라미터
++     *      {"t":"error","message":"..."}                     실행 중 오류
++     *      {"t":"end","rows":총행수,"ms":소요}                전송 완료
++     *    상태 커서(PROC_RESULT, 예: O_RESULT_CURSOR)는 데이터 커서보다 먼저 보낸다 → FE 가 CODE 오류를 먼저 판정.
++     * ====================================================================================================== */
++    private static final int STREAM_FIRST_BATCH = 1000;   // 첫 화면용 — 작게 보내 빨리 그린다
++    private static final int STREAM_BATCH = 30000;          // 사용자 지정(2026-10-15) — 5,000 → 30,000 (브라우저 묶음 처리 횟수 축소)
++    private static final int STREAM_FETCH_SIZE = 1000;
++    private static final ObjectMapper STREAM_MAPPER = createStreamMapper();
++
++    /** 응답 JSON 과 같은 설정 — CustomWebConfig.configureMessageConverters 와 동일하게 맞춘다 */
++    private static ObjectMapper createStreamMapper() {
++        ObjectMapper mapper = new ObjectMapper();
++        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
++        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
++        mapper.getFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
++        // 기본값(true)이면 gen.writeObject(행) 마다 flush → 행마다 gzip 동기 flush + 소켓 쓰기 (28.9만 행 365초 실측).
++        //   flush 는 묶음 끝(endLine)에서만 한다.
++        mapper.disable(SerializationFeature.FLUSH_AFTER_WRITE_VALUE);
++        return mapper;
++    }
++
++    @Override
++    public StreamingResponseBody execBtnStream(Map<String, Object> params) throws Exception {
++    	// 1) 메타 해석 — 호출 스레드에서 끝낸다(오류는 일반 응답으로 돌아감)
++    	List<Map<String, Object>> procParam = (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
++    	Set<String> jCols = new HashSet<>();
++    	for(Map<String, Object> paramMap:procParam) {
++    		if("JVARCHAR".equals(paramMap.get("DATA_TP_CD"))) jCols.add((String)paramMap.get("COL_NM"));
++    	}
++    	if(!jCols.isEmpty()) MapUtils.cvtJsonToJVarchar(params, jCols);
++    	final Map<String, Object> callParams = new HashMap<>(params);
++    	final String procNm = String.valueOf(procParam.get(0).get("PROC_NM"));
++
++    	// 2) 실행·전송 — StreamingResponseBody 안에서
++    	return out -> {
++    		long st = System.currentTimeMillis();
++    		long total = 0;
++    		JsonGenerator gen = STREAM_MAPPER.getFactory().createGenerator(out, JsonEncoding.UTF8);
++    		SqlSession ses = null;
++    		try {
++    			ses = ncommondao.getSqlSession();
++    			Connection con = ses.getConnection();
++    			StringBuilder sql = new StringBuilder("{call ").append(procNm);
++    			List<Map<String, Object>> args = new ArrayList<>();
++    			for(Map<String, Object> p:procParam) {
++    				String tp = String.valueOf(p.get("COL_TP_CD"));
++    				if("IN".equals(tp) || "OUT".equals(tp)) args.add(p);
++    			}
++    			if(!args.isEmpty()) {
++    				sql.append("(");
++    				for(int i=0; i<args.size(); i++) sql.append(i==0 ? "?" : ", ?");
++    				sql.append(")");
++    			}
++    			sql.append("}");
++
++    			try (CallableStatement cs = con.prepareCall(sql.toString())) {
++    				for(int i=0; i<args.size(); i++) bindStreamArg(con, cs, i+1, args.get(i), callParams);
++    				cs.execute();
++
++    				// 상태 커서(PROC_RESULT) 먼저, 그 다음 데이터 커서, 마지막에 일반 OUT
++    				for(String pass : new String[]{"PROC_RESULT", "CURSOR", "OTHER"}) {
++    					for(int i=0; i<args.size(); i++) {
++    						Map<String, Object> a = args.get(i);
++    						if(!"OUT".equals(a.get("COL_TP_CD"))) continue;
++    						String dt = String.valueOf(a.get("DATA_TP_CD"));
++    						String nm = String.valueOf(a.get("COL_NM"));
++    						boolean isCursor = "CURSOR".equals(dt) || "PROC_RESULT".equals(dt);
++    						if("OTHER".equals(pass) ? isCursor : !pass.equals(dt)) continue;
++    						// getObject(int, Class) 는 log4jdbc(CallableStatementSpy)가 구현하지 않음 → getObject(int) (MyBatis 와 동일 경로)
++    						if(isCursor) total += writeCursor(gen, out, nm, (ResultSet) cs.getObject(i+1));
++    						else {
++    							gen.writeStartObject();
++    							gen.writeStringField("t", "out");
++    							gen.writeStringField("c", nm);
++    							gen.writeFieldName("v");
++    							gen.writeObject(cs.getObject(i+1));
++    							gen.writeEndObject();
++    							endLine(gen, out);
++    						}
++    					}
++    				}
++    			}
++    		} catch (Throwable e) {
++    			// 응답 헤더(x-ndjson)가 이미 정해져 일반 오류 응답으로 바꿀 수 없다 → 오류 줄로 알린다. JVM 치명 오류만 다시 던짐
++    			log.error("[execBtnStream] {} error: {}", procNm, e.getMessage(), e);
++    			gen.writeStartObject();
++    			gen.writeStringField("t", "error");
++    			gen.writeStringField("message", String.valueOf(e.getMessage()));
++    			gen.writeEndObject();
++    			endLine(gen, out);
++    			if(e instanceof VirtualMachineError vme) throw vme;
++    		} finally {
++    			if(ses != null) { ses.clearCache(); ses.close(); }
++    		}
++    		gen.writeStartObject();
++    		gen.writeStringField("t", "end");
++    		gen.writeNumberField("rows", total);
++    		gen.writeNumberField("ms", System.currentTimeMillis() - st);
++    		gen.writeEndObject();
++    		endLine(gen, out);
++    		gen.close();
++    		log.info("[execBtnStream] {} {}/{}/{} rows={} ms={}", procNm, callParams.get("mnuId"), callParams.get("shtNm"),
++    				callParams.get("mnuBtnCd"), total, System.currentTimeMillis() - st);
++    	};
++    }
++
++    /** IN/OUT 바인딩 — makeProcedure 의 DATA_TP_CD 매핑과 같은 규칙 */
++    private void bindStreamArg(Connection con, CallableStatement cs, int idx, Map<String, Object> a, Map<String, Object> params) throws SQLException {
++    	String dt = String.valueOf(a.get("DATA_TP_CD"));
++    	String nm = String.valueOf(a.get("COL_NM"));
++    	if("OUT".equals(a.get("COL_TP_CD"))) {
++    		switch (dt) {
++    			case "CURSOR", "PROC_RESULT" -> cs.registerOutParameter(idx, Types.REF_CURSOR);
++    			case "NUMBER", "NUMERIC" -> cs.registerOutParameter(idx, Types.NUMERIC);
++    			case "CLOB" -> cs.registerOutParameter(idx, Types.CLOB);
++    			case "DATE" -> cs.registerOutParameter(idx, Types.TIMESTAMP);
++    			default -> cs.registerOutParameter(idx, Types.VARCHAR);
++    		}
++    		return;
++    	}
++    	Object v = params.get(nm);
++    	switch (dt) {
++    		case "NUMBER", "NUMERIC" -> {
++    			if(v == null || String.valueOf(v).isBlank()) cs.setNull(idx, Types.NUMERIC);
++    			else cs.setBigDecimal(idx, new BigDecimal(String.valueOf(v)));
++    		}
++    		case "CLOB" -> {
++    			if(v == null) cs.setNull(idx, Types.CLOB);
++    			else { Clob c = con.createClob(); c.setString(1, String.valueOf(v)); cs.setClob(idx, c); }
++    		}
++    		default -> {
++    			if(v == null) cs.setNull(idx, Types.VARCHAR);
++    			else cs.setString(idx, String.valueOf(v));
++    		}
++    	}
++    }
++
++    /** 커서 1개를 묶음 단위로 전송. 행 변환은 CustomMap(기존 call-proc 와 동일) */
++    private long writeCursor(JsonGenerator gen, java.io.OutputStream out, String nm, ResultSet rs) throws Exception {
++    	long count = 0;
++    	if(rs == null) return 0;
++    	try (rs) {
++    		rs.setFetchSize(STREAM_FETCH_SIZE);
++    		ResultSetMetaData md = rs.getMetaData();
++    		int cc = md.getColumnCount();
++    		String[] cols = new String[cc];
++    		for(int c=0; c<cc; c++) cols[c] = md.getColumnLabel(c+1);
++
++    		gen.writeStartObject();
++    		gen.writeStringField("t", "cursor");
++    		gen.writeStringField("c", nm);
++    		gen.writeArrayFieldStart("cols");
++    		for(String col:cols) gen.writeString(col);
++    		gen.writeEndArray();
++    		gen.writeEndObject();
++    		endLine(gen, out);
++
++    		int inBatch = 0;
++    		int limit = STREAM_FIRST_BATCH;
++    		boolean open = false;
++    		while(rs.next()) {
++    			if(!open) {
++    				gen.writeStartObject();
++    				gen.writeStringField("t", "rows");
++    				gen.writeStringField("c", nm);
++    				gen.writeArrayFieldStart("rows");
++    				open = true;
++    			}
++    			CustomMap row = new CustomMap();
++    			for(int c=0; c<cc; c++) row.put(cols[c], rs.getObject(c+1));
++    			gen.writeObject(row);
++    			count++;
++    			if(++inBatch >= limit) {
++    				gen.writeEndArray();
++    				gen.writeEndObject();
++    				endLine(gen, out);
++    				open = false;
++    				inBatch = 0;
++    				limit = STREAM_BATCH;
++    			}
++    		}
++    		if(open) {
++    			gen.writeEndArray();
++    			gen.writeEndObject();
++    			endLine(gen, out);
++    		}
++    		gen.writeStartObject();
++    		gen.writeStringField("t", "cursorEnd");
++    		gen.writeStringField("c", nm);
++    		gen.writeNumberField("count", count);
++    		gen.writeEndObject();
++    		endLine(gen, out);
++    	}
++    	return count;
++    }
++
++    private void endLine(JsonGenerator gen, java.io.OutputStream out) throws java.io.IOException {
++    	gen.writeRaw('\n');
++    	gen.flush();
++    	out.flush();
++    }
++
+     /**
+      * api 호출
+      * @MethodName : callProc
+diff --git a/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java b/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
+index f2faa0e..ad57d80 100644
+--- a/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
+@@ -1,22 +1,23 @@
+ package com.lgcns.nscm.general.file;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Map;
++import java.util.Set;
++import java.util.stream.Collectors;
+ 
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.multipart.MultipartFile;
+ 
+-import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseService;
+ import com.lgcns.nscm.framework.exception.BusinessException;
+ import com.lgcns.nscm.framework.utils.ExcelUtils;
+-import com.lgcns.nscm.framework.utils.MapUtils;
+-import com.lgcns.nscm.framework.utils.NullUtils;
++
+ 
+ import lombok.extern.slf4j.Slf4j;
+ 
+@@ -55,12 +56,44 @@ public class FileServiceImpl extends BaseService implements FileService {
+ 				validProc = (String) excelInfo.get("STORAGE_SQL_ID");
+ 
+ 				// 엑셀 파일 데이터 파싱
+-				List<Map<String, Object>> excelList = ExcelUtils.convertExcelToJson((MultipartFile) params.get("excelfile"));
+-				// 엑셀 데이터 > 엑셀 업로드용 데이터롷 변경
+-				excelJsonData = cvtListUploadJson(excelList, headerContent);
++				//   DMF0074(Metal Link Price) 는 Excel Form 다운로드가 그리드 그대로(2단 헤더:
++				//   그룹행+원소행)를 내보내므로 재업로드 시 전용 2단 헤더 파서를 쓴다.
++				//   PROGRAM_ID 는 'DMF0074'(대형) / 'DMF0074_40'(소형) 두 가지 모두 대상.
++				String mnuId = String.valueOf(params.get("mnuId"));
++				boolean isTwoHeaderRowMenu = mnuId.startsWith("DMF0074");
++				List<Map<String, Object>> excelList = isTwoHeaderRowMenu
++						? ExcelUtils.convertExcelToJsonTwoHeaderRows((MultipartFile) params.get("excelfile"))
++						: ExcelUtils.convertExcelToJson((MultipartFile) params.get("excelfile"));
++				/* 26.09.07
++					헤더 검증 — HEADER_CONTENT 필수 토큰('*' 접미)이 엑셀 1행 헤더에 그대로 없으면
++					(컬럼명 변경/오탈자 등) SP 까지 빈 값으로 흘러가 ORA-01403 등 원인불명 에러로 터진다.
++					 AS-IS 공용 ExcelUploadForm 의 MSG00450(헤더 미검출) 과 동일 시점의 방어.
++				*/
++				validateExcelHeader(excelList, headerContent);
++				// 엑셀 데이터 > 업로드용 행 리스트 (@TITLE + UPLOAD). 동적 기간 컬럼은 엑셀 날짜 행 기준.
++				//   2단 헤더 메뉴(DMF0074)는 컬럼이 헤더 2행에 전부 고정 선언돼 있어 titleDateRow
++				//   휴리스틱(3번째 행 값 유무로 컬럼을 골라내는 DMF0014 동적 주차 컬럼 전용 로직)이
++				//   불필요 — 오히려 3행 값이 우연히 빈칸인 컬럼을 통째로 누락시키는 회귀를 낸다
++				//   (2026-09-22 실사고: PeriodFr/PeriodTo 등 그룹 전체가 Error Detail 에서 사라짐).
++				//   isTwoHeaderRowMenu 는 항상 HEADER_CONTENT 순서 그대로 전 컬럼을 고정 노출한다.
++				//   DMF0014(Customer FCST Upload) — 1단 헤더 폼은 헤더 1행 자체가 이미 실제 날짜
++				//   문자열(예: '20260921')로 채워진 자기서술형 기간 컬럼이라, titleDateRow 휴리스틱
++				//   (2행 선두 식별컬럼이 빈칸인지로 날짜행을 추정)이 필요 없다. 오히려 2행이 우연히
++				//   정상 데이터(선두 식별컬럼 채움)이면 날짜행이 아니라고 오판해 기간 컬럼 전체가
++				//   HEADER_CONTENT 고정 13열로 되돌아가 통째로 유실되고, 스테이징 ATTRIBUTE14~ 가
++				//   비어 버킷타입(WEEKLY/MONTHLY) 판정이 어긋난다(2026-09-23 실사고 — Customer FCST
++				//   Upload 전건 Invalid Measure Upload Bucket). DMF0014 는 엑셀 헤더에 실제로 존재하는
++				//   컬럼 중 HEADER_CONTENT 에 없는 나머지를 전부 기간 컬럼으로 채택(오름차순 정렬)한다.
++				boolean useHeaderDefinedPeriodCols = mnuId.startsWith("DMF0014");
++				List<Map<String, Object>> uploadRows =
++						cvtListUploadRows(excelList, headerContent, isTwoHeaderRowMenu, useHeaderDefinedPeriodCols);
++				excelJsonData = objectMapper.writeValueAsString(uploadRows);
+ 				// 엑셀 업로드 temp 테이블에 insert
+ 				params.put("excelData", excelJsonData);
+-				params.put("colCnt", getPipeCount(headerContent));
++				// colCnt = 실제 _COL 개수 (동적 기간 컬럼 반영). 행 없으면 HEADER_CONTENT 토큰 수 fallback.
++				int colCnt = uploadRows.isEmpty() ? getPipeCount(headerContent)
++						: (int) uploadRows.get(0).keySet().stream().filter(k -> k.startsWith("_COL")).count();
++				params.put("colCnt", colCnt);
+ 				params.put("@O_RESULT_CURSOR", null);
+ 				selectList("admin.excel.excelUploadTmp", params);
+ 				// 유효성 체크 프로시저 실행
+@@ -84,50 +117,135 @@ public class FileServiceImpl extends BaseService implements FileService {
+         return parts.length;
+     }
+ 
+-	private String cvtListUploadJson(List<Map<String, Object>> excelList, String keyTemplate) {
++	// 'W27', 'W44' 같은 주차 라벨 토큰 — 매주 굴러가는 동적 컬럼이라 HEADER_CONTENT 에 특정 주차가
++	//   박혀 있어도 그 주차가 지나면 영원히 없는 컬럼이 된다(2026-09-23 실사고 — DMF0014 W27~31
++	//   토큰이 stale 화 되어 현재 주차 파일(W43~) 업로드가 전건 헤더 검증 실패). 고정 식별 컬럼만
++	//   필수로 보고, 주차 라벨은 있으면 검사하되 없어도 통과시킨다.
++	private static final java.util.regex.Pattern WEEK_LABEL_TOKEN = java.util.regex.Pattern.compile("^W\\d+$");
++
++	/* 26.09.22
++	   HEADER_CONTENT 토큰 전체(필수 '*' 여부 무관)가 엑셀 1행 헤더에 1건이라도 없으면 즉시 중단한다
++	   — 업로드 파일 헤더가 Excel Form(업로드 양식) 다운로드 헤더와 다르면 무조건 안내해야 한다는
++	   사용자 요구(2026-09-22). 종전엔 '*'(필수) 토큰만 체크해 DMF0074/DMF0082 처럼 HEADER_CONTENT 에
++	   '*' 토큰이 아예 없는 메뉴는 이 체크가 사실상 no-op 이었다 — 전체 토큰 비교로 그 구멍을 없앴다.
++	   (AS-IS ExcelUploadForm MSG00450 과 동일 시점의 방어 — 대상 범위만 필수→전체로 확장.)
++	   2026.09.23 — 주차 라벨(W\d+) 토큰은 이 "전체 필수" 대상에서 제외한다(WEEK_LABEL_TOKEN 참고).
++	*/
++	private void validateExcelHeader(List<Map<String, Object>> excelList, String headerContent) {
++		if (excelList.isEmpty() || isAllBlank(excelList)) {
++			// 헤더 밑에 데이터 행이 아예 없거나, 행은 있어도 값이 전부 공백인 경우
++			//   (AS-IS ExcelUploadForm MSG00451 과 동일 시점의 방어). 엑셀에서 값만 지워도
++			//   POI 상 빈 Row 객체가 남아 excelList 자체는 비어있지 않을 수 있어 값까지 확인한다.
++			throw new BusinessException("엑셀 파일에 업로드할 데이터가 존재하지 않습니다.");
++		}
++		Set<String> actualHeaders = excelList.get(0).keySet();
++		List<String> missing = Arrays.stream(headerContent.split("\\|", -1))
++				.map(String::trim)
++				.filter(tk -> !tk.isEmpty())
++				.filter(tk -> !WEEK_LABEL_TOKEN.matcher(tk).matches())
++				.filter(tk -> !actualHeaders.contains(tk))
++				.collect(Collectors.toList());
++		if (!missing.isEmpty()) {
++			// MSG01151("Invalid Column Header Title") — 업로드 양식과 실제 파일 헤더가 다를 때 안내.
++			//   잘못된(누락된) 헤더명을 메시지 본문에 줄바꿈으로 나열한다(2026-09-22 사용자 요청).
++			throw new BusinessException("Invalid Column Header Title\n\n" + String.join("\n", missing));
++		}
++	}
++
++	// 모든 행의 모든 값이 공백인지 확인 — 값만 지운 빈 행은 POI 상 Row 객체가 남아있어
++	//   excelList 자체는 비어있지 않게 파싱될 수 있다.
++	private boolean isAllBlank(List<Map<String, Object>> excelList) {
++		return excelList.stream().allMatch(row ->
++				row.values().stream().allMatch(v -> v == null || v.toString().trim().isEmpty()));
++	}
++
++	private List<Map<String, Object>> cvtListUploadRows(
++			List<Map<String, Object>> excelList, String keyTemplate, boolean skipTitleDateRow,
++			boolean useHeaderDefinedPeriodCols) {
+ 	    List<Map<String, Object>> transformedList = new ArrayList<>();
+ 
+-	    // 1. 기준이 되는 키 목록을 배열로 분리 (limit -1로 마지막 공백 포함)
++	    // 기준 키 목록 (HEADER_CONTENT) — 식별 컬럼 매핑용. 기간 컬럼은 여기서 쓰지 않는다(동적 주차).
+ 	    String[] targetKeys = keyTemplate.split("\\|", -1);
+ 
+-	    // 2. 첫 번째 행에 헤더 정보 및 @TITLE 상태값 추가
++	    // 날짜(타이틀) 행 판별 — 2단 헤더(라벨 + 기간 시작일) 업로드에서, 선두 식별 컬럼(targetKeys[0])이
++	    //   공란이고 기간 컬럼에만 값이 있는 첫 행이 날짜 행이다.
++	    // ※ 날짜 행은 데이터에서 제외하지 않는다 — 검증 프로시저(P_DMF0014_CUST_FCST_EXCEL_UPLOAD, 07-08 fix)가
++	    //   스테이징에서 'ATTRIBUTE1 IS NULL 인 날짜행'을 직접 찾아 버킷을 산출한다. 여기선 기간 컬럼 순서 판별용.
++	    // skipTitleDateRow(2단 헤더 메뉴) 는 이 휴리스틱 자체를 건너뛴다 — 컬럼이 이미 헤더에 전부
++	    //   고정 선언돼 있어 날짜행 판별이 불필요하고, 잘못 걸리면 컬럼이 통째로 누락된다.
++	    Map<String, Object> titleDateRow = null;
++	    if (!useHeaderDefinedPeriodCols && !skipTitleDateRow && !excelList.isEmpty() && targetKeys.length > 0) {
++	        Map<String, Object> first = excelList.get(0);
++	        Object leadKeyVal = first.get(targetKeys[0].trim());
++	        if (leadKeyVal == null || leadKeyVal.toString().trim().isEmpty()) {
++	            titleDateRow = first;
++	        }
++	    }
++
++	    // 컬럼 순서(_COL1..N) 결정
++	    List<String> orderedCols = new ArrayList<>();
++	    if (useHeaderDefinedPeriodCols) {
++	        // DMF0014 전용 — 1단 헤더 자체가 이미 실제 날짜 문자열('20260921' 등)로 채워진 자기서술형
++	        //   기간 컬럼이라, "2행이 비어있으면 날짜행" 추정이 필요 없고 오히려 위험하다(2026-09-23
++	        //   실사고). 엑셀 헤더에 실제 존재하는 컬럼 중 HEADER_CONTENT 식별 토큰이 아닌 나머지를
++	        //   전부 기간 컬럼으로 채택 — 8자리 날짜 문자열 키라 사전식 정렬이 곧 시간순 정렬이다.
++	        Set<String> headerKeys = excelList.isEmpty() ? Set.of() : excelList.get(0).keySet();
++	        Set<String> targetKeySet = Arrays.stream(targetKeys).map(String::trim).collect(Collectors.toSet());
++	        for (String tk : targetKeys) {
++	            String key = tk.trim();
++	            if (headerKeys.contains(key)) orderedCols.add(key);
++	        }
++	        headerKeys.stream()
++	                .filter(k -> !targetKeySet.contains(k))
++	                .sorted()
++	                .forEach(orderedCols::add);
++	    } else if (titleDateRow != null) {
++	        final Map<String, Object> tdr = titleDateRow; // 람다/정렬용 final 별칭
++	        // 식별 컬럼 = HEADER_CONTENT 토큰 중 날짜 행에 존재하고 값이 비어있는 것 (Division*..Model 순서 보존).
++	        //   HEADER_CONTENT 의 stale 기간 토큰(W27 등)은 실제 파일에 없어(containsKey=false) 자동 제외된다.
++	        for (String tk : targetKeys) {
++	            String key = tk.trim();
++	            if (tdr.containsKey(key)) {
++	                Object dv = tdr.get(key);
++	                if (dv == null || dv.toString().trim().isEmpty()) orderedCols.add(key);
++	            }
++	        }
++	        // 기간 컬럼 = 날짜 행에 시작일이 채워진 엑셀 컬럼 전체(동적 주차), 시작일 오름차순(시트 기간 순).
++	        List<String> periodCols = new ArrayList<>();
++	        for (Map.Entry<String, Object> e : tdr.entrySet()) {
++	            Object dv = e.getValue();
++	            if (dv != null && !dv.toString().trim().isEmpty()) periodCols.add(e.getKey());
++	        }
++	        periodCols.sort((a, b) -> tdr.get(a).toString().trim()
++	                .compareTo(tdr.get(b).toString().trim()));
++	        orderedCols.addAll(periodCols);
++	    } else {
++	        // 날짜 행 없는 업로드(단일 헤더) → 기존 동작: HEADER_CONTENT 토큰 순서 그대로
++	        for (String tk : targetKeys) orderedCols.add(tk.trim());
++	    }
++
++	    // @TITLE(라벨) 행 — SP 는 버킷을 V_TITLE 이 아니라 날짜행에서 산출하므로 라벨만 싣는다.
+ 	    Map<String, Object> headerMap = new LinkedHashMap<>();
+ 	    headerMap.put("UPLOAD_STAT", "@TITLE"); // 헤더 행 식별자
+-
+-	    for (int i = 0; i < targetKeys.length; i++) {
+-	        String attrKey = "_COL" + (i + 1);
+-	        headerMap.put(attrKey, targetKeys[i].trim());
++	    for (int i = 0; i < orderedCols.size(); i++) {
++	        headerMap.put("_COL" + (i + 1), orderedCols.get(i));
+ 	    }
+ 	    transformedList.add(headerMap);
+ 
+-	    // 3. 실제 데이터 행 변환 및 UPLOAD 상태값 추가
+-	    for (Map<String, Object> excelRow : excelList) {
++	    // 실제 데이터 행 — 날짜 행 포함(제외 안 함). 날짜 행은 식별 컬럼이 공란("")이라 Oracle 에서
++	    //   ATTRIBUTE1=NULL 로 저장되고, 기간 컬럼엔 연속 시작일이 실려 SP 버킷 산출(ATTRIBUTE14~)의 근거가 된다.
++	    for (int r = 0; r < excelList.size(); r++) {
++	        Map<String, Object> excelRow = excelList.get(r);
+ 	        Map<String, Object> attrMap = new LinkedHashMap<>();
+ 	        attrMap.put("UPLOAD_STAT", "UPLOAD"); // 데이터 행 식별자
+-
+-	        for (int i = 0; i < targetKeys.length; i++) {
+-	            String targetKey = targetKeys[i].trim();
+-	            String attrKey = "_COL" + (i + 1);
+-	            Object value = excelRow.get(targetKey);
+-	            if (value != null) attrMap.put(attrKey, value.toString().trim());
+-	            else attrMap.put(attrKey, "");
++	        for (int i = 0; i < orderedCols.size(); i++) {
++	            String col = orderedCols.get(i);
++	            Object value = excelRow.get(col);
++	            attrMap.put("_COL" + (i + 1), value != null ? value.toString().trim() : "");
+ 	        }
+ 	        transformedList.add(attrMap);
+ 	    }
+ 
+-	    // 4. 최종 리스트를 JSON 문자열로 변환
+-	    try {
+-	    	return objectMapper.writeValueAsString(transformedList);
+-	    } catch (JsonProcessingException e) {
+-	        log.error("JSON conversion error: {}", e.getMessage());
+-	        return "[]";
+-	    }
++	    return transformedList;
+ 	}
+-
+-
+-/*========================================================================================================================== */
+-
+-
+-
+-
+-}
++}
+\ No newline at end of file
+diff --git a/src/main/resources/application.yml b/src/main/resources/application.yml
+index 6821029..56d8a98 100644
+--- a/src/main/resources/application.yml
++++ b/src/main/resources/application.yml
+@@ -31,6 +31,12 @@ spring:
+   aop:
+     proxy-target-class: true
+ 
++  # [E20261015-STREAMPROC] 스트리밍 응답(StreamingResponseBody)은 MVC 비동기 처리 — 기본 타임아웃(서버 기본 30초 내외)이면
++  #   대량 조회 전송 중 끊긴다. tomcat connection-timeout 과 같은 30분으로 맞춘다.
++  mvc:
++    async:
++      request-timeout: 1800000
++
+ 
+ 
+ server:
+@@ -40,6 +46,15 @@ server:
+   port: 8080
+   tomcat:
+     connection-timeout: 1800000
++  # [E20260824-GZIP] 응답 압축. 조회 응답이 컬럼명 반복이 많은 JSON 이라 압축률이 극단적으로 높다.
++  #   DMF0020 실측(div82 / 12개월 / 10,524행 × 102컬럼): 25.1MB -> 0.60MB (42배), 압축 비용 0.55s.
++  #   FE 계약은 그대로다(브라우저가 Accept-Encoding: gzip 으로 투명 해제).
++  #   min-response-size 미만(작은 응답)은 압축하지 않으므로 소형 API 에 부담이 없다.
++  compression:
++    enabled: true
++    # [E20261015-STREAMPROC] application/x-ndjson = 대량 조회 스트리밍(call-proc-stream) 응답
++    mime-types: application/json,application/json;charset=UTF-8,text/plain,text/css,text/html,application/javascript,application/x-ndjson
++    min-response-size: 2KB
+ 
+ config:
+   # Async 설정
+diff --git a/src/main/resources/config/config-local.yml b/src/main/resources/config/config-local.yml
+index f77c67b..ba46b09 100644
+--- a/src/main/resources/config/config-local.yml
++++ b/src/main/resources/config/config-local.yml
+@@ -3,13 +3,40 @@ config:
+   datasources[0]: # ORACLE
+     databaseName: nscm_oracle
+     databaseType: oracle
+-#    driverClassName: oracle.jdbc.OracleDriver
+-#    jdbc-url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
++# ⭐ [로컬 2026-08-14] 사내 Oracle 로 복구. 클라우드 소스의 기본값(10.34.220.81:2521:ESSCMD /
++#   SCMD_APP)은 사내망에서 도달할 수 없다. 계정도 다르다 — UI/BE 는 SCMP_APP 이다(≠ SCM_MGR).
++#   실측(2026-08-14): 100.65.143.121:1521 TCP 도달 OK · SCMP_APP 접속 OK(DB_NAME=OCGSCMD_P01).
++#                     구 주소 10.34.222.16:2521 은 도달 불가라 백업본을 그대로 쓰면 안 된다.
++#   ⭐ [2026-09-02] 사내 주소 변경 — 100.65.143.121:1521 → 175.211.29.206:3521(사용자 통보).
++#      동일 인스턴스 확인(SYS_CONTEXT SERVER_HOST=ol9-db · DB_NAME=OCGSCMD_P01), 계정/비밀번호 무변경.
++#   ⭐ [2026-09-07] DB 명 변경 — 175.211.29.206:2521/AJS → **175.211.29.206:2521/ZIOUI1**(사용자 통보. HOST/PORT/계정 동일).
++#   ⭐ [2026-09-05] DB 교체 — 175.211.29.206:3521/OCGSCMD_P01 → 175.211.29.206:2521/AJS(사용자 통보).
++#      다른 인스턴스다(SYS_CONTEXT SERVER_HOST=itx · DB_NAME=ZIOUI1 · Oracle 26ai 23.26.1).
++#      비밀번호도 변경 — SCM_MGR/SCMP_APP 모두 zionex1! 로 접속 실측(구 !ScMpaP_wndls@ 는 ORA-01017).
++#      SCMD_APP 계정은 신규 DB 에 존재하지 않는다.
++#   ⭐ [2026-09-21] 사내 IP 변경 — 175.211.29.206:2521/ZIOUI1 → **222.110.191.243:2521/ZIOUI1**(사용자 통보).
++#      동일 인스턴스 확인(SYS_CONTEXT SERVER_HOST=ol9-db · DB_NAME=ZIOUI1). PORT/서비스/계정/비밀번호 무변경.
++#      실측 2026-09-21: TCP 도달 OK · SCM_MGR·SCMP_APP 접속 OK. (구 IP 는 동일자 TCP 타임아웃)
++#   ⭐ [2026-10-13] 사내 IP 변경 — 222.110.191.243:2521/ZIOUI1 → **59.19.252.148:2521/ZIOUI1**(사용자 통보).
++#      PORT/서비스/계정/비밀번호 무변경. ⚠ 다른 인스턴스다(실측 2026-10-13: SERVER_HOST=localhost · DBID 71207375 ·
++#      PDB 생성 2026-10-08. 구 IP 는 SERVER_HOST=ol9-db · DBID 68425124 로 동일자에도 접속됨).
++#   ⚠ 클라우드 배포 시 아래 4줄을 주석 처리하고 cloud 블록을 되살릴 것.
+     driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+-    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+-    username: SCMD_APP
+-    password: "!SCMroqkf2026"
+-    maxPoolSize: 10
++    jdbc-url: jdbc:log4jdbc:oracle:thin:@59.19.252.148:2521/ZIOUI1
++    username: SCMP_APP
++    password: "zionex1!"
++# --- 이전 접속 정보 (보관 / DEPRECATED) ---
++#   2026-09-21~2026-10-13 : @222.110.191.243:2521/ZIOUI1                SCMP_APP / "zionex1!"
++#   2026-09-07~2026-09-21 : @175.211.29.206:2521/ZIOUI1                 SCMP_APP / "zionex1!"
++#   2026-09-02~09-05 : @175.211.29.206:3521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
++#   2026-07-27~09-02 : @100.65.143.121:1521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
++#   2026-06-17~07-27 : @121.162.245.167:2521/OCGSCMD_P01 SCMP_APP / "!ScMpaP_wndls@"
++# --- cloud 기본값 (배포 시 복원) ---
++#    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
++#    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
++#    username: SCMD_APP
++#    password: "!SCMroqkf2026"
++    maxPoolSize: 40   # 2026-10-29 10→40: 로컬 CheckList 5화면 동시 E2E 에서 풀 고갈(active=10 waiting=22 · 로그인 401 -9998). ZIOUI1 processes 600 중 SCMP_APP 세션 10 — 여유 충분. 적용 = BE 재기동
+     minIdel: 10
+ #    connectionTestQuery: "select 1 from dual"
+     mapperLocations: classpath:/sql/**/*.xml
+diff --git a/src/main/resources/mybatis/mybatis-config.xml b/src/main/resources/mybatis/mybatis-config.xml
+index 0c9e3b1..5207733 100644
+--- a/src/main/resources/mybatis/mybatis-config.xml
++++ b/src/main/resources/mybatis/mybatis-config.xml
+@@ -1,14 +1,25 @@
+-<?xml version="1.0" encoding="UTF-8" ?>
++﻿<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "./mybatis-3-config.dtd">
+ 
+ <configuration>
+     <settings>
+         <setting name="jdbcTypeForNull" value="NULL"/>	<!-- null 허용 -->
+-        <setting name="defaultFetchSize" value="0"/>
++        <!-- [E20260824-FETCHSIZE] 0 = 드라이버 기본값이고 Oracle JDBC 기본은 10행이다.
++             DB 가 원격(사내 175.211.29.206:2521/ZIOUI1 — 2026-09-07 DB명 변경, 구 .../AJS · .../OCGSCMD_P01)이라 대량 조회에서 왕복 횟수가 그대로 지연이 된다.
++             DMF0020 실측(div82 / 12개월 / 10,524행 x 102컬럼):
++               fetchSize 10 -> 약 1,052회 왕복, BE 내부 약 22초 (API TTFB 34초)
++               같은 커서를 arraysize 2000 으로 받으면 4초 (직접 측정)
++             1000 = 왕복 11회. 102컬럼이어도 1,000행 버퍼는 수 MB 라 힙 부담이 낮다. -->
++        <setting name="defaultFetchSize" value="1000"/>
++        <!-- callSettersOnNulls=true : 커서 컬럼 값이 NULL 이어도 결과 Map 에 키를 담는다.
++             꺼져 있으면 값이 NULL 인 컬럼은 응답 행에서 빠진다. 화면은 응답 행의 키로 동적(기간) 컬럼을 만들기 때문에
++             PIVOT 결과에서 값이 전부 NULL 인 기간은 컬럼째 사라진다 (DMF0020 Sales Price 2026-10-13 : SP 는 주차 41개를
++             내려주는데 화면은 값이 있는 5개만 표시. DMF0043 2026-06 과 같은 원인).
++             필수: framework/model/CustomMap.put 의 null 가드와 한 쌍이다. 가드 없이 이 설정만 켜면 모든 조회가 NPE 로 실패한다. -->
++        <setting name="callSettersOnNulls" value="true"/>
+ 		<!-- 
+         <setting name="mapUnderscoreToCamelCase" value="true"/>
+         <setting name="lazyLoadingEnabled" value="true"/>
+-        <setting name="callSettersOnNulls" value="true"/>
+ 		-->
+     </settings>
+ 
+@@ -47,4 +58,4 @@
+ -->
+ 
+ 
+-</configuration>
+\ No newline at end of file
++</configuration>
+diff --git a/src/main/resources/sql/admin/Auth.xml b/src/main/resources/sql/admin/Auth.xml
+index 2d31692..388e64d 100644
+--- a/src/main/resources/sql/admin/Auth.xml
++++ b/src/main/resources/sql/admin/Auth.xml
+@@ -29,6 +29,16 @@
+ 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
+ 		) }
+ 	</select>
++
++	<!-- 공통버튼 노출 = 사용자 × 선택 Division 권한 (2026-10-26) — divisionId NULL/'ALL'/복수 = 그룹 합집합 -->
++    <select id="retrieveMenuBtnAuthDiv" statementType="CALLABLE">
++		{ CALL SCM_MGR.PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV(
++			#{userId},
++			#{mnuId},
++			#{divisionId, jdbcType=VARCHAR},
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
++		) }
++	</select>
+ 	
+ 	<select id="checkMenuBtnAuthOri" statementType="CALLABLE">
+ 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_AUTH.PR_CHECK_MNU_BTN_AUTH(
+diff --git a/src/main/resources/sql/admin/Excel.xml b/src/main/resources/sql/admin/Excel.xml
+index 755e61c..fd65323 100644
+--- a/src/main/resources/sql/admin/Excel.xml
++++ b/src/main/resources/sql/admin/Excel.xml
+@@ -11,6 +11,16 @@
+            AND  SHEET_NAME = #{shtNm}
+ 	</select>
+ 
++	<!-- 26.09.22 업로드 오류 문구 1건 조회 (세션 언어 우선 → EN → 그 외). sesLangCd 는 BaseService 가 자동 주입. -->
++	<select id="selectMessageNm" resultType="java.util.HashMap">
++		SELECT  MSG_NM
++		  FROM  SCM_ADM_MSG_M
++		 WHERE  MSG_ID = #{msgId}
++		   AND  USE_YN = 'Y'
++		 ORDER BY CASE WHEN LANG_CD = #{sesLangCd} THEN 0 WHEN LANG_CD = 'EN' THEN 1 ELSE 2 END
++		 FETCH FIRST 1 ROWS ONLY
++	</select>
++
+ 	<select id="excelUploadTmp" statementType="CALLABLE" >
+ 		<![CDATA[
+     	{ call PKG_NSCM_UI_EXCEL.PR_SAVE_EXCEL_UPLOAD(#{excelData}, #{colCnt}, #{mnuId}, #{shtNm}, #{sesUserId} 
+diff --git a/src/main/resources/sql/admin/Menu.xml b/src/main/resources/sql/admin/Menu.xml
+index 5b3e688..6e0d09b 100644
+--- a/src/main/resources/sql/admin/Menu.xml
++++ b/src/main/resources/sql/admin/Menu.xml
+@@ -5,7 +5,7 @@
+     <resultMap id="menuResultMap" type="java.util.HashMap" />
+ 
+     <select id="retrieveMenus" statementType="CALLABLE">
+-		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_GET_MENU_LIST(
++		{ CALL SCM_MGR.PR_GET_MENU_LIST_V2(
+ 			#{userId},
+ 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+ 		) }
+@@ -68,4 +68,35 @@
+ 		) }
+     </select>    
+     
++	<select id="retrieveTitleSet" statementType="CALLABLE">
++		{ CALL SCM_MGR.DMF0002_GET_TITLESET_POPUP(
++			#{programId, mode=IN, jdbcType=VARCHAR},
++			#{sheetName, mode=IN, jdbcType=VARCHAR},
++			#{columnType, mode=IN, jdbcType=VARCHAR},
++			#{sesUserId, mode=IN, jdbcType=VARCHAR},
++			#{divisionId, mode=IN, jdbcType=VARCHAR},
++			#{menuId, mode=IN, jdbcType=VARCHAR},
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
++		) }
++    </select>
++
++	<select id="saveTitleSet" statementType="CALLABLE">
++		{ CALL SCM_MGR.SCM0002_SET_TITLESET_POPUP(
++			#{programId, mode=IN, jdbcType=VARCHAR},
++			#{sheetName, mode=IN, jdbcType=VARCHAR},
++			#{columnType, mode=IN, jdbcType=VARCHAR},
++			#{activeFlag, mode=IN, jdbcType=VARCHAR},
++			#{columnName, mode=IN, jdbcType=VARCHAR},
++			#{sortOrderNo, mode=IN, jdbcType=VARCHAR},
++			#{subTotalFlag, mode=IN, jdbcType=VARCHAR},
++			#{sortMethodCode, mode=IN, jdbcType=VARCHAR},
++			#{sesUserId, mode=IN, jdbcType=VARCHAR},
++			#{columnWidth, mode=IN, jdbcType=VARCHAR},
++			#{cellColor, mode=IN, jdbcType=VARCHAR},
++			#{textColor, mode=IN, jdbcType=VARCHAR},
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap},
++			#{resultCursor, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
++		) }
++    </select>
++    
+ </mapper>
+\ No newline at end of file

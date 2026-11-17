@@ -1,0 +1,217 @@
+{
+  "menuId": "SSP0005",
+  "page": "ShipmentWorkingDay",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-working-day",
+  "asisName": "ShipmentWorkingDay",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "company",
+      "label": "Company",
+      "lbl": "LBL00047",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboCompany"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "input",
+      "label": "Input",
+      "lbl": "LBL00872",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnInput"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Shipment Working Day",
+      "key": "SHIPMENT_WORKING_DAY",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "COMPANY_ID",
+        "DIVISION_ID"
+      ],
+      "labels": [
+        "Company",
+        "Divison"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0005.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_PERIOD",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SCM0001_GET_SCP_PERIOD",
+      "entries": [
+        "event:this.Load"
+      ]
+    }
+  ],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.YesOrNo",
+        "SCP.SCM0001_GET_SCP_PERIOD"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleCboDayWeek",
+      "target": "cboDayWeek",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleInput",
+      "target": "btnInput",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

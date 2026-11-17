@@ -38,10 +38,13 @@ export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) =
 
   const isBusy = useIsBusy([tabs[activeIndex].tabId]);
 
+  // 특정 화면(대시보드 DMD0001)은 콘텐츠 여백 없이 full-bleed 로 보여준다 — 활성 탭일 때만.
+  const isFlushScreen = tabs[activeIndex]?.mnuId === 'DMD0001';
+
   return (
     <div className={styles.mdiContainer}>
       <MDITabs />
-      <div className={styles.mdiContent}>
+      <div className={clsx(styles.mdiContent, { [styles.mdiContentFlush]: isFlushScreen })}>
         <RouterSync mirrorOnMount={mirrorRouteOnMount} />
         <AtlasBridge />
         <ViewContainer />

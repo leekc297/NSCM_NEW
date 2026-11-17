@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0030-S6e2113,DIVISION,,,,값 미도출,"if (siMain.ActiveSheet.SheetName == ""Excluded Item"") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID))",

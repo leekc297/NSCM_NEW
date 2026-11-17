@@ -1,0 +1,186 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 20:04:04.728",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 50,
+   "rows_kind": "DataSet rows",
+   "ms": 11.18,
+   "params": {
+    "Code": "Plan_InforElectrode",
+    "Param1": "HQ00",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Plan_InforElectrode', @Param1='HQ00', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:BtnRequestUser"
+  },
+  {
+   "at": "2026-11-14 20:04:04.823",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 255,
+   "rows_kind": "DataSet rows",
+   "ms": 9.82,
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "inline": "EXEC SSP0023_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260928', @p_end_yyyymmdd='20261204'",
+   "phase": "action:BtnRequestUser"
+  },
+  {
+   "at": "2026-11-14 20:04:04.839",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 4.6,
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0023', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Plan(Electrode)'",
+   "phase": "action:BtnRequestUser"
+  },
+  {
+   "at": "2026-11-14 20:04:18.644",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0023_GET_SHIPMENT_PLAN",
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 308,
+   "rows_kind": "DataSet rows",
+   "ms": 13679.64,
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "inline": "EXEC SSP0023_GET_SHIPMENT_PLAN @P_DIVISION_ID='40', @P_COMPANY_ID='HQ00', @P_FROM_SITE='', @P_PLAN_START_YYYYMMDD='20261010', @P_FROM_YYYYMMDD='20260928', @P_TO_YYYYMMDD='20261204', @P_MODEL_ID='', @P_ITEM_ID='', @P_NICK_NAME='', @P_USER_ID='jaeuk.shin', @P_PROGRAM_ID='SSP0023', @P_SHEET_NAME='Shipment Plan(Electrode)', @P_REAL_FLAG='Y', @P_MY_MODEL_CHK='N', @P_PART_LEADER_CHK='N', @P_TEAM_LEADER_CHK='N', @P_DELEGATEE_CHK='N', @P_NON_CHK='Y'",
+   "phase": "action:BtnRequestUser"
+  },
+  {
+   "at": "2026-11-14 20:04:18.991",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.88,
+   "params": {
+    "p_menu_id": "SSP0023",
+    "p_log_type": "FIND",
+    "p_log_cnt": "308",
+    "p_db_time": "13.882",
+    "p_ui_time": "0.166",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SSP0023', @p_log_type='FIND', @p_log_cnt='308', @p_db_time='13.882', @p_ui_time='0.166', @p_user_id='jaeuk.shin'",
+   "phase": "action:BtnRequestUser"
+  },
+  {
+   "at": "2026-11-14 20:04:26.387",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.39,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 20:04:26.445",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2559,
+   "rows_kind": "DataSet rows",
+   "ms": 36.19,
+   "params": {
+    "p_division_id": "ALL",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='ALL', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 20:04:32.603",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156657,
+   "rows_kind": "DataSet rows",
+   "ms": 5285.96,
+   "params": {
+    "p_division_id": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 20:04:40.169",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 18.32,
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_sheet_name": "Shipment Plan(Electrode)",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SSP0023', @p_sheet_name='Shipment Plan(Electrode)', @p_column_type='M', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

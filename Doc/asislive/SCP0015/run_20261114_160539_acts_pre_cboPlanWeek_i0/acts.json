@@ -1,0 +1,32 @@
+{
+ "id": "SCP0015",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [],
+ "skipped": [
+  {
+   "control": "BtnStop",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-14 16:05:21.931",
+ "preset": {
+  "name": "cboPlanWeek",
+  "token": "cboPlanWeek=i0",
+  "kw": {
+   "name": "cboPlanWeek",
+   "index": "0"
+  },
+  "label": "cboPlanWeek 콤보 0번째 항목",
+  "ok": false,
+  "error": "InvalidOperationException: combo index out of range: 0/0",
+  "applied": null,
+  "value": "",
+  "text": "",
+  "checked": null,
+  "selected_index": -1
+ },
+ "note": "조건 값 설정 실패(cboPlanWeek=i0): InvalidOperationException: combo index out of range: 0/0"
+}

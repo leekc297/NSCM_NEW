@@ -1,0 +1,8 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+GSCM_GROUPINFO-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 2,,2,GroupInfo.cs:89,DERIVED
+GSCM_GROUPINFO-S357315,기타,OTHER,button:EditButton,EditButton,"if (this.fps != null) ▸ if (fps.Name == ""spdMain"")",잠금 2 · 잠금:siMain.SwitchLock ; 잠금:siMain.LockColumn,,2,GroupInfo.cs:143,DERIVED
+GSCM_GROUPINFO-S5bc1f8,조회,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,FindData,,"서버 호출 3, 데이터 처리 2, 잠금 1, 그리드 구성 1 · SystemManager.UP_FX_GetGroupInfoList · 잠금:siMain.LockColumn",SystemManager.UP_FX_GetGroupInfoList,7,GroupInfo.cs:166,DERIVED
+GSCM_GROUPINFO-S90bd48,초기,SHEET+DATA,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,InitSpread,if (sheetName == SpdSheet.shtMain),그리드 구성 7,,7,GroupInfo.cs:101,DERIVED
+GSCM_GROUPINFO-S1ad898,저장,SHEET+STATE,button:InsertButton,InsertRow,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(siMain.SheetName) == false)","데이터 처리 4, 그리드 값·서식 1",,5,GroupInfo.cs:281,DERIVED
+GSCM_GROUPINFO-S1bb36d,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),"표시·활성 4, 데이터 처리 3, 서버 호출 2, 메시지 1 · 표시·활성:request.InsertQueryId ; 표시·활성:request.DeleteQueryId ; 표시·활성:request.UpdateQueryId ; 표시·활성:request.DataSet",,10,GroupInfo.cs:221,DERIVED
+GSCM_GROUPINFO-Saef96f,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (cnt > 0),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,GroupInfo.cs:236,DERIVED

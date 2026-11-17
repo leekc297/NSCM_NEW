@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0060",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 96,
+  "at": "2026-11-14T19:22:44.703Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 232,
+  "at": "2026-11-14T19:22:45.105Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 501,
+  "at": "2026-11-14T19:22:45.256Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 99,
+  "at": "2026-11-14T19:22:46.142Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 113,
+  "at": "2026-11-14T19:22:49.558Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"companyId\":\"GM00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261009\",\"fromYyyymmdd\":\"20261009\",\"toYyyymmdd\":\"20261023\",\"itemId\":\"\",\"productLevel1\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0060\",\"sheetName\":\"Shipment Plan\",\"realFlag\":\"Y\"}",
+  "status": 200,
+  "rows": 24,
+  "dur": 162,
+  "at": "2026-11-14T19:22:49.639Z",
+  "user": "minyonglee1",
+  "test": "W9 대조표 미구현 행 실측"
+ }
+]

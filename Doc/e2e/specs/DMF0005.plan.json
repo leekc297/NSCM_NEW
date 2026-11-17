@@ -6,6 +6,7 @@
   "divCascade": [],
   "divLabels": [
     "Div.",
+    "Div",
     "Division"
   ],
   "condOrder": [],
@@ -185,6 +186,7 @@
       "catalog": "",
       "labels": [
         "Div.",
+        "Div",
         "Division"
       ],
       "excluded": false,
@@ -449,20 +451,18 @@
     "Production": {
       "40": [
         "Div.",
-        "Org.Name (Report)",
         "Team",
+        "Team ID",
+        "Team ID",
         "Team(Sales)",
-        "Team ID",
-        "Team ID",
         "Cust Group*",
         "Cust Group",
         "End Customer*",
         "End Customer",
         "End Customer",
-        "End Customer (Report)",
         "Owner Name",
-        "Owner",
         "Owner(Sales)",
+        "Owner",
         "Owner(PM)",
         "Sold-To",
         "Sold-To",
@@ -476,8 +476,6 @@
         "Project Code",
         "Project",
         "Cell Prod. Site (S&OP Report)",
-        "Project Status",
-        "Project Owner",
         "Sales Sync",
         "Item Type",
         "Product Group",
@@ -487,21 +485,23 @@
         "Model Name",
         "Energy(Wh)",
         "Energy(Wh)",
-        "Production Process*"
+        "Production Process*",
+        "Production Process",
+        "Cell Type",
+        "KWh/Cell",
+        "Cell/Car"
       ],
       "81": [
         "Div.",
-        "Org.Name (Report)",
+        "Team ID",
+        "Team ID",
         "Team(Sales)",
-        "Team ID",
-        "Team ID",
         "Cust Group",
         "End Customer",
         "End Customer",
-        "End Customer (Report)",
         "Owner Name",
-        "Owner",
         "Owner(Sales)",
+        "Owner",
         "Owner(PM)",
         "Sold-To",
         "Sold-To",
@@ -512,8 +512,6 @@
         "Sales Site",
         "Project Code",
         "Project",
-        "Project Status",
-        "Project Owner",
         "Sales Sync",
         "Item Type",
         "Product Group",
@@ -523,29 +521,31 @@
         "Energy(Wh)",
         "Production Process",
         "Cell Type",
-        "Cell Type",
         "KWh/Cell",
         "Cell/Car",
         "Cell/Module",
         "Module/Car",
         "Customer Model",
-        "Sales Company"
+        "Sales Company",
+        "Sales Plant",
+        "Nick Name",
+        "BPMS Exist",
+        "Sold-to Cust.(Report)",
+        "Cust Group Detail"
       ],
       "82": [
         "Div.",
-        "Org.Name (Report)",
-        "Team(Sales)",
         "Team(Sales)",
         "Team ID",
         "Team ID",
+        "Team(Sales)",
         "Cust Group",
         "End Customer",
         "End Customer",
-        "End Customer (Report)",
         "Owner Name",
         "Owner(Sales)*",
-        "Owner",
         "Owner(Sales)",
+        "Owner",
         "Owner(PM)*",
         "Owner(PM)",
         "Sold-To",
@@ -557,8 +557,6 @@
         "Sales Site",
         "Project Code",
         "Project",
-        "Project Status",
-        "Project Owner",
         "Sales Sync*",
         "Sales Sync",
         "Item Type",
@@ -568,10 +566,14 @@
         "Model Name",
         "Energy(Wh)",
         "Production Process",
-        "Cell Type",
         "Cell Type*",
         "Cell Type",
-        "KWh/Cell"
+        "KWh/Cell",
+        "Cell/Car",
+        "Cell/Module",
+        "Module/Car",
+        "Customer Model",
+        "Sales Company"
       ]
     },
     "Purchase": {
@@ -580,12 +582,10 @@
         "Sales Site",
         "Project Code",
         "Project",
-        "Project Status",
         "Sales Sync",
         "Item Type",
         "Model Type",
         "Model",
-        "Cell Type",
         "Cell Type",
         "KWh/Cell",
         "Cell/Car",
@@ -598,13 +598,9 @@
         "BPMS Exist",
         "Owner Name",
         "Owner",
-        "Liablity(Week)",
-        "Currency",
         "EDI Incoterms",
         "EDI Leadtime",
         "Active",
-        "양극재",
-        "Module variant",
         "Update Date",
         "Update By"
       ],
@@ -613,12 +609,10 @@
         "Sales Site",
         "Project Code",
         "Project",
-        "Project Status",
         "Sales Sync",
         "Item Type",
         "Model Type",
         "Model",
-        "Cell Type",
         "Cell Type",
         "KWh/Cell",
         "Cell/Car",
@@ -631,13 +625,9 @@
         "BPMS Exist",
         "Owner Name",
         "Owner",
-        "Liablity(Week)",
-        "Currency",
         "EDI Incoterms",
         "EDI Leadtime",
         "Active",
-        "양극재",
-        "Module variant",
         "Update Date",
         "Update By"
       ],
@@ -646,12 +636,10 @@
         "Sales Site",
         "Project Code",
         "Project",
-        "Project Status",
         "Sales Sync",
         "Item Type",
         "Model Type",
         "Model",
-        "Cell Type",
         "Cell Type*",
         "Cell Type",
         "KWh/Cell",
@@ -665,13 +653,9 @@
         "BPMS Exist",
         "Owner Name",
         "Owner",
-        "Liablity(Week)",
-        "Currency",
         "EDI Incoterms",
         "EDI Leadtime",
         "Active",
-        "양극재",
-        "Module variant",
         "Update Date",
         "Update By"
       ]
@@ -720,10 +704,10 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "SAVE",
-        "DELETE",
+        "SEARCH",
         "INSERT",
         "MODEL_CHANGE",
-        "SEARCH"
+        "DELETE"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -748,123 +732,123 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "SAVE",
-      "DELETE",
+      "SEARCH",
       "INSERT",
       "MODEL_CHANGE",
-      "SEARCH"
+      "DELETE"
     ],
     "CAPA Planner": [
       "SAVE",
-      "DELETE",
-      "INSERT",
       "SEARCH",
+      "INSERT",
+      "DELETE",
       "MODEL_CHANGE"
     ],
     "DM ADMIN": [
       "SAVE",
       "INSERT",
-      "DELETE",
       "MODEL_CHANGE",
+      "DELETE",
       "SEARCH"
     ],
     "DM Planner": [
       "SAVE",
-      "SEARCH",
       "DELETE",
-      "INSERT",
-      "MODEL_CHANGE"
+      "SEARCH",
+      "MODEL_CHANGE",
+      "INSERT"
     ],
     "DM Planner (W/S)": [
       "SAVE",
-      "MODEL_CHANGE",
-      "SEARCH",
+      "DELETE",
       "INSERT",
-      "DELETE"
+      "MODEL_CHANGE",
+      "SEARCH"
     ],
     "DM Viewer": [
       "SAVE",
-      "INSERT",
-      "SEARCH",
+      "MODEL_CHANGE",
       "DELETE",
-      "MODEL_CHANGE"
+      "INSERT",
+      "SEARCH"
     ],
     "FP Planner": [
       "SAVE",
-      "MODEL_CHANGE",
-      "DELETE",
       "SEARCH",
-      "INSERT"
+      "DELETE",
+      "INSERT",
+      "MODEL_CHANGE"
     ],
     "FP Viewer": [
       "SAVE",
-      "INSERT",
-      "SEARCH",
       "DELETE",
+      "SEARCH",
+      "INSERT",
       "MODEL_CHANGE"
     ],
     "JV Planner": [
       "SAVE",
-      "SEARCH",
       "INSERT",
       "MODEL_CHANGE",
+      "SEARCH",
       "DELETE"
     ],
     "SCM PI Admin": [
       "SAVE",
-      "INSERT",
-      "MODEL_CHANGE",
       "SEARCH",
-      "DELETE"
+      "DELETE",
+      "MODEL_CHANGE",
+      "INSERT"
     ],
     "SCM Viewer": [
       "SAVE",
-      "MODEL_CHANGE",
       "SEARCH",
       "DELETE",
-      "INSERT"
+      "INSERT",
+      "MODEL_CHANGE"
     ],
     "SCP Planner": [
       "SAVE",
-      "DELETE",
       "MODEL_CHANGE",
       "INSERT",
+      "DELETE",
       "SEARCH"
     ],
     "SCP Tester": [
       "SAVE",
+      "MODEL_CHANGE",
+      "SEARCH",
+      "INSERT",
+      "DELETE"
+    ],
+    "SSP ADMIN": [
+      "SAVE",
+      "MODEL_CHANGE",
+      "INSERT",
+      "DELETE",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "SAVE",
       "DELETE",
       "SEARCH",
       "MODEL_CHANGE",
       "INSERT"
     ],
-    "SSP ADMIN": [
-      "SAVE",
-      "INSERT",
-      "DELETE",
-      "SEARCH",
-      "MODEL_CHANGE"
-    ],
-    "SSP Planner": [
-      "SAVE",
-      "MODEL_CHANGE",
-      "DELETE",
-      "INSERT",
-      "SEARCH"
-    ],
     "SSP Viewer": [
       "SAVE",
-      "DELETE",
-      "SEARCH",
       "MODEL_CHANGE",
+      "SEARCH",
+      "DELETE",
       "INSERT"
     ]
   },
   "menuBtnCodes": [
     "SAVE",
-    "DELETE",
+    "SEARCH",
     "INSERT",
     "MODEL_CHANGE",
-    "SEARCH"
+    "DELETE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

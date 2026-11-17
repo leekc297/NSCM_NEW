@@ -1,4 +1,4 @@
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useRef, useState } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
@@ -163,7 +163,9 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
             {multi(t(LBL.LINE, 'Line'), sc.lineIds, lineOptions, codes =>
               setSearchParams({ lineIds: codes })
             )}
-            {/* Model/Nickname — 텍스트 + btnItemId(ItemByDivisionModal) 팝업. 확정값은 itemId 로만 전송한다. */}
+            {/* Model/Nickname — 텍스트 + btnItemId(MaterialByDivisionModal) 팝업. 확정값은 itemId 로만 전송한다.
+                AS-IS 는 ItemByDivisionModal(COM0008)이나 사용자 지시(2026-11-11)로 MaterialByDivisionModal
+                (COM0013)로 교체 — 감사가 "AS-IS=Item 팝업"으로 되돌리지 말 것. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -208,16 +210,17 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
         }
       />
 
-      {/* btnItemId → DM0002_ItembyDivisionPopup(COM0008). AS-IS btnItemId_Click(cs:3391). 확정값은 itemId 로만 반영한다. */}
-      <ItemByDivisionModal
+      {/* btnItemId → MaterialByDivisionModal(COM0013). AS-IS btnItemId_Click(cs:3391)은 ItemByDivisionModal
+          (COM0008)이나 사용자 지시(2026-11-11)로 교체. 확정값은 itemId(ITEM_ID) 로만 반영한다 — SP
+          P_GET_CAPA_MOBILITYIT 의 P_ITEM_ID 계약 유지. Division 은 고정 '40'(scpModuleType=MENU_ID 로 SP 분기). */}
+      <MaterialByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={items => {
           if (items) setSearchParams({ itemId: items });
           setOpenItem(false);
         }}
-        preSearchParams={{ divisionId: FIXED_DIVISION, itemId: sc.itemId }}
-        callFromCell={false}
+        preSearchParams={{ divisionId: FIXED_DIVISION, scpModuleType: MENU_ID, itemId: sc.itemId }}
       />
     </>
   );

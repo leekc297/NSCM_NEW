@@ -1,0 +1,52 @@
+{
+  "id": "SSP0024",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0024] · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0024/__asis-actions__.md · Doc/asisfacts/screens/SSP0024/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-10T14:09:43+09:00",
+  "end": "2026-11-10T14:14:51+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\shipment-master-electrode",
+      "files": 14
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0024",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0024",
+      "files": 5
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "Material 앞뒤 like, 대소문자 넣어도 조회될 수 있도록 DB 객체 보완해주세요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-10T14:14:51+09:00",
+  "changed": [
+    {
+      "file": "docs\\business_analysis.md",
+      "kind": "added"
+    },
+    {
+      "file": "docs\\screen_design.md",
+      "kind": "added"
+    },
+    {
+      "file": "docs\\unit_test.md",
+      "kind": "added"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+ "id": "SSP0013",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM",
+  "pk": [
+   "CONFIRM_ID"
+  ],
+  "match": {
+   "CONFIRM_ID": "CONFIRM_ID"
+  },
+  "save_sp": "SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK",
+  "side": [],
+  "basis": "foxml SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK → SP SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "BEFORE_QTY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "BEFORE_QTY",
+     "db_col": "BEFORE_QTY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "BEFORE_QTY",
+    "db_col": "BEFORE_QTY",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:06:56",
+ "status": "ERROR",
+ "steps": [],
+ "find_dialogs": [],
+ "note": "조회 결과 행 없음(메시지 [])"
+}

@@ -1,0 +1,376 @@
+{
+ "id": "SCP0115",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Policy Inv Management",
+     "rows": 0,
+     "cols": 23,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Request No."
+       ],
+       "label": "Request No.",
+       "tag": "REQUEST_NO",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Date"
+       ],
+       "label": "Plan Date",
+       "tag": "PLAN_DATE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "구분"
+       ],
+       "label": "구분",
+       "tag": "PLAN_TP_DESC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLAN_TP_DESC",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "발생사유"
+       ],
+       "label": "발생사유",
+       "tag": "OCCR_RSN_DESC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "OCCR_RSN_DESC",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "발생사유(상세)"
+       ],
+       "label": "발생사유(상세)",
+       "tag": "OCCR_RSN_CTN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "소진방안"
+       ],
+       "label": "소진방안",
+       "tag": "EXHT_TP_DESC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "EXHT_TP_DESC",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "소진방안(상세)"
+       ],
+       "label": "소진방안(상세)",
+       "tag": "EXHT_TP_CTN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "COMPANY ID"
+       ],
+       "label": "COMPANY ID",
+       "tag": "COMPANY_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "COMPANY_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "DIV"
+       ],
+       "label": "DIV",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "플랜트코드"
+       ],
+       "label": "플랜트코드",
+       "tag": "PLANT_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLANT_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "플랜트이름"
+       ],
+       "label": "플랜트이름",
+       "tag": "PLANT_DESC",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "아이템코드"
+       ],
+       "label": "아이템코드",
+       "tag": "ITEM_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "아이템이름"
+       ],
+       "label": "아이템이름",
+       "tag": "ITEM_NAME",
+       "width": "170",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "자재분류코드"
+       ],
+       "label": "자재분류코드",
+       "tag": "ITEM_CLASS",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "자재분류이름"
+       ],
+       "label": "자재분류이름",
+       "tag": "ITEM_CLASS_NAME",
+       "width": "170",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "수량"
+       ],
+       "label": "수량",
+       "tag": "QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "단위"
+       ],
+       "label": "단위",
+       "tag": "UOM",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "계획일자"
+       ],
+       "label": "계획일자",
+       "tag": "ETA",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "공급사코드"
+       ],
+       "label": "공급사코드",
+       "tag": "SUPPLIER_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "공급사이름"
+       ],
+       "label": "공급사이름",
+       "tag": "SUPPLIER_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "입력자"
+       ],
+       "label": "입력자",
+       "tag": "USER_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "입력일자"
+       ],
+       "label": "입력일자",
+       "tag": "UPDATE_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "id": "SCP0055",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnNickName",
+   "ok": false,
+   "error": "TimeoutException: UI thread busy (modal dialog?)",
+   "popups": null,
+   "dialogs": [],
+   "calls": [
+    "SCP0055_GET_SHIPMENT_ALLO_PLAN",
+    "SCP0055_GET_SHIPMENT_ALLO_PLAN",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "SCP0055_GET_SHIPMENT_ALLO_NOTE"
+   ],
+   "scenarios": [
+    "SCP0055-S76fd13",
+    "SCP0055-S0d5d3a"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModel_ID",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 09:31:24.299",
+ "fills": 0,
+ "fill_left": []
+}

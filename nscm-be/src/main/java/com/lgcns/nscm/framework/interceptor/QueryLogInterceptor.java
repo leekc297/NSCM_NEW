@@ -1,14 +1,9 @@
 package com.lgcns.nscm.framework.interceptor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.sql.DataSource;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -27,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgcns.nscm.admin.user.UserSession;
-import com.lgcns.nscm.framework.property.CommonProperties;
 import com.lgcns.nscm.framework.utils.NullUtils;
 import com.lgcns.nscm.framework.utils.SecurityUtil;
 
@@ -51,25 +45,20 @@ import com.lgcns.nscm.framework.utils.SecurityUtil;
 public class QueryLogInterceptor implements Interceptor {
 
     private static final Logger log = LoggerFactory.getLogger(QueryLogInterceptor.class);
-    private static final ThreadLocal<Boolean> logging = ThreadLocal.withInitial(() -> false);
 
-    private final DataSource dataSource;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final CommonProperties commonProperties;
+    private final SqlLogWriter sqlLogWriter;
+    private final boolean loggingOnlyError;
 
     private int thresholdMs = 0;
 
-    public QueryLogInterceptor(DataSource dataSource, CommonProperties commonProperties) {
-        this.dataSource = dataSource;
-        this.commonProperties = commonProperties;
+    public QueryLogInterceptor(SqlLogWriter sqlLogWriter, boolean loggingOnlyError) {
+        this.sqlLogWriter = sqlLogWriter;
+        this.loggingOnlyError = loggingOnlyError;
     }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-
-        if (Boolean.TRUE.equals(logging.get())) {
-            return invocation.proceed();
-        }
 
         long start = System.currentTimeMillis();
 
@@ -105,104 +94,26 @@ public class QueryLogInterceptor implements Interceptor {
             long end = System.currentTimeMillis();
             int elapsed = (int) (end - start);
 
-            if (thresholdMs > 0 && elapsed < thresholdMs) {
-                return null;
+            // 주의: finally 안에서 절대 return 하지 않는다. finally 의 return 은 try 의 실제 쿼리 결과를 덮어쓴다.
+            boolean belowThreshold = thresholdMs > 0 && elapsed < thresholdMs;
+            boolean hasError = !NullUtils.isNone(exceptionMsg);
+            boolean skip = belowThreshold || (loggingOnlyError && !hasError);
+
+            if (!skip) {
+                String paramsJson = toJsonSafe(parameter);
+                UserSession userSession = SecurityUtil.getUserSession();
+                String userId = (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
+                LocalDateTime now = LocalDateTime.now();
+
+                sqlLogWriter.offer(new SqlLogRecord(
+                        sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg));
             }
-
-            String paramsJson = toJsonSafe(parameter);
-            UserSession userSession = SecurityUtil.getUserSession();
-            String userId =  (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
-            LocalDateTime now = LocalDateTime.now();
-
-            // logging.set(true);
-            if(commonProperties.getMybatis().isLoggingOnlyError()) {
-            	if(!NullUtils.isNone(exceptionMsg)) insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
-            } else insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
         }
     }
 
-    private void insertSqlLog(String sqlId,
-                              String sqlType,
-                              String sqlText,
-                              int elapsedMs,
-                              LocalDateTime executeTime,
-                              String userId,
-                              String paramsJson,
-                              int resultCount,
-                              String exceptionMsg) {
-
-        String insertSql =
-            "INSERT INTO SCM_COM_SQL_LOG " +
-            " (SQL_ID, SQL_TYPE, SQL_TEXT, ELAPSED_MS, EXECUTE_TIME, CREATED_BY, PARAMS, RESULT_COUNT, EXCEPTION) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(insertSql)) {
-
-            ps.setString(1, sqlId);
-            ps.setString(2, sqlType);
-            ps.setString(3, sqlText);
-            ps.setInt(4, elapsedMs);
-            ps.setTimestamp(5, Timestamp.valueOf(executeTime));
-            ps.setString(6, userId);
-            ps.setString(7, paramsJson);
-
-            if (resultCount < 0) {
-                ps.setNull(8, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(8, resultCount);
-            }
-
-            ps.setString(9, exceptionMsg);
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-            log.warn("Failed to insert SCM_COM_SQL_LOG. sqlId={}, elapsedMs={}, error={}",
-                    sqlId, elapsedMs, e.getMessage());
-        }
-    }
-
-    /** [E20260824-LOGPARAM] PARAMS 로그 상한. 초과분은 잘라 기록한다(안전망). */
-    private static final int PARAMS_MAX_LEN = 4000;
-
-    /**
-     * [E20260824-LOGPARAM] 파라미터 로그 직렬화.
-     *
-     * <p>종전 문제: MyBatis 는 실행 후 <b>OUT 파라미터(REF CURSOR 매핑 결과)를 파라미터 맵에 되돌려
-     * 넣는다</b>. 이 메서드는 finally 에서 호출되므로 그 시점 맵에는 조회 결과 전체가 들어 있었고,
-     * 결과적으로 조회 1회마다 결과셋을 통째로 JSON 으로 만들어 SCM_COM_SQL_LOG.PARAMS(CLOB) 에
-     * INSERT 했다. DMF0020 실측(2026-08-24, div82/12개월/10,524행 x 102컬럼):
-     * <b>PARAMS 길이 20,535,281 bytes(19.6MB)</b> — 직렬화 + 원격 DB CLOB 왕복이 조회 지연의
-     * 지배적 요인이었다(DB 자체는 13초).
-     *
-     * <p>조치: ① OUT 파라미터 키('@' 시작)와 MyBatis 결과 홀더(DATARESULT)를 제외해 <b>입력만</b>
-     * 남긴다(로그 목적 = 어떤 파라미터로 호출했는가). ② 그래도 커지면 PARAMS_MAX_LEN 으로 절단한다.
-     */
     private String toJsonSafe(Object parameter) {
         try {
-            if (parameter == null) return null;
-            Object target = parameter;
-            if (parameter instanceof Map<?, ?> map) {
-                Map<String, Object> in = new java.util.LinkedHashMap<>();
-                for (Map.Entry<?, ?> e : map.entrySet()) {
-                    String k = String.valueOf(e.getKey());
-                    // OUT 커서(@o_rc1, @O_RESULT_CURSOR ...) 와 결과 홀더는 로그 대상이 아니다
-                    if (k.startsWith("@") || "DATARESULT".equals(k)) continue;
-                    Object v = e.getValue();
-                    // 방어: 결과 컬렉션이 다른 키로 섞여 들어와도 통째로 담지 않는다
-                    if (v instanceof java.util.Collection<?> c) {
-                        in.put(k, "[collection size=" + c.size() + "]");
-                    } else {
-                        in.put(k, v);
-                    }
-                }
-                target = in;
-            }
-            String json = objectMapper.writeValueAsString(target);
-            if (json != null && json.length() > PARAMS_MAX_LEN) {
-                json = json.substring(0, PARAMS_MAX_LEN) + "...(truncated, total=" + json.length() + ")";
-            }
-            return json;
+            return parameter == null ? null : objectMapper.writeValueAsString(parameter);
         } catch (Exception e) {
             return "param to json error: " + e.getMessage();
         }

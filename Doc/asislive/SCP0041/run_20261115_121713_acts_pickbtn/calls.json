@@ -1,0 +1,73 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 12:16:45.183",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.65,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:pickbtn:BtnItemId"
+  },
+  {
+   "at": "2026-11-15 12:16:45.203",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 756,
+   "rows_kind": "DataSet rows",
+   "ms": 14.59,
+   "params": {
+    "p_division_id": "82",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='82', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:pickbtn:BtnItemId"
+  },
+  {
+   "at": "2026-11-15 12:16:45.298",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 756,
+   "rows_kind": "DataSet rows",
+   "ms": 14.31,
+   "params": {
+    "p_division_id": "82",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='82', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:pickbtn:BtnItemId"
+  },
+  {
+   "at": "2026-11-15 12:16:47.887",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 65906,
+   "rows_kind": "DataSet rows",
+   "ms": 2358.18,
+   "params": {
+    "p_division_id": "82",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='82', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:pickbtn:BtnItemId"
+  }
+ ]
+}

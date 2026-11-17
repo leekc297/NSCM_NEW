@@ -1,0 +1,814 @@
+{
+  "id": "SCP0020",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0020",
+  "divCascade": [
+    [
+      "Plant Site"
+    ],
+    [
+      "Line"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plant Site",
+    "Operation group",
+    "Line",
+    "Model/Nickname"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "TactTime",
+  "routePath": "supply/tact-time",
+  "asisName": "TactTime",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite",
+      "tobeLabel": "Plant Site",
+      "catalog": "Plant Site → Plant Site",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup",
+      "tobeLabel": "Operation group",
+      "catalog": "Operation group → Operation group",
+      "labels": [
+        "Operation group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "line",
+      "label": "Line",
+      "lbl": "LBL00010",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbLine",
+      "tobeLabel": "Line",
+      "catalog": "Line → Line",
+      "labels": [
+        "Line"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active",
+        "Valid"
+      ],
+      "excluded": true,
+      "excludedWhy": "As-is 숨김: layoutControlItem9.Visibility = Never (designer.cs)"
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Tact Time(OSP)",
+  "asisMapping": "features\\supply\\src\\pages\\tact-time\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Packer",
+      "key": "PACKER",
+      "labels": [
+        "",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity*",
+        "Division*",
+        "EXCEPT_YN",
+        "INPUT_STATUS",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "OPERATION_ID",
+        "OSP_YN",
+        "PLANT_SITE_ID",
+        "Priority*",
+        "Plant Site*",
+        "Tact Time*",
+        "Yield(%)*"
+      ]
+    },
+    {
+      "name": "Plant",
+      "key": "PLANT",
+      "labels": [
+        "Actual Capacity",
+        "Actual Output",
+        "Big Last Update Date",
+        "Big Tact Time",
+        "Due Date",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Effective Data Count",
+        "EXCEPT_YN",
+        "From Actual Capacity",
+        "INPUT_STATUS",
+        "Model",
+        "Item UOM",
+        "Jumbo / Min",
+        "Slitting Lane",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Model Site",
+        "Nick Name",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "Operation",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Priority*",
+        "Tact Time*",
+        "To Actual Capacity",
+        "UOM Convert",
+        "Valid*",
+        "Yield(%)*"
+      ]
+    },
+    {
+      "name": "Tact Time",
+      "key": "TACT_TIME",
+      "labels": [
+        "Actual Capacity",
+        "Actual Output",
+        "Big Last Update Date",
+        "Big Tact Time",
+        "Due Date",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Effective Data Count",
+        "EXCEPT_YN",
+        "From Actual Capacity",
+        "INPUT_STATUS",
+        "Model",
+        "Item UOM",
+        "Jumbo / Min",
+        "Slitting Lane",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Model Site",
+        "Nick Name",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "Operation",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Priority*",
+        "Tact Time*",
+        "To Actual Capacity",
+        "UOM Convert",
+        "Valid*",
+        "Yield(%)*"
+      ]
+    },
+    {
+      "name": "Tact Time Except",
+      "key": "TACT_TIME_EXCEPT",
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Comment",
+        "INPUT_STATUS",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Line",
+        "Nick Name",
+        "OPERATION_ID",
+        "Operation",
+        "ORG_DIVISION_ID",
+        "ORG_ITEM_ID",
+        "ORG_LINE_ID",
+        "ORG_OPERATION_ID",
+        "ORG_PLANT_SITE_ID",
+        "ORG_TACT_TIME_END_DATE",
+        "ORG_TACT_TIME_START_DATE",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Tact Time*",
+        "End Date*",
+        "Start Date*",
+        "Product YN",
+        "Yield(%)*"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Packer",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0020.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Packer",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0020.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_OSP",
+      "sheet": "Tact Time Except",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME",
+      "sheet": "Tact Time Except",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+      "sheet": "Tact Time Except",
+      "btn": "TACT_TIME_EXCEPT_OSP",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+      "entries": [
+        "event:spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_EXCEPT",
+      "sheet": "Tact Time Except",
+      "btn": "TACT_TIME_EXCEPT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT",
+      "entries": [
+        "event:spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_OSP",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Packer": {
+      "40": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Daily Capacity*",
+        "Tact Time*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "OSP_YN"
+      ],
+      "81": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Daily Capacity*",
+        "Tact Time*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "OSP_YN"
+      ],
+      "82": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Daily Capacity*",
+        "Tact Time*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "OSP_YN"
+      ]
+    },
+    "Plant": {
+      "40": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ]
+    },
+    "Tact Time": {
+      "40": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Jumbo / Min",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Jumbo / Min",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model Site",
+        "Model",
+        "Nick Name",
+        "Line*",
+        "Priority*",
+        "Yield(%)*",
+        "Slitting Lane",
+        "Daily Capacity",
+        "Item UOM",
+        "UOM Convert",
+        "Tact Time*",
+        "Jumbo / Min",
+        "Due Date",
+        "Big Tact Time",
+        "Actual Capacity",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date",
+        "Big Last Update Date"
+      ]
+    },
+    "Tact Time Except": {
+      "40": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model",
+        "Nick Name",
+        "Line",
+        "Start Date*",
+        "End Date*",
+        "Daily Capacity",
+        "Tact Time*",
+        "Yield(%)*",
+        "Comment",
+        "Product YN",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model",
+        "Nick Name",
+        "Line",
+        "Start Date*",
+        "End Date*",
+        "Daily Capacity",
+        "Tact Time*",
+        "Yield(%)*",
+        "Comment",
+        "Product YN",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "Plant Site",
+        "Operation",
+        "Model",
+        "Nick Name",
+        "Line",
+        "Start Date*",
+        "End Date*",
+        "Daily Capacity",
+        "Tact Time*",
+        "Yield(%)*",
+        "Comment",
+        "Product YN",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "INSERT",
+        "DELETE",
+        "SEARCH",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE"
+    ],
+    "CAPA Planner": [
+      "INSERT",
+      "SAVE",
+      "DELETE",
+      "SEARCH"
+    ],
+    "DM ADMIN": [
+      "SAVE",
+      "SEARCH",
+      "INSERT",
+      "DELETE"
+    ],
+    "DM Planner": [
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "DM Viewer": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "DELETE",
+      "SAVE",
+      "INSERT"
+    ],
+    "SCM PI Admin": [
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "INSERT"
+    ],
+    "SCM Viewer": [
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "INSERT"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "INSERT",
+    "DELETE",
+    "SEARCH",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

@@ -1,0 +1,68 @@
+{
+ "id": "DMF0014",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btmItem",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0014-Sde943e",
+    "DMF0014-Sd23e9c"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0014-S287784",
+    "DMF0014-S6ab4d3"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 09:56:15.622",
+ "fills": 0,
+ "fill_left": []
+}

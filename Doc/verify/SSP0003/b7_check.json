@@ -1,0 +1,136 @@
+{
+ "menu_id": "SSP0003",
+ "asis_id": "SSP0003",
+ "generated": "2026-11-14 19:26:46",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 대상  와 콤보 원천 14종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 10종: clbDivision, cboStatus, cboChangeType, clbFromSite, LookupCommon3, Dept, APPROVAL_DEPT, CHANGE_REASON_CODE, DELEGATEE_DEPT, REQUEST_DEPT",
+  "save_tables": [],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision",
+    "label": "Division",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboStatus",
+    "label": "Status",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboChangeType",
+    "label": "Change Type",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "LookupCommon3",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "Dept",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "APPROVAL_DEPT",
+    "label": "Approval Dept Name",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "CHANGE_REASON_CODE",
+    "label": "Change Reason",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "CHANGE_TYPE",
+    "label": "Change Type",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DELEGATEE_DEPT",
+    "label": "Delegatee Dept Name",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "REQUEST_DEPT",
+    "label": "Requestor Dept Name",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SHIPMENT_STATUS",
+    "label": "Status",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FCST_TYPE",
+    "label": "FCST Type",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "STATUS_DETAIL",
+    "label": "Status Detail",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   }
+  ]
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 '1' · 활성 셀 첫 행 ITEM_ID · KeyPressEventArgs(char 49)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-S1bc19a"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 'a' · 활성 셀 첫 행 ITEM_ID · KeyPressEventArgs(char 97)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-S1bc19a"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 1, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-Sc5a661",
+    "SCP0037-S92b852",
+    "SCP0037-S7b63e1",
+    "SCP0037-Sc07c2d",
+    "SCP0037-S03961c",
+    "SCP0037-Se6d569",
+    "SCP0037-Sf94b30",
+    "SCP0037-S6bdf6d",
+    "SCP0037-S4dadb8",
+    "SCP0037-S1929f6"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 SCM_SITE_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-Sc5a661",
+    "SCP0037-S92b852",
+    "SCP0037-S7b63e1",
+    "SCP0037-Sc07c2d",
+    "SCP0037-S03961c",
+    "SCP0037-Se6d569",
+    "SCP0037-Sf94b30",
+    "SCP0037-S6bdf6d",
+    "SCP0037-S4dadb8",
+    "SCP0037-S1929f6"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0035_GET_SPREAD_TITLE",
+    "DMF0035_GET_MKT_FCST_WATERFALL",
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 ITEM_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-Sc5a661",
+    "SCP0037-S92b852",
+    "SCP0037-S7b63e1",
+    "SCP0037-Sc07c2d",
+    "SCP0037-S03961c",
+    "SCP0037-Se6d569",
+    "SCP0037-Sf94b30",
+    "SCP0037-S6bdf6d",
+    "SCP0037-S4dadb8",
+    "SCP0037-S1929f6"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 PLANT_SITE_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0037-Sc5a661",
+    "SCP0037-S92b852",
+    "SCP0037-S7b63e1",
+    "SCP0037-Sc07c2d",
+    "SCP0037-S03961c",
+    "SCP0037-Se6d569",
+    "SCP0037-Sf94b30",
+    "SCP0037-S6bdf6d",
+    "SCP0037-S4dadb8",
+    "SCP0037-S1929f6"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:15:13",
+ "edit_mode": true,
+ "save_like_calls": [
+  "DMF0002_GET_TITLESET_POPUP"
+ ]
+}

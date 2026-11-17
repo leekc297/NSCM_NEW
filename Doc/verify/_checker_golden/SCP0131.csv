@@ -10,7 +10,7 @@ V-ef6e0fe0,F2,SCP0131 화면,NA, | 검사기(_verify.spec(@verify))가 이 대�
 V-8d56c801,F4,SCP0131 화면,PASS,규칙 F4 요소 3행 집계 — NA 2 · PASS 1 | [T-285883d0] PKG_SCP0131.P_SCP0131_GET_SALES_SI,2026-11-07 15:31,,,checker
 V-10ebb742,F5,SCP0131 화면,PASS,Insert → 신규행 CRUD_TYPE='I' · 기존행 OPMZ_PLAN_GR_ID 편집 → CRUD_TYPE='M' · 신규행 Delete,2026-11-07 15:31,,,checker
 V-1986aabd,F6,SCP0131 화면,NA, | 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 수동 검수 대상(작업 원장 W7),2026-11-07 15:31,,,checker
-V-c8cd860a,G3,SCP0131 화면,ERROR,[증거 부족: 측정 전제 미충족(전제 기록 없음 또는 저장 계열인데 조회 행 0)] E2E smoke 공통 'Condition(F6) Perio,2026-11-07 15:31,,,checker
+V-c8cd860a,G3,SCP0131 화면,NA,[사용자판정] NA — 1번 G3 Condition(F6) Period 비저장 — 사용자 판정 'Period From/To 기간은 Conditi,2026-11-12 06:24,사용자(대화),2026-11-12 06:24,user
 V-fc6fb436,H4,SCP0131 화면,PASS,페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26),2026-11-07 15:31,,,checker
 V-d41c77a1,H7,SCP0131 화면,PASS,E2E smoke 공통 'Excel 다운로드' [OK] 'SalesSitePriority_20261107_104932.xlsx' 6567B | ,2026-11-07 15:31,,,checker
 V-5645cb8f,I1,SCP0131 화면,PASS,t() 코드 5개 KO/EN/CN 전부 등록,2026-11-07 15:31,,,checker

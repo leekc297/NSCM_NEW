@@ -1,0 +1,26 @@
+{
+ "id": "SCP0102",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btn_Search",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL"
+   ],
+   "scenarios": [
+    "SCP0102-S6a63fc",
+    "SCP0102-S30cd13",
+    "SCP0102-S306a73",
+    "SCP0102-S6f699b"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:09:53.364",
+ "fills": 0,
+ "fill_left": []
+}

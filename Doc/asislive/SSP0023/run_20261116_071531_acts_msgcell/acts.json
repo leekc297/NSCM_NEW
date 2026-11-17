@@ -1,0 +1,592 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "SpdDetail_ComboSelChange",
+   "expect": "MSG00278",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:964~971 상세 TRANSPORT_MODE 콤보 변경 · 값 빈 값 → MSG00278 · 상세 행은 BtnSearch(Plan Detail)로 채움 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "row_where": {
+       "ERP_STATUS": "!C"
+      },
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "found",
+       "col": "0",
+       "wait": "2"
+      },
+      "row": 15
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=15,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=15,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 15,
+     "col": 23,
+     "before": "TRK",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "TRANSPORT_MODE",
+      "value": "",
+      "mode": "value",
+      "row": "found"
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "ComboSelChange",
+       "row": "found",
+       "col_tag": "TRANSPORT_MODE",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=15,column=23)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Trans Mode를 선택해 주세요.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Trans Mode를 선택해 주세요.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "row_found": 15,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "shtPlanDetail_Change",
+   "expect": "MSG00278",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:6117~6199 상세 수정 중 데이터 변경 TRANSPORT_MODE 빈 값 → MSG00278 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "row_where": {
+       "ERP_STATUS": "!C"
+      },
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "found",
+       "col": "0",
+       "wait": "2"
+      },
+      "row": 15
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=15,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=15,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 15,
+     "col": 23,
+     "before": "TRK",
+     "after": "",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "TRANSPORT_MODE",
+      "value": "",
+      "mode": "edit",
+      "row": "found"
+     }
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Trans Mode를 선택해 주세요.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "row_found": 15,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdDetail_EditChange",
+   "expect": "MSG00287",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:1569~1625 상세 수정 중 CHANGE_REASON_DETAIL 편집 · CHANGE_REASON_CODE '-'·빈 값 → MSG00287 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "row_where": {
+       "ERP_STATUS": "!C"
+      },
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "found",
+       "col": "0",
+       "wait": "2"
+      },
+      "row": 15
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=15,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=15,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 15,
+     "col": 31,
+     "before": "",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "CHANGE_REASON_CODE",
+      "value": "",
+      "mode": "value",
+      "row": "found"
+     }
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 15,
+     "col": 32,
+     "before": "",
+     "after": "asislive",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "CHANGE_REASON_DETAIL",
+      "value": "asislive",
+      "mode": "value",
+      "row": "found"
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "EditChange",
+       "row": "found",
+       "col_tag": "CHANGE_REASON_DETAIL",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.EditChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=15,column=32)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Reason Code를 입력 해주세요",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "row_found": 15,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 07:08:28",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 7.16,
+   "at": "2026-11-16 07:08:45.814",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.12,
+   "at": "2026-11-16 07:08:45.836",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 731.54,
+   "at": "2026-11-16 07:08:46.701",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 8.26,
+   "at": "2026-11-16 07:11:06.402",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.5,
+   "at": "2026-11-16 07:11:06.421",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 621.35,
+   "at": "2026-11-16 07:11:07.160",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 7.96,
+   "at": "2026-11-16 07:13:20.287",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.21,
+   "at": "2026-11-16 07:13:20.306",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 616.2,
+   "at": "2026-11-16 07:13:21.057",
+   "phase": "find+post_find"
+  }
+ ]
+}

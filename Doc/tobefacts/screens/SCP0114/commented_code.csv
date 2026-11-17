@@ -1,5 +1,6 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","234","code","미조회(applied 없음) 상태 삽입 차단 — AS-IS 는 무언 return, TO-BE 는 동작 동일 + 안내만 더한다."
-"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","251","code","선택행이 신규행('I')일 때만 로컬 제거한다. 기존행은 삭제 불가(메시지 없이 return, hook #138)."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","301","code","미조회(applied 없음) 상태 삽입 차단 — AS-IS 는 무언 return, TO-BE 는 동작 동일 + 안내만 더한다."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","318","code","선택행이 신규행('I')일 때만 로컬 제거한다. 기존행은 삭제 불가(메시지 없이 return, hook #138)."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/components/CapaLineMasterForm.tsx","41","code","않는다(useAutocomplete.js: focused && !valueChange → 조기 return). 그래서 편집중 Div 를 바꿔"
 "supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/useCapaLineMasterStore.ts","38","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(시트별)."
 "supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/useCapaLineMasterStore.ts","271","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch(5시트) — 미등록/실패 시 빈 배열 유지(console 금지 룰)."

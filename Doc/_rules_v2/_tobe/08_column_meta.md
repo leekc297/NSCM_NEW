@@ -28,9 +28,11 @@ import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 | `CELL_INPUT_EDIT_TYPE.MODIFY` (M) | 수정만 (insert 불가) | 편집 가능 (조건부) | LockColumn INSERT |
 | `CELL_INPUT_EDIT_TYPE.INSERT_ONLY` (IO) | 입력만 (수정 불가) | INSERT 시만 편집 | LockRange UPDATE |
 | `CELL_INPUT_EDIT_TYPE.INSERT_MODIFY` (IM) | 입력 + 수정 가능 | 항상 편집 가능 | (편집 cell) |
-| `CELL_INPUT_EDIT_TYPE.DISABLED` (D) 또는 미명시 | 조회만 | `.wj-cell-non-editable` (#f1f4f3 회색) | LockColumn 전체 |
+| `CELL_INPUT_EDIT_TYPE.DISABLED` (D) 또는 미명시 | 조회만 | 클래스 없음 = 흰색 + 홀짝 zebra (2026-11-13 정정: `.wj-cell-non-editable` (#f1f4f3 회색) → 클래스 없음 — CR-016 · hook `grid-cell-backcolor-standard.md` §0·§1. 회색 클래스는 "편집 가능하나 지금 잠긴" 특정 셀에만. 공용 DataGrid 는 `wj-cell-editable` 만 toggle — `dataGridUtils.ts:337-341`) | LockColumn 전체 |
 
-> **의무 (메모리 `feedback_grid_editable_coloring_mandatory.md`)**: 모든 column 에 `_inputEditType` 명시. 미명시 = 자동 회색 (조회). DataGrid wrapper 가 `formatItem` 자동 처리 — FlexGrid 직접 사용 시 수동 작성 필요.
+> (2026-11-13 정정: 위 표의 enum 멤버 `REQUIRED`(R) · `MODIFY` · `INSERT_ONLY` · `INSERT_MODIFY` · `DISABLED`(D) 는 현행 코드에 없다. 실제 `CELL_INPUT_EDIT_TYPE` (`packages/foundation/src/constants/column-config.ts:1-7`) 은 5종 — `SEARCH_ONLY='S'` / `OPTIONAL='O'` / `MANDATORY='M'` / `OPTIONAL_INSERT_ONLY='IO'` / `MANDATORY_INSERT_ONLY='IM'` — 이며 §8 변경 이력 2026-06-12 의 INPUT_TP_CD 표준 5종(S/O/M/IO/IM)과 같다. 값 `R` · `D` 는 쓰지 않는다.)
+
+> **의무 (메모리 `feedback_grid_editable_coloring_mandatory.md`)**: 모든 column 에 `_inputEditType` 명시. 미명시 = 클래스 없음(흰색 + zebra, 조회) (11-13 정정: '자동 회색' → 클래스 없음). DataGrid wrapper 가 `formatItem` 자동 처리 — FlexGrid 직접 사용 시 수동 작성 필요.
 
 ### §1.2 `_ctrlType` (편집 컨트롤 타입)
 
@@ -45,13 +47,13 @@ import { CELL_CONTROL_TYPE } from '@foundation/constants';
 | `CELL_CONTROL_TYPE.COMBO` | dropdown (dataMap 사용) | SetCellTypeCombo |
 | `CELL_CONTROL_TYPE.CHECKBOX` | 체크박스 | CheckBoxCellType |
 | `CELL_CONTROL_TYPE.DATE` | 날짜 picker | DateCellType |
-| `CELL_CONTROL_TYPE.FPModal` | popup modal cell | cellTypeImage |
-| `CELL_CONTROL_TYPE.MASKED` | 마스크된 입력 (Y/N) | MaskCellType |
+| `CELL_CONTROL_TYPE.MODAL` (값 `'FPModal'`) | popup modal cell | cellTypeImage (2026-11-13 정정: 멤버명 `.FPModal` → `.MODAL` — `column-config.ts:11` `MODAL = 'FPModal'`) |
+| `CELL_CONTROL_TYPE.MASKED` | 마스크된 입력 (Y/N) | MaskCellType (2026-11-13: `MASKED` 멤버는 현재 저장소에 없음) |
 
 ### §1.3 `_modalKey` (popup cell 의 modal 종류)
 
 ```typescript
-{ binding: 'PROJECT_CODE', _ctrlType: CELL_CONTROL_TYPE.FPModal, _modalKey: 'PROJECT' }
+{ binding: 'PROJECT_CODE', _ctrlType: CELL_CONTROL_TYPE.MODAL, _modalKey: 'PROJECT' }   // 11-13 정정: .FPModal → .MODAL
 ```
 
 | `_modalKey` | 호출 modal (TO-BE 공용) |
@@ -110,30 +112,36 @@ import { CELL_CONTROL_TYPE } from '@foundation/constants';
 
 ```typescript
 // RawFlexGridColumnConfig (from @foundation/models)
+// 2026-11-13 정정: 아래는 현행 packages/foundation/src/models/common/column-config.ts:7~ 의 필드
+//   (옛 본문의 binding/header/width/align/_inputEditType/_ctrlType/_modalKey 형태는 변환 뒤 FlexGridColumnConfig 쪽)
 interface RawFlexGridColumnConfig {
-  binding: string;
-  header: string;
-  width?: number;
-  align?: 'left' | 'center' | 'right';
-  format?: string;
+  colNm: string;
+  colLblNm: string;
+  horzAlgnCd?: 'L' | 'R' | 'C';
+  cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
+  cellCboDataTp?: string;
+  scale?: number;
+  dataMaxLength?: number;
+  inputTpCd?: CELL_INPUT_EDIT_TYPE;
+  colWth?: number;
+  fixed?: boolean;
+  uppercase?: boolean;
   visible?: boolean;
-  isRequired?: boolean;
-  _inputEditType?: CELL_INPUT_EDIT_TYPE;
-  _ctrlType?: CELL_CONTROL_TYPE;
-  _modalKey?: string;
-  _display?: boolean;
-  dataMap?: string[] | { value: string; label: string }[];
-  columns?: RawFlexGridColumnConfig[];
-  // ... 다른 wijmo 표준 props
+  display?: boolean;
+  defaultFlag?: boolean;
+  personalizable?: boolean;
+  dataMap?: ComboResponse[];
+  // ... (cellColor / textColor / sClsLblNm / lClsLblNm / rowParamRows / insertDataMap 등 — 원본 파일 참조)
 }
 ```
 
 ### §2.2 BE column meta 등록 (메타 SQL — 룰 12 cross-ref)
 
-`SCM_ADM_MNU_M_SHEET_COLUMNS` 테이블 (이름 변경 가능) 에 row 단위 등록:
+`SCM_MST_SHEET_COLUMNS` 테이블에 row 단위 등록: (2026-11-13 정정: 테이블명 `SCM_ADM_MNU_M_SHEET_COLUMNS` → `SCM_MST_SHEET_COLUMNS` — 룰 12 §14 · 룰 07 변경 이력 2026-06-12 · 저장소 SQL/하네스가 쓰는 이름. 키 컬럼은 `PROGRAM_ID, SHEET_NAME, COLUMN_NAME` 이고 실제 컬럼 구성(`COLUMN_LABEL_NAME`, `COLUMN_WIDTH`, `HORIZONTAL_ALIGN_CODE`, `CELL_CONTROL_OBJECT_TYPE_CODE`, `VALID_YN` …)은 룰 12 의 `SCM_MGR.SCM_MST_SHEET_COLUMNS` INSERT 표준을 따른다. 아래 예시의 `MNU_ID/SHT_NM/COL_NM/COL_HEAD/INPUT_TP_CD/CTRL_TP_CD/MODAL_KEY/IS_REQUIRED` 컬럼명은 초안 표기)
 
 ```sql
-INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS (MNU_ID, SHT_NM, COL_NM, COL_HEAD, COL_WIDTH, COL_ALIGN, 
+-- (11-13 정정) 테이블명만 현행으로 바꿈 — 컬럼명은 위 단서 참조
+INSERT INTO SCM_MST_SHEET_COLUMNS (MNU_ID, SHT_NM, COL_NM, COL_HEAD, COL_WIDTH, COL_ALIGN, 
     INPUT_TP_CD, CTRL_TP_CD, MODAL_KEY, IS_REQUIRED, IS_DISPLAY, ...) 
 VALUES ('DMF0006', 'customerModelMapping', 'PROJECT_CODE', 'Project Code', 100, 'center', 
     'IO', 'FPModal', 'PROJECT', 'Y', 'N', ...);
@@ -288,8 +296,8 @@ fetchDateColumns: () => {
 ```typescript
 {
   binding: 'PROJECT_CODE',
-  _inputEditType: CELL_INPUT_EDIT_TYPE.INSERT_ONLY,
-  _ctrlType: CELL_CONTROL_TYPE.FPModal,
+  _inputEditType: CELL_INPUT_EDIT_TYPE.OPTIONAL_INSERT_ONLY,   // 11-13 정정: INSERT_ONLY → OPTIONAL_INSERT_ONLY ('IO')
+  _ctrlType: CELL_CONTROL_TYPE.MODAL,                         // 11-13 정정: .FPModal → .MODAL
   _modalKey: 'PROJECT',
 }
 ```
@@ -362,7 +370,7 @@ DYNAMIC_PREFIX=$(rg -oE "binding: \`D_" features/{domain}/src/pages/{screen}/ | 
 
 | AS-IS Spread | TO-BE column meta |
 |---|---|
-| `siMain.LockColumn(col, true)` | `_inputEditType: 'D'` (DISABLED) — 회색 cell |
+| `siMain.LockColumn(col, true)` | `_inputEditType: 'S'` (SEARCH_ONLY) — 회색 cell (11-13 정정: `'D'`(DISABLED) → `'S'`(SEARCH_ONLY)) |
 | `siMain.LockColumn(col, false)` | `_inputEditType: 'O'` (OPTIONAL) — 노란색 cell |
 | `siMain.LockRange2(row, col, lockColor)` | (TO-BE column meta + CRUD_TYPE 자동) |
 | `SetCellTypeCombo(col, items)` | `_ctrlType: 'COMBO'` + `dataMap` |
@@ -379,7 +387,7 @@ DYNAMIC_PREFIX=$(rg -oE "binding: \`D_" features/{domain}/src/pages/{screen}/ | 
 
 | 패턴 | reference |
 |---|---|
-| BE 메타 (column 정의) | `_artifacts/12_DMF0020_metadata_v2_part2.sql` 의 INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS |
+| BE 메타 (column 정의) | `_artifacts/12_DMF0020_metadata_v2_part2.sql` 의 INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS (2026-11-13: 이 파일은 현재 저장소에 없음 · 현행 형식 예 = `_artifacts/75_SYS0014_GroupUser_full_create.sql` 의 `INSERT INTO SCM_MGR.SCM_MST_SHEET_COLUMNS`) |
 | FE staticColumns 사용 | `CustomerModelMappingGrid.tsx:30 + 119` |
 | dynamicColumns 사용 | `CustomerFcstMasterFcstGrid.tsx:30 + 63` |
 | dynamic column util 표준 | `customer-forecast-master/utils/CustomerFcstMasterDateColumns.ts` (89 lines) |

@@ -1,0 +1,39 @@
+﻿kind,item,static,live,verdict,note
+SP,DM0000_GET_COMMON_SPREAD_TITLE,DMF0006_CustomerModelMapping.cs:1136 GetSpdTitle,1회 · 구간 load,MATCH,
+SP,DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA,DMF0006_CustomerModelMapping.cs:406 FindData,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,8회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA,DMF0006_CustomerModelMapping.cs:636 SaveData_DataService,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),35개,31개,INFO,공통 14 · 선언만 21 · 실측만 17
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,FoxProgressDialog,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCancel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,loadingCircle,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,progressPanel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbDivisions,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umltCustomerPJT,Y,Customer PJT,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umltCustomerModel,Y,Customer Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umltProject,Y,Project,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnProject,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,umltModel,Y,Model / Nickname,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnModelType,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbEndCustomer,Y,End Customer,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboActive,Y,Active,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbSalesSite,Y,Sales Site,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Customer Model Mapping,정적 컬럼 사실 19행(시트 미지정 포함),컬럼 21(보임 19) · 헤더 1단 · 행 152 · 고정 1,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

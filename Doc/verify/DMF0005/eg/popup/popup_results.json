@@ -14,8 +14,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Item Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T10:54:12.749Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.554Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -30,8 +35,13 @@
   "expected": "AS-IS 팝업 'Model by DivisionPopup'(DM0002_ItembyDivisionPopupEx) 과 같은 팝업",
   "actual": "TO-BE 제목 'Item Popup' · 제목 공통 토큰 [] · 클래스 공통 토큰 [itemby] · 호출 ",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4078 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembyDivisionPopupEx.cs",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.554Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -46,8 +56,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Open, Open, Open, Open, Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -62,8 +77,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -75,11 +95,16 @@
    "EG342"
   ],
   "result": "PASS",
-  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 14601행)",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 14602행)",
   "actual": "행머리 폭 0px · No 컬럼 폭 56px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -93,10 +118,15 @@
   ],
   "result": "PASS",
   "expected": "조회 건수 표시",
-  "actual": "'총14,601'",
+  "actual": "'총14,602'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -111,8 +141,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T10:54:12.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -127,8 +162,13 @@
   "expected": "AS-IS 조건부 비활성(DM0002_ItembyDivisionPopupEx.cs:309 — 분기 미평가)",
   "actual": "disabled=true · 값 [40 Mobility & IT Battery] · 메인 Div '40'",
   "basis": "DM0002_ItembyDivisionPopupEx.cs:309",
-  "at": "2026-11-02T10:54:12.755Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.555Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -144,8 +184,13 @@
   "expected": "AS-IS 조건 라벨 [Division, Sales Site, Project, End Customer]",
   "actual": "TO-BE [Div:combo:비활성, Team:combo:비활성, End Customer:combo:비활성, Sales Site:combo:비활성, Model/Nickname:text] · 누락 [Project] · 라벨 차이 []",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembyDivisionPopupEx.cs",
-  "at": "2026-11-02T10:54:12.756Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.556Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -161,8 +206,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [Div, Team, End Customer, Sales Site, Model/Nickname]",
   "basis": "",
-  "at": "2026-11-02T10:54:12.756Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:39.556Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -177,10 +227,15 @@
   ],
   "result": "PASS",
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
-  "actual": "자동 조회 4건 · 행 14601 · 오류 없음 · 알림 ''",
+  "actual": "자동 조회 4건 · 행 14602 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T10:54:13.749Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:40.280Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -196,8 +251,13 @@
   "expected": "AS-IS ORDER BY I.DIVISION_ID",
   "actual": "대조 키 [DIVISION_ID] · 행 3000 · 위반 없음",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql:330",
-  "at": "2026-11-02T10:54:13.753Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:40.282Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -213,8 +273,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T10:54:13.753Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:40.282Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -228,10 +293,15 @@
   ],
   "result": "PASS",
   "expected": "F3(정렬 스위치) + 머리글 클릭 → DEPT_NAME 오름/내림 토글(공통 그리드 규칙 CR-034)",
-  "actual": "스위치 true · 1회 DEPT_NAME ASC · 2회 DEPT_NAME DESC · 첫 행 '소형.마케팅.미주/유럽.미주팀'→'ESS.SCM.SCM2팀'",
+  "actual": "스위치 true · 1회 DEPT_NAME ASC · 2회 DEPT_NAME DESC · 첫 행 '소형.마케팅.미주/유럽.미주팀'→'LGESAU'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:54:16.460Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:42.700Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -245,10 +315,15 @@
   ],
   "result": "ERROR",
   "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
-  "actual": "아이콘 0→2 · 행 14601→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "actual": "아이콘 0→2 · 행 14602→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
   "basis": "문서 DM-C8·DM-P64",
-  "at": "2026-11-02T10:54:27.172Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:53.008Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -263,8 +338,13 @@
   "expected": "필터 후 건수 표시",
   "actual": "''",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:54:27.172Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:53.008Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -279,8 +359,13 @@
   "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
   "actual": "선택 행 1",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:54:27.589Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:53.402Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -295,8 +380,13 @@
   "expected": "AS-IS 잠금 호출 있음(DM0002_ItembyDivisionPopupEx.cs:438 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
   "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center'",
   "basis": "DM0002_ItembyDivisionPopupEx.cs:438",
-  "at": "2026-11-02T10:54:27.593Z",
-  "mut": ""
+  "at": "2026-11-13T23:19:53.405Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -313,8 +403,13 @@
   "expected": "'Model/Nickname'='ECE0074N5-01' 조회 요청 본문에 값 포함(고정 '%' 금지)",
   "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"ECE0074N5-01\",\"activeFlag\":\"ALL\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T10:55:12.350Z",
-  "mut": ""
+  "at": "2026-11-13T23:20:23.289Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -328,11 +423,16 @@
    "EG338"
   ],
   "result": "PASS",
-  "expected": "'Model/Nickname'='ECE0074N5-01' → 값 포함 행만(기준 14601행 중)",
+  "expected": "'Model/Nickname'='ECE0074N5-01' → 값 포함 행만(기준 14602행 중)",
   "actual": "2행 · 전행 포함 true · 컬럼 'Model'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T10:55:12.350Z",
-  "mut": ""
+  "at": "2026-11-13T23:20:23.289Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -349,8 +449,13 @@
   "expected": "부분 문자열 'CE0074N5-0' → 포함 행(≥ 2)",
   "actual": "2행 · 전행 포함 true · AS-IS LIKE=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T10:55:29.319Z",
-  "mut": ""
+  "at": "2026-11-13T23:20:38.371Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -366,8 +471,13 @@
   "expected": "대소문자 무시 — 'ece0074n5-01' 행수 = 'ECE0074N5-01' 행수",
   "actual": "2 vs 2 · AS-IS UPPER=false",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T10:55:46.504Z",
-  "mut": ""
+  "at": "2026-11-13T23:20:53.164Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -384,8 +494,13 @@
   "expected": "콤마 'ECE0074N5-01,ESE0074N5-01' → 두 값 모두 조회",
   "actual": "4행 · 'ECE0074N5-01' true · 'ESE0074N5-01' true · AS-IS 콤마 분해=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T10:56:03.383Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:09.173Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -397,11 +512,16 @@
    "EG261"
   ],
   "result": "PASS",
-  "expected": "조건 비우고 재조회 → 기준 14601행",
-  "actual": "14601행",
+  "expected": "조건 비우고 재조회 → 기준 14602행",
+  "actual": "14602행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T10:56:21.011Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.060Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -417,8 +537,13 @@
   "expected": "팝업 콤보 조건",
   "actual": "활성 콤보 없음 — 조건 [Div:combo:비활성, Team:combo:비활성, End Customer:combo:비활성, Sales Site:combo:비활성, Model/Nickname:text]",
   "basis": "",
-  "at": "2026-11-02T10:56:21.012Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.061Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -434,8 +559,13 @@
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
   "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T10:56:21.013Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.062Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -451,8 +581,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 194px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T10:56:21.013Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.062Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -467,8 +602,13 @@
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
   "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T10:56:21.013Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.062Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -483,8 +623,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T10:56:21.013Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:25.062Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -500,8 +645,13 @@
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
   "actual": "드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T10:56:24.429Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:26.133Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -516,8 +666,13 @@
   "expected": "반대 방향 드래그 → 뷰포트 안",
   "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T10:56:25.692Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:26.946Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -533,8 +688,13 @@
   "expected": "가로만 조절 → 세로 불변(810)",
   "actual": "조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T10:56:28.062Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:28.063Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -550,8 +710,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T10:56:29.298Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:29.055Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -566,8 +731,13 @@
   "expected": "축소 → 조건·버튼 겹침 없음",
   "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
   "basis": "문서 DM-166",
-  "at": "2026-11-02T10:56:30.685Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:30.088Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -582,8 +752,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T10:57:08.971Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:53.647Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -598,8 +773,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 '' → ''",
   "basis": "문서 EG443",
-  "at": "2026-11-02T10:57:10.148Z",
-  "mut": ""
+  "at": "2026-11-13T23:21:54.719Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -616,8 +796,13 @@
   "expected": "AS-IS _bMultiSelect=true → 다중",
   "actual": "Ctrl+클릭 2행 → 선택 2행 · selectionMode=6",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4078 · 문서 GAPPI-27",
-  "at": "2026-11-02T10:57:28.133Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:09.908Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -632,8 +817,13 @@
   "expected": "OK → 대상 칸에 선택 값",
   "actual": "대상 '' → 'MCMMA38038A1-016' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [PROJECT_CODE,ITEM_ID,END_CUSTOMER,ROW_NO]",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4078",
-  "at": "2026-11-02T10:57:30.381Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:11.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -648,8 +838,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T10:57:30.386Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:11.897Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -666,8 +861,13 @@
   "expected": "칸 표시 = 선택 행의 키 값만(설명 미부착)",
   "actual": "칸 'MCMMA38038A1-016' · 행 값 일치 true · 괄호 false",
   "basis": "문서 DM-95·GAP-332",
-  "at": "2026-11-02T10:57:30.386Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:11.897Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -681,10 +881,15 @@
   ],
   "result": "PASS",
   "expected": "선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0",
-  "actual": "요청 값 포함 true · 괄호 false · 행 4 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"MCMMA38038A1-016\",\"activeFlag\":\"ALL\",\"owner\":\"\"}",
+  "actual": "요청 값 포함 true · 괄호 false · 행 4 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"MCMMA38038A1-016\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
   "basis": "문서 GAP-439",
-  "at": "2026-11-02T10:57:32.065Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:13.445Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -699,8 +904,13 @@
   "expected": "AS-IS 팝업 후 재조회·재정렬",
   "actual": "AS-IS 후처리 facts 없음",
   "basis": "",
-  "at": "2026-11-02T10:57:32.065Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:13.445Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -715,8 +925,13 @@
   "expected": "더블클릭 결과 = OK 결과('MCMMA38038A1-016')",
   "actual": "더블클릭 'MCMMA38038A1-016'",
   "basis": "문서 GAP-19",
-  "at": "2026-11-02T10:57:50.722Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:30.111Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -732,8 +947,13 @@
   "expected": "버튼 테두리 포함 전 영역 클릭 → 팝업 열림",
   "actual": "좌상:열림 · 우상:열림 · 좌하:열림 · 우하:열림 · 중앙:열림 · 버튼 36x36",
   "basis": "문서 SCPSSP-4",
-  "at": "2026-11-02T10:58:20.430Z",
-  "mut": ""
+  "at": "2026-11-13T23:22:45.562Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -748,8 +968,13 @@
   "expected": "텍스트 입력 + 아이콘 팝업 공통 입력 칸",
   "actual": "입력 가능 true · 칸 'Model/Nickname'",
   "basis": "문서 GAPPI-1·GAPPI-16",
-  "at": "2026-11-02T10:59:01.263Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:12.175Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -764,8 +989,13 @@
   "expected": "메인 입력 'MCMMA38038A1-016' → 팝업 조건·요청 전달 · 그 기준 조회",
   "actual": "팝업 조건 표시 [Model/Nickname] · 요청 포함 true · 행 4 · 전행 포함 true · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"MCMMA38038A1-016\",\"activeFlag\":\"ALL\"} · AS-IS 인자 [_bMultiSelect=LITERAL,_DivisionID=VAR,_DeptID=CONTROL,_EndCustomer=CONTROL,_ScmSiteId=CONTROL,_ProjectCode=CONTROL,_ItemID=CONTROL]",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4078",
-  "at": "2026-11-02T10:59:18.905Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:26.676Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 14603,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -782,8 +1012,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Owner Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T10:59:43.676Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.220Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -795,11 +1030,16 @@
    "EG135"
   ],
   "result": "PASS",
-  "expected": "AS-IS 팝업 'Owner by DivisionPopup'(DM0020_OwnerbyDivisionPopup) 과 같은 팝업",
-  "actual": "TO-BE 제목 'Owner Popup' · 제목 공통 토큰 [owner] · 클래스 공통 토큰 [ownerby] · 호출 ",
-  "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs",
-  "at": "2026-11-02T10:59:43.676Z",
-  "mut": ""
+  "expected": "AS-IS 팝업 'Owner by DivisionPopup'(DM0020_OwnerbyDivisionPopup) → TO-BE 룰 공용 모달 OwnerByDivisionModal(tobe_catalog.csv 대응표)",
+  "actual": "TO-BE 제목 'Owner Popup' · 대응 컴포넌트 OwnerByDivisionModal · 제목 토큰 일치 [owner] — AS-IS 와 달라도 TO-BE 룰 대체라 오류 아님",
+  "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246 · tools/Harness/rules/tobe_catalog.csv",
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -814,8 +1054,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Open, Open, Open, Open, Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T10:59:43.676Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -830,8 +1075,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T10:59:43.677Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -843,11 +1093,16 @@
    "EG342"
   ],
   "result": "PASS",
-  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(20px, 86행)",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(20px, 87행)",
   "actual": "행머리 폭 0px · No 컬럼 폭 56px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T10:59:43.677Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -861,10 +1116,15 @@
   ],
   "result": "PASS",
   "expected": "조회 건수 표시",
-  "actual": "'총86'",
+  "actual": "'총87'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:59:43.677Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -879,8 +1139,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T10:59:43.677Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -895,8 +1160,13 @@
   "expected": "AS-IS Division 비활성(DM0020_OwnerbyDivisionPopup.cs:202) → 팝업 Div 메인값 고정·수정 불가",
   "actual": "disabled=true · 값 [40 Mobility & IT Battery] · 메인 Div '40'",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs:DM0020_OwnerbyDivisionPopup.cs:202",
-  "at": "2026-11-02T10:59:43.678Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.222Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -912,8 +1182,13 @@
   "expected": "AS-IS 조건 라벨 [Division, Sales Site, End Customer]",
   "actual": "TO-BE [Div:combo:비활성, Team:combo:비활성, End Customer:combo:비활성, Sales Site:combo:비활성, Owner:text] · 누락 [] · 라벨 차이 []",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs",
-  "at": "2026-11-02T10:59:43.678Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.222Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -929,8 +1204,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [Div, Team, End Customer, Sales Site, Owner]",
   "basis": "",
-  "at": "2026-11-02T10:59:43.678Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.222Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -945,10 +1225,15 @@
   ],
   "result": "PASS",
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
-  "actual": "자동 조회 4건 · 행 86 · 오류 없음 · 알림 ''",
+  "actual": "자동 조회 4건 · 행 87 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T10:59:43.704Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.239Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -962,10 +1247,15 @@
   ],
   "result": "PASS",
   "expected": "AS-IS ORDER BY DEPT_INFO.DEPT_NAME_KO, FxU.UserName, FxU.UserID",
-  "actual": "대조 키 [DEPT_NAME_KO] · 미대조 [USERNAME] · 행 86 · 위반 없음",
+  "actual": "대조 키 [DEPT_NAME_KO] · 미대조 [USERNAME] · 행 87 · 위반 없음",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0020_GET_OWNER_DATA.sql:253",
-  "at": "2026-11-02T10:59:43.706Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.240Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -981,8 +1271,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T10:59:43.706Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:37.240Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -998,8 +1293,13 @@
   "expected": "F3(정렬 스위치) + 머리글 클릭 → DEPT_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
   "actual": "스위치 true · 1회 DEPT_ID ASC · 2회 DEPT_ID DESC · 첫 행 '58099468'→'71067310'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:59:46.089Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:39.518Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1013,10 +1313,15 @@
   ],
   "result": "ERROR",
   "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
-  "actual": "아이콘 0→2 · 행 86→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "actual": "아이콘 0→2 · 행 87→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
   "basis": "문서 DM-C8·DM-P64",
-  "at": "2026-11-02T10:59:56.717Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:49.782Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1031,8 +1336,13 @@
   "expected": "필터 후 건수 표시",
   "actual": "''",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:59:56.717Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:49.782Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1047,8 +1357,13 @@
   "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
   "actual": "선택 행 1",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T10:59:57.124Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:50.175Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1063,8 +1378,13 @@
   "expected": "AS-IS 잠금 호출 있음(DM0020_OwnerbyDivisionPopup.cs:297 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
   "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center'",
   "basis": "DM0020_OwnerbyDivisionPopup.cs:297",
-  "at": "2026-11-02T10:59:57.131Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:50.177Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1079,10 +1399,15 @@
   ],
   "result": "PASS",
   "expected": "'Owner'='kdh31001' 조회 요청 본문에 값 포함(고정 '%' 금지)",
-  "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kdh31001\"}",
+  "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kdh31001\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T11:00:01.657Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:54.150Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1096,11 +1421,16 @@
    "EG338"
   ],
   "result": "PASS",
-  "expected": "'Owner'='kdh31001' → 값 포함 행만(기준 86행 중)",
+  "expected": "'Owner'='kdh31001' → 값 포함 행만(기준 87행 중)",
   "actual": "1행 · 전행 포함 true · 컬럼 'Owner'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0020_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:00:01.657Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:54.150Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1117,8 +1447,13 @@
   "expected": "부분 문자열 'dh3100' → 포함 행(≥ 1)",
   "actual": "1행 · 전행 포함 true · AS-IS LIKE=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0020_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:00:04.053Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:56.205Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1134,8 +1469,13 @@
   "expected": "대소문자 무시 — 'KDH31001' 행수 = 'kdh31001' 행수",
   "actual": "1 vs 1 · AS-IS UPPER=true",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T11:00:06.324Z",
-  "mut": ""
+  "at": "2026-11-13T23:23:58.269Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1152,8 +1492,13 @@
   "expected": "콤마 'kdh31001,lihuifeng' → 두 값 모두 조회",
   "actual": "2행 · 'kdh31001' true · 'lihuifeng' true · AS-IS 콤마 분해=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0020_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:00:08.660Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:00.412Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1165,11 +1510,16 @@
    "EG261"
   ],
   "result": "PASS",
-  "expected": "조건 비우고 재조회 → 기준 86행",
-  "actual": "86행",
+  "expected": "조건 비우고 재조회 → 기준 87행",
+  "actual": "87행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:00:11.100Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1185,8 +1535,13 @@
   "expected": "팝업 콤보 조건",
   "actual": "활성 콤보 없음 — 조건 [Div:combo:비활성, Team:combo:비활성, End Customer:combo:비활성, Sales Site:combo:비활성, Owner:text]",
   "basis": "",
-  "at": "2026-11-02T11:00:11.101Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1202,8 +1557,13 @@
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
   "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:00:11.101Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1219,8 +1579,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 194px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T11:00:11.101Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1235,8 +1600,13 @@
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
   "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T11:00:11.101Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1251,8 +1621,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T11:00:11.101Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:02.529Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1268,8 +1643,13 @@
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
   "actual": "드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:00:12.507Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:03.572Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1284,8 +1664,13 @@
   "expected": "반대 방향 드래그 → 뷰포트 안",
   "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:00:13.621Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:04.372Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1301,8 +1686,13 @@
   "expected": "가로만 조절 → 세로 불변(810)",
   "actual": "조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:00:15.292Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:05.481Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1318,8 +1708,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:00:16.484Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:06.416Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1334,8 +1729,13 @@
   "expected": "축소 → 조건·버튼 겹침 없음",
   "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
   "basis": "문서 DM-166",
-  "at": "2026-11-02T11:00:17.788Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:07.326Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1350,8 +1750,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T11:00:41.743Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:17.830Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1366,8 +1771,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 '' → ''",
   "basis": "문서 EG443",
-  "at": "2026-11-02T11:00:42.995Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:18.851Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1384,8 +1794,13 @@
   "expected": "AS-IS _bMultiSelect=true → 다중",
   "actual": "Ctrl+클릭 2행 → 선택 2행 · selectionMode=6",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246 · 문서 GAPPI-27",
-  "at": "2026-11-02T11:00:45.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:21.255Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1398,10 +1813,15 @@
   ],
   "result": "PASS",
   "expected": "OK → 대상 칸에 선택 값",
-  "actual": "대상 '' → 'kunwonsaw' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [OWNER]",
+  "actual": "대상 '' → 'kbkwon' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [OWNER]",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246",
-  "at": "2026-11-02T11:00:47.919Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:23.184Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1416,8 +1836,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T11:00:47.926Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:23.187Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1432,10 +1857,15 @@
   ],
   "result": "PASS",
   "expected": "칸 표시 = 선택 행의 키 값만(설명 미부착)",
-  "actual": "칸 'kunwonsaw' · 행 값 일치 true · 괄호 false",
+  "actual": "칸 'kbkwon' · 행 값 일치 true · 괄호 false",
   "basis": "문서 DM-95·GAP-332",
-  "at": "2026-11-02T11:00:47.926Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:23.187Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1449,10 +1879,15 @@
   ],
   "result": "PASS",
   "expected": "선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0",
-  "actual": "요청 값 포함 true · 괄호 false · 행 2 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kunwonsaw\"}",
+  "actual": "요청 값 포함 true · 괄호 false · 행 1 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kbkwon\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
   "basis": "문서 GAP-439",
-  "at": "2026-11-02T11:00:49.952Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:24.717Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1467,8 +1902,13 @@
   "expected": "AS-IS 팝업 후 재조회·재정렬",
   "actual": "AS-IS 후처리 facts 없음",
   "basis": "",
-  "at": "2026-11-02T11:00:49.952Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:24.717Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1480,11 +1920,16 @@
    "EG093"
   ],
   "result": "PASS",
-  "expected": "더블클릭 결과 = OK 결과('kunwonsaw')",
-  "actual": "더블클릭 'kunwonsaw'",
+  "expected": "더블클릭 결과 = OK 결과('kbkwon')",
+  "actual": "더블클릭 'kbkwon'",
   "basis": "문서 GAP-19",
-  "at": "2026-11-02T11:00:53.712Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:28.100Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1500,8 +1945,13 @@
   "expected": "버튼 테두리 포함 전 영역 클릭 → 팝업 열림",
   "actual": "좌상:열림 · 우상:열림 · 좌하:열림 · 우하:열림 · 중앙:열림 · 버튼 36x36",
   "basis": "문서 SCPSSP-4",
-  "at": "2026-11-02T11:01:26.582Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:43.473Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1516,8 +1966,13 @@
   "expected": "텍스트 입력 + 아이콘 팝업 공통 입력 칸",
   "actual": "입력 가능 true · 칸 'Owner'",
   "basis": "문서 GAPPI-1·GAPPI-16",
-  "at": "2026-11-02T11:01:51.363Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:53.782Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1529,11 +1984,16 @@
    "EG288"
   ],
   "result": "PASS",
-  "expected": "메인 입력 'kunwonsaw' → 팝업 조건·요청 전달 · 그 기준 조회",
-  "actual": "팝업 조건 표시 [Owner] · 요청 포함 true · 행 1 · 전행 포함 true · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kunwonsaw\"} · AS-IS 인자 [_bMultiSelect=LITERAL,_DivisionID=VAR,_DeptID=CONTROL,_EndCustomer=CONTROL,_ScmSiteId=CONTROL,_ProjectCode=CONTROL,_ItemID=CONTROL,_Owner=CONTROL]",
+  "expected": "메인 입력 'kbkwon' → 팝업 조건·요청 전달 · 그 기준 조회",
+  "actual": "팝업 조건 표시 [Owner] · 요청 포함 true · 행 1 · 전행 포함 true · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"kbkwon\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"} · AS-IS 인자 [_bMultiSelect=LITERAL,_DivisionID=VAR,_DeptID=CONTROL,_EndCustomer=CONTROL,_ScmSiteId=CONTROL,_ProjectCode=CONTROL,_ItemID=CONTROL,_Owner=CONTROL]",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246",
-  "at": "2026-11-02T11:01:53.895Z",
-  "mut": ""
+  "at": "2026-11-13T23:24:55.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1549,8 +2009,13 @@
   "expected": "AS-IS btnProject_Click 팝업(SCM0002_ProjectbyDivisionPopupEx) 열림",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4054",
-  "at": "2026-11-02T11:02:18.689Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:04.209Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1565,8 +2030,13 @@
   "expected": "선택 시험",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "",
-  "at": "2026-11-02T11:02:41.369Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:11.899Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1582,8 +2052,13 @@
   "expected": "버튼 전 영역",
   "actual": "칸 못 찾음",
   "basis": "",
-  "at": "2026-11-02T11:03:04.235Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:19.411Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1599,8 +2074,13 @@
   "expected": "메인 텍스트 전달",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "",
-  "at": "2026-11-02T11:03:26.285Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:27.139Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1614,10 +2094,15 @@
   ],
   "result": "ERROR",
   "expected": "AS-IS spdMain_CellDoubleClick 팝업(SCM0002_ProjectbyDivisionPopup) 열림",
-  "actual": "CELL: 컬럼 PROJECT_CODE 이 현재 그리드에 없음(바인딩 34개 — Division·개인화·시트 차이 가능)",
+  "actual": "CELL: 컬럼 PROJECT_CODE 이 현재 그리드에 없음(바인딩 31개 — Division·개인화·시트 차이 가능)",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3367",
-  "at": "2026-11-02T11:03:54.747Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:38.024Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1630,10 +2115,15 @@
   ],
   "result": "ERROR",
   "expected": "선택 시험",
-  "actual": "CELL: 컬럼 PROJECT_CODE 이 현재 그리드에 없음(바인딩 34개 — Division·개인화·시트 차이 가능)",
+  "actual": "CELL: 컬럼 PROJECT_CODE 이 현재 그리드에 없음(바인딩 31개 — Division·개인화·시트 차이 가능)",
   "basis": "",
-  "at": "2026-11-02T11:04:23.983Z",
-  "mut": ""
+  "at": "2026-11-13T23:25:48.942Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1650,8 +2140,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "PROJECT_CODE 그리드에 없음(Division·개인화)",
   "basis": "",
-  "at": "2026-11-02T11:04:52.201Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:00.141Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1668,8 +2163,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Item Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T11:05:43.016Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.380Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1684,8 +2184,13 @@
   "expected": "AS-IS 팝업 'Model by DivisionPopup'(DM0002_ItembySmallDivPopup) 과 같은 팝업",
   "actual": "TO-BE 제목 'Item Popup' · 제목 공통 토큰 [] · 클래스 공통 토큰 [itemby] · 호출 ",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3417 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembySmallDivPopup.cs",
-  "at": "2026-11-02T11:05:43.016Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1700,8 +2205,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Open, Open, Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T11:05:43.017Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1716,8 +2226,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T11:05:43.017Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1732,8 +2247,13 @@
   "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 16941행)",
   "actual": "행머리 폭 0px · No 컬럼 폭 56px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T11:05:43.017Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1749,8 +2269,13 @@
   "expected": "조회 건수 표시",
   "actual": "'총16,941'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:05:43.017Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1765,8 +2290,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T11:05:43.017Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1781,8 +2311,13 @@
   "expected": "AS-IS Division 비활성(DM0002_ItembySmallDivPopup.cs:246) → 팝업 Div 메인값 고정·수정 불가",
   "actual": "disabled=true · 값 [40 Mobility & IT Battery] · 메인 Div '40'",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembySmallDivPopup.cs:DM0002_ItembySmallDivPopup.cs:246",
-  "at": "2026-11-02T11:05:43.018Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1797,8 +2332,13 @@
   "expected": "팝업 조건 'Item Type' 입력 가능(AS-IS 비활성 문장 없음)",
   "actual": "TO-BE 'Item Type' disabled=false · 값 [Product]",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembySmallDivPopup.cs:DM0002_ItembySmallDivPopup.Designer.cs:43",
-  "at": "2026-11-02T11:05:43.018Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1814,8 +2354,13 @@
   "expected": "AS-IS 조건 라벨 [Division, Item Type]",
   "actual": "TO-BE [Div:combo:비활성, Model/Nickname:text, Item Type:combo] · 누락 [] · 라벨 차이 []",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembySmallDivPopup.cs",
-  "at": "2026-11-02T11:05:43.018Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.381Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1831,8 +2376,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [Div, Model/Nickname, Item Type]",
   "basis": "",
-  "at": "2026-11-02T11:05:43.019Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.382Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1849,8 +2399,13 @@
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
   "actual": "자동 조회 4건 · 행 16941 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T11:05:44.565Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.930Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1866,8 +2421,13 @@
   "expected": "AS-IS ORDER BY T.ITEM_ID",
   "actual": "대조 키 [ITEM_ID] · 행 3000 · 위반 ITEM_ID: 0행 '-M01-M01-M01-M01' → 1행 '3766125J2TCO'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx.sql:418",
-  "at": "2026-11-02T11:05:44.567Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.930Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1883,8 +2443,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T11:05:44.567Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:23.930Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1900,8 +2465,13 @@
   "expected": "F3(정렬 스위치) + 머리글 클릭 → ITEM_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
   "actual": "스위치 true · 1회 ITEM_ID ASC · 2회 ITEM_ID DESC · 첫 행 '-M01-M01-M01-M01'→'TEST_SV_FERT1'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:05:47.344Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:26.428Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1917,8 +2487,13 @@
   "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
   "actual": "아이콘 0→2 · 행 16941→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
   "basis": "문서 DM-C8·DM-P64",
-  "at": "2026-11-02T11:10:07.148Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:52.375Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1933,8 +2508,13 @@
   "expected": "필터 후 건수 표시",
   "actual": "''",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:10:07.148Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:52.375Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1949,8 +2529,13 @@
   "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
   "actual": "선택 행 1",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:10:44.844Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:52.768Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1965,8 +2550,13 @@
   "expected": "AS-IS 잠금 호출 있음(DM0002_ItembySmallDivPopup.cs:390 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
   "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center'",
   "basis": "DM0002_ItembySmallDivPopup.cs:390",
-  "at": "2026-11-02T11:10:44.848Z",
-  "mut": ""
+  "at": "2026-11-13T23:26:52.771Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -1983,8 +2573,13 @@
   "expected": "'Model/Nickname'='TEST_SV_FERT1' 조회 요청 본문에 값 포함(고정 '%' 금지)",
   "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"%\",\"itemId\":\"TEST_SV_FERT1\",\"itemType\":\"P\",\"menuId\":\"DMF0005\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T11:10:53.152Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:00.466Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2001,8 +2596,13 @@
   "expected": "'Model/Nickname'='TEST_SV_FERT1' → 값 포함 행만(기준 16941행 중)",
   "actual": "1행 · 전행 포함 true · 컬럼 'Model'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:10:53.152Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:00.466Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2019,8 +2619,13 @@
   "expected": "부분 문자열 'EST_SV_FERT' → 포함 행(≥ 1)",
   "actual": "1행 · 전행 포함 true · AS-IS LIKE=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:10:56.938Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:04.267Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2036,8 +2641,13 @@
   "expected": "대소문자 무시 — 'test_sv_fert1' 행수 = 'TEST_SV_FERT1' 행수",
   "actual": "1 vs 1 · AS-IS UPPER=false",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T11:11:01.073Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:08.100Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2054,8 +2664,13 @@
   "expected": "콤마 'TEST_SV_FERT1,TEST_FERT1' → 두 값 모두 조회",
   "actual": "2행 · 'TEST_SV_FERT1' true · 'TEST_FERT1' true · AS-IS 콤마 분해=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:11:04.985Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:11.733Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2070,8 +2685,13 @@
   "expected": "조건 비우고 재조회 → 기준 16941행",
   "actual": "16941행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:11:09.402Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:16.191Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2086,8 +2706,13 @@
   "expected": "AS-IS UsrCheckedList(다중=true)",
   "actual": "TO-BE 'Item Type' 다중=false · 후보 5 · ALL true — 다르면 개선 확정 CR 여부 확인(문서 DM-2·DM-83)",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembySmallDivPopup.cs:DM0002_ItembySmallDivPopup.Designer.cs:43",
-  "at": "2026-11-02T11:11:10.130Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:16.850Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2103,8 +2728,13 @@
   "expected": "'Item Type'='Semi Product' 재조회 요청에 값",
   "actual": "Search true · 요청 2 · 값 포함 false · 행 16941→48643 · {\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"%\",\"itemId\":\"%\",\"itemType\":\"H\",\"menuId\":\"DMF0005\"} {\"divisionId\":\"40\",\"de",
   "basis": "",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2119,8 +2749,13 @@
   "expected": "ALL 재선택 재조회 → 전체(≥ 48643)",
   "actual": "단일 48643행 → ALL 0행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2134,10 +2769,15 @@
   ],
   "result": "PASS",
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
-  "actual": "rect {\"x\":510,\"y\":135,\"w\":900,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2153,8 +2793,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2167,10 +2812,15 @@
   ],
   "result": "PASS",
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
-  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":850,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1150,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2185,8 +2835,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T11:11:19.989Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:25.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2200,10 +2855,15 @@
   ],
   "result": "PASS",
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
-  "actual": "드래그 후 rect {\"x\":510,\"y\":135,\"w\":900,\"h\":810} · 뷰포트 1920x1080",
+  "actual": "드래그 후 rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:11:21.199Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:27.012Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2216,10 +2876,15 @@
   ],
   "result": "PASS",
   "expected": "반대 방향 드래그 → 뷰포트 안",
-  "actual": "rect {\"x\":510,\"y\":135,\"w\":900,\"h\":810}",
+  "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:11:22.405Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:27.918Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2233,10 +2898,15 @@
   ],
   "result": "PASS",
   "expected": "가로만 조절 → 세로 불변(810)",
-  "actual": "조절 후 {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
+  "actual": "조절 후 {\"x\":248,\"y\":135,\"w\":1425,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:11:23.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:28.917Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2252,8 +2922,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:11:24.364Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:29.896Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2268,8 +2943,13 @@
   "expected": "축소 → 조건·버튼 겹침 없음",
   "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
   "basis": "문서 DM-166",
-  "at": "2026-11-02T11:11:25.294Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:30.860Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2284,8 +2964,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T11:12:03.991Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:54.074Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2300,8 +2985,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 '' → ''",
   "basis": "문서 EG443",
-  "at": "2026-11-02T11:12:05.044Z",
-  "mut": ""
+  "at": "2026-11-13T23:27:55.035Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2318,8 +3008,13 @@
   "expected": "AS-IS _bMultiSelect=true → 다중",
   "actual": "Ctrl+클릭 2행 → 선택 2행 · selectionMode=6",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3417 · 문서 GAPPI-27",
-  "at": "2026-11-02T11:12:17.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:06.879Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2334,8 +3029,13 @@
   "expected": "OK → 대상 칸에 선택 값",
   "actual": "대상 '' → '-M01-M01-M01-M01' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [ITEM_ID,ROW_NO]",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3417",
-  "at": "2026-11-02T11:12:19.228Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:08.757Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2350,8 +3050,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T11:12:19.235Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:08.760Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 16942,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2364,26 +3069,36 @@
   ],
   "result": "PASS",
   "expected": "AS-IS 더블클릭 팝업 컬럼(DMF0005_SaleSite_PjtModelMapping.cs:3417) → 메타 FPModal/FPTextModal",
-  "actual": "ITEM_ID 메타 입력 방식 [,FPModal, ] · 직접 편집 false (행 0)",
+  "actual": "ITEM_ID 메타 입력 방식 [,FPTextModal, ] · 직접 편집 false (행 0)",
   "basis": "문서 GAPPI-1·GAPPI-16 · DMF0005_SaleSite_PjtModelMapping.cs:3417",
-  "at": "2026-11-02T11:12:56.168Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:23.473Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
   "call": 4,
   "cls": "DM0002_ItembySmallDivPopup",
   "trig": "CELL:ITEM_ID",
-  "check": "CELL_NOEDIT",
+  "check": "CELL_KEYIN",
   "egs": [
-   "EG104"
+   "EG137"
   ],
-  "result": "PASS",
-  "expected": "팝업 전용 컬럼 — 직접 편집 불가",
-  "actual": "editor 열림 false",
-  "basis": "문서 DM-18 · DMF0005_SaleSite_PjtModelMapping.cs:3417",
-  "at": "2026-11-02T11:12:56.168Z",
-  "mut": ""
+  "result": "판정필요",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 false(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T23:28:23.473Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2396,10 +3111,15 @@
   ],
   "result": "판정필요",
   "expected": "팝업 셀 아이콘 표시",
-  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-align-left wj-state-active wj-state-selected' · 메타 [,FPModal, ]",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-align-left wj-state-active wj-state-selected' · 메타 [,FPTextModal, ]",
   "basis": "",
-  "at": "2026-11-02T11:12:56.869Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:23.500Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2410,12 +3130,17 @@
   "egs": [
    "EG104"
   ],
-  "result": "판정필요",
+  "result": "NA",
   "expected": "Delete 키 값 삭제 허용",
   "actual": "'ACPP1025U-A1'→'ACPP1025U-A1'",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:12:57.743Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:24.225Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2431,8 +3156,13 @@
   "expected": "붙여넣기 → ITEM_ID = 원천값 · 코드 컬럼 동반(문서 DM-18)",
   "actual": "값 'ACPP1025U-A1'→'ACPP1025U-A1' (원천 'MCCM356015A2') · 바뀐 컬럼 [] · 원천과 같은 []",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:12:59.434Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:25.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2445,10 +3175,15 @@
   ],
   "result": "NA",
   "expected": "Key-in 잘못된 값",
-  "actual": "FPTextModal 아님/편집 불가 (메타 ,FPModal,  · 편집 false)",
+  "actual": "FPTextModal 아님/편집 불가 (메타 ,FPTextModal,  · 편집 false)",
   "basis": "",
-  "at": "2026-11-02T11:12:59.434Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:25.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2461,10 +3196,15 @@
   ],
   "result": "FAIL",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 USER_ID_82 표시",
-  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 false",
+  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 false",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:13:29.665Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:41.004Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2480,8 +3220,13 @@
   "expected": "AS-IS spdMain_CellDoubleClick 팝업(DMF000_OwnerSet_Popup) 열림",
   "actual": "CELL: 컬럼 USER_ID_82 이 현재 그리드에 없음(바인딩 25개 — Division·개인화·시트 차이 가능)",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3472",
-  "at": "2026-11-02T11:13:29.678Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:41.051Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2496,8 +3241,13 @@
   "expected": "선택 시험",
   "actual": "CELL: 컬럼 USER_ID_82 이 현재 그리드에 없음(바인딩 25개 — Division·개인화·시트 차이 가능)",
   "basis": "",
-  "at": "2026-11-02T11:14:02.498Z",
-  "mut": ""
+  "at": "2026-11-13T23:28:57.276Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2514,8 +3264,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "USER_ID_82 그리드에 없음(Division·개인화)",
   "basis": "",
-  "at": "2026-11-02T11:14:33.597Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:12.982Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2528,10 +3283,15 @@
   ],
   "result": "FAIL",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 USER_ID_82 표시",
-  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 false",
+  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 false",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:15:06.128Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:29.582Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2544,10 +3304,15 @@
   ],
   "result": "FAIL",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 USER_ID_82 표시",
-  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 false",
+  "actual": "Division 40→82(컬럼 USER_ID_82 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 false",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:15:06.128Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:29.582Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2560,10 +3325,15 @@
   ],
   "result": "PASS",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 PRJ_OWNR_ID 표시",
-  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 true",
+  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 true",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:15:06.128Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:29.582Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2580,8 +3350,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Owner Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T11:15:08.172Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.210Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2596,8 +3371,13 @@
   "expected": "AS-IS 팝업 'Multi Owner Set'(DMF000_OwnerSet_Popup) 과 같은 팝업",
   "actual": "TO-BE 제목 'Owner Popup' · 제목 공통 토큰 [owner] · 클래스 공통 토큰 [owner] · 호출 ",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3500 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF000_OwnerSet_Popup.cs",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2612,8 +3392,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2628,8 +3413,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [No] · 첫 컬럼 'User ID' · No. 1개 · 행머리 폭 50px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2644,8 +3434,13 @@
   "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(34px, 3097행)",
   "actual": "행머리 폭 50px · No 컬럼 폭 0px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2661,8 +3456,13 @@
   "expected": "조회 건수 표시",
   "actual": "'총3,097'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2677,8 +3477,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2694,8 +3499,13 @@
   "expected": "AS-IS 조건 라벨 []",
   "actual": "TO-BE [User:text] · 누락 [] · 라벨 차이 []",
   "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF000_OwnerSet_Popup.cs",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2711,8 +3521,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [User]",
   "basis": "",
-  "at": "2026-11-02T11:15:08.173Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.211Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2729,8 +3544,13 @@
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
   "actual": "자동 조회 2건 · 행 3097 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T11:15:08.591Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.485Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2746,8 +3566,13 @@
   "expected": "AS-IS ORDER BY SORT_ORDER_NO",
   "actual": "대조 키 [SORT_ORDER_NO] · 행 3000 · 위반 SORT_ORDER_NO: 2행 '254600' → 3행 '176500'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF000_GET_OWNER_DATA.sql:258",
-  "at": "2026-11-02T11:15:08.592Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.486Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2763,8 +3588,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T11:15:08.592Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:31.486Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2780,8 +3610,13 @@
   "expected": "F3(정렬 스위치) + 머리글 클릭 → USER_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
   "actual": "스위치 true · 1회 USER_ID ASC · 2회 USER_ID DESC · 첫 행 '329navy'→'zzzbaby'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:15:11.021Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:33.789Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2797,8 +3632,13 @@
   "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
   "actual": "아이콘 0→2 · 행 3097→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
   "basis": "문서 DM-C8·DM-P64",
-  "at": "2026-11-02T11:15:33.223Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:46.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2813,8 +3653,13 @@
   "expected": "필터 후 건수 표시",
   "actual": "''",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:15:33.223Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:46.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2829,8 +3674,13 @@
   "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
   "actual": "선택 행 1",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:15:33.684Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:47.206Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2845,8 +3695,13 @@
   "expected": "AS-IS 잠금 호출 있음(DMF000_OwnerSet_Popup.cs:301 siBase.LockColumn(0, siBase.GetMaxColumnIndex(), true);)",
   "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-left'",
   "basis": "DMF000_OwnerSet_Popup.cs:301",
-  "at": "2026-11-02T11:15:33.689Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:47.209Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2863,8 +3718,13 @@
   "expected": "'User'='zzzbaby' 조회 요청 본문에 값 포함(고정 '%' 금지)",
   "actual": "요청 1건 · 본문 {\"divisionId\":\"82\",\"user\":\"zzzbaby\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T11:15:38.514Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:51.523Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2881,8 +3741,13 @@
   "expected": "'User'='zzzbaby' → 값 포함 행만(기준 3097행 중)",
   "actual": "1행 · 전행 포함 true · 컬럼 'User ID'",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF000_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:15:38.514Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:51.524Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2899,8 +3764,13 @@
   "expected": "부분 문자열 'zzbab' → 포함 행(≥ 1)",
   "actual": "1행 · 전행 포함 true · AS-IS LIKE=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF000_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:15:40.754Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:53.698Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2916,8 +3786,13 @@
   "expected": "대소문자 무시 — 'ZZZBABY' 행수 = 'zzzbaby' 행수",
   "actual": "1 vs 1 · AS-IS UPPER=false",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T11:15:43.176Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:55.743Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2934,8 +3809,13 @@
   "expected": "콤마 'zzzbaby,zzuzzung' → 두 값 모두 조회",
   "actual": "2행 · 'zzzbaby' true · 'zzuzzung' true · AS-IS 콤마 분해=true",
   "basis": "Doc/asisfacts/db/modules/dbo.DMF000_GET_OWNER_DATA.sql (AS-IS LIKE)",
-  "at": "2026-11-02T11:15:45.443Z",
-  "mut": ""
+  "at": "2026-11-13T23:29:57.934Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2950,8 +3830,13 @@
   "expected": "조건 비우고 재조회 → 기준 3097행",
   "actual": "3097행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:15:48.431Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2967,8 +3852,13 @@
   "expected": "팝업 콤보 조건",
   "actual": "활성 콤보 없음 — 조건 [User:text]",
   "basis": "",
-  "at": "2026-11-02T11:15:48.431Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -2984,8 +3874,13 @@
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:15:48.432Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3001,8 +3896,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 154px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T11:15:48.432Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3017,8 +3917,13 @@
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
   "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1150,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T11:15:48.432Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3033,8 +3938,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T11:15:48.432Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:00.156Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3050,8 +3960,13 @@
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
   "actual": "드래그 후 rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:15:49.657Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:01.275Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3066,8 +3981,13 @@
   "expected": "반대 방향 드래그 → 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:15:50.799Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:02.136Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3083,8 +4003,13 @@
   "expected": "가로만 조절 → 세로 불변(810)",
   "actual": "조절 후 {\"x\":248,\"y\":135,\"w\":1425,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:15:52.541Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:03.199Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3100,8 +4025,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:15:53.723Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:04.164Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3112,12 +4042,17 @@
   "egs": [
    "EG337"
   ],
-  "result": "PASS",
-  "expected": "축소 → 조건·버튼 겹침 없음",
-  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
-  "basis": "문서 DM-166",
-  "at": "2026-11-02T11:15:54.907Z",
-  "mut": ""
+  "result": "NA",
+  "expected": "축소 → 조건·버튼 간섭 없음",
+  "actual": "리사이즈 핸들 없음",
+  "basis": "",
+  "at": "2026-11-13T23:30:04.181Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3132,8 +4067,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T11:16:27.853Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:20.894Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3148,8 +4088,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 'kmcheon' → 'kmcheon'",
   "basis": "문서 EG443",
-  "at": "2026-11-02T11:16:28.847Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:21.891Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3166,8 +4111,13 @@
   "expected": "단일/다중 선택 구분",
   "actual": "AS-IS 인자 없음(multi='') 또는 행 3097",
   "basis": "",
-  "at": "2026-11-02T11:16:30.726Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:23.421Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3182,8 +4132,13 @@
   "expected": "OK → 대상 칸에 선택 값",
   "actual": "대상 'kmcheon' → '' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 []",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3500",
-  "at": "2026-11-02T11:16:32.809Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:25.363Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3198,8 +4153,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T11:16:32.812Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:25.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3212,26 +4172,36 @@
   ],
   "result": "PASS",
   "expected": "AS-IS 더블클릭 팝업 컬럼(DMF0005_SaleSite_PjtModelMapping.cs:3500) → 메타 FPModal/FPTextModal",
-  "actual": "PRJ_OWNR_ID 메타 입력 방식 [,FPModal] · 직접 편집 false (행 0)",
+  "actual": "PRJ_OWNR_ID 메타 입력 방식 [,FPTextModal] · 직접 편집 true (행 0)",
   "basis": "문서 GAPPI-1·GAPPI-16 · DMF0005_SaleSite_PjtModelMapping.cs:3500",
-  "at": "2026-11-02T11:17:07.466Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:39.686Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
   "call": 6,
   "cls": "DMF000_OwnerSet_Popup",
   "trig": "CELL:PRJ_OWNR_ID",
-  "check": "CELL_NOEDIT",
+  "check": "CELL_KEYIN",
   "egs": [
-   "EG104"
+   "EG137"
   ],
   "result": "PASS",
-  "expected": "팝업 전용 컬럼 — 직접 편집 불가",
-  "actual": "editor 열림 false",
-  "basis": "문서 DM-18 · DMF0005_SaleSite_PjtModelMapping.cs:3500",
-  "at": "2026-11-02T11:17:07.466Z",
-  "mut": ""
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T23:30:39.686Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3244,10 +4214,15 @@
   ],
   "result": "판정필요",
   "expected": "팝업 셀 아이콘 표시",
-  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-left wj-cell-editable wj-cell' · 메타 [,FPModal]",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-left wj-cell-editable wj-cell' · 메타 [,FPTextModal]",
   "basis": "",
-  "at": "2026-11-02T11:17:07.738Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:39.760Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3258,12 +4233,17 @@
   "egs": [
    "EG104"
   ],
-  "result": "판정필요",
+  "result": "NA",
   "expected": "Delete 키 값 삭제 허용",
   "actual": "'kmcheon'→'kmcheon'",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:17:08.286Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:40.316Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3275,12 +4255,17 @@
    "EG104",
    "EG159"
   ],
-  "result": "판정필요",
+  "result": "PASS",
   "expected": "붙여넣기 → PRJ_OWNR_ID = 원천값 · 코드 컬럼 동반(문서 DM-18)",
-  "actual": "값 'kmcheon'→'kmcheon' (원천 'kunwonsaw') · 바뀐 컬럼 [] · 원천과 같은 []",
+  "actual": "값 ''→'somi.seo' (원천 'somi.seo') · 바뀐 컬럼 [PRJ_OWNR_ID] · 원천과 같은 [PRJ_OWNR_ID]",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:17:10.633Z",
-  "mut": ""
+  "at": "2026-11-13T23:30:42.157Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3291,12 +4276,17 @@
   "egs": [
    "EG176"
   ],
-  "result": "NA",
-  "expected": "Key-in 잘못된 값",
-  "actual": "FPTextModal 아님/편집 불가 (메타 ,FPModal · 편집 false)",
-  "basis": "",
-  "at": "2026-11-02T11:17:10.633Z",
-  "mut": ""
+  "result": "판정필요",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ_E2E_BAD_KEY' · 메시지 '' · Save 요청 1건(응답 200 · production/SAVE) · 잘못된 값 포함 true · 알림 '' · [서버 검증 미측정] VERIFY_NO_SAVE — 저장 요청은 픽스처가 가로채 200 반환(실 BE 미도달) · FE 사전검증(AS-IS MSG00458) 없음은 사실 · PKG 검증 결과는 실저장 경로(@verify F1·DB 보완 검증 호출)로 확인",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T23:30:50.487Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3309,10 +4299,15 @@
   ],
   "result": "PASS",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 PRJ_OWNR_ID 표시",
-  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 true",
+  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 true",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:17:38.225Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:01.347Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3325,10 +4320,15 @@
   ],
   "result": "PASS",
   "expected": "메타 DIVISION_ID 허용 Division 전환 → 컬럼 PRJ_OWNR_ID 표시",
-  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47461행 · 컬럼 존재 true",
+  "actual": "Division 40→82(컬럼 PRJ_OWNR_ID 메타 DIVISION_ID [82]) · 조회 47575행 · 컬럼 존재 true",
   "basis": "문서 GAP-104 · SCM_MST_SHEET_COLUMNS.DIVISION_ID",
-  "at": "2026-11-02T11:17:38.225Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:01.347Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3342,10 +4342,15 @@
   ],
   "result": "ERROR",
   "expected": "AS-IS spdMain_CellDoubleClick 팝업(DMF000_OwnerSet_Popup) 열림",
-  "actual": "CELL: 컬럼 USER_ID 이 현재 그리드에 없음(바인딩 34개 — Division·개인화·시트 차이 가능)",
+  "actual": "CELL: 컬럼 USER_ID 이 현재 그리드에 없음(바인딩 31개 — Division·개인화·시트 차이 가능)",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3521",
-  "at": "2026-11-02T11:17:38.235Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:01.353Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3358,10 +4363,15 @@
   ],
   "result": "ERROR",
   "expected": "선택 시험",
-  "actual": "CELL: 컬럼 USER_ID 이 현재 그리드에 없음(바인딩 34개 — Division·개인화·시트 차이 가능)",
+  "actual": "CELL: 컬럼 USER_ID 이 현재 그리드에 없음(바인딩 31개 — Division·개인화·시트 차이 가능)",
   "basis": "",
-  "at": "2026-11-02T11:18:05.885Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:12.215Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3378,8 +4388,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "USER_ID 그리드에 없음(Division·개인화)",
   "basis": "",
-  "at": "2026-11-02T11:18:31.066Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:22.710Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3395,8 +4410,13 @@
   "expected": "AS-IS spdSub_CellDoubleClick 팝업(SCM0002_ProjectbyDivisionPopup) 열림",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3922",
-  "at": "2026-11-02T11:18:56.496Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:33.355Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3411,8 +4431,13 @@
   "expected": "선택 시험",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:19:22.585Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:44.075Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3429,8 +4454,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "보조 그리드(spdSub) 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:19:32.192Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:47.471Z",
+  "mut": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3446,8 +4476,13 @@
   "expected": "AS-IS spdSub_CellDoubleClick 팝업(SCM0002_ItembyDivisionPopup) 열림",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3957",
-  "at": "2026-11-02T11:19:57.232Z",
-  "mut": ""
+  "at": "2026-11-13T23:31:58.194Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3462,8 +4497,13 @@
   "expected": "선택 시험",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:20:23.093Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:08.799Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3480,8 +4520,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "보조 그리드(spdSub) 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:20:31.536Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:12.173Z",
+  "mut": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3497,8 +4542,13 @@
   "expected": "AS-IS spdSub_CellDoubleClick 팝업(DMF000_OwnerSet_Popup) 열림",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:3988",
-  "at": "2026-11-02T11:20:57.602Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:22.858Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3513,8 +4563,13 @@
   "expected": "선택 시험",
   "actual": "CELL: AS-IS 보조 그리드(spdSub) 팝업 — 보조 그리드 프로브 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:21:23.897Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:33.421Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3531,8 +4586,13 @@
   "expected": "셀 팝업 컬럼",
   "actual": "보조 그리드(spdSub) 경로 미구현",
   "basis": "",
-  "at": "2026-11-02T11:21:31.992Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:36.768Z",
+  "mut": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3548,8 +4608,13 @@
   "expected": "AS-IS txtProject_KeyDown 팝업(SCM0002_ProjectbyDivisionPopupEx) 열림",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4214",
-  "at": "2026-11-02T11:21:52.625Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:44.279Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3564,8 +4629,13 @@
   "expected": "선택 시험",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "",
-  "at": "2026-11-02T11:22:13.235Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:51.805Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3581,8 +4651,13 @@
   "expected": "버튼 전 영역",
   "actual": "칸 못 찾음",
   "basis": "",
-  "at": "2026-11-02T11:22:33.718Z",
-  "mut": ""
+  "at": "2026-11-13T23:32:59.225Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3598,8 +4673,13 @@
   "expected": "메인 텍스트 전달",
   "actual": "COND: 조회영역 팝업형 칸 [Model/Nickname, Owner] 중 라벨 [PJT, Project, Project, Project, Project, Projectby] 없음",
   "basis": "",
-  "at": "2026-11-02T11:22:53.965Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:06.709Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3616,8 +4696,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Team Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.339Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3632,8 +4717,13 @@
   "expected": "AS-IS 팝업 제목과 같은 팝업",
   "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Team Popup'",
   "basis": "",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.339Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3648,8 +4738,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3664,8 +4759,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [No] · 첫 컬럼 'Department ID' · No. 1개 · 행머리 폭 50px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3680,8 +4780,13 @@
   "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(13px, 1행)",
   "actual": "행머리 폭 50px · No 컬럼 폭 0px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3697,8 +4802,13 @@
   "expected": "조회 건수 표시",
   "actual": "'총1'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3713,8 +4823,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3730,8 +4845,13 @@
   "expected": "AS-IS 조건 칸 ↔ TO-BE",
   "actual": "AS-IS 원문을 찾지 못함",
   "basis": "",
-  "at": "2026-11-02T11:23:22.417Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3747,8 +4867,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [Team]",
   "basis": "",
-  "at": "2026-11-02T11:23:22.418Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.340Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3765,8 +4890,13 @@
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
   "actual": "자동 조회 3건 · 행 1 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T11:23:22.422Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3782,8 +4912,13 @@
   "expected": "팝업 목록 순서 = AS-IS ORDER BY",
   "actual": "행 1 — 순서 대조 불가",
   "basis": "",
-  "at": "2026-11-02T11:23:22.422Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3799,8 +4934,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T11:23:22.422Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3815,8 +4955,13 @@
   "expected": "팝업 그리드 Sort",
   "actual": "행 1 · 정렬 효과 대조 불가",
   "basis": "",
-  "at": "2026-11-02T11:23:22.422Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3832,8 +4977,13 @@
   "expected": "팝업 Filter",
   "actual": "행 1 · 필터 대조 불가",
   "basis": "",
-  "at": "2026-11-02T11:23:22.422Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3848,8 +4998,13 @@
   "expected": "단축키",
   "actual": "행 1",
   "basis": "",
-  "at": "2026-11-02T11:23:22.639Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.556Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3864,8 +5019,13 @@
   "expected": "AS-IS 잠금 호출 facts",
   "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
   "basis": "",
-  "at": "2026-11-02T11:23:22.645Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:19.559Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3882,8 +5042,13 @@
   "expected": "'Team'='AI/빅데이터1.빅데이터분석팀' 조회 요청 본문에 값 포함(고정 '%' 금지)",
   "actual": "요청 1건 · 본문 {\"teamId\":\"AI/빅데이터1.빅데이터분석팀\",\"teamName\":\"AI/빅데이터1.빅데이터분석팀\",\"divisionId\":\"\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T11:23:26.941Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:23.385Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3900,8 +5065,13 @@
   "expected": "'Team'='AI/빅데이터1.빅데이터분석팀' → 값 포함 행만(기준 1행 중)",
   "actual": "1행 · 전행 포함 true · 컬럼 'Team'",
   "basis": "문서 DM-220·GAPPI-23",
-  "at": "2026-11-02T11:23:26.941Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:23.385Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3918,8 +5088,13 @@
   "expected": "부분 문자열 'I/빅데이터1.빅데이터분석' → 포함 행(≥ 1)",
   "actual": "1행 · 전행 포함 true · AS-IS LIKE=undefined",
   "basis": "문서 DM-181·DM-212",
-  "at": "2026-11-02T11:23:29.394Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:25.619Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3935,8 +5110,13 @@
   "expected": "대소문자 무시 — 'ai/빅데이터1.빅데이터분석팀' 행수 = 'AI/빅데이터1.빅데이터분석팀' 행수",
   "actual": "1 vs 1 · AS-IS UPPER=undefined",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T11:23:31.817Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:27.808Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3953,8 +5133,13 @@
   "expected": "콤마 다중",
   "actual": "컬럼 'Team' 서로 겹치지 않는 값 2개 없음",
   "basis": "",
-  "at": "2026-11-02T11:23:31.817Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:27.808Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3969,8 +5154,13 @@
   "expected": "조건 비우고 재조회 → 기준 1행",
   "actual": "1행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:23:34.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -3986,8 +5176,13 @@
   "expected": "팝업 콤보 조건",
   "actual": "활성 콤보 없음 — 조건 [Team:text]",
   "basis": "",
-  "at": "2026-11-02T11:23:34.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4003,8 +5198,13 @@
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:23:34.091Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4020,8 +5220,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T11:23:34.091Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4036,8 +5241,13 @@
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
   "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1150,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T11:23:34.091Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4052,8 +5262,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T11:23:34.091Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:29.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4069,8 +5284,13 @@
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
   "actual": "드래그 후 rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:23:35.388Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:31.192Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4085,8 +5305,13 @@
   "expected": "반대 방향 드래그 → 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:23:36.731Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:32.092Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4102,8 +5327,13 @@
   "expected": "가로만 조절 → 세로 불변(810)",
   "actual": "조절 후 {\"x\":248,\"y\":135,\"w\":1425,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:23:37.724Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:33.076Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4119,8 +5349,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:23:38.634Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:34.021Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4131,12 +5366,17 @@
   "egs": [
    "EG337"
   ],
-  "result": "NA",
-  "expected": "축소 → 조건·버튼 간섭 없음",
-  "actual": "리사이즈 핸들 없음",
-  "basis": "",
-  "at": "2026-11-02T11:23:38.649Z",
-  "mut": ""
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T23:33:34.956Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4151,8 +5391,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T11:24:07.209Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:48.186Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4167,8 +5412,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 'AI/빅데이터1.빅데이터분석팀' → 'AI/빅데이터1.빅데이터분석팀'",
   "basis": "문서 EG443",
-  "at": "2026-11-02T11:24:08.163Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:49.118Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4185,8 +5435,13 @@
   "expected": "단일/다중 선택 구분",
   "actual": "AS-IS 인자 없음(multi='') 또는 행 1",
   "basis": "",
-  "at": "2026-11-02T11:24:09.823Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:50.624Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4201,8 +5456,13 @@
   "expected": "OK → 대상 칸에 선택 값",
   "actual": "[근거 불충분] 대상 'AI/빅데이터1.빅데이터분석팀' → 'AI/빅데이터1.빅데이터분석팀' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [TEAM_NAME_KO]",
   "basis": "",
-  "at": "2026-11-02T11:24:11.983Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:52.613Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4217,8 +5477,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T11:24:11.987Z",
-  "mut": ""
+  "at": "2026-11-13T23:33:52.616Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 5355,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4233,8 +5498,13 @@
   "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
   "actual": "TEAM_NAME 메타 입력 방식 [FPModal] · 직접 편집 false (행 0)",
   "basis": "문서 GAPPI-1·GAPPI-16 · ",
-  "at": "2026-11-02T11:24:41.853Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:06.764Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4249,8 +5519,13 @@
   "expected": "팝업 전용 컬럼 — 직접 편집 불가",
   "actual": "editor 열림 false",
   "basis": "문서 DM-18 · ",
-  "at": "2026-11-02T11:24:41.853Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:06.764Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4265,8 +5540,13 @@
   "expected": "팝업 셀 아이콘 표시",
   "actual": "아이콘 false · 셀 클래스 'wj-cell wj-align-left wj-cell-editable wj-cell-popup wj-state-active wj-state-se' · 메타 [FPModal]",
   "basis": "",
-  "at": "2026-11-02T11:24:42.451Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:06.784Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4281,8 +5561,13 @@
   "expected": "Delete 키 값 삭제 허용",
   "actual": "'AI/빅데이터1.빅데이터분석팀'→''",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:24:43.027Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:07.418Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4294,12 +5579,17 @@
    "EG104",
    "EG159"
   ],
-  "result": "판정필요",
+  "result": "PASS",
   "expected": "붙여넣기 → TEAM_NAME = 원천값 · 코드 컬럼 동반(문서 DM-18)",
-  "actual": "값 ''→'' (원천 'ESS.SCM.SCM2팀') · 바뀐 컬럼 [] · 원천과 같은 []",
+  "actual": "값 ''→'ESS.SCM.SCM2팀' (원천 'ESS.SCM.SCM2팀') · 바뀐 컬럼 [DEPT_ID,TEAM_NAME] · 원천과 같은 [DEPT_ID,TEAM_NAME]",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:24:44.956Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:08.979Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4314,8 +5604,13 @@
   "expected": "Key-in 잘못된 값",
   "actual": "FPTextModal 아님/편집 불가 (메타 FPModal · 편집 false)",
   "basis": "",
-  "at": "2026-11-02T11:24:44.956Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:08.979Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4332,8 +5627,13 @@
   "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
   "actual": "제목 'Owner Popup'",
   "basis": "문서 SCPSSP-16·GAP-33",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4348,8 +5648,13 @@
   "expected": "AS-IS 팝업 제목과 같은 팝업",
   "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Owner Popup'",
   "basis": "",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4364,8 +5669,13 @@
   "expected": "버튼 순서 OK → CLOSE",
   "actual": "버튼 [Search, OK, Close]",
   "basis": "문서 DM-C6",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4380,8 +5690,13 @@
   "expected": "왼쪽 No. 컬럼 1개",
   "actual": "코너 [No] · 첫 컬럼 'User ID' · No. 1개 · 행머리 폭 50px",
   "basis": "문서 DM-C8·DM-179",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4396,8 +5711,13 @@
   "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(34px, 3096행)",
   "actual": "행머리 폭 50px · No 컬럼 폭 0px",
   "basis": "문서 DM-179",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4413,8 +5733,13 @@
   "expected": "조회 건수 표시",
   "actual": "'총3,096'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4429,8 +5754,13 @@
   "expected": "AS-IS 병합 호출 facts",
   "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
   "basis": "",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4446,8 +5776,13 @@
   "expected": "AS-IS 조건 칸 ↔ TO-BE",
   "actual": "AS-IS 원문을 찾지 못함",
   "basis": "",
-  "at": "2026-11-02T11:25:12.763Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.828Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4463,8 +5798,13 @@
   "expected": "팝업 Period = 메인 Period",
   "actual": "팝업에 기간 칸 없음 — 조건 [User]",
   "basis": "",
-  "at": "2026-11-02T11:25:12.764Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:21.829Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4481,8 +5821,13 @@
   "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
   "actual": "자동 조회 2건 · 행 3096 · 오류 없음 · 알림 ''",
   "basis": "",
-  "at": "2026-11-02T11:25:13.084Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:22.112Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4498,8 +5843,13 @@
   "expected": "팝업 목록 순서 = AS-IS ORDER BY",
   "actual": "AS-IS 조회 SP 원문 없음()",
   "basis": "",
-  "at": "2026-11-02T11:25:13.084Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:22.112Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4515,8 +5865,13 @@
   "expected": "팝업 기간 동적 컬럼",
   "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
   "basis": "",
-  "at": "2026-11-02T11:25:13.084Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:22.112Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4532,8 +5887,13 @@
   "expected": "F3(정렬 스위치) + 머리글 클릭 → USER_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
   "actual": "스위치 true · 1회 USER_ID ASC · 2회 USER_ID DESC · 첫 행 '329navy'→'zzzbaby'",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:25:15.628Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:24.538Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4549,8 +5909,13 @@
   "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
   "actual": "아이콘 0→2 · 행 3096→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
   "basis": "문서 DM-C8·DM-P64",
-  "at": "2026-11-02T11:25:37.327Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:37.625Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4565,8 +5930,13 @@
   "expected": "필터 후 건수 표시",
   "actual": "''",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:25:37.327Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:37.625Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4581,8 +5951,13 @@
   "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
   "actual": "선택 행 1",
   "basis": "문서 DM-C8",
-  "at": "2026-11-02T11:25:37.775Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:38.018Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4597,8 +5972,13 @@
   "expected": "AS-IS 잠금 호출 facts",
   "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
   "basis": "",
-  "at": "2026-11-02T11:25:37.779Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:38.020Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4615,8 +5995,13 @@
   "expected": "'User'='zzzbaby' 조회 요청 본문에 값 포함(고정 '%' 금지)",
   "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"user\":\"zzzbaby\"}",
   "basis": "문서 GAPPI-23·DM-220",
-  "at": "2026-11-02T11:25:42.945Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:42.255Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4633,8 +6018,13 @@
   "expected": "'User'='zzzbaby' → 값 포함 행만(기준 3096행 중)",
   "actual": "1행 · 전행 포함 true · 컬럼 'User ID'",
   "basis": "문서 DM-220·GAPPI-23",
-  "at": "2026-11-02T11:25:42.946Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:42.255Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4651,8 +6041,13 @@
   "expected": "부분 문자열 'zzbab' → 포함 행(≥ 1)",
   "actual": "1행 · 전행 포함 true · AS-IS LIKE=undefined",
   "basis": "문서 DM-181·DM-212",
-  "at": "2026-11-02T11:25:45.276Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:44.445Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4668,8 +6063,13 @@
   "expected": "대소문자 무시 — 'ZZZBABY' 행수 = 'zzzbaby' 행수",
   "actual": "1 vs 1 · AS-IS UPPER=undefined",
   "basis": "문서 GAP-506·SSP45REQ-13",
-  "at": "2026-11-02T11:25:47.608Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:46.665Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4686,8 +6086,13 @@
   "expected": "콤마 'zzzbaby,zzuzzung' → 두 값 모두 조회",
   "actual": "2행 · 'zzzbaby' true · 'zzuzzung' true · AS-IS 콤마 분해=undefined",
   "basis": "문서 SSP45REQ-14",
-  "at": "2026-11-02T11:25:49.938Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:48.871Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4702,8 +6107,13 @@
   "expected": "조건 비우고 재조회 → 기준 3096행",
   "actual": "3096행",
   "basis": "문서 DM-P29",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4719,8 +6129,13 @@
   "expected": "팝업 콤보 조건",
   "actual": "활성 콤보 없음 — 조건 [User:text]",
   "basis": "",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4736,8 +6151,13 @@
   "expected": "팝업·닫기·버튼 모두 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4753,8 +6173,13 @@
   "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
   "actual": "paperV=false paperH=false · 내용 초과 154px · 본문 스크롤 []",
   "basis": "문서 DM-175",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4769,8 +6194,13 @@
   "expected": "머리 아래~첫 내용 사이 가로줄 없음",
   "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1150,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
   "basis": "문서 GAPPI-30·GAPPI-34",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4785,8 +6215,13 @@
   "expected": "섹션 타이틀 = 테두리 밖",
   "actual": "타이틀 []",
   "basis": "문서 DM-202",
-  "at": "2026-11-02T11:25:53.090Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:51.366Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4802,8 +6237,13 @@
   "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
   "actual": "드래그 후 rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:25:54.265Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:52.574Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4818,8 +6258,13 @@
   "expected": "반대 방향 드래그 → 뷰포트 안",
   "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:25:55.575Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:53.465Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4835,8 +6280,13 @@
   "expected": "가로만 조절 → 세로 불변(810)",
   "actual": "조절 후 {\"x\":248,\"y\":135,\"w\":1425,\"h\":810}",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:25:57.193Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:54.575Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4852,8 +6302,13 @@
   "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
   "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
   "basis": "문서 GAPPI-24",
-  "at": "2026-11-02T11:25:58.428Z",
-  "mut": ""
+  "at": "2026-11-13T23:34:55.549Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4864,12 +6319,17 @@
   "egs": [
    "EG337"
   ],
-  "result": "NA",
-  "expected": "축소 → 조건·버튼 간섭 없음",
-  "actual": "리사이즈 핸들 없음",
-  "basis": "",
-  "at": "2026-11-02T11:25:58.451Z",
-  "mut": ""
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T23:34:56.488Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4884,8 +6344,13 @@
   "expected": "선택 없이 OK → 안내",
   "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
   "basis": "",
-  "at": "2026-11-02T11:26:51.869Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:09.710Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4900,8 +6365,13 @@
   "expected": "Close → 칸 값 유지",
   "actual": "Close 닫힘 · 칸 'kunwonsaw' → 'kunwonsaw'",
   "basis": "문서 EG443",
-  "at": "2026-11-02T11:26:52.909Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:10.687Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4918,8 +6388,13 @@
   "expected": "단일/다중 선택 구분",
   "actual": "AS-IS 인자 없음(multi='') 또는 행 3096",
   "basis": "",
-  "at": "2026-11-02T11:26:54.765Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:12.257Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4934,8 +6409,13 @@
   "expected": "OK → 대상 칸에 선택 값",
   "actual": "대상 'kunwonsaw' → 'kunwonsaw' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 []",
   "basis": "",
-  "at": "2026-11-02T11:26:57.206Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:14.350Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4950,8 +6430,13 @@
   "expected": "팝업 기간 → 메인 Period 반영",
   "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
   "basis": "",
-  "at": "2026-11-02T11:26:57.210Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:14.353Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4964,26 +6449,36 @@
   ],
   "result": "PASS",
   "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
-  "actual": "OWNER 메타 입력 방식 [,FPModal] · 직접 편집 false (행 0)",
+  "actual": "OWNER 메타 입력 방식 [,FPTextModal] · 직접 편집 true (행 0)",
   "basis": "문서 GAPPI-1·GAPPI-16 · ",
-  "at": "2026-11-02T11:27:27.824Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:25.133Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
   "call": 101,
   "cls": "(TO-BE 메타 팝업)",
   "trig": "CELL:OWNER",
-  "check": "CELL_NOEDIT",
+  "check": "CELL_KEYIN",
   "egs": [
-   "EG104"
+   "EG137"
   ],
   "result": "PASS",
-  "expected": "팝업 전용 컬럼 — 직접 편집 불가",
-  "actual": "editor 열림 false",
-  "basis": "문서 DM-18 · ",
-  "at": "2026-11-02T11:27:27.824Z",
-  "mut": ""
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T23:35:25.133Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -4996,10 +6491,15 @@
   ],
   "result": "판정필요",
   "expected": "팝업 셀 아이콘 표시",
-  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-align-left wj-cell-editable wj-cell-popup wj-state-active wj-state-se' · 메타 [,FPModal]",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-left wj-cell-editable wj-cell' · 메타 [,FPTextModal]",
   "basis": "",
-  "at": "2026-11-02T11:27:28.469Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:25.244Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -5010,12 +6510,17 @@
   "egs": [
    "EG104"
   ],
-  "result": "판정필요",
+  "result": "NA",
   "expected": "Delete 키 값 삭제 허용",
   "actual": "'kunwonsaw'→'kunwonsaw'",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:27:29.314Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:25.779Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -5027,12 +6532,17 @@
    "EG104",
    "EG159"
   ],
-  "result": "판정필요",
+  "result": "PASS",
   "expected": "붙여넣기 → OWNER = 원천값 · 코드 컬럼 동반(문서 DM-18)",
-  "actual": "값 'kunwonsaw'→'kunwonsaw' (원천 'hyelin.jung') · 바뀐 컬럼 [] · 원천과 같은 []",
+  "actual": "값 ''→'hyelin.jung' (원천 'hyelin.jung') · 바뀐 컬럼 [OWNER] · 원천과 같은 [OWNER]",
   "basis": "문서 DM-18",
-  "at": "2026-11-02T11:27:30.787Z",
-  "mut": ""
+  "at": "2026-11-13T23:35:27.325Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "screen": "DMF0005",
@@ -5043,11 +6553,16 @@
   "egs": [
    "EG176"
   ],
-  "result": "NA",
-  "expected": "Key-in 잘못된 값",
-  "actual": "FPTextModal 아님/편집 불가 (메타 ,FPModal · 편집 false)",
-  "basis": "",
-  "at": "2026-11-02T11:27:30.787Z",
-  "mut": ""
+  "result": "판정필요",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ_E2E_BAD_KEY' · 메시지 '' · Save 요청 1건(응답 200 · production/SAVE) · 잘못된 값 포함 true · 알림 '' · [서버 검증 미측정] VERIFY_NO_SAVE — 저장 요청은 픽스처가 가로채 200 반환(실 BE 미도달) · FE 사전검증(AS-IS MSG00458) 없음은 사실 · PKG 검증 결과는 실저장 경로(@verify F1·DB 보완 검증 호출)로 확인",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T23:35:32.685Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  }
 ]

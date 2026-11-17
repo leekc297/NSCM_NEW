@@ -1,0 +1,160 @@
+- paragraph: Shipment Plan(Electrode)
+- text: Shipping Shipping Schedule Shipment Plan(Electrode) Search Area
+- switch [checked]
+- button "Full screen"
+- img
+- text: Div
+- combobox: 40 Mobility & IT Battery
+- button "Open"
+- img
+- text: Company
+- combobox: ESOC
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: Bucket
+- combobox: Daily
+- button "Open"
+- img
+- text: Plan Date
+- combobox: {DATE}
+- button "Open"
+- img
+- text: Period
+- textbox "YYYY.MM.DD" [disabled]: 2026.09.28
+- text: ~
+- textbox "YYYY.MM.DD" [disabled]: 2026.12.04
+- text: Material
+- textbox
+- button
+- text: Model/Nickname
+- textbox
+- button
+- text: UOM Type
+- radio "UOM" [checked]
+- text: UOM
+- radio "Cell"
+- text: Cell
+- radio "Pancake m"
+- text: Pancake m
+- button "Search(F5)"
+- button
+- paragraph
+- button "Measure":
+  - img
+- button "Simulation"
+- button "Excel Form"
+- button "Excel Upload"
+- button "Insert(F8)"
+- button "Delete(F9)"
+- button "Save(F7)":
+  - img
+  - text: Save(F7)
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- grid:
+  - rowgroup:
+    - row "Div Model Nick Name From Site Material Oper. L/T Elec Type BOH PSI Measure No":
+      - columnheader "Div"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "From Site"
+      - columnheader "Material"
+      - columnheader "Oper. L/T"
+      - columnheader "Elec Type"
+      - columnheader "BOH"
+      - columnheader "PSI"
+      - columnheader "Measure"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- separator
+- img
+- text: Shipment Date
+- textbox "YYYY.MM.DD": 2026.10.10
+- text: ~
+- textbox "YYYY.MM.DD": 2026.12.04
+- text: Material
+- textbox
+- button
+- text: Model/Nickname
+- textbox
+- button
+- text: Requestor
+- textbox
+- button
+- button "Search"
+- button "Shipment Plan Detail"
+- button "Stock Detail"
+- button "Shipment Result"
+- grid:
+  - rowgroup:
+    - row "Div PO No Confirm/Plan ID Status Model Material Nick Name To Site DOM/EXP. Day Shipment Date Shipping Plan Qty Confirm Qty Gap Confirm Qty (Cut) Package Type No":
+      - columnheader "Div"
+      - columnheader "PO No"
+      - columnheader "Confirm/Plan ID"
+      - columnheader "Status"
+      - columnheader "Model"
+      - columnheader "Material"
+      - columnheader "Nick Name"
+      - columnheader "To Site"
+      - columnheader "DOM/EXP."
+      - columnheader "Day"
+      - columnheader "Shipment Date"
+      - columnheader "Shipping Plan Qty"
+      - columnheader "Confirm Qty"
+      - columnheader "Gap"
+      - columnheader "Confirm Qty (Cut)"
+      - columnheader "Package Type"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 23:51:15
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 23:51:15
+- button "Toggle Calendar"
+- button "Toggle Time List"
+# visual-order: Div > Company > From Site > Bucket > Plan Date > Period > Period > UOM > Cell > Pancake m > Shipment Date

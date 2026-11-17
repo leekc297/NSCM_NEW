@@ -7,8 +7,8 @@
   "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
   "status": 200,
   "rows": 2835,
-  "dur": 293,
-  "at": "2026-11-07T12:00:51.188Z",
+  "dur": 246,
+  "at": "2026-11-14T09:37:30.881Z",
   "user": "minyonglee1",
   "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261109\",\"periodTo\":\"20271108\"}",
   "status": 200,
   "rows": 535,
-  "dur": 212,
-  "at": "2026-11-07T12:00:53.384Z",
+  "dur": 177,
+  "at": "2026-11-14T09:37:33.081Z",
   "user": "minyonglee1",
   "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
  }

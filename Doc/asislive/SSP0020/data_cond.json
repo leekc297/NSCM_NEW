@@ -1,0 +1,6 @@
+{
+  "set": [],
+  "why": "SSP0020_GET_DELEGATE 조회 인자 = 로그인 사용자(p_user_id)·언어뿐. SSP_MST_DELEGATE 699행 중 jaeuk.shin 관련 0행이라 조회 0행. 시험 행 2개 추가(위임한 1·위임받은 1)",
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:24 실측: 추가 뒤 SP 결과 1·1행 · 적용 SQL tools/AsisLocal/sql/20261115_SSP0020_DELEGATE_TEST_ROWS.sql(ATTRIBUTE10=ASISLIVE_TEST_20261115, 되돌리기 포함)",
+  "at": "2026-11-15 10:24"
+}

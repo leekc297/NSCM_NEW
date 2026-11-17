@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 327,
+  "at": "2026-11-13T22:24:53.902Z",
+  "user": "minyonglee1",
+  "test": "Insert 행 Division(D4)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 437,
+  "at": "2026-11-13T22:24:54.063Z",
+  "user": "minyonglee1",
+  "test": "Insert 행 Division(D4)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2561,
+  "at": "2026-11-13T22:24:56.975Z",
+  "user": "minyonglee1",
+  "test": "Insert 행 Division(D4)"
+ }
+]

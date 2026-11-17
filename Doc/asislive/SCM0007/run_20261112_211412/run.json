@@ -1,0 +1,141 @@
+{
+ "id": "SCM0007",
+ "started": "2026-11-12 21:14:12.275",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:14:12.620",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCM.Master.UIL.SCM0007_SMS_Setup",
+   "form_text": "SMS Setup",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:16.640"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:14:20.316",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0007\\run_20261112_211412\\dump_load.json",
+   "control_count": 38,
+   "grid_count": 4,
+   "total": "Total : 1",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:20.326"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:14:20.485",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0007\\run_20261112_211412\\shots\\SCM0007_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:20.702"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:14:21.036",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:21.971"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:14:51.888",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0007\\run_20261112_211412\\dump_find.json",
+   "control_count": 42,
+   "grid_count": 4,
+   "total": "Total : 34",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:51.916"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:14:52.087",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0007\\run_20261112_211412\\shots\\SCM0007_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:52.326"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:14:52.668",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:53.445"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 14,
+  "calls_with_params": 14
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCM.Master.UIL.SCM0007_SMS_Setup",
+  "form_text": "SMS Setup",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 21:14:12.478",
+ "t_find": "2026-11-12 21:14:20.785",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 42,
+  "layout_items": 10,
+  "grids": 4,
+  "sheets": 4,
+  "header_cols": 23,
+  "data_rows": 34,
+  "grid_rows": 34,
+  "calls_total": 14,
+  "calls_screen": 14,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:42.563",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:42"
+}

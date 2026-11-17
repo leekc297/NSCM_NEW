@@ -1,0 +1,594 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "SSP0015",
+      "--grep",
+      "@smoke"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/SSP0015/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "SSP0015.smoke.spec.ts",
+      "file": "SSP0015.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SSP0015 ShipmentPSI 스모크 @smoke",
+          "file": "SSP0015.smoke.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "console",
+                      "description": "열림 직후 오류 52(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "labels",
+                      "description": "펼침=false 일치 14 / 누락 2: Result Type, Lot ID / 제외 1: Period(drpPeriod2: As-is 숨김: layoutControlItem11.Visibility = Never (designer.cs))"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 125612,
+                      "error": {
+                        "message": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                          "column": 110,
+                          "line": 31
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 29 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(cands)\u001b[33m;\u001b[39m\n \u001b[90m 30 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     }\n \u001b[90m 33 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Lot ID' (InputField) — 후보 [Lot ID]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:38:26"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[langlock] 다른 실행(SSP0005 시나리오 · pid 10128)이 언어 전환 중 — 끝날 때까지 대기\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:23:55.897Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 52(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 14 / 누락 2: Result Type, Lot ID / 제외 1: Period(drpPeriod2: As-is 숨김: layoutControlItem11.Visibility = Never (designer.cs))"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                        "column": 110,
+                        "line": 31
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 127381,
+                      "error": {
+                        "message": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                          "column": 110,
+                          "line": 31
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 29 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(cands)\u001b[33m;\u001b[39m\n \u001b[90m 30 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     }\n \u001b[90m 33 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Lot ID' (InputField) — 후보 [Lot ID]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:38:26"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[langlock] 다른 실행(SSP0005 시나리오 · pid 10128)이 언어 전환 중 — 끝날 때까지 대기\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T12:26:05.045Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 52(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 14 / 누락 2: Result Type, Lot ID / 제외 1: Period(drpPeriod2: As-is 숨김: layoutControlItem11.Visibility = Never (designer.cs))"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-39b73--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts",
+                        "column": 110,
+                        "line": 31
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "dbe903250383574127d6-d02c98354c4612240b8f",
+              "file": "SSP0015.smoke.spec.ts",
+              "line": 11,
+              "column": 7
+            },
+            {
+              "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 25350,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at conditionCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:195:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:109:19",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                          "column": 17,
+                          "line": 386
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n\u001b[0m \u001b[90m 384 |\u001b[39m     \u001b[36mconst\u001b[39m combo \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisibleFirst(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 385 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcombo) \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 386 |\u001b[39m     \u001b[36mawait\u001b[39m combo\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 387 |\u001b[39m     \u001b[36mconst\u001b[39m opt \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'option'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(\u001b[32m`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`\u001b[39m) })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 388 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) { \u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m;\u001b[39m }\n \u001b[90m 389 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at conditionCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:195:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:109:19"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:28:16.009Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                        "column": 17,
+                        "line": 386
+                      }
+                    },
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 25370,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at conditionCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:195:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:109:19",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                          "column": 17,
+                          "line": 386
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n\u001b[0m \u001b[90m 384 |\u001b[39m     \u001b[36mconst\u001b[39m combo \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisibleFirst(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 385 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcombo) \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 386 |\u001b[39m     \u001b[36mawait\u001b[39m combo\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 387 |\u001b[39m     \u001b[36mconst\u001b[39m opt \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'option'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(\u001b[32m`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`\u001b[39m) })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 388 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) { \u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m;\u001b[39m }\n \u001b[90m 389 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at conditionCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:195:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:109:19"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T12:28:44.879Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-cd655-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                        "column": 17,
+                        "line": 386
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "dbe903250383574127d6-8f2c6eb191191d75890e",
+              "file": "SSP0015.smoke.spec.ts",
+              "line": 106,
+              "column": 7
+            },
+            {
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 24867,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at commonCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:291:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:118:19",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                          "column": 17,
+                          "line": 386
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n\u001b[0m \u001b[90m 384 |\u001b[39m     \u001b[36mconst\u001b[39m combo \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisibleFirst(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 385 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcombo) \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 386 |\u001b[39m     \u001b[36mawait\u001b[39m combo\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 387 |\u001b[39m     \u001b[36mconst\u001b[39m opt \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'option'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(\u001b[32m`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`\u001b[39m) })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 388 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) { \u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m;\u001b[39m }\n \u001b[90m 389 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at commonCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:291:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:118:19"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T12:29:13.807Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                        "column": 17,
+                        "line": 386
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 24957,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at commonCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:291:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:118:19",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                          "column": 17,
+                          "line": 386
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n\u001b[0m \u001b[90m 384 |\u001b[39m     \u001b[36mconst\u001b[39m combo \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisibleFirst(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 385 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcombo) \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 386 |\u001b[39m     \u001b[36mawait\u001b[39m combo\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 387 |\u001b[39m     \u001b[36mconst\u001b[39m opt \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'option'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(\u001b[32m`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`\u001b[39m) })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 388 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) { \u001b[36mawait\u001b[39m opt\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m;\u001b[39m }\n \u001b[90m 389 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 17,
+                            "line": 386
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('combobox').first()\u001b[22m\n\u001b[2m    - locator resolved to <input disabled id=\":r9:\" type=\"text\" role=\"combobox\" autocomplete=\"off\" spellcheck=\"false\" aria-invalid=\"false\" aria-expanded=\"false\" autocapitalize=\"none\" aria-autocomplete=\"list\" value=\"40 Mobility & IT Battery\" class=\"MuiInputBase-input MuiOutlinedInput-input Mui-disabled MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1e3onoi-MuiInputBase-input-MuiOutlinedInput-input\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    37 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:386\n\n  384 |     const combo = await this.visibleFirst(this.page.getByRole('combobox'));\n  385 |     if (!combo) return false;\n> 386 |     await combo.click();\n      |                 ^\n  387 |     const opt = this.page.getByRole('option', { name: new RegExp(`^\\\\s*${escapeRe(code)}(\\\\s|$|\\\\b)`) }).first();\n  388 |     if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }\n  389 |     await this.page.keyboard.press('Escape'); return false;\n    at Nscm.setDivision (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:386:17)\n    at commonCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\smoke-extra.ts:291:39)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0015.smoke.spec.ts:118:19"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T12:29:42.188Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\artifacts\\SSP0015.smoke-SSP0015-Ship-6edff-·Columns·Search-Area·Manual-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                        "column": 17,
+                        "line": 386
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "dbe903250383574127d6-241efb7d4c2e8fe70bf9",
+              "file": "SSP0015.smoke.spec.ts",
+              "line": 115,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T12:23:55.278Z",
+    "duration": 375099.745,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

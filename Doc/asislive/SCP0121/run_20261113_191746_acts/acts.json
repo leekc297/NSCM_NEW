@@ -1,0 +1,85 @@
+{
+ "id": "SCP0121",
+ "group": "SCM PI Admin",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0121_GET_PLAN_GROUP_LINE"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     11
+    ],
+    [
+     "SCP0121_GET_PLAN_GROUP_LINE",
+     241
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0121-S575e43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0121-S575e43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnPlanGroupReg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 6
+  },
+  {
+   "control": "btnPlanGroupReg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  }
+ ],
+ "at": "2026-11-13 19:17:04.874",
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

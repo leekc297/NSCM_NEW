@@ -120,7 +120,7 @@
         {
           "title": "SCP0016 WaterfallShipmentPlanFG 스모크 @smoke",
           "file": "SCP0016.smoke.spec.ts",
-          "line": 8,
+          "line": 9,
           "column": 6,
           "specs": [
             {
@@ -143,11 +143,11 @@
                     },
                     {
                       "type": "console",
-                      "description": "오류 56(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                      "description": "오류 57(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
                       "type": "columns",
-                      "description": "시트 Waterfall Shipment Plan(spreadTitle) 헤더 24 / 기대 20 / 누락 0: "
+                      "description": "시트 Waterfall Shipment Plan(main) 헤더 52 / 기대 20 / 누락 1: Origin From Div"
                     },
                     {
                       "type": "header",
@@ -155,19 +155,15 @@
                     },
                     {
                       "type": "dynamic",
-                      "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 384 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
+                      "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 383 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"spreadTitle\",\"SEARCH\",200,440,1724]]"
+                      "description": "[[\"spreadTitle\",\"SEARCH\",200,440,5909],[\"main\",\"SEARCH\",200,437,5909]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -178,25 +174,25 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 8343,
+                      "duration": 13062,
                       "error": {
                         "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:70:93",
+                        "stack": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:74:93",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                           "column": 93,
-                          "line": 70
+                          "line": 74
                         },
-                        "snippet": "\u001b[0m \u001b[90m 68 |\u001b[39m       \u001b[90m// 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\u001b[39m\n \u001b[90m 69 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows\u001b[33m,\u001b[39m \u001b[35m2\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 70 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(missLit\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 71 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mheight\u001b[33m,\u001b[39m \u001b[32m`헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mmaxRowPx \u001b[33m*\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows)\u001b[33m;\u001b[39m\n \u001b[90m 72 |\u001b[39m       \u001b[90m// 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\u001b[39m\n \u001b[90m 73 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals \u001b[33m&&\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength \u001b[33m>=\u001b[39m \u001b[35m2\u001b[39m) {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 72 |\u001b[39m       \u001b[90m// 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\u001b[39m\n \u001b[90m 73 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows\u001b[33m,\u001b[39m \u001b[35m2\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(missLit\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mheight\u001b[33m,\u001b[39m \u001b[32m`헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mmaxRowPx \u001b[33m*\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m       \u001b[90m// 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals \u001b[33m&&\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength \u001b[33m>=\u001b[39m \u001b[35m2\u001b[39m) {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                             "column": 93,
-                            "line": 70
+                            "line": 74
                           },
-                          "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  68 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  69 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 70 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  71 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  72 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  73 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:70:93"
+                          "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  77 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:74:93"
                         }
                       ],
                       "stdout": [
@@ -206,7 +202,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T12:40:11.180Z",
+                      "startTime": "2026-11-14T00:41:09.831Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -218,11 +214,11 @@
                         },
                         {
                           "type": "console",
-                          "description": "오류 56(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "오류 57(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "columns",
-                          "description": "시트 Waterfall Shipment Plan(spreadTitle) 헤더 24 / 기대 20 / 누락 0: "
+                          "description": "시트 Waterfall Shipment Plan(main) 헤더 52 / 기대 20 / 누락 1: Origin From Div"
                         },
                         {
                           "type": "header",
@@ -230,19 +226,15 @@
                         },
                         {
                           "type": "dynamic",
-                          "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 384 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
+                          "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 383 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"spreadTitle\",\"SEARCH\",200,440,1744]]"
+                          "description": "[[\"spreadTitle\",\"SEARCH\",200,440,6246],[\"main\",\"SEARCH\",200,437,6246]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": [
@@ -265,32 +257,32 @@
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                         "column": 93,
-                        "line": 70
+                        "line": 74
                       }
                     },
                     {
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 8283,
+                      "duration": 13308,
                       "error": {
                         "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:70:93",
+                        "stack": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:74:93",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                           "column": 93,
-                          "line": 70
+                          "line": 74
                         },
-                        "snippet": "\u001b[0m \u001b[90m 68 |\u001b[39m       \u001b[90m// 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\u001b[39m\n \u001b[90m 69 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows\u001b[33m,\u001b[39m \u001b[35m2\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 70 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(missLit\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 71 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mheight\u001b[33m,\u001b[39m \u001b[32m`헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mmaxRowPx \u001b[33m*\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows)\u001b[33m;\u001b[39m\n \u001b[90m 72 |\u001b[39m       \u001b[90m// 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\u001b[39m\n \u001b[90m 73 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals \u001b[33m&&\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength \u001b[33m>=\u001b[39m \u001b[35m2\u001b[39m) {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 72 |\u001b[39m       \u001b[90m// 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\u001b[39m\n \u001b[90m 73 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows\u001b[33m,\u001b[39m \u001b[35m2\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(missLit\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(hr\u001b[33m.\u001b[39mheight\u001b[33m,\u001b[39m \u001b[32m`헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mmaxRowPx \u001b[33m*\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mrows)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m       \u001b[90m// 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals \u001b[33m&&\u001b[39m \u001b[33mHS\u001b[39m\u001b[33m.\u001b[39mliterals\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m hr\u001b[33m.\u001b[39mrows\u001b[33m.\u001b[39mlength \u001b[33m>=\u001b[39m \u001b[35m2\u001b[39m) {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                             "column": 93,
-                            "line": 70
+                            "line": 74
                           },
-                          "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  68 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  69 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 70 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  71 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  72 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  73 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:70:93"
+                          "message": "Error: As-is 병합 헤더 리터럴 노출 [SUM]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  77 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:74:93"
                         }
                       ],
                       "stdout": [
@@ -300,7 +292,7 @@
                       ],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-07T12:40:23.569Z",
+                      "startTime": "2026-11-14T00:41:27.164Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -312,11 +304,11 @@
                         },
                         {
                           "type": "console",
-                          "description": "오류 56(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "오류 57(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "columns",
-                          "description": "시트 Waterfall Shipment Plan(spreadTitle) 헤더 24 / 기대 20 / 누락 0: "
+                          "description": "시트 Waterfall Shipment Plan(main) 헤더 52 / 기대 20 / 누락 1: Origin From Div"
                         },
                         {
                           "type": "header",
@@ -324,19 +316,15 @@
                         },
                         {
                           "type": "dynamic",
-                          "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 384 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
+                          "description": "As-is SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL,SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO,SCP0009_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumnISO:420,InitSpreadDateColumnNotISO:493,InitSpreadDateColumnNotISO:501 · 컬럼정의 383 / 정적밖 364 (D_20260824,D_20260825,D_20260826,D_20260827,D_20260828) · 타이틀 시트 spreadTitleIso,spreadTitle 호출 1"
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"spreadTitle\",\"SEARCH\",200,440,1724]]"
+                          "description": "[[\"spreadTitle\",\"SEARCH\",200,440,5909],[\"main\",\"SEARCH\",200,437,5909]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": [
@@ -359,7 +347,7 @@
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
                         "column": 93,
-                        "line": 70
+                        "line": 74
                       }
                     }
                   ],
@@ -368,12 +356,12 @@
               ],
               "id": "bde7bbc28d3f37d4a337-3a0f8fe3478dffe8c9ca",
               "file": "SCP0016.smoke.spec.ts",
-              "line": 10,
+              "line": 11,
               "column": 7
             },
             {
               "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "smoke"
               ],
@@ -383,11 +371,11 @@
                   "annotations": [
                     {
                       "type": "cond",
-                      "description": "[OK] (기준 조회)(search) — call-proc 1"
+                      "description": "[OK] (기준 조회)(search) — call-proc 2"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                      "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
                       "type": "cond",
@@ -395,15 +383,15 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Operation group(combo) — 옵션 'Cell' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                      "description": "[OK] Operation group(combo) — 옵션 'Cell' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
                       "type": "cond",
-                      "description": "[ERROR] PJT(popup) — 팝업 창을 자동 감지하지 못함 — 수동 확인 필요(SCP0100 Model 팝업은 수동 디버그에서 정상 열림 확인, 2026-10-23)"
+                      "description": "[OK] PJT(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'A15BW7001' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                      "description": "[OK] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
                       "type": "cond",
@@ -423,7 +411,7 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[FAIL] (기준표 순서)(order) — 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum / 기준 div → ver → operationgroup → pjt → modelnickname → electrode → period → bucket → sum"
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum / 기준 div → ver → operationgroup → pjt → modelnickname → electrode → period → bucket → sum"
                     },
                     {
                       "type": "cond",
@@ -431,11 +419,7 @@
                     },
                     {
                       "type": "condsum",
-                      "description": "2/11 OK · FAIL 1 · WARN 7 · ERROR 1 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "6/10 OK · FAIL 0 · WARN 4 · ERROR 0 · NA 2"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -445,36 +429,9 @@
                     {
                       "workerIndex": 2,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 67264,
-                      "error": {
-                        "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:108:123",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                          "column": 123,
-                          "line": 108
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 106 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 108 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 109 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 110 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                            "column": 123,
-                            "line": 108
-                          },
-                          "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  106 |     const s = record(test.info(), 'cond', items);\n  107 |     await nscm.snapshot(`${MENU}_cond`);\n> 108 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  109 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  110 |   });\n  111 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:108:123"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                            "column": 131,
-                            "line": 109
-                          },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 1: PJT\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  107 |     await nscm.snapshot(`${MENU}_cond`);\n  108 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 109 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  110 |   });\n  111 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  112 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:109:131"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 79812,
+                      "errors": [],
                       "stdout": [
                         {
                           "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
@@ -485,15 +442,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T12:40:35.782Z",
+                      "startTime": "2026-11-14T00:41:44.821Z",
                       "annotations": [
                         {
                           "type": "cond",
-                          "description": "[OK] (기준 조회)(search) — call-proc 1"
+                          "description": "[OK] (기준 조회)(search) — call-proc 2"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                          "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
                           "type": "cond",
@@ -501,15 +458,15 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Operation group(combo) — 옵션 'Cell' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                          "description": "[OK] Operation group(combo) — 옵션 'Cell' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
                           "type": "cond",
-                          "description": "[ERROR] PJT(popup) — 팝업 창을 자동 감지하지 못함 — 수동 확인 필요(SCP0100 Model 팝업은 수동 디버그에서 정상 열림 확인, 2026-10-23)"
+                          "description": "[OK] PJT(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'A15BW7001' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                          "description": "[OK] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
                           "type": "cond",
@@ -529,7 +486,7 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[FAIL] (기준표 순서)(order) — 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum / 기준 div → ver → operationgroup → pjt → modelnickname → electrode → period → bucket → sum"
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum / 기준 div → ver → operationgroup → pjt → modelnickname → electrode → period → bucket → sum"
                         },
                         {
                           "type": "cond",
@@ -537,168 +494,18 @@
                         },
                         {
                           "type": "condsum",
-                          "description": "2/11 OK · FAIL 1 · WARN 7 · ERROR 1 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "6/10 OK · FAIL 0 · WARN 4 · ERROR 0 · NA 2"
                         }
                       ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                        "column": 123,
-                        "line": 108
-                      }
-                    },
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 67885,
-                      "error": {
-                        "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:108:123",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                          "column": 123,
-                          "line": 108
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 106 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 108 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 109 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 110 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                            "column": 123,
-                            "line": 108
-                          },
-                          "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  106 |     const s = record(test.info(), 'cond', items);\n  107 |     await nscm.snapshot(`${MENU}_cond`);\n> 108 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  109 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  110 |   });\n  111 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:108:123"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                            "column": 131,
-                            "line": 109
-                          },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 1: PJT\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  107 |     await nscm.snapshot(`${MENU}_cond`);\n  108 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 109 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  110 |   });\n  111 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  112 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts:109:131"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
-                        },
-                        {
-                          "text": "[required] Ver.: 선택 'SP_W_20260824 (W35)'(후보 10개 중 1번째) ← 'Ver. 값은 필수 입력 항목입니다. Confirm'\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-11-07T12:41:53.068Z",
-                      "annotations": [
-                        {
-                          "type": "cond",
-                          "description": "[OK] (기준 조회)(search) — call-proc 1"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Ver.(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Operation group(combo) — 옵션 'Cell' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[ERROR] PJT(popup) — 팝업 창을 자동 감지하지 못함 — 수동 확인 필요(SCP0100 Model 팝업은 수동 디버그에서 정상 열림 확인, 2026-10-23)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Electrode(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Period(period) — 기간 '2026.08.24' ~ '2027.08.22' → 조회 정상"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Bucket(combo) — 옵션 'Weekly' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[WARN] Sum(checkbox) — 체크 OFF→ON → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[FAIL] (기준표 순서)(order) — 화면 div → operationgroup → pjt → modelnickname → electrode → ver → bucket → period → sum / 기준 div → ver → operationgroup → pjt → modelnickname → electrode → period → bucket → sum"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[NA] Sum(디자인)(design) — 같은 열 비교 대상 없음"
-                        },
-                        {
-                          "type": "condsum",
-                          "description": "2/11 OK · FAIL 1 · WARN 7 · ERROR 1 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0016\\artifacts\\SCP0016.smoke-SCP0016-Wate-17976-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0016.smoke.spec.ts",
-                        "column": 123,
-                        "line": 108
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "bde7bbc28d3f37d4a337-5913ddb8b1ffadaba941",
               "file": "SCP0016.smoke.spec.ts",
-              "line": 102,
+              "line": 106,
               "column": 7
             },
             {
@@ -713,7 +520,7 @@
                   "annotations": [
                     {
                       "type": "common",
-                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 440"
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 2 · 행 440/437"
                     },
                     {
                       "type": "common",
@@ -753,7 +560,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'WaterfallShipmentPlanFg_20261107_094347.xlsx' 6730B"
+                      "description": "[OK] Excel 다운로드(common) — 'WaterfallShipmentPlanFg_20261114_094347.xlsx' 6705B"
                     },
                     {
                       "type": "common",
@@ -770,10 +577,6 @@
                     {
                       "type": "commonsum",
                       "description": "12/13 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -781,10 +584,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 4,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 37553,
+                      "duration": 41362,
                       "errors": [],
                       "stdout": [
                         {
@@ -793,11 +596,11 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T12:43:11.353Z",
+                      "startTime": "2026-11-14T00:43:07.174Z",
                       "annotations": [
                         {
                           "type": "common",
-                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 440"
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 2 · 행 440/437"
                         },
                         {
                           "type": "common",
@@ -837,7 +640,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'WaterfallShipmentPlanFg_20261107_094347.xlsx' 6730B"
+                          "description": "[OK] Excel 다운로드(common) — 'WaterfallShipmentPlanFg_20261114_094347.xlsx' 6705B"
                         },
                         {
                           "type": "common",
@@ -854,10 +657,6 @@
                         {
                           "type": "commonsum",
                           "description": "12/13 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -868,7 +667,7 @@
               ],
               "id": "bde7bbc28d3f37d4a337-905e1e0ca748f783dcb5",
               "file": "SCP0016.smoke.spec.ts",
-              "line": 111,
+              "line": 115,
               "column": 7
             }
           ]
@@ -878,11 +677,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-07T12:40:10.615Z",
-    "duration": 221572.00100000002,
-    "expected": 1,
+    "startTime": "2026-11-14T00:41:09.152Z",
+    "duration": 163145.671,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 1,
     "flaky": 0
   }
 }

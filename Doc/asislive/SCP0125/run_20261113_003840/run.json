@@ -1,0 +1,151 @@
+{
+ "id": "SCP0125",
+ "started": "2026-11-13 00:38:40.528",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 00:38:40.831",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0125_Workbench",
+   "form_text": "Workbench",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0125_Workbench.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:38:53.601"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 00:38:57.011",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0125\\run_20261113_003840\\dump_load.json",
+   "control_count": 20,
+   "grid_count": 1,
+   "total": "Total : 1,712",
+   "time_status": "DB : 2.457s, UI : 0.084s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:38:57.029"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 00:38:57.189",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0125\\run_20261113_003840\\shots\\SCP0125_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:38:57.297"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 00:38:57.951",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:38:58.470"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 00:39:28.425",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0125\\run_20261113_003840\\dump_find.json",
+   "control_count": 20,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:39:28.430"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 00:39:28.593",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0125\\run_20261113_003840\\shots\\SCP0125_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:39:28.735"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 00:39:29.218",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:39:30.319"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 19,
+  "calls_with_params": 18
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0125_Workbench",
+  "form_text": "Workbench",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0125_Workbench.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal",
+  "inflight_check": "ok"
+ },
+ "t_open": "2026-11-13 00:38:40.741",
+ "t_find": "2026-11-13 00:38:57.686",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 20,
+  "layout_items": 9,
+  "grids": 1,
+  "sheets": 5,
+  "header_cols": 107,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 19,
+  "calls_screen": 19,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 00:39:30.541",
+ "exit": 0
+}

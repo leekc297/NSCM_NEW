@@ -1,0 +1,259 @@
+{
+ "sheets": {
+  "DMF0074_GET_METAL_LINK_PRICE": {
+   "sp": "DMF0074_GET_METAL_LINK_PRICE",
+   "conds": [
+    {
+     "label": "Division 81 + 기간 12개월 앞",
+     "rows": 759,
+     "ops": [
+      {
+       "division": "81"
+      },
+      {
+       "name": "drpPeriodMonth",
+       "prop": "MonthText1",
+       "value": "2025-11"
+      },
+      {
+       "name": "drpPeriodMonth",
+       "prop": "MonthText2",
+       "value": "2026-05"
+      }
+     ],
+     "params": {
+      "p_division_id": "81",
+      "p_from_yyyymmdd": "202511",
+      "p_to_yyyymmdd": "202605"
+     }
+    },
+    {
+     "label": "Division 81 + 기간 24개월 앞",
+     "rows": 2103,
+     "ops": [
+      {
+       "division": "81"
+      },
+      {
+       "name": "drpPeriodMonth",
+       "prop": "MonthText1",
+       "value": "2024-11"
+      },
+      {
+       "name": "drpPeriodMonth",
+       "prop": "MonthText2",
+       "value": "2025-05"
+      }
+     ],
+     "params": {
+      "p_division_id": "81",
+      "p_from_yyyymmdd": "202411",
+      "p_to_yyyymmdd": "202505"
+     }
+    }
+   ],
+   "divs": [],
+   "tried": [
+    {
+     "cond": "Division 81",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HD",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HD(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HG",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HG(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HM",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_HM(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_UC",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81_UC(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 82",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 82(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81 + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81 + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81 + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:47"
+    },
+    {
+     "cond": "Division 81 + 기간 12개월 앞",
+     "rows": 759,
+     "err": "",
+     "at": "2026-11-17 16:39:48"
+    },
+    {
+     "cond": "Division 81 + 기간 24개월 앞",
+     "rows": 2103,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HD + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HD + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HD + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HD + 기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HD + 기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HG + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HG + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HG + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HG + 기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    },
+    {
+     "cond": "Division 81_HG + 기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 16:39:49"
+    }
+   ],
+   "axes": [
+    "division",
+    "period"
+   ],
+   "at": "2026-11-17 16:39:50"
+  }
+ },
+ "at": "2026-11-17 16:39:50",
+ "source": "AS-IS 조회 SP 재실행(Division·콤보·기간 후보 · .env.asis)"
+}

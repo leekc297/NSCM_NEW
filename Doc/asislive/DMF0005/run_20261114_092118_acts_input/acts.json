@@ -1,0 +1,418 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "LIABILITY_PERIOD",
+       "before": "0",
+       "after": "1"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LIABILITY_PERIOD]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 '' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Se76dae",
+    "DMF0005-Sc2c9ae",
+    "DMF0005-S9d7fe1",
+    "DMF0005-Sf9cb5c",
+    "DMF0005-Sdb1492",
+    "DMF0005-S387b14",
+    "DMF0005-Se06c5d",
+    "DMF0005-S34ae90",
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "USER_ID",
+       "before": "hyelin.jung",
+       "after": "kdh31001"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[USER_ID]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 hyelin.jung → kdh31001(수정 모드) · 입력 뒤 값 kdh31001 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "hyelin.jung",
+    "after": "kdh31001",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "PRODUCTION_PROCESS",
+       "before": "일반",
+       "after": "21700"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[PRODUCTION_PROCESS]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 일반 → 21700(수정 모드) · 입력 뒤 값 21700 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "일반",
+    "after": "21700",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "SALES_COMPANY",
+       "before": "NJ00",
+       "after": "HQ00"
+      },
+      {
+       "row": 0,
+       "col": "SALES_PLANT",
+       "before": "NJ01",
+       "after": "HQ04"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[SALES_COMPANY]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 NJ00 → HQ00(수정 모드) · 입력 뒤 값 HQ00 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "NJ00",
+    "after": "HQ00",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "SALES_PLANT",
+       "before": "HQ04",
+       "after": "HQ06"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[SALES_PLANT]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 NJ01 → HQ06(수정 모드) · 입력 뒤 값 HQ06 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "HQ04",
+    "after": "HQ06",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "CUST_GROUP_DTL",
+       "before": "계약",
+       "after": "타용도/계약"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[CUST_GROUP_DTL]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 계약 → 타용도/계약(수정 모드) · 입력 뒤 값 타용도/계약 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "계약",
+    "after": "타용도/계약",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "APPLICATION",
+       "before": "ESS",
+       "after": "BBU"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[APPLICATION]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 ESS → BBU(수정 모드) · 입력 뒤 값 BBU · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "ESS",
+    "after": "BBU",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15657,
+     "cells": [
+      {
+       "row": 0,
+       "col": "ROUTE",
+       "before": "내수",
+       "after": "기타"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[ROUTE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 내수 → 기타(수정 모드) · 입력 뒤 값 기타 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ],
+   "cell": {
+    "before": "내수",
+    "after": "기타",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdMain[ITEM_ID]",
+   "why": "잠긴 셀",
+   "scenarios": [
+    "DMF0005-Se06c5d",
+    "DMF0005-Sc30ad2",
+    "DMF0005-S21baf8",
+    "DMF0005-S4aa3b6",
+    "DMF0005-S871843",
+    "DMF0005-S58a897",
+    "DMF0005-Seca278",
+    "DMF0005-S0a7386"
+   ]
+  }
+ ],
+ "at": "2026-11-14 09:18:23",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "Production",
+  "named_cols": [
+   "ITEM_ID",
+   "LIABILITY_PERIOD"
+  ],
+  "branches": 15,
+  "branches_without_col_name": 7,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ }
+}

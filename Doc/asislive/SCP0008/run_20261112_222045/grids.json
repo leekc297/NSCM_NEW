@@ -1,0 +1,796 @@
+{
+ "id": "SCP0008",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Item Master",
+     "rows": 0,
+     "cols": 51,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "SCM Site"
+       ],
+       "label": "SCM Site",
+       "tag": "SCM_SITE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SCM_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Material Name"
+       ],
+       "label": "Material Name",
+       "tag": "ITEM_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Operation Group"
+       ],
+       "label": "Operation Group",
+       "tag": "OPERATION_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "OPERATION_GROUP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Cell / M"
+       ],
+       "label": "Cell / M",
+       "tag": "CELL_M",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CELL_M",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Cell Item ID"
+       ],
+       "label": "Cell Item ID",
+       "tag": "CELL_ITEM_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CELL_ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Convert Qty Cell"
+       ],
+       "label": "Convert Qty Cell",
+       "tag": "CONVERT_QTY_CELL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CONVERT_QTY_CELL",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "SCM PJT Code"
+       ],
+       "label": "SCM PJT Code",
+       "tag": "SCM_PJT_CODE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SCM_PJT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "FP PJT Code"
+       ],
+       "label": "FP PJT Code",
+       "tag": "FP_PJT_CODE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FP_PJT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "MES Route"
+       ],
+       "label": "MES Route",
+       "tag": "FLOW_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FLOW_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Material Type"
+       ],
+       "label": "Material Type",
+       "tag": "ITEM_TYPE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ITEM_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Class"
+       ],
+       "label": "Class",
+       "tag": "ITEM_CLASS",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Class Name"
+       ],
+       "label": "Class Name",
+       "tag": "ITEM_CLASS_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Class 1"
+       ],
+       "label": "Class 1",
+       "tag": "ITEM_CLASS_LEVEL_1",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS_LEVEL_1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Class 2"
+       ],
+       "label": "Class 2",
+       "tag": "ITEM_CLASS_LEVEL_2",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS_LEVEL_2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Class 3"
+       ],
+       "label": "Class 3",
+       "tag": "ITEM_CLASS_LEVEL_3",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS_LEVEL_3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Class 4"
+       ],
+       "label": "Class 4",
+       "tag": "ITEM_CLASS_LEVEL_4",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_CLASS_LEVEL_4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Electrode Type"
+       ],
+       "label": "Electrode Type",
+       "tag": "ELECTRODE_TYPE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ELECTRODE_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "UOM"
+       ],
+       "label": "UOM",
+       "tag": "ITEM_UOM",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ITEM_UOM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Demand Lot Size"
+       ],
+       "label": "Demand Lot Size",
+       "tag": "DEMAND_LOT_SIZE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DEMAND_LOT_SIZE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Material Attribute"
+       ],
+       "label": "Material Attribute",
+       "tag": "ITEM_ATTRIBUTE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ATTRIBUTE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Setup Attribute"
+       ],
+       "label": "Setup Attribute",
+       "tag": "SETUP_ATTRIBUTE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SETUP_ATTRIBUTE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Material Class"
+       ],
+       "label": "Material Class",
+       "tag": "MATERIAL_CLASS",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MATERIAL_CLASS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Material Class Name"
+       ],
+       "label": "Material Class Name",
+       "tag": "MATERIAL_CLASS_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MATERIAL_CLASS_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "EOL"
+       ],
+       "label": "EOL",
+       "tag": "ERP_EOL",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ERP_EOL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "SCP EOL"
+       ],
+       "label": "SCP EOL",
+       "tag": "SCP_EOL",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SCP_EOL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Make And Buy"
+       ],
+       "label": "Make And Buy",
+       "tag": "MAKE_AND_BUY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "MAKE_AND_BUY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Active"
+       ],
+       "label": "Active",
+       "tag": "ACTIVE_FLAG",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ACTIVE_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "COMPANY_ID"
+       ],
+       "label": "COMPANY_ID",
+       "tag": "COMPANY_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "COMPANY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "LEVEL_1_CODE"
+       ],
+       "label": "LEVEL_1_CODE",
+       "tag": "LEVEL_1_CODE",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_1_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "LEVEL_1_ID"
+       ],
+       "label": "LEVEL_1_ID",
+       "tag": "LEVEL_1_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_1_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "LEVEL_2_CODE"
+       ],
+       "label": "LEVEL_2_CODE",
+       "tag": "LEVEL_2_CODE",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_2_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "LEVEL_2_ID"
+       ],
+       "label": "LEVEL_2_ID",
+       "tag": "LEVEL_2_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_2_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "LEVEL_3_CODE"
+       ],
+       "label": "LEVEL_3_CODE",
+       "tag": "LEVEL_3_CODE",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_3_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "LEVEL_3_ID"
+       ],
+       "label": "LEVEL_3_ID",
+       "tag": "LEVEL_3_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_3_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "LEVEL_4_CODE"
+       ],
+       "label": "LEVEL_4_CODE",
+       "tag": "LEVEL_4_CODE",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_4_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "LEVEL_4_ID"
+       ],
+       "label": "LEVEL_4_ID",
+       "tag": "LEVEL_4_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LEVEL_4_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "SIDE_TYPE"
+       ],
+       "label": "SIDE_TYPE",
+       "tag": "SIDE_TYPE",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SIDE_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "ITEM_GROUP_ID"
+       ],
+       "label": "ITEM_GROUP_ID",
+       "tag": "ITEM_GROUP_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "SETUP_GROUP_ID_1"
+       ],
+       "label": "SETUP_GROUP_ID_1",
+       "tag": "SETUP_GROUP_ID_1",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SETUP_GROUP_ID_1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "SETUP_GROUP_ID_2"
+       ],
+       "label": "SETUP_GROUP_ID_2",
+       "tag": "SETUP_GROUP_ID_2",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SETUP_GROUP_ID_2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "SETUP_GROUP_ID_3"
+       ],
+       "label": "SETUP_GROUP_ID_3",
+       "tag": "SETUP_GROUP_ID_3",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SETUP_GROUP_ID_3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "SPEC"
+       ],
+       "label": "SPEC",
+       "tag": "SPEC",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SPEC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "OUTSOURCING_FACTORY"
+       ],
+       "label": "OUTSOURCING_FACTORY",
+       "tag": "OUTSOURCING_FACTORY",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "OUTSOURCING_FACTORY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "FINITE_TERM"
+       ],
+       "label": "FINITE_TERM",
+       "tag": "FINITE_TERM",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FINITE_TERM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "FINITE_TERM_UOM"
+       ],
+       "label": "FINITE_TERM_UOM",
+       "tag": "FINITE_TERM_UOM",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FINITE_TERM_UOM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "DESCRIPTION"
+       ],
+       "label": "DESCRIPTION",
+       "tag": "DESCRIPTION",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "BATCH_RATIO_ID"
+       ],
+       "label": "BATCH_RATIO_ID",
+       "tag": "BATCH_RATIO_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BATCH_RATIO_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

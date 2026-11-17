@@ -10,7 +10,7 @@ const cases = [
   ['후보 밖 거부', b(P), 'PASS'], ['빈 값으로 거부', b({ ...P, after: '' }), 'PASS'], ['후보 밖 들어감', b({ ...P, after: 'X' }), 'FAIL'], ['붙여넣기 실패', b({ ...P, pasted: false }), 'ERROR'], ['측정 실패2', b({ ...P, why: 'x' }), 'ERROR'],
 ];
 const LK = { b: 'C', full: 'ABCDEF', part: 'BCDE', vals: ['ABCDEF', 'xBCDEy'], sent: true };
-cases.push(['부분일치', lk(LK), 'PASS'], ['0행', lk({ ...LK, vals: [] }), 'ERROR'], ['원래 값 없음', lk({ ...LK, vals: ['xBCDEy'] }), 'FAIL'], ['다른 칸 검색', lk({ ...LK, vals: ['ABCDEF', 'zzz'] }), 'ERROR'], ['요청 없음', lk({ ...LK, sent: false }), 'ERROR']);
+cases.push(['부분일치', lk(LK), 'PASS'], ['0행(본문 확인 안 함)', lk({ ...LK, vals: [] }), 'ERROR'], ['0행·본문에 실림(T177)', lk({ ...LK, vals: [], inBody: true }), 'FAIL'], ['0행·본문에 없음', lk({ ...LK, vals: [], inBody: false }), 'ERROR'], ['원래 값 없음', lk({ ...LK, vals: ['xBCDEy'] }), 'FAIL'], ['다른 칸 검색', lk({ ...LK, vals: ['ABCDEF', 'zzz'] }), 'ERROR'], ['요청 없음', lk({ ...LK, sent: false }), 'ERROR']);
 const SL = { name: 'N', want: ['a', 'b'], vals: ['a', 'b', 'a'], sent: true }; const AR = { name: 'N', n0: 10, n1: 2, n2: 10 };
 cases.push(['복수 정상', sl(SL), 'PASS'], ['조건 밖', sl({ ...SL, vals: ['a', 'b', 'c'] }), 'FAIL'], ['하나 빠짐', sl({ ...SL, vals: ['a'] }), 'FAIL'], ['0행', sl({ ...SL, vals: [] }), 'FAIL'], ['요청 없음', sl({ ...SL, sent: false }), 'ERROR'], ['왕복 정상', ar(AR), 'PASS'], ['왕복 실패', ar({ ...AR, n2: 2 }), 'FAIL'], ['선택 효과 없음', ar({ ...AR, n1: 10 }), 'ERROR']);
 const TD = { where: 'C', key: 'Delete', full: 'ABCDEF', want: 'ADEF', got: 'ADEF' }; const DC = { divEditable: true, divs: ['40', '81'], changed: ['SITE'], same: ['X'] };

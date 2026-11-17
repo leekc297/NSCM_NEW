@@ -1,0 +1,15 @@
+NOW 2026-11-10 14:11:57
+('40', 515, 'APCAN0002A', 'APCCS0855A')
+('81', 190, 'APCAN0506B', 'APCCA2794A')
+M '40' '' '' rows= 515 ['APCAN0002A', 'APCAN0005A', 'APCAN0009A', 'APCAN0018A', 'APCAN0019A']
+M '40' '' 'APCAN0002A' rows= 1 ['APCAN0002A']
+M '40' '' 'apcan0002a' rows= 0 []
+M '40' '' 'CAN000' rows= 0 []
+M '40' '' 'can000' rows= 0 []
+M '40' '' 'can000,ccs0855' rows= 0 []
+M '' '' 'can000' rows= 0 []
+P '40' '' '' rows= 2401 ['APCAN0001A', 'APCAN0002A', 'APCAN0005A', 'APCAN0006A', 'APCAN0007A']
+P '40' '' 'APCAN0002A' rows= 2 ['APCAN0002A']
+P '40' '' 'apcan0002a' rows= 0 []
+P '40' '' 'can000' rows= 0 []
+P '40' '' 'can000,ccs0855' rows= 0 []

@@ -1,0 +1,64 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+SCP0006-S4dd274,조회,NONE,,AfterFindDataBOM,,잠금 1 · 잠금:siBOM.LockColumn,,1,SCP0006_ProjectRoute.cs:600,UNREACHED
+SCP0006-S2d4f70,조회,DATA,,AfterFindDataBOM,if (this.spdMainSelRow >= 0 && _isReload),그리드 값·서식 1,,1,SCP0006_ProjectRoute.cs:619,UNREACHED
+SCP0006-S76d962,조회,NONE,,AfterFindDataPlant,,잠금 1 · 잠금:siPlant.LockColumn,,1,SCP0006_ProjectRoute.cs:638,UNREACHED
+SCP0006-Sbc71df,조회,NONE,,AfterFindDataSite,,잠금 1 · 잠금:siSite.LockColumn,,1,SCP0006_ProjectRoute.cs:582,UNREACHED
+SCP0006-S746946,저장,DATA,,AfterSaveDataPlant,"if (result.Tables[0].Rows[0][""result_code""].ToString() == ""S"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:652,UNREACHED
+SCP0006-S3542fe,저장,DATA,,AfterSaveDataPlant,"else of (result.Tables[0].Rows[0][""result_code""].ToString() == ""S"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:662,UNREACHED
+SCP0006-S1ccbe4,기타,DATA,,ChkPlantOs,"if ("""" != siPlant.GetValue(nRowIdx, siPlant.GetColumnIndex(DefColumns.PLANT_SITE_ID)).ToString() && ""40"" == siPlant.GetValue…) ▸ if (dtChkSite.Rows.Count>0) ▸ if (dtItemSiteRow.Rows.Count == 0)","메시지 1, 그리드 값·서식 1 · 메시지:MessageHelper.GMessageBox",,2,SCP0006_ProjectRoute.cs:1351,UNREACHED
+SCP0006-Seb6c4c,기타,OTHER,,ClearUsrCheckedList,if (dt != null),목록 다시 채움 1,,1,SCP0006_ProjectRoute.cs:1070,UNREACHED
+SCP0006-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 4,,4,SCP0006_ProjectRoute.cs:272,DERIVED
+SCP0006-S055131,기타,OTHER,button:EditButton,EditButton,"if (fps != null) ▸ if (fps.Name == ""spdMain"" || fps.Name == ""spdBOM"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:499,DERIVED
+SCP0006-Sfc5893,기타,OTHER,button:EditButton,EditButton,"if (fps != null) ▸ if (fps.Name == ""spdPlant"")",잠금 7 · 잠금:siPlant.SwitchLock ; 잠금:siPlant.LockColumn ; 잠금:siPlant.LockColumn ; 잠금:siPlant.LockColumn,,7,SCP0006_ProjectRoute.cs:517,DERIVED
+SCP0006-S96683f,조회,NONE,event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick,FindDataBOM,,서버 호출 1,,1,SCP0006_ProjectRoute.cs:862,DERIVED
+SCP0006-S69ad11,조회,NONE,,FindDataBOMPlant,,서버 호출 1,,1,SCP0006_ProjectRoute.cs:879,UNREACHED
+SCP0006-Se3ddfb,조회,NONE,event:spdBOM.CellDoubleClick | event:spdBOM_CellDoubleClick,FindDataPlant,,서버 호출 1,,1,SCP0006_ProjectRoute.cs:870,DERIVED
+SCP0006-S849b8d,조회,STATE,button:FindButton | event:btnAllFind_Click | event:this.btnAllFind.Click,FindDataSite,if (CommonUtils.CheckDataEmpty(message) == false),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:710,DERIVED
+SCP0006-Sd0e3ee,조회,NONE,button:FindButton | event:btnAllFind_Click | event:this.btnAllFind.Click,FindDataSite,,"데이터 처리 9, 표시·활성 3, 서버 호출 1 · 표시·활성:qi.BeforeExecuteSQLProc ; 표시·활성:qi.AfterExecuteSQLProc ; 표시·활성:qi.ServiceUri",,13,SCP0006_ProjectRoute.cs:720,DERIVED
+SCP0006-S721c3f,조회,DIVISION,button:FindButton | event:btnAllFind_Click | event:this.btnAllFind.Click,FindDataSite,"if (division.ToString() == ""82"" || division.ToString() == ""40"")",표시·활성 1 · 표시·활성:qi.QueryId,,1,SCP0006_ProjectRoute.cs:726,DERIVED
+SCP0006-Sffb1e4,조회,DIVISION,button:FindButton | event:btnAllFind_Click | event:this.btnAllFind.Click,FindDataSite,"else of (division.ToString() == ""82"" || division.ToString() == ""40"")",표시·활성 1 · 표시·활성:qi.QueryId,,1,SCP0006_ProjectRoute.cs:730,DERIVED
+SCP0006-S95028d,조회,NONE,,GetDayRange,,서버 호출 2 · SCP.GET_DATE_RANGE_1MONTH,SCP.GET_DATE_RANGE_1MONTH,2,SCP0006_ProjectRoute.cs:1134,UNREACHED
+SCP0006-S916bcb,조회,NONE,button:SaveButton | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick,GetQueryInfoGetBOM,,"데이터 처리 4, 표시·활성 3 · 표시·활성:res.BeforeExecuteSQLProc ; 표시·활성:res.AfterExecuteSQLProc ; 표시·활성:res.ServiceUri",,7,SCP0006_ProjectRoute.cs:751,DERIVED
+SCP0006-S6173f4,조회,DIVISION,button:SaveButton | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick,GetQueryInfoGetBOM,"if (_siteDivision.ToString() == ""82"" || _siteDivision.ToString() == ""40"")",표시·활성 1 · 표시·활성:res.QueryId,,1,SCP0006_ProjectRoute.cs:757,DERIVED
+SCP0006-Sde3708,조회,DIVISION,button:SaveButton | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick,GetQueryInfoGetBOM,"else of (_siteDivision.ToString() == ""82"" || _siteDivision.ToString() == ""40"")",표시·활성 1 · 표시·활성:res.QueryId,,1,SCP0006_ProjectRoute.cs:761,DERIVED
+SCP0006-S28b222,조회,NONE,button:SaveButton | event:spdBOM.CellDoubleClick | event:spdBOM_CellDoubleClick,GetQueryInfoGetPlant,,"데이터 처리 5, 표시·활성 4 · 표시·활성:res.BeforeExecuteSQLProc ; 표시·활성:res.AfterExecuteSQLProc ; 표시·활성:res.ServiceUri ; 표시·활성:res.QueryId",,9,SCP0006_ProjectRoute.cs:789,DERIVED
+SCP0006-S629870,저장,NONE,button:SaveButton,GetQueryInfoSavePlant,,"데이터 처리 16, 표시·활성 4 · 표시·활성:res.BeforeExecuteSQLProc ; 표시·활성:res.AfterExecuteSQLProc ; 표시·활성:res.ServiceUri ; 표시·활성:res.QueryId",,20,SCP0006_ProjectRoute.cs:820,DERIVED
+SCP0006-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,"표시·활성 3, 데이터 처리 2, 목록 다시 채움 2 · 표시·활성:drpPeriod.MonthText2 ; 표시·활성:drpPeriod.MonthMin1 ; 표시·활성:drpPeriod.MonthMax1",,7,SCP0006_ProjectRoute.cs:249,DERIVED
+SCP0006-S4eb6d1,초기,SHEET+DATA,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,InitSpread,if (spreadInfo.SheetName == SpdSheet.shtSite),그리드 구성 2,,2,SCP0006_ProjectRoute.cs:301,DERIVED
+SCP0006-S23d995,초기,SHEET+DATA,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,InitSpread,if (spreadInfo.SheetName == SpdSheet.shtBOM),그리드 구성 3,,3,SCP0006_ProjectRoute.cs:346,DERIVED
+SCP0006-Sbdd331,초기,SHEET+DATA,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,InitSpread,if (spreadInfo.SheetName == SpdSheet.shtPlant),그리드 구성 3,,3,SCP0006_ProjectRoute.cs:368,DERIVED
+SCP0006-S96ec52,초기,SHEET+COND+DATA,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,InitSpread,if (spreadInfo.SheetName == SpdSheet.shtPlant) ▸ if (dtPlantSiteSpread != null),목록 다시 채움 1,,1,SCP0006_ProjectRoute.cs:408,DERIVED
+SCP0006-S39c421,초기,NONE,,InitSpreadBOM,,그리드 구성 1,,1,SCP0006_ProjectRoute.cs:568,UNREACHED
+SCP0006-S6e3fcf,초기,NONE,,InitSpreadPlant,,그리드 구성 1,,1,SCP0006_ProjectRoute.cs:574,UNREACHED
+SCP0006-S7bf79e,초기,NONE,,InitSpreadSite,,그리드 구성 1,,1,SCP0006_ProjectRoute.cs:562,UNREACHED
+SCP0006-S16b3a6,저장,SHEET+DATA+STATE,button:InsertButton,InsertRow,if (siPlant != null && siPlant.IsLock(siPlant.SheetName) == false) ▸ if (siPlant.SheetName == SpdSheet.shtPlant) ▸ if (!isBomClick || string.IsNullOrEmpty(this._bomItemId)),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1039,DERIVED
+SCP0006-Sa42ef4,저장,SHEET+DATA+STATE,button:InsertButton,InsertRow,if (siPlant != null && siPlant.IsLock(siPlant.SheetName) == false) ▸ if (siPlant.SheetName == SpdSheet.shtPlant),"데이터 처리 6, 잠금 6, 그리드 값·서식 1 · 잠금:siPlant.LockRange ; 잠금:siPlant.LockRange ; 잠금:siPlant.LockRange ; 잠금:siPlant.LockRange",,13,SCP0006_ProjectRoute.cs:1042,DERIVED
+SCP0006-S0c555f,저장,NONE,button:SaveButton,SaveData,,서버 호출 1,,1,SCP0006_ProjectRoute.cs:997,DERIVED
+SCP0006-Sa26745,저장,OTHER,button:SaveButton,SaveDataPlant,if (changedCnt == 0),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1012,DERIVED
+SCP0006-Sceb3f0,연쇄,NONE,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,SetCalendar,,콤보 채움 1,,1,SCP0006_ProjectRoute.cs:419,DERIVED
+SCP0006-S1aee1d,연쇄,DATA,event:Form_Load | event:spdMain.CellDoubleClick | event:spdSite_CellDoubleClick | event:this.Load,SetCalendar,foreach (var a in dtCalendar.AsEnumerable()),"데이터 처리 2, 그리드 구성 1",,3,SCP0006_ProjectRoute.cs:426,DERIVED
+SCP0006-S0c6437,초기,DIVISION+COND+STATE,event:ClbDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,SetChangedControl,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL""))","데이터 처리 2, 목록 다시 채움 1, 콤보 채움 1",,4,SCP0006_ProjectRoute.cs:1080,DERIVED
+SCP0006-S950695,초기,NONE,event:Form_Load | event:this.Load,SetChangedPeriod,,콤보 채움 1,,1,SCP0006_ProjectRoute.cs:1112,DERIVED
+SCP0006-Sc2c5b0,초기,DATA,event:Form_Load | event:this.Load,SetChangedPeriod,if (dt.Rows.Count > 0),표시·활성 2 · 표시·활성:drpPeriod.MonthText1 ; 표시·활성:drpPeriod.MonthText2,,2,SCP0006_ProjectRoute.cs:1119,DERIVED
+SCP0006-S131927,연쇄,NONE,event:dsdm.Changed | event:spdPlant_Change,SetOrgData,,"그리드 값·서식 3, 데이터 처리 1",,4,SCP0006_ProjectRoute.cs:1377,DERIVED
+SCP0006-S9a745f,조회,NONE,event:btnAllFind_Click | event:this.btnAllFind.Click,btnAllFind_Click,,"팝업 3, 표시·활성 2 · 팝업:new SCM0002_ProjectRouteListSavePopup ; 팝업:popItem.Form_Load ; 표시·활성:popItem.StartPosition ; 표시·활성:popItem.Width",,5,SCP0006_ProjectRoute.cs:543,DERIVED
+SCP0006-Sea1449,팝업,NONE,event:btnItemId_Click | event:this.btnItemId.Click,btnItemId_Click,,"팝업 3, 표시·활성 1 · 팝업:new SCM0002_ItembyDivisionPopup ; 팝업:popItem.Form_Load ; 표시·활성:popItem.StartPosition ; 팝업:popItem.ShowDialog",,4,SCP0006_ProjectRoute.cs:1300,DERIVED
+SCP0006-Sec3442,연쇄,OTHER,event:btnItemId_Click | event:this.btnItemId.Click,btnItemId_Click,"if (popItem.ItemID != """")",값 자동 세팅 1 · 값 자동 세팅:txtItemId.Text,,1,SCP0006_ProjectRoute.cs:1310,DERIVED
+SCP0006-S287784,팝업,NONE,event:btnProject_Click | event:this.btnProject.Click,btnProject_Click,,"팝업 3, 표시·활성 1 · 팝업:new SCM0002_ProjectbyDivisionPopup ; 팝업:popProject.Form_Load ; 표시·활성:popProject.StartPosition ; 팝업:popProject.ShowDialog",,4,SCP0006_ProjectRoute.cs:1277,DERIVED
+SCP0006-S6ab4d3,연쇄,OTHER,event:btnProject_Click | event:this.btnProject.Click,btnProject_Click,"if (popProject.ProjectCode != """")",값 자동 세팅 1 · 값 자동 세팅:txtProject.Text,,1,SCP0006_ProjectRoute.cs:1287,DERIVED
+SCP0006-S30bdd2,기타,STATE,,checkValidN0,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1524,UNREACHED
+SCP0006-S6d5d4f,저장,STATE,button:SaveButton,checkValidN1,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1586,DERIVED
+SCP0006-S61c045,저장,STATE,button:SaveButton,checkValidN2,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1650,DERIVED
+SCP0006-Sd4cb88,저장,STATE,button:SaveButton,checkValidN3,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1711,DERIVED
+SCP0006-S222d5e,저장,STATE,button:SaveButton,checkValidN4,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1774,DERIVED
+SCP0006-S986944,저장,STATE,button:SaveButton,checkValidN5,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1859,DERIVED
+SCP0006-Sf830ed,저장,DATA+STATE,button:SaveButton,checkValidN6,for (i < dt.Rows.Count) ▸ if (!isExistNextDate),그리드 값·서식 1,,1,SCP0006_ProjectRoute.cs:1931,DERIVED
+SCP0006-S5a04fd,저장,STATE,button:SaveButton,checkValidN6,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1941,DERIVED
+SCP0006-S673966,저장,DATA,button:SaveButton,checkValidN7,for (i < dt.Rows.Count) ▸ if (intPRIORITY <1),그리드 값·서식 1,,1,SCP0006_ProjectRoute.cs:1982,DERIVED
+SCP0006-Seb0963,저장,STATE,button:SaveButton,checkValidN7,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:1991,DERIVED
+SCP0006-Sf4e039,저장,STATE,button:SaveButton,checkValidN8,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:2063,DERIVED
+SCP0006-S546953,저장,STATE,button:SaveButton,checkValidN8,else of (!isPass) ▸ if (!isDatePass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:2067,DERIVED
+SCP0006-S1f7903,저장,STATE,button:SaveButton,checkValidN9,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0006_ProjectRoute.cs:2133,DERIVED
+SCP0006-S695310,연쇄,SHEET+STATE,event:spdBOM.CellDoubleClick | event:spdBOM_CellDoubleClick,spdBOM_CellDoubleClick,else of (siBOM.ActiveSheet.Columns[CAppSetting.StringAction].Visible) ▸ if (!containsNull),콤보 채움 1,,1,SCP0006_ProjectRoute.cs:1257,DERIVED
+SCP0006-Sf1485a,연쇄,SHEET,event:spdBOM.CellDoubleClick | event:spdBOM_CellDoubleClick,spdBOM_CellDoubleClick,else of (siBOM.ActiveSheet.Columns[CAppSetting.StringAction].Visible),콤보 채움 1,,1,SCP0006_ProjectRoute.cs:1260,DERIVED
+SCP0006-S4024c2,팝업,SHEET,event:spdPlant.CellDoubleClick | event:spdPlant_CellDoubleClick,spdPlant_CellDoubleClick,else of (siPlant.ActiveSheet.Columns[CAppSetting.StringAction].Visible),"팝업 2, 표시·활성 1 · 팝업:new SCP0049_CAPANewModelPopup ; 표시·활성:popup.StartPosition ; 팝업:popup.ShowDialog",,3,SCP0006_ProjectRoute.cs:1437,DERIVED

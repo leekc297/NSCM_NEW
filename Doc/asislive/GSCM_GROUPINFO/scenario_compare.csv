@@ -1,0 +1,8 @@
+﻿scenario_id,type,axes,entry,method,guard,asis_cov,asis_evidence,linked_rows,tobe_verdicts,tobe_fail_checks,tobe_unverified_checks,call_compare,tobe_popup,tobe_rules,result,why,src
+GSCM_GROUPINFO-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:89
+GSCM_GROUPINFO-S357315,기타,OTHER,button:EditButton,EditButton,"if (this.fps != null) ▸ if (fps.Name == ""spdMain"")",NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:143
+GSCM_GROUPINFO-S5bc1f8,조회,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,FindData,,EXECUTED,호출로 분기 특정: UP_FX_GETGROUPINFOLIST,0,,,,,,,연결 없음,연결된 대조표 행·호출 대조 없음,GroupInfo.cs:166
+GSCM_GROUPINFO-S90bd48,초기,SHEET+DATA,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,InitSpread,if (sheetName == SpdSheet.shtMain),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:101
+GSCM_GROUPINFO-S1ad898,저장,SHEET+STATE,button:InsertButton,InsertRow,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(siMain.SheetName) == false)",NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:281
+GSCM_GROUPINFO-S1bb36d,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:221
+GSCM_GROUPINFO-Saef96f,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (cnt > 0),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,GroupInfo.cs:236

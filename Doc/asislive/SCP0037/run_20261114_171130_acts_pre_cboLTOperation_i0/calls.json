@@ -1,0 +1,140 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 17:11:04.369",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 5.37,
+   "params": {
+    "p_program_id": "SCP0037",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Operation LT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0037', @p_user_id='jaeuk.shin', @p_sheet_name='Operation LT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:11:04.382",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 97,
+   "rows_kind": "DataSet rows",
+   "ms": 6.63,
+   "params": {
+    "Code": "PlantByDivisionOperation",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantByDivisionOperation', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:11:04.395",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.86,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "OPERATION_LT",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='OPERATION_LT', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:11:05.302",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0037_GET_OPERATION_LT",
+   "sp": "SCP0037_GET_OPERATION_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 328,
+   "rows_kind": "DataSet rows",
+   "ms": 857.32,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+    "p_item_id": "",
+    "p_scm_valid_yn": null,
+    "p_lt_operation": "SLITTING"
+   },
+   "inline": "EXEC SCP0037_GET_OPERATION_LT @p_division_id='81', @p_scm_site_id='HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E', @p_item_id='', @p_scm_valid_yn=NULL, @p_lt_operation='SLITTING'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:11:05.424",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 7.86,
+   "params": {
+    "p_menu_id": "SCP0037",
+    "p_log_type": "FIND",
+    "p_log_cnt": "328",
+    "p_db_time": "0.933",
+    "p_ui_time": "0.064",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0037', @p_log_type='FIND', @p_log_cnt='328', @p_db_time='0.933', @p_ui_time='0.064', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 17:11:08.531",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.63,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 17:11:09.136",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 426.28,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0037"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0037'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

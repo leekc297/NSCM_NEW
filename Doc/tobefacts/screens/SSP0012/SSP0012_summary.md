@@ -9,7 +9,7 @@
 |---|---|---|
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | component | 138 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | component | 194 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | component | 265 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | component | 266 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.module.scss | component | 21 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | component | 168 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/index.ts | index | 2 |
@@ -25,7 +25,7 @@
 |---|---|---|---|---|
 | /SSP0012/main/GET_BOD_DETAIL/call-proc | http | 1 | Y | BodDetailModal.tsx:89 |
 | /SSP0012/main/GET_REQ_DRAFTING/call-proc | http | 1 | Y | ShipmentRequestDetailModal.tsx:141 |
-| (useTabComboQueries) | hook | 1 | Y | ShipmentPlanConfirmDetailForm.tsx:81 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentPlanConfirmDetailForm.tsx:82 |
 | SSP0012/main//call-proc | hook | 1 | Y | ShipmentPlanConfirmDetail.tsx:95 |
 | /admin/menu/SSP0012/search-conditions | http | 1 | Y | useShipmentPlanConfirmDetailStore.ts:256 |
 | /admin/menu/SSP0012/column | http | 1 | Y | useShipmentPlanConfirmDetailStore.ts:327 |
@@ -38,14 +38,14 @@
 |---|---|---|---|---|---|
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | 130 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 186 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 129 |
-| CustomDropdown | onChange | <arrow> setDivisions,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 148 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 176 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 211 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 207 |
-| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 224 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 238 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 255 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 130 |
+| CustomDropdown | onChange | <arrow> setDivisions,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 149 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 177 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 212 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 208 |
+| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 225 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 239 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 256 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 95 |
 | g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 123 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 136 |

@@ -1,0 +1,152 @@
+{
+ "id": "FP00626",
+ "started": "2026-11-12 19:07:30.221",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:07:30.537",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00626_PancakeSimulation_Assy",
+   "form_text": "Pancake Simulation(Assy)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Planning.UIL.dll",
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:07:35.653"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:07:39.754",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_190730\\dump_load.json",
+   "control_count": 44,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "DB : 24.39s, UI : 0.134s",
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:07:39.770"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:07:40.077",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_190730\\shots\\FP00626_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:07:40.273"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:07:40.609",
+   "call_timed_out": false,
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:07:42.257"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:07:50.209",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_190730\\dump_find.json",
+   "control_count": 48,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:07:50.221"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:07:50.375",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_190730\\shots\\FP00626_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:07:50.615"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:07:50.941",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:07:51.454"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 41,
+  "calls_with_params": 41
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00626_PancakeSimulation_Assy",
+  "form_text": "Pancake Simulation(Assy)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Planning.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 19:07:30.428",
+ "t_find": "2026-11-12 19:07:40.351",
+ "dialogs": [
+  {
+   "at": "2026-11-12 19:07:43.239",
+   "caption": "GSCM",
+   "text": "다시 확인하여 주십시오. PLAN ID",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 48,
+  "layout_items": 17,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 32,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 41,
+  "calls_screen": 41,
+  "calls_find": 14,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:31.021",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:31"
+}

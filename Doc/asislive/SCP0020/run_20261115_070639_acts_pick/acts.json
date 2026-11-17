@@ -1,0 +1,229 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,2 failed: InvalidOperationException: cell not visible: 0,2",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "SITE_DESCRIPTION",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,3 failed: InvalidOperationException: cell not visible: 0,3",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,5 failed: InvalidOperationException: cell not visible: 0,5",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "LINE_ID",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdExcept/Tact Time Except",
+     "rows_before": 0,
+     "rows_after": 1,
+     "cells": [
+      {
+       "row": 0,
+       "col": "(행)",
+       "before": "없음",
+       "after": "있음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0020_GET_TACT_TIME_EXCEPT_OSP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "PRIORITY",
+   "grid": "spdMain",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0020_GET_TACT_TIME_EXCEPT_OSP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [
+  {
+   "grid": "spdMain",
+   "col": null,
+   "row_conds": [],
+   "ids": [
+    "SCP0020-Sdc3952"
+   ],
+   "why": "시트 shtMain 못 찾음(시트 ['Plant', 'Packer'])"
+  }
+ ],
+ "at": "2026-11-15 07:05:07",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0020-S607170",
+    "SCP0020-S03372a",
+    "SCP0020-Sdfcb04",
+    "SCP0020-S6ff692",
+    "SCP0020-S4c6276",
+    "SCP0020-S0bebb3",
+    "SCP0020-S94fe64"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "shtMain",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0020-Sdc3952"
+   ],
+   "has_else": false
+  }
+ ]
+}

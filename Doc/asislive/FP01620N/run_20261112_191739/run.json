@@ -1,0 +1,151 @@
+{
+ "id": "FP01620N",
+ "started": "2026-11-12 19:17:39.484",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:17:39.812",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP01620_WO_Create",
+   "form_text": "W/O Create",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP01620_WO_Create.UIL.dll",
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-12 19:17:46.685"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:17:50.125",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261112_191739\\dump_load.json",
+   "control_count": 72,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 1.337s, UI : 0.015s",
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-12 19:17:50.153"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:17:50.323",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261112_191739\\shots\\FP01620N_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-12 19:17:50.625"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:17:50.956",
+   "call_timed_out": true,
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:18:20.971"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:18:28.966",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261112_191739\\dump_find.json",
+   "control_count": 72,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:18:28.984"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:18:29.150",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261112_191739\\shots\\FP01620N_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:18:29.435"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:18:29.759",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 4,
+   "ok": true,
+   "done": "2026-11-12 19:18:30.502"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 21,
+  "calls_with_params": 21
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP01620_WO_Create",
+  "form_text": "W/O Create",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP01620_WO_Create.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 19:17:39.691",
+ "t_find": "2026-11-12 19:17:50.718",
+ "dialogs": [
+  {
+   "at": "2026-11-12 19:17:52.445",
+   "caption": "GSCM",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 72,
+  "layout_items": 19,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 31,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 21,
+  "calls_screen": 21,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:33.730",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:33"
+}

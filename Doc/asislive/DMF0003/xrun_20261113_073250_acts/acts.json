@@ -1,0 +1,225 @@
+{
+ "id": "DMF0003",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 25,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0003-S1108a0",
+    "DMF0003-Sda2dcc",
+    "DMF0003-S96bd28",
+    "DMF0003-S747668",
+    "DMF0003-Scd1e6c",
+    "DMF0003-S38f1e5",
+    "DMF0003-Scd17b0",
+    "DMF0003-S26ff5f",
+    "DMF0003-S18f2df",
+    "DMF0003-Sdc54d0",
+    "DMF0003-S34d7d6",
+    "DMF0003-Sd59aae",
+    "DMF0003-S2276a2",
+    "DMF0003-Sbb8d29",
+    "DMF0003-S6c006c",
+    "DMF0003-S7a85a5",
+    "DMF0003-Sd3649c",
+    "DMF0003-Sffed87",
+    "DMF0003-S0ba399",
+    "DMF0003-Sd738d5",
+    "DMF0003-S2e76bd",
+    "DMF0003-S72a490",
+    "DMF0003-Sf409b9",
+    "DMF0003-S6bd4b3",
+    "DMF0003-S109112",
+    "DMF0003-S8a77d8",
+    "DMF0003-Sd02c47",
+    "DMF0003-S59f56c",
+    "DMF0003-S66695b",
+    "DMF0003-Scc0cd8",
+    "DMF0003-S979a41",
+    "DMF0003-Sac510b",
+    "DMF0003-Sdcfb89",
+    "DMF0003-Sf7da2c",
+    "DMF0003-Sf64d30"
+   ]
+  },
+  {
+   "control": "btnFindPSI",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnFindPSI failed: InvalidOperationException: control not found: btnFindPSI",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0003-S783aea",
+    "DMF0003-Sc46984",
+    "DMF0003-Sa6f090",
+    "DMF0003-Sf58fd6",
+    "DMF0003-S170883",
+    "DMF0003-S134548",
+    "DMF0003-S4b437d",
+    "DMF0003-S729942",
+    "DMF0003-S50622d",
+    "DMF0003-Sc1b4c2",
+    "DMF0003-S05be3f"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0003-Sea1449",
+    "DMF0003-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 3,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0003-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0003-S4fa471"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0003-S287784",
+    "DMF0003-S6ab4d3"
+   ]
+  },
+  {
+   "control": "btnUpDown",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnUpDown failed: InvalidOperationException: control not found: btnUpDown",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0003-S887305",
+    "DMF0003-S5e5a4e",
+    "DMF0003-S102858"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0003-S669149"
+   ]
+  },
+  {
+   "control": "txtMarketShare",
+   "ok": false,
+   "error": "InvalidOperationException: click:txtMarketShare failed: InvalidOperationException: control not found: txtMarketShare",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0003-S277406"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnCalculation",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 6
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnIncotermsChg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 07:29:38.685",
+ "fills": 0,
+ "fill_left": []
+}

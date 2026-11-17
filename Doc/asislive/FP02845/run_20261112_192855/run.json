@@ -1,0 +1,142 @@
+{
+ "id": "FP02845",
+ "started": "2026-11-12 19:28:55.884",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:28:56.184",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP02845_Plan_Result_Elec_Post_Shift",
+   "form_text": "Plan Result (Elec Post Shift)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP02845_Plan_Result_Elec_Post_Shift.UIL.dll",
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:05.218"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:29:08.810",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02845\\run_20261112_192855\\dump_load.json",
+   "control_count": 115,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "DB : 11.431s, UI : 0.314s",
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:08.832"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:29:08.989",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02845\\run_20261112_192855\\shots\\FP02845_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:09.303"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:29:09.631",
+   "call_timed_out": false,
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:10.483"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:29:40.407",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02845\\run_20261112_192855\\dump_find.json",
+   "control_count": 115,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:40.428"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:29:40.773",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02845\\run_20261112_192855\\shots\\FP02845_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:41.113"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:29:41.463",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 19:29:41.982"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 47,
+  "calls_with_params": 47
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP02845_Plan_Result_Elec_Post_Shift",
+  "form_text": "Plan Result (Elec Post Shift)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP02845_Plan_Result_Elec_Post_Shift.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 19:28:56.091",
+ "t_find": "2026-11-12 19:29:09.336",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 115,
+  "layout_items": 19,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 18,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 47,
+  "calls_screen": 47,
+  "calls_find": 10,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:38.597",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:38"
+}

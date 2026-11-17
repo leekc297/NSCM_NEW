@@ -1,0 +1,1757 @@
+# -*- coding: utf-8 -*-
+"""소스 분기 시나리오 실행 — 화면 안 버튼으로 타는 조회·팝업 분기 (2026-11-13 · 플랜 P6-2 1단계)
+
+  python tools/AsisLive/asis_live_scen_run.py <ID> [ID ...] [--group SCP Planner]     (그룹 이름은 따옴표 없이 띄어 써도 된다 · 실행 뒤 그룹을 되돌리지는 않는다 — 다음 세션은 런처 기본 그룹으로 시작)
+  python tools/AsisLive/asis_live_scen_run.py <ID> --edit      (직전 실행에서 "수정모드가 아니므로 …" 메시지를 낸 버튼만 수정 모드에서 다시 누른다 · 화면을 닫을 때 저장 확인은 "아니오")
+  python tools/AsisLive/asis_live_scen_run.py <ID> --division 81,40 | all      (Division 조건을 바꿔 가며 버튼 분기를 다시 실행 — Division 별 시나리오 · all = 그 화면 목록 전부)
+  python tools/AsisLive/asis_live_scen_run.py <ID> --preset "cboType=i2;chkGap=cT;clbBucket=k0"      (조회 조건 값을 정해 놓고 조회·버튼 분기를 다시 실행 — 항목마다 화면을 새로 연다 · iN = 콤보 N번째 항목, cT/cF = 체크 켬/끔, kN = 체크 목록 N번째만 체크 · 값은 asis_live_scen_values.py 가 도출)
+  python tools/AsisLive/asis_live_scen_run.py <ID> --conds     (조건 컨트롤의 값 변경 이벤트로 타는 분기: 콤보·체크 상자·체크 목록 값을 바꿔 호출·메시지·다른 컨트롤 변화를 기록 · 저장 없음)
+  python tools/AsisLive/asis_live_scen_run.py <ID> --cells     (그리드 셀 클릭·더블클릭 분기: 조회 뒤 첫 행에서 분기 조건식에 나온 열을 실제 마우스 클릭으로 누름 · 팝업·새 화면·호출 기록 · 저장 없음)
+  python tools/AsisLive/asis_live_scen_run.py --groups-list                           (이 계정의 그룹 목록·현재 그룹 읽기)
+대상  scenarios_cov.csv 에서 아직 실행 안 된 분기 중, 진입점이 **화면 안 버튼 Click** 이고 그 버튼에서 저장 계열 분기로 이어지지 않는 것.
+        · 저장·삭제·업로드로 이어지는 버튼은 이 단계에서 누르지 않는다(저장 시나리오는 대상 행 기록·복원과 함께 따로 실행).
+        · Excel·인쇄·파일 대화상자를 여는 버튼은 누르지 않는다(이름 규칙) — 건너뛴 버튼은 목록으로 남긴다.
+순서  화면 열기 → 필수 조건 최근 값 채움 → 조회 → 버튼마다: 누르기 → 뜬 팝업 기록·닫기 → 그동안의 서버 호출 수집
+산출  Doc/asislive/<ID>/run_<시각>_acts/  calls.json(구간 = action:<버튼>) · acts.json(버튼별 결과·팝업·대화상자) · run.json
+      실행 뒤 asis_live_scen_cov.py 를 다시 돌리면 실행 현황에 반영된다.
+"""
+import io, glob
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+import asis_live_run as R
+import asis_live_fill as F
+import asis_live_excel as X
+
+SAVE = re.compile(r"save|delete|insert|upload|confirm|copy|create|apply|release|approve|reject|import|send|interface|i/?f\b", re.I)
+SKIPNAME = re.compile(r"excel|export|download|upload|print|file|import|report", re.I)
+RISKY = re.compile(r"update|chg|change|calc|status|run|exec|engine|batch|close|cancel|reset|init|plan(?!date)|send|mail|sync|gen|make|fix|lock|open|start|stop|new|add|del|remove|clear|copy|apply|confirm|approve", re.I)   # 조회가 아닐 수 있는 버튼(이름 규칙) — 누르지 않고 목록으로 남긴다
+P = lambda *a: os.path.join(R.ROOT, *a)
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def click_target(entry):
+    """진입점 문자열에서 버튼 컨트롤 이름 — event:this.btnInput.Click · event:btnInput_Click"""
+    m = re.match(r"^event:(?:this\.)?(\w+)\.Click$", entry) or re.match(r"^event:(\w+)_Click$", entry)
+    return m.group(1) if m else None
+
+
+def plan(mid):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    by = {}
+    for r in sc:
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            c = click_target(e)
+            if not c: continue
+            d = by.setdefault(c, {"types": set(), "eps": set(), "todo": 0, "ids": []})
+            d["types"].add(r["type"]); d["eps"] |= set(filter(None, (r.get("endpoints") or "").split(";")))
+            if r.get("cov", "NOT_EXECUTED") in ("NOT_EXECUTED", "NO_CALL_EVIDENCE") and r["scenario_id"] not in d["ids"]: d["todo"] += 1; d["ids"].append(r["scenario_id"])
+    todo, skipped = [], []
+    for c, d in sorted(by.items()):
+        if d["todo"] == 0: continue
+        if "저장" in d["types"] or any(SAVE.search(e) for e in d["eps"]) or SAVE.search(c): skipped.append({"control": c, "why": "저장 계열 분기로 이어짐", "scenarios": d["todo"]})
+        elif SKIPNAME.search(c): skipped.append({"control": c, "why": "파일·Excel·인쇄 버튼(이름 규칙)", "scenarios": d["todo"]})
+        elif RISKY.search(c): skipped.append({"control": c, "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행", "scenarios": d["todo"]})
+        else: todo.append({"control": c, "scenarios": d["ids"]})
+    return todo, skipped
+
+
+def pressed_before(mid):
+    """지금까지 버튼 실행에서 눌렀던 버튼 이름(수정 모드 제외)"""
+    import glob
+    out = []
+    for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*_acts*"))):
+        try: j = json.load(open(os.path.join(d, "acts.json"), encoding="utf-8"))
+        except Exception: continue
+        if j.get("edit") or j.get("cond") or j.get("cellrun"): continue
+        out += [a.get("control") for a in j.get("acts") or [] if a.get("ok") and not str(a.get("control") or "").startswith("(")]      # "(조회)" 는 버튼이 아니다
+    return sorted(set(x for x in out if x))
+
+
+def ids_of(mid, control):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    return [r["scenario_id"] for r in sc if any(click_target(e.strip()) == control for e in (r.get("entry") or "").split("|"))]
+
+
+def need_edit(mid):
+    """가장 최근 버튼 실행에서 "수정모드가 아니므로 …" 메시지를 낸 버튼 — 수정 모드에서 다시 눌러야 그 분기가 실행된다"""
+    import glob
+    ds = [d for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*_acts"))) if not json.load(open(os.path.join(d, "acts.json"), encoding="utf-8")).get("edit")]   # _acts 로 끝나는 폴더만(조건 변경·수정 모드 기록 제외)
+    if not ds: return []
+    j = json.load(open(os.path.join(ds[-1], "acts.json"), encoding="utf-8"))
+    return [a["control"] for a in j.get("acts") or [] if any(re.search(r"수정\s*모드|edit\s*mode", (d.get("text") or ""), re.I) for d in a.get("dialogs") or [])]
+
+
+def division_control(host):
+    """화면의 Division 조회 조건 — (종류 "combo"|"checklist"|None, 컨트롤 이름, 항목 문자열 목록)"""
+    st = F.state(host)
+    dv = next((c for c in st if c["t"] == "UsrCombo" and (F.DIV.search(c["label"]) or re.search(r"division", c.get("name") or "", re.I))), None)
+    if dv: return "combo", dv["name"], [str(x) for x in dv.get("items") or []]
+    dl = next((c for c in st if c["t"].startswith("UsrCheckedList") and (F.DIV.search(c["label"]) or re.search(r"division", c.get("name") or "", re.I))), None)
+    if dl:
+        d = host.send("dump", timeout=120, rows=-1).get("data") or {}
+        for c in d.get("controls") or []:
+            if "/" + dl["name"] + "/" in (c.get("path") or "") and (c.get("type") or "").endswith("CheckedListBox"):
+                return "checklist", dl["name"], [str(x.get("text")) for x in c.get("items") or []]
+        return "checklist", dl["name"], []
+    return None, None, []
+
+
+def div_id(item):
+    """항목 문자열("81 Automotive Battery" · "81_UC …")의 Division 코드"""
+    return (item or "").strip().split(" ")[0]
+
+
+def set_division(host, out, division):
+    """Division 조건을 지정한 값으로 바꾼다(조회 전). 채움 규칙이 되돌리지 않도록 잠근다. 반환 True = 적용됨"""
+    kind, name, items = division_control(host)
+    out["division_control"] = {"kind": kind, "name": name, "items": [div_id(x) for x in items]}
+    if not kind: out["division_note"] = "이 화면에 Division 조회 조건이 없음"; return False
+    idx = next((i for i, x in enumerate(items) if div_id(x) == division), None)
+    if idx is None: out["division_note"] = "Division %s 이 이 화면 목록에 없음(목록 %s)" % (division, ",".join(div_id(x) for x in items)); return False
+    t = R.now()
+    r = host.send("set", timeout=120, name=name, index=str(idx)) if kind == "combo" else host.send("set", timeout=120, name=name, check=str(idx), only="1")
+    R.wait_quiet(t, 2, 60); F.LOCK.add(name)
+    out["division_set"] = {"ok": bool(r.get("ok")), "applied": r.get("applied"), "error": r.get("error")}
+    return bool(r.get("ok"))
+
+
+CHG = re.compile(r"^event:(?:this\.)?(\w+)[._](SelectedIndexChanged|ComboSelChange|CheckedChanged|ValueChanged|TextChanged|ComboCloseUp|SelectionChanged|EditValueChanged|SelectedValueChanged)$")
+
+
+def cond_targets(mid):
+    """조건 컨트롤의 값 변경 이벤트로 타는 분기 — {컨트롤 이름: [시나리오 ID]} (소스 분기 목록 기준)"""
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv")); out = {}
+    for r in sc:
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            m = CHG.match(e)
+            if m: out.setdefault(m.group(1), []).append(r["scenario_id"])
+    return out
+
+
+def ctl_state(host):
+    """보이는 컨트롤의 상태 요약 — {이름: (글자, 항목 수, 선택 순번, 체크, 활성, 표시, 값)} · 값 변경이 다른 컨트롤에 준 영향을 보려는 것"""
+    out = {}
+    for c in F.raw(host):
+        k = c.get("path") or c.get("name")                      # 이름이 겹치는 안쪽 컨트롤(체크 목록의 목록 상자 등)이 있어 경로로 구분한다
+        if not k: continue
+        it = c.get("items") or []
+        out[k] = (str(c.get("text") or "")[:60], c.get("item_count") if c.get("item_count") is not None else (len(it) if it else None), c.get("selected_index"),
+                  c.get("checked") if c.get("checked") is not None else (sum(1 for x in it if isinstance(x, dict) and x.get("checked")) if it and isinstance(it[0], dict) else None),
+                  c.get("enabled"), c.get("visible"), str(c.get("control_values") or "")[:80])
+    return out
+
+
+def run_conds(host, mid, group):
+    """조건 값 변경 분기 실행 — 콤보는 다음 항목으로 바꿨다가 되돌리고, 체크 상자는 뒤집었다가 되돌리고, 체크 목록은 한 항목만 체크한다(되돌리지 않음 — 화면을 닫으므로).
+    바꿀 때마다 서버 호출·메시지·다른 컨트롤의 변화(항목 수·값·활성)를 기록한다. 저장 버튼은 누르지 않는다."""
+    tg = cond_targets(mid)
+    out = {"id": mid, "group": group, "cond": True, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not tg: out["note"] = "값 변경 이벤트 분기가 없는 화면"; return out, []
+    sweep(host, out, None)
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); out["restart"] = True; return out, []
+    R.wait_quiet(R.now(), 3, 60); F.LOCK.clear()
+    try: F.prefill(host, mid)
+    except Exception: pass
+    ctrls = {}; calls = []
+    for c in F.raw(host):
+        if c.get("name") and c.get("name").lower() not in ctrls: ctrls[c.get("name").lower()] = c     # 처리기 이름에서 읽은 컨트롤 이름은 대소문자가 다를 수 있다(CboDivision ↔ cboDivision)
+    merged = {}
+    for n, ids in tg.items():
+        real = (ctrls.get(n.lower()) or {}).get("name") or n; merged.setdefault(real, [])
+        merged[real] += [x for x in ids if x not in merged[real]]
+    tg = merged; ctrls = {c["name"]: c for c in ctrls.values()}
+    order = sorted(tg, key=lambda n: (0 if (ctrls.get(n) or {}).get("t") == "CheckBox" else 1 if (ctrls.get(n) or {}).get("t") == "UsrCombo" else 2, n))     # 체크 목록은 되돌리지 않으므로 맨 뒤
+    for name in order:
+        c = ctrls.get(name)
+        if not c: out["skipped"].append({"control": name, "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)", "scenarios": len(tg[name])}); continue
+        t = c.get("t") or ""; steps = []
+        if t == "UsrCombo":
+            n = c.get("item_count") or 0; cur = c.get("selected_index") or 0
+            if n < 2: out["skipped"].append({"control": name, "why": "콤보 항목이 %d개라 바꿀 값이 없음" % n, "scenarios": len(tg[name])}); continue
+            steps = [("다음 항목(%d → %d)" % (cur, (cur + 1) % n), dict(name=name, index=str((cur + 1) % n))), ("원래 항목으로(%d)" % cur, dict(name=name, index=str(cur)))]
+        elif t == "CheckBox":
+            ck = bool(c.get("checked")); steps = [("체크 %s → %s" % (ck, not ck), dict(name=name, prop="Checked", value=str(not ck))), ("원래대로(%s)" % ck, dict(name=name, prop="Checked", value=str(ck)))]
+        elif t.startswith("UsrCheckedList"):
+            n, _k, _t = F.checked_list_items(host, name)
+            if n < 1: out["skipped"].append({"control": name, "why": "체크 목록이 비어 있음", "scenarios": len(tg[name])}); continue
+            steps = [("첫 항목만 체크(목록 %d개)" % n, dict(name=name, check="0", only="1"))]
+        else:
+            out["skipped"].append({"control": name, "why": "값을 고르는 규칙이 없는 컨트롤 형식(%s)" % t, "scenarios": len(tg[name])}); continue
+        for label, kw in steps:
+            s0 = ctl_state(host); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or [])); t1 = R.now()
+            rr = host.send("set", timeout=120, **kw); R.wait_quiet(t1, 2, 60)
+            n2, _s = R.db_inflight()
+            if n2: R.wait_db_clear(600)
+            late = sweep(host, out, name); cs = R.parse_dbprofile(t1, R.now())
+            for x in cs: x["phase"] = "action:set:" + name
+            calls += cs; s1 = ctl_state(host)
+            GEN = {"pnlMain", "clb", "cmb", "cbo", "chkAll", "txt", "pnl", "panel1"}                # 안쪽 부품 이름 — 바깥 컨트롤 이름으로 적는다
+            nm = lambda k: next((x for x in reversed(k.strip("/").split("/")) if x not in GEN), k.strip("/").split("/")[-1]) + ("" if k.strip("/").split("/")[-1] not in GEN else "(" + k.strip("/").split("/")[-1] + ")")
+            ch = [{"control": nm(k), "before": list(s0.get(k) or []), "after": list(s1.get(k) or [])}
+                  for k in sorted(set(s0) | set(s1)) if not k.rstrip("/").endswith("/" + name) and ("/" + name + "/") not in k and s0.get(k) != s1.get(k)][:30]
+            dl = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]
+            out["acts"].append({"control": name, "kind": "cond", "change": label, "ok": bool(rr.get("ok")), "error": rr.get("error"), "applied": rr.get("applied"),
+                                "popups": [dict(p, late=True) for p in late], "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dl],
+                                "calls": [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20], "asis_timeout": sorted({str(x.get("sp")) for x in cs if timed_out(x)}),
+                                "changed_controls": ch, "scenarios": tg[name]})
+            print("   %s · %s · %s · 호출 %d · 메시지 %d · 바뀐 컨트롤 %d%s" % (name, label, "적용" if rr.get("ok") else "실패", len(cs), len(dl), len(ch), (" — " + str(rr.get("error"))[:80]) if not rr.get("ok") else ""), flush=True)
+            if out.get("restart"): break
+        if out.get("restart"): print("   남은 창을 닫지 못함 → 이 화면 중단", flush=True); break
+    if not out.get("restart"): host.send("close_screen", timeout=60); sweep(host, out, None)
+    return out, calls
+
+
+CELLEV = re.compile(r"^event:(?:this\.)?(\w+)[._](CellClick|CellDoubleClick)$")
+POPNEW = re.compile(r"팝업:new (?!GSCM\.Windows\.Forms\.UI\.ProgressForm|ProgressForm|SaveFileDialog|OpenFileDialog)([\w.]+)")
+
+
+def cell_targets(mid):
+    """그리드 셀 클릭·더블클릭으로 타는 분기 — {"click"|"dbl": {"ids": [시나리오 ID], "text": 그 분기들의 조건식·관찰점 글자}}"""
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv")); out = {}
+    for r in sc:
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            m = CELLEV.match(e)
+            if m:
+                d = out.setdefault("dbl" if m.group(2) == "CellDoubleClick" else "click", {"ids": [], "text": ""})
+                if r["scenario_id"] not in d["ids"]: d["ids"].append(r["scenario_id"]); d["text"] += " " + (r.get("guard") or "") + " " + (r.get("observe") or "")
+    return out
+
+
+def cells_need_edit(mid):
+    """셀 클릭 분기의 조건식에 잠금·수정 모드 조건이 있으면 수정 모드에서도 한 번 더 눌러야 한다"""
+    return any(re.search(r"IsLock|IsEditMode", v["text"]) for v in cell_targets(mid).values())
+
+
+def run_cells(host, mid, group, max_cols=12, edit=False):
+    """셀 클릭·더블클릭 분기 실행 — 조회 뒤 첫 행에서, 분기 조건식에 이름이 나온 열(없으면 앞쪽 보이는 열)을 실제 마우스 클릭으로 누른다.
+    뜨는 팝업·메시지·서버 호출·새로 열린 화면(드릴다운)·그리드 변화를 기록하고 닫는다. 수정 모드는 켜지 않는다(저장 없음)."""
+    tg = cell_targets(mid)
+    out = {"id": mid, "group": group, "cellrun": True, "cell_edit": edit, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not tg: out["note"] = "셀 클릭·더블클릭 분기가 없는 화면"; return out, []
+    sweep(host, out, None)
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); out["restart"] = True; return out, []
+    R.wait_quiet(R.now(), 3, 60); F.LOCK.clear()
+    try: F.prefill(host, mid)
+    except Exception: pass
+    apply_data_cond(host, mid, out)
+    t0 = R.now(); host.send("find", timeout=60); R.wait_find(host, t0, 0, 300)
+    d = host.send("dump", timeout=180, rows=3).get("data") or {}; gname, sheet, gs = data_sheet(d); GS.clear(); GS.update(gs)
+    if gs: out["sheet_used"] = gs
+    if not sheet or not (sheet.get("data") or []): out["note"] = "조회 결과 행이 없어 셀을 누를 수 없음"; host.send("close_screen", timeout=60); sweep(host, out, None); return out, []
+    cols = sheet.get("columns") or []; tag = lambda c: (c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index")))
+    vis = [c for c in cols if str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1]
+    if edit:                                                 # 조건식이 잠금 해제(수정 모드)를 요구하는 분기 — 수정 모드를 켜고 누른다 · 닫을 때 저장하지 않음
+        host.send("policy", timeout=30, dialogs="no"); out["edit_focus"] = focus_grid(host, vis); sweep(host, out, None)
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton"); er["edit_mode"] = edit_by_action(host, er)[0]; out["edit_mode"] = er.get("edit_mode")
+        print("   수정 모드 %s" % ("켜짐" if er.get("edit_mode") else "켜지지 않음"), flush=True)
+        if not er.get("edit_mode"):
+            host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); sweep(host, out, None); host.send("policy", timeout=30, dialogs="default")
+            out["note"] = "수정 모드가 켜지지 않아 누르지 않음"; return out, []
+    calls = []; xb = X.snap()
+    for kind, info in sorted(tg.items()):
+        words = set(re.findall(r"[A-Za-z_][A-Za-z0-9_]{2,}", info["text"]))
+        named = [c for c in vis if tag(c) in words or tag(c).upper() in {w.upper() for w in words}]
+        pick = (named or vis[:6])[:max_cols]
+        out.setdefault("plan", []).append({"kind": kind, "scenarios": len(info["ids"]), "named_cols": [tag(c) for c in named][:30], "used": [tag(c) for c in pick], "rule": "분기 조건식에 이름이 나온 열" if named else "이름이 나온 열이 없어 앞쪽 보이는 열 6개"})
+        for c in pick:
+            g0 = grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+            rr = host.send("act", timeout=120, cell="0,%s" % c.get("index"), double="1" if kind == "dbl" else "0", wait=6, **GS); R.wait_quiet(t1, 3, 90)
+            n2, _s = R.db_inflight()
+            if n2: R.wait_db_clear(600)
+            late = sweep(host, out, tag(c)); cs = R.parse_dbprofile(t1, R.now())
+            for x in cs: x["phase"] = "action:cell:" + tag(c)
+            calls += cs; gd = grid_diff(g0, grid_snap(host, rows=60)) if not out.get("restart") else []
+            xr = X.close_new(xb, X.host_pids()); dl = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]
+            pops = (rr.get("popups") or []) + [dict(p, late=True) for p in late]
+            out["acts"].append({"control": "%s[%s]" % (gname, tag(c)), "kind": "cell", "change": "첫 행 %s%s" % ("더블클릭" if kind == "dbl" else "클릭", "(수정 모드)" if edit else ""), "ok": bool(rr.get("ok")), "error": rr.get("error"),
+                                "popups": pops, "new_screens": rr.get("new_screens") or [], "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dl],
+                                "calls": [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20], "asis_timeout": sorted({str(x.get("sp")) for x in cs if timed_out(x)}),
+                                "grid_changes": gd, "excel": xr.get("closed") or [], "scenarios": info["ids"]})
+            print("   %s[%s] · %s · %s · 팝업 %s · 새 화면 %s · 메시지 %d · 호출 %d%s" % (gname, tag(c), "더블클릭" if kind == "dbl" else "클릭", "실행" if rr.get("ok") else "실패",
+                  [p.get("form") for p in pops if p.get("form") != "ProgressForm"], [x.get("form") for x in rr.get("new_screens") or []], len(dl), len(cs), (" — " + str(rr.get("error"))[:80]) if not rr.get("ok") else ""), flush=True)
+            if out.get("restart"): break
+        if out.get("restart"): print("   남은 창을 닫지 못함 → 이 화면 중단", flush=True); break
+    if not out.get("restart"):
+        host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); time.sleep(1); sweep(host, out, None); host.send("policy", timeout=30, dialogs="default")
+    return out, calls
+
+
+GS = {}   # 셀 클릭·셀 상태에 넘길 그리드·시트(행이 있는 시트가 첫 그리드의 활성 시트가 아닐 때만 채운다)
+
+
+def data_sheet(d):
+    """dump 결과에서 행이 있는 시트 고르기(11-15): 첫 그리드 활성 시트에 행이 있으면 그대로(GS 비움), 아니면 행이 있는 첫 시트를 grid·sheet 로 지정.
+    반환 (그리드 이름, 시트, GS)"""
+    first = None; hit = None
+    for gi, g in enumerate(d.get("grids") or []):
+        act = g.get("active_sheet_index")
+        for i, sh in enumerate(g.get("sheets") or []):
+            if first is None and (act in (None, "", i) or str(act) == str(i)): first = (g.get("name") or "", sh)
+            if hit is None and (sh.get("data") or []): hit = (gi, g.get("name") or "", i, sh, str(act) == str(i))
+    if hit is None: return (first or ("", None))[0], (first or ("", None))[1], {}
+    gi, gname, i, sh, is_act = hit
+    if gi == 0 and is_act: return gname, sh, {}
+    return gname, sh, {"grid": gname, "sheet": str(i)}
+
+
+def focus_grid(host, vis=None):
+    """수정 버튼 전 셀 1회 클릭(11-15): 사용자는 셀을 누른 뒤 수정 버튼을 누른다. AS-IS BaseForm 은 셀 클릭(FpSpread_CellClick)에서 fps 를 채우고,
+    화면 EditButton 은 fps 가 있어야 시트 잠금을 푼다(SSP0014_ShipmentModelPIC.cs:267). 행이 없으면 누르지 않는다."""
+    if vis is None:
+        d = host.send("dump", timeout=180, rows=1).get("data") or {}; _g, sheet, gs = data_sheet(d); GS.clear(); GS.update(gs)
+        if not sheet or not (sheet.get("data") or []): return "행 없음"
+        vis = [c for c in (sheet.get("columns") or []) if str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1]
+    for c in (vis or [])[:4]:
+        r = host.send("act", timeout=60, cell="0,%s" % c.get("index"), double="0", wait=2, **GS)
+        if r.get("ok"): return "셀 0,%s" % c.get("index")
+    return "누르지 못함"
+
+
+def apply_data_cond(host, mid, out):
+    """Doc/asislive/<ID>/data_cond.json {"set": [{name, value|index|check(+only)|prop}], "src", "why"} → 조회 전 조건 넣기. 넣은 결과를 out["data_cond"] 에 남긴다"""
+    f = P("Doc", "asislive", mid, "data_cond.json")
+    pre = out.get("_pre_set") or []                          # 11-15 --msgcell 시나리오의 조회 전 조건(pre_set) · 화면 data_cond 뒤에 넣는다
+    if not os.path.exists(f) and not pre: return
+    j = {}
+    if os.path.exists(f):
+        try: j = json.load(open(f, encoding="utf-8"))
+        except Exception as e: out["data_cond"] = {"error": "data_cond.json 읽기 실패: %s" % e}; return
+    done = []
+    for st in (j.get("set") or []) + pre:
+        if st.get("act"):                                     # 11-15 조회 전 화면 동작(시트 탭 클릭 등): host act 인자 그대로
+            r = host.send("act", timeout=120, **{k: str(v) for k, v in st["act"].items()}); done.append({"set": {"act": st["act"]}, "ok": bool(r.get("ok")), "applied": r.get("did"), "error": r.get("error")})
+            tw = R.now(); time.sleep(float(st.get("wait") or 1)); R.wait_quiet(tw, 2, 60); continue
+        kw = {k: str(v) for k, v in st.items() if k in ("name", "value", "index", "check", "only", "prop", "call", "uncheck_all")}
+        r = host.send("set", timeout=60, **kw); done.append({"set": kw, "ok": bool(r.get("ok")), "applied": r.get("applied"), "error": r.get("error")})
+        tw = R.now(); time.sleep(float(st.get("wait") or 1)); R.wait_quiet(tw, 2, 60)   # 값 변경 이벤트가 목록을 다시 불러오는 시간
+    out["data_cond"] = {"src": j.get("src"), "why": j.get("why"), "done": done}
+    print("   데이터 조건 %s" % ", ".join("%s=%s%s" % (d["set"].get("name") or "act", d.get("applied"), "" if d["ok"] else " 실패 " + str(d.get("error"))[:60]) for d in done), flush=True)
+
+
+def post_find(host, mid, out):
+    """Doc/asislive/<ID>/data_cond.json "post_find": [{"dblclick_where": {"col": 태그, "value": 값}, "col_prefix": "D_", "nonzero": true}]
+    조회 뒤 상세 그리드를 채우는 사용자 동작(11-15 SSP0015: MEASURE=SHIP_CONFIRM 행의 D_ 칸 더블클릭 → FindData_Detail, SSP0015_ShipmentPSI.cs:8133~8150)"""
+    f = P("Doc", "asislive", mid, "data_cond.json")
+    try: steps = json.load(open(f, encoding="utf-8")).get("post_find") or []
+    except Exception: steps = []
+    if out.get("_post_find") is not None: steps = out["_post_find"]   # 11-16 셀 시나리오 항목의 post_find 가 화면 data_cond 보다 우선
+    if not steps: return
+    done = []
+    for st in steps:
+        w = st.get("dblclick_where") or {}
+        d = host.send("dump", timeout=180, rows=200).get("data") or {}
+        g = (d.get("grids") or [{}])[0]; act = g.get("active_sheet_index")
+        sh = next((x for i, x in enumerate(g.get("sheets") or []) if str(act) in ("", "None") or str(i) == str(act)), {})
+        cols = sh.get("columns") or []; data = sh.get("data") or []
+        conds = dict(st.get("where") or {})                    # 11-15: 여러 열 조건 {"MEASURE": "SHIP_CONFIRM", "FROM_SITE": "NJ01-A"}
+        if w.get("col"): conds[w["col"]] = w.get("value")
+        ix = {k: next((n for n, c in enumerate(cols) if (c.get("tag") or "").upper() == str(k).upper()), None) for k in conds}
+        hit = None
+        for r, row in enumerate(data):
+            if any(i is None or i >= len(row) or str(row[i]).strip() != str(conds[k]) for k, i in ix.items()): continue
+            for n, c in enumerate(cols):
+                if not (c.get("tag") or "").startswith(st.get("col_prefix", "")) or n >= len(row): continue
+                v = str(row[n]).replace(",", "").strip()
+                if st.get("nonzero") and (not v or v in ("0", "0.0", "-")): continue
+                hit = (r, c.get("index", n), c.get("tag"), v); break
+            if hit: break
+        if not hit: done.append({"step": st, "ok": False, "why": "조건 맞는 칸 없음"}); continue
+        t1 = R.now(); rr = host.send("act", timeout=180, cell="%s,%s" % (hit[0], hit[1]), double="1", wait=6)
+        if not rr.get("ok") and "not visible" in str(rr.get("error")):   # 11-16 화면 밖 칸 = 더블클릭 이벤트로 실행
+            rr = host.send("act", timeout=180, target=(g.get("name") or "spdMain"), **{"raise": "CellDoubleClick", "row": str(hit[0]), "col": str(hit[1]), "wait": "6"}); rr["via"] = "raise"
+        R.wait_quiet(t1, 3, 300); sweep(host, out, "post_find")
+        done.append({"step": st, "ok": bool(rr.get("ok")), "row": hit[0], "col": hit[2], "value": hit[3], "error": rr.get("error")})
+    out["post_find"] = done
+    print("   조회 뒤 동작 %s" % ", ".join("%s 행 %s %s=%s" % ("성공" if x.get("ok") else "실패", x.get("row"), x.get("col"), x.get("value") or x.get("why")) for x in done), flush=True)
+
+
+def open_and_find(host, mid, out, edit=False):
+    """화면 열기 → 조회 조건 채우기 → 조회. 수정 모드가 필요하면 켠다. 성공하면 True"""
+    sweep(host, out, None)
+    if out.get("restart"): out["error"] = "시작 전 남은 창을 닫지 못함"; return False
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); out["restart"] = True; return False
+    R.wait_quiet(R.now(), 3, 60); F.LOCK.clear()
+    try: F.prefill(host, mid)
+    except Exception: pass
+    apply_data_cond(host, mid, out)
+    t0 = R.now(); host.send("find", timeout=60); R.wait_find(host, t0, 0, 300)
+    n0, _s = R.db_inflight()
+    if n0: R.wait_db_clear(900)
+    post_find(host, mid, out)
+    try:                                                      # 11-16 조회 단계 SP 호출 기록(셀 시나리오 등 조회 뒤 동작만 남기던 실행도 어떤 조회 SP 가 불렸는지 남긴다)
+        fc = [{"sp": x.get("sp"), "params": x.get("params"), "rows": x.get("rows"), "ms": x.get("ms"), "at": x.get("at"), "phase": "find+post_find"} for x in R.parse_dbprofile(t0, R.now()) if "UP_FX_" not in str(x.get("sp"))]
+        out.setdefault("find_calls", []).extend(fc[:40])
+    except Exception as ex: out.setdefault("find_calls_error", str(ex)[:200])
+    GS.clear()
+    try:
+        _g, _sh, gs = data_sheet(host.send("dump", timeout=180, rows=1).get("data") or {}); GS.update(gs)
+        if gs: out["sheet_used"] = gs
+    except Exception: pass
+    if edit:
+        host.send("policy", timeout=30, dialogs="no"); out["edit_focus"] = focus_grid(host); sweep(host, out, None)
+        te = R.now()
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton")
+        try:                                                  # 11-16 수정 단계 SP 호출 기록(SSP0024 EditButton 안 SSP0002_GET_USER_INFO_LIST 등)
+            R.wait_quiet(te, 2, 60)
+            out.setdefault("edit_calls", []).extend([{"sp": x.get("sp"), "params": x.get("params"), "rows": x.get("rows"), "ms": x.get("ms"), "at": x.get("at"), "phase": "edit"} for x in R.parse_dbprofile(te, R.now()) if "UP_FX_" not in str(x.get("sp"))][:40])
+        except Exception as ex: out.setdefault("edit_calls_error", str(ex)[:200])
+        ok, by = edit_by_action(host, er); out["edit_mode"] = ok
+        if by and by != "IsEditMode": out["edit_by"] = by
+        if not ok: out["note"] = "수정 모드가 켜지지 않음"; return False
+    return True
+
+
+def edit_by_action(host, er):
+    """수정 모드 판정 보완(11-15): BaseForm.IsEditMode 가 거짓이어도 SpreadInfo.SwitchLockEx(SpreadInfo.cs:9708)는 IsEditMode 를 바꾸지 않고
+    Action 열을 보이게 한 뒤 잠금을 푼다(SSP0015_ShipmentPSI.cs:1785). 그리드 중 Action 열이 보이면 수정 모드로 본다 → (bool, 근거)"""
+    if er.get("edit_mode"): return True, "IsEditMode"
+    try:
+        d = host.send("dump", timeout=180, rows=1).get("data") or {}
+        for g in d.get("grids") or []:
+            act = g.get("active_sheet_index")
+            for i, sh in enumerate(g.get("sheets") or []):
+                if str(act) not in ("", "None") and str(act) != str(i): continue
+                c = next((c for c in sh.get("columns") or [] if (c.get("tag") or "") == "Action"), None)
+                if c and str(c.get("visible")) == "True": return True, "Action 열 표시(%s/%s)" % (g.get("name"), sh.get("name") or i)
+    except Exception: pass
+    return False, ""
+
+
+def close_screen(host, out):
+    if out.get("restart"): return
+    host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); time.sleep(1); sweep(host, out, None); host.send("policy", timeout=30, dialogs="default")
+
+
+def run_states(host, mid, group, rows=40, edit=False):
+    """행별 셀 상태(11-15): 조회 뒤 앞 rows 행의 셀마다 잠금·배경색·글자색·글자를 읽는다. 편집 불가 셀·행 조건 계산 분기의 AS-IS 정답.
+    수정 모드가 있는 화면은 수정 모드에서 한 번 더 읽는다(잠금이 수정 모드에서 풀리는 화면이 있다). 저장하지 않는다."""
+    out = {"id": mid, "group": group, "states": True, "edit": edit, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not open_and_find(host, mid, out, edit=edit): close_screen(host, out); return out, []
+    st = host.send("cellstate", timeout=300, rows=str(rows), **GS)
+    if not st.get("ok"): out["error"] = "셀 상태 읽기 실패: %s" % st.get("error")
+    else:
+        st.pop("ok", None); out["cellstate"] = st
+        lk = st.get("locked") or []; ncol = len(st.get("cols") or [])
+        varies = [c for c in range(ncol) if len({row[c] for row in lk if c < len(row)}) > 1]
+        out["summary"] = {"rows": len(lk), "rows_total": st.get("rows_total"), "cols": ncol, "lock_how": st.get("how"),
+                          "locked_cells": sum(row.count("1") for row in lk), "open_cells": sum(row.count("0") for row in lk), "unknown": sum(row.count("?") for row in lk),
+                          "cols_lock_varies_by_row": [(st["cols"][c].get("tag") or st["cols"][c].get("label") or str(st["cols"][c].get("index"))) for c in varies]}
+        print("   셀 상태 %s행 × %s열 · 잠김 %s · 열림 %s · 모름 %s · 행마다 잠금이 다른 열 %s" % (out["summary"]["rows"], ncol, out["summary"]["locked_cells"], out["summary"]["open_cells"], out["summary"]["unknown"], out["summary"]["cols_lock_varies_by_row"][:12]), flush=True)
+    close_screen(host, out)
+    return out, []
+
+
+RX_SHEET = re.compile(r"(\w+)(?:\.ActiveSheet)?\.SheetName\s*==\s*SpdSheet\.(\w+)")
+RX_COLEQ = re.compile(r"e\.Column\s*==\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)")
+RX_COLAFTER = re.compile(r"e\.Column\s*>=?\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)\s*\+\s*1")
+RX_ROWEQ = re.compile(r"Get(?:Text|Value)\(e\.Row,\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)\)(?:\.ToString\(\))?\s*(==|!=)\s*\"([^\"]*)\"")
+
+
+_SRC_CACHE = {}
+
+
+def _src_text(fn):
+    """AS-IS 원문 .cs (06.UIL 아래 파일 이름으로 찾음 · 원문 그대로)"""
+    if fn in _SRC_CACHE: return _SRC_CACHE[fn]
+    hit = glob.glob(P("GSCM", "06.UIL", "**", fn), recursive=True)
+    t = ""
+    if hit:
+        try: t = io.open(hit[0], encoding="utf-8-sig", errors="replace").read()
+        except Exception: t = ""
+    _SRC_CACHE[fn] = t; return t
+
+
+def expand_guard(r):
+    """잘린 조건 구간 복원(11-15): '…' 로 끝난 구간을 원문에서 찾아 괄호 짝이 맞을 때까지 잇는다.
+    같은 앞부분이 여러 번 나오면 시나리오 src 줄 이전의 가장 가까운 위치를 쓴다. 못 찾으면 그대로 둔다"""
+    g = r.get("guard") or ""
+    if "…" not in g: return g
+    sp = (r.get("src") or "").split(":"); fn = sp[0].strip()
+    try: ln = int(re.match(r"\d+", sp[1]).group(0)) if len(sp) > 1 else 10 ** 9
+    except Exception: ln = 10 ** 9
+    t = _src_text(fn) if fn else ""
+    if not t: return g
+    segs = [x.strip() for x in g.split("▸")]
+    for n, sg in enumerate(segs):
+        if not (sg.endswith("…)") or sg.endswith("…")): continue
+        head = sg.rstrip(")").rstrip("…")
+        head = re.sub(r"^else of\s*\(?\s*", "", head)
+        if "if (" in head: head = head[head.find("if ("):]
+        rx = re.compile(r"\s*".join(re.escape(w) for w in head.split()))
+        best = None
+        for m in rx.finditer(t):
+            l = t.count("\n", 0, m.start()) + 1
+            if l <= ln: best = m
+        if best is None: continue
+        st = t.find("(", best.start()); dep = 0; e = st
+        while 0 <= e < len(t):
+            if t[e] == "(": dep += 1
+            elif t[e] == ")":
+                dep -= 1
+                if dep == 0: break
+            e += 1
+        if dep == 0: segs[n] = ("else of " if sg.startswith("else of") else "") + re.sub(r"\s+", " ", t[best.start():e + 1])
+    return " ▸ ".join(segs)
+
+
+def dbl_plan(mid):
+    """더블클릭 분기마다 누를 대상(11-15): {grid, sheet_key, col, col_after, row_conds, ids, rule}. 'else of' 구간의 조건은 부정이므로 대상 조건으로 쓰지 않는다"""
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv")); plans = {}
+    for r in sc:
+        grids = []; single = False
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            m = CELLEV.match(e)
+            if m and m.group(2) == "CellDoubleClick": grids.append(m.group(1)[:1].lower() + m.group(1)[1:])
+            elif m and m.group(2) == "CellClick" and POPNEW.search(r.get("observe") or ""): grids.append(m.group(1)[:1].lower() + m.group(1)[1:]); single = True   # 11-15 한 번 클릭 팝업
+        if not grids: continue
+        segs = [x.strip() for x in expand_guard(r).split("▸")]
+        pos = " ▸ ".join(x for x in segs if not x.startswith("else of"))
+        skl = RX_SHEET.findall(pos); ce = RX_COLEQ.findall(pos); ca = RX_COLAFTER.findall(pos); rc = RX_ROWEQ.findall(pos)
+        try: rc = rc + [x for x in var_row_conds(mid, (r.get("method") or "").strip(), pos) if x not in rc]   # 11-15 지역 변수 행 조건
+        except Exception: pass
+        rc = rc + [("#" + n, op, v) for n, op, v in re.findall(r"Get(?:Text|Value)\(e\.Row,\s*(\d+)\)(?:\.ToString\(\))?\s*(==|!=)\s*\"([^\"]*)\"", pos) if ("#" + n, op, v) not in rc]   # 11-15 열 번호 행 조건(SCP0033 GetText(e.Row, 0) == "I")
+        rc = rc + [("#0", op, f) for op, f in re.findall(r"Get(?:Text|Value)\(e\.Row,\s*\w+\.GetColumnIndex\((?:CAppSetting\.StringAction|\"Action\")\)\)(?:\.ToString\(\))?\s*(==|!=)\s*CAppSetting\.Flag(\w)\b", pos) if ("#0", op, f) not in rc]   # 11-15 Action 상수 행 조건(SCP0037·SSP0024 CAppSetting.FlagI)
+        cols = [(c, False) for c in ce[:3]] + [(c, True) for c in ca[:1]] or [(None, False)]
+        for g in sorted(set(grids)):
+            # 시트 조건은 그 그리드의 것만(siDetail.ActiveSheet.SheetName → spdDetail · 11-15 SSP0021/23)
+            sk = [x[1] for x in skl if re.sub(r"^(si|spd|fp)", "", x[0], flags=re.I).lower() == re.sub(r"^(si|spd|fp)", "", g, flags=re.I).lower()]
+            for c, after in cols:
+                k = (g, sk[-1] if sk else "", c or "", after, tuple(sorted(set(rc))), single)
+                d = plans.setdefault(k, {"grid": g, "sheet_key": k[1], "sheet_name": sheet_const(mid, k[1]) if k[1] else None, "col": c, "col_after": after, "row_conds": list(k[4]), "ids": [], "has_else": any(x.startswith("else of") for x in segs), "single": single})
+                if r["scenario_id"] not in d["ids"]: d["ids"].append(r["scenario_id"])
+    # 메인 그리드 먼저(상세 그리드는 메인 더블클릭 뒤에 채워지는 화면이 있다 · SSP0021/SSP0023)
+    return sorted(plans.values(), key=lambda x: (0 if x["grid"].lower().endswith("main") else 1, x["grid"], x["col"] is None, x["col"] or ""))
+
+
+RX_VARCOND = re.compile(r"\b(\w+)\s*(==|!=)\s*\"([^\"]*)\"")
+
+
+def var_row_conds(mid, method, pos):
+    """조건식의 '변수 == "값"' 중 변수가 처리기 안에서 e.Row 셀 값으로 정해지면 열 조건으로 바꾼다.
+    string action = siMain.GetText(e.Row, 0) → ("#0", "==", "I") · string x = siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.COL)).ToString() → ("COL", …)"""
+    out = []
+    f = screen_src_file(mid)
+    if not f or not method: return out
+    t = io.open(f, encoding="utf-8-sig", errors="replace").read()
+    b, _ln = _method_body(t, method)
+    if not b: return out
+    for v, op, val in RX_VARCOND.findall(pos):
+        if v in ("e",) or v.startswith("Def"): continue
+        m = re.search(r"\b(?:string|var|object)\s+%s\s*=\s*\w+\.Get(?:Text|Value)\(\s*e\.Row\s*,\s*(?:(\d+)|\w+\.GetColumnIndex\(DefColumns\.(\w+)\))\s*\)" % re.escape(v), b)
+        if m: out.append(("#" + m.group(1) if m.group(1) else m.group(2), op, val))
+    return out
+
+
+def make_new_row(host, out, gs):
+    """새 행 전제 분기(Action == "I"): 셀 클릭 → 수정 → 행 추가. 늘어난 행 번호를 돌려준다(없으면 None)"""
+    rec = {"grid": gs}
+    if out.get("edit_mode"):                                 # 이미 수정 모드(pick_edit): 수정 버튼을 다시 누르면 꺼진다
+        er = {"edit_mode": True}; rec["edit_mode"] = True; rec["edit_already"] = True
+    else:
+        focus_grid(host); sweep(host, out, None)
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton"); er["edit_mode"] = edit_by_action(host, er)[0]; rec["edit_mode"] = er.get("edit_mode")
+    g0 = grid_snap(host, rows=60)
+    ir = host.send("act", timeout=120, method="OnClickInsertButton", wait=6); sweep(host, out, "OnClickInsertButton"); rec["insert_ok"] = bool(ir.get("ok"))
+    nr = new_rows(grid_diff(g0, grid_snap(host, rows=60))); rec["new_rows"] = nr
+    out.setdefault("new_row_for_pick", []).append(rec)
+    print("   새 행 만들기(행 조건 Action=I) · 수정 모드 %s · 늘어난 행 %s" % ("켜짐" if er.get("edit_mode") else "안 켜짐", {k: len(v) for k, v in nr.items()} or 0), flush=True)
+    for k, v in nr.items():
+        if k.split("/")[0].lower() == (gs.get("grid") or "").lower(): return min(v)
+    return None
+
+
+def fill_from_neighbor(host, gs, row, term):
+    """새 행(row)의 'term' 열(라벨·태그 일치)에 같은 그리드 기존 행(Action 이 I 가 아닌 첫 행)의 값을 넣는다 → {ok, col, value, res}"""
+    d = host.send("dump", timeout=180, rows=30).get("data") or {}
+    g = next((g for g in d.get("grids") or [] if (g.get("name") or "").lower() == (gs.get("grid") or "").lower()), None)
+    if not g: return {"ok": False, "why": "그리드 없음"}
+    try: sh = (g.get("sheets") or [])[int(gs.get("sheet") or 0)]
+    except Exception: sh = (g.get("sheets") or [{}])[0]
+    cols = sh.get("columns") or []; data = sh.get("data") or []
+    tn = _norm(term); ci = None
+    for n, c in enumerate(cols):                              # 1순위: 화면 라벨 일치(SCP0037 'Plant Site*' = SCM_SITE_ID · 태그가 비슷한 PLANT_SITE_ID 'Plant Site Code' 아님)
+        if _norm(c.get("label")) == tn: ci = n; break
+    if ci is None:
+        for n, c in enumerate(cols):
+            if _norm(c.get("tag")) in (tn, tn + "id"): ci = n; break
+    if ci is None: return {"ok": False, "why": "열 '%s' 없음" % term}
+    src = next((r for i, r in enumerate(data) if i != row and str(r[0] if r else "").strip() != "I" and ci < len(r) and str(r[ci]).strip()), None)
+    if src is None: return {"ok": False, "why": "기존 행에 '%s' 값 없음" % term}
+    tag = cols[ci].get("tag") or str(ci); val = str(src[ci]).strip()
+    # 11-15: 콤보 칸은 표시 글자가 아니라 셀의 원래 값(코드)을 넣어야 화면 GetValue 가 읽는다(SCP0037 Plant Site 'HQ07-E' 표시 → 메시지 반복)
+    raw = None
+    try:
+        dr = host.send("dump", timeout=180, rows=30, raw="1").get("data") or {}
+        gr = next((x for x in dr.get("grids") or [] if (x.get("name") or "").lower() == (gs.get("grid") or "").lower()), None)
+        shr = (gr.get("sheets") or [])[int(gs.get("sheet") or 0)] if gr else None
+        si = next((i for i, r in enumerate((shr or {}).get("data") or []) if r == src), None)
+        if si is not None: raw = ((shr.get("values") or [])[si] or [None] * (ci + 1))[ci]
+    except Exception: raw = None
+    if raw not in (None, "") and str(raw).strip() != val:
+        rv = host.send("cell", timeout=60, row=str(row), col=tag, value=str(raw).strip(), mode="value"); how = "value(원래 값)"
+    else:
+        rv = host.send("cell", timeout=60, row=str(row), col=tag, value=val, mode="edit"); how = "edit"
+        if not (rv.get("after") or "").strip():
+            rv = host.send("cell", timeout=60, row=str(row), col=tag, value=val, mode="value"); how = "value"
+    return {"ok": bool((rv.get("after") or "").strip()), "col": tag, "value": val, "raw": raw, "after": rv.get("after"), "how": how, "error": rv.get("error")}
+
+
+def _norm(x): return re.sub(r"[^a-z0-9]", "", (x or "").lower())
+
+
+def sheet_const(mid, key):
+    """SpdSheet 상수 → 시트 이름(11-15): 화면 원문(06.UIL 아래 <ID>*.cs)에서 'key = "이름"' 을 찾는다. 못 찾으면 None"""
+    for f in glob.glob(P("GSCM", "06.UIL", "**", mid + "*.cs"), recursive=True):
+        t = _src_text(os.path.basename(f))
+        m = re.search(r"\b%s\s*=\s*\"([^\"]+)\"" % re.escape(key), t)
+        if m: return m.group(1)
+    return None
+
+
+def resolve_target(d, t, used_cols):
+    """dump 결과에서 대상 셀 찾기 → (gs, row, [열…], 사유). 못 찾으면 row=None"""
+    gl = [g for g in (d.get("grids") or []) if (g.get("name") or "").lower() == t["grid"].lower()] or [g for g in (d.get("grids") or []) if any(sh.get("data") for sh in g.get("sheets") or [])][:1]
+    if not gl: return None, None, [], "그리드 %s 없음" % t["grid"]
+    g = gl[0]; shs = g.get("sheets") or []; si = None
+    if t["sheet_key"]:
+        kk = _norm(re.sub(r"^sht", "", t["sheet_key"])); kc = _norm(t.get("sheet_name") or "")
+        for i, sh in enumerate(shs):
+            if kc and _norm(sh.get("name")) == kc: si = i; break
+        if si is None:
+            for i, sh in enumerate(shs):
+                if _norm(sh.get("name")) == kk or kk in _norm(sh.get("name")): si = i; break
+        if si is None: return None, None, [], "시트 %s 못 찾음(시트 %s)" % (t["sheet_key"], [sh.get("name") for sh in shs])
+    else:
+        act = g.get("active_sheet_index")
+        try: act = int(act)
+        except Exception: act = 0
+        si = act if act < len(shs) and (shs[act].get("data") or []) else next((i for i, sh in enumerate(shs) if sh.get("data")), act if act < len(shs) else 0)
+    sh = shs[si]; cols = sh.get("columns") or []; data = sh.get("data") or []
+    gs = {"grid": g.get("name") or "", "sheet": str(si)}
+    if not data: return gs, None, [], "%s/%s 행 없음" % (g.get("name"), sh.get("name"))
+    tag = lambda c: (c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index")))
+    ix = {tag(c).upper(): n for n, c in enumerate(cols)}
+    vis = lambda c: str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1
+    row = None; why = []
+    for rn, rv in enumerate(data):
+        ok = True
+        for cn, op, val in t["row_conds"]:
+            n = int(cn[1:]) if cn.startswith("#") and cn[1:].isdigit() else ix.get(cn.upper())
+            if n is None: why.append("행 조건 열 %s 없음" % cn); continue
+            v = str(rv[n] if n < len(rv) else "").strip()
+            if (op == "==" and v != val) or (op == "!=" and v == val): ok = False; break
+        if ok: row = rn; break
+    if row is None: return gs, None, [], "행 조건 %s 를 만족하는 행 없음(앞 %d행)" % (t["row_conds"], len(data))
+    if t["col"]:
+        n = ix.get(t["col"].upper())
+        if n is None: return gs, None, [], "열 %s 없음" % t["col"]
+        if t["col_after"]:
+            # 사용자는 값이 있는 칸을 누른다: 그 행에서 열 다음의 보이는 열 중 값이 있는(0 아님) 첫 열. 없으면 첫 보이는 열
+            vk = [k for k in range(n + 1, len(cols)) if vis(cols[k])]
+            if not vk: return gs, None, [], "열 %s 다음 보이는 열 없음" % t["col"]
+            rv = data[row]; nz = [k for k in vk if k < len(rv) and str(rv[k]).strip() not in ("", "0", "0.0", "-")]
+            n2 = (nz or vk)[0]
+            return gs, row, [cols[n2]], "열 %s 다음 열 중 %s" % (t["col"], "값 있는 첫 열" if nz else "첫 열(값 있는 칸 없음)")
+        if not vis(cols[n]): return gs, None, [], "열 %s 숨김" % t["col"]
+        return gs, row, [cols[n]], "열 %s" % t["col"]
+    vl = [c for c in cols if vis(c) and tag(c) not in used_cols]
+    return gs, row, vl[:6], "열 조건 없는 분기: 앞쪽 보이는 열 6개"
+
+
+def popup_inside(host, pf, found_already=False):
+    """팝업 내부(11-15): 조건 컨트롤(이름·형식·라벨·값·항목 앞 10개)과 그리드(시트·행 수·열) 덤프 → 팝업 조회(FindButton) 1회 실행 → 그때 호출된 SP·인자·건수.
+    found_already=True(빈 목록이라 이미 조회함)면 조회는 다시 하지 않는다."""
+    o = {"form": pf}
+    try:
+        d = host.send("dump", timeout=120, form=pf, rows=3).get("data") or {}
+        lab = {li.get("control"): (li.get("label") or "").strip() for li in d.get("layout_items") or [] if li.get("control")}
+        o["controls"] = [{"name": c.get("name"), "type": (c.get("type") or "").split(".")[-1], "label": lab.get(c.get("name"), ""), "value": c.get("value"), "items": (c.get("items") or [])[:10], "enabled": c.get("enabled")}
+                         for c in d.get("controls") or [] if c.get("visible") and (c.get("type") or "").split(".")[-1].startswith("Usr") and not any(x in (c.get("type") or "") for x in ("Layout", "Panel", "Label", "ButtonList"))][:40]
+        o["grids"] = [{"grid": g.get("name"), "sheet": sh.get("name"), "rows": sh.get("rows"), "cols": [(c.get("tag") or c.get("label")) for c in (sh.get("columns") or []) if str(c.get("visible")) == "True"][:40]} for g in d.get("grids") or [] for sh in g.get("sheets") or []]
+    except Exception as e: o["dump_error"] = str(e)[:200]
+    if not found_already:
+        tf = R.now()
+        fr = host.send("act", timeout=120, form=pf, method="FindButton", wait=6)
+        if not fr.get("ok") and "method not found" in str(fr.get("error")): fr = host.send("act", timeout=120, form=pf, method="OnClickFindButton", wait=6)
+        R.wait_quiet(tf, 3, 90)
+        cs = R.parse_dbprofile(tf, R.now())
+        o["find"] = {"ok": bool(fr.get("ok")), "error": fr.get("error"), "calls": [{"sp": x.get("sp"), "rows": x.get("rows"), "params": x.get("params")} for x in cs if "UP_FX_" not in str(x.get("sp"))][:10]}
+        n = 0
+        for k, v in grid_snap_form(host, pf, rows=1).items(): n = max(n, int(v.get("rows") or 0))
+        o["find"]["rows_after"] = n
+    return o
+
+
+def feed_candidates(d, t, limit=12):
+    """col_after 분기(상세 조회 셀)의 후보 칸: 행 조건을 만족하는 행마다 기준 열 다음의 값 있는 보이는 칸(행·열 순서)"""
+    g = next((g for g in (d.get("grids") or []) if (g.get("name") or "").lower() == t["grid"].lower()), None)
+    if not g: return []
+    out = []
+    for si, sh in enumerate(g.get("sheets") or []):
+        cols = sh.get("columns") or []; data = sh.get("data") or []
+        if not data: continue
+        tag = lambda c: (c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index")))
+        ix = {tag(c).upper(): n for n, c in enumerate(cols)}; n = ix.get((t["col"] or "").upper())
+        if n is None: continue
+        vis = lambda c: str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1
+        for rn, rv in enumerate(data):
+            if any((ix.get(cn.upper()) is not None) and ((op == "==" and str(rv[ix[cn.upper()]]).strip() != val) or (op == "!=" and str(rv[ix[cn.upper()]]).strip() == val)) for cn, op, val in t["row_conds"]): continue
+            for k in range(n + 1, len(cols)):
+                if vis(cols[k]) and k < len(rv) and str(rv[k]).strip() not in ("", "0", "0.0", "-"):
+                    out.append(({"grid": g.get("name") or "", "sheet": str(si)}, rn, cols[k]))
+                    if len(out) >= limit: return out
+        break
+    return out
+
+
+def feed_detail(host, out, feeder, t, tried):
+    """상세 그리드(t)가 비었을 때 feeder 분기의 다른 칸을 눌러 상세 행이 생기는 칸을 찾는다 → 찾으면 True. 시도 내역은 out["feed"] 에 남긴다"""
+    rec = {"target": "%s[%s]" % (t["grid"], t["col"]), "feeder": "%s[%s 다음]" % (feeder["grid"], feeder["col"]), "tries": []}
+    out.setdefault("feed", []).append(rec)
+    d = host.send("dump", timeout=180, rows=200).get("data") or {}
+    for gs, rn, c in feed_candidates(d, feeder):
+        key = (gs["sheet"], rn, c.get("index"))
+        if key in tried: continue
+        tried.add(key); t1 = R.now()
+        rr = host.send("act", timeout=120, cell="%d,%s" % (rn, c.get("index")), double="1", wait=8, close_popup="1", **gs)
+        R.wait_quiet(t1, 3, 90); sweep(host, out, "feed")
+        cs = R.parse_dbprofile(t1, R.now())
+        d2 = host.send("dump", timeout=180, rows=1).get("data") or {}
+        n = 0
+        for g in d2.get("grids") or []:
+            if (g.get("name") or "").lower() == t["grid"].lower():
+                for sh in g.get("sheets") or []: n = max(n, int(sh.get("rows") or 0))
+        rec["tries"].append({"row": rn, "col": c.get("tag") or c.get("label"), "ok": bool(rr.get("ok")), "detail_rows": n, "calls": [{"sp": x.get("sp"), "rows": x.get("rows")} for x in cs if "UP_FX_" not in str(x.get("sp")) and "SPREAD_TITLE" not in str(x.get("sp"))][:6]})
+        print("   상세 채우기 %s 행 %d 열 %s → %s 행 %d" % (feeder["grid"], rn, c.get("tag") or c.get("label"), t["grid"], n), flush=True)
+        if n: rec["found"] = True; return True
+    rec["found"] = False
+    return False
+
+
+def run_pick(host, mid, group, max_cols=12, edit=False):
+    """팝업 값 반영(11-15 v2): 셀 더블클릭 분기마다 조건식의 그리드·시트·열·행 조건을 만족하는 셀을 더블클릭해 팝업을 띄우고(닫지 않음), 팝업 그리드 첫 행을 더블클릭해 고른다.
+    빈 목록 팝업은 팝업 조회(FindButton) 뒤 고른다. 더블클릭으로 닫히지 않으면 OK·확인 버튼. 고르기 전후 화면 그리드를 비교해 바뀐 셀을 기록한다. 저장하지 않는다."""
+    plan = dbl_plan(mid)
+    out = {"id": mid, "group": group, "pick": True, "edit": edit, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not plan: out["note"] = "셀 더블클릭 분기가 없는 화면"; return out, []
+    if not open_and_find(host, mid, out, edit=edit): close_screen(host, out); return out, []
+    out["plan"] = [{k: v for k, v in t.items()} for t in plan]
+    calls = []; xb = X.snap(); done = set(); clicks = 0; feed_tried = set()
+    tagf = lambda c: (c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index")))
+    for t in plan:
+        if clicks >= max_cols * 3: out["skipped"].append({"target": t, "why": "누름 상한 %d 도달" % (max_cols * 3)}); continue
+        d = host.send("dump", timeout=180, rows=200).get("data") or {}
+        gs, row, cl, why = resolve_target(d, t, {x[2] for x in done})
+        if row is None and "만족하는 행 없음" in why and any(op == "==" and val == "I" and (cn == "#0" or cn.upper() == "ACTION") for cn, op, val in t["row_conds"]) and not out.get("new_row_for_pick"):
+            if make_new_row(host, out, gs or {"grid": t["grid"]}) is not None:
+                d = host.send("dump", timeout=180, rows=200).get("data") or {}
+                gs, row, cl, why = resolve_target(d, t, {x[2] for x in done}); why = "새 행 · " + why
+        if row is None and why.endswith("행 없음"):
+            fd = [f for f in plan if f.get("col_after") and f["grid"].lower() != t["grid"].lower()]
+            if fd and feed_detail(host, out, fd[0], t, feed_tried):
+                d = host.send("dump", timeout=180, rows=200).get("data") or {}
+                gs, row, cl, why = resolve_target(d, t, {x[2] for x in done})
+        t["resolved"] = why
+        if row is None: out["skipped"].append({"grid": t["grid"], "col": t["col"], "row_conds": t["row_conds"], "ids": t["ids"], "why": why}); print("   %s[%s] 건너뜀 · %s" % (t["grid"], t["col"] or "-", why), flush=True); continue
+        for c in cl:
+            key = (gs.get("grid"), gs.get("sheet"), tagf(c), row)
+            if key in done: continue
+            done.add(key); clicks += 1
+            g0 = grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+            rr = host.send("act", timeout=120, cell="%d,%s" % (row, c.get("index")), double="0" if t.get("single") else "1", wait=8, close_popup="0", **gs)
+            pops = [p for p in (rr.get("popups") or []) if p.get("form") not in ("ProgressForm",) and (p.get("grid_rows") or 0) > 0]
+            a = {"control": tagf(c), "grid": gs.get("grid"), "sheet": gs.get("sheet"), "row": row, "rule": why, "row_conds": t["row_conds"], "kind": "pick", "ok": bool(rr.get("ok")), "error": rr.get("error"), "popup": None, "picked": None, "scenarios": t["ids"]}
+            empty = [p for p in (rr.get("popups") or []) if p.get("form") not in ("ProgressForm",) and not (p.get("grid_rows") or 0)]
+            if not pops and empty and empty[-1]["form"] in (host.send("ping", timeout=30).get("forms") or []):
+                # 빈 목록으로 열리는 팝업(UserInfoPopup.cs:158 FindButton): 사용자가 팝업의 조회 버튼을 누르는 것과 같은 FindButton 호출 → 목록이 차면 고른다
+                pf0 = empty[-1]["form"]; tf = R.now()
+                fr = host.send("act", timeout=120, form=pf0, method="FindButton", wait=6)
+                if not fr.get("ok") and "method not found" in str(fr.get("error")): fr = host.send("act", timeout=120, form=pf0, method="OnClickFindButton", wait=6)
+                R.wait_quiet(tf, 3, 90)
+                n3 = 0
+                for k, v in grid_snap_form(host, pf0, rows=1).items(): n3 = max(n3, len(v.get("data") or []))
+                a["popup_find"] = {"form": pf0, "ok": bool(fr.get("ok")), "error": fr.get("error"), "rows_after": n3}
+                if n3: pops = [dict(empty[-1], grid_rows=n3, found_by="FindButton")]
+                elif pf0 in (host.send("ping", timeout=30).get("forms") or []): a["popup"] = {"form": pf0, "title": empty[-1].get("title"), "rows": 0, "note": "팝업 조회 뒤에도 목록 0행"}
+            elif not pops and empty: a["popup"] = {"form": empty[-1]["form"], "title": empty[-1].get("title"), "rows": 0, "note": "목록 없는 팝업(상세·안내 창)"}
+            if pops:
+                pf = pops[-1]["form"]; a["popup"] = {"form": pf, "title": pops[-1].get("title"), "rows": pops[-1].get("grid_rows")}
+                a["popup_inside"] = popup_inside(host, pf, found_already=bool(a.get("popup_find")))
+                if pf not in (host.send("ping", timeout=30).get("forms") or []): a["popup"]["note"] = "팝업 조회 뒤 팝업이 닫힘"; pops = []
+            if pops:
+                pf = pops[-1]["form"]
+                pg = grid_snap_form(host, pf, rows=1); first = None
+                for k, v in pg.items():
+                    if v.get("data"): first = {"sheet": k, "cols": v["cols"], "row": v["data"][0]}; break
+                a["picked"] = first
+                pc = None
+                for i in range(min(len((first or {}).get("cols") or []), 8)):
+                    pc = host.send("act", timeout=120, form=pf, cell="0,%d" % i, double="1", wait=5)
+                    if not pc.get("ok") and "not visible" in str(pc.get("error")): continue
+                    break
+                a["pick_act"] = {"ok": bool(pc and pc.get("ok")), "error": (pc or {}).get("error")}
+                time.sleep(2)
+                if pf in (host.send("ping", timeout=30).get("forms") or []):   # 더블클릭으로 닫히지 않는 팝업: 확인 버튼(ButtonList OK·Confirm, 없으면 OK·확인·선택 버튼)
+                    rb = host.send("popup_ok", timeout=120, form=pf, wait=10)
+                    a["pick_button"] = rb.get("how") if rb.get("ok") else None; a["pick_ok"] = {"ok": bool(rb.get("ok")), "closed": rb.get("closed"), "error": rb.get("error"), "buttons": (rb.get("buttons") or [])[:20]}
+            R.wait_quiet(t1, 3, 90)
+            n2, _s = R.db_inflight()
+            if n2: R.wait_db_clear(600)
+            late = sweep(host, out, tagf(c)); cs = R.parse_dbprofile(t1, R.now())
+            for x in cs: x["phase"] = "action:pick:" + tagf(c)
+            calls += cs
+            if a.get("popup") and a["popup"].get("note", "").startswith("목록 없는 팝업"):
+                one = [x for x in cs if "POPUP" in str(x.get("sp")).upper() and x.get("rows") == 1]
+                if one: a["popup"]["note"] = "팝업 조회 1행 → 팝업이 스스로 고르고 닫힘(%s 1행)" % one[0].get("sp"); a["auto_pick"] = True
+            a["grid_changes"] = grid_diff(g0, grid_snap(host, rows=60)) if not out.get("restart") else []
+            a["late_popups"] = late; a["calls"] = [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20]
+            a["dialogs"] = [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+            msgs = [x["text"] for x in a["dialogs"]]; a["retries"] = []; filled = set()
+            for _try in range(3):
+                mm = re.search(r"(\S[^\n]*?)을\(를\) 선택하십시오", " ".join(msgs))
+                if not (why.startswith("새 행") and mm and not a.get("popup")): break
+                term = mm.group(1).strip()
+                if term in filled: a["retries"].append({"term": term, "why": "채운 뒤에도 같은 메시지"}); break
+                filled.add(term)
+                # 빈 값 분기(메시지)는 기록으로 남기고, 값을 채워 팝업 분기를 다시 실행한다
+                fl = fill_from_neighbor(host, gs, row, term); rec = {"term": term, "fill": fl}; a["retries"].append(rec)
+                print("   새 행 '%s' 채움 %s (%s %s)" % (term, "예" if fl.get("ok") else "아니오", fl.get("value") or fl.get("why"), fl.get("how") or ""), flush=True)
+                if not fl.get("ok"): break
+                d1 = len((host.send("dialogs", timeout=30).get("dialogs") or [])); t2 = R.now()
+                r2 = host.send("act", timeout=120, cell="%d,%s" % (row, c.get("index")), double="0" if t.get("single") else "1", wait=8, close_popup="1", **gs)
+                R.wait_quiet(t2, 3, 90); late2 = sweep(host, out, tagf(c)); cs2 = R.parse_dbprofile(t2, R.now())
+                for x in cs2: x["phase"] = "action:pick_retry:" + tagf(c)
+                calls += cs2
+                pp = [p for p in (r2.get("popups") or []) + late2 if p.get("form") not in ("ProgressForm",)]
+                msgs = [(x.get("text") or "")[:200] for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d1:]]
+                rec.update({"ok": bool(r2.get("ok")), "error": r2.get("error"), "popups": [{"form": p.get("form"), "rows": p.get("grid_rows")} for p in pp],
+                            "calls": [x.get("sp") for x in cs2 if "UP_FX_" not in str(x.get("sp"))][:20], "dialogs": msgs})
+                a["retry"] = rec
+                if pp: a["popup"] = {"form": pp[-1].get("form"), "rows": pp[-1].get("grid_rows"), "note": "값 채운 뒤 다시 누름 · 기록 후 닫음"}
+                print("   다시 누름 · 팝업 %s · 호출 %d · 메시지 %s" % ([p.get("form") for p in pp] or 0, len(cs2), [m[:40] for m in msgs] or 0), flush=True)
+            X.close_new(xb, X.host_pids()); out["acts"].append(a)
+            nchg = sum(len(g.get("cells") or []) + (g.get("more") or 0) for g in a["grid_changes"])
+            print("   %s[%s] 행 %d · %s · 팝업 %s · 고름 %s%s · 바뀐 셀 %d · 호출 %d · 메시지 %d" % (gs.get("grid"), tagf(c), row, why, (a["popup"] or {}).get("form"), "예" if (a.get("pick_act") or {}).get("ok") else "아니오", (" · 버튼 " + a["pick_button"]) if a.get("pick_button") else "", nchg, len(cs), len(a["dialogs"])), flush=True)
+            if out.get("restart"): break
+        if out.get("restart"): print("   남은 창을 닫지 못함 → 이 화면 중단", flush=True); break
+    close_screen(host, out)
+    return out, calls
+
+
+def popup_buttons(mid):
+    """앞선 버튼 실행에서 팝업을 띄운 버튼 → {버튼: {"forms": [...], "edit": 수정 모드 실행 여부, "src": 실행 폴더}}"""
+    out = {}
+    for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*_acts*"))):
+        f = os.path.join(d, "acts.json")
+        if not os.path.exists(f) or os.path.exists(os.path.join(d, "overlap.json")): continue
+        try: j = json.load(io.open(f, encoding="utf-8"))
+        except Exception: continue
+        for a in j.get("acts") or []:
+            c = a.get("control") or ""
+            if not c or c.startswith("(") or "[" in c or any(k.lower() == c.lower() and k != c for k in out) or a.get("kind") in ("pick", "insert", "insert_detail", "insert_no_edit", "save_violate", "save_violate_detail", "pickbtn", "find") or "cell" in a or a.get("grid"): continue
+            fs = sorted({(p.get("form") if isinstance(p, dict) else p) for p in (a.get("popups") or []) if (p.get("form") if isinstance(p, dict) else p) and (p.get("form") if isinstance(p, dict) else p) not in ("ProgressForm",)})   # 11-15 msgbtn·msgcell 기록은 폼 이름 문자열
+            if fs:
+                e = out.setdefault(c, {"forms": [], "edit": False, "src": os.path.basename(d)})
+                e["forms"] = sorted(set(e["forms"]) | set(fs)); e["edit"] = e["edit"] or bool(j.get("edit"))
+    # 11-15: 실행 기록이 없는 버튼 — 원문 시나리오 'event:<버튼>.Click' 이 팝업:new X 를 열고 SAVE 호출이 없을 때(SSP0020 BtnDelegatee)
+    for r in rd(P("Doc", "asislive", mid, "scenarios_src.csv")):
+        ob = r.get("observe") or ""; pm = POPNEW.findall(ob)
+        if not pm or re.search(r"_SAVE|SaveButton", ob + (r.get("entry") or "")): continue
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            m = re.match(r"^event:(?:this\.)?(\w+)\.Click$", e)
+            if not m or m.group(1).lower().startswith(("spd", "fp")) or re.search(r"save|delete|unset|confirm|upload|apply|approv|cancel|reject|send|batch|exec|run|release|close|excel|copy|paste|create|make|calc|sim", m.group(1), re.I): continue   # 저장·상태 변경 계열 버튼은 누르지 않는다
+            c = m.group(1)
+            if any(k.lower() == c.lower() for k in out): continue
+            out[c] = {"forms": sorted(set(x.split(".")[-1] for x in pm)), "edit": False, "src": "scenarios_src:" + r.get("scenario_id", "")}
+    return out
+
+
+def ctrl_snap(host):
+    """조회 조건 컨트롤 값(보이는 Usr*·TextBox·DateTimePicker) → {"이름#순번": 값}"""
+    try: d = host.send("dump", timeout=120, rows=0).get("data") or {}
+    except Exception: return {}
+    o = {}; seen = {}
+    for c in d.get("controls") or []:
+        t = (c.get("type") or "").split(".")[-1]
+        if not c.get("visible") or any(x in t for x in ("Layout", "Panel", "Label", "Button", "Spread")): continue
+        n = c.get("name") or "?"; k = seen.get(n, 0); seen[n] = k + 1
+        o["%s#%d" % (n, k)] = str(c.get("value") if c.get("value") is not None else c.get("text") or "")
+    return o
+
+
+def run_pick_btn(host, mid, group, edit=False):
+    pb = popup_buttons(mid)
+    out = {"id": mid, "group": group, "pickbtn": True, "edit": edit, "acts": [], "skipped": [], "targets": pb, "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    todo = [c for c, v in sorted(pb.items()) if bool(v["edit"]) == edit]
+    if not todo: out["note"] = "팝업을 띄운 버튼 없음(%s)" % ("수정 모드" if edit else "조회 직후"); return out, []
+    if not open_and_find(host, mid, out, edit=edit): close_screen(host, out); return out, []
+    host.send("policy", timeout=30, dialogs="no")
+    calls = []; xb = X.snap()
+    for c in todo:
+        c0 = ctrl_snap(host); g0 = grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        rr = host.send("act", timeout=120, click=c, wait=8, close_popup="0")
+        allp = [p for p in (rr.get("popups") or []) if p.get("form") not in ("ProgressForm",)]
+        forms = host.send("ping", timeout=30).get("forms") or []
+        live = [p for p in allp if p.get("form") in forms]
+        a = {"control": c, "kind": "pickbtn", "ok": bool(rr.get("ok")), "error": rr.get("error"), "popup": None, "picked": None, "expected_forms": pb[c]["forms"]}
+        if live:
+            pf = live[-1]["form"]; a["popup"] = {"form": pf, "title": live[-1].get("title"), "rows": live[-1].get("grid_rows")}
+            a["popup_inside"] = popup_inside(host, pf, found_already=bool(live[-1].get("grid_rows")))
+            if pf in (host.send("ping", timeout=30).get("forms") or []):
+                pg = grid_snap_form(host, pf, rows=1); first = None
+                for k, v in pg.items():
+                    if v.get("data"): first = {"sheet": k, "cols": v["cols"], "row": v["data"][0]}; break
+                a["picked"] = first; pc = None
+                if first:
+                    for i in range(min(len(first.get("cols") or []), 8)):
+                        pc = host.send("act", timeout=120, form=pf, cell="0,%d" % i, double="1", wait=5)
+                        if not pc.get("ok") and "not visible" in str(pc.get("error")): continue
+                        break
+                a["pick_act"] = {"ok": bool(pc and pc.get("ok")), "error": (pc or {}).get("error")}
+                time.sleep(2)
+                if pf in (host.send("ping", timeout=30).get("forms") or []):
+                    rb = host.send("popup_ok", timeout=120, form=pf, wait=10)
+                    a["pick_button"] = rb.get("how") if rb.get("ok") else None; a["pick_ok"] = {"ok": bool(rb.get("ok")), "closed": rb.get("closed"), "error": rb.get("error")}
+            else: a["popup"]["note"] = "팝업 조회 뒤 팝업이 닫힘"
+        elif allp: a["popup"] = {"form": allp[-1]["form"], "note": "누른 뒤 바로 닫힌 팝업(close_popup=0 무시 또는 자체 종료)"}
+        R.wait_quiet(t1, 3, 90); late = sweep(host, out, c)
+        cs = R.parse_dbprofile(t1, R.now())
+        for x in cs: x["phase"] = "action:pickbtn:" + c
+        calls += cs
+        c1 = ctrl_snap(host)
+        a["cond_changes"] = [{"control": k, "before": c0.get(k), "after": c1.get(k)} for k in sorted(set(c0) | set(c1)) if c0.get(k) != c1.get(k)][:40]
+        a["grid_changes"] = grid_diff(g0, grid_snap(host, rows=60)) if not out.get("restart") else []
+        a["late_popups"] = late; a["calls"] = [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20]
+        a["dialogs"] = [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+        X.close_new(xb, X.host_pids()); out["acts"].append(a)
+        nchg = sum(len(g.get("cells") or []) + (g.get("more") or 0) for g in a["grid_changes"])
+        print("   %s · 팝업 %s · 고름 %s · 바뀐 조건 %s · 바뀐 셀 %d · 호출 %d · 메시지 %d" % (c, (a["popup"] or {}).get("form"), "예" if (a.get("pick_act") or {}).get("ok") or a.get("pick_button") else "아니오",
+              [x["control"] for x in a["cond_changes"]][:5] or 0, nchg, len(cs), len(a["dialogs"])), flush=True)
+        if out.get("restart"): break
+    close_screen(host, out)
+    return out, calls
+
+
+def msg_buttons(mid):
+    """Doc/asislive/_msg_cover.csv 의 미관찰 경로 메시지 중 버튼 클릭 처리기 → {처리기: [메시지 코드…]}"""
+    out = {}
+    for r in rd(P("Doc", "asislive", "_msg_cover.csv")):
+        if r.get("menu_id") != mid or r.get("state") != "미관찰": continue
+        h = r.get("handler") or ""
+        if not re.fullmatch(r"[Bb]tn\w+_Click", h) or re.search(r"upload|excel", h, re.I): continue
+        out.setdefault(h, [])
+        if r.get("target") not in out[h]: out[h].append(r.get("target"))
+    return out
+
+
+def wired_controls(mid, handler):
+    """원문(.cs·Designer.cs)의 '<컨트롤>.<이벤트> += [new EventHandler(]this.<처리기>' 연결 중 주석이 아닌 것 → [컨트롤…]. 없으면 처리기 이름에서 '_Click' 을 뗀 이름"""
+    f = screen_src_file(mid); out = []
+    if f:
+        d = os.path.dirname(f)
+        for fn in sorted(glob.glob(os.path.join(d, "*.cs"))):
+            for l in io.open(fn, encoding="utf-8", errors="replace"):
+                c = l.split("//", 1)[0]
+                m = re.search(r"(?:this\.)?(\w+)\.\w+\s*\+=\s*(?:new\s+[\w.]+\s*\(\s*)?(?:this\.)?%s\b" % re.escape(handler), c)
+                if m and m.group(1) not in out: out.append(m.group(1))
+    return out or [handler[:-len("_Click")] if handler.endswith("_Click") else handler]
+
+
+def check_first_row(host, gs):
+    """첫 행 선택(CHK 열 = True). CHK 열이 없으면 첫 셀 클릭만"""
+    d = host.send("dump", timeout=120, rows=1).get("data") or {}
+    g = next((g for g in d.get("grids") or [] if (g.get("name") or "").lower() == (gs.get("grid") or "").lower()), None) or ((d.get("grids") or [None])[0])
+    if not g: return {"ok": False, "why": "그리드 없음"}
+    try: sh = (g.get("sheets") or [])[int(gs.get("sheet") or 0)]
+    except Exception: sh = (g.get("sheets") or [{}])[0]
+    if not (sh.get("data") or []): return {"ok": False, "why": "행 없음"}
+    cols = sh.get("columns") or []
+    ck = next((c for c in cols if (c.get("tag") or "").upper() in ("CHK", "CHECK", "SEL", "SELECT")), None)
+    focus_grid(host)
+    if not ck: return {"ok": True, "how": "첫 셀 클릭(CHK 열 없음)"}
+    rv = host.send("cell", timeout=60, row="0", col=ck.get("tag"), value="True", mode="value")
+    return {"ok": str(rv.get("after") or "").lower() in ("true", "1"), "how": "CHK=True", "after": rv.get("after"), "error": rv.get("error")}
+
+
+def run_msg_btn(host, mid, group):
+    tg = msg_buttons(mid)
+    out = {"id": mid, "group": group, "msgbtn": True, "acts": [], "skipped": [], "targets": tg, "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not tg: out["note"] = "미관찰 버튼 경로 메시지 없음"; return out, []
+    calls = []; xb = X.snap()
+    for state in ("선택 없음", "첫 행 선택"):
+        if not open_and_find(host, mid, out, edit=False): close_screen(host, out); break
+        host.send("policy", timeout=30, dialogs="no")
+        sel = check_first_row(host, dict(GS)) if state == "첫 행 선택" else None
+        for h, codes in sorted(tg.items()):
+          for ctl in wired_controls(mid, h):
+              t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+              r = host.send("act", timeout=180, click=ctl, wait=8)
+              R.wait_quiet(t1, 3, 120); late = sweep(host, out, ctl)
+              n, _s = R.db_inflight()
+              if n: R.wait_db_clear(600)
+              cs = R.parse_dbprofile(t1, R.now())
+              for x in cs: x["phase"] = "action:msgbtn:%s:%s" % (ctl, state)
+              calls += cs
+              dl = [{"text": (x.get("text") or "")[:300], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+              sp = [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))]
+              sv = [x for x in sp if re.search(r"SAVE|INSERT|UPDATE|DELETE|_SET_|APPROV|REJECT|CANCEL|CONFIRM", str(x), re.I)]
+              a = {"control": ctl, "handler": h, "kind": "msgbtn", "state": state, "select": sel, "ok": bool(r.get("ok")), "error": r.get("error"), "expect": codes,
+                   "dialogs": dl, "calls": sp[:20], "save_calls": sv, "popups": [p.get("form") for p in (r.get("popups") or []) + late if p.get("form") not in ("ProgressForm",)]}
+              out["acts"].append(a)
+              print("   [%s] %s · 메시지 %s · 호출 %s%s" % (state, ctl, [x["text"][:50] for x in dl] or 0, sp[:4] or 0, (" · 저장 계열 호출 " + ",".join(sv)) if sv else ""), flush=True)
+              if out.get("restart"): break
+        close_screen(host, out)
+        if out.get("restart"): break
+    X.close_new(xb, X.host_pids())
+    return out, calls
+
+
+def msg_cell_spec(mid):
+    """Doc/asislive/_msg_cell_spec.json {<ID>: [{handler, expect, edit, why, steps:[{cell, value, row?, mode?}]}]}"""
+    try: return json.load(open(P("Doc", "asislive", "_msg_cell_spec.json"), encoding="utf-8")).get(mid) or []
+    except Exception: return []
+
+
+def msg_col_index(host, key):
+    """GS(없으면 첫 그리드) 활성 시트에서 태그·라벨이 key 인 열 번호"""
+    d = host.send("dump", timeout=180, rows=1).get("data") or {}
+    gl = d.get("grids") or []
+    g = next((g for g in gl if (g.get("name") or "").lower() == (GS.get("grid") or "").lower()), None) if GS.get("grid") else (gl[0] if gl else None)
+    if not g: return None
+    try: sh = (g.get("sheets") or [])[int(GS.get("sheet") or g.get("active_sheet_index") or 0)]
+    except Exception: sh = (g.get("sheets") or [{}])[0]
+    for n, c in enumerate(sh.get("columns") or []):
+        if (c.get("tag") or "").lower() == key.lower() or _norm(c.get("label")) == _norm(key): return c.get("index", n)
+    return None
+
+
+def run_msg_cell(host, mid, group):
+    sp = msg_cell_spec(mid)
+    out = {"id": mid, "group": group, "msgcell": True, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    if not sp: out["note"] = "경로 메시지 셀 시나리오 없음"; return out, []
+    calls = []; xb = X.snap()
+    if os.environ.get("ASIS_MSGCELL_EXPECT"):                  # 11-16 지정한 메시지 시나리오만 다시(쉼표 구분)
+        want = set(os.environ["ASIS_MSGCELL_EXPECT"].split(",")); sp = [x for x in sp if x.get("expect") in want]
+    for it in sp:
+        # 11-16: 시나리오 그룹(권한 분기) — 그룹을 적은 항목은 그 그룹 실행(--group)에서만, 안 적은 항목은 ADMIN 실행에서만
+        if (it.get("group") or "ADMIN").upper() != (group or "").upper():
+            out["skipped"].append({"handler": it.get("handler"), "expect": it.get("expect"), "why": "그룹 %s 실행에서만(현재 %s)" % (it.get("group") or "ADMIN", group)}); continue
+        a = {"kind": "msgcell", "handler": it.get("handler"), "expect": it.get("expect"), "why": it.get("why"), "steps": [], "dialogs": [], "group": group}
+        out["_pre_set"] = it.get("pre_set") or []
+        out["_post_find"] = it.get("post_find")
+        if it.get("open"): a["opened_from"] = it["open"]           # 11-16 다른 화면에서 시작하는 경로(SCP0102 ROUTE_ID 더블클릭 → SCP0005 외부 진입 조회)
+        if not open_and_find(host, it.get("open") or mid, out, edit=bool(it.get("edit"))):
+            a["ok"] = False; a["error"] = out.get("error") or out.get("note"); out["acts"].append(a); close_screen(host, out)
+            if out.get("restart"): break
+            continue
+        a["edit_mode"] = out.get("edit_mode")
+        if it.get("grid"): GS.clear(); GS.update({"grid": it["grid"], "sheet": str(it.get("sheet", 0))})   # 상세 그리드 분기: 시나리오가 그리드·시트를 정한다
+        host.send("policy", timeout=30, dialogs=it.get("dialogs") or "no")   # 11-16 항목별 정책(cancel = 취소 우선: Excel 열기 확인 창)
+        t1 = R.now(); d0 = len(host.send("dialogs", timeout=30).get("dialogs") or [])
+        row_new = None
+        for st in it.get("steps") or []:
+            if st.get("row_where"):                               # 11-16 행 = 조건 열 값이 맞는 첫 행(덤프 앞 500행) — SSP0200 ERP_STATUS='C'
+                d = host.send("dump", timeout=180, rows=500, **GS).get("data") or {}
+                g = next((x for x in d.get("grids") or [] if not GS.get("grid") or x.get("name") == GS.get("grid")), {})
+                ai = g.get("active_sheet_index"); sh = next((x for i, x in enumerate(g.get("sheets") or []) if str(ai) in ("", "None") or str(i) == str(ai)), {})
+                cols = sh.get("columns") or []; ix = {k: next((n for n, c in enumerate(cols) if (c.get("tag") or "").upper() == k.upper()), None) for k in st["row_where"]}
+                hitr = next((r for r, row in enumerate(sh.get("data") or []) if all(i is not None and i < len(row) and ((str(row[i]).strip() != str(v)[1:]) if str(v).startswith("!") else (str(row[i]).strip() == str(v))) for (k, v), i in zip(st["row_where"].items(), ix.values()))), None)
+                if hitr is None: a["steps"].append({"set": st, "error": "조건 맞는 행 없음(앞 500행)"}); continue
+                st = dict(st); st["row"] = hitr; a.setdefault("row_found", hitr)
+            if st.get("popup_ok"):                                # 11-16 열린 팝업의 확인 버튼(ButtonList OK) — 다중 선택 팝업의 SetItem
+                rb = host.send("popup_ok", timeout=120, form=st["popup_ok"], wait=10); R.wait_quiet(R.now(), 2, 60); sweep(host, out, "popup_ok")
+                a["steps"].append({"set": st, "ok": bool(rb.get("ok")), "error": rb.get("error"), "how": rb.get("how"), "closed": rb.get("closed")}); continue
+            if st.get("sleep"): time.sleep(float(st["sleep"])); a["steps"].append({"set": st, "ok": True}); continue
+            if st.get("values"):                                  # 11-16 칸 값 읽기 {"row": n, "cols": [태그…]} — 동작 전후 비교용
+                vv = st["values"]; rr_ = int(vv.get("row", 0))
+                d = host.send("dump", timeout=180, rows=rr_ + 1, **GS).get("data") or {}
+                g = next((x for x in d.get("grids") or [] if not GS.get("grid") or x.get("name") == GS.get("grid")), {})
+                ai = g.get("active_sheet_index"); sh = next((x for i, x in enumerate(g.get("sheets") or []) if str(ai) in ("", "None") or str(i) == str(ai)), {})
+                cols_ = sh.get("columns") or []; row_ = (sh.get("data") or [[]] * (rr_ + 1))[rr_] if len(sh.get("data") or []) > rr_ else []
+                got = {c: (row_[n] if n < len(row_) else None) for c in vv.get("cols") or [] for n in [next((k for k, x in enumerate(cols_) if (x.get("tag") or "").upper() == c.upper()), 10 ** 6)]}
+                a["steps"].append({"set": st, "ok": bool(row_), "values": got}); continue
+            if st.get("cellstate"):                               # 11-16 셀 잠금·색 읽기(그 열만 요약) — SCP0007 수정 두 번째(수정 끔) 뒤 INCOTERMS_SSP 잠금
+                cs_ = st["cellstate"]; r = host.send("cellstate", timeout=300, rows=str(cs_.get("rows", 40)), **GS)
+                cols_ = r.get("cols") or []; lk = r.get("locked") or []
+                ci = next((n for n, c in enumerate(cols_) if str((c or {}).get("tag") if isinstance(c, dict) else c).upper() == cs_["col"].upper()), None)
+                a["steps"].append({"set": st, "ok": bool(r.get("ok")), "error": r.get("error"), "col_index": ci,
+                                   "locked_by_row": [row[ci] for row in lk if ci is not None and ci < len(row)][:60]}); continue
+            if st.get("setc"):                                    # 11-16 컨트롤 값 지정(팝업 폼 포함: form=) — host set 인자 그대로
+                kw = {k: str(v) for k, v in st["setc"].items()}
+                r = host.send("set", timeout=120, **kw); R.wait_quiet(R.now(), 2, 60)
+                a["steps"].append({"set": st, "ok": bool(r.get("ok")), "error": r.get("error"), "applied": r.get("applied")}); continue
+            rr = row_new if st.get("row") == "new" else (a.get("row_found", 0) if st.get("row") == "found" else int(st.get("row", 0)))
+            if st.get("row") == "new" and row_new is None:
+                a["steps"].append({"set": st, "error": "새 행 없음"}); continue
+            if st.get("act") or st.get("method"):
+                kw = dict(st.get("act") or {}); kw = {k: str(v) for k, v in kw.items()}
+                if st.get("method"): kw = {"method": st["method"]}
+                if kw.get("col_tag"):                                  # 11-16 이벤트 인자 열 = 태그·라벨로 찾은 열 번호 · 행 'new' = 이 항목에서 만든 새 행
+                    ci = msg_col_index(host, kw.pop("col_tag"))
+                    if ci is None: a["steps"].append({"set": st, "error": "열 없음"}); continue
+                    kw["col"] = str(ci)
+                if kw.get("row") == "found": kw["row"] = str(a.get("row_found", 0))
+                if kw.get("row") == "new":
+                    if row_new is None: a["steps"].append({"set": st, "error": "새 행 없음"}); continue
+                    kw["row"] = str(row_new)
+                kw.setdefault("wait", "4")
+                if st.get("keep_popup"): kw["close_popup"] = "0"
+                r = host.send("act", timeout=180, **kw); R.wait_quiet(R.now(), 2, 60)
+                if not st.get("keep_popup"): sweep(host, out, "act")
+                a["steps"].append({"set": st, "ok": bool(r.get("ok")), "error": r.get("error"), "did": r.get("did"), "raised": r.get("raised"), "edit_mode": r.get("edit_mode")}); continue
+            if st.get("insert"):
+                d = host.send("dump", timeout=180, rows=1).get("data") or {}
+                gs = dict(GS) or {"grid": ((d.get("grids") or [{}])[0].get("name") or ""), "sheet": "0"}
+                row_new = make_new_row(host, out, gs)
+                a["steps"].append({"set": st, "new_row": row_new, "error": None if row_new is not None else "새 행 없음"}); continue
+            if st.get("click"):
+                ci = msg_col_index(host, st["click"])
+                if ci is None: a["steps"].append({"set": st, "error": "열 없음: %s" % st["click"]}); continue
+                r = host.send("act", timeout=120, cell="%s,%s" % (rr, ci), double=str(st.get("double", 0)), wait=int(st.get("wait", 3)), close_popup="0" if st.get("keep_popup") else "1", **GS)
+                R.wait_quiet(R.now(), 2, 60)
+                if not st.get("keep_popup"): sweep(host, out, "cell_click")
+                a["steps"].append({"set": st, "row": rr, "col": ci, "ok": bool(r.get("ok")), "error": r.get("error"), "popups": [{"form": q.get("form"), "rows": q.get("grid_rows")} for q in r.get("popups") or []]}); continue
+            r = host.send("cell", timeout=60, row=str(rr), col=st["cell"], value=str(st["value"]), mode=st.get("mode", "edit"), **GS)
+            R.wait_quiet(R.now(), 2, 60); sweep(host, out, "cell")
+            x = {k: r.get(k) for k in ("sheet", "row", "col", "before", "after", "locked", "entered", "how", "error", "edit_error")}; x["set"] = st
+            a["steps"].append(x)
+        cs = R.parse_dbprofile(t1, R.now())
+        for x in cs: x["phase"] = "action:msgcell:%s" % it.get("handler")
+        calls += cs
+        a["dialogs"] = [{"text": (x.get("text") or "")[:300], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+        sps = [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))]
+        a["calls"] = sps[:20]; a["save_calls"] = [x for x in sps if re.search(r"SAVE|INSERT|UPDATE|DELETE|_SET_", str(x), re.I)]
+        # 11-16 잠긴 칸에 값 지정(SetValue)한 단계가 있으면 사용자가 할 수 없는 경로 → 메시지는 정답 근거 아님
+        lk = [x["set"].get("cell") for x in a["steps"] if isinstance(x.get("set"), dict) and x["set"].get("cell") and x.get("locked") in (True, "True", 1, "1") and x["set"].get("mode", "edit") == "value"]
+        if lk: a["non_user_path"] = "잠긴 칸 값 지정: %s" % ",".join(map(str, lk))
+        a["ok"] = all(not x.get("error") for x in a["steps"])
+        if it.get("open"):
+            try: a["screens_after"] = host.send("ping", timeout=30).get("forms")
+            except Exception: pass
+            close_screen(host, out)                                # 열린 하위 화면 먼저 닫고 아래에서 시작 화면 닫음
+        out["acts"].append(a)
+        print("   %s · 단계 %s · 메시지 %s%s" % (it.get("handler"), ["%s%s" % (json.dumps(x["set"], ensure_ascii=False), (" → " + str(x.get("after"))) if "after" in x else "") + (" 오류 " + str(x.get("error"))[:60] if x.get("error") else "") for x in a["steps"]],
+              [d["text"][:60] for d in a["dialogs"]] or 0, " · 저장 계열 호출 " + ",".join(map(str, a["save_calls"])) if a["save_calls"] else ""), flush=True)
+        close_screen(host, out)
+        if out.get("restart"): break
+    X.close_new(xb, X.host_pids())
+    return out, calls
+
+
+def new_rows(gd):
+    """그리드 차이에서 새로 생긴 행 번호(행 수가 늘어난 시트의 '(행)' 생김 + 바뀐 셀의 행)"""
+    out = {}
+    for g in gd or []:
+        if "cells" not in g or (g.get("rows_after") or 0) <= (g.get("rows_before") or 0): continue
+        rs = sorted({c["row"] for c in g["cells"] if c.get("col") == "(행)" and c.get("after") == "있음"} | {c["row"] for c in g["cells"] if c.get("col") == "Action"})
+        out[g["sheet"]] = rs or [0]
+    return out
+
+
+_PROG = {}
+
+
+def program_info(mid):
+    """메뉴 덤프(GSCM/_build_logs/menu_jaeuk_admin.csv)의 ProgramPath·ClassName — 없으면 {}"""
+    if not _PROG:
+        import csv as _csv
+        _csv.field_size_limit(1 << 30)
+        f = P("GSCM", "_build_logs", "menu_jaeuk_admin.csv")
+        if os.path.exists(f):
+            for r in _csv.DictReader(io.open(f, encoding="utf-8-sig", errors="replace")):
+                if r.get("ProgramID") and r.get("ClassName"): _PROG.setdefault(r["ProgramID"].upper(), {"path": r.get("ProgramPath") or "", "cls": r["ClassName"]})
+        _PROG.setdefault("__loaded__", {})
+    return _PROG.get(mid.upper()) or {}
+
+
+def screen_src_file(mid):
+    """화면 메인 원문 .cs: 메뉴 ClassName 의 클래스 이름 파일(<클래스>.cs, Designer 제외).
+    사본이 여럿이면 ProgramPath 가 화면 전용 DLL(경로에 \\ 포함)일 때 <ID>_*.UIL 폴더, 아니면 ProgramPath DLL 이름의 프로젝트 폴더. 메뉴 정보가 없으면 <ID>_*.cs 중 화면 폴더 우선"""
+    pi = program_info(mid); cls = (pi.get("cls") or "").split(".")[-1]
+    fs = [f for f in glob.glob(P("GSCM", "06.UIL", "**", (cls or mid + "_*") + ".cs"), recursive=True) if not f.endswith(".Designer.cs")]
+    if cls and not fs:
+        fs = [f for f in glob.glob(P("GSCM", "06.UIL", "**", mid + "_*.cs"), recursive=True) if not f.endswith(".Designer.cs") and re.search(r"partial\s+class\s+%s\b" % re.escape(cls), _src_text(os.path.basename(f)))]
+    path = (pi.get("path") or "").replace("/", "\\"); proj = os.path.splitext(os.path.basename(path))[0].upper()
+    def rank(f):
+        parts = [x.upper() for x in f.replace("/", "\\").split("\\")]
+        if "\\" in path: return (0 if any(x.startswith(mid.upper() + "_") for x in parts[-3:-1]) else 1, len(f))
+        if proj: return (0 if proj in parts else 1, len(f))
+        return (0 if os.path.basename(os.path.dirname(f)).upper().startswith(mid.upper() + "_") else 1, len(f))
+    fs.sort(key=rank)
+    return fs[0] if fs else None
+
+
+def _method_body(t, name):
+    """메서드 본문(중괄호 안)과 시작 줄 번호 — 없으면 (None, None)"""
+    m = re.search(r"(?:override|private|protected|public)[^\n;{]*\b%s\s*\([^)]*\)\s*\{" % re.escape(name), t)
+    if not m: return None, None
+    i = m.end(); dep = 1; j = i
+    while j < len(t) and dep:
+        if t[j] == "{": dep += 1
+        elif t[j] == "}": dep -= 1
+        j += 1
+    return t[i:j - 1], t.count("\n", 0, m.start()) + 1
+
+
+def _code_only(b):
+    b = re.sub(r"/\*.*?\*/", "", b or "", flags=re.S); b = re.sub(r"//[^\n]*", "", b)
+    return b.strip()
+
+
+def save_unconfirmed(mid, depth=4):
+    """저장 안전장치(11-15 · 검증 위반 모드 전용): SaveButton 부터 화면 메서드를 따라가며(깊이 4) 저장 SP 요청(FoxDataRequest("…SAVE…"))이
+    그 메서드 안에서 확인 창(DialogResult)보다 먼저 나오는 경로를 찾는다. 하나라도 있으면 [(메서드, 줄, SP)] 를 돌려준다(→ 저장 버튼을 누르지 않음).
+    사례: SSP0015 SaveData_Detail 5841행 SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40 · 확인 창 없음(5905행 MSG00324 는 저장 뒤)"""
+    f = screen_src_file(mid)
+    if not f: return [("?", 0, "원문 없음")]
+    t = io.open(f, encoding="utf-8-sig", errors="replace").read()
+    names = set(re.findall(r"(?:void|bool|DataSet|Task\S*|int|string)\s+(\w+)\s*\(", t))
+    hits = []; seen = set(); todo = [("SaveButton", 0)]
+    while todo:
+        nm, dp = todo.pop(0)
+        if nm in seen: continue
+        seen.add(nm); b, ln = _method_body(t, nm)
+        if b is None: continue
+        code = _code_only(b)
+        sv = re.search(r'FoxDataRequest\(\s*"[^"]*SAVE[^"]*"', code, re.I)
+        cf = re.search(r"DialogResult", code)
+        if sv and (not cf or cf.start() > sv.start()):
+            hits.append((nm, ln, re.search(r'"([^"]+)"', sv.group(0)).group(1)))
+        if dp < depth:
+            for c in re.findall(r"\b(\w+)\s*\(", code):
+                if c in names and c not in seen and c != nm: todo.append((c, dp + 1))
+    return hits
+
+
+def insert_targets(mid):
+    """행 추가 원문 분석 → {"file", "exists", "evidence", "targets": [{"si", "grid", "sheet_key", "sheet_name", "line"}]}"""
+    f = screen_src_file(mid); o = {"file": f, "exists": False, "targets": []}
+    if not f: o["evidence"] = "원문 없음"; return o
+    t = io.open(f, encoding="utf-8-sig", errors="replace").read(); rel = os.path.relpath(f, P())
+    b, ln = _method_body(t, "InsertButton")
+    if b is None: o["evidence"] = "%s: InsertButton 오버라이드 없음(BaseForm 빈 virtual)" % rel; return o
+    code = _code_only(b)
+    if not code: o["evidence"] = "%s:%d InsertButton 본문 비어 있음(주석만)" % (rel, ln); return o
+    bodies = [(b, ln)]
+    for cm in re.findall(r"\b(\w+)\s*\(\s*\)\s*;", code):
+        if cm in ("InsertButton",): continue
+        b2, l2 = _method_body(t, cm)
+        if b2 is not None: bodies.append((b2, l2))
+    has_code = lambda x: bool(_code_only(x)) and not re.fullmatch(r"(?:[\w.]+\s*\(\s*\)\s*;\s*)+", _code_only(x))
+    if not any(has_code(x) for x, _ in bodies):
+        o["evidence"] = "%s:%d InsertButton 본문에 행 추가 코드 없음(호출 메서드 %s)" % (rel, ln, ", ".join("%d행" % l for _, l in bodies[1:]) or "없음"); return o
+    o["exists"] = True; o["evidence"] = "%s:%d InsertButton" % (rel, ln)
+    for x, l0 in bodies:
+        xc = _code_only(x)
+        for m in re.finditer(r"\b(si\w+)\s*\.\s*ActiveSheet\s*\.\s*SheetName\s*==\s*(?:SpdSheet\s*\.\s*)?(sht\w+)", xc):
+            si, key = m.group(1), m.group(2)
+            if any(z["si"] == si and z["sheet_key"] == key for z in o["targets"]): continue
+            o["targets"].append({"si": si, "grid": "spd" + si[2:], "sheet_key": key, "sheet_name": sheet_const(mid, key), "body_line": l0})
+    return o
+
+
+def _grid_sheet(d, grid, sheet_name):
+    g = next((g for g in (d.get("grids") or []) if (g.get("name") or "").lower() == grid.lower()), None)
+    if not g: return None, None
+    for i, sh in enumerate(g.get("sheets") or []):
+        if _norm(sh.get("name")) == _norm(sheet_name or ""): return {"grid": g.get("name"), "sheet": str(i)}, sh
+    return None, None
+
+
+def run_insert(host, mid, group, violate=False):
+    """행 추가(11-15): 조회 → 행 추가 버튼(BaseForm.OnClickInsertButton, 권한·CheckValidation 포함 사용자 경로) → 늘어난 행·새 행 값·새 행 셀 잠금·색·메시지 기록.
+    violate=True 면 이어서 빈 새 행 그대로 저장 버튼(OnClickSaveButton)을 실행해 저장 전 검증 메시지를 기록한다. 대화상자 정책 no = 저장 확인 창은 아니오(저장하지 않음)."""
+    out = {"id": mid, "group": group, "insert": True, "violate": violate, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    it = insert_targets(mid); out["insert_src"] = it
+    print("   행 추가 원문 · %s · %s · 대상 시트 %s" % ("있음" if it["exists"] else "없음", it.get("evidence"), [(z["grid"], z["sheet_name"] or z["sheet_key"]) for z in it["targets"]] or "-"), flush=True)
+    if not open_and_find(host, mid, out, edit=False): close_screen(host, out); return out, []
+    host.send("policy", timeout=30, dialogs="no")
+    calls = []; xb = X.snap()
+    main_grid = (GS.get("grid") or "").lower()
+    other = [z for z in it["targets"] if z["grid"].lower() != main_grid]
+    if other:
+        # 원문 InsertRow 가 다른 그리드 시트를 요구: 상세 행 채우기 → 시트 셀 클릭(fps) → 수정 → 행 추가. 대상 시트마다 1회
+        plan = dbl_plan(mid); fd = [f for f in plan if f.get("col_after") and f["grid"].lower() != other[0]["grid"].lower()]
+        tried = set(); out["detail_insert"] = []
+        for z in other:
+            rec = {"target": z}; out["detail_insert"].append(rec)
+            d = host.send("dump", timeout=180, rows=1).get("data") or {}
+            gs2, sh = _grid_sheet(d, z["grid"], z["sheet_name"])
+            if gs2 is None: rec["why"] = "시트 %s/%s 못 찾음" % (z["grid"], z["sheet_name"]); print("   상세 행 추가 %s/%s 건너뜀 · %s" % (z["grid"], z["sheet_name"], rec["why"]), flush=True); continue
+            if not int(sh.get("rows") or 0) and fd:
+                feed_detail(host, out, fd[0], {"grid": z["grid"], "col": z["sheet_name"]}, tried)
+                d = host.send("dump", timeout=180, rows=1).get("data") or {}; gs2, sh = _grid_sheet(d, z["grid"], z["sheet_name"])
+            n0 = int((sh or {}).get("rows") or 0); rec["rows_before"] = n0
+            vis = [c for c in ((sh or {}).get("columns") or []) if str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1]
+            if n0 and vis:
+                fr = host.send("act", timeout=60, cell="0,%s" % vis[0].get("index"), double="0", wait=2, **gs2); rec["focus"] = {"ok": bool(fr.get("ok")), "error": fr.get("error")}
+            else:
+                rec["focus"] = "행 없음 · 시트만 활성(%s)" % gs2
+                host.send("cellstate", timeout=60, **dict(gs2, **{"from": "0", "rows": "0"}))
+                # 11-15: 행이 없어 셀을 누를 수 없으면 그 그리드의 CellClick 이벤트를 일으켜 BaseForm fps 를 그 그리드로 맞춘다(SSP0015 Hold stock · EditButton 1861행 fps.Name == "spdDetail")
+                rr = host.send("act", timeout=60, **{"target": z["grid"], "raise": "CellClick", "row": "0", "col": "0", "wait": "2"})
+                rec["focus"] += " · CellClick 이벤트 %s" % ("성공" if rr.get("ok") else "실패 " + str(rr.get("error"))[:80])
+            sweep(host, out, None); td = R.now(); dd0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+            er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton"); er["edit_mode"] = edit_by_action(host, er)[0]; rec["edit_mode"] = er.get("edit_mode")
+            g0 = grid_snap(host, rows=60)
+            ir = host.send("act", timeout=120, method="OnClickInsertButton", wait=6); R.wait_quiet(td, 3, 90); late = sweep(host, out, "OnClickInsertButton")
+            cs = R.parse_dbprofile(td, R.now())
+            for x in cs: x["phase"] = "action:insert_detail"
+            calls.extend(cs); g1 = grid_snap(host, rows=60); gd = grid_diff(g0, g1); nr = new_rows(gd)
+            dl = [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[dd0:]]
+            a = {"control": "OnClickInsertButton", "kind": "insert_detail", "target": "%s/%s" % (z["grid"], z["sheet_name"]), "ok": bool(ir.get("ok")), "error": ir.get("error"), "edit_mode": er.get("edit_mode"), "popups": (ir.get("popups") or []) + late,
+                 "dialogs": dl, "calls": [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20], "grid_changes": gd, "new_rows": nr, "rows_before": n0}
+            if nr:
+                r0 = min(min(v) for v in nr.values())
+                st = host.send("cellstate", timeout=180, **dict(gs2, **{"from": str(r0), "rows": "1"}))
+                if st.get("ok"): st.pop("ok", None); a["new_row_state"] = st
+            out["acts"].append(a)
+            ns = a.get("new_row_state") or {}; lk = (ns.get("locked") or [""])[0]
+            print("   상세 행 추가 %s · 상세 행 %d · 수정 모드 %s · 늘어난 행 %s · 새 행 잠김 %d · 열림 %d · 메시지 %s" % (a["target"], n0, "켜짐" if er.get("edit_mode") else "안 켜짐", {k: len(v) for k, v in nr.items()} or 0, lk.count("1"), lk.count("0"), [x["text"][:40] for x in dl] or 0), flush=True)
+            if violate and nr and not out.get("restart") and save_unconfirmed(mid):
+                out["acts"].append({"control": "OnClickSaveButton", "kind": "save_violate_detail", "target": a["target"], "ok": False, "skipped": "저장 확인 창 없음 · 실저장 위험 · 저장 미실행", "unconfirmed": save_unconfirmed(mid)})
+                print("   저장 위반 시험 건너뜀 · 확인 창 없이 저장하는 경로 %s" % save_unconfirmed(mid)[:3], flush=True)
+            elif violate and nr and not out.get("restart"):
+                t2 = R.now(); d1 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+                sr = host.send("act", timeout=180, method="OnClickSaveButton", wait=8); R.wait_quiet(t2, 3, 120); late2 = sweep(host, out, "OnClickSaveButton")
+                cs2 = R.parse_dbprofile(t2, R.now())
+                for x in cs2: x["phase"] = "action:save_violate_detail"
+                calls.extend(cs2)
+                dl2 = [{"text": (x.get("text") or "")[:300], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d1:]]
+                sp_save = [x.get("sp") for x in cs2 if "UP_FX_" not in str(x.get("sp"))]
+                out["acts"].append({"control": "OnClickSaveButton", "kind": "save_violate_detail", "target": a["target"], "ok": bool(sr.get("ok")), "error": sr.get("error"), "popups": (sr.get("popups") or []) + late2, "dialogs": dl2, "calls": sp_save[:20]})
+                print("   상세 빈 새 행 저장 · 메시지 %s · 호출 %s" % ([x["text"][:60] for x in dl2] or 0, sp_save[:5] or 0), flush=True)
+            if out.get("restart"): break
+            # 다음 대상 전에 화면을 다시 열어 같은 상태에서 시작한다
+            if z is not other[-1]:
+                close_screen(host, out)
+                if not open_and_find(host, mid, out, edit=False): break
+                host.send("policy", timeout=30, dialogs="no")
+        X.close_new(xb, X.host_pids()); close_screen(host, out)
+        return out, calls
+
+    def _ins(phase):
+        g0 = grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        rr = host.send("act", timeout=120, method="OnClickInsertButton", wait=6)
+        R.wait_quiet(t1, 3, 90); late = sweep(host, out, "OnClickInsertButton")
+        cs = R.parse_dbprofile(t1, R.now())
+        for x in cs: x["phase"] = phase
+        calls.extend(cs); g1 = grid_snap(host, rows=60); gd = grid_diff(g0, g1)
+        dl = [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+        nr = new_rows(gd)
+        return rr, g1, nr, {"control": "OnClickInsertButton", "kind": "insert", "ok": bool(rr.get("ok")), "error": rr.get("error"), "edit_mode": rr.get("edit_mode"), "popups": (rr.get("popups") or []) + late,
+                            "dialogs": dl, "calls": [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20], "grid_changes": gd, "new_rows": nr}
+    rr, g1, nr, a = _ins("action:insert")
+    dl = a["dialogs"]
+    if not nr and any("수정모드" in (x.get("text") or "") for x in dl):
+        # AS-IS 사용자 경로: 셀 클릭(BaseForm.fps) → 수정(F2) → 행 추가. 수정 모드 없이 누른 결과(메시지)는 그대로 남긴다
+        a["kind"] = "insert_no_edit"; out["acts"].append(a)
+        out["edit_focus"] = focus_grid(host); sweep(host, out, None)
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton"); er["edit_mode"] = edit_by_action(host, er)[0]; out["edit_mode"] = er.get("edit_mode")
+        print("   수정 모드 %s · 행 추가 다시" % ("켜짐" if er.get("edit_mode") else "켜지지 않음"), flush=True)
+        rr, g1, nr, a = _ins("action:insert_edit"); a["after_edit"] = True; dl = a["dialogs"]
+    if nr:
+        r0 = min(min(v) for v in nr.values())
+        st = host.send("cellstate", timeout=180, **dict(GS, **{"from": str(r0), "rows": "1"}))
+        if st.get("ok"): st.pop("ok", None); a["new_row_state"] = st
+        else: a["new_row_state_error"] = st.get("error")
+    out["acts"].append(a)
+    ns = a.get("new_row_state") or {}; lk = (ns.get("locked") or [""])[0]
+    print("   행 추가 · %s · 늘어난 행 %s · 새 행 잠김 %d · 열림 %d · 메시지 %s" % ("실행" if rr.get("ok") else "실패 " + str(rr.get("error"))[:80], {k: len(v) for k, v in nr.items()} or 0, lk.count("1"), lk.count("0"), [x["text"][:40] for x in dl] or 0), flush=True)
+    uc = save_unconfirmed(mid) if violate and nr else []
+    if uc and not out.get("restart"):
+        out["acts"].append({"control": "OnClickSaveButton", "kind": "save_violate", "ok": False, "skipped": "저장 확인 창 없음 · 실저장 위험 · 저장 미실행", "unconfirmed": uc})
+        print("   저장 위반 시험 건너뜀 · 확인 창 없이 저장하는 경로 %s" % uc[:3], flush=True)
+    elif violate and nr and not out.get("restart"):
+        t2 = R.now(); d1 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        sr = host.send("act", timeout=180, method="OnClickSaveButton", wait=8)
+        R.wait_quiet(t2, 3, 120); late2 = sweep(host, out, "OnClickSaveButton")
+        cs2 = R.parse_dbprofile(t2, R.now())
+        for x in cs2: x["phase"] = "action:save_violate"
+        calls += cs2
+        dl2 = [{"text": (x.get("text") or "")[:300], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d1:]]
+        sp_save = [x.get("sp") for x in cs2 if "UP_FX_" not in str(x.get("sp"))]
+        out["acts"].append({"control": "OnClickSaveButton", "kind": "save_violate", "ok": bool(sr.get("ok")), "error": sr.get("error"), "popups": (sr.get("popups") or []) + late2,
+                            "dialogs": dl2, "calls": sp_save[:20], "grid_changes": grid_diff(g1, grid_snap(host, rows=60))})
+        print("   빈 새 행 저장 · 메시지 %s · 호출 %s" % ([x["text"][:60] for x in dl2] or 0, sp_save[:5] or 0), flush=True)
+    X.close_new(xb, X.host_pids())
+    close_screen(host, out)
+    return out, calls
+
+
+def timed_out(c):
+    t = str(c.get("inline") or "")
+    return "EXCEPTION" in t and bool(re.search(r"제한 시간|시간.{0,4}초과|timeout|timed out", t, re.I))
+
+
+def grid_snap_form(host, form, rows=300):
+    """열려 있는 팝업 폼의 그리드 값"""
+    return grid_snap(host, rows=rows, form=form)
+
+
+def grid_snap(host, rows=300, form="", raw=False):
+    """화면 그리드의 현재 값(앞 rows 행) — {"그리드/시트": {"rows": 전체 행 수, "cols": [열 이름], "data": [[셀…]…]}} · form 을 주면 그 팝업 폼의 그리드"""
+    kw = dict(rows=rows); 
+    if form: kw["form"] = form
+    if raw: kw["raw"] = "1"                                   # 표시 글자 옆에 셀의 원래 값("values")도 받는다
+    try: d = host.send("dump", timeout=180, **kw).get("data") or {}
+    except Exception: return {}
+    out = {}
+    for g in d.get("grids") or []:
+        for sh in g.get("sheets") or []:
+            cols = [(c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index"))) for c in sh.get("columns") or []]
+            out["%s/%s" % (g.get("name"), sh.get("name"))] = {"rows": sh.get("rows"), "cols": cols, "data": sh.get("data") or []}
+            if raw: out["%s/%s" % (g.get("name"), sh.get("name"))]["values"] = sh.get("values") or []
+    return out
+
+
+def grid_diff(a, b, cap=60):
+    """버튼 전후 그리드 차이 — 행 수 변화와 바뀐 셀(행 번호·열 이름·전→후). 덤프한 앞쪽 행만 비교한다(한계)."""
+    out = []
+    for k in sorted(set(a) | set(b)):
+        x, y = a.get(k), b.get(k)
+        if x is None or y is None: out.append({"sheet": k, "change": "시트 %s" % ("생김" if x is None else "없어짐")}); continue
+        e = {"sheet": k, "rows_before": x["rows"], "rows_after": y["rows"], "cells": [], "more": 0}
+        for i in range(max(len(x["data"]), len(y["data"]))):
+            ra = x["data"][i] if i < len(x["data"]) else None; rb = y["data"][i] if i < len(y["data"]) else None
+            if ra == rb: continue
+            if ra is None or rb is None:
+                if len(e["cells"]) < cap: e["cells"].append({"row": i, "col": "(행)", "before": "없음" if ra is None else "있음", "after": "있음" if ra is None else "없음"})
+                else: e["more"] += 1
+                continue
+            for j in range(max(len(ra), len(rb))):
+                va = ra[j] if j < len(ra) else None; vb = rb[j] if j < len(rb) else None
+                if va != vb:
+                    if len(e["cells"]) < cap: e["cells"].append({"row": i, "col": y["cols"][j] if j < len(y["cols"]) else str(j), "before": va, "after": vb})
+                    else: e["more"] += 1
+        if e["cells"] or e["more"] or x["rows"] != y["rows"]: out.append(e)
+    return out
+
+
+def sweep(host, out, control):
+    """떠 있는 팝업·예외 창을 닫고 목록을 돌려준다. 닫지 못한 창·메시지 상자가 남으면 out["restart"] 를 세운다."""
+    try: sw = host.send("sweep", timeout=150)
+    except Exception as ex: sw = {"ok": False, "error": str(ex)}
+    if not sw.get("ok"):
+        out["restart"] = True; out.setdefault("sweep_errors", []).append({"control": control, "error": str(sw.get("error"))[:200]}); return []
+    if (sw.get("left") or 0) > 0 or (sw.get("dialogs_open") or 0) > 0:
+        time.sleep(4)
+        try: sw2 = host.send("sweep", timeout=150)
+        except Exception: sw2 = {}
+        sw["closed"] = (sw.get("closed") or []) + (sw2.get("closed") or [])
+        if not sw2.get("ok") or (sw2.get("left") or 0) > 0 or (sw2.get("dialogs_open") or 0) > 0:
+            out["restart"] = True; out.setdefault("sweep_errors", []).append({"control": control, "left": sw2.get("left"), "dialogs_open": sw2.get("dialogs_open")})
+    return sw.get("closed") or []
+
+
+def parse_preset(tok):
+    """'이름=i2' → {"name","kind","arg","kw","label"} · 형식이 아니면 None"""
+    m = re.match(r"^(\w+)=(i\d+|c[TF]|k\d+)$", tok.strip())
+    if not m: return None
+    n, v = m.group(1), m.group(2)
+    if v[0] == "i": return {"name": n, "token": tok.strip(), "kw": dict(name=n, index=v[1:]), "label": "%s 콤보 %s번째 항목" % (n, v[1:])}
+    if v[0] == "c": return {"name": n, "token": tok.strip(), "kw": dict(name=n, prop="Checked", value="True" if v[1] == "T" else "False"), "label": "%s 체크 %s" % (n, "켬" if v[1] == "T" else "끔")}
+    return {"name": n, "token": tok.strip(), "kw": dict(name=n, check=v[1:], only="1"), "label": "%s 체크 목록 %s번째만 체크" % (n, v[1:])}
+
+
+def apply_preset(host, out, preset):
+    """조회 조건 값을 정해 놓는다(조회 전). 채움 규칙이 되돌리지 않도록 잠근다. 적용 뒤 그 컨트롤의 값·글자·체크를 읽어 적는다(조건식의 값과 맞춰 보는 근거). 반환 True = 적용됨"""
+    real = next((c.get("name") for c in F.raw(host) if str(c.get("name") or "").lower() == preset["name"].lower()), None)
+    if not real: out["preset"] = dict(preset, ok=False, error="화면에 보이는 컨트롤이 아님"); return False
+    kw = dict(preset["kw"], name=real); t = R.now(); r = host.send("set", timeout=120, **kw); R.wait_quiet(t, 2, 60); F.LOCK.add(real)
+    c = next((c for c in F.raw(host) if c.get("name") == real), {})
+    out["preset"] = dict(preset, name=real, kw=kw, ok=bool(r.get("ok")), error=r.get("error"), applied=r.get("applied"),
+                         value=str(c.get("control_values") or ""), text=str(c.get("text") or "")[:80], checked=c.get("checked"), selected_index=c.get("selected_index"))
+    return bool(r.get("ok"))
+
+
+def run_screen(host, mid, group, edit=False, only=None, division="", group_run=False, preset=None):
+    group_run = bool(group_run or preset)                    # 조건 값을 정한 실행도 조회 자체가 관찰 대상이고, 이미 누른 버튼을 그 조건으로 다시 누른다
+    todo, skipped = plan(mid)
+    if only is not None:                                     # 수정 모드 재실행: 지정한 버튼만(실행 여부와 무관하게 다시 누른다)
+        todo = [{"control": c, "scenarios": ids_of(mid, c)} for c in only]
+    if (division or group_run) and only is None:             # Division·그룹을 바꿔 실행: 이미 실행된 버튼도 그 조건으로 다시 누른다
+        todo = [{"control": c, "scenarios": ids_of(mid, c)} for c in sorted({t["control"] for t in todo} | set(pressed_before(mid)))]
+    out = {"id": mid, "group": group, "edit": edit, "division": division, "acts": [], "skipped": skipped, "at": R.ts(R.now()) if hasattr(R, "ts") else ""}
+    if not todo and not division and not group_run: out["note"] = "누를 버튼 없음"; return out, []
+    sweep(host, out, None)                                   # 앞 화면이 남긴 창이 있으면 먼저 닫는다
+    if out.get("restart"): out["error"] = "시작 전 남은 창을 닫지 못함"; return out, []
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); out["restart"] = True; return out, []
+    R.wait_quiet(R.now(), 3, 60)
+    F.LOCK.clear()
+    if division:
+        if not set_division(host, out, division):
+            host.send("close_screen", timeout=60); sweep(host, out, None)
+            out["note"] = out.get("division_note") or ("Division %s 설정 실패: %s" % (division, (out.get("division_set") or {}).get("error"))); return out, []
+    if preset:
+        if not apply_preset(host, out, preset):
+            host.send("close_screen", timeout=60); sweep(host, out, None)
+            out["note"] = "조건 값 설정 실패(%s): %s" % (preset["token"], (out.get("preset") or {}).get("error")); return out, []
+        print("   조건 %s → 값 '%s' 글자 '%s'" % (preset["label"], out["preset"].get("value"), out["preset"].get("text")), flush=True)
+    try: fills, left = F.prefill(host, mid)
+    except Exception as ex: fills, left = [], [str(ex)[:150]]
+    out["fills"] = len(fills); out["fill_left"] = left
+    t0 = R.now(); d0f = len((host.send("dialogs", timeout=30).get("dialogs") or [])); host.send("find", timeout=60); R.wait_find(host, t0, 0, 300)
+    calls0 = []
+    if division or group_run:
+        # Division·그룹을 바꾼 실행은 조회 자체가 관찰 대상이다(조회 SP 인자·건수, 메시지) — 누를 버튼이 없는 화면도 이 기록은 남긴다
+        n0, _s0 = R.db_inflight()
+        if n0: R.wait_db_clear(900)
+        calls0 = R.parse_dbprofile(t0, R.now())
+        for c in calls0: c["phase"] = "find"
+        dlf = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0f:]
+        out["acts"].append({"control": "(조회)", "kind": "find", "ok": True, "error": None, "popups": [], "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dlf],
+                            "calls": [c.get("sp") for c in calls0 if "UP_FX_" not in str(c.get("sp"))][:20], "rows": [(c.get("sp"), c.get("rows")) for c in calls0 if "UP_FX_" not in str(c.get("sp")) and " " not in str(c.get("sp"))][:20],
+                            "asis_timeout": sorted({str(c.get("sp")) for c in calls0 if timed_out(c)}), "scenarios": []})
+        print("   (조회) · 호출 %d · 메시지 %d" % (len(calls0), len(dlf)), flush=True)
+    if edit:
+        # AS-IS 는 수정 모드(Edit F2)를 켜야 입력 버튼 분기가 실행된다(BaseForm.OnClickEditButton — 화면 상태만 바꾼다).
+        # 수정 모드에서 화면을 닫으면 저장 확인 창이 뜰 수 있다 → 이 화면이 닫힐 때까지 대화상자 정책을 "아니오"로 둔다(저장하지 않음).
+        host.send("policy", timeout=30, dialogs="no")
+        d0e = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); sweep(host, out, "OnClickEditButton")
+        out["edit_mode"] = er.get("edit_mode"); out["edit_dialogs"] = [(x.get("text") or "")[:200] for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0e:]]
+        print("   수정 모드 %s%s" % ("켜짐" if er.get("edit_mode") else "켜지지 않음", (" · 메시지 " + " / ".join(out["edit_dialogs"])) if out["edit_dialogs"] else ""), flush=True)
+        if not er.get("edit_mode"):
+            host.send("close_screen", timeout=60); sweep(host, out, None); host.send("policy", timeout=30, dialogs="default")
+            out["note"] = "수정 모드가 켜지지 않아 버튼을 누르지 않음"; return out, []
+    calls = list(calls0); xb = X.snap()                      # 지금 떠 있는 Excel = 사용자 것(닫지 않을 기준)
+    for it in todo:
+        g0 = grid_snap(host) if edit else {}                 # 수정 모드: 버튼이 화면 안 값만 바꾸는 경우가 있어 전후 그리드를 비교한다
+        t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        r = host.send("act", timeout=120, click=it["control"], wait=8)
+        R.wait_quiet(t1, 3, 120)
+        n, _sec = R.db_inflight()
+        if n: R.wait_db_clear(900)
+        cs = R.parse_dbprofile(t1, R.now())
+        # AS-IS 서버 호출이 시간 초과로 끝나면 결과가 비어 TO-BE 와 맞댈 수 없다(11-13 SCM0002_GET_ITEM_BY_DIVISION_POPUP 30초 초과 2회 실측) →
+        #   뜬 창을 정리하고 DB 가 비기를 기다린 뒤 한 번 더 누른다(앞 실행이 읽어 둔 페이지 덕에 두 번째는 빨라지는 경우가 있다). 그래도 초과면 "조회 불가"로 남긴다.
+        tmo = [c.get("sp") for c in cs if timed_out(c)]; retried = False
+        if tmo and not edit:
+            sweep(host, out, it["control"]); R.wait_db_clear(300); retried = True
+            t1b = R.now(); r = host.send("act", timeout=120, click=it["control"], wait=8); R.wait_quiet(t1b, 3, 120)
+            n, _sec = R.db_inflight()
+            if n: R.wait_db_clear(900)
+            cs2 = R.parse_dbprofile(t1b, R.now()); cs = cs + cs2
+            tmo = [c.get("sp") for c in cs2 if timed_out(c)]
+        for c in cs: c["phase"] = "action:" + it["control"]
+        calls += cs
+        late = sweep(host, out, it["control"])               # 늦게 뜬 팝업·예외 창까지 기록하고 닫는다(11-13 창 쌓임 결함 보정)
+        if late: r["popups"] = (r.get("popups") or []) + [dict(p, late=True) for p in late]
+        gd = grid_diff(g0, grid_snap(host)) if edit and not out.get("restart") else []
+        xr = X.close_new(xb, X.host_pids())                  # 이 버튼이 띄운 Excel: 문서 이름·시트 행 수 기록 뒤 닫기(사용자 문서는 유지)
+        dl = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]
+        out["acts"].append({"control": it["control"], "ok": bool(r.get("ok")), "error": r.get("error"), "popups": r.get("popups"), "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dl],
+                            "calls": [c.get("sp") for c in cs if "UP_FX_" not in str(c.get("sp"))][:20], "scenarios": it["scenarios"], "retried": retried, "asis_timeout": sorted(set(str(x) for x in tmo)),
+                            "grid_changes": gd, "excel": xr.get("closed") or [], "excel_left": xr.get("left") or [], "excel_error": xr.get("error")})
+        print("   %s · %s · 팝업 %s · 대화상자 %d · 호출 %d · Excel %s%s" % (it["control"], "실행" if r.get("ok") else "실패", [p.get("form") for p in (r.get("popups") or [])], len(dl), len(cs), [(x.get("name") or x.get("title"), "닫음" if x.get("closed") else "못 닫음") for x in xr.get("closed") or []] or 0, (" — " + str(r.get("error"))[:90]) if not r.get("ok") else ""), flush=True)
+        if retried: print("      서버 호출 시간 초과 → 다시 누름 · %s" % ("이번에는 정상" if not tmo else "다시 초과 — AS-IS 조회 불가: " + ", ".join(sorted(set(str(x) for x in tmo)))), flush=True)
+        if gd: print("      그리드 변화: " + " ; ".join("%s 행 %s→%s · 바뀐 셀 %d%s" % (g.get("sheet"), g.get("rows_before"), g.get("rows_after"), len(g.get("cells") or []), ("+" + str(g["more"])) if g.get("more") else "") if "cells" in g else "%s %s" % (g["sheet"], g["change"]) for g in gd)[:300], flush=True)
+        if out.get("restart"): print("   남은 창을 닫지 못함 → 이 화면 중단 · 런처 다시 시작", flush=True); break
+    if not out.get("restart"):
+        d0c = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        if edit: host.send("policy", timeout=30, dialogs="close")      # "이 화면을 닫으시겠습니까?"(MSG00013)에만 예 = 저장 없이 닫기 · 저장 확인류는 아니오
+        cr = host.send("close_screen", timeout=60); time.sleep(2 if edit else 0)
+        if edit and (cr.get("open_screens") or 0) != 0: cr = host.send("close_screen", timeout=60)
+        sweep(host, out, None)
+        out["close"] = {"open_screens": cr.get("open_screens"), "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0c:]]}
+        if edit and (cr.get("open_screens") or 0) != 0: out["restart"] = True; out.setdefault("sweep_errors", []).append({"control": "close_screen", "open_screens": cr.get("open_screens")})
+    if edit:
+        try: host.send("policy", timeout=30, dialogs="default")
+        except Exception: pass
+    time.sleep(2); xr = X.close_new(xb, X.host_pids())      # 늦게 뜬 Excel
+    if xr.get("closed") or xr.get("left"): out["excel_late"] = xr.get("closed") or []; out["excel_left"] = xr.get("left") or []
+    return out, calls
+
+
+def main():
+    av = sys.argv[1:]; gtok = []
+    if "--group" in av:                                      # 그룹 이름에 공백이 있다("SCP Planner") — VM 은 입력값을 공백으로 쪼개 넘기므로 다음 옵션 전까지를 이어 붙인다
+        i = av.index("--group") + 1
+        while i < len(av) and not av[i].startswith("--"): gtok.append(av[i]); i += 1
+    group = " ".join(gtok).strip()
+    if group in ("-", "현재", "(현재)"): group = ""
+    rest = list(av)
+    for g in gtok: rest.remove(g)
+    ids = [a.upper() for a in rest if not a.startswith("-")]
+    if "--groups-list" in av:                                # 이 계정이 가진 그룹(권한) 목록과 현재 그룹만 읽는다 — 화면은 열지 않는다
+        if not R.acquire_lock("groups"): print("[ERROR] 다른 AS-IS 실측이 끝나지 않음"); return 3
+        host, info, why = R.start_session(P("Doc", "asislive", "_cmd_groups_" + time.strftime("%H%M%S")))
+        if host is None: print("[ERROR] 런처 세션 시작 실패: %s" % why); return 3
+        try:
+            g = host.send("group", timeout=60)
+            print("계정 %s · 현재 그룹 %s · 메뉴 %s개" % (info.get("user_id"), g.get("current"), (info.get("main") or {}).get("menu_count")))
+            for it in g.get("items") or []: print("   %s%s" % (it.get("code"), "" if it.get("code") == it.get("name") else " (%s)" % it.get("name")))
+            json.dump({"at": time.strftime("%Y-%m-%d %H:%M:%S"), "user_id": info.get("user_id"), "current": g.get("current"), "items": g.get("items")}, open(P("Doc", "asislive", "_groups.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            print("@@LINK 📄 그룹 목록|Doc/asislive/_groups.json")
+        finally:
+            try: host.send("quit", timeout=30)
+            except Exception: pass
+        return 0
+    if not ids: print("사용: asis_live_scen_run.py <ID> [ID ...] [--group 그룹]"); return 2
+    divs = [""]
+    if "--division" in av:
+        dv = av[av.index("--division") + 1] if av.index("--division") + 1 < len(av) else ""
+        rest = [a for a in rest if a != dv]; ids = [a.upper() for a in rest if not a.startswith("-")]
+        divs = [x.strip() for x in dv.split(",") if x.strip()] or [""]
+    presets = [None]
+    if "--preset" in av:
+        pv = av[av.index("--preset") + 1] if av.index("--preset") + 1 < len(av) else ""
+        rest = [a for a in rest if a != pv]; ids = [a.upper() for a in rest if not a.startswith("-")]
+        presets = [parse_preset(x) for x in pv.split(";") if x.strip()]
+        if not presets or any(x is None for x in presets): print("[ERROR] --preset 형식: 이름=iN | 이름=cT | 이름=cF | 이름=kN (여러 개는 ; 로 나눔)"); return 2
+    conds = "--conds" in av; cells = "--cells" in av; states = "--states" in av; picks = "--pick" in av; inserts = "--insert" in av; violates = "--violate" in av
+    pickbtns = "--pickbtn" in av; picks = picks and not pickbtns; msgbtns = "--msgbtn" in av; msgcells = "--msgcell" in av
+    edit = "--edit" in av
+    if pickbtns and not any(popup_buttons(m) for m in ids):
+        for m in ids: print("[%s] 팝업을 띄운 버튼 기록 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if edit and not any(need_edit(m) for m in ids):
+        for m in ids: print("[%s] 수정 모드에서 다시 누를 버튼 없음(직전 실행에 수정 모드 메시지 없음) — 런처를 띄우지 않음" % m)
+        return 0
+    if conds and not any(cond_targets(m) for m in ids):
+        for m in ids: print("[%s] 값 변경 이벤트 분기 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if cells and not any(cell_targets(m) for m in ids):
+        for m in ids: print("[%s] 셀 클릭·더블클릭 분기 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if picks and not any(dbl_plan(m) for m in ids):
+        for m in ids: print("[%s] 셀 더블클릭 분기 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if msgcells and not any(msg_cell_spec(m) for m in ids):
+        for m in ids: print("[%s] 경로 메시지 셀 시나리오 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if msgbtns and not any(msg_buttons(m) for m in ids):
+        for m in ids: print("[%s] 미관찰 버튼 경로 메시지 없음 — 런처를 띄우지 않음" % m)
+        return 0
+    if not conds and not cells and not states and not picks and not pickbtns and not msgbtns and not msgcells and not inserts and not violates and not edit and divs == [""] and presets == [None] and not group and not any(plan(m)[0] for m in ids):
+        for m in ids: print("[%s] 누를 버튼 없음 · 건너뛴 버튼 %d — 런처를 띄우지 않음" % (m, len(plan(m)[1])))
+        return 0
+    if not R.acquire_lock("scenrun"): print("[ERROR] 다른 AS-IS 실측이 끝나지 않음"); return 3
+    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+    if host is None: print("[ERROR] 런처 세션 시작 실패: %s" % why); return 3
+    try:
+        if group:
+            g = host.send("group", timeout=180, value=group, wait=120)
+            if not g.get("ok"): print("[ERROR] 그룹 전환 실패: %s" % g.get("error")); return 3
+        cur = host.send("group", timeout=60).get("current")
+        jobs = []
+        for mid in ids:
+            dlist = list(divs)
+            if [x.upper() for x in dlist] == ["ALL"]:              # 이 화면의 Division 목록 전부 — 화면을 한 번 열어 목록을 읽는다
+                o0 = {}; r0 = host.send("open", timeout=180, id=mid); R.wait_quiet(R.now(), 3, 60)
+                _k, _n, items = division_control(host) if r0.get("ok") else (None, None, [])
+                host.send("close_screen", timeout=60); sweep(host, o0, None)
+                dlist = [div_id(x) for x in items] or [""]
+                print("[%s] Division 목록 %s" % (mid, ",".join(dlist) or "(없음 — Division 조건이 없는 화면)"), flush=True)
+            jobs += [(mid, dv, pz) for dv in dlist for pz in presets]
+        for mid, division, preset in jobs:
+            print("[%s] 그룹 %s%s%s%s" % (mid, cur, (" · Division " + division) if division else "", (" · 조건 " + preset["label"]) if preset else "", " · 조건 값 변경 분기" if conds else " · 셀 클릭 분기" if cells else ""), flush=True)
+            if msgbtns or msgcells:
+                out, calls = run_msg_btn(host, mid, cur) if msgbtns else run_msg_cell(host, mid, cur); kd = "msgbtn" if msgbtns else "msgcell"
+                d = P("Doc", "asislive", mid, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), kd)); os.makedirs(d, exist_ok=True)
+                json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                json.dump({"id": mid, "group": cur, "kind": "acts_" + kd, "acts": len(out["acts"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                print("   %s · %s" % (kd, out.get("error") or out.get("note") or R.rel(d)), flush=True)
+                if out.get("restart"):
+                    try: host.send("quit", timeout=30)
+                    except Exception: pass
+                    time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                    if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                continue
+            if pickbtns:
+                pbm = popup_buttons(mid)
+                for cedit in sorted({bool(v["edit"]) for v in pbm.values()}):
+                    out, calls = run_pick_btn(host, mid, cur, edit=cedit); kd = "pickbtn" + ("_edit" if cedit else "")
+                    d = P("Doc", "asislive", mid, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), kd)); os.makedirs(d, exist_ok=True)
+                    json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump({"id": mid, "group": cur, "kind": "acts_" + kd, "acts": len(out["acts"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                    print("   %s · %s" % (kd, out.get("error") or out.get("note") or R.rel(d)), flush=True)
+                    if out.get("restart"):
+                        try: host.send("quit", timeout=30)
+                        except Exception: pass
+                        time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                        host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                        if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                continue
+            if inserts or violates:
+                out, calls = run_insert(host, mid, cur, violate=violates); kd = "violate" if violates else "insert"
+                d = P("Doc", "asislive", mid, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), kd)); os.makedirs(d, exist_ok=True)
+                json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                json.dump({"id": mid, "group": cur, "kind": "acts_" + kd, "acts": len(out["acts"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                print("   %s · %s" % (kd, out.get("error") or out.get("note") or R.rel(d)), flush=True)
+                if out.get("restart"):
+                    try: host.send("quit", timeout=30)
+                    except Exception: pass
+                    time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                    if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                continue
+            if states or picks:
+                for cedit in ([False, True] if edit or cells_need_edit(mid) else [False]):
+                    out, calls = run_states(host, mid, cur, edit=cedit) if states else run_pick(host, mid, cur, edit=cedit)
+                    kd = ("states" if states else "pick") + ("_edit" if cedit else "")
+                    d = P("Doc", "asislive", mid, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), kd)); os.makedirs(d, exist_ok=True)
+                    json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump({"id": mid, "group": cur, "kind": "acts_" + kd, "acts": len(out["acts"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                    print("   %s · %s" % (kd, out.get("error") or out.get("note") or R.rel(d)), flush=True)
+                    if out.get("restart"):
+                        try: host.send("quit", timeout=30)
+                        except Exception: pass
+                        time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                        host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                        if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                continue
+            if conds or cells:
+                passes = [False] if conds else ([False, True] if cells_need_edit(mid) else [False])
+                for cedit in passes:
+                    out, calls = run_conds(host, mid, cur) if conds else run_cells(host, mid, cur, edit=cedit)
+                    d = P("Doc", "asislive", mid, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), "cond" if conds else ("cell_edit" if cedit else "cell"))); os.makedirs(d, exist_ok=True)
+                    json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+                    json.dump({"id": mid, "group": cur, "kind": "acts_cond" if conds else "acts_cell", "acts": len(out["acts"]), "skipped": len(out["skipped"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                    print("   바꾼 횟수 %d · 건너뛴 컨트롤 %d(%s) · %s" % (len(out["acts"]), len(out["skipped"]), ", ".join("%s:%s" % (x["control"], x["why"][:10]) for x in out["skipped"][:5]), out.get("error") or out.get("note") or R.rel(d)), flush=True)
+                    if out.get("restart"):
+                        try: host.send("quit", timeout=30)
+                        except Exception: pass
+                        time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                        host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                        if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                continue
+            if edit and not need_edit(mid): print("   수정 모드에서 다시 누를 버튼 없음"); continue
+            out, calls = run_screen(host, mid, cur, edit=edit, only=need_edit(mid) if edit else None, division=division, group_run=bool(group), preset=preset)
+            d = P("Doc", "asislive", mid, "run_%s_acts%s%s%s" % (time.strftime("%Y%m%d_%H%M%S"), "_edit" if edit else "", ("_div" + re.sub(r"[^A-Za-z0-9_]", "", division)) if division else "",
+                                                               ("_pre_" + re.sub(r"[^A-Za-z0-9_]", "_", preset["token"])) if preset else "")); os.makedirs(d, exist_ok=True)
+            json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump({"id": mid, "group": cur, "kind": "acts_edit" if edit else "acts", "acts": len(out["acts"]), "skipped": len(out["skipped"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            if out.get("restart"):
+                try: host.send("quit", timeout=30)
+                except Exception: pass
+                time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+                if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+                if group: host.send("group", timeout=180, value=group, wait=120)
+            print("   누른 버튼 %d · 건너뛴 버튼 %d(%s) · %s" % (len(out["acts"]), len(out["skipped"]), ", ".join("%s:%s" % (s["control"], s["why"][:6]) for s in out["skipped"][:6]), out.get("error") or out.get("note") or R.rel(d)), flush=True)
+    finally:
+        try: host.send("quit", timeout=30)
+        except Exception: pass
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

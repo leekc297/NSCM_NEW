@@ -184,11 +184,14 @@
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 | dbo.TB_FX_SearchCondition | 1595 | dbmeta_dbo_TB_FX_SearchCondition.csv |
 
-## 9. 주석/비활성 처리된 호출 (6건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (9건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 595 | SCP.SCP0011_GET_LAST_PLAN_VERSION | commented:MATCH |
 | 3409 |  | commented:EMPTY |
+| 3421 | SCP.SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG | commented:MATCH |
+| 3422 | SCP.SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG | commented:MATCH |
+| 3423 | SCP.SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG | commented:MATCH |
 | 3899 | SCP.SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING | commented:MATCH |
 | 4025 | SCP.SCM0001_GET_SCP_PERIOD | commented:MATCH |
 | 4024 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |

@@ -32,6 +32,9 @@
 | button:InsertButton | InsertButton > InsertRow | 1237 | biz:CommonData.CommonDataList [code=MktFcstEditMeasure] | BIZ_MATCH |  |
 | button:InsertButton | InsertButton > InsertRow | 1246 | biz:CommonData.CommonDataList [code=MktFcstEditMeasure40] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > SaveData > FindData | 153 | DM.DMF_QTEST001 | MATCH | [statement] foxquery_sql\DM.DMF_QTEST001.sql |
+| button:SaveButton | SaveButton > SaveData | 285 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 286 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 287 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > SaveData > FindData | 806 | DM.DM0003_GET_MKT_FCST_DATA_SML_40 | MATCH | SP DM0003_GET_MKT_FCST_DATA_SML_40 |
 | button:SaveButton | SaveButton > SaveData | 1066 | DM.DM0003_SAVE_MKT_FCST_40 | MATCH | SP DM0003_SAVE_MKT_FCST_40 |
 | button:SaveButton | SaveButton > SaveData > FindData > InitSpread > GetSpdTitle | 3384 | DM.DM0003_GET_SPREAD_TITLE_40 | MATCH | SP DM0003_GET_SPREAD_TITLE_40 |
@@ -93,6 +96,9 @@
 | SCM.SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | MATCH | 1 | SP SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | EXEC:SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER, SELECT:SCM_MST_SITE, REF:VALUE, REF:NODES |  |
 | SCM.SCM0001_GET_SITE_BY_DIVISION | MATCH | 1 | SP SCM0001_GET_SITE_BY_DIVISION | EXEC:SCM0001_GET_SITE_BY_DIVISION, SELECT:SCM_MST_SITE, REF:VALUE, REF:NODES |  |
 | SCM.SCM0001_GET_TEAM_BY_DIVISION | MATCH | 1 | SP SCM0001_GET_TEAM_BY_DIVISION | EXEC:SCM0001_GET_TEAM_BY_DIVISION, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SSO_DEPT_INFO, REF:VALUE, REF:NODES |  |
+| xxxx.DeleteQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.InsertQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.UpdateQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -162,9 +168,12 @@
 | ImageList | 1 | imageList1 |
 | UsrTextBox | 1 | usrTextBox1 |
 
-## 7. 확인 필요 (0건)
+## 7. 확인 필요 (3건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 285 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 286 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 287 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

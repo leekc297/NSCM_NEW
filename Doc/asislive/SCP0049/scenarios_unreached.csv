@@ -1,0 +1,26 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0049-Se81496,저장,SaveUploadExcel,CapaExcelUploadForm.cs:64,같은 파일에서 호출,CapaExcelUploadForm.cs:183,OnOpen_Click
+SCP0049-S91f93b,저장,ValidateUpload,CapaExcelUploadForm.cs:78,주석 안에서만 호출,CapaExcelUploadForm.cs:184,
+SCP0049-S5a5025,기타,SetSpreadRow,SCP0049_CAPA.cs:1813,주석 안에서만 호출,SCP0049_CAPA.cs:4322,
+SCP0049-S540951,기타,SetSpreadRow,SCP0049_CAPA.cs:1820,주석 안에서만 호출,SCP0049_CAPA.cs:4322,
+SCP0049-Sca4707,기타,SetSpreadRow,SCP0049_CAPA.cs:1826,주석 안에서만 호출,SCP0049_CAPA.cs:4322,
+SCP0049-S10bda0,기타,SetSpreadRow,SCP0049_CAPA.cs:1833,주석 안에서만 호출,SCP0049_CAPA.cs:4322,
+SCP0049-S9f2842,기타,Set_CalculatorBestWorstValidate,SCP0049_CAPA.cs:3857,주석 안에서만 호출,SCP0049_CAPA.cs:2050,
+SCP0049-S5cca27,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3564,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S84b5e5,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3571,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Sad6e08,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3576,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S4c3681,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3584,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Sdac55c,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3589,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Sbe657f,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3596,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S2d385a,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3604,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Scffeac,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3611,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S3c86b8,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3682,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S90f26a,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3688,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Seed0e5,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3693,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S8a6274,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3698,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S8a25ee,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3706,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Secadd1,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3726,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-Sfd44a9,기타,Set_CalculatorValidate,SCP0049_CAPA.cs:3733,주석 안에서만 호출,SCP0049_CAPA.cs:2049,
+SCP0049-S897733,기타,Set_UnChecked,SCP0049_CAPANewModelPopup.cs:1656,주석 안에서만 호출,SCP0049_CAPANewModelPopup.cs:1149; SCP0049_CAPANewModelPopup.cs:1192; SCP0049_CAPANewModelPopup.cs:1218; SCP0049_CAPANewModelPopup.cs:1234,
+SCP0049-S304248,기타,SetOption,SCP0049_ExcelSelect_Popup.cs:100,호출 없음,SCP0049_CAPA.cs:5162; SCP0049_CAPA.cs:5163; SCP0049_CAPA.cs:5300; SCP0049_CAPA.cs:5301,"FindData_Excel_DownLoad,btnExcelUpload_Click"
+SCP0049-Sbe96d4,기타,SetOption,SCP0049_ExcelSelect_Popup.cs:102,호출 없음,SCP0049_CAPA.cs:5162; SCP0049_CAPA.cs:5163; SCP0049_CAPA.cs:5300; SCP0049_CAPA.cs:5301,"FindData_Excel_DownLoad,btnExcelUpload_Click"

@@ -1,0 +1,1189 @@
+{
+ "id": "SCM0008",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMyAuthList",
+   "path": "/panel4/spdMyAuthList",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "My Authority List",
+     "rows": 71,
+     "cols": 12,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "False"
+       ],
+       "label": "False",
+       "tag": "chk",
+       "width": "25",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "chk",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Authority_code"
+       ],
+       "label": "Authority_code",
+       "tag": "GROUP_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "group_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Authority"
+       ],
+       "label": "Authority",
+       "tag": "grpName",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "grpname",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "division_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_NAME",
+       "width": "160",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "division_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "PLANT_ID"
+       ],
+       "label": "PLANT_ID",
+       "tag": "PLANT_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "plant_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_NAME",
+       "width": "200",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "plant_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Request Date"
+       ],
+       "label": "Request Date",
+       "tag": "creation_date",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "creation_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Approval Result"
+       ],
+       "label": "Approval Result",
+       "tag": "APPROVAL_RESULT",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "approval_result",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Approval User"
+       ],
+       "label": "Approval User",
+       "tag": "last_updated_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "last_updated_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Approval Date"
+       ],
+       "label": "Approval Date",
+       "tag": "last_update_date",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "last_update_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Reject Reason"
+       ],
+       "label": "Reject Reason",
+       "tag": "reject_reason",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "reject_reason",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 50,
+     "data": [
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "40",
+       "40 Mobility & IT Battery",
+       "",
+       "",
+       "2022-02-15 17:01:52",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "81",
+       "81 Automotive Battery",
+       "",
+       "",
+       "2022-02-15 17:01:52",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "81_HD",
+       "81_HD Automotive Battery(HD)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "81_HG",
+       "81_HG Automotive Battery(HG)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "81_HM",
+       "81_HM Automotive Battery(HM)",
+       "",
+       "",
+       "2023-05-11 14:46:43",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "81_UC",
+       "81_UC Automotive Battery(UC)",
+       "",
+       "",
+       "2022-05-15 20:00:08",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "82",
+       "82 ESS Battery",
+       "",
+       "",
+       "2022-02-15 17:01:52",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "EE",
+       "EE Electrode",
+       "",
+       "",
+       "2022-02-15 17:01:52",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "EE_HD",
+       "EE_HD Electrode(HD)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "EE_HG",
+       "EE_HG Electrode(HG)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "EE_HM",
+       "EE_HM Electrode(HM)",
+       "",
+       "",
+       "2023-05-11 14:46:43",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "True",
+       "ADMIN",
+       "System Administrator",
+       "EE_UC",
+       "EE_UC Electrode(UC)",
+       "",
+       "",
+       "2022-05-15 20:00:08",
+       "APPROVED",
+       "Group User",
+       "2023-05-11 14:46:43",
+       ""
+      ],
+      [
+       "False",
+       "FP Planner",
+       "FP Planner",
+       "40",
+       "40 Mobility & IT Battery",
+       "-",
+       "",
+       "2022-01-25 15:39:05",
+       "REJECT",
+       "scm_batch2",
+       "2023-03-28 11:17:50",
+       "DEPT_CHANGED_AUTH_DELETE"
+      ],
+      [
+       "True",
+       "FP Planner",
+       "FP Planner",
+       "81",
+       "81 Automotive Battery",
+       "-",
+       "",
+       "2022-01-25 15:39:05",
+       "APPROVED",
+       "hwanghg",
+       "2022-01-27 14:24:02",
+       ""
+      ],
+      [
+       "False",
+       "FP Planner",
+       "FP Planner",
+       "82",
+       "82 ESS Battery",
+       "-",
+       "",
+       "2022-01-25 15:39:05",
+       "REJECT",
+       "scm_batch2",
+       "2023-03-28 11:17:50",
+       "DEPT_CHANGED_AUTH_DELETE"
+      ],
+      [
+       "False",
+       "FP Planner",
+       "FP Planner",
+       "EE",
+       "EE Electrode",
+       "-",
+       "",
+       "2022-01-25 15:39:05",
+       "REJECT",
+       "scm_batch2",
+       "2023-03-28 11:17:50",
+       "DEPT_CHANGED_AUTH_DELETE"
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "40",
+       "40 Mobility & IT Battery",
+       "-",
+       "",
+       "2022-10-12 18:05:48",
+       "APPROVED",
+       "multishin",
+       "2022-10-12 18:08:43",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "81",
+       "81 Automotive Battery",
+       "-",
+       "",
+       "2022-10-12 18:05:42",
+       "APPROVED",
+       "multishin",
+       "2022-10-12 18:05:46",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "81_HD",
+       "81_HD Automotive Battery(HD)",
+       "-",
+       "",
+       "2024-09-09 13:09:16",
+       "APPROVED",
+       "jeremy.shin",
+       "2024-09-09 13:09:16",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "81_HM",
+       "81_HM Automotive Battery(HM)",
+       "-",
+       "",
+       "2024-02-27 14:25:40",
+       "APPROVED",
+       "moonsu.kim",
+       "2024-02-27 14:25:41",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "81_ST",
+       "81_ST Automotive Battery(ST)",
+       "-",
+       "",
+       "2024-02-19 11:37:41",
+       "APPROVED",
+       "moonsu.kim",
+       "2024-02-19 11:37:41",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "81_UC",
+       "81_UC Automotive Battery(UC)",
+       "",
+       "",
+       "2022-05-16 14:49:40",
+       "APPROVED",
+       "Group User",
+       "2022-05-16 14:49:40",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "82",
+       "82 ESS Battery",
+       "-",
+       "",
+       "2022-10-12 18:05:46",
+       "APPROVED",
+       "multishin",
+       "2022-10-12 18:05:48",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "EE",
+       "EE Electrode",
+       "",
+       "",
+       "2023-04-21 17:35:49",
+       "APPROVED",
+       "Group User",
+       "2023-04-21 17:35:49",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "EE_HD",
+       "EE_HD Electrode(HD)",
+       "",
+       "",
+       "2024-09-10 11:00:07",
+       "APPROVED",
+       "Group User",
+       "2024-09-10 11:00:07",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "EE_HM",
+       "EE_HM Electrode(HM)",
+       "",
+       "",
+       "2024-02-28 11:00:11",
+       "APPROVED",
+       "Group User",
+       "2024-02-28 11:00:11",
+       ""
+      ],
+      [
+       "True",
+       "FP Viewer",
+       "FP Viewer",
+       "EE_UC",
+       "EE_UC Electrode(UC)",
+       "",
+       "",
+       "2023-04-21 17:35:49",
+       "APPROVED",
+       "Group User",
+       "2023-04-21 17:35:49",
+       ""
+      ],
+      [
+       "True",
+       "JV Planner",
+       "JV Planner",
+       "81_HD",
+       "81_HD Automotive Battery(HD)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "JV Planner",
+       "JV Planner",
+       "81_HG",
+       "81_HG Automotive Battery(HG)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "JV Planner",
+       "JV Planner",
+       "EE_HD",
+       "EE_HD Electrode(HD)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "JV Planner",
+       "JV Planner",
+       "EE_HG",
+       "EE_HG Electrode(HG)",
+       "",
+       "",
+       "2024-07-05 10:47:03",
+       "APPROVED",
+       "Group User",
+       "2024-07-05 10:47:03",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "40",
+       "40 Mobility & IT Battery",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81",
+       "81 Automotive Battery",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81_HD",
+       "81_HD Automotive Battery(HD)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81_HG",
+       "81_HG Automotive Battery(HG)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81_HM",
+       "81_HM Automotive Battery(HM)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81_ST",
+       "81_ST Automotive Battery(ST)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "81_UC",
+       "81_UC Automotive Battery(UC)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "82",
+       "82 ESS Battery",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE",
+       "EE Electrode",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE_HD",
+       "EE_HD Electrode(HD)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE_HG",
+       "EE_HG Electrode(HG)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE_HM",
+       "EE_HM Electrode(HM)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE_ST",
+       "EE_ST Electrode(ST)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "EE_UC",
+       "EE_UC Electrode(UC)",
+       "-",
+       "",
+       "2025-03-04 09:36:38",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "True",
+       "SCM Viewer",
+       "SCM Viewer",
+       "40",
+       "40 Mobility & IT Battery",
+       "-",
+       "",
+       "2024-03-18 11:27:31",
+       "APPROVED",
+       "jaeuk.shin",
+       "2024-03-18 11:28:10",
+       ""
+      ],
+      [
+       "True",
+       "SCM Viewer",
+       "SCM Viewer",
+       "81",
+       "81 Automotive Battery",
+       "-",
+       "",
+       "2024-03-18 11:27:31",
+       "APPROVED",
+       "jaeuk.shin",
+       "2024-03-18 11:28:10",
+       ""
+      ],
+      [
+       "True",
+       "SCM Viewer",
+       "SCM Viewer",
+       "81_HM",
+       "81_HM Automotive Battery(HM)",
+       "-",
+       "",
+       "2024-03-18 11:27:31",
+       "APPROVED",
+       "jaeuk.shin",
+       "2024-03-18 11:28:10",
+       ""
+      ],
+      [
+       "True",
+       "SCM Viewer",
+       "SCM Viewer",
+       "81_ST",
+       "81_ST Automotive Battery(ST)",
+       "-",
+       "",
+       "2024-03-18 11:27:31",
+       "APPROVED",
+       "jaeuk.shin",
+       "2024-03-18 11:28:10",
+       ""
+      ],
+      [
+       "True",
+       "SCM Viewer",
+       "SCM Viewer",
+       "81_UC",
+       "81_UC Automotive Battery(UC)",
+       "-",
+       "",
+       "2024-03-18 11:27:31",
+       "APPROVED",
+       "jaeuk.shin",
+       "2024-03-18 11:28:10",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdDivision",
+   "path": "/panel3/panel2/spdDivision",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Division",
+     "rows": 14,
+     "cols": 3,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "False"
+       ],
+       "label": "False",
+       "tag": "chk",
+       "width": "25",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "chk",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "Code",
+       "width": "40",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "Name",
+       "width": "250",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 14,
+     "data": [
+      [
+       "",
+       "40",
+       "40 Mobility & IT Battery"
+      ],
+      [
+       "",
+       "81",
+       "81 Automotive Battery"
+      ],
+      [
+       "",
+       "81_HD",
+       "81_HD Automotive Battery(HD)"
+      ],
+      [
+       "",
+       "81_HG",
+       "81_HG Automotive Battery(HG)"
+      ],
+      [
+       "",
+       "81_HM",
+       "81_HM Automotive Battery(HM)"
+      ],
+      [
+       "",
+       "81_ST",
+       "81_ST Automotive Battery(ST)"
+      ],
+      [
+       "",
+       "81_UC",
+       "81_UC Automotive Battery(UC)"
+      ],
+      [
+       "",
+       "82",
+       "82 ESS Battery"
+      ],
+      [
+       "",
+       "EE",
+       "EE Electrode"
+      ],
+      [
+       "",
+       "EE_HD",
+       "EE_HD Electrode(HD)"
+      ],
+      [
+       "",
+       "EE_HG",
+       "EE_HG Electrode(HG)"
+      ],
+      [
+       "",
+       "EE_HM",
+       "EE_HM Electrode(HM)"
+      ],
+      [
+       "",
+       "EE_ST",
+       "EE_ST Electrode(ST)"
+      ],
+      [
+       "",
+       "EE_UC",
+       "EE_UC Electrode(UC)"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdMain",
+   "path": "/panel3/panel1/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Authority",
+     "rows": 9,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "2",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "Group ID"
+       ],
+       "label": "Group ID",
+       "tag": "GroupID",
+       "width": "40",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "E-MAIL"
+       ],
+       "label": "E-MAIL",
+       "tag": "GrpMail",
+       "width": "40",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpMail",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Authority"
+       ],
+       "label": "Authority",
+       "tag": "GrpName",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "GrpDescription",
+       "width": "340",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpDescription",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 9,
+     "data": [
+      [
+       "DM ADMIN",
+       "k0101@lgensol.com",
+       "DM Administrator",
+       "For Sales management team"
+      ],
+      [
+       "DM Planner",
+       "k0101@lgensol.com",
+       "DM Planner",
+       "For MKT team"
+      ],
+      [
+       "DM Planner (W/S)",
+       "k0101@lgensol.com",
+       "DM Planner (W/S)",
+       "For Warranty service team"
+      ],
+      [
+       "DM Viewer",
+       "k0101@lgensol.com",
+       "DM Viewer",
+       "For Sales management team"
+      ],
+      [
+       "SCM Viewer",
+       "fran.d.k.@lgensol.com",
+       "SCM Viewer",
+       "For General ES company user"
+      ],
+      [
+       "SCP Planner",
+       "fran.d.k.@lgensol.com",
+       "SCP Planner",
+       "For SCP team"
+      ],
+      [
+       "SCP Tester",
+       "fran.d.k.@lgensol.com",
+       "SCP Tester",
+       "SCP Tester"
+      ],
+      [
+       "SSP Planner",
+       "jaewoo_95@lgensol.com",
+       "SSP Planner",
+       "For Logistics team or production management shipping part"
+      ],
+      [
+       "SSP Viewer",
+       "jaewoo_95@lgensol.com",
+       "SSP Viewer",
+       "For Logistics Partner"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

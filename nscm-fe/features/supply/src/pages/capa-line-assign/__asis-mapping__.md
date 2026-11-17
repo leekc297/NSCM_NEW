@@ -86,10 +86,13 @@
 | `txtItem`(S12)+`btnItemId`(S13) | LBL00054/LBL00669 | `InputField` + `...` 버튼 → 공용 `CapaItemPopup` **`multiSelect` + `operationGroup`** 배선(iter-3). 다중선택 결과는 distinct 후 `','` 결합해 한 칸에 누적(=`GetSelectedValuesText`) | `p_item_id`(SP 가 콤마 IN) | 구현 |
 | (조회조건 Reset) | **AS-IS 없음** | ~~`SearchArea.onResetCondition`~~ 제거(사용자 결정 2026-10-28). AS-IS 전수검색 결과 조건 패널 Reset 버튼이 없다 — `reset`/`clear` 는 전부 시트·DataTable·row 비우기이고, 앞서 근거로 인용했던 `UsrConditionPanel`/`SavePanelCondition` 은 이 화면에 실재하지 않는다(cs:1548·1558 은 콤보 바인딩 키 주석일 뿐). `#region Refresh Search Condition`(cs:1530-1748)도 콤보 cascade 재생성 메서드지 Reset 버튼이 아니다. CP-16 근거는 오기였다 | — | 제거(AS-IS 추종) |
 | `cboValid`(S14) | Active / LBL00007(DB 실측, 이전 Valid/LBL00639) | `YesOrNo` + ALL 선행 → `''` 변환 | `p_valid_flag` | 구현 |
-| `btnColumn`(S15) | — | SubTitle 공용 `IcGridColumnSetup` 아이콘 → `ColumnLayoutModal` | — | 구현 |
+| `btnColumn`(S15) | — | SubTitle 공용 `IcGridColumnSetup` 아이콘 → `ColumnLayoutModal`. **스코프 = 항상 Assign 시트**(ELTR/ASSEMBLY) — `activeSheet` 아님(아래 주석) | — | 구현(스코프 교정) |
 
 콤보 의미 패리티(convert-core §2.6): 접미 `EE` 2쌍(마스터·Operation)을 **SQL_ID 전환**으로 분리했다.
 `CapaProgressStatus_SCP_ALL`(D03)·`YearFromThisYear_SCP_ALL`(D10)은 호출하지 않는다(V-27 — 전자는 죽은 로드, 후자는 바인딩 컨트롤 부재 + U-5 제외).
+
+**컬럼 설정(P04) 스코프 교정 — 항상 Assign 시트(사용자 확정 2026-11-10):**
+AS-IS `btnColumn_Click`(cs:6096-6105)은 탭(`isPageSOP`)과 무관하게 `_sheet_name`(=Division Type, ELTR/ASSEMBLY, cs:249-263)으로 `SCM002_CAPAColumnPopup` 를 열고, OK 시 `BeforeFindDataAssign()` 로 **Assign 그리드만** 재구성한다(design 03 §T6). 즉 **SOP 그리드는 AS-IS 에서 개인화 대상이 아니다.** 초기 TO-BE 는 `ColumnLayoutModal sheetName={activeSheet}` 로 배선돼 **SOP 탭에선 SOP 그리드를 개인화**했는데(AS-IS 에 없는 동작), 이는 gap 감사에서 "TitleSet 3점 일치"(구조 정합)로만 통과했을 뿐 AS-IS 스코프 파리티가 검토된 바 없다(설계·표준에 SOP 탭 개인화를 결정한 기록 없음, 2026-11-10 확인). 따라서 convert-core 기본값(AS-IS 파리티)에 따라 **`CapaLineAssign.tsx` 의 P04 를 `assignSheet` 고정으로 교정**했다: `sheetName={assignSheet}` · `fallbackColumns=columnSettingColumns(=staticColumns[assignSheet])` · `onSave sheet=assignSheet`. SOP 탭에서 열어도 Assign 시트를 설정하며, `userColumnLayout[sopSheet]` 설정 경로가 사라져 SOP 그리드는 기본 컬럼만 쓴다. (저장 F7 경로의 `activeSheet` 는 "활성 탭 1시트만 저장" 축이라 교정 대상 아님 — 유지.)
 
 ---
 

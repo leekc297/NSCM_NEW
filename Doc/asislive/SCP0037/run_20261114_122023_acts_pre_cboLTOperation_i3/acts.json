@@ -1,0 +1,89 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0037_GET_OPERATION_LT"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     13
+    ],
+    [
+     "SCP0037_GET_OPERATION_LT",
+     64
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 9616,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0037-Sea1449",
+    "SCP0037-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:19:36.069",
+ "preset": {
+  "name": "cboLTOperation",
+  "token": "cboLTOperation=i3",
+  "kw": {
+   "name": "cboLTOperation",
+   "index": "3"
+  },
+  "label": "cboLTOperation 콤보 3번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:3:Coating to PKG",
+  "value": "CTP_LT",
+  "text": "Coating to PKG",
+  "checked": null,
+  "selected_index": 3
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

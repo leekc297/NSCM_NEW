@@ -1,0 +1,11 @@
+﻿check,target,result,detail,todo
+R1 AS-IS 사실 묶음,endpoints.csv,PASS,3행,
+R1 AS-IS 사실 묶음,controls.csv,PASS,43행,
+R1 AS-IS 사실 묶음,events.csv,PASS,13행,
+R1 AS-IS 사실 묶음,actions.csv,PASS,402행,
+R1 AS-IS 사실 묶음,grid_columns_asis.csv,PASS,44행,
+R2 AS-IS SP 원문,1개,PASS,화면 호출 SP 전부 원문 있음,
+R3 AS-IS 호출 해석,3행,PASS,풀리지 않은 호출 0,
+R4 AS-IS 컬럼 메타,SCM_MST_SHEET_COLUMNS,PASS,44행,
+R5 분석 문서,"analysis.md, screen_design.md, unit_test.md",FAIL,없음,tools/AsisFacts/agent.ps1 <ID> 로 분석 문서 생성
+R6 TO-BE 사내 DB,11항목,PASS,meta_live_check 11항목 중 FAIL·ERROR 0,

@@ -800,7 +800,8 @@ export const BusinessPlanGrid = ({
     // ===== 더블클릭 — 헤더 드릴다운 + 셀 모달 (AS-IS spdMain_CellDoubleClick L1598~1797) =====
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
-      // 헤더 — Y_ 헤더: 해당 연 Q_ 토글 + 열린 M_ 접기 / Q_ 헤더: 해당 분기 M_ 토글 (L1600~1639)
+      // 헤더 — Y_ 헤더: 해당 연 Q_ 토글 + 열린 M_ 접기 / Q_ 헤더: 해당 분기 M_ 토글 (L1600~1639).
+      //   단, Sum OFF 면 조회 bucket 보다 세부 단계만 바꾼다(아래 flip 가드).
       if (ht.cellType === CellType.ColumnHeader) {
         // ⭐ 머지된 상위 헤더 → 그룹 대표 binding 복원 (forecast-price 선례 1:1).
         //   hitTest 는 **커서 아래 물리 컬럼**을 준다(머지 원점이 아니다). 3단 헤더에서 1단(연)/
@@ -825,6 +826,11 @@ export const BusinessPlanGrid = ({
         const idx = dynBindings.indexOf(hb);
         if (idx < 0) return;
         const flip = (target: string, hideOnly: boolean) => {
+          // Sum OFF 면 조회 bucket 보다 세부 단계만 펼치고 접는다 (사용자 지시 2026-11-10).
+          //   합계가 숨어 있어 bucket 단계를 접으면 연도가 통째로 사라지기 때문 → Monthly 는 변화 없음.
+          //   Sum ON 이면 기존대로 bucket 단계도 접혀 합계로 요약된다.
+          const targetKind = dynKindOf(target) as keyof typeof DYN_RANK;
+          if (!sumYn && !(DYN_RANK[targetKind] > bucketRank)) return;
           const targetCol = g.getColumn(target);
           if (!targetCol) return;
           if (hideOnly && !targetCol.visible) return; // AS-IS: 열린 M_ 만 접기 (Y_ 드릴)
@@ -964,6 +970,7 @@ export const BusinessPlanGrid = ({
     validWindow,
     division,
     bucketType,
+    sumYn,
     dataMaps,
     gridEpoch,
   ]);

@@ -1,0 +1,177 @@
+# AS-IS 실측 요약 — FP01551A
+
+- 실행: 2026-11-12 23:41:34.949 ~ 2026-11-12 23:42:20.004 · 계정 jaeuk.shin · 상태 OK
+- 화면: In-house Request Plan(Pack) (GSCM.FP.Planning.UIL.FP01551_In_House_Request_Plan)
+- 조회 결과:  · DB : 20.937s, UI : 0.235s · 완료 판단 status
+- 조건: 시나리오 {"rule": "recent", "set": [{"name": "drpPlanDate", "prop": "DateTime", "value": "20260919"}]}
+
+## 호출된 SP (화면 로드·조회)
+
+| 시각 | 구간 | 서비스 | SP | 건수 | ms | 인자 |
+|---|---|---|---|---|---|---|
+| 23:41:35.395 | load | GSCM.BizService.WSL | UP_FX_GetGSCMSecurityACL | 1 | 5.06 | GroupID=ADMIN, UserID=jaeuk.shin, MenuID=FP01551 |
+| 23:41:35.412 | load | GSCM.FP_Common | SELECT * | 351 | 10.53 | USER_ID= |
+| 23:41:35.416 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.31 | PROG_ID=get_all_code, QUERY_ID=FP\admin\code_lookup, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0USER_ID
+---Check client parameter : USER_ID
+---FOUND USER_ID
+-- TYPE = nvarchar---Add string Service
+
+
+SELECT * 
+     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK) 
+      , JOB_TYPE=read,  |
+| 23:41:35.529 | load | GSCM.FP_Common | UI_FP_COMMON | 0 | 9.86 | code=USER_AUTH, user_id=jaeuk.shin, non_auth=, save_auth=, param1=ADMIN, param2=NONE, param3=, param4=, param5=, param6=, param7=, param8=, param9=, param10=, param11=, param12=, param13=, param14=, param15=, param16=, param17=, param18=, param19=, param20=, param21=, param22=, param23=, param24=, p |
+| 23:41:35.534 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 3.88 | PROG_ID=UI_FP_COMMON, QUERY_ID=FP_Common.UI_FP_COMMON, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=StoredProcedure UI_FP_COMMON, JOB_TYPE=procedure, START_TIME=2026-11-12 23:41:35, END_TIME=2026-11-12 23:41:35, INSERT_ID=jaeuk.shin, LOG_TYPE=SQL, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234135_519, PA |
+| 23:41:35.596 | load | GSCM.FP_Common | WITH M_TABLE AS ( | 11 | 26.77 | USER_ID=jaeuk.shin, MENU_ID=FP01551_Main |
+| 23:41:35.628 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 31.17 | PROG_ID=select_measure, QUERY_ID=FP\Common\Measure, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0USER_ID
+---Service Parameter : 1MENU_ID
+---Check client parameter : USER_ID
+---FOUND USER_ID
+-- TYPE = nvarchar---Add string Service
+---Check client parameter : MENU_ID
+---FOUND MENU_ID
+- |
+| 23:41:35.635 | load | GSCM.SCM.Master.WSL | SELECT COUNT(*) AS CNT | 1 | 2.91 | p_program_id=FP01551, p_sheet_name=Main, p_user_id=jaeuk.shin |
+| 23:41:35.678 | load | GSCM.SCM.Master.WSL | SELECT C.PROGRAM_ID | 0 | 39.0 | p_program_id=FP01551, p_sheet_name=Main |
+| 23:41:36.099 | load | GSCM.FP_Common | UI_FP_COMMON | 8 | 369.45 | code=AMEND_INSTANCE, user_id=jaeuk.shin, non_auth=, save_auth=, param1=, param2=, param3=, param4=, param5=, param6=, param7=, param8=, param9=, param10=, param11=, param12=, param13=, param14=, param15=, param16=, param17=, param18=, param19=, param20=, param21=PSI_AMEND_PACK, param22=, param23=, p |
+| 23:41:36.159 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 60.12 | PROG_ID=UI_FP_COMMON, QUERY_ID=FP_Common.UI_FP_COMMON, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=StoredProcedure UI_FP_COMMON, JOB_TYPE=procedure, START_TIME=2026-11-12 23:41:35, END_TIME=2026-11-12 23:41:36, INSERT_ID=jaeuk.shin, LOG_TYPE=SQL, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234135_729, PA |
+| 23:41:36.199 | load | GSCM.FP_Common | PR_UI_SQL_LOG | 0 | 5.71 | LOGTYPE=SpeedUp, NOTE=FP01551
+instance_id_changed
+start
+, USER_ID=jaeuk.shin |
+| 23:41:36.224 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 25.74 | PROG_ID=note2, QUERY_ID=FP\Common\Utility, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0USER_ID
+---Service Parameter : 1LOGTYPE
+---Service Parameter : 2NOTE
+---Check client parameter : LOGTYPE
+---FOUND LOGTYPE
+-- TYPE = nvarchar---Add string Service
+---Check client parameter : NOTE
+- |
+| 23:41:36.330 | load | GSCM.FP_Common | UI_FP_COMMON | 1 | 94.88 | code=CURR_UTDATE, user_id=jaeuk.shin, non_auth=, save_auth=, param1=KR_PACK, param2=, param3=, param4=, param5=, param6=, param7=, param8=, param9=, param10=, param11=, param12=, param13=, param14=, param15=, param16=, param17=, param18=, param19=, param20=, param21=, param22=, param23=, param24=, p |
+| 23:41:36.344 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 13.27 | PROG_ID=UI_FP_COMMON, QUERY_ID=FP_Common.UI_FP_COMMON, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=StoredProcedure UI_FP_COMMON, JOB_TYPE=procedure, START_TIME=2026-11-12 23:41:36, END_TIME=2026-11-12 23:41:36, INSERT_ID=jaeuk.shin, LOG_TYPE=SQL, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234136_236, PA |
+| 23:41:36.781 | load | GSCM.FP_Common | PR_UI_GENERAL_COMMAND | 0 | 424.93 | p_sys_type=SELECT, p_sys_flag=RELEASE_PLAN_INFO, p_sys_gubun=, p_user_id=jaeuk.shin, p_proc_name=PR_UI_FP01551_ETC, opt_none=, in_columns=AMEND_INSTANCE^OPERATION_ID^PLAN_DATE^BUCKET^USER_ID^INSTANCE_ID^USE_WOW_STATUS^CONFIRM_AREA^IS_SAME_PLAN_ID^, in_row=PSI_AMEND_PACK^P5000^20261112^D^mXlVW48SU1c3 |
+| 23:41:36.809 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 27.88 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=--GSCM.FP.Common.WSL/FoxDataService.svc
+EXEC PR_UI_GENERAL_COMMAND @p_sys_type=N'SELECT',@p_sys_flag=N'RELEASE_PLAN_INFO',@p_sys_gubun=N'',@p_user_id=N'jaeuk.shin',@p_proc_name=N'PR_UI_FP01551_E |
+| 23:41:36.854 | load | GSCM.FP_Common | PR_UI_SQL_LOG | 0 | 38.57 | LOGTYPE=SpeedUp, NOTE=FP01551
+instance_id_changed
+end
+, USER_ID=jaeuk.shin |
+| 23:41:36.943 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 89.67 | PROG_ID=note2, QUERY_ID=FP\Common\Utility, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0USER_ID
+---Service Parameter : 1LOGTYPE
+---Service Parameter : 2NOTE
+---Check client parameter : LOGTYPE
+---FOUND LOGTYPE
+-- TYPE = nvarchar---Add string Service
+---Check client parameter : NOTE
+- |
+| 23:41:37.073 | load | GSCM.FP_Common | UI_FP_COMMON | 1 | 107.92 | code=CURR_UTDATE, user_id=jaeuk.shin, non_auth=, save_auth=, param1=KR_PACK, param2=, param3=, param4=, param5=, param6=, param7=, param8=, param9=, param10=, param11=, param12=, param13=, param14=, param15=, param16=, param17=, param18=, param19=, param20=, param21=, param22=, param23=, param24=, p |
+| 23:41:37.099 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 26.91 | PROG_ID=UI_FP_COMMON, QUERY_ID=FP_Common.UI_FP_COMMON, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=StoredProcedure UI_FP_COMMON, JOB_TYPE=procedure, START_TIME=2026-11-12 23:41:36, END_TIME=2026-11-12 23:41:37, INSERT_ID=jaeuk.shin, LOG_TYPE=SQL, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234136_964, PA |
+| 23:41:37.134 | load | GSCM.SCM.Master.WSL | SELECT COUNT(*) AS CNT | 1 | 4.24 | p_program_id=FP01551, p_sheet_name=Amend, p_user_id=jaeuk.shin |
+| 23:41:37.146 | load | GSCM.SCM.Master.WSL | SELECT C.PROGRAM_ID | 23 | 4.29 | p_program_id=FP01551, p_sheet_name=Amend |
+| 23:41:37.156 | load | GSCM.SCM.Master.WSL | SELECT COUNT(*) AS CNT | 1 | 4.86 | p_program_id=FP01551, p_sheet_name=Amend, p_user_id=jaeuk.shin |
+| 23:41:37.165 | load | GSCM.SCM.Master.WSL | SELECT C.PROGRAM_ID | 23 | 4.84 | p_program_id=FP01551, p_sheet_name=Amend |
+| 23:41:37.294 | load | GSCM.BizService.WSL | UP_FX_SaveMenuConnect | -1 | 107.59 | MenuID=In-house Request Plan(Pack), CnntCode=0104001, UserID=jaeuk.shin |
+| 23:41:37.353 | load | GSCM.BizService.WSL | UP_FX_GetSearchCondition | 0 | 4.07 | GroupID=ADMIN, UserID=jaeuk.shin, MenuID=FP01551 |
+| 23:41:46.212 | load | GSCM.FP_Common | PR_UI_GENERAL_COMMAND | 1 | 206.02 | p_sys_type=SELECT, p_sys_flag=RELEASE_PLAN_INFO, p_sys_gubun=, p_user_id=jaeuk.shin, p_proc_name=PR_UI_FP01551_ETC, opt_none=, in_columns=AMEND_INSTANCE^OPERATION_ID^PLAN_DATE^BUCKET^USER_ID^INSTANCE_ID^USE_WOW_STATUS^CONFIRM_AREA^IS_SAME_PLAN_ID^MASTER_ID^BUCKET_FROM^BUCKET_TO^DIVISION_ID^SITE_ID^P |
+| 23:41:46.219 | load | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 6.45 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=--GSCM.FP.Common.WSL/FoxDataService.svc
+EXEC PR_UI_GENERAL_COMMAND @p_sys_type=N'SELECT',@p_sys_flag=N'RELEASE_PLAN_INFO',@p_sys_gubun=N'',@p_user_id=N'jaeuk.shin',@p_proc_name=N'PR_UI_FP01551_E |
+| 23:41:51.322 | find | GSCM.SCM.Master.WSL | SELECT COUNT(*) AS CNT | 1 | 5.8 | p_program_id=FP01551, p_sheet_name=Amend, p_user_id=jaeuk.shin |
+| 23:41:51.333 | find | GSCM.SCM.Master.WSL | SELECT C.PROGRAM_ID | 23 | 6.59 | p_program_id=FP01551, p_sheet_name=Amend |
+| 23:41:51.340 | find | GSCM.SCM.Master.WSL | SELECT COUNT(*) AS CNT | 1 | 4.02 | p_program_id=FP01551, p_sheet_name=Amend, p_user_id=jaeuk.shin |
+| 23:41:51.351 | find | GSCM.SCM.Master.WSL | SELECT C.PROGRAM_ID | 23 | 5.97 | p_program_id=FP01551, p_sheet_name=Amend |
+| 23:41:51.406 | find | GSCM.FP_Common | SELECT ISO_YYYYWW AS WEEK | 17 | 34.58 | BUCKET_FROM=20260919, BUCKET_TO=20270106 |
+| 23:41:51.441 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 33.54 | PROG_ID=find_WeekCnt, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0BUCKET_FROM
+---Service Parameter : 1BUCKET_TO
+---Check client parameter : AMEND_INSTANCE
+---Check client parameter : OPERATION_ID
+---Check client parameter : PLAN_DATE
+---Check cl |
+| 23:41:51.456 | find | GSCM.FP_Common | SELECT (CASE WHEN YYYYMMDD >= @PLAN_DATE THEN 'Y' ELSE 'N' END) AS IS_PLAN | 110 | 8.94 | PLAN_DATE=20260919, BUCKET_FROM=20260919, BUCKET_TO=20270106 |
+| 23:41:51.464 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 8.11 | PROG_ID=find_DateMap, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0PLAN_DATE
+---Service Parameter : 1BUCKET_FROM
+---Service Parameter : 2BUCKET_TO
+---Check client parameter : AMEND_INSTANCE
+---Check client parameter : OPERATION_ID
+---Check client |
+| 23:41:51.481 | find | GSCM.FP_Common | SELECT YYYYMM AS MONTH | 5 | 9.75 | BUCKET_FROM=20260919, BUCKET_TO=20270106 |
+| 23:41:51.488 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.96 | PROG_ID=find_MonthCnt, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0BUCKET_FROM
+---Service Parameter : 1BUCKET_TO
+---Check client parameter : AMEND_INSTANCE
+---Check client parameter : OPERATION_ID
+---Check client parameter : PLAN_DATE
+---Check c |
+| 23:41:51.503 | find | GSCM.FP_Common | SELECT 	A.* | 110 | 8.47 | BUCKET_FROM=20260919, BUCKET_TO=20270106 |
+| 23:41:51.519 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 14.76 | PROG_ID=find_BukInfo, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0BUCKET_FROM
+---Service Parameter : 1BUCKET_TO
+---Check client parameter : AMEND_INSTANCE
+---Check client parameter : OPERATION_ID
+---Check client parameter : PLAN_DATE
+---Check cl |
+| 23:41:51.539 | find | GSCM.FP_Common | SELECT MAX(B.SEGMENT1) AS INSTANCE_ID, (CASE WHEN MAX(B.SEGMENT1) IS NULL THEN 'N' ELSE 'Y' END) AS IS_CELL_ASSY | 1 | 6.52 | INSTANCE_ID=KR_PACK |
+| 23:41:51.543 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.47 | PROG_ID=find_CellAssyYN, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:41:51, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_531, PARAM_VALUE={AMEND_INSTAN |
+| 23:41:51.549 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.62 | PROG_ID=find_CellAssyYN, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=1, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:41:51, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_531, PARAM_VALUE= (Fri)#_COUNT |
+| 23:41:51.555 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.4 | PROG_ID=find_CellAssyYN, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=2, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:41:51, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_531, PARAM_VALUE=UNT:1#_VALUE: |
+| 23:41:51.604 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 49.41 | PROG_ID=find_CellAssyYN, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=0, INST_SEQ=3, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:41:51, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_531, PARAM_VALUE=E:2026W49#WEE |
+| 23:41:51.618 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 14.0 | PROG_ID=find_CellAssyYN, QUERY_ID=FP\Common\FP01551_PlanAmend, QUERY_SEQ=1, INST_SEQ=0, QUERY_VALUE=---Service Parameter : 0INSTANCE_ID
+---Check client parameter : AMEND_INSTANCE
+---Check client parameter : OPERATION_ID
+---Check client parameter : PLAN_DATE
+---Check client parameter : BUCKET
+---Chec |
+| 23:42:11.936 | find | GSCM.FP_Common | PR_UI_GENERAL_COMMAND | 0 | 20311.94 | p_sys_type=Select, p_sys_flag=, p_sys_gubun=, p_user_id=jaeuk.shin, p_proc_name=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, opt_none=, in_columns=AMEND_INSTANCE^OPERATION_ID^PLAN_DATE^BUCKET^USER_ID^INSTANCE_ID^USE_WOW_STATUS^CONFIRM_AREA^IS_SAME_PLAN_ID^PLAN_ID^MASTER_ID^BUCKET_FROM^BUCKET_TO^DIVISION_ID^ |
+| 23:42:11.982 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 45.08 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:42:11, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_624, P |
+| 23:42:11.987 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.59 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=1, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:42:11, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_624, P |
+| 23:42:11.992 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.35 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=2, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:42:11, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_624, P |
+| 23:42:12.032 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 39.58 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=3, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:41:51, END_TIME=2026-11-12 23:42:11, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234151_624, P |
+| 23:42:12.076 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 42.75 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=0, QUERY_VALUE=--GSCM.FP.Common.WSL/FoxDataService.svc
+EXEC PR_UI_GENERAL_COMMAND @p_sys_type=N'Select',@p_sys_flag=N'',@p_sys_gubun=N'',@p_user_id=N'jaeuk.shin',@p_proc_name=N'PR_UI_FP01551_ |
+| 23:42:12.081 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.73 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=1, QUERY_VALUE=6#_DATE_SEQ:1#WEEK_SEQ:202643#_TYPE:D#!_DATE:20261026#_NAME:2026-10-26 (Mon)#_COUNT:1#_VALUE:D37#_DATE_SEQ:1#WEEK_SEQ:202644#_TYPE:D#!_DATE:20261027#_NAME:2026-10-27 (Tue)#_COU |
+| 23:42:12.086 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.39 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=2, QUERY_VALUE=Q:1#WEEK_SEQ:202649#_TYPE:D#!_DATE:20261207#_NAME:2026-12-07 (Mon)#_COUNT:1#_VALUE:D79#_DATE_SEQ:1#WEEK_SEQ:202650#_TYPE:D#!_DATE:20261208#_NAME:2026-12-08 (Tue)#_COUNT:1#_VALU |
+| 23:42:12.105 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 18.63 | PROG_ID=PR_UI_FP01551_IN_HOUSE_REQUEST_PLAN, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=3, QUERY_VALUE=#WEEK_NAME:2026W46#WEEK_COUNT:7#W_VALUE:W8#IS_DAY_VIEW:1#!WEEK:202647#WEEK_NAME:2026W47#WEEK_COUNT:7#W_VALUE:W9#IS_DAY_VIEW:1#!WEEK:202648#WEEK_NAME:2026W48#WEEK_COUNT:7#W_VALU |
+| 23:42:12.174 | find | GSCM.FP_Common | PR_UI_GENERAL_COMMAND | 0 | 58.35 | p_sys_type=Select, p_sys_flag=TOTAL_VALUE, p_sys_gubun=, p_user_id=jaeuk.shin, p_proc_name=PR_UI_FP01551_ETC, opt_none=, in_columns=AMEND_INSTANCE^OPERATION_ID^PLAN_DATE^BUCKET^USER_ID^INSTANCE_ID^USE_WOW_STATUS^CONFIRM_AREA^IS_SAME_PLAN_ID^PLAN_ID^MASTER_ID^BUCKET_FROM^BUCKET_TO^DIVISION_ID^SITE_ID |
+| 23:42:12.180 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.88 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_114, PARAM_VALUE={p_sys_ |
+| 23:42:12.185 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.91 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=1, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_114, PARAM_VALUE=LUE:D37 |
+| 23:42:12.216 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 31.55 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=2, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_114, PARAM_VALUE=ATE_SEQ |
+| 23:42:12.261 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 44.73 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=3, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_114, PARAM_VALUE=EEK_COU |
+| 23:42:12.278 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 16.55 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=0, QUERY_VALUE=--GSCM.FP.Common.WSL/FoxDataService.svc
+EXEC PR_UI_GENERAL_COMMAND @p_sys_type=N'Select',@p_sys_flag=N'TOTAL_VALUE',@p_sys_gubun=N'',@p_user_id=N'jaeuk.shin',@p_proc_name=N'PR_UI_FP01551_ETC',@o |
+| 23:42:12.283 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 4.78 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=1, QUERY_VALUE=_SEQ:1#WEEK_SEQ:202643#_TYPE:D#!_DATE:20261026#_NAME:2026-10-26 (Mon)#_COUNT:1#_VALUE:D37#_DATE_SEQ:1#WEEK_SEQ:202644#_TYPE:D#!_DATE:20261027#_NAME:2026-10-27 (Tue)#_COUNT:1#_VALUE:D38#_DATE_SEQ |
+| 23:42:12.290 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.68 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=2, QUERY_VALUE=K_SEQ:202649#_TYPE:D#!_DATE:20261207#_NAME:2026-12-07 (Mon)#_COUNT:1#_VALUE:D79#_DATE_SEQ:1#WEEK_SEQ:202650#_TYPE:D#!_DATE:20261208#_NAME:2026-12-08 (Tue)#_COUNT:1#_VALUE:D80#_DATE_SEQ:1#WEEK_SE |
+| 23:42:12.295 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.16 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=3, QUERY_VALUE=AME:2026W46#WEEK_COUNT:7#W_VALUE:W8#IS_DAY_VIEW:1#!WEEK:202647#WEEK_NAME:2026W47#WEEK_COUNT:7#W_VALUE:W9#IS_DAY_VIEW:1#!WEEK:202648#WEEK_NAME:2026W48#WEEK_COUNT:7#W_VALUE:W10#IS_DAY_VIEW:1#!WEEK |
+| 23:42:12.368 | find | GSCM.FP_Common | PR_UI_GENERAL_COMMAND | 1 | 64.92 | p_sys_type=SELECT, p_sys_flag=CONFIRM_INFO, p_sys_gubun=, p_user_id=jaeuk.shin, p_proc_name=PR_UI_FP01551_ETC, opt_none=, in_columns=AMEND_INSTANCE^OPERATION_ID^PLAN_DATE^BUCKET^USER_ID^INSTANCE_ID^USE_WOW_STATUS^CONFIRM_AREA^IS_SAME_PLAN_ID^PLAN_ID^MASTER_ID^BUCKET_FROM^BUCKET_TO^DIVISION_ID^SITE_I |
+| 23:42:12.374 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.78 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=0, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_302, PARAM_VALUE={p_sys_ |
+| 23:42:12.379 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.04 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=1, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_302, PARAM_VALUE=ALUE:D3 |
+| 23:42:12.385 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 5.6 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=2, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_302, PARAM_VALUE=DATE_SE |
+| 23:42:12.411 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 26.41 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=0, INST_SEQ=3, QUERY_VALUE=, JOB_TYPE=read, START_TIME=2026-11-12 23:42:12, END_TIME=2026-11-12 23:42:12, INSERT_ID=jaeuk.shin, LOG_TYPE=PARAM, IP_ADDRESS=100.113.200.36, SESSION_ID=20261112234212_302, PARAM_VALUE=WEEK_CO |
+| 23:42:12.449 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 36.78 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=0, QUERY_VALUE=--GSCM.FP.Common.WSL/FoxDataService.svc
+EXEC PR_UI_GENERAL_COMMAND @p_sys_type=N'SELECT',@p_sys_flag=N'CONFIRM_INFO',@p_sys_gubun=N'',@p_user_id=N'jaeuk.shin',@p_proc_name=N'PR_UI_FP01551_ETC',@ |
+| 23:42:12.456 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 6.58 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=1, QUERY_VALUE=E_SEQ:1#WEEK_SEQ:202643#_TYPE:D#!_DATE:20261026#_NAME:2026-10-26 (Mon)#_COUNT:1#_VALUE:D37#_DATE_SEQ:1#WEEK_SEQ:202644#_TYPE:D#!_DATE:20261027#_NAME:2026-10-27 (Tue)#_COUNT:1#_VALUE:D38#_DATE_SE |
+| 23:42:12.464 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 7.63 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=2, QUERY_VALUE=EK_SEQ:202649#_TYPE:D#!_DATE:20261207#_NAME:2026-12-07 (Mon)#_COUNT:1#_VALUE:D79#_DATE_SEQ:1#WEEK_SEQ:202650#_TYPE:D#!_DATE:20261208#_NAME:2026-12-08 (Tue)#_COUNT:1#_VALUE:D80#_DATE_SEQ:1#WEEK_S |
+| 23:42:12.527 | find | GSCM.FP_Common | INSERT INTO [dbo].[TH_UIS_SQL_LOG] | 1 | 62.91 | PROG_ID=PR_UI_FP01551_ETC, QUERY_ID=FP_Common.PR_UI_GENERAL_COMMAND, QUERY_SEQ=1, INST_SEQ=3, QUERY_VALUE=NAME:2026W46#WEEK_COUNT:7#W_VALUE:W8#IS_DAY_VIEW:1#!WEEK:202647#WEEK_NAME:2026W47#WEEK_COUNT:7#W_VALUE:W9#IS_DAY_VIEW:1#!WEEK:202648#WEEK_NAME:2026W48#WEEK_COUNT:7#W_VALUE:W10#IS_DAY_VIEW:1#!WEE |
+| 23:42:12.540 | find | GSCM.BizService.WSL | UP_FX_SaveMenuExecutionLog | 0 | 4.38 | p_menu_id=FP01551, p_log_type=FIND, p_log_cnt=, p_db_time=20.937, p_ui_time=0.235, p_user_id=jaeuk.shin |
+| 23:42:19.194 | find | GSCM.BizService.WSL | UP_FX_SaveMenuConnect | -1 | 59.21 | MenuID=In-house Request Plan(Pack), CnntCode=0104002, UserID=jaeuk.shin |
+
+## 조회조건 (LayoutControl 라벨)
+
+| 라벨 | 컨트롤 | 필수 |
+|---|---|---|
+| lblSql | btnSql |  |
+| Data | btnToggleSave |  |
+| Plan Group | cboInstance |  |
+| Plan Date | drpPlanDate |  |
+| Plan Id | cboPlanId |  |
+| Division. | clbDivision |  |
+| Site | cboSite |  |
+| Plant | clbPlant |  |
+| Building | clbFactory |  |
+| Cell Code | txtCellCode |  |
+| Nick Name(Cell) | txtNickName |  |
+| Plan Period | drpPeriod |  |
+| layoutControlItem13 | chk_Info |  |
+| layoutControlItem2 | chk_lineAssign |  |
+
+## 그리드
+
+- spdMain / Amend: 행 0 · 컬럼 24(보임 23) · 헤더 2단 · 고정 컬럼 0
+
+> 주의: 실행 중 다른 AS-IS 런처가 떠 있었음(GSCM.Launcher.exe(34700)) — 호출 기록에 그쪽 호출이 섞였을 수 있음

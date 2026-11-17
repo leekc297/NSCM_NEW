@@ -1,0 +1,80 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0104-S449fc9",
+    "SCP0104-Saa86fe",
+    "SCP0104-Sc5133f",
+    "SCP0104-S5dd269",
+    "SCP0104-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItem",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItem failed: InvalidOperationException: control not found: btnItem",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0104-Sf9ae0a",
+    "SCP0104-S6dd7e2"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CAPAItemPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_CAPA_ITEM_POPUP"
+   ],
+   "scenarios": [
+    "SCP0104-Sf9ae0a",
+    "SCP0104-S6dd7e2"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnAddVersion",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSopNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 12:11:02.718",
+ "fills": 0,
+ "fill_left": []
+}

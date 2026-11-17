@@ -7,7 +7,8 @@ import type { Nscm } from './nscm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { probe, parseCsv } from './probe';
-import { typeCell } from './saveprobe';
+import { typeCell, recordTouched } from './saveprobe';
+import { fillPrereq } from './prereq';
 
 export type CrudPlan = { keyColumns?: string[]; sample?: { div?: string } };
 export type CrudOutcome = {
@@ -16,6 +17,7 @@ export type CrudOutcome = {
   editable: boolean | null;          // 셀 편집기 열림/값 변경 가능 여부(판정 불가 null)
   inserted: boolean; saved: boolean; found: boolean; updated: boolean; cleaned: boolean; restored: boolean;
   saveCalls: number; saveErrors: string[]; notes: string[];
+  lost?: boolean;                    // 저장 성공 뒤 재조회에서 그 행을 못 찾음 — 반영 여부 측정 실패(2026-11-10 T179)
 };
 
 const ERR = /ORA-|PLS-|Exception|실패|fail|error|오류/i;
@@ -84,7 +86,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     // 값 있는 칸 우선 · 없으면 빈 칸도(2026-11-06 사용자 지시 — 입력·저장 후 지워서 저장까지 왕복. 종전 2026-10-31 SCP0028 빈칸 제외 규칙 대체)
     const valued = ecs.filter(c => c.text !== ''); const ordered = (valued.length ? valued : ecs).slice(0, 24); if (!valued.length && ecs.length) out.notes.push('값 있는 편집 칸 없음 — 빈 칸 왕복');
     if (!ordered.length) { out.editable = false; out.notes.push('편집 가능 셀 없음'); countSave(); annotate(info, out); return out; }
-    const S: { col: number; colIdx: number; row: number; orig: string; nv: { next: string; restore: string } | null; key: string; binding: string } = { col: -1, colIdx: -1, row: -1, orig: '', nv: null, key: '', binding: '' };
+    const S: { col: number; colIdx: number; row: number; orig: string; nv: { next: string; restore: string } | null; key: string; binding: string; item0: Record<string, unknown> | null } = { col: -1, colIdx: -1, row: -1, orig: '', nv: null, key: '', binding: '', item0: null };
     const metaB = byMeta ? await nscm.gridColumnsMeta(0) : null;
     for (const c of ordered) {
       // 2026-11-06(SCP0084 조치 필요 1·2·3·16번 허위 FAIL): 컬럼 정의 후보는 화면 beginningEdit 가 막는 칸(공용 DataGrid INPUT_TP_CD='S' 잠금)일 수 있다 —
@@ -103,7 +105,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       let bindHit = '';
       if (kb) { const ka = (await probe.rowItem(nscm.page, c.row).catch(() => null)) as Record<string, unknown> | null; const chAll = ka ? Object.keys(ka).filter(k => !/^(CRUD_TYPE|_SEL|ROW_STATUS|STATUS|_ROW_INDEX)$/i.test(k) && String(kb[k] ?? '') !== String(ka[k] ?? '')) : []; const ch = chAll.filter(k => exK.size && exK.has(k.toUpperCase())); if (ch.length) { out.notes.push(`저장 키 연동 칸 제외(${ch.join(',')})`); await nscm.search().catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); continue; } if (chAll.length === 1) bindHit = chAll[0]; }
       const after = (await (await nscm.gridCell(c.row, c.col, 0)).innerText().catch(() => '')).trim();
-      if (after !== c.text && after !== '') { S.col = c.col; S.colIdx = mi(c); S.row = c.row; S.orig = c.text; S.nv = cand; S.key = await nscm.rowKey(c.row); S.binding = bindHit; break; }
+      if (after !== c.text && after !== '') { S.col = c.col; S.colIdx = mi(c); S.row = c.row; S.orig = c.text; S.nv = cand; S.key = await nscm.rowKey(c.row); S.binding = bindHit; S.item0 = kb; break; }
       await nscm.page.keyboard.press('Escape').catch(() => undefined);
     }
     const col = S.col, row = S.row, orig = S.orig, nv = S.nv, key = S.key;
@@ -124,6 +126,9 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       const identEx = [colName]; const dataRow = await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const c = el && el['$WJ-CTRL']; if (!c) return ${row}; const vr = c.viewRange; return (vr && vr.row > 0 ? vr.row : 0) + ${row}; })()`) as number;
       const identity = await probe.rowIdentity(nscm.page, dataRow, identEx);
       if (opt.onBeforeSave) await opt.onBeforeSave(dataRow);  // 저장 전 DB 스냅샷(원복 전 비교용 · 2026-10-31)
+      // 2026-11-09 T175(SSP0024 15:11 실저장 미기록): edit-save 실저장도 편집 전 행을 touched_rows 에 남긴다 — 종전엔 cellRoundTrip·realsave 만 기록해
+      //   restore_touched 기준 시각이 첫 저장보다 늦어(15:12:10) 15:11 저장의 이력(_H) 2행을 못 찾았다
+      if (S.item0) recordTouched(S.item0, new Date(Date.now() - 3_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19));
       T('수정 입력 완료'); const s1 = await nscm.save(); T('저장 응답 ' + (s1.calls.length ? s1.calls.map(c => c.btn + ':' + c.status + (c.req ? ' 요청=' + c.req.replace(/\s+/g, ' ').slice(0, 180) : '') + (c.res ? ' 응답=' + c.res.slice(0, 120) : '')).join(' | ') : 'call-proc 없음') + (s1.message ? ' 알림=' + s1.message.slice(0, 80) : ''));
       { const sc = saveOf(s1.calls); out.saved = !ERR.test(s1.message || '') && sc.every(c => c.status < 400) && sc.length > 0;
       if (!out.saved) out.saveErrors.push(`SAVE: ${s1.message || (sc.length ? sc.map(c => `${c.btn} HTTP ${c.status}`).join(',') : 'SAVE call-proc 없음')}`); }
@@ -131,8 +136,11 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       await nscm.search(); T('재조회');
       // 행 전체 값으로 같은 행을 찾는다 — 유일하지 않으면 원복하지 않는다(다른 행 덮어쓰기 방지, 2026-10-31)
       await nscm.page.waitForTimeout(800); await probe.waitRows(nscm.page, 30_000).catch(() => undefined);
-      const hits1 = identity ? await probe.findRowsByIdentity(nscm.page, identity, identEx) : [];
-      if (hits1.length !== 1) { out.notes.push(`행 식별 ${hits1.length}건(1건이어야 함) — 재조회 대조·원복 중단${out.saved ? ' · ⚠ 저장은 됨: 수동 원복 필요 [' + colName + ' 원값 ' + orig + ']' : ''}`); out.found = false; out.restored = !out.saved; countSave(); annotate(info, out); return out; }
+      let hits1 = identity ? await probe.findRowsByIdentity(nscm.page, identity, identEx) : [];
+      // 2026-11-10 T179(SCP0033 F1 허위 FAIL): 수정 칸의 사본 칸(AS-IS SP 'VALID_YN AS S_VALUE_YN' · TO-BE S_VALID_YN)이 저장과 함께 바뀌어
+      //   저장 전 식별 값과 정확히 같은 행이 0건 → '재조회 미반영' 으로 오판. 정확 일치 0건이면 식별 값이 2칸 이내만 다른 유일한 행을 그 행으로 본다(차이 칸 기록)
+      if (identity && hits1.length === 0) { const near = await probe.findRowNear(nscm.page, identity, identEx, 2).catch(() => null); if (near) { hits1 = [near.row]; out.notes.push(`행 식별 정확 일치 0 → 근접 일치 r${near.row}(저장으로 함께 바뀐 칸: ${near.diff.join(', ') || '없음'})`); } }
+      if (hits1.length !== 1) { out.notes.push(`행 식별 ${hits1.length}건(1건이어야 함) — 재조회 대조·원복 중단${out.saved ? ' · ⚠ 저장은 됨: 수동 원복 필요 [' + colName + ' 원값 ' + orig + ']' : ''}`); out.found = false; out.lost = out.saved; out.restored = !out.saved; countSave(); annotate(info, out); return out; }
       const r1 = hits1[0]; T('행 찾기 ' + r1);
       const v1 = (await probe.displayText(nscm.page, r1, colName)) ?? ''; out.found = same(v1, nv.next); out.updated = out.found;
       out.notes.push(`행 [${key}] ${colName}: '${orig}' → '${nv.next}' 저장 ${out.saved ? '성공' : '실패'} · 재조회 값 '${v1}' ${out.found ? '반영 확인' : '미반영'}`);
@@ -180,7 +188,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : remarkCol >= 0 ? remarkCol : firstEditable, 0);
   try {
     const before = await rowsLoc().count();
-    await nscm.subButton('Insert').click();
+    await nscm.clickInsert();
     await nscm.page.waitForFunction((n: number) => document.querySelectorAll('.wj-flexgrid .wj-cells .wj-row').length > n, before, { timeout: 10_000 }).catch(() => undefined);
     out.inserted = (await rowsLoc().count()) > before;
     if (!out.inserted) { out.notes.push('Insert 후 행 증가 없음'); }
@@ -188,6 +196,8 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       // 신규 행 = 맨 위 또는 맨 아래 — 비어 있는 행을 찾는다
       const n = await rowsLoc().count(); let ri = 0;
       for (const cand of [0, n - 1]) { const t = (await rowsLoc().nth(cand).innerText().catch(() => '')).replace(/\s+/g, ''); if (!t) { ri = cand; break; } }
+      // 2026-11-09 T176: AS-IS 선행 칸(cell_prereq.csv · 예 Division)을 먼저 채운다 — 비우면 다른 칸 입력이 '먼저 선택' 안내로 막혀 마커 저장이 실패한다
+      { const mid = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || '').toUpperCase(); const nq = await probe.findRow(nscm.page, 'new'); if (mid && nq) { const pl = await fillPrereq(nscm.page, mid, nq.row, { isNew: true }); if (pl.length) out.notes.push(`선행 칸 채움(T176) ${pl.join(' · ')}`); } }
       // 2026-11-08 T166(SCP0122 J2 실측 '[Act. Seq] 값은 필수 입력 항목입니다.' → 17:4x 2차 실측 '신규 입력 데이터 중 중복된 데이터' — 연동 콤보(OPMZ_ACTV_NAME→CD)가 키를 기존 값으로 바꿈 → 필수 칸을 먼저 채우고 마커(키)는 마지막에 넣어 덮는다): 마커 행이 keyColumns 만 채워 필수(M) 컬럼 화면 검증에 막혀 허용 계정 CRUD 를 재지 못했다 →
       //   TO-BE 메타(sheet_columns.csv input_tp_cd=M)와 그리드 바인딩을 대조해 비어 있는 필수 칸을 채운다: 콤보 = 첫 후보 · 숫자 = '1' · 날짜 = 오늘 YYYYMMDD · 문자 = 마커. 채운 칸은 노트에 남긴다
       try {

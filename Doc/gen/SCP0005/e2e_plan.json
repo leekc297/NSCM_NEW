@@ -1,0 +1,428 @@
+{
+  "menuId": "SCP0005",
+  "page": "DistributionRoute",
+  "feature": "shipping",
+  "routePath": "shipping/distribution-route",
+  "asisName": "DistributionRoute",
+  "fields": [
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN"
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode"
+    },
+    {
+      "key": "fromCountry",
+      "label": "From Country",
+      "lbl": "LBL00074",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtFromCountry"
+    },
+    {
+      "key": "fromCity",
+      "label": "From City",
+      "lbl": "LBL00070",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtFromCity"
+    },
+    {
+      "key": "toCountry",
+      "label": "To Country",
+      "lbl": "LBL00075",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtToCountry"
+    },
+    {
+      "key": "toCity",
+      "label": "To City",
+      "lbl": "LBL00071",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtToCity"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "toSrch",
+      "label": "To Srch",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnToSrch"
+    },
+    {
+      "key": "fromSrch",
+      "label": "From Srch",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnFromSrch"
+    },
+    {
+      "key": "eaxelUpload",
+      "label": "Upload",
+      "lbl": "LBL01130",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnEaxel_Upload"
+    },
+    {
+      "key": "excelForm",
+      "label": "Excel Form",
+      "lbl": "LBL00762",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnExcel_Form"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Distribution Route",
+      "key": "DISTRIBUTION_ROUTE",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "A_COUNTRY",
+        "A_PORT_CODE",
+        "A_PORT_NAME",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "D_COUNTRY",
+        "D_PORT_CODE",
+        "D_PORT_NAME",
+        "DAYS_FRI",
+        "DAYS_MON",
+        "DAYS_SAT",
+        "DAYS_SUN",
+        "DAYS_THU",
+        "DAYS_TUE",
+        "DAYS_WED",
+        "FROM_CITY",
+        "FROM_CITY_NAME",
+        "FROM_COUNTRY",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LT_ARRIVAL_INLAND",
+        "LT_DEPARTURE_INLAND",
+        "LT_LAY_OFF_CLEARANCE",
+        "LT_SUM",
+        "LT_TYPE",
+        "LT_VOYAGE",
+        "LT_WAIT_SHIPPING",
+        "One_SEGMENT_COST",
+        "PRIORITY",
+        "ROUTE_ID",
+        "SHIP_DOC_PREPARATION_DATE",
+        "SHIPPING_COMPANY",
+        "Three_SEGMENT_COST",
+        "TO_CITY",
+        "TO_CITY_NAME",
+        "TO_COUNTRY",
+        "TRANSPORT_MODE",
+        "Two_SEGMENT_COST",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Created By",
+        "Creation Date",
+        "Country*",
+        "Port Code*",
+        "Port*",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "City*",
+        "City Name",
+        "Country*",
+        "Last Update Date",
+        "Last Updated By",
+        "Arrival Inland",
+        "Departure Inland",
+        "Lay Off/Customs Clearance",
+        "Total L/T",
+        "L/T Type*",
+        "Voyage",
+        "Waiting For Shipping",
+        "Pick Up Cost",
+        "Priority*",
+        "Route Id",
+        "Shipping Document Preparation Date",
+        "Forwarder*",
+        "Delivery Cost",
+        "City*",
+        "City Name",
+        "Country*",
+        "Trans Mode*",
+        "Freight Cost",
+        "Valid*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "POPUP",
+      "key": "POPUP",
+      "popup": true,
+      "rule": "META+코드연결",
+      "columns": [
+        "DAYS_FRI",
+        "DAYS_MON",
+        "DAYS_SAT",
+        "DAYS_SUN",
+        "DAYS_THU",
+        "DAYS_TUE",
+        "DAYS_WED",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LT_ARRIVAL_INLAND",
+        "LT_DEPARTURE_INLAND",
+        "LT_LAY_OFF_CLEARANCE",
+        "LT_SUM",
+        "LT_VOYAGE",
+        "LT_WAIT_SHIPPING",
+        "ROUTE_ID"
+      ],
+      "labels": [
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "Last Update Date",
+        "Last Updated By",
+        "Arrival Inland",
+        "Departure Inland",
+        "Lay Off/Customs Clearance",
+        "Total L/T",
+        "Voyage",
+        "Waiting For Shipping",
+        "Route Id"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Distribution Route",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Distribution Route",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0005.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+      "entries": [
+        "event:this.btnEaxel_Upload.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_COUNTRY_CITY",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleToSrch",
+      "target": "this.btnToSrch",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleFromSrch",
+      "target": "this.btnFromSrch",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleExcelForm",
+      "target": "this.btnExcel_Form",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID"
+      ]
+    },
+    {
+      "name": "handleMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleEaxelUpload",
+      "target": "this.btnEaxel_Upload",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0005_GET_DISTRIBUTION_ROUTE"
+      ]
+    },
+    {
+      "name": "handleMainDataModel",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMainDataModel",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMainDataModel",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

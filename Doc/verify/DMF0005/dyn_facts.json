@@ -2090,8 +2090,16 @@
   ],
   "{\"comboId\":\"TeambyDivision\",\"divisionId\":\"''\",\"mnuId\":\"DMF0005\"}": [
    {
+    "c": "30385415",
+    "v": "Admin T.Treasury P"
+   },
+   {
     "c": "70021414",
     "v": "AI/빅데이터1.빅데이터분석팀"
+   },
+   {
+    "c": "70084589",
+    "v": "AI/빅데이터1.제품개발AI팀"
    },
    {
     "c": "71067318",
@@ -2248,6 +2256,10 @@
    {
     "c": "70021352",
     "v": "IR커뮤니케이션팀"
+   },
+   {
+    "c": "30228984",
+    "v": "LGESAU"
    },
    {
     "c": "71065524",
@@ -2782,6 +2794,10 @@
   ],
   "{\"comboId\":\"FilterTeambyDivision\",\"mnuId\":\"DMF0005\"}": [
    {
+    "c": "30228984",
+    "v": "LGESAU"
+   },
+   {
     "c": "30234912",
     "v": "New Business T"
    },
@@ -2800,6 +2816,10 @@
    {
     "c": "30339338",
     "v": "Technology Planning Team"
+   },
+   {
+    "c": "30385415",
+    "v": "Admin T.Treasury P"
    },
    {
     "c": "30426977",
@@ -3246,6 +3266,10 @@
     "v": "구매.자재.자재혁신팀"
    },
    {
+    "c": "70084589",
+    "v": "AI/빅데이터1.제품개발AI팀"
+   },
+   {
     "c": "70084594",
     "v": "ESS.개발.Cell.Cell개발1팀"
    },
@@ -3642,6 +3666,10 @@
    {
     "c": "HQ05-40-AS",
     "v": "HQ05_40-W"
+   },
+   {
+    "c": "Anjin_CN_SHA",
+    "v": "Anjin_CN_SHA"
    },
    {
     "c": "Sunwoda_CN_SZX",
@@ -5630,10 +5658,6 @@
    {
     "c": "Continental_DE_SC1",
     "v": "Continental_DE_SC1"
-   },
-   {
-    "c": "Continental_MX_AGU",
-    "v": "Continental_MX_AGU"
    }
   ],
   "{\"comboId\":\"FilterSiteByEndCustomer\",\"mnuId\":\"DMF0005\"}": [
@@ -6176,6 +6200,10 @@
    {
     "c": "Anjin_AK_TES",
     "v": "Anjin_AK_TES"
+   },
+   {
+    "c": "Anjin_CN_SHA",
+    "v": "Anjin_CN_SHA"
    },
    {
     "c": "Anjin_CN_SHA",
@@ -7632,10 +7660,6 @@
    {
     "c": "Corun_CN_LHW",
     "v": "Corun_CN_LHW"
-   },
-   {
-    "c": "Corun_CN_SZX",
-    "v": "Corun_CN_SZX"
    }
   ],
   "{\"comboId\":\"FilterEndCustomerByDivision\",\"mnuId\":\"DMF0005\"}": [
@@ -7690,6 +7714,10 @@
    {
     "c": "8minute Energy",
     "v": "8minute Energy"
+   },
+   {
+    "c": "ABB",
+    "v": "ABB"
    },
    {
     "c": "ABB",
@@ -8248,6 +8276,10 @@
     "v": "Anjin"
    },
    {
+    "c": "Anjin",
+    "v": "Anjin"
+   },
+   {
     "c": "Anker",
     "v": "Anker"
    },
@@ -8514,6 +8546,10 @@
    {
     "c": "ATL",
     "v": "ATL"
+   },
+   {
+    "c": "Audi",
+    "v": "Audi"
    },
    {
     "c": "Audi",
@@ -9626,18 +9662,6 @@
    {
     "c": "Chubutsu",
     "v": "Chubutsu"
-   },
-   {
-    "c": "Chubutsu",
-    "v": "Chubutsu"
-   },
-   {
-    "c": "Chubutsu",
-    "v": "Chubutsu"
-   },
-   {
-    "c": "Chunju",
-    "v": "Chunju"
    }
   ],
   "{\"comboId\":\"CustGroup\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
@@ -24591,11 +24615,11 @@
    },
    {
     "c": "LGE",
-    "v": "LG ENERGY SOLUTION, LTD."
+    "v": "LGE"
    },
    {
     "c": "LGE",
-    "v": "LGE"
+    "v": "LG ENERGY SOLUTION, LTD."
    },
    {
     "c": "LGE RESU",
@@ -35518,14 +35542,14 @@
   ],
   "{\"comboId\":\"CompanySalesSite\",\"divisionId\":\"'40'\",\"scmSiteId\":\"'1X Technologies_US_PAO'\",\"validYn\":\"'Y'\"}": [
    {
-    "c": "HQ00",
-    "v": "HQ00"
+    "c": "HD00",
+    "v": "HD00"
    }
   ],
   "{\"comboId\":\"CompanySalesSite\",\"divisionId\":\"'40'\",\"scmSiteId\":\"'1X Technologies_US_PAO'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
    {
-    "c": "HQ00",
-    "v": "HQ00"
+    "c": "HD00",
+    "v": "HD00"
    }
   ],
   "{\"comboId\":\"SALES_PLANT_DM\",\"divisionId\":\"'40'\",\"companyId\":\"'HQ00'\",\"validYn\":\"'Y'\"}": [
@@ -36702,28 +36726,28 @@
   ],
   "{\"comboId\":\"EndCustomerByCustGroup\",\"divisionId\":\"'40'\",\"custGroup\":\"'FT'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
    {
-    "c": "IM(개발OC)",
-    "v": "IM(개발OC)"
+    "c": "IM(개발NJ)",
+    "v": "IM(개발NJ)"
    },
    {
-    "c": "SpaceX",
-    "v": "SpaceX"
+    "c": "Keyway",
+    "v": "Keyway"
    },
    {
     "c": "IM MDF",
     "v": "IM MDF"
    },
    {
-    "c": "IM(개발NJ)",
-    "v": "IM(개발NJ)"
+    "c": "SpaceX",
+    "v": "SpaceX"
+   },
+   {
+    "c": "IM(개발OC)",
+    "v": "IM(개발OC)"
    },
    {
     "c": "IM-Re",
     "v": "IM-Re"
-   },
-   {
-    "c": "Keyway",
-    "v": "Keyway"
    },
    {
     "c": "IM",
@@ -36777,8 +36801,2996 @@
     "c": "Alte_US_SFJ",
     "v": "Alte_US_SFJ"
    }
+  ],
+  "{\"comboId\":\"EndCustomerByDivisionDept\",\"divisionId\":\"''\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "-",
+    "v": "-"
+   },
+   {
+    "c": "300MS 8ME SBS1",
+    "v": "300MS 8ME SBS1"
+   },
+   {
+    "c": "425LM 8ME SBS2",
+    "v": "425LM 8ME SBS2"
+   },
+   {
+    "c": "45MG 8ME",
+    "v": "45MG 8ME"
+   },
+   {
+    "c": "8minute Energy",
+    "v": "8minute Energy"
+   },
+   {
+    "c": "ABB",
+    "v": "ABB"
+   },
+   {
+    "c": "ABB AUSTRALIA",
+    "v": "ABB AUSTRALIA"
+   },
+   {
+    "c": "ABB CA",
+    "v": "ABB CA"
+   },
+   {
+    "c": "ABB USA",
+    "v": "ABB USA"
+   },
+   {
+    "c": "Acciona SA",
+    "v": "Acciona SA"
+   },
+   {
+    "c": "Ace Engineering",
+    "v": "Ace Engineering"
+   },
+   {
+    "c": "AEE Solar",
+    "v": "AEE Solar"
+   },
+   {
+    "c": "Aeonus",
+    "v": "Aeonus"
+   },
+   {
+    "c": "AES",
+    "v": "AES"
+   },
+   {
+    "c": "AES Corp",
+    "v": "AES Corp"
+   },
+   {
+    "c": "AES ES",
+    "v": "AES ES"
+   },
+   {
+    "c": "AGL Energy",
+    "v": "AGL Energy"
+   },
+   {
+    "c": "AKA",
+    "v": "AKA"
+   },
+   {
+    "c": "Akatsuki",
+    "v": "Akatsuki"
+   },
+   {
+    "c": "AKUO ENERGY",
+    "v": "AKUO ENERGY"
+   },
+   {
+    "c": "ALBIOMA",
+    "v": "ALBIOMA"
+   },
+   {
+    "c": "Aldustria",
+    "v": "Aldustria"
+   },
+   {
+    "c": "Alpha",
+    "v": "Alpha"
+   },
+   {
+    "c": "Alte",
+    "v": "Alte"
+   },
+   {
+    "c": "Ampere",
+    "v": "Ampere"
+   },
+   {
+    "c": "Ampere Electricity",
+    "v": "Ampere Electricity"
+   },
+   {
+    "c": "Ampherr",
+    "v": "Ampherr"
+   },
+   {
+    "c": "ANDURIL",
+    "v": "ANDURIL"
+   },
+   {
+    "c": "ANODE",
+    "v": "ANODE"
+   },
+   {
+    "c": "Anode Power",
+    "v": "Anode Power"
+   },
+   {
+    "c": "Aratina",
+    "v": "Aratina"
+   },
+   {
+    "c": "Arlington Energy",
+    "v": "Arlington Energy"
+   },
+   {
+    "c": "Arpiem",
+    "v": "Arpiem"
+   },
+   {
+    "c": "AS",
+    "v": "AS"
+   },
+   {
+    "c": "Asset Engineering",
+    "v": "Asset Engineering"
+   },
+   {
+    "c": "ATBS",
+    "v": "ATBS"
+   },
+   {
+    "c": "ATL",
+    "v": "ATL"
+   },
+   {
+    "c": "Audi",
+    "v": "Audi"
+   },
+   {
+    "c": "audi as",
+    "v": "audi as"
+   },
+   {
+    "c": "Avangrid",
+    "v": "Avangrid"
+   },
+   {
+    "c": "AVK",
+    "v": "AVK"
+   },
+   {
+    "c": "AW",
+    "v": "AW"
+   },
+   {
+    "c": "AWS",
+    "v": "AWS"
+   },
+   {
+    "c": "BAE",
+    "v": "BAE"
+   },
+   {
+    "c": "Banglilai",
+    "v": "Banglilai"
+   },
+   {
+    "c": "BAP",
+    "v": "BAP"
+   },
+   {
+    "c": "Baywa",
+    "v": "Baywa"
+   },
+   {
+    "c": "BEDEO",
+    "v": "BEDEO"
+   },
+   {
+    "c": "BeiJing HuaQing",
+    "v": "BeiJing HuaQing"
+   },
+   {
+    "c": "BJ Power",
+    "v": "BJ Power"
+   },
+   {
+    "c": "Blue sigma",
+    "v": "Blue sigma"
+   },
+   {
+    "c": "BMW",
+    "v": "BMW"
+   },
+   {
+    "c": "BMW AS",
+    "v": "BMW AS"
+   },
+   {
+    "c": "BMW_NTG",
+    "v": "BMW_NTG"
+   },
+   {
+    "c": "BOSCH",
+    "v": "BOSCH"
+   },
+   {
+    "c": "Bosung Power",
+    "v": "Bosung Power"
+   },
+   {
+    "c": "Bosung Powertec",
+    "v": "Bosung Powertec"
+   },
+   {
+    "c": "BS Hanyang",
+    "v": "BS Hanyang"
+   },
+   {
+    "c": "BYUCKSAN POWER",
+    "v": "BYUCKSAN POWER"
+   },
+   {
+    "c": "Capital Energy",
+    "v": "Capital Energy"
+   },
+   {
+    "c": "CAT",
+    "v": "CAT"
+   },
+   {
+    "c": "CCR",
+    "v": "CCR"
+   },
+   {
+    "c": "CDN Energy",
+    "v": "CDN Energy"
+   },
+   {
+    "c": "CED",
+    "v": "CED"
+   },
+   {
+    "c": "Celltech",
+    "v": "Celltech"
+   },
+   {
+    "c": "Cen",
+    "v": "Cen"
+   },
+   {
+    "c": "China Effort(A)",
+    "v": "China Effort(A)"
+   },
+   {
+    "c": "Chint",
+    "v": "Chint"
+   },
+   {
+    "c": "CHPP",
+    "v": "CHPP"
+   },
+   {
+    "c": "CHROMAGEN",
+    "v": "CHROMAGEN"
+   },
+   {
+    "c": "Chubutsu",
+    "v": "Chubutsu"
+   },
+   {
+    "c": "Clearway Energy",
+    "v": "Clearway Energy"
+   },
+   {
+    "c": "Cling Systems",
+    "v": "Cling Systems"
+   },
+   {
+    "c": "CLOU",
+    "v": "CLOU"
+   },
+   {
+    "c": "Club Car",
+    "v": "Club Car"
+   },
+   {
+    "c": "CMC",
+    "v": "CMC"
+   },
+   {
+    "c": "Coenergia",
+    "v": "Coenergia"
+   },
+   {
+    "c": "COENSYS",
+    "v": "COENSYS"
+   },
+   {
+    "c": "Con Edison",
+    "v": "Con Edison"
+   },
+   {
+    "c": "Controllis",
+    "v": "Controllis"
+   },
+   {
+    "c": "Cooltech",
+    "v": "Cooltech"
+   },
+   {
+    "c": "Core Scientific",
+    "v": "Core Scientific"
+   },
+   {
+    "c": "Corvus",
+    "v": "Corvus"
+   },
+   {
+    "c": "Corvus Norway",
+    "v": "Corvus Norway"
+   },
+   {
+    "c": "CPH",
+    "v": "CPH"
+   },
+   {
+    "c": "CPS America",
+    "v": "CPS America"
+   },
+   {
+    "c": "Critical Loop Equipment",
+    "v": "Critical Loop Equipment"
+   },
+   {
+    "c": "CRR",
+    "v": "CRR"
+   },
+   {
+    "c": "CS Enertech",
+    "v": "CS Enertech"
+   },
+   {
+    "c": "CS Enertech_KR_OSN",
+    "v": "CS Enertech_KR_OSN"
+   },
+   {
+    "c": "CSR",
+    "v": "CSR"
+   },
+   {
+    "c": "Cummins",
+    "v": "Cummins"
+   },
+   {
+    "c": "Cummins EP",
+    "v": "Cummins EP"
+   },
+   {
+    "c": "Cummins EP(OTS)",
+    "v": "Cummins EP(OTS)"
+   },
+   {
+    "c": "Cummins(OTS)",
+    "v": "Cummins(OTS)"
+   },
+   {
+    "c": "Daechang",
+    "v": "Daechang"
+   },
+   {
+    "c": "Daimler",
+    "v": "Daimler"
+   },
+   {
+    "c": "Daimler AS",
+    "v": "Daimler AS"
+   },
+   {
+    "c": "Daimler(AS)",
+    "v": "Daimler(AS)"
+   },
+   {
+    "c": "Dasan Energy",
+    "v": "Dasan Energy"
+   },
+   {
+    "c": "DBH",
+    "v": "DBH"
+   },
+   {
+    "c": "DCBEL LLC",
+    "v": "DCBEL LLC"
+   },
+   {
+    "c": "Delta",
+    "v": "Delta"
+   },
+   {
+    "c": "DeltaX",
+    "v": "DeltaX"
+   },
+   {
+    "c": "Demand Energy",
+    "v": "Demand Energy"
+   },
+   {
+    "c": "DESRI",
+    "v": "DESRI"
+   },
+   {
+    "c": "Destin Power",
+    "v": "Destin Power"
+   },
+   {
+    "c": "Destin Power Asia",
+    "v": "Destin Power Asia"
+   },
+   {
+    "c": "Develop",
+    "v": "Develop"
+   },
+   {
+    "c": "dianchibao",
+    "v": "dianchibao"
+   },
+   {
+    "c": "Diotech",
+    "v": "Diotech"
+   },
+   {
+    "c": "DIS",
+    "v": "DIS"
+   },
+   {
+    "c": "DM Energy",
+    "v": "DM Energy"
+   },
+   {
+    "c": "DM GEC",
+    "v": "DM GEC"
+   },
+   {
+    "c": "Doosan Heavy",
+    "v": "Doosan Heavy"
+   },
+   {
+    "c": "DSMT",
+    "v": "DSMT"
+   },
+   {
+    "c": "DTE",
+    "v": "DTE"
+   },
+   {
+    "c": "Duke",
+    "v": "Duke"
+   },
+   {
+    "c": "Dynapower",
+    "v": "Dynapower"
+   },
+   {
+    "c": "E-Max",
+    "v": "E-Max"
+   },
+   {
+    "c": "E-Works Mobility GmbH",
+    "v": "E-Works Mobility GmbH"
+   },
+   {
+    "c": "E2Z",
+    "v": "E2Z"
+   },
+   {
+    "c": "E3DC",
+    "v": "HagerEnergy GmbH"
+   },
+   {
+    "c": "Eaton",
+    "v": "Eaton"
+   },
+   {
+    "c": "ECO Power",
+    "v": "ECO Power"
+   },
+   {
+    "c": "Eco Stor",
+    "v": "Eco Stor"
+   },
+   {
+    "c": "Ecocoach",
+    "v": "Ecocoach"
+   },
+   {
+    "c": "EDF",
+    "v": "EDF"
+   },
+   {
+    "c": "Edina",
+    "v": "Edina"
+   },
+   {
+    "c": "EDISON MOTORS",
+    "v": "EDISON MOTORS"
+   },
+   {
+    "c": "Edison Power",
+    "v": "Edison Power"
+   },
+   {
+    "c": "Edisoninno",
+    "v": "Edisoninno"
+   },
+   {
+    "c": "EDPR",
+    "v": "EDPR"
+   },
+   {
+    "c": "EE",
+    "v": "EE"
+   },
+   {
+    "c": "Eesti Energia",
+    "v": "Eesti Energia"
+   },
+   {
+    "c": "EForce",
+    "v": "EForce"
+   },
+   {
+    "c": "EForce(OTS)",
+    "v": "EForce(OTS)"
+   },
+   {
+    "c": "EG4",
+    "v": "EG4"
+   },
+   {
+    "c": "EGEM",
+    "v": "EGEM"
+   },
+   {
+    "c": "Eguana",
+    "v": "Eguana"
+   },
+   {
+    "c": "EK",
+    "v": "EK"
+   },
+   {
+    "c": "Electric Era",
+    "v": "Electric Era"
+   },
+   {
+    "c": "Element Energy",
+    "v": "Element Energy"
+   },
+   {
+    "c": "EN Tech",
+    "v": "EN Tech"
+   },
+   {
+    "c": "EN Technology",
+    "v": "EN Technology"
+   },
+   {
+    "c": "ENEFIT",
+    "v": "ENEFIT"
+   },
+   {
+    "c": "ENEL X",
+    "v": "ENEL X"
+   },
+   {
+    "c": "Eneon",
+    "v": "Eneon"
+   },
+   {
+    "c": "Energix",
+    "v": "Energix"
+   },
+   {
+    "c": "Energon",
+    "v": "Energon"
+   },
+   {
+    "c": "Energy & HVAC",
+    "v": "Energy & HVAC"
+   },
+   {
+    "c": "Energy Australia",
+    "v": "Energy Australia"
+   },
+   {
+    "c": "ENERGYGATE",
+    "v": "ENERGYGATE"
+   },
+   {
+    "c": "Enerm",
+    "v": "Enerm"
+   },
+   {
+    "c": "Enerzent",
+    "v": "Enerzent"
+   },
+   {
+    "c": "Enodam",
+    "v": "Enodam"
+   },
+   {
+    "c": "Entech",
+    "v": "Entech"
+   },
+   {
+    "c": "Eolian",
+    "v": "Eolian"
+   },
+   {
+    "c": "EON",
+    "v": "EON"
+   },
+   {
+    "c": "Epiroc",
+    "v": "Epiroc"
+   },
+   {
+    "c": "Epiroc Electrification",
+    "v": "Epiroc Electrification"
+   },
+   {
+    "c": "EPS",
+    "v": "EPS"
+   },
+   {
+    "c": "Equinix",
+    "v": "Equinix"
+   },
+   {
+    "c": "Equipmake",
+    "v": "Equipmake"
+   },
+   {
+    "c": "equipmake(OTS)",
+    "v": "equipmake(OTS)"
+   },
+   {
+    "c": "EQUIS Australia",
+    "v": "EQUIS Australia"
+   },
+   {
+    "c": "ESMI(AS)",
+    "v": "ESMI(AS)"
+   },
+   {
+    "c": "ESOC(AS)",
+    "v": "ESOC(AS)"
+   },
+   {
+    "c": "ESS",
+    "v": "ESS"
+   },
+   {
+    "c": "ESST",
+    "v": "ESST"
+   },
+   {
+    "c": "ESWA(AS)",
+    "v": "ESWA(AS)"
+   },
+   {
+    "c": "ETS(CA)",
+    "v": "ETS(CA)"
+   },
+   {
+    "c": "EVO Power",
+    "v": "EVO Power"
+   },
+   {
+    "c": "EVT",
+    "v": "EVT"
+   },
+   {
+    "c": "Evyon",
+    "v": "Evyon"
+   },
+   {
+    "c": "Excelsior",
+    "v": "Excelsior"
+   },
+   {
+    "c": "Facebook",
+    "v": "Facebook"
+   },
+   {
+    "c": "FAW VW",
+    "v": "FAW VW"
+   },
+   {
+    "c": "FBPS",
+    "v": "FBPS"
+   },
+   {
+    "c": "FBPS(OTS)",
+    "v": "FBPS(OTS)"
+   },
+   {
+    "c": "FCA",
+    "v": "FCA"
+   },
+   {
+    "c": "FCA AS",
+    "v": "FCA AS"
+   },
+   {
+    "c": "FE",
+    "v": "FE"
+   },
+   {
+    "c": "Ferrari",
+    "v": "Ferrari"
+   },
+   {
+    "c": "FLASH",
+    "v": "FLASH"
+   },
+   {
+    "c": "Fluence",
+    "v": "Fluence"
+   },
+   {
+    "c": "FMS",
+    "v": "FMS"
+   },
+   {
+    "c": "Ford",
+    "v": "Ford"
+   },
+   {
+    "c": "Ford AS",
+    "v": "Ford AS"
+   },
+   {
+    "c": "Ford(MX-VMI)",
+    "v": "Ford(MX-VMI)"
+   },
+   {
+    "c": "Forsee",
+    "v": "Forsee"
+   },
+   {
+    "c": "FPL",
+    "v": "FPL"
+   },
+   {
+    "c": "Fronius",
+    "v": "Fronius"
+   },
+   {
+    "c": "Fuji Bridex",
+    "v": "Fuji Bridex"
+   },
+   {
+    "c": "Fuji Electric",
+    "v": "Fuji Electric"
+   },
+   {
+    "c": "G2Power",
+    "v": "G2Power"
+   },
+   {
+    "c": "Gamesa",
+    "v": "Gamesa"
+   },
+   {
+    "c": "GasiriGridPark",
+    "v": "GasiriGridPark"
+   },
+   {
+    "c": "Gateway",
+    "v": "Gateway"
+   },
+   {
+    "c": "GCV",
+    "v": "GCV"
+   },
+   {
+    "c": "GE",
+    "v": "GE"
+   },
+   {
+    "c": "GE Fuel Cells",
+    "v": "GE Fuel Cells"
+   },
+   {
+    "c": "GE Grid Solutions",
+    "v": "GE Grid Solutions"
+   },
+   {
+    "c": "GE Vernova",
+    "v": "GE Vernova"
+   },
+   {
+    "c": "GEELY",
+    "v": "GEELY"
+   },
+   {
+    "c": "Ginlong_CN",
+    "v": "Ginlong_CN"
+   },
+   {
+    "c": "Glidepath",
+    "v": "Glidepath"
+   },
+   {
+    "c": "GLOVIS",
+    "v": "GLOVIS"
+   },
+   {
+    "c": "GM",
+    "v": "GM"
+   },
+   {
+    "c": "GM AS",
+    "v": "GM AS"
+   },
+   {
+    "c": "GM Energy",
+    "v": "GM Energy"
+   },
+   {
+    "c": "GOEN",
+    "v": "GOEN"
+   },
+   {
+    "c": "Google",
+    "v": "Google"
+   },
+   {
+    "c": "GPD",
+    "v": "GPD"
+   },
+   {
+    "c": "Gransolar",
+    "v": "Gransolar"
+   },
+   {
+    "c": "Green Diamond",
+    "v": "Green Diamond"
+   },
+   {
+    "c": "Green Power Tech",
+    "v": "Green Power Tech"
+   },
+   {
+    "c": "GREENSMITH",
+    "v": "GREENSMITH"
+   },
+   {
+    "c": "Gresham House",
+    "v": "Gresham House"
+   },
+   {
+    "c": "Grid Serve",
+    "v": "Grid Serve"
+   },
+   {
+    "c": "Growatt",
+    "v": "Growatt"
+   },
+   {
+    "c": "GS Neotek",
+    "v": "GS Neotek"
+   },
+   {
+    "c": "GSENR",
+    "v": "GSENR"
+   },
+   {
+    "c": "Guangdonglihua",
+    "v": "Guangdonglihua"
+   },
+   {
+    "c": "HA",
+    "v": "HA"
+   },
+   {
+    "c": "Hanwha Aero",
+    "v": "Hanwha Aero"
+   },
+   {
+    "c": "Hanwha Convergence",
+    "v": "Hanwha Convergence"
+   },
+   {
+    "c": "Hanwha Defense",
+    "v": "Hanwha Defense"
+   },
+   {
+    "c": "Hanwha Energy",
+    "v": "Hanwha Energy"
+   },
+   {
+    "c": "Hanwha Q Cells",
+    "v": "Hanwha Q Cells"
+   },
+   {
+    "c": "HCC",
+    "v": "HCC"
+   },
+   {
+    "c": "HD Infracore",
+    "v": "HD Infracore"
+   },
+   {
+    "c": "HDMA",
+    "v": "HDMA"
+   },
+   {
+    "c": "Hengyuan",
+    "v": "Hengyuan"
+   },
+   {
+    "c": "HKI",
+    "v": "HKI"
+   },
+   {
+    "c": "HKMC",
+    "v": "HKMC"
+   },
+   {
+    "c": "HKMC AS",
+    "v": "HKMC AS"
+   },
+   {
+    "c": "HL-GA",
+    "v": "HL-GA"
+   },
+   {
+    "c": "HLGP",
+    "v": "HLGP"
+   },
+   {
+    "c": "HLGP AS",
+    "v": "HLGP AS"
+   },
+   {
+    "c": "Honda Motor",
+    "v": "Honda Motor"
+   },
+   {
+    "c": "HOPPECKE",
+    "v": "HOPPECKE"
+   },
+   {
+    "c": "Humanhorizons",
+    "v": "Humanhorizons"
+   },
+   {
+    "c": "Hybrid Energy",
+    "v": "Hybrid Energy"
+   },
+   {
+    "c": "HYbrid Energy Solutions",
+    "v": "HYbrid Energy Solutions"
+   },
+   {
+    "c": "Hybrid Systems",
+    "v": "Hybrid Systems"
+   },
+   {
+    "c": "Hyosung",
+    "v": "Hyosung"
+   },
+   {
+    "c": "Hyosung H.I",
+    "v": "Hyosung H.I"
+   },
+   {
+    "c": "Hyperstrong",
+    "v": "Hyperstrong"
+   },
+   {
+    "c": "Hyundai E.E.S",
+    "v": "Hyundai E.E.S"
+   },
+   {
+    "c": "Hyundai Electric & Energy Systems",
+    "v": "Hyundai Electric & Energy Systems"
+   },
+   {
+    "c": "Hyundai Electric Energy Systems",
+    "v": "Hyundai Electric Energy Systems"
+   },
+   {
+    "c": "Hyundai Global",
+    "v": "Hyundai Global"
+   },
+   {
+    "c": "Hyundai H.I",
+    "v": "Hyundai H.I"
+   },
+   {
+    "c": "Hyundai Hyms",
+    "v": "Hyundai Hyms"
+   },
+   {
+    "c": "HYUNDAI MOTOR COMPANY (NAMYANG)",
+    "v": "HKMC"
+   },
+   {
+    "c": "HYUNDAI MOTOR COMPANY (NAMYANG)",
+    "v": "HYUNDAI MOTOR COMPANY (NAMYANG)"
+   },
+   {
+    "c": "hyundai-ce",
+    "v": "hyundai-ce"
+   },
+   {
+    "c": "I Power",
+    "v": "I Power"
+   },
+   {
+    "c": "ICPT",
+    "v": "ICPT"
+   },
+   {
+    "c": "ICPT(OTS)",
+    "v": "ICPT(OTS)"
+   },
+   {
+    "c": "IES",
+    "v": "IES"
+   },
+   {
+    "c": "Ignis Energia",
+    "v": "Ignis Energia"
+   },
+   {
+    "c": "IHI",
+    "v": "IHI"
+   },
+   {
+    "c": "ILJIN",
+    "v": "ILJIN"
+   },
+   {
+    "c": "Iljin_power",
+    "v": "Iljin_power"
+   },
+   {
+    "c": "IM",
+    "v": "IM"
+   },
+   {
+    "c": "Ingeteam",
+    "v": "Ingeteam"
+   },
+   {
+    "c": "INOVAT",
+    "v": "INOVAT"
+   },
+   {
+    "c": "IntechFA",
+    "v": "IntechFA"
+   },
+   {
+    "c": "Integra",
+    "v": "Integra"
+   },
+   {
+    "c": "Intilion",
+    "v": "Intilion"
+   },
+   {
+    "c": "Intor",
+    "v": "Intor"
+   },
+   {
+    "c": "Invenergy",
+    "v": "Invenergy"
+   },
+   {
+    "c": "IOWN",
+    "v": "IOWN"
+   },
+   {
+    "c": "Irizar",
+    "v": "Irizar"
+   },
+   {
+    "c": "Irizar EM",
+    "v": "Irizar EM"
+   },
+   {
+    "c": "IRTronix",
+    "v": "IRTronix"
+   },
+   {
+    "c": "Itochu",
+    "v": "Itochu"
+   },
+   {
+    "c": "Jabil",
+    "v": "Jabil"
+   },
+   {
+    "c": "JCI",
+    "v": "JCI"
+   },
+   {
+    "c": "Jeju electric vehicle",
+    "v": "Jeju electric vehicle"
+   },
+   {
+    "c": "Jeju electric vehicle service",
+    "v": "Jeju electric vehicle service"
+   },
+   {
+    "c": "jemado",
+    "v": "jemado"
+   },
+   {
+    "c": "JFE",
+    "v": "JFE"
+   },
+   {
+    "c": "JH Energy",
+    "v": "JH Energy"
+   },
+   {
+    "c": "JIANGSU",
+    "v": "JIANGSU"
+   },
+   {
+    "c": "JJ Solstice",
+    "v": "JJ Solstice"
+   },
+   {
+    "c": "JLR",
+    "v": "JLR"
+   },
+   {
+    "c": "JLR AS",
+    "v": "JLR AS"
+   },
+   {
+    "c": "JLR(OTS)",
+    "v": "JLR(OTS)"
+   },
+   {
+    "c": "JOBYAR",
+    "v": "JOBYAR"
+   },
+   {
+    "c": "Jofemar SA",
+    "v": "Jofemar SA"
+   },
+   {
+    "c": "Johnson Controls",
+    "v": "Johnson Controls"
+   },
+   {
+    "c": "JSLH",
+    "v": "JSLH"
+   },
+   {
+    "c": "JSW",
+    "v": "JSW"
+   },
+   {
+    "c": "K.E.W.Power",
+    "v": "K.E.W.Power"
+   },
+   {
+    "c": "KAIST",
+    "v": "KAIST"
+   },
+   {
+    "c": "Karma",
+    "v": "Karma"
+   },
+   {
+    "c": "Karma(OTS)",
+    "v": "Karma(OTS)"
+   },
+   {
+    "c": "KCE",
+    "v": "KCE"
+   },
+   {
+    "c": "KCS",
+    "v": "KCS"
+   },
+   {
+    "c": "kepco",
+    "v": "kepco"
+   },
+   {
+    "c": "KGM Cheonan",
+    "v": "KGM Cheonan"
+   },
+   {
+    "c": "KIA",
+    "v": "KIA"
+   },
+   {
+    "c": "Kitakoudensha",
+    "v": "Kitakoudensha"
+   },
+   {
+    "c": "Kokam",
+    "v": "Kokam"
+   },
+   {
+    "c": "kokam",
+    "v": "kokam"
+   },
+   {
+    "c": "kokam NS",
+    "v": "kokam NS"
+   },
+   {
+    "c": "Kongsberg",
+    "v": "Kongsberg"
+   },
+   {
+    "c": "Kongsberg Maritime AS",
+    "v": "Kongsberg Maritime AS"
+   },
+   {
+    "c": "KRAKEN",
+    "v": "KRAKEN"
+   },
+   {
+    "c": "Krannich",
+    "v": "Krannich"
+   },
+   {
+    "c": "KTC",
+    "v": "KTC"
+   },
+   {
+    "c": "Kyocera",
+    "v": "Kyocera"
+   },
+   {
+    "c": "L&T",
+    "v": "L&T"
+   },
+   {
+    "c": "Lamborghini",
+    "v": "Lamborghini"
+   },
+   {
+    "c": "Landsuccess",
+    "v": "Landsuccess"
+   },
+   {
+    "c": "Leclanche",
+    "v": "Leclanche"
+   },
+   {
+    "c": "Legrand",
+    "v": "Legrand"
+   },
+   {
+    "c": "LEO ELECTRONICS",
+    "v": "LEO ELECTRONICS"
+   },
+   {
+    "c": "LEVC",
+    "v": "LEVC"
+   },
+   {
+    "c": "LEVC AS",
+    "v": "LEVC AS"
+   },
+   {
+    "c": "LG CNS",
+    "v": "LG CNS"
+   },
+   {
+    "c": "LG ENERGY SOLUTION, LTD.",
+    "v": "LG ENERGY SOLUTION, LTD."
+   },
+   {
+    "c": "LG ENERGY SOLUTION, LTD.",
+    "v": "LGE"
+   },
+   {
+    "c": "LG-Hitachi",
+    "v": "LG-Hitachi"
+   },
+   {
+    "c": "LGCAU",
+    "v": "LGCAU"
+   },
+   {
+    "c": "LGCDJ",
+    "v": "LGCDJ"
+   },
+   {
+    "c": "LGCEG",
+    "v": "LGCEG"
+   },
+   {
+    "c": "LGCGC",
+    "v": "LGCGC"
+   },
+   {
+    "c": "LGCNS",
+    "v": "LGCNS"
+   },
+   {
+    "c": "LGCPI",
+    "v": "LGCPI"
+   },
+   {
+    "c": "LGE",
+    "v": "LGE"
+   },
+   {
+    "c": "LGE",
+    "v": "LG ENERGY SOLUTION, LTD."
+   },
+   {
+    "c": "LGE RESU",
+    "v": "LGE RESU"
+   },
+   {
+    "c": "LGE SYMC",
+    "v": "LGE SYMC"
+   },
+   {
+    "c": "LGESAU",
+    "v": "LGESAU"
+   },
+   {
+    "c": "LGESDJ",
+    "v": "LGESDJ"
+   },
+   {
+    "c": "LGESEG",
+    "v": "LGESEG"
+   },
+   {
+    "c": "LGESGC",
+    "v": "LGESGC"
+   },
+   {
+    "c": "LGESMI",
+    "v": "LGESMI"
+   },
+   {
+    "c": "LGESNA",
+    "v": "LGESNA"
+   },
+   {
+    "c": "LGESNJ",
+    "v": "LGESNJ"
+   },
+   {
+    "c": "LGESOC",
+    "v": "LGESOC"
+   },
+   {
+    "c": "LGESOC2",
+    "v": "LGESOC2"
+   },
+   {
+    "c": "LGESPI",
+    "v": "LGESPI"
+   },
+   {
+    "c": "LGESVT",
+    "v": "LGESVT"
+   },
+   {
+    "c": "LGESWA",
+    "v": "LGESWA"
+   },
+   {
+    "c": "LGnsys",
+    "v": "LGnsys"
+   },
+   {
+    "c": "LGU+",
+    "v": "LGU+"
+   },
+   {
+    "c": "Libertad",
+    "v": "Libertad"
+   },
+   {
+    "c": "Lion Bus",
+    "v": "Lion Bus"
+   },
+   {
+    "c": "LM",
+    "v": "LM"
+   },
+   {
+    "c": "Loccioni",
+    "v": "Loccioni"
+   },
+   {
+    "c": "London Taxi",
+    "v": "London Taxi"
+   },
+   {
+    "c": "looop",
+    "v": "looop"
+   },
+   {
+    "c": "LS Energy Solutions",
+    "v": "LS Energy Solutions"
+   },
+   {
+    "c": "LSis",
+    "v": "LSis"
+   },
+   {
+    "c": "LTW",
+    "v": "LTW"
+   },
+   {
+    "c": "MacLaren",
+    "v": "MacLaren"
+   },
+   {
+    "c": "Magna",
+    "v": "Magna"
+   },
+   {
+    "c": "Magna AS",
+    "v": "Magna AS"
+   },
+   {
+    "c": "Magna BMW",
+    "v": "Magna BMW"
+   },
+   {
+    "c": "Magna_Renault",
+    "v": "Magna_Renault"
+   },
+   {
+    "c": "Magnum",
+    "v": "Magnum"
+   },
+   {
+    "c": "Magtec",
+    "v": "Magtec"
+   },
+   {
+    "c": "Mahindra",
+    "v": "Mahindra"
+   },
+   {
+    "c": "MAN",
+    "v": "MAN"
+   },
+   {
+    "c": "MAN AS",
+    "v": "MAN AS"
+   },
+   {
+    "c": "Man Truck & Bus",
+    "v": "Man Truck & Bus"
+   },
+   {
+    "c": "Maserati",
+    "v": "Maserati"
+   },
+   {
+    "c": "Material in Motion",
+    "v": "Material in Motion"
+   },
+   {
+    "c": "Maxion",
+    "v": "Maxion"
+   },
+   {
+    "c": "Maxion(OTS)",
+    "v": "Maxion(OTS)"
+   },
+   {
+    "c": "MBAG",
+    "v": "MBAG"
+   },
+   {
+    "c": "MELCO",
+    "v": "MELCO"
+   },
+   {
+    "c": "Melfosur",
+    "v": "Melfosur"
+   },
+   {
+    "c": "Memodo",
+    "v": "Memodo"
+   },
+   {
+    "c": "MEPPI",
+    "v": "MEPPI"
+   },
+   {
+    "c": "Merus Power",
+    "v": "Merus Power"
+   },
+   {
+    "c": "METKA EGN",
+    "v": "METKA EGN"
+   },
+   {
+    "c": "MHPS",
+    "v": "MHPS"
+   },
+   {
+    "c": "Microgrid Networks",
+    "v": "Microgrid Networks"
+   },
+   {
+    "c": "Misum Systech",
+    "v": "Misum Systech"
+   },
+   {
+    "c": "MITSUBISHI",
+    "v": "MITSUBISHI"
+   },
+   {
+    "c": "Mitsui",
+    "v": "Mitsui"
+   },
+   {
+    "c": "MMEM",
+    "v": "MMEM"
+   },
+   {
+    "c": "MOBIS",
+    "v": "MOBIS"
+   },
+   {
+    "c": "MOBIS_AS",
+    "v": "MOBIS_AS"
+   },
+   {
+    "c": "Monarch",
+    "v": "Monarch"
+   },
+   {
+    "c": "MP2 Energy LLC",
+    "v": "MP2 Energy LLC"
+   },
+   {
+    "c": "MPOWER GROUP",
+    "v": "MPOWER GROUP "
+   },
+   {
+    "c": "Mytilineos",
+    "v": "Mytilineos"
+   },
+   {
+    "c": "NANO IN TECH",
+    "v": "NANO IN TECH"
+   },
+   {
+    "c": "NEC",
+    "v": "NEC"
+   },
+   {
+    "c": "NEC ES",
+    "v": "NEC ES"
+   },
+   {
+    "c": "Neoen",
+    "v": "Neoen"
+   },
+   {
+    "c": "NextEra",
+    "v": "NextEra"
+   },
+   {
+    "c": "NEXTracker",
+    "v": "NEXTracker"
+   },
+   {
+    "c": "Nhoa",
+    "v": "Nhoa"
+   },
+   {
+    "c": "NIDEC",
+    "v": "NIDEC"
+   },
+   {
+    "c": "NIPPONKOEI",
+    "v": "NIPPONKOEI"
+   },
+   {
+    "c": "Nissan",
+    "v": "Nissan"
+   },
+   {
+    "c": "NIV",
+    "v": "NIV"
+   },
+   {
+    "c": "Nivalis",
+    "v": "Nivalis"
+   },
+   {
+    "c": "Nivalis(OTS)",
+    "v": "Nivalis(OTS)"
+   },
+   {
+    "c": "NKES",
+    "v": "NKES"
+   },
+   {
+    "c": "Nordresa",
+    "v": "Nordresa"
+   },
+   {
+    "c": "Noriker",
+    "v": "Noriker"
+   },
+   {
+    "c": "Northern Reliability",
+    "v": "Northern Reliability"
+   },
+   {
+    "c": "NRG ENERGY",
+    "v": "NRG ENERGY"
+   },
+   {
+    "c": "Numeric",
+    "v": "Numeric"
+   },
+   {
+    "c": "NW Energy",
+    "v": "NW Energy"
+   },
+   {
+    "c": "Nysa Motor",
+    "v": "Nysa Motor"
+   },
+   {
+    "c": "OCI Power",
+    "v": "OCI Power"
+   },
+   {
+    "c": "Octave",
+    "v": "Octave"
+   },
+   {
+    "c": "Omexom",
+    "v": "Omexom"
+   },
+   {
+    "c": "Omnisystem",
+    "v": "Omnisystem"
+   },
+   {
+    "c": "OMRON",
+    "v": "OMRON"
+   },
+   {
+    "c": "One Stop Warehouse",
+    "v": "One Stop Warehouse"
+   },
+   {
+    "c": "Onesource",
+    "v": "Onesource"
+   },
+   {
+    "c": "Opel",
+    "v": "Opel"
+   },
+   {
+    "c": "ORMAT",
+    "v": "ORMAT"
+   },
+   {
+    "c": "Panasonic NA",
+    "v": "Panasonic NA"
+   },
+   {
+    "c": "Peopleworks",
+    "v": "Peopleworks"
+   },
+   {
+    "c": "PESCA",
+    "v": "PESCA"
+   },
+   {
+    "c": "PG&E",
+    "v": "PG&E"
+   },
+   {
+    "c": "PGE",
+    "v": "PGE"
+   },
+   {
+    "c": "PGS",
+    "v": "PGS"
+   },
+   {
+    "c": "Piston",
+    "v": "Piston"
+   },
+   {
+    "c": "PIXII",
+    "v": "PIXII"
+   },
+   {
+    "c": "PNESYSTEMS",
+    "v": "PNESYSTEMS"
+   },
+   {
+    "c": "Porsche",
+    "v": "Porsche"
+   },
+   {
+    "c": "Porsche AS",
+    "v": "Porsche AS"
+   },
+   {
+    "c": "Porsche AS_HQ",
+    "v": "Porsche AS_HQ"
+   },
+   {
+    "c": "Porsche AS_WA",
+    "v": "Porsche AS_WA"
+   },
+   {
+    "c": "posco",
+    "v": "posco"
+   },
+   {
+    "c": "POSCO ICT",
+    "v": "POSCO ICT"
+   },
+   {
+    "c": "POSCO International",
+    "v": "POSCO International"
+   },
+   {
+    "c": "Power-Tech",
+    "v": "Power-Tech"
+   },
+   {
+    "c": "PSA",
+    "v": "PSA"
+   },
+   {
+    "c": "PSA AS",
+    "v": "PSA AS"
+   },
+   {
+    "c": "PSA Sevelnord",
+    "v": "PSA Sevelnord"
+   },
+   {
+    "c": "PWM",
+    "v": "PWM"
+   },
+   {
+    "c": "QEV",
+    "v": "QEV"
+   },
+   {
+    "c": "QEVT",
+    "v": "QEVT"
+   },
+   {
+    "c": "Qinous",
+    "v": "Qinous"
+   },
+   {
+    "c": "QIT",
+    "v": "QIT"
+   },
+   {
+    "c": "Quewave",
+    "v": "Quewave"
+   },
+   {
+    "c": "Raychem",
+    "v": "Raychem"
+   },
+   {
+    "c": "Raymond",
+    "v": "Raymond"
+   },
+   {
+    "c": "Red Earth",
+    "v": "Red Earth"
+   },
+   {
+    "c": "Rempus",
+    "v": "Rempus"
+   },
+   {
+    "c": "Renault",
+    "v": "Renault"
+   },
+   {
+    "c": "Renault AS",
+    "v": "Renault AS"
+   },
+   {
+    "c": "Renault AS HQ",
+    "v": "Renault AS HQ"
+   },
+   {
+    "c": "RES America",
+    "v": "RES America"
+   },
+   {
+    "c": "REV Renewables",
+    "v": "REV Renewables"
+   },
+   {
+    "c": "Rheem",
+    "v": "Rheem"
+   },
+   {
+    "c": "RNA Energy",
+    "v": "RNA Energy"
+   },
+   {
+    "c": "Rolls-Royce Marine",
+    "v": "Rolls-Royce Marine"
+   },
+   {
+    "c": "Rosendin",
+    "v": "Rosendin"
+   },
+   {
+    "c": "RRC",
+    "v": "RRC"
+   },
+   {
+    "c": "RVA",
+    "v": "RVA"
+   },
+   {
+    "c": "RWE",
+    "v": "RWE"
+   },
+   {
+    "c": "S&C",
+    "v": "S&C"
+   },
+   {
+    "c": "S&C AU",
+    "v": "S&C AU"
+   },
+   {
+    "c": "SAET",
+    "v": "SAET"
+   },
+   {
+    "c": "Saft",
+    "v": "Saft"
+   },
+   {
+    "c": "SAIC",
+    "v": "SAIC"
+   },
+   {
+    "c": "Saman",
+    "v": "Saman"
+   },
+   {
+    "c": "Samsung SDI",
+    "v": "Samsung SDI"
+   },
+   {
+    "c": "SB Energy",
+    "v": "SB Energy"
+   },
+   {
+    "c": "Schneider",
+    "v": "Schneider"
+   },
+   {
+    "c": "SCLE",
+    "v": "SCLE"
+   },
+   {
+    "c": "Sebang",
+    "v": "Sebang"
+   },
+   {
+    "c": "SEMIROAD",
+    "v": "SEMIROAD"
+   },
+   {
+    "c": "Sempra",
+    "v": "Sempra"
+   },
+   {
+    "c": "SER",
+    "v": "SER"
+   },
+   {
+    "c": "SGM",
+    "v": "SGM"
+   },
+   {
+    "c": "SGM AS",
+    "v": "SGM AS"
+   },
+   {
+    "c": "Shanghai Feixiang",
+    "v": "Shanghai Feixiang"
+   },
+   {
+    "c": "Sharp",
+    "v": "Sharp"
+   },
+   {
+    "c": "Shell",
+    "v": "Shell"
+   },
+   {
+    "c": "Shinden Hightex",
+    "v": "Shinden Hightex"
+   },
+   {
+    "c": "Shinden Hihhtex",
+    "v": "Shinden Hihhtex"
+   },
+   {
+    "c": "Shinsegae-ENC",
+    "v": "Shinsegae-ENC"
+   },
+   {
+    "c": "Siemens",
+    "v": "Siemens"
+   },
+   {
+    "c": "Siemens AG",
+    "v": "Siemens AG"
+   },
+   {
+    "c": "Signature Solar",
+    "v": "Signature Solar"
+   },
+   {
+    "c": "Sime Darby",
+    "v": "Sime Darby"
+   },
+   {
+    "c": "SKE&S",
+    "v": "SKE&S"
+   },
+   {
+    "c": "SKODA",
+    "v": "SKODA"
+   },
+   {
+    "c": "Skysource",
+    "v": "Skysource"
+   },
+   {
+    "c": "Skyworth",
+    "v": "Skyworth"
+   },
+   {
+    "c": "SLB",
+    "v": "SLB"
+   },
+   {
+    "c": "SMA",
+    "v": "SMA"
+   },
+   {
+    "c": "SMA Altenso",
+    "v": "SMA Altenso"
+   },
+   {
+    "c": "Smart solar",
+    "v": "Smart solar"
+   }
+  ],
+  "{\"comboId\":\"CompanySalesSite\",\"divisionId\":\"'40'\",\"scmSiteId\":\"'Anjin_CN_SHA'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "HQ00",
+    "v": "HQ00"
+   }
+  ],
+  "{\"comboId\":\"ScmSitebyEndCustomer40\",\"divisionId\":\"'40'\",\"endCustomer\":\"'Anjin'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Anjin_AA_TES",
+    "v": "Anjin_AA_TES"
+   },
+   {
+    "c": "Anjin_CN_SHA",
+    "v": "Anjin_CN_SHA"
+   }
+  ],
+  "{\"comboId\":\"EndCustomerByDivisionDept\",\"divisionId\":\"'40'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "-",
+    "v": "-"
+   }
+  ],
+  "{\"comboId\":\"EndCustomerByDivisionDept\",\"divisionId\":\"'81'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Aeonus",
+    "v": "Aeonus"
+   },
+   {
+    "c": "Alte",
+    "v": "Alte"
+   },
+   {
+    "c": "Ampere Electricity",
+    "v": "Ampere Electricity"
+   },
+   {
+    "c": "Ampherr",
+    "v": "Ampherr"
+   },
+   {
+    "c": "ANDURIL",
+    "v": "ANDURIL"
+   },
+   {
+    "c": "ANODE",
+    "v": "ANODE"
+   },
+   {
+    "c": "Arpiem",
+    "v": "Arpiem"
+   },
+   {
+    "c": "AS",
+    "v": "AS"
+   },
+   {
+    "c": "ATBS",
+    "v": "ATBS"
+   },
+   {
+    "c": "ATL",
+    "v": "ATL"
+   },
+   {
+    "c": "Audi",
+    "v": "Audi"
+   },
+   {
+    "c": "audi as",
+    "v": "audi as"
+   },
+   {
+    "c": "AW",
+    "v": "AW"
+   },
+   {
+    "c": "BAE",
+    "v": "BAE"
+   },
+   {
+    "c": "Banglilai",
+    "v": "Banglilai"
+   },
+   {
+    "c": "BAP",
+    "v": "BAP"
+   },
+   {
+    "c": "BEDEO",
+    "v": "BEDEO"
+   },
+   {
+    "c": "BeiJing HuaQing",
+    "v": "BeiJing HuaQing"
+   },
+   {
+    "c": "BMW",
+    "v": "BMW"
+   },
+   {
+    "c": "BMW AS",
+    "v": "BMW AS"
+   },
+   {
+    "c": "BMW_NTG",
+    "v": "BMW_NTG"
+   },
+   {
+    "c": "Celltech",
+    "v": "Celltech"
+   },
+   {
+    "c": "China Effort(A)",
+    "v": "China Effort(A)"
+   },
+   {
+    "c": "Cling Systems",
+    "v": "Cling Systems"
+   },
+   {
+    "c": "Club Car",
+    "v": "Club Car"
+   },
+   {
+    "c": "CMC",
+    "v": "CMC"
+   },
+   {
+    "c": "COENSYS",
+    "v": "COENSYS"
+   },
+   {
+    "c": "Corvus",
+    "v": "Corvus"
+   },
+   {
+    "c": "Corvus Norway",
+    "v": "Corvus Norway"
+   },
+   {
+    "c": "CRR",
+    "v": "CRR"
+   },
+   {
+    "c": "CS Enertech",
+    "v": "CS Enertech"
+   },
+   {
+    "c": "CS Enertech_KR_OSN",
+    "v": "CS Enertech_KR_OSN"
+   },
+   {
+    "c": "Cummins",
+    "v": "Cummins"
+   },
+   {
+    "c": "Cummins EP",
+    "v": "Cummins EP"
+   },
+   {
+    "c": "Cummins EP(OTS)",
+    "v": "Cummins EP(OTS)"
+   },
+   {
+    "c": "Cummins(OTS)",
+    "v": "Cummins(OTS)"
+   },
+   {
+    "c": "Daechang",
+    "v": "Daechang"
+   },
+   {
+    "c": "Daimler",
+    "v": "Daimler"
+   },
+   {
+    "c": "Daimler AS",
+    "v": "Daimler AS"
+   },
+   {
+    "c": "Daimler(AS)",
+    "v": "Daimler(AS)"
+   },
+   {
+    "c": "DBH",
+    "v": "DBH"
+   },
+   {
+    "c": "dianchibao",
+    "v": "dianchibao"
+   },
+   {
+    "c": "DIS",
+    "v": "DIS"
+   },
+   {
+    "c": "DSMT",
+    "v": "DSMT"
+   },
+   {
+    "c": "E-Works Mobility GmbH",
+    "v": "E-Works Mobility GmbH"
+   },
+   {
+    "c": "EDISON MOTORS",
+    "v": "EDISON MOTORS"
+   },
+   {
+    "c": "Edisoninno",
+    "v": "Edisoninno"
+   },
+   {
+    "c": "EForce",
+    "v": "EForce"
+   },
+   {
+    "c": "EForce(OTS)",
+    "v": "EForce(OTS)"
+   },
+   {
+    "c": "EK",
+    "v": "EK"
+   },
+   {
+    "c": "Epiroc",
+    "v": "Epiroc"
+   },
+   {
+    "c": "Epiroc Electrification",
+    "v": "Epiroc Electrification"
+   },
+   {
+    "c": "Equipmake",
+    "v": "Equipmake"
+   },
+   {
+    "c": "equipmake(OTS)",
+    "v": "equipmake(OTS)"
+   },
+   {
+    "c": "ESMI(AS)",
+    "v": "ESMI(AS)"
+   },
+   {
+    "c": "ESOC(AS)",
+    "v": "ESOC(AS)"
+   },
+   {
+    "c": "ESS",
+    "v": "ESS"
+   },
+   {
+    "c": "ESST",
+    "v": "ESST"
+   },
+   {
+    "c": "ESWA(AS)",
+    "v": "ESWA(AS)"
+   },
+   {
+    "c": "EVT",
+    "v": "EVT"
+   },
+   {
+    "c": "Evyon",
+    "v": "Evyon"
+   },
+   {
+    "c": "FAW VW",
+    "v": "FAW VW"
+   },
+   {
+    "c": "FBPS",
+    "v": "FBPS"
+   },
+   {
+    "c": "FBPS(OTS)",
+    "v": "FBPS(OTS)"
+   },
+   {
+    "c": "FCA",
+    "v": "FCA"
+   },
+   {
+    "c": "FCA AS",
+    "v": "FCA AS"
+   },
+   {
+    "c": "FE",
+    "v": "FE"
+   },
+   {
+    "c": "Ferrari",
+    "v": "Ferrari"
+   },
+   {
+    "c": "FLASH",
+    "v": "FLASH"
+   },
+   {
+    "c": "Ford",
+    "v": "Ford"
+   },
+   {
+    "c": "Ford AS",
+    "v": "Ford AS"
+   },
+   {
+    "c": "Ford(MX-VMI)",
+    "v": "Ford(MX-VMI)"
+   },
+   {
+    "c": "Forsee",
+    "v": "Forsee"
+   },
+   {
+    "c": "GCV",
+    "v": "GCV"
+   },
+   {
+    "c": "GEELY",
+    "v": "GEELY"
+   },
+   {
+    "c": "GLOVIS",
+    "v": "GLOVIS"
+   },
+   {
+    "c": "GM",
+    "v": "GM"
+   },
+   {
+    "c": "GM AS",
+    "v": "GM AS"
+   },
+   {
+    "c": "Guangdonglihua",
+    "v": "Guangdonglihua"
+   },
+   {
+    "c": "HA",
+    "v": "HA"
+   },
+   {
+    "c": "Hanwha Aero",
+    "v": "Hanwha Aero"
+   },
+   {
+    "c": "Hanwha Defense",
+    "v": "Hanwha Defense"
+   },
+   {
+    "c": "HDMA",
+    "v": "HDMA"
+   },
+   {
+    "c": "Hengyuan",
+    "v": "Hengyuan"
+   },
+   {
+    "c": "HKI",
+    "v": "HKI"
+   },
+   {
+    "c": "HKMC",
+    "v": "HKMC"
+   },
+   {
+    "c": "HKMC AS",
+    "v": "HKMC AS"
+   },
+   {
+    "c": "HLGP",
+    "v": "HLGP"
+   },
+   {
+    "c": "HLGP AS",
+    "v": "HLGP AS"
+   },
+   {
+    "c": "Honda Motor",
+    "v": "Honda Motor"
+   },
+   {
+    "c": "Humanhorizons",
+    "v": "Humanhorizons"
+   },
+   {
+    "c": "Hyperstrong",
+    "v": "Hyperstrong"
+   },
+   {
+    "c": "ICPT",
+    "v": "ICPT"
+   },
+   {
+    "c": "ICPT(OTS)",
+    "v": "ICPT(OTS)"
+   },
+   {
+    "c": "IM",
+    "v": "IM"
+   },
+   {
+    "c": "Irizar",
+    "v": "Irizar"
+   },
+   {
+    "c": "Irizar EM",
+    "v": "Irizar EM"
+   },
+   {
+    "c": "jemado",
+    "v": "jemado"
+   },
+   {
+    "c": "JIANGSU",
+    "v": "JIANGSU"
+   },
+   {
+    "c": "JJ Solstice",
+    "v": "JJ Solstice"
+   },
+   {
+    "c": "JLR",
+    "v": "JLR"
+   },
+   {
+    "c": "JLR AS",
+    "v": "JLR AS"
+   },
+   {
+    "c": "JLR(OTS)",
+    "v": "JLR(OTS)"
+   },
+   {
+    "c": "JOBYAR",
+    "v": "JOBYAR"
+   },
+   {
+    "c": "JSLH",
+    "v": "JSLH"
+   },
+   {
+    "c": "KAIST",
+    "v": "KAIST"
+   },
+   {
+    "c": "Karma",
+    "v": "Karma"
+   },
+   {
+    "c": "Karma(OTS)",
+    "v": "Karma(OTS)"
+   },
+   {
+    "c": "KGM Cheonan",
+    "v": "KGM Cheonan"
+   },
+   {
+    "c": "KIA",
+    "v": "KIA"
+   },
+   {
+    "c": "kokam",
+    "v": "kokam"
+   },
+   {
+    "c": "Kokam",
+    "v": "Kokam"
+   },
+   {
+    "c": "kokam NS",
+    "v": "kokam NS"
+   },
+   {
+    "c": "Kongsberg Maritime AS",
+    "v": "Kongsberg Maritime AS"
+   },
+   {
+    "c": "KRAKEN",
+    "v": "KRAKEN"
+   },
+   {
+    "c": "KTC",
+    "v": "KTC"
+   },
+   {
+    "c": "Lamborghini",
+    "v": "Lamborghini"
+   },
+   {
+    "c": "Landsuccess",
+    "v": "Landsuccess"
+   },
+   {
+    "c": "LEVC",
+    "v": "LEVC"
+   },
+   {
+    "c": "LEVC AS",
+    "v": "LEVC AS"
+   },
+   {
+    "c": "LGCDJ",
+    "v": "LGCDJ"
+   },
+   {
+    "c": "LGCEG",
+    "v": "LGCEG"
+   },
+   {
+    "c": "LGCGC",
+    "v": "LGCGC"
+   },
+   {
+    "c": "LGCPI",
+    "v": "LGCPI"
+   },
+   {
+    "c": "LGE SYMC",
+    "v": "LGE SYMC"
+   },
+   {
+    "c": "LGESDJ",
+    "v": "LGESDJ"
+   },
+   {
+    "c": "LGESEG",
+    "v": "LGESEG"
+   },
+   {
+    "c": "LGESGC",
+    "v": "LGESGC"
+   },
+   {
+    "c": "LGESMI",
+    "v": "LGESMI"
+   },
+   {
+    "c": "LGESNA",
+    "v": "LGESNA"
+   },
+   {
+    "c": "LGESOC",
+    "v": "LGESOC"
+   },
+   {
+    "c": "LGESOC2",
+    "v": "LGESOC2"
+   },
+   {
+    "c": "LGESPI",
+    "v": "LGESPI"
+   },
+   {
+    "c": "LGESWA",
+    "v": "LGESWA"
+   },
+   {
+    "c": "Lion Bus",
+    "v": "Lion Bus"
+   },
+   {
+    "c": "London Taxi",
+    "v": "London Taxi"
+   },
+   {
+    "c": "MacLaren",
+    "v": "MacLaren"
+   },
+   {
+    "c": "Magna",
+    "v": "Magna"
+   },
+   {
+    "c": "Magna AS",
+    "v": "Magna AS"
+   },
+   {
+    "c": "Magna BMW",
+    "v": "Magna BMW"
+   },
+   {
+    "c": "Magna_Renault",
+    "v": "Magna_Renault"
+   },
+   {
+    "c": "Magnum",
+    "v": "Magnum"
+   },
+   {
+    "c": "Magtec",
+    "v": "Magtec"
+   },
+   {
+    "c": "Mahindra",
+    "v": "Mahindra"
+   },
+   {
+    "c": "MAN AS",
+    "v": "MAN AS"
+   },
+   {
+    "c": "Man Truck & Bus",
+    "v": "Man Truck & Bus"
+   },
+   {
+    "c": "Maserati",
+    "v": "Maserati"
+   },
+   {
+    "c": "Maxion",
+    "v": "Maxion"
+   },
+   {
+    "c": "Maxion(OTS)",
+    "v": "Maxion(OTS)"
+   },
+   {
+    "c": "MBAG",
+    "v": "MBAG"
+   },
+   {
+    "c": "Misum Systech",
+    "v": "Misum Systech"
+   },
+   {
+    "c": "MITSUBISHI",
+    "v": "MITSUBISHI"
+   },
+   {
+    "c": "Mitsui",
+    "v": "Mitsui"
+   },
+   {
+    "c": "MOBIS",
+    "v": "MOBIS"
+   },
+   {
+    "c": "MOBIS_AS",
+    "v": "MOBIS_AS"
+   },
+   {
+    "c": "Monarch",
+    "v": "Monarch"
+   },
+   {
+    "c": "NANO IN TECH",
+    "v": "NANO IN TECH"
+   },
+   {
+    "c": "Nissan",
+    "v": "Nissan"
+   },
+   {
+    "c": "NIV",
+    "v": "NIV"
+   },
+   {
+    "c": "Nivalis",
+    "v": "Nivalis"
+   },
+   {
+    "c": "Nivalis(OTS)",
+    "v": "Nivalis(OTS)"
+   },
+   {
+    "c": "Nordresa",
+    "v": "Nordresa"
+   },
+   {
+    "c": "Nysa Motor",
+    "v": "Nysa Motor"
+   },
+   {
+    "c": "Octave",
+    "v": "Octave"
+   },
+   {
+    "c": "Opel",
+    "v": "Opel"
+   },
+   {
+    "c": "Peopleworks",
+    "v": "Peopleworks"
+   },
+   {
+    "c": "Piston",
+    "v": "Piston"
+   },
+   {
+    "c": "Porsche",
+    "v": "Porsche"
+   },
+   {
+    "c": "Porsche AS",
+    "v": "Porsche AS"
+   },
+   {
+    "c": "Porsche AS_HQ",
+    "v": "Porsche AS_HQ"
+   },
+   {
+    "c": "Porsche AS_WA",
+    "v": "Porsche AS_WA"
+   },
+   {
+    "c": "PSA",
+    "v": "PSA"
+   },
+   {
+    "c": "PSA AS",
+    "v": "PSA AS"
+   },
+   {
+    "c": "PSA Sevelnord",
+    "v": "PSA Sevelnord"
+   },
+   {
+    "c": "PWM",
+    "v": "PWM"
+   },
+   {
+    "c": "QEV",
+    "v": "QEV"
+   },
+   {
+    "c": "QEVT",
+    "v": "QEVT"
+   },
+   {
+    "c": "Raymond",
+    "v": "Raymond"
+   },
+   {
+    "c": "Rempus",
+    "v": "Rempus"
+   },
+   {
+    "c": "Renault",
+    "v": "Renault"
+   },
+   {
+    "c": "Renault AS",
+    "v": "Renault AS"
+   },
+   {
+    "c": "Renault AS HQ",
+    "v": "Renault AS HQ"
+   },
+   {
+    "c": "RVA",
+    "v": "RVA"
+   },
+   {
+    "c": "SAIC",
+    "v": "SAIC"
+   },
+   {
+    "c": "Samsung SDI",
+    "v": "Samsung SDI"
+   },
+   {
+    "c": "Sebang",
+    "v": "Sebang"
+   },
+   {
+    "c": "SEMIROAD",
+    "v": "SEMIROAD"
+   },
+   {
+    "c": "SGM",
+    "v": "SGM"
+   },
+   {
+    "c": "SGM AS",
+    "v": "SGM AS"
+   },
+   {
+    "c": "Shanghai Feixiang",
+    "v": "Shanghai Feixiang"
+   },
+   {
+    "c": "Shinden Hihhtex",
+    "v": "Shinden Hihhtex"
+   },
+   {
+    "c": "Siemens",
+    "v": "Siemens"
+   },
+   {
+    "c": "Sime Darby",
+    "v": "Sime Darby"
+   },
+   {
+    "c": "SKODA",
+    "v": "SKODA"
+   },
+   {
+    "c": "Skysource",
+    "v": "Skysource"
+   },
+   {
+    "c": "Skyworth",
+    "v": "Skyworth"
+   },
+   {
+    "c": "Solaris",
+    "v": "Solaris"
+   },
+   {
+    "c": "Spear Power Systems",
+    "v": "Spear Power Systems"
+   },
+   {
+    "c": "STB",
+    "v": "STB"
+   },
+   {
+    "c": "STRIX",
+    "v": "STRIX"
+   },
+   {
+    "c": "Suzhou Anjin",
+    "v": "Suzhou Anjin"
+   },
+   {
+    "c": "SYMC",
+    "v": "SYMC"
+   },
+   {
+    "c": "Taiga",
+    "v": "Taiga"
+   },
+   {
+    "c": "Temsa bus & Coach",
+    "v": "Temsa bus & Coach"
+   },
+   {
+    "c": "Temsabus&Coach(OTS)",
+    "v": "Temsabus&Coach(OTS)"
+   },
+   {
+    "c": "TW sys",
+    "v": "TW sys"
+   },
+   {
+    "c": "TWEnersys",
+    "v": "TWEnersys"
+   },
+   {
+    "c": "TY",
+    "v": "TY"
+   },
+   {
+    "c": "VAL",
+    "v": "VAL"
+   },
+   {
+    "c": "VALEO",
+    "v": "VALEO"
+   },
+   {
+    "c": "Valmet",
+    "v": "Valmet"
+   },
+   {
+    "c": "Vanderhall",
+    "v": "Vanderhall"
+   },
+   {
+    "c": "VIA",
+    "v": "VIA"
+   },
+   {
+    "c": "VIA(OTS)",
+    "v": "VIA(OTS)"
+   },
+   {
+    "c": "Volta PS",
+    "v": "Volta PS"
+   },
+   {
+    "c": "Volvo",
+    "v": "Volvo"
+   },
+   {
+    "c": "Volvo AS",
+    "v": "Volvo AS"
+   },
+   {
+    "c": "Volvo AS_WA",
+    "v": "Volvo AS_WA"
+   },
+   {
+    "c": "Vremt",
+    "v": "Vremt"
+   },
+   {
+    "c": "Vremt AS",
+    "v": "Vremt AS"
+   },
+   {
+    "c": "VW",
+    "v": "VW"
+   },
+   {
+    "c": "VW AS",
+    "v": "VW AS"
+   },
+   {
+    "c": "WATTPACK",
+    "v": "WATTPACK"
+   },
+   {
+    "c": "WRSE",
+    "v": "WRSE"
+   },
+   {
+    "c": "WRSE(OTS)",
+    "v": "WRSE(OTS)"
+   },
+   {
+    "c": "XL",
+    "v": "XL"
+   },
+   {
+    "c": "Yamaha",
+    "v": "Yamaha"
+   },
+   {
+    "c": "Yuntong",
+    "v": "Yuntong"
+   },
+   {
+    "c": "ZEEBUS",
+    "v": "ZEEBUS"
+   },
+   {
+    "c": "ZeroEV",
+    "v": "ZeroEV"
+   },
+   {
+    "c": "ZeroEV(OTS)",
+    "v": "ZeroEV(OTS)"
+   },
+   {
+    "c": "Zhongjia",
+    "v": "Zhongjia"
+   },
+   {
+    "c": "동훈모터스",
+    "v": "동훈모터스"
+   },
+   {
+    "c": "에디슨모터스",
+    "v": "에디슨모터스"
+   },
+   {
+    "c": "코캄(논산)",
+    "v": "코캄(논산)"
+   },
+   {
+    "c": "한국 코캄(논산)",
+    "v": "한국 코캄(논산)"
+   }
+  ],
+  "{\"comboId\":\"EndCustomerByDivisionDept\",\"divisionId\":\"'81_HD'\",\"mnuId\":\"DMF0005\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "ESS",
+    "v": "ESS"
+   },
+   {
+    "c": "ESST",
+    "v": "ESST"
+   },
+   {
+    "c": "HDMA",
+    "v": "HDMA"
+   },
+   {
+    "c": "Honda Motor",
+    "v": "Honda Motor"
+   }
   ]
  },
  "popupFields": {},
- "at": "2026-11-02T09:06:53.625Z"
+ "at": "2026-11-13T21:13:30.711Z"
 }

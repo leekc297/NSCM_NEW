@@ -67,6 +67,7 @@ grep -cE "window.alert\(|window\.confirm\(" "$MODAL"   # = 0
 
 **의무 순서**:
 1. **공용 11종 인벤토리 확인** (`@master/components/index.ts`): ProjectByDivisionModal / ItemByDivisionModal / CustomerModal / TeamModal / RegionModal / StorageLocationModal / OwnerByDivisionModal / OwnerModal / ProjectModal / ColumnSettingModal / SearchFields
+   (2026-11-13 정정: 인벤토리 파일 = `features/master/src/components/index.ts` — `@master/components` 별칭은 tsconfig paths 에 없음. 현재 export 는 위 11종 외에 CapaNewModelPopup / MeasureSelectModal / ContributeRateModal / ContributeVersionModal / ItemByPlantSiteModal / ModelByDivisionPopup / MaterialByDivisionModal / ProjectByDivisionPopup / VersionModal 9종이 더 있으므로 이것까지 확인한다)
 2. **AS-IS popup ↔ 공용 11종 매핑** (`_asis/01_popups/00_inventory.md` §2)
 3. **매핑 modal 있음 → 재사용**: 격차 항목 (검색조건 / 표시컬럼 / 이벤트) 보강만 (`headerTitle?` prop override 등)
 4. **매핑 modal 없음 → 신규 작성** (`@master/components/{newModal}/`)

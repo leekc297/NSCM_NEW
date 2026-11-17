@@ -1,0 +1,459 @@
+﻿menu_id,row_id,target,handler,state,run,text
+DMF0005,V-66afd1d0,MSG00096,EditButton,도달 불가(실측(계정 권한 데이터)),Doc/asislive/_msg_unreachable.csv,DMF0005_SaleSite_PjtModelMapping.cs:618~622 Division 81·82 이고 NowGroupID=='SCP Planner' 일 때만 · 측정 계정 jaeuk.shin 의 SCP Planner 그룹 Division 목록 = 40 하나(런처 2026-11-16 04:32 run_20261116_043257_acts_msgcel
+DMF0005,V-bf22bca4,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,V-80d2d55d,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,V-2d908ca2,MSG00177,shtMainDataModel_Changed,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,현행 화면 spdMain 에 CELL_PER_CAR·CELL_PER_MODULE 열 없음(덤프 Doc/asislive/DMF0005/run_20261114_090706/grids.json · 셀 입력 시 column not found run_20261115_193235_acts_msgcell) · GetColumnIndex = -1 이고 3542행 e.Co
+DMF0005,V-80d68e28,MSG00128,spdMain_CellDoubleClick,실측 관찰,run_20261116_042918_acts_msgcell,Purchase를 수정 중이어서 조회를 할 수 없습니다.
+DMF0005,V-66d0d650,MSG00471,spdMain_CellDoubleClick,실측 관찰,run_20261116_044501_acts_msgcell,Model은 한개만 선택하여 입력해주세요.
+DMF0005,V-933c34a5,MSG00430,spdMain_CellDoubleClick,실측 관찰,run_20261116_044501_acts_msgcell,Owner(Sales)는 1명만 선택 가능합니다.
+DMF0005,V-21a5ba1d,MSG00430,spdSub_CellDoubleClick,실측 관찰,run_20261116_044501_acts_msgcell,Owner(Sales)는 1명만 선택 가능합니다.
+DMF0005,V-d0533fc2,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,V-138c2130,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,V-a08ac994,MSG00177,shtMainDataModel_Changed,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,현행 화면 spdMain 에 CELL_PER_CAR·CELL_PER_MODULE 열 없음(덤프 Doc/asislive/DMF0005/run_20261114_090706/grids.json · 셀 입력 시 column not found run_20261115_193235_acts_msgcell) · GetColumnIndex = -1 이고 3542행 e.Co
+DMF0005,V-da0195ec,MSG00128,spdMain_CellDoubleClick,실측 관찰,run_20261116_042918_acts_msgcell,Purchase를 수정 중이어서 조회를 할 수 없습니다.
+DMF0005,V-d53ef2a0,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지 — 예 SSP0015 MSG00170·MSG00109·MSG00251),spdMain_CellDoubleClick,메시지 코드 아님,,
+DMF0005,T-e9230582,MSG00096,EditButton,도달 불가(실측(계정 권한 데이터)),Doc/asislive/_msg_unreachable.csv,DMF0005_SaleSite_PjtModelMapping.cs:618~622 Division 81·82 이고 NowGroupID=='SCP Planner' 일 때만 · 측정 계정 jaeuk.shin 의 SCP Planner 그룹 Division 목록 = 40 하나(런처 2026-11-16 04:32 run_20261116_043257_acts_msgcel
+DMF0005,T-399916e8,MSG00096,EditButton,도달 불가(실측(계정 권한 데이터)),Doc/asislive/_msg_unreachable.csv,DMF0005_SaleSite_PjtModelMapping.cs:618~622 Division 81·82 이고 NowGroupID=='SCP Planner' 일 때만 · 측정 계정 jaeuk.shin 의 SCP Planner 그룹 Division 목록 = 40 하나(런처 2026-11-16 04:32 run_20261116_043257_acts_msgcel
+DMF0005,T-c34993d8,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,T-588f3744,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,T-e73526e0,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,T-3b082027,clbDivision / Division / Div. / Div,spdMain_CellDoubleClick,메시지 코드 아님,,
+DMF0005,T-668a715a,MSG00177,shtMainDataModel_Changed,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,현행 화면 spdMain 에 CELL_PER_CAR·CELL_PER_MODULE 열 없음(덤프 Doc/asislive/DMF0005/run_20261114_090706/grids.json · 셀 입력 시 column not found run_20261115_193235_acts_msgcell) · GetColumnIndex = -1 이고 3542행 e.Co
+DMF0005,T-f67c28bd,MSG00177,shtMainDataModel_Changed,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,현행 화면 spdMain 에 CELL_PER_CAR·CELL_PER_MODULE 열 없음(덤프 Doc/asislive/DMF0005/run_20261114_090706/grids.json · 셀 입력 시 column not found run_20261115_193235_acts_msgcell) · GetColumnIndex = -1 이고 3542행 e.Co
+DMF0005,T-a615c688,MSG00128,spdMain_CellDoubleClick,실측 관찰,run_20261116_042918_acts_msgcell,Purchase를 수정 중이어서 조회를 할 수 없습니다.
+DMF0005,T-2fe38288,MSG00128,spdMain_CellDoubleClick,실측 관찰,run_20261116_042918_acts_msgcell,Purchase를 수정 중이어서 조회를 할 수 없습니다.
+DMF0005,T-f4b07b53,MSG00471,spdMain_CellDoubleClick,실측 관찰,run_20261116_044501_acts_msgcell,Model은 한개만 선택하여 입력해주세요.
+DMF0005,T-517b57cb,MSG00471,spdMain_CellDoubleClick,실측 관찰,run_20261116_044501_acts_msgcell,Model은 한개만 선택하여 입력해주세요.
+DMF0005,T-4ea5e697,EDIT_FLAG / Edit Flag,spdMain_CellDoubleClick,메시지 코드 아님,,
+DMF0005,T-e9fb526e,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,T-1c5646b4,MSG00130,EditButton,실측 관찰,run_20261116_042918_acts_msgcell,Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.
+DMF0005,T-e343d020,MSG00177,shtMainDataModel_Changed,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,현행 화면 spdMain 에 CELL_PER_CAR·CELL_PER_MODULE 열 없음(덤프 Doc/asislive/DMF0005/run_20261114_090706/grids.json · 셀 입력 시 column not found run_20261115_193235_acts_msgcell) · GetColumnIndex = -1 이고 3542행 e.Co
+DMF0005,T-851290bf,MSG00128,spdMain_CellDoubleClick,실측 관찰,run_20261116_042918_acts_msgcell,Purchase를 수정 중이어서 조회를 할 수 없습니다.
+SCP0005,V-4a0b6271,MSG00265,btnEaxel_Upload_Click,실측 관찰,run_20261116_052200_acts_msgcell,다시 조회하시겠습니까?
+SCP0005,V-3e95d2be,MSG00209,spdMainDataModel_Changed,실측 관찰,run_20261116_052331_acts_msgcell,Total L/T은 999 이하 입니다.
+SCP0005,T-2c4e7c8a,MSG00265,btnEaxel_Upload_Click,실측 관찰,run_20261116_052200_acts_msgcell,다시 조회하시겠습니까?
+SCP0005,T-e19b6757,MSG00265,btnEaxel_Upload_Click,실측 관찰,run_20261116_052200_acts_msgcell,다시 조회하시겠습니까?
+SCP0005,T-dba493fd,MSG00209,spdMainDataModel_Changed,실측 관찰,run_20261116_052331_acts_msgcell,Total L/T은 999 이하 입니다.
+SCP0005,T-eea49685,LT_ARRIVAL_INLAND / Arrival Inland,spdMainDataModel_Changed,메시지 코드 아님,,
+SCP0005,T-6a512ae5,MSG00209,spdMainDataModel_Changed,실측 관찰,run_20261116_052331_acts_msgcell,Total L/T은 999 이하 입니다.
+SCP0016,V-901f4886,DateUtil.Check_PeriodDate,FindData_Main,메시지 코드 아님,,
+SCP0020,V-7d30157b,MSG00203,CheckDigitValueEntered,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0020_TactTime.cs:442 SetSpreadInit(shtMain) 에서 Plant 시트 Visible=false(2021-09-13 주석 'Plant Sheet 제거 안보이도록 처리') · 덤프 Plant visible False(run_20261114_105944) · 런처 2026-11-16 05:08 spdMain.ActiveShee
+SCP0020,V-9476eb39,MSG00203,CheckDigitValueEntered,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0020_TactTime.cs:442 SetSpreadInit(shtMain) 에서 Plant 시트 Visible=false(2021-09-13 주석 'Plant Sheet 제거 안보이도록 처리') · 덤프 Plant visible False(run_20261114_105944) · 런처 2026-11-16 05:08 spdMain.ActiveShee
+SCP0020,T-7a72efd9,TACT_TIME / Tact Time,CheckDigitValueEntered,메시지 코드 아님,,
+SCP0020,T-bc32369f,MSG00002,InsertButton,실측 관찰,run_20261116_051641_acts_msgcell,Line 값은 필수 입력입니다
+SCP0020,T-7290a305,MSG00203,CheckDigitValueEntered,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0020_TactTime.cs:442 SetSpreadInit(shtMain) 에서 Plant 시트 Visible=false(2021-09-13 주석 'Plant Sheet 제거 안보이도록 처리') · 덤프 Plant visible False(run_20261114_105944) · 런처 2026-11-16 05:08 spdMain.ActiveShee
+SCP0020,T-18449119,MSG00203,CheckDigitValueEntered,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0020_TactTime.cs:442 SetSpreadInit(shtMain) 에서 Plant 시트 Visible=false(2021-09-13 주석 'Plant Sheet 제거 안보이도록 처리') · 덤프 Plant visible False(run_20261114_105944) · 런처 2026-11-16 05:08 spdMain.ActiveShee
+SCP0020,T-5871045e,MSG00203,CheckDigitValueEntered,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0020_TactTime.cs:442 SetSpreadInit(shtMain) 에서 Plant 시트 Visible=false(2021-09-13 주석 'Plant Sheet 제거 안보이도록 처리') · 덤프 Plant visible False(run_20261114_105944) · 런처 2026-11-16 05:08 spdMain.ActiveShee
+SCP0020,T-342b61d4,MSG00161,InsertButton,실측 관찰,run_20261116_051246_acts_msgcell,더블클릭하여 Tact Time을 선택한 후 사용하세요!
+SCP0020,T-5a6edfa0,MSG00002,InsertButton,실측 관찰,run_20261116_051641_acts_msgcell,Line 값은 필수 입력입니다
+SCP0028,T-0caf6c62,MSG00031,FindDelete,미실행(실저장 경로),,FindDelete 의 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:462) · 저장 시험 결정 전 미실행 · 문구 삭제 하였습니다.
+SCP0028,T-4677b9e5,MSG00284,FindDelete,미실행(실저장 경로),,FindDelete 의 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:462) · 저장 시험 결정 전 미실행 · 문구 실행중 에러가 발생했습니다.
+SCP0033,V-0c8f3043,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_125818_acts_pick,Division을(를) 선택하십시오.
+SCP0033,V-144e2ada,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,SpdMain_CellClick,메시지 코드 아님,,
+SCP0033,V-a848ad8b,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),SpdMain_CellClick,메시지 코드 아님,,
+SCP0033,T-2d6f3bd2,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_125818_acts_pick,Division을(를) 선택하십시오.
+SCP0033,T-1c355151,ITEM_ID / Model,SpdMain_CellClick,메시지 코드 아님,,
+SCP0033,T-575ed269,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_125818_acts_pick,Division을(를) 선택하십시오.
+SCP0037,V-377e14ec,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,V-05394fc0,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,V-e2267fc9,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,V-4159d179,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-ceb976de,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-a8970d68,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-4e3816d7,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-82c90a72,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-5ddcb122,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,V-3209c1f9,[SYS0014 결함 유형] Division 시트 저장(JV Planner),SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,T-3c2be75d,SCM_SITE_ID / Plant Site,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,T-6422d572,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,T-6db03fd4,ITEM_ID / Material,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,T-0e962d80,DIVISION_ID / Division,SpdMain_CellClick,메시지 코드 아님,,
+SCP0037,T-687b80fd,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,T-b51be921,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0037,T-0dc5f559,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133552_acts_pick,Plant Site을(를) 선택하십시오.
+SCP0041,V-6e4cb1a9,MSG00108,ActiveSheet_CellChanged,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0041_StockOSP.cs:224 InitEvent 에서 siMain.ActiveSheet.CellChanged += (CreateSpread 뒤 · 화면 열림 활성 시트 0 'Osp Stock' = 덤프 active_sheet_index 0) · DATE_FORECAST_START/FINISH 열은 시트 1 'Pack Hold Stock' 에만 
+SCP0041,T-b409f0b8,MSG00108,ActiveSheet_CellChanged,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0041_StockOSP.cs:224 InitEvent 에서 siMain.ActiveSheet.CellChanged += (CreateSpread 뒤 · 화면 열림 활성 시트 0 'Osp Stock' = 덤프 active_sheet_index 0) · DATE_FORECAST_START/FINISH 열은 시트 1 'Pack Hold Stock' 에만 
+SCP0041,T-221e8255,MSG00108,ActiveSheet_CellChanged,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0041_StockOSP.cs:224 InitEvent 에서 siMain.ActiveSheet.CellChanged += (CreateSpread 뒤 · 화면 열림 활성 시트 0 'Osp Stock' = 덤프 active_sheet_index 0) · DATE_FORECAST_START/FINISH 열은 시트 1 'Pack Hold Stock' 에만 
+SCP0041,T-50cc9349,MSG00108,ActiveSheet_CellChanged,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SCP0041_StockOSP.cs:224 InitEvent 에서 siMain.ActiveSheet.CellChanged += (CreateSpread 뒤 · 화면 열림 활성 시트 0 'Osp Stock' = 덤프 active_sheet_index 0) · DATE_FORECAST_START/FINISH 열은 시트 1 'Pack Hold Stock' 에만 
+SCP0084,V-8a056ad0,MSG00100,ExcelButton,실측 관찰,run_20261116_044743_acts_msgcell,저장하지 않고 바로 열겠습니까?
+SCP0084,T-5eb7ae09,MSG00100,ExcelButton,실측 관찰,run_20261116_044743_acts_msgcell,저장하지 않고 바로 열겠습니까?
+SCP0084,T-4a0d3125,MSG00100,ExcelButton,실측 관찰,run_20261116_044743_acts_msgcell,저장하지 않고 바로 열겠습니까?
+SCP0104,V-7c99061c,MSG00004,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 {0}개의 데이터가 저장되었습니다.
+SCP0104,V-3e88f5f3,MSG00006,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 저장에 실패하였습니다.
+SCP0104,T-c3b3d45e,MSG00004,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 {0}개의 데이터가 저장되었습니다.
+SCP0104,T-624c3a8f,MSG00006,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 저장에 실패하였습니다.
+SCP0104,T-a7d22c22,MSG00004,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 {0}개의 데이터가 저장되었습니다.
+SCP0104,T-855d8b2d,MSG00006,AfterSaveData,미실행(실저장 경로),,SetQueryInfoSaveAssignASSEMBLY 의 SCP.SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY 요청 뒤 메시지(GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:4940) · 저장 시험 결정 전 미실행 · 문구 저장에 실패하였습니다.
+SCP0131,V-e9e51d5f,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,SpdMain_EditChange,메시지 코드 아님,,
+SCP0131,T-199ef21e,TO_YYYYMMDD / Valid To,SpdMain_EditChange,메시지 코드 아님,,
+SCP0131,T-5cc952a8,MSG00049,SpdMain_EditChange,도달 불가(원문),Doc/asislive/_msg_unreachable.csv,"SCP0131_SalesSitePriority.cs:979 Convert.ToDateTime(...).ToString(""yyyy-MM-dd"") 결과를 987행 DateTime.TryParse 로 다시 검사 · 항상 참 · 변환 실패는 979행 예외로 끝남"
+SCP0131,T-c7d5c219,FROM_YYYYMMDD / Valid From,SpdMain_EditChange,메시지 코드 아님,,
+SSP0003,V-af3f2826,MSG00190,BtnApproval_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 확인 창(MSG00190) 전에 SaveDraftingData(""O"")·SaveData(""O"") 저장 · ERP I/F 점검 연동 · 문구 요청하신 내용을 승인 하시겠습니까?"
+SSP0003,V-f949e508,MSG00181,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,V-b1947ba4,MSG00191,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 반려 하시겠습니까?
+SSP0003,V-ceb8b040,MSG00181,BtnSelfReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 자체 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,V-16357b9a,MSG00192,BtnSelfReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 자체 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 자기반려 하시겠습니까?
+SSP0003,V-821b3c45,MSG00420,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 승인 대상을 체크해주세요.
+SSP0003,V-7f7b04a3,MSG00181,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 Reject Reason을 입력하세요.
+SSP0003,V-9dca4452,MSG00421,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Reject 버튼 눌러 주세요. 부분 승인 필요 시, 승인 대상 체크 후 Approval 눌러주세요."
+SSP0003,V-afec74bd,MSG00422,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Self Reject 버튼 눌러주세요.
+SSP0003,V-a2458308,MSG00291,EngProcessingChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 SSP Daily Plan 수행중입니다.약 {0} 분후에 다시 수행 바랍니다.
+SSP0003,V-99cc9b11,MSG00197,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0003,V-231a1d8e,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,V-e7c75198,MSG00306,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0003,V-7ee82d50,MSG00204,GetErpIFCheckNew,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,V-3ca5bf85,MSG00197,GetErpIFCheckNew,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0003,V-78ddd956,MSG00413,GetShipmentStatusChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 해당 계획에 대한 ERP D/O(Delivery Order) 생성되어 \r\n SSP 계획 변경 불가합니다.
+SSP0003,V-e8993ea3,MSG00267,chkERPIFBlockYn,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 기간동안 서버 교체 작업으로 인한 SCM 시스템 가동 중단 됩니다. \n\r 기간:{0}
+SSP0003,T-a9398cc2,MSG00181,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,T-e20020ab,MSG00422,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Self Reject 버튼 눌러주세요.
+SSP0003,T-f6cc8458,MSG00192,BtnSelfReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 자체 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 자기반려 하시겠습니까?
+SSP0003,T-272ab397,MSG00421,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Reject 버튼 눌러 주세요. 부분 승인 필요 시, 승인 대상 체크 후 Approval 눌러주세요."
+SSP0003,T-20e5a924,MSG00291,EngProcessingChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 SSP Daily Plan 수행중입니다.약 {0} 분후에 다시 수행 바랍니다.
+SSP0003,T-3b71ae3a,MSG00413,GetShipmentStatusChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 해당 계획에 대한 ERP D/O(Delivery Order) 생성되어 \r\n SSP 계획 변경 불가합니다.
+SSP0003,T-aed20308,MSG00420,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 승인 대상을 체크해주세요.
+SSP0003,T-d7d691ba,MSG00190,BtnApproval_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 확인 창(MSG00190) 전에 SaveDraftingData(""O"")·SaveData(""O"") 저장 · ERP I/F 점검 연동 · 문구 요청하신 내용을 승인 하시겠습니까?"
+SSP0003,T-e316f440,MSG00190,BtnApproval_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 확인 창(MSG00190) 전에 SaveDraftingData(""O"")·SaveData(""O"") 저장 · ERP I/F 점검 연동 · 문구 요청하신 내용을 승인 하시겠습니까?"
+SSP0003,T-0660d346,MSG00181,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,T-712d2504,MSG00191,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 반려 하시겠습니까?
+SSP0003,T-4bf6ff2f,MSG00191,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 반려 하시겠습니까?
+SSP0003,T-d6f13071,MSG00181,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,T-2bce23fd,MSG00192,BtnSelfReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 자체 반려 저장 경로 · ERP I/F 점검 연동 · 문구 요청하신 내용을 자기반려 하시겠습니까?
+SSP0003,T-3cbff55c,MSG00420,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 승인 대상을 체크해주세요.
+SSP0003,T-d464b571,MSG00181,BtnReject_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 반려 저장 경로 · ERP I/F 점검 연동 · 문구 Reject Reason을 입력하세요.
+SSP0003,T-8ab3e76a,txtRejectReason / Reject Reason,ChkDraftingData,메시지 코드 아님,,
+SSP0003,T-d9f7e84d,MSG00421,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,"2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Reject 버튼 눌러 주세요. 부분 승인 필요 시, 승인 대상 체크 후 Approval 눌러주세요."
+SSP0003,T-b1db291c,MSG00422,ChkDraftingData,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 전체 체크 후 Self Reject 버튼 눌러주세요.
+SSP0003,T-fca11a97,MSG00291,EngProcessingChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 SSP Daily Plan 수행중입니다.약 {0} 분후에 다시 수행 바랍니다.
+SSP0003,T-ecbefe67,MSG00197,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0003,T-5064a9d0,MSG00197,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0003,T-07bb5d53,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,T-9397193c,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,T-ef4dfdfc,MSG00306,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0003,T-23c81dd2,MSG00306,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0003,T-0a025897,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,T-a845091d,MSG00197,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0003,T-26597578,MSG00413,GetShipmentStatusChk,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click 뿐 · 문구 해당 계획에 대한 ERP D/O(Delivery Order) 생성되어 \r\n SSP 계획 변경 불가합니다.
+SSP0003,T-bb6170a2,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,T-4a67261f,MSG00204,GetErpIFCheck,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0003,T-8243508f,MSG00267,chkERPIFBlockYn,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 기간동안 서버 교체 작업으로 인한 SCM 시스템 가동 중단 됩니다. \n\r 기간:{0}
+SSP0003,T-ba3b5d18,MSG00267,chkERPIFBlockYn,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐 · 문구 하기 기간동안 서버 교체 작업으로 인한 SCM 시스템 가동 중단 됩니다. \n\r 기간:{0}
+SSP0015,V-20b7234e,DateUtil.Check_PeriodDate,FindData_Main_Packer,메시지 코드 아님,,
+SSP0015,V-b20599c8,DateUtil.Check_PeriodDate,FindData_Main_Packer_Past,메시지 코드 아님,,
+SSP0015,V-66cdc8de,DateUtil.Check_PeriodDate,FindData_Request_Detail,메시지 코드 아님,,
+SSP0015,V-af322c16,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0015,V-9593610e,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0015,V-324f6e02,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0015,V-e0f0c4a0,MSG00007,btnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0015,V-4e89d52b,MSG00007,btnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0015,V-f1bbe4fa,MSG00189,shtDetail_Change,미관찰,,"In ERP, DO is created and can not request change. \n\rPlease cancel the generated DO and request a change."
+SSP0015,V-1ad498b1,MSG00362,shtDetail_Change,미관찰,,SCS에서 해당 Confirm ID기준 출하 실적이 발생 했습니다. 출하계획 변경 불가 합니다.
+SSP0015,V-a4968988,MSG00278,shtDetail_Change,미관찰,,Trans Mode를 선택해 주세요.
+SSP0015,V-7640b172,MSG00278,spdDetail_ComboSelChange,미관찰,,Trans Mode를 선택해 주세요.
+SSP0015,V-4dc87319,MSG00050,txtChange_Qty_TextChanged,미관찰,,유효한 숫자 형식이 아닙니다. {0}
+SSP0015,V-0b85379f,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,FindData_Main_Packer,메시지 코드 아님,,
+SSP0015,T-7673b395,MSG00007,btnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0015,T-f726f2a1,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0015,T-773a08a9,TRANSPORT_MODE / Trans Mode,SpdDetail_ClipboardPasted,메시지 코드 아님,,
+SSP0015,T-8617e174,MSG00278,shtDetail_Change,미관찰,,Trans Mode를 선택해 주세요.
+SSP0015,T-97f8b368,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-605b7da8,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-a2fc874f,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0015,T-f82cdbe2,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-9f98e684,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-631bcea3,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-c8dfd804,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-1ea080c5,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0015,T-a2dcee08,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-5b1fb09a,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-2611e771,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-2a837eb3,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0015,T-96d974ad,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0015,T-956017cf,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0015,T-6b5681a8,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0015,T-f4dae91c,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0015,T-58e4a8db,MSG00007,btnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0015,T-47dd4283,MSG00007,btnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0015,T-75263c75,MSG00362,shtDetail_Change,미관찰,,SCS에서 해당 Confirm ID기준 출하 실적이 발생 했습니다. 출하계획 변경 불가 합니다.
+SSP0015,T-121cd195,MSG00362,shtDetail_Change,미관찰,,SCS에서 해당 Confirm ID기준 출하 실적이 발생 했습니다. 출하계획 변경 불가 합니다.
+SSP0015,T-1ffc5999,MSG00278,shtDetail_Change,미관찰,,Trans Mode를 선택해 주세요.
+SSP0015,T-eac476e1,MSG00278,shtDetail_Change,미관찰,,Trans Mode를 선택해 주세요.
+SSP0015,T-927247d1,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0015,T-a618c81d,MSG00050,txtChange_Qty_TextChanged,미관찰,,유효한 숫자 형식이 아닙니다. {0}
+SSP0015,T-df232581,MSG00050,txtChange_Qty_TextChanged,미관찰,,유효한 숫자 형식이 아닙니다. {0}
+SSP0021,V-4aa77fa5,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0021,V-6d8a9a30,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0021,V-f152b063,MSG00292,Simulation,실측 관찰,run_20261114_184209_acts_pre_cboPlanDate_i1,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0021,V-529d6c06,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0021,V-d8bb3a06,MSG00278,SpdDetail_ComboSelChange,미관찰,,Trans Mode를 선택해 주세요.
+SSP0021,V-d89b7096,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0021,V-365feee3,MSG00189,shtDetail_Change,미관찰,,"In ERP, DO is created and can not request change. \n\rPlease cancel the generated DO and request a change."
+SSP0021,V-1086d939,MSG00278,shtDetail_Change,미관찰,,Trans Mode를 선택해 주세요.
+SSP0021,T-353a7ec2,TRANSPORT_MODE / Trans Mode,SpdDetail_ClipboardPasted,메시지 코드 아님,,
+SSP0021,T-e0deba3c,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0021,T-ac1fe91f,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0021,T-6254b813,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0021,T-bcf82dff,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0021,T-9b782e6d,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0021,T-f8877b3a,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0021,T-02019064,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0021,T-960856df,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0021,T-1b0ff90a,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0021,T-9a2df583,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0021,T-82e0ab05,MSG00292,Simulation,실측 관찰,run_20261114_184209_acts_pre_cboPlanDate_i1,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0021,T-05385ee1,MSG00292,Simulation,실측 관찰,run_20261114_184209_acts_pre_cboPlanDate_i1,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0021,T-56c72e20,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0021,T-3fc86921,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0021,T-eb894007,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0021,T-f72d63a3,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0021,T-7346bd10,MSG00278,SpdDetail_ComboSelChange,미관찰,,Trans Mode를 선택해 주세요.
+SSP0021,T-62201dbd,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0021,T-6a4ac729,MSG00287,SpdDetail_EditChange,미관찰,,Reason Code를 입력 해주세요
+SSP0021,T-107c229d,MSG00278,SpdDetail_ComboSelChange,미관찰,,Trans Mode를 선택해 주세요.
+SSP0023,V-7455da53,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0023,V-b8630633,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0023,V-565d89d1,MSG00292,Simulation,미관찰,,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0023,V-b04941f7,MSG00004,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 {0}개의 데이터가 저장되었습니다.
+SSP0023,V-b997e5ad,MSG00042,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0023,V-bf3dbe0d,MSG00005,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 변경/추가된 데이터가 없습니다.
+SSP0023,V-afdb030b,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0023,V-8d14b2be,MSG00278,SpdDetail_ComboSelChange,실측 관찰,run_20261116_071531_acts_msgcell,Trans Mode를 선택해 주세요.
+SSP0023,V-8f1ad22c,MSG00287,SpdDetail_EditChange,실측 관찰,run_20261116_071531_acts_msgcell,Reason Code를 입력 해주세요
+SSP0023,V-ba0abe2f,MSG00265,btnExcelUpload_Click,실측 관찰,run_20261116_065951_acts_msgcell,다시 조회하시겠습니까?
+SSP0023,V-43e27d79,MSG00189,shtPlanDetail_Change,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0023_ShipmentPlanElectrode.cs:6125~6132 상세 수정 중 ERP_STATUS='C' 행 변경 · 수정 버튼 2275~2283행 'erp_stuts 가 C 인 경우 수정 못하도록' 분기(SHIPMENT_STATUS C 이고 ERP_STATUS != C 일 때만 편집 열 해제) · 런처 11-16 07:00 상세 0행(ERP_
+SSP0023,V-3bbfff01,MSG00278,shtPlanDetail_Change,실측 관찰,run_20261116_071531_acts_msgcell,Trans Mode를 선택해 주세요.
+SSP0023,T-e727c7d1,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0023,T-9da10201,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0023,T-0c2215d7,MSG00007,BtnMeasure_Click,미관찰,,선택한 Spread 가 없습니다.
+SSP0023,T-edbe7804,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0023,T-cf238c13,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0023,T-0e4bed5d,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0023,T-12b82f7c,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0023,T-12019bd0,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0023,T-b39ebd47,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0023,T-e79068bc,MSG00292,Simulation,미관찰,,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0023,T-6a62f149,MSG00292,Simulation,미관찰,,Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0023,T-be078e87,MSG00042,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0023,T-1cedfca9,MSG00042,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0023,T-71c37701,MSG00005,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 변경/추가된 데이터가 없습니다.
+SSP0023,T-73da8e60,MSG00005,Simulation,미실행(실저장 경로),,Simulation 의 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0023_ShipmentPlanElectrode.UIL/SSP0023_ShipmentPlanElectrode.cs:5931) · 저장 시험 결정 전 미실행 · 문구 변경/추가된 데이터가 없습니다.
+SSP0023,T-33242d34,MSG00324,NewNonSoNo,미관찰,,기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0023,T-5e6eefaf,MSG00284,NewNonSoNo,미관찰,,실행중 에러가 발생했습니다.
+SSP0023,T-053464d2,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0023,T-cdce7228,MSG00047,SpdDetail_ClipboardPasted,미관찰,,존재하지 않는 {0}입니다. 
+SSP0023,T-6b88f829,TRANSPORT_MODE / Trans Mode,SpdDetail_ClipboardPasted,메시지 코드 아님,,
+SSP0023,T-4ff6b9f5,MSG00278,SpdDetail_ComboSelChange,실측 관찰,run_20261116_071531_acts_msgcell,Trans Mode를 선택해 주세요.
+SSP0023,T-14fa20af,MSG00287,SpdDetail_EditChange,실측 관찰,run_20261116_071531_acts_msgcell,Reason Code를 입력 해주세요
+SSP0023,T-2c9c5aee,MSG00287,SpdDetail_EditChange,실측 관찰,run_20261116_071531_acts_msgcell,Reason Code를 입력 해주세요
+SSP0023,T-d3269dc1,MSG00265,btnExcelUpload_Click,실측 관찰,run_20261116_065951_acts_msgcell,다시 조회하시겠습니까?
+SSP0023,T-51a5877d,MSG00265,btnExcelUpload_Click,실측 관찰,run_20261116_065951_acts_msgcell,다시 조회하시겠습니까?
+SSP0024,V-493f4064,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133821_acts_pick,Plant Site을(를) 선택하십시오.
+SSP0024,V-3c2a6208,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133821_acts_pick,Plant Site을(를) 선택하십시오.
+SSP0024,V-0ab3cbeb,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-5d7a9ed0,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-ed9656b7,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-4f77accb,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-7506200f,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-a0df4265,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,V-f71b7303,[SYS0014 결함 유형] Division 시트 저장(JV Planner),SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,T-ab78900c,DIVISION_ID / Div,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,T-8beafcdc,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133821_acts_pick,Plant Site을(를) 선택하십시오.
+SSP0024,T-b9d7f06f,PLANT_SITE_ID / Plant Site,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,T-a7a626c5,MATERIAL_ID / Material,SpdMain_CellClick,메시지 코드 아님,,
+SSP0024,T-7dd4a73f,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133821_acts_pick,Plant Site을(를) 선택하십시오.
+SSP0024,T-0e306795,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_133821_acts_pick,Plant Site을(를) 선택하십시오.
+SSP0025,V-bab460f9,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_134254_acts_pick,Division을(를) 선택하십시오.
+SSP0025,V-2eead347,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_134254_acts_pick,Division을(를) 선택하십시오.
+SSP0025,V-ac986103,[SYS0014 결함 유형] Division 시트 저장(JV Planner),SpdMain_CellClick,메시지 코드 아님,,
+SSP0025,T-922a5a83,DIVISION_ID / Division,SpdMain_CellClick,메시지 코드 아님,,
+SSP0025,T-01446a71,ITEM_ID / Material,SpdMain_CellClick,메시지 코드 아님,,
+SSP0025,T-b3d05bd1,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_134254_acts_pick,Division을(를) 선택하십시오.
+SSP0025,T-4f8019e7,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_134254_acts_pick,Division을(를) 선택하십시오.
+SSP0025,T-50d60adf,MSG00093,SpdMain_CellClick,실측 관찰,run_20261115_134254_acts_pick,Division을(를) 선택하십시오.
+SSP0060,V-49934161,MSG00007,BtnMeasure_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 선택한 Spread 가 없습니다.
+SSP0060,V-f391c6c6,MSG00007,BtnMeasure_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 선택한 Spread 가 없습니다.
+SSP0060,V-19962dff,MSG00251,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 SSP Planner 권한이 없는 사용자 입니다 .\n\rUser ID : {0}
+SSP0060,V-2b418157,MSG00170,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 이전 Plan은 편집할 수 없습니다.
+SSP0060,V-45978bfb,MSG00424,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 수정사항이 있습니다. 재조회해주세요.
+SSP0060,V-a1e3992e,MSG00312,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실시간 Data가 아닙니다.
+SSP0060,V-fc9d478b,MSG00425,EditByChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 최소입력수량 이상 입력해야 합니다.
+SSP0060,V-2d74edd3,MSG00197,GetErpIFCheck,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0060,V-1b4807ba,MSG00204,GetErpIFCheck,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0060,V-9c589130,MSG00306,GetErpIFCheck,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0060,V-e377b154,MSG00247,GetNewERPInterface,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 동일 SO번호로 생성된 다른 건이 존재합니다.\n\r변경은 SO번호기준으로 동일하게 변경해야 합니다.\n\r[ SO NO : {0} ]
+SSP0060,V-24e21001,MSG00049,GetNewERPInterface,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 유효한 날짜 형식이 아닙니다. {0}
+SSP0060,V-e7bdf428,MSG00324,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0060,V-d3a12483,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,V-8e8410c7,MSG00292,Simulation,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0060,V-7472fe36,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-af4d8347,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-b9f1e980,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-0d660f19,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-745476dd,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-38ae3cd9,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-09cc01e6,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,V-62fca86d,MSG00047,SpdDetail_ClipboardPasted,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 존재하지 않는 {0}입니다. 
+SSP0060,V-2b43a981,MSG00278,SpdDetail_ComboSelChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Trans Mode를 선택해 주세요.
+SSP0060,V-6ad0790f,MSG00287,SpdDetail_EditChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Reason Code를 입력 해주세요
+SSP0060,V-99071c9e,MSG00189,shtDetail_Change,런처 제외,,"asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 In ERP, DO is created and can not request change. \n\rPlease cancel the generate"
+SSP0060,V-9feba404,MSG00278,shtDetail_Change,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Trans Mode를 선택해 주세요.
+SSP0060,V-77ca1854,MSG00013,SSP0060_ShipmentPlanRequestPopup_FormClosing,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?
+SSP0060,V-13e2fa12,MSG00275,btnAutoSet_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 입력 가능한 데이터가 없습니다.
+SSP0060,V-0536312b,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,SpdDetail_CellDoubleClick,메시지 코드 아님,,
+SSP0060,V-58a44b33,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),SpdDetail_CellDoubleClick,메시지 코드 아님,,
+SSP0060,V-0237c616,[DMF0005 결함 유형] Project 컬럼 필수 검증,SpdDetail_CellDoubleClick,메시지 코드 아님,,
+SSP0060,T-e7161acd,MSG00278,SpdDetail_ComboSelChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Trans Mode를 선택해 주세요.
+SSP0060,T-183aecc7,CHANGE_REASON_DETAIL / Reason Detail,SpdDetail_EditChange,메시지 코드 아님,,
+SSP0060,T-ef423e29,MSG00287,SpdDetail_EditChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Reason Code를 입력 해주세요
+SSP0060,T-1fc753a7,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-bd27bc1f,MSG00013,SSP0060_ShipmentPlanRequestPopup_FormClosing,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?
+SSP0060,T-4e781806,MSG00425,EditByChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 최소입력수량 이상 입력해야 합니다.
+SSP0060,T-890f1644,MSG00007,BtnMeasure_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 선택한 Spread 가 없습니다.
+SSP0060,T-e53c55fd,MSG00251,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 SSP Planner 권한이 없는 사용자 입니다 .\n\rUser ID : {0}
+SSP0060,T-a09192e2,MSG00170,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 이전 Plan은 편집할 수 없습니다.
+SSP0060,T-cc98d10b,MSG00424,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 수정사항이 있습니다. 재조회해주세요.
+SSP0060,T-defacc00,MSG00312,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실시간 Data가 아닙니다.
+SSP0060,T-a65340c1,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,T-29f8b8ce,MSG00324,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0060,T-e07f5945,MSG00292,Simulation,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0060,T-6ff1d674,MSG00007,BtnMeasure_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 선택한 Spread 가 없습니다.
+SSP0060,T-0bbb754f,MSG00007,BtnMeasure_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 선택한 Spread 가 없습니다.
+SSP0060,T-442991a9,MSG00251,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 SSP Planner 권한이 없는 사용자 입니다 .\n\rUser ID : {0}
+SSP0060,T-4bb99bef,MSG00170,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 이전 Plan은 편집할 수 없습니다.
+SSP0060,T-3414c78a,MSG00424,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 수정사항이 있습니다. 재조회해주세요.
+SSP0060,T-674ec5c0,MSG00312,EditButton,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실시간 Data가 아닙니다.
+SSP0060,T-3b63c223,MSG00425,EditByChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 최소입력수량 이상 입력해야 합니다.
+SSP0060,T-ffd546cd,MSG00306,GetErpIFCheck,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0060,T-91df6850,MSG00306,GetErpIFCheck,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0060,T-44ee0bb2,MSG00324,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0060,T-cd89a4b2,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,T-ab90da6c,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,T-637a2400,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,T-4ead747c,ITEM_ID / Model,SpdDetail_CellDoubleClick,메시지 코드 아님,,
+SSP0060,T-719ac5f6,TRANSPORT_MODE / Trans Mode,SpdDetail_ClipboardPasted,메시지 코드 아님,,
+SSP0060,T-38d42e36,MSG00292,Simulation,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.
+SSP0060,T-a37b349c,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-2da4d9c8,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-150eb91c,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-cc1f3d2c,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-f96783c6,PROJECT_CODE / Project Code,SpdDetail_CellDoubleClick,메시지 코드 아님,,
+SSP0060,T-f2ca6e68,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-18df7a74,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-ec929f85,MSG00098,SpdDetail_CellDoubleClick,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 먼저 {0}을(를) 선택하십시오.
+SSP0060,T-b90886cd,MSG00047,SpdDetail_ClipboardPasted,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 존재하지 않는 {0}입니다. 
+SSP0060,T-f9a25b1d,MSG00278,SpdDetail_ComboSelChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Trans Mode를 선택해 주세요.
+SSP0060,T-b62a98c1,MSG00287,SpdDetail_EditChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Reason Code를 입력 해주세요
+SSP0060,T-8d127d91,MSG00278,SpdDetail_ComboSelChange,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 Trans Mode를 선택해 주세요.
+SSP0060,T-9918eef5,CHANGE_REASON_CODE / Change Reason,SpdDetail_ClipboardPasted,메시지 코드 아님,,
+SSP0060,T-43ebce8a,MSG00013,SSP0060_ShipmentPlanRequestPopup_FormClosing,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?
+SSP0060,T-6ead8c8b,MSG00324,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?
+SSP0060,T-4c8fe709,MSG00284,NewNonSoNo,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 실행중 에러가 발생했습니다.
+SSP0060,T-fb98d11c,MSG00275,btnAutoSet_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 입력 가능한 데이터가 없습니다.
+SSP0060,T-8ea5eea6,txtReasonDetail / Reason Detail,btnAutoSet_Click,메시지 코드 아님,,
+SSP0060,T-b79fca0c,cboChangeReason / Change Reason,btnAutoSet_Click,메시지 코드 아님,,
+SSP0060,T-a3be7b39,MSG00275,btnAutoSet_Click,런처 제외,,asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 입력 가능한 데이터가 없습니다.
+SSP0200,V-085d0ea0,MSG00195,BtnCancel_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 취소 저장 경로(DeleteDataDrafting) · 문구 취소하시겠습니까?
+SSP0200,V-0604c80e,MSG00202,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 0보다 큰 수를 입력하십시오.
+SSP0200,V-e2b68cce,MSG00202,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 0보다 큰 수를 입력하십시오.
+SSP0200,V-0df6aa86,MSG00201,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 현재일 기준 D+{0} 이전은 요청 할 수 없습니다. \n\r삭제 후 다시 요청하시기 바랍니다.
+SSP0200,V-e1530e76,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,V-c5d157b9,MSG00198,DeleteDataDrafting,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnCancel_Click 뿐 · 문구 최초 선택된 항목은 삭제할 수 없습니다. \n\r삭제할려면 전체 취소하고 재 진행 하시기 바랍니다.
+SSP0200,V-3e03c0d8,MSG00284,DeleteDataDrafting,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnCancel_Click 뿐 · 문구 실행중 에러가 발생했습니다.
+SSP0200,V-65c760b1,MSG00197,GetErpIFCheck,미실행(실저장 경로),,GetErpIFCheck 의 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.UIL/SSP0200_ShipmentChangeRequest.cs:4912) · 저장 시험 결정 전 미실행 · 문구 하기 ERP ISSUE로 인해 처리할 수 없습니다.  \n\rERP 해결 후 재처리 바랍니다. \n\r{0}
+SSP0200,V-783b46e6,MSG00204,GetErpIFCheck,미실행(실저장 경로),,GetErpIFCheck 의 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.UIL/SSP0200_ShipmentChangeRequest.cs:4912) · 저장 시험 결정 전 미실행 · 문구 시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \n\rRequest No : {0}
+SSP0200,V-518265d2,MSG00306,GetErpIFCheck,미실행(실저장 경로),,GetErpIFCheck 의 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.UIL/SSP0200_ShipmentChangeRequest.cs:4912) · 저장 시험 결정 전 미실행 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0200,V-56c3d505,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,V-d42a17d3,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,V-62a6a4f9,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,V-8c6250a2,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-d7d72459,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-b281e110,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-c5410a1d,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-dbb75eae,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-300d2050,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-2bf0d543,MSG00098,SpdMain_CellDoubleClick,실측 관찰,run_20261116_070753_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-c860e418,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-0ef874ed,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-7229258b,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-21ef23af,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-160080d7,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-d0698363,MSG00293,SpdMain_ComboSelChange,실측 관찰,run_20261116_061651_acts_msgcell,"Div, From Site, To Site 에 해당되는 BOD(Trans mode, Incoterms) 정보가 유효하지 않습니다."
+SSP0200,V-be06cda6,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-f1819b93,MSG00098,SpdMain_ComboSelChange,실측 관찰,run_20261116_060518_acts_msgcell,먼저 From Site을(를) 선택하십시오.
+SSP0200,V-af4b736f,MSG00194,SpdMain_EditChange,실측 관찰,run_20261116_061326_acts_msgcell,변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.
+SSP0200,V-20013f3d,MSG00287,SpdMain_EditChange,실측 관찰,run_20261115_194411_acts_msgcell,Reason Code를 입력 해주세요
+SSP0200,V-11b4854b,MSG00002,checkRequired,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnChangeRe_Click 뿐 · 문구 {0} 값은 필수 입력입니다
+SSP0200,V-7c9601ff,MSG00002,checkRequired,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnChangeRe_Click 뿐 · 문구 {0} 값은 필수 입력입니다
+SSP0200,V-07f48f5e,MSG00002,checkRequired,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnChangeRe_Click 뿐 · 문구 {0} 값은 필수 입력입니다
+SSP0200,V-c4677ee3,MSG00002,checkRequired,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnChangeRe_Click 뿐 · 문구 {0} 값은 필수 입력입니다
+SSP0200,V-6e2fdc54,MSG00189,shtMain_Change,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs:6415~6422 수정 중 ERP_STATUS='C' 행 셀 변경 · EditButton 796~816행이 ERP_STATUS='C' 행 1열~끝 열 잠금(LockRange) · 새 행(Action I)은 ERP_STATUS 빈 값 · 런처 2026-11-16 06:17 ERP_STATUS=C 0행
+SSP0200,V-e15f0c3b,MSG00050,btnButtonList_UsrButtonList_Click_Detected,실측 관찰,run_20261116_061856_acts_msgcell,유효한 숫자 형식이 아닙니다. 0
+SSP0200,V-99da1902,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-7337cfde,[DMF0082 결함 유형] Biz Type 미존재 검증 팝업 메시지,BtnChangeRe_Click,메시지 코드 아님,,
+SSP0200,V-ef609cc3,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-22829581,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-d3d6904a,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,btnButtonList_UsrButtonList_Click_Detected,메시지 코드 아님,,
+SSP0200,V-39bc4c96,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-1bfc76d2,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-c73ea73c,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,V-92e1293d,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,BtnChangeRe_Click,메시지 코드 아님,,
+SSP0200,V-d55adb06,[SYS0014 결함 유형] Division 시트 저장(JV Planner),SpdMain_ComboSelChange,메시지 코드 아님,,
+SSP0200,V-61305b41,[DMF0005 결함 유형] Project 컬럼 필수 검증,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-d71ec798,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,T-97f48cbb,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-29e10910,MSG00195,BtnCancel_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 취소 저장 경로(DeleteDataDrafting) · 문구 취소하시겠습니까?
+SSP0200,T-7fbfbd04,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-810f3cd2,MSG00202,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 0보다 큰 수를 입력하십시오.
+SSP0200,T-8858aa96,MSG00287,SpdMain_EditChange,실측 관찰,run_20261115_194411_acts_msgcell,Reason Code를 입력 해주세요
+SSP0200,T-bf25f16d,MSG00195,BtnCancel_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 취소 저장 경로(DeleteDataDrafting) · 문구 취소하시겠습니까?
+SSP0200,T-685f45cc,MSG00202,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 0보다 큰 수를 입력하십시오.
+SSP0200,T-93094233,cboChangeType / Change Type,BtnChangeRe_Click,메시지 코드 아님,,
+SSP0200,T-028f669a,MSG00202,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 0보다 큰 수를 입력하십시오.
+SSP0200,T-90b9dd90,NEW_YN / new_yn,BtnChangeRe_Click,메시지 코드 아님,,
+SSP0200,T-fb08330c,MSG00201,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 현재일 기준 D+{0} 이전은 요청 할 수 없습니다. \n\r삭제 후 다시 요청하시기 바랍니다.
+SSP0200,T-2971e636,MSG00201,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 현재일 기준 D+{0} 이전은 요청 할 수 없습니다. \n\r삭제 후 다시 요청하시기 바랍니다.
+SSP0200,T-2f952a0b,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,T-b81436af,MSG00198,DeleteDataDrafting,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnCancel_Click 뿐 · 문구 최초 선택된 항목은 삭제할 수 없습니다. \n\r삭제할려면 전체 취소하고 재 진행 하시기 바랍니다.
+SSP0200,T-4caec78b,MSG00198,DeleteDataDrafting,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 호출처 BtnCancel_Click 뿐 · 문구 최초 선택된 항목은 삭제할 수 없습니다. \n\r삭제할려면 전체 취소하고 재 진행 하시기 바랍니다.
+SSP0200,T-5be4c6ed,MSG00306,GetErpIFCheck,미실행(실저장 경로),,GetErpIFCheck 의 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.UIL/SSP0200_ShipmentChangeRequest.cs:4912) · 저장 시험 결정 전 미실행 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0200,T-dc2655f9,MSG00306,GetErpIFCheck,미실행(실저장 경로),,GetErpIFCheck 의 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING 요청 뒤 메시지(GSCM/06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.UIL/SSP0200_ShipmentChangeRequest.cs:4912) · 저장 시험 결정 전 미실행 · 문구 데이터 전송 중 오류가 발생하였습니다. \n\r화면 캡쳐해서 시스템 담당자에게 전달하세요.
+SSP0200,T-f95901c6,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,T-8c20a4b1,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,T-c1b79af2,txtTitle / Title,checkRequired,메시지 코드 아님,,
+SSP0200,T-37d86c91,cboChangeReason / Change Reason,checkRequired,메시지 코드 아님,,
+SSP0200,T-8139b5d8,txtReasonDetail / Reason Detail,checkRequired,메시지 코드 아님,,
+SSP0200,T-33b594f6,txtApproval / Approval,checkRequired,메시지 코드 아님,,
+SSP0200,T-6a7b85e7,CHANGE_REASON_DETAIL / Reason Detail,SpdMain_EditChange,메시지 코드 아님,,
+SSP0200,T-38e428c3,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-9fd30681,FROM_SITE_DESCRIPTION / From Site,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-20b9b054,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-19f12c97,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-c862369e,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-68de28f0,ITEM_ID / Model,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-faf83230,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-54509186,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-da13a109,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-ced486e1,PROJECT_CODE / Project Code,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-499189aa,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-4134e953,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-d7a746dd,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-6fc9c24d,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-13692f0d,TO_SITE_DESCRIPTION / To Site,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-065bcb75,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-2b6a8efe,INCOTERMS / Incoterms,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-ed461aa7,DIVISION_ID / Div,SpdMain_ComboSelChange,메시지 코드 아님,,
+SSP0200,T-ef45aef9,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-5c211a6b,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-9d303e56,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-af539c33,TRANSPORT_MODE / Trans Mode,SpdMain_CellClick,메시지 코드 아님,,
+SSP0200,T-32ea50ed,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-6a6106b7,MSG00098,SpdMain_CellClick,도달 불가(실측+원문),Doc/asislive/_msg_unreachable.csv,SSP0200_ShipmentChangeRequest.cs SpdMain_CellClick 살아 있는 MSG00098 = FROM/TO_SITE_DESCRIPTION 클릭 시 Division 빈 값(처리기 28~49행) · 나머지 MSG00098 은 주석 · InsertRow 가 새 행 DIVISION_ID 를 활성 행에서 복사하고 잠금(LockRange)
+SSP0200,T-4082096c,MSG00194,BtnChangeRe_Click,미실행(사용자 결정),Doc/asislive/_user_decisions.csv,2026-11-15 실행 안 함 · 필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석) · 문구 변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.
+SSP0200,T-53006526,MSG00287,SpdMain_EditChange,실측 관찰,run_20261115_194411_acts_msgcell,Reason Code를 입력 해주세요
+SSP0200,T-31f33112,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-8873b9f0,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-1e6d4322,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-2c16071f,MSG00002,SpdMain_CellClick,실측 관찰,run_20261115_195125_acts_msgcell,Incoterms 값은 필수 입력입니다
+SSP0200,T-e5d2b776,MSG00050,btnButtonList_UsrButtonList_Click_Detected,실측 관찰,run_20261116_061856_acts_msgcell,유효한 숫자 형식이 아닙니다. 0
+SSP0200,T-c8facac1,txtCurrentInsert_Qty / Confirm Id / Current Insert_Qty,btnButtonList_UsrButtonList_Click_Detected,메시지 코드 아님,,
+SSP0200,T-9e88f272,MSG00050,btnButtonList_UsrButtonList_Click_Detected,실측 관찰,run_20261116_061856_acts_msgcell,유효한 숫자 형식이 아닙니다. 0

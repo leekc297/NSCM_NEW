@@ -1,0 +1,150 @@
+{
+ "id": "SCP0122",
+ "started": "2026-11-13 05:43:46.392",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:43:46.698",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0122_PlanActivityMgmt",
+   "form_text": "Plan Activity Mgmt",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0122_PlanActivityMgmt.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:43:51.279"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:43:55.132",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0122\\run_20261113_054346\\dump_load.json",
+   "control_count": 15,
+   "grid_count": 1,
+   "total": "Total : 1,712",
+   "time_status": "DB : 0.36s, UI : 0.085s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:43:55.142"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:43:55.328",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0122\\run_20261113_054346\\shots\\SCP0122_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:43:55.470"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 05:43:56.122",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:43:56.653"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 05:44:01.486",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0122\\run_20261113_054346\\dump_find.json",
+   "control_count": 15,
+   "grid_count": 1,
+   "total": "Total : 7",
+   "time_status": "DB : 0.084s, UI : 0.086s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:01.501"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 05:44:01.671",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0122\\run_20261113_054346\\shots\\SCP0122_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:01.860"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:44:02.351",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:03.016"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 15,
+  "calls_with_params": 15
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0122_PlanActivityMgmt",
+  "form_text": "Plan Activity Mgmt",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0122_PlanActivityMgmt.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.084s, UI : 0.086s",
+  "total": "Total : 7",
+  "how": "status"
+ },
+ "t_open": "2026-11-13 05:43:46.601",
+ "t_find": "2026-11-13 05:43:55.840",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 15,
+  "layout_items": 5,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 16,
+  "data_rows": 7,
+  "grid_rows": 7,
+  "calls_total": 15,
+  "calls_screen": 15,
+  "calls_find": 5,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 05:44:03.226",
+ "exit": 0
+}

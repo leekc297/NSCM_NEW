@@ -1,0 +1,195 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch",
+   "why": "SSP0023_ShipmentPlanElectrode.cs BtnSearch_Click: siDetail 활성 시트 Plan Detail·Stock Detail·Shipment Result 별 상세 조회",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "1"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:30:37",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 6.52,
+   "at": "2026-11-16 06:30:54.876",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.16,
+   "at": "2026-11-16 06:30:54.892",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 11546.72,
+   "at": "2026-11-16 06:31:06.586",
+   "phase": "find+post_find"
+  }
+ ]
+}

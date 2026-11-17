@@ -1,0 +1,195 @@
+{
+ "id": "SCP0005",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_DISTRIBUTION_ROUTE",
+  "pk": [
+   "ROUTE_ID"
+  ],
+  "match": {
+   "ROUTE_ID": "ROUTE_ID"
+  },
+  "save_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+  "side": [
+   {
+    "table": "SCP_MST_DISTRIBUTION_ROUTE_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0005_SAVE_DISTRIBUTION_ROUTE → SP SCP0005_SAVE_DISTRIBUTION_ROUTE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PRIORITY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   {
+    "col": "LT_DEPARTURE_INLAND",
+    "db_col": "LT_DEPARTURE_INLAND",
+    "rule": "plus1"
+   },
+   {
+    "col": "LT_WAIT_SHIPPING",
+    "db_col": "LT_WAIT_SHIPPING",
+    "rule": "plus1"
+   },
+   {
+    "col": "LT_VOYAGE",
+    "db_col": "LT_VOYAGE",
+    "rule": "plus1"
+   },
+   {
+    "col": "LT_LAY_OFF_CLEARANCE",
+    "db_col": "LT_LAY_OFF_CLEARANCE",
+    "rule": "plus1"
+   },
+   {
+    "col": "LT_ARRIVAL_INLAND",
+    "db_col": "LT_ARRIVAL_INLAND",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 20:30:22",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "ROUTE_ID": 9917,
+   "FROM_COUNTRY": "CA",
+   "FROM_CITY": "CAWND",
+   "TRANSPORT_MODE": "TRK",
+   "PRIORITY": 1,
+   "DAYS_MON": "Y",
+   "DAYS_TUE": "Y",
+   "DAYS_WED": "Y",
+   "DAYS_THU": "Y",
+   "DAYS_FRI": "Y",
+   "DAYS_SAT": "Y",
+   "DAYS_SUN": "Y",
+   "D_COUNTRY": "-",
+   "D_PORT_CODE": "-",
+   "D_PORT_NAME": "-",
+   "A_COUNTRY": "-",
+   "A_PORT_CODE": "-",
+   "A_PORT_NAME": "-",
+   "SHIPPING_COMPANY": "-",
+   "TO_COUNTRY": "CA",
+   "TO_CITY": "CAWND",
+   "SHIP_DOC_PREPARATION_DATE": "",
+   "LT_DEPARTURE_INLAND": 0,
+   "LT_WAIT_SHIPPING": 0,
+   "LT_VOYAGE": 0,
+   "LT_LAY_OFF_CLEARANCE": 0,
+   "LT_ARRIVAL_INLAND": 0,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ohsun",
+   "CREATION_DATE": "2024-01-22 14:07:22.223",
+   "LAST_UPDATED_BY": "sji.kwon",
+   "LAST_UPDATE_DATE": "2025-02-16 01:49:52.787",
+   "ATTRIBUTE1": "",
+   "ATTRIBUTE2": "",
+   "ATTRIBUTE3": "",
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "LT_TYPE": "AVERAGE"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "ROUTE_ID": "9917"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PRIORITY",
+   "old": "1",
+   "new": "2",
+   "ok": true,
+   "error": null,
+   "before": "1",
+   "after": "2",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "ROUTE_ID": 9917,
+   "FROM_COUNTRY": "CA",
+   "FROM_CITY": "CAWND",
+   "TRANSPORT_MODE": "TRK",
+   "PRIORITY": 1,
+   "DAYS_MON": "Y",
+   "DAYS_TUE": "Y",
+   "DAYS_WED": "Y",
+   "DAYS_THU": "Y",
+   "DAYS_FRI": "Y",
+   "DAYS_SAT": "Y",
+   "DAYS_SUN": "Y",
+   "D_COUNTRY": "-",
+   "D_PORT_CODE": "-",
+   "D_PORT_NAME": "-",
+   "A_COUNTRY": "-",
+   "A_PORT_CODE": "-",
+   "A_PORT_NAME": "-",
+   "SHIPPING_COMPANY": "-",
+   "TO_COUNTRY": "CA",
+   "TO_CITY": "CAWND",
+   "SHIP_DOC_PREPARATION_DATE": "",
+   "LT_DEPARTURE_INLAND": 0,
+   "LT_WAIT_SHIPPING": 0,
+   "LT_VOYAGE": 0,
+   "LT_LAY_OFF_CLEARANCE": 0,
+   "LT_ARRIVAL_INLAND": 0,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ohsun",
+   "CREATION_DATE": "2024-01-22 14:07:22.223",
+   "LAST_UPDATED_BY": "sji.kwon",
+   "LAST_UPDATE_DATE": "2025-02-16 01:49:52.787",
+   "ATTRIBUTE1": "",
+   "ATTRIBUTE2": "",
+   "ATTRIBUTE3": "",
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "LT_TYPE": "AVERAGE"
+  }
+ ]
+}

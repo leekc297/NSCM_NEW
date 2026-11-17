@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 86,
+  "at": "2026-11-16T17:54:14.914Z",
+  "user": "minyonglee1",
+  "test": "그리드 표시 묶음(N1·H8·A5)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 256,
+  "at": "2026-11-16T17:54:15.024Z",
+  "user": "minyonglee1",
+  "test": "그리드 표시 묶음(N1·H8·A5)"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 110,
+  "at": "2026-11-16T17:54:16.156Z",
+  "user": "minyonglee1",
+  "test": "그리드 표시 묶음(N1·H8·A5)"
+ }
+]

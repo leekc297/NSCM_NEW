@@ -1,0 +1,71 @@
+{
+ "id": "SCP0011",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCP0011_GET_PRODUCTION_PLAN_MODEL",
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0011-Sea1449",
+    "SCP0011-S82161d"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0011-Scf33ed",
+    "SCP0011-S963877",
+    "SCP0011-S3e4aef",
+    "SCP0011-S955b86"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnCal",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 12
+  }
+ ],
+ "at": "2026-11-13 08:26:33.929",
+ "fills": 0,
+ "fill_left": []
+}

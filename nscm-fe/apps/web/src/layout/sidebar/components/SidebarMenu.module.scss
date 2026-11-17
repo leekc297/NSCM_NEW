@@ -46,8 +46,8 @@
 
     &.on {
       background-color: $navLeftBgLastChildSelected;
-      a {
-        color: $navLeftTextLastChildSelected !important;
+      .subTitle {
+        color: $navLeftTextLastChildSelected;
       }
     }
 
@@ -69,3 +69,5 @@
     }
   }
 }
+
+ 

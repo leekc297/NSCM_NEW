@@ -28,11 +28,23 @@ from facts_combosrc import strip_comments  # noqa: E402
 from asis_variant import is_main, is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-RX_DEFCOL = re.compile(r'\bDef\w+\.([A-Z0-9_]+)')
+RX_DEFCOL = re.compile(r'\bDef\w+\.([A-Za-z_][A-Za-z0-9_]*)')  # 2026-11-12 T265: 이름 전체(종전 [A-Z0-9_]+ 는 EditFlag 를 E 로 잘랐다) — 값은 Resolver.defcol() 로
 RX_TABLE_FAMILY = re.compile(r'Data\.Common\(\s*Data\.Type\.(\w+)')
 RX_GROUP_SRC = re.compile(r'NowGroupID|GroupID"\]|UserGroup', re.I)
 RX_DIV_SRC = re.compile(r'Division|DIVISION', re.I)
 LOCK_COLS = ['method', 'line', 'api', 'scope', 'locked', 'lock_expr', 'columns', 'expand', 'cond', 'guard', 'control', 'raw']
+
+
+def lock_sig(api, argc):
+    """프레임워크 잠금 함수 오버로드(GSCM.Windows.Forms/Class/SpreadInfo.cs:6910-7154 · 2026-11-11 원문 확인) → (컬럼 인자 위치들, 잠금 여부 인자 위치) 또는 None
+      LockColumn·LockColumn2 : (c1, pLock) · (c1, c2, pLock) · (c1, c2, pLock, isAlternatingRow)
+      LockRange·2·3          : (cell, c1, c2, pLock) · (r1, c1, r2, c2, pLock) · (…, pLock, bChangeBackColor) · (…, pLock, ForeColor, BackColor)"""
+    a = re.sub(r'\d+$', '', api or '')
+    if a == 'LockColumn':
+        return {2: ([0], 1), 3: ([0, 1], 2), 4: ([0, 1], 2)}.get(argc)
+    if a == 'LockRange':
+        return {4: ([1, 2], 3), 5: ([1, 3], 4), 6: ([1, 3], 4), 7: ([1, 3], 4)}.get(argc)
+    return None
 
 
 def read_csv(p):
@@ -52,6 +64,61 @@ class Resolver:
         self.unresolved = []
         self.control = ''  # 지금 해석 중인 잠금의 스프레드 컨트롤(siMain·siExcept) — 시트/컨트롤 상태 가드를 접는 기준
         self.line = 0      # 지금 해석 중인 문장 줄(불리언 플래그 변수는 그 앞의 대입만)
+
+    def const_value(self, name):
+        """같은 파일의 문자열·정수 상수 값 — `public static string S_Status_C = "C";` · `const string X = "v";` · `static readonly int N = 3;`
+        이름은 `Cls.NAME` 또는 `NAME`. 같은 이름이 서로 다른 값으로 여러 번 정의돼 있으면(중첩 클래스마다 다른 값) 풀지 않는다(None). 2026-11-12 T263"""
+        short = name.split('.')[-1]
+        if not re.fullmatch(r'[A-Za-z_]\w*', short):
+            return None
+        cache = self.__dict__.setdefault('_const_cache', {})
+        if short not in cache:
+            rx = re.compile(r'\b(?:public|private|internal|protected)?\s*(?:static\s+readonly|static|const|readonly)\s+(?:readonly\s+)?(?:string|int|String)\s+' + re.escape(short) + r'\s*=\s*("[^"]*"|-?\d+)\s*;')
+            vals = set()
+            for ln in self.lines:
+                s = ln.split('//')[0]
+                m = rx.search(s)
+                if m:
+                    vals.add(m.group(1))
+            cache[short] = vals.pop() if len(vals) == 1 else None
+        return cache[short]
+
+    def toggle_enter_pre(self, key, var):
+        """상태 토글 변수 var 의 '편집 모드 진입 분기' 조건 값 — `if (var == false) { … var = true; }` 이면 False.
+        메서드 안에서 `if (… var == X …)` 블록이 var 에 !X 를 대입하는 구조를 찾아, 대입 값이 true 인(= 편집 모드로 들어가는) 분기의 X 를 돌려준다.
+        그런 구조가 없거나 서로 어긋나면 None(접지 않는다). 2026-11-12 T264"""
+        rx_if = re.compile(r'\bif\s*\(\s*(?:this\.)?' + re.escape(var) + r'\s*==\s*(true|false)\s*\)')
+        rx_as = re.compile(r'(?:this\.)?\b' + re.escape(var) + r'\s*=\s*(true|false)\s*;')
+        ml = self.method_lines(key)
+        found = set()
+        for idx, (i, ln) in enumerate(ml):
+            m = rx_if.search(ln.split('//')[0])
+            if not m:
+                continue
+            depth = 0; started = False
+            for _, l2 in ml[idx:]:
+                s = l2.split('//')[0]
+                for ch in s:
+                    if ch == '{':
+                        depth += 1; started = True
+                    elif ch == '}':
+                        depth -= 1
+                ma = rx_as.search(s)
+                if started and ma and depth >= 1:
+                    if (ma.group(1) == 'true') != (m.group(1) == 'true') and ma.group(1) == 'true':
+                        found.add(m.group(1) == 'true')
+                if started and depth <= 0:
+                    break
+        return found.pop() if len(found) == 1 else None
+
+    def defcol(self, name):
+        """컬럼 상수 멤버 이름 → 컬럼 이름. 대문자·숫자·밑줄만이면 그대로(대부분 이름 = 값). 섞여 있으면 같은 파일 상수 값(EditFlag = "EDIT_FLAG") · 못 찾으면 이름 그대로. T265"""
+        if re.fullmatch(r'[A-Z0-9_]+', name):
+            return name
+        v = self.const_value(name)
+        if v and v.startswith('"') and re.fullmatch(r'"[A-Za-z0-9_]+"', v):
+            return v.strip('"')
+        return name
 
     def method_lines(self, key):
         lo, hi = self.spans.get(key, (0, 0))
@@ -146,7 +213,10 @@ class Resolver:
             return ('COL', 'CRUD_TYPE')  # 프레임워크 행 상태 칸(2026-11-02 DMF0005)
         m = RX_DEFCOL.search(arg)
         if m:
-            return ('COL', m.group(1))
+            return ('COL', self.defcol(m.group(1)))
+        ms = re.fullmatch(r'"([A-Za-z0-9_]+)"', arg)  # 2026-11-11 T245: GetColumnIndex("TO_SITE_SOLDTO_CODE") — 컬럼 이름을 문자열로 직접 준 형태(SSP0015 InsertRow:7861)
+        if ms:
+            return ('COL', ms.group(1).upper())
         if re.fullmatch(r'\w+', arg):
             defs = self.var_defs(key, arg)
             before = [d for d in defs if d[0] < self.line] if self.line else []
@@ -158,7 +228,7 @@ class Resolver:
                         return ('DYN', fam)
                 mt2 = RX_DEFCOL.search(ex)
                 if mt2:
-                    return ('COL', mt2.group(1))
+                    return ('COL', self.defcol(mt2.group(1)))
         return ('RAW', arg)
 
     def atom(self, key, a, self_col=''):
@@ -179,6 +249,42 @@ class Resolver:
         mtag = re.fullmatch(r'(?:\w+\.)?GetColumnTag\(\s*\w+\s*\)\.IndexOf\(\s*"(\w+_?)"\s*\)\s*==\s*0', a)
         if mtag:
             return f'SELF~"^{mtag.group(1)}"'  # 동적 binding 접두 조건 — 전 패밀리가 아니라 그 접두 컬럼만(2026-10-31 SCP0096 M_/W_ 합계 컬럼)
+        # 2026-11-12 T264 ① 행 수 조건 — 검사는 조회 행이 있을 때만 잰다
+        mr_ = re.fullmatch(r'(?:\w+(?:\(\d+\)|\[\d+\])?\.)+(?:Rows\.Count|RowCount)\s*(>|>=|==|!=|<=)\s*(\d+)', a)
+        if mr_ and re.search(r'ActiveSheet|Sheet\(\d+\)|Sheets\[', a):
+            op_, n_ = mr_.group(1), int(mr_.group(2))
+            if n_ == 0:
+                return {'>': 'TRUE', '!=': 'TRUE', '==': 'FALSE', '<=': 'FALSE', '>=': 'TRUE'}[op_]
+        # ② 편집 모드 플래그 변수 — TO-BE 는 조회 즉시 편집 모드(CR-084·CR-093)
+        me_ = re.fullmatch(r'(!?)\s*(?:this\.)?((?:b|is|_b|m_b)?_?[Ee]dit_?[Mm]ode)\s*(?:(==|!=)\s*(true|false))?', a)
+        if me_:
+            want_ = True                      # 이 원자가 참이 되는 변수 값
+            if me_.group(3):
+                want_ = (me_.group(3) == '==') == (me_.group(4) == 'true')
+            if me_.group(1):
+                want_ = not want_
+            pre_ = self.toggle_enter_pre(key, me_.group(2))   # 편집 모드로 들어가는 분기의 '들어가기 전 값'(원문 구조로 확인) · 못 찾으면 None
+            if pre_ is not None:
+                return 'TRUE' if want_ == pre_ else 'FALSE'
+        # ③ 편집 권한 플래그 변수 — 계정에 따라 다르므로 평가 가능한 원자로 내보낸다(평가기 문맥 auth)
+        ma_ = re.fullmatch(r'(!?)\s*(?:this\.)?(?:b|is|_b|m_b)?_?[Ee]dit_?[Aa]uth\s*(?:(==|!=)\s*(true|false))?', a)
+        if ma_:
+            pos_ = True
+            if ma_.group(2):
+                pos_ = (ma_.group(2) == '==') == (ma_.group(3) == 'true')
+            if ma_.group(1):
+                pos_ = not pos_
+            return 'AUTH' if pos_ else '!(AUTH)'
+        # ④ 다중 시트 컨트롤(siDetail 등)의 활성 시트 조건 — 컨트롤 이름으로 접지 못하는 경우 시트 이름 상수값으로 내보낸다
+        msh_ = re.fullmatch(r'(?:\w+\.)?ActiveSheet\.SheetName\s*(==|!=)\s*((?:\w+\.)*sht\w+)', a)
+        if msh_:
+            cv0_ = self.const_value(msh_.group(2))
+            if cv0_ and cv0_.startswith('"'):
+                return f'SHEET{msh_.group(1)}{cv0_}'  # 시트 이름 상수값으로 — 컨트롤 이름(siDetail ↔ shtDetail)이 우연히 같아도 다중 시트일 수 있어 접지 않는다
+            suf0_ = re.sub(r'^(si|spd)', '', self.control or '', flags=re.I).lower()
+            if suf0_:  # 상수값을 못 풀면 종전 규칙(컨트롤 이름 ↔ 시트 상수 이름)으로
+                same0_ = msh_.group(2).split('.')[-1][3:].lower() == suf0_
+                return 'TRUE' if same0_ == (msh_.group(1) == '==') else 'FALSE'
         # 접는 것(TRUE)
         if re.fullmatch(r'string\.IsNullOrEmpty\(\s*\w+\s*\)', a):
             return 'FALSE'  # 세션 값(그룹·Division)은 비어 있지 않다고 본다 → '!string.IsNullOrEmpty(x)' 는 expr 의 부정으로 TRUE
@@ -220,10 +326,15 @@ class Resolver:
             if bv is not None:
                 return bv
         m = re.fullmatch(r'(.+?)\s*(==|!=)\s*(.+)', a)
-        if m and not re.search(r'\(.*\)\s*$', m.group(1)) or (m and re.fullmatch(r'[\w.]+\([^=]*\)(?:\.ToString\(\))?', m.group(1).strip())):
+        if m and not re.search(r'\(.*\)\s*$', m.group(1)) or (m and re.fullmatch(r'[\w.]+\([^=]*\)(?:\.ToString\(\))?', m.group(1).strip())) \
+                or (m and re.fullmatch(r'UserInfoContext\.Current\[\s*"\w+"\s*\](?:\.ToString\(\))?', m.group(1).strip())):  # T267: 세션 그룹 직접 비교
             lhs, op, rhs = m.group(1).strip(), m.group(2), m.group(3).strip()
             rhs = '""' if rhs in ('string.Empty', 'String.Empty') else rhs
             rhs = {'CAppSetting.StringY': '"Y"', 'CAppSetting.StringN': '"N"'}.get(rhs, rhs)  # 프레임워크 상수(2026-11-02 EDIT_FLAG=="Y" 가 전부 RAW 였음)
+            if not re.fullmatch(r'"[^"]*"|-?\d+', rhs) and re.fullmatch(r'(?:\w+\.)*[A-Za-z_]\w*', rhs):  # 2026-11-12 T263: 우변이 같은 파일 상수(Shipment_Status.S_Status_C = "C")
+                cv_ = self.const_value(rhs)
+                if cv_ is not None:
+                    rhs = cv_
             L = self.lhs(key, lhs, self_col)
             if L and re.fullmatch(r'"[^"]*"|-?\d+', rhs):
                 return f'{L}{op}{rhs}'
@@ -233,7 +344,7 @@ class Resolver:
     def lhs(self, key, lhs, self_col):
         """비교 좌변 → GROUP · DIV · COL(NAME) · COL(NAME)[a:b] · COL(SELF)"""
         # 가드 안의 직접 GetText/GetValue(…GetColumnIndex(Def*.COL)…) (SCP0020 siMain.ActiveSheet.GetText(i, …INPUT_STATUS…).ToString() == "M")
-        mi = re.fullmatch(r'(?:\w+\.)+Get(?:Text|Value)\(\s*\w+\s*,\s*\w+\.GetColumnIndex\(\s*([^)]+)\)\s*\)(?:\.ToString\(\))?(?:\.Substring\(\s*(\d+)\s*,\s*(\d+)\s*\))?', lhs)
+        mi = re.fullmatch(r'(?:\w+\.)+Get(?:Text|Value)\(\s*[\w.]+\s*,\s*\w+\.GetColumnIndex\(\s*([^)]+)\)\s*\)(?:\.ToString\(\))?(?:\.Substring\(\s*(\d+)\s*,\s*(\d+)\s*\))?', lhs)
         if mi:
             kind, nm = self.col_arg(key, mi.group(1))
             sl0 = f'[{mi.group(2)}:{int(mi.group(2)) + int(mi.group(3))}]' if mi.group(2) else ''
@@ -249,7 +360,7 @@ class Resolver:
         for _, ex in defs:
             if RX_GROUP_SRC.search(ex):
                 return 'GROUP' + sl
-            mg = re.search(r'Get(?:Value|Text)\(\s*\w+\s*,\s*\w+\.GetColumnIndex\(\s*([^)]+)\)\s*\)', ex)
+            mg = re.search(r'Get(?:Value|Text)\(\s*[\w.]+\s*,\s*\w+\.GetColumnIndex\(\s*([^)]+)\)\s*\)', ex)  # T267: 행 인자 e.Row
             if mg:
                 kind, nm = self.col_arg(key, mg.group(1))
                 if kind == 'COL':
@@ -398,11 +509,17 @@ def main():
 
     def dyn_family_by_tag(key, var):
         """잠금 문장 앞 같은 메서드 안에 'GetColumnTag(var).IndexOf("P_") == 0' 가드가 있으면 접두 P_ 에 맞는 동적 패밀리 이름(없으면 '')"""
-        pref = None
+        pref = None; alias = set()
         for i, ln in R.method_lines(key):
             if R.line and i > R.line: break
             m = re.search(r'GetColumnTag\(\s*' + re.escape(var) + r'\s*\)\.IndexOf\(\s*"([A-Za-z]+_?)"\s*\)\s*==\s*0', ln)
             if m: pref = m.group(1)
+            # 2026-11-11 T246: 태그를 지역 변수에 담아 검사하는 형태 — sColName = <ctl>.ActiveSheet.Columns[j].Tag… / GetColumnTag(j) … if (sColName.IndexOf("D_") == 0 | StartsWith("D_"))
+            ma = re.search(r'\b(\w+)\s*=\s*[\w.]*(?:Columns\[\s*' + re.escape(var) + r'\s*\]\.Tag|GetColumnTag\(\s*' + re.escape(var) + r'\s*\))', ln)
+            if ma: alias.add(ma.group(1))
+            for al in alias:
+                m2 = re.search(r'\b' + re.escape(al) + r'\.(?:IndexOf\(\s*"([A-Za-z]+_?)"\s*\)\s*==\s*0|StartsWith\(\s*"([A-Za-z]+_?)"\s*\))', ln)
+                if m2: pref = m2.group(1) or m2.group(2)
         if not pref: return ''
         for d in _dyn_rows:
             try:
@@ -410,19 +527,23 @@ def main():
             except re.error: continue
         return ''
 
-    def expand(key, arg_text, self_hint=''):
+    def expand(key, arg_text, self_hint='', api_hint=''):
         """LockColumn/LockRange 의 컬럼 인자 → (컬럼 목록, 전개 방식). 동적 패밀리는 '<DYNAMIC:Family>'"""
         inner = arg_text.strip()
         if inner.startswith('(') and inner.endswith(')'):
             inner = inner[1:-1]
         args = Resolver._split(inner, ',')
         args = [x.strip() for x in args]
-        # 마지막 인자 = 잠금 bool · 앞은 (col) 또는 (colA, colB) 또는 (row, colA, row, colB)
-        cols_arg = args[:-1]
-        if len(cols_arg) == 4:
-            cols_arg = [cols_arg[1], cols_arg[3]]
-        elif len(cols_arg) == 3:
-            cols_arg = [cols_arg[1], cols_arg[2]]
+        # 2026-11-11 T244: 컬럼 인자 위치 = 프레임워크 오버로드 서명(lock_sig). 서명에 없는 인자 수만 종전 추정(마지막 = 잠금 여부)으로
+        sg = lock_sig(api_hint, len(args))
+        if sg:
+            cols_arg = [args[i] for i in sg[0]]
+        else:
+            cols_arg = args[:-1]
+            if len(cols_arg) == 4:
+                cols_arg = [cols_arg[1], cols_arg[3]]
+            elif len(cols_arg) == 3:
+                cols_arg = [cols_arg[1], cols_arg[2]]
         ends = []
         for x in cols_arg:
             # 루프 변수 + 'GetColumnTag(x).IndexOf("M_") == 0' 가드 → 태그 접두에 맞는 동적 패밀리(2026-10-31 SCP0096 SetLockSumColumn:408 LockColumn(iCol))
@@ -438,6 +559,8 @@ def main():
                     x = src[0][1].strip()
             if re.fullmatch(r'0', x):
                 ends.append(('FIRST', '')); continue
+            if re.fullmatch(r'\d+', x) and int(x) < len(order):  # 2026-11-11 T245: 열 번호 상수(LockRange(i, 1, i, Max, …) — SSP0200 EditButton:819) = 메타 순서의 그 위치 컬럼
+                ends.append(('COL', order[int(x)])); continue
             if re.search(r'ColumnCount\s*-\s*1|GetMaxColumnIndex\(\)', x):
                 ends.append(('LAST', '')); continue
             mg = re.search(r'GetColumnIndex\((.*)\)\s*$', x)
@@ -471,7 +594,24 @@ def main():
         if tgt.endswith('SwitchLock'):
             locks.append({'method': m, 'line': x['line'], 'api': 'SwitchLock', 'scope': 'MODE', 'locked': 'TOGGLE', 'lock_expr': '', 'columns': '', 'expand': '', 'cond': '', 'guard': x['guard'], 'control': ctl, 'raw': tgt + val})
             continue
-        last = Resolver._split(val.strip()[1:-1] if val.strip().startswith('(') else val, ',')[-1].strip() if val.strip() else ''
+        if val.rstrip().endswith('…') and src_lines:
+            # 2026-11-11 T245: 문장 사실의 값 칸이 길이 제한으로 잘린 경우(…) — 원문에서 그 줄부터 괄호가 닫힐 때까지 다시 읽는다(SSP0060 InsertRow:2553 '…, tr…')
+            ln0 = int(x['line'] or 0)
+            chunk = ' '.join(s_.strip() for s_ in src_lines[max(ln0 - 1, 0):ln0 + 6])
+            i0 = chunk.find(tgt.split('.')[-1] + '(')
+            if i0 >= 0:
+                j0 = i0 + len(tgt.split('.')[-1]); depth = 0
+                for k0 in range(j0, len(chunk)):
+                    if chunk[k0] == '(':
+                        depth += 1
+                    elif chunk[k0] == ')':
+                        depth -= 1
+                        if depth == 0:
+                            val = chunk[j0:k0 + 1]
+                            break
+        _args = [a_.strip() for a_ in Resolver._split(val.strip()[1:-1] if val.strip().startswith('(') else val, ',')] if val.strip() else []
+        _sg = lock_sig(tgt.split('.')[-1], len(_args))
+        last = (_args[_sg[1]] if _sg else (_args[-1] if _args else ''))  # 잠금 여부 인자 — 서명 위치(6·7인자의 마지막은 색·배경 플래그다)
         R.control = ctl; R.line = int(x['line'] or 0)
         lock_expr = ''
         if last in ('true', 'false'):
@@ -485,7 +625,7 @@ def main():
                 locked = 'EXPR'; lock_expr = (f'!({cond_true})' if neg else cond_true) if cond_true not in ('TRUE', 'FALSE') else ({'TRUE': 'N' if neg else 'Y', 'FALSE': 'Y' if neg else 'N'}[cond_true])
                 if lock_expr in ('Y', 'N'):
                     locked, lock_expr = lock_expr, ''
-        cols, how = expand(key, val)
+        cols, how = expand(key, val, api_hint=tgt.split('.')[-1])
         if tgt.endswith('LockColumn'):
             scope = 'ALL_ROWS'
         else:
@@ -497,6 +637,9 @@ def main():
                       'cond': cond, 'guard': x['guard'], 'control': ctl, 'raw': tgt + val})
 
     base = os.path.basename((acts[0]['file'] if acts else '')).replace('.cs', '')
+    # 2026-11-09 T176: 근거 파일명 = 그 잠금 문장(메서드·줄)의 실제 파일 — 종전엔 첫 동작 행의 파일(팝업)을 일괄로 써서 본 화면 EditButton:223 이 'ItembyDivisionPopup:223' 으로 표기됐다
+    _fof = {(a.get('method'), str(a.get('line'))): os.path.basename(a.get('file') or '').replace('.cs', '') for a in acts}
+    fbase = lambda l: _fof.get((l.get('method'), str(l.get('line'))), base)
     out1 = os.path.join(sdir, 'lock_rules.csv')
     with open(out1, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=LOCK_COLS)
@@ -537,10 +680,20 @@ def main():
             ent(c)
         for l in edit_locks:
             for c in [c for c in l['columns'].split(';') if c]:
-                e = ent(c); e['existing_rules'] += rules_of(l); e['ref'] = (e['ref'] + ' | ' if e['ref'] else '') + f"기존행 {base}:{l['line']} {l['api']}"
+                e = ent(c); e['existing_rules'] += rules_of(l); e['ref'] = (e['ref'] + ' | ' if e['ref'] else '') + f"기존행 {fbase(l)}:{l['line']} {l['api']}"
+        # 2026-11-16(SSP0020 D1 허위 FAIL 8행 · cs:294·307): 조회 결과를 바인딩한 바로 그 블록에서 컬럼 범위를 잠그고(전 컬럼 잠금이 아니라 search_locks_all 에 안 걸림)
+        #   EditButton 경로가 SwitchLock 으로 풀지 않으면 그 컬럼은 조회된 모든 행에서 잠긴 채다 → 기존행 잠금 규칙으로 넣는다.
+        #   '같은 블록' = 같은 메서드·같은 guard 의 GRID_BIND 문장이 있다(행 수 > 0 같은 guard 는 바인딩의 전제라 행 조건이 아니다). 전 컬럼 잠금(ALL)은 종전 규칙(d_exist)이 맡는다
+        if not edit_unlocks_all:
+            bind_guards = {(x['method'], x.get('guard', '')) for x in acts if x.get('kind') == 'GRID_BIND'}
+            for l in locks:
+                if l['scope'] == 'ALL_ROWS' and l['locked'] == 'Y' and l['method'] not in edit_chain and l['expand'] not in ('UNRESOLVED', '', 'ALL') and (l['method'], l.get('guard', '')) in bind_guards:
+                    for c in [c for c in l['columns'].split(';') if c and c.upper() != 'CHK']:   # 행 선택용 CHK 는 잠겨 있어도 CellClick 처리기가 값을 뒤집는다(선택 가능) — 편집 기대에서 뺀다
+                        e = ent(c); e['existing_rules'] += [{'g': '', 'lock': 'Y', 'ref': f"{l['method']}:{l['line']} 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음"}]
+                        e['ref'] = (e['ref'] + ' | ' if e['ref'] else '') + f"기존행 {fbase(l)}:{l['line']} {l['api']}(조회 후 잠금)"
         for l in new_locks:
             for c in [c for c in l['columns'].split(';') if c]:
-                e = ent(c); e['new_rules'] += rules_of(l); e['ref'] = (e['ref'] + ' | ' if e['ref'] else '') + f"신규행 {base}:{l['line']} {l['api']}"
+                e = ent(c); e['new_rules'] += rules_of(l); e['ref'] = (e['ref'] + ' | ' if e['ref'] else '') + f"신규행 {fbase(l)}:{l['line']} {l['api']}"
         # 접기: 규칙이 전부 무조건이면 마지막 규칙의 상태 · 조건 규칙이 하나라도 있으면 COND(JSON) · RAW 만 있으면 COND 이되 평가 불가 표식
         for c, e in exp.items():
             for k, rk, ck in (('existing_row', 'existing_rules', 'existing_cond'), ('new_row', 'new_rules', 'new_rules_cond')):

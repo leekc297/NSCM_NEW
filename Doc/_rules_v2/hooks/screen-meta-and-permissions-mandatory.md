@@ -65,7 +65,7 @@ const customButtons = hasButton('EXECUTE')
 
 ## 2. `__asis-mapping__.md` 표준 양식 (권장 — 사용자 작성 시 참조)
 
-> ⚠️ **2026-06-18 사용자 정책 정정**: DMF0004/0005/0006 3 master 화면에 `__asis-mapping__.md` 가 **존재하지 않음**. 따라서 본 영역은 **3 master 에서 추출된 패턴 아님** — 신규 화면 작성 시 마이그레이션 / 분석 자료가 필요하면 본 양식 참조 (필수 아님).
+> ⚠️ **2026-06-18 사용자 정책 정정**: DMF0004/0005/0006 3 master 화면에 `__asis-mapping__.md` 가 **존재하지 않음**. 따라서 본 영역은 **3 master 에서 추출된 패턴 아님** — 신규 화면 작성 시 마이그레이션 / 분석 자료가 필요하면 본 양식 참조 (필수 아님). (2026-11-13 정정: "필수 아님"은 본 양식(서식) 준수에 한함 → `__asis-mapping__.md` 작성 자체는 필수 — `CLAUDE.md §4` ⑪ · 본 문서 §2.6 · screen-completion-gate G1)
 
 ### 2.1 파일 위치
 ```
@@ -164,10 +164,10 @@ features/{domain}/src/pages/{screen}/__asis-mapping__.md   ⭐ 화면 폴더 안
 ```
 
 ### 3.3 의무 사항
-- 신규 LBL 추가 시 **KO + EN 둘 다 동시 등록** (메모리 `feedback_i18n_ko_en_alignment.md`)
+- 신규 LBL 추가 시 **KO + EN + CN 3개 언어 동시 등록** (메모리 `feedback_i18n_ko_en_alignment.md`) (2026-11-13 정정: KO + EN 둘 → KO/EN/CN 3개 언어 — 본 문서 §0-3 · 확정 룰 CR-008)
   - KO = EN 정확 동일 값 (메모리 명시)
   - KO 전용 키 (예: `MNU_*` 메뉴 트리) 는 EN 미존재 허용
-- **CN 미적용** — fallback 영문 (현 phase 정책)
+- **CN 도 등록** — `CN.json` 에 같은 키 추가 (2026-11-13 정정: "CN 미적용 — fallback 영문 (현 phase 정책)" → CN 등록 의무. 확정 룰 CR-008 "모든 MSG/LBL 코드는 KO/EN/CN 3개 언어로 등록" · CR-067 '_' 폴백 노출 금지)
 - 코드 = `LBL` + 5자리 숫자 (메모리 `feedback_i18n_lbl_code_pattern.md`)
 - 자유 형식 (`LBL_DMF0020_DIV`) 절대 금지
 - 신규 영역 = KO.json 최대값 + 100-block 단위 (DMF0020 = LBL00501~514)
@@ -229,7 +229,7 @@ features/{domain}/src/pages/{screen}/__asis-mapping__.md   ⭐ 화면 폴더 안
 [ ] 8.  모든 행 상태 ✅ (PR 머지 게이트)?
 
 [i18n 3 언어]
-[ ] 9.  신규 LBL 추가 시 KO.json + EN.json 동시 등록 (동일 값)?
+[ ] 9.  신규 LBL 추가 시 KO.json + EN.json 동시 등록 (동일 값) + CN.json 등록?   # 11-13 정정: CN 추가 (CR-008)
 [ ] 10. LBL + 5자리 / 자유 형식 0?
 [ ] 11. `pnpm gen:i18n` 실행 후 type-check?
 

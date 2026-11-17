@@ -1,0 +1,64 @@
+{
+ "id": "SCP0019",
+ "group": "ADMIN",
+ "edit": true,
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 15:06:55.420",
+ "fills": 0,
+ "fill_left": [],
+ "edit_mode": true,
+ "edit_dialogs": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": [
+   {
+    "text": "작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?",
+    "action": "yes_button(id=6 · 저장 없이 닫기)"
+   }
+  ]
+ }
+}

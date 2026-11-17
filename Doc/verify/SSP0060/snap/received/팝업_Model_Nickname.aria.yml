@@ -1,0 +1,50 @@
+- dialog:
+  - heading "Material by Division" [level=2]
+  - text: Div
+  - combobox [disabled]: ESS Battery
+  - button "Open" [disabled]
+  - img
+  - text: Operation Group
+  - textbox [disabled]
+  - text: Material
+  - textbox: ECE1592F1-01-H01
+  - button "Search"
+  - paragraph
+  - text: 총3건
+  - grid:
+    - rowgroup:
+      - row "No Div. Material Code Description Nickname Class Name":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Material Code"
+        - columnheader "Description"
+        - columnheader "Nickname"
+        - columnheader "Class Name"
+    - rowgroup:
+      - row "1 82 APCCA3573A ECE1592F1-01-H01 1592 P Non Taping A JF2-H01 [APCCA]Cathode Pancake":
+        - gridcell "1" [selected]
+        - gridcell "82"
+        - gridcell "APCCA3573A"
+        - gridcell "ECE1592F1-01-H01 1592 P Non Taping A"
+        - gridcell "JF2-H01"
+        - gridcell "[APCCA]Cathode Pancake"
+      - row "2 82 EAE1592F1-01-H01 ECE1592F1-01-H01 P JF2-H01 [ACACA]Cell Assembly":
+        - gridcell "2"
+        - gridcell "82"
+        - gridcell "EAE1592F1-01-H01"
+        - gridcell "ECE1592F1-01-H01 P"
+        - gridcell "JF2-H01"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "3 82 ECE1592F1-01-H01 EC,,159.2Ah,F1,01 JF2-H01 [EC]Cell":
+        - gridcell "3"
+        - gridcell "82"
+        - gridcell "ECE1592F1-01-H01"
+        - gridcell "EC,,159.2Ah,F1,01"
+        - gridcell "JF2-H01"
+        - gridcell "[EC]Cell"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

@@ -1,0 +1,90 @@
+{
+ "menu_id": "SSP0005",
+ "at": "2026-11-11 15:03:45",
+ "verdict": "UNKNOWN",
+ "rc": 3,
+ "counts": {
+  "PASS": 9,
+  "ERROR": 1,
+  "INFO": 1
+ },
+ "rows": [
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "endpoints.csv",
+   "result": "PASS",
+   "detail": "12행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "controls.csv",
+   "result": "PASS",
+   "detail": "20행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "events.csv",
+   "result": "PASS",
+   "detail": "9행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "actions.csv",
+   "result": "PASS",
+   "detail": "336행",
+   "todo": ""
+  },
+  {
+   "check": "R1 AS-IS 사실 묶음",
+   "target": "grid_columns_asis.csv",
+   "result": "PASS",
+   "detail": "3행",
+   "todo": ""
+  },
+  {
+   "check": "R2 AS-IS SP 원문",
+   "target": "4개",
+   "result": "PASS",
+   "detail": "화면 호출 SP 전부 원문 있음",
+   "todo": ""
+  },
+  {
+   "check": "R3 AS-IS 호출 해석",
+   "target": "12행",
+   "result": "PASS",
+   "detail": "풀리지 않은 호출 0",
+   "todo": ""
+  },
+  {
+   "check": "R4 AS-IS 컬럼 메타",
+   "target": "SCM_MST_SHEET_COLUMNS",
+   "result": "PASS",
+   "detail": "2행",
+   "todo": ""
+  },
+  {
+   "check": "R5 분석 문서",
+   "target": "3종",
+   "result": "PASS",
+   "detail": "있음",
+   "todo": ""
+  },
+  {
+   "check": "R6 TO-BE 사내 DB · M2 FE 호출 배선",
+   "target": "(식이 풀리지 않은 호출)",
+   "result": "ERROR",
+   "detail": "[측정 경로 없음] 시트·버튼이 식이라 대조 불가 3곳: ShipmentWorkingDay.tsx:121, ShipmentWorkingDay.tsx:288, useShipmentWorkingDayStore.ts:240",
+   "todo": "FE 호출의 시트·버튼을 MNU_BTN_MPG_M 에 등록"
+  },
+  {
+   "check": "R6 TO-BE 사내 DB",
+   "target": "13항목",
+   "result": "INFO",
+   "detail": "meta_live_check 13항목 중 FAIL·ERROR 1",
+   "todo": ""
+  }
+ ]
+}

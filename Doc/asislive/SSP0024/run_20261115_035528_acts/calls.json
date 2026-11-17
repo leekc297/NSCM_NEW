@@ -1,0 +1,156 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 03:54:56.222",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 44.8,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:BtnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:54:56.234",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 3.67,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:BtnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:54:56.290",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 39.98,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:BtnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:54:56.631",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 970,
+   "rows_kind": "DataSet rows",
+   "ms": 222.76,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "",
+    "p_material_id": ""
+   },
+   "inline": "EXEC SSP0024_GET_ITEM_BY_DIVISION_POPUP @p_division_id='81', @p_plant_site_id='', @p_material_id=''",
+   "phase": "action:BtnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:55:09.469",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.89,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:55:09.483",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 5.67,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:55:09.506",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 4.17,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnMaterialId"
+  },
+  {
+   "at": "2026-11-15 03:55:09.736",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 970,
+   "rows_kind": "DataSet rows",
+   "ms": 145.87,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "",
+    "p_material_id": ""
+   },
+   "inline": "EXEC SSP0024_GET_ITEM_BY_DIVISION_POPUP @p_division_id='81', @p_plant_site_id='', @p_material_id=''",
+   "phase": "action:btnMaterialId"
+  }
+ ]
+}

@@ -6,8 +6,17 @@ import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'rea
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 
-import { deriveStorLocCode, isCellEditable, isStorLocNameVisible } from '../utils/warehouseCapacityEditLock';
+import {
+  attachDigitLimit,
+  clearCellText,
+  deriveStorLocCode,
+  isCellEditable,
+  isInvalidPlanGroupRow,
+  isStorLocNameVisible,
+} from '../utils/warehouseCapacityEditLock';
+import { COMBO } from '../warehouse-capacity.constants';
 
 import styles from './WarehouseItemMappingGrid.module.scss';
 
@@ -57,6 +66,19 @@ export const WarehouseItemMappingGrid = ({
   // 핸들러가 항상 최신 조회원을 보도록 ref 로 들고 있는다(effect dep 은 adminColumns 로 고정).
   const warehouseSiteStageRef = useRef(warehouseSiteStage);
   warehouseSiteStageRef.current = warehouseSiteStage;
+
+  // OPMZ_PLAN_GR_ID 빈 값 표시(사용자 보고 2026-11-09/10 QA I-06 — WhCapa 와 동일 증상이 Item
+  //   Mapping 테이블에도 있음, ora.py 실측). SCP_OPMZ_PLAN_GR_M VALID_YN='Y' 코드만 담은
+  //   'PlanGroup_SCP_ALL' 콤보(Form 필터와 동일 원천)로 유효코드 집합을 만들어 화면(formatItem)
+  //   에서만 가린다 — DB/프로시저 변경 없음, 저장키·조회조건은 원본 값 그대로.
+  const [planGroups] = useTabComboQueries({ filters: [COMBO.PLAN_GROUP] });
+  const validPlanGroupKeys = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of planGroups ?? []) set.add(`${String(r.DIVISION_ID ?? '')}|${String(r.CODE ?? '')}`);
+    return set;
+  }, [planGroups]);
+  const validPlanGroupKeysRef = useRef(validPlanGroupKeys);
+  validPlanGroupKeysRef.current = validPlanGroupKeys;
 
   const columns = useMemo(() => {
     const cols = adminColumns ?? [];
@@ -117,8 +139,43 @@ export const WarehouseItemMappingGrid = ({
       if (binding === 'STOR_LOC_NAME') {
         e.cell.classList.toggle('wj-cell-editable', isCellEditable(binding));
       }
+
+      // OPMZ_PLAN_GR_ID 빈 값 표시 — 유효 Plan Group 집합 밖 코드는 셀 텍스트만 지운다(DataMap 은
+      //   건드리지 않아 편집·저장 값은 그대로 원본 코드를 유지한다). clearCellText 는 텍스트 노드만
+      //   비워 Wijmo 가 같이 심어 둔 드롭다운 화살표 요소는 남긴다(2026-11-10 실사고 — textContent
+      //   전체 초기화는 그 요소까지 지워 편집 진입 후 드롭다운이 안 뜸).
+      if (binding === 'OPMZ_PLAN_GR_ID') {
+        const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+        if (isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) clearCellText(e.cell);
+      }
     };
     g.formatItem.addHandler(formatItemHandler as never);
+
+    // 편집 진입 시에도 빈값으로 시작(사용자 지시 2026-11-10, WhCapa 동형) — 아무것도 새로 고르지
+    //   않고 그대로 커밋하면 원본 값을 유지한다(OPMZ_PLAN_GR_ID 는 PRE_KEY_VALUES 구성요소라
+    //   빈 문자열로 덮이면 데이터 유실).
+    const planGroupPrepareEditHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'OPMZ_PLAN_GR_ID') return;
+      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+      if (!isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) return;
+      const editor = sender.activeEditor as { value?: string } | null;
+      if (editor) editor.value = '';
+    };
+    g.prepareCellForEdit.addHandler(planGroupPrepareEditHandler as never);
+
+    const planGroupEditEndingHandler = (
+      sender: FlexGridType,
+      e: { row: number; col: number; cancel: boolean }
+    ) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'OPMZ_PLAN_GR_ID') return;
+      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+      if (!isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) return;
+      const editor = sender.activeEditor as { value?: string } | null;
+      if (!(editor?.value ?? '').trim()) e.cancel = true;
+    };
+    g.cellEditEnding.addHandler(planGroupEditEndingHandler as never);
 
     // STOR_LOC_NAME(East/West) → STOR_LOC(@E/@W) 파생(AS-IS ComboSelChange/ClipboardPasted).
     const storLocDeriveHandler = (
@@ -163,11 +220,17 @@ export const WarehouseItemMappingGrid = ({
     g.cellEditEnded.addHandler(whDeriveHandler as never);
     g.pastedCell.addHandler(whDeriveHandler as never);
 
+    // STOR_PER 정수부 10자리 제한(사용자 요청 2026-11-10).
+    const detachDigitLimit = attachDigitLimit(g);
+
     return () => {
       try {
+        detachDigitLimit();
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
         g.formatItem?.removeHandler(formatItemHandler as never);
+        g.prepareCellForEdit?.removeHandler(planGroupPrepareEditHandler as never);
+        g.cellEditEnding?.removeHandler(planGroupEditEndingHandler as never);
         g.cellEditEnded?.removeHandler(storLocDeriveHandler as never);
         g.pastedCell?.removeHandler(storLocDeriveHandler as never);
         g.cellEditEnded?.removeHandler(whDeriveHandler as never);
@@ -187,7 +250,7 @@ export const WarehouseItemMappingGrid = ({
     if (ht.cellType !== CellType.Cell || ht.col < 0) return;
     const binding = grid.columns[ht.col]?.binding ?? '';
     if (binding !== 'ITEM_ID') return;
-    const row = GridUtils.getRow(grid, ht.row);
+    const row = GridUtils.getRow(grid, ht.row) as WijmoRowItem | undefined;
     if (!row) return;
     dblClickRowRef.current = row;
     setItemModalOpen(true);

@@ -214,7 +214,7 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetMeasure | Measure:203, InitControl:289, RefreshSpreadSheet:1316, CheckAndGetMeasure:2644, Measure:129, InitControl:153 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| GetMeasure | Measure:129, InitControl:153, Measure:203, InitControl:289, RefreshSpreadSheet:1316, CheckAndGetMeasure:2644 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetFilter | InitControls:296, InitControls:297, InitControls:298, InitControls:299, InitControls:316, SetChangeControl:346, SetChangeControl:347, SetChangeControl:348 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetCheckedListValue | InitControls:316, SetChangeControl:345, SetChangeControl:358, SetChangeControl:366, SetChangeControl:374, SetChangeControl:383, SetChangeControl:398, SetChangeControl:406 | CString.GetCheckedListValue | CODE |
 | GetInnerTable | SetChangeControl:341, SetChangeControl:351, SetChangeControl:359, SetChangeControl:367, SetChangeControl:375, SetChangeControl:399, GetPlanGroup:3625, SetDivision:3646 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
@@ -232,6 +232,11 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.chk_week | CheckedChanged | chk_week_CheckedChanged | InitializeComponent:121 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:170 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:207 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:221 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:222 |
 | this.btnSet | Click | btnSet_Click | InitializeComponent:425 |
 | this.btnOK | Click | btnOK_Click | InitializeComponent:463 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:552 |
@@ -263,21 +268,16 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:1466 |
 | this.btnCatagory | Click | btnCatagory_Click | InitializeComponent:1504 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:1542 |
-| this.chk_week | CheckedChanged | chk_week_CheckedChanged | InitializeComponent:121 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:170 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:207 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:221 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:222 |
 
 ## 6. 컨트롤 (100개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| CheckBox | 35 | chk_gap_out, chk_gap_in, chk_result_out, chk_seq, chk_offtime, chk_result_in, chk_memo, chk_outqty, chk_inqty, chk_mpp_outqty, chk_mpp_inqty, chk_wpp_outqty, chk_wpp_inqty, chk_gap_out_tot, chk_gap_in_tot … |
+| CheckBox | 35 | chk_week_sun, chk_totalBatch, chk_month, chk_week, chk_day, chk_gap_out, chk_gap_in, chk_result_out, chk_seq, chk_offtime, chk_result_in, chk_memo, chk_outqty, chk_inqty, chk_mpp_outqty … |
 | LayoutControlItem | 16 | layoutControlItem17, lblSql, layoutControlItem5, layoutControlItem7, layoutControlItem8, Operation, layoutControlItem10, layoutControlItem2, layoutControlItem11, layoutControlItem1, layoutControlItem6, layoutControlItem9, layoutControlItem14, layoutControlItem13, layoutControlItem16 … |
-| UsrButton | 12 | btnSet, btnOK, btnSql, usrButton2, btnMemo, btnPlanInfo, brnSetupColor, btnBucket, btnCatagory, btnColumn, usrButton1, usrButton2 |
-| Panel | 7 | panel1, panel3, panel2, panel2, panel4, panel1, panel1 |
+| UsrButton | 12 | usrButton1, usrButton2, btnSet, btnOK, btnSql, usrButton2, btnMemo, btnPlanInfo, brnSetupColor, btnBucket, btnCatagory, btnColumn |
+| Panel | 7 | panel1, panel1, panel3, panel2, panel2, panel4, panel1 |
 | UsrCheckedList2 | 7 | mcbo_nickname_lt, mcbo_prod_type, mcbo_line, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_division |
-| Label | 5 | label1, label2, label3, label2, label1 |
+| Label | 5 | label2, label1, label1, label2, label3 |
 | UsrCheckBox | 3 | chk_IncludeSubOp, chkInAct, chk_allLine |
 | UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup2 |

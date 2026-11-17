@@ -1,0 +1,23 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0017-S8e1f94,조회,AfterFindDataModel,SCP0017_WaterfallProductionPlan.cs:1336,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1379,SetQueryInfoGetModel
+SCP0017-Sb341c5,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:1952,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-Sf36ef1,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:1965,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-S546c7a,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:1981,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-S2271c1,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:1990,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-Sdc7315,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:2003,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-S2e1366,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:2049,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-S11a860,기타,CalculateSumMain,SCP0017_WaterfallProductionPlan.cs:2059,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1864; SCP0017_WaterfallProductionPlan.cs:2074,CalculateSumMain
+SCP0017-S114320,기타,ClearEventInvocations,SCP0017_WaterfallProductionPlan.cs:2357,호출 없음,,
+SCP0017-Seb6c4c,기타,ClearUsrCheckedList,SCP0017_WaterfallProductionPlan.cs:450,호출 없음,,
+SCP0017-Sbbce8e,조회,FindData_Line,SCP0017_WaterfallProductionPlan.cs:1495,주석 안에서만 호출,SCP0017_WaterfallProductionPlan.cs:1362; SCP0017_WaterfallProductionPlan.cs:2338,
+SCP0017-Sbf4efb,조회,GetDivision,SCP0017_WaterfallProductionPlan.cs:2441,호출 없음,SCP0017_WaterfallProductionPlan.cs:284,getUOM
+SCP0017-S0733a0,초기,InitSpreadMain,SCP0017_WaterfallProductionPlan.cs:1327,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1378,SetQueryInfoGetModel
+SCP0017-Sd2f3b0,기타,SetChangedPeriod,SCP0017_WaterfallProductionPlan.cs:2456,호출 없음,,
+SCP0017-Sb69d72,기타,SetChangedPeriod,SCP0017_WaterfallProductionPlan.cs:2460,호출 없음,,
+SCP0017-Sc2c5b0,기타,SetChangedPeriod,SCP0017_WaterfallProductionPlan.cs:2467,호출 없음,,
+SCP0017-S0ce700,팝업,SetColumnModelVisible,SCP0017_WaterfallProductionPlan.cs:2305,주석 안에서만 호출,SCP0017_WaterfallProductionPlan.cs:701,
+SCP0017-S730a6f,기타,SetColumnModelVisible,SCP0017_WaterfallProductionPlan.cs:2314,주석 안에서만 호출,SCP0017_WaterfallProductionPlan.cs:701,
+SCP0017-Sda616d,기타,SetColumnModelVisible,SCP0017_WaterfallProductionPlan.cs:2317,주석 안에서만 호출,SCP0017_WaterfallProductionPlan.cs:701,
+SCP0017-S9ea56d,기타,SetLockSumColumn,SCP0017_WaterfallProductionPlan.cs:1242,호출 없음,,
+SCP0017-S124c91,기타,Set_OnHandEOH,SCP0017_WaterfallProductionPlan.cs:1696,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1352,AfterFindDataModel
+SCP0017-Sf46d4c,기타,Set_OnHandEOH,SCP0017_WaterfallProductionPlan.cs:1707,같은 파일에서 호출,SCP0017_WaterfallProductionPlan.cs:1352,AfterFindDataModel

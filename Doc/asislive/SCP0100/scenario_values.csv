@@ -1,0 +1,12 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0100-Sb3fe2d,DIVISION,,,,값 미도출,"if (this._division != null && !this._division.Equals(""ALL""))",
+SCP0100-S22e1ff,COND,cboDisplay.SelectedIndex,,,화면에 없는 컨트롤,if (cboDisplay.SelectedIndex == 2),화면 덤프에 cboDisplay 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-S31a155,COND,cboDisplay.SelectedIndex,,,화면에 없는 컨트롤,else of (cboDisplay.SelectedIndex == 2) ▸ if (cboDisplay.SelectedIndex == 1),화면 덤프에 cboDisplay 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-S0af184,COND,cboDisplay.SelectedIndex,,,화면에 없는 컨트롤,else of (cboDisplay.SelectedIndex == 2) ▸ else of (cboDisplay.SelectedIndex == 1),화면 덤프에 cboDisplay 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-Sb675ed,COND,,,,값 미도출,if (dStart > dPlan),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0100-S9b8338,COND,,,,값 미도출,if (dtPlanType.Rows.Count > 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0100-S519c51,COND,cboSearchLevel.SelectedIndex,,,화면에 없는 컨트롤,if (!_is_detail) ▸ switch (cboSearchLevel.SelectedIndex) case 1:,화면 덤프에 cboSearchLevel 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-S941e00,COND,cboSearchLevel.SelectedIndex,,,화면에 없는 컨트롤,if (!_is_detail) ▸ switch (cboSearchLevel.SelectedIndex) case 2:,화면 덤프에 cboSearchLevel 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-S87e796,COND,cboSearchLevel.SelectedIndex,,,화면에 없는 컨트롤,if (!_is_detail) ▸ switch (cboSearchLevel.SelectedIndex) case 3:,화면 덤프에 cboSearchLevel 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-S884727,COND,cboSearchLevel.SelectedIndex,,,화면에 없는 컨트롤,if (!_is_detail) ▸ switch (cboSearchLevel.SelectedIndex) case 4:,화면 덤프에 cboSearchLevel 없음(팝업 안·다른 폼이거나 덤프 없음)
+SCP0100-Sfaab78,COND,cboSearchLevel.SelectedIndex,,,화면에 없는 컨트롤,if (!_is_detail) ▸ switch (cboSearchLevel.SelectedIndex) default:,화면 덤프에 cboSearchLevel 없음(팝업 안·다른 폼이거나 덤프 없음)

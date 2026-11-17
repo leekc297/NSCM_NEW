@@ -1,0 +1,208 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "PLANT_NAME",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,10 failed: InvalidOperationException: cell not visible: 0,10",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FACTORY_NAME",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,12 failed: InvalidOperationException: cell not visible: 0,12",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "LINE_NAME",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,14 failed: InvalidOperationException: cell not visible: 0,14",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,15 failed: InvalidOperationException: cell not visible: 0,15",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "grid": "spdAssign",
+   "sheet": "1",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,16 failed: InvalidOperationException: cell not visible: 0,16",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [
+  {
+   "grid": "spdSOP",
+   "col": null,
+   "row_conds": [],
+   "ids": [
+    "SCP0104-S032e68",
+    "SCP0104-Se9a42a"
+   ],
+   "why": "spdSOP/SOP_ELTR 행 없음"
+  }
+ ],
+ "at": "2026-11-15 07:08:26",
+ "plan": [
+  {
+   "grid": "spdAssign",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdSOP",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0104-S032e68",
+    "SCP0104-Se9a42a"
+   ],
+   "has_else": false
+  }
+ ]
+}

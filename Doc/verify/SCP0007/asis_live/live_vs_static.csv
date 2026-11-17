@@ -1,0 +1,35 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0007_GET_BOD,SCP0007_BOD.cs:553 FindData_Main,1회 · 구간 find,MATCH,
+SP,SCP0007_GET_COUNTRY_CITY,SCP0007_BOD.cs:626 GetData_Country,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,11회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,7회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0007_GET_ROUTE_CNT,SCP0007_BOD.cs:1448 SetCityCode,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0007_SAVE_BOD,SCP0007_BOD.cs:794 SaveData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),26개,22개,INFO,공통 11 · 선언만 15 · 실측만 11
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnOK,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboInputStatus,Y,Input Status,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboValidYN,Y,Valid,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbToSite,Y,To Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbIncoterms,Y,Incoterms,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTransMode,Y,Trans Mode,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbIncotermsSSP,Y,SSP Incoterms,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/BOD,정적 컬럼 사실 39행(시트 미지정 포함),컬럼 41(보임 34) · 헤더 2단 · 행 15317 · 고정 11,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

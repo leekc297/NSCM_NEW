@@ -292,3 +292,5 @@ done
 | 일자 | 변경 |
 |---|---|
 | 2026-06-04 | Phase 6 PoC 보완 10 건 모두 fix 완료 (17 파일 신규/수정 + ~1500 lines) |
+
+> 2026-11-13 덧붙임: 본문의 `Doc/_rules_v2/_archive_be_phase6_wrong/` 는 `Doc/_archive/rules_v2_archive_be_phase6_wrong/` 로 보관 이동됐다(본문은 작성 당시 기록이라 고치지 않음).

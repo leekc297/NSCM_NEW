@@ -1,0 +1,11 @@
+﻿scenario_id,type,axes,entry,method,guard,asis_cov,asis_evidence,linked_rows,tobe_verdicts,tobe_fail_checks,tobe_unverified_checks,call_compare,tobe_popup,tobe_rules,result,why,src
+SCP0124-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,NO_CALL_EVIDENCE,,14,미검증:10 검증완료:4,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:240
+SCP0124-Sed3e1e,조회,NONE,button:FindButton,FindData_Main,,EXECUTED,호출로 분기 특정: SCP0124_GET_PLAN_GROUP_DASHBOARD,45,미검증:45,,"A1,X-ROW",,,,TO-BE 미검증,연결 행 45 모두 미검증,SCP0124_PlanGroupDashboard.cs:288
+SCP0124-Sedadda,조회,NONE,,GetSearchInfo,,UNREACHED,,11,검증완료:6 미검증:5,,X-ROW,,,,도달 경로 없음,소스에서 진입 경로를 찾지 못함,SCP0124_PlanGroupDashboard.cs:187
+SCP0124-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,NO_CALL_EVIDENCE,,37,미검증:29 검증완료:8,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:134
+SCP0124-S9f054b,초기,OTHER,event:Form_Load | event:this.Load,InitControls,foreach (Control x in ctl) ▸ if (x is MaskedTextBox),NO_CALL_EVIDENCE,,18,미검증:18,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:150
+SCP0124-S96bd28,초기,NONE,event:Form_Load | event:this.Load,InitSpread,,NO_CALL_EVIDENCE,,13,미검증:13,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:252
+SCP0124-S1094a1,조회,NONE,event:ClbDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,RefreshPlanGroupByDivision,,NO_CALL_EVIDENCE,,20,미검증:16 검증완료:4,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:226
+SCP0124-S9f95f5,조회,NONE,event:ClbDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,RefreshPlantIdByDivision,,NO_CALL_EVIDENCE,,22,미검증:18 검증완료:4,,X-ROW,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:217
+SCP0124-S0bebb3,초기,SHEET+DATA,button:FindButton | event:Form_Load | event:this.Load,SetSpreadInit,if (sheetName.Equals(SpdSheet.shtMain)),NO_CALL_EVIDENCE,,14,미검증:12 검증완료:2,,"A1,X-ROW",,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:260
+SCP0124-S7b3573,초기,NONE,button:FindButton | event:Form_Load | event:this.Load,SetSpreadInit,,NO_CALL_EVIDENCE,,14,미검증:12 검증완료:2,,"A1,X-ROW",,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,SCP0124_PlanGroupDashboard.cs:264

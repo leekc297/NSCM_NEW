@@ -34,6 +34,10 @@ export const COMBO = {
   SALES_SITE: 'ToSiteBOD1_SCP_ALL',
   // 범용 lookup 디스패처 — @lookupType='SHIPMENT_RESULT_TYPE'. 후보 I/C/B(VALID_YN='Y' 3건, ALL 없음).
   RESULT_TYPE: 'LookupCommon',
+  // Result Date 기본값(어제, 사용자 timezone) — AS-IS GET_DATE_RANGE_YESTERDAY_BEFORE_1MONTH(foxml 인라인 SQL,
+  //   이름 "1MONTH"는 거짓=실제 -1일) TO-BE 변환 전역 콤보. CODE='YYYYMMDD:YYYYMMDD'(From=To=어제).
+  //   서버가 FN_MULTY_TIME(@timeZone)-1 로 산출(클라 dayjs 근사 대체). @timeZone=sessionTimeZone(session).
+  YESTERDAY_PERIOD: 'SCM0001_GET_DATE_RANGE_YESTERDAY',
 } as const;
 
 // 전체선택 sentinel — Plant/Sales Site 다중 콤보 기본값·payload 무필터 해석(BOD 화면 규약 동일).

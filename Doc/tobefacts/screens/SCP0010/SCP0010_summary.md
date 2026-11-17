@@ -14,14 +14,14 @@
 | features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.columns.ts | other | 48 |
 | features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.constants.ts | constants | 132 |
 | features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.types.ts | types | 44 |
-| features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | page | 564 |
+| features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | page | 581 |
 | features/supply/src/pages/shipment-plan-semi/useShipmentPlanSemiStore.test.tsx | test | 122 |
 | features/supply/src/pages/shipment-plan-semi/useShipmentPlanSemiStore.ts | store | 265 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.buildColumns.ts | util | 42 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.deptDayDistribute.ts | util | 59 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | util | 213 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.headerMerge.ts | util | 58 |
-| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | util | 243 |
+| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | util | 249 |
 | features/supply/src/pages/shipment-plan-semi/__asis-mapping__.md | mapping | 520 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -31,7 +31,7 @@
 | SCP0010/main//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:78 |
 | SCP0010/calendar//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:85 |
 | /SCP0010/main/{action}/call-proc | http | 1 | N | ShipmentPlanSemi.tsx:220 |
-| /SCP0010/main/SAVE_WEEKLY\|SAVE/call-proc | http | 1 | Y | ShipmentPlanSemi.tsx:410 |
+| /SCP0010/main/SAVE_WEEKLY\|SAVE/call-proc | http | 1 | Y | ShipmentPlanSemi.tsx:413 |
 | /admin/menu/SCP0010/column | http | 1 | Y | useShipmentPlanSemiStore.ts:202 |
 | /admin/menu/SCP0010/measure | http | 1 | Y | useShipmentPlanSemiStore.ts:222 |
 | /admin/menu/SCP0010/search-conditions | http | 1 | Y | useShipmentPlanSemiStore.ts:242 |
@@ -60,11 +60,11 @@
 | grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 536 |
 | DataGrid | initialized | handleGridInitialized | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 549 |
 | DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 550 |
-| ShipmentPlanSemiForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 455 |
-| ShipmentPlanSemiForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 455 |
-| ShipmentPlanSemiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 506 |
-| MeasureSelectModal | onApply | <arrow> currentMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME[measureSheetGroup],columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast,t | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 534 |
-| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 559 |
+| ShipmentPlanSemiForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 472 |
+| ShipmentPlanSemiForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 472 |
+| ShipmentPlanSemiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 523 |
+| MeasureSelectModal | onApply | <arrow> currentMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME[measureSheetGroup],columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast,t | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 551 |
+| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 576 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -161,6 +161,7 @@
 | code | void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 348 |
 | code | const rows = buildSaveRows( | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 387 |
 | code | ); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 393 |
+| code | void setAlert({ type: 'alert', content: String(result.RESULT_MSG ?? t(MSG.SAVE_FAIL, '_Save failed.')) }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 437 |
 | code | const { division, shipFrozen, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 83 |
 | code | const blockStartDate = division === '40' \|\| division === '81' \|\| isDivision81Series(division) | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 90 |
 | code | if (!blockStartDate) return null; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 93 |
@@ -170,7 +171,7 @@
 | code | const lockStartIdx = ctx.weekBindingsAsc.indexOf(lockStart); | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 189 |
 | code | const thisIdx = ctx.weekBindingsAsc.indexOf(binding); | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 190 |
 | code | if (thisIdx >= 0 && thisIdx >= lockStartIdx) return false; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 191 |
-| code | if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨) | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | 93 |
+| code | if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨) | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | 97 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

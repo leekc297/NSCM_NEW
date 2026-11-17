@@ -1,0 +1,880 @@
+{
+ "id": "SCP0016",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 06:27:18",
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 06:27:56.273",
+  "grid": "spdMain",
+  "sheet_index": 0,
+  "sheet_name": "Waterfall Shipment Plan",
+  "sheet": "Waterfall Shipment Plan",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "division_id",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "biz_type_name",
+    "label": "Operation Group",
+    "data_field": "biz_type_name",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "item_id",
+    "label": "Model",
+    "data_field": "item_id",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "nick_name",
+    "label": "Nick Name",
+    "data_field": "nick_name",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "ELECTRODE_TYPE",
+    "label": "Electrode Type",
+    "data_field": "ELECTRODE_TYPE",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "ORIGIN_TO_DIVISION_ID",
+    "label": "Origin To Div",
+    "data_field": "ORIGIN_TO_DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "to_site_name",
+    "label": "To Site",
+    "data_field": "to_site_name",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "boh",
+    "label": "BOH (To Site)",
+    "data_field": "boh",
+    "visible": "True"
+   },
+   {
+    "index": 9,
+    "tag": "incoterms",
+    "label": "Incoterms",
+    "data_field": "incoterms",
+    "visible": "True"
+   },
+   {
+    "index": 10,
+    "tag": "DEPT_NAME_KO",
+    "label": "Team",
+    "data_field": "DEPT_NAME_KO",
+    "visible": "True"
+   },
+   {
+    "index": 11,
+    "tag": "project_code",
+    "label": "Project Code",
+    "data_field": "project_code",
+    "visible": "True"
+   },
+   {
+    "index": 12,
+    "tag": "PROJECT_NAME",
+    "label": "Project",
+    "data_field": "PROJECT_NAME",
+    "visible": "True"
+   },
+   {
+    "index": 13,
+    "tag": "PROJECT_OWNER",
+    "label": "Project Owner",
+    "data_field": "PROJECT_OWNER",
+    "visible": "True"
+   },
+   {
+    "index": 14,
+    "tag": "ITEM_TYPE",
+    "label": "Item Type",
+    "data_field": "ITEM_TYPE",
+    "visible": "True"
+   },
+   {
+    "index": 15,
+    "tag": "ORIGIN_FROM_DIVISION_ID",
+    "label": "Origin From Div",
+    "data_field": "ORIGIN_FROM_DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 16,
+    "tag": "from_site_name",
+    "label": "From Site",
+    "data_field": "from_site_name",
+    "visible": "True"
+   },
+   {
+    "index": 17,
+    "tag": "transport_mode",
+    "label": "Trans Mode",
+    "data_field": "transport_mode",
+    "visible": "True"
+   },
+   {
+    "index": 18,
+    "tag": "lt_day",
+    "label": "L/T(Day)",
+    "data_field": "lt_day",
+    "visible": "True"
+   },
+   {
+    "index": 19,
+    "tag": "version_no",
+    "label": "Version",
+    "data_field": "version_no",
+    "visible": "True"
+   },
+   {
+    "index": 20,
+    "tag": "measure_label",
+    "label": "Measure",
+    "data_field": "measure_label",
+    "visible": "True"
+   },
+   {
+    "index": 21,
+    "tag": "biz_type",
+    "label": "biz_type",
+    "data_field": "biz_type",
+    "visible": "False"
+   },
+   {
+    "index": 22,
+    "tag": "bod_id",
+    "label": "bod_id",
+    "data_field": "bod_id",
+    "visible": "False"
+   },
+   {
+    "index": 23,
+    "tag": "from_site",
+    "label": "from_site",
+    "data_field": "from_site",
+    "visible": "False"
+   },
+   {
+    "index": 24,
+    "tag": "KEY_IDX",
+    "label": "KEY_IDX",
+    "data_field": "key_idx",
+    "visible": "False"
+   },
+   {
+    "index": 25,
+    "tag": "measure_order_no",
+    "label": "MEASURE_ORDER_NO",
+    "data_field": "measure_order_no",
+    "visible": "False"
+   },
+   {
+    "index": 26,
+    "tag": "to_site",
+    "label": "to_site",
+    "data_field": "to_site",
+    "visible": "False"
+   },
+   {
+    "index": 27,
+    "tag": "to_yyyymmdd",
+    "label": "to_yyyymmdd",
+    "data_field": "to_yyyymmdd",
+    "visible": "False"
+   },
+   {
+    "index": 28,
+    "tag": "measure",
+    "label": "measure",
+    "data_field": "measure",
+    "visible": "False"
+   },
+   {
+    "index": 29,
+    "tag": "M_202608",
+    "label": "SUM",
+    "data_field": "M_202608",
+    "visible": "False"
+   },
+   {
+    "index": 30,
+    "tag": "W_20260834",
+    "label": "SUM",
+    "data_field": "W_20260834",
+    "visible": "False"
+   },
+   {
+    "index": 31,
+    "tag": "D_20260817",
+    "label": "17",
+    "data_field": "D_20260817",
+    "visible": "True"
+   },
+   {
+    "index": 32,
+    "tag": "D_20260818",
+    "label": "18",
+    "data_field": "D_20260818",
+    "visible": "True"
+   },
+   {
+    "index": 33,
+    "tag": "D_20260819",
+    "label": "19",
+    "data_field": "D_20260819",
+    "visible": "True"
+   },
+   {
+    "index": 34,
+    "tag": "D_20260820",
+    "label": "20",
+    "data_field": "D_20260820",
+    "visible": "True"
+   },
+   {
+    "index": 35,
+    "tag": "D_20260821",
+    "label": "21",
+    "data_field": "D_20260821",
+    "visible": "True"
+   },
+   {
+    "index": 36,
+    "tag": "D_20260822",
+    "label": "22",
+    "data_field": "D_20260822",
+    "visible": "True"
+   },
+   {
+    "index": 37,
+    "tag": "D_20260823",
+    "label": "23",
+    "data_field": "D_20260823",
+    "visible": "True"
+   },
+   {
+    "index": 38,
+    "tag": "W_20260835",
+    "label": "SUM",
+    "data_field": "W_20260835",
+    "visible": "False"
+   },
+   {
+    "index": 39,
+    "tag": "D_20260824",
+    "label": "24",
+    "data_field": "D_20260824",
+    "visible": "True"
+   },
+   {
+    "index": 40,
+    "tag": "D_20260825",
+    "label": "25",
+    "data_field": "D_20260825",
+    "visible": "True"
+   },
+   {
+    "index": 41,
+    "tag": "D_20260826",
+    "label": "26",
+    "data_field": "D_20260826",
+    "visible": "True"
+   },
+   {
+    "index": 42,
+    "tag": "D_20260827",
+    "label": "27",
+    "data_field": "D_20260827",
+    "visible": "True"
+   },
+   {
+    "index": 43,
+    "tag": "D_20260828",
+    "label": "28",
+    "data_field": "D_20260828",
+    "visible": "True"
+   },
+   {
+    "index": 44,
+    "tag": "D_20260829",
+    "label": "29",
+    "data_field": "D_20260829",
+    "visible": "True"
+   },
+   {
+    "index": 45,
+    "tag": "D_20260830",
+    "label": "30",
+    "data_field": "D_20260830",
+    "visible": "True"
+   },
+   {
+    "index": 46,
+    "tag": "W_20260836",
+    "label": "SUM",
+    "data_field": "W_20260836",
+    "visible": "False"
+   },
+   {
+    "index": 47,
+    "tag": "D_20260831",
+    "label": "31",
+    "data_field": "D_20260831",
+    "visible": "True"
+   },
+   {
+    "index": 48,
+    "tag": "M_202609",
+    "label": "SUM",
+    "data_field": "M_202609",
+    "visible": "False"
+   },
+   {
+    "index": 49,
+    "tag": "W_20260936",
+    "label": "SUM",
+    "data_field": "W_20260936",
+    "visible": "False"
+   },
+   {
+    "index": 50,
+    "tag": "D_20260901",
+    "label": "01",
+    "data_field": "D_20260901",
+    "visible": "True"
+   },
+   {
+    "index": 51,
+    "tag": "D_20260902",
+    "label": "02",
+    "data_field": "D_20260902",
+    "visible": "True"
+   },
+   {
+    "index": 52,
+    "tag": "D_20260903",
+    "label": "03",
+    "data_field": "D_20260903",
+    "visible": "True"
+   },
+   {
+    "index": 53,
+    "tag": "D_20260904",
+    "label": "04",
+    "data_field": "D_20260904",
+    "visible": "True"
+   },
+   {
+    "index": 54,
+    "tag": "D_20260905",
+    "label": "05",
+    "data_field": "D_20260905",
+    "visible": "True"
+   },
+   {
+    "index": 55,
+    "tag": "D_20260906",
+    "label": "06",
+    "data_field": "D_20260906",
+    "visible": "True"
+   },
+   {
+    "index": 56,
+    "tag": "W_20260937",
+    "label": "SUM",
+    "data_field": "W_20260937",
+    "visible": "False"
+   },
+   {
+    "index": 57,
+    "tag": "D_20260907",
+    "label": "07",
+    "data_field": "D_20260907",
+    "visible": "True"
+   },
+   {
+    "index": 58,
+    "tag": "D_20260908",
+    "label": "08",
+    "data_field": "D_20260908",
+    "visible": "True"
+   },
+   {
+    "index": 59,
+    "tag": "D_20260909",
+    "label": "09",
+    "data_field": "D_20260909",
+    "visible": "True"
+   },
+   {
+    "index": 60,
+    "tag": "D_20260910",
+    "label": "10",
+    "data_field": "D_20260910",
+    "visible": "True"
+   },
+   {
+    "index": 61,
+    "tag": "D_20260911",
+    "label": "11",
+    "data_field": "D_20260911",
+    "visible": "True"
+   },
+   {
+    "index": 62,
+    "tag": "D_20260912",
+    "label": "12",
+    "data_field": "D_20260912",
+    "visible": "True"
+   },
+   {
+    "index": 63,
+    "tag": "D_20260913",
+    "label": "13",
+    "data_field": "D_20260913",
+    "visible": "True"
+   },
+   {
+    "index": 64,
+    "tag": "W_20260938",
+    "label": "SUM",
+    "data_field": "W_20260938",
+    "visible": "False"
+   },
+   {
+    "index": 65,
+    "tag": "D_20260914",
+    "label": "14",
+    "data_field": "D_20260914",
+    "visible": "True"
+   },
+   {
+    "index": 66,
+    "tag": "D_20260915",
+    "label": "15",
+    "data_field": "D_20260915",
+    "visible": "True"
+   },
+   {
+    "index": 67,
+    "tag": "D_20260916",
+    "label": "16",
+    "data_field": "D_20260916",
+    "visible": "True"
+   },
+   {
+    "index": 68,
+    "tag": "D_20260917",
+    "label": "17",
+    "data_field": "D_20260917",
+    "visible": "True"
+   },
+   {
+    "index": 69,
+    "tag": "D_20260918",
+    "label": "18",
+    "data_field": "D_20260918",
+    "visible": "True"
+   },
+   {
+    "index": 70,
+    "tag": "D_20260919",
+    "label": "19",
+    "data_field": "D_20260919",
+    "visible": "True"
+   },
+   {
+    "index": 71,
+    "tag": "D_20260920",
+    "label": "20",
+    "data_field": "D_20260920",
+    "visible": "True"
+   },
+   {
+    "index": 72,
+    "tag": "W_20260939",
+    "label": "SUM",
+    "data_field": "W_20260939",
+    "visible": "False"
+   },
+   {
+    "index": 73,
+    "tag": "D_20260921",
+    "label": "21",
+    "data_field": "D_20260921",
+    "visible": "True"
+   },
+   {
+    "index": 74,
+    "tag": "D_20260922",
+    "label": "22",
+    "data_field": "D_20260922",
+    "visible": "True"
+   },
+   {
+    "index": 75,
+    "tag": "D_20260923",
+    "label": "23",
+    "data_field": "D_20260923",
+    "visible": "True"
+   },
+   {
+    "index": 76,
+    "tag": "D_20260924",
+    "label": "24",
+    "data_field": "D_20260924",
+    "visible": "True"
+   },
+   {
+    "index": 77,
+    "tag": "D_20260925",
+    "label": "25",
+    "data_field": "D_20260925",
+    "visible": "True"
+   },
+   {
+    "index": 78,
+    "tag": "D_20260926",
+    "label": "26",
+    "data_field": "D_20260926",
+    "visible": "True"
+   },
+   {
+    "index": 79,
+    "tag": "D_20260927",
+    "label": "27",
+    "data_field": "D_20260927",
+    "visible": "True"
+   },
+   {
+    "index": 80,
+    "tag": "W_20260940",
+    "label": "SUM",
+    "data_field": "W_20260940",
+    "visible": "False"
+   },
+   {
+    "index": 81,
+    "tag": "D_20260928",
+    "label": "28",
+    "data_field": "D_20260928",
+    "visible": "True"
+   },
+   {
+    "index": 82,
+    "tag": "D_20260929",
+    "label": "29",
+    "data_field": "D_20260929",
+    "visible": "True"
+   },
+   {
+    "index": 83,
+    "tag": "D_20260930",
+    "label": "30",
+    "data_field": "D_20260930",
+    "visible": "True"
+   },
+   {
+    "index": 84,
+    "tag": "M_202610",
+    "label": "SUM",
+    "data_field": "M_202610",
+    "visible": "False"
+   },
+   {
+    "index": 85,
+    "tag": "W_20261040",
+    "label": "SUM",
+    "data_field": "W_20261040",
+    "visible": "False"
+   },
+   {
+    "index": 86,
+    "tag": "D_20261001",
+    "label": "01",
+    "data_field": "D_20261001",
+    "visible": "True"
+   },
+   {
+    "index": 87,
+    "tag": "D_20261002",
+    "label": "02",
+    "data_field": "D_20261002",
+    "visible": "True"
+   },
+   {
+    "index": 88,
+    "tag": "D_20261003",
+    "label": "03",
+    "data_field": "D_20261003",
+    "visible": "True"
+   },
+   {
+    "index": 89,
+    "tag": "D_20261004",
+    "label": "04",
+    "data_field": "D_20261004",
+    "visible": "True"
+   },
+   {
+    "index": 90,
+    "tag": "W_20261041",
+    "label": "SUM",
+    "data_field": "W_20261041",
+    "visible": "False"
+   },
+   {
+    "index": 91,
+    "tag": "D_20261005",
+    "label": "05",
+    "data_field": "D_20261005",
+    "visible": "True"
+   },
+   {
+    "index": 92,
+    "tag": "D_20261006",
+    "label": "06",
+    "data_field": "D_20261006",
+    "visible": "True"
+   },
+   {
+    "index": 93,
+    "tag": "D_20261007",
+    "label": "07",
+    "data_field": "D_20261007",
+    "visible": "True"
+   },
+   {
+    "index": 94,
+    "tag": "D_20261008",
+    "label": "08",
+    "data_field": "D_20261008",
+    "visible": "True"
+   },
+   {
+    "index": 95,
+    "tag": "D_20261009",
+    "label": "09",
+    "data_field": "D_20261009",
+    "visible": "True"
+   },
+   {
+    "index": 96,
+    "tag": "D_20261010",
+    "label": "10",
+    "data_field": "D_20261010",
+    "visible": "True"
+   },
+   {
+    "index": 97,
+    "tag": "D_20261011",
+    "label": "11",
+    "data_field": "D_20261011",
+    "visible": "True"
+   },
+   {
+    "index": 98,
+    "tag": "W_20261042",
+    "label": "SUM",
+    "data_field": "W_20261042",
+    "visible": "False"
+   },
+   {
+    "index": 99,
+    "tag": "D_20261012",
+    "label": "12",
+    "data_field": "D_20261012",
+    "visible": "True"
+   },
+   {
+    "index": 100,
+    "tag": "D_20261013",
+    "label": "13",
+    "data_field": "D_20261013",
+    "visible": "True"
+   },
+   {
+    "index": 101,
+    "tag": "D_20261014",
+    "label": "14",
+    "data_field": "D_20261014",
+    "visible": "True"
+   },
+   {
+    "index": 102,
+    "tag": "D_20261015",
+    "label": "15",
+    "data_field": "D_20261015",
+    "visible": "True"
+   },
+   {
+    "index": 103,
+    "tag": "D_20261016",
+    "label": "16",
+    "data_field": "D_20261016",
+    "visible": "True"
+   },
+   {
+    "index": 104,
+    "tag": "D_20261017",
+    "label": "17",
+    "data_field": "D_20261017",
+    "visible": "True"
+   },
+   {
+    "index": 105,
+    "tag": "D_20261018",
+    "label": "18",
+    "data_field": "D_20261018",
+    "visible": "True"
+   },
+   {
+    "index": 106,
+    "tag": "W_20261043",
+    "label": "SUM",
+    "data_field": "W_20261043",
+    "visible": "False"
+   },
+   {
+    "index": 107,
+    "tag": "D_20261019",
+    "label": "19",
+    "data_field": "D_20261019",
+    "visible": "True"
+   },
+   {
+    "index": 108,
+    "tag": "D_20261020",
+    "label": "20",
+    "data_field": "D_20261020",
+    "visible": "True"
+   },
+   {
+    "index": 109,
+    "tag": "D_20261021",
+    "label": "21",
+    "data_field": "D_20261021",
+    "visible": "True"
+   },
+   {
+    "index": 110,
+    "tag": "D_20261022",
+    "label": "22",
+    "data_field": "D_20261022",
+    "visible": "True"
+   },
+   {
+    "index": 111,
+    "tag": "D_20261023",
+    "label": "23",
+    "data_field": "D_20261023",
+    "visible": "True"
+   },
+   {
+    "index": 112,
+    "tag": "D_20261024",
+    "label": "24",
+    "data_field": "D_20261024",
+    "visible": "True"
+   },
+   {
+    "index": 113,
+    "tag": "D_20261025",
+    "label": "25",
+    "data_field": "D_20261025",
+    "visible": "True"
+   },
+   {
+    "index": 114,
+    "tag": "W_20261044",
+    "label": "SUM",
+    "data_field": "W_20261044",
+    "visible": "False"
+   },
+   {
+    "index": 115,
+    "tag": "D_20261026",
+    "label": "26",
+    "data_field": "D_20261026",
+    "visible": "True"
+   },
+   {
+    "index": 116,
+    "tag": "D_20261027",
+    "label": "27",
+    "data_field": "D_20261027",
+    "visible": "True"
+   },
+   {
+    "index": 117,
+    "tag": "D_20261028",
+    "label": "28",
+    "data_field": "D_20261028",
+    "visible": "True"
+   },
+   {
+    "index": 118,
+    "tag": "D_20261029",
+    "label": "29",
+    "data_field": "D_20261029",
+    "visible": "True"
+   },
+   {
+    "index": 119,
+    "tag": "D_20261030",
+    "label": "30",
+    "data_field": "D_20261030",
+    "visible": "True"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 06:27:56.273"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 120,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

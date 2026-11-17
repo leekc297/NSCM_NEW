@@ -1,0 +1,107 @@
+{
+ "id": "SSP0046",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SSP.SSP0046_SAVE_SHIPMENT_REQUEST",
+   "save_sp": "SSP0046_SAVE_SHIPMENT_REQUEST",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_SHIPMENT_REQ",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "TRANSPORT_MODE",
+    "MEASURE",
+    "PLANT_SITE_ID",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PROJECT_CODE": "PROJECT_CODE",
+    "ITEM_ID": "ITEM_ID",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "SCM_SITE_ID",
+    "TRANSPORT_MODE",
+    "PLANT_SITE_ID",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_SHIPMENT_REQ_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Pack Biz",
+   "writes": {
+    "DM_PLN_SHIPMENT_REQ": [
+     "INSERT INTO"
+    ],
+    "DM_PLN_SHIPMENT_REQ_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SSP0046_SAVE_SHIPMENT_REQUEST → SP SSP0046_SAVE_SHIPMENT_REQUEST 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "TRANSPORT_MODE": "p_transport_mode←(그리드 열에서 오지 않음)",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "p_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SSP.SSP0046_SET_TITLESET_POPUP",
+   "save_sp": "SSP0046_SET_TITLESET_POPUP",
+   "status": "키 일부 미대응",
+   "table": "scm_mst_titleset_user",
+   "pk": [
+    "USER_ID",
+    "PROGRAM_ID",
+    "SHEET_NAME",
+    "USER_INQUIRY_COLUMN_TYPE_CODE",
+    "COLUMN_NAME"
+   ],
+   "match": {},
+   "unmatched_pk": [
+    "USER_ID",
+    "PROGRAM_ID",
+    "SHEET_NAME",
+    "USER_INQUIRY_COLUMN_TYPE_CODE",
+    "COLUMN_NAME"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Pack Biz",
+   "writes": {
+    "scm_mst_titleset_user": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SSP0046_SET_TITLESET_POPUP → SP SSP0046_SET_TITLESET_POPUP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "USER_ID": "p_user_id←(그리드 열에서 오지 않음)",
+    "PROGRAM_ID": "p_program_id←(그리드 열에서 오지 않음)",
+    "SHEET_NAME": "p_sheet_name←(그리드 열에서 오지 않음)",
+    "USER_INQUIRY_COLUMN_TYPE_CODE": "p_column_type←(그리드 열에서 오지 않음)",
+    "COLUMN_NAME": "p_column_name←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

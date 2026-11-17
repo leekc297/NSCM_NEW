@@ -1,0 +1,45 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,7회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT ROW_NUMBER() OVER ( ORDER BY A.INSTANCE_ID,",,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT ROW_NUMBER() OVER ( ORDER BY A.USER_ID ) AS,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: WITH WITH_ROLE_FACTORY AS (,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0049_GET_DAY_RANGE,FP01883_Instance_Authority.cs:934 GetDayRange,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0049_GET_SHEET_USER_TITLE,FP01883_Instance_Authority.cs:856 GetUserTitle,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),59개,32개,INFO,공통 21 · 선언만 38 · 실측만 11
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel3,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel4,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel_gap,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,txtAuthority,Y,°Authority ID,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtUpperAuth,Y,°Upper Authority Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtAuthDesc,Y,°Authority Desc,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbApproval,Y,°Approval Flag,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtInsert,Y,°Insert ID,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dtInsert,Y,°Insert Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dtUpdate,Y,°Update Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtUpdate,Y,°Update ID,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtAuthorityName2,Y,°Authority Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_AuthFolder,Y,Auth Folder,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_AddDetail,Y,Add,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_DelDetail,Y,Del,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_SaveDetail,Y,Save,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_Add,Y,Add,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_Save,Y,Save,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btn_Del,Y,Del,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Instance,정적 컬럼 사실 10행(시트 미지정 포함),컬럼 11(보임 11) · 헤더 1단 · 행 1 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdMain/User,정적 컬럼 사실 5행(시트 미지정 포함),컬럼 6(보임 6) · 헤더 1단 · 행 475 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

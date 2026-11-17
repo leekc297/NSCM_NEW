@@ -25,6 +25,7 @@
 ### 1.1 `.env.asis` (gitignored, `.gitignore` `.env.*` 패턴)
 
 ```
+# (2026-11-13 정정: 아래 HOST·PORT 는 작성 당시(2026-06-01) 값 — 현행 `.env.asis` 값과 다르다. 접속 주소는 `.env.asis` 의 ASIS_DB_* 만 참조하고 이 문서에 적힌 주소는 쓰지 않는다)
 ASIS_DB_HOST=165.244.95.223
 ASIS_DB_PORT=1433
 ASIS_DB_NAME=LGCE_SCMDEV       # ⚠ LGCD 아님 — D vs E 주의

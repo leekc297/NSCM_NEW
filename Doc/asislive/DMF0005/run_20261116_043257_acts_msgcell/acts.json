@@ -1,0 +1,70 @@
+{
+ "id": "DMF0005",
+ "group": "SCP Planner",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "EditButton",
+   "expect": "MSG00096",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:618~622 Division 앞 두 자리 81·82 이고 NowGroupID == 'SCP Planner'",
+   "steps": [
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [],
+   "group": "SCP Planner",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [
+  {
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "그룹 ADMIN 실행에서만(현재 SCP Planner)"
+  },
+  {
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "그룹 ADMIN 실행에서만(현재 SCP Planner)"
+  },
+  {
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00128",
+   "why": "그룹 ADMIN 실행에서만(현재 SCP Planner)"
+  }
+ ],
+ "at": "2026-11-16 04:32:03",
+ "_pre_set": [
+  {
+   "name": "clbDivision",
+   "index": "1",
+   "wait": 3
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "1"
+    },
+    "ok": false,
+    "applied": null,
+    "error": "InvalidOperationException: combo index out of range: 1/1"
+   }
+  ]
+ }
+}

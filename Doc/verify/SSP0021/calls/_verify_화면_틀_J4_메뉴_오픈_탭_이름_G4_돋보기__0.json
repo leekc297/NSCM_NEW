@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SSP0021",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 21,
+  "dur": 117,
+  "at": "2026-11-14T16:39:29.654Z",
+  "user": "minyonglee1",
+  "test": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0021/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 210,
+  "at": "2026-11-14T16:39:29.950Z",
+  "user": "minyonglee1",
+  "test": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 518,
+  "at": "2026-11-14T16:39:30.129Z",
+  "user": "minyonglee1",
+  "test": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260919\",\"endYyyymmdd\":\"20261113\"}",
+  "status": 200,
+  "rows": 71,
+  "dur": 102,
+  "at": "2026-11-14T16:39:30.631Z",
+  "user": "minyonglee1",
+  "test": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)"
+ }
+]

@@ -1,0 +1,43 @@
+{
+ "table": "SCP_OPMZ_SALES_SITE_PRIORITY",
+ "pk": [
+  "DIVISION_ID",
+  "SCM_SITE_ID",
+  "OPMZ_PLAN_GR_ID",
+  "ITEM_ID",
+  "FROM_YYYYMMDD",
+  "TO_YYYYMMDD"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "SCM_SITE_ID": "SCM_SITE_ID",
+  "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+  "ITEM_ID": "ITEM_ID",
+  "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+  "TO_YYYYMMDD": "TO_YYYYMMDD"
+ },
+ "save_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+ "side": [],
+ "related": [],
+ "basis": "foxml SCP0131_SAVE_SALES_SITE_PRIORITY → SP SCP0131_SAVE_SALES_SITE_PRIORITY 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = UPDATE SCP_OPMZ_SALES_SITE_PRIORITY WHERE 키 6컬럼(@v_pre_*) · 이력 표 없음 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 PRIO_RANK 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "PRIO_RANK",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "PRIO_RANK",
+      "db_col": "PRIO_RANK",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

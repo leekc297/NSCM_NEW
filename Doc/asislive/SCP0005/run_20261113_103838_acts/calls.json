@@ -1,0 +1,139 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 10:38:11.819",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.67,
+   "params": {
+    "p_menu_id": "SCP0005",
+    "p_log_type": "FIND",
+    "p_log_cnt": "8036",
+    "p_db_time": "1.296",
+    "p_ui_time": "43.611",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0005', @p_log_type='FIND', @p_log_cnt='8036', @p_db_time='1.296', @p_ui_time='43.611', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnFromSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:11.991",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 68.74,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:btnFromSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:12.004",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.09,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:btnFromSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:12.844",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 89418,
+   "rows_kind": "DataSet rows",
+   "ms": 686.08,
+   "params": {
+    "p_country": "",
+    "p_city": ""
+   },
+   "inline": "EXEC SCM0002_GET_CITY_BY_COUNTY_POPUP @p_country='', @p_city=''",
+   "phase": "action:btnFromSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:23.921",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.36,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:btnToSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:23.936",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM_H.DM0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 6.62,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF0004",
+    "p_sheet_name": "CountryPopup"
+   },
+   "inline": "EXEC DM0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF0004', @p_sheet_name='CountryPopup'",
+   "phase": "action:btnToSrch"
+  },
+  {
+   "at": "2026-11-13 10:38:24.789",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 89418,
+   "rows_kind": "DataSet rows",
+   "ms": 714.33,
+   "params": {
+    "p_country": "",
+    "p_city": ""
+   },
+   "inline": "EXEC SCM0002_GET_CITY_BY_COUNTY_POPUP @p_country='', @p_city=''",
+   "phase": "action:btnToSrch"
+  }
+ ]
+}

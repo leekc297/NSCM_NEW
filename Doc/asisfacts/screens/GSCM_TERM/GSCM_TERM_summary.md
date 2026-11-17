@@ -13,13 +13,18 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData | 170 | SystemManager.UP_FX_GetTermInfoList | MATCH | SP UP_FX_GetTermInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData | 170 | SystemManager.UP_FX_GetTermInfoList | MATCH | SP UP_FX_GetTermInfoList |
+| button:SaveButton | SaveButton > SaveData | 264 | SystemManager.UP_FX_SaveTermInfo | MATCH | SP UP_FX_SaveTermInfo |
+| button:SaveButton | SaveButton > SaveData | 265 | SystemManager.UP_FX_DeleteTermInfo | MATCH | SP UP_FX_DeleteTermInfo |
+| button:SaveButton | SaveButton > SaveData | 266 | SystemManager.UP_FX_SaveTermInfo | MATCH | SP UP_FX_SaveTermInfo |
 | unreached:(진입점 미연결) | <field:dtYesOrNo> | 42 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteTermInfo | MATCH | 1 | SP UP_FX_DeleteTermInfo | EXEC:UP_FX_DELETETERMINFO, DELETE:TB_FX_TERMINFO |  |
 | SystemManager.UP_FX_GetTermInfoList | MATCH | 1 | SP UP_FX_GetTermInfoList | EXEC:UP_FX_GETTERMINFOLIST, SELECT:TB_FX_TERMINFO |  |
+| SystemManager.UP_FX_SaveTermInfo | MATCH | 2 | SP UP_FX_SaveTermInfo | EXEC:UP_FX_SAVETERMINFO, MERGE:TB_FX_TERMINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

@@ -1,0 +1,5 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0039-Sedadda,조회,GetSearchInfo,SCP0039_ValidationMaster.cs:248,같은 파일에서 호출,SCP0039_ValidationMaster.cs:66,
+SCP0039-Sceb3f0,기타,SetCalendar,SCP0039_ValidationMaster.cs:1238,주석 안에서만 호출,SCP0039_ValidationMaster.cs:406,
+SCP0039-S1aee1d,기타,SetCalendar,SCP0039_ValidationMaster.cs:1261,주석 안에서만 호출,SCP0039_ValidationMaster.cs:406,
+SCP0039-Sc4c56f,조회,getLookupMasterValidation,SCP0039_ValidationMaster.cs:520,같은 파일에서 호출,SCP0039_ValidationMaster.cs:46,

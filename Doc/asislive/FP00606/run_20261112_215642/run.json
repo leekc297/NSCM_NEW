@@ -1,0 +1,147 @@
+{
+ "id": "FP00606",
+ "started": "2026-11-12 21:56:42.377",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:56:42.714",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00606_PlanBy_Model_Electrode",
+   "form_text": "Plan by Model(Elec)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00606_PlanBy_Model_Electrode.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:56:48.404"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:56:52.853",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00606\\run_20261112_215642\\dump_load.json",
+   "control_count": 90,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 6.469s, UI : 0.005s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:56:52.858"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:56:53.022",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00606\\run_20261112_215642\\shots\\FP00606_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:56:53.145"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:56:53.650",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:56:54.066"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:57:25.598",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00606\\run_20261112_215642\\dump_find.json",
+   "control_count": 90,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:57:25.604"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:57:25.916",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00606\\run_20261112_215642\\shots\\FP00606_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:57:26.050"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:57:26.527",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:57:27.034"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 43,
+  "calls_with_params": 43
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00606_PlanBy_Model_Electrode",
+  "form_text": "Plan by Model(Elec)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00606_PlanBy_Model_Electrode.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 21:56:42.583",
+ "t_find": "2026-11-12 21:56:53.353",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 90,
+  "layout_items": 16,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 24,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 43,
+  "calls_screen": 43,
+  "calls_find": 16,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:57:27.475",
+ "exit": 0
+}

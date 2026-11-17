@@ -7,8 +7,8 @@ import com.lgcns.nscm.admin.menu.dto.GridColumn;
 import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+import com.lgcns.nscm.admin.menu.dto.TitleSetRetrieveRequest;
 import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
-import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
 
 public interface MenuService {
 
@@ -20,8 +20,7 @@ public interface MenuService {
 	List<SearchCondition> retrieveSearchCondition(String userId, String mnuId) throws Exception;
 	void saveSearchCondition(String userId, String mnuId, List<SearchCondition> searchConditions) throws Exception;
 	void resetSearchCondition(String userId, String mnuId) throws Exception;
-	List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetSearchRequest request) throws Exception;
-
 	List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception;
+	List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetRetrieveRequest request) throws Exception;
 
 }

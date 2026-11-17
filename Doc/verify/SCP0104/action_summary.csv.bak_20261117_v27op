@@ -1,0 +1,38 @@
+row_id,group,title,where,asis,tobe,gap,action
+V-8c0651f6,SAVE_ORA1840,저장 시 ORA-01840 오류,Line Assign 탭 ELTR 그리드 저장(Save F7),변경 없는 행, 빈 칸 행을 저장해도 오류 없이 저장됨,"기간 값이 모두 빈 행, 연도 칸(Y_2031)만 넣은 행, Lane Number 를 비운 행을 저장하면 '저장에 실패하였습니다.'(ORA-01840)",변경 행이 0건이면 Loss Plan 계산이 빈 버전으로 날짜 변환을 해 오류. 빈 칸이 있는 행은 저장 대상에서 빠짐,DB 보완 11-17 09:44, 09:47(PKG_SCP0104)
+V-f4309640,SAVE_ORA1840,,,,,,
+V-cc74e5aa,SAVE_ORA1840,,,,,,
+V-34ccc111,SAVE_ORA1840,,,,,,
+V-f5a0b46a,PLANT_SHOPGROUP,Plant 후보에 전극 외 Plant 표시,조회조건 Plant, Line Assign 탭 그리드 Plant 칸,Operation group = Electrode 일 때 Plant 후보는 SHOP_GROUP 'E' 인 Plant 만 표시(Div 81 기준 7건),Operation group = Electrode 일 때 SHOP_GROUP 조건이 없어 MI03 MI Michigan HP Auto Prod 1건이 더 보임(8건),Electrode 모드 Plant 후보 필터 누락. Cell, Module/Pack 모드는 7건 같음,FE 수정 대상(useCapaLineCascade.ts:145, DB MODE 라 가이드만)
+T-96d7cbbb,PLANT_SHOPGROUP,,,,,,
+V-73037cda,POPUP_CAPALINE,CAPA Line 찾기 팝업 조건 미전달,Line Assign 탭 ELTR, ASSEMBLY 그리드 Insert 뒤 Line 선택 팝업(CAPA Line),메인 조회조건 Site, Plant, Building, Line 선택값을 팝업 조건에 채우고 바로 조회,Division 만 넘기고 나머지 조건은 전체로 시작,팝업 첫 목록이 메인 조회조건으로 걸러지지 않음,FE 수정 대상(CapaLineModal, DB MODE 라 가이드만)
+V-e38e474a,POPUP_SOPMODEL,SOP 모델 찾기 팝업 조건 미전달,SOP 탭 SOP 그리드 New(모델 배정) 팝업,메인 조회조건 Site, Plant, Building, Line, Operation, Line Type 선택값을 팝업 조건에 채우고 바로 조회,Division, Version 만 넘김,팝업 첫 목록이 메인 조회조건으로 걸러지지 않음,FE 수정 대상(CapaLineAssignModelModal, 가이드만)
+T-79cc3699,POPUP_SOPMODEL,,,,,,
+T-f3de1469,ITEM_MULTI,품목 팝업 다중 선택 불가,Line Assign 탭 그리드 Nickname(ASSEMBLY), Model(ELTR) 칸 품목 팝업,팝업에서 여러 품목을 고르고 OK 하면 고른 수만큼 행이 추가됨,셀에서 연 품목 팝업은 1건만 고를 수 있고 현재 행에만 반영,다중 선택, 행 추가 동작 없음(DB 객체로 고칠 수 없는 화면 동작),FE 수정 대상(CapaLineAssign.tsx:900~907, 가이드만)
+T-2ad5be22,ITEM_MULTI,,,,,,
+T-9f1114a7,ITEM_MULTI,,,,,,
+T-25489c40,ITEM_DEFAULT,추가 행 품목 선택 뒤 기본값 미재설정,Line Assign 탭 그리드 Insert 행에서 품목 팝업 선택,품목을 고르면 기간 칸 1, Active Y 기본값을 다시 넣음,품목만 채우고 기존 입력값 유지,추가 행 품목 선택 시 기본값 재설정 없음,FE 수정 대상(가이드만)
+T-bc2f6848,LTYPE_DASH,Line Type 후보에서 '-' 빠짐,조회조건 Line Type(Cell 모드), Line Assign 탭 ASSEMBLY 그리드 Line Type 칸,"Line Type 후보에 '-' 포함. Operation A9000, AFFFF, P5500, P9500 은 '-' 1건만 고를 수 있음","'-' 를 후보에서 뺌. 조회조건 후보 10 → 9건, 그리드는 후보 0건이 되어 아무 값이나 입력됨",'-' 후보 제외로 값 제한이 풀림,FE 수정 대상(useCapaLineCascade.ts, capaLineAssign.gridCombos.ts:51, 가이드만)
+T-4ae38c68,LTYPE_DASH,,,,,,
+T-b943b4c9,LTYPE_DASH,,,,,,
+T-04e8f5c3,BUILDING_COMPANY,Building 후보 필터에 Company 누락,Line Assign 탭 그리드 Building 칸(Plant 가 빈 행),행의 Company 로 Building 후보를 거름,Division + Plant 로만 거름. Plant 가 빈 행은 다른 Company 의 Building 도 보임,Building 후보 필터 조건 1개 누락,FE 수정 대상(capaLineAssign.gridCombos.ts:130, 가이드만)
+T-0cb8d43f,BUILDING_COMPANY,,,,,,
+T-14b55da2,LINE_FILTER,Line 후보 필터, Dummy 라인 누락,Line Assign 탭 그리드 Line 칸,행의 Plant + Building 으로 거르고 DMY_ 라인을 목록 끝에 보여 줌,Division + Building 으로만 거르고 DMY_ 라인(43건)을 후보에서 뺌,Line 후보 조건과 DMY_ 처리 다름,FE 수정 대상(capaLineAssign.gridCombos.ts:46~55, 가이드만)
+T-2ea34689,LINE_FILTER,,,,,,
+T-261e9e8e,NAME_ORDER,명칭 콤보 후보 순서 다름,Line Assign 탭 그리드 Site Name, Company Name 칸,코드순 정렬 뒤 DMY_ 를 뒤로 보낸 순서로 명칭 후보 표시,명칭 후보 순서가 코드순과 다름,후보 순서 차이(값 집합은 같음),FE 수정 대상(가이드만)
+T-5b37f06a,NAME_ORDER,,,,,,
+T-228fc738,DUMMY_OUTLIST,목록 밖 이름으로 Dummy 코드 생성 불가,Line Assign 탭 그리드 Nickname(ASSEMBLY), Model(ELTR) 칸,목록에 없는 이름을 넣으면 DMY_ 코드를 만들어 받아 줌(Dummy=Y),셀 후보 목록(3,891건) 밖 값을 받지 않아 Dummy 코드 채번 호출 0건,목록 밖 입력 차단으로 Dummy 기능 동작 안 함,FE 수정 대상(DataMap isEditable, 가이드만)
+T-dacd5310,DUMMY_OUTLIST,,,,,,
+T-9f7a81a0,CASCADE_CLEAR,값 변경 없이 셀을 닫아도 하위 칸 지워짐,Line Assign 탭 그리드 Site, Company, Plant, Building, Line 칸,상위 칸 값이 바뀔 때만 하위 칸을 지움,F2 로 열고 Esc, Enter 로 닫기만 해도 Company~Line Name 8칸을 지움,값 변경 여부를 보지 않고 하위 칸을 지움,FE 수정 대상(cellEditEnded, 가이드만)
+T-6c0c417e,PASTE_HANDLER,붙여넣기 때 연관 칸 처리 안 됨,Line Assign 탭 ASSEMBLY, ELTR 그리드 코드 칸 붙여넣기(Ctrl+V),"붙여넣기에도 코드↔명칭 채우기, 하위 칸 지우기, Dummy 확인을 실행",붙여넣기 이벤트(pastedCell) 처리기가 없어 셀 편집 때만 실행,붙여넣기 경로 처리 누락(10개 검사 항목이 같은 원인),FE 수정 대상(CapaLineAssignGrid, 가이드만)
+T-582a484f,PASTE_HANDLER,,,,,,
+T-0f4fddcc,PASTE_HANDLER,,,,,,
+T-be980bcf,PASTE_HANDLER,,,,,,
+T-4cdf97a0,PASTE_HANDLER,,,,,,
+T-6568ea2a,PASTE_HANDLER,,,,,,
+T-b7342461,PASTE_HANDLER,,,,,,
+T-5b0f6337,PASTE_HANDLER,,,,,,
+T-2e69b5d7,PASTE_HANDLER,,,,,,
+T-ae45df34,PASTE_HANDLER,,,,,,
+T-750f3c40,UC02,수정 중 재조회 확인창 없음,화면 공통 조회(Search F5),데이터를 고친 상태에서 조회하면 확인창(MSG00703)을 띄움,확인창 없이 바로 재조회해 수정 내용이 사라짐,공통 기능 미구현,공통 FE 수정 대상(가이드만)
+T-dba78bc7,DIV_COMBO,새 행 Div 콤보 후보 없음,Line Assign 탭 그리드 Insert 행 Div 칸,새 행 Div 칸에서 고를 수 있는 목록이 나옴,목록이 비어 값을 고를 수 없음,내 Division 목록 콤보 미구현(D00-3-009),FE 수정 대상(가이드만)

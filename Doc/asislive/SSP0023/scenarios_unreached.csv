@@ -1,0 +1,17 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0023-S20f481,저장,GetErpIFCheck,SSP0023_ShipmentPlanElectrode.cs:4251,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:3900; SSP0023_ShipmentPlanElectrode.cs:4134,
+SSP0023-Sf834bb,조회,GetErpIFCheck,SSP0023_ShipmentPlanElectrode.cs:4266,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:3900; SSP0023_ShipmentPlanElectrode.cs:4134,
+SSP0023-S0801b6,조회,GetErpIFCheck,SSP0023_ShipmentPlanElectrode.cs:4273,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:3900; SSP0023_ShipmentPlanElectrode.cs:4134,
+SSP0023-Sc71a7e,조회,GetErpIFCheck,SSP0023_ShipmentPlanElectrode.cs:4278,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:3900; SSP0023_ShipmentPlanElectrode.cs:4134,
+SSP0023-Se42905,저장,GetErpIFCheckNew_,SSP0023_ShipmentPlanElectrode.cs:4195,호출 없음,,
+SSP0023-S56adab,조회,GetErpIFCheckNew_,SSP0023_ShipmentPlanElectrode.cs:4210,호출 없음,,
+SSP0023-Sb9aa4b,조회,GetErpIFCheckNew_,SSP0023_ShipmentPlanElectrode.cs:4217,호출 없음,,
+SSP0023-Sa92932,조회,GetErpIFCheckNew_,SSP0023_ShipmentPlanElectrode.cs:4222,호출 없음,,
+SSP0023-Saa0e5f,조회,GetNewERPInterface,SSP0023_ShipmentPlanElectrode.cs:3396,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:2699,
+SSP0023-Sd86cd7,조회,GetNewERPInterface,SSP0023_ShipmentPlanElectrode.cs:3406,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:2699,
+SSP0023-S80313d,조회,GetNewERPInterface,SSP0023_ShipmentPlanElectrode.cs:3415,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:2699,
+SSP0023-S7df84c,저장,NewNonSoNo,SSP0023_ShipmentPlanElectrode.cs:3645,같은 파일에서 호출,SSP0023_ShipmentPlanElectrode.cs:3434,GetNewERPInterface
+SSP0023-Sa443dc,기타,NewNonSoNo,SSP0023_ShipmentPlanElectrode.cs:3710,같은 파일에서 호출,SSP0023_ShipmentPlanElectrode.cs:3434,GetNewERPInterface
+SSP0023-S0ba413,기타,NewNonSoNo,SSP0023_ShipmentPlanElectrode.cs:3733,같은 파일에서 호출,SSP0023_ShipmentPlanElectrode.cs:3434,GetNewERPInterface
+SSP0023-Sf3e68d,기타,Set_Sum_Inventory,SSP0023_ShipmentPlanElectrode.cs:5097,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:4796,
+SSP0023-S03e600,기타,Set_Sum_Inventory,SSP0023_ShipmentPlanElectrode.cs:5133,주석 안에서만 호출,SSP0023_ShipmentPlanElectrode.cs:4796,

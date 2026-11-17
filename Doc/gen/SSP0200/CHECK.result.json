@@ -1,0 +1,61 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-12T05:53:33.011Z",
+ "producer": "check.js",
+ "id": "SSP0200",
+ "final": false,
+ "page": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 3,
+  "warn": 97
+ },
+ "issues": [
+  {
+   "id": "F01",
+   "class": "BLOCK",
+   "msg": "상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용",
+   "where": "components/ChangeRequestPlanSubGrid.tsx:8",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js F01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "F01",
+   "class": "BLOCK",
+   "msg": "상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용",
+   "where": "components/ShipmentChangeRequestPlanMainGrid.tsx:9",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js F01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "Validation 마커 누락 37/37: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) V-004(Lundefined) V-005(Lundefined) V-006(Lundefined) V-007(Lundefined) V-008(Lundefined)",
+   "where": "hooks/useShipmentChangeRequestPlanValidation.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

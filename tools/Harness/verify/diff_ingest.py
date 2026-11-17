@@ -4,7 +4,9 @@
 규칙 매핑은 tools/Harness/rules/diff_rule_map.csv (코드에 규칙 ID 를 적지 않는다): diff_item(KEYSET/VALUES/COLSET/ORDER) → rule_id · verdict_map(diff 판정 → 원장 결과)
 판정은 judge.py 가 한다 — 여기서는 eg_ingest.py 와 같이 원장 행 + e2e_results 항목만 만든다(evidence 에 3-증거: 기대 원천 ASIS:<sp> · 증거 경로 diff/*.md · 전제 = 호출 인자).
 """
-import csv, hashlib, json, os, sys
+import csv, hashlib, io, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import safe_io  # 2026-11-13 T284: 기존 파일 'w' 재열기 Errno 22(SCP0028 15:57) 대비 — safe_io(재시도 → r+b)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
@@ -47,6 +49,9 @@ def main():
             vm = dict(x.split('=', 1) for x in (m.get('verdict_map') or '').split(';') if '=' in x)
             item = m['diff_item']
             res = vm.get(v)
+            # 2026-11-16(SSP0020 UNSET 4행 미검증): 저장 SP(kind=SAVE)는 차등 검증이 실행하지 않는다(쓰기 금지) — 미검증이 아니라 대상 아님. 저장 동작은 저장 검사(F 계열·폼 저장형 시나리오)가 판정한다
+            save_skip = (v == 'SKIP' and str(s.get('note') or '').startswith('kind=SAVE'))
+            if save_skip: res = 'NA'
             if item == 'KEYSET' and v == 'PASS' and (str(s.get('asis_only') or '0') not in ('', '0') or str(s.get('tobe_only') or '0') not in ('', '0')):
                 res = vm.get('ASIS_ONLY', '판정필요')  # 사용자 결정 2026-11-06: 건수(단독행) 차이 = 판정필요
             if item == 'ORDER' and v == 'PASS':
@@ -68,19 +73,22 @@ def main():
             if 'precond' in fields: r['precond'] = json.dumps({'calls': 1, 'rows': s.get('tobe_rows') or 0, 'asis_rows': s.get('asis_rows') or 0, 'params': (s.get('params_tobe') or '')[:300]}, ensure_ascii=False)
             if 'applicable' in fields: r['applicable'] = 'Y'; r['applicable_why'] = '차등 검증 실행 행'
             rows.append(r)
-            out.append({'row_id': r['row_id'], 'result': res, 'evidence': (f"[{item}] " + base_ev)[:1500], 'tobe_ref': f"DB @diff {item}",
+            # 2026-11-16 CR-105(사용자 결정): 값·행 집합 차이는 DB 데이터 차이라 판정에서 뺀다 — 해당없음에 근거를 붙인다(근거 없는 해당없음 금지)
+            if save_skip: base_ev = '[저장 SP — 조회 결과 대조 대상 아님(쓰기 SP 실행 금지) · 저장 동작은 저장 검사에서 판정] ' + base_ev if not base_ev.startswith('[저장 SP') else base_ev
+            cr105 = '[CR-105] 값·행 집합 차이는 AS-IS DEV 와 사내 DB 데이터 차이 — 판정 제외(컬럼 집합·정렬·조건 로직으로 판정) · ' if (res == 'NA' and item in ('KEYSET', 'VALUES')) else ''
+            out.append({'row_id': r['row_id'], 'result': res, 'evidence': (f"[{item}] " + cr105 + base_ev)[:1500], 'tobe_ref': f"DB @diff {item}",
                         'mctx': {'calls': 1, 'rows': int(s.get('tobe_rows') or 0) if str(s.get('tobe_rows') or '').isdigit() else 0, 'req': 0},
                         'expect_src': f"ASIS:{sp}", 'evidence_ref': s.get('md', ''), 'precond': {'params': (s.get('params_tobe') or '')[:300]}})
-    with open(lp, 'w', encoding='utf-8-sig', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    _buf = io.StringIO(newline='')
+    w = csv.DictWriter(_buf, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    safe_io.write_text(lp, _buf.getvalue(), 'utf-8-sig', log=print)
     ej = os.path.join(vd, 'e2e_results.json')
     try:
-        with open(ej, encoding='utf-8') as f: prev = json.load(f)
-    except (OSError, ValueError):
+        prev = safe_io.read_json_list(ej)  # 없으면 [] · 있는데 못 읽으면 예외(못 읽은 채 덮어써 E2E 판정을 지우지 않는다)
+    except ValueError:
         prev = []
     keep = [e for e in prev if not str(e.get('row_id', '')).startswith('AD-')]
-    with open(ej, 'w', encoding='utf-8') as f:
-        json.dump(keep + out, f, ensure_ascii=False, indent=1)
+    safe_io.write_text(ej, json.dumps(keep + out, ensure_ascii=False, indent=1).replace('\n', os.linesep), 'utf-8', log=print)
     cnt = {}
     for o in out: cnt[o['result']] = cnt.get(o['result'], 0) + 1
     print(f"[diff_ingest] {mid}: diff 요약 {len(summ)}행 → 원장 ASIS_DIFF {len(out)}행(" + ' · '.join(f'{k} {v}' for k, v in sorted(cnt.items())) + f") · e2e_results 반입 {len(out)} (judge.py 가 판정)")

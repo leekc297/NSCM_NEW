@@ -13,6 +13,9 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData | 198 | SystemManager.UP_FX_GetMessageInfoSearchList | MATCH | SP UP_FX_GetMessageInfoSeachList |
 | button:SaveButton | SaveButton > SaveData > FindData | 198 | SystemManager.UP_FX_GetMessageInfoSearchList | MATCH | SP UP_FX_GetMessageInfoSeachList |
+| button:SaveButton | SaveButton > SaveData | 289 | SystemManager.UP_FX_SaveMessageInfo | MATCH | SP UP_FX_SaveMessageInfo |
+| button:SaveButton | SaveButton > SaveData | 290 | SystemManager.UP_FX_DeleteMessageInfo | MATCH | SP UP_FX_DeleteMessageInfo |
+| button:SaveButton | SaveButton > SaveData | 291 | SystemManager.UP_FX_SaveMessageInfo | MATCH | SP UP_FX_SaveMessageInfo |
 | event:this.Load | Form_Load > InitControl | 114 | biz:CommonData.BaseCode [baseCode=0201000] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | <field:dtMessageType> | 44 | biz:CommonData.BaseCode [baseCode=0201000] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | <field:dtMessageButton> | 45 | biz:CommonData.BaseCode [baseCode=0202000] | BIZ_MATCH |  |
@@ -24,7 +27,9 @@
 | biz:CommonData.BaseCode [baseCode=0201000] | BIZ_MATCH | 2 |  |  |  |
 | biz:CommonData.BaseCode [baseCode=0202000] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteMessageInfo | MATCH | 1 | SP UP_FX_DeleteMessageInfo | EXEC:UP_FX_DELETEMESSAGEINFO, DELETE:TB_FX_MESSAGEINFO |  |
 | SystemManager.UP_FX_GetMessageInfoSearchList | MATCH | 1 | SP UP_FX_GetMessageInfoSeachList | EXEC:UP_FX_GETMESSAGEINFOSEACHLIST, SELECT:TB_FX_MESSAGEINFO |  |
+| SystemManager.UP_FX_SaveMessageInfo | MATCH | 2 | SP UP_FX_SaveMessageInfo | EXEC:UP_FX_SAVEMESSAGEINFO, MERGE:TB_FX_MESSAGEINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

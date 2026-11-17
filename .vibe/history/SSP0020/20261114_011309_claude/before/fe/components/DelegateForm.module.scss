@@ -1,0 +1,12 @@
+// Period From~To 날짜 2개 + 구분자 가로 배치 (drpPeriod 재현).
+.periodWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.periodSeparator {
+  flex: 0 0 auto;
+  padding: 0 2px;
+}

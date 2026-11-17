@@ -39,346 +39,352 @@ Received: 1
           - /url: /view/SCP0084
         - link "Shipping" [ref=f3e13] [cursor=pointer]:
           - /url: /view/SCP0084
-        - link "Authority" [ref=f3e14] [cursor=pointer]:
+        - link "Report" [ref=f3e14] [cursor=pointer]:
           - /url: /view/SCP0084
-        - link "Admin" [ref=f3e15] [cursor=pointer]:
+        - link "Authority" [ref=f3e15] [cursor=pointer]:
           - /url: /view/SCP0084
-      - generic [ref=f3e16]:
-        - button "KOR" [ref=f3e18] [cursor=pointer]
-        - button "이 이민용" [ref=f3e22] [cursor=pointer]:
-          - paragraph [ref=f3e27]: 이
-          - generic [ref=f3e28]: 이민용
-    - generic [ref=f3e29]:
-      - button [ref=f3e30] [cursor=pointer]
-      - complementary [ref=f3e36]:
-        - navigation [ref=f3e37]:
-          - paragraph [ref=f3e38]: Supply
-          - generic [ref=f3e39]:
-            - link [ref=f3e40] [cursor=pointer]:
+        - link "Admin" [ref=f3e16] [cursor=pointer]:
+          - /url: /view/SCP0084
+      - generic [ref=f3e17]:
+        - button "KOR" [ref=f3e19] [cursor=pointer]
+        - button "이 이민용" [ref=f3e23] [cursor=pointer]:
+          - paragraph [ref=f3e28]: 이
+          - generic [ref=f3e29]: 이민용
+    - generic [ref=f3e30]:
+      - button [ref=f3e31] [cursor=pointer]
+      - complementary [ref=f3e37]:
+        - navigation [ref=f3e38]:
+          - paragraph [ref=f3e39]: Supply
+          - generic [ref=f3e40]:
+            - link [ref=f3e41] [cursor=pointer]:
               - /url: /view/SCP0084
-              - paragraph [ref=f3e41]: Supply Master
+              - paragraph [ref=f3e42]: Supply Master
             - link "Line Master":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e44] [cursor=pointer]: Line Master
+              - paragraph [ref=f3e45] [cursor=pointer]: Line Master
             - link "Project Route":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e45] [cursor=pointer]: Project Route
+              - paragraph [ref=f3e46] [cursor=pointer]: Project Route
             - link "BOD":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e46] [cursor=pointer]: BOD
+              - paragraph [ref=f3e47] [cursor=pointer]: BOD
             - link "Plant Site":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e47] [cursor=pointer]: Plant Site
+              - paragraph [ref=f3e48] [cursor=pointer]: Plant Site
             - link "Production Plan":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e48] [cursor=pointer]: Production Plan
+              - paragraph [ref=f3e49] [cursor=pointer]: Production Plan
             - link "Work Calendar(OSP)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e49] [cursor=pointer]: Work Calendar(OSP)
+              - paragraph [ref=f3e50] [cursor=pointer]: Work Calendar(OSP)
             - link "Tact Time(OSP)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e50] [cursor=pointer]: Tact Time(OSP)
+              - paragraph [ref=f3e51] [cursor=pointer]: Tact Time(OSP)
             - link "Formation":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e51] [cursor=pointer]: Formation
+              - paragraph [ref=f3e52] [cursor=pointer]: Formation
             - link "Outsourcing Capacity":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e52] [cursor=pointer]: Outsourcing Capacity
+              - paragraph [ref=f3e53] [cursor=pointer]: Outsourcing Capacity
             - link "BOD ITEM":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e53] [cursor=pointer]: BOD ITEM
+              - paragraph [ref=f3e54] [cursor=pointer]: BOD ITEM
             - link "Master Validation":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e54] [cursor=pointer]: Master Validation
+              - paragraph [ref=f3e55] [cursor=pointer]: Master Validation
             - link "Stock OSP":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e55] [cursor=pointer]: Stock OSP
+              - paragraph [ref=f3e56] [cursor=pointer]: Stock OSP
             - link "ProjectRoute(Electrode)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e56] [cursor=pointer]: ProjectRoute(Electrode)
+              - paragraph [ref=f3e57] [cursor=pointer]: ProjectRoute(Electrode)
             - link "ProjectRoute(Warranty)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e57] [cursor=pointer]: ProjectRoute(Warranty)
+              - paragraph [ref=f3e58] [cursor=pointer]: ProjectRoute(Warranty)
             - link "CAPA":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e58] [cursor=pointer]: CAPA
+              - paragraph [ref=f3e59] [cursor=pointer]: CAPA
             - link "SCP BOM (Cell~Pack)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e59] [cursor=pointer]: SCP BOM (Cell~Pack)
+              - paragraph [ref=f3e60] [cursor=pointer]: SCP BOM (Cell~Pack)
             - link "Model Code Master":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e60] [cursor=pointer]: Model Code Master
+              - paragraph [ref=f3e61] [cursor=pointer]: Model Code Master
             - link "MDM Class Master":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e61] [cursor=pointer]: MDM Class Master
+              - paragraph [ref=f3e62] [cursor=pointer]: MDM Class Master
             - link "Shipment Working Day(OSP)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e62] [cursor=pointer]: Shipment Working Day(OSP)
+              - paragraph [ref=f3e63] [cursor=pointer]: Shipment Working Day(OSP)
             - link "SCP BOM(Elec)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e63] [cursor=pointer]: SCP BOM(Elec)
+              - paragraph [ref=f3e64] [cursor=pointer]: SCP BOM(Elec)
             - link "CAPA (Mobility IT)":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e64] [cursor=pointer]: CAPA (Mobility IT)
-            - link "Line Assign":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e65] [cursor=pointer]: Line Assign
-            - link "Speed Plan":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e66] [cursor=pointer]: Speed Plan
-            - link "Loss Plan":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e67] [cursor=pointer]: Loss Plan
-            - link "TEEP Report":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e68] [cursor=pointer]: TEEP Report
-            - link "LOB Report":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e69] [cursor=pointer]: LOB Report
+              - paragraph [ref=f3e65] [cursor=pointer]: CAPA (Mobility IT)
             - link "Demand Group Master":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e70] [cursor=pointer]: Demand Group Master
-            - link "CAPA LineMaster":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e71] [cursor=pointer]: CAPA LineMaster
+              - paragraph [ref=f3e66] [cursor=pointer]: Demand Group Master
             - link "Operation LT":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e72] [cursor=pointer]: Operation LT
-          - generic [ref=f3e73]:
-            - link [ref=f3e74] [cursor=pointer]:
+              - paragraph [ref=f3e67] [cursor=pointer]: Operation LT
+          - generic [ref=f3e68]:
+            - link [ref=f3e69] [cursor=pointer]:
               - /url: /view/SCP0084
-              - paragraph [ref=f3e75]: Supply Plan
+              - paragraph [ref=f3e70]: Supply Plan
             - link "Plan Management":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e78] [cursor=pointer]: Plan Management
+              - paragraph [ref=f3e73] [cursor=pointer]: Plan Management
             - link "Shipment Plan FG":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e79] [cursor=pointer]: Shipment Plan FG
+              - paragraph [ref=f3e74] [cursor=pointer]: Shipment Plan FG
             - link "Shipment Plan SEMI":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e80] [cursor=pointer]: Shipment Plan SEMI
+              - paragraph [ref=f3e75] [cursor=pointer]: Shipment Plan SEMI
             - link "Production Plan Line":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e81] [cursor=pointer]: Production Plan Line
+              - paragraph [ref=f3e76] [cursor=pointer]: Production Plan Line
             - link "Production Plan Fix":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e82] [cursor=pointer]: Production Plan Fix
+              - paragraph [ref=f3e77] [cursor=pointer]: Production Plan Fix
             - link "Shipment Plan Fix":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e83] [cursor=pointer]: Shipment Plan Fix
+              - paragraph [ref=f3e78] [cursor=pointer]: Shipment Plan Fix
             - link "Global PSI":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e84] [cursor=pointer]: Global PSI
+              - paragraph [ref=f3e79] [cursor=pointer]: Global PSI
             - link "Global PSI Elec":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e85] [cursor=pointer]: Global PSI Elec
+              - paragraph [ref=f3e80] [cursor=pointer]: Global PSI Elec
             - link "Global PSI New":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e86] [cursor=pointer]: Global PSI New
+              - paragraph [ref=f3e81] [cursor=pointer]: Global PSI New
             - link "Integration PSI":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e87] [cursor=pointer]: Integration PSI
-          - generic [ref=f3e88]:
-            - link [ref=f3e89] [cursor=pointer]:
+              - paragraph [ref=f3e82] [cursor=pointer]: Integration PSI
+          - generic [ref=f3e83]:
+            - link [ref=f3e84] [cursor=pointer]:
               - /url: /view/SCP0084
-              - paragraph [ref=f3e90]: Waterfall
-            - link "Shipment Plan FG Waterfall":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e93] [cursor=pointer]: Shipment Plan FG Waterfall
-            - link "Production Plan Waterfall":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e94] [cursor=pointer]: Production Plan Waterfall
-            - link "Shipment Plan Semi Waterfall":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e95] [cursor=pointer]: Shipment Plan Semi Waterfall
-          - generic [ref=f3e96]:
-            - link [ref=f3e97] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e98]: OPT Plan
-            - link "Plan Control":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e101] [cursor=pointer]: Plan Control
-            - link "OPT CAPA":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e102] [cursor=pointer]: OPT CAPA
-            - link "Workbench":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e103] [cursor=pointer]: Workbench
-            - link "Constraint Mgmt":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e104] [cursor=pointer]: Constraint Mgmt
-            - link "Plan Group Master":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e105] [cursor=pointer]: Plan Group Master
-            - link "Plan Activity Mgmt":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e106] [cursor=pointer]: Plan Activity Mgmt
-            - link "Plan Group Dashboard":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e107] [cursor=pointer]: Plan Group Dashboard
-            - link "Precede/Safety Stock Day":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e108] [cursor=pointer]: Precede/Safety Stock Day
-            - link "Precede/Safety Stock Qty":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e109] [cursor=pointer]: Precede/Safety Stock Qty
-            - link "Demand Exception":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e110] [cursor=pointer]: Demand Exception
-            - link "Scheduled Receipt Information":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e111] [cursor=pointer]: Scheduled Receipt Information
-            - link "Sales Site Priority":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e112] [cursor=pointer]: Sales Site Priority
-            - link "Constraint Of Shipment Qty":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e113] [cursor=pointer]: Constraint Of Shipment Qty
-            - link "Warehouse Capacity":
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e114] [cursor=pointer]: Warehouse Capacity
-          - generic [ref=f3e115]:
-            - link [ref=f3e116] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e117]: SCM Supply
-            - link [ref=f3e120] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e121]: Shipment(Allo) Report
-            - link [ref=f3e122] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e123]: Long-term stock
-            - link [ref=f3e124] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e125]: Ending Inventory
-            - link [ref=f3e126] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e127]: Inventory Trend
-          - generic [ref=f3e128]:
-            - link [ref=f3e129] [cursor=pointer]:
-              - /url: /view/SCP0084
-              - paragraph [ref=f3e130]: Validation
+              - paragraph [ref=f3e85]: Validation
             - link "Intransit Inventory":
               - /url: /view/SCP0084
-              - paragraph [ref=f3e133] [cursor=pointer]: Intransit Inventory
-      - main [ref=f3e134]:
-        - generic [ref=f3e136]:
-          - generic [ref=f3e137]:
-            - generic [ref=f3e138]:
-              - button "Home" [ref=f3e139] [cursor=pointer]
-              - button "Long-term stock" [ref=f3e141] [cursor=pointer]
-            - generic [ref=f3e146]:
-              - button "Scroll tabs left" [disabled] [ref=f3e147]
-              - button "Scroll tabs right" [disabled] [ref=f3e150]
-              - button "Close others" [ref=f3e153] [cursor=pointer]
-              - button "Close All" [ref=f3e154] [cursor=pointer]
-          - generic [ref=f3e155]:
-            - generic [ref=f3e158]:
-              - generic [ref=f3e160]:
-                - generic [ref=f3e161]:
-                  - img [aria-hidden] [ref=f3e163] [cursor=pointer]
-                  - paragraph [ref=f3e166]: Long-term stock
+              - paragraph [ref=f3e88] [cursor=pointer]: Intransit Inventory
+          - generic [ref=f3e89]:
+            - link [ref=f3e90] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e91]: Capa Plan
+            - link "CAPA LineMaster":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e94] [cursor=pointer]: CAPA LineMaster
+            - link "Line Assign":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e95] [cursor=pointer]: Line Assign
+            - link "Speed Plan":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e96] [cursor=pointer]: Speed Plan
+            - link "Loss Plan":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e97] [cursor=pointer]: Loss Plan
+            - link "LOB Report":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e98] [cursor=pointer]: LOB Report
+            - link "TEEP Report":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e99] [cursor=pointer]: TEEP Report
+          - generic [ref=f3e100]:
+            - link [ref=f3e101] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e102]: OPT Plan
+            - link "Plan Control":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e105] [cursor=pointer]: Plan Control
+            - link "OPT CAPA":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e106] [cursor=pointer]: OPT CAPA
+            - link "Workbench":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e107] [cursor=pointer]: Workbench
+            - link "Constraint Mgmt":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e108] [cursor=pointer]: Constraint Mgmt
+            - link "Plan Group Master":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e109] [cursor=pointer]: Plan Group Master
+            - link "Plan Activity Mgmt":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e110] [cursor=pointer]: Plan Activity Mgmt
+            - link "Plan Group Dashboard":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e111] [cursor=pointer]: Plan Group Dashboard
+            - link "Precede/Safety Stock Day":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e112] [cursor=pointer]: Precede/Safety Stock Day
+            - link "Precede/Safety Stock Qty":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e113] [cursor=pointer]: Precede/Safety Stock Qty
+            - link "Demand Exception":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e114] [cursor=pointer]: Demand Exception
+            - link "Scheduled Receipt Information":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e115] [cursor=pointer]: Scheduled Receipt Information
+            - link "Sales Site Priority":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e116] [cursor=pointer]: Sales Site Priority
+            - link "Constraint Of Shipment Qty":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e117] [cursor=pointer]: Constraint Of Shipment Qty
+            - link "Warehouse Capacity":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e118] [cursor=pointer]: Warehouse Capacity
+          - generic [ref=f3e119]:
+            - link [ref=f3e120] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e121]: Waterfall
+            - link "Shipment Plan FG Waterfall":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e124] [cursor=pointer]: Shipment Plan FG Waterfall
+            - link "Production Plan Waterfall":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e125] [cursor=pointer]: Production Plan Waterfall
+            - link "Shipment Plan Semi Waterfall":
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e126] [cursor=pointer]: Shipment Plan Semi Waterfall
+          - generic [ref=f3e127]:
+            - link [ref=f3e128] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e129]: SCM Supply
+            - link [ref=f3e132] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e133]: Shipment(Allo) Report
+            - link [ref=f3e134] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e135]: Long-term stock
+            - link [ref=f3e136] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e137]: Ending Inventory
+            - link [ref=f3e138] [cursor=pointer]:
+              - /url: /view/SCP0084
+              - paragraph [ref=f3e139]: Inventory Trend
+      - main [ref=f3e140]:
+        - generic [ref=f3e142]:
+          - generic [ref=f3e143]:
+            - generic [ref=f3e144]:
+              - button "Home" [ref=f3e145] [cursor=pointer]
+              - button "Long-term stock" [ref=f3e147] [cursor=pointer]
+            - generic [ref=f3e152]:
+              - button "Scroll tabs left" [disabled] [ref=f3e153]
+              - button "Scroll tabs right" [disabled] [ref=f3e156]
+              - button "Close others" [ref=f3e159] [cursor=pointer]
+              - button "Close All" [ref=f3e160] [cursor=pointer]
+          - generic [ref=f3e161]:
+            - generic [ref=f3e164]:
+              - generic [ref=f3e166]:
                 - generic [ref=f3e167]:
-                  - generic [ref=f3e168]: Supply
-                  - generic [ref=f3e173]: SCM Supply
-                  - generic [ref=f3e178]: Long-term stock
-                - generic [ref=f3e180]:
-                  - generic [ref=f3e181]: Search Area
-                  - switch [checked] [active] [ref=f3e184] [cursor=pointer]
-                - button "Full screen" [ref=f3e187] [cursor=pointer]
-              - generic [ref=f3e197]:
-                - generic [ref=f3e198]:
-                  - generic [ref=f3e200]:
-                    - generic [ref=f3e201]: Month
-                    - generic [ref=f3e206]:
-                      - button "calendar" [ref=f3e207] [cursor=pointer]
-                      - textbox "YYYY.MM" [ref=f3e218]: "2026.09"
-                  - generic [ref=f3e220]:
-                    - generic [ref=f3e221]: Div
-                    - generic [ref=f3e229] [cursor=pointer]:
-                      - generic "40 Mobility & IT Battery" [ref=f3e230]:
-                        - paragraph [ref=f3e234]: 40 Mobility & IT Battery
+                  - img [aria-hidden] [ref=f3e169] [cursor=pointer]
+                  - paragraph [ref=f3e172]: Long-term stock
+                - generic [ref=f3e173]:
+                  - generic [ref=f3e174]: Supply
+                  - generic [ref=f3e179]: SCM Supply
+                  - generic [ref=f3e184]: Long-term stock
+                - generic [ref=f3e186]:
+                  - generic [ref=f3e187]: Search Area
+                  - switch [checked] [active] [ref=f3e190] [cursor=pointer]
+                - button "Full screen" [ref=f3e193] [cursor=pointer]
+              - generic [ref=f3e203]:
+                - generic [ref=f3e204]:
+                  - generic [ref=f3e206]:
+                    - generic [ref=f3e207]: Month
+                    - generic [ref=f3e212]:
+                      - button "calendar" [ref=f3e213] [cursor=pointer]
+                      - textbox "YYYY.MM" [ref=f3e224]: "2026.09"
+                  - generic [ref=f3e226]:
+                    - generic [ref=f3e227]: Div
+                    - generic [ref=f3e235] [cursor=pointer]:
+                      - generic "40 Mobility & IT Battery" [ref=f3e236]:
+                        - paragraph [ref=f3e240]: 40 Mobility & IT Battery
                       - combobox
-                      - button "Open" [ref=f3e240]
+                      - button "Open" [ref=f3e246]
                       - group [aria-hidden]
-                  - generic [ref=f3e245]:
-                    - generic [ref=f3e246]: Plant
-                    - generic [ref=f3e254] [cursor=pointer]:
-                      - combobox "ALL" [ref=f3e255]
-                      - button "Open" [ref=f3e257]
+                  - generic [ref=f3e251]:
+                    - generic [ref=f3e252]: Plant
+                    - generic [ref=f3e260] [cursor=pointer]:
+                      - combobox "ALL" [ref=f3e261]
+                      - button "Open" [ref=f3e263]
                       - group [aria-hidden]
-                  - generic [ref=f3e262]:
-                    - generic [ref=f3e263]: Long Term Type
-                    - generic [ref=f3e271] [cursor=pointer]:
-                      - combobox "ALL" [ref=f3e272]
-                      - button "Open" [ref=f3e274]
+                  - generic [ref=f3e268]:
+                    - generic [ref=f3e269]: Long Term Type
+                    - generic [ref=f3e277] [cursor=pointer]:
+                      - combobox "ALL" [ref=f3e278]
+                      - button "Open" [ref=f3e280]
                       - group [aria-hidden]
-                - button [ref=f3e279] [cursor=pointer]
-              - generic [ref=f3e284]:
+                - button [ref=f3e285] [cursor=pointer]
+              - generic [ref=f3e290]:
                 - generic:
                   - paragraph
-                - generic [ref=f3e285]:
-                  - generic "Save" [ref=f3e286]:
-                    - button [ref=f3e287] [cursor=pointer]
-                  - generic "Sort" [ref=f3e291]:
-                    - button [ref=f3e292] [cursor=pointer]
-                  - generic "Filter" [ref=f3e297]:
+                - generic [ref=f3e291]:
+                  - generic "Save" [ref=f3e292]:
+                    - button [ref=f3e293] [cursor=pointer]
+                  - generic "Sort" [ref=f3e297]:
                     - button [ref=f3e298] [cursor=pointer]
-                  - generic "Condition" [ref=f3e303]:
+                  - generic "Filter" [ref=f3e303]:
                     - button [ref=f3e304] [cursor=pointer]
-                  - generic "Reset Condition" [ref=f3e314]:
-                    - button [ref=f3e315] [cursor=pointer]
-                  - generic "Excel" [ref=f3e322]:
-                    - button [ref=f3e323] [cursor=pointer]
-              - generic [ref=f3e331]:
-                - grid [ref=f3e332]:
-                  - rowgroup [ref=f3e333]:
+                  - generic "Condition" [ref=f3e309]:
+                    - button [ref=f3e310] [cursor=pointer]
+                  - generic "Reset Condition" [ref=f3e320]:
+                    - button [ref=f3e321] [cursor=pointer]
+                  - generic "Excel" [ref=f3e328]:
+                    - button [ref=f3e329] [cursor=pointer]
+              - generic [ref=f3e337]:
+                - grid [ref=f3e338]:
+                  - rowgroup [ref=f3e339]:
                     - generic:
                       - row "YY.MM DIV Plant Site Plant Material Description Unit Long term Type Item Type Process Group Material Group GPLM Cell Model MDM Project Nick name Extra Spec GPLM Cell Conversion factor MDM class_Lv1 No":
-                        - columnheader "YY.MM" [ref=f3e334]
-                        - columnheader "DIV" [ref=f3e335]
-                        - columnheader "Plant Site" [ref=f3e336]
-                        - columnheader "Plant" [ref=f3e337]
-                        - columnheader "Material" [ref=f3e338]
-                        - columnheader "Description" [ref=f3e339]
-                        - columnheader "Unit" [ref=f3e340]
-                        - columnheader "Long term Type" [ref=f3e341]
-                        - columnheader "Item Type" [ref=f3e342]
-                        - columnheader "Process Group" [ref=f3e343]
-                        - columnheader "Material Group" [ref=f3e344]
-                        - columnheader "GPLM Cell Model" [ref=f3e345]
-                        - columnheader "MDM Project Nick name" [ref=f3e346]
-                        - columnheader "Extra Spec" [ref=f3e347]
-                        - columnheader "GPLM Cell Conversion factor" [ref=f3e348]
-                        - columnheader "MDM class_Lv1" [ref=f3e349]
-                        - gridcell "No" [ref=f3e350]
-                        - gridcell [ref=f3e351]
-                  - rowgroup [ref=f3e352]:
+                        - columnheader "YY.MM" [ref=f3e340]
+                        - columnheader "DIV" [ref=f3e341]
+                        - columnheader "Plant Site" [ref=f3e342]
+                        - columnheader "Plant" [ref=f3e343]
+                        - columnheader "Material" [ref=f3e344]
+                        - columnheader "Description" [ref=f3e345]
+                        - columnheader "Unit" [ref=f3e346]
+                        - columnheader "Long term Type" [ref=f3e347]
+                        - columnheader "Item Type" [ref=f3e348]
+                        - columnheader "Process Group" [ref=f3e349]
+                        - columnheader "Material Group" [ref=f3e350]
+                        - columnheader "GPLM Cell Model" [ref=f3e351]
+                        - columnheader "MDM Project Nick name" [ref=f3e352]
+                        - columnheader "Extra Spec" [ref=f3e353]
+                        - columnheader "GPLM Cell Conversion factor" [ref=f3e354]
+                        - columnheader "MDM class_Lv1" [ref=f3e355]
+                        - gridcell "No" [ref=f3e356]
+                        - gridcell [ref=f3e357]
+                  - rowgroup [ref=f3e358]:
                     - row "Focus helper":
-                      - gridcell "Focus helper" [ref=f3e354]
-                  - generic [ref=f3e356]:
+                      - gridcell "Focus helper" [ref=f3e360]
+                  - generic [ref=f3e362]:
                     - generic:
                       - row "No"
-                - generic [ref=f3e357]:
+                - generic [ref=f3e363]:
                   - status
-                  - generic [ref=f3e358]: "0"
+                  - generic [ref=f3e364]: "0"
                 - generic:
-                  - spinbutton "InputNumber Input" [ref=f3e362]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e366]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e370]: "0.0000000"
-                  - spinbutton "InputNumber Input" [ref=f3e374]: "0.00"
-                  - spinbutton "InputNumber Input" [ref=f3e378]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e382]: "0.00"
-                  - spinbutton "InputNumber Input" [ref=f3e386]: "0.0000000"
-                  - spinbutton "InputNumber Input" [ref=f3e390]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e394]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e398]: "0.0000000"
-                  - spinbutton "InputNumber Input" [ref=f3e402]: "0.00"
-                  - spinbutton "InputNumber Input" [ref=f3e406]: "0"
-                  - spinbutton "InputNumber Input" [ref=f3e410]: "0.00"
-                  - spinbutton "InputNumber Input" [ref=f3e414]: "0.0000000"
-            - alert [ref=f3e415]:
-              - generic [ref=f3e416] [cursor=pointer]
-  - link "Wijmo Evaluation Version (5.20252.44)" [ref=f3e419] [cursor=pointer]:
+                  - spinbutton "InputNumber Input" [ref=f3e368]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e372]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e376]: "0.0000000"
+                  - spinbutton "InputNumber Input" [ref=f3e380]: "0.00"
+                  - spinbutton "InputNumber Input" [ref=f3e384]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e388]: "0.00"
+                  - spinbutton "InputNumber Input" [ref=f3e392]: "0.0000000"
+                  - spinbutton "InputNumber Input" [ref=f3e396]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e400]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e404]: "0.0000000"
+                  - spinbutton "InputNumber Input" [ref=f3e408]: "0.00"
+                  - spinbutton "InputNumber Input" [ref=f3e412]: "0"
+                  - spinbutton "InputNumber Input" [ref=f3e416]: "0.00"
+                  - spinbutton "InputNumber Input" [ref=f3e420]: "0.0000000"
+            - alert [ref=f3e421]:
+              - generic [ref=f3e422] [cursor=pointer]
+  - link "Wijmo Evaluation Version (5.20252.44)" [ref=f3e425] [cursor=pointer]:
     - /url: https://developer.mescius.com/licensing/wijmo?utm_source=Wijmo-In-App&utm_medium=Click-to-Site&utm_campaign=Wijmo-User-Analysis
 ```
 

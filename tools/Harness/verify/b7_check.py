@@ -36,7 +36,7 @@ def read_csv(p):
 
 def src_tables(cx, sp, code):
     """콤보 원천이 읽는 테이블 — UP_FX_* 는 @Code 분기 본문, 전용 SP 는 원문 전체"""
-    if sp in ('STATIC', '') or sp.startswith('DM_BIGFILTER'):
+    if sp in ('STATIC', '') or sp.startswith(('DM_BIGFILTER', 'SSP_BIGFILTER')):
         return None, ('고정 목록' if sp == 'STATIC' else '원천 SP 없음/BigFilter')
     if code and sp.upper().startswith('UP_FX_'):
         sql = co.branch_sql(type('A', (), {'cx': cx})(), sp, code)

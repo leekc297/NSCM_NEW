@@ -1,0 +1,363 @@
+{
+ "id": "SCP0019",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      65,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      18,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0019-S6820d8",
+    "SCP0019-Sdb45a9",
+    "SCP0019-S25d5d7",
+    "SCP0019-S8965a4"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      65,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      18,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0019-S6820d8",
+    "SCP0019-Sdb45a9",
+    "SCP0019-S25d5d7",
+    "SCP0019-S8965a4"
+   ]
+  },
+  {
+   "control": "clbOperation",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 8개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:Assembly",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      65,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(panel1)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "clbLine(chkAll)",
+     "before": [
+      "ALL",
+      null,
+      null,
+      false,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "txtTextKeyin",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    }
+   ],
+   "scenarios": [
+    "SCP0019-Sdb45a9"
+   ]
+  },
+  {
+   "control": "clbPlantSite",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 1개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:CS-ENERTECH_PACK",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      65,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(panel1)",
+     "before": [],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(chkAll)",
+     "before": [],
+     "after": [
+      "ALL",
+      null,
+      null,
+      false,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtTextKeyin",
+     "before": [],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "A3000"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbOperation(cbo)",
+     "before": [
+      "Assembly",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation(clb)",
+     "before": [
+      "",
+      8,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      8,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0019-S6820d8",
+    "SCP0019-Sdb45a9",
+    "SCP0019-S25d5d7"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "ClbBuilding",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "cboBucketType",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 8
+  }
+ ],
+ "at": "2026-11-13 18:36:59"
+}

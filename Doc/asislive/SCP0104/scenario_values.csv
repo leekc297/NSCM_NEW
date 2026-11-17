@@ -1,0 +1,13 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0104-S7c4aff,DIVISION,,,,값 미도출,if ((colIdxName == colIdx_SITE_NAME) || (colIdxName == colIdx_COMPANY_NAME) || (colIdxName == colIdx_PLANT_NAME) || (colIdxN…) ▸ else of (colIdxName == colIdx_SITE_NAME) ▸ else of (colIdxName == colIdx_COMPANY_NAME) ▸ if (colIdxName == colI,
+SCP0104-S32c7a3,DIVISION,,,,값 미도출,if ((colIdxName == colIdx_SITE_NAME) || (colIdxName == colIdx_COMPANY_NAME) || (colIdxName == colIdx_PLANT_NAME) || (colIdxN…) ▸ else of (colIdxName == colIdx_SITE_NAME) ▸ else of (colIdxName == colIdx_COMPANY_NAME) ▸ if (colIdxName == colI,
+SCP0104-Sde7843,DIVISION,,,,값 미도출,if (_division_type == 0),
+SCP0104-S29756e,DIVISION,,,,값 미도출,if (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0104-S7c9ef3,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0104-Sc2a20b,DIVISION,,,,값 미도출,if (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.CELL),
+SCP0104-S0eab06,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.CELL),
+SCP0104-Sd8fa4a,DIVISION,,,,값 미도출,if (_division_type == DivisionType.ELTR),
+SCP0104-Sbd8fe2,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.ELTR),
+SCP0104-Sd0fb8a,DIVISION,,,,값 미도출,if (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0104-S619dc3,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0104-Sd49fd3,COND,,,,값 미도출,"if (dtProgressStatus.Rows.Count > 0) ▸ if (dtProgressStatus.Rows[0][""PROG_STAT""].ToString().Equals(""-""))",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

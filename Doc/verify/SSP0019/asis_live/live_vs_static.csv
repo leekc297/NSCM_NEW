@@ -1,0 +1,43 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SELECT,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SSP0019_GET_SHIPMENT_CHANGE_HISTORY,SSP0019_ShipmentChangeHistory.cs:409 FindData_Main,1회 · 구간 find,MATCH,
+SP,UP_FX_GETCOMMONDATALIST,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONTROL,(선언 ↔ 실측),32개,33개,INFO,공통 15 · 선언만 17 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,drpPeriod,Y,Shipment Date,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnItemId,Y,layoutControlItem2,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtSoNo,Y,SO No,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbToSite,Y,To Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbIncomterms,Y,Incoterms,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtItemId,Y,Model,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,chkCurrent,Y,layoutControlItem1,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbTransportMode,Y,TransportMode,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtConfirmId,Y,Confirm ID,LIVE,layout=usrLayoutControl1 visible=True
+GRID,spdMain/Shipment Change History,정적 컬럼 사실 47행(시트 미지정 포함),컬럼 48(보임 46) · 헤더 1단 · 행 0 · 고정 8,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

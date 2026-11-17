@@ -1,0 +1,911 @@
+﻿row_id,section,line,verdict,checks,scenarios,link,scenario_ids
+ACT:SSP0003_ShipmentChangeRequestConfirm..ctor,AS-IS 진입점,200,미검증,G03-WIRE=NOPATH,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm..ctor:200:1,AS-IS 문장 CALL_LOCAL,200,미검증,G03-WIRE=NOPATH,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm..ctor:203:2,AS-IS 문장 EVENT_WIRE,203,미검증,G03-WIRE=NOPATH,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm..ctor:204:3,AS-IS 문장 EVENT_WIRE,204,미검증,G03-WIRE=NOPATH,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click,AS-IS 진입점,2005,미검증,K4=ERROR J2=ERROR,1,진입점,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2005:1,AS-IS 문장 BRANCH,2005,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2005:2,AS-IS 문장 RETURN,2005,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2006:3,AS-IS 문장 LOCAL,2006,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2007:4,AS-IS 문장 EXPR,2007,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2010:5,AS-IS 문장 CALL_LOCAL,2010,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2010:6,AS-IS 문장 RETURN,2010,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2013:7,AS-IS 문장 CALL_LOCAL,2013,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2013:8,AS-IS 문장 RETURN,2013,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2016:9,AS-IS 문장 BRANCH,2016,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2018:10,AS-IS 문장 EXPR,2018,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2019:11,AS-IS 문장 EXPR,2019,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2021:12,AS-IS 문장 CALL_LOCAL,2021,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2023:13,AS-IS 문장 LOCAL,2023,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2024:14,AS-IS 문장 CALL_LOCAL,2024,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2025:15,AS-IS 문장 BRANCH,2025,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2026:16,AS-IS 문장 LOCAL,2026,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2026:16,AS-IS 문장 CALL_LOCAL,2026,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2028:17,AS-IS 문장 BRANCH,2028,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2029:18,AS-IS 문장 CALL_LOCAL,2029,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2031:19,AS-IS 문장 RETURN,2031,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2035:20,AS-IS 문장 FLAG,2035,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2038:21,AS-IS 문장 CALL_LOCAL,2038,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2038:22,AS-IS 문장 RETURN,2038,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2041:23,AS-IS 문장 MESSAGE,2041,FAIL,E4=ERROR K4=ERROR J2=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2043:24,AS-IS 문장 RETURN,2043,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2059:25,AS-IS 문장 CALL_LOCAL,2059,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2060:26,AS-IS 문장 CALL_LOCAL,2060,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2061:27,AS-IS 문장 CALL_LOCAL,2061,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2063:28,AS-IS 문장 CALL_LOCAL,2063,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2066:29,AS-IS 문장 STATE_RESET,2066,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnApproval_Click:2067:30,AS-IS 문장 FLAG,2067,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf68071
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click,AS-IS 진입점,1959,미검증,K4=ERROR J2=ERROR,2,진입점,SSP0003-Sd31eae SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1959:1,AS-IS 문장 BRANCH,1959,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1959:2,AS-IS 문장 RETURN,1959,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1962:3,AS-IS 문장 CALL_LOCAL,1962,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1962:4,AS-IS 문장 RETURN,1962,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1964:5,AS-IS 문장 LOCAL,1964,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1966:6,AS-IS 문장 EXPR,1966,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1969:7,AS-IS 문장 MESSAGE,1969,FAIL,E4=ERROR K4=ERROR J2=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sd31eae
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1970:8,AS-IS 문장 FOCUS,1970,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sd31eae
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1971:9,AS-IS 문장 RETURN,1971,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sd31eae
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1975:10,AS-IS 문장 CALL_LOCAL,1975,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1975:11,AS-IS 문장 RETURN,1975,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1978:12,AS-IS 문장 MESSAGE,1978,FAIL,E4=ERROR K4=ERROR J2=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1980:13,AS-IS 문장 RETURN,1980,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1983:14,AS-IS 문장 LOCAL,1983,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1984:15,AS-IS 문장 FLAG,1984,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1986:16,AS-IS 문장 CALL_LOCAL,1986,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1989:17,AS-IS 문장 BRANCH,1989,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1990:18,AS-IS 문장 LOCAL,1990,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1990:18,AS-IS 문장 CALL_LOCAL,1990,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1992:19,AS-IS 문장 BRANCH,1992,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1993:20,AS-IS 문장 CALL_LOCAL,1993,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnReject_Click:1995:21,AS-IS 문장 FLAG,1995,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sf3aaad
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click,AS-IS 진입점,1928,미검증,K4=ERROR J2=ERROR,2,진입점,SSP0003-S3e4258 SSP0003-S85e9fc
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1928:1,AS-IS 문장 POPUP,1928,미검증,G5=ERROR H6=ERROR M3=ERROR K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1930:2,AS-IS 문장 UI_PROP,1930,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1931:3,AS-IS 문장 UI_PROP,1931,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1932:4,AS-IS 문장 UI_PROP,1932,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1933:5,AS-IS 문장 UI_PROP,1933,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1934:6,AS-IS 문장 UI_PROP,1934,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1935:7,AS-IS 문장 UI_PROP,1935,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1937:8,AS-IS 문장 POPUP,1937,미검증,G5=ERROR H6=ERROR K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1939:9,AS-IS 문장 BRANCH,1939,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-S3e4258
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1941:10,AS-IS 문장 LOCAL,1941,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-S85e9fc
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1942:11,AS-IS 문장 BRANCH,1942,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-S85e9fc
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1944:12,AS-IS 문장 LOCAL,1944,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-S85e9fc
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnRequestUser_Click:1947:13,AS-IS 문장 VALUE_SET,1947,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S85e9fc
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click,AS-IS 진입점,1888,미검증,K4=ERROR J2=ERROR,2,진입점,SSP0003-Sd31af0 SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1888:1,AS-IS 문장 BRANCH,1888,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1888:2,AS-IS 문장 RETURN,1888,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1891:3,AS-IS 문장 CALL_LOCAL,1891,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1891:4,AS-IS 문장 RETURN,1891,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1893:5,AS-IS 문장 LOCAL,1893,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1895:6,AS-IS 문장 EXPR,1895,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1898:7,AS-IS 문장 MESSAGE,1898,FAIL,E4=ERROR K4=ERROR J2=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sd31af0
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1899:8,AS-IS 문장 FOCUS,1899,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sd31af0
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1900:9,AS-IS 문장 RETURN,1900,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sd31af0
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1904:10,AS-IS 문장 CALL_LOCAL,1904,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1904:11,AS-IS 문장 RETURN,1904,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1907:12,AS-IS 문장 MESSAGE,1907,FAIL,E4=ERROR K4=ERROR J2=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1909:13,AS-IS 문장 RETURN,1909,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1912:14,AS-IS 문장 LOCAL,1912,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1913:15,AS-IS 문장 FLAG,1913,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1915:16,AS-IS 문장 CALL_LOCAL,1915,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1917:17,AS-IS 문장 BRANCH,1917,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1918:18,AS-IS 문장 LOCAL,1918,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1918:18,AS-IS 문장 CALL_LOCAL,1918,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1920:19,AS-IS 문장 BRANCH,1920,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1921:20,AS-IS 문장 CALL_LOCAL,1921,미검증,K4=ERROR J2=ERROR,1,바깥 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.BtnSelfReject_Click:1923:21,AS-IS 문장 FLAG,1923,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData,AS-IS 진입점,1720,FAIL,X-ROW=FAIL,4,진입점,SSP0003-Scc5a3b SSP0003-Sfc2aa2 SSP0003-S520ed9 SSP0003-S572d4e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1720:1,AS-IS 문장 LOCAL,1720,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1721:2,AS-IS 문장 LOCAL,1721,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1722:3,AS-IS 문장 LOCAL,1722,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1724:4,AS-IS 문장 LOCAL,1724,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1726:5,AS-IS 문장 BRANCH,1726,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1728:6,AS-IS 문장 LOCAL,1728,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1729:7,AS-IS 문장 BRANCH,1729,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1730:8,AS-IS 문장 LOCAL,1730,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1732:9,AS-IS 문장 LOCAL,1732,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1735:10,AS-IS 문장 BRANCH,1735,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1737:11,AS-IS 문장 BRANCH,1737,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1740:12,AS-IS 문장 MESSAGE,1740,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-Scc5a3b
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1741:13,AS-IS 문장 RETURN,1741,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Scc5a3b
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1744:14,AS-IS 문장 EXPR,1744,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1747:15,AS-IS 문장 MESSAGE,1747,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sfc2aa2
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1748:16,AS-IS 문장 FOCUS,1748,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfc2aa2
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1749:17,AS-IS 문장 RETURN,1749,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfc2aa2
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1752:18,AS-IS 문장 BRANCH,1752,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1754:19,AS-IS 문장 BRANCH,1754,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1757:20,AS-IS 문장 MESSAGE,1757,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-S520ed9
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1758:21,AS-IS 문장 RETURN,1758,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S520ed9
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1761:22,AS-IS 문장 BRANCH,1761,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1763:23,AS-IS 문장 BRANCH,1763,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1766:24,AS-IS 문장 MESSAGE,1766,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-S572d4e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1767:25,AS-IS 문장 RETURN,1767,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S572d4e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ChkDraftingData:1772:26,AS-IS 문장 RETURN,1772,FAIL,X-ROW=FAIL,3,부르는 쪽 사슬,SSP0003-Sf68071 SSP0003-Sf3aaad SSP0003-Sb8b3f4
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClbDivision_SelectedIndexChanged,AS-IS 진입점,1854,미검증,X-ROW=ERROR,3,불리는 쪽 사슬,SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClbDivision_SelectedIndexChanged:1854:1,AS-IS 문장 CALL_LOCAL,1854,미검증,C2=NA C3=ERROR C6=NA,3,불리는 쪽 사슬,SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo,AS-IS 진입점,744,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:744:1,AS-IS 문장 VALUE_CLEAR,744,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:745:2,AS-IS 문장 VALUE_CLEAR,745,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:746:3,AS-IS 문장 VALUE_CLEAR,746,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:747:4,AS-IS 문장 VALUE_CLEAR,747,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:748:5,AS-IS 문장 VALUE_CLEAR,748,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:749:6,AS-IS 문장 VALUE_CLEAR,749,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:750:7,AS-IS 문장 VALUE_CLEAR,750,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.ClearRequestInfo:751:8,AS-IS 문장 VALUE_CLEAR,751,미검증,X-ROW=REVIEW,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread,AS-IS 진입점,405,미검증,X-ROW=ERROR H5=REVIEW,1,진입점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:405:1,AS-IS 문장 GRID_INIT,405,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:406:2,AS-IS 문장 FLAG,406,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:407:3,AS-IS 문장 CALL_LOCAL,407,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:409:4,AS-IS 문장 GRID_INIT,409,미검증,H5=REVIEW,1,관찰점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:410:5,AS-IS 문장 FLAG,410,미검증,H5=REVIEW,1,같은 사슬,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:412:6,AS-IS 문장 GRID_INIT,412,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:413:7,AS-IS 문장 CALL_LOCAL,413,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:415:8,AS-IS 문장 GRID_INIT,415,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:417:9,AS-IS 문장 LOCAL,417,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.CreateSpread:419:10,AS-IS 문장 GRID_INIT,419,미검증,A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S207f89
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load,AS-IS 진입점,1832,미검증,X-ROW=ERROR,2,진입점,SSP0003-Sd6a3a0 SSP0003-Saa4962
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1832:1,AS-IS 문장 RESOURCE,1832,미검증,X-ROW=ERROR X-REOPEN=PASS,1,같은 사슬,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1834:2,AS-IS 문장 ENDPOINT,1834,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1835:3,AS-IS 문장 DATA_OP,1835,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1836:4,AS-IS 문장 DATA_OP,1836,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1838:5,AS-IS 문장 ENDPOINT,1838,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1840:6,AS-IS 문장 FLAG,1840,미검증,X-ROW=ERROR,1,바깥 사슬,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1841:7,AS-IS 문장 FLAG,1841,미검증,X-ROW=ERROR,1,바깥 사슬,SSP0003-Sd6a3a0
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1845:8,AS-IS 문장 FLAG,1845,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Saa4962
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1845:8,AS-IS 문장 ENDPOINT,1845,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Saa4962
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1846:9,AS-IS 문장 FLAG,1846,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Saa4962
+ACT:SSP0003_ShipmentChangeRequestConfirm.Delegate_Load:1846:9,AS-IS 문장 ENDPOINT,1846,미검증,X-ROW=ERROR F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-Saa4962
+ACT:SSP0003_ShipmentChangeRequestConfirm.Dispose,AS-IS 진입점,16,검증완료,X-REOPEN=PASS,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.Dispose:16:1,AS-IS 문장 BRANCH,16,검증완료,X-REOPEN=PASS,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.Dispose:18:2,AS-IS 문장 UI_MISC,18,검증완료,X-REOPEN=PASS,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.Dispose:20:3,AS-IS 문장 CALL_LOCAL,20,검증완료,X-REOPEN=PASS,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton,AS-IS 진입점,627,검증완료,D1=NA D1=NA D3=NA D3=NA,3,진입점,SSP0003-Sc79aa7 SSP0003-S9fa5b3 SSP0003-Sed535e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:627:1,AS-IS 문장 MESSAGE,627,FAIL,E4=NA E4=NA I1=FAIL,1,관찰점,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:628:2,AS-IS 문장 RETURN,628,미검증,D1=ERROR D3=PASS,1,같은 사슬,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:631:3,AS-IS 문장 FLAG,631,미검증,D1=ERROR D3=NA,1,같은 사슬,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:633:4,AS-IS 문장 BRANCH,633,미검증,D1=ERROR D3=PASS,1,같은 사슬,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:633:5,AS-IS 문장 RETURN,633,미검증,D1=ERROR D3=PASS,1,바깥 사슬,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:635:6,AS-IS 문장 BRANCH,635,미검증,D1=ERROR D3=PASS,1,같은 사슬,SSP0003-Sc79aa7
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:639:7,AS-IS 문장 GRID_LOCK,639,검증완료,D3=PASS,1,관찰점,SSP0003-S9fa5b3
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:641:8,AS-IS 문장 GRID_LOCK,641,검증완료,D3=NA D1=NA D1=NA D3=NA D3=NA,1,관찰점,SSP0003-S9fa5b3
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:642:9,AS-IS 문장 GRID_LOCK,642,검증완료,D3=NA D1=NA D3=NA,1,관찰점,SSP0003-S9fa5b3
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:647:10,AS-IS 문장 MESSAGE,647,FAIL,E4=NA E4=NA I1=FAIL,1,관찰점,SSP0003-Sed535e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EditButton:648:11,AS-IS 문장 RETURN,648,미검증,D1=ERROR D3=PASS,1,같은 사슬,SSP0003-Sed535e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk,AS-IS 진입점,1612,FAIL,X-ROW=FAIL,2,진입점,SSP0003-Sfbbabb SSP0003-S00752e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1612:1,AS-IS 문장 LOCAL,1612,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1616:2,AS-IS 문장 LOCAL,1616,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1617:3,AS-IS 문장 RESOURCE,1617,FAIL,X-ROW=FAIL X-REOPEN=PASS,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1619:4,AS-IS 문장 ENDPOINT,1619,FAIL,X-ROW=FAIL F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1620:5,AS-IS 문장 DATA_OP,1620,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1622:6,AS-IS 문장 ENDPOINT,1622,FAIL,X-ROW=FAIL F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1624:7,AS-IS 문장 LOCAL,1624,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1627:8,AS-IS 문장 EXPR,1627,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1630:9,AS-IS 문장 EXPR,1630,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S00752e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1632:10,AS-IS 문장 MESSAGE,1632,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-S00752e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1633:11,AS-IS 문장 LOCAL,1633,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S00752e
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1637:12,AS-IS 문장 LOCAL,1637,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1642:13,AS-IS 문장 RETURN,1642,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.EngProcessingChk:1644:14,AS-IS 문장 RETURN,1644,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sfbbabb
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindButton,AS-IS 진입점,612,미검증,X-ROW=ERROR A1=REVIEW A6=ERROR F4=REVIEW,5,불리는 쪽 사슬,SSP0003-Sed3e1e SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindButton:612:1,AS-IS 문장 CALL_LOCAL,612,미검증,A1=REVIEW A6=ERROR F4=REVIEW,5,불리는 쪽 사슬,SSP0003-Sed3e1e SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main,AS-IS 진입점,663,FAIL,G1=PASS G1=ERROR G1=FAIL G1=PASS G1=PASS G1=NA G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,진입점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:663:1,AS-IS 문장 POPUP,663,FAIL,A1=REVIEW A6=ERROR F4=REVIEW X-ROW=FAIL,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:668:2,AS-IS 문장 VALIDATE,668,FAIL,E3=FAIL A1=REVIEW A6=ERROR F4=REVIEW X-ROW=FAIL,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:668:3,AS-IS 문장 RETURN,668,FAIL,E3=FAIL A1=REVIEW A6=ERROR F4=REVIEW,1,바깥 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:670:4,AS-IS 문장 LOCAL,670,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:672:5,AS-IS 문장 POPUP,672,FAIL,A1=REVIEW A6=ERROR F4=REVIEW X-ROW=FAIL,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:673:6,AS-IS 문장 CALL_LOCAL,673,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:675:7,AS-IS 문장 EXPR,675,미검증,G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:678:8,AS-IS 문장 EXPR,678,미검증,G1=ERROR A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:680:9,AS-IS 문장 LOCAL,680,FAIL,G1=FAIL A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:681:10,AS-IS 문장 EXPR,681,미검증,G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:682:11,AS-IS 문장 EXPR,682,미검증,G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:683:12,AS-IS 문장 EXPR,683,미검증,G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:684:13,AS-IS 문장 LOCAL,684,미검증,G1=NA A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:685:14,AS-IS 문장 EXPR,685,미검증,G1=PASS A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:688:15,AS-IS 문장 LOG,688,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:690:16,AS-IS 문장 LOCAL,690,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:692:17,AS-IS 문장 ENDPOINT,692,미검증,A1=REVIEW A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:694:18,AS-IS 문장 RESOURCE,694,미검증,A1=REVIEW A6=ERROR F4=REVIEW X-REOPEN=PASS,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:696:19,AS-IS 문장 ENDPOINT,696,미검증,A1=REVIEW A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:697:20,AS-IS 문장 DATA_OP,697,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:698:21,AS-IS 문장 DATA_OP,698,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:699:22,AS-IS 문장 DATA_OP,699,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:700:23,AS-IS 문장 DATA_OP,700,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:701:24,AS-IS 문장 DATA_OP,701,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:702:25,AS-IS 문장 DATA_OP,702,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:703:26,AS-IS 문장 DATA_OP,703,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:704:27,AS-IS 문장 DATA_OP,704,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:705:28,AS-IS 문장 DATA_OP,705,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:707:29,AS-IS 문장 ENDPOINT,707,미검증,A1=REVIEW A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:709:30,AS-IS 문장 RETURN,709,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:714:31,AS-IS 문장 LOG,714,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:716:32,AS-IS 문장 GRID_BIND,716,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:717:33,AS-IS 문장 GRID_LOCK,717,FAIL,D1=NA A1=REVIEW A6=ERROR F4=REVIEW X-ROW=FAIL,1,관찰점,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:720:34,AS-IS 문장 UI_MISC,720,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:722:35,AS-IS 문장 CALL_LOCAL,722,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:727:36,AS-IS 문장 CALL_LOCAL,727,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:728:37,AS-IS 문장 LOCAL,728,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:730:38,AS-IS 문장 CALL_LOCAL,730,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:733:39,AS-IS 문장 LOG,733,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Main:738:40,AS-IS 문장 UI_MISC,738,미검증,A1=REVIEW A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub,AS-IS 진입점,756,미검증,X-ROW=ERROR A1=NA A6=ERROR F4=REVIEW,9,진입점,SSP0003-S572264 SSP0003-S07f944 SSP0003-S5e0c5e SSP0003-S648b40 SSP0003-Sf810d5 SSP0003-Sb545e6 SSP0003-S0f326c SSP0003-Sa37e57 SSP0003-S6c0f2b
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:756:1,AS-IS 문장 LOCAL,756,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:757:2,AS-IS 문장 CALL_LOCAL,757,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:759:3,AS-IS 문장 EXPR,759,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:760:4,AS-IS 문장 EXPR,760,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:761:5,AS-IS 문장 LOCAL,761,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:764:6,AS-IS 문장 LOG,764,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:766:7,AS-IS 문장 LOCAL,766,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:768:8,AS-IS 문장 ENDPOINT,768,미검증,A1=NA A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:770:9,AS-IS 문장 RESOURCE,770,미검증,A1=NA A6=ERROR F4=REVIEW X-REOPEN=PASS,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:772:10,AS-IS 문장 ENDPOINT,772,미검증,A1=NA A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:773:11,AS-IS 문장 DATA_OP,773,미검증,A1=NA A6=ERROR F4=REVIEW,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:774:12,AS-IS 문장 DATA_OP,774,미검증,A1=NA A6=ERROR F4=REVIEW,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:777:13,AS-IS 문장 ENDPOINT,777,미검증,A1=NA A6=ERROR F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:779:14,AS-IS 문장 RETURN,779,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:784:15,AS-IS 문장 LOG,784,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:787:16,AS-IS 문장 GRID_BIND,787,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:789:17,AS-IS 문장 UI_MISC,789,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:794:18,AS-IS 문장 EXPR,794,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:796:19,AS-IS 문장 GRID_LOCK,796,미검증,D3=NA A1=NA A6=ERROR F4=REVIEW D1=NA D3=PASS,1,관찰점,SSP0003-S07f944
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:798:20,AS-IS 문장 EXPR,798,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S07f944
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:800:21,AS-IS 문장 GRID_SET,800,미검증,A1=NA A6=ERROR F4=REVIEW C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S5e0c5e
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:803:22,AS-IS 문장 EXPR,803,미검증,A1=NA A6=ERROR F4=REVIEW,1,바깥 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:805:23,AS-IS 문장 GRID_LOCK,805,미검증,D3=PASS A1=NA A6=ERROR F4=REVIEW D1=NA D3=PASS,1,관찰점,SSP0003-S648b40
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:807:24,AS-IS 문장 EXPR,807,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S648b40
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:809:25,AS-IS 문장 GRID_SET,809,미검증,A1=NA A6=ERROR F4=REVIEW C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sf810d5
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:812:26,AS-IS 문장 EXPR,812,미검증,A1=NA A6=ERROR F4=REVIEW,1,바깥 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:814:27,AS-IS 문장 GRID_LOCK,814,미검증,D3=NA A1=NA A6=ERROR F4=REVIEW D1=NA D3=PASS,1,관찰점,SSP0003-Sb545e6
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:816:28,AS-IS 문장 EXPR,816,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sb545e6
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:818:29,AS-IS 문장 EXPR,818,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S0f326c
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:820:30,AS-IS 문장 GRID_SET,820,미검증,A1=NA A6=ERROR F4=REVIEW C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S0f326c
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:825:31,AS-IS 문장 GRID_LOCK,825,미검증,D1=NA A1=NA A6=ERROR F4=REVIEW D1=NA D3=PASS,1,관찰점,SSP0003-Sa37e57
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:826:32,AS-IS 문장 GRID_LOCK,826,미검증,D1=ERROR A1=NA A6=ERROR F4=REVIEW X-ROW=ERROR,1,관찰점,SSP0003-Sa37e57
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:827:33,AS-IS 문장 GRID_INIT,827,미검증,A1=NA A6=ERROR F4=REVIEW X-ROW=ERROR,1,관찰점,SSP0003-Sa37e57
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:829:34,AS-IS 문장 EXPR,829,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-Sa37e57
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:831:35,AS-IS 문장 GRID_SET,831,미검증,A1=NA A6=ERROR F4=REVIEW C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S6c0f2b
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:835:36,AS-IS 문장 GRID_LOCK,835,미검증,D1=NA A1=NA A6=ERROR F4=REVIEW D1=NA D3=PASS,1,관찰점,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:839:37,AS-IS 문장 BRANCH,839,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:841:38,AS-IS 문장 CALL_LOCAL,841,미검증,A1=NA A6=ERROR F4=REVIEW,1,바깥 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:844:39,AS-IS 문장 LOCAL,844,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.FindData_Sub:847:40,AS-IS 문장 LOG,847,미검증,A1=NA A6=ERROR F4=REVIEW,1,같은 사슬,SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load,AS-IS 진입점,209,검증완료,X-ROW=PASS A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load:209:1,AS-IS 문장 UI_MISC,209,검증완료,A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load:210:2,AS-IS 문장 CALL_LOCAL,210,검증완료,A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load:211:3,AS-IS 문장 CALL_LOCAL,211,검증완료,A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load:212:4,AS-IS 문장 CALL_LOCAL,212,검증완료,A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.Form_Load:213:5,AS-IS 문장 CALL_LOCAL,213,검증완료,A10=PASS,17,불리는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange,AS-IS 진입점,1859,미검증,X-ROW=ERROR,1,진입점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1859:1,AS-IS 문장 LOCAL,1859,FAIL,B4=ERROR B3=FAIL,1,같은 사슬,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1861:2,AS-IS 문장 RESOURCE,1861,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1864:3,AS-IS 문장 ENDPOINT,1864,미검증,F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1865:4,AS-IS 문장 DATA_OP,1865,FAIL,B4=ERROR B3=FAIL,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1866:5,AS-IS 문장 DATA_OP,1866,FAIL,B4=ERROR B3=FAIL,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1867:6,AS-IS 문장 DATA_OP,1867,FAIL,B4=ERROR B3=FAIL,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1868:7,AS-IS 문장 LOCAL,1868,미검증,F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1868:7,AS-IS 문장 ENDPOINT,1868,미검증,F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetDayRange:1871:8,AS-IS 문장 RETURN,1871,FAIL,B4=ERROR B3=FAIL,1,같은 사슬,SSP0003-S95028d
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck,AS-IS 진입점,1319,검증완료,B4=NA B3=NA,4,진입점,SSP0003-Sc3818a SSP0003-S489981 SSP0003-Se19aab SSP0003-S83dc66
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1319:1,AS-IS 문장 LOCAL,1319,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1322:2,AS-IS 문장 LOCAL,1322,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1324:3,AS-IS 문장 LOCAL,1324,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1325:4,AS-IS 문장 LOCAL,1325,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1326:5,AS-IS 문장 LOCAL,1326,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1328:6,AS-IS 문장 BRANCH,1328,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1329:7,AS-IS 문장 LOCAL,1329,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1330:8,AS-IS 문장 BRANCH,1330,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1331:9,AS-IS 문장 LOCAL,1331,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1333:10,AS-IS 문장 LOCAL,1333,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1335:11,AS-IS 문장 RESOURCE,1335,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1337:12,AS-IS 문장 ENDPOINT,1337,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1338:13,AS-IS 문장 DATA_OP,1338,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1339:14,AS-IS 문장 DATA_OP,1339,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1340:15,AS-IS 문장 DATA_OP,1340,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1341:16,AS-IS 문장 DATA_OP,1341,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1342:17,AS-IS 문장 DATA_OP,1342,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1343:18,AS-IS 문장 ENDPOINT,1343,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1346:19,AS-IS 문장 LOCAL,1346,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1349:20,AS-IS 문장 EXPR,1349,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1351:21,AS-IS 문장 RESOURCE,1351,검증완료,X-REOPEN=PASS,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1353:22,AS-IS 문장 CALL_EXT,1353,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1355:23,AS-IS 문장 BRANCH,1355,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1357:24,AS-IS 문장 LOCAL,1357,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S489981
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1360:25,AS-IS 문장 MESSAGE,1360,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-S489981
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1361:26,AS-IS 문장 LOCAL,1361,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S489981
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1363:27,AS-IS 문장 BRANCH,1363,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1365:28,AS-IS 문장 LOCAL,1365,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Se19aab
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1367:29,AS-IS 문장 MESSAGE,1367,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Se19aab
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1368:30,AS-IS 문장 LOCAL,1368,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Se19aab
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1370:31,AS-IS 문장 BRANCH,1370,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1372:32,AS-IS 문장 MESSAGE,1372,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-S83dc66
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1373:33,AS-IS 문장 LOCAL,1373,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S83dc66
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1377:34,AS-IS 문장 LOCAL,1377,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1382:35,AS-IS 문장 LOCAL,1382,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheck:1384:36,AS-IS 문장 RETURN,1384,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sc3818a
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew,AS-IS 진입점,1390,검증완료,B4=NA B3=NA,5,진입점,SSP0003-Scae9bc SSP0003-Sf3f7cf SSP0003-S6b7162 SSP0003-S413868 SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1390:1,AS-IS 문장 LOCAL,1390,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1393:2,AS-IS 문장 LOCAL,1393,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1395:3,AS-IS 문장 LOCAL,1395,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1396:4,AS-IS 문장 LOCAL,1396,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1397:5,AS-IS 문장 LOCAL,1397,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1398:6,AS-IS 문장 LOCAL,1398,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1400:7,AS-IS 문장 BRANCH,1400,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1401:8,AS-IS 문장 LOCAL,1401,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1402:9,AS-IS 문장 BRANCH,1402,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1403:10,AS-IS 문장 LOCAL,1403,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1405:11,AS-IS 문장 LOCAL,1405,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1407:12,AS-IS 문장 RESOURCE,1407,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1409:13,AS-IS 문장 ENDPOINT,1409,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1410:14,AS-IS 문장 DATA_OP,1410,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1411:15,AS-IS 문장 DATA_OP,1411,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1412:16,AS-IS 문장 DATA_OP,1412,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1413:17,AS-IS 문장 DATA_OP,1413,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1414:18,AS-IS 문장 BRANCH,1414,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1415:19,AS-IS 문장 LOCAL,1415,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1417:20,AS-IS 문장 LOCAL,1417,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1418:21,AS-IS 문장 DATA_OP,1418,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1420:22,AS-IS 문장 ENDPOINT,1420,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1423:23,AS-IS 문장 LOCAL,1423,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1426:24,AS-IS 문장 EXPR,1426,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1428:25,AS-IS 문장 RESOURCE,1428,검증완료,X-REOPEN=PASS,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1430:26,AS-IS 문장 CALL_EXT,1430,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1432:27,AS-IS 문장 BRANCH,1432,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1435:28,AS-IS 문장 LOCAL,1435,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1437:29,AS-IS 문장 EXPR,1437,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1439:30,AS-IS 문장 UI_PROP,1439,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-Sf3f7cf
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1442:31,AS-IS 문장 EXPR,1442,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1444:32,AS-IS 문장 BRANCH,1444,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1446:33,AS-IS 문장 DATA_OP,1446,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1448:34,AS-IS 문장 EXPR,1448,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1449:35,AS-IS 문장 EXPR,1449,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1450:36,AS-IS 문장 DATA_OP,1450,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1455:37,AS-IS 문장 LOCAL,1455,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1456:38,AS-IS 문장 RESOURCE,1456,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1458:39,AS-IS 문장 ENDPOINT,1458,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1460:40,AS-IS 문장 DATA_OP,1460,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1461:41,AS-IS 문장 DATA_OP,1461,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1462:42,AS-IS 문장 DATA_OP,1462,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1463:43,AS-IS 문장 DATA_OP,1463,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1464:44,AS-IS 문장 DATA_OP,1464,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1465:45,AS-IS 문장 DATA_OP,1465,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1466:46,AS-IS 문장 DATA_OP,1466,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1468:47,AS-IS 문장 ENDPOINT,1468,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1470:48,AS-IS 문장 LOCAL,1470,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1473:49,AS-IS 문장 BRANCH,1473,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1475:50,AS-IS 문장 LOCAL,1475,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1478:51,AS-IS 문장 BRANCH,1478,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1480:52,AS-IS 문장 LOCAL,1480,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S6b7162
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1487:53,AS-IS 문장 BRANCH,1487,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1489:54,AS-IS 문장 LOCAL,1489,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1490:55,AS-IS 문장 RESOURCE,1490,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1492:56,AS-IS 문장 ENDPOINT,1492,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1493:57,AS-IS 문장 DATA_OP,1493,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1494:58,AS-IS 문장 DATA_OP,1494,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1495:59,AS-IS 문장 DATA_OP,1495,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1496:60,AS-IS 문장 DATA_OP,1496,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1497:61,AS-IS 문장 DATA_OP,1497,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1499:62,AS-IS 문장 ENDPOINT,1499,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1502:63,AS-IS 문장 LOCAL,1502,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1506:64,AS-IS 문장 CALL_EXT,1506,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1508:65,AS-IS 문장 EXPR,1508,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1509:66,AS-IS 문장 MESSAGE,1509,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1511:67,AS-IS 문장 LOCAL,1511,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S413868
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1515:68,AS-IS 문장 LOCAL,1515,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1520:69,AS-IS 문장 BRANCH,1520,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1522:70,AS-IS 문장 LOCAL,1522,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1523:71,AS-IS 문장 LOCAL,1523,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1524:72,AS-IS 문장 LOCAL,1524,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1525:73,AS-IS 문장 LOCAL,1525,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1527:74,AS-IS 문장 EXPR,1527,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1529:75,AS-IS 문장 BRANCH,1529,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1531:76,AS-IS 문장 EXPR,1531,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1532:77,AS-IS 문장 EXPR,1532,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1533:78,AS-IS 문장 EXPR,1533,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1534:79,AS-IS 문장 EXPR,1534,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1535:80,AS-IS 문장 EXPR,1535,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1538:81,AS-IS 문장 LOCAL,1538,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1539:82,AS-IS 문장 RESOURCE,1539,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1541:83,AS-IS 문장 ENDPOINT,1541,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1543:84,AS-IS 문장 DATA_OP,1543,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1544:85,AS-IS 문장 DATA_OP,1544,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1545:86,AS-IS 문장 DATA_OP,1545,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1546:87,AS-IS 문장 DATA_OP,1546,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1547:88,AS-IS 문장 DATA_OP,1547,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1549:89,AS-IS 문장 ENDPOINT,1549,미검증,F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1551:90,AS-IS 문장 LOCAL,1551,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1554:91,AS-IS 문장 EXPR,1554,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1555:92,AS-IS 문장 MESSAGE,1555,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-S3f6cd6
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1558:93,AS-IS 문장 LOCAL,1558,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1561:94,AS-IS 문장 STATE_RESET,1561,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetErpIFCheckNew:1564:95,AS-IS 문장 RETURN,1564,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Scae9bc
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk,AS-IS 진입점,1650,검증완료,B4=NA B3=NA,2,진입점,SSP0003-S68fff0 SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1650:1,AS-IS 문장 LOCAL,1650,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1653:2,AS-IS 문장 LOCAL,1653,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1654:3,AS-IS 문장 RESOURCE,1654,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1656:4,AS-IS 문장 ENDPOINT,1656,미검증,F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1657:5,AS-IS 문장 DATA_OP,1657,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1658:6,AS-IS 문장 DATA_OP,1658,검증완료,B4=NA B3=NA,1,관찰점,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1660:7,AS-IS 문장 ENDPOINT,1660,미검증,F4=ERROR DB-SYN=PASS,1,관찰점,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1662:8,AS-IS 문장 LOCAL,1662,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1694:9,AS-IS 문장 BRANCH,1694,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1696:10,AS-IS 문장 LOCAL,1696,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1697:11,AS-IS 문장 BRANCH,1697,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1699:12,AS-IS 문장 LOCAL,1699,검증완료,B4=NA B3=NA,1,바깥 사슬,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1701:13,AS-IS 문장 EXPR,1701,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1704:14,AS-IS 문장 MESSAGE,1704,FAIL,E4=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1705:15,AS-IS 문장 LOCAL,1705,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-Sce3155
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1708:16,AS-IS 문장 RETURN,1708,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.GetShipmentStatusChk:1710:17,AS-IS 문장 RETURN,1710,검증완료,B4=NA B3=NA,1,같은 사슬,SSP0003-S68fff0
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls,AS-IS 진입점,293,FAIL,G6=PASS G6=FAIL G6=PASS G6=PASS A10=PASS G4=PASS G4=PASS G4=NA G4=PASS,1,진입점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:293:1,AS-IS 문장 LOG,293,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:294:2,AS-IS 문장 CALL_LOCAL,294,검증완료,G6=PASS A10=PASS G4=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:295:3,AS-IS 문장 CALL_LOCAL,295,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:296:4,AS-IS 문장 CALL_LOCAL,296,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:297:5,AS-IS 문장 CALL_LOCAL,297,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:298:6,AS-IS 문장 CALL_LOCAL,298,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:299:7,AS-IS 문장 CALL_LOCAL,299,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:300:8,AS-IS 문장 CALL_LOCAL,300,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:301:9,AS-IS 문장 LOG,301,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:304:10,AS-IS 문장 FLAG,304,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:307:11,AS-IS 문장 DATA_OP,307,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:308:12,AS-IS 문장 DATA_OP,308,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:310:13,AS-IS 문장 BRANCH,310,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:311:14,AS-IS 문장 VALIDATE,311,FAIL,J1=PASS A10=PASS X-ROW=FAIL,1,바깥 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:316:15,AS-IS 문장 LOCAL,316,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:317:16,AS-IS 문장 ENDPOINT,317,미검증,A10=PASS F4=REVIEW DB-SYN=NOPATH,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:319:17,AS-IS 문장 RESOURCE,319,검증완료,A10=PASS X-REOPEN=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:321:18,AS-IS 문장 DATA_OP,321,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:322:19,AS-IS 문장 DATA_OP,322,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:323:20,AS-IS 문장 LOCAL,323,미검증,A10=PASS F4=ERROR F4=REVIEW F4=REVIEW F4=REVIEW DB-SYN=PASS DB-SYN=NOPATH DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:323:20,AS-IS 문장 ENDPOINT,323,미검증,A10=PASS F4=ERROR F4=REVIEW F4=REVIEW F4=REVIEW DB-SYN=PASS DB-SYN=NOPATH DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:327:21,AS-IS 문장 FLAG,327,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:330:22,AS-IS 문장 FLAG,330,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:330:22,AS-IS 문장 DATA_OP,330,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:330:22,AS-IS 문장 DATA_OP,330,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:330:23,AS-IS 문장 EXPR,330,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:332:24,AS-IS 문장 LIST_REBIND,332,FAIL,G6=PASS A10=PASS G4=PASS C1=PASS X-ROW=FAIL,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:334:25,AS-IS 문장 LIST_REBIND,334,FAIL,G6=FAIL A10=PASS G4=PASS C1=PASS X-ROW=FAIL,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:336:26,AS-IS 문장 LIST_REBIND,336,FAIL,G6=PASS A10=PASS G4=NA C1=PASS X-ROW=FAIL,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:338:27,AS-IS 문장 CALL_LOCAL,338,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:340:28,AS-IS 문장 VALUE_SET,340,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:340:28,AS-IS 문장 CALL_LOCAL,340,검증완료,A10=PASS,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:342:29,AS-IS 문장 BRANCH,342,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:343:30,AS-IS 문장 FLAG,343,검증완료,A10=PASS,1,바깥 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:345:31,AS-IS 문장 FLAG,345,검증완료,G6=PASS A10=PASS G4=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:347:32,AS-IS 문장 VALUE_SET,347,FAIL,G6=FAIL A10=PASS G4=PASS X-ROW=FAIL,1,관찰점,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitControls:349:33,AS-IS 문장 FLAG,349,검증완료,A10=PASS,1,같은 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent,AS-IS 진입점,275,미검증,G03-WIRE=NOPATH G6=PASS A10=PASS G4=PASS G4=NOPATH G4=NOPATH G4=NOPATH G4=NOPATH G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:275:1,AS-IS 문장 EVENT_WIRE,275,미검증,G03-WIRE=NOPATH G6=PASS A10=PASS G4=PASS,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:276:2,AS-IS 문장 EVENT_WIRE,276,미검증,G03-WIRE=NOPATH A10=PASS,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:278:3,AS-IS 문장 EVENT_WIRE,278,미검증,G03-WIRE=NOPATH A10=PASS G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:279:4,AS-IS 문장 EVENT_WIRE,279,미검증,G03-WIRE=NOPATH A10=PASS G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:280:5,AS-IS 문장 EVENT_WIRE,280,미검증,G03-WIRE=NOPATH A10=PASS G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:281:6,AS-IS 문장 EVENT_WIRE,281,미검증,G03-WIRE=NOPATH A10=PASS G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitEvent:282:7,AS-IS 문장 EVENT_WIRE,282,미검증,G03-WIRE=NOPATH A10=PASS G4=NOPATH,17,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sfc19ed SSP0003-S95028d SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78 SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread,AS-IS 진입점,424,미검증,X-ROW=ERROR A10=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS A5=PASS H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H2=NA H5=ERROR H5=NA H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR H5=ERROR D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA D5=NA,4,진입점,SSP0003-Sf64d30 SSP0003-S143229 SSP0003-S78c043 SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:424:1,AS-IS 문장 BRANCH,424,검증완료,A10=PASS,3,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sed3e1e SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:426:2,AS-IS 문장 GRID_INIT,426,검증완료,A10=PASS,1,관찰점,SSP0003-Sf64d30
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:428:3,AS-IS 문장 LIST_REBIND,428,미검증,A10=PASS X-ROW=ERROR,1,관찰점,SSP0003-Sf64d30
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:429:4,AS-IS 문장 LIST_REBIND,429,미검증,A10=PASS X-ROW=ERROR,1,관찰점,SSP0003-Sf64d30
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:431:5,AS-IS 문장 GRID_INIT,431,검증완료,A10=PASS,1,관찰점,SSP0003-Sf64d30
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:432:6,AS-IS 문장 GRID_INIT,432,검증완료,A10=PASS,1,관찰점,SSP0003-Sf64d30
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:435:7,AS-IS 문장 BRANCH,435,검증완료,A10=PASS,3,부르는 쪽 사슬,SSP0003-S207f89 SSP0003-Sed3e1e SSP0003-S572264
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:437:8,AS-IS 문장 GRID_INIT,437,검증완료,A10=PASS,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:439:9,AS-IS 문장 GRID_INIT,439,검증완료,A10=PASS,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:442:10,AS-IS 문장 LOCAL,442,검증완료,A10=PASS,1,같은 사슬,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:445:11,AS-IS 문장 EXPR,445,검증완료,A10=PASS,1,같은 사슬,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:447:12,AS-IS 문장 GRID_SET,447,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:448:13,AS-IS 문장 GRID_SET,448,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:449:14,AS-IS 문장 GRID_SET,449,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA C3=ERROR X-ROW=ERROR,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:451:15,AS-IS 문장 LOCAL,451,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:453:16,AS-IS 문장 UI_PROP,453,검증완료,A10=PASS,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:470:17,AS-IS 문장 GRID_INIT,470,검증완료,A10=PASS,1,관찰점,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:472:18,AS-IS 문장 BRANCH,472,검증완료,A10=PASS A5=PASS H2=NA H5=NA D5=NA,1,같은 사슬,SSP0003-S143229
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:475:19,AS-IS 문장 GRID_SET,475,미검증,A10=PASS A5=PASS H2=NA H5=NA D5=NA C3=NA X-ROW=ERROR,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:477:20,AS-IS 문장 GRID_INIT,477,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:478:21,AS-IS 문장 GRID_INIT,478,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:480:22,AS-IS 문장 GRID_INIT,480,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:481:23,AS-IS 문장 GRID_INIT,481,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:482:24,AS-IS 문장 GRID_INIT,482,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:483:25,AS-IS 문장 GRID_INIT,483,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:484:26,AS-IS 문장 GRID_INIT,484,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:485:27,AS-IS 문장 GRID_INIT,485,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:487:28,AS-IS 문장 GRID_INIT,487,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:488:29,AS-IS 문장 GRID_INIT,488,미검증,A10=PASS A5=PASS A5=PASS H2=NA H2=NA H5=ERROR H5=ERROR D5=NA D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:489:30,AS-IS 문장 GRID_INIT,489,미검증,A10=PASS A5=PASS A5=PASS H2=NA H2=NA H5=ERROR H5=ERROR D5=NA D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:490:31,AS-IS 문장 GRID_INIT,490,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:491:32,AS-IS 문장 GRID_INIT,491,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:492:33,AS-IS 문장 GRID_INIT,492,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:494:34,AS-IS 문장 EXPR,494,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:495:35,AS-IS 문장 EXPR,495,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:496:36,AS-IS 문장 CALL_EXT,496,검증완료,A10=PASS,1,같은 사슬,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:497:37,AS-IS 문장 CALL_EXT,497,검증완료,A10=PASS,1,같은 사슬,SSP0003-S78c043
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:503:38,AS-IS 문장 GRID_SET,503,미검증,A10=PASS A5=PASS H2=NA H5=NA D5=NA C3=NA X-ROW=ERROR,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:505:39,AS-IS 문장 GRID_INIT,505,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:506:40,AS-IS 문장 GRID_INIT,506,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:508:41,AS-IS 문장 GRID_INIT,508,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:509:42,AS-IS 문장 GRID_INIT,509,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:510:43,AS-IS 문장 GRID_INIT,510,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:511:44,AS-IS 문장 GRID_INIT,511,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:512:45,AS-IS 문장 GRID_INIT,512,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:513:46,AS-IS 문장 GRID_INIT,513,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:515:47,AS-IS 문장 GRID_INIT,515,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:516:48,AS-IS 문장 GRID_INIT,516,미검증,A10=PASS A5=PASS A5=PASS H2=NA H2=NA H5=ERROR H5=ERROR D5=NA D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:517:49,AS-IS 문장 GRID_INIT,517,미검증,A10=PASS A5=PASS A5=PASS H2=NA H2=NA H5=ERROR H5=ERROR D5=NA D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:518:50,AS-IS 문장 GRID_INIT,518,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:519:51,AS-IS 문장 GRID_INIT,519,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:520:52,AS-IS 문장 GRID_INIT,520,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,관찰점,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:522:53,AS-IS 문장 EXPR,522,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:523:54,AS-IS 문장 EXPR,523,미검증,A10=PASS A5=PASS H2=NA H5=ERROR D5=NA,1,같은 사슬,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:524:55,AS-IS 문장 CALL_EXT,524,검증완료,A10=PASS,1,같은 사슬,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.InitSpread:525:56,AS-IS 문장 CALL_EXT,525,검증완료,A10=PASS,1,같은 사슬,SSP0003-S375a17
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData,AS-IS 진입점,1046,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,3,진입점,SSP0003-S0c555f SSP0003-Sef24bd SSP0003-Sdd3490
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1046:1,AS-IS 문장 LOCAL,1046,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1047:2,AS-IS 문장 LOCAL,1047,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1048:3,AS-IS 문장 LOCAL,1048,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1049:4,AS-IS 문장 LOCAL,1049,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1050:5,AS-IS 문장 LOCAL,1050,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1051:6,AS-IS 문장 LOCAL,1051,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1052:7,AS-IS 문장 LOCAL,1052,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1053:8,AS-IS 문장 LOCAL,1053,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1054:9,AS-IS 문장 LOCAL,1054,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1055:10,AS-IS 문장 LOCAL,1055,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1056:11,AS-IS 문장 LOCAL,1056,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1057:12,AS-IS 문장 LOCAL,1057,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1058:13,AS-IS 문장 LOCAL,1058,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1059:14,AS-IS 문장 LOCAL,1059,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1060:15,AS-IS 문장 LOCAL,1060,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1061:16,AS-IS 문장 LOCAL,1061,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1062:17,AS-IS 문장 LOCAL,1062,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1063:18,AS-IS 문장 LOCAL,1063,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1064:19,AS-IS 문장 LOCAL,1064,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1065:20,AS-IS 문장 LOCAL,1065,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1066:21,AS-IS 문장 LOCAL,1066,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1068:22,AS-IS 문장 LOCAL,1068,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1069:23,AS-IS 문장 LOCAL,1069,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1070:24,AS-IS 문장 LOCAL,1070,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1071:25,AS-IS 문장 LOCAL,1071,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1073:26,AS-IS 문장 LOCAL,1073,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1074:27,AS-IS 문장 LOCAL,1074,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1075:28,AS-IS 문장 LOCAL,1075,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1076:29,AS-IS 문장 LOCAL,1076,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1078:30,AS-IS 문장 LOCAL,1078,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1079:31,AS-IS 문장 LOCAL,1079,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1080:32,AS-IS 문장 LOCAL,1080,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1082:33,AS-IS 문장 LOCAL,1082,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1083:34,AS-IS 문장 LOCAL,1083,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1086:35,AS-IS 문장 LOCAL,1086,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1087:36,AS-IS 문장 LOCAL,1087,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1088:37,AS-IS 문장 LOCAL,1088,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1090:38,AS-IS 문장 LOCAL,1090,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1091:39,AS-IS 문장 LOCAL,1091,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1092:40,AS-IS 문장 LOCAL,1092,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1096:41,AS-IS 문장 BRANCH,1096,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1098:42,AS-IS 문장 LOCAL,1098,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1101:43,AS-IS 문장 LOCAL,1101,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1102:44,AS-IS 문장 LOCAL,1102,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1103:45,AS-IS 문장 LOCAL,1103,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1105:46,AS-IS 문장 BRANCH,1105,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1107:47,AS-IS 문장 EXPR,1107,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1108:48,AS-IS 문장 BRANCH,1108,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1110:49,AS-IS 문장 LOCAL,1110,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1111:50,AS-IS 문장 FLOW,1111,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1115:51,AS-IS 문장 BRANCH,1115,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1123:52,AS-IS 문장 LOCAL,1123,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1124:53,AS-IS 문장 BRANCH,1124,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1126:54,AS-IS 문장 BRANCH,1126,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1128:55,AS-IS 문장 EXPR,1128,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1130:56,AS-IS 문장 LOCAL,1130,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1131:57,AS-IS 문장 FLOW,1131,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1135:58,AS-IS 문장 BRANCH,1135,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1135:59,AS-IS 문장 FLOW,1135,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1137:60,AS-IS 문장 LOCAL,1137,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1138:61,AS-IS 문장 BRANCH,1138,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1139:62,AS-IS 문장 LOCAL,1139,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1142:63,AS-IS 문장 LOCAL,1142,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1143:64,AS-IS 문장 FLOW,1143,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1146:65,AS-IS 문장 EXPR,1146,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1150:66,AS-IS 문장 EXPR,1150,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1151:67,AS-IS 문장 EXPR,1151,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1152:68,AS-IS 문장 EXPR,1152,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1153:69,AS-IS 문장 EXPR,1153,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1154:70,AS-IS 문장 EXPR,1154,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1156:71,AS-IS 문장 LOCAL,1156,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1159:72,AS-IS 문장 BRANCH,1159,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1160:73,AS-IS 문장 EXPR,1160,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1162:74,AS-IS 문장 EXPR,1162,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1166:75,AS-IS 문장 EXPR,1166,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1167:76,AS-IS 문장 EXPR,1167,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1169:77,AS-IS 문장 EXPR,1169,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1170:78,AS-IS 문장 EXPR,1170,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1171:79,AS-IS 문장 EXPR,1171,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1172:80,AS-IS 문장 EXPR,1172,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1173:81,AS-IS 문장 EXPR,1173,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1174:82,AS-IS 문장 EXPR,1174,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1175:83,AS-IS 문장 EXPR,1175,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1176:84,AS-IS 문장 EXPR,1176,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1177:85,AS-IS 문장 EXPR,1177,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1178:86,AS-IS 문장 EXPR,1178,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1179:87,AS-IS 문장 EXPR,1179,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1181:88,AS-IS 문장 EXPR,1181,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1182:89,AS-IS 문장 EXPR,1182,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1183:90,AS-IS 문장 EXPR,1183,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1186:91,AS-IS 문장 EXPR,1186,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1187:92,AS-IS 문장 EXPR,1187,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1188:93,AS-IS 문장 EXPR,1188,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1190:94,AS-IS 문장 LOCAL,1190,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1193:95,AS-IS 문장 BRANCH,1193,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1195:96,AS-IS 문장 LOCAL,1195,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1198:97,AS-IS 문장 LOCAL,1198,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1199:98,AS-IS 문장 EXPR,1199,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1201:99,AS-IS 문장 LOCAL,1201,미검증,F1=ERROR F2=ERROR F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1205:100,AS-IS 문장 LOCAL,1205,미검증,F1=ERROR F2=ERROR F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1207:101,AS-IS 문장 ENDPOINT,1207,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F6=ERROR DB-SYN=PASS DB-SYN=PASS,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1212:102,AS-IS 문장 LOCAL,1212,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1214:103,AS-IS 문장 ENDPOINT,1214,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR DB-SYN=PASS DB-SYN=PASS DB-SYN=PASS,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1216:104,AS-IS 문장 RESOURCE,1216,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR X-REOPEN=PASS,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1218:105,AS-IS 문장 UI_PROP,1218,FAIL,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR X-ROW=FAIL,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1220:106,AS-IS 문장 BRANCH,1220,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1222:107,AS-IS 문장 BRANCH,1222,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1223:108,AS-IS 문장 LOCAL,1223,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1224:109,AS-IS 문장 BRANCH,1224,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1225:110,AS-IS 문장 LOCAL,1225,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1226:111,AS-IS 문장 BRANCH,1226,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1227:112,AS-IS 문장 LOCAL,1227,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1231:113,AS-IS 문장 DATA_OP,1231,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1232:114,AS-IS 문장 DATA_OP,1232,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1233:115,AS-IS 문장 DATA_OP,1233,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1235:116,AS-IS 문장 DATA_OP,1235,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1236:117,AS-IS 문장 DATA_OP,1236,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1237:118,AS-IS 문장 DATA_OP,1237,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1238:119,AS-IS 문장 DATA_OP,1238,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1240:120,AS-IS 문장 DATA_OP,1240,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1241:121,AS-IS 문장 DATA_OP,1241,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1242:122,AS-IS 문장 DATA_OP,1242,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1243:123,AS-IS 문장 DATA_OP,1243,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1244:124,AS-IS 문장 DATA_OP,1244,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1245:125,AS-IS 문장 DATA_OP,1245,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1246:126,AS-IS 문장 DATA_OP,1246,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1248:127,AS-IS 문장 DATA_OP,1248,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1249:128,AS-IS 문장 DATA_OP,1249,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1250:129,AS-IS 문장 DATA_OP,1250,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1251:130,AS-IS 문장 DATA_OP,1251,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1252:131,AS-IS 문장 DATA_OP,1252,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1253:132,AS-IS 문장 DATA_OP,1253,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1254:133,AS-IS 문장 DATA_OP,1254,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1255:134,AS-IS 문장 DATA_OP,1255,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1256:135,AS-IS 문장 DATA_OP,1256,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1257:136,AS-IS 문장 DATA_OP,1257,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1258:137,AS-IS 문장 DATA_OP,1258,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1260:138,AS-IS 문장 DATA_OP,1260,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1261:139,AS-IS 문장 DATA_OP,1261,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1262:140,AS-IS 문장 DATA_OP,1262,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1264:141,AS-IS 문장 DATA_OP,1264,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1265:142,AS-IS 문장 DATA_OP,1265,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1266:143,AS-IS 문장 DATA_OP,1266,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1268:144,AS-IS 문장 BRANCH,1268,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1270:145,AS-IS 문장 DATA_OP,1270,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1271:146,AS-IS 문장 DATA_OP,1271,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1275:147,AS-IS 문장 DATA_OP,1275,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1276:148,AS-IS 문장 DATA_OP,1276,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1280:149,AS-IS 문장 DATA_OP,1280,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1281:150,AS-IS 문장 DATA_OP,1281,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1282:151,AS-IS 문장 DATA_OP,1282,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1284:152,AS-IS 문장 ENDPOINT,1284,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1284:152,AS-IS 문장 RETURN,1284,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,관찰점,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1288:153,AS-IS 문장 BRANCH,1288,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,같은 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1290:154,AS-IS 문장 EXPR,1290,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1292:155,AS-IS 문장 CALL_LOCAL,1292,미검증,F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR,1,바깥 사슬,SSP0003-S0c555f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1304:156,AS-IS 문장 MESSAGE,1304,FAIL,E4=ERROR F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sef24bd
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveData:1309:157,AS-IS 문장 MESSAGE,1309,FAIL,E4=ERROR F1=ERROR F2=ERROR F4=REVIEW F4=REVIEW F4=REVIEW F6=ERROR E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sdd3490
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData,AS-IS 진입점,891,FAIL,X-ROW=FAIL,3,진입점,SSP0003-S0f79c8 SSP0003-S95750d SSP0003-Sa6923e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:891:1,AS-IS 문장 LOCAL,891,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:892:2,AS-IS 문장 LOCAL,892,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:893:3,AS-IS 문장 LOCAL,893,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:894:4,AS-IS 문장 LOCAL,894,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:895:5,AS-IS 문장 LOCAL,895,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:896:6,AS-IS 문장 LOCAL,896,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:897:7,AS-IS 문장 LOCAL,897,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:900:8,AS-IS 문장 LOCAL,900,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:902:9,AS-IS 문장 LOCAL,902,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:903:10,AS-IS 문장 LOCAL,903,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:904:11,AS-IS 문장 LOCAL,904,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:908:12,AS-IS 문장 LOCAL,908,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:910:13,AS-IS 문장 BRANCH,910,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:912:14,AS-IS 문장 EXPR,912,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:913:15,AS-IS 문장 BRANCH,913,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:915:16,AS-IS 문장 LOCAL,915,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:916:17,AS-IS 문장 FLOW,916,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:920:18,AS-IS 문장 BRANCH,920,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:928:19,AS-IS 문장 LOCAL,928,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:929:20,AS-IS 문장 BRANCH,929,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:931:21,AS-IS 문장 BRANCH,931,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:933:22,AS-IS 문장 EXPR,933,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:935:23,AS-IS 문장 LOCAL,935,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:936:24,AS-IS 문장 FLOW,936,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:940:25,AS-IS 문장 BRANCH,940,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:940:26,AS-IS 문장 FLOW,940,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:942:27,AS-IS 문장 LOCAL,942,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:943:28,AS-IS 문장 BRANCH,943,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:944:29,AS-IS 문장 LOCAL,944,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:946:30,AS-IS 문장 LOCAL,946,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:948:31,AS-IS 문장 EXPR,948,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:952:32,AS-IS 문장 EXPR,952,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:953:33,AS-IS 문장 EXPR,953,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:956:34,AS-IS 문장 EXPR,956,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:958:35,AS-IS 문장 EXPR,958,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:960:36,AS-IS 문장 EXPR,960,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:962:37,AS-IS 문장 EXPR,962,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:966:38,AS-IS 문장 LOCAL,966,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:969:39,AS-IS 문장 LOCAL,969,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:970:40,AS-IS 문장 ENDPOINT,970,FAIL,X-ROW=FAIL F4=REVIEW DB-SYN=PASS,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:972:41,AS-IS 문장 LOCAL,972,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:974:42,AS-IS 문장 ENDPOINT,974,FAIL,X-ROW=FAIL F4=REVIEW F4=REVIEW DB-SYN=PASS DB-SYN=PASS,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:976:43,AS-IS 문장 RESOURCE,976,FAIL,X-ROW=FAIL X-REOPEN=PASS,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:978:44,AS-IS 문장 UI_PROP,978,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:980:45,AS-IS 문장 EXPR,980,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:982:46,AS-IS 문장 BRANCH,982,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:983:47,AS-IS 문장 LOCAL,983,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:984:48,AS-IS 문장 BRANCH,984,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:985:49,AS-IS 문장 LOCAL,985,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:986:50,AS-IS 문장 BRANCH,986,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:988:51,AS-IS 문장 LOCAL,988,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:989:52,AS-IS 문장 FLAG,989,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:992:53,AS-IS 문장 EXPR,992,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:994:54,AS-IS 문장 LOCAL,994,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:998:55,AS-IS 문장 DATA_OP,998,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:999:56,AS-IS 문장 DATA_OP,999,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1001:57,AS-IS 문장 DATA_OP,1001,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1002:58,AS-IS 문장 DATA_OP,1002,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1004:59,AS-IS 문장 DATA_OP,1004,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1005:60,AS-IS 문장 DATA_OP,1005,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1008:61,AS-IS 문장 DATA_OP,1008,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1009:62,AS-IS 문장 DATA_OP,1009,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1012:63,AS-IS 문장 ENDPOINT,1012,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1012:63,AS-IS 문장 RETURN,1012,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1016:64,AS-IS 문장 BRANCH,1016,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1018:65,AS-IS 문장 EXPR,1018,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1020:66,AS-IS 문장 CALL_LOCAL,1020,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-S0f79c8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1032:67,AS-IS 문장 MESSAGE,1032,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-S95750d
+ACT:SSP0003_ShipmentChangeRequestConfirm.SaveDraftingData:1037:68,AS-IS 문장 MESSAGE,1037,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-Sa6923e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl,AS-IS 진입점,227,미검증,X-ROW=ERROR E4=NA,7,진입점,SSP0003-Se9843f SSP0003-Sbd19c1 SSP0003-Sfa3936 SSP0003-Se90550 SSP0003-Se08523 SSP0003-Sd95741 SSP0003-S2eabad
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:227:1,AS-IS 문장 DATA_OP,227,미검증,C3=ERROR E4=NA,1,부르는 쪽 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:228:2,AS-IS 문장 DATA_OP,228,미검증,C3=ERROR E4=NA,1,부르는 쪽 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:230:3,AS-IS 문장 BRANCH,230,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sfc19ed
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:234:4,AS-IS 문장 FLAG,234,미검증,E4=NA B4=ERROR B3=PASS,1,관찰점,SSP0003-Se9843f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:234:4,AS-IS 문장 COMBO_DATA,234,미검증,E4=NA B4=ERROR B3=PASS,1,관찰점,SSP0003-Se9843f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:236:5,AS-IS 문장 FLOW,236,검증완료,E4=NA,1,같은 사슬,SSP0003-Se9843f
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:239:6,AS-IS 문장 FLAG,239,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sbd19c1
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:239:6,AS-IS 문장 COMBO_DATA,239,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sbd19c1
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:241:7,AS-IS 문장 FLOW,241,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Sbd19c1
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:244:8,AS-IS 문장 FLAG,244,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sfa3936
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:244:8,AS-IS 문장 COMBO_DATA,244,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sfa3936
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:246:9,AS-IS 문장 FLOW,246,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Sfa3936
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:249:10,AS-IS 문장 FLAG,249,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Se90550
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:249:10,AS-IS 문장 COMBO_DATA,249,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Se90550
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:251:11,AS-IS 문장 FLOW,251,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Se90550
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:254:12,AS-IS 문장 FLAG,254,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Se08523
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:254:12,AS-IS 문장 COMBO_DATA,254,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Se08523
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:256:13,AS-IS 문장 FLOW,256,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Se08523
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:259:14,AS-IS 문장 FLAG,259,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sd95741
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:259:14,AS-IS 문장 COMBO_DATA,259,미검증,X-ROW=ERROR,1,관찰점,SSP0003-Sd95741
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:261:15,AS-IS 문장 FLOW,261,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Sd95741
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:264:16,AS-IS 문장 FLAG,264,미검증,X-ROW=ERROR,1,관찰점,SSP0003-S2eabad
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:264:16,AS-IS 문장 COMBO_DATA,264,미검증,X-ROW=ERROR,1,관찰점,SSP0003-S2eabad
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeControl:266:17,AS-IS 문장 FLOW,266,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S2eabad
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo,AS-IS 진입점,852,미검증,C3=ERROR C3=ERROR C3=ERROR C3=ERROR C3=ERROR C3=ERROR E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA,1,진입점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:852:1,AS-IS 문장 EXPR,852,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:853:2,AS-IS 문장 EXPR,853,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:854:3,AS-IS 문장 EXPR,854,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:855:4,AS-IS 문장 EXPR,855,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:856:5,AS-IS 문장 EXPR,856,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:857:6,AS-IS 문장 EXPR,857,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:858:7,AS-IS 문장 EXPR,858,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:859:8,AS-IS 문장 EXPR,859,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:862:9,AS-IS 문장 VALUE_SET,862,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:863:10,AS-IS 문장 VALUE_SET,863,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:864:11,AS-IS 문장 VALUE_SET,864,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:865:12,AS-IS 문장 VALUE_SET,865,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:866:13,AS-IS 문장 VALUE_SET,866,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:867:14,AS-IS 문장 VALUE_SET,867,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:868:15,AS-IS 문장 VALUE_SET,868,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangeRequestInfo:869:16,AS-IS 문장 VALUE_SET,869,검증완료,E4=NA,1,관찰점,SSP0003-S0b7fa8
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl,AS-IS 진입점,354,미검증,X-ROW=ERROR E4=NA E4=NA,3,진입점,SSP0003-S5dcee3 SSP0003-Sa16183 SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:354:1,AS-IS 문장 EXPR,354,검증완료,E4=NA,1,같은 사슬,SSP0003-S5dcee3
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:366:2,AS-IS 문장 DATA_OP,366,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-S5dcee3
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:368:3,AS-IS 문장 LOCAL,368,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:369:4,AS-IS 문장 ENDPOINT,369,미검증,F4=REVIEW DB-SYN=NOPATH,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:371:5,AS-IS 문장 RESOURCE,371,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:373:6,AS-IS 문장 DATA_OP,373,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:374:7,AS-IS 문장 DATA_OP,374,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:375:8,AS-IS 문장 DATA_OP,375,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:376:9,AS-IS 문장 DATA_OP,376,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:377:10,AS-IS 문장 DATA_OP,377,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:378:11,AS-IS 문장 LOCAL,378,미검증,F4=REVIEW F4=REVIEW DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:378:11,AS-IS 문장 ENDPOINT,378,미검증,F4=REVIEW F4=REVIEW DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:381:12,AS-IS 문장 FLAG,381,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-Sa16183
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:385:13,AS-IS 문장 LOCAL,385,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:386:14,AS-IS 문장 ENDPOINT,386,미검증,F4=REVIEW DB-SYN=NOPATH,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:388:15,AS-IS 문장 RESOURCE,388,검증완료,X-REOPEN=PASS,1,같은 사슬,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:390:16,AS-IS 문장 DATA_OP,390,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:391:17,AS-IS 문장 DATA_OP,391,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:392:18,AS-IS 문장 DATA_OP,392,미검증,C3=ERROR E4=NA,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:393:19,AS-IS 문장 LOCAL,393,미검증,F4=REVIEW F4=REVIEW DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:393:19,AS-IS 문장 ENDPOINT,393,미검증,F4=REVIEW F4=REVIEW DB-SYN=NOPATH DB-SYN=NOPATH,1,관찰점,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:396:20,AS-IS 문장 FLAG,396,미검증,C3=ERROR E4=NA,1,같은 사슬,SSP0003-S8e0a78
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedControl:400:21,AS-IS 문장 LIST_REBIND,400,미검증,E4=NA C1=PASS X-ROW=ERROR,1,관찰점,SSP0003-S5dcee3
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod,AS-IS 진입점,1569,해당없음,X-ROW=NA E4=NA,2,진입점,SSP0003-S950695 SSP0003-Sc2c5b0
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1569:1,AS-IS 문장 BRANCH,1569,해당없음,C3=NA E4=NA,1,같은 사슬,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1571:2,AS-IS 문장 LOCAL,1571,해당없음,C3=NA E4=NA,1,바깥 사슬,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1573:3,AS-IS 문장 COMBO_DATA,1573,해당없음,X-ROW=NA,1,관찰점,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1575:4,AS-IS 문장 BRANCH,1575,해당없음,C3=NA E4=NA,1,같은 사슬,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1576:5,AS-IS 문장 RETURN,1576,해당없음,C3=NA E4=NA,1,바깥 사슬,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1578:6,AS-IS 문장 BRANCH,1578,해당없음,E4=NA,1,같은 사슬,SSP0003-S950695
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1580:7,AS-IS 문장 UI_PROP,1580,검증완료,E4=NA G4=PASS X-ROW=NA,1,관찰점,SSP0003-Sc2c5b0
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetChangedPeriod:1581:8,AS-IS 문장 UI_PROP,1581,검증완료,E4=NA G4=PASS X-ROW=NA,1,관찰점,SSP0003-Sc2c5b0
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear,AS-IS 진입점,874,미검증,X-ROW=ERROR E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=NA E4=ERROR,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:874:1,AS-IS 문장 VALUE_CLEAR,874,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:875:2,AS-IS 문장 VALUE_CLEAR,875,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:876:3,AS-IS 문장 VALUE_CLEAR,876,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:877:4,AS-IS 문장 VALUE_CLEAR,877,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:878:5,AS-IS 문장 VALUE_CLEAR,878,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:879:6,AS-IS 문장 VALUE_CLEAR,879,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:880:7,AS-IS 문장 VALUE_CLEAR,880,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:881:8,AS-IS 문장 VALUE_CLEAR,881,검증완료,E4=NA,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SetConfirmInfoClear:882:9,AS-IS 문장 VALUE_CLEAR,882,미검증,E4=ERROR,1,부르는 쪽 사슬,SSP0003-Sed3e1e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick,AS-IS 진입점,1782,미검증,X-ROW=NA M4=REVIEW M4=REVIEW M4=REVIEW M4=REVIEW M4=REVIEW M4=REVIEW,4,진입점,SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1782:1,AS-IS 문장 EXPR,1782,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1784:2,AS-IS 문장 FLAG,1784,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1785:3,AS-IS 문장 EXPR,1785,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1786:4,AS-IS 문장 RETURN,1786,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1787:5,AS-IS 문장 EXPR,1787,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1788:6,AS-IS 문장 EXPR,1788,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1789:7,AS-IS 문장 EXPR,1789,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1790:8,AS-IS 문장 EXPR,1790,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1791:9,AS-IS 문장 EXPR,1791,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1792:10,AS-IS 문장 CALL_LOCAL,1792,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1794:11,AS-IS 문장 BRANCH,1794,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1796:12,AS-IS 문장 UI_PROP,1796,검증완료,X-ROW=NA,1,관찰점,SSP0003-Sb8bb65
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1797:13,AS-IS 문장 UI_PROP,1797,검증완료,X-ROW=NA,1,관찰점,SSP0003-Sb8bb65
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1801:14,AS-IS 문장 UI_PROP,1801,검증완료,X-ROW=NA,1,관찰점,SSP0003-Sab647e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1802:15,AS-IS 문장 UI_PROP,1802,검증완료,X-ROW=NA,1,관찰점,SSP0003-Sab647e
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1805:16,AS-IS 문장 BRANCH,1805,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1807:17,AS-IS 문장 UI_PROP,1807,검증완료,X-ROW=NA,1,관찰점,SSP0003-S613f39
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1811:18,AS-IS 문장 UI_PROP,1811,검증완료,X-ROW=NA,1,관찰점,SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1814:19,AS-IS 문장 BRANCH,1814,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1816:20,AS-IS 문장 FLAG,1816,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1820:21,AS-IS 문장 FLAG,1820,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1823:22,AS-IS 문장 FLAG,1823,미검증,M4=REVIEW,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_CellDoubleClick:1825:23,AS-IS 문장 CALL_LOCAL,1825,미검증,H6=ERROR G5=ERROR M4=ERROR,4,같은 메서드(하위 사슬),SSP0003-Sb8bb65 SSP0003-Sab647e SSP0003-S613f39 SSP0003-Sf3a320
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_TopChange,AS-IS 진입점,1876,미검증,X-ROW=ERROR H4=ERROR,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_TopChange:1876:1,AS-IS 문장 LOCAL,1876,미검증,H4=ERROR,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.SpdMain_TopChange:1878:2,AS-IS 문장 LOCAL,1878,미검증,H4=ERROR,0,,
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click,AS-IS 진입점,2072,미검증,K4=ERROR J2=ERROR,2,진입점,SSP0003-Sea1449 SSP0003-Sec3442
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2072:1,AS-IS 문장 LOCAL,2072,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2073:2,AS-IS 문장 LOCAL,2073,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2076:3,AS-IS 문장 LOCAL,2076,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2077:4,AS-IS 문장 LOCAL,2077,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2079:5,AS-IS 문장 POPUP,2079,미검증,G5=NA H6=ERROR M3=ERROR K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2081:6,AS-IS 문장 POPUP,2081,미검증,G5=PASS H6=ERROR K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2082:7,AS-IS 문장 UI_PROP,2082,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2083:8,AS-IS 문장 POPUP,2083,미검증,G5=NA H6=ERROR K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2085:9,AS-IS 문장 LOCAL,2085,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2087:10,AS-IS 문장 BRANCH,2087,미검증,K4=ERROR J2=ERROR,1,같은 사슬,SSP0003-Sea1449
+ACT:SSP0003_ShipmentChangeRequestConfirm.btnItemId_Click:2089:11,AS-IS 문장 VALUE_SET,2089,미검증,K4=ERROR J2=ERROR X-ROW=ERROR,1,관찰점,SSP0003-Sec3442
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn,AS-IS 진입점,1587,FAIL,X-ROW=FAIL,2,진입점,SSP0003-Sbe93a1 SSP0003-S6f1c91
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1587:1,AS-IS 문장 LOCAL,1587,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1588:2,AS-IS 문장 LOCAL,1588,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1590:3,AS-IS 문장 FLAG,1590,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1590:3,AS-IS 문장 COMBO_DATA,1590,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1591:4,AS-IS 문장 BRANCH,1591,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1593:5,AS-IS 문장 LOCAL,1593,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1593:5,AS-IS 문장 DATA_OP,1593,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1594:6,AS-IS 문장 BRANCH,1594,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1596:7,AS-IS 문장 LOCAL,1596,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1599:8,AS-IS 문장 BRANCH,1599,FAIL,X-ROW=FAIL,1,바깥 사슬,SSP0003-Sbe93a1
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1601:9,AS-IS 문장 LOCAL,1601,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-S6f1c91
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1602:10,AS-IS 문장 DATA_OP,1602,FAIL,X-ROW=FAIL,1,관찰점,SSP0003-S6f1c91
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1603:11,AS-IS 문장 MESSAGE,1603,FAIL,E4=ERROR X-ROW=FAIL E4=ERROR I1=FAIL,1,관찰점,SSP0003-S6f1c91
+ACT:SSP0003_ShipmentChangeRequestConfirm.chkERPIFBlockYn:1607:12,AS-IS 문장 RETURN,1607,FAIL,X-ROW=FAIL,1,같은 사슬,SSP0003-Sbe93a1

@@ -28,7 +28,7 @@
 | grid 전체 중복 row check + MSG + revert | §2.10.2 duplicate-check | `cellEditEnded` + getOriginalValue + revert |
 | parent clear → child cell 다중 clear (예: CountryName clear → Country/City clear) | §2.10.3 cascade-clear | `cellEditEnded` + 다중 storeChange |
 | staging table (예: dtSubBucket) | §2.10.4 staging | EditTracker 자동 (DataGrid wrapper) |
-| combo 옵션 reload (예: SalesPlant ↔ SalesCompany) | §2.10.5 combo cascade | column.dataMap 갱신 (⚠️ 전체 grid 적용 — row 별 불가) |
+| combo 옵션 reload (예: SalesPlant ↔ SalesCompany) | §2.10.5 combo cascade | column.dataMap 갱신 (⚠️ 전체 grid 적용 — row 별 불가) (2026-11-14 정정: 행별 후보는 공용 DataGrid 컬럼 메타(PARAM2, PARAM10) 처리가 표준(2026-09-01). 편집 진입 때 col.dataMap 교체 금지. `SalesFuturePriceGrid.tsx:267-276`) |
 | modal cell 선택 → 다중 cell 일괄 cascade (예: setRegion / setCustomers) | §2.10.6 modal callback | dblClick → Modal → setSelectedValue callback (storeChange N 회) |
 | 동일 key 의 **다중 row 의 특정 cell** 동기 (예: VMI_LT) | §2.10.7 다중 row propagate | `deferUpdate` + items.forEach + 다중 storeChange |
 
@@ -99,7 +99,7 @@ rg -nE "\.Changed\s*-=" {asis-cs}
 ## §5 cross-ref
 
 - 룰 07 `_tobe/07_datagrid.md` §2.10 (7 sub-pattern 정형)
-- 룰 25 `_dev_rules/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` §1.5.2 (As-Is `.cs` 의 `LockColumn`/`SetCellTypeCombo`/`cellTypeImage` → To-Be `_inputEditType`/`_ctrlType`/`_modalKey` 매핑)
+- 룰 25 `_dev_rules/_archive/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` (2026-11-13 정정: `_dev_rules/` → `_dev_rules/_archive/` 보관 이동 반영) §1.5.2 (As-Is `.cs` 의 `LockColumn`/`SetCellTypeCombo`/`cellTypeImage` → To-Be `_inputEditType`/`_ctrlType`/`_modalKey` 매핑)
 - Hook `asis-coverage-check.md` (4축 매핑 PR 머지 게이트)
 - 메타-룰 `meta-rule-evolution.md` (PoC → 룰 보강 사이클)
 - 메모리 `feedback_cell_cascade_5_patterns.md` (트리거)

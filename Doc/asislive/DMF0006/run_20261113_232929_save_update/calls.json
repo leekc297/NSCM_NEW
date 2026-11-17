@@ -1,0 +1,61 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 23:30:37.339",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+   "sp": "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 69.92,
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_customer_project_code": "48V GEN 1.5 CLAR",
+    "p_customer_model": "APBMW48CL-B1-B01",
+    "p_scm_site_id": "BMW_DE_MUC",
+    "p_project_code": "A18BW2003",
+    "p_item_id": "",
+    "p_valid_yn": "Y",
+    "p_customer_model_type": "",
+    "p_convert_qty_pack": "31",
+    "p_convert_qty_module": "0.0000000000",
+    "p_convert_qty_cell": "0.0000000000",
+    "p_created_by": "jaeuk.shin",
+    "p_creation_date": "2026-11-13 오후 11:30:37",
+    "p_last_updated_by": "jaeuk.shin",
+    "p_last_update_date": "2026-11-13 오후 11:30:37"
+   },
+   "inline": "EXEC PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA @p_active_flag='M', @p_division_id='81', @p_customer_project_code='48V GEN 1.5 CLAR', @p_customer_model='APBMW48CL-B1-B01', @p_scm_site_id='BMW_DE_MUC', @p_project_code='A18BW2003', @p_item_id='', @p_valid_yn='Y', @p_customer_model_type='', @p_convert_qty_pack='31', @p_convert_qty_module='0.0000000000', @p_convert_qty_cell='0.0000000000', @p_created_by='jaeuk.shin', @p_creation_date='2026-11-13 오후 11:30:37', @p_last_updated_by='jaeuk.shin', @p_last_update_date='2026-11-13 오후 11:30:37'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:30:48.305",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA",
+   "sp": "DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 152,
+   "rows_kind": "DataSet rows",
+   "ms": 7079.61,
+   "params": {
+    "p_division_id": "81",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL",
+    "p_scm_site_id": "ALL",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_customer_project_code": "",
+    "p_customer_model": "",
+    "p_valid_yn": "Y",
+    "p_created_by": "jaeuk.shin",
+    "p_userinfo": "ADMIN"
+   },
+   "inline": "EXEC DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_project_code='', @p_item_id='', @p_customer_project_code='', @p_customer_model='', @p_valid_yn='Y', @p_created_by='jaeuk.shin', @p_userinfo='ADMIN'",
+   "phase": "action:save"
+  }
+ ]
+}

@@ -19,6 +19,7 @@ import type { MeasureInfoRow, SalesPlanRow, SpreadTitleRow } from './sales-plan.
 import { useSalesPlanStore } from './useSalesPlanStore';
 import { callSaveSalesPlan, formatSaveErrorText } from './utils/sales-plan.api';
 import { resolveSalesPlanAuthGroup } from './utils/sales-plan.auth';
+import { dynKindOf } from './utils/sales-plan.editLock';
 import { type GroupKeyColumn, groupKeyBindings } from './utils/sales-plan.insertAnchor';
 import { buildSavePayload, buildUnfoldRows } from './utils/sales-plan.save';
 import { SEARCH_COMBO } from './utils/sales-plan.searchCombos';
@@ -193,7 +194,27 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainData]);
 
-  const spRows = useMemo<SalesPlanRow[]>(() => mainData?.data ?? [], [mainData]);
+  // 조회해 온 수량 0 은 빈칸으로 받는다 — DMF0003 Mkt Fcst 와 같은 표시(2026-11-11 사용자 요청).
+  //   조회 SP 가 다른 메저는 QTY <> 0 으로 걸러 내고 RTF_SYS_RP 만 0 을 내려 주므로, 그 0 만 비우면
+  //   모든 메저가 같아진다. 표시 규칙(formatByNotation: 값 0 = '0')은 그대로라 입력한 0 은 저장 전까지 보이고,
+  //   저장 후 재조회하면 다시 빈칸이 된다. 원본 캐시를 건드리지 않도록 0 이 있는 행만 복사한다.
+  const spRows = useMemo<SalesPlanRow[]>(
+    () =>
+      (mainData?.data ?? []).map(row => {
+        const zeroKeys = Object.keys(row).filter(key => {
+          if (!dynKindOf(key)) return false;
+          const v = (row as Record<string, unknown>)[key];
+          return v != null && v !== '' && Number(v) === 0;
+        });
+        if (zeroKeys.length === 0) return row;
+        const copy = { ...row } as Record<string, unknown>;
+        zeroKeys.forEach(key => {
+          copy[key] = null;
+        });
+        return copy as SalesPlanRow;
+      }),
+    [mainData]
+  );
   // ⭐ measure 행 필터는 서버(TITLESET 'M') 단일 출처 — 모달 OK 의 saveTitleSet('M') + invalidate 재조회로
   //   반영 (클라이언트 measure 행 필터 금지 — DMF0003 종속 메저 잘림 사고 계보).
   // 신규행은 GridAction.addRowSet 이 spRows(=grid.collectionView.sourceCollection)에 직접
@@ -252,7 +273,7 @@ export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     return true;
   };
 
-  // 변경분 존재 여부 — Bucket 변경 가드(MSG00227) 입력 (신규 행 + EditTracker 변경 셀)
+  // 변경분 존재 여부 — Bucket 변경 가드(MSG00680) 입력 (신규 행 + EditTracker 변경 셀)
   const hasPendingChanges = () =>
     pendingRows.length > 0 || (editTrackerRef.current?.getOriginalValues()?.size ?? 0) > 0;
 

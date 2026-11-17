@@ -1,0 +1,585 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 17,
+     "cells": [
+      {
+       "row": 8,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 8,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "DIVISION_ID",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "TO_SITE",
+       "before": "WA00-A",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "SITE_DESCRIPTION",
+       "before": "LGESWA Cell WA00",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "APCAN1257B",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "ELECTRODE_TYPE",
+       "before": "ANODE",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "MODEL_ID",
+       "before": "ACPN1034U-A1-100",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "NICK_NAME",
+       "before": "P34-100",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "USER_ID",
+       "before": "michaelchoi",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "USER_NAME",
+       "before": "Michael Choi",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "CREATION_DATE",
+       "before": "2020-07-03 15:18:05",
+       "after": ""
+      },
+      {
+       "row": 8,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2022-12-12 17:36:22",
+       "after": ""
+      },
+      {
+       "row": 9,
+       "col": "ITEM_ID",
+       "before": "APCAN1280B",
+       "after": "APCAN1257B"
+      },
+      {
+       "row": 9,
+       "col": "MODEL_ID",
+       "before": "ACEN1066I-A1-D02",
+       "after": "ACPN1034U-A1-100"
+      },
+      {
+       "row": 9,
+       "col": "NICK_NAME",
+       "before": "E66C-D02",
+       "after": "P34-100"
+      },
+      {
+       "row": 9,
+       "col": "USER_ID",
+       "before": "kgorlach",
+       "after": "michaelchoi"
+      },
+      {
+       "row": 9,
+       "col": "USER_NAME",
+       "before": "KAROLINA GORLACH",
+       "after": "Michael Choi"
+      },
+      {
+       "row": 9,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-07-03 15:18:05",
+       "after": "2022-12-12 17:36:22"
+      },
+      {
+       "row": 10,
+       "col": "ITEM_ID",
+       "before": "APCAN1288A",
+       "after": "APCAN1280B"
+      },
+      {
+       "row": 10,
+       "col": "MODEL_ID",
+       "before": "ACLT1010U-A1-D02",
+       "after": "ACEN1066I-A1-D02"
+      },
+      {
+       "row": 10,
+       "col": "NICK_NAME",
+       "before": "L10D-2",
+       "after": "E66C-D02"
+      },
+      {
+       "row": 11,
+       "col": "ITEM_ID",
+       "before": "APCAN1397A",
+       "after": "APCAN1288A"
+      },
+      {
+       "row": 11,
+       "col": "MODEL_ID",
+       "before": "ACLT1010U-A1-D04",
+       "after": "ACLT1010U-A1-D02"
+      },
+      {
+       "row": 11,
+       "col": "NICK_NAME",
+       "before": "L10D-4",
+       "after": "L10D-2"
+      },
+      {
+       "row": 12,
+       "col": "ITEM_ID",
+       "before": "APCCA0548A",
+       "after": "APCAN1397A"
+      },
+      {
+       "row": 12,
+       "col": "ELECTRODE_TYPE",
+       "before": "CATHODE",
+       "after": "ANODE"
+      },
+      {
+       "row": 12,
+       "col": "MODEL_ID",
+       "before": "ACPN1029I-A1",
+       "after": "ACLT1010U-A1-D04"
+      },
+      {
+       "row": 12,
+       "col": "NICK_NAME",
+       "before": "P28.5",
+       "after": "L10D-4"
+      },
+      {
+       "row": 13,
+       "col": "ITEM_ID",
+       "before": "APCCA0867A",
+       "after": "APCCA0548A"
+      },
+      {
+       "row": 13,
+       "col": "MODEL_ID",
+       "before": "ACLT1010U-A1-D02",
+       "after": "ACPN1029I-A1"
+      },
+      {
+       "row": 13,
+       "col": "NICK_NAME",
+       "before": "L10D-2",
+       "after": "P28.5"
+      },
+      {
+       "row": 14,
+       "col": "ITEM_ID",
+       "before": "APCCA0978A",
+       "after": "APCCA0867A"
+      },
+      {
+       "row": 14,
+       "col": "MODEL_ID",
+       "before": "ACPN1034U-A1-100",
+       "after": "ACLT1010U-A1-D02"
+      },
+      {
+       "row": 14,
+       "col": "NICK_NAME",
+       "before": "P34-100",
+       "after": "L10D-2"
+      },
+      {
+       "row": 14,
+       "col": "USER_ID",
+       "before": "michaelchoi",
+       "after": "kgorlach"
+      },
+      {
+       "row": 14,
+       "col": "USER_NAME",
+       "before": "Michael Choi",
+       "after": "KAROLINA GORLACH"
+      },
+      {
+       "row": 14,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2022-12-12 17:35:50",
+       "after": "2020-07-03 15:18:05"
+      },
+      {
+       "row": 15,
+       "col": "ITEM_ID",
+       "before": "APCCA1329A",
+       "after": "APCCA0978A"
+      },
+      {
+       "row": 15,
+       "col": "MODEL_ID",
+       "before": "ACEN1066I-A1-D04",
+       "after": "ACPN1034U-A1-100"
+      },
+      {
+       "row": 15,
+       "col": "NICK_NAME",
+       "before": "E66C-D04",
+       "after": "P34-100"
+      },
+      {
+       "row": 15,
+       "col": "USER_ID",
+       "before": "kgorlach",
+       "after": "michaelchoi"
+      },
+      {
+       "row": 15,
+       "col": "USER_NAME",
+       "before": "KAROLINA GORLACH",
+       "after": "Michael Choi"
+      },
+      {
+       "row": 15,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-07-03 15:18:05",
+       "after": "2022-12-12 17:35:50"
+      },
+      {
+       "row": 16,
+       "col": "(행)",
+       "before": "없음",
+       "after": "있음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "new_rows": {
+    "spdMain/Shipment Requestor PIC": [
+     8,
+     16
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:15:33.599",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Shipment Requestor PIC",
+    "sheet": "Shipment Requestor PIC",
+    "rows_total": 17,
+    "from": 8,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "DIVISION_ID",
+      "label": "Div",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "TO_SITE",
+      "label": "Plant Site Code",
+      "data_field": "TO_SITE",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "SITE_DESCRIPTION",
+      "label": "Plant Site*",
+      "data_field": "SITE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "ITEM_ID",
+      "label": "Material*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "ELECTRODE_TYPE",
+      "label": "Electrode Type",
+      "data_field": "ELECTRODE_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "MODEL_ID",
+      "label": "Model",
+      "data_field": "MODEL_ID",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "CELL_TYPE",
+      "label": "Cell Type",
+      "data_field": "CELL_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "USER_ID",
+      "label": "User ID*",
+      "data_field": "USER_ID",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "USER_NAME",
+      "label": "User Name",
+      "data_field": "USER_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "PART_LEADER",
+      "label": "Part Leader",
+      "data_field": "PART_LEADER",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "PART_LEADER_NAME",
+      "label": "Part Leader Name",
+      "data_field": "PART_LEADER_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "TEAM_LEADER",
+      "label": "Team Leader",
+      "data_field": "TEAM_LEADER",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "TEAM_LEADER_NAME",
+      "label": "Team Leader Name",
+      "data_field": "TEAM_LEADER_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "VALID_YN",
+      "label": "Valid*",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "100100111101010101111"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:15:33.605"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Plant Site* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:14:44",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true
+}

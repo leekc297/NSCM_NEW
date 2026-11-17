@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3797,
+  "at": "2026-11-14T01:07:12.776Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3683,
+  "at": "2026-11-14T01:07:24.675Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

@@ -8,7 +8,7 @@ import { useMutation } from '@foundation/query-client';
 import { sessionTimeZone } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Box, Stack } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -340,6 +340,9 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
     [t, setAlert, session]
   );
   const savingRef = useRef(false);
+  // 저장 전체 구간(검증~ERP 연쇄~확정저장) 동안 팝업을 Dim+잠금 — 중복 클릭 차단(사용자 요청 2026-11-10).
+  //   savingRef(동기 재진입 가드)는 리렌더를 못 일으켜 버튼 시각잠금/오버레이에 쓸 수 없어 state 를 병행한다.
+  const [saving, setSaving] = useState(false);
 
   // 저장 — AS-IS SaveData(RP:401~700) 순서:
   //   검증(RP:422, 아래) → [엔진 진행 검사 RP:412 SSP0003_GET_SSP_PLAN_PROCESSING_CHECK — TO-BE 메타 없음, 보류]
@@ -441,10 +444,12 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
     }
     if (isPending || savingRef.current) return; // 연쇄 진행 중 재진입 차단
     savingRef.current = true;
+    setSaving(true); // 팝업 Dim+버튼 잠금 ON
     try {
       await runSave(src);
     } finally {
       savingRef.current = false;
+      setSaving(false); // 저장 완료/실패 후 해제
     }
   };
 
@@ -468,10 +473,19 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
       disableEnforceFocus
       title={t(LBL.REQUEST, '_Shipment Request')}
       customContentArea={
-        <Stack direction='column' spacing={1}>
+        <Box sx={{ position: 'relative' }}>
+          {/* 저장 중 팝업 Dim+클릭 차단(placement='parent' 백드롭이 부모 전체를 덮어 버튼 재클릭까지 막음) —
+              하단 그리드만 Dim 되어 중복 클릭 가능하던 문제 해소(사용자 요청 2026-11-10, FcstUploadModal 패턴). */}
+          <ProgressIndicator
+            shape='circular'
+            apprearance='infinite'
+            open={saving || isPending}
+            placement='parent'
+          />
+          <Stack direction='column' spacing={1}>
           {/* 상단 툴바 (AS-IS 캡처 1:1) — Auto Set · Change Reason* · Reason Detail* · Save · Cancel */}
           <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={1}>
-            <Button appearance='outlined' priority='normal' onClick={handleAutoSet}>
+            <Button appearance='outlined' priority='normal' disabled={saving} onClick={handleAutoSet}>
               Auto Set
             </Button>
             <FormItem
@@ -495,7 +509,12 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
                 <InputField value={autoDetail} onChange={e => setAutoDetail(e.target.value)} />
               )}
             />
-            <Button appearance='contained' priority='primary' onClick={() => void handleSave()}>
+            <Button
+              appearance='contained'
+              priority='primary'
+              disabled={saving || isPending}
+              onClick={() => void handleSave()}
+            >
               {t(LBL.OK, '_Save')}
             </Button>
             <Button appearance='outlined' priority='normal' onClick={modalClose}>
@@ -505,7 +524,8 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
           <Box sx={{ height: 460 }}>
             <DataGrid gridRef={gridRef} itemsSource={rows as unknown as WijmoRowItem[]} dynamicColumns={columns} />
           </Box>
-        </Stack>
+          </Stack>
+        </Box>
       }
     />
   );

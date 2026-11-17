@@ -1,0 +1,61 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0025-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 0->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0025-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 16개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0025-Sb39c49"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 06:02:45"
+}

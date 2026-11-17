@@ -1,4 +1,4 @@
-# [Harness] DMF0042 business-plan — BLOCK 25 / WARN 102 (final)
+# [Harness] DMF0042 business-plan — BLOCK 25 / WARN 103 (final)
 
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/ReplaceByCutoffModal.tsx:233
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/VersionCutoffModal.tsx:255
@@ -72,6 +72,7 @@
 - WARN G04 As-is 컨트롤 cboQty / UsrCheckBox 매핑표 §1 에 없음
 - BLOCK H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/BusinessPlanForm.tsx:407
 - BLOCK H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/BusinessPlanForm.tsx:412
+- WARN D01 사전 밖 컴포넌트 <IcExchangeRate> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/MeasureSelectModal.tsx
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionCutoffModal.tsx
 - WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
@@ -85,16 +86,16 @@
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @business-plan.constants.ts
 - BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @utils/business-plan.save.test.ts
 - BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @utils/business-plan.save.ts
-- BLOCK VC1 대조표 FAIL 15행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)
-- BLOCK VC1 대조표 미검증 8756행 — 검사 사유 ERROR 6956 · NOT_RUN 18677 · REVIEW 968 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
-- BLOCK VC1 작업 원장 미완료 1235건 / 검사 인스턴스 1275 — W2 15 · W3 1 · W4 8 · W5 96 · W6 476 · W7 639 · 구현 의심 10 (Doc/verify/DMF0042/work_ledger.md)
-- WARN VC1 대조표 검증 추적이 100시간 전 결과 — 재실행 후 판정
+- BLOCK VC1 대조표 FAIL 322행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)
+- BLOCK VC1 대조표 미검증 8449행 — 검사 사유 ERROR 6761 · NOT_RUN 17782 · REVIEW 465 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- BLOCK VC1 작업 원장 미완료 952건 / 검사 인스턴스 2338 — W3 20 · W5 62 · W6 339 · W7 96 · W9 435 · 구현 의심 6 (Doc/verify/DMF0042/work_ledger.md)
+- WARN VC1 대조표 검증 추적이 119시간 전 결과 — 재실행 후 판정
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @BusinessPlan.tsx:270
 - WARN R10 감사키 빈문자열 (#99 §0.1) @BusinessPlan.tsx:76
-- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:149
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:150
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useBusinessPlanStore.ts:267
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/business-plan.merge.ts:38
-- WARN R16 진입 Page 700 라인 > 400 — components/ 분리 (#9) @BusinessPlan.tsx
+- WARN R16 진입 Page 703 라인 > 400 — components/ 분리 (#9) @BusinessPlan.tsx
 - BLOCK B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
 - BLOCK B19 validation.md 434행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
 - BLOCK B19 expressions.md 288행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
@@ -111,15 +112,15 @@
 - BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SPREAD_TITLE · 시트 'spreadTitle') — 누락 sesUserId — 현재 키: startYyyymmdd, endYyyymmdd, divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
 - BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 programId, sesUserId — 현재 키: sheetName, columnType, divisionId, mnuId · BE positional 매핑이라 값이 NULL 로 감
 - WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpread_X:184, InitSpread:254 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpread_X / 184 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md
-- BLOCK S01 정적 게이트(run_verify.py --static) 실행 — 실행 결과 없음(rc=1) —                                                     ^^^ | UnboundLocalError: cannot access local variable 'mid' where it is not associated with a value
-- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package. @components\BusinessPlanGrid.tsx:35
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:287
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:305
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:313
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:376
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:397
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:218
-- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:346
+- BLOCK S01 정적 게이트 직접 FAIL 0(정적 판정 3801행 · ERROR 2551) — FAIL 1: I4×1 — Doc/verify/DMF0042/static_gate.md
+- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package. @components\BusinessPlanGrid.tsx:36
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:288
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:306
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:314
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:377
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:398
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:219
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:347
 - WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MeasureSelectModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\MeasureSelectModal.tsx:8
 - WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ReplaceByCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\ReplaceByCutoffModal.tsx:21
 - WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\VersionCutoffModal.tsx:22

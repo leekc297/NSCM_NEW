@@ -1,0 +1,41 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST,SCM0005_DynamicQueryListPopUp.cs:349 FindData,1회 · 구간 find,MATCH,
+SP,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST_COMMON,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS,SCM0005_DynamicQueryListPopUp.cs:443 GroupData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST2,SCM0005_DynamicQueryList.cs:505 FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS,SCM0005_DynamicQueryListPopUp.cs:458 ParameterData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ADM_DQ_CREATE,SCM0005_DynamicQueryListPopUp.cs:524 mSave,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ADM_DQ_CREATE_COLUMN,SCM0005_DynamicQueryList.cs:863 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ADM_DQ_CREATE_PARAMETER,SCM0005_DynamicQueryList.cs:900 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ADM_DQ_CREATE_USER_GROUP,SCM0005_DynamicQueryList.cs:832 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ADM_DQ_EXECUTE_HIST,SCM0005_DynamicQueryList.cs:527 FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),46개,35개,INFO,공통 22 · 선언만 24 · 실측만 13
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,umltReportName,Y,Report Name,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbRole,Y,Role,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtDescription,Y,Description,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,umltReportNameResult,Y,Report Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbRoleResult,Y,Role,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,lbl_DQ_ID,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtDescrptionResult,Y,Description,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/DynamicList,정적 컬럼 사실 40행(시트 미지정 포함),컬럼 17(보임 16) · 헤더 1단 · 행 142 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,fpGroup/DynamicGroup,정적 컬럼 사실 40행(시트 미지정 포함),컬럼 7(보임 5) · 헤더 2단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,fpWhere/DynamicWhere,정적 컬럼 사실 40행(시트 미지정 포함),컬럼 7(보임 5) · 헤더 2단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,fpResult/DynamicResult,정적 컬럼 사실 40행(시트 미지정 포함),컬럼 5(보임 4) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

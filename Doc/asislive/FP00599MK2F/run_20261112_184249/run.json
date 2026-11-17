@@ -1,0 +1,151 @@
+{
+ "id": "FP00599MK2F",
+ "started": "2026-11-12 18:42:49.131",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:42:49.396",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00599MK2_PlanAmend_Model_Assy",
+   "form_text": "Plan Amend by Model(Assy_OC/NB/WA)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00599MK2_Plan_Amend_Model_Assy.UIL.dll",
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 18:42:55.164"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:42:58.595",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00599MK2F\\run_20261112_184249\\dump_load.json",
+   "control_count": 148,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 18:42:58.605"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:42:58.762",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00599MK2F\\run_20261112_184249\\shots\\FP00599MK2F_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 18:42:58.957"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:42:59.432",
+   "call_timed_out": true,
+   "dialog_count": 8,
+   "ok": true,
+   "done": "2026-11-12 18:43:29.444"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:43:37.400",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00599MK2F\\run_20261112_184249\\dump_find.json",
+   "control_count": 148,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 8,
+   "ok": true,
+   "done": "2026-11-12 18:43:37.412"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:43:37.735",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00599MK2F\\run_20261112_184249\\shots\\FP00599MK2F_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 8,
+   "ok": true,
+   "done": "2026-11-12 18:43:37.960"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:43:38.286",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 8,
+   "ok": true,
+   "done": "2026-11-12 18:43:38.939"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 28,
+  "calls_with_params": 28
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00599MK2_PlanAmend_Model_Assy",
+  "form_text": "Plan Amend by Model(Assy_OC/NB/WA)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00599MK2_Plan_Amend_Model_Assy.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 18:42:49.341",
+ "t_find": "2026-11-12 18:42:59.157",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:43:00.741",
+   "caption": "",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 148,
+  "layout_items": 25,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 24,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 28,
+  "calls_screen": 28,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:25.923",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:25"
+}

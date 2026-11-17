@@ -1,0 +1,42 @@
+{
+ "id": "SCP0013",
+ "screen_divisions": [
+  "81",
+  "40",
+  "82",
+  "EE",
+  "81_UC",
+  "EE_UC",
+  "81_HM",
+  "EE_HM",
+  "81_ST",
+  "EE_ST",
+  "81_HD",
+  "EE_HD",
+  "81_HG",
+  "EE_HG"
+ ],
+ "divisions": [
+  "40",
+  "81"
+ ],
+ "groups": [],
+ "todo_divisions": [
+  "40",
+  "81"
+ ],
+ "todo_groups": [],
+ "conds": [
+  "cboPlanType=i0",
+  "cboPlanType=i1",
+  "chkLineAssign=cT",
+  "chkLineAssign=cF",
+  "chkAll=cT",
+  "chkAll=cF",
+  "cboBucketType=i0",
+  "cboBucketType=i1",
+  "cboBucketType=i2"
+ ],
+ "todo_conds": [],
+ "account_groups_known": true
+}

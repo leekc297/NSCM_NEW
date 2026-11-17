@@ -1,0 +1,5 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0113-S4baa63,COND,,,,값 미도출,if (usrRadio3.Checked),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0113-Sadce6e,COND,,,,값 미도출,"if (usrRadio3.Checked) ▸ if (MessageBox.Show(message, ""Process Data"", MessageBoxButtons.YesNo) == DialogResult.Yes)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0113-Sf132d7,COND,,,,값 미도출,else of (usrRadio3.Checked),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0113-S6fff6e,COND,,,,값 미도출,"else of (usrRadio3.Checked) ▸ if (MessageBox.Show(message, ""Process Data"", MessageBoxButtons.YesNo) == DialogResult.Yes) ▸ for (i < arr.Length)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

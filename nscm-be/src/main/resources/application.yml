@@ -92,6 +92,11 @@ config:
   mybatis:
     logging-enabled: true
     logging-only-error: false
+    # [공통소스 BE 다운로드 2026-11-12] 로컬에 없던 설정 키 보충 — 값은 공통 기본값
+    queue-capacity: 10000
+    batch-size: 500
+    log-pool-size: 2
+    flush-interval-ms: 1000
 
 # Swagger UI 접속 경로 설정 (기본값: /swagger-ui/index.html)
 springdoc:

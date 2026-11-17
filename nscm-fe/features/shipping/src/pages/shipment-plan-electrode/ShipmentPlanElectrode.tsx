@@ -7,7 +7,7 @@ import {
   MaterialByDivisionModal,
   MeasureSelectModal,
 } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
@@ -18,7 +18,7 @@ import { MainTitle, saveTitleSet, SsoUserModal, SubTitle } from '@shared/compone
 import { useTabBtnPermissions, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/modals/ExcelUploadModal';
 import {
@@ -61,7 +61,8 @@ const str = (v: unknown): string =>
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0023_ShipmentPlanElectrode (Shipment Plan - Electrode / 출하계획-전극) — 신규 전환.
 //   설계: .atlas/gscm-design/SSP0023/design/00~03. 매핑: __asis-mapping__.md.
-//   툴바: Find/Save/Insert = 실동작, Delete = NO-OP `() => undefined`(03 §3.5 — 노출 유지, false 숨김 금지),
+//   툴바: Find/Save/Insert = 실동작, Delete = 미저장 신규행만 제거(AS-IS 빈 NO-OP 는 Insert 행 되돌림
+//     불가 버그 → 사용자 지시 2026-11-09 실동작 부여, handleDelete. 03 §3.5 노출 유지·false 숨김 금지),
 //     Edit = SwitchLock 미이식(convert-core §2.4 — 편집 기본 ON, 권한 마운트 1회).
 //   이중 pivot: rdButton1/2/3 이 BOH 3칸 + 활성 기간 span(X_/Y_/Z_)을 동시 선택(03 §2.1/§2.2).
 //   하단 Detail 저장은 AS-IS 순서대로 상태 재검증 → SO 건수 → 2분 잠금 → 초안(DRAFTING) → ERP 송신
@@ -613,19 +614,79 @@ export const ShipmentPlanElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.addRow(g, { ...copied, CRUD_TYPE: 'I' } as WijmoRowItem, 'above', true);
   };
 
+  // ── Delete (상단 툴바) — **미저장 신규행(CRUD_TYPE='I')만** 하단 PlanDetail 그리드에서 걷어낸다.
+  //   AS-IS `DeleteButton() { }`(cs:2061)은 빈 NO-OP 라 Insert 한 행을 되돌릴 수단이 없는 버그였다
+  //   (사용자 신고 2026-11-09, "insert 된 건 delete 되어야 하는데 AS-IS 에도 있는 버그"). 사용자 지시로
+  //   미저장 신규행만 제거하는 실동작을 부여한다(자매 SSP0200/SSP0201 handleDelete 와 동일 드리프트).
+  //   수정행·기존행은 제거도 CRUD_TYPE='D' 마킹도 하지 않는다 — removeRow 2번째 인자 deleteOnlyNew=true 규약.
+  const handleDelete = () => {
+    if (savingRef.current) return; // 저장 중 행 제거 금지 — 전송 중인 행이 그리드에서 사라진다.
+    if (!detailEditable) return;
+    if (activeDetailSheet !== SHEETS.PLAN_DETAIL) return; // 신규행은 PlanDetail 시트에만 생긴다
+    const g = planDetailGridRef.current;
+    if (!g) return;
+    g.finishEditing(); // 편집중 셀 커밋 후 CRUD_TYPE 이 선택행 판정에 반영되게 한다
+    const selected = (GridUtils.getSelectedRows(g) ?? []) as Record<string, unknown>[];
+    if (selected.length === 0) return; // 선택 없음 — 공용 removeRow 와 같이 조용히 끝낸다.
+    if (!selected.some(r => str(r.CRUD_TYPE) === 'I')) {
+      // 기존(저장)행은 삭제 불가(AS-IS 패리티) — 조용한 무동작은 "버튼이 고장났다"로 읽힌다.
+      void setAlert({
+        type: 'alert',
+        content: t('_ssp0023.deleteInsertOnly', {
+          defaultValue:
+            'Only rows pending insert can be deleted. Saved rows cannot be removed here.',
+        }),
+      });
+      return;
+    }
+    // preserveMergeManager=true — Insert 와 동일하게 화면 전용 머지 매니저를 지킨다.
+    GridAction.removeRow(g, true, true);
+  };
+
   // ── Measure (btnMeasure) — spdMain 활성일 때만 팝업. spdDetail 이면 조용히 no-op ──
   const handleMeasure = () => {
     if (activeGrid === 'detail') return; // 경고 없이 조용히 return
     setOpenMeasure(true);
   };
 
+  // item 3(공통 기능키 하단 그리드 미작동, 사용자 신고 2026-11-09) — 공통 툴바 Sort(F3)/Filter(F4)·키보드
+  //   단축키 가드는 SubTitle 의 grid/gridFilter prop 을 대상으로 삼는데, 종전엔 메인에 고정돼 하단 3-sheet
+  //   (Plan Detail/Block Detail/Shipment Result)에서 동작하지 않았다. 포커스된 그리드(activeGrid:
+  //   gotFocus→'detail'/'main', activeDetailSheet)로 grid/gridFilter 를 라우팅한다(SSP0026 item3 동형).
+  //   건수(countGrid)·Excel 은 메인에 고정해 포커스 회귀를 막는다.
+  const focusedGridRef = (
+    activeGrid === 'detail'
+      ? activeDetailSheet === SHEETS.PLAN_DETAIL
+        ? planDetailGridRef
+        : activeDetailSheet === SHEETS.STOCK_DETAIL
+          ? stockDetailGridRef
+          : shipmentResultGridRef
+      : mainGridRef
+  ) as RefObject<FlexGridType | undefined>;
+  const focusedGridFilterRef = (
+    activeGrid === 'detail'
+      ? activeDetailSheet === SHEETS.PLAN_DETAIL
+        ? planDetailGridFilterRef
+        : activeDetailSheet === SHEETS.STOCK_DETAIL
+          ? stockDetailGridFilterRef
+          : shipmentResultGridFilterRef
+      : mainGridFilterRef
+  ) as RefObject<FlexGridFilter | undefined>;
+
   // ── hotkeyConfig (00 §4d/01 R10 — hasButton 조건부, 재판단 금지) ──
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') ? handleSave : false,
     insert: hasButton('INSERT') ? handleInsert : false,
-    // Delete = NO-OP (AS-IS 빈 몸체) — 노출 유지 + 명시적 무동작. 키 생략/false 금지(03 §3.5).
-    delete: hasButton('DELETE') ? () => undefined : false,
+    // Delete = 미저장 신규행만 제거하는 실동작(AS-IS 빈 몸체 NO-OP 는 Insert 행 되돌림 불가 버그 →
+    //   사용자 지시 2026-11-09 로 실동작 부여, handleDelete). 키 생략/false 금지(공용 removeRow 부활 방지).
+    delete: hasButton('DELETE') ? handleDelete : false,
+    // Excel 다운로드는 포커스와 무관하게 항상 메인 그리드를 받는다(grid prop 이 포커스로 바뀌어 하단이
+    //   다운로드되는 회귀 방지, SSP0026/SSP0202 선례).
+    excel: () => {
+      const g = mainGridRef.current;
+      if (g) void GridAction.excelDownload(g, 'ShipmentPlanElectrode', useUIStore.getState().setProgress);
+    },
     manual: false,
     upload: false,
   };
@@ -795,8 +856,11 @@ export const ShipmentPlanElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
       )}
       <SubTitle
         menuId={MENU_ID}
-        grid={mainGridRef}
-        gridFilter={mainGridFilterRef}
+        // item 3: Sort(F3)/Filter(F4)·키보드 가드를 포커스된 그리드(메인↔하단 3-sheet)로 라우팅.
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
+        // 건수 배지는 메인 그리드에 고정(포커스가 하단으로 가도 메인 건수 유지).
+        countGrid={mainGridRef}
         dataCount={mainRows.length}
         excelFileName='ShipmentPlanElectrode'
         useHotkey={true}

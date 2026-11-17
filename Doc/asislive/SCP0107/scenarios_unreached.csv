@@ -1,0 +1,7 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0107-S12c840,기타,SetFixColumnStatus,SCP0107_CAPAReportPopup.cs:359,주석 안에서만 호출,SCP0107_CAPAReportPopup.cs:94,
+SCP0107-S93aed0,조회,AfterFindData,SCP0107_CAPA_TEEP_Report.cs:1508,같은 파일에서 호출,SCP0107_CAPA_TEEP_Report.cs:1596,SetQueryInfoGet
+SCP0107-Seb6c4c,기타,ClearUsrCheckedList,SCP0107_CAPA_TEEP_Report.cs:1146,호출 없음,,
+SCP0107-S704476,기타,MergeKeyColumns,SCP0107_CAPA_TEEP_Report.cs:1265,호출 없음,,
+SCP0107-Sb188c1,기타,SetBaseToDateColumns,SCP0107_CAPA_TEEP_Report.cs:1760,호출 없음,,
+SCP0107-Sd2063b,팝업,SetSheetNumericColumnFormat,SCP0107_CAPA_TEEP_Report.cs:1486,같은 파일에서 호출,SCP0107_CAPA_TEEP_Report.cs:1517,AfterFindData

@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3520,
+  "at": "2026-11-14T01:02:50.476Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ }
+]

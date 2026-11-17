@@ -1,0 +1,68 @@
+{
+ "id": "SSP0045",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SSP.SSP0045_SAVE_SHIPMENT_REQUEST",
+   "save_sp": "SSP0045_SAVE_SHIPMENT_REQUEST",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_SHIPMENT_REQ",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "TRANSPORT_MODE",
+    "MEASURE",
+    "PLANT_SITE_ID",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PROJECT_CODE": "PROJECT_CODE",
+    "ITEM_ID": "ITEM_ID",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "TRANSPORT_MODE": "TR_MODE",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "SCM_SITE_ID",
+    "PLANT_SITE_ID",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_SHIPMENT_REQ_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Shipment Request",
+   "writes": {
+    "DM_PLN_SHIPMENT_REQ": [
+     "INSERT INTO"
+    ],
+    "DM_PLN_SHIPMENT_REQ_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SSP0045_SAVE_SHIPMENT_REQUEST → SP SSP0045_SAVE_SHIPMENT_REQUEST 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "p_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "match_basis": {
+    "TRANSPORT_MODE": "TRANSPORT_MODE ← @p_transport_mode(SP 150줄(@v_transport_mode AS TRANSPORT_MODE) ← 133줄) ← 그리드 열 TR_MODE(SSP0045_ShipmentRequest.cs:1400)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

@@ -17,6 +17,18 @@
 | button:SaveButton | SaveButton > SaveData > FindData_User | 355 | SystemManager.UP_FX_GetUserGroupInfoList | MATCH | SP UP_FX_GetUserGroupInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData_Division | 388 | SystemManager.UP_FX_GetUserGroupAuthExtentionList | MATCH | SP UP_FX_GetUserGroupAuthExtentionList |
 | button:SaveButton | SaveButton > SaveData > FindData_Customer | 465 | SystemManager.UP_FX_GetUserGroupAuthExtentionList | MATCH | SP UP_FX_GetUserGroupAuthExtentionList |
+| button:SaveButton | SaveButton > SaveData | 535 | SystemManager.UP_FX_SaveUserGroupInfo | MATCH | SP UP_FX_SaveUserGroupInfo |
+| button:SaveButton | SaveButton > SaveData | 536 | SystemManager.UP_FX_DeleteUserGroupInfo | MATCH | SP UP_FX_DeleteUserGroupInfo |
+| button:SaveButton | SaveButton > SaveData | 537 | SystemManager.UP_FX_SaveUserGroupInfo | MATCH | SP UP_FX_SaveUserGroupInfo |
+| button:SaveButton | SaveButton > SaveData | 604 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 605 | SystemManager.UP_FX_DeleteUserGroupAuthExtention | MATCH | SP UP_FX_DeleteUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 606 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 680 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 681 | SystemManager.UP_FX_DeleteUserGroupAuthExtention | MATCH | SP UP_FX_DeleteUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 682 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 746 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 747 | SystemManager.UP_FX_DeleteUserGroupAuthExtention | MATCH | SP UP_FX_DeleteUserGroupAuthExtention |
+| button:SaveButton | SaveButton > SaveData | 748 | SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | SP UP_FX_SaveUserGroupAuthExtention |
 | event:this.Load | Form_Load > FindData > InitSpread | 176 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 | event:this.Load | Form_Load > FindData | 317 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
 | event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > InitSpread | 176 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
@@ -30,9 +42,13 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
+| SystemManager.UP_FX_DeleteUserGroupAuthExtention | MATCH | 3 | SP UP_FX_DeleteUserGroupAuthExtention | EXEC:UP_FX_DELETEUSERGROUPAUTHEXTENTION, DELETE:TB_FX_USERGROUPAUTHEXTENTION, DELETE:SCM_MST_AUTH_REQUEST |  |
+| SystemManager.UP_FX_DeleteUserGroupInfo | MATCH | 1 | SP UP_FX_DeleteUserGroupInfo | EXEC:UP_FX_DELETEUSERGROUPINFO, DELETE:TB_FX_USERGROUPINFO, DELETE:TB_FX_USERGROUPAUTHEXTENTION, DELETE:SCM_MST_AUTH_REQUEST, SELECT:TB_FX_USERGROUPINFO, UPDATE:TB_FX_USER |  |
 | SystemManager.UP_FX_GetGroupInfoList | MATCH | 1 | SP UP_FX_GetGroupInfoList | EXEC:UP_FX_GETGROUPINFOLIST, SELECT:TB_FX_GROUPINFO |  |
 | SystemManager.UP_FX_GetUserGroupAuthExtentionList | MATCH | 3 | SP UP_FX_GetUserGroupAuthExtentionList | EXEC:UP_FX_GETUSERGROUPAUTHEXTENTIONLIST, SELECT:SCM_MST_DIVISION, SELECT:TB_FX_USERGROUPAUTHEXTENTION, SELECT:SCM_MST_PLANT_SN, SELECT:SCM_MST_VENDOR, SELECT:SCM_MST_SITE |  |
 | SystemManager.UP_FX_GetUserGroupInfoList | MATCH | 1 | SP UP_FX_GetUserGroupInfoList | EXEC:UP_FX_GETUSERGROUPINFOLIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER |  |
+| SystemManager.UP_FX_SaveUserGroupAuthExtention | MATCH | 6 | SP UP_FX_SaveUserGroupAuthExtention | EXEC:UP_FX_SAVEUSERGROUPAUTHEXTENTION, MERGE:TB_FX_USERGROUPAUTHEXTENTION |  |
+| SystemManager.UP_FX_SaveUserGroupInfo | MATCH | 2 | SP UP_FX_SaveUserGroupInfo | EXEC:UP_FX_SAVEUSERGROUPINFO, MERGE:TB_FX_USERGROUPINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

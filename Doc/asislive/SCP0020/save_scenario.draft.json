@@ -1,0 +1,302 @@
+{
+ "id": "SCP0020",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0020_SAVE_TACT_TIME_EXCEPT",
+   "save_sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_TACT_TIME_EXCEPT",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "TACT_TIME_START_DATE",
+    "TACT_TIME_END_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID",
+    "TACT_TIME_START_DATE": "TACT_TIME_START_DATE",
+    "TACT_TIME_END_DATE": "TACT_TIME_END_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "TACT_TIME",
+    "db_col": "TACT_TIME",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_TACT_TIME_EXCEPT_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdExcept/Tact Time Except",
+   "writes": {
+    "SCP_MST_TACT_TIME_EXCEPT": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_TACT_TIME_EXCEPT_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0020_SAVE_TACT_TIME_EXCEPT → SP SCP0020_SAVE_TACT_TIME_EXCEPT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "TACT_TIME",
+     "db_col": "TACT_TIME",
+     "rule": "plus1"
+    },
+    {
+     "col": "YIELD",
+     "db_col": "YIELD",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "ERROR",
+    "note": "Division 도출 {\"table_divisions\": [[\"40\", 1735951], [\"81\", 633428], [\"82\", 38404], [\"81_UC\", 20844], [\"81_ST\", 6286], [\"81_HM\", 5297], [\"81_HD\", 5267], [\"81_HG\", 1279]], \"screen_list\": [\"82\"], \"tried\": [{\"division\": \"82\", \"set\": true, \"rows\": 0}]} · 조회 결과 행 없음(메시지 [])",
+    "at": "2026-11-14 11:06:33"
+   }
+  },
+  {
+   "endpoint": "SCP.SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+   "save_sp": "SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_TACT_TIME_EXCEPT_OSP",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "TACT_TIME_START_DATE",
+    "TACT_TIME_END_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID",
+    "TACT_TIME_START_DATE": "TACT_TIME_START_DATE",
+    "TACT_TIME_END_DATE": "TACT_TIME_END_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "TACT_TIME",
+    "db_col": "TACT_TIME",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_TACT_TIME_EXCEPT_OSP_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdExcept/Tact Time Except",
+   "writes": {
+    "SCP_MST_TACT_TIME_EXCEPT_OSP": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_TACT_TIME_EXCEPT_OSP_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0020_SAVE_TACT_TIME_EXCEPT_OSP → SP SCP0020_SAVE_TACT_TIME_EXCEPT_OSP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "TACT_TIME",
+     "db_col": "TACT_TIME",
+     "rule": "plus1"
+    },
+    {
+     "col": "YIELD",
+     "db_col": "YIELD",
+     "rule": "plus1"
+    },
+    {
+     "col": "DAILY_CAPACITY",
+     "db_col": "DAILY_CAPACITY",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0020_SAVE_TACT_TIME",
+   "save_sp": "SCP0020_SAVE_TACT_TIME",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_TACT_TIME",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID",
+    "OPERATION_ID",
+    "LINE_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_TACT_TIME_EXCEPT_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_MST_TACT_TIME_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Plant",
+   "writes": {
+    "SCP_MST_TACT_TIME": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "SCP_MST_TACT_TIME_EXCEPT_H": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_TACT_TIME_EXCEPT": [
+     "DELETE FROM"
+    ]
+   },
+   "basis": "foxml SCP0020_SAVE_TACT_TIME → SP SCP0020_SAVE_TACT_TIME 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_TACT_TIME_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "SCP_MST_TACT_TIME_EXCEPT"
+   ],
+   "edit_candidates": [
+    {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    {
+     "col": "TACT_TIME",
+     "db_col": "TACT_TIME",
+     "rule": "plus1"
+    },
+    {
+     "col": "YIELD",
+     "db_col": "YIELD",
+     "rule": "plus1"
+    },
+    {
+     "col": "UOM_CONVERT_VALUE",
+     "db_col": "UOM_CONVERT_VALUE",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0020_SAVE_TACT_TIME_OSP",
+   "save_sp": "SCP0020_SAVE_TACT_TIME_OSP",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_TACT_TIME_OSP",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID",
+    "OPERATION_ID",
+    "LINE_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_TACT_TIME_EXCEPT_OSP_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_MST_TACT_TIME_OSP_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Plant",
+   "writes": {
+    "SCP_MST_TACT_TIME_EXCEPT_OSP_H": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_TACT_TIME_OSP_H": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_TACT_TIME_OSP": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0020_SAVE_TACT_TIME_OSP → SP SCP0020_SAVE_TACT_TIME_OSP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    {
+     "col": "TACT_TIME",
+     "db_col": "TACT_TIME",
+     "rule": "plus1"
+    },
+    {
+     "col": "YIELD",
+     "db_col": "YIELD",
+     "rule": "plus1"
+    },
+    {
+     "col": "DAILY_CAPACITY",
+     "db_col": "DAILY_CAPACITY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

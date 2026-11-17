@@ -1,0 +1,123 @@
+{
+ "id": "SSP0201",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnApprovalUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0002_UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0201-S4f816c",
+    "SSP0201-S18a9c7",
+    "SSP0201-Sd6cc75",
+    "SSP0201-S0fb53e"
+   ]
+  },
+  {
+   "control": "btnApprovalUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0002_UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0201-S4f816c",
+    "SSP0201-S18a9c7",
+    "SSP0201-Sd6cc75",
+    "SSP0201-S0fb53e"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0026_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0026_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0201-Sea1449",
+    "SSP0201-Sec3442"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnCancel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 15
+  },
+  {
+   "control": "BtnChangeRe",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 27
+  },
+  {
+   "control": "BtnNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 7
+  },
+  {
+   "control": "BtnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 11
+  },
+  {
+   "control": "btnCancel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnChangeRe",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnChangeRe2",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 4
+  },
+  {
+   "control": "btnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 13:28:23.292",
+ "fills": 0,
+ "fill_left": []
+}

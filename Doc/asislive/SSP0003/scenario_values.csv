@@ -1,0 +1,5 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SSP0003-Se9843f,DIVISION,,,,값 미도출,"switch (triggerControl) case ""MyDivision"":",
+SSP0003-Sa16183,DIVISION,,,,값 미도출,"if (!pDivisionID.Contains(""EE""))",
+SSP0003-S8e0a78,DIVISION,,,,값 미도출,"else of (!pDivisionID.Contains(""EE""))",
+SSP0003-Sfc2aa2,COND,txtRejectReason.Text,,,값 미도출,"if (sStatus == ""A"") ▸ if (iUnChkCnt > 0 && string.IsNullOrEmpty(txtRejectReason.Text))",값을 고르는 규칙이 없는 컨트롤 형식(TextBox)

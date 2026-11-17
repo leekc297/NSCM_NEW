@@ -1,0 +1,86 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\조회조건_Div_40.aria.yml",
+  "received": "Doc\\verify\\SSP0020\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0020\\snap\\golden\\조회조건_Div_40.aria.yml 와 일치 · 조회영역 aria(17줄 · formItem 공통 조상) · 시각 순서 3칸",
+  "at": "2026-11-16T17:41:05.499Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\버튼_Div_40.aria.yml",
+  "received": "Doc\\verify\\SSP0020\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0020\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,이 이민용,Home,Delegate,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Clear,Open,Search(F5),Save,UnSet,Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Delegated List,Choose Date,Toggle Calendar,Toggle Time List",
+  "at": "2026-11-16T17:41:05.575Z"
+ },
+ {
+  "key": "헤더_Delegate",
+  "kind": "헤더",
+  "scope": "Delegate",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0020\\snap\\received\\헤더_Delegate.txt",
+  "diff": "",
+  "lines": 1,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0020\\snap\\received\\헤더_Delegate.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 1행 · 칸 7",
+  "at": "2026-11-16T17:41:10.701Z"
+ },
+ {
+  "key": "팝업_Delegatee",
+  "kind": "팝업",
+  "scope": "Delegatee",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\팝업_Delegatee.aria.yml",
+  "received": "Doc\\verify\\SSP0020\\snap\\received\\팝업_Delegatee.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0020\\snap\\golden\\팝업_Delegatee.aria.yml 와 일치 · 팝업 aria(225줄)",
+  "at": "2026-11-16T17:41:17.758Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "at": ""
+ },
+ {
+  "key": "헤더_Delegated_List",
+  "kind": "헤더",
+  "scope": "Delegated List",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SSP0020\\snap\\received\\헤더_Delegated_List.txt",
+  "diff": "",
+  "lines": 1,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0020\\snap\\received\\헤더_Delegated_List.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 1행 · 칸 7",
+  "at": "2026-11-16T17:41:12.507Z"
+ }
+]

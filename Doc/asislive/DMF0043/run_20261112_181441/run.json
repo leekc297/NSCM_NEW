@@ -1,0 +1,141 @@
+{
+ "id": "DMF0043",
+ "started": "2026-11-12 18:14:41.325",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:14:41.651",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0043_Contribute_Main",
+   "form_text": "해외법인 기여율 등록",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0043_Contribute_Main.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:14:47.146"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:14:50.553",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043\\run_20261112_181441\\dump_load.json",
+   "control_count": 17,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:14:50.578"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:14:50.734",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043\\run_20261112_181441\\shots\\DMF0043_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:14:50.842"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:14:51.175",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:14:51.807"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:15:20.829",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043\\run_20261112_181441\\dump_find.json",
+   "control_count": 17,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 24.435s, UI : 0.101s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:15:20.977"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:15:21.136",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043\\run_20261112_181441\\shots\\DMF0043_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:15:21.303"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:15:21.795",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:15:22.437"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 22,
+  "calls_with_params": 21
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0043_Contribute_Main",
+  "form_text": "해외법인 기여율 등록",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0043_Contribute_Main.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 24.435s, UI : 0.101s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:14:41.535",
+ "t_find": "2026-11-12 18:14:50.855",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 17,
+  "layout_items": 7,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 126,
+  "data_rows": 50,
+  "grid_rows": 1527,
+  "calls_total": 22,
+  "calls_screen": 22,
+  "calls_find": 10,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:15.391",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:15"
+}

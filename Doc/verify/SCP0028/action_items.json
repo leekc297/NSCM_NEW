@@ -1,6 +1,6 @@
 [
  {
-  "row_id": "V-e50f03fc",
+  "row_id": "V-be29b7a4",
   "rule_id": "F5",
   "target": "SCP0028 화면",
   "same": [
@@ -8,27 +8,9 @@
   ]
  },
  {
-  "row_id": "V-563f3c40",
-  "rule_id": "G3",
-  "target": "SCP0028 화면",
-  "same": []
- },
- {
-  "row_id": "V-564a1ac4",
-  "rule_id": "F5",
-  "target": "SCP0028 병합 셀 Delete 범위",
-  "same": []
- },
- {
-  "row_id": "V-4b34e536",
-  "rule_id": "F5",
-  "target": "SCP0028 원값 복원 상태 해제",
-  "same": []
- },
- {
-  "row_id": "V-6ba6160a",
-  "rule_id": "G4",
-  "target": "SCP0028 돋보기 위치",
+  "row_id": "V-ed697b1a",
+  "rule_id": "E3",
+  "target": "SCP0028 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
   "same": []
  },
  {
@@ -44,44 +26,6 @@
   "same": []
  },
  {
-  "row_id": "V-072aeef0",
-  "rule_id": "F10",
-  "target": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
-  "same": [
-   "V-ddc8b74f"
-  ]
- },
- {
-  "row_id": "V-9496af63",
-  "rule_id": "F10",
-  "target": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
-  "same": []
- },
- {
-  "row_id": "V-602d9026",
-  "rule_id": "G1",
-  "target": "조회조건 Valid",
-  "same": []
- },
- {
-  "row_id": "V-9e2b9258",
-  "rule_id": "G1",
-  "target": "조회조건 Model",
-  "same": []
- },
- {
-  "row_id": "V-93e5a09c",
-  "rule_id": "G8",
-  "target": "조회조건 Model",
-  "same": []
- },
- {
-  "row_id": "V-ed2ee896",
-  "rule_id": "G9",
-  "target": "조회조건 Model",
-  "same": []
- },
- {
   "row_id": "V-6259d313",
   "rule_id": "E1",
   "target": "Shipment Lot Size.LOT_SIZE (Lot Size*)",
@@ -94,123 +38,30 @@
   "same": []
  },
  {
-  "row_id": "V-2692f262",
-  "rule_id": "MS1",
-  "target": "MSG00031",
-  "same": []
- },
- {
-  "row_id": "V-dc8f2fac",
-  "rule_id": "G5",
-  "target": "popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",
-  "same": []
- },
- {
-  "row_id": "T-c84f6550",
-  "rule_id": "G4",
-  "target": "cboDivision / Division / Div.",
-  "same": []
- },
- {
-  "row_id": "T-d8b53e0a",
-  "rule_id": "G4",
-  "target": "cboOperationGroup / Operation Group / Operation group",
-  "same": []
- },
- {
-  "row_id": "T-77c266c5",
-  "rule_id": "G4",
-  "target": "cboValid / Valid / Active",
-  "same": []
- },
- {
-  "row_id": "T-f67deb05",
-  "rule_id": "G4",
-  "target": "clbTransMode / Trans Mode",
-  "same": []
- },
- {
-  "row_id": "T-aae51484",
-  "rule_id": "G4",
-  "target": "clbFromSite / From Site",
-  "same": []
- },
- {
-  "row_id": "T-9861326e",
-  "rule_id": "G4",
-  "target": "clbToSite / To Site",
-  "same": []
- },
- {
-  "row_id": "T-ce1c0ba2",
-  "rule_id": "G4",
-  "target": "txtItemId / Model / Item Id",
-  "same": []
- },
- {
-  "row_id": "T-c770299c",
-  "rule_id": "F4",
-  "target": "PR_GET_MNU_BTN_AUTH",
-  "same": []
- },
- {
-  "row_id": "EG-ea38ffcb",
-  "rule_id": "M4",
-  "target": "SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PICK_DBL",
-  "same": []
- },
- {
-  "row_id": "EG-7a88dc15",
-  "rule_id": "J2",
-  "target": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
-  "same": []
- },
- {
   "row_id": "EG-a0ea432d",
   "rule_id": "K4",
   "target": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-1e23ee08",
-  "rule_id": "J2",
-  "target": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/81/SCM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-e6cfb2a1",
-  "rule_id": "K4",
-  "target": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/81/SCM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-b949a64b",
-  "rule_id": "J2",
-  "target": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/82/SCM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-3e88650e",
-  "rule_id": "K4",
-  "target": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/82/SCM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-bd49cfa8",
-  "rule_id": "I2",
-  "target": "SCP0028 언어 전환 CN",
-  "same": []
+  "same": [
+   "EG-e6cfb2a1",
+   "EG-3e88650e"
+  ]
  },
  {
   "row_id": "T-8e194f95",
   "rule_id": "F5",
   "target": "",
-  "folded_into": "V-e50f03fc"
+  "folded_into": "V-be29b7a4"
  },
  {
-  "row_id": "V-ddc8b74f",
-  "rule_id": "F10",
+  "row_id": "EG-e6cfb2a1",
+  "rule_id": "K4",
   "target": "",
-  "folded_into": "V-072aeef0"
+  "folded_into": "EG-a0ea432d"
+ },
+ {
+  "row_id": "EG-3e88650e",
+  "rule_id": "K4",
+  "target": "",
+  "folded_into": "EG-a0ea432d"
  }
 ]

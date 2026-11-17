@@ -2,6 +2,12 @@
 """vsce 없이 .vsix 패키징 — 오프라인 노트북용"""
 import json, os, zipfile
 here = os.path.dirname(os.path.abspath(__file__)); pkg = json.load(open(os.path.join(here, 'package.json'), encoding='utf-8'))
+# 사이드바 머리글 = 'Vibe_Manager <버전>' — 컨테이너 제목과 뷰 이름을 같게 두면 VS Code 가 ': 뷰 이름' 을 붙이지 않는다. 빌드 때마다 버전과 맞춘다(사용자 2026-11-11)
+_t = f"Vibe_Manager {pkg['version']}"; _c = pkg['contributes']; _old = json.dumps(pkg, ensure_ascii=False)
+for _a in _c['viewsContainers']['activitybar']:
+    if _a['id'] == 'vibeManager': _a['title'] = _t
+for _v in _c['views']['vibeManager']: _v['name'] = _t
+if json.dumps(pkg, ensure_ascii=False) != _old: open(os.path.join(here, 'package.json'), 'w', encoding='utf-8', newline=chr(10)).write(json.dumps(pkg, ensure_ascii=False, indent=2) + chr(10))
 ver = pkg['version']; out = os.path.join(here, 'dist', f"{pkg['name']}-{ver}.vsix"); os.makedirs(os.path.dirname(out), exist_ok=True)
 manifest = f'''<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
@@ -34,7 +40,7 @@ ctypes = '''<?xml version="1.0" encoding="utf-8"?>
   <Default Extension=".js" ContentType="application/javascript"/><Default Extension=".md" ContentType="text/markdown"/>
   <Default Extension=".svg" ContentType="image/svg+xml"/><Default Extension=".txt" ContentType="text/plain"/>
 </Types>'''
-files = ['package.json', 'extension.js', 'prompt-panel.js', 'flow-panel.js', 'history.js', 'workbench.js', 'tabview.js', 'quick.json', 'steps.json', 'README.md', 'CHANGELOG.md', 'CONCEPT.md', 'media/vibe.svg', 'media/vibe-color.png', 'media/vibe-color.svg']
+files = ['package.json', 'extension.js', 'prompt-panel.js', 'flow-panel.js', 'history.js', 'workbench.js', 'tabview.js', 'menu-view.js', 'quick.json', 'steps.json', 'README.md', 'CHANGELOG.md', 'CONCEPT.md', 'media/vibe.svg', 'media/vibe-color.png', 'media/vibe-color.svg'] + ['media/' + f for f in sorted(os.listdir(os.path.join(here, 'media'))) if f.startswith('tb-') and f.endswith('.svg')]
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('[Content_Types].xml', ctypes); z.writestr('extension.vsixmanifest', manifest)
     for f in files:

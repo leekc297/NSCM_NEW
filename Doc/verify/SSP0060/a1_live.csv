@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SSP0060,main|같은 사용자,SSP0060_GET_SHIPMENT_PLAN,ERROR,0,13,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+SSP0060,main,SSP0060_GET_SHIPMENT_PLAN,REVIEW,21,13,"AS-IS 21행 · TO-BE 13행 · 키 ['from_site_description', 'ITEM_ID', 'nick_name', 'BOH_TYPE', 'PSI', 'MEASURE', 'MEASURE_NAME', 'TO_SITE'] AS-IS 전용 8 · TO-BE 전용 0 · 값 대조 228칸(숫자 컬럼 21) · 불일치 컬럼 8 · BOH_QTY 2건 예 98.0↔0.0 · M_202610 2건 예 -2281538.0↔-437570.0 · W_20261043 2건 예 -2282518.0↔-438550.0 · D_20261019 2건 예 -43806.0↔-87710.0",

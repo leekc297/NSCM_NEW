@@ -1,20 +1,20 @@
 ﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
-DIVISION_ID,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn,,Shipment Requestor PIC
-TO_SITE,Y,N,N,잠금 (InsertRow:319),잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:319 LockRange,,Shipment Requestor PIC
-SITE_DESCRIPTION,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn,,Shipment Requestor PIC
-ITEM_ID,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn,,Shipment Requestor PIC
-ELECTRODE_TYPE,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:321 LockRange,,Shipment Requestor PIC
-MODEL_ID,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:321 LockRange,,Shipment Requestor PIC
-NICK_NAME,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ItembyDivisionPopup:223 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:321 LockRange,,Shipment Requestor PIC
-CELL_TYPE,Y,N,Y,잠금 (InsertRow:321),,,신규행 SSP0025_ItembyDivisionPopup:321 LockRange,,Shipment Requestor PIC
+DIVISION_ID,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn,,Shipment Requestor PIC
+TO_SITE,Y,N,N,잠금 (InsertRow:319),잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:319 LockRange,,Shipment Requestor PIC
+SITE_DESCRIPTION,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn,,Shipment Requestor PIC
+ITEM_ID,Y,Y,N,,잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn,,Shipment Requestor PIC
+ELECTRODE_TYPE,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:321 LockRange,,Shipment Requestor PIC
+MODEL_ID,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:321 LockRange,,Shipment Requestor PIC
+NICK_NAME,Y,N,N,잠금 (InsertRow:321),잠금 (EditButton:223),,기존행 SSP0025_ShipmentRequestorPIC:223 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:321 LockRange,,Shipment Requestor PIC
+CELL_TYPE,Y,N,Y,잠금 (InsertRow:321),,,신규행 SSP0025_ShipmentRequestorPIC:321 LockRange,,Shipment Requestor PIC
 USER_ID,Y,Y,Y,,,,,,Shipment Requestor PIC
-USER_NAME,Y,N,N,잠금 (InsertRow:322),잠금 (EditButton:224),,기존행 SSP0025_ItembyDivisionPopup:224 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:322 LockRange,,Shipment Requestor PIC
+USER_NAME,Y,N,N,잠금 (InsertRow:322),잠금 (EditButton:224),,기존행 SSP0025_ShipmentRequestorPIC:224 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:322 LockRange,,Shipment Requestor PIC
 PART_LEADER,Y,Y,Y,,,,,,Shipment Requestor PIC
-PART_LEADER_NAME,Y,N,N,잠금 (InsertRow:323),잠금 (EditButton:225),,기존행 SSP0025_ItembyDivisionPopup:225 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:323 LockRange,,Shipment Requestor PIC
+PART_LEADER_NAME,Y,N,N,잠금 (InsertRow:323),잠금 (EditButton:225),,기존행 SSP0025_ShipmentRequestorPIC:225 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:323 LockRange,,Shipment Requestor PIC
 TEAM_LEADER,Y,Y,Y,,,,,,Shipment Requestor PIC
-TEAM_LEADER_NAME,Y,N,N,잠금 (InsertRow:324),잠금 (EditButton:226),,기존행 SSP0025_ItembyDivisionPopup:226 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:324 LockRange,,Shipment Requestor PIC
+TEAM_LEADER_NAME,Y,N,N,잠금 (InsertRow:324),잠금 (EditButton:226),,기존행 SSP0025_ShipmentRequestorPIC:226 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:324 LockRange,,Shipment Requestor PIC
 VALID_YN,Y,Y,Y,,,,,,Shipment Requestor PIC
-CREATED_BY,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ItembyDivisionPopup:227 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:325 LockRange,,Shipment Requestor PIC
-CREATION_DATE,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ItembyDivisionPopup:227 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:325 LockRange,,Shipment Requestor PIC
-LAST_UPDATED_BY,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ItembyDivisionPopup:227 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:325 LockRange,,Shipment Requestor PIC
-LAST_UPDATE_DATE,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ItembyDivisionPopup:227 LockColumn | 신규행 SSP0025_ItembyDivisionPopup:325 LockRange,,Shipment Requestor PIC
+CREATED_BY,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ShipmentRequestorPIC:227 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:325 LockRange,,Shipment Requestor PIC
+CREATION_DATE,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ShipmentRequestorPIC:227 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:325 LockRange,,Shipment Requestor PIC
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ShipmentRequestorPIC:227 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:325 LockRange,,Shipment Requestor PIC
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertRow:325),잠금 (EditButton:227),,기존행 SSP0025_ShipmentRequestorPIC:227 LockColumn | 신규행 SSP0025_ShipmentRequestorPIC:325 LockRange,,Shipment Requestor PIC

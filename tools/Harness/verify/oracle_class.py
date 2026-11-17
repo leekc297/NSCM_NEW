@@ -136,8 +136,11 @@ def main():
         for f in files:
             for r in rd(f):
                 rid = (r.get('rule_id') or '').strip()
-                if rid and rid not in cur:
-                    miss.setdefault(rid, set()).add(os.path.basename(os.path.dirname(f)))
+                # 2026-11-13 점검: 복합 규칙 ID('H5;H6;K3' — 확정 규칙 CR-100 의 대표 규칙 칸)는 낱개로 풀어 대조한다.
+                #   종전엔 통째로 '마스터에 없는 규칙' 이 되어 11-10 이후 전 화면 실행마다 경고(rc 2)가 났다(_timing.csv 81회 · 28화면)
+                for one in ([rid] if rid in cur else split_rules(rid)):
+                    if one and one not in cur:
+                        miss.setdefault(one, set()).add(os.path.basename(os.path.dirname(f)))
         bad = [r for r in cur.values() if r['oracle_class'] not in CLASSES or (r['oracle_class'] == 'HOLD' and not r.get('hold_reason'))]
         if miss or bad:
             if miss:

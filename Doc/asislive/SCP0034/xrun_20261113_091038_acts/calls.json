@@ -1,0 +1,66 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 09:05:56.221",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.47,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 09:06:07.648",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11275,
+   "rows_kind": "DataSet rows",
+   "ms": 11321.99,
+   "params": {
+    "p_division_id": "40,81,81_HD,81_HG,81_HM,81_ST,82",
+    "p_operation_group": "E",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0034"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='40,81,81_HD,81_HG,81_HM,81_ST,82', @p_operation_group='E', @p_item_id='', @p_scp_module_type='SCP0034'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 09:10:18.923",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0034_GET_ELECTRODE_PSI",
+   "sp": "SCP0034_GET_ELECTRODE_PSI",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1734,
+   "rows_kind": "DataSet rows",
+   "ms": 272549.85,
+   "params": {
+    "p_from_yyyymmdd": "20260824",
+    "p_to_yyyymmdd": "20270822",
+    "p_division_id": "EE",
+    "p_operation_group": "E",
+    "p_From_Site": "3050-E,AZ00-E,G183-E,G383-E,G385-E,G387-E,G452-E,G632-E,G672-E,G674-E,G742-E,G822-E,G872-E,GM00-E,GM01-E,HD00-E,HG00-E,HM00-E,HQ06-E,HQ07-E,HQ10-E,HQ11-E,MI00-E,MI01-E,MI02-E,NA00-E,NB01-E,NJ01-E,ST00-E,WA00-E,WA01-E",
+    "p_item_id": "",
+    "p_electype": "",
+    "p_unit": "A",
+    "p_program_id": null,
+    "p_plan_start_yyyymmdd": "20260824",
+    "p_plan_type": "FN",
+    "p_seq": "1",
+    "p_user_id": null,
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0034_GET_ELECTRODE_PSI @p_from_yyyymmdd='20260824', @p_to_yyyymmdd='20270822', @p_division_id='EE', @p_operation_group='E', @p_From_Site='3050-E,AZ00-E,G183-E,G383-E,G385-E,G387-E,G452-E,G632-E,G672-E,G674-E,G742-E,G822-E,G872-E,GM00-E,GM01-E,HD00-E,HG00-E,HM00-E,HQ06-E,HQ07-E,HQ10-E,HQ11-E,MI00-E,MI01-E,MI02-E,NA00-E,NB01-E,NJ01-E,ST00-E,WA00-E,WA01-E', @p_item_id='', @p_electype='', @p_unit='A', @p_program_id=NULL, @p_plan_start_yyyymmdd='20260824', @p_plan_type='FN', @p_seq='1', @p_user_id=NULL, @debug_mode='F'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

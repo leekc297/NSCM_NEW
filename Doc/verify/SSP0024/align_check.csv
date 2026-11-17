@@ -4,9 +4,9 @@ SSP0024,,DIVISION_NAME,division,,SSP0024_ItembyDivisionPopup.cs:215,SSP0024,Ship
 SSP0024,,PLANT_SITE_CODE,Plant Site Code,,SSP0024_ItembyDivisionPopup.cs:216,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,NA,AS-IS 정렬 근거 없음
 SSP0024,,PLANT_SITE_ID,Plant Site,C,SSP0024_ItembyDivisionPopup.cs:217,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
 SSP0024,,MATERIAL_ID,Material,C,SSP0024_ItembyDivisionPopup.cs:218,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
-SSP0024,,MODEL_ID,Model,C,SSP0024_ItembyDivisionPopup.cs:219,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,FAIL,AS-IS center ↔ TO-BE left — 정렬 다름
+SSP0024,,MODEL_ID,Model,C,SSP0024_ItembyDivisionPopup.cs:219,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,[CR-099] AS-IS center ↔ TO-BE left — TO-BE 룰 정렬 방식 변경(Center→Left · 사용자 판정 2026-11-09)
 SSP0024,,CELL_TYPE,Cell Type,C,SSP0024_ItembyDivisionPopup.cs:220,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
-SSP0024,,NICK_NAME,Nick Name,C,SSP0024_ItembyDivisionPopup.cs:221,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,FAIL,AS-IS center ↔ TO-BE left — 정렬 다름
+SSP0024,,NICK_NAME,Nick Name,C,SSP0024_ItembyDivisionPopup.cs:221,SSP0024,Ship Master Elec,L,메타 SSP0024/Ship Master Elec,PASS,[CR-099] AS-IS center ↔ TO-BE left — TO-BE 룰 정렬 방식 변경(Center→Left · 사용자 판정 2026-11-09)
 SSP0024,,ELECTRODE_TYPE,Electrode Type,C,SSP0024_ItembyDivisionPopup.cs:222,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
 SSP0024,,ITEM_UOM,UOM,C,SSP0024_ItembyDivisionPopup.cs:223,SSP0024,Ship Master Elec,C,메타 SSP0024/Ship Master Elec,PASS,AS-IS center ↔ TO-BE center
 SSP0024,,UOM_CONVERT_IN_TACT_TIME,Pancake (m/cell),,SSP0024_ItembyDivisionPopup.cs:224,SSP0024,Ship Master Elec,R,메타 SSP0024/Ship Master Elec,NA,AS-IS 정렬 근거 없음

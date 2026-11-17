@@ -106,6 +106,21 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
     set({ month: monthRange.maxMonth });
   }, [monthRange.maxMonth, set]);
 
+  // Profit Center cascade 선택값 정리 — 상위(Division/Plant/기간) 변경으로 콤보가 재조회되면
+  //   새 목록에 없는 기존 선택값을 조회조건에서도 제거한다(화면엔 안 보이는데 stale 값이 proc 로
+  //   전달되던 버그, 보고 2026-11-10). 목록에 남아있는 값은 유지('참고' 케이스: Division 유지+추가
+  //   시 기존 선택값 보존), 전부 사라지면 'ALL'(전체=필터 없음)로 되돌린다. Profit Center 는
+  //   @yyyymmdd/@divisionId/@plantId 세 부모에 cascade 하는데 세 트리거 모두 이 콤보 재조회로
+  //   수렴하므로 effect 하나가 전부 커버한다. 사용자 토글 시엔 options 가 안 바뀌어 no-op.
+  useEffect(() => {
+    if (profitCenters === undefined) return; // 재조회 도착 전엔 정리하지 않음(로딩 중)
+    if (sc.profitCenter === 'ALL' || sc.profitCenter === '') return; // 전체=필터 없음, 정리 대상 아님
+    const valid = new Set(profitCenters.map(r => str(r.CODE)));
+    const kept = sc.profitCenter.split(',').filter(v => valid.has(v));
+    const next = kept.length > 0 ? kept.join(',') : 'ALL';
+    if (next !== sc.profitCenter) set({ profitCenter: next });
+  }, [profitCenters, sc.profitCenter, set]);
+
   // Item Type — 옵션집합·표시명 모두 DB LOOKUP 'ITEM_TYPE'에서 가져온다(사용자 결정 2026-10-21).
   //   품목데이터 DISTINCT(ITEM_MASTER_ITEM_TYPE)는 실재 코드(H/P/Q/R·'-')만이라 '기타'·'저장품' 등 미사용
   //   코드가 빠지므로, LOOKUP 정의 7종 전체(기타/반제품/상품/원부자재/저장품/제품/(Blanks))를 쓴다.

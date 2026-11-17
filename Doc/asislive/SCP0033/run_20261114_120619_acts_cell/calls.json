@@ -1,0 +1,24 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 12:06:06.179",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM.DMF0002_GET_TITLESET_POPUP",
+   "sp": "DMF0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 45,
+   "rows_kind": "DataSet rows",
+   "ms": 13.53,
+   "params": {
+    "p_program_id": "DMF0022",
+    "p_sheet_name": "Sales Plan Waterfall",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0002_GET_TITLESET_POPUP @p_program_id='DMF0022', @p_sheet_name='Sales Plan Waterfall', @p_column_type='C', @p_user_id='jaeuk.shin', @p_division_id='40'",
+   "phase": "action:cell:ITEM_ID"
+  }
+ ]
+}

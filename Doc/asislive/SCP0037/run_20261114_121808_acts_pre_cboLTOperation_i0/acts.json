@@ -1,0 +1,95 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0037_GET_OPERATION_LT",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     13
+    ],
+    [
+     "SCP0037_GET_OPERATION_LT",
+     328
+    ],
+    [
+     "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+     48459
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 9616,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION",
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0037-Sea1449",
+    "SCP0037-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:17:22.369",
+ "preset": {
+  "name": "cboLTOperation",
+  "token": "cboLTOperation=i0",
+  "kw": {
+   "name": "cboLTOperation",
+   "index": "0"
+  },
+  "label": "cboLTOperation 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Slitting",
+  "value": "SLITTING",
+  "text": "Slitting",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

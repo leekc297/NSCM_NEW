@@ -2,7 +2,7 @@
  "menu_id": "SSP0025",
  "asis_id": "SSP0025",
  "area": "SSP",
- "generated": "2026-11-09 11:04:01",
+ "generated": "2026-11-15 04:02:15",
  "division_cond": {
   "present": true,
   "labels": [
@@ -79,9 +79,19 @@
  ],
  "bucket_cond": "",
  "observed": {
-  "source": "e2e_results.json 없음",
-  "max_rows_after_search": null,
-  "zero_row_failures": []
+  "source": "e2e_results.json 2026-11-13 13:58 · 행 수 근거 31행",
+  "max_rows_after_search": 16,
+  "zero_row_failures": [
+   {
+    "row_id": "EG-5f3cd02d",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 Div"
+   },
+   {
+    "row_id": "EG-5f3cd02d",
+    "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 Div 81_HM:0행 전"
+   }
+  ],
+  "zero_row_count": 2
  },
  "warnings": []
 }

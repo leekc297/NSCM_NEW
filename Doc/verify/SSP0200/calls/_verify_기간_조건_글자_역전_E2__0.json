@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 204,
+  "at": "2026-11-14T21:14:32.858Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 215,
+  "at": "2026-11-14T21:14:38.284Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ }
+]

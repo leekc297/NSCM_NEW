@@ -1,0 +1,942 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 10개 전부 원문 등장: `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM`, `SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`, `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40`, `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM`, `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`, `biz:CommonData.CommonDataList`, `SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK`, `SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK`, `SSP.SSP0202_GET_DELEGATEE_LOAD`, `SCP.SCM0001_GET_SCP_DAY_PERIOD`
+2. business_analysis.md 에 SP 9개 전부 등장: `SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM`, `SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`, `SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40`, `SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM`, `SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`, `SSP0202_GET_SSP_PLAN_PROCESSING_CHECK`, `SSP0202_GET_SCS_CONFIRM_ID_CHECK`, `SSP0202_GET_DELEGATEE_LOAD`, `SCM0001_GET_SCP_DAY_PERIOD`
+3. screen_design.md 에 컨트롤 29개 전부 등장: `spdMain`, `spdMain_Sheet1`, `usrConditionPanel1`, `usrLayoutControl1`, `clbDivision`, `clbFromSite`, `drpPeriod`, `btnSelfReject`, `cboStatus`, `btnReject`, `btnApproval`, `btnRequestUser`, `txtRequest`, `txtItemID`, `btnItemId`, `cboChangeType`, `txtApprovalDeptName`, `txtApprovalDeptName_Sheet1`, `usrLayoutControl3`, `txtRequestNo`, `txtTitle`, `txtRequestor`, `txtRequestDeptName`, `txtApproval`, `txtAppDeptName`, `txtReasonDetail`, `usrLabel2`, `txtChangeReason`, `txtRejectReason`
+4. screen_design.md 에 시트 2개 전부 등장: `Shipment Change Request Confirm`, `Shipment Change Request Confirm Detail`
+5. screen_design.md 에 이벤트 핸들러 9개와 엔드포인트 전부 등장: `Form_Load`, `SpdMain_CellDoubleClick`, `ClbDivision_SelectedIndexChanged`, `SpdMain_TopChange`, `BtnApproval_Click`, `BtnReject_Click`, `BtnSelfReject_Click`, `BtnRequestUser_Click`, `btnItemId_Click`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SSP0202-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SSP0202 Shipment Change Request Confirm — As-Is 분석
+
+> 출처: AsisFacts 정적 추출 Fact Pack(SSP0202). 이 문서에는 Fact Pack에 있는 사실만 적었습니다. Fact Pack에 없는 내용은 **확인 필요**로 표시했습니다.
+
+## 1. 화면 개요
+
+| 항목 | 값 |
+|---|---|
+| 화면 ID | SSP0202 |
+| 클래스 | `SSP0202_ShipmentChangeRequestConfirm` |
+| 도메인 | SSP (프로젝트 `06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj`) |
+| 화면명(파일명 기준) | Shipment Change Request Confirm |
+| Grid 구성 방식 | **META(프레임워크) (+코드 표시/라벨 변경)** |
+
+### 1-1. 파일 구성
+
+| 구분 | 파일 | 줄수 |
+|---|---|---:|
+| current(only) | `06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs` | 1440 |
+| current(only) | `06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs` | 1314 |
+| shared | 없음 (Fact Pack에 shared 파일 없음) | - |
+| legacy | 없음 (Fact Pack에 legacy 사본 없음) | - |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+| 진입점 | 호출 경로 | 줄 | 엔드포인트 | 상태 |
+|---|---|---:|---|---|
+| `this.Load` → `Form_Load` | Form_Load > InitControls > GetDayRange | 1263 | `SCP.SCM0001_GET_SCP_DAY_PERIOD` | MATCH |
+| 프레임워크 FindButton(조회) | FindButton > FindData_Main | 611 | `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM` | MATCH |
+| `spdMain.CellDoubleClick` → `SpdMain_CellDoubleClick` | SpdMain_CellDoubleClick > FindData_Sub | 687 | `SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING` | MATCH |
+| `spdMain.CellDoubleClick` → `SpdMain_CellDoubleClick` | SpdMain_CellDoubleClick > Delegate_Load | 1233 | `SSP.SSP0202_GET_DELEGATEE_LOAD` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > EngProcessingChk | 1090 | `SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > chkSaveYN | 1130 | `SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > GetErpIFCheck | 986 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH |
+| `btnApproval.Click` → `BtnApproval_Click` | BtnApproval_Click > SaveData > FindData_Main | 611 | `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM` | MATCH |
+| `btnReject.Click` → `BtnReject_Click` | BtnReject_Click > GetErpIFCheck | 986 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` | MATCH |
+| `btnReject.Click` → `BtnReject_Click` | BtnReject_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40` | MATCH |
+| `btnReject.Click` → `BtnReject_Click` | BtnReject_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH |
+| `btnReject.Click` → `BtnReject_Click` | BtnReject_Click > SaveData > FindData_Main | 611 | `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM` | MATCH |
+| `btnSelfReject.Click` → `BtnSelfReject_Click` | BtnSelfReject_Click > GetErpIFCheck | 986 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` | MATCH |
+| `btnSelfReject.Click` → `BtnSelfReject_Click` | BtnSelfReject_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40` | MATCH |
+| `btnSelfReject.Click` → `BtnSelfReject_Click` | BtnSelfReject_Click > SaveData | 875 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH |
+| `btnSelfReject.Click` → `BtnSelfReject_Click` | BtnSelfReject_Click > SaveData > FindData_Main | 611 | `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM` | MATCH |
+| (진입점 미연결) | SetChangedPeriod | 1044 | `biz:CommonData.CommonDataList` [code=PERIOD_{p:value} \|\| PERIOD_DEFAULT] | BIZ_MATCH |
+
+흐름에서 확인된 사실:
+- `EngProcessingChk`(1090)와 `chkSaveYN`(1130)은 **`BtnApproval_Click` 경로에만** 있습니다. `BtnReject_Click`와 `BtnSelfReject_Click`에는 이 두 검사가 없습니다.
+- `GetErpIFCheck`(986)는 세 버튼(Approval / Reject / Self Reject)에서 모두 호출됩니다.
+- `SaveData` 875줄에 `_40` 저장 SP와 일반 저장 SP가 **같은 줄에** 추출되었습니다. 둘 중 하나를 고르는 분기(삼항식 등)로 보이지만 분기 조건은 Fact Pack에 없습니다. 실제 조건은 **확인 필요**입니다.
+- 저장 뒤에는 `FindData_Main`(611)으로 재조회합니다.
+- 프레임워크 메타 소비표(4-2)에 `SaveData`가 `PersonalSettingPopup.SaveData`로 연결되어 있습니다(BtnSelfReject_Click:1311, BtnReject_Click:1369, BtnApproval_Click:1412). 화면 내부 `SaveData`(875)와 이름이 같아서 파서가 잘못 연결했을 수 있습니다. **확인 필요**.
+
+## 3. 엔드포인트 전체 표
+
+| # | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 테이블·객체(SP 내부 EXEC 전이 포함, 원문) |
+|---:|---|---|---:|---|---|
+| 1 | `SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM` | MATCH | 1 | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | FN_GET_ITEM_NICKNAME, SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SSP_ANL_SHIP_CONFIRM_CHG_REQ, TB_FX_USER, SSP_MST_DELEGATE, STRING_SPLIT, SCM_MST_SITE, SCM_MST_ITEM_SN |
+| 2 | `SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING` | MATCH | 1 | SP SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | FN_GET_PROJECT_NAME, FN_GET_SCM_SITE_DESCRIPTION, FN_GET_SITE_CUSTOMER_INFO, SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SCP_MST_BOD_N_V, SSP_ANL_SHIP_CONFIRM, SSP_ANL_SHIP_CONFIRM_CHG_REQ, SCM_MST_SSO_DEPT_INFO, TB_FX_USER, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_PROJECT, SCM_MST_SITE, SCM_MST_CUSTOMER, SCM_MST_SITE_CUSTOMER |
+| 3 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40` | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | UPDATE/INSERT/DELETE SSP_ANL_SHIP_CONFIRM, UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT SSP_ANL_SHIP_CONFIRM_H, EXEC PR_SSP_ANL_SHIP_CONFIRM_HIST, SCM_SSP_MAIL_SEND, SCM_ADM_MAIL_SEND, SP_SEND_DBMAIL, INSERT SCM_ADM_SMS_MAIL_SEND_LOG 외 (전체 목록: oracle_migration.md §1) |
+| 4 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | UPDATE/INSERT/DELETE SSP_ANL_SHIP_CONFIRM, EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, PR_DM_SSP_CONFIRM_SYNC, PR_SSP_ANL_SHIP_CONFIRM_ROUTE, INSERT XIF_SCS_PACK_SHIP_PLAN_S_SN, INSERT DM_PLN_MKT_FCST_CONFIRM 외 (전체 목록: oracle_migration.md §1) |
+| 5 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT XIF_ERP_PACK_SHIP_PLAN_S_SN, INSERT XIF_SCS_PACK_SHIP_PLAN_S_SN, NERP_CONV_MASTER 외 (전체 목록: oracle_migration.md §1) |
+| 6 | `biz:CommonData.CommonDataList` | BIZ_MATCH | 1 | (biz 호출, `Data.CallBizCommonData`) | code = `PERIOD_{p:value}` \|\| `PERIOD_DEFAULT` → FROM_VALUE, TO_VALUE를 읽음 |
+| 7 | `SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK` | MATCH | 1 | SP SSP0202_GET_SSP_PLAN_PROCESSING_CHECK | SCM_MST_PLAN, SCM_MST_DIVISION, SCM_MST_PLAN_DETAIL |
+| 8 | `SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK` | MATCH | 1 | SP SSP0202_GET_SCS_CONFIRM_ID_CHECK | SCM_ADM_LOOKUP_MASTER_DETAIL, FN_GET_IN_STR, FN_SCM_SPLIT, **동적 SQL**(DYNAMIC@SSP0202_GET_SCS_CONFIRM_ID_CHECK) |
+| 9 | `SSP.SSP0202_GET_DELEGATEE_LOAD` | MATCH | 1 | SP SSP0202_GET_DELEGATEE_LOAD | SSP_MST_DELEGATE, TB_FX_USER |
+| 10 | `SCP.SCM0001_GET_SCP_DAY_PERIOD` | MATCH | 1 | SP SCM0001_GET_SCP_DAY_PERIOD | FN_MULTY_TIME, SCM_SYS_CALENDAR_M, FN_WEEKOFDAY_DATE, SCM_ADM_LOOKUP_MASTER_DETAIL, CTE_DATE |
+
+### 3-1. 주석 처리된 호출 (현행 기능 아님)
+
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 877 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | **주석 처리됨** |
+| 1262 | SCP.GET_DATE_RANGE_1MONTH | **주석 처리됨** |
+
+875줄의 활성 호출과는 별개로, 877줄 호출은 주석 처리되어 있어 집계에서 뺐습니다.
+
+## 4. 이벤트 배선
+
+| 대상 | 이벤트 | 핸들러 | 배선 위치 | 연결 엔드포인트(flow 기준) |
+|---|---|---|---|---|
+| this | Load | `Form_Load` | .ctor:185 | SCP.SCM0001_GET_SCP_DAY_PERIOD |
+| this.spdMain | CellDoubleClick | `SpdMain_CellDoubleClick` | .ctor:186 | SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SSP0202_GET_DELEGATEE_LOAD |
+| clbDivision | SelectedIndexChanged | `ClbDivision_SelectedIndexChanged` | InitEvent:257 | 없음 (동작은 확인 필요) |
+| spdMain | TopChange | `SpdMain_TopChange` | InitEvent:258 | 없음 (동작은 확인 필요) |
+| btnApproval | Click | `BtnApproval_Click` | InitEvent:260 | PLAN_PROCESSING_CHECK, SCS_CONFIRM_ID_CHECK, IF_CHECK, SAVE(_40/일반), 재조회 |
+| btnReject | Click | `BtnReject_Click` | InitEvent:261 | IF_CHECK, SAVE(_40/일반), 재조회 |
+| btnSelfReject | Click | `BtnSelfReject_Click` | InitEvent:262 | IF_CHECK, SAVE(_40/일반), 재조회 |
+| btnRequestUser | Click | `BtnRequestUser_Click` | InitEvent:263 | 없음 (동작은 확인 필요) |
+| btnItemId | Click | `btnItemId_Click` | InitEvent:264 | 없음 (동작은 확인 필요) |
+
+## 5. 기타 코드 사실 (메타·데이터 컬럼 사용)
+
+| 메서드 | 줄 | 대상 | 읽는 컬럼 / 동작 |
+|---|---:|---|---|
+| SetChangeControl | 209~210 | Filter / UserInfoContext.Current | GROUP_ID, USER_ID, NowGroupID |
+| SetChangeControl | 216, 221, 226, 231, 236, 241, 246 | `DataService.GetSSPInnerTable` (7회) | CODE, COMPANY_ID, DEPT_ID, DIVISION_ID, END_CUSTOMER, LANGUAGE_CODE, NAME, PLANT_ID, SCM_SITE_ID |
+| InitControls | 275, 283 | `DataService.FP_Log2` | LOGTYPE, NOTE, USER_ID |
+| InitControls | 295 | c | CODE |
+| SetChangedControl | 319, 327 | `CString.GetCheckedListValue`, NowGroupID | CODE |
+| FindData_Main | 593, 594, 598, 600 | `CString.GetCheckedListValue` | CODE |
+| SetChangeRequestInfo | 723~730 | dt.Rows[0] | CHANGE_REQ_NO, REQUEST_TITLE, REQUEST_USER, REQUEST_DEPT, APPROVAL_USER, CHANGE_REASON_CODE, CHANGE_REASON_DETAIL, APPROVAL_DEPT_NAME |
+| GetErpIFCheck | 998 | ds.Tables[0].Rows[0] | result_code |
+| SetChangedPeriod | 1051~1052 | dt.Rows[0] | FROM_VALUE, TO_VALUE |
+| chkERPIFBlockYn | 1064, 1073 | dtERPBlockYnIF.Rows[0] | BLOCK_YN, PERIOD (Field<T>) |
+| chkSaveYN | 1141, 1147, 1161 | ds.Tables[0]/[1].Rows[0] | CNT |
+
+## 6. Grid 구성 방식과 Division별 차이
+
+- 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)**
+  - 메타 컬럼 생성 호출: `SetSheetHeaderColumn`@InitSpread:368(Main, 헤더 1행), `SetSheetHeaderColumn`@InitSpread:399(Detail, 헤더 2행)
+  - 시트 생성(CreateSpread): `spdMain` ← `Shipment Change Request Confirm`(342), `txtApprovalDeptName`(FpSpread) ← `Shipment Change Request Confirm Detail`(346)
+- 코드 분기: Detail 시트에서만 `_sChangeType == "P"` 여부로 다음 두 가지가 달라집니다.
+  - `ERP_SO_NO` Visible: "P" → false(405), 그 외 → true(427)
+  - 상단 헤더 Span 라벨: "P" → `Plan`(LT_DAY, 6칸) / `Confirm`(NEW_LT_DAY, 7칸). 그 외 → `Confirmed`(LT_DAY, 7칸) / `Change`(NEW_LT_DAY, 7칸)
+- Division별 차이: 메타 규칙과 최종 Grid 모두 **14개 division 키(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC)에서 같습니다.**
+
+| 시트 | 연결 규칙 | 표시 컬럼 수(전 division 동일) |
+|---|---|---|
+| Shipment Change Request Confirm | META+코드연결 | 19 |
+| Shipment Change Request Confirm Detail | META+코드연결 | 25 (?1 — ERP_SO_NO는 런타임 `_sChangeType`에 따라 달라짐) |
+
+- 실제 SP 실행 결과와 맞는 시트가 없습니다. grid 단계를 실행하지 않았거나 시트명이 다르기 때문이며, **확인 필요**합니다.
+
+## 7. 확인 필요 항목
+
+1. `SaveData`(875)에서 `_40`과 일반 저장 SP 중 하나를 고르는 조건. `_40` 접미사가 Division 40을 뜻하는지는 Fact Pack으로 입증되지 않았습니다.
+2. 4-2에서 `SaveData`가 `PersonalSettingPopup.SaveData`로 연결된 것이 파서 오매핑인지.
+3. `SetChangedPeriod`(1044, CommonDataList PERIOD_*)는 진입점에 연결되어 있지 않습니다. 실제로 호출되는지 확인이 필요합니다.
+4. `chkERPIFBlockYn`이 쓰는 `dtERPBlockYnIF`의 데이터 출처(엔드포인트 목록에 없음).
+5. `ClbDivision_SelectedIndexChanged`, `SpdMain_TopChange`, `BtnRequestUser_Click`, `btnItemId_Click`의 동작(엔드포인트 호출 없음).
+6. `GetSSPInnerTable` 7회 호출(216~246)이 각각 어느 컨트롤(clbDivision, clbFromSite, cboStatus, cboChangeType 등)에 바인딩되는지.
+7. Main 시트 grid_effective의 `ERP_SO_NO`(CODE_ONLY_CHANGE, 값 없음) 행. 코드 분기 조건은 Detail 시트에만 있으므로 파서가 시트를 잘못 연결했을 수 있습니다.
+8. `SetChangeRequestInfo` 호출 위치와 각 컬럼을 상세 TextBox에 넣는 대응 관계.
+9. 메타 행: SCM_ADM_LOOKUP_MASTER_DETAIL 1건, TB_FX_GroupMenuAuth 8건, TB_FX_ProgramInfo 2건, TB_FX_MenuItemInfo 2건. 내용은 Fact Pack 본문에 없습니다.
+
+
+# 1차 분석서 — web_components.md
+# SSP0202 화면 구성 → React / Wijmo 매핑
+
+## 1. 화면 배치 (props.csv)
+
+| 컨테이너 | 속성(원문) | 해석 |
+|---|---|---|
+| splitContainer1 | Orientation = Horizontal, Size = (1192, 649), SplitterDistance = 259, Dock Fill | **상/하 분할**. 상단 259 / 전체 649 = **약 39.9%**, 하단 약 60.1% |
+| ├ Panel1(상) usrConditionPanel1 | Dock Top, Size (1192, 67), UsrPanelType = HidePanel | 조회조건 영역 (높이 67) |
+| ├ Panel1(상) spdMain | Dock Fill, Size (1192, 192) | Main Grid (67 + 192 = 259) |
+| ├ Panel2(하) panel1 → usrLayoutControl3 | Dock Top, Size (1192, 209) | 요청 상세 정보 폼 (높이 209) |
+| ├ Panel2(하) splitter1 | Dock Top, Size (1192, 3) | 폼과 Detail Grid 사이 스플리터 |
+| └ Panel2(하) txtApprovalDeptName (FpSpread) | Dock Fill, Size (1192, 174) | Detail Grid (컨트롤 이름은 txt*이지만 FpSpread임) |
+
+하단 패널 높이 합계는 209 + 3 + 174 = 386입니다. 전체 649 − 259 = 390과 4px 차이가 나며, 이는 SplitContainer 분할선 몫입니다(SplitterWidth는 props에 값이 없음).
+
+## 2. 컨트롤 → 컴포넌트 매핑
+
+### 2-1. 조회조건 영역 (usrLayoutControl1)
+
+| AS-IS 컨트롤 | 유형 | 라벨(LayoutControlItem.Text / 컨트롤 Text 원문) | Size | TO-BE 후보 |
+|---|---|---|---|---|
+| clbDivision | UsrCheckedList | "Division" (lcDivision) | 246×21 | 멀티 선택 콤보 (Wijmo MultiSelect 계열 공통 컴포넌트) |
+| drpPeriod | UsrDateRangePicker | "Request Date" (layoutControlItem1) | 210×20 | 기간 선택(From~To) 공통 컴포넌트 |
+| clbFromSite | UsrCheckedList | "From Site" (layoutControlItem7) | 199×21 | 멀티 선택 콤보 |
+| cboStatus | UsrCombo | "Status" (LayoutControlItem 이름 `PlanType`) | 198×20 | 단일 콤보 (Wijmo ComboBox 계열) |
+| cboChangeType | UsrCombo | "Change Type" (LayoutControlItem 이름 `PlanType1`) | 141×20 | 단일 콤보 |
+| txtRequest | UsrMultiLineEditor | LayoutControlItem 이름 `Requestor` (Text 값은 Fact Pack에서 잘려 있음, 확인 필요) | 154×21 | 멀티라인 입력 + 팝업 버튼 |
+| btnRequestUser | UsrButton | layoutControlItem13 Text "layoutControlItem2" (TextVisible 여부 확인 필요) | 39×24 | 사용자 검색 팝업 버튼 |
+| txtItemID | UsrMultiLineEditor | LayoutControlItem 이름 `Model` (Text 값은 잘려 있음, 확인 필요) | 136×21 | 멀티라인 입력 + 팝업 버튼 |
+| btnItemId | UsrButton | layoutControlItem2 (Text 확인 필요) | 39×24 | 품목 검색 팝업 버튼 |
+| btnApproval | SimpleButton | "Approval" (lcBtnApproval Text "layoutControlItem10") | 105×22 | 화면 버튼 (menu-button 동적 조회 대상) |
+| btnReject | SimpleButton | "Reject" (lcBtnReject Text "layoutControlItem10") | 105×22 | 화면 버튼 |
+| btnSelfReject | SimpleButton | "Self Reject" (lcSelfReject Text "layoutControlItem10") | 105×22 | 화면 버튼 |
+
+### 2-2. 요청 상세 폼 (usrLayoutControl3, panel1 내부)
+
+| AS-IS 컨트롤 | 유형 | 라벨 원문 | ReadOnly(props) | Size | TO-BE 후보 |
+|---|---|---|---|---|---|
+| usrLabel2 | UsrLabel | "Request Confirm Detail" | - | 733×20 | 섹션 타이틀 |
+| txtRequestNo | TextBox | "Request No" (layoutControlItem5) | true | 644×24 | 읽기 전용 Input |
+| txtTitle | TextBox | 확인 필요 (lcTitle 또는 lcTitle1 추정, Text 잘림) | true | 259×24 | 읽기 전용 Input |
+| txtRequestor | TextBox | 확인 필요 (layoutControlItem4, Text 잘림) | true | 259×24 | 읽기 전용 Input |
+| txtRequestDeptName | TextBox | 확인 필요 | true | 292×20 | 읽기 전용 Input |
+| txtApproval | TextBox | 확인 필요 (lcApproval 추정) | true | 259×24 | 읽기 전용 Input |
+| txtAppDeptName | TextBox | 확인 필요 | true | 292×20 | 읽기 전용 Input |
+| txtChangeReason | TextBox | 확인 필요 | true | 292×20 | 읽기 전용 Input |
+| txtReasonDetail | TextBox | 확인 필요 (lcReasonDetail 추정) | true | 644×24 | 읽기 전용 Input |
+| txtRejectReason | TextBox | 확인 필요 | **ReadOnly 행 없음** (입력 가능 여부 확인 필요) | 644×24 | Input (반려 사유 입력 여부 확인 필요) |
+
+라벨 원문이 "확인 필요"인 행이 있습니다. props.csv가 Fact Pack에서 10,890자 잘려서 layoutControlItem6, 9, 10, 3, lcApproval, lcReasonDetail, lcTitle, lcTitle1의 Text를 볼 수 없기 때문입니다. 전체 props.csv를 열어 확인해야 합니다.
+
+### 2-3. Grid
+
+| AS-IS | 시트 | TO-BE |
+|---|---|---|
+| spdMain (FpSpread) | `Shipment Change Request Confirm` | Wijmo FlexGrid — 메타(SCM_MST_SHEET_COLUMNS) 기반, 헤더 1행 |
+| txtApprovalDeptName (FpSpread) | `Shipment Change Request Confirm Detail` | Wijmo FlexGrid — 메타 기반, 헤더 2행(병합 헤더) |
+
+## 3. 시트별 Grid 컬럼 (grid_effective 기준)
+
+### 3-1. Shipment Change Request Confirm (표시 19 / 전 division 동일)
+
+| 컬럼 | 라벨 | 출처 | 표시 |
+|---|---|---|---|
+| DIVISION_ID | Division | META | 기본 |
+| CHANGE_REQ_NO | Request No | META | 기본 |
+| REQUEST_TITLE | Title | META | 기본 |
+| CHANGE_TYPE | Change Type | META | 기본 |
+| SHIPMENT_STATUS | Status | META | 기본 |
+| FROM_SITE | From Site | META | 기본 |
+| TO_SITE | To Site | META | 기본 |
+| ITEM_ID | Model | META | 기본 |
+| NICK_NAME | Nick Name | META | 기본 |
+| CHANGE_REASON_CODE | Change Reason | META | 기본 |
+| REJECT_REASON | Reject Reason | META | 기본 |
+| REQUEST_USER_NAME | Requestor | META | 기본 |
+| REQUEST_DEPT | Requestor Dept Name | META | 기본 |
+| REQUEST_TIME | Request Date | META | 기본 |
+| APPROVAL_USER_NAME | Approval | META | 기본 |
+| APPROVAL_DEPT | Approval Dept Name | META | 기본 |
+| APPROVAL_TIME | Approval Date | META | 기본 |
+| DELEGATEE_USER_NAME | Delegatee | META | 기본 |
+| DELEGATEE_DEPT | Delegatee Dept Name | META | 기본 |
+| REQUEST_USER | Requestor | META | 숨김 |
+| APPROVAL_USER | Approval | META | 숨김 |
+| DELEGATEE_USER | Delegatee | META | 숨김 |
+| ERP_SO_NO | (없음) | CODE_ONLY_CHANGE | 값 없음. 코드 분기는 Detail 시트 조건 안에 있으므로 Main 시트 귀속은 확인 필요 |
+
+표의 컬럼 순서는 grid_effective.csv의 행 순서(알파벳 순)와 다릅니다. 실제 표시 순서는 메타의 순서 컬럼으로 확인해야 합니다(확인 필요).
+
+### 3-2. Shipment Change Request Confirm Detail (표시 25(?1) / 전 division 동일)
+
+| 컬럼 | 라벨(메타) | 표시 | 코드 헤더(2행째, "P"·else 같음) |
+|---|---|---|---|
+| CONFIRM_ID | Confirm ID | 기본 | |
+| ERP_SO_NO | SO No | 기본 → `_sChangeType=="P"`면 숨김(405) / 그 외 표시(427) | |
+| FCST_TYPE | FCST Type | 기본 | |
+| PROJECT_NAME | Project Name | 기본 | |
+| ITEM_ID | Model | 기본 | |
+| FROM_SITE_DESCRIPTION | From Site | 기본 | |
+| TO_SITE_DESCRIPTION | To Site | 기본 | |
+| SHIPTO_CODE | ShipTo Code | 기본 | |
+| INCOTERMS | Incoterms | 기본 | |
+| LT_DAY | L/T(Day) | 기본 | L/T(Day) |
+| ETD | ETD | 기본 | ETD |
+| ETA | ETA | 기본 | ETA |
+| TRANSPORT_MODE | Trans Mode | 기본 | Trans Mode |
+| SHIPMENT_DATE | Shipment Date | 기본 | Shipment Date |
+| SHIPMENT_CONFIRM_QTY | Qty | 기본 | Qty |
+| NEW_LT_DAY | L/T(Day) | 기본 | L/T(Day) |
+| NEW_ETD | ETD | 기본 | ETD |
+| NEW_ETA | ETA | 기본 | ETA |
+| NEW_TRANSPORT_MODE | Trans Mode | 기본 | Trans Mode |
+| NEW_SHIPMENT_DATE | Shipment Date* | 기본 | Shipment Date* |
+| NEW_SHIPMENT_CONFIRM_QTY | Qty* | 기본 | Qty* |
+| NEW_SHIPTO_CODE | ShipTo Code | 기본 | |
+| REMARKS | Remarks | 기본 | |
+| REMARKS2 | Building | 기본 | |
+| REMARKS3 | Customer requirement | 기본 | |
+
+숨김 컬럼 25개(메타 기준): A_COUNTRY, A_PORT_CODE, BOD_ID, CHANGE_REQ_NO, CUSTOMER_LT, D_COUNTRY, D_PORT_CODE, DIVISION_ID, FROM_SITE, NEW_A_COUNTRY, NEW_A_PORT_CODE, NEW_BASE_CONFIRM_YN, NEW_BOD_ID, NEW_CUSTOMER_LT, NEW_D_COUNTRY, NEW_D_PORT_CODE, NEW_INCOTERMS, NEW_ROUTE, NEW_TO_CITY, NEW_TO_COUNTRY, NEW_YN, ROUTE_ID, TO_CITY, TO_COUNTRY, TO_SITE.
+
+#### 상단 헤더 병합 (InitSpread, `_sChangeType` 분기)
+
+| 조건 | 0행 Span 1 | 0행 Span 2 |
+|---|---|---|
+| `_sChangeType == "P"` (407~408) | LT_DAY부터 6칸 = **"Plan"** | NEW_LT_DAY부터 7칸 = **"Confirm"** |
+| 그 외 (429~430) | LT_DAY부터 7칸 = **"Confirmed"** | NEW_LT_DAY부터 7칸 = **"Change"** |
+
+"P" 분기에서만 기존 쪽 Span이 6칸입니다. ERP_SO_NO가 숨김이 되는 것과 관련이 있을 수 있지만, 메타의 컬럼 순서가 Fact Pack에 없어 **확인 필요**입니다. 1행(2~3행 Span, 높이 30) 라벨은 두 분기가 같습니다.
+
+### 3-3. Division별 표시 차이
+
+| 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Change Request Confirm | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 |
+| Shipment Change Request Confirm Detail | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) | 25(?1) |
+
+Division별 차이는 없습니다. 차이는 런타임 `_sChangeType` 값 하나로만 생깁니다.
+
+## 4. 시트 연결 규칙
+
+| 시트 | 연결 규칙 | 근거 |
+|---|---|---|
+| Shipment Change Request Confirm | META+코드연결 | CreateSpread:342 AddSheet(spdMain) → InitSpread:368 SetSheetHeaderColumn(…, 1) |
+| Shipment Change Request Confirm Detail | META+코드연결 | CreateSpread:346 AddSheet(txtApprovalDeptName) → 349/352/356 ChangeSheet → InitSpread:399 SetSheetHeaderColumn(…, 2) |
+
+Master–Detail 연결:
+- `spdMain` 셀을 더블클릭하면(`SpdMain_CellDoubleClick`) `FindData_Sub`가 `SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`를 호출하고, `Delegate_Load`가 `SSP0202_GET_DELEGATEE_LOAD`를 호출합니다.
+- 더블클릭한 행에서 어떤 키(CHANGE_REQ_NO 등)를 넘기는지는 Fact Pack에 없습니다(**확인 필요**).
+
+
+# 1차 분석서 — tobe_design.md
+# SSP0202 TO-BE 설계 입력
+
+## 1. 조회조건 (컨트롤 기준)
+
+| 순 | 라벨(원문) | AS-IS 컨트롤 | 유형 | 데이터 출처 | 비고 |
+|---:|---|---|---|---|---|
+| 1 | Division | clbDivision | UsrCheckedList(멀티) | GetSSPInnerTable 추정(확인 필요) | `SelectedIndexChanged` → `ClbDivision_SelectedIndexChanged`(연쇄 동작 확인 필요) |
+| 2 | Request Date | drpPeriod | UsrDateRangePicker | 기본 기간: Form_Load > InitControls > GetDayRange → `SCP.SCM0001_GET_SCP_DAY_PERIOD` | 1262줄 GET_DATE_RANGE_1MONTH는 주석 처리됨 |
+| 3 | From Site | clbFromSite | UsrCheckedList(멀티) | 확인 필요 | |
+| 4 | Status | cboStatus | UsrCombo | 확인 필요 | |
+| 5 | Change Type | cboChangeType | UsrCombo | 확인 필요 | |
+| 6 | (Requestor, Text 확인 필요) | txtRequest + btnRequestUser | UsrMultiLineEditor + UsrButton | 팝업(`BtnRequestUser_Click`, 동작 확인 필요) | |
+| 7 | (Model, Text 확인 필요) | txtItemID + btnItemId | UsrMultiLineEditor + UsrButton | 팝업(`btnItemId_Click`, 동작 확인 필요) | |
+
+- `FindData_Main`은 593, 594, 598, 600줄에서 `GetCheckedListValue`로 멀티 선택 값을 모읍니다. 정확히 몇 개의 CheckedList가 파라미터로 들어가는지는 확인 필요입니다.
+- 조회조건 순서는 CR-098에 따라 판정에서 제외됩니다. 사용 여부와 EDIT 형태는 위 표에 맞춰야 합니다.
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | AS-IS 핸들러 | 호출 순서(Fact Pack flow 기준) | TO-BE API 후보 |
+|---|---|---|---|
+| 화면 진입 | Form_Load | InitControls → GetDayRange(`SCM0001_GET_SCP_DAY_PERIOD`) | 공용 기간 조회 API(SCM0001 재사용 여부 확인) |
+| 조회 | FindButton | FindData_Main(`SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM`) | `GET /ssp/ssp0202/main` (후보) |
+| Main 더블클릭 | SpdMain_CellDoubleClick | FindData_Sub(`SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`), Delegate_Load(`SSP0202_GET_DELEGATEE_LOAD`) | `GET /ssp/ssp0202/detail`, `GET /ssp/ssp0202/delegatee` (후보) |
+| Approval | BtnApproval_Click | EngProcessingChk(`SSP0202_GET_SSP_PLAN_PROCESSING_CHECK`) · chkSaveYN(`SSP0202_GET_SCS_CONFIRM_ID_CHECK`) · GetErpIFCheck(`SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`) · SaveData(`_40` 또는 일반 SAVE) → FindData_Main 재조회 | 검사 API 2종 + `POST /ssp/ssp0202/approve` (후보) |
+| Reject | BtnReject_Click | GetErpIFCheck · SaveData(`_40`/일반) → 재조회 | `POST /ssp/ssp0202/reject` (후보) |
+| Self Reject | BtnSelfReject_Click | GetErpIFCheck · SaveData(`_40`/일반) → 재조회 | `POST /ssp/ssp0202/self-reject` (후보) |
+| Requestor 팝업 | BtnRequestUser_Click | 엔드포인트 없음 | 공용 사용자 검색 팝업(확인 필요) |
+| Model 팝업 | btnItemId_Click | 엔드포인트 없음 | 공용 품목 검색 팝업(확인 필요) |
+| Grid 스크롤 | SpdMain_TopChange | 엔드포인트 없음 | 동작 확인 후 결정 |
+
+- 세 버튼 모두 같은 `SaveData`(875)를 씁니다. 어떤 버튼인지(승인/반려/자가반려) 구분하는 파라미터 값은 Fact Pack에 없습니다(**확인 필요**).
+- 검사 메서드 순서(EngProcessingChk, chkSaveYN, GetErpIFCheck, SaveData)는 flow 경로 목록에서 나온 것이고 실행 순서를 보장하지 않습니다. 원문 줄 순서로 **확인 필요**합니다.
+- `chkERPIFBlockYn`(BLOCK_YN, PERIOD 검사)이 어느 버튼 경로에 들어가는지 **확인 필요**합니다.
+- 버튼 3종(Approval / Reject / Self Reject)은 `menu-button-dynamic-fetch` 대상입니다.
+
+## 3. Division별 Grid 변형 요약
+
+| 시트 | Division별 차이 | 코드 변형 |
+|---|---|---|
+| Shipment Change Request Confirm | 없음 (14 division 모두 19컬럼) | 없음 |
+| Shipment Change Request Confirm Detail | 없음 (14 division 모두 25컬럼, ?1) | `_sChangeType == "P"`: ERP_SO_NO 숨김, 상단 헤더 "Plan"(6칸)/"Confirm"(7칸). 그 외: ERP_SO_NO 표시, "Confirmed"(7칸)/"Change"(7칸) |
+
+- Detail 헤더는 2행이고(SetSheetHeaderColumn 2), 2행째 라벨은 "Shipment Date*", "Qty*" 등 메타 라벨과 같습니다.
+- `_sChangeType` 값이 어디서 정해지는지(Main 선택 행의 CHANGE_TYPE으로 보이지만 미입증)는 **확인 필요**입니다.
+
+## 4. 권한(C/R/U/D) 관련 사실
+
+| 항목 | 사실 |
+|---|---|
+| 메뉴/권한 메타 | TB_FX_GroupMenuAuth 8행, TB_FX_MenuItemInfo 2행, TB_FX_ProgramInfo 2행, TB_FX_Favorite 13행 (내용은 Fact Pack에 없음) |
+| 사용자 그룹 사용 | SetChangeControl:209~210에서 Filter GROUP_ID / USER_ID와 `UserInfoContext.Current.NowGroupID` 사용. SetChangedControl:327에서도 NowGroupID 사용 |
+| 저장 버튼 | 프레임워크 저장 버튼이 아니라 화면 전용 버튼 3종(Approval / Reject / Self Reject)으로 저장 |
+| 승인자/위임자 | Main 시트에 APPROVAL_USER(숨김)/APPROVAL_USER_NAME, DELEGATEE_USER(숨김)/DELEGATEE_USER_NAME 있음. GET_DELEGATEE_LOAD는 SSP_MST_DELEGATE 참조 |
+
+버튼별 권한 제어(그룹에 따라 버튼 활성/비활성)가 있는지는 SetChangeControl 원문으로 **확인 필요**합니다.
+
+## 5. 미확정 사항
+
+1. `_40`과 일반 저장 SP를 고르는 조건, 그리고 `_40`이 Division 40 전용인지.
+2. 세 버튼이 SaveData에 넘기는 상태 값과 txtRejectReason(ReadOnly 미설정) 입력값이 저장 파라미터에 들어가는지.
+3. GetSSPInnerTable 7회 호출과 각 조회조건 컨트롤의 대응.
+4. 조회조건 라벨 원문 중 잘린 항목(Requestor, Model, 상세 폼 라벨 8건). 전체 props.csv로 확인.
+5. SetChangedPeriod(CommonDataList PERIOD_*)가 실제로 쓰이는지(진입점 미연결).
+6. dtERPBlockYnIF 데이터 출처와 chkERPIFBlockYn 호출 위치.
+7. Main 시트 grid_effective의 ERP_SO_NO(CODE_ONLY_CHANGE) 행이 파서가 시트를 잘못 연결한 것인지.
+8. 메타의 컬럼 표시 순서. "P" 분기 Span 6칸과 else 7칸의 차이가 ERP_SO_NO 위치와 관련 있는지.
+9. 실제 SP 실행 결과와 맞는 시트가 없어, grid 단계 실측이 필요함.
+10. 4-2의 `PersonalSettingPopup.SaveData` 매핑이 파서 오매핑인지.
+
+
+# Fact Pack — SSP0202
+# SSP0202 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 1440 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 1314 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:btnApproval.Click | BtnApproval_Click > SaveData > FindData_Main | 611 | SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | MATCH | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM |
+| event:btnApproval.Click | BtnApproval_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 |
+| event:btnApproval.Click | BtnApproval_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| event:btnApproval.Click | BtnApproval_Click > GetErpIFCheck | 986 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK |
+| event:btnApproval.Click | BtnApproval_Click > EngProcessingChk | 1090 | SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK | MATCH | SP SSP0202_GET_SSP_PLAN_PROCESSING_CHECK |
+| event:btnApproval.Click | BtnApproval_Click > chkSaveYN | 1130 | SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK | MATCH | SP SSP0202_GET_SCS_CONFIRM_ID_CHECK |
+| event:btnReject.Click | BtnReject_Click > SaveData > FindData_Main | 611 | SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | MATCH | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM |
+| event:btnReject.Click | BtnReject_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 |
+| event:btnReject.Click | BtnReject_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| event:btnReject.Click | BtnReject_Click > GetErpIFCheck | 986 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK |
+| event:btnSelfReject.Click | BtnSelfReject_Click > SaveData > FindData_Main | 611 | SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | MATCH | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM |
+| event:btnSelfReject.Click | BtnSelfReject_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 |
+| event:btnSelfReject.Click | BtnSelfReject_Click > SaveData | 875 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| event:btnSelfReject.Click | BtnSelfReject_Click > GetErpIFCheck | 986 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK |
+| button:FindButton | FindButton > FindData_Main | 611 | SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | MATCH | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM |
+| event:this.Load | Form_Load > InitControls > GetDayRange | 1263 | SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | SP SCM0001_GET_SCP_DAY_PERIOD |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Sub | 687 | SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | SP SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > Delegate_Load | 1233 | SSP.SSP0202_GET_DELEGATEE_LOAD | MATCH | SP SSP0202_GET_DELEGATEE_LOAD |
+| unreached:(진입점 미연결) | SetChangedPeriod | 1044 | biz:CommonData.CommonDataList [code=PERIOD_{p:value} \|\| PERIOD_DEFAULT] | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=PERIOD_{p:value} \|\| PERIOD_DEFAULT] | BIZ_MATCH | 1 |  |  |  |
+| SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | 1 | SP SCM0001_GET_SCP_DAY_PERIOD | EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE |  |
+| SSP.SSP0202_GET_DELEGATEE_LOAD | MATCH | 1 | SP SSP0202_GET_DELEGATEE_LOAD | EXEC:SSP0202_GET_DELEGATEE_LOAD, SELECT:SSP_MST_DELEGATE, SELECT:TB_FX_USER |  |
+| SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK | MATCH | 1 | SP SSP0202_GET_SCS_CONFIRM_ID_CHECK | EXEC:SSP0202_GET_SCS_CONFIRM_ID_CHECK, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_IN_STR, DYNAMIC@SSP0202_GET_SCS_CONFIRM_ID_CHECK, REF:FN_SCM_SPLIT |  |
+| SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | MATCH | 1 | SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM | EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN |  |
+| SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | 1 | SP SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | EXEC:SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, REF:FN_GET_PROJECT_NAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER |  |
+| SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK | MATCH | 1 | SP SSP0202_GET_SSP_PLAN_PROCESSING_CHECK | EXEC:SSP0202_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL |  |
+| SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, EXEC:PR_DM_SSP_CONFIRM_SYNC, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, SELECT:NERP_CONV_MASTER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT, INSERT:#T_CONFIRM_ID, DELETE:A, SELECT:DM_PLN_MKT_FCST_CONFIRM, SELECT:#T_CONFIRM_ID, INSERT:DM_PLN_MKT_FCST_CONFIRM, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:DM_MST_ITEM_SINGLE_V |  |
+| SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 | EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_ITEM_SN, EXEC:SP_SEND_DBMAIL, INSERT:SCM_ADM_SMS_MAIL_SEND_LOG |  |
+| SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| chkERPIFBlockYn | dtERPBlockYnIF.Rows[0] | BLOCK_YN, PERIOD |
+| chkSaveYN | ds.Tables[0].Rows[0] | CNT |
+| chkSaveYN | ds.Tables[1].Rows[0] | CNT |
+| GetErpIFCheck | ds.Tables[0].Rows[0] | result_code |
+| InitControls | c | CODE |
+| SetChangeControl | Filter | GROUP_ID, USER_ID |
+| SetChangeControl | UserInfoContext.Current | NowGroupID |
+| SetChangedControl | UserInfoContext.Current | NowGroupID |
+| SetChangedPeriod | dt.Rows[0] | FROM_VALUE, TO_VALUE |
+| SetChangeRequestInfo | dt.Rows[0] | CHANGE_REQ_NO, REQUEST_TITLE, REQUEST_USER, REQUEST_DEPT, APPROVAL_USER, CHANGE_REASON_CODE, CHANGE_REASON_DETAIL, APPROVAL_DEPT_NAME |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetSSPInnerTable | SetChangeControl:216, SetChangeControl:221, SetChangeControl:226, SetChangeControl:231, SetChangeControl:236, SetChangeControl:241, SetChangeControl:246 | DataService.GetSSPInnerTable | CODE, COMPANY_ID, DEPT_ID, DIVISION_ID, END_CUSTOMER, LANGUAGE_CODE, NAME, PLANT_ID, SCM_SITE_ID |
+| FP_Log2 | InitControls:275, InitControls:283 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| GetCheckedListValue | SetChangedControl:319, FindData_Main:593, FindData_Main:594, FindData_Main:598, FindData_Main:600 | CString.GetCheckedListValue | CODE |
+| SetSheetHeaderColumn | InitSpread:368, InitSpread:399 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | BtnSelfReject_Click:1311, BtnReject_Click:1369, BtnApproval_Click:1412 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:185 |
+| this.spdMain | CellDoubleClick | SpdMain_CellDoubleClick | .ctor:186 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:257 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:258 |
+| btnApproval | Click | BtnApproval_Click | InitEvent:260 |
+| btnReject | Click | BtnReject_Click | InitEvent:261 |
+| btnSelfReject | Click | BtnSelfReject_Click | InitEvent:262 |
+| btnRequestUser | Click | BtnRequestUser_Click | InitEvent:263 |
+| btnItemId | Click | btnItemId_Click | InitEvent:264 |
+
+## 6. 컨트롤 (62개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 22 | lcDivision, lcSelfReject, layoutControlItem1, layoutControlItem7, PlanType, lcBtnReject, lcBtnApproval, layoutControlItem13, Requestor, Model, layoutControlItem2, PlanType1, layoutControlItem5, layoutControlItem4, layoutControlItem6 … |
+| TextBox | 9 | txtRequestNo, txtTitle, txtRequestor, txtRequestDeptName, txtApproval, txtAppDeptName, txtReasonDetail, txtChangeReason, txtRejectReason |
+| EmptySpaceItem | 5 | emptySpaceItem1, emptySpaceItem8, emptySpaceItem4, emptySpaceItem2, emptySpaceItem5 |
+| SimpleButton | 3 | btnSelfReject, btnReject, btnApproval |
+| FpSpread | 2 | spdMain, txtApprovalDeptName |
+| SheetView | 2 | spdMain_Sheet1, txtApprovalDeptName_Sheet1 |
+| UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl3 |
+| UsrCheckedList | 2 | clbDivision, clbFromSite |
+| UsrCombo | 2 | cboStatus, cboChangeType |
+| UsrButton | 2 | btnRequestUser, btnItemId |
+| UsrMultiLineEditor | 2 | txtRequest, txtItemID |
+| LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup3 |
+| SplitContainer | 1 | splitContainer1 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrDateRangePicker | 1 | drpPeriod |
+| Splitter | 1 | splitter1 |
+| Panel | 1 | panel1 |
+| UsrLabel | 1 | usrLabel2 |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 37 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL | 1 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL_H | 4 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL_H.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 72 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 13 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 8 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 2 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 2 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+
+## 9. 주석/비활성 처리된 호출 (2건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 877 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM | commented:MATCH |
+| 1262 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0202 | Shipment Change Request Confirm | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0202 | Shipment Change Request Confirm Detail | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Shipment Change Request Confirm, Shipment Change Request Confirm Detail
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:368, SetSheetHeaderColumn@InitSpread:399
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpread |  | 405 | 표시/라벨 변경 | set:Visible | Visible = {?false} | ERP_SO_NO | if(spreadInfo.SheetName == "Shipment Change Request Confirm Detail") ⟫ if(_sChangeType == "P") |
+| InitSpread |  | 427 | 표시/라벨 변경 | set:Visible | Visible = {?true} | ERP_SO_NO | if(spreadInfo.SheetName == "Shipment Change Request Confirm Detail") ⟫ else!(_sChangeType == "P") |
+| InitializeComponent |  | 189 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 190 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 191 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 192 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+| InitializeComponent |  | 837 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 838 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 839 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 840 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Change Request Confirm | META+코드연결 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 |
+| Shipment Change Request Confirm Detail | META+코드연결 | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) | 25 (?1) |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+판단불가(?) 분류: 런타임:호출파라미터 28 — 런타임 분류는 실행 시점에만 결정되는 정상 동적 분기, '미지원식'만 파서 보완 대상.
+분기 조건 판단불가 적용 28건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (10 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","FindData_Main","611","ctor","fox","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","MATCH","SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","FindData_Sub","687","ctor","fox","SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, REF:FN_GET_PROJECT_NAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SaveData","875","ctor","fox","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_ITEM_SN, EXEC:SP_SEND_DBMAIL, INSERT:SCM_ADM_SMS_MAIL_SEND_LOG","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SaveData","875","ctor","fox","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, EXEC:PR_DM_SSP_CONFIRM_SYNC, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, SELECT:NERP_CONV_MASTER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT, INSERT:#T_CONFIRM_ID, DELETE:A, SELECT:DM_PLN_MKT_FCST_CONFIRM, SELECT:#T_CONFIRM_ID, INSERT:DM_PLN_MKT_FCST_CONFIRM, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:DM_MST_ITEM_SINGLE_V","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","GetErpIFCheck","986","ctor","fox","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangedPeriod","1044","derived","biz","CommonData.CommonDataList [code=PERIOD_{p:value} || PERIOD_DEFAULT]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","EngProcessingChk","1090","ctor","fox","SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","MATCH","SP SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","EXEC:SSP0202_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkSaveYN","1130","ctor","fox","SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK","SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK","MATCH","SP SSP0202_GET_SCS_CONFIRM_ID_CHECK","EXEC:SSP0202_GET_SCS_CONFIRM_ID_CHECK, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_IN_STR, DYNAMIC@SSP0202_GET_SCS_CONFIRM_ID_CHECK, REF:FN_SCM_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","Delegate_Load","1233","ctor","fox","SSP.SSP0202_GET_DELEGATEE_LOAD","SSP.SSP0202_GET_DELEGATEE_LOAD","MATCH","SP SSP0202_GET_DELEGATEE_LOAD","EXEC:SSP0202_GET_DELEGATEE_LOAD, SELECT:SSP_MST_DELEGATE, SELECT:TB_FX_USER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","GetDayRange","1263","ctor","fox","SCP.SCM0001_GET_SCP_DAY_PERIOD","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE","",""
+```
+
+### FILE flow.csv (19 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","this.Load","Form_Load > InitControls > GetDayRange","GetDayRange","1263","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","this.spdMain.CellDoubleClick","SpdMain_CellDoubleClick > FindData_Sub","FindData_Sub","687","SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, REF:FN_GET_PROJECT_NAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","this.spdMain.CellDoubleClick","SpdMain_CellDoubleClick > Delegate_Load","Delegate_Load","1233","SSP.SSP0202_GET_DELEGATEE_LOAD","MATCH","SP SSP0202_GET_DELEGATEE_LOAD","EXEC:SSP0202_GET_DELEGATEE_LOAD, SELECT:SSP_MST_DELEGATE, SELECT:TB_FX_USER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_ITEM_SN, EXEC:SP_SEND_DBMAIL, INSERT:SCM_ADM_SMS_MAIL_SEND_LOG"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, EXEC:PR_DM_SSP_CONFIRM_SYNC, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, SELECT:NERP_CONV_MASTER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT, INSERT:#T_CONFIRM_ID, DELETE:A, SELECT:DM_PLN_MKT_FCST_CONFIRM, SELECT:#T_CONFIRM_ID, INSERT:DM_PLN_MKT_FCST_CONFIRM, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:DM_MST_ITEM_SINGLE_V"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > SaveData > FindData_Main","FindData_Main","611","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","MATCH","SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > GetErpIFCheck","GetErpIFCheck","986","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > EngProcessingChk","EngProcessingChk","1090","SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","MATCH","SP SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","EXEC:SSP0202_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnApproval.Click","BtnApproval_Click > chkSaveYN","chkSaveYN","1130","SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK","MATCH","SP SSP0202_GET_SCS_CONFIRM_ID_CHECK","EXEC:SSP0202_GET_SCS_CONFIRM_ID_CHECK, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_IN_STR, DYNAMIC@SSP0202_GET_SCS_CONFIRM_ID_CHECK, REF:FN_SCM_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnReject.Click","BtnReject_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_ITEM_SN, EXEC:SP_SEND_DBMAIL, INSERT:SCM_ADM_SMS_MAIL_SEND_LOG"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnReject.Click","BtnReject_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, EXEC:PR_DM_SSP_CONFIRM_SYNC, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, SELECT:NERP_CONV_MASTER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT, INSERT:#T_CONFIRM_ID, DELETE:A, SELECT:DM_PLN_MKT_FCST_CONFIRM, SELECT:#T_CONFIRM_ID, INSERT:DM_PLN_MKT_FCST_CONFIRM, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:DM_MST_ITEM_SINGLE_V"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnReject.Click","BtnReject_Click > SaveData > FindData_Main","FindData_Main","611","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","MATCH","SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnReject.Click","BtnReject_Click > GetErpIFCheck","GetErpIFCheck","986","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnSelfReject.Click","BtnSelfReject_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_ITEM_SN, EXEC:SP_SEND_DBMAIL, INSERT:SCM_ADM_SMS_MAIL_SEND_LOG"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnSelfReject.Click","BtnSelfReject_Click > SaveData","SaveData","875","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_MST_SITE_ITEM_EE_V, UPDATE:SSP_ANL_SHIP_CONFIRM, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, DELETE:SSP_ANL_SHIP_CONFIRM, EXEC:SCM_SSP_MAIL_SEND, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, EXEC:PR_DM_SSP_CONFIRM_SYNC, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCP_MST_BOD_N_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SSP_ANL_SHIP_CONFIRM_H, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SCM_ADM_RECIPIENT_LIST, SELECT:SCM_ADM_RECIPIENT_MESSAGE, SELECT:SCM_ADM_RECIPIENT_ASSIGN, INSERT:#TBLSSPAPPROVEDMAILSEND, REF:FN_GET_USER_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:#TBLSSPAPPROVEDMAILSEND, EXEC:SCM_ADM_MAIL_SEND, SELECT:SSP_MST_DELEGATE, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, SELECT:NERP_CONV_MASTER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT, INSERT:#T_CONFIRM_ID, DELETE:A, SELECT:DM_PLN_MKT_FCST_CONFIRM, SELECT:#T_CONFIRM_ID, INSERT:DM_PLN_MKT_FCST_CONFIRM, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:DM_MST_ITEM_SINGLE_V"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnSelfReject.Click","BtnSelfReject_Click > SaveData > FindData_Main","FindData_Main","611","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","MATCH","SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","event","btnSelfReject.Click","BtnSelfReject_Click > GetErpIFCheck","GetErpIFCheck","986","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","button","FindButton","FindButton > FindData_Main","FindData_Main","611","SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","MATCH","SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","EXEC:SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:TB_FX_USER, SELECT:SSP_MST_DELEGATE, REF:STRING_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","unreached","(진입점 미연결)","SetChangedPeriod","SetChangedPeriod","1044","biz:CommonData.CommonDataList [code=PERIOD_{p:value} || PERIOD_DEFAULT]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (9 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm",".ctor","185","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm",".ctor","186","this.spdMain","CellDoubleClick","SpdMain_CellDoubleClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","257","clbDivision","SelectedIndexChanged","ClbDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","258","spdMain","TopChange","SpdMain_TopChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","260","btnApproval","Click","BtnApproval_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","261","btnReject","Click","BtnReject_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","262","btnSelfReject","Click","BtnSelfReject_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","263","btnRequestUser","Click","BtnRequestUser_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitEvent","264","btnItemId","Click","btnItemId_Click","+="
+```
+
+### FILE controls.csv (62 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","splitContainer1","System.Windows.Forms.SplitContainer","this","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","spdMain","FarPoint.Win.Spread.FpSpread","splitContainer1.Panel1","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","splitContainer1.Panel1","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","clbDivision","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl1","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","clbFromSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl1","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","drpPeriod","GSCM.Windows.Forms.Controls.UsrDateRangePicker","usrLayoutControl1","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","btnSelfReject","DevExpress.XtraEditors.SimpleButton","usrLayoutControl1","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","cboStatus","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl1","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","btnReject","DevExpress.XtraEditors.SimpleButton","usrLayoutControl1","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","btnApproval","DevExpress.XtraEditors.SimpleButton","usrLayoutControl1","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","btnRequestUser","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl1","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtRequest","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl1","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtItemID","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl1","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl1","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","cboChangeType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl1","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcDivision","DevExpress.XtraLayout.LayoutControlItem","","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcSelfReject","DevExpress.XtraLayout.LayoutControlItem","","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","emptySpaceItem8","DevExpress.XtraLayout.EmptySpaceItem","","54"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","55"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","56"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","PlanType","DevExpress.XtraLayout.LayoutControlItem","","57"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","58"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcBtnReject","DevExpress.XtraLayout.LayoutControlItem","","59"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcBtnApproval","DevExpress.XtraLayout.LayoutControlItem","","60"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem13","DevExpress.XtraLayout.LayoutControlItem","","61"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","Requestor","DevExpress.XtraLayout.LayoutControlItem","","62"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","Model","DevExpress.XtraLayout.LayoutControlItem","","63"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","64"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","PlanType1","DevExpress.XtraLayout.LayoutControlItem","","65"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtApprovalDeptName","FarPoint.Win.Spread.FpSpread","splitContainer1.Panel2","66"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtApprovalDeptName_Sheet1","FarPoint.Win.Spread.SheetView","","67"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","splitter1","System.Windows.Forms.Splitter","splitContainer1.Panel2","68"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","panel1","System.Windows.Forms.Panel","splitContainer1.Panel2","69"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","usrLayoutControl3","GSCM.Windows.Forms.Controls.UsrLayoutControl","panel1","70"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtRequestNo","System.Windows.Forms.TextBox","usrLayoutControl3","71"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtTitle","System.Windows.Forms.TextBox","usrLayoutControl3","72"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtRequestor","System.Windows.Forms.TextBox","usrLayoutControl3","73"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtRequestDeptName","System.Windows.Forms.TextBox","usrLayoutControl3","74"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtApproval","System.Windows.Forms.TextBox","usrLayoutControl3","75"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtAppDeptName","System.Windows.Forms.TextBox","usrLayoutControl3","76"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtReasonDetail","System.Windows.Forms.TextBox","usrLayoutControl3","77"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","usrLabel2","GSCM.Windows.Forms.Controls.UsrLabel","usrLayoutControl3","78"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtChangeReason","System.Windows.Forms.TextBox","usrLayoutControl3","79"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","txtRejectReason","System.Windows.Forms.TextBox","usrLayoutControl3","80"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlGroup3","DevExpress.XtraLayout.LayoutControlGroup","","81"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","82"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","83"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","84"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcApproval","DevExpress.XtraLayout.LayoutControlItem","","85"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem9","DevExpress.XtraLayout.LayoutControlItem","","86"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcReasonDetail","DevExpress.XtraLayout.LayoutControlItem","","87"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem10","DevExpress.XtraLayout.LayoutControlItem","","88"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcTitle","DevExpress.XtraLayout.LayoutControlItem","","89"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","90"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","91"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","lcTitle1","DevExpress.XtraLayout.LayoutControlItem","","92"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","emptySpaceItem5","DevExpress.XtraLayout.EmptySpaceItem","","93"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","imageList1","System.Windows.Forms.ImageList","","94"
+```
+
+### FILE props.csv (156 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","144","splitContainer1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","148","splitContainer1","Orientation","System.Windows.Forms.Orientation.Horizontal"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","160","splitContainer1","Size","new System.Drawing.Size(1192, 649)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","161","splitContainer1","SplitterDistance","259"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","167","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","172","spdMain","Size","new System.Drawing.Size(1192, 192)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","218","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","221","usrConditionPanel1","Size","new System.Drawing.Size(1192, 67)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","223","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","240","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","245","usrLayoutControl1","Size","new System.Drawing.Size(1192, 67)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","247","usrLayoutControl1","Text","""usrLayoutControl1"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","281","clbDivision","Size","new System.Drawing.Size(246, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","320","clbFromSite","Size","new System.Drawing.Size(199, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","360","drpPeriod","Size","new System.Drawing.Size(210, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","374","btnSelfReject","Size","new System.Drawing.Size(105, 22)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","377","btnSelfReject","Text","""Self Reject"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","411","cboStatus","Size","new System.Drawing.Size(198, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","421","btnReject","Size","new System.Drawing.Size(105, 22)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","424","btnReject","Text","""Reject"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","432","btnApproval","Size","new System.Drawing.Size(105, 22)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","435","btnApproval","Text","""Approval"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","466","btnRequestUser","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","502","txtRequest","Size","new System.Drawing.Size(154, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","536","txtItemID","Size","new System.Drawing.Size(136, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","569","btnItemId","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","607","cboChangeType","Size","new System.Drawing.Size(141, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","633","layoutControlGroup1","Size","new System.Drawing.Size(1192, 73)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","641","emptySpaceItem1","Size","new System.Drawing.Size(49, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","646","lcDivision","Control","this.clbDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","649","lcDivision","Size","new System.Drawing.Size(294, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","650","lcDivision","Text","""Division"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","657","lcSelfReject","Control","this.btnSelfReject"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","663","lcSelfReject","Size","new System.Drawing.Size(109, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","665","lcSelfReject","Text","""layoutControlItem10"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","675","emptySpaceItem8","Size","new System.Drawing.Size(109, 27)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","680","layoutControlItem1","Control","this.drpPeriod"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","686","layoutControlItem1","Size","new System.Drawing.Size(294, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","688","layoutControlItem1","Text","""Request Date"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","695","layoutControlItem7","Control","this.clbFromSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","699","layoutControlItem7","Size","new System.Drawing.Size(260, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","700","layoutControlItem7","Text","""From Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","707","PlanType","Control","this.cboStatus"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","711","PlanType","Size","new System.Drawing.Size(242, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","712","PlanType","Text","""Status"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","722","emptySpaceItem4","Size","new System.Drawing.Size(44, 27)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","727","lcBtnReject","Control","this.btnReject"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","733","lcBtnReject","Size","new System.Drawing.Size(109, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","735","lcBtnReject","Text","""layoutControlItem10"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","742","lcBtnApproval","Control","this.btnApproval"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","748","lcBtnApproval","Size","new System.Drawing.Size(109, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","750","lcBtnApproval","Text","""layoutControlItem10"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","757","layoutControlItem13","Control","this.btnRequestUser"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","763","layoutControlItem13","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","765","layoutControlItem13","Text","""layoutControlItem2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","771","Requestor","Control","this.txtRequest"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","775","Requestor","Size","new System.Drawing.Size(217, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","780","Model","Control","this.txtItemID"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","784","Model","Size","new System.Drawing.Size(199, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","789","layoutControlItem2","Control","this.btnItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","795","layoutControlItem2","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","802","PlanType1","Control","this.cboChangeType"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","806","PlanType1","Size","new System.Drawing.Size(223, 27)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","807","PlanType1","Text","""Change Type"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","815","txtApprovalDeptName","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","820","txtApprovalDeptName","Size","new System.Drawing.Size(1192, 174)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","865","splitter1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","868","splitter1","Size","new System.Drawing.Size(1192, 3)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","875","panel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","878","panel1","Size","new System.Drawing.Size(1192, 209)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","894","usrLayoutControl3","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","898","usrLayoutControl3","Size","new System.Drawing.Size(1192, 209)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","900","usrLayoutControl3","Text","""usrLayoutControl3"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","906","txtRequestNo","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","907","txtRequestNo","Size","new System.Drawing.Size(644, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","914","txtTitle","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","915","txtTitle","Size","new System.Drawing.Size(259, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","922","txtRequestor","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","923","txtRequestor","Size","new System.Drawing.Size(259, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","930","txtRequestDeptName","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","931","txtRequestDeptName","Size","new System.Drawing.Size(292, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","938","txtApproval","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","939","txtApproval","Size","new System.Drawing.Size(259, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","946","txtAppDeptName","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","947","txtAppDeptName","Size","new System.Drawing.Size(292, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","955","txtReasonDetail","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","956","txtReasonDetail","Size","new System.Drawing.Size(644, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","988","usrLabel2","Size","new System.Drawing.Size(733, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","991","usrLabel2","Text","""Request Confirm Detail"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","998","txtChangeReason","ReadOnly","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","999","txtChangeReason","Size","new System.Drawing.Size(292, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1006","txtRejectReason","Size","new System.Drawing.Size(644, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1028","layoutControlGroup3","Size","new System.Drawing.Size(1192, 212)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1033","layoutControlItem5","Control","this.txtRequestNo"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1039","layoutControlItem5","Size","new System.Drawing.Size(737, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1041","layoutControlItem5","Text","""Request No"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1048","layoutControlItem4","Control","this.txtRequestor"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","1054","layoutControlItem4","Size","new System.Drawing.Size(352, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestCon
+… (truncated, 10890 chars more — 전체는 Fact Pack CSV 참조)
+```
+
+### FILE grid_effective.csv (73 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Shipment Change Request Confirm","META+코드연결","ERP_SO_NO","","CODE_ONLY_CHANGE","","","","","","","","","","","","","",""
+"Shipment Change Request Confirm","META+코드연결","APPROVAL_DEPT","Approval Dept Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","APPROVAL_TIME","Approval Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","APPROVAL_USER","Approval","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm","META+코드연결","APPROVAL_USER_NAME","Approval","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","CHANGE_REASON_CODE","Change Reason","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","CHANGE_REQ_NO","Request No","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","CHANGE_TYPE","Change Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","DELEGATEE_DEPT","Delegatee Dept Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","DELEGATEE_USER","Delegatee","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm","META+코드연결","DELEGATEE_USER_NAME","Delegatee","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","DIVISION_ID","Division","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","FROM_SITE","From Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","ITEM_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","REJECT_REASON","Reject Reason","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","REQUEST_DEPT","Requestor Dept Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","REQUEST_TIME","Request Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","REQUEST_TITLE","Title","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","REQUEST_USER","Requestor","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm","META+코드연결","REQUEST_USER_NAME","Requestor","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","SHIPMENT_STATUS","Status","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm","META+코드연결","TO_SITE","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","A_COUNTRY","A Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","A_PORT_CODE","A Port","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","BOD_ID","BOD","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","CHANGE_REQ_NO","change_req_no","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","CONFIRM_ID","Confirm ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","CUSTOMER_LT","Customer LT","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","D_COUNTRY","D Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","D_PORT_CODE","D Port","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","DIVISION_ID","division","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","ERP_SO_NO","SO No","META","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?","기본 →숨김? →표시?"
+"Shipment Change Request Confirm Detail","META+코드연결","ETA","ETA","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","ETD","ETD","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","FCST_TYPE","FCST Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","FROM_SITE","From Site","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","FROM_SITE_DESCRIPTION","From Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","INCOTERMS","Incoterms","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","ITEM_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","LT_DAY","L/T(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_A_COUNTRY","A Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_A_PORT_CODE","A Port","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_BASE_CONFIRM_YN","NEW_BASE_CONFIRM_YN","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_BOD_ID","BOD","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_CUSTOMER_LT","Customer LT","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_D_COUNTRY","D Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_D_PORT_CODE","D Port","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_ETA","ETA","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_ETD","ETD","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_INCOTERMS","Incoterms","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_LT_DAY","L/T(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_ROUTE","Route","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_SHIPMENT_CONFIRM_QTY","Qty*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_SHIPMENT_DATE","Shipment Date*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_SHIPTO_CODE","ShipTo Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_TO_CITY","To City","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_TO_COUNTRY","To Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_TRANSPORT_MODE","Trans Mode","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","NEW_YN","new_yn","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","PROJECT_NAME","Project Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","REMARKS","Remarks","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","REMARKS2","Building","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","REMARKS3","Customer requirement","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","ROUTE_ID","Route","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","SHIPMENT_CONFIRM_QTY","Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","SHIPMENT_DATE","Shipment Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","SHIPTO_CODE","ShipTo Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","TO_CITY","To City","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","TO_COUNTRY","To Country","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","TO_SITE","To Site","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Change Request Confirm Detail","META+코드연결","TO_SITE_DESCRIPTION","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Change Request Confirm Detail","META+코드연결","TRANSPORT_MODE","Trans Mode","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (49 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","342","Shipment Change Request Confirm","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Change Request Confirm ¦ Shipment Change Request Confirm ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","343","Shipment Change Request Confirm","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","346","Shipment Change Request Confirm Detail","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Change Request Confirm Detail ¦ Shipment Change Request Confirm Detail ¦ 2 ¦ 1 ¦ 30","","","txtApprovalDeptName ¦ SpdSheet.shtSub ¦ SpdSheet.shtSub ¦ 2 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","347","Shipment Change Request Confirm Detail","SHEET","GetSheetInfo","HARDCODED","","","","{?txtApprovalDeptName.Name} ¦ Shipment Change Request Confirm Detail","","","txtApprovalDeptName.Name ¦ SpdSheet.shtSub"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","349","Shipment Change Request Confirm Detail","SHEET","ChangeSheet","HARDCODED","","","","Shipment Change Request Confirm Detail","","","SpdSheet.shtSub"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","352","Shipment Change Request Confirm Detail","SHEET","ChangeSheet","HARDCODED","","","","Shipment Change Request Confirm Detail","","","SpdSheet.shtSub"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","CreateSpread","356","Shipment Change Request Confirm Detail","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","363","","SHEET","InitSheet","EXPR","","","","{?spreadInfo.SheetName}","","if(spreadInfo.SheetName == ""Shipment Change Request Confirm"")","spreadInfo.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","368","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spreadInfo} ¦ 1","siObj,iColumnHeaderRowCount","if(spreadInfo.SheetName == ""Shipment Change Request Confirm"")","spreadInfo ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","397","","SHEET","InitSheet","EXPR","","","","{?spreadInfo.SheetName}","","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"")","spreadInfo.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","399","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spreadInfo} ¦ 2","siObj,iColumnHeaderRowCount","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"")","spreadInfo ¦ 2"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","405","","OVERRIDE","set:Visible","EXPR","","","ERP_SO_NO","{?false}","Visible","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","407","","OTHER","ColumnHeaderSpan","EXPR","","","LT_DAY","0 ¦ {?siSub.GetColumnIndex(DefColumns.LT_DAY)} ¦ 1 ¦ 6 ¦ 20 ¦ Plan ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","0 ¦ siSub.GetColumnIndex(DefColumns.LT_DAY) ¦ 1 ¦ 6 ¦ 20 ¦ ""Plan"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","408","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_LT_DAY","0 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_LT_DAY)} ¦ 1 ¦ 7 ¦ 20 ¦ Confirm ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","0 ¦ siSub.GetColumnIndex(DefColumns.NEW_LT_DAY) ¦ 1 ¦ 7 ¦ 20 ¦ ""Confirm"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","410","","OTHER","ColumnHeaderSpan","EXPR","","","LT_DAY","1 ¦ {?siSub.GetColumnIndex(DefColumns.LT_DAY)} ¦ 2 ¦ 1 ¦ 30 ¦ L/T(Day) ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.LT_DAY) ¦ 2 ¦ 1 ¦ 30 ¦ ""L/T(Day)"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","411","","OTHER","ColumnHeaderSpan","EXPR","","","ETD","1 ¦ {?siSub.GetColumnIndex(DefColumns.ETD)} ¦ 2 ¦ 1 ¦ 30 ¦ ETD ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.ETD) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETD"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","412","","OTHER","ColumnHeaderSpan","EXPR","","","ETA","1 ¦ {?siSub.GetColumnIndex(DefColumns.ETA)} ¦ 2 ¦ 1 ¦ 30 ¦ ETA ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.ETA) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETA"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","413","","OTHER","ColumnHeaderSpan","EXPR","","","TRANSPORT_MODE","1 ¦ {?siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE)} ¦ 2 ¦ 1 ¦ 30 ¦ Trans Mode ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Trans Mode"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","414","","OTHER","ColumnHeaderSpan","EXPR","","","SHIPMENT_DATE","1 ¦ {?siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE)} ¦ 2 ¦ 1 ¦ 30 ¦ Shipment Date ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Shipment Date"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","415","","OTHER","ColumnHeaderSpan","EXPR","","","SHIPMENT_CONFIRM_QTY","1 ¦ {?siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY)} ¦ 2 ¦ 1 ¦ 30 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY) ¦ 2 ¦ 1 ¦ 30 ¦ ""Qty"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","417","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_LT_DAY","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_LT_DAY)} ¦ 2 ¦ 1 ¦ 30 ¦ L/T(Day) ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_LT_DAY) ¦ 2 ¦ 1 ¦ 30 ¦ ""L/T(Day)"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","418","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_ETD","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_ETD)} ¦ 2 ¦ 1 ¦ 30 ¦ ETD ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_ETD) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETD"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","419","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_ETA","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_ETA)} ¦ 2 ¦ 1 ¦ 30 ¦ ETA ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_ETA) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETA"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","420","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_TRANSPORT_MODE","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE)} ¦ 2 ¦ 1 ¦ 30 ¦ Trans Mode ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Trans Mode"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","421","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_SHIPMENT_DATE","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE)} ¦ 2 ¦ 1 ¦ 30 ¦ Shipment Date* ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Shipment Date*"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","422","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_SHIPMENT_CONFIRM_QTY","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY)} ¦ 2 ¦ 1 ¦ 30 ¦ Qty* ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ if(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY) ¦ 2 ¦ 1 ¦ 30 ¦ ""Qty*"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","427","","OVERRIDE","set:Visible","EXPR","","","ERP_SO_NO","{?true}","Visible","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","429","","OTHER","ColumnHeaderSpan","EXPR","","","LT_DAY","0 ¦ {?siSub.GetColumnIndex(DefColumns.LT_DAY)} ¦ 1 ¦ 7 ¦ 20 ¦ Confirmed ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","0 ¦ siSub.GetColumnIndex(DefColumns.LT_DAY) ¦ 1 ¦ 7 ¦ 20 ¦ ""Confirmed"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","430","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_LT_DAY","0 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_LT_DAY)} ¦ 1 ¦ 7 ¦ 20 ¦ Change ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","0 ¦ siSub.GetColumnIndex(DefColumns.NEW_LT_DAY) ¦ 1 ¦ 7 ¦ 20 ¦ ""Change"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","432","","OTHER","ColumnHeaderSpan","EXPR","","","LT_DAY","1 ¦ {?siSub.GetColumnIndex(DefColumns.LT_DAY)} ¦ 2 ¦ 1 ¦ 30 ¦ L/T(Day) ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.LT_DAY) ¦ 2 ¦ 1 ¦ 30 ¦ ""L/T(Day)"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","433","","OTHER","ColumnHeaderSpan","EXPR","","","ETD","1 ¦ {?siSub.GetColumnIndex(DefColumns.ETD)} ¦ 2 ¦ 1 ¦ 30 ¦ ETD ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.ETD) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETD"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","434","","OTHER","ColumnHeaderSpan","EXPR","","","ETA","1 ¦ {?siSub.GetColumnIndex(DefColumns.ETA)} ¦ 2 ¦ 1 ¦ 30 ¦ ETA ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.ETA) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETA"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","435","","OTHER","ColumnHeaderSpan","EXPR","","","TRANSPORT_MODE","1 ¦ {?siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE)} ¦ 2 ¦ 1 ¦ 30 ¦ Trans Mode ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Trans Mode"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","436","","OTHER","ColumnHeaderSpan","EXPR","","","SHIPMENT_DATE","1 ¦ {?siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE)} ¦ 2 ¦ 1 ¦ 30 ¦ Shipment Date ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Shipment Date"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","437","","OTHER","ColumnHeaderSpan","EXPR","","","SHIPMENT_CONFIRM_QTY","1 ¦ {?siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY)} ¦ 2 ¦ 1 ¦ 30 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY) ¦ 2 ¦ 1 ¦ 30 ¦ ""Qty"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","439","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_LT_DAY","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_LT_DAY)} ¦ 2 ¦ 1 ¦ 30 ¦ L/T(Day) ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_LT_DAY) ¦ 2 ¦ 1 ¦ 30 ¦ ""L/T(Day)"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","440","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_ETD","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_ETD)} ¦ 2 ¦ 1 ¦ 30 ¦ ETD ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_ETD) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETD"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","441","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_ETA","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_ETA)} ¦ 2 ¦ 1 ¦ 30 ¦ ETA ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_ETA) ¦ 2 ¦ 1 ¦ 30 ¦ ""ETA"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","442","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_TRANSPORT_MODE","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE)} ¦ 2 ¦ 1 ¦ 30 ¦ Trans Mode ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Trans Mode"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","443","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_SHIPMENT_DATE","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE)} ¦ 2 ¦ 1 ¦ 30 ¦ Shipment Date* ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE) ¦ 2 ¦ 1 ¦ 30 ¦ ""Shipment Date*"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitSpread","444","","OTHER","ColumnHeaderSpan","EXPR","","","NEW_SHIPMENT_CONFIRM_QTY","1 ¦ {?siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY)} ¦ 2 ¦ 1 ¦ 30 ¦ Qty* ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","if(spreadInfo.SheetName == ""Shipment Change Request Confirm Detail"") ⟫ else!(_sChangeType == ""P"")","1 ¦ siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY) ¦ 2 ¦ 1 ¦ 30 ¦ ""Qty*"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","189","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","190","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","191","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","192","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","837","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","838","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","839","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.Designer.cs","SSP0202_ShipmentChangeRequestConfirm","InitializeComponent","840","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (21 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeControl","209","Filter","GROUP_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeControl","209","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeControl","210","Filter","USER_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","InitControls","295","c","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangedControl","327","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","723","dt.Rows[0]","CHANGE_REQ_NO","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","724","dt.Rows[0]","REQUEST_TITLE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","725","dt.Rows[0]","REQUEST_USER","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","726","dt.Rows[0]","REQUEST_DEPT","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","727","dt.Rows[0]","APPROVAL_USER","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","728","dt.Rows[0]","CHANGE_REASON_CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","729","dt.Rows[0]","CHANGE_REASON_DETAIL","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangeRequestInfo","730","dt.Rows[0]","APPROVAL_DEPT_NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","GetErpIFCheck","998","ds.Tables[0].Rows[0]","result_code","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangedPeriod","1051","dt.Rows[0]","FROM_VALUE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","SetChangedPeriod","1052","dt.Rows[0]","TO_VALUE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkERPIFBlockYn","1064","dtERPBlockYnIF.Rows[0]","BLOCK_YN","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkERPIFBlockYn","1073","dtERPBlockYnIF.Rows[0]","PERIOD","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkSaveYN","1141","ds.Tables[0].Rows[0]","CNT","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkSaveYN","1147","ds.Tables[1].Rows[0]","CNT","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","SSP0202_ShipmentChangeRequestConfirm","chkSaveYN","1161","ds.Tables[1].Rows[0]","CNT","[]"
+```
+
+### FILE commented_calls.csv (2 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","877","fox","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","commented:MATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0202_ShipmentChangeRequestConfirm.cs","1262","fox","SCP.GET_DATE_RANGE_1MONTH","SCP.GET_DATE_RANGE_1MONTH","commented:MATCH"
+```

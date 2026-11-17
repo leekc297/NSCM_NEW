@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
 from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))

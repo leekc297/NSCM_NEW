@@ -1,0 +1,209 @@
+{
+ "id": "SCM0005",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM_H.PR_DM_ADM_DQ_CREATE",
+   "save_sp": "PR_DM_ADM_DQ_CREATE",
+   "status": "고칠 열 후보 없음",
+   "table": "SCM_ADM_DQ_LIST",
+   "pk": [
+    "DQ_ID"
+   ],
+   "match": {
+    "DQ_ID": "DQ_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_DQ_LIST_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/DynamicList",
+   "writes": {
+    "SCM_ADM_DQ_LIST": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_DM_ADM_DQ_CREATE → SP PR_DM_ADM_DQ_CREATE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_DQ_LIST_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM_H.PR_DM_ADM_DQ_CREATE_USER_GROUP",
+   "save_sp": "PR_DM_ADM_DQ_CREATE_USER_GROUP",
+   "status": "고칠 열 후보 없음",
+   "table": "SCM_ADM_DQ_USER_GROUP",
+   "pk": [
+    "DQ_ID",
+    "GROUP_ID"
+   ],
+   "match": {
+    "DQ_ID": "DQ_ID",
+    "GROUP_ID": "GROUP_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_DQ_USER_GROUP_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/DynamicList",
+   "writes": {
+    "SCM_ADM_DQ_USER_GROUP": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml PR_DM_ADM_DQ_CREATE_USER_GROUP → SP PR_DM_ADM_DQ_CREATE_USER_GROUP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_DQ_USER_GROUP_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM_H.PR_DM_ADM_DQ_CREATE_COLUMN",
+   "save_sp": "PR_DM_ADM_DQ_CREATE_COLUMN",
+   "status": "키 일부 미대응",
+   "table": "SCM_ADM_DQ_COLUMN",
+   "pk": [
+    "DQ_ID",
+    "COLUMN_NAME"
+   ],
+   "match": {
+    "DQ_ID": "DQ_ID"
+   },
+   "unmatched_pk": [
+    "COLUMN_NAME"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_DQ_COLUMN_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/DynamicList",
+   "writes": {
+    "SCM_ADM_DQ_COLUMN": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_DM_ADM_DQ_CREATE_COLUMN → SP PR_DM_ADM_DQ_CREATE_COLUMN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_DQ_COLUMN_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "COLUMN_NAME": "p_COLUMN_NAME←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM_H.PR_DM_ADM_DQ_CREATE_PARAMETER",
+   "save_sp": "PR_DM_ADM_DQ_CREATE_PARAMETER",
+   "status": "키 일부 미대응",
+   "table": "SCM_ADM_DQ_PARAMETER",
+   "pk": [
+    "DQ_ID",
+    "PARAMETER_ID"
+   ],
+   "match": {
+    "DQ_ID": "DQ_ID"
+   },
+   "unmatched_pk": [
+    "PARAMETER_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_DQ_PARAMETER_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/DynamicList",
+   "writes": {
+    "SCM_ADM_DQ_PARAMETER": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_DM_ADM_DQ_CREATE_PARAMETER → SP PR_DM_ADM_DQ_CREATE_PARAMETER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_DQ_PARAMETER_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "PARAMETER_ID": "p_PARAMETER_ID←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.PR_DM_ADM_DQ_CREATE",
+   "save_sp": "PR_DM_ADM_DQ_CREATE",
+   "status": "고칠 열 후보 없음",
+   "table": "SCM_ADM_DQ_LIST",
+   "pk": [
+    "DQ_ID"
+   ],
+   "match": {
+    "DQ_ID": "DQ_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_DQ_LIST_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/DynamicList",
+   "writes": {
+    "SCM_ADM_DQ_LIST": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml PR_DM_ADM_DQ_CREATE → SP PR_DM_ADM_DQ_CREATE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_DQ_LIST_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

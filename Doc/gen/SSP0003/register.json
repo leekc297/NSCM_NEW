@@ -1,0 +1,260 @@
+{
+  "menuId": "SSP0003",
+  "screenName": "ShipmentChangeRequestConfirm",
+  "feature": "shipping",
+  "pageDir": "shipment-change-request-confirm-ssp0003",
+  "routePath": "shipping/shipment-change-request-confirm-ssp0003",
+  "sheets": [
+    {
+      "sheetName": "Shipment Change Request Confirm",
+      "rule": "META+코드연결",
+      "columns": 23,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Change Request Confirm Detail",
+      "rule": "META+코드연결",
+      "columns": 54,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_DIVISION",
+      "asis_sp": "SSP0200_GET_SHIPMENT_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0200_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_PLANT_SITE_BY_DIVISION",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ],
+      "methods": [
+        "SetChangedControl"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ],
+      "methods": [
+        "SetChangedControl"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "asis_sp": "SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click",
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "asis_sp": "SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_Sub"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SHIPMENT_REQUEST_CONFIRM_DRAFTING"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM",
+      "asis_sp": "SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ],
+      "methods": [
+        "SaveDraftingData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "asis_sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "asis_sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "asis_sp": "SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click",
+        "event:btnReject.Click",
+        "event:btnSelfReject.Click"
+      ],
+      "methods": [
+        "GetErpIFCheck",
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "asis_sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click"
+      ],
+      "methods": [
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "asis_sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click"
+      ],
+      "methods": [
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "SetChangedPeriod"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "asis_sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click"
+      ],
+      "methods": [
+        "EngProcessingChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SSP_PLAN_PROCESSING_CHECK"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_STATUS",
+      "asis_sp": "SSP0200_GET_SHIPMENT_STATUS",
+      "status": "MATCH",
+      "entries": [
+        "event:btnApproval.Click"
+      ],
+      "methods": [
+        "GetShipmentStatusChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0200_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SHIPMENT_STATUS"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0003_GET_DELEGATEE_LOAD",
+      "asis_sp": "SSP0003_GET_DELEGATEE_LOAD",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "Delegate_Load"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SSP0003_GET_DELEGATEE_LOAD",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "DELEGATEE_LOAD"
+    },
+    {
+      "asis_endpoint": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+      "asis_sp": "SCM0001_GET_SCP_DAY_PERIOD",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetDayRange"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0003.P_SCM0001_GET_SCP_DAY_PERIOD",
+      "sheet": "Shipment Change Request Confirm",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

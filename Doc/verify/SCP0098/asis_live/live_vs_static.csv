@@ -1,0 +1,51 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM0001_GET_SCP_DAILY_PLAN_PERIOD,SCP0098_CAPAReprotSmall.cs:3075 GetLastRange,2회 · 구간 load,MATCH,
+SP,SCM0001_GET_SCP_DAY_PERIOD,SCP0098_CAPAReprotSmall.cs:3095 GetDayRange,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,SCP0098_CAPAReprotSmall.cs:3363 GetSpdTitle2,3회 · 구간 find/load,MATCH,
+SP,SCP0009_GET_SHEET_CALENDAR_3SPAN,SCP0098_CAPAReprotSmall.cs:3040 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,SCP0098_GET_CAPA_MOBILITYIT,SCP0098_CAPAReprotSmall.cs:702 FindData_Main,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,8회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_SCM_SYS_LOG_BATCH,SCP0098_CAPAReprotSmall.cs:3336 SCM_SYS_LOG_BATCH,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0098_COPY_MONTH_WEEK,SCP0098_CAPAReprotSmall.cs:3762 btnCopyData_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0098_SAVE_SCP_CAPA,SCP0098_CAPAReprotSmall.cs:2275 SaveDataFull,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE,SCP0098_CAPAReprotSmall.cs:2219 SaveDataFull,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0098_SAVE_SCP_CAPA_WORK,SCP0098_CAPAReprotSmall.cs:2332 SaveDataFull,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),44개,35개,INFO,공통 19 · 선언만 25 · 실측만 16
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnOK,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div * [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dCalendar,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem14,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbLine,Y,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtNickName,Y,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkDetail,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnCopyData,Y,Copy Data,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboCategory,Y,Category,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboDayWeek,Y,Day Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnInput,Y,Input,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtInpuValue,Y,Input Value,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/CAPA_SMALL,정적 컬럼 사실 20행(시트 미지정 포함),컬럼 400(보임 325) · 헤더 3단 · 행 1973 · 고정 15,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

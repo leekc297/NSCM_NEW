@@ -1,0 +1,26 @@
+{
+ "id": "SSP0015",
+ "rule": "tobe",
+ "set": [
+  {
+   "name": "clbDivision",
+   "prop": "ControlValues",
+   "value": "40",
+   "param": "division_id",
+   "from": "81",
+   "sheet": "main",
+   "kept": true
+  },
+  {
+   "name": "dp2",
+   "prop": "Value",
+   "value": "20261110",
+   "param": "to_yyyymmdd",
+   "from": "20261109",
+   "sheet": "main",
+   "kept": true
+  }
+ ],
+ "unresolved": [],
+ "skipped": []
+}

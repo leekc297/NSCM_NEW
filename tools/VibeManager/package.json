@@ -2,7 +2,7 @@
   "name": "vibe-manager",
   "displayName": "Vibe_Manager",
   "description": "NSCM 전환(As-is C#.NET → To-Be React/Oracle) 6단계 작업을 VS Code 에서 실행·판정하는 관리 패널 — 프로그램 ID 하나로 단계별 작업, 룰·Hook·하네스 관리, 환경설정, 실행 이력",
-  "version": "1.9.43",
+  "version": "2.0.1",
   "publisher": "marisoft",
   "license": "UNLICENSED",
   "private": true,
@@ -31,7 +31,7 @@
       "activitybar": [
         {
           "id": "vibeManager",
-          "title": "Vibe_Manager",
+          "title": "Vibe Manager 2.0.1",
           "icon": "media/vibe.svg"
         }
       ]
@@ -40,15 +40,24 @@
       "vibeManager": [
         {
           "id": "vibeManager.menu",
-          "name": "전체 메뉴",
+          "name": "Vibe Manager 2.0.1",
           "icon": "media/vibe.svg",
-          "contextualTitle": "Vibe_Manager"
+          "contextualTitle": "Vibe Manager",
+          "type": "webview",
+          "when": "config.vibeManager.menuStyle != 'tree'"
+        },
+        {
+          "id": "vibeManager.menuTree",
+          "name": "Vibe Manager 2.0.1",
+          "icon": "media/vibe.svg",
+          "contextualTitle": "Vibe Manager",
+          "when": "config.vibeManager.menuStyle == 'tree'"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "vibeManager.menu",
+        "view": "vibeManager.menuTree",
         "contents": "프로젝트 루트(C:\\Projects\\NSCM)를 찾지 못했습니다.\n[설정 열기](command:vibeManager.openSettings)\n`vibeManager.projectRoot` 에 tools\\AsisFacts 가 들어 있는 폴더를 지정하세요.",
         "when": "vibeManager.noRoot"
       }
@@ -58,7 +67,10 @@
         "command": "vibeManager.openWorkbench",
         "title": "Vibe_Manager Workbench 열기",
         "category": "Vibe_Manager",
-        "icon": "$(layout)"
+        "icon": {
+          "light": "media/tb-workbench-light.svg",
+          "dark": "media/tb-workbench-dark.svg"
+        }
       },
       {
         "command": "vibeManager.openWorkbenchNew",
@@ -162,11 +174,14 @@
         "command": "vibeManager.openFlow",
         "title": "FLOW 진척 보기",
         "category": "Vibe_Manager",
-        "icon": "$(graph)"
+        "icon": {
+          "light": "media/tb-flow-light.svg",
+          "dark": "media/tb-flow-dark.svg"
+        }
       },
       {
         "command": "vibeManager.openHistory",
-        "title": "Revision History (수정 전후 비교)",
+        "title": "Revision (수정 전후 비교)",
         "category": "Vibe_Manager",
         "icon": "$(history)"
       },
@@ -185,94 +200,106 @@
         "command": "vibeManager.qRestart",
         "title": "BE & FE Finish & Start (재기동)",
         "category": "Vibe_Manager",
-        "icon": "$(device-desktop)"
+        "icon": {
+          "light": "media/tb-restart-light.svg",
+          "dark": "media/tb-restart-dark.svg"
+        }
       },
       {
         "command": "vibeManager.qSourceSync",
         "title": "Source Download & Merge (공통소스 반영)",
         "category": "Vibe_Manager",
-        "icon": "$(cloud-download)"
+        "icon": {
+          "light": "media/tb-sync-light.svg",
+          "dark": "media/tb-sync-dark.svg"
+        }
       },
       {
         "command": "vibeManager.qFullChain",
         "title": "ID 하나로 전체 (파싱→분석→생성→자동보완→테스트→문서)",
         "category": "Vibe_Manager",
-        "icon": "$(rocket)"
+        "icon": {
+          "light": "media/tb-full-light.svg",
+          "dark": "media/tb-full-dark.svg"
+        }
       },
       {
         "command": "vibeManager.qCheckList",
         "title": "CheckList (AS-IS vs TO-BE → CheckList·ActionItemList)",
         "category": "Vibe_Manager",
-        "icon": "$(checklist)"
+        "icon": {
+          "light": "media/tb-checklist-light.svg",
+          "dark": "media/tb-checklist-dark.svg"
+        }
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "vibeManager.openWorkbench",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@0"
         },
         {
           "command": "vibeManager.openOutputFolder",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "1_more@1"
         },
         {
           "command": "vibeManager.editSteps",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "1_more@2"
         },
         {
           "command": "vibeManager.openTaskLog",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "1_more@3"
         },
         {
           "command": "vibeManager.openSettings",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "1_more@4"
         },
         {
           "command": "vibeManager.openFlow",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@1"
         },
         {
           "command": "vibeManager.qRestart",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@2"
         },
         {
           "command": "vibeManager.qSourceSync",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@3"
         },
         {
           "command": "vibeManager.qFullChain",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@4"
         },
         {
           "command": "vibeManager.qCheckList",
-          "when": "view == vibeManager.menu",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@5"
         }
       ],
       "view/item/context": [
         {
           "command": "vibeManager.runTask",
-          "when": "view == vibeManager.menu && viewItem == task",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/ && viewItem == task",
           "group": "inline"
         },
         {
           "command": "vibeManager.toggleHook",
-          "when": "view == vibeManager.menu && viewItem == hook",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/ && viewItem == hook",
           "group": "inline"
         },
         {
           "command": "vibeManager.openItem",
-          "when": "view == vibeManager.menu && viewItem =~ /^(rule|hookfile|doc)$/",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/ && viewItem =~ /^(rule|hookfile|doc)$/",
           "group": "inline"
         }
       ],
@@ -355,6 +382,19 @@
           ],
           "default": "en",
           "description": "Vibe_Manager menu / label language. 사이드바 메뉴는 즉시, Workbench 는 새 창부터 적용."
+        },
+        "vibeManager.menuStyle": {
+          "type": "string",
+          "enum": [
+            "mobile",
+            "tree"
+          ],
+          "enumDescriptions": [
+            "모바일 홈 화면형 메뉴 — 단일 색상 아이콘 타일 (기본)",
+            "기존 트리 메뉴"
+          ],
+          "default": "mobile",
+          "description": "사이드바 전체 메뉴 모양. mobile = 모바일 홈 화면형(2.0.0) · tree = 기존 트리. 항목·명령은 두 방식이 같습니다."
         },
         "vibeManager.claudeCommand": {
           "type": "string",

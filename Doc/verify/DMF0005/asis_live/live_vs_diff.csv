@@ -1,0 +1,8 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SCM0001_GET_LOOKUP_VALUES,,GET,0,,,1,load,3,"{""p_lookup_type"": ""INVENTORY_DAYS_SETUP_SITE""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+DMF0005_GET_SALES_SITE_MODEL_PRODUCTION,PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION,GET,29,SKIP:29,"인자 미해결(UNRESOLVED): p_valid_yn,p_userinfo,p_user_dept_id — param_map.csv 에 값/대응 ",1,find,15657,"{""p_division_id"": ""40"", ""p_dept_id"": ""ALL"", ""p_end_customer"": ""ALL"", ""p_scm_site_id"": ""ALL"", ""p_project_code"": """", ""p_item_id"": """", ""p_valid_yn"": ""ALL"", ""p_created_by"": ""jaeuk.shin"", ""p_userinfo"": ""ADMIN"", ""p_owner"": """", ""p_user_dept_id"": ""58183091"", ""p_end_cust_report_yn"": ""N"", ""p_project_info_yn"": ""N""}",LIVE_CAN_FILL,차등 검증은 전부 건너뜀 · AS-IS 실측에 결과(건수·인자) 있음 → 같은 조건 실측(조건 시나리오)으로 대조 가능
+DMF0005_GET_SALES_SITE_MODEL_PURCHASE,PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION,PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+UP_FX_GETCOMMONDATALIST_DM,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCM0001_GET_SITE_INFO_BY_DIVISION,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0000_GET_COMMON_SPREAD_TITLE,PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE,GET,0,,,4,find/load,"50,19,50,19","{""p_start_yyyymmdd"": """", ""p_end_yyyymmdd"": """", ""p_created_by"": ""jaeuk.shin"", ""p_program_id"": ""DMF0005"", ""p_sheet_name"": ""Purchase"", ""p_division_id"": ""40""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음

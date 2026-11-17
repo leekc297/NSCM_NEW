@@ -1,0 +1,431 @@
+{
+ "id": "FP01551A",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitter/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Amend",
+     "rows": 0,
+     "cols": 24,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Company",
+        "Company"
+       ],
+       "label": "Company",
+       "tag": "COMPANY_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Site",
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plant",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Cell Code",
+        "Cell Code"
+       ],
+       "label": "Cell Code",
+       "tag": "CELL_ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "CELL_NICK_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Cell Assy Code",
+        "Cell Assy Code"
+       ],
+       "label": "Cell Assy Code",
+       "tag": "ASSY_ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "ERP Sloc",
+        "ERP Sloc"
+       ],
+       "label": "ERP Sloc",
+       "tag": "STORAGE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Box Qty",
+        "Box Qty"
+       ],
+       "label": "Box Qty",
+       "tag": "MOQ",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "MOQ",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Module Code",
+        "Module Code"
+       ],
+       "label": "Module Code",
+       "tag": "ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "BOH(Cell)",
+        "Total"
+       ],
+       "label": "Total",
+       "tag": "TOTAL_CELL_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TOTAL_CELL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "BOH(Cell)",
+        "Available"
+       ],
+       "label": "Available",
+       "tag": "AVAIL_CELL_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AVAIL_CELL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "BOH(Cell)",
+        "Long-Term"
+       ],
+       "label": "Long-Term",
+       "tag": "AVAIL_CELL_LONG_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AVAIL_CELL_LONG_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "BOH(Cell)",
+        "Hold Normal"
+       ],
+       "label": "Hold Normal",
+       "tag": "HOLD_CELL_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "HOLD_CELL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "BOH(Cell)",
+        "Hold Long-Term"
+       ],
+       "label": "Hold Long-Term",
+       "tag": "HOLD_CELL_LONG_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "HOLD_CELL_LONG_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "BOH",
+        "Total"
+       ],
+       "label": "Total",
+       "tag": "TOTAL_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TOTAL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "BOH",
+        "Available"
+       ],
+       "label": "Available",
+       "tag": "AVAIL_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AVAIL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "BOH",
+        "Hold"
+       ],
+       "label": "Hold",
+       "tag": "HOLD_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "HOLD_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Intransit",
+        "Intransit"
+       ],
+       "label": "Intransit",
+       "tag": "INTRANSIT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "INTRANSIT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "BOM Rate",
+        "BOM Rate"
+       ],
+       "label": "BOM Rate",
+       "tag": "BOM_RATE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BOM_RATE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Category",
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "PSI",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Transport",
+        "Transport"
+       ],
+       "label": "Transport",
+       "tag": "SOC_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdEdit",
+   "path": "/splitter/SplitterPanel/spdEdit",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": false,
+   "active_sheet_index": "-1",
+   "sheets": []
+  },
+  {
+   "name": "spdInfo",
+   "path": "/splitter/SplitterPanel/spdInfo",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": false,
+   "active_sheet_index": "-1",
+   "sheets": []
+  }
+ ]
+}

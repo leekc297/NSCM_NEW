@@ -1,0 +1,134 @@
+{
+ "id": "SSP0003",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "BtnRequestUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN"
+   ],
+   "scenarios": [
+    "SSP0003-S3e4258",
+    "SSP0003-S85e9fc"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0003-Sea1449",
+    "SSP0003-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnRequestUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0003-S3e4258",
+    "SSP0003-S85e9fc"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnApproval",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 30
+  },
+  {
+   "control": "BtnReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "BtnSelfReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "btnApproval",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  },
+  {
+   "control": "btnReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSelfReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-14 20:03:43.238",
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

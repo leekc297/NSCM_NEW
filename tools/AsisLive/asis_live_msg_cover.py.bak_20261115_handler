@@ -1,0 +1,120 @@
+# -*- coding: utf-8 -*-
+"""AS-IS 경로 메시지 실측 대조 (2026-11-15)
+
+  python tools/AsisLive/asis_live_msg_cover.py [ID …]
+
+대상  Doc/verify/<ID>/verify_ledger.csv 의 메시지 항목(E 계열, target = MSGnnnnn) 중
+      근거가 '경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음)' 인 행
+기준  메시지 문구 = AS-IS TB_FX_MessageInfo.Ko ({0} 자리는 아무 글자) · 접속은 .env.asis 만 사용
+관찰  Doc/asislive/<ID>/run_*/ 의 acts.json·run.json 에 기록된 대화상자 문구 전부(겹친 실행 overlap.json 제외)
+산출  Doc/asislive/_msg_cover.csv (menu_id,row_id,target,handler,state,run,text)
+      state = 실측 관찰(문구 일치) | 미관찰(그 메시지를 낸 실행 없음) | 메시지 코드 아님(대상이 MSG 코드가 아님)
+            | 도달 불가(실측+원문|원문) = Doc/asislive/_msg_unreachable.csv 에 근거와 함께 등록된 분기
+            | 미실행(사용자 결정) =Doc/asislive/_user_decisions.csv 에 '실행 안 함'으로 등록된 처리기(11-15 SSP0003·SSP0200 승인·반려·취소 저장 경로)
+종료  0 정상 · 3 AS-IS DB 접속 실패
+"""
+import csv, glob, io, json, os, re, sys, time, collections
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+P = lambda *a: os.path.join(ROOT, *a)
+S27 = "DMF0005 SCP0005 SCP0007 SCP0016 SCP0020 SCP0028 SCP0033 SCP0037 SCP0041 SCP0084 SCP0104 SCP0108 SCP0111 SCP0122 SCP0127 SCP0131 SSP0003 SSP0005 SSP0014 SSP0015 SSP0020 SSP0021 SSP0023 SSP0024 SSP0025 SSP0060 SSP0200".split()
+RX_PATH = re.compile(r"— (\w+) 경로 메시지\(저장 전 검증 아님")
+
+
+def messages():
+    import pyodbc
+    env = {}
+    for l in io.open(P(".env.asis"), encoding="utf-8"):
+        l = l.strip()
+        if l and not l.startswith("#") and "=" in l: k, v = l.split("=", 1); env[k.strip()] = v.strip()
+    cs = "DRIVER={%s};SERVER=%s,%s;DATABASE=%s;UID=%s;PWD=%s;TrustServerCertificate=yes" % (env.get("ASIS_DB_DRIVER", "ODBC Driver 17 for SQL Server").strip("{}"), env["ASIS_DB_HOST"], env["ASIS_DB_PORT"], env["ASIS_DB_NAME"], env["ASIS_DB_USER"], env["ASIS_DB_PASS"])
+    cur = pyodbc.connect(cs, timeout=30, autocommit=True).cursor()
+    cur.execute("SELECT MessageID, Ko, En FROM TB_FX_MessageInfo")
+    return {r[0]: (r[1] or "", r[2] or "") for r in cur.fetchall()}
+
+
+def to_rx(t):
+    t = re.sub(r"\s+", " ", t.strip())
+    parts = re.split(r"\{\d+\}", t)
+    return re.compile(".*?".join(re.escape(x) for x in parts), re.S)
+
+
+def observed(mid):
+    """[(실행 폴더, 문구)]"""
+    out = []
+    for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*"))):
+        if not os.path.isdir(d) or os.path.exists(os.path.join(d, "overlap.json")): continue
+        for fn in ("acts.json", "run.json"):
+            f = os.path.join(d, fn)
+            if not os.path.exists(f): continue
+            try: j = json.load(io.open(f, encoding="utf-8"))
+            except Exception: continue
+            texts = []
+            def walk(o):
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        if k in ("dialogs", "edit_dialogs") and isinstance(v, list):
+                            for x in v: texts.append(x.get("text") if isinstance(x, dict) else x)
+                        else: walk(v)
+                elif isinstance(o, list):
+                    for x in o: walk(x)
+            walk(j)
+            out += [(os.path.basename(d), re.sub(r"\s+", " ", str(t))) for t in texts if t]
+    return out
+
+
+def main():
+    ids = [a.upper() for a in sys.argv[1:] if not a.startswith("-")] or S27
+    try: msg = messages()
+    except Exception as e: print("[ERROR] AS-IS DB 접속 실패: %s" % str(e)[:200]); return 3
+    global EXCL
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import asis_live_batch as _B; EXCL = set(_B.EXCLUDED)
+    except Exception: EXCL = set()
+    global UNR
+    UNR = {}
+    fu = P("Doc", "asislive", "_msg_unreachable.csv")
+    if os.path.exists(fu):
+        for r in csv.DictReader(io.open(fu, encoding="utf-8-sig")): UNR[(r["menu_id"], r["handler"], r["target"])] = r
+    dec = {}
+    fd =P("Doc", "asislive", "_user_decisions.csv")
+    if os.path.exists(fd):
+        for r in csv.DictReader(io.open(fd, encoding="utf-8-sig")): dec[(r["menu_id"], r["handler"])] = r
+    rows = []; tot = collections.Counter(); per = collections.defaultdict(collections.Counter)
+    for mid in ids:
+        f = P("Doc", "verify", mid, "verify_ledger.csv")
+        if not os.path.exists(f): continue
+        obs = None
+        for r in csv.DictReader(io.open(f, encoding="utf-8-sig")):
+            mm = RX_PATH.search(r.get("evidence") or "")
+            if not mm: continue
+            if obs is None: obs = observed(mid)
+            tg = (r.get("target") or "").strip(); hd = mm.group(1)
+            if not re.fullmatch(r"MSG\d{5}", tg):
+                st, run, txt = "메시지 코드 아님", "", ""
+            else:
+                ko, en = msg.get(tg, ("", ""))
+                rx = [to_rx(x) for x in (ko, en) if x.strip()]
+                hit = next(((d, t) for d, t in obs if any(x.search(t) for x in rx)), None)
+                st, run, txt = ("실측 관찰", hit[0], hit[1][:200]) if hit else ("미관찰", "", ko[:120])
+                dd = dec.get((mid, hd))
+                if not hit and mid in EXCL:
+                    st, run, txt = "런처 제외", "", "asis_live_batch.EXCLUDED(사용자 결정 2026-11-12) · 문구 %s" % ko[:80]
+                elif not hit and (mid, hd, tg) in UNR:
+                    u = UNR[(mid, hd, tg)]; st, run, txt = "도달 불가(%s)" % u["basis"], "Doc/asislive/_msg_unreachable.csv", u["evidence"][:200]
+                elif not hit and dd:
+                    st, run, txt = "미실행(사용자 결정)", "Doc/asislive/_user_decisions.csv", "%s %s · %s · 문구 %s" % (dd["at"], dd["decision"], dd["reason"], ko[:80])
+            rows.append([mid, r.get("row_id"), tg, hd, st, run, txt]); tot[st] += 1; per[mid][st] += 1
+    out = P("Doc", "asislive", "_msg_cover.csv")
+    with io.open(out, "w", encoding="utf-8-sig", newline="") as fo:
+        w = csv.writer(fo); w.writerow(["menu_id", "row_id", "target", "handler", "state", "run", "text"]); w.writerows(rows)
+    print("[실측 %s] 경로 메시지 원장 행 %d: %s" % (time.strftime("%Y-%m-%d %H:%M"), len(rows), ", ".join("%s %d" % kv for kv in tot.most_common())))
+    for m in ids:
+        if per[m]: print("  %s: %s" % (m, ", ".join("%s %d" % kv for kv in per[m].most_common())))
+    print("@@LINK 📄 경로 메시지 실측 대조|%s" % out)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

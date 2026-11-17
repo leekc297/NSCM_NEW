@@ -36,6 +36,16 @@ export const isMainCellEditable = (binding: string, row: WijmoRowItem | undefine
   return !LOCKED_ALWAYS.has(binding) && !POPUP_ONLY.has(binding);
 };
 
+// 붙여넣기 게이트 — inline 타이핑(isMainCellEditable)과 달리 ITEM_ID(Model)도 허용한다.
+//   AS-IS 는 ITEM_ID 컬럼을 LockColumn 하지 않아(.cs:382 주석처리) 행 복사-붙여넣기로 Model 이
+//   그대로 채워졌고, ClipboardPasted(.cs:1065~)는 OPMZ_PLAN_GR_ID 만 후처리했다. TO-BE 도 직접
+//   타이핑만 팝업으로 유도하고(POPUP_ONLY) 붙여넣기는 막지 않는다 — 잠금셋(DIVISION_ID·감사컬럼)만
+//   차단. 유효성은 저장 검증(MSG00458)·SP 가 최종 확정한다.
+export const isMainCellPasteable = (binding: string, row: WijmoRowItem | undefined): boolean => {
+  if (!row) return false;
+  return !LOCKED_ALWAYS.has(binding);
+};
+
 // 편집 가능 시각 강조(wj-cell-editable, 노란 배경) 판정. ITEM_ID(Model)는 셀 편집기는 열지 않지만
 //   (팝업 전용) 사용자 입력으로 값이 바뀌는 편집 가능 컬럼이라 강조는 켠다(사용자 지시 2026-11-03).
 //   즉 inline 편집 게이트(isMainCellEditable)와 달리 POPUP_ONLY 는 강조에서 제외하지 않고

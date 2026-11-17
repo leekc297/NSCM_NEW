@@ -150,14 +150,22 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
+| CommonDefaultLineCheck | DefaultLineCheck:978 | ExcelService.CommonDefaultLineCheck | BUCKET_FROM, BUCKET_TO, MESSAGE, QTY |
 | GetCheckedListValue | SetChangedControl:290, SetChangedControl:296, SetChangedControl:302, SetChangedControl:308, SetChangedControl:319, SetChangedControl:329, SetChangedControl:339, SetChangedControl:348 | CString.GetCheckedListValue | CODE |
 | FP_PseudoBatch | ExcelImport_Main_SaveDataDelegate:943, ExcelImport_Main_ValidateDataDelegate:965, ExcelImport_Sub_SaveDataDelegate:990, ExcelImport_Sub_ValidateDataDelegate:1009 | DataService.FP_PseudoBatch | COUNT, EXCEPTION, RESULT |
 | GetSearchCondition | ExcelPopup_Search_Sub_Data:977, lfn_SearchDetailGrid:1927 | BaseForm.GetSearchCondition | ControlName, ControlValue |
-| CommonDefaultLineCheck | DefaultLineCheck:978 | ExcelService.CommonDefaultLineCheck | BUCKET_FROM, BUCKET_TO, MESSAGE, QTY |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this | Load | Form_Load | .ctor:141 |
+| this.btnSave | Click | btnSave_Click | InitializeComponent:153 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:204 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:244 |
+| this.btnDownload | Click | btnDownload_Click | InitializeComponent:284 |
+| this.btnUpload | Click | btnUpload_Click | InitializeComponent:324 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:407 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:408 |
 | this.spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitializeComponent:122 |
 | this.btnExcelUpload | Click | btnExcelUpload_Click | InitializeComponent:222 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:475 |
@@ -171,28 +179,20 @@
 | clbFactory | SelectedIndexChanged | ClbFactory_SelectedIndexChanged | InitEvent:188 |
 | clbOperation | SelectedIndexChanged | ClbOperation_SelectedIndexChanged | InitEvent:189 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:1031 |
-| this | Load | Form_Load | .ctor:141 |
-| this.btnSave | Click | btnSave_Click | InitializeComponent:153 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:204 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:244 |
-| this.btnDownload | Click | btnDownload_Click | InitializeComponent:284 |
-| this.btnUpload | Click | btnUpload_Click | InitializeComponent:324 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:407 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:408 |
 
 ## 6. 컨트롤 (57개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 15 | lblDivision, lblSite, lblPlant, lblFactory, lblOperation, lblExcelUpload, lblSql, layoutControlItem11, layoutControlItem1, layoutControlItem2, layoutControlItem2, layoutControlItem4, layoutControlItem5, layoutControlItem6, layoutControlItem3 |
-| UsrButton | 8 | btnExcelUpload, btnSql, btnSubImport, btnSave, btnClose, btnFind, btnDownload, btnUpload |
-| EmptySpaceItem | 7 | emptySpaceItem1, emptySpaceItem2, emptySpaceItem4, emptySpaceItem5, emptySpaceItem3, emptySpaceItem7, emptySpaceItem1 |
+| LayoutControlItem | 15 | layoutControlItem2, layoutControlItem4, layoutControlItem5, layoutControlItem6, layoutControlItem3, lblDivision, lblSite, lblPlant, lblFactory, lblOperation, lblExcelUpload, lblSql, layoutControlItem11, layoutControlItem1, layoutControlItem2 |
+| UsrButton | 8 | btnSave, btnClose, btnFind, btnDownload, btnUpload, btnExcelUpload, btnSql, btnSubImport |
+| EmptySpaceItem | 7 | emptySpaceItem1, emptySpaceItem1, emptySpaceItem2, emptySpaceItem4, emptySpaceItem5, emptySpaceItem3, emptySpaceItem7 |
 | UsrCheckedList2 | 5 | clbFactory, clbOperation, clbPlant, clbSite, clbDivision |
-| UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2 |
-| LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2 |
-| FpSpread | 3 | spdMain, spdSub, spdMain |
-| SheetView | 3 | spdMain_Sheet1, spdSub_Sheet1, spdMain_Sheet1 |
-| ImageList | 2 | imageList1, imageList1 |
+| UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl3 |
+| LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup3 |
+| FpSpread | 3 | spdMain, spdMain, spdSub |
+| SheetView | 3 | spdMain_Sheet1, spdMain_Sheet1, spdSub_Sheet1 |
 | UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
+| ImageList | 2 | imageList1, imageList1 |
 | Panel | 1 | StockPanel |
 | Label | 1 | label1 |
 | SimpleButton | 1 | btnSearchAll |
@@ -228,8 +228,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: Main, Sub, AutoExcelPopup
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:389, SetSheetHeaderColumn_FP@InitSpread:397, SetSheetHeaderColumn_FP@InitSpread:196
+- 코드에서 생성하는 시트: AutoExcelPopup, Main, Sub
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:196, SetSheetHeaderColumn_FP@InitSpread:389, SetSheetHeaderColumn_FP@InitSpread:397
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

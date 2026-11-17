@@ -32,8 +32,26 @@ def delete_stmts(actions, entry='DeleteButton', depth=6):
         if m in seen or d > depth:
             return
         seen.add(m)
+        # 2026-11-10 T180(SCP0033 3번 허위 FAIL): 앞선 return 가드 'if (x != CAppSetting.FlagI) return;'(cs:186) 뒤의 삭제 문장은 신규 행에서만 닿는다 —
+        #   종전엔 삭제 문장 자신의 guard 만 보아 '== FlagI' 가 없다고 '기존 행 Delete → D' 를 기대했다. 같은 범위(RETURN guard 의 앞 조각이 뒤 문장 guard 의 앞부분)에서
+        #   뒤 줄 문장에 '(앞선 return) == FlagI' 조각을 붙인다. 조건이 '!=' 인 return 만 인정('==' 인 return 은 반대 — 신규 행에서 중단)
+        early = []  # (line, 앞 조각, 합성 조각)
+        def _ln(a):
+            try:
+                return int(a.get('line') or 0)
+            except ValueError:
+                return 0
         for a in by.get(m, []):
-            g = ' ▸ '.join(x for x in (chain, a.get('guard') or '') if x)
+            if (a.get('kind') or '') != 'RETURN':
+                continue
+            segs = [s.strip() for s in (a.get('guard') or '').split('▸') if s.strip()]
+            mm = re.match(r'^if \((.+?)\s*!=\s*CAppSetting\.(StringI|FlagI)\s*\)$', segs[-1]) if segs else None
+            if mm and '&&' not in mm.group(1):  # '||' 는 중단 조건을 넓힐 뿐(SCP0001 IsNullOrWhiteSpace(action) || action != FlagI) · '&&' 는 신규 행 아닌데도 통과할 수 있어 제외
+                early.append((_ln(a), ' ▸ '.join(segs[:-1]), f'(앞선 return {segs[-1]}) {mm.group(1)} == CAppSetting.{mm.group(2)}'))
+        for a in by.get(m, []):
+            g0 = a.get('guard') or ''
+            extra = [syn for ln, pre, syn in early if _ln(a) > ln and g0.startswith(pre)]
+            g = ' ▸ '.join(x for x in (chain, *extra, g0) if x)
             k = a.get('kind') or ''
             if k == 'CALL_LOCAL':
                 n = _callee(a)

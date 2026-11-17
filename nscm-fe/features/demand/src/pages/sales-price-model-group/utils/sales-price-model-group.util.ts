@@ -33,7 +33,24 @@ export const joinCodes = (values: readonly string[], separator: '^' | ','): stri
   return picked.length === 0 ? 'ALL' : picked.join(separator);
 };
 
-// 기존 행은 묶음 키로, 신규 행은 행 추가 때 붙인 묶음 식별 값으로 같은 묶음인지 본다.
+// 조회 시점 묶음 키 — 조회된 행에 한 번 찍어 두는 화면 내부 칸(그리드 칸 아님).
+//   Currency 는 묶음 키의 한 칸인데 기존 행에서 고칠 수 있다(2026-11-12). 고친 뒤의 값으로 묶음을 찾으면
+//   같은 6키(사업부 · Project · Sales Site · Model Group · Incoterms · FCST Type)에 새 통화를 이미 가진
+//   다른 묶음과 섞인다. 그래서 묶음 찾기(머지 · 편집 전파 · 저장 묶음)는 이 값으로 한다.
+//   프로시저에 보내는 키는 지금 값(bundleKeyOf)이다 — 새 통화로 나가야 통화 변경으로 처리된다.
+export const ORIGIN_BUNDLE_KEY = 'ORIGIN_BUNDLE_KEY';
+
+export const stampOriginBundleKey = (rows: ModelGroupRow[]): ModelGroupRow[] => {
+  for (const row of rows) {
+    if (!isInsertRow(row) && cellOf(row, ORIGIN_BUNDLE_KEY) === '') row[ORIGIN_BUNDLE_KEY] = bundleKeyOf(row);
+  }
+  return rows;
+};
+
+export const originBundleKeyOf = (row: ModelGroupRow): string =>
+  cellOf(row, ORIGIN_BUNDLE_KEY) || bundleKeyOf(row);
+
+// 기존 행은 조회 시점 묶음 키로, 신규 행은 행 추가 때 붙인 묶음 식별 값으로 같은 묶음인지 본다.
 export const sameBundle = (a: ModelGroupRow, b: ModelGroupRow): boolean => {
   const aInsert = isInsertRow(a);
   if (aInsert !== isInsertRow(b)) return false;
@@ -41,7 +58,7 @@ export const sameBundle = (a: ModelGroupRow, b: ModelGroupRow): boolean => {
     const groupId = cellOf(a, INSERT_GROUP_ID);
     return groupId !== '' && groupId === cellOf(b, INSERT_GROUP_ID);
   }
-  return bundleKeyOf(a) === bundleKeyOf(b);
+  return originBundleKeyOf(a) === originBundleKeyOf(b);
 };
 
 // 고른 Model 목록(쉼표) → Model Group 목록 (앞 12자리, 중복 제거, 고른 순서 유지).
@@ -96,6 +113,23 @@ export const isPastPeriodKey = (key: string, monday: string): boolean => {
   if (key.startsWith('M_')) return tag.slice(0, 6) < monday.slice(0, 6);
   return tag < monday;
 };
+
+// LOC 행에 조회 기간의 이번 주 이후 가격이 있는지 — 기존 묶음의 Currency 를 바꿀 수 있는 조건이다.
+//   Currency 변경은 화면이 보내는 주만 새 통화가 된다(프로시저 3-0, 2026-11-12 변경). 보낼 이번 주 이후 주가 없으면
+//   바꿀 것이 없고, 지난 주로 보내면 지난 주에 새 통화 행이 생긴다(사용자 결정 2026-11-12: 이런 묶음은 화면에서 막는다).
+//   Y 묶음은 0 이 아닌 값이 있어야 한다(Y 의 0 = 삭제라 보내면 지워진다). N 묶음은 0 도 저장된 값이라 센다.
+//   조회 결과는 주 칸 · 월 칸을 함께 내려주므로 Bucket 과 무관하게 주 칸으로 본다.
+export const hasFutureLocPrice = (
+  loc: ModelGroupRow | undefined,
+  monday: string,
+  allowZero = false
+): boolean =>
+  !!loc &&
+  Object.keys(loc).some(key => {
+    if (!WEEK_KEY_RE.test(key) || isPastPeriodKey(key, monday)) return false;
+    const value = numberOf(loc[key]);
+    return value !== null && (allowZero || value !== 0);
+  });
 
 // 조회 기간 기본값 — 원천 DMF0020 과 같은 이번 달 1일 ~ 5개월 뒤 말일 (설계서 [개요] I15 "미정 (원천: …)").
 export const defaultPeriod = (): { from: string; to: string } => {

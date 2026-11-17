@@ -1,0 +1,40 @@
+{
+ "id": "SSP0200",
+ "screen_divisions": [
+  "40",
+  "81",
+  "81_HD",
+  "81_HG",
+  "81_HM",
+  "81_UC",
+  "82",
+  "EE_HD",
+  "EE_HG",
+  "EE_HM",
+  "EE_UC"
+ ],
+ "divisions": [
+  "40",
+  "81"
+ ],
+ "groups": [],
+ "todo_divisions": [
+  "40",
+  "81"
+ ],
+ "todo_groups": [],
+ "conds": [
+  "chkSingleProcess=cT",
+  "chkSingleProcess=cF",
+  "cboChangeReason=i0",
+  "cboChangeReason=i1",
+  "cboChangeReason=i2",
+  "cboChangeReason=i3",
+  "cboChangeReason=i4",
+  "cboChangeReason=i5",
+  "cboChangeReason=i6",
+  "cboChangeReason=i7"
+ ],
+ "todo_conds": [],
+ "account_groups_known": true
+}

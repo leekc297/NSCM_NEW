@@ -25,3 +25,7 @@
 - INV 반영만 되돌리기(2차 적용본): `PKG_SCP0111_BODY.INVQTY_ASIS.sql`. 3차 적용본: `PKG_SCP0111_BODY.INVQTY_TOBE.sql`.
 
 타 사용자 행 변경 없음. 기존 BOH 분리 12 KEY(09:48:56 측정)는 수정하지 않았다.
+
+## 2026-11-17 대체
+
+- 2026-11-17 17:35:22 `M` 분기를 AS-IS UPDATE 1문으로 되돌림(FE 절대값 전송 전제). 이 기록의 "현행 M 분기 계약"은 더 이상 현행이 아님. 기록: `_artifacts/_apply_corporate/SCP0111_ADMIN_M_ASIS_20261117/APPLIED_OPERATIONS.md`

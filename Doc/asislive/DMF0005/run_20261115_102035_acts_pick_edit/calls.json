@@ -1,0 +1,86 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 10:18:19.723",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 31.64,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner Base",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner Base', @p_division_id='40'",
+   "phase": "action:pick:USER_ID"
+  },
+  {
+   "at": "2026-11-15 10:18:19.736",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.79,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner User",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner User', @p_division_id='40'",
+   "phase": "action:pick:USER_ID"
+  },
+  {
+   "at": "2026-11-15 10:18:20.591",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF000_GET_OWNER_DATA",
+   "sp": "DMF000_GET_OWNER_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 101,
+   "rows_kind": "DataSet rows",
+   "ms": 845.3,
+   "params": {
+    "p_division_id": "40",
+    "p_owner_id": "hyelin.jung",
+    "p_search": "",
+    "p_user_id": "jaeuk.shin",
+    "p_now_group_id": "ADMIN"
+   },
+   "inline": "EXEC DMF000_GET_OWNER_DATA @p_division_id='40', @p_owner_id='hyelin.jung', @p_search='', @p_user_id='jaeuk.shin', @p_now_group_id='ADMIN'",
+   "phase": "action:pick:USER_ID"
+  },
+  {
+   "at": "2026-11-15 10:18:25.173",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF000_GET_OWNER_DATA",
+   "sp": "DMF000_GET_OWNER_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 101,
+   "rows_kind": "DataSet rows",
+   "ms": 65.93,
+   "params": {
+    "p_division_id": "40",
+    "p_owner_id": "hyelin.jung",
+    "p_search": "",
+    "p_user_id": "jaeuk.shin",
+    "p_now_group_id": "ADMIN"
+   },
+   "inline": "EXEC DMF000_GET_OWNER_DATA @p_division_id='40', @p_owner_id='hyelin.jung', @p_search='', @p_user_id='jaeuk.shin', @p_now_group_id='ADMIN'",
+   "phase": "action:pick:USER_ID"
+  }
+ ]
+}

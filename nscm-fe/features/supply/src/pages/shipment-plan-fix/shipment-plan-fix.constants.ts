@@ -101,9 +101,12 @@ export const MSG = {
   //   TO-BE 는 MSG00046 미등록이라 동일 의미 MSG01078("No data to delete.")로 역매핑(자매 SCP0024 NO_DELETE_DATA 정합).
   //   AS-IS 순서: confirm("삭제하시겠습니까?") → OK → 수집 0건이면 이 메시지. 이미 unfix 된 빈 셀 선택 시 이 경로.
   NO_DELETE_DATA: 'MSG01078',
+  // Unfix 성공 건수 토스트 — AS-IS SaveData_FixInfo_U(cs:1156) GMessageBox("MSG00004",{result_cnt}) "{0} data saved."
+  //   TO-BE 에서 MSG00004 는 "No changes to save."로 의미가 반전돼 성공에 재사용 금지(07_validation-audit S1/D2).
+  //   동일 의미 표준 코드 MSG00672 "{0}개의 데이터가 저장되었습니다."로 재매핑(자매 SCP0024 SAVED_COUNT 정합, 약 25개 화면 공통).
+  SAVED_COUNT: 'MSG00672',
   SAVE_SUCCESS: 'MSG00004', // No changes to unfix. (변경/대상없음 토스트 — 자매 정합)
   PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (자매 PERIOD_RANGE 정합)
-  SEARCH_FIRST: 'MSG00662', // Action available after search. (R1 조회선행 — 자매 SEARCH_FIRST 정합)
 } as const;
 
 // i18n 라벨 코드 — DB 실측 LBL ID(SCM_ADM_MSG_M, design 02 §4.5). 표준 화면(bod-item·shipment-working-day)

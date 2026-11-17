@@ -1,7 +1,19 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_auth",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +26,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0111/eg/auth/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,9 +44,60 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\eg\\auth\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -60,7 +112,7 @@
         {
           "title": "E03 Division·권한 SCP0111 @eg-auth",
           "file": "eg_auth.spec.ts",
-          "line": 67,
+          "line": 85,
           "column": 6,
           "specs": [
             {
@@ -72,20 +124,16 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 39590,
+                      "duration": 18728,
                       "errors": [],
                       "stdout": [
                         {
@@ -97,7 +145,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:46:14.168Z",
+                      "startTime": "2026-11-14T07:40:49.354Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -106,7 +155,7 @@
               ],
               "id": "fce9d8edbd378244cae8-e5fe1d42c5919d2e8de5",
               "file": "eg_auth.spec.ts",
-              "line": 73,
+              "line": 92,
               "column": 7
             },
             {
@@ -118,27 +167,23 @@
               "tests": [
                 {
                   "timeout": 1500000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 195431,
+                      "duration": 103029,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 28s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -147,16 +192,16 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 20s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 11s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 24s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -165,25 +210,7 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 20s\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
-                        },
-                        {
-                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 22s\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
-                        },
-                        {
-                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP/81/SCP Planner 21s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -192,7 +219,7 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 16s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -201,16 +228,34 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 17s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 11s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 17s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 12s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/82/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -221,7 +266,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:47:01.767Z",
+                      "startTime": "2026-11-14T07:41:11.041Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -230,7 +276,7 @@
               ],
               "id": "fce9d8edbd378244cae8-3d696e338e8931bb7e72",
               "file": "eg_auth.spec.ts",
-              "line": 230,
+              "line": 249,
               "column": 7
             },
             {
@@ -242,20 +288,16 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18964,
+                      "duration": 9185,
                       "errors": [],
                       "stdout": [
                         {
@@ -267,7 +309,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:50:25.262Z",
+                      "startTime": "2026-11-14T07:42:58.245Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -276,7 +319,7 @@
               ],
               "id": "fce9d8edbd378244cae8-d25ab16cac6ca2589147",
               "file": "eg_auth.spec.ts",
-              "line": 330,
+              "line": 366,
               "column": 7
             },
             {
@@ -288,20 +331,16 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 37887,
+                      "duration": 19996,
                       "errors": [],
                       "stdout": [
                         {
@@ -325,7 +364,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:50:51.160Z",
+                      "startTime": "2026-11-14T07:43:11.247Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -334,7 +374,7 @@
               ],
               "id": "fce9d8edbd378244cae8-e1ed7a0a5b2737006097",
               "file": "eg_auth.spec.ts",
-              "line": 381,
+              "line": 417,
               "column": 7
             },
             {
@@ -346,20 +386,16 @@
               "tests": [
                 {
                   "timeout": 1800000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 200089,
+                      "duration": 107693,
                       "errors": [],
                       "stdout": [
                         {
@@ -384,19 +420,7 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG377 FAIL\":1,\"EG124 FAIL\":1,\"EG378 FAIL\":1,\"EG123 FAIL\":1}\n"
-                        },
-                        {
-                          "text": "  EG377 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/40/ADMIN · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 3 · BOH_QTY r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; BOH_QTY r1 편집=false/AS-IS  · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG124 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/40/ADMIN · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 3 · BOH_QTY r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; BOH_QTY r1 편집=false/AS-IS  · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG378 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/40/ADMIN · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 3 · BOH_QTY r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; BOH_QTY r1 편집=false/AS-IS  · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG123 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/40/ADMIN · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 3 · BOH_QTY r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; BOH_QTY r1 편집=false/AS-IS  · edit_expect.csv \n"
+                          "text": "[eg_auth] SCP0111 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
@@ -447,16 +471,16 @@
                           "text": "[eg_auth] SCP0111 {\"EG377 FAIL\":1,\"EG124 FAIL\":1,\"EG378 FAIL\":1,\"EG123 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG377 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div ] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "  EG377 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
                         },
                         {
-                          "text": "  EG124 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div ] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "  EG124 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
                         },
                         {
-                          "text": "  EG378 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div ] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "  EG378 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
                         },
                         {
-                          "text": "  EG123 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div ] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "  EG123 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCP/81/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
@@ -470,7 +494,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:51:35.404Z",
+                      "startTime": "2026-11-14T07:43:35.060Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -479,7 +504,7 @@
               ],
               "id": "fce9d8edbd378244cae8-ea4f0dff9ce4f391caf2",
               "file": "eg_auth.spec.ts",
-              "line": 452,
+              "line": 488,
               "column": 7
             },
             {
@@ -491,20 +516,16 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18407,
+                      "duration": 5813,
                       "errors": [],
                       "stdout": [
                         {
@@ -516,7 +537,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:55:03.070Z",
+                      "startTime": "2026-11-14T07:45:26.882Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -525,7 +547,7 @@
               ],
               "id": "fce9d8edbd378244cae8-466cf9ca04344bdfc787",
               "file": "eg_auth.spec.ts",
-              "line": 522,
+              "line": 558,
               "column": 7
             },
             {
@@ -544,8 +566,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1063,
+                      "duration": 261,
                       "errors": [],
                       "stdout": [
                         {
@@ -557,7 +580,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:55:29.018Z",
+                      "startTime": "2026-11-14T07:45:36.770Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -566,7 +590,7 @@
               ],
               "id": "fce9d8edbd378244cae8-dcee9b4a48e342676832",
               "file": "eg_auth.spec.ts",
-              "line": 536,
+              "line": 574,
               "column": 7
             },
             {
@@ -578,20 +602,16 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17307,
+                      "duration": 5786,
                       "errors": [],
                       "stdout": [
                         {
@@ -603,7 +623,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:55:38.145Z",
+                      "startTime": "2026-11-14T07:45:41.116Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -612,7 +633,7 @@
               ],
               "id": "fce9d8edbd378244cae8-f663c20e0e0d7b3e54fd",
               "file": "eg_auth.spec.ts",
-              "line": 566,
+              "line": 604,
               "column": 7
             },
             {
@@ -631,8 +652,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1065,
+                      "duration": 254,
                       "errors": [],
                       "stdout": [
                         {
@@ -644,7 +666,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-04T22:56:03.113Z",
+                      "startTime": "2026-11-14T07:45:50.769Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -653,7 +676,7 @@
               ],
               "id": "fce9d8edbd378244cae8-9b0d92de197bd60696d0",
               "file": "eg_auth.spec.ts",
-              "line": 591,
+              "line": 629,
               "column": 7
             }
           ]
@@ -663,8 +686,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-04T22:46:12.443Z",
-    "duration": 604098.188,
+    "startTime": "2026-11-14T07:40:48.814Z",
+    "duration": 307870.61,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

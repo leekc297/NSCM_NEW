@@ -1,15 +1,15 @@
 # DMF0035 — To-Be Fact Pack 요약
 
 - page_key: `report/demand-plan-waterfall` · feature: report · As-is Fact Pack 있음
-- 파일 25 · 엔드포인트 호출 15 (미해결 2, 주석 속 0) · 이벤트 82 · 컴포넌트 사용 95 · 하드코딩 컬럼 10 · 메시지 34
+- 파일 25 · 엔드포인트 호출 15 (미해결 2, 주석 속 0) · 이벤트 83 · 컴포넌트 사용 96 · 하드코딩 컬럼 10 · 메시지 35
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 10건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.module.scss | component | 17 |
-| features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | component | 518 |
-| features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | component | 423 |
+| features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | component | 513 |
+| features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | component | 435 |
 | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.module.scss | component | 652 |
 | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | component | 617 |
 | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/olapFieldRail.utils.ts | component | 155 |
@@ -26,8 +26,8 @@
 | features/report/src/pages/demand-plan-waterfall/useDemandPlanWaterfallStore.ts | store | 402 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.columns.test.ts | test | 211 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.columns.ts | util | 318 |
-| features/report/src/pages/demand-plan-waterfall/utils/waterfall.drill.test.ts | test | 125 |
-| features/report/src/pages/demand-plan-waterfall/utils/waterfall.drill.ts | util | 96 |
+| features/report/src/pages/demand-plan-waterfall/utils/waterfall.drill.test.ts | test | 232 |
+| features/report/src/pages/demand-plan-waterfall/utils/waterfall.drill.ts | util | 138 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.headerColors.ts | util | 93 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.merge.ts | util | 121 |
 | features/report/src/pages/demand-plan-waterfall/utils/waterfall.periods.ts | util | 74 |
@@ -67,33 +67,34 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSubmit | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 130 |
 | DivisionField | onChange | <arrow> setSearchParams,gubunResetParams,onDivisionChange,onGubunChange | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 140 |
-| CustomDropdown | onChange | <arrow> setSearchParams,gubunResetParams,onGubunChange | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 184 |
-| TeamField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 199 |
+| CustomDropdown | onChange | <arrow> setSearchParams,gubunResetParams,onGubunChange | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 185 |
+| TeamField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 200 |
 | EndCustomerField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 211 |
-| SalesSiteField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 224 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 242 |
-| InputField | onDoubleClick | <arrow> setOpenVersionModal | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 253 |
-| Button | onClick | <arrow> setOpenVersionModal | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 249 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 262 |
-| CustomDropdown | onChange | <arrow> setSearchParams,onBucketChange | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 274 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 299 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 316 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 331 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 346 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 375 |
-| ProjectField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 391 |
-| ItemField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 402 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 424 |
-| BizTypeField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 438 |
-| PlantSiteField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 445 |
-| OwnerField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 453 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 483 |
-| WaterfallVersionModal | onApply | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 507 |
+| SalesSiteField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 219 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 237 |
+| InputField | onDoubleClick | <arrow> setOpenVersionModal | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 248 |
+| Button | onClick | <arrow> setOpenVersionModal | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 244 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 257 |
+| CustomDropdown | onChange | <arrow> setSearchParams,onBucketChange | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 269 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 294 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 311 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 326 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 341 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 370 |
+| ProjectField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 386 |
+| ItemField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 397 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 419 |
+| BizTypeField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 433 |
+| PlantSiteField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 440 |
+| OwnerField | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 448 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 470 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 478 |
+| WaterfallVersionModal | onApply | <arrow> setSearchParams | jsx | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallForm.tsx | 502 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 223 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 267 |
 | g | scrollPositionChanged | onScroll | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 298 |
-| host | dblclick | onDblClick | addEventListener | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 325 |
-| g | formatItem | handler | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 370 |
+| host | dblclick | onDblClick | addEventListener | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 337 |
+| g | formatItem | handler | addHandler | features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx | 382 |
 | div | onMouseDown | <arrow> e.stopPropagation | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 101 |
 | button | onClick | <arrow> editorRef.current?.clearEditor,editorRef.current?.updateFilter,onApplied,onClose | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 107 |
 | button | onClick | onClose | jsx | features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/OlapFieldRail.tsx | 117 |
@@ -154,8 +155,8 @@
 | Grid | 13 |
 | FormItem | 12 |
 | CustomDropdown | 9 |
+| Checkbox | 5 |
 | Button | 4 |
-| Checkbox | 4 |
 | ResultArea | 3 |
 | SearchArea | 2 |
 | InputField | 2 |
@@ -220,6 +221,7 @@
 | LBL00606 | 1 |
 | LBL00710 | 1 |
 | LBL00090 | 1 |
+| LBL00687 | 1 |
 | MSG00013 | 2 |
 | MSG00133 | 1 |
 | MSG00606 | 2 |
@@ -245,8 +247,8 @@
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0035(13), DMF0003(9), DMF0022(6), DMF0082(5), DMF0051(5), DMF0073(3), SCM0002(3), DMF0044(1), SYS0004(1)
-- SP/PKG: PKG_DMF0035(6), DMF0073_GET_VERSION_SALESPRICE(4), PR_GET_DAY_RANGE(3), P_DMF0035_SAVE_VERSION_MRF(2), P_PROGRAM_ID(2), P_DIVISION_ID(1), P_VERSION_NO(1), P_MONTHLY_ROLLING_FCST(1), PKG_SCM0002(1), P_SCM0002_GET_VERSIONBYWATERFALLPOPUP(1), PKG_DMF0022(1), DMF0003_GET_REPORT_BUCKET_TYPE_CODE(1), SCM0002_SET_TITLESET_POPUP(1)
+- 화면ID: DMF0035(13), DMF0003(9), DMF0022(6), DMF0082(5), DMF0051(5), DMF0073(3), SCM0002(3), DMF0044(1), SYS0004(1), DMF0042(1)
+- SP/PKG: PKG_DMF0035(6), DMF0073_GET_VERSION_SALESPRICE(4), PR_GET_DAY_RANGE(3), P_DMF0035_SAVE_VERSION_MRF(2), PKG_DMF0022(2), P_PROGRAM_ID(2), P_DIVISION_ID(1), P_VERSION_NO(1), P_MONTHLY_ROLLING_FCST(1), PKG_SCM0002(1), P_SCM0002_GET_VERSIONBYWATERFALLPOPUP(1), DMF0003_GET_REPORT_BUCKET_TYPE_CODE(1), SCM0002_SET_TITLESET_POPUP(1), PKG_DMF0051(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

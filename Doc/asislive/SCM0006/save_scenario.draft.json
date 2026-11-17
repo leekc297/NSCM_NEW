@@ -1,0 +1,158 @@
+{
+ "id": "SCM0006",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCM.SCM0006_SAVE_RECIPIENT_MASTER",
+   "save_sp": "SCM0006_SAVE_RECIPIENT_MASTER",
+   "status": "키가 없는 테이블",
+   "table": "SCM_ADM_RECIPIENT_LIST",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CATEGORY_ID",
+    "db_col": "CATEGORY_ID",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "Category/Category",
+   "writes": {
+    "SCM_ADM_RECIPIENT_LIST": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ],
+    "SCM_ADM_RECIPIENT_MESSAGE": [
+     "DELETE FROM"
+    ],
+    "SCM_ADM_RECIPIENT_SMS_ASSIGN": [
+     "DELETE FROM"
+    ],
+    "SCM_ADM_RECIPIENT_ASSIGN": [
+     "DELETE FROM"
+    ]
+   },
+   "basis": "foxml SCM0006_SAVE_RECIPIENT_MASTER → SP SCM0006_SAVE_RECIPIENT_MASTER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_RECIPIENT_LIST_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "SCM_ADM_RECIPIENT_ASSIGN",
+    "SCM_ADM_RECIPIENT_MESSAGE",
+    "SCM_ADM_RECIPIENT_SMS_ASSIGN"
+   ],
+   "edit_candidates": [
+    {
+     "col": "CATEGORY_ID",
+     "db_col": "CATEGORY_ID",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCM.SCM0006_SAVE_RECIPIENT_MESSAGE",
+   "save_sp": "SCM0006_SAVE_RECIPIENT_MESSAGE",
+   "status": "키가 없는 테이블",
+   "table": "SCM_ADM_RECIPIENT_MESSAGE",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CATEGORY_ID",
+    "db_col": "CATEGORY_ID",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "Message/Message",
+   "writes": {
+    "SCM_ADM_RECIPIENT_MESSAGE": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCM0006_SAVE_RECIPIENT_MESSAGE → SP SCM0006_SAVE_RECIPIENT_MESSAGE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_RECIPIENT_MESSAGE_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "CATEGORY_ID",
+     "db_col": "CATEGORY_ID",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCM.SCM0006_SAVE_RECIPIENT_ASSIGN",
+   "save_sp": "SCM0006_SAVE_RECIPIENT_ASSIGN",
+   "status": "키가 없는 테이블",
+   "table": "SCM_ADM_RECIPIENT_ASSIGN",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CATEGORY_ID",
+    "db_col": "CATEGORY_ID",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "Category/Category",
+   "writes": {
+    "SCM_ADM_RECIPIENT_ASSIGN": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCM0006_SAVE_RECIPIENT_ASSIGN → SP SCM0006_SAVE_RECIPIENT_ASSIGN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_RECIPIENT_ASSIGN_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "CATEGORY_ID",
+     "db_col": "CATEGORY_ID",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCM.SCM0006_SAVE_RECIPIENT_MASTER_U",
+   "save_sp": "SCM0006_SAVE_RECIPIENT_MASTER_U",
+   "status": "키가 없는 테이블",
+   "table": "SCM_ADM_RECIPIENT_LIST",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CATEGORY_ID",
+    "db_col": "CATEGORY_ID",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "Category/Category",
+   "writes": {
+    "SCM_ADM_RECIPIENT_LIST": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCM0006_SAVE_RECIPIENT_MASTER_U → SP SCM0006_SAVE_RECIPIENT_MASTER_U 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "CATEGORY_ID",
+     "db_col": "CATEGORY_ID",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

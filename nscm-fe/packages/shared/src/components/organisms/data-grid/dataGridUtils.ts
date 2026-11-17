@@ -265,10 +265,17 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
   //   같이 '/' 를 포함하는 정당한 값은 건드리지 않는다. 소스 데이터·저장 payload 는 '/' 그대로
   //   유지하고(저장/조회 센티널이라 키가 어긋나면 안 됨) 표시 텍스트만 비운다.
   //   setCellTooltip 보다 먼저 등록해야 툴팁도 비운 텍스트를 읽는다(formatPendingComboColumns 동일).
+  //   주의: 편집 중인 셀은 건너뛰고, 셀 전체가 아니라 '/' 글자 노드만 비운다. textContent = '' 는
+  //   자식 요소까지 지워 콤보 드롭다운 버튼과 편집기 입력칸이 사라진다 — '/' 셀은 눌러도 목록이 안 뜨고
+  //   편집이 안 됐다(2026-11-10 Sales Price 82 Currency 신고).
   const formatSentinelColumns = (grid: FlexGrid<T>, event: FormatItemEventArgs) => {
     if (event.panel.cellType !== CellType.Cell) return;
+    if (grid.editRange?.contains(event.row, event.col)) return;
     const value = grid.getCellData(event.row, event.col, false);
-    if (value === '/') event.cell.textContent = '';
+    if (value !== '/') return;
+    event.cell.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '/') node.textContent = '';
+    });
   };
 
   // RowHeader col 0(행번호 또는 체크박스) 셀에 선택 행 표시.
@@ -683,6 +690,25 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
   ) => {
     const resizeStartWidths = new Map<number, number>(); // key: column.index
 
+    // 헤더 경계 더블클릭(auto-size)도 wijmo 가 autoSizeColumn 을 호출하며 드래그 리사이즈와
+    //   똑같이 resizingColumn/resizedColumn 을 발생시킨다. 그 경우엔 "데이터에 맞춘 그 컬럼
+    //   한 개만" fit 되어야 하므로, 더블클릭을 감지해 아래 다중 컬럼 전파를 건너뛴다.
+    //   캡처 단계로 등록해 wijmo 가 auto-size 하기 전에 플래그를 세우고, 다음 드래그를
+    //   오인하지 않도록 이벤트 루프 끝에 해제한다.
+    let autoSizePending = false;
+    grid.hostElement.addEventListener(
+      'dblclick',
+      (ev: MouseEvent) => {
+        if (grid.hitTest(ev)?.cellType === CellType.ColumnHeader) {
+          autoSizePending = true;
+          setTimeout(() => {
+            autoSizePending = false;
+          }, 0);
+        }
+      },
+      true
+    );
+
     grid.resizingColumn.addHandler((_sender, e) => {
       const column = e.getColumn();
       if (!column || resizeStartWidths.has(column.index)) return;
@@ -696,6 +722,9 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       const startWidth = resizeStartWidths.get(column.index);
       resizeStartWidths.delete(column.index);
       if (!startWidth || startWidth <= 0 || column.renderWidth === startWidth) return;
+
+      // 더블클릭 auto-fit 은 그 컬럼만 맞추고 선택된 다른 컬럼엔 전파하지 않는다.
+      if (autoSizePending) return;
 
       // 다중 컬럼이 선택된 범위(col !== col2)에 지금 리사이즈한 컬럼이 포함될 때만 관여한다.
       const range = grid.selectedRanges.find(
@@ -715,6 +744,92 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
         userColumnWidthsRef.current.set(other.binding, newWidth);
       }
     });
+
+    // Excel 호환 단축키: 그리드에 포커스가 있을 때 Alt → H → O → I (열 너비 자동 맞춤)를 누르면
+    //   컨텍스트 메뉴 "Autosize This Column"과 동일하게, 선택된 열을 각자 데이터 폭에 맞춘다
+    //   (grid.autoSizeColumn). 한 열만 선택돼 있으면 그 열만, 여러 열이면 각 열을 개별로 맞춘다.
+    //   Alt 를 누른 채 h,o,i 를 눌러도, Alt 를 뗀 뒤 눌러도 되도록 시퀀스로 추적한다. 레이아웃
+    //   독립적인 event.code(KeyH/KeyO/KeyI)로 판정해 Alt 조합이 만드는 특수문자 영향을 안 받는다.
+    //   필수: 캡처 단계로 등록하고 매칭된 키는 stopImmediatePropagation 한다 — 그러지 않으면
+    //   wijmo 가 o/i 를 셀 편집 시작으로 먼저 처리해 버리고, Alt 는 브라우저 메뉴를 띄운다.
+    //   autoSizeColumn 은 resizedColumn 을 발생시키므로 위 다중 컬럼 비율 전파를 타지 않도록
+    //   autoSizePending 으로 억제한다(각 열은 자기 데이터에만 맞춰야 한다). 폭 persist 는
+    //   DataGrid 의 resizedColumn 핸들러가 담당한다.
+    const AUTOFIT_SEQ = ['KeyH', 'KeyO', 'KeyI'];
+    const SEQ_TIMEOUT_MS = 1500;
+    let seqIndex = 0;
+    let seqTimer: ReturnType<typeof setTimeout> | null = null;
+    const resetSeq = () => {
+      seqIndex = 0;
+      if (seqTimer) {
+        clearTimeout(seqTimer);
+        seqTimer = null;
+      }
+    };
+    const armSeqTimer = () => {
+      if (seqTimer) clearTimeout(seqTimer);
+      seqTimer = setTimeout(resetSeq, SEQ_TIMEOUT_MS);
+    };
+
+    const autoFitSelectedColumns = () => {
+      const cols = new Set<number>();
+      for (const range of grid.selectedRanges) {
+        for (let c = range.leftCol; c <= range.rightCol; c++) cols.add(c);
+      }
+      if (cols.size === 0) return;
+
+      autoSizePending = true; // 각 열을 자기 데이터에 맞춤 — 다중 컬럼 비율 전파 억제
+      try {
+        cols.forEach(c => {
+          const column = grid.columns[c];
+          if (!column || column.binding == null) return; // rowHeader 등 제외
+          grid.autoSizeColumn(c); // 컨텍스트 메뉴 "Autosize This Column"과 동일
+          // autoSizeColumn 메서드는 resizedColumn 을 발생시키지 않으므로(컨텍스트 메뉴가
+          //   notifyWidth 를 따로 호출하는 이유), 맞춘 폭을 사용자 폭 기억에 직접 반영한다.
+          //   안 하면 columnGroups 재대입 시 userColumnWidthsRef 복원 로직이 옛 폭으로 되돌린다.
+          //   저장값은 renderWidth(다음 레이아웃 패스에서야 갱신될 수 있음) 대신 autoSizeColumn 이
+          //   방금 동기로 세팅한 숫자 column.width 를 쓴다 — 복원(1911)도 column.width 기준이라
+          //   width↔width 로 일치한다. ("늘었다가 다시 줄어듦" = renderWidth 가 옛 값일 때의 증상)
+          const fittedWidth =
+            typeof column.width === 'number' ? column.width : column.renderWidth;
+          userColumnWidthsRef.current.set(column.binding, fittedWidth);
+        });
+      } finally {
+        autoSizePending = false;
+      }
+    };
+
+    grid.hostElement.addEventListener(
+      'keydown',
+      (keyboardEvent: KeyboardEvent) => {
+        // 시퀀스 시작은 Alt+H 에서만.
+        if (seqIndex === 0) {
+          if (keyboardEvent.altKey && keyboardEvent.code === 'KeyH') {
+            keyboardEvent.preventDefault(); // 브라우저 Alt 메뉴 활성 차단
+            keyboardEvent.stopImmediatePropagation();
+            seqIndex = 1;
+            armSeqTimer();
+          }
+          return;
+        }
+        // 이어지는 O, I (Alt 유지/해제 무관).
+        if (keyboardEvent.code === AUTOFIT_SEQ[seqIndex]) {
+          keyboardEvent.preventDefault();
+          keyboardEvent.stopImmediatePropagation(); // wijmo 셀 편집 시작 차단
+          seqIndex += 1;
+          if (seqIndex === AUTOFIT_SEQ.length) {
+            resetSeq();
+            autoFitSelectedColumns();
+          } else {
+            armSeqTimer();
+          }
+          return;
+        }
+        // 그 외 키는 시퀀스 취소.
+        resetSeq();
+      },
+      true // 캡처 단계 — wijmo/브라우저보다 먼저
+    );
   };
 
   return {

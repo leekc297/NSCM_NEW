@@ -1,0 +1,1350 @@
+{
+ "id": "SCP0102",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer1/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "BOD Main",
+     "rows": 0,
+     "cols": 18,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "",
+        "",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "From Site",
+        "From Site",
+        "From Site"
+       ],
+       "label": "From Site",
+       "tag": "FROM_SITE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "FROM_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "To Site",
+        "To Site",
+        "To Site"
+       ],
+       "label": "To Site",
+       "tag": "TO_SITE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TO_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "POL Area",
+        "POL Area",
+        "POL Area"
+       ],
+       "label": "POL Area",
+       "tag": "POL_AREA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_AREA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "POD Area",
+        "POD Area",
+        "POD Area"
+       ],
+       "label": "POD Area",
+       "tag": "POD_AREA",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_AREA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "POL Port",
+        "POL Port",
+        "POL Port"
+       ],
+       "label": "POL Port",
+       "tag": "POL",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "POD Port",
+        "POD Port",
+        "POD Port"
+       ],
+       "label": "POD Port",
+       "tag": "POD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "From City",
+        "From City",
+        "From City"
+       ],
+       "label": "From City",
+       "tag": "FROM_CITY",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "FROM_CITY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "To City",
+        "To City",
+        "To City"
+       ],
+       "label": "To City",
+       "tag": "TO_CITY",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TO_CITY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "(Main)Transport Mode",
+        "(Main)Transport Mode",
+        "(Main)Transport Mode"
+       ],
+       "label": "(Main)Transport Mode",
+       "tag": "TRANSPORT_MODE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TRANSPORT_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "BOD ID",
+        "BOD ID",
+        "BOD ID"
+       ],
+       "label": "BOD ID",
+       "tag": "BOD_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BOD_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Route ID",
+        "Route ID",
+        "Route ID"
+       ],
+       "label": "Route ID",
+       "tag": "ROUTE_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ROUTE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Incoterms",
+        "Incoterms",
+        "Incoterms"
+       ],
+       "label": "Incoterms",
+       "tag": "INCOTERMS",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Shipment 개수",
+        "Shipment 개수",
+        "Shipment 개수"
+       ],
+       "label": "Shipment 개수",
+       "tag": "SHIPMENT_COUNT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "SHIPMENT_COUNT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Container 개수",
+        "Container 개수",
+        "Container 개수"
+       ],
+       "label": "Container 개수",
+       "tag": "CONTAINER_COUNT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CONTAINER_COUNT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "구분 ▼",
+        "구분 ▼",
+        "구분 ▼"
+       ],
+       "label": "구분 ▼",
+       "tag": "KUBUN",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "KUBUN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "기준 L/T(조회시점)",
+        "기준 L/T(조회시점)",
+        "기준 L/T(조회시점)"
+       ],
+       "label": "기준 L/T(조회시점)",
+       "tag": "NLT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NLT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdDetail",
+   "path": "/splitContainer1/SplitterPanel/spdDetail",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "BOD Detail",
+     "rows": 0,
+     "cols": 66,
+     "visible": "True",
+     "frozen_cols": "4",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Exfactory Date"
+       ],
+       "label": "Exfactory Date",
+       "tag": "EXFACTORY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "EXFACTORY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Shipment No."
+       ],
+       "label": "Shipment No.",
+       "tag": "SHIPMENT_NO",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SHIPMENT_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "CNTR No."
+       ],
+       "label": "CNTR No.",
+       "tag": "CNTR_NO",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CNTR_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "(Main)Transport Mode"
+       ],
+       "label": "(Main)Transport Mode",
+       "tag": "TRANSPORT_MODE",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TRANSPORT_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "BOD ID"
+       ],
+       "label": "BOD ID",
+       "tag": "BOD_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BOD_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Route ID"
+       ],
+       "label": "Route ID",
+       "tag": "ROUTE_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ROUTE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "From Site"
+       ],
+       "label": "From Site",
+       "tag": "FROM_SITE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "FROM_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "To Site"
+       ],
+       "label": "To Site",
+       "tag": "TO_SITE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TO_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "From City"
+       ],
+       "label": "From City",
+       "tag": "FROM_CITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "FROM_CITY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "To City"
+       ],
+       "label": "To City",
+       "tag": "TO_CITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TO_CITY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "POL Port"
+       ],
+       "label": "POL Port",
+       "tag": "POL_PORT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_PORT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "POD Port"
+       ],
+       "label": "POD Port",
+       "tag": "POD_PORT",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_PORT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "F.Dest code"
+       ],
+       "label": "F.Dest code",
+       "tag": "F_DEST_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "F_DEST_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Incoterms"
+       ],
+       "label": "Incoterms",
+       "tag": "INCOTERMS",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "SSP Incoterms"
+       ],
+       "label": "SSP Incoterms",
+       "tag": "INCOTERMS_SSP",
+       "width": "65",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "INCOTERMS_SSP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Carrier"
+       ],
+       "label": "Carrier",
+       "tag": "CARRIER",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CARRIER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Inland ATD"
+       ],
+       "label": "Inland ATD",
+       "tag": "INLAND_ATD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "INLAND_ATD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "POL ETA"
+       ],
+       "label": "POL ETA",
+       "tag": "POL_ETA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_ETA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "POL ATA"
+       ],
+       "label": "POL ATA",
+       "tag": "POL_ATA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_ATA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "POL ETD"
+       ],
+       "label": "POL ETD",
+       "tag": "POL_ETD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_ETD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "POL ATD"
+       ],
+       "label": "POL ATD",
+       "tag": "POL_ATD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POL_ATD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "POD ETA"
+       ],
+       "label": "POD ETA",
+       "tag": "POD_ETA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_ETA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "POD ATA"
+       ],
+       "label": "POD ATA",
+       "tag": "POD_ATA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_ATA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "POD ETD"
+       ],
+       "label": "POD ETD",
+       "tag": "POD_ETD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_ETD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "POD ATD"
+       ],
+       "label": "POD ATD",
+       "tag": "POD_ATD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "POD_ATD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "허브 ETA"
+       ],
+       "label": "허브 ETA",
+       "tag": "VMI_ETA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VMI_ETA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "허브 ATA"
+       ],
+       "label": "허브 ATA",
+       "tag": "VMI_ATA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VMI_ATA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "허브 ETD"
+       ],
+       "label": "허브 ETD",
+       "tag": "VMI_ETD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VMI_ETD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "허브 ATD"
+       ],
+       "label": "허브 ATD",
+       "tag": "VMI_ATD",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VMI_ATD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "F.DEST ETA"
+       ],
+       "label": "F.DEST ETA",
+       "tag": "F_DEST_ETA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "F_DEST_ETA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "F.DEST ATA"
+       ],
+       "label": "F.DEST ATA",
+       "tag": "F_DEST_ATA",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "F_DEST_ATA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "TTL12"
+       ],
+       "label": "TTL12",
+       "tag": "TTL12",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TTL12",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "TTL3"
+       ],
+       "label": "TTL3",
+       "tag": "TTL3",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TTL3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "TTL45"
+       ],
+       "label": "TTL45",
+       "tag": "TTL45",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TTL45",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "TTL"
+       ],
+       "label": "TTL",
+       "tag": "TTL",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TTL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "TTL(Incoterms)"
+       ],
+       "label": "TTL(Incoterms)",
+       "tag": "TTL_INCOTERMS",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TTL_INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "DR1"
+       ],
+       "label": "DR1",
+       "tag": "DR1",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DR1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "DR2"
+       ],
+       "label": "DR2",
+       "tag": "DR2",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DR2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "DR3"
+       ],
+       "label": "DR3",
+       "tag": "DR3",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DR3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "DR4"
+       ],
+       "label": "DR4",
+       "tag": "DR4",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DR4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "DR5"
+       ],
+       "label": "DR5",
+       "tag": "DR5",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DR5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "DR TTL"
+       ],
+       "label": "DR TTL",
+       "tag": "DRTTL",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DRTTL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "DR TTL(Incoterms)"
+       ],
+       "label": "DR TTL(Incoterms)",
+       "tag": "DRTTL_INCOTERMS",
+       "width": "75",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "DRTTL_INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "NDR1"
+       ],
+       "label": "NDR1",
+       "tag": "NDR1",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "NDR2"
+       ],
+       "label": "NDR2",
+       "tag": "NDR2",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "NDR3"
+       ],
+       "label": "NDR3",
+       "tag": "NDR3",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "NDR4"
+       ],
+       "label": "NDR4",
+       "tag": "NDR4",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "NDR5"
+       ],
+       "label": "NDR5",
+       "tag": "NDR5",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "NDR TTL"
+       ],
+       "label": "NDR TTL",
+       "tag": "NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "NDR TTL(Incoterms)"
+       ],
+       "label": "NDR TTL(Incoterms)",
+       "tag": "NDR_INCOTERMS",
+       "width": "75",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NDR_INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "GAP1"
+       ],
+       "label": "GAP1",
+       "tag": "GAP1",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "GAP2"
+       ],
+       "label": "GAP2",
+       "tag": "GAP2",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "GAP3"
+       ],
+       "label": "GAP3",
+       "tag": "GAP3",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "GAP4"
+       ],
+       "label": "GAP4",
+       "tag": "GAP4",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "GAP5"
+       ],
+       "label": "GAP5",
+       "tag": "GAP5",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "GAP"
+       ],
+       "label": "GAP",
+       "tag": "GAP",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "GAP(Incoterms)"
+       ],
+       "label": "GAP(Incoterms)",
+       "tag": "GAP_INCOTERMS",
+       "width": "75",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP_INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "GAP1(NDR)"
+       ],
+       "label": "GAP1(NDR)",
+       "tag": "GAP1_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP1_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "GAP2(NDR)"
+       ],
+       "label": "GAP2(NDR)",
+       "tag": "GAP2_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP2_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 60,
+       "header": [
+        "GAP3(NDR)"
+       ],
+       "label": "GAP3(NDR)",
+       "tag": "GAP3_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP3_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 61,
+       "header": [
+        "GAP4(NDR)"
+       ],
+       "label": "GAP4(NDR)",
+       "tag": "GAP4_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP4_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 62,
+       "header": [
+        "GAP5(NDR)"
+       ],
+       "label": "GAP5(NDR)",
+       "tag": "GAP5_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP5_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 63,
+       "header": [
+        "GAP(NDR)"
+       ],
+       "label": "GAP(NDR)",
+       "tag": "GAP_NDR",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP_NDR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 64,
+       "header": [
+        "GAP(NDR Incoterms)"
+       ],
+       "label": "GAP(NDR Incoterms)",
+       "tag": "GAP_NDR_INCOTERMS",
+       "width": "75",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "GAP_NDR_INCOTERMS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 65,
+       "header": [
+        "Confirm ID"
+       ],
+       "label": "Confirm ID",
+       "tag": "CONFIRM_ID",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CONFIRM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

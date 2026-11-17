@@ -1,0 +1,221 @@
+{
+ "screen": "SSP0060",
+ "generated": "2026-11-15 04:08:40",
+ "vars": {
+  "dtBucketType": {
+   "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+   "code": "",
+   "targets": [
+    "SEARCH:cboBucketType"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:462 ← SSP0060_ShipmentPlan.cs:461",
+   "unresolved": "SP 매개변수 정보 없음"
+  },
+  "Tmp_dtPlanDate": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Plan_Infor",
+   "targets": [
+    "SEARCH:cboPlanDate"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:6520 ← SSP0060_ShipmentPlan.cs:6489",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "dtFromSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Com_FromSite",
+   "targets": [
+    "GRID:FROM_SITE_DESCRIPTION",
+    "PARAM:PlantSiteByDivision",
+    "SEARCH:clbPlantSite"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:7181 ← SSP0060_ShipmentPlan.cs:7180",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtPlanDate": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Plan_Infor",
+   "targets": [
+    "SEARCH:cboPlanDate"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:7198 ← SSP0060_ShipmentPlan.cs:7197",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "dtTransMode": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "TransMode",
+   "targets": [
+    "GRID:TRANSPORT_MODE"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:1995 ← SSP0060_ShipmentPlan.cs:1380",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3, @Param4"
+  },
+  "dtToSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "ShipmentPlanToSite",
+   "targets": [
+    "GRID:TO_SITE_DESCRIPTION"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:7422 ← SSP0060_ShipmentPlan.cs:7185",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "dtEndCustomer": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "EndCustomerByItemForSSP",
+   "targets": [
+    "GRID:END_CUSTOMER"
+   ],
+   "ref": "SSP0060_ShipmentPlan.cs:7990 ← SSP0060_ShipmentPlan.cs:7989",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "<meta Data.Type.Division>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Division",
+   "targets": [
+    "GRID:DIVISION_ID"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0060/Hold stock/DIVISION_ID ← SCM_MST_SHEET_COLUMNS SSP0060/Shipment Result/DIVISION_ID",
+   "rows": [
+    {
+     "CODE": "40",
+     "NAME": "40"
+    },
+    {
+     "CODE": "81",
+     "NAME": "81"
+    },
+    {
+     "CODE": "81_HD",
+     "NAME": "81_HD"
+    },
+    {
+     "CODE": "81_HG",
+     "NAME": "81_HG"
+    },
+    {
+     "CODE": "81_HM",
+     "NAME": "81_HM"
+    },
+    {
+     "CODE": "81_ST",
+     "NAME": "81_ST"
+    },
+    {
+     "CODE": "81_UC",
+     "NAME": "81_UC"
+    },
+    {
+     "CODE": "82",
+     "NAME": "82"
+    },
+    {
+     "CODE": "EE",
+     "NAME": "EE"
+    },
+    {
+     "CODE": "EE_HD",
+     "NAME": "EE_HD"
+    },
+    {
+     "CODE": "EE_HG",
+     "NAME": "EE_HG"
+    },
+    {
+     "CODE": "EE_HM",
+     "NAME": "EE_HM"
+    },
+    {
+     "CODE": "EE_ST",
+     "NAME": "EE_ST"
+    },
+    {
+     "CODE": "EE_UC",
+     "NAME": "EE_UC"
+    }
+   ]
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:FCST_TYPE",
+    "GRID:SHIPMENT_STATUS"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0060/Shipment Plan/FCST_TYPE ← SCM_MST_SHEET_COLUMNS SSP0060/Shipment Plan Detail/SHIPMENT_STATUS",
+   "rows": []
+  },
+  "<meta Data.Type.Incoterms>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Incoterms",
+   "targets": [
+    "GRID:INCOTERMS"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0060/Shipment Plan Detail/INCOTERMS ← SCM_MST_SHEET_COLUMNS SSP0060/Shipment Plan Detail/INCOTERMS",
+   "rows": [
+    {
+     "CODE": "A01",
+     "NAME": "A01"
+    },
+    {
+     "CODE": "Z01",
+     "NAME": "Z01"
+    },
+    {
+     "CODE": "Z04",
+     "NAME": "Z04"
+    },
+    {
+     "CODE": "EXW",
+     "NAME": "EXW"
+    },
+    {
+     "CODE": "FCA",
+     "NAME": "FCA"
+    },
+    {
+     "CODE": "FAS",
+     "NAME": "FAS"
+    },
+    {
+     "CODE": "FOB",
+     "NAME": "FOB"
+    },
+    {
+     "CODE": "CFR",
+     "NAME": "CFR"
+    },
+    {
+     "CODE": "CIF",
+     "NAME": "CIF"
+    },
+    {
+     "CODE": "CIP",
+     "NAME": "CIP"
+    },
+    {
+     "CODE": "CPT",
+     "NAME": "CPT"
+    },
+    {
+     "CODE": "Z02",
+     "NAME": "Z02"
+    },
+    {
+     "CODE": "DAT",
+     "NAME": "DAT"
+    },
+    {
+     "CODE": "DAP",
+     "NAME": "DAP"
+    },
+    {
+     "CODE": "DDP",
+     "NAME": "DDP"
+    },
+    {
+     "CODE": "DDU",
+     "NAME": "DDU"
+    }
+   ]
+  }
+ }
+}

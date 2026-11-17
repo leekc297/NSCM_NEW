@@ -1,0 +1,146 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "40",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION"
+   ],
+   "rows": [
+    [
+     "DMF0000_GET_COMMON_SPREAD_TITLE",
+     50
+    ],
+    [
+     "DMF0000_GET_COMMON_SPREAD_TITLE",
+     19
+    ],
+    [
+     "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+     15657
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 15317,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0005-Sea1449",
+    "DMF0005-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 102,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0005-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0005-S287784",
+    "DMF0005-S6ab4d3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModelChange",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-14 09:24:46.824",
+ "division_control": {
+  "kind": "combo",
+  "name": "clbDivision",
+  "items": [
+   "40",
+   "81",
+   "81_HD",
+   "81_HG",
+   "81_HM",
+   "81_UC",
+   "82"
+  ]
+ },
+ "division_set": {
+  "ok": true,
+  "applied": "combo:0:40 Mobility & IT Battery",
+  "error": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

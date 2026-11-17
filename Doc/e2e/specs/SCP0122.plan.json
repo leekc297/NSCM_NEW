@@ -230,9 +230,9 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "EDIT",
-        "SEARCH",
-        "SAVE",
         "DELETE",
+        "SAVE",
+        "SEARCH",
         "INSERT"
       ],
       "matrix": [],
@@ -282,17 +282,17 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "EDIT",
-      "SEARCH",
-      "SAVE",
       "DELETE",
+      "SAVE",
+      "SEARCH",
       "INSERT"
     ],
     "FP Planner": [
-      "DELETE",
-      "EDIT",
-      "INSERT",
+      "SEARCH",
       "SAVE",
-      "SEARCH"
+      "INSERT",
+      "EDIT",
+      "DELETE"
     ],
     "SCM PI Admin": [
       "DELETE",
@@ -302,17 +302,17 @@
       "INSERT"
     ],
     "SCP Planner": [
+      "SAVE",
       "INSERT",
       "DELETE",
-      "SAVE",
       "SEARCH"
     ]
   },
   "menuBtnCodes": [
     "EDIT",
-    "SEARCH",
-    "SAVE",
     "DELETE",
+    "SAVE",
+    "SEARCH",
     "INSERT"
   ],
   "menuAuth": "menu.csv",

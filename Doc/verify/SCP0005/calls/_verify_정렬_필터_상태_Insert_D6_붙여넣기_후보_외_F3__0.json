@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1926,
+  "at": "2026-11-13T22:05:44.120Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 913,
+  "at": "2026-11-13T22:05:44.316Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 847,
+  "at": "2026-11-13T22:06:01.833Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2626,
+  "at": "2026-11-13T22:06:03.101Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 795,
+  "at": "2026-11-13T22:06:10.664Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2525,
+  "at": "2026-11-13T22:06:11.918Z",
+  "user": "minyonglee1",
+  "test": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)"
+ }
+]

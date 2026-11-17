@@ -1,0 +1,137 @@
+{
+ "menu_id": "SSP0023",
+ "asis_id": "SSP0023",
+ "area": "SSP",
+ "generated": "2026-11-14 23:50:11",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "CHECK_CONFIRM_CHANGETIME",
+   "DELETE",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "ERP_ERROR_CONFIRM",
+   "EXCEL",
+   "GET_ERP_SO_NO_CNT",
+   "GET_ORDER_DETAIL",
+   "GET_REQ_DRAFTING",
+   "GET_SHEET_CALENDAR_3SPAN",
+   "GET_SHIPMENT_PLAN",
+   "GET_SHIPMENT_PLAN_DETAIL",
+   "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+   "GET_SHIPMENT_PLAN_RESULT",
+   "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+   "GET_SHIPMENT_STATUS",
+   "IF_CHECK",
+   "INSERT",
+   "MANUAL",
+   "SAVE",
+   "SAVE_SHIPMENT_PLAN_SIMU",
+   "SEARCH",
+   "UPLOAD",
+   "UPLOAD_SAVE"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Div",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Company",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Plan Date",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Period",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Material",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Material",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Material",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 2026-11-13 11:29 · 행 수 근거 21행",
+  "max_rows_after_search": 308,
+  "zero_row_failures": [],
+  "zero_row_count": 0
+ },
+ "warnings": []
+}

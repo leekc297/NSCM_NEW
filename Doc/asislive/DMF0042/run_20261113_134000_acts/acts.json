@@ -1,0 +1,251 @@
+{
+ "id": "DMF0042",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 11,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP",
+    "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+   ],
+   "scenarios": [
+    "DMF0042-S96bd28",
+    "DMF0042-S67a3b2",
+    "DMF0042-S114678",
+    "DMF0042-Sbbccff",
+    "DMF0042-S5716df",
+    "DMF0042-Sc14b1d",
+    "DMF0042-Sb91cf3",
+    "DMF0042-Sefdb4c",
+    "DMF0042-Sd738d5",
+    "DMF0042-Sb7eeb1",
+    "DMF0042-Sf409b9",
+    "DMF0042-S6bd4b3",
+    "DMF0042-S109112",
+    "DMF0042-Sac510b",
+    "DMF0042-S58ff30",
+    "DMF0042-Sdc8a86",
+    "DMF0042-Sfd461d",
+    "DMF0042-S776a5d",
+    "DMF0042-Sc42b1a",
+    "DMF0042-S4a4bd9",
+    "DMF0042-S36d204",
+    "DMF0042-Seecc87",
+    "DMF0042-Sddf179",
+    "DMF0042-S2ddb8d"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnCutOff",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "VersionCutOffPopUp",
+     "title": "Ver. Cut-Off [BP_M]",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0042_GET_DM_MDF_VERSION"
+   ],
+   "scenarios": [
+    "DMF0042-Sd0a499",
+    "DMF0042-Se7e3bc"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0042-Sea1449",
+    "DMF0042-Sec3442"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0042-S3e4aef"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 146,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0042-S4fa471"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0042-S287784",
+    "DMF0042-S6ab4d3"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnReplace",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "데이터 조회 후 다시 시도해 주시기 바랍니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "DMF0042-S625f8c",
+    "DMF0042-S1749e8",
+    "DMF0042-Sfe4d0a",
+    "DMF0042-S8232b9"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0042-S669149"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "layoutControlItem3",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationException: control not found: layoutControlItem3",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0042-S287784",
+    "DMF0042-S6ab4d3"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnExchangeRate",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 9
+  },
+  {
+   "control": "btnIncotermsChg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "btnSetPrice",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 13:37:01.305",
+ "fills": 0,
+ "fill_left": []
+}

@@ -178,7 +178,12 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
             operationGroup: orEmpty(c.operationGroupId), //  2 p_operation_group (단일 필수)
             scmSiteId: joinOrNull(c.plantSiteIds), //  3 p_scm_site_id (다중, 전체선택 ''→NULL)
             lineId: joinOrNull(c.lineIds.filter(v => v !== '-')), //  4 p_line_id ('-'→제외, 전체선택 '')
-            modelId: str(c.modelId), //  5 p_model_id
+            // 5 p_model_id — Model/Nickname 칸 값(c.nickName)을 model(정확 MODEL_ID IN)에도 전달한다
+            //   (사용자 지시 2026-11-11, AS-IS txtModel 패리티). SP 는 p_model_id 를 T.MODEL_ID IN(정확),
+            //   p_nick_name 을 ITEM_ID/NICK_NAME LIKE(fuzzy)로 AND 결합하므로, 모델/품목코드 입력은 둘 다
+            //   매치되고, 닉네임-only 입력은 model 정확매치가 거짓이 될 수 있음(트레이드오프 — 사용자 승인).
+            //   c.modelId 는 현재 폼에서 설정하지 않는 사장 필드라 nickName 으로 공급한다.
+            modelId: str(c.nickName), //  5 p_model_id (Model/Nickname 값)
             itemId: str(c.itemId), //  6 p_item_id
             fromYyyymmdd: c.fromYyyymmdd.replace(/-/g, ''), //  7 p_from_yyyymmdd
             toYyyymmdd: c.toYyyymmdd.replace(/-/g, ''), //  8 p_to_yyyymmdd
@@ -196,7 +201,7 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
             chkAll: 'Y',
             extraSpec: joinOrNull(c.extraSpecs), // 18 p_extra_spec (다중, 전체선택 '')
             programId: MENU_ID, // 19 p_program_id
-            sheetName: 'LINE', // 20 p_sheet_name
+            sheetName: 'Line', // 20 p_sheet_name — 컬럼 메타·개인화플래그와 대소문자 통일('Line')
             debugMode: 'F', // 22 debug_mode (21 p_user_id = 세션 자동)
           },
         };
@@ -272,8 +277,11 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
     fetchStaticMeasures: async () => {
       try {
         const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
-          sheetNm: 'LINE',
-          divisionId: get().searchCondition.divisionId,
+          sheetNm: 'Line', // 컬럼 메타·개인화플래그(SHEET_PRSL_YN)와 대소문자 통일('Line')
+          // measure 는 division-global(메타 DIVISION_ID 미등록). measure proc 필터는 컬럼과 달리
+          //   'M.DIVISION_ID IS NULL' 분기가 없어 P_DIVISION_ID 가 넘어가면 0행이 된다
+          //   → 항상 '' (NULL) 로 호출해 전역 measure 를 받는다(division 바뀌어도 재fetch 불필요).
+          divisionId: '',
         });
         const next = res.data.result ?? [];
         set(state => {

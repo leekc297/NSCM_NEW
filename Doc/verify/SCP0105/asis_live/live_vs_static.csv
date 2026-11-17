@@ -1,0 +1,38 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM_SYS_GET_SPREAD_TITLE,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0104_GET_CAPA_LINE_ASSIGN_ELTR,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SCP0104_GET_SPREAD_TITLE,SCP0105_CAPA_Speed_Plan.cs:1316 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST_SCP,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONTROL,(선언 ↔ 실측),42개,28개,INFO,공통 18 · 선언만 24 · 실측만 10
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboProgressStatus,Y,Status,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboVersion,Y,Plan Month,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbSite,Y,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbOperation,Y,Operation,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,clbPlant,Y,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFactory,Y,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbLine,Y,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbElectrodeType,Y,Line Type,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,txtItem,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem10,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,rgrpDivisionType,Y,lciDivisionType,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboVersionSeq,Y,Version,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtPlanType,Y,PlanType,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/ASSEMBLY,정적 컬럼 사실 32행(시트 미지정 포함),컬럼 0(보임 0) · 헤더 3단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdMain/ELTR,정적 컬럼 사실 31행(시트 미지정 포함),컬럼 88(보임 87) · 헤더 3단 · 행 0 · 고정 30,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

@@ -1,0 +1,3 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+MODEL_ID,,FROM_SITE,ALL,MODE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""From Site"") })",if (siDetail.ActiveSheet.SheetName == SpdSheet.shtRequestDetail),SSP0026_ShipmentRequestPack.cs:3228 SSP0026_ShipmentRequestPack.SpdDetail_CellDoubleClick
+MODEL_ID,,TO_SITE,ALL,MODE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""To Site"") })",if (siDetail.ActiveSheet.SheetName == SpdSheet.shtRequestDetail),SSP0026_ShipmentRequestPack.cs:3235 SSP0026_ShipmentRequestPack.SpdDetail_CellDoubleClick

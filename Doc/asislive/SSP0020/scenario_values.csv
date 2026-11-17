@@ -1,0 +1,10 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SSP0020-S615051,DIVISION,,,,값 미도출,else of (dtMyDivision.Rows.Count == 0),
+SSP0020-S2bf51f,DIVISION,,,,값 미도출,if (bolDivisionChk == true) ▸ for (i < clbDivision.Items.Count) ▸ if (clbDivision.Items[i].CheckState == CheckState.Checked) ▸ if (intCount > 0),
+SSP0020-Sfcf6fe,DIVISION,,,,값 미도출,else of (bolDivisionChk == true),
+SSP0020-S77261e,DIVISION,,,,값 미도출,if (chkAll.Checked == true) ▸ for (i < clbDivision.ItemCount),
+SSP0020-Sd7fb29,DIVISION,,,,값 미도출,else of (chkAll.Checked == true) ▸ for (i < clbDivision.ItemCount),
+SSP0020-S1429a4,COND,txtDelegatee.Text,,,값 미도출,if (string.IsNullOrWhiteSpace(txtDelegatee.Text)),값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+SSP0020-S2bf51f,COND,,,,값 미도출,if (bolDivisionChk == true) ▸ for (i < clbDivision.Items.Count) ▸ if (clbDivision.Items[i].CheckState == CheckState.Checked) ▸ if (intCount > 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SSP0020-S77261e,COND,chkAll.Checked,chkAll=cT chkAll=cF,chkAll=cT chkAll=cF,실행함,if (chkAll.Checked == true) ▸ for (i < clbDivision.ItemCount),
+SSP0020-Sd7fb29,COND,chkAll.Checked,chkAll=cT chkAll=cF,chkAll=cT chkAll=cF,실행함,else of (chkAll.Checked == true) ▸ for (i < clbDivision.ItemCount),

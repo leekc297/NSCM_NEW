@@ -1,0 +1,28 @@
+{
+ "id": "SSP0003",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [
+  {
+   "param": "division_id",
+   "asis": "40,81,81_HD,81_HG,81_HM,81_UC,82,EE_HD,EE_HG,EE_HM,EE_UC",
+   "tobe": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+   "why": "같은 값을 가진 컨트롤 0개",
+   "candidates": []
+  }
+ ],
+ "skipped": [
+  {
+   "param": "change_type",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "from_site",
+   "asis": "AZ00-A,AZ00-E,CN00249500-P,CN00254300_40-P,CN00732500_40-P,CN02072800_40-P,CN05104100_82-P,EG01_81-W,EG01_82-W,GM00-A,GM",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  }
+ ]
+}

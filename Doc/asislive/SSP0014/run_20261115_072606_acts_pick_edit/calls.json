@@ -1,0 +1,148 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 07:21:04.646",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 487.75,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:MAIL_USER1"
+  },
+  {
+   "at": "2026-11-15 07:21:42.754",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 160.19,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:MAIL_USER2"
+  },
+  {
+   "at": "2026-11-15 07:22:21.676",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 162.61,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:MAIL_USER3"
+  },
+  {
+   "at": "2026-11-15 07:23:00.334",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 161.76,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:MAIL_USER4"
+  },
+  {
+   "at": "2026-11-15 07:23:39.101",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 164.62,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:MAIL_USER5"
+  },
+  {
+   "at": "2026-11-15 07:24:17.873",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 161.94,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:PART_LEADER"
+  },
+  {
+   "at": "2026-11-15 07:24:56.925",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 258.55,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:TEAM_LEADER"
+  },
+  {
+   "at": "2026-11-15 07:25:35.616",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 169.02,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pick:USER_ID"
+  }
+ ]
+}

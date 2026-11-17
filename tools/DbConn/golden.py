@@ -44,7 +44,10 @@ def run_asis(cx, sp, params):
             cols = [d[0] for d in cur.description]
             rows = cur.fetchmany(MAX_ROWS)
             sets.append((cols, [[nval(v) for v in r] for r in rows]))
-        if not cur.nextset(): break
+        try:
+            if not cur.nextset(): break
+        except Exception as e:  # 2026-11-11 T239: SQLSTATE 01003(집계에서 NULL 제외 경고)은 오류가 아니다 — 경고를 넘기고 다음 결과셋으로(다른 예외는 그대로)
+            if '01003' not in str(e): raise
     return sets
 
 def run_tobe(cx, proc, params):
@@ -219,7 +222,7 @@ def compare(a_sets, t_sets, *, keys=None, norm=None, alias=None, rs_map=None):
                 ja, jt = a[0].index(ac[k]), t[1].index(tc[k])
                 for kk in both:
                     va, vt = nval(amap[kk][ja]), nval(tmap[kk][jt])
-                    if va != vt:
+                    if va != vt and snorm(va) != snorm(vt):  # 2026-11-11 T239: 빈 값 센티널(''·'-'·'/')끼리는 같은 값(2026-10-15 지시) — 행 집합 비교엔 있었고 키 기반 셀 비교엔 빠져 SCP0005 150셀이 DIFF
                         kp['diff_cells'] += 1
                         if len(kp['examples']) < 50: kp['examples'].append({'key': '|'.join(str(x) for x in kk), 'column': ac[k], 'asis': va[:80], 'tobe': vt[:80]})
         KEYPROF.append(kp)

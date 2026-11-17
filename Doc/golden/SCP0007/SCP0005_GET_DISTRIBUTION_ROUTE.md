@@ -1,6 +1,6 @@
 # SCP0007 · SCP0005_GET_DISTRIBUTION_ROUTE ↔ PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE
 
-- 실행: 2026-11-02 03:09:10
+- 실행: 2026-11-14 07:40:28
 - 파라미터: `{"p_from_country": "KR", "p_from_city": "KRCOJ", "p_to_country": "KR", "p_to_city": "KRSEL", "p_transport_mode": "TRK", "p_valid_yn": "Y"}`
 - 종류: GET
 

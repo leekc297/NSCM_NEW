@@ -1,0 +1,9 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0106-S26a0ec,DIVISION,,,,값 미도출,if ((_division_type == DivisionType.CELL) && ((_progress_status == ProgressStatusType._1ST_CUTOFF) || (_progress_status == P…),
+SCP0106-Sc2a20b,DIVISION,,,,값 미도출,if (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.CELL),
+SCP0106-S0eab06,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.CELL),
+SCP0106-S69c336,DIVISION,,,,값 미도출,if (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.ELTR),
+SCP0106-S7461fb,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.ELTR),
+SCP0106-Sd8fa4a,DIVISION,,,,값 미도출,if (_division_type == DivisionType.ELTR),
+SCP0106-Sbd8fe2,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.ELTR),
+SCP0106-S070f60,COND,cboProgressStatus.Items,cboProgressStatus=i0,cboProgressStatus=i0,실행함,if (cboProgressStatus.Items.Count > 0),콤보 항목 1개

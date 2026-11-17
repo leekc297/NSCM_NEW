@@ -678,17 +678,17 @@ export const ShipmentRequestGrid = ({
             return;
           }
         }
-        // 정적 셀 — Insert 행 화이트리스트만 (기존 행 키 컬럼 잠금).
-        if (!row || row.CRUD_TYPE !== 'I' || !insertStaticEditable(binding, row, division, isSoleRow())) {
+        // 정적 셀 — Insert 행만 편집. 편집 대상 = 콤보 화이트리스트(insertStaticEditable) 또는
+        //   모달 셀(ITEM_ID/PROJECT_CODE/TR_MODE). AS-IS 는 이 셋을 TextCellType(cs 243-246)으로 두어
+        //   직접 키인 + 팝업 아이콘을 모두 허용한다 → 키인 개방(팝업은 dblclick 으로 병행, cs 992-994).
+        if (!row || row.CRUD_TYPE !== 'I') {
           e.cancel = true;
           return;
         }
-        // 모달 전용 셀(PROJECT_CODE/TR_MODE/ITEM_ID)은 직접 타이핑 차단 — dblclick 팝업으로만 값 입력.
-        if (isInsertModalCell(binding, row, division)) {
-          e.cancel = true;
-          return;
-        }
-        e.cancel = false;
+        e.cancel = !(
+          insertStaticEditable(binding, row, division, isSoleRow()) ||
+          isInsertModalCell(binding, row, division)
+        );
         return;
       }
       // 동적 셀 — R1~R4 종합. FIFO 마지막 핸들러 → e.cancel 명시 설정이 wrapper read-only 보다 우선.
@@ -806,6 +806,16 @@ export const ShipmentRequestGrid = ({
         s.invalidate(true);
         window.requestAnimationFrame(() => s.invalidate(true));
         return;
+      }
+
+      // 모달 셀(ITEM_ID/PROJECT_CODE/TR_MODE) 직접 키인 — AS-IS CharacterCasing.Upper(cs 246) 파리티.
+      //   팝업 채움값은 이미 정규(대문자)라 무해, 직접 타이핑분만 대문자로 올린다. (붙여넣기도 동일 경로)
+      if (
+        row.CRUD_TYPE === 'I' &&
+        (binding === 'ITEM_ID' || binding === 'PROJECT_CODE' || binding === 'TR_MODE')
+      ) {
+        const v = rec[binding];
+        if (typeof v === 'string' && v !== v.toUpperCase()) rec[binding] = v.toUpperCase();
       }
 
       // 정적 셀 값 후처리: 저장 전개(save-unfold)·셀 팝업 채움(모달 applyToInsertRow)이 담당 —

@@ -24,6 +24,7 @@
 
 ```sql
 -- 도커 컨테이너 안에서 SQL*Plus 으로 dump
+-- (2026-11-13 정정: 작업 기준 원문 = 착수 시 사내 ZIOUI1 에서 새로 조회한 최신 원문(ALL_SOURCE + LAST_DDL_TIME · hook #152 db-source-refresh-before-work). 아래 도커 절차는 작성 당시(2026-06-06) 로컬 환경 기준 예시)
 SET LONG 100000 LONGCHUNKSIZE 32767 PAGESIZE 0 LINESIZE 32767
 SET FEEDBACK OFF HEADING OFF VERIFY OFF TRIMSPOOL ON
 SPOOL /tmp/{sp_name}.sql

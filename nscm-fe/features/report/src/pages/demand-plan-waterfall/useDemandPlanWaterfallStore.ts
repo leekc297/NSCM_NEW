@@ -116,7 +116,7 @@ const initSearchParams: SearchParams = {
   ...defaultPeriod(),
   bucket: BUCKET_TYPE.MONTHLY, // 3화면 공통 기본 MONTHLY (AS-IS .cs:430/445/318)
   senderCodes: [],
-  isSumChecked: false,
+  isSumChecked: true, // Sum 기본 체크 (사용자 지시 2026-11-10 — Business Plan DMF0042 sumYn 기본 true 와 동일)
   isCellQtyChecked: false,
   isQtyNotZeroChecked: false,
   krw: '1',

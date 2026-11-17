@@ -1,0 +1,185 @@
+{
+ "id": "SSP0008",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0008_GET_PLAN_EDIT_INFO",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0008_GET_PRODUCTION_PLAN_LINEBY"
+   ],
+   "rows": [
+    [
+     "SSP0008_GET_PLAN_EDIT_INFO",
+     0
+    ],
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     70
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     22
+    ],
+    [
+     "SSP0008_GET_PRODUCTION_PLAN_LINEBY",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-S7d95f9",
+    "SSP0008-S69448c",
+    "SSP0008-S8271f9",
+    "SSP0008-S5a1a8f",
+    "SSP0008-S67bbf1",
+    "SSP0008-Se946c7",
+    "SSP0008-S64eb3a",
+    "SSP0008-Sf282b3",
+    "SSP0008-S7b31fe",
+    "SSP0008-S7a38e2",
+    "SSP0008-Sc684ba",
+    "SSP0008-S346303",
+    "SSP0008-Sede481",
+    "SSP0008-S00ad82",
+    "SSP0008-Sd73a1d",
+    "SSP0008-S22ea04",
+    "SSP0008-S8db3bb",
+    "SSP0008-S641370",
+    "SSP0008-S14aca7",
+    "SSP0008-S6e6dad",
+    "SSP0008-S1691b9"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-Sea1449",
+    "SSP0008-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-S7d95f9",
+    "SSP0008-S69448c",
+    "SSP0008-S8271f9",
+    "SSP0008-S5a1a8f"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnFix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-14 17:53:46.648",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 3,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

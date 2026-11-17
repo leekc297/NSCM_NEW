@@ -263,7 +263,7 @@ def next_version(folder, prefix):
     return doc_archive.next_version(folder, prefix)
 
 def block_overview(sb, S, doc_kind):
-    sb.title(f'{S.ID} ({S.name}) {doc_kind}', f'작성 {TODAY} · 원천: 현행 소스 분석 자료 + 운영 메타(메뉴·SP 배선·그리드 컬럼) · 이 문서는 사람이 읽는 사본이며 변경 시 분석 자료를 먼저 갱신합니다')
+    sb.title(f'{S.ID} ({S.name}) {doc_kind}', f'작성 {TODAY} · 원천: 현행 소스 분석 자료 + 운영 메타(메뉴·SP 배선·그리드 컬럼) · 열람용 사본, 변경 시 분석 자료를 먼저 갱신')
     sb.sec('1. 개요')
     sb.kv('화면 ID / 명', f'{S.ID} / {S.name}')
     sb.kv('메뉴 경로', S.menu_path or '(운영 메뉴에 미등록)')
@@ -278,7 +278,7 @@ def block_overview(sb, S, doc_kind):
     sb.gap(); sb.sec('개정 이력'); sb.hdr(['버전', '일자', '내용']); sb.row(['v1.0', TODAY, '최초 작성 (현행 소스 분석 기준)'])
 
 def block_flow(sb, S):
-    sb.title('2. 전체 흐름', '이 화면이 업무 흐름의 어느 단계에서 쓰이는지와, 화면이 부르는 SP · 주요 테이블 · 저장 대상')
+    sb.title('2. 전체 흐름', '업무 흐름에서 쓰이는 단계와, 화면이 부르는 SP · 주요 테이블 · 저장 대상')
     sb.sec('A. 업무 흐름 속 위치'); sb.hdr(['단계', '프로세스', '설명', '본 화면'])
     scen = find_sec(S.sec['business_analysis'], '사용자 시나리오'); flows = find_sec(S.sec['business_analysis'], '업무 흐름도')
     steps = []
@@ -290,14 +290,31 @@ def block_flow(sb, S):
             m2 = re.match(r'^\s*→\s*(.*)', ln)
             if m2 and cur: cur[2] = (cur[2] + '\n' if cur[2] else '') + '→ ' + clean(m2.group(1))
     if not steps:
-        # 시나리오 제목으로 대체
-        for k in S.sec['business_analysis']:
-            pass
+        # 2026-11-10: Agent 업무 흐름도가 '[단계명]' 들여쓰기 트리 형식이면(SSP 23화면·SCP0007/0041/0096/0100 등) 최상위 '[...]' 줄을 단계로,
+        #   그 아래 들여쓴 줄 전부를 설명으로 옮긴다(줄 생략 없음). 종전에는 '1. [..]' 번호 형식만 읽어 이 시트가 비었다.
+        for blk in md_codeblocks(flows):
+            cur = None
+            for ln in blk:
+                if not ln.strip(): continue
+                m = re.match(r'^\[(.+?)\]\s*(.*)$', ln)  # 들여쓰기 없는 대괄호 줄 = 단계
+                if m:
+                    cur = [str(len(steps) + 1), clean(m.group(1)), clean(m.group(2)), '본 화면']; steps.append(cur); continue
+                if cur is not None:
+                    cur[2] = (cur[2] + '\n' if cur[2] else '') + ln.strip()
+                elif ln.strip():
+                    cur = [str(len(steps) + 1), '(흐름 머리말)', ln.strip(), '본 화면']; steps.append(cur)
+    if not steps:
+        # 2026-11-10: 사용자 시나리오가 표('| S1 | 행위 | 처리 | 결과 | 근거 |') 형식이면 행마다 단계로
+        for tb in md_tables(scen):
+            if not tb or len(tb[0]) < 4: continue
+            for r in tb[1:]:
+                if len(r) >= 4: steps.append([r[0], r[1], '처리: ' + r[2] + '\n결과: ' + r[3], '본 화면'])
+    if not steps:
         titles = re.findall(r'^###\s+시나리오\s*(\d+)\s*[:：]\s*(.*)', S.md['business_analysis'], re.M)
         steps = [[n, clean(t), '', '본 화면'] for n, t in titles]
     if steps:
         for s in steps: sb.row(s)
-    else: sb.note('업무 흐름 원천 없음 — 문서 생성(S3.agent) 후 다시 만들면 채워집니다.')
+    else: sb.note('업무 흐름 원천 없음 — 문서 생성(S3.agent) 후 다시 만들면 채워짐.')
     sb.gap(); sb.sec('B. 화면이 부르는 SP'); sb.hdr(['구분', 'SP / 데이터', '무엇을 하나요', 'TO-BE 배선', '참조 테이블'])
     pm_by = {}
     for r in S.proc_meta: pm_by.setdefault((r.get('proc') or '').upper(), r)
@@ -315,7 +332,7 @@ def block_flow(sb, S):
     sb.gap(); sb.sec('D. 저장 대상 (Measure)'); sb.hdr(['항목', '내용'])
     if S.sheet_meas:
         for r in S.sheet_meas[:60]: sb.row([r.get('measure') or r.get('measure_name') or r.get('column_name') or '', ', '.join(f'{k}={v}' for k, v in r.items() if v and k not in ('program_id', 'menu_id'))][:2])
-    else: sb.row(['해당 축 없음', '이 화면은 저장 대상 Measure 가 없습니다(조회 또는 단순 입력 화면).'])
+    else: sb.row(['해당 축 없음', '저장 대상 Measure 가 없음(조회 또는 단순 입력 화면).'])
 
 # ── 화면설계서 8시트 ────────────────────────────────────────────────────────────
 def build_design(S):
@@ -409,7 +426,7 @@ def build_design(S):
         nv += 1; sb.row([f'V{nv:02d}', clean(v.get('condition') or v.get('detail') or v.get('text') or ''), v.get('msg_id') or v.get('message') or '', clean(v.get('action') or v.get('kind') or '')])
     for x in md_prose(find_sec(S.sec['screen_design'], '검증')) + md_prose(find_sec(S.sec['business_analysis'], '검증 규칙')) + md_prose(find_sec(S.sec['business_analysis'], '필수값')):
         if x: nv += 1; sb.row([f'V{nv:02d}', x, '', ''])
-    if not nv: sb.row(['-', '화면 자체의 입력 확인 없음 (조회조건은 모두 선택 사항)', '', ''])
+    if not nv: sb.row(['-', '화면 자체의 입력 확인 없음 (조회조건은 선택 사항)', '', ''])
     # 8.API·SP
     sb = SB(wb.create_sheet('8.API·SP'), [30, 34, 60]); sb.title('8. SP · API 배선'); sb.sec('TO-BE 배선 (운영 메타)'); sb.hdr(['시트 / 버튼', 'SP', '입력 파라미터'])
     for r in S.proc_meta:
@@ -433,7 +450,7 @@ def build_analysis(S):
     for x in md_prose(find_sec(S.sec['screen_design'], '검증')): n += 1; sb.row([f'A-{n:02d}', '화면 확인', x, '', '', ''])
     for x in md_prose(find_sec(S.sec['business_analysis'], '검증 규칙')) + md_prose(find_sec(S.sec['business_analysis'], '필수값')): n += 1; sb.row([f'B-{n:02d}', '업무 규칙', x, '', '', ''])
     for e in S.expressions: n += 1; sb.row([f'C-{n:02d}', '계산 · 잠금 규칙', clean(e.get('detail') or e.get('expression') or e.get('text') or ''), '', '', ''])
-    if not n: sb.row(['-', '', '입력 확인 없음(조회 조건은 모두 선택 사항) — SP 내부 확인은 PKG 본문에서 별도 확인', '', '', ''])
+    if not n: sb.row(['-', '', '입력 확인 없음(조회 조건은 선택 사항) — SP 내부 확인은 PKG 본문에서 별도 확인', '', '', ''])
     # 4.MATRIX_Division
     sb = SB(wb.create_sheet('4.MATRIX_Division'), [26, 20, 20, 20, 20, 30]); sb.title('4. Division 별 차이')
     divs = [d for d in S.divisions if any((g.get(d) or '') not in ('', '-') for g in S.grid)][:4]
@@ -442,7 +459,7 @@ def build_analysis(S):
         rs = [g for g in S.grid if g.get('sheet') == sh]
         sb.row([f"그리드 '{sh}' 컬럼 수"] + [str(sum(1 for g in rs if (g.get(d) or '') not in ('', '-', '숨김'))) for d in divs] + ['관리 설정 컬럼 기준'])
     for x in md_prose(find_sec(S.sec['tobe_design'], 'Division')) + md_prose(find_sec(S.sec['web_components'], 'Division')) + md_prose(find_sec(S.sec['analysis'], 'Division')): sb.row([x])
-    if not S.grid and not divs: sb.note('Division 축 없음 — 이 화면은 Division 에 따른 차이가 없습니다.')
+    if not S.grid and not divs: sb.note('Division 축 없음 — Division 에 따른 차이가 없음.')
     # 5.MATRIX_권한
     sb = SB(wb.create_sheet('5.MATRIX_권한'), [24, 14, 14, 14, 16, 46]); sb.title('5. 권한 그룹별 사용 기능')
     grs = sorted({r.get('user_gr_id') for r in S.btn_auth})[:4]
@@ -455,12 +472,12 @@ def build_analysis(S):
     sb = SB(wb.create_sheet('6.MATRIX_Measure'), [26, 62, 36]); sb.title('6. Measure 축'); sb.hdr(['축', '실측', 'TO-BE 방침'])
     if S.sheet_meas:
         for r in S.sheet_meas[:80]: sb.row([r.get('measure') or r.get('measure_name') or '', ', '.join(f'{k}={v}' for k, v in r.items() if v and k not in ('program_id', 'menu_id')), ''])
-    else: sb.row(['해당 축 없음', '이 화면은 Measure(측정치) 개념이 없습니다.', ''])
+    else: sb.row(['해당 축 없음', 'Measure(측정치) 개념이 없음.', ''])
     # 7.MATRIX_Bucket
     sb = SB(wb.create_sheet('7.MATRIX_Bucket'), [22, 26, 22, 22, 42]); sb.title('7. 기간 · Bucket 규칙'); sb.hdr(['항목', '내용', '', '', '비고'])
     bk = md_prose(find_sec(S.sec['business_analysis'], '날짜')) + md_prose(find_sec(S.sec['business_analysis'], '버킷'))
     for x in bk: sb.row([x])
-    if not bk: sb.row(['해당 축 없음', '이 화면은 Bucket(일/주/월) 전환 규칙이 없습니다.'])
+    if not bk: sb.row(['해당 축 없음', 'Bucket(일/주/월) 전환 규칙이 없음.'])
     # 8.가시성_LAYER종속
     sb = SB(wb.create_sheet('8.가시성_LAYER종속'), [26, 52, 40]); sb.title('8. 화면 요소의 표시 · 숨김 규칙'); sb.hdr(['화면 요소', '표시 규칙', '근거'])
     n8 = 0
@@ -495,7 +512,7 @@ def build_gap(S):
     wb = openpyxl.Workbook(); wb.remove(wb.active)
     sb = SB(wb.create_sheet('1.요약'), [26, 16, 16, 16, 16, 30]); sb.title(f'{S.ID} ({S.name}) GAP 분석서', f'작성 {TODAY} · 현행 화면의 요소·동작·호출 SP·그리드 컬럼이 TO-BE 화면에 반영됐는지 대조한 결과')
     sb.sec('판정 기준'); sb.hdr(['판정', '뜻'])
-    for k, v in STATUS_KO.items(): sb.row([v, {'COVERED': 'TO-BE 화면에 같은 기능이 있습니다.', 'INTENDED': 'TO-BE 설계상 다르게 만들기로 한 항목입니다(공통 컴포넌트로 대체 등).', 'MISSING': 'TO-BE 화면에서 아직 찾지 못했습니다 — 확인 후 반영이 필요합니다.', 'UNMAPPED': '대응 여부를 자동으로 판단하지 못했습니다 — 사람이 확인해야 합니다.', 'PARTIAL': '일부만 반영됐습니다.'}[k]])
+    for k, v in STATUS_KO.items(): sb.row([v, {'COVERED': 'TO-BE 화면에 같은 기능이 있음.', 'INTENDED': 'TO-BE 설계상 다르게 만들기로 한 항목임(공통 컴포넌트로 대체 등).', 'MISSING': 'TO-BE 화면에서 아직 찾지 못했음 — 확인 후 반영이 필요함.', 'UNMAPPED': '대응 여부 자동 판정 불가, 사람 확인 필요.', 'PARTIAL': '일부만 반영됐음.'}[k]])
     sb.gap(); sb.sec('구분별 현황');
     statuses = ['COVERED', 'INTENDED', 'MISSING', 'UNMAPPED']; sb.hdr(['구분'] + [STATUS_KO[s] for s in statuses] + ['합계'])
     kinds = sorted({g.get('kind') for g in S.gap}, key=lambda k: list(KIND_KO).index(k) if k in KIND_KO else 99)
@@ -511,7 +528,7 @@ def build_gap(S):
     fills = {'MISSING': BAD_FILL, 'UNMAPPED': WARN_FILL}
     for g in S.gap: sb.row([KIND_KO.get(g.get('kind'), g.get('kind')), clean(g.get('asis_item')), clean(g.get('asis_detail')), status_ko(g.get('status')), clean(g.get('evidence')), clean(g.get('reason'))], fills.get(g.get('status')))
     sb.ws.freeze_panes = 'A3'; sb.ws.auto_filter.ref = f'A2:F{sb.r}'
-    sb = SB(wb.create_sheet('3.조치 필요'), [12, 34, 44, 18, 40, 16, 16]); sb.title('3. 조치 필요 항목', '미반영 · 대응 미확인 항목만 모았습니다. 담당자가 확인 결과와 조치를 적어 주세요.'); sb.hdr(['구분', '현행 항목', '상세', '판정', '확인 결과 / 조치', '담당', '완료일'])
+    sb = SB(wb.create_sheet('3.조치 필요'), [12, 34, 44, 18, 40, 16, 16]); sb.title('3. 조치 필요 항목', '미반영 · 대응 미확인 항목만 모았음. 담당자가 확인 결과와 조치를 적어 주세요.'); sb.hdr(['구분', '현행 항목', '상세', '판정', '확인 결과 / 조치', '담당', '완료일'])
     for g in S.gap:
         if g.get('status') in ('MISSING', 'UNMAPPED'): sb.row([KIND_KO.get(g.get('kind'), g.get('kind')), clean(g.get('asis_item')), clean(g.get('asis_detail')), status_ko(g.get('status')), clean(g.get('reason')), '', ''])
     if need == 0: sb.text('조치 필요 항목 없음', OK_FILL)
@@ -591,7 +608,7 @@ def build_recon(S):
     sb.sec('화면 단위 대조 (Doc/recon · 대사표_화면.csv 의 이 화면 행)')
     if scr:
         for k, v in scr[0].items(): sb.kv(RECON_KO.get(k, k), clean(v))
-    else: sb.text('Doc/recon 에 이 화면 행이 없습니다 — S1.recon(개발대상 대조표 재확인) 을 먼저 실행하세요', WARN_FILL)
+    else: sb.text('Doc/recon 에 이 화면 행이 없음 — S1.recon(개발대상 대조표 재확인) 을 먼저 실행하세요', WARN_FILL)
     sb.gap(); sb.sec('요약'); sb.kv('시트 대조 행', len(sht)); sb.kv('SP 대조 행', len(sps)); sb.kv('AS-IS↔TO-BE 매핑', '있음 (4.AS-IS↔TO-BE 매핑 시트)' if mapping else '없음 (페이지 __asis-mapping__.md 미생성)')
     # 2. 시트 / 3. SP — 표
     for title, rows, widths in [('2.시트 대조', sht, [12, 12, 28, 10, 10, 10, 10, 30, 24, 24, 14]), ('3.SP 대조', sps, [12, 12, 40, 10, 10, 14, 46, 10, 12, 10, 14])]:
@@ -604,7 +621,7 @@ def build_recon(S):
             sb.ws.freeze_panes = 'A3'; sb.ws.auto_filter.ref = f'A2:{get_column_letter(len(keys))}{sb.r}'
         else: sb.text('해당 행 없음', WARN_FILL)
     # 4. AS-IS ↔ TO-BE 매핑 (__asis-mapping__.md 전체)
-    ws = wb.create_sheet('4.AS-IS↔TO-BE 매핑'); sb = SB(ws, [14, 46, 46, 40, 40, 14, 30, 30]); sb.title('4. AS-IS ↔ TO-BE 매핑', f'원천: {S.page_dir}/__asis-mapping__.md (정본은 MD — 이 시트는 열람용 사본)' if S.page_dir else '원천 없음')
+    ws = wb.create_sheet('4.AS-IS↔TO-BE 매핑'); sb = SB(ws, [14, 46, 46, 40, 40, 14, 30, 30]); sb.title('4. AS-IS ↔ TO-BE 매핑', f'원천: {S.page_dir}/__asis-mapping__.md (정본은 MD, 열람용 사본)' if S.page_dir else '원천 없음')
     if mapping:
         for b in md_blocks_simple(mapping):
             if b[0] == 'h': sb.sec(b[2]) if b[1] <= 2 else sb.text(b[2], KEY_FILL)
@@ -618,19 +635,35 @@ def build_recon(S):
                     fill = BAD_FILL if re.search(r'미구현|누락|MISSING', st) else (WARN_FILL if re.search(r'부분|확인필요|재확인|WARN', st) else (OK_FILL if re.search(r'^구현$|구현 \(|COVERED', st) else None))
                     sb.row(r, fill)
                 sb.gap()
-    else: sb.text('페이지 __asis-mapping__.md 가 없습니다 (화면 생성 전이거나 페이지 폴더 미등록)', WARN_FILL)
+    else: sb.text('페이지 __asis-mapping__.md 가 없음 (화면 생성 전이거나 페이지 폴더 미등록)', WARN_FILL)
     return wb
 
 # ── 실행 ────────────────────────────────────────────────────────────────────────
 def save(wb, folder, prefix):
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     v = next_version(folder, prefix); out = os.path.join(folder, f'{prefix}_v{v}.0.xlsx'); wb.save(out)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(out)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     doc_archive.archive_previous(out)  # 같은 UI·같은 문서의 이전 버전 → <폴더>/old/ (2026-10-28 사용자)
     return out
 for ID in IDS:
     S = Src(ID); nm = S.safe_name(); made = []
     if not S.has_agent: print(f'[{ID}] 문서 생성(S3.agent) 산출 MD 없음 — 분석 자료(Fact Pack)·운영 메타·GAP 만으로 작성합니다 (설계서·분석서 일부 시트는 "원천 없음" 표기)')
-    made.append(save(build_design(S), OUT_DESIGN, f'{ID}_{nm}_화면설계서'))
-    made.append(save(build_analysis(S), OUT_ANALYSIS, f'{ID}_{nm}_UI분석서'))
+    # 2026-11-12 AS-IS Live P3: AS-IS 실측(런처 실제 실행 — 캡처·호출 SP·조회조건·그리드)이 있으면 '부록' 시트로 붙인다.
+    #   번호 붙은 표준 시트(설계서 8 · 분석서 10)는 그대로 — 실측이 없으면 아무것도 붙이지 않는다(내용을 지어내지 않음)
+    def with_live(wb, kind):
+        try:
+            import asis_live_doc  # tools/Harness/verify (sys.path 는 위 asis_variant import 때 추가됨)
+            info = asis_live_doc.add_sheet(wb, ID, '부록.AS-IS 실측')
+            print(f"[{ID}] {kind} 부록.AS-IS 실측: " + (f"캡처 {info['shots']} · 호출 {info['calls']}(화면 고유 {info['own_calls']}) · 조회조건 {info['conditions']} · 그리드 시트 {info['sheets']}" if info else '없음(AS-IS 실측 미실행)'))
+        except Exception as ex:
+            print(f'[{ID}] [WARN] {kind} AS-IS 실측 부록 생성 실패(문서의 나머지는 정상): {str(ex)[:160]}')
+        return wb
+    made.append(save(with_live(build_design(S), '화면설계서'), OUT_DESIGN, f'{ID}_{nm}_화면설계서'))
+    made.append(save(with_live(build_analysis(S), 'UI분석서'), OUT_ANALYSIS, f'{ID}_{nm}_UI분석서'))
     # 2026-10-30 사용자: GAP 분석 폐지(CheckList 로 대체) — GAP분석서 생성 중단(build_gap 은 이력 보존용으로 남김)
     rc = build_recon(S)
     if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_대조표'))

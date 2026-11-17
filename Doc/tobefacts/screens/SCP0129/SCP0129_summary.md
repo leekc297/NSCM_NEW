@@ -7,26 +7,26 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | component | 250 |
-| features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | component | 276 |
+| features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | component | 252 |
+| features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | component | 294 |
 | features/supply/src/pages/demand-exception/demand-exception.constants.ts | constants | 72 |
 | features/supply/src/pages/demand-exception/demand-exception.types.ts | types | 25 |
-| features/supply/src/pages/demand-exception/DemandException.tsx | page | 216 |
+| features/supply/src/pages/demand-exception/DemandException.tsx | page | 226 |
 | features/supply/src/pages/demand-exception/index.ts | index | 2 |
 | features/supply/src/pages/demand-exception/useDemandExceptionStore.ts | store | 159 |
 | features/supply/src/pages/demand-exception/utils/demand-exception.util.ts | util | 34 |
-| features/supply/src/pages/demand-exception/utils/demandExceptionEditLock.ts | util | 67 |
+| features/supply/src/pages/demand-exception/utils/demandExceptionEditLock.ts | util | 77 |
 | features/supply/src/pages/demand-exception/utils/demandExceptionSaveRequest.ts | util | 109 |
-| features/supply/src/pages/demand-exception/utils/demandExceptionSaveValidation.ts | util | 97 |
+| features/supply/src/pages/demand-exception/utils/demandExceptionSaveValidation.ts | util | 125 |
 | features/supply/src/pages/demand-exception/utils/demandExceptionSiteCascade.ts | util | 25 |
 | features/supply/src/pages/demand-exception/__asis-mapping__.md | mapping | 139 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 3 | Y | DemandExceptionForm.tsx:45 DemandExceptionForm.tsx:46 DemandExceptionGrid.tsx:95 |
-| SCP0129/init//call-proc | hook | 2 | Y | DemandExceptionForm.tsx:51 DemandExceptionGrid.tsx:108 |
-| SCP0129/main//call-proc | hook | 1 | Y | DemandException.tsx:69 |
+| (useTabComboQueries) | hook | 3 | Y | DemandExceptionForm.tsx:45 DemandExceptionForm.tsx:46 DemandExceptionGrid.tsx:99 |
+| SCP0129/init//call-proc | hook | 2 | Y | DemandExceptionForm.tsx:51 DemandExceptionGrid.tsx:112 |
+| SCP0129/main//call-proc | hook | 1 | Y | DemandException.tsx:70 |
 | /admin/menu/SCP0129/column | http | 1 | Y | useDemandExceptionStore.ts:115 |
 | /admin/menu/SCP0129/search-conditions | http | 1 | Y | useDemandExceptionStore.ts:139 |
 | /SCP0129/main/SAVE/call-proc | http | 1 | Y | demandExceptionSaveRequest.ts:95 |
@@ -42,21 +42,21 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 107 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 123 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 143 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 158 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 175 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 193 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 221 |
-| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 217 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 232 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 132 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 153 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 154 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 171 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 194 |
-| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 210 |
-| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 214 |
-| DemandExceptionGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/demand-exception/DemandException.tsx | 211 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 144 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 159 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 176 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 195 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 223 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 219 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/demand-exception/components/DemandExceptionForm.tsx | 234 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 136 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 157 |
+| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 172 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 189 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 212 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 228 |
+| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx | 232 |
+| DemandExceptionGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/demand-exception/DemandException.tsx | 221 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -92,7 +92,7 @@
 | LBL00013 | 1 |
 | MSG00013 | 1 |
 | MSG00219 | 1 |
-| MSG00260 | 1 |
+| MSG00428 | 1 |
 | MSG00458 | 1 |
 | MSG00002 | 2 |
 | MSG00003 | 2 |
@@ -103,9 +103,9 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | SCP0129 Demand Exception — 단일 그리드 CRUD 마스터(SCP0122/SCP0127/SCP0128 계열 구조). 신규(NEW) 판정 — convert-flow/goal.md ①. domain=SCP(형제 트리 실측 + namespace, 00_checklist.md §0). nscmPath 는 goal.md ①에서 확정한 `features/supply/src/pages/demand-exception/`.  | features/supply/src/pages/demand-exception/DemandException.tsx | 25 |
-| code | buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design 01 §2 규칙#5). | features/supply/src/pages/demand-exception/DemandException.tsx | 111 |
-| endpoint | useProcMutation({data:[rows]}) 로는 null 바인딩 no-op 이므로 전용 조립 util 을 mutationFn 으로 | features/supply/src/pages/demand-exception/DemandException.tsx | 123 |
+| code | SCP0129 Demand Exception — 단일 그리드 CRUD 마스터(SCP0122/SCP0127/SCP0128 계열 구조). 신규(NEW) 판정 — convert-flow/goal.md ①. domain=SCP(형제 트리 실측 + namespace, 00_checklist.md §0). nscmPath 는 goal.md ①에서 확정한 `features/supply/src/pages/demand-exception/`.  | features/supply/src/pages/demand-exception/DemandException.tsx | 26 |
+| code | buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design 01 §2 규칙#5). | features/supply/src/pages/demand-exception/DemandException.tsx | 112 |
+| endpoint | useProcMutation({data:[rows]}) 로는 null 바인딩 no-op 이므로 전용 조립 util 을 mutationFn 으로 | features/supply/src/pages/demand-exception/DemandException.tsx | 124 |
 | endpoint | → 공용 useProcMutation({data:[rows]}) 로는 top-level 에 activeFlag/divisionId... 키가 없어 전부 | features/supply/src/pages/demand-exception/utils/demandExceptionSaveRequest.ts | 5 |
 
 ## 10. __asis-mapping__.md 상태

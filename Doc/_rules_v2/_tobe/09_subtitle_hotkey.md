@@ -19,11 +19,15 @@
 import { SubTitle } from '@shared/components';
 import type { HotkeyConfig } from '@foundation/models';
 
+// 2026-11-13 정정: insert/delete/save 하드코딩 → useTabBtnPermissions + hasButton(BTN_CD) 조건부
+//   (§11 변경 이력 2026-06-12 결정 · 실제 코드 SalesSite.tsx hotkeyConfig — search 는 reference 화면에서도 핸들러 그대로)
+const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });   // @shared/hooks
+
 const hotkeyConfig: HotkeyConfig = {
-  insert: handleInsert,
-  delete: handleDelete,
+  insert: hasButton('INSERT') ? handleInsert : false,
+  delete: hasButton('DELETE') ? handleDelete : false,
   search: setFilters,
-  save: handleSave,
+  save: hasButton('SAVE') ? handleSave : false,
   manual: false,
   upload: false,
   // sort / filter / condition / resetCondition 명시 생략 = 자동 활성 (SubTitle DefaultButtonActions)
@@ -65,14 +69,14 @@ const hotkeyConfig: HotkeyConfig = {
 | F3 | (생략 = 자동 활성) | OnClickSortButton | DataGrid `allowSorting={true}` 자동 |
 | F4 | (생략 = 자동 활성) | OnClickFilterButton | FlexGridFilter 자동 |
 | F5 | `search` | OnClickFindButton → FindButton | 의무 명시 (handler) |
-| F6 | `condition` | OnClickConditionButton (사용자별 저장) | **Phase 5 G1 후**: useSearchConditionPersistence.saveCondition |
+| F6 | `condition` | OnClickConditionButton (사용자별 저장) | **Phase 5 G1 후**: useSearchConditionPersistence.saveCondition (2026-11-13 정정: `useSearchConditionPersistence` 훅은 저장소에 없음 — 현행 = SubTitle 내장 `GridAction.personalizeCondition(menuId, searchParam, …)` · `gridAction.ts:785` · `SubTitle.tsx:196`) |
 | F7 | `save` | OnClickSaveButton → SaveButton | 의무 명시 (handler) |
 | F8 | `insert` | OnClickInsertButton → InsertButton | 의무 명시 (handler) |
 | F9 | `delete` | OnClickDeleteButton → DeleteButton | 의무 명시 (handler) |
-| F10 | `resetCondition` | OnClickResetConditionButton | **Phase 5 G1 후**: useSearchConditionPersistence.resetCondition |
+| F10 | `resetCondition` | OnClickResetConditionButton | **Phase 5 G1 후**: useSearchConditionPersistence.resetCondition (11-13 정정: 현행 = SubTitle 내장 `GridAction.resetPersonalizedCondition(menuId)` · `gridAction.ts:981` · `SubTitle.tsx:237`) |
 | F12 | (없음 — excel 자동) | OnClickExcelButton | `excelFileName` prop 자동 |
 | - | `manual` | (Help 매뉴얼) | 의무 `false` (사용 안 함) |
-| - | `upload` | (Excel 업로드) | 의무 `false` (G5 후 결정) |
+| - | `upload` | (Excel 업로드) | AS-IS 업로드 기능 있을 때만 함수(+버튼 권한) / 없으면 `false` 명시 (2026-11-13 정정: '의무 `false` (G5 후 결정)' → §2.2 Always-false 표 · CR-070 "화면에 그 기능이 있고 버튼 코드 권한이 있을 때만 노출" 과 맞춤) |
 
 ### §2.2 정책 4 종
 
@@ -149,10 +153,10 @@ const hotkeyConfig: HotkeyConfig = {
 **자동 활성 (생략)**:
 ```typescript
 const hotkeyConfig: HotkeyConfig = {
-  insert: handleInsert,
-  delete: handleDelete,
+  insert: hasButton('INSERT') ? handleInsert : false,   // 11-13 정정 (§1 과 동일 — hasButton 조건부)
+  delete: hasButton('DELETE') ? handleDelete : false,
   search: setFilters,
-  save: handleSave,
+  save: hasButton('SAVE') ? handleSave : false,
   manual: false,
   upload: false,
   // sort / filter / condition / resetCondition 생략 → 자동 활성
@@ -162,8 +166,8 @@ const hotkeyConfig: HotkeyConfig = {
 **SubTitle 의 DefaultButtonActions 자동 제공**:
 - **Sort (F3)**: DataGrid `allowSorting={true}` 자동
 - **Filter (F4)**: FlexGridFilter 자동 (DataGrid 내장)
-- **Condition (F6)**: **Phase 5 G1 후 신규**: `useSearchConditionPersistence.saveCondition(searchParams)` 자동
-- **ResetCondition (F10)**: **Phase 5 G1 후 신규**: `setConfirm(t('MSG00397'))` → `resetCondition()` 자동
+- **Condition (F6)**: **Phase 5 G1 후 신규**: `useSearchConditionPersistence.saveCondition(searchParams)` 자동 (2026-11-13 정정: 현행 구현 = `GridAction.personalizeCondition(menuId, searchParam, …)` — SubTitle 내장 · `useSearchConditionPersistence` 는 저장소에 없음)
+- **ResetCondition (F10)**: **Phase 5 G1 후 신규**: `setConfirm(t('MSG00397'))` → `resetCondition()` 자동 (11-13 정정: 현행 구현 = `useMessageStore` 의 `setAlert` 확인 → `GridAction.resetPersonalizedCondition(menuId)` — SubTitle 내장 · `setConfirm` 은 저장소에 없음)
 
 ### §2.5 ⭐ SearchArea 부재 화면 — SubTitle 좌측 Search 버튼 의무 (2026-06-06 신규)
 
@@ -184,7 +188,7 @@ const queryClient = useQueryClient();
 
 const handleSearch = () => {
   // 모든 조회 query refetch (또는 특정 sheet 만)
-  void queryClient.invalidateQueries({ queryKey: ['proc', MENU_ID] });
+  void queryClient.invalidateQueries({ queryKey: [tabId] });   // 2026-11-13 정정: ['proc', MENU_ID] → [tabId] — 실제 키 = buildTabQueryKey(tabId, sheetName, procedureAction, filters) (useCustomQueryClient.ts:76-81) · 룰 07 §10 과 통일
 };
 
 <MainTitle title={title} menuId={MENU_ID} disableSearchArea />
@@ -241,7 +245,7 @@ const hotkeyConfig: HotkeyConfig = {
 const handleInsert = () => {
   if (!gridRefs[activeTab].current) return;
   GridAction.addRow(gridRefs[activeTab].current, {
-    DIVISION_ID: filters[SHEETS.SITE]?.divisionId ?? '81',
+    DIVISION_ID: searchParams.divisionId,   // 2026-11-13 정정: `filters[SHEETS.SITE]?.divisionId ?? '81'` → 조회조건 Div (CR-028 · '81' 고정 대체값 없음 — SalesSite.tsx:178)
     SCM_SITE_ID: activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite,
   });
 };
@@ -296,18 +300,17 @@ const detailDataCountByTab: Record<number, number> = {
 ### §4.1 표준 customButtons (선택)
 
 ```typescript
-const hotkeyConfig: HotkeyConfig = {
-  // ... 10 키
-  customButtons: [
-    {
-      id: 'unique-id',
-      label: t('LBL_BUTTON_LABEL'),
-      icon: <CustomIcon />,
-      onClick: () => { ... },
-      disabled: false,
-    },
-  ],
-};
+// 2026-11-13 정정: customButtons 는 hotkeyConfig 키가 아니라 <SubTitle customButtons={...}> prop 이고
+//   항목 형태는 { label, action, ...ButtonProps } — SubTitle.tsx:54-57,101 (CustomButtonProps) · HotkeyConfig(hotkey.ts:22)에 customButtons 키 없음 · §12.2 와 통일
+const customButtons = [
+  {
+    label: t('LBL_BUTTON_LABEL'),
+    action: () => { ... },
+    disabled: false,
+  },
+];
+
+<SubTitle hotkeyConfig={hotkeyConfig} customButtons={customButtons} ... />
 ```
 
 → AS-IS 화면 안 추가 버튼 (예: "Auto Sync", "Recalculate") TO-BE 이전 시 `customButtons` 로 매핑.
@@ -365,7 +368,7 @@ const handleSave = () => {
           const changeMap = editMap?.get(row);
           // MODIFY 일 때만 변경된 cell 만 save (full row save 아님)
           if (row.CRUD_TYPE === CRUD_TYPE.MODIFY && (!changeMap || !(key in changeMap))) return;
-          saveData.push(buildPivotedRow(row, key, 'CUST_FCST') as unknown as FcstRow);
+          saveData.push(buildPivotedRow(row, key, 'CUST_FCST'));   // 2026-11-13 정정: `as unknown as FcstRow` 제거 — 이중 캐스트 금지(타입은 procedures.d.ts 에서 맞춤). 실제 코드는 캐스트 없이 객체를 push — CustomerFcstMaster.tsx:153-175
         });
       });
     saveWithValidation(saveData, staticColumns[SHEETS.CUSTOMER_FCST], saveFcst);
@@ -389,7 +392,7 @@ const handleSave = () => {
 const handleInsert = () => {
   if (!gridRef.current) return;
   GridAction.addRow(gridRef.current, {
-    DIVISION_ID: filters?.divisionId ?? '81',   // searchParams 의 default 값
+    DIVISION_ID: searchParams.divisionId,   // 조회조건 Div (11-13 정정: `filters?.divisionId ?? '81'` → CR-028 · CustomerModelMapping.tsx:65)
     // ... 다른 default
   });
 };
@@ -402,11 +405,12 @@ const handleInsert = () => {
 ```typescript
 const handleDelete = () => {
   if (!gridRef.current) return;
-  GridAction.removeRow(gridRef.current, true);   // 두 번째 인자 true = confirm 표시
+  GridAction.removeRow(gridRef.current);   // 2026-11-13 정정: 두 번째 인자는 confirm 이 아니라 deleteOnlyNew (기본 false) — gridAction.ts:894-896
+  // deleteOnlyNew=true 는 신규행만 제거하고 기존행에 D 를 표시하지 않는다 → Active 컬럼으로 사용여부를 관리하는 화면(CR-057)에서만 사용 (예: DMF0004 SalesSite.tsx:188-192)
 };
 ```
 
-→ `GridAction.removeRow(grid, true)` — 선택 row 의 CRUD_TYPE='D' 마킹 + grid 표시 (실제 삭제는 SaveButton 시).
+→ `GridAction.removeRow(grid)` — 신규행은 즉시 제거, 기존행은 CRUD_TYPE='D' 마킹 + grid 표시 (실제 삭제는 SaveButton 시 · CR-085). (11-13 정정: `removeRow(grid, true)` 는 기존행에 D 표시를 하지 않으므로 전 화면 default 가 아님)
 
 ---
 

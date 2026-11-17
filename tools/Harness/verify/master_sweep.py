@@ -53,8 +53,33 @@ def read_tables(body):
     return sorted({m.group(1).upper() for m in RX_MST.finditer(strip_comments(body))})
 
 
-def judge_keys(tbl, asis, tobe):
-    """asis·tobe = 키 튜플 집합 — AS-IS 0행은 비교 근거 없음"""
+def pkg_literals(body):
+    """PKG 본문(주석 제외)의 따옴표 문자열 상수 — 대문자·공백 제거"""
+    return {norm_key(m.group(1)) for m in re.finditer(r"'([^'\n]{2,60})'", strip_comments(body)) if norm_key(m.group(1))}
+
+
+def judge_keys(tbl, asis, tobe, scope=None):
+    """asis·tobe = 키 튜플 집합 — AS-IS 0행은 비교 근거 없음
+    scope = 화면 PKG 본문의 문자열 상수(+ 화면 ID). 2026-11-16 SCP0104(N1 미검증 8행): PKG 가 LOOKUP_TYPE='OPERATION_SPEED_UNIT' 처럼
+      키 첫 컬럼을 상수로 거르는 공용 기준표는 표 전체를 대조하면 다른 화면 코드(CUST_FCST_MEASURE · DMF0021)까지 이 화면 미검증이 된다.
+      키 첫 값이 scope 에 있는 키가 하나라도 있으면 그 키들만 대조한다(하나도 없으면 범위를 못 정한 것이라 표 전체 대조 유지)"""
+    if not asis:
+        return 'NA', f'{tbl} AS-IS 0행 — 비교 근거 없음(TO-BE {len(tobe)}행)'
+    note = ''
+    if scope:
+        ins = {k for k in asis if k and k[0] in scope}
+        if ins:
+            note = f' · 범위 = 화면 PKG 조건 값 {len({k[0] for k in ins})}종(AS-IS 키 {len(ins)}/{len(asis)}건 · 범위 밖 {len(asis - ins - tobe)}건 제외)'
+            asis = ins; tobe = {k for k in tobe if k and k[0] in scope}
+    only = sorted(asis - tobe)
+    if not only:
+        return 'PASS', f'{tbl} AS-IS 키 {len(asis)}건 전부 TO-BE 에 있음(TO-BE 전용 {len(tobe - asis)}건){note}'
+    smp = ', '.join('/'.join(k) for k in only[:5])
+    return 'ERROR', f'[확인 대상] {tbl} AS-IS 키 {len(asis)}건 중 {len(only)}건 TO-BE 에 없음: {smp}{note}'
+
+
+def _judge_keys_old(tbl, asis, tobe):
+    """(사용 안 함 — 2026-11-16 범위 판정 이전 원형 보관)"""
     if not asis:
         return 'NA', f'{tbl} AS-IS 0행 — 비교 근거 없음(TO-BE {len(tobe)}행)'
     only = sorted(asis - tobe)
@@ -85,6 +110,10 @@ def selftest():
         ('TO-BE 전용만', judge_keys('T', A, A | {('C',)})[0], 'PASS'),
         ('AS-IS 전용', judge_keys('T', A, {('A',)})[0], 'ERROR'),
         ('AS-IS 0행', judge_keys('T', set(), A)[0], 'NA'),
+        ('범위 밖 키만 누락', judge_keys('T', {('X', '1'), ('Y', '1')}, {('X', '1')}, scope={'X'})[0], 'PASS'),
+        ('범위 안 키 누락', judge_keys('T', {('X', '1'), ('X', '2')}, {('X', '1')}, scope={'X'})[0], 'ERROR'),
+        ('범위 못 정함 = 전체 대조', judge_keys('T', {('Y', '1')}, set(), scope={'X'})[0], 'ERROR'),
+        ('PKG 상수', 'OPERATION_SPEED_UNIT' in pkg_literals("WHERE LOOKUP_TYPE = 'OPERATION_SPEED_UNIT' -- 'ZZZ'"), True),
         ('센티널 동일', norm_key('-') == norm_key('/') == '', True),
         ('공백·대소문자', norm_key(' ab ') == 'AB', True),
         ('비활성 후보', judge_active('L', ['A', 'B', 'C'], {'A', 'B', 'C'}, {'C'})[0], 'ERROR'),
@@ -189,9 +218,11 @@ def main(mid):
     cands = list(iter_cands(json.load(open(p_rt, encoding='utf-8-sig')))) if os.path.exists(p_rt) else []
     with connect('tobe') as tcx, connect('asis') as acx:
         tc = tcx.cursor(); ac = (getattr(acx, 'cx', acx)).cursor()
+        lits = {mid.upper()}  # 화면 PKG 본문의 문자열 상수(LOOKUP_TYPE·PROGRAM_ID 조건 값) — 키 대조 범위
         for pkg in pkgs:
             tc.execute("SELECT TEXT FROM ALL_SOURCE WHERE NAME=:n AND TYPE='PACKAGE BODY' ORDER BY LINE", n=pkg)
-            tables |= set(read_tables(''.join(x[0] for x in tc.fetchall())))
+            _body = ''.join(x[0] for x in tc.fetchall())
+            tables |= set(read_tables(_body)); lits |= pkg_literals(_body)
         for tbl in sorted(tables):
             tc.execute("SELECT COUNT(*) FROM ALL_TABLES WHERE TABLE_NAME=:t", t=tbl)
             if not tc.fetchone()[0]:
@@ -232,7 +263,7 @@ def main(mid):
                 if is_surrogate(pk, akeys | tkeys):
                     res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': 'NA', 'why': f'단일 숫자 대리키 {pk[0]} — DB 사이 값 대조 의미 없음'})
                     continue
-                r, why = judge_keys(tbl, akeys, tkeys)
+                r, why = judge_keys(tbl, akeys, tkeys, scope=lits)
                 res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': r, 'why': why})
         res += active_rows(tc, cands)
     p = os.path.join(ROOT, 'Doc', 'verify', mid, 'master_sweep.csv')

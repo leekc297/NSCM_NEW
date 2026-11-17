@@ -2,9 +2,10 @@
 export type J = { result: 'PASS' | 'FAIL' | 'ERROR'; why: string };
 
 /** Insert 전 조건 state 정렬|필터 · 뒤 상태 유지 여부 · 신규행 생겼는지 · 편집 가능 칸 수 */
-export function judgeInsertInState(s: { state: string; kept: boolean; newRow: boolean; editable: number; why?: string }): J {
+export function judgeInsertInState(s: { state: string; kept: boolean; newRow: boolean; editable: number; why?: string; guard?: string }): J {
   if (s.why) return { result: 'ERROR', why: `[측정 경로 없음] ${s.why}` };
-  if (!s.newRow) return { result: 'FAIL', why: `${s.state} 상태에서 Insert 뒤 신규 행 없음` };
+  // 2026-11-10 T197: AS-IS Insert 가 전제 guard(편집 잠금 해제·활성 시트·최신 Plan 등) 안에서만 행을 만들면 신규 행 없음 = 전제 미충족 측정 실패(FAIL 아님)
+  if (!s.newRow) return s.guard ? { result: 'ERROR', why: `[측정 경로 없음] ${s.state} 상태에서 Insert 뒤 신규 행 없음 — AS-IS Insert 전제(${s.guard}) 미충족 가능` } : { result: 'FAIL', why: `${s.state} 상태에서 Insert 뒤 신규 행 없음` };
   if (!s.editable) return { result: 'FAIL', why: `${s.state} 상태 Insert 행 편집 가능 칸 0` };
   if (!s.kept) return { result: 'FAIL', why: `Insert 뒤 ${s.state} 상태가 풀림` };
   return { result: 'PASS', why: `${s.state} 유지 · Insert 행 편집 가능 칸 ${s.editable}` };
@@ -18,11 +19,16 @@ export function judgePasteBad(s: { b: string; bad: string; before: string; after
   return { result: 'PASS', why: `${s.b} 후보 밖 값 거부 — '${s.before}' → '${s.after}'` };
 }
 
-/** 텍스트 조건 부분 문자열 조회 — full 원래 값 · part 입력 · vals 결과 칸 값 · sent 요청 여부. 0행은 AS-IS 가 Like 인지 확인 전이라 ERROR */
-export function judgeLike(s: { b: string; full: string; part: string; vals: string[]; sent: boolean }): J {
+/** 텍스트 조건 부분 문자열 조회 — full 원래 값 · part 입력 · vals 결과 칸 값 · sent 요청 여부 · inBody 부분 문자열이 조회 요청 본문에 실렸는지.
+ *  기대 = 요건 EG245(문서 DM-181·GAP-75·GAP-419·SSP45-6 — 텍스트 조건 부분일치). AS-IS SP 가 정확 일치(IN)여도 TO-BE 요건이 우선한다.
+ *  0행: 본문에 부분 문자열이 실렸으면 FAIL(조건은 전달됐는데 부분일치 안 됨) · 안 실렸거나 모르면 입력 조작 실패일 수 있어 ERROR
+ *  (2026-11-10 T177 — SSP0024 Material 'PCAN0506' 0행이 'AS-IS Like 여부 확인 필요' ERROR 로 미검증에 묻혀 조치필요 누락 · 사용자 판정 오류) */
+export function judgeLike(s: { b: string; full: string; part: string; vals: string[]; sent: boolean; inBody?: boolean }): J {
   const ci = (v: string) => v.toLowerCase();
   if (!s.sent) return { result: 'ERROR', why: `[측정 경로 없음] 조회 요청 없음` };
-  if (!s.vals.length) return { result: 'ERROR', why: `[확인 대상] '${s.part}'(값 '${s.full}' 일부) 조회 0행 — 부분일치 안 되는 것으로 보임 · AS-IS Like 여부 확인 필요` };
+  if (!s.vals.length) return s.inBody
+    ? { result: 'FAIL', why: `'${s.part}'(값 '${s.full}' 일부) 이 조회 요청 본문에 실렸는데 0행 — 텍스트 조건 부분일치(Like) 안 됨 · 기대 근거 요건 EG245(DM-181·GAP-75·GAP-419·SSP45-6)` }
+    : { result: 'ERROR', why: `[확인 대상] '${s.part}'(값 '${s.full}' 일부) 조회 0행 · 조회 요청 본문에 부분 문자열 ${s.inBody === false ? '없음' : '확인 안 함'} — 입력 조작 실패일 수 있어 판정 보류` };
   const out = [...new Set(s.vals.filter(v => !ci(v).includes(ci(s.part))))];
   if (!s.vals.some(v => ci(v) === ci(s.full))) return { result: 'FAIL', why: `'${s.part}' 조회 ${s.vals.length}행에 원래 값 '${s.full}' 없음` };
   if (out.length) return { result: 'ERROR', why: `[확인 대상] '${s.part}' 조회 ${s.vals.length}행 중 ${s.b} 에 그 문자열 없는 값 ${out.length}종: ${out.slice(0, 4).join(', ')}(ID·명칭 등 다른 칸 검색일 수 있음)` };

@@ -1,0 +1,3 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0130-S8c2771,DIVISION,,,,값 미도출,if (_sActiveSheetName == SpdSheet.sht01VirtualBom) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (action == CAppSetting.FlagI) ▸ if (v_division_id == string.Empty || v_opmz_plan_,
+SCP0130-Scc4598,DIVISION,,,,값 미도출,else of (_sActiveSheetName == SpdSheet.sht01VirtualBom) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (action == CAppSetting.FlagI) ▸ if (v_division_id == string.Empty || v_opmz_,

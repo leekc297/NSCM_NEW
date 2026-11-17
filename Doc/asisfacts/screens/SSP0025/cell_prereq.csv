@@ -1,0 +1,3 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+*,DIVISION_ID,DIVISION_ID,ALL,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Division"" })",if (siMain.IsLock(siMain.SheetName) == false),SSP0025_ShipmentRequestorPIC.cs:631 SSP0025_ShipmentRequestorPIC.SpdMain_CellClick
+ITEM_ID,,SITE_DESCRIPTION,NEW,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plant Site"" })","if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CAppSetting.FlagI)",SSP0025_ShipmentRequestorPIC.cs:648 SSP0025_ShipmentRequestorPIC.SpdMain_CellClick

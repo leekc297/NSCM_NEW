@@ -1,0 +1,143 @@
+{
+ "id": "GSCM_MENUITEMINFO",
+ "window": [
+  "2026-11-12 21:04:54.320",
+  "2026-11-12 21:05:36.861"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 21:04:54.734",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.05,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SY0102"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SY0102'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 21:04:54.762",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 22.31,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 21:04:55.720",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 738.23,
+   "params": {
+    "MenuID": "Menu",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Menu', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 21:04:55.969",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.41,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SY0102"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SY0102'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 21:04:56.034",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetMenuItemInfoList",
+   "sp": "UP_FX_GetMenuItemInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 1084.16,
+   "params": {
+    "MenuID": "",
+    "ProgramID": "",
+    "Title": "",
+    "MenuLevel": "1",
+    "PrntMenuID": ""
+   },
+   "inline": "EXEC UP_FX_GetMenuItemInfoList @MenuID='', @ProgramID='', @Title='', @MenuLevel=1, @PrntMenuID=''",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 21:05:04.491",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetMenuItemInfoList",
+   "sp": "UP_FX_GetMenuItemInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 27.7,
+   "params": {
+    "MenuID": "",
+    "ProgramID": "",
+    "Title": "",
+    "MenuLevel": "1",
+    "PrntMenuID": ""
+   },
+   "inline": "EXEC UP_FX_GetMenuItemInfoList @MenuID='', @ProgramID='', @Title='', @MenuLevel=1, @PrntMenuID=''",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 21:05:35.404",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 6.52,
+   "params": {
+    "MenuID": "Menu",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Menu', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

@@ -1,0 +1,447 @@
+{
+ "id": "GSCM_GROUPUSERINFO",
+ "from": "dump_find.json",
+ "total": "Total : 19",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer1/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "GroupInfo",
+     "rows": 19,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group ID"
+       ],
+       "label": "Group ID",
+       "tag": "GroupID",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Group Name"
+       ],
+       "label": "Group Name",
+       "tag": "GrpName",
+       "width": "170",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Use YN"
+       ],
+       "label": "Use YN",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 19,
+     "data": [
+      [
+       "",
+       "ADMIN",
+       "System Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "CAPA Planner",
+       "CAPA Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM ADMIN",
+       "DM Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner",
+       "DM Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner (W/S)",
+       "DM Planner (W/S)",
+       "Y"
+      ],
+      [
+       "",
+       "DM Viewer",
+       "DM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "FP Planner",
+       "FP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "FP Viewer",
+       "FP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "GMES Viewer",
+       "GMES Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "Guest",
+       "Guest",
+       "Y"
+      ],
+      [
+       "",
+       "JV Planner",
+       "JV Planner",
+       "N"
+      ],
+      [
+       "",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "Y"
+      ],
+      [
+       "",
+       "SCM Viewer",
+       "SCM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Planner",
+       "SCP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Tester",
+       "SCP Tester",
+       "Y"
+      ],
+      [
+       "",
+       "SSP ADMIN",
+       "SSP ADMIN",
+       "N"
+      ],
+      [
+       "",
+       "SSP Planner",
+       "SSP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SSP Viewer",
+       "SSP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "System Monitor",
+       "System Monitor",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdUserInfo",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdUserInfo",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "UserInfo",
+     "rows": 0,
+     "cols": 9,
+     "visible": "True",
+     "frozen_cols": "2",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group ID*"
+       ],
+       "label": "Group ID*",
+       "tag": "GroupID",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "User ID*"
+       ],
+       "label": "User ID*",
+       "tag": "UserID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "UserID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "User Name*"
+       ],
+       "label": "User Name*",
+       "tag": "UserName",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "UserName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "English Name"
+       ],
+       "label": "English Name",
+       "tag": "UserName_E",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "UserName_E",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Email"
+       ],
+       "label": "Email",
+       "tag": "Email",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Email",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Dept ID*"
+       ],
+       "label": "Dept ID*",
+       "tag": "Dept_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Dept_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Dept Name*"
+       ],
+       "label": "Dept Name*",
+       "tag": "Dept_Name",
+       "width": "220",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Dept_Name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Use YN"
+       ],
+       "label": "Use YN",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdDivision",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/panel1/spdDivision",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Division",
+     "rows": 0,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "2",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Name*"
+       ],
+       "label": "Name*",
+       "tag": "Name",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Code"
+       ],
+       "label": "Code",
+       "tag": "Code",
+       "width": "40",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Code",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "JV Plant*"
+       ],
+       "label": "JV Plant*",
+       "tag": "JV_PLANT_ID",
+       "width": "180",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "JV_PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

@@ -93,7 +93,7 @@ SELECT COLUMN_NAME, INPUT_TP_CD, DIVISION_ID, VISIBLE_FLAG
 메타 `ATTRIBUTE2` 가 아니라 **행별 서버 재조회 + WeakMap 캐시**가 이 프로젝트의 정본이다.
 
 ```
-apply*(dataItem)  →  apiClient.getCombo({comboId, …행 키})  →  ref.current.set(dataItem, rows)
+apply*(dataItem)  →  apiClient.getCombo({comboId, …행 키})  →  ref.current.set(dataItem, rows)   (2026-11-14 정정: 행별 콤보 후보는 공용 DataGrid 컬럼 메타(PARAM2, PARAM10) 처리가 표준(2026-09-01). 편집 진입 때 col.dataMap 교체 금지. `SalesFuturePriceGrid.tsx:267-276`. 이 흐름은 ForecastPriceGrid 의 구 방식)
 cellEditEnded / pastedCell  →  트리거 binding 판정  →  apply*(dataItem)
 ```
 
@@ -149,7 +149,9 @@ DMF0008(8) · DMF0004(6) · DMF0005(6) · DMF0006(3) · SYS0009(1) 뿐이다.
 
 ---
 
-## §4. 대사표 등재 의무
+## §4. 대조표 등재 의무
+
+(2026-11-13 정정: 용어 대사표 → 대조표)
 
 추출한 축은 **하나도 빠짐없이** `__asis-mapping__.md` 에 `EVENT:` 접두로 한 행씩 올린다.
 
@@ -173,7 +175,7 @@ DMF0008(8) · DMF0004(6) · DMF0005(6) · DMF0006(3) · SYS0009(1) 뿐이다.
 | G146-4 | TO-BE 반영 현황에 `❓` 0건 | 미확인 남기고 완료 선언 금지 |
 | G146-4b | **⛔ 판정 행마다 트리거 `INPUT_TP_CD` 실측치 기재** | 미기재 = 판정 무효(§1.4) |
 | G146-4c | **TO-BE 코드 실측 근거**(`파일:심볼:라인`) 없이 `⛔` 금지 | 문서만 보고 미배선 단정 = FAIL |
-| G146-5 | 대사표 `EVENT:` 축 = 문서의 축 수와 **동수** | 불일치 FAIL |
+| G146-5 | 대조표 `EVENT:` 축 = 문서의 축 수와 **동수** | 불일치 FAIL |
 | G146-6 | `⛔`(미구현) 축은 **사용자 보고** 후 결정 | 조용히 남기지 않는다 |
 
 > ⛔ **"주요 이벤트는 반영했다" 는 표현을 쓰지 않는다.** 축 번호별 `✅/⛔` 로만 말한다.

@@ -1,0 +1,97 @@
+{
+ "id": "SCP0041",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(2 → 3)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:3:81_UC Automotive Battery(UC)",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0013_GET_EXTRA_SPEC",
+    "SELECT *",
+    "DM0003_GET_BUCKET_TYPE_CODE",
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      11,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0041-S5dcee3"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(2)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:2:82 ESS Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      11,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0041-S5dcee3"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 15:38:30"
+}

@@ -1,0 +1,201 @@
+{
+ "id": "SCP0016",
+ "started": "2026-11-13 05:48:09.990",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:48:10.407",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0016_WaterfallShipmentPlanFG",
+   "form_text": "Shipment Plan FG Waterfall",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0016_WaterfallShipmentPlanFG.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:48:15.041"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:48:18.590",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0016\\run_20261113_054809\\dump_load.json",
+   "control_count": 54,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:48:18.610"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:48:18.922",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0016\\run_20261113_054809\\shots\\SCP0016_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:48:19.063"
+  },
+  {
+   "step": "set",
+   "cmd": "set",
+   "at": "2026-11-13 05:48:19.228",
+   "applied": "prop:ControlValues",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:48:19.232"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-13 05:48:23.636",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0016\\run_20261113_054809\\shots\\SCP0016_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:48:23.787"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 05:48:24.123",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 05:48:54.147"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 05:49:02.259",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0016\\run_20261113_054809\\dump_find.json",
+   "control_count": 54,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 05:49:02.278"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 05:49:02.592",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0016\\run_20261113_054809\\shots\\SCP0016_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 05:49:02.822"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:49:03.154",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 05:49:03.765"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 15,
+  "calls_with_params": 15
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "scenario": {
+  "rule": "tobe",
+  "set": [
+   {
+    "name": "clbVersion",
+    "prop": "ControlValues",
+    "value": "SP_W_20260824",
+    "param": "version_no",
+    "from": "SP_W_20260817",
+    "sheet": "main"
+   }
+  ],
+  "then_fill": []
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0016_WaterfallShipmentPlanFG",
+  "form_text": "Shipment Plan FG Waterfall",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0016_WaterfallShipmentPlanFG.dll"
+ },
+ "fills": [
+  {
+   "rule": "체크 목록 첫 항목(Version*)",
+   "set": null,
+   "ok": false,
+   "applied": null,
+   "error": "시나리오가 넣은 값이라 바꾸지 않음(clbVersion)"
+  }
+ ],
+ "fill_left": [
+  "clbVersion[Version*·UsrCheckedList] 비어 있음(항목 13개)"
+ ],
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-13 05:48:10.301",
+ "t_find": "2026-11-13 05:48:23.899",
+ "dialogs": [
+  {
+   "at": "2026-11-13 05:48:25.003",
+   "caption": "GSCM",
+   "text": "Version 값은 필수 입력입니다",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 54,
+  "layout_items": 17,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 400,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 15,
+  "calls_screen": 15,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-13 05:49:04.124",
+ "exit": 0
+}

@@ -91,6 +91,7 @@ import { MeasureSelectModal } from 'features/master/src/components';
 - 정본 = 위 `packages/shared/.../column-layout-modal` **유일**. import 는 `@shared/components` 로 한다.
 - 구 정본이던 `features/master/src/components/columnLayoutModal/` 은 **재수출 스텁**으로만 유지
   (기존 화면 호환 — 스텁이므로 기존 import 도 런타임은 정본을 쓴다). 스텁에 구현을 되살리는 것 금지.
+  (2026-11-13: 이 스텁 폴더는 현재 저장소에 없음 — `features/master/src/components/` 에 `columnLayoutModal/` 폴더가 없고 `index.ts` 에 `ColumnLayoutModal` export 도 없다. Column 모달 import 경로는 `@shared/components` 뿐이다.)
 - 사본 간 fix 분기 이력: HIDDEN_FROM_LIST(MEASURE) 순번 fix(2026-08-13, 구 master 사본에만 존재)는
   2026-08-20 정본에 이식 완료 — 정본 외 파일에 fix 를 넣으면 이런 분기가 재발한다.
 - 신규 화면 grep 게이트: `grep -rn "master/src/components'.*ColumnLayoutModal\|columnLayoutModal" {페이지}/` = 0

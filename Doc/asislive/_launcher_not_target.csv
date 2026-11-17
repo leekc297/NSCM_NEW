@@ -1,0 +1,2 @@
+﻿menu_id,kind,row_ids,state,at,evidence
+SCP0084,분기 해석,T-31a47125 T-3ff3faf4 T-5d6662af T-4e7583c4,검사기 결함 후보,2026-11-16,"원장 C3 '연쇄 자동 채움' asis_ref SCP0084_LongTermStock.cs:614 = ExportExcelData 안 복사 시트(newSheet)의 열 Visible 전환(609~623행 LONG_TERM_STOCK_QTY·AMOUNT 숨김, *_XLS 표시) · 셀 값 대입 문장 아님 · 화면 그리드 값 연쇄 없음 → 런처로 줄 정답 없음, 검사기 W5 원천 분류 결함"

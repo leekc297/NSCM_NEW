@@ -194,3 +194,5 @@ Recommendation: establish **one Single Source of Truth** (root CLAUDE.md as the 
 
 *본 보고서는 기존 룰 파일을 변경하지 않았습니다. 보완 적용은 짝 문서 `RULESET_MASTER.md` 와 위 R-1~R-8 권고를 참조하십시오.*
 *This report did not modify any existing rule files. For remediation, see the companion `RULESET_MASTER.md` and recommendations R-1–R-8.*
+
+> 2026-11-13 덧붙임: 본문이 가리키는 `Doc/_rules_v2/CLAUDE.md`(구판)는 `Doc/_archive/rules_v2_reports/CLAUDE.md` 로 보관 이동됐다(본문은 작성 당시 기록이라 고치지 않음). 이동 목록 `Doc/_archive/_moved_20261113.csv`.

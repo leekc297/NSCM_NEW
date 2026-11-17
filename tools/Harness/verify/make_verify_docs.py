@@ -3,11 +3,11 @@
   python tools/Harness/verify/make_verify_docs.py <MENU_ID> [--scope DB_ONLY|DB_FE]
 
 입력  Doc/verify/<ID>/verify_ledger.csv (ledger.py → judge.py 판정 반영본)
-산출  Doc/CheckList/<ID>_<화면명>_CheckList_v<N>.xlsx       (2026-10-28 사용자: 정합검증서 → CheckList 명칭·폴더 변경)
-      Doc/CheckList/<ID>_<화면명>_보완대상_v<N>.xlsx       ← 보완 적용(P6) 전에 사용자가 확인하는 목록
+산출  Doc/UI_CHECKLIST/<ID>_<화면명>_CheckList_v<N>.xlsx    (2026-10-28 정합검증서 → CheckList · 2026-11-16 폴더 Doc/CheckList → Doc/UI_CHECKLIST)
+      Doc/UI_CHECKLIST/<ID>_<화면명>_ActionItemList_v<N>.xlsx ← 보완 적용(P6) 전에 사용자가 확인하는 목록
       Doc/verify/<ID>/fixlist.csv                         ← 보완 실행기(Vibe_Manager 🩹·🛠️·🧯)가 읽는 기계용 사본
 버전 N 은 기존 파일 다음 번호(덮어쓰지 않음 · old/ 와 이전 위치 Doc/화면분석서 의 '정합검증서' 번호까지 이어서). 새 버전을 만들면 같은 화면의 이전 버전은
-  Doc/CheckList/old/ 로 옮긴다(이전 위치 Doc/화면분석서 의 정합검증서·보완대상 포함 — tools/Docs/doc_archive.py). 보완 범위 = --scope 또는 tools/Harness/harness.json repairScope(기본 DB_ONLY).
+  Doc/UI_CHECKLIST/old/ 로 옮긴다(이전 위치 Doc/화면분석서 의 정합검증서·보완대상 포함 — tools/Docs/doc_archive.py). 보완 범위 = --scope 또는 tools/Harness/harness.json repairScope(기본 DB_ONLY).
 
 보완 계층(fix_layer) 결정 — 원장 행에 값이 있으면 그대로, 없으면 아래 규칙(제안값, '근거' 열에 사유):
   DB_META   라벨·메시지 미등록(I1·I4), 컬럼 표시·편집 메타(A5, D1 에서 TO-BE INPUT_TP_CD 가 AS-IS 와 어긋날 때), 기준정보(B8·N1·H9), 콤보 원천 SQL(B4·B5·B7)
@@ -17,6 +17,10 @@
   HUMAN     판정필요·조건부 기대
 """
 import argparse
+try:  # 2026-11-13: 설명 열 새 형식 모듈(없거나 오류면 종전 한 줄 설명으로 동작)
+    import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__))); import plain_detail
+except Exception:
+    plain_detail = None
 import csv
 import json
 import os
@@ -31,7 +35,8 @@ from openpyxl.utils import get_column_letter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 P = lambda *a: os.path.join(ROOT, *a)
-OUTDIR = P('Doc', 'CheckList')
+OUTDIR = P('Doc', 'UI_CHECKLIST')               # 2026-11-16 사용자: CheckList 폴더 Doc/CheckList → Doc/UI_CHECKLIST (없으면 next_version 이 생성)
+OLD_CHECKLIST_DIR = P('Doc', 'CheckList')      # 2026-11-16 이전 폴더 — 쓰지 않음. 사용자 의견 누적·번호 이어가기용으로만 읽는다
 LEGACY_DIR = P('Doc', '화면분석서')            # 2026-10-28 이전 위치 — 사용자 의견 누적·번호 이어가기용으로만 읽는다
 DOC_KIND = {'CheckList': ('CheckList', '정합검증서'), 'ActionItemList': ('ActionItemList', '보완대상')}  # 2026-10-28 보완대상 → ActionItemList  # 종류 → (새 이름, 이전 이름)
 sys.path.insert(0, P('tools', 'Docs'))
@@ -70,13 +75,13 @@ def screen_name(mid):
 
 def next_path(mid, name, kind):
     new, old = DOC_KIND[kind]
-    n = max(doc_archive.next_version(OUTDIR, f'{mid}_{name}_{new}', also=[LEGACY_DIR]),
-            doc_archive.next_version(OUTDIR, f'{mid}_{name}_{old}', also=[LEGACY_DIR]))
+    n = max(doc_archive.next_version(OUTDIR, f'{mid}_{name}_{new}', also=[LEGACY_DIR, OLD_CHECKLIST_DIR]),
+            doc_archive.next_version(OUTDIR, f'{mid}_{name}_{old}', also=[LEGACY_DIR, OLD_CHECKLIST_DIR]))
     return os.path.join(OUTDIR, f'{mid}_{name}_{new}_v{n}.xlsx'), n
 
 
 def archive_after_save(path, mid, name, kind):
-    """새 버전 저장 뒤 — 같은 화면 이전 버전을 Doc/CheckList/old/ 로(이전 위치 Doc/화면분석서 의 옛 이름 파일 포함)"""
+    """새 버전 저장 뒤 — 같은 화면 이전 버전을 Doc/UI_CHECKLIST/old/ 로(이전 위치 Doc/화면분석서 의 옛 이름 파일 포함)"""
     doc_archive.archive_previous(path)
     _, old = DOC_KIND[kind]
     legacy = [f for f in doc_archive.all_versions([LEGACY_DIR], f'{mid}_{name}_{old}_v*.xlsx') if os.path.dirname(f) == LEGACY_DIR]
@@ -93,7 +98,7 @@ def archive_after_save(path, mid, name, kind):
 
 def prior_docs(mid):
     """사용자 의견·판정 누적용 — 이 화면 CheckList·옛 정합검증서 전 버전(새 폴더·old·이전 위치), 오래된 → 최신"""
-    fs = doc_archive.all_versions([OUTDIR, LEGACY_DIR], f'{mid}_*_CheckList_v*.xlsx') + doc_archive.all_versions([OUTDIR, LEGACY_DIR], f'{mid}_*_정합검증서_v*.xlsx')
+    fs = doc_archive.all_versions([OUTDIR, OLD_CHECKLIST_DIR, LEGACY_DIR], f'{mid}_*_CheckList_v*.xlsx') + doc_archive.all_versions([OUTDIR, OLD_CHECKLIST_DIR, LEGACY_DIR], f'{mid}_*_정합검증서_v*.xlsx')
     # '{mid}_*' 는 별개 화면(DMF0003 ↔ DMF0003_1_…)까지 잡는다 — ID 바로 뒤가 숫자 구간이면 다른 화면
     fs = [f for f in fs if not re.match(rf'^{re.escape(mid)}_\d+_', os.path.basename(f)) and not os.path.basename(f).startswith('~$')]
     return sorted(set(fs), key=os.path.getmtime)
@@ -261,7 +266,7 @@ def load_user_verdicts(mid):
         from openpyxl import load_workbook
     except Exception:
         return
-    for f in prior_docs(mid):  # CheckList·옛 정합검증서 전 버전(Doc/CheckList · old · 이전 위치 Doc/화면분석서) 오래된 → 최신
+    for f in prior_docs(mid):  # CheckList·옛 정합검증서 전 버전(Doc/UI_CHECKLIST · 옛 Doc/CheckList · old · 이전 위치 Doc/화면분석서) 오래된 → 최신
         try: wb = load_workbook(f, read_only=True, data_only=True)
         except Exception: continue
         for ws in wb.worksheets:
@@ -286,24 +291,24 @@ RULE_MEAN = {
     'C6': '값을 바꾸지 않고 셀을 닫았을 때 연관 칸이 그대로 남는지',
     'D1': '컬럼이 잠겨 있는지(편집 가능/불가)', 'D3': '행 조건(사이트 유형 등)에 따라 셀이 잠기는지', 'D4': 'Insert 한 새 행의 기본값', 'D5': '셀 입력 방식(텍스트·콤보·숫자·날짜)', 'D6': 'Insert 한 새 행이 생기는 위치',
     'E1': '숫자 셀 입력 범위(소수·최소·최대·문자 차단)', 'E2': '날짜 셀 입력 검증(존재하지 않는 날짜 차단)', 'E4': '업무 검증 메시지(저장 차단·안내)', 'E5': '입력 규칙(대문자·길이 등)',
-    'F1': '저장이 실제로 DB 에 반영되는지', 'F2': '저장 결과 메시지', 'F3': '행의 CRUD 상태 표시(I/U/D)', 'F4': '저장 SP 호출·SQL 오류 없음', 'F5': 'Insert·수정 행의 CRUD 상태', 'F6': '저장 뒤 입력값이 그대로 남는지',
+    'F1': '저장이 DB 에 반영되는지', 'F2': '저장 결과 메시지', 'F3': '행의 CRUD 상태 표시(I/U/D)', 'F4': '저장 SP 호출·SQL 오류 없음', 'F5': 'Insert·수정 행의 CRUD 상태', 'F6': '저장 뒤 입력값이 그대로 남는지',
     'G1': '조회조건으로 조회 결과가 걸러지는지', 'G2': '멀티선택 조회조건(개별·전체 선택) 동작', 'G3': '조회조건 ↔ SP 인자 배선', 'G4': '조회조건 순서·구성이 기준표와 같은지', 'G5': '팝업으로 전달되는 조회조건·값', 'G6': '조회조건 초기값',
     'H2': '셀 색(편집 가능 노랑·글자색)', 'H3': '같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합)', 'H4': '컬럼 폭 비율·가로 스크롤', 'H5': '컬럼·조회조건 라벨(명칭)', 'H6': '팝업의 버튼 구성·그리드', 'H8': '숫자 천단위·소수·날짜 표시 포맷', 'H9': '컬럼 폭 메타', 'H10': '헤더 병합',
     'I1': '메타(SHEET_COLUMNS) 등록', 'I3': '명칭 컬럼 다국어', 'J1': '공통버튼(Insert/Delete/Save) 노출 = 기능 × 권한', 'J2': 'Division 권한에 따른 버튼 노출', 'J4': '권한 없는 기능 차단',
     'L1': '조회 응답 시간', 'L2': '입력 중 화면 재렌더', 'M1': 'Excel Upload 기능', 'M3': '팝업 내부 기능', 'M4': '팝업에서 고른 값이 행에 반영되는지', 'N1': '공란 컬럼',
-    'X-NOTIMPL': '대조표에 미구현으로 적힌 동작을 화면에서 실제로 재현', 'X-ROW': 'AS-IS 메서드(진입점) 단위로 묶은 검사 결과', 'X-LOC': '대조표의 구현 위치 기록', 'X-REASON': '대조표 제외·해당없음 사유 기록',
-    'G8': '텍스트 조회조건을 대소문자 다르게 입력해도 같은 결과가 나오는지', 'G9': '텍스트 조회조건에 콤마로 여러 값을 넣으면 전부 조회되는지', 'E7': '팝업으로 고르는 셀에 직접 입력한 잘못된 값이 차단되는지',
-    'E6': '셀 키 입력(한글 IME·콤보 자동완성)', 'MS1': 'AS-IS 메시지와 같은 뜻의 TO-BE 메시지 ID 를 쓰는지(ID 가 같은지가 아니라 문구 의미)', 'DB-SYN': 'SP 가 쓰는 시노님·권한', 'SC1': '기준표 순서', 'SC2': '기준표 제외 조건 잔존', 'PCOL': '팝업 그리드 컬럼',
+    'X-NOTIMPL': '대조표에 미구현으로 적힌 동작을 화면에서 재현', 'X-ROW': 'AS-IS 메서드(진입점) 단위로 묶은 검사 결과', 'X-LOC': '대조표의 구현 위치 기록', 'X-REASON': '대조표 제외·해당없음 사유 기록',
+    'G8': '텍스트 조회조건을 대소문자 다르게 입력해도 같은 결과가 나오는지', 'G9': '텍스트 조회조건에 콤마로 값을 2개 이상 넣으면 전부 조회되는지', 'E7': '팝업으로 고르는 셀에 직접 입력한 잘못된 값이 차단되는지',
+    'E6': '셀 키 입력(한글 IME·콤보 자동완성)', 'MS1': 'AS-IS 메시지와 같은 뜻의 TO-BE 메시지 ID 를 쓰는지(기준은 문구 의미, ID 일치 여부는 보지 않음)', 'DB-SYN': 'SP 가 쓰는 시노님·권한', 'SC1': '기준표 순서', 'SC2': '기준표 제외 조건 잔존', 'PCOL': '팝업 그리드 컬럼',
 }
 # FAIL 일 때 사용자가 화면에서 겪는 일(규칙별 한 문장)
 FAIL_MEAN = {
-    'C6': 'To Site(원천) 셀을 열었다가 값을 바꾸지 않고 닫기만 해도 연관 칸(Incoterms 등)이 지워집니다. AS-IS 는 값이 실제로 바뀔 때만 다시 계산합니다.',
+    'C6': 'To Site(원천) 셀을 열었다가 값을 바꾸지 않고 닫기만 해도 연관 칸(Incoterms 등)이 지워집니다. AS-IS 는 값이 바뀔 때만 다시 계산합니다.',
     'E2': '존재하지 않는 날짜(예 10월 33일)를 입력해도 거부되지 않고 그대로 저장 대상이 됩니다. AS-IS 는 날짜 셀이 잘못된 날짜를 받지 않습니다.',
-    'D6': 'Insert 를 누르면 새 행이 선택한 행 자리 대신 맨 위에 생깁니다. AS-IS 와 TO-BE 룰(hook #144) 모두 선택한 행 세트 바로 위입니다.',
+    'D6': 'Insert 를 누르면 새 행이 선택한 행 자리 대신 맨 위에 생깁니다. AS-IS 와 TO-BE 룰(hook #144) 둘 다 선택한 행 세트 바로 위입니다.',
     'G2': '멀티선택 조회조건에서 전체(ALL)를 고르고 조회하면 서버 오류가 나 결과가 0건입니다. 개별 선택은 정상입니다.',
     'C3': '팝업이나 상위 값 선택 뒤 자동으로 채워져야 하는 칸이 비어 있거나 다른 값입니다.',
     'H3': 'AS-IS 는 같은 값이 세로로 이어진 셀을 한 칸으로 합쳐 보여 주는데, TO-BE 는 이 컬럼을 합치지 않고 행마다 따로 보여 줍니다.',
-    'H2': 'AS-IS 는 특정 조건의 셀 글자색·배경색을 바꿔 보여 주는데, TO-BE 그리드는 그 색 구분이 없습니다.',
+    'H2': 'AS-IS 는 조건에 맞는 셀의 글자색·배경색을 바꿔 보여 주는데, TO-BE 그리드는 그 색 구분이 없습니다.',
     'M4': '팝업에서 고른 행의 값이 그리드 행에 옮겨지지 않았습니다.',
     'E1': '숫자 셀이 허용 범위 밖의 값(소수·범위 초과·문자)을 받습니다.',
     'B2': '콤보 후보 목록에 같은 값이 여러 번 나옵니다.',
@@ -315,7 +320,7 @@ FAIL_MEAN = {
     'G6': '조회조건의 초기값이 AS-IS 로드 시 값과 다릅니다.',
     'X-NOTIMPL': '대조표에 미구현으로 적힌 AS-IS 동작이 화면 재현에서도 없습니다. 구현이 필요합니다.',
 }
-RESULT_TAIL = {'PASS': '⇒ AS-IS 와 같게 동작합니다.', 'FAIL': '⇒ AS-IS 와 다릅니다(조치 필요).', 'NA': '⇒ 이 항목은 이 화면·데이터에서 검사 대상이 아닙니다.', '판정필요': '⇒ 기계로 결론을 내지 못해 사람이 확인해야 합니다.', 'ERROR': '⇒ 검사 실행 오류.', 'NOT_RUN': '⇒ 아직 검사하지 않았습니다.'}
+RESULT_TAIL = {'PASS': '⇒ AS-IS 와 같게 동작합니다.', 'FAIL': '⇒ AS-IS 와 다릅니다(조치 필요).', 'NA': '⇒ 이 화면·데이터에서는 검사 대상이 아닙니다.', '판정필요': '⇒ 기계로 결론을 내지 못해 사람이 확인해야 합니다.', 'ERROR': '⇒ 검사 실행 오류.', 'NOT_RUN': '⇒ 아직 검사하지 않았습니다.'}
 _PREFIXES = [re.compile(r'^\[사용자판정\].*?— 실측: ', re.S), re.compile(r'^\[사용자의견:[^\]]*\]\s*', re.S), re.compile(r'^실측\[T-[0-9a-f]+\]: '), re.compile(r'^\[대조표 [^\]]*실측으로 판정\] ')]
 _TOK = [(re.compile(r'\bDIVISION_ID\b'), 'Division'), (re.compile(r'\bFROM_SITE_CODE\b'), 'From Site'), (re.compile(r'\bTO_SITE_CODE\b'), 'To Site'), (re.compile(r'\bTO_SITE\b'), 'To Site'), (re.compile(r'\bFROM_SITE\b'), 'From Site'),
         (re.compile(r'\bINCOTERMS_SSP\b'), 'SSP Incoterms'), (re.compile(r'\bINCOTERMS\b'), 'Incoterms'), (re.compile(r'\bTRANSPORT_MODE\b'), 'Trans Mode'), (re.compile(r'\bROUTE_ID\b'), 'Route Id'), (re.compile(r'\bPRIORITY\b'), 'Priority'),
@@ -565,9 +570,127 @@ def _similar_tag(r):
     n = str(r.get('note') or '')
     if '유사 사용자 판정:' not in n: return ''
     return ' ★ 다른 화면 사용자 판정 동일 패턴(' + n.split('유사 사용자 판정:')[-1].strip()[:90] + ') — 전 화면 제외 여부 결정 요청'
+ACTION_SUMMARY = {}
+
+# 2026-11-17 사용자 지시: 첫 줄 = '[위치 / 성격 / 수정 대상] 오류명'('○' 는 11-17 사용자 지시로 뺌). 정리 파일 tag 칸이 있으면 그 값, 없으면 규칙·대상·증거로 정한다.
+#   위치 = 조회조건, 그리드 컬럼, 팝업, 버튼, 저장, 메뉴·권한, 화면 공통 · 성격 = 후보값, CASCADE, 기본값, 입력 제어, 로직, 순서, 표시, 성능, DB 객체
+#   수정 대상 = FE, DB, FE+DB, 공통 FE, 확인 필요
+_NATURE = {'B1': '후보값', 'B2': '후보값', 'B4': '후보값', 'B8': '후보값', 'B3': '순서', 'A6': '순서',
+           'C1': 'CASCADE', 'C2': 'CASCADE', 'C3': 'CASCADE', 'C4': 'CASCADE', 'C6': 'CASCADE',
+           'D1': '입력 제어', 'D3': '입력 제어', 'D5': '입력 제어', 'E1': '입력 제어', 'E2': '입력 제어', 'E4': '입력 제어', 'E5': '입력 제어', 'E7': '입력 제어',
+           'D4': '기본값', 'D6': '기본값', 'G6': '기본값', 'L1': '성능', 'L2': '성능', 'DB-SYN': 'DB 객체'}
+_PLACE = {'B': '조회조건', 'F': '저장', 'J': '메뉴·권한', 'M': '팝업'}
+
+
+def _tag_auto(r):
+    rule = r.get('rule_id') or ''; fam = rule[:1]
+    nature = _NATURE.get(rule) or ('표시' if fam in ('A', 'H', 'I') else '로직')
+    try: et = (json.loads(r.get('condition') or '{}') or {}).get('et', '')
+    except Exception: et = ''
+    tgt = (r.get('target') or '') + ' ' + (r.get('area') or '')
+    if rule in ('G1', 'G2', 'G3', 'G4', 'G6', 'G8', 'G9') or '조회조건' in tgt or et == 'SEARCH': place = '조회조건'
+    elif rule in ('G5', 'H6') or '팝업' in tgt or 'popup' in tgt.lower(): place = '팝업'
+    elif fam in _PLACE: place = _PLACE[fam]
+    elif rule == 'E4': place = '저장'
+    elif et == 'COL' or re.search(r'헤더|컬럼|칸', tgt): place = '그리드 컬럼'
+    elif et == 'SP': place = '저장'
+    elif et in ('BTN', 'BUTTON') or '버튼' in tgt: place = '버튼'
+    else: place = '화면 공통'
+    ev = (r.get('evidence') or '') + ' ' + (r.get('tobe_ref') or '')
+    fl = (r.get('fix_layer') or '').upper()
+    fe = bool(re.search(r'\.tsx?\b|\.tsx?:', ev)) or 'FE' in fl
+    db = bool(re.search(r'PKG_|ORA-\d|SHEET_COLUMNS|SCM_[A-Z_]+_M\b', ev)) or 'DB' in fl or rule == 'DB-SYN'
+    layer = 'FE+DB' if fe and db else 'FE' if fe else 'DB' if db else '확인 필요'
+    if 'COMMON:' in (r.get('target') or ''): layer = '공통 FE'
+    return f'{place} / {nature} / {layer}'
+
+
+def _tag(r, s=None):
+    t = (s or {}).get('tag') if s else ''
+    return (t or '').strip() or _tag_auto(r)
+
+
+
+# 2026-11-17 사용자 지시: 조치 필요는 화면 배치 순서(위 → 아래, 왼쪽 → 오른쪽)로 나열한다.
+#   구역 = 메뉴·권한 → 조회조건 → 버튼 → 그리드 컬럼(탭 순서 → 컬럼 순서) → 팝업 → 저장 → 화면 공통.
+#   조회조건 순서 = combo_runtime.json search 실측 순서(화면 DOM 순) · 탭 순서 = sheet_nav.json · 컬럼 순서 = AS-IS 메타 SHEET_COLUMNS SORT_ORDER_NO.
+_ZONE = {'메뉴·권한': 0, '조회조건': 1, '버튼': 2, '그리드 컬럼': 3, '팝업': 4, '저장': 5, '화면 공통': 6}
+
+
+def _summ(r):
+    """정리 파일 행 — 이 행에 제목이 없으면 같은 묶음(group)의 제목 있는 행(대표 행이 PASS 로 빠져도 남은 행이 같은 설명·위치·분류를 쓴다)"""
+    s = ACTION_SUMMARY.get(r['row_id'])
+    if s and not (s.get('title') or '').strip() and (s.get('group') or '').strip():
+        s = next((x for x in ACTION_SUMMARY.values() if (x.get('group') or '').strip() == s['group'].strip() and (x.get('title') or '').strip()), s)
+    return s or {}
+
+
+def _layout(mid):
+    lay = {'search': [], 'sheets': [], 'tabs': [], 'cols': {}}
+    try: lay['search'] = list((json.load(open(P('Doc', 'verify', mid, 'combo_runtime.json'), encoding='utf-8')).get('search') or {}).keys())
+    except Exception: pass
+    try:
+        sn = json.load(open(P('Doc', 'verify', mid, 'sheet_nav.json'), encoding='utf-8')).get('sheets') or {}
+        lay['sheets'] = list(sn.keys())
+        for v in sn.values():
+            for t in (v.get('tabs') or [])[:1]:
+                if t not in lay['tabs']: lay['tabs'].append(t)
+    except Exception: pass
+    for x in read_csv(P('Doc', 'asisfacts', 'screens', mid, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')):
+        try: no = int(float(x.get('SORT_ORDER_NO') or 9999))
+        except ValueError: no = 9999
+        for k in (x.get('COLUMN_NAME') or '', (x.get('COLUMN_LABEL_NAME') or '').replace('*', '').strip()):
+            if k and (k not in lay['cols'] or no < lay['cols'][k]): lay['cols'][k] = no
+    return lay
+
+
+def _screen_key(r, lay):
+    s = _summ(r)
+    tag = _tag(r, s); place = tag.split('/')[0].split(',')[0].strip()
+    # 정리 파일이 있으면 '위치' 칸만 본다(증거 문장의 다른 탭·컬럼 이름이 순서를 흐리지 않게)
+    txt = (s.get('where') or '') if (s.get('where') or '').strip() else ' '.join([r.get('target') or '', (r.get('evidence') or '')[:300]])
+    if r.get('rule_id') == 'DB-SYN': return (-1, 0, 0, 0)   # 테스트 차단 원인 = 1번(2026-10-29 사용자)
+    z = _ZONE.get(place, 6)
+    if place == '조회조건':
+        idx = [i for i, lb in enumerate(lay['search']) if re.search(r'(?<![A-Za-z])' + re.escape(lb) + r'(?![A-Za-z])', txt)]
+        return (z, min(idx) if idx else 99, 0, 0)
+    tab = [i for _, i in sorted((txt.find(t), i) for i, t in enumerate(lay['tabs']) if t and t in txt)][:1]   # 위치 칸에 먼저 나온 탭
+    sh = [i for i, t in enumerate(lay['sheets']) if t and re.search(r'(?<![A-Z_])' + re.escape(t) + r'(?![A-Z_])', txt)]
+    col = [n for k, n in lay['cols'].items() if len(k) > 2 and re.search(r'(?<![A-Za-z_])' + re.escape(k) + r'(?![A-Za-z_])', txt)]
+    return (z, min(tab) if tab else 99, min(col) if col else 9999, min(sh) if sh else 99)   # 같은 탭 안에서는 왼쪽 컬럼부터
+
+
+def _summary_text(r):
+    """2026-11-17 사용자 지시(SCP0104): 설명 = ① 오류명(간결) ② 위치(조회조건 항목 / 탭·그리드·컬럼) ③ AS-IS 표기·동작 ④ TO-BE 표기·동작 ⑤ GAP.
+    정리 파일(action_summary.csv)에 그 행이 있으면 그 내용, 없으면 원장 값으로 같은 틀을 채운다."""
+    s = ACTION_SUMMARY.get(r['row_id'])
+    if s and not (s.get('title') or '').strip() and (s.get('group') or '').strip():   # 묶음의 다른 행에 적은 설명을 쓴다
+        s = next((x for x in ACTION_SUMMARY.values() if (x.get('group') or '').strip() == s['group'].strip() and (x.get('title') or '').strip()), s)
+    same_n = len(r.get('_same') or [])
+    tail = (chr(10) + f'같은 원인 {same_n + 1}건 묶음: ' + ', '.join([r['row_id']] + list(r.get('_same') or []))[:300]) if same_n else ''
+    if s and (s.get('title') or '').strip():
+        lines = ['[' + _tag(r, s) + '] ' + s['title'].strip().lstrip('○● ').strip(), '위치 : ' + (s.get('where') or '').strip(), 'AS-IS : ' + (s.get('asis') or '').strip(), 'TO-BE : ' + (s.get('tobe') or '').strip(), 'GAP : ' + (s.get('gap') or '').strip()]
+        if (s.get('action') or '').strip(): lines.append('조치 : ' + s['action'].strip())
+        return chr(10).join(lines) + tail
+    return ''
+
+
+def _explain(r):
+    """2026-11-13 사용자: 설명 = 맨 위에 무엇이 오류인지 정의, 그 아래 AS-IS 는 어떻게·TO-BE 는 어떻게. 조치 필요·판정 필요 행만 새 형식, 실패하면 종전 한 줄"""
+    st = _summary_text(r)
+    if st: return st
+    short = plain(r); repro = _repro_tag(r); sim = _similar_tag(r)
+    same = (f" (같은 내용 {len(r['_same']) + 1}건: {', '.join(sorted({(t.split('.')[0] if '.' in t else t) for t in r.get('_same_t', [])} | ({r['target'].split('.')[0]} if '.' in r['target'] else set()))[:6])})" if r.get('_same') else '')
+    try:
+        if r.get('result') in ('FAIL', '판정필요'):
+            t = plain_detail.build(r, short, repro, same, RULE_MEAN.get(r.get('rule_id') or '', '')) + (chr(10) + '· ' + sim.strip() if sim else '')
+            return '[' + _tag(r) + '] ' + t
+    except Exception:
+        pass
+    return short + repro + sim + same
 def lrow(i, r):
     shown = RESULT_NAME.get(r['result'], r['result']) + (' (AI 판단만)' if r.get('_raw_result') and r['_raw_result'] != r['result'] else '')
-    explain = plain(r) + _repro_tag(r) + _similar_tag(r) + (f" (같은 내용 {len(r['_same']) + 1}건: {', '.join(sorted({(t.split('.')[0] if '.' in t else t) for t in r.get('_same_t', [])} | ({r['target'].split('.')[0]} if '.' in r['target'] else set()))[:6])})" if r.get('_same') else '')
+    explain = _explain(r)
     by = {'No': i, '검증 ID': r['row_id'], '분류': AXIS_NAME.get(r.get('axis', ''), r.get('axis', '')), '출처': r['source'], '유형': r['family'], '규칙': r['rule_id'], '영역': r['area'], '대상': r['target'],
           '조건': r['condition'], '정답': r['oracle'], '기대(AS-IS·규칙)': r['expected'], 'AS-IS 근거': r['asis_ref'], '판정 방법': r['method'], '결과': shown, '사용자의견': USER_OPINION.get(r['row_id'], ''),
           '설명': explain, '근거 등급': r['_grade'], '증거(실측)': r['evidence'], 'TO-BE 위치': r['tobe_ref'], '결함 원장': r['defect_ref'], '사용자판정': USER_VERDICT.get(r['row_id'], ''),
@@ -583,6 +706,8 @@ def main():
     a = ap.parse_args()
     mid = a.menu_id.upper()
     _load_prev(mid)
+    try: plain_detail.set_screen(mid)  # 2026-11-13: 설명 열 새 형식(오류 정의 → AS-IS/TO-BE 풀이)
+    except Exception: pass
     rows = read_csv(P('Doc', 'verify', mid, 'verify_ledger.csv'))
     if not rows:
         print(f'[ERROR] 원장 없음 — ledger.py·judge.py 먼저 ({mid})')
@@ -644,7 +769,7 @@ def main():
         ws0.append([g, len(sub), c['PASS'], c['FAIL'], c['판정필요'], c['NOT_RUN'] + c['ERROR'], c['NA'], '인정' if g in GRADE_HARD else '불인정'])
     demoted = sum(1 for r in rows if r.get('_raw_result'))
     ws0.append([f'AI 판단만으로 PASS·해당없음이던 {demoted}건은 판정필요로 셈(원장 값은 보존 — 결정표 by·근거 인용으로 확정)' if demoted else 'AI 판단만으로 통과한 행 없음'])
-    ws0.append(['근거 등급: 기계 = E2E·정적·메타·DB 실측 / 기계(상속·집계) = 다른 기계 판정의 상속·집계 / 사람 = CheckList 사용자판정·결정표 by=사람 / AI 작성·인용 확인 = AI 답이지만 인용 원문이 기계로 확인됨(행과의 관련성은 사람 확인 권장) / AI 판단만 = 인용 없는 AI 답'])
+    ws0.append(['근거 등급: 기계 = E2E·정적·메타·DB 실측 / 기계(상속·집계) = 다른 기계 판정의 상속·집계 / 사람 = CheckList 사용자판정·결정표 by=사람 / AI 작성·인용 확인 = AI 답이지만 인용 원문이 기계로 확인됨(행과 관련 있는지는 사람 확인 권장) / AI 판단만 = 인용 없는 AI 답'])
     for c in ws0[grade_row]:
         c.fill, c.font = HFILL, Font(bold=True)
     ws0.append([])
@@ -691,8 +816,14 @@ def main():
             # 후보 갱신(B7)의 (b-재진입) 캐시 판정은 화면 단위 현상(콤보 공통 캐시) — 조회조건마다 같은 문장이 반복되므로 대상 없이 묶는다(2026-10-29 SCP0020 Div·Plant Site·Operation group·Line 4건)
             core = ev.split('| FAIL:')[-1] if '| FAIL:' in ev else ev
             return (r['rule_id'], '', re.sub(r'\d+건|\s+', ' ', core)[:120])
+        if r['rule_id'] == 'K3':
+            # 2026-11-16 사용자 지적(SCP0104 v4 조치 필요에 'Hide Column → 컬럼 여전히 표시' 3건 — 화면 행 V-6af7fe19 · 결함 일반화 DM-P26 · DM-P28):
+            #   그리드 조작(K3)은 한 번의 실측(copy·ctrl·hdr·hide·f5 …)을 화면 행과 결함 유형 행이 각자 자기 항목만 골라 적는다 → 대상도 증거 앞머리도 달라 위 키로는 안 묶였다.
+            #   → 실패한 조작 항목('hide FAIL: …' 의 항목 이름과 증상 앞부분) 집합으로 묶는다(대상 무관 — 화면당 같은 조작 실패는 1건)
+            subs = sorted({a.lower() + ':' + re.sub(r'\s+', ' ', b).strip()[:60] for a, b in re.findall(r'(?:^|\|)\s*([A-Za-z0-9]+) FAIL: ([^|]*)', ev)})
+            if subs: return ('K3', '', 'SUB:' + '|'.join(subs))
         return (r['rule_id'], tg.upper(), re.sub(r'\s+', ' ', ev)[:120])
-    elem_rules = {r['rule_id'] for r in rows if r['result'] == 'FAIL' and r['source'] in ('COLUMN', 'SEARCH', 'ASIS', 'TRACE', 'SP', 'MSG') and not re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|규칙 \w+ )', r.get('evidence') or '')}
+    elem_rules ={r['rule_id'] for r in rows if r['result'] == 'FAIL' and r['source'] in ('COLUMN', 'SEARCH', 'ASIS', 'TRACE', 'SP', 'MSG') and not re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|규칙 \w+ )', r.get('evidence') or '')}
     a5_screen = next((r for r in rows if r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'A5' and r['result'] == 'FAIL' and re.search(r'누락\(|추가\(', r.get('evidence') or '')), None)
     for r in rows:
         ev = r.get('evidence') or ''
@@ -736,6 +867,18 @@ def main():
             root.setdefault('_same', []).append(r['row_id']); root.setdefault('_same_t', []).append(r['target']); root['_same'] += r.get('_same', []); root['_same_t'] += r.get('_same_t', [])
             continue
         final.append(r)
+    # 2026-11-17 사용자 지시(SSP0020 v31 조치 필요 3번 = 2번과 동일 항목 '중복 제거'): 근거가 '같은 결함 <행 ID>' 로 다른 조치 행을 가리키면
+    #   (V-db5fae91 A5 스냅샷 헤더 'Valid' 잔존 → V-d1f0e5dc H5 Valid→Active) 그 행으로 묶는다. 가리킨 행이 조치 필요에 없으면 그대로 둔다
+    _fid = {r['row_id']: r for r in final}
+    _folded = []
+    for r in final:
+        ref_ids = re.findall(r'같은 결함\s*([A-Z]{1,3}-[0-9a-f]{6,})', r.get('evidence') or '')
+        root = next((_fid[i] for i in ref_ids if i in _fid and _fid[i] is not r and not re.search(r'같은 결함\s*' + re.escape(r['row_id']), _fid[i].get('evidence') or '')), None)
+        if root is not None:
+            root.setdefault('_same', []).append(r['row_id']); root.setdefault('_same_t', []).append(r['target']); root['_same'] += r.get('_same', []); root['_same_t'] += r.get('_same_t', [])
+            continue
+        _folded.append(r)
+    final = _folded
     # 2026-11-06 사용자 지시(SCP0084 v3 조치 필요 14·15·16 '상단과 동일항목 중복'): 두 엔진(@verify COLUMN · @trace TRACE)이 같은 컬럼·같은 규칙을
     #   대상 이름만 달리('Long Term Stock.MEMO (Memo)' ↔ 'MEMO') 적은 행, 같은 저장 실측 1회('저장 요청이 서버로 나가지 않음')를 규칙(F1·F2·F4)·대상(화면·저장 SP)별로
     #   따로 적은 행을 원천 1건으로 묶는다(검증 전체 시트에는 그대로 남음).
@@ -760,7 +903,22 @@ def main():
         if sym: by_sym[sym] = r
         elif c: by_col[(r['rule_id'], c)] = r
     fails = merged
-    fails.sort(key=lambda r: 0 if r['rule_id'] == 'DB-SYN' else 1)  # 차단 원인이 1번(2026-10-29)
+    # 2026-11-17 사용자 지시(SCP0104 v22 '중복제거'·'설명 간결'): 화면별 정리 파일 Doc/verify/<ID>/action_summary.csv 의 group 이 같은 행은 원인 1건으로 묶는다
+    #   (붙여넣기 핸들러 없음 10행 · 저장 ORA-01840 4행처럼 규칙·대상은 달라도 고칠 곳이 하나인 행). 검증 전체 시트에는 그대로 남는다
+    global ACTION_SUMMARY
+    ACTION_SUMMARY = {x['row_id']: x for x in read_csv(P('Doc', 'verify', mid, 'action_summary.csv')) if (x.get('row_id') or '').strip()}
+    _grp, _kept2 = {}, []
+    for r in fails:
+        g = (ACTION_SUMMARY.get(r['row_id']) or {}).get('group', '').strip()
+        root = _grp.get(g) if g else None
+        if root is not None:
+            root.setdefault('_same', []).append(r['row_id']); root.setdefault('_same_t', []).append(r['target']); root['_same'] += r.get('_same', []); root['_same_t'] += r.get('_same_t', [])
+            continue
+        if g: _grp[g] = r
+        _kept2.append(r)
+    fails = _kept2
+    _lay = _layout(mid)
+    fails.sort(key=lambda r: _screen_key(r, _lay))  # 차단 원인(DB-SYN)이 1번(2026-10-29) · 그 뒤 화면 배치 순서(2026-11-17)
     try:  # 회귀 게이트(regress.py)용 — 조치 필요 행과 묶인 행(folded_into)
         ai = [{'row_id': r['row_id'], 'rule_id': r['rule_id'], 'target': r['target'], 'same': r.get('_same') or []} for r in fails]
         for r in fails:
@@ -801,8 +959,22 @@ def main():
     write_sheet(wb, '검출 규칙', ['규칙', '유형', '명칭', '정답', '방법', '기대 원천', '판정 방법'],
                 [[k, v['family'], v['name'], v['oracle'], v['method'], v['expected_source'], v['how']] for k, v in rules.items()], [7, 6, 30, 8, 12, 40, 60])
     p1, n1 = next_path(mid, name, 'CheckList')
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb, gaejo=doc_style.CHECKLIST_GAEJO, free=True)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     wb.save(p1)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(p1)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     archive_after_save(p1, mid, name, 'CheckList')
+    # 2026-11-16 사용자: CheckList 생성 후 Doc/UI_TEST(SCP&SSP) 에 테스트 Excel 도 생성 — '조치 필요' 시트 기준(make_ui_test_sheet.py)
+    #   사람이 쓰는 파일이라 덮어쓰지 않고 검증 ID 가 없는 행만 덧붙인다. 실패해도 CheckList 생성 결과(rc)는 바꾸지 않는다.
+    ui_test_msg = ''
+    try:
+        import make_ui_test_sheet
+        _rc_ut, ui_test_msg = make_ui_test_sheet.build(mid, p1)
+    except Exception as _e:
+        ui_test_msg = f'UI 테스트 Sheet: ERROR 생성 못함 — {_e}'
 
     # ── 보완대상목록 ──
     targets = [r for r in rows if r['result'] in ('FAIL', '판정필요')]
@@ -876,7 +1048,13 @@ def main():
     write_sheet(wb2, '공통 컴포넌트 가이드', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] == 'COMMON'], 1)], FW)
     write_sheet(wb2, '사람판정', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] == 'HUMAN'], 1)], FW)
     p2, n2 = next_path(mid, name, 'ActionItemList')
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb2, gaejo=doc_style.CHECKLIST_GAEJO, free=True)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     wb2.save(p2)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(p2)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     archive_after_save(p2, mid, name, 'ActionItemList')
     fl = P('Doc', 'verify', mid, 'fixlist.csv')
     with open(fl, 'w', encoding='utf-8-sig', newline='') as f:
@@ -886,6 +1064,8 @@ def main():
     print(f'CheckList v{n1}: {p1}')
     print(f'  결과 ' + ' · '.join(f'{k} {v}' for k, v in sorted(cnt.items())) + f' · 결함 원장 {len(dref)}건 중 FAIL {len(dfail)}')
     print(f'ActionItemList v{n2}: {p2} (설정 {scope})')
+    if ui_test_msg:
+        print(ui_test_msg)
     print('  ' + ' · '.join(f"{LAYER_NAME[k]} {v}" for k, v in Counter(f['layer'] for f in fx).items()) + f' · 기계용 {fl}')
     return 0
 

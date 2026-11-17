@@ -1,0 +1,91 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 09:44:23.381",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 249,
+   "rows_kind": "DataSet rows",
+   "ms": 4.1,
+   "params": {
+    "Code": "COUNTRY_MST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='COUNTRY_MST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ROUTE_ID"
+  },
+  {
+   "at": "2026-11-14 09:44:23.399",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 249,
+   "rows_kind": "DataSet rows",
+   "ms": 4.12,
+   "params": {
+    "Code": "COUNTRY_MST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='COUNTRY_MST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ROUTE_ID"
+  },
+  {
+   "at": "2026-11-14 09:44:23.412",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 3.63,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "TRANSPORT_MODE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='TRANSPORT_MODE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ROUTE_ID"
+  },
+  {
+   "at": "2026-11-14 09:44:24.196",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0005_GET_DISTRIBUTION_ROUTE",
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 398.84,
+   "params": {
+    "p_from_country": "US",
+    "p_from_city": "USAAZ",
+    "p_to_country": "US",
+    "p_to_city": "USAAZ",
+    "p_transport_mode": "TRK",
+    "p_valid_yn": "Y"
+   },
+   "inline": "EXEC SCP0005_GET_DISTRIBUTION_ROUTE @p_from_country='US', @p_from_city='USAAZ', @p_to_country='US', @p_to_city='USAAZ', @p_transport_mode='TRK', @p_valid_yn='Y'",
+   "phase": "action:cell:ROUTE_ID"
+  }
+ ]
+}

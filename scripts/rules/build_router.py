@@ -55,7 +55,7 @@ router = (
     '2. 해당 행의 **핵심 Hook 을 `Doc/_rules_v2/hooks/<name>.md` 에서 Read** 한다 — ⭐⭐⭐ 표기는 생략 불가.\n'
     '3. T01/T01M 이면 `UI_MANDATORY_CHECKLIST.md` 를 PRE-WRITE 로 통과한다.\n'
     '4. 첫 응답 머리에 `[T# 적용: T01, T04 / Read: hook-a, hook-b]` 1줄을 남긴다 (누락 추적용).\n'
-    '5. 카탈로그 전체(142+ hook 한 줄 요약)가 필요할 때만 `RULESET_MASTER.md §4` 를 연다.\n\n'
+    '5. 카탈로그 전체(hook 한 줄 요약 — 수는 RULESET_MASTER 상단 카운트 단일 소스 문단)가 필요할 때만 `RULESET_MASTER.md §4` 를 연다.\n\n'
     + s2 + '\n' + s25 + '\n' + s7
 )
 write(os.path.join(OUT_DIR, 'TRIGGER_ROUTER.md'), router)

@@ -1,7 +1,7 @@
 # DMF0083 — To-Be Fact Pack 요약
 
 - page_key: `demand/sales-price-model-group` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 17 · 엔드포인트 호출 13 (미해결 0, 주석 속 0) · 이벤트 38 · 컴포넌트 사용 44 · 하드코딩 컬럼 1 · 메시지 32
+- 파일 17 · 엔드포인트 호출 13 (미해결 0, 주석 속 0) · 이벤트 38 · 컴포넌트 사용 44 · 하드코딩 컬럼 1 · 메시지 33
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -13,31 +13,31 @@
 | features/demand/src/pages/sales-price-model-group/components/ModelGroupField.tsx | component | 99 |
 | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupForm.tsx | component | 210 |
 | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.module.scss | component | 13 |
-| features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | component | 354 |
+| features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | component | 465 |
 | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupModals.tsx | component | 179 |
 | features/demand/src/pages/sales-price-model-group/hooks/useSalesPriceModelGroupSave.ts | hook | 121 |
 | features/demand/src/pages/sales-price-model-group/index.ts | index | 2 |
-| features/demand/src/pages/sales-price-model-group/sales-price-model-group.constants.ts | constants | 133 |
+| features/demand/src/pages/sales-price-model-group/sales-price-model-group.constants.ts | constants | 136 |
 | features/demand/src/pages/sales-price-model-group/sales-price-model-group.types.ts | types | 55 |
-| features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | page | 341 |
+| features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | page | 343 |
 | features/demand/src/pages/sales-price-model-group/useSalesPriceModelGroupStore.ts | store | 238 |
 | features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.grid.ts | util | 201 |
-| features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.save.ts | util | 340 |
-| features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.util.ts | util | 204 |
+| features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.save.ts | util | 399 |
+| features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.util.ts | util | 238 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 4 | Y | PriceBatchInputModal.tsx:121 SalesPriceModelGroupForm.tsx:51 SalesPriceModelGroup.tsx:80 SalesPriceModelGroup.tsx:136 |
+| (useTabComboQueries) | hook | 4 | Y | PriceBatchInputModal.tsx:121 SalesPriceModelGroupForm.tsx:51 SalesPriceModelGroup.tsx:81 SalesPriceModelGroup.tsx:138 |
 | DMF0083/priceBatch//call-proc | hook | 1 | Y | PriceBatchInputModal.tsx:138 |
 | DMF0083/priceBatch/EXCHANGE_RATE/call-proc | hook | 1 | Y | PriceBatchInputModal.tsx:153 |
-| DMF0083/main//call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:88 |
-| DMF0083/main/SPREAD_TITLE_DATE/call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:100 |
-| DMF0083/main/EXCHANGE_RATE/call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:112 |
+| DMF0083/main//call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:89 |
+| DMF0083/main/SPREAD_TITLE_DATE/call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:101 |
+| DMF0083/main/EXCHANGE_RATE/call-proc | hook | 1 | Y | SalesPriceModelGroup.tsx:113 |
 | /admin/menu/DMF0083/column | http | 1 | Y | useSalesPriceModelGroupStore.ts:75 |
 | /admin/menu/DMF0083/measure | http | 1 | Y | useSalesPriceModelGroupStore.ts:177 |
 | /admin/menu/DMF0083/search-conditions | http | 1 | Y | useSalesPriceModelGroupStore.ts:215 |
-| /DMF0083/main/SAVE/call-proc | http | 1 | Y | sales-price-model-group.save.ts:328 |
+| /DMF0083/main/SAVE/call-proc | http | 1 | Y | sales-price-model-group.save.ts:387 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -71,19 +71,19 @@
 | PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupForm.tsx | 178 |
 | ModelGroupField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupForm.tsx | 182 |
 | BucketField | onChange | <arrow> useMessageStore.getState().setAlert,useMessageStore.getState,t,setSearchParams | jsx | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupForm.tsx | 193 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 304 |
-| g | beginningEdit | beginningEdit | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 305 |
-| g | pastingCell | pastingCell | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 306 |
-| g | cellEditEnded | cellEditEnded | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 307 |
-| g | pastedCell | cellEditEnded | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 308 |
-| g | scrollPositionChanged | onScroll | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 309 |
-| g.hostElement | click | clickHandler | addEventListener | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 310 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 415 |
+| g | beginningEdit | beginningEdit | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 416 |
+| g | pastingCell | pastingCell | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 417 |
+| g | cellEditEnded | cellEditEnded | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 418 |
+| g | pastedCell | cellEditEnded | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 419 |
+| g | scrollPositionChanged | onScroll | addHandler | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 420 |
+| g.hostElement | click | clickHandler | addEventListener | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx | 421 |
 | ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,useMessageStore.getState().setAlert,useMessageStore.getState | jsx | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupModals.tsx | 116 |
 | PriceBatchInputModal | onSaved | onBatchSaved | jsx | features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupModals.tsx | 174 |
-| SalesPriceModelGroupForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 266 |
-| SalesPriceModelGroupGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 313 |
-| SalesPriceModelGroupModals | onColumnSettingSaved | <arrow> clearGrid,queryClient.invalidateQueries,fetchGridLayout | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 328 |
-| SalesPriceModelGroupModals | onBatchSaved | <arrow> refetch | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 333 |
+| SalesPriceModelGroupForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 268 |
+| SalesPriceModelGroupGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 315 |
+| SalesPriceModelGroupModals | onColumnSettingSaved | <arrow> clearGrid,queryClient.invalidateQueries,fetchGridLayout | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 330 |
+| SalesPriceModelGroupModals | onBatchSaved | <arrow> refetch | jsx | features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx | 335 |
 | grid | updatedLayout | normalize | addHandler | features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.grid.ts | 104 |
 | grid | loadedRows | reassert | addHandler | features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.grid.ts | 194 |
 | grid | updatedLayout | reassert | addHandler | features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.grid.ts | 195 |
@@ -127,7 +127,7 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| LBL00662 | 3 |
+| LBL01274 | 3 |
 | LBL00664 | 1 |
 | LBL00001 | 2 |
 | LBL00111 | 1 |
@@ -150,6 +150,7 @@
 | MSG00409 | 1 |
 | MSG00428 | 1 |
 | MSG00447 | 1 |
+| MSG01429 | 1 |
 | MSG00608 | 1 |
 | MSG00606 | 1 |
 | MSG00618 | 1 |
@@ -157,7 +158,7 @@
 | LBL00605 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0020(21), DMF0083(8), COM0008(4), COM0005(2)
+- 화면ID: DMF0020(23), DMF0083(8), COM0008(4), COM0005(2), DMF0020_01(1)
 - SP/PKG: PKG_DMF0083(12), P_FROM_YYYYMMDD(1), PR_GET_SHEET_MEASURE_LIST(1), P_DMF0083_SAVE_SCM_MST_FUTURE_PRICE_MDL_GR(1), P_OPEN_MDL_GR_CURSOR(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)

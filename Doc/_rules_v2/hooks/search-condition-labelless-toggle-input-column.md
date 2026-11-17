@@ -130,7 +130,7 @@ const radio = (labelText: string, value: string, options: readonly Option[], onP
   - DMF0082 `MktFcstForm.tsx` 의 Sum/Qty≥0/Cell Qty 묶음(`customGrid` 직접 배치) — reference 화면이므로 변경 시 동일 패턴 화면 전수 동반
 - **정본** = SCP0100 `GlobalPsiReportForm.tsx`(공통소스판, 2026-10-22 채택) — Cell Qty·A/S·Search Mode 가 v2 그대로.
 - #121 §1 표의 `customGrid`/`customCheckbox` 는 **조회조건에서는 본 hook §2 패턴 안에서만** 쓴다.
-- **소급 일괄 수정 금지** — 현행 위반은 스캐너 인벤토리로만 관리하고, 화면 신규 작성·보완(touch) 시 적용한다. FE 수정은 CLAUDE.md §1-8 및 사용자 지시(2026-10-23 "FE 직접 수정 요청 전에는 룰·하네스 작업에서 FE 를 고치지 않는다")를 따른다.
+- **소급 일괄 수정 금지** — 현행 위반은 스캐너 인벤토리로만 관리하고, 화면 신규 작성·보완(touch) 시 적용한다. FE 수정은 CLAUDE.md §1-8 및 사용자 지시(2026-10-23 "FE 직접 수정 요청 전에는 룰·하네스 작업에서 FE 를 고치지 않는다")를 따른다. (2026-11-13 정정: 2026-10-23 지시는 2026-11-02 작업 모드로 대체 — FE 직접 수정 여부는 `tools/Harness/harness.json` repairScope: UI/DB MODE(DB_FE) = 직접 수정 / DB MODE(DB_ONLY) = 가이드만 · 실행 hook `check-work-mode`)
 
 ---
 

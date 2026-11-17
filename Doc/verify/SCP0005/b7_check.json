@@ -1,0 +1,119 @@
+{
+ "menu_id": "SCP0005",
+ "asis_id": "SCP0005",
+ "generated": "2026-11-14 05:55:06",
+ "a": {
+  "verdict": "NA",
+  "note": "저장 SP SCP0005_SAVE_DISTRIBUTION_ROUTE 대상 SCP_MST_DISTRIBUTION_ROUTE 와 콤보 원천 12종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SCP_MST_DISTRIBUTION_ROUTE"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "clbTransMode",
+    "label": "Trans Mode",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboValidYN",
+    "label": "Valid",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_FRI",
+    "label": "Fri",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_MON",
+    "label": "Mon",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_SAT",
+    "label": "Sat",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_SUN",
+    "label": "Sun",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_THU",
+    "label": "Thu",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_TUE",
+    "label": "Tue",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DAYS_WED",
+    "label": "Wed",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "LT_TYPE",
+    "label": "L/T Type*",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TRANSPORT_MODE",
+    "label": "Trans Mode*",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "VALID_YN",
+    "label": "Valid*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 172,
+  "at": "2026-11-14T13:23:41.297Z",
+  "user": "minyonglee1",
+  "test": "조회조건 초기값·Division 변경 뒤 Version(G6)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 420,
+  "at": "2026-11-14T13:23:41.329Z",
+  "user": "minyonglee1",
+  "test": "조회조건 초기값·Division 변경 뒤 Version(G6)"
+ }
+]

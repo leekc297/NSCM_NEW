@@ -3,7 +3,7 @@
 > **트리거**: 신규 화면 작성 완료 직전 / 화면 수정 작업 종료 직전 / "화면 다 됐어?" / PR 제출 전
 > **목적**: 화면 개발 시 누락·미구현·런타임 오류가 반복되는 문제 해소.
 > 개별 hook 은 작성 "중" 체크인 반면, 본 게이트는 작업 **종료 선언 전 마지막 관문**이다.
-> ⚠️ **아래 G1~G10 중 1개라도 미수행 상태로 "완료" 보고 금지.** 각 게이트는 증거(카운트/grep 결과/캡쳐)와 함께 보고한다.
+> ⚠️ **아래 G1~G11 중 1개라도 미수행 상태로 "완료" 보고 금지.** 각 게이트는 증거(카운트/grep 결과/캡쳐)와 함께 보고한다. (2026-11-13 정정: G1~G10 → G1~G11 — §0 매트릭스 11 게이트와 일치)
 > ⛔ **2026-08-11 사용자 지적** — "POPUP 디자인부터 기능 미구현 / MAIN GRID 에 UI Category Setup 데이터 미사용 /
 > CRUD 완료라 했는데 실제로는 오류가 다 발생" 이 **G1~G8 종합 PASS 상태에서** 나왔다.
 > ⇒ **G9 신설(§0.4)**. 게이트 통과 = 완료가 아니라, **축별 커버리지 표(안 본 축 = ERROR)** 를 붙여야 완료다.
@@ -14,17 +14,17 @@
 
 | # | 게이트 | 판정 기준 | 근거 룰/Hook |
 |---|---|---|---|
-| G1 | AS-IS 매핑 완전성 | `__asis-mapping__.md` 4축 (Event/API/Validation/Expression) 카운트 = AS-IS 분석 자료 행 수와 **정확 일치, 누락 0** + ⭐ **이벤트 ID(E01~) 1:1 대사표 — 빈 칸 0** (총합 비교 폐지, 2026-08-06 SYS0017 감사 계기) | asis-coverage-check §0.0/§0.1 + CLAUDE.md §4-11 |
+| G1 | AS-IS 매핑 완전성 | `__asis-mapping__.md` 4축 (Event/API/Validation/Expression) 카운트 = AS-IS 분석 자료 행 수와 **정확 일치, 누락 0** + ⭐ **이벤트 ID(E01~) 1:1 대조표 — 빈 칸 0** (총합 비교 폐지, 2026-08-06 SYS0017 감사 계기) (2026-11-13 정정: 용어 대사표 → 대조표) | asis-coverage-check §0.0/§0.1 + CLAUDE.md §4-11 |
 | G2 | 버튼 10대 매핑 + **동적 권한 fetch** | CRUD 6 + Search Aux 4 전수 판정 (구현/숨김/자동활성 명시) + `() => undefined` 빈 핸들러 0건 + ⭐ **`useTabBtnPermissions` + `hasButton(BTN_CD)` 조건부 사용** (hotkeyConfig 하드코딩 금지) + **신규 화면은 `SCM_ADM_MNU_BTN_MPG_M` + `USER_GR_MNU_BTN_MPG_M` 멱등 INSERT** | asis-button-mapping + ⭐⭐ **ui-dynamic-property-management §3** (master) + **menu-button-dynamic-fetch** (child) |
 | G3 | Grid 메타 완전성 + **동적 Column/Measure fetch** | 전 grid: DataGrid 래퍼 + `_inputEditType`/`_ctrlType`/`_modalKey` + SHEET_COLUMNS ↔ SP alias 일치 + selectionMode 명시 + ⭐ **store `staticColumns` + `fetchStaticColumns` + mount/Search 호출 + DataGrid prop 5 단계** + (PIVOT/measure 화면) **`staticMeasures` + `fetchStaticMeasures`** + **신규 화면은 `SCM_MST_SHEET_COLUMNS` + `SCM_MST_SHEET_MEASURE` 멱등 INSERT** + **컬럼 lookup = `CELL_COMBO_DATA_TYPE` 위치 (ATTRIBUTE1 금지)** + **INPUT_TP_CD 'IM' 표준 ('MI' typo 금지)** | grid-column-meta + sheet-columns-binding-match + grid-interaction-patterns + ⭐⭐ **ui-dynamic-property-management §4/§5** (master) + **ui-category-setup-column-meta** (child) + **column-lookup-meta-standard** |
 | G4 | 메타/라우팅 정합 | MNU_M (UPPR 대소문자/MNU_DESC/MNU_TP_CD) + SHT_NM FE↔DB 일치 + PROC_M positional + 권한 (MNU_BTN_MPG_M ↔ USER_GR — G2 master 와 cross-ref) | menu-not-displayed-debug 7단계 + proc-meta-signature-match |
-| G5 | 정적 검증 + **regression 0 보고** | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) + type-check-error-patterns 17종 grep 0건 + ⭐ **`_artifacts/_local_setup/regression-impact.ps1` 실행** → Hard Boundary 위반 / 영향 도메인 / `procedures.d.ts` 변경 인벤토리 보고 (룰 #62 §9) | type-check-error-patterns + post-write + ⭐ **regression-zero-mandatory §9** |
-| G6 | 런타임 smoke (실행 증명) | ⭐ **§0.5 명시 체크리스트 5항 전수** (모달 OK/Cancel · 저장 SYS_LOG 실증 · DB SELECT 왕복 · 콤보 NAME · cascade 1회) + 브라우저 콘솔 에러 0건. "alert 떴으니 됨" 금지 (2026-08-06 SYS0017 감사 계기 정량화) | oracle-db-workflow §2.5 + runtime-error-prevention + screen-runtime-pitfalls P9 |
+| G5 | 정적 검증 + **regression 0 보고** | `pnpm lint:fix` + `pnpm type-check` + `pnpm build` 3종 PASS (출력 첨부) (2026-11-13 정정: 통과 기준은 유지하되 AI 직접 실행 금지 — 실행 hook `block-dev-commands` 차단. AI 는 변경 파일 목록을 보고하고, 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`(type-check | lint | all) 사용. 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 보고) + type-check-error-patterns 17종 grep 0건 + ⭐ **`_artifacts/_local_setup/regression-impact.ps1` 실행** → Hard Boundary 위반 / 영향 도메인 / `procedures.d.ts` 변경 인벤토리 보고 (룰 #62 §9) | type-check-error-patterns + post-write + ⭐ **regression-zero-mandatory §9** |
+| G6 | 런타임 smoke (실행 증명) | ⭐ **§0.5 명시 체크리스트 6항 전수** (모달 OK/Cancel · 저장 SYS_LOG 실증 · DB SELECT 왕복 · 콤보 NAME · cascade 1회 · 모달별 CRUD 왕복) (2026-11-13 정정: 5항 → 6항 — §0.5 G6-1~G6-6, G6-6 은 2026-08-07 신설) + 브라우저 콘솔 에러 0건. "alert 떴으니 됨" 금지 (2026-08-06 SYS0017 감사 계기 정량화) | oracle-db-workflow §2.5 + runtime-error-prevention + screen-runtime-pitfalls P9 |
 | G7 | 표준 패턴 정합 + **Figma 레이아웃 정합** | 자매 화면(동일 features 폴더) 1개와 구조 비교: SearchArea/FormItem/Store/Constants/components 폴더 — 임의 작성 0건 + ⭐ **Figma MD(`Doc/_figma/screens/{ID}.md`) 존재 시 영역 배치 6축(상단조건/좌·우/상·하/영역 컨텐츠/버튼/라벨) 정합 — 불일치 0 (수정 작업이면 레이아웃 교체 수행) + `Figma 영역↔구현` 매핑표 보고** | _tobe/01~10 + components-folder-pattern + screen-create-checklist + ⭐⭐⭐ **figma-layout-parity-mandatory** |
 | G8 | 이관 완전성 | deploy package 5종 인벤토리 (DDL/META/SP body/GRANT/i18n) + 멱등 SQL + 공용/wrapper SP 포함 | deploy-package-completeness |
 | **G9** | ⭐⭐⭐ **메타 실소비 · 셀 컨트롤 3요소 · 저장 경로 전수** | **§0.4 G9-A~G9-D 전수 판정** — ①컬럼명 하드코딩 0건 + 메타↔실동작 모순 질문 ②팝업/콤보 3요소(메타·트리거·파라미터) ③저장 SP 수 = 왕복 수(신규행 C·조회 R 독립) + 원장 delta ④harness = FE 실 payload·다행. **G1~G8 을 전부 통과하고도 터진 3종을 막는 게이트** | ⭐⭐⭐ **#130 ui-meta-consumption-and-crud-path-coverage** (2026-08-11 사용자 지정) |
-| **G10** | ⭐⭐⭐ **지정 보완요청 원장 축 (미적용 전제)** | `보완요청_원장.md` 의 이 화면 대상 행 전수 — 러너 **섹션 10** (`asis_mapping_gate --check --requests-only --menu`) PASS: 원장 미편입 0 / **PENDING 0** / 비-PENDING 근거 공란 0 / 판정신호 실측 불일치 0 / 원장↔대사표 상태 정합. **보류(USER-DECISION/VISUAL)·클라우드 N 목록을 완료 보고에 전기** (PASS 여도 생략 금지). 하위문구 단위 판정 — 행 단위 "완료" 금지 | ⭐⭐⭐ **#139 request-ledger-and-subclause-mapping** (2026-08-20 사용자 지정 "미적용 전제") + #126 §2 (F) |
-| **G11** | ⭐⭐⭐ **대조표 전 행 검증 커버리지 + DB 접근(시노님·권한)** | 대조표 2종(FE `__asis-mapping__.md` 전 행 + AS-IS 액션 대조표 `Doc/asisfacts/screens/<AS-IS>/actions.csv` 진입점·검증 가능 액션)의 **행마다 필요한 검증 층**(정적 디자인 · 동적 생성·조회 · 콤보 · Cascade · 편집·검증 · CRUD · 팝업 · 공통 · 권한 · DB 실행·접근)에 **검증 결과**가 있어야 한다. `Doc/verify/<ID>/mapping_trace.md`(v2 — 대조표 전 행 × 검사 카탈로그 `mapping_checks.csv`, **검증 불필요 분류 없음**: 제외·해당없음 행 = 사유 근거 검사 X-REASON) 판정 **FAIL 0 · 미구현 0 · 미검증 0**(인스턴스 사유 NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현 · BLOCKED = 대조표 미구현 행) · **작업 원장 `work_ledger.md` 0건**(PASS·NA 외 검사 인스턴스 전부 = 할 일 W1 기능 구현·W2 구현 위치·W3 동작 수정·W4 검사기 구현·W5 검사기 연결·W6 검증 실행·W7 기대값 확정·W8 구현 후 검증·W9 도구 오류 — 별도 대기열 없음) · FE 대조표 없음 = 미통과 · `Doc/verify/<ID>/syn_check.csv`(BE 계정 SCMP_APP 이 부르는 PKG·콤보 SQL 객체의 시노님/권한) 문제 0 · E2E 테스트 구간 BE 로그 DB 오류(ORA-00942·PLS-00201 등) 0. **미검증은 PASS 가 아니다** | 사용자 지시 2026-10-26 · 🔎 화면 정합검증(`run_verify.py` → `syn_check.py` → `mapping_trace.py --to-ledger` → E2E `@verify`+검증 엔진 `@trace` → `mapping_trace.py` → 구현 엔진 `impl_engine.py`) · 하네스 게이트 **VC1·VC2** · E2E fixture `dberr` · 전 화면 `trace_all.py` → `Doc/verify/_trace_all.md` · 대사표 열 `verify_cov`·`syn_issue` |
+| **G10** | ⭐⭐⭐ **지정 보완요청 원장 축 (미적용 전제)** | `보완요청_원장.md` 의 이 화면 대상 행 전수 — 러너 **섹션 10** (`asis_mapping_gate --check --requests-only --menu`) PASS: 원장 미편입 0 / **PENDING 0** / 비-PENDING 근거 공란 0 / 판정신호 실측 불일치 0 / 원장↔대조표 상태 정합. **보류(USER-DECISION/VISUAL)·클라우드 N 목록을 완료 보고에 전기** (PASS 여도 생략 금지). 하위문구 단위 판정 — 행 단위 "완료" 금지 | ⭐⭐⭐ **#139 request-ledger-and-subclause-mapping** (2026-08-20 사용자 지정 "미적용 전제") + #126 §2 (F) |
+| **G11** | ⭐⭐⭐ **대조표 전 행 검증 커버리지 + DB 접근(시노님·권한)** | 대조표 2종(FE `__asis-mapping__.md` 전 행 + AS-IS 액션 대조표 `Doc/asisfacts/screens/<AS-IS>/actions.csv` 진입점·검증 가능 액션)의 **행마다 필요한 검증 층**(정적 디자인 · 동적 생성·조회 · 콤보 · Cascade · 편집·검증 · CRUD · 팝업 · 공통 · 권한 · DB 실행·접근)에 **검증 결과**가 있어야 한다. `Doc/verify/<ID>/mapping_trace.md`(v2 — 대조표 전 행 × 검사 카탈로그 `mapping_checks.csv`, **검증 불필요 분류 없음**: 제외·해당없음 행 = 사유 근거 검사 X-REASON) 판정 **FAIL 0 · 미구현 0 · 미검증 0**(인스턴스 사유 NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현 · BLOCKED = 대조표 미구현 행) · **작업 원장 `work_ledger.md` 0건**(PASS·NA 외 검사 인스턴스 전부 = 할 일 W1 기능 구현·W2 구현 위치·W3 동작 수정·W4 검사기 구현·W5 검사기 연결·W6 검증 실행·W7 기대값 확정·W8 구현 후 검증·W9 도구 오류 — 별도 대기열 없음) · FE 대조표 없음 = 미통과 · `Doc/verify/<ID>/syn_check.csv`(BE 계정 SCMP_APP 이 부르는 PKG·콤보 SQL 객체의 시노님/권한) 문제 0 · E2E 테스트 구간 BE 로그 DB 오류(ORA-00942·PLS-00201 등) 0. **미검증은 PASS 가 아니다** | 사용자 지시 2026-10-26 · 🔎 화면 정합검증(`run_verify.py` → `syn_check.py` → `mapping_trace.py --to-ledger` → E2E `@verify`+검증 엔진 `@trace` → `mapping_trace.py` → 구현 엔진 `impl_engine.py`) · 하네스 게이트 **VC1·VC2** · E2E fixture `dberr` · 전 화면 `trace_all.py` → `Doc/verify/_trace_all.md` · 대조표 열 `verify_cov`·`syn_issue` |
 
 ## §0.4 ⭐⭐⭐ G9 신설 — 메타 실소비 · 셀 컨트롤 3요소 · 저장 경로 전수 (2026-08-11 사용자 지정, hook #130)
 
@@ -35,7 +35,7 @@
 | # | 게이트 | 판정 기준 | 실패 시 |
 |---|---|---|---|
 | **G9-A** | **메타 실소비** | 화면 코드에 **컬럼명 배열 상수**로 표시/편집/잠금을 정하는 코드 **0건**. 판정은 공용 `GridUtils.isEditableCell` **동일 규약**(IM/IO=신규행만·M/O=전 행·S=불가), 색(formatItem)·편집(beginningEdit)이 **같은 함수** 참조. ⭐ **모순 질문 필수** — "이 화면에서 편집되는 컬럼이 메타에서도 편집 가능인가?" (전 컬럼 `'S'` 인데 편집되면 둘 중 하나가 틀린 것) | BLOCK |
-| **G9-B** | **셀 컨트롤 3요소** | 팝업/콤보 각각 ①메타 등재(`FPModal`/`FPComboBox`+`CELL_COMBO_DATA_TYPE`) ②트리거 배선 ③파라미터·반환 계약(AS-IS 인자 1:1) — **3요소 모두** 충족해야 대사표 '구현'. ①없음 = 아이콘 미표시 = **사용자가 기능 존재를 모름**. ③이 `'ALL'`/공백 하드코딩 = FAIL | FAIL |
+| **G9-B** | **셀 컨트롤 3요소** | 팝업/콤보 각각 ①메타 등재(`FPModal`/`FPComboBox`+`CELL_COMBO_DATA_TYPE`) ②트리거 배선 ③파라미터·반환 계약(AS-IS 인자 1:1) — **3요소 모두** 충족해야 대조표 '구현'. ①없음 = 아이콘 미표시 = **사용자가 기능 존재를 모름**. ③이 `'ALL'`/공백 하드코딩 = FAIL | FAIL |
 | **G9-C** | **저장 경로 전수** | 화면 저장 SP **인벤토리 수 = 왕복 검증 수**. 축 4종 각각 독립: 기존행 U / **신규행 C**(⛔ 기존행 `activeFlag='I'` 로 대체 불가) / 삭제 D / **조회 R**(⛔ "저장 성공" 으로 대체 불가 — 읽는 표≠쓰는 표 가능). 성공 판정 = **원장 SELECT + 영향행수 delta**(0 이면 FAIL). 토스트·`CODE='0'` 은 증거 아님 | FAIL / 미실행은 **ERROR** |
 | **G9-D** | **harness 형태 정합** | 검증 harness 파라미터 = **FE 가 실제로 보내는 값**(빈값·센티널 포함). `'^'` bulk 화면은 **다행 payload**(단일행은 "2행부터 NULL" 계열 결함을 구조적으로 놓침) | FAIL |
 | **G9-E** | **저장 멱등성** (2026-08-11 추가, hook #131) | 조회가 PIVOT/GROUP BY 인 화면: ①그룹 축 컬럼 목록 산출 ②저장 기입값 ↔ 원장 분포 대조(`'' AS` 전수 grep — Oracle `''`=NULL) ③**저장 전후 조회 행수 동일 + 화면 식별자 조합 중복 0 실측**(행수 증가 = 유령 행) | FAIL |
@@ -49,14 +49,14 @@
 
 > 배경: SYS0017 13건 재작업 당시 "8게이트 통과" 주장이 type-check 0·메타 건수·PKG VALID 만으로 구성 —
 > SYS_LOG 실증 결과 **사용자 검증 세션에 SAVE 호출 0건**(저장 요청이 BE 에 도달한 적 없음)이었다.
-> **런타임 왕복 없는 완료 선언 금지.** 아래 5항 각각에 증거 1줄(캡쳐/SQL 결과) 없이 G6 PASS 금지.
+> **런타임 왕복 없는 완료 선언 금지.** 아래 6항 각각에 증거 1줄(캡쳐/SQL 결과) 없이 G6 PASS 금지. (11-13 정정: 5항 → 6항)
 
 - [ ] **G6-1 모달 전수 OK/Cancel 표시** — 화면의 모든 모달을 실제로 열어 footer 버튼(OK/Cancel 또는 자체 footer) 렌더 확인. `customContentArea` 지정 모달은 공통 footer 가 **미렌더**되므로 특히 (screen-runtime-pitfalls **P9**)
 - [ ] **G6-2 편집→저장→성공 toast + `SCM_COM_SQL_LOG` 에 SAVE 호출 실증** — 실제 셀 편집/Insert 후 저장하고, `SELECT * FROM SCM_COM_SQL_LOG WHERE MNU_ID='{ID}' AND MNU_BTN_CD='SAVE' ORDER BY CREATION_DATE DESC` 로 **호출이 찍힌 것까지** 확인 (toast 는 증거가 아님 — false success). 성공 toast 문구의 placeholder(`{n}`/`{{var}}`) 실치환 확인
 - [ ] **G6-3 저장 후 DB SELECT 왕복** — 저장한 값·감사컬럼(CREATED_BY/LAST_UPDATED_BY=세션 사용자, 빈값 금지)을 대상 테이블 SELECT 로 확인
 - [ ] **G6-4 콤보 NAME 표시** — 콤보 셀이 코드 원문이 아닌 명칭(NAME)으로 표시되는지 (CTRL='FPComboBox'+CMBO 배선 — hook #98 §6 값 단언과 짝)
 - [ ] **G6-5 cascade 1회 조작** — 종속 콤보/셀 cascade 를 실제 1회 조작해 하위 갱신·잠금 확인 (util 정의만으로는 불통 — post-write §0.1-B 정의-참조 게이트와 짝)
-- [ ] ⭐ **G6-6 모달별 CRUD 왕복 (2026-08-07 신설 — 사용자 요구 "MAIN UI 와 모달의 CRUD 누락 0")** — MAIN UI 가 여는 **모달 전수** 각각에 대해 **열기 → 편집/입력 → OK → DB 반영 확인** 1왕복 실증 (예: SYS0017 SQL VIEW 모달 = 열기→SQL 편집→OK→`SCM_ADM_RECIPIENT_LIST.SQL_LONG_TEXT` SELECT 왕복). 조회 전용 모달은 "해당없음+사유" 로 대사표(`__asis-mapping__.md` CRUD·모달 매트릭스)에 기재. 정적 짝 = check-ui-gates **G-E**(모달 확정버튼 부재 의심) + wiring_chain_check **L2A**(모달 파일 call-proc 체인) + asis_mapping_gate `--check --matrix-only`
+- [ ] ⭐ **G6-6 모달별 CRUD 왕복 (2026-08-07 신설 — 사용자 요구 "MAIN UI 와 모달의 CRUD 누락 0")** — MAIN UI 가 여는 **모달 전수** 각각에 대해 **열기 → 편집/입력 → OK → DB 반영 확인** 1왕복 실증 (예: SYS0017 SQL VIEW 모달 = 열기→SQL 편집→OK→`SCM_ADM_RECIPIENT_LIST.SQL_LONG_TEXT` SELECT 왕복). 조회 전용 모달은 "해당없음+사유" 로 대조표(`__asis-mapping__.md` CRUD·모달 매트릭스)에 기재. 정적 짝 = check-ui-gates **G-E**(모달 확정버튼 부재 의심) + wiring_chain_check **L2A**(모달 파일 call-proc 체인) + asis_mapping_gate `--check --matrix-only`
 
 ## §0.6 ⭐⭐⭐ 완료 선언 3-상태 계약 (2026-08-08 신설 — 사용자 명시, hook #126 본문)
 
@@ -121,7 +121,7 @@
 2. 각 게이트에 PASS/FAIL + 증거 1줄 (카운트, grep 0건, 캡쳐 경로, SELECT 결과)
 3. FAIL 1건이라도 있으면: 보완 → 해당 게이트 재실행 (전체 재실행 불요)
 4. ⭐ **ERROR(미실행·환경파손) 섹션이 있으면 환경을 복구해 재실행** — 건너뛰고 완료 선언 금지 (§0.6)
-5. 러너 종합 ∈ {PASS, WARN(사유 기재분)} 이고 G1~G8 전수 판정 후에만 "완료" 보고 + pre-submit hook 진입
+5. 러너 종합 ∈ {PASS, WARN(사유 기재분)} 이고 G1~G11 전수 판정 후에만 "완료" 보고 + pre-submit hook 진입   # 11-13 정정: G1~G8 → G1~G11
    → 남은 ERROR/미적용/미확인 축은 **§0.6 3-상태로 별도 표기** (hook #126 §3 5칸 양식)
 ```
 
@@ -160,4 +160,4 @@
 
 ---
 
-> Cross-ref: pre-submit.md (본 게이트 8/8 PASS 가 선행 조건) | 00_INDEX §A T01 | anti-simplification.md (게이트 생략 = 위반)
+> Cross-ref: pre-submit.md (본 게이트 11/11 PASS 가 선행 조건 — 11-13 정정: 8/8 → 11/11) | 00_INDEX §A T01 | anti-simplification.md (게이트 생략 = 위반)

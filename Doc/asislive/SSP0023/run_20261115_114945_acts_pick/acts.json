@@ -1,0 +1,425 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "X_D_20261010",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 4,
+   "rule": "열 MEASURE 다음 열 중 값 있는 첫 열",
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "P_SHIP_CONFIRM_ETD"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,2 failed: InvalidOperationException: cell not visible: 0,2",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MODEL_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,5 failed: InvalidOperationException: cell not visible: 0,5",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_SITE",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,8 failed: InvalidOperationException: cell not visible: 0,8",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ELECTRODE_POST_OPER_LT",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,10 failed: InvalidOperationException: cell not visible: 0,10",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ERP_SO_NO",
+   "grid": "spdDetail",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ERP_SO_NO",
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0300_OrderDetailPopup",
+    "title": "ERP Order Detail",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/OrderDetail",
+    "cols": [
+     "SO_NO",
+     "SO_ITEM_NO",
+     "SO_ITEM_QTY",
+     "DO_NO",
+     "DO_ITEM_NO",
+     "DO_ITEM_QTY",
+     "CONFIRM_ID"
+    ],
+    "row": [
+     "1200022661",
+     "000010",
+     "464,762",
+     "6010093453",
+     "000010",
+     "464,762",
+     "C20261007211127"
+    ]
+   },
+   "scenarios": [
+    "SSP0023-Se42af7"
+   ],
+   "popup_inside": {
+    "form": "SSP0300_OrderDetailPopup",
+    "controls": [
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "OrderDetail",
+      "rows": 1,
+      "cols": [
+       "SO_NO",
+       "SO_ITEM_NO",
+       "SO_ITEM_QTY",
+       "DO_NO",
+       "DO_ITEM_NO",
+       "DO_ITEM_QTY",
+       "CONFIRM_ID"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [
+      {
+       "sp": "SSP0300_GET_ORDER_DETAIL",
+       "rows": 1,
+       "params": {
+        "P_DIVISION_ID": "40",
+        "P_ERP_SO_NO": "1200022661",
+        "P_CONFIRM_ID": "C20261007211127",
+        "P_ITEM_ID": "APCCA3122A"
+       }
+      }
+     ],
+     "rows_after": 1
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "pick_button": null,
+   "pick_ok": {
+    "ok": false,
+    "closed": null,
+    "error": "InvalidOperationException: no OK/Confirm button on SSP0300_OrderDetailPopup",
+    "buttons": [
+     "btnCancel|■||off",
+     "Change|||on"
+    ]
+   },
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "SSP0300_OrderDetailPopup",
+     "title": "ERP Order Detail",
+     "modal": true,
+     "grid_rows": 1,
+     "text": "statusStrip1 | ",
+     "closed": true
+    }
+   ],
+   "calls": [
+    "SSP0300_GET_ORDER_DETAIL",
+    "SSP0300_GET_ORDER_DETAIL"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 11:46:59",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ },
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "MEASURE",
+   "col_after": true,
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "P_SHIP_CONFIRM_ETD"
+    ]
+   ],
+   "ids": [
+    "SSP0023-Sf0c6eb"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdDetail",
+   "sheet_key": "shtPlanDetail",
+   "sheet_name": "Shipment Plan Detail",
+   "col": "ERP_SO_NO",
+   "col_after": false,
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0023-Se42af7"
+   ],
+   "has_else": false
+  }
+ ],
+ "feed": [
+  {
+   "target": "spdDetail[ERP_SO_NO]",
+   "feeder": "spdMain[MEASURE 다음]",
+   "tries": [
+    {
+     "row": 4,
+     "col": "X_D_20261010",
+     "ok": true,
+     "detail_rows": 0,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 0
+      }
+     ]
+    },
+    {
+     "row": 4,
+     "col": "X_D_20261011",
+     "ok": true,
+     "detail_rows": 0,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 0
+      }
+     ]
+    },
+    {
+     "row": 4,
+     "col": "X_D_20261012",
+     "ok": true,
+     "detail_rows": 5,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 5
+      }
+     ]
+    }
+   ],
+   "found": true
+  }
+ ]
+}

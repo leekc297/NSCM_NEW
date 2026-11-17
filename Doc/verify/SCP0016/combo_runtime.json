@@ -1,27 +1,27 @@
 {
- "at": "2026-11-07T12:54:34.007Z",
+ "at": "2026-11-14T00:56:55.370Z",
  "search": {
   "Div": {
    "label": "Div",
    "opts": [
-    "40 Mobility & IT Battery",
     "81 Automotive Battery",
-    "81_HD Automotive Battery(HD)",
-    "81_HG Automotive Battery(HG)",
-    "81_HM Automotive Battery(HM)",
-    "81_ST Automotive Battery(ST)",
-    "81_UC Automotive Battery(UC)",
+    "40 Mobility & IT Battery",
     "82 ESS Battery",
     "EE Electrode",
-    "EE_HD Electrode(HD)",
-    "EE_HG Electrode(HG)",
+    "81_UC Automotive Battery(UC)",
+    "EE_UC Electrode(UC)",
+    "81_HM Automotive Battery(HM)",
     "EE_HM Electrode(HM)",
+    "81_ST Automotive Battery(ST)",
     "EE_ST Electrode(ST)",
-    "EE_UC Electrode(UC)"
+    "81_HD Automotive Battery(HD)",
+    "EE_HD Electrode(HD)",
+    "81_HG Automotive Battery(HG)",
+    "EE_HG Electrode(HG)"
    ],
    "multi": false,
    "sel": [
-    "40 Mobility & IT Battery"
+    "81 Automotive Battery"
    ]
   },
   "Ver.": {
@@ -130,41 +130,37 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"MyDivisionInEE_SCP\",\"mnuId\":\"SCP0016\"}",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0016\"}",
    "status": 200,
    "n": 14,
    "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
     "CODE",
-    "NAME"
+    "VALID_YN"
    ],
    "rows": [
-    {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
     {
      "c": "81",
      "v": "81 Automotive Battery"
     },
     {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
     },
     {
      "c": "82",
@@ -175,24 +171,44 @@
      "v": "EE Electrode"
     },
     {
-     "c": "EE_HD",
-     "v": "EE_HD Electrode(HD)"
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
     },
     {
-     "c": "EE_HG",
-     "v": "EE_HG Electrode(HG)"
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
     },
     {
      "c": "EE_HM",
      "v": "EE_HM Electrode(HM)"
     },
     {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
      "c": "EE_ST",
      "v": "EE_ST Electrode(ST)"
     },
     {
-     "c": "EE_UC",
-     "v": "EE_UC Electrode(UC)"
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
     }
    ],
    "user": "minyonglee1"
@@ -8012,9 +8028,62 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"WaterfallVer_FG2_SCP\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0016\"}",
+   "status": 200,
+   "n": 10,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "SP_W_20261026",
+     "v": "SP_W_20261026 (W44)"
+    },
+    {
+     "c": "SP_W_20261019",
+     "v": "SP_W_20261019 (W43)"
+    },
+    {
+     "c": "SP_W_20261012",
+     "v": "SP_W_20261012 (W42)"
+    },
+    {
+     "c": "SP_W_20261005",
+     "v": "SP_W_20261005 (W41)"
+    },
+    {
+     "c": "SP_W_20260928",
+     "v": "SP_W_20260928 (W40)"
+    },
+    {
+     "c": "SP_W_20260921",
+     "v": "SP_W_20260921 (W39)"
+    },
+    {
+     "c": "SP_W_20260914",
+     "v": "SP_W_20260914 (W38)"
+    },
+    {
+     "c": "SP_W_20260907",
+     "v": "SP_W_20260907 (W37)"
+    },
+    {
+     "c": "SP_W_20260831",
+     "v": "SP_W_20260831 (W36)"
+    },
+    {
+     "c": "SP_W_20260824",
+     "v": "SP_W_20260824 (W35)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"TeambyDivision\",\"divisionId\":\"''\",\"mnuId\":\"SCP0016\"}",
    "status": 200,
-   "n": 172,
+   "n": 173,
    "keys": [
     "CODE",
     "NAME"
@@ -8187,6 +8256,10 @@
     {
      "c": "70021352",
      "v": "IR커뮤니케이션팀"
+    },
+    {
+     "c": "30228984",
+     "v": "LGESAU"
     },
     {
      "c": "71065524",
@@ -8715,7 +8788,7 @@
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"SalesSite\",\"mnuId\":\"SCP0016\"}",
    "status": 200,
-   "n": 4386,
+   "n": 4388,
    "keys": [
     "SALES_SITE_NAME",
     "END_CUSTOMER_NAME",
@@ -8738,6 +8811,10 @@
     {
      "c": "HQ05-40-AS",
      "v": "HQ05_40-W"
+    },
+    {
+     "c": "Anjin_CN_SHA",
+     "v": "Anjin_CN_SHA"
     },
     {
      "c": "Sunwoda_CN_SZX",
@@ -21888,6 +21965,10 @@
      "v": "LGCAU_AU_BNE"
     },
     {
+     "c": "ABB_AV_TES",
+     "v": "ABB_AV_TES"
+    },
+    {
      "c": "ABB_US_CFC",
      "v": "ABB_US_CFC"
     },
@@ -26274,59 +26355,6 @@
     {
      "c": "EG01-82-AS",
      "v": "EG01-82-AS"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"WaterfallVer_FG2_SCP\",\"divisionId\":\"'40'\",\"mnuId\":\"SCP0016\"}",
-   "status": 200,
-   "n": 10,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "SP_W_20261026",
-     "v": "SP_W_20261026 (W44)"
-    },
-    {
-     "c": "SP_W_20261019",
-     "v": "SP_W_20261019 (W43)"
-    },
-    {
-     "c": "SP_W_20261012",
-     "v": "SP_W_20261012 (W42)"
-    },
-    {
-     "c": "SP_W_20261005",
-     "v": "SP_W_20261005 (W41)"
-    },
-    {
-     "c": "SP_W_20260928",
-     "v": "SP_W_20260928 (W40)"
-    },
-    {
-     "c": "SP_W_20260921",
-     "v": "SP_W_20260921 (W39)"
-    },
-    {
-     "c": "SP_W_20260914",
-     "v": "SP_W_20260914 (W38)"
-    },
-    {
-     "c": "SP_W_20260907",
-     "v": "SP_W_20260907 (W37)"
-    },
-    {
-     "c": "SP_W_20260831",
-     "v": "SP_W_20260831 (W36)"
-    },
-    {
-     "c": "SP_W_20260824",
-     "v": "SP_W_20260824 (W35)"
     }
    ],
    "user": "minyonglee1"

@@ -1,0 +1,7 @@
+﻿seq,at,phase,service,foxquery_id,sp,framework,exec_type,rows,rows_kind,ms,params
+1,2026-11-12 21:09:52.987,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetGSCMSecurityACL,UP_FX_GetGSCMSecurityACL,Y,ExecuteDataSet,1,DataSet rows,4.11,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0109""}"
+2,2026-11-12 21:09:53.012,load,GSCM.BizService.WSL,,SELECT *,,ExecuteDataSet,874,DataSet rows,18.57,"{""USER_ID"": """"}"
+3,2026-11-12 21:09:53.460,load,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,327.49,"{""MenuID"": ""Term"", ""CnntCode"": ""0104001"", ""UserID"": ""jaeuk.shin""}"
+4,2026-11-12 21:09:53.526,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetSearchCondition,UP_FX_GetSearchCondition,Y,ExecuteDataSet,0,DataSet rows,3.71,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0109""}"
+5,2026-11-12 21:10:01.921,find,GSCM.SystemMgmt.WSL,SystemManager.UP_FX_GetTermInfoList,UP_FX_GetTermInfoList,Y,ExecuteDataSet,665,DataSet rows,16.35,"{""Search"": """"}"
+6,2026-11-12 21:10:32.922,find,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,5.73,"{""MenuID"": ""Term"", ""CnntCode"": ""0104002"", ""UserID"": ""jaeuk.shin""}"

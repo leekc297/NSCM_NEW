@@ -1,0 +1,327 @@
+﻿# SCP0028 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.csproj | 784 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.csproj | 792 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:cboDivision.SelectedIndexChanged | ClbDivision_SelectedIndexChanged > SetChangedControl | 166 | biz:CommonData.CommonDataList [code=FromSiteByDivision] | BIZ_MATCH |  |
+| event:cboDivision.SelectedIndexChanged | ClbDivision_SelectedIndexChanged > SetChangedControl | 169 | biz:CommonData.CommonDataList [code=ToSiteByDivision] | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData | 349 | SCP.SCP0028_GET_SHIPMENT_LOT_SIZE | MATCH | SP SCP0028_GET_SHIPMENT_LOT_SIZE |
+| button:SaveButton | SaveButton > SaveData > FindData | 349 | SCP.SCP0028_GET_SHIPMENT_LOT_SIZE | MATCH | SP SCP0028_GET_SHIPMENT_LOT_SIZE |
+| button:SaveButton | SaveButton > SaveData | 659 | SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE | MATCH | SP SCP0028_SAVE_SHIPMENT_LOT_SIZE |
+| event:this.btnDelete.Click | btnDelete_Click > FindDelete > FindData | 349 | SCP.SCP0028_GET_SHIPMENT_LOT_SIZE | MATCH | SP SCP0028_GET_SHIPMENT_LOT_SIZE |
+| event:this.btnDelete.Click | btnDelete_Click > FindDelete | 511 | SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE | MATCH | SP SCP0028_SAVE_SHIPMENT_LOT_SIZE |
+| event:this.btnInput.Click | btnInput_Click > FindInput | 417 | SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT | MATCH | SP SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT |
+| event:this.Load | Form_Load > InitControls | 135 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls | 137 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 166 | biz:CommonData.CommonDataList [code=FromSiteByDivision] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 169 | biz:CommonData.CommonDataList [code=ToSiteByDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtTransMode> | 44 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtYesOrNo> | 46 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=FromSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=ToSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
+| SCP.SCP0028_GET_SHIPMENT_LOT_SIZE | MATCH | 1 | SP SCP0028_GET_SHIPMENT_LOT_SIZE | EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT, SELECT:SCM_MST_SITE |  |
+| SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT | MATCH | 1 | SP SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT | EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, INSERT:#TBLDYNAMIC_SCP0028IN_DIV, REF:UF_FX_STRING_SPLIT, INSERT:#TBLDYNAMIC_SCP0028IN_OPER, INSERT:#TBLDYNAMIC_SCP0028IN_FROM, INSERT:#TBLDYNAMIC_SCP0028IN_TO, INSERT:#TBLDYNAMIC_SCP0028IN_ITEM, INSERT:#TBLDYNAMIC_SCP0028IN_INPUT, REF:FN_GET_LOOKUP_CODE_DESC, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:#TBLDYNAMIC_SCP0028IN_DIV, SELECT:#TBLDYNAMIC_SCP0028IN_OPER, SELECT:#TBLDYNAMIC_SCP0028IN_FROM, SELECT:#TBLDYNAMIC_SCP0028IN_TO, SELECT:#TBLDYNAMIC_SCP0028IN_ITEM, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCP_MST_BOD, SELECT:#TBLDYNAMIC_SCP0028IN_INPUT, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE |  |
+| SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE | MATCH | 2 | SP SCP0028_SAVE_SHIPMENT_LOT_SIZE | EXEC:SCP0028_SAVE_SHIPMENT_LOT_SIZE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST, MERGE:SCP_MST_SHIPMENT_LOT_SIZE, DELETE:SCP_MST_SHIPMENT_LOT_SIZE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_LOT_SIZE_H |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| SetChangedControl | UserInfoContext.Current | NowGroupID |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| DataBind | InitControls:135 | UsrComboBox.DataBind | CODE, NAME |
+| GetCheckedListValue | SetChangedControl:160, btnInput_Click:265, btnDelete_Click:293, FindData:332, FindData:333, FindData:334, FindData:335, FindData:336 | CString.GetCheckedListValue | CODE |
+| SetSheetHeaderColumn | InitSpread:186 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | SaveButton:207 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:95 |
+| this.btnInput | Click | btnInput_Click | InitEvent:117 |
+| this.btnDelete | Click | btnDelete_Click | InitEvent:118 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:120 |
+| dsdm | Changed | spdMain_Change | InitEvent:124 |
+| cboDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:144 |
+| this.btnItemId | Click | btnItemId_Click | InitControls:146 |
+
+## 6. 컨트롤 (32개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 10 | Division, layoutControlItem1, layoutControlItem7, layoutControlItem6, layoutControlItem3, layoutControlItem11, layoutControlItem9, layoutControlItem5, layoutControlItem2, layoutControlItem4 |
+| EmptySpaceItem | 4 | emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem4 |
+| UsrButton | 3 | btnItemId, btnInput, btnDelete |
+| UsrCheckedList | 3 | clbFromSite, clbTransMode, clbToSite |
+| UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup2 |
+| UsrCombo | 2 | cboDivision, cboOperationGroup |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrComboBox | 1 | cboValid |
+| UsrMultiLineEditor | 1 | txtItemId |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 8 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 18 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 10 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 13 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 54 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0028 | Shipment Lot Size | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Shipment Lot Size
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:186
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 633 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 634 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 635 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 636 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Lot Size | META+코드연결 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (10 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","<field:dtTransMode>","44","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","<field:dtYesOrNo>","46","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitControls","135","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","UsrComboBox.DataBind[case Type.YesOrNo:Type.YesOrNo] > Data.Common[case param:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitControls","137","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","SetChangedControl","166","derived","biz","CommonData.CommonDataList [code=FromSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.FromSiteByDivision:Type.FromSiteByDivision] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","SetChangedControl","169","derived","biz","CommonData.CommonDataList [code=ToSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.ToSiteByDivision:Type.ToSiteByDivision] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","FindData","349","ctor","fox","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT, SELECT:SCM_MST_SITE","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","FindInput","417","ctor","fox","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, INSERT:#TBLDYNAMIC_SCP0028IN_DIV, REF:UF_FX_STRING_SPLIT, INSERT:#TBLDYNAMIC_SCP0028IN_OPER, INSERT:#TBLDYNAMIC_SCP0028IN_FROM, INSERT:#TBLDYNAMIC_SCP0028IN_TO, INSERT:#TBLDYNAMIC_SCP0028IN_ITEM, INSERT:#TBLDYNAMIC_SCP0028IN_INPUT, REF:FN_GET_LOOKUP_CODE_DESC, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:#TBLDYNAMIC_SCP0028IN_DIV, SELECT:#TBLDYNAMIC_SCP0028IN_OPER, SELECT:#TBLDYNAMIC_SCP0028IN_FROM, SELECT:#TBLDYNAMIC_SCP0028IN_TO, SELECT:#TBLDYNAMIC_SCP0028IN_ITEM, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCP_MST_BOD, SELECT:#TBLDYNAMIC_SCP0028IN_INPUT, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","FindDelete","511","ctor","fox","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_SAVE_SHIPMENT_LOT_SIZE","EXEC:SCP0028_SAVE_SHIPMENT_LOT_SIZE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST, MERGE:SCP_MST_SHIPMENT_LOT_SIZE, DELETE:SCP_MST_SHIPMENT_LOT_SIZE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_LOT_SIZE_H","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","SaveData","659","ctor","fox","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_SAVE_SHIPMENT_LOT_SIZE","EXEC:SCP0028_SAVE_SHIPMENT_LOT_SIZE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST, MERGE:SCP_MST_SHIPMENT_LOT_SIZE, DELETE:SCP_MST_SHIPMENT_LOT_SIZE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_LOT_SIZE_H","",""
+```
+
+### FILE flow.csv (14 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.Load","Form_Load > InitControls","InitControls","137","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.Load","Form_Load > InitControls","InitControls","135","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","166","biz:CommonData.CommonDataList [code=FromSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","169","biz:CommonData.CommonDataList [code=ToSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.btnInput.Click","btnInput_Click > FindInput","FindInput","417","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, INSERT:#TBLDYNAMIC_SCP0028IN_DIV, REF:UF_FX_STRING_SPLIT, INSERT:#TBLDYNAMIC_SCP0028IN_OPER, INSERT:#TBLDYNAMIC_SCP0028IN_FROM, INSERT:#TBLDYNAMIC_SCP0028IN_TO, INSERT:#TBLDYNAMIC_SCP0028IN_ITEM, INSERT:#TBLDYNAMIC_SCP0028IN_INPUT, REF:FN_GET_LOOKUP_CODE_DESC, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:#TBLDYNAMIC_SCP0028IN_DIV, SELECT:#TBLDYNAMIC_SCP0028IN_OPER, SELECT:#TBLDYNAMIC_SCP0028IN_FROM, SELECT:#TBLDYNAMIC_SCP0028IN_TO, SELECT:#TBLDYNAMIC_SCP0028IN_ITEM, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCP_MST_BOD, SELECT:#TBLDYNAMIC_SCP0028IN_INPUT, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.btnDelete.Click","btnDelete_Click > FindDelete","FindDelete","511","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_SAVE_SHIPMENT_LOT_SIZE","EXEC:SCP0028_SAVE_SHIPMENT_LOT_SIZE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST, MERGE:SCP_MST_SHIPMENT_LOT_SIZE, DELETE:SCP_MST_SHIPMENT_LOT_SIZE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_LOT_SIZE_H"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","this.btnDelete.Click","btnDelete_Click > FindDelete > FindData","FindData","349","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT, SELECT:SCM_MST_SITE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","cboDivision.SelectedIndexChanged","ClbDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","166","biz:CommonData.CommonDataList [code=FromSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","event","cboDivision.SelectedIndexChanged","ClbDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","169","biz:CommonData.CommonDataList [code=ToSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","button","FindButton","FindButton > FindData","FindData","349","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT, SELECT:SCM_MST_SITE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","button","SaveButton","SaveButton > SaveData","SaveData","659","SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_SAVE_SHIPMENT_LOT_SIZE","EXEC:SCP0028_SAVE_SHIPMENT_LOT_SIZE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST, MERGE:SCP_MST_SHIPMENT_LOT_SIZE, DELETE:SCP_MST_SHIPMENT_LOT_SIZE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_LOT_SIZE_H"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","button","SaveButton","SaveButton > SaveData > FindData","FindData","349","SCP.SCP0028_GET_SHIPMENT_LOT_SIZE","MATCH","SP SCP0028_GET_SHIPMENT_LOT_SIZE","EXEC:SCP0028_GET_SHIPMENT_LOT_SIZE, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SCM_MST_FINAL_ITEM_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT, SELECT:SCM_MST_SITE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","unreached","(진입점 미연결)","<field:dtYesOrNo>","<field:dtYesOrNo>","46","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","unreached","(진입점 미연결)","<field:dtTransMode>","<field:dtTransMode>","44","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (7 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size",".ctor","95","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitEvent","117","this.btnInput","Click","btnInput_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitEvent","118","this.btnDelete","Click","btnDelete_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitEvent","120","spdMain","TopChange","SpdMain_TopChange","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitEvent","124","dsdm","Changed","spdMain_Change","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitControls","144","cboDivision","SelectedIndexChanged","ClbDivision_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitControls","146","this.btnItemId","Click","btnItemId_Click","+="
+```
+
+### FILE controls.csv (32 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","cboValid","GSCM.Windows.Forms.Controls.UsrComboBox","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","cboOperationGroup","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","clbFromSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","clbTransMode","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","btnInput","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","btnDelete","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","Division","DevExpress.XtraLayout.LayoutControlItem","","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem11","DevExpress.XtraLayout.LayoutControlItem","","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem9","DevExpress.XtraLayout.LayoutControlItem","","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","59"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","spdMain","FarPoint.Win.Spread.FpSpread","this","60"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","61"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","imageList1","System.Windows.Forms.ImageList","","62"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","clbToSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","63"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","64"
+```
+
+### FILE props.csv (58 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","94","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","98","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","107","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","112","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","115","usrConditionPanel1","Size","new System.Drawing.Size(1093, 72)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","117","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","132","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","136","usrLayoutControl2","Size","new System.Drawing.Size(1093, 72)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","138","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","147","cboValid","Size","new System.Drawing.Size(194, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","182","cboDivision","Size","new System.Drawing.Size(162, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","215","btnItemId","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","251","txtItemId","Size","new System.Drawing.Size(135, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","287","cboOperationGroup","Size","new System.Drawing.Size(128, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","323","clbFromSite","Size","new System.Drawing.Size(180, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","362","clbTransMode","Size","new System.Drawing.Size(168, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","398","btnInput","Size","new System.Drawing.Size(71, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","401","btnInput","Text","""Input"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","434","btnDelete","Size","new System.Drawing.Size(71, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","437","btnDelete","Text","""Delete"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","462","layoutControlGroup2","Size","new System.Drawing.Size(1093, 78)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","467","Division","Control","this.cboDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","471","Division","Size","new System.Drawing.Size(217, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","472","Division","Text","""Division*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","482","emptySpaceItem1","Size","new System.Drawing.Size(10, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","487","layoutControlItem1","Control","this.cboOperationGroup"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","491","layoutControlItem1","Size","new System.Drawing.Size(228, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","492","layoutControlItem1","Text","""Operation Group"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","499","layoutControlItem7","Control","this.clbFromSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","503","layoutControlItem7","Size","new System.Drawing.Size(241, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","504","layoutControlItem7","Text","""From Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","511","layoutControlItem6","Control","this.clbTransMode"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","515","layoutControlItem6","Size","new System.Drawing.Size(241, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","516","layoutControlItem6","Text","""Trans Mode"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","523","layoutControlItem3","Control","this.txtItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","527","layoutControlItem3","Size","new System.Drawing.Size(174, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","528","layoutControlItem3","Text","""Model"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","533","layoutControlItem11","Control","this.btnItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","539","layoutControlItem11","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","551","emptySpaceItem3","Size","new System.Drawing.Size(242, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","556","layoutControlItem9","Control","this.cboValid"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","559","layoutControlItem9","Size","new System.Drawing.Size(228, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","560","layoutControlItem9","Text","""Valid"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","570","emptySpaceItem2","Size","new System.Drawing.Size(145, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","578","emptySpaceItem4","Size","new System.Drawing.Size(13, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","583","layoutControlItem5","Control","this.btnInput"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","589","layoutControlItem5","Size","new System.Drawing.Size(75, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","596","layoutControlItem2","Control","this.btnDelete"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","602","layoutControlItem2","Size","new System.Drawing.Size(75, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","604","layoutControlItem2","Text","""layoutControlItem5"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","611","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","616","spdMain","Size","new System.Drawing.Size(1093, 502)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","697","clbToSite","Size","new System.Drawing.Size(165, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","706","layoutControlItem4","Control","this.clbToSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","710","layoutControlItem4","Size","new System.Drawing.Size(214, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","711","layoutControlItem4","Text","""To Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","724","this","Text","""SCP0028_Shipment_Lot_Size"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","btnItemId_Click","256","txtItemId","Text","sItemId"
+```
+
+### FILE grid_effective.csv (18 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Shipment Lot Size","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","DIVISION_ID","Division","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","FROM_SITE","From Site","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Lot Size","META+코드연결","FROM_SITE_DESCRIPTION","From Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","INCREMENT","Increment*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","ITEM_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","LOT_SIZE","Lot Size*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","OPERATION_GROUP_ID","Operation Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","SPLIT_YN","Container Split*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","TO_SITE","To Site","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Lot Size","META+코드연결","TO_SITE_DESCRIPTION","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","TRANS_MODE_CODE","Trans Mode","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Lot Size","META+코드연결","TRANS_MODE_NAME","Trans Mode","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Lot Size","META+코드연결","VALID_YN","Valid*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (10 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","CreateSpread","176","Shipment Lot Size","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Lot Size ¦ Shipment Lot Size ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","CreateSpread","177","Shipment Lot Size","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","CreateSpread","178","Shipment Lot Size","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitSpread","185","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","InitSpread","186","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ 1","siObj,iColumnHeaderRowCount","","siMain ¦ 1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","EditButton","231","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","","spdMain.Name ¦ fps.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","633","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","634","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","635","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.Designer.cs","SCP0028_Shipment_Lot_Size","InitializeComponent","636","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (2 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","SetChangedControl","166","UserInfoContext.Current","NowGroupID","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs","SCP0028_Shipment_Lot_Size","SetChangedControl","169","UserInfoContext.Current","NowGroupID","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

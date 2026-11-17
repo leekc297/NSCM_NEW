@@ -73,6 +73,7 @@ ORDER BY E.POS;
 4. 동급 대안: **F12 Network 응답에서 중복 2행 JSON diff** (DB 접속 불필요·즉시)
 
 **교정**: **GTT 적재 시점 정규화** — `CASE WHEN TRIM(x) IS NULL OR TRIM(x) IN ('-','--') THEN '-' ELSE x END`.
+(2026-11-13 정정: 위 식은 2026-07-02 당시 교정 원문 · 신규 작성 시 정규화 값 `'-'` → `'/'` — `CASE WHEN x IS NULL OR TRIM(x) IS NULL OR x IN ('-','--','/') THEN '/' ELSE x END`, 원래 `'-'` 인 기존 데이터는 유지·과도기 비교 `IN ('-','/')` · 정본 `oracle-null-sentinel-and-notnull-default.md` §0.5·§1.5)
 적재부가 유일한 안전 지점 (하류 9키 조인이 전부 GTT 참조). raw 테이블 직접 조인 구간(over-range)은 raw 측에 동일식.
 **회귀검증 표준**: division 별 (행수, 업무키 DISTINCT, **SUM(가격)**) 전후 비교 — **합계 불변 + 키만 감소 = 무손실 병합 증명**.
 
@@ -110,7 +111,7 @@ ORDER BY E.POS;
 ## cross-ref
 
 - 진입: `oracle-db-workflow.md` §3 증상표 → 본 hook
-- 실전 진단 SQL 원본: `_artifacts/_deploy_packages/DMF0020_CLOUD_20260702/05_DIAGNOSE/9x0_*.sql`, `SYS0012_APPROVAL_20260702/90_DIAGNOSE/900_*.sql`
+- 실전 진단 SQL 원본: `_artifacts/_deploy_packages/DMF0020_CLOUD_20260702/05_DIAGNOSE/9x0_*.sql`, `SYS0012_APPROVAL_20260702/90_DIAGNOSE/900_*.sql` (2026-11-13: 이 두 폴더는 현재 저장소에 없음)
 - 메모리: `feedback_plant_placeholder_pivot_split`, `feedback_api_m_diagnosis_by_api_id`, `feedback_proc_meta_must_match_sp_signature`, `feedback_isnull_to_nvl_null_handling`
 
 ## 변경 이력

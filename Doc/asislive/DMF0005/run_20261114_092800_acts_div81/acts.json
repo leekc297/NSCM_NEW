@@ -1,0 +1,170 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "81",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION"
+   ],
+   "rows": [
+    [
+     "DMF0000_GET_COMMON_SPREAD_TITLE",
+     45
+    ],
+    [
+     "DMF0000_GET_COMMON_SPREAD_TITLE",
+     31
+    ],
+    [
+     "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+     40923
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0005-Sea1449",
+    "DMF0005-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 146,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0005-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0005-S287784",
+    "DMF0005-S6ab4d3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModelChange",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-14 09:26:12.912",
+ "division_control": {
+  "kind": "combo",
+  "name": "clbDivision",
+  "items": [
+   "40",
+   "81",
+   "81_HD",
+   "81_HG",
+   "81_HM",
+   "81_UC",
+   "82"
+  ]
+ },
+ "division_set": {
+  "ok": true,
+  "applied": "combo:1:81 Automotive Battery",
+  "error": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

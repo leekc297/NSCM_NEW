@@ -1,9 +1,10 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-11-02) · 원천: Doc/gen/DMF0005/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-11-13) · 원천: Doc/gen/DMF0005/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/DMF0005.plan.json', 'utf8'));
 const MENU = "DMF0005";
 import { conditionCycle, commonCycle, record } from '../../../tools/E2E/lib/smoke-extra';
+import { loadLabelAliases, aliasFor } from '../../../tools/E2E/lib/labelalias';  // 2026-11-08 (a) 사양 표 공유 — 검사기(_trace G4)와 같은 라벨 별칭 표(label_alias.csv · CR-092 Valid→Active)
 
 test.describe(`${MENU} SaleSite_PjtModelMapping 스모크 @smoke`, () => {
   test.use({ account: PLAN.sample.account || undefined });
@@ -22,7 +23,10 @@ test.describe(`${MENU} SaleSite_PjtModelMapping 스모크 @smoke`, () => {
     const labelHits: string[] = [], labelMiss: string[] = [], labelSkip: string[] = [];
     for (const f of PLAN.fields) {
       if (f.excluded) { labelSkip.push(`${f.label}(${f.asis}: ${f.excludedWhy})`); continue; }
-      const hit = await nscm.fieldExistsAny(f.labels && f.labels.length ? f.labels : [f.label]);
+      // 2026-11-08 (a): 별칭 표의 TO-BE 명칭(예 Valid→Active)도 후보 — 검사기와 기대값 원천을 같이 쓴다(종전엔 smoke 만 별칭 없이 '누락' → 검사기 PASS 와 불일치)
+      const cands0: string[] = f.labels && f.labels.length ? f.labels : [f.label];
+      const AL = loadLabelAliases(MENU); const cands = [...new Set([...cands0, ...cands0.map((l: string) => aliasFor(l, AL)?.tobe_label || '').filter(Boolean)])];
+      const hit = await nscm.fieldExistsAny(cands);
       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);
       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();
     }
@@ -43,7 +47,7 @@ test.describe(`${MENU} SaleSite_PjtModelMapping 스모크 @smoke`, () => {
     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
     // 컬럼 대사: 메타(sheet_columns) 있으면 메타, 없으면 As-is 라벨(soft)
-    const headers = await nscm.gridHeaders(0);
+    const headers = await nscm.gridHeadersAll(0);  // T162: 가로 가상화로 DOM 헤더가 일부만 보여 허위 누락
     // 기대 컬럼의 시트 = 실제 조회된 시트(첫 SEARCH call-proc 의 sheet → register.json adminSheetName). 매핑이 없으면 mainSheets[0]
     const titleSheets: string[] = (PLAN.dynamicHeader && PLAN.dynamicHeader.titleSheets) || [];
     const firstSearch = calls.find(c => /SEARCH/i.test(c.btn) && !titleSheets.includes(c.sheet)) || calls.find(c => /SEARCH/i.test(c.btn)) || calls[0]; // 타이틀(기간 헤더) 시트 호출은 제외

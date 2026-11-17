@@ -1,0 +1,162 @@
+{
+ "menu_id": "SSP0005",
+ "asis_id": "SSP0005",
+ "area": "SSP",
+ "generated": "2026-11-14 19:48:16",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "DELETE",
+   "EDIT",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Div",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Period",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 2026-11-13 07:06 · 행 수 근거 23행",
+  "max_rows_after_search": 0,
+  "zero_row_failures": [
+   {
+    "row_id": "T-cd6386c9",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-57fe96b8",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-f5e2b116",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-59de933f",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-bc60d5c7",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-db2a4710",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-c61b1188",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-f6d2008f",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "T-d9af9685",
+    "via": "조회 0행 — 기존행 기반 위반 입력 불가"
+   },
+   {
+    "row_id": "V-edb955cc",
+    "via": "[측정 경로 없음] 조회 0행 — 스크롤 판정 불가"
+   },
+   {
+    "row_id": "V-9bf88d42",
+    "via": " 미식별 값에서 고를 후보를 못 찾아 임의 후보 선택 — 기본(ALL) 조회 0행: 조건 반영 검사 불가(데이터 없음"
+   },
+   {
+    "row_id": "V-abd1d540",
+    "via": "조회 0행 — 화면에 건수 '0' 표시 있음("
+   },
+   {
+    "row_id": "V-d150a84e",
+    "via": "조회 0행 — 화면에 건수 '0' 표시 있음("
+   },
+   {
+    "row_id": "V-2e889f80",
+    "via": "ALL(Div) 조회 0행 · 필수 안내 없음"
+   },
+   {
+    "row_id": "V-63c6cabf",
+    "via": "[측정 경로 없음] 조회 0행"
+   },
+   {
+    "row_id": "V-689c2134",
+    "via": "[측정 경로 없음] 조회 0행 — 편집 가능 여부 판정 불가"
+   },
+   {
+    "row_id": "V-d75aa24b",
+    "via": "기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~"
+   },
+   {
+    "row_id": "V-3a321dcf",
+    "via": "기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~"
+   },
+   {
+    "row_id": "V-8bcce9c3",
+    "via": "기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~"
+   },
+   {
+    "row_id": "V-d9d4b814",
+    "via": "기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~"
+   }
+  ],
+  "zero_row_count": 23
+ },
+ "warnings": []
+}

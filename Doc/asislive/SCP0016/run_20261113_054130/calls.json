@@ -1,0 +1,572 @@
+{
+ "id": "SCP0016",
+ "window": [
+  "2026-11-13 05:41:30.255",
+  "2026-11-13 05:41:52.261"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-13 05:41:30.583",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 22.15,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.592",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 4.1,
+   "params": {
+    "Code": "OperationGroup",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='OperationGroup', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.606",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 10.97,
+   "params": {
+    "Code": "OperationGroupEE",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='OperationGroupEE', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.752",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 196,
+   "rows_kind": "DataSet rows",
+   "ms": 139.71,
+   "params": {
+    "Code": "WaterfallVer_FG21",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='WaterfallVer_FG21', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.809",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.6,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0016"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0016'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.832",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 19.27,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.965",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 5.36,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "OPERATION_GROUP",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='OPERATION_GROUP', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:30.981",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 3.76,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "ELECTRODE_TYPE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='ELECTRODE_TYPE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.005",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.7,
+   "params": {
+    "Code": "BucketISO",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='BucketISO', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.024",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_MONTH_PERIOD",
+   "sp": "SCM0001_GET_SCP_MONTH_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 6.06,
+   "params": {
+    "p_division_id": "81",
+    "p_plan_cycle": "DAILY",
+    "p_from_date": "",
+    "p_offset_month": "12",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_MONTH_PERIOD @p_division_id='81', @p_plan_cycle='DAILY', @p_from_date='', @p_offset_month='12', @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.072",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 434,
+   "rows_kind": "DataSet rows",
+   "ms": 14.81,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20271107"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20271107'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.088",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 8.73,
+   "params": {
+    "p_program_id": "SCP0016",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Waterfall Shipment Plan"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0016', @p_user_id='jaeuk.shin', @p_sheet_name='Waterfall Shipment Plan'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.246",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 6.98,
+   "params": {
+    "MenuID": "Shipment Plan FG Waterfall",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Shipment Plan FG Waterfall', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:31.336",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.17,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0016"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0016'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:39.891",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_MONTH_PERIOD",
+   "sp": "SCM0001_GET_SCP_MONTH_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 5.91,
+   "params": {
+    "p_division_id": "81",
+    "p_plan_cycle": "DAILY",
+    "p_from_date": "20260817",
+    "p_offset_month": "12",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_MONTH_PERIOD @p_division_id='81', @p_plan_cycle='DAILY', @p_from_date='20260817', @p_offset_month='12', @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:39.920",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 540,
+   "rows_kind": "DataSet rows",
+   "ms": 18.24,
+   "params": {
+    "p_start_yyyymmdd": "20260817",
+    "p_end_yyyymmdd": "20271107"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260817', @p_end_yyyymmdd='20271107'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:39.939",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 10.41,
+   "params": {
+    "p_program_id": "SCP0016",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Waterfall Shipment Plan"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0016', @p_user_id='jaeuk.shin', @p_sheet_name='Waterfall Shipment Plan'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:40.128",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 439,
+   "rows_kind": "DataSet rows",
+   "ms": 15.02,
+   "params": {
+    "p_start_yyyymmdd": "20260817",
+    "p_end_yyyymmdd": "20270815"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260817', @p_end_yyyymmdd='20270815'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:40.146",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 10.52,
+   "params": {
+    "p_program_id": "SCP0016",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Waterfall Shipment Plan"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0016', @p_user_id='jaeuk.shin', @p_sheet_name='Waterfall Shipment Plan'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:41:44.079",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 439,
+   "rows_kind": "DataSet rows",
+   "ms": 14.24,
+   "params": {
+    "p_start_yyyymmdd": "20260817",
+    "p_end_yyyymmdd": "20270815"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260817', @p_end_yyyymmdd='20270815'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:44.096",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 7.4,
+   "params": {
+    "p_program_id": "SCP0016",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Waterfall Shipment Plan"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0016', @p_user_id='jaeuk.shin', @p_sheet_name='Waterfall Shipment Plan'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:45.025",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+   "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 700.2,
+   "params": {
+    "p_from_yyyymmdd": "20260817",
+    "p_to_yyyymmdd": "20270815",
+    "p_division_id": "81",
+    "p_biz_type": "P",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_version_no": "SP_W_20260817",
+    "p_electype": "",
+    "p_iso": "F",
+    "p_program_id": "SCP0016",
+    "p_sheet_name": "Shipment Plan FG",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL @p_from_yyyymmdd='20260817', @p_to_yyyymmdd='20270815', @p_division_id='81', @p_biz_type='P', @p_project_code='', @p_item_id='', @p_version_no='SP_W_20260817', @p_electype='', @p_iso='F', @p_program_id='SCP0016', @p_sheet_name='Shipment Plan FG', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:45.846",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 1555.16,
+   "params": {
+    "p_from_yyyymmdd": "20260817",
+    "p_to_yyyymmdd": "20261216",
+    "p_division_id": "81",
+    "p_biz_type": "P",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_version_no": "SP_W_20260817",
+    "p_electype": "",
+    "p_program_id": "SCP0016",
+    "p_sheet_name": "Shipment Plan FG",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL @p_from_yyyymmdd='20260817', @p_to_yyyymmdd='20261216', @p_division_id='81', @p_biz_type='P', @p_project_code='', @p_item_id='', @p_version_no='SP_W_20260817', @p_electype='', @p_program_id='SCP0016', @p_sheet_name='Shipment Plan FG', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:45.965",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 1656.56,
+   "params": {
+    "p_from_yyyymmdd": "20270417",
+    "p_to_yyyymmdd": "20270815",
+    "p_division_id": "81",
+    "p_biz_type": "P",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_version_no": "SP_W_20260817",
+    "p_electype": "",
+    "p_program_id": "SCP0016",
+    "p_sheet_name": "Shipment Plan FG",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL @p_from_yyyymmdd='20270417', @p_to_yyyymmdd='20270815', @p_division_id='81', @p_biz_type='P', @p_project_code='', @p_item_id='', @p_version_no='SP_W_20260817', @p_electype='', @p_program_id='SCP0016', @p_sheet_name='Shipment Plan FG', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:45.982",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "sp": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 1640.82,
+   "params": {
+    "p_from_yyyymmdd": "20261217",
+    "p_to_yyyymmdd": "20270416",
+    "p_division_id": "81",
+    "p_biz_type": "P",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_version_no": "SP_W_20260817",
+    "p_electype": "",
+    "p_program_id": "SCP0016",
+    "p_sheet_name": "Shipment Plan FG",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL @p_from_yyyymmdd='20261217', @p_to_yyyymmdd='20270416', @p_division_id='81', @p_biz_type='P', @p_project_code='', @p_item_id='', @p_version_no='SP_W_20260817', @p_electype='', @p_program_id='SCP0016', @p_sheet_name='Shipment Plan FG', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:46.122",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.68,
+   "params": {
+    "p_menu_id": "SCP0016",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "1.775",
+    "p_ui_time": "0.128",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0016', @p_log_type='FIND', @p_log_cnt='', @p_db_time='1.775', @p_ui_time='0.128', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:41:51.574",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 6.62,
+   "params": {
+    "MenuID": "Shipment Plan FG Waterfall",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Shipment Plan FG Waterfall', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

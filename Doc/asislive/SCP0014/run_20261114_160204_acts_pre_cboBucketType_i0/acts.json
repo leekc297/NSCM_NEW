@@ -1,0 +1,179 @@
+{
+ "id": "SCP0014",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0014_GET_PROBLEM_REPORT"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     439
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     19
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     16
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     6
+    ],
+    [
+     "SCP0014_GET_PROBLEM_REPORT",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItemId failed: InvalidOperationException: control not found: btnItemId",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0014-Sea1449",
+    "SCP0014-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 9616,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0014-Sea1449",
+    "SCP0014-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnMeasure failed: InvalidOperationException: control not found: btnMeasure",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0014-S67bbf1",
+    "SCP0014-S7b31fe",
+    "SCP0014-S7a38e2",
+    "SCP0014-S29bc0f",
+    "SCP0014-S346303",
+    "SCP0014-Sede481",
+    "SCP0014-S00ad82",
+    "SCP0014-S003e1c",
+    "SCP0014-S687343",
+    "SCP0014-S0bab83",
+    "SCP0014-S3e4aef",
+    "SCP0014-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0014-S287784",
+    "SCP0014-S6ab4d3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 16:00:30.292",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

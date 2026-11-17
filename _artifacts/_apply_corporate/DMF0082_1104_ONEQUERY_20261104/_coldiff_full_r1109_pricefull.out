@@ -1,0 +1,120 @@
+=== r1109_pricefull env=['zioui1', '2026-11-09 18:25:57'] period=20261101~20270430 A=PKG_DMF0082_BAKPF [('PACKAGE', 'VALID', '2026-11-09 18:23:42'), ('PACKAGE BODY', 'VALID', '2026-11-09 18:23:45')] B=PKG_DMF0082 [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-09 18:25:35')] users=k0101,minyonglee1 divs=40,81,82 scen=['current', 'teams', 'ver', 'multi', 'filters']
+--- k0101 div40 표본 {'site': 'SCUD_CN_FOC', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'JUNG IL SEO', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+18:28:20 k0101 div40 Current                                      PASS  A=5.22+1.3s B=4.43+1.07s rows 8213/8213 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:26 k0101 div40 team1=58520274                               PASS  A=2.62+0.43s B=2.49+0.49s rows 2695/2695 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:32 k0101 div40 team3=58520274,70021343,58666055             PASS  A=3.19+0.76s B=2.96+0.8s rows 5186/5186 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:41 k0101 div40 MF_W MF_W_20260921_V001                      PASS  A=1.84+0.07s B=0.88+0.08s rows 10/10 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:44 k0101 div40 SF_W SF_W_20260824_V001                      PASS  A=3.57+0.51s B=2.93+0.56s rows 3257/3257 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:52 k0101 div40 SP_W SP_W_20260820_V002                      PASS  A=1.81+0.3s B=1.44+0.26s rows 1179/1179 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:28:56 k0101 div40 MF_D MF_D_20260827_V001                      PASS  A=2.94+0.53s B=2.71+0.45s rows 3221/3221 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:03 k0101 div40 Current,MF_W_20260921_V001                   PASS  A=4.29+1.19s B=4.31+1.12s rows 8223/8223 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:14 k0101 div40 Current,SP_W_20260820_V002                   PASS  A=5.09+1.26s B=5.02+1.28s rows 9390/9390 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:27 k0101 div40 Current site=SCUD_CN_FOC                     PASS  A=1.39+0.1s B=1.26+0.1s rows 207/207 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:30 k0101 div40 Current item=CM348                           PASS  A=1.46+0.28s B=1.47+0.24s rows 1189/1189 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2 [rc1:ORDER_TIE]
+18:29:34 k0101 div40 Current cust=Lenovo                          PASS  A=1.24+0.17s B=1.23+0.2s rows 1392/1392 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:37 k0101 div40 Current biz=CELL                             PASS  A=3.44+0.88s B=3.46+0.86s rows 6137/6137 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:46 k0101 div40 Current project=Lenovo                       PASS  A=1.69+0.18s B=1.52+0.2s rows 1392/1392 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:50 k0101 div40 Current owner=JUNG IL SEO                    PASS  A=1.57+0.17s B=1.56+0.15s rows 483/483 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+18:29:54 k0101 div40 Current team=58520274                        PASS  A=2.44+0.47s B=2.43+0.46s rows 2695/2695 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2 [rc1:ORDER_TIE]
+18:30:00 k0101 div40 Current sender=NOSUCH                        PASS  A=2.36+0.08s B=2.35+0.09s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:30:05 k0101 div40 Current qty=Y                                PASS  A=3.86+0.45s B=4.02+0.48s rows 2312/2312 6/6 1/1 5/5 181/181 1/1 cols 413/413 3/3 3/3 4/4 7/7 2/2
+--- k0101 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20261105_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+18:31:06 k0101 div81 Current                                      PASS  A=32.75+1.27s B=26.62+1.24s rows 8500/8500 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:31:34 k0101 div81 team1=70000347                               PASS  A=3.59+0.54s B=4.12+0.53s rows 3002/3002 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:31:44 k0101 div81 team3=70000347,70000342,70618869             PASS  A=5.14+0.97s B=5.44+1.0s rows 5952/5952 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:31:57 k0101 div81 real_team=70000342                           PASS  A=3.47+0.34s B=3.71+0.32s rows 1946/1946 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:32:05 k0101 div81 real_team=70084589                           PASS  A=2.4+0.07s B=2.79+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:32:11 k0101 div81 MF_W MF_W_20261105_V001                      PASS  A=5.52+0.3s B=3.97+0.31s rows 1475/1475 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:32:21 k0101 div81 SF_W SF_W_20261028_V001                      PASS  A=1.39+0.07s B=1.43+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:32:24 k0101 div81 SP_W SP_W_20260826_V002                      PASS  A=2.13+0.16s B=1.84+0.14s rows 540/540 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:32:29 k0101 div81 MF_D MF_D_20260827_V001                      PASS  A=1.61+0.07s B=1.43+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:32:32 k0101 div81 Current,MF_W_20261105_V001                   PASS  A=10.71+1.26s B=11.3+1.24s rows 8506/8506 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:32:57 k0101 div81 Current,SP_W_20260826_V002                   PASS  A=8.35+1.38s B=8.71+1.32s rows 8482/8482 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:17 k0101 div81 Current site=BMW_US_SPA                      PASS  A=1.96+0.13s B=2.37+0.13s rows 398/398 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:22 k0101 div81 Current item=HP200                           PASS  A=1.46+0.13s B=1.92+0.13s rows 447/447 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:26 k0101 div81 Current cust=A18BW2003                       PASS  A=1.51+0.07s B=1.93+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:33:30 k0101 div81 Current biz=CELL                             PASS  A=1.72+0.1s B=2.21+0.1s rows 154/154 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:34 k0101 div81 Current project=A18BW2003                    PASS  A=3.15+0.27s B=3.81+0.31s rows 1387/1387 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:42 k0101 div81 Current owner=BYUNGCHANG PARK                PASS  A=3.32+0.3s B=3.73+0.3s rows 1673/1673 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:50 k0101 div81 Current team=70000347                        PASS  A=3.84+0.53s B=4.1+0.5s rows 3002/3002 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:33:59 k0101 div81 Current plant=WA00-P                         PASS  A=4.97+0.83s B=5.39+0.85s rows 5559/5559 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:34:12 k0101 div81 Current sender=NOSUCH                        PASS  A=3.44+0.08s B=4.72+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:34:20 k0101 div81 Current qty=Y                                PASS  A=5.23+0.34s B=5.67+0.3s rows 1287/1287 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+18:35:02 k0101 div82 Current                                      PASS  A=11.74+3.27s B=11.23+3.08s rows 16677/16677 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:35:17 k0101 div82 team1=58187671                               PASS  A=9.14+2.36s B=9.16+2.69s rows 11979/11979 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:35:42 k0101 div82 team3=58187671,70496991,71059521             PASS  A=10.41+2.95s B=10.16+2.79s rows 14491/14491 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:36:09 k0101 div82 real_team=30385415,70021414,71067318         PASS  A=3.77+0.08s B=3.76+0.07s rows 8/8 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:36:17 k0101 div82 MF_W MF_W_20260825_V001                      PASS  A=3.55+0.18s B=3.6+0.18s rows 700/700 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:36:25 k0101 div82 SP_W SP_W_20260827_V001                      PASS  A=2.14+0.18s B=2.03+0.17s rows 690/690 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:36:30 k0101 div82 MF_D MF_D_20260827_V001                      PASS  A=1.48+0.07s B=1.42+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:36:33 k0101 div82 Current,MF_W_20260825_V001                   PASS  A=12.42+3.21s B=12.61+3.13s rows 17377/17377 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:37:05 k0101 div82 Current,SP_W_20260827_V001                   PASS  A=12.14+4.05s B=12.17+3.28s rows 17319/17319 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:37:38 k0101 div82 Current site=NextEra_US_PHX                  PASS  A=6.92+1.45s B=6.8+1.37s rows 7773/7773 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:37:56 k0101 div82 Current item=D1551                           PASS  A=8.55+2.29s B=8.51+2.34s rows 13057/13057 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:38:18 k0101 div82 Current cust=G-26-033                        PASS  A=2.83+0.07s B=2.92+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:38:24 k0101 div82 Current project=G-26-033                     PASS  A=4.17+0.16s B=4.16+0.18s rows 444/444 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:38:33 k0101 div82 Current owner=YEEUN CHO                      PASS  A=8.75+2.06s B=8.8+2.2s rows 11197/11197 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:38:57 k0101 div82 Current team=58187671                        PASS  A=9.29+2.3s B=8.9+2.24s rows 11979/11979 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+18:39:21 k0101 div82 Current sender=NOSUCH                        PASS  A=5.6+0.07s B=5.66+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:39:32 k0101 div82 Current qty=Y                                PASS  A=9.0+0.24s B=8.91+0.25s rows 1181/1181 6/6 1/1 5/5 181/181 1/1 cols 414/414 3/3 3/3 4/4 7/7 2/2
+--- minyonglee1 div40 표본 {'site': 'SCUD_CN_FOC', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'JUNG IL SEO', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+18:40:19 minyonglee1 div40 Current                                      PASS  A=4.86+1.16s B=4.86+1.2s rows 8213/8213 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:25 minyonglee1 div40 team1=58520274                               PASS  A=2.86+0.5s B=2.71+0.48s rows 2695/2695 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:32 minyonglee1 div40 team3=58520274,70021343,58666055             PASS  A=3.31+0.78s B=3.32+0.76s rows 5186/5186 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:41 minyonglee1 div40 MF_W MF_W_20260921_V001                      PASS  A=1.01+0.09s B=1.01+0.08s rows 10/10 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:43 minyonglee1 div40 SF_W SF_W_20260824_V001                      PASS  A=3.39+0.53s B=3.28+0.56s rows 3257/3257 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:51 minyonglee1 div40 SP_W SP_W_20260820_V002                      PASS  A=1.84+0.24s B=1.67+0.27s rows 1179/1179 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:40:56 minyonglee1 div40 MF_D MF_D_20260827_V001                      PASS  A=3.09+0.52s B=3.04+0.63s rows 3221/3221 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:03 minyonglee1 div40 Current,MF_W_20260921_V001                   PASS  A=5.02+1.16s B=5.01+1.19s rows 8223/8223 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:16 minyonglee1 div40 Current,SP_W_20260820_V002                   PASS  A=5.79+1.41s B=5.97+1.32s rows 9390/9390 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:32 minyonglee1 div40 Current site=SCUD_CN_FOC                     PASS  A=1.41+0.11s B=1.38+0.15s rows 207/207 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:35 minyonglee1 div40 Current item=CM348                           PASS  A=1.65+0.25s B=1.64+0.27s rows 1189/1189 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:39 minyonglee1 div40 Current cust=Lenovo                          PASS  A=1.38+0.21s B=1.38+0.2s rows 1392/1392 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:42 minyonglee1 div40 Current biz=CELL                             PASS  A=3.95+0.99s B=3.93+0.95s rows 6137/6137 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:53 minyonglee1 div40 Current project=Lenovo                       PASS  A=1.7+0.2s B=1.66+0.22s rows 1392/1392 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:41:57 minyonglee1 div40 Current owner=JUNG IL SEO                    PASS  A=1.77+0.16s B=1.71+0.17s rows 483/483 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:42:01 minyonglee1 div40 Current team=58520274                        PASS  A=2.81+0.48s B=2.76+0.43s rows 2695/2695 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:42:07 minyonglee1 div40 Current sender=NOSUCH                        PASS  A=2.5+0.08s B=2.78+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:42:13 minyonglee1 div40 Current qty=Y                                PASS  A=4.42+0.4s B=4.18+0.38s rows 2312/2312 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+--- minyonglee1 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20261105_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+18:42:48 minyonglee1 div81 Current                                      PASS  A=6.58+1.48s B=7.12+1.42s rows 8500/8500 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:42:58 minyonglee1 div81 team1=70000347                               PASS  A=3.91+0.65s B=4.33+0.65s rows 3002/3002 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:43:08 minyonglee1 div81 team3=70000347,70000342,70618869             PASS  A=5.46+1.15s B=5.91+1.24s rows 5952/5952 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:43:22 minyonglee1 div81 real_team=70000342                           PASS  A=3.38+0.45s B=3.84+0.41s rows 1946/1946 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:43:31 minyonglee1 div81 real_team=70084589                           PASS  A=2.49+0.09s B=2.97+0.09s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:43:37 minyonglee1 div81 MF_W MF_W_20261105_V001                      PASS  A=3.21+0.4s B=3.2+0.4s rows 1475/1475 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:43:44 minyonglee1 div81 SF_W SF_W_20261028_V001                      PASS  A=1.5+0.07s B=1.49+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:43:48 minyonglee1 div81 SP_W SP_W_20260826_V002                      PASS  A=2.19+0.2s B=1.97+0.15s rows 540/540 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:43:52 minyonglee1 div81 MF_D MF_D_20260827_V001                      PASS  A=1.53+0.08s B=1.55+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:43:56 minyonglee1 div81 Current,MF_W_20261105_V001                   PASS  A=13.82+1.53s B=13.92+1.62s rows 8506/8506 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:44:27 minyonglee1 div81 Current,SP_W_20260826_V002                   PASS  A=10.72+1.57s B=11.47+1.61s rows 8482/8482 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:44:54 minyonglee1 div81 Current site=BMW_US_SPA                      PASS  A=2.02+0.13s B=2.5+0.18s rows 398/398 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:44:59 minyonglee1 div81 Current item=HP200                           PASS  A=1.59+0.19s B=2.03+0.17s rows 447/447 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:03 minyonglee1 div81 Current cust=A18BW2003                       PASS  A=1.59+0.08s B=2.02+0.09s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:45:07 minyonglee1 div81 Current biz=CELL                             PASS  A=1.84+0.12s B=2.31+0.1s rows 154/154 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:11 minyonglee1 div81 Current project=A18BW2003                    PASS  A=3.29+0.38s B=3.85+0.31s rows 1387/1387 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:20 minyonglee1 div81 Current owner=BYUNGCHANG PARK                PASS  A=3.62+0.43s B=4.07+0.39s rows 1673/1673 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:29 minyonglee1 div81 Current team=70000347                        PASS  A=4.0+0.68s B=4.46+0.65s rows 3002/3002 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:39 minyonglee1 div81 Current plant=WA00-P                         PASS  A=5.47+1.0s B=5.91+0.98s rows 5559/5559 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:45:53 minyonglee1 div81 Current sender=NOSUCH                        PASS  A=3.43+0.08s B=3.91+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:46:01 minyonglee1 div81 Current qty=Y                                PASS  A=5.5+0.38s B=5.93+0.34s rows 1287/1287 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+--- minyonglee1 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+18:46:42 minyonglee1 div82 Current                                      PASS  A=11.89+2.98s B=11.93+3.0s rows 16677/16677 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:46:58 minyonglee1 div82 team1=58187671                               PASS  A=9.86+1.95s B=9.83+2.2s rows 11979/11979 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:47:24 minyonglee1 div82 team3=58187671,70496991,71059521             PASS  A=10.97+2.63s B=11.34+2.68s rows 14491/14491 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:47:53 minyonglee1 div82 real_team=30385415,70021414,71067318         PASS  A=3.76+0.07s B=3.79+0.08s rows 8/8 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:48:01 minyonglee1 div82 MF_W MF_W_20260825_V001                      PASS  A=2.67+0.18s B=2.71+0.17s rows 700/700 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:48:07 minyonglee1 div82 SP_W SP_W_20260827_V001                      PASS  A=2.14+0.18s B=2.14+0.18s rows 690/690 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:48:12 minyonglee1 div82 MF_D MF_D_20260827_V001                      PASS  A=1.49+0.07s B=1.49+0.07s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:48:15 minyonglee1 div82 Current,MF_W_20260825_V001                   PASS  A=14.15+2.83s B=13.72+2.84s rows 17377/17377 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:48:50 minyonglee1 div82 Current,SP_W_20260827_V001                   PASS  A=14.32+2.9s B=13.32+3.04s rows 17319/17319 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:49:25 minyonglee1 div82 Current site=NextEra_US_PHX                  PASS  A=7.23+1.4s B=7.24+1.44s rows 7773/7773 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:49:43 minyonglee1 div82 Current item=D1551                           PASS  A=9.55+2.52s B=9.39+2.19s rows 13057/13057 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:50:08 minyonglee1 div82 Current cust=G-26-033                        PASS  A=2.85+0.07s B=2.88+0.09s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:50:14 minyonglee1 div82 Current project=G-26-033                     PASS  A=4.37+0.16s B=4.58+0.17s rows 444/444 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:50:23 minyonglee1 div82 Current owner=YEEUN CHO                      PASS  A=9.56+2.06s B=9.34+1.96s rows 11197/11197 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:50:48 minyonglee1 div82 Current team=58187671                        PASS  A=10.17+2.2s B=9.8+2.13s rows 11979/11979 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+18:51:13 minyonglee1 div82 Current sender=NOSUCH                        PASS  A=6.16+0.07s B=5.67+0.08s rows 0/0 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2 ⚠0행(rc1)
+18:51:25 minyonglee1 div82 Current qty=Y                                PASS  A=9.17+0.28s B=9.12+0.29s rows 1181/1181 6/6 1/1 5/5 181/181 1/1 cols 432/432 3/3 3/3 4/4 7/7 2/2
+=== 합계(2026-11-09 18:51:47): 시나리오 112 · PASS 112 · FAIL 0 · DRIFT_RESOLVED 0 · DRIFT_FAIL 0 · ERROR 0 · 커서 672 중 전 행·전 열 동일 672 · 비교 셀 198,360,637 · 주 커서 0행(미실증) 18

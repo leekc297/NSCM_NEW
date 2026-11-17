@@ -89,6 +89,10 @@ export const COMBO = {
   PLANT_SITE: 'FromSiteByDivisionOspPack', // param: divisionId (Team/Customer/SalesSite 무관 독립 체인)
   BUCKET_TYPE: 'BucketType', // 실측 확정(ora.py, SCM_ADM_CMBO_SQL_M, USE_YN='Y') — LOOKUP_TYPE='BUCKET_TYPE_CODE' 조회
   PLAN_PERIOD: 'Plan_InforPacker_SCP', // 초기 Period From/To 단발성 조회(콤보 아님)
+  // 기본요일(DEFAULT_BUCKET_DAY) — W→D/M→D 배분 기준 요일. param: divisionId, bucketType.
+  //   SCM_ADM_CMBO_SQL_M USE_YN='Y' 실측(2026-11-09): SCM_ADM_LOOKUP_MASTER_DETAIL SEGMENT1=div,
+  //   SEGMENT2=WEEKLY/MONTHLY → SEGMENT3=요일(40=MON, 81/82=FRI). CODE/NAME 동일(요일코드).
+  DEFAULT_BUCKET_DAY: 'DefaultBucketDay',
 } as const;
 
 export const BUCKET_TYPE = {

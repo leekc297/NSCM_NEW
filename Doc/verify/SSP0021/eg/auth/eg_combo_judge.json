@@ -1,0 +1,252 @@
+[
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Div.*",
+"ctx": "SSP/40/SSP Planner · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Company*",
+"ctx": "SSP/40/SSP Planner · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "From Site",
+"ctx": "SSP/40/SSP Planner · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 98개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Bucket",
+"ctx": "SSP/40/SSP Planner · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Plan Date*",
+"ctx": "SSP/40/SSP Planner · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Div*",
+"ctx": "SSP/40/SSP Viewer · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Company*",
+"ctx": "SSP/40/SSP Viewer · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "From Site",
+"ctx": "SSP/40/SSP Viewer · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 98개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Bucket",
+"ctx": "SSP/40/SSP Viewer · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Plan Date*",
+"ctx": "SSP/40/SSP Viewer · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Div.*",
+"ctx": "SSP/81/SSP Planner · Div 81_HM",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Company*",
+"ctx": "SSP/81/SSP Planner · Div 81_HM",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 1건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "From Site",
+"ctx": "SSP/81/SSP Planner · Div 81_HM",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Bucket",
+"ctx": "SSP/81/SSP Planner · Div 81_HM",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Plan Date*",
+"ctx": "SSP/81/SSP Planner · Div 81_HM",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 14건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Div.*",
+"ctx": "SSP/81/SSP Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Company*",
+"ctx": "SSP/81/SSP Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 5건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "From Site",
+"ctx": "SSP/81/SSP Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 7개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Bucket",
+"ctx": "SSP/81/SSP Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Plan Date*",
+"ctx": "SSP/81/SSP Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 14건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Div*",
+"ctx": "SSP/82/SSP Planner · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Company*",
+"ctx": "SSP/82/SSP Planner · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 6건만(가상 스크롤), 대조 안 함"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "From Site",
+"ctx": "SSP/82/SSP Planner · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 8개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Bucket",
+"ctx": "SSP/82/SSP Planner · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "SSP0021",
+"target": "Plan Date*",
+"ctx": "SSP/82/SSP Planner · Div 82",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "ERROR",
+"expected": "전체 후보(콤보 응답)",
+"actual": "전체 후보 미확보 — DOM 렌더 14건만(가상 스크롤), 대조 안 함"
+}
+]

@@ -1,0 +1,3 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+ITEM_ID,,DIVISION_ID,ALL,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Div"" })","if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CA…)",SCP0037_OperationLT.cs:664 SCP0037_OperationLT.SpdMain_CellClick
+ITEM_ID,,SCM_SITE_ID,ALL,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plant Site"" })","if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CA…)",SCP0037_OperationLT.cs:671 SCP0037_OperationLT.SpdMain_CellClick

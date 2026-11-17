@@ -1,0 +1,38 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0025_ItembyDivisionPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 3872,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0025_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0025-Sea1449",
+    "SSP0025-S5451f5"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModelId",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 12:58:50.469",
+ "fills": 0,
+ "fill_left": []
+}

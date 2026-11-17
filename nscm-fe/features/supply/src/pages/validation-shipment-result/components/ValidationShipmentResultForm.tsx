@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useSessionStore, useTabid } from '@shared/stores';
 
 import { useValidationShipmentResultStore } from '../useValidationShipmentResultStore';
 import {
@@ -62,6 +63,12 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
   const [salesSites] = useTabComboQueries({
     filters: [{ comboId: COMBO.SALES_SITE, mnuId: MENU_ID }],
   });
+  // Result Date 기본값(어제, 사용자 timezone) — AS-IS GET_DATE_RANGE_YESTERDAY_BEFORE_1MONTH(foxml 인라인 SQL)
+  //   TO-BE 변환 전역 콤보. 서버가 FN_MULTY_TIME(session.tmzCd)-1 로 어제 산출(클라 dayjs 근사 대체).
+  const tmzCd = sessionTimeZone(useSessionStore(state => state.session));
+  const [yesterdayRange] = useTabComboQueries({
+    filters: [{ comboId: COMBO.YESTERDAY_PERIOD, mnuId: MENU_ID, timeZone: tmzCd }],
+  });
 
   const divisionOptions = toOptions(divisions);
   const resultTypeOptions = toOptions(resultTypes);
@@ -83,6 +90,18 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
       set({ resultType: resultTypeOptions[0].value });
     }
   }, [resultTypeOptions, sc.resultType, set]);
+
+  // Result Date 기본값 반영 — 콤보 CODE="어제:어제"(사용자 tz)를 1회 적용(store 의 dayjs 초기 근사 대체).
+  //   파라미터(tmzCd) 불변이라 1회 도착하며, 빈값/형식불량이면 skip(dayjs 폴백 유지).
+  const periodAppliedRef = useRef(false);
+  useEffect(() => {
+    if (periodAppliedRef.current) return;
+    const [from, to] = str(yesterdayRange?.[0]?.CODE).split(':');
+    if (from?.length === 8 && to?.length === 8) {
+      set({ fromYyyymmdd: from, toYyyymmdd: to });
+      periodAppliedRef.current = true;
+    }
+  }, [yesterdayRange, set]);
 
   // Division 권한 게이트(R1, cs:142~143) — MyDivision 결과 0건이면 조회영역 disable + MSG00097.
   const noDivisionAuth = divisions !== undefined && divisionOptions.length === 0;
@@ -138,6 +157,7 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
                 <CustomDropdown
                   multiple
                   allOption
+                  useClearIcon
                   value={sc.plantSiteId}
                   options={plantSiteOptions}
                   disabled={noDivisionAuth}
@@ -158,6 +178,7 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
                 <CustomDropdown
                   multiple
                   allOption
+                  useClearIcon
                   value={sc.salesSiteId}
                   options={salesSiteOptions}
                   disabled={noDivisionAuth}

@@ -1,0 +1,151 @@
+{
+ "id": "DMF0068",
+ "started": "2026-11-12 18:19:42.314",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:19:42.555",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0068_DemandManager40",
+   "form_text": "Demand Manager ",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0068_DemandManager40.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:19:51.279"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:19:57.882",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_181942\\dump_load.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:19:57.901"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:19:58.060",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_181942\\shots\\DMF0068_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:19:58.186"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:19:58.513",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:20:28.518"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:20:36.323",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_181942\\dump_find.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:20:36.336"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:20:36.505",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_181942\\shots\\DMF0068_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:20:36.632"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:20:37.116",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:20:37.710"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 8,
+  "calls_with_params": 8
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0068_DemandManager40",
+  "form_text": "Demand Manager ",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0068_DemandManager40.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 18:19:42.521",
+ "t_find": "2026-11-12 18:19:58.228",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:19:59.525",
+   "caption": "GSCM",
+   "text": "Version을 선택하고 조회하세요.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 36,
+  "layout_items": 5,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 157,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 8,
+  "calls_screen": 8,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:17.284",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:17"
+}

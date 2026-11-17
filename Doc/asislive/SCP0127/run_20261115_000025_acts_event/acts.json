@@ -1,0 +1,568 @@
+{
+ "id": "SCP0127",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/PRECEDE / SAFETY STOCK DAY",
+     "rows_before": 534,
+     "rows_after": 534,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "MAX",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALUE_TYPE",
+       "before": "81",
+       "after": "MAX"
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "WA00-A",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 0,
+       "col": "SCM_SITE_ID",
+       "before": "AAEN4128I-A1-000",
+       "after": "WA00-A"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "ASSY",
+       "after": "AAEN4128I-A1-000"
+      },
+      {
+       "row": 0,
+       "col": "STAGE",
+       "before": "2025-04-21",
+       "after": "ASSY"
+      },
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-12-31"
+      },
+      {
+       "row": 0,
+       "col": "TYPE_APPLY_DAY",
+       "before": "",
+       "after": "0"
+      },
+      {
+       "row": 0,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASSY|20250421|20261231",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 0,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASSY|20250421|20261231"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "MAX",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "VALUE_TYPE",
+       "before": "81",
+       "after": "MAX"
+      },
+      {
+       "row": 1,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "WA00-A",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 1,
+       "col": "SCM_SITE_ID",
+       "before": "AAEN4128I-A1-000",
+       "after": "WA00-A"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "ASY_AGING",
+       "after": "AAEN4128I-A1-000"
+      },
+      {
+       "row": 1,
+       "col": "STAGE",
+       "before": "2025-04-21",
+       "after": "ASY_AGING"
+      },
+      {
+       "row": 1,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 1,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-12-31"
+      },
+      {
+       "row": 1,
+       "col": "TYPE_APPLY_DAY",
+       "before": "",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASY_AGING|20250421|20261231",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 1,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "MAX|81|PG0001|WA00-A|AAEN4128I-A1-000|ASY_AGING|20250421|20261231"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "MAX",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "VALUE_TYPE",
+       "before": "81",
+       "after": "MAX"
+      },
+      {
+       "row": 2,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "WA00-A",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 2,
+       "col": "SCM_SITE_ID",
+       "before": "AAEN4129I-A1-300",
+       "after": "WA00-A"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "ASSY",
+       "after": "AAEN4129I-A1-300"
+      },
+      {
+       "row": 2,
+       "col": "STAGE",
+       "before": "2025-04-21",
+       "after": "ASSY"
+      },
+      {
+       "row": 2,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 2,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-12-31"
+      },
+      {
+       "row": 2,
+       "col": "TYPE_APPLY_DAY",
+       "before": "",
+       "after": "0"
+      },
+      {
+       "row": 2,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-11-26 오전 11:59:06",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASSY|20250421|20261231",
+       "after": "2025-11-26 오전 11:59:06"
+      },
+      {
+       "row": 2,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "MAX|81|PG0001|WA00-A|AAEN4129I-A1-300|ASSY|20250421|20261231"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "MAX",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "VALUE_TYPE",
+       "before": "81",
+       "after": "MAX"
+      },
+      {
+       "row": 3,
+       "col": "DIVISION_ID",
+       "before": "E129A_E128A",
+       "after": "81"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "WA00-A",
+       "after": "E129A_E128A"
+      },
+      {
+       "row": 3,
+       "col": "SCM_SITE_ID",
+       "before": "AAEN4129I-A1-300",
+       "after": "WA00-A"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "ASY_AGING",
+       "after": "AAEN4129I-A1-300"
+      },
+      {
+       "row": 3,
+       "col": "STAGE",
+       "before": "2025-04-21",
+       "after": "ASY_AGING"
+      },
+      {
+       "row": 3,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 3,
+       "col": "TO_YYYYMMDD",
+       "before": "0",
+       "after": "2026-12-31"
+      }
+     ],
+     "more": 960
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/PRECEDE / SAFETY STOCK DAY",
+     "rows_before": 534,
+     "rows_after": 534,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 36,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 37,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 OPMZ_PLAN_GR_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 VALUE_TYPE 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 1, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 SCM_SITE_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0127-Se6364d"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 23:58:37",
+ "edit_mode": true
+}

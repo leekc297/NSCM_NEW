@@ -1,0 +1,20 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0012-Sab4b85,DIVISION,,,,값 미도출,"if (!division.Substring(0, 2).Equals(""EE""))",
+SCP0012-Sa3a1d9,DIVISION,40,40,,실행 대상,"if (!division.Substring(0, 2).Equals(""EE"")) ▸ if (division == ""40"")",
+SCP0012-S7afa5c,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"if (!division.Substring(0, 2).Equals(""EE"")) ▸ else of (division == ""40"")",
+SCP0012-S585b01,DIVISION,,,,값 미도출,"else of (!division.Substring(0, 2).Equals(""EE""))",
+SCP0012-S4446a7,DIVISION,,,,값 미도출,"if (!division.Substring(0, 2).Equals(""EE""))",
+SCP0012-Sac4dee,DIVISION,,,,값 미도출,"else of (!division.Substring(0, 2).Equals(""EE""))",
+SCP0012-S2b3789,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (dtPlanType.Rows.Count > 0)",
+SCP0012-S57fbf3,COND,,,,값 미도출,if (dtPlanTypeAll == null),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0012-S9648a8,COND,,,,값 미도출,if (dtPlanSeqAll == null),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0012-S2b3789,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (dtPlanType.Rows.Count > 0)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0012-S8a6f22,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol <= siObj.GetMaxColumnIndex()) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+SCP0012-S262f67,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol <= siObj.GetMaxColumnIndex()) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+SCP0012-Sb3e88d,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol <= siObj.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0)",
+SCP0012-S024785,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol <= siObj.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ else of (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0) ▸ if (siObj.GetColumnTag(iCo",
+SCP0012-S67eeba,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol <= siObj.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0)",
+SCP0012-Se59316,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,for (iCol <= siObj.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ if (siObj.GetColumnT,
+SCP0012-S8e9b3d,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,for (iCol <= siObj.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ else of (siObj.GetCo,
+SCP0012-S362018,COND,,,,값 미도출,"if (action_name.Equals(""CHK_PERIOD"")) ▸ if (DateTime.Compare(dtPlanStart, dtFrom) > 0)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0012-S0ab7cb,COND,,,,값 미도출,"if (action_name.Equals(""CHK_PERIOD"")) ▸ if (diff.Days > 364)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

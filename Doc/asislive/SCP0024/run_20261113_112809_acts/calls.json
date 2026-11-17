@@ -1,0 +1,145 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 11:26:23.438",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.44,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "181",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=181, @p_timezone='AS054'",
+   "phase": "action:BtnW26"
+  },
+  {
+   "at": "2026-11-13 11:26:38.352",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.43,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "363",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=363, @p_timezone='AS054'",
+   "phase": "action:BtnW52"
+  },
+  {
+   "at": "2026-11-13 11:26:53.396",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.54,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "587",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=587, @p_timezone='AS054'",
+   "phase": "action:BtnWLast"
+  },
+  {
+   "at": "2026-11-13 11:27:08.599",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.34,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 11:27:12.404",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2575,
+   "rows_kind": "DataSet rows",
+   "ms": 3682.51,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "P",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0024"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='P', @p_item_id='', @p_scp_module_type='SCP0024'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 11:27:21.618",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.82,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "181",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=181, @p_timezone='AS054'",
+   "phase": "action:btnW26"
+  },
+  {
+   "at": "2026-11-13 11:27:36.889",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.06,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "363",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=363, @p_timezone='AS054'",
+   "phase": "action:btnW52"
+  },
+  {
+   "at": "2026-11-13 11:27:51.983",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 5.46,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "587",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=587, @p_timezone='AS054'",
+   "phase": "action:btnWLast"
+  }
+ ]
+}

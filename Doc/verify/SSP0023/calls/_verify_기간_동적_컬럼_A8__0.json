@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 405,
+  "at": "2026-11-14T15:19:09.024Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 133,
+  "at": "2026-11-14T15:19:10.577Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1803,
+  "at": "2026-11-14T15:19:12.163Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ }
+]

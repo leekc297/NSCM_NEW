@@ -1,7 +1,7 @@
 # SCP0018 — To-Be Fact Pack 요약
 
 - page_key: `supply/waterfall-shipment-plan-semi` · feature: supply · As-is Fact Pack 있음
-- 파일 8 · 엔드포인트 호출 8 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 33 · 하드코딩 컬럼 2 · 메시지 13
+- 파일 8 · 엔드포인트 호출 8 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 33 · 하드코딩 컬럼 2 · 메시지 16
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,9 +11,9 @@
 | features/supply/src/pages/waterfall-shipment-plan-semi/components/WaterfallShipmentPlanSemiGrid.tsx | component | 484 |
 | features/supply/src/pages/waterfall-shipment-plan-semi/index.ts | index | 2 |
 | features/supply/src/pages/waterfall-shipment-plan-semi/useWaterfallShipmentPlanSemiStore.ts | store | 259 |
-| features/supply/src/pages/waterfall-shipment-plan-semi/waterfall-shipment-plan-semi.constants.ts | constants | 71 |
+| features/supply/src/pages/waterfall-shipment-plan-semi/waterfall-shipment-plan-semi.constants.ts | constants | 84 |
 | features/supply/src/pages/waterfall-shipment-plan-semi/waterfall-shipment-plan-semi.types.ts | types | 35 |
-| features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | page | 215 |
+| features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | page | 253 |
 | features/supply/src/pages/waterfall-shipment-plan-semi/__asis-mapping__.md | mapping | 71 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -23,9 +23,9 @@
 | /admin/menu/SCP0018/column | http | 1 | Y | useWaterfallShipmentPlanSemiStore.ts:180 |
 | /admin/menu/SCP0018/measure | http | 1 | Y | useWaterfallShipmentPlanSemiStore.ts:194 |
 | /admin/menu/SCP0018/search-conditions | http | 1 | Y | useWaterfallShipmentPlanSemiStore.ts:235 |
-| SCP0018/main//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:58 |
-| SCP0018/spreadTitle//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:65 |
-| SCP0018/spreadTitleIso//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:72 |
+| SCP0018/main//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:59 |
+| SCP0018/spreadTitle//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:66 |
+| SCP0018/spreadTitleIso//call-proc | hook | 1 | Y | WaterfallShipmentPlanSemi.tsx:73 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -50,8 +50,8 @@
 | g | updatedLayout | applyDynVisibility | addHandler | features/supply/src/pages/waterfall-shipment-plan-semi/components/WaterfallShipmentPlanSemiGrid.tsx | 331 |
 | host | dblclick | onDblClick | addEventListener | features/supply/src/pages/waterfall-shipment-plan-semi/components/WaterfallShipmentPlanSemiGrid.tsx | 386 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/waterfall-shipment-plan-semi/components/WaterfallShipmentPlanSemiGrid.tsx | 455 |
-| WaterfallShipmentPlanSemiForm | onSubmit | handleSubmit | jsx | features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | 171 |
-| MeasureSelectModal | onApply | <arrow> staticMeasures.map,applyVisibleMeasures,saveTitleSet,selected.map,clearData | jsx | features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | 196 |
+| WaterfallShipmentPlanSemiForm | onSubmit | handleSubmit | jsx | features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | 209 |
+| MeasureSelectModal | onApply | <arrow> staticMeasures.map,applyVisibleMeasures,saveTitleSet,selected.map,clearData | jsx | features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx | 234 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -85,7 +85,9 @@
 |---|---|
 | MSG00097 | 1 |
 | MSG00109 | 1 |
-| MSG00013 | 1 |
+| MSG00429 | 1 |
+| MSG01135 | 1 |
+| MSG01187 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00027 | 1 |
@@ -93,12 +95,13 @@
 | LBL00038 | 1 |
 | LBL00710 | 1 |
 | LBL00606 | 1 |
+| LBL01275 | 1 |
 | LBL00013 | 1 |
 | LBL00687 | 1 |
 | LBL00310 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0018(17), SCP0016(8), COM0013(2), SCP0025(2), DMF0053(1)
+- 화면ID: SCP0018(18), SCP0016(8), COM0013(2), SCP0025(2), DMF0053(1)
 - SP/PKG: PKG_COM0000(3), SCM0001_GET_SCP_MONTH_PERIOD(2), PKG_SCP0009(2), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(2), PKG_SCP0018(2), SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO(2), FN_GET_DIVISION(1), PKG_NSCM_UI_COM_MENU(1), PR_GET_SHEET_MEASURE_LIST(1), P_SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)

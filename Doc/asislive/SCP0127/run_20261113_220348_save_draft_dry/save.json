@@ -1,0 +1,173 @@
+{
+ "id": "SCP0127",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "STAGE",
+   "ITEM_ID",
+   "VALUE_TYPE",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "STAGE": "STAGE",
+   "ITEM_ID": "ITEM_ID",
+   "VALUE_TYPE": "VALUE_TYPE",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+  "side": [],
+  "basis": "foxml SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY → SP SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "TYPE_APPLY_DAY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "TYPE_APPLY_DAY",
+     "db_col": "TYPE_APPLY_DAY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "TYPE_APPLY_DAY",
+    "db_col": "TYPE_APPLY_DAY",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:03:48",
+ "status": "DRY_OK",
+ "steps": [],
+ "raw_key_used": [
+  {
+   "row": 0,
+   "shown": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "E129A_E128A",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "2025-04-21",
+    "TO_YYYYMMDD": "2026-12-31"
+   },
+   "raw": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "20261231"
+   }
+  }
+ ],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "SCM_SITE_ID": "WA00-A",
+   "STAGE": "ASSY",
+   "ITEM_ID": "AAEN4128I-A1-000",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "20261231",
+   "TYPE_APPLY_DAY": "0",
+   "VALUE_DESCRIPTION": null,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-11-26 11:59:06.073",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-11-26 11:59:06.073"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "20261231"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "TYPE_APPLY_DAY",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "SCM_SITE_ID": "WA00-A",
+   "STAGE": "ASSY",
+   "ITEM_ID": "AAEN4128I-A1-000",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "20261231",
+   "TYPE_APPLY_DAY": "0",
+   "VALUE_DESCRIPTION": null,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-11-26 11:59:06.073",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-11-26 11:59:06.073"
+  }
+ ]
+}

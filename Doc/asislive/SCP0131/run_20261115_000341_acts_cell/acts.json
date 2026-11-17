@@ -1,0 +1,113 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[OPMZ_PLAN_GR_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0131-S42f879",
+    "SCP0131-Sa802ed",
+    "SCP0131-Sc1d4e2"
+   ]
+  },
+  {
+   "control": "spdMain[SCM_SITE_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0131-S42f879",
+    "SCP0131-Sa802ed",
+    "SCP0131-Sc1d4e2"
+   ]
+  },
+  {
+   "control": "spdMain[VALID_YN]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0131-S42f879",
+    "SCP0131-Sa802ed",
+    "SCP0131-Sc1d4e2"
+   ]
+  },
+  {
+   "control": "spdMain[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 00:02:30",
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 3,
+   "named_cols": [
+    "OPMZ_PLAN_GR_ID",
+    "SCM_SITE_ID",
+    "VALID_YN"
+   ],
+   "used": [
+    "OPMZ_PLAN_GR_ID",
+    "SCM_SITE_ID",
+    "VALID_YN"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  },
+  {
+   "kind": "dbl",
+   "scenarios": 2,
+   "named_cols": [
+    "ITEM_ID"
+   ],
+   "used": [
+    "ITEM_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

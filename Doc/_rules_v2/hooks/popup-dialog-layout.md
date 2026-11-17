@@ -29,7 +29,7 @@ const DEFAULT_HEIGHT = '50vh';   // ⚠ 고정 — size prop 은 width 만 영�
 
 **중요**:
 - `size` prop = **width** 만 결정 (enum 1600~400)
-- height 는 항상 `50vh` (resize 가능하지만 SCSS 에서 100% 보장 불가)
+- height 는 기본 `50vh` (resize 가능하지만 SCSS 에서 100% 보장 불가) (2026-11-13 정정: "항상 50vh" → 기본값 50vh — `CustomDialog` 에 `height?: string | number` prop 이 있어 지정하면 그 값이 쓰인다(`height ?? DEFAULT_HEIGHT`). `size` prop 은 width 만 결정)
 - `position`:
   - `'basic'` — viewport 중앙 (modal default)
   - `'overflow'` — 화면 가득 사용 (scroll 영역 안에 떠 있음)

@@ -6,7 +6,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -17,6 +17,7 @@ import {
   ELECTRODE_LOOKUP,
   LBL,
   MENU_ID,
+  OP_GROUP_CELL,
   PRESET_W52,
   SHEETS,
 } from '../production-plan-line.constants';
@@ -28,9 +29,12 @@ import {
   isStageEditableFor,
 } from '../utils/productionPlanLineEditLock';
 
+// Material/Model·Nickname 두 픽커가 같은 팝업을 열되, 어느 쪽이 열었는지로 팝업 seed 값을 가른다.
+export type ItemPickerField = 'material' | 'nickname';
+
 interface Props {
   onSearch: () => void;
-  onItemSearch: () => void;
+  onItemSearch: (field: ItemPickerField) => void;
 }
 
 interface Option {
@@ -58,6 +62,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   const setDivision = useProductionPlanLineStore(s => s.setDivision);
   const setLatestVersion = useProductionPlanLineStore(s => s.setLatestVersion);
   const setStageEditable = useProductionPlanLineStore(s => s.setStageEditable);
+  const clearFilters = useProductionPlanLineStore(s => s.clearFilters);
   const openSearchArea = useProductionPlanLineStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -156,7 +161,12 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   const divisionPeriod =
     Number((divisions ?? []).find(r => str(r.CODE) === sc.divisionId)?.DAILY_PLAN_PERIOD) ||
     undefined;
-  const operationGroupOptions = toOptions(operationGroups);
+  // EE(JV 포함, 앞2자 'EE') 는 Operation Group 에서 Cell(A) 제외 — 사용자 지시 2026-11-11.
+  //   AS-IS deviation: AS-IS(SetChangedControl)는 EE 콤보 OperationGroupEE 를 A(Cell)/E(Electrode) 그대로
+  //   바인딩한다. 비EE 는 불변. 선택값이 'A'였다가 EE 로 바뀌면 아래 기본값 effect 가 첫 옵션(E)으로 교정한다.
+  const operationGroupOptions = toOptions(operationGroups).filter(
+    o => !(isEe && o.value === OP_GROUP_CELL)
+  );
   const bucketOptions = toOptions(buckets);
   const cellTypeGrOptions = toOptions(cellTypeGrs);
   // electrode 는 lookup(LookupResponse — index signature) — CODE/NAME 로 직접 매핑(tact-time 규약).
@@ -394,7 +404,12 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   //   AS-IS txtItemId(Material, btnItemId 팝업)·txtNickName(Nick Name) 분리 복원. 팝업 행 선택 1회가
   //   Material(itemId←ITEM_ID)·Model/Nickname(nickName←NICK_NAME)을 함께 채운다(ProductionPlanLine.tsx
   //   setSelectedValue). 자유 입력은 각 조건으로 분리(Material→p_item_id, Model/Nickname→p_nick_name).
-  const pickerField = (labelText: string, value: string, onPick: (v: string) => void) => (
+  const pickerField = (
+    labelText: string,
+    value: string,
+    onPick: (v: string) => void,
+    field: ItemPickerField
+  ) => (
     <Grid size={3}>
       <FormItem
         className={commonStyles.formItem}
@@ -411,7 +426,8 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
                   appearance='outlined'
                   priority='normal'
                   iconComponent={<FunctionSearchIcon appearance='lined' />}
-                  onClick={onItemSearch}
+                  // 어느 픽커가 열었는지 전달 — 페이지가 그 필드값(Material/Nickname)을 팝업 seed 로 쓴다.
+                  onClick={() => onItemSearch(field)}
                 />
               ),
             }}
@@ -431,6 +447,18 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
     });
   };
 
+  // Operation Group 변경 시 그리드 초기화(사용자 지시 2026-11-11) — 재조회(Search) 전까지 빈 상태로 둔다.
+  //   선택 opGroup 과 조회결과 불일치 상태로 편집·저장되는 사고 방지. 편집(dirty) 중이면 Division 과 동일하게
+  //   confirmIfDirtyKey(MSG00704) confirm 후에만 바꾼다. 하위 조건(site/line/extraSpec 등)은 유지하고 그리드만
+  //   비운다(요청 범위). controlled 콤보라 취소 시 이전 opGroup 으로 자동 복귀.
+  const handleOperationGroupChange = (code: string) => {
+    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+      if (!ok) return;
+      set({ operationGroupId: code });
+      clearFilters();
+    });
+  };
+
   return (
     <SearchArea
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
@@ -444,7 +472,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
             t(LBL.OPERATION_GROUP, '_Operation Group'),
             sc.operationGroupId,
             operationGroupOptions,
-            v => set({ operationGroupId: v }),
+            handleOperationGroupChange,
             true
           )}
           {multi(t(LBL.CELL_TYPE_GR, '_Cell Type Gr'), sc.cellTypeGrs, cellTypeGrOptions, v => set({ cellTypeGrs: v }), !cellTypeEnabled)}
@@ -462,13 +490,13 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               통합 되돌림). Material→itemId(p_item_id), Model/Nickname→nickName(p_nick_name). 팝업 1회 선택이
               둘을 함께 채운다(페이지 setSelectedValue: ITEM_ID→itemId / NICK_NAME→nickName).
               Model/Nickname↔Material 순서 교체(사용자 지시 2026-11-03) — Model/Nickname 을 Material 앞으로. */}
-          {pickerField(t(LBL.MODEL_NICKNAME, '_Model/Nickname'), sc.nickName, v => set({ nickName: v }))}
-          {pickerField(t(LBL.MATERIAL, '_Material'), sc.itemId, v => set({ itemId: v }))}
-          {/* Model 줄의 남은 9칸을 비워 그 줄을 유지한다. 아래 Plan 버전이 Model 옆으로 올라오지 않게 하는 칸이다. */}
-          <Grid size={9} />
+          {pickerField(t(LBL.MODEL_NICKNAME, '_Model/Nickname'), sc.nickName, v => set({ nickName: v }), 'nickname')}
+          {pickerField(t(LBL.MATERIAL, '_Material'), sc.itemId, v => set({ itemId: v }), 'material')}
 
-          {/* Row3 — Plan Date/Type/Seq / Period / Bucket / Sum. 접고펼침 없이 모두 항상 보이게 둔다(SCP0009
-              ShipmentPlanFgForm 동일, 사용자 지시 2026-11-02). extraConditions 를 넘기지 않아 펼치기 버튼도 없다. */}
+          {/* Material 옆으로 Plan Date/Type/Seq / Period / Bucket 을 이어 붙인다(사용자 지시 2026-11-11) —
+              Material(3)+PlanVersion(3)+Period(3)+Bucket(3)=12 로 한 줄을 꽉 채운다. 종전 spacer(9)로 밀어
+              다음 줄에 두던 배치를 폐기. Sum 은 그리드 건수 툴바(SubTitle)로 이동(폼에서 제거). 접고펼침 없이
+              모두 항상 보이게 둔다(SCP0009 ShipmentPlanFgForm 동일). extraConditions 미사용 — 펼치기 버튼 없음. */}
           {/* Plan-date → Plan-type → Seq 는 AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 #9/#10). 공용
               PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 클릭하면 date→type→seq 컬럼 팝업이 열려
               경로를 고르고, 상위 변경 시 하위 초기화. 선택값은 기존과 동일하게 1-요소 배열로 store 에 보존
@@ -517,25 +545,8 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
             false,
             sc.chkAll
           )}
-
-          {/* Sum(SUM 컬럼 토글). ALL/Line Assign 은 사용자 지시(2026-10-01)로 제거. SCP0009(ShipmentPlanFgForm)
-              동일 패턴으로 교체 — 체크박스 앞·라벨 뒤(Checkbox labelText), FormItem 라벨 칸은 공백으로 두고
-              customGrid 로 체크박스를 행 높이 기준 세로 중앙 정렬(사용자 지시 2026-10-21, Period 와 겹침 해소).
-              Row3 마지막 칸 size=3(cascade3+Period3+Bucket3+Sum3=12). */}
-          <Grid size={3} className={commonStyles.customGrid}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Sum(SUM 컬럼 토글)은 그리드 건수 툴바(SubTitle)로 이동(사용자 지시 2026-11-11). ALL/Line Assign 은
+              사용자 지시(2026-10-01)로 제거됨. */}
         </>
       }
     />

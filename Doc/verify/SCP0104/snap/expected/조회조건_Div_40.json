@@ -1,0 +1,136 @@
+{
+ "kind": "조회조건",
+ "scope": "Div 40",
+ "items": [
+  {
+   "seq": 1,
+   "label": "Div",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=1"
+  },
+  {
+   "seq": 2,
+   "label": "Plan Month",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=2"
+  },
+  {
+   "seq": 3,
+   "label": "Ver.",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=3"
+  },
+  {
+   "seq": 4,
+   "label": "Operation group",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=4"
+  },
+  {
+   "seq": 5,
+   "label": "Site",
+   "type1": "선택",
+   "type2": "다중",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=5"
+  },
+  {
+   "seq": 6,
+   "label": "Plant",
+   "type1": "선택",
+   "type2": "다중",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=6"
+  },
+  {
+   "seq": 7,
+   "label": "Building",
+   "type1": "선택",
+   "type2": "다중",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=7"
+  },
+  {
+   "seq": 8,
+   "label": "Line",
+   "type1": "선택",
+   "type2": "다중",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=8"
+  },
+  {
+   "seq": 9,
+   "label": "Material",
+   "type1": "텍스트",
+   "type2": "다중",
+   "roles": [
+    "textbox"
+   ],
+   "popup": true,
+   "src": "search_cond.csv SCP0104 tobe_seq=9"
+  },
+  {
+   "seq": 10,
+   "label": "Active",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0104 tobe_seq=10"
+  }
+ ],
+ "order_rule": "CR-071(기준표 tobe_seq 순서)",
+ "note": "Div 별 표시 차이(G4 Div 분기)는 사람 확인"
+}

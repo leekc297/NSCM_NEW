@@ -1,0 +1,2 @@
+﻿method,api,color,guard,tobe_hits,result,why
+EditButton,SetBGColor,,"if (fps.Name == ""spdMain"") ▸ if (bEdit_Auth == true) ▸ if (bEdit_Mode == false) ▸ if (siMain.Sheet(0).Rows.Count > 0) ▸ for (i < siMain.Sheet(0).Rows.Count) ▸ i",17,PASS,"TO-BE 셀 색 변경 코드 17곳 존재(예 nscm-fe\features\shipping\src\pages\shipment-plan-electrode\components\ShipmentPlanElectrodeDetailGrid.tsx:13) — 조건·색 일치는 E2E H2 실측 · AS-IS EditButton SetBGColor  [if (fps.Name == ""spdMain"") ▸ if (bEdit_Auth == true) ▸ if (bEdit_Mode == false) ]"

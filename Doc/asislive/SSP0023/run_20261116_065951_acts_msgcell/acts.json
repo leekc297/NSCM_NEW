@@ -1,0 +1,757 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "BtnMeasure_Click",
+   "expect": "MSG00007",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:854~875 fps == null(그리드 클릭 전) → MSG00007",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "click": "BtnMeasure",
+       "wait": "5"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnMeasure",
+     "raised": null,
+     "edit_mode": false
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "btnExcelUpload_Click",
+   "expect": "MSG00265",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:6398~6406 업로드 창 닫힌 뒤 MSG00265 · 업로드 안 함 · 아니오",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "click": "btnExcelUpload",
+       "wait": "8"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:btnExcelUpload",
+     "raised": null,
+     "edit_mode": false
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "다시 조회하시겠습니까?",
+     "action": "no_button(id=7)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "PR_SCM_ADM_GET_UPLOAD_INFO"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdDetail_ComboSelChange",
+   "expect": "MSG00278",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:964~971 상세 TRANSPORT_MODE 콤보 변경 · 값 빈 값 → MSG00278 · 상세 행은 BtnSearch(Plan Detail)로 채움",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 0,
+     "col": 23,
+     "before": "SEA",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "TRANSPORT_MODE",
+      "value": "",
+      "mode": "value",
+      "row": 0
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "ComboSelChange",
+       "row": "0",
+       "col_tag": "TRANSPORT_MODE",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=23)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Trans Mode를 선택해 주세요.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: TRANSPORT_MODE (11-16 소급 표시)"
+  },
+  {
+   "kind": "msgcell",
+   "handler": "shtPlanDetail_Change",
+   "expect": "MSG00278",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:6117~6199 상세 수정 중 데이터 변경 TRANSPORT_MODE 빈 값 → MSG00278",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 0,
+     "col": 23,
+     "before": "SEA",
+     "after": "SEA",
+     "locked": true,
+     "entered": false,
+     "how": null,
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "TRANSPORT_MODE",
+      "value": "",
+      "mode": "edit",
+      "row": 0
+     }
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdDetail_EditChange",
+   "expect": "MSG00287",
+   "why": "SSP0023_ShipmentPlanElectrode.cs:1569~1625 상세 수정 중 CHANGE_REASON_DETAIL 편집 · CHANGE_REASON_CODE '-'·빈 값 → MSG00287",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 0,
+     "col": 31,
+     "before": "",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "CHANGE_REASON_CODE",
+      "value": "",
+      "mode": "value",
+      "row": 0
+     }
+    },
+    {
+     "sheet": "Shipment Plan Detail",
+     "row": 0,
+     "col": 32,
+     "before": "",
+     "after": "asislive",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "CHANGE_REASON_DETAIL",
+      "value": "asislive",
+      "mode": "value",
+      "row": 0
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "EditChange",
+       "row": "0",
+       "col_tag": "CHANGE_REASON_DETAIL",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.EditChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=32)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "In ERP, DO is created and can not request change. \r\nPlease cancel the generated DO and request a change.",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Reason Code를 입력 해주세요",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: CHANGE_REASON_CODE,CHANGE_REASON_DETAIL (11-16 소급 표시)"
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:51:35",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 7.7,
+   "at": "2026-11-16 06:51:52.491",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.69,
+   "at": "2026-11-16 06:51:52.505",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 1029.52,
+   "at": "2026-11-16 06:51:53.672",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 6.94,
+   "at": "2026-11-16 06:52:30.042",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.31,
+   "at": "2026-11-16 06:52:30.053",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 616.53,
+   "at": "2026-11-16 06:52:30.787",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 6.53,
+   "at": "2026-11-16 06:53:06.738",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 3.98,
+   "at": "2026-11-16 06:53:06.751",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 624.88,
+   "at": "2026-11-16 06:53:07.499",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 7.08,
+   "at": "2026-11-16 06:55:27.117",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.25,
+   "at": "2026-11-16 06:55:27.134",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 620.43,
+   "at": "2026-11-16 06:55:27.864",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20260928",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "ms": 7.13,
+   "at": "2026-11-16 06:57:38.986",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan(Electrode)"
+   },
+   "rows": 25,
+   "ms": 4.27,
+   "at": "2026-11-16 06:57:39.007",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0023_GET_SHIPMENT_PLAN",
+   "params": {
+    "P_DIVISION_ID": "40",
+    "P_COMPANY_ID": "HQ00",
+    "P_FROM_SITE": "",
+    "P_PLAN_START_YYYYMMDD": "20261010",
+    "P_FROM_YYYYMMDD": "20260928",
+    "P_TO_YYYYMMDD": "20261204",
+    "P_MODEL_ID": "",
+    "P_ITEM_ID": "APCCA3122A",
+    "P_NICK_NAME": "",
+    "P_USER_ID": "jaeuk.shin",
+    "P_PROGRAM_ID": "SSP0023",
+    "P_SHEET_NAME": "Shipment Plan(Electrode)",
+    "P_REAL_FLAG": "Y",
+    "P_MY_MODEL_CHK": "N",
+    "P_PART_LEADER_CHK": "N",
+    "P_TEAM_LEADER_CHK": "N",
+    "P_DELEGATEE_CHK": "N",
+    "P_NON_CHK": "Y"
+   },
+   "rows": 11,
+   "ms": 613.8,
+   "at": "2026-11-16 06:57:39.754",
+   "phase": "find+post_find"
+  }
+ ]
+}

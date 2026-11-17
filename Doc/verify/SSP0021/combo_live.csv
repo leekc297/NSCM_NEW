@@ -1,0 +1,22 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+Com_FromSite_SCP,"{""comboId"":""Com_FromSite_SCP"",""mnuId"":""SSP0021"",""divisionId"":""''"",""companyId"":""''""}",98,95,,,PASS,응답 95건 = DB 95건
+BucketType,"{""comboId"":""BucketType"",""mnuId"":""SSP0021""}",3,3,,,PASS,응답 3건 = DB 3건
+Plan_Infor_SCP,"{""comboId"":""Plan_Infor_SCP"",""mnuId"":""SSP0021"",""companyId"":""''""}",50,6,,,PASS,응답 6건 = DB 6건 · 세션 날짜 형식 'YYYY-MM-DD HH24:MI:SS' 에서 ORA-01830 → DB 기본 'DD-MON-RR' 로 재실행(T209)
+LookupCommon,"{""comboId"":""LookupCommon"",""mnuId"":""SSP0021"",""lookupType"":""'SHIPMENT_STATUS'""}",4,4,,,PASS,응답 4건 = DB 4건
+LookupCommon,"{""comboId"":""LookupCommon"",""mnuId"":""SSP0021"",""lookupType"":""'SALES_TYPE_CODE'""}",14,14,,,PASS,응답 14건 = DB 14건
+CHANGE_REASON_CODE_ALL,"{""comboId"":""CHANGE_REASON_CODE_ALL"",""mnuId"":""SSP0021"",""lookupType"":""'CHANGE_REASON_CODE'""}",8,8,,,PASS,응답 8건 = DB 8건
+LookupCommon3,"{""comboId"":""LookupCommon3"",""mnuId"":""SSP0021"",""lookupType"":""'STOCK_STATUS'""}",0,0,,,PASS,응답 0건 = DB 0건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SSP0021""}",14,14,,,PASS,응답 14건 = DB 14건
+MyDivision,"{""comboId"":""MyDivision"",""mnuId"":""SSP0021""}",8,8,,,PASS,응답 8건 = DB 8건
+ItemType,"{""comboId"":""ItemType"",""mnuId"":""SSP0021""}",4,4,,,PASS,응답 4건 = DB 4건
+EndCustomer,"{""comboId"":""EndCustomer"",""mnuId"":""SSP0021""}",1921,1622,,,PASS,응답 1622건 = DB 1622건
+TeambyDivision,"{""comboId"":""TeambyDivision"",""divisionId"":""''"",""mnuId"":""SSP0021""}",173,173,,,PASS,응답 173건 = DB 173건
+SalesSite,"{""comboId"":""SalesSite"",""mnuId"":""SSP0021""}",4388,2551,,,PASS,응답 2551건 = DB 2551건
+Com_FromSite_SCP,"{""comboId"":""Com_FromSite_SCP"",""mnuId"":""SSP0021"",""divisionId"":""'81'"",""companyId"":""''""}",24,24,,,PASS,응답 24건 = DB 24건
+Com_FromSite_SCP,"{""comboId"":""Com_FromSite_SCP"",""mnuId"":""SSP0021"",""divisionId"":""'81'"",""companyId"":""'HQ00'""}",7,7,,,PASS,응답 7건 = DB 7건
+Plan_Infor_SCP,"{""comboId"":""Plan_Infor_SCP"",""mnuId"":""SSP0021"",""companyId"":""'HQ00'""}",50,50,,,PASS,응답 50건 = DB 50건 · 세션 날짜 형식 'YYYY-MM-DD HH24:MI:SS' 에서 ORA-01830 → DB 기본 'DD-MON-RR' 로 재실행(T209)
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SALES_TYPE_CODE'"",""mnuId"":""SSP0021"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+CHANGE_REASON_CODE_ALL,"{""comboId"":""CHANGE_REASON_CODE_ALL"",""lookupType"":""'CHANGE_REASON_CODE'"",""mnuId"":""SSP0021"",""validYn"":""'Y'""}",8,8,,,PASS,응답 8건 = DB 8건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SHIPMENT_STATUS'"",""mnuId"":""SSP0021"",""validYn"":""'Y'""}",4,4,,,PASS,응답 4건 = DB 4건
+LookupCommon3,"{""comboId"":""LookupCommon3"",""lookupType"":""'OWMS_STOCK_STATUS'"",""mnuId"":""SSP0021"",""validYn"":""'Y'""}",13,13,,,PASS,응답 13건 = DB 13건
+Division,"{""comboId"":""Division"",""mnuId"":""SSP0021"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건

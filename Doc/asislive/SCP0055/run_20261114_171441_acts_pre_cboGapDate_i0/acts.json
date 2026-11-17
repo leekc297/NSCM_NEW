@@ -1,0 +1,86 @@
+{
+ "id": "SCP0055",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Gap date 와 Plan date 는 같을 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "rows": [],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnNickName",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 29575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0055-S76fd13",
+    "SCP0055-S0d5d3a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModel_ID",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-14 17:13:49.507",
+ "preset": {
+  "name": "cboGapDate",
+  "token": "cboGapDate=i0",
+  "kw": {
+   "name": "cboGapDate",
+   "index": "0"
+  },
+  "label": "cboGapDate 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:2026-10-19 (W43)",
+  "value": "20261019",
+  "text": "2026-10-19 (W43)",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

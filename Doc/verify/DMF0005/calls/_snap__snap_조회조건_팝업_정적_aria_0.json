@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 360,
+  "at": "2026-11-13T20:58:12.938Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 390,
+  "at": "2026-11-13T20:58:12.975Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0008",
+  "sheet": "itemByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0008/itemByDivision/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 1,
+  "dur": 117,
+  "at": "2026-11-13T20:58:14.237Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0006",
+  "sheet": "ownerByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0006/ownerByDivision/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 1,
+  "dur": 105,
+  "at": "2026-11-13T20:58:16.141Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0006",
+  "sheet": "ownerByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0006/ownerByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": 88,
+  "dur": 193,
+  "at": "2026-11-13T20:58:16.243Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

@@ -1,0 +1,4 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SCP0128_GET_SEARCH_INFO,PKG_SCP0128.P_SCP0128_GET_SEARCH_INFO,GET,0,,,1,load,46,"{""p_division_id"": ""81"", ""p_site_id"": """"}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+SCP0131_GET_SALES_SITE_PRIORITY,PKG_SCP0131.P_SCP0131_GET_SALES_SITE_PRIORITY,GET,19,PASS:11 ROWS_ONLY:8,,1,find,61,"{""p_division_id"": ""81"", ""p_plan_group_id"": """", ""p_scm_site_id"": """", ""p_item_id"": """", ""p_valid_yn"": """", ""p_period_from"": ""20261109"", ""p_period_to"": ""20271108""}",BOTH,차등 검증·실측 모두 있음
+SCP0131_SAVE_SALES_SITE_PRIORITY,PKG_SCP0131.P_SCP0131_SAVE_SALES_SITE_PRIORITY,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)

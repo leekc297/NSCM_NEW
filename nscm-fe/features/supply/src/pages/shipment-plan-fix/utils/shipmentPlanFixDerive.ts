@@ -43,12 +43,20 @@ export const getCI = (row: Row, name: string): unknown => {
   return hit ? row[hit] : undefined;
 };
 
-// AS-IS 와 동일하게 FG/SEMI 로 키 컬럼을 가른다(INCOTERMS '-' = SEMI). 구분자 '|' 로 조인(값 이어붙음 충돌 방지).
+// AS-IS 와 동일하게 FG/SEMI 로 키 컬럼을 가른다(INCOTERMS 없음 = SEMI). 구분자 '|' 로 조인(값 이어붙음 충돌 방지).
 //   reasonByKey 구성(O_RC2)·조회(O_RC1 Fix Reason 행) 양쪽이 같은 함수를 쓰므로 같은 lane 은 같은 키가 된다.
+//   ⚠️ SEMI 판정은 '-' 뿐 아니라 빈값(null)도 포함해야 한다 — O_RC1 은 NVL(INCOTERMS,'-')로 null→'-' 를 주지만
+//     O_RC2(Fix Reason 상세)는 A.INCOTERMS 를 NVL 없이 raw NULL 로 준다(PKG_SCP0025 L221 vs L337). '-' 만 SEMI 로
+//     보면 같은 semi lane 인데 O_RC1('-')→SEMI_KEYS·O_RC2(null→'')→FG_KEYS 로 키 컬럼 집합이 갈려 매칭이 전혀
+//     안 돼 Fix Reason 이 공란이 됐다(사용자 신고 2026-11-04, DB 실측 semi+사유 72,613행/112 lane). AS-IS 는 화면
+//     표시값 GetText('-')로 판정해 이 문제가 없었다(cs:618). 빈 INCOTERMS 는 semi 전용이라(FG 는 항상 값 보유) 안전.
 //   export: Unfix 수집(shipmentPlanFixSave)이 Fix Reason 행 선택을 같은 lane 의 Ship Plan 행으로 되찾을 때도 이 키를 쓴다
 //   (Ship Plan·Fix Reason 두 measure 행은 같은 lane → 같은 rowKey).
-export const rowKey = (row: Row): string =>
-  (s(getCI(row, 'INCOTERMS')) === '-' ? SEMI_KEYS : FG_KEYS).map(c => s(getCI(row, c))).join('|');
+export const rowKey = (row: Row): string => {
+  const inc = s(getCI(row, 'INCOTERMS'));
+  const isSemi = inc === '-' || inc === '';
+  return (isSemi ? SEMI_KEYS : FG_KEYS).map(c => s(getCI(row, c))).join('|');
+};
 
 // Fix Reason 행에 다는 사유 맵 필드명(YYYYMMDD→사유). pivot 숫자 컬럼이 아니라 이 별도 필드에 담아야
 //   Wijmo dataType=Number coercion(텍스트→NaN→공란)을 피한다. 그리드 formatItem 이 이 필드를 읽어 D_ 셀에 렌더.

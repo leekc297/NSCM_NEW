@@ -1,0 +1,312 @@
+{
+ "id": "SCP0016",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+    "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+    "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+    "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     439
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     28
+    ],
+    [
+     "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+     0
+    ],
+    [
+     "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+     0
+    ],
+    [
+     "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+     0
+    ],
+    [
+     "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S6e3e4a",
+    "SCP0016-S67bbf1",
+    "SCP0016-S908b8c",
+    "SCP0016-Sb7a7b7",
+    "SCP0016-Sd849d1",
+    "SCP0016-Sf92dc6",
+    "SCP0016-S9d67d7",
+    "SCP0016-Se775e1",
+    "SCP0016-S9402aa",
+    "SCP0016-Sddee9f",
+    "SCP0016-Se7543b",
+    "SCP0016-S481294",
+    "SCP0016-Sc91bf8",
+    "SCP0016-Sd9f09f",
+    "SCP0016-S8a009f",
+    "SCP0016-S400b22",
+    "SCP0016-Scf08d8",
+    "SCP0016-S31a9bd"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S647918",
+    "SCP0016-S6c43db"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S354027",
+    "SCP0016-Sbfc2aa"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S6e3e4a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S647918",
+    "SCP0016-S6c43db"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S67bbf1",
+    "SCP0016-S908b8c",
+    "SCP0016-Sb7a7b7",
+    "SCP0016-Sd849d1",
+    "SCP0016-Sf92dc6",
+    "SCP0016-S9d67d7",
+    "SCP0016-Se775e1",
+    "SCP0016-S9402aa",
+    "SCP0016-Sddee9f",
+    "SCP0016-Se7543b",
+    "SCP0016-S481294",
+    "SCP0016-Sc91bf8",
+    "SCP0016-Sd9f09f",
+    "SCP0016-S8a009f",
+    "SCP0016-S400b22",
+    "SCP0016-Scf08d8",
+    "SCP0016-S31a9bd",
+    "SCP0016-S3e4aef",
+    "SCP0016-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S354027",
+    "SCP0016-Sbfc2aa"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 16:11:30.862",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i2",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "2"
+  },
+  "label": "cboBucketType 콤보 2번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:2:Monthly",
+  "value": "MONTHLY",
+  "text": "Monthly",
+  "checked": null,
+  "selected_index": 2
+ },
+ "fills": 1,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

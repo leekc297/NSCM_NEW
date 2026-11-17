@@ -183,9 +183,9 @@ export const CapaTeepReportForm = ({ combos, onSearch, disabled }: Props) => {
               )}
             />
           </Grid>
-          {/* Ver. — 사용자 지시(2026-10-29)로 라벨을 `Ver.` 하드코딩한다. 카탈로그 표기는 `Ver.` 지만
-              `SCM_ADM_MSG_M` 에 해당 문구 LBL 코드가 0건이라(ora.py 실측) i18n 경유 대신 리터럴로 둔다.
-              DB 에 `Ver.` 라벨이 채번·등록되면 `t('<신규코드>', '_Ver.')` 로 되돌린다.
+          {/* Ver. — 라벨 `Ver.` 는 **`LBL01275`**(KO/EN/CN 'Ver.' 3언어, DB 등록 2026-11-12,
+              SCM_ADM_MSG_M MSG_TP_CD='LBL')로 i18n 배선한다. 과거 LBL01231 참조는 오매핑으로, LBL01231 은
+              실제 "요청일"/"Date of Request"(ora.py 2026-11-12 재실측)라 화면에 "요청일" 이 오표시됐다 → 교정.
               Ver.(verSeq) 콤보 **바로 뒤에 Plan Type 읽기전용 박스**를 한 칸(size=3) Box flex 50:50 으로
               묶는다 — AS-IS Designer 순서가 `VersionSeq`(632~646) -> `PlanType`(648~662, TextVisible=false)
               라 Version 콤보 직후에 txtPlanType 이 붙는다(dsn / __asis-mapping__ #4·#3). 자매 SCP0105
@@ -193,7 +193,7 @@ export const CapaTeepReportForm = ({ combos, onSearch, disabled }: Props) => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label='Ver.'
+              label={t('LBL01275', '_Ver.')}
               labelAlign='right'
               render={() => (
                 <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>

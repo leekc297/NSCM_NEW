@@ -1,0 +1,177 @@
+{
+ "menu_id": "SSP0015",
+ "asis_id": "SSP0015",
+ "area": "SSP",
+ "generated": "2026-11-14 21:30:15",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "CHECK_CONFIRM_CHANGETIME",
+   "DELETE",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "EDIT",
+   "ERP_ERROR_CONFIRM",
+   "GET_BLOCK_STOCK",
+   "GET_ERP_SO_NO_CNT",
+   "GET_MES_STOCK",
+   "GET_ORDER_DETAIL",
+   "GET_REQ_DRAFTING",
+   "GET_SCS_STOCK",
+   "GET_SHIPMENT_CONFIRM_DETAIL",
+   "GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+   "GET_SHIPMENT_PSI",
+   "GET_SHIPMENT_PSI_COMMENTS",
+   "GET_SHIPMENT_PSI_PACKER",
+   "GET_SHIPMENT_PSI_PACKER_PAST",
+   "GET_SHIPMENT_RESULT",
+   "GET_SHIPMENT_RESULT_PACKER",
+   "GET_SHIPMENT_STATUS",
+   "GET_STOCK_LOCATION_DETAIL",
+   "GET_WH_STOCK",
+   "IF_CHECK",
+   "INSERT",
+   "SAVE",
+   "SAVE_BLOCK_STOCK_DATA",
+   "SAVE_MES_STOCK",
+   "SAVE_SHIPMENT_PSI",
+   "SAVE_SHIPMENT_PSI_COMMENTS",
+   "SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+   "SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+   "SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Div",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Plan Date",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Period",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 2026-11-13 15:41 · 행 수 근거 21행",
+  "max_rows_after_search": 90,
+  "zero_row_failures": [
+   {
+    "row_id": "V-cb2e1076",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-86b3ce9d",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-62dc5cbb",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-abbff0bc",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   }
+  ],
+  "zero_row_count": 4
+ },
+ "warnings": []
+}

@@ -9,11 +9,26 @@
 import { expect, type Page, type Locator, type Response } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import * as net from 'node:net';
 import { applyGridMutations } from './mutate';  // CheckList 자기검증(변이 시험, 2026-10-28) — CL_MUTATE 없으면 무동작
+import { waitLangFree, pendingLangRestore, langRestored, acquireLang, releaseLang } from './langlock';
+import { retryInsertWithRow } from './insertpre';  // 2026-11-12 Y01(T259)  // 2026-11-10 T189 — 다른 실행의 언어 전환(서버 사용자 설정) 중에는 화면을 열지 않는다
 
 export const CFG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
 export const FE: string = process.env.E2E_FE || CFG.feUrl;
 export const BE: string = process.env.E2E_BE || CFG.beUrl;
+/** 2026-11-12 T256: BE 포트가 열려 있나(TCP 연결 2초) */
+export function bePortOpen(): Promise<boolean> {
+  return new Promise(res => { let u: URL; try { u = new URL(BE); } catch { res(true); return; } const s = net.connect({ host: u.hostname, port: Number(u.port || (u.protocol === 'https:' ? 443 : 80)) });
+    const done = (ok: boolean) => { s.destroy(); res(ok); }; s.setTimeout(2_000, () => done(false)); s.once('connect', () => done(true)); s.once('error', () => done(false)); });
+}
+/** BE 포트가 닫혀 있으면(재기동 중) 열릴 때까지 기다린다 — 최대 maxMs. 반환 = 기다린 ms(처음부터 열려 있으면 0 · 끝내 안 열리면 -1) */
+export async function waitBeUp(tag: string, maxMs = Number(process.env.E2E_BE_WAIT_MS || 300_000)): Promise<number> {
+  if (await bePortOpen()) return 0;
+  const t0 = Date.now(); console.log(`[BE 대기] ${tag}: BE(${BE}) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 ${Math.round(maxMs / 1000)}초 대기`);
+  while (Date.now() - t0 < maxMs) { await new Promise(r => setTimeout(r, 5_000)); if (await bePortOpen()) { await new Promise(r => setTimeout(r, 10_000)); /* 포트가 열린 직후는 아직 초기화 중일 수 있다 */ console.log(`[BE 대기] ${tag}: ${Math.round((Date.now() - t0) / 1000)}초 뒤 BE 응답 — 이어서 진행`); return Date.now() - t0; } }
+  console.log(`[BE 대기] ${tag}: ${Math.round(maxMs / 1000)}초 안에 BE 가 뜨지 않음`); return -1;
+}
 
 export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string; body?: string; dur?: number; sets?: Record<string, Record<string, unknown>[]>; at?: string };
 
@@ -107,6 +122,7 @@ export class Nscm {
     //   일시 장애라 간격을 두고 재시도한다(최대 LOGIN_TRIES회 · LOGIN_WAIT_MS 간격 · 픽스처 timeout 360s 안). 그래도 실패면 dev-login 폴백 뒤 사유(풀 고갈 가능)를 붙여 던진다.
     const LOGIN_TRIES = Number(process.env.E2E_LOGIN_TRIES || CFG.loginTries || 4), LOGIN_WAIT_MS = Number(process.env.E2E_LOGIN_WAIT_MS || CFG.loginWaitMs || 15_000);
     let r = await post(); const hist: string[] = [];
+    if (r.status < 200 || r.status >= 300) { const w = await waitBeUp(`로그인 ${userId}`); if (w !== 0) { hist.push(w > 0 ? `BE 재기동 대기 ${Math.round(w / 1000)}초` : 'BE 미기동'); if (w > 0) { await this.page.goto(FE, { waitUntil: 'domcontentloaded' }).catch(() => undefined); r = await post(); } } }  // T256
     this.tp('login.post', t0); t0 = Date.now();
     for (let i = 1; (r.status < 200 || r.status >= 300) && i < LOGIN_TRIES; i++) {
       hist.push(`${i}회 HTTP ${r.status}`);
@@ -215,9 +231,31 @@ export class Nscm {
     return 'none';
   }
 
+  /** 2026-11-12 T251: 끊긴 언어 전환(시간 초과로 원복 못 한 채 죽은 시험)이 남긴 계정 언어를 원래대로 되돌린다 — 기록(langlock journal)이 있고 주인이 죽었을 때만.
+   *  되돌리는 동안 언어 잠금을 잡아 다른 실행이 그 사이 화면을 열지 않게 한다. 실패하면 기록을 남겨 다음 화면 열기가 다시 시도한다(측정은 계속 — 로그에 남김). */
+  private async restoreBrokenLang(menuId: string): Promise<void> {
+    const j = pendingLangRestore(); if (!j) return;
+    const btn = this.page.locator('header button, [class*="header" i] button').filter({ hasText: /^(KOR|ENG|CHN)$/ }).first();
+    const cur = ((await btn.innerText({ timeout: 5_000 }).catch(() => '')) || '').trim();
+    if (!cur) { console.log(`[언어 복구] ${menuId}: 머리글 언어 버튼을 읽지 못함 — 끊긴 전환 기록(${j.tag} · 원래 ${j.name}) 유지`); return; }
+    if (cur === j.name) { langRestored(cur); console.log(`[언어 복구] ${menuId}: 끊긴 전환 기록(${j.tag}) 확인 — 계정 언어는 이미 ${cur}`); return; }
+    if ((await acquireLang(`${menuId} 언어 복구`, 60_000)) < 0) { console.log(`[언어 복구] ${menuId}: 언어 잠금을 얻지 못함 — 다음 화면 열기에서 재시도`); return; }
+    try {
+      const it = this.page.locator(`button[id="${j.code}"]`).first();
+      for (let k = 0; k < 4 && !(await it.isVisible().catch(() => false)); k++) { await btn.evaluate(b => (b as HTMLElement).click()).catch(() => undefined); await it.waitFor({ state: 'visible', timeout: 3_000 }).catch(() => undefined); }
+      await it.evaluate(b => (b as HTMLElement).click(), undefined, { timeout: 5_000 }).catch(() => undefined);
+      for (let k = 0; k < 30 && ((await btn.innerText().catch(() => '')) || '').trim() !== j.name; k++) await this.page.waitForTimeout(300);
+      await this.page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
+      const now = ((await btn.innerText().catch(() => '')) || '').trim();
+      if (langRestored(now)) console.log(`[언어 복구] ${menuId}: 끊긴 언어 전환(${j.tag} · pid ${j.pid}) 뒤 계정 언어 ${cur} → ${now} 로 되돌림`);
+      else console.log(`[언어 복구 실패] ${menuId}: ${cur} → ${now}(원래 ${j.name}) — 이 화면의 측정은 ${now} 화면 기준일 수 있음`);
+    } finally { releaseLang(); }
+  }
+
   /** MDI 딥링크로 화면을 연다. 반환: authorized(권한 안내가 뜨지 않음), notFound */
   async openScreen(menuId: string) {
     this.calls = []; this.searchExpanded = false; this.consoleErrors = [];
+    this.curMenu = menuId;
     this.userConds = {}; this.userCondsApplied = false; this.userCondsNote = '';
     try { const uj = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'users.json'), 'utf8').replace(/^\uFEFF/, '')); const sc = (uj.screens || {})[menuId.toUpperCase()] || {};
       // condsValidUntil(ISO) 이 지났으면 무시 — '이번만 한정' 조건(2026-10-31 사용자: SCP0111 Plan Date 20260907 은 이번 실행만)
@@ -225,10 +263,12 @@ export class Nscm {
       if (sc.conds && typeof sc.conds === 'object' && !(isFinite(until) && Date.now() > until)) this.userConds = sc.conds;
       else if (sc.conds && isFinite(until)) console.log(`[userConds] ${menuId}: 지정 조건 유효기간(${sc.condsValidUntil}) 경과 — 기본 조건으로 조회`); } catch { /* 명부 없음 */ }
     let t0 = Date.now();
+    await waitLangFree();
     await this.page.goto(`${FE}/view/${menuId}`, { waitUntil: 'domcontentloaded' });
     this.tp('open.goto', t0); t0 = Date.now();
     await this.dismissNotices();
     this.tp('open.notice', t0); t0 = Date.now();
+    await this.restoreBrokenLang(menuId);
     const how = await this.activateScreenTab(menuId);
     this.tp('open.activate.' + how, t0); t0 = Date.now();
     const notFound = await this.page.getByText(/404|Not Found|페이지를 찾을 수 없/i).first().isVisible({ timeout: 3_000 }).catch(() => false);
@@ -241,7 +281,20 @@ export class Nscm {
       this.page.locator('[class*="SubTitle"], [class*="subTitle"], [class*="MainTitle"], [class*="TitleArea"]').first().waitFor({ state: 'visible', timeout: 30_000 }),
     ]).catch(() => undefined);
     this.tp('open.body', t0);
-    return { authorized: !guest, notFound };
+    // 2026-11-17 SCP0104 EG032(dana.robot · SCP Planner): 메뉴 트리에 화면이 없는 계정은 주소로 열어도 /view/home 에 남고 조회조건 0개인데
+    //   '권한 없음' 문구가 없어 authorized=true 로 잡혔다 → 화면 ID 없는 Home 에 남으면 진입 실패(권한 없음)로 본다
+    // 2026-11-17 사용자 확인(SSP0020 3번 EG-f6eeda7b): SSP Viewer 가 주소로 열면 화면이 열리지 않고 Home 으로 돌아가는데, Home 이동이 본문 대기 뒤에 일어나
+    //   그 전에 읽은 주소(/view/SSP0020)로 authorized=true 가 됐다(09:5x 단독 캡처: 8초 뒤 /view/home · 그리드 0). → 주소를 최대 8초 동안 다시 읽어 Home 이동을 잡는다
+    let u = this.page.url();
+    for (let k = 0; k < 16 && !/\/view\/home\b/i.test(u); k++) {
+      const hasGrid = await this.page.locator('.wj-flexgrid').first().isVisible().catch(() => false);
+      if (hasGrid && k >= 4) break;   // 화면 그리드가 2초 이상 유지되면 진입 완료
+      await this.page.waitForTimeout(500); u = this.page.url();
+    }
+    const landedHome = /\/view\/home\b/i.test(u) && !u.toUpperCase().includes(menuId.toUpperCase());
+    if (process.env.E2E_DEBUG_OPEN) console.log(`[openScreen 진단] ${menuId} user=${this.curUser} url=${u} grid=${await this.page.locator('.wj-flexgrid').first().isVisible().catch(() => false)} guest=${guest} home=${landedHome}`);
+    if (landedHome) console.log(`[openScreen] ${menuId}: 주소 진입 뒤 Home 에 남음(${u}) — 화면 진입 실패로 처리`);
+    return { authorized: !guest && !landedHome, notFound };
   }
 
   /** 알림/확인 다이얼로그 닫기 (확인 우선) */
@@ -341,11 +394,24 @@ export class Nscm {
 
   /** Division 선택 — DivisionField(콤보) 가 있으면 옵션 선택 */
   async setDivision(code: string) {
-    const combo = await this.visibleFirst(this.page.getByRole('combobox'));
+    // 2026-11-16(SSP0020 smoke 3건 20초 시간 초과): '보이는 첫 콤보'가 Division 이 아닐 수 있다(Delegatee·Div·Period 순서 화면에서 날짜 입력칸을 눌렀다).
+    //   라벨이 Div·Div.·Division 인 조회영역 칸의 콤보를 먼저 찾고, 없을 때만 종전대로 보이는 첫 콤보를 쓴다.
+    //   다중 선택 칸(지우기 버튼이 있고 이미 값이 골라져 있음)은 먼저 비운 뒤 고른다 — 그대로 누르면 골라져 있던 값이 해제된다.
+    const item = await this.visibleFirst(this.page.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: this.page.locator(':scope > :first-child', { hasText: /^\s*\*?\s*(Div\.?|Division)\s*\*?\s*$/i }) }), 6).catch(() => null);
+    const inItem = item ? item.locator('[role="combobox"]').first() : null;
+    const combo = inItem && (await inItem.count().catch(() => 0)) ? inItem : await this.visibleFirst(this.page.getByRole('combobox'));
     if (!combo) return false;
-    await combo.click();
-    const opt = this.page.getByRole('option', { name: new RegExp(`^\\s*${escapeRe(code)}(\\s|$|\\b)`) }).first();
-    if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click(); return true; }
+    const optRx = new RegExp(`^\\s*${escapeRe(code)}(\\s|$|\\b)`);
+    const clr = item ? item.locator('button[aria-label="Clear"]').first() : null;
+    const multi = !!clr && (await clr.count().catch(() => 0)) > 0 && (await item!.locator('.MuiChip-root, [class*="MuiAutocomplete-tag"]').count().catch(() => 0)) > 0;
+    if (multi) { await item!.hover().catch(() => undefined); await clr!.click({ timeout: 3_000, force: true }).catch(() => undefined); await this.page.waitForTimeout(300); }
+    await combo.click({ timeout: 5_000 }).catch(() => undefined);
+    let opt = this.page.getByRole('option', { name: optRx }).first();
+    if (!(await opt.isVisible({ timeout: 3_000 }).catch(() => false)) && item) {
+      const ob = item.locator('button[aria-label="Open"]').first();
+      if (await ob.count().catch(() => 0)) { await ob.click({ timeout: 3_000, force: true }).catch(() => undefined); opt = this.page.getByRole('option', { name: optRx }).first(); }
+    }
+    if (await opt.isVisible({ timeout: 3_000 }).catch(() => false)) { await opt.click({ timeout: 5_000 }).catch(() => undefined); if (multi) await this.page.keyboard.press('Escape').catch(() => undefined); return true; }
     await this.page.keyboard.press('Escape'); return false;
   }
 
@@ -411,6 +477,11 @@ export class Nscm {
     // 메인 조회(call-proc) 응답을 기다린다 — 초기기간 조회(dayRange)는 조회 버튼과 무관하므로 제외.
     // 2026-10-20: 감시를 클릭 '전에' 걸어 빠른 응답을 놓치지 않는다(실측: 뒤에 걸면 재조회 121s). 조회 버튼이 없는 계정은 F5 도 무동작 → 10s 만
     const waitSearch = this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: btn ? (opts.timeout ?? CFG.searchTimeoutMs) : 10_000 }).catch(() => undefined);
+    // 2026-11-10 T207(SSP0023 G1·G8 허위 FAIL 4건): 조회 버튼 1회에 call-proc 이 여러 개 나가는 화면(SSP0023 main 30~37s + calendar 0.2s)에서
+    //   waitSearch 는 먼저 끝난 calendar 응답으로 풀려 main 응답 전에 빈(로딩 중) 그리드를 읽었다 — 서버는 22행. 클릭 뒤 시작된 조회 call-proc 이 모두 끝날 때까지 기다린다.
+    const pend = new Set<import('@playwright/test').Request>(); const isQ = (u: string) => /call-proc/.test(u) && !/\/dayRange\//i.test(u) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(u);
+    const onReq = (r: import('@playwright/test').Request) => { if (isQ(r.url())) pend.add(r); }; const onDone = (r: import('@playwright/test').Request) => { pend.delete(r); };
+    this.page.on('request', onReq); this.page.on('requestfinished', onDone); this.page.on('requestfailed', onDone);
     if (btn) await btn.click({ timeout: 10_000 }).catch(() => undefined); else await this.page.keyboard.press('F5');
     // 2026-11-06 T59(SCP0016): 필수 조회조건이 비어 화면이 '… 필수 입력 항목입니다' 알림으로 조회를 막으면 call-proc 이 안 나가
     //   응답 대기(searchTimeoutMs 120s)를 다 쓰고 0행으로 끝났다(테스트당 8~15분 · 7시간). 알림을 감시해 그 칸을 화면 콤보 후보로 채우고 재조회한다.
@@ -424,7 +495,7 @@ export class Nscm {
       const note = label ? await this.fillRequired(label) : '';
       this.requiredNotes.push(`${label || '(항목명 해석 불가)'}: ${note || '채우기 실패'} ← '${req.replace(/\s+/g, ' ').slice(0, 60)}'`);
       console.log(`[required] ${this.requiredNotes[this.requiredNotes.length - 1]}`);
-      if (!note.startsWith('선택')) return this.calls.slice(before);  // 채우지 못함 — 응답 대기 없이 반환(호출부는 0행 처리)
+      if (!note.startsWith('선택')) { this.page.off('request', onReq); this.page.off('requestfinished', onDone); this.page.off('requestfailed', onDone); return this.calls.slice(before); }  // 채우지 못함 — 응답 대기 없이 반환(호출부는 0행 처리)
       const ws2 = this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: opts.timeout ?? CFG.searchTimeoutMs }).catch(() => undefined);
       void ws2.then(r => { if (r) got = true; });
       if (btn) await btn.click({ timeout: 10_000 }).catch(() => undefined); else await this.page.keyboard.press('F5');
@@ -432,6 +503,9 @@ export class Nscm {
       if (got) break;
     }
     if (!got) await waitSearch;
+    { const lim = opts.timeout ?? CFG.searchTimeoutMs; const t2 = Date.now(); await this.page.waitForTimeout(300); while (pend.size && Date.now() - t2 < lim) await this.page.waitForTimeout(300);
+      if (pend.size) console.log(`[search] 조회 요청 ${pend.size}건이 ${Math.round(lim / 1000)}s 안에 끝나지 않음: ${[...pend].map(r => r.url().replace(/^.*\/api\//, '')).join(', ')}`); }
+    this.page.off('request', onReq); this.page.off('requestfinished', onDone); this.page.off('requestfailed', onDone);
     await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
     const mine = this.calls.slice(before); mine.forEach(c => (c.ms = Date.now() - t0));
     await applyGridMutations(this.page);  // 조회 직후 그리드 변이 주입(CL_MUTATE 지정 시만)
@@ -440,7 +514,13 @@ export class Nscm {
 
   // 2026-10-20: 보이는 그리드만 — Home keep-alive 등 숨은 .wj-flexgrid 가 첫 번째로 잡히면 dblclick 이 테스트 타임아웃까지 대기한다(crud/authcrud 180s 초과 원인)
   grids(): Locator { return this.page.locator('.wj-flexgrid:visible'); }
-  grid(i = 0): Locator { return this.grids().nth(i); }
+  /** 2026-11-10 T224: 기본 그리드 지정 — 저장 시험이 AS-IS Save 대상 시트 그리드를 편집하도록(i=0 요청을 이 인덱스로) · null = 보이는 첫 그리드 */
+  forceGrid: number | null = null;
+  grid(i = 0): Locator { return this.grids().nth(i === 0 && this.forceGrid != null ? this.forceGrid : i); }
+  /** 보이는 그리드 중 이 컬럼(binding)을 모두 가진 첫 그리드의 인덱스(-1 = 없음) */
+  async indexOfGridWith(cols: string[]): Promise<number> {
+    return this.page.evaluate((want: string[]) => { const els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => (e as HTMLElement).offsetParent !== null); for (let k = 0; k < els.length; k++) { const c = (els[k] as unknown as { ['$WJ-CTRL']?: { columns: { getColumn: (b: string) => unknown } } })['$WJ-CTRL']; if (c && want.every(b => !!c.columns.getColumn(b))) return k; } return -1; }, cols).catch(() => -1);
+  }
   async gridHeaders(i = 0): Promise<string[]> {
     const g = this.grid(i); await g.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
     const cells = await g.locator('.wj-colheaders .wj-cell').allInnerTexts();
@@ -506,7 +586,7 @@ export class Nscm {
   async setCell(r: number, c: number, value: string, i = 0) {
     // 2026-10-20: 더블클릭 시간 상한(기본은 테스트 타임아웃까지 대기 — 비편집 셀에서 182s 매달림)
     const cell = await this.gridCell(r, c, i);
-    try { await cell.dblclick({ timeout: 5_000 }); }
+    try { await cell.dblclick({ timeout: 5_000 }); await this.dismissDblPopup(() => cell.click({ timeout: 3_000 })); }
     catch { await cell.scrollIntoViewIfNeeded({ timeout: 3_000 }).catch(() => undefined); await cell.click({ timeout: 5_000 }); await this.page.keyboard.press('F2'); } // 재조회 직후 더블클릭이 안정화 대기에 걸리면 클릭 + F2 로 편집기 열기
     await this.page.keyboard.press('Control+A'); if (value === '') await this.page.keyboard.press('Delete'); else await this.page.keyboard.type(value); await this.page.keyboard.press('Enter');  // 2026-11-06 빈 값 = 지우기(빈 칸 왕복 원복)
   }
@@ -568,6 +648,7 @@ export class Nscm {
       if (!(await cell.isVisible({ timeout: 1_000 }).catch(() => false))) continue;
       sawCell = true;
       try { await cell.dblclick({ timeout: 5_000 }); } catch { try { await cell.dblclick({ timeout: 3_000, force: true }); } catch { continue; } }
+      await this.dismissDblPopup(() => cell.click({ timeout: 3_000 }));
       const ed = this.grid(i).locator('input.wj-grid-editor, .wj-cell input, .wj-cell textarea, .wj-cell select, .wj-cell [contenteditable="true"]').first();
       const on = await ed.isVisible({ timeout: 1_500 }).catch(() => false);
       await this.page.keyboard.press('Escape');
@@ -580,6 +661,83 @@ export class Nscm {
     return this.page.getByRole('button', { name: new RegExp(`^${escapeRe(name)}(\\(F\\d+\\))?$`, 'i') }).first();
   }
   async subButtonVisible(name: string) { return this.subButton(name).isVisible({ timeout: 3_000 }).catch(() => false); }
+  /** 지금 연 화면 ID(openScreen 이 기록) — clickInsert 가 AS-IS 사실을 찾는 데 쓴다 */
+  curMenu = '';
+  /** 가장 최근 clickInsert 의 행 선택 재시도 내역(없으면 '') — 호출부가 증거에 붙일 수 있다 */
+  lastInsertTrail = '';
+  /** 2026-11-12 Y01(T259 · C1-01): Insert 버튼 클릭 + 전제 맞추기. 클릭 뒤 대화상자도 신규 행(CRUD_TYPE 'I' 증가)도 없으면
+   *  TO-BE 가 원본으로 쓰는 선택 행이 없는 것일 수 있으므로 행을 선택한 뒤 다시 누른다(insertpre.retryInsertWithRow — AS-IS 활성 행 대응).
+   *  대화상자가 떴으면 건드리지 않는다(호출부가 문구를 읽는다). 클릭 자체의 오류는 종전 subButton('Insert').click 과 같이 던진다. */
+  /** 화면별 시트 이동 사실(Doc/verify/<ID>/sheet_nav.json)의 최상위 값 — 없으면 '' (2026-11-16 SCP0104) */
+  private _navFact: Record<string, unknown> | null | undefined;
+  navFact(key: string): string {
+    if (this._navFact === undefined) { try { const id = (process.env.VERIFY_ID || this.curMenu || '').toUpperCase(); this._navFact = id ? JSON.parse(fs.readFileSync(`${__dirname}/../../../Doc/verify/${id}/sheet_nav.json`, 'utf8').replace(/^\uFEFF/, '')) as Record<string, unknown> : null; } catch { this._navFact = null; } }
+    const v = this._navFact ? this._navFact[key] : ''; return typeof v === 'string' ? v : '';
+  }
+  /** 셀 더블클릭이 선택 팝업도 여는 화면(sheet_nav.json cell_dblclick_popup = 팝업 제목 · SCP0104 'CAPA Line Search' — AS-IS spdAssign_CellDoubleClick 과 같은 동작):
+   *  편집하려고 더블클릭한 뒤 그 팝업이 뜨면 Close 로 닫고 셀을 다시 눌러 F2 로 편집기를 연다. 닫았으면 true */
+  async dismissDblPopup(refocus?: () => Promise<unknown>): Promise<boolean> {
+    const t = this.navFact('cell_dblclick_popup'); if (!t) return false;
+    const dlg = this.page.locator('[role="dialog"]:visible').filter({ hasText: t }).last();
+    if (!(await dlg.isVisible({ timeout: 800 }).catch(() => false))) return false;
+    await dlg.getByRole('button', { name: /^(Close|닫기)$/i }).first().click({ timeout: 3_000 }).catch(() => undefined);
+    await this.page.waitForTimeout(400);
+    if (await dlg.isVisible({ timeout: 300 }).catch(() => false)) { await this.page.keyboard.press('Escape').catch(() => undefined); await this.page.waitForTimeout(300); }
+    if (refocus) await refocus().catch(() => undefined);
+    await this.page.keyboard.press('F2').catch(() => undefined); await this.page.waitForTimeout(250);
+    return true;
+  }
+  /** Insert 가 선택 팝업(그리드 + OK 버튼)을 여는 화면(SCP0104 SOP 탭 — AS-IS btnSopNew → InsertSop): 팝업 그리드에서 앞 행 max 개를 체크하고 OK → 신규 행이 생긴다. 처리했으면 팝업 제목 */
+  async pickFromInsertPopup(max = 3, altCond = -1): Promise<string> {
+    const p = this.page; const dlg = p.locator('[role="dialog"]:visible').last();
+    if (!(await dlg.isVisible({ timeout: 500 }).catch(() => false))) return '';
+    const grid = dlg.locator('.wj-flexgrid').first(); if (!(await grid.count().catch(() => 0))) return '';
+    const ok = dlg.getByRole('button', { name: /^(OK|확인)$/i }).first(); if (!(await ok.isVisible().catch(() => false))) return '';
+    // altCond ≥ 0: 팝업 첫 조회조건(콤보)의 altCond 번째 후보로 바꿔 팝업 Search — 기본 조건의 후보가 전부 화면에 이미 있는 키라 신규 행이 안 생길 때(SCP0104 SOP · Div 81_HG 후보 27행 = 화면 27행)
+    if (altCond >= 0) {
+      const combo = dlg.locator('[role="combobox"]').first();
+      if (await combo.isVisible().catch(() => false)) {
+        await combo.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(400);
+        let opts = p.getByRole('option'); if (!(await opts.count().catch(() => 0))) { await dlg.locator('button[aria-label="Open"]').first().click({ timeout: 3_000, force: true }).catch(() => undefined); await p.waitForTimeout(400); opts = p.getByRole('option'); }
+        const no = await opts.count().catch(() => 0);
+        if (altCond < no) { const txt = ((await opts.nth(altCond).innerText().catch(() => '')) || '').trim(); await opts.nth(altCond).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(1_000); await dlg.getByRole('button', { name: /^Search/i }).first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(3_000); console.log(`[Insert 팝업] 팝업 조건 '${txt}' 로 다시 조회`); }
+        else { await p.keyboard.press('Escape').catch(() => undefined); await dlg.getByRole('button', { name: /^(Close|닫기)$/i }).first().click({ timeout: 3_000 }).catch(() => undefined); return ''; }
+      }
+    }
+    const ttl = ((await dlg.locator('h1, h2, h3, [class*="title" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 60) || '(제목 없음)';
+    const rowsN = () => grid.evaluate(e => { const c = (e as unknown as Record<string, { rows?: { length: number } }>)['$WJ-CTRL']; return c && c.rows ? c.rows.length : 0; }).catch(() => 0);
+    for (let k = 0; k < 24 && !(await rowsN()); k++) { if (k === 0 || k === 10) await dlg.getByRole('button', { name: /^Search/i }).first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(500); }
+    if (!(await rowsN())) { console.log(`[Insert 팝업] '${ttl}' 그리드 0행 — 선택 불가`); return ''; }
+    let boxes = grid.locator('.wj-cells .wj-row .wj-cell input[type="checkbox"]'); if (!(await boxes.count().catch(() => 0))) boxes = grid.locator('.wj-rowheaders input[type="checkbox"]');
+    const nb = Math.min(await boxes.count().catch(() => 0), max); let picked = 0;
+    for (let i = 0; i < nb; i++) { await boxes.nth(i).click({ timeout: 3_000, force: true }).then(() => { picked++; }).catch(() => undefined); await p.waitForTimeout(150); }
+    if (!picked) { console.log(`[Insert 팝업] '${ttl}' 체크 칸 없음 — 선택 불가`); return ''; }
+    // 앞 행이 이미 화면에 있는 키면 화면이 중복으로 건너뛴다(SCP0104 handleSopModelConfirm 8키 중복 제외) — 끝 쪽 3행도 같이 체크한다(그리드 값 지정 · CHK 컬럼)
+    await grid.evaluate(e => { const c = (e as unknown as Record<string, { rows: { length: number }; columns: { getColumn: (b: string) => { index: number } | null }; setCellData: (r: number, c: number, v: unknown) => void; invalidate: () => void }>)['$WJ-CTRL']; const col = c && c.columns.getColumn('CHK'); if (!c || !col) return; for (let r = c.rows.length - 1; r >= Math.max(3, c.rows.length - 3); r--) c.setCellData(r, col.index, true); c.invalidate(); }).catch(() => undefined);
+    await ok.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
+    if (await dlg.isVisible({ timeout: 300 }).catch(() => false)) { await dlg.getByRole('button', { name: /^(Close|닫기)$/i }).first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(500); }
+    console.log(`[Insert 팝업] '${ttl}' ${picked}행 선택 후 OK`);
+    return ttl;
+  }
+  async clickInsert(opts: Parameters<Locator['click']>[0] = {}): Promise<void> {
+    this.lastInsertTrail = '';
+    const cnt = () => this.page.evaluate(() => { let n = 0; for (const e of Array.from(document.querySelectorAll('.wj-flexgrid'))) { if ((e as HTMLElement).offsetParent === null) continue; const c = (e as unknown as Record<string, { rows?: { length: number; [i: number]: { dataItem?: { CRUD_TYPE?: string } } } }>)['$WJ-CTRL']; if (!c || !c.rows) continue; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') n++; } } return n; }).catch(() => -1);
+    const n0 = await cnt();
+    await this.subButton('Insert').click({ timeout: 10_000, ...(opts || {}) });
+    if (n0 < 0 || !this.curMenu) return;
+    await this.page.waitForTimeout(700);
+    const dlg = await this.page.locator('[role="dialog"], [role="alertdialog"]').first().isVisible({ timeout: 300 }).catch(() => false);
+    if (dlg) {
+      // 선택 팝업: 앞 행을 골라 OK. 신규 행이 안 생기면(전부 중복 키) Insert 를 다시 눌러 팝업 조건의 다른 후보로 최대 3번 더 시도
+      let t = await this.pickFromInsertPopup().catch(() => '');
+      for (let k = 0; t && k < 3; k++) { const n1 = await cnt(); if (n1 < 0 || n1 > n0) break; await this.subButton('Insert').click({ timeout: 10_000 }).catch(() => undefined); await this.page.waitForTimeout(1_200); t = await this.pickFromInsertPopup(3, k).catch(() => ''); }
+      return;
+    }
+    const n1 = await cnt(); if (n1 < 0 || n1 > n0) return;
+    const rt = await retryInsertWithRow(this as never, this.curMenu).catch(e => ({ made: false, sheet: '', trail: [`재시도 실패: ${String(e).slice(0, 80)}`] }));
+    this.lastInsertTrail = rt.trail.join(' / ').slice(0, 500);
+    console.log(`[Insert 전제] ${this.curMenu} 신규 행 없음 → 행 선택 후 재시도 — ${this.lastInsertTrail}`);
+  }
   /**
    * 보이는 버튼의 이름 목록. 2026-10-21(SCP0100 auth): SubTitle 의 Excel 다운로드는 아이콘 전용(텍스트 없음)이고 이름은 MUI Tooltip 이
    *   감싼 상위 div 의 aria-label('Excel') 에만 있다 → innerText → aria-label → title → 가장 가까운 상위 [aria-label]/[title] 순으로 이름을 잡는다.
@@ -618,7 +776,16 @@ export class Nscm {
       }
       await this.closeAlert('cancel'); await this.page.waitForTimeout(300);
     }
+    // 2026-11-13 점검(SCP0104·SSP0014·SSP0025 '저장 세부'·'저장 경로'·'신규행 검증' — "locator.click: Timeout 10000ms … waiting for Save" · 화면샷 = Insert 가 연 선택 팝업 'CAPA Line Search' 가 떠 있음):
+    //   그리드가 있는 팝업이 화면을 덮고 있으면 Save 버튼은 접근성 트리에서 빠져 10초를 다 쓰고 원인 없는 시간 초과로 끝났다. 이유를 문구로 남기고 바로 끝낸다(판정은 종전과 같은 미검증 — 사유만 분명해진다).
+    if (!isAlert && (await dlg0.isVisible().catch(() => false)) && !(await this.subButton('Save').isVisible({ timeout: 1_000 }).catch(() => false))) {
+      const ttl = ((await dlg0.locator('h1, h2, h3, [class*="title" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+      throw new Error(`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`);
+    }
     await this.subButton('Save').click({ timeout: 10_000 });
+    // 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):
+    //   저장 입력 팝업을 처리하지 못해 다음 Save 가 팝업에 막혀 10초 타임아웃 → '원복 저장 후 복원되지 않음' 허위 FAIL. 필수(*) 칸을 채우고 OK — 생긴 요청 행은 restore_touched 가 지운다
+    { const note = await this.fillSaveInputPopup().catch(() => ''); if (note) { this.requiredNotes.push(note); console.log(`[save] ${note}`); } }
     // 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다
     await this.page.waitForTimeout(500); let toast = ''; for (const t of await this.page.locator('.MuiSnackbar-root, [role="alert"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) { const v = t.replace(/\s+/g, ' ').trim(); if (v && !staleToast.has(v)) { toast = v; break; } }
     const preAlert = await this.alertText().catch(() => '');
@@ -649,6 +816,44 @@ export class Nscm {
     }).catch(() => [] as string[]);
   }
   /** 열린 대화상자가 있으면 전부 닫는다(최대 3개) — 조회/편집 전에 호출 */
+  /** T223: Save 뒤 뜨는 저장 입력 팝업(필수 '*' 칸 + OK) — 콤보는 첫 실값 후보, 텍스트는 'E2E 시험' 으로 채우고 OK. 처리했으면 근거 문구, 아니면 '' */
+  async fillSaveInputPopup(): Promise<string> {
+    await this.page.waitForTimeout(600);
+    const dlg = this.page.locator('[role="dialog"]:visible, .MuiDialog-root:visible').last();
+    if (!(await dlg.isVisible().catch(() => false))) return '';
+    const ok = dlg.getByRole('button', { name: /^(OK|확인|Confirm)$/i }).first();
+    if (!(await ok.isVisible().catch(() => false))) return '';
+    const labs = dlg.locator('label, span, div, p').filter({ hasText: /^[^*]{1,40}\*\s*$/ });
+    const n = Math.min(await labs.count().catch(() => 0), 12); if (!n) return '';
+    const title = ((await dlg.locator('h1, h2, h3, h4, [class*="title" i], [class*="Title"]').first().innerText({ timeout: 500 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+    const done: string[] = []; const seen = new Set<string>();
+    for (let i = 0; i < n; i++) {
+      const lab = labs.nth(i); const name = ((await lab.innerText({ timeout: 500 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim(); if (!name || seen.has(name)) continue; seen.add(name);
+      const ctl = lab.locator('xpath=following::*[@role="combobox" or (self::input and not(@type="hidden") and not(@type="checkbox") and not(@readonly)) or self::textarea][1]');
+      if (!(await ctl.isVisible().catch(() => false))) continue;
+      const role = await ctl.getAttribute('role').catch(() => null);
+      if (role === 'combobox') {
+        await ctl.click({ timeout: 3_000 }).catch(() => undefined);
+        const opt = this.page.locator('[role="listbox"] [role="option"], .MuiAutocomplete-popper [role="option"], .MuiMenu-list [role="option"], ul[role="listbox"] li');
+        await opt.first().waitFor({ state: 'visible', timeout: 3_000 }).catch(() => undefined);
+        const texts = (await opt.allInnerTexts().catch(() => [] as string[])).map(s => s.trim()); const k = texts.findIndex(s => s && !/^(all|select|선택|전체|-)$/i.test(s));
+        if (k >= 0) { await opt.nth(k).click({ timeout: 3_000 }).catch(() => undefined); done.push(`${name} '${texts[k].slice(0, 20)}'`); } else await this.page.keyboard.press('Escape').catch(() => undefined);
+      } else {
+        const cur = await ctl.inputValue().catch(() => ''); if (!cur) { await ctl.fill('E2E 시험').catch(() => undefined); done.push(`${name} 'E2E 시험'`); }
+      }
+      await this.page.waitForTimeout(250);
+    }
+    if (!done.length) return '';
+    // 2026-11-10 T223 보강(21:3x 실측: 필수 칸 채움 뒤 OK → 팝업 그대로 · FE ShipmentRequestModal.handleSave = 변경 행마다 CHANGE_REASON_CODE·DETAIL 필수 → '…Please enter Change_Reason.' 알림):
+    //   상단 칸은 'Auto Set' 으로 변경 행에 일괄 적용된다(AS-IS 와 같은 흐름) — Auto Set 버튼이 있으면 OK 전에 누른다 · OK 뒤 알림은 읽고 닫는다 · 그래도 남으면 Close 로 닫아 다음 동작을 막지 않는다
+    const auto = dlg.getByRole('button', { name: /^(Auto\s*Set|자동\s*설정)$/i }).first();
+    let autoNote = ''; if (await auto.isVisible().catch(() => false)) { await auto.click({ timeout: 3_000 }).catch(() => undefined); await this.page.waitForTimeout(400); autoNote = ' → Auto Set'; }
+    await ok.click({ timeout: 5_000 }).catch(() => undefined); await this.page.waitForTimeout(800);
+    let alertNote = ''; for (let k = 0; k < 3; k++) { const a = (await this.alertText().catch(() => '')) || ''; if (!a || a.length > 400) break; alertNote = alertNote || a.replace(/\s+/g, ' ').slice(0, 120); await this.closeAlert('ok'); await this.page.waitForTimeout(400); }
+    let stuck = ''; if (await dlg.isVisible().catch(() => false) && await ok.isVisible().catch(() => false)) { const cl = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first(); await cl.click({ timeout: 3_000 }).catch(() => undefined); await this.page.waitForTimeout(400); stuck = ' · 팝업이 닫히지 않아 Close(저장 미완 — 측정 경로 실패)'; }
+    return `저장 입력 팝업 '${title || '(제목 없음)'}' 필수 ${done.length}칸 채움(${done.join(' · ')})${autoNote} → OK${alertNote ? ` · 알림 '${alertNote}'` : ''}${stuck}(T223)`;
+  }
+
   async clearDialogs() { for (let k = 0; k < 3; k++) { if (!(await this.closeAlert('ok'))) break; await this.page.waitForTimeout(200); } }
 
   snapshot(name: string) { return this.page.screenshot({ path: path.join(process.env.E2E_RESULTS || CFG.resultsDir, 'shots', `${name}.png`), fullPage: false }).catch(() => undefined); }

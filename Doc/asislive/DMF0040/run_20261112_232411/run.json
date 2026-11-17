@@ -1,0 +1,186 @@
+{
+ "id": "DMF0040",
+ "started": "2026-11-12 23:24:11.658",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:24:11.926",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0040_MktFcst_Comparison",
+   "form_text": "MKT FCST Comparison",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0040_MktFcst_Comparison.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:18.489"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:24:22.909",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0040\\run_20261112_232411\\dump_load.json",
+   "control_count": 95,
+   "grid_count": 1,
+   "total": "Total : 319",
+   "time_status": "DB : 133.12s, UI : 0.196s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:22.929"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:24:23.091",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0040\\run_20261112_232411\\shots\\DMF0040_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:23.220"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 23:24:29.737",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0040\\run_20261112_232411\\shots\\DMF0040_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:29.911"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:24:30.228",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:31.348"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:27:12.125",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0040\\run_20261112_232411\\dump_find.json",
+   "control_count": 95,
+   "grid_count": 1,
+   "total": "Total : 292",
+   "time_status": "DB : 155.148s, UI : 0.342s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:12.306"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:27:12.475",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0040\\run_20261112_232411\\shots\\DMF0040_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:12.667"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:27:13.141",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:13.781"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 3,
+  "calls": 28,
+  "calls_with_params": 26
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0040_MktFcst_Comparison",
+  "form_text": "MKT FCST Comparison",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0040_MktFcst_Comparison.dll"
+ },
+ "fills": [
+  {
+   "rule": "Version 팝업 맨 위 행(Version*)",
+   "set": {
+    "name": "txtVersion",
+    "popup": "DMF0000_VersionByWaterfallPopup",
+    "opener": "btnVersion_Click"
+   },
+   "ok": true,
+   "applied": "popup:DMF0000_VersionByWaterfallPopup rows=1 value=Current",
+   "top": [
+    "Current"
+   ],
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "txtVersion",
+    "popup": "DMF0000_VersionByWaterfallPopup",
+    "opener": "btnVersion_Click"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 155.148s, UI : 0.342s",
+  "total": "Total : 292",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 153
+ },
+ "t_open": "2026-11-12 23:24:11.890",
+ "t_find": "2026-11-12 23:24:29.924",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 95,
+  "layout_items": 25,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 225,
+  "data_rows": 50,
+  "grid_rows": 292,
+  "calls_total": 28,
+  "calls_screen": 28,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:27:14.212",
+ "exit": 0
+}

@@ -1,0 +1,120 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ROUTE_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCP0007_DistributionRoutePopup",
+    "title": "Distribution Route Popup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/Distribution Route",
+    "cols": [
+     "Action",
+     "ROUTE_ID",
+     "LT_TYPE",
+     "VALID_YN",
+     "FROM_CITY_NAME",
+     "FROM_COUNTRY",
+     "FROM_CITY",
+     "TRANSPORT_MODE_NAME",
+     "PRIORITY",
+     "DAYS_MON",
+     "DAYS_TUE",
+     "DAYS_WED",
+     "DAYS_THU",
+     "DAYS_FRI",
+     "DAYS_SAT",
+     "DAYS_SUN",
+     "DAYS",
+     "D_PORT_NAME",
+     "D_COUNTRY",
+     "D_PORT_CODE",
+     "A_PORT_NAME",
+     "A_COUNTRY",
+     "A_PORT_CODE",
+     "SHIPPING_COMPANY",
+     "TO_CITY_NAME",
+     "TO_COUNTRY",
+     "TO_CITY",
+     "SHIP_DOC_PREPARATION_DATE",
+     "LT_DEPARTURE_INLAND",
+     "LT_WAIT_SHIPPING",
+     "LT_VOYAGE",
+     "LT_LAY_OFF_CLEARANCE",
+     "LT_ARRIVAL_INLAND",
+     "LT_SUM"
+    ],
+    "row": [
+     "",
+     "10583",
+     "AVERAGE",
+     "Y",
+     "PARKER, AZ, UNITED STATES",
+     "US",
+     "USAAZ",
+     "TRUCK",
+     "4",
+     "Y",
+     "Y",
+     "Y",
+     "Y",
+     "Y",
+     "",
+     "",
+     "Mon, Tue, Wed, Thu, Fri",
+     "PARKER, AZ, UNITED STATES",
+     "US",
+     "USAAZ",
+     "PARKER, AZ, UNITED STATES",
+     "US",
+     "USAAZ",
+     "PANTOS",
+     "PARKER, AZ, UNITED STATES",
+     "US",
+     "USAAZ",
+     "",
+     "0",
+     "0",
+     "1",
+     "0",
+     "0",
+     "1"
+    ]
+   },
+   "scenarios": [
+    "SCP0007-Sca043c",
+    "SCP0007-Sa9fa28",
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0005_GET_DISTRIBUTION_ROUTE"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:30:57",
+ "edit_mode": true,
+ "plan": {
+  "scenarios": 4,
+  "used": [
+   "ROUTE_ID"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

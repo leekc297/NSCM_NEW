@@ -1,0 +1,919 @@
+{
+ "id": "SCP0108",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersion",
+     "before": [
+      "202610",
+      27,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "202610",
+      20,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    },
+    {
+     "control": "clbElectrodeType(clb)",
+     "before": [
+      "",
+      10,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbFactory(clb)",
+     "before": [
+      "",
+      12,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      9,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      66,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      80,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation(clb)",
+     "before": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlant(clb)",
+     "before": [
+      "",
+      6,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-S67bbf1",
+    "SCP0108-S96bd28",
+    "SCP0108-Sbf28a0",
+    "SCP0108-S2a8740",
+    "SCP0108-Sdb45a9",
+    "SCP0108-S25d5d7",
+    "SCP0108-S876cc5",
+    "SCP0108-Sf0a89a",
+    "SCP0108-Sde8261",
+    "SCP0108-S070f60",
+    "SCP0108-S20acca",
+    "SCP0108-S2b86f0",
+    "SCP0108-S3ca6c1",
+    "SCP0108-S3ca6c1",
+    "SCP0108-S538e42",
+    "SCP0108-S69c336",
+    "SCP0108-S7461fb",
+    "SCP0108-Sd8fa4a",
+    "SCP0108-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersion",
+     "before": [
+      "202610",
+      20,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "202610",
+      27,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    },
+    {
+     "control": "clbElectrodeType(clb)",
+     "before": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      10,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbFactory(clb)",
+     "before": [
+      "",
+      9,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      12,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      80,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      66,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation(clb)",
+     "before": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlant(clb)",
+     "before": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      6,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-S67bbf1",
+    "SCP0108-S96bd28",
+    "SCP0108-Sbf28a0",
+    "SCP0108-S2a8740",
+    "SCP0108-Sdb45a9",
+    "SCP0108-S25d5d7",
+    "SCP0108-S876cc5",
+    "SCP0108-Sf0a89a",
+    "SCP0108-Sde8261",
+    "SCP0108-S070f60",
+    "SCP0108-S20acca",
+    "SCP0108-S2b86f0",
+    "SCP0108-S3ca6c1",
+    "SCP0108-S3ca6c1",
+    "SCP0108-S538e42",
+    "SCP0108-S69c336",
+    "SCP0108-S7461fb",
+    "SCP0108-Sd8fa4a",
+    "SCP0108-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboVersion",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:202609",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboProgressStatus",
+     "before": [
+      "Current",
+      1,
+      0,
+      null,
+      false,
+      true,
+      "0"
+     ],
+     "after": [
+      "2`nd Cut off",
+      1,
+      0,
+      null,
+      false,
+      true,
+      "2"
+     ]
+    },
+    {
+     "control": "cboVersionSeq",
+     "before": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202609"
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-Sbf28a0",
+    "SCP0108-S2a8740",
+    "SCP0108-Sdb45a9",
+    "SCP0108-S25d5d7",
+    "SCP0108-S876cc5",
+    "SCP0108-Sf0a89a",
+    "SCP0108-Sde8261",
+    "SCP0108-S070f60",
+    "SCP0108-S2b86f0",
+    "SCP0108-S538e42",
+    "SCP0108-S69c336",
+    "SCP0108-S7461fb",
+    "SCP0108-Sd8fa4a",
+    "SCP0108-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboVersion",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:202610",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboProgressStatus",
+     "before": [
+      "2`nd Cut off",
+      1,
+      0,
+      null,
+      false,
+      true,
+      "2"
+     ],
+     "after": [
+      "Current",
+      1,
+      0,
+      null,
+      false,
+      true,
+      "0"
+     ]
+    },
+    {
+     "control": "cboVersionSeq",
+     "before": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202609"
+     ],
+     "after": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-Sbf28a0",
+    "SCP0108-S2a8740",
+    "SCP0108-Sdb45a9",
+    "SCP0108-S25d5d7",
+    "SCP0108-S876cc5",
+    "SCP0108-Sf0a89a",
+    "SCP0108-Sde8261",
+    "SCP0108-S070f60",
+    "SCP0108-S2b86f0",
+    "SCP0108-S538e42",
+    "SCP0108-S69c336",
+    "SCP0108-S7461fb",
+    "SCP0108-Sd8fa4a",
+    "SCP0108-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "clbFactory",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 12개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:A2 OC5_A",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      66,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation(clb)",
+     "before": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      5,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-Sdb45a9",
+    "SCP0108-S25d5d7",
+    "SCP0108-Sd8fa4a",
+    "SCP0108-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "clbOperation",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 5개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:A5000 Notching",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbElectrodeType(clb)",
+     "before": [
+      "",
+      10,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-Sbf28a0",
+    "SCP0108-S69c336",
+    "SCP0108-S7461fb"
+   ]
+  },
+  {
+   "control": "clbPlant",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 6개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:HQ07 HQ OC1 Auto Prod",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFactory",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "A2"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbFactory(cbo)",
+     "before": [
+      "A2 OC5_A",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbFactory(clb)",
+     "before": [
+      "",
+      12,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "A5000"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbOperation(cbo)",
+     "before": [
+      "A5000 Notching",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbOperation(clb)",
+     "before": [
+      "",
+      5,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      5,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-S2a8740"
+   ]
+  },
+  {
+   "control": "clbSite",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 4개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:A001 LGES Korea",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlant",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "HQ07"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbPlant(cbo)",
+     "before": [
+      "HQ07 HQ OC1 Auto Prod",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlant(clb)",
+     "before": [
+      "",
+      6,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0108-Sf0a89a"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboVersionSeq",
+   "why": "콤보 항목이 1개라 바꿀 값이 없음",
+   "scenarios": 13
+  },
+  {
+   "control": "cboFromYYYY",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 3
+  },
+  {
+   "control": "rgrpDivisionType",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(RadioGroup)",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-14 18:02:16"
+}

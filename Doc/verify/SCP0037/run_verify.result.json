@@ -1,33 +1,141 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T11:50:00+09:00",
+ "ts": "2026-11-14T12:22:46+09:00",
  "producer": "run_verify",
  "id": "SCP0037",
  "skip_e2e": false,
- "started": "2026-11-08 11:47:56",
+ "started": "2026-11-14 11:10:25",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-d73d9696",
-   "class": "SC1",
+   "id": "V-85ec81e0",
+   "class": "F5",
    "msg": "SCP0037 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약 + Excel 조회조건 정리(List 시트)"
+     "ref": "E2E @trace @11-14 12:21"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-eed95e79",
-   "class": "E1",
+   "id": "V-686bd02b",
+   "class": "K3",
+   "msg": "SCP0037 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-40b09280",
+   "class": "D1",
    "msg": "Operation LT.LT_DAY (LT(Day)*)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-08 11:49"
+     "ref": "E2E @verify @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-494dc9ad",
+   "class": "G1",
+   "msg": "SCP0037 텍스트 부분일치 Material",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d814cf98",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fbc20535",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ea497b53",
+   "class": "F5",
+   "msg": "SCP0037 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 12:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0b703554",
+   "class": "D1",
+   "msg": "13 · SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2e5f6d9a",
+   "class": "D1",
+   "msg": "3,9 · lock",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b07b7248",
+   "class": "X-ROW",
+   "msg": "SCP0037_OperationLT.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d405ae33",
+   "class": "X-ROW",
+   "msg": "SCP0037_OperationLT.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
     }
    ],
    "grade": "hard"
@@ -35,32 +143,33 @@
  ],
  "warnings": [],
  "summary": {
-  "rows": 1706,
-  "PASS": 695,
-  "FAIL": 2,
-  "판정필요": 20,
-  "미검증": 98,
-  "해당없음": 891,
+  "rows": 1757,
+  "PASS": 663,
+  "FAIL": 11,
+  "판정필요": 7,
+  "미검증": 324,
+  "해당없음": 752,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1138,
-   "없음(미검증)": 98,
+   "기계": 915,
+   "없음(미검증)": 324,
    "사람": 23,
-   "기계(상속·집계)": 427,
-   "없음(판정 대기)": 20
+   "기계(상속·집계)": 487,
+   "없음(판정 대기)": 7,
+   "출처 미기록": 1
   },
-  "fail_listed": 2,
+  "fail_listed": 11,
   "coverage": {
    "rules": 91,
-   "measured": 441,
-   "not_run_error": 52,
-   "na": 300,
+   "measured": 467,
+   "not_run_error": 209,
+   "na": 177,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0037_OperationLt_CheckList_v24.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0037_OperationLt_ActionItemList_v24.xlsx"
+  "CheckList": "Doc/CheckList/SCP0037_OperationLt_CheckList_v27.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0037_OperationLt_ActionItemList_v27.xlsx"
  },
  "evidence": [
   {

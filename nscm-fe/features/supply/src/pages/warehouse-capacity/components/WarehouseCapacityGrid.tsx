@@ -1,6 +1,6 @@
 import { AllowMerging, DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
@@ -8,7 +8,14 @@ import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { clampNonNegative, isCellEditable, matchSiteByDivision } from '../utils/warehouseCapacityEditLock';
+import {
+  attachDigitLimit,
+  clampNonNegative,
+  clearCellText,
+  isCellEditable,
+  isInvalidPlanGroupRow,
+  matchSiteByDivision,
+} from '../utils/warehouseCapacityEditLock';
 import { COMBO, MSG } from '../warehouse-capacity.constants';
 import type { MainRow } from '../warehouse-capacity.types';
 
@@ -60,11 +67,23 @@ export const WarehouseCapacityGrid = ({
   // SCM_SITE_ID 셀 콤보 — 'Site' 콤보(DIVISION_ID 반환)를 matchSiteByDivision 으로 좁혀 DataMap 을
   //   SCM_SITE_ID 컬럼에 덮어쓴다. 공용 DataGrid 가 레이아웃 재계산마다 메타 dataMap 으로 재대입하므로
   //   updatedLayout 마다 재부착한다(SafetyStockGrid SCM_SITE_ID 선례와 동형).
-  const [sites] = useTabComboQueries({ filters: [COMBO.SITE] });
+  const [sites, planGroups] = useTabComboQueries({ filters: [COMBO.SITE, COMBO.PLAN_GROUP] });
   const siteDataMap = useMemo(() => {
     const filtered = (sites ?? []).filter(r => matchSiteByDivision(r.DIVISION_ID, divisionId));
     return filtered.length ? new DataMap(filtered, 'CODE', 'NAME') : null;
   }, [sites, divisionId]);
+
+  // OPMZ_PLAN_GR_ID 빈 값 표시(사용자 보고 2026-11-09/10 QA I-06) — SCP_OPMZ_PLAN_GR_M 에서
+  //   VALID_YN='Y' 인 코드만 담은 'PlanGroup_SCP_ALL' 콤보(전 사업부, Form 필터와 동일 원천)를
+  //   그대로 재사용해 유효코드 집합을 만든다. DB/프로시저 변경 없이 화면(formatItem)에서만 가린다
+  //   — 저장키·조회조건은 원본 CRUD 데이터(row.OPMZ_PLAN_GR_ID) 그대로라 영향 없음.
+  const validPlanGroupKeys = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of planGroups ?? []) set.add(`${String(r.DIVISION_ID ?? '')}|${String(r.CODE ?? '')}`);
+    return set;
+  }, [planGroups]);
+  const validPlanGroupKeysRef = useRef(validPlanGroupKeys);
+  validPlanGroupKeysRef.current = validPlanGroupKeys;
 
   useEffect(() => {
     const g = gridRef.current;
@@ -131,12 +150,63 @@ export const WarehouseCapacityGrid = ({
     g.cellEditEnded.addHandler(cellEditEndedHandler as never);
     g.pastedCell.addHandler(cellEditEndedHandler as never);
 
+    // OPMZ_PLAN_GR_ID 빈 값 표시 — 유효 Plan Group 집합 밖 코드는 셀 텍스트만 지운다(DataMap 은
+    //   건드리지 않아 편집·저장 값은 그대로 원본 코드를 유지한다). clearCellText 는 텍스트 노드만
+    //   비워 Wijmo 가 같이 심어 둔 드롭다운 화살표 요소는 남긴다(2026-11-10 실사고 — textContent
+    //   전체 초기화는 그 요소까지 지워 편집 진입 후 드롭다운이 안 뜸).
+    const formatItemHandler = (
+      sender: FlexGridType<MainRow>,
+      e: { panel: unknown; row: number; col: number; cell: HTMLElement }
+    ) => {
+      if (e.panel !== sender.cells) return;
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'OPMZ_PLAN_GR_ID') return;
+      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+      if (isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) clearCellText(e.cell);
+    };
+    g.formatItem.addHandler(formatItemHandler as never);
+
+    // 편집 진입 시에도 빈값으로 시작(사용자 지시 2026-11-10) — 더블클릭하면 무효 코드(PG0004 등)가
+    //   그대로 보이던 것을 빈 입력으로 바꾼다. 단, 아무것도 새로 고르지 않고 그대로 커밋(포커스
+    //   이탈)하면 원본 값을 유지해야 한다 — 그렇지 않으면 셀을 클릭했다 나가기만 해도 유효하던
+    //   저장값이 빈 문자열로 덮여 데이터가 유실된다(OPMZ_PLAN_GR_ID 는 PRE_KEY_VALUES 구성요소).
+    const planGroupPrepareEditHandler = (sender: FlexGridType<MainRow>, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'OPMZ_PLAN_GR_ID') return;
+      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+      if (!isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) return;
+      const editor = sender.activeEditor as { value?: string } | null;
+      if (editor) editor.value = '';
+    };
+    g.prepareCellForEdit.addHandler(planGroupPrepareEditHandler as never);
+
+    const planGroupEditEndingHandler = (
+      sender: FlexGridType<MainRow>,
+      e: { row: number; col: number; cancel: boolean }
+    ) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'OPMZ_PLAN_GR_ID') return;
+      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+      if (!isInvalidPlanGroupRow(row, validPlanGroupKeysRef.current)) return;
+      const editor = sender.activeEditor as { value?: string } | null;
+      // 빈 입력으로 시작했다가 아무것도 고르지 않았으면(= 여전히 빈 문자열) 취소 — 원본 코드 유지.
+      if (!(editor?.value ?? '').trim()) e.cancel = true;
+    };
+    g.cellEditEnding.addHandler(planGroupEditEndingHandler as never);
+
+    // MAX_CAPA 정수부 10자리 제한(사용자 요청 2026-11-10).
+    const detachDigitLimit = attachDigitLimit(g as FlexGridType);
+
     return () => {
       try {
+        detachDigitLimit();
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
         g.cellEditEnded?.removeHandler(cellEditEndedHandler as never);
         g.pastedCell?.removeHandler(cellEditEndedHandler as never);
+        g.formatItem?.removeHandler(formatItemHandler as never);
+        g.prepareCellForEdit?.removeHandler(planGroupPrepareEditHandler as never);
+        g.cellEditEnding?.removeHandler(planGroupEditEndingHandler as never);
       } catch {
         /* unmount race */
       }

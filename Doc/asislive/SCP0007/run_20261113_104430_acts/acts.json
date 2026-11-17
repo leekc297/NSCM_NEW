@@ -1,0 +1,34 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnFromSrch",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnFromSrch failed: InvalidOperationException: control not found: btnFromSrch",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0007-Sd6fc80",
+    "SCP0007-Sfc760a"
+   ]
+  },
+  {
+   "control": "btnToSrch",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnToSrch failed: InvalidOperationException: control not found: btnToSrch",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0007-S55ebc4",
+    "SCP0007-Sad92f9"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 10:43:41.206",
+ "fills": 0,
+ "fill_left": []
+}

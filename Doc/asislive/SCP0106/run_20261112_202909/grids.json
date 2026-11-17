@@ -1,0 +1,1635 @@
+{
+ "id": "SCP0106",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "4",
+   "sheets": [
+    {
+     "name": "CURRENT_ASSEMBLY",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "CUTOFF_MODEL_ASSEMBLY",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "1ST_CUTOFF_LINE_ASSEMBLY",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "2ND_CUTOFF_LINE_ASSEMBLY",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "CURRENT_ELTR",
+     "rows": 0,
+     "cols": 89,
+     "visible": "True",
+     "frozen_cols": "31",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Name",
+        "Plant Name",
+        "Plant Name"
+       ],
+       "label": "Plant Name",
+       "tag": "PLANT_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Building Name",
+        "Building Name",
+        "Building Name"
+       ],
+       "label": "Building Name",
+       "tag": "FACTORY_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Line Name",
+        "Line Name",
+        "Line Name"
+       ],
+       "label": "Line Name",
+       "tag": "LINE_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Equipment Name",
+        "Equipment Name",
+        "Equipment Name"
+       ],
+       "label": "Equipment Name",
+       "tag": "EQUIPMENT_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Equipment Type",
+        "Equipment Type",
+        "Equipment Type"
+       ],
+       "label": "Equipment Type",
+       "tag": "ELTR_TP_NM_EN",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ELTR_TP_NM_EN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Model",
+        "Model",
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "NICK_NAME",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Nickname",
+        "Nickname",
+        "Nickname"
+       ],
+       "label": "Nickname",
+       "tag": "BASIC_NICK_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Operation Name",
+        "Operation Name",
+        "Operation Name"
+       ],
+       "label": "Operation Name",
+       "tag": "OPERATION_NAME",
+       "width": "160",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Level 1",
+        "Level 1",
+        "Level 1"
+       ],
+       "label": "Level 1",
+       "tag": "MEASURE_GROUP_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Level 2",
+        "Level 2",
+        "Level 2"
+       ],
+       "label": "Level 2",
+       "tag": "MEASURE_NAME",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Result",
+        "Result",
+        "Result"
+       ],
+       "label": "Result",
+       "tag": "PFRSLT_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PFRSLT_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Base",
+        "Base",
+        "Base"
+       ],
+       "label": "Base",
+       "tag": "BASE_QTY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "BASE_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Ver",
+        "Ver",
+        "Ver"
+       ],
+       "label": "Ver",
+       "tag": "VER_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "VER_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Seq",
+        "Seq",
+        "Seq"
+       ],
+       "label": "Seq",
+       "tag": "VER_SEQ",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "VER_SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Site",
+        "Site",
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Plant Name",
+        "Plant",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Building Name",
+        "Building",
+        "Building"
+       ],
+       "label": "Building",
+       "tag": "FACTORY_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FACTORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Line Name",
+        "Line",
+        "Line"
+       ],
+       "label": "Line",
+       "tag": "LINE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LINE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Operation",
+        "Operation",
+        "Operation"
+       ],
+       "label": "Operation",
+       "tag": "OPERATION_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Equipment Type",
+        "Equipment Type",
+        "Equipment Type"
+       ],
+       "label": "Equipment Type",
+       "tag": "ELTR_LN_TP_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ELTR_LN_TP_CD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "SORT_ORDER_NO",
+        "SORT_ORDER_NO",
+        "SORT_ORDER_NO"
+       ],
+       "label": "SORT_ORDER_NO",
+       "tag": "SORT_ORDER_NO",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SORT_ORDER_NO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "SPEED_PPM",
+        "SPEED_PPM",
+        "SPEED_PPM"
+       ],
+       "label": "SPEED_PPM",
+       "tag": "SPEED_PPM",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "SPEED_PPM",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "SPEED_BASE_PPM",
+        "SPEED_BASE_PPM",
+        "SPEED_BASE_PPM"
+       ],
+       "label": "SPEED_BASE_PPM",
+       "tag": "SPEED_BASE_PPM",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "SPEED_BASE_PPM",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "LINE_IDX",
+        "LINE_IDX",
+        "LINE_IDX"
+       ],
+       "label": "LINE_IDX",
+       "tag": "LINE_IDX",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LINE_IDX",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "ITEM_CNT",
+        "ITEM_CNT",
+        "ITEM_CNT"
+       ],
+       "label": "ITEM_CNT",
+       "tag": "ITEM_CNT",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ITEM_CNT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Company",
+        "Company",
+        "Company"
+       ],
+       "label": "Company",
+       "tag": "COMPANY_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "COMPANY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Level 1",
+        "Level 1",
+        "Level 1"
+       ],
+       "label": "Level 1",
+       "tag": "MEASURE_GROUP",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEASURE_GROUP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Level 2",
+        "Level 2",
+        "Level 2"
+       ],
+       "label": "Level 2",
+       "tag": "MEASURE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEASURE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Site",
+        "Site Name",
+        "Site Name"
+       ],
+       "label": "Site Name",
+       "tag": "SITE_NAME",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Operation Plan",
+        "2026",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202611",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202611",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 32,
+       "header": [
+        "Operation Plan",
+        "2026",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202612",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202612",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 33,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "01"
+       ],
+       "label": "01",
+       "tag": "M_01202701",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202701",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 34,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "02"
+       ],
+       "label": "02",
+       "tag": "M_01202702",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202702",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "03"
+       ],
+       "label": "03",
+       "tag": "M_01202703",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202703",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 36,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "04"
+       ],
+       "label": "04",
+       "tag": "M_01202704",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202704",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 37,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "05"
+       ],
+       "label": "05",
+       "tag": "M_01202705",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202705",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 38,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "06"
+       ],
+       "label": "06",
+       "tag": "M_01202706",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202706",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 39,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "07"
+       ],
+       "label": "07",
+       "tag": "M_01202707",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202707",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 40,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "08"
+       ],
+       "label": "08",
+       "tag": "M_01202708",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202708",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 41,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "09"
+       ],
+       "label": "09",
+       "tag": "M_01202709",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202709",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 42,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "10"
+       ],
+       "label": "10",
+       "tag": "M_01202710",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202710",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 43,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202711",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202711",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 44,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202712",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202712",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 45,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "01"
+       ],
+       "label": "01",
+       "tag": "M_01202801",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202801",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 46,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "02"
+       ],
+       "label": "02",
+       "tag": "M_01202802",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202802",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 47,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "03"
+       ],
+       "label": "03",
+       "tag": "M_01202803",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202803",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 48,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "04"
+       ],
+       "label": "04",
+       "tag": "M_01202804",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202804",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 49,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "05"
+       ],
+       "label": "05",
+       "tag": "M_01202805",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202805",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 50,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "06"
+       ],
+       "label": "06",
+       "tag": "M_01202806",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202806",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 51,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "07"
+       ],
+       "label": "07",
+       "tag": "M_01202807",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202807",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 52,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "08"
+       ],
+       "label": "08",
+       "tag": "M_01202808",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202808",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 53,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "09"
+       ],
+       "label": "09",
+       "tag": "M_01202809",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202809",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 54,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "10"
+       ],
+       "label": "10",
+       "tag": "M_01202810",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202810",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 55,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202811",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202811",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 56,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202812",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202812",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 57,
+       "header": [
+        "Operation Plan",
+        "2029",
+        "2029"
+       ],
+       "label": "2029",
+       "tag": "Y_2029",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2029",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 58,
+       "header": [
+        "Operation Plan",
+        "2030",
+        "2030"
+       ],
+       "label": "2030",
+       "tag": "Y_2030",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2030",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 59,
+       "header": [
+        "Operation Plan",
+        "2031",
+        "2031"
+       ],
+       "label": "2031",
+       "tag": "Y_2031",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2031",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 60,
+       "header": [
+        "Operation Plan",
+        "2026",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202611_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202611_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 61,
+       "header": [
+        "Operation Plan",
+        "2026",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202612_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202612_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 62,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "01"
+       ],
+       "label": "01",
+       "tag": "M_01202701_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202701_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 63,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "02"
+       ],
+       "label": "02",
+       "tag": "M_01202702_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202702_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 64,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "03"
+       ],
+       "label": "03",
+       "tag": "M_01202703_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202703_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 65,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "04"
+       ],
+       "label": "04",
+       "tag": "M_01202704_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202704_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 66,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "05"
+       ],
+       "label": "05",
+       "tag": "M_01202705_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202705_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 67,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "06"
+       ],
+       "label": "06",
+       "tag": "M_01202706_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202706_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 68,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "07"
+       ],
+       "label": "07",
+       "tag": "M_01202707_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202707_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 69,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "08"
+       ],
+       "label": "08",
+       "tag": "M_01202708_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202708_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 70,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "09"
+       ],
+       "label": "09",
+       "tag": "M_01202709_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202709_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 71,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "10"
+       ],
+       "label": "10",
+       "tag": "M_01202710_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202710_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 72,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202711_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202711_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 73,
+       "header": [
+        "Operation Plan",
+        "2027",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202712_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202712_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 74,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "01"
+       ],
+       "label": "01",
+       "tag": "M_01202801_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202801_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 75,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "02"
+       ],
+       "label": "02",
+       "tag": "M_01202802_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202802_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 76,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "03"
+       ],
+       "label": "03",
+       "tag": "M_01202803_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202803_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 77,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "04"
+       ],
+       "label": "04",
+       "tag": "M_01202804_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202804_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 78,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "05"
+       ],
+       "label": "05",
+       "tag": "M_01202805_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202805_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 79,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "06"
+       ],
+       "label": "06",
+       "tag": "M_01202806_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202806_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 80,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "07"
+       ],
+       "label": "07",
+       "tag": "M_01202807_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202807_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 81,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "08"
+       ],
+       "label": "08",
+       "tag": "M_01202808_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202808_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 82,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "09"
+       ],
+       "label": "09",
+       "tag": "M_01202809_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202809_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 83,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "10"
+       ],
+       "label": "10",
+       "tag": "M_01202810_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202810_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 84,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "11"
+       ],
+       "label": "11",
+       "tag": "M_01202811_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202811_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 85,
+       "header": [
+        "Operation Plan",
+        "2028",
+        "12"
+       ],
+       "label": "12",
+       "tag": "M_01202812_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "M_01202812_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 86,
+       "header": [
+        "Operation Plan",
+        "2029",
+        "2029"
+       ],
+       "label": "2029",
+       "tag": "Y_2029_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2029_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 87,
+       "header": [
+        "Operation Plan",
+        "2030",
+        "2030"
+       ],
+       "label": "2030",
+       "tag": "Y_2030_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2030_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 88,
+       "header": [
+        "Operation Plan",
+        "2031",
+        "2031"
+       ],
+       "label": "2031",
+       "tag": "Y_2031_ASSIGN_PRIORITY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Y_2031_ASSIGN_PRIORITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "CUTOFF_MODEL_ELTR",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "1ST_CUTOFF_LINE_ELTR",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "2ND_CUTOFF_LINE_ELTR",
+     "rows": 0,
+     "cols": 0,
+     "visible": "False",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

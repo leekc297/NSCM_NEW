@@ -1,0 +1,7 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+GSCM_TERM-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 2,,2,TermInfo.cs:101,DERIVED
+GSCM_TERM-Sc79aa7,기타,NONE,button:EditButton,EditButton,,잠금 2 · 잠금:siMain.SwitchLock ; 잠금:siMain.LockColumn,,2,TermInfo.cs:145,DERIVED
+GSCM_TERM-S5bc1f8,조회,NONE,button:FindButton | button:SaveButton,FindData,,"서버 호출 3, 데이터 처리 3, 잠금 1, 그리드 구성 1 · SystemManager.UP_FX_GetTermInfoList · 잠금:siMain.LockColumn",SystemManager.UP_FX_GetTermInfoList,8,TermInfo.cs:166,DERIVED
+GSCM_TERM-S96bd28,초기,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,InitSpread,,그리드 구성 9,,9,TermInfo.cs:110,DERIVED
+GSCM_TERM-S27eab7,저장,SHEET+STATE,button:InsertButton,InsertRow,if (siMain != null && siMain.IsLock(siMain.SheetName) == false),"데이터 처리 7, 그리드 값·서식 1",,8,TermInfo.cs:292,DERIVED
+GSCM_TERM-S1bb36d,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),"표시·활성 4, 서버 호출 2, 데이터 처리 1, 메시지 1 · 표시·활성:request.InsertQueryId ; 표시·활성:request.DeleteQueryId ; 표시·활성:request.UpdateQueryId ; 표시·활성:request.DataSet",,8,TermInfo.cs:227,DERIVED

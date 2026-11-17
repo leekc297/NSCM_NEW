@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+GSCM_BASECODE-Sc3be90,COND,,,,값 미도출,if (spreadLevel != null && spreadLevel.IsLock(spreadLevel.SheetName) == false) ▸ for (i <= spreadLevel.GetMaxRowIndex()) ▸ if (string.IsNullOrEmpty(chkOrder)),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

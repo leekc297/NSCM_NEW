@@ -1,0 +1,130 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ROUTE_ID",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,1 failed: InvalidOperationException: cell not visible: 0,1",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_CITY_NAME",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_COUNTRY",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_CITY",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TO_CITY_NAME",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TO_CITY",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802",
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:26:35",
+ "plan": {
+  "scenarios": 4,
+  "used": [
+   "ROUTE_ID",
+   "FROM_CITY_NAME",
+   "FROM_COUNTRY",
+   "FROM_CITY",
+   "TO_CITY_NAME",
+   "TO_CITY"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

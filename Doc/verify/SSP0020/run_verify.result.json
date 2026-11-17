@@ -1,0 +1,143 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-17T10:07:45+09:00",
+ "producer": "run_verify",
+ "id": "SSP0020",
+ "skip_e2e": true,
+ "started": "2026-11-17 10:04:59",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-3e374103",
+   "class": "E4",
+   "msg": "MSG00219",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @form @11-17 10:07"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d1f0e5dc",
+   "class": "H5",
+   "msg": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META+E2E CR-092 라벨 잔존"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-db5fae91",
+   "class": "A5",
+   "msg": "SSP0020 스냅샷 헤더 Delegate",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-52d828e2",
+   "class": "A5",
+   "msg": "SSP0020 스냅샷 헤더 Delegated List",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c95c4dc6",
+   "class": "E4",
+   "msg": "MSG00219",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @form @11-17 10:07"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-14d3f156",
+   "class": "X-ROW",
+   "msg": "SSP0020_Delegate.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9c2295eb",
+   "class": "X-ROW",
+   "msg": "SSP0020_Delegate.Validation_Check",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3e6ff1ff",
+   "class": "E4",
+   "msg": "MSG00219",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @form @11-17 10:07"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [],
+ "summary": {
+  "rows": 1468,
+  "PASS": 468,
+  "FAIL": 8,
+  "판정필요": 0,
+  "미검증": 0,
+  "해당없음": 992,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1240,
+   "사람": 2,
+   "기계(상속·집계)": 224,
+   "출처 미기록": 2
+  },
+  "fail_listed": 8,
+  "coverage": {
+   "rules": 84,
+   "measured": 269,
+   "not_run_error": 0,
+   "na": 264,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v33.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SSP0020_Delegate_ActionItemList_v33.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  }
+ ],
+ "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증"
+}

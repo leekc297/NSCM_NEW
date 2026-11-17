@@ -90,7 +90,7 @@ let panel = null;
 function open(api) {
   const render = () => { const p = api.paths(); panel.webview.html = html(list(p).filter(it => it.scope !== 'none'), panel._mode || 'date', panel._sel || ''); };
   if (panel) { panel.reveal(); render(); return; }
-  panel = vscode.window.createWebviewPanel('vibeManager.history', 'Revision History — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+  panel = vscode.window.createWebviewPanel('vibeManager.history', 'Revision — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
   panel.onDidDispose(() => { panel = null; });
   panel.webview.onDidReceiveMessage(async m => {
     const p = api.paths();
@@ -148,7 +148,9 @@ function innerHtml(p, mode, sel, src, view) {
   const keys = Object.keys(groups).sort((a, b) => mode === 'date' ? b.localeCompare(a) : a.localeCompare(b));
   const stOf = it => it.exit === 'event' ? ['ok', '▶ 실행'] : it.exit === 0 ? ['ok', '✓'] : it.end ? ['bad', `exit ${it.exit}`] : ['run', '진행중'];
   const row = it => { const [ic] = SRC[srcOf(it)] || ['•']; const [sc, sl] = stOf(it); const title = it.label || (srcOf(it) === 'prompt' ? (it.text || it.note || '').replace(/\s+/g, ' ').slice(0, 70) : it.task);
-    return `<div class="hit${it.dir === sel ? ' hsel' : ''}" data-dir="${esc(it.dir)}"><span title="${esc((SRC[srcOf(it)] || [, ''])[1])}">${ic}</span> <span class="when">${esc(fmtLocal(it.start).slice(mode === 'date' ? 11 : 0))}</span> <b>${esc(it.id === NOID ? '' : it.id)}</b> <span class="task">${esc(title)}</span> <span class="st ${sc}">${esc(sl)}</span> <span class="n">${durOf(it)}${it.changed && it.changed.length ? ` · 변경 ${it.changed.length}` : ''}${it.afterMode === 'view' ? ' · ⚠ 작업후 미기록(열람시점 비교)' : ''}</span></div>`; };
+    // 2026-11-17 사용자: 검색 — 행 검색 문자열(data-s) = 화면 ID · 메뉴 이름 · 작업 · 프롬프트 원문 · 메모 · 출처 · 시각 · 상태 · 변경 파일 경로 (소문자)
+    const hs = [it.id === NOID ? '' : it.id, it.label, it.task, it.text, it.note, (SRC[srcOf(it)] || [, ''])[1], fmtLocal(it.start), sl, ...(it.changed || []).map(c => c.file)].filter(Boolean).join(' ').replace(/\s+/g, ' ').toLowerCase();
+    return `<div class="hit${it.dir === sel ? ' hsel' : ''}" data-dir="${esc(it.dir)}" data-s="${esc(hs)}"><span title="${esc((SRC[srcOf(it)] || [, ''])[1])}">${ic}</span> <span class="when">${esc(fmtLocal(it.start).slice(mode === 'date' ? 11 : 0))}</span> <b>${esc(it.id === NOID ? '' : it.id)}</b> <span class="task">${esc(title)}</span> <span class="st ${sc}">${esc(sl)}</span> <span class="n">${durOf(it)}${it.changed && it.changed.length ? ` · 변경 ${it.changed.length}` : ''}${it.afterMode === 'view' ? ' · ⚠ 작업후 미기록(열람시점 비교)' : ''}</span></div>`; };
   const left = keys.map(k => `<details open><summary>${mode === 'date' ? '📅' : '🎯'} ${esc(k === NOID ? '(화면 ID 없음)' : k)} <span class="n">(${groups[k].length})</span></summary>${groups[k].map(row).join('')}</details>`).join('');
   const cur = items.find(i => i.dir === sel);
   let right = view === 'task'
@@ -167,7 +169,7 @@ function innerHtml(p, mode, sel, src, view) {
   }
   const sb = (k, l) => `<button class="sec${src === k ? ' on' : ''}" data-hsrc="${k}">${l}</button>`;
   return `<div class="hist-root">
-    <div class="hist-top"><button class="sec${mode === 'date' ? ' on' : ''}" data-hmode="date">📅 일자별</button><button class="sec${mode === 'screen' ? ' on' : ''}" data-hmode="screen">🎯 화면별</button>${view === 'task' ? ` │ ${sb('all', '전체')}${sb('menu', '📋 메뉴')}${sb('prompt', '💬 프롬프트')}${sb('chain', '🔗 체인 단계')}${sb('task', '⚙️ 작업')}` : ''} <button class="sec" id="hist-rf">🔁 새로고침</button> <span class="n">${items.length}건 · .vibe/history</span></div>
+    <div class="hist-top"><button class="sec${mode === 'date' ? ' on' : ''}" data-hmode="date">📅 일자별</button><button class="sec${mode === 'screen' ? ' on' : ''}" data-hmode="screen">🎯 화면별</button>${view === 'task' ? ` │ ${sb('all', '전체')}${sb('menu', '📋 메뉴')}${sb('prompt', '💬 프롬프트')}${sb('chain', '🔗 체인 단계')}${sb('task', '⚙️ 작업')}` : ''} <button class="sec" id="hist-rf">🔁 새로고침</button> <span class="n">${items.length}건 · .vibe/history</span><span class="hqw"><input class="hq" type="search" autocomplete="off" spellcheck="false" placeholder="${view === 'task' ? '검색: 화면 ID, 메뉴, 프롬프트, 파일' : '검색: 화면 ID, 작업, 파일'}" aria-label="검색"><span class="hqn"></span></span></div>
     <div class="hist-cols"><div class="hist-l">${left || (view === 'task' ? '<div class="hint">실행 내역 없음 — VM 메뉴를 실행하거나 프롬프트를 보내면 쌓입니다.</div>' : '<div class="hint">이력 없음 — 파이프라인/수선/PKG/등록 작업을 실행하면 작업 전·후 스냅샷이 쌓입니다.</div>')}</div><div class="hist-r">${right}</div></div>
   </div>`;
 }

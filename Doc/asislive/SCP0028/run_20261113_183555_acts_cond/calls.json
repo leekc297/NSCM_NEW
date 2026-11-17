@@ -1,0 +1,92 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 18:35:42.901",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 22.05,
+   "params": {
+    "Code": "FromSiteByDivision",
+    "Param1": "40",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FromSiteByDivision', @Param1='40', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-13 18:35:42.946",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1325,
+   "rows_kind": "DataSet rows",
+   "ms": 28.76,
+   "params": {
+    "Code": "ToSiteByDivision",
+    "Param1": "40",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='ToSiteByDivision', @Param1='40', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-13 18:35:48.543",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 22.52,
+   "params": {
+    "Code": "FromSiteByDivision",
+    "Param1": "81",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FromSiteByDivision', @Param1='81', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-13 18:35:48.595",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 475,
+   "rows_kind": "DataSet rows",
+   "ms": 28.16,
+   "params": {
+    "Code": "ToSiteByDivision",
+    "Param1": "81",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='ToSiteByDivision', @Param1='81', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:cboDivision"
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+{
+ "id": "DMF0072",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    },
+    {
+     "form": "ExceptionDialog",
+     "title": "ExceptionDialog",
+     "modal": true,
+     "grid_rows": -1,
+     "text": "ClipBoard | Cancel | Send | 잘못된 열 인덱스: -1(0과 1 사이여야 함) | 잘못된 열 인덱스: -1(0과 1 사이여야 함) | 잘못된 열 인덱스: -1(0과 1 사이여야 함) | ",
+     "closed": true,
+     "late": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0072-S287784"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModelType",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 10:26:43.445",
+ "fills": 0,
+ "fill_left": []
+}

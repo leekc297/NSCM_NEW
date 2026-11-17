@@ -1,0 +1,145 @@
+{
+ "id": "SCP0105",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0105_GET_CAPA_SPEED_PLAN_CURRENT_ELTR"
+   ],
+   "rows": [
+    [
+     "SCP0104_GET_SPREAD_TITLE",
+     58
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     29
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     29
+    ],
+    [
+     "SCP0105_GET_CAPA_SPEED_PLAN_CURRENT_ELTR",
+     152
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0105-S67bbf1",
+    "SCP0105-S96bd28",
+    "SCP0105-S85522d",
+    "SCP0105-S25b5c0",
+    "SCP0105-S20acca",
+    "SCP0105-S47156c",
+    "SCP0105-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItem",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItem failed: InvalidOperationException: control not found: btnItem",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0105-Sf9ae0a",
+    "SCP0105-Sd530a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CAPAItemPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 3177,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_CAPA_ITEM_POPUP"
+   ],
+   "scenarios": [
+    "SCP0105-Sf9ae0a",
+    "SCP0105-Sd530a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 17:41:24.473",
+ "preset": {
+  "name": "cboProgressStatus",
+  "token": "cboProgressStatus=i0",
+  "kw": {
+   "name": "cboProgressStatus",
+   "index": "0"
+  },
+  "label": "cboProgressStatus 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Current",
+  "value": "0",
+  "text": "Current",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

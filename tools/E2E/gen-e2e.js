@@ -22,6 +22,8 @@ const menu = readCsv(path.join(cfg.tobeOutDir, 'db', 'menu.csv'));
 // 2026-10-21(SCP0100 smoke): To-Be 화면은 LBL 코드로 라벨을 그리므로 기대 라벨 = msg_master 의 LBL 문구(EN 우선). As-is 라벨('Plan date*','Plan-type')은 후보로만.
 const msgMaster = readCsv(path.join(cfg.tobeOutDir, 'db', 'msg_master.csv'));
 const lblText = code => { if (!code) return ''; const rows = msgMaster.filter(r => up(r.msg_id) === up(code) && (r.use_yn || 'Y') !== 'N'); const r = rows.find(x => up(x.lang_cd) === 'EN') || rows[0]; return r ? String(r.msg_nm || '').trim() : ''; };
+// 2026-11-14 T308: 화면 언어에 따라 LBL 문구가 다르다(LBL00001 KO 'Div' · EN 'Div.'). smoke 는 로그인 계정의 언어로 열리므로 전 언어 문구를 후보에 넣는다(SCP0028 실측: 화면 'Div', 후보 'Div.'·'Division' → 누락 판정)
+const lblTexts = code => { if (!code) return []; return [...new Set(msgMaster.filter(r => up(r.msg_id) === up(code) && (r.use_yn || 'Y') !== 'N').map(r => String(r.msg_nm || '').trim()).filter(Boolean))]; };
 const feRoot = cfg.feRoot || path.resolve(cfg.genOutDir, '..', '..', 'nscm-fe');
 // 2026-10-21(SCP0100 🩹 수선 1차 "(c) 기대값 결함" 4건 → 생성기 보정): 기대 라벨·컬럼의 권위 원천 3종을 더 읽는다.
 //   ① 조회조건 카탈로그 Doc/_rules_v2/_mapping/search_conditions*.md — To-Be 화면명 섹션(### <이름>  (N행 …)) 표의 As-Is 명칭→To-Be 명칭(명칭 변경: Project→PJT, Unit (Qty)→Unit)·'조회조건 삭제'
@@ -106,7 +108,12 @@ for (const id0 of planDirs) {
   const id = up(id0); const pf = path.join(cfg.genOutDir, id, 'e2e_plan.json');
   if (!fs.existsSync(pf)) { console.error(`  ${id}: e2e_plan.json 없음 (node ../Harness/gen.js ${id} 먼저)`); continue; }
   const P = JSON.parse(fs.readFileSync(pf, 'utf8')); const MENU = tobeIdOf(P.menuId);
-  const mainSheets = P.sheets.filter(s => !s.popup && s.name !== 'spreadTitle');
+  // 2026-11-10 T177: 팝업 판정을 시트 이름('popup')만으로 하면 AS-IS 팝업 클래스 안 시트(SSP0024_ItembyDivisionPopup.cs:202 AddSheet 'Project')가
+  //   메인 시트로 섞여 _verify 가 없는 탭을 찾다 메인 그리드 161행을 미측정으로 남겼다. AS-IS grid_code.csv 에서 그 시트를 만든 클래스가
+  //   팝업(클래스명 Popup·파일 경로 \Popup\)뿐이면 팝업 시트로 본다. 화면(Form) 클래스가 한 번이라도 만든 시트는 그대로 메인.
+  const popupOnly = (() => { try { const gc = readCsv(path.join(path.dirname(cfg.genOutDir), '..', 'Doc', 'asisfacts', 'screens', id, 'grid_code.csv')).filter(r => VARIANT.isCur(r) && r.sheet_hint); const by = {}; for (const r of gc) { const k = r.sheet_hint.toLowerCase(); (by[k] = by[k] || []).push(/popup/i.test(r.class || '') || VARIANT.POPUP_RX.test(r.file || '')); } return new Set(Object.keys(by).filter(k => by[k].every(Boolean))); } catch { return new Set(); } })();
+  const mainSheets = P.sheets.filter(s => !s.popup && s.name !== 'spreadTitle' && !popupOnly.has(String(s.name).toLowerCase()));
+  if (P.sheets.some(s => popupOnly.has(String(s.name).toLowerCase()))) console.log(`  ${id}: AS-IS 팝업 클래스 안 시트 메인 제외 — ${P.sheets.filter(s => popupOnly.has(String(s.name).toLowerCase())).map(s => s.name).join(', ')}`);
   // 2026-10-21: FE 시트명(call-proc 경로의 sheet, 예 searchLevel) → admin 시트명(SEARCH_LEVEL). 기대 컬럼은 '실제 조회된 시트' 기준으로 고른다
   //   (SCP0100: 기본 Search Mode 가 SEARCH_LEVEL 시트인데 mainSheets[0]=REPORT 컬럼을 기대해 '누락 6' 오탐)
   const regF = path.join(cfg.genOutDir, id, 'register.json'); const REG = fs.existsSync(regF) ? JSON.parse(fs.readFileSync(regF, 'utf8').replace(/^\uFEFF/, '')) : null;
@@ -129,7 +136,7 @@ for (const id0 of planDirs) {
   if (SCref) { try { const SCm = require(path.join(__dirname, '..', 'Harness', 'lib', 'searchcond')); const pseudo = (P.fields || []).map(f => ({ c: { name: f.asis || f.key || '', type: f.component || '', file: '' }, r: { tobe_component: f.component || '' }, label: String(f.label || '').replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(), key: f.key || '', src: f })); SCm.apply(SCref, pseudo.slice(), [], () => ''); for (const x of pseudo) if (x.sc && x.sc.row) scRowOf.set(x.src, x.sc.row); } catch (e) { console.error(`  ${id}: 기준표 매칭 실패 — ${e.message}`); } }
   const fieldsPlan = (P.fields || []).map(f => {
     const asisLabel = String(f.label || '').replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(); const tobe = lblText(f.lbl);
-    const cands = [tobe, asisLabel, ...asisLabel.split('/').map(x => x.trim()).filter(x => x.length >= 2)];
+    const cands = [tobe, ...lblTexts(f.lbl), asisLabel, ...asisLabel.split('/').map(x => x.trim()).filter(x => x.length >= 2)];
     if (f.kind === 'period' || /Period/i.test(f.component || '')) cands.push('From', 'To', 'Period', '기간');
     let ex = excludedReason(f.asis); let catalog = '';
     const cat = catRows.find(r => normLbl(r.asis) === normLbl(asisLabel));

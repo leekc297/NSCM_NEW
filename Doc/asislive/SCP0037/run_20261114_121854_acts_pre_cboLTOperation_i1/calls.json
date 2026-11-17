@@ -1,0 +1,183 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 12:18:26.426",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 5.87,
+   "params": {
+    "p_program_id": "SCP0037",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Operation LT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0037', @p_user_id='jaeuk.shin', @p_sheet_name='Operation LT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 12:18:26.438",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 97,
+   "rows_kind": "DataSet rows",
+   "ms": 6.41,
+   "params": {
+    "Code": "PlantByDivisionOperation",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantByDivisionOperation', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 12:18:26.451",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.62,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "OPERATION_LT",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='OPERATION_LT', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 12:18:26.495",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0037_GET_OPERATION_LT",
+   "sp": "SCP0037_GET_OPERATION_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 29.16,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "",
+    "p_item_id": "",
+    "p_scm_valid_yn": null,
+    "p_lt_operation": "OSP_LT"
+   },
+   "inline": "EXEC SCP0037_GET_OPERATION_LT @p_division_id='81', @p_scm_site_id='', @p_item_id='', @p_scm_valid_yn=NULL, @p_lt_operation='OSP_LT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 12:18:26.593",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 11.1,
+   "params": {
+    "p_menu_id": "SCP0037",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "0.041",
+    "p_ui_time": "0.079",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0037', @p_log_type='FIND', @p_log_cnt='', @p_db_time='0.041', @p_ui_time='0.079', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 12:18:29.936",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.36,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 12:18:30.485",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 428.59,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0037"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0037'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 12:18:38.789",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 3.49,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-14 12:18:38.813",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM.SCM0002_GET_VERSIONBYWATERFALLPOPUP",
+   "sp": "SCM0002_GET_VERSIONBYWATERFALLPOPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.96,
+   "params": {
+    "p_start_yyyymmdd": "20261101",
+    "p_end_yyyymmdd": "20270430",
+    "p_created_by": "jaeuk.shin",
+    "p_division_id": "81",
+    "p_version_type": "MF_SF_W,ME_S",
+    "p_version_no": ""
+   },
+   "inline": "EXEC SCM0002_GET_VERSIONBYWATERFALLPOPUP @p_start_yyyymmdd='20261101', @p_end_yyyymmdd='20270430', @p_created_by='jaeuk.shin', @p_division_id='81', @p_version_type='MF_SF_W,ME_S', @p_version_no=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

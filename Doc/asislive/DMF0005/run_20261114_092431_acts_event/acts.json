@@ -1,0 +1,187 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Seff0c0"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Seff0c0"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Seff0c0"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdSub",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 0개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sd8b538"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "txtProject",
+   "kind": "event",
+   "change": "KeyDown 처리기 직접 호출 · 키 D1 · KeyEventArgs(D1)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sdd2aa7",
+    "DMF0005-Sb6f2ec"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 SALES_COMPANY 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 22, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sf9b812",
+    "DMF0005-Sf8ee40",
+    "DMF0005-Sc4c020",
+    "DMF0005-Seedaad"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 SALES_PLANT 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 23, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sf9b812",
+    "DMF0005-Sf8ee40",
+    "DMF0005-Sc4c020",
+    "DMF0005-Seedaad"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sf9b812",
+    "DMF0005-Sf8ee40",
+    "DMF0005-Sc4c020",
+    "DMF0005-Seedaad"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DEPT_ID2 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "DMF0005-Sf9b812",
+    "DMF0005-Sf8ee40",
+    "DMF0005-Sc4c020",
+    "DMF0005-Seedaad"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdSub",
+   "why": "조회 결과 행이 없어 붙여넣을 셀이 없음",
+   "scenarios": [
+    "DMF0005-S3acfa1",
+    "DMF0005-S7f4a9c",
+    "DMF0005-Sd38708"
+   ]
+  }
+ ],
+ "at": "2026-11-14 09:21:34",
+ "edit_mode": true
+}

@@ -63,7 +63,7 @@ onSuccess:
 ### §2.1 onSuccess override 시 4 요소 의무
 
 ```typescript
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@foundation/query-client';   // (2026-11-13 정정: '@tanstack/react-query' 직접 import → foundation 재수출 — hook #40 · eslint no-restricted-imports)
 
 const queryClient = useQueryClient();
 const setToast = useMessageStore(state => state.setToast);
@@ -136,7 +136,7 @@ fi
 |---|---|
 | useProcMutation default 동작 | `packages/shared/src/hooks/useCustomQueryClient.ts:110~115` |
 | recentlyAddedKeys 패턴 | `feedback_recently_added_loadedrows_pattern` 메모리 |
-| toast 표준 메시지 (MSG00002 등) | `13_I18N_MESSAGES.md` |
+| toast 표준 메시지 (MSG00002 등) | `Doc/_dev_rules/_archive/13_I18N_MESSAGES.md` (2026-11-13 정정: 보관 이동된 문서 — 경로 명시) |
 
 ---
 

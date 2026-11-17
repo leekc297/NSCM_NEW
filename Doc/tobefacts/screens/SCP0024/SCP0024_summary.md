@@ -1,7 +1,7 @@
 # SCP0024 — To-Be Fact Pack 요약
 
 - page_key: `supply/production-plan-fix` · feature: supply · As-is Fact Pack 있음
-- 파일 16 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 16 · 컴포넌트 사용 21 · 하드코딩 컬럼 2 · 메시지 25
+- 파일 16 · 엔드포인트 호출 8 (미해결 1, 주석 속 2) · 이벤트 16 · 컴포넌트 사용 21 · 하드코딩 컬럼 2 · 메시지 24
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,10 +11,10 @@
 | features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx | component | 241 |
 | features/supply/src/pages/production-plan-fix/hooks/useProductionPlanFixValidation.ts | hook | 99 |
 | features/supply/src/pages/production-plan-fix/index.ts | index | 2 |
-| features/supply/src/pages/production-plan-fix/production-plan-fix.constants.ts | constants | 179 |
+| features/supply/src/pages/production-plan-fix/production-plan-fix.constants.ts | constants | 178 |
 | features/supply/src/pages/production-plan-fix/production-plan-fix.types.ts | types | 22 |
 | features/supply/src/pages/production-plan-fix/ProductionPlanFix.module.scss | style | 12 |
-| features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | page | 241 |
+| features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | page | 280 |
 | features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts | store | 209 |
 | features/supply/src/pages/production-plan-fix/utils/productionPlanFixColumns.ts | util | 156 |
 | features/supply/src/pages/production-plan-fix/utils/productionPlanFixDerive.ts | util | 29 |
@@ -29,7 +29,8 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | ProductionPlanFixForm.tsx:51 |
 | (useTabLookupQueries) | hook | 1 | Y | ProductionPlanFixForm.tsx:60 |
-| SCP0024/main//call-proc | hook | 2 | Y | ProductionPlanFix.tsx:64 ProductionPlanFix.tsx:74 |
+| SCP0024/main//call-proc | hook | 2 | Y | ProductionPlanFix.tsx:66 ProductionPlanFix.tsx:76 |
+| {?{comboId:'SCM0001_GET_SCP_DAY_PERIOD',mnuId:MENU_ID,fromDate:'',offsetDay:String} | http | 1 | N | ProductionPlanFix.tsx:167 |
 | /admin/menu/SCP0024/column | http | 1 | Y | useProductionPlanFixStore.ts:142 |
 | /admin/menu/SCP0024/measure | http | 1 | Y | useProductionPlanFixStore.ts:163 |
 | /admin/menu/SCP0024/search-conditions | http | 1 | Y | useProductionPlanFixStore.ts:186 |
@@ -55,9 +56,9 @@
 | g.hostElement? | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx | 149 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx | 218 |
 | DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx | 237 |
-| ProductionPlanFixForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 185 |
-| ProductionPlanFixForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 186 |
-| ProductionPlanFixGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 221 |
+| ProductionPlanFixForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 224 |
+| ProductionPlanFixForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 225 |
+| ProductionPlanFixGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 260 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -100,7 +101,6 @@
 | MSG01187 | 1 |
 | MSG00225 | 1 |
 | MSG00165 | 1 |
-| MSG00662 | 1 |
 | LBL00001 | 1 |
 | LBL00027 | 1 |
 | LBL00005 | 1 |
@@ -114,15 +114,15 @@
 | LBL00772 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0024(16), SCP0013(12), SCP0025(5), SCP0020(3), DMF0082(1)
-- SP/PKG: PKG_SCP0024(8), P_SCP0024_SAVE_PLAN_FIX_DS(3), P_SCP0024_GET_PROD_PLAN_FIX(1), P_DATA(1), P_USER_ID(1), P_SCP0024_SAVE_PROD_PLAN_FIX(1)
+- 화면ID: SCP0024(16), SCP0013(11), SCP0025(9), SCP0020(3), DMF0082(1)
+- SP/PKG: PKG_SCP0024(8), P_SCP0024_SAVE_PLAN_FIX_DS(3), P_SCP0024_GET_PROD_PLAN_FIX(1), P_DATA(1), P_USER_ID(1), P_SCP0024_SAVE_PROD_PLAN_FIX(1), SCM0001_GET_SCP_DAY_PERIOD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | return(cs:621-634, SwitchLock 주석) — 모드 토글 자체는 asis_to_tobe.md §11 (b) 결정으로 미이식. | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 30 |
-| endpoint | — mount 1회 fetch(hook #66). Search 시에도 refetch(handleSearch). | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 92 |
-| code | R1 — 미조회(데이터 없음) 상태면 안내 후 return. AS-IS 는 무반응(cs:1259)이나 TO-BE 는 안내를 유지(사용자 결정). | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 125 |
-| code | 종전 `() => undefined` 상시 노출(2026-09-26 G20)을 대체한다 — 동작 없는 버튼이라 완전 제거(false, | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 162 |
+| code | return(cs:621-634, SwitchLock 주석) — 모드 토글 자체는 asis_to_tobe.md §11 (b) 결정으로 미이식. | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 32 |
+| endpoint | — mount 1회 fetch(hook #66). Search 시에도 refetch(handleSearch). | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 94 |
+| code | R3b — AS-IS 순서대로 confirm 을 수집보다 먼저 띄운다(cs:1319). 취소 시 return. | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 145 |
+| code | 종전 `() => undefined` 상시 노출(2026-09-26 G20)을 대체한다 — 동작 없는 버튼이라 완전 제거(false, | features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx | 201 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS('Model') 동적 fetch (ui-dynamic-property-management §2.3). 12행 등록 확인. | features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts | 30 |
 
 ## 10. __asis-mapping__.md 상태

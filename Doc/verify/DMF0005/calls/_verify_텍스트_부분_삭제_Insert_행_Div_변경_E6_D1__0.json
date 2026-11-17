@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 449,
+  "at": "2026-11-13T22:21:41.710Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 497,
+  "at": "2026-11-13T22:21:41.720Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2385,
+  "at": "2026-11-13T22:21:45.677Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ }
+]

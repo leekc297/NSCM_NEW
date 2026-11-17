@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0041",
+  "sheet": "Osp Stock",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0041/Osp%20Stock/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261109\",\"toYyyymmdd\":\"20271009\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 159,
+  "at": "2026-11-14T03:18:08.513Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ },
+ {
+  "menu": "SCP0041",
+  "sheet": "Osp Stock",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0041/Osp%20Stock/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"plantSiteId\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20211109\",\"toYyyymmdd\":\"20271009\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2316,
+  "at": "2026-11-14T03:19:15.468Z",
+  "user": "minyonglee1",
+  "test": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태"
+ }
+]

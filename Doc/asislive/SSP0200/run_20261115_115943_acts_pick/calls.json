@@ -1,0 +1,96 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 11:57:57.032",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.67,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:pick:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 11:57:57.063",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1294,
+   "rows_kind": "DataSet rows",
+   "ms": 18.38,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:pick:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 11:57:57.230",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1294,
+   "rows_kind": "DataSet rows",
+   "ms": 19.15,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:pick:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 11:57:59.820",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2269.09,
+   "params": {
+    "p_division_id": "40",
+    "p_project_code": "",
+    "p_scm_site_id": "IM_US_TXT",
+    "p_item_id": "APCCA3122A"
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='40', @p_project_code='', @p_scm_site_id='IM_US_TXT', @p_item_id='APCCA3122A'",
+   "phase": "action:pick:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 11:57:59.938",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 7.33,
+   "params": {
+    "Code": "EndCustomerByItemForSSP",
+    "Param1": "40",
+    "Param2": "IM_US_TXT",
+    "Param3": "APCCA3122A",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='EndCustomerByItemForSSP', @Param1='40', @Param2='IM_US_TXT', @Param3='APCCA3122A', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:pick:ITEM_ID"
+  }
+ ]
+}

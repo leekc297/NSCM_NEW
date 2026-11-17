@@ -1,0 +1,290 @@
+{
+ "id": "DMF0022",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Version 값은 필수 입력입니다",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [
+    "SELECT",
+    "DECLARE @v_time  NVARCHAR(10);",
+    "SELECT *",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "rows": [
+    [
+     "SELECT",
+     1
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     13
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 33,
+     "closed": true
+    },
+    {
+     "form": "DMF0073_VersionBySalesPricePopup",
+     "title": "VersionBySalesPrice Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "text": "statusStrip1 | usrLayoutControl2 | Manual | Week | 2027-04-30 | 2026-11-01 | ButtonList | 40 Mobility & IT Battery | 40 Mobility & IT Battery | ",
+     "closed": true,
+     "late": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0037_GET_OPERATION_LT",
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "DMF0022-S67bbf1",
+    "DMF0022-Sbd6791",
+    "DMF0022-S1c30d2",
+    "DMF0022-S26ff5f",
+    "DMF0022-S18f2df",
+    "DMF0022-S6c59f3",
+    "DMF0022-S6a69a9",
+    "DMF0022-Sd59aae",
+    "DMF0022-Sf5f784",
+    "DMF0022-Sbb8d29",
+    "DMF0022-S252290",
+    "DMF0022-Sc14b34",
+    "DMF0022-S67cbbb",
+    "DMF0022-Sa5d8be",
+    "DMF0022-S7aca34",
+    "DMF0022-Sf6ff58",
+    "DMF0022-Sbc6685",
+    "DMF0022-S36e4d3",
+    "DMF0022-Sd738d5",
+    "DMF0022-S2e76bd",
+    "DMF0022-S72a490",
+    "DMF0022-Sf409b9",
+    "DMF0022-S6bd4b3",
+    "DMF0022-S109112",
+    "DMF0022-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 15317,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0022-Sea1449"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 15,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP",
+    "SELECT *",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0022-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnOwner failed: InvalidOperationException: control not found: btnOwner",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0022-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0022-S287784"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ExceptionDialog",
+     "title": "ExceptionDialog",
+     "modal": true,
+     "grid_rows": -1,
+     "closed": true
+    },
+    {
+     "form": "DMF0073_VersionBySalesPricePopup",
+     "title": "VersionBySalesPrice Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SELECT *",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0037_GET_OPERATION_LT"
+   ],
+   "scenarios": [
+    "DMF0022-S8f08c9",
+    "DMF0022-Sc9b6a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrButton1",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 102,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0022-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:08:10.031",
+ "preset": {
+  "name": "chkMem",
+  "token": "chkMem=cF",
+  "kw": {
+   "name": "chkMem",
+   "prop": "Checked",
+   "value": "False"
+  },
+  "label": "chkMem 체크 끔",
+  "ok": true,
+  "error": null,
+  "applied": "prop:Checked",
+  "value": "ALL",
+  "text": "Color",
+  "checked": false,
+  "selected_index": null
+ },
+ "fills": 1,
+ "fill_left": [
+  "txtVersion[Version*·UsrMultiLineEditor] 비어 있음(팝업 선택 실패)"
+ ],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

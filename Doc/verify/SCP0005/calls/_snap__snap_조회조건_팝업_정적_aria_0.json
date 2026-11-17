@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2269,
+  "at": "2026-11-13T20:55:37.442Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2856,
+  "at": "2026-11-13T20:55:39.733Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

@@ -1,7 +1,20 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_popup",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--pass-with-no-tests",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +27,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/DMF0005/eg/popup/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,9 +45,60 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0005\\eg\\popup\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -72,13 +125,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 171461,
+                  "duration": 130295,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T10:53:31.005Z",
+                  "startTime": "2026-11-13T23:19:17.150Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -87,7 +142,7 @@
           ],
           "id": "85feec5f8d5a0014d343-1ed237a9a1b8985eb87b",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -106,13 +161,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 71584,
+                  "duration": 55962,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T10:56:31.561Z",
+                  "startTime": "2026-11-13T23:21:31.108Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -121,7 +178,7 @@
           ],
           "id": "85feec5f8d5a0014d343-1b1c1a8447d8e3140301",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -140,13 +197,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22577,
+                  "duration": 12251,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T10:57:50.837Z",
+                  "startTime": "2026-11-13T23:22:30.291Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -155,7 +214,7 @@
           ],
           "id": "85feec5f8d5a0014d343-f1e424534300926a659b",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -174,13 +233,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 51427,
+                  "duration": 38294,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T10:58:20.528Z",
+                  "startTime": "2026-11-13T23:22:45.688Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -189,7 +250,7 @@
           ],
           "id": "85feec5f8d5a0014d343-f20af53f805d8a2d23ba",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -208,13 +269,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 50847,
+                  "duration": 37388,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T10:59:19.830Z",
+                  "startTime": "2026-11-13T23:23:27.723Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -223,7 +286,7 @@
           ],
           "id": "85feec5f8d5a0014d343-bbfe5969f59c64b56573",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -242,13 +305,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 27164,
+                  "duration": 16653,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:00:18.722Z",
+                  "startTime": "2026-11-13T23:24:08.214Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -257,7 +322,7 @@
           ],
           "id": "85feec5f8d5a0014d343-92539aa7fe01f378fa3c",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -276,13 +341,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 24855,
+                  "duration": 12290,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:00:53.827Z",
+                  "startTime": "2026-11-13T23:24:28.162Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -291,7 +358,7 @@
           ],
           "id": "85feec5f8d5a0014d343-e2e1f2c8bb82b7fc29a7",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -310,13 +377,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 20050,
+                  "duration": 9817,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:01:26.706Z",
+                  "startTime": "2026-11-13T23:24:43.597Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -325,7 +394,7 @@
           ],
           "id": "85feec5f8d5a0014d343-cd753661d282c3dee91c",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -344,13 +413,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14960,
+                  "duration": 4446,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:01:54.916Z",
+                  "startTime": "2026-11-13T23:24:56.656Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -359,7 +430,7 @@
           ],
           "id": "85feec5f8d5a0014d343-24b03187a42c4ed63b9e",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -378,13 +449,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13584,
+                  "duration": 4500,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:02:18.806Z",
+                  "startTime": "2026-11-13T23:25:04.280Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -393,7 +466,7 @@
           ],
           "id": "85feec5f8d5a0014d343-8c5d5dd177e5a75c213a",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -412,13 +485,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13836,
+                  "duration": 4417,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:02:41.518Z",
+                  "startTime": "2026-11-13T23:25:11.979Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -427,7 +502,7 @@
           ],
           "id": "85feec5f8d5a0014d343-8750f1b06b8de7b15c0b",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -446,13 +521,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13940,
+                  "duration": 4524,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:03:04.334Z",
+                  "startTime": "2026-11-13T23:25:19.482Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -461,7 +538,7 @@
           ],
           "id": "85feec5f8d5a0014d343-ebe578eff11741fae8c4",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -480,13 +557,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19455,
+                  "duration": 7682,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:03:26.406Z",
+                  "startTime": "2026-11-13T23:25:27.209Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -495,7 +574,7 @@
           ],
           "id": "85feec5f8d5a0014d343-6b399ad1960d046d3d35",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -514,13 +593,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 21020,
+                  "duration": 7693,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:03:54.862Z",
+                  "startTime": "2026-11-13T23:25:38.094Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -529,7 +610,7 @@
           ],
           "id": "85feec5f8d5a0014d343-64cf92ab4373df70dbf3",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -548,13 +629,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19665,
+                  "duration": 7982,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:04:24.251Z",
+                  "startTime": "2026-11-13T23:25:49.125Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -563,7 +646,7 @@
           ],
           "id": "85feec5f8d5a0014d343-d5c68a45ba0678c88fac",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -582,13 +665,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 385211,
+                  "duration": 87976,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:04:52.323Z",
+                  "startTime": "2026-11-13T23:26:00.296Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -597,7 +682,7 @@
           ],
           "id": "85feec5f8d5a0014d343-5fac72f5c18f5a750082",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -616,13 +701,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 45583,
+                  "duration": 33633,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:11:26.145Z",
+                  "startTime": "2026-11-13T23:27:31.871Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -631,7 +718,7 @@
           ],
           "id": "85feec5f8d5a0014d343-0a3baea68f86e32fd91a",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -650,13 +737,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 32696,
+                  "duration": 13626,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:12:19.478Z",
+                  "startTime": "2026-11-13T23:28:09.032Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -665,7 +754,7 @@
           ],
           "id": "85feec5f8d5a0014d343-694c57988e5fb8b6cf02",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -684,13 +773,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22669,
+                  "duration": 11873,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:12:59.540Z",
+                  "startTime": "2026-11-13T23:28:26.019Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -699,7 +790,7 @@
           ],
           "id": "85feec5f8d5a0014d343-94cfe63d8141d50c1296",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -718,13 +809,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25412,
+                  "duration": 11678,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:13:29.836Z",
+                  "startTime": "2026-11-13T23:28:41.200Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -733,7 +826,7 @@
           ],
           "id": "85feec5f8d5a0014d343-092eed133dcd2d34cf48",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -752,13 +845,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22980,
+                  "duration": 11187,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:14:02.882Z",
+                  "startTime": "2026-11-13T23:28:57.628Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -767,7 +862,7 @@
           ],
           "id": "85feec5f8d5a0014d343-1c773257da835bc60ffe",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -786,13 +881,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 73821,
+                  "duration": 46691,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:14:33.921Z",
+                  "startTime": "2026-11-13T23:29:13.311Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -801,7 +898,7 @@
           ],
           "id": "85feec5f8d5a0014d343-de8e387f67b092c5e5fa",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -820,13 +917,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 29090,
+                  "duration": 17131,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:15:55.847Z",
+                  "startTime": "2026-11-13T23:30:05.198Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -835,7 +934,7 @@
           ],
           "id": "85feec5f8d5a0014d343-ac461bf197d6c0f0e6da",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -854,13 +953,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 29714,
+                  "duration": 21989,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:16:32.914Z",
+                  "startTime": "2026-11-13T23:30:25.631Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -869,7 +970,7 @@
           ],
           "id": "85feec5f8d5a0014d343-6b3785bbbb68914d54f0",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -888,13 +989,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19663,
+                  "duration": 7586,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:17:10.783Z",
+                  "startTime": "2026-11-13T23:30:50.822Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -903,7 +1006,7 @@
           ],
           "id": "85feec5f8d5a0014d343-bf2c667c415ed93aca65",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -922,13 +1025,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19136,
+                  "duration": 7584,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:17:38.453Z",
+                  "startTime": "2026-11-13T23:31:01.682Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -937,7 +1042,7 @@
           ],
           "id": "85feec5f8d5a0014d343-77a9e8f9aa41559c3227",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -956,13 +1061,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17498,
+                  "duration": 7448,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:18:06.110Z",
+                  "startTime": "2026-11-13T23:31:12.311Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -971,7 +1078,7 @@
           ],
           "id": "85feec5f8d5a0014d343-2dd6bee5d64ddf579b6b",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -990,13 +1097,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17869,
+                  "duration": 7496,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:18:31.225Z",
+                  "startTime": "2026-11-13T23:31:22.876Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1005,7 +1114,7 @@
           ],
           "id": "85feec5f8d5a0014d343-55af1827d6c87511b655",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1024,13 +1133,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 18864,
+                  "duration": 7595,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:18:56.635Z",
+                  "startTime": "2026-11-13T23:31:33.510Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1039,7 +1150,7 @@
           ],
           "id": "85feec5f8d5a0014d343-3dd7c4033b951fa2210a",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1058,13 +1169,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 746,
+                  "duration": 213,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:19:22.869Z",
+                  "startTime": "2026-11-13T23:31:44.228Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1073,7 +1186,7 @@
           ],
           "id": "85feec5f8d5a0014d343-f0724f55b5e499ee9dcb",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1092,13 +1205,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17951,
+                  "duration": 7628,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:19:32.309Z",
+                  "startTime": "2026-11-13T23:31:47.614Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1107,7 +1222,7 @@
           ],
           "id": "85feec5f8d5a0014d343-95d75e8447983d610e0c",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1126,13 +1241,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 18811,
+                  "duration": 7560,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:19:57.377Z",
+                  "startTime": "2026-11-13T23:31:58.284Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1141,7 +1258,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9a46fe29240569a1c827",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1160,13 +1277,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 509,
+                  "duration": 224,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:20:23.281Z",
+                  "startTime": "2026-11-13T23:32:08.954Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1175,7 +1294,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9c7507222a0b25790cb1",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1194,13 +1313,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 18626,
+                  "duration": 7602,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:20:31.672Z",
+                  "startTime": "2026-11-13T23:32:12.329Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1209,7 +1330,7 @@
           ],
           "id": "85feec5f8d5a0014d343-bff4f4558ba8cef7f0d8",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1228,13 +1349,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 18575,
+                  "duration": 7520,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:20:57.832Z",
+                  "startTime": "2026-11-13T23:32:22.947Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1243,7 +1366,7 @@
           ],
           "id": "85feec5f8d5a0014d343-12600504597d59ea2c0b",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1262,13 +1385,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 458,
+                  "duration": 218,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:21:24.055Z",
+                  "startTime": "2026-11-13T23:32:33.581Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1277,7 +1402,7 @@
           ],
           "id": "85feec5f8d5a0014d343-c386d66a234eee5015ea",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1296,13 +1421,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13289,
+                  "duration": 4422,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:21:32.112Z",
+                  "startTime": "2026-11-13T23:32:36.934Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1311,7 +1438,7 @@
           ],
           "id": "85feec5f8d5a0014d343-d7adf29d185623e3997e",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1330,13 +1457,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12717,
+                  "duration": 4504,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:21:52.806Z",
+                  "startTime": "2026-11-13T23:32:44.381Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1345,7 +1474,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9f53dfb235d0f5154542",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1364,13 +1493,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12651,
+                  "duration": 4382,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:22:13.367Z",
+                  "startTime": "2026-11-13T23:32:51.891Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1379,7 +1510,7 @@
           ],
           "id": "85feec5f8d5a0014d343-a2fe4d02fbed51a988ab",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1398,13 +1529,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13587,
+                  "duration": 4497,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:22:33.830Z",
+                  "startTime": "2026-11-13T23:32:59.325Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1413,7 +1546,7 @@
           ],
           "id": "85feec5f8d5a0014d343-d03a284379fced813c80",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1432,13 +1565,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 37815,
+                  "duration": 25869,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:22:54.081Z",
+                  "startTime": "2026-11-13T23:33:06.799Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1447,7 +1582,7 @@
           ],
           "id": "85feec5f8d5a0014d343-26bd82b2a567eb11bd7a",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1466,13 +1601,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25111,
+                  "duration": 13927,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:23:39.496Z",
+                  "startTime": "2026-11-13T23:33:35.761Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1481,7 +1618,7 @@
           ],
           "id": "85feec5f8d5a0014d343-1252d966b525a3f84842",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1500,13 +1637,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25839,
+                  "duration": 13286,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:24:12.124Z",
+                  "startTime": "2026-11-13T23:33:52.778Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1515,7 +1654,7 @@
           ],
           "id": "85feec5f8d5a0014d343-625285f509d8a8f9ce37",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1534,13 +1673,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 67077,
+                  "duration": 45014,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:24:45.098Z",
+                  "startTime": "2026-11-13T23:34:09.144Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1549,7 +1690,7 @@
           ],
           "id": "85feec5f8d5a0014d343-652b8489fdbb12cc7255",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1568,13 +1709,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25669,
+                  "duration": 13999,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:25:59.630Z",
+                  "startTime": "2026-11-13T23:34:57.397Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1583,7 +1726,7 @@
           ],
           "id": "85feec5f8d5a0014d343-141fa1f6e8d3f4f676b7",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         },
         {
@@ -1602,13 +1745,15 @@
               "results": [
                 {
                   "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25403,
+                  "duration": 15216,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T11:26:57.376Z",
+                  "startTime": "2026-11-13T23:35:14.524Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
@@ -1617,7 +1762,7 @@
           ],
           "id": "85feec5f8d5a0014d343-3fcf3989bd568edae236",
           "file": "eg_popup.spec.ts",
-          "line": 884,
+          "line": 906,
           "column": 9
         }
       ]
@@ -1625,8 +1770,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-02T10:53:29.143Z",
-    "duration": 2042402.5259999998,
+    "startTime": "2026-11-13T23:19:16.503Z",
+    "duration": 976736.353,
     "expected": 46,
     "skipped": 0,
     "unexpected": 0,

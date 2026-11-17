@@ -1,0 +1,181 @@
+{
+ "id": "SCP0017",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     440
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     21
+    ],
+    [
+     "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+     531
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 4,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0017-S67bbf1",
+    "SCP0017-Se946c7",
+    "SCP0017-S5ab99b",
+    "SCP0017-S8f3365",
+    "SCP0017-S13def4",
+    "SCP0017-S6177de",
+    "SCP0017-S739620",
+    "SCP0017-Se0573a",
+    "SCP0017-Sc96866",
+    "SCP0017-S9402aa",
+    "SCP0017-Se7543b",
+    "SCP0017-S481294",
+    "SCP0017-Sc91bf8",
+    "SCP0017-Sd9f09f",
+    "SCP0017-S8a009f",
+    "SCP0017-S400b22",
+    "SCP0017-Sba3da9",
+    "SCP0017-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 2575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0017-Sea1449",
+    "SCP0017-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0017-S67bbf1",
+    "SCP0017-Se946c7",
+    "SCP0017-S5ab99b",
+    "SCP0017-S8f3365",
+    "SCP0017-S13def4",
+    "SCP0017-S6177de",
+    "SCP0017-S739620",
+    "SCP0017-Se0573a",
+    "SCP0017-Sc96866",
+    "SCP0017-S9402aa",
+    "SCP0017-Se7543b",
+    "SCP0017-S481294",
+    "SCP0017-Sc91bf8",
+    "SCP0017-Sd9f09f",
+    "SCP0017-S8a009f",
+    "SCP0017-S400b22",
+    "SCP0017-Sba3da9",
+    "SCP0017-Scf33ed",
+    "SCP0017-S963877",
+    "SCP0017-S3e4aef",
+    "SCP0017-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 16:28:42.872",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i2",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "2"
+  },
+  "label": "cboBucketType 콤보 2번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:2:Monthly",
+  "value": "MONTHLY",
+  "text": "Monthly",
+  "checked": null,
+  "selected_index": 2
+ },
+ "fills": 1,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

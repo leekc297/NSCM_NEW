@@ -1,6 +1,6 @@
 # Hook #127 — oracle-nvl-null-antipattern (`NVL(x, NULL)` 금지 — 표현식은 `NVL(x,'-')`, 술어는 NVL 제거)
 
-> **Trigger**: T06 (SP 변환) / T07 (사내 DB 적용) / SP 본문을 읽거나 고치는 모든 작업
+> **Trigger**: T19 (SP 변환) / T18 (사내 DB 적용) (2026-11-13 정정: T06/T07 → TRIGGER_ROUTER 현행 번호 T19/T18) / SP 본문을 읽거나 고치는 모든 작업
 > **PR 차단 강도**: ⭐⭐⭐ (런타임 차단 결함 — ORA-00979 실사고)
 > **신설일**: 2026-08-10 (사용자 명시 — "NVL(x, NULL) 은 동작불가로 NVL(x, '-') 로 일괄적으로 적용되도록 RULE 로 지정해주세요")
 > **정본**: `_artifacts/_diagnostics/dmf0044_nvl_null_apply.py`
@@ -10,7 +10,8 @@
 ## §1. 결론 (2줄)
 
 - ⛔ **`NVL(x, NULL)` 은 금지**한다. MSSQL `ISNULL(x, '')` 오변환 계보이며 Oracle 에서 **동작 불가**다.
-- ✅ **표현식(SELECT·GROUP BY·INSERT 값)은 `NVL(x, '-')`** / ⚠ **술어(`IS [NOT] NULL`)는 NVL 자체를 제거**한다.
+- ✅ **표현식(SELECT·GROUP BY·INSERT 값)은 `NVL(x, '/')`** / ⚠ **술어(`IS [NOT] NULL`)는 NVL 자체를 제거**한다.
+  (2026-11-13 정정: 대체값 `'-'` → `'/'` — 2026-10-15 센티널 개정, hook #119 `oracle-null-sentinel-and-notnull-default.md` §0.5. 원래 `'-'` 인 기존 데이터는 유지 · 과도기 비교는 `IN ('-','/')`. 제목·§2 사고 기록·사용자 원문의 `'-'` 는 당시 표기)
 
 ### §1.1 적용 시점 (사용자 지시 2026-08-10 — **둘 다 의무**)
 
@@ -43,6 +44,7 @@ ORA-20001: [PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY]
 
 관련 계보: [[feedback_isnull_to_nvl_null_handling]] (`ISNULL(x,'')` → 잘못된 Oracle = `NVL(x, NULL)`) ·
 `oracle-empty-string-notnull-insert` (`''` = NULL → NOT NULL 위반).
+(2026-11-13 정정: 이 이름의 hook 파일은 저장소에 없음 — 메모리 `feedback_oracle_empty_string_notnull_insert` 를 가리킨다. NOT NULL 초기값의 현행 hook = #119 `oracle-null-sentinel-and-notnull-default.md`)
 
 ---
 
@@ -50,7 +52,7 @@ ORA-20001: [PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY]
 
 | 위치 | 정정 | 이유 |
 |---|---|---|
-| **표현식** — SELECT 목록 / GROUP BY / INSERT VALUES / `\|\|` 연결 / CASE 결과 | `NVL(x, **'-'**)` | 빈값 센티널 표준(hook #119 §1.5)과 동일. SELECT·GROUP BY 는 **반드시 쌍으로** 같은 문자열 |
+| **표현식** — SELECT 목록 / GROUP BY / INSERT VALUES / `\|\|` 연결 / CASE 결과 | `NVL(x, **'/'**)` (11-13 정정) | 빈값 센티널 표준(hook #119 §0.5·§1.5)과 동일. SELECT·GROUP BY 는 **반드시 쌍으로** 같은 문자열 |
 | **술어** — `NVL(x, NULL) IS [NOT] NULL` | **`x IS [NOT] NULL`** (NVL 제거) | `NVL(x,'-') IS NOT NULL` 은 **항상 참** → 조건이 사라진다. DATE/NUMBER 변수면 타입 오류(ORA-00932/01858)까지 난다 |
 | **숫자 리터럴형** — `NVL(1, NULL)` 등 (동적 SQL 조립) | **손대지 않는다** | 컬럼 참조가 아니라 조립 토큰 — 의미가 다르다 |
 
@@ -67,7 +69,7 @@ ORA-20001: [PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY]
    NVL\s*\(\s*([A-Za-z_][\w$#]*(?:\s*\.\s*[A-Za-z_][\w$#]*)?)\s*,\s*NULL\s*\)
    ```
 2. **분류** — 매치 직후 텍스트가 `IS [NOT] NULL` 이면 **술어**, 아니면 **표현식**.
-3. **치환** — 표현식 `NVL(x,'-')` / 술어 `x`. 주석 줄은 **원문 보존**(이력).
+3. **치환** — 표현식 `NVL(x,'/')`(11-13 정정) / 술어 `x`. 주석 줄은 **원문 보존**(이력).
 4. **검증** — ①잔존 `NVL(x, NULL)` **0건** ②행 수 불변 ③선행 마커 전량 유지
    ④컴파일 VALID ⑤**해당 기능을 실제로 실행**(정적 통과로 끝내지 말 것 — §2 사고가 그렇게 통과했다).
 

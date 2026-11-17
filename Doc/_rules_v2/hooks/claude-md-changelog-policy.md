@@ -39,6 +39,7 @@ CLAUDE.md §15 (변경 이력) 이 작업마다 entry 가 누적되며 비대화
 ```
 
 §15 의 본문 = **위 5 줄 고정**. entry 표 작성 금지.
+(2026-11-13 정정: CLAUDE.md 는 2026-10-12 경량 재구성으로 §15 절이 없어짐 → 현행 위치는 `CLAUDE.md §6` 매핑표의 "§15 변경 이력 → `Doc/_archive/CLAUDE_changelog_YYYY-MM.md` 1-line (본 파일에 직접 추가 금지)" 한 줄. 본 hook 의 "§15" 는 이 pointer 행으로 읽는다 — CLAUDE.md 에 entry 직접 추가 금지·monthly archive 1-line 원칙은 그대로 유효.)
 
 ### §1.2 §15 작성 시 강제 정책
 
@@ -138,6 +139,7 @@ wc -c CLAUDE.md
 ```bash
 sed -n '/## 15\./,/## 16\.\|^## [^0-9]/p' CLAUDE.md | wc -l
 # 기대: ≤ 15 줄 (header + pointer 5 줄 + 여백)
+# (2026-11-13 정정: 현행 CLAUDE.md 에는 '## 15.' 절이 없어 위 명령은 0줄을 낸다. 현행 확인 대상은 CLAUDE.md §6 표의 '§15 변경 이력' 한 줄이며 entry 직접 추가 0건인지 본다)
 ```
 
 ### §5.3 작업 보고 파일 존재

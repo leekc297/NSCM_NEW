@@ -1,7 +1,7 @@
 # DMF0049 — To-Be Fact Pack 요약
 
 - page_key: `demand/etc-sales-reports` · feature: demand · As-is Fact Pack 있음
-- 파일 18 · 엔드포인트 호출 15 (미해결 1, 주석 속 3) · 이벤트 32 · 컴포넌트 사용 22 · 하드코딩 컬럼 2 · 메시지 22
+- 파일 18 · 엔드포인트 호출 15 (미해결 1, 주석 속 3) · 이벤트 32 · 컴포넌트 사용 22 · 하드코딩 컬럼 2 · 메시지 23
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,10 +11,10 @@
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx | component | 176 |
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx | component | 899 |
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx | component | 189 |
-| features/demand/src/pages/etc-sales-reports/etc-sales-reports.constants.ts | constants | 133 |
+| features/demand/src/pages/etc-sales-reports/etc-sales-reports.constants.ts | constants | 137 |
 | features/demand/src/pages/etc-sales-reports/etc-sales-reports.types.ts | types | 34 |
 | features/demand/src/pages/etc-sales-reports/EtcSalesReports.module.scss | style | 148 |
-| features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | page | 664 |
+| features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | page | 673 |
 | features/demand/src/pages/etc-sales-reports/index.ts | index | 2 |
 | features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts | store | 323 |
 | features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.api.ts | api | 86 |
@@ -75,16 +75,16 @@
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet,visible.map,onClose | jsx | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx | 131 |
 | MeasureSelectModal | onApply | <arrow> onGridReset,applyVisibleMeasures,staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx | 163 |
 | VersionModal | onSelect | onVersionSelect | jsx | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx | 184 |
-| EtcSalesReportsForm | onSearch | handleSearch | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 607 |
-| EtcSalesReportsForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 608 |
-| EtcSalesReportsForm | onReportTypeChange | handleReportTypeChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 609 |
-| EtcSalesReportsForm | onPlanResultChange | handlePlanResultChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 610 |
-| EtcSalesReportsForm | onOpenVersionModal | <arrow> setOpenModal | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 611 |
-| EtcSalesReportsGrid | onProjectCellDblClick | handleProjectCellDblClick | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 642 |
-| EtcSalesReportsModals | onClose | <arrow> setOpenModal | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 653 |
-| EtcSalesReportsModals | onGridReset | clearGridOnSettingChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 654 |
-| EtcSalesReportsModals | onProjectSelect | applyPopupSelection | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 656 |
-| EtcSalesReportsModals | onVersionSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 657 |
+| EtcSalesReportsForm | onSearch | handleSearch | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 616 |
+| EtcSalesReportsForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 617 |
+| EtcSalesReportsForm | onReportTypeChange | handleReportTypeChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 618 |
+| EtcSalesReportsForm | onPlanResultChange | handlePlanResultChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 619 |
+| EtcSalesReportsForm | onOpenVersionModal | <arrow> setOpenModal | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 620 |
+| EtcSalesReportsGrid | onProjectCellDblClick | handleProjectCellDblClick | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 651 |
+| EtcSalesReportsModals | onClose | <arrow> setOpenModal | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 662 |
+| EtcSalesReportsModals | onGridReset | clearGridOnSettingChange | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 663 |
+| EtcSalesReportsModals | onProjectSelect | applyPopupSelection | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 665 |
+| EtcSalesReportsModals | onVersionSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 666 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -127,6 +127,7 @@
 | MSG00283 | 1 |
 | MSG00688 | 1 |
 | MSG00096 | 1 |
+| MSG01091 | 1 |
 | MSG00429 | 1 |
 | MSG00002 | 1 |
 | MSG00004 | 1 |
@@ -172,9 +173,9 @@
 | code | s.invalidate(); | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx | 625 |
 | code | syncInsertSet(s, row, [binding, ...clears]); | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx | 627 |
 | code | · clbType(Report Type) `.cs:1530~1539` — InitSpread(); txtSPVersion.Text = null; | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 247 |
-| code | *주석 처리돼 있다**(`//if (GetText(ActiveRowIndex, Action) != "I") return;`) — 즉 AS-IS 는 | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 368 |
-| jsx | `SubTitle.tsx` 가 `{buttonActions.save === false \|\| (<Button .../>)}` 로 그린다. | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 558 |
-| jsx | action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />, | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 580 |
+| code | *주석 처리돼 있다**(`//if (GetText(ActiveRowIndex, Action) != "I") return;`) — 즉 AS-IS 는 | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 377 |
+| jsx | `SubTitle.tsx` 가 `{buttonActions.save === false \|\| (<Button .../>)}` 로 그린다. | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 567 |
+| jsx | action: () => setOpenModal('COLUMN'), iconComponent: <IcGridColumnSetup />, | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx | 589 |
 | code | 가드(if (sc.divisionId) return)에 걸려 자동선택이 발화하지 않고, '40' 권한이 없는 사용자에게도 | features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts | 101 |
 | endpoint | ⭐ master hook §2.3 — Column 동적 fetch (SHEET_COLUMNS 46건 'MDF Reports', hook #113 서버 직접 비교) | features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts | 257 |
 | endpoint | ⭐ master hook §5 — Measure 동적 fetch (SHEET_MEASURE 18건 — Measure Select 팝업 대상) | features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts | 275 |

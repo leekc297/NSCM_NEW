@@ -1,0 +1,85 @@
+{
+ "menu_id": "SSP0014",
+ "asis_id": "SSP0014",
+ "generated": "2026-11-14 20:13:25",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SSP0014_GET_SHIPMENT_MODEL_PIC 대상  와 콤보 원천 8종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 2종: cboDivision, cboOperationGroup",
+  "save_tables": [],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Division*",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboOperationGroup",
+    "label": "Operation Group",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboValidYN",
+    "label": "Valid",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=PlantSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "PlantSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=PlantSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FROM_SITE",
+    "label": "From Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=PlantSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "OPERATION_GROUP",
+    "label": "Operation Group",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "VALID_YN",
+    "label": "Valid*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

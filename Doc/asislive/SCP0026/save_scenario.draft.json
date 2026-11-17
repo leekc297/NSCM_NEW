@@ -1,0 +1,59 @@
+{
+ "id": "SCP0026",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0026_SAVE_DEMAND_GROUPING",
+   "save_sp": "SCP0026_SAVE_DEMAND_GROUPING",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_FINAL_ITEM",
+   "pk": [
+    "DIVISION_ID",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "DEMAND_GROUPING_DAYS",
+    "db_col": "DEMAND_GROUPING_DAYS",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_FINAL_ITEM_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Demand Grouping",
+   "writes": {
+    "SCP_MST_FINAL_ITEM": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0026_SAVE_DEMAND_GROUPING → SP SCP0026_SAVE_DEMAND_GROUPING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_FINAL_ITEM_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "DEMAND_GROUPING_DAYS",
+     "db_col": "DEMAND_GROUPING_DAYS",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "ERROR",
+    "note": "대상 행을 찾지 못함(pick {'col': 'DEMAND_GROUPING_DAYS', 'nonempty': True} · 앞 500행)",
+    "at": "2026-11-13 20:31:08"
+   }
+  }
+ ]
+}

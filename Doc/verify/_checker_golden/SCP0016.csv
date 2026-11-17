@@ -2073,6 +2073,6 @@ EG-b3944d38,K2,SCP0016 사용자 칸 설정 이관 건수 SCP0016,ERROR,"[확인
 V-1416ef80,G4,SCP0016 스냅샷 조회조건 Div 40,NA, | 검사기(smoke 화면 열림(labels)·_verify)가 이 대상을 실행하지 못함 — 수동 검수 대상(작업 원장 W7),2026-11-06 22:16,,,checker
 V-5a0ec62a,K4,SCP0016 스냅샷 버튼 Div 40,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0016\snap\golden\버튼_Div_40.aria.yml@f6ed179b,2026-11-06 22:25,사용자(대화),2026-11-06 22:25,user
 V-16619dc1,A5,SCP0016 스냅샷 헤더 Waterfall Shipment Plan,NA, | 검사기(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5)가 이 대상을 실행하지,2026-11-06 22:16,,,checker
-V-1e39e729,H6,SCP0016 스냅샷 팝업 PJT,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0016\snap\golden\팝업_PJT.aria.yml@4bee962f — ,2026-11-06 22:25,사용자(대화),2026-11-06 22:25,user
+V-1e39e729,H6,SCP0016 스냅샷 팝업 PJT,FAIL,[재실측 스냅샷 팝업] 기준 Doc\verify\SCP0016\snap\golden\팝업_PJT.aria.yml ↔ 실측 Doc\verify\S,2026-11-11 23:57,사용자(대화),2026-11-11 23:57,user
 V-74b29c26,H4,SCP0016 스냅샷 화면샷 1920,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0016\snap\golden\화면샷_1920.png ↔ 실측 C:\Projects\NS,2026-11-07 22:57,사용자(대화),2026-11-07 22:57,user
 V-7753e74e,H4,SCP0016 스냅샷 화면샷 1366,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0016\snap\golden\화면샷_1366.png ↔ 실측 C:\Projects\NS,2026-11-07 22:57,사용자(대화),2026-11-07 22:57,user

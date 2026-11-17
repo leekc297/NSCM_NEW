@@ -1,0 +1,142 @@
+{
+ "id": "DMF0008",
+ "started": "2026-11-12 18:07:47.614",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:07:47.885",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0008_ErpEdiMaster",
+   "form_text": "ERP EDI MASTER 정비",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0008_ErpEdiMaster.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:53.915"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:07:57.305",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0008\\run_20261112_180747\\dump_load.json",
+   "control_count": 41,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "DB : 0.773s, UI : 0.081s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:57.311"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:07:57.624",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0008\\run_20261112_180747\\shots\\DMF0008_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:57.735"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:07:58.216",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:58.988"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:08:28.180",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0008\\run_20261112_180747\\dump_find.json",
+   "control_count": 41,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:08:28.191"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:08:28.344",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0008\\run_20261112_180747\\shots\\DMF0008_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:08:28.466"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:08:28.802",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:08:29.317"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 66,
+  "calls_with_params": 65
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0008_ErpEdiMaster",
+  "form_text": "ERP EDI MASTER 정비",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0008_ErpEdiMaster.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 18:07:47.820",
+ "t_find": "2026-11-12 18:07:57.902",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 41,
+  "layout_items": 17,
+  "grids": 3,
+  "sheets": 4,
+  "header_cols": 99,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 66,
+  "calls_screen": 66,
+  "calls_find": 23,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:13.466",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:13"
+}

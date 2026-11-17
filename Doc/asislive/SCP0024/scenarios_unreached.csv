@@ -1,0 +1,11 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0024-Sf01c28,초기,InitSpreadFixReason,SCP0024_ProductionPlanFix.cs:1085,주석 안에서만 호출,SCP0024_ProductionPlanFix.cs:923,
+SCP0024-S357139,초기,InitSpreadFixReason,SCP0024_ProductionPlanFix.cs:1097,주석 안에서만 호출,SCP0024_ProductionPlanFix.cs:923,
+SCP0024-S90d96f,저장,SaveData,SCP0024_ProductionPlanFix.cs:1012,주석 안에서만 호출,SCP0024_ProductionPlanFix.cs:638,
+SCP0024-S34b25c,저장,SaveData,SCP0024_ProductionPlanFix.cs:1043,주석 안에서만 호출,SCP0024_ProductionPlanFix.cs:638,
+SCP0024-S3fb57b,저장,SaveData,SCP0024_ProductionPlanFix.cs:1052,주석 안에서만 호출,SCP0024_ProductionPlanFix.cs:638,
+SCP0024-Sf28299,저장,SaveData_FixInfo,SCP0024_ProductionPlanFix.cs:1601,호출 없음,,
+SCP0024-S4dc844,저장,SaveData_FixInfo,SCP0024_ProductionPlanFix.cs:1676,호출 없음,,
+SCP0024-S4febdb,저장,SaveData_FixInfo,SCP0024_ProductionPlanFix.cs:1708,호출 없음,,
+SCP0024-S9b3817,저장,SaveData_FixInfo,SCP0024_ProductionPlanFix.cs:1721,호출 없음,,
+SCP0024-Secbd99,저장,SaveData_FixInfo,SCP0024_ProductionPlanFix.cs:1740,호출 없음,,

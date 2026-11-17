@@ -21,7 +21,7 @@
 | features/master/src/pages/sales-future-price/components/modals/salesPriceVersionModalStore.ts | store | 48 |
 | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.module.scss | component | 18 |
 | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | component | 341 |
-| features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | component | 1314 |
+| features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | component | 1321 |
 | features/master/src/pages/sales-future-price/hooks/useSalesFuturePriceExpression.ts | hook | 97 |
 | features/master/src/pages/sales-future-price/hooks/useSalesFuturePriceValidation.ts | hook | 206 |
 | features/master/src/pages/sales-future-price/index.ts | index | 2 |
@@ -123,15 +123,15 @@
 | BucketField | onChange | <arrow> validate.validateBucketChange,set | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 308 |
 | VersionField | onOpenPopup | onVersionOpen | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 314 |
 | SearchOverRangeField | onChange | <arrow> thisWeekMonday,end.setDate,start.getDate,set,yyyymmddOf | jsx | features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx | 320 |
-| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 606 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 760 |
-| g | pastingCell | pastingCellHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 790 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 955 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 956 |
-| g.hostElement | click | clickAsDblHandler | addEventListener | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1002 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1008 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1220 |
-| f | filterApplied | onFilterApplied | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1246 |
+| g | formatItem | formatHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 613 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 767 |
+| g | pastingCell | pastingCellHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 797 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 962 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 963 |
+| g.hostElement | click | clickAsDblHandler | addEventListener | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1009 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1015 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1227 |
+| f | filterApplied | onFilterApplied | addHandler | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 1253 |
 | SalesFuturePriceForm | onSearch | handleSearch | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 891 |
 | SalesFuturePriceForm | onVersionOpen | <arrow> setOpenVersion | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 892 |
 | SalesFuturePriceGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 956 |
@@ -218,10 +218,10 @@
 | VERSION_COLUMNS | MONTHLY_ROLLING_FCST | Monthly Rolling Forecast | 170 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 74 |
 | VERSION_COLUMNS | CREATED_BY | Create By | 110 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 75 |
 | VERSION_COLUMNS | CREATION_DATE | Create Date | 150 |  |  |  | meta-shape | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 76 |
-| mergedColumns | c.key | c.header | c.width ?? 100 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 208 |
-| mergedColumns | sc.colNm | sc.colLblNm \|\| fb?.header \|\| sc.colNm | sc.colWth ?? fb?.width ?? 100 | sc.visible !== false |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 225 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 362 |
-| mainDynamicColumns | b | mmdd | 90 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 434 |
+| mergedColumns | c.key | c.header | c.width ?? 100 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 215 |
+| mergedColumns | sc.colNm | sc.colLblNm \|\| fb?.header \|\| sc.colNm | sc.colWth ?? fb?.width ?? 100 | sc.visible !== false |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 232 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 369 |
+| mainDynamicColumns | b | mmdd | 90 | true |  |  | object | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 441 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -280,7 +280,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: DMF0020(8), DMF0042(6), DMF0082(3), SYS0004(3), COM0008(3), DMF0003(3), DMF0006(2), DMF0043_01(1), DMF0049(1), DMF0004(1), DMF0040(1), DMF0053(1), DMF0005(1)
-- SP/PKG: P_DMF0020_GET_FUTUREPRICE_INFO(6), PKG_DMF0020(6), DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL(5), DMF0020_GET_SCM_MST_FUTURE_PRICE(4), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M(4), PR_GET_SHEET_COLUMN_LIST(3), DMF0073_GET_VERSION_SALESPRICE(2), P_START_YYYYMMDD(2), P_END_YYYYMMDD(2), P_CREATED_BY(2), P_USER_ID(2), DMF0020_GET_SPREAD_TITLE_DATE(2), P_DMF0000_SAVE_EXCHANGE_POPUP_DATA(2), P_OVER_RANGE(2), P_DMF0020_GET_SPREAD_TITLE_DATE(2), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA(1), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP(1), DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP(1), P_DIVISION_ID(1), P_VERSION_TYPE(1), P_DESCRIPTION(1), P_MENU_ID(1), P_MNU_ID(1), PR_GET_SHEET_MEASURE_LIST(1), P_USERINFO(1), DMF0002_GET_TITLESET_POPUP(1), PR_GET_DAY_RANGE(1), DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE(1)
+- SP/PKG: P_DMF0020_GET_FUTUREPRICE_INFO(6), PKG_DMF0020(6), DMF0020_GET_SCM_MST_FUTURE_PRICE(5), DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL(5), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_M(4), PR_GET_SHEET_COLUMN_LIST(3), DMF0073_GET_VERSION_SALESPRICE(2), P_START_YYYYMMDD(2), P_END_YYYYMMDD(2), P_CREATED_BY(2), P_USER_ID(2), DMF0020_GET_SPREAD_TITLE_DATE(2), P_DMF0000_SAVE_EXCHANGE_POPUP_DATA(2), P_OVER_RANGE(2), P_DMF0020_GET_SPREAD_TITLE_DATE(2), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA(1), P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP(1), DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP(1), P_DIVISION_ID(1), P_VERSION_TYPE(1), P_DESCRIPTION(1), P_MENU_ID(1), P_MNU_ID(1), PR_GET_SHEET_MEASURE_LIST(1), P_USERINFO(1), DMF0002_GET_TITLESET_POPUP(1), PR_GET_DAY_RANGE(1), DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -288,7 +288,7 @@
 | code | popVersion.Form_Load(true, "SP", sDivision, sStartDate, sEndDate); | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 24 |
 | code | popVersion.ShowDialog(); | features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx | 25 |
 | code | AS-IS EditButton `if(!isCurVersion) return` 과 동일) + 편집가능(노란) 표시 안 함. 기본 true(호환). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 61 |
-| code | 과거 버전 조회 — 편집 진입 자체를 막는다(AS-IS EditButton `if(!isCurVersion) return`, 안내 없음). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 667 |
+| code | 과거 버전 조회 — 편집 진입 자체를 막는다(AS-IS EditButton `if(!isCurVersion) return`, 안내 없음). | features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx | 674 |
 | code | const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용) | features/master/src/pages/sales-future-price/sales-future-price.constants.ts | 22 |
 | jsx | To-Be: react FlexGrid <Col binding=BASIS_START_DATE2 header=MMDD> + 3단 group header | features/master/src/pages/sales-future-price/sales-future-price.types.ts | 41 |
 | endpoint | ⭐ master hook §2.3 — Column/Measure 동적 fetch (admin SYS0004 UI Category Setup 변경 즉시 반영) | features/master/src/pages/sales-future-price/SalesFuturePrice.tsx | 100 |

@@ -11,7 +11,7 @@
 ### §0.1 모든 파일 공통
 
 - [ ] **anti-simplification**: 단순화 유혹 없는가? 사용자 요구 정확히 충족?
-- [ ] **기존 패턴 참조**: reference 화면 (DMF0004~7) 의 패턴 확인했는가?
+- [ ] **기존 패턴 참조**: reference 화면 (DMF0004~0006 — Tab형 0004 · Panel형 0005 · 단일 grid 0006) 의 패턴 확인했는가?
 - [ ] **i18n key**: LBL/MSG 코드가 `LBL` + 5자리 / `MSG` + 5자리 표준인가? 자유 형식 (예: `LBL_DMF0007_CUSTOMER_FCST`) 사용 금지
 
 ### §0.2 FE `.ts / .tsx`
@@ -22,11 +22,11 @@
 - [ ] **hotkeyConfig manual/upload**: 명시 의무 (기본 `false`)
 - [ ] **DataGrid wrapper**: FlexGrid 직접 import 금지 → `DataGrid` (`@shared/components`)
 - [ ] **EditTracker.storeChange**: cell 변경 시 누락 금지
-- [ ] **CRUD_TYPE 가드**: modal cell 더블클릭 시 `CRUD_TYPE.INSERT` 가드 의무
+- [ ] **CRUD_TYPE 가드**: modal cell 더블클릭 시 `CRUD_TYPE.INSERT` 가드 의무 (2026-11-13 정정: 신규 행에서만 값을 바꿀 수 있는 셀에 한함 — 기존 행에서도 팝업으로 값을 바꾸는 셀(CR-072 · 예 SCP0007 Route Id)은 이 가드 대상이 아니다)
 - [ ] ⭐ **저장 대상 행 판정 = `CRUD_TYPE` 전용** (hook #99 §0, SYS0017 2026-08-06 감사): 자체 상태필드(rowStatus/actionFlag/isNew 류) 신설 금지 — 공통버튼·EditTracker 마킹과 단절 → 저장 0건
 - [ ] ⭐ **`apiClient.post`(call-proc) 직접 호출 = 결과 판정 동반** (screen-completion-gate §1-3): `if (res.status >= 400 || Number(res.data.code))` — 인터셉터가 500/403 도 resolve (정본 business-plan.api.ts:71)
 - [ ] ⭐ **공용 컴포넌트 상호배타 prop 계약 확인** (screen-runtime-pitfalls **P9** §8C.4 표, SYS0017 감사): 낯선 prop 지정 전 소스 조건 분기 확인 — `CustomDialog customContentArea` 지정 = 공통 OK/Cancel footer 미렌더 → 자체 footer 구현 의무
-- [ ] **⭐ type-check-error-patterns** (`./type-check-error-patterns.md` §1~§5 17 패턴 self-check): `useTabProcQuery/useProcMutation` `tabId` 필수 / Modal `callFromCell` 필수 / `as XxxRow[]` direct cast 금지 (`as unknown as` 의무) / `DialogNavigationSize` number literal 만 / index sig `[key:string]: WijmoPrimitive` 의무 (optional `?: string` 금지)
+- [ ] **⭐ type-check-error-patterns** (`./type-check-error-patterns.md` §1~§5 17 패턴 self-check): `useTabProcQuery/useProcMutation` `tabId` 필수 / Modal `callFromCell` 필수 / `as XxxRow[]` direct cast 금지 — 타입은 `procedures.d.ts` 에서 맞춘다 (2026-11-13 정정: "`as unknown as` 의무" 삭제 — `as unknown as` 는 쓰지 않는다 · 실행 hook `check-fe-import` 경고 대상) / `DialogNavigationSize` number literal 만 / index sig `[key:string]: WijmoPrimitive` 의무 (optional `?: string` 금지)
 
 ### §0.3 BE `.java`
 

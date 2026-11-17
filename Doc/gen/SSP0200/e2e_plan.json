@@ -1,0 +1,973 @@
+{
+  "menuId": "SSP0200",
+  "page": "ShipmentChangeRequestPlan",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-change-request-plan",
+  "asisName": "ShipmentChangeRequest",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbDivision_ID"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite"
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboStatus"
+    },
+    {
+      "key": "singleProcess",
+      "label": "Single Process",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSingleProcess"
+    },
+    {
+      "key": "date",
+      "label": "Date",
+      "lbl": "LBL00069",
+      "kind": "single",
+      "component": "DatePickerCalendar",
+      "comboId": "",
+      "popup": false,
+      "asis": "dtDate"
+    },
+    {
+      "key": "requestNo",
+      "label": "Request No",
+      "lbl": "LBL00744",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestNo"
+    },
+    {
+      "key": "period",
+      "label": "Shipment Date",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "soNo",
+      "label": "SO No",
+      "lbl": "LBL01111",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtSoNo"
+    },
+    {
+      "key": "confirmId",
+      "label": "Confirm Id",
+      "lbl": "LBL01063",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtConfirmId"
+    },
+    {
+      "key": "request",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequest"
+    },
+    {
+      "key": "changeType",
+      "label": "Change Type",
+      "lbl": "LBL01061",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboChangeType"
+    },
+    {
+      "key": "requestDeptName",
+      "label": "Dept Name",
+      "lbl": "LBL01071",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestDeptName"
+    },
+    {
+      "key": "approval",
+      "label": "Approval",
+      "lbl": "LBL01052",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtApproval"
+    },
+    {
+      "key": "itemIds",
+      "label": "Item Id",
+      "lbl": "LBL01142",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "title",
+      "label": "Title",
+      "lbl": "LBL01125",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtTitle"
+    },
+    {
+      "key": "requestor",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestor"
+    },
+    {
+      "key": "changeReason",
+      "label": "Change Reason",
+      "lbl": "LBL01060",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboChangeReason"
+    },
+    {
+      "key": "reasonDetail",
+      "label": "Reason Detail",
+      "lbl": "LBL01104",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtReasonDetail"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "insertMultiple",
+      "label": "Insert(Multi)",
+      "lbl": "LBL01085",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnInsertMultiple"
+    },
+    {
+      "key": "new",
+      "label": "New",
+      "lbl": "LBL00770",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.insert",
+      "asis": "btnNew"
+    },
+    {
+      "key": "del",
+      "label": "Delete",
+      "lbl": "LBL00622",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.delete",
+      "asis": "btnDel"
+    },
+    {
+      "key": "cancel",
+      "label": "Cancel",
+      "lbl": "LBL00107",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnCancel"
+    },
+    {
+      "key": "save",
+      "label": "Save Draft",
+      "lbl": "LBL01112",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.save",
+      "asis": "btnSave"
+    },
+    {
+      "key": "add",
+      "label": "Add Date",
+      "lbl": "LBL01050",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.insert",
+      "asis": "btnAdd"
+    },
+    {
+      "key": "changeRe2",
+      "label": "Request Complete",
+      "lbl": "LBL01105",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnChangeRe2"
+    },
+    {
+      "key": "approvalUser",
+      "label": "Approval User",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnApprovalUser"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Change Request",
+      "key": "CHANGE_REQUEST",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "END_CUSTOMER",
+        "ERP_ATTR1",
+        "ERP_ATTR2",
+        "ERP_ATTR3",
+        "A_COUNTRY",
+        "A_PORT_CODE",
+        "BOD_ID",
+        "CHANGE_REQ_NO",
+        "CHK",
+        "CONFIRM_ID",
+        "CUSTOMER_LT",
+        "D_COUNTRY",
+        "D_PORT_CODE",
+        "DIVISION_ID",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "ERP_SO_NO",
+        "ETA",
+        "ETD",
+        "FCST_TYPE",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LT_DAY",
+        "NEW_A_COUNTRY",
+        "NEW_A_PORT_CODE",
+        "NEW_BASE_CONFIRM_YN",
+        "NEW_BOD_ID",
+        "NEW_CUSTOMER_LT",
+        "NEW_D_COUNTRY",
+        "NEW_D_PORT_CODE",
+        "NEW_ETA",
+        "NEW_ETD",
+        "NEW_INCOTERMS",
+        "NEW_LT_DAY",
+        "NEW_ROUTE_ID",
+        "NEW_SHIPMENT_CONFIRM_QTY",
+        "NEW_SHIPMENT_DATE",
+        "NEW_TO_CITY",
+        "NEW_TO_COUNTRY",
+        "NEW_TRANSPORT_MODE",
+        "NEW_YN",
+        "NICK_NAME",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PLAN_CONFIRM_ID",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "REMARKS",
+        "REMARKS2",
+        "REMARKS3",
+        "ROUTE_ID",
+        "SHIPMENT_CONFIRM_QTY",
+        "SHIPMENT_DATE",
+        "TO_CITY",
+        "TO_COUNTRY",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TRANSPORT_MODE"
+      ],
+      "labels": [
+        "",
+        "",
+        "",
+        "",
+        "A Country",
+        "A Port",
+        "BOD",
+        "Change Req.No",
+        "ALL",
+        "Confirm id",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "division",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "SO No",
+        "ETA",
+        "ETD",
+        "FCST Type",
+        "From Site",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "L/T(Day)",
+        "A Country",
+        "A Port",
+        "NEW_BASE_CONFIRM_YN",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "new incoterms",
+        "L/T(Day)",
+        "Route",
+        "Qty*",
+        "Shipment Date*",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "new_yn",
+        "Nick Name",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PLAN_CONFIRM_ID",
+        "Project Code",
+        "Project Name",
+        "Remarks",
+        "Building",
+        "Customer requirement",
+        "Route",
+        "Qty",
+        "Shipment Date",
+        "To City",
+        "To Country",
+        "To Site",
+        "To Site",
+        "Trans Mode"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Change Request",
+      "key": "SHIPMENT_CHANGE_REQUEST",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CHK",
+        "ATTRIBUTE10",
+        "BOD_ID",
+        "CHANGE_REASON_CODE",
+        "CHANGE_REASON_DETAIL",
+        "CHANGE_REQ_NO",
+        "CHANGE_TYPE",
+        "CHECK_NEED_YN",
+        "CONFIRM_ID",
+        "DIVISION_ID",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "END_CUSTOMER",
+        "ERP_ATTR1",
+        "ERP_ATTR2",
+        "ERP_ATTR3",
+        "ERP_SO_NO",
+        "ERP_STATUS",
+        "ETA",
+        "ETD",
+        "Expected_Shipping_Date",
+        "FCST_TYPE",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LT_DAY",
+        "MODEL_USER",
+        "MTK_OWNER",
+        "NEW_A_COUNTRY",
+        "NEW_A_PORT_CODE",
+        "NEW_BOD_ID",
+        "NEW_CUSTOMER_LT",
+        "NEW_D_COUNTRY",
+        "NEW_D_PORT_CODE",
+        "NEW_ETA",
+        "NEW_ETD",
+        "NEW_INCOTERMS",
+        "NEW_LT_DAY",
+        "NEW_ROUTE_ID",
+        "NEW_SHIPMENT_DATE",
+        "NEW_TO_CITY",
+        "NEW_TO_COUNTRY",
+        "NEW_TRANSPORT_MODE",
+        "NICK_NAME",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "REMARKS",
+        "REMARKS2",
+        "REMARKS3",
+        "REQUEST_DATE",
+        "REQUESTOR",
+        "SHIPMENT_CONFIRM_QTY",
+        "SHIPMENT_DATE",
+        "SHIPMENT_STATUS",
+        "SHIPTO_DESCRIPTION",
+        "SOLDTO_DESCRIPTION",
+        "TEAM",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TO_SITE_SHIPTO_CODE",
+        "TO_SITE_SOLDTO_CODE",
+        "TRANSPORT_MODE",
+        "UPDATED_BY",
+        "UPDATED_DATE"
+      ],
+      "labels": [
+        "",
+        "ATTRIBUTE10",
+        "bod_id",
+        "Change Reason",
+        "Reason Detail",
+        "Change Request No",
+        "CHANGE_TYPE",
+        "Checked",
+        "Confirm/Plan ID",
+        "Div",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "End Customer*",
+        "Consignee Name",
+        "Contact Point",
+        "Lot",
+        "SO No",
+        "erp_status",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "FCST Type*",
+        "From Site ID",
+        "From Site*",
+        "Incoterms*",
+        "Model*",
+        "L/T(Day)",
+        "Model PIC",
+        "MKT Owner",
+        "A Country",
+        "A Port",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "new incoterms",
+        "L/T(Day)",
+        "Route",
+        "Shipment Date",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "Nick Name",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "Project Code*",
+        "Project Name",
+        "Remarks",
+        "Building",
+        "Customer Requirement",
+        "Request Date",
+        "Shipment Requestor",
+        "Shipment Qty*",
+        "Shipment Date*",
+        "Status",
+        "Ship To Party",
+        "Sold To Party",
+        "Team",
+        "To Site ID",
+        "To Site*",
+        "Ship to",
+        "Sold to",
+        "Trans Mode*",
+        "Updated By",
+        "Updated Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SSP0200_GET_CHANGE_REQ_NO",
+      "sheet": "Change Request",
+      "btn": "CHANGE_REQ_NO",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_CHANGE_REQ_NO",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_SAVE_SHIPMENT_CONFIRM_NEW",
+      "sheet": "Change Request",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_CONFIRM_NEW",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+      "sheet": "Change Request",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click",
+        "event:btnCancel.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N",
+      "sheet": "Change Request",
+      "btn": "SHIPMENT_CHANGE_REQUEST_N",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Shipment Change Request",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click",
+        "event:btnCancel.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+      "sheet": "Change Request",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click"
+      ]
+    },
+    {
+      "sp": "SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Change Request",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "event:btnCancel.Click",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+      "sheet": "Change Request",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SCM0001_GET_SCP_DAY_PERIOD",
+      "entries": [
+        "event:this.Load",
+        "event:cboChangeType.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Change Request",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Change Request",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_STATUS",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_ERP_SO_NO_CNT",
+      "sheet": "Change Request",
+      "btn": "ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_ERP_SO_NO_CNT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Change Request",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Change Request",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE",
+      "sheet": "Change Request",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Change Request",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0200.P_",
+      "entries": []
+    },
+    {
+      "sp": "SSP0026_GET_BOD_ITEM",
+      "sheet": "Change Request",
+      "btn": "BOD_ITEM",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0026_GET_BOD_ITEM",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_ITEM_FROM_BOD",
+      "sheet": "Change Request",
+      "btn": "ITEM_FROM_BOD",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_ITEM_FROM_BOD",
+      "entries": [
+        "event:this.btnInsertMultiple.Click",
+        "event:dsdm.Changed"
+      ]
+    },
+    {
+      "sp": "SSP0200_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Change Request",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Change Request",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0200.P_",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision_ID.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Change Request",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0200.P_",
+      "entries": [
+        "event:this.btnInsertMultiple.Click",
+        "event:btnNew.Click",
+        "event:this.spdMain.ComboSelChange",
+        "button:InsertButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleInsertMultiple",
+      "target": "this.btnInsertMultiple",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+        "SSP.SSP0200_GET_ITEM_FROM_BOD"
+      ]
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+        "SSP.SSP0200_GET_SHIPMENT_DIVISION",
+        "SSP.SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE"
+      ]
+    },
+    {
+      "name": "handleDivisionID",
+      "target": "clbDivision_ID",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleApprovalUser",
+      "target": "btnApprovalUser",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleshtMainChange",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_GET_ITEM_FROM_BOD"
+      ]
+    },
+    {
+      "name": "handleSave",
+      "target": "btnSave",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+        "SSP.SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+        "SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST"
+      ]
+    },
+    {
+      "name": "handleChangeRe",
+      "target": "btnChangeRe2",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+        "SSP.SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+        "SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST"
+      ]
+    },
+    {
+      "name": "handleCancel",
+      "target": "btnCancel",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+        "SSP.SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+        "SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST"
+      ]
+    },
+    {
+      "name": "handleNew",
+      "target": "btnNew",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION"
+      ]
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=TransMode]"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainEditChange",
+      "target": "this.spdMain",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "this.spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": [
+        "SSP.SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+        "SSP.SSP0026_GET_BOD_ITEM",
+        "biz:CommonData.CommonDataList [code=TransMode]"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboChangeType",
+      "target": "cboChangeType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD"
+      ]
+    },
+    {
+      "name": "handleSpdMainCursor",
+      "target": "spdMain",
+      "event": "CursorChanged",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

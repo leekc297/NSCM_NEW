@@ -1,0 +1,50 @@
+{
+ "id": "SCP0115",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+   "save_sp": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+   "status": "키 일부 미대응",
+   "table": "SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+   "pk": [
+    "PLAN_START_YYYYMMDD",
+    "REQUEST_NO"
+   ],
+   "match": {
+    "REQUEST_NO": "REQUEST_NO"
+   },
+   "unmatched_pk": [
+    "PLAN_START_YYYYMMDD"
+   ],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Policy Inv Management",
+   "writes": {
+    "SCP_ANL_LGTM_PCY_INV_MGMT_PLAN": [
+     "MERGE INTO"
+    ],
+    "WHEN": [
+     "DELETE"
+    ]
+   },
+   "basis": "foxml SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN → SP SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PLAN_START_YYYYMMDD": "p_plan_start_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

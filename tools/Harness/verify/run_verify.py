@@ -17,6 +17,19 @@
   3' 검증 엔진(E2E)   Doc/e2e/specs/_trace.spec.ts @trace — TRACE 행 중 엔진 구현 검사(A10·X-REOPEN·K4·G6·C1·C4·D6)
   4' 추적·구현 엔진   mapping_trace.py(재계산) · impl_engine.py → work_ledger.md(작업 원장 — PASS·NA 외 전부 할 일 W1~W9)
   5 문서              make_verify_docs.py → 정합검증서 + 보완대상목록 xlsx (보완 적용은 하지 않는다 — 목록 확인 후 🛠️/🧯/🩹)
+                      + make_ui_test_sheet.py → Doc/UI_TEST(SCP&SSP) 화면별 테스트 Excel(조치 필요 행 덧붙임 · SCP·SSP만 · 2026-11-16)
+
+현재 실행 단계(2026-11-13 기준 · 아래 STAGES 와 같은 순서 — 위 목록은 초기 설명이라 뒤에 붙은 단계가 없다. 도구별 설명 = tools/Harness/README.md '도구 등록부'):
+  pre    prereq.py(+ db_orphan_sessions.py --ensure-watch 보조)
+  facts  facts_defcols → facts_gridcols·dyncols·cellclear·cellrules·lockrules·combosrc·combovalues·sortrules·prereq → facts_popup_meta → facts_append_tables → gen_expect → scenario_env → ledger   (15)
+  static syn_check → syn_fix(차단 객체 있을 때) → sort_check → align_check → popup_args_check → popup_data_check → f10_check → DbConn/golden.py → b7_check → mapping_trace --to-ledger   (10)
+  e2e    (gen_cleanup_spec — 정의 없을 때) → Playwright _verify·_trace·_snap
+  eg     eg_chain.py(팝업·권한 검사기 — tier all/slow)   (1)
+  diff   sqllog_calls --from-calls → gen_param_map → diff_verify → diff_ingest → asis_live_auto → tools/AsisLive/asis_live_screen.py --after-basic → asis_live_ingest   (7 · --static/--only 는 건너뜀)
+  post   combo_oracle → db_orphan_sessions --kill → restore_touched → cleanup_marker → save_audit → sp_branch_check → a1_live → asis_live_rows → sp_dml_check → i18n_static → lookup_check → sort_ci_check
+         → i18n_lang_check → measure_sweep → db_ref_check → display_sort_check → all_cols_check → combo_live_check → measure_by_site_check → bg_style_check → master_sweep → titleset_check
+         → eg_ingest → oracle_class --check → judge → mapping_trace --to-ledger → eg_ingest → judge → mapping_trace → impl_engine → coverage   (31)
+  docs   make_verify_docs → regress --harvest → checker_regress → precision   (4 · --static 은 static_gate 1)
 """
 import argparse
 import time
@@ -38,12 +51,12 @@ E2E = os.path.join(ROOT, 'tools', 'E2E')
 #   세부 수(M)는 아래 STAGES 의 예정 수 — run() 을 추가·삭제하면 여기도 고친다(어긋나면 단계 끝에 [WARN] 으로 알린다 · 판정 영향 없음).
 #   사전 작업의 세부는 prereq.py 가 항목마다 '[세부 j/M]' 을 낸다(M=None). E2E 단계의 세부 = Playwright 테스트(M=0).
 STAGES = [('pre', '사전 작업(DB·Fact Pack·메타·스펙·smoke)', None),
-          ('facts', 'AS-IS 사실 보강·자동 기대 행·검증 원장', 11),
+          ('facts', 'AS-IS 사실 보강·자동 기대 행·검증 원장', 15),  # 2026-11-13 점검: 실제 run() 15(로그 '실행 15 ≠ 예정 14' 29회) ·  # +facts_defcols(2026-11-12 T266)  # +facts_prereq(2026-11-09 T176) · +facts_popup_meta(2026-11-10 T178)
           ('static', '정적 검사·골든·대조표 추적', 10),
           ('e2e', 'E2E 검증엔진(@verify·@trace)', 0),
           ('eg', 'E2E 팝업·권한 검사기(eg_chain)', 1),
-          ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 2),  # 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
-          ('post', '사후 검사·판정·추적', 29),  # +oracle_class --check(2026-11-06)
+          ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 7),  # +asis_live_screen(2026-11-13 · 6 → 7)  # +asis_live_auto(2026-11-13)  # +asis_live_ingest(2026-11-12 · 실제 run() 4 + 1 = 5 — 종전 2 는 sqllog_calls·gen_param_map 추가 때 안 고쳐진 값) · 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
+          ('post', '사후 검사·판정·추적', 31),  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
           ('docs', '문서 생성·회귀 점검', 4)]  # +precision.py(2026-11-06)
 _PG = {'i': 0, 'j': 0, 'm': 0}
 
@@ -161,6 +174,19 @@ def main():
     ap.add_argument('--only', default='', help="2026-11-08 (b) 부분 재판정 — 쉼표 구분 규칙 ID(예 G9,F2). 그 규칙을 판정하는 @verify/@trace 테스트만 다시 실행하고(이전 E2E 결과는 보존·행 단위 병합) 판정·문서를 갱신한다. 팝업·권한(eg)·차등(diff)은 건너뜀 — 보완 뒤 전체 체인 재실행 대신 사용")
     a = ap.parse_args()
     mid = a.menu_id.upper()  # (run_mode 기록이 mid 를 먼저 쓴다 — 2026-11-08 12:2x NameError 수정)
+    # 2026-11-11 EN-00 엔진 변경 게이트: 검증 도구가 마지막 전체 통과 뒤 바뀌었으면 전체 검사(tsc·selftest), 아니면 빠른 검사 —
+    #   미정의 이름·문법 오류·제어 문자·스펙 파일 급감을 E2E 를 띄우기 전에 잡는다(11-10 --only 3건이 E2E 직전 NameError 로 중단 · T220).
+    #   실패하면 실행하지 않는다(run_mode·결과 봉투 기록 전에 검사). 우회는 VERIFY_SKIP_SELFCHECK=1(사유를 로그에 남김)
+    _sc = subprocess.run([sys.executable, os.path.join(HERE, 'engine_selfcheck.py'), '--if-changed'], capture_output=True, text=True, encoding='utf-8', errors='replace')
+    print((_sc.stdout or '').rstrip())
+    if _sc.returncode:
+        if os.environ.get('VERIFY_SKIP_SELFCHECK') == '1':
+            print('[WARN] 엔진 변경 게이트 실패를 VERIFY_SKIP_SELFCHECK=1 로 우회 — 이번 결과는 검증 도구 결함의 영향을 받을 수 있음')
+        else:
+            print('[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)')
+            global GATE_BLOCKED
+            GATE_BLOCKED = True  # 게이트 차단은 화면에 대한 판정이 아니다 — run_mode·결과 봉투를 덮어쓰지 않는다(11-11 SSP0005 봉투 덮어쓰기 사고)
+            return 3
     if a.static:
         a.skip_e2e = True
     only = {x.strip().upper() for x in a.only.split(',') if x.strip()}
@@ -209,6 +235,11 @@ def main():
     # 0 사전 작업 점검·선수행(2026-10-28 사용자 요청) — Fact Pack·TO-BE 메타·TO-BE 인덱스·골든 케이스·E2E plan/스펙·smoke 가
     #   없거나 오래되면 생산자를 먼저 실행한다. 대조표·조회조건 기준표처럼 사람이 만드는 것은 MANUAL 로 prereq.json·실행 로그에만 남긴다(정합검증서 미포함)
     stage('pre')
+    # 2026-11-12 T253(사용자 상시 지시 — DB 실행 5분 이상 알림 · 30분 이상 종료): 감시가 없으면 띄운다. 세부 수에 넣지 않는 보조 호출(실패해도 체인 계속)
+    try:
+        subprocess.run([py, os.path.join(HERE, 'db_orphan_sessions.py'), '--ensure-watch'], timeout=90)
+    except Exception as e_w:
+        print(f'[WARN] DB 감시 기동 실패(미기동): {str(e_w)[:120]}')
     rc_pre = run([py, os.path.join(HERE, 'prereq.py'), mid, '--asis', asis] + (['--skip-e2e'] if a.skip_e2e else []))
     if rc_pre:
         # 2026-10-30: E2E plan·스펙·smoke 가 없으면 FAIL(종전엔 MANUAL/ERROR 로 기록만 하고 진행 → SCP0111 smoke 근거 규칙 전부 미측정 · T13). rc 5 = 서버/잠금(환경)
@@ -216,9 +247,16 @@ def main():
         return 5 if rc_pre == 5 else 6
     # 순서: gridcols(프레임워크 기본값 CSV 기록) → dyncols(기본값 인용) → cellrules/lockrules(동적 패밀리 키 공유) — 2026-10-30 WP1/WP7
     stage('facts')
-    for s in ('facts_gridcols.py', 'facts_dyncols.py', 'facts_cellclear.py', 'facts_cellrules.py', 'facts_lockrules.py', 'facts_combosrc.py', 'facts_combovalues.py', 'facts_sortrules.py'):  # combovalues = AS-IS 원천 후보 값(2026-10-28 C2 분기 후보 대조)
+    # 2026-11-12 T266(C1-27): 사실 파일의 대소문자 혼합 컬럼 상수 이름(DefColumns.EditFlag·Division·Project …)을 선언 값(EDIT_FLAG·DIVISION_ID·PROJECT_CODE)으로 — 뒤 도구 25개·검증 스펙이 읽기 전에 한 번(멱등 · 실패해도 계속)
+    run([py, os.path.join(HERE, 'facts_defcols.py'), asis])
+    for s in ('facts_gridcols.py', 'facts_dyncols.py', 'facts_cellclear.py', 'facts_cellrules.py', 'facts_lockrules.py', 'facts_combosrc.py', 'facts_combovalues.py', 'facts_sortrules.py', 'facts_prereq.py'):  # facts_prereq = 선행 칸(2026-11-09 T176) · combovalues = AS-IS 원천 후보 값(2026-10-28 C2 분기 후보 대조)
         if run([py, os.path.join(HERE, s), asis]):
             return 6
+    # 2026-11-10 T178: TO-BE 메타 셀 팝업 컬럼(CR-100 대상)을 E2E 전에 갱신 — 종전엔 eg 단계(E2E 뒤)에서만 만들어 첫 실행 @verify 가 빈 목록을 읽었다.
+    #   읽기 전용 DB 조회 · 실패해도 중단하지 않는다(eg 단계가 다시 만든다 · 없으면 CR-100 미적용 = 종전 판정)
+    run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
+    # 2026-11-10 T212: AS-IS 저장 SP 가 저장마다 새 키로 행을 쌓는 표(append_tables.csv) — F7 '2회 저장 행 수' 가 AS-IS 동작을 결함으로 보지 않게. 실패해도 중단하지 않음(없으면 종전 판정)
+    run([py, '-I', os.path.join(HERE, 'facts_append_tables.py'), asis])
     # 2026-11-04 W8-2 ②: 자동 기대 행 재생성 — 방금 보강한 AS-IS 사실·TO-BE 메타로 Doc/verify/<ID>/auto_expect/ 를 다시 만든다(손 행 불변).
     #   자동 행은 기본으로 원장·E2E 가 읽는다(2026-11-05 사용자 지시) → 생성 실패 시 낡은 행 측정 방지로 중단 · VERIFY_AUTO=0(끔)이면 경고만.
     if run([py, os.path.join(HERE, 'gen_expect.py'), mid, '--asis', asis]):
@@ -381,7 +419,7 @@ def main():
             if ns >= 14000:
                 print(f'[FAIL] 동적 포트 고갈 의심 — TCP {ns}개. E2E 를 시작하지 않는다. 점유 프로세스 확인(Get-NetTCPConnection · 사내 보안 에이전트는 임의 종료 금지)', flush=True)
                 return 5
-            env = dict(os.environ, VERIFY_ID=mid, E2E_RESULTS=os.path.join(out_dir, 'e2e'),
+            env = dict(os.environ, VERIFY_RUN_ID=time.strftime('%Y%m%d%H%M%S'), VERIFY_ID=mid, E2E_RESULTS=os.path.join(out_dir, 'e2e'),
                        PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(out_dir, 'e2e', 'results.json'))
             # 2026-11-06 플랜 3-5: 스냅샷 형상 검사(_snap.spec.ts @snap)를 같은 실행에(알파벳 순 _snap → _trace → _verify · 잠금·입장 동일)
             tier_args = ['--grep', 'W4c'] if a.tier == 'slow' else (['--grep', '@verify|@trace|@snap', '--grep-invert', 'W4c'] if a.tier == 'fast' else ['--grep', '@verify|@trace|@snap'])
@@ -395,6 +433,26 @@ def main():
                 titles += [pre for rn, pre, suf, v in own.get('_tmpl', []) if (v.get('rules') or set()) & only and pre]
                 # 제목 토큰 보강 — 본문이 rule_id 비교 없이 target 정규식으로 행을 고르는 테스트(저장 세부 'F1·F6' · CRUD '(F1·F2·F4·F6)')는 제목의 규칙 토큰으로 잡는다
                 titles += [k[1] for k in own if isinstance(k, tuple) and any(_re.search(rf'(?<![A-Z0-9]){_re.escape(r_)}(?![A-Z0-9])', k[1]) for r_ in only)]
+                # 2026-11-10 T220(SSP0060 --only F7 이 '저장 세부' 테스트를 못 고름): 이 규칙의 원장 행 target 이 테스트 본문의 target 정규식과 맞으면 그 테스트도 재실행
+                try:
+                    csv.field_size_limit(10 ** 8)
+                    _tg = [x.get('target') or '' for x in csv.DictReader(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'verify_ledger.csv'), encoding='utf-8-sig')) if (x.get('rule_id') or '').upper() in only]
+                    for k, v in own.items():
+                        if not isinstance(k, tuple) or k[1] in titles: continue
+                        for rx_ in v.get('target_res') or []:
+                            try:
+                                if any(_re.search(rx_, tg_) for tg_ in _tg): titles.append(k[1]); break
+                            except _re.error:
+                                continue
+                except OSError:
+                    pass
+                # 2026-11-09 T176(SSP0025 V-180d66f3 재판정 누락): 시나리오 행(target '… 시나리오 <이름>')은 '문서 시나리오' 테스트가 target 으로 고르므로
+                #   규칙 소유 분석에 안 잡혀 --only 로 다시 돌지 않았다(이전 결과 잔존) → 그 규칙의 시나리오 행이 있으면 테스트를 넣고 SCN_ONLY 로 그 시나리오만 실행
+                _lp = os.path.join(ROOT, 'Doc', 'verify', mid, 'verify_ledger.csv')
+                _scn = sorted({r_['target'].partition(' 시나리오 ')[2] for r_ in csv.DictReader(open(_lp, encoding='utf-8-sig')) if (r_.get('rule_id') or '').upper() in only and ' 시나리오 ' in (r_.get('target') or '') and r_['target'].partition(' 시나리오 ')[2]}) if os.path.exists(_lp) else []
+                if _scn:
+                    titles.append('문서 시나리오'); env['SCN_ONLY'] = '^(?:' + '|'.join(_re.escape(n_) for n_ in _scn) + ')$'
+                    print(f"[INFO] --only 시나리오 행 {len(_scn)}건 포함(SCN_ONLY): " + ' | '.join(_scn[:4])[:300], flush=True)
                 snap_rules = {'H4', 'A5', 'G4', 'K4', 'H6'} & only
                 smoke_rules = {'SC1', 'SC2', 'G3', 'K1', 'K2', 'K4', 'H7', 'J1', 'J2', 'C1', 'I2', 'A5'} & only  # smoke/auth 요약으로 판정되는 규칙 — smoke 스펙을 다시 돌린다(prereq 는 최신이면 건너뛰므로)
                 if smoke_rules:
@@ -410,6 +468,14 @@ def main():
                 grep = '|'.join(_re.escape(t) for t in sorted(set(titles))) + ('|@snap' if snap_rules else '')
                 tier_args = ['--grep', grep]; spec_files = ['_verify', '_trace'] + (['_snap'] if snap_rules else [])
                 print(f"[INFO] --only {','.join(sorted(only))} → 테스트 {len(set(titles))}개{' + @snap' if snap_rules else ''} 만 재실행(이전 E2E 결과는 행 단위 병합 보존): " + ' | '.join(sorted(set(titles))[:6])[:400], flush=True)
+            # 2026-11-16 폼 저장형 화면(Doc/verify/<ID>/form_scenarios.json): E2E 앞에서 검증용 행을 화면 저장으로 만들고(@formsetup) 끝에서 해제한다(@formteardown · finally)
+            #   결과 파일은 본 E2E 의 results.json 을 덮지 않도록 별도 폴더(formfix)에 쓴다. 정리는 E2E 가 실패해도 실행한다(검증용 행을 남기지 않는다)
+            _form = os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'form_scenarios.json'))
+            _fenv = dict(env); _fenv['E2E_RESULTS'] = os.path.join(os.path.dirname(res_json), 'formfix')
+            if _form:
+                _frc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_formfix', '--grep', '@formsetup', '--workers', '1', '--retries', '0', '--reporter=list'], env=_fenv, cwd=E2E)
+                print(f'[INFO] 폼 저장형 준비(@formsetup) rc={_frc} — 결과 Doc/verify/{mid}/form_scen_results.json', flush=True)
+                _form_started = True
             rc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', *spec_files, *tier_args, '--workers', '1',
                       '--reporter=list,json'], env=env, cwd=E2E)
             if not os.path.exists(res_json):
@@ -424,6 +490,13 @@ def main():
             else:
                 stage('eg', '건너뜀(--tier fast — 팝업·권한 검사기는 slow/all 에서만)', m=0)
         finally:
+            if locals().get('_form_started'):
+                try:
+                    _frc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_formfix', '--grep', '@formteardown', '--workers', '1', '--retries', '0', '--reporter=list'], env=_fenv, cwd=E2E)
+                    print(f'[INFO] 폼 저장형 정리(@formteardown) rc={_frc}', flush=True)
+                    if _frc != 0: print(f'[ERROR] 폼 저장형 정리 실패(rc={_frc}) — 검증용 행이 남았는지 화면에서 확인: {mid}', flush=True)
+                except Exception as _e:
+                    print(f'[ERROR] 폼 저장형 정리 실행 오류: {_e}', flush=True)
             subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
             if slot is not None:
                 subprocess.run(['node', 'runlock.js', 'release', 'slot', str(slot)], cwd=E2E, capture_output=True)
@@ -437,10 +510,31 @@ def main():
     #   AS-IS 는 readOnly 접속 · TO-BE 는 rollback · GET 만. --skip-e2e 여도 실행(포착이 없으면 SKIP 행). 결과는 원장 ASIS_DIFF 행 + e2e_results 로 반입(판정은 judge).
     if a.static or only:
         stage('diff', '건너뜀(--static — AS-IS SP 실행·포착 인자 없음)' if a.static else f"건너뜀(--only {','.join(sorted(only))} — 차등 검증은 전체 실행에서만)", m=0)
+        # 2026-11-12 T257(SCP0111 11:14 전체 → 11:38 --only: 원장 1,813 → 1,722행 · ASIS_DIFF 84행(PASS 55 · 판정필요 17 · NA 12) 소실 → 증명됨 49 → 46):
+        #   원장은 실행마다 다시 만들어지는데 차등 검증 단계를 건너뛰면 그 행을 다시 넣는 반입도 같이 빠졌다 → 직전 전체 실행의 대조 결과(diff_summary.csv)가 있으면 반입만 다시 한다(실행·대조는 하지 않음)
+        if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'diff', 'diff_summary.csv')):
+            try:
+                subprocess.run([py, os.path.join(HERE, 'diff_ingest.py'), mid], timeout=300)
+            except Exception as e_d:
+                print(f'[WARN] 직전 차등 검증 결과 반입 실패(그 행은 이번 판에 빠짐): {str(e_d)[:120]}')
     else:
         stage('diff')
+        # 2026-11-11 EN-02: 짝·인자 대응표(sp_pair.csv·param_map.csv)를 이 화면분으로 먼저 만든다 — 종전엔 체인에 없어 손으로 돌린 6화면만 대조되고
+        #   나머지는 전부 'sp_pair.csv 에 AS-IS 짝 없음' SKIP 이었다(20화면 diff 395행 중 SKIP 299 — 사유 전부 이것 · 실측 11-11 14:4x)
+        run([py, os.path.join(HERE, 'sqllog_calls.py'), mid, '--from-calls'])  # 2026-11-11 T235: E2E 시각대의 사내 호출 로그 → 세션 인자·저장 본문(없으면 rc 3 = 미측정, 체인 계속)
+        run([py, os.path.join(HERE, 'gen_param_map.py'), mid])
         run([py, os.path.join(HERE, 'diff_verify.py'), mid])
         run([py, os.path.join(HERE, 'diff_ingest.py'), mid])
+        # 2026-11-12 AS-IS Live(플랜 velvet-conjuring-lake P2): AS-IS 런처 실측(Doc/asislive/<ID>/latest.json)이 있으면 차등 검증 상태·정적 사실과 대조표를 만든다
+        #   → Doc/verify/<ID>/asis_live/ · 실측이 없으면 rc 3(미측정)으로 계속 · 원장 행은 만들지 않는다(판정 영향 없음). 실측 자체는 S1.live(런처 구동)가 따로 한다
+        # 2026-11-13 사용자: CheckList 실행 시 AS-IS 런처를 자동 구동해 실측을 모은다 — 최근 실측(24시간 안)이 있으면 그것을 쓰고, 없으면 IIS(8086)·런처를 띄워 조회한다.
+        #   대상 아님(FP·Material 4·제외 화면)·환경 미비·잠금 대기 초과 = rc 3(미측정)으로 체인 계속 · 끄려면 환경변수 VERIFY_ASIS_LIVE=off
+        run([py, os.path.join(HERE, 'asis_live_auto.py'), mid])
+        # 2026-11-13 사용자: "실제 AS-IS 런처 실행으로 필요한 데이터 취합 및 기준설정 부분은 화면별 CHECKLIST 작업 시 구동" — 위 기본 실측에 이어 이 화면의
+        #   소스 분기 시나리오 도출 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 분기 실행 현황 → TO-BE 조회 조건 대조. 기본 실측이 0행이면 필수 조건을 최근 값으로 채워 다시 잰다.
+        #   최근 묶음(24시간 안)은 재사용 · 저장 계열 버튼은 누르지 않음 · 실패·미측정이어도 체인 계속(판정 행을 만들지 않는다) · 끄기 = VERIFY_ASIS_LIVE=off
+        run([py, os.path.join(ROOT, 'tools', 'AsisLive', 'asis_live_screen.py'), mid, '--after-basic'])
+        run([py, os.path.join(HERE, 'asis_live_ingest.py'), mid])
     # W1 콤보 AS-IS 원천 비교 — E2E 덤프(combo_runtime.json)가 있으면 AS-IS DB 에서 원천을 실행해 B4·B3 판정 근거를 만든다(실패해도 다음 단계 진행 = 판정필요로 남음)
     stage('post')
     if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_runtime.json')):
@@ -449,17 +543,19 @@ def main():
         sub('combo_oracle.py', 'E2E 콤보 덤프 combo_runtime.json 없음')
     # CRUD 실제 저장 마커 행 정리(사내 DB) — 백업·건수 단언·SQL 기록. 정의 없는 화면은 SKIP(2026-10-24 BOD 잔존 행 사고 재발 방지)
     if not a.skip_e2e and not blocked:
+        run([py, os.path.join(HERE, 'db_orphan_sessions.py'), mid, '--kill'])  # 2026-11-12 T250: 시간 초과로 끝난 저장 시험이 DB 에 남긴 장시간 세션 종료(SCP0111 5개·6시간 잠금) — 복원보다 먼저(잠금에 걸리지 않게)
         run([py, os.path.join(HERE, 'restore_touched.py'), mid])  # 시험이 원복 못 한 기존 행 DB 복원(T39)
         run([py, os.path.join(HERE, 'cleanup_marker.py'), mid])
     else:
-        sub('restore_touched.py', 'E2E 미실행'); sub('cleanup_marker.py', 'E2E 미실행')
+        sub('db_orphan_sessions.py', 'E2E 미실행'); sub('restore_touched.py', 'E2E 미실행'); sub('cleanup_marker.py', 'E2E 미실행')
     # F8 감사 필드 · F7 저장 연계 테이블 — 정리 백업(실제 저장이 남긴 행) ↔ AS-IS 저장 SP DML 대상 (2026-10-27)
     run([py, os.path.join(HERE, 'save_audit.py'), mid, '--asis', asis])
     run([py, os.path.join(HERE, 'sp_branch_check.py'), mid])  # 저장 SP 검증 분기 정적 대조(EG161)
     if a.static:
-        sub('a1_live.py', '--static(AS-IS SP 실행 없음)')
+        sub('a1_live.py', '--static(AS-IS SP 실행 없음)'); sub('asis_live_rows.py', '--static(AS-IS SP 실행 없음)')  # 2026-11-13 점검: 세부 수 31 유지; sub('asis_live_rows.py', '--static(AS-IS 실구동 건수 대조 없음)')  # 2026-11-13: 건너뜀 표시 누락으로 --static 에서 세부 30 ≠ 31 이던 것
     else:
         run([py, os.path.join(HERE, 'a1_live.py'), mid])  # 화면 실전송 인자 AS-IS 조회 대조(EG006)
+        run([py, os.path.join(HERE, 'asis_live_rows.py'), mid])  # 2026-11-13 사용자: AS-IS 실구동 건수 ↔ TO-BE — 소량 차이 = 판정필요 · 데이터 없음/아예 다름 = FAIL(a1_live.csv 에 반입 → eg_ingest A1 행)
     run([py, os.path.join(HERE, 'sp_dml_check.py'), mid])  # 저장 SP 쓰기 컬럼 대조(EG238·EG230·EG223)
     run([py, os.path.join(HERE, 'i18n_static.py'), mid])  # 다국어 정적 점검(EG451·EG356·EG364)
     run([py, os.path.join(HERE, 'lookup_check.py'), mid])  # Lookup 편집 후보 ↔ 기준 코드(EG066)
@@ -480,11 +576,25 @@ def main():
     if run([py, os.path.join(HERE, 'judge.py'), mid]):
         return 7
     # 판정 반입 후 추적표 재계산 + 원장 TRACE 행(행·진입점 집계·정적 판정) 갱신 → 다시 반입(2026-10-27: E2E 전에 만든 집계 행이 낡은 채 남아 판정필요로 보이던 결함)
-    if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis, '--to-ledger']):
-        return 9
-    run([py, os.path.join(HERE, 'eg_ingest.py'), mid])
-    if run([py, os.path.join(HERE, 'judge.py'), mid]):
-        return 7
+    # 2026-11-16(SSP0020 7회차 — 집계 3행이 추적표에는 PASS 인데 원장에는 ERROR 로 남음): 집계 행은 구성 요소 판정 → 행 집계 → 진입점 집계로 두 단을 거친다.
+    #   한 번만 돌리면 마지막 단이 한 주기 늦는다 → 원장 (행, 결과) 가 더 바뀌지 않을 때까지 추적표 재계산 + 반입을 되풀이한다(최대 3회 · 바뀐 것이 없으면 바로 끝)
+    def _ledger_sig():
+        try:
+            with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'verify_ledger.csv'), encoding='utf-8-sig', newline='') as _f:
+                return hash(tuple((x.get('row_id'), x.get('result')) for x in csv.DictReader(_f)))
+        except Exception:
+            return None
+    _sig0 = None
+    for _it in range(3):
+        if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis, '--to-ledger']):
+            return 9
+        run([py, os.path.join(HERE, 'eg_ingest.py'), mid])
+        if run([py, os.path.join(HERE, 'judge.py'), mid]):
+            return 7
+        _sig = _ledger_sig()
+        if _sig is not None and _sig == _sig0:
+            break
+        _sig0 = _sig
     if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis]):
         return 9
     run([py, os.path.join(HERE, 'impl_engine.py'), mid])
@@ -536,6 +646,9 @@ def main():
 STEP_OF_RC = {2: '인자', 3: 'E2E 판정(결과 파일 없음)', 4: 'E2E 잠금(다른 E2E 실행 중)', 5: 'E2E 서버 미기동', 6: 'AS-IS 사실 보강·원장·사전 작업', 7: '판정(judge)', 8: '문서 생성', 9: '대조표 추적', 10: '검사기 회귀 오라클 위반(문서는 생성됨)'}
 
 
+GATE_BLOCKED = False
+
+
 def write_envelope(rc):
     """결과 봉투 Doc/verify/<ID>/run_verify.result.json (vibe-result/1, 2026-10-26) — 실패 단계도 기록(미실행을 완료로 보고하지 않음).
     verdict: FAIL 있으면 fail · 판정필요·미검증 남으면 hold · 전부 PASS/해당없음이면 pass. 근거 등급은 make_verify_docs 와 같은 규칙."""
@@ -573,9 +686,9 @@ def write_envelope(rc):
             fails.append({'id': r['row_id'], 'class': r['rule_id'], 'msg': f"{r['target']}"[:200], 'evidence': [{'kind': 'exec' if r['_grade'] in mvd.GRADE_HARD else 'agent-judgment', 'ref': r.get('tobe_ref') or r['_grade']}]})
     unv = cnt.get('NOT_RUN', 0) + cnt.get('ERROR', 0) + cnt.get('', 0); pend = cnt.get('판정필요', 0) + cnt.get('WARN', 0)
     docs = {}
-    for kind in ('CheckList', 'ActionItemList'):  # 2026-10-28 정합검증서 → CheckList · 폴더 Doc/CheckList
+    for kind in ('CheckList', 'ActionItemList'):  # 2026-10-28 정합검증서 → CheckList · 폴더 Doc/UI_CHECKLIST(2026-11-16 Doc/CheckList 에서 변경)
         import glob
-        fs = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'CheckList', f'{mid}_*_{kind}_v*.xlsx')), key=os.path.getmtime)
+        fs = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', f'{mid}_*_{kind}_v*.xlsx')), key=os.path.getmtime)
         if fs:
             docs[kind] = os.path.relpath(fs[-1], ROOT).replace('\\', '/')
     cov = {}
@@ -602,7 +715,10 @@ GATE_WARN = []  # 2026-11-06: 문서 생성 뒤 검사기 게이트 경고(종�
 def load_now():
     """실측 (CPU 사용률 %, 여유 메모리 MB) — Win32_Processor.LoadPercentage 평균 · Win32_OperatingSystem.FreePhysicalMemory. 실패 = (None, None).
     11-06 10:18:53 실측 1회 3.3초(CPU 21 · 여유 5,657MB / 32,327MB)."""
-    ps = ("$c=(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average;"
+    # 2026-11-10 T214(SSP0023 18:39~ 57분 입장 대기): Win32_Processor.LoadPercentage 가 100 으로 고정 보고 — 같은 시각(19:36) 성능 카운터
+    #   '\Processor(_Total)\% Processor Time' 3회 30.8·30.9·32.1% · '% Processor Utility' 58.8·56.2% · 프로세스별 합 약 25%. 성능 카운터 3회(1초) 평균을 쓰고 실패 시만 WMI
+    ps = ("try { $c=[math]::Round(((Get-Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 3 -ErrorAction Stop).CounterSamples | Measure-Object -Property CookedValue -Average).Average,1) }"
+          " catch { $c=(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average };"
           "$o=Get-CimInstance Win32_OperatingSystem; '{0} {1}' -f $c,[int]($o.FreePhysicalMemory/1024)")
     try:
         o = subprocess.run(['powershell', '-NoProfile', '-Command', ps], capture_output=True, text=True, timeout=60).stdout.split()
@@ -688,7 +804,7 @@ def admit_by_load(mid, cfg):
 
 def _latest_doc(mid, kind):
     import glob
-    fs = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'CheckList', f'{mid}_*_{kind}_v*.xlsx')), key=os.path.getmtime)
+    fs = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', f'{mid}_*_{kind}_v*.xlsx')), key=os.path.getmtime)
     return fs[-1] if fs else ''
 
 
@@ -719,7 +835,10 @@ if __name__ == '__main__':
     stage_end()
     timing_write()
     try:
-        write_envelope(rc)
+        if GATE_BLOCKED:
+            print('[INFO] 엔진 변경 게이트 차단 — 이 화면의 결과 봉투·실행 모드 기록은 바꾸지 않음')
+        else:
+            write_envelope(rc)
     except Exception as e:  # 봉투 기록 실패가 본 작업 결과를 바꾸지 않게 — 단, 알린다
         print(f'[WARN] 결과 봉투 기록 실패: {e}')
     sys.exit(rc)

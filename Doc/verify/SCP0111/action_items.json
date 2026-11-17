@@ -1,46 +1,8 @@
 [
  {
-  "row_id": "V-1a8b7e39",
-  "rule_id": "F1",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "V-b5cfd22a",
-  "rule_id": "F2",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "V-3cf1ef89",
-  "rule_id": "F4",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "V-9df393e4",
+  "row_id": "V-02e2f75a",
   "rule_id": "F5",
   "target": "SCP0111 화면",
-  "same": [
-   "T-541fb101"
-  ]
- },
- {
-  "row_id": "V-2220c069",
-  "rule_id": "F6",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "V-a4e04101",
-  "rule_id": "G3",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "V-171648d3",
-  "rule_id": "H4",
-  "target": "SCP0111 헤더 글자 잘림",
   "same": []
  },
  {
@@ -50,57 +12,15 @@
   "same": []
  },
  {
-  "row_id": "V-198950ce",
-  "rule_id": "I1",
-  "target": "SCP0111 시나리오 [자동] CN 언어 조회 건수 총/건 표기",
-  "same": []
- },
- {
-  "row_id": "V-daa3f0ba",
-  "rule_id": "D6",
-  "target": "SCP0111 시나리오 [자동] 선택 행 위로 Insert",
-  "same": []
- },
- {
   "row_id": "V-2eed0400",
   "rule_id": "E3",
   "target": "SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
   "same": []
  },
  {
-  "row_id": "V-e1eb57b1",
-  "rule_id": "G4",
-  "target": "SCP0111 돋보기 위치",
-  "same": []
- },
- {
-  "row_id": "V-923a13d7",
-  "rule_id": "H4",
-  "target": "SCP0111 조회조건 겹침 1366",
-  "same": []
- },
- {
-  "row_id": "V-be5a2381",
-  "rule_id": "A5",
-  "target": "SCP0111 Division 컬럼 40/Integration PSI",
-  "same": []
- },
- {
-  "row_id": "V-daf0f58f",
-  "rule_id": "A5",
-  "target": "SCP0111 Division 컬럼 81/Integration PSI",
-  "same": []
- },
- {
-  "row_id": "V-acae451e",
-  "rule_id": "A5",
-  "target": "SCP0111 Division 컬럼 82/Integration PSI",
-  "same": []
- },
- {
-  "row_id": "V-56473196",
+  "row_id": "V-bded1ccf",
   "rule_id": "F1",
-  "target": "SCP0111 저장 실패 처리",
+  "target": "SCP0111 컬럼별 저장 왕복",
   "same": []
  },
  {
@@ -110,69 +30,15 @@
   "same": []
  },
  {
-  "row_id": "V-47b619ec",
-  "rule_id": "H11",
-  "target": "SCP0111 저장 중 로딩",
-  "same": []
- },
- {
-  "row_id": "V-129ff7c5",
-  "rule_id": "F2",
-  "target": "SCP0111 붙여넣기 저장 인식",
-  "same": []
- },
- {
-  "row_id": "V-a9296f21",
-  "rule_id": "G10",
-  "target": "조회조건 Model/Nickname",
-  "same": []
- },
- {
-  "row_id": "V-5776bee9",
-  "rule_id": "F10",
-  "target": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
-  "same": []
- },
- {
-  "row_id": "V-c939af9e",
-  "rule_id": "F10",
-  "target": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+  "row_id": "V-a19f5cc5",
+  "rule_id": "F4",
+  "target": "SCP0111 경계값 저장",
   "same": []
  },
  {
   "row_id": "V-e9c8ca19",
   "rule_id": "G9",
   "target": "조회조건 Cell Model",
-  "same": []
- },
- {
-  "row_id": "V-a30ef64b",
-  "rule_id": "G1",
-  "target": "조회조건 Period",
-  "same": []
- },
- {
-  "row_id": "V-5f70c87f",
-  "rule_id": "D1",
-  "target": "Integration PSI.PLAN_TYPE (Plan Type)",
-  "same": []
- },
- {
-  "row_id": "V-2e5af804",
-  "rule_id": "D1",
-  "target": "Integration PSI.OPERATION_GROUP (Operation)",
-  "same": []
- },
- {
-  "row_id": "V-65d7acb9",
-  "rule_id": "D1",
-  "target": "Integration PSI.CELL_MODEL_NICK_NAME (Cell Model Nick Name)",
-  "same": []
- },
- {
-  "row_id": "V-5a3e4ab5",
-  "rule_id": "D1",
-  "target": "Integration PSI.CELL_ITEM_ID (Cell Model)",
   "same": []
  },
  {
@@ -188,314 +54,107 @@
   "same": []
  },
  {
-  "row_id": "V-4eb504e3",
-  "rule_id": "D1",
-  "target": "Integration PSI.CELL_CF (Cell Coversion Factor)",
-  "same": []
- },
- {
-  "row_id": "V-72eb6e0d",
-  "rule_id": "D1",
-  "target": "Integration PSI.COMPANY_ID (Company)",
-  "same": []
- },
- {
-  "row_id": "V-b6e82660",
-  "rule_id": "D1",
-  "target": "Integration PSI.PLANT_ID_DESCRIPTION (Plant)",
-  "same": []
- },
- {
-  "row_id": "V-6cb3f7bc",
-  "rule_id": "D1",
-  "target": "Integration PSI.MEASURE_LABEL (Measure)",
-  "same": []
- },
- {
-  "row_id": "V-e71635cf",
-  "rule_id": "D1",
-  "target": "Integration PSI.TO_PRODUCT (To Product)",
-  "same": []
- },
- {
-  "row_id": "V-a5d9e967",
-  "rule_id": "D1",
-  "target": "Integration PSI.VALUE_TYPE (Valuation Type)",
-  "same": []
- },
- {
-  "row_id": "V-d2113726",
-  "rule_id": "D1",
-  "target": "Integration PSI.TO_SITE_DESCRIPTION (To Site)",
-  "same": []
- },
- {
-  "row_id": "V-48843285",
-  "rule_id": "D1",
-  "target": "Integration PSI.INCOTERMS (Incoterms)",
-  "same": [
-   "V-9cbd9cd8"
-  ]
- },
- {
-  "row_id": "V-08c9996f",
-  "rule_id": "D1",
-  "target": "Integration PSI.BOH_QTY (BOH)",
-  "same": []
- },
- {
-  "row_id": "V-3fd855b9",
-  "rule_id": "D1",
-  "target": "Integration PSI.BOH_QTY (BOH)",
-  "same": []
- },
- {
-  "row_id": "V-4962487b",
-  "rule_id": "D1",
-  "target": "Integration PSI.UOM (UOM)",
-  "same": []
- },
- {
-  "row_id": "V-66ddcf9e",
-  "rule_id": "D1",
-  "target": "Integration PSI.SEQ_FLAG (SEQ_FLAG)",
-  "same": []
- },
- {
-  "row_id": "V-0183a369",
-  "rule_id": "D1",
-  "target": "Integration PSI.MEASURE (MEASURE)",
-  "same": []
- },
- {
-  "row_id": "V-173fe96d",
-  "rule_id": "D1",
-  "target": "Integration PSI.PLANT_ID (Plant)",
-  "same": []
- },
- {
-  "row_id": "V-c21b9ea7",
-  "rule_id": "D1",
-  "target": "Integration PSI.TO_SITE (To Site)",
-  "same": []
- },
- {
-  "row_id": "V-80e2a3d0",
-  "rule_id": "D1",
-  "target": "Integration PSI.<DYNAMIC:CalendarMonth> (동적 CalendarMonth 컬럼)",
-  "same": []
- },
- {
-  "row_id": "V-cf182b16",
-  "rule_id": "D1",
-  "target": "Integration PSI.<DYNAMIC:CalendarMonth> (동적 CalendarMonth 컬럼)",
-  "same": []
- },
- {
-  "row_id": "V-2c42b77d",
-  "rule_id": "MS1",
-  "target": "MSG00260",
-  "same": []
- },
- {
-  "row_id": "V-e52e3323",
-  "rule_id": "E4",
-  "target": "MSG00004",
-  "same": [
-   "V-4d16fe68",
-   "T-7258c056"
-  ]
- },
- {
-  "row_id": "T-ea67ed5b",
-  "rule_id": "F4",
-  "target": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
-  "same": []
- },
- {
-  "row_id": "T-03071eab",
-  "rule_id": "F4",
-  "target": "P_SCP0111_SAVE",
-  "same": []
- },
- {
-  "row_id": "T-81330c67",
-  "rule_id": "F4",
-  "target": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
-  "same": []
- },
- {
-  "row_id": "T-c715eadc",
-  "rule_id": "F4",
-  "target": "P_SCP0111_SAVE_ADMIN",
-  "same": []
- },
- {
   "row_id": "T-40ab485f",
   "rule_id": "D6",
   "target": "SCP0111 화면",
   "same": []
  },
  {
-  "row_id": "T-4488b2b4",
-  "rule_id": "X-REOPEN",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "T-5c60353e",
-  "rule_id": "F4",
-  "target": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
-  "same": []
- },
- {
   "row_id": "EG-65640b9a",
   "rule_id": "D4",
   "target": "SCP0111 EG140 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
-  "same": []
- },
- {
-  "row_id": "EG-08f72f25",
-  "rule_id": "D4",
-  "target": "SCP0111 EG319 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
-  "same": []
- },
- {
-  "row_id": "EG-2e732f55",
-  "rule_id": "J3",
-  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-c268b3bb",
-  "rule_id": "D1",
-  "target": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-4ca56f7c",
-  "rule_id": "J3",
-  "target": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-e16b3a6a",
-  "rule_id": "D1",
-  "target": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
-  "same": []
+  "same": [
+   "EG-08f72f25"
+  ]
  },
  {
   "row_id": "EG-82d30dcc",
   "rule_id": "J3",
   "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
-  "same": []
+  "same": [
+   "EG-2e8307c0",
+   "EG-d13c141b",
+   "EG-b31053bd",
+   "EG-d3e4b9b4",
+   "EG-6ca2bc0c",
+   "EG-cf3316d3",
+   "EG-9657323f",
+   "EG-08e7a01b",
+   "EG-f25a8cdd",
+   "EG-e9209992",
+   "EG-9ec64ea6"
+  ]
+ },
+ {
+  "row_id": "EG-08f72f25",
+  "rule_id": "D4",
+  "target": "",
+  "folded_into": "EG-65640b9a"
  },
  {
   "row_id": "EG-2e8307c0",
-  "rule_id": "D1",
-  "target": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
-  "same": []
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-d13c141b",
   "rule_id": "J3",
-  "target": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
-  "same": []
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-b31053bd",
-  "rule_id": "D1",
-  "target": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
-  "same": []
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-d3e4b9b4",
   "rule_id": "J3",
-  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
-  "same": []
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-6ca2bc0c",
-  "rule_id": "D1",
-  "target": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
-  "same": []
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-cf3316d3",
   "rule_id": "J3",
-  "target": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
-  "same": []
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
   "row_id": "EG-9657323f",
-  "rule_id": "D1",
-  "target": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-96be91cd",
   "rule_id": "J3",
-  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
-  "same": []
+  "target": "",
+  "folded_into": "EG-82d30dcc"
  },
  {
-  "row_id": "EG-fb4948d7",
-  "rule_id": "D1",
-  "target": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
-  "same": []
- },
- {
-  "row_id": "EG-72d47971",
+  "row_id": "EG-08e7a01b",
   "rule_id": "J3",
-  "target": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
-  "same": []
- },
- {
-  "row_id": "EG-558ab61d",
-  "rule_id": "D1",
-  "target": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
-  "same": []
- },
- {
-  "row_id": "EG-ac3a715e",
-  "rule_id": "I2",
-  "target": "SCP0111 언어 전환 CN",
-  "same": []
- },
- {
-  "row_id": "EG-4e04ee8a",
-  "rule_id": "B7",
-  "target": "SCP0111 콤보 후보 최신성 SCPPlanPeriod_SCP",
-  "same": []
- },
- {
-  "row_id": "EG-4c539bff",
-  "rule_id": "B7",
-  "target": "SCP0111 콤보 후보 최신성 SCPPlanPeriod_SCP",
-  "same": []
- },
- {
-  "row_id": "T-541fb101",
-  "rule_id": "F5",
   "target": "",
-  "folded_into": "V-9df393e4"
+  "folded_into": "EG-82d30dcc"
  },
  {
-  "row_id": "V-9cbd9cd8",
-  "rule_id": "D1",
+  "row_id": "EG-f25a8cdd",
+  "rule_id": "J3",
   "target": "",
-  "folded_into": "V-48843285"
+  "folded_into": "EG-82d30dcc"
  },
  {
-  "row_id": "V-4d16fe68",
-  "rule_id": "E4",
+  "row_id": "EG-e9209992",
+  "rule_id": "J3",
   "target": "",
-  "folded_into": "V-e52e3323"
+  "folded_into": "EG-82d30dcc"
  },
  {
-  "row_id": "T-7258c056",
-  "rule_id": "E4",
+  "row_id": "EG-9ec64ea6",
+  "rule_id": "J3",
   "target": "",
-  "folded_into": "V-e52e3323"
+  "folded_into": "EG-82d30dcc"
  }
 ]

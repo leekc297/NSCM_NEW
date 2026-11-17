@@ -1,0 +1,453 @@
+{
+ "id": "GSCM_GROUPMENUAUTH",
+ "from": "dump_find.json",
+ "total": "Total : 19",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer1/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "GroupInfo",
+     "rows": 19,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group ID"
+       ],
+       "label": "Group ID",
+       "tag": "GroupID",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Group Name"
+       ],
+       "label": "Group Name",
+       "tag": "GrpName",
+       "width": "170",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Use YN"
+       ],
+       "label": "Use YN",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 19,
+     "data": [
+      [
+       "",
+       "ADMIN",
+       "System Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "CAPA Planner",
+       "CAPA Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM ADMIN",
+       "DM Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner",
+       "DM Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner (W/S)",
+       "DM Planner (W/S)",
+       "Y"
+      ],
+      [
+       "",
+       "DM Viewer",
+       "DM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "FP Planner",
+       "FP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "FP Viewer",
+       "FP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "GMES Viewer",
+       "GMES Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "Guest",
+       "Guest",
+       "Y"
+      ],
+      [
+       "",
+       "JV Planner",
+       "JV Planner",
+       "N"
+      ],
+      [
+       "",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "Y"
+      ],
+      [
+       "",
+       "SCM Viewer",
+       "SCM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Planner",
+       "SCP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Tester",
+       "SCP Tester",
+       "Y"
+      ],
+      [
+       "",
+       "SSP ADMIN",
+       "SSP ADMIN",
+       "N"
+      ],
+      [
+       "",
+       "SSP Planner",
+       "SSP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SSP Viewer",
+       "SSP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "System Monitor",
+       "System Monitor",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdSub",
+   "path": "/splitContainer1/SplitterPanel/spdSub",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "MenuItemInfo",
+     "rows": 0,
+     "cols": 14,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group ID",
+        "Group ID"
+       ],
+       "label": "Group ID",
+       "tag": "GroupID",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Level1 Menu Desc*",
+        "Level1 Menu Desc*"
+       ],
+       "label": "Level1 Menu Desc*",
+       "tag": "Level1Title",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Level1Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Level2 Menu Desc*",
+        "Level2 Menu Desc*"
+       ],
+       "label": "Level2 Menu Desc*",
+       "tag": "Level2Title",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Level2Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Level1 Menu",
+        "Level1 Menu"
+       ],
+       "label": "Level1 Menu",
+       "tag": "Level1MenuID",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Level1MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Level2 Menu",
+        "Level2 Menu"
+       ],
+       "label": "Level2 Menu",
+       "tag": "PrntMenuID",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "PrntMenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Level3 Menu*",
+        "Level3 Menu*"
+       ],
+       "label": "Level3 Menu*",
+       "tag": "MenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Title*",
+        "Title*"
+       ],
+       "label": "Title*",
+       "tag": "Title",
+       "width": "250",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "BasicACLC",
+        "BasicACLC"
+       ],
+       "label": "BasicACLC",
+       "tag": "BasicACLC",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BasicACLC",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "False",
+        "Read*"
+       ],
+       "label": "Read*",
+       "tag": "BasicACLR",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BasicACLR",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "False",
+        "Modify*"
+       ],
+       "label": "Modify*",
+       "tag": "BasicACLU",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BasicACLU",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "BasicACLD",
+        "BasicACLD"
+       ],
+       "label": "BasicACLD",
+       "tag": "BasicACLD",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BasicACLD",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "ExtendedACL",
+        "ExtendedACL"
+       ],
+       "label": "ExtendedACL",
+       "tag": "ExtendedACL",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ExtendedACL",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Use YN",
+        "Use YN"
+       ],
+       "label": "Use YN",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

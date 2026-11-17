@@ -1,0 +1,145 @@
+{
+ "id": "SCP0041",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 06:33:06",
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 06:33:21.272",
+  "grid": "spdMain",
+  "sheet_index": 0,
+  "sheet_name": "Osp Stock",
+  "sheet": "Osp Stock",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "DIVISION_ID",
+    "label": "Div*",
+    "data_field": "DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "SITE_DESCRIPTION",
+    "label": "Plant Site*",
+    "data_field": "SITE_DESCRIPTION",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "ITEM_ID",
+    "label": "Model*",
+    "data_field": "ITEM_ID",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "NICK_NAME",
+    "label": "Nick Name",
+    "data_field": "nick_name",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "YYYYMMDD",
+    "label": "Date*",
+    "data_field": "YYYYMMDD",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "ATTRIBUTE1",
+    "label": "Valuation Type",
+    "data_field": "ATTRIBUTE1",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "QTY",
+    "label": "Qty*",
+    "data_field": "QTY",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "ATTRIBUTE2",
+    "label": "Cell From Site",
+    "data_field": "ATTRIBUTE2",
+    "visible": "True"
+   },
+   {
+    "index": 9,
+    "tag": "COMMENT",
+    "label": "Comment",
+    "data_field": "COMMENT",
+    "visible": "True"
+   },
+   {
+    "index": 10,
+    "tag": "ATTRIBUTE3",
+    "label": "Box",
+    "data_field": "ATTRIBUTE3",
+    "visible": "True"
+   },
+   {
+    "index": 11,
+    "tag": "CREATED_BY",
+    "label": "Created By",
+    "data_field": "CREATED_BY",
+    "visible": "True"
+   },
+   {
+    "index": 12,
+    "tag": "CREATION_DATE",
+    "label": "Creation Date",
+    "data_field": "CREATION_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 13,
+    "tag": "LAST_UPDATED_BY",
+    "label": "Last Updated By",
+    "data_field": "LAST_UPDATED_BY",
+    "visible": "True"
+   },
+   {
+    "index": 14,
+    "tag": "LAST_UPDATE_DATE",
+    "label": "Last Update Date",
+    "data_field": "LAST_UPDATE_DATE",
+    "visible": "True"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 06:33:21.272"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 15,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2046,
+  "at": "2026-11-13T21:01:06.368Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 880,
+  "at": "2026-11-13T21:01:08.671Z",
+  "user": "minyonglee1",
+  "test": "D6 Insert 위치·상태 = AS-IS"
+ }
+]

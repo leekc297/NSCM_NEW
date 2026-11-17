@@ -1,102 +1,102 @@
 ﻿rule_id,doc_rows,verdict,gen,meas,runner,how,checker_claim
-A1,39,OK,ledger.add;mapping_checks,_trace;a1_live.py;eg_ingest.py;judge.py;make_test_report.py;make_verify_docs.py;mapping_trace.py,static,같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교,tools/DbConn/golden.py(AS-IS SP ↔ TO-BE PROC 같은 파라미터 동시 실행 — 행수·키 집합) → Doc/golden/_summar
-A5,51,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,smoke|verify|trace,표시 컬럼 구성 = 메타·AS-IS(Div·개인화·필수),_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective D
+A1,39,OK,ledger.add;mapping_checks,_trace;a1_live.py;backlog_types.py;eg_ingest.py;judge.py;make_test_report.py;make_verify_docs.py;mapping_trace.py;plain_detail.py,static,같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교,tools/DbConn/golden.py(AS-IS SP ↔ TO-BE PROC 같은 파라미터 동시 실행 — 행수·키 집합) → Doc/golden/_summar
+A5,51,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py;repair_close.py;run_verify.py;snap_parallel.py,smoke|verify|trace,표시 컬럼 구성 = 메타·AS-IS(Div·개인화·필수),_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective D
 A8,7,OK,ledger.add,eg_ingest.py;make_verify_docs.py;mapping_trace.py,smoke,기간 동적 컬럼 = Period 전 구간,smoke dynamic
-A10,1,OK,ledger.add;mapping_checks,_trace;make_verify_docs.py;mapping_trace.py,trace,조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS,_trace.spec(@trace) 조회 전 그리드
+A10,1,OK,ledger.add;mapping_checks,_trace;make_verify_docs.py;mapping_trace.py;plain_detail.py,trace,조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS,_trace.spec(@trace) 조회 전 그리드
 B1,5,OK,ledger.list;mapping_checks,_verify;_trace;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,콤보 후보 빈 행 없음,_verify.spec(@verify)
 B2,6,OK,ledger.list;mapping_checks,_verify;_trace;judge.py;make_verify_docs.py;mapping_trace.py,verify,콤보 후보 중복 없음,_verify.spec(@verify)
 B3,10,OK,ledger.list;mapping_checks,eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,콤보 후보 정렬 = AS-IS,combo_oracle order_check — AS-IS ORDER BY 키(사내 값 재검사)·CODE 정렬·고정 목록 순서 대조(변이 B3_MUTATE)
 B4,47,OK,ledger.list;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,콤보 후보 집합 = AS-IS 원천+필터(같은 데이터에 AS-IS 논리 적용),combo_oracle.py(W1)
 B6,11,OK,ledger.add;mapping_checks,_verify;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,ALL 옵션·다중선택 사양,_verify.spec(@verify)
-C1,14,OK,ledger.add;mapping_checks,_trace;smoke-extra.ts;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,상위 조회조건 변경 → 하위 후보 재조회·선택 초기화,_trace.spec(@trace) 상위 변경→하위 후보
-C2,18,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,그리드 셀 cascade 후보,_verify.spec(@verify) · _trace.spec(@trace) W5
+C1,14,OK,ledger.add;mapping_checks,_trace;smoke-extra.ts;eg_ingest.py;feature_inventory.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,trace,상위 조회조건 변경 → 하위 후보 재조회·선택 초기화,_trace.spec(@trace) 상위 변경→하위 후보
+C2,18,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;feature_inventory.py;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py,verify|trace,그리드 셀 cascade 후보,_verify.spec(@verify) · _trace.spec(@trace) W5
 C3,20,OK,ledger.add;mapping_checks,_verify;_trace;expect_rows.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,연쇄 자동 채움,_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)
 C4,6,OK,mapping_checks,_trace;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,조회조건 변경 시 그리드 상태(초기화·유지) = AS-IS,_trace.spec(@trace) 조건 변경→그리드 상태
 C6,0,OK,ledger.add;mapping_checks,_verify;_trace;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,무변경 편집 종료 시 연쇄 미발동,_verify.spec(@verify) · _trace.spec(@trace) W5
-D1,26,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;db_ref_check.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,컬럼 편집 가능 여부(신규행·기존행),_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)
+D1,26,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;db_ref_check.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py;repair_scope.py,verify|trace,컬럼 편집 가능 여부(신규행·기존행),_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)
 D3,11,OK,ledger.list;mapping_checks,_verify;_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,행 값 기반 조건부 잠금,_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산
 D4,15,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,신규행 기본값·자동세팅·Insert 전제,_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)
-D5,8,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,셀 에디터 유형,_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)
+D5,8,OK,ledger.add;mapping_checks,_verify;_trace;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,셀 에디터 유형,_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)
 D6,4,OK,ledger.add;mapping_checks,_trace;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,Insert 위치·상태 유지,_trace.spec(@trace) Insert 위치
 E1,10,OK,ledger.add;mapping_checks,_verify;_trace;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,숫자 소수자리·정수·부호·범위,_verify.spec(@verify) · _trace.spec(@trace) W5(cell_rules)
 E2,5,OK,ledger.add;mapping_checks,_verify;gen_expect.py;judge.py;make_test_report.py;make_verify_docs.py;mapping_trace.py,verify,날짜 형식·유효성,_verify.spec(@verify)
-E3,18,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;gen_expect.py;make_verify_docs.py;mapping_trace.py,verify|trace,필수 입력 검증,"_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)"
-E4,43,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,업무 검증·메시지 발생 조건(조건부 필수·중복·관계),_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정
+E3,18,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;gen_expect.py;make_verify_docs.py;mapping_trace.py;plain_detail.py,verify|trace,필수 입력 검증,"_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)"
+E4,43,OK,ledger.add;mapping_checks,_trace;diagnose_layer.py;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,업무 검증·메시지 발생 조건(조건부 필수·중복·관계),_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정
 E5,4,OK,ledger.add;mapping_checks,_verify;_trace;judge.py;make_verify_docs.py;mapping_trace.py,verify,콤보 셀 후보 외 값 차단,_verify.spec(@verify)
 F1,71,OK,ledger.add;mapping_checks,_verify;_trace;smoke-extra.ts;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|crud,저장 후 DB 반영(마커 행),_verify.spec(@verify) 실저장·crud spec
 F2,11,OK,ledger.add;mapping_checks,_verify;gen_expect.py;judge.py;make_verify_docs.py,verify,1회 저장(변경 감지),_verify.spec(@verify)
 F3,8,OK,ledger.add;mapping_checks,_trace;smoke-extra.ts;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,붙여넣기 경로 → 값·검증·연쇄·저장,_trace.spec(@trace) W4b 붙여넣기 — Ctrl+C/Ctrl+V 로 셀 값 복사 후 값·연쇄
-F4,29,OK,ledger.add;mapping_checks,_verify;_trace;smoke-extra.ts;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,smoke|verify|trace,저장·조회 SQL 오류 0(BE 로그 DB 오류 0),smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)
+F4,29,OK,ledger.add;mapping_checks,_verify;_trace;smoke-extra.ts;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py;repair_close.py;tobe_rule_registry.py,smoke|verify|trace,저장·조회 SQL 오류 0(BE 로그 DB 오류 0),smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)
 F5,8,OK,ledger.add;mapping_checks,_trace;smoke-extra.ts;judge.py;make_verify_docs.py;mapping_trace.py,trace,CRUD Status 표시 정합,_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시
 F6,35,OK,ledger.add;mapping_checks,_verify;smoke-extra.ts;gen_expect.py;judge.py;make_verify_docs.py,verify,저장 후 값 보존,_verify.spec(@verify)
-G1,29,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,smoke|verify,조회조건 값 변경 → 조회 인자·결과 반영,smoke 조회조건 동작·_verify
-G3,5,OK,ledger.list;mapping_checks,smoke-extra.ts;judge.py;make_verify_docs.py;mapping_trace.py,smoke,조회조건 저장·복원,smoke 공통 기능(Condition·Reset)
-G4,36,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,smoke|verify,조회조건 표시·라벨·활성,smoke 화면 열림(labels)·_verify
+G1,29,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;repair_close.py,smoke|verify,조회조건 값 변경 → 조회 인자·결과 반영,smoke 조회조건 동작·_verify
+G3,5,OK,ledger.list;mapping_checks,smoke-extra.ts;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,smoke,조회조건 저장·복원,smoke 공통 기능(Condition·Reset)
+G4,36,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,smoke|verify,조회조건 표시·라벨·활성,smoke 화면 열림(labels)·_verify
 G5,21,OK,ledger.add;mapping_checks,_verify;_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,팝업 조건 연동(인자),popup_args_check.py · _verify.spec(@verify)
-G6,7,OK,ledger.add;mapping_checks,_trace;judge.py;make_verify_docs.py;mapping_trace.py,trace,조회조건 초기 기본값 = AS-IS Form_Load,_trace.spec(@trace) 초기값
+G6,7,OK,ledger.add;mapping_checks,_trace;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py,trace,조회조건 초기 기본값 = AS-IS Form_Load,_trace.spec(@trace) 초기값
 H2,9,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,verify|trace,배경·글자색 규칙,_verify.spec(@verify) · _trace.spec(@trace) W5
 H3,11,OK,ledger.add;mapping_checks,mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,셀 병합 = AS-IS,_trace.spec(@trace) W4b 셀 병합 — 컬럼 allowMerging 실측 ↔ AS-IS SmartColMerge 대상
-H4,30,OK,ledger.add;mapping_checks,_trace;cr_harness_gap.py;eg_ingest.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,trace,레이아웃·스크롤·크기,_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)
-H5,18,OK,ledger.add;mapping_checks,_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,verify|trace,라벨 명칭,_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)
-H6,20,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,smoke|verify,팝업 표준·열림,_verify.spec(@verify)·smoke popup
-H7,5,OK,ledger.add,judge.py;make_verify_docs.py;mapping_trace.py,smoke,Excel 다운로드,smoke 공통 기능(Excel)
+H4,30,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,trace,레이아웃·스크롤·크기,_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)
+H5,18,OK,ledger.add;mapping_checks,_trace;mutate.ts;checklist_selftest.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py;snap_parallel.py,verify|trace,라벨 명칭,_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)
+H6,20,OK,ledger.add;mapping_checks,_verify;_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,smoke|verify,팝업 표준·열림,_verify.spec(@verify)·smoke popup
+H7,5,OK,ledger.add,judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,smoke,Excel 다운로드,smoke 공통 기능(Excel)
 H10,11,OK,ledger.add;mapping_checks,gen_expect.py;make_verify_docs.py;mapping_trace.py,static,메시지 표준(방식·코드 단일화),mapping_trace 정적(FE 소스 메시지 API)
-I1,18,OK,ledger.list;mapping_checks,eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,meta,LBL/MSG 언어별 등록,judge(DB 조회)·하네스 I18N1
-I2,12,OK,ledger.list,_verify;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,smoke|verify,런타임 언어 일치('_' 노출 0),smoke i18n
-J2,17,OK,ledger.list;mapping_checks,eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,auth,권한별 버튼·기능,auth·authcrud spec
-K1,21,OK,ledger.add,_verify;cr_harness_gap.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,smoke,Sort·Filter,smoke 공통 기능(Sort·Filter)
-K2,27,OK,ledger.add,cr_harness_gap.py;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,smoke,컬럼·Measure 셋팅,smoke 공통 기능(Columns)
-K4,12,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;gen_expect.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,trace,버튼 구성·조건별 노출,_trace.spec(@trace) 버튼 구성
+I1,18,OK,ledger.list;mapping_checks,diagnose_layer.py;eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py,meta,LBL/MSG 언어별 등록,judge(DB 조회)·하네스 I18N1
+I2,12,OK,ledger.list,_verify;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;plain_detail.py;run_verify.py,smoke|verify,런타임 언어 일치('_' 노출 0),smoke i18n
+J2,17,OK,ledger.list;mapping_checks,eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,auth,권한별 버튼·기능,auth·authcrud spec
+K1,21,OK,ledger.add,_verify;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,smoke,Sort·Filter,smoke 공통 기능(Sort·Filter)
+K2,27,OK,ledger.add,eg_ingest.py;gen_expect.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,smoke,컬럼·Measure 셋팅,smoke 공통 기능(Columns)
+K4,12,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;gen_expect.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,trace,버튼 구성·조건별 노출,_trace.spec(@trace) 버튼 구성
 K-SA,0,OK,mapping_checks,mapping_trace.py,smoke,조회영역 토글,smoke 공통 기능(Search Area)
-M3,41,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,팝업 내부 기능(조회·CRUD) · 팝업 목록 행수(조회조건 변경 후 포함),_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류 · 셀 더블클릭 팝업) · popup_data_check.py(개인화 팝업 목
-M4,12,OK,mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,팝업 선택값 반영,_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움
-SC1,0,OK,ledger.list;mapping_checks,judge.py;make_verify_docs.py;mapping_trace.py;snap_parallel.py,static|smoke,조회조건 순서 = 기준표,check.js SC1·smoke 기준표 순서
+M3,41,OK,ledger.add;mapping_checks,_trace;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;new_screen_precheck.py;pkg_gate.py,trace,팝업 내부 기능(조회·CRUD) · 팝업 목록 행수(조회조건 변경 후 포함),_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류 · 셀 더블클릭 팝업) · popup_data_check.py(개인화 팝업 목
+M4,12,OK,mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;new_screen_precheck.py;pkg_gate.py,trace,팝업 선택값 반영,_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움
+SC1,0,OK,ledger.list;mapping_checks,judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py;snap_parallel.py,static|smoke,조회조건 순서 = 기준표,check.js SC1·smoke 기준표 순서
 DB-SYN,2,OK,ledger.list;mapping_checks,eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,static,BE 계정 시노님·권한·대상 객체,syn_check.py·fixture dberr
 G03-WIRE,0,대상 생성 없음,,mapping_trace.py,static,AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결,check.js G03
 X-REASON,0,OK,mapping_checks,impl_engine.py;make_verify_docs.py;mapping_trace.py,static,제외·해당없음 사유·근거(룰·지시·원문·이동 위치) 존재 — 근거 없으면 사람 확인,mapping_trace
 X-NOTIMPL,0,OK,mapping_checks,_trace;impl_engine.py;judge.py;make_verify_docs.py;mapping_trace.py,static,대조표 상태 미구현 = 구현 대상(FAIL),mapping_trace
 X-REOPEN,0,OK,mapping_checks,_trace;mapping_trace.py,trace,화면 닫기·재오픈 시 오류·잔존 상태 없음,_trace.spec(@trace) 닫기·재오픈
-X-ROW,0,OK,mapping_checks,make_verify_docs.py;mapping_trace.py,static,대조표 행이 서술한 동작을 화면에서 재현,mapping_trace 집계(진입점 문장의 모든 검사) · 검사 대상 동작 없는 진입점 = NA
-A2,11,OK,ledger.add,_verify;_trace;judge.py;make_test_report.py;make_verify_docs.py,verify,코드 컬럼 표시값=Name — 그리드·Excel 셀 표시값이 코드가 아닌 Name 인지(dataMap 보유 컬럼 전수),_verify.spec(@verify)
+X-ROW,0,OK,mapping_checks,make_verify_docs.py;mapping_trace.py;repair_plan.py,static,대조표 행이 서술한 동작을 화면에서 재현,mapping_trace 집계(진입점 문장의 모든 검사) · 검사 대상 동작 없는 진입점 = NA
+A2,11,OK,ledger.add,_verify;_trace;backlog_types.py;judge.py;make_test_report.py;make_verify_docs.py;proof_backlog.py,verify,코드 컬럼 표시값=Name — 그리드·Excel 셀 표시값이 코드가 아닌 Name 인지(dataMap 보유 컬럼 전수),_verify.spec(@verify)
 A3,6,OK,ledger.add,_verify;_trace;make_verify_docs.py,trace,합계·소계 행 값 — Sum 행 존재·공란 아님·구성 행 합과 일치,_trace.spec(@trace) W4d 합계행 유무·값
 A4,2,OK,ledger.add,_trace;make_verify_docs.py,trace,재조회 시 전 시트 초기화 — 모든 결과 시트가 재조회 직전 비워지고 다시 채워지는지,_trace.spec(@trace) W4d 재조회 전 시트 초기화(Division 전환 조회)
 B5,23,대상 생성 없음,,eg_ingest.py;judge.py;make_verify_docs.py,static,Div·권한·조건별 허용 항목만 후보에 존재(B4 필터 원천 대조로 판정),combo_oracle.py B4(필터 원천: combo_src filters DIVISION_ID/GROUP) — 허용 목록 = AS-IS 원천 집합(필터 적용
 D2,22,대상 생성 없음,,db_ref_check.py;gen_expect.py;judge.py,verify,Measure 행×기간 열 셀 편집 가능 매트릭스 = AS-IS 잠금 규칙(동적 컬럼 패밀리 COND),_verify.spec(@verify) D1 <DYNAMIC:…> COND(행 값 COL(MEASURE)/COL(SEQ_FLAG) × 동적 기간 컬럼 COL(SE
 G2,12,OK,ledger.add,_verify;_trace;judge.py;make_verify_docs.py;mapping_trace.py,verify,ALL 재선택·다중선택·콤마 키인 — ALL→Y→ALL 재조회 정상 · 다중 선택/콤마 다중 입력 결과 반영,_verify.spec(@verify)
-H1,1,OK,ledger.add,judge.py,static,정렬(가로 정렬) — 컬럼 정렬 = AS-IS,tools/Harness/verify/align_check.py(AS-IS grid_columns_asis halign ↔ TO-BE SHEET_COLUMNS.H
+H1,1,OK,ledger.add,diagnose_layer.py;judge.py;repair_close.py;repair_scope.py,static,정렬(가로 정렬) — 컬럼 정렬 = AS-IS,tools/Harness/verify/align_check.py(AS-IS grid_columns_asis halign ↔ TO-BE SHEET_COLUMNS.H
 I3,2,OK,ledger.list,_trace;make_verify_docs.py,trace,데이터 다국어 컬럼 — Team 등 명칭 데이터가 사용자 언어로 표시,_trace.spec(@trace) W4d 명칭 컬럼 언어
-J1,9,OK,ledger.add,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,trace,권한 Division 노출 — 계정별 Division 후보·기본값 = 권한(단일 권한 자동 선택),_trace.spec(@trace) W4b Division 후보 실측 ↔ 계정 권한 Division(user_group) — 기대 미확정 시 판정필요
+J1,9,OK,ledger.add,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;run_verify.py,trace,권한 Division 노출 — 계정별 Division 후보·기본값 = 권한(단일 권한 자동 선택),_trace.spec(@trace) W4b Division 후보 실측 ↔ 계정 권한 Division(user_group) — 기대 미확정 시 판정필요
 J3,11,OK,ledger.add,_verify;eg_ingest.py;make_verify_docs.py,verify,권한별 편집 구간 — 다른 권한 그룹 계정에서도 AS-IS 기대와 편집 가능 여부 일치,_verify.spec(@verify) J3 — D1 RULES 에 GROUP 이 있는 컬럼을 admin 아닌 계정(plan.accounts)으로 재로그인해 같은
-K3,10,OK,ledger.add,_verify;cr_harness_gap.py;eg_ingest.py;judge.py;make_verify_docs.py,verify,그리드 조작(Ctrl 다중·Copy·Hide·단축키) — Ctrl 다중선택·Copy→Excel·Hide Column·단축키 동작,_verify.spec(@verify) 그리드 조작 — 비병합 열 Ctrl+클릭·헤더 클릭·Ctrl+C/우클릭 Copy·Hide Column·F5(hitTest 
-L1,7,OK,ledger.add,_trace;cr_harness_gap.py;dict_sweep.py;eg_ingest.py;i18n_lang_check.py;make_verify_docs.py,trace,성능 — 조회·저장·삭제·키 이동 응답이 기준 이내,_trace.spec(@trace) W4d 조회 응답시간
-M1,21,OK,ledger.add,_trace;gen_expect.py;make_verify_docs.py,trace,Excel Upload·Form — 양식 다운로드=AS-IS · 검증 메시지 사용자 문구 · 전 오류 표시 · DB 반영,_trace.spec(@trace) W4d Excel Upload 유무·헤더 검증
-M2,13,OK,ledger.add,_verify;make_verify_docs.py,verify,특수 기능 버튼 — 클릭 반응(요청·팝업·메시지) 실측 · 결과 데이터 동일성은 M3/F1 에서,_verify.spec(@verify) M2 — plan.buttons kind=subtitle-custom 버튼 클릭 → 5초 안 요청/팝업/다운로드/메시지 발
-N1,31,OK,ledger.add,_trace;eg_ingest.py;make_verify_docs.py,trace,기준 데이터 정합 — 공란 표기 혼재('-'·NULL·Blank) 0 · 미사용 코드/메저 정리 · 마스터 누락 0,_trace.spec(@trace) W4d 공란 표기 혼재(그리드 전수)
-A6,10,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py,static|trace,결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 키 순서 동일 · 조회 결과가 그 키 순으로 정렬돼 ,"sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@tra"
+K3,10,OK,ledger.add,_verify;eg_ingest.py;judge.py;make_verify_docs.py;plain_detail.py;repair_close.py;repair_scope.py,verify,그리드 조작(Ctrl 다중·Copy·Hide·단축키) — Ctrl 다중선택·Copy→Excel·Hide Column·단축키 동작,_verify.spec(@verify) 그리드 조작 — 비병합 열 Ctrl+클릭·헤더 클릭·Ctrl+C/우클릭 Copy·Hide Column·F5(hitTest 
+L1,7,OK,ledger.add,_trace;dict_sweep.py;eg_ingest.py;i18n_lang_check.py;make_verify_docs.py;meta_live_check.py,trace,성능 — 조회·저장·삭제·키 이동 응답이 기준 이내,_trace.spec(@trace) W4d 조회 응답시간
+M1,21,OK,ledger.add,_trace;gen_expect.py;make_verify_docs.py;new_screen_precheck.py,trace,Excel Upload·Form — 양식 다운로드=AS-IS · 검증 메시지 사용자 문구 · 전 오류 표시 · DB 반영,_trace.spec(@trace) W4d Excel Upload 유무·헤더 검증
+M2,13,OK,ledger.add,_verify;make_verify_docs.py;new_screen_precheck.py,verify,특수 기능 버튼 — 클릭 반응(요청·팝업·메시지) 실측 · 결과 데이터 동일성은 M3/F1 에서,_verify.spec(@verify) M2 — plan.buttons kind=subtitle-custom 버튼 클릭 → 5초 안 요청/팝업/다운로드/메시지 발
+N1,31,OK,ledger.add,_trace;backlog_types.py;eg_ingest.py;make_verify_docs.py;proof_backlog.py,trace,기준 데이터 정합 — 공란 표기 혼재('-'·NULL·Blank) 0 · 미사용 코드/메저 정리 · 마스터 누락 0,_trace.spec(@trace) W4d 공란 표기 혼재(그리드 전수)
+A6,10,OK,ledger.add;mapping_checks,_trace;eg_ingest.py;judge.py;make_verify_docs.py;mapping_trace.py;repair_close.py;repair_scope.py,static|trace,결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 키 순서 동일 · 조회 결과가 그 키 순으로 정렬돼 ,"sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@tra"
 A7,42,OK,ledger.add,eg_ingest.py;judge.py;make_verify_docs.py,static,컬럼별 결과 값 일치(공란 컬럼) — 키가 같은 행의 컬럼 값 비교 · AS-IS 에 값 있는데 공란인 컬럼 0,tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge A7
 A9,3,OK,ledger.add,_verify;snap_parallel.py,verify,조건값 기반 동적 헤더 — 헤더 존재·고유·형식,_verify.spec(@verify) A9 — 동적 컬럼 패밀리(dyn_columns) 헤더: 바인딩 수 = 헤더 수 · 헤더 비어있지 않음·중복 0 · 원천(
-B7,7,OK,ledger.list,_verify;b7_check.py;eg_ingest.py;judge.py;make_verify_docs.py,verify,기준 데이터 변경 후 후보 갱신 — 마스터 신규 저장·변경 후 조회조건·셀 콤보에 즉시 반영(선택값 유지),b7_check.py(a 저장 대상∩콤보 원천·useInvalidateCombos) + _verify.spec(@verify) B7(b SPA 재진입·조회 시 a
+B7,7,OK,ledger.list,_verify;b7_check.py;eg_ingest.py;judge.py;make_verify_docs.py;repair_scope.py,verify,기준 데이터 변경 후 후보 갱신 — 마스터 신규 저장·변경 후 조회조건·셀 콤보에 즉시 반영(선택값 유지),b7_check.py(a 저장 대상∩콤보 원천·useInvalidateCombos) + _verify.spec(@verify) B7(b SPA 재진입·조회 시 a
 B8,12,대상 생성 없음,,_trace;eg_ingest.py;make_verify_docs.py,trace,원천 표준(Team=SSPM DEPT_ID 등) — Team·명칭 원천이 표준 테이블(SSPM SITE_ITEM.DEPT_ID 등),_trace.spec(@trace) W4d Team·Sales Site 조건 원천
 C5,6,OK,ledger.add,_verify,verify,그리드 간 연동(마스터-디테일) — 하단 조회 인자 = 상단 선택 행,_verify.spec(@verify) K6 확장 — 상단 행 선택/더블클릭 뒤 하단 조회 요청 본문에 상단 행 키 값 포함
 E6,2,OK,ledger.add,_verify;judge.py;make_verify_docs.py,verify,셀 키 입력 정합 — IME 한글 첫 글자·자동완성 정상,_verify.spec(@verify) 셀 키 입력 — 선택 셀 CDP IME 조합(대조군 편집기 열림)·콤보 입력 중 자동완성(변이 E6_MUTATE)
 F7,20,OK,ledger.add,eg_ingest.py;judge.py;make_verify_docs.py;save_audit.py,static,저장 연계·타 화면 동기화 — 저장 후 연계 테이블·연관 화면 데이터가 AS-IS 와 같게 갱신,tools/Harness/verify/save_audit.py(CRUD 실제 저장 정리 백업 ↔ AS-IS 저장 SP MERGE/INSERT 대상)
 F8,18,OK,ledger.add,eg_ingest.py;judge.py;make_verify_docs.py;save_audit.py,static,파생·감사 필드 갱신 — 재요청·수정 시 파생 필드 초기화 · Last Update By/Date 갱신,tools/Harness/verify/save_audit.py(정리 백업 루트 행 감사 컬럼 = 저장 계정·시각)
 G7,4,OK,ledger.list,eg_ingest.py;gen_expect.py;judge.py,verify,조회조건 표시값 형식 — 조회조건 선택값이 Name·형식 일관(코드/설명 혼용 0),combo_oracle.py(W1) G7 — AS-IS 컨트롤 표시 열(CControl.setListBox·UsrCheckedList2 row[1]) vs TO-
-G8,11,OK,ledger.list,_verify;eg_ingest.py;make_verify_docs.py,verify,텍스트 조건 대소문자 무시 — 대소문자 달라도 같은 결과(팝업 조회조건 포함),_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9)
-H8,10,OK,ledger.add,_trace;eg_ingest.py;make_verify_docs.py;mapping_trace.py,verify,표시 포맷(숫자 천단위·날짜시간) — 숫자 천단위·소수·날짜/시간 표시 = AS-IS,_trace.spec(@trace) H8 — 숫자 천단위·소수 + 날짜 yyyy-MM-dd/일시 yyyy-MM-dd HH:mm:ss 표시(SpreadInfo.cs
-H9,1,OK,ledger.add,_trace;make_verify_docs.py;mapping_trace.py,trace,컬럼 기본 폭 — 개인화 없을 때 컬럼 폭 = 기준,_trace.spec(@trace) W4c 컬럼 폭 = META COLUMN_WIDTH
+G8,11,OK,ledger.list,_verify;diagnose_layer.py;eg_ingest.py;make_verify_docs.py,verify,텍스트 조건 대소문자 무시 — 대소문자 달라도 같은 결과(팝업 조회조건 포함),_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9)
+H8,10,OK,ledger.add,_trace;diagnose_layer.py;eg_ingest.py;make_verify_docs.py;mapping_trace.py,verify,표시 포맷(숫자 천단위·날짜시간) — 숫자 천단위·소수·날짜/시간 표시 = AS-IS,_trace.spec(@trace) H8 — 숫자 천단위·소수 + 날짜 yyyy-MM-dd/일시 yyyy-MM-dd HH:mm:ss 표시(SpreadInfo.cs
+H9,1,OK,ledger.add,_trace;diagnose_layer.py;make_verify_docs.py;mapping_trace.py,trace,컬럼 기본 폭 — 개인화 없을 때 컬럼 폭 = 기준,_trace.spec(@trace) W4c 컬럼 폭 = META COLUMN_WIDTH
 I4,1,OK,ledger.list,judge.py;make_verify_docs.py,verify,라벨·메시지 중복 채번 금지 — 같은 문구 다른 코드 중복 0,judge meta_i4 — 화면 t() 코드의 같은 유형·KO·EN 문구 다른 MSG_ID(SCM_ADM_MSG_M) · 앞선 코드 두고 새 채번=FAIL
-J4,8,OK,ledger.add,_trace;eg_ingest.py;make_verify_docs.py,trace,메뉴·라우트 노출 = 권한·화면 존재 — 권한 메뉴만 노출 · 노출 메뉴 404 0 · 무권한 기본 화면,_trace.spec(@trace) W4d 메뉴 노출·라우트
+J4,8,OK,ledger.add,_trace;eg_ingest.py;make_verify_docs.py;plain_detail.py,trace,메뉴·라우트 노출 = 권한·화면 존재 — 권한 메뉴만 노출 · 노출 메뉴 404 0 · 무권한 기본 화면,_trace.spec(@trace) W4d 메뉴 노출·라우트
 K5,1,OK,ledger.add,_verify;make_verify_docs.py,verify,특수 편집기 동작(리치텍스트 등) — 서식·입력 동작 정상,_verify.spec(@verify) K5 — 표준 셀 타입 밖 AS-IS 셀 타입(cell_rules) 컬럼에 표본 입력 → 값 확정·재표시 보존(ledger
-L2,3,OK,ledger.add,_trace;cr_harness_gap.py;dict_sweep.py;i18n_lang_check.py;make_verify_docs.py,trace,입력 중 불필요 재렌더·깜박임 0 — 조회조건·셀 입력 중 그리드 이동·깜박임 0,_trace.spec(@trace) W4d 입력 중 그리드 재렌더 0
+L2,3,OK,ledger.add,_trace;dict_sweep.py;i18n_lang_check.py;make_verify_docs.py;meta_live_check.py,trace,입력 중 불필요 재렌더·깜박임 0 — 조회조건·셀 입력 중 그리드 이동·깜박임 0,_trace.spec(@trace) W4d 입력 중 그리드 재렌더 0
 X-LOC,0,대상 생성 없음,,impl_engine.py;judge.py;make_verify_docs.py;mapping_trace.py,verify,대조표 상태 구현 행의 구현 위치(파일:라인)가 TO-BE 소스에 실존,mapping_trace 정적(구현 위치 실존)
-MS1,23,OK,ledger.add,defects_sources_merge.py;eg_ingest.py;judge.py;make_verify_docs.py;validate_classified.py,static,AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 사용 여부,judge.py MS1(impl_engine.msg_mapper 문구 매핑 · FE 페이지 폴더(주석 제외)·TO-BE PKG(sort_check tobe_pkg
-G9,5,OK,ledger.list,_verify;eg_ingest.py;judge.py;make_verify_docs.py;validate_classified.py,verify,텍스트 조건 콤마 다중값 입력 — 두 값 모두 조회·결과가 그 값들만(팝업 포함),_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9)
+MS1,23,OK,ledger.add,defects_sources_merge.py;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;validate_classified.py,static,AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 사용 여부,judge.py MS1(impl_engine.msg_mapper 문구 매핑 · FE 페이지 폴더(주석 제외)·TO-BE PKG(sort_check tobe_pkg
+G9,5,OK,ledger.list,_verify;diagnose_layer.py;eg_ingest.py;judge.py;make_verify_docs.py;validate_classified.py,verify,텍스트 조건 콤마 다중값 입력 — 두 값 모두 조회·결과가 그 값들만(팝업 포함),_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9)
 E7,2,OK,ledger.add,_verify;eg_ingest.py;make_verify_docs.py;validate_classified.py,verify,팝업 셀 직접 입력 잘못된 값 → 되돌림/검증 메시지(저장 차단),_verify.spec(@verify) 팝업 입력 컬럼 Key-in 검증(E7)
 F9,2,OK,ledger.add,_verify;defects_sources_merge.py,verify,주/월 입력 수량 일자 배분 = AS-IS 규칙,_verify.spec(@verify) F9 — Bucket=Weekly 편집 가능 주 셀 +7 저장 → Daily 재조회 같은 행(rowKey) 그 주 일자 합
-F10,2,OK,ledger.add,smoke-extra.ts;defects_sources_merge.py;judge.py,static,저장 SP 트랜잭션 원자성,f10_check.py — 저장 PROC(PROC_M SAVE/INS/UPD/DEL)+1단계 하위 호출 본문(ALL_SOURCE) COMMIT·TRUNCATE·D
+F10,2,OK,ledger.add,smoke-extra.ts;defects_sources_merge.py;diagnose_layer.py;judge.py;repair_scope.py,static,저장 SP 트랜잭션 원자성,f10_check.py — 저장 PROC(PROC_M SAVE/INS/UPD/DEL)+1단계 하위 호출 본문(ALL_SOURCE) COMMIT·TRUNCATE·D
 H11,3,OK,ledger.add,_verify;defects_sources_merge.py,verify,서버 호출 중 로딩 표시,_verify.spec(@verify) H11 — 조회 클릭 후 응답 전까지 progressbar/스피너 노출 · 응답 후 사라짐
-H12,1,OK,ledger.add,_verify;defects_sources_merge.py,verify,좌측 고정 컬럼 = META FIXED_FLAG,_verify.spec(@verify) H12 — probe.frozenColumns ↔ SHEET_COLUMNS FIXED_FLAG=Y 컬럼 집합
+H12,1,OK,ledger.add,_verify;defects_sources_merge.py;diagnose_layer.py,verify,좌측 고정 컬럼 = META FIXED_FLAG,_verify.spec(@verify) H12 — probe.frozenColumns ↔ SHEET_COLUMNS FIXED_FLAG=Y 컬럼 집합
 G10,2,OK,ledger.add,_verify;defects_sources_merge.py,verify,팝업 연결 텍스트 조회조건 Enter → 팝업 열기,_verify.spec(@verify) G10 — 팝업 연결 텍스트 조회조건 입력칸에서 Enter → dialog 열림
 H13,0,OK,ledger.add,_verify,verify,음수 글자색 빨강(NegativeRed 프레임워크 기본),_verify.spec(@verify) H13 — 음수 셀 글자색(probe.cellStyle · 정적 NUMBER 컬럼 + <DYNAMIC:> 패밀리)
 K6,1,OK,ledger.list,_verify;make_verify_docs.py,verify,상단·하단 그리드 연동 시 상단 안정(깜빡임 없음),_verify.spec(@verify) K6 — 상단 행 클릭/더블클릭 → 하단 조회 중 상단 그리드 재조회 요청·재렌더(행 수·DOM) 변화 없음(RULE_SC

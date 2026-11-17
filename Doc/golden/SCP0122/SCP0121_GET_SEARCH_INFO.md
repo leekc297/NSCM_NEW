@@ -1,6 +1,6 @@
 # SCP0122 · SCP0121_GET_SEARCH_INFO ↔ PKG_COM0000.P_SCP0121_GET_SEARCH_INFO
 
-- 실행: 2026-11-08 22:01:06
+- 실행: 2026-11-14 17:10:14
 - 파라미터: `{"p_user_id": "bpark416"}`
 - 종류: GET
 

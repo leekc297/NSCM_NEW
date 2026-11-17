@@ -1,0 +1,110 @@
+{
+ "id": "SSP0008",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-S7d95f9",
+    "SSP0008-S69448c",
+    "SSP0008-S8271f9",
+    "SSP0008-S5a1a8f",
+    "SSP0008-Se946c7",
+    "SSP0008-S64eb3a",
+    "SSP0008-Sf282b3",
+    "SSP0008-S7b31fe",
+    "SSP0008-S7a38e2",
+    "SSP0008-Sc684ba",
+    "SSP0008-S346303",
+    "SSP0008-Sede481",
+    "SSP0008-S00ad82",
+    "SSP0008-Sd73a1d",
+    "SSP0008-S22ea04",
+    "SSP0008-S8db3bb",
+    "SSP0008-S641370",
+    "SSP0008-S14aca7",
+    "SSP0008-S6e6dad",
+    "SSP0008-S1691b9"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-Sea1449",
+    "SSP0008-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0008-S7d95f9",
+    "SSP0008-S69448c",
+    "SSP0008-S8271f9",
+    "SSP0008-S5a1a8f"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnFix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-13 12:31:38.529",
+ "fills": 3,
+ "fill_left": []
+}

@@ -1,0 +1,170 @@
+{
+ "id": "DMF0053",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 30,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0053-S96bd28",
+    "DMF0053-S66b2c3",
+    "DMF0053-S26ff5f",
+    "DMF0053-S18f2df",
+    "DMF0053-S6c59f3",
+    "DMF0053-S6a69a9",
+    "DMF0053-Sd59aae",
+    "DMF0053-Sf5f784",
+    "DMF0053-Sbb8d29",
+    "DMF0053-S252290",
+    "DMF0053-Sc14b34",
+    "DMF0053-Sf6ff58",
+    "DMF0053-Sbc6685",
+    "DMF0053-S36e4d3",
+    "DMF0053-Sd738d5",
+    "DMF0053-S2e76bd",
+    "DMF0053-S72a490",
+    "DMF0053-Sf409b9",
+    "DMF0053-S6bd4b3",
+    "DMF0053-S109112",
+    "DMF0053-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0053-Sea1449",
+    "DMF0053-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0053-S96bd28",
+    "DMF0053-S66b2c3",
+    "DMF0053-S26ff5f",
+    "DMF0053-S18f2df",
+    "DMF0053-S6c59f3",
+    "DMF0053-S6a69a9",
+    "DMF0053-Sd59aae",
+    "DMF0053-Sf5f784",
+    "DMF0053-Sbb8d29",
+    "DMF0053-S252290",
+    "DMF0053-Sc14b34",
+    "DMF0053-Sf6ff58",
+    "DMF0053-Sbc6685",
+    "DMF0053-S36e4d3",
+    "DMF0053-Sd738d5",
+    "DMF0053-S2e76bd",
+    "DMF0053-S72a490",
+    "DMF0053-Sf409b9",
+    "DMF0053-S6bd4b3",
+    "DMF0053-S109112",
+    "DMF0053-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0053-S4fa471"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0053-S287784",
+    "DMF0053-S6ab4d3"
+   ]
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0053-S8f08c9",
+    "DMF0053-Sc9b6a0"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 10:22:35.993",
+ "fills": 0,
+ "fill_left": []
+}

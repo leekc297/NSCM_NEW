@@ -1,14 +1,32 @@
 [
  {
-  "row_id": "V-2fdb9660",
-  "rule_id": "A6",
-  "target": "SCP0007_GET_BOD",
+  "row_id": "V-c9113f26",
+  "rule_id": "K3",
+  "target": "SCP0007 화면",
   "same": []
  },
  {
-  "row_id": "V-2ecba37b",
-  "rule_id": "G2",
-  "target": "조회조건 To Site",
+  "row_id": "V-db344fe6",
+  "rule_id": "F2",
+  "target": "SCP0007 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+  "same": []
+ },
+ {
+  "row_id": "V-3aea2c41",
+  "rule_id": "L1",
+  "target": "SCP0007 저장 응답 시간",
+  "same": []
+ },
+ {
+  "row_id": "V-c7015016",
+  "rule_id": "F10",
+  "target": "PKG_SCP0007.P_SCP0007_SAVE_BOD",
+  "same": []
+ },
+ {
+  "row_id": "V-6474e997",
+  "rule_id": "H13",
+  "target": "bod.AFTER_LEAD_TIME (Additional Lead Time)",
   "same": []
  },
  {
@@ -33,6 +51,60 @@
   ]
  },
  {
+  "row_id": "V-3ce5c2f4",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
+ },
+ {
+  "row_id": "V-9c58202f",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
+ },
+ {
+  "row_id": "AD-6ffd73f7",
+  "rule_id": "A1",
+  "target": "SCP0007 SCP0007_GET_BOD 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 )",
+  "same": []
+ },
+ {
+  "row_id": "T-48725bd0",
+  "rule_id": "C6",
+  "target": "TO_SITE_CODE / To Site",
+  "same": []
+ },
+ {
+  "row_id": "T-803c75b2",
+  "rule_id": "D1",
+  "target": "ROUTE_ID / Route Id",
+  "same": []
+ },
+ {
+  "row_id": "T-a457e667",
+  "rule_id": "D3",
+  "target": "INCOTERMS_SSP / Incoterms SSP",
+  "same": [
+   "T-aa95f6d2",
+   "T-0c3aaaf4"
+  ]
+ },
+ {
+  "row_id": "T-cd892e67",
+  "rule_id": "D3",
+  "target": "INCOTERMS / Incoterms",
+  "same": [
+   "T-943eabe5",
+   "T-f660d450"
+  ]
+ },
+ {
+  "row_id": "EG-6925ee53",
+  "rule_id": "M4",
+  "target": "SCP0007 팝업 SCP0007_DistributionRoutePopup CELL:ROUTE_ID PICK_OK",
+  "same": []
+ },
+ {
   "row_id": "V-3778a5ce",
   "rule_id": "C6",
   "target": "",
@@ -43,5 +115,29 @@
   "rule_id": "C6",
   "target": "",
   "folded_into": "V-c667b133"
+ },
+ {
+  "row_id": "T-aa95f6d2",
+  "rule_id": "D3",
+  "target": "",
+  "folded_into": "T-a457e667"
+ },
+ {
+  "row_id": "T-0c3aaaf4",
+  "rule_id": "D3",
+  "target": "",
+  "folded_into": "T-a457e667"
+ },
+ {
+  "row_id": "T-943eabe5",
+  "rule_id": "D3",
+  "target": "",
+  "folded_into": "T-cd892e67"
+ },
+ {
+  "row_id": "T-f660d450",
+  "rule_id": "D3",
+  "target": "",
+  "folded_into": "T-cd892e67"
  }
 ]

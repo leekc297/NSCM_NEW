@@ -15,7 +15,7 @@
 | features/supply/src/pages/plan-management/plan-management.constants.ts | constants | 114 |
 | features/supply/src/pages/plan-management/plan-management.types.ts | types | 18 |
 | features/supply/src/pages/plan-management/PlanManagement.module.scss | style | 63 |
-| features/supply/src/pages/plan-management/PlanManagement.tsx | page | 291 |
+| features/supply/src/pages/plan-management/PlanManagement.tsx | page | 306 |
 | features/supply/src/pages/plan-management/usePlanManagementStore.ts | store | 175 |
 | features/supply/src/pages/plan-management/__asis-mapping__.md | mapping | 129 |
 
@@ -23,9 +23,9 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | PlanManagementForm.tsx:49 |
-| SCP0134/mainGrid//call-proc | hook | 1 | Y | PlanManagement.tsx:78 |
-| SCP0134/detailGrid//call-proc | hook | 1 | Y | PlanManagement.tsx:86 |
-| /SCP0134/mainGrid/EXECUTE/call-proc | http | 1 | Y | PlanManagement.tsx:149 |
+| SCP0134/mainGrid//call-proc | hook | 1 | Y | PlanManagement.tsx:79 |
+| SCP0134/detailGrid//call-proc | hook | 1 | Y | PlanManagement.tsx:87 |
+| /SCP0134/mainGrid/EXECUTE/call-proc | http | 1 | Y | PlanManagement.tsx:150 |
 | /admin/menu/SCP0134/search-conditions | http | 1 | Y | usePlanManagementStore.ts:134 |
 | /admin/menu/SCP0134/column | http | 1 | Y | usePlanManagementStore.ts:154 |
 
@@ -43,11 +43,11 @@
 | grid | formatItem | handleFormatItem | addHandler | features/supply/src/pages/plan-management/components/PlanManagementGrid.tsx | 123 |
 | grid | beginningEdit | handleBeginningEdit | addHandler | features/supply/src/pages/plan-management/components/PlanManagementGrid.tsx | 133 |
 | grid | cellEditEnded | handleCellEditEnded | addHandler | features/supply/src/pages/plan-management/components/PlanManagementGrid.tsx | 143 |
-| PlanManagementForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 249 |
-| PlanManagementForm | onDivisionRows | setDivisionRows | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 251 |
-| PlanManagementGrid | onAction | handleAction | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 271 |
-| PlanManagementGrid | onRowSelect | handleRowSelect | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 272 |
-| PlanManagementGrid | onRevisionChanged | handleRevisionChanged | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 273 |
+| PlanManagementForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 264 |
+| PlanManagementForm | onDivisionRows | setDivisionRows | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 266 |
+| PlanManagementGrid | onAction | handleAction | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 286 |
+| PlanManagementGrid | onRowSelect | handleRowSelect | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 287 |
+| PlanManagementGrid | onRevisionChanged | handleRevisionChanged | jsx | features/supply/src/pages/plan-management/PlanManagement.tsx | 288 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

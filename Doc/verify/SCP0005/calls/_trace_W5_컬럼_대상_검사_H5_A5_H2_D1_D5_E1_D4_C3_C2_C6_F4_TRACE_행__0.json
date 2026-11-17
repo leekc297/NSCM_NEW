@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2047,
+  "at": "2026-11-13T20:57:01.726Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 784,
+  "at": "2026-11-13T20:57:03.935Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 116,
+  "at": "2026-11-13T20:57:14.873Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ }
+]

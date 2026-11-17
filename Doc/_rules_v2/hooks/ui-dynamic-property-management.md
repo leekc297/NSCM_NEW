@@ -55,7 +55,7 @@ SELECT PROGRAM_ID, SHEET_NAME, COLUMN_NAME, COLUMN_LABEL_NAME, SORT_ORDER_NO, VA
 
 ### Step 2 — 부재 시 admin UI 에 신규 등록 의무
 
-⚠ **Step 1 결과 0 건 → 신규 등록 의무**. admin UI 에서 등록하거나, deploy SQL (BLOCK 3/4/6) 에 INSERT 포함.
+⚠ **Step 1 결과 0 건 → 신규 등록 의무**. admin UI 에서 등록하거나, deploy SQL (BLOCK 3/4/6) 에 INSERT 포함. (2026-11-13 정정: INSERT 값은 화면설계서·AS-IS 실데이터 근거가 있거나 사용자가 요청한 것만 — 근거 없는 추정 값 INSERT 금지·사용자 보고(`ui-category-setup-no-arbitrary-data.md`))
 
 **신규 등록 표준 SQL 패턴** (메타 SQL 7-BLOCK 의 일부):
 
@@ -81,14 +81,14 @@ SELECT * FROM (SELECT '{NEW_MENU_ID}', 'Sales Price', 'LOC', 'Local', 1, 'Y', 'a
 
 | 구성요소 | Store state | fetch action | 호출 시점 |
 |---|---|---|---|
-| **Menu Button** | (BE auto: `useTabBtnPermissions` hook 또는 API `/admin/menu/{MENU_ID}/buttons`) | `useTabBtnPermissions(MENU_ID, SHT_NM)` | mount + division/tab 변경 |
+| **Menu Button** | (BE auto: `useTabBtnPermissions` hook 또는 API `/admin/menu/{MENU_ID}/buttons`) | `useTabBtnPermissions({ menuId: MENU_ID })` (2026-11-13 정정: `(MENU_ID, SHT_NM)` → 객체 인자 `{ menuId }` — §3.2 시그니처·실제 훅과 일치. 시트 단위는 `hasButton(btnCd, sheetName)`) | mount + division/tab 변경 |
 | **Column** | `staticColumns: { [SHEET]: RawFlexGridColumnConfig[] }` | `fetchStaticColumns()` | mount + Search + division 변경 |
 | **Measure** | `staticMeasures: { [SHEET]: MeasureMeta[] }` (PIVOT 화면) | `fetchStaticMeasures()` | mount + Search + division 변경 |
 
 ### Step 4 — admin UI 변경 → 화면 즉시 반영 의무
 
 - 화면 진입 시 항상 fetch (mount + Search)
-- Cache invalidation 시점: 사용자가 admin UI 에서 SAVE → BE 가 `/api/cache/refresh` 트리거 → FE store 자동 invalidate
+- Cache invalidation 시점: 사용자가 admin UI 에서 SAVE → BE 가 `/api/cache/refresh` 트리거 → FE store 자동 invalidate (2026-11-13: `/api/cache/refresh` 엔드포인트는 현재 `nscm-be` 에 없음 — 반영 경로는 아래 재진입·mount fetch)
 - (BE 가 cache 미지원 시) 사용자가 화면 재진입 시 mount fetch 로 반영
 
 ---
@@ -104,7 +104,7 @@ SELECT * FROM (SELECT '{NEW_MENU_ID}', 'Sales Price', 'LOC', 'Local', 1, 'Y', 'a
 | 의미 | 결정 기준 |
 |---|---|
 | **Visible** (사용자에게 표시) | `MNU_BTN_MPG_M.USE_YN = 'Y'` (admin 이 정의 자체 토글) |
-| **Enable** (클릭 가능) | 로그인 사용자 그룹의 `USER_GR_MNU_BTN_MPG_M` row 존재 + `USE_YN = 'Y'` (권한) |
+| **Enable** (클릭 가능) | 로그인 사용자 그룹의 `USER_GR_MNU_BTN_MPG_M` row 존재 + `USE_YN = 'Y'` (권한) (2026-11-13 정정: 권한이 없으면 '표시하되 비활성'이 아니라 **숨김** — CR-070 · `subtitle-button-actions-mandatory.md` §1.0, 공용 `SubTitle.tsx` `gateByAuth`) |
 
 ### 3.2 FE 구현 패턴 ⭐ 2026-06-15 — **BE+FE 구현 완료**
 
@@ -140,6 +140,7 @@ const customButtons = hasButton('EXECUTE')
 ```
 
 ⚠ **hardcoded `hotkeyConfig: { search: handleSearch }`** 작성 시 → admin USE_YN='N' 비활성화 무시 → 운영 결정 무효화 (SCM0008 사고 family, 메모리 `feedback_common_button_visibility_default.md`).
+(2026-11-13 정정: SAVE/INSERT/DELETE 는 공용 `SubTitle.tsx` 가 중앙에서 권한 게이트(`gateByAuth` — 메뉴에 정의돼 있는데 사용자 권한이 없으면 숨김, CR-070)하므로 이 3종은 핸들러를 그대로 넘겨도 권한이 걸러진다 → `subtitle-button-actions-mandatory.md` §1.0. 화면별 `hasButton(...)` 조건부 배선이 계속 필요한 것은 중앙 게이트 대상이 아닌 SEARCH·customButtons·시트 단위 판정이다.)
 
 ⚠ **`shtNm` 파라미터 없음** — BE 가 menu 전체의 권한 list 반환 (sheet 무관). sheet 별 권한 분리 필요 시 BE 보강 별도 task.
 
@@ -169,7 +170,7 @@ USING (SELECT '{NEW_MENU_ID}' MNU_ID, '{SHT_NM}' SHT_NM, '{BTN_CD}' MNU_BTN_CD F
                        VALUES (s.MNU_ID, s.SHT_NM, s.MNU_BTN_CD, '{API_ID}', 'Y', 'admin', SYSDATE, 'admin', SYSDATE);
 -- {BTN_CD} 반복: SEARCH/INSERT/DELETE/SAVE/EXCEL/UPLOAD/MANUAL
 
--- USER_GR_MNU_BTN_MPG_M (자매 화면 그룹 동적 복사)
+-- USER_GR_MNU_BTN_MPG_M (자매 화면 그룹 동적 복사)   (2026-11-14 정정: 복사할 그룹은 사용자가 지정한 경우만. 지정이 없으면 등록하지 않고 보고한다. ui-category-setup-no-arbitrary-data.md 금지 4번)
 INSERT INTO SCM_ADM_USER_GR_MNU_BTN_MPG_M (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
 SELECT DISTINCT u.USER_GR_ID, '{NEW_MENU_ID}' MNU_ID, '{SHT_NM}', '{BTN_CD}', 'Y', 'admin', SYSDATE, 'admin', SYSDATE
   FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M u
@@ -200,7 +201,7 @@ SELECT DISTINCT u.USER_GR_ID, '{NEW_MENU_ID}' MNU_ID, '{SHT_NM}', '{BTN_CD}', 'Y
 | Align | `HORIZONTAL_ALIGN_CODE` | L/R/C |
 | Uppercase | `UPPERCASE_APPLY_FLAG` | 자동 변환 |
 | Selectable | `USER_SELECTABLE_FLAG` | column setting popup 노출 |
-| Lookup (combo) | `ATTRIBUTE1~10` (`_modalKey` 등) | combo / popup 키 |
+| Lookup (combo) | `ATTRIBUTE1~10` (`_modalKey` 등) | combo / popup 키 (2026-11-13 정정: 콤보·모달 키의 표준 위치는 `CELL_COMBO_DATA_TYPE`(FE `cellCboDataTp`) — 2026-08-22 슬롯 전환. `ATTRIBUTE1` 은 파라미터(`sParam1`) 자리이고 모달키는 과도기 병행만 — `ui-meta-dictionary-mandatory.md` §4.1) |
 
 → **모두 admin 변경 시 즉시 반영** — `staticColumns[SHEET]` state + `fetchStaticColumns()` action.
 
@@ -234,8 +235,9 @@ interface Action {
 
 fetchStaticMeasures: async () => {
   const [main, popup] = await Promise.all([
-    apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.MAIN }),
-    apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.POPUP }),
+    // (2026-11-13 정정: divisionId 항상 전송 — 컬럼 호출과 통일)
+    apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.MAIN, divisionId: get().searchParams.divisionId }),
+    apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.POPUP, divisionId: get().searchParams.divisionId }),
   ]);
   set(state => {
     state.staticMeasures = {

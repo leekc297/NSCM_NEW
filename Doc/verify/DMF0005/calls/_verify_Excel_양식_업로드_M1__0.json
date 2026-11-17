@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 361,
+  "at": "2026-11-13T22:15:41.291Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 439,
+  "at": "2026-11-13T22:15:41.442Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ }
+]

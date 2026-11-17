@@ -1,0 +1,298 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BtnApprovalUser",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0002_UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "afdhal",
+     "Afdhal Zikri Yudita",
+     "Afdhal Zikri Yudita",
+     "71068129",
+     "Production Management Part - Assembly Planner"
+    ]
+   },
+   "expected_forms": [
+    "SSP0002_UserInfoPopup"
+   ],
+   "popup_inside": {
+    "form": "SSP0002_UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 0,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [
+      {
+       "sp": "SSP0002_GET_USER_INFO_LIST",
+       "rows": 293,
+       "params": {
+        "Search": "",
+        "Language": "KO",
+        "SSOUserYN": "N"
+       }
+      }
+     ],
+     "rows_after": 293
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "txtAppDeptName#0",
+     "before": "",
+     "after": "Production Management Part - Assembly Planner"
+    },
+    {
+     "control": "txtApproval#0",
+     "before": "",
+     "after": "Afdhal Zikri Yudita"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 29575
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "40",
+     "Mobility & IT Battery",
+     "-",
+     "-",
+     "1X Technologies_US_PAO",
+     "1X Technologies_US_PAO",
+     "MCCM351015B1-D01",
+     "MC,C,M,21700,5.1Ah,15.3A,B1",
+     "P",
+     "M53L",
+     "[MCC]18/21 Cylindrical"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 29575,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#2",
+     "before": "",
+     "after": "MCCM351015B1-D01"
+    },
+    {
+     "control": "txtRequest#0",
+     "before": "",
+     "after": "MCCM351015B1-D01"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnApprovalUser": {
+   "forms": [
+    "SSP0002_UserInfoPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_132823_acts"
+  },
+  "btnItemId": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_132823_acts"
+  }
+ },
+ "at": "2026-11-15 12:38:38",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "done": [
+   {
+    "set": {
+     "name": "cboChangeType",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Confirm",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ }
+}

@@ -1,0 +1,11 @@
+﻿sheet,asis_sp,param,asis,tobe,verdict,note
+main,SSP0024_GET_SHIP_MASTER,division_id,81,81,SAME,
+main,SSP0024_GET_SHIP_MASTER,material_id,,,SAME,
+main,SSP0024_GET_SHIP_MASTER,model_id,,,SAME,
+main,SSP0024_GET_SHIP_MASTER,nick_name,,,SAME,
+main,SSP0024_GET_SHIP_MASTER,plant_site_id,"HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",,ALL_SAME,
+popup,SSP0024_GET_SHIP_MASTER,division_id,81,81,SAME,
+popup,SSP0024_GET_SHIP_MASTER,material_id,,,SAME,
+popup,SSP0024_GET_SHIP_MASTER,model_id,,,ASIS_ONLY,
+popup,SSP0024_GET_SHIP_MASTER,nick_name,,,ASIS_ONLY,
+popup,SSP0024_GET_SHIP_MASTER,plant_site_id,"HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",HQ07-E,DIFF,

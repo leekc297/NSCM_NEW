@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0021",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 21,
+  "dur": 107,
+  "at": "2026-11-14T13:37:48.253Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0021/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 218,
+  "at": "2026-11-14T13:37:48.533Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 474,
+  "at": "2026-11-14T13:37:48.697Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260919\",\"endYyyymmdd\":\"20261113\"}",
+  "status": 200,
+  "rows": 71,
+  "dur": 100,
+  "at": "2026-11-14T13:37:49.294Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SSP0021\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 882,
+  "at": "2026-11-14T13:37:53.469Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ },
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"FMC-HEVC\",\"scpModuleType\":\"SSP0021\"}",
+  "status": 200,
+  "rows": 4,
+  "dur": 459,
+  "at": "2026-11-14T13:37:55.049Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

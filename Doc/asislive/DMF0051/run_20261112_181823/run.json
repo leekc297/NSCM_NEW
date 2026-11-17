@@ -1,0 +1,151 @@
+{
+ "id": "DMF0051",
+ "started": "2026-11-12 18:18:23.968",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:18:24.303",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0051_BizPlanWaterfall",
+   "form_text": "Biz Plan Waterfall",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0051_BizPlanWaterfall.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:30.554"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:18:33.936",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0051\\run_20261112_181823\\dump_load.json",
+   "control_count": 100,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:33.946"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:18:34.105",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0051\\run_20261112_181823\\shots\\DMF0051_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:18:34.240"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:18:34.566",
+   "call_timed_out": false,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 18:18:35.920"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:18:43.690",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0051\\run_20261112_181823\\dump_find.json",
+   "control_count": 100,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 18:18:43.699"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:18:43.857",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0051\\run_20261112_181823\\shots\\DMF0051_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 18:18:44.006"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:18:44.480",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 18:18:45.105"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 20,
+  "calls_with_params": 19
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0051_BizPlanWaterfall",
+  "form_text": "Biz Plan Waterfall",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0051_BizPlanWaterfall.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 18:18:24.175",
+ "t_find": "2026-11-12 18:18:34.246",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:18:35.481",
+   "caption": "GSCM",
+   "text": "Version 값은 필수 입력입니다",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 100,
+  "layout_items": 30,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 24,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 20,
+  "calls_screen": 20,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:16.729",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:16"
+}

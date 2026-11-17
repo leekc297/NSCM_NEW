@@ -1,0 +1,92 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 09:34:52.075",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.63,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 09:35:56.355",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36384,
+   "rows_kind": "DataSet rows",
+   "ms": 64221.77,
+   "params": {
+    "p_division_id": "ALL",
+    "p_operation_group": "ALL",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0085"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='ALL', @p_operation_group='ALL', @p_item_id='', @p_scp_module_type='SCP0085'",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 09:36:12.824",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0085_GET_ENDING_INVENTORY",
+   "sp": "SCP0085_GET_ENDING_INVENTORY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 132922,
+   "rows_kind": "DataSet rows",
+   "ms": 90888.13,
+   "params": {
+    "p_yyyymm": "202609",
+    "p_division_id": "",
+    "p_plant_id": "",
+    "p_item_type": "",
+    "p_item_id": "",
+    "p_profit_center": "",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0085_GET_ENDING_INVENTORY @p_yyyymm='202609', @p_division_id='', @p_plant_id='', @p_item_type='', @p_item_id='', @p_profit_center='', @debug_mode='F'",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 09:36:15.524",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.59,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-13 09:36:17.194",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36384,
+   "rows_kind": "DataSet rows",
+   "ms": 1468.95,
+   "params": {
+    "p_division_id": "ALL",
+    "p_operation_group": "ALL",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0085"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='ALL', @p_operation_group='ALL', @p_item_id='', @p_scp_module_type='SCP0085'",
+   "phase": "action:btnItem_Id"
+  }
+ ]
+}

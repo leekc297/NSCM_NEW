@@ -1,6 +1,6 @@
 # issue-feed-rules — 일일 이슈목록 → 룰 후보 누적 피드
 
-> **성격**: append-only 누적 피드. `C:\TRANFILE\RECEIVE\이슈목록관리.xlsx` 일일 스냅샷에서 도출한 룰 후보를 날짜별로 누적한다.
+> **성격**: append-only 누적 피드. `C:\Projects\NSCM\Doc\issue\이슈목록관리.xlsx` 또는 `C:\Projects\NSCM\_analysis\이슈목록관리.xlsx` 일일 스냅샷에서 도출한 룰 후보를 날짜별로 누적한다. (2026-11-13 정정: 원본 위치 `C:\TRANFILE\RECEIVE\` → 현행 2곳 — `issue-log-daily-workflow.md` 입력 경로 표, 2026-06-23 위치 변경)
 > **운영**: 매일 자동 작업이 본 파일 하단에 신규 날짜 블록을 **추가만** 한다(기존 블록 수정/삭제 금지).
 > **편입 절차**: 사람이 검토 후, 정식 룰로 승격할 후보는 해당 hook 또는 `_tobe` 룰 문서로 이관하고 본 피드의 상태를 `편입완료`로 표기한다.
 > ⚠️ anti-simplification 정책상 정식 룰 문서 직접 자동수정은 금지. 본 피드는 **후보 적재용 단일 안전지대**이다.

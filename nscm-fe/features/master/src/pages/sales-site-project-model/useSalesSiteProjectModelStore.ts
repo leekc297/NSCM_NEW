@@ -2,7 +2,12 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import { MENU_ID, RESPONSE_SET, SHEETS } from './sales-site-project-model.constants';
+import {
+  MENU_ID,
+  NULL_FILTER_DIVISION,
+  RESPONSE_SET,
+  SHEETS,
+} from './sales-site-project-model.constants';
 
 interface SearchParamProps {
   divisionId: string;
@@ -13,6 +18,9 @@ interface SearchParamProps {
   itemId: string;
   activeFlag: string;
   owner: string;
+  // 40 전용 체크박스 — 'Y' / 'N'. 설명은 constants NULL_FILTER_LABEL 주석 참조.
+  endCustReportYn: string;
+  projectInfoYn: string;
 }
 
 type filtersBySheet = {
@@ -57,6 +65,8 @@ const makeInitSearchParams = (): SearchParamProps => ({
   itemId: '',
   activeFlag: 'ALL',
   owner: '',
+  endCustReportYn: 'N',
+  projectInfoYn: 'N',
 });
 
 // filters 도 호출 시점에 새 객체로 만든다. 같은 객체를 reset 과 division 변경에 재사용하면
@@ -96,7 +106,15 @@ export const useSalesSiteProjectModelStore = createPersistedStoreWithTab<
     },
     setProductionFilter: () => {
       set(state => {
-        state.filters[SHEETS.PRODUCTION] = { ...state.searchParams };
+        // 체크박스 두 값은 40 에서만 'Y' 가 나간다 — AS-IS 도 40 이 아니면 'N' 고정이었다.
+        //   저장해 둔 조회조건을 복원한 경우 이 두 키가 없을 수 있어 여기서 'Y' / 'N' 으로 확정한다.
+        const sp = state.searchParams;
+        const isNullFilterDivision = sp.divisionId === NULL_FILTER_DIVISION;
+        state.filters[SHEETS.PRODUCTION] = {
+          ...sp,
+          endCustReportYn: isNullFilterDivision && sp.endCustReportYn === 'Y' ? 'Y' : 'N',
+          projectInfoYn: isNullFilterDivision && sp.projectInfoYn === 'Y' ? 'Y' : 'N',
+        };
         state.filters[SHEETS.PURCHASE] = undefined;
       });
     },
@@ -107,7 +125,12 @@ export const useSalesSiteProjectModelStore = createPersistedStoreWithTab<
     },
     setSearchParams: searchParams => {
       set(state => {
-        state.searchParams = { ...get().searchParams, ...searchParams };
+        // Division 을 바꾸면 40 전용 체크박스도 함께 푼다(다른 하위 조건과 같은 초기화).
+        state.searchParams = {
+          ...get().searchParams,
+          ...(searchParams.divisionId ? { endCustReportYn: 'N', projectInfoYn: 'N' } : {}),
+          ...searchParams,
+        };
         if (searchParams.divisionId) {
           state.filters = makeInitFilters();
         }

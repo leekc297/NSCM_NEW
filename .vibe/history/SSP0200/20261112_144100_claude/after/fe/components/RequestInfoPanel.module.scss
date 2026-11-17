@@ -1,0 +1,45 @@
+// 요청정보 머리줄 — [접기/펼치기·고정 버튼] [Request Info 제목(가운데)] [Request Complete·Cancel].
+//   좌우 1fr 로 제목을 화면 가운데에 둔다(사용자 지시 2026-10-08 가운데 정렬 유지).
+//   액션 버튼을 머리줄에 둬 접힌 상태에서도 요청확정/취소를 쓸 수 있다(사용자 지시 2026-11-12).
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 8px;
+  min-height: 32px;
+}
+
+.headerTools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: start;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #292d32;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.headerActions {
+  justify-self: end;
+}
+
+// Reason Detail — 한 줄 배치(Title·Change Reason 과 같은 행)라 조회조건 표준 높이 36px 에 맞춘다.
+//   textarea 는 칸 안에서 스크롤한다(장문 입력 유지). 칸 밖으로 늘면 overflow:hidden 패널이 화면을 밀어 올린다.
+.reasonDetail {
+  :global {
+    .MuiInputBase-root {
+      height: 100%;
+    }
+    textarea {
+      height: 100% !important;
+      min-height: 0 !important;
+      overflow: auto !important;
+    }
+  }
+}

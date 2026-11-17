@@ -1,17 +1,17 @@
 # SCM0014 — To-Be Fact Pack 요약
 
 - page_key: `supply/validation-shipment-result` · feature: supply · As-is Fact Pack 있음
-- 파일 9 · 엔드포인트 호출 7 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 32 · 하드코딩 컬럼 0 · 메시지 11
+- 파일 9 · 엔드포인트 호출 8 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 32 · 하드코딩 컬럼 0 · 메시지 11
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | component | 265 |
+| features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | component | 286 |
 | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultGrid.tsx | component | 52 |
 | features/supply/src/pages/validation-shipment-result/index.ts | index | 2 |
-| features/supply/src/pages/validation-shipment-result/useValidationShipmentResultStore.ts | store | 167 |
-| features/supply/src/pages/validation-shipment-result/validation-shipment-result.constants.ts | constants | 66 |
+| features/supply/src/pages/validation-shipment-result/useValidationShipmentResultStore.ts | store | 168 |
+| features/supply/src/pages/validation-shipment-result/validation-shipment-result.constants.ts | constants | 70 |
 | features/supply/src/pages/validation-shipment-result/validation-shipment-result.types.ts | types | 21 |
 | features/supply/src/pages/validation-shipment-result/validation-shipment-result.util.ts | other | 34 |
 | features/supply/src/pages/validation-shipment-result/ValidationShipmentResult.tsx | page | 154 |
@@ -20,9 +20,9 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 4 | Y | ValidationShipmentResultForm.tsx:50 ValidationShipmentResultForm.tsx:54 ValidationShipmentResultForm.tsx:59 ValidationShipmentResultForm.tsx:62 |
-| /admin/menu/SCM0014/search-conditions | http | 1 | Y | useValidationShipmentResultStore.ts:131 |
-| /admin/menu/SCM0014/column | http | 1 | Y | useValidationShipmentResultStore.ts:152 |
+| (useTabComboQueries) | hook | 5 | Y | ValidationShipmentResultForm.tsx:51 ValidationShipmentResultForm.tsx:55 ValidationShipmentResultForm.tsx:60 ValidationShipmentResultForm.tsx:63 ValidationShipmentResultForm.tsx:69 |
+| /admin/menu/SCM0014/search-conditions | http | 1 | Y | useValidationShipmentResultStore.ts:132 |
+| /admin/menu/SCM0014/column | http | 1 | Y | useValidationShipmentResultStore.ts:153 |
 | SCM0014/main//call-proc | hook | 1 | Y | ValidationShipmentResult.tsx:46 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -33,16 +33,16 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 103 |
-| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 119 |
-| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 144 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 122 |
+| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 138 |
 | CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 164 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 195 |
-| Button | onClick | onProjectSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 191 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 225 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 221 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 240 |
-| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 255 |
+| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 185 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 216 |
+| Button | onClick | onProjectSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 212 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 246 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 242 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 261 |
+| CustomDropdown | onChange | <arrow> set,str | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultForm.tsx | 276 |
 | grid | updatedLayout | <arrow> Math.round | addHandler | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultGrid.tsx | 32 |
 | DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/validation-shipment-result/components/ValidationShipmentResultGrid.tsx | 47 |
 | ValidationShipmentResultForm | onSearch | handleSearch | jsx | features/supply/src/pages/validation-shipment-result/ValidationShipmentResult.tsx | 113 |
@@ -88,7 +88,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SCP0007(5), SCP0085(3), SCP0025(2), SCP0039(2), COM0013(1), COM0008(1), SCM0014(1)
-- SP/PKG: PKG_SCM0014(1)
+- SP/PKG: FN_MULTY_TIME(3), PKG_SCM0014(1), SCM0001_GET_DATE_RANGE_YESTERDAY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

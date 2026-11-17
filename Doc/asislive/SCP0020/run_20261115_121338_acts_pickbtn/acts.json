@@ -1,0 +1,153 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 65906
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "82",
+     "ESS Battery",
+     "G-26-112",
+     "Avantus_SBS1",
+     "300MS 8ME SBS1_US_LAS",
+     "300MS 8ME SBS1_US_LAS",
+     "ETD1551AFB3N",
+     "ET,D,15,51,A,F,B,3,N",
+     "P",
+     "",
+     "[ET]Total Solution"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 65906,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "ETD1551AFB3N"
+    },
+    {
+     "control": "txtItemId#0",
+     "before": "",
+     "after": "ETD1551AFB3N"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnItemId": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_112451_acts"
+  }
+ },
+ "at": "2026-11-15 12:09:29"
+}

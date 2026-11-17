@@ -38,7 +38,7 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| Run | Main:19, Main:27, Main:87, Main:18, Main:42, Main:29 | ApplicationStart.Run | __Query |
+| Run | Main:19, Main:27, Main:29, Main:87, Main:18, Main:42 | ApplicationStart.Run | __Query |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |

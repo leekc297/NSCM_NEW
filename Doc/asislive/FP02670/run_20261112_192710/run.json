@@ -1,0 +1,141 @@
+{
+ "id": "FP02670",
+ "started": "2026-11-12 19:27:10.874",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:27:11.205",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP02670_Slurry_Batch_Master",
+   "form_text": "Slurry Batch Master",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Master.UIL.dll",
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:18.091"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:27:21.537",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02670\\run_20261112_192710\\dump_load.json",
+   "control_count": 57,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 8.03s, UI : 0.004s",
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:21.555"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:27:21.719",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02670\\run_20261112_192710\\shots\\FP02670_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:21.974"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:27:22.311",
+   "call_timed_out": false,
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:23.640"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:27:35.117",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02670\\run_20261112_192710\\dump_find.json",
+   "control_count": 57,
+   "grid_count": 1,
+   "total": "Total : 107",
+   "time_status": "DB : 6.682s, UI : 0.114s",
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:35.178"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:27:35.345",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP02670\\run_20261112_192710\\shots\\FP02670_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:35.670"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:27:36.163",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 7,
+   "ok": true,
+   "done": "2026-11-12 19:27:37.021"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 31,
+  "calls_with_params": 31
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP02670_Slurry_Batch_Master",
+  "form_text": "Slurry Batch Master",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 6.682s, UI : 0.114s",
+  "total": "Total : 107",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:27:11.083",
+ "t_find": "2026-11-12 19:27:22.072",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 57,
+  "layout_items": 13,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 20,
+  "data_rows": 50,
+  "grid_rows": 107,
+  "calls_total": 31,
+  "calls_screen": 31,
+  "calls_find": 8,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:37.881",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:37"
+}

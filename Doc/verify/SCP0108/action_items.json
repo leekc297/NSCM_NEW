@@ -1,40 +1,78 @@
 [
  {
-  "row_id": "V-6316517e",
-  "rule_id": "F5",
+  "row_id": "V-821dd2b1",
+  "rule_id": "L1",
   "target": "SCP0108 화면",
   "same": [
-   "T-b42a43de"
+   "V-6f1f5442"
   ]
  },
  {
-  "row_id": "V-3d8af6e6",
-  "rule_id": "N1",
-  "target": "SCP0108 기간 칸 이상값",
+  "row_id": "V-2595165f",
+  "rule_id": "M2",
+  "target": "SCP0108 전용 버튼 확인창",
   "same": []
  },
  {
-  "row_id": "V-fffdaaaf",
-  "rule_id": "K1",
-  "target": "SCP0108 동적 칸 정렬·필터",
+  "row_id": "V-56edb3f6",
+  "rule_id": "J4",
+  "target": "SCP0108 탭 이름",
   "same": []
  },
  {
-  "row_id": "V-450984ff",
-  "rule_id": "G8",
-  "target": "조회조건 Basic Nickname",
+  "row_id": "V-ff05c271",
+  "rule_id": "H8",
+  "target": "총 건수 표시",
+  "same": [
+   "V-745adec5"
+  ]
+ },
+ {
+  "row_id": "V-4e4835bb",
+  "rule_id": "A3",
+  "target": "Sum 행",
   "same": []
  },
  {
-  "row_id": "V-ef9bb8ba",
-  "rule_id": "H9",
-  "target": "Main Grid 컬럼 폭",
+  "row_id": "T-cd6ab79d",
+  "rule_id": "C1",
+  "target": "cboDivision / Division / Div / Div.",
   "same": []
  },
  {
-  "row_id": "T-b42a43de",
-  "rule_id": "F5",
+  "row_id": "T-ba90725d",
+  "rule_id": "C1",
+  "target": "clbFactory / Building / Factory",
+  "same": []
+ },
+ {
+  "row_id": "T-b2c54bd0",
+  "rule_id": "C1",
+  "target": "clbLine / Line",
+  "same": []
+ },
+ {
+  "row_id": "T-08b32c52",
+  "rule_id": "C1",
+  "target": "clbOperation / Operation",
+  "same": []
+ },
+ {
+  "row_id": "T-9a195eb8",
+  "rule_id": "C1",
+  "target": "clbPlant / Plant",
+  "same": []
+ },
+ {
+  "row_id": "V-6f1f5442",
+  "rule_id": "L1",
   "target": "",
-  "folded_into": "V-6316517e"
+  "folded_into": "V-821dd2b1"
+ },
+ {
+  "row_id": "V-745adec5",
+  "rule_id": "H8",
+  "target": "",
+  "folded_into": "V-ff05c271"
  }
 ]

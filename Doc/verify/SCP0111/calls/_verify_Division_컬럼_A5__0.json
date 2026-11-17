@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202703\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1899,
+  "dur": 1011,
+  "at": "2026-11-14T07:08:45.882Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202703\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1261,
+  "dur": 874,
+  "at": "2026-11-14T07:08:51.176Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ },
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202703\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1282,
+  "dur": 808,
+  "at": "2026-11-14T07:08:56.029Z",
+  "user": "minyonglee1",
+  "test": "Division 컬럼(A5)"
+ }
+]

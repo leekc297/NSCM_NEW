@@ -22,6 +22,7 @@
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx","348","code","void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx","387","code","const rows = buildSaveRows("
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx","393","code",");"
+"supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx","437","code","void setAlert({ type: 'alert', content: String(result.RESULT_MSG ?? t(MSG.SAVE_FAIL, '_Save failed.')) });"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","83","code","const { division, shipFrozen, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params;"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","90","code","const blockStartDate = division === '40' || division === '81' || isDivision81Series(division)"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","93","code","if (!blockStartDate) return null;"
@@ -31,4 +32,4 @@
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","189","code","const lockStartIdx = ctx.weekBindingsAsc.indexOf(lockStart);"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","190","code","const thisIdx = ctx.weekBindingsAsc.indexOf(binding);"
 "supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts","191","code","if (thisIdx >= 0 && thisIdx >= lockStartIdx) return false;"
-"supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts","93","code","if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨)"
+"supply/shipment-plan-semi","SCP0010","features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts","97","code","if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨)"

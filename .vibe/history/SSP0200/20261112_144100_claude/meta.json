@@ -1,0 +1,68 @@
+{
+  "id": "SSP0200",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0200] · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0200/__asis-actions__.md · Doc/asisfacts/screens/SSP0200/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-12T14:41:01+09:00",
+  "end": "2026-11-12T15:02:37+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\shipment-change-request-plan",
+      "files": 32
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0200",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0200",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "디자인도 표준을 따르지만 REQUESTOR, REQ DEPT_NAME, APPROVAL, APP_DEPT_NAME 4개를 하나의 라인으로, 그리고 TITLE, CHANGE REASON, REASON DETAIL 을 한줄로 만들는 것도 하나의 방법일 것 같아요.\n이부분도 추가해서 적용해주세요. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-12T15:02:37+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\RequestActionBar.module.scss",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\components\\RequestInfoPanel.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\ShipmentChangeRequestPlan.module.scss",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\ShipmentChangeRequestPlan.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\components\\RequestInfoPanel.module.scss",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\hooks\\useRequestInfoFold.ts",
+      "kind": "added"
+    }
+  ]
+}

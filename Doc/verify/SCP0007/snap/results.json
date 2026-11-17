@@ -1,0 +1,62 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0007\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 26,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0007\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(27줄 · formItem 공통 조상) · 시각 순서 8칸",
+  "at": "2026-11-13T22:40:54.398Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0007\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 10,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0007\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(11줄) · 보이는 버튼 KOR,이 이민용,Home,BOD,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
+  "at": "2026-11-13T22:40:54.536Z"
+ },
+ {
+  "key": "헤더_BOD",
+  "kind": "헤더",
+  "scope": "BOD",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0007\\snap\\received\\헤더_BOD.txt",
+  "diff": "",
+  "lines": 2,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0007\\snap\\received\\헤더_BOD.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 2행 · 칸 34",
+  "at": "2026-11-13T22:41:08.411Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SCP0007\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SCP0007\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ }
+]

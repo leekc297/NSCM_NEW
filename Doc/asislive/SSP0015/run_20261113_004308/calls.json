@@ -1,0 +1,2399 @@
+{
+ "id": "SSP0015",
+ "window": [
+  "2026-11-13 00:43:08.795",
+  "2026-11-13 00:44:14.848"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-13 00:43:09.235",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.41,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SSP0015"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SSP0015'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:09.257",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 19.0,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:09.537",
+   "service": "GSCM.FP_Common",
+   "foxquery_id": "",
+   "sp": "PR_UI_SQL_LOG",
+   "caller": "GSCM.FP.Common.DLL.FPCommonDataDLL::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 101.45,
+   "params": {
+    "LOGTYPE": "SpeedUp",
+    "NOTE": "SSP0015\ndivision_id_changed\nstart\n",
+    "USER_ID": "jaeuk.shin"
+   },
+   "inline": "---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG 'SpeedUp',  'jaeuk.shin','','','SSP0015\ndivision_id_changed\nstart\n','',@runstart, @runend",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:09.607",
+   "service": "GSCM.FP_Common",
+   "foxquery_id": "",
+   "sp": "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+   "caller": "GSCM.FP.Common.DLL.FPCommonDataDLL::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteNonQuery",
+   "rows": 1,
+   "rows_kind": "Affected rows",
+   "ms": 69.13,
+   "params": {
+    "PROG_ID": "note2",
+    "QUERY_ID": "FP\\Common\\Utility",
+    "QUERY_SEQ": "0",
+    "INST_SEQ": "0",
+    "QUERY_VALUE": "---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG @LOGTYPE,  @USER_ID,'','',@NOTE,'',@runstart, @runend\n      ",
+    "JOB_TYPE": "read",
+    "START_TIME": "2026-11-13 00:43:09",
+    "END_TIME": "2026-11-13 00:43:09",
+    "INSERT_ID": "jaeuk.shin",
+    "LOG_TYPE": "SQL",
+    "IP_ADDRESS": "100.113.200.36",
+    "SESSION_ID": "20261113004309_435",
+    "PARAM_VALUE": "{LOGTYPE : SpeedUp NOTE : SSP0015\ndivision_id_changed\nstart\n USER_ID : jaeuk.shin }",
+    "DUR_TIME": "102",
+    "ATTRIBUTE1": "GeneralExecuteQuery",
+    "ATTRIBUTE2": "",
+    "ATTRIBUTE3": "",
+    "ATTRIBUTE4": "",
+    "ATTRIBUTE5": ""
+   },
+   "inline": "INSERT INTO [dbo].[TH_UIS_SQL_LOG]\n           ([PROG_ID]\n           ,[QUERY_ID]\n           ,[QUERY_SEQ]\n           ,[INST_SEQ]\n           ,[QUERY_VALUE]\n           ,[JOB_TYPE]\n           ,[START_TIME]\n           ,[END_TIME]\n           ,[INSERT_ID]\n           ,[INSERT_TIME]\n           ,[LOG_TYPE]\n           ,[IP_ADDRESS]\n           ,[SESSION_ID]\n           ,[PARAM_VALUE]\n           ,[DUR_TIME]\n           ,[ATTRIBUTE1]\n           ,[ATTRIBUTE2]\n           ,[ATTRIBUTE3]\n           ,[ATTRIBUTE4]\n           ,[ATTRIBUTE5])\n     VALUES\n           ('note2',\n           'FP\\Common\\Utility',\n           0,\n           0, \n           '---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG @LOGTYPE,  @USER_ID,'''','''',@NOTE,'''',@runstart, @runend\n      ',\n           'read', \n           '2026-11-13 00:43:09', \n           '2026-11-13 00:43:09',\n           'jaeuk.shin',\n           getdate(),\n           'SQL', \n           '100.113.200.36', \n           '20261113004309_435',\n           '{LOGTYPE : SpeedUp NOTE : SSP0015\ndivision_id_changed\nstart\n USER_ID : jaeuk.shin }', \n           '102',\n           'GeneralExecuteQuery', \n           '',\n           '', \n           '',\n           ''\n)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:11.375",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "DECLARE @TResult TABLE(",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 1741.09,
+   "params": {
+    "GROUP_ID": "ADMIN",
+    "USER_ID": "jaeuk.shin",
+    "LANGUAGE_CODE": "KO"
+   },
+   "inline": "-- Temp Table\n      \n\t\t\tDECLARE @TResult TABLE(\n\t\t\t\tCode NVARCHAR(MAX),\n\t\t\t\tNAME NVARCHAR(MAX)\n        )\n\t\t\t\n\t\t\tDECLARE @TResultDIV TABLE(\n\t\t\t\tCode NVARCHAR(MAX),\n\t\t\t\tNAME NVARCHAR(MAX),\n\t\t\t\tDIVISION_ID NVARCHAR(MAX)\n\t\t\t)\n\t\t\t\n\t\t\tDECLARE @TResultVALUE TABLE(\n\t\t\t\tCode NVARCHAR(MAX),\n\t\t\t\tVALUE NVARCHAR(MAX),\n\t\t\t\tDiff_VALUE NVARCHAR(MAX)\n\t\t\t)\n\n\t\t\tDECLARE @TResultBuilding TABLE(\n\t\t\t\tCode NVARCHAR(MAX),\n\t\t\t\tNAME NVARCHAR(MAX),\n\t\t\t\tDIVISION_ID NVARCHAR(MAX),\n\t\t\t\tPLANT_ID NVARCHAR(MAX),\n\t\t\t\tCOMPANY_ID NVARCHAR(MAX),\n\t\t\t\tSCM_SITE_ID NVARCHAR(MAX)\n\t\t\t)\n\n\t\t\tDECLARE @TResultCOMPANYID TABLE(\n\t\t\t\tCOMPANY_ID NVARCHAR(MAX)\n\t\t\t)\n\n\n\t\t BEGIN\n\t\t\t-- run UP_FX_GetCommonDataList_SCP \n\t\t\tINSERT @TResult EXEC [UP_FX_GetCommonDataList_SCP]\n\t\t\t   @Code = 'MyDivisionInEE'\n\t\t\t , @Param1 = 'ADMIN'\n\t\t\t , @Param2 = 'jaeuk.shin'\n\t\t\t , @Param3 = ''\n\t\t\t , @Param4 = ''\n\t\t\t , @Param5 = ''\n\t\t\t -- Result : MyDivisionInEE \n\t\t\tSELECT\t* FROM @TResult\n\t\t END\n\n\t\t BEGIN\n\t\t\t-- run UP_FX_GetCommonDataList_SCP \n\t\t\tINSERT @TResultDIV EXEC [UP_FX_GetCommonDataList_SCP]\n\t\t\t   @Code = 'Div_Company'\n\t\t\t , @Param1 = ''\n\t\t\t , @Param2 = ''\n\t\t\t , @Param3 = ''\n\t\t\t , @Param4 = ''\n\t\t\t , @Param5 = ''\n\t\t\t -- Result : Div_Company \n\t\t\tSELECT\t* FROM @TResultDIV\n\t\t END\n\n\t\t BEGIN\n\t\t\t--\tINIT Temp\n\t\t\tDELETE @TResult\n\n\t\t\t-- run UP_FX_GetCommonDataList_SCP \n\t\t\tINSERT @TResult EXEC [UP_FX_GetCommonDataList_SCP]\n\t\t\t   @Code = 'MyCompanyID'\n\t\t\t , @Param1 = 'jaeuk.shin'\n\t\t\t , @Param2 = ''\n\t\t\t , @Param3 = ''\n\t\t\t , @Param4 = ''\n\t\t\t , @Param5 = ''\n\t\t\t -- Result : MyCompanyID \n\t\t\tSELECT\t* FROM @TResult\n\t\t END\n\n\t\t BEGIN\n\t\t\t--\tINIT Temp\n\t\t\tDELETE @TResult\n\n\t\t\t-- run UP_FX_GetCommonDataList_SCP \n\t\t\tINSERT @TResult EXEC [UP_FX_GetCommonDataList_SCP]\n\t\t\t   @Code = 'CellTypeGr'\n\t\t\t , @Param1 = ''\n\t\t\t , @Param2 = ''\n\t\t\t , @Param3 = ''\n\t\t\t , @Param4 = ''\n\t\t\t , @Param5 = ''\n\t\t\t -- Result : CellTypeGr \n\t\t\tSELECT\t* FROM @TResult\n\t\t END\n\n\t\t BEGIN\n\t\t\t--\tINIT Temp\n\t\t\tDELETE @TResult\n\n\t\t\t-- run UP_FX_GetCommonDataList\n\t\t\tINSERT @TResult EXEC [UP_FX_GetCommon",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:11.564",
+   "service": "GSCM.FP_Common",
+   "foxquery_id": "",
+   "sp": "PR_UI_SQL_LOG",
+   "caller": "GSCM.FP.Common.DLL.FPCommonDataDLL::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 21.13,
+   "params": {
+    "LOGTYPE": "SpeedUp",
+    "NOTE": "SSP0015\ndivision_id_changed\nend\n",
+    "USER_ID": "jaeuk.shin"
+   },
+   "inline": "---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG 'SpeedUp',  'jaeuk.shin','','','SSP0015\ndivision_id_changed\nend\n','',@runstart, @runend",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:11.799",
+   "service": "GSCM.FP_Common",
+   "foxquery_id": "",
+   "sp": "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+   "caller": "GSCM.FP.Common.DLL.FPCommonDataDLL::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteNonQuery",
+   "rows": 1,
+   "rows_kind": "Affected rows",
+   "ms": 234.37,
+   "params": {
+    "PROG_ID": "note2",
+    "QUERY_ID": "FP\\Common\\Utility",
+    "QUERY_SEQ": "0",
+    "INST_SEQ": "0",
+    "QUERY_VALUE": "---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG @LOGTYPE,  @USER_ID,'','',@NOTE,'',@runstart, @runend\n      ",
+    "JOB_TYPE": "read",
+    "START_TIME": "2026-11-13 00:43:11",
+    "END_TIME": "2026-11-13 00:43:11",
+    "INSERT_ID": "jaeuk.shin",
+    "LOG_TYPE": "SQL",
+    "IP_ADDRESS": "100.113.200.36",
+    "SESSION_ID": "20261113004311_542",
+    "PARAM_VALUE": "{LOGTYPE : SpeedUp NOTE : SSP0015\ndivision_id_changed\nend\n USER_ID : jaeuk.shin }",
+    "DUR_TIME": "21",
+    "ATTRIBUTE1": "GeneralExecuteQuery",
+    "ATTRIBUTE2": "",
+    "ATTRIBUTE3": "",
+    "ATTRIBUTE4": "",
+    "ATTRIBUTE5": ""
+   },
+   "inline": "INSERT INTO [dbo].[TH_UIS_SQL_LOG]\n           ([PROG_ID]\n           ,[QUERY_ID]\n           ,[QUERY_SEQ]\n           ,[INST_SEQ]\n           ,[QUERY_VALUE]\n           ,[JOB_TYPE]\n           ,[START_TIME]\n           ,[END_TIME]\n           ,[INSERT_ID]\n           ,[INSERT_TIME]\n           ,[LOG_TYPE]\n           ,[IP_ADDRESS]\n           ,[SESSION_ID]\n           ,[PARAM_VALUE]\n           ,[DUR_TIME]\n           ,[ATTRIBUTE1]\n           ,[ATTRIBUTE2]\n           ,[ATTRIBUTE3]\n           ,[ATTRIBUTE4]\n           ,[ATTRIBUTE5])\n     VALUES\n           ('note2',\n           'FP\\Common\\Utility',\n           0,\n           0, \n           '---Service Parameter : 0USER_ID\n---Service Parameter : 1LOGTYPE\n---Service Parameter : 2NOTE\n---Check client parameter : LOGTYPE\n---FOUND LOGTYPE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : NOTE\n---FOUND NOTE\n-- TYPE = nvarchar---Add string Service\n---Check client parameter : USER_ID\n---FOUND USER_ID\n-- TYPE = nvarchar---Add string Service\n\n        DECLARE @runstart datetime\n        DECLARE @runend datetime\n        SET @runstart = GetDate()\n        SET @runend = GetDate()\n\n        exec PR_UI_SQL_LOG @LOGTYPE,  @USER_ID,'''','''',@NOTE,'''',@runstart, @runend\n      ',\n           'read', \n           '2026-11-13 00:43:11', \n           '2026-11-13 00:43:11',\n           'jaeuk.shin',\n           getdate(),\n           'SQL', \n           '100.113.200.36', \n           '20261113004311_542',\n           '{LOGTYPE : SpeedUp NOTE : SSP0015\ndivision_id_changed\nend\n USER_ID : jaeuk.shin }', \n           '21',\n           'GeneralExecuteQuery', \n           '',\n           '', \n           '',\n           ''\n)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:12.616",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 665.42,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "40",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='40', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:12.633",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.03,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "40",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='40', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.326",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 682.76,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "40",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='40', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.338",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.08,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.344",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.74,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.364",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.03,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.371",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.87,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.382",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DM0003_GET_BUCKET_TYPE_CODE",
+   "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 3.32,
+   "params": {},
+   "inline": "EXEC DM0003_GET_BUCKET_TYPE_CODE",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.424",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.73,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.464",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 30.56,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment PSI(Mobility & IT)"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment PSI(Mobility & IT)'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.497",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.18,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.506",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 5.42,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment PSI(Packer)"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment PSI(Packer)'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.571",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 59.63,
+   "params": {
+    "Code": "Measure",
+    "Param1": "SSP0015",
+    "Param2": "Shipment PSI(Packer)",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Measure', @Param1='SSP0015', @Param2='Shipment PSI(Packer)', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.601",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.32,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.612",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 67,
+   "rows_kind": "DataSet rows",
+   "ms": 6.27,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Confirm Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Confirm Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.621",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.53,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SHIPMENT_STATUS",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SHIPMENT_STATUS', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.630",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.86,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SALES_TYPE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SALES_TYPE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.640",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.1,
+   "params": {
+    "Code": "CHANGE_REASON_CODE_ALL",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CHANGE_REASON_CODE_ALL', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.671",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.44,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.678",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 34,
+   "rows_kind": "DataSet rows",
+   "ms": 4.29,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Request Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Request Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.687",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.55,
+   "params": {
+    "Code": "FCST_TYPE",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FCST_TYPE', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.721",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 30.06,
+   "params": {
+    "Code": "TransportMode",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='TransportMode', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.741",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 4.55,
+   "params": {
+    "Code": "Incoterms",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Incoterms', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.773",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.26,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.786",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 4.59,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "W/H stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='W/H stock'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.799",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.86,
+   "params": {
+    "Code": "LookupCommon3",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon3', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.824",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.01,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.836",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 4.61,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "W/H stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='W/H stock Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.847",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.83,
+   "params": {
+    "Code": "LookupCommon3",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon3', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.869",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.38,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.879",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 4.69,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Hold stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Hold stock'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.886",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.61,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.905",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.16,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.919",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 4.44,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Hold stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Hold stock Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.933",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.96,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.952",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.7,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:13.964",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 26,
+   "rows_kind": "DataSet rows",
+   "ms": 4.17,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Stock Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.019",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 50.35,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "MES_CHANGE_STATUS",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='MES_CHANGE_STATUS', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.047",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.46,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.058",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9,
+   "rows_kind": "DataSet rows",
+   "ms": 4.07,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "SCS Stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='SCS Stock Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.071",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.4,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.089",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.71,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.098",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 4.43,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Location Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Stock Location Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.116",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.79,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.122",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 3.53,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "WH In Plan Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='WH In Plan Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.129",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.15,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.145",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.82,
+   "params": {
+    "p_start_yyyymmdd": "20261113",
+    "p_end_yyyymmdd": "20261214"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261113', @p_end_yyyymmdd='20261214'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.155",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 4.16,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Result"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Result'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.165",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.5,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.427",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 236.3,
+   "params": {
+    "MenuID": "Shipment Plan(Mobility & IT)",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Shipment Plan(Mobility & IT)', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:14.503",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9,
+   "rows_kind": "DataSet rows",
+   "ms": 2.77,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SSP0015"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SSP0015'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:22.414",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 5.43,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "81",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='81', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:23.094",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 672.0,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "81",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='81', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:23.105",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.4,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:23.119",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.06,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:23.143",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.99,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:23.151",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.74,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:25.424",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 4.84,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "40",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='40', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:26.088",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 657.64,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "40",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='40', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:26.094",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.84,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:26.100",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.0,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:28.594",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 4.28,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "81",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='81', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:29.324",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 726.6,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "81",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='81', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:29.333",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.13,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:29.343",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.92,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:29.362",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.82,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:29.371",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.18,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 00:43:33.362",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.92,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.371",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 3.89,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment PSI(Mobility & IT)"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment PSI(Mobility & IT)'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.403",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.02,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.421",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 67,
+   "rows_kind": "DataSet rows",
+   "ms": 6.98,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Confirm Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Confirm Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.430",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.49,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SHIPMENT_STATUS",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SHIPMENT_STATUS', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.438",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.53,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SALES_TYPE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SALES_TYPE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:33.447",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.9,
+   "params": {
+    "Code": "CHANGE_REASON_CODE_ALL",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CHANGE_REASON_CODE_ALL', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:43:39.007",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0015_GET_SHIPMENT_PSI",
+   "sp": "SSP0015_GET_SHIPMENT_PSI",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 5536.3,
+   "params": {
+    "p_division_id": "81",
+    "p_from_site": "",
+    "p_item_id": "",
+    "p_plan_start_yyyymmdd": "20261009",
+    "p_plan_type": "SP",
+    "p_from_yyyymmdd": "20261009",
+    "p_to_yyyymmdd": "20261109",
+    "p_user_id": "jaeuk.shin",
+    "p_myModelChk": "N",
+    "p_program_id": "SSP0015",
+    "p_sheet_name": "Shipment PSI(Mobility & IT)",
+    "debug_mode": "F",
+    "p_seq": "1",
+    "p_partLeaderChk": "N",
+    "p_teamLeaderChk": "N",
+    "p_nonChk": "Y",
+    "p_delegateeChk": "N"
+   },
+   "inline": "EXEC SSP0015_GET_SHIPMENT_PSI @p_division_id='81', @p_from_site='', @p_item_id='', @p_plan_start_yyyymmdd='20261009', @p_plan_type='SP', @p_from_yyyymmdd='20261009', @p_to_yyyymmdd='20261109', @p_user_id='jaeuk.shin', @p_myModelChk='N', @p_program_id='SSP0015', @p_sheet_name='Shipment PSI(Mobility & IT)', @debug_mode='F', @p_seq='1', @p_partLeaderChk='N', @p_teamLeaderChk='N', @p_nonChk='Y', @p_delegateeChk='N'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:12.459",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 5.9,
+   "params": {
+    "MenuID": "Shipment Plan(Mobility & IT)",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Shipment Plan(Mobility & IT)', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:12.750",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 4.08,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "81",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='81', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.431",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 678.42,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "81",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='81', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.447",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.15,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.458",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.23,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.479",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.72,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.487",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.92,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.502",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.98,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.517",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 67,
+   "rows_kind": "DataSet rows",
+   "ms": 7.14,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Confirm Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Confirm Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.527",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 3.13,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SHIPMENT_STATUS",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SHIPMENT_STATUS', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.538",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.47,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SALES_TYPE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SALES_TYPE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.552",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.29,
+   "params": {
+    "Code": "CHANGE_REASON_CODE_ALL",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CHANGE_REASON_CODE_ALL', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.592",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.34,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.606",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 4.56,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "W/H stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='W/H stock'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.619",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.72,
+   "params": {
+    "Code": "LookupCommon3",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon3', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.639",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.18,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.652",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 4.99,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "W/H stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='W/H stock Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.665",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.25,
+   "params": {
+    "Code": "LookupCommon3",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon3', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.684",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.51,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.701",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 3.96,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Hold stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Hold stock'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.710",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.01,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.727",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.94,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.737",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 4.44,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Hold stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Hold stock Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.748",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.47,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.766",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.75,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.776",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 26,
+   "rows_kind": "DataSet rows",
+   "ms": 5.57,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Stock Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.785",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 4.11,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "MES_CHANGE_STATUS",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='MES_CHANGE_STATUS', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.803",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.33,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.811",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9,
+   "rows_kind": "DataSet rows",
+   "ms": 4.36,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "SCS Stock Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='SCS Stock Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.822",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.8,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.835",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 9.01,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.843",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 4.25,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Location Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Stock Location Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.859",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.29,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.868",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 4.18,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "WH In Plan Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='WH In Plan Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.875",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.17,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.889",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 8.5,
+   "params": {
+    "p_start_yyyymmdd": "20261009",
+    "p_end_yyyymmdd": "20261109"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20261009', @p_end_yyyymmdd='20261109'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.898",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 3.89,
+   "params": {
+    "p_program_id": "SSP0015",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Result"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0015', @p_user_id='jaeuk.shin', @p_sheet_name='Shipment Result'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.907",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.69,
+   "params": {
+    "Code": "Division",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='Division', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.920",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 4.24,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "SSP_SHIPMENT_RESULT_TYPE_PACKER",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='SSP_SHIPMENT_RESULT_TYPE_PACKER', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 00:44:13.940",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 10.88,
+   "params": {
+    "Code": "FromSiteByDivisionOspPack",
+    "Param1": "81",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='FromSiteByDivisionOspPack', @Param1='81', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "find"
+  }
+ ]
+}

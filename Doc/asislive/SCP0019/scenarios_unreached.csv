@@ -1,0 +1,5 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0019-Seb6c4c,기타,ClearUsrCheckedList,SCP0019_WorkingTime.cs:188,호출 없음,,
+SCP0019-Sbf4efb,조회,GetDivision,SCP0019_WorkingTime.cs:1456,주석 안에서만 호출,SCP0019_WorkingTime.cs:200; SCP0019_WorkingTime.cs:203,
+SCP0019-S950695,기타,SetChangedPeriod,SCP0019_WorkingTime.cs:1464,주석 안에서만 호출,SCP0019_WorkingTime.cs:211; SCP0019_WorkingTime.cs:1202,
+SCP0019-Sc2c5b0,기타,SetChangedPeriod,SCP0019_WorkingTime.cs:1470,주석 안에서만 호출,SCP0019_WorkingTime.cs:211; SCP0019_WorkingTime.cs:1202,

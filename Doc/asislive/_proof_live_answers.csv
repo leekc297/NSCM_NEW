@@ -1,0 +1,219 @@
+﻿menu_id,kind,count,state,evidence,observed,runs
+DMF0005,검증 위반 입력,64,정답 있음,Doc/asislive/DMF0005/run_20261115_101450_acts_violate,늘어난 행 {'spdMain/Production': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Active 값은 필수 입력입니다'] · 호출 0,1
+DMF0005,그리드에 없는 컬럼,27,정답 있음,Doc/asislive/DMF0005/run_20261114_090706,기본 실행 덤프,2
+DMF0005,동작 재현 시나리오,2,정답 있음,Doc/asislive/DMF0005/run_20261115_120446_acts_pickbtn,"버튼 3 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0, btnOwner→textBox1#2,txtOwner#0",17
+DMF0005,분기 해석,48,정답 있음,Doc/asislive/DMF0005/run_20261114_093318_acts,동작 4 · 호출 9 · 메시지 0 · 팝업 2,11
+DMF0005,저장 밖 경로 메시지,16,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 30: 실측 관찰 19, 도달 불가(실측+원문) 5, 도달 불가(실측(계정 권한 데이터)) 3, 메시지 코드 아님 3",17
+DMF0005,조건 데이터 없음,26,정답 있음,Doc/asislive/DMF0005/run_20261114_093123_acts_div81_HD,동작 4 · 호출 12 · 메시지 0 · 팝업 5,5
+DMF0005,차등 검증 인자,2,정답 있음,Doc/asislive/DMF0005/run_20261112_180632,"대상 SP 관찰 행 2/2 · DMF0000_GET_COMMON_SPREAD_TITLE({""p_start_yyyymmdd"": """", ""p_end_yyyymmdd"": """", ""p_created_by"": ""jaeuk.shin"", ""p_ · 50행 · run_20261112_180632 load), DMF0005_GET_SALES_SITE_MODEL_PRODUCTION({""p_division_id"": ""40"", ""p_dept_id"": ""ALL"", ""p_end_customer"": ""ALL"", ""p_scm_site · 15657행 · run_20261114_090706 ",17
+DMF0005,팝업 값 반영,35,정답 있음,Doc/asislive/DMF0005/run_20261115_120446_acts_pickbtn,"버튼 3 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0, btnOwner→textBox1#2,txtOwner#0",11
+DMF0005,팝업 내부,4,정답 있음,Doc/asislive/DMF0005/run_20261115_120446_acts_pickbtn,"버튼 3 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0, btnOwner→textBox1#2,txtOwner#0",11
+DMF0005,팝업 사용처,40,정답 있음,Doc/asislive/DMF0005/run_20261115_120446_acts_pickbtn,"버튼 3 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0, btnOwner→textBox1#2,txtOwner#0",13
+DMF0005,팝업·셀 이벤트 호출,4,정답 있음,Doc/asislive/DMF0005/run_20261112_180632,"대상 SP 관찰 행 4/4 · DMF0000_GET_COMMON_SPREAD_TITLE({""p_start_yyyymmdd"": """", ""p_end_yyyymmdd"": """", ""p_created_by"": ""jaeuk.shin"", ""p_ · 50행 · run_20261112_180632 load), DMF0005_GET_SALES_SITE_MODEL_PURCHASE({""p_project_code"": ""G-18-036"", ""p_active_flag"": ""ALL"", ""p_created_by"": ""jaeuk.sh · 25행 · run_20261116_044501_acts_",13
+DMF0005,편집 불가 셀,35,정답 있음,Doc/asislive/DMF0005/run_20261115_101450_acts_violate,늘어난 행 {'spdMain/Production': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Active 값은 필수 입력입니다'] · 호출 0,7
+DMF0005,행 조건 계산,223,정답 있음,Doc/asislive/DMF0005/run_20261115_062411_acts_states_edit,40행×52열 잠김 1000 열림 1080 · 행마다 잠금 다른 열 0,6
+SCP0005,검증 위반 입력,4,정답 있음,Doc/asislive/SCP0005/run_20261115_091930_acts_violate,늘어난 행 {'spdMain/Distribution Route': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['L/T Type* 값은 필수 입력입니다'] · 호출 0,2
+SCP0005,그리드에 없는 컬럼,1,정답 있음,Doc/asislive/SCP0005/run_20261114_072344,기본 실행 덤프,3
+SCP0005,분기 해석,15,정답 있음,Doc/asislive/SCP0005/run_20261114_072558_acts,동작 2 · 호출 6 · 메시지 0 · 팝업 2,6
+SCP0005,저장 밖 경로 메시지,5,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 7: 실측 관찰 6, 메시지 코드 아님 1",9
+SCP0005,차등 검증 인자,3,정답 있음,Doc/asislive/SCP0005/run_20261112_193451,"대상 SP 관찰 행 3/3 · SCP0005_GET_COUNTRY_CITY({""p_country"": """", ""p_city"": """", ""p_city_name"": """", ""debug_mode"": ""F""} · 89426행 · run_20261112_193451 find), SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID({""p_route_id"": ""9917""} · 2행 · run_20261116_052200_acts_msgcell action:msgcell:spdMain_CellDoubleClick), SCP0005_GET_DISTRIBUTI",9
+SCP0005,팝업 값 반영,15,정답 있음,Doc/asislive/SCP0005/run_20261115_120619_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnFromSrch→txtFromCity#0,txtFromCountry#0, btnToSrch→txtToCity#0,txtToCountry#0",5
+SCP0005,팝업 내부,1,정답 있음,Doc/asislive/SCP0005/run_20261115_120619_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnFromSrch→txtFromCity#0,txtFromCountry#0, btnToSrch→txtToCity#0,txtToCountry#0",5
+SCP0005,팝업·셀 이벤트 호출,9,정답 있음,Doc/asislive/SCP0005/run_20261112_193451,"대상 SP 관찰 행 6/6 · SCP0005_GET_COUNTRY_CITY({""p_country"": """", ""p_city"": """", ""p_city_name"": """", ""debug_mode"": ""F""} · 89426행 · run_20261112_193451 find), SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID({""p_route_id"": ""9917""} · 2행 · run_20261116_052200_acts_msgcell action:msgcell:spdMain_CellDoubleClick), SCP0005_GET_DISTRIBUTI",7
+SCP0005,편집 불가 셀,4,정답 있음,Doc/asislive/SCP0005/run_20261115_091930_acts_violate,늘어난 행 {'spdMain/Distribution Route': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['L/T Type* 값은 필수 입력입니다'] · 호출 0,6
+SCP0007,그리드에 없는 컬럼,18,정답 있음,Doc/asislive/SCP0007/run_20261114_093932,기본 실행 덤프,4
+SCP0007,분기 해석,3,정답 있음,Doc/asislive/SCP0007/run_20261115_062706_acts_states_edit,40행×41열 잠김 1240 열림 400 · 행마다 잠금 다른 열 0,6
+SCP0007,조건 데이터 없음,1,정답 있음,Doc/asislive/SCP0007/run_20261116_062457_acts_msgcell,2026-11-16 06:25 · SCP0007_BOD.cs:437~488 EditButton boolEditChange 토글 · 런처 셀 상태 INCOTERMS_SSP(열 10) 앞 40행: 수정 켬 = 잠금 0(40행) · 두 번째 눌러 수정 끔 = 잠금 1(40행) · 원장 D3 'else of (boolEditChange == true)' 분기 = 수정 끔 상태 잠금,1
+SCP0007,편집 불가 셀,13,정답 있음,Doc/asislive/SCP0007/run_20261115_092110_acts_violate,늘어난 행 {'spdMain/BOD': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Div* 값은 필수 입력입니다'] · 호출 0,6
+SCP0007,행 조건 계산,6,정답 있음,Doc/asislive/SCP0007/run_20261115_062706_acts_states_edit,40행×41열 잠김 1240 열림 400 · 행마다 잠금 다른 열 0,4
+SCP0016,동작 재현 시나리오,2,정답 있음,Doc/asislive/SCP0016/run_20261115_120916_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnColumn→-, BtnItem_Id→textBox1#1,txtItem_Id#0, BtnProject→textBox1#2,txtProject#0, btnMeasure→-",3
+SCP0016,분기 해석,2,정답 있음,Doc/asislive/SCP0016/run_20261113_165501_acts,동작 7 · 호출 15 · 메시지 0 · 팝업 7,2
+SCP0016,저장 밖 경로 메시지,2,관찰 대상 없음(도달 불가·메시지 코드 아님),Doc/asislive/_msg_cover.csv,경로 메시지 원장 행 1: 메시지 코드 아님 1,1
+SCP0016,차등 검증 인자,2,정답 있음,Doc/asislive/SCP0016/run_20261114_161702_acts_pre_cboBucketType_i3,"대상 SP 관찰 행 2/2 · SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO({""p_start_yyyymmdd"": ""20260817"", ""p_end_yyyymmdd"": ""20270815""} · 429행 · run_20261114_161702_acts_pre_cboBucketType_i3 find), SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL({""p_from_yyyymmdd"": ""20260817"", ""p_to_yyyymmdd"": ""20270815"", ""p_division_id"": ""8 · 0행 ·",3
+SCP0016,팝업 값 반영,14,정답 있음,Doc/asislive/SCP0016/run_20261115_120916_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnColumn→-, BtnItem_Id→textBox1#1,txtItem_Id#0, BtnProject→textBox1#2,txtProject#0, btnMeasure→-",1
+SCP0016,팝업 사용처,1,정답 있음,Doc/asislive/SCP0016/run_20261115_120916_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnColumn→-, BtnItem_Id→textBox1#1,txtItem_Id#0, BtnProject→textBox1#2,txtProject#0, btnMeasure→-",1
+SCP0016,팝업·셀 이벤트 호출,1,정답 있음,Doc/asislive/SCP0016/run_20261114_161702_acts_pre_cboBucketType_i3,"대상 SP 관찰 행 2/2 · SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO({""p_start_yyyymmdd"": ""20260817"", ""p_end_yyyymmdd"": ""20270815""} · 429행 · run_20261114_161702_acts_pre_cboBucketType_i3 find), SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL({""p_from_yyyymmdd"": ""20260817"", ""p_to_yyyymmdd"": ""20270815"", ""p_division_id"": ""8 · 0행 ·",1
+SCP0020,검증 위반 입력,25,정답 있음,Doc/asislive/SCP0020/run_20261115_092522_acts_violate,늘어난 행 {'spdMain/Packer': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Line* 값은 필수 입력입니다'] · 호출 0,2
+SCP0020,그리드에 없는 컬럼,2,정답 있음,Doc/asislive/SCP0020/run_20261114_105944,기본 실행 덤프,4
+SCP0020,동작 재현 시나리오,5,정답 있음,Doc/asislive/SCP0020/run_20261115_121338_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",10
+SCP0020,분기 해석,20,정답 있음,Doc/asislive/SCP0020/run_20261114_110304_acts,동작 1 · 호출 4 · 메시지 0 · 팝업 1,7
+SCP0020,저장 밖 경로 메시지,12,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 9: 도달 불가(실측+원문) 5, 실측 관찰 3, 메시지 코드 아님 1",10
+SCP0020,차등 검증 인자,4,도달 불가(실측+원문),Doc/asislive/SCP0020/run_20261115_070639_acts_pick,"대상 SP 관찰 행 2/4 · SCP0020_GET_TACT_TIME_EXCEPT_OSP({""p_division_id"": ""82"", ""p_plant_site"": ""CN00249500-P"", ""p_operation_id"": ""CN002 · 1행 · run_20261115_070639_acts_pick action:pick:LINE_ID), SCP0020_GET_TACT_TIME_OSP({""p_division_id"": ""82"", ""p_plant_site_id"": """", ""p_line_id"": """", ""p_operation_gro · 855행 · run_2026111 · 못 본 SP SCP0020_GET_TACT_TIME,SCP0020_GET_TACT_TIME_EXCEPT · 도달 불가 SP SCP0020_GET_TACT_TIME(실측+원문); SCP0020_GET_TACT_TIME_EXCEPT(실측+원문)",11
+SCP0020,팝업 값 반영,3,정답 있음,Doc/asislive/SCP0020/run_20261115_121338_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",5
+SCP0020,팝업·셀 이벤트 호출,6,도달 불가(실측+원문),Doc/asislive/SCP0020/run_20261115_070639_acts_pick,"대상 SP 관찰 행 2/6 · SCP0020_GET_TACT_TIME_EXCEPT_OSP({""p_division_id"": ""82"", ""p_plant_site"": ""CN00249500-P"", ""p_operation_id"": ""CN002 · 1행 · run_20261115_070639_acts_pick action:pick:LINE_ID) · 못 본 SP SCP0020_GET_TACT_TIME,SCP0020_GET_TACT_TIME_EXCEPT · 도달 불가 SP SCP0020_GET_TACT_TIME(실측+원문); SCP0020_GET_TACT_TIME_EXCEPT(실측+원문)",8
+SCP0020,편집 불가 셀,3,정답 있음,Doc/asislive/SCP0020/run_20261115_092522_acts_violate,늘어난 행 {'spdMain/Packer': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Line* 값은 필수 입력입니다'] · 호출 0,8
+SCP0028,검증 위반 입력,7,정답 있음,Doc/asislive/SCP0028/run_20261115_092632_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0028_Shipment_Lot_Size\SCP0028_Shipment_Lot_Size.cs:200 InsertButton 본문에 행 추가 코드 없음(호출 메서드 571행)) · 런처 행 추가 결과 0,2
+SCP0028,저장 밖 경로 메시지,2,미실행(실저장 경로),Doc/asislive/_msg_cover.csv,경로 메시지 원장 행 2: 미실행(실저장 경로) 2,1
+SCP0028,차등 검증 인자,18,검사기 결함 후보(AS-IS 경로에 없는 SP),Doc/asislive/SCP0028/run_20261113_072910_acts,"대상 SP 관찰 행 1/3 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_id · 60187행 · run_20261113_072910_acts action:btnItemId) · 못 본 SP SCM0002_GET_MATERIAL_BY_DIVISION,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT · 도달 불가 SP SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT(실저장 경로) · AS-IS 화면·팝업 원문에 없는 SP SCM0002_GET_MATERIAL_BY_DIVISION",10
+SCP0028,팝업 값 반영,15,정답 있음,Doc/asislive/SCP0028/run_20261115_121522_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnInput→-, btnItemId→textBox1#0,txtItemId#0",1
+SCP0028,팝업·셀 이벤트 호출,5,검사기 결함 후보(AS-IS 경로에 없는 SP),Doc/asislive/SCP0028/run_20261113_072910_acts,"대상 SP 관찰 행 2/3 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_id · 60187행 · run_20261113_072910_acts action:btnItemId), SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP({""p_division_id"": ""81"", ""p_operation_group"": ""P,A,E"", ""p_from_site"": ""HQ05-W"", "" · 882행 · run · 못 본 SP SCM0002_GET_MATERIAL_BY_DIVISION · AS-IS 화면·팝업 원문에 없는 SP SCM0002_GET_MATERIAL_BY_DIVISION",2
+SCP0033,검증 위반 입력,5,정답 있음,Doc/asislive/SCP0033/run_20261115_092755_acts_violate,늘어난 행 {'spdMain/Shipment Semi Dept Day': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Div* 값은 필수 입력입니다'] · 호출 0,2
+SCP0033,동작 재현 시나리오,1,정답 있음,Doc/asislive/SCP0033/run_20261115_133425_acts_pick_edit,열 1 중 팝업 1 · 고른 뒤 셀 변화 0 (ITEM_ID→SCM0002_ItembyDivisionPopup),10
+SCP0033,분기 해석,1,정답 있음,Doc/asislive/SCP0033/run_20261115_063129_acts_states_edit,40행×12열 잠김 360 열림 120 · 행마다 잠금 다른 열 0,5
+SCP0033,저장 밖 경로 메시지,3,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 6: 실측 관찰 3, 메시지 코드 아님 3",10
+SCP0033,차등 검증 인자,17,정답 있음,Doc/asislive/SCP0033/run_20261115_133314_acts_pick,"대상 SP 관찰 행 1/1 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""ALL"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_i · 156657행 · run_20261115_133314_acts_pick action:pick_retry:ITEM_ID)",9
+SCP0033,팝업 값 반영,6,정답 있음,Doc/asislive/SCP0033/run_20261115_133425_acts_pick_edit,열 1 중 팝업 1 · 고른 뒤 셀 변화 0 (ITEM_ID→SCM0002_ItembyDivisionPopup),6
+SCP0033,팝업·셀 이벤트 호출,1,정답 있음,Doc/asislive/SCP0033/run_20261115_133314_acts_pick,"대상 SP 관찰 행 1/1 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""ALL"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_i · 156657행 · run_20261115_133314_acts_pick action:pick_retry:ITEM_ID)",9
+SCP0037,검증 위반 입력,2,정답 있음,Doc/asislive/SCP0037/run_20261115_092918_acts_violate,늘어난 행 {'spdMain/Operation LT': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Plant Site* 값은 필수 입력입니다'] · 호출 0,2
+SCP0037,동작 재현 시나리오,1,정답 있음,Doc/asislive/SCP0037/run_20261115_121618_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",14
+SCP0037,분기 해석,10,정답 있음,Doc/asislive/SCP0037/run_20261114_233812_acts,동작 1 · 호출 2 · 메시지 0 · 팝업 2,8
+SCP0037,저장 밖 경로 메시지,7,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 17: 메시지 코드 아님 10, 실측 관찰 7",14
+SCP0037,팝업 값 반영,11,정답 있음,Doc/asislive/SCP0037/run_20261115_121618_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",9
+SCP0037,편집 불가 셀,17,정답 있음,Doc/asislive/SCP0037/run_20261115_092918_acts_violate,늘어난 행 {'spdMain/Operation LT': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Plant Site* 값은 필수 입력입니다'] · 호출 0,6
+SCP0041,검증 위반 입력,2,정답 있음,Doc/asislive/SCP0041/run_20261115_093022_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs:249 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SCP0041,동작 재현 시나리오,1,정답 있음,Doc/asislive/SCP0041/run_20261115_121713_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 BtnItemId→textBox1#1,txtItemId#0",3
+SCP0041,분기 해석,8,정답 있음,Doc/asislive/SCP0041/run_20261114_234512_acts,동작 2 · 호출 8 · 메시지 0 · 팝업 2,2
+SCP0041,신규행 전제,2,정답 있음,Doc/asislive/SCP0041/run_20261115_093022_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs:249 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SCP0041,저장 밖 경로 메시지,3,관찰 대상 없음(도달 불가·메시지 코드 아님),Doc/asislive/_msg_cover.csv,경로 메시지 원장 행 4: 도달 불가(실측+원문) 4,1
+SCP0041,팝업 값 반영,5,정답 있음,Doc/asislive/SCP0041/run_20261115_121713_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 BtnItemId→textBox1#1,txtItemId#0",1
+SCP0041,팝업·셀 이벤트 호출,2,정답 있음,Doc/asislive/SCP0041/run_20261116_050007_acts_msgcell,"대상 SP 관찰 행 2/2 · SCP0041_GET_PACK_HOLD_STOCK({""p_division_id"": ""82"", ""p_plant_site_id"": ""CN00249500-P,CN05104100_82-P,KR00697 · 1332행 · run_20261116_050007_acts_msgcell find)",1
+SCP0041,편집 불가 셀,2,정답 있음,Doc/asislive/SCP0041/run_20261115_093022_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs:249 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,4
+SCP0041,행 조건 계산,6,정답 있음,Doc/asislive/SCP0041/run_20261115_063324_acts_states,0행×15열 잠김 0 열림 0 · 행마다 잠금 다른 열 0,2
+SCP0084,검증 위반 입력,2,정답 있음,Doc/asislive/SCP0084/run_20261115_093134_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0084_LongTermStock\SCP0084_LongTermStock.cs: InsertButton 오버라이드 없음(BaseForm 빈 virtual)) · 런처 행 추가 결과 0,2
+SCP0084,분기 해석,4,검사기 결함 후보,Doc/asislive/_launcher_not_target.csv,"T-31a47125 T-3ff3faf4 T-5d6662af T-4e7583c4 · 원장 C3 '연쇄 자동 채움' asis_ref SCP0084_LongTermStock.cs:614 = ExportExcelData 안 복사 시트(newSheet)의 열 Visible 전환(609~623행 LONG_TERM_STOCK_QTY·AMOUNT 숨김, *_XLS 표시) · 셀 값 대입 문장 아님 · 화면 그리드 값 연쇄 없음 → 런처로 줄 정답 없음, 검사기 W5 원천 분류 결함",1
+SCP0084,신규행 전제,7,정답 있음,Doc/asislive/SCP0084/run_20261115_093134_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0084_LongTermStock\SCP0084_LongTermStock.cs: InsertButton 오버라이드 없음(BaseForm 빈 virtual)) · 런처 행 추가 결과 0,2
+SCP0084,저장 밖 경로 메시지,2,정답 있음,,,0
+SCP0084,차등 검증 인자,1,정답 있음,,,0
+SCP0084,팝업·셀 이벤트 호출,1,정답 있음,,,0
+SCP0104,검증 위반 입력,2,정답 있음,Doc/asislive/SCP0104/run_20261115_093305_acts_violate,늘어난 행 {'spdAssign/ELTR': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Site* 값은 필수 입력입니다'] · 호출 0,2
+SCP0104,그리드에 없는 컬럼,8,정답 있음,Doc/asislive/SCP0104/run_20261114_023933,기본 실행 덤프,3
+SCP0104,동작 재현 시나리오,53,정답 있음,Doc/asislive/SCP0104/run_20261115_121900_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",7
+SCP0104,분기 해석,12,정답 있음,Doc/asislive/SCP0104/run_20261114_024141_acts,동작 3 · 호출 2 · 메시지 0 · 팝업 2,2
+SCP0104,신규행 전제,7,정답 있음,Doc/asislive/SCP0104/run_20261115_093305_acts_violate,늘어난 행 {'spdAssign/ELTR': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Site* 값은 필수 입력입니다'] · 호출 0,2
+SCP0104,저장 밖 경로 메시지,7,미실행(실저장 경로),Doc/asislive/_msg_cover.csv,경로 메시지 원장 행 6: 미실행(실저장 경로) 6,1
+SCP0104,팝업 값 반영,24,정답 있음,Doc/asislive/SCP0104/run_20261115_121900_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",3
+SCP0104,팝업 내부,1,정답 있음,Doc/asislive/SCP0104/run_20261115_121900_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",3
+SCP0104,팝업 사용처,2,정답 있음,Doc/asislive/SCP0104/run_20261115_121900_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",4
+SCP0104,팝업·셀 이벤트 호출,1,미실행(실저장 경로),Doc/asislive/SCP0104,대상 SP 관찰 행 0/1 ·  · 못 본 SP SCP0104_CHECK_NAME_ON_DUMMY_CODE · 도달 불가 SP SCP0104_CHECK_NAME_ON_DUMMY_CODE(실저장 경로(셀 입력 쓰기)),5
+SCP0104,편집 불가 셀,36,정답 있음,Doc/asislive/SCP0104/run_20261115_093305_acts_violate,늘어난 행 {'spdAssign/ELTR': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Site* 값은 필수 입력입니다'] · 호출 0,4
+SCP0104,행 조건 계산,4,정답 있음,Doc/asislive/SCP0104/run_20261115_063611_acts_states,40행×54열 잠김 2120 열림 40 · 행마다 잠금 다른 열 0,2
+SCP0108,검증 위반 입력,1,정답 있음,Doc/asislive/SCP0108/run_20261115_093419_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0108_CAPA_LOB_Report\SCP0108_CAPA_LOB_Report.cs:1284 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SCP0108,그리드에 없는 컬럼,2,정답 있음,Doc/asislive/SCP0108/run_20261114_234636,기본 실행 덤프,5
+SCP0108,동작 재현 시나리오,10,정답 있음,Doc/asislive/SCP0108/run_20261115_122044_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",4
+SCP0108,분기 해석,8,정답 있음,Doc/asislive/SCP0108/run_20261114_234825_acts,동작 3 · 호출 2 · 메시지 0 · 팝업 2,3
+SCP0108,팝업 값 반영,4,정답 있음,Doc/asislive/SCP0108/run_20261115_122044_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",1
+SCP0108,팝업 내부,1,정답 있음,Doc/asislive/SCP0108/run_20261115_122044_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnColumn→-, btnItemId→txtItem#0",1
+SCP0108,팝업·셀 이벤트 호출,1,정답 있음,Doc/asislive/SCP0108/run_20261112_203117,"대상 SP 관찰 행 1/1 · SCP0104_GET_SPREAD_TITLE({""p_from_yyyymm"": ""202611"", ""p_program_id"": ""SCP0108"", ""p_sheet_name"": ""MAIN""} · 29행 · run_20261112_203117 load)",1
+SCP0111,검증 위반 입력,8,정답 있음,Doc/asislive/SCP0111/run_20261115_093545_acts_violate,늘어난 행 {'spdMain/Integration PSI': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['모든 항목은 필수 입력입니다.'] · 호출 0,2
+SCP0111,동작 재현 시나리오,1,정답 있음,Doc/asislive/SCP0111/run_20261115_122213_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnItemId→textBox1#2,txtItemId#0, BtnNickName→textBox1#0,txtNickName#0",2
+SCP0111,분기 해석,9,정답 있음,Doc/asislive/SCP0111/run_20261113_121944_acts,동작 5 · 호출 16 · 메시지 0 · 팝업 4,1
+SCP0111,차등 검증 인자,4,정답 있음,Doc/asislive/SCP0111/run_20261112_203458,"대상 SP 관찰 행 2/2 · SCP0111_GET_ESS_PACK_LINE({} · 32행 · run_20261112_203458 load), SCP0111_GET_INTEGRATION_PSI({""p_division_id"": ""81"", ""p_plan_start_yyyymmdd"": ""20260817"", ""p_plan_type"": """",  · 1712행 · run_20261113_003821 find)",2
+SCP0111,팝업 값 반영,4,정답 있음,Doc/asislive/SCP0111/run_20261115_122213_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnItemId→textBox1#2,txtItemId#0, BtnNickName→textBox1#0,txtNickName#0",1
+SCP0111,팝업·셀 이벤트 호출,2,정답 있음,Doc/asislive/SCP0111/run_20261112_203458,대상 SP 관찰 행 2/2 · SCP0111_GET_ESS_PACK_LINE({} · 32행 · run_20261112_203458 load),1
+SCP0111,편집 불가 셀,13,정답 있음,Doc/asislive/SCP0111/run_20261115_093545_acts_violate,늘어난 행 {'spdMain/Integration PSI': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['모든 항목은 필수 입력입니다.'] · 호출 0,4
+SCP0111,행 조건 계산,1,정답 있음,Doc/asislive/SCP0111/run_20261115_063724_acts_states,40행×30열 잠김 1160 열림 40 · 행마다 잠금 다른 열 0,2
+SCP0122,검증 위반 입력,4,정답 있음,Doc/asislive/SCP0122/run_20261115_093707_acts_violate,늘어난 행 {'spdMain/Plan Activity Mgmt': 2} · 메시지 0 · 빈 새 행 저장 메시지 0 · 호출 0,2
+SCP0122,동작 재현 시나리오,1,정답 있음,Doc/asislive/SCP0122/run_20261116_062814_acts_msgcell,2026-11-16 06:28 · SCP0122_PlanActivityMgmt.cs:555~558 CellClick = _currRowIdx 갱신 · 수정 모드 1행 OPMZ_ACTV_CD·LINK_UI_TYPE 비움 → 1행 CellClick → OPMZ_ACTV_NAME ComboSelChange(224~243) → 1행 OPMZ_ACTV_CD 'A008'·LINK_UI_TYPE 'UI' 다시 채움(CONFIRM_YN Y,2
+SCP0122,팝업·셀 이벤트 호출,2,정답 있음,,,0
+SCP0127,검증 위반 입력,8,정답 있음,Doc/asislive/SCP0127/run_20261115_093831_acts_violate,늘어난 행 {'spdMain/PRECEDE / SAFETY STOCK DAY': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['모든 항목은 필수 입력입니다.'] · 호출 0,2
+SCP0127,분기 해석,3,정답 있음,Doc/asislive/SCP0127/run_20261114_235344_acts,동작 1 · 호출 2 · 메시지 0 · 팝업 2,6
+SCP0127,팝업 값 반영,4,정답 있음,Doc/asislive/SCP0127/run_20261115_122313_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",5
+SCP0131,검증 위반 입력,10,정답 있음,Doc/asislive/SCP0131/run_20261115_093955_acts_violate,늘어난 행 {'spdMain/Sales Site Priority': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['모든 항목은 필수 입력입니다.'] · 호출 0,2
+SCP0131,분기 해석,4,정답 있음,Doc/asislive/SCP0131/run_20261115_000143_acts,동작 1 · 호출 2 · 메시지 0 · 팝업 2,6
+SCP0131,저장 밖 경로 메시지,3,관찰 대상 없음(도달 불가·메시지 코드 아님),Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 4: 메시지 코드 아님 3, 도달 불가(원문) 1",1
+SCP0131,팝업 값 반영,4,정답 있음,Doc/asislive/SCP0131/run_20261115_122409_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",5
+SCP0131,팝업·셀 이벤트 호출,1,정답 있음,Doc/asislive/SCP0131/run_20261112_204330,"대상 SP 관찰 행 1/1 · SCP0128_GET_SEARCH_INFO({""p_division_id"": ""81"", ""p_site_id"": """"} · 46행 · run_20261112_204330 load)",7
+SCP0131,편집 불가 셀,2,정답 있음,Doc/asislive/SCP0131/run_20261115_093955_acts_violate,늘어난 행 {'spdMain/Sales Site Priority': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['모든 항목은 필수 입력입니다.'] · 호출 0,6
+SSP0003,그리드에 없는 컬럼,13,정답 있음,Doc/asislive/SSP0003/run_20261115_000704,기본 실행 덤프,6
+SSP0003,동작 재현 시나리오,1,정답 있음,Doc/asislive/SSP0003/run_20261115_122622_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnRequestUser→textBox1#0,txtRequest#0, btnItemId→textBox1#1,txtItemID#0",13
+SSP0003,분기 해석,7,정답 있음,Doc/asislive/SSP0003/run_20261115_000853_acts,동작 3 · 호출 3 · 메시지 0 · 팝업 3,8
+SSP0003,저장 밖 경로 메시지,36,미실행(사용자 결정),Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 50: 미실행(사용자 결정) 49, 메시지 코드 아님 1",1
+SSP0003,팝업 값 반영,10,정답 있음,Doc/asislive/SSP0003/run_20261115_122622_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnRequestUser→textBox1#0,txtRequest#0, btnItemId→textBox1#1,txtItemID#0",7
+SSP0003,팝업·셀 이벤트 호출,5,미실행(사용자 결정),Doc/asislive/SSP0003/run_20261112_204421,"대상 SP 관찰 행 9/17 · SCM0001_GET_SCP_DAY_PERIOD({""p_from_date"": """", ""p_offset_day"": ""-14"", ""p_timezone"": ""AS054""} · 1행 · run_20261112_204421 load), SSP0003_GET_DELEGATEE_LOAD({""p_division_id"": ""40"", ""p_apploval"": ""jaeuk.shin""} · 1행 · run_20261116_054703_acts_msgcell action:msgcell:SpdMain_CellDoubleClick), SSP0003_GET_S · 못 본 SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK,SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM,SSP0200_GET_SHIPMENT_STATUS · 사용자 결정 경로 SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK(부르는 처리기 BtnApproval_Click = 사용자 결정 실행 안 함); SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM(부르는 처리기 BtnApproval_Click,BtnReject_Click,BtnSelfReject_Click = 사용자 결정 실행 안 함); SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40(부르는 처리기 BtnApproval_Click,BtnReject_Click,BtnSelfReject_Cli",12
+SSP0005,검증 위반 입력,9,정답 있음,Doc/asislive/SSP0005/run_20261115_094243_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SSP.Plan.UIL\SSP0005_ShipmentWorkingDay.cs:335 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SSP0005,그리드에 없는 컬럼,1,정답 있음,Doc/asislive/SSP0005/run_20261115_001222,기본 실행 덤프,6
+SSP0005,신규행 전제,3,정답 있음,Doc/asislive/SSP0005/run_20261115_094243_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SSP.Plan.UIL\SSP0005_ShipmentWorkingDay.cs:335 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SSP0005,차등 검증 인자,17,정답 있음,Doc/asislive/SSP0005/run_20261112_204451,"대상 SP 관찰 행 1/1 · SSP0005_GET_SHIPMENT_WORKING_DAY({""p_from_yyyymmdd"": ""20261112"", ""p_to_yyyymmdd"": ""20271107"", ""p_division_id"": ""8 · 0행 · run_20261112_204451 find)",8
+SSP0005,팝업·셀 이벤트 호출,1,정답 있음,Doc/asislive/SSP0005/run_20261112_204451,"대상 SP 관찰 행 4/4 · SCM0001_GET_SCP_PERIOD({""p_from_date"": """", ""p_offset_month"": """", ""p_timezone"": ""AS054""} · 1행 · run_20261112_204451 load), SCP0009_GET_SHEET_CALENDAR_3SPAN({""p_start_yyyymmdd"": ""20261112"", ""p_end_yyyymmdd"": ""20271107""} · 435행 · run_20261112_204451 load), SSP0005_GET_SHIPMENT_WORKING_DAY({""p_from_yyyy",5
+SSP0014,검증 위반 입력,2,정답 있음,Doc/asislive/SSP0014/run_20261115_094354_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SSP.Plan.UIL\SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SSP0014,그리드에 없는 컬럼,1,정답 있음,Doc/asislive/SSP0014/run_20261113_054501,기본 실행 덤프,3
+SSP0014,분기 해석,10,정답 있음,Doc/asislive/SSP0014/run_20261113_124224_acts,동작 1 · 호출 5 · 메시지 0 · 팝업 1,7
+SSP0014,신규행 전제,19,정답 있음,Doc/asislive/SSP0014/run_20261115_094354_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SSP.Plan.UIL\SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,2
+SSP0014,차등 검증 인자,17,정답 있음,Doc/asislive/SSP0014/run_20261113_124224_acts,"대상 SP 관찰 행 1/1 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""40"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_id · 29575행 · run_20261113_124224_acts action:btnItemId)",10
+SSP0014,팝업 값 반영,3,정답 있음,Doc/asislive/SSP0014/run_20261115_122718_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnItemId→textBox1#0,txtItemId#0",9
+SSP0014,팝업·셀 이벤트 호출,2,미실행(실저장 경로),Doc/asislive/SSP0014/run_20261113_124224_acts,"대상 SP 관찰 행 1/3 · SCM0002_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""40"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_id · 29575행 · run_20261113_124224_acts action:btnItemId) · 못 본 SP SSP0014_GET_USER_ID_CHECK · 실저장 경로 SSP0014_GET_USER_ID_CHECK(부르는 메서드 SaveButton)",10
+SSP0015,검증 위반 입력,38,실행·관찰 없음,Doc/asislive/SSP0015/run_20261115_211522_acts_violate,spdDetail/Hold stock 늘어난 행 0 · 메시지 0 / spdDetail/Shipment Confirm Detail 늘어난 행 0 · 메시지 0,5
+SSP0015,그리드에 없는 컬럼,17,정답 있음,Doc/asislive/SSP0015/run_20261114_231832,기본 실행 덤프,9
+SSP0015,동작 재현 시나리오,6,정답 있음,Doc/asislive/SSP0015/run_20261115_211842_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0, btnMeasure→-",16
+SSP0015,분기 해석,20,정답 있음,Doc/asislive/SSP0015/run_20261114_232211_acts,동작 4 · 호출 8 · 메시지 0 · 팝업 3,11
+SSP0015,신규행 전제,72,정답 있음,Doc/asislive/SSP0015/run_20261115_214759_acts_insert,spdDetail/Hold stock 늘어난 행 {'spdDetail/Hold stock': 1} · 메시지 0 / spdDetail/Shipment Confirm Detail 늘어난 행 {'spdDetail/Shipment Confirm Detail': 2} · 메시지 0,9
+SSP0015,저장 밖 경로 메시지,34,실행·관찰 없음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 43: 미관찰 38, 메시지 코드 아님 5",17
+SSP0015,차등 검증 인자,12,실행·관찰 없음,Doc/asislive/SSP0015/run_20261115_202618_acts_pick,"대상 SP 관찰 행 3/10 · SSP0015_GET_BLOCK_STOCK({""p_from_site"": ""HQ06-A"", ""p_item_id"": ""MCBB45821-A1"", ""p_plan_start_yyyymmdd"":  · 0행 · run_20261115_202618_acts_pick action:pick:FIGURE), SSP0015_GET_MES_STOCK({""p_division_id"": ""40"", ""p_from_site"": """", ""p_item_id"": ""MCBB45821-A1"", ""p_plan_ · 1행 · run_20261115_202618_acts_pi · 못 본 SP SSP0002_GET_NERP_CODE,SSP0015_GET_SCS_STOCK,SSP0015_GET_SHIPMENT_PSI_PACKER_PAST,SSP0015_GET_SHIPMENT_RESULT,SSP0015_GET_SHIPMENT_RESULT_PACKER,SSP0015_GET_STOCK_LOCATION_DETAIL,SSP0026_GET_REQUEST_DETAIL_PACK",17
+SSP0015,팝업 값 반영,41,정답 있음,Doc/asislive/SSP0015/run_20261115_211842_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0, btnMeasure→-",10
+SSP0015,팝업 내부,12,정답 있음,Doc/asislive/SSP0015/run_20261115_211842_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0, btnMeasure→-",10
+SSP0015,팝업 사용처,11,정답 있음,Doc/asislive/SSP0015/run_20261115_211842_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0, btnMeasure→-",12
+SSP0015,팝업·셀 이벤트 호출,26,실행·관찰 없음,Doc/asislive/SSP0015/run_20261112_205100,"대상 SP 관찰 행 11/35 · SCM0001_GET_SCP_DAY_PERIOD({""p_from_date"": """", ""p_offset_day"": ""31"", ""p_timezone"": ""AS054""} · 1행 · run_20261112_205100 load), SCP0009_GET_SHEET_CALENDAR_3SPAN({""p_start_yyyymmdd"": ""20261112"", ""p_end_yyyymmdd"": ""20261213""} · 40행 · run_20261112_205100 load), SSP0015_GET_BLOCK_STOCK({""p_from_site"": ""HQ · 못 본 SP SSP0002_GET_NERP_CODE,SSP0003_GET_SSP_PLAN_PROCESSING_CHECK,SSP0015_GET_ERP_SO_NO_CNT,SSP0015_GET_SCS_STOCK,SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER,SSP0015_GET_SHIPMENT_PSI_PACKER,SSP0015_GET_SHIPMENT_PSI_PACKER_PAST,SSP0015_GET_SHIPMENT_RESULT,SSP0015_GET_SHIPMENT_RESULT_PACKER,SSP0015_GET_SHIPMENT_STATUS,SSP0015_GET_STOCK_LOCATION_DETAIL,SSP0026_GET_REQUEST_DETAIL_PACK,SSP0202_GET_SCS_CONFIRM_ID_CHECK",13
+SSP0015,편집 불가 셀,61,정답 있음,Doc/asislive/SSP0015/run_20261115_214759_acts_insert,spdDetail/Hold stock 늘어난 행 {'spdDetail/Hold stock': 1} · 메시지 0 / spdDetail/Shipment Confirm Detail 늘어난 행 {'spdDetail/Shipment Confirm Detail': 2} · 메시지 0,17
+SSP0015,행 조건 계산,9,정답 있음,Doc/asislive/SSP0015/run_20261115_204534_acts_states_edit,40행×60열 잠김 2304 열림 96 · 행마다 잠금 다른 열 32,8
+SSP0020,검증 위반 입력,30,정답 있음,Doc/asislive/SSP0020/run_20261115_104346_acts_violate,AS-IS 행 추가 기능 없음(GSCM\06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs:897 InsertButton 본문 비어 있음(주석만)) · 런처 행 추가 결과 0,3
+SSP0020,동작 재현 시나리오,2,정답 있음,Doc/asislive/SSP0020/run_20261115_124921_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnDelegatee→textBox1#0,txtDelegatee#0",2
+SSP0020,차등 검증 인자,10,정답 있음,Doc/asislive/SSP0020/run_20261115_104415,"대상 SP 관찰 행 1/1 · SSP0020_GET_DELEGATE({""p_user_id"": ""jaeuk.shin"", ""p_language"": ""KO""} · 1행 · run_20261115_104415 load)",2
+SSP0020,팝업 값 반영,2,정답 있음,Doc/asislive/SSP0020/run_20261115_124921_acts_pickbtn,"버튼 1 중 팝업 1 · 고름 1 · 바뀐 조건 btnDelegatee→textBox1#0,txtDelegatee#0",1
+SSP0020,팝업·셀 이벤트 호출,5,미실행(실저장 경로),Doc/asislive/SSP0020/run_20261115_104415,"대상 SP 관찰 행 1/3 · SSP0020_GET_DELEGATE({""p_user_id"": ""jaeuk.shin"", ""p_language"": ""KO""} · 1행 · run_20261115_104415 load) · 못 본 SP SSP0020_SAVE_UNSET · 실저장 경로 SSP0020_SAVE_UNSET(쓰기 SP 이름)",3
+SSP0021,검증 위반 입력,33,정답 있음,Doc/asislive/SSP0021/run_20261115_103907_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.'] · 호출 0,3
+SSP0021,그리드에 없는 컬럼,17,정답 있음,Doc/asislive/SSP0021/run_20261115_024020,기본 실행 덤프,10
+SSP0021,동작 재현 시나리오,3,정답 있음,Doc/asislive/SSP0021/run_20261115_123351_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0",14
+SSP0021,분기 해석,21,정답 있음,Doc/asislive/SSP0021/run_20261115_024709_acts,동작 11 · 호출 20 · 메시지 0 · 팝업 9,8
+SSP0021,신규행 전제,66,정답 있음,Doc/asislive/SSP0021/run_20261115_103907_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.'] · 호출 0,3
+SSP0021,저장 밖 경로 메시지,28,실행·관찰 없음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 29: 미관찰 25, 실측 관찰 3, 메시지 코드 아님 1",15
+SSP0021,조건 데이터 없음,1,정답 있음,Doc/asislive/SSP0021/run_20261115_003150_acts_pre_cboBucketType_i2,동작 12 · 호출 31 · 메시지 0 · 팝업 9,12
+SSP0021,차등 검증 인자,8,실행·관찰 없음,Doc/asislive/SSP0021/run_20261115_131557_acts_pick,"대상 SP 관찰 행 7/8 · SSP0021_GET_MES_STOCK({""p_division_id"": ""81"", ""p_company_id"": ""HQ00"", ""p_from_site"": ""HQ05-W"", ""p_item · 0행 · run_20261115_131557_acts_pick action:pick:BOH_QTY), SSP0021_GET_MES_STOCK_DETAIL({""p_division_id"": ""81"", ""p_company_id"": ""HQ00"", ""p_from_site"": ""HQ05-W"", ""p_item · 0행 · run_20261115_131557_a · 못 본 SP SSP0021_GET_HOLD_STOCK",15
+SSP0021,팝업 값 반영,29,정답 있음,Doc/asislive/SSP0021/run_20261115_123351_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0",9
+SSP0021,팝업 사용처,5,정답 있음,Doc/asislive/SSP0021/run_20261115_123351_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnItemID2→textBox1#0,txtModel2#0, BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→textBox1#1,txtItemId#0",11
+SSP0021,팝업·셀 이벤트 호출,15,실행·관찰 없음,Doc/asislive/SSP0021/run_20261112_171316,"대상 SP 관찰 행 16/23 · SCP0009_GET_SHEET_CALENDAR_3SPAN({""p_start_yyyymmdd"": ""20130712"", ""p_end_yyyymmdd"": ""19990101""} · 0행 · run_20261112_171316 load), SSP0021_GET_MES_STOCK({""p_division_id"": ""81"", ""p_company_id"": ""HQ00"", ""p_from_site"": ""HQ05-W"", ""p_item · 0행 · run_20261115_131557_acts_pick action:pick:BOH_QTY), SSP0021_ · 못 본 SP SSP0021_GET_ERP_SO_NO_CNT,SSP0021_GET_HOLD_STOCK,SSP0021_GET_SHIPMENT_STATUS,SSP0021_SAVE_HOLD_STOCK_DATA",12
+SSP0021,편집 불가 셀,45,정답 있음,Doc/asislive/SSP0021/run_20261115_103907_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.'] · 호출 0,7
+SSP0021,행 조건 계산,19,정답 있음,Doc/asislive/SSP0021/run_20261115_064621_acts_states,40행×85열 잠김 3360 열림 40 · 행마다 잠금 다른 열 0,4
+SSP0023,검증 위반 입력,30,정답 있음,Doc/asislive/SSP0023/run_20261115_104202_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['Package Type * 값은 필수 입력입니다'] · 호출 0,3
+SSP0023,그리드에 없는 컬럼,12,정답 있음,Doc/asislive/SSP0023/run_20261115_015036,기본 실행 덤프,3
+SSP0023,동작 재현 시나리오,2,정답 있음,Doc/asislive/SSP0023/run_20261115_123639_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→-, btnItemId2→textBox1#1,txtItemId2#0",20
+SSP0023,분기 해석,34,정답 있음,Doc/asislive/SSP0023/run_20261115_015621_acts,동작 10 · 호출 19 · 메시지 0 · 팝업 9,12
+SSP0023,신규행 전제,86,정답 있음,Doc/asislive/SSP0023/run_20261115_104202_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['Package Type * 값은 필수 입력입니다'] · 호출 0,3
+SSP0023,저장 밖 경로 메시지,35,실행·관찰 없음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 37: 미관찰 19, 실측 관찰 9, 미실행(실저장 경로) 7, 도달 불가(실측+원문) 1, 메시지 코드 아님 1",21
+SSP0023,조건 데이터 없음,1,정답 있음,Doc/asislive/SSP0023/run_20261115_003719_acts_pre_cboPlanDate_i0,동작 11 · 호출 22 · 메시지 0 · 팝업 9,14
+SSP0023,차등 검증 인자,44,미실행(실저장 경로),Doc/asislive/SSP0023/run_20261112_205428,"대상 SP 관찰 행 3/10 · DM0003_GET_BUCKET_TYPE_CODE({} · 3행 · run_20261112_205428 load), SSP0023_GET_SHIPMENT_PLAN_RESULT({""p_division_id"": ""40"", ""p_from_site"": """", ""p_item_id"": """", ""p_from_yyyymmdd"": "" · 0행 · run_20261116_063929_acts_msgcell action:msgcell:BtnSearch_Click), SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL({""p_divis · 못 본 SP DMF0002_GET_TITLESET_POPUP,SSP0023_GET_CALENDAR,SSP0023_GET_DETAIL_EXCEL,SSP0023_GET_ERP_SO_NO_CNT,SSP0023_GET_PLAN_DETAIL,SSP0023_GET_RESULT,SSP0023_GET_SHIPMENT_STATUS,SSP0023_GET_STOCK_DETAIL · AS-IS 화면·팝업 원문에 없는 SP DMF0002_GET_TITLESET_POPUP,SSP0023_GET_CALENDAR,SSP0023_GET_DETAIL_EXCEL,SSP0023_GET_PLAN_DETAIL,SSP0023_GET_RESULT,SSP0023_GET_STOCK_DETAIL · 실저장 경로 SSP0023_GET_ERP_SO_NO_CNT(부르는 메서드 SaveButton); SSP0023_GET_SHIPMENT_STATUS(부르는 메서드 SaveButton)",21
+SSP0023,팝업 값 반영,24,정답 있음,Doc/asislive/SSP0023/run_20261115_123639_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→-, btnItemId2→textBox1#1,txtItemId2#0",13
+SSP0023,팝업 사용처,5,정답 있음,Doc/asislive/SSP0023/run_20261115_123639_acts_pickbtn,"버튼 4 중 팝업 4 · 고름 4 · 바뀐 조건 BtnMeasure→-, BtnRequestor→txtRequestor#0, btnItemId→-, btnItemId2→textBox1#1,txtItemId2#0",15
+SSP0023,팝업·셀 이벤트 호출,15,미실행(실저장 경로),Doc/asislive/SSP0023/run_20261112_205428,"대상 SP 관찰 행 10/19 · DM0003_GET_BUCKET_TYPE_CODE({} · 3행 · run_20261112_205428 load), SSP0002_GET_USER_INFO_LIST({""Search"": ""jaeuk.shin"", ""Language"": ""KO"", ""SSOUserYN"": ""N""} · 1행 · run_20261115_104202_acts_violate action:insert_detail), SSP0023_GET_SHIPMENT_PLAN_DETAIL({""p_division_id"": ""40"", ""p_company_id"": ""HQ00"", ""p_ · 못 본 SP DMF0002_GET_TITLESET_POPUP,SSP0023_GET_DETAIL_EXCEL,SSP0023_GET_ERP_SO_NO_CNT,SSP0023_GET_PLAN_DETAIL,SSP0023_GET_RESULT,SSP0023_GET_SHIPMENT_STATUS,SSP0023_GET_STOCK_DETAIL · AS-IS 화면·팝업 원문에 없는 SP DMF0002_GET_TITLESET_POPUP,SSP0023_GET_DETAIL_EXCEL,SSP0023_GET_PLAN_DETAIL,SSP0023_GET_RESULT,SSP0023_GET_STOCK_DETAIL · 실저장 경로 SSP0023_GET_ERP_SO_NO_CNT(부르는 메서드 SaveButton); SSP0023_GET_SHIPMENT_STATUS(부르는 메서드 SaveButton)",16
+SSP0023,편집 불가 셀,59,정답 있음,Doc/asislive/SSP0023/run_20261115_104202_acts_violate,spdDetail/Shipment Plan Detail 늘어난 행 {'spdDetail/Shipment Plan Detail': 2} · 메시지 0 · 빈 새 행 저장 메시지 ['Package Type * 값은 필수 입력입니다'] · 호출 0,7
+SSP0023,행 조건 계산,31,정답 있음,Doc/asislive/SSP0023/run_20261115_064813_acts_states_edit,40행×120열 잠김 4536 열림 264 · 행마다 잠금 다른 열 56,4
+SSP0024,검증 위반 입력,4,정답 있음,Doc/asislive/SSP0024/run_20261115_094957_acts_violate,늘어난 행 {'spdMain/Ship Master Elec': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['Plant Site* 값은 필수 입력입니다'] · 호출 0,2
+SSP0024,동작 재현 시나리오,2,정답 있음,Doc/asislive/SSP0024/run_20261115_125037_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnMaterialId→textBox1#0,txtMaterialId#0, btnModelId→textBox1#1,txtModelId#0",11
+SSP0024,분기 해석,11,정답 있음,Doc/asislive/SSP0024/run_20261115_035528_acts,동작 2 · 호출 4 · 메시지 0 · 팝업 2,7
+SSP0024,저장 밖 경로 메시지,8,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 15: 메시지 코드 아님 10, 실측 관찰 5",11
+SSP0024,차등 검증 인자,3,정답 있음,Doc/asislive/SSP0024/run_20261116_055129_acts_states_edit,"대상 SP 관찰 행 2/2 · SSP0002_GET_USER_INFO_LIST({""Search"": ""jaeuk.shin"", ""Language"": ""KO"", ""SSOUserYN"": ""N""} · 1행 · run_20261116_055129_acts_states_edit edit), SSP0024_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_plant_site_id"": """", ""p_material_id"": """"} · 970행 · run_20261113_125850_acts action:BtnMaterialId)",11
+SSP0024,팝업 값 반영,21,정답 있음,Doc/asislive/SSP0024/run_20261115_125037_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnMaterialId→textBox1#0,txtMaterialId#0, btnModelId→textBox1#1,txtModelId#0",6
+SSP0024,팝업 내부,5,정답 있음,Doc/asislive/SSP0024/run_20261115_125037_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnMaterialId→textBox1#0,txtMaterialId#0, btnModelId→textBox1#1,txtModelId#0",6
+SSP0024,팝업 사용처,1,정답 있음,Doc/asislive/SSP0024/run_20261115_125037_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 BtnMaterialId→textBox1#0,txtMaterialId#0, btnModelId→textBox1#1,txtModelId#0",8
+SSP0024,팝업·셀 이벤트 호출,4,정답 있음,Doc/asislive/SSP0024/run_20261113_125850_acts,"대상 SP 관찰 행 3/3 · SCM0001_GET_DIVISION({} · 14행 · run_20261113_125850_acts action:BtnMaterialId), SSP0024_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_plant_site_id"": """", ""p_material_id"": """"} · 970행 · run_20261113_125850_acts action:BtnMaterialId)",8
+SSP0025,동작 재현 시나리오,1,정답 있음,Doc/asislive/SSP0025/run_20261115_125153_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#1,txtItemId#0, btnModelId→textBox1#0,txtModelId#0",17
+SSP0025,분기 해석,6,정답 있음,Doc/asislive/SSP0025/run_20261115_055739_acts,동작 1 · 호출 1 · 메시지 0 · 팝업 1,9
+SSP0025,저장 밖 경로 메시지,8,정답 있음,Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 8: 실측 관찰 5, 메시지 코드 아님 3",17
+SSP0025,차등 검증 인자,8,정답 있음,Doc/asislive/SSP0025/run_20261113_125916_acts,"대상 SP 관찰 행 1/1 · SSP0025_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_from_site_id"": """", ""p_item_id"": """", ""p_model_id"": """", · 3872행 · run_20261113_125916_acts action:btnItemId)",17
+SSP0025,팝업 값 반영,18,정답 있음,Doc/asislive/SSP0025/run_20261115_125153_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#1,txtItemId#0, btnModelId→textBox1#0,txtModelId#0",12
+SSP0025,팝업 내부,13,정답 있음,Doc/asislive/SSP0025/run_20261115_125153_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#1,txtItemId#0, btnModelId→textBox1#0,txtModelId#0",12
+SSP0025,팝업 사용처,4,정답 있음,Doc/asislive/SSP0025/run_20261115_125153_acts_pickbtn,"버튼 2 중 팝업 2 · 고름 2 · 바뀐 조건 btnItemId→textBox1#1,txtItemId#0, btnModelId→textBox1#0,txtModelId#0",14
+SSP0025,팝업·셀 이벤트 호출,4,미실행(실저장 경로),Doc/asislive/SSP0025/run_20261115_050506,"대상 SP 관찰 행 4/5 · SSP0002_GET_USER_INFO_LIST({""Search"": ""jaeuk.shin"", ""Language"": ""KO"", ""SSOUserYN"": ""N""} · 1행 · run_20261115_050506 login), SSP0025_GET_ITEM_BY_DIVISION_POPUP({""p_division_id"": ""81"", ""p_from_site_id"": """", ""p_item_id"": """", ""p_model_id"": """", · 3872행 · run_20261113_125916_acts action:btnItemId) · 못 본 SP SSP0025_GET_USER_ID_CHECK · 실저장 경로 SSP0025_GET_USER_ID_CHECK(부르는 메서드 SaveButton)",15
+SSP0060,검증 위반 입력,62,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,그리드에 없는 컬럼,26,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,동작 재현 시나리오,7,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,분기 해석,24,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,신규행 전제,79,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,저장 밖 경로 메시지,50,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,차등 검증 인자,12,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,팝업 값 반영,44,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,팝업 내부,6,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,팝업 사용처,4,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,팝업·셀 이벤트 호출,30,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,편집 불가 셀,54,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0060,행 조건 계산,26,런처 제외,Doc/asislive,"런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요",1
+SSP0200,검증 위반 입력,54,정답 있음,Doc/asislive/SSP0200/run_20261115_091742_acts_violate,늘어난 행 {'spdMain/Shipment Change Request': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.'] · 호출 ['SSP0200_GET_CHANGE_REQ_NO'],1
+SSP0200,그리드에 없는 컬럼,2,정답 있음,Doc/asislive/SSP0200/run_20261115_074122,기본 실행 덤프,7
+SSP0200,동작 재현 시나리오,1,정답 있음,Doc/asislive/SSP0200/run_20261115_125417_acts_pickbtn,"버튼 3 중 팝업 3 · 고름 3 · 바뀐 조건 BtnApprovalUser→txtAppDeptName#0,txtApproval#0, btnInsertMultiple→-, btnItemId→textBox1#2,txtRequest#0",19
+SSP0200,분기 해석,31,정답 있음,Doc/asislive/SSP0200/run_20261115_074319_acts,동작 3 · 호출 4 · 메시지 0 · 팝업 3,11
+SSP0200,저장 밖 경로 메시지,56,미실행(실저장 경로),Doc/asislive/_msg_cover.csv,"경로 메시지 원장 행 105: 실측 관찰 29, 메시지 코드 아님 26, 미실행(사용자 결정) 25, 도달 불가(실측+원문) 20, 미실행(실저장 경로) 5",1
+SSP0200,차등 검증 인자,3,정답 있음,Doc/asislive/SSP0200/run_20261116_060031_acts_msgcell,"대상 SP 관찰 행 3/3 · SSP0026_GET_BOD_ITEM({""p_division_id"": ""40"", ""p_from_site_id"": """", ""p_to_site_id"": """", ""p_item_id"": "" · 0행 · run_20261116_060031_acts_msgcell action:msgcell:SpdMain_ComboSelChange), SSP0200_GET_ITEM_FROM_BOD({""p_division_id"": ""40"", ""p_from_site_id"": """", ""p_to_site_id"": """", ""p_item_id"": "" · 0행 · run_",19
+SSP0200,팝업 값 반영,13,정답 있음,Doc/asislive/SSP0200/run_20261115_125417_acts_pickbtn,"버튼 3 중 팝업 3 · 고름 3 · 바뀐 조건 BtnApprovalUser→txtAppDeptName#0,txtApproval#0, btnInsertMultiple→-, btnItemId→textBox1#2,txtRequest#0",14
+SSP0200,팝업 내부,2,정답 있음,Doc/asislive/SSP0200/run_20261115_125417_acts_pickbtn,"버튼 3 중 팝업 3 · 고름 3 · 바뀐 조건 BtnApprovalUser→txtAppDeptName#0,txtApproval#0, btnInsertMultiple→-, btnItemId→textBox1#2,txtRequest#0",14
+SSP0200,팝업·셀 이벤트 호출,19,미실행(실저장 경로),Doc/asislive/SSP0200/run_20261116_060031_acts_msgcell,"대상 SP 관찰 행 10/16 · SSP0026_GET_BOD_ITEM({""p_division_id"": ""40"", ""p_from_site_id"": """", ""p_to_site_id"": """", ""p_item_id"": "" · 0행 · run_20261116_060031_acts_msgcell action:msgcell:SpdMain_ComboSelChange), SSP0200_GET_CHANGE_REQ_NO({""p_user_id"": ""jaeuk.shin""} · 1행 · run_20261115_091742_acts_violate action:save_violate), SS · 못 본 SP SSP0200_GET_ERP_SO_NO_CNT,SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N,SSP0200_GET_SHIPMENT_STATUS · 실저장 경로 SSP0200_GET_ERP_SO_NO_CNT(부르는 메서드 SaveButton); SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N(부르는 메서드 SaveButton); SSP0200_GET_SHIPMENT_STATUS(부르는 메서드 SaveButton)",17
+SSP0200,편집 불가 셀,75,정답 있음,Doc/asislive/SSP0200/run_20261115_091742_acts_violate,늘어난 행 {'spdMain/Shipment Change Request': 1} · 메시지 0 · 빈 새 행 저장 메시지 ['변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.'] · 호출 ['SSP0200_GET_CHANGE_REQ_NO'],7
+SSP0200,행 조건 계산,43,정답 있음,Doc/asislive/SSP0200/run_20261115_095345_acts_states_edit,40행×61열 잠김 1465 열림 975 · 행마다 잠금 다른 열 39,6

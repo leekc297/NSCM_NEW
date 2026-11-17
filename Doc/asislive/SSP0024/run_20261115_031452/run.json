@@ -1,0 +1,128 @@
+{
+ "id": "SSP0024",
+ "started": "2026-11-15 03:14:52.598",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-15 03:15:07.056",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0024_ShipmentMasterElectrode",
+   "form_text": "Shipment Master Electrode",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:11.271"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-15 03:15:15.386",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0024\\run_20261115_031452\\dump_load.json",
+   "control_count": 34,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:15.413"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-15 03:15:15.735",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0024\\run_20261115_031452\\shots\\SSP0024_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:15.842"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-15 03:15:16.317",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:16.879"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-15 03:15:22.377",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0024\\run_20261115_031452\\dump_find.json",
+   "control_count": 34,
+   "grid_count": 1,
+   "total": "Total : 190",
+   "time_status": "DB : 0.192s, UI : 0.062s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:22.423"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-15 03:15:22.597",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0024\\run_20261115_031452\\shots\\SSP0024_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-15 03:15:22.764"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 25,
+  "calls_with_params": 25
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0024_ShipmentMasterElectrode",
+  "form_text": "Shipment Master Electrode",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.192s, UI : 0.062s",
+  "total": "Total : 190",
+  "how": "status"
+ },
+ "t_open": "2026-11-15 03:15:06.998",
+ "t_find": "2026-11-15 03:15:15.987",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 34,
+  "layout_items": 9,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 26,
+  "data_rows": 50,
+  "grid_rows": 190,
+  "calls_total": 34,
+  "calls_screen": 25,
+  "calls_find": 8,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-15 03:15:23.706",
+ "exit": 0
+}

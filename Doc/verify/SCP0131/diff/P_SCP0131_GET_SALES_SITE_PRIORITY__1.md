@@ -1,10 +1,11 @@
 # SCP0131 · SCP0131_GET_SALES_SITE_PRIORITY ↔ PKG_SCP0131.P_SCP0131_GET_SALES_SITE_PRIORITY
 
-- 실행 2026-11-07 20:26:40 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-14 19:25:07 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 61행 전 컬럼 일치 · 키 원천 cleanup_spec.json · 키 DIVISION_ID+SCM_SITE_ID+OPMZ_PLAN_GR_ID+ITEM_ID+FROM_YYYYMMDD+TO_YYYYMMDD · golden 집합 판정 PASS
 - 호출 #1 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 62 · 원천 Doc\verify\SCP0131\calls\_snap__snap_그리드_헤더_텍스트_모델_시트_0.json
-- TO-BE 인자(FE 본문): `{"divisionId": "81", "planGroupId": "", "scmSiteId": "", "itemId": "", "validYn": "", "periodFrom": "20261102", "periodTo": "20271101"}`
-- AS-IS 인자(번역): `{"p_division_id": "81", "p_plan_group_id": "", "p_scm_site_id": "", "p_item_id": "", "p_valid_yn": "", "p_period_from": "20261102", "p_period_to": "20271101"}`
+- TO-BE 인자(FE 본문): `{"divisionId": "81", "planGroupId": "", "scmSiteId": "", "itemId": "", "validYn": "", "periodFrom": "20261109", "periodTo": "20271108"}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
+- AS-IS 인자(번역): `{"p_division_id": "81", "p_plan_group_id": "", "p_scm_site_id": "", "p_item_id": "", "p_valid_yn": "", "p_period_from": "20261109", "p_period_to": "20271108"}`
 
 ### 결과셋 1  As-is 61행 ↔ To-Be O_RC1 61행
 - 일치

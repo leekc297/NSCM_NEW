@@ -1,0 +1,78 @@
+{
+ "menu_id": "SCP0033",
+ "asis_id": "SCP0033",
+ "generated": "2026-11-14 11:10:36",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0033)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "DONE",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "13시간 지난 메타 → 다시 export · rc=0 · 14s · _meta.csv 1536행 proc_params.csv 8646행 sheet_columns.csv 17270행 sheet_measures.csv 1760행 combo_sql.csv 747행 menu.csv 224행 msg_master.csv 5249행 btn_auth.csv 14822행 user_group.csv 23행 user_group_user.csv 13089행 user_group_menu.csv 2211행 users.csv 8612행 division.csv 14행 unit_auth.csv 25062행 tables.csv 5704행 columns.csv 17589행 procs_catalog.csv 2033행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-semi-dept-day · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-semi-dept-day\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "OK",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "화면 행 있음"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "2건 있음"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SCP0033 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 없음)) → 계정 1: jooyong026 SCP0033 → SCP0033 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 · rc=0 · 69s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0033\\run_20261114_110927_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0033 running - output goes to the log file # E2E 결과 — 2026-11-14 11:10 테스트 3 · PASS 3 · FAIL 0 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0033\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0033\\run_20261114_110927_smoke.log"
+  }
+ ]
+}

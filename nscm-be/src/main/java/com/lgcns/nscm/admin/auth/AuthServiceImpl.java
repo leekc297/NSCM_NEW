@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
 import com.lgcns.nscm.admin.auth.dto.UnitDto;
 import com.lgcns.nscm.framework.base.BaseService;
 import com.lgcns.nscm.framework.utils.MapUtils;
@@ -57,18 +58,11 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
 	@Override
 	public List<String> retrieveMenuBtnAuth(String userId, String mnuId) throws Exception {
-		return retrieveMenuBtnAuth(userId, mnuId, null);
-	}
-
-	@Override
-	public List<String> retrieveMenuBtnAuth(String userId, String mnuId, String divisionId) throws Exception {
-		// divisionId: 단일 Division 이면 그 Division 단위권한 그룹 기준, NULL/'ALL'/복수(',')면 그룹 합집합 — SP 가 분기 (2026-10-26)
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
 		params.put("mnuId", mnuId);
-		params.put("divisionId", divisionId);
 
-		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuthDiv", params);
+		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuth", params);
 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
 
 		List<String> mnuBtnAuth = data.stream()
@@ -77,6 +71,29 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
 		return mnuBtnAuth;
 
+	}
+
+	@Override
+	public List<MnuBtnAuthSheet> retrieveMenuBtnAuthSheets(String userId, String mnuId) throws Exception {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		params.put("mnuId", mnuId);
+
+		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuth", params);
+		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
+
+		return MnuBtnAuthSheet.listOf(data);
+	}
+
+	@Override
+	public List<MnuBtnAuthSheet> retrieveMenuBtnDefs(String mnuId) throws Exception {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("mnuId", mnuId);
+
+		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnDefs", params);
+		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
+
+		return MnuBtnAuthSheet.listOf(data);
 	}
 
 	@Override

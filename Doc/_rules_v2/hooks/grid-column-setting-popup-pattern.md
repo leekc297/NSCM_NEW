@@ -7,7 +7,7 @@
 **갱신: 2026-06-18 — DMF0020 미적용 사고 발생 → 적용 의무 강도 PR 차단 강제로 격상**
 관련 hook: `ui-category-setup-column-meta.md`, `ui-dynamic-property-management.md`, `column-meta-rework-checklist.md`
 상위 룰: `anti-simplification.md`
-Reference 화면: **DMF0043_01** (ContributeView) — 본 패턴 master 표준
+Reference 화면: **DMF0043_01** (ContributeView) — 본 패턴 master 표준 (2026-11-13 정정: 이 팝업 패턴에 한정한 참조 화면이다 — 화면 전체 reference 3개(DMF0004·0005·0006)와 별개이며 그 3화면에는 이 팝업이 없다)
 적용 화면 (검증 완료): **DMF0020** (SalesFuturePrice, 2026-06-18) / **DMF0043_01** (ContributeView, 2026-06-17 master)
 
 ---
@@ -40,6 +40,8 @@ Reference 화면: **DMF0043_01** (ContributeView) — 본 패턴 master 표준
 ---
 
 ## §1. 5 단계 패턴 — DMF0043_01 reference
+
+> (2026-11-14 정정: 참조 구현 contribute-view 의 현행 코드는 이 절과 다르다. `visibleBaseColumns` 경로는 제거됐고(`ContributeViewGrid.tsx:91`), 저장 처리는 `clearGridOnSettingChange → applyColumnLayout → saveTitleSet` 순서다(`ContributeView.tsx:246`, `handleColumnApply` 없음). 이 절은 2026-06-17 구현 기준이다.)
 
 ### 1.1 Store (`useXxxStore.ts`)
 

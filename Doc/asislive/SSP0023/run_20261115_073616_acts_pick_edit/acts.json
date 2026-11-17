@@ -1,0 +1,234 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "X_D_20261010",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 4,
+   "rule": "열 MEASURE 다음 열",
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "P_SHIP_CONFIRM_ETD"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "Action",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,0 failed: InvalidOperationException: cell not visible: 0,0",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,2 failed: InvalidOperationException: cell not visible: 0,2",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MODEL_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,5 failed: InvalidOperationException: cell not visible: 0,5",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_SITE",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,8 failed: InvalidOperationException: cell not visible: 0,8",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [
+  {
+   "grid": "spdDetail",
+   "col": "ERP_SO_NO",
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0023-Se42af7"
+   ],
+   "why": "spdDetail/Shipment Plan Detail 행 없음"
+  }
+ ],
+ "at": "2026-11-15 07:34:29",
+ "edit_focus": "누르지 못함",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MEASURE",
+   "col_after": true,
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "P_SHIP_CONFIRM_ETD"
+    ]
+   ],
+   "ids": [
+    "SSP0023-Sf0c6eb"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdDetail",
+   "sheet_key": "shtPlanDetail",
+   "col": "ERP_SO_NO",
+   "col_after": false,
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0023-Se42af7"
+   ],
+   "has_else": false
+  }
+ ]
+}

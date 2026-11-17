@@ -54,35 +54,35 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MaterialByDivisionModal** | `features/master/src/components` | 72 |  |  |
-| **PeriodField** | `features/master/src/components` | 64 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
-| **ProjectByDivisionModal** | `features/master/src/components` | 34 | button:^btnProject$ |  |
+| **MaterialByDivisionModal** | `features/master/src/components` | 73 |  |  |
+| **PeriodField** | `features/master/src/components` | 67 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
+| **ProjectByDivisionModal** | `features/master/src/components` | 36 | button:^btnProject$ |  |
 | **MeasureSelectModal** | `features/master/src/components` | 29 | button:^btnMeasure$ |  |
-| **ItemByDivisionModal** | `features/master/src/components` | 26 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
-| **ProjectField** | `features/master/src/components` | 14 | field:^(txt\|usr)Project(Code)?$ |  |
-| **ItemField** | `features/master/src/components` | 11 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |
-| **OwnerField** | `features/master/src/components` | 10 | field:^(txt\|cbo\|usr)Owner$ |  |
+| **ItemByDivisionModal** | `features/master/src/components` | 27 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
+| **ProjectField** | `features/master/src/components` | 15 | field:^(txt\|usr)Project(Code)?$ |  |
+| **ItemField** | `features/master/src/components` | 12 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |
+| **OwnerField** | `features/master/src/components` | 11 | field:^(txt\|cbo\|usr)Owner$ |  |
 | **ModelByDivisionPopup** | `features/master/src/components` | 8 |  |  |
+| **SalesSiteField** | `features/master/src/components` | 7 | field:^clbSalesSite$\|^cboSalesSite$ | // 4. SalesSiteField (size=4, combo=SalesSite) // |
 | **DivisionField** | `features/master/src/components` | 6 | field:^cboDivision$\|^cboDiv$ |  |
-| **SalesSiteField** | `features/master/src/components` | 6 | field:^clbSalesSite$\|^cboSalesSite$ | // 4. SalesSiteField (size=4, combo=SalesSite) // |
 | **CustomerModal** | `features/master/src/components` | 5 | button:^btnCustomer$ |  |
+| **VersionField** | `features/master/src/components` | 5 | field:^cboVersion$\|^cboVer(sion)?No$ |  |
 | **ContributeVersionModal** | `features/master/src/components` | 4 |  |  |
 | **OwnerByDivisionModal** | `features/master/src/components` | 4 | button:^btnOwner$ |  |
 | **OwnerModal** | `features/master/src/components` | 4 |  |  |
 | **TeamModal** | `features/master/src/components` | 4 |  |  |
-| **VersionField** | `features/master/src/components` | 4 | field:^cboVersion$\|^cboVer(sion)?No$ |  |
+| **BucketField** | `features/master/src/components` | 3 | field:^cboBucket(Type)?$ |  |
 | **EndCustomerField** | `features/master/src/components` | 3 | field:^clb(End)?Customer$\|^cboEndCustomer$ | // 3. EndCustomerField (size=4, combo=EndCustomer) // |
 | **PlantSiteField** | `features/master/src/components` | 3 | field:^clbPlantSite$\|^cboPlantSite$\|^clbPlant$ | // 6. PlantSiteField (size=4, combo=PlantSitebyEndCustomer) // // Plant Site — combo `PlantSitebyEndCustomer`. // 2026-08-22 콤보 SQL 개정: 파라미터 |
 | **RegionModal** | `features/master/src/components` | 3 |  |  |
 | **TeamField** | `features/master/src/components` | 3 | field:^clbTeam$\|^cboTeam$ | // 2. TeamField (size=4, combo=TeambyDivision) // |
 | **BizTypeField** | `features/master/src/components` | 2 | field:^cboBizType$\|^cboBiz / field:^clbBizType$ | // 7. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE') // |
-| **BucketField** | `features/master/src/components` | 2 | field:^cboBucket(Type)?$ |  |
 | **ProjectModal** | `features/master/src/components` | 2 |  |  |
+| **SearchOverRangeField** | `features/master/src/components` | 2 | field:^chk(Over\|SearchOver)Range$ |  |
 | **VersionModal** | `features/master/src/components` | 2 |  |  |
 | **YearField** | `features/master/src/components` | 2 | field:^cboYear$\|^cboYYYY$ |  |
 | **CapaNewModelPopup** | `features/master/src/components` | 1 |  |  |
 | **ItemByPlantSiteModal** | `features/master/src/components` | 1 |  |  |
-| **SearchOverRangeField** | `features/master/src/components` | 1 | field:^chk(Over\|SearchOver)Range$ |  |
 | **StorageLocationModal** | `features/master/src/components` | 1 |  |  |
 | **CascadeFields** | `features/master/src/components` | 0 |  | 단계를 levels 순서대로 붙여서 렌더하는 기본형. 중간에 다른 조회조건이 끼는 화면은 이 컴포넌트 대신 useCascadeFields 를 쓴다. prop 설명과 콤보 SQL 규약은 이 파일 헤더 참조. |
 | **ColumnSettingModal** | `features/master/src/components` | 0 |  |  |
@@ -251,19 +251,6 @@ props/params:
 - `params?: ModelByDivisionPopupParams`
 - `multiSelect?: boolean — 다중선택 opt-in (기본 false = 기존 단일선택). AS-IS `Form_Load` 첫 인자 bMultiSelect 자리다. true 면 체크박스 열이 생기고, OK 가 체크된 행들을 AS-IS 와 같은 규약으로 돌려준다 — `SetItem()`(SCM0002_ItembyDiv`
 
-### DivisionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:286</sub>
-
-```ts
-({ value, onChange, gridSize, disabled }: DivisionFieldProps): any
-```
-
-props/params:
-
-- `disabled?: boolean`
-- `value: string`
-- `onChange: (v: string) => void`
-- `gridSize?: number`
-
 ### SalesSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:464</sub>
 
 ```ts
@@ -284,6 +271,19 @@ props/params:
 - `sortBy?: DropdownSortKey — 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다. 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조). 표시 계층 전용이라 cascade 가 좁히는 원본 행`
 - `debugLabel?: string — 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조.`
 
+### DivisionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:286</sub>
+
+```ts
+({ value, onChange, gridSize, disabled }: DivisionFieldProps): any
+```
+
+props/params:
+
+- `disabled?: boolean`
+- `value: string`
+- `onChange: (v: string) => void`
+- `gridSize?: number`
+
 ### CustomerModal  <sub>features/master/src/components/customerModal/CustomerModal.tsx:32</sub>
 
 ```ts
@@ -298,6 +298,22 @@ props/params:
 - `divisionId?: string`
 - `soldTo?: string`
 - `shipTo?: string`
+
+### VersionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1332</sub>
+
+```ts
+({ value, onOpenPopup, gridSize, label, emptyText, onValueChange, versionNo, }: VersionFieldProps): any
+```
+
+props/params:
+
+- `value: string`
+- `onOpenPopup: () => void`
+- `gridSize?: number`
+- `label?: string — 라벨 override — 화면별 Version 명칭이 다른 경우(DMF0044/0049 BP/SP Version). 미전달 = LBL00513 'Version'`
+- `emptyText?: string — value 가 빈 값일 때 표시할 문자열. 미전달 = 'Current' (DMF0020 기존 동작 보존)`
+- `onValueChange?: (v: string) => void — 직접 입력(key-in) 허용. 미전달 = 팝업 선택 전용 (기존 동작 그대로 — 회귀 0). 사용자가 친 문자열이 가공 없이 그대로 올라오므로, 조회키/표시문 매핑은 호출 측이 정한다.`
+- `versionNo?: string — 조회에 실제로 나가는 VERSION_NO. 팝업이 채운 표시문(`value`)은 'VERSION_NO + 설명' 이라 그 상태에서 편집을 시작하면 설명까지 조회키로 올라가 0건이 된다. 이 값을 주면 포커스 순간 표시문을 코드만 남긴 상태로 되돌린다 (정본 DemandManagerFor`
 
 ### ContributeVersionModal  <sub>features/master/src/components/contributeVersionModal/ContributeVersionModal.tsx:93</sub>
 
@@ -356,21 +372,19 @@ props/params:
 - `teamName?: string`
 - `divisionId?: string`
 
-### VersionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1332</sub>
+### BucketField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1276</sub>
 
 ```ts
-({ value, onOpenPopup, gridSize, label, emptyText, onValueChange, versionNo, }: VersionFieldProps): any
+({ value, onChange, gridSize }: BucketFieldProps): any
 ```
 
 props/params:
 
-- `value: string`
-- `onOpenPopup: () => void`
+- `value: "W"`
+- `"M"`
+- `onChange: (v: "W"`
+- `"M") => void`
 - `gridSize?: number`
-- `label?: string — 라벨 override — 화면별 Version 명칭이 다른 경우(DMF0044/0049 BP/SP Version). 미전달 = LBL00513 'Version'`
-- `emptyText?: string — value 가 빈 값일 때 표시할 문자열. 미전달 = 'Current' (DMF0020 기존 동작 보존)`
-- `onValueChange?: (v: string) => void — 직접 입력(key-in) 허용. 미전달 = 팝업 선택 전용 (기존 동작 그대로 — 회귀 0). 사용자가 친 문자열이 가공 없이 그대로 올라오므로, 조회키/표시문 매핑은 호출 측이 정한다.`
-- `versionNo?: string — 조회에 실제로 나가는 VERSION_NO. 팝업이 채운 표시문(`value`)은 'VERSION_NO + 설명' 이라 그 상태에서 편집을 시작하면 설명까지 조회키로 올라가 0건이 된다. 이 값을 주면 포커스 순간 표시문을 코드만 남긴 상태로 되돌린다 (정본 DemandManagerFor`
 
 ### EndCustomerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:376</sub>
 
@@ -451,20 +465,6 @@ props/params:
 - `comboId?: string — ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in. comboId 기본 'BizType'(전역 lookup — 기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 'BizTypebyDivision'(DM_BIZ_TYPE(40) UN`
 - `division?: string`
 
-### BucketField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1276</sub>
-
-```ts
-({ value, onChange, gridSize }: BucketFieldProps): any
-```
-
-props/params:
-
-- `value: "W"`
-- `"M"`
-- `onChange: (v: "W"`
-- `"M") => void`
-- `gridSize?: number`
-
 ### ProjectModal  <sub>features/master/src/components/projectModal/ProjectModal.tsx:24</sub>
 
 ```ts
@@ -478,6 +478,18 @@ props/params:
 - `setSelectedValue: (projects: string, projectsNames?: string) => void`
 - `preSearchParams: ProcRequest<"COM0012", "project">`
 - `preProject: string`
+
+### SearchOverRangeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1383</sub>
+
+```ts
+({ value, onChange, gridSize }: CheckFieldProps): any
+```
+
+props/params:
+
+- `value: boolean`
+- `onChange: (v: boolean) => void`
+- `gridSize?: number`
 
 ### VersionModal  <sub>features/master/src/components/versionModal/VersionModal.tsx:61</sub>
 
@@ -534,18 +546,6 @@ props/params:
 - `setSelectedValue: (itemId: string, itemName?: string, itemClassName?: string, itemType?: string, n`
 - `preSearchParams: ProcRequest<"COM0014", "itemByPlantSite">`
 - `headerTitle?: string`
-
-### SearchOverRangeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1383</sub>
-
-```ts
-({ value, onChange, gridSize }: CheckFieldProps): any
-```
-
-props/params:
-
-- `value: boolean`
-- `onChange: (v: boolean) => void`
-- `gridSize?: number`
 
 ### StorageLocationModal  <sub>features/master/src/components/storageLocationModal/StorageLocationModal.tsx:24</sub>
 
@@ -655,16 +655,16 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **DataGrid** | `@shared/components` | 282 | FpSpread |  |
-| **CustomDropdown** | `@shared/components` | 177 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
-| **SearchArea** | `@shared/components` | 172 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
-| **MainTitle** | `@shared/components` | 140 |  |  |
-| **SubTitle** | `@shared/components` | 140 | button:^btnExcel(Down\|Download\|Export)?$ |  |
-| **CustomDialog** | `@shared/components` | 101 |  |  |
-| **ResultArea** | `@shared/components` | 57 |  |  |
+| **DataGrid** | `@shared/components` | 287 | FpSpread |  |
+| **CustomDropdown** | `@shared/components` | 181 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
+| **SearchArea** | `@shared/components` | 176 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
+| **MainTitle** | `@shared/components` | 141 |  |  |
+| **SubTitle** | `@shared/components` | 141 | button:^btnExcel(Down\|Download\|Export)?$ |  |
+| **CustomDialog** | `@shared/components` | 105 |  |  |
+| **ResultArea** | `@shared/components` | 61 |  |  |
+| **ColumnLayoutModal** | `@shared/components` | 31 | button:^btnColumn$ |  |
 | **TabItem** | `@shared/components` | 31 | TabPage |  |
 | **TabWrapper** | `@shared/components` | 31 | TabControl |  |
-| **ColumnLayoutModal** | `@shared/components` | 30 | button:^btnColumn$ |  |
 | **PeriodRangePicker** | `@shared/components` | 23 |  |  |
 | **SsoUserModal** | `@shared/components` | 16 |  |  |
 | **DETAIL_CONDITIONS_SX** | `@shared/components` | 2 |  | 하단 DetailBar 전용. 상단(CSS Grid)과 달리 레거시 flex-wrap Grid 를 그대로 둔다 — 하단바는 // 리사이즈 Panel(width 1460 + overflow:hidden) 안이라 넘쳐도 가로 스크롤이 닿지 않아, 넘치면  |
@@ -776,6 +776,30 @@ props/params:
 - `className?: string`
 - `style?: CSSProperties`
 
+### ColumnLayoutModal  <sub>packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx:108</sub>
+
+```ts
+({ open, modalClose, menuId, sheetName, columnType, divisionId, fallbackColumns, initialSettings, defaultSettings, onSave, title, leftTitle, rightTitle, hiddenColumns, showSmallClass, }: Props): any
+```
+
+props/params:
+
+- `open: boolean`
+- `modalClose: () => void`
+- `menuId: string`
+- `sheetName: string`
+- `columnType?: string`
+- `divisionId?: string`
+- `fallbackColumns?: ColumnSettingFallback[]`
+- `initialSettings?: ColumnLayoutRow[] — 재진입 시 이전 저장 상태 복원 (visible+width+color+order)`
+- `defaultSettings?: ColumnLayoutRow[]`
+- `onSave: (settings: ColumnLayoutRow[]) => void — OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다.`
+- `title?: string`
+- `leftTitle?: string — dual list 좌측 상단 라벨 (예: 'Invisible')`
+- `rightTitle?: string — dual list 우측 상단 라벨 (예: 'Visible')`
+- `hiddenColumns?: string[] — 화면별로 팝업 목록에서 감출 컬럼명 — MEASURE 와 동일 처리(좌/우 목록에서 빼고, 저장 시 USER_FLAG='Y' 로 고정해 그리드에는 그대로 둔다). AS-IS 가 특정 화면에서만 Height=0 으로 가리던 ID/NAME 컬럼을 TO-BE 공용 팝업에 이식할 때 쓴다(SC`
+- `showSmallClass?: boolean — 목록에 소분류(SMALL_CLASS_LABEL_NAME) 열을 함께 노출한다 — 2단 머지헤더 화면에서 같은 leaf 라벨(예: Departure/Arrival 양쪽의 Port·Country·Port Code)을 그룹으로 구분하기 위함. 값은 팝업이 이미 조회하는 admin 컬럼 메타(`
+
 ### TabItem  <sub>packages/shared/src/components/molecules/tab/Tab.tsx:104</sub>
 
 ```ts
@@ -805,30 +829,6 @@ props/params:
 - `activeTabIndex?: number`
 - `setActiveTabIndex?: (index: number) => void`
 - `rightSlot?: ReactNode — 탭 줄에서 탭 버튼들 오른쪽에 표시할 보조 영역(표시 전용). 주의: 이 값은 persist key(= 탭 label)와 무관하다 — 여기 넣은 텍스트가 바뀌어도 그리드가 remount 되지 않는다.`
-
-### ColumnLayoutModal  <sub>packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx:108</sub>
-
-```ts
-({ open, modalClose, menuId, sheetName, columnType, divisionId, fallbackColumns, initialSettings, defaultSettings, onSave, title, leftTitle, rightTitle, hiddenColumns, showSmallClass, }: Props): any
-```
-
-props/params:
-
-- `open: boolean`
-- `modalClose: () => void`
-- `menuId: string`
-- `sheetName: string`
-- `columnType?: string`
-- `divisionId?: string`
-- `fallbackColumns?: ColumnSettingFallback[]`
-- `initialSettings?: ColumnLayoutRow[] — 재진입 시 이전 저장 상태 복원 (visible+width+color+order)`
-- `defaultSettings?: ColumnLayoutRow[]`
-- `onSave: (settings: ColumnLayoutRow[]) => void — OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다.`
-- `title?: string`
-- `leftTitle?: string — dual list 좌측 상단 라벨 (예: 'Invisible')`
-- `rightTitle?: string — dual list 우측 상단 라벨 (예: 'Visible')`
-- `hiddenColumns?: string[] — 화면별로 팝업 목록에서 감출 컬럼명 — MEASURE 와 동일 처리(좌/우 목록에서 빼고, 저장 시 USER_FLAG='Y' 로 고정해 그리드에는 그대로 둔다). AS-IS 가 특정 화면에서만 Height=0 으로 가리던 ID/NAME 컬럼을 TO-BE 공용 팝업에 이식할 때 쓴다(SC`
-- `showSmallClass?: boolean — 목록에 소분류(SMALL_CLASS_LABEL_NAME) 열을 함께 노출한다 — 2단 머지헤더 화면에서 같은 leaf 라벨(예: Departure/Arrival 양쪽의 Port·Country·Port Code)을 그룹으로 구분하기 위함. 값은 팝업이 이미 조회하는 admin 컬럼 메타(`
 
 ### PeriodRangePicker  <sub>packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx:252</sub>
 

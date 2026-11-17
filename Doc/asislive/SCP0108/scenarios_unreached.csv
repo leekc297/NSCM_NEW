@@ -1,0 +1,4 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0108-S93aed0,조회,AfterFindData,SCP0108_CAPA_LOB_Report.cs:1404,같은 파일에서 호출,SCP0108_CAPA_LOB_Report.cs:1443,SetQueryInfoGet
+SCP0108-Sc874ef,조회,AfterFindData,SCP0108_CAPA_LOB_Report.cs:1418,같은 파일에서 호출,SCP0108_CAPA_LOB_Report.cs:1443,SetQueryInfoGet
+SCP0108-Seb6c4c,기타,ClearUsrCheckedList,SCP0108_CAPA_LOB_Report.cs:1149,호출 없음,,

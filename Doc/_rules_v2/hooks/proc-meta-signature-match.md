@@ -97,8 +97,8 @@ PROC_M **행수 9 = SP 인자 9 (개수 정합)** 인데 COL_NM **순서만 뒤�
 | P_USER_ID / P_SES_USER_ID | `sesUserId` | session 의 userId 자동 |
 | P_MNU_ID | `mnuId` | 현재 menu id 자동 (FE request body) |
 | P_LANG_CD | `sesLangCd` | session lang 자동 |
-| P_CREATED_BY | `createdBy` | session userId 자동 (As-Is 변환 SP 대응 — 2026-06-06 추가) |
-| P_LAST_UPDATED_BY | `lastUpdatedBy` | session userId 자동 (As-Is 변환 SP 대응 — 2026-06-06 추가) |
+| P_CREATED_BY | `createdBy` | session userId 자동 (As-Is 변환 SP 대응 — 2026-06-06 추가) → (2026-11-13 정정: BE 자동 주입 아님 — **FE 필수 전달**. `NDaoInterface._selectList()` 는 `sesUserId`·`sesLangCd` 만 put, `oracle-save-payload-integrity.md` §0.1) |
+| P_LAST_UPDATED_BY | `lastUpdatedBy` | session userId 자동 (As-Is 변환 SP 대응 — 2026-06-06 추가) → (11-13 정정: FE 필수 전달) |
 
 > ⚠️ **자동 채움 표준 위치**: `nscm-be/src/main/java/com/lgcns/nscm/framework/dao/NDaoInterface.java:430-441` 의 `_selectList()` 메서드. 신규 키 추가 시 이 한 곳만 수정 (다른 위치 분산 금지).
 
@@ -170,10 +170,11 @@ OPEN O_RESULT_CURSOR FOR SELECT '0' AS CODE, 'SUCCESS' AS MSG FROM DUAL;
    WHERE OWNER='SCM_MGR' AND OBJECT_NAME='P_XXX'
    ORDER BY POSITION;
 
-☐ PROC_M INSERT 행 수 = SP IN/OUT 인자 합계 + 1 (O_RESULT_CURSOR 추가) 일치?
+☐ PROC_M INSERT 행 수 = SP IN/OUT 인자 합계 (O_RESULT_CURSOR 포함) 일치?
+  (2026-11-13 정정: "+ 1 (O_RESULT_CURSOR 추가)" → O_RESULT_CURSOR 는 SP 인자에 이미 포함되므로 더하지 않는다 — §0.1·§0.4·§3.1·§4 와 같은 기준 = ALL_ARGUMENTS 인자 수)
 ☐ SORT_ORD 가 SP POSITION 과 정확 일치 (positional binding)?
 ☐ FE store 의 filter key = PROC_M COL_NM 매칭?
-☐ BE 자동 채움 키 (sesUserId/sesLangCd/mnuId/createdBy/lastUpdatedBy) 정확 사용?
+☐ BE 자동 채움 키 (sesUserId/sesLangCd/mnuId) 정확 사용? createdBy/lastUpdatedBy 는 FE 전달? (11-13 정정)
 ```
 
 ---
@@ -236,7 +237,7 @@ ORDER BY E.POS;
 - [ ] 모든 SP 의 PROC_M 행 수 = ALL_ARGUMENTS 인자 수 일치
 - [ ] PROC_M SORT_ORD = SP POSITION 정확 일치
 - [ ] FE store filter key = PROC_M COL_NM 정확 일치 (`__asis-mapping__.md ## PROC_M 매핑` 표 의무)
-- [ ] BE 자동 채움 키 (sesUserId/sesLangCd/mnuId/createdBy/lastUpdatedBy) 정확 사용 (custom naming 금지)
+- [ ] BE 자동 채움 키 (sesUserId/sesLangCd/mnuId) 정확 사용 (custom naming 금지) · createdBy/lastUpdatedBy 는 FE 전달 (11-13 정정)
 
 ---
 

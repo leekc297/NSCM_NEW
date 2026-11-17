@@ -112,14 +112,20 @@ const saveFailMessage = (chain: SaveChainResult): string => {
 };
 
 // 요청정보 폼 패널의 고정 높이(px 문자열). min=max 로 이 값에 고정되어 스플리터가 폼을 리사이즈하지 못한다.
-//   자매 SSP0200 과 동일 값 — 섹션 헤더 1줄 + 컴팩트 폼 + 액션바가 들어가는 높이. 조정 시 이 값만 바꾼다.
+//   컴팩트 폼(헤더 없음 + 3행 + Reason Detail 2줄) + Reason Detail 옆 액션바가 들어가는 높이. 조정 시 이 값만 바꾼다.
 //   패널은 overflow:hidden 이라 모자라면 **조용히 잘린다** — 내용이 늘면 이 값도 함께 올려야 한다.
 //   2026-10-08: `usrLabel2`("Request Info") 섹션 헤더(16px 가운데정렬, lineHeight 1.4) 반영분 포함.
 //   2026-10-14: 224 -> 248. Request Complete 버튼 아래쪽이 잘려 보인다는 신고 — 폼+액션바 자연높이
-//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다. +24 중 4px 은 액션바 하단 여백
-//     증가분(8->12, RequestActionBar.module.scss)이고 나머지 20px 이 잘림 여유다. 폰트·확대율이
-//     달라져도 버티도록 넉넉히 뒀다 — 그만큼 Grid1/Grid2 가 나눠 갖는 높이가 줄어든다.
-const FORM_PANEL_SIZE = '248px';
+//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다.
+//   2026-11-12: 248 -> 200. 자매 SSP0200 과 레이아웃을 맞춘다(사용자 지시) — 'Request Info' 헤더 삭제(~22px)
+//     + 입력칸 30px + 액션바를 Reason Detail 옆으로 이동 + rowSpacing/pt·pb 컴팩트화로 폼 콘텐츠가 줄었다.
+//   2026-11-12: 200 -> 222. Reason Detail 을 2줄(rows=2)에서 3줄(height=78)로 전환(사용자 지시, SSP0200 과
+//     동일) → +22px. SSP0200(218px, 헤더 있음+3줄)과 거의 같되, 이 화면은 헤더가 삭제돼 그만큼 상쇄된다.
+//     px 고정이라 늘어난 분량만큼 위·아래 그리드가 자동으로 공간을 양보한다.
+//   2026-11-12: 222 -> 160. 자매 SSP0200 과 레이아웃을 맞춘다(사용자 지시) — Reason Detail 3줄->2줄(78->56),
+//     입력칸 28px, 행 셀 32px, pt/pb 0 으로 폼 콘텐츠가 ~158px 로 줄었다. content(158) + 여유 2 = 160 으로
+//     맞춰 남던 간격을 하단 그리드로 환원한다(SSP0200 과 동일값).
+const FORM_PANEL_SIZE = '160px';
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0201_ShipmentChangeRequest — 출하 변경 요청(멀티그리드 + cascade 셀콤보).
 //   설계: .atlas/gscm-design/SSP0201/design/00~03. 상세 매핑: __asis-mapping__.md.
@@ -860,8 +866,12 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
           %로 고정값을 주면 100%+196px 를 넘겨 Grid2 가 헤더만 남고 붕괴한다(SSP0200 실측). */}
       <div className={styles.splitWrapper}>
         <PanelGroup className={styles.panelGroup} orientation='vertical'>
-          {/* Grid1 (main) — 리사이즈 대상. */}
-          <Panel minSize='10%'>
+          {/* Grid1 (main) — 리사이즈 대상. 하단 그리드를 키우기 위해 상단을 px 로 고정한다(사용자 지시
+              2026-11-12, 자매 SSP0200 과 동일). 상단만 px defaultSize 로 작게 고정하고, 하단은 defaultSize
+              미지정 → 폼·상단 두 px 를 뺀 나머지를 하단이 전부 가져간다.
+              260 -> 200: 상단 그리드를 줄이고 하단 그리드를 키운다(사용자 지시 2026-11-12, SSP0200 과 동일).
+              줄인 60px 는 하단 그리드로 환원된다(하단은 나머지를 전부 가져가므로). */}
+          <Panel defaultSize='200px' minSize='10%'>
             <div className={styles.mainPane}>
               <ShipmentChangeRequestMainGrid
                 rows={mainRows}
@@ -890,6 +900,9 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
             minSize={FORM_PANEL_SIZE}
             maxSize={FORM_PANEL_SIZE}
           >
+            {/* 액션바(Request Complete/Cancel)는 Reason Detail 옆 우측 빈칸에 배치 — 사용자 지시
+                2026-11-12(자매 SSP0200 패턴). RequestInfoPanel 의 actionSlot 으로 넘겨 폼 그리드 안에서
+                함께 흐르게 한다. */}
             <div className={styles.formPane}>
               <div className={styles.requestInfo}>
                 <RequestInfoPanel
@@ -897,23 +910,25 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
                   canEdit={canEdit}
                   onChange={setRequestInfo}
                   onApprovalSearch={() => setOpenApproval(true)}
+                  actionSlot={
+                    // Cancel 의 권한축: 자매 SSP0200 은 `DELETE` 를 쓰지만 SSP0201 은 그 메타가 아직
+                    //   미등록이라(ora.py 실측 5행) DELETE 로 걸면 버튼이 사라진다 — 등록된 `EDIT` 로
+                    //   잠정 게이트하고, DELETE 등록 회차에 SSP0200 과 맞춘다.
+                    <RequestActionBar
+                      canRequestComplete={hasButton('SAVE')}
+                      canCancel={canEdit}
+                      onRequestComplete={handleChangeRequest}
+                      onCancel={handleCancel}
+                    />
+                  }
                 />
               </div>
-              {/* Cancel 의 권한축: 자매 SSP0200 은 `DELETE` 를 쓰지만 SSP0201 은 그 메타가 아직
-                  미등록이라(ora.py 실측 5행) DELETE 로 걸면 버튼이 사라진다 — 종전엔 상시 노출이었다.
-                  등록된 `EDIT` 로 잠정 게이트하고, DELETE 등록 회차에 SSP0200 과 맞춘다. */}
-              <RequestActionBar
-                canRequestComplete={hasButton('SAVE')}
-                canCancel={canEdit}
-                onRequestComplete={handleChangeRequest}
-                onCancel={handleCancel}
-              />
             </div>
           </Panel>
 
           <PanelSeparator className={styles.splitBar} />
 
-          {/* Grid2 (sub) — 리사이즈 대상. defaultSize 미지정 → Grid1 과 남은 공간 자동 균등 분배. */}
+          {/* Grid2 (sub) — 리사이즈 대상. defaultSize 미지정 → 폼·상단 두 px 를 뺀 나머지를 전부 가져간다. */}
           <Panel minSize='10%'>
             <div className={styles.subPane}>
               <ShipmentChangeRequestSubGrid

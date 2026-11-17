@@ -37,7 +37,7 @@ SYS0009 Menu Button (`menu-button-management`) admin 화면 + 두 테이블이 �
 |---|---|---|---|---|
 | 정상 button | USE_YN='Y' | USE_YN='Y' (사용자 그룹 일치) | ✅ | ✅ |
 | admin 이 button 비활성 | USE_YN='N' | (관계없음) | ❌ | - |
-| 권한 없음 (사용자 그룹 미부여) | USE_YN='Y' | row 없음 | ✅ | ❌ disabled |
+| 권한 없음 (사용자 그룹 미부여) | USE_YN='Y' | row 없음 | ❌ (2026-11-13 정정: ✅ 노출·disabled → 숨김 — CR-070 "버튼 코드 권한이 있을 때만 노출", 아래 2026-10-26 지시와 통일) | - |
 | 정의 자체 없음 | row 없음 | - | ❌ | - |
 | **화면에 기능 없음**(hotkeyConfig 핸들러 없음·AS-IS NO-OP) — 2026-10-26 | (관계없음) | (관계없음) | ❌ | - |
 | **선택 Division 에 권한 없음** — 단일 Division 조회조건 × `SCM_ADM_USER_GR_UNIT_AUTH_MPG_M`(UNIT_TP_CD='D') 그룹에 버튼 권한 없음 — 2026-10-26 | USE_YN='Y' | 그 Division 그룹에 row 없음 | ❌ (Division 바꾸면 재평가) | - |
@@ -204,6 +204,7 @@ const hotkeyConfig = {
 };
 ```
 → **fix**: Hidden allowlist 정책 (insert/delete/save 만 false 명시, 나머지 자동 활성).
+(2026-11-13 정정: '나머지 자동 활성' 은 사고 당시 처방이다. 현행은 §2.1 · §4 — search/excel/upload 등 버튼마다 `hasButton(코드)` 게이트를 둔다.)
 참조: 메모리 `feedback_common_button_visibility_default.md`
 
 ### 6.2 (실제) `search: handleSearch` 직접 — admin USE_YN 무시

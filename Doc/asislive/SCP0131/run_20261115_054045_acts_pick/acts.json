@@ -1,0 +1,33 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:40:16",
+ "plan": {
+  "scenarios": 2,
+  "used": [
+   "ITEM_ID"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

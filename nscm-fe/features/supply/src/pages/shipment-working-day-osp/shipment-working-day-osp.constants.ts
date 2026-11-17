@@ -45,13 +45,13 @@ export const RESPONSE_SET = {
 
 // GetDayRange(dayRange) SP 고정 파라미터 — AS-IS SCP0096.cs:837 GetDayRange() 호출 인자 1:1.
 //   planCycle='DAILY'(BucketType.Daily, cs:86·134) / fromDate=''(plan date 미전달) /
-//   offsetMonth='12'(DateUtil.cs:156 sOffsetMonth 기본) / timeZone='AS054'(UserInfoContext.TimeZone 기본
-//   = Asia/Seoul, UserInfo.cs:435). TO-BE 세션에 타임존 필드가 없어 AS-IS 기본값 그대로 고정 전달.
+//   offsetMonth='12'(DateUtil.cs:156 sOffsetMonth 기본). timeZone 은 호출부에서 sessionTimeZone(session)
+//   으로 넘긴다 — AS-IS UserInfoContext.TimeZone 과 동일하게 사용자 등록 timezone(tmzCd) 기준으로 SP 가
+//   FN_MULTY_TIME 으로 '오늘'을 잡게 한다(종전 'AS054' 하드코딩은 비-KST 사용자에게 날짜경계 오차, 2026-11-12 교정).
 export const DAY_RANGE_PARAMS = {
   planCycle: 'DAILY',
   fromDate: '',
   offsetMonth: '12',
-  timeZone: 'AS054',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 

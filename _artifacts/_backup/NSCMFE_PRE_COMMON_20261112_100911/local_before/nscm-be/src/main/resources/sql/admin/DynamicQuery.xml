@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgcns.nscm.admin.dynamicquery">
+
+	<resultMap id="dynamicQueryStatus" type="com.lgcns.nscm.framework.model.CustomMap" />
+
+	<resultMap id="dynamicQueryValidateColumns" type="com.lgcns.nscm.framework.model.CustomMap" />
+
+	<select id="executeDynamicQuery" statementType="CALLABLE" resultType="java.util.HashMap">
+		<![CDATA[
+		{ call SCM_MGR.PKG_SYS0013.P_SYS0013_EXECUTE_QUERY(
+			  #{sqlText, mode=IN, jdbcType=VARCHAR}
+			, #{@o_rc1, mode=OUT, jdbcType=CURSOR, javaType=com.lgcns.nscm.admin.dynamicquery.model.OrderedCursorResult, typeHandler=com.lgcns.nscm.admin.dynamicquery.model.OrderedCursorTypeHandler}
+			, #{@O_RESULT_CURSOR, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=dynamicQueryStatus}
+		) }
+		]]>
+	</select>
+
+	<select id="validateDynamicQuery" statementType="CALLABLE" resultType="java.util.HashMap">
+		<![CDATA[
+		{ call SCM_MGR.PKG_SYS0013.P_SYS0013_VALIDATE_QUERY(
+			  #{sqlText, mode=IN, jdbcType=VARCHAR}
+			, #{@o_rc1, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=dynamicQueryValidateColumns}
+			, #{@O_RESULT_CURSOR, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=dynamicQueryStatus}
+		) }
+		]]>
+	</select>
+
+</mapper>

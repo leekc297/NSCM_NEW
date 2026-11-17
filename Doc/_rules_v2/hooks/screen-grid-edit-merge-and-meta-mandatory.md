@@ -83,8 +83,11 @@ const sameRow = (a: number, b: number): boolean => {
 
 ```
 [필수 1] "일부 컬럼만 수정 가능"은 화면 readonly 하드코딩이 아니라 SCM_MST_SHEET_COLUMNS.INPUT_TP_CD 메타로 제어.
-  - INPUT_TP_CD = 'M'  → 전체(모든 셀) 수정 가능
-  - INPUT_TP_CD = 'IM' → 일부(지정 컬럼)만 수정 가능
+  - INPUT_TP_CD = 'M'  → 필수 입력 · 전 행(기존 조회 행 포함) 수정 가능
+  - INPUT_TP_CD = 'IM' → 필수 입력 · 신규(Insert) 행에서만 수정 가능 (기존 행은 잠김)
+  # 2026-11-13 정정: 'M'=전체 셀 수정 / 'IM'=일부 컬럼만 수정 → 위 뜻으로
+  #   (packages/foundation/src/constants/column-config.ts MANDATORY='M' · MANDATORY_INSERT_ONLY='IM',
+  #    gridUtils.ts isEditableCell — M/O = 전 행 · IM/IO = CRUD_TYPE INSERT 행만). 값은 컬럼 단위 메타.
   - No.10 사고: DB 작업 후 일부만 수정 가능했어야 하는데 전 컬럼 수정 가능 → INPUT_TP_CD 'M' → 'IM' 수정으로 해결
 ```
 
@@ -121,7 +124,7 @@ useEffect(() => {
   return () => {
     g.beginningEdit.removeHandler(handleBeginningEdit);
   };
-}, []);
+}, [staticColumns]); // 2026-11-13 정정: [] → [staticColumns] (실제 NnMasterMappingGrid.tsx:178 · screen-runtime-pitfalls §2.4 "dependency [] 금지")
 ```
 
 > 이 패턴은 `screen-runtime-pitfalls-mandatory §P7`(동적 cell 편집 EDIT_FLAG 우회) 과 **동일 메커니즘**. P7 은 wrapper `setEditableColumns` 의 `isEditableCell` 분기를 화면 `beginningEdit` 로 override 하는 방향, 본 §2.2 는 추가 조건(특정 컬럼값)으로 잠그는 방향. 둘 다 **useEffect mount + cleanup + FIFO 등록** 의무 동일.
@@ -265,7 +268,7 @@ LEFT JOIN SCM_ADM_API_M a ON a.API_ID=b.API_ID WHERE b.MNU_ID='<MNU_ID>' AND a.A
 - `feedback_screen_runtime_pitfalls_mandatory` — P7 조건부 편집 / CRUD_TYPE 마킹 (본 §1.3·§2.2)
 - `feedback_ui_category_setup_no_arbitrary_data` — admin 메타 실 데이터만 (본 §2.1·§3.2·§5)
 - `feedback_ddl_grep_before_sql` — 컬럼명 추측 금지 (본 §3.3)
-- `feedback_be_no_modification_rule` — 메타/SP/FE 한정 (본 §3·§5)
+- `feedback_be_no_modification_rule` — 메타/SP/FE 한정 (본 §3·§5) (2026-11-13 정정: FE·BE 직접 수정 여부는 2026-11-02 작업 모드(`tools/Harness/harness.json` repairScope · `CLAUDE.md §1-8`)를 따른다 — UI/DB MODE = 직접 수정 / DB MODE = FE·BE 가이드만)
 
 ### 원천
 - `_analysis/이슈목록_2026-06-23.md` §4 룰 후보 R-6~R-11 (PM 갱신)

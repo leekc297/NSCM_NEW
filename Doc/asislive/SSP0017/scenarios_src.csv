@@ -1,0 +1,21 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+SSP0017-Seb6c4c,기타,OTHER,,ClearUsrCheckedList,if (dt != null),목록 다시 채움 1,,1,SSP0017_InventoryRaw.cs:156,UNREACHED
+SSP0017-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 2,,2,SSP0017_InventoryRaw.cs:188,DERIVED
+SSP0017-Sd7efec,초기,NONE,event:Form_Load | event:this.Load,DefineProperty,,표시·활성 3 · 표시·활성:siMain.ImagePopUp ; 표시·활성:cellTypeImage.BackgroundImage ; 표시·활성:cellTypeImage.BackgroundImage.AlignHorz,,3,SSP0017_InventoryRaw.cs:141,DERIVED
+SSP0017-Sed3e1e,조회,NONE,button:FindButton,FindData_Main,,"데이터 처리 9, 서버 호출 3, 팝업 2, 표시·활성 2, 잠금 1, 그리드 구성 1 · SSP.SSP0017_GET_INVENTORY_RAW · 팝업:new GSCM.Windows.Forms.UI.ProgressForm ; 팝업:prg.Show ; 표시·활성:proxyPivot.ShowProgress ; 표시·활성:req.CommandTimeout",SSP.SSP0017_GET_INVENTORY_RAW,18,SSP0017_InventoryRaw.cs:372,DERIVED
+SSP0017-S95028d,조회,NONE,,GetDayRange,,"데이터 처리 3, 서버 호출 2 · SCP.SCM0001_GET_SCP_DAY_PERIOD",SCP.SCM0001_GET_SCP_DAY_PERIOD,5,SSP0017_InventoryRaw.cs:514,UNREACHED
+SSP0017-Sbf4efb,조회,NONE,,GetDivision,,서버 호출 2 · SCM.SCM0001_GET_DIVISION,SCM.SCM0001_GET_DIVISION,2,SSP0017_InventoryRaw.cs:478,UNREACHED
+SSP0017-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,"데이터 처리 2, 목록 다시 채움 2, 값 자동 세팅 1, 콤보 채움 1 · 값 자동 세팅:clbDivision.ControlValues",,6,SSP0017_InventoryRaw.cs:165,DERIVED
+SSP0017-Se946c7,초기,SHEET+DATA,button:FindButton | event:Form_Load | event:btnMeasure_Click | event:this.Load,InitSpread,if (spdInfo.SheetName == SpdSheet.shtMain),"그리드 구성 3, 목록 다시 채움 1",,4,SSP0017_InventoryRaw.cs:200,DERIVED
+SSP0017-S26ff5f,초기,NONE,button:FindButton | event:Form_Load | event:btnMeasure_Click | event:this.Load,InitSpreadFooterSum,,그리드 값·서식 2,,2,SSP0017_InventoryRaw.cs:217,DERIVED
+SSP0017-Sd183f7,초기,OTHER,button:FindButton | event:Form_Load | event:btnMeasure_Click | event:this.Load,InitSpreadFooterSum,for (iCol <= siMain.GetMaxColumnIndex()),그리드 값·서식 2,,2,SSP0017_InventoryRaw.cs:230,DERIVED
+SSP0017-S5dcee3,초기,NONE,event:Form_Load | event:clbDivision.SelectedIndexChanged | event:clbDivision_SelectedIndexChanged | event:this.Load,SetChangedControl,,"목록 다시 채움 2, 데이터 처리 1, 콤보 채움 1",,4,SSP0017_InventoryRaw.cs:352,DERIVED
+SSP0017-Sa16183,초기,DIVISION+STATE,event:Form_Load | event:clbDivision.SelectedIndexChanged | event:clbDivision_SelectedIndexChanged | event:this.Load,SetChangedControl,"if (!pDivisionID.Contains(""EE""))",콤보 채움 1,,1,SSP0017_InventoryRaw.cs:354,DERIVED
+SSP0017-S8e0a78,초기,DIVISION+STATE,event:Form_Load | event:clbDivision.SelectedIndexChanged | event:clbDivision_SelectedIndexChanged | event:this.Load,SetChangedControl,"else of (!pDivisionID.Contains(""EE""))",콤보 채움 1,,1,SSP0017_InventoryRaw.cs:358,DERIVED
+SSP0017-Sb39c49,연쇄,NONE,event:spdMain.TopChange,SpdMain_TopChange,,그리드 구성 1,,1,SSP0017_InventoryRaw.cs:255,DERIVED
+SSP0017-Sea1449,팝업,NONE,event:btnItemId_Click | event:this.btnItemId.Click,btnItemId_Click,,"팝업 3, 표시·활성 1 · 팝업:new SCM0002_ItembyDivisionPopup ; 팝업:popItem.Form_Load ; 표시·활성:popItem.StartPosition ; 팝업:popItem.ShowDialog",,4,SSP0017_InventoryRaw.cs:291,DERIVED
+SSP0017-Sec3442,연쇄,OTHER,event:btnItemId_Click | event:this.btnItemId.Click,btnItemId_Click,"if (popItem.ItemID != """")",값 자동 세팅 1 · 값 자동 세팅:txtItemId.Text,,1,SSP0017_InventoryRaw.cs:301,DERIVED
+SSP0017-Sd04bb9,연쇄,OTHER,event:btnMeasure_Click | event:this.btnMeasure.Click,btnMeasure_Click,"if (fps != null) ▸ else of (fps.Name == ""spdMain"")",메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SSP0017_InventoryRaw.cs:316,DERIVED
+SSP0017-S963877,연쇄,OTHER,event:btnMeasure_Click | event:this.btnMeasure.Click,btnMeasure_Click,else of (fps != null),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SSP0017_InventoryRaw.cs:322,DERIVED
+SSP0017-S3e4aef,팝업,NONE,event:btnMeasure_Click | event:this.btnMeasure.Click,btnMeasure_Click,,"팝업 2, 표시·활성 1 · 팝업:new SCM0002_TitleSetForm_Popup ; 표시·활성:frm.StartPosition ; 팝업:frm.ShowDialog",,3,SSP0017_InventoryRaw.cs:326,DERIVED
+SSP0017-S955b86,연쇄,OTHER,event:btnMeasure_Click | event:this.btnMeasure.Click,btnMeasure_Click,if (frm.DialogResult == DialogResult.OK),표시·활성 2 · 표시·활성:this.CanModelChange ; 표시·활성:this.CanModelChange,,2,SSP0017_InventoryRaw.cs:332,DERIVED

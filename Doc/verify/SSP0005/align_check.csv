@@ -1,0 +1,4 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SSP0005,,dr[DefColumns.COLUMN_NAME],dr[DefColumns.COLUMN_LABEL_NAME],C,SSP0005_ShipmentWorkingDay.cs:263,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+SSP0005,Shipment Working Day,COMPANY_ID,Company,L,META SCM_MST_SHEET_COLUMNS(SSP0005/Shipment Working Day),SSP0005,Shipment Working Day,L,메타 SSP0005/Shipment Working Day,PASS,AS-IS left ↔ TO-BE left
+SSP0005,Shipment Working Day,DIVISION_ID,Divison,C,META SCM_MST_SHEET_COLUMNS(SSP0005/Shipment Working Day),SSP0005,Shipment Working Day,C,메타 SSP0005/Shipment Working Day,PASS,AS-IS center ↔ TO-BE center

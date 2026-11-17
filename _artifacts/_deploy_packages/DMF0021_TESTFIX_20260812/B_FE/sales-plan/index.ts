@@ -1,1 +1,0 @@
-export { SalesPlan } from './SalesPlan';

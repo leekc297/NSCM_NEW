@@ -1,69 +1,33 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-02T15:22:07+09:00",
+ "ts": "2026-11-14T05:52:55+09:00",
  "producer": "run_verify",
  "id": "SCP0028",
  "skip_e2e": false,
- "started": "2026-11-02 13:50:36",
+ "started": "2026-11-14 05:01:39",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-e50f03fc",
+   "id": "V-be29b7a4",
    "class": "F5",
    "msg": "SCP0028 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
+     "ref": "E2E @trace @11-14 05:52"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-563f3c40",
-   "class": "G3",
-   "msg": "SCP0028 화면",
+   "id": "V-ed697b1a",
+   "class": "E3",
+   "msg": "SCP0028 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-564a1ac4",
-   "class": "F5",
-   "msg": "SCP0028 병합 셀 Delete 범위",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-4b34e536",
-   "class": "F5",
-   "msg": "SCP0028 원값 복원 상태 해제",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-6ba6160a",
-   "class": "G4",
-   "msg": "SCP0028 돋보기 위치",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 화면 틀 @11-02 15:14"
+     "ref": "E2E @verify 시나리오 @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -75,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 입력 검증 @11-02 15:14"
+     "ref": "E2E @verify 입력 검증 @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -87,91 +51,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 입력 검증 @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-072aeef0",
-   "class": "F10",
-   "msg": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-9496af63",
-   "class": "F10",
-   "msg": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ddc8b74f",
-   "class": "F10",
-   "msg": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-602d9026",
-   "class": "G1",
-   "msg": "조회조건 Valid",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-9e2b9258",
-   "class": "G1",
-   "msg": "조회조건 Model",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-93e5a09c",
-   "class": "G8",
-   "msg": "조회조건 Model",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ed2ee896",
-   "class": "G9",
-   "msg": "조회조건 Model",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-02 15:14"
+     "ref": "E2E @verify 입력 검증 @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -183,7 +63,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-02 15:14"
+     "ref": "E2E @verify @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -195,103 +75,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-2692f262",
-   "class": "MS1",
-   "msg": "MSG00031",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC msgmap(문구 일치) + 코드 사용 ID"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-dc8f2fac",
-   "class": "G5",
-   "msg": "popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC popup_args_check (AS-IS 팝업 인자 ↔ TO-BE 모달 전달값)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-27cc2d6b",
-   "class": "L1",
-   "msg": "조회조건 텍스트 입력 중 그리드",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e1f702d7",
-   "class": "F5",
-   "msg": "Delete 버튼·CRUD Status D Flag",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-cd91e8b8",
-   "class": "M4",
-   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-080b3110",
-   "class": "F5",
-   "msg": "[DMF0082 결함 유형] CRUD Status · 대량 저장",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-2a2d5e00",
-   "class": "G4",
-   "msg": "[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-2b755a7b",
-   "class": "F5",
-   "msg": "[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "E2E @verify @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -299,18 +83,6 @@
   {
    "id": "V-82de05d7",
    "class": "K4",
-   "msg": "[DMF0044 결함 유형] Delete 버튼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-c0763e78",
-   "class": "J2",
    "msg": "[DMF0044 결함 유형] Delete 버튼",
    "evidence": [
     {
@@ -333,93 +105,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-320faea0",
-   "class": "G4",
-   "msg": "[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-d09a45ac",
-   "class": "G4",
-   "msg": "[DMF0040 결함 유형] Plant Site 조회조건",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-a8a5958a",
-   "class": "G1",
-   "msg": "[DMF0053 결함 유형] Project·Owner 조회조건(Model/Nickname 정상)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-ec56c078",
    "class": "G5",
    "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-b720ef33",
-   "class": "G4",
-   "msg": "[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 팝업 타이틀",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-541eefcb",
-   "class": "F5",
-   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-bceb8955",
-   "class": "G4",
-   "msg": "[SCP0007 결함 일반화] 조회조건 명칭·순서 / 대응 컬럼명",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-0a3b3696",
-   "class": "J2",
-   "msg": "[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET_MNU_BTN_AUTH_DIV)",
    "evidence": [
     {
      "kind": "exec",
@@ -441,78 +129,6 @@
    "grade": "hard"
   },
   {
-   "id": "V-ceffba08",
-   "class": "G4",
-   "msg": "[DMF0074 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-31ed3615",
-   "class": "M4",
-   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-04558423",
-   "class": "J2",
-   "msg": "[DMF0005 결함 일반화] Insert·Save·Delete 버튼 노출 = 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M DMF0005 production SAVE) — DM Viewer 는 SEARCH 만",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-6569cc0f",
-   "class": "J2",
-   "msg": "[DMF0007 결함 일반화] Insert·Save·Delete 버튼 표시 = 단추 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M DMF0007 SAVE·INSERT·DELETE) 판정",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-c974c45c",
-   "class": "G8",
-   "msg": "[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPPER) · 쉼표 다중 입력",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-b304f5b7",
-   "class": "G9",
-   "msg": "[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPPER) · 쉼표 다중 입력",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-3437dc1d",
    "class": "G5",
    "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
@@ -525,217 +141,13 @@
    "grade": "hard"
   },
   {
-   "id": "V-8c1055e7",
-   "class": "M4",
-   "msg": "[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 갱신",
+   "id": "V-7254a80c",
+   "class": "G5",
+   "msg": "검색 팝업(공용 모달) 호출 인자",
    "evidence": [
     {
      "kind": "exec",
      "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-0f1d9d51",
-   "class": "G1",
-   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e674c0aa",
-   "class": "G8",
-   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ffb39923",
-   "class": "G9",
-   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-cd9e9f3d",
-   "class": "F5",
-   "msg": "Delete 버튼·CRUD Status D Flag",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ccd5dda0",
-   "class": "G4",
-   "msg": "조회조건 명칭·순서 / 대응 컬럼명",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-4114d871",
-   "class": "J2",
-   "msg": "공통버튼 Insert(F8)/Delete(F9)/Save(F7)/Upload 노출",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-5d65b136",
-   "class": "F5",
-   "msg": "공통 버튼 Delete(F9) · CRUD Status D · DB 삭제 반영",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-c84f6550",
-   "class": "G4",
-   "msg": "cboDivision / Division / Div.",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-d8b53e0a",
-   "class": "G4",
-   "msg": "cboOperationGroup / Operation Group / Operation group",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-77c266c5",
-   "class": "G4",
-   "msg": "cboValid / Valid / Active",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-f67deb05",
-   "class": "G4",
-   "msg": "clbTransMode / Trans Mode",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-aae51484",
-   "class": "G4",
-   "msg": "clbFromSite / From Site",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-9861326e",
-   "class": "G4",
-   "msg": "clbToSite / To Site",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-ce1c0ba2",
-   "class": "G4",
-   "msg": "txtItemId / Model / Item Id",
-   "evidence": [
-    {
-     "kind": "agent-judgment",
-     "ref": "출처 미기록"
-    }
-   ],
-   "grade": "soft"
-  },
-  {
-   "id": "T-380b4c0f",
-   "class": "G4",
-   "msg": "`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-59af1afb",
-   "class": "G1",
-   "msg": "`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-98554096",
-   "class": "F4",
-   "msg": "Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
     }
    ],
    "grade": "hard"
@@ -747,211 +159,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-8c1a9dab",
-   "class": "G1",
-   "msg": "FindButton (cs) · `hotkeyConfig.search` → handleSearch",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-14732ce2",
-   "class": "F4",
-   "msg": "SaveButton SaveData (cs:574~) · `hotkeyConfig.save` → handleSave",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-4c9f8629",
-   "class": "G5",
-   "msg": "**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-9466f72f",
-   "class": "G1",
-   "msg": "**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-c770299c",
-   "class": "F4",
-   "msg": "PR_GET_MNU_BTN_AUTH",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-6c69b6ac",
-   "class": "G1",
-   "msg": "btnInput \"Input\" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-484c739b",
-   "class": "G5",
-   "msg": "팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-80e70b77",
-   "class": "F4",
-   "msg": "팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-7754adb7",
-   "class": "G1",
-   "msg": "팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-3a8b1d0e",
-   "class": "G5",
-   "msg": "팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-b5cbb882",
-   "class": "G1",
-   "msg": "팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-47a23fbe",
-   "class": "G5",
-   "msg": "**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-f7a95dc6",
-   "class": "F4",
-   "msg": "**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-c9e36f25",
-   "class": "G1",
-   "msg": "SetDivisionAuthCheck (cs:131~132, R1) · Form `noAuth` 시 조회영역 disable + 안내, handleSearch Division 필수 가드",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-a806b129",
-   "class": "G5",
-   "msg": "P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 6 (division/opGroup/from/to/item/actionFlag)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-78a38634",
-   "class": "X-ROW",
-   "msg": "SCP0028_Shipment_Lot_Size.FindData",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-548f9655",
-   "class": "X-ROW",
-   "msg": "SCP0028_Shipment_Lot_Size.InitControls",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @trace @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -993,49 +201,13 @@
    "grade": "hard"
   },
   {
-   "id": "EG-ea38ffcb",
-   "class": "M4",
-   "msg": "SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PICK_DBL",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-popup @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-7a88dc15",
-   "class": "J2",
-   "msg": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "EG-a0ea432d",
    "class": "K4",
    "msg": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-1e23ee08",
-   "class": "J2",
-   "msg": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/81/SCM Viewer",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
+     "ref": "E2E @eg-auth @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -1047,19 +219,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-b949a64b",
-   "class": "J2",
-   "msg": "SCP0028 EG374 DELETE 버튼 조회 전 SCP/82/SCM Viewer",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
+     "ref": "E2E @eg-auth @11-14 05:52"
     }
    ],
    "grade": "hard"
@@ -1071,53 +231,41 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-02 15:14"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-bd49cfa8",
-   "class": "I2",
-   "msg": "SCP0028 언어 전환 CN",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @i18n-lang @11-02 15:14"
+     "ref": "E2E @eg-auth @11-14 05:52"
     }
    ],
    "grade": "hard"
   }
  ],
+ "warnings": [],
  "summary": {
-  "rows": 1723,
-  "PASS": 618,
-  "FAIL": 90,
-  "판정필요": 26,
-  "미검증": 70,
-  "해당없음": 919,
+  "rows": 1870,
+  "PASS": 713,
+  "FAIL": 19,
+  "판정필요": 34,
+  "미검증": 325,
+  "해당없음": 779,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1007,
-   "없음(미검증)": 70,
-   "기계(상속·집계)": 612,
-   "출처 미기록": 8,
-   "없음(판정 대기)": 26
+   "기계": 948,
+   "없음(미검증)": 325,
+   "사람": 2,
+   "없음(판정 대기)": 34,
+   "기계(상속·집계)": 551,
+   "출처 미기록": 10
   },
-  "fail_listed": 90,
+  "fail_listed": 19,
   "coverage": {
-   "rules": 88,
-   "measured": 433,
-   "not_run_error": 43,
-   "na": 317,
-   "suspect_na100": [
-    "E3"
-   ]
+   "rules": 89,
+   "measured": 521,
+   "not_run_error": 213,
+   "na": 211,
+   "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0028_ShipmentLotSize_CheckList_v6.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0028_ShipmentLotSize_ActionItemList_v6.xlsx"
+  "CheckList": "Doc/CheckList/SCP0028_ShipmentLotSize_CheckList_v11.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0028_ShipmentLotSize_ActionItemList_v11.xlsx"
  },
  "evidence": [
   {
@@ -1129,5 +277,5 @@
    "ref": "Doc/verify/SCP0028/e2e_results.json"
   }
  ],
- "note": "⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음"
+ "note": ""
 }

@@ -1,0 +1,4 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+LINK,,OPMZ_PLAN_ID,ALL,ROW,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plan ID"" })","else of (actv_cd == ""A001"") ▸ else of (actv_cd == ""A002"") ▸ if (actv_cd == ""A003"")",SCP0123_PlanControl.cs:957 SCP0123_PlanControl.SpdMain_CellClick
+CONFIRM,,OPMZ_PLAN_ID,ALL,ROW,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plan ID"" })","else of (plan_id_indp_yn == ""Y"") ▸ else of (actv_cd == ""A002"") ▸ if (actv_cd == ""A003"")",SCP0123_PlanControl.cs:1087 SCP0123_PlanControl.SpdMain_CellClick
+*,,OPMZ_PLAN_ID,ALL,ROW,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plan ID"" })","if (actv_cd == ""A003"")",SCP0123_PlanControl.cs:1277 SCP0123_PlanControl.SpdMain_CellDoubleClick

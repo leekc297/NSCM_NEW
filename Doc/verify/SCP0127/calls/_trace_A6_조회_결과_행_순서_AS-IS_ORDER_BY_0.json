@@ -7,8 +7,8 @@
   "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
   "status": 200,
   "rows": 2835,
-  "dur": 276,
-  "at": "2026-11-07T11:38:36.556Z",
+  "dur": 263,
+  "at": "2026-11-14T09:10:31.857Z",
   "user": "minyonglee1",
   "test": "A6 조회 결과 행 순서 = AS-IS ORDER BY"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261109\",\"periodTo\":\"20271108\"}",
   "status": 200,
   "rows": 535,
-  "dur": 208,
-  "at": "2026-11-07T11:38:39.774Z",
+  "dur": 163,
+  "at": "2026-11-14T09:10:34.975Z",
   "user": "minyonglee1",
   "test": "A6 조회 결과 행 순서 = AS-IS ORDER BY"
  }

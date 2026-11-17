@@ -1,0 +1,244 @@
+# -*- coding: utf-8 -*-
+"""소스 분기 기반 시나리오 도출 (2026-11-13 · 플랜 P6-1 · 사용자 지시 "소스를 확인해서 확인이 필요한 시나리오를 직접 수립")
+
+  python tools/AsisLive/asis_live_scen_src.py [ID ...]     (ID 생략 = Doc/asislive/_scenario_types.csv 의 전 화면 · FP·Material 4개 제외)
+입력  Doc/asisfacts/screens/<ID>/actions.csv  (문장별 동작 · guard = 그 문장에 이르는 분기 조건 사슬)
+      Doc/asisfacts/screens/<ID>/flow.csv     (버튼·이벤트 진입점 → 도달 메서드)
+방법  "관찰할 수 있는 동작"(서버 호출 · 메시지 · 잠금 · 팝업 · 표시/활성 · 콤보 채움 · 값 자동 세팅 · 그리드 구성)에 이르는
+      **분기 사슬(메서드 + guard)마다 시나리오 1개**를 만든다. 같은 사슬 아래 관찰 동작은 한 시나리오의 관찰점으로 묶는다.
+      분기 조건을 무엇이 좌우하는지로 축을 나눈다(여러 축에 걸리면 모두 표시):
+        DIVISION  Division 값 분기            AUTH   그룹·권한 분기
+        COND      조회조건 컨트롤 값 분기      DATA   행·셀 값/건수 분기
+        SHEET     시트·탭 분기                 STATE  화면 상태 플래그       NONE  조건 없음(항상 실행)
+      유형: 진입점 기준 — 조회(Find/Search/조회 버튼) · 저장(Save/Delete/Insert/Upload/Confirm/Copy) · 연쇄(컨트롤·셀 이벤트) · 초기(로드) · 팝업 · 기타
+산출  Doc/asislive/<ID>/scenarios_src.csv
+        scenario_id · type · axes · entry · method · guard · observe(관찰점 요약) · n_observe · src(파일:첫 줄) · status
+      Doc/asislive/_scenarios_src_summary.csv  화면별 분모(분기 사슬 수)·유형·축 분포
+      status: DERIVED(자동 도출) | UNREACHED(진입점에서 도달 경로를 못 찾음 — 버리지 않고 남긴다)
+한계  분기 사슬은 정적 추출 결과다(런타임에만 정해지는 분기는 guard 문자열 그대로 남는다). 실행 가능한 조작 순서(어떤 값을 넣어야 그 분기를 타는지)는
+      이 단계에서 만들지 않는다 — 축·조건식만 확정하고, 값 결정은 다음 단계(실행 준비)에서 화면 덤프·DB 로 한다.
+"""
+import csv, os, re, sys, collections, hashlib
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+for _s in (sys.stdout, sys.stderr):
+    try: _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception: pass
+
+OBS = {"ENDPOINT": "서버 호출", "MESSAGE": "메시지", "GRID_LOCK": "잠금", "POPUP": "팝업", "UI_PROP": "표시·활성", "COMBO_DATA": "콤보 채움",
+       "LIST_REBIND": "목록 다시 채움", "VALUE_SET": "값 자동 세팅", "GRID_COMBO": "셀 콤보", "GRID_INIT": "그리드 구성", "GRID_SET": "그리드 값·서식", "DATA_OP": "데이터 처리"}
+STRONG = {"ENDPOINT", "MESSAGE", "GRID_LOCK", "POPUP", "UI_PROP", "COMBO_DATA", "LIST_REBIND", "VALUE_SET", "GRID_COMBO", "GRID_INIT", "GRID_SET"}   # GRID_INIT·GRID_SET = 그리드 덤프로 관찰 가능(11-13 추가)   # 이 중 하나라도 있어야 시나리오로 센다
+AX = [("DIVISION", re.compile(r"division|\bdiv\b|sDiv|DIVISION_ID", re.I)),
+      ("AUTH", re.compile(r"GroupID|NowGroup|ADMIN|PLANNER|Viewer|Auth|IsSave|SaveAuth|Permission|Role", re.I)),
+      ("SHEET", re.compile(r"SheetName|shtMain|SpdSheet|ActiveSheet|SelectedTab|tab[A-Z]\w*\.Selected|TabIndex", re.I)),
+      ("COND", re.compile(r"\b(cbo|clb|chk|txt|drp|dtp|rdo|opt|cmb|dp|usr)[A-Z_]\w*|ControlValues|SelectedValue|SelectedIndex|\.Checked|EditValue", re.I)),
+      ("DATA", re.compile(r"Rows?\b|RowCount|Count\b|GetText|GetValue|Cells?\[|\[\"[A-Z_]+\"\]|dt\w*\.|ds\w*\.|IsNullOrEmpty|\.Length|iCount|iRow|ActiveRow", re.I)),
+      ("STATE", re.compile(r"\b(b|is|Is|can|Can|has|Has)[A-Z]\w*|== *(true|false)|!\w+\b", 0))]
+SAVE = re.compile(r"save|delete|insert|upload|confirm|copy|create|apply|release|approve|reject|import", re.I)
+FIND = re.compile(r"find|search|query|retrieve|select|load|get", re.I)
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def norm_guard(g):
+    g = re.sub(r"\s+", " ", (g or "").strip())
+    parts = [x.strip() for x in g.split("▸") if x.strip() and x.strip() not in ("try", "lambda", "finally", "using")]
+    parts = [x for x in parts if not re.match(r"^(try|lambda|using\b.*|catch.*|finally)$", x)]
+    return " ▸ ".join(parts)
+
+
+def axes(g):
+    if not g: return ["NONE"]
+    out = [n for n, rx in AX if rx.search(g)]
+    return out or ["OTHER"]
+
+
+def one(mid):
+    fs = P("Doc", "asisfacts", "screens", mid)
+    acts = rd(os.path.join(fs, "actions.csv")); flow = rd(os.path.join(fs, "flow.csv"))
+    ent = collections.defaultdict(set)                       # 메서드 → 진입점(kind:entry)
+    for r in flow:
+        if (r.get("variant") or "") not in ("current", "only", "current(sln미등록)", ""): continue
+        k = r.get("entry_kind") or ""; e = r.get("entry") or ""
+        for m in {r.get("member") or ""} | set(x.strip() for x in re.split(r"[>→▸/]", r.get("path") or "") if x.strip()):
+            if m: ent[m.split("(")[0].split(".")[-1]].add(k + ":" + e)
+    # (11-13 보정) flow.csv 는 서버 호출로 끝나는 경로만 담는다 → 이벤트 처리기(events.csv) · 공통 버튼 재정의(xxxButton) · 화면 로드 ·
+    #   내부 호출 관계(actions.csv CALL_LOCAL)를 따라가 도달 여부를 다시 계산한다.
+    for r in rd(os.path.join(fs, "events.csv")):
+        h = (r.get("handler") or "").split("(")[0].split(".")[-1].strip()
+        if h: ent[h].add("event:" + (r.get("target") or "") + "." + (r.get("event") or ""))
+    names = {a.get("method") or "" for a in acts}
+    for m in names:
+        if re.match(r"^\w+Button$", m): ent[m].add("button:" + m)
+        elif re.search(r"_(Click|Changed|CheckedChanged|ValueChanged|EditValueChanged|SelectedIndexChanged|KeyDown|KeyPress|KeyUp|DoubleClick|CellClick|CellDoubleClick|ButtonClicked|ComboSelChange|ComboCloseUp|Change|EditModeOff|EditModeOn|LeaveCell|EnterCell|ClipboardPasted|TextChanged|Leave|Enter|Load|Shown|Closing|Closed|SelectionChanged|Validating|Validated)$", m): ent[m].add("event:" + m)
+        elif m in ("Form_Load", ".ctor") or re.match(r"^(On[A-Z]\w+)$", m): ent[m].add("event:" + m)
+    calls = collections.defaultdict(set)
+    for a in acts:
+        if (a.get("kind") or "") == "CALL_LOCAL":
+            c = re.split(r"[(<]", (a.get("target") or ""))[0].split(".")[-1].strip()
+            if c in names: calls[a.get("method") or ""].add(c)
+    reach = {m: set(e for e in es if not e.startswith("unreached")) for m, es in ent.items()}
+    todo = [m for m, es in reach.items() if es]
+    while todo:
+        m = todo.pop()
+        for c in calls.get(m, ()):
+            before = len(reach.setdefault(c, set())); reach[c] |= reach[m]
+            if len(reach[c]) != before: todo.append(c)
+    ent = collections.defaultdict(set, {m: es for m, es in reach.items()})
+    groups = collections.OrderedDict()
+    for a in acts:
+        k = a.get("kind") or ""
+        if k not in OBS: continue
+        key = (a.get("method") or "", norm_guard(a.get("guard")))
+        g = groups.setdefault(key, {"obs": collections.Counter(), "detail": [], "file": a.get("file"), "line": a.get("line"), "strong": False, "eps": set()})
+        g["obs"][k] += 1; g.setdefault("keys", []).append("ACT:%s.%s:%s:%s" % (a.get("class") or "", a.get("method") or "", a.get("line") or "", a.get("stmt_no") or ""))
+        g["cls"] = a.get("class") or ""
+        if k in STRONG: g["strong"] = True
+        if k == "ENDPOINT" and a.get("endpoint"): g["eps"].add(a.get("endpoint"))
+        if k in ("MESSAGE", "POPUP", "GRID_LOCK", "UI_PROP", "VALUE_SET") and len(g["detail"]) < 4: g["detail"].append("%s:%s" % (OBS[k], (a.get("target") or a.get("value") or "")[:40]))
+    rows = []; links = []
+    for (method, guard), g in groups.items():
+        if not g["strong"]: continue
+        es = sorted(ent.get(method, []))
+        real = [e for e in es if not e.startswith("unreached")]
+        ename = " | ".join(real[:4]) if real else ""
+        roots = {e.split(":", 1)[1] for e in real}
+        only_save = bool(roots) and all(SAVE.search(e) for e in roots)
+        only_find = bool(roots) and all(FIND.search(e) and not SAVE.search(e) for e in roots)
+        only_load = bool(roots) and all(re.search(r"Load|Shown|ctor|Init", e) for e in roots)
+        if SAVE.search(method): typ = "저장"                    # 메서드 이름이 먼저(FindData 가 저장 뒤 재조회로 불려도 조회)
+        elif re.search(r"valid|check", method, re.I) and any(SAVE.search(e) for e in roots): typ = "저장"
+        elif FIND.search(method) and not re.search(r"Init|Load|Define", method): typ = "조회"
+        elif re.search(r"Init|Load|Define|Create|Set\w*Control", method) or only_load: typ = "초기"
+        elif any("POPUP" == k for k in g["obs"]) and not g["eps"]: typ = "팝업"
+        elif only_save: typ = "저장"
+        elif only_find: typ = "조회"
+        elif any(e.startswith("event") for e in real): typ = "연쇄"
+        else: typ = "기타"
+        if g["eps"] and any(SAVE.search(e) for e in g["eps"]): typ = "저장"
+        ax = axes(guard)
+        obs = ", ".join("%s %d" % (OBS[k], v) for k, v in g["obs"].most_common()) + ((" · " + " ; ".join(sorted(g["eps"]))[:160]) if g["eps"] else "") + ((" · " + " ; ".join(g["detail"])) if g["detail"] else "")
+        sid = "%s-S%s" % (mid, hashlib.md5((method + "|" + guard).encode("utf-8")).hexdigest()[:6])
+        for k_ in g.get("keys", []): links.append((k_, sid))
+        links.append(("ACT:%s.%s" % (g.get("cls", ""), method), sid))
+        rows.append({"scenario_id": sid, "type": typ, "axes": "+".join(ax), "entry": ename, "method": method, "guard": guard, "observe": obs, "endpoints": ";".join(sorted(g["eps"])), "n_observe": sum(g["obs"].values()),
+                     "src": "%s:%s" % (os.path.basename(g["file"] or ""), g["line"]), "status": "DERIVED" if real else "UNREACHED"})
+    od = P("Doc", "asislive", mid); os.makedirs(od, exist_ok=True)
+    with open(os.path.join(od, "scenarios_src.csv"), "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["scenario_id", "type", "axes", "entry", "method", "guard", "observe", "endpoints", "n_observe", "src", "status"]); w.writeheader(); w.writerows(rows)
+    # ── 검사 단위(mapping_trace.csv)와 연결: 문장 행 = 그 문장을 관찰점으로 가진 시나리오 · 진입점 행 = 그 메서드의 모든 시나리오 (11-13 · 기존 엔진에 연결)
+    lk = collections.defaultdict(list); how = {}
+    for k_, sid in links:
+        if sid not in lk[k_]: lk[k_].append(sid)
+        how[k_] = "관찰점" if k_.count(":") >= 3 else "진입점"
+    # (11-13 보완) 관찰 동작이 아닌 문장도 소속 분기 사슬로 묶는다 — 같은 사슬 → 바깥(상위) 사슬 → 그 메서드를 부르는 쪽의 사슬 순서로 찾는다
+    by_chain = collections.defaultdict(list); by_method = collections.defaultdict(list)
+    for r in rows:
+        by_chain[(r["method"], r["guard"])].append(r["scenario_id"]); by_method[r["method"]].append(r["scenario_id"])
+    callsites = collections.defaultdict(list)                 # 불리는 메서드 → [(부르는 메서드, guard)]
+    for a in acts:
+        if (a.get("kind") or "") == "CALL_LOCAL":
+            c = re.split(r"[(<]", (a.get("target") or ""))[0].split(".")[-1].strip()
+            if c in names: callsites[c].append((a.get("method") or "", norm_guard(a.get("guard"))))
+    memo = {}
+    def resolve(method, guard, depth=0, seen=()):
+        key = (method, guard)
+        if key in memo: return memo[key]
+        g = guard
+        while True:
+            if (method, g) in by_chain: memo[key] = (by_chain[(method, g)], "같은 사슬" if g == guard else "바깥 사슬"); return memo[key]
+            if not g: break
+            g = " ▸ ".join(g.split(" ▸ ")[:-1])
+        if depth < 6 and method not in seen:
+            out = []
+            for cm, cg in callsites.get(method, []):
+                s, _h = resolve(cm, cg, depth + 1, seen + (method,))
+                for x in s:
+                    if x not in out: out.append(x)
+            if out: memo[key] = (out, "부르는 쪽 사슬"); return memo[key]
+        if by_method.get(method): memo[key] = (by_method[method], "같은 메서드(하위 사슬)"); return memo[key]
+        # 자기 자신에 관찰 동작이 없고 부르는 쪽도 없으면(진입 메서드: Form_Load·생성자·InitEvent 등) 이 메서드가 부르는 쪽의 사슬로 묶는다
+        out = []; stack = [method]; vis = {method}
+        while stack and len(vis) < 60:
+            m_ = stack.pop()
+            for c in calls.get(m_, ()):
+                if c in vis: continue
+                vis.add(c); stack.append(c)
+                for x in by_method.get(c, []):
+                    if x not in out: out.append(x)
+        if out: memo[key] = (out, "불리는 쪽 사슬"); return memo[key]
+        memo[key] = ([], ""); return memo[key]
+    for a in acts:
+        k_ = "ACT:%s.%s:%s:%s" % (a.get("class") or "", a.get("method") or "", a.get("line") or "", a.get("stmt_no") or "")
+        if lk.get(k_): continue
+        s, h = resolve(a.get("method") or "", norm_guard(a.get("guard")))
+        if s: lk[k_] = list(s); how[k_] = h
+    for m in names:
+        cls = next((a.get("class") or "" for a in acts if (a.get("method") or "") == m), "")
+        k_ = "ACT:%s.%s" % (cls, m)
+        if lk.get(k_): continue
+        s, h = resolve(m, "")
+        if s: lk[k_] = list(s); how[k_] = h
+    tr = [r for r in rd(P("Doc", "verify", mid, "mapping_trace.csv")) if (r.get("source") or "") == "AS-IS 액션"]
+    lrows = []; open_v = ("미검증", "ERROR", "REVIEW", "NOPATH", "NOT_RUN", "판정필요")
+    # 검사 단위가 예전 정적 사실로 만들어져 줄 번호가 다른 화면이 있다(11-13 실측: DMF0021 SaveData 1280↔1945 · 문장 수는 같음) → 줄 번호가 안 맞으면 클래스.메서드+문장 번호로 맞춘다
+    by_stmt = {}
+    for k_ in list(lk):
+        m_ = re.match(r"^(ACT:.+):(\d+):(\d+)$", k_)
+        if m_: by_stmt[(m_.group(1), m_.group(3))] = k_
+    stale = 0
+    for r in tr:
+        rid = r.get("row_id") or ""
+        if rid not in lk:
+            m_ = re.match(r"^(ACT:.+):(\d+):(\d+)$", rid)
+            alt = by_stmt.get((m_.group(1), m_.group(3))) if m_ else None
+            if alt: lk[rid] = lk[alt]; how[rid] = how.get(alt, "") + "(줄 번호 불일치·문장 번호로 맞춤)"; stale += 1
+        sids = lk.get(r.get("row_id") or "", [])
+        lrows.append({"row_id": r.get("row_id"), "section": r.get("section"), "line": r.get("line"), "verdict": r.get("verdict"), "checks": r.get("checks"),
+                      "scenarios": len(sids), "link": how.get(r.get("row_id") or "", ""), "scenario_ids": " ".join(sids[:30])})
+    if tr:
+        os.makedirs(P("Doc", "verify", mid, "asis_live"), exist_ok=True)
+        with open(P("Doc", "verify", mid, "asis_live", "scen_link.csv"), "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=["row_id", "section", "line", "verdict", "checks", "scenarios", "link", "scenario_ids"]); w.writeheader(); w.writerows(lrows)
+    is_open = lambda r: any(v in (r["verdict"] or "") for v in open_v)
+    t = collections.Counter(r["type"] for r in rows); x = collections.Counter()
+    for r in rows:
+        for a in r["axes"].split("+"): x[a] += 1
+    return {"id": mid, "trace_stale_rows": stale, "trace_rows": len(lrows), "trace_linked": sum(1 for r in lrows if r["scenarios"]), "trace_open": sum(1 for r in lrows if is_open(r)),
+            "trace_open_linked": sum(1 for r in lrows if is_open(r) and r["scenarios"]), "trace_entry": sum(1 for r in lrows if r["section"] == "AS-IS 진입점"),
+            "trace_entry_linked": sum(1 for r in lrows if r["section"] == "AS-IS 진입점" and r["scenarios"]), "actions": len(acts), "scenarios": len(rows), "derived": sum(1 for r in rows if r["status"] == "DERIVED"), "unreached": sum(1 for r in rows if r["status"] == "UNREACHED"),
+            "조회": t["조회"], "저장": t["저장"], "연쇄": t["연쇄"], "초기": t["초기"], "팝업": t["팝업"], "기타": t["기타"],
+            "DIVISION": x["DIVISION"], "AUTH": x["AUTH"], "COND": x["COND"], "DATA": x["DATA"], "SHEET": x["SHEET"], "STATE": x["STATE"], "NONE": x["NONE"], "OTHER": x["OTHER"]}
+
+
+def main():
+    ids = [a.upper() for a in sys.argv[1:] if not a.startswith("-")]; ALL = not ids
+    if not ids: ids = [r["id"] for r in rd(P("Doc", "asislive", "_scenario_types.csv")) if r["type"] != "정적 사실 없음"]
+    out = []
+    for mid in ids:
+        s = one(mid); out.append(s)
+        if not ALL: print(s)
+    if ALL and out:
+        with open(P("Doc", "asislive", "_scenarios_src_summary.csv"), "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(out[0].keys())); w.writeheader(); w.writerows(out)
+        tot = collections.Counter()
+        for s in out:
+            for k, v in s.items():
+                if k != "id": tot[k] += v
+        print("화면 %d · 시나리오(분기 사슬) %d · 도출 %d · 도달 경로 없음 %d" % (len(out), tot["scenarios"], tot["derived"], tot["unreached"]))
+        print("유형", {k: tot[k] for k in ("조회", "저장", "연쇄", "초기", "팝업", "기타")})
+        print("축", {k: tot[k] for k in ("DIVISION", "AUTH", "COND", "DATA", "SHEET", "STATE", "NONE", "OTHER")})
+        print("화면당 시나리오 수: 최소 %d · 최대 %d(%s) · 0개 화면 %d" % (min(s["scenarios"] for s in out), max(s["scenarios"] for s in out), max(out, key=lambda s: s["scenarios"])["id"], sum(1 for s in out if s["scenarios"] == 0)))
+        ns = sum(1 for s in out if s["trace_rows"])
+        print("검사 단위가 예전 정적 사실 기준인 화면(줄 번호 불일치) %d개 · 그런 행 %d" % (sum(1 for s in out if s["trace_stale_rows"]), tot["trace_stale_rows"]))
+        print("검사 단위 연결: 검사 단위가 있는 화면 %d · AS-IS 문장·진입점 행 %d 중 시나리오 연결 %d · 미해결 행 %d 중 연결 %d · 진입점 행 %d 중 연결 %d" % (ns, tot["trace_rows"], tot["trace_linked"], tot["trace_open"], tot["trace_open_linked"], tot["trace_entry"], tot["trace_entry_linked"]))
+        print("@@LINK 📄 소스 기반 시나리오 요약|Doc/asislive/_scenarios_src_summary.csv")
+
+
+if __name__ == "__main__":
+    main()

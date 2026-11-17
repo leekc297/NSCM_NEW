@@ -10,6 +10,7 @@
   한계: 코드 칸 = 후보와 가장 많이 겹치는 SEGMENT(유형마다 다름) · 덤프 시점의 행 상태 1건만 잰다
 """
 import csv, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
 from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))

@@ -1,0 +1,258 @@
+{
+ "id": "DMF0051",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0051_GET_SPREAD_TITLE",
+    "DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL"
+   ],
+   "rows": [
+    [
+     "DMF0051_GET_SPREAD_TITLE",
+     23
+    ],
+    [
+     "DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL",
+     9450
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnBPCutOff",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnBPCutOff failed: InvalidOperationException: control not found: btnBPCutOff",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0051-S8bbcf8"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 26,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0051-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 15317,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0051-Sea1449"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0051-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnOwner failed: InvalidOperationException: control not found: btnOwner",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0051-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0051-S287784"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_VersionByWaterfallPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "scenarios": [
+    "DMF0051-S8f08c9",
+    "DMF0051-Sc9b6a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrButton1",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 102,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0051-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnConfirmBP",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnReleaseSCP",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-14 13:17:59.472",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Monthly",
+  "value": "MONTHLY",
+  "text": "Monthly",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 1,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

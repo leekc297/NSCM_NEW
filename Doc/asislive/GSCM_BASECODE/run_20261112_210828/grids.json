@@ -1,0 +1,505 @@
+{
+ "id": "GSCM_BASECODE",
+ "from": "dump_find.json",
+ "total": "Total : 2",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdLevel1",
+   "path": "/splitContainer1/SplitterPanel/spdLevel1",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level1",
+     "rows": 2,
+     "cols": 9,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Base Code*"
+       ],
+       "label": "Base Code*",
+       "tag": "BaseCode",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "BaseCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Code1*"
+       ],
+       "label": "Code1*",
+       "tag": "ClsCode1",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ClsCode1",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Code2*"
+       ],
+       "label": "Code2*",
+       "tag": "ClsCode2",
+       "width": "70",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ClsCode2",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Code3*"
+       ],
+       "label": "Code3*",
+       "tag": "ClsCode3",
+       "width": "70",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ClsCode3",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Code Name*"
+       ],
+       "label": "Code Name*",
+       "tag": "CodeName",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "CodeName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "PrntCode*"
+       ],
+       "label": "PrntCode*",
+       "tag": "PrntCode",
+       "width": "150",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "PrntCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "SortOrder",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 2,
+     "data": [
+      [
+       "",
+       "0100000",
+       "01",
+       "00",
+       "000",
+       "시스템코드",
+       "       ",
+       "1",
+       "Y"
+      ],
+      [
+       "",
+       "0200000",
+       "02",
+       "00",
+       "000",
+       "메세지코드",
+       "       ",
+       "2",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdLevel2",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdLevel2",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level2",
+     "rows": 0,
+     "cols": 9,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Base Code*"
+       ],
+       "label": "Base Code*",
+       "tag": "BaseCode",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "BaseCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Code1*"
+       ],
+       "label": "Code1*",
+       "tag": "ClsCode1",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode1",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Code2*"
+       ],
+       "label": "Code2*",
+       "tag": "ClsCode2",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode2",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Code3*"
+       ],
+       "label": "Code3*",
+       "tag": "ClsCode3",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode3",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Code Name*"
+       ],
+       "label": "Code Name*",
+       "tag": "CodeName",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "CodeName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "PrntCode*"
+       ],
+       "label": "PrntCode*",
+       "tag": "PrntCode",
+       "width": "150",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "PrntCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "SortOrder",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdLevel3",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdLevel3",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level3",
+     "rows": 0,
+     "cols": 9,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Base Code*"
+       ],
+       "label": "Base Code*",
+       "tag": "BaseCode",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "BaseCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Code1*"
+       ],
+       "label": "Code1*",
+       "tag": "ClsCode1",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode1",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Code2*"
+       ],
+       "label": "Code2*",
+       "tag": "ClsCode2",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode2",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Code3*"
+       ],
+       "label": "Code3*",
+       "tag": "ClsCode3",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ClsCode3",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Code Name*"
+       ],
+       "label": "Code Name*",
+       "tag": "CodeName",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "CodeName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "PrntCode*"
+       ],
+       "label": "PrntCode*",
+       "tag": "PrntCode",
+       "width": "150",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "PrntCode",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "SortOrder",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

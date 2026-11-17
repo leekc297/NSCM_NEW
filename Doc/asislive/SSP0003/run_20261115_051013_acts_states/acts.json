@@ -1,0 +1,198 @@
+{
+ "id": "SSP0003",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 05:09:53",
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 05:10:10.244",
+  "sheet": "Shipment Change Request Confirm",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "division_id",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "FROM_SITE",
+    "label": "From Site",
+    "data_field": "from_site",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "TO_SITE",
+    "label": "To Site",
+    "data_field": "to_site",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "CHANGE_TYPE",
+    "label": "Change Type",
+    "data_field": "change_type",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "CHANGE_REQ_NO",
+    "label": "Request No",
+    "data_field": "change_req_no",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "SHIPMENT_STATUS",
+    "label": "Status",
+    "data_field": "shipment_status",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "ITEM_ID",
+    "label": "Model",
+    "data_field": "item_id",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "NICK_NAME",
+    "label": "Nick Name",
+    "data_field": "nick_name",
+    "visible": "True"
+   },
+   {
+    "index": 9,
+    "tag": "REQUEST_TITLE",
+    "label": "Title",
+    "data_field": "request_title",
+    "visible": "True"
+   },
+   {
+    "index": 10,
+    "tag": "CHANGE_REASON_CODE",
+    "label": "Change Reason",
+    "data_field": "change_reason_code",
+    "visible": "True"
+   },
+   {
+    "index": 11,
+    "tag": "REQUEST_USER_NAME",
+    "label": "Requestor",
+    "data_field": "request_user_name",
+    "visible": "True"
+   },
+   {
+    "index": 12,
+    "tag": "REQUEST_DEPT",
+    "label": "Requestor Dept Name",
+    "data_field": "request_dept",
+    "visible": "True"
+   },
+   {
+    "index": 13,
+    "tag": "REQUEST_TIME",
+    "label": "Request Date",
+    "data_field": "request_time",
+    "visible": "True"
+   },
+   {
+    "index": 14,
+    "tag": "APPROVAL_USER_NAME",
+    "label": "Approval",
+    "data_field": "approval_user_name",
+    "visible": "True"
+   },
+   {
+    "index": 15,
+    "tag": "APPROVAL_DEPT",
+    "label": "Approval Dept Name",
+    "data_field": "approval_dept",
+    "visible": "True"
+   },
+   {
+    "index": 16,
+    "tag": "DELEGATEE_USER_NAME",
+    "label": "Delegatee",
+    "data_field": "delegatee_user_name",
+    "visible": "True"
+   },
+   {
+    "index": 17,
+    "tag": "DELEGATEE_DEPT",
+    "label": "Delegatee Dept Name",
+    "data_field": "DELEGATEE_DEPT",
+    "visible": "True"
+   },
+   {
+    "index": 18,
+    "tag": "APPROVAL_TIME",
+    "label": "Approval Date",
+    "data_field": "approval_time",
+    "visible": "True"
+   },
+   {
+    "index": 19,
+    "tag": "REJECT_REASON",
+    "label": "Reject Reason",
+    "data_field": "reject_reason",
+    "visible": "True"
+   },
+   {
+    "index": 20,
+    "tag": "REQUEST_USER",
+    "label": "Requestor",
+    "data_field": "request_user",
+    "visible": "False"
+   },
+   {
+    "index": 21,
+    "tag": "APPROVAL_USER",
+    "label": "Approval",
+    "data_field": "approval_user",
+    "visible": "False"
+   },
+   {
+    "index": 22,
+    "tag": "DELEGATEE_USER",
+    "label": "Delegatee",
+    "data_field": "DELEGATEE_USER",
+    "visible": "False"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 05:10:10.253"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 23,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

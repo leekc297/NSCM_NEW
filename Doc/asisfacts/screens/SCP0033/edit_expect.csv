@@ -1,0 +1,12 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,Y,N,,잠금 (EditButton:224),,기존행 SCP0033_Shipment_semi_dept_day:224 LockColumn,,Shipment Semi Dept Day
+OPERATION_GROUP,Y,N,N,잠금 (InsertButton:209),잠금 (EditButton:224),,기존행 SCP0033_Shipment_semi_dept_day:224 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:209 LockRange,,Shipment Semi Dept Day
+ITEM_ID,Y,Y,N,,잠금 (EditButton:224),,기존행 SCP0033_Shipment_semi_dept_day:224 LockColumn,,Shipment Semi Dept Day
+NICK_NAME,Y,N,N,잠금 (InsertButton:210),잠금 (EditButton:224),,기존행 SCP0033_Shipment_semi_dept_day:224 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:210 LockRange,,Shipment Semi Dept Day
+DEPARTURE_DAY,Y,Y,Y,,,,,,Shipment Semi Dept Day
+VALID_YN,Y,Y,Y,,,,,,Shipment Semi Dept Day
+CREATED_BY,Y,N,N,잠금 (InsertButton:211),잠금 (EditButton:225),,기존행 SCP0033_Shipment_semi_dept_day:225 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:211 LockRange,,Shipment Semi Dept Day
+CREATION_DATE,Y,N,N,잠금 (InsertButton:211),잠금 (EditButton:225),,기존행 SCP0033_Shipment_semi_dept_day:225 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:211 LockRange,,Shipment Semi Dept Day
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertButton:211),잠금 (EditButton:225),,기존행 SCP0033_Shipment_semi_dept_day:225 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:211 LockRange,,Shipment Semi Dept Day
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertButton:211),잠금 (EditButton:225),,기존행 SCP0033_Shipment_semi_dept_day:225 LockColumn | 신규행 SCP0033_Shipment_semi_dept_day:211 LockRange,,Shipment Semi Dept Day
+S_VALID_YN,N,Y,Y,,,,,,Shipment Semi Dept Day

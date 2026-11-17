@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | component | 207 |
+| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | component | 210 |
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | component | 442 |
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.module.scss | component | 13 |
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | component | 147 |
@@ -22,8 +22,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | ShipmentWorkingDayOspForm.tsx:64 ShipmentWorkingDayOspInputModal.tsx:50 |
-| SCP0096/dayRange//call-proc | hook | 1 | Y | ShipmentWorkingDayOspForm.tsx:86 |
+| (useTabComboQueries) | hook | 2 | Y | ShipmentWorkingDayOspForm.tsx:65 ShipmentWorkingDayOspInputModal.tsx:50 |
+| SCP0096/dayRange//call-proc | hook | 1 | Y | ShipmentWorkingDayOspForm.tsx:89 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentWorkingDayOspInputModal.tsx:49 |
 | SCP0096/Shipment Working Day OSP//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:86 |
 | SCP0096/calendar//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:96 |
@@ -37,10 +37,10 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 134 |
-| SearchArea | onSearch | onSubmit | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 152 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 166 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 191 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 137 |
+| SearchArea | onSearch | onSubmit | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 155 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 169 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 194 |
 | g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 264 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 274 |
 | g | cellEditEnding | rangeGuardHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 289 |
@@ -109,7 +109,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SCP0096(11), SCP0019(10), SCP0010(3), DMF0014(3), DMF0048(1), DMF0021(1), SCP0120(1), SSP0025(1), SCP0025(1)
-- SP/PKG: PKG_COM0000(8), PKG_SCP0096(8), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(6), P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP(5), P_USER_ID(5), P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP(3), P_SCM0001_GET_SCP_MONTH_PERIOD(2), P_MEASURE(2), P_ACTION(1), P_DIVISION_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1)
+- SP/PKG: PKG_COM0000(8), PKG_SCP0096(8), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(6), P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP(5), P_USER_ID(5), P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP(3), P_SCM0001_GET_SCP_MONTH_PERIOD(2), FN_MULTY_TIME(2), P_MEASURE(2), P_ACTION(1), P_DIVISION_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

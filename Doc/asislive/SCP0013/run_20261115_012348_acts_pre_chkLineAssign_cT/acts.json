@@ -1,0 +1,360 @@
+{
+ "id": "SCP0013",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Line Assign 체크 시 Model을 입력해야 합니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [
+    "SCP0013_GET_PLAN_EDIT_INFO"
+   ],
+   "rows": [
+    [
+     "SCP0013_GET_PLAN_EDIT_INFO",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnLoad",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCP0013_ProductionPlanLineLoadPopup",
+     "title": "Line Load(%) Popup",
+     "modal": false,
+     "grid_rows": 52,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCP0013_PRODUCTION_PLAN_LINE_LOAD_POPUP"
+   ],
+   "scenarios": [
+    "SCP0013-Sf3eb43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0013-S7d95f9",
+    "SCP0013-S69448c",
+    "SCP0013-S8271f9",
+    "SCP0013-S5a1a8f",
+    "SCP0013-S67bbf1",
+    "SCP0013-Se946c7",
+    "SCP0013-S65a1ed",
+    "SCP0013-S8f884b",
+    "SCP0013-S589ef3",
+    "SCP0013-S54d41c",
+    "SCP0013-Saee867",
+    "SCP0013-S254d5b",
+    "SCP0013-S7b31fe",
+    "SCP0013-S7a38e2",
+    "SCP0013-Sc684ba",
+    "SCP0013-S346303",
+    "SCP0013-Sede481",
+    "SCP0013-S00ad82",
+    "SCP0013-Sd73a1d",
+    "SCP0013-S22ea04",
+    "SCP0013-S8db3bb",
+    "SCP0013-S641370",
+    "SCP0013-S14aca7",
+    "SCP0013-S6e6dad",
+    "SCP0013-S1691b9",
+    "SCP0013-Sf64d30",
+    "SCP0013-S80b35b",
+    "SCP0013-S5d3dca",
+    "SCP0013-Sbea420"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-S75f3d7",
+    "SCP0013-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-Sb00579",
+    "SCP0013-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-S5b9d5b",
+    "SCP0013-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 2575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0013-Sea1449",
+    "SCP0013-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnLoad",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "최대 조회일은 From Date + 371 입니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0013-Sf3eb43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0013-S7d95f9",
+    "SCP0013-S69448c",
+    "SCP0013-S8271f9",
+    "SCP0013-S5a1a8f"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-S75f3d7"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-Sb00579"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0013-S5b9d5b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnNew",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 35
+  },
+  {
+   "control": "btnFix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 18
+  },
+  {
+   "control": "btnNew",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 6
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 14
+  }
+ ],
+ "at": "2026-11-15 01:20:27.294",
+ "preset": {
+  "name": "chkLineAssign",
+  "token": "chkLineAssign=cT",
+  "kw": {
+   "name": "chkLineAssign",
+   "prop": "Checked",
+   "value": "True"
+  },
+  "label": "chkLineAssign 체크 켬",
+  "ok": true,
+  "error": null,
+  "applied": "prop:Checked",
+  "value": "Y",
+  "text": "Line Assign",
+  "checked": true,
+  "selected_index": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

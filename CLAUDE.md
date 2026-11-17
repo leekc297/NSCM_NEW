@@ -4,12 +4,13 @@
 > 구 전문(20KB)은 `Doc/_archive/CLAUDE_md_full_2026-10-12.md` 에 보존. 내용은 삭제되지 않았고 **계층 이동**만 했다 (§6 매핑표).
 
 ## 0. 프로젝트
-**LG Energy Solution NSCM** — AS-IS GSCM C#.NET WinForms(358 csproj / 4,162 cs / 2,771 SP) → TO-BE **React 19 + Spring Boot 3.5 + Oracle 19c**.
+**LG Energy Solution NSCM** — AS-IS GSCM C#.NET WinForms(358 csproj / 4,162 cs / 2,771 SP) → TO-BE **React 18 + Spring Boot 3.5 + Oracle 19c**.
 도메인 DM / SCM / FP / SCP / SSP / Common. 코드: `nscm-fe/` · `nscm-be/` · 분석 `Doc/_analysis/`, `_analysis/`.
+CheckList·ActionItemList 폴더 = `Doc/UI_CHECKLIST/`(2026-11-16 `Doc/CheckList` 에서 변경, 옛 경로에 쓰지 않음) · UI 테스트 Excel = `Doc/UI_TEST(SCP&SSP)/`(CheckList 생성 시 같이 생성).
 
 ## 1. 절대 원칙 (항상 적용)
 1. ⚠️ **anti-simplification** — 속도·편의를 위한 단순화 절대 금지. "모두/전체/정밀/상세" 요청 = 다중 패턴 + Cross-check. 자동화 1회 통과 채택 금지. 추출 한계는 명시. 전문: `Doc/_rules_v2/anti-simplification.md` (**T01~T21 작업 시 Read**).
-2. **디자인 그대로 구현(1순위)** → **한 사람이 개발한 것처럼**(reference 화면 DMF0004~0007 패턴 100% 동일) → **AS-IS 한 줄도 누락 없음** → **공용으로 끌어올리기**(shared default 변경 금지).
+2. **디자인 그대로 구현(1순위)** → **한 사람이 개발한 것처럼**(reference 화면 DMF0004~0006 패턴 100% 동일) → **AS-IS 한 줄도 누락 없음** → **공용으로 끌어올리기**(shared default 변경 금지).
 3. **Layer 의존 방향**: FE foundation ← shared ← features ← web / BE Controller → Service(interface) → ServiceImpl → BaseService → MyBatis.
 4. **Syntax Error 0**: Oracle 19c 컴파일 가능 / FE·BE lint + type-check + build 통과.
 5. **정직 보고**: 검증 미실행·미확인·환경 파손은 PASS 가 아니라 **ERROR** 로 보고 (hook #126). 완료는 스스로 선언하지 않는다 — 게이트 통과 증빙 첨부.
@@ -17,6 +18,7 @@
 7. **파괴적 Git 작업**(force-push / filter-branch / reset --hard) 전 사용자 승인 의무.
 8. **보완 = DB 객체 수정 우선** (사용자 상시 지시 2026-10-15). 가능하면 PKG/SP/메타 등 DB 객체로 해결한다. FE(`nscm-fe`)·BE(`nscm-be`) 직접 수정 여부는 **Vibe_Manager 환경설정 작업 모드**(`tools/Harness/harness.json` repairScope, 2026-11-02)를 따른다: **UI/DB MODE**(DB_FE) = 직접 수정 / **DB MODE**(DB_ONLY) = 직접 수정 금지, 가이드만(파일:라인 · 변경 전/후 · 이유 · 검증법 — 실행 hook `check-work-mode` 가 차단). CheckList 는 모드와 무관하게 전체 수행.
 9. **감·예측 답변 금지** (사용자 상시 지시 2026-10-31 · 룰/hook/하네스 공통, hook #126 §0-1). 수치·진행율·소요 시간·원인·결과를 감이나 예측으로 답하지 않는다. 답은 이번에 실행한 측정·로그·파일·DB 조회 결과만 인용하고 그 출처와 시각을 함께 적는다. 측정하지 못했으면 '미측정'이라고 쓰고 측정 방법을 제시한다. '~할 것으로 기대', '약 N분', 'N% 쯤' 같은 추정 표현과, 원인을 확인하지 않은 단정을 금지한다. 진행율은 분모·분자를 명시한 실측값만 쓴다(정합검증 = tools/Harness/verify/doc_proof.py 출력).
+10. **문장 규칙** (사용자 상시 지시 2026-11-13 · 답변·보고·문서·생성기 고정 문장 전부). ① 수식어를 쓰지 않는다(매우·다소·실제로·모두·반드시·정확히·다양한·적절히 등 — 정도는 수치로). ② 문맥으로 아는 주어는 뺀다('이 화면은'·'사용자는'·'시스템은' 으로 시작 금지). ③ 번역투를 쓰지 않는다('~에 대한'·'~에 의해'·'~로 인해'·'~를 통해'·'~의 경우'·'~를 수행한다'·'~를 가지고 있다'·'~하는 것이 가능하다'·'~것으로 보인다'). ④ 사람이 쓴 업무 문서처럼 쓴다(규칙 4~18): 줄표(—)·⇒·이모지·굵은 글씨로 문장을 꾸미지 않는다 · 문서 셀은 개조식(~함·~임) · 'A가 아니라 B' 틀 금지 · 접속 부사로 시작 금지 · 문서 소개·맺음 문장 금지 · 추측 어미 금지(못 확인했으면 '미확인') · 추상어 대신 화면ID·컬럼명·건수. AS-IS 원문 인용은 그대로 둔다. 전문 `~/.claude/CLAUDE.md` · 정본 `tools/VibeManager/rules/50_DOC_STYLE.md` · 검사 `tools/Docs/doc_style.py`.
 
 ## 2. 응답 모드 (속도 ↔ 누락 0 양립의 핵심)
 | 모드 | 판별 | 행동 |
@@ -34,17 +36,17 @@ Step 2  Read: Doc/_rules_consolidation/TRIGGER_ROUTER.md          (T00~T21 → �
 Step 3  해당 T# 행의 핵심 Hook 을 Doc/_rules_v2/hooks/<name>.md 에서 Read (⭐⭐⭐ 생략 불가)
 Step 4  T01/T01M 이면 Read: Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md 를 PRE-WRITE 통과  ← RULESET_MASTER §3 추출본
 ```
-- 2대 통합 진입 hook: **Oracle SP/DB 전부** → `hooks/oracle-db-workflow.md` / **화면 종료 선언 전** → `hooks/screen-completion-gate.md` (8 게이트).
+- 2대 통합 진입 hook: **Oracle SP/DB 전부** → `hooks/oracle-db-workflow.md` / **화면 종료 선언 전** → `hooks/screen-completion-gate.md` (11 게이트 G1~G11).
 - 공통 hook: 작성 직전 `hooks/pre-write.md` · 직후 `hooks/post-write.md` · 종료 직전 `hooks/pre-submit.md`.
 - 신규/수정 화면 **절대 누락 금지 3종**: `ui-dynamic-property-management`(master) → `menu-button-dynamic-fetch` → `ui-category-setup-column-meta`.
-- 전체 카탈로그(hook 한 줄 요약 153종)·카운트 단일 소스 = `RULESET_MASTER.md §4` + `00_INDEX.md §B.3` — **카탈로그가 필요할 때만** 연다. 매 작업 전문 Read 금지(토큰 150K+).
+- 전체 카탈로그(hook 한 줄 요약 156종)·카운트 단일 소스 = `RULESET_MASTER.md §4` + `00_INDEX.md §B.3` — **카탈로그가 필요할 때만** 연다. 매 작업 전문 Read 금지(토큰 150K+).
 - 경로별 상세 규약은 `.claude/rules/*.md` 가 **해당 경로 파일을 만질 때 자동 로드**된다: FE 화면 / BE / DB·SQL / 분석 산출물.
 
 ## 4. 절대 금지 (Top 11 — 요약)
 ①상대경로 import(alias 사용) ②feature 간 직접 import ③`console.log`/`System.out.println` ④`any` ⑤inline style ⑥Controller 에서 SQL 직접 ⑦`@Autowired` 필드 주입 ⑧하드코딩 SQL ID ⑨`ResponseEntity` 직접(→`successResponseEntity`) ⑩MSSQL 키워드 잔존(DATEADD/CHARINDEX/STRING_SPLIT/GETDATE/ISNULL/IIF/N'/NOLOCK) ⑪As-Is `validation.md`/`expressions.md` 1건이라도 누락(`__asis-mapping__.md` 필수).
 
 ## 5. 실행 hook (`.claude/settings.json` — AI 의지와 무관하게 자동 차단)
-`block-dev-commands`(Bash) · `check-work-mode`(Write/Edit/Bash 전 — DB MODE 에서 FE·BE 수정 차단, 2026-11-02 신설) · `check-rules-read`(Write/Edit 전 — 필수 hook 미열람 시 차단, 2026-10-12 신설) · `check-dbeaver-sql` · `check-notnull-insert` · `check-fe-import` · `check-ui-gates` · `check-meta-sql` · `check-db-fresh-source`(Write/Edit 후) · `attach-context`(프롬프트 키워드 → 룰 자동 첨부, LITE 판별 포함). 상세 `.claude/hooks/README.md`.
+`block-dev-commands`(Bash) · `check-work-mode`(Write/Edit/Bash 전 — DB MODE 에서 FE·BE 수정 차단, 2026-11-02 신설) · `check-rules-read`(Write/Edit 전 — 필수 hook 미열람 시 차단, 2026-10-12 신설) · `check-dbeaver-sql` · `check-notnull-insert` · `check-fe-import` · `check-ui-gates` · `check-meta-sql` · `check-db-fresh-source`(Write/Edit 후) · `attach-context`(프롬프트 키워드 → 룰 자동 첨부, LITE 판별 포함) · 하네스 3종(`tools/Harness/hooks` — `check-asis-harness`(Write/Edit 후 게이트) · `harness-gen-context`(프롬프트) · `harness-stop-gate`(종료 전 `--final`)). 상세 `.claude/hooks/README.md`.
 
 ## 6. 구 CLAUDE.md 섹션 → 이동 위치
 | 구 섹션 | 지금 위치 |

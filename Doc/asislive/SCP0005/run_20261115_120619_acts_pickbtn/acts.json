@@ -1,0 +1,230 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnFromSrch",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_CitybyCountry",
+    "title": "City by Country",
+    "rows": 89418
+   },
+   "picked": {
+    "sheet": "spdMain/CountryPopup",
+    "cols": [
+     "Action",
+     "COUNTRY",
+     "COUNTRY_NAME",
+     "CITY",
+     "CITY_NAME",
+     "STATE_NM",
+     "NATION_NM"
+    ],
+    "row": [
+     "",
+     "AD",
+     "ANDORRA",
+     "ADALV",
+     "ANDORRA LA VELLA, ANDORRA",
+     "",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_CitybyCountry"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_CitybyCountry",
+    "controls": [
+     {
+      "name": "txtCity",
+      "type": "UsrMultiLineEditor",
+      "label": "City",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "txtCountry",
+      "type": "UsrMultiLineEditor",
+      "label": "Country",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "CountryPopup",
+      "rows": 89418,
+      "cols": [
+       "COUNTRY",
+       "COUNTRY_NAME",
+       "CITY",
+       "CITY_NAME",
+       "STATE_NM"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "txtFromCity#0",
+     "before": "",
+     "after": "ADALV"
+    },
+    {
+     "control": "txtFromCountry#0",
+     "before": "",
+     "after": "AD"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_CITY_BY_COUNTY_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnToSrch",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_CitybyCountry",
+    "title": "City by Country",
+    "rows": 89418
+   },
+   "picked": {
+    "sheet": "spdMain/CountryPopup",
+    "cols": [
+     "Action",
+     "COUNTRY",
+     "COUNTRY_NAME",
+     "CITY",
+     "CITY_NAME",
+     "STATE_NM",
+     "NATION_NM"
+    ],
+    "row": [
+     "",
+     "AD",
+     "ANDORRA",
+     "ADALV",
+     "ANDORRA LA VELLA, ANDORRA",
+     "",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_CitybyCountry"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_CitybyCountry",
+    "controls": [
+     {
+      "name": "txtCity",
+      "type": "UsrMultiLineEditor",
+      "label": "City",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "txtCountry",
+      "type": "UsrMultiLineEditor",
+      "label": "Country",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "CountryPopup",
+      "rows": 89418,
+      "cols": [
+       "COUNTRY",
+       "COUNTRY_NAME",
+       "CITY",
+       "CITY_NAME",
+       "STATE_NM"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "txtToCity#0",
+     "before": "",
+     "after": "ADALV"
+    },
+    {
+     "control": "txtToCountry#0",
+     "before": "",
+     "after": "AD"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_CITY_BY_COUNTY_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnFromSrch": {
+   "forms": [
+    "SCM0002_CitybyCountry"
+   ],
+   "edit": false,
+   "src": "run_20261113_103838_acts"
+  },
+  "btnToSrch": {
+   "forms": [
+    "SCM0002_CitybyCountry"
+   ],
+   "edit": false,
+   "src": "run_20261113_103838_acts"
+  }
+ },
+ "at": "2026-11-15 12:04:59"
+}

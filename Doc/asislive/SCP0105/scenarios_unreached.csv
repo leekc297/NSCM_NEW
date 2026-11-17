@@ -1,0 +1,10 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0105-S93aed0,조회,AfterFindData,SCP0105_CAPA_Speed_Plan.cs:2075,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2236,SetQueryInfoGet
+SCP0105-Sc874ef,조회,AfterFindData,SCP0105_CAPA_Speed_Plan.cs:2099,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2236,SetQueryInfoGet
+SCP0105-S814d22,저장,AfterSaveData,SCP0105_CAPA_Speed_Plan.cs:2165,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2271,SetQueryInfoSave
+SCP0105-Sa72c8c,저장,AfterSaveData,SCP0105_CAPA_Speed_Plan.cs:2169,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2271,SetQueryInfoSave
+SCP0105-S698384,저장,AfterSaveData,SCP0105_CAPA_Speed_Plan.cs:2212,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2271,SetQueryInfoSave
+SCP0105-S303553,저장,AfterSaveData,SCP0105_CAPA_Speed_Plan.cs:2221,같은 파일에서 호출,SCP0105_CAPA_Speed_Plan.cs:2271,SetQueryInfoSave
+SCP0105-Seb6c4c,기타,ClearUsrCheckedList,SCP0105_CAPA_Speed_Plan.cs:1257,호출 없음,,
+SCP0105-S55a1df,저장,Insert_Row,SCP0105_CAPA_Speed_Plan.cs:2369,호출 없음,,
+SCP0105-S989da4,기타,SetBaseToDateColumns,SCP0105_CAPA_Speed_Plan.cs:2590,주석 안에서만 호출,SCP0105_CAPA_Speed_Plan.cs:2893; SCP0105_CAPA_Speed_Plan.cs:2922; SCP0105_CAPA_Speed_Plan.cs:2926,

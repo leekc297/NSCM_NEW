@@ -1,0 +1,27 @@
+{
+ "id": "SCP0108",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:03:10"
+}

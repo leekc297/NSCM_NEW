@@ -1,0 +1,121 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0005_GET_SHIPMENT_WORKING_DAY"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     441
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     2
+    ],
+    [
+     "SSP0005_GET_SHIPMENT_WORKING_DAY",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 17:47:32.353",
+ "preset": {
+  "name": "cboInputValue",
+  "token": "cboInputValue=i1",
+  "kw": {
+   "name": "cboInputValue",
+   "index": "1"
+  },
+  "label": "cboInputValue 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:N",
+  "value": "",
+  "text": "N",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

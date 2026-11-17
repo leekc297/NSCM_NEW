@@ -1,0 +1,371 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms, FarPoint Spread, TheOne FoxQuery) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 As-is 분석 작성자입니다.
+아래 '사실 묶음(Fact Pack)'은 정적 파서가 소스와 DB에서 기계적으로 추출한 것입니다. **이 묶음에 있는 사실만** 사용하고, 없는 것은 추측하지 말고 '확인 필요'로 표기하세요.
+출력은 한국어 Markdown 문서 5개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. analysis.md 에 아래 엔드포인트 4개가 **모두** 원문 그대로 등장: `SSP.SSP0020_GET_DELEGATE`, `SSP.SSP0020_SAVE_DELEGATE`, `SSP.SSP0020_SAVE_UNSET`, `SSP.UP_FX_GetSSPUserUseInfoList`
+2. analysis.md 에 아래 이벤트 핸들러 7개가 모두 등장: `chkAll_CheckStateChanged`, `Form_Load`, `BtnDelegatee_Click`, `BtnSave_Click`, `BtnUnSet_Click`, `SpdMain_SheetTabClick`, `SpdMain_CellClick`
+3. web_components.md 에 아래 시트 2개가 모두 등장: `Delegate`, `Delegated List`
+4. oracle_migration.md 에 아래 SP 4개가 모두 등장: `SSP0020_GET_DELEGATE`, `SSP0020_SAVE_DELEGATE`, `SSP0020_SAVE_UNSET`, `UP_FX_GetSSPUserUseInfoList`
+5. 주석 처리된 호출(commented_calls)은 '주석 처리됨'으로만 언급하고 현행 기능으로 쓰지 말 것.
+
+문서별 내용:
+- analysis.md: 화면 개요(ID, 도메인, 파일 구성 current/shared/legacy), 기능 흐름(진입점→메서드→엔드포인트 표), 엔드포인트 전체 표(상태·SP·참조 테이블), 이벤트 배선 표, Grid 구성 방식(`META(프레임워크) (+코드 표시/라벨 변경)`)과 division별 차이, 확인 필요 항목.
+- source_links.md: 파일 경로·줄 번호 기준 링크 표(파일, 메서드, 줄, 내용). 모든 엔드포인트 호출 지점 포함.
+- web_components.md: 컨트롤 → React/Wijmo 컴포넌트 매핑 표(라벨은 props.csv 의 LayoutControlItem.Text/컨트롤 Text 원문), 화면 배치(props.csv 의 SplitContainer Orientation·SplitterDistance·Size → 상/하·좌/우 분할 비율), 시트별 Grid 컬럼(메타 규칙 + 코드 하드코딩 + division별 표시 차이 — grid_effective 기준), 시트 연결 규칙.
+- oracle_migration.md: 호출 SP 인벤토리(참조 테이블·EXEC 체인), 공통코드 분기(code=X → 테이블), FoxQuery 미등록/직접호출 SP, Oracle 전환 시 확인 포인트. 난이도는 사실에 근거해서만.
+- tobe_design.md: 조회조건(컨트롤 기준), 액션별(버튼/이벤트) 호출 API 후보, division별 Grid 변형 요약, 권한(C/R/U/D) 관련 사실, 미확정 사항.
+
+# Fact Pack — SSP0020
+# SSP0020 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 958 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 764 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:btnSave.Click | BtnSave_Click > FindData_Main | 268 | SSP.SSP0020_GET_DELEGATE | MATCH | SP SSP0020_GET_DELEGATE |
+| event:btnSave.Click | BtnSave_Click > SaveData | 507 | SSP.SSP0020_SAVE_DELEGATE | MATCH | SP SSP0020_SAVE_DELEGATE |
+| event:btnSave.Click | BtnSave_Click > UserName_Search | 781 | SSP.UP_FX_GetSSPUserUseInfoList | MATCH | SP UP_FX_GetSSPUserUseInfoList |
+| event:btnUnSet.Click | BtnUnSet_Click > FindData_Main | 268 | SSP.SSP0020_GET_DELEGATE | MATCH | SP SSP0020_GET_DELEGATE |
+| event:btnUnSet.Click | BtnUnSet_Click > UnSet | 657 | SSP.SSP0020_SAVE_UNSET | MATCH | SP SSP0020_SAVE_UNSET |
+| event:btnUnSet.Click | BtnUnSet_Click > UnSet | 715 | SSP.SSP0020_SAVE_UNSET | MATCH | SP SSP0020_SAVE_UNSET |
+| button:FindButton | FindButton > FindData_Main | 268 | SSP.SSP0020_GET_DELEGATE | MATCH | SP SSP0020_GET_DELEGATE |
+| event:this.Load | Form_Load > FindData_Main | 268 | SSP.SSP0020_GET_DELEGATE | MATCH | SP SSP0020_GET_DELEGATE |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| SSP.SSP0020_GET_DELEGATE | MATCH | 1 | SP SSP0020_GET_DELEGATE | EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE |  |
+| SSP.SSP0020_SAVE_DELEGATE | MATCH | 1 | SP SSP0020_SAVE_DELEGATE | EXEC:SSP0020_SAVE_DELEGATE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SSP0020_SAVE_UNSET | MATCH | 2 | SP SSP0020_SAVE_UNSET | EXEC:SSP0020_SAVE_UNSET, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.UP_FX_GetSSPUserUseInfoList | MATCH | 1 | SP UP_FX_GetSSPUserUseInfoList | EXEC:UP_FX_GETSSPUSERUSEINFOLIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| <field:dtMyDivision> | UserInfoContext.Current | NowGroupID |
+| InitControls | c | CODE |
+| InitControls | dtMyDivision.Rows[i] | CODE, NAME |
+| UserName_Search | dsUserList.Tables[0].Rows[0] | UserID, UserName, UserName_E |
+| Validation_Check | row | DIVISION_ID, VALID, FROM_DATE, TO_DATE, USER_ID, DELEGATEE_ID |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| SetSheetHeaderColumn | InitSpread:199, InitSpread:207 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | BtnSave_Click:352 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.chkAll | CheckStateChanged | chkAll_CheckStateChanged | InitializeComponent:298 |
+| this | Load | Form_Load | .ctor:104 |
+| btnDelegatee | Click | BtnDelegatee_Click | InitEvent:224 |
+| btnSave | Click | BtnSave_Click | InitEvent:225 |
+| btnUnSet | Click | BtnUnSet_Click | InitEvent:226 |
+| spdMain | SheetTabClick | SpdMain_SheetTabClick | InitEvent:228 |
+| spdMain | CellClick | SpdMain_CellClick | InitEvent:229 |
+
+## 6. 컨트롤 (30개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 9 | layoutControlItem10, lblDelegatee, layoutControlItem2, layoutControlItem1, layoutControlItem6, layoutControlItem4, lcBtnUnset, lcBtnSave, layoutControlItem3 |
+| UsrButton | 5 | usrButton1, btnSave, btnUnSet, btnMeasure, btnDelegatee |
+| EmptySpaceItem | 4 | emptySpaceItem2, emptySpaceItem3, emptySpaceItem6, emptySpaceItem4 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrLabel | 1 | usrLabel1 |
+| UsrCheckBox | 1 | chkAll |
+| CheckedListBoxControl | 1 | clbDivision |
+| UsrMultiLineEditor | 1 | txtDelegatee |
+| UsrDateRangePicker | 1 | drpPeriod |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| ImageList | 1 | imageList1 |
+| Panel | 1 | panel1 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 11 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 16 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 13 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 7 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 2 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0020 | Delegate | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0020 | Delegated List | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Delegate, Delegated List
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:199, SetSheetHeaderColumn@InitSpread:207
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpread | Delegated List | 216 | 표시/라벨 변경 | set:CellType | CellType = {?chk} | CHK |  |
+| InitSpread | Delegated List | 217 | 표시/라벨 변경 | set:Value | Value = {?false} | CHK |  |
+| InitSpread | Delegated List | 218 | 표시/라벨 변경 | set:Border | Border = {?bevelbrdr} | CHK |  |
+| SpdMain_CellClick |  | 859 | 표시/라벨 변경 | set:Value | Value = {?false} |  | if(siMain.ActiveSheet.RowCount >= 1 && e.ColumnHeader) ⟫ if(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == typeof(CheckBoxCellType)) ⟫ if(Convert.ToBoolean(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].Value)) |
+| SpdMain_CellClick |  | 863 | 표시/라벨 변경 | set:Value | Value = {?true} |  | if(siMain.ActiveSheet.RowCount >= 1 && e.ColumnHeader) ⟫ if(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == typeof(CheckBoxCellType)) ⟫ else!(Convert.ToBoolean(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].Value)) |
+| InitializeComponent |  | 667 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 668 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 669 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 670 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Delegate | META+코드연결 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 |
+| Delegated List | META+코드연결 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (5 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","268","ctor","fox","SSP.SSP0020_GET_DELEGATE","SSP.SSP0020_GET_DELEGATE","MATCH","SP SSP0020_GET_DELEGATE","EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","SaveData","507","ctor","fox","SSP.SSP0020_SAVE_DELEGATE","SSP.SSP0020_SAVE_DELEGATE","MATCH","SP SSP0020_SAVE_DELEGATE","EXEC:SSP0020_SAVE_DELEGATE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UnSet","657","ctor","fox","SSP.SSP0020_SAVE_UNSET","SSP.SSP0020_SAVE_UNSET","MATCH","SP SSP0020_SAVE_UNSET","EXEC:SSP0020_SAVE_UNSET, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UnSet","715","ctor","fox","SSP.SSP0020_SAVE_UNSET","SSP.SSP0020_SAVE_UNSET","MATCH","SP SSP0020_SAVE_UNSET","EXEC:SSP0020_SAVE_UNSET, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","781","ctor","fox","SSP.UP_FX_GetSSPUserUseInfoList","SSP.UP_FX_GetSSPUserUseInfoList","MATCH","SP UP_FX_GetSSPUserUseInfoList","EXEC:UP_FX_GETSSPUSERUSEINFOLIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER","",""
+```
+
+### FILE flow.csv (8 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","this.Load","Form_Load > FindData_Main","FindData_Main","268","SSP.SSP0020_GET_DELEGATE","MATCH","SP SSP0020_GET_DELEGATE","EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnSave.Click","BtnSave_Click > FindData_Main","FindData_Main","268","SSP.SSP0020_GET_DELEGATE","MATCH","SP SSP0020_GET_DELEGATE","EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnSave.Click","BtnSave_Click > SaveData","SaveData","507","SSP.SSP0020_SAVE_DELEGATE","MATCH","SP SSP0020_SAVE_DELEGATE","EXEC:SSP0020_SAVE_DELEGATE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnSave.Click","BtnSave_Click > UserName_Search","UserName_Search","781","SSP.UP_FX_GetSSPUserUseInfoList","MATCH","SP UP_FX_GetSSPUserUseInfoList","EXEC:UP_FX_GETSSPUSERUSEINFOLIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnUnSet.Click","BtnUnSet_Click > FindData_Main","FindData_Main","268","SSP.SSP0020_GET_DELEGATE","MATCH","SP SSP0020_GET_DELEGATE","EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnUnSet.Click","BtnUnSet_Click > UnSet","UnSet","657","SSP.SSP0020_SAVE_UNSET","MATCH","SP SSP0020_SAVE_UNSET","EXEC:SSP0020_SAVE_UNSET, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","event","btnUnSet.Click","BtnUnSet_Click > UnSet","UnSet","715","SSP.SSP0020_SAVE_UNSET","MATCH","SP SSP0020_SAVE_UNSET","EXEC:SSP0020_SAVE_UNSET, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_MST_DELEGATE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","button","FindButton","FindButton > FindData_Main","FindData_Main","268","SSP.SSP0020_GET_DELEGATE","MATCH","SP SSP0020_GET_DELEGATE","EXEC:SSP0020_GET_DELEGATE, DYNAMIC@SSP0020_GET_DELEGATE"
+```
+
+### FILE events.csv (7 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","298","this.chkAll","CheckStateChanged","chkAll_CheckStateChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate",".ctor","104","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitEvent","224","btnDelegatee","Click","BtnDelegatee_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitEvent","225","btnSave","Click","BtnSave_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitEvent","226","btnUnSet","Click","BtnUnSet_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitEvent","228","spdMain","SheetTabClick","SpdMain_SheetTabClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitEvent","229","spdMain","CellClick","SpdMain_CellClick","+="
+```
+
+### FILE controls.csv (30 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","usrLabel1","GSCM.Windows.Forms.Controls.UsrLabel","usrLayoutControl2","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","btnSave","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","btnUnSet","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","chkAll","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","clbDivision","DevExpress.XtraEditors.CheckedListBoxControl","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","btnMeasure","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","btnDelegatee","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","txtDelegatee","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","drpPeriod","GSCM.Windows.Forms.Controls.UsrDateRangePicker","usrLayoutControl2","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem10","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","lblDelegatee","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","emptySpaceItem6","DevExpress.XtraLayout.EmptySpaceItem","","54"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","55"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","lcBtnUnset","DevExpress.XtraLayout.LayoutControlItem","","56"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","lcBtnSave","DevExpress.XtraLayout.LayoutControlItem","","57"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","58"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","imageList1","System.Windows.Forms.ImageList","","59"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","panel1","System.Windows.Forms.Panel","this","60"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","spdMain","FarPoint.Win.Spread.FpSpread","panel1","61"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","62"
+```
+
+### FILE props.csv (55 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","117","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","126","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","129","usrConditionPanel1","Size","new System.Drawing.Size(1192, 83)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","131","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","145","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","152","usrLayoutControl2","Size","new System.Drawing.Size(1192, 73)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","154","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","185","usrLabel1","Size","new System.Drawing.Size(59, 54)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","188","usrLabel1","Text","""Division*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","220","btnSave","Size","new System.Drawing.Size(71, 22)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","223","btnSave","Text","""SAVE"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","256","btnUnSet","Size","new System.Drawing.Size(71, 22)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","259","btnUnSet","Text","""UnSet"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","293","chkAll","Size","new System.Drawing.Size(373, 14)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","296","chkAll","Text","""All"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","309","clbDivision","Size","new System.Drawing.Size(377, 40)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","342","btnMeasure","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","378","btnDelegatee","Size","new System.Drawing.Size(38, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","414","txtDelegatee","Size","new System.Drawing.Size(170, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","453","drpPeriod","Size","new System.Drawing.Size(200, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","463","layoutControlItem10","Control","this.btnMeasure"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","468","layoutControlItem10","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","492","layoutControlGroup2","Size","new System.Drawing.Size(1192, 78)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","497","lblDelegatee","Control","this.txtDelegatee"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","502","lblDelegatee","Size","new System.Drawing.Size(255, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","503","lblDelegatee","Text","""Delegatee*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","510","layoutControlItem2","Control","this.btnDelegatee"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","515","layoutControlItem2","Size","new System.Drawing.Size(42, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","525","emptySpaceItem2","Size","new System.Drawing.Size(285, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","533","emptySpaceItem3","Size","new System.Drawing.Size(435, 32)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","539","layoutControlItem1","Control","this.chkAll"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","544","layoutControlItem1","Size","new System.Drawing.Size(377, 18)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","551","layoutControlItem6","Control","this.drpPeriod"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","556","layoutControlItem6","Size","new System.Drawing.Size(255, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","558","layoutControlItem6","Text","""Period*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","565","layoutControlItem4","Control","this.clbDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","570","layoutControlItem4","Size","new System.Drawing.Size(377, 40)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","582","emptySpaceItem6","Size","new System.Drawing.Size(42, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","591","emptySpaceItem4","Size","new System.Drawing.Size(255, 10)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","596","lcBtnUnset","Control","this.btnUnSet"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","601","lcBtnUnset","Size","new System.Drawing.Size(75, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","608","lcBtnSave","Control","this.btnSave"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","613","lcBtnSave","Size","new System.Drawing.Size(75, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","620","layoutControlItem3","Control","this.usrLabel1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","623","layoutControlItem3","Size","new System.Drawing.Size(63, 58)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","636","panel1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","639","panel1","Size","new System.Drawing.Size(1192, 566)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","645","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","650","spdMain","Size","new System.Drawing.Size(1192, 566)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","701","this","Text","""Inventory Raw(Small)"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitControls","168","txtDelegatee","Text",""""""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","793","txtDelegatee","Text","dsUserList.Tables[0].Rows[0][""UserName""].ToString()"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","795","txtDelegatee","Text","dsUserList.Tables[0].Rows[0][""UserName_E""].ToString()"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserPopup","841","txtDelegatee","Text","item.UserName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserPopup","843","txtDelegatee","Text","item.UserName_E"
+```
+
+### FILE grid_effective.csv (16 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Delegate","META+코드연결","CHK","ALL","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","DELEGATEE","Delegatee","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","FROM_DATE","From","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","TO_DATE","To","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegate","META+코드연결","VALID","Valid","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","CHK","ALL","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Delegated List","META+코드연결","DELEGATOR","Delegator","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","FROM_DATE","From","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","TO_DATE","To","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Delegated List","META+코드연결","VALID","Valid","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (27 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","181","Delegate","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Delegate ¦ Delegate ¦ 1 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","182","Delegated List","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Delegated List ¦ Delegated List ¦ 1 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMainList ¦ SpdSheet.shtMainList ¦ 1 ¦ 1 ¦ 35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","184","Delegate","SHEET","GetSheetInfo","HARDCODED","","","","{?spdMain.Name} ¦ Delegate","","","spdMain.Name ¦ SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","185","Delegate","SHEET","ChangeSheet","HARDCODED","","","","Delegate","","","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","188","Delegated List","SHEET","GetSheetInfo","HARDCODED","","","","{?spdMain.Name} ¦ Delegated List","","","spdMain.Name ¦ SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","CreateSpread","189","Delegated List","SHEET","ChangeSheet","HARDCODED","","","","Delegated List","","","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","198","Delegate","SHEET","InitSheet","HARDCODED","","","","Delegate","","if(spdInfo.SheetName == ""Delegate"")","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","199","Delegate","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spdInfo} ¦ 1","siObj,iColumnHeaderRowCount","if(spdInfo.SheetName == ""Delegate"")","spdInfo ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","206","Delegated List","SHEET","InitSheet","HARDCODED","","","","Delegated List","","else!(spdInfo.SheetName == ""Delegate"") ⟫ if(spdInfo.SheetName == ""Delegated List"")","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","207","Delegated List","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spdInfo} ¦ 1","siObj,iColumnHeaderRowCount","else!(spdInfo.SheetName == ""Delegate"") ⟫ if(spdInfo.SheetName == ""Delegated List"")","spdInfo ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","216","Delegated List","OVERRIDE","set:CellType","EXPR","","","CHK","{?chk}","CellType","","chk"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","217","Delegated List","OVERRIDE","set:Value","EXPR","","","CHK","{?false}","Value","","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitSpread","218","Delegated List","OVERRIDE","set:Border","EXPR","","","CHK","{?bevelbrdr}","Border","","bevelbrdr"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","290","Delegate","SHEET","ChangeSheet","HARDCODED","","","","Delegate","","if(dsBinding.Tables[0].Rows.Count > 0)","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","291","Delegate","SHEET","ChangeActiveSheet","HARDCODED","","","","Delegate","sSheetName","if(dsBinding.Tables[0].Rows.Count > 0)","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","299","Delegated List","SHEET","ChangeSheet","HARDCODED","","","","Delegated List","","if(dsBinding.Tables[1].Rows.Count > 0 && isReLoad == false)","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","300","Delegated List","SHEET","ChangeActiveSheet","HARDCODED","","","","Delegated List","sSheetName","if(dsBinding.Tables[1].Rows.Count > 0 && isReLoad == false)","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","312","Delegate","SHEET","ChangeSheet","HARDCODED","","","","Delegate","","if(intActiveSheetIdx == 0)","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","313","Delegate","SHEET","ChangeActiveSheet","HARDCODED","","","","Delegate","sSheetName","if(intActiveSheetIdx == 0)","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","317","Delegated List","SHEET","ChangeSheet","HARDCODED","","","","Delegated List","","else!(intActiveSheetIdx == 0)","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","FindData_Main","318","Delegated List","SHEET","ChangeActiveSheet","HARDCODED","","","","Delegated List","sSheetName","else!(intActiveSheetIdx == 0)","SpdSheet.shtMainList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","SpdMain_CellClick","859","","OVERRIDE","set:Value","EXPR","","","","{?false}","Value","if(siMain.ActiveSheet.RowCount >= 1 && e.ColumnHeader) ⟫ if(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == typeof(CheckBoxCellType)) ⟫ if(Convert.ToBoolean(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].Value))","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","SpdMain_CellClick","863","","OVERRIDE","set:Value","EXPR","","","","{?true}","Value","if(siMain.ActiveSheet.RowCount >= 1 && e.ColumnHeader) ⟫ if(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == typeof(CheckBoxCellType)) ⟫ else!(Convert.ToBoolean(siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].Value))","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","667","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","668","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","669","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.Designer.cs","SSP0020_Delegate","InitializeComponent","670","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (27 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","<field:dtMyDivision>","52","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitControls","137","c","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitControls","160","dtMyDivision.Rows[i]","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","InitControls","160","dtMyDivision.Rows[i]","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","417","row","DIVISION_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","418","row","VALID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","419","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","420","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","421","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","422","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","431","row","DIVISION_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","432","row","VALID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","433","row","USER_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","434","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","435","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","436","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","437","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","445","row","DIVISION_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","446","row","VALID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","447","row","DELEGATEE_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","448","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","449","row","FROM_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","450","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","Validation_Check","451","row","TO_DATE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","791","dsUserList.Tables[0].Rows[0]","UserID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","793","dsUserList.Tables[0].Rows[0]","UserName","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0020_Delegate.cs","SSP0020_Delegate","UserName_Search","795","dsUserList.Tables[0].Rows[0]","UserName_E","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

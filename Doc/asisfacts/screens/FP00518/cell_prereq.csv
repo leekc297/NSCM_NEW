@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+TRANSPORT_MODE,,ITEM_ID,ALL,ROW,"MessageHelper.GMessageBox(""MSG00086"", new object[] { sMsg2 })",try ▸ if (siMain.ActiveSheet.Columns[CAppSetting.StringAction].Visible),FP00518_Shipping_Plan.cs:1395 FP00518_Shipping_Plan.spdMain_CellClick

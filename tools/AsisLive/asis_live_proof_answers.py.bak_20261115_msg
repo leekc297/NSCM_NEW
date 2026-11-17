@@ -1,0 +1,148 @@
+# -*- coding: utf-8 -*-
+"""asis_live_proof_answers.py — 런처 몫 미증명 항목(_proof_live_targets.csv)마다 AS-IS 런처 실행 결과(정답)가 있는지 연결한다 (2026-11-15, 27화면 미검증·미판단 0 작업)
+
+입력  Doc/asislive/_proof_live_targets.csv (asis_live_proof_targets.py 출력)
+      Doc/asislive/<ID>/run_*_acts_*/acts.json (asis_live_scen_run.py --states · --pick · --insert · --violate · --cells · 버튼 실행)
+      Doc/asislive/<ID>/run_*/grids.json (기본 실행 덤프) · overlap.json 있는 폴더는 뺀다(다른 화면 실행과 겹친 기록)
+출력  Doc/asislive/_proof_live_answers.csv  (화면 × 사유 종류: 건수 · 정답 상태 · 근거 폴더 · 관찰 요약)
+상태  정답 있음        = 그 종류에 맞는 실행을 했고 관찰값이 있음(잠금·색, 팝업 고른 뒤 바뀐 셀, 늘어난 행, 검증 메시지, 호출 SP)
+      실행·관찰 없음   = 실행했으나 관찰값이 없음(팝업이 안 열림, 행이 안 늘어남 등). 그 자체가 AS-IS 사실이므로 근거로 남긴다
+      미실행          = 맞는 실행 기록 없음
+한계  화면 단위로 연결한다. 검사 단위 1건과 셀·열 1개를 짝짓는 일은 검증 엔진 쪽 입력(asis_live_ingest)에서 한다.
+
+  python tools/AsisLive/asis_live_proof_answers.py [ID …]
+"""
+import csv, glob, json, os, sys, time, collections
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+try: sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception: pass
+P = lambda *a: os.path.join(ROOT, *a)
+
+# 사유 종류 → 근거가 되는 실행 종류(acts 폴더 이름 끝)
+NEED = {
+    "편집 불가 셀": ["states", "states_edit", "insert", "violate"],
+    "행 조건 계산": ["states", "states_edit"],
+    "팝업 값 반영": ["pick", "pick_edit", "pickbtn", "pickbtn_edit"],          # 11-15 pickbtn = 버튼·조회 조건 팝업(M4 BTN·COND)
+    "팝업 사용처": ["pick", "pick_edit", "cell", "cell_edit", "pickbtn", "pickbtn_edit"],
+    "팝업 내부": ["pick", "pick_edit", "pickbtn", "pickbtn_edit"],
+    "팝업·셀 이벤트 호출": ["pick", "pick_edit", "cell", "cell_edit", "pickbtn", "pickbtn_edit"],
+    "차등 검증 인자": ["pick", "pick_edit", "cell", "cell_edit", "cond", "acts", "pickbtn", "pickbtn_edit"],
+    "신규행 전제": ["insert", "violate"],
+    "검증 위반 입력": ["violate"],
+    "저장 밖 경로 메시지": ["acts", "edit"],
+    "동작 재현 시나리오": ["acts", "edit"],
+    "분기 해석": ["pick_edit", "states_edit", "acts", "edit"],
+    "그리드에 없는 컬럼": ["dump"],
+    "조건 데이터 없음": ["cond", "pre"],
+}
+
+
+def kind_of(dirname):
+    b = os.path.basename(dirname)
+    if "_acts" not in b: return "dump"
+    t = b.split("_acts", 1)[1].lstrip("_")
+    if t == "": return "acts"
+    if t.startswith("pre_") or t.startswith("div"): return "pre"
+    return t
+
+
+def observe(k, j):
+    """실행 1건의 관찰 요약과 관찰값 유무"""
+    acts = j.get("acts") or []
+    if k in ("states", "states_edit"):
+        st = j.get("cellstate") or {}; sm = j.get("summary") or {}
+        if not st: return False, j.get("error") or j.get("note") or "셀 상태 없음"
+        return True, "%s행×%s열 잠김 %s 열림 %s · 행마다 잠금 다른 열 %d" % (sm.get("rows"), sm.get("cols"), sm.get("locked_cells"), sm.get("open_cells"), len(sm.get("cols_lock_varies_by_row") or []))
+    if k in ("pickbtn", "pickbtn_edit"):
+        pops = [a for a in acts if a.get("popup") and a["popup"].get("form")]
+        if not acts: return False, j.get("error") or j.get("note") or "실행 없음"
+        picked = [a for a in pops if (a.get("pick_act") or {}).get("ok") or a.get("pick_button")]
+        return bool(picked), "버튼 %d 중 팝업 %d · 고름 %d · 바뀐 조건 %s" % (len(acts), len(pops), len(picked), ", ".join("%s→%s" % (a["control"], ",".join(x["control"] for x in a.get("cond_changes") or [])[:60] or "-") for a in picked)[:200])
+    if k in ("pick", "pick_edit"):
+        pops = [a for a in acts if a.get("popup")]; chg = [a for a in pops if a.get("grid_changes")]
+        if not acts: return False, j.get("error") or j.get("note") or "실행 없음"
+        return bool(pops), "열 %d 중 팝업 %d · 고른 뒤 셀 변화 %d (%s)" % (len(acts), len(pops), len(chg), ", ".join("%s→%s" % (a["control"], a["popup"]["form"]) for a in pops)[:200])
+    if k in ("insert", "violate"):
+        # 11-15: 수정 모드 뒤 행 추가(insert · after_edit) · 상세 시트 행 추가(insert_detail) 우선, 수정 모드 없이 누른 결과(insert_no_edit)는 참고
+        isrc = j.get("insert_src") or {}
+        if not isrc and j.get("id"):
+            try:
+                import asis_live_scen_run as _S; isrc = _S.insert_targets(j["id"])   # 11-15 이전 실행: 원문 분석을 지금 수행
+            except Exception: isrc = {}
+        ins = [a for a in acts if a.get("kind") in ("insert", "insert_detail")] or [a for a in acts if a.get("kind") == "insert_no_edit"]
+        sv = [a for a in acts if a.get("kind") in ("save_violate", "save_violate_detail")]
+        if isrc and not isrc.get("exists"):
+            return True, "AS-IS 행 추가 기능 없음(%s) · 런처 행 추가 결과 %s" % (isrc.get("evidence"), ({x: len(v) for x, v in (ins[0].get("new_rows") or {}).items()} or 0) if ins else "실행 없음")
+        if not ins: return False, j.get("error") or j.get("note") or "실행 없음"
+        parts = []
+        for a in ins:
+            nr = a.get("new_rows") or {}; msg = [d.get("text", "")[:50] for d in a.get("dialogs") or []]
+            parts.append("%s늘어난 행 %s · 메시지 %s" % (("%s " % a["target"]) if a.get("target") else "", {x: len(v) for x, v in nr.items()} or 0, msg or 0))
+        s = " / ".join(parts)
+        for x in sv: s += " · 빈 새 행 저장 메시지 %s · 호출 %s" % ([d.get("text", "")[:50] for d in x.get("dialogs") or []] or 0, x.get("calls") or 0)
+        # "수정모드가 아니므로" 만 받은 행 추가 = 실행기가 수정 모드를 켜지 않은 결과(11-15 이전 실행) → 정답 아님
+        blocked = lambda a: not a.get("new_rows") and all("수정모드" in (d.get("text") or "") for d in a.get("dialogs") or [])
+        ok = any((a.get("new_rows") or a.get("dialogs")) and not blocked(a) for a in ins if a.get("kind") != "insert_no_edit")
+        return ok, s
+    if k == "dump":
+        return True, "기본 실행 덤프"
+    n_calls = sum(len(a.get("calls") or []) for a in acts); n_dlg = sum(len(a.get("dialogs") or []) for a in acts); n_pop = sum(len(a.get("popups") or []) for a in acts)
+    return bool(acts) and (n_calls + n_dlg + n_pop) > 0, "동작 %d · 호출 %d · 메시지 %d · 팝업 %d" % (len(acts), n_calls, n_dlg, n_pop)
+
+
+def runs(mid):
+    out = collections.defaultdict(list)
+    for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*"))):
+        if not os.path.isdir(d) or os.path.exists(os.path.join(d, "overlap.json")): continue
+        k = kind_of(d)
+        if k == "dump":
+            if os.path.exists(os.path.join(d, "grids.json")): out["dump"].append((d, True, "기본 실행 덤프"))
+            continue
+        f = os.path.join(d, "acts.json")
+        if not os.path.exists(f): continue
+        try: j = json.load(open(f, encoding="utf-8"))
+        except Exception: continue
+        ok, s = observe(k, j); out[k].append((d, ok, s))
+    return out
+
+
+def _excluded():
+    try:
+        import asis_live_batch as _B; return set(_B.EXCLUDED)
+    except Exception: return set()
+
+
+def main():
+    ids = [a.upper() for a in sys.argv[1:] if not a.startswith("-")]
+    src = P("Doc", "asislive", "_proof_live_targets.csv")
+    if not os.path.exists(src): print("[ERROR] %s 없음. asis_live_proof_targets.py 먼저" % src); return 3
+    agg = collections.Counter()
+    for r in csv.DictReader(open(src, encoding="utf-8-sig")):
+        if r["owner"] != "런처" or (ids and r["menu_id"] not in ids): continue
+        agg[(r["menu_id"], r["kind"])] += int(r["count"] or 0)
+    cache = {}; rows = []; tot = collections.Counter()
+    for (mid, k), n in sorted(agg.items()):
+        if mid not in cache: cache[mid] = runs(mid)
+        rr = []
+        for need in NEED.get(k, []): rr += cache[mid].get(need, [])
+        good = [x for x in rr if x[1]]
+        st = "정답 있음" if good else ("실행·관찰 없음" if rr else "미실행")
+        if not good and mid in _excluded():
+            st = "런처 제외"; rr = [(P("Doc", "asislive"), False, "런처 대상 아님: asis_live_batch.EXCLUDED(소스 없음·미사용 예정, 사용자 결정 2026-11-12) · 다른 증명 경로 필요")]
+        pick = (good or rr)[-1] if rr else None
+        rows.append([mid, k, n, st, os.path.relpath(pick[0], ROOT).replace("\\", "/") if pick else "", pick[2] if pick else "", len(rr)])
+        tot[st] += n
+    out = P("Doc", "asislive", "_proof_live_answers.csv")
+    with open(out, "w", encoding="utf-8-sig", newline="") as fo:
+        w = csv.writer(fo); w.writerow(["menu_id", "kind", "count", "state", "evidence", "observed", "runs"]); w.writerows(rows)
+    print("[실측 %s] 화면 %d · 런처 몫 %d건: %s" % (time.strftime("%Y-%m-%d %H:%M"), len(cache), sum(agg.values()), ", ".join("%s %d" % kv for kv in tot.most_common())))
+    bk = collections.defaultdict(collections.Counter)
+    for mid, k, n, st, *_ in rows: bk[k][st] += n
+    for k in sorted(bk, key=lambda x: -sum(bk[x].values())): print("  %s: %s" % (k, ", ".join("%s %d" % kv for kv in bk[k].most_common())))
+    print("@@LINK 📂 런처 정답 연결|%s" % out)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

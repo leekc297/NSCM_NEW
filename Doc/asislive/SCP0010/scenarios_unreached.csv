@@ -1,0 +1,23 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0010-Se3ea39,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5101,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-Sf75ae8,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5108,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-S3062f3,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5128,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-S10fc78,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5135,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-S6198d9,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5161,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-Sbdca8a,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5177,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-S946751,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5184,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-Scc83dd,기타,SetCalcMeasure,SCP0010_Shipment_Plan_SEMI.cs:5217,같은 파일에서 호출,SCP0010_Shipment_Plan_SEMI.cs:1988; SCP0010_Shipment_Plan_SEMI.cs:1995,HandleBindingDataSet
+SCP0010-Sbf4efb,조회,GetDivision,SCP0010_Shipment_Plan_SEMI.cs:4583,호출 없음,SCP0010_Shipment_Plan_SEMI.cs:66,
+SCP0010-S1d7d4f,조회,GetLastPlanVersion,SCP0010_Shipment_Plan_SEMI.cs:832,호출 없음,,
+SCP0010-S0af853,조회,GetLastPlanVersion,SCP0010_Shipment_Plan_SEMI.cs:851,호출 없음,,
+SCP0010-S96bd28,초기,InitSpread,SCP0010_Shipment_Plan_SEMI.cs:407,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:991; SCP0010_Shipment_Plan_SEMI.cs:4746; SCP0010_Shipment_Plan_SEMI.cs:4757,
+SCP0010-Sd2f3b0,기타,SetChangedPeriod,SCP0010_Shipment_Plan_SEMI.cs:4596,호출 없음,,
+SCP0010-Sb69d72,기타,SetChangedPeriod,SCP0010_Shipment_Plan_SEMI.cs:4600,호출 없음,,
+SCP0010-Sc2c5b0,기타,SetChangedPeriod,SCP0010_Shipment_Plan_SEMI.cs:4607,호출 없음,,
+SCP0010-S22c226,저장,Set_InsertColumnsFont,SCP0010_Shipment_Plan_SEMI.cs:3848,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:903; SCP0010_Shipment_Plan_SEMI.cs:925,
+SCP0010-S5ffe94,저장,Set_InsertColumnsFont,SCP0010_Shipment_Plan_SEMI.cs:3852,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:903; SCP0010_Shipment_Plan_SEMI.cs:925,
+SCP0010-Sd01f57,기타,TotalCellsMerge,SCP0010_Shipment_Plan_SEMI.cs:1650,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:1085,
+SCP0010-S226b80,기타,TotalCellsMerge,SCP0010_Shipment_Plan_SEMI.cs:1656,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:1085,
+SCP0010-S2b563e,기타,TotalCellsMerge,SCP0010_Shipment_Plan_SEMI.cs:1687,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:1085,
+SCP0010-S2d4777,기타,TotalCellsMerge,SCP0010_Shipment_Plan_SEMI.cs:1693,주석 안에서만 호출,SCP0010_Shipment_Plan_SEMI.cs:1085,
+SCP0010-Seff0c0,기타,spdMain_TopChange,SCP0010_Shipment_Plan_SEMI.cs:4456,호출 없음,,

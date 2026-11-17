@@ -2,6 +2,7 @@ package com.lgcns.nscm.admin.user;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +38,19 @@ class UserServiceImplTest {
         } else {
             fail("DB에 테스트용 유저가 존재하지 않습니다. ID를 확인하세요.");
         }
+    }
+
+    @Test
+    @DisplayName("DB 연동: 미등록 사용자 조회 시 예외 없이 null 을 반환한다")
+    void retrieveUserReturnsNullWhenNotFound() throws Exception {
+        // given: SCM_ADM_USER_M / SCM_MST_SSO_USER_INFO 어디에도 없는 사번
+        String unknownUserId = "__NO_SUCH_USER_9999__";
+
+        // when
+        User user = userService.retrieveUser(unknownUserId);
+
+        // then
+        assertNull(user);
     }
 
     @Test

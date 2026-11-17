@@ -1,0 +1,141 @@
+{
+ "id": "FP00611",
+ "started": "2026-11-12 19:01:56.136",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:01:56.403",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00611_PlanBy_Line_Assy",
+   "form_text": "Plan By Line(Assy)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00611_PlanBy_Line_Assy.UIL.dll",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:03.243"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:02:06.823",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00611\\run_20261112_190156\\dump_load.json",
+   "control_count": 109,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:06.843"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:02:07.007",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00611\\run_20261112_190156\\shots\\FP00611_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:07.186"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:02:07.660",
+   "call_timed_out": false,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:08.542"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:02:20.762",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00611\\run_20261112_190156\\dump_find.json",
+   "control_count": 109,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "DB : 8.016s, UI : 0.001s",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:20.774"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:02:21.083",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00611\\run_20261112_190156\\shots\\FP00611_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:21.279"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:02:21.614",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:02:22.227"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 63,
+  "calls_with_params": 63
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00611_PlanBy_Line_Assy",
+  "form_text": "Plan By Line(Assy)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00611_PlanBy_Line_Assy.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 8.016s, UI : 0.001s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:01:56.344",
+ "t_find": "2026-11-12 19:02:07.307",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 109,
+  "layout_items": 24,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 21,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 63,
+  "calls_screen": 63,
+  "calls_find": 34,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:28.543",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:28"
+}

@@ -1,0 +1,721 @@
+﻿// AsisLive.Host — AS-IS GSCM 런처를 프로세스 안에서 구동하는 호스트 (2026-11-12 · 승인 플랜 velvet-conjuring-lake P0)
+//   · Program.Main 과 똑같이 ApplicationStart.Run() 을 부르되, 그 전에 명령 처리 스레드를 띄운다.
+//   · AS-IS 소스·csproj 는 수정하지 않는다. 모든 접근은 리플렉션(컴파일 시 GSCM/DevExpress/FarPoint 참조 없음).
+//   · 명령: <cmddir>\NNN.req (첫 줄 = 명령, 이후 key=value) → <cmddir>\NNN.res.json
+//   · 비밀번호는 읽지도 입력하지도 않는다(login = 로그인 창의 OK 버튼만 누름).
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Web.Script.Serialization;
+using System.Windows.Forms;
+
+static class AsisLiveHost
+{
+    static string cmdDir;
+    static readonly List<Dictionary<string, object>> dialogs = new List<Dictionary<string, object>>();
+    static readonly object dlgLock = new object();
+    static volatile string dialogPolicy = "default"; // default = 기본 버튼 · hold = 누르지 않고 기록만
+    const BindingFlags BF = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy;
+
+    [STAThread]
+    static int Main(string[] args)
+    {
+        for (int i = 0; i < args.Length - 1; i++) if (args[i] == "--cmddir") cmdDir = args[i + 1];
+        if (string.IsNullOrEmpty(cmdDir)) { MessageBox.Show("usage: AsisLive.Host.exe --cmddir <dir>"); return 2; }
+        Directory.CreateDirectory(cmdDir);
+        new Thread(AgentLoop) { IsBackground = true, Name = "AsisLive.Agent" }.Start();
+        new Thread(DialogLoop) { IsBackground = true, Name = "AsisLive.Dialogs" }.Start();
+        try
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Assembly asm = Assembly.Load("GSCM.Windows.Forms");
+            object start = Activator.CreateInstance(asm.GetType("GSCM.Windows.Forms.ApplicationStart", true));
+            start.GetType().GetMethod("Run", Type.EmptyTypes).Invoke(start, null);
+        }
+        catch (Exception ex)
+        {
+            File.WriteAllText(Path.Combine(cmdDir, "_host_error.txt"), ex.ToString(), Encoding.UTF8);
+            return 1;
+        }
+        return 0;
+    }
+
+    // ───────────────────────── 명령 루프 ─────────────────────────
+    static void AgentLoop()
+    {
+        var js = new JavaScriptSerializer { MaxJsonLength = int.MaxValue, RecursionLimit = 64 };
+        File.WriteAllText(Path.Combine(cmdDir, "_ready.txt"), DateTime.Now.ToString("o"));
+        while (true)
+        {
+            try
+            {
+                string req = Directory.GetFiles(cmdDir, "*.req").OrderBy(f => f).FirstOrDefault();
+                if (req == null) { Thread.Sleep(150); continue; }
+                string[] lines; try { lines = File.ReadAllLines(req, Encoding.UTF8); } catch { Thread.Sleep(100); continue; }
+                var a = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var l in lines.Skip(1)) { int k = l.IndexOf('='); if (k > 0) a[l.Substring(0, k).Trim()] = l.Substring(k + 1); }
+                string cmd = lines.Length > 0 ? lines[0].Trim() : "";
+                var res = new Dictionary<string, object> { { "cmd", cmd }, { "at", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") } };
+                try { Exec(cmd, a, res); if (!res.ContainsKey("ok")) res["ok"] = true; }
+                catch (Exception ex) { var e = ex is TargetInvocationException && ex.InnerException != null ? ex.InnerException : ex; res["ok"] = false; res["error"] = e.GetType().Name + ": " + e.Message; }
+                res["done"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string outp = Path.ChangeExtension(req, ".res.json");
+                File.WriteAllText(outp + ".tmp", js.Serialize(res), new UTF8Encoding(false));
+                File.Delete(req);
+                if (File.Exists(outp)) File.Delete(outp);
+                File.Move(outp + ".tmp", outp);
+                if (cmd == "quit") { Thread.Sleep(200); Environment.Exit(0); }
+            }
+            catch { Thread.Sleep(300); }
+        }
+    }
+
+    static int Int(Dictionary<string, string> a, string k, int d) { string v; int n; return a.TryGetValue(k, out v) && int.TryParse(v, out n) ? n : d; }
+    static string Str(Dictionary<string, string> a, string k, string d) { string v; return a.TryGetValue(k, out v) ? v : d; }
+
+    static void Exec(string cmd, Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        switch (cmd)
+        {
+            case "ping": res["pid"] = System.Diagnostics.Process.GetCurrentProcess().Id; res["forms"] = FormNames(); break;
+            case "policy": dialogPolicy = Str(a, "dialogs", "default"); res["dialogs"] = dialogPolicy; break;
+            case "login": Login(a, res); break;
+            case "wait_main": WaitMain(a, res); break;
+            case "open": Open(a, res); break;
+            case "find": Find(a, res); break;
+            case "wait_idle": WaitIdle(a, res); break;
+            case "dump": Dump(a, res); break;
+            case "shot": Shot(a, res); break;
+            case "set": SetValue(a, res); break;
+            case "popup_pick": PopupPick(a, res); break;
+            case "group": Group(a, res); break;
+            case "act": Act(a, res); break;
+            case "sweep": Sweep(a, res); break;
+            case "maximize": { var mf = MainForm(); if (mf == null) throw new InvalidOperationException("main form not ready"); res["state"] = OnUi(mf, () => { mf.WindowState = FormWindowState.Maximized; return mf.WindowState.ToString(); }); Thread.Sleep(800); res["size"] = OnUi(mf, () => mf.Width + "x" + mf.Height); break; }
+            case "dialogs": { int from = Int(a, "from", 0); lock (dlgLock) res["dialogs"] = dialogs.Skip(from).ToList(); break; }
+            case "menu": { var mf = MainForm(); if (mf == null) throw new InvalidOperationException("main form not ready");
+                res["items"] = OnUi(mf, () => { var l = new List<object>(); var e = Get(mf, "GSCMMenuItem") as IEnumerable; if (e != null) foreach (var x in e) l.Add(new Dictionary<string, object> { { "program_id", S(Get(x, "ProgramId")) }, { "menu_id", S(Get(x, "Id")) }, { "title", S(Get(x, "Title")) }, { "url", S(Get(x, "Url")) }, { "class_name", S(Get(x, "ClassName")) }, { "path", S(Get(x, "NavigatePath")) } }); return l; }); break; }
+            case "close_screen": { var mf = MainForm(); if (mf == null) throw new InvalidOperationException("main form not ready");
+                bool to; int left = OnUi(mf, () => { foreach (var c in mf.MdiChildren.ToArray()) { try { c.Close(); } catch { } } return mf.MdiChildren.Length; }, Int(a, "timeout", 30) * 1000, out to);
+                res["close_timed_out"] = to; Thread.Sleep(500); res["open_screens"] = to ? -1 : OnUi(mf, () => mf.MdiChildren.Length); break; }
+            case "quit": break;
+            default: throw new ArgumentException("unknown command: " + cmd);
+        }
+        lock (dlgLock) res["dialog_count"] = dialogs.Count;
+    }
+
+    // ───────────────────────── UI 스레드 실행 도우미 ─────────────────────────
+    static Form[] OpenFormsSnapshot() { try { return Application.OpenForms.Cast<Form>().ToArray(); } catch { return new Form[0]; } }
+    static List<string> FormNames() { return OpenFormsSnapshot().Select(f => f.GetType().Name).ToList(); }
+    static Form FindForm(string typeName) { return OpenFormsSnapshot().FirstOrDefault(f => f.GetType().Name == typeName && f.IsHandleCreated); }
+    static Form MainForm()
+    {
+        var t = Type.GetType("GSCM.Windows.Forms.GSCM_MainForm, GSCM.Windows.Forms", false);
+        if (t == null) return null;
+        var f = t.GetField("Instance", BF); var m = f == null ? null : f.GetValue(null) as Form;
+        return m != null && m.IsHandleCreated ? m : null;
+    }
+    // UI 스레드에서 실행하고 timeoutMs 안에 끝나지 않으면 timedOut=true (모달 대화상자에 막힌 경우)
+    static T OnUi<T>(Control c, Func<T> fn, int timeoutMs, out bool timedOut)
+    {
+        T val = default(T); Exception err = null; var done = new ManualResetEvent(false);
+        c.BeginInvoke((MethodInvoker)delegate { try { val = fn(); } catch (Exception ex) { err = ex; } finally { done.Set(); } });
+        timedOut = !done.WaitOne(timeoutMs);
+        if (err != null) throw err;
+        return val;
+    }
+    static T OnUi<T>(Control c, Func<T> fn) { bool to; var v = OnUi(c, fn, 60000, out to); if (to) throw new TimeoutException("UI thread busy (modal dialog?)"); return v; }
+    static object Get(object o, string name)
+    {
+        if (o == null) return null;
+        for (var t = o.GetType(); t != null; t = t.BaseType)
+        {
+            var p = t.GetProperty(name, BF | BindingFlags.DeclaredOnly, null, null, Type.EmptyTypes, null); if (p != null) { try { return p.GetValue(o, null); } catch { return null; } }
+            var f = t.GetField(name, BF | BindingFlags.DeclaredOnly); if (f != null) return f.GetValue(o);
+        }
+        return null;
+    }
+    static object Call(object o, string name, params object[] args)
+    {
+        var ms = o.GetType().GetMethods(BF).Where(m => m.Name == name && m.GetParameters().Length == args.Length).ToArray();
+        foreach (var m in ms)
+        {
+            var ps = m.GetParameters(); bool ok = true;
+            for (int i = 0; i < ps.Length; i++) if (args[i] != null && !ps[i].ParameterType.IsInstanceOfType(args[i])) { ok = false; break; }
+            if (ok) return m.Invoke(o, args);
+        }
+        throw new MissingMethodException(o.GetType().Name + "." + name + "/" + args.Length);
+    }
+    static string S(object o) { return o == null ? null : Convert.ToString(o); }
+
+    // ───────────────────────── 명령 구현 ─────────────────────────
+    static void Login(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        int timeout = Int(a, "timeout", 60); var until = DateTime.Now.AddSeconds(timeout); Form lf = null;
+        while (DateTime.Now < until && (lf = FindForm("LogInForm")) == null) { if (MainForm() != null) { res["note"] = "main already open"; return; } Thread.Sleep(200); }
+        if (lf == null) throw new TimeoutException("LogInForm not shown");
+        Thread.Sleep(500);
+        res["userId"] = OnUi(lf, () => { var c = lf.Controls.Find("txtUserID", true).FirstOrDefault(); return c == null ? null : c.Text; });
+        bool to;
+        OnUi<object>(lf, () => { var b = lf.Controls.Find("btnOK", true).FirstOrDefault(); if (b == null) throw new InvalidOperationException("btnOK not found"); Call(b, "PerformClick"); return null; }, timeout * 1000, out to);
+        res["click_timed_out"] = to;
+    }
+
+    static void WaitMain(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        int timeout = Int(a, "timeout", 180); var until = DateTime.Now.AddSeconds(timeout); Form m = null;
+        while (DateTime.Now < until) { m = MainForm(); if (m != null && m.Visible) break; m = null; Thread.Sleep(300); }
+        if (m == null) throw new TimeoutException("main form not ready; forms=" + string.Join(",", FormNames()));
+        Thread.Sleep(Int(a, "settle", 3) * 1000);
+        var mm = m;
+        res["title"] = OnUi(mm, () => mm.Text);
+        res["user"] = OnUi(mm, () => S(Get(Get(mm, "tsLblUser"), "Text")));
+        res["menu_count"] = OnUi(mm, () => { var l = Get(mm, "GSCMMenuItem") as IEnumerable; int n = 0; if (l != null) foreach (var x in l) n++; return n; });
+    }
+
+    static void Open(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        string id = Str(a, "id", ""); if (id == "") throw new ArgumentException("id required");
+        int timeout = Int(a, "timeout", 120); var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        bool known = OnUi(m, () => { var l = Get(m, "GSCMMenuItem") as IEnumerable; if (l != null) foreach (var x in l) if (S(Get(x, "ProgramId")) == id) return true; return false; });
+        res["in_menu"] = known;
+        if (!known) throw new InvalidOperationException("ProgramID not in this user's menu: " + id);
+        int before = OnUi(m, () => m.MdiChildren.Length);
+        bool to; OnUi<object>(m, () => { Call(m, "OpenUserMenu", id); return null; }, timeout * 1000, out to);
+        res["open_timed_out"] = to;
+        var until = DateTime.Now.AddSeconds(timeout); Form child = null;
+        while (DateTime.Now < until)
+        {
+            child = OnUi(m, () => m.ActiveMdiChild);
+            if (child != null && OnUi(m, () => m.MdiChildren.Length) > before) break;
+            if (child != null && before > 0 && OnUi(m, () => child.GetType().Name).StartsWith(id, StringComparison.OrdinalIgnoreCase)) break;
+            child = null; Thread.Sleep(300);
+        }
+        if (child == null) throw new TimeoutException("screen not opened: " + id);
+        Thread.Sleep(Int(a, "settle", 3) * 1000);
+        var ch = child;
+        res["form_type"] = ch.GetType().FullName; res["form_text"] = OnUi(m, () => ch.Text); res["assembly"] = ch.GetType().Assembly.Location;
+    }
+
+    static void Find(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var child = OnUi(m, () => m.ActiveMdiChild); if (child == null) throw new InvalidOperationException("no active screen");
+        // 완료 신호 = 상태바 tsLblTimeStatus 가 다시 채워짐 (조회 전 비운다)
+        OnUi<object>(m, () => { var l = Get(m, "tsLblTimeStatus") as ToolStripItem; if (l != null) l.Text = ""; var s = Get(m, "tsLblSum") as ToolStripItem; if (s != null) s.Text = ""; return null; });
+        bool to; OnUi<object>(m, () => { Call(child, "OnClickFindButton"); return null; }, Int(a, "timeout", 30) * 1000, out to);
+        res["call_timed_out"] = to;
+    }
+
+    static void WaitIdle(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        int timeout = Int(a, "wait", Int(a, "timeout", 200)); var until = DateTime.Now.AddSeconds(timeout); string ts = "";
+        while (DateTime.Now < until)
+        {
+            bool to; ts = OnUi(m, () => S(Get(Get(m, "tsLblTimeStatus"), "Text")) ?? "", 2000, out to);
+            if (!to && !string.IsNullOrEmpty(ts)) break;
+            Thread.Sleep(400);
+        }
+        res["time_status"] = ts; res["signaled"] = !string.IsNullOrEmpty(ts);
+        if (!string.IsNullOrEmpty(ts)) { Thread.Sleep(800); res["total"] = OnUi(m, () => S(Get(Get(m, "tsLblSum"), "Text"))); }
+    }
+
+    static void Shot(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        string path = Str(a, "path", ""); if (path == "") throw new ArgumentException("path required");
+        var m = MainForm(); Form target = m ?? OpenFormsSnapshot().FirstOrDefault(); if (target == null) throw new InvalidOperationException("no window");
+        IntPtr h = OnUi(target, () => target.Handle);
+        RECT r; GetWindowRect(h, out r); int w = r.Right - r.Left, hgt = r.Bottom - r.Top; if (w <= 0 || hgt <= 0) throw new InvalidOperationException("window has no size");
+        using (var bmp = new Bitmap(w, hgt, PixelFormat.Format32bppArgb))
+        {
+            bool ok;
+            using (var g = Graphics.FromImage(bmp)) { IntPtr dc = g.GetHdc(); ok = PrintWindow(h, dc, 2); g.ReleaseHdc(dc); }
+            res["method"] = ok ? "PrintWindow" : "PrintWindow(false)";
+            Directory.CreateDirectory(Path.GetDirectoryName(path)); bmp.Save(path, ImageFormat.Png);
+        }
+        res["path"] = path; res["width"] = w; res["height"] = hgt;
+    }
+
+    static void SetValue(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); var child = OnUi(m, () => m.ActiveMdiChild); if (child == null) throw new InvalidOperationException("no active screen");
+        string name = Str(a, "name", ""), value = Str(a, "value", "");
+        res["applied"] = OnUi(m, () =>
+        {
+            var c = child.Controls.Find(name, true).FirstOrDefault(); if (c == null) throw new InvalidOperationException("control not found: " + name);
+            // 2026-11-12 2차(필수 조건 채움): prop = 속성 직접 지정 · index = 콤보 순번 · check = 체크 목록 순번 · call = 화면 메서드(sender,e) 호출
+            string prop = Str(a, "prop", ""), sIndex = Str(a, "index", ""), sCheck = Str(a, "check", ""), call = Str(a, "call", "");
+            if (call != "")
+            {
+                var mi = child.GetType().GetMethod(call, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic); if (mi == null) throw new InvalidOperationException("method not found: " + call);
+                var ps = mi.GetParameters(); mi.Invoke(child, ps.Length == 0 ? null : ps.Length == 2 ? new object[] { c, EventArgs.Empty } : new object[ps.Length]); return "call:" + call;
+            }
+            if (prop != "")
+            {
+                var pi = c.GetType().GetProperty(prop, BindingFlags.Instance | BindingFlags.Public); if (pi == null || !pi.CanWrite) throw new InvalidOperationException("property not writable: " + prop);
+                object v; var pt = Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType;
+                if (pt == typeof(DateTime)) v = DateTime.ParseExact(value, value.Length == 8 ? "yyyyMMdd" : "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                else if (pt == typeof(string) || pt == typeof(object)) v = value;
+                else if (pt == typeof(bool)) v = value == "1" || value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                else v = Convert.ChangeType(value, pt, System.Globalization.CultureInfo.InvariantCulture);
+                pi.SetValue(c, v, null); return "prop:" + prop;
+            }
+            if (sCheck != "")
+            {
+                CheckedListBox lb = c as CheckedListBox;
+                if (lb == null) { var st = new Stack<Control>(); st.Push(c); while (st.Count > 0 && lb == null) { var x = st.Pop(); foreach (Control k in x.Controls) { lb = k as CheckedListBox; if (lb != null) break; st.Push(k); } } }
+                if (lb == null) throw new InvalidOperationException("checked list not found in: " + name);
+                int ci = int.Parse(sCheck); if (ci < 0 || ci >= lb.Items.Count) throw new InvalidOperationException("check index out of range: " + ci + "/" + lb.Items.Count);
+                if (Str(a, "only", "") == "1") for (int q = 0; q < lb.Items.Count; q++) if (q != ci && lb.GetItemChecked(q)) lb.SetItemChecked(q, false);   // only=1 → 이 항목만 체크
+                lb.SetItemChecked(ci, true); return "check:" + ci + ":" + lb.GetItemText(lb.Items[ci]);
+            }
+            var cb = c as ComboBox;
+            if (cb != null && sIndex != "") { int ix = int.Parse(sIndex); if (ix < 0) ix = cb.Items.Count + ix; if (ix < 0 || ix >= cb.Items.Count) throw new InvalidOperationException("combo index out of range: " + sIndex + "/" + cb.Items.Count); cb.SelectedIndex = ix; return "combo:" + ix + ":" + cb.GetItemText(cb.Items[ix]); }
+            if (cb != null) { for (int i = 0; i < cb.Items.Count; i++) if (cb.GetItemText(cb.Items[i]) == value) { cb.SelectedIndex = i; return "combo:" + i; } throw new InvalidOperationException("combo item not found: " + value); }
+            var chk = c as CheckBox; if (chk != null) { chk.Checked = value == "1" || value.Equals("true", StringComparison.OrdinalIgnoreCase); return "check"; }
+            c.Text = value; return "text";
+        });
+    }
+
+    // 2026-11-12 2차: 선택 팝업(Version 등)을 화면의 여는 메서드로 실제로 띄우고, 팝업이 불러온 목록의 맨 위 행을 선택해 닫는다.
+    //   팝업의 조회 조건·정렬은 팝업 기본값 그대로(사용자가 팝업을 열어 첫 행을 고른 것과 같은 경로). 고른 값·위 5행을 돌려준다.
+    static Control FindSpread(Control root)
+    {
+        foreach (Control k in root.Controls)
+        {
+            for (var t = k.GetType(); t != null; t = t.BaseType) if (t.Name == "FpSpread") return k;
+            var x = FindSpread(k); if (x != null) return x;
+        }
+        return null;
+    }
+    // 2026-11-13 P6-3: 메인 화면의 그룹(권한) 콤보를 읽고 바꾼다. 바꾸면 런처가 확인 창(MSG00309)을 띄우고 화면을 모두 닫은 뒤 메뉴를 다시 불러온다
+    //   (GSCM_MainForm.UsrCmbMyGroupID_SelectedIndexChanged) — 사용자가 콤보에서 그룹을 바꾼 것과 같은 경로. value 없으면 읽기만.
+    // 2026-11-13 P6-2 보정: 팝업이 닫히지 않고 쌓이는 결함(실측 61개 창) — 닫은 뒤 실제로 사라졌는지 확인하고, 남으면 숨긴다.
+    static bool ForceClose(Form f)
+    {
+        try { if (f.Modal) f.DialogResult = DialogResult.Cancel; } catch { }
+        try { if (!f.IsDisposed && f.Visible) f.Close(); } catch { }
+        try { if (!f.IsDisposed && f.Visible) f.Hide(); } catch { }
+        return f.IsDisposed || !f.Visible;
+    }
+    static List<Form> StrayForms(Form m)
+    {
+        return OpenFormsSnapshot().Where(f => { try { return f != m && f.IsHandleCreated && !f.IsDisposed && f.Visible && !f.IsMdiChild && f.GetType().Name != "ProgressForm" && !(f.Text == "" && f.FormBorderStyle == FormBorderStyle.None); } catch { return false; } }).ToList();
+    }
+    static int OpenDialogCount()
+    {
+        uint pid = (uint)System.Diagnostics.Process.GetCurrentProcess().Id; int n = 0;
+        EnumWindows((h, l) => { uint p; GetWindowThreadProcessId(h, out p); if (p == pid && IsWindowVisible(h)) { var cls = new StringBuilder(64); GetClassName(h, cls, 64); if (cls.ToString() == "#32770") n++; } return true; }, IntPtr.Zero);
+        return n;
+    }
+    // sweep: 메인 창·열린 화면(MDI) 말고 떠 있는 창(늦게 뜬 팝업·예외 창 포함)을 새 것부터 기록하고 닫는다. left = 닫지 못한 창 수 · dialogs_open = 남은 메시지 상자 수.
+    static void Sweep(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var closed = new List<object>();
+        for (int round = 0; round < 6; round++)
+        {
+            var st = StrayForms(m); if (st.Count == 0) break;
+            st.Reverse();
+            foreach (var f in st)
+            {
+                var ff = f;
+                try
+                {
+                    bool to; var d = OnUi(ff, () =>
+                    {
+                        var spd = FindSpread(ff); int rows = -1; try { if (spd != null) { var sh = Get(spd, "ActiveSheet"); rows = sh == null ? -1 : Convert.ToInt32(Get(sh, "RowCount")); } } catch { }
+                        var sb = new StringBuilder(); var stack = new Stack<Control>(); stack.Push(ff);
+                        while (stack.Count > 0 && sb.Length < 600) { var x = stack.Pop(); foreach (Control k in x.Controls) { stack.Push(k); if (!(k is Button) && k.Text != null && k.Text.Length > 3 && k.Text.Length < 2000) sb.Append(k.Text.Length > 300 ? k.Text.Substring(0, 300) : k.Text).Append(" | "); } }
+                        var e = new Dictionary<string, object> { { "form", ff.GetType().Name }, { "title", ff.Text }, { "modal", ff.Modal }, { "grid_rows", rows }, { "text", sb.ToString() } };
+                        e["closed"] = ForceClose(ff); return e;
+                    }, 15000, out to);
+                    if (to) closed.Add(new Dictionary<string, object> { { "form", ff.GetType().Name }, { "error", "UI thread busy" } }); else closed.Add(d);
+                }
+                catch (Exception ex) { closed.Add(new Dictionary<string, object> { { "form", ff.GetType().Name }, { "error", ex.Message } }); }
+            }
+            Thread.Sleep(700);
+        }
+        Thread.Sleep(Int(a, "settle", 1) * 1000);
+        res["closed"] = closed; res["left"] = StrayForms(m).Count; res["dialogs_open"] = OpenDialogCount();
+    }
+    // 2026-11-13 P6-2: 화면 안의 동작 1개를 사용자와 같은 경로로 일으킨다.
+    //   click=<컨트롤 이름>  버튼 누르기(PerformClick · 없으면 OnClick)        method=<화면 메서드>  공통 버튼 재정의 등(인자 0개 또는 (sender,e))
+    //   tab=<탭 컨트롤 이름> index=<n>  탭 전환
+    //   동작이 모달 창(팝업 폼)을 띄우면 그 창의 이름·제목·그리드 행 수를 기록하고 닫는다(close_popup=0 이면 닫지 않음). 메시지 상자는 기존 대화상자 정책이 처리한다.
+    static void Act(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var child = OnUi(m, () => m.ActiveMdiChild); if (child == null) throw new InvalidOperationException("no active screen");
+        string click = Str(a, "click", ""), method = Str(a, "method", ""), tab = Str(a, "tab", ""); int wait = Int(a, "wait", 8);
+        var before = new HashSet<Form>(OpenFormsSnapshot()); Exception err = null; string did = "";
+        MethodInvoker work = delegate
+        {
+            try
+            {
+                if (click != "")
+                {
+                    var c = child.Controls.Find(click, true).FirstOrDefault(); if (c == null) throw new InvalidOperationException("control not found: " + click);
+                    var pc = c.GetType().GetMethod("PerformClick", BindingFlags.Instance | BindingFlags.Public, null, Type.EmptyTypes, null);
+                    if (pc != null) pc.Invoke(c, null);
+                    else { var oc = typeof(Control).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic); oc.Invoke(c, new object[] { EventArgs.Empty }); }
+                }
+                else if (method != "")
+                {
+                    var mi = child.GetType().GetMethod(method, BF); if (mi == null) throw new InvalidOperationException("method not found: " + method);
+                    var ps = mi.GetParameters(); mi.Invoke(child, ps.Length == 0 ? null : ps.Length == 2 ? new object[] { child, EventArgs.Empty } : new object[ps.Length]);
+                }
+                else if (tab != "")
+                {
+                    var c = child.Controls.Find(tab, true).FirstOrDefault(); if (c == null) throw new InvalidOperationException("tab control not found: " + tab);
+                    int ix = Int(a, "index", 0); var tc = c as TabControl;
+                    if (tc != null) tc.SelectedIndex = ix;
+                    else { var pi = c.GetType().GetProperty("SelectedTabPageIndex") ?? c.GetType().GetProperty("SelectedIndex"); if (pi == null) throw new InvalidOperationException("not a tab control: " + tab); pi.SetValue(c, ix, null); }
+                }
+                else throw new InvalidOperationException("act needs click | method | tab");
+            }
+            catch (Exception ex) { err = ex.InnerException ?? ex; }
+        };
+        did = click != "" ? "click:" + click : method != "" ? "method:" + method : "tab:" + tab + ":" + Str(a, "index", "0");
+        m.BeginInvoke(work); res["did"] = did;
+        var popups = new List<object>(); var until = DateTime.Now.AddSeconds(wait); bool closePopup = Str(a, "close_popup", "1") != "0";
+        while (DateTime.Now < until)
+        {
+            Thread.Sleep(600);
+            if (err != null) break;
+            var nf = OpenFormsSnapshot().Where(f => !before.Contains(f) && f.IsHandleCreated && f.Visible).ToList();
+            foreach (var f in nf)
+            {
+                before.Add(f); var ff = f; Thread.Sleep(1500);
+                // 팝업은 뜬 뒤에 조회가 끝난다(11-13 품목 팝업 2.4초 · 6만 행인데 행 수 0 으로 기록) → 행이 채워지거나 6초가 지날 때까지 기다렸다가 읽는다
+                if (ff.GetType().Name != "ProgressForm")
+                {
+                    var tEnd = DateTime.Now.AddSeconds(Int(a, "popup_wait", 6));
+                    while (DateTime.Now < tEnd)
+                    {
+                        int rc = -1;
+                        try { bool to0; rc = OnUi(ff, () => { var sp0 = FindSpread(ff); if (sp0 == null) return -2; var sh0 = Get(sp0, "ActiveSheet"); return sh0 == null ? -1 : Convert.ToInt32(Get(sh0, "RowCount")); }, 3000, out to0); if (to0) rc = -1; } catch { }
+                        if (rc > 0 || rc == -2) break;
+                        Thread.Sleep(500);
+                    }
+                }
+                try
+                {
+                    popups.Add(OnUi(ff, () =>
+                    {
+                        var spd = FindSpread(ff); int rows = -1; try { if (spd != null) { var sh = Get(spd, "ActiveSheet"); rows = sh == null ? -1 : Convert.ToInt32(Get(sh, "RowCount")); } } catch { }
+                        var d = new Dictionary<string, object> { { "form", ff.GetType().Name }, { "title", ff.Text }, { "modal", ff.Modal }, { "grid_rows", rows } };
+                        if (closePopup) { d["closed"] = ForceClose(ff); }
+                        return d;
+                    }));
+                }
+                catch (Exception ex) { popups.Add(new Dictionary<string, object> { { "form", ff.GetType().Name }, { "error", ex.Message } }); }
+                until = DateTime.Now.AddSeconds(3);
+            }
+        }
+        res["popups"] = popups;
+        try { var fi = child.GetType().GetField("IsEditMode", BF); if (fi != null) res["edit_mode"] = OnUi(m, () => Convert.ToBoolean(fi.GetValue(child))); } catch { }
+        if (err != null) throw new InvalidOperationException(did + " failed: " + err.GetType().Name + ": " + err.Message);
+    }
+
+    static object Item1(object o, int i)
+    {
+        var pi = o.GetType().GetProperty("Item", new[] { typeof(int) }); return pi == null ? null : pi.GetValue(o, new object[] { i });
+    }
+    static void Group(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var fi = m.GetType().GetField("usrCmbMyGroupID", BF); if (fi == null) throw new InvalidOperationException("group combo field not found");
+        var cb = fi.GetValue(m) as ComboBox; if (cb == null) throw new InvalidOperationException("group combo is not a ComboBox");
+        Func<Dictionary<string, object>> read = () => OnUi(m, () =>
+        {
+            var items = new List<object>();
+            for (int i = 0; i < cb.Items.Count; i++) { var it = cb.Items[i]; string code = ""; try { var row = Get(it, "Row"); code = row == null ? "" : S(Item1(row, 0)); } catch { }
+                items.Add(new Dictionary<string, object> { { "code", code }, { "name", cb.GetItemText(it) } }); }
+            return new Dictionary<string, object> { { "current", S(cb.SelectedValue) }, { "items", items } };
+        });
+        var before = read(); res["before"] = before["current"]; res["items"] = before["items"];
+        string value = Str(a, "value", ""); if (value == "") { res["current"] = before["current"]; return; }
+        if (S(before["current"]) == value) { res["current"] = value; res["changed"] = false; return; }
+        string old = dialogPolicy; dialogPolicy = "yes";
+        try
+        {
+            m.BeginInvoke((MethodInvoker)delegate { try { cb.SelectedValue = value; } catch { } });
+            var until = DateTime.Now.AddSeconds(Int(a, "wait", 120)); bool ok = false; Thread.Sleep(1500);
+            while (DateTime.Now < until)
+            {
+                Thread.Sleep(1000);
+                try { var cur = read(); if (S(cur["current"]) == value) { ok = true; Thread.Sleep(2000); break; } } catch { }
+            }
+            var after = read(); res["current"] = after["current"]; res["changed"] = ok;
+            if (!ok) throw new InvalidOperationException("group not changed (current=" + S(after["current"]) + ")");
+        }
+        finally { dialogPolicy = old; }
+    }
+
+    static void PopupPick(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var child = OnUi(m, () => m.ActiveMdiChild); if (child == null) throw new InvalidOperationException("no active screen");
+        int wait = Int(a, "wait", 60); MethodInfo mi = null;
+        foreach (var o in Str(a, "openers", "btnVersion_Click,btnSPVer_Click").Split(',')) { mi = child.GetType().GetMethod(o.Trim(), BF); if (mi != null) break; }
+        if (mi == null) throw new InvalidOperationException("popup opener method not found on " + child.GetType().Name);
+        res["opener"] = mi.Name;
+        var before = new HashSet<Form>(OpenFormsSnapshot()); Exception openErr = null;
+        m.BeginInvoke((MethodInvoker)delegate { try { var ps = mi.GetParameters(); mi.Invoke(child, ps.Length == 0 ? null : new object[] { null, EventArgs.Empty }); } catch (Exception ex) { openErr = ex; } });
+        Form pop = null; Control spd = null; int rows = -1, stable = 0; var until = DateTime.Now.AddSeconds(wait);
+        while (DateTime.Now < until)
+        {
+            Thread.Sleep(700);
+            if (openErr != null) throw new InvalidOperationException("popup opener failed: " + (openErr.InnerException ?? openErr).Message);
+            if (pop == null) pop = OpenFormsSnapshot().LastOrDefault(f => !before.Contains(f) && f.IsHandleCreated && f.Visible);
+            if (pop == null) continue;
+            var p0 = pop;
+            int r = OnUi(p0, () => { if (spd == null) spd = FindSpread(p0); if (spd == null) return -1; var sh = Get(spd, "ActiveSheet"); return sh == null ? -1 : Convert.ToInt32(Get(sh, "RowCount")); });
+            if (r > 0 && r == rows) { if (++stable >= 2) break; } else stable = 0;
+            rows = r;
+        }
+        if (pop == null) throw new InvalidOperationException("popup did not open");
+        var pp = pop; res["popup"] = pp.GetType().Name; res["rows"] = rows;
+        if (rows <= 0)
+        {
+            // 목록이 없는 창(예외 창 등)이면 그 창의 글자를 모아 원인으로 돌려준다
+            string txt = OnUi(pp, () => { var sb = new StringBuilder(pp.Text); var st = new Stack<Control>(); st.Push(pp); while (st.Count > 0) { var x = st.Pop(); foreach (Control k in x.Controls) { if (!string.IsNullOrEmpty(k.Text) && sb.Length < 1500) sb.Append(" | ").Append(k.Text); st.Push(k); } } pp.Close(); return sb.ToString(); });
+            throw new InvalidOperationException("popup has no rows: " + pp.GetType().Name + " :: " + txt);
+        }
+        res["picked"] = OnUi(pp, () =>
+        {
+            var sh = Get(spd, "ActiveSheet"); int cols = Convert.ToInt32(Get(sh, "ColumnCount"));
+            var colHeader = Get(sh, "ColumnHeader"); var hcells = colHeader == null ? null : Get(colHeader, "Cells"); int hrows = colHeader == null ? 0 : Convert.ToInt32(Get(colHeader, "RowCount"));
+            int vcol = -1, vloose = -1; var heads = new List<string>();
+            for (int c = 0; c < cols && c < 200; c++)
+            {
+                string h = ""; for (int r = 0; r < hrows; r++) { int rr = r, cc = c; h += " " + (SafeS(() => Get(Item2(hcells, rr, cc), "Text")) ?? ""); }
+                h = h.Trim(); heads.Add(h); string hl = h.ToLowerInvariant().Replace("_", " ").Replace(".", "").Trim();
+                if (vcol < 0 && (hl == "version" || hl == "version no" || hl == "sp version" || hl == "versionno")) vcol = c;
+                if (vloose < 0 && hl.Contains("version") && !hl.Contains("type") && !hl.Contains("desc")) vloose = c;
+            }
+            if (vcol < 0) vcol = vloose;
+            var top = new List<string>(); for (int r = 0; r < rows && r < 5; r++) { int rr = r; top.Add(vcol >= 0 ? SafeS(() => Call(sh, "GetText", rr, vcol)) : ""); }
+            int ac = Math.Max(vcol, 0);
+            try { Call(sh, "SetActiveCell", 0, ac); } catch { }
+            try { Call(sh, "ClearSelection"); Call(sh, "AddSelection", 0, ac, 1, 1); } catch { }
+            string how; var fv = pp.GetType().GetField("sVersions", BF);
+            var setItem = pp.GetType().GetMethod("SetItem", BF, null, Type.EmptyTypes, null);
+            if (setItem != null) { setItem.Invoke(pp, null); how = "SetItem"; }
+            else { if (fv == null || vcol < 0) throw new InvalidOperationException("popup has no SetItem and no version column/field"); fv.SetValue(pp, top[0]); how = "field"; }
+            string val = fv == null ? null : S(fv.GetValue(pp));
+            pp.Close();
+            return new Dictionary<string, object> { { "how", how }, { "value", val }, { "top", top }, { "version_col", vcol }, { "version_header", vcol >= 0 ? heads[vcol] : null } };
+        });
+        Thread.Sleep(500);
+    }
+
+    // ───────────────────────── 덤프 ─────────────────────────
+    static void Dump(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        int maxRows = Int(a, "rows", 50);
+        var data = OnUi(m, () =>
+        {
+            var d = new Dictionary<string, object>();
+            var child = m.ActiveMdiChild;
+            d["main_title"] = m.Text; d["total"] = S(Get(Get(m, "tsLblSum"), "Text")); d["time_status"] = S(Get(Get(m, "tsLblTimeStatus"), "Text")); d["user"] = S(Get(Get(m, "tsLblUser"), "Text"));
+            d["open_screens"] = m.MdiChildren.Select(c => c.GetType().Name + "|" + c.Text).ToList();
+            if (child == null) { d["screen"] = null; return d; }
+            d["screen"] = new Dictionary<string, object> { { "type", child.GetType().FullName }, { "text", child.Text }, { "width", child.Width }, { "height", child.Height } };
+            var controls = new List<object>(); var grids = new List<object>(); var layout = new List<object>();
+            Walk(child, "", controls, grids, layout, maxRows);
+            d["controls"] = controls; d["grids"] = grids; d["layout_items"] = layout;
+            return d;
+        });
+        string path = Str(a, "path", "");
+        if (path != "")
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            File.WriteAllText(path, new JavaScriptSerializer { MaxJsonLength = int.MaxValue, RecursionLimit = 64 }.Serialize(data), new UTF8Encoding(false));
+            res["path"] = path;
+            res["control_count"] = data.ContainsKey("controls") ? ((List<object>)data["controls"]).Count : 0;
+            res["grid_count"] = data.ContainsKey("grids") ? ((List<object>)data["grids"]).Count : 0;
+            res["total"] = data["total"]; res["time_status"] = data["time_status"];
+        }
+        else res["data"] = data;
+    }
+
+    static void Walk(Control c, string parentPath, List<object> controls, List<object> grids, List<object> layout, int maxRows)
+    {
+        foreach (Control k in c.Controls)
+        {
+            string tn = k.GetType().Name, full = k.GetType().FullName;
+            string path = parentPath + "/" + (string.IsNullOrEmpty(k.Name) ? tn : k.Name);
+            var o = new Dictionary<string, object> { { "name", k.Name }, { "type", full }, { "path", path }, { "visible", k.Visible }, { "enabled", k.Enabled },
+                { "x", k.Left }, { "y", k.Top }, { "w", k.Width }, { "h", k.Height }, { "tab", k.TabIndex } };
+            bool isGrid = false;
+            for (var t = k.GetType(); t != null; t = t.BaseType) if (t.Name == "FpSpread") { isGrid = true; break; }
+            if (!isGrid) { try { o["text"] = k.Text; } catch { } }
+            var cb = k as ComboBox;
+            if (cb != null) { o["selected_index"] = cb.SelectedIndex; o["selected_text"] = cb.SelectedIndex >= 0 ? cb.GetItemText(cb.SelectedItem) : null; o["selected_value"] = SafeS(() => cb.SelectedValue); var items = new List<string>(); for (int i = 0; i < cb.Items.Count && i < 500; i++) items.Add(cb.GetItemText(cb.Items[i])); o["items"] = items; o["item_count"] = cb.Items.Count; }
+            var chk = k as CheckBox; if (chk != null) o["checked"] = chk.Checked;
+            var rb = k as RadioButton; if (rb != null) o["checked"] = rb.Checked;
+            var clb = k as CheckedListBox;
+            if (clb != null) { var items = new List<object>(); for (int i = 0; i < clb.Items.Count && i < 500; i++) items.Add(new Dictionary<string, object> { { "text", clb.GetItemText(clb.Items[i]) }, { "checked", clb.GetItemChecked(i) } }); o["items"] = items; }
+            var dtp = k as DateTimePicker; if (dtp != null) o["value"] = dtp.Value.ToString("yyyy-MM-dd HH:mm:ss");
+            // 사용자 정의 컨트롤이 흔히 내는 값 속성(있을 때만)
+            foreach (var pn in new[] { "EditValue", "ControlValues", "ControlValue", "FromDate", "ToDate", "Value", "ReadOnly" })
+            { if (o.ContainsKey(ToSnake(pn))) continue; var p = k.GetType().GetProperty(pn, BindingFlags.Instance | BindingFlags.Public, null, null, Type.EmptyTypes, null); if (p == null || !p.CanRead) continue; try { var v = p.GetValue(k, null); if (v != null && (v is string || v.GetType().IsPrimitive || v is DateTime || v is decimal)) o[ToSnake(pn)] = Convert.ToString(v); } catch { } }
+            controls.Add(o);
+            if (tn == "LayoutControl" || k.GetType().BaseType != null && k.GetType().BaseType.Name == "LayoutControl") DumpLayout(k, layout);
+            if (isGrid && maxRows < 0) continue;      // rows=-1 → 그리드 생략(조건 컨트롤만 빠르게)
+            if (isGrid) { try { grids.Add(DumpSpread(k, path, maxRows)); } catch (Exception ex) { grids.Add(new Dictionary<string, object> { { "name", k.Name }, { "error", ex.Message } }); } continue; }
+            if (k.Controls.Count > 0) Walk(k, path, controls, grids, layout, maxRows);
+        }
+    }
+    static string ToSnake(string s) { var sb = new StringBuilder(); foreach (char ch in s) { if (char.IsUpper(ch) && sb.Length > 0) sb.Append('_'); sb.Append(char.ToLowerInvariant(ch)); } return sb.ToString(); }
+    static string SafeS(Func<object> f) { try { return S(f()); } catch { return null; } }
+
+    // DevExpress LayoutControl: 라벨(필수 '*' 포함) ↔ 컨트롤 이름
+    static void DumpLayout(Control lc, List<object> layout)
+    {
+        var items = Get(lc, "Items") as IEnumerable; if (items == null) return;
+        foreach (var it in items)
+        {
+            var ctl = Get(it, "Control") as Control; string text = S(Get(it, "Text"));
+            if (ctl == null && string.IsNullOrEmpty(text)) continue;
+            layout.Add(new Dictionary<string, object> { { "layout", lc.Name }, { "item", S(Get(it, "Name")) }, { "label", text }, { "control", ctl == null ? null : ctl.Name },
+                { "required", text != null && text.TrimEnd().EndsWith("*") }, { "visible", SafeS(() => Get(it, "Visible")) }, { "text_visible", SafeS(() => Get(it, "TextVisible")) } });
+        }
+    }
+
+    // FarPoint FpSpread: 시트·헤더·컬럼 속성·앞 N행 값
+    static Dictionary<string, object> DumpSpread(Control spd, string path, int maxRows)
+    {
+        var g = new Dictionary<string, object> { { "name", spd.Name }, { "path", path }, { "type", spd.GetType().FullName }, { "visible", spd.Visible } };
+        var sheets = new List<object>(); var sv = Get(spd, "Sheets") as IEnumerable; g["active_sheet_index"] = SafeS(() => Get(spd, "ActiveSheetIndex"));
+        if (sv != null) foreach (var sh in sv)
+        {
+            var s = new Dictionary<string, object>();
+            int rows = Convert.ToInt32(Get(sh, "RowCount")), cols = Convert.ToInt32(Get(sh, "ColumnCount"));
+            s["name"] = S(Get(sh, "SheetName")); s["rows"] = rows; s["cols"] = cols; s["visible"] = SafeS(() => Get(sh, "Visible"));
+            s["frozen_cols"] = SafeS(() => Get(sh, "FrozenColumnCount")); s["frozen_rows"] = SafeS(() => Get(sh, "FrozenRowCount")); s["operation_mode"] = SafeS(() => Get(sh, "OperationMode"));
+            var colHeader = Get(sh, "ColumnHeader"); int hrows = colHeader == null ? 0 : Convert.ToInt32(Get(colHeader, "RowCount")); s["header_rows"] = hrows;
+            var hcells = colHeader == null ? null : Get(colHeader, "Cells"); var colsObj = Get(sh, "Columns");
+            var colList = new List<object>();
+            for (int c = 0; c < cols && c < 400; c++)
+            {
+                var col = colsObj == null ? null : Item(colsObj, c);
+                var cd = new Dictionary<string, object> { { "index", c } };
+                var hd = new List<string>(); for (int r = 0; r < hrows; r++) hd.Add(SafeS(() => Get(Item2(hcells, r, c), "Text")));
+                cd["header"] = hd;
+                if (col != null)
+                {
+                    cd["label"] = SafeS(() => Get(col, "Label")); cd["tag"] = SafeS(() => Get(col, "Tag")); cd["width"] = SafeS(() => Get(col, "Width")); cd["visible"] = SafeS(() => Get(col, "Visible"));
+                    cd["locked"] = SafeS(() => Get(col, "Locked")); cd["h_align"] = SafeS(() => Get(col, "HorizontalAlignment")); cd["data_field"] = SafeS(() => Get(col, "DataField"));
+                    var ct = Get(col, "CellType"); cd["cell_type"] = ct == null ? null : ct.GetType().Name; cd["merge_policy"] = SafeS(() => Get(col, "MergePolicy"));
+                }
+                colList.Add(cd);
+            }
+            s["columns"] = colList;
+            var data = new List<object>(); int take = Math.Min(rows, maxRows);
+            for (int r = 0; r < take; r++) { var row = new List<string>(); for (int c = 0; c < cols && c < 400; c++) row.Add(SafeS(() => Call(sh, "GetText", r, c))); data.Add(row); }
+            s["data_rows"] = take; s["data"] = data;
+            sheets.Add(s);
+        }
+        g["sheets"] = sheets; return g;
+    }
+    static object Item(object coll, int i) { var p = coll.GetType().GetProperties(BF).FirstOrDefault(x => x.GetIndexParameters().Length == 1 && x.GetIndexParameters()[0].ParameterType == typeof(int)); return p == null ? null : p.GetValue(coll, new object[] { i }); }
+    static object Item2(object coll, int r, int c) { if (coll == null) return null; var p = coll.GetType().GetProperties(BF).FirstOrDefault(x => x.GetIndexParameters().Length == 2 && x.GetIndexParameters().All(q => q.ParameterType == typeof(int))); return p == null ? null : p.GetValue(coll, new object[] { r, c }); }
+
+    // ───────────────────────── 대화상자 감시 (Win32 #32770) ─────────────────────────
+    // 2026-11-13 수정 모드 실행용: 정책 "no" = 예/아니오 창이면 아니오(7), 없으면 취소(2), 그것도 없으면 기본 단추 — 저장 확인 창에서 저장하지 않기 위함
+    static int WantId(IntPtr h, int defId)
+    {
+        if (dialogPolicy == "yes") return 6;
+        if (dialogPolicy == "close")
+        {
+            // 화면 닫기용: "…이 화면을 닫으시겠습니까?"(MSG00013 — 예 = 저장 없이 닫기)에만 예. 그 밖의 창(저장 확인 등)은 아래 "no" 와 같게 아니오/취소.
+            var sb = new StringBuilder();
+            EnumChildWindows(h, (c, l) => { var cls = new StringBuilder(64); GetClassName(c, cls, 64); if (cls.ToString() != "Button") { var t = new StringBuilder(1024); GetWindowText(c, t, 1024); sb.Append(t).Append(' '); } return true; }, IntPtr.Zero);
+            string tx = sb.ToString();
+            if (tx.Contains("닫으시겠습니까") || tx.IndexOf("close this", StringComparison.OrdinalIgnoreCase) >= 0) return 6;
+        }
+        if (dialogPolicy == "no" || dialogPolicy == "close")
+        {
+            bool no = false, cancel = false;
+            EnumChildWindows(h, (c, l) => { var cls = new StringBuilder(64); GetClassName(c, cls, 64); if (cls.ToString() == "Button") { int id = GetDlgCtrlID(c); if (id == 7) no = true; if (id == 2) cancel = true; } return true; }, IntPtr.Zero);
+            if (no) return 7; if (cancel) return 2;
+        }
+        return defId == 0 ? 1 : defId;
+    }
+    static void DialogLoop()
+    {
+        uint pid = (uint)System.Diagnostics.Process.GetCurrentProcess().Id; var seen = new HashSet<IntPtr>(); var seenAt = new Dictionary<IntPtr, DateTime>();
+        while (true)
+        {
+            try
+            {
+                var found = new List<IntPtr>();
+                EnumWindows((h, l) => { uint p; GetWindowThreadProcessId(h, out p); if (p == pid && IsWindowVisible(h)) { var cls = new StringBuilder(64); GetClassName(h, cls, 64); if (cls.ToString() == "#32770") found.Add(h); } return true; }, IntPtr.Zero);
+                foreach (var h in found)
+                {
+                    if (seen.Contains(h))
+                    {
+                        // 눌렀는데 3초 뒤에도 남아 있으면 다시 누른다(11-13 메시지 상자 7개 잔류 실측)
+                        if (dialogPolicy != "hold" && seenAt.ContainsKey(h) && (DateTime.Now - seenAt[h]).TotalSeconds > 3)
+                        {
+                            int di = (int)(SendMessage(h, 0x0400, IntPtr.Zero, IntPtr.Zero).ToInt64() & 0xFFFF);
+                            PostMessage(h, 0x0111, (IntPtr)WantId(h, di), IntPtr.Zero); seenAt[h] = DateTime.Now;
+                            // 그래도 남는 경우(11-13 실측 7건: 눌렀다고 기록됐는데 창이 남음) — 단추를 직접 누르고, 마지막에 닫기 메시지를 보낸다
+                            Thread.Sleep(400);
+                            if (IsWindowVisible(h))
+                            {
+                                IntPtr btn = IntPtr.Zero; int want = WantId(h, di);
+                                EnumChildWindows(h, (c, l) => { var cls = new StringBuilder(64); GetClassName(c, cls, 64); if (cls.ToString() == "Button" && (btn == IntPtr.Zero || GetDlgCtrlID(c) == want)) btn = c; return true; }, IntPtr.Zero);
+                                if (btn != IntPtr.Zero) PostMessage(btn, 0x00F5 /*BM_CLICK*/, IntPtr.Zero, IntPtr.Zero);
+                                Thread.Sleep(400);
+                                if (IsWindowVisible(h)) PostMessage(h, 0x0010 /*WM_CLOSE*/, IntPtr.Zero, IntPtr.Zero);
+                            }
+                        }
+                        continue;
+                    }
+                    seen.Add(h); seenAt[h] = DateTime.Now;
+                    Thread.Sleep(250);
+                    var cap = new StringBuilder(256); GetWindowText(h, cap, 256); var texts = new List<string>(); var buttons = new List<string>();
+                    EnumChildWindows(h, (c, l) => { var cls = new StringBuilder(64); GetClassName(c, cls, 64); var t = new StringBuilder(2048); GetWindowText(c, t, 2048); if (cls.ToString() == "Button") buttons.Add(t.ToString()); else if (t.Length > 0) texts.Add(t.ToString()); return true; }, IntPtr.Zero);
+                    int defId = (int)(SendMessage(h, 0x0400 /*DM_GETDEFID*/, IntPtr.Zero, IntPtr.Zero).ToInt64() & 0xFFFF);
+                    string action = "held";
+                    if (dialogPolicy == "yes") { PostMessage(h, 0x0111 /*WM_COMMAND*/, (IntPtr)6 /*IDYES*/, IntPtr.Zero); action = "yes_button(id=6)"; }
+                    else if (dialogPolicy == "no" || dialogPolicy == "close") { int w = WantId(h, defId); PostMessage(h, 0x0111 /*WM_COMMAND*/, (IntPtr)w, IntPtr.Zero); action = (w == 6 ? "yes_button(id=6 · 저장 없이 닫기)" : w == 7 ? "no_button(id=7)" : w == 2 ? "cancel_button(id=2)" : "default_button(id=" + w + ")"); }
+                    else if (dialogPolicy == "default") { PostMessage(h, 0x0111 /*WM_COMMAND*/, (IntPtr)(defId == 0 ? 1 : defId), IntPtr.Zero); action = "default_button(id=" + (defId == 0 ? 1 : defId) + ")"; }
+                    lock (dlgLock) dialogs.Add(new Dictionary<string, object> { { "at", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") }, { "caption", cap.ToString() }, { "text", string.Join("\n", texts) }, { "buttons", buttons }, { "action", action } });
+                }
+                seen.RemoveWhere(x => !found.Contains(x));
+            }
+            catch { }
+            Thread.Sleep(300);
+        }
+    }
+
+    delegate bool EnumProc(IntPtr h, IntPtr l);
+    [StructLayout(LayoutKind.Sequential)] struct RECT { public int Left, Top, Right, Bottom; }
+    [DllImport("user32.dll")] static extern bool EnumWindows(EnumProc e, IntPtr l);
+    [DllImport("user32.dll")] static extern int GetDlgCtrlID(IntPtr h);
+    [DllImport("user32.dll")] static extern bool EnumChildWindows(IntPtr p, EnumProc e, IntPtr l);
+    [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr h, out uint pid);
+    [DllImport("user32.dll")] static extern bool IsWindowVisible(IntPtr h);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetWindowText(IntPtr h, StringBuilder s, int n);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassName(IntPtr h, StringBuilder s, int n);
+    [DllImport("user32.dll")] static extern IntPtr SendMessage(IntPtr h, int msg, IntPtr w, IntPtr l);
+    [DllImport("user32.dll")] static extern bool PostMessage(IntPtr h, int msg, IntPtr w, IntPtr l);
+    [DllImport("user32.dll")] static extern bool GetWindowRect(IntPtr h, out RECT r);
+    [DllImport("user32.dll")] static extern bool PrintWindow(IntPtr h, IntPtr dc, uint flags);
+}

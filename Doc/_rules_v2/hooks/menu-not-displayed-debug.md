@@ -107,14 +107,16 @@ SELECT MNU_ID FROM SCM_ADM_MNU_M WHERE MNU_DESC IS NULL AND USE_YN='Y';
 ```sql
 INSERT INTO SCM_ADM_MNU_M
   (MNU_ID, UPPR_MNU_ID, MNU_URL, MNU_MSG_ID, MNU_DESC, MNU_TP_CD, UNIT_TP_CD, MNU_LV_NO, ...)
-VALUES ('SYS0015', 'Admin_Menu', 'program', 'MNU_SYS0015', 'Program' /* ⭐ 의무 */, 'SCREEN', '-', 3, ...);
+VALUES ('SYS0015', 'Admin_Menu', 'program', 'MNU_SYS0015', 'Program' /* ⭐ 의무 */, 'SCREEN', '-', 3, ...);   -- (2026-11-14 정정: UNIT_TP_CD '-' 는 기존 admin 메뉴 값(S 82행, '-' 81행, D 61행). 컬럼 기본값은 '/' 라 신규 등록은 '/'. 사내 DB 실측 2026-11-13 21:51)
 ```
 
 ### §1.4 Step 2 — FE 라우터 등록 정합
 
 ```bash
-grep -n "{MENU_ID}\|{screen-slug}" nscm-fe/apps/web/src/app/router/
-# AppRouter.tsx 또는 동등 안 등록 확인
+ls nscm-fe/features/*/src/pages/{screen-slug}/index.ts
+# 페이지 폴더의 index.ts 존재 확인 — nscm-fe/apps/web/src/mdi/viewRegistry.tsx 가 features/*/src/pages/*/index.ts 를 자동 수집하고,
+# 메뉴↔화면 연결은 DB SCM_ADM_MNU_M.ROUTE_PATH('<도메인>/<페이지폴더>') 로 한다.
+# (2026-11-13 정정: 없는 경로 nscm-fe/apps/web/src/app/router/ · AppRouter.tsx grep → 페이지 폴더 index.ts + viewRegistry 확인으로)
 ```
 
 ### §1.5 Step 3 — 메뉴 권한 (SCM_ADM_USER_GR_MNU_MPG_M)
@@ -122,7 +124,7 @@ grep -n "{MENU_ID}\|{screen-slug}" nscm-fe/apps/web/src/app/router/
 ```sql
 SELECT FIND_AUTH_YN, INSERT_AUTH_YN, EDIT_AUTH_YN, SAVE_AUTH_YN, DELETE_AUTH_YN 
 FROM SCM_ADM_USER_GR_MNU_MPG_M 
-WHERE USER_ID = 'minyonglee1' AND GR_ID = 'ADMIN' AND MNU_ID = '{MENU_ID}';
+WHERE USER_GR_ID = 'ADMIN' AND MNU_ID = '{MENU_ID}';   -- (2026-11-14 정정: 이 표의 키는 USER_GR_ID, MNU_ID. USER_ID, GR_ID 컬럼 없음. 사용자 소속 그룹은 SCM_ADM_USER_GR_MPG_M(USER_GR_ID, USER_ID) 로 확인. 사내 DB 실측 2026-11-13 21:51)
 -- 'Y' 또는 NULL (NULL = row 없음 = 권한 누락)
 ```
 
@@ -164,7 +166,8 @@ SELECT COUNT(*) FROM SCM_ADM_API_M WHERE MNU_ID = '{MENU_ID}';
 ### §1.9 Step 7 — i18n 누락 / 사이드 이펙트
 
 ```bash
-grep "MSG00\d\d\d\|LBL00\d\d\d" nscm-fe/apps/web/public/locales/ko/translation.json
+grep "MSG00\d\d\d\|LBL00\d\d\d" nscm-fe/public/locales/KO.json
+# (2026-11-13 정정: 없는 경로 apps/web/public/locales/ko/translation.json → nscm-fe/public/locales/KO.json)
 # 등록 안 되면 텍스트 = key 자체 표시 (사용성 ↓, 사고 X)
 
 # 또는 BE 재시작 필요한 경우 (`config-local.yml` 변경 후 등)
@@ -185,7 +188,7 @@ UNION ALL SELECT 'SHEET' AS chk, COUNT(*) FROM SCM_ADM_MNU_M_SHEET WHERE MNU_ID=
 UNION ALL SELECT 'PROC_M', COUNT(*) FROM SCM_ADM_PROC_M WHERE PROC_NM LIKE 'P_${MENU_ID}_%'
 UNION ALL SELECT 'API_M', COUNT(*) FROM SCM_ADM_API_M WHERE MNU_ID='$MENU_ID'
 UNION ALL SELECT 'GR_MNU_MPG', COUNT(*) FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE MNU_ID='$MENU_ID' AND USER_ID='minyonglee1'
-UNION ALL SELECT 'GR_BTN_MPG', COUNT(*) FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='$MENU_ID' AND USER_ID='minyonglee1'
+UNION ALL SELECT 'GR_BTN_MPG', COUNT(*) FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='$MENU_ID' AND USER_GR_ID='ADMIN'   -- (2026-11-14 정정: USER_ID 컬럼 없음, 키는 USER_GR_ID, MNU_ID, MNU_BTN_CD. 사내 DB 실측 2026-11-13 21:51)
 ;
 EOF
 ```

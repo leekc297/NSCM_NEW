@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0060",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 108,
+  "at": "2026-11-14T20:03:14.243Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 227,
+  "at": "2026-11-14T20:03:14.531Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 499,
+  "at": "2026-11-14T20:03:14.827Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 93,
+  "at": "2026-11-14T20:03:15.738Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 108,
+  "at": "2026-11-14T20:03:17.145Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"companyId\":\"GM00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261009\",\"fromYyyymmdd\":\"20261009\",\"toYyyymmdd\":\"20261023\",\"itemId\":\"\",\"productLevel1\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0060\",\"sheetName\":\"Shipment Plan\",\"realFlag\":\"Y\"}",
+  "status": 200,
+  "rows": 24,
+  "dur": 157,
+  "at": "2026-11-14T20:03:17.228Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ }
+]

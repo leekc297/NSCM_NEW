@@ -1,0 +1,74 @@
+{
+ "label": "AFTER",
+ "rows": 1681,
+ "cols": 64,
+ "fixed_cols": [
+  "DIVISION_ID",
+  "TEAM_NAME",
+  "END_CUSTOMER",
+  "SCM_SITE_ID",
+  "CUST_GROUP",
+  "END_CUSTOMER40",
+  "GROUP_ID",
+  "ITEM_ID",
+  "TEXT4082",
+  "INCOTERMS",
+  "FCST_TYPE",
+  "DOM_EXP",
+  "CELL_PROD_SITE_ID",
+  "CURRENCY",
+  "PLANT_SITE_ID",
+  "MEASURE",
+  "DEPT_ID",
+  "FORECAST_INFO_PRODUCT_GROUP",
+  "SALES_PLAN_ADJUST_YN",
+  "NOTATION",
+  "SORT_ORDER_NO"
+ ],
+ "key_cols_present": [
+  "END_CUSTOMER40",
+  "CELL_PROD_SITE_ID",
+  "TEXT4082",
+  "PLANT_SITE_ID"
+ ],
+ "item_rows": 15,
+ "item_rtf": [
+  {
+   "END_CUSTOMER40": "IM-Re",
+   "TEXT4082": "/",
+   "CELL_PROD_SITE_ID": "NJ01-A",
+   "PLANT_SITE_ID": "/",
+   "MEASURE": "RTF_SYS_RP",
+   "M_202612": null,
+   "M_202701": null,
+   "M_202702": null,
+   "M_202703": null,
+   "M_202704": null
+  },
+  {
+   "END_CUSTOMER40": "IM",
+   "TEXT4082": "/",
+   "CELL_PROD_SITE_ID": "NJ01-A",
+   "PLANT_SITE_ID": "/",
+   "MEASURE": "RTF_SYS_RP",
+   "M_202612": null,
+   "M_202701": null,
+   "M_202702": null,
+   "M_202703": null,
+   "M_202704": null
+  },
+  {
+   "END_CUSTOMER40": "/",
+   "TEXT4082": "/",
+   "CELL_PROD_SITE_ID": "-",
+   "PLANT_SITE_ID": "/",
+   "MEASURE": "RTF_SYS_RP",
+   "M_202612": 111,
+   "M_202701": 222,
+   "M_202702": 333,
+   "M_202703": 444,
+   "M_202704": 555
+  }
+ ],
+ "num_sum": 6067288067571.169
+}

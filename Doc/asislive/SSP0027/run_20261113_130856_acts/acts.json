@@ -1,0 +1,264 @@
+{
+ "id": "SSP0027",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnMaterialId2",
+   "ok": false,
+   "error": "InvalidOperationException: click:BtnMaterialId2 failed: InvalidOperationException: control not found: BtnMaterialId2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0027-S02db5e",
+    "SSP0027-Sb76bed"
+   ]
+  },
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0027-S9b65c6",
+    "SSP0027-S69448c",
+    "SSP0027-S8271f9",
+    "SSP0027-S5a1a8f",
+    "SSP0027-Se946c7",
+    "SSP0027-Sf683ab",
+    "SSP0027-S9ceaf0",
+    "SSP0027-S8105fa",
+    "SSP0027-Sdeb597",
+    "SSP0027-S34c778",
+    "SSP0027-Sd99e82",
+    "SSP0027-S7b31fe",
+    "SSP0027-S7a38e2",
+    "SSP0027-Sc684ba",
+    "SSP0027-S346303",
+    "SSP0027-Sede481",
+    "SSP0027-S00ad82",
+    "SSP0027-S6c59f3",
+    "SSP0027-S6a69a9",
+    "SSP0027-Sd59aae",
+    "SSP0027-Sf5f784",
+    "SSP0027-Sbb8d29",
+    "SSP0027-S252290",
+    "SSP0027-Sc14b34"
+   ]
+  },
+  {
+   "control": "BtnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0027-S97242e",
+    "SSP0027-S6442a1",
+    "SSP0027-S569dec"
+   ]
+  },
+  {
+   "control": "BtnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "error": "UI thread busy (modal dialog?)"
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0027_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "scenarios": [
+    "SSP0027-S22b0e3",
+    "SSP0027-S6a65e0",
+    "SSP0027-S92b087",
+    "SSP0027-S41e8eb",
+    "SSP0027-S2206fa",
+    "SSP0027-Sc795fa",
+    "SSP0027-S5cd96f",
+    "SSP0027-S2a3ef3",
+    "SSP0027-Sb3764e",
+    "SSP0027-Sff6d56",
+    "SSP0027-S684d62",
+    "SSP0027-Sd0b654",
+    "SSP0027-S22980e",
+    "SSP0027-Se946c7",
+    "SSP0027-Sf683ab",
+    "SSP0027-S9ceaf0",
+    "SSP0027-S8105fa",
+    "SSP0027-Sdeb597",
+    "SSP0027-S34c778",
+    "SSP0027-Sd99e82",
+    "SSP0027-S7b31fe",
+    "SSP0027-S7a38e2",
+    "SSP0027-Sc684ba",
+    "SSP0027-S346303",
+    "SSP0027-Sede481",
+    "SSP0027-S00ad82",
+    "SSP0027-S19a837",
+    "SSP0027-S6c59f3",
+    "SSP0027-S6a69a9",
+    "SSP0027-Sd59aae",
+    "SSP0027-Sf5f784",
+    "SSP0027-Sbb8d29",
+    "SSP0027-S252290",
+    "SSP0027-Sc14b34"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0027-Sea1449",
+    "SSP0027-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0027-S9b65c6",
+    "SSP0027-S69448c",
+    "SSP0027-S8271f9",
+    "SSP0027-S5a1a8f"
+   ]
+  },
+  {
+   "control": "btnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0027-S97242e",
+    "SSP0027-S6442a1",
+    "SSP0027-S569dec"
+   ]
+  },
+  {
+   "control": "btnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "error": "UI thread busy (modal dialog?)"
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0027_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "scenarios": [
+    "SSP0027-S22b0e3",
+    "SSP0027-S6a65e0",
+    "SSP0027-S92b087",
+    "SSP0027-S41e8eb",
+    "SSP0027-S2206fa",
+    "SSP0027-Sc795fa",
+    "SSP0027-S5cd96f",
+    "SSP0027-S2a3ef3",
+    "SSP0027-Sb3764e",
+    "SSP0027-Sff6d56",
+    "SSP0027-S684d62",
+    "SSP0027-Sd0b654",
+    "SSP0027-S22980e",
+    "SSP0027-S19a837"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnConfirm",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "BtnSimulation",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnConfirm",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSimulation",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-13 13:02:22.226",
+ "fills": 0,
+ "fill_left": []
+}

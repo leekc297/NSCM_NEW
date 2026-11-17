@@ -6,6 +6,7 @@ Vibe_Manager Git 메뉴 두 항목이 이 도구(`common_sync.py`)를 쓴다. �
 | 메뉴 | 방향 | 결과 |
 |---|---|---|
 | ⬇️🔀 Source Download & Merge | 공통 → 내 nscm-fe | 내가 안 고친 파일은 공통 원문, 내가 고친 파일은 내 수정분 유지 + 공통 수정분 병합 |
+| ⬇️🔀 Source Download & Merge(BE) | 공통 → 내 nscm-be/src | 같은 판정 + BE 로컬 작업환경 보호(§0-1) — 필요할 때만 |
 | 📤 Source Upload(UI) | 내 화면 → 공통 `feat/<id>-<날짜>` | 공통 최신 위에 **내 작업분만** 얹은 커밋 |
 
 `git merge` / `git pull` 은 쓰지 않는다(사내 GitLab 이력과 섞임). 다운로드는 `common` 의 push URL 이 `no_push` 일 때만 진행한다.
@@ -32,6 +33,46 @@ Vibe_Manager Git 메뉴 두 항목이 이 도구(`common_sync.py`)를 쓴다. �
 - 공통에 없는 로컬 전용 파일은 삭제하지 않고 보고서에 '유지' 로 남긴다.
 - 공통 새 커밋이 없어도 로컬과 다른 파일이 있으면 적용한다.
 - §4 의 백업·미리보기·확인·적용 후 검증은 그대로 적용된다.
+
+## 0-1. BE(nscm-be) 다운로드 — 별도 메뉴 (2026-11-12)
+
+FE 와 BE 는 따로 받는다. ⬇️🔀 Source Download & Merge = FE(nscm-fe)만(`--areas fe` · 기본값). ⬇️🔀 Source Download & Merge(BE) = BE 만(`--areas be`) — 필요할 때만 실행한다.
+Source Upload(UI) 는 FE 만 다룬다.
+
+- 대상 = 공통 트리 `nscm-be/src` → 로컬 `nscm-be/src`. 판정 규칙(§1~§3)과 작업 모드(§0)는 FE 와 같다. d.ts·locales 규칙은 FE 전용.
+- 기준선 = `state.json` 의 `baselineBe`(FE 기준선 `baseline` 과 따로 간다). 없는 첫 회차는 공통 최신 트리와 로컬을 직접 대조한다.
+- 병합 후 선언 중복 검사 = Java 메서드(이름+인자)·클래스, MyBatis XML 의 `id`.
+- 옵션: `--areas fe|be|all` · `--be <폴더>` · `--base-be <sha>` · `--be-work <사본>` · `--no-cfg-supplement`.
+- 백업 폴더 = `_artifacts/_backup/NSCMBE_PRE_COMMON_<날짜>/`(`local_before/nscm-be/` · `be_worktree_tracked.patch` · `be_git_status_before.txt`).
+
+### BE 로컬 작업환경 보호 — 작업 모드와 무관
+로컬은 SSO 에 접속하지 않고 사용자 ID 로그인(`/user/login`)으로 쓴다. BE 를 받아도 이 상태가 유지돼야 한다.
+
+| 보호 | 내용 |
+|---|---|
+| 환경 파일 유지 | `application*.yml/.yaml/.properties` · `config/*` · `mybatis/mybatis-config.xml` · `logback*.xml` · `log4j*` · `framework/config/CorsConfig.java` 는 항상 로컬 유지. 공통과 다르면 보고서에 '공통과 다름 — 필요하면 직접 반영' |
+| 로컬 필수 유지 소스 | `be_local_keep.txt` 에 적은 소스도 항상 로컬 유지 — 환경 파일과 한 쌍으로 동작하는 소스(예: `CustomMap.java` ↔ `mybatis-config.xml` 의 `callSettersOnNulls`) |
+| 설정 키 보충 | `application.yml` · `config/config-local.yml` 은 공통에만 있는 **단일 값 키**를 공통 기본값으로 끼워 넣는다(부모 블록이 로컬에 있을 때만). 기존 값·주석·순서는 그대로. 접속·SSO·비밀 값 계열 키와 블록째 없는 설정은 넣지 않고 보고서에 적는다. 보충본은 YAML 로 다시 읽어 기존 값 무변경·보충 키 인식을 확인하고, 하나라도 어긋나면 보충하지 않는다 |
+| 로컬 로그인 점검 | 적용될 내용 기준으로 ① `/user/login` + `JsonLoginFilter` 경로 유지 ② 로컬 설정에 `id-login-disabled: true` 없음 을 확인. 실패하면 아무 파일도 바꾸지 않고 중단(exit 4) |
+| 대상 밖 쓰기 차단 | 쓰기·삭제는 `nscm-be/src` 아래만. `build.gradle` · `settings.gradle` · `gradle/` · `lib/` · `.git` · `build` · `bin` · `logs` 등은 가드에 걸리면 무변경 중단 |
+| 삭제 차단 | DB MODE 에서도 BE 의 내 편집본·환경 파일은 삭제하지 않는다 |
+| 저장소 명령 차단 | `nscm-be/.git` 에는 읽기 명령(status · diff · config --get)만 실행 |
+| 적용 후 검증 | 환경 파일 바이트 동일 · 설정 키 보충 파일의 기존 줄 삭제 0 · 대상 밖 무변경 · 로그인 점검. 실패하면 기준선 미갱신 |
+
+### 되돌리기
+```
+python tools/CommonSync/common_sync.py --restore-be-from <백업 폴더> --restore-be-paths src/…/A.java,src/…/B.xml
+```
+그 회차 백업의 `local_before/nscm-be` 에서 지정한 파일만 되돌린다(src 아래만). 되돌리기 직전 내용은 `_artifacts/_backup/NSCMBE_RESTORE_<시각>/` 에 남는다.
+
+### 받은 뒤 확인 (자동 실행하지 않는다)
+컴파일 → 기동 → 로그인 → 화면 조회 1건. BE 는 재기동해야 반영된다.
+- `build.gradle` 은 대상 밖이다. 공통 BE 가 새 라이브러리를 쓰면 로컬 `build.gradle` 에 직접 넣거나, 넣기 전까지 `be_sso.init.gradle`(SSO jar 6개)로 기동한다: `gradlew.bat bootRun --offline -I C:/Projects/NSCM/tools/CommonSync/be_sso.init.gradle`
+- DB MODE 는 내 편집본도 공통 원문으로 덮어쓴다. 로컬 환경과 한 쌍인 소스가 덮이면 전 화면이 깨질 수 있다 — 그런 소스는 `be_local_keep.txt` 에 적어 둔다.
+- UI/DB MODE 는 파일 단위 병합이라, 한 기능의 일부 파일만 충돌로 남으면 컴파일이 깨질 수 있다.
+
+2026-11-12 첫 회차 실사례: ① `build.gradle` SSO jar 6줄 주석 → 컴파일 오류 ② `application.yml` 에 `config.mybatis.log-pool-size` 없음 → Oracle 풀 생성 실패 → 로그인 401 ③ `config.system-cd` 없음
+④ `CustomMap.java` 의 null 가드가 공통 원문으로 덮임 → NULL 컬럼이 있는 모든 조회 NullPointerException(화면 'Sql Error'). ②③은 설정 키 보충, ④는 로컬 필수 유지 목록으로 막는다.
 
 ## 1. "내 편집본" 판정 — 내용 대조
 

@@ -1,0 +1,152 @@
+{
+ "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+ "pk": [
+  "DIVISION_ID",
+  "OPERATION_GROUP",
+  "FROM_SITE",
+  "TO_SITE",
+  "ITEM_ID",
+  "TRANSPORT_MODE"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "FROM_SITE": "FROM_SITE",
+  "TO_SITE": "TO_SITE",
+  "ITEM_ID": "ITEM_ID",
+  "TRANSPORT_MODE": "TRANS_MODE_CODE"
+ },
+ "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+ "basis": "SCP0028_Shipment_Lot_Size.cs:575 SaveData · :659 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE · SP 원문(MERGE: 있으면 UPDATE·없으면 INSERT / DELETE · SCP_MST_SHIPMENT_LOT_SIZE PK 6컬럼 · 트리거 0 — 11-13 실측) · 저장 SP 가 PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST 로 SCP_MST_SHIPMENT_LOT_SIZE_H 에 이력 1행을 덧붙임(11-13 18:0x 실측)",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 Lot Size 수정(MERGE 의 UPDATE 경로)",
+   "edits": [
+    {
+     "pick": {
+      "col": "LOT_SIZE",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "LOT_SIZE",
+      "db_col": "LOT_SIZE",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  },
+  {
+   "name": "insert",
+   "title": "DB 에 없는 조합(화면에는 Lot Size 빈 행으로 보임)에 Lot Size 입력(MERGE 의 INSERT 경로) — 복원은 키로 DELETE",
+   "edits": [
+    {
+     "pick": {
+      "col": "LOT_SIZE",
+      "nonempty": false
+     },
+     "edit": {
+      "col": "LOT_SIZE",
+      "db_col": "LOT_SIZE",
+      "value": "1"
+     },
+     "expect_before": 0
+    }
+   ]
+  },
+  {
+   "name": "multi",
+   "title": "두 행을 고치고 한 번에 저장(저장 SP 인자가 쉼표로 묶여 넘어가는 경우)",
+   "edits": [
+    {
+     "pick": {
+      "col": "LOT_SIZE",
+      "nonempty": true,
+      "nth": 0
+     },
+     "edit": {
+      "col": "LOT_SIZE",
+      "db_col": "LOT_SIZE",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    },
+    {
+     "pick": {
+      "col": "LOT_SIZE",
+      "nonempty": true,
+      "nth": 0
+     },
+     "edit": {
+      "col": "LOT_SIZE",
+      "db_col": "LOT_SIZE",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  },
+  {
+   "name": "invalid_zero",
+   "title": "Lot Size 를 0 으로 넣고 저장 → 검증 메시지(0보다 큰 정수) · 저장 안 됨 (checkValidSize :751 · MSG00084)",
+   "edits": [
+    {
+     "pick": {
+      "col": "LOT_SIZE",
+      "nonempty": true,
+      "nth": 0
+     },
+     "edit": {
+      "col": "LOT_SIZE",
+      "db_col": "LOT_SIZE",
+      "value": "0"
+     },
+     "expect_before": 1
+    }
+   ],
+   "expect": "message",
+   "message_re": "0보다 큰 정수"
+  },
+  {
+   "name": "delete",
+   "title": "삭제 팝업에서 한 조합을 체크해 삭제(FindDelete :462 — 그 조합의 운송 수단 전부 삭제) → 지워진 행 전부 되살림",
+   "kind": "delete_popup",
+   "button": "btnDelete",
+   "popup": "SCM0002_ShipmentLotSizePopup",
+   "popup_set": [
+    {
+     "name": "clbFromSite",
+     "from": "FROM_SITE"
+    }
+   ],
+   "popup_find": "FindData",
+   "popup_ok": "SaveData",
+   "popup_check_col": "CHK",
+   "popup_match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "FROM_SITE": "FROM_SITE",
+    "TO_SITE": "TO_SITE",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "pick": {
+    "col": "LOT_SIZE",
+    "nonempty": true,
+    "nth": 0
+   },
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "FROM_SITE": "FROM_SITE",
+    "TO_SITE": "TO_SITE",
+    "ITEM_ID": "ITEM_ID"
+   }
+  }
+ ],
+ "side": [
+  {
+   "table": "SCP_MST_SHIPMENT_LOT_SIZE_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ]
+}

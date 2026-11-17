@@ -19,6 +19,7 @@ import json
 import os
 import re
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
 from asis_variant import is_main, is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -449,9 +450,14 @@ def main():
         if r.get('control'):
             ee_ctl.setdefault(r['column'], {})[r['control']] = r
 
+    # 2026-11-16 SCP0104: AS-IS 잠금 원문을 사람이 읽어 적은 편집 기대(Doc/verify/<ID>/edit_expect_manual.csv · 시트+컬럼 키) — 자동 해석(edit_expect.csv)이 '해석 못 한 잠금'·시트 누락으로 남긴 칸을 원문 근거로 채운다. 있으면 자동 해석보다 우선
+    ee_manual = {(re.sub(r'[^a-z0-9]', '', (r.get('sheet') or '').lower()), (r.get('column') or '').upper()): dict(r, asis_visible='', ambiguous='', control='') for r in read_csv(P('Doc', 'verify', mid, 'edit_expect_manual.csv'))}
+
     def ee_for(col, sheet):
         """시트별 편집 기대 — 잠금 문장의 스프레드 컨트롤(siMain·siExcept…) 토큰과 TO-BE 시트명을 맞춘다
         (2026-10-29: SCP0020 siExcept 의 LINE_ID 신규행 잠금이 Plant/Packer/Tact Time 시트 D1 에 적용돼 허위 FAIL). 컨트롤 분리 정보가 없으면 통합 기대"""
+        _m = ee_manual.get((re.sub(r'[^a-z0-9]', '', (sheet or '').lower()), (col or '').upper()))
+        if _m: return _m
         by = ee_ctl.get(col, {})
         # 규칙이 해석된 시트(edit_expect.sheet)가 있고 TO-BE 시트와 다르면 기대를 쓰지 않는다 — 같은 컬럼명(QTY)이 다른 시트에도 있을 때 교차 오염(2026-10-31 SCP0041)
         base = ee.get(col, {})
@@ -609,6 +615,12 @@ def main():
             add('ASIS', rule_id, ','.join(cnames) or tgt, condition=guard[:600], expected=f"셀 콤보 후보 = AS-IS {val[:160]}", asis_ref=loc, area=area)
             if 'Clipboard' in m:
                 add('ASIS', 'F3', ','.join(cnames) or tgt, condition=guard[:600], expected='붙여넣기 입력에도 같은 콤보·연쇄 적용', asis_ref=loc, area=area)
+        elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m) and re.search(r'[.](ForeColor|BackColor|Border)$', tgt):
+            # 2026-11-11 T247: 값 변경 핸들러 안의 '셀 색·테두리' 대입은 값 연쇄(C3·C6)가 아니라 표시 규칙(H2 배경·글자색) — 종전엔 C3 로 넣어 '원천 컬럼 분기 해석 불가' 판정필요로 남았다(전 화면 76행)
+            add('ASIS', 'H2', ','.join(col_from_args(tgt)) or tgt, condition=guard[:600], expected=f"조건 충족 시 셀 표시(색·테두리) {tgt.split('.')[-1]} = {val[:160]}", asis_ref=loc, area=area)
+        elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m) and re.search(r'Columns\[.*\][.]Visible$', tgt):
+            # 2026-11-11 T247: 값 변경(라디오·콤보)으로 '컬럼 표시 여부'를 바꾸는 문장 = 조건별 표시 컬럼 구성(A5) — 값 연쇄가 아니다(전 화면 70행 · 예 SSP0023 rdButton_Changed)
+            add('ASIS', 'A5', ','.join(col_from_args(tgt)) or tgt, condition=guard[:600], expected=f"조건 충족 시 컬럼 표시 여부 = {val[:80]}", asis_ref=loc, area=area)
         elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m):
             # 빈 값 대입은 '채움' 이 아니다(EG085 — 초기화 판정은 cell_clear 전용 행) · 2026-11-01 이전에는 비워야 정상인 칸을 '대상 빈 값' FAIL 로 보았다
             if not re.search(r',\s*(""|string\.Empty|String\.Empty|null)\s*\)\s*$', val): add('ASIS', 'C3', ','.join(cnames) or tgt, condition=guard[:600], expected=f"연쇄 자동 채움 {tgt}{val[:160]}", asis_ref=loc, area=area)

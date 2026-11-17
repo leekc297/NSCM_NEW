@@ -1,0 +1,173 @@
+{
+ "id": "SCP0128",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_SAFETY_STOCK",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "STAGE",
+   "ITEM_ID",
+   "VALUE_TYPE",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "STAGE": "STAGE",
+   "ITEM_ID": "ITEM_ID",
+   "VALUE_TYPE": "VALUE_TYPE",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0128_SAVE_SAFETY_STOCK",
+  "side": [],
+  "basis": "foxml SCP0128_SAVE_SAFETY_STOCK → SP SCP0128_SAVE_SAFETY_STOCK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "APL_QTY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "APL_QTY",
+     "db_col": "APL_QTY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "APL_QTY",
+    "db_col": "APL_QTY",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:04:29",
+ "status": "DRY_OK",
+ "steps": [],
+ "raw_key_used": [
+  {
+   "row": 0,
+   "shown": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "MI00-P",
+    "OPMZ_PLAN_GR_ID": "E79C",
+    "STAGE": "PACK",
+    "ITEM_ID": "AMTYTTNGA-A1-070",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "2026-06-01",
+    "TO_YYYYMMDD": "2027-12-31"
+   },
+   "raw": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "MI00-P",
+    "OPMZ_PLAN_GR_ID": "PG0061",
+    "STAGE": "PACK",
+    "ITEM_ID": "AMTYTTNGA-A1-070",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20260601",
+    "TO_YYYYMMDD": "20271231"
+   }
+  }
+ ],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0061",
+   "SCM_SITE_ID": "MI00-P",
+   "STAGE": "PACK",
+   "ITEM_ID": "AMTYTTNGA-A1-070",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20260601",
+   "TO_YYYYMMDD": "20271231",
+   "APL_QTY": "10000",
+   "VALUE_DESCRIPTION": "적재 수량",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "ycw9419",
+   "CREATION_DATE": "2026-06-01 14:55:48.807",
+   "LAST_UPDATED_BY": "ycw9419",
+   "LAST_UPDATE_DATE": "2026-06-01 14:55:48.807"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "MI00-P",
+    "OPMZ_PLAN_GR_ID": "PG0061",
+    "STAGE": "PACK",
+    "ITEM_ID": "AMTYTTNGA-A1-070",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20260601",
+    "TO_YYYYMMDD": "20271231"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "APL_QTY",
+   "old": "10000",
+   "new": "10001",
+   "ok": true,
+   "error": null,
+   "before": "10,000",
+   "after": "10,001",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0061",
+   "SCM_SITE_ID": "MI00-P",
+   "STAGE": "PACK",
+   "ITEM_ID": "AMTYTTNGA-A1-070",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20260601",
+   "TO_YYYYMMDD": "20271231",
+   "APL_QTY": "10000",
+   "VALUE_DESCRIPTION": "적재 수량",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "ycw9419",
+   "CREATION_DATE": "2026-06-01 14:55:48.807",
+   "LAST_UPDATED_BY": "ycw9419",
+   "LAST_UPDATE_DATE": "2026-06-01 14:55:48.807"
+  }
+ ]
+}

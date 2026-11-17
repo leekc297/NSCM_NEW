@@ -1,0 +1,1604 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: SCP0007.smoke.spec.ts >> SCP0007 BOD 스모크 @smoke >> 화면 열림 · 조회조건 · 조회 · 그리드 컬럼
+- Location: ..\..\Doc\e2e\specs\SCP0007.smoke.spec.ts:11:7
+
+# Error details
+
+```
+Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검
+
+expect(received).toBeGreaterThanOrEqual(expected)
+
+Expected: >= 2
+Received:    1
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - link "SCM 공급망관리시스템 Supply Chain Management system" [ref=f2e5] [cursor=pointer]:
+        - /url: /view/SCP0007
+        - generic [ref=f2e6]: SCM
+        - generic [ref=f2e7]:
+          - generic [ref=f2e8]: 공급망관리시스템
+          - generic [ref=f2e9]: Supply Chain Management system
+      - navigation [ref=f2e10]:
+        - link "Demand" [ref=f2e11] [cursor=pointer]:
+          - /url: /view/SCP0007
+        - link "Supply" [ref=f2e12] [cursor=pointer]:
+          - /url: /view/SCP0007
+        - link "Shipping" [ref=f2e13] [cursor=pointer]:
+          - /url: /view/SCP0007
+        - link "Report" [ref=f2e14] [cursor=pointer]:
+          - /url: /view/SCP0007
+        - link "Authority" [ref=f2e15] [cursor=pointer]:
+          - /url: /view/SCP0007
+        - link "Admin" [ref=f2e16] [cursor=pointer]:
+          - /url: /view/SCP0007
+      - generic [ref=f2e17]:
+        - button "KOR" [ref=f2e19] [cursor=pointer]
+        - button "이 이민용" [ref=f2e23] [cursor=pointer]:
+          - paragraph [ref=f2e28]: 이
+          - generic [ref=f2e29]: 이민용
+    - generic [ref=f2e30]:
+      - button [ref=f2e31] [cursor=pointer]
+      - complementary [ref=f2e37]:
+        - navigation [ref=f2e38]:
+          - paragraph [ref=f2e39]: Supply
+          - generic [ref=f2e40]:
+            - link [ref=f2e41] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e42]: Supply Master
+            - link [ref=f2e45] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e46]: Line Master
+            - link [ref=f2e47] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e48]: Project Route
+            - link [ref=f2e49] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e50]: BOD
+            - link [ref=f2e51] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e52]: Plant Site
+            - link [ref=f2e53] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e54]: Production Plan
+            - link [ref=f2e55] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e56]: Work Calendar(OSP)
+            - link [ref=f2e57] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e58]: Tact Time(OSP)
+            - link [ref=f2e59] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e60]: Formation
+            - link [ref=f2e61] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e62]: Outsourcing Capacity
+            - link [ref=f2e63] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e64]: BOD ITEM
+            - link [ref=f2e65] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e66]: Master Validation
+            - link [ref=f2e67] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e68]: Stock OSP
+            - link [ref=f2e69] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e70]: ProjectRoute(Electrode)
+            - link [ref=f2e71] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e72]: ProjectRoute(Warranty)
+            - link [ref=f2e73] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e74]: CAPA
+            - link [ref=f2e75] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e76]: SCP BOM (Cell~Pack)
+            - link [ref=f2e77] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e78]: Model Code Master
+            - link [ref=f2e79] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e80]: MDM Class Master
+            - link [ref=f2e81] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e82]: Shipment Working Day(OSP)
+            - link [ref=f2e83] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e84]: SCP BOM(Elec)
+            - link [ref=f2e85] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e86]: CAPA (Mobility IT)
+            - link [ref=f2e87] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e88]: Demand Group Master
+            - link [ref=f2e89] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e90]: Operation LT
+          - generic [ref=f2e91]:
+            - link [ref=f2e92] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e93]: Supply Plan
+            - link "Plan Management":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e96] [cursor=pointer]: Plan Management
+            - link "Shipment Plan FG":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e97] [cursor=pointer]: Shipment Plan FG
+            - link "Shipment Plan SEMI":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e98] [cursor=pointer]: Shipment Plan SEMI
+            - link "Production Plan Line":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e99] [cursor=pointer]: Production Plan Line
+            - link "Production Plan Fix":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e100] [cursor=pointer]: Production Plan Fix
+            - link "Shipment Plan Fix":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e101] [cursor=pointer]: Shipment Plan Fix
+            - link "Global PSI":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e102] [cursor=pointer]: Global PSI
+            - link "Global PSI Elec":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e103] [cursor=pointer]: Global PSI Elec
+            - link "Global PSI New":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e104] [cursor=pointer]: Global PSI New
+            - link "Integration PSI":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e105] [cursor=pointer]: Integration PSI
+          - generic [ref=f2e106]:
+            - link [ref=f2e107] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e108]: Validation
+            - link "Intransit Inventory":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e111] [cursor=pointer]: Intransit Inventory
+          - generic [ref=f2e112]:
+            - link [ref=f2e113] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e114]: Capa Plan
+            - link "CAPA LineMaster":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e117] [cursor=pointer]: CAPA LineMaster
+            - link "Line Assign":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e118] [cursor=pointer]: Line Assign
+            - link "Speed Plan":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e119] [cursor=pointer]: Speed Plan
+            - link "Loss Plan":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e120] [cursor=pointer]: Loss Plan
+            - link "LOB Report":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e121] [cursor=pointer]: LOB Report
+            - link "TEEP Report":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e122] [cursor=pointer]: TEEP Report
+          - generic [ref=f2e123]:
+            - link [ref=f2e124] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e125]: OPT Plan
+            - link "Plan Control":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e128] [cursor=pointer]: Plan Control
+            - link "OPT CAPA":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e129] [cursor=pointer]: OPT CAPA
+            - link "Workbench":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e130] [cursor=pointer]: Workbench
+            - link "Constraint Mgmt":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e131] [cursor=pointer]: Constraint Mgmt
+            - link "Plan Group Master":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e132] [cursor=pointer]: Plan Group Master
+            - link "Plan Activity Mgmt":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e133] [cursor=pointer]: Plan Activity Mgmt
+            - link "Plan Group Dashboard":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e134] [cursor=pointer]: Plan Group Dashboard
+            - link "Precede/Safety Stock Day":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e135] [cursor=pointer]: Precede/Safety Stock Day
+            - link "Precede/Safety Stock Qty":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e136] [cursor=pointer]: Precede/Safety Stock Qty
+            - link "Demand Exception":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e137] [cursor=pointer]: Demand Exception
+            - link "Scheduled Receipt Information":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e138] [cursor=pointer]: Scheduled Receipt Information
+            - link "Sales Site Priority":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e139] [cursor=pointer]: Sales Site Priority
+            - link "Constraint Of Shipment Qty":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e140] [cursor=pointer]: Constraint Of Shipment Qty
+            - link "Warehouse Capacity":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e141] [cursor=pointer]: Warehouse Capacity
+          - generic [ref=f2e142]:
+            - link [ref=f2e143] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e144]: Waterfall
+            - link "Shipment Plan FG Waterfall":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e147] [cursor=pointer]: Shipment Plan FG Waterfall
+            - link "Production Plan Waterfall":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e148] [cursor=pointer]: Production Plan Waterfall
+            - link "Shipment Plan Semi Waterfall":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e149] [cursor=pointer]: Shipment Plan Semi Waterfall
+          - generic [ref=f2e150]:
+            - link [ref=f2e151] [cursor=pointer]:
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e152]: SCM Supply
+            - link "Shipment(Allo) Report":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e155] [cursor=pointer]: Shipment(Allo) Report
+            - link "Long-term stock":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e156] [cursor=pointer]: Long-term stock
+            - link "Ending Inventory":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e157] [cursor=pointer]: Ending Inventory
+            - link "Inventory Trend":
+              - /url: /view/SCP0007
+              - paragraph [ref=f2e158] [cursor=pointer]: Inventory Trend
+      - main [ref=f2e159]:
+        - generic [ref=f2e161]:
+          - generic [ref=f2e162]:
+            - generic [ref=f2e163]:
+              - button "Home" [ref=f2e164] [cursor=pointer]
+              - button "BOD" [ref=f2e166] [cursor=pointer]
+            - generic [ref=f2e171]:
+              - button "Scroll tabs left" [disabled] [ref=f2e172]
+              - button "Scroll tabs right" [disabled] [ref=f2e175]
+              - button "Close others" [ref=f2e178] [cursor=pointer]
+              - button "Close All" [ref=f2e179] [cursor=pointer]
+          - generic [ref=f2e180]:
+            - generic [ref=f2e183]:
+              - generic [ref=f2e185]:
+                - generic [ref=f2e186]:
+                  - img [aria-hidden] [ref=f2e188] [cursor=pointer]
+                  - paragraph [ref=f2e191]: BOD
+                - generic [ref=f2e192]:
+                  - generic [ref=f2e193]: Supply
+                  - generic [ref=f2e198]: Supply Master
+                  - generic [ref=f2e203]: BOD
+                - generic [ref=f2e205]:
+                  - generic [ref=f2e206]: Search Area
+                  - switch [checked] [ref=f2e209] [cursor=pointer]
+                - button "Full screen" [ref=f2e212] [cursor=pointer]
+              - generic [ref=f2e222]:
+                - generic [ref=f2e223]:
+                  - generic [ref=f2e225]:
+                    - generic [ref=f2e226]: Div
+                    - generic [ref=f2e236] [cursor=pointer]:
+                      - generic "40 Mobility & IT Battery" [ref=f2e237]:
+                        - paragraph [ref=f2e241]: 40 Mobility & IT Battery
+                      - combobox
+                      - button "Open" [ref=f2e247]
+                      - group [aria-hidden]
+                  - generic [ref=f2e252]:
+                    - generic [ref=f2e253]: From Site
+                    - generic [ref=f2e261] [cursor=pointer]:
+                      - combobox "ALL" [ref=f2e262]
+                      - button "Open" [ref=f2e264]
+                      - group [aria-hidden]
+                  - generic [ref=f2e269]:
+                    - generic [ref=f2e270]: To Site
+                    - generic [ref=f2e278] [cursor=pointer]:
+                      - combobox "ALL" [ref=f2e279]
+                      - button "Open" [ref=f2e281]
+                      - group [aria-hidden]
+                  - generic [ref=f2e286]:
+                    - generic [ref=f2e287]: Incoterms
+                    - generic [ref=f2e295] [cursor=pointer]:
+                      - combobox "ALL" [ref=f2e296]
+                      - button "Open" [ref=f2e298]
+                      - group [aria-hidden]
+                  - generic [ref=f2e303]:
+                    - generic [ref=f2e304]: SSP Incoterms
+                    - generic [ref=f2e312] [cursor=pointer]:
+                      - combobox "ALL" [ref=f2e313]
+                      - button "Open" [ref=f2e315]
+                      - group [aria-hidden]
+                  - generic [ref=f2e320]:
+                    - generic [ref=f2e321]: Trans Mode
+                    - generic [ref=f2e329] [cursor=pointer]:
+                      - combobox "ALL" [ref=f2e330]
+                      - button "Open" [ref=f2e332]
+                      - group [aria-hidden]
+                  - generic [ref=f2e337]:
+                    - generic [ref=f2e338]: Status
+                    - generic [ref=f2e346]:
+                      - combobox [ref=f2e347]: Completed
+                      - button "Open" [ref=f2e349] [cursor=pointer]
+                      - group [aria-hidden]
+                  - generic [ref=f2e354]:
+                    - generic [ref=f2e355]: Active
+                    - generic [ref=f2e363]:
+                      - combobox [ref=f2e364]: ALL
+                      - button "Open" [ref=f2e366] [cursor=pointer]
+                      - group [aria-hidden]
+                - button [active] [ref=f2e371] [cursor=pointer]
+              - generic [ref=f2e376]:
+                - generic [ref=f2e377]:
+                  - paragraph
+                  - generic [ref=f2e378]: 총8,194건
+                - generic [ref=f2e379]:
+                  - generic "Insert Row" [ref=f2e380]:
+                    - button [ref=f2e381] [cursor=pointer]
+                  - generic "Remove" [ref=f2e386]:
+                    - button [ref=f2e387] [cursor=pointer]
+                  - generic "Save" [ref=f2e394]:
+                    - button [ref=f2e395] [cursor=pointer]
+                  - generic "Sort" [ref=f2e399]:
+                    - button [ref=f2e400] [cursor=pointer]
+                  - generic "Filter" [ref=f2e405]:
+                    - button [ref=f2e406] [cursor=pointer]
+                  - generic "Condition" [ref=f2e411]:
+                    - button [ref=f2e412] [cursor=pointer]
+                  - generic "Reset Condition" [ref=f2e422]:
+                    - button [ref=f2e423] [cursor=pointer]
+                  - generic "Excel" [ref=f2e430]:
+                    - button [ref=f2e431] [cursor=pointer]
+              - generic [ref=f2e439]:
+                - grid [ref=f2e440]:
+                  - rowgroup [ref=f2e441]:
+                    - generic:
+                      - row "Div Customer From Site From City To Site To City To Site VMI Incoterms SSP Incoterms Priority Route Count Trans Mode Route Id L/T Type Mon Tue Wed Thu Fri Sat Sun Lead Time Distribution Total Lead Time BOD_ID No":
+                        - columnheader "Div" [ref=f2e442]
+                        - columnheader "Customer" [ref=f2e443]
+                        - columnheader "From Site" [ref=f2e444]
+                        - columnheader "From City" [ref=f2e445]
+                        - columnheader "To Site" [ref=f2e446]
+                        - columnheader "To City" [ref=f2e447]
+                        - columnheader "To Site VMI" [ref=f2e448]
+                        - columnheader "Incoterms" [ref=f2e449]
+                        - columnheader "SSP Incoterms" [ref=f2e450]
+                        - columnheader "Priority" [ref=f2e451]
+                        - columnheader "Route Count" [ref=f2e452]
+                        - columnheader "Trans Mode" [ref=f2e453]
+                        - columnheader "Route Id" [ref=f2e454]
+                        - columnheader "L/T Type" [ref=f2e455]
+                        - columnheader "Mon" [ref=f2e456]
+                        - columnheader "Tue" [ref=f2e457]
+                        - columnheader "Wed" [ref=f2e458]
+                        - columnheader "Thu" [ref=f2e459]
+                        - columnheader "Fri" [ref=f2e460]
+                        - columnheader "Sat" [ref=f2e461]
+                        - columnheader "Sun" [ref=f2e462]
+                        - columnheader "Lead Time" [ref=f2e463]
+                        - columnheader "Distribution Total Lead Time" [ref=f2e464]
+                        - columnheader "BOD_ID" [ref=f2e465]
+                        - gridcell "No" [ref=f2e466]
+                        - gridcell [ref=f2e467]
+                  - rowgroup [ref=f2e468]:
+                    - generic [ref=f2e469]:
+                      - row "40 - HQ06-A KRCOJ Alte_KR_SEL KRSEL N A01 A01 1 1 TRUCK 740 AVERAGE Y Y Y Y Y 0 1 16938 1":
+                        - gridcell "40" [selected] [ref=f2e470]
+                        - gridcell "-" [ref=f2e471]
+                        - gridcell "HQ06-A" [ref=f2e472]
+                        - gridcell "KRCOJ" [ref=f2e473]
+                        - gridcell "Alte_KR_SEL" [ref=f2e474]
+                        - gridcell "KRSEL" [ref=f2e475]
+                        - gridcell "N" [ref=f2e476]
+                        - gridcell "A01" [ref=f2e477]
+                        - gridcell "A01" [ref=f2e478]
+                        - gridcell "1" [ref=f2e479]
+                        - gridcell "1" [ref=f2e480]
+                        - gridcell "TRUCK" [ref=f2e481]
+                        - gridcell "740" [ref=f2e482] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e483]
+                        - gridcell "Y" [ref=f2e484]
+                        - gridcell "Y" [ref=f2e485]
+                        - gridcell "Y" [ref=f2e486]
+                        - gridcell "Y" [ref=f2e487]
+                        - gridcell "Y" [ref=f2e488]
+                        - gridcell [ref=f2e489]
+                        - gridcell [ref=f2e490]
+                        - gridcell "0" [ref=f2e491]
+                        - gridcell "1" [ref=f2e492]
+                        - gridcell "16938" [ref=f2e493]
+                        - gridcell "1" [ref=f2e494]
+                        - gridcell [ref=f2e495]
+                      - row "D.Throne_KR_BCN KRBCN N A01 A01 1 1 TRUCK 742 Y Y Y Y Y Y Y 0 1 16976 2":
+                        - gridcell "D.Throne_KR_BCN" [ref=f2e496]
+                        - gridcell "KRBCN" [ref=f2e497]
+                        - gridcell "N" [ref=f2e498]
+                        - gridcell "A01" [ref=f2e499]
+                        - gridcell "A01" [ref=f2e500]
+                        - gridcell "1" [ref=f2e501]
+                        - gridcell "1" [ref=f2e502]
+                        - gridcell "TRUCK" [ref=f2e503]
+                        - gridcell "742" [ref=f2e504] [cursor=pointer]
+                        - gridcell [ref=f2e505]
+                        - gridcell "Y" [ref=f2e506]
+                        - gridcell "Y" [ref=f2e507]
+                        - gridcell "Y" [ref=f2e508]
+                        - gridcell "Y" [ref=f2e509]
+                        - gridcell "Y" [ref=f2e510]
+                        - gridcell "Y" [ref=f2e511]
+                        - gridcell "Y" [ref=f2e512]
+                        - gridcell "0" [ref=f2e513]
+                        - gridcell "1" [ref=f2e514]
+                        - gridcell "16976" [ref=f2e515]
+                        - gridcell "2" [ref=f2e516]
+                        - gridcell [ref=f2e517]
+                      - row "DC EnergySolution_KR_CHU KRCHU N A01 A01 3 3 TRUCK 6516 AVERAGE Y Y Y Y Y 0 0 17006 3":
+                        - gridcell "DC EnergySolution_KR_CHU" [ref=f2e518]
+                        - gridcell "KRCHU" [ref=f2e519]
+                        - gridcell "N" [ref=f2e520]
+                        - gridcell "A01" [ref=f2e521]
+                        - gridcell "A01" [ref=f2e522]
+                        - gridcell "3" [ref=f2e523]
+                        - gridcell "3" [ref=f2e524]
+                        - gridcell "TRUCK" [ref=f2e525]
+                        - gridcell "6516" [ref=f2e526] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e527]
+                        - gridcell "Y" [ref=f2e528]
+                        - gridcell "Y" [ref=f2e529]
+                        - gridcell "Y" [ref=f2e530]
+                        - gridcell "Y" [ref=f2e531]
+                        - gridcell "Y" [ref=f2e532]
+                        - gridcell [ref=f2e533]
+                        - gridcell [ref=f2e534]
+                        - gridcell "0" [ref=f2e535]
+                        - gridcell "0" [ref=f2e536]
+                        - gridcell "17006" [ref=f2e537]
+                        - gridcell "3" [ref=f2e538]
+                        - gridcell [ref=f2e539]
+                      - row "Daechang Motors_KR_CHU KRCHU N A01 A01 1 3 TRUCK 2439 AVERAGE Y Y Y Y Y 0 0 16958 4":
+                        - gridcell "Daechang Motors_KR_CHU" [ref=f2e540]
+                        - gridcell "KRCHU" [ref=f2e541]
+                        - gridcell "N" [ref=f2e542]
+                        - gridcell "A01" [ref=f2e543]
+                        - gridcell "A01" [ref=f2e544]
+                        - gridcell "1" [ref=f2e545]
+                        - gridcell "3" [ref=f2e546]
+                        - gridcell "TRUCK" [ref=f2e547]
+                        - gridcell "2439" [ref=f2e548] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e549]
+                        - gridcell "Y" [ref=f2e550]
+                        - gridcell "Y" [ref=f2e551]
+                        - gridcell "Y" [ref=f2e552]
+                        - gridcell "Y" [ref=f2e553]
+                        - gridcell "Y" [ref=f2e554]
+                        - gridcell [ref=f2e555]
+                        - gridcell [ref=f2e556]
+                        - gridcell "0" [ref=f2e557]
+                        - gridcell "0" [ref=f2e558]
+                        - gridcell "16958" [ref=f2e559]
+                        - gridcell "4" [ref=f2e560]
+                        - gridcell [ref=f2e561]
+                      - row "Doosan_KR_INC KRINC N A01 A01 1 2 TRUCK 1771 AVERAGE Y Y Y Y Y 0 0 17002 5":
+                        - gridcell "Doosan_KR_INC" [ref=f2e562]
+                        - gridcell "KRINC" [ref=f2e563]
+                        - gridcell "N" [ref=f2e564]
+                        - gridcell "A01" [ref=f2e565]
+                        - gridcell "A01" [ref=f2e566]
+                        - gridcell "1" [ref=f2e567]
+                        - gridcell "2" [ref=f2e568]
+                        - gridcell "TRUCK" [ref=f2e569]
+                        - gridcell "1771" [ref=f2e570] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e571]
+                        - gridcell "Y" [ref=f2e572]
+                        - gridcell "Y" [ref=f2e573]
+                        - gridcell "Y" [ref=f2e574]
+                        - gridcell "Y" [ref=f2e575]
+                        - gridcell "Y" [ref=f2e576]
+                        - gridcell [ref=f2e577]
+                        - gridcell [ref=f2e578]
+                        - gridcell "0" [ref=f2e579]
+                        - gridcell "0" [ref=f2e580]
+                        - gridcell "17002" [ref=f2e581]
+                        - gridcell "5" [ref=f2e582]
+                        - gridcell [ref=f2e583]
+                      - row "Edison Tech_KR_TJN KRTJN N A01 A01 1 3 TRUCK 771 AVERAGE Y Y Y Y Y Y Y 0 1 16411 6":
+                        - gridcell "Edison Tech_KR_TJN" [ref=f2e584]
+                        - gridcell "KRTJN" [ref=f2e585]
+                        - gridcell "N" [ref=f2e586]
+                        - gridcell "A01" [ref=f2e587]
+                        - gridcell "A01" [ref=f2e588]
+                        - gridcell "1" [ref=f2e589]
+                        - gridcell "3" [ref=f2e590]
+                        - gridcell "TRUCK" [ref=f2e591]
+                        - gridcell "771" [ref=f2e592] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e593]
+                        - gridcell "Y" [ref=f2e594]
+                        - gridcell "Y" [ref=f2e595]
+                        - gridcell "Y" [ref=f2e596]
+                        - gridcell "Y" [ref=f2e597]
+                        - gridcell "Y" [ref=f2e598]
+                        - gridcell "Y" [ref=f2e599]
+                        - gridcell "Y" [ref=f2e600]
+                        - gridcell "0" [ref=f2e601]
+                        - gridcell "1" [ref=f2e602]
+                        - gridcell "16411" [ref=f2e603]
+                        - gridcell "6" [ref=f2e604]
+                        - gridcell [ref=f2e605]
+                      - row "Gims_KR_CHF KRCHF N A01 A01 1 1 TRUCK 3656 Y Y Y Y Y Y 0 1 16384 7":
+                        - gridcell "Gims_KR_CHF" [ref=f2e606]
+                        - gridcell "KRCHF" [ref=f2e607]
+                        - gridcell "N" [ref=f2e608]
+                        - gridcell "A01" [ref=f2e609]
+                        - gridcell "A01" [ref=f2e610]
+                        - gridcell "1" [ref=f2e611]
+                        - gridcell "1" [ref=f2e612]
+                        - gridcell "TRUCK" [ref=f2e613]
+                        - gridcell "3656" [ref=f2e614] [cursor=pointer]
+                        - gridcell [ref=f2e615]
+                        - gridcell "Y" [ref=f2e616]
+                        - gridcell "Y" [ref=f2e617]
+                        - gridcell "Y" [ref=f2e618]
+                        - gridcell "Y" [ref=f2e619]
+                        - gridcell "Y" [ref=f2e620]
+                        - gridcell "Y" [ref=f2e621]
+                        - gridcell [ref=f2e622]
+                        - gridcell "0" [ref=f2e623]
+                        - gridcell "1" [ref=f2e624]
+                        - gridcell "16384" [ref=f2e625]
+                        - gridcell "7" [ref=f2e626]
+                        - gridcell [ref=f2e627]
+                      - row "Gims_KR_SEL KRSEL N A01 A01 1 1 TRUCK 740 AVERAGE Y Y Y Y Y 0 1 16385 8":
+                        - gridcell "Gims_KR_SEL" [ref=f2e628]
+                        - gridcell "KRSEL" [ref=f2e629]
+                        - gridcell "N" [ref=f2e630]
+                        - gridcell "A01" [ref=f2e631]
+                        - gridcell "A01" [ref=f2e632]
+                        - gridcell "1" [ref=f2e633]
+                        - gridcell "1" [ref=f2e634]
+                        - gridcell "TRUCK" [ref=f2e635]
+                        - gridcell "740" [ref=f2e636] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e637]
+                        - gridcell "Y" [ref=f2e638]
+                        - gridcell "Y" [ref=f2e639]
+                        - gridcell "Y" [ref=f2e640]
+                        - gridcell "Y" [ref=f2e641]
+                        - gridcell "Y" [ref=f2e642]
+                        - gridcell [ref=f2e643]
+                        - gridcell [ref=f2e644]
+                        - gridcell "0" [ref=f2e645]
+                        - gridcell "1" [ref=f2e646]
+                        - gridcell "16385" [ref=f2e647]
+                        - gridcell "8" [ref=f2e648]
+                        - gridcell [ref=f2e649]
+                      - row "Hanwha Aerospace_KR_CHU KRCHU N A01 A01 1 3 TRUCK 2439 AVERAGE Y Y Y Y Y 0 0 17007 9":
+                        - gridcell "Hanwha Aerospace_KR_CHU" [ref=f2e650]
+                        - gridcell "KRCHU" [ref=f2e651]
+                        - gridcell "N" [ref=f2e652]
+                        - gridcell "A01" [ref=f2e653]
+                        - gridcell "A01" [ref=f2e654]
+                        - gridcell "1" [ref=f2e655]
+                        - gridcell "3" [ref=f2e656]
+                        - gridcell "TRUCK" [ref=f2e657]
+                        - gridcell "2439" [ref=f2e658] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e659]
+                        - gridcell "Y" [ref=f2e660]
+                        - gridcell "Y" [ref=f2e661]
+                        - gridcell "Y" [ref=f2e662]
+                        - gridcell "Y" [ref=f2e663]
+                        - gridcell "Y" [ref=f2e664]
+                        - gridcell [ref=f2e665]
+                        - gridcell [ref=f2e666]
+                        - gridcell "0" [ref=f2e667]
+                        - gridcell "0" [ref=f2e668]
+                        - gridcell "17007" [ref=f2e669]
+                        - gridcell "9" [ref=f2e670]
+                        - gridcell [ref=f2e671]
+                      - row "Hanwha Defense_KR_SGM KRSGM N A01 A01 1 1 TRUCK 756 Y Y Y Y Y Y Y 0 1 16977 10":
+                        - gridcell "Hanwha Defense_KR_SGM" [ref=f2e672]
+                        - gridcell "KRSGM" [ref=f2e673]
+                        - gridcell "N" [ref=f2e674]
+                        - gridcell "A01" [ref=f2e675]
+                        - gridcell "A01" [ref=f2e676]
+                        - gridcell "1" [ref=f2e677]
+                        - gridcell "1" [ref=f2e678]
+                        - gridcell "TRUCK" [ref=f2e679]
+                        - gridcell "756" [ref=f2e680] [cursor=pointer]
+                        - gridcell [ref=f2e681]
+                        - gridcell "Y" [ref=f2e682]
+                        - gridcell "Y" [ref=f2e683]
+                        - gridcell "Y" [ref=f2e684]
+                        - gridcell "Y" [ref=f2e685]
+                        - gridcell "Y" [ref=f2e686]
+                        - gridcell "Y" [ref=f2e687]
+                        - gridcell "Y" [ref=f2e688]
+                        - gridcell "0" [ref=f2e689]
+                        - gridcell "1" [ref=f2e690]
+                        - gridcell "16977" [ref=f2e691]
+                        - gridcell "10" [ref=f2e692]
+                        - gridcell [ref=f2e693]
+                      - row "KR Motors_KR_CHW KRCHW N A01 A01 1 1 TRUCK 755 Y Y Y Y Y Y Y 0 1 16978 11":
+                        - gridcell "KR Motors_KR_CHW" [ref=f2e694]
+                        - gridcell "KRCHW" [ref=f2e695]
+                        - gridcell "N" [ref=f2e696]
+                        - gridcell "A01" [ref=f2e697]
+                        - gridcell "A01" [ref=f2e698]
+                        - gridcell "1" [ref=f2e699]
+                        - gridcell "1" [ref=f2e700]
+                        - gridcell "TRUCK" [ref=f2e701]
+                        - gridcell "755" [ref=f2e702] [cursor=pointer]
+                        - gridcell [ref=f2e703]
+                        - gridcell "Y" [ref=f2e704]
+                        - gridcell "Y" [ref=f2e705]
+                        - gridcell "Y" [ref=f2e706]
+                        - gridcell "Y" [ref=f2e707]
+                        - gridcell "Y" [ref=f2e708]
+                        - gridcell "Y" [ref=f2e709]
+                        - gridcell "Y" [ref=f2e710]
+                        - gridcell "0" [ref=f2e711]
+                        - gridcell "1" [ref=f2e712]
+                        - gridcell "16978" [ref=f2e713]
+                        - gridcell "11" [ref=f2e714]
+                        - gridcell [ref=f2e715]
+                      - row "LGI_KR_INC KRINC N A01 A01 1 2 TRUCK 1771 AVERAGE Y Y Y Y Y 0 0 16951 12":
+                        - gridcell "LGI_KR_INC" [ref=f2e716]
+                        - gridcell "KRINC" [ref=f2e717]
+                        - gridcell "N" [ref=f2e718]
+                        - gridcell "A01" [ref=f2e719]
+                        - gridcell "A01" [ref=f2e720]
+                        - gridcell "1" [ref=f2e721]
+                        - gridcell "2" [ref=f2e722]
+                        - gridcell "TRUCK" [ref=f2e723]
+                        - gridcell "1771" [ref=f2e724] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e725]
+                        - gridcell "Y" [ref=f2e726]
+                        - gridcell "Y" [ref=f2e727]
+                        - gridcell "Y" [ref=f2e728]
+                        - gridcell "Y" [ref=f2e729]
+                        - gridcell "Y" [ref=f2e730]
+                        - gridcell [ref=f2e731]
+                        - gridcell [ref=f2e732]
+                        - gridcell "0" [ref=f2e733]
+                        - gridcell "0" [ref=f2e734]
+                        - gridcell "16951" [ref=f2e735]
+                        - gridcell "12" [ref=f2e736]
+                        - gridcell [ref=f2e737]
+                      - row "Naverlabs_KR_SGM KRSGM N A01 A01 1 1 TRUCK 756 Y Y Y Y Y Y Y 0 1 16979 13":
+                        - gridcell "Naverlabs_KR_SGM" [ref=f2e738]
+                        - gridcell "KRSGM" [ref=f2e739]
+                        - gridcell "N" [ref=f2e740]
+                        - gridcell "A01" [ref=f2e741]
+                        - gridcell "A01" [ref=f2e742]
+                        - gridcell "1" [ref=f2e743]
+                        - gridcell "1" [ref=f2e744]
+                        - gridcell "TRUCK" [ref=f2e745]
+                        - gridcell "756" [ref=f2e746] [cursor=pointer]
+                        - gridcell [ref=f2e747]
+                        - gridcell "Y" [ref=f2e748]
+                        - gridcell "Y" [ref=f2e749]
+                        - gridcell "Y" [ref=f2e750]
+                        - gridcell "Y" [ref=f2e751]
+                        - gridcell "Y" [ref=f2e752]
+                        - gridcell "Y" [ref=f2e753]
+                        - gridcell "Y" [ref=f2e754]
+                        - gridcell "0" [ref=f2e755]
+                        - gridcell "1" [ref=f2e756]
+                        - gridcell "16979" [ref=f2e757]
+                        - gridcell "13" [ref=f2e758]
+                        - gridcell [ref=f2e759]
+                      - row "Peopleworks_KR_KUM KRKUM N A01 A01 1 1 TRUCK 769 Y Y Y Y Y Y Y 0 1 16902 14":
+                        - gridcell "Peopleworks_KR_KUM" [ref=f2e760]
+                        - gridcell "KRKUM" [ref=f2e761]
+                        - gridcell "N" [ref=f2e762]
+                        - gridcell "A01" [ref=f2e763]
+                        - gridcell "A01" [ref=f2e764]
+                        - gridcell "1" [ref=f2e765]
+                        - gridcell "1" [ref=f2e766]
+                        - gridcell "TRUCK" [ref=f2e767]
+                        - gridcell "769" [ref=f2e768] [cursor=pointer]
+                        - gridcell [ref=f2e769]
+                        - gridcell "Y" [ref=f2e770]
+                        - gridcell "Y" [ref=f2e771]
+                        - gridcell "Y" [ref=f2e772]
+                        - gridcell "Y" [ref=f2e773]
+                        - gridcell "Y" [ref=f2e774]
+                        - gridcell "Y" [ref=f2e775]
+                        - gridcell "Y" [ref=f2e776]
+                        - gridcell "0" [ref=f2e777]
+                        - gridcell "1" [ref=f2e778]
+                        - gridcell "16902" [ref=f2e779]
+                        - gridcell "14" [ref=f2e780]
+                        - gridcell [ref=f2e781]
+                      - row "Peopleworks_KR_SEL KRSEL N A01 A01 1 1 TRUCK 740 AVERAGE Y Y Y Y Y 0 1 16903 15":
+                        - gridcell "Peopleworks_KR_SEL" [ref=f2e782]
+                        - gridcell "KRSEL" [ref=f2e783]
+                        - gridcell "N" [ref=f2e784]
+                        - gridcell "A01" [ref=f2e785]
+                        - gridcell "A01" [ref=f2e786]
+                        - gridcell "1" [ref=f2e787]
+                        - gridcell "1" [ref=f2e788]
+                        - gridcell "TRUCK" [ref=f2e789]
+                        - gridcell "740" [ref=f2e790] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e791]
+                        - gridcell "Y" [ref=f2e792]
+                        - gridcell "Y" [ref=f2e793]
+                        - gridcell "Y" [ref=f2e794]
+                        - gridcell "Y" [ref=f2e795]
+                        - gridcell "Y" [ref=f2e796]
+                        - gridcell [ref=f2e797]
+                        - gridcell [ref=f2e798]
+                        - gridcell "0" [ref=f2e799]
+                        - gridcell "1" [ref=f2e800]
+                        - gridcell "16903" [ref=f2e801]
+                        - gridcell "15" [ref=f2e802]
+                        - gridcell [ref=f2e803]
+                      - row "Powerlogics_KR_OCH KROCH N A01 A01 1 2 TRUCK 1772 AVERAGE Y Y Y Y Y 0 0 16412 16":
+                        - gridcell "Powerlogics_KR_OCH" [ref=f2e804]
+                        - gridcell "KROCH" [ref=f2e805]
+                        - gridcell "N" [ref=f2e806]
+                        - gridcell "A01" [ref=f2e807]
+                        - gridcell "A01" [ref=f2e808]
+                        - gridcell "1" [ref=f2e809]
+                        - gridcell "2" [ref=f2e810]
+                        - gridcell "TRUCK" [ref=f2e811]
+                        - gridcell "1772" [ref=f2e812] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e813]
+                        - gridcell "Y" [ref=f2e814]
+                        - gridcell "Y" [ref=f2e815]
+                        - gridcell "Y" [ref=f2e816]
+                        - gridcell "Y" [ref=f2e817]
+                        - gridcell "Y" [ref=f2e818]
+                        - gridcell [ref=f2e819]
+                        - gridcell [ref=f2e820]
+                        - gridcell "0" [ref=f2e821]
+                        - gridcell "0" [ref=f2e822]
+                        - gridcell "16412" [ref=f2e823]
+                        - gridcell "16" [ref=f2e824]
+                        - gridcell [ref=f2e825]
+                      - row "Shin-Heung SEC_KR_OSN KROSN N A01 A01 1 1 TRUCK 735 AVERAGE Y Y Y Y Y 0 0 16904 17":
+                        - gridcell "Shin-Heung SEC_KR_OSN" [ref=f2e826]
+                        - gridcell "KROSN" [ref=f2e827]
+                        - gridcell "N" [ref=f2e828]
+                        - gridcell "A01" [ref=f2e829]
+                        - gridcell "A01" [ref=f2e830]
+                        - gridcell "1" [ref=f2e831]
+                        - gridcell "1" [ref=f2e832]
+                        - gridcell "TRUCK" [ref=f2e833]
+                        - gridcell "735" [ref=f2e834] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e835]
+                        - gridcell "Y" [ref=f2e836]
+                        - gridcell "Y" [ref=f2e837]
+                        - gridcell "Y" [ref=f2e838]
+                        - gridcell "Y" [ref=f2e839]
+                        - gridcell "Y" [ref=f2e840]
+                        - gridcell [ref=f2e841]
+                        - gridcell [ref=f2e842]
+                        - gridcell "0" [ref=f2e843]
+                        - gridcell "0" [ref=f2e844]
+                        - gridcell "16904" [ref=f2e845]
+                        - gridcell "17" [ref=f2e846]
+                        - gridcell [ref=f2e847]
+                      - row "Toyota Tsusho KR_KR_SEL KRSEL N A01 A01 1 1 TRUCK 740 AVERAGE Y Y Y Y Y 0 1 16980 18":
+                        - gridcell "Toyota Tsusho KR_KR_SEL" [ref=f2e848]
+                        - gridcell "KRSEL" [ref=f2e849]
+                        - gridcell "N" [ref=f2e850]
+                        - gridcell "A01" [ref=f2e851]
+                        - gridcell "A01" [ref=f2e852]
+                        - gridcell "1" [ref=f2e853]
+                        - gridcell "1" [ref=f2e854]
+                        - gridcell "TRUCK" [ref=f2e855]
+                        - gridcell "740" [ref=f2e856] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e857]
+                        - gridcell "Y" [ref=f2e858]
+                        - gridcell "Y" [ref=f2e859]
+                        - gridcell "Y" [ref=f2e860]
+                        - gridcell "Y" [ref=f2e861]
+                        - gridcell "Y" [ref=f2e862]
+                        - gridcell [ref=f2e863]
+                        - gridcell [ref=f2e864]
+                        - gridcell "0" [ref=f2e865]
+                        - gridcell "1" [ref=f2e866]
+                        - gridcell "16980" [ref=f2e867]
+                        - gridcell "18" [ref=f2e868]
+                        - gridcell [ref=f2e869]
+                      - row "Zentropy_KR_SGM KRSGM N A01 A01 1 1 TRUCK 756 Y Y Y Y Y Y Y 0 1 16981 19":
+                        - gridcell "Zentropy_KR_SGM" [ref=f2e870]
+                        - gridcell "KRSGM" [ref=f2e871]
+                        - gridcell "N" [ref=f2e872]
+                        - gridcell "A01" [ref=f2e873]
+                        - gridcell "A01" [ref=f2e874]
+                        - gridcell "1" [ref=f2e875]
+                        - gridcell "1" [ref=f2e876]
+                        - gridcell "TRUCK" [ref=f2e877]
+                        - gridcell "756" [ref=f2e878] [cursor=pointer]
+                        - gridcell [ref=f2e879]
+                        - gridcell "Y" [ref=f2e880]
+                        - gridcell "Y" [ref=f2e881]
+                        - gridcell "Y" [ref=f2e882]
+                        - gridcell "Y" [ref=f2e883]
+                        - gridcell "Y" [ref=f2e884]
+                        - gridcell "Y" [ref=f2e885]
+                        - gridcell "Y" [ref=f2e886]
+                        - gridcell "0" [ref=f2e887]
+                        - gridcell "1" [ref=f2e888]
+                        - gridcell "16981" [ref=f2e889]
+                        - gridcell "19" [ref=f2e890]
+                        - gridcell [ref=f2e891]
+                      - row "KR00781800_40-P KROCH Robostar_KR_SUO KRSUO N A01 A01 2 3 TRUCK 5133 AVERAGE Y Y Y Y Y Y 0 0 16424 20":
+                        - gridcell "KR00781800_40-P" [ref=f2e892]
+                        - gridcell "KROCH" [ref=f2e893]
+                        - gridcell "Robostar_KR_SUO" [ref=f2e894]
+                        - gridcell "KRSUO" [ref=f2e895]
+                        - gridcell "N" [ref=f2e896]
+                        - gridcell "A01" [ref=f2e897]
+                        - gridcell "A01" [ref=f2e898]
+                        - gridcell "2" [ref=f2e899]
+                        - gridcell "3" [ref=f2e900]
+                        - gridcell "TRUCK" [ref=f2e901]
+                        - gridcell "5133" [ref=f2e902] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e903]
+                        - gridcell "Y" [ref=f2e904]
+                        - gridcell "Y" [ref=f2e905]
+                        - gridcell "Y" [ref=f2e906]
+                        - gridcell "Y" [ref=f2e907]
+                        - gridcell "Y" [ref=f2e908]
+                        - gridcell "Y" [ref=f2e909]
+                        - gridcell [ref=f2e910]
+                        - gridcell "0" [ref=f2e911]
+                        - gridcell "0" [ref=f2e912]
+                        - gridcell "16424" [ref=f2e913]
+                        - gridcell "20" [ref=f2e914]
+                        - gridcell [ref=f2e915]
+                      - row "NJ01-A CNNKG Alte_KR_SEL KRSEL N A01 A01 1 1 SEA 1691 AVERAGE Y Y 0 13 6517 21":
+                        - gridcell "NJ01-A" [ref=f2e916]
+                        - gridcell "CNNKG" [ref=f2e917]
+                        - gridcell "Alte_KR_SEL" [ref=f2e918]
+                        - gridcell "KRSEL" [ref=f2e919]
+                        - gridcell "N" [ref=f2e920]
+                        - gridcell "A01" [ref=f2e921]
+                        - gridcell "A01" [ref=f2e922]
+                        - gridcell "1" [ref=f2e923]
+                        - gridcell "1" [ref=f2e924]
+                        - gridcell "SEA" [ref=f2e925]
+                        - gridcell "1691" [ref=f2e926] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e927]
+                        - gridcell [ref=f2e928]
+                        - gridcell [ref=f2e929]
+                        - gridcell "Y" [ref=f2e930]
+                        - gridcell [ref=f2e931]
+                        - gridcell [ref=f2e932]
+                        - gridcell [ref=f2e933]
+                        - gridcell "Y" [ref=f2e934]
+                        - gridcell "0" [ref=f2e935]
+                        - gridcell "13" [ref=f2e936]
+                        - gridcell "6517" [ref=f2e937]
+                        - gridcell "21" [ref=f2e938]
+                        - gridcell [ref=f2e939]
+                      - row "A01 2 2 FERRY 1692 AVERAGE Y Y Y 0 6 6516 22":
+                        - gridcell "A01" [ref=f2e940]
+                        - gridcell "2" [ref=f2e941]
+                        - gridcell "2" [ref=f2e942]
+                        - gridcell "FERRY" [ref=f2e943]
+                        - gridcell "1692" [ref=f2e944] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e945]
+                        - gridcell "Y" [ref=f2e946]
+                        - gridcell [ref=f2e947]
+                        - gridcell "Y" [ref=f2e948]
+                        - gridcell [ref=f2e949]
+                        - gridcell "Y" [ref=f2e950]
+                        - gridcell [ref=f2e951]
+                        - gridcell [ref=f2e952]
+                        - gridcell "0" [ref=f2e953]
+                        - gridcell "6" [ref=f2e954]
+                        - gridcell "6516" [ref=f2e955]
+                        - gridcell "22" [ref=f2e956]
+                        - gridcell [ref=f2e957]
+                      - row "CS Enertech_KR_OSN KROSN N A01 A01 1 1 SEA 1683 AVERAGE Y Y 0 13 10698 23":
+                        - gridcell "CS Enertech_KR_OSN" [ref=f2e958]
+                        - gridcell "KROSN" [ref=f2e959]
+                        - gridcell "N" [ref=f2e960]
+                        - gridcell "A01" [ref=f2e961]
+                        - gridcell "A01" [ref=f2e962]
+                        - gridcell "1" [ref=f2e963]
+                        - gridcell "1" [ref=f2e964]
+                        - gridcell "SEA" [ref=f2e965]
+                        - gridcell "1683" [ref=f2e966] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e967]
+                        - gridcell [ref=f2e968]
+                        - gridcell [ref=f2e969]
+                        - gridcell "Y" [ref=f2e970]
+                        - gridcell [ref=f2e971]
+                        - gridcell [ref=f2e972]
+                        - gridcell [ref=f2e973]
+                        - gridcell "Y" [ref=f2e974]
+                        - gridcell "0" [ref=f2e975]
+                        - gridcell "13" [ref=f2e976]
+                        - gridcell "10698" [ref=f2e977]
+                        - gridcell "23" [ref=f2e978]
+                        - gridcell [ref=f2e979]
+                      - row "A01 2 1 FERRY 1684 Y Y Y 0 6 10697 24":
+                        - gridcell "A01" [ref=f2e980]
+                        - gridcell "2" [ref=f2e981]
+                        - gridcell "1" [ref=f2e982]
+                        - gridcell "FERRY" [ref=f2e983]
+                        - gridcell "1684" [ref=f2e984] [cursor=pointer]
+                        - gridcell [ref=f2e985]
+                        - gridcell "Y" [ref=f2e986]
+                        - gridcell [ref=f2e987]
+                        - gridcell "Y" [ref=f2e988]
+                        - gridcell [ref=f2e989]
+                        - gridcell "Y" [ref=f2e990]
+                        - gridcell [ref=f2e991]
+                        - gridcell [ref=f2e992]
+                        - gridcell "0" [ref=f2e993]
+                        - gridcell "6" [ref=f2e994]
+                        - gridcell "10697" [ref=f2e995]
+                        - gridcell "24" [ref=f2e996]
+                        - gridcell [ref=f2e997]
+                      - row "D.Throne_KR_BCN KRBCN N A01 A01 1 1 SEA 1661 Y Y 0 10 3863 25":
+                        - gridcell "D.Throne_KR_BCN" [ref=f2e998]
+                        - gridcell "KRBCN" [ref=f2e999]
+                        - gridcell "N" [ref=f2e1000]
+                        - gridcell "A01" [ref=f2e1001]
+                        - gridcell "A01" [ref=f2e1002]
+                        - gridcell "1" [ref=f2e1003]
+                        - gridcell "1" [ref=f2e1004]
+                        - gridcell "SEA" [ref=f2e1005]
+                        - gridcell "1661" [ref=f2e1006] [cursor=pointer]
+                        - gridcell [ref=f2e1007]
+                        - gridcell [ref=f2e1008]
+                        - gridcell [ref=f2e1009]
+                        - gridcell "Y" [ref=f2e1010]
+                        - gridcell [ref=f2e1011]
+                        - gridcell [ref=f2e1012]
+                        - gridcell [ref=f2e1013]
+                        - gridcell "Y" [ref=f2e1014]
+                        - gridcell "0" [ref=f2e1015]
+                        - gridcell "10" [ref=f2e1016]
+                        - gridcell "3863" [ref=f2e1017]
+                        - gridcell "25" [ref=f2e1018]
+                        - gridcell [ref=f2e1019]
+                      - row "A01 2 1 FERRY 1662 Y Y Y 0 6 3862 26":
+                        - gridcell "A01" [ref=f2e1020]
+                        - gridcell "2" [ref=f2e1021]
+                        - gridcell "1" [ref=f2e1022]
+                        - gridcell "FERRY" [ref=f2e1023]
+                        - gridcell "1662" [ref=f2e1024] [cursor=pointer]
+                        - gridcell [ref=f2e1025]
+                        - gridcell "Y" [ref=f2e1026]
+                        - gridcell [ref=f2e1027]
+                        - gridcell "Y" [ref=f2e1028]
+                        - gridcell [ref=f2e1029]
+                        - gridcell "Y" [ref=f2e1030]
+                        - gridcell [ref=f2e1031]
+                        - gridcell [ref=f2e1032]
+                        - gridcell "0" [ref=f2e1033]
+                        - gridcell "6" [ref=f2e1034]
+                        - gridcell "3862" [ref=f2e1035]
+                        - gridcell "26" [ref=f2e1036]
+                        - gridcell [ref=f2e1037]
+                      - row "DC EnergySolution_KR_CHU KRCHU N A01 A01 2 1 FERRY 1666 AVERAGE Y Y Y 0 5 13859 27":
+                        - gridcell "DC EnergySolution_KR_CHU" [ref=f2e1038]
+                        - gridcell "KRCHU" [ref=f2e1039]
+                        - gridcell "N" [ref=f2e1040]
+                        - gridcell "A01" [ref=f2e1041]
+                        - gridcell "A01" [ref=f2e1042]
+                        - gridcell "2" [ref=f2e1043]
+                        - gridcell "1" [ref=f2e1044]
+                        - gridcell "FERRY" [ref=f2e1045]
+                        - gridcell "1666" [ref=f2e1046] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1047]
+                        - gridcell "Y" [ref=f2e1048]
+                        - gridcell [ref=f2e1049]
+                        - gridcell "Y" [ref=f2e1050]
+                        - gridcell [ref=f2e1051]
+                        - gridcell "Y" [ref=f2e1052]
+                        - gridcell [ref=f2e1053]
+                        - gridcell [ref=f2e1054]
+                        - gridcell "0" [ref=f2e1055]
+                        - gridcell "5" [ref=f2e1056]
+                        - gridcell "13859" [ref=f2e1057]
+                        - gridcell "27" [ref=f2e1058]
+                        - gridcell [ref=f2e1059]
+                      - row "A01 4 5 SEA 1803 AVERAGE Y Y 0 11 13861 28":
+                        - gridcell "A01" [ref=f2e1060]
+                        - gridcell "4" [ref=f2e1061]
+                        - gridcell "5" [ref=f2e1062]
+                        - gridcell "SEA" [ref=f2e1063]
+                        - gridcell "1803" [ref=f2e1064] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1065]
+                        - gridcell [ref=f2e1066]
+                        - gridcell [ref=f2e1067]
+                        - gridcell "Y" [ref=f2e1068]
+                        - gridcell [ref=f2e1069]
+                        - gridcell "Y" [ref=f2e1070]
+                        - gridcell [ref=f2e1071]
+                        - gridcell [ref=f2e1072]
+                        - gridcell "0" [ref=f2e1073]
+                        - gridcell "11" [ref=f2e1074]
+                        - gridcell "13861" [ref=f2e1075]
+                        - gridcell "28" [ref=f2e1076]
+                        - gridcell [ref=f2e1077]
+                      - row "A01 6 1 AIR 10235 AVERAGE Y Y Y Y Y Y Y 0 0 15678 29":
+                        - gridcell "A01" [ref=f2e1078]
+                        - gridcell "6" [ref=f2e1079]
+                        - gridcell "1" [ref=f2e1080]
+                        - gridcell "AIR" [ref=f2e1081]
+                        - gridcell "10235" [ref=f2e1082] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1083]
+                        - gridcell "Y" [ref=f2e1084]
+                        - gridcell "Y" [ref=f2e1085]
+                        - gridcell "Y" [ref=f2e1086]
+                        - gridcell "Y" [ref=f2e1087]
+                        - gridcell "Y" [ref=f2e1088]
+                        - gridcell "Y" [ref=f2e1089]
+                        - gridcell "Y" [ref=f2e1090]
+                        - gridcell "0" [ref=f2e1091]
+                        - gridcell "0" [ref=f2e1092]
+                        - gridcell "15678" [ref=f2e1093]
+                        - gridcell "29" [ref=f2e1094]
+                        - gridcell [ref=f2e1095]
+                      - row "Daechang Motors_KR_CHU KRCHU N A01 A01 1 5 SEA 1665 AVERAGE Y Y 0 11 3670 30":
+                        - gridcell "Daechang Motors_KR_CHU" [ref=f2e1096]
+                        - gridcell "KRCHU" [ref=f2e1097]
+                        - gridcell "N" [ref=f2e1098]
+                        - gridcell "A01" [ref=f2e1099]
+                        - gridcell "A01" [ref=f2e1100]
+                        - gridcell "1" [ref=f2e1101]
+                        - gridcell "5" [ref=f2e1102]
+                        - gridcell "SEA" [ref=f2e1103]
+                        - gridcell "1665" [ref=f2e1104] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1105]
+                        - gridcell [ref=f2e1106]
+                        - gridcell [ref=f2e1107]
+                        - gridcell "Y" [ref=f2e1108]
+                        - gridcell [ref=f2e1109]
+                        - gridcell [ref=f2e1110]
+                        - gridcell [ref=f2e1111]
+                        - gridcell "Y" [ref=f2e1112]
+                        - gridcell "0" [ref=f2e1113]
+                        - gridcell "11" [ref=f2e1114]
+                        - gridcell "3670" [ref=f2e1115]
+                        - gridcell "30" [ref=f2e1116]
+                        - gridcell [ref=f2e1117]
+                      - row "A01 3 1 FERRY 1666 AVERAGE Y Y Y 0 5 3660 31":
+                        - gridcell "A01" [ref=f2e1118]
+                        - gridcell "3" [ref=f2e1119]
+                        - gridcell "1" [ref=f2e1120]
+                        - gridcell "FERRY" [ref=f2e1121]
+                        - gridcell "1666" [ref=f2e1122] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1123]
+                        - gridcell "Y" [ref=f2e1124]
+                        - gridcell [ref=f2e1125]
+                        - gridcell "Y" [ref=f2e1126]
+                        - gridcell [ref=f2e1127]
+                        - gridcell "Y" [ref=f2e1128]
+                        - gridcell [ref=f2e1129]
+                        - gridcell [ref=f2e1130]
+                        - gridcell "0" [ref=f2e1131]
+                        - gridcell "5" [ref=f2e1132]
+                        - gridcell "3660" [ref=f2e1133]
+                        - gridcell "31" [ref=f2e1134]
+                        - gridcell [ref=f2e1135]
+                      - row "A01 6 1 AIR 10235 AVERAGE Y Y Y Y Y Y Y 0 0 15677 32":
+                        - gridcell "A01" [ref=f2e1136]
+                        - gridcell "6" [ref=f2e1137]
+                        - gridcell "1" [ref=f2e1138]
+                        - gridcell "AIR" [ref=f2e1139]
+                        - gridcell "10235" [ref=f2e1140] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1141]
+                        - gridcell "Y" [ref=f2e1142]
+                        - gridcell "Y" [ref=f2e1143]
+                        - gridcell "Y" [ref=f2e1144]
+                        - gridcell "Y" [ref=f2e1145]
+                        - gridcell "Y" [ref=f2e1146]
+                        - gridcell "Y" [ref=f2e1147]
+                        - gridcell "Y" [ref=f2e1148]
+                        - gridcell "0" [ref=f2e1149]
+                        - gridcell "0" [ref=f2e1150]
+                        - gridcell "15677" [ref=f2e1151]
+                        - gridcell "32" [ref=f2e1152]
+                        - gridcell [ref=f2e1153]
+                      - row "Doosan_KR_INC KRINC N A01 A01 1 3 SEA 1669 AVERAGE Y Y 0 11 7579 33":
+                        - gridcell "Doosan_KR_INC" [ref=f2e1154]
+                        - gridcell "KRINC" [ref=f2e1155]
+                        - gridcell "N" [ref=f2e1156]
+                        - gridcell "A01" [ref=f2e1157]
+                        - gridcell "A01" [ref=f2e1158]
+                        - gridcell "1" [ref=f2e1159]
+                        - gridcell "3" [ref=f2e1160]
+                        - gridcell "SEA" [ref=f2e1161]
+                        - gridcell "1669" [ref=f2e1162] [cursor=pointer]
+                        - gridcell "AVERAGE" [ref=f2e1163]
+                        - gridcell [ref=f2e1164]
+                        - gridcell [ref=f2e1165]
+                        - gridcell "Y" [ref=f2e1166]
+                        - gridcell [ref=f2e1167]
+                        - gridcell [ref=f2e1168]
+                        - gridcell [ref=f2e1169]
+                        - gridcell "Y" [ref=f2e1170]
+                        - gridcell "0" [ref=f2e1171]
+                        - gridcell "11" [ref=f2e1172]
+                        - gridcell "7579" [ref=f2e1173]
+                        - gridcell "33" [ref=f2e1174]
+                        - gridcell [ref=f2e1175]
+                      - row "A01 2 1 FERRY 1670 Y Y Y 0 6 7578 34":
+                        - gridcell "A01" [ref=f2e1176]
+                        - gridcell "2" [ref=f2e1177]
+                        - gridcell "1" [ref=f2e1178]
+                        - gridcell "FERRY" [ref=f2e1179]
+                        - gridcell "1670" [ref=f2e1180] [cursor=pointer]
+                        - gridcell [ref=f2e1181]
+                        - gridcell "Y" [ref=f2e1182]
+                        - gridcell [ref=f2e1183]
+                        - gridcell "Y" [ref=f2e1184]
+                        - gridcell [ref=f2e1185]
+                        - gridcell "Y" [ref=f2e1186]
+                        - gridcell [ref=f2e1187]
+                        - gridcell [ref=f2e1188]
+                        - gridcell "0" [ref=f2e1189]
+                        - gridcell "6" [ref=f2e1190]
+                        - gridcell "7578" [ref=f2e1191]
+                        - gridcell "34" [ref=f2e1192]
+                        - gridcell [ref=f2e1193]
+                      - row "Edison Tech_KR_TJN KRTJN N A01 A01 1 1 SEA 1699 Y Y 0 10 6554 35":
+                        - gridcell "Edison Tech_KR_TJN" [ref=f2e1194]
+                        - gridcell "KRTJN" [ref=f2e1195]
+                        - gridcell "N" [ref=f2e1196]
+                        - gridcell "A01" [ref=f2e1197]
+                        - gridcell "A01" [ref=f2e1198]
+                        - gridcell "1" [ref=f2e1199]
+                        - gridcell "1" [ref=f2e1200]
+                        - gridcell "SEA" [ref=f2e1201]
+                        - gridcell "1699" [ref=f2e1202] [cursor=pointer]
+                        - gridcell [ref=f2e1203]
+                        - gridcell [ref=f2e1204]
+                        - gridcell [ref=f2e1205]
+                        - gridcell "Y" [ref=f2e1206]
+                        - gridcell [ref=f2e1207]
+                        - gridcell [ref=f2e1208]
+                        - gridcell [ref=f2e1209]
+                        - gridcell "Y" [ref=f2e1210]
+                        - gridcell "0" [ref=f2e1211]
+                        - gridcell "10" [ref=f2e1212]
+                        - gridcell "6554" [ref=f2e1213]
+                        - gridcell "35" [ref=f2e1214]
+                        - gridcell [ref=f2e1215]
+                      - row "A01 2 2 FERRY 1700 Y Y Y 0 6 6553 36":
+                        - gridcell "A01" [ref=f2e1216]
+                        - gridcell "2" [ref=f2e1217]
+                        - gridcell "2" [ref=f2e1218]
+                        - gridcell "FERRY" [ref=f2e1219]
+                        - gridcell "1700" [ref=f2e1220] [cursor=pointer]
+                        - gridcell [ref=f2e1221]
+                        - gridcell "Y" [ref=f2e1222]
+                        - gridcell [ref=f2e1223]
+                        - gridcell "Y" [ref=f2e1224]
+                        - gridcell [ref=f2e1225]
+                        - gridcell "Y" [ref=f2e1226]
+                        - gridcell [ref=f2e1227]
+                        - gridcell [ref=f2e1228]
+                        - gridcell "0" [ref=f2e1229]
+                        - gridcell "6" [ref=f2e1230]
+                        - gridcell "6553" [ref=f2e1231]
+                        - gridcell "36" [ref=f2e1232]
+                        - gridcell [ref=f2e1233]
+                      - row "Gims_KR_CHF KRCHF N A01 A01 1 1 SEA 3494 Y Y 0 23 5836 37":
+                        - gridcell "Gims_KR_CHF" [ref=f2e1234]
+                        - gridcell "KRCHF" [ref=f2e1235]
+                        - gridcell "N" [ref=f2e1236]
+                        - gridcell "A01" [ref=f2e1237]
+                        - gridcell "A01" [ref=f2e1238]
+                        - gridcell "1" [ref=f2e1239]
+                        - gridcell "1" [ref=f2e1240]
+                        - gridcell "SEA" [ref=f2e1241]
+                        - gridcell "3494" [ref=f2e1242] [cursor=pointer]
+                        - gridcell [ref=f2e1243]
+                        - gridcell [ref=f2e1244]
+                        - gridcell [ref=f2e1245]
+                        - gridcell "Y" [ref=f2e1246]
+                        - gridcell [ref=f2e1247]
+                        - gridcell [ref=f2e1248]
+                        - gridcell "Y" [ref=f2e1249]
+                        - gridcell [ref=f2e1250]
+                        - gridcell "0" [ref=f2e1251]
+                        - gridcell "23" [ref=f2e1252]
+                        - gridcell "5836" [ref=f2e1253]
+                        - gridcell "37" [ref=f2e1254]
+                        - gridcell [ref=f2e1255]
+                    - row "Focus helper":
+                      - gridcell "Focus helper" [ref=f2e1256]
+                  - generic [aria-hidden]:
+                    - gridcell [selected] [ref=f2e1257]: "40"
+                    - gridcell [ref=f2e1258]: "-"
+                    - gridcell [ref=f2e1259]: HQ06-A
+                    - gridcell [ref=f2e1260]: KRCOJ
+                    - gridcell [ref=f2e1261]: Alte_KR_SEL
+                    - gridcell [ref=f2e1262]: KRSEL
+                    - gridcell [ref=f2e1263]: "N"
+                    - gridcell [ref=f2e1264]: A01
+                    - gridcell [ref=f2e1265]: A01
+                    - gridcell [ref=f2e1266]: D.Throne_KR_BCN
+                    - gridcell [ref=f2e1267]: KRBCN
+                    - gridcell [ref=f2e1268]: "N"
+                    - gridcell [ref=f2e1269]: A01
+                    - gridcell [ref=f2e1270]: A01
+                    - gridcell [ref=f2e1271]: DC EnergySolution_KR_CHU
+                    - gridcell [ref=f2e1272]: KRCHU
+                    - gridcell [ref=f2e1273]: "N"
+                    - gridcell [ref=f2e1274]: A01
+                    - gridcell [ref=f2e1275]: A01
+                    - gridcell [ref=f2e1276]: Daechang Motors_KR_CHU
+                    - gridcell [ref=f2e1277]: KRCHU
+                    - gridcell [ref=f2e1278]: "N"
+                    - gridcell [ref=f2e1279]: A01
+                    - gridcell [ref=f2e1280]: A01
+                    - gridcell [ref=f2e1281]: Doosan_KR_INC
+                    - gridcell [ref=f2e1282]: KRINC
+                    - gridcell [ref=f2e1283]: "N"
+                    - gridcell [ref=f2e1284]: A01
+                    - gridcell [ref=f2e1285]: A01
+                    - gridcell [ref=f2e1286]: Edison Tech_KR_TJN
+                    - gridcell [ref=f2e1287]: KRTJN
+                    - gridcell [ref=f2e1288]: "N"
+                    - gridcell [ref=f2e1289]: A01
+                    - gridcell [ref=f2e1290]: A01
+                    - gridcell [ref=f2e1291]: Gims_KR_CHF
+                    - gridcell [ref=f2e1292]: KRCHF
+                    - gridcell [ref=f2e1293]: "N"
+                    - gridcell [ref=f2e1294]: A01
+                    - gridcell [ref=f2e1295]: A01
+                    - gridcell [ref=f2e1296]: Gims_KR_SEL
+                    - gridcell [ref=f2e1297]: KRSEL
+                    - gridcell [ref=f2e1298]: "N"
+                    - gridcell [ref=f2e1299]: A01
+                    - gridcell [ref=f2e1300]: A01
+                    - gridcell [ref=f2e1301]: Hanwha Aerospace_KR_CHU
+                    - gridcell [ref=f2e1302]: KRCHU
+                    - gridcell [ref=f2e1303]: "N"
+                    - gridcell [ref=f2e1304]: A01
+                    - gridcell [ref=f2e1305]: A01
+                    - gridcell [ref=f2e1306]: Hanwha Defense_KR_SGM
+                    - gridcell [ref=f2e1307]: KRSGM
+                    - gridcell [ref=f2e1308]: "N"
+                    - gridcell [ref=f2e1309]: A01
+                    - gridcell [ref=f2e1310]: A01
+                    - gridcell [ref=f2e1311]: KR Motors_KR_CHW
+                    - gridcell [ref=f2e1312]: KRCHW
+                    - gridcell [ref=f2e1313]: "N"
+                    - gridcell [ref=f2e1314]: A01
+                    - gridcell [ref=f2e1315]: A01
+                    - gridcell [ref=f2e1316]: LGI_KR_INC
+                    - gridcell [ref=f2e1317]: KRINC
+                    - gridcell [ref=f2e1318]: "N"
+                    - gridcell [ref=f2e1319]: A01
+                    - gridcell [ref=f2e1320]: A01
+                    - gridcell [ref=f2e1321]: Naverlabs_KR_SGM
+                    - gridcell [ref=f2e1322]: KRSGM
+                    - gridcell [ref=f2e1323]: "N"
+                    - gridcell [ref=f2e1324]: A01
+                    - gridcell [ref=f2e1325]: A01
+                    - gridcell [ref=f2e1326]: Peopleworks_KR_KUM
+                    - gridcell [ref=f2e1327]: KRKUM
+                    - gridcell [ref=f2e1328]: "N"
+                    - gridcell [ref=f2e1329]: A01
+                    - gridcell [ref=f2e1330]: A01
+                    - gridcell [ref=f2e1331]: Peopleworks_KR_SEL
+                    - gridcell [ref=f2e1332]: KRSEL
+                    - gridcell [ref=f2e1333]: "N"
+                    - gridcell [ref=f2e1334]: A01
+                    - gridcell [ref=f2e1335]: A01
+                    - gridcell [ref=f2e1336]: Powerlogics_KR_OCH
+                    - gridcell [ref=f2e1337]: KROCH
+                    - gridcell [ref=f2e1338]: "N"
+                    - gridcell [ref=f2e1339]: A01
+                    - gridcell [ref=f2e1340]: A01
+                    - gridcell [ref=f2e1341]: Shin-Heung SEC_KR_OSN
+                    - gridcell [ref=f2e1342]: KROSN
+                    - gridcell [ref=f2e1343]: "N"
+                    - gridcell [ref=f2e1344]: A01
+                    - gridcell [ref=f2e1345]: A01
+                    - gridcell [ref=f2e1346]: Toyota Tsusho KR_KR_SEL
+                    - gridcell [ref=f2e1347]: KRSEL
+                    - gridcell [ref=f2e1348]: "N"
+                    - gridcell [ref=f2e1349]: A01
+                    - gridcell [ref=f2e1350]: A01
+                    - gridcell [ref=f2e1351]: Zentropy_KR_SGM
+                    - gridcell [ref=f2e1352]: KRSGM
+                    - gridcell [ref=f2e1353]: "N"
+                    - gridcell [ref=f2e1354]: A01
+                    - gridcell [ref=f2e1355]: A01
+                    - gridcell [ref=f2e1356]: KR00781800_40-P
+                    - gridcell [ref=f2e1357]: KROCH
+                    - gridcell [ref=f2e1358]: Robostar_KR_SUO
+                    - gridcell [ref=f2e1359]: KRSUO
+                    - gridcell [ref=f2e1360]: "N"
+                    - gridcell [ref=f2e1361]: A01
+                    - gridcell [ref=f2e1362]: A01
+                    - gridcell [ref=f2e1363]: NJ01-A
+                    - gridcell [ref=f2e1364]: CNNKG
+                    - gridcell [ref=f2e1365]: Alte_KR_SEL
+                    - gridcell [ref=f2e1366]: KRSEL
+                    - gridcell [ref=f2e1367]: "N"
+                    - gridcell [ref=f2e1368]: A01
+                    - gridcell [ref=f2e1369]: A01
+                    - gridcell [ref=f2e1370]: A01
+                    - gridcell [ref=f2e1371]: CS Enertech_KR_OSN
+                    - gridcell [ref=f2e1372]: KROSN
+                    - gridcell [ref=f2e1373]: "N"
+                    - gridcell [ref=f2e1374]: A01
+                    - gridcell [ref=f2e1375]: A01
+                    - gridcell [ref=f2e1376]: A01
+                    - gridcell [ref=f2e1377]: D.Throne_KR_BCN
+                    - gridcell [ref=f2e1378]: KRBCN
+                    - gridcell [ref=f2e1379]: "N"
+                    - gridcell [ref=f2e1380]: A01
+                    - gridcell [ref=f2e1381]: A01
+                    - gridcell [ref=f2e1382]: A01
+                    - gridcell [ref=f2e1383]: DC EnergySolution_KR_CHU
+                    - gridcell [ref=f2e1384]: KRCHU
+                    - gridcell [ref=f2e1385]: "N"
+                    - gridcell [ref=f2e1386]: A01
+                    - gridcell [ref=f2e1387]: A01
+                    - gridcell [ref=f2e1388]: A01
+                    - gridcell [ref=f2e1389]: A01
+                    - gridcell [ref=f2e1390]: Daechang Motors_KR_CHU
+                    - gridcell [ref=f2e1391]: KRCHU
+                    - gridcell [ref=f2e1392]: "N"
+                    - gridcell [ref=f2e1393]: A01
+                    - gridcell [ref=f2e1394]: A01
+                    - gridcell [ref=f2e1395]: A01
+                    - gridcell [ref=f2e1396]: A01
+                    - gridcell [ref=f2e1397]: Doosan_KR_INC
+                    - gridcell [ref=f2e1398]: KRINC
+                    - gridcell [ref=f2e1399]: "N"
+                    - gridcell [ref=f2e1400]: A01
+                    - gridcell [ref=f2e1401]: A01
+                    - gridcell [ref=f2e1402]: A01
+                    - gridcell [ref=f2e1403]: Edison Tech_KR_TJN
+                    - gridcell [ref=f2e1404]: KRTJN
+                    - gridcell [ref=f2e1405]: "N"
+                    - gridcell [ref=f2e1406]: A01
+                    - gridcell [ref=f2e1407]: A01
+                    - gridcell [ref=f2e1408]: A01
+                    - gridcell [ref=f2e1409]: Gims_KR_CHF
+                    - gridcell [ref=f2e1410]: KRCHF
+                    - gridcell [ref=f2e1411]: "N"
+                    - gridcell [ref=f2e1412]: A01
+                    - gridcell [ref=f2e1413]: A01
+                  - generic [ref=f2e1414]:
+                    - generic:
+                      - row "1"
+                      - row "2"
+                      - row "3"
+                      - row "4"
+                      - row "5"
+                      - row "6"
+                      - row "7"
+                      - row "8"
+                      - row "9"
+                      - row "10"
+                      - row "11"
+                      - row "12"
+                      - row "13"
+                      - row "14"
+                      - row "15"
+                      - row "16"
+                      - row "17"
+                      - row "18"
+                      - row "19"
+                      - row "20"
+                      - row "21"
+                      - row "22"
+                      - row "23"
+                      - row "24"
+                      - row "25"
+                      - row "26"
+                      - row "27"
+                      - row "28"
+                      - row "29"
+                      - row "30"
+                      - row "31"
+                      - row "32"
+                      - row "33"
+                      - row "34"
+                      - row "35"
+                      - row "36"
+                      - row "37"
+                  - generic [ref=f2e1415]:
+                    - generic:
+                      - row "No"
+                - generic [ref=f2e1416]:
+                  - status
+                  - generic [ref=f2e1417]: "0"
+                - generic:
+                  - generic [ref=f2e1420]:
+                    - combobox "InputDateTime Input" [ref=f2e1421]: 2026-11-14 07:34:48
+                    - generic [ref=f2e1422]:
+                      - button "Toggle Calendar" [ref=f2e1423] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1425] [cursor=pointer]
+                  - generic [ref=f2e1429]:
+                    - combobox "InputDateTime Input" [ref=f2e1430]: 2026-11-14 07:34:48
+                    - generic [ref=f2e1431]:
+                      - button "Toggle Calendar" [ref=f2e1432] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1434] [cursor=pointer]
+                  - generic [ref=f2e1438]:
+                    - combobox "InputDateTime Input" [ref=f2e1439]: 2026-11-14 07:34:48
+                    - generic [ref=f2e1440]:
+                      - button "Toggle Calendar" [ref=f2e1441] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1443] [cursor=pointer]
+                  - generic [ref=f2e1447]:
+                    - combobox "InputDateTime Input" [ref=f2e1448]: 2026-11-14 07:34:48
+                    - generic [ref=f2e1449]:
+                      - button "Toggle Calendar" [ref=f2e1450] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1452] [cursor=pointer]
+                  - generic [ref=f2e1456]:
+                    - combobox "InputDateTime Input" [ref=f2e1457]: 2026-11-14 07:34:51
+                    - generic [ref=f2e1458]:
+                      - button "Toggle Calendar" [ref=f2e1459] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1461] [cursor=pointer]
+                  - generic [ref=f2e1465]:
+                    - combobox "InputDateTime Input" [ref=f2e1466]: 2026-11-14 07:34:51
+                    - generic [ref=f2e1467]:
+                      - button "Toggle Calendar" [ref=f2e1468] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1470] [cursor=pointer]
+                  - generic [ref=f2e1474]:
+                    - combobox "InputDateTime Input" [ref=f2e1475]: 2026-11-14 07:34:52
+                    - generic [ref=f2e1476]:
+                      - button "Toggle Calendar" [ref=f2e1477] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1479] [cursor=pointer]
+                  - generic [ref=f2e1483]:
+                    - combobox "InputDateTime Input" [ref=f2e1484]: 2026-11-14 07:34:52
+                    - generic [ref=f2e1485]:
+                      - button "Toggle Calendar" [ref=f2e1486] [cursor=pointer]
+                      - button "Toggle Time List" [ref=f2e1488] [cursor=pointer]
+            - alert [ref=f2e1490]:
+              - generic [ref=f2e1491] [cursor=pointer]
+  - link "Wijmo Evaluation Version (5.20252.44)" [ref=f2e1494] [cursor=pointer]:
+    - /url: https://developer.mescius.com/licensing/wijmo?utm_source=Wijmo-In-App&utm_medium=Click-to-Site&utm_campaign=Wijmo-User-Analysis
+```
+
+# Test source
+
+```ts
+  1   | // 자동 생성 — tools/E2E/gen-e2e.js (2026-11-13) · 원천: Doc/gen/SCP0007/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+  2   | import { test, expect } from '../../../tools/E2E/fixtures/test';
+  3   | import * as fs from 'node:fs';
+  4   | const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0007.plan.json', 'utf8'));
+  5   | const MENU = "SCP0007";
+  6   | import { conditionCycle, commonCycle, record } from '../../../tools/E2E/lib/smoke-extra';
+  7   | import { loadLabelAliases, aliasFor } from '../../../tools/E2E/lib/labelalias';  // 2026-11-08 (a) 사양 표 공유 — 검사기(_trace G4)와 같은 라벨 별칭 표(label_alias.csv · CR-092 Valid→Active)
+  8   | 
+  9   | test.describe(`${MENU} BOD 스모크 @smoke`, () => {
+  10  |   test.use({ account: PLAN.sample.account || undefined });
+  11  |   test('화면 열림 · 조회조건 · 조회 · 그리드 컬럼', async ({ nscm, page }) => {
+  12  |     const r = await nscm.openScreen(MENU);
+  13  |     expect(r.notFound, '404 아님').toBeFalsy();
+  14  |     expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+  15  |     await nscm.snapshot(`${MENU}_open`);
+  16  |     // 2026-10-21: 화면 열자마자 콘솔 치명 오류를 먼저 확인 — 그리드 생성이 Wijmo 단언으로 죽으면(SCP0100 "Unknown property inner") 뒤의 라벨/그리드 검사는 전부 부수 증상이다
+  17  |     { await page.waitForTimeout(800); const errs0 = nscm.consoleErrors; const fatal0 = errs0.filter(e => /Assertion failed|Uncaught|is not a function|Cannot read propert|Unknown property/i.test(e));
+  18  |       if (errs0.length) test.info().annotations.push({ type: 'console', description: `열림 직후 오류 ${errs0.length}(치명 ${fatal0.length}): ${[...fatal0, ...errs0.filter(e => !fatal0.includes(e))].slice(0, 3).join(' || ')}` });
+  19  |       expect.soft(fatal0.length, `화면 열림 직후 브라우저 콘솔 치명 오류 0 — ${fatal0[0] || ''}`).toBe(0); }
+  20  |     // 조회조건 라벨 존재(soft) — 2026-10-21: 접힌 조건(extraConditions) 펼친 뒤, To-Be LBL 문구 → As-is 라벨('*' 제거) → '/' 분할 후보 순으로 찾는다.
+  21  |     //   __asis-mapping__.md 에서 '제외' 로 닫힌 As-is 컨트롤(dead control·NO-OP)은 검사하지 않고 어노테이션만 남긴다.
+  22  |     const expanded = await nscm.expandSearchArea();
+  23  |     const labelHits: string[] = [], labelMiss: string[] = [], labelSkip: string[] = [];
+  24  |     for (const f of PLAN.fields) {
+  25  |       if (f.excluded) { labelSkip.push(`${f.label}(${f.asis}: ${f.excludedWhy})`); continue; }
+  26  |       // 2026-11-08 (a): 별칭 표의 TO-BE 명칭(예 Valid→Active)도 후보 — 검사기와 기대값 원천을 같이 쓴다(종전엔 smoke 만 별칭 없이 '누락' → 검사기 PASS 와 불일치)
+  27  |       const cands0: string[] = f.labels && f.labels.length ? f.labels : [f.label];
+  28  |       const AL = loadLabelAliases(MENU); const cands = [...new Set([...cands0, ...cands0.map((l: string) => aliasFor(l, AL)?.tobe_label || '').filter(Boolean)])];
+  29  |       const hit = await nscm.fieldExistsAny(cands);
+  30  |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);
+  31  |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();
+  32  |     }
+  33  |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });
+  34  |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+  35  |     const gridCount = await nscm.grids().count();
+  36  |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+  37  |     // Division 선택(있으면) 후 조회
+  38  |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+  39  |     const calls = await nscm.search();
+  40  |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+  41  |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+  42  |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+  43  |     // 2026-10-21: 브라우저 콘솔 오류/페이지 예외 — Wijmo 단언(그리드 생성 실패)·Uncaught 는 화면 결함으로 FAIL, 나머지는 기록만
+  44  |     { const errs = nscm.consoleErrors; const fatal = errs.filter(e => /Assertion failed|Uncaught|is not a function|Cannot read propert|Unknown property/i.test(e));
+  45  |       test.info().annotations.push({ type: 'console', description: errs.length ? `오류 ${errs.length}(치명 ${fatal.length}): ${[...fatal, ...errs.filter(e => !fatal.includes(e))].slice(0, 3).join(' || ')}` : '오류 0' });
+  46  |       expect.soft(fatal.length, `브라우저 콘솔 치명 오류 0 — ${fatal[0] || ''}`).toBe(0); }
+  47  |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+  48  |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+  49  |     // 컬럼 대사: 메타(sheet_columns) 있으면 메타, 없으면 As-is 라벨(soft)
+  50  |     const headers = await nscm.gridHeadersAll(0);  // T162: 가로 가상화로 DOM 헤더가 일부만 보여 허위 누락
+  51  |     // 기대 컬럼의 시트 = 실제 조회된 시트(첫 SEARCH call-proc 의 sheet → register.json adminSheetName). 매핑이 없으면 mainSheets[0]
+  52  |     const titleSheets: string[] = (PLAN.dynamicHeader && PLAN.dynamicHeader.titleSheets) || [];
+  53  |     const firstSearch = calls.find(c => /SEARCH/i.test(c.btn) && !titleSheets.includes(c.sheet)) || calls.find(c => /SEARCH/i.test(c.btn)) || calls[0]; // 타이틀(기간 헤더) 시트 호출은 제외
+  54  |     const mappedSheet = firstSearch && PLAN.sheetMap ? PLAN.sheetMap[firstSearch.sheet] : '';
+  55  |     const sheetName = mappedSheet && PLAN.mainSheets.some((s: { name: string }) => s.name === mappedSheet) ? mappedSheet : PLAN.mainSheets[0]?.name;
+  56  |     const expectCols = PLAN.hasMeta ? (PLAN.expectedCols[sheetName]?.[PLAN.sample.div] || []) : (PLAN.mainSheets.find((s: { name: string }) => s.name === sheetName)?.labels || []);
+  57  |     const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  58  |     // 2026-10-21: As-is SetLayout(조회조건에 따라 표시/숨김)이 다루는 컬럼은 기본 조회에서 안 보여도 '누락' 이 아니다(SCP0100 Product Level1~3)
+  59  |     const condSet = new Set(((PLAN.condLabels || []) as string[]).map(norm));
+  60  |     const missingAll = expectCols.filter((c: string) => c && !headers.some(h => norm(h) === norm(c) || norm(h).includes(norm(c))));
+  61  |     const condHidden = missingAll.filter((c: string) => condSet.has(norm(c)));
+  62  |     const missing = missingAll.filter((c: string) => !condSet.has(norm(c)));
+  63  |     test.info().annotations.push({ type: 'columns', description: `시트 ${sheetName}(${firstSearch ? firstSearch.sheet : '-'}) 헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}${condHidden.length ? ' / 조건부 표시(SetLayout) 제외 ' + condHidden.length + ': ' + condHidden.join(', ') : ''}` });
+  64  |     expect.soft(missing.length, `그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`).toBeLessThanOrEqual(Math.ceil(expectCols.length * 0.2));
+  65  |     // 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)
+  66  |     // As-is 헤더 사양 대조(2026-10-21 SCP0100: 대조표 '구현' 인데 3단 헤더가 144px 한 칸으로 병합되고 "Qty" 행이 없었다) — 행 수·병합 리터럴·행 높이
+  67  |     if (PLAN.headerSpec && PLAN.headerSpec.rows > 1) {
+  68  |       const HS = PLAN.headerSpec; const hr = await nscm.gridHeaderRows(0);
+  69  |       const texts = new Set(hr.rows.flatMap(r => r.texts));
+  70  |       const missLit = (HS.literals || []).filter((l: string) => !texts.has(l));
+  71  |       test.info().annotations.push({ type: 'header', description: `As-is 헤더 ${HS.rows}행(병합 리터럴 ${(HS.literals || []).join('/') || '-'}) ↔ To-Be 행 ${hr.rows.length}(높이 ${hr.rows.map(r => r.h).join('+')}=${hr.height}px)${missLit.length ? ' · 리터럴 누락 ' + missLit.join(',') : ''}` });
+  72  |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)
+> 73  |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));
+      |                                                                                                                                                  ^ Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검
+  74  |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);
+  75  |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);
+  76  |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전
+  77  |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {
+  78  |         const top = hr.rows[0]; const litRow = hr.rows.find(r => (HS.literals as string[]).some((l: string) => r.texts.includes(l)));
+  79  |         if (litRow) {
+  80  |           const topDyn = top.cells.filter(c => !/^[A-Za-z가-힣 ./()]+$/.test(c)).length; // 상단 행에서 문자 라벨(고정 컬럼)이 아닌 칸(연월·주차) 수
+  81  |           test.info().annotations.push({ type: 'header', description: `리터럴 행 칸 ${litRow.n} / 상단 동적 칸 ${topDyn} · 높이 상단 ${top.h} vs 리터럴 행 ${litRow.h}` });
+  82  |           if (topDyn >= 2) expect.soft(litRow.n, `리터럴(${HS.literals.join('/')}) 칸이 월마다 분리(상단 동적 칸 ${topDyn}) — 1칸이면 헤더 가로 병합(check.js H05)`).toBeGreaterThanOrEqual(Math.min(topDyn, 2));
+  83  |           expect.soft(litRow.h >= top.h, `leaf(${HS.literals.join('/')}) 행 높이(${litRow.h}) ≥ 상단 그룹 행(${top.h}) — As-is 는 Qty 영역이 더 높다(1~2행 병합)`).toBeTruthy();
+  84  |         }
+  85  |       }
+  86  |     }
+  87  |     if (PLAN.dynamicHeader) {
+  88  |       const DH = PLAN.dynamicHeader;
+  89  |       const binds = await nscm.gridBindings(0);
+  90  |       const stat = new Set((DH.staticBindings || []).map((s: string) => s.toUpperCase()));
+  91  |       const dyn = (binds || []).filter((b: string) => !stat.has(b.toUpperCase()));
+  92  |       const titleCalls = nscm.calls.filter(c => (DH.titlePairs || []).some((p: { sheet: string; btn: string }) => p.sheet === c.sheet && p.btn.toUpperCase() === c.btn.toUpperCase()));
+  93  |       test.info().annotations.push({ type: 'dynamic', description: `As-is ${DH.titles.map((t: { sp: string }) => t.sp).join(',') || '-'} · DB루프 ${(DH.dbLoop || []).join(',') || '-'} · 컬럼정의 ${binds ? binds.length : '판정불가'} / 정적밖 ${dyn.length} (${dyn.slice(0, 5).join(',')}) · 타이틀 시트 ${(DH.titleSheets || []).join(',') || '(사내 배선 없음)'} 호출 ${titleCalls.length}` });
+  94  |       expect.soft(binds, '그리드 컬럼 정의 판독(Wijmo columns) — null 이면 판정 불가(ERROR)').not.toBeNull();
+  95  |       expect.soft(dyn.length, `동적 기간 컬럼 ≥1 (As-is ${DH.titles.map((t: { sp: string }) => t.sp).join(',') || 'DB루프'} — 정적 메타 ${stat.size}개 밖 컬럼)`).toBeGreaterThan(0);
+  96  |       if ((DH.titleSheets || []).length) expect.soft(titleCalls.some(c => c.status < 400), `타이틀 시트 '${DH.titleSheets.join("','")}' call-proc 조회`).toBeTruthy();
+  97  |     }
+  98  |     await nscm.snapshot(`${MENU}_searched`);
+  99  |     test.info().annotations.push({ type: 'calls', description: JSON.stringify(calls.map(c => [c.sheet, c.btn, c.status, c.rows, c.ms])) });
+  100 |     // 2026-10-23 사용자 지시: 다국어 미적용(코드 미등록 → '_기본문구' 노출) = 오류 — 조회조건 펼침·조회 후 보이는 글자 전체
+  101 |     { const u = await nscm.untranslatedTexts();
+  102 |       test.info().annotations.push({ type: 'i18n', description: u.length ? `'_' 노출 ${u.length}: ${u.slice(0, 15).join(' | ')}` : "'_' 노출 0" });
+  103 |       expect.soft(u.length, `다국어 미적용 '_' 노출 0 — ${u.slice(0, 8).join(' | ')} (SCM_ADM_MSG_M 에 코드 등록 또는 기존 LBL/MSG 재사용 · 하네스 I18N1)`).toBe(0); }
+  104 |   });
+  105 |   // 2026-10-23 사용자 지시: 조회조건 각각의 동작 · 공통 기능 동작 (lib/smoke-extra.ts) — 결과는 cond:/common: 어노테이션 → _summary · 대조표(recon) 열
+  106 |   test('조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인', async ({ nscm }) => {
+  107 |     test.setTimeout(1_200_000);
+  108 |     const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+  109 |     const items = await conditionCycle(nscm, test.info(), PLAN);
+  110 |     const s = record(test.info(), 'cond', items);
+  111 |     await nscm.snapshot(`${MENU}_cond`);
+  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);
+  113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);
+  114 |   });
+  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {
+  116 |     test.setTimeout(600_000);
+  117 |     const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+  118 |     const items = await commonCycle(nscm, test.info(), PLAN);
+  119 |     const s = record(test.info(), 'common', items);
+  120 |     await nscm.snapshot(`${MENU}_common`);
+  121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);
+  122 |   });
+  123 | });
+  124 | 
+```

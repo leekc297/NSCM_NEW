@@ -1,0 +1,111 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "PART_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 PART_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TEAM_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 TEAM_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "USER_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 USER_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 07:36:29",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "PART_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "TEAM_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "USER_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "has_else": false
+  }
+ ]
+}

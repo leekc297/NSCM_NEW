@@ -1,0 +1,48 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "cellrun": true,
+ "tabrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "tab",
+   "change": "시트 Plant(0) 활성화",
+   "ok": false,
+   "error": "활성 시트가 1 로 읽힘",
+   "scenarios": [
+    "SCP0020-S8965a4",
+    "SCP0020-Sa02cf9",
+    "SCP0020-S6def13"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "tab",
+   "change": "시트 Packer(1) 활성화 — 처음 시트로 되돌림",
+   "ok": true,
+   "error": "",
+   "scenarios": [
+    "SCP0020-S8965a4",
+    "SCP0020-Sa02cf9",
+    "SCP0020-S6def13"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 11:04:36"
+}

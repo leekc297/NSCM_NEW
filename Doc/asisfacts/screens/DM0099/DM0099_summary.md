@@ -13,11 +13,20 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData_Main | 239 | DM.DM0099_GET_CUSTOMER_FCST_TEST | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > SaveData > FindData_Main | 239 | DM.DM0099_GET_CUSTOMER_FCST_TEST | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 359 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 360 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 361 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 439 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 440 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 441 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | DM.DM0099_GET_CUSTOMER_FCST_TEST | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.DeleteQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.InsertQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.UpdateQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -52,10 +61,16 @@
 | EmptySpaceItem | 1 | emptySpaceItem1 |
 | UsrCombo | 1 | usrCombo1 |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (7건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 239 | FindData_Main | DM.DM0099_GET_CUSTOMER_FCST_TEST | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 359 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 360 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 361 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 439 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 440 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 441 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

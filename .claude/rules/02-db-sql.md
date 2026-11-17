@@ -20,7 +20,7 @@ paths:
 - 성능 개선 순서 고정: ①SELECT 목록 함수 제거(JOIN 치환) → ②인덱스 타도록 구문 변경 → ③힌트. 힌트 우선 금지 (#129).
 - GTT 는 `TRUNCATE`(DDL) 금지 → `DELETE` (#107) · `@@FETCH_STATUS` 변환 시 FETCH 직후 `%NOTFOUND` 재할당 의무.
 - `SCM_ADM_MSG_M` 클라우드 이관 취합 = `INSERT … NOT EXISTS` 전용 (MERGE/UPDATE/DELETE ⛔) (#140).
-- `*_DBeaver*.sql` 에 SQL*Plus 토큰(`SET`/`PROMPT`/`DEFINE`/`/`) 금지 — 실행 hook `check-dbeaver-sql.ps1`. 메타 INSERT 는 `desc` 로 NOT NULL 인벤토리 선행 — `check-notnull-insert.ps1` · `SHEET_COLUMNS` 값 단언 `check-meta-sql.ps1`.
+- SQL 산출물은 SQL*Plus/SQLcl **단일본**만 만든다 — `_DBeaver` 변형 생성 금지(2026-07-29 사용자 지시 · 구 4-파일 세트 폐기). 예전 `*_DBeaver*.sql` 을 고칠 때는 SQL*Plus 토큰(`SET`/`PROMPT`/`DEFINE`/`/`) 금지 — 실행 hook `check-dbeaver-sql.ps1`. 메타 INSERT 는 `desc` 로 NOT NULL 인벤토리 선행 — `check-notnull-insert.ps1` · `SHEET_COLUMNS` 값 단언 `check-meta-sql.ps1`.
 - 사내 DB 적용(T18): `hooks/db-corporate-apply.md` + `db-schema-divergence-check.md` + `corp-meta-integrity-and-wiring.md`(#98). 적용 결과는 `_artifacts/_apply_corporate/{…}/APPLIED_OPERATIONS.md` 기록.
 - 이관 패키지(T16): `Doc/_dev_rules/22_PACKAGE_ARTIFACTS.md` + `hooks/deploy-package-completeness.md`.
 - Oracle 직결 도구: `Doc/_dev_rules/32_CLAUDE_ORACLE_DIRECT.md` (`python _artifacts/_diagnostics/ora.py query|desc|args|compile|exec`).

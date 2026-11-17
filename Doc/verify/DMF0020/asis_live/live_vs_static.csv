@@ -1,0 +1,70 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0003_GET_BUCKET_TYPE_CODE,DMF0020_SalesFuturePrice.cs:3810 GetBucketType,1회 · 구간 load,MATCH,
+SP,DMF0020_GET_FUTUREPRICE_INFO,DMF0020_SalesFuturePrice.cs:531 GetFuturePriceInfo,2회 · 구간 find/load,MATCH,
+SP,DMF0020_GET_MEASURE_COUNTINFO,DMF0020_SalesFuturePrice.cs:514 GetMeasureCountInfo,1회 · 구간 load,MATCH,
+SP,DMF0020_GET_SCM_MST_FUTURE_PRICE,DMF0020_SalesFuturePrice.cs:1349 FindData,1회 · 구간 find,MATCH,
+SP,DMF0020_GET_SPREAD_TITLE,DMF0020_SalesFuturePrice.cs:3554 GetSpdTitle,1회 · 구간 load,MATCH,
+SP,DMF0020_GET_WEEKDATA,DMF0020_SalesFuturePrice.cs:498 GetWeekData,1회 · 구간 load,MATCH,
+SP,PR_GET_DAY_RANGE,DMF0020_SalesFuturePrice.cs:423 GetDayRange,1회 · 구간 load,MATCH,
+SP,SQL: Declare @AuthTypePara varchar(100) = 'D';,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,10회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0020_GET_SPREAD_TITLE_DATE,DMF0020_SalesFuturePrice.cs:786 InitSpread_X,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL,DMF0020_SalesFuturePrice.cs:1902 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW,DMF0020_SalesFuturePrice.cs:3474 btnBatch_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_BIZ_TYPE_BY_DIVISION,DMF0020_SalesFuturePrice.cs:3631 GetBizTypebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_CUSTOMER_BY_DIVISION,DMF0020_SalesFuturePrice.cs:3419 GetEndCustomerbyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_DIVISION,DMF0020_SalesFuturePrice.cs:3360 GetDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_LOOKUP_VALUES,DMF0020_SalesFuturePrice.cs:3434 GetLookupValues,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER,DMF0020_SalesFuturePrice.cs:3448 GetPlantSitebyEndCustomer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_BY_DIVISION,DMF0020_SalesFuturePrice.cs:3374 GetScmSitebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_INFO_BY_DIVISION,DMF0020_SalesFuturePrice.cs:3390 GetScmSiteInfobyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_TEAM_BY_DIVISION,DMF0020_SalesFuturePrice.cs:3405 GetTeambyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,UP_FX_GETCOMMONDATALIST_DM,DMF0020_SalesFuturePrice.cs:870 EditButton,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),60개,47개,INFO,공통 30 · 선언만 30 · 실측만 17
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbEndCustomer,Y,End Customer,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,drpDateTime,Y,Period,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbSalesSite,Y,Sales Site,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnItemId,Y,layoutControlItem1,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,umltModel,Y,Model / Nickname,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,umltProject,Y,Project,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,usrButton1,Y,layoutControlItem3,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbBizType,Y,Biz.Type,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnExchangeRate,Y,Exchange Rate,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnBatch,Y,Batch Job,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbDivisions,Y,Div,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnOwner,Y,layoutControlItem2,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtOwner,Y,Owner,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnColumn,Y,layoutControlItem8,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,usrDiscard,Y,layoutControlItem9,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,checkInvalidExec,Y,layoutControlItem10,LIVE,layout=usrLayoutControl3 visible=False
+CONDITION,btnSavePricePeriod,Y,Price일괄입력,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtVersion,Y,Version,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnSPVer,Y,layoutControlItem7,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnExcelUpload,Y,Upload,LIVE,layout=usrLayoutControl3 visible=False
+CONDITION,btnTemplate,Y,Excel Form,LIVE,layout=usrLayoutControl3 visible=False
+GRID,spdMain/Sales Price,정적 컬럼 사실 63행(시트 미지정 포함),컬럼 53(보임 45) · 헤더 3단 · 행 8260 · 고정 17,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 85,
+  "at": "2026-11-17T04:59:14.151Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

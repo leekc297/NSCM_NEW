@@ -1,0 +1,657 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 4개 전부 원문 등장: `biz:CommonData.CommonDataList`, `SSP.SSP0017_GET_INVENTORY_RAW`, `SCM.SCM0001_GET_DIVISION`, `SCP.SCM0001_GET_SCP_DAY_PERIOD`
+2. business_analysis.md 에 SP 3개 전부 등장: `SSP0017_GET_INVENTORY_RAW`, `SCM0001_GET_DIVISION`, `SCM0001_GET_SCP_DAY_PERIOD`
+3. screen_design.md 에 컨트롤 12개 전부 등장: `usrButton1`, `usrConditionPanel1`, `usrLayoutControl2`, `cboPlanDate`, `btnMeasure`, `btnItemId`, `clbPlantSite`, `txtItemId`, `cboInventoryType`, `clbDivision`, `spdMain`, `spdMain_Sheet1`
+4. screen_design.md 에 시트 2개 전부 등장: `Inventory Raw(IT & Mobile)`, `Inventory Raw(Mobility & IT)`
+5. screen_design.md 에 이벤트 핸들러 5개와 엔드포인트 전부 등장: `Form_Load`, `SpdMain_TopChange`, `btnItemId_Click`, `btnMeasure_Click`, `clbDivision_SelectedIndexChanged`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SSP0017-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SSP0017 As-is 분석서 — Inventory Raw(Small)
+
+> 출처: AsisFacts 정적 추출 Fact Pack(SSP0017). 이 문서는 Fact Pack에 있는 사실만 담았습니다. Fact Pack에 없는 내용은 **확인 필요**로 표시했습니다.
+
+## 1. 화면 개요
+
+| 항목 | 값 | 근거 |
+|---|---|---|
+| 화면 ID | SSP0017 | Fact Pack |
+| 클래스 | `SSP0017_InventoryRaw` | controls.csv |
+| 폼 Text(화면 제목) | `Inventory Raw(Small)` | props.csv `this.Text` (Designer.cs:589) |
+| 도메인 | SSP (프로젝트 `GSCM.SSP.Plan.UIL`) | 파일 구성 |
+| 화면 성격 | 조회 전용. 활성 엔드포인트는 모두 조회(GET/CommonDataList)이며, 저장 계열 호출은 추출되지 않았습니다. | endpoints.csv |
+
+### 1-1. 파일 구성
+
+| 구분(variant) | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only (current) | `06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs` | `06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj` | 547 |
+| only (current) | `06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs` | `06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj` | 641 |
+
+- **shared**: 없음 (Fact Pack에 shared 파일 미추출)
+- **legacy**: 없음 (variant가 모두 `only` = 현행)
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+| # | 진입점 | 호출 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---:|---|---|---:|---|---|---|
+| 1 | event: `this.Load` (`Form_Load`) | `Form_Load` > `InitControls` | 179 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | (공통 BIZ → `UP_FX_GetCommonDataList`) |
+| 2 | event: `this.Load` (`Form_Load`) | `Form_Load` > `InitControls` > `SetChangedControl` | 365 | `biz:CommonData.CommonDataList` [code=PlanDateShip] | BIZ_MATCH | (공통 BIZ → `UP_FX_GetCommonDataList`) |
+| 3 | event: `clbDivision.SelectedIndexChanged` (`clbDivision_SelectedIndexChanged`) | `clbDivision_SelectedIndexChanged` > `SetChangedControl` | 365 | `biz:CommonData.CommonDataList` [code=PlanDateShip] | BIZ_MATCH | (공통 BIZ → `UP_FX_GetCommonDataList`) |
+| 4 | button: `FindButton` (프레임워크 조회 버튼) | `FindButton` > `FindData_Main` | 405 | `SSP.SSP0017_GET_INVENTORY_RAW` | MATCH | SP `SSP0017_GET_INVENTORY_RAW` |
+| 5 | (진입점 미연결) | `<field:dtInventoryStatus>` (필드 초기화) | 49 | `biz:CommonData.CommonDataList` [code=OWMS_STOCK_STATUS] | BIZ_MATCH | (공통 BIZ) |
+| 6 | (진입점 미연결) | `GetDivision` | 478 | `SCM.SCM0001_GET_DIVISION` | MATCH | SP `SCM0001_GET_DIVISION` |
+| 7 | (진입점 미연결) | `GetDayRange` | 514 | `SCP.SCM0001_GET_SCP_DAY_PERIOD` | MATCH | SP `SCM0001_GET_SCP_DAY_PERIOD` |
+
+- #5는 필드 초기화식이라 클래스 생성 시점에 실행될 수 있습니다. 다만 정적 파서가 이벤트 진입점과 연결하지 못했으므로 실행 여부는 **확인 필요**입니다.
+- #6 `GetDivision`, #7 `GetDayRange`는 이 화면 안에서 호출자를 찾지 못했습니다(unreached). 실제 사용 여부는 **확인 필요**입니다(미사용 메서드일 수 있음).
+- `btnItemId_Click`, `btnMeasure_Click`, `SpdMain_TopChange`에서 나가는 엔드포인트 호출은 추출되지 않았습니다. 내부에서 팝업을 여는지 등 동작은 **확인 필요**입니다. 확인된 사실은 `btnItemId_Click`:301에서 `txtItemId.Text = sItemId`로 값을 넣는다는 것 하나입니다.
+
+## 3. 엔드포인트 전체 표
+
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강(코드 분기) |
+|---|---|---:|---|---|---|
+| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | — | — | `UP_FX_GetCommonDataList`: SELECT `SCM_ADM_LOOKUP_MASTER`, SELECT `SCM_ADM_LOOKUP_MASTER_DETAIL` |
+| `biz:CommonData.CommonDataList` [code=OWMS_STOCK_STATUS] | BIZ_MATCH | 1 | — | — | `UP_FX_GetCommonDataList`: SELECT `SCM_ADM_LOOKUP_MASTER_DETAIL` |
+| `biz:CommonData.CommonDataList` [code=PlanDateShip] | BIZ_MATCH | 1 | — | — | `UP_FX_GetCommonDataList`: SELECT `SCM_ADM_LOOKUP_MASTER_DETAIL`, SELECT `SSP_ANL_SHIP_PLAN_P`, SELECT `SSP_PLAN_VERSION_V`, REF `STRING_SPLIT` |
+| `SSP.SSP0017_GET_INVENTORY_RAW` | MATCH | 1 | SP `SSP0017_GET_INVENTORY_RAW` | EXEC `SSP0017_GET_INVENTORY_RAW`, SELECT `SCM_MST_ITEM_SN`, REF `FN_CHAR_TO_DATE`, SELECT `SSP_ANL_INVENTORY_RAW`, SELECT `SCM_MST_FACTORY_SN`, SELECT `SCM_MST_SLOC`, SELECT `SCM_MST_SITE`, REF `UF_FX_STRING_SPLIT` | — |
+| `SCM.SCM0001_GET_DIVISION` | MATCH | 1 | SP `SCM0001_GET_DIVISION` | EXEC `SCM0001_GET_DIVISION`, SELECT `SCM_MST_DIVISION` | — |
+| `SCP.SCM0001_GET_SCP_DAY_PERIOD` | MATCH | 1 | SP `SCM0001_GET_SCP_DAY_PERIOD` | EXEC `SCM0001_GET_SCP_DAY_PERIOD`, REF `FN_MULTY_TIME`, SELECT `SCM_SYS_CALENDAR_M`, REF `FN_WEEKOFDAY_DATE`, SELECT `SCM_ADM_LOOKUP_MASTER_DETAIL`, SELECT `CTE_DATE` | — |
+
+### 3-1. 주석 처리된 호출 (활성 집계 제외)
+
+아래 3건은 소스에서 **주석 처리됨** 상태입니다. 현행 기능이 아닙니다.
+
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 513 | `SCP.GET_DATE_RANGE_1MONTH` | 주석 처리됨 (commented:MATCH) |
+| 531 | `SCP.GET_DATE_RANGE_1MONTH` | 주석 처리됨 (commented:MATCH) |
+| 532 | `SCP.SCM0001_GET_SCP_PERIOD` | 주석 처리됨 (commented:MATCH) |
+
+## 4. 이벤트 배선 표
+
+| 대상 | 이벤트 | 핸들러 | 등록 위치 | 연결 엔드포인트 |
+|---|---|---|---|---|
+| `this` | Load | `Form_Load` | `.ctor`:122 | `InitControls`→`biz:CommonData.CommonDataList`[LookupCommon], `SetChangedControl`→[PlanDateShip] |
+| `spdMain` | TopChange | `SpdMain_TopChange` | `InitEvent`:243 | 추출된 호출 없음 (동작 확인 필요) |
+| `this.btnItemId` | Click | `btnItemId_Click` | `InitEvent`:244 | 추출된 호출 없음. `txtItemId.Text = sItemId` (:301) |
+| `this.btnMeasure` | Click | `btnMeasure_Click` | `InitEvent`:245 | 추출된 호출 없음 (동작 확인 필요) |
+| `clbDivision` | SelectedIndexChanged | `clbDivision_SelectedIndexChanged` | `InitEvent`:247 | `SetChangedControl`→`biz:CommonData.CommonDataList`[PlanDateShip] |
+| (프레임워크) | FindButton | `FindData_Main` | 프레임워크 조회 버튼 | `SSP.SSP0017_GET_INVENTORY_RAW` |
+
+- `InitControls`:176에서 `clbDivision.Enabled = false`를 설정합니다. 사용자가 Division을 직접 바꿀 수 없는 상태에서 `clbDivision_SelectedIndexChanged`가 실제로 발생하는 경로(프로그램이 값을 설정할 때 등)는 **확인 필요**입니다.
+
+## 5. 메타/데이터 컬럼 사용
+
+| 메서드 / 위치 | 대상 | 컬럼 | 비고 |
+|---|---|---|---|
+| `<field:dtMyDivision>` (:46) | `UserInfoContext.Current` | `NowGroupID` | 로그인 사용자 그룹 기반 Division 데이터로 보입니다. 용도는 확인 필요 |
+| `SetSheetHeaderColumn` (`InitSpread`:202) | `SpreadInfo.SetSheetHeaderColumn` (프레임워크) | ATTRIBUTE1~5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG | 메타로 Grid 컬럼 생성 |
+| `GetCheckedListValue` (`SetChangedControl`:350, `FindData_Main`:386·387·389·390) | `CString.GetCheckedListValue` (프레임워크) | `CODE` | 체크 리스트에서 선택된 CODE 값을 추출. 각 줄이 어느 컨트롤을 읽는지는 확인 필요 |
+
+## 6. Grid 구성 방식
+
+**구성 방식: `META(프레임워크) (+코드 표시/라벨 변경)`**
+
+1. `CreateSpread`:188에서 `AddSheet`로 `spdMain`에 시트 `SpdSheet.shtMain`을 만듭니다. 시트명은 `Inventory Raw(Mobility & IT)`이고, 인자는 `1 ¦ 1 ¦ 30`입니다.
+2. `CreateSpread`:189 `GetSheetInfo(spdMain.Name, 0)` → :191 `ChangeSheet`
+3. `InitSpread`:200 `if(spdInfo.SheetName == "Inventory Raw(Mobility & IT)")` 조건에서 `InitSheet`
+4. `InitSpread`:202 `SetSheetHeaderColumn(spdInfo, 1)`: 컬럼헤더 1행 기준으로 `SCM_MST_SHEET_COLUMNS` 메타에서 컬럼을 생성합니다.
+5. `InitSpreadFooterSum`:217 `siMain.ActiveSheet.ColumnFooter.Visible = true`: 컬럼 푸터(합계 행)를 켭니다. 합계 대상 컬럼은 확인 필요입니다.
+6. Designer.cs:555~558의 코드 변경 4건은 모두 `ColumnHeaderDefaultEnhanced` 스타일 속성입니다: HorizontalAlignment = General, NoteIndicatorColor = Red, Parent = `ColumnHeaderDefaultEnhanced`, VerticalAlignment = General. 컬럼을 추가하거나 숨기지 않습니다.
+
+### 6-1. 시트와 Division별 차이
+
+| 시트 | 연결 규칙 | 메타 컬럼 수 | 표시 | 숨김 |
+|---|---|---:|---:|---:|
+| `Inventory Raw(Mobility & IT)` | META+코드연결 (현행 사용 시트) | 31 | 27 | 4 |
+| `Inventory Raw(IT & Mobile)` | 메타 정의만, 코드 미참조(미사용 가능) | 31 | 27 | 4 |
+
+- Division 40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC **전부 27개(필수+기본 27 / 선택 0)로 같습니다**. Division별 Grid 차이는 없습니다.
+- 숨김 컬럼 4개(두 시트 공통): `LONG_QTY`(Long-Term Qty), `OPERATION_NAME`(Operation Name), `ROUTE_NAME`(Route Name), `ROUTE_TYPE`(Route Type)
+- 실제 SP 실행 결과와 매칭되는 시트가 없습니다(grid 단계 미실행 또는 시트명 불일치). SP 결과셋 컬럼과 메타 컬럼의 일치 여부는 **확인 필요**입니다.
+
+## 7. DB 메타 데이터 (화면 ID 보유 행)
+
+| 메타 테이블 | 행 수 |
+|---|---:|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 2 |
+| dbo.SCM_MST_SHEET_COLUMNS | 62 |
+| dbo.TB_FX_Favorite | 9 |
+| dbo.TB_FX_GroupMenuAuth | 14 |
+| dbo.TB_FX_MenuItemInfo | 2 |
+| dbo.TB_FX_ProgramInfo | 2 |
+| dbo.TB_FX_SearchCondition | 8 |
+
+## 8. 확인 필요 항목
+
+| # | 항목 | 사유 |
+|---:|---|---|
+| 1 | `GetDivision`(478) → `SCM.SCM0001_GET_DIVISION`의 실사용 여부 | 진입점 미연결(unreached) |
+| 2 | `GetDayRange`(514) → `SCP.SCM0001_GET_SCP_DAY_PERIOD`의 실사용 여부 | 진입점 미연결(unreached) |
+| 3 | `dtInventoryStatus`(49) [code=OWMS_STOCK_STATUS] 데이터의 사용처 | 필드 초기화. 바인딩 대상 미추출 |
+| 4 | [code=LookupCommon](179)이 채우는 컨트롤 | `cboInventoryType`, `cboPlanDate`, `clbPlantSite` 중 어느 것인지 미추출 |
+| 5 | `clbPlantSite` 항목의 데이터 출처 | 해당 엔드포인트 미추출 |
+| 6 | `btnMeasure_Click`, `btnItemId_Click`, `SpdMain_TopChange` 내부 동작(팝업, 페이징 등) | 엔드포인트 호출 미추출 |
+| 7 | `FindData_Main`:386~390 `GetCheckedListValue` 4회가 읽는 컨트롤과 SP 파라미터 매핑 | 파라미터 미추출 |
+| 8 | `clbDivision.Enabled=false`(176) 상태에서 `SelectedIndexChanged`가 발생하는 경로 | 정적 추출 한계 |
+| 9 | 푸터 합계 대상 컬럼 | `InitSpreadFooterSum` 세부 미추출 |
+| 10 | `Inventory Raw(IT & Mobile)` 시트 메타의 폐기 여부 | 코드 미참조 |
+| 11 | SP 결과셋 컬럼과 메타 컬럼의 일치 여부 | grid 단계 매칭 시트 없음 |
+| 12 | 숨김 4개 컬럼의 사유(VISIBLE_FLAG 또는 VALID_YN) | grid_effective에는 결과만 있음 |
+
+
+# 1차 분석서 — web_components.md
+# SSP0017 Web 컴포넌트 매핑 (React + Wijmo)
+
+## 1. 컨트롤 → React/Wijmo 매핑
+
+라벨은 props.csv의 `LayoutControlItem.Text` 원문입니다.
+
+| AS-IS 컨트롤 | 유형 | 라벨(LayoutControlItem.Text 원문) | LayoutControlItem | 크기(컨트롤) | TO-BE 컴포넌트 후보 | 비고 |
+|---|---|---|---|---|---|---|
+| `cboPlanDate` | UsrCombo | `Plan-date*` | `PlanDate` (232×25) | 165×20 | 단일 선택 콤보 (Wijmo ComboBox 계열 공용 컴포넌트) | 라벨의 `*`는 필수 표시. 데이터: [code=PlanDateShip] |
+| `clbDivision` | UsrCheckedList | `Division` | `lcDivision` (232×28) | 184×21 | 다중 선택 체크 콤보 (Wijmo MultiSelect 계열) | `InitControls`:176 `Enabled=false`(비활성). 변경 시 `SetChangedControl` |
+| `clbPlantSite` | UsrCheckedList | `Plant Site` | `layoutControlItem7` (161×28) | 100×21 | 다중 선택 체크 콤보 | 데이터 출처 확인 필요 |
+| `cboInventoryType` | UsrCombo | `Inventory Type` | `lblInventoryType` (252×28) | 145×20 | 단일 선택 콤보 | 데이터 출처 확인 필요(LookupCommon 후보) |
+| `txtItemId` | UsrMultiLineEditor | `Model` | `lblItemId` (154×28) | 100×21 | 멀티라인 입력(다건 입력) 공용 컴포넌트 | `btnItemId_Click`이 값을 채움 |
+| `btnItemId` | UsrButton | (Text 미추출) | `layoutControlItem2` (43×28) | 39×24 | 아이콘 버튼 (Model 옆) | Click → `btnItemId_Click` |
+| `btnMeasure` | UsrButton | (Text 미추출) | `layoutControlItem10` (43×28) | 39×24 | 아이콘 버튼 | Click → `btnMeasure_Click`. 동작 확인 필요 |
+| `usrButton1` | UsrButton | (Text 미추출) | — | 75×23 | 확인 필요 | 부모 미지정. 화면 배치 여부 확인 필요 |
+| `usrConditionPanel1` | UsrConditionPanel | — | — | 1192×79 | 조회조건 패널 (접기 가능) | `UsrPanelType = HidePanel` |
+| `usrLayoutControl2` / `layoutControlGroup2` | UsrLayoutControl / LayoutControlGroup | — | — | 1192×73 | 조회조건 레이아웃 | |
+| `emptySpaceItem3` / `emptySpaceItem1` | EmptySpaceItem | — | — | 287×28 / 940×25 | 여백 | |
+| `panel1` | Panel | — | — | 1192×570 | Grid 컨테이너 | Dock Fill |
+| `spdMain` / `spdMain_Sheet1` | FpSpread / SheetView | — | — | 1192×570 | Wijmo FlexGrid (공용 Grid) | Dock Fill. 컬럼 푸터 Visible(합계 행) |
+| `imageList1` | ImageList | — | — | — | 불필요(아이콘 리소스) | |
+| (프레임워크) FindButton | — | — | — | — | 공통 조회 버튼 | → `FindData_Main` |
+
+## 2. 화면 배치
+
+- props.csv에 **SplitContainer가 없습니다**. Dock 구성만 있습니다.
+- 상/하 2분할:
+  - 상단 `usrConditionPanel1`: Dock Top, 높이 79 → 79 / (79+570) ≈ **12.2%**
+  - 하단 `panel1` → `spdMain`: Dock Fill, 높이 570 → 570 / 649 ≈ **87.8%** (나머지 영역을 모두 채움)
+- 좌/우 분할은 없습니다(Grid 1개).
+- 조회조건 행 배치는 LayoutControlItem 크기 기준입니다. 높이 25인 항목(`PlanDate` 232, `emptySpaceItem1` 940)과 높이 28인 항목(`lcDivision` 232, `lblInventoryType` 252, `layoutControlItem7` 161, `lblItemId` 154, `layoutControlItem2` 43, `layoutControlItem10` 43, `emptySpaceItem3` 287)이 있습니다. 정확한 행·열 좌표(Location)는 Fact Pack에 없어 **확인 필요**입니다.
+  - 참고: 높이 28 항목 너비 합은 232+252+161+154+43+43+287 = 1172이고, 높이 25 항목 합은 232+940 = 1172입니다. 2행 구성으로 보이지만 확정하려면 Location 확인이 필요합니다.
+
+## 3. 시트별 Grid 컬럼 (grid_effective 기준)
+
+컬럼 순서는 CSV 정렬 순서(알파벳)입니다. 실제 표시 순서(메타의 순번 컬럼)는 Fact Pack에 없어 **확인 필요**입니다.
+
+### 3-1. `Inventory Raw(Mobility & IT)` — META+코드연결 (현행 사용 시트)
+
+| # | COLUMN_NAME | 라벨 | 출처 | 표시(전 Division 동일) |
+|---:|---|---|---|---|
+| 1 | AVAILABLE_QTY | Available Qty | META | 기본 |
+| 2 | BUILDING | Building | META | 기본 |
+| 3 | CAPACITY | Capacity | META | 기본 |
+| 4 | CURRENT_OP_START_DATE | Current OP Start Date | META | 기본 |
+| 5 | CUSTOMER | Customer | META | 기본 |
+| 6 | DIVISION_ID | Div | META | 기본 |
+| 7 | EXP_FORMATION_END_DATE | Exp. Formation End Date | META | 기본 |
+| 8 | EXPIRATION_QTY | Expiration Qty | META | 기본 |
+| 9 | HOLD_QTY | Hold Qty | META | 기본 |
+| 10 | HOLD_YN | Hold YN | META | 기본 |
+| 11 | INVENTORY_STATUS | Inventory Status | META | 기본 |
+| 12 | INVENTORY_TYPE | Inventory Type | META | 기본 |
+| 13 | LINE | Line | META | 기본 |
+| 14 | LONG_QTY | Long-Term Qty | META | **숨김** |
+| 15 | LOT | Lot | META | 기본 |
+| 16 | LOT_ID | Lot ID | META | 기본 |
+| 17 | MODEL | Model | META | 기본 |
+| 18 | NICK_NAME | Nick Name | META | 기본 |
+| 19 | OPERATION | Operation | META | 기본 |
+| 20 | OPERATION_NAME | Operation Name | META | **숨김** |
+| 21 | PALLET_ID | Pallet ID | META | 기본 |
+| 22 | PLANT_SITE | Plant Site | META | 기본 |
+| 23 | PRODUCTION_DATE | Production Date | META | 기본 |
+| 24 | REMAIN_LEAD_TIME | Remain Lead Time(Day) | META | 기본 |
+| 25 | ROUTE | Route | META | 기본 |
+| 26 | ROUTE_NAME | Route Name | META | **숨김** |
+| 27 | ROUTE_TYPE | Route Type | META | **숨김** |
+| 28 | SOC | SOC | META | 기본 |
+| 29 | SPECIAL_YN | Special YN | META | 기본 |
+| 30 | STOCK_QTY | Stock Qty | META | 기본 |
+| 31 | VALTAGE | Valtage | META | 기본 |
+
+- 메타 31개 중 표시 27개, 숨김 4개입니다.
+- 라벨 `Valtage`는 메타 원문 철자 그대로입니다. TO-BE에서 정정할지는 확인 필요입니다.
+- 코드 하드코딩 컬럼은 없습니다. 코드 변경은 컬럼헤더 스타일 4건(Designer.cs:555~558)뿐입니다.
+
+### 3-2. `Inventory Raw(IT & Mobile)` — 메타 정의만, 코드 미참조(미사용 가능)
+
+- 컬럼 구성(31개)과 표시/숨김은 3-1과 같습니다(표시 27, 숨김 `LONG_QTY`·`OPERATION_NAME`·`ROUTE_NAME`·`ROUTE_TYPE`).
+- 코드 어디에서도 이 시트명을 쓰지 않습니다. 폐기 후보이며, TO-BE 반영 여부는 확인 필요입니다.
+
+### 3-3. Division별 표시 차이
+
+| 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Inventory Raw(IT & Mobile) | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 |
+| Inventory Raw(Mobility & IT) | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 |
+
+→ Division별 차이는 없습니다. 분기 조건 판단불가 0건입니다.
+
+## 4. 시트 연결 규칙
+
+| 시트 | 규칙 | 코드 근거 |
+|---|---|---|
+| `Inventory Raw(Mobility & IT)` | META+코드연결 | `CreateSpread`:188 `AddSheet` → :191 `ChangeSheet` → `InitSpread`:200 `InitSheet` → :202 `SetSheetHeaderColumn(spdInfo, 1)` |
+| `Inventory Raw(IT & Mobile)` | 메타 정의만, 코드 미참조 | 없음 |
+
+- 컬럼헤더 1행(`SetSheetHeaderColumn` 두 번째 인자 1)
+- 컬럼 푸터 표시(`InitSpreadFooterSum`:217). 합계 대상 컬럼은 확인 필요
+
+
+# 1차 분석서 — tobe_design.md
+# SSP0017 TO-BE 설계 입력 (Inventory Raw(Small))
+
+## 1. 조회조건 (컨트롤 기준)
+
+| 라벨(원문) | AS-IS 컨트롤 | 유형 | 필수 | 초기 상태 / 데이터 | 비고 |
+|---|---|---|---|---|---|
+| `Plan-date*` | `cboPlanDate` | 단일 콤보 | 라벨에 `*` 표시 | [code=PlanDateShip] (`SetChangedControl`:365, Form_Load 시와 Division 변경 시 갱신) | |
+| `Division` | `clbDivision` | 다중 체크 | 확인 필요 | `Enabled=false` (`InitControls`:176) | 사용자 Division 기본 설정 로직(`dtMyDivision` ← `NowGroupID`)과의 관계는 확인 필요 |
+| `Plant Site` | `clbPlantSite` | 다중 체크 | 확인 필요 | 데이터 출처 확인 필요 | |
+| `Inventory Type` | `cboInventoryType` | 단일 콤보 | 확인 필요 | 데이터 출처 확인 필요 (LookupCommon 후보) | |
+| `Model` | `txtItemId` (+`btnItemId`) | 멀티라인 입력 + 버튼 | 확인 필요 | `btnItemId_Click`에서 `txtItemId.Text = sItemId` | |
+| (라벨 없음) | `btnMeasure` | 버튼 | — | Click → `btnMeasure_Click` | 동작 확인 필요 |
+
+- 조회조건 패널은 `HidePanel` 타입(접기 가능)입니다.
+- TB_FX_SearchCondition에 이 화면 행이 8건 있습니다(조회조건 저장/복원 기능으로 보이며, 내용은 확인 필요).
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | AS-IS 핸들러 / 경로 | AS-IS 엔드포인트 | TO-BE API 후보 |
+|---|---|---|---|
+| 화면 진입 | `Form_Load` > `InitControls` | `biz:CommonData.CommonDataList` [LookupCommon] | 공통코드 조회 API (공용) |
+| 화면 진입 / Division 변경 | `Form_Load` > `InitControls` > `SetChangedControl`, `clbDivision_SelectedIndexChanged` > `SetChangedControl` | `biz:CommonData.CommonDataList` [PlanDateShip] | 공통코드 조회 API (PlanDateShip, Division 파라미터) |
+| 조회(Find) | `FindButton` > `FindData_Main` | `SSP.SSP0017_GET_INVENTORY_RAW` | 화면 조회 API → Oracle `SSP0017_GET_INVENTORY_RAW` |
+| Model 버튼 | `btnItemId_Click` | 추출 없음 | 확인 필요 (결과를 `txtItemId`에 반영) |
+| Measure 버튼 | `btnMeasure_Click` | 추출 없음 | 확인 필요 |
+| Grid 스크롤 | `SpdMain_TopChange` | 추출 없음 | 확인 필요 (FlexGrid 스크롤 이벤트로 대응할지 판단 필요) |
+| (미연결) | `GetDivision` | `SCM.SCM0001_GET_DIVISION` | 사용 여부가 확인된 뒤 결정 |
+| (미연결) | `GetDayRange` | `SCP.SCM0001_GET_SCP_DAY_PERIOD` | 사용 여부가 확인된 뒤 결정 |
+| (미연결) | `<field:dtInventoryStatus>` | `biz:CommonData.CommonDataList` [OWMS_STOCK_STATUS] | 사용 여부가 확인된 뒤 결정 |
+
+- 주석 처리된 호출(`SCP.GET_DATE_RANGE_1MONTH`, `SCP.SCM0001_GET_SCP_PERIOD`)은 TO-BE 범위에서 제외합니다.
+- 저장·삭제 액션은 추출되지 않았습니다. 조회 전용 화면으로 판단합니다.
+
+## 3. Division별 Grid 변형 요약
+
+- 현행 시트: `Inventory Raw(Mobility & IT)` (META+코드연결). 메타 31개 컬럼 중 표시 27개, 숨김 4개(`LONG_QTY`, `OPERATION_NAME`, `ROUTE_NAME`, `ROUTE_TYPE`)
+- Division 14개 전부 27개로 같아서 **Division별 변형이 없습니다**.
+- `Inventory Raw(IT & Mobile)` 시트는 메타에만 있고 코드는 참조하지 않습니다. 폐기 후보입니다.
+- 컬럼헤더 1행, 컬럼 푸터(합계) 표시. 합계 컬럼은 확인 필요입니다.
+- 메타 기반 Grid이므로 TO-BE에서도 메타(`SCM_MST_SHEET_COLUMNS` 대응) 기반 컬럼 구성이 전제입니다.
+
+## 4. 권한(C/R/U/D) 관련 사실
+
+| 사실 | 값 |
+|---|---|
+| TB_FX_GroupMenuAuth 화면 행 수 | 14 |
+| TB_FX_MenuItemInfo 행 수 | 2 |
+| TB_FX_ProgramInfo 행 수 | 2 |
+| TB_FX_Favorite 행 수 | 9 |
+| 코드상 권한 분기 | 추출되지 않음 |
+| C/U/D 엔드포인트 | 없음 (조회만 존재) |
+
+- 그룹별 C/R/U/D 플래그 값은 Fact Pack에 없습니다(행 수만 있음). 원문 CSV `dbmeta_dbo_TB_FX_GroupMenuAuth.csv` 확인이 필요합니다.
+
+## 5. 미확정 사항
+
+1. `btnMeasure_Click`, `btnItemId_Click`, `SpdMain_TopChange`의 내부 동작
+2. `clbDivision`을 비활성(`Enabled=false`) 상태로 두는 정책, 그리고 `NowGroupID` 기반 기본 Division 설정 방식
+3. `clbPlantSite`, `cboInventoryType`의 데이터 출처
+4. `FindData_Main`:386~390 파라미터와 SP 인자 매핑
+5. `GetDivision`, `GetDayRange`, `dtInventoryStatus`(진입점 미연결)의 실사용 여부
+6. Grid 컬럼 표시 순서, 합계 대상 컬럼, 숨김 4개 컬럼의 사유
+7. SP 결과셋과 메타 컬럼의 일치 여부 (grid 매칭 미실행)
+8. `Inventory Raw(IT & Mobile)` 메타 시트를 폐기할지 여부
+9. `usrButton1`(부모 미지정)이 화면에 실제로 배치되는지
+10. 라벨 `Valtage` 철자를 유지할지 정정할지
+
+
+# Fact Pack — SSP0017
+# SSP0017 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 547 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 641 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:clbDivision.SelectedIndexChanged | clbDivision_SelectedIndexChanged > SetChangedControl | 365 | biz:CommonData.CommonDataList [code=PlanDateShip] | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_Main | 405 | SSP.SSP0017_GET_INVENTORY_RAW | MATCH | SP SSP0017_GET_INVENTORY_RAW |
+| event:this.Load | Form_Load > InitControls | 179 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 365 | biz:CommonData.CommonDataList [code=PlanDateShip] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtInventoryStatus> | 49 | biz:CommonData.CommonDataList [code=OWMS_STOCK_STATUS] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetDivision | 478 | SCM.SCM0001_GET_DIVISION | MATCH | SP SCM0001_GET_DIVISION |
+| unreached:(진입점 미연결) | GetDayRange | 514 | SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | SP SCM0001_GET_SCP_DAY_PERIOD |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=OWMS_STOCK_STATUS] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=PlanDateShip] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:SELECT:SSP_ANL_SHIP_PLAN_P, UP_FX_GetCommonDataList:SELECT:SSP_PLAN_VERSION_V, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| SCM.SCM0001_GET_DIVISION | MATCH | 1 | SP SCM0001_GET_DIVISION | EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION |  |
+| SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | 1 | SP SCM0001_GET_SCP_DAY_PERIOD | EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE |  |
+| SSP.SSP0017_GET_INVENTORY_RAW | MATCH | 1 | SP SSP0017_GET_INVENTORY_RAW | EXEC:SSP0017_GET_INVENTORY_RAW, SELECT:SCM_MST_ITEM_SN, REF:FN_CHAR_TO_DATE, SELECT:SSP_ANL_INVENTORY_RAW, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_MST_SLOC, SELECT:SCM_MST_SITE, REF:UF_FX_STRING_SPLIT |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| <field:dtMyDivision> | UserInfoContext.Current | NowGroupID |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| SetSheetHeaderColumn | InitSpread:202 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| GetCheckedListValue | SetChangedControl:350, FindData_Main:386, FindData_Main:387, FindData_Main:389, FindData_Main:390 | CString.GetCheckedListValue | CODE |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:122 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:243 |
+| this.btnItemId | Click | btnItemId_Click | InitEvent:244 |
+| this.btnMeasure | Click | btnMeasure_Click | InitEvent:245 |
+| clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitEvent:247 |
+
+## 6. 컨트롤 (24개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 7 | layoutControlItem7, lblItemId, layoutControlItem2, PlanDate, layoutControlItem10, lcDivision, lblInventoryType |
+| UsrButton | 3 | usrButton1, btnMeasure, btnItemId |
+| UsrCombo | 2 | cboPlanDate, cboInventoryType |
+| UsrCheckedList | 2 | clbPlantSite, clbDivision |
+| EmptySpaceItem | 2 | emptySpaceItem3, emptySpaceItem1 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrMultiLineEditor | 1 | txtItemId |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| ImageList | 1 | imageList1 |
+| Panel | 1 | panel1 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 2 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 62 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 9 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 14 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 2 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 2 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 8 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (3건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 513 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |
+| 532 | SCP.SCM0001_GET_SCP_PERIOD | commented:MATCH |
+| 531 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0017 | Inventory Raw(IT & Mobile) | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0017 | Inventory Raw(Mobility & IT) | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 | 27/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Inventory Raw(Mobility & IT)
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:202
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 555 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 556 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 557 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 558 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Inventory Raw(IT & Mobile) | 메타 정의만, 코드 미참조(미사용 가능) | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 |
+| Inventory Raw(Mobility & IT) | META+코드연결 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 | 27 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (6 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","<field:dtInventoryStatus>","49","derived","biz","CommonData.CommonDataList [code=OWMS_STOCK_STATUS]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.OWMS_STOCK_STATUS:Type.OWMS_STOCK_STATUS] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitControls","179","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","SetChangedControl","365","derived","biz","CommonData.CommonDataList [code=PlanDateShip]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlanDateShip:Type.PlanDateShip] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","FindData_Main","405","ctor","fox","SSP.SSP0017_GET_INVENTORY_RAW","SSP.SSP0017_GET_INVENTORY_RAW","MATCH","SP SSP0017_GET_INVENTORY_RAW","EXEC:SSP0017_GET_INVENTORY_RAW, SELECT:SCM_MST_ITEM_SN, REF:FN_CHAR_TO_DATE, SELECT:SSP_ANL_INVENTORY_RAW, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_MST_SLOC, SELECT:SCM_MST_SITE, REF:UF_FX_STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","GetDivision","478","ctor","fox","SCM.SCM0001_GET_DIVISION","SCM.SCM0001_GET_DIVISION","MATCH","SP SCM0001_GET_DIVISION","EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","GetDayRange","514","ctor","fox","SCP.SCM0001_GET_SCP_DAY_PERIOD","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE","",""
+```
+
+### FILE flow.csv (7 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","event","this.Load","Form_Load > InitControls","InitControls","179","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","365","biz:CommonData.CommonDataList [code=PlanDateShip]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","event","clbDivision.SelectedIndexChanged","clbDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","365","biz:CommonData.CommonDataList [code=PlanDateShip]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","button","FindButton","FindButton > FindData_Main","FindData_Main","405","SSP.SSP0017_GET_INVENTORY_RAW","MATCH","SP SSP0017_GET_INVENTORY_RAW","EXEC:SSP0017_GET_INVENTORY_RAW, SELECT:SCM_MST_ITEM_SN, REF:FN_CHAR_TO_DATE, SELECT:SSP_ANL_INVENTORY_RAW, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_MST_SLOC, SELECT:SCM_MST_SITE, REF:UF_FX_STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","unreached","(진입점 미연결)","GetDivision","GetDivision","478","SCM.SCM0001_GET_DIVISION","MATCH","SP SCM0001_GET_DIVISION","EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","unreached","(진입점 미연결)","GetDayRange","GetDayRange","514","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","unreached","(진입점 미연결)","<field:dtInventoryStatus>","<field:dtInventoryStatus>","49","biz:CommonData.CommonDataList [code=OWMS_STOCK_STATUS]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (5 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw",".ctor","122","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitEvent","243","spdMain","TopChange","SpdMain_TopChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitEvent","244","this.btnItemId","Click","btnItemId_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitEvent","245","this.btnMeasure","Click","btnMeasure_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitEvent","247","clbDivision","SelectedIndexChanged","clbDivision_SelectedIndexChanged","+="
+```
+
+### FILE controls.csv (24 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","32"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","cboPlanDate","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","btnMeasure","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","clbPlantSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","cboInventoryType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","clbDivision","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","lblItemId","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","PlanDate","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","layoutControlItem10","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","lcDivision","DevExpress.XtraLayout.LayoutControlItem","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","lblInventoryType","DevExpress.XtraLayout.LayoutControlItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","imageList1","System.Windows.Forms.ImageList","","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","panel1","System.Windows.Forms.Panel","this","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","spdMain","FarPoint.Win.Spread.FpSpread","panel1","54"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","55"
+```
+
+### FILE props.csv (44 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","105","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","114","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","117","usrConditionPanel1","Size","new System.Drawing.Size(1192, 79)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","119","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","131","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","136","usrLayoutControl2","Size","new System.Drawing.Size(1192, 73)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","138","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","172","cboPlanDate","Size","new System.Drawing.Size(165, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","205","btnMeasure","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","241","btnItemId","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","279","clbPlantSite","Size","new System.Drawing.Size(100, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","316","txtItemId","Size","new System.Drawing.Size(100, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","352","cboInventoryType","Size","new System.Drawing.Size(145, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","388","clbDivision","Size","new System.Drawing.Size(184, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","411","layoutControlGroup2","Size","new System.Drawing.Size(1192, 73)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","419","emptySpaceItem3","Size","new System.Drawing.Size(287, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","424","layoutControlItem7","Control","this.clbPlantSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","428","layoutControlItem7","Size","new System.Drawing.Size(161, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","429","layoutControlItem7","Text","""Plant Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","436","lblItemId","Control","this.txtItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","441","lblItemId","Size","new System.Drawing.Size(154, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","442","lblItemId","Text","""Model"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","449","layoutControlItem2","Control","this.btnItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","454","layoutControlItem2","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","461","PlanDate","Control","this.cboPlanDate"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","464","PlanDate","Size","new System.Drawing.Size(232, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","465","PlanDate","Text","""Plan-date*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","472","layoutControlItem10","Control","this.btnMeasure"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","477","layoutControlItem10","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","487","emptySpaceItem1","Size","new System.Drawing.Size(940, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","492","lcDivision","Control","this.clbDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","496","lcDivision","Size","new System.Drawing.Size(232, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","497","lcDivision","Text","""Division"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","504","lblInventoryType","Control","this.cboInventoryType"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","509","lblInventoryType","Size","new System.Drawing.Size(252, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","510","lblInventoryType","Text","""Inventory Type"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","524","panel1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","527","panel1","Size","new System.Drawing.Size(1192, 570)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","533","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","538","spdMain","Size","new System.Drawing.Size(1192, 570)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","589","this","Text","""Inventory Raw(Small)"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitControls","176","clbDivision","Enabled","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitSpreadFooterSum","217","siMain.ActiveSheet.ColumnFooter","Visible","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","btnItemId_Click","301","txtItemId","Text","sItemId"
+```
+
+### FILE grid_effective.csv (62 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","AVAILABLE_QTY","Available Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","BUILDING","Building","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","CAPACITY","Capacity","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","CURRENT_OP_START_DATE","Current OP Start Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","CUSTOMER","Customer","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","EXP_FORMATION_END_DATE","Exp. Formation End Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","EXPIRATION_QTY","Expiration Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","HOLD_QTY","Hold Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","HOLD_YN","Hold YN","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","INVENTORY_STATUS","Inventory Status","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","INVENTORY_TYPE","Inventory Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","LINE","Line","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","LONG_QTY","Long-Term Qty","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","LOT","Lot","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","LOT_ID","Lot ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","MODEL","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","OPERATION","Operation","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","OPERATION_NAME","Operation Name","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","PALLET_ID","Pallet ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","PLANT_SITE","Plant Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","PRODUCTION_DATE","Production Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","REMAIN_LEAD_TIME","Remain Lead Time(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","ROUTE","Route","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","ROUTE_NAME","Route Name","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","ROUTE_TYPE","Route Type","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","SOC","SOC","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","SPECIAL_YN","Special YN","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","STOCK_QTY","Stock Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(IT & Mobile)","메타 정의만, 코드 미참조(미사용 가능)","VALTAGE","Valtage","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","AVAILABLE_QTY","Available Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","BUILDING","Building","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","CAPACITY","Capacity","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","CURRENT_OP_START_DATE","Current OP Start Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","CUSTOMER","Customer","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","EXP_FORMATION_END_DATE","Exp. Formation End Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","EXPIRATION_QTY","Expiration Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","HOLD_QTY","Hold Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","HOLD_YN","Hold YN","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","INVENTORY_STATUS","Inventory Status","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","INVENTORY_TYPE","Inventory Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","LINE","Line","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","LONG_QTY","Long-Term Qty","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(Mobility & IT)","META+코드연결","LOT","Lot","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","LOT_ID","Lot ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","MODEL","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","OPERATION","Operation","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","OPERATION_NAME","Operation Name","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(Mobility & IT)","META+코드연결","PALLET_ID","Pallet ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","PLANT_SITE","Plant Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","PRODUCTION_DATE","Production Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","REMAIN_LEAD_TIME","Remain Lead Time(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","ROUTE","Route","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","ROUTE_NAME","Route Name","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(Mobility & IT)","META+코드연결","ROUTE_TYPE","Route Type","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Inventory Raw(Mobility & IT)","META+코드연결","SOC","SOC","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","SPECIAL_YN","Special YN","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","STOCK_QTY","Stock Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Inventory Raw(Mobility & IT)","META+코드연결","VALTAGE","Valtage","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (9 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","CreateSpread","188","Inventory Raw(Mobility & IT)","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Inventory Raw(Mobility & IT) ¦ Inventory Raw(Mobility & IT) ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","CreateSpread","189","0","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ 0","","","spdMain.Name ¦ 0"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","CreateSpread","191","0","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitSpread","200","Inventory Raw(Mobility & IT)","SHEET","InitSheet","HARDCODED","","","","Inventory Raw(Mobility & IT)","","if(spdInfo.SheetName == ""Inventory Raw(Mobility & IT)"")","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","InitSpread","202","Inventory Raw(Mobility & IT)","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spdInfo} ¦ 1","siObj,iColumnHeaderRowCount","if(spdInfo.SheetName == ""Inventory Raw(Mobility & IT)"")","spdInfo ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","555","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","556","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","557","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.Designer.cs","SSP0017_InventoryRaw","InitializeComponent","558","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (1 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","SSP0017_InventoryRaw","<field:dtMyDivision>","46","UserInfoContext.Current","NowGroupID","[]"
+```
+
+### FILE commented_calls.csv (3 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","513","fox","SCP.GET_DATE_RANGE_1MONTH","SCP.GET_DATE_RANGE_1MONTH","commented:MATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","532","fox","SCP.SCM0001_GET_SCP_PERIOD","SCP.SCM0001_GET_SCP_PERIOD","commented:MATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0017_InventoryRaw.cs","531","fox","SCP.GET_DATE_RANGE_1MONTH","SCP.GET_DATE_RANGE_1MONTH","commented:MATCH"
+```

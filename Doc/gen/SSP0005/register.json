@@ -1,0 +1,100 @@
+{
+  "menuId": "SSP0005",
+  "screenName": "ShipmentWorkingDay",
+  "feature": "shipping",
+  "pageDir": "shipment-working-day",
+  "routePath": "shipping/shipment-working-day",
+  "sheets": [
+    {
+      "sheetName": "Shipment Working Day",
+      "rule": "META+코드연결",
+      "columns": 2,
+      "popup": false
+    },
+    {
+      "sheetName": "calendar",
+      "rule": "동적 헤더(기간 컬럼) — SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtMyDivision>",
+        "<field:dtCompany>",
+        "<field:dtDayWeek>",
+        "SetChangedPeriod"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0005.P_",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0005.P_",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "asis_sp": "SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "asis_sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0005.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCM0001_GET_SCP_PERIOD",
+      "asis_sp": "SCM0001_GET_SCP_PERIOD",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetDayRange"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0005.P_SCM0001_GET_SCP_PERIOD",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

@@ -1,0 +1,335 @@
+{
+ "id": "SCP0022",
+ "window": [
+  "2026-11-12 19:54:45.198",
+  "2026-11-12 19:55:09.158"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 19:54:45.593",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 24.9,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:45.604",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 68,
+   "rows_kind": "DataSet rows",
+   "ms": 4.18,
+   "params": {
+    "Code": "PlantByDivisionOperNonOsp1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlantByDivisionOperNonOsp1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:45.953",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.0,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0022"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0022'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:45.980",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 18.24,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:46.257",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 124.6,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:46.298",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 3.88,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation Except"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation Except'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:46.313",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 4.94,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation Except LT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation Except LT'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:47.003",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 600.41,
+   "params": {
+    "MenuID": "Formation",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Formation', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:47.213",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 2.78,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0022"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0022'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 19:54:55.322",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 4.06,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:54:55.337",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 5.98,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation Except"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation Except'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:54:55.439",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 5.82,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation Except"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation Except'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:55:00.625",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0022_GET_FORMATION_EXCEPT",
+   "sp": "SCP0022_GET_FORMATION_EXCEPT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 5152.96,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCP0022_GET_FORMATION_EXCEPT @p_division_id='81', @p_plant_site_id='HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A', @p_item_id=''",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:55:00.939",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 224.7,
+   "params": {
+    "p_menu_id": "SCP0022",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "5.176",
+    "p_ui_time": "0.079",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0022', @p_log_type='FIND', @p_log_cnt='', @p_db_time='5.176', @p_ui_time='0.079', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:55:00.958",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 6.98,
+   "params": {
+    "p_program_id": "SCP0022",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Formation Except LT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0022', @p_user_id='jaeuk.shin', @p_sheet_name='Formation Except LT'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:55:02.369",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0022_GET_FORMATION_EXCEPT_LT",
+   "sp": "SCP0022_GET_FORMATION_EXCEPT_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 1393.14,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCP0022_GET_FORMATION_EXCEPT_LT @p_division_id='81', @p_plant_site_id='HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A', @p_item_id=''",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 19:55:02.884",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 502.63,
+   "params": {
+    "p_menu_id": "SCP0022",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "1.398",
+    "p_ui_time": "0.004",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0022', @p_log_type='FIND', @p_log_cnt='', @p_db_time='1.398', @p_ui_time='0.004', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

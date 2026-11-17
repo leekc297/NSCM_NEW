@@ -1,0 +1,20 @@
+﻿sheet,asis_sp,param,asis,tobe,verdict,note
+calendar,,,,,NO_PAIR,AS-IS 호출 중 인자 이름이 겹치는 SP 없음 · TO-BE 조건 3종
+main,SSP0015_GET_SHIPMENT_PSI,debug_mode,F,F,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,delegatee_chk,N,N,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,division_id,81,40,DIFF,
+main,SSP0015_GET_SHIPMENT_PSI,from_site,,,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,from_yyyymmdd,20261009,20261010,DIFF,
+main,SSP0015_GET_SHIPMENT_PSI,item_id,,,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,my_model_chk,N,N,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,non_chk,Y,Y,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,part_leader_chk,N,N,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,plan_start_yyyymmdd,20261009,20261010,DIFF,
+main,SSP0015_GET_SHIPMENT_PSI,plan_type,SP,SP,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,program_id,SSP0015,SSP0015,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,seq,1,1,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,sheet_name,Shipment PSI(Mobility & IT),Shipment PSI(Mobility & IT),SAME,
+main,SSP0015_GET_SHIPMENT_PSI,team_leader_chk,N,N,SAME,
+main,SSP0015_GET_SHIPMENT_PSI,to_yyyymmdd,20261109,20261110,DIFF,
+main,SSP0015_GET_SHIPMENT_PSI,user_id,jaeuk.shin,minyonglee1,USER(비교 제외),
+mainPacker,SSP0015_GET_SHIPMENT_PSI,,,,NOT_IN_TARGET,대표 시험(_snap__snap_그리드_헤더_텍스트_모델_시트_0.json)에 이 시트 조회가 없음

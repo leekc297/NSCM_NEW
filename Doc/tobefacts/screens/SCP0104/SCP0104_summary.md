@@ -1,7 +1,7 @@
 # SCP0104 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-line-assign` · feature: supply · As-is Fact Pack 있음
-- 파일 22 · 엔드포인트 호출 21 (미해결 6, 주석 속 1) · 이벤트 39 · 컴포넌트 사용 76 · 하드코딩 컬럼 1 · 메시지 27
+- 파일 22 · 엔드포인트 호출 21 (미해결 6, 주석 속 1) · 이벤트 39 · 컴포넌트 사용 76 · 하드코딩 컬럼 1 · 메시지 28
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -10,9 +10,9 @@
 | features/supply/src/pages/capa-line-assign/capa-line-assign.constants.ts | constants | 547 |
 | features/supply/src/pages/capa-line-assign/capa-line-assign.types.ts | types | 56 |
 | features/supply/src/pages/capa-line-assign/CapaLineAssign.module.scss | style | 8 |
-| features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | page | 980 |
-| features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | component | 380 |
-| features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx | component | 322 |
+| features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | page | 993 |
+| features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | component | 387 |
+| features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx | component | 341 |
 | features/supply/src/pages/capa-line-assign/components/CapaLineSopGrid.tsx | component | 148 |
 | features/supply/src/pages/capa-line-assign/components/modals/CapaLineAssignModals.module.scss | component | 46 |
 | features/supply/src/pages/capa-line-assign/components/modals/CapaLineAssignModelModal.tsx | component | 456 |
@@ -22,13 +22,13 @@
 | features/supply/src/pages/capa-line-assign/hooks/useSopModelCascade.ts | hook | 234 |
 | features/supply/src/pages/capa-line-assign/index.ts | index | 5 |
 | features/supply/src/pages/capa-line-assign/useCapaLineAssignStore.ts | store | 412 |
-| features/supply/src/pages/capa-line-assign/utils/capaLineAssign.cascade.ts | util | 91 |
+| features/supply/src/pages/capa-line-assign/utils/capaLineAssign.cascade.ts | util | 118 |
 | features/supply/src/pages/capa-line-assign/utils/capaLineAssign.dummyCode.ts | util | 74 |
 | features/supply/src/pages/capa-line-assign/utils/capaLineAssign.editLock.ts | util | 115 |
 | features/supply/src/pages/capa-line-assign/utils/capaLineAssign.gridCombos.ts | util | 280 |
 | features/supply/src/pages/capa-line-assign/utils/capaLineAssign.save.ts | util | 171 |
 | features/supply/src/pages/capa-line-assign/utils/capaLineAssignColumns.ts | util | 272 |
-| features/supply/src/pages/capa-line-assign/__asis-mapping__.md | mapping | 228 |
+| features/supply/src/pages/capa-line-assign/__asis-mapping__.md | mapping | 231 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -50,26 +50,26 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CapaLineAssignForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 800 |
-| CapaLineAssignGrid | onCellDblClick | handleAssignCellDblClick | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 840 |
-| CapaLineAssignGrid | onUnknownItemName | handleUnknownItemName | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 841 |
-| CapaLineModal | onClose | <arrow> setOpenLinePopup | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 875 |
-| CapaLineModal | onConfirm | handleLinePopupConfirm | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 876 |
-| CapaLineAssignModelModal | onClose | <arrow> setOpenSopModelPopup | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 887 |
-| CapaLineAssignModelModal | onConfirm | handleSopModelConfirm | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 888 |
-| CapaItemPopup | onClose | <arrow> setItemPopupRow | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 913 |
-| CapaItemPopup | onSelect | <arrow> handleItemPopupSelect | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 914 |
-| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,clearAssignFilters,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:sheet,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((setting,index)=>({name:setting.COLUMN_NAME,sortOrderNo:index+1,colWidth:setting.COL_WIDTH,cellColor:setting.CELL_COLOR,textColor:setting.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 933 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 132 |
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 161 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 179 |
-| CustomDropdown | onChange | <arrow> changeDivisionType,Number | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 204 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 237 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 238 |
-| Button | onClick | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 233 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 284 |
-| CapaItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 362 |
-| CapaItemPopup | onSelect | <arrow> [...newSet(selectedAll.map(selection=>(isEltr?selection.itemId:(selection.nickName??''))).filter(Boolean)),].join,selectedAll.map(selection=>(isEltr?selection.itemId:(selection.nickName??''))).filter,selectedAll.map,setSearchParams | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 363 |
+| CapaLineAssignForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 808 |
+| CapaLineAssignGrid | onCellDblClick | handleAssignCellDblClick | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 848 |
+| CapaLineAssignGrid | onUnknownItemName | handleUnknownItemName | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 849 |
+| CapaLineModal | onClose | <arrow> setOpenLinePopup | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 883 |
+| CapaLineModal | onConfirm | handleLinePopupConfirm | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 884 |
+| CapaLineAssignModelModal | onClose | <arrow> setOpenSopModelPopup | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 895 |
+| CapaLineAssignModelModal | onConfirm | handleSopModelConfirm | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 896 |
+| CapaItemPopup | onClose | <arrow> setItemPopupRow | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 921 |
+| CapaItemPopup | onSelect | <arrow> handleItemPopupSelect | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 922 |
+| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,clearAssignFilters,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:sheet,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((setting,index)=>({name:setting.COLUMN_NAME,sortOrderNo:index+1,colWidth:setting.COL_WIDTH,cellColor:setting.CELL_COLOR,textColor:setting.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx | 946 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 134 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 163 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 181 |
+| CustomDropdown | onChange | <arrow> changeDivisionType,Number | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 205 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 238 |
+| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 239 |
+| Button | onClick | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 234 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 293 |
+| CapaItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 369 |
+| CapaItemPopup | onSelect | <arrow> [...newSet(selectedAll.map(selection=>(isEltr?selection.itemId:(selection.nickName??''))).filter(Boolean)),].join,selectedAll.map(selection=>(isEltr?selection.itemId:(selection.nickName??''))).filter,selectedAll.map,setSearchParams | jsx | features/supply/src/pages/capa-line-assign/components/CapaLineAssignForm.tsx | 370 |
 | grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx | 154 |
 | grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx | 181 |
 | grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx | 209 |
@@ -154,6 +154,7 @@
 | LBL00664 | 1 |
 | LBL00414 | 1 |
 | LBL00605 | 1 |
+| LBL01275 | 1 |
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SCP0104(12), SCP0114(2), DMF0044(1), SCP0055(1), SCP0105(1), SCP0106(1)

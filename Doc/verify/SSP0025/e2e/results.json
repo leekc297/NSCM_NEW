@@ -127,12 +127,7 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -141,18 +136,13 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2095,
+                      "duration": 2639,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:04:24.717Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:02:42.294Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -174,12 +164,7 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -188,18 +173,13 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2964,
+                      "duration": 4085,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:04:29.305Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:02:47.282Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -221,12 +201,7 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -235,18 +210,13 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4815,
+                      "duration": 6521,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:04:34.314Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:02:54.083Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -260,7 +230,7 @@
             },
             {
               "title": "@snap 화면샷 패널+헤더 띠 1920/1366",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "snap",
                 "snap"
@@ -268,12 +238,7 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -281,96 +246,18 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 4741,
-                      "error": {
-                        "message": "Error: A snapshot doesn't exist at C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1920.png, writing actual.",
-                        "stack": "Error: A snapshot doesn't exist at C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1920.png, writing actual.\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts:155:9",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts",
-                          "column": 9,
-                          "line": 155
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 153 |\u001b[39m       \u001b[36mconst\u001b[39m approved \u001b[33m=\u001b[39m exists \u001b[33m&&\u001b[39m (() \u001b[33m=>\u001b[39m { \u001b[36mtry\u001b[39m { \u001b[36mconst\u001b[39m man \u001b[33m=\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mparse(fs\u001b[33m.\u001b[39mreadFileSync(path\u001b[33m.\u001b[39mjoin(\u001b[33mROOT\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Doc'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'verify'\u001b[39m\u001b[33m,\u001b[39m \u001b[33mID\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'snap'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'manifest.json'\u001b[39m)\u001b[33m,\u001b[39m \u001b[32m'utf8'\u001b[39m)) \u001b[36mas\u001b[39m \u001b[33mRecord\u001b[39m\u001b[33m<\u001b[39m\u001b[33mstring\u001b[39m\u001b[33m,\u001b[39m unknown\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[33m!\u001b[39m\u001b[33m!\u001b[39mman[key] \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mkey\u001b[33m.\u001b[39mstartsWith(\u001b[32m'_'\u001b[39m)\u001b[33m;\u001b[39m } \u001b[36mcatch\u001b[39m { \u001b[36mreturn\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m } })()\u001b[33m;\u001b[39m\n \u001b[90m 154 |\u001b[39m       \u001b[36mtry\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 155 |\u001b[39m         \u001b[36mawait\u001b[39m expect(nscm\u001b[33m.\u001b[39mpage)\u001b[33m.\u001b[39mtoHaveScreenshot(rel\u001b[33m,\u001b[39m { clip\u001b[33m,\u001b[39m mask\u001b[33m,\u001b[39m maxDiffPixelRatio\u001b[33m:\u001b[39m \u001b[35m0.002\u001b[39m\u001b[33m,\u001b[39m animations\u001b[33m:\u001b[39m \u001b[32m'disabled'\u001b[39m\u001b[33m,\u001b[39m timeout\u001b[33m:\u001b[39m \u001b[35m15\u001b[39m_000 })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 156 |\u001b[39m         put(\u001b[32m'화면샷'\u001b[39m\u001b[33m,\u001b[39m scope\u001b[33m,\u001b[39m { key\u001b[33m,\u001b[39m kind\u001b[33m:\u001b[39m \u001b[32m'화면샷'\u001b[39m\u001b[33m,\u001b[39m scope\u001b[33m,\u001b[39m status\u001b[33m:\u001b[39m approved \u001b[33m?\u001b[39m \u001b[32m'MATCH'\u001b[39m \u001b[33m:\u001b[39m \u001b[32m'NEW'\u001b[39m\u001b[33m,\u001b[39m golden\u001b[33m:\u001b[39m path\u001b[33m.\u001b[39mrelative(\u001b[33mROOT\u001b[39m\u001b[33m,\u001b[39m expected)\u001b[33m,\u001b[39m received\u001b[33m:\u001b[39m \u001b[32m''\u001b[39m\u001b[33m,\u001b[39m diff\u001b[33m:\u001b[39m \u001b[32m''\u001b[39m\u001b[33m,\u001b[39m lines\u001b[33m:\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m detail\u001b[33m:\u001b[39m approved \u001b[33m?\u001b[39m \u001b[32m'골든 화면샷과 일치(maxDiffPixelRatio 0.002)'\u001b[39m \u001b[33m:\u001b[39m exists \u001b[33m?\u001b[39m \u001b[32m'골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요'\u001b[39m \u001b[33m:\u001b[39m \u001b[32m'골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)'\u001b[39m\u001b[33m,\u001b[39m at\u001b[33m:\u001b[39m \u001b[32m''\u001b[39m }\u001b[33m,\u001b[39m { viewport\u001b[33m:\u001b[39m w })\u001b[33m;\u001b[39m\n \u001b[90m 157 |\u001b[39m       } \u001b[36mcatch\u001b[39m (e) {\n \u001b[90m 158 |\u001b[39m         \u001b[90m// toHaveScreenshot 실패 — actual/diff 는 Playwright outputDir(artifacts) 에 남는다\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts",
-                            "column": 9,
-                            "line": 155
-                          },
-                          "message": "Error: A snapshot doesn't exist at C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1920.png, writing actual.\n\n  153 |       const approved = exists && (() => { try { const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'snap', 'manifest.json'), 'utf8')) as Record<string, unknown>; return !!man[key] && !key.startsWith('_'); } catch { return false; } })();\n  154 |       try {\n> 155 |         await expect(nscm.page).toHaveScreenshot(rel, { clip, mask, maxDiffPixelRatio: 0.002, animations: 'disabled', timeout: 15_000 });\n      |         ^\n  156 |         put('화면샷', scope, { key, kind: '화면샷', scope, status: approved ? 'MATCH' : 'NEW', golden: path.relative(ROOT, expected), received: '', diff: '', lines: 0, detail: approved ? '골든 화면샷과 일치(maxDiffPixelRatio 0.002)' : exists ? '골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요' : '골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)', at: '' }, { viewport: w });\n  157 |       } catch (e) {\n  158 |         // toHaveScreenshot 실패 — actual/diff 는 Playwright outputDir(artifacts) 에 남는다\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts:155:9"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts",
-                            "column": 9,
-                            "line": 155
-                          },
-                          "message": "Error: A snapshot doesn't exist at C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1366.png, writing actual.\n\n  153 |       const approved = exists && (() => { try { const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'snap', 'manifest.json'), 'utf8')) as Record<string, unknown>; return !!man[key] && !key.startsWith('_'); } catch { return false; } })();\n  154 |       try {\n> 155 |         await expect(nscm.page).toHaveScreenshot(rel, { clip, mask, maxDiffPixelRatio: 0.002, animations: 'disabled', timeout: 15_000 });\n      |         ^\n  156 |         put('화면샷', scope, { key, kind: '화면샷', scope, status: approved ? 'MATCH' : 'NEW', golden: path.relative(ROOT, expected), received: '', diff: '', lines: 0, detail: approved ? '골든 화면샷과 일치(maxDiffPixelRatio 0.002)' : exists ? '골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요' : '골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)', at: '' }, { viewport: w });\n  157 |       } catch (e) {\n  158 |         // toHaveScreenshot 실패 — actual/diff 는 Playwright outputDir(artifacts) 에 남는다\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts:155:9"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 5926,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:04:41.366Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": [
-                        {
-                          "name": "SSP0025\\snap\\golden\\화면샷_1920-expected.png",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1920.png"
-                        },
-                        {
-                          "name": "SSP0025\\snap\\golden\\화면샷_1920-actual.png",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\SSP0025\\snap\\golden\\화면샷_1920-actual.png"
-                        },
-                        {
-                          "name": "SSP0025\\snap\\golden\\화면샷_1366-expected.png",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\snap\\golden\\화면샷_1366.png"
-                        },
-                        {
-                          "name": "SSP0025\\snap\\golden\\화면샷_1366-actual.png",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\SSP0025\\snap\\golden\\화면샷_1366-actual.png"
-                        },
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_snap.spec.ts",
-                        "column": 9,
-                        "line": 155
-                      }
+                      "startTime": "2026-11-14T19:03:03.338Z",
+                      "annotations": [],
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
@@ -392,7 +279,7 @@
         {
           "title": "검증엔진 SSP0025 @trace",
           "file": "_trace.spec.ts",
-          "line": 114,
+          "line": 129,
           "column": 6,
           "specs": [
             {
@@ -404,32 +291,22 @@
               "tests": [
                 {
                   "timeout": 480000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9772,
+                      "duration": 12082,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:04:49.323Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:03:12.426Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -438,7 +315,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-47049a4a41bf5b276980",
               "file": "_trace.spec.ts",
-              "line": 139,
+              "line": 155,
               "column": 7
             },
             {
@@ -450,32 +327,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4075,
+                      "duration": 5148,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:05:01.478Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:03:27.276Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -484,7 +351,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-04eb4d20fca3b8a2f353",
               "file": "_trace.spec.ts",
-              "line": 210,
+              "line": 229,
               "column": 7
             },
             {
@@ -496,32 +363,22 @@
               "tests": [
                 {
                   "timeout": 480000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 21278,
+                      "duration": 24471,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:05:07.712Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:03:35.179Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -530,7 +387,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-8dab2a6b1468909cac09",
               "file": "_trace.spec.ts",
-              "line": 246,
+              "line": 265,
               "column": 7
             },
             {
@@ -542,32 +399,22 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26813,
+                      "duration": 34398,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:05:31.118Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:04:02.558Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -576,7 +423,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-abf367c3f15093b6ae72",
               "file": "_trace.spec.ts",
-              "line": 333,
+              "line": 352,
               "column": 7
             },
             {
@@ -594,15 +441,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 170,
+                      "duration": 16517,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:00.102Z",
+                      "startTime": "2026-11-14T19:04:39.771Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -612,7 +459,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-b86bc922b280970409db",
               "file": "_trace.spec.ts",
-              "line": 561,
+              "line": 592,
               "column": 7
             },
             {
@@ -624,32 +471,22 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4774,
+                      "duration": 6700,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:02.409Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:04:59.094Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -658,7 +495,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-04f6e539bc706a95ec27",
               "file": "_trace.spec.ts",
-              "line": 636,
+              "line": 667,
               "column": 7
             },
             {
@@ -670,32 +507,22 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5881,
+                      "duration": 10019,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:09.318Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:05:08.861Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -704,7 +531,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-964a970e96cf8e6da796",
               "file": "_trace.spec.ts",
-              "line": 698,
+              "line": 729,
               "column": 7
             },
             {
@@ -716,32 +543,22 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18487,
+                      "duration": 17900,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:17.334Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:05:21.674Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -750,7 +567,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-c72e6465db31b74bbc7e",
               "file": "_trace.spec.ts",
-              "line": 806,
+              "line": 844,
               "column": 7
             },
             {
@@ -762,32 +579,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4705,
+                      "duration": 6068,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:37.982Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:05:42.329Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -796,7 +603,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-12552636640144386ced",
               "file": "_trace.spec.ts",
-              "line": 855,
+              "line": 916,
               "column": 7
             },
             {
@@ -808,32 +615,22 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9099,
+                      "duration": 12811,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:44.940Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:05:51.140Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -842,7 +639,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-93522e32713fd2dcf332",
               "file": "_trace.spec.ts",
-              "line": 910,
+              "line": 971,
               "column": 7
             },
             {
@@ -854,32 +651,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6287,
+                      "duration": 8863,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:06:56.201Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:06:06.891Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -888,7 +675,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-6c566d35080056ca33f1",
               "file": "_trace.spec.ts",
-              "line": 1157,
+              "line": 1230,
               "column": 7
             },
             {
@@ -900,32 +687,22 @@
               "tests": [
                 {
                   "timeout": 1800000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 49792,
+                      "duration": 61013,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:07:04.674Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:06:18.570Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -934,7 +711,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-8c168e29babb12c191c3",
               "file": "_trace.spec.ts",
-              "line": 1185,
+              "line": 1259,
               "column": 7
             },
             {
@@ -946,32 +723,22 @@
               "tests": [
                 {
                   "timeout": 1800000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 193285,
+                      "duration": 197732,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:07:56.590Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:07:22.443Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -980,7 +747,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-55f587b7d79b37757ea6",
               "file": "_trace.spec.ts",
-              "line": 1617,
+              "line": 1709,
               "column": 7
             },
             {
@@ -998,15 +765,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 174,
+                      "duration": 310,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:11:11.967Z",
+                      "startTime": "2026-11-14T19:10:43.072Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1016,7 +783,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-dcf8f73c9f1dfa904b26",
               "file": "_trace.spec.ts",
-              "line": 1965,
+              "line": 2065,
               "column": 7
             }
           ]
@@ -1033,7 +800,7 @@
         {
           "title": "정합검증 SSP0025 @verify",
           "file": "_verify.spec.ts",
-          "line": 213,
+          "line": 252,
           "column": 6,
           "specs": [
             {
@@ -1045,32 +812,22 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4564,
+                      "duration": 5661,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:11:14.576Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:10:46.694Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1079,7 +836,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-cd248abcb23c628d1eaa",
               "file": "_verify.spec.ts",
-              "line": 240,
+              "line": 280,
               "column": 7
             },
             {
@@ -1093,8 +850,8 @@
                   "timeout": 900000,
                   "annotations": [
                     {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "type": "prereq",
+                      "description": "신규행 선행 칸 채움 DIVISION_ID='81 Automotive Battery'"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -1102,71 +859,74 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18647,
+                      "duration": 63925,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[lap] 기존행 편집(D1) 2s\n"
+                          "text": "[lap] 기존행 편집(D1) 4s\n"
                         },
                         {
-                          "text": "[lap] 신규행 2s\n"
+                          "text": "[lap] 신규행 5s\n"
                         },
                         {
-                          "text": "[lap] 입력 프로브 행 14s\n"
+                          "text": "[Insert 전제] 시트 'Shipment Requestor PIC' 선택(InsertRow:315 · shtMain=\"Shipment Requestor PIC\")\n"
                         },
                         {
-                          "text": "[lap] 연쇄 프로브 행 14s\n"
+                          "text": "[lap] 입력 프로브 행 21s\n"
                         },
                         {
-                          "text": "[lap] 콤보 후보+재편집 14s\n"
+                          "text": "[lap] 연쇄 프로브 행 21s\n"
                         },
                         {
-                          "text": "[lap] E1 14s\n"
+                          "text": "[lap] 콤보 후보+재편집 22s\n"
                         },
                         {
-                          "text": "[lap] H13 14s\n"
+                          "text": "[lap] E1 29s\n"
                         },
                         {
-                          "text": "[lap] E2 14s\n"
+                          "text": "[lap] H13 29s\n"
                         },
                         {
-                          "text": "[lap] C3 14s\n"
+                          "text": "[lap] E2 29s\n"
                         },
                         {
-                          "text": "[lap] D5 15s\n"
+                          "text": "[lap] C3 29s\n"
                         },
                         {
-                          "text": "[lap] K5 15s\n"
+                          "text": "[lap] D5 30s\n"
                         },
                         {
-                          "text": "[lap] H2 15s\n"
+                          "text": "[lap] K5 30s\n"
                         },
                         {
-                          "text": "[lap] A2 15s\n"
+                          "text": "[lap] H2 30s\n"
                         },
                         {
-                          "text": "[lap] C2 15s\n"
+                          "text": "[lap] A2 31s\n"
                         },
                         {
-                          "text": "[lap] C6 15s\n"
+                          "text": "[lap] C2 31s\n"
                         },
                         {
-                          "text": "[lap] E5 18s\n"
+                          "text": "[lap] C6 31s\n"
                         },
                         {
-                          "text": "[lap] E7 18s\n"
+                          "text": "[lap] E5 35s\n"
+                        },
+                        {
+                          "text": "[lap] E7 35s\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:11:21.230Z",
+                      "startTime": "2026-11-14T19:10:55.231Z",
                       "annotations": [
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "type": "prereq",
+                          "description": "신규행 선행 칸 채움 DIVISION_ID='81 Automotive Battery'"
                         }
                       ],
                       "attachments": []
@@ -1177,105 +937,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-e9cf248e9891a2f2e3f0",
               "file": "_verify.spec.ts",
-              "line": 262,
-              "column": 65
-            },
-            {
-              "title": "그리드 컬럼 프로브 [탭 Shipment Requestor PIC] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 27027,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[lap] 기존행 편집(D1) 3s\n"
-                        },
-                        {
-                          "text": "[lap] 신규행 4s\n"
-                        },
-                        {
-                          "text": "[lap] 입력 프로브 행 16s\n"
-                        },
-                        {
-                          "text": "[lap] 연쇄 프로브 행 16s\n"
-                        },
-                        {
-                          "text": "[lap] 콤보 후보+재편집 16s\n"
-                        },
-                        {
-                          "text": "[lap] E1 22s\n"
-                        },
-                        {
-                          "text": "[lap] H13 22s\n"
-                        },
-                        {
-                          "text": "[lap] E2 22s\n"
-                        },
-                        {
-                          "text": "[lap] C3 22s\n"
-                        },
-                        {
-                          "text": "[lap] D5 22s\n"
-                        },
-                        {
-                          "text": "[lap] K5 22s\n"
-                        },
-                        {
-                          "text": "[lap] H2 22s\n"
-                        },
-                        {
-                          "text": "[lap] A2 22s\n"
-                        },
-                        {
-                          "text": "[lap] C2 22s\n"
-                        },
-                        {
-                          "text": "[lap] C6 22s\n"
-                        },
-                        {
-                          "text": "[lap] E5 22s\n"
-                        },
-                        {
-                          "text": "[lap] E7 23s\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-09T02:11:41.992Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-2e2bbe35283672ea1609",
-              "file": "_verify.spec.ts",
-              "line": 262,
+              "line": 302,
               "column": 65
             },
             {
@@ -1287,32 +949,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 24621,
+                      "duration": 27323,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:12:11.167Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:12:01.961Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1321,7 +973,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-f3899907d81345db3a0f",
               "file": "_verify.spec.ts",
-              "line": 755,
+              "line": 839,
               "column": 7
             },
             {
@@ -1335,8 +987,8 @@
                   "timeout": 900000,
                   "annotations": [
                     {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 저장 키 컬럼 제외 16셀 · [0s] 수정 입력 완료 · [2s] 저장 응답 USER_CHECK:200 | SAVE:200 요청={\"activeFlag\":\"M\",\"divisionId\":\"81\",\"toSite\":\"HQ07-A\",\"itemId\":\"APCAN1146A\",\"userId\":\"kyb0716\",\"validYn\":\"N\",\"partLeader\":\"\",\"teamLeader\":\"\",\"createId\":\"minyonglee1\"} 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=1개의 데이터가 저장되었습니다. · [3s] 재조회 · [4s] 행 찾기 0 · 행 [81 Automotive Battery|HQ07-A|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 성공 · 재조회 값 'N' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 'Y' 저장 성공 · 재조회 값 'Y' 복원 확인"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -1344,19 +996,23 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17951,
+                      "duration": 89061,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[crud] 빈 키 없음 — 신규행 경로 무효, 기존행 수정 저장으로 측정 · 초기 {\"DIVISION_ID\":\"\",\"TO_SITE\":\"\",\"ITEM_ID\":\"\",\"USER_ID\":\"\"}: 키 값 없음 ['DIVISION_ID', 'TO_SITE', 'ITEM_ID', 'USER_ID'] · 추천 0건\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:12:37.918Z",
+                      "startTime": "2026-11-14T19:12:32.157Z",
                       "annotations": [
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 저장 키 컬럼 제외 16셀 · [0s] 수정 입력 완료 · [2s] 저장 응답 USER_CHECK:200 | SAVE:200 요청={\"activeFlag\":\"M\",\"divisionId\":\"81\",\"toSite\":\"HQ07-A\",\"itemId\":\"APCAN1146A\",\"userId\":\"kyb0716\",\"validYn\":\"N\",\"partLeader\":\"\",\"teamLeader\":\"\",\"createId\":\"minyonglee1\"} 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=1개의 데이터가 저장되었습니다. · [3s] 재조회 · [4s] 행 찾기 0 · 행 [81 Automotive Battery|HQ07-A|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 성공 · 재조회 값 'N' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 'Y' 저장 성공 · 재조회 값 'Y' 복원 확인"
                         }
                       ],
                       "attachments": []
@@ -1367,7 +1023,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-92fa206a3a8769c1da40",
               "file": "_verify.spec.ts",
-              "line": 818,
+              "line": 904,
               "column": 7
             },
             {
@@ -1379,55 +1035,48 @@
               "tests": [
                 {
                   "timeout": 1800000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 20556,
+                      "duration": 13392,
                       "error": {
-                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n",
-                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:621:34)\n    at saveReload (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:55:13)\n    at cellRoundTrip (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:91:14)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1467:16",
+                        "message": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)",
+                        "stack": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:700:13)\n    at saveReload (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:55:13)\n    at cellRoundTrip (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:91:14)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1572:16",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 34,
-                          "line": 621
+                          "column": 13,
+                          "line": 700
                         },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:621\n\n\u001b[0m \u001b[90m 619 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcloseAlert(\u001b[32m'cancel'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m300\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 620 |\u001b[39m     }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 621 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39mclick({ timeout\u001b[33m:\u001b[39m \u001b[35m10\u001b[39m_000 })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 622 |\u001b[39m     \u001b[90m// 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다\u001b[39m\n \u001b[90m 623 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mlet\u001b[39m toast \u001b[33m=\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m t \u001b[36mof\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(\u001b[32m'.MuiSnackbar-root, [role=\"alert\"], .Toastify__toast'\u001b[39m)\u001b[33m.\u001b[39mallInnerTexts()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m [] \u001b[36mas\u001b[39m string[])) { \u001b[36mconst\u001b[39m v \u001b[33m=\u001b[39m t\u001b[33m.\u001b[39mreplace(\u001b[35m/\\s+/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m' '\u001b[39m)\u001b[33m.\u001b[39mtrim()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (v \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mstaleToast\u001b[33m.\u001b[39mhas(v)) { toast \u001b[33m=\u001b[39m v\u001b[33m;\u001b[39m \u001b[36mbreak\u001b[39m\u001b[33m;\u001b[39m } }\n \u001b[90m 624 |\u001b[39m     \u001b[36mconst\u001b[39m preAlert \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39malertText()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:700\n\n\u001b[0m \u001b[90m 698 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39misAlert \u001b[33m&&\u001b[39m (\u001b[36mawait\u001b[39m dlg0\u001b[33m.\u001b[39misVisible()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m))) {\n \u001b[90m 699 |\u001b[39m       \u001b[36mconst\u001b[39m ttl \u001b[33m=\u001b[39m ((\u001b[36mawait\u001b[39m dlg0\u001b[33m.\u001b[39mlocator(\u001b[32m'h1, h2, h3, [class*=\"title\" i]'\u001b[39m)\u001b[33m.\u001b[39mfirst()\u001b[33m.\u001b[39minnerText({ timeout\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[32m''\u001b[39m)) \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m.\u001b[39mreplace(\u001b[35m/\\s+/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m' '\u001b[39m)\u001b[33m.\u001b[39mtrim()\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m60\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 700 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 701 |\u001b[39m     }\n \u001b[90m 702 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39mclick({ timeout\u001b[33m:\u001b[39m \u001b[35m10\u001b[39m_000 })\u001b[33m;\u001b[39m\n \u001b[90m 703 |\u001b[39m     \u001b[90m// 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 34,
-                            "line": 621
+                            "column": 13,
+                            "line": 700
                           },
-                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:621\n\n  619 |       await this.closeAlert('cancel'); await this.page.waitForTimeout(300);\n  620 |     }\n> 621 |     await this.subButton('Save').click({ timeout: 10_000 });\n      |                                  ^\n  622 |     // 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다\n  623 |     await this.page.waitForTimeout(500); let toast = ''; for (const t of await this.page.locator('.MuiSnackbar-root, [role=\"alert\"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) { const v = t.replace(/\\s+/g, ' ').trim(); if (v && !staleToast.has(v)) { toast = v; break; } }\n  624 |     const preAlert = await this.alertText().catch(() => '');\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:621:34)\n    at saveReload (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:55:13)\n    at cellRoundTrip (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:91:14)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1467:16"
+                          "message": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:700\n\n  698 |     if (!isAlert && (await dlg0.isVisible().catch(() => false)) && !(await this.subButton('Save').isVisible({ timeout: 1_000 }).catch(() => false))) {\n  699 |       const ttl = ((await dlg0.locator('h1, h2, h3, [class*=\"title\" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\\s+/g, ' ').trim().slice(0, 60);\n> 700 |       throw new Error(`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`);\n      |             ^\n  701 |     }\n  702 |     await this.subButton('Save').click({ timeout: 10_000 });\n  703 |     // 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:700:13)\n    at saveReload (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:55:13)\n    at cellRoundTrip (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:91:14)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1572:16"
                         }
                       ],
                       "stdout": [
                         {
-                          "text": "[저장 세부] 02:13:04 USER_ID r0 시작\n"
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 4: DIVISION_ID,TO_SITE,ITEM_ID,USER_ID\n"
+                        },
+                        {
+                          "text": "[저장 세부] 19:14:14 PART_LEADER r0 시작\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:12:57.998Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:14:04.093Z",
+                      "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -1452,8 +1101,8 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 34,
-                        "line": 621
+                        "column": 13,
+                        "line": 700
                       }
                     }
                   ],
@@ -1462,7 +1111,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-c98807e1cf11f54a2bba",
               "file": "_verify.spec.ts",
-              "line": 1430,
+              "line": 1534,
               "column": 7
             },
             {
@@ -1474,51 +1123,41 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 20682,
+                      "duration": 12218,
                       "error": {
-                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n",
-                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:621:34)\n    at guarded (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1546:99)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1568:27",
+                        "message": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)",
+                        "stack": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:700:13)\n    at guarded (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1651:99)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1673:27",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 34,
-                          "line": 621
+                          "column": 13,
+                          "line": 700
                         },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:621\n\n\u001b[0m \u001b[90m 619 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcloseAlert(\u001b[32m'cancel'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m300\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 620 |\u001b[39m     }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 621 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39mclick({ timeout\u001b[33m:\u001b[39m \u001b[35m10\u001b[39m_000 })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 622 |\u001b[39m     \u001b[90m// 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다\u001b[39m\n \u001b[90m 623 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mlet\u001b[39m toast \u001b[33m=\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m t \u001b[36mof\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mlocator(\u001b[32m'.MuiSnackbar-root, [role=\"alert\"], .Toastify__toast'\u001b[39m)\u001b[33m.\u001b[39mallInnerTexts()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m [] \u001b[36mas\u001b[39m string[])) { \u001b[36mconst\u001b[39m v \u001b[33m=\u001b[39m t\u001b[33m.\u001b[39mreplace(\u001b[35m/\\s+/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m' '\u001b[39m)\u001b[33m.\u001b[39mtrim()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (v \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mstaleToast\u001b[33m.\u001b[39mhas(v)) { toast \u001b[33m=\u001b[39m v\u001b[33m;\u001b[39m \u001b[36mbreak\u001b[39m\u001b[33m;\u001b[39m } }\n \u001b[90m 624 |\u001b[39m     \u001b[36mconst\u001b[39m preAlert \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39malertText()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:700\n\n\u001b[0m \u001b[90m 698 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39misAlert \u001b[33m&&\u001b[39m (\u001b[36mawait\u001b[39m dlg0\u001b[33m.\u001b[39misVisible()\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39m(\u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m))) {\n \u001b[90m 699 |\u001b[39m       \u001b[36mconst\u001b[39m ttl \u001b[33m=\u001b[39m ((\u001b[36mawait\u001b[39m dlg0\u001b[33m.\u001b[39mlocator(\u001b[32m'h1, h2, h3, [class*=\"title\" i]'\u001b[39m)\u001b[33m.\u001b[39mfirst()\u001b[33m.\u001b[39minnerText({ timeout\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[32m''\u001b[39m)) \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m.\u001b[39mreplace(\u001b[35m/\\s+/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m' '\u001b[39m)\u001b[33m.\u001b[39mtrim()\u001b[33m.\u001b[39mslice(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m60\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 700 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 701 |\u001b[39m     }\n \u001b[90m 702 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msubButton(\u001b[32m'Save'\u001b[39m)\u001b[33m.\u001b[39mclick({ timeout\u001b[33m:\u001b[39m \u001b[35m10\u001b[39m_000 })\u001b[33m;\u001b[39m\n \u001b[90m 703 |\u001b[39m     \u001b[90m// 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 34,
-                            "line": 621
+                            "column": 13,
+                            "line": 700
                           },
-                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /^Save(\\(F\\d+\\))?$/i }).first()\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:621\n\n  619 |       await this.closeAlert('cancel'); await this.page.waitForTimeout(300);\n  620 |     }\n> 621 |     await this.subButton('Save').click({ timeout: 10_000 });\n      |                                  ^\n  622 |     // 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다\n  623 |     await this.page.waitForTimeout(500); let toast = ''; for (const t of await this.page.locator('.MuiSnackbar-root, [role=\"alert\"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) { const v = t.replace(/\\s+/g, ' ').trim(); if (v && !staleToast.has(v)) { toast = v; break; } }\n  624 |     const preAlert = await this.alertText().catch(() => '');\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:621:34)\n    at guarded (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1546:99)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1568:27"
+                          "message": "Error: [측정 경로 없음] Save 를 누를 수 없음 — 팝업 'User Popup' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:700\n\n  698 |     if (!isAlert && (await dlg0.isVisible().catch(() => false)) && !(await this.subButton('Save').isVisible({ timeout: 1_000 }).catch(() => false))) {\n  699 |       const ttl = ((await dlg0.locator('h1, h2, h3, [class*=\"title\" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\\s+/g, ' ').trim().slice(0, 60);\n> 700 |       throw new Error(`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`);\n      |             ^\n  701 |     }\n  702 |     await this.subButton('Save').click({ timeout: 10_000 });\n  703 |     // 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):\n    at Nscm.save (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:700:13)\n    at guarded (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1651:99)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1673:27"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:13:22.684Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:14:23.087Z",
+                      "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -1543,8 +1182,8 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 34,
-                        "line": 621
+                        "column": 13,
+                        "line": 700
                       }
                     }
                   ],
@@ -1553,7 +1192,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-3a10f86da7977c84baf3",
               "file": "_verify.spec.ts",
-              "line": 1529,
+              "line": 1634,
               "column": 7
             },
             {
@@ -1565,32 +1204,22 @@
               "tests": [
                 {
                   "timeout": 1800000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4211,
+                      "duration": 5397,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:13:50.248Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:14:39.496Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1599,7 +1228,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-4aed9b8ad1a40ae54803",
               "file": "_verify.spec.ts",
-              "line": 1640,
+              "line": 1745,
               "column": 7
             },
             {
@@ -1611,32 +1240,22 @@
               "tests": [
                 {
                   "timeout": 1500000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 31938,
+                      "duration": 36156,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:13:56.884Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:14:47.443Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1645,7 +1264,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-29e324f384f4049e5859",
               "file": "_verify.spec.ts",
-              "line": 1741,
+              "line": 1847,
               "column": 7
             },
             {
@@ -1663,15 +1282,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 165,
+                      "duration": 287,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:14:31.092Z",
+                      "startTime": "2026-11-14T19:15:26.285Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1681,7 +1300,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-c16d6df461469d4f64af",
               "file": "_verify.spec.ts",
-              "line": 1785,
+              "line": 1891,
               "column": 7
             },
             {
@@ -1693,32 +1312,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2659,
+                      "duration": 4078,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:14:33.502Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:15:29.317Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1727,7 +1336,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-852a07d493fc71946b43",
               "file": "_verify.spec.ts",
-              "line": 1797,
+              "line": 1903,
               "column": 7
             },
             {
@@ -1739,32 +1348,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2749,
+                      "duration": 4186,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:14:38.364Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:15:36.149Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1773,7 +1372,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-97ca900dd90cdb1521a6",
               "file": "_verify.spec.ts",
-              "line": 1810,
+              "line": 1916,
               "column": 7
             },
             {
@@ -1785,32 +1384,22 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10963,
+                      "duration": 14569,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:14:43.443Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:15:43.109Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1819,7 +1408,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-cbd70705258a46381bea",
               "file": "_verify.spec.ts",
-              "line": 1837,
+              "line": 1943,
               "column": 7
             },
             {
@@ -1831,32 +1420,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3716,
+                      "duration": 4860,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:14:56.601Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:16:00.344Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1865,7 +1444,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d3c4dea08fd0dd128ba1",
               "file": "_verify.spec.ts",
-              "line": 1859,
+              "line": 1972,
               "column": 7
             },
             {
@@ -1877,32 +1456,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1982,
+                      "duration": 3064,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:15:02.511Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:16:08.131Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1911,7 +1480,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-13d4568172e4d2fa91ad",
               "file": "_verify.spec.ts",
-              "line": 1872,
+              "line": 1985,
               "column": 7
             },
             {
@@ -1923,32 +1492,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2118,
+                      "duration": 3134,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:15:06.714Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:16:13.847Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1957,7 +1516,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-4cad41569539ed95888e",
               "file": "_verify.spec.ts",
-              "line": 1886,
+              "line": 1999,
               "column": 7
             },
             {
@@ -1969,32 +1528,22 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17245,
+                      "duration": 29001,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:15:11.106Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:16:19.619Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2003,7 +1552,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-270599916985275051fd",
               "file": "_verify.spec.ts",
-              "line": 1920,
+              "line": 2033,
               "column": 7
             },
             {
@@ -2021,15 +1570,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 241,
+                      "duration": 281,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:15:30.658Z",
+                      "startTime": "2026-11-14T19:16:51.474Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2039,7 +1588,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-1946dd4f42834004f521",
               "file": "_verify.spec.ts",
-              "line": 1986,
+              "line": 2100,
               "column": 7
             },
             {
@@ -2051,32 +1600,26 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13919,
+                      "duration": 363606,
                       "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-09T02:15:33.445Z",
-                      "annotations": [
+                      "stdout": [
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "text": "[langlock] SSP0025 I2: 다른 화면 E2E 실행 중(SSP0060) — 끝날 때까지 언어 전환 대기\n"
                         }
                       ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T19:16:54.450Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2085,7 +1628,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-1d6c9bec39c2abbaab1b",
               "file": "_verify.spec.ts",
-              "line": 2041,
+              "line": 2155,
               "column": 7
             },
             {
@@ -2096,33 +1639,23 @@
               ],
               "tests": [
                 {
-                  "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "timeout": 438485,
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15386,
+                      "duration": 22955,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:15:49.662Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:23:00.933Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2131,7 +1664,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-fa1f016e02e7fd180cfb",
               "file": "_verify.spec.ts",
-              "line": 2065,
+              "line": 2182,
               "column": 7
             },
             {
@@ -2143,32 +1676,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7569,
+                      "duration": 11417,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:16:07.427Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:23:26.633Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2177,7 +1700,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ef4b4d9a62c1ccc4dfc7",
               "file": "_verify.spec.ts",
-              "line": 2103,
+              "line": 2224,
               "column": 7
             },
             {
@@ -2189,32 +1712,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6976,
+                      "duration": 8751,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:16:17.137Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:23:40.775Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2223,7 +1736,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-5e500fc82b258902a7a9",
               "file": "_verify.spec.ts",
-              "line": 2115,
+              "line": 2236,
               "column": 7
             },
             {
@@ -2235,32 +1748,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 101907,
+                      "duration": 104754,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:16:26.273Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:23:52.302Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2269,7 +1772,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-e5a14eef3cd076578656",
               "file": "_verify.spec.ts",
-              "line": 2132,
+              "line": 2253,
               "column": 7
             },
             {
@@ -2281,32 +1784,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 98733,
+                      "duration": 101916,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:18:10.319Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:25:39.804Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2315,7 +1808,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8057cfe8d11f2190ce98",
               "file": "_verify.spec.ts",
-              "line": 2156,
+              "line": 2277,
               "column": 7
             },
             {
@@ -2327,32 +1820,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3576,
+                      "duration": 4660,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:19:51.217Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:27:24.452Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2361,7 +1844,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-c0a21cf3c417c9f48eac",
               "file": "_verify.spec.ts",
-              "line": 2168,
+              "line": 2289,
               "column": 7
             },
             {
@@ -2373,32 +1856,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2619,
+                      "duration": 4032,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:19:56.979Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:27:31.852Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2407,7 +1880,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-697377dd64f860f14b97",
               "file": "_verify.spec.ts",
-              "line": 2178,
+              "line": 2299,
               "column": 7
             },
             {
@@ -2419,32 +1892,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5775,
+                      "duration": 8478,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:20:01.825Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:27:38.510Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2453,7 +1916,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0030bd1148f7034d2fc1",
               "file": "_verify.spec.ts",
-              "line": 2183,
+              "line": 2304,
               "column": 7
             },
             {
@@ -2465,32 +1928,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6412,
+                      "duration": 8733,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:20:09.858Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:27:49.659Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2499,7 +1952,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-2dab0c3b903cd67fdcef",
               "file": "_verify.spec.ts",
-              "line": 2192,
+              "line": 2313,
               "column": 7
             },
             {
@@ -2511,32 +1964,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4642,
+                      "duration": 6567,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:20:18.447Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:28:01.073Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2545,7 +1988,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-9fa7ddd6f91fd1a3cf33",
               "file": "_verify.spec.ts",
-              "line": 2202,
+              "line": 2324,
               "column": 7
             },
             {
@@ -2557,32 +2000,26 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 320651,
+                      "duration": 331709,
                       "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-09T02:20:25.433Z",
-                      "annotations": [
+                      "stdout": [
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e_results.json — UNKNOWN\n"
                         }
                       ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T19:28:10.304Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2591,7 +2028,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d1676a787b286174d76d",
               "file": "_verify.spec.ts",
-              "line": 2212,
+              "line": 2334,
               "column": 7
             },
             {
@@ -2603,32 +2040,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2566,
+                      "duration": 3823,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:25:48.257Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:33:44.844Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2637,7 +2064,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-349394c32f9027a79a5c",
               "file": "_verify.spec.ts",
-              "line": 2220,
+              "line": 2342,
               "column": 7
             },
             {
@@ -2649,32 +2076,26 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3981,
+                      "duration": 7139,
                       "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-09T02:25:53.015Z",
-                      "annotations": [
+                      "stdout": [
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e_results.json — UNKNOWN\n"
                         }
                       ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T19:33:51.459Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2683,7 +2104,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8aed386647a8afabfa1c",
               "file": "_verify.spec.ts",
-              "line": 2228,
+              "line": 2350,
               "column": 7
             },
             {
@@ -2701,15 +2122,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 186,
+                      "duration": 284,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:25:59.362Z",
+                      "startTime": "2026-11-14T19:34:01.269Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2719,7 +2140,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8fd89fc7f3befed3b082",
               "file": "_verify.spec.ts",
-              "line": 2234,
+              "line": 2366,
               "column": 7
             },
             {
@@ -2737,15 +2158,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 176,
+                      "duration": 252,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:26:01.883Z",
+                      "startTime": "2026-11-14T19:34:04.201Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2755,7 +2176,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-c0b35f7aa9e9c4dc9ba5",
               "file": "_verify.spec.ts",
-              "line": 2246,
+              "line": 2378,
               "column": 7
             },
             {
@@ -2773,15 +2194,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 168,
+                      "duration": 267,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:26:04.258Z",
+                      "startTime": "2026-11-14T19:34:07.104Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2791,7 +2212,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-5d325a241808c7c9241a",
               "file": "_verify.spec.ts",
-              "line": 2258,
+              "line": 2390,
               "column": 7
             },
             {
@@ -2809,15 +2230,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 186,
+                      "duration": 291,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:26:06.704Z",
+                      "startTime": "2026-11-14T19:34:09.978Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2827,7 +2248,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8968291737bc0afaec5a",
               "file": "_verify.spec.ts",
-              "line": 2269,
+              "line": 2401,
               "column": 7
             },
             {
@@ -2845,15 +2266,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 166,
+                      "duration": 259,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:26:09.175Z",
+                      "startTime": "2026-11-14T19:34:12.795Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2863,7 +2284,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-3fc387a887ad4326a7e7",
               "file": "_verify.spec.ts",
-              "line": 2278,
+              "line": 2410,
               "column": 7
             },
             {
@@ -2874,11 +2295,11 @@
               ],
               "tests": [
                 {
-                  "timeout": 3750000,
+                  "timeout": 3600000,
                   "annotations": [
                     {
                       "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 2건: [DB] ORA-01841 년은 영이 아닌 -4713 과 +4713 사이의 값으로 지정해야 합니다. | [DB] ORA-01841 년은 영이 아닌 -4713 과 +4713 사이의 값으로 지정해야 합니다.\\nORA-06512: \\\"SCM_M"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -2886,19 +2307,98 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 296303,
+                      "duration": 703951,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 04:34:18\n"
+                        },
+                        {
+                          "text": "[langlock] SSP0025 시나리오: 다른 화면 E2E 실행 중(SSP0060) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] CN 언어 조회 건수 총/건 표기' 시작 04:42:23\n"
+                        },
+                        {
+                          "text": "[langlock] SSP0025 시나리오: 다른 화면 E2E 실행 중(SSP0060) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] 조회 중 Loading 토스트 없음' 시작 04:42:46\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] 선택 행 위로 Insert' 시작 04:42:52\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 셀 콤보 후보 = 서버 콤보 MyDivision' 시작 04:43:00\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 04:43:09\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 04:43:19\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 04:43:28\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 04:43:37\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] DIVISION_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 04:43:47\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 셀 콤보 후보 = 서버 콤보 PlantCell' 시작 04:43:55\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 04:44:04\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 04:44:15\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 04:44:24\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 04:44:33\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] SITE_DESCRIPTION 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 04:44:43\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 04:44:51\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 04:45:00\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 04:45:10\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 04:45:20\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 04:45:29\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 04:45:39\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0' 시작 04:45:47\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0025 '[자동] 조회조건 콤보 2종 = 콤보' 시작 04:45:58\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:26:11.582Z",
+                      "startTime": "2026-11-14T19:34:15.633Z",
                       "annotations": [
                         {
                           "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 2건: [DB] ORA-01841 년은 영이 아닌 -4713 과 +4713 사이의 값으로 지정해야 합니다. | [DB] ORA-01841 년은 영이 아닌 -4713 과 +4713 사이의 값으로 지정해야 합니다.\\nORA-06512: \\\"SCM_M"
                         }
                       ],
                       "attachments": []
@@ -2909,7 +2409,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-06317f9911dc09cfdb92",
               "file": "_verify.spec.ts",
-              "line": 2291,
+              "line": 2423,
               "column": 7
             },
             {
@@ -2927,15 +2427,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 183,
+                      "duration": 285,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:10.186Z",
+                      "startTime": "2026-11-14T19:46:02.439Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2945,7 +2445,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-6183dbdf8d901cc84b93",
               "file": "_verify.spec.ts",
-              "line": 2531,
+              "line": 2670,
               "column": 7
             },
             {
@@ -2963,15 +2463,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 175,
+                      "duration": 299,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:12.772Z",
+                      "startTime": "2026-11-14T19:46:05.546Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2981,7 +2481,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-015b5f68742392054821",
               "file": "_verify.spec.ts",
-              "line": 2538,
+              "line": 2677,
               "column": 7
             },
             {
@@ -2993,32 +2493,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5333,
+                      "duration": 8469,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:15.265Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:46:08.609Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3027,7 +2517,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-6af89e32991b360388cc",
               "file": "_verify.spec.ts",
-              "line": 2545,
+              "line": 2684,
               "column": 7
             },
             {
@@ -3045,15 +2535,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 191,
+                      "duration": 250,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:22.880Z",
+                      "startTime": "2026-11-14T19:46:19.825Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3063,7 +2553,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-967f4f5deff4b6371694",
               "file": "_verify.spec.ts",
-              "line": 2571,
+              "line": 2711,
               "column": 7
             },
             {
@@ -3081,15 +2571,19 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 172,
+                      "duration": 5540,
                       "errors": [],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0025\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:25.320Z",
+                      "startTime": "2026-11-14T19:46:22.800Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3099,7 +2593,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0ad9c4eef666171828c5",
               "file": "_verify.spec.ts",
-              "line": 2583,
+              "line": 2723,
               "column": 7
             },
             {
@@ -3111,32 +2605,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 16263,
+                      "duration": 27116,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:27.736Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:46:30.980Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3145,7 +2629,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-71f0a207eca4a0bec6a1",
               "file": "_verify.spec.ts",
-              "line": 2609,
+              "line": 2749,
               "column": 7
             },
             {
@@ -3157,32 +2641,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2730,
+                      "duration": 3915,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:46.269Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:47:01.130Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3191,7 +2665,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-3578b209af8125a2cf44",
               "file": "_verify.spec.ts",
-              "line": 2646,
+              "line": 2789,
               "column": 7
             },
             {
@@ -3203,32 +2677,22 @@
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2931,
+                      "duration": 4015,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:51.255Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:47:07.683Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3237,7 +2701,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-fce95d6fb66cc79068f0",
               "file": "_verify.spec.ts",
-              "line": 2657,
+              "line": 2800,
               "column": 7
             },
             {
@@ -3249,32 +2713,22 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 57206,
+                      "duration": 32479,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:31:56.395Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:47:14.400Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3283,7 +2737,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0c45e3eafef245e45dad",
               "file": "_verify.spec.ts",
-              "line": 2671,
+              "line": 2814,
               "column": 7
             },
             {
@@ -3295,32 +2749,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3765,
+                      "duration": 5087,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:32:55.858Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:47:50.055Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3329,7 +2773,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-02393f7032f3703ff9f6",
               "file": "_verify.spec.ts",
-              "line": 2699,
+              "line": 2856,
               "column": 7
             },
             {
@@ -3341,32 +2785,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7286,
+                      "duration": 8927,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:01.918Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:47:57.724Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3375,7 +2809,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-11aeb7c6da249f7e3485",
               "file": "_verify.spec.ts",
-              "line": 2716,
+              "line": 2873,
               "column": 7
             },
             {
@@ -3387,32 +2821,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9905,
+                      "duration": 11176,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:11.483Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:48:09.278Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3421,7 +2845,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-acf13ac9acb5354a76d8",
               "file": "_verify.spec.ts",
-              "line": 2748,
+              "line": 2905,
               "column": 7
             },
             {
@@ -3439,15 +2863,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 168,
+                      "duration": 259,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:23.814Z",
+                      "startTime": "2026-11-14T19:48:23.159Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3457,7 +2881,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-343fc7a7ff5e20db4789",
               "file": "_verify.spec.ts",
-              "line": 2858,
+              "line": 3018,
               "column": 7
             },
             {
@@ -3475,15 +2899,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 172,
+                      "duration": 262,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:26.135Z",
+                      "startTime": "2026-11-14T19:48:26.065Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3493,7 +2917,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d8276f3aaaadbb5c3cac",
               "file": "_verify.spec.ts",
-              "line": 2927,
+              "line": 3087,
               "column": 7
             },
             {
@@ -3505,32 +2929,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3528,
+                      "duration": 4084,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:28.530Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:48:29.061Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3539,7 +2953,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-744093057807a18a4a55",
               "file": "_verify.spec.ts",
-              "line": 2958,
+              "line": 3118,
               "column": 7
             },
             {
@@ -3551,32 +2965,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14795,
+                      "duration": 12547,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:34.477Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:48:35.821Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3585,7 +2989,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-aa7f6dfc3428a47325fa",
               "file": "_verify.spec.ts",
-              "line": 3001,
+              "line": 3161,
               "column": 7
             },
             {
@@ -3597,32 +3001,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10893,
+                      "duration": 15436,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:33:51.447Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:48:51.024Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3631,7 +3025,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dc0b86d9d9d55c1a6eae",
               "file": "_verify.spec.ts",
-              "line": 3145,
+              "line": 3305,
               "column": 7
             },
             {
@@ -3643,32 +3037,22 @@
               "tests": [
                 {
                   "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10475,
+                      "duration": 11672,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:34:04.485Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:49:09.084Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3677,7 +3061,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-7e3be0d80c10966d7fa4",
               "file": "_verify.spec.ts",
-              "line": 3250,
+              "line": 3414,
               "column": 7
             },
             {
@@ -3689,32 +3073,22 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 137570,
+                      "duration": 22318,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:34:17.124Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:49:23.474Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3723,7 +3097,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0987038ab24ac144c46f",
               "file": "_verify.spec.ts",
-              "line": 3302,
+              "line": 3466,
               "column": 7
             },
             {
@@ -3735,32 +3109,22 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69203,
+                      "duration": 44919,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:36:36.860Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:49:48.438Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3769,7 +3133,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-50a5add4847a0e4e06c9",
               "file": "_verify.spec.ts",
-              "line": 3432,
+              "line": 3601,
               "column": 7
             },
             {
@@ -3781,32 +3145,22 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13707,
+                      "duration": 15302,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T02:37:48.286Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T19:50:36.131Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -3815,7 +3169,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-99b7edbac3660f5dfd35",
               "file": "_verify.spec.ts",
-              "line": 3524,
+              "line": 3695,
               "column": 7
             }
           ]
@@ -3825,11 +3179,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-09T02:04:22.742Z",
-    "duration": 2023948.415,
+    "startTime": "2026-11-14T19:02:41.593Z",
+    "duration": 2894470.495,
     "expected": 74,
     "skipped": 0,
-    "unexpected": 3,
+    "unexpected": 2,
     "flaky": 0
   }
 }

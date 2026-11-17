@@ -119,7 +119,14 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
     options: Option[],
     onPick: (codes: string[]) => void,
     disabled?: boolean,
-    required?: boolean
+    required?: boolean,
+    // placeholder: 미선택일 때 필드에 보일 문구. 인자를 주지 않으면(undefined) CustomDropdown 다중선택
+    //   기본('ALL')이 그대로 쓰여 "All" 로 보인다(Electrode 등 전체=ALL 이 정상인 조건).
+    //   빈값('')을 주면 미선택이 공백으로 보인다(Version 처럼 AS-IS 초기값이 빈값인 조건).
+    //   주의: placeholder 는 '값이 있을 때만' 넘긴다(아래 조건부 스프레드). undefined 를 prop 으로 그대로
+    //   넘기면 CustomDropdown 내부의 {...props} 재스프레드가 기본 'ALL' 을 undefined 로 덮어써 Electrode
+    //   까지 공백이 된다 — 키 자체를 빼야 기본값이 유지된다.
+    placeholder?: string
   ) => (
     <Grid size={3}>
       <FormItem
@@ -137,6 +144,7 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             disabled={disabled || noDivisionAuth}
             value={value.length ? value.join(',') : 'ALL'}
             options={options}
+            {...(placeholder !== undefined ? { placeholder } : {})}
             onChange={(_, picked) =>
               onPick(String(picked ?? '').split(',').filter(v => v !== '' && v.toUpperCase() !== 'ALL'))
             }
@@ -243,14 +251,18 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             !isEe
           )}
           {/* Version — 다중선택 CheckedList(필수). 변경 시 Period 재산정(AS-IS ClbVersion → GetDayRange).
-              라벨 'Ver.' 는 하드코딩(사용자 지시 2026-10-20) — DB/번들 미등록 약어, KO/EN/CN 동일 표기라 i18n 불요. */}
+              라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체.
+              AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0016.cs L239)이므로 placeholder='' 로 미선택을
+              공백 표시한다(자매 SCP0017 동일 패턴 — 다중선택 기본 'ALL' 표시 억제). 미선택 조회는 필수값 게이트로
+              차단되므로 공백 초기값과 양립한다. */}
           {multi(
-            'Ver.',
+            t('LBL01275', '_Ver.'),
             sc.versionNos,
             versionOptions,
             v => setVersions(v),
             false,
-            true
+            true,
+            ''
           )}
           {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
             set({ bucket: v as BUCKET_TYPE })

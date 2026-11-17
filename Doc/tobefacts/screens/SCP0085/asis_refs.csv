@@ -4,7 +4,7 @@
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","71","","P_YYYYMMDD","","","AS-IS SP 는 @P_YYYYMMDD 만 받고 DIVISION_ID/PLANT_ID 를 함께 내려 C# 클라가 선택 Division/Plant 로 걸렀다."
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","86","","","494","","Month 범위·기본값 — 전역 콤보(파라미터 없음). AS-IS SetMonthRange(cs:494~513) 재현."
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","92","SCP0084","","","","형제 long-term-stock(SCP0084) 패턴 축약: 상한은 maxYear(연) + onChange 클램프(월)로 건다."
-"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","209","","","510","","'2021-12' 를 YYYYMM 문자열 비교로 경계월에 클램프한다(cs:510~511)."
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","224","","","510","","'2021-12' 를 YYYYMM 문자열 비교로 경계월에 클램프한다(cs:510~511)."
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx","33","","","456","","QUANTITY 헤더 더블클릭 → 상세 3컬럼 토글(AS-IS SpdMain_CellDoubleClick, cs:456~468)."
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx","37","","","578","","cboDivision 값에 '40' 포함(또는 All) 시 CELL_TYPE_GR 표시 — AS-IS SetHeaderDivision(cs:578~596)."
 "supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx","59","","","506","","- 재고월령 39컬럼: Devaluation Age 체크 시만 표시(chkDetail 토글, cs:506 ChkDetail_CheckedChanged)"

@@ -1,0 +1,43 @@
+{
+ "id": "SCP0033",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": true,
+ "acts": [
+  {
+   "control": "spdMain[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0033-Sb9414a",
+    "SCP0033-Sc6b25a",
+    "SCP0033-S0245d2"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 23:34:24",
+ "edit_mode": true,
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 3,
+   "named_cols": [
+    "ITEM_ID"
+   ],
+   "used": [
+    "ITEM_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

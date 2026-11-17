@@ -1,0 +1,32 @@
+{
+ "id": "DMF0004",
+ "run_dir": "Doc/asislive/DMF0004/run_20261112_180607",
+ "live_at": "2026-11-12 18:06:07.696",
+ "user": "jaeuk.shin",
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.652s, UI : 0.059s",
+  "total": "",
+  "how": "status"
+ },
+ "mixed_risk": true,
+ "live_calls": 28,
+ "live_sp_distinct": 9,
+ "static_vs_live": {
+  "SP:MATCH": 3,
+  "SP:INLINE": 1,
+  "SP:FRAMEWORK": 5,
+  "SP:NOT_CALLED": 8,
+  "CONTROL:INFO": 1,
+  "CONTROL:LIVE_ONLY": 10,
+  "CONDITION:LIVE": 7,
+  "GRID:LIVE": 4
+ },
+ "diff_gap": {},
+ "param_hints": 0,
+ "limits": [
+  "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
+  "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",
+  "원장 행 미생성(같은 조건 실측 전에는 판정 근거 없음)"
+ ]
+}

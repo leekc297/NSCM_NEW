@@ -4,11 +4,8 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "_trace",
-      "--grep",
-      "W4d",
-      "--workers",
-      "1"
+      "_tmp_sop_scp0104",
+      "--retries=0"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -29,7 +26,7 @@
       {
         "outputDir": "C:/Projects/NSCM/Doc/e2e/results/artifacts",
         "repeatEach": 1,
-        "retries": 1,
+        "retries": 0,
         "metadata": {
           "actualWorkers": 1
         },
@@ -49,7 +46,7 @@
         "grepInvert": null,
         "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts",
         "repeatEach": 1,
-        "retries": 1,
+        "retries": 0,
         "metadata": {
           "actualWorkers": 1
         },
@@ -108,78 +105,70 @@
     "updateSnapshots": "default",
     "updateSourceMethod": "patch",
     "version": "1.64.1",
-    "workers": 1,
+    "workers": 2,
     "webServer": null
   },
   "suites": [
     {
-      "title": "_trace.spec.ts",
-      "file": "_trace.spec.ts",
+      "title": "_tmp_sop_scp0104.spec.ts",
+      "file": "_tmp_sop_scp0104.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [],
-      "suites": [
+      "specs": [
         {
-          "title": "검증엔진 SCP0122 @trace",
-          "file": "_trace.spec.ts",
-          "line": 111,
-          "column": 6,
-          "specs": [
+          "title": "SCP0104 SOP rows",
+          "ok": true,
+          "tags": [],
+          "tests": [
             {
-              "title": "W4d 잔여 판정필요 실측",
-              "ok": true,
-              "tags": [
-                "trace"
-              ],
-              "tests": [
+              "timeout": 400000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
                 {
-                  "timeout": 1800000,
-                  "annotations": [
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13402,
+                  "errors": [],
+                  "stdout": [
                     {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "text": "[SOP_ELTR] nav=true rows=6 calls=[\"SOP_ELTR/SEARCH:7\"]\n"
+                    },
+                    {
+                      "text": "[SOP_ELTR conds] [\"Operation group​=Electrode\",\"Material​=\",\"Active​=ALL\",\"Div​=81_HG Automotive Battery(HG)\",\"Plan Month​=202610\",\"Ver.​​=1|RP\",\"Site​=\",\"Plant​=\",\"Building​=\",\"Line​=\"]\n"
+                    },
+                    {
+                      "text": "[SOP_ASSEMBLY] nav=true rows=27 calls=[\"SOP_ASSEMBLY/SEARCH:28\"]\n"
+                    },
+                    {
+                      "text": "[SOP_ASSEMBLY conds] [\"Operation group​=Cell\",\"Basic Nickname​=\",\"Active​=ALL\",\"Div​=81_HG Automotive Battery(HG)\",\"Plan Month​=202610\",\"Ver.​​=1|RP\",\"Site​=\",\"Plant​=\",\"Building​=\",\"Line​=\",\"Operation​=\",\"Line Type​=\"]\n"
                     }
                   ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 195273,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-06T22:41:10.618Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T06:28:48.466Z",
+                  "annotations": [],
+                  "attachments": []
                 }
               ],
-              "id": "61ae7fb993b6ecef23da-45c07522f76e3c27552e",
-              "file": "_trace.spec.ts",
-              "line": 1614,
-              "column": 7
+              "status": "expected"
             }
-          ]
+          ],
+          "id": "9f4eb5f63c97ff242d28-0ea63684cdfa6c4ed6ae",
+          "file": "_tmp_sop_scp0104.spec.ts",
+          "line": 5,
+          "column": 5
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-06T22:41:08.001Z",
-    "duration": 201038.587,
+    "startTime": "2026-11-17T06:28:48.029Z",
+    "duration": 16433.121,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

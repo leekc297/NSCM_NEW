@@ -1,0 +1,70 @@
+{
+ "id": "SCP0105",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0105-S96bd28",
+    "SCP0105-S85522d",
+    "SCP0105-S25b5c0",
+    "SCP0105-S20acca",
+    "SCP0105-S47156c",
+    "SCP0105-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItem",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItem failed: InvalidOperationException: control not found: btnItem",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0105-Sf9ae0a",
+    "SCP0105-Sd530a0"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CAPAItemPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 3177,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_CAPA_ITEM_POPUP"
+   ],
+   "scenarios": [
+    "SCP0105-Sf9ae0a",
+    "SCP0105-Sd530a0"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:12:35.834",
+ "fills": 0,
+ "fill_left": []
+}

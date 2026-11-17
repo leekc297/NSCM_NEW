@@ -1,0 +1,25 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 11:31:52.541",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.28,
+   "params": {
+    "p_menu_id": "SCP0027",
+    "p_log_type": "FIND",
+    "p_log_cnt": "19060",
+    "p_db_time": "4.693",
+    "p_ui_time": "44.676",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0027', @p_log_type='FIND', @p_log_cnt='19060', @p_db_time='4.693', @p_ui_time='44.676', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

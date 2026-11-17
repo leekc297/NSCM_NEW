@@ -1,0 +1,323 @@
+{
+  "menuId": "SSP0200",
+  "screenName": "ShipmentChangeRequest",
+  "feature": "shipping",
+  "pageDir": "shipment-change-request-plan",
+  "routePath": "shipping/shipment-change-request-plan",
+  "sheets": [
+    {
+      "sheetName": "Change Request",
+      "rule": "META+코드연결",
+      "columns": 60,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Change Request",
+      "rule": "META+코드연결",
+      "columns": 69,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_CHANGE_REQ_NO",
+      "asis_sp": "SSP0200_GET_CHANGE_REQ_NO",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveButton"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_CHANGE_REQ_NO",
+      "sheet": "Change Request",
+      "btn": "CHANGE_REQ_NO"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_SAVE_SHIPMENT_CONFIRM_NEW",
+      "asis_sp": "SSP0200_SAVE_SHIPMENT_CONFIRM_NEW",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveButton"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_CONFIRM_NEW",
+      "sheet": "Change Request",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+      "asis_sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+      "status": "MATCH",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click",
+        "event:btnCancel.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+      "sheet": "Change Request",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N",
+      "asis_sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main_Nonasync"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N",
+      "sheet": "Change Request",
+      "btn": "SHIPMENT_CHANGE_REQUEST_N"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+      "asis_sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click",
+        "event:btnCancel.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Sub_Draft"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Shipment Change Request",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+      "asis_sp": "SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+      "status": "MATCH",
+      "entries": [
+        "event:btnSave.Click",
+        "event:btnChangeRe2.Click"
+      ],
+      "methods": [
+        "SaveDataDrafting"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE",
+      "sheet": "Change Request",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "asis_sp": "SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "event:btnCancel.Click",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "DeleteDataDrafting",
+        "GetERPInterface",
+        "GetErpIFCheck"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Change Request",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+      "asis_sp": "SCM0001_GET_SCP_DAY_PERIOD",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:cboChangeType.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetDayRange"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SCM0001_GET_SCP_DAY_PERIOD",
+      "sheet": "Change Request",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "asis_sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetERPInterface"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Change Request",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_STATUS",
+      "asis_sp": "SSP0200_GET_SHIPMENT_STATUS",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetShipmentStatusChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Change Request",
+      "btn": "SHIPMENT_STATUS"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_ERP_SO_NO_CNT",
+      "asis_sp": "SSP0200_GET_ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetErpSoNoCnt"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_ERP_SO_NO_CNT",
+      "sheet": "Change Request",
+      "btn": "ERP_SO_NO_CNT"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "asis_sp": "SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "NewNonSoNo",
+        "NonSoNo",
+        "SoNo"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Change Request",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "asis_sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Change Request",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE",
+      "asis_sp": "PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetErpIFSeqMerge"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE",
+      "sheet": "Change Request",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "SpdMain_CellClick",
+        "FindData_BOD"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_",
+      "sheet": "Change Request",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0026_GET_BOD_ITEM",
+      "asis_sp": "SSP0026_GET_BOD_ITEM",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ],
+      "methods": [
+        "FindData_BOD"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0026_GET_BOD_ITEM",
+      "sheet": "Change Request",
+      "btn": "BOD_ITEM"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_ITEM_FROM_BOD",
+      "asis_sp": "SSP0200_GET_ITEM_FROM_BOD",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnInsertMultiple.Click",
+        "event:dsdm.Changed"
+      ],
+      "methods": [
+        "GetItemFromBOD"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_ITEM_FROM_BOD",
+      "sheet": "Change Request",
+      "btn": "ITEM_FROM_BOD"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_DIVISION",
+      "asis_sp": "SSP0200_GET_SHIPMENT_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_SSP0200_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Change Request",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision_ID.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetShipmentPlanPlantSite"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_",
+      "sheet": "Change Request",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "event:this.btnInsertMultiple.Click",
+        "event:btnNew.Click",
+        "event:this.spdMain.ComboSelChange",
+        "button:InsertButton"
+      ],
+      "methods": [
+        "GetPlantSiteByDivisionEEOperation"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0200.P_",
+      "sheet": "Change Request",
+      "btn": "ACTION"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

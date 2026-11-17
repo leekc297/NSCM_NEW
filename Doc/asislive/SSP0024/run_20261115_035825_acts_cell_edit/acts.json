@@ -1,0 +1,91 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": true,
+ "acts": [
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-S5588d6",
+    "SSP0024-Sa8ebc1",
+    "SSP0024-S4272cc",
+    "SSP0024-S1d4032"
+   ]
+  },
+  {
+   "control": "spdMain[PLANT_SITE_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-S5588d6",
+    "SSP0024-Sa8ebc1",
+    "SSP0024-S4272cc",
+    "SSP0024-S1d4032"
+   ]
+  },
+  {
+   "control": "spdMain[MATERIAL_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-S5588d6",
+    "SSP0024-Sa8ebc1",
+    "SSP0024-S4272cc",
+    "SSP0024-S1d4032"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 03:57:19",
+ "edit_mode": true,
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 5,
+   "named_cols": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "MATERIAL_ID"
+   ],
+   "used": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "MATERIAL_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
+V-5cc11a68,G4,SCP0104 스냅샷 조회조건 Div 40,PASS,[재실측 스냅샷 조회조건] 기준 Doc\verify\SCP0104\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 일치 · ,2026-11-17 02:32,,,checker
+V-c607b60f,K4,SCP0104 스냅샷 버튼 Div 40,PASS,[재실측 스냅샷 버튼] 기준 Doc\verify\SCP0104\snap\golden\버튼_Div_40.aria.yml ↔ 실측 일치 · 골든 D,2026-11-17 02:32,,,checker
+V-d8f0483b,A5,SCP0104 스냅샷 헤더 ASSEMBLY,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_ASSEMBLY.txt ↔ 실측 일치 · 골든 Doc\,2026-11-17 02:32,,,checker
+V-bd3a75eb,A5,SCP0104 스냅샷 헤더 ELTR,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_ELTR.txt ↔ 실측 일치 · 골든 Doc\veri,2026-11-17 02:32,,,checker
+V-248aa937,A5,SCP0104 스냅샷 헤더 LINE,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_LINE.txt ↔ 실측 일치 · 골든 Doc\veri,2026-11-17 02:32,,,checker
+V-73f61c57,A5,SCP0104 스냅샷 헤더 SOP_ASSEMBLY,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_SOP_ASSEMBLY.txt ↔ 실측 일치 · 골든 ,2026-11-17 02:32,,,checker
+V-d0e756cd,A5,SCP0104 스냅샷 헤더 SOP_ELTR,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_SOP_ELTR.txt ↔ 실측 일치 · 골든 Doc\,2026-11-17 02:32,,,checker
+V-e5914fb9,A5,SCP0104 스냅샷 헤더 SOP_MODEL_ASSEMBLY,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_SOP_MODEL_ASSEMBLY.txt ↔ 실측 일치,2026-11-17 02:32,,,checker
+V-09fbeb91,A5,SCP0104 스냅샷 헤더 SOP_MODEL_ELTR,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0104\snap\golden\헤더_SOP_MODEL_ELTR.txt ↔ 실측 일치 · 골,2026-11-17 02:32,,,checker
+V-dc08ebcc,H4,SCP0104 스냅샷 화면샷 1920,ERROR,[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요) · 전제 Div - · c,2026-11-17 02:32,,,checker
+V-69720751,H4,SCP0104 스냅샷 화면샷 1366,ERROR,[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요) · 전제 Div - · c,2026-11-17 02:32,,,checker

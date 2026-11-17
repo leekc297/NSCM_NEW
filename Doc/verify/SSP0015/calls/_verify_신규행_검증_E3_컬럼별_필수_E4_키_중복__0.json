@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 176,
+  "at": "2026-11-14T13:00:35.274Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 390,
+  "at": "2026-11-14T13:00:35.315Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261010\",\"endYyyymmdd\":\"20261110\"}",
+  "status": 200,
+  "rows": 42,
+  "dur": 95,
+  "at": "2026-11-14T13:00:38.182Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "GET_SHIPMENT_PSI_COMMENTS",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planStartYyyymmdd\":\"20261010\",\"fromSite\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261110\"}",
+  "status": 200,
+  "rows": 41,
+  "dur": 251,
+  "at": "2026-11-14T13:00:38.314Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"\",\"itemId\":\"\",\"planStartYyyymmdd\":\"20261010\",\"planType\":\"SP\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261110\",\"userId\":\"minyonglee1\",\"myModelChk\":\"N\",\"programId\":\"SSP0015\",\"sheetName\":\"Shipment PSI(Mobility & IT)\",\"debugMode\":\"F\",\"seq\":\"1\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\",\"nonChk\":\"Y\",\"delegateeChk\":\"N\"}",
+  "status": 200,
+  "rows": 131,
+  "dur": 1980,
+  "at": "2026-11-14T13:00:40.039Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261010\",\"endYyyymmdd\":\"20261110\"}",
+  "status": 200,
+  "rows": 42,
+  "dur": 113,
+  "at": "2026-11-14T13:00:41.177Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"\",\"itemId\":\"\",\"planStartYyyymmdd\":\"20261010\",\"planType\":\"SP\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261110\",\"userId\":\"minyonglee1\",\"myModelChk\":\"N\",\"programId\":\"SSP0015\",\"sheetName\":\"Shipment PSI(Mobility & IT)\",\"debugMode\":\"F\",\"seq\":\"1\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\",\"nonChk\":\"Y\",\"delegateeChk\":\"N\"}",
+  "status": 200,
+  "rows": 131,
+  "dur": 2066,
+  "at": "2026-11-14T13:00:43.088Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ }
+]

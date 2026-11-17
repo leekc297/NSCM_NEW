@@ -1,5 +1,5 @@
 {
- "at": "2026-11-09T02:30:13.878Z",
+ "at": "2026-11-14T17:23:19.125Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -2637,6 +2637,51 @@
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_MY_DIVISION_CODE\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81"
+    },
+    {
+     "c": "40",
+     "v": "40"
+    },
+    {
+     "c": "82",
+     "v": "82"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 0,
@@ -2751,45 +2796,21 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"SSP0024_MY_DIVISION_CODE\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "body": "{\"comboId\":\"DomExpTypeCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 8,
+   "n": 2,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "81",
-     "v": "81"
+     "c": "DOM",
+     "v": "DOM"
     },
     {
-     "c": "40",
-     "v": "40"
-    },
-    {
-     "c": "82",
-     "v": "82"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG"
+     "c": "EXP",
+     "v": "EXP"
     }
    ],
    "user": "minyonglee1"
@@ -2820,22 +2841,70 @@
    "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"DomExpTypeCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0024\"}",
    "status": 200,
-   "n": 2,
+   "n": 14,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "DOM",
-     "v": "DOM"
+     "c": "40",
+     "v": "Mobility & IT Battery"
     },
     {
-     "c": "EXP",
-     "v": "EXP"
+     "c": "81",
+     "v": "Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
     }
    ],
    "user": "minyonglee1"
@@ -3347,70 +3416,52 @@
    "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0024\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 14,
+   "n": 9,
    "keys": [
     "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
     "NAME"
    ],
    "rows": [
     {
-     "c": "40",
-     "v": "Mobility & IT Battery"
+     "c": "OP01",
+     "v": "Taping"
     },
     {
-     "c": "81",
-     "v": "Automotive Battery"
+     "c": "OP02",
+     "v": "CTIC"
     },
     {
-     "c": "81_HD",
-     "v": "Automotive Battery(HD)"
+     "c": "OP03",
+     "v": "Heat treatment"
     },
     {
-     "c": "81_HG",
-     "v": "Automotive Battery(HG)"
+     "c": "OP04",
+     "v": "Tandem press"
     },
     {
-     "c": "81_HM",
-     "v": "Automotive Battery(HM)"
+     "c": "OP05",
+     "v": "General"
     },
     {
-     "c": "81_ST",
-     "v": "Automotive Battery(ST)"
+     "c": "OP06",
+     "v": "CTIC/Heat treatment"
     },
     {
-     "c": "81_UC",
-     "v": "Automotive Battery(UC)"
+     "c": "OP00",
+     "v": "-"
     },
     {
-     "c": "82",
-     "v": "ESS Battery"
+     "c": "OP04",
+     "v": "Tandem press"
     },
     {
-     "c": "EE",
-     "v": "Electrode"
-    },
-    {
-     "c": "EE_HD",
-     "v": "Electrode(HD)"
-    },
-    {
-     "c": "EE_HG",
-     "v": "Electrode(HG)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "Electrode(HM)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "Electrode(ST)"
-    },
-    {
-     "c": "EE_UC",
-     "v": "Electrode(UC)"
+     "c": "OP05",
+     "v": "General"
     }
    ],
    "user": "minyonglee1"
@@ -3418,49 +3469,6 @@
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\"}",
-   "status": 200,
-   "n": 7,
-   "keys": [
-    "CODE",
-    "DIVISION_ID",
-    "PLANT_ID",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "HQ07-E",
-     "v": "LGESOC Elec HQ07"
-    },
-    {
-     "c": "HQ11-E",
-     "v": "OC_2 Auto Elec-Electrode"
-    },
-    {
-     "c": "MI00-E",
-     "v": "LGESMI Elec MI00"
-    },
-    {
-     "c": "MI02-E",
-     "v": "MI_LS Auto Elec-Electrode"
-    },
-    {
-     "c": "NA00-E",
-     "v": "LGESNA Elec NA00"
-    },
-    {
-     "c": "NB01-E",
-     "v": "LGESNB Electrode-Electrode NB01"
-    },
-    {
-     "c": "WA00-E",
-     "v": "LGESWA Elec WA00"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 7,
    "keys": [
@@ -3548,51 +3556,43 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"mnuId\":\"SSP0024\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 9,
+   "n": 7,
    "keys": [
     "CODE",
     "DIVISION_ID",
-    "POST_OPER_LT",
+    "PLANT_ID",
     "NAME"
    ],
    "rows": [
     {
-     "c": "OP01",
-     "v": "Taping"
+     "c": "HQ07-E",
+     "v": "LGESOC Elec HQ07"
     },
     {
-     "c": "OP02",
-     "v": "CTIC"
+     "c": "HQ11-E",
+     "v": "OC_2 Auto Elec-Electrode"
     },
     {
-     "c": "OP03",
-     "v": "Heat treatment"
+     "c": "MI00-E",
+     "v": "LGESMI Elec MI00"
     },
     {
-     "c": "OP04",
-     "v": "Tandem press"
+     "c": "MI02-E",
+     "v": "MI_LS Auto Elec-Electrode"
     },
     {
-     "c": "OP05",
-     "v": "General"
+     "c": "NA00-E",
+     "v": "LGESNA Elec NA00"
     },
     {
-     "c": "OP06",
-     "v": "CTIC/Heat treatment"
+     "c": "NB01-E",
+     "v": "LGESNB Electrode-Electrode NB01"
     },
     {
-     "c": "OP00",
-     "v": "-"
-    },
-    {
-     "c": "OP04",
-     "v": "Tandem press"
-    },
-    {
-     "c": "OP05",
-     "v": "General"
+     "c": "WA00-E",
+     "v": "LGESWA Elec WA00"
     }
    ],
    "user": "minyonglee1"
@@ -3864,57 +3864,6 @@
    "n": 0,
    "keys": [],
    "rows": [],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"segment1\":\"''\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 9,
-   "keys": [
-    "CODE",
-    "DIVISION_ID",
-    "POST_OPER_LT",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "OP01",
-     "v": "Taping"
-    },
-    {
-     "c": "OP02",
-     "v": "CTIC"
-    },
-    {
-     "c": "OP03",
-     "v": "Heat treatment"
-    },
-    {
-     "c": "OP04",
-     "v": "Tandem press"
-    },
-    {
-     "c": "OP05",
-     "v": "General"
-    },
-    {
-     "c": "OP06",
-     "v": "CTIC/Heat treatment"
-    },
-    {
-     "c": "OP00",
-     "v": "-"
-    },
-    {
-     "c": "OP04",
-     "v": "Tandem press"
-    },
-    {
-     "c": "OP05",
-     "v": "General"
-    }
-   ],
    "user": "minyonglee1"
   },
   {
@@ -4419,6 +4368,403 @@
     {
      "c": "W2",
      "v": "(N/A)NJ Mobile Bldg#6"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"segment1\":\"''\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "OP01",
+     "v": "Taping"
+    },
+    {
+     "c": "OP02",
+     "v": "CTIC"
+    },
+    {
+     "c": "OP03",
+     "v": "Heat treatment"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    },
+    {
+     "c": "OP06",
+     "v": "CTIC/Heat treatment"
+    },
+    {
+     "c": "OP00",
+     "v": "-"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByFactoryEEOperation\",\"divisionId\":\"'81'\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 7,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "PLANT_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "HQ07-E",
+     "v": "LGESOC Elec HQ07"
+    },
+    {
+     "c": "HQ11-E",
+     "v": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "c": "MI00-E",
+     "v": "LGESMI Elec MI00"
+    },
+    {
+     "c": "MI02-E",
+     "v": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "c": "NA00-E",
+     "v": "LGESNA Elec NA00"
+    },
+    {
+     "c": "NB01-E",
+     "v": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "c": "WA00-E",
+     "v": "LGESWA Elec WA00"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePostOperCode\",\"segment1\":\"'81'\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "POST_OPER_LT",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "OP00",
+     "v": "-"
+    },
+    {
+     "c": "OP04",
+     "v": "Tandem press"
+    },
+    {
+     "c": "OP05",
+     "v": "General"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_BUILDING_BY_PLANTSITE_ALL\",\"pPlantSiteId\":\"'HQ07-E'\",\"divisionId\":\"'81'\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 12,
+   "keys": [
+    "CODE",
+    "SORT_NO",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "OC5_A"
+    },
+    {
+     "c": "A9",
+     "v": "OC3_A"
+    },
+    {
+     "c": "AF",
+     "v": "OC8_A"
+    },
+    {
+     "c": "E5",
+     "v": "OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "OC5_E"
+    },
+    {
+     "c": "EG",
+     "v": "OC3_E(Pilot)"
+    },
+    {
+     "c": "EY",
+     "v": "OC8_E(Pilot)"
+    },
+    {
+     "c": "P1",
+     "v": "OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "OC5_P"
+    },
+    {
+     "c": "P6",
+     "v": "OC2_P"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"SSP0024_BUILDING_BY_PLANTSITE_ALL\",\"pPlantSiteId\":\"''\",\"divisionId\":\"'81'\",\"mnuId\":\"SSP0024\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 50,
+   "keys": [
+    "CODE",
+    "SORT_NO",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "NB2_A"
+    },
+    {
+     "c": "AC",
+     "v": "WA8_A"
+    },
+    {
+     "c": "AF",
+     "v": "OC8_A"
+    },
+    {
+     "c": "AH",
+     "v": "MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "(N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AL",
+     "v": "OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "OC10_A(Pilot)"
+    },
+    {
+     "c": "E5",
+     "v": "OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "OC5_E"
+    },
+    {
+     "c": "E8",
+     "v": "(N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "WA4_E"
+    },
+    {
+     "c": "EF",
+     "v": "NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "OC3_E(Pilot)"
+    },
+    {
+     "c": "EJ",
+     "v": "WA8_E"
+    },
+    {
+     "c": "ES",
+     "v": "(N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "MI_LS_E"
+    },
+    {
+     "c": "EY",
+     "v": "OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "OC10_E(Pilot)"
+    },
+    {
+     "c": "F3",
+     "v": "MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "MI1_F"
+    },
+    {
+     "c": "N2",
+     "v": "(N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "OC5_P"
+    },
+    {
+     "c": "P4",
+     "v": "NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "NB2_P"
+    },
+    {
+     "c": "PE",
+     "v": "OC9_P"
+    },
+    {
+     "c": "PG",
+     "v": "MI4_P"
+    },
+    {
+     "c": "PJ",
+     "v": "MI3_P2"
+    },
+    {
+     "c": "SA",
+     "v": "(SA)MI_LS2_A(ESS)"
     }
    ],
    "user": "minyonglee1"

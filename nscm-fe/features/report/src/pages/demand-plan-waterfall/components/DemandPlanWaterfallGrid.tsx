@@ -31,7 +31,7 @@ import {
   type DynColMeta,
   type WaterfallTitleRow,
 } from '../utils/waterfall.columns';
-import { walkHeaderDrill } from '../utils/waterfall.drill';
+import { resolveBizHeaderBinding, walkHeaderDrill } from '../utils/waterfall.drill';
 import { currentPeriodBindings } from '../utils/waterfall.headerColors';
 import { WaterfallMergeManager } from '../utils/waterfall.merge';
 import { dynKindOf } from '../utils/waterfall.periods';
@@ -313,18 +313,30 @@ export const DemandPlanWaterfallGrid = ({
     const onDblClick = (ev: MouseEvent) => {
       const hit = g.hitTest(ev);
       if (hit.cellType !== CellType.ColumnHeader) return;
-      const clicked = g.columns[hit.col]?.binding ?? '';
-      if (!clicked || !dynKindOf(clicked)) return;
+      const physical = g.columns[hit.col]?.binding ?? '';
+      if (!physical || !dynKindOf(physical)) return;
+      // BIZ 는 연도/분기 묶음 헤더 클릭을 그 합계 binding 으로 복원 (Business Plan 동작)
+      const clicked =
+        gubun === GUBUN.BIZ_PLAN
+          ? resolveBizHeaderBinding(physical, hit.row, g.columnHeaders.rows.length - 1, dynBindings)
+          : physical;
       const isVisible = (binding: string): boolean =>
         g.columns.getColumn(binding)?.visible ?? false;
-      const patch = walkHeaderDrill({ gubun, bucket, dynBindings, isVisible, clicked });
+      const patch = walkHeaderDrill({
+        gubun,
+        bucket,
+        dynBindings,
+        isVisible,
+        clicked,
+        isSumChecked,
+      });
       if (patch.size === 0) return;
       patch.forEach((visible, binding) => drillVisRef.current.set(binding, visible));
       applyDynVisibilityRef.current?.();
     };
     host.addEventListener('dblclick', onDblClick);
     return () => host.removeEventListener('dblclick', onDblClick);
-  }, [gridRef, gubun, bucket, dynBindings]);
+  }, [gridRef, gubun, bucket, dynBindings, isSumChecked]);
 
   // ── 표시 규칙: 행별 NOTATION / 당기 Green Bold / 주말 헤더색 ──
   useEffect(() => {

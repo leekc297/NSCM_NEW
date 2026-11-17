@@ -9,7 +9,7 @@ export type MENU_ID = typeof MENU_ID;
 //   - 편집 대상 측정치 = P_SHIP_PLAN_SIMU_ETD 행만(siMain), [plan_start~confirm_day] 비-SUM 칼럼(03 §3.1).
 //   - siDetail(shtPlanDetail) 편집: SHIPMENT_STATUS=='C' && ERP_STATUS!='C' 행만 화이트리스트 컬럼 unlock(03 §3.1).
 //   - 편집 화이트리스트는 DB INPUT_TP_CD 전건 'S' 갭(§6-5)이라 코드 상수로 재현. admin 이 INPUT_TP_CD 정비 시 메타 기준으로 전환.
-//   - 툴바: Find/Insert/Save = 실동작, Delete = NO-OP `() => undefined`(03 §3.5 — 노출 유지·행삭제 불가), Edit = SwitchLock 미이식(edit default ON).
+//   - 툴바: Find/Insert/Save = 실동작, Delete = 미저장 신규행(CRUD_TYPE='I')만 제거(AS-IS 빈 NO-OP 는 Insert 행 되돌림 불가 버그 → 사용자 지시 2026-11-09 실동작 부여), Edit = SwitchLock 미이식(edit default ON).
 //   - 확정 SAVE SP PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM(27 IN + O_RC1/O_RC2) 배포·VALID(ora.py 실측 2026-10-16) → Detail 저장 실배선. siMain 시뮬레이션 저장 SAVE_SHIPMENT_PLAN_SIMU 도 배포됨.
 export enum SHEETS {
   MAIN = 'main', // spdMain "Shipment Plan(Electrode)" (Measure pivot 11 × 기간 pivot)

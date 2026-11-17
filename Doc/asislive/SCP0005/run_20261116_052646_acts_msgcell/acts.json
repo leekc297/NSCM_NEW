@@ -1,0 +1,95 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "FindButton",
+   "expect": "(SP)SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "why": "SCP0005_DistributionRoute.cs:206·277 IgnoreSearchCondition 이면 FindDataReceive(ROUTEID SP) · 외부 진입 = SCP0102_BOD_Validation_Report.cs:1669~1686 주 그리드 ROUTE_ID 더블클릭 openSubMenu('SCP0005', true, true, ROUTE_ID 조건)",
+   "steps": [
+    {
+     "set": {
+      "click": "ROUTE_ID",
+      "double": 1,
+      "row": 0,
+      "wait": 15
+     },
+     "row": 0,
+     "col": 12,
+     "ok": false,
+     "error": "InvalidOperationException: celldbl:0,12 failed: InvalidOperationException: cell not visible: 0,12",
+     "popups": []
+    },
+    {
+     "set": {
+      "sleep": 5
+     },
+     "ok": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "opened_from": "SCP0102",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": false,
+   "screens_after": [
+    "GSCM_MainForm",
+    "SCP0102_BOD_Validation_Report"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:25:38",
+ "_pre_set": [],
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Main"
+   },
+   "rows": 17,
+   "ms": 4.27,
+   "at": "2026-11-16 05:25:51.353",
+   "phase": "find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Detail"
+   },
+   "rows": 65,
+   "ms": 4.85,
+   "at": "2026-11-16 05:25:51.367",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT",
+   "params": {
+    "p_division_id": "40",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_PIVOT_yyyymm": "[202610]",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "rows": 0,
+   "ms": 9938.23,
+   "at": "2026-11-16 05:26:01.358",
+   "phase": "find"
+  }
+ ]
+}

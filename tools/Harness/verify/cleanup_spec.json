@@ -947,5 +947,278 @@
   "unresolved_tables": [
    "SCM_SYS_LOG_BATCH"
   ]
+ },
+ "SSP0014": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC 의 DML 대상(깊이 3). 대표 SSP_MST_MODEL_USER PK",
+  "keys": [
+   "DIVISION_ID",
+   "FROM_SITE",
+   "ITEM_ID"
+  ],
+  "vary": [
+   "FROM_SITE"
+  ],
+  "tables": [
+   "SSP_MST_MODEL_USER"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0005": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0005.P_SSP0005_SAVE_SHIPMENT_WORKING_DAY 의 DML 대상(깊이 3). 대표 SSP_MST_SHIP_CALENDAR PK",
+  "keys": [
+   "COMPANY_ID",
+   "DIVISION_ID"
+  ],
+  "vary": [
+   "COMPANY_ID"
+  ],
+  "tables": [
+   "SSP_MST_SHIP_CALENDAR"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0015": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0015.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM;PKG_SSP0015.P_SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING;PKG_SSP0015.P_SSP0015_SAVE_BLOCK_STOCK_DATA;PKG_SSP0015.P_SSP0015_SAVE_MES_STOC 의 DML 대상(깊이 3). 대표 SSP_ANL_SHIP_PLAN_40 PK",
+  "keys": [
+   "DIVISION_ID",
+   "PLAN_START_YYYYMMDD",
+   "PLAN_TYPE",
+   "ITEM_ID",
+   "FROM_SITE",
+   "TO_SITE",
+   "MEASURE",
+   "BOD_ID",
+   "INCOTERMS",
+   "TRANSPORT_MODE",
+   "PROJECT_CODE",
+   "FCST_TYPE",
+   "CONFIRM_ID"
+  ],
+  "vary": [
+   "PLAN_START_YYYYMMDD"
+  ],
+  "tables": [
+   "SSP_ANL_SHIP_PLAN_40",
+   "SSP_ANL_SHIP_PLAN_40_WH_IN_H"
+  ],
+  "unresolved_tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "SCM_SYS_LOG_BATCH",
+   "SSP_ANL_HOLD_STOCK",
+   "SSP_ANL_MES_FCS_STOCK_40_C",
+   "SSP_ANL_SHIP_PLAN_40_WH_IN_CMT",
+   "SSP_ANL_SHIP_PLAN_40_WH_IN_CMT_H",
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "SSP_MST_SEND_MAIL_REQ",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "DM_PLN_MKT_FCST",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE"
+  ]
+ },
+ "SSP0003": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0003.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM;PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM;PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM_40;PKG_SSP0003.P_SSP0003_SAVE_REQ_DE_CONFIRM 의 DML 대상(깊이 3). 대표 SSP_ANL_SHIP_CONFIRM PK",
+  "keys": [
+   "CONFIRM_ID"
+  ],
+  "vary": [
+   "CONFIRM_ID"
+  ],
+  "tables": [
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE",
+   "SSP_ANL_SHIP_PLAN_40",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE"
+  ],
+  "unresolved_tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SCM_SYS_LOG_BATCH",
+   "DM_PLN_MKT_FCST"
+  ]
+ },
+ "SSP0021": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE(PK);화면에 없는 키 NEW_YN",
+  "tables": [
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_MST_SEND_MAIL_REQ",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "DM_PLN_MKT_FCST",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0023": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SSP_ANL_SHIP_PLAN_EE(PK);화면에 없는 키 PLAN_START_YYYYMMDD,FROM_DIVISION_ID,TO_DIVISION_ID",
+  "tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "SSP_ANL_SHIP_PLAN_SIMU_EE",
+   "SSP_ANL_SHIP_PLAN_EE",
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_MST_SEND_MAIL_REQ",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "DM_PLN_MKT_FCST",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH",
+   "SCM_ADM_EXCEL_UPLOAD"
+  ]
+ },
+ "SSP0060": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE(PK);화면에 없는 키 NEW_YN",
+  "tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_MST_SEND_MAIL_REQ",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "DM_PLN_MKT_FCST",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0200": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SSP0200.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM;PKG_SSP0200.P_SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING;PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_CONFIRM_NEW;PKG_SSP0200.P_SSP0200_SAVE_SHIP 의 DML 대상(깊이 3). 대표 SSP_ANL_SHIP_CONFIRM PK",
+  "keys": [
+   "CONFIRM_ID"
+  ],
+  "vary": [
+   "CONFIRM_ID"
+  ],
+  "tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE",
+   "SSP_ANL_SHIP_CONFIRM",
+   "DM_PLN_MKT_FCST_CONFIRM",
+   "SSP_ANL_SHIP_CONFIRM_ROUTE"
+  ],
+  "unresolved_tables": [
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SCM_SYS_LOG_BATCH",
+   "DM_PLN_MKT_FCST"
+  ]
+ },
+ "SCP0033": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY 의 DML 대상(깊이 3). 대표 SCP_MST_SHIPMENT_SEMI_DEPT_DAY PK",
+  "keys": [
+   "DIVISION_ID",
+   "ITEM_ID"
+  ],
+  "vary": [
+   "ITEM_ID"
+  ],
+  "tables": [
+   "SCP_MST_SHIPMENT_SEMI_DEPT_DAY",
+   "SCP_MST_SHIPMENT_SEMI_DEPT_DAY_H"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SCP0020": {
+  "mode": "keyset",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "저장 PROC PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME;PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP;PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP 의 DML 대상(깊이 3). 대표 SCP_MST_TACT_TIME_EXCEPT_OSP PK",
+  "keys": [
+   "DIVISION_ID",
+   "PLANT_SITE_ID",
+   "ITEM_ID",
+   "OPERATION_ID",
+   "LINE_ID",
+   "TACT_TIME_START_DATE",
+   "TACT_TIME_END_DATE"
+  ],
+  "vary": [
+   "PLANT_SITE_ID"
+  ],
+  "tables": [
+   "SCP_MST_TACT_TIME_EXCEPT_H",
+   "SCP_MST_TACT_TIME_EXCEPT",
+   "SCP_MST_TACT_TIME_EXCEPT_OSP",
+   "SCP_MST_TACT_TIME_EXCEPT_OSP_H"
+  ],
+  "unresolved_tables": [
+   "SCP_MST_TACT_TIME_H",
+   "SCP_MST_TACT_TIME",
+   "SCP_MST_TACT_TIME_OSP_H",
+   "SCP_MST_TACT_TIME_OSP"
+  ]
+ },
+ "SCP0084": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SCP_ANL_LONG_TERM_STOCK(PK);화면에 없는 키 NOID",
+  "tables": [
+   "SCP_ANL_LONG_TERM_STOCK"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SSP0020": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "유일 인덱스 없음 · 대표 SSP_MST_DELEGATE(유일 인덱스)",
+  "tables": [
+   "SSP_MST_DELEGATE"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
+ },
+ "SCP0104": {
+  "mode": "editonly",
+  "_generated": "2026-10-31 gen_cleanup_spec.py",
+  "_why": "키가 화면 컬럼 아님 · 대표 SCP_MST_CAPA_ELTR_LOSS_PLAN_MDL(PK);화면에 없는 키 MDL_NM,MSR_TP_CD",
+  "tables": [
+   "SCP_MST_CAPA_LINE_MDL",
+   "SCP_MST_CAPA_LINE_ASSIGN",
+   "SCP_MST_CAPA_SPEED_PLAN",
+   "SCP_MST_CAPA_LOSS_PLAN_MDL",
+   "SCP_MST_CAPA_ELTR_LINE_MDL",
+   "SCP_MST_CAPA_ELTR_LINE_ASSIGN",
+   "SCP_MST_CAPA_DUMMY_CODE",
+   "SCP_MST_CAPA_ELTR_SPEED_PLAN",
+   "SCP_MST_CAPA_ELTR_LOSS_PLAN_MDL",
+   "SCP_MST_CAPA_LINE_SOP",
+   "SCP_MST_CAPA_ELTR_LINE_SOP"
+  ],
+  "unresolved_tables": [
+   "SCM_SYS_LOG_BATCH"
+  ]
  }
 }

@@ -1,7 +1,7 @@
 {
  "menu_id": "DMF0005",
  "asis_id": "DMF0005",
- "generated": "2026-11-02 17:39:19",
+ "generated": "2026-11-14 05:56:26",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "3.8시간 전 export(기준 12시간)"
+   "evidence": "7.4시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -58,14 +58,14 @@
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
    "status": "DONE",
    "producer": "tools/E2E/gen-e2e.js <ID>",
-   "evidence": "rc=0 · 2s · DMF0005 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: k0101 DMF0005 → DMF0005 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행)"
+   "evidence": "rc=0 · 1s · DMF0005: AS-IS 팝업 클래스 안 시트 메인 제외 — Sales Site Project Model Popup DMF0005 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: k0101 DMF0005 → DMF0005 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
   },
   {
    "key": "smoke",
-   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
-   "status": "OK",
-   "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 10-31 13:30 (FE 소스보다 최신)"
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 203s · specs\\DMF0005.smoke.spec.ts:106:7 › DMF0005 SaleSite_PjtModelMapping 스모크 @smoke › 조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인 1 passed (3.2m) # E2E 결과 — 2026-11-14 05:56 테스트 3 · PASS 1 · FAIL 2 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\DMF0005\\run_20261114_055303_smoke.log"
   }
  ]
 }

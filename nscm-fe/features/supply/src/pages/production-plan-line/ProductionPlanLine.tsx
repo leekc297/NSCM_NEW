@@ -7,8 +7,9 @@ import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
+import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { ProductionPlanFixReasonModal } from './components/modals/ProductionPlanFixReasonModal';
@@ -21,9 +22,11 @@ import {
   LBL,
   LINE_TOTAL_MEASURE_PREFIX,
   MEASURE_ROW_ORDER,
+  MEASURE_SHEET_NAME,
   MENU_ID,
   MSG,
   SHEETS,
+  TITLESET_MEASURE_TYPE,
 } from './production-plan-line.constants';
 import { MOCK_EDIT_INFO_DATA, MOCK_MAIN_DATA, MOCK_MAIN_ENABLED } from './production-plan-line.mock'; // ⚠ 임시 개발용 목데이터
 import type { EditInfoRow, FixMode, FixRow, MainRow } from './production-plan-line.types';
@@ -77,6 +80,9 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   const latestPlanSeq = useProductionPlanLineStore(s => s.latestPlanSeq);
 
   const [openItem, setOpenItem] = useState(false);
+  // Material/Model·Nickname 두 픽커가 같은 팝업을 연다 — 어느 쪽에서 열었는지로 팝업 초기 검색어(seed)를
+  //   가른다(Material→sc.itemId, Model/Nickname→sc.nickName). 기본 'material'.
+  const [itemSearchField, setItemSearchField] = useState<'material' | 'nickname'>('material');
   const [openLoad, setOpenLoad] = useState(false);
   const [openFixReason, setOpenFixReason] = useState(false);
   const [openInsert, setOpenInsert] = useState(false);
@@ -129,7 +135,11 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   % measure(LINE_TOTAL_*)를 각 Plant site 행그룹 맨 아래로 보낸다. staticMeasures 미로드 시 상수 fallback.
     const measureOrder =
       staticMeasures.length > 0 ? staticMeasures.map(m => m.colNm) : MEASURE_ROW_ORDER;
-    return orderRowsByMeasure(ratioed, measureOrder) as unknown as MainRow[];
+    return orderRowsByMeasure(
+      ratioed,
+      measureOrder,
+      LINE_TOTAL_MEASURE_PREFIX
+    ) as unknown as MainRow[];
   }, [data, staticMeasures]);
 
   // fix 확정 셀 집합 (M4a/M2) — O_RC2(dtFix) 8필드 FIX_KEY + 기간키(D_/W_). Grid formatHandler 가 녹색 판정.
@@ -225,6 +235,15 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (staticMeasures.length === 0) void fetchStaticMeasures();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
+
+  // Measure 개인화 복원 — staticMeasures.display(= DISPLAY_FLAG, BE 가 titleSet 반영해 계산한 저장선택)로
+  //   그리드 표시 measure 를 맞춘다. 메타 로드/저장후 재조회 때마다 저장값을 그리드에 반영 → 새로고침·재진입
+  //   후에도 저장된 measure 만 보인다(2026-11-11). display 가 전부 true(개인화 없음)면 null(전체 표시).
+  useEffect(() => {
+    if (staticMeasures.length === 0) return;
+    const shown = staticMeasures.filter(m => m.display).map(m => m.colNm);
+    setVisibleMeasures(shown.length === staticMeasures.length ? null : shown);
+  }, [staticMeasures]);
 
   // 고정 컬럼 메타는 division 별로 DIVISION_ID(SCM_MST_SHEET_COLUMNS) 서버 필터되므로, division 이
   //   확정/변경될 때마다 그 값으로 재fetch 한다(division 별 가시성 데이터화 — FE 하드코딩 제거).
@@ -485,7 +504,13 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
         toggleOpenSearchArea={setOpenSearchArea}
       />
       {openSearchArea && (
-        <ProductionPlanLineForm onSearch={handleSearch} onItemSearch={() => setOpenItem(true)} />
+        <ProductionPlanLineForm
+          onSearch={handleSearch}
+          onItemSearch={field => {
+            setItemSearchField(field);
+            setOpenItem(true);
+          }}
+        />
       )}
       <SubTitle
         menuId={MENU_ID}
@@ -519,6 +544,16 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
             buttonLabel: '',
           },
         ]}
+        // Sum(SUM 컬럼 토글) — 조회조건 폼에서 그리드 건수 툴바로 이동(사용자 지시 2026-11-11). afterCount 는
+        //   건수 배지 바로 오른쪽(좌측 클러스터)에 렌더되므로 "건수 표시 오른쪽"에 위치한다.
+        //   라벨은 다국어 처리 없이 영어 'Weekly / Monthly Sum' 고정(사용자 지시 2026-11-11).
+        afterCount={
+          <Checkbox
+            labelText='Weekly / Monthly Sum'
+            checked={sc.chkSum}
+            onChange={checked => setSearchCondition({ chkSum: checked })}
+          />
+        }
       />
 
       <div className={styles.gridWrapper}>
@@ -531,6 +566,8 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
           chkSum={sc.chkSum}
           // 전체보기 고정 — 조회가 항상 일자(D_)까지 싣으므로 헤더 더블클릭 드릴다운 게이트도 상시 허용(SCP0011 동일).
           chkAll={true}
+          // 회색(실적) 음영 기준 = 선택 Plan Date(AS-IS Set_ProductResult — cboPlanDate 선택값). 이 날짜 이전 셀 회색.
+          planStartYyyymmdd={sc.planStartYyyymmdds[0] ?? ''}
           editContext={editContext}
           visibilityCtx={visibilityCtx}
           adminColumns={staticColumns[SHEETS.MAIN]}
@@ -552,9 +589,14 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
         preSearchParams={{
           divisionId: sc.divisionId,
-          operationGroup: '',
+          // AS-IS btnItemId_Click(cs:826/830)은 선택 Operation Group(cboOperationGroup)을 팝업에
+          //   그대로 넘긴다. 빈값으로 두면 팝업 SP(P_SCM0002_GET_MATERIAL_BY_DIVISION)의 Operation
+          //   Group 분기가 안 걸리고 조건칸도 공백이 된다 → 선택값(sc.operationGroupId) 전달.
+          operationGroup: sc.operationGroupId,
           scpModuleType: MENU_ID,
-          itemId: sc.itemId,
+          // 팝업 초기 검색어 seed — Model/Nickname 픽커로 열면 그 값(sc.nickName), Material 픽커로 열면
+          //   sc.itemId. 팝업 SP P_ITEM_ID 는 ITEM_ID·NICK_NAME·MODEL 을 함께 LIKE 매칭하므로 둘 다 유효.
+          itemId: itemSearchField === 'nickname' ? sc.nickName : sc.itemId,
         }}
       />
 
@@ -583,14 +625,33 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
         onSaved={handleInsertSaved}
       />
 
-      {/* Measure 설정 팝업 — AS-IS btnMeasure(SCM0002_TitleSetForm_Popup) 등가. forecast-price(DMF0082)와
-          동일 공용 컴포넌트. OK 결과(표시 measure 코드, 전체면 null)를 visibleMeasures 로 그리드 행 필터. */}
+      {/* Measure 설정 팝업 — AS-IS btnMeasure(SCM0002_TitleSetForm_Popup 'M') 등가. OK 결과(표시 measure
+          코드, 전체면 null)를 (1) visibleMeasures 로 즉시 클라 필터, (2) saveTitleSet 으로 SCM_MST_TITLESET_USER
+          에 영속 저장(개인화), (3) fetchStaticMeasures 재조회로 measure 메타의 display(=저장선택) 갱신 → 모달
+          체크상태·그리드(아래 display→visibleMeasures 동기화 effect)가 새로고침·재진입 후에도 저장값으로 복원된다.
+          SHEET_NAME='Line'(measure 메타·개인화플래그와 대소문자 일치)라야 proc 의 V_PRSL_YN 이 매칭돼 반영됨. */}
       <MeasureSelectModal
         open={openMeasure}
         modalClose={() => setOpenMeasure(false)}
         measures={staticMeasures}
         visibleMeasures={visibleMeasures}
-        onApply={codes => setVisibleMeasures(codes)}
+        onApply={codes => {
+          setVisibleMeasures(codes);
+          const all = staticMeasures.map(m => m.colNm);
+          const selected = codes ?? all;
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: MEASURE_SHEET_NAME,
+            columnType: TITLESET_MEASURE_TYPE,
+            rows: selected.map((name, i) => ({ name, sortOrderNo: i + 1 })),
+          }).then(ok => {
+            if (!ok) {
+              setToast({ type: 'error', message: t(MSG.SAVE_FAIL, '_Failed to save.') });
+              return;
+            }
+            void fetchStaticMeasures(); // 재조회 → display 갱신 → 모달·그리드 복원
+          });
+        }}
       />
     </>
   );

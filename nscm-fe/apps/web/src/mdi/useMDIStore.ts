@@ -41,6 +41,18 @@ const initMDIState: MDIState = {
   activeIndex: 0,
 };
 
+// 활성 탭이 바뀌면 헤더 상단 메뉴(선택 밑줄)·좌측 사이드바 트리를 그 탭의 상단 메뉴로 맞춘다.
+//   사이드바 열림/닫힘은 사용자가 둔 그대로 두고 트리만 교체한다. 그룹 펼침·음영은
+//   SidebarMenu 가 활성 탭 mnuId 로 처리한다. 홈 등 메뉴 트리에 없는 탭은 그대로 둔다.
+const syncSidebarToTab = (tab: AnyTab | undefined) => {
+  if (!tab?.mnuId) return;
+  const rootMenu = useSessionStore.getState().findMenuPath(String(tab.mnuId))?.[0];
+  if (!rootMenu) return;
+  const ui = useUIStore.getState();
+  if (ui.sidebarMenu?.mnuId === rootMenu.mnuId) return;
+  ui.setSidebarMenu(rootMenu);
+};
+
 export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
   (set, get) => ({
     ...initMDIState,
@@ -134,6 +146,7 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
       set(state => {
         state.activeIndex = tabIndex;
       });
+      syncSidebarToTab(get().tabs[tabIndex]);
     },
     closeTab: tabIndex => {
       if (tabIndex === -1) return;
@@ -150,6 +163,8 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
           state.tabs.splice(index, 1);
           if (state.activeIndex >= index) state.activeIndex -= 1;
         });
+        const { tabs, activeIndex } = get();
+        syncSidebarToTab(tabs[activeIndex]);
       });
     },
     closeOtherTabs: () => {
@@ -178,3 +193,4 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
   }),
   'MDI-store'
 );
+ 

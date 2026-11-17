@@ -1,6 +1,6 @@
 {
  "screen": "SCP0020",
- "generated": "2026-10-30 12:17:05",
+ "generated": "2026-11-14 09:59:51",
  "vars": {
   "dtMyDivision": {
    "sp": "UP_FX_GetCommonDataList_SCP",
@@ -42,6 +42,14 @@
    "ref": "SCP0020_TactTime.cs:296 ← SCP0020_TactTime.cs:46",
    "rows": [
     {
+     "CODE": "AZ00-A",
+     "NAME": "AZ Mobile Assy-Cell"
+    },
+    {
+     "CODE": "AZ00-E",
+     "NAME": "AZ Mobile Elec-Electrode"
+    },
+    {
      "CODE": "HQ05_40-W",
      "NAME": "LGESOC IT & New Application Waranty HQ05"
     },
@@ -76,10 +84,6 @@
     {
      "CODE": "NJ01-P",
      "NAME": "LGESNJ BATTERY-Pack"
-    },
-    {
-     "CODE": "AC00-A",
-     "NAME": "LGESOC Cell HQ07"
     },
     {
      "CODE": "EG01_81-W",
@@ -186,18 +190,6 @@
      "NAME": "LGESWA Pack WA00"
     },
     {
-     "CODE": "HD00-A",
-     "NAME": "ES Honda JV Auto Assy/Pack-Cell"
-    },
-    {
-     "CODE": "HD00-E",
-     "NAME": "ES Honda JV Auto Elec-Electrode"
-    },
-    {
-     "CODE": "HD00-P",
-     "NAME": "ES Honda JV Auto Assy/Pack-Pack"
-    },
-    {
      "CODE": "HG00-A",
      "NAME": "ESHG Auto Assy-Cell"
     },
@@ -226,10 +218,6 @@
      "NAME": "OT Auto Assy/Pack-Pack"
     },
     {
-     "CODE": "AC00-A",
-     "NAME": "Ultium Cells (A) - Lordstown-Cell"
-    },
-    {
      "CODE": "GM00-A",
      "NAME": "Ultium Cells (A) - Lordstown-Cell"
     },
@@ -244,10 +232,6 @@
     {
      "CODE": "GM01-E",
      "NAME": "GM2_TN Auto Elec-Electrode"
-    },
-    {
-     "CODE": "AC00-A",
-     "NAME": "LGESOC Cell HQ08"
     },
     {
      "CODE": "EG01_82-W",
@@ -298,10 +282,6 @@
      "NAME": "virtual plant(HD00)-Cell"
     },
     {
-     "CODE": "VP_HD00-P",
-     "NAME": "virtual plant(HD00)-Pack"
-    },
-    {
      "CODE": "VP_MI02-A",
      "NAME": "virtual plant(MI02)-Cell"
     },
@@ -322,16 +302,16 @@
      "NAME": "PL WRO ESS Prod-Electrode"
     },
     {
-     "CODE": "AC00-A",
-     "NAME": "AZ Mobile Assy-Cell"
+     "CODE": "HD00-A",
+     "NAME": "ES Honda JV Auto Assy/Pack-Cell"
     },
     {
-     "CODE": "AZ00-A",
-     "NAME": "AZ Mobile Assy-Cell"
+     "CODE": "HD00-E",
+     "NAME": "ES Honda JV Auto Elec-Electrode"
     },
     {
-     "CODE": "AZ00-E",
-     "NAME": "AZ Mobile Elec-Electrode"
+     "CODE": "HD00-P",
+     "NAME": "ES Honda JV Auto Assy/Pack-Pack"
     }
    ]
   },
@@ -7224,20 +7204,8 @@
      "NAME": "VL_AJA04   VL AJ)Assy #04"
     },
     {
-     "CODE": "VL_AJA04",
-     "NAME": "VL_AJA04   VL AJ)Assy #04"
-    },
-    {
      "CODE": "VL_AJA05",
      "NAME": "VL_AJA05   VL AJ)Assy #05"
-    },
-    {
-     "CODE": "VL_AJA05",
-     "NAME": "VL_AJA05   VL AJ)Assy #05"
-    },
-    {
-     "CODE": "VL_AJA06",
-     "NAME": "VL_AJA06   VL AJ)Assy #06"
     },
     {
      "CODE": "VL_AJA06",
@@ -7262,40 +7230,12 @@
    "ref": "SCP0020_TactTime.cs:334 ← SCP0020_TactTime.cs:64",
    "rows": [
     {
-     "CODE": "YTA01",
-     "NAME": "YTA01"
+     "CODE": "SHL01",
+     "NAME": "Ship Link Line 1"
     },
     {
-     "CODE": "YTE01",
-     "NAME": "YTE01"
-    },
-    {
-     "CODE": "YMHT01",
-     "NAME": "YMH_TEST_001"
-    },
-    {
-     "CODE": "C1P05",
-     "NAME": "남경 피플웍스 Line 5"
-    },
-    {
-     "CODE": "C1P09",
-     "NAME": "남경 피플웍스 Line 9"
-    },
-    {
-     "CODE": "C1P10",
-     "NAME": "남경 피플웍스 Line 10"
-    },
-    {
-     "CODE": "C1P11",
-     "NAME": "남경 피플웍스 Line 11"
-    },
-    {
-     "CODE": "C1P12",
-     "NAME": "남경 피플웍스 Line 12"
-    },
-    {
-     "CODE": "C1R01",
-     "NAME": "남경 피플웍스 Rack Line 1"
+     "CODE": "SHP01",
+     "NAME": "Ship Pack Line 1"
     },
     {
      "CODE": "K3D01",
@@ -7310,36 +7250,8 @@
      "NAME": "MI Pack Line"
     },
     {
-     "CODE": "AZP02",
-     "NAME": "피플웍스 Pack Line 1"
-    },
-    {
-     "CODE": "AZP03",
-     "NAME": "피플웍스 Pack Line 2"
-    },
-    {
-     "CODE": "AZP04",
-     "NAME": "피플웍스 Pack Line 3"
-    },
-    {
-     "CODE": "AZP05",
-     "NAME": "피플웍스 Pack Line 4"
-    },
-    {
      "CODE": "K2D01",
      "NAME": "구미 피플웍스 B-Link Line 1"
-    },
-    {
-     "CODE": "WAD01",
-     "NAME": "WA 피플웍스 B-Link Line 1"
-    },
-    {
-     "CODE": "WAP01",
-     "NAME": "WA 피플웍스 Pack Line 1"
-    },
-    {
-     "CODE": "WAP02",
-     "NAME": "WA 피플웍스 Pack Line 2"
     },
     {
      "CODE": "K2B01",
@@ -7398,18 +7310,6 @@
      "NAME": "WA 인팩 B-Link Line 1"
     },
     {
-     "CODE": "WAD01",
-     "NAME": "WA 인팩 B-Link Line 1"
-    },
-    {
-     "CODE": "WAP01",
-     "NAME": "WA 인팩 Pack Line 1"
-    },
-    {
-     "CODE": "WAP02",
-     "NAME": "WA 인팩 Pack Line 2"
-    },
-    {
      "CODE": "AZPL01",
      "NAME": "AZ 피플웍스 Link Line 1"
     },
@@ -7432,18 +7332,6 @@
     {
      "CODE": "CHP04",
      "NAME": "PW CHI Pack Line 4"
-    },
-    {
-     "CODE": "CHP05",
-     "NAME": "PW CHI Pack Line 5"
-    },
-    {
-     "CODE": "CHP06",
-     "NAME": "PW CHI Pack Line 6"
-    },
-    {
-     "CODE": "CHP07",
-     "NAME": "PW CHI Pack Line 7"
     },
     {
      "CODE": "PWAZL01",
@@ -14366,20 +14254,8 @@
      "NAME": "VL_AJA04   VL AJ)Assy #04"
     },
     {
-     "CODE": "VL_AJA04",
-     "NAME": "VL_AJA04   VL AJ)Assy #04"
-    },
-    {
      "CODE": "VL_AJA05",
      "NAME": "VL_AJA05   VL AJ)Assy #05"
-    },
-    {
-     "CODE": "VL_AJA05",
-     "NAME": "VL_AJA05   VL AJ)Assy #05"
-    },
-    {
-     "CODE": "VL_AJA06",
-     "NAME": "VL_AJA06   VL AJ)Assy #06"
     },
     {
      "CODE": "VL_AJA06",
@@ -14406,40 +14282,12 @@
    "ref": "SCP0020_TactTime.cs:403 ← SCP0020_TactTime.cs:204",
    "rows": [
     {
-     "CODE": "YTA01",
-     "NAME": "YTA01"
+     "CODE": "SHL01",
+     "NAME": "Ship Link Line 1"
     },
     {
-     "CODE": "YTE01",
-     "NAME": "YTE01"
-    },
-    {
-     "CODE": "YMHT01",
-     "NAME": "YMH_TEST_001"
-    },
-    {
-     "CODE": "C1P05",
-     "NAME": "남경 피플웍스 Line 5"
-    },
-    {
-     "CODE": "C1P09",
-     "NAME": "남경 피플웍스 Line 9"
-    },
-    {
-     "CODE": "C1P10",
-     "NAME": "남경 피플웍스 Line 10"
-    },
-    {
-     "CODE": "C1P11",
-     "NAME": "남경 피플웍스 Line 11"
-    },
-    {
-     "CODE": "C1P12",
-     "NAME": "남경 피플웍스 Line 12"
-    },
-    {
-     "CODE": "C1R01",
-     "NAME": "남경 피플웍스 Rack Line 1"
+     "CODE": "SHP01",
+     "NAME": "Ship Pack Line 1"
     },
     {
      "CODE": "K3D01",
@@ -14454,36 +14302,8 @@
      "NAME": "MI Pack Line"
     },
     {
-     "CODE": "AZP02",
-     "NAME": "피플웍스 Pack Line 1"
-    },
-    {
-     "CODE": "AZP03",
-     "NAME": "피플웍스 Pack Line 2"
-    },
-    {
-     "CODE": "AZP04",
-     "NAME": "피플웍스 Pack Line 3"
-    },
-    {
-     "CODE": "AZP05",
-     "NAME": "피플웍스 Pack Line 4"
-    },
-    {
      "CODE": "K2D01",
      "NAME": "구미 피플웍스 B-Link Line 1"
-    },
-    {
-     "CODE": "WAD01",
-     "NAME": "WA 피플웍스 B-Link Line 1"
-    },
-    {
-     "CODE": "WAP01",
-     "NAME": "WA 피플웍스 Pack Line 1"
-    },
-    {
-     "CODE": "WAP02",
-     "NAME": "WA 피플웍스 Pack Line 2"
     },
     {
      "CODE": "K2B01",
@@ -14542,18 +14362,6 @@
      "NAME": "WA 인팩 B-Link Line 1"
     },
     {
-     "CODE": "WAD01",
-     "NAME": "WA 인팩 B-Link Line 1"
-    },
-    {
-     "CODE": "WAP01",
-     "NAME": "WA 인팩 Pack Line 1"
-    },
-    {
-     "CODE": "WAP02",
-     "NAME": "WA 인팩 Pack Line 2"
-    },
-    {
      "CODE": "AZPL01",
      "NAME": "AZ 피플웍스 Link Line 1"
     },
@@ -14576,18 +14384,6 @@
     {
      "CODE": "CHP04",
      "NAME": "PW CHI Pack Line 4"
-    },
-    {
-     "CODE": "CHP05",
-     "NAME": "PW CHI Pack Line 5"
-    },
-    {
-     "CODE": "CHP06",
-     "NAME": "PW CHI Pack Line 6"
-    },
-    {
-     "CODE": "CHP07",
-     "NAME": "PW CHI Pack Line 7"
     },
     {
      "CODE": "PWAZL01",

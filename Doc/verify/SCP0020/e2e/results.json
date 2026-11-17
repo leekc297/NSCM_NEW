@@ -1,7 +1,21 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "@verify|@trace|@snap",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +28,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0020/e2e/artifacts",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,13 +46,229 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0020\\e2e\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
   "suites": [
+    {
+      "title": "_snap.spec.ts",
+      "file": "_snap.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "@snap 스냅샷 형상 검사",
+          "file": "_snap.spec.ts",
+          "line": 60,
+          "column": 6,
+          "specs": [
+            {
+              "title": "@snap 조회조건 패널·버튼 바 aria ×Div",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3896,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:00:24.367Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-74c995e979b472a2d796",
+              "file": "_snap.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "@snap 그리드 헤더 텍스트(모델) ×시트",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8015,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:00:31.125Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-399ba7d6116eaaa3a887",
+              "file": "_snap.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "@snap 조회조건 팝업 정적 aria",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5026,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:00:42.155Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-95b89906c95d0086fb4b",
+              "file": "_snap.spec.ts",
+              "line": 114,
+              "column": 7
+            },
+            {
+              "title": "@snap 화면샷 패널+헤더 띠 1920/1366",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9849,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:00:50.112Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
+              "file": "_snap.spec.ts",
+              "line": 137,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
     {
       "title": "_trace.spec.ts",
       "file": "_trace.spec.ts",
@@ -60,7 +279,7 @@
         {
           "title": "검증엔진 SCP0020 @trace",
           "file": "_trace.spec.ts",
-          "line": 95,
+          "line": 129,
           "column": 6,
           "specs": [
             {
@@ -71,7 +290,7 @@
               ],
               "tests": [
                 {
-                  "timeout": 240000,
+                  "timeout": 480000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -79,13 +298,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 42753,
+                      "duration": 16290,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:21:44.974Z",
+                      "startTime": "2026-11-14T01:01:03.132Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -94,7 +315,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-629f34ce3c1a51cbaabe",
               "file": "_trace.spec.ts",
-              "line": 101,
+              "line": 155,
               "column": 7
             },
             {
@@ -113,13 +334,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 23655,
+                      "duration": 5732,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:22:42.190Z",
+                      "startTime": "2026-11-14T01:01:22.446Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -128,7 +351,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-61914dd27a9c048b9710",
               "file": "_trace.spec.ts",
-              "line": 147,
+              "line": 229,
               "column": 7
             },
             {
@@ -147,13 +370,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 93512,
+                      "duration": 42409,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:23:15.690Z",
+                      "startTime": "2026-11-14T01:01:31.269Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -162,7 +387,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-95fae7eb62900cc919c3",
               "file": "_trace.spec.ts",
-              "line": 183,
+              "line": 265,
               "column": 7
             },
             {
@@ -181,13 +406,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 50643,
+                      "duration": 16364,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:25:02.774Z",
+                      "startTime": "2026-11-14T01:02:16.483Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -196,7 +423,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-9d23e92b757e38115515",
               "file": "_trace.spec.ts",
-              "line": 249,
+              "line": 352,
               "column": 7
             },
             {
@@ -215,13 +442,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2261,
+                      "duration": 328,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:26:03.333Z",
+                      "startTime": "2026-11-14T01:02:35.625Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -230,7 +459,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-7fec2abc1a2e33a7032a",
               "file": "_trace.spec.ts",
-              "line": 474,
+              "line": 592,
               "column": 7
             },
             {
@@ -249,13 +478,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 23575,
+                      "duration": 10205,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:26:17.851Z",
+                      "startTime": "2026-11-14T01:02:38.693Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -264,7 +495,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-21b844c0496e31dd63b5",
               "file": "_trace.spec.ts",
-              "line": 547,
+              "line": 667,
               "column": 7
             },
             {
@@ -283,13 +514,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 31116,
+                      "duration": 12586,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:26:50.923Z",
+                      "startTime": "2026-11-14T01:02:51.676Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -298,7 +531,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-fb5ac388d5db0ba51fea",
               "file": "_trace.spec.ts",
-              "line": 609,
+              "line": 729,
               "column": 7
             },
             {
@@ -317,13 +550,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3862,
+                      "duration": 343,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:27:32.141Z",
+                      "startTime": "2026-11-14T01:03:07.111Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -332,7 +567,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-fc56751a12d6c6a53240",
               "file": "_trace.spec.ts",
-              "line": 699,
+              "line": 844,
               "column": 7
             },
             {
@@ -351,13 +586,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25137,
+                      "duration": 9357,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:27:51.416Z",
+                      "startTime": "2026-11-14T01:03:10.271Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -366,7 +603,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-7c138035ab040279797a",
               "file": "_trace.spec.ts",
-              "line": 748,
+              "line": 916,
               "column": 7
             },
             {
@@ -385,13 +622,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 43581,
+                      "duration": 16640,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:28:29.686Z",
+                      "startTime": "2026-11-14T01:03:22.394Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -400,7 +639,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-1d848a69c9dc9000a71b",
               "file": "_trace.spec.ts",
-              "line": 803,
+              "line": 971,
               "column": 7
             },
             {
@@ -419,13 +658,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 30658,
+                      "duration": 12377,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:29:25.557Z",
+                      "startTime": "2026-11-14T01:03:41.830Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -434,7 +675,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-b53928296a289a43aaf7",
               "file": "_trace.spec.ts",
-              "line": 1013,
+              "line": 1230,
               "column": 7
             },
             {
@@ -453,13 +694,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 204749,
+                      "duration": 181135,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:30:06.543Z",
+                      "startTime": "2026-11-14T01:03:57.020Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -468,7 +711,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-34a9a120ab770b67af4c",
               "file": "_trace.spec.ts",
-              "line": 1039,
+              "line": 1259,
               "column": 7
             },
             {
@@ -487,13 +730,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 41488,
+                      "duration": 23428,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:33:41.785Z",
+                      "startTime": "2026-11-14T01:07:00.930Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -502,7 +747,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-b28fdfb423fa56670d25",
               "file": "_trace.spec.ts",
-              "line": 1410,
+              "line": 1709,
               "column": 7
             },
             {
@@ -521,13 +766,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3369,
+                      "duration": 336,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:34:33.924Z",
+                      "startTime": "2026-11-14T01:07:27.136Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -536,7 +783,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-5995f1dbb4154d62e321",
               "file": "_trace.spec.ts",
-              "line": 1757,
+              "line": 2065,
               "column": 7
             }
           ]
@@ -553,7 +800,7 @@
         {
           "title": "정합검증 SCP0020 @verify",
           "file": "_verify.spec.ts",
-          "line": 140,
+          "line": 252,
           "column": 6,
           "specs": [
             {
@@ -572,13 +819,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 21627,
+                      "duration": 5833,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:34:48.378Z",
+                      "startTime": "2026-11-14T01:07:30.829Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -587,7 +836,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-cf4493da911077603628",
               "file": "_verify.spec.ts",
-              "line": 145,
+              "line": 280,
               "column": 7
             },
             {
@@ -598,7 +847,7 @@
               ],
               "tests": [
                 {
-                  "timeout": 480000,
+                  "timeout": 900000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -606,13 +855,80 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 96926,
+                      "duration": 56042,
                       "errors": [],
-                      "stdout": [],
-                      "stderr": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 7s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Plant' 선택(InsertButton:762 · shtMain=\"Plant\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 16s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 16s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 17s\n"
+                        },
+                        {
+                          "text": "[lap] E1 19s\n"
+                        },
+                        {
+                          "text": "[lap] H13 40s\n"
+                        },
+                        {
+                          "text": "[lap] E2 40s\n"
+                        },
+                        {
+                          "text": "[lap] C3 53s\n"
+                        },
+                        {
+                          "text": "[lap] D5 53s\n"
+                        },
+                        {
+                          "text": "[lap] K5 53s\n"
+                        },
+                        {
+                          "text": "[lap] H2 53s\n"
+                        },
+                        {
+                          "text": "[lap] A2 54s\n"
+                        },
+                        {
+                          "text": "[lap] C2 54s\n"
+                        },
+                        {
+                          "text": "[lap] C6 54s\n"
+                        },
+                        {
+                          "text": "[lap] E5 55s\n"
+                        },
+                        {
+                          "text": "[lap] E7 56s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] TACT_TIME: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:35:21.873Z",
+                      "startTime": "2026-11-14T01:07:39.865Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -621,8 +937,311 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-961ffc625ec76a12ce28",
               "file": "_verify.spec.ts",
-              "line": 166,
-              "column": 7
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Plant] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 67702,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 7s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 20s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Plant' 선택(InsertButton:762 · shtMain=\"Plant\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 27s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 27s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 29s\n"
+                        },
+                        {
+                          "text": "[lap] E1 31s\n"
+                        },
+                        {
+                          "text": "[lap] H13 53s\n"
+                        },
+                        {
+                          "text": "[lap] E2 53s\n"
+                        },
+                        {
+                          "text": "[lap] C3 66s\n"
+                        },
+                        {
+                          "text": "[lap] D5 66s\n"
+                        },
+                        {
+                          "text": "[lap] K5 66s\n"
+                        },
+                        {
+                          "text": "[lap] H2 66s\n"
+                        },
+                        {
+                          "text": "[lap] A2 67s\n"
+                        },
+                        {
+                          "text": "[lap] C2 67s\n"
+                        },
+                        {
+                          "text": "[lap] C6 67s\n"
+                        },
+                        {
+                          "text": "[lap] E5 67s\n"
+                        },
+                        {
+                          "text": "[lap] E7 67s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] TACT_TIME: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:08:38.876Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3e3207e3c713153f7e3f",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Tact Time] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 57862,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 9s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Plant' 선택(InsertButton:762 · shtMain=\"Plant\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 17s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 17s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 18s\n"
+                        },
+                        {
+                          "text": "[lap] E1 21s\n"
+                        },
+                        {
+                          "text": "[lap] H13 43s\n"
+                        },
+                        {
+                          "text": "[lap] E2 43s\n"
+                        },
+                        {
+                          "text": "[lap] C3 56s\n"
+                        },
+                        {
+                          "text": "[lap] D5 56s\n"
+                        },
+                        {
+                          "text": "[lap] K5 56s\n"
+                        },
+                        {
+                          "text": "[lap] H2 56s\n"
+                        },
+                        {
+                          "text": "[lap] A2 57s\n"
+                        },
+                        {
+                          "text": "[lap] C2 57s\n"
+                        },
+                        {
+                          "text": "[lap] C6 57s\n"
+                        },
+                        {
+                          "text": "[lap] E5 57s\n"
+                        },
+                        {
+                          "text": "[lap] E7 58s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] TACT_TIME: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:09:49.595Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3037789e31f1f78c207c",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
+            },
+            {
+              "title": "그리드 컬럼 프로브 [탭 Tact Time Except] — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 55802,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 8s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[Insert 전제] 시트 'Plant' 선택(InsertButton:762 · shtMain=\"Plant\")\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 16s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 16s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 17s\n"
+                        },
+                        {
+                          "text": "[lap] E1 20s\n"
+                        },
+                        {
+                          "text": "[lap] H13 41s\n"
+                        },
+                        {
+                          "text": "[lap] E2 41s\n"
+                        },
+                        {
+                          "text": "[lap] C3 54s\n"
+                        },
+                        {
+                          "text": "[lap] D5 54s\n"
+                        },
+                        {
+                          "text": "[lap] K5 54s\n"
+                        },
+                        {
+                          "text": "[lap] H2 54s\n"
+                        },
+                        {
+                          "text": "[lap] A2 55s\n"
+                        },
+                        {
+                          "text": "[lap] C2 55s\n"
+                        },
+                        {
+                          "text": "[lap] C6 55s\n"
+                        },
+                        {
+                          "text": "[lap] E5 55s\n"
+                        },
+                        {
+                          "text": "[lap] E7 55s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] TACT_TIME: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:10:50.417Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-673bec2e31a5460e290a",
+              "file": "_verify.spec.ts",
+              "line": 302,
+              "column": 65
             },
             {
               "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
@@ -640,13 +1259,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1111,
+                      "duration": 308,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:37:07.655Z",
+                      "startTime": "2026-11-14T01:11:48.989Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -655,11 +1276,1652 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8f1202a79c8259679beb",
               "file": "_verify.spec.ts",
-              "line": 472,
+              "line": 839,
               "column": 7
             },
             {
               "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [3s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"lgsoo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":0,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":1,\"CREATION_DATE\":\"2021-08-17 15:4 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\",\"EVENT\":\"1\"}],\"DATARESULT\":[]}} | SEARCH:200 알림=성공적으로 저장되었습니다. · [9s] 재조회 · [10s] 행 찾기 7 · 행 [Peopleworks_CN|EM048063P3N1|M4863P3N1] PRIORITY: '1' → '2' 저장 성공 · 재조회 값 '2' 반영 확인 · [12s] 원복 입력 · [13s] 원복 저장 응답 · 원복 '1' 저장 성공 · 재조회 값 '1' 복원 확인"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 56313,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[crud] 빈 키 없음 — 신규행 경로 무효, 기존행 수정 저장으로 측정 · 초기 {\"DIVISION_ID\":\"82\",\"PLANT_SITE_ID\":\"US02182600_82-P\",\"ITEM_ID\":\"EP096636PFB1-CG0\",\"OPERATION_ID\":\"US02182600\",\"LINE_ID\":\"AZL01\",\"TACT_TIME_START_DATE\":\"\",\"T\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:11:52.085Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [3s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"lgsoo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"DAILY_CAPACITY\":0,\"PLANT_SITE_ID\":\"CN00249500-P\",\"OPERATION_GROUP_ID\":\"P\",\"YIELD\":1,\"CREATION_DATE\":\"2021-08-17 15:4 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"CODE\":\"0\",\"EVENT\":\"1\"}],\"DATARESULT\":[]}} | SEARCH:200 알림=성공적으로 저장되었습니다. · [9s] 재조회 · [10s] 행 찾기 7 · 행 [Peopleworks_CN|EM048063P3N1|M4863P3N1] PRIORITY: '1' → '2' 저장 성공 · 재조회 값 '2' 반영 확인 · [12s] 원복 입력 · [13s] 원복 저장 응답 · 원복 '1' 저장 성공 · 재조회 값 '1' 복원 확인"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-df39725a348fb0471e89",
+              "file": "_verify.spec.ts",
+              "line": 904,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 293617,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 3: DIVISION_ID,ITEM_ID,LINE_ID\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:13:53 PRIORITY r8 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:14:16 PRIORITY 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:14:17 YIELD r8 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:15:17 YIELD 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:15:17 DAILY_CAPACITY r8 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 01:15:39 DAILY_CAPACITY 끝\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:12:51.214Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f89e0971bb990180b927",
+              "file": "_verify.spec.ts",
+              "line": 1534,
+              "column": 7
+            },
+            {
+              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 123339,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:17:48.184Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-8e782c6db5dc7f4d032f",
+              "file": "_verify.spec.ts",
+              "line": 1634,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 35654,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[신규행] Packer 대조군 blocked · 화면 추가 필수 PRIORITY · PRIORITY 입력 실패(팝업 입력일 수 있음) · 입력 실패  · '[Priority] 값은 필수 입력 항목입니다.'\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:19:54.620Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e2d0fbff627a6b96c2f0",
+              "file": "_verify.spec.ts",
+              "line": 1745,
+              "column": 7
+            },
+            {
+              "title": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 97571,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:20:33.079Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c35cabbb98ad8c317a7e",
+              "file": "_verify.spec.ts",
+              "line": 1847,
+              "column": 7
+            },
+            {
+              "title": "기간 동적 컬럼(A8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 292,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:22:13.511Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5419b4b73a6f7a32930c",
+              "file": "_verify.spec.ts",
+              "line": 1891,
+              "column": 7
+            },
+            {
+              "title": "실전송 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7834,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:22:16.550Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-835425bf4f5dd9ad14e0",
+              "file": "_verify.spec.ts",
+              "line": 1903,
+              "column": 7
+            },
+            {
+              "title": "합계 값(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7707,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:22:27.150Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6c104910f65bffa98e71",
+              "file": "_verify.spec.ts",
+              "line": 1916,
+              "column": 7
+            },
+            {
+              "title": "Division 컬럼(A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 29791,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:22:37.602Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-81f994bde3c5755f5c3a",
+              "file": "_verify.spec.ts",
+              "line": 1943,
+              "column": 7
+            },
+            {
+              "title": "조회조건 겹침(H4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5100,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:10.188Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c4e8577c82fc30bf8cc4",
+              "file": "_verify.spec.ts",
+              "line": 1972,
+              "column": 7
+            },
+            {
+              "title": "Excel 2단계 차단(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3236,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:18.083Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-448a7692322b7ca253bf",
+              "file": "_verify.spec.ts",
+              "line": 1985,
+              "column": 7
+            },
+            {
+              "title": "Excel 양식·업로드(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3386,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:24.080Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b52fb5a849afb8511987",
+              "file": "_verify.spec.ts",
+              "line": 1999,
+              "column": 7
+            },
+            {
+              "title": "셀 연쇄 초기화(C2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 281,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:30.236Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-bdee2f3c0f19e418569c",
+              "file": "_verify.spec.ts",
+              "line": 2033,
+              "column": 7
+            },
+            {
+              "title": "컬럼 설정 필수 컬럼(K2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 276,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:33.650Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a3fa554ce89f356fb52e",
+              "file": "_verify.spec.ts",
+              "line": 2100,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27967,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langlock] SCP0020 I2 단독 실행 0s 대기 후 언어 잠금 획득\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:23:36.735Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fd1ba8abfc42ea18a378",
+              "file": "_verify.spec.ts",
+              "line": 2155,
+              "column": 7
+            },
+            {
+              "title": "병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 456810,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 40100,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:24:07.510Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4eb7cda9519c07b59a63",
+              "file": "_verify.spec.ts",
+              "line": 2182,
+              "column": 7
+            },
+            {
+              "title": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10717,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:24:50.410Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-16520d5dbb8ccee2ba71",
+              "file": "_verify.spec.ts",
+              "line": 2224,
+              "column": 7
+            },
+            {
+              "title": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12655,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:25:03.889Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a9759e2a02a4fea16ca1",
+              "file": "_verify.spec.ts",
+              "line": 2236,
+              "column": 7
+            },
+            {
+              "title": "레이아웃·조회 묶음(H4·N1·G1·L2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17534,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:25:19.484Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-38e646ab5afde8aaa0be",
+              "file": "_verify.spec.ts",
+              "line": 2253,
+              "column": 7
+            },
+            {
+              "title": "필터 항목·연속 조회 본문(K1·G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 115493,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:25:39.824Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c149eb384ef7c606eea9",
+              "file": "_verify.spec.ts",
+              "line": 2277,
+              "column": 7
+            },
+            {
+              "title": "조회조건 초기값·Division 변경 뒤 Version(G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5010,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:27:38.108Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-47af3573575edb2f6f11",
+              "file": "_verify.spec.ts",
+              "line": 2289,
+              "column": 7
+            },
+            {
+              "title": "Team 값 덤프(B8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7716,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:27:45.879Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d7308a37ea437581164a",
+              "file": "_verify.spec.ts",
+              "line": 2299,
+              "column": 7
+            },
+            {
+              "title": "Insert 행 Division(D4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11922,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:27:56.863Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a560eff69e5f236c053d",
+              "file": "_verify.spec.ts",
+              "line": 2304,
+              "column": 7
+            },
+            {
+              "title": "동적 칸 정렬·방향키 응답(K1·L1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12666,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:28:11.519Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6e1a7ad4f6157008082f",
+              "file": "_verify.spec.ts",
+              "line": 2313,
+              "column": 7
+            },
+            {
+              "title": "기간 조건 글자·역전(E2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7425,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:28:27.049Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-241946709564a2051450",
+              "file": "_verify.spec.ts",
+              "line": 2324,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14754,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:28:37.324Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6778e6728b6e25bd4f4e",
+              "file": "_verify.spec.ts",
+              "line": 2334,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7710,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:28:55.048Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5c04b2d254b08726a346",
+              "file": "_verify.spec.ts",
+              "line": 2342,
+              "column": 7
+            },
+            {
+              "title": "편집 모드 구분(D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8513,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:05.553Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-76697cba5193dc0f0a81",
+              "file": "_verify.spec.ts",
+              "line": 2350,
+              "column": 7
+            },
+            {
+              "title": "실적 구간 색(H2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 304,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:17.002Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-05e37f246c28f7dd600a",
+              "file": "_verify.spec.ts",
+              "line": 2366,
+              "column": 7
+            },
+            {
+              "title": "이름·ID 조건 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 307,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:20.245Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d9aa7beaa08184c1b5cd",
+              "file": "_verify.spec.ts",
+              "line": 2378,
+              "column": 7
+            },
+            {
+              "title": "Sum 체크박스(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 279,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:23.503Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2cf324c1ba570f193d1b",
+              "file": "_verify.spec.ts",
+              "line": 2390,
+              "column": 7
+            },
+            {
+              "title": "숫자 표시 형식(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 288,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:26.616Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-55a05f296b0443f278f3",
+              "file": "_verify.spec.ts",
+              "line": 2401,
+              "column": 7
+            },
+            {
+              "title": "문서 표시 문구(H5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 296,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:29.611Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c895e0257bc8dd85a04c",
+              "file": "_verify.spec.ts",
+              "line": 2410,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 3900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 784818,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 10:29:36\n"
+                        },
+                        {
+                          "text": "[langlock] SCP0020 시나리오: 다른 화면 E2E 실행 중(SCP0016) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] CN 언어 조회 건수 총/건 표기' 시작 10:37:41\n"
+                        },
+                        {
+                          "text": "[langlock] SCP0020 시나리오: 다른 화면 E2E 실행 중(SCP0016) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 조회 중 Loading 토스트 없음' 시작 10:38:04\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 선택 행 위로 Insert' 시작 10:38:14\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 기존 행 Delete → D 저장 요청' 시작 10:38:25\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 셀 콤보 후보 = 서버 콤보 LineByPlantPacker' 시작 10:38:39\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 10:38:52\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 10:39:04\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 10:39:17\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 10:39:29\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] LINE_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 10:39:41\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 10:39:57\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 10:40:07\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 10:40:18\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 10:40:28\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 10:40:39\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] USE_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 10:40:49\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] YIELD 소수 2자리 저장 요청 유지' 시작 10:40:59\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] TACT_TIME 소수 4자리 저장 요청 유지' 시작 10:41:15\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] UOM_CONVERT_VALUE 소수 2자리 저장 요청 유지' 시작 10:41:30\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 기존 행 PRIORITY 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 10:41:40\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0' 시작 10:41:54\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 조회조건 콤보 4종 = 콤보' 시작 10:42:08\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] TACT_TIME_START_DATE 없는 날짜 저장 차단' 시작 10:42:13\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] TACT_TIME_END_DATE 없는 날짜 저장 차단' 시작 10:42:18\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0020 '[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I' 시작 10:42:22\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:29:32.619Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b384fadc109cace0f20f",
+              "file": "_verify.spec.ts",
+              "line": 2423,
+              "column": 7
+            },
+            {
+              "title": "0 표시 규칙(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 295,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:42:40.853Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5a9ba204d7d1c3121d4d",
+              "file": "_verify.spec.ts",
+              "line": 2670,
+              "column": 7
+            },
+            {
+              "title": "문서 조건별 버튼·컬럼 노출(K4·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 308,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:42:43.940Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-75b45269040c9f4e2635",
+              "file": "_verify.spec.ts",
+              "line": 2677,
+              "column": 7
+            },
+            {
+              "title": "셀 편집 표시·값 유지(A2·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14001,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:42:47.094Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d847e2c0a4b448b48636",
+              "file": "_verify.spec.ts",
+              "line": 2684,
+              "column": 7
+            },
+            {
+              "title": "재조회 하위 시트 초기화(A4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 308,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:43:03.807Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-022f5b7e8ceb5afc6a15",
+              "file": "_verify.spec.ts",
+              "line": 2711,
+              "column": 7
+            },
+            {
+              "title": "월 Bucket 합계(F1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 297,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:43:07.056Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-479f2fa1d5f60086c81a",
+              "file": "_verify.spec.ts",
+              "line": 2723,
+              "column": 7
+            },
+            {
+              "title": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 33277,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:43:10.120Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f322cb341746eadc5961",
+              "file": "_verify.spec.ts",
+              "line": 2749,
+              "column": 7
+            },
+            {
+              "title": "그리드 표시 묶음(N1·H8·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7952,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:43:46.178Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-581dc79f21605f322077",
+              "file": "_verify.spec.ts",
+              "line": 2789,
+              "column": 7
+            },
+            {
+              "title": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3943,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:43:56.929Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0b602c9071e8e15c074f",
+              "file": "_verify.spec.ts",
+              "line": 2800,
+              "column": 7
+            },
+            {
+              "title": "선택 조회 복수·단일·전체 왕복(G2·B6)",
               "ok": true,
               "tags": [
                 "verify"
@@ -674,22 +2936,204 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 43583,
+                      "duration": 55105,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:37:17.269Z",
+                      "startTime": "2026-11-14T01:44:03.705Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
                   "status": "expected"
                 }
               ],
-              "id": "d557cdbda6ec1bc6afb1-df39725a348fb0471e89",
+              "id": "d557cdbda6ec1bc6afb1-ef292b9303aab3a9ac28",
               "file": "_verify.spec.ts",
-              "line": 535,
+              "line": 2814,
+              "column": 7
+            },
+            {
+              "title": "Excel 다운로드 내용(H7)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9014,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:45:01.554Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7daa70e0418b5433ad17",
+              "file": "_verify.spec.ts",
+              "line": 2856,
+              "column": 7
+            },
+            {
+              "title": "필터 유지 재조회(K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15787,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:45:13.398Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5a20ccbbff683fa1c201",
+              "file": "_verify.spec.ts",
+              "line": 2873,
+              "column": 7
+            },
+            {
+              "title": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14381,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:45:31.940Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f394301e2b5a679dc75a",
+              "file": "_verify.spec.ts",
+              "line": 2905,
+              "column": 7
+            },
+            {
+              "title": "주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 301,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:45:49.159Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ef91b307fe0801a2f68c",
+              "file": "_verify.spec.ts",
+              "line": 3018,
+              "column": 7
+            },
+            {
+              "title": "권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 305,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T01:45:52.378Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-64acba4ffb065fa81428",
+              "file": "_verify.spec.ts",
+              "line": 3087,
               "column": 7
             },
             {
@@ -708,13 +3152,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 29282,
+                      "duration": 20326,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:38:09.612Z",
+                      "startTime": "2026-11-14T01:45:55.472Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -723,7 +3169,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d2dd56e6f85415dce91c",
               "file": "_verify.spec.ts",
-              "line": 1085,
+              "line": 3118,
               "column": 7
             },
             {
@@ -742,13 +3188,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 42720,
+                      "duration": 16800,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:38:48.580Z",
+                      "startTime": "2026-11-14T01:46:18.617Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -757,7 +3205,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ea4879cec1d56f49f584",
               "file": "_verify.spec.ts",
-              "line": 1119,
+              "line": 3161,
               "column": 7
             },
             {
@@ -776,13 +3224,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 21692,
+                      "duration": 11409,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:39:40.023Z",
+                      "startTime": "2026-11-14T01:46:38.153Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -791,7 +3241,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-28f24455801510077bfc",
               "file": "_verify.spec.ts",
-              "line": 1255,
+              "line": 3305,
               "column": 7
             },
             {
@@ -810,13 +3260,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 22767,
+                      "duration": 15564,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:40:13.271Z",
+                      "startTime": "2026-11-14T01:46:52.331Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -825,7 +3277,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-08425bcb970dbca878a2",
               "file": "_verify.spec.ts",
-              "line": 1360,
+              "line": 3414,
               "column": 7
             },
             {
@@ -844,13 +3296,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 62479,
+                      "duration": 47394,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:40:45.000Z",
+                      "startTime": "2026-11-14T01:47:10.730Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -859,7 +3313,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-f43f649c4f6bb863ad63",
               "file": "_verify.spec.ts",
-              "line": 1411,
+              "line": 3466,
               "column": 7
             },
             {
@@ -878,13 +3332,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20282,
+                      "duration": 25642,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:41:56.590Z",
+                      "startTime": "2026-11-14T01:48:00.921Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -893,7 +3349,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-49c20a406012862bd46d",
               "file": "_verify.spec.ts",
-              "line": 1534,
+              "line": 3601,
               "column": 7
             },
             {
@@ -912,13 +3368,15 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 34466,
+                      "duration": 20805,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-29T22:42:25.434Z",
+                      "startTime": "2026-11-14T01:48:29.378Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -927,7 +3385,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-67bbd7da846851f4a18b",
               "file": "_verify.spec.ts",
-              "line": 1604,
+              "line": 3695,
               "column": 7
             }
           ]
@@ -937,9 +3395,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-29T22:21:37.942Z",
-    "duration": 1296521.817,
-    "expected": 25,
+    "startTime": "2026-11-14T01:00:23.537Z",
+    "duration": 2920015.232,
+    "expected": 79,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

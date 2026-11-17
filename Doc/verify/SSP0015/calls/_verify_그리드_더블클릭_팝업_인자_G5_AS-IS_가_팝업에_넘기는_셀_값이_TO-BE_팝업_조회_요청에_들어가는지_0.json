@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 182,
+  "at": "2026-11-14T12:51:21.817Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 400,
+  "at": "2026-11-14T12:51:21.857Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261010\",\"endYyyymmdd\":\"20261110\"}",
+  "status": 200,
+  "rows": 42,
+  "dur": 113,
+  "at": "2026-11-14T12:51:24.694Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "GET_SHIPMENT_PSI_COMMENTS",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"planStartYyyymmdd\":\"20261010\",\"fromSite\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261110\"}",
+  "status": 200,
+  "rows": 41,
+  "dur": 253,
+  "at": "2026-11-14T12:51:24.833Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0015",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0015/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"\",\"itemId\":\"\",\"planStartYyyymmdd\":\"20261010\",\"planType\":\"SP\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261110\",\"userId\":\"minyonglee1\",\"myModelChk\":\"N\",\"programId\":\"SSP0015\",\"sheetName\":\"Shipment PSI(Mobility & IT)\",\"debugMode\":\"F\",\"seq\":\"1\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\",\"nonChk\":\"Y\",\"delegateeChk\":\"N\"}",
+  "status": 200,
+  "rows": 131,
+  "dur": 2074,
+  "at": "2026-11-14T12:51:26.637Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ }
+]

@@ -1,0 +1,257 @@
+{
+ "id": "SCP0028",
+ "dry": false,
+ "name": "update",
+ "scenario": {
+  "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+  "pk": [
+   "DIVISION_ID",
+   "OPERATION_GROUP",
+   "FROM_SITE",
+   "TO_SITE",
+   "ITEM_ID",
+   "TRANSPORT_MODE"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "FROM_SITE": "FROM_SITE",
+   "TO_SITE": "TO_SITE",
+   "ITEM_ID": "ITEM_ID",
+   "TRANSPORT_MODE": "TRANS_MODE_CODE"
+  },
+  "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+  "basis": "SCP0028_Shipment_Lot_Size.cs:575 SaveData · :659 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE · SP 원문(MERGE: 있으면 UPDATE·없으면 INSERT / DELETE · SCP_MST_SHIPMENT_LOT_SIZE PK 6컬럼 · 트리거 0 — 11-13 실측) · 저장 SP 가 PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST 로 SCP_MST_SHIPMENT_LOT_SIZE_H 에 이력 1행을 덧붙임(11-13 18:0x 실측)",
+  "side": [
+   {
+    "table": "SCP_MST_SHIPMENT_LOT_SIZE_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "name": "update",
+  "title": "DB 에 있는 행의 Lot Size 수정(MERGE 의 UPDATE 경로)",
+  "pick": {
+   "col": "LOT_SIZE",
+   "nonempty": true
+  },
+  "edit": {
+   "col": "LOT_SIZE",
+   "db_col": "LOT_SIZE",
+   "rule": "plus1"
+  },
+  "expect_before": 1
+ },
+ "at": "2026-11-13 18:06:48",
+ "status": "OK",
+ "steps": [],
+ "grid_row": {
+  "index": 3,
+  "values": {
+   "Action": "",
+   "COLMERGE": "X",
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP_ID": "Cell",
+   "FROM_SITE_DESCRIPTION": "LGESOC Cell HQ07",
+   "TO_SITE_DESCRIPTION": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "NICK_NAME": "E65D",
+   "TRANS_MODE_NAME": "SEA",
+   "LOT_SIZE": "12,800",
+   "INCREMENT": "12,800",
+   "VALID_YN": "Y",
+   "SPLIT_YN": "N",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "TRANS_MODE_CODE": "SEA"
+  }
+ },
+ "where": {
+  "DIVISION_ID": "81",
+  "FROM_SITE": "HQ07-A",
+  "TO_SITE": "Club Car_US_AGS",
+  "ITEM_ID": "ACEP2065I-B1",
+  "TRANSPORT_MODE": "SEA"
+ },
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ],
+ "edit": {
+  "col": "LOT_SIZE",
+  "old": "12800",
+  "new": "12801"
+ },
+ "edit_mode": true,
+ "cell": {
+  "ok": true,
+  "error": null,
+  "before": "12,800",
+  "after": "12,801",
+  "action_before": "",
+  "action_after": "M",
+  "locked": false,
+  "entered": true,
+  "how": "edit",
+  "is_change": true,
+  "edit_error": null
+ },
+ "save_wait": [
+  {
+   "at": "18:07:31",
+   "sid": 63,
+   "status": "running",
+   "wait": null,
+   "wait_ms": 0,
+   "blocked_by": 0,
+   "elapsed_ms": 715,
+   "tran": 0,
+   "stmt": "set @retVal = (select max(SITE_DESCRIPTION) from SCM_MST_SITE where 1=1 -- DIVISION_ID = @str1 and SCM_SITE_ID = @str2 group by SCM_SI",
+   "proc": "FN_GET_SCM_SITE_DESCRIPTION",
+   "blocker_sql": "",
+   "blocker": null,
+   "until": "18:07:33",
+   "elapsed_ms_last": 2738
+  }
+ ],
+ "save_timeout": false,
+ "save_call": [
+  {
+   "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_operation_group": "A",
+    "p_from_site": "HQ07-A",
+    "p_to_site": "Club Car_US_AGS",
+    "p_item_id": "ACEP2065I-B1",
+    "p_transport_mode": "SEA",
+    "p_lot_size": "12801",
+    "p_increment": "12800",
+    "p_split_yn": "N",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "rows": 1,
+   "ms": 5.21
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "1개의 데이터가 저장되었습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null
+ },
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12801,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2026-11-13 18:07:26.403",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ],
+ "restore_sql": [
+  {
+   "sql": "UPDATE SCP_MST_SHIPMENT_LOT_SIZE SET LOT_SIZE = ?, INCREMENT…",
+   "key": [
+    "81",
+    "A",
+    "HQ07-A",
+    "Club Car_US_AGS",
+    "ACEP2065I-B1",
+    "SEA"
+   ],
+   "rows": 1
+  }
+ ],
+ "side_cleanup": [
+  {
+   "table": "SCP_MST_SHIPMENT_LOT_SIZE_H",
+   "key": [
+    1390
+   ],
+   "rows": 1
+  }
+ ],
+ "db_restored": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ]
+}

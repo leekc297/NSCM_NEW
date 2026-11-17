@@ -1,15 +1,15 @@
 import { PeriodField } from 'features/master/src/components';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
-import dayjs from '@foundation/dayjs';
 import type { ComboParam, ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
   ALL,
@@ -67,15 +67,16 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
     divisionId: sc.divisionIds.join(','),
   };
 
-  // Period 기본구간 — AS-IS GetDayRange(cs:588-608): SCM0001_GET_SCP_DAY_PERIOD(@fromDate=오늘, @offsetDay='55',
-  //   @timeZone=''(TO-BE 세션 미보유)). fromDate 를 마운트당 1회 고정해 콤보 재발사·깜빡임을 막는다.
-  const today = useMemo(() => dayjs().format('YYYYMMDD'), []);
+  // Period 기본구간 — AS-IS GetDayRange(cs:588-608): SCM0001_GET_SCP_DAY_PERIOD(@fromDate=''(서버가 timezone
+  //   으로 '오늘' 산출), @offsetDay='55', @timeZone=sessionTimeZone(session) 사용자 등록 timezone). 종전 fromDate=
+  //   클라 dayjs today + timeZone='' 는 브라우저 timezone 의존이라 비-KST 사용자 날짜경계 오차(2026-11-12 교정).
+  const tmzCd = sessionTimeZone(useSessionStore(state => state.session));
   const dayPeriodFilter: ComboParam = {
     comboId: COMBO.DAY_PERIOD,
     mnuId: MENU_ID,
-    fromDate: today,
+    fromDate: '',
     offsetDay: String(PERIOD_BUSINESS_DAYS),
-    timeZone: '',
+    timeZone: tmzCd,
   };
 
   const [divisions, fromSites, dayPeriod] = useTabComboQueries({

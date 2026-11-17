@@ -1,5 +1,5 @@
 {
- "at": "2026-11-07T10:53:02.443Z",
+ "at": "2026-11-14T09:31:44.712Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -23953,6 +23953,27 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0131\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlanGroup\",\"mnuId\":\"SCP0131\"}",
    "status": 200,
    "n": 46,
@@ -24145,27 +24166,6 @@
     {
      "c": "PG0058",
      "v": "Test"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0131\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
     }
    ],
    "user": "minyonglee1"

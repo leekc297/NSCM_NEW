@@ -1,21 +1,21 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-07T20:32:27+09:00",
+ "ts": "2026-11-14T19:46:38+09:00",
  "producer": "run_verify",
  "id": "SCP0131",
  "skip_e2e": false,
- "started": "2026-11-07 19:43:07",
+ "started": "2026-11-14 18:23:41",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-c8cd860a",
-   "class": "G3",
+   "id": "V-a98bdc43",
+   "class": "K3",
    "msg": "SCP0131 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약"
+     "ref": "E2E @verify @11-14 19:45"
     }
    ],
    "grade": "hard"
@@ -27,31 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-07 20:27"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-2bcf7fcf",
-   "class": "E7",
-   "msg": "Sales Site Priority.ITEM_ID (Model*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-07 20:27"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-8e911390",
-   "class": "E7",
-   "msg": "Sales Site Priority.ITEM_ID (Model*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-07 20:27"
+     "ref": "E2E @verify 시나리오 @11-14 19:45"
     }
    ],
    "grade": "hard"
@@ -63,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-07 20:27"
+     "ref": "E2E @verify @11-14 19:45"
     }
    ],
    "grade": "hard"
@@ -75,7 +51,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-07 20:27"
+     "ref": "E2E @verify @11-14 19:45"
     }
    ],
    "grade": "hard"
@@ -88,6 +64,30 @@
     {
      "kind": "exec",
      "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-05281e8f",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 19:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-89f91e1c",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 19:45"
     }
    ],
    "grade": "hard"
@@ -165,35 +165,39 @@
    "grade": "hard"
   }
  ],
- "warnings": [],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 G3 — Doc/verify/SCP0131/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
  "summary": {
-  "rows": 1837,
-  "PASS": 782,
+  "rows": 1846,
+  "PASS": 736,
   "FAIL": 13,
-  "판정필요": 18,
-  "미검증": 88,
-  "해당없음": 936,
+  "판정필요": 16,
+  "미검증": 300,
+  "해당없음": 781,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1211,
-   "없음(미검증)": 88,
-   "사람": 2,
-   "없음(판정 대기)": 18,
-   "기계(상속·집계)": 516,
-   "출처 미기록": 2
+   "기계": 979,
+   "사람": 3,
+   "없음(미검증)": 300,
+   "없음(판정 대기)": 16,
+   "기계(상속·집계)": 547,
+   "출처 미기록": 1
   },
   "fail_listed": 13,
   "coverage": {
    "rules": 90,
-   "measured": 503,
-   "not_run_error": 63,
-   "na": 309,
-   "suspect_na100": []
+   "measured": 506,
+   "not_run_error": 194,
+   "na": 213,
+   "suspect_na100": [
+    "G3"
+   ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0131_SalesSitePriority_CheckList_v11.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0131_SalesSitePriority_ActionItemList_v11.xlsx"
+  "CheckList": "Doc/CheckList/SCP0131_SalesSitePriority_CheckList_v14.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0131_SalesSitePriority_ActionItemList_v14.xlsx"
  },
  "evidence": [
   {
@@ -205,5 +209,5 @@
    "ref": "Doc/verify/SCP0131/e2e_results.json"
   }
  ],
- "note": ""
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 G3 — Doc/verify/SCP0131/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

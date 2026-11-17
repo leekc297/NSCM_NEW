@@ -1,0 +1,4 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+GSCM_USERINFO-S647e0b,AUTH,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.MyGroupID)),
+GSCM_USERINFO-S27abc5,AUTH,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.MyGroupID)) ▸ if (dt.Rows.Count > 0),
+GSCM_USERINFO-S60b7fd,AUTH,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.MyGroupID)) ▸ else of (dt.Rows.Count > 0),

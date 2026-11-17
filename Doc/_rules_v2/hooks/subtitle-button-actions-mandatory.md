@@ -25,7 +25,7 @@
 | **F7** | `save` | **`false`(숨김)** — 2026-10-26 이전: no-op 노출 | Save(F7) | ⭐⭐ **화면 의무** — 저장 기능이 있을 때만 핸들러 |
 | **F8** | `insert` | **`false`(숨김)** — 2026-10-26 이전: `GridAction.addRow(grid, {})` | Insert(F8) | ⭐⭐ **화면 의무** — 행추가 기능이 있을 때만 핸들러(`GridAction.addRow(grid, {기본값})`) |
 | **F9** | `delete` | **`false`(숨김)** — 2026-10-26 이전: `GridAction.removeRow(grid)` + MSG00014 | Delete(F9) | ⭐⭐ **화면 의무** — 행삭제 기능이 있을 때만 핸들러(`GridAction.removeRow(grid)`) |
-| **F10** | `resetCondition` | confirm MSG00009 → `GridAction.resetPersonalizedCondition(menuId)` + storage reset → MSG00011 | Reset Condition(F10) | ⭐ **자동** (구현 0) |
+| **F10** | `resetCondition` | confirm MSG00009 → `GridAction.resetPersonalizedCondition(menuId)`(서버 저장본만 삭제 · 화면 조회조건 값은 유지) → MSG00011 (2026-11-13 정정: "+ storage reset" 삭제 — CR-094. 화면 초기화는 `resetConditionOnClient` 를 켠 화면만) | Reset Condition(F10) | ⭐ **자동** (구현 0) |
 | (Hotkey 없음) | `excel` | `GridAction.excelDownload(grid, excelFileName, setProgress)` | (아이콘만) | ⭐ **자동** (`excelFileName` prop 의무) |
 | (Hotkey 없음) | `upload` | (default 없음) | (아이콘만) | 선택 (`upload: false` 또는 화면 구현) |
 
@@ -57,13 +57,13 @@ const hotkeyConfig: HotkeyConfig = {
   search: () => { setFilters(); void fetchStaticColumns(); },
   save: handleSave,
 
-  // ⭐ insert default 가 빈 row 라 권장 default 주입
+  // ⭐ insert 는 기본 숨김(2026-10-26 · CR-070) — 행추가 기능이 있는 화면만 핸들러를 준다(권장 default 주입)  (2026-11-13 정정: "default 가 빈 row" 삭제)
   insert: () => GridAction.addRow(gridRefs[activeTab].current, {
     DIVISION_ID: filters?.divisionId ?? '81',  // ← 화면 default 주입
   }),
 
-  // ⭐ delete 는 default 그대로면 생략 가능 — 또는 분기 시 override
-  delete: () => GridAction.removeRow(gridRefs[activeTab].current, true),  // true = hard delete
+  // ⭐ delete 도 기본 숨김(2026-10-26 · CR-070) — 행삭제 기능이 있는 화면만 핸들러를 준다(생략 = 버튼 없음)  (11-13 정정)
+  delete: () => GridAction.removeRow(gridRefs[activeTab].current, true),  // true = deleteOnlyNew(신규행만 제거·기존행 D 표시 안 함 — Active 관리 화면 CR-057). 기존행을 D 표시 후 Save 로 삭제하는 화면은 둘째 인자 생략(CR-085)  (2026-11-13 정정: "true = hard delete" → 실제 인자 뜻, gridAction.ts removeRow)
 
   // ⭐ 비활성화 (버튼 + 단축키 모두 제거)
   manual: false,
@@ -118,7 +118,7 @@ const hotkeyConfig: HotkeyConfig = {
   gridFilter={gridFilterRef}             // ⭐ filter 토글 의 FlexGridFilter
   dataCount={data?.main?.length ?? 0}    // ⭐ 표시 카운트
   excelFileName='Sales Site'             // ⭐ excel 다운로드 파일명 (필수 — 미주입 시 'Excel File' fallback)
-  hotkeyConfig={hotkeyConfig}            // ⭐ 화면 의무 5 항목 + 비활성화
+  hotkeyConfig={hotkeyConfig}            // ⭐ 화면 의무 4 항목 + 비활성화  (2026-11-13 정정: 5 → 4 — §1.1 search/save/insert/delete)
   searchParam={searchParams}             // ⭐ condition (F6) 의 개인화 저장 payload
 />
 ```
@@ -132,7 +132,7 @@ const hotkeyConfig: HotkeyConfig = {
 | `gridFilter` | ✅ | filter (F4) 토글 의 FlexGridFilter ref |
 | `dataCount` | ✅ | 표시 카운트 (0 시 미표시) |
 | `excelFileName` | ✅ | Excel 다운로드 파일명 |
-| `hotkeyConfig` | ✅ | 5 의무 액션 + 비활성화 |
+| `hotkeyConfig` | ✅ | 4 의무 액션 + 비활성화 (11-13 정정: 5 → 4) |
 | `searchParam` | ✅ | F6 개인화 저장 payload (`Record<string, string>`) |
 | `useHotkey` | – | default `true` (F1~F10 자동) |
 | `visible` | – | default `true` |
@@ -145,15 +145,15 @@ const hotkeyConfig: HotkeyConfig = {
 
 | 요청 | hotkeyConfig | 단축키 | 자동? | 화면 의무 코드 |
 |---|---|:-:|:-:|---|
-| **추가** | `insert` | F8 | 자동 (빈 row) | `() => GridAction.addRow(gridRef.current, { DIVISION_ID: filters?.divisionId ?? '81' })` (권장 default 주입) |
-| **삭제** | `delete` | F9 | ✅ 자동 (default OK) | 생략 또는 `() => GridAction.removeRow(gridRef.current, true)` (hard delete 시) |
+| **추가** | `insert` | F8 | ⭐ 의무 — 생략 = 숨김(2026-10-26 · CR-070) (11-13 정정: "자동 (빈 row)" 삭제) | `() => GridAction.addRow(gridRef.current, { DIVISION_ID: filters?.divisionId ?? '81' })` (권장 default 주입) |
+| **삭제** | `delete` | F9 | ⭐ 의무 — 생략 = 숨김(2026-10-26 · CR-070) (11-13 정정) | `() => GridAction.removeRow(gridRef.current)` 또는 `() => GridAction.removeRow(gridRef.current, true)` (신규행만 제거 — Active 관리 화면 CR-057 시) (11-13 정정: "hard delete 시") |
 | **저장** | `save` | F7 | ⭐ 의무 | `handleSave = () => { const saveData = ...filter(CRUD_TYPE); saveWithValidation(saveData, staticColumns.X, mutate); }` |
 | **Sort** | `sort` | F3 | ✅ 자동 | 생략 (DefaultButtonActions = `GridAction.toggleColumnSort`) |
 | **Filter** | `filter` | F4 | ✅ 자동 | 생략 (DefaultButtonActions = `GridAction.toggleColumnFilter`) |
 | **Condition** (조회조건 저장) | `condition` | F6 | ✅ 자동 + `searchParam` prop 의무 | 생략 (DefaultButtonActions = `GridAction.personalizeCondition(menuId, searchParam) + MSG00010`) |
-| **Reset Condition** | `resetCondition` | F10 | ✅ 자동 (MSG00009 confirm + MSG00011 alert) | 생략 (DefaultButtonActions = `GridAction.resetPersonalizedCondition(menuId)` + `useMotherStore.reset()`) |
+| **Reset Condition** | `resetCondition` | F10 | ✅ 자동 (MSG00009 confirm + MSG00011 alert) | 생략 (DefaultButtonActions = `GridAction.resetPersonalizedCondition(menuId)` — 서버 저장본만 삭제, 화면 조회조건 값 유지) (11-13 정정: `+ useMotherStore.reset()` 삭제 — CR-094) |
 
-→ **7 요청 중 5 (sort/filter/condition/resetCondition/delete) 는 화면 코드 0 line** 으로 표준 동작. 화면 의무 = `insert` default 주입 + `save` 구현 2 항목.
+→ **7 요청 중 4 (sort/filter/condition/resetCondition) 는 화면 코드 0 line** 으로 표준 동작. 화면 의무 = 기능이 있는 화면에 한해 `insert` · `delete` · `save` 핸들러 3 항목. (2026-11-13 정정: 5 → 4 · delete 를 의무 쪽으로 — §1 표 2026-10-26 기본 숨김 · CR-070. ⚠ 공용 `SubTitle.tsx:211-228` 의 기본 동작은 아직 살아 있어 코드와 이 룰이 다르다 — 코드 정합은 별도 확인 대상)
 
 ---
 
@@ -169,7 +169,7 @@ const hotkeyConfig: HotkeyConfig = {
 | 6 | `excelFileName` 누락 | Excel 다운로드 시 'Excel File' fallback (의미 없는 파일명) |
 | 7 | `searchParam` 누락 | F6 condition 동작 안 함 (early return) |
 | 8 | `grid` / `gridFilter` ref 미주입 (raw `useRef<FlexGrid>()` 안 주입) | sort/filter/excel/insert/delete 모두 미동작 |
-| 9 | `delete` 를 화면별 `splice` 로 override | EditTracker / CRUD_TYPE='D' 누락 — `GridAction.removeRow(grid, true)` 만 (메모리 #60 §5.2) |
+| 9 | `delete` 를 화면별 `splice` 로 override | EditTracker / CRUD_TYPE='D' 누락 — `GridAction.removeRow(grid, true)` 만 (메모리 #60 §5.2) (11-13 정정: 둘째 인자 `true` = 신규행만 제거 — 기존행 `CRUD_TYPE='D'` 표시가 필요한 화면은 인자 생략 `removeRow(grid)`, CR-085) |
 | 10 | `save` 호출 시 `useSaveWithValidation` 미사용 (raw `mutate` 호출) | 필수값 검증 누락 → ORA-01400 (MSG00013 미표시) |
 | 11 | `save` 시 `staticColumns` 미주입 | `useSaveWithValidation` 의 `checkMandatoryColumns` 가 무력화 → 필수값 검증 0 |
 | 12 | `hotkeyConfig.search` 미정의 (default alert 잔존) | F5 누를 때 "검색은 화면별로 구현하세요" alert — 사용자 경험 깨짐 |
@@ -184,7 +184,7 @@ const hotkeyConfig: HotkeyConfig = {
 [ ] 2.  hotkeyConfig.search 정의 (default alert 회피)?
 [ ] 3.  hotkeyConfig.save 정의 + useSaveWithValidation(saveData, staticColumns.X, mutate)?
 [ ] 4.  hotkeyConfig.insert 정의 + GridAction.addRow(grid, { ...권한 default })?
-[ ] 5.  hotkeyConfig.delete — 생략 (자동) 또는 GridAction.removeRow(grid, true)?
+[ ] 5.  hotkeyConfig.delete — 삭제 기능이 있으면 GridAction.removeRow(grid[, true]) 핸들러 명시, 없으면 생략(= 숨김)?   (11-13 정정: "생략 (자동)" 삭제 — CR-070)
 [ ] 6.  manual / upload — false (비활성화) 명시?
 [ ] 7.  sort / filter / condition / resetCondition / excel — 생략 (자동)?
 [ ] 8.  excelFileName prop 명시 (Excel 다운로드 의미 있는 이름)?

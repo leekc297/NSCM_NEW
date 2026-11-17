@@ -37,13 +37,14 @@ export const {PascalName} = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setFilters = useStore(state => state.setFilters);
   const initialized = useStore(state => state.initialized);
   const fetchStaticColumns = useStore(state => state.fetchStaticColumns);
-  const staticColumn = useStore(state => state.staticColumn);
+  const staticColumns = useStore(state => state.staticColumns);     // 2026-11-13 정정: staticColumn(단수) → staticColumns (00 §8 #3 정준형 · 단수는 DMF0006 기존 일탈)
   const searchParams = useStore(state => state.searchParams);
-  const isOpenSearchArea = useStore(state => state.isOpenSearchArea);
+  const openSearchArea = useStore(state => state.openSearchArea);   // 2026-11-13 정정: isOpenSearchArea → openSearchArea (00 §8 #2 정준형)
   const setOpenSearchArea = useStore(state => state.setOpenSearchArea);
   
   // [3] Hook (useTabProcQuery / useProcMutation / useSaveWithValidation)
   const { saveWithValidation } = useSaveWithValidation();
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });   // 11-13 정정: 버튼 권한 (아래 hotkeyConfig)
   
   const { data } = useTabProcQuery<MENU_ID>({
     menuId: MENU_ID,
@@ -64,20 +65,22 @@ export const {PascalName} = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleDelete = () => { ... };
   const handleSave = () => { ... };
   
-  // [5] useEffect (initialized check)
-  useEffect(() => {
-    if (!initialized) void fetchStaticColumns();
-  }, [tabId]);
-  
-  // [6] hotkeyConfig (manual: false, upload: false 의무)
+  // [5] hotkeyConfig (manual: false, upload: false 의무) — useEffect 보다 먼저
+  //     (2026-11-13 정정 ①: 블록 순서 useEffect → hotkeyConfig 를 hotkeyConfig → useEffect 로 — 00 §3.3 10)·§8 #5 정준형, DMF0004/0005 실제 순서)
+  //     (2026-11-13 정정 ②: insert/delete/save 하드코딩 → hasButton(BTN_CD) 조건부 — 룰 09 2026-06-12 결정 · SalesSite.tsx hotkeyConfig)
   const hotkeyConfig: HotkeyConfig = {
-    insert: handleInsert,
-    delete: handleDelete,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     search: setFilters,
-    save: handleSave,
+    save: hasButton('SAVE') ? handleSave : false,
     manual: false,
     upload: false,
   };
+  
+  // [6] useEffect (initialized check)
+  useEffect(() => {
+    if (!initialized) void fetchStaticColumns();
+  }, [tabId]);
   
   // [7] JSX (MainTitle → Form → SubTitle → Grid 순서 의무)
   return (
@@ -336,7 +339,7 @@ const hotkeyConfig: HotkeyConfig = {
 ### §3.7 한 컴포넌트 200 lines 초과 / 진입 페이지 inline JSX
 
 **금지**:
-- 한 `.tsx` 파일이 200 lines 초과 (권장) / **400 lines 초과 (강제)**
+- 한 `.tsx` 파일이 200 lines 초과 (권장) / **400 lines 초과 (강제)** (2026-11-13 정정: 진입 페이지(`{PascalName}.tsx`)의 권장 한도는 **300 lines** · 강제 400 — 01 §1.5.1 과 통일. 200 권장은 Form/Grid 등 하위 컴포넌트 파일에 해당)
 - 진입 페이지 안 `<FlexGrid>` / `<DataGrid>` / `<CustomDialog>` / `<Dialog>` JSX **직접 정의** (DMF0008 사고 2026-06-09)
 
 **의무**: sub-component 로 분리 (Form / Grid / Modal 등) — 룰 01 §1.5 + hook `components-folder-pattern.md` 참조.
@@ -369,7 +372,7 @@ awk '/<MainTitle/{print NR ": MainTitle"} /<SubTitle/{print NR ": SubTitle"}' fe
 # MainTitle line < SubTitle line
 
 # 7. 파일 라인 수
-wc -l features/{domain}/src/pages/{screen}/{Name}.tsx  # ≤ 250 권장
+wc -l features/{domain}/src/pages/{screen}/{Name}.tsx  # ≤ 300 권장 · 400 초과 금지 (11-13 정정: 250 → 300 — 01 §1.5.1 과 통일)
 ```
 
 ---
@@ -396,8 +399,8 @@ wc -l features/{domain}/src/pages/{screen}/{Name}.tsx  # ≤ 250 권장
 
 | 패턴 | reference |
 |---|---|
-| 최소 구조 (single sheet) | `CustomerModelMapping.tsx` (100 lines) |
-| 최대 구조 (4 sheet) | `SalesSite.tsx` (223 lines) |
+| 최소 구조 (single sheet) | `CustomerModelMapping.tsx` (100 lines — 11-13 실측 201 lines) |
+| 최대 구조 (4 sheet) | `SalesSite.tsx` (223 lines — 11-13 실측 412 lines · 강제 400 초과 상태) |
 | Panel 분할 | `SalesSiteProjectModel.tsx:132-151` |
 | Tab navigation | `SalesSite.tsx:193-218`, `CustomerFcstMaster.tsx:213-234` |
 | Dynamic column | `CustomerFcstMaster.tsx:81-174` |

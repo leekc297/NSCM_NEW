@@ -1,0 +1,112 @@
+{
+ "id": "SCP0101",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP",
+    "SCP0101_GET_INVENTORY_TREND"
+   ],
+   "scenarios": [
+    "SCP0101-S6e3e4a",
+    "SCP0101-S96bd28",
+    "SCP0101-Sfe4c05",
+    "SCP0101-S82ba8f",
+    "SCP0101-S74a89a",
+    "SCP0101-Sdc9973",
+    "SCP0101-S0116d8",
+    "SCP0101-S57c68a",
+    "SCP0101-Seda5e7",
+    "SCP0101-Sf17793",
+    "SCP0101-Sf8a013",
+    "SCP0101-S7b3573"
+   ]
+  },
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0101-S647918",
+    "SCP0101-S6c43db"
+   ]
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0101-S6e3e4a"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0101-S647918",
+    "SCP0101-S6c43db"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:02:07.521",
+ "fills": 0,
+ "fill_left": []
+}

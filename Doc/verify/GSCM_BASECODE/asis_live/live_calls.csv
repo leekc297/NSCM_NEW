@@ -1,0 +1,9 @@
+﻿seq,at,phase,service,foxquery_id,sp,framework,exec_type,rows,rows_kind,ms,params
+1,2026-11-12 21:08:28.828,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetGSCMSecurityACL,UP_FX_GetGSCMSecurityACL,Y,ExecuteDataSet,1,DataSet rows,3.44,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0107""}"
+2,2026-11-12 21:08:28.851,load,GSCM.BizService.WSL,,SELECT *,,ExecuteDataSet,874,DataSet rows,17.93,"{""USER_ID"": """"}"
+3,2026-11-12 21:08:29.792,load,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,733.39,"{""MenuID"": ""Code"", ""CnntCode"": ""0104001"", ""UserID"": ""jaeuk.shin""}"
+4,2026-11-12 21:08:30.273,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetSearchCondition,UP_FX_GetSearchCondition,Y,ExecuteDataSet,0,DataSet rows,2.75,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0107""}"
+5,2026-11-12 21:08:30.447,load,GSCM.SystemMgmt.WSL,SystemManager.UP_FX_GetBaseCodeList,UP_FX_GetBaseCodeList,Y,ExecuteDataSet,2,DataSet rows,1432.88,"{""Level"": ""1"", ""BaseCode"": """"}"
+6,2026-11-12 21:08:38.716,find,GSCM.SystemMgmt.WSL,SystemManager.UP_FX_GetBaseCodeList,UP_FX_GetBaseCodeList,Y,ExecuteDataSet,2,DataSet rows,2.92,"{""Level"": ""1"", ""BaseCode"": """"}"
+7,2026-11-12 21:09:09.757,find,GSCM.SSP.Plan.WSL,SSP.SSP0045_GET_SHIPMENT_REQUEST,SSP0045_GET_SHIPMENT_REQUEST,,ExecuteDataSet,0,DataSet rows,597541.98,"{""p_division_id"": ""40"", ""p_operation_group"": ""P"", ""p_scm_site_id"": """", ""p_item_id"": """", ""p_from_yyyymmdd"": ""20261112"", ""p_to_yyyymmdd"": ""20270106"", ""p_program_id"": ""SSP0045"", ""p_sheet_name"": ""Shipment Request"", ""p_user_id"": ""jaeuk.shin"", ""debug_mode"": ""F""}"
+8,2026-11-12 21:09:09.938,find,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,6.28,"{""MenuID"": ""Code"", ""CnntCode"": ""0104002"", ""UserID"": ""jaeuk.shin""}"

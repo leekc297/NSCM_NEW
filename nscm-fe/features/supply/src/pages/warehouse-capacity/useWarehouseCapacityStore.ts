@@ -29,6 +29,7 @@ interface Action {
   reset: () => void;
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
+  setPlanGroup: (planGroupIds: string[]) => void;
   setFilter: () => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -134,6 +135,16 @@ export const useWarehouseCapacityStore = createPersistedStoreWithTab<State & Act
           fromYyyymmdd: cur.fromYyyymmdd,
           toYyyymmdd: cur.toYyyymmdd,
         };
+        state.filters = {};
+      }),
+    // Plan Group 변경(다중 콤보) = 사용자 지시(2026-11-09, QA I-01): 선택 변경 시 SCM Site 조회조건을
+    //   초기화하고 두 시트 그리드를 Clear 한다(AS-IS GSCM 정합 — NSCM 은 기존에 필터만 바뀌고 그리드가
+    //   남아 있었다). Division 변경(setDivision, apply-division-reset)과 동형으로 filters={} 로 비워
+    //   재조회 전까지 빈 그리드 상태가 되고 EditTracker 도 빈 행으로 재바인딩된다.
+    setPlanGroup: planGroupIds =>
+      set(state => {
+        const cur = get().searchCondition;
+        state.searchCondition = { ...cur, planGroupIds, siteIds: [] };
         state.filters = {};
       }),
     // GET 파라미터(procedures.d.ts SCP0133.main/itemMapping.request, design 03 §4.2). 두 시트의

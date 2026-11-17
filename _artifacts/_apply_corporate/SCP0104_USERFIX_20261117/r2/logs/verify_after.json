@@ -1,0 +1,140 @@
+{
+ "save": [
+  {
+   "at": "11/16/2026 17:14:32.203",
+   "lane": "2",
+   "vals_head": ";;;;;;;;;;;;",
+   "result": "S",
+   "msg": "",
+   "before": [
+    29,
+    58,
+    0
+   ],
+   "in_txn_after": [
+    29,
+    58,
+    0
+   ]
+  },
+  {
+   "at": "11/16/2026 17:24:54.864",
+   "lane": "2",
+   "vals_head": ";;;;;;;;;;;;",
+   "result": "S",
+   "msg": "",
+   "before": [
+    29,
+    58,
+    0
+   ],
+   "in_txn_after": [
+    29,
+    58,
+    1
+   ]
+  },
+  {
+   "at": "11/17/2026 04:51:08.875",
+   "lane": "",
+   "vals_head": "1;1;1;1;1;1;",
+   "result": "S",
+   "msg": "",
+   "before": [
+    29,
+    58,
+    28
+   ],
+   "in_txn_after": [
+    29,
+    0,
+    28
+   ]
+  },
+  {
+   "at": "11/17/2026 09:13:35.305",
+   "lane": "3",
+   "vals_head": ";;;;;;;;;;;;",
+   "result": "S",
+   "msg": "",
+   "before": [
+    29,
+    58,
+    0
+   ],
+   "in_txn_after": [
+    29,
+    87,
+    0
+   ]
+  }
+ ],
+ "material": {
+  "전체": {
+   "n": 6,
+   "items": [
+    "APCAN2364C",
+    "APCCA2475C"
+   ]
+  },
+  "소문자": {
+   "n": 4,
+   "items": [
+    "APCAN2364C"
+   ]
+  },
+  "대문자": {
+   "n": 4,
+   "items": [
+    "APCAN2364C"
+   ]
+  }
+ },
+ "sop_order": {
+  "SOP_ASSEMBLY div=81_HG": {
+   "n": 27,
+   "out_of_order": 0
+  },
+  "SOP_ASSEMBLY div=40": {
+   "n": 0,
+   "out_of_order": 0
+  },
+  "SOP_ASSEMBLY div=81": {
+   "n": 0,
+   "out_of_order": 0
+  },
+  "SOP_ASSEMBLY div=82": {
+   "n": 0,
+   "out_of_order": 0
+  },
+  "INE_SOP_ELTR div=81_HG": {
+   "n": 6,
+   "out_of_order": 0
+  },
+  "INE_SOP_ELTR div=40": {
+   "n": 0,
+   "out_of_order": 0
+  },
+  "INE_SOP_ELTR div=81": {
+   "n": 0,
+   "out_of_order": 0
+  },
+  "INE_SOP_ELTR div=82": {
+   "n": 0,
+   "out_of_order": 0
+  }
+ },
+ "dummy": {
+  "existing": [
+   "N",
+   "DMY_11562",
+   "M50LT"
+  ],
+  "input": "m50lt",
+  "returned": [
+   "DMY_11562"
+  ],
+  "rows_before": 505,
+  "rows_after": 505
+ }
+}

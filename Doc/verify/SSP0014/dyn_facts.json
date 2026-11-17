@@ -1,0 +1,736 @@
+{
+ "combos": {
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "40",
+    "v": "Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   },
+   {
+    "c": "E",
+    "v": "Electrode"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "AC00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AT00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AZ00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AZ00-E",
+    "v": "AZ Mobile Elec-Electrode"
+   },
+   {
+    "c": "CN00254300_40-P",
+    "v": "NEXCON_CN_NJ"
+   },
+   {
+    "c": "CN00732500_40-P",
+    "v": "C-TECH_CN_CQ"
+   },
+   {
+    "c": "CN02072800_40-P",
+    "v": "Elentec_CN"
+   },
+   {
+    "c": "HQ05_40-W",
+    "v": "LGESOC IT & New Application Waranty HQ05"
+   },
+   {
+    "c": "HQ06-A",
+    "v": "LGESOC Cell HQ06"
+   },
+   {
+    "c": "HQ06-E",
+    "v": "LGESOC Elec HQ06"
+   },
+   {
+    "c": "HQ10-A",
+    "v": "HQ OC2 Mobile Prod-Cell"
+   },
+   {
+    "c": "HQ10-E",
+    "v": "OC_2 Mobile Elec-Electrode"
+   },
+   {
+    "c": "HQ10-P",
+    "v": "HQ OC2 Mobile Prod-Pack"
+   },
+   {
+    "c": "IN00142000_40-P",
+    "v": "Elentec_IN"
+   },
+   {
+    "c": "KR00496300_40-P",
+    "v": "SUNTEL_KR_VN"
+   },
+   {
+    "c": "KR00781800_40-P",
+    "v": "POWERLOGICS_KR"
+   },
+   {
+    "c": "KR00797800_40-P",
+    "v": "PeopleWorks-KR-1"
+   },
+   {
+    "c": "KR00995200_40-P",
+    "v": "DONGHWAES_KR"
+   },
+   {
+    "c": "KR01297200_40-P",
+    "v": "Elentec_KR"
+   },
+   {
+    "c": "KR02149300_40-A",
+    "v": "SEOWON_NJ-CELL"
+   },
+   {
+    "c": "KR02265100_40_KR-P",
+    "v": "ITM_KR"
+   },
+   {
+    "c": "KR02265100_40-P",
+    "v": "ITM_KR_VN"
+   },
+   {
+    "c": "KR03346900_40-P",
+    "v": "DEOKYANG"
+   },
+   {
+    "c": "KR04179400_40-E",
+    "v": "Enetech_KR_CJ_ELEC"
+   },
+   {
+    "c": "KR04595000_40-P",
+    "v": "INFAC_KR"
+   },
+   {
+    "c": "KR40408500_40-P",
+    "v": "Elentec_Yongin"
+   },
+   {
+    "c": "NJ01-A",
+    "v": "LGESNJ Cell NJ01"
+   },
+   {
+    "c": "NJ01-E",
+    "v": "LGESNJ Elec NJ01"
+   },
+   {
+    "c": "NJ01-P",
+    "v": "LGESNJ BATTERY-Pack"
+   },
+   {
+    "c": "PL01279700_40-P",
+    "v": "INFAC_40"
+   },
+   {
+    "c": "TW00177500_40-P",
+    "v": "C-TECH_TW"
+   },
+   {
+    "c": "VN00188600_40-P",
+    "v": "POWERLOGICS_VN"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'40'\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "AC00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AT00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AZ00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AZ00-E",
+    "v": "AZ Mobile Elec-Electrode"
+   },
+   {
+    "c": "CN00254300_40-P",
+    "v": "NEXCON_CN_NJ"
+   },
+   {
+    "c": "CN00732500_40-P",
+    "v": "C-TECH_CN_CQ"
+   },
+   {
+    "c": "CN02072800_40-P",
+    "v": "Elentec_CN"
+   },
+   {
+    "c": "HQ05_40-W",
+    "v": "LGESOC IT & New Application Waranty HQ05"
+   },
+   {
+    "c": "HQ06-A",
+    "v": "LGESOC Cell HQ06"
+   },
+   {
+    "c": "HQ06-E",
+    "v": "LGESOC Elec HQ06"
+   },
+   {
+    "c": "HQ10-A",
+    "v": "HQ OC2 Mobile Prod-Cell"
+   },
+   {
+    "c": "HQ10-E",
+    "v": "OC_2 Mobile Elec-Electrode"
+   },
+   {
+    "c": "HQ10-P",
+    "v": "HQ OC2 Mobile Prod-Pack"
+   },
+   {
+    "c": "IN00142000_40-P",
+    "v": "Elentec_IN"
+   },
+   {
+    "c": "KR00496300_40-P",
+    "v": "SUNTEL_KR_VN"
+   },
+   {
+    "c": "KR00781800_40-P",
+    "v": "POWERLOGICS_KR"
+   },
+   {
+    "c": "KR00797800_40-P",
+    "v": "PeopleWorks-KR-1"
+   },
+   {
+    "c": "KR00995200_40-P",
+    "v": "DONGHWAES_KR"
+   },
+   {
+    "c": "KR01297200_40-P",
+    "v": "Elentec_KR"
+   },
+   {
+    "c": "KR02149300_40-A",
+    "v": "SEOWON_NJ-CELL"
+   },
+   {
+    "c": "KR02265100_40_KR-P",
+    "v": "ITM_KR"
+   },
+   {
+    "c": "KR02265100_40-P",
+    "v": "ITM_KR_VN"
+   },
+   {
+    "c": "KR03346900_40-P",
+    "v": "DEOKYANG"
+   },
+   {
+    "c": "KR04179400_40-E",
+    "v": "Enetech_KR_CJ_ELEC"
+   },
+   {
+    "c": "KR04595000_40-P",
+    "v": "INFAC_KR"
+   },
+   {
+    "c": "KR40408500_40-P",
+    "v": "Elentec_Yongin"
+   },
+   {
+    "c": "NJ01-A",
+    "v": "LGESNJ Cell NJ01"
+   },
+   {
+    "c": "NJ01-E",
+    "v": "LGESNJ Elec NJ01"
+   },
+   {
+    "c": "NJ01-P",
+    "v": "LGESNJ BATTERY-Pack"
+   },
+   {
+    "c": "PL01279700_40-P",
+    "v": "INFAC_40"
+   },
+   {
+    "c": "TW00177500_40-P",
+    "v": "C-TECH_TW"
+   },
+   {
+    "c": "VN00188600_40-P",
+    "v": "POWERLOGICS_VN"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   },
+   {
+    "c": "E",
+    "v": "Electrode"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "AC00-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "AU000062_81-P",
+    "v": "TEST"
+   },
+   {
+    "c": "EG01_81-W",
+    "v": "LGESEG Automotive Waranty EG01"
+   },
+   {
+    "c": "HQ05-W",
+    "v": "LGESOC Automotive Waranty HQ05"
+   },
+   {
+    "c": "HQ07-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "HQ07-E",
+    "v": "LGESOC Elec HQ07"
+   },
+   {
+    "c": "HQ07-P",
+    "v": "LGESOC Pack HQ07"
+   },
+   {
+    "c": "HQ11-A",
+    "v": "HQ OC2 Auto Prod-Cell"
+   },
+   {
+    "c": "HQ11-E",
+    "v": "OC_2 Auto Elec-Electrode"
+   },
+   {
+    "c": "HQ11-P",
+    "v": "OC_2 Auto Pack-Pack"
+   },
+   {
+    "c": "KR02239900_81-P",
+    "v": "CS-ENERTECH_PACK"
+   },
+   {
+    "c": "MI00_81-W",
+    "v": "LGESMI Automotive Waranty MI00"
+   },
+   {
+    "c": "MI00-A",
+    "v": "LGESMI Cell MI00"
+   },
+   {
+    "c": "MI00-E",
+    "v": "LGESMI Elec MI00"
+   },
+   {
+    "c": "MI00-P",
+    "v": "LGESMI Pack MI00"
+   },
+   {
+    "c": "MI02-A",
+    "v": "MI_LS Auto Assy/Pack-Cell"
+   },
+   {
+    "c": "MI02-E",
+    "v": "MI_LS Auto Elec-Electrode"
+   },
+   {
+    "c": "MI03_81-W",
+    "v": "LGESMI Hazel Park Automotive Waranty MI03"
+   },
+   {
+    "c": "MI03-P",
+    "v": "ESMI-Hazel Park-Pack"
+   },
+   {
+    "c": "MT00-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "NA00-A",
+    "v": "LGESNA Cell NA00"
+   },
+   {
+    "c": "NA00-E",
+    "v": "LGESNA Elec NA00"
+   },
+   {
+    "c": "NA00-P",
+    "v": "LGESNA Pack NA00"
+   },
+   {
+    "c": "NB01-A",
+    "v": "LGESNB Cell NB01"
+   },
+   {
+    "c": "NB01-E",
+    "v": "LGESNB Electrode-Electrode NB01"
+   },
+   {
+    "c": "NB01-P",
+    "v": "LGESNB Pack NB01"
+   },
+   {
+    "c": "WA00_81-W",
+    "v": "LGESWA Automotive Waranty WA00"
+   },
+   {
+    "c": "WA00-A",
+    "v": "LGESWA Cell WA00"
+   },
+   {
+    "c": "WA00-E",
+    "v": "LGESWA Elec WA00"
+   },
+   {
+    "c": "WA00-P",
+    "v": "LGESWA Pack WA00"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   },
+   {
+    "c": "E",
+    "v": "Electrode"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'81'\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "AC00-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "AU000062_81-P",
+    "v": "TEST"
+   },
+   {
+    "c": "EG01_81-W",
+    "v": "LGESEG Automotive Waranty EG01"
+   },
+   {
+    "c": "HQ05-W",
+    "v": "LGESOC Automotive Waranty HQ05"
+   },
+   {
+    "c": "HQ07-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "HQ07-E",
+    "v": "LGESOC Elec HQ07"
+   },
+   {
+    "c": "HQ07-P",
+    "v": "LGESOC Pack HQ07"
+   },
+   {
+    "c": "HQ11-A",
+    "v": "HQ OC2 Auto Prod-Cell"
+   },
+   {
+    "c": "HQ11-E",
+    "v": "OC_2 Auto Elec-Electrode"
+   },
+   {
+    "c": "HQ11-P",
+    "v": "OC_2 Auto Pack-Pack"
+   },
+   {
+    "c": "KR02239900_81-P",
+    "v": "CS-ENERTECH_PACK"
+   },
+   {
+    "c": "MI00_81-W",
+    "v": "LGESMI Automotive Waranty MI00"
+   },
+   {
+    "c": "MI00-A",
+    "v": "LGESMI Cell MI00"
+   },
+   {
+    "c": "MI00-E",
+    "v": "LGESMI Elec MI00"
+   },
+   {
+    "c": "MI00-P",
+    "v": "LGESMI Pack MI00"
+   },
+   {
+    "c": "MI02-A",
+    "v": "MI_LS Auto Assy/Pack-Cell"
+   },
+   {
+    "c": "MI02-E",
+    "v": "MI_LS Auto Elec-Electrode"
+   },
+   {
+    "c": "MI03_81-W",
+    "v": "LGESMI Hazel Park Automotive Waranty MI03"
+   },
+   {
+    "c": "MI03-P",
+    "v": "ESMI-Hazel Park-Pack"
+   },
+   {
+    "c": "MT00-A",
+    "v": "LGESOC Cell HQ07"
+   },
+   {
+    "c": "NA00-A",
+    "v": "LGESNA Cell NA00"
+   },
+   {
+    "c": "NA00-E",
+    "v": "LGESNA Elec NA00"
+   },
+   {
+    "c": "NA00-P",
+    "v": "LGESNA Pack NA00"
+   },
+   {
+    "c": "NB01-A",
+    "v": "LGESNB Cell NB01"
+   },
+   {
+    "c": "NB01-E",
+    "v": "LGESNB Electrode-Electrode NB01"
+   },
+   {
+    "c": "NB01-P",
+    "v": "LGESNB Pack NB01"
+   },
+   {
+    "c": "WA00_81-W",
+    "v": "LGESWA Automotive Waranty WA00"
+   },
+   {
+    "c": "WA00-A",
+    "v": "LGESWA Cell WA00"
+   },
+   {
+    "c": "WA00-E",
+    "v": "LGESWA Elec WA00"
+   },
+   {
+    "c": "WA00-P",
+    "v": "LGESWA Pack WA00"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81_HD'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Pack"
+   },
+   {
+    "c": "A",
+    "v": "Cell"
+   },
+   {
+    "c": "E",
+    "v": "Electrode"
+   }
+  ],
+  "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81_HD'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "Y",
+    "v": "Y"
+   },
+   {
+    "c": "N",
+    "v": "N"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'81_HD'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "HD00-A",
+    "v": "ES Honda JV Auto Assy/Pack-Cell"
+   },
+   {
+    "c": "HD00-E",
+    "v": "ES Honda JV Auto Elec-Electrode"
+   },
+   {
+    "c": "HD00-P",
+    "v": "ES Honda JV Auto Assy/Pack-Pack"
+   }
+  ],
+  "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'81_HD'\",\"mnuId\":\"SSP0014\"}": [
+   {
+    "c": "HD00-A",
+    "v": "ES Honda JV Auto Assy/Pack-Cell"
+   },
+   {
+    "c": "HD00-E",
+    "v": "ES Honda JV Auto Elec-Electrode"
+   },
+   {
+    "c": "HD00-P",
+    "v": "ES Honda JV Auto Assy/Pack-Pack"
+   }
+  ]
+ },
+ "popupFields": {},
+ "at": "2026-11-14T11:18:34.184Z"
+}

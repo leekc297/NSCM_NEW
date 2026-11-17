@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0101-Scb2842,COND,,,,값 미도출,"for (i < siMain.GetMaxRowIndex()) ▸ for (iCol <= iColHolding) ▸ switch (colName) case ""INV_STATUS_AVAILABLE"": ▸ if (cellQty.Equals(cellAvailable) == false) ▸ if (chkQTY != 0)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

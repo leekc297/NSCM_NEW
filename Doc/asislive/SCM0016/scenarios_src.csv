@@ -1,0 +1,10 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+SCM0016-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 4,,4,SCM0016_BatchLog.cs:159,DERIVED
+SCM0016-Sc79aa7,기타,NONE,button:EditButton,EditButton,,메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCM0016_BatchLog.cs:245,DERIVED
+SCM0016-S5bc1f8,조회,NONE,button:FindButton,FindData,,"서버 호출 3, 데이터 처리 1, 잠금 1, 그리드 구성 1 · SCM.SCM0016_GET_BATCH_LOG · 잠금:siMain.LockColumn",SCM.SCM0016_GET_BATCH_LOG,6,SCM0016_BatchLog.cs:284,DERIVED
+SCM0016-Sb79f1e,조회,NONE,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,FindData_Hist,,"서버 호출 3, 데이터 처리 1, 잠금 1, 그리드 구성 1 · SCM.SCM0016_GET_BATCH_LOG_HIST · 잠금:siHist.LockColumn",SCM.SCM0016_GET_BATCH_LOG_HIST,6,SCM0016_BatchLog.cs:354,DERIVED
+SCM0016-S66d118,조회,NONE,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,FindData_Step,,"서버 호출 3, 데이터 처리 1, 잠금 1, 그리드 구성 1 · SCM.SCM0016_GET_BATCH_STEP_INFO · 잠금:siStep.LockColumn",SCM.SCM0016_GET_BATCH_STEP_INFO,6,SCM0016_BatchLog.cs:318,DERIVED
+SCM0016-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,"데이터 처리 3, 목록 다시 채움 1",,4,SCM0016_BatchLog.cs:127,DERIVED
+SCM0016-Sf64d30,초기,SHEET+DATA,button:FindButton | event:Form_Load | event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,InitSpread,if (spreadInfo.SheetName == SpdSheet.shtMain),그리드 구성 15,,15,SCM0016_BatchLog.cs:180,DERIVED
+SCM0016-S5c5b76,초기,SHEET+DATA,button:FindButton | event:Form_Load | event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,InitSpread,else of (spreadInfo.SheetName == SpdSheet.shtMain) ▸ if (spreadInfo.SheetName == SpdSheet.shtStep),그리드 구성 13,,13,SCM0016_BatchLog.cs:200,DERIVED
+SCM0016-S02dc33,초기,SHEET+DATA,button:FindButton | event:Form_Load | event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,InitSpread,else of (spreadInfo.SheetName == SpdSheet.shtMain) ▸ else of (spreadInfo.SheetName == SpdSheet.shtStep) ▸ if (spreadInfo.SheetName == SpdSheet.shtHist),그리드 구성 8,,8,SCM0016_BatchLog.cs:220,DERIVED

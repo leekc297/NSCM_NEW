@@ -1,0 +1,47 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "MATERIAL_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MATERIAL_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0024-S4272cc"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:26:18",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "MATERIAL_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0024-S4272cc"
+   ],
+   "has_else": true,
+   "single": true
+  }
+ ]
+}

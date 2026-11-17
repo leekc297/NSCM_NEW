@@ -1,0 +1,61 @@
+{
+ "id": "SCP0113",
+ "group": "ADMIN",
+ "cellrun": true,
+ "tabrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdSub",
+   "kind": "tab",
+   "change": "시트 PSI Detail(1) 활성화",
+   "ok": true,
+   "error": "",
+   "scenarios": [
+    "SCP0113-S8b6f99"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdSub",
+   "kind": "tab",
+   "change": "시트 BOH Long-Term Stock(2) 활성화",
+   "ok": true,
+   "error": "",
+   "scenarios": [
+    "SCP0113-S8b6f99"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdSub",
+   "kind": "tab",
+   "change": "시트 BOH Ending Inventory(0) 활성화 — 처음 시트로 되돌림",
+   "ok": true,
+   "error": "",
+   "scenarios": [
+    "SCP0113-S8b6f99"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 22:11:49"
+}

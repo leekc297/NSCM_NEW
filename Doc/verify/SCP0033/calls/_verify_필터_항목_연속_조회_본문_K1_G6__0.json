@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 120,
+  "at": "2026-11-14T02:31:06.351Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 140,
+  "at": "2026-11-14T02:31:07.885Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"E2E\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 56,
+  "dur": 107,
+  "at": "2026-11-14T02:31:09.517Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 121,
+  "at": "2026-11-14T02:32:41.605Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ }
+]

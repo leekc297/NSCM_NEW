@@ -1,0 +1,5 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0024-S7ec2c1,DIVISION,,,,값 미도출,"if (spdInfo.SheetName == SpdSheet.shtMain) ▸ if (!_division.Substring(0, 2).Equals(""EE""))",
+SCP0024-S24cfce,DIVISION,,,,값 미도출,"if (spdInfo.SheetName == SpdSheet.shtMain) ▸ else of (!_division.Substring(0, 2).Equals(""EE""))",
+SCP0024-Sa63f8c,DIVISION,,,,값 미도출,"if (_division.Substring(0, 2).Equals(""EE""))",
+SCP0024-Sbd53fa,DIVISION,,,,값 미도출,"else of (_division.Substring(0, 2).Equals(""EE""))",

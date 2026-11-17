@@ -1,0 +1,82 @@
+/* SSP 흐름 뷰어 — 카드형 흐름(spf) · 그림 보기 틀(맞춤 · 확대 · 크게 보기) · 연결선 강조  (2026-11-11) */
+.spf{--ar:30px;margin:10px 0 14px;max-width:1500px}
+.spf-row{display:flex;align-items:stretch}
+.spf-card,.spf-col{flex:1 1 0;min-width:0;background:#eef2f4;border:1.5px solid var(--c,#5b6770);box-sizing:border-box}
+.spf-empty{visibility:hidden}
+.spf-h{background:var(--c,#5b6770);color:#fff;font-weight:700;font-size:15px;padding:7px 12px;letter-spacing:.2px}
+.spf-card ul{margin:8px 10px 10px 0;padding-left:26px;font-size:13.5px;line-height:1.5}
+.spf-card li{margin:1px 0;word-break:break-word}
+.spf-l{padding:6px 12px;font-size:13.5px}
+.spf-ar{flex:0 0 var(--ar);display:flex;align-items:center;justify-content:center;color:#5b6770;font-size:15px}
+.spf-snake{height:26px;margin:0 calc((100% - (var(--n) - 1) * var(--ar)) / var(--n) / 2);position:relative}
+.spf-snake i{position:absolute;right:0;top:0;height:13px;width:calc(100%);border-right:2px solid #5b6770;border-bottom:2px solid #5b6770;box-sizing:border-box}
+.spf-snake u{position:absolute;left:0;top:11px;height:15px;border-left:2px solid #5b6770}
+.spf-snake u:after{content:'';position:absolute;left:-6px;bottom:-2px;border:5px solid transparent;border-top:7px solid #5b6770;border-bottom:0}
+.spf-col{background:#fff;border:0;display:flex;flex-direction:column;gap:8px}
+.spf-col .spf-h{margin-bottom:2px}
+.spf-sub{flex:1;background:#eef2f4;border:1.5px solid var(--c,#5b6770);padding:8px 10px;display:flex;flex-direction:column;justify-content:center;min-height:44px}
+.spf-sub b{font-size:14.5px}.spf-sub span{font-size:13px;color:#333;word-break:break-all}
+.spf [data-k]{cursor:pointer}.spf-sub[data-k]:hover,.spf-card[data-k]:hover{box-shadow:0 0 0 2px #0b57d0;background:#e8f0fe}
+.spf-sub[data-k] b:after{content:' ›';color:#0b57d0}
+.spf-leg{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:10px;font-size:13px;color:#333}
+.spf-leg i{display:inline-block;width:14px;height:14px;background:var(--c);margin-right:7px;vertical-align:-2px}
+.spf-note{margin-top:12px;border:1.5px solid var(--c,#d98e2b);background:#eef2f4;padding:10px 14px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.spf-note .t{color:var(--c,#d98e2b);font-size:15px}
+.spf-roll{position:relative;height:30px;margin-top:2px;font-size:12.5px;color:#a0611a}
+.spf-roll i{position:absolute;top:0;height:12px;border:2px dashed #d98e2b;border-top:0;box-sizing:border-box}
+.spf-roll i:after{content:'';position:absolute;left:-6px;top:-3px;border:5px solid transparent;border-bottom:7px solid #d98e2b;border-top:0}
+.spf-roll span{position:absolute;top:13px;text-align:center}
+.spf-op .spf-ar{font-size:26px;font-weight:700;color:#1f7a8c;flex-basis:54px}
+.spf-op .spf-card{background:#eef2f4;border-width:2px;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:16px 8px;min-height:70px}
+.spf-op .spf-card b{font-size:17px}.spf-op .spf-card span{font-size:13px}
+.spf-op .spf-card.fill{background:var(--c);color:#fff}
+.spf-grid{display:grid;grid-template-columns:repeat(var(--n,2),1fr);gap:14px}
+.spf-step .spf-card{background:#fff;border-radius:4px;text-align:center;padding:8px 6px;display:flex;flex-direction:column;justify-content:center}
+.spf-step .spf-card b{font-size:14px}.spf-step .spf-card span{font-size:12px;color:#555}
+.spf-step .spf-card[data-k]:hover{background:#e8f0fe}
+@media(max-width:1100px){.spf-card ul{font-size:12.5px}}
+
+/* 그림 보기 틀 */
+pre.mermaid.mv{padding:0;overflow:hidden;position:relative}
+.mv-bar{display:flex;align-items:center;gap:4px;padding:4px 8px;background:#f3f5f8;border-bottom:1px solid #dde2e8;font:12px Segoe UI,Malgun Gothic,sans-serif;color:#555;white-space:nowrap}
+.mv-bar button{font:12px Segoe UI,Malgun Gothic,sans-serif;padding:2px 9px;border:1px solid #b6bec9;background:#fff;border-radius:3px;cursor:pointer;color:#222}
+.mv-bar button:hover{background:#e8f0fe;border-color:#0b57d0}
+.mv-bar .mv-pct{min-width:44px;text-align:right;color:#222}
+.mv-bar .mv-tip{margin-left:auto;color:#888;overflow:hidden;text-overflow:ellipsis}
+.mv-port{overflow:auto;max-height:84vh;padding:8px;cursor:grab;background:#fff}
+.mv-port.drag{cursor:grabbing;user-select:none}
+.mv-port svg{display:block;max-width:none!important;margin:0 auto}
+pre.mermaid.mv.full{position:fixed;inset:0;z-index:45;margin:0;border:0;display:flex;flex-direction:column}
+pre.mermaid.mv.full .mv-port{flex:1;max-height:none}
+.np-body pre.mermaid.mv .mv-port{max-height:70vh}
+/* 연결선 강조: 노드에 마우스를 올리면 그 노드와 이어진 선 · 상대 노드만 남긴다 */
+svg.hl g.node:not(.hon){opacity:.3}
+svg.hl .edgePaths path:not(.hon),svg.hl path.flowchart-link:not(.hon){opacity:.13}
+svg.hl g.edgeLabel:not(.hon){opacity:.08}
+svg.hl .edgePaths path.hon,svg.hl path.flowchart-link.hon{stroke:#d9480f!important;stroke-width:3px!important;opacity:1}
+svg.hl g.node.hme rect,svg.hl g.node.hme polygon,svg.hl g.node.hme path,svg.hl g.node.hme circle{stroke:#d9480f!important;stroke-width:3px!important}
+pre.mermaid g.node, pre.mermaid .edgePaths path{transition:opacity .12s}
+/* 종류별 기본 색(그림이 따로 색을 정하지 않은 노드) */
+pre.mermaid g.node.k-scr rect,pre.mermaid g.node.k-scr polygon{fill:#e7f0ff!important;stroke:#3a6ea5!important}
+pre.mermaid g.node.k-P rect,pre.mermaid g.node.k-P polygon{fill:#fff4de!important;stroke:#d98e2b!important}
+pre.mermaid g.node.k-T path,pre.mermaid g.node.k-E path,pre.mermaid g.node.k-T rect,pre.mermaid g.node.k-E rect{fill:#e9f6ec!important;stroke:#4e8f4a!important}
+pre.mermaid g.node.k-JOB rect,pre.mermaid g.node.k-GRP rect{fill:#f1e9fb!important;stroke:#7b52b8!important}
+pre.mermaid g.node.k-ST rect{fill:#e0f2f4!important;stroke:#1f7a8c!important}
+.kleg{display:inline-flex;gap:12px;margin-left:6px}.kleg span i{display:inline-block;width:12px;height:12px;border:1.5px solid;margin-right:4px;vertical-align:-2px}
+
+/* 2026-11-16 읽기 보완: 탭 버튼 고정 · 목차 · 긴 표 스크롤 · 한눈에 보기 카드 */
+nav{position:sticky;top:0;z-index:30;background:#fafafa;padding:8px 0 0;border-bottom:1px solid #d6dbe1;margin-bottom:6px}
+nav button{font-size:14px;border-radius:4px 4px 0 0}
+.scrbar{top:var(--navh,52px)!important}
+h3,h4{scroll-margin-top:calc(var(--navh,52px) + 12px)}
+section.tab h3{border-left:5px solid #1f6feb;padding:4px 10px;background:#eef3fb}
+.toc{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:4px 0 14px;padding:8px 10px;background:#fff;border:1px solid #d6dbe1;border-radius:6px;font-size:13px}
+.toc b{margin-right:4px;color:#444}
+.toc a{color:#0b57d0;text-decoration:none;padding:2px 9px;border:1px solid #c9d6ee;border-radius:12px;background:#f5f8fe;white-space:nowrap}
+.toc a:hover{background:#e8f0fe}
+.tbl-scroll{max-height:68vh;overflow:auto;border:1px solid #d6dbe1;margin:4px 0 10px;background:#fff}
+.tbl-scroll table{margin:0}
+.tbl-scroll thead th{position:sticky;top:0;z-index:2;box-shadow:0 1px 0 #ccc}
+.tbl-cap{font-size:12px;color:#777;margin-top:6px}
+table tbody tr:nth-child(even) td{background:#fafbfd}
+.spf-grid .spf-card ul{font-size:13px}

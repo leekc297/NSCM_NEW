@@ -1,0 +1,63 @@
+[
+ {
+  "call": 0,
+  "cls": "SCP0007_DistributionRoutePopup",
+  "trig": "CELL:ROUTE_ID",
+  "account": "minyonglee1",
+  "rows": 1,
+  "body": "{\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"TRK\",\"validYn\":\"Y\"}",
+  "url": "SCP0005/route/SEARCH/call-proc",
+  "title": "Distribution Route",
+  "buttons": [
+   "Search",
+   "OK",
+   "Close"
+  ],
+  "columns": [
+   "FROM_CITY",
+   "LT_TYPE",
+   "SHIPPING_COMPANY",
+   "ROUTE_ID",
+   "DAYS",
+   "LT_SUM",
+   "PRIORITY",
+   "LAST_UPDATE_DATE",
+   "A_PORT_CODE",
+   "TRANSPORT_MODE_NAME",
+   "LT_VOYAGE",
+   "LT_WAIT_SHIPPING",
+   "LT_LAY_OFF_CLEARANCE",
+   "DAYS_THU",
+   "D_COUNTRY",
+   "D_PORT_NAME",
+   "TO_COUNTRY",
+   "TO_CITY",
+   "TO_CITY_NAME",
+   "DAYS_TUE",
+   "D_PORT_CODE",
+   "CREATED_BY",
+   "LAST_UPDATED_BY",
+   "Three_SEGMENT_COST",
+   "DAYS_MON",
+   "DAYS_SUN",
+   "LT_DEPARTURE_INLAND",
+   "FROM_COUNTRY",
+   "FROM_CITY_NAME",
+   "CREATION_DATE",
+   "A_COUNTRY",
+   "DAYS_WED",
+   "A_PORT_NAME",
+   "TRANSPORT_MODE",
+   "Two_SEGMENT_COST",
+   "One_SEGMENT_COST",
+   "DAYS_FRI",
+   "SHIP_DOC_PREPARATION_DATE",
+   "VALID_YN",
+   "DAYS_SAT",
+   "LT_ARRIVAL_INLAND"
+  ],
+  "sample": [
+   "{\"FROM_CITY\":\"KRCOJ\",\"LT_TYPE\":\"AVERAGE\",\"SHIPPING_COMPANY\":\"-\",\"ROUTE_ID\":\"740\",\"DAYS\":\"Mon, Tue, Wed, Thu, Fri\",\"LT_SUM\":\"1\",\"PRIORITY\":\"1\",\"LAST_UPDATE_DATE\":\"2026-07-01 14:32:38\",\"A_PORT_CODE\":\"-\",\"TRANSPORT_MODE_NAME\":\"TRUCK\",\"LT_VOYAGE\":\"1\",\"LT_WAIT_SHIPPING\":\"0\"}"
+  ]
+ }
+]

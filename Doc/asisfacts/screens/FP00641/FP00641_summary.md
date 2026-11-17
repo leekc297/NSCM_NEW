@@ -423,9 +423,9 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetMeasure | Measure:207, InitControl:281, CheckAndGetMeasure:844, btnCatagory_Click:11287, btnCategory_Click:11621 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | GetCheckedListValue | InitControls:241, MakeInstanceLT:319, MakeInstanceLT:320, MakeInstanceLT:321, mcbo_planner_Cell_changed:547, mcbo_planner_Pack_changed:562, mcbo_planner_Form_changed:576, GetPlanner:674 | CString.GetCheckedListValue | CODE |
 | SetFilter | chk_allLine_Cell_CheckedChanged:522, chk_allLine_Pack_CheckedChanged:527, chk_allLine_Form_CheckedChanged:532, mcbo_planner_Cell_changed:545, mcbo_planner_Cell_changed:548, mcbo_planner_Pack_changed:560, mcbo_planner_Pack_changed:563, mcbo_planner_Form_changed:575 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
+| GetMeasure | CheckAndGetMeasure:844, btnCatagory_Click:11287, btnCategory_Click:11621, Measure:207, InitControl:281 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | EditQuery | RefreshHeader:888, RefreshHeader:915 | FPExtensions.EditQuery | ROW_ID |
 | GetChanges | Save_Data_Sim:1522, Save_Data_Pack:1711, Save_Data_Cell:1951, Save_Data_Form:2194 | FPExtensions.GetChanges | ROW_ID |
 | FP_UpdateBatch | Save_Data_Sim:1669 | DataService.FP_UpdateBatch | COUNT, RESULT |
@@ -435,10 +435,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:512 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:549 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:681 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:682 |
 | this | Load | Form_Load | .ctor:169 |
 | cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:471 |
 | cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:477 |
@@ -527,18 +523,22 @@
 | this.spdMain | EnabledChanged | spdMain_EnabledChanged | InitializeComponent:126 |
 | this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:127 |
 | this | Load | Form_Load | .ctor:109 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:512 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:549 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:681 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:682 |
 
 ## 6. 컨트롤 (170개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | CheckBox | 41 | chk_pack_unhold_exp_qty, chk_pack_eoh_good_unhold_exp, chk_pack_yield, chk_pack_result, chk_pack_plan_out, chk_pack_eoh_good_sim, chk_pack_eoh_sim, chk_pack_eoh_good, chk_pack_eoh, chk_pack_prod_target, chk_pack_scp_target, chk_pack_shipping_gap, chk_pack_shipping_plan_sim, chk_pack_shipping_result, chk_pack_shipping_plan … |
 | LayoutControlItem | 32 | lblSql, layoutControlItem15, layoutControlItem10, layoutControlItem22, layoutControlItem11, layoutControlItem29, layoutControlItem8, layoutControlItem5, layoutControlItem3, layoutControlItem30, layoutControlItem17, layoutControlItem6, layoutControlItem4, layoutControlItem1, layoutControlItem13 … |
-| Label | 15 | label1, label2, label3, label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1 |
+| Label | 15 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label1, label2, label3 |
 | UsrCheckBox | 10 | chk_allLine_Cell, chk_allLine_Pack, chk_cell_plan_info, chk_form_plan_info, chk_pack_plan_info, chk_input_mode, chk_pack_plan_group, chk_cell_plan_group, chk_form_plan_group, chk_allLine_Form |
-| UsrButton | 8 | usrButton1, usrButton2, btnToggleSave, btnSql, btnReplan, usrButton2, btnCategory, btn_column |
+| UsrButton | 8 | btnToggleSave, btnSql, btnReplan, usrButton2, btnCategory, btn_column, usrButton1, usrButton2 |
 | EmptySpaceItem | 8 | emptySpaceItem4, emptySpaceItem5, emptySpaceItem6, emptySpaceItem2, emptySpaceItem3, emptySpaceItem7, emptySpaceItem8, emptySpaceItem1 |
-| Panel | 7 | panel1, panel3, panel2, infoPanel, panel2, panel4, panel1 |
 | UsrCombo | 7 | cbo_form_plan_id, cbo_form_plan_group, cbo_cell_plan_id, cbo_cell_plan_group, cbo_pack_plan_group, cbo_pack_plan_id, cbo_site |
+| Panel | 7 | infoPanel, panel2, panel4, panel1, panel1, panel3, panel2 |
 | UsrCheckedList2 | 6 | mcbo_line_Form, mcbo_line_Pack, mcbo_planner_Pack, mcbo_planner_Form, mcbo_planner_Cell, mcbo_line_Cell |
 | UsrTextBox | 5 | txt_group_cell, txt_cell_nick, txt_pack_code, txt_pack_nick, txt_cell_code |
 | UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |

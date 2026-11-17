@@ -1,0 +1,12 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0080-S77ee88,DIVISION,81,81,,실행 대상,"for (rowIdx <= _si.ActiveSheet.RowCount - 1) ▸ if (this._division.Substring(0, 2) == ""81"") ▸ if (Convert.ToDateTime(sales_from_yyyymmdd) > Convert.ToDateTime(sales_to_yyyymmdd))",
+SCP0080-Sfbc9e4,DIVISION,81,81,,실행 대상,"if (this._division.Substring(0, 2) == ""81"") ▸ if (invalidSalesModels.Count > 0)",
+SCP0080-Sc3607e,DIVISION,81,81,,실행 대상,"if (this._division.Substring(0, 2) == ""81"") ▸ if (invalidSalesModelPrioritys.Count > 0)",
+SCP0080-S0a78a3,DIVISION,81,81,,실행 대상,"if (this._division.Substring(0, 2) == ""81"") ▸ if (invalidBasicEndCustomer.Count > 0)",
+SCP0080-S955312,DIVISION,81,81,,실행 대상,"switch (this._division) case ""81"":",
+SCP0080-S8207d1,DIVISION,81_UC,81_UC,,실행 대상,"switch (this._division) case ""81_UC"":",
+SCP0080-S4394ca,DIVISION,81_HM,81_HM,,실행 대상,"switch (this._division) case ""81_HM"":",
+SCP0080-S07c18c,DIVISION,81_ST,81_ST,,실행 대상,"switch (this._division) case ""81_ST"":",
+SCP0080-S9b511b,DIVISION,82,82,,실행 대상,"switch (this._division) case ""82"":",
+SCP0080-Sc80213,DIVISION,40,40,,실행 대상,"switch (this._division) case ""40"":",
+SCP0080-Sc7e808,DIVISION,,,,값 미도출,switch (this._division) default:,

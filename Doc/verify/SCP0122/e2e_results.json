@@ -62,7 +62,7 @@
  {
   "row_id": "V-41234786",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요 · 전제 Div - · calls 1 · rows 8 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1265 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0122\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0122\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 1 · rows 8 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "76e850b6",
   "mctx": {
@@ -82,7 +82,7 @@
  {
   "row_id": "V-bd1416c6",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요 · 전제 Div - · calls 1 · rows 8 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1265 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0122\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0122\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 1 · rows 8 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "dd9a0f7d",
   "mctx": {
@@ -109,7 +109,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-677dd124",
@@ -121,19 +122,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-bec40765",
   "result": "PASS",
-  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0(공통 접속 로그 5xx 1건 제외 — 화면 무관 · /api/admin/log/menu-access) · 재오픈 직후 행 0(최초 진입 0)",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
   "tobe_ref": "E2E @trace",
   "cond": "7e583589",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-c9a91ae9",
@@ -145,7 +148,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-72ff99b1",
@@ -157,7 +161,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5a2ead0d",
@@ -169,7 +174,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e339ab8b",
@@ -181,7 +187,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-bca7b74d",
@@ -193,7 +200,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-587e6aef",
@@ -205,7 +213,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e0127bf7",
@@ -217,7 +226,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-8983ad1d",
@@ -229,7 +239,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-77af2fd2",
@@ -241,7 +252,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-3bfb2186",
@@ -253,7 +265,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-29ccd757",
@@ -265,7 +278,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-3c596e73",
@@ -277,7 +291,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-74b99feb",
@@ -289,7 +304,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-ee24f291",
@@ -301,7 +317,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-9e30aa70",
@@ -313,7 +330,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-0b0a9199",
@@ -325,7 +343,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-05f38c43",
@@ -337,7 +356,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-0677ac8f",
@@ -349,7 +369,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-982c39d1",
@@ -361,7 +382,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-d57b7cbe",
@@ -373,7 +395,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-2202a4bd",
@@ -385,7 +408,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5847afe6",
@@ -397,7 +421,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-b3d9303b",
@@ -409,91 +434,99 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-9efda9ee",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_CD: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "804f9020",
+  "cond": "290aa130",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-552581fd",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_CD: AS-IS 'Activity Code' = TO-BE 헤더 'Activity Code'",
   "tobe_ref": "E2E @trace",
-  "cond": "804f9020",
+  "cond": "290aa130",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-fb4b80a4",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_SEQ: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "353c1539",
+  "cond": "123f800c",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-8423f671",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "927aceac",
+  "cond": "7ca398da",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-c3590105",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_SEQ: AS-IS 'Act. Seq' = TO-BE 헤더 'Act. Seq'",
   "tobe_ref": "E2E @trace",
-  "cond": "353c1539",
+  "cond": "123f800c",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5c24cd1a",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME: AS-IS 'Activity Name' = TO-BE 헤더 'Activity Name'",
   "tobe_ref": "E2E @trace",
-  "cond": "927aceac",
+  "cond": "7ca398da",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-922eabef",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y",
   "tobe_ref": "E2E @trace",
-  "cond": "d1fea3bd",
+  "cond": "19bd9711",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-dccbde15",
@@ -504,7 +537,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2f411f09",
@@ -516,487 +550,528 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7dd01ed1",
   "result": "PASS",
-  "evidence": "Plan Activity Mgmt · Div 40 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
+  "evidence": "Plan Activity Mgmt · 시트 확정: DataGrid props 시트 'Plan Activity Mgmt' · Div 40 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
   "tobe_ref": "E2E @verify Division 컬럼",
   "cond": "6f22db38",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d4b92d5a",
   "result": "PASS",
-  "evidence": "Plan Activity Mgmt · Div 81 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
+  "evidence": "Plan Activity Mgmt · 시트 확정: DataGrid props 시트 'Plan Activity Mgmt' · Div 81 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
   "tobe_ref": "E2E @verify Division 컬럼",
   "cond": "0a08697c",
   "mctx": {
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-cb1f0c93",
   "result": "PASS",
-  "evidence": "Plan Activity Mgmt · Div 82 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
+  "evidence": "Plan Activity Mgmt · 시트 확정: DataGrid props 시트 'Plan Activity Mgmt' · Div 82 대조 15컬럼 일치 · AS-IS 폭 0(숨김) 4개 숨김 기대: OPMZ_PLAN_GR_ID,OPMZ_PRS_CD,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_SEQ",
   "tobe_ref": "E2E @verify Division 컬럼",
   "cond": "b5460877",
   "mctx": {
    "calls": 3,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e331dd7d",
   "result": "PASS",
   "evidence": "기존행 r0 OPMZ_ACTV_SEQ 편집=true (AS-IS 편집 가능) | 신규행 r0 OPMZ_ACTV_SEQ 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "353c1539",
+  "cond": "123f800c",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-87b4d167",
   "result": "PASS",
   "evidence": "기존행 r0 OPMZ_ACTV_NAME 편집=true (AS-IS 편집 가능) | 신규행 r0 OPMZ_ACTV_NAME 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "927aceac",
+  "cond": "7ca398da",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-933fa231",
   "result": "PASS",
   "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금) | 신규행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "8d300767",
+  "cond": "32b07cd6",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-1ac82e4b",
   "result": "PASS",
   "evidence": "기존행 r0 OPMZ_ACTV_CD 편집=false (AS-IS 잠금) | 신규행 r0 OPMZ_ACTV_CD 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "b1b39e01",
+  "cond": "326e7894",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-ae692a11",
   "result": "PASS",
   "evidence": "기존행 r0 LINK_UI_TYPE 편집=false (AS-IS 잠금) | 신규행 r0 LINK_UI_TYPE 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "f775bff6",
+  "cond": "e397612f",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5fcfbefa",
   "result": "PASS",
   "evidence": "기존행 r0 OPMZ_PLAN_GR_NAME 편집=false (AS-IS 잠금) | 신규행 r0 OPMZ_PLAN_GR_NAME 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "17ce1ed1",
+  "cond": "e09f4ebd",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-32e0ead9",
   "result": "PASS",
   "evidence": "기존행 r0 OPTION_YN 편집=false (AS-IS 잠금) | 신규행 r0 OPTION_YN 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "f03d5f1d",
+  "cond": "b6a85d65",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-b5b4a172",
   "result": "PASS",
   "evidence": "신규행 OPMZ_ACTV_CD='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
   "tobe_ref": "E2E @trace",
-  "cond": "917cb31b",
+  "cond": "30ae2277",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-85b5da5c",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_CD: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "804f9020",
+  "cond": "290aa130",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-f2c672e5",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_SEQ: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "353c1539",
+  "cond": "123f800c",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-181fc762",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "927aceac",
+  "cond": "7ca398da",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-c233f375",
   "result": "PASS",
   "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → OPMZ_ACTV_CD: OPMZ_ACTV_NAME='Master Validation' → OPMZ_ACTV_CD='A001' (AS-IS SpdMain_ComboSelChange:235 if (dtActivityCd.Rows.Count > 0) )",
   "tobe_ref": "E2E @trace",
-  "cond": "55ef8d26",
+  "cond": "2e0df036",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "T-b7f9742d",
-  "result": "PASS",
-  "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → LINK_UI_TYPE: OPMZ_ACTV_NAME='Master Validation' → LINK_UI_TYPE='UI' (AS-IS SpdMain_ComboSelChange:239 siMain.SetValue(this._currRowIdx,)",
-  "tobe_ref": "E2E @trace",
-  "cond": "87037746",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-7e1d93dd",
-  "result": "PASS",
-  "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → OPTION_YN: OPMZ_ACTV_NAME='Master Validation' → OPTION_YN=' ' (AS-IS SpdMain_ComboSelChange:243 siMain.SetValue(this._currRowIdx,)",
-  "tobe_ref": "E2E @trace",
-  "cond": "13a2c30f",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e24e5af7",
   "result": "NA",
   "evidence": "OPMZ_ACTV_NAME: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "a4bae97a",
+  "cond": "d0bf3565",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-b7f9742d",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → LINK_UI_TYPE: OPMZ_ACTV_NAME='Master Validation' → LINK_UI_TYPE='UI' (AS-IS SpdMain_ComboSelChange:239 siMain.SetValue(this._currRowIdx,)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5bd6ea29",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5d81418a",
   "result": "PASS",
   "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → PROGRAM_NAME: OPMZ_ACTV_NAME='Master Validation' → PROGRAM_NAME=' ' (AS-IS SpdMain_ComboSelChange:240 siMain.SetValue(this._currRowIdx,)",
   "tobe_ref": "E2E @trace",
-  "cond": "e50d5dbd",
+  "cond": "e9e2965f",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-01d7e3c4",
   "result": "PASS",
   "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → CONFIRM_YN: OPMZ_ACTV_NAME='Master Validation' → CONFIRM_YN='Y' (AS-IS SpdMain_ComboSelChange:241 siMain.SetValue(this._currRowIdx,)",
   "tobe_ref": "E2E @trace",
-  "cond": "d58da18a",
+  "cond": "dae7ea74",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-5c47cc13",
   "result": "PASS",
   "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → AUTO_YN: OPMZ_ACTV_NAME='Master Validation' → AUTO_YN=' ' (AS-IS SpdMain_ComboSelChange:242 siMain.SetValue(this._currRowIdx,)",
   "tobe_ref": "E2E @trace",
-  "cond": "266fbf49",
+  "cond": "d0daa777",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-7e1d93dd",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 OPMZ_ACTV_NAME → OPTION_YN: OPMZ_ACTV_NAME='Master Validation' → OPTION_YN=' ' (AS-IS SpdMain_ComboSelChange:243 siMain.SetValue(this._currRowIdx,)",
+  "tobe_ref": "E2E @trace",
+  "cond": "95699423",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-f2ceeba6",
   "result": "판정필요",
   "evidence": "OPMZ_ACTV_CD 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
   "tobe_ref": "E2E @trace",
-  "cond": "55ef8d26",
+  "cond": "2e0df036",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "T-a21662da",
-  "result": "판정필요",
-  "evidence": "LINK_UI_TYPE 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
-  "tobe_ref": "E2E @trace",
-  "cond": "87037746",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-591ee6b6",
-  "result": "판정필요",
-  "evidence": "OPTION_YN 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
-  "tobe_ref": "E2E @trace",
-  "cond": "13a2c30f",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-32156746",
   "result": "판정필요",
   "evidence": "OPMZ_ACTV_NAME 연쇄 원천 해석 불가 — AS-IS SpdMain_ComboSelChange:229 siMain.GetColumnIndex(DefColumns.OPMZ_ACTV_NAME) [if (siMain != null && siMain.IsLock(siMain.SheetName) == false)]",
   "tobe_ref": "E2E @trace",
-  "cond": "96e9ddb8",
+  "cond": "fcac747b",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-a21662da",
+  "result": "판정필요",
+  "evidence": "LINK_UI_TYPE 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5bd6ea29",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-05c8a62c",
   "result": "판정필요",
   "evidence": "PROGRAM_NAME 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
   "tobe_ref": "E2E @trace",
-  "cond": "e50d5dbd",
+  "cond": "e9e2965f",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-58cf3c02",
   "result": "판정필요",
   "evidence": "CONFIRM_YN 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
   "tobe_ref": "E2E @trace",
-  "cond": "d58da18a",
+  "cond": "dae7ea74",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-3d19f6a9",
   "result": "판정필요",
   "evidence": "AUTO_YN 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
   "tobe_ref": "E2E @trace",
-  "cond": "266fbf49",
+  "cond": "d0daa777",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-591ee6b6",
+  "result": "판정필요",
+  "evidence": "OPTION_YN 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)",
+  "tobe_ref": "E2E @trace",
+  "cond": "95699423",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-1a63ab28",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → OPMZ_ACTV_CD 'A001'→'A001' — 값 유지(정상)",
   "tobe_ref": "E2E @trace",
-  "cond": "55ef8d26",
+  "cond": "2e0df036",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "T-f024e28f",
-  "result": "PASS",
-  "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → LINK_UI_TYPE 'UI'→'UI' — 값 유지(정상)",
-  "tobe_ref": "E2E @trace",
-  "cond": "87037746",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-12ff009d",
-  "result": "PASS",
-  "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → OPTION_YN ' '→' ' — 값 유지(정상)",
-  "tobe_ref": "E2E @trace",
-  "cond": "13a2c30f",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-4603f467",
   "result": "판정필요",
   "evidence": "OPMZ_ACTV_NAME 연쇄 원천 해석 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "96e9ddb8",
+  "cond": "fcac747b",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-f024e28f",
+  "result": "PASS",
+  "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → LINK_UI_TYPE 'UI'→'UI' — 값 유지(정상)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5bd6ea29",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-0ad72c0e",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → PROGRAM_NAME ' '→' ' — 값 유지(정상)",
   "tobe_ref": "E2E @trace",
-  "cond": "e50d5dbd",
+  "cond": "e9e2965f",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-527ac148",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → CONFIRM_YN 'Y'→'Y' — 값 유지(정상)",
   "tobe_ref": "E2E @trace",
-  "cond": "d58da18a",
+  "cond": "dae7ea74",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-8384da08",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → AUTO_YN ' '→' ' — 값 유지(정상)",
   "tobe_ref": "E2E @trace",
-  "cond": "266fbf49",
+  "cond": "d0daa777",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-12ff009d",
+  "result": "PASS",
+  "evidence": "OPMZ_ACTV_NAME 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → OPTION_YN ' '→' ' — 값 유지(정상)",
+  "tobe_ref": "E2E @trace",
+  "cond": "95699423",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-71327f0c",
   "result": "NA",
   "evidence": "OPMZ_ACTV_SEQ: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "40e63111",
+  "cond": "8f7feeab",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-1a8e3afe",
   "result": "NA",
   "evidence": "OPMZ_ACTV_NAME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "a3173f6a",
+  "cond": "68b49aac",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-f5572191",
   "result": "NA",
   "evidence": "DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "bd1f7e15",
+  "cond": "8633d127",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-336e0e01",
   "result": "NA",
   "evidence": "OPMZ_ACTV_CD: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "deecb50c",
+  "cond": "0ec72c46",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-4b22153d",
   "result": "NA",
   "evidence": "LINK_UI_TYPE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "68456397",
+  "cond": "27c98ee6",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-dd804490",
@@ -1008,7 +1083,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-29ea937f",
@@ -1020,19 +1096,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-20c0336b",
   "result": "NA",
   "evidence": "OPMZ_PLAN_GR_NAME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "85b89f67",
+  "cond": "2cb5c1a9",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-927af3f3",
@@ -1044,7 +1122,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e390b6c1",
@@ -1056,19 +1135,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-e8783799",
   "result": "NA",
   "evidence": "OPTION_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "638c0e03",
+  "cond": "8ff6053e",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-083923e2",
@@ -1080,7 +1161,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-1180a6fb",
@@ -1092,7 +1174,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-4fb00d06",
@@ -1104,7 +1187,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-027e4911",
@@ -1115,7 +1199,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b8c7b39d",
@@ -1126,7 +1211,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-39cf09ad",
@@ -1137,7 +1223,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c4a877ad",
@@ -1148,7 +1235,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3066bd21",
@@ -1159,7 +1247,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e1475b53",
@@ -1170,7 +1259,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-59a3263d",
@@ -1181,7 +1271,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-2e47a3c3",
@@ -1193,7 +1284,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-6973cbcf",
@@ -1205,7 +1297,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-bbe62bb2",
@@ -1217,7 +1310,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-f7b470ee",
@@ -1229,7 +1323,34 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-a41dd8de",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "T-77b7c0d3",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-d597c277",
@@ -1241,7 +1362,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-8908c97a",
@@ -1253,7 +1375,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-d1d89af2",
@@ -1265,7 +1388,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-f7b01025",
@@ -1277,7 +1401,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-142bcf73",
@@ -1289,67 +1414,47 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-32679fc1",
   "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "evidence": "MSG00001: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (actv_cd == string.Empty || actv_seq == string.Empty)' (변수→컬럼 {\"actv_seq\":\"OPMZ_ACTV_SEQ\",\"actv_cd\":\"OPMZ_ACTV_CD\"}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
-  "cond": "4369240a",
+  "cond": "a5d6149b",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-d634fa3e",
   "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "evidence": "MSG00443: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (dtPlanActivity.Rows.Count > 0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
-  "cond": "eca496e2",
+  "cond": "6f8a0715",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-4cf07a64",
   "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
   "tobe_ref": "E2E @trace",
-  "cond": "632431bc",
+  "cond": "33408b1f",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "T-a41dd8de",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "a2f9c33b",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-77b7c0d3",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "a2f9c33b",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c198fac7",
@@ -1360,7 +1465,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-945f4977",
@@ -1371,7 +1477,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-65db88fd",
@@ -1382,7 +1489,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3607a0de",
@@ -1393,7 +1501,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3a883949",
@@ -1404,7 +1513,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-35fce643",
@@ -1416,7 +1526,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-42de2d82",
@@ -1428,7 +1539,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5092c492",
@@ -1439,7 +1551,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e643d9db",
@@ -1450,7 +1563,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0e66ba5e",
@@ -1461,7 +1575,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-307c24a5",
@@ -1473,7 +1588,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-85bfd01b",
@@ -1485,7 +1601,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f6ebf0b0",
@@ -1497,7 +1614,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-11804da0",
@@ -1509,7 +1627,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-92c026d3",
@@ -1521,30 +1640,33 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-21988288",
-  "result": "PASS",
-  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 OPMZ_ACTV_SEQ 편집 → CRUD_TYPE='M' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → CRUD_TYPE='D' (AS-IS CRUD Status I/U/D 표시)",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 OPMZ_ACTV_SEQ 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → CRUD_TYPE='D' (AS-IS CRUD Status I/U/D 표시)",
   "tobe_ref": "E2E @trace",
   "cond": "7e583589",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b2ab9f0a",
-  "result": "PASS",
-  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 OPMZ_ACTV_SEQ 편집 → CRUD_TYPE='M' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → CRUD_TYPE='D' (AS-IS CRUD Status I/U/D 표시)",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 OPMZ_ACTV_SEQ 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → CRUD_TYPE='D' (AS-IS CRUD Status I/U/D 표시)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-17ff72e9",
@@ -1556,19 +1678,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-eae7d9ad",
-  "result": "PASS",
-  "evidence": "OPMZ_ACTV_SEQ 수정 'M' → 원값 복원 뒤 상태 해제",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] OPMZ_ACTV_SEQ 값 변경이 안 됨('1')",
   "tobe_ref": "E2E @verify 병합 셀",
   "cond": "0c603b16",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7a517b41",
@@ -1579,7 +1703,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "T-563b98f8",
@@ -1591,7 +1716,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2ac926bb",
@@ -1602,7 +1728,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b6f2c53f",
@@ -1613,7 +1740,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2bd5b016",
@@ -1624,7 +1752,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-12af56a3",
@@ -1635,7 +1764,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c3336c85",
@@ -1646,7 +1776,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-fe4a2eb2",
@@ -1657,7 +1788,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-98ae82f0",
@@ -1668,7 +1800,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-496bfba7",
@@ -1679,7 +1812,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7b16a09b",
@@ -1690,7 +1824,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6734e54a",
@@ -1702,7 +1837,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-57270351",
@@ -1713,7 +1849,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0b7c84a9",
@@ -1724,7 +1861,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5c2ec240",
@@ -1735,7 +1873,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-aa57a11b",
@@ -1746,7 +1885,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f35570e4",
@@ -1757,7 +1897,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8f47ce0c",
@@ -1768,7 +1909,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5ab0b39f",
@@ -1779,7 +1921,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-34ff5ca2",
@@ -1790,7 +1933,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-790360b4",
@@ -1801,7 +1945,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-30a67128",
@@ -1812,7 +1957,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ee0f4303",
@@ -1823,7 +1969,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f7acdfc0",
@@ -1834,7 +1981,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6671bb7d",
@@ -1845,7 +1993,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-86703ee9",
@@ -1856,7 +2005,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-08d66a49",
@@ -1867,7 +2017,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8e78ee24",
@@ -1878,7 +2029,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-bd86c072",
@@ -1889,7 +2041,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1e942f9c",
@@ -1900,7 +2053,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7cf14001",
@@ -1911,7 +2065,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c30ed9e5",
@@ -1922,7 +2077,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-341c8637",
@@ -1933,7 +2089,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4b74493c",
@@ -1944,7 +2101,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7536257b",
@@ -1955,7 +2113,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e213abb1",
@@ -1966,7 +2125,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4045d2b3",
@@ -1977,7 +2137,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-70b9dfb1",
@@ -1988,7 +2149,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-60456f5d",
@@ -1999,7 +2161,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5ad99495",
@@ -2010,7 +2173,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-fa405526",
@@ -2021,7 +2185,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-00f7e47e",
@@ -2032,7 +2197,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-fa7948e8",
@@ -2043,7 +2209,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-306313dd",
@@ -2054,7 +2221,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-03fc1be5",
@@ -2065,29 +2233,32 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-226dfa35",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 169ms(요청~응답 169ms · 벽시계 682ms) · 7행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 101ms(요청~응답 101ms · 벽시계 1147ms) · 7행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-58a71ace",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 169ms(요청~응답 169ms · 벽시계 682ms) · 7행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 101ms(요청~응답 101ms · 벽시계 1147ms) · 7행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5100a896",
@@ -2099,7 +2270,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7ed7b23b",
@@ -2110,7 +2282,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-499b7a20",
@@ -2121,7 +2294,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-698b2f33",
@@ -2132,7 +2306,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-80dad4c1",
@@ -2143,7 +2318,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5f7c1ea4",
@@ -2154,7 +2330,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3924355a",
@@ -2165,7 +2342,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-08020cd4",
@@ -2176,7 +2354,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4cb23f2f",
@@ -2187,7 +2366,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3685ffd8",
@@ -2198,7 +2378,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1b24303d",
@@ -2210,7 +2391,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-dae05d48",
@@ -2222,7 +2404,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3f7b44f1",
@@ -2234,7 +2417,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0f6bd601",
@@ -2245,7 +2429,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0607041c",
@@ -2257,7 +2442,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-48c182ae",
@@ -2268,7 +2454,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d8440b6d",
@@ -2279,7 +2466,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5b9c7e9a",
@@ -2290,7 +2478,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-9850c356",
@@ -2301,7 +2490,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-219f92a7",
@@ -2313,7 +2503,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6db06d21",
@@ -2325,7 +2516,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-af5ffe79",
@@ -2336,7 +2528,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f5f78bf8",
@@ -2347,7 +2540,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1f5643ad",
@@ -2358,7 +2552,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7532f0ba",
@@ -2369,7 +2564,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3724244a",
@@ -2380,7 +2576,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0309bd8c",
@@ -2392,7 +2589,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-75eb4f08",
@@ -2404,7 +2602,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c9aa3b5b",
@@ -2416,7 +2615,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0d2d9b14",
@@ -2428,7 +2628,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-88826131",
@@ -2440,7 +2641,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-73d4f7b1",
@@ -2452,7 +2654,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-cd17a37e",
@@ -2464,7 +2667,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2885a2f7",
@@ -2476,10 +2680,11 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
-  "row_id": "V-fcbdd25f",
+  "row_id": "V-5308adf0",
   "result": "PASS",
   "evidence": "기존행 r0 OPMZ_ACTV_SEQ 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @verify",
@@ -2488,7 +2693,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-46f9759a",
@@ -2500,7 +2706,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f995f592",
@@ -2512,7 +2719,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-df2c6970",
@@ -2524,7 +2732,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ccd0185d",
@@ -2536,7 +2745,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f9df188a",
@@ -2548,7 +2758,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-fba9e332",
@@ -2560,7 +2771,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f6e896c3",
@@ -2572,7 +2784,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0afd651b",
@@ -2584,7 +2797,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3a354345",
@@ -2596,7 +2810,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e6d35bcd",
@@ -2608,10 +2823,11 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
-  "row_id": "V-50f0b612",
+  "row_id": "V-c575bfd9",
   "result": "PASS",
   "evidence": "신규행 r0 OPMZ_ACTV_SEQ 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @verify",
@@ -2620,7 +2836,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6a8030c5",
@@ -2632,7 +2849,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1957bb19",
@@ -2644,7 +2862,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-274b6319",
@@ -2656,7 +2875,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-62b9002f",
@@ -2668,7 +2888,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4262e238",
@@ -2680,7 +2901,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-eb482078",
@@ -2692,7 +2914,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-74026a3e",
@@ -2704,7 +2927,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2b752270",
@@ -2716,7 +2940,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8740bf05",
@@ -2728,7 +2953,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ea47bd85",
@@ -2740,7 +2966,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f7e600f1",
@@ -2752,7 +2979,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e04d2a4f",
@@ -2764,7 +2992,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c36d9de8",
@@ -2776,7 +3005,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-500cf5a2",
@@ -2788,7 +3018,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b00190a9",
@@ -2800,7 +3031,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-da916044",
@@ -2812,7 +3044,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-18f8e0b4",
@@ -2824,7 +3057,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-81cb4e26",
@@ -2836,7 +3070,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7445ade6",
@@ -2848,10 +3083,11 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
-  "row_id": "V-a093c39f",
+  "row_id": "V-cd73964d",
   "result": "PASS",
   "evidence": "OPMZ_ACTV_SEQ: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @verify",
@@ -2860,7 +3096,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3c7a8e55",
@@ -2872,7 +3109,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c53c15a4",
@@ -2884,7 +3122,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-84e3b3a1",
@@ -2896,7 +3135,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-55d435f5",
@@ -2908,7 +3148,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-61655939",
@@ -2920,7 +3161,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5879dab7",
@@ -2932,7 +3174,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-94ace634",
@@ -2944,7 +3187,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-bd224644",
@@ -2956,7 +3200,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-124f0396",
@@ -2968,7 +3213,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ed4e78b2",
@@ -2980,7 +3226,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-dca09650",
@@ -2992,7 +3239,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-465fe78d",
@@ -3004,7 +3252,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-15b3214f",
@@ -3016,7 +3265,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0dfe66db",
@@ -3028,7 +3278,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-bb84f90b",
@@ -3040,7 +3291,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1d0e8f17",
@@ -3052,7 +3304,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c7e2f95a",
@@ -3064,7 +3317,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b7d49994",
@@ -3076,7 +3330,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-24f2a804",
@@ -3088,7 +3343,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-411a13c7",
@@ -3100,19 +3356,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-aeb64a23",
   "result": "ERROR",
-  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [181s] 행 찾기 0 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '1' → '2' 저장 실패 · 재조회 값 '2' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '2' ⚠ 원값과 다름",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [182s] 행 찾기 1 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '2' → '3' 저장 실패 · 재조회 값 '3' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '3' ⚠ 원값과 다름",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1d783c8b",
@@ -3124,7 +3382,8 @@
    "calls": 3,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-561acd2b",
@@ -3136,31 +3395,21 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e7eb2e22",
   "result": "ERROR",
-  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [181s] 행 찾기 0 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '1' → '2' 저장 실패 · 재조회 값 '2' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '2' ⚠ 원값과 다름",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [182s] 행 찾기 1 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '2' → '3' 저장 실패 · 재조회 값 '3' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '3' ⚠ 원값과 다름",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "V-0641830f",
-  "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I: 칸 OPMZ_ACTV_SEQ 입력 실패: 입력 안 됨('1'→'1' · 더블클릭 뒤 포커스 INPUT:1) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → type:7행·신규0·호출1·요청8 → 끝:7행·신규0·호출1·요청8 · 문서 자동 생성 P23 · sheet_columns 편집 OPMZ_ACTV_SEQ · 필수 2칸",
-  "tobe_ref": "E2E @verify 시나리오",
-  "cond": "ea8f9db4",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4c4d17d8",
@@ -3172,19 +3421,21 @@
    "calls": 10,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-9b602eaf",
   "result": "ERROR",
-  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [181s] 행 찾기 0 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '1' → '2' 저장 실패 · 재조회 값 '2' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '2' ⚠ 원값과 다름",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [182s] 행 찾기 1 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '2' → '3' 저장 실패 · 재조회 값 '3' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '3' ⚠ 원값과 다름",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c01f3d23",
@@ -3196,7 +3447,8 @@
    "calls": 9,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4e06a98e",
@@ -3205,22 +3457,24 @@
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "5f790b2d",
   "mctx": {
-   "calls": 11,
+   "calls": 10,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c349a23c",
   "result": "ERROR",
-  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [181s] 행 찾기 0 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '1' → '2' 저장 실패 · 재조회 값 '2' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '2' ⚠ 원값과 다름",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=신규 입력 데이터 중 중복된 데이터가 있습니다. · [181s] 재조회 · [182s] 행 찾기 1 · 행 [81|SCP 엔진 최적화 프로세스|E62B_E63F] OPMZ_ACTV_SEQ: '2' → '3' 저장 실패 · 재조회 값 '3' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '3' ⚠ 원값과 다름",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-085b90b1",
@@ -3232,7 +3486,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b039b9f2",
@@ -3244,7 +3499,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0cc6b7f8",
@@ -3256,7 +3512,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-a8809434",
@@ -3268,7 +3525,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ad01538a",
@@ -3280,7 +3538,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-81e3c55e",
@@ -3292,7 +3551,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d6b2ad6b",
@@ -3304,7 +3564,8 @@
    "calls": 4,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-084e3b40",
@@ -3316,19 +3577,21 @@
    "calls": 10,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1bf41900",
   "result": "ERROR",
-  "evidence": "OPMZ_ACTV_SEQ r0 '1'→빈값 [AS-IS 검증 근거 없음] 저장 전 화면 검증 거부 · 원복 OK · 화면 메시지 '[Act. Seq] 값은 필수 입력 항목입니다.'",
+  "evidence": "OPMZ_ACTV_SEQ r0 '1'→빈값 [사유 불명] 저장 요청 없음 · 원복 OK · 입력 경로 실패: 입력 안 됨('1'→'1' · 더블클릭 뒤 포커스 INPUT:1)",
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "86ca7438",
   "mctx": {
-   "calls": 11,
+   "calls": 10,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-065b371b",
@@ -3337,22 +3600,24 @@
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "92f0eb0a",
   "mctx": {
-   "calls": 13,
+   "calls": 12,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-de9c26e8",
   "result": "PASS",
-  "evidence": "저장 2회 소요 165·147ms · 최소 147ms · 기준 3000ms",
+  "evidence": "저장 2회 소요 153·116ms · 최소 116ms · 기준 3000ms",
   "tobe_ref": "E2E @verify 저장 세부",
   "cond": "338fc284",
   "mctx": {
-   "calls": 13,
+   "calls": 12,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3ebf6c56",
@@ -3364,7 +3629,8 @@
    "calls": 5,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-91c021bf",
@@ -3376,7 +3642,8 @@
    "calls": 6,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-25b65419",
@@ -3388,7 +3655,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-390fdf7d",
@@ -3400,7 +3668,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d2af68f8",
@@ -3412,7 +3681,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-02b72710",
@@ -3424,7 +3694,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-90fc2c99",
@@ -3436,7 +3707,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ca2d6739",
@@ -3448,7 +3720,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1eca1e99",
@@ -3460,7 +3733,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-55d81da8",
@@ -3472,7 +3746,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1a1e6eb0",
@@ -3484,7 +3759,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-bb368bbd",
@@ -3496,7 +3772,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f85013b7",
@@ -3508,7 +3785,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-21404699",
@@ -3520,7 +3798,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-130dba17",
@@ -3532,7 +3811,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f6f672d6",
@@ -3544,7 +3824,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1529d774",
@@ -3556,7 +3837,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-30b75737",
@@ -3568,7 +3850,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3db47efc",
@@ -3580,7 +3863,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d98af8ba",
@@ -3592,7 +3876,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-fa828398",
@@ -3604,7 +3889,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0f79438a",
@@ -3616,7 +3902,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ee91b9b8",
@@ -3628,7 +3915,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7f6e1011",
@@ -3640,7 +3928,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-da2a4269",
@@ -3652,7 +3941,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-009ab603",
@@ -3664,7 +3954,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-afa8bc95",
@@ -3676,7 +3967,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4ab599b8",
@@ -3688,7 +3980,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-354f89f5",
@@ -3700,7 +3993,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-97a0630a",
@@ -3712,7 +4006,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6d26be32",
@@ -3724,7 +4019,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5bf0521a",
@@ -3736,7 +4032,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3777e301",
@@ -3748,7 +4045,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f8c7c23f",
@@ -3760,19 +4058,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-9646c6fd",
-  "result": "FAIL",
-  "evidence": "[자동] OPMZ_ACTV_NAME 신규 행 콤보 붙여넣기 — 후보 값 반영: OPMZ_ACTV_NAME@0 값 '' 이 /\\S/ 아님 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → insert:7행·신규0·호출1·요청8 → paste:8행·신규1·호출1·요청8 → OPMZ_ACTV_NAME@0 붙여넣기 'Master Validation': ''→'' → cell:8행·신규1·호출1·요청8 → 끝:8행·신규1·호출1·요청8 · 문서 자동 생성 P08 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_NAME FPComboBox M",
+  "result": "PASS",
+  "evidence": "[자동] OPMZ_ACTV_NAME 신규 행 콤보 붙여넣기 — 후보 값 반영: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → insert:7행·신규0·호출1·요청8 → paste:8행·신규1·호출1·요청8 → OPMZ_ACTV_NAME@0 붙여넣기 'Master Validation': ''→'A001' → cell:8행·신규1·호출1·요청8 → OPMZ_ACTV_NAME@0='A001' → 끝:8행·신규1·호출1·요청8 · 문서 자동 생성 P08 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_NAME FPComboBox M",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "135a66ec",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-a5a4e257",
@@ -3784,7 +4084,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0231d1c8",
@@ -3796,19 +4097,47 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
-  "row_id": "V-68fdcb16",
-  "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 기존 행 OPMZ_ACTV_SEQ 수정 저장 → 입력된 필수 칸 오탐 없음: 칸 OPMZ_ACTV_SEQ 입력 실패: 입력 안 됨('1'→'1' · 더블클릭 뒤 포커스 INPUT:1) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → type:7행·신규0·호출1·요청8 → 끝:7행·신규0·호출1·요청8 · 문서 자동 생성 P12 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_SEQ M · 필수 오탐 유형(DM-215)",
+  "row_id": "V-a672594b",
+  "result": "PASS",
+  "evidence": "[자동] OPMZ_ACTV_NAME 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → insert:7행·신규0·호출1·요청8 → paste:8행·신규1·호출1·요청8 → OPMZ_ACTV_NAME@0 붙여넣기 'Input Constraint' [기존 행 r1 원값 'A007' Copy='Input Constraint'(이 행 후보 9건 안)]: ''→'A007' → cell:8행·신규1·호출1·요청8 → OPMZ_ACTV_NAME@0='A007' → 끝:8행·신규1·호출1·요청8 · 문서 자동 생성 P31 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_NAME FPComboBox M · 사용자 경로 Copy&Paste",
   "tobe_ref": "E2E @verify 시나리오",
-  "cond": "cb6449c3",
+  "cond": "64bee0b2",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "V-80cda0d7",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] OPMZ_ACTV_NAME 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사: 값 토큰 @copy:out 해석 실패(값 없음) — 이 행 후보 9건 밖 값을 가진 기존 행 없음 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → insert:7행·신규0·호출1·요청8 → paste:8행·신규1·호출1·요청8 → 끝:8행·신규1·호출1·요청8 · 문서 자동 생성 P32 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_NAME FPComboBox M · 사용자 경로 Copy&Paste(원본 값이 이 행 후보 밖)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "62d50533",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
+ },
+ {
+  "row_id": "V-2cb37405",
+  "result": "PASS",
+  "evidence": "[자동] 기존 행 OPMZ_ACTV_SEQ 수정 저장 → 입력된 필수 칸 오탐 없음: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청6 → type:7행·신규0·호출1·요청8 → OPMZ_ACTV_SEQ@0=1 → btn:7행·신규0·호출1·요청8 → nomsgre:7행·신규0·호출1·요청8 → 안내 0건 중 /필수|required|mandatory/ 0 → 끝:7행·신규0·호출1·요청8 · 문서 자동 생성 P12 · sheet_columns Plan Activity Mgmt.OPMZ_ACTV_SEQ M · 필수 오탐 유형(DM-215)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "1ded1684",
+  "mctx": {
+   "calls": 1,
+   "rows": 8,
+   "req": 0
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-23d510c7",
@@ -3820,7 +4149,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-20ee0f0e",
@@ -3832,7 +4162,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-79c8ec6a",
@@ -3844,7 +4175,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-51966be8",
@@ -3856,7 +4188,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c539d653",
@@ -3868,7 +4201,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-cf63ad41",
@@ -3880,7 +4214,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d4553fa9",
@@ -3892,7 +4227,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e3a74925",
@@ -3904,7 +4240,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-6124c136",
@@ -3916,7 +4253,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-13a12214",
@@ -3928,7 +4266,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-cb5ccd4b",
@@ -3940,7 +4279,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-81e4546e",
@@ -3952,7 +4292,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c65fe235",
@@ -3964,7 +4305,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3458fc81",
@@ -3976,7 +4318,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-63f2315a",
@@ -3988,7 +4331,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0fcb5f6c",
@@ -4000,7 +4344,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2c0e7682",
@@ -4012,7 +4357,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-10512b6b",
@@ -4024,19 +4370,21 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-642f2141",
-  "result": "PASS",
-  "evidence": "조회 클릭 → 로딩 표시 관측 1회(100ms 폴링) · 응답 639ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "result": "FAIL",
+  "evidence": "조회 클릭 → 로딩 표시 관측 0회(100ms 폴링) · 응답 1072ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외 — 서버 호출 중 로딩 표시 없음(공통 UI 규칙 · GAP 자체결함 3·7·16)",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e980e118",
@@ -4048,7 +4396,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8151db53",
@@ -4060,7 +4409,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d3c596df",
@@ -4072,7 +4422,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d57cd20a",
@@ -4084,7 +4435,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e96482ff",
@@ -4096,7 +4448,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f1f17265",
@@ -4108,7 +4461,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1bc3eb34",
@@ -4120,7 +4474,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-dfa93a03",
@@ -4132,7 +4487,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e6008e5f",
@@ -4144,7 +4500,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e517e5fd",
@@ -4156,7 +4513,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e9e1dae9",
@@ -4168,7 +4526,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-83ed5471",
@@ -4180,7 +4539,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5aba7bb5",
@@ -4192,7 +4552,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-78f4e79d",
@@ -4204,7 +4565,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-178f7430",
@@ -4216,7 +4578,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4ff386ae",
@@ -4228,7 +4591,8 @@
    "calls": 2,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e41495e0",
@@ -4240,19 +4604,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
- },
- {
-  "row_id": "V-0049f42d",
-  "result": "PASS",
-  "evidence": "ime NA: 신규행에 직접 입력하는 문자 컬럼 없음 | auto PASS: 신규행 OPMZ_ACTV_NAME 에 'Ma' 입력 → 편집기 'Master Validation' · Enter 후 셀 'Master Validation' (기대 후보 'Master Validation') [전체: ime NA: 신규행에 직접 입력하는 문자 컬럼 없음 | auto PASS: 신규행 OPMZ_ACTV_NAME 에 'Ma' 입력 → 편집기 'Master Validation' · Enter 후 셀 'Master Validation' (기대 후보 'Master Validation')]",
-  "tobe_ref": "E2E @verify",
-  "cond": "e5cf1e91",
-  "mctx": {
-   "calls": 1,
-   "rows": 8,
-   "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b8a00261",
@@ -4264,7 +4617,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8b968083",
@@ -4276,7 +4630,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4464ebfb",
@@ -4288,7 +4643,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ba79c933",
@@ -4300,7 +4656,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-480a997c",
@@ -4312,7 +4669,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-2f46deed",
@@ -4324,7 +4682,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-37c5cef2",
@@ -4336,7 +4695,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-81ec0ae7",
@@ -4348,7 +4708,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d67f7473",
@@ -4360,7 +4721,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-7fc125bb",
@@ -4372,7 +4734,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-8375c10b",
@@ -4384,19 +4747,21 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-51c5443e",
   "result": "PASS",
-  "evidence": "조회조건 Div: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "evidence": "조회조건 Div: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false · 기대 원천 AS-IS 원문 UsrCombo",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-535fc2ca",
@@ -4408,7 +4773,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-90238570",
@@ -4420,7 +4786,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-1e76b6b7",
@@ -4432,7 +4799,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-bd146eed",
@@ -4444,7 +4812,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-4fa7659f",
@@ -4456,7 +4825,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5365e701",
@@ -4468,7 +4838,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-a7f4c86a",
@@ -4480,7 +4851,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-5bae13c0",
@@ -4492,7 +4864,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-dd453020",
@@ -4504,7 +4877,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-f3600f47",
@@ -4516,7 +4890,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-968af19a",
@@ -4528,7 +4903,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-478e2419",
@@ -4540,7 +4916,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-44d0c083",
@@ -4552,7 +4929,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-9f3ccc32",
@@ -4564,7 +4942,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-83cff452",
@@ -4576,7 +4955,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-0777d675",
@@ -4588,7 +4968,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-b5d80f3d",
@@ -4600,7 +4981,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-32fd576d",
@@ -4612,7 +4994,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-63043a47",
@@ -4624,7 +5007,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-ec70542d",
@@ -4636,7 +5020,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-9ad38aa1",
@@ -4648,7 +5033,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-40b09b75",
@@ -4660,7 +5046,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-15d16990",
@@ -4672,7 +5059,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-3384c6a8",
@@ -4684,7 +5072,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-628421d3",
@@ -4696,7 +5085,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-a9dbc6f1",
@@ -4708,7 +5098,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-d7c8a9dd",
@@ -4720,7 +5111,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-e894ae6e",
@@ -4732,7 +5124,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-caba58ac",
@@ -4744,7 +5137,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-45f6ca67",
@@ -4756,7 +5150,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-697c00c1",
@@ -4768,7 +5163,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-81560d16",
@@ -4780,7 +5176,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-35d972b5",
@@ -4792,7 +5189,8 @@
    "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "V-c002bb90",
@@ -4801,10 +5199,11 @@
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 8,
    "req": 0
-  }
+  },
+  "run": "20261114171025"
  },
  {
   "row_id": "AD-f5a29c5c",
@@ -6008,7 +6407,7 @@
  {
   "row_id": "EG-71faae7f",
   "result": "PASS",
-  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 1건 별도) · AS-IS ",
+  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 0건 별도) · AS-IS ",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 0,
@@ -6426,7 +6825,7 @@
  {
   "row_id": "EG-bf08bc54",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6437,7 +6836,7 @@
  {
   "row_id": "EG-b409c84f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6448,7 +6847,7 @@
  {
   "row_id": "EG-10fb2e33",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6459,7 +6858,7 @@
  {
   "row_id": "EG-83777d48",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6470,7 +6869,7 @@
  {
   "row_id": "EG-6006eef1",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6481,7 +6880,7 @@
  {
   "row_id": "EG-acaae3ff",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6547,7 +6946,7 @@
  {
   "row_id": "EG-cdaa23a0",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6558,7 +6957,7 @@
  {
   "row_id": "EG-d26b03c6",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6569,7 +6968,7 @@
  {
   "row_id": "EG-60eea686",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6580,7 +6979,7 @@
  {
   "row_id": "EG-6c6b62ae",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6591,7 +6990,7 @@
  {
   "row_id": "EG-e254ddb6",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6602,7 +7001,7 @@
  {
   "row_id": "EG-21ef7b7c",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6789,7 +7188,7 @@
  {
   "row_id": "EG-7cb20777",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6800,7 +7199,7 @@
  {
   "row_id": "EG-c086ee09",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6811,7 +7210,7 @@
  {
   "row_id": "EG-767a5181",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6822,7 +7221,7 @@
  {
   "row_id": "EG-6db61e84",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6833,7 +7232,7 @@
  {
   "row_id": "EG-5a287b1d",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -6844,7 +7243,7 @@
  {
   "row_id": "EG-2917dc93",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7084,28 +7483,6 @@
   }
  },
  {
-  "row_id": "EG-1ecdf655",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[KO] 수정한 내용이 없습니다.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-61af3e9e",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[CN] 没有修改的内容.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
   "row_id": "EG-728f502e",
   "result": "판정필요",
   "evidence": "[SORT 기준 차이 → 판정필요] 문자 키 1/1건 AS-IS 콜레이션과 다를 수 있음: DIVISION_ID(대소문자 무시·NULL 먼저 없음)",
@@ -7118,8 +7495,8 @@
  },
  {
   "row_id": "EG-55cc999e",
-  "result": "PASS",
-  "evidence": "KO 문구 11건 일치 · 사전에 없는 문구 9건",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0108) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -7129,19 +7506,8 @@
  },
  {
   "row_id": "EG-743687ee",
-  "result": "PASS",
-  "evidence": "EN 문구 10건 일치 · 사전에 없는 문구 9건",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-e690309a",
   "result": "ERROR",
-  "evidence": "[확인 대상] 그리드 칸 한글 OPMZ_PRS_NAME 7행 — 명칭 칸이면 언어 미반영",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0108) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -7151,19 +7517,8 @@
  },
  {
   "row_id": "EG-14c3bd1a",
-  "result": "FAIL",
-  "evidence": "CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 9건",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-5a018ad2",
   "result": "ERROR",
-  "evidence": "[확인 대상] 그리드 칸 한글 OPMZ_PRS_NAME 7행 — 명칭 칸이면 언어 미반영",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0108) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -7172,20 +7527,9 @@
   }
  },
  {
-  "row_id": "EG-f0c14a3e",
+  "row_id": "EG-3d8e6c9d",
   "result": "PASS",
-  "evidence": "조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-d5204018",
-  "result": "PASS",
-  "evidence": "응답 46건 = DB 46건",
+  "evidence": "응답 14건 = DB 14건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -7205,9 +7549,9 @@
   }
  },
  {
-  "row_id": "EG-3d8e6c9d",
+  "row_id": "EG-d5204018",
   "result": "PASS",
-  "evidence": "응답 14건 = DB 14건",
+  "evidence": "응답 46건 = DB 46건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -7238,6 +7582,17 @@
   }
  },
  {
+  "row_id": "EG-1902b673",
+  "result": "PASS",
+  "evidence": "SCP_OPMZ_PLAN_GR_ACTV_M 생성 칸 불변 · 수정 칸 정상",
+  "tobe_ref": "E2E @save-audit-cols",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
   "row_id": "EG-ad0528f1",
   "result": "PASS",
   "evidence": "SCP_OPMZ_PLAN_GR_ACTV_M 생성 칸 불변 · 수정 칸 정상",
@@ -7251,7 +7606,7 @@
  {
   "row_id": "EG-99b6858b",
   "result": "ERROR",
-  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 61건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
+  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 64건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
   "tobe_ref": "E2E @master_sweep",
   "mctx": {
    "calls": 0,

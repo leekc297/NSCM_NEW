@@ -7,8 +7,8 @@
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
   "rows": 8613,
-  "dur": 397,
-  "at": "2026-11-09T02:15:14.595Z",
+  "dur": 417,
+  "at": "2026-11-14T19:16:24.599Z",
   "user": "minyonglee1",
   "test": "셀 연쇄 초기화(C2)"
  },
@@ -19,9 +19,22 @@
   "url": "http://127.0.0.1:5173/api/SSP0025/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"81\",\"plantSite\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"modelId\":\"\"}",
   "status": 200,
-  "rows": 18,
-  "dur": 293,
-  "at": "2026-11-09T02:15:15.634Z",
+  "rows": 17,
+  "dur": 252,
+  "at": "2026-11-14T19:16:25.712Z",
+  "user": "minyonglee1",
+  "test": "셀 연쇄 초기화(C2)"
+ },
+ {
+  "menu": "SSP0025",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0025/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"fromSiteId\":\"\",\"toSiteId\":\"AC00-A\",\"itemId\":\"\",\"modelId\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 390,
+  "at": "2026-11-14T19:16:35.486Z",
   "user": "minyonglee1",
   "test": "셀 연쇄 초기화(C2)"
  }

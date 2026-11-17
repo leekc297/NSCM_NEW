@@ -1,0 +1,10 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SSP0024-S803ec4,DIVISION,,,,값 미도출,"if ("""" != pdivision)",
+SSP0024-S5588d6,DIVISION,,,,값 미도출,if (siMain.IsLock(siMain.SheetName) == false) ▸ if (string.IsNullOrEmpty(sDivisionId) && e.Column != siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SSP0024-Sc5a661,DIVISION,,,,값 미도출,for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (iCol < e.CellRange.Column + e.CellRange.ColumnCount) ▸ if (iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SSP0024-S7b63e1,DIVISION,,,,값 미도출,"for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (iCol < e.CellRange.Column + e.CellRange.ColumnCount) ▸ if (iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ else of (rDivisionID != """")",
+SSP0024-Se8fd94,DIVISION,,,,값 미도출,for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (iCol < e.CellRange.Column + e.CellRange.ColumnCount) ▸ else of (iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (iCol == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)),
+SSP0024-Sdace47,DIVISION,,,,값 미도출,for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (iCol < e.CellRange.Column + e.CellRange.ColumnCount) ▸ else of (iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (iCol == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)),
+SSP0024-S66bbcc,DIVISION,,,,값 미도출,for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (iCol < e.CellRange.Column + e.CellRange.ColumnCount) ▸ else of (iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (iCol == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)),
+SSP0024-S0ecdd1,DIVISION,,,,값 미도출,"if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CAppSetting.FlagI) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID))",
+SSP0024-S9c9ff7,DIVISION,,,,값 미도출,"if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CAppSetting.FlagI) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (e.Column == siMain.",

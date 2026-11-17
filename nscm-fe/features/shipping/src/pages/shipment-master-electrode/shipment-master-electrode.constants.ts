@@ -1,3 +1,5 @@
+import type { NumberInputRule } from '@foundation/utils';
+
 export const MENU_ID = 'SSP0024' as const;
 export type MENU_ID = typeof MENU_ID;
 
@@ -205,6 +207,21 @@ export const MAIN_COLUMNS: ColumnMeta[] = [
   { key: 'LAST_UPDATED_BY', header: 'Last Updated By', width: 100, align: 'L' },
   { key: 'LAST_UPDATE_DATE', header: 'Last Update Date', width: 160, align: 'C' },
 ];
+
+// 숫자 입력 규칙 (보완요청 이규철 2026-11-10) — Pancake Roll Length / Steelcrate/Cut:
+//   정수만 입력(소수 차단) + 음수 허용(positiveOnly 미지정). 정수/양수 제한은 DB 메타
+//   (SCM_MST_SHEET_COLUMNS)에 컬럼이 없어 화면 코드 numberRules 로 선언한다(규칙 column-meta COL-10).
+//   음수일 때 빨간 글자는 formatItem(paintNegativeText, NEGATIVE_RED_COLUMNS)이 담당한다.
+export const NUMBER_RULES: Record<string, NumberInputRule> = {
+  PC_ROLL_LENGTH: { integerOnly: true },
+  STEELCRATE_PER_CUT: { integerOnly: true },
+};
+
+// 음수 → 빨간 글자 대상 컬럼 (위 두 컬럼과 동일 — 음수 입력이 허용되는 셀).
+export const NEGATIVE_RED_COLUMNS: ReadonlySet<string> = new Set([
+  'PC_ROLL_LENGTH',
+  'STEELCRATE_PER_CUT',
+]);
 
 // TO-BE MSG 코드 (SCM_ADM_MSG_M 문구 역조회로 확정 — Hook #114, ora.py 실측 2026-09-22).
 //   주의: AS-IS 번호를 그대로 쓰지 않는다. AS-IS MSG00004(성공)=TO-BE MSG00004("No changes to save") 로 의미가 달라

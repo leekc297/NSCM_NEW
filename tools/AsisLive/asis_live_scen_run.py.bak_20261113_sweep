@@ -1,0 +1,110 @@
+# -*- coding: utf-8 -*-
+"""소스 분기 시나리오 실행 — 화면 안 버튼으로 타는 조회·팝업 분기 (2026-11-13 · 플랜 P6-2 1단계)
+
+  python tools/AsisLive/asis_live_scen_run.py <ID> [ID ...] [--group "SCP Planner"]
+대상  scenarios_cov.csv 에서 아직 실행 안 된 분기 중, 진입점이 **화면 안 버튼 Click** 이고 그 버튼에서 저장 계열 분기로 이어지지 않는 것.
+        · 저장·삭제·업로드로 이어지는 버튼은 이 단계에서 누르지 않는다(저장 시나리오는 대상 행 기록·복원과 함께 따로 실행).
+        · Excel·인쇄·파일 대화상자를 여는 버튼은 누르지 않는다(이름 규칙) — 건너뛴 버튼은 목록으로 남긴다.
+순서  화면 열기 → 필수 조건 최근 값 채움 → 조회 → 버튼마다: 누르기 → 뜬 팝업 기록·닫기 → 그동안의 서버 호출 수집
+산출  Doc/asislive/<ID>/run_<시각>_acts/  calls.json(구간 = action:<버튼>) · acts.json(버튼별 결과·팝업·대화상자) · run.json
+      실행 뒤 asis_live_scen_cov.py 를 다시 돌리면 실행 현황에 반영된다.
+"""
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+import asis_live_run as R
+import asis_live_fill as F
+
+SAVE = re.compile(r"save|delete|insert|upload|confirm|copy|create|apply|release|approve|reject|import|send|interface|i/?f\b", re.I)
+SKIPNAME = re.compile(r"excel|export|download|upload|print|file|import|report", re.I)
+RISKY = re.compile(r"update|chg|change|calc|status|run|exec|engine|batch|close|cancel|reset|init|plan(?!date)|send|mail|sync|gen|make|fix|lock|open|start|stop|new|add|del|remove|clear|copy|apply|confirm|approve", re.I)   # 조회가 아닐 수 있는 버튼(이름 규칙) — 누르지 않고 목록으로 남긴다
+P = lambda *a: os.path.join(R.ROOT, *a)
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def click_target(entry):
+    """진입점 문자열에서 버튼 컨트롤 이름 — event:this.btnInput.Click · event:btnInput_Click"""
+    m = re.match(r"^event:(?:this\.)?(\w+)\.Click$", entry) or re.match(r"^event:(\w+)_Click$", entry)
+    return m.group(1) if m else None
+
+
+def plan(mid):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    by = {}
+    for r in sc:
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            c = click_target(e)
+            if not c: continue
+            d = by.setdefault(c, {"types": set(), "eps": set(), "todo": 0, "ids": []})
+            d["types"].add(r["type"]); d["eps"] |= set(filter(None, (r.get("endpoints") or "").split(";")))
+            if r.get("cov", "NOT_EXECUTED") in ("NOT_EXECUTED", "NO_CALL_EVIDENCE") and r["scenario_id"] not in d["ids"]: d["todo"] += 1; d["ids"].append(r["scenario_id"])
+    todo, skipped = [], []
+    for c, d in sorted(by.items()):
+        if d["todo"] == 0: continue
+        if "저장" in d["types"] or any(SAVE.search(e) for e in d["eps"]) or SAVE.search(c): skipped.append({"control": c, "why": "저장 계열 분기로 이어짐", "scenarios": d["todo"]})
+        elif SKIPNAME.search(c): skipped.append({"control": c, "why": "파일·Excel·인쇄 버튼(이름 규칙)", "scenarios": d["todo"]})
+        elif RISKY.search(c): skipped.append({"control": c, "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행", "scenarios": d["todo"]})
+        else: todo.append({"control": c, "scenarios": d["ids"]})
+    return todo, skipped
+
+
+def run_screen(host, mid, group):
+    todo, skipped = plan(mid)
+    out = {"id": mid, "group": group, "acts": [], "skipped": skipped, "at": R.ts(R.now()) if hasattr(R, "ts") else ""}
+    if not todo: out["note"] = "누를 버튼 없음"; return out, []
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); return out, []
+    R.wait_quiet(R.now(), 3, 60)
+    try: fills, left = F.prefill(host, mid)
+    except Exception as ex: fills, left = [], [str(ex)[:150]]
+    out["fills"] = len(fills); out["fill_left"] = left
+    t0 = R.now(); host.send("find", timeout=60); R.wait_find(host, t0, 0, 300)
+    calls = []
+    for it in todo:
+        t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        r = host.send("act", timeout=120, click=it["control"], wait=8)
+        R.wait_quiet(t1, 3, 120)
+        n, _sec = R.db_inflight()
+        if n: R.wait_db_clear(900)
+        cs = R.parse_dbprofile(t1, R.now())
+        for c in cs: c["phase"] = "action:" + it["control"]
+        calls += cs
+        dl = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]
+        out["acts"].append({"control": it["control"], "ok": bool(r.get("ok")), "error": r.get("error"), "popups": r.get("popups"), "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dl],
+                            "calls": [c.get("sp") for c in cs if "UP_FX_" not in str(c.get("sp"))][:20], "scenarios": it["scenarios"]})
+        print("   %s · %s · 팝업 %s · 대화상자 %d · 호출 %d%s" % (it["control"], "실행" if r.get("ok") else "실패", [p.get("form") for p in (r.get("popups") or [])], len(dl), len(cs), (" — " + str(r.get("error"))[:90]) if not r.get("ok") else ""), flush=True)
+    host.send("close_screen", timeout=60)
+    return out, calls
+
+
+def main():
+    av = sys.argv[1:]; group = av[av.index("--group") + 1] if "--group" in av else ""
+    ids = [a.upper() for a in av if not a.startswith("-") and a != group]
+    if not ids: print("사용: asis_live_scen_run.py <ID> [ID ...] [--group 그룹]"); return 2
+    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_scenrun_" + time.strftime("%H%M%S")))
+    if host is None: print("[ERROR] 런처 세션 시작 실패: %s" % why); return 3
+    try:
+        if group:
+            g = host.send("group", timeout=180, value=group, wait=120)
+            if not g.get("ok"): print("[ERROR] 그룹 전환 실패: %s" % g.get("error")); return 3
+        cur = host.send("group", timeout=60).get("current")
+        for mid in ids:
+            print("[%s] 그룹 %s" % (mid, cur), flush=True)
+            out, calls = run_screen(host, mid, cur)
+            d = P("Doc", "asislive", mid, "run_%s_acts" % time.strftime("%Y%m%d_%H%M%S")); os.makedirs(d, exist_ok=True)
+            json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump({"id": mid, "group": cur, "kind": "acts", "acts": len(out["acts"]), "skipped": len(out["skipped"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            print("   누른 버튼 %d · 건너뛴 버튼 %d(%s) · %s" % (len(out["acts"]), len(out["skipped"]), ", ".join("%s:%s" % (s["control"], s["why"][:6]) for s in out["skipped"][:6]), out.get("error") or out.get("note") or R.rel(d)), flush=True)
+    finally:
+        try: host.send("quit", timeout=30)
+        except Exception: pass
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

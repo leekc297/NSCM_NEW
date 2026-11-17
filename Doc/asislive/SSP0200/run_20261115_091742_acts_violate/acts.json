@@ -1,0 +1,1107 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Change Request",
+     "rows_before": 637,
+     "rows_after": 638,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "FROM_SITE",
+       "before": "HQ06-E",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE",
+       "before": "IM_US_TXT",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "40",
+       "after": "40 Mobility & IT Battery"
+      },
+      {
+       "row": 0,
+       "col": "ERP_SO_NO",
+       "before": "1200022461",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SHIPMENT_STATUS",
+       "before": "Confirm",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CONFIRM_ID",
+       "before": "C20260930209830",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PROJECT_CODE",
+       "before": "IM",
+       "after": "-"
+      },
+      {
+       "row": 0,
+       "col": "REMARKS2",
+       "before": "SHP2609-A323278",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE_SOLDTO_CODE",
+       "before": "US00100700",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE_SHIPTO_CODE",
+       "before": "USH002242",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_DAY",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ETD",
+       "before": "2026-10-01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ETA",
+       "before": "2026-11-09",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REQUESTOR",
+       "before": "강윤하(kangyh)",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REQUEST_DATE",
+       "before": "2026-09-30 오전 10:16:43",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CHECK_NEED_YN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ERP_STATUS",
+       "before": "C",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BOD_ID",
+       "before": "13717",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CHANGE_TYPE",
+       "before": "C",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_ROUTE_ID",
+       "before": "8025",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_BOD_ID",
+       "before": "13717",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_INCOTERMS",
+       "before": "FCA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_D_COUNTRY",
+       "before": "KR",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_D_PORT_CODE",
+       "before": "KRPUS",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_A_COUNTRY",
+       "before": "US",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_A_PORT_CODE",
+       "before": "USLGB",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_CUSTOMER_LT",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_TO_COUNTRY",
+       "before": "US",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_TO_CITY",
+       "before": "USTXT",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_ETA",
+       "before": "2026-11-09",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_ETD",
+       "before": "2026-10-01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_LT_DAY",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_TRANSPORT_MODE",
+       "before": "SEA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NEW_SHIPMENT_DATE",
+       "before": "2026-10-01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDIT_REMARKS",
+       "before": "N",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDIT_MAIN",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "ELECTRODE_YN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ORIGIN_FROM_DIVISION_ID",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ORIGIN_TO_DIVISION_ID",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ERP_SO_NO",
+       "before": "1200022460",
+       "after": "1200022461"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_ID",
+       "before": "C20260930209829",
+       "after": "C20260930209830"
+      },
+      {
+       "row": 1,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "467,187.000",
+       "after": "465,536.000"
+      },
+      {
+       "row": 1,
+       "col": "REMARKS2",
+       "before": "SHP2609-A323296",
+       "after": "SHP2609-A323278"
+      },
+      {
+       "row": 2,
+       "col": "ERP_SO_NO",
+       "before": "1200022459",
+       "after": "1200022460"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_ID",
+       "before": "C20260930209828",
+       "after": "C20260930209829"
+      },
+      {
+       "row": 2,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "466,702.000",
+       "after": "467,187.000"
+      },
+      {
+       "row": 2,
+       "col": "REMARKS2",
+       "before": "SHP2609-A323316",
+       "after": "SHP2609-A323296"
+      },
+      {
+       "row": 3,
+       "col": "ERP_SO_NO",
+       "before": "1200022458",
+       "after": "1200022459"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_ID",
+       "before": "C20260930209827",
+       "after": "C20260930209828"
+      },
+      {
+       "row": 3,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "467,491.000",
+       "after": "466,702.000"
+      },
+      {
+       "row": 3,
+       "col": "REMARKS2",
+       "before": "SHP2609-A323284",
+       "after": "SHP2609-A323316"
+      },
+      {
+       "row": 4,
+       "col": "FROM_SITE",
+       "before": "HQ06-A",
+       "after": "HQ06-E"
+      },
+      {
+       "row": 4,
+       "col": "TO_SITE",
+       "before": "OP Mobility_US_EKI",
+       "after": "IM_US_TXT"
+      },
+      {
+       "row": 4,
+       "col": "ERP_SO_NO",
+       "before": "1200022397",
+       "after": "1200022458"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_ID",
+       "before": "C20260923208130",
+       "after": "C20260930209827"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "MCCH318867A1T000",
+       "after": "APCCA3122A"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "H19",
+       "after": "W80F1"
+      },
+      {
+       "row": 4,
+       "col": "PROJECT_CODE",
+       "before": "OP Mobility",
+       "after": "IM"
+      },
+      {
+       "row": 4,
+       "col": "END_CUSTOMER",
+       "before": "OP Mobility",
+       "after": "IM"
+      }
+     ],
+     "more": 869
+    }
+   ],
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:17:21.526",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Shipment Change Request",
+    "sheet": "Shipment Change Request",
+    "rows_total": 638,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "FROM_SITE",
+      "label": "From Site ID",
+      "data_field": "from_site",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "TO_SITE",
+      "label": "To Site ID",
+      "data_field": "to_site",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "DIVISION_ID",
+      "label": "Div",
+      "data_field": "division_id",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "ERP_SO_NO",
+      "label": "SO No",
+      "data_field": "erp_so_no",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "SHIPMENT_STATUS",
+      "label": "Status",
+      "data_field": "shipment_status",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "CONFIRM_ID",
+      "label": "Confirm/Plan ID",
+      "data_field": "confirm_id",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "item_id",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "nick_name",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "PROJECT_CODE",
+      "label": "Project Code*",
+      "data_field": "project_code",
+      "visible": "False"
+     },
+     {
+      "index": 10,
+      "tag": "PROJECT_NAME",
+      "label": "Project Name",
+      "data_field": "project_name",
+      "visible": "False"
+     },
+     {
+      "index": 11,
+      "tag": "END_CUSTOMER",
+      "label": "End Customer*",
+      "data_field": "end_customer",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "FCST_TYPE",
+      "label": "FCST Type*",
+      "data_field": "fcst_type",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "FROM_SITE_DESCRIPTION",
+      "label": "From Site*",
+      "data_field": "from_site_description",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "TO_SITE_DESCRIPTION",
+      "label": "To Site*",
+      "data_field": "to_site_description",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "INCOTERMS",
+      "label": "Incoterms*",
+      "data_field": "INCOTERMS",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "SHIPMENT_CONFIRM_QTY",
+      "label": "Shipment Confirm Qty*",
+      "data_field": "shipment_confirm_qty",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "SHIPMENT_DATE",
+      "label": "Shipment Date*",
+      "data_field": "shipment_date",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "TRANSPORT_MODE",
+      "label": "Trans Mode*",
+      "data_field": "transport_mode",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "CHANGE_REASON_CODE",
+      "label": "Change Reason",
+      "data_field": "CHANGE_REASON_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "CHANGE_REASON_DETAIL",
+      "label": "Reason Detail",
+      "data_field": "CHANGE_REASON_DETAIL",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "REMARKS2",
+      "label": "Building",
+      "data_field": "remarks2",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "REMARKS",
+      "label": "Remarks",
+      "data_field": "remarks",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "REMARKS3",
+      "label": "Customer Requirement",
+      "data_field": "remarks3",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "ERP_ATTR1",
+      "label": "Consignee Name",
+      "data_field": "ERP_ATTR1",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "ERP_ATTR2",
+      "label": "Contact Point",
+      "data_field": "ERP_ATTR2",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "ERP_ATTR3",
+      "label": "Lot",
+      "data_field": "ERP_ATTR3",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "TO_SITE_SOLDTO_CODE",
+      "label": "Sold to",
+      "data_field": "TO_SITE_SOLDTO_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "TO_SITE_SHIPTO_CODE",
+      "label": "Ship to",
+      "data_field": "TO_SITE_SHIPTO_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "LT_DAY",
+      "label": "L/T(Day)",
+      "data_field": "lt_day",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "ETD",
+      "label": "ETD",
+      "data_field": "etd",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "ETA",
+      "label": "ETA",
+      "data_field": "eta",
+      "visible": "True"
+     },
+     {
+      "index": 32,
+      "tag": "MTK_OWNER",
+      "label": "MKT Owner",
+      "data_field": "MTK_OWNER",
+      "visible": "True"
+     },
+     {
+      "index": 33,
+      "tag": "REQUESTOR",
+      "label": "Shipment Requestor",
+      "data_field": "requestor",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "REQUEST_DATE",
+      "label": "Request Date",
+      "data_field": "REQUEST_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "CHECK_NEED_YN",
+      "label": "Checked",
+      "data_field": "CHECK_NEED_YN",
+      "visible": "False"
+     },
+     {
+      "index": 36,
+      "tag": "ERP_STATUS",
+      "label": "erp_status",
+      "data_field": "erp_status",
+      "visible": "False"
+     },
+     {
+      "index": 37,
+      "tag": "BOD_ID",
+      "label": "bod_id",
+      "data_field": "bod_id",
+      "visible": "False"
+     },
+     {
+      "index": 38,
+      "tag": "CHANGE_TYPE",
+      "label": "CHANGE_TYPE",
+      "data_field": "change_type",
+      "visible": "False"
+     },
+     {
+      "index": 39,
+      "tag": "NEW_ROUTE_ID",
+      "label": "Route",
+      "data_field": "NEW_ROUTE_ID",
+      "visible": "False"
+     },
+     {
+      "index": 40,
+      "tag": "NEW_BOD_ID",
+      "label": "new bod",
+      "data_field": "NEW_BOD_ID",
+      "visible": "False"
+     },
+     {
+      "index": 41,
+      "tag": "NEW_INCOTERMS",
+      "label": "new incoterms",
+      "data_field": "NEW_INCOTERMS",
+      "visible": "False"
+     },
+     {
+      "index": 42,
+      "tag": "NEW_D_COUNTRY",
+      "label": "D Country",
+      "data_field": "NEW_D_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 43,
+      "tag": "NEW_D_PORT_CODE",
+      "label": "D Port",
+      "data_field": "NEW_D_PORT_CODE",
+      "visible": "False"
+     },
+     {
+      "index": 44,
+      "tag": "NEW_A_COUNTRY",
+      "label": "A Country",
+      "data_field": "NEW_A_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 45,
+      "tag": "NEW_A_PORT_CODE",
+      "label": "A Port",
+      "data_field": "NEW_A_PORT_CODE",
+      "visible": "False"
+     },
+     {
+      "index": 46,
+      "tag": "NEW_CUSTOMER_LT",
+      "label": "Customer LT",
+      "data_field": "NEW_CUSTOMER_LT",
+      "visible": "False"
+     },
+     {
+      "index": 47,
+      "tag": "NEW_TO_COUNTRY",
+      "label": "To Country",
+      "data_field": "NEW_TO_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 48,
+      "tag": "NEW_TO_CITY",
+      "label": "To City",
+      "data_field": "NEW_TO_CITY",
+      "visible": "False"
+     },
+     {
+      "index": 49,
+      "tag": "NEW_ETA",
+      "label": "ETA",
+      "data_field": "NEW_ETA",
+      "visible": "False"
+     },
+     {
+      "index": 50,
+      "tag": "NEW_ETD",
+      "label": "ETD",
+      "data_field": "NEW_ETD",
+      "visible": "False"
+     },
+     {
+      "index": 51,
+      "tag": "NEW_LT_DAY",
+      "label": "L/T(Day)",
+      "data_field": "NEW_LT_DAY",
+      "visible": "False"
+     },
+     {
+      "index": 52,
+      "tag": "NEW_TRANSPORT_MODE",
+      "label": "Trans Mode",
+      "data_field": "NEW_TRANSPORT_MODE",
+      "visible": "False"
+     },
+     {
+      "index": 53,
+      "tag": "NEW_SHIPMENT_DATE",
+      "label": "Shipment Date",
+      "data_field": "NEW_SHIPMENT_DATE",
+      "visible": "False"
+     },
+     {
+      "index": 54,
+      "tag": "EDIT_REMARKS",
+      "label": "EDIT_REMARKS",
+      "data_field": "EDIT_REMARKS",
+      "visible": "False"
+     },
+     {
+      "index": 55,
+      "tag": "EDIT_MAIN",
+      "label": "EDIT_MAIN",
+      "data_field": "EDIT_MAIN",
+      "visible": "True"
+     },
+     {
+      "index": 56,
+      "tag": "ELECTRODE_YN",
+      "label": "ELECTRODE_YN",
+      "data_field": "ELECTRODE_YN",
+      "visible": "False"
+     },
+     {
+      "index": 57,
+      "tag": "ELECTRODE_TYPE",
+      "label": "ELECTRODE_TYPE",
+      "data_field": "ELECTRODE_TYPE",
+      "visible": "False"
+     },
+     {
+      "index": 58,
+      "tag": "ORIGIN_FROM_DIVISION_ID",
+      "label": "ORIGIN_FROM_DIVISION_ID",
+      "data_field": "ORIGIN_FROM_DIVISION_ID",
+      "visible": "False"
+     },
+     {
+      "index": 59,
+      "tag": "ORIGIN_TO_DIVISION_ID",
+      "label": "ORIGIN_TO_DIVISION_ID",
+      "data_field": "ORIGIN_TO_DIVISION_ID",
+      "visible": "False"
+     },
+     {
+      "index": 60,
+      "tag": "ATTRIBUTE10",
+      "label": "ATTRIBUTE10",
+      "data_field": "ATTRIBUTE10",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "1001110010100000000000000001111111100000000000000000000000000"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "40 Mobility & IT Battery",
+      "",
+      "",
+      "",
+      "APCCA3122A",
+      "W80F1",
+      "-",
+      "",
+      "IM",
+      "Mass",
+      "LGESOC Elec HQ06",
+      "IM_US_TXT",
+      "FCA",
+      "465,536.000",
+      "2026-10-01",
+      "SEA",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "김지후(jihu_kim)",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:17:21.531"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "변경요청은 현재일 기준 D+-56 출하일부터 가능합니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [
+    "SSP0200_GET_CHANGE_REQ_NO"
+   ],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:16:07",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건",
+  "done": [
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "edit_focus": "셀 0,6",
+ "edit_mode": true
+}

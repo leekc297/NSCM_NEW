@@ -1,0 +1,71 @@
+﻿sheet,column,cell_type,decimals,min,max,separator,max_length,uppercase,negative_red,fixed_point,source,ref
+Shipment Change Request Confirm,APPROVAL_DEPT,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.APPROVAL_DEPT CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,APPROVAL_TIME,DATETIME,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.APPROVAL_TIME CELL=FPDateTime SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,APPROVAL_USER,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.APPROVAL_USER CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,APPROVAL_USER_NAME,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.APPROVAL_USER_NAME CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,A_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.A_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,A_PORT_CODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.A_PORT_CODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,BOD_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.BOD_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,CHANGE_REASON_CODE,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.CHANGE_REASON_CODE CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,CHANGE_REQ_NO,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.CHANGE_REQ_NO CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,CHANGE_TYPE,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.CHANGE_TYPE CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,CHK,CHECK,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.CHK CELL=FPCheckBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,CONFIRM_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.CONFIRM_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,CUSTOMER_LT,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.CUSTOMER_LT CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,DELEGATEE_DEPT,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.DELEGATEE_DEPT CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,DELEGATEE_USER,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.DELEGATEE_USER CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,DELEGATEE_USER_NAME,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.DELEGATEE_USER_NAME CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,DIVISION_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.DIVISION_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,D_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.D_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,D_PORT_CODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.D_PORT_CODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ERP_ATTR1,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ERP_ATTR1 CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ERP_ATTR2,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ERP_ATTR2 CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ERP_ATTR3,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ERP_ATTR3 CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ERP_SO_NO,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ERP_SO_NO CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ETA,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:542
+Shipment Change Request Confirm Detail,ETD,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:541
+Shipment Change Request Confirm Detail,FCST_TYPE,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.FCST_TYPE CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,FROM_SITE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.FROM_SITE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,FROM_SITE_DESCRIPTION,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.FROM_SITE_DESCRIPTION CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,INCOTERMS,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.INCOTERMS CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ITEM_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ITEM_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,LT_DAY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.LT_DAY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_A_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_A_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_A_PORT_CODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_A_PORT_CODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_BASE_CONFIRM_YN,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_BASE_CONFIRM_YN CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_BOD_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_BOD_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_CUSTOMER_LT,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_CUSTOMER_LT CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_D_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_D_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_D_PORT_CODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_D_PORT_CODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_ETA,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:549
+Shipment Change Request Confirm Detail,NEW_ETD,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:548
+Shipment Change Request Confirm Detail,NEW_INCOTERMS,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_INCOTERMS CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_LT_DAY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_LT_DAY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_ROUTE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_ROUTE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_SHIPMENT_CONFIRM_QTY,NUMBER,0,-99999999999999,99999999999999,,,,Y,Y,CODE_AddNumColumn,SSP0003_ShipmentChangeRequestConfirm.cs:552
+Shipment Change Request Confirm Detail,NEW_SHIPMENT_DATE,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:551
+Shipment Change Request Confirm Detail,NEW_TO_CITY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_TO_CITY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_TO_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_TO_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_TRANSPORT_MODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_TRANSPORT_MODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,NEW_YN,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.NEW_YN CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,NICK_NAME,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.NICK_NAME CELL=FPText SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,PROJECT_NAME,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.PROJECT_NAME CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,REJECT_REASON,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.REJECT_REASON CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,REMARKS,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.REMARKS CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,REMARKS2,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.REMARKS2 CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,REMARKS3,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.REMARKS3 CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,REQUEST_DEPT,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.REQUEST_DEPT CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,REQUEST_TIME,DATETIME,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.REQUEST_TIME CELL=FPDateTime SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,REQUEST_TITLE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.REQUEST_TITLE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,REQUEST_USER,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.REQUEST_USER CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm,REQUEST_USER_NAME,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.REQUEST_USER_NAME CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,ROUTE_ID,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.ROUTE_ID CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,SHIPMENT_CONFIRM_QTY,NUMBER,0,-99999999999999,99999999999999,,,,Y,Y,CODE_AddNumColumn,SSP0003_ShipmentChangeRequestConfirm.cs:545
+Shipment Change Request Confirm Detail,SHIPMENT_DATE,DATE,,,,,,,,,CODE_AddDateColumn,SSP0003_ShipmentChangeRequestConfirm.cs:544
+Shipment Change Request Confirm,SHIPMENT_STATUS,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm.SHIPMENT_STATUS CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,STATUS_DETAIL,COMBO,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.STATUS_DETAIL CELL=FPComboBox SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,TO_CITY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.TO_CITY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,TO_COUNTRY,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.TO_COUNTRY CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,TO_SITE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.TO_SITE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,TO_SITE_DESCRIPTION,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.TO_SITE_DESCRIPTION CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497
+Shipment Change Request Confirm Detail,TRANSPORT_MODE,TEXT,,,,,,,,,META,SHEET_COLUMNS Shipment Change Request Confirm Detail.TRANSPORT_MODE CELL=- SCALE=NULL · SpreadInfo.cs:1433-1439/1497

@@ -1,0 +1,292 @@
+{
+ "id": "SCP0028",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnInput",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ShipmentLotSizePopup",
+    "title": "ShipmentLotSize Input/Delete Popup",
+    "rows": 0
+   },
+   "picked": null,
+   "expected_forms": [
+    "SCM0002_ShipmentLotSizePopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ShipmentLotSizePopup",
+    "controls": [
+     {
+      "name": "cboDivision",
+      "type": "UsrCombo",
+      "label": "Div*",
+      "value": null,
+      "items": [
+       "81 Automotive Battery",
+       "40 Mobility & IT Battery",
+       "82 ESS Battery",
+       "81_UC Automotive Battery(UC)",
+       "81_HM Automotive Battery(HM)",
+       "81_HD Automotive Battery(HD)",
+       "81_HG Automotive Battery(HG)"
+      ],
+      "enabled": true
+     },
+     {
+      "name": "cboOperationGroup",
+      "type": "UsrCombo",
+      "label": "Operation Group",
+      "value": null,
+      "items": [
+       "ALL",
+       "Pack",
+       "Cell",
+       "Electrode"
+      ],
+      "enabled": true
+     },
+     {
+      "name": "clbFromSite",
+      "type": "UsrCheckedList",
+      "label": "From Site",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbToSite",
+      "type": "UsrCheckedList",
+      "label": "To Site",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Shipment Lot Size",
+      "rows": 0,
+      "cols": [
+       "CHK",
+       "DIVISION_ID",
+       "OPERATION_GROUP_NAME",
+       "FROM_SITE_DESCRIPTION",
+       "TO_SITE_DESCRIPTION",
+       "ITEM_ID",
+       "NICK_NAME"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 0
+    }
+   },
+   "pick_act": {
+    "ok": false,
+    "error": null
+   },
+   "pick_button": "ButtonItem OK",
+   "pick_ok": {
+    "ok": true,
+    "closed": false,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "SCM0002_ShipmentLotSizePopup",
+     "title": "ShipmentLotSize Input/Delete Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "text": "statusStrip1 | usrLayoutControl2 | 81 Automotive Battery | ButtonList | ",
+     "closed": true
+    }
+   ],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": [
+    {
+     "text": "From Site 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "조회 후 추가하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 60187
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "81",
+     "Automotive Battery",
+     "A23US4001",
+     "Indego 50",
+     "Aeonus_KR_GUN",
+     "Aeonus_KR_GUN",
+     "AAEN1078I-A1-G00",
+     "ACEN1078I-A1-G00 P",
+     "H",
+     "E78-G00",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "expected_forms": [
+    "ExceptionDialog",
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 60187,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    },
+    {
+     "control": "txtItemId#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnInput": {
+   "forms": [
+    "SCM0002_ShipmentLotSizePopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_072910_acts"
+  },
+  "btnItemId": {
+   "forms": [
+    "ExceptionDialog",
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_072910_acts"
+  }
+ },
+ "at": "2026-11-15 12:13:52"
+}

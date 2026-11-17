@@ -1,0 +1,257 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellClick",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5265 새 행 DIVISION_ID 빈 값에서 FROM_SITE_DESCRIPTION 클릭",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 3,
+     "before": "40 Mobility & IT Battery",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DIVISION_ID",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "click": "FROM_SITE_DESCRIPTION",
+      "row": "new"
+     },
+     "row": 0,
+     "col": 13,
+     "ok": true,
+     "error": null,
+     "popups": []
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "먼저 Div을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "edit_mode": true,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: DIVISION_ID (11-16 소급 표시)"
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellClick",
+   "expect": "MSG00002",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5473 INCOTERMS 빈 값에서 TRANSPORT_MODE 클릭",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 15,
+     "before": "FCA",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "INCOTERMS",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "click": "TRANSPORT_MODE",
+      "row": "new"
+     },
+     "row": 0,
+     "col": 18,
+     "ok": true,
+     "error": null,
+     "popups": []
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Incoterms 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "edit_mode": true,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_EditChange",
+   "expect": "MSG00287",
+   "why": "SSP0200_ShipmentChangeRequest.cs:6367 CHANGE_REASON_CODE 빈 값('-' 포함)에서 CHANGE_REASON_DETAIL 입력",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 20,
+     "before": "",
+     "after": "",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "CHANGE_REASON_DETAIL",
+      "value": "ASISLIVE",
+      "row": "new"
+     }
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Reason Code를 입력 해주세요",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "edit_mode": true,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:48:13",
+ "_pre_set": [],
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "done": [
+   {
+    "set": {
+     "name": "cboChangeType",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Confirm",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "edit_focus": "셀 0,3",
+ "edit_mode": true,
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  }
+ ]
+}

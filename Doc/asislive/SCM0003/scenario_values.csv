@@ -1,0 +1,4 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCM0003-S92f4e3,DIVISION,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SCM0003-Sad17f6,DIVISION,,,,값 미도출,else of (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.FACTORY_ID)),
+SCM0003-S3d791c,DIVISION,,,,값 미도출,else of (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.FACTORY_ID)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.OPERATION_ID)),

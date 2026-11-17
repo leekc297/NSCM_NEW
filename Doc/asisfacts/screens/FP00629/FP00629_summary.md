@@ -39,16 +39,16 @@
 | event:dtpPlanDate.ValueChanged | dtpPlanDate_ValueChanged > GetFpPlanInfo | 1873 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:dtpPlanDate.ValueChanged | dtpPlanDate_ValueChanged > GetFpPlanInfo | 2128 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:dtpPlanDate.ValueChanged | dtpPlanDate_ValueChanged > GetFpPlanInfo | 2132 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 602 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 605 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 608 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 611 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 614 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 703 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 706 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 709 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 712 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Amend > ApplyAmendCalendarCondition | 715 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 602 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 605 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 608 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 611 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 614 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 703 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 706 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 709 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 712 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
+| button:FindButton | FindButton > UIFindData > Find_Data_Amend > ApplyAmendCalendarCondition | 715 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:mcbo_division.SelectedIndexChanged | mcbo_division_changed > SetSite | 1711 | biz:FPCommonDataBLL.FPCommonDataList [code=SITE] | BIZ_MATCH |  |
 | event:mcbo_division.SelectedIndexChanged | mcbo_division_changed > SetSite | 1963 | biz:FPCommonDataBLL.FPCommonDataList [code=SITE] | BIZ_MATCH |  |
 | event:mcbo_plant.SelectedIndexChanged | mcbo_plant_changed > SetOperation | 1732 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
@@ -96,7 +96,7 @@
 |---|---|---|
 | ApplyAmendCalendarCondition | Filter | PLAN_DATE, BUCKET_FROM, BUCKET_TO, DAY_INFO, WEEK_INFO, MONTH_INFO, BUCKET, CATE_INFO, RESULT_VAL, RESULT_VAL2 |
 | ApplyAmendCalendarCondition | dtMap.Rows[i] | _DATE |
-| ApplySearchCondition | Filter | BUCKET_FROM, BUCKET_TO, RELEASE_FLAG, INSTANCE_ID, AMEND_TABLE, PLAN_TYPE, IS_RESULT |
+| ApplySearchCondition | Filter | BUCKET_FROM, BUCKET_TO, RELEASE_FLAG, IS_RESULT, INSTANCE_ID, AMEND_TABLE, PLAN_TYPE |
 | btnBucket_Click | Application.OpenForms | FP00629_BucketSetForm_Popup |
 | btnColumn_Click | Application.OpenForms | FPC0097_ColumnSetForm_Popup |
 | btnMrpTransit_Click | Filter | PLAN_ID, PLAN_TYPE |
@@ -109,12 +109,12 @@
 | dtpPlanDate_ValueChanged | dtCurrDate.Rows[0] | CURR_DATE |
 | Find_Data | Filter | PLAN_NAME |
 | FpPlanFilterInit | dtPlanId.Rows[idx] | PLAN_START_DATE, PLAN_END_DATE, SITE_ID, DESCRIPTION, PLAN_TYPE, READ_ONLY, NAME, CODE |
-| GetFpPlanInfo | Filter | POPUP_OPEN, READ_ONLY |
 | GetFpPlanInfo | dtPlanId.Rows[i] | PLAN_ID |
 | GetFpPlanInfo | dtPlanId.Rows[idx] | PLAN_TYPE, DESCRIPTION, READ_ONLY, NAME |
+| GetFpPlanInfo | Filter | READ_ONLY, POPUP_OPEN |
+| InitControls | Filter | USER_ID, POPUP_OPEN |
 | InitControls | c | ControlName |
 | InitControls | a | ControlName, ControlValue |
-| InitControls | Filter | USER_ID, POPUP_OPEN |
 | onNLFAmendMenu | frm.Filter | MASTER_ID, INSTANCE_ID, FP_PLAN_ID, PLAN_ID, PLAN_DATE, BUCKET_FROM, BUCKET_TO, PLAN_TYPE |
 | onNLFAmendMenu | Filter | INSTANCE_ID, FP_PLAN_ID, PLAN_ID, PLAN_DATE, BUCKET_FROM, BUCKET_TO, PLAN_TYPE |
 | onZeroBucketMenu | row_to_test | CATEGORY_ID |
@@ -136,7 +136,7 @@
 | SetShortageDate | each_row | _DATE, D_VALUE |
 | SetShortageDate | result.First() | D_VALUE |
 | SetShortageDate | dateMap.Tables[0].Rows[dateMap.Tables[0].Rows.Count - 1] | D_VALUE |
-| SetShortageDate | row | IS_RESULT, SHORTAGE_DATE, PROD_SHORTAGE_DATE, IS_RESULT_COLOR, KEY_YN |
+| SetShortageDate | row | IS_RESULT, SHORTAGE_DATE, IS_RESULT_COLOR, PROD_SHORTAGE_DATE, KEY_YN |
 | SetShortageDate | result2.First() | D_VALUE |
 | SetShortageDate | result3.First() | _DATE |
 | SetSite | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID |
@@ -145,17 +145,32 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetMeasure | Measure:134, InitControl:162, RefreshSpreadSheet:946, CheckAndGetMeasure:1184, RefreshSpreadSheet:747, CheckAndGetMeasure:989 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
-| SetFilter | InitControls:281, InitControls:282, InitControls:292, InitControls:293, InitControls:303, InitControls:304, InitControls:305, InitControls:306 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
-| GetCheckedListValue | InitControls:332, InitControls:340, UIFindData:505, UIFindData:512, ApplySearchCondition:777, cbo_plan_group_changed:1400, dtpPlanDate_ValueChanged:1440, cbo_planid_changed:1484 | CString.GetCheckedListValue | CODE |
-| GetSpdTitle | SetAmendHeaderColumn_FP_Local:1103, SetAmendHeaderColumn_FP_Local:927 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
-| SetMenuColumn | SetAmendHeaderColumn_FP_Local:1125, SetAmendHeaderColumn_FP_Local:949 | MenuService.SetMenuColumn | CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, DATA_SORT_METHOD_CODE, DEFAULT_FLAG, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, SORT_ORDER_NO, UPPERCASE_APPLY_FLAG, USER_SELECTABLE_FLAG, VALID_YN |
-| SetSheetHeaderColumn | SetAmendHeaderColumn_FP_Local:1170, SetAmendHeaderColumn_FP_Local:974 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SetFilter | InitControls:268, InitControls:269, InitControls:270, InitControls:271, InitControls:291, ApplySearchCondition:676, ApplySearchCondition:684, ApplySearchCondition:685 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
+| GetCheckedListValue | InitControls:291, Find_Data:486, ApplySearchCondition:676, cbo_plan_group_changed:1089, dtpPlanDate_ValueChanged:1126, cbo_planid_changed:1170, mcbo_division_changed:1218, cbo_site_changed:1226 | CString.GetCheckedListValue | CODE |
+| GetMeasure | RefreshSpreadSheet:747, CheckAndGetMeasure:989, Measure:134, InitControl:162, RefreshSpreadSheet:946, CheckAndGetMeasure:1184 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| GetSpdTitle | SetAmendHeaderColumn_FP_Local:927, SetAmendHeaderColumn_FP_Local:1103 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| SetMenuColumn | SetAmendHeaderColumn_FP_Local:949, SetAmendHeaderColumn_FP_Local:1125 | MenuService.SetMenuColumn | CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, DATA_SORT_METHOD_CODE, DEFAULT_FLAG, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, SORT_ORDER_NO, UPPERCASE_APPLY_FLAG, USER_SELECTABLE_FLAG, VALID_YN |
+| SetSheetHeaderColumn | SetAmendHeaderColumn_FP_Local:974, SetAmendHeaderColumn_FP_Local:1170 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
 | FP_Log2 | cbo_plan_group_changed:1398, cbo_plan_group_changed:1433 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this | Load | Form_Load | .ctor:185 |
+| this | Load | Form_Load | .ctor:194 |
+| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:239 |
+| dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitEvent:240 |
+| cbo_planid | SelectedIndexChanged | cbo_planid_changed | InitEvent:241 |
+| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:242 |
+| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:243 |
+| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:244 |
+| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:245 |
+| txtPjtGroupName | TextChanged | TxtPjtGroupName_TextChanged | InitEvent:247 |
+| txtModel | TextChanged | TxtModel_TextChanged | InitEvent:248 |
+| txtItem | TextChanged | TxtItem_TextChanged | InitEvent:249 |
+| txtNickName | TextChanged | TxtNickName_TextChanged | InitEvent:250 |
+| dCalendar_planrange | ValueChanged | dCalendarPlanrange_changed | InitEvent:252 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1488 |
 | this.btbSet | Click | btnSet_Click | InitializeComponent:184 |
 | this.btnOK | Click | btnOK_Click | InitializeComponent:221 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:236 |
@@ -188,21 +203,6 @@
 | this.btnMrpReceive | Click | btnMrpReceive_Click | InitializeComponent:1525 |
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:1612 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:1650 |
-| this | Load | Form_Load | .ctor:185 |
-| this | Load | Form_Load | .ctor:194 |
-| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:239 |
-| dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitEvent:240 |
-| cbo_planid | SelectedIndexChanged | cbo_planid_changed | InitEvent:241 |
-| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:242 |
-| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:243 |
-| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:244 |
-| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:245 |
-| txtPjtGroupName | TextChanged | TxtPjtGroupName_TextChanged | InitEvent:247 |
-| txtModel | TextChanged | TxtModel_TextChanged | InitEvent:248 |
-| txtItem | TextChanged | TxtItem_TextChanged | InitEvent:249 |
-| txtNickName | TextChanged | TxtNickName_TextChanged | InitEvent:250 |
-| dCalendar_planrange | ValueChanged | dCalendarPlanrange_changed | InitEvent:252 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1488 |
 
 ## 6. 컨트롤 (82개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
@@ -261,7 +261,7 @@
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
 - 코드에서 생성하는 시트: Amend
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:443, SetSheetHeaderColumn@SetAmendHeaderColumn_FP_Local:1170, SetSheetHeaderColumn_FP@RefreshHeaderOnly:388, SetSheetHeaderColumn@SetAmendHeaderColumn_FP_Local:974
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:388, SetSheetHeaderColumn@SetAmendHeaderColumn_FP_Local:974, SetSheetHeaderColumn_FP@RefreshHeaderOnly:443, SetSheetHeaderColumn@SetAmendHeaderColumn_FP_Local:1170
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

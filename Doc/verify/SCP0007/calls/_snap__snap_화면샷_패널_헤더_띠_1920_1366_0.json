@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0007",
+  "sheet": "countryCity",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/countryCity/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 183,
+  "at": "2026-11-13T22:41:20.708Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SCP0007",
+  "sheet": "countryCity",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/countryCity/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 650,
+  "at": "2026-11-13T22:41:21.712Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SCP0007",
+  "sheet": "bod",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/bod/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"fromSite\":\"ALL\",\"toSite\":\"ALL\",\"incoterms\":\"ALL\",\"incotermsSsp\":\"ALL\",\"transMode\":\"ALL\",\"inputStatus\":\"C\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 3672,
+  "at": "2026-11-13T22:41:24.665Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ }
+]

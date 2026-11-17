@@ -1,0 +1,130 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_MaterialByDivisionPopup",
+    "title": "Material by Division Popup",
+    "rows": 9616
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "COLMERGE",
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "X",
+     "",
+     "81",
+     "Automotive Battery",
+     "AAEF1001I-A1-000",
+     "ACEF1001I-A1-000 P",
+     "ELFP-000",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_MaterialByDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_MaterialByDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Material",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtOperationGroup",
+      "type": "UsrMultiLineEditor",
+      "label": "Operation Group",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 9616,
+      "cols": [
+       "DIVISION_ID",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "AAEF1001I-A1-000"
+    },
+    {
+     "control": "txtItemId#0",
+     "before": "",
+     "after": "AAEF1001I-A1-000"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "btnItemId": {
+   "forms": [
+    "SCM0002_MaterialByDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_113843_acts"
+  }
+ },
+ "at": "2026-11-15 12:15:35"
+}

@@ -9,7 +9,7 @@ import { useTabProcQuery } from '@shared/hooks';
 import { Button, ProgressIndicator } from '@shared/lges';
 import { Stack } from '@shared/mui';
 
-import { LBL, MENU_ID, SHEETS } from '../../production-plan-line.constants';
+import { BUCKET_TYPE, LBL, MENU_ID, SHEETS } from '../../production-plan-line.constants';
 import type { LoadRow } from '../../production-plan-line.types';
 import { useProductionPlanLineStore } from '../../useProductionPlanLineStore';
 import { buildPivotColumns } from '../../utils/productionPlanLineColumns';
@@ -53,9 +53,12 @@ export const ProductionPlanLineLoadModal = ({ open, modalClose }: Props) => {
   const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const filters = useProductionPlanLineStore(s => s.filters[SHEETS.LOAD]);
-  // Load pivot 은 부모 메인 조회의 bucket/chkSum 형상을 그대로 따른다(AS-IS Load = 메인 동일 pivot).
-  const bucket = useProductionPlanLineStore(s => s.searchCondition.bucket);
-  const chkSum = useProductionPlanLineStore(s => s.searchCondition.chkSum);
+  // Load 팝업 pivot 은 부모 bucket 과 무관하게 항상 Weekly 고정이다 — AS-IS SetSpreadColumn(cs:370~423)
+  //   이 bucket 분기를 전부 주석처리하고 D_ 숨김/W_ 표시/M_ 숨김만 살려둔 것, 팝업엔 cboBucketType 자체가 없다.
+  //   Load SP(P_SCP0013_LINE_LOAD_POPUP)도 bucket 파라미터 없이 W_+D_ 만 반환(M_ 미생성)하므로 WEEKLY 로
+  //   고정하면 W_ 표시·D_ 숨김이 되어 AS-IS 와 1:1. chkSum 은 M_(미존재) 가시성만 좌우하므로 false 고정.
+  const bucket = BUCKET_TYPE.WEEKLY;
+  const chkSum = false;
 
   const { data, isFetching } = useTabProcQuery<MENU_ID, SHEETS.LOAD>({
     menuId: MENU_ID,

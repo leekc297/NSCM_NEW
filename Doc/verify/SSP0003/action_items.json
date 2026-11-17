@@ -1,0 +1,200 @@
+[
+ {
+  "row_id": "V-671736f1",
+  "rule_id": "I1",
+  "target": "SSP0003 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림",
+  "same": []
+ },
+ {
+  "row_id": "V-1c17dc27",
+  "rule_id": "A5",
+  "target": "SSP0003 Division 컬럼 40/Shipment Change Request Confirm",
+  "same": []
+ },
+ {
+  "row_id": "V-d8f9377c",
+  "rule_id": "A5",
+  "target": "SSP0003 Division 컬럼 82/Shipment Change Request Confirm",
+  "same": []
+ },
+ {
+  "row_id": "V-1863646b",
+  "rule_id": "F10",
+  "target": "PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM",
+  "same": []
+ },
+ {
+  "row_id": "V-a32bb846",
+  "rule_id": "F10",
+  "target": "PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM_40",
+  "same": []
+ },
+ {
+  "row_id": "V-7de95ca4",
+  "rule_id": "B2",
+  "target": "조회조건 From Site",
+  "same": []
+ },
+ {
+  "row_id": "V-5f6e4f5f",
+  "rule_id": "B3",
+  "target": "조회조건 Status",
+  "same": []
+ },
+ {
+  "row_id": "V-d9d1430b",
+  "rule_id": "G8",
+  "target": "조회조건 Requestor",
+  "same": [
+   "V-c8e2561a"
+  ]
+ },
+ {
+  "row_id": "V-7bc634c0",
+  "rule_id": "B3",
+  "target": "조회조건 Change Type",
+  "same": []
+ },
+ {
+  "row_id": "V-8a809465",
+  "rule_id": "G1",
+  "target": "조회조건 Requestor",
+  "same": []
+ },
+ {
+  "row_id": "V-db80e551",
+  "rule_id": "G1",
+  "target": "SSP0003 텍스트 부분일치 Requestor",
+  "same": []
+ },
+ {
+  "row_id": "V-0768539f",
+  "rule_id": "E3",
+  "target": "DataUtil.checkRequiredOfSearch",
+  "same": []
+ },
+ {
+  "row_id": "T-089b59ce",
+  "rule_id": "G6",
+  "target": "cboStatus / Status",
+  "same": []
+ },
+ {
+  "row_id": "EG-84381a3c",
+  "rule_id": "J3",
+  "target": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/40/SSP Planner · Div",
+  "same": [
+   "EG-1d38b2d9",
+   "EG-4b3d426d",
+   "EG-6230e783",
+   "EG-8bd860ad",
+   "EG-4074d7b9",
+   "EG-6d8aa7c5",
+   "EG-906c6e13",
+   "EG-7cca8605",
+   "EG-84b126e2",
+   "EG-6dadea6c",
+   "EG-6da461e4"
+  ]
+ },
+ {
+  "row_id": "EG-3dad7d81",
+  "rule_id": "J3",
+  "target": "SSP0003 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SSP/81/SSP Viewer · Div",
+  "same": [
+   "EG-1cac48b9",
+   "EG-f3395aa3",
+   "EG-855d394d"
+  ]
+ },
+ {
+  "row_id": "V-c8e2561a",
+  "rule_id": "G8",
+  "target": "",
+  "folded_into": "V-d9d1430b"
+ },
+ {
+  "row_id": "EG-1d38b2d9",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-4b3d426d",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-6230e783",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-8bd860ad",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-4074d7b9",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-6d8aa7c5",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-906c6e13",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-7cca8605",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-84b126e2",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-6dadea6c",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-6da461e4",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-84381a3c"
+ },
+ {
+  "row_id": "EG-1cac48b9",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-3dad7d81"
+ },
+ {
+  "row_id": "EG-f3395aa3",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-3dad7d81"
+ },
+ {
+  "row_id": "EG-855d394d",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-3dad7d81"
+ }
+]

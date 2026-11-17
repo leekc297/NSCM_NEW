@@ -1,0 +1,129 @@
+{
+ "id": "SCP0024",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-S75f3d7"
+   ]
+  },
+  {
+   "control": "BtnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-Sb00579"
+   ]
+  },
+  {
+   "control": "BtnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-S5b9d5b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0024-Sea1449",
+    "SCP0024-S82161d"
+   ]
+  },
+  {
+   "control": "btnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-S75f3d7"
+   ]
+  },
+  {
+   "control": "btnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-Sb00579"
+   ]
+  },
+  {
+   "control": "btnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0024-S5b9d5b"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  }
+ ],
+ "at": "2026-11-13 11:26:08.593",
+ "fills": 0,
+ "fill_left": []
+}

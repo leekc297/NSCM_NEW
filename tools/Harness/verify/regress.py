@@ -4,7 +4,7 @@
 사용: python tools/Harness/verify/regress.py [<MENU_ID> ...] [--harvest]   (인자 없으면 원장이 있는 모든 화면)
 
 하는 일
-  1 --harvest(또는 오라클 파일이 없을 때): 모든 CheckList 판(Doc/CheckList, old, 옛 Doc/화면분석서)의 '사용자의견/사용자판정' 열을 모아
+  1 --harvest(또는 오라클 파일이 없을 때): 모든 CheckList 판(Doc/UI_CHECKLIST, old, 옛 Doc/CheckList, 옛 Doc/화면분석서)의 '사용자의견/사용자판정' 열을 모아
     Doc/verify/_user_verdicts.csv (menu_id,row_id,class,opinion,rule_id,target,explain,source_file) 로 쓴다. class = 판정오류 | 중복 | 대상아님 | 실제오류확인 | 설명요구 | 기타
   2 화면별 검사:
     (a) class=판정오류 행 — judge 가 사용자판정으로 덮기 전 '원판정'(note 의 원판정:) 이 FAIL 이면 위반 → 검사기가 여전히 같은 허위 FAIL 을 낸다
@@ -38,7 +38,8 @@ def cls(o):
 
 def harvest():
     import openpyxl
-    pats = [os.path.join(ROOT, 'Doc', 'CheckList', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'CheckList', 'old', '*_CheckList_v*.xlsx'),
+    pats = [os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', 'old', '*_CheckList_v*.xlsx'),  # 2026-11-16 폴더 변경
+            os.path.join(ROOT, 'Doc', 'CheckList', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'CheckList', 'old', '*_CheckList_v*.xlsx'),
             os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_정합검증서_v*.xlsx'), os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_CheckList_v*.xlsx')]
     files = sorted({f for p in pats for f in glob.glob(p, recursive=True) if not os.path.basename(f).startswith('~$')}, key=os.path.getmtime)
     # 2026-11-08 속도: 판 xlsx 262개를 매 실행 전부 여는 데 264s(SCP0122 --only K3 실측 · docs 단계의 95%) → 파일별 (mtime, size) 캐시 — 바뀐/새 판만 다시 읽는다(결과 동일 · 순서 = mtime)
@@ -162,6 +163,16 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument('menus', nargs='*'); ap.add_argument('--harvest', action='store_true'); a = ap.parse_args()
     if a.harvest or not os.path.exists(VERD): harvest()
     verd = rd(VERD)
+    # 2026-11-17(SCP0104 T-25489c40): 대화로 받은 최신 판정(_user_verdicts_direct.csv)이 CheckList 옛 판의 의견보다 우선.
+    #   사용자가 '오류 아님' 을 뒤집어 FAIL 로 확정하면 그 행은 판정오류 오라클이 아니다(검사기 FAIL 이 정답) → 실제오류확인으로 바꾼다
+    try:
+        _dv = {(d.get('menu_id') or '').upper() + '|' + (d.get('row_id') or '').strip(): (d.get('verdict') or '').strip().upper() for d in rd(os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_direct.csv'))}
+        for v_ in verd:
+            k_ = (v_.get('menu_id') or '').upper() + '|' + (v_.get('row_id') or '').strip()
+            if _dv.get(k_) == 'FAIL' and v_.get('class') in ('판정오류', '대상아님'): v_['class'] = '실제오류확인'; v_['opinion'] = (v_.get('opinion') or '') + ' → 사용자 직접 판정 FAIL 로 대체'
+            elif _dv.get(k_) == 'PASS' and v_.get('class') == '실제오류확인': v_['class'] = '판정오류'; v_['opinion'] = (v_.get('opinion') or '') + ' → 사용자 직접 판정 PASS 로 대체'
+    except Exception as _ex:
+        print(f'[WARN] 직접 판정 반영 실패(무시): {_ex}')
     # 2026-11-06 W8(플랜 1-6·3-4): 대화·스냅샷 승인으로 받은 직접 판정(_user_verdicts_direct.csv)도 회귀 오라클 — PASS → 판정오류(다시 FAIL 이면 위반) · NA/SKIP → 대상아님 · FAIL → 실제오류확인
     have = {(v['menu_id'], v['row_id']) for v in verd}
     for d in rd(os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_direct.csv')):

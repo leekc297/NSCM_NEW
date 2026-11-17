@@ -1,0 +1,15 @@
+﻿slide,procedure,jobs,conditions,owner_rule
+3,PR_SSP_XIF_MES_WIP_LOT_40_R,JOB.PR_SSP_XIF_MES_STOCK_40_R (매일 06:05~11:00 10분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_MES_WIP_LOT_8X_R,JOB.PR_SSP_XIF_MES_STOCK_81_82_R (매일 종일 10분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_MES_WIP_LOT_EE_R,JOB.PR_SSP_XIF_MES_STOCK_EE_R (매일 종일 30분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_OWMS_STOCK_EE_R,JOB.PR_SSP_XIF_OWMS_STOCK_EE_R (매일 종일 10분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_OWMS_STOCK_R,JOB.PR_SSP_XIF_OWMS_STOCK_R (매일 종일 5분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우 | ※ 40 사업부 Look up 도 Update 함,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_OWMS_STOCK_REST_R,JOB.PR_SSP_XIF_OWMS_STOCK_R (매일 종일 5분마다),※ PR_SSP_XIF_OWMS_STOCK_R 호출 이후 바로 호출 | 1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 있는 경우 | 3. 받은 데이터가 오늘데이터이면 (전일 <> 현재(Max Date) | - I/F 받은 데이터 키 기준 Merge 처리,같은 세로 줄 바로 위 머리 상자
+3,PR_SSP_XIF_IWMS_STOCK_EE_R,JOB.PR_SSP_XIF_IWMS_STOCK_EE_R (매일 종일 10분마다),1. 보낸데이터건수와 받은데이터건수가 일치하고 | 2. 룩업 기준 동기화 이력이 없는 경우,같은 세로 줄 바로 위 머리 상자
+4,PR_SSP_PLN_SHIP_PLAN_CUTOFF,JOB.PR_SSP_PLN_SHIP_PLAN_81_82 (매일 05:07~23:59:59 10분마다),1. 법인별 당일계획 수립이력 확인해서 수립하지 않은 법인확인 | 2. View데이터 확인해서 ERP 재고 데이터 유무 확인 | ※ CUTOFF_DATE 는 전일임 | 3. 룩업 기준 당일 재고 I/F 완료 확인 | ※ SSP_ANL_OWMS_STOCK_C2 데이터 없으면 여기서도 생성 | ※ 앞서 PR_SSP_XIF_OWMS_STOCK_REST_R 에서 생성하는 테이블 / 차이점 / - PR_SSP_XIF_OWMS_STOCK_REST_R / : PLANT_ID 가 V_G673 = ‘GM01’ 인 경우만 생성 / - 여기서는 법인기준으로 확인하고 없으면 생성 | 4. 2에서 ERP 재고가 있고 당일 SSP용 재고 I/F 가 온전하면 이후 프로세스 진행,'- 프로세스 진행여부 체크 -' 표지에 가장 가까운 머리 상자
+5,PR_SSP_ANL_SHIP_PLAN_EE,JOB.PR_SSP_PLN_SHIP_PLAN_EE (매일 종일 10분마다),"1. 법인별 당일계획 수립이력 확인해서 수립하지 않은 법인확인 | 2. 1에서 확인된 법인들 중 전극 재고 당일 유효한 법인확인 | 3. 2에서 해당 법인이 있으면 진행, 없으면 종료",'- 프로세스 진행여부 체크 -' 표지에 가장 가까운 머리 상자
+6,PR_SSP_ANL_SHIP_CONFIRM_BATCH_40,"JOB.PR_SSP_PLN_SHIP_PLAN_40 (월, 화, 수, 목, 금, 토, 일 08:00) | JOB.PR_SSP_PLN_SHIP_PLAN_40_AZ (월, 화, 수, 목, 금, 토, 일 10:30) | JOB.PR_SSP_PLN_SHIP_PLAN_40_C (월, 화, 수, 목, 금, 토, 일 11:00)",1. 당일기준 계획이 있으면 진행 X,패널 안 '- 프로시저' 줄 아래
+6,PR_SSP_ANL_SHIP_PLAN_40,"JOB.PR_SSP_PLN_SHIP_PLAN_40 (월, 화, 수, 목, 금, 토, 일 08:00) | JOB.PR_SSP_PLN_SHIP_PLAN_40_AZ (월, 화, 수, 목, 금, 토, 일 10:30) | JOB.PR_SSP_PLN_SHIP_PLAN_40_C (월, 화, 수, 목, 금, 토, 일 11:00)",1. 당일기준 계획이 유무 확인 | 2. 당일기준 재고 I/F 확인 | 3. 계획이 없고 재고가 있으면 진행 (둘 중 하나라도 없으면 진행 X) | ※ 사업부-법인별로 1회 호출하기 때문에 각 JOB 실행시엔 일반적으론 프로세스항상 진행할 것으로 보임,패널 안 '- 프로시저' 줄 아래
+7,PR_SSP_ANL_SHIP_PLAN_P,"JOB.PR_SSP_PLN_SHIP_PLAN_P (월, 화, 수, 목, 금, 토, 일 07:15)",- 당일 계획된 Packer 출하계획이 있는경우엔 수행 X | ※ DIVISION_CD 는 변수선언부에서 40으로 지정됨,가장 가까운 머리 상자
+7,PR_SSP_ANL_SHIP_CONFIRM_P,"JOB.PR_SSP_PLN_SHIP_PLAN_P (월, 화, 수, 목, 금, 토, 일 07:15)",- 프로세스 진행 여부 체크 없음,가장 가까운 머리 상자
+8,PR_SSP_ANL_SHIP_PLAN_ALL,JOB.PR_SSP_ANL_SHIP_PLAN_ALL (매일 종일 30분마다),※ V_PLAN_START_YYYYMMDD = 전일 | 1. 한번 Snapshot 한 사업부-법인 은 제외,가장 가까운 머리 상자

@@ -1,0 +1,8 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0027-Sc72821,DIVISION,,,,값 미도출,"if (fps != null && siMain.IsLock(SpdSheet.shtMain) == false && siMain.IsLockCell(e.Row, e.Column) == false) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)) ▸ if (division.Equals("""") || division.Length == 0)",
+SCP0027-Secccfc,DIVISION,,,,값 미도출,"if (fps != null && siMain.IsLock(SpdSheet.shtMain) == false && siMain.IsLockCell(e.Row, e.Column) == false) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)) ▸ else of (division.Equals("""") || division.Length == 0)",
+SCP0027-S50a965,DIVISION,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SCP0027-S6f33a4,DIVISION,,,,값 미도출,"if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ else of (null == item_id || """" == item_id) ▸ if (drs.Length != 0) ▸ if (division != """") ▸ if (drs.Length != 0)",
+SCP0027-S02f695,DIVISION,,,,값 미도출,"if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ else of (null == item_id || """" == item_id) ▸ if (drs.Length != 0) ▸ if (division != """") ▸ if (drs.Length != 0) ▸ if (plant_site != """")",
+SCP0027-S109d39,DIVISION,,,,값 미도출,"if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ else of (null == item_id || """" == item_id) ▸ if (drs.Length != 0) ▸ if (division != """") ▸ else of (drs.Length != 0)",
+SCP0027-S708e26,DIVISION,,,,값 미도출,"if (e.Column == siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)) ▸ if (division != """" && item_id != """") ▸ if (plant_site != """")",

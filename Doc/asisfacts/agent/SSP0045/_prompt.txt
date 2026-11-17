@@ -1,0 +1,423 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms, FarPoint Spread, TheOne FoxQuery) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 As-is 분석 작성자입니다.
+아래 '사실 묶음(Fact Pack)'은 정적 파서가 소스와 DB에서 기계적으로 추출한 것입니다. **이 묶음에 있는 사실만** 사용하고, 없는 것은 추측하지 말고 '확인 필요'로 표기하세요.
+출력은 한국어 Markdown 문서 5개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. analysis.md 에 아래 엔드포인트 6개가 **모두** 원문 그대로 등장: `biz:CommonData.CommonDataList`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `SSP.SSP0045_GET_SHIPMENT_REQUEST`, `SCP.SCM0001_GET_SCP_DAY_PERIOD`, `SSP.SSP0045_SAVE_SHIPMENT_REQUEST`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`
+2. analysis.md 에 아래 이벤트 핸들러 10개가 모두 등장: `chkSum_CheckedChanged`, `Form_Load`, `CboDivision_SelectedIndexChanged`, `BtnItem_Id_Click`, `cboBucketType_SelectedIndexChanged`, `CboBizType_SelectedIndexChanged`, `SpdMain_TopChange`, `SpdMain_CellDoubleClick`, `SpdMain_CellClick`, `SpdMain_ComboSelChange`
+3. web_components.md 에 아래 시트 1개가 모두 등장: `Shipment Request`
+4. oracle_migration.md 에 아래 SP 5개가 모두 등장: `DM0003_GET_BUCKET_TYPE_CODE`, `SSP0045_GET_SHIPMENT_REQUEST`, `SCM0001_GET_SCP_DAY_PERIOD`, `SSP0045_SAVE_SHIPMENT_REQUEST`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`
+5. 주석 처리된 호출(commented_calls)은 '주석 처리됨'으로만 언급하고 현행 기능으로 쓰지 말 것.
+
+문서별 내용:
+- analysis.md: 화면 개요(ID, 도메인, 파일 구성 current/shared/legacy), 기능 흐름(진입점→메서드→엔드포인트 표), 엔드포인트 전체 표(상태·SP·참조 테이블), 이벤트 배선 표, Grid 구성 방식(`HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)`)과 division별 차이, 확인 필요 항목.
+- source_links.md: 파일 경로·줄 번호 기준 링크 표(파일, 메서드, 줄, 내용). 모든 엔드포인트 호출 지점 포함.
+- web_components.md: 컨트롤 → React/Wijmo 컴포넌트 매핑 표(라벨은 props.csv 의 LayoutControlItem.Text/컨트롤 Text 원문), 화면 배치(props.csv 의 SplitContainer Orientation·SplitterDistance·Size → 상/하·좌/우 분할 비율), 시트별 Grid 컬럼(메타 규칙 + 코드 하드코딩 + division별 표시 차이 — grid_effective 기준), 시트 연결 규칙.
+- oracle_migration.md: 호출 SP 인벤토리(참조 테이블·EXEC 체인), 공통코드 분기(code=X → 테이블), FoxQuery 미등록/직접호출 SP, Oracle 전환 시 확인 포인트. 난이도는 사실에 근거해서만.
+- tobe_design.md: 조회조건(컨트롤 기준), 액션별(버튼/이벤트) 호출 API 후보, division별 Grid 변형 요약, 권한(C/R/U/D) 관련 사실, 미확정 사항.
+
+# Fact Pack — SSP0045
+# SSP0045 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 1468 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 684 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main > InitSpread_2 | 299 | biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_Main | 587 | SSP.SSP0045_GET_SHIPMENT_REQUEST | MATCH | SP SSP0045_GET_SHIPMENT_REQUEST |
+| button:FindButton | FindButton > FindData_Main > InitSpread_2 > GetSpdTitle | 1115 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:SaveButton | SaveButton > SaveData > FindData_Main > InitSpread_2 | 299 | biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData > FindData_Main | 587 | SSP.SSP0045_GET_SHIPMENT_REQUEST | MATCH | SP SSP0045_GET_SHIPMENT_REQUEST |
+| button:SaveButton | SaveButton > SaveData | 944 | SSP.SSP0045_SAVE_SHIPMENT_REQUEST | MATCH | SP SSP0045_SAVE_SHIPMENT_REQUEST |
+| button:SaveButton | SaveButton > SaveData > FindData_Main > InitSpread_2 > GetSpdTitle | 1115 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.cboBizType.SelectedIndexChanged | CboBizType_SelectedIndexChanged | 413 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH |  |
+| event:this.cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedControl | 268 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 268 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > GetBucketType | 279 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | SP DM0003_GET_BUCKET_TYPE_CODE |
+| event:this.Load | Form_Load > CreateSpread > InitSpread_2 | 299 | biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > CreateSpread > GetDayRange | 647 | SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | SP SCM0001_GET_SCP_DAY_PERIOD |
+| event:this.Load | Form_Load > CreateSpread > InitSpread_2 > GetSpdTitle | 1115 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT |
+| DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCM0001_GET_SCP_DAY_PERIOD | MATCH | 1 | SP SCM0001_GET_SCP_DAY_PERIOD | EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE |  |
+| SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | 1 | SP SCP0009_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M |  |
+| SSP.SSP0045_GET_SHIPMENT_REQUEST | MATCH | 1 | SP SSP0045_GET_SHIPMENT_REQUEST | EXEC:SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCP_PLAN_VERSION_V, CREATE:#TBLDYNAMIC_PLAN, CREATE:#TBLDYNAMIC_SHIP_ROW, CREATE:#TBLDYNAMIC_CAL_QTY, CREATE:#TBLDYNAMIC_FILTER, INSERT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCP_PLN_SHIPMENT_PLAN_PEGGING, SELECT:SCP_PLN_SHIPMENT_PLAN, REF:FN_NEXT_DAY, SELECT:SCP_MST_BOD_N_V, REF:STRING_SPLIT, INSERT:#TBLDYNAMIC_PLAN, SELECT:SCP_ANL_SHIPMENT_PLAN_SEMI, SELECT:SCM_MST_SITE, SELECT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:#TBLDYNAMIC_PLAN, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCP_MST_FINAL_ITEM, REF:FN_LIST_LOOKUP_VALUE, INSERT:#TBLDYNAMIC_SHIP_REQ, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SSP_DNM_SHIP_RESULT_OWMS_V, SELECT:#TBLDYNAMIC_SHIP_REQ, INSERT:#TBLDYNAMIC_FILTER, INSERT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:#TBLDYNAMIC_FILTER, SELECT:SSP_ANL_SHIP_PLAN_40, INSERT:#TBLDYNAMIC_SHIP_ROW, SELECT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:SCM_DNM_PLAN_FROZEN_V, SELECT:SCM_MST_ITEM_SN, UPDATE:#TBLDYNAMIC_SHIP_ROW, INSERT:#STOCK, SELECT:SSP_DNM_STOCK_C, SELECT:SCM_MST_LOCATION, SELECT:SCM_SYS_CALENDAR_M, SELECT:#TBLDYNAMIC_SHIP_ROW, SELECT:#STOCK, INSERT:#TBLDYNAMIC_CAL_QTY, SELECT:#TBLDYNAMIC_CAL_QTY, INSERT:#TBLDYNAMIC_REQUESTOR, SELECT:SCM_MST_SHEET_MEASURE, INSERT:#TBLDYNAMIC_SHIP_PIVOT, DYNAMIC@SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCM_CODE_LOOKUP_VALUE |  |
+| SSP.SSP0045_SAVE_SHIPMENT_REQUEST | MATCH | 1 | SP SSP0045_SAVE_SHIPMENT_REQUEST | EXEC:SSP0045_SAVE_SHIPMENT_REQUEST, CREATE:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, SELECT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, UPDATE:A, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ_H, INSERT:SCM_SYS_LOG_BATCH |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| checkValidN0 | dr | p_division_id, p_scm_site_id, p_item_id, p_incoterms, p_transport_mode, p_plant_site_id, p_user_id, p_bod_id, p_project_code, p_fcst_type |
+| checkValidN0 | cpDr | p_division_id, p_scm_site_id, p_item_id, p_incoterms, p_transport_mode, p_plant_site_id, p_bod_id, p_project_code, p_fcst_type |
+| InitSpread_2 | drRow | CODE, NAME |
+| Set_SumValues | dsBinding.Tables[0].Columns | MEASURE |
+| SetChangeControl | Filter | GROUP_ID, USER_ID |
+| SetChangeControl | UserInfoContext.Current | NowGroupID |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetSSPInnerTable | SetChangeControl:176 | DataService.GetSSPInnerTable | CODE, COMPANY_ID, DEPT_ID, DIVISION_ID, END_CUSTOMER, LANGUAGE_CODE, NAME, PLANT_ID, SCM_SITE_ID |
+| FP_Log2 | InitControls:199, InitControls:201 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| GetCheckedListValue | SetChangedControl:264, FindData_Main:565, FindData_Main:568, FindData_Main:570, InsertRow:755, InsertRow2:786, SpdMain_CellClick:1227, SpdMain_CellClick:1228 | CString.GetCheckedListValue | CODE |
+| GetSpdTitle | InitSpread_2:310 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| SetSheetHeaderColumn | InitSpread_2:313 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| InitSpreadDateColumn | InitSpread_2:316 | SpreadInfo.InitSpreadDateColumn | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
+| SaveData | SaveButton:527 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:177 |
+| this | Load | Form_Load | .ctor:148 |
+| this.cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:400 |
+| this.btnItem_Id | Click | BtnItem_Id_Click | InitEvent:401 |
+| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:402 |
+| this.cboBizType | SelectedIndexChanged | CboBizType_SelectedIndexChanged | InitEvent:403 |
+| this.spdMain | TopChange | SpdMain_TopChange | InitEvent:405 |
+| this.spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitEvent:406 |
+| this.spdMain | CellClick | SpdMain_CellClick | InitEvent:407 |
+| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitEvent:408 |
+| spdMain | ComboSelChange | SpdMain_ComboSelChange | SpdMain_CellClick:1252 |
+| spdMain | ComboSelChange | SpdMain_ComboSelChange | SpdMain_CellClick:1334 |
+
+## 6. 컨트롤 (25개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 8 | lblCombo, lblCombo1, lblBucket, lblItemId, layoutControlItem4, layoutControlItem6, layoutControlItem9, layoutControlItem3 |
+| UsrCombo | 3 | cboBizType, cboDivision, cboBucketType |
+| UsrButton | 2 | usrButton1, btnItem_Id |
+| EmptySpaceItem | 2 | emptySpaceItem1, emptySpaceItem3 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrCheckBox | 1 | chkSum |
+| UsrMultiLineEditor | 1 | txtItem_Id |
+| UsrDateRangePicker | 1 | drpPeriod |
+| UsrCheckedList | 1 | clbFromSite |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| SheetView | 1 | spdMain_Sheet1 |
+| FpSpread | 1 | spdMain |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 120 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 18 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.SCM_MST_SHEET_MEASURE | 9 | dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv |
+| dbo.TB_FX_Favorite | 14 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 11 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 55 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (1건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 834 | SSP.PR_SCM_SYS_LOG_BATCH | commented:MATCH |
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0045 | Shipment Request | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 | 12/0 |
+| SCM_MST_SHEET_MEASURE | SSP0045 | Shipment Request | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Shipment Request
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread_2:313
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSpreadDateColumn, SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpreadDateColumn |  | 354 | DB루프 | AddTextColumn | {?dr[DefMain.COLUMN_LABEL_NAME]} | {?dr[DefMain.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 358 | DB루프 | AddNumColumn | {?dr[DefMain.COLUMN_LABEL_NAME]} | {?dr[DefMain.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 362 | 표시/라벨 변경 | set:ForeColor | ForeColor = {?sDayCode == "SAT"? Color.Blue : Color.Red} |  | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) ⟫ if(sDayCode == "SAT"\|\| sDayCode == "SUN") |
+| SetSpreadColumn |  | 1140 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(cboBucketType.ControlValues == "DAILY") ⟫ if(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 1144 | 표시/라벨 변경 | set:Visible | Visible = {?chkSum.Checked} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(cboBucketType.ControlValues == "DAILY") ⟫ if(siObj.GetColumnTag(iCol).IndexOf("M_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 1149 | 표시/라벨 변경 | set:Visible | Visible = {?false} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == "DAILY") ⟫ if(cboBucketType.ControlValues == "WEEKLY") ⟫ if(siObj.GetColumnTag(iCol).IndexOf("D_") == 0) |
+| SetSpreadColumn |  | 1152 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == "DAILY") ⟫ if(cboBucketType.ControlValues == "WEEKLY") ⟫ else!(siObj.GetColumnTag(iCol).IndexOf("D_") == 0) ⟫ if(siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 1156 | 표시/라벨 변경 | set:Visible | Visible = {?chkSum.Checked} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == "DAILY") ⟫ if(cboBucketType.ControlValues == "WEEKLY") ⟫ if(siObj.GetColumnTag(iCol).IndexOf("M_") == 0) |
+| SetSpreadColumn |  | 1161 | 표시/라벨 변경 | set:Visible | Visible = {?false} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == "DAILY") ⟫ else!(cboBucketType.ControlValues == "WEEKLY") ⟫ if(cboBucketType.ControlValues == "MONTHLY") ⟫ if(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 1164 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == "DAILY") ⟫ else!(cboBucketType.ControlValues == "WEEKLY") ⟫ if(cboBucketType.ControlValues == "MONTHLY") ⟫ else!(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| InitializeComponent |  | 580 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 581 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 582 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 583 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Request | META+코드연결 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 12 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (8 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetChangedControl","268","derived","biz","CommonData.CommonDataList [code=PlantByDivisionOperation]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantByDivisionOperation:Type.PlantByDivisionOperation] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","GetBucketType","279","ctor","fox","DM.DM0003_GET_BUCKET_TYPE_CODE","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","299","derived","biz","CommonData.CommonDataList [code=PlantSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantSiteByDivision:Type.PlantSiteByDivision] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","CboBizType_SelectedIndexChanged","413","derived","biz","CommonData.CommonDataList [code=PlantByDivisionOperation]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantByDivisionOperation:Type.PlantByDivisionOperation] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","FindData_Main","587","ctor","fox","SSP.SSP0045_GET_SHIPMENT_REQUEST","SSP.SSP0045_GET_SHIPMENT_REQUEST","MATCH","SP SSP0045_GET_SHIPMENT_REQUEST","EXEC:SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCP_PLAN_VERSION_V, CREATE:#TBLDYNAMIC_PLAN, CREATE:#TBLDYNAMIC_SHIP_ROW, CREATE:#TBLDYNAMIC_CAL_QTY, CREATE:#TBLDYNAMIC_FILTER, INSERT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCP_PLN_SHIPMENT_PLAN_PEGGING, SELECT:SCP_PLN_SHIPMENT_PLAN, REF:FN_NEXT_DAY, SELECT:SCP_MST_BOD_N_V, REF:STRING_SPLIT, INSERT:#TBLDYNAMIC_PLAN, SELECT:SCP_ANL_SHIPMENT_PLAN_SEMI, SELECT:SCM_MST_SITE, SELECT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:#TBLDYNAMIC_PLAN, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCP_MST_FINAL_ITEM, REF:FN_LIST_LOOKUP_VALUE, INSERT:#TBLDYNAMIC_SHIP_REQ, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SSP_DNM_SHIP_RESULT_OWMS_V, SELECT:#TBLDYNAMIC_SHIP_REQ, INSERT:#TBLDYNAMIC_FILTER, INSERT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:#TBLDYNAMIC_FILTER, SELECT:SSP_ANL_SHIP_PLAN_40, INSERT:#TBLDYNAMIC_SHIP_ROW, SELECT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:SCM_DNM_PLAN_FROZEN_V, SELECT:SCM_MST_ITEM_SN, UPDATE:#TBLDYNAMIC_SHIP_ROW, INSERT:#STOCK, SELECT:SSP_DNM_STOCK_C, SELECT:SCM_MST_LOCATION, SELECT:SCM_SYS_CALENDAR_M, SELECT:#TBLDYNAMIC_SHIP_ROW, SELECT:#STOCK, INSERT:#TBLDYNAMIC_CAL_QTY, SELECT:#TBLDYNAMIC_CAL_QTY, INSERT:#TBLDYNAMIC_REQUESTOR, SELECT:SCM_MST_SHEET_MEASURE, INSERT:#TBLDYNAMIC_SHIP_PIVOT, DYNAMIC@SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCM_CODE_LOOKUP_VALUE","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","GetDayRange","647","ctor","fox","SCP.SCM0001_GET_SCP_DAY_PERIOD","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SaveData","944","ctor","fox","SSP.SSP0045_SAVE_SHIPMENT_REQUEST","SSP.SSP0045_SAVE_SHIPMENT_REQUEST","MATCH","SP SSP0045_SAVE_SHIPMENT_REQUEST","EXEC:SSP0045_SAVE_SHIPMENT_REQUEST, CREATE:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, SELECT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, UPDATE:A, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ_H, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","GetSpdTitle","1115","ctor","fox","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M","",""
+```
+
+### FILE flow.csv (14 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.Load","Form_Load > CreateSpread > InitSpread_2","InitSpread_2","299","biz:CommonData.CommonDataList [code=PlantSiteByDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.Load","Form_Load > CreateSpread > InitSpread_2 > GetSpdTitle","GetSpdTitle","1115","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.Load","Form_Load > CreateSpread > GetDayRange","GetDayRange","647","SCP.SCM0001_GET_SCP_DAY_PERIOD","MATCH","SP SCM0001_GET_SCP_DAY_PERIOD","EXEC:SCM0001_GET_SCP_DAY_PERIOD, REF:FN_MULTY_TIME, SELECT:SCM_SYS_CALENDAR_M, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.Load","Form_Load > InitControls > GetBucketType","GetBucketType","279","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","268","biz:CommonData.CommonDataList [code=PlantByDivisionOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.cboDivision.SelectedIndexChanged","CboDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","268","biz:CommonData.CommonDataList [code=PlantByDivisionOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","event","this.cboBizType.SelectedIndexChanged","CboBizType_SelectedIndexChanged","CboBizType_SelectedIndexChanged","413","biz:CommonData.CommonDataList [code=PlantByDivisionOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","FindButton","FindButton > FindData_Main","FindData_Main","587","SSP.SSP0045_GET_SHIPMENT_REQUEST","MATCH","SP SSP0045_GET_SHIPMENT_REQUEST","EXEC:SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCP_PLAN_VERSION_V, CREATE:#TBLDYNAMIC_PLAN, CREATE:#TBLDYNAMIC_SHIP_ROW, CREATE:#TBLDYNAMIC_CAL_QTY, CREATE:#TBLDYNAMIC_FILTER, INSERT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCP_PLN_SHIPMENT_PLAN_PEGGING, SELECT:SCP_PLN_SHIPMENT_PLAN, REF:FN_NEXT_DAY, SELECT:SCP_MST_BOD_N_V, REF:STRING_SPLIT, INSERT:#TBLDYNAMIC_PLAN, SELECT:SCP_ANL_SHIPMENT_PLAN_SEMI, SELECT:SCM_MST_SITE, SELECT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:#TBLDYNAMIC_PLAN, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCP_MST_FINAL_ITEM, REF:FN_LIST_LOOKUP_VALUE, INSERT:#TBLDYNAMIC_SHIP_REQ, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SSP_DNM_SHIP_RESULT_OWMS_V, SELECT:#TBLDYNAMIC_SHIP_REQ, INSERT:#TBLDYNAMIC_FILTER, INSERT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:#TBLDYNAMIC_FILTER, SELECT:SSP_ANL_SHIP_PLAN_40, INSERT:#TBLDYNAMIC_SHIP_ROW, SELECT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:SCM_DNM_PLAN_FROZEN_V, SELECT:SCM_MST_ITEM_SN, UPDATE:#TBLDYNAMIC_SHIP_ROW, INSERT:#STOCK, SELECT:SSP_DNM_STOCK_C, SELECT:SCM_MST_LOCATION, SELECT:SCM_SYS_CALENDAR_M, SELECT:#TBLDYNAMIC_SHIP_ROW, SELECT:#STOCK, INSERT:#TBLDYNAMIC_CAL_QTY, SELECT:#TBLDYNAMIC_CAL_QTY, INSERT:#TBLDYNAMIC_REQUESTOR, SELECT:SCM_MST_SHEET_MEASURE, INSERT:#TBLDYNAMIC_SHIP_PIVOT, DYNAMIC@SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCM_CODE_LOOKUP_VALUE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","FindButton","FindButton > FindData_Main > InitSpread_2","InitSpread_2","299","biz:CommonData.CommonDataList [code=PlantSiteByDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","FindButton","FindButton > FindData_Main > InitSpread_2 > GetSpdTitle","GetSpdTitle","1115","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","SaveButton","SaveButton > SaveData","SaveData","944","SSP.SSP0045_SAVE_SHIPMENT_REQUEST","MATCH","SP SSP0045_SAVE_SHIPMENT_REQUEST","EXEC:SSP0045_SAVE_SHIPMENT_REQUEST, CREATE:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, SELECT:#TBLDYNAMIC_SSP0045_SHPIMENTREQ, UPDATE:A, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ, INSERT:DM_PLN_SHIPMENT_REQ_H, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","SaveButton","SaveButton > SaveData > FindData_Main","FindData_Main","587","SSP.SSP0045_GET_SHIPMENT_REQUEST","MATCH","SP SSP0045_GET_SHIPMENT_REQUEST","EXEC:SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCP_PLAN_VERSION_V, CREATE:#TBLDYNAMIC_PLAN, CREATE:#TBLDYNAMIC_SHIP_ROW, CREATE:#TBLDYNAMIC_CAL_QTY, CREATE:#TBLDYNAMIC_FILTER, INSERT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCP_PLN_SHIPMENT_PLAN_PEGGING, SELECT:SCP_PLN_SHIPMENT_PLAN, REF:FN_NEXT_DAY, SELECT:SCP_MST_BOD_N_V, REF:STRING_SPLIT, INSERT:#TBLDYNAMIC_PLAN, SELECT:SCP_ANL_SHIPMENT_PLAN_SEMI, SELECT:SCM_MST_SITE, SELECT:#TMP_SCP_ANL_SHIPMENT_PLAN_FG, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:#TBLDYNAMIC_PLAN, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCP_MST_FINAL_ITEM, REF:FN_LIST_LOOKUP_VALUE, INSERT:#TBLDYNAMIC_SHIP_REQ, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, INSERT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SSP_DNM_SHIP_RESULT_OWMS_V, SELECT:#TBLDYNAMIC_SHIP_REQ, INSERT:#TBLDYNAMIC_FILTER, INSERT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:#TBLDYNAMIC_FILTER, SELECT:SSP_ANL_SHIP_PLAN_40, INSERT:#TBLDYNAMIC_SHIP_ROW, SELECT:#TBLDYNAMIC_PLAN_ERP_RESULT, SELECT:#TBLDYNAMIC_SHIP_REQ_OWMS_RESULT, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TBLDYNAMIC_SCP0045_40_STD, SELECT:SCM_DNM_PLAN_FROZEN_V, SELECT:SCM_MST_ITEM_SN, UPDATE:#TBLDYNAMIC_SHIP_ROW, INSERT:#STOCK, SELECT:SSP_DNM_STOCK_C, SELECT:SCM_MST_LOCATION, SELECT:SCM_SYS_CALENDAR_M, SELECT:#TBLDYNAMIC_SHIP_ROW, SELECT:#STOCK, INSERT:#TBLDYNAMIC_CAL_QTY, SELECT:#TBLDYNAMIC_CAL_QTY, INSERT:#TBLDYNAMIC_REQUESTOR, SELECT:SCM_MST_SHEET_MEASURE, INSERT:#TBLDYNAMIC_SHIP_PIVOT, DYNAMIC@SSP0045_GET_SHIPMENT_REQUEST, SELECT:SCM_CODE_LOOKUP_VALUE"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","SaveButton","SaveButton > SaveData > FindData_Main > InitSpread_2","InitSpread_2","299","biz:CommonData.CommonDataList [code=PlantSiteByDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","button","SaveButton","SaveButton > SaveData > FindData_Main > InitSpread_2 > GetSpdTitle","GetSpdTitle","1115","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+```
+
+### FILE events.csv (12 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","177","this.chkSum","CheckedChanged","chkSum_CheckedChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest",".ctor","148","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","400","this.cboDivision","SelectedIndexChanged","CboDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","401","this.btnItem_Id","Click","BtnItem_Id_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","402","this.cboBucketType","SelectedIndexChanged","cboBucketType_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","403","this.cboBizType","SelectedIndexChanged","CboBizType_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","405","this.spdMain","TopChange","SpdMain_TopChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","406","this.spdMain","CellDoubleClick","SpdMain_CellDoubleClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","407","this.spdMain","CellClick","SpdMain_CellClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitEvent","408","this.spdMain","ComboSelChange","SpdMain_ComboSelChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SpdMain_CellClick","1252","spdMain","ComboSelChange","SpdMain_ComboSelChange","-="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SpdMain_CellClick","1334","spdMain","ComboSelChange","SpdMain_ComboSelChange","+="
+```
+
+### FILE controls.csv (25 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","chkSum","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","btnItem_Id","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","txtItem_Id","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","cboBizType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","cboBucketType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","drpPeriod","GSCM.Windows.Forms.Controls.UsrDateRangePicker","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","clbFromSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","lblCombo","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","lblCombo1","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","lblBucket","DevExpress.XtraLayout.LayoutControlItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","lblItemId","DevExpress.XtraLayout.LayoutControlItem","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","layoutControlItem9","DevExpress.XtraLayout.LayoutControlItem","","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","54"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","55"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","spdMain","FarPoint.Win.Spread.FpSpread","this","56"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","imageList1","System.Windows.Forms.ImageList","","57"
+```
+
+### FILE props.csv (53 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","107","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","116","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","119","usrConditionPanel1","Size","new System.Drawing.Size(1129, 75)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","121","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","134","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","139","usrLayoutControl2","Size","new System.Drawing.Size(1129, 75)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","141","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","172","chkSum","Size","new System.Drawing.Size(180, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","175","chkSum","Text","""Sum"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","208","btnItem_Id","Size","new System.Drawing.Size(39, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","244","txtItem_Id","Size","new System.Drawing.Size(100, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","278","cboBizType","Size","new System.Drawing.Size(145, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","312","cboDivision","Size","new System.Drawing.Size(162, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","348","cboBucketType","Size","new System.Drawing.Size(172, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","385","drpPeriod","Size","new System.Drawing.Size(207, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","425","clbFromSite","Size","new System.Drawing.Size(151, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","449","layoutControlGroup2","Size","new System.Drawing.Size(1129, 75)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","457","emptySpaceItem1","Size","new System.Drawing.Size(244, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","465","emptySpaceItem3","Size","new System.Drawing.Size(456, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","470","lblCombo","Control","this.cboBizType"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","474","lblCombo","Size","new System.Drawing.Size(252, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","475","lblCombo","Text","""Operation Group*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","482","lblCombo1","Control","this.cboDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","486","lblCombo1","Size","new System.Drawing.Size(217, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","487","lblCombo1","Text","""Division*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","494","lblBucket","Control","this.cboBucketType"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","499","lblBucket","Size","new System.Drawing.Size(217, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","500","lblBucket","Text","""Bucket"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","507","lblItemId","Control","this.txtItem_Id"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","511","lblItemId","Size","new System.Drawing.Size(141, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","512","lblItemId","Text","""Model"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","519","layoutControlItem4","Control","this.btnItem_Id"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","524","layoutControlItem4","Size","new System.Drawing.Size(43, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","531","layoutControlItem6","Control","this.drpPeriod"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","538","layoutControlItem6","Size","new System.Drawing.Size(252, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","540","layoutControlItem6","Text","""Period*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","547","layoutControlItem9","Control","this.chkSum"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","550","layoutControlItem9","Size","new System.Drawing.Size(184, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","556","layoutControlItem3","Control","this.clbFromSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","560","layoutControlItem3","Size","new System.Drawing.Size(212, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","561","layoutControlItem3","Text","""From Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","609","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","614","spdMain","Size","new System.Drawing.Size(1129, 574)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","631","this","Text","""Shipment Request"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","CreateSpread","291","drpPeriod","Enabled","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1140","siObj.ActiveSheet.Columns[iCol]","Visible","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1144","siObj.ActiveSheet.Columns[iCol]","Visible","chkSum.Checked"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1149","siObj.ActiveSheet.Columns[iCol]","Visible","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1152","siObj.ActiveSheet.Columns[iCol]","Visible","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1156","siObj.ActiveSheet.Columns[iCol]","Visible","chkSum.Checked"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1161","siObj.ActiveSheet.Columns[iCol]","Visible","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1164","siObj.ActiveSheet.Columns[iCol]","Visible","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","BtnItem_Id_Click","1198","txtItem_Id","Text","sItemId"
+```
+
+### FILE grid_effective.csv (18 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Shipment Request","META+코드연결","BOD_FROM_YYYYMMDD","BOD_FROM_YYYYMMDD","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","BOD_ID","BOD_ID","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","BOD_TO_YYYYMMDD","BOD_TO_YYYYMMDD","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","DIVISION_ID","Division*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","FCST_TYPE","FCST Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","FROM_SITE","From Site*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","FROZEN_YYYYMMDD","FROZEN_YYYYMMDD","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","INCOTERMS","Incoterms*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","ITEM_ID","Model*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","LAST_UPDATED_BY","Requestor","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","LT_DAY","L/T(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","MEASURE","Measure*","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","MEASURE_COLOR","MEASURE_COLOR","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Request","META+코드연결","MEASURE_LABEL","Measure","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","PROJECT_CODE","Project Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","TO_SITE","To Site*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Request","META+코드연결","TR_MODE","Trans Mode*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (36 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","CreateSpread","286","Shipment Request","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Request ¦ Shipment Request ¦ 3 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 3 ¦ 1 ¦ 35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","CreateSpread","287","Shipment Request","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","CreateSpread","288","Shipment Request","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","297","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","313","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ 3","siObj,iColumnHeaderRowCount","","siMain ¦ 3"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","316","","LOCAL_METHOD","local:InitSpreadDateColumn","EXPR","","","","{p:spdInfo} ¦ {?spdInfo.nIdxData}","","","spdInfo ¦ spdInfo.nIdxData"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","318","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{p:spdInfo}","","","spdInfo"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","354","","COLUMN","AddTextColumn","DB_DRIVEN","{?dr[DefMain.COLUMN_LABEL_NAME]}","{?dr[DefMain.COLUMN_NAME]}","","{?dr[DefMain.COLUMN_LABEL_NAME]} ¦ {?dr[DefMain.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 0 ¦ {?false}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 0 ¦ false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","358","","COLUMN","AddNumColumn","DB_DRIVEN","{?dr[DefMain.COLUMN_LABEL_NAME]}","{?dr[DefMain.COLUMN_NAME]}","","{?dr[DefMain.COLUMN_LABEL_NAME]} ¦ {?dr[DefMain.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 70 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 70 ¦ true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","362","","OVERRIDE","set:ForeColor","EXPR","","","","{?sDayCode == ""SAT""? Color.Blue : Color.Red}","ForeColor","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0) ⟫ if(sDayCode == ""SAT""|| sDayCode == ""SUN"")","sDayCode == DefMainLabel.Saturday ? Color.Blue : Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","368","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefMain.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","369","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","374","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefMain.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","375","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 30 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 30 ¦ ""SUM"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","382","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefMain.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","383","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","393","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefMain.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","394","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","395","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefMain.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpreadDateColumn","396","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","EditButton","449","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","if(fps.Name == ""spdMain"")","spdMain.Name ¦ fps.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InsertRow","772","","OTHER","SetCellTypeCombo","EXPR","","","ITEM_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefMain.ITEM_ID)} ¦ {?Data_SCP.Common(Data_SCP.Type.BODItemProjectRoute, false, cboDivision.ControlValues, cboBizType.ControlValues)}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false)","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefMain.ITEM_ID) ¦ dtBODItem"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InsertRow2","803","","OTHER","SetCellTypeCombo","EXPR","","","ITEM_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefMain.ITEM_ID)} ¦ {?Data_SCP.Common(Data_SCP.Type.BODItemProjectRoute, false, cboDivision.ControlValues, cboBizType.ControlValues)}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false)","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefMain.ITEM_ID) ¦ dtBODItem"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","cboBucketType_SelectedIndexChanged","1125","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(siMain != null)","siMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","chkSum_CheckedChanged","1130","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(siMain != null)","siMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1140","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(cboBucketType.ControlValues == ""DAILY"") ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1144","","OVERRIDE","set:Visible","EXPR","","","","{?chkSum.Checked}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(cboBucketType.ControlValues == ""DAILY"") ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","chkSum.Checked"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1149","","OVERRIDE","set:Visible","EXPR","","","","{?false}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == ""DAILY"") ⟫ if(cboBucketType.ControlValues == ""WEEKLY"") ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0)","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1152","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == ""DAILY"") ⟫ if(cboBucketType.ControlValues == ""WEEKLY"") ⟫ else!(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0) ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1156","","OVERRIDE","set:Visible","EXPR","","","","{?chkSum.Checked}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == ""DAILY"") ⟫ if(cboBucketType.ControlValues == ""WEEKLY"") ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0)","chkSum.Checked"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1161","","OVERRIDE","set:Visible","EXPR","","","","{?false}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == ""DAILY"") ⟫ else!(cboBucketType.ControlValues == ""WEEKLY"") ⟫ if(cboBucketType.ControlValues == ""MONTHLY"") ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetSpreadColumn","1164","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(cboBucketType.ControlValues == ""DAILY"") ⟫ else!(cboBucketType.ControlValues == ""WEEKLY"") ⟫ if(cboBucketType.ControlValues == ""MONTHLY"") ⟫ else!(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","580","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","581","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","582","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.Designer.cs","SSP0045_ShipmentRequest","InitializeComponent","583","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (34 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetChangeControl","169","Filter","GROUP_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetChangeControl","169","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","SetChangeControl","170","Filter","USER_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","302","drRow","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","InitSpread_2","303","drRow","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","Set_SumValues","660","dsBinding.Tables[0].Columns","MEASURE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1396","dr","p_division_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1397","dr","p_scm_site_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1398","dr","p_item_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1399","dr","p_incoterms","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1400","dr","p_transport_mode","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1401","dr","p_plant_site_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1402","dr","p_user_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1403","dr","p_bod_id","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1404","dr","p_project_code","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1405","dr","p_fcst_type","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1413","dr","p_division_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1414","dr","p_scm_site_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1415","dr","p_item_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1416","dr","p_incoterms","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1417","dr","p_transport_mode","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1418","dr","p_plant_site_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1419","dr","p_bod_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1420","dr","p_project_code","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1421","dr","p_fcst_type","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1428","cpDr","p_division_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1429","cpDr","p_scm_site_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1430","cpDr","p_item_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1431","cpDr","p_incoterms","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1432","cpDr","p_transport_mode","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1433","cpDr","p_plant_site_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1434","cpDr","p_bod_id","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1435","cpDr","p_project_code","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","SSP0045_ShipmentRequest","checkValidN0","1436","cpDr","p_fcst_type","Field"
+```
+
+### FILE commented_calls.csv (1 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0045_ShipmentRequest.cs","834","fox","SSP.PR_SCM_SYS_LOG_BATCH","SSP.PR_SCM_SYS_LOG_BATCH","commented:MATCH"
+```

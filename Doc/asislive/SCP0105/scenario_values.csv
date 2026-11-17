@@ -1,0 +1,8 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0105-Saf5d94,DIVISION,,,,값 미도출,for (r <= _si.GetMaxRowIndex()) ▸ if ((currDIVISION_ID == DIVISION_ID) && (currCOMPANY_ID == COMPANY_ID) && (currSITE_ID == SITE_ID) && (currPLANT_ID == PLANT…),
+SCP0105-S3751ff,DIVISION,,,,값 미도출,"for (r <= _si.GetMaxRowIndex()) ▸ if ((currDIVISION_ID == DIVISION_ID) && (currCOMPANY_ID == COMPANY_ID) && (currSITE_ID == SITE_ID) && (currPLANT_ID == PLANT…) ▸ if ((_si.GetText(r, 0) != ""I"") && (_si.GetText(r, 0) != ""M""))",
+SCP0105-S335478,DIVISION,,,,값 미도출,if (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0105-S23a28e,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.CELL || _division_type == DivisionType.MODULE_PACK),
+SCP0105-Sd8fa4a,DIVISION,,,,값 미도출,if (_division_type == DivisionType.ELTR),
+SCP0105-Sbd8fe2,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.ELTR),
+SCP0105-S070f60,COND,cboProgressStatus.Items,cboProgressStatus=i0,cboProgressStatus=i0,실행함,if (cboProgressStatus.Items.Count > 0),콤보 항목 1개

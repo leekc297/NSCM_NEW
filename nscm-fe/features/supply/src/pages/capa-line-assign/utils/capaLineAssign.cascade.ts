@@ -48,43 +48,70 @@ const SUFFIX_C = '_C';
 const SUFFIX_A = '_A';
 
 /**
- * `clbLine` 전용 `_A`/`_C` 접미 재정렬 (AS-IS cs:1642-1702, 체크리스트 X-N).
+ * `clbLine` 전용 정렬 (AS-IS `RefreshLine` cs:1662-1699 충실 재현, 체크리스트 X-N).
  *
- * AS-IS 는 정렬된 목록을 훑으며 SEQ1(그룹 채번)을 매기고, 같은 base 를 가진 `_C`/`_A` 쌍에만
- * SEQ2 를 `_C`→1 / `_A`→2 로 주어 재정렬한다. **접미 쌍이 정확히 2건일 때만** 적용된다 —
- * 한쪽만 있거나 3건 이상이면 일반 정렬 그대로다. 일반 정렬로 대체할 수 없는 업무 규칙이다.
+ * AS-IS 는 {@link sortMasterCodes} 결과(CODE 오름차순, `DMY_` 더미 맨 뒤)를 훑으며 각 코드의
+ * **base = CODE 에서 마지막 2글자를 뗀 값**을 구하고, `CODE LIKE '%base%'`(base 를 부분
+ * 문자열로 포함, `_` 는 SQL 단일문자 와일드카드) 매칭 코드가 **전체에서 정확히 2건**이면 그
+ * 코드를 "쌍 그룹" 으로 본다. 쌍 그룹이면:
+ *   - 접미 `_C` → (SEQ1=그룹채번, SEQ2=1) / `_A` → (SEQ1=그룹채번, SEQ2=2) ⇒ `_C` 가 `_A` 앞.
+ *   - 접미가 `_C`/`_A` 가 **아니면 SEQ 미부여(NULL)** ⇒ 최종 정렬에서 **맨 앞으로 뜬다.**
+ *     예: `E5DP1`/`E5DP2` 는 base `E5D` 가 서로를 포함해 쌍 그룹(count==2)이 되지만 접미가
+ *     `P1`/`P2` 라 NULL → 목록 최상단. **AS-IS 실측 순서다** — 일반 정렬로는 재현 불가(V-19).
+ * 쌍 그룹이 아니면 SEQ1 을 1씩 올려 부여한다. 최종 정렬 = `SEQ1,SEQ2 ASC`(문자열 컬럼, NULL 우선).
  *
- * 입력은 이미 {@link sortMasterCodes} 를 거친 목록이어야 한다(그룹 채번이 그 순서를 따른다).
+ * `_cd`(그룹 채번)는 AS-IS 와 동일하게 10 에서 시작하고 SEQ 는 **문자열로 비교**한다(그룹 90개
+ * 미만이면 숫자 정렬과 동일 — AS-IS DataView 문자열 컬럼 정렬 동작까지 보존). 입력은 이미
+ * {@link sortMasterCodes} 를 거친 목록이어야 한다(그룹 채번이 그 순서를 따른다).
  */
 export const sortLineCodes = (options: ComboOption[]): ComboOption[] => {
-  const baseOf = (code: string): string | null => {
-    if (code.endsWith(SUFFIX_C) || code.endsWith(SUFFIX_A)) return code.slice(0, -2);
-    return null;
+  const values = options.map(option => option.value);
+
+  // `CODE LIKE '%base%'` 매칭 건수 — `_` 는 임의 1글자, 나머지는 리터럴(base 에 `%` 는 없다).
+  const likeCount = (base: string): number => {
+    const pattern = new RegExp(base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/_/g, '.'));
+    return values.reduce((count, value) => (pattern.test(value) ? count + 1 : count), 0);
   };
 
-  // base 별 접미 구성원 수 — 정확히 2건(_C + _A)인 base 만 재정렬 대상이다.
-  const pairCount = new Map<string, Set<string>>();
-  for (const option of options) {
-    const base = baseOf(option.value);
-    if (base === null) continue;
-    const suffixes = pairCount.get(base) ?? new Set<string>();
-    suffixes.add(option.value.slice(-2));
-    pairCount.set(base, suffixes);
-  }
-
-  // SEQ1 = 그룹 채번(등장 순서). 쌍이 아닌 코드는 자기 자신이 곧 그룹이다.
-  const groupSeq = new Map<string, number>();
-  let nextSeq = 0;
+  let cd = 10;
+  let prevBase: string | null = null;
   const decorated = options.map((option, index) => {
-    const base = baseOf(option.value);
-    const isPair = base !== null && pairCount.get(base)?.size === 2;
-    const groupKey = isPair && base !== null ? base : `#${index}`;
-    if (!groupSeq.has(groupKey)) groupSeq.set(groupKey, nextSeq++);
-    const seq2 = isPair ? (option.value.endsWith(SUFFIX_C) ? 1 : 2) : 0;
-    return { option, seq1: groupSeq.get(groupKey) ?? 0, seq2 };
+    const code = option.value;
+    const base = code.slice(0, -2); // CODE 에서 마지막 2글자 제거(AS-IS Substring(0, len-2))
+    let seq1: string | null;
+    let seq2: string | null;
+    if (likeCount(base) === 2) {
+      const suffix = code.slice(-2);
+      if (prevBase !== base) cd++;
+      if (suffix === SUFFIX_C) {
+        seq1 = String(cd);
+        seq2 = '1';
+      } else if (suffix === SUFFIX_A) {
+        seq1 = String(cd);
+        seq2 = '2';
+      } else {
+        seq1 = null; // AS-IS: SEQ 미부여 → NULL 우선으로 최상단
+        seq2 = null;
+      }
+    } else {
+      cd++;
+      seq1 = String(cd);
+      seq2 = '1';
+    }
+    prevBase = base;
+    return { option, seq1, seq2, index };
   });
 
+  // AS-IS DataView "SEQ1,SEQ2 ASC": NULL 우선 → 문자열 SEQ1 → 문자열 SEQ2 → 입력순(안정).
   return decorated
-    .sort((a, b) => (a.seq1 === b.seq1 ? a.seq2 - b.seq2 : a.seq1 - b.seq1))
+    .sort((a, b) => {
+      if (a.seq1 === null || b.seq1 === null) {
+        if (a.seq1 === b.seq1) return a.index - b.index;
+        return a.seq1 === null ? -1 : 1;
+      }
+      if (a.seq1 !== b.seq1) return a.seq1 < b.seq1 ? -1 : 1;
+      if (a.seq2 !== b.seq2) return (a.seq2 ?? '') < (b.seq2 ?? '') ? -1 : 1;
+      return a.index - b.index;
+    })
     .map(entry => entry.option);
 };

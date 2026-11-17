@@ -27,7 +27,7 @@
 | 트리거 | 예 |
 |---|---|
 | T01 / T04 / T07 작업 | "DMF0043 그리드 수정", "FlexGrid 컬럼 추가" |
-| Wijmo 직접 사용 화면 작업 | DMF0008/0020/0043/0043_01 등 (DataGrid wrapper 우회) |
+| Wijmo 직접 사용 화면 작업 | DMF0008/0020/0043/0043_01 등 (DataGrid wrapper 우회) (2026-11-13 정정: 이미 FlexGrid 를 직접 쓰는 기존 화면 한정 — 신규 화면은 공용 DataGrid 필수·인라인 FlexGrid JSX 금지, hook `datagrid-shared-component-mandatory`) |
 | `@mescius/wijmo*` import 신규 / 변경 | 모든 신규 화면 + 기존 화면 grid 변경 |
 | `CollectionView` 사용 | 정렬/필터/그룹/페이징/변경추적 필요 시 |
 | `cellTemplate` / `itemFormatter` / `FlexGridCellTemplate` 작성 | 셀 커스터마이징 |

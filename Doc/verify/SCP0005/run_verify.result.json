@@ -1,0 +1,369 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-14T07:33:58+09:00",
+ "producer": "run_verify",
+ "id": "SCP0005",
+ "skip_e2e": false,
+ "started": "2026-11-14 05:52:57",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-f648eb06",
+   "class": "J1",
+   "msg": "SCP0005 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-27f100cb",
+   "class": "K3",
+   "msg": "SCP0005 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e32d34a2",
+   "class": "L1",
+   "msg": "SCP0005 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3aecb21a",
+   "class": "F2",
+   "msg": "SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e4a3ef56",
+   "class": "C3",
+   "msg": "SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9beff6f2",
+   "class": "C3",
+   "msg": "SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2ca073e5",
+   "class": "N1",
+   "msg": "SCP0005 센티널 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 표시 @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-087d756b",
+   "class": "E3",
+   "msg": "SCP0005 Excel 필수 칸 빈 업로드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Excel @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1d8d1afb",
+   "class": "F10",
+   "msg": "PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3134fc3e",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-dac80ff3",
+   "class": "L1",
+   "msg": "조회조건 텍스트 입력 중 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ddd9c330",
+   "class": "G5",
+   "msg": "From City 검색 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-536d9503",
+   "class": "L1",
+   "msg": "그리드 방향키 이동 응답",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5e6d8247",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-36b6c266",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-433764ba",
+   "class": "E3",
+   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f7d054e1",
+   "class": "F2",
+   "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-326d9325",
+   "class": "G5",
+   "msg": "[SCP0007 결함 유형] Route 검색 팝업 결과",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f1cb080a",
+   "class": "C3",
+   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-660a833e",
+   "class": "H5",
+   "msg": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META+E2E CR-092 라벨 잔존"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d3a35463",
+   "class": "G4",
+   "msg": "dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe · 미구현(신설 금지)",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-e9f643c5",
+   "class": "G1",
+   "msg": "dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe · 미구현(신설 금지)",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-878acc93",
+   "class": "A1",
+   "msg": "dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe · 미구현(신설 금지)",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-a12fee3f",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ece1c98b",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f048d4a9",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 07:33"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 E2 — Doc/verify/SCP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 2152,
+  "PASS": 809,
+  "FAIL": 26,
+  "판정필요": 36,
+  "미검증": 390,
+  "해당없음": 891,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1142,
+   "없음(미검증)": 390,
+   "없음(판정 대기)": 36,
+   "사람": 2,
+   "기계(상속·집계)": 575,
+   "출처 미기록": 7
+  },
+  "fail_listed": 26,
+  "coverage": {
+   "rules": 92,
+   "measured": 664,
+   "not_run_error": 341,
+   "na": 261,
+   "suspect_na100": [
+    "E2"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0005_DistributionRoute_CheckList_v4.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0005_DistributionRoute_ActionItemList_v4.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0005/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 E2 — Doc/verify/SCP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

@@ -1,0 +1,3309 @@
+{
+ "menu_id": "SCP0037",
+ "at": "2026-11-14 12:05:37",
+ "windows": [
+  [
+   5883202,
+   5909519,
+   "2026-11-14 09:43",
+   "2026-11-14 12:02"
+  ]
+ ],
+ "rows_scanned": 26318,
+ "pkgs": [
+  "PKG_SCP0037"
+ ],
+ "user": "",
+ "calls": [
+  {
+   "seq": 5898569,
+   "at": "2026-11-14 11:10:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898621,
+   "at": "2026-11-14 11:10:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898662,
+   "at": "2026-11-14 11:10:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898678,
+   "at": "2026-11-14 11:11:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "CTP_LT",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898715,
+   "at": "2026-11-14 11:11:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "AC00-A",
+    "ltOperation": "CTP_LT",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898810,
+   "at": "2026-11-14 11:11:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "AC00-A",
+    "ltOperation": "CTP_LT",
+    "itemId": "AMDAU0348A",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898820,
+   "at": "2026-11-14 11:11:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "Y",
+    "scmSiteId": "AC00-A",
+    "ltOperation": "CTP_LT",
+    "itemId": "AMDAU0348A",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898913,
+   "at": "2026-11-14 11:11:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5898945,
+   "at": "2026-11-14 11:11:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899562,
+   "at": "2026-11-14 11:13:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899667,
+   "at": "2026-11-14 11:13:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5899773,
+   "at": "2026-11-14 11:13:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900103,
+   "at": "2026-11-14 11:14:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900138,
+   "at": "2026-11-14 11:14:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900188,
+   "at": "2026-11-14 11:14:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900249,
+   "at": "2026-11-14 11:15:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900299,
+   "at": "2026-11-14 11:15:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900349,
+   "at": "2026-11-14 11:15:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900399,
+   "at": "2026-11-14 11:15:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900449,
+   "at": "2026-11-14 11:16:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900499,
+   "at": "2026-11-14 11:16:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900549,
+   "at": "2026-11-14 11:16:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900584,
+   "at": "2026-11-14 11:16:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900589,
+   "at": "2026-11-14 11:16:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900594,
+   "at": "2026-11-14 11:16:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900599,
+   "at": "2026-11-14 11:16:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81_HD"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900731,
+   "at": "2026-11-14 11:17:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900736,
+   "at": "2026-11-14 11:17:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "CTP_LT",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900741,
+   "at": "2026-11-14 11:17:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "OSP_LT",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900746,
+   "at": "2026-11-14 11:18:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "PRE_INSP",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900830,
+   "at": "2026-11-14 11:18:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900909,
+   "at": "2026-11-14 11:18:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900916,
+   "at": "2026-11-14 11:18:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5900921,
+   "at": "2026-11-14 11:18:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "Y",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901041,
+   "at": "2026-11-14 11:19:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "N",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901097,
+   "at": "2026-11-14 11:19:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901195,
+   "at": "2026-11-14 11:19:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901200,
+   "at": "2026-11-14 11:19:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901316,
+   "at": "2026-11-14 11:19:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901550,
+   "at": "2026-11-14 11:21:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901810,
+   "at": "2026-11-14 11:22:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901847,
+   "at": "2026-11-14 11:22:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo",
+    "INV_FLAG": "N",
+    "CREATION_DATE": "2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0506B",
+    "SCM_SITE_ID": "HQ07-E",
+    "LT_OPERATION": "SLITTING",
+    "DIVISION_ID": "81",
+    "LT_DAY": "6",
+    "CRUD_TYPE": "M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901851,
+   "at": "2026-11-14 11:22:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901863,
+   "at": "2026-11-14 11:22:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901878,
+   "at": "2026-11-14 11:22:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo",
+    "INV_FLAG": "N",
+    "CREATION_DATE": "2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0506B",
+    "SCM_SITE_ID": "HQ07-E",
+    "LT_OPERATION": "SLITTING",
+    "DIVISION_ID": "81",
+    "LT_DAY": "5",
+    "CRUD_TYPE": "M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901882,
+   "at": "2026-11-14 11:22:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901891,
+   "at": "2026-11-14 11:22:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901968,
+   "at": "2026-11-14 11:22:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901973,
+   "at": "2026-11-14 11:23:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901977,
+   "at": "2026-11-14 11:23:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo",
+    "INV_FLAG": "N",
+    "CREATION_DATE": "2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0506B",
+    "SCM_SITE_ID": "HQ07-E",
+    "LT_OPERATION": "SLITTING",
+    "DIVISION_ID": "81",
+    "LT_DAY": "6",
+    "CRUD_TYPE": "M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901981,
+   "at": "2026-11-14 11:23:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901986,
+   "at": "2026-11-14 11:23:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901990,
+   "at": "2026-11-14 11:23:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo",
+    "INV_FLAG": "N",
+    "CREATION_DATE": "2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0506B",
+    "SCM_SITE_ID": "HQ07-E",
+    "LT_OPERATION": "SLITTING",
+    "DIVISION_ID": "81",
+    "LT_DAY": "5",
+    "CRUD_TYPE": "M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901994,
+   "at": "2026-11-14 11:23:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5901999,
+   "at": "2026-11-14 11:23:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902004,
+   "at": "2026-11-14 11:25:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902008,
+   "at": "2026-11-14 11:25:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo^attackgo",
+    "INV_FLAG": "N^N",
+    "CREATION_DATE": "2019-07-16 09:50:59^2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0507B^APCAN0511A",
+    "SCM_SITE_ID": "HQ07-E^HQ07-E",
+    "LT_OPERATION": "SLITTING^SLITTING",
+    "DIVISION_ID": "81^81",
+    "LT_DAY": "6^6",
+    "CRUD_TYPE": "M^M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1^minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902012,
+   "at": "2026-11-14 11:25:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902017,
+   "at": "2026-11-14 11:25:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902021,
+   "at": "2026-11-14 11:25:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+   "kind": "SAVE",
+   "fe": {
+    "CREATED_BY": "attackgo^attackgo",
+    "INV_FLAG": "N^N",
+    "CREATION_DATE": "2019-07-16 09:50:59^2019-07-16 09:50:59",
+    "ITEM_ID": "APCAN0507B^APCAN0511A",
+    "SCM_SITE_ID": "HQ07-E^HQ07-E",
+    "LT_OPERATION": "SLITTING^SLITTING",
+    "DIVISION_ID": "81^81",
+    "LT_DAY": "5^5",
+    "CRUD_TYPE": "M^M"
+   },
+   "ses": {
+    "sesUserId^": "minyonglee1^minyonglee1",
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902025,
+   "at": "2026-11-14 11:25:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902030,
+   "at": "2026-11-14 11:25:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902080,
+   "at": "2026-11-14 11:25:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902085,
+   "at": "2026-11-14 11:26:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902090,
+   "at": "2026-11-14 11:27:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902094,
+   "at": "2026-11-14 11:27:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902099,
+   "at": "2026-11-14 11:27:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902103,
+   "at": "2026-11-14 11:27:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902108,
+   "at": "2026-11-14 11:27:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902112,
+   "at": "2026-11-14 11:27:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902117,
+   "at": "2026-11-14 11:27:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902122,
+   "at": "2026-11-14 11:27:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902172,
+   "at": "2026-11-14 11:27:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902177,
+   "at": "2026-11-14 11:27:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902227,
+   "at": "2026-11-14 11:27:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902232,
+   "at": "2026-11-14 11:28:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902478,
+   "at": "2026-11-14 11:29:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902582,
+   "at": "2026-11-14 11:29:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902637,
+   "at": "2026-11-14 11:29:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5902867,
+   "at": "2026-11-14 11:30:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903706,
+   "at": "2026-11-14 11:36:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903741,
+   "at": "2026-11-14 11:36:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903799,
+   "at": "2026-11-14 11:36:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903839,
+   "at": "2026-11-14 11:36:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903874,
+   "at": "2026-11-14 11:36:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5903952,
+   "at": "2026-11-14 11:36:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904030,
+   "at": "2026-11-14 11:36:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904137,
+   "at": "2026-11-14 11:37:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904169,
+   "at": "2026-11-14 11:37:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "82"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904527,
+   "at": "2026-11-14 11:38:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904532,
+   "at": "2026-11-14 11:39:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904537,
+   "at": "2026-11-14 11:39:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "E2E",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5904880,
+   "at": "2026-11-14 11:40:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905036,
+   "at": "2026-11-14 11:40:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905091,
+   "at": "2026-11-14 11:41:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905141,
+   "at": "2026-11-14 11:41:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905352,
+   "at": "2026-11-14 11:41:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905362,
+   "at": "2026-11-14 11:41:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905374,
+   "at": "2026-11-14 11:41:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905409,
+   "at": "2026-11-14 11:41:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905420,
+   "at": "2026-11-14 11:41:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905425,
+   "at": "2026-11-14 11:41:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905430,
+   "at": "2026-11-14 11:41:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905435,
+   "at": "2026-11-14 11:41:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905451,
+   "at": "2026-11-14 11:41:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905549,
+   "at": "2026-11-14 11:42:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5905632,
+   "at": "2026-11-14 11:42:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906920,
+   "at": "2026-11-14 11:51:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5906966,
+   "at": "2026-11-14 11:51:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907044,
+   "at": "2026-11-14 11:51:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907083,
+   "at": "2026-11-14 11:51:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907118,
+   "at": "2026-11-14 11:51:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907153,
+   "at": "2026-11-14 11:51:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907188,
+   "at": "2026-11-14 11:51:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907223,
+   "at": "2026-11-14 11:52:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907258,
+   "at": "2026-11-14 11:52:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907293,
+   "at": "2026-11-14 11:52:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907328,
+   "at": "2026-11-14 11:52:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907363,
+   "at": "2026-11-14 11:52:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907398,
+   "at": "2026-11-14 11:52:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907433,
+   "at": "2026-11-14 11:52:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907468,
+   "at": "2026-11-14 11:52:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907472,
+   "at": "2026-11-14 11:52:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907507,
+   "at": "2026-11-14 11:53:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907609,
+   "at": "2026-11-14 11:53:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907681,
+   "at": "2026-11-14 11:53:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907716,
+   "at": "2026-11-14 11:53:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907751,
+   "at": "2026-11-14 11:54:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907801,
+   "at": "2026-11-14 11:54:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907896,
+   "at": "2026-11-14 11:54:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907931,
+   "at": "2026-11-14 11:54:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5907966,
+   "at": "2026-11-14 11:54:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908001,
+   "at": "2026-11-14 11:54:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908036,
+   "at": "2026-11-14 11:54:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908086,
+   "at": "2026-11-14 11:54:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908136,
+   "at": "2026-11-14 11:54:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908141,
+   "at": "2026-11-14 11:55:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908191,
+   "at": "2026-11-14 11:55:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908263,
+   "at": "2026-11-14 11:55:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908313,
+   "at": "2026-11-14 11:55:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908363,
+   "at": "2026-11-14 11:55:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908413,
+   "at": "2026-11-14 11:56:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908519,
+   "at": "2026-11-14 11:56:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908554,
+   "at": "2026-11-14 11:56:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908589,
+   "at": "2026-11-14 11:56:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908624,
+   "at": "2026-11-14 11:56:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908659,
+   "at": "2026-11-14 11:56:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908709,
+   "at": "2026-11-14 11:56:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908714,
+   "at": "2026-11-14 11:56:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "APCAN0506B",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908719,
+   "at": "2026-11-14 11:56:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "apcan0506b",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908724,
+   "at": "2026-11-14 11:56:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "PCAN0506",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908729,
+   "at": "2026-11-14 11:57:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "APCAN0506B,APCAN0507B",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908779,
+   "at": "2026-11-14 11:57:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5908957,
+   "at": "2026-11-14 11:59:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "AAEF1001I-A1-000",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909135,
+   "at": "2026-11-14 12:00:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909185,
+   "at": "2026-11-14 12:01:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909235,
+   "at": "2026-11-14 12:01:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909285,
+   "at": "2026-11-14 12:02:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909290,
+   "at": "2026-11-14 12:02:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909295,
+   "at": "2026-11-14 12:02:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909361,
+   "at": "2026-11-14 12:02:20",
+   "by": "dana.robot",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "dana.robot"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909435,
+   "at": "2026-11-14 12:02:31",
+   "by": "lucky-alex",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "81"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "lucky-alex"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5909509,
+   "at": "2026-11-14 12:02:42",
+   "by": "zhangjiali",
+   "proc": "PKG_SCP0037.P_SCP0037_GET_OPERATION_LT",
+   "kind": "GET",
+   "fe": {
+    "scmValidYn": "ALL",
+    "scmSiteId": "ALL",
+    "ltOperation": "SLITTING",
+    "itemId": "ALL",
+    "divisionId": "40"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "zhangjiali"
+   },
+   "rows": 0,
+   "params_parsed": true
+  }
+ ]
+}

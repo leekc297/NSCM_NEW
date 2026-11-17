@@ -1,0 +1,1130 @@
+{
+  "menuId": "SCP0020",
+  "page": "TactTime",
+  "feature": "supply",
+  "routePath": "supply/tact-time",
+  "asisName": "TactTime",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup"
+    },
+    {
+      "key": "line",
+      "label": "Line",
+      "lbl": "LBL00010",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbLine"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Packer",
+      "key": "PACKER",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "OPERATION_NAME",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DAILY_CAPACITY",
+        "DIVISION_ID",
+        "EXCEPT_YN",
+        "INPUT_STATUS",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OSP_YN",
+        "PLANT_SITE_ID",
+        "PRIORITY",
+        "SITE_DESCRIPTION",
+        "TACT_TIME",
+        "YIELD"
+      ],
+      "labels": [
+        "",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity*",
+        "Division*",
+        "EXCEPT_YN",
+        "INPUT_STATUS",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "OPERATION_ID",
+        "OSP_YN",
+        "PLANT_SITE_ID",
+        "Priority*",
+        "Plant Site*",
+        "Tact Time*",
+        "Yield(%)*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Plant",
+      "key": "PLANT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "ACTUAL_CAPACITY",
+        "ACTUAL_OUTPUT",
+        "BIG_LAST_UPDATE_DATE",
+        "BIG_TACT_TIME",
+        "BOM_MIN_DUE_DATE",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DAILY_CAPACITY",
+        "DIVISION_ID",
+        "EFFECTIVE_DATA_COUNT",
+        "EXCEPT_YN",
+        "FROM_ACTUAL_CAPACITY",
+        "INPUT_STATUS",
+        "ITEM_ID",
+        "ITEM_UOM",
+        "JUMBO_MIN",
+        "LANE_QTY",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "MODEL_SITE",
+        "NICK_NAME",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "PLANT_SITE_ID",
+        "PLANT_SITE_NAME",
+        "PRIORITY",
+        "TACT_TIME",
+        "TO_ACTUAL_CAPACITY",
+        "UOM_CONVERT_VALUE",
+        "VALID_YN",
+        "YIELD"
+      ],
+      "labels": [
+        "Actual Capacity",
+        "Actual Output",
+        "Big Last Update Date",
+        "Big Tact Time",
+        "Due Date",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Effective Data Count",
+        "EXCEPT_YN",
+        "From Actual Capacity",
+        "INPUT_STATUS",
+        "Model",
+        "Item UOM",
+        "Jumbo / Min",
+        "Slitting Lane",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Model Site",
+        "Nick Name",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "Operation",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Priority*",
+        "Tact Time*",
+        "To Actual Capacity",
+        "UOM Convert",
+        "Valid*",
+        "Yield(%)*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Tact Time",
+      "key": "TACT_TIME",
+      "popup": false,
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": [
+        "ACTUAL_CAPACITY",
+        "ACTUAL_OUTPUT",
+        "BIG_LAST_UPDATE_DATE",
+        "BIG_TACT_TIME",
+        "BOM_MIN_DUE_DATE",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DAILY_CAPACITY",
+        "DIVISION_ID",
+        "EFFECTIVE_DATA_COUNT",
+        "EXCEPT_YN",
+        "FROM_ACTUAL_CAPACITY",
+        "INPUT_STATUS",
+        "ITEM_ID",
+        "ITEM_UOM",
+        "JUMBO_MIN",
+        "LANE_QTY",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "MODEL_SITE",
+        "NICK_NAME",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "PLANT_SITE_ID",
+        "PLANT_SITE_NAME",
+        "PRIORITY",
+        "TACT_TIME",
+        "TO_ACTUAL_CAPACITY",
+        "UOM_CONVERT_VALUE",
+        "VALID_YN",
+        "YIELD"
+      ],
+      "labels": [
+        "Actual Capacity",
+        "Actual Output",
+        "Big Last Update Date",
+        "Big Tact Time",
+        "Due Date",
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Effective Data Count",
+        "EXCEPT_YN",
+        "From Actual Capacity",
+        "INPUT_STATUS",
+        "Model",
+        "Item UOM",
+        "Jumbo / Min",
+        "Slitting Lane",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Model Site",
+        "Nick Name",
+        "OPERATION_GROUP_ID",
+        "OPERATION_ID",
+        "Operation",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Priority*",
+        "Tact Time*",
+        "To Actual Capacity",
+        "UOM Convert",
+        "Valid*",
+        "Yield(%)*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Tact Time Except",
+      "key": "TACT_TIME_EXCEPT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DAILY_CAPACITY",
+        "DIVISION_ID",
+        "EXCEPT_COMMENT",
+        "INPUT_STATUS",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "ORG_DIVISION_ID",
+        "ORG_ITEM_ID",
+        "ORG_LINE_ID",
+        "ORG_OPERATION_ID",
+        "ORG_PLANT_SITE_ID",
+        "ORG_TACT_TIME_END_DATE",
+        "ORG_TACT_TIME_START_DATE",
+        "PLANT_SITE_ID",
+        "PLANT_SITE_NAME",
+        "TACT_TIME",
+        "TACT_TIME_END_DATE",
+        "TACT_TIME_START_DATE",
+        "USE_YN",
+        "YIELD"
+      ],
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Daily Capacity",
+        "Division",
+        "Comment",
+        "INPUT_STATUS",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Line",
+        "Nick Name",
+        "OPERATION_ID",
+        "Operation",
+        "ORG_DIVISION_ID",
+        "ORG_ITEM_ID",
+        "ORG_LINE_ID",
+        "ORG_OPERATION_ID",
+        "ORG_PLANT_SITE_ID",
+        "ORG_TACT_TIME_END_DATE",
+        "ORG_TACT_TIME_START_DATE",
+        "PLANT_SITE_ID",
+        "Plant Site",
+        "Tact Time*",
+        "End Date*",
+        "Start Date*",
+        "Product YN",
+        "Yield(%)*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Packer",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0020.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Packer",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0020.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_OSP",
+      "sheet": "Tact Time Except",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME",
+      "sheet": "Tact Time Except",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+      "sheet": "Tact Time Except",
+      "btn": "TACT_TIME_EXCEPT_OSP",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+      "entries": [
+        "event:spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_GET_TACT_TIME_EXCEPT",
+      "sheet": "Tact Time Except",
+      "btn": "TACT_TIME_EXCEPT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT",
+      "entries": [
+        "event:spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_OSP",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+      "sheet": "Packer",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainEditModeOff",
+      "target": "this.spdMain",
+      "event": "EditModeOff",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainEditChange",
+      "target": "this.spdMain",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleExceptEditModeOff",
+      "target": "this.spdExcept",
+      "event": "EditModeOff",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleExceptEditChange",
+      "target": "this.spdExcept",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=LookupCommon]",
+        "biz:CommonData.YesOrNo",
+        "biz:CommonData.CommonDataList [code=LineByOperation]"
+      ]
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbPlantSite",
+      "target": "clbPlantSite",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+        "SCP.SCP0020_GET_TACT_TIME_EXCEPT"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdExceptTopChange",
+      "target": "spdExcept",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdmMain",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainChangedPacker",
+      "target": "dsdmMainPacker",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainActiveSheet",
+      "target": "this.spdMain",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdExcept",
+      "target": "dsdmExcept",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0020-001",
+      "kind": "초기화",
+      "pre": "메뉴 권한 보유",
+      "step": "화면 SCP0020 열기",
+      "input": "-",
+      "expect": "cboValid에 YesOrNo 목록(CODE/NAME)이 바인딩된다",
+      "basis": "`Form_Load` > InitControls:218 / `biz:CommonData.YesOrNo`"
+    },
+    {
+      "id": "TC-SCP0020-002",
+      "kind": "초기화",
+      "pre": "동일",
+      "step": "화면 열기",
+      "input": "-",
+      "expect": "LookupCommon 공통코드 호출이 성공한다(바인딩 대상 컨트롤은 **확인 필요**)",
+      "basis": "`Form_Load` > InitControls:220 / `biz:CommonData.CommonDataList` [code=LookupCommon]"
+    },
+    {
+      "id": "TC-SCP0020-003",
+      "kind": "초기화",
+      "pre": "동일",
+      "step": "화면 열기",
+      "input": "-",
+      "expect": "LineByOperation 공통코드 호출이 성공한다(용도 **확인 필요**)",
+      "basis": "`Form_Load` > DefineProperty:199 / `biz:CommonData.CommonDataList` [code=LineByOperation]"
+    },
+    {
+      "id": "TC-SCP0020-004",
+      "kind": "초기화",
+      "pre": "동일",
+      "step": "화면 열기 후 spdMain 탭과 spdExcept 시트 확인",
+      "input": "-",
+      "expect": "spdMain에 `Plant`·`Packer` 탭, spdExcept에 `Tact Time Except` 시트가 있다. `Tact Time` 시트는 생성되지 않는다",
+      "basis": "CreateSpread:374·377·384 / 시트 `Plant`, `Packer`, `Tact Time Except`, `Tact Time`"
+    },
+    {
+      "id": "TC-SCP0020-005",
+      "kind": "초기화",
+      "pre": "동일",
+      "step": "화면 열기",
+      "input": "-",
+      "expect": "필드 초기화(dtValidYN/dtYesOrNo)가 오류 없이 수행된다(실행 시점 **확인 필요**)",
+      "basis": "`<field:dtValidYN>`:57, `<field:dtYesOrNo>`:58 / `biz:CommonData.YesOrNo`"
+    },
+    {
+      "id": "TC-SCP0020-006",
+      "kind": "조회",
+      "pre": "데이터가 있는 조건",
+      "step": "cboDivision, cboOperationGroup 선택 → (Plant 경로) 조회",
+      "input": "Division, Operation Group 유효값",
+      "expect": "LineByOperation 재조회 후 `Plant` 시트에 결과가 표시된다",
+      "basis": "FindButton > Find_Data > FindData_Main:1041·1067 / `biz:CommonData.CommonDataList` [code=LineByOperation], `SCP.SCP0020_GET_TACT_TIME`, SP `SCP0020_GET_TACT_TIME` / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-007",
+      "kind": "조회",
+      "pre": "데이터가 있는 조건",
+      "step": "(Packer 경로) 조회",
+      "input": "동일",
+      "expect": "`Packer` 시트에 결과가 표시된다",
+      "basis": "FindButton > Find_Data > Find_Packer:980 / `SCP.SCP0020_GET_TACT_TIME_OSP`, SP `SCP0020_GET_TACT_TIME_OSP` / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-008",
+      "kind": "조회",
+      "pre": "결과가 없는 조건",
+      "step": "Plant 경로로 조회",
+      "input": "존재하지 않는 Model을 txtItemId에 입력",
+      "expect": "`Plant` 시트가 0건으로 표시되고 오류가 없다",
+      "basis": "`SCP.SCP0020_GET_TACT_TIME` / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-009",
+      "kind": "조회",
+      "pre": "결과가 없는 조건",
+      "step": "Packer 경로로 조회",
+      "input": "동일",
+      "expect": "`Packer` 시트가 0건으로 표시되고 오류가 없다",
+      "basis": "`SCP.SCP0020_GET_TACT_TIME_OSP` / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-010",
+      "kind": "조회",
+      "pre": "SP 오류를 유도하는 환경",
+      "step": "조회 실행",
+      "input": "-",
+      "expect": "오류 메시지가 표시되고 그리드가 깨지지 않는다(메시지 형식 **확인 필요**)",
+      "basis": "`SCP.SCP0020_GET_TACT_TIME`, `SCP.SCP0020_GET_TACT_TIME_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-011",
+      "kind": "조회",
+      "pre": "-",
+      "step": "cboDivision을 선택하지 않고 조회",
+      "input": "Division 빈값",
+      "expect": "필수 입력 안내가 나오거나 조회되지 않는다(검증 로직 **확인 필요**, 라벨 `Division*`)",
+      "basis": "layoutControlItem1 Text `Division*` / `SCP.SCP0020_GET_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-012",
+      "kind": "조회",
+      "pre": "-",
+      "step": "cboOperationGroup을 선택하지 않고 조회",
+      "input": "Operation Group 빈값",
+      "expect": "필수 입력 안내가 나오거나 조회되지 않는다(**확인 필요**, 라벨 `Operation Group*`)",
+      "basis": "layoutControlItem5 Text `Operation Group*` / `SCP.SCP0020_GET_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-013",
+      "kind": "조회",
+      "pre": "데이터가 있음",
+      "step": "txtItemId에 여러 줄 Model 입력 → 조회",
+      "input": "Model 2건(줄바꿈)",
+      "expect": "입력한 Model만 조회된다(파라미터 형식 **확인 필요**)",
+      "basis": "txtItemId(UsrMultiLineEditor) / `SCP.SCP0020_GET_TACT_TIME` / SP `SCP0020_GET_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-014",
+      "kind": "조회",
+      "pre": "데이터가 있음",
+      "step": "cboValid 선택 → 조회",
+      "input": "Valid = Y / N",
+      "expect": "선택값에 맞는 결과가 나온다(**확인 필요**)",
+      "basis": "cboValid / `biz:CommonData.YesOrNo`, `SCP.SCP0020_GET_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-015",
+      "kind": "조회",
+      "pre": "데이터가 있음",
+      "step": "clbPlantSite·clbLine 다중 선택 → 조회",
+      "input": "Plant Site 2건, Line 2건",
+      "expect": "선택한 사이트·라인만 조회된다(**확인 필요**)",
+      "basis": "clbPlantSite, clbLine / `SCP.SCP0020_GET_TACT_TIME_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-016",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "btnItemId 클릭",
+      "input": "-",
+      "expect": "txtItemId.Text에 sItemId 값이 설정된다(팝업 여부 **확인 필요**)",
+      "basis": "`btnItemId_Click`:2560"
+    },
+    {
+      "id": "TC-SCP0020-017",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "cboDivision 값 변경",
+      "input": "Division A → B",
+      "expect": "AS-IS와 같이 동작한다(Plant Site 갱신 가능성 있음, 내부 동작 **확인 필요**)",
+      "basis": "`ClbDivision_SelectedIndexChanged` (InitEvent:460)"
+    },
+    {
+      "id": "TC-SCP0020-018",
+      "kind": "이벤트",
+      "pre": "Division 선택됨",
+      "step": "clbPlantSite 선택 변경",
+      "input": "Plant Site 체크 변경",
+      "expect": "AS-IS와 같이 동작한다(Line 갱신 가능성 있음, 내부 동작 **확인 필요**)",
+      "basis": "`ClbPlantSite_SelectedIndexChanged` (InitEvent:461)"
+    },
+    {
+      "id": "TC-SCP0020-019",
+      "kind": "이벤트",
+      "pre": "`Packer` 조회 결과 있음",
+      "step": "spdMain `Packer` 행 더블클릭",
+      "input": "대상 행 1건",
+      "expect": "spdExcept `Tact Time Except`에 OSP 예외 데이터가 표시된다(분기 조건 **확인 필요**)",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_Except_Packer:1321 / `SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP`, SP `SCP0020_GET_TACT_TIME_EXCEPT_OSP` / 시트 `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-020",
+      "kind": "이벤트",
+      "pre": "`Plant` 조회 결과 있음",
+      "step": "spdMain `Plant` 행 더블클릭",
+      "input": "대상 행 1건",
+      "expect": "spdExcept `Tact Time Except`에 예외 데이터가 표시된다",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_Except:1397 / `SCP.SCP0020_GET_TACT_TIME_EXCEPT`, SP `SCP0020_GET_TACT_TIME_EXCEPT` / 시트 `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-021",
+      "kind": "이벤트",
+      "pre": "예외 데이터가 없는 행",
+      "step": "spdMain 행 더블클릭",
+      "input": "예외 없는 모델 행",
+      "expect": "spdExcept가 0건으로 표시되고 오류가 없다",
+      "basis": "`SpdMain_CellDoubleClick` / `SCP.SCP0020_GET_TACT_TIME_EXCEPT`, `SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-022",
+      "kind": "이벤트",
+      "pre": "`Plant` 활성, 잠금 아님",
+      "step": "spdMain LINE_ID 셀 클릭",
+      "input": "-",
+      "expect": "LINE_ID 셀이 Line 콤보로 바뀐다(division·FACTORY_ID 필터 데이터)",
+      "basis": "`SpdMain_CellClick`:2583 / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-023",
+      "kind": "이벤트",
+      "pre": "`Plant` 활성",
+      "step": "spdMain의 LINE_ID 외 셀 클릭, 또는 잠금 셀의 LINE_ID 클릭",
+      "input": "-",
+      "expect": "콤보가 구성되지 않는다",
+      "basis": "`SpdMain_CellClick`:2583 조건(IsLock(\"Plant\")=false, IsLockCell=false, e.Column==LINE_ID) / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-024",
+      "kind": "이벤트",
+      "pre": "`Plant` 또는 `Packer` 활성, 잠금 아님, 행 1건 이상",
+      "step": "spdMain LINE_ID 열에 값 붙여넣기",
+      "input": "유효한 Line 코드 2건",
+      "expect": "붙여넣은 LINE_ID 셀에 Line 콤보(dtLine)가 적용된다",
+      "basis": "`SpdMain_ClipboardPasted`:2769~2773 / 시트 `Plant`, `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-025",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "spdMain 탭을 `Plant`로 전환",
+      "input": "-",
+      "expect": "shtMain으로 ChangeSheet/ChangeActiveSheet가 적용되고, spdExcept에서 OPERATION_NAME 표시·DAILY_CAPACITY 숨김(초기화 시점 **확인 필요**)",
+      "basis": "`SpdMain_ActiveSheetChanged`:2792~2793 / 시트 `Plant`, `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-026",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "spdMain 탭을 `Packer`로 전환",
+      "input": "-",
+      "expect": "shtPacker로 ChangeSheet/ChangeActiveSheet가 적용된다",
+      "basis": "`SpdMain_ActiveSheetChanged`:2799~2800 / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-027",
+      "kind": "이벤트",
+      "pre": "spdMain 다건 조회",
+      "step": "spdMain 세로 스크롤",
+      "input": "-",
+      "expect": "AS-IS와 같이 동작한다(내부 동작 **확인 필요**)",
+      "basis": "`SpdMain_TopChange` (InitEvent:464)"
+    },
+    {
+      "id": "TC-SCP0020-028",
+      "kind": "이벤트",
+      "pre": "spdExcept 다건 조회",
+      "step": "spdExcept 세로 스크롤",
+      "input": "-",
+      "expect": "AS-IS와 같이 동작한다(**확인 필요**)",
+      "basis": "`SpdExcept_TopChange` (InitEvent:467)"
+    },
+    {
+      "id": "TC-SCP0020-029",
+      "kind": "이벤트",
+      "pre": "spdMain 편집 중",
+      "step": "spdMain 셀 편집 후 편집 모드 종료",
+      "input": "임의 값",
+      "expect": "AS-IS와 같이 동작한다(**확인 필요**)",
+      "basis": "`SpdMain_EditModeOff` (Designer:505)"
+    },
+    {
+      "id": "TC-SCP0020-030",
+      "kind": "이벤트",
+      "pre": "spdMain 편집 중",
+      "step": "spdMain 셀 값 입력",
+      "input": "임의 값",
+      "expect": "AS-IS와 같이 동작한다(**확인 필요**)",
+      "basis": "`SpdMain_EditChange` (Designer:506)"
+    },
+    {
+      "id": "TC-SCP0020-031",
+      "kind": "이벤트",
+      "pre": "spdExcept 편집 중",
+      "step": "spdExcept 셀 편집 후 종료",
+      "input": "임의 값",
+      "expect": "AS-IS와 같이 동작한다(**확인 필요**)",
+      "basis": "`spdExcept_EditModeOff` (Designer:558)"
+    },
+    {
+      "id": "TC-SCP0020-032",
+      "kind": "이벤트",
+      "pre": "spdExcept 편집 중",
+      "step": "spdExcept 셀 값 입력",
+      "input": "임의 값",
+      "expect": "AS-IS와 같이 동작한다(**확인 필요**)",
+      "basis": "`spdExcept_EditChange` (Designer:559)"
+    },
+    {
+      "id": "TC-SCP0020-033",
+      "kind": "이벤트",
+      "pre": "`Plant` 조회됨",
+      "step": "spdMain `Plant` 셀 값 변경",
+      "input": "임의 값",
+      "expect": "변경 행 상태가 반영된다(내부 동작 **확인 필요**)",
+      "basis": "`SpdMain_Changed` (dsdmMain, InitEvent:471) / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-034",
+      "kind": "이벤트",
+      "pre": "`Packer` 조회됨",
+      "step": "spdMain `Packer` 셀 값 변경",
+      "input": "임의 값",
+      "expect": "변경 행 상태가 반영된다(**확인 필요**)",
+      "basis": "`SpdMain_Changed_Packer` (dsdmMainPacker, InitEvent:474) / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-035",
+      "kind": "이벤트",
+      "pre": "`Tact Time Except` 조회됨",
+      "step": "spdExcept 셀 값 변경",
+      "input": "임의 값",
+      "expect": "변경 행 상태가 반영된다(**확인 필요**)",
+      "basis": "`SpdExcept_Changed` (dsdmExcept, InitEvent:482) / 시트 `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-036",
+      "kind": "그리드",
+      "pre": "`Plant` 조회됨",
+      "step": "spdMain `Plant` 헤더 확인",
+      "input": "-",
+      "expect": "표시 23개(Actual Capacity … Yield(%)*), 숨김 10개(ACTUAL_OUTPUT, EFFECTIVE_DATA_COUNT, EXCEPT_YN, FROM_ACTUAL_CAPACITY, INPUT_STATUS, OPERATION_GROUP_ID, OPERATION_ID, PLANT_SITE_ID, TO_ACTUAL_CAPACITY, VALID_YN)",
+      "basis": "SetSpreadInit:438 / 시트 `Plant` / `SCP.SCP0020_GET_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-037",
+      "kind": "그리드",
+      "pre": "`Packer` 조회됨",
+      "step": "spdMain `Packer` 헤더 확인",
+      "input": "-",
+      "expect": "표시 14개(Created By, Creation Date, Daily Capacity*, Division*, Model*, Last Update Date, Last Updated By, Line*, Nick Name, OSP_YN, Priority*, Plant Site*, Tact Time*, Yield(%)*), 숨김 4개(EXCEPT_YN, INPUT_STATUS, OPERATION_ID, PLANT_SITE_ID)",
+      "basis": "SetSpreadInit:449 / 시트 `Packer` / `SCP.SCP0020_GET_TACT_TIME_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-038",
+      "kind": "그리드",
+      "pre": "spdMain `Plant` 활성",
+      "step": "spdExcept `Tact Time Except` 헤더 확인",
+      "input": "-",
+      "expect": "표시 16개. OPERATION_NAME(Operation) 표시, DAILY_CAPACITY 숨김",
+      "basis": "InitSpread:410·411 / 시트 `Tact Time Except`, `Plant` / `SCP.SCP0020_GET_TACT_TIME_EXCEPT`"
+    },
+    {
+      "id": "TC-SCP0020-039",
+      "kind": "그리드",
+      "pre": "spdMain `Packer` 활성",
+      "step": "spdExcept `Tact Time Except` 헤더 확인",
+      "input": "-",
+      "expect": "표시 16개. DAILY_CAPACITY(Daily Capacity) 표시, OPERATION_NAME 숨김",
+      "basis": "InitSpread:415·416 / 시트 `Tact Time Except`, `Packer` / `SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-040",
+      "kind": "그리드",
+      "pre": "화면 열림",
+      "step": "메타 시트 `Tact Time` 노출 여부 확인",
+      "input": "-",
+      "expect": "`Tact Time` 탭과 그리드가 표시되지 않는다(메타 33행은 코드 미참조, 폐기 여부 **확인 필요**)",
+      "basis": "시트 `Tact Time` (Fact Pack §12 \"메타 정의만, 코드 미참조\")"
+    },
+    {
+      "id": "TC-SCP0020-041",
+      "kind": "그리드",
+      "pre": "`Packer` 활성, 잠금 아님",
+      "step": "InsertButton 클릭",
+      "input": "-",
+      "expect": "새 행이 추가되고 LINE_ID 셀이 콤보(dtComboIns)가 된다",
+      "basis": "InsertButton:859~864 / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-042",
+      "kind": "그리드",
+      "pre": "`Packer`(인덱스 1) 조회됨",
+      "step": "EditButton 클릭",
+      "input": "INPUT_STATUS=\"I\" 행",
+      "expect": "조건에 맞는 행의 LINE_ID에 콤보가 적용된다(`GetText(\"0\", …)` 행 지정 원문의 의도 **확인 필요**)",
+      "basis": "EditButton:607·636~641 / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-043",
+      "kind": "저장",
+      "pre": "`Plant` 행 수정",
+      "step": "spdMain `Plant` 값 수정 → 저장",
+      "input": "TACT_TIME, YIELD, PRIORITY 변경",
+      "expect": "저장에 성공하고 `Plant`가 다시 조회된다. SCP_MST_TACT_TIME·_H에 반영된다",
+      "basis": "SaveButton > SaveData_Main:1797·1874 / `SCP.SCP0020_SAVE_TACT_TIME`, SP `SCP0020_SAVE_TACT_TIME` → `SCP.SCP0020_GET_TACT_TIME` / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-044",
+      "kind": "저장",
+      "pre": "`Packer` 행 추가",
+      "step": "InsertButton → 값 입력 → 저장",
+      "input": "필수(* 컬럼) 입력",
+      "expect": "저장에 성공하고 `Packer`가 다시 조회된다. SCP_MST_TACT_TIME_OSP·_H에 반영된다",
+      "basis": "SaveButton > SaveData_Packer:1560·1622 / `SCP.SCP0020_SAVE_TACT_TIME_OSP`, SP `SCP0020_SAVE_TACT_TIME_OSP` → `SCP.SCP0020_GET_TACT_TIME_OSP` / 시트 `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-045",
+      "kind": "저장",
+      "pre": "Packer 행 더블클릭으로 하단 조회됨",
+      "step": "spdExcept 행 추가·수정 → 저장",
+      "input": "Start Date*, End Date*, Tact Time*, Yield(%)*",
+      "expect": "저장에 성공하고 하단이 다시 조회된다. SCP_MST_TACT_TIME_EXCEPT_OSP·_H에 반영된다",
+      "basis": "SaveButton > SaveData_Except_Packer:2023·2094 / `SCP.SCP0020_SAVE_TACT_TIME_EXCEPT_OSP`, SP `SCP0020_SAVE_TACT_TIME_EXCEPT_OSP` → `SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP` / 시트 `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-046",
+      "kind": "저장",
+      "pre": "Plant 행 더블클릭으로 하단 조회됨",
+      "step": "spdExcept 행 추가·수정 → 저장",
+      "input": "동일",
+      "expect": "저장에 성공하고 하단이 다시 조회된다. SCP_MST_TACT_TIME_EXCEPT·_H에 반영된다",
+      "basis": "SaveButton > SaveData_Except:2227·2297 / `SCP.SCP0020_SAVE_TACT_TIME_EXCEPT`, SP `SCP0020_SAVE_TACT_TIME_EXCEPT` → `SCP.SCP0020_GET_TACT_TIME_EXCEPT` / 시트 `Tact Time Except`"
+    },
+    {
+      "id": "TC-SCP0020-047",
+      "kind": "저장",
+      "pre": "저장 SP가 ERR_MESSAGE를 돌려주는 데이터",
+      "step": "저장 실행",
+      "input": "필수값 누락 또는 중복 키",
+      "expect": "ERR_MESSAGE 내용이 표시되고 재조회로 덮어쓰지 않는다(판정 조건·메시지 ID **확인 필요**)",
+      "basis": "SaveData_Packer:1622, SaveData_Main:1874, SaveData_Except_Packer:2094, SaveData_Except:2297 / `SCP.SCP0020_SAVE_TACT_TIME`, `SCP.SCP0020_SAVE_TACT_TIME_OSP`, `SCP.SCP0020_SAVE_TACT_TIME_EXCEPT`, `SCP.SCP0020_SAVE_TACT_TIME_EXCEPT_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-048",
+      "kind": "저장",
+      "pre": "`Plant` 행 삭제 상태(삭제 방식 **확인 필요**)",
+      "step": "저장",
+      "input": "예외 데이터가 있는 모델 행",
+      "expect": "SCP_MST_TACT_TIME과 SCP_MST_TACT_TIME_EXCEPT의 DELETE·_H 이력이 AS-IS와 같다(**확인 필요**)",
+      "basis": "`SCP.SCP0020_SAVE_TACT_TIME`, SP `SCP0020_SAVE_TACT_TIME`(DELETE:SCP_MST_TACT_TIME, DELETE:SCP_MST_TACT_TIME_EXCEPT) / 시트 `Plant`"
+    },
+    {
+      "id": "TC-SCP0020-049",
+      "kind": "권한",
+      "pre": "조회 전용 그룹 사용자(TB_FX_GroupMenuAuth)",
+      "step": "화면 열기",
+      "input": "-",
+      "expect": "권한에 맞게 Save/Insert/Edit 버튼이 노출·제한된다(C/R/U/D 값 **확인 필요**)",
+      "basis": "TB_FX_GroupMenuAuth 13행 / `SCP.SCP0020_SAVE_TACT_TIME`"
+    },
+    {
+      "id": "TC-SCP0020-050",
+      "kind": "권한",
+      "pre": "spdMain 시트 잠금 상태(IsLock=true)",
+      "step": "LINE_ID 셀 클릭, 붙여넣기, InsertButton 실행",
+      "input": "-",
+      "expect": "LINE_ID 콤보가 적용되지 않는다",
+      "basis": "`SpdMain_CellClick`:2583, `SpdMain_ClipboardPasted`:2773, InsertButton:864 / 시트 `Plant`, `Packer`"
+    },
+    {
+      "id": "TC-SCP0020-051",
+      "kind": "division",
+      "pre": "division 14종 각각 로그인(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC)",
+      "step": "각 division에서 조회 후 헤더 수 확인",
+      "input": "-",
+      "expect": "모든 division에서 `Packer` 14, `Plant` 23, `Tact Time Except` 16으로 같다(division 변형 없음)",
+      "basis": "Fact Pack §12 / 시트 `Packer`, `Plant`, `Tact Time Except` / `SCP.SCP0020_GET_TACT_TIME`, `SCP.SCP0020_GET_TACT_TIME_OSP`"
+    },
+    {
+      "id": "TC-SCP0020-052",
+      "kind": "division",
+      "pre": "`Plant` 활성, 서로 다른 division 데이터",
+      "step": "각 division 행의 LINE_ID 셀 클릭",
+      "input": "Division A 행 / Division B 행",
+      "expect": "콤보 목록이 해당 행의 DIVISION_ID·FACTORY_ID로 필터된 Line만 보여 준다",
+      "basis": "`SpdMain_CellClick`:2583(DBUtils.Filter DIVISION_ID/FACTORY_ID) / `biz:CommonData.CommonDataList` [code=LineByOperation] / 시트 `Plant`"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

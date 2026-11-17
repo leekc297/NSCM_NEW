@@ -71,6 +71,10 @@ export const MSG = {
   REQUIRE_VERSION_ACTION: 'MSG00688',
   // 편집 권한 차단 — DM Planner && Div≠82 (EditButton L344 — 사내 기등록)
   NO_PERMISSION: 'MSG00096',
+  // 조회 전 Insert 차단 — "조회 후 추가하십시오." (TO-BE 신설 가드, 2026-11-11 사용자 결정).
+  //   AS-IS 는 화면 진입 시(InitControls L171) Measure 세트를 받아 두지만 TO-BE 는 조회 때 받고,
+  //   월 칸(M_)도 조회해야 생기므로 조회 전 Insert 는 막는다. 문구는 shipping/supply 기존 사용처와 같다.
+  SEARCH_FIRST: 'MSG01091',
   // Department 필수 (SaveData L748 — AS-IS 00002 '{0} 필수' → 사내 MSG00429 재매핑 선례)
   REQUIRED_FIELD: 'MSG00429',
   // 저장 성공 (AS-IS 00004 '{N}건' → 사내 MSG00002 재매핑 선례)

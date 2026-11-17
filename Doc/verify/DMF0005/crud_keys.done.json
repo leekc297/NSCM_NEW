@@ -348,5 +348,30 @@
    }
   ],
   "cleaned": "20261025_045757"
+ },
+ {
+  "keys": {
+   "DIVISION_ID": "40",
+   "SCM_SITE_ID": "AJ상사_AB_TES",
+   "ITEM_ID": "MCCM134010A1"
+  },
+  "saved_before": "2026-11-14T06:23:36",
+  "snapshots": [
+   {
+    "table": "SCM_MST_SITE",
+    "keys": {
+     "DIVISION_ID": "40",
+     "SCM_SITE_ID": "AJ상사_AB_TES"
+    },
+    "rows": [
+     {
+      "ETL_DEPT_ID": "70021414",
+      "LAST_UPDATED_BY": "minyonglee1",
+      "LAST_UPDATE_DATE": "2026-11-04T16:33:54"
+     }
+    ]
+   }
+  ],
+  "cleaned": "20261114_093520"
  }
 ]

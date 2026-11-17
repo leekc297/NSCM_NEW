@@ -1,0 +1,157 @@
+{
+ "id": "SSP0024",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_MST_SHIP_MASTER_EE",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "PLANT_SITE_CODE",
+   "ITEM_ID": "MATERIAL_ID"
+  },
+  "save_sp": "SSP0024_SAVE_SHIP_MASTER",
+  "side": [
+   {
+    "table": "SSP_MST_SHIP_MASTER_EE_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SSP0024_SAVE_SHIP_MASTER → SP SSP0024_SAVE_SHIP_MASTER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PC_ROLL_LENGTH",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PC_ROLL_LENGTH",
+     "db_col": "PC_ROLL_LENGTH",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PC_ROLL_LENGTH",
+    "db_col": "PC_ROLL_LENGTH",
+    "rule": "plus1"
+   },
+   {
+    "col": "BOX_PER_CUT",
+    "db_col": "BOX_PER_CUT",
+    "rule": "plus1"
+   },
+   {
+    "col": "STEELCRATE_PER_CUT",
+    "db_col": "STEELCRATE_PER_CUT",
+    "rule": "plus1"
+   },
+   {
+    "col": "STEELRACK_PER_CUT",
+    "db_col": "STEELRACK_PER_CUT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-15 04:00:12",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "SCM_SITE_ID": "HQ07-E",
+   "ITEM_ID": "APCAN0506B",
+   "ELECTRODE_POST_OPER_CODE": "OP05",
+   "PC_ROLL_LENGTH": 850,
+   "PACKAGE_TYPE_CODE": "SR",
+   "BOX_PER_CUT": "0.5000000000",
+   "STEELCRATE_PER_CUT": 1,
+   "STEELRACK_PER_CUT": "0.3300000000",
+   "DOM_EXP_TYPE_CODE": "DOM",
+   "FACTORY_ID": "ALL",
+   "REMARKS": "",
+   "CREATED_BY": "ssp_batch",
+   "CREATION_DATE": "2020-05-13 16:57:03.120",
+   "LAST_UPDATED_BY": "yhleea",
+   "LAST_UPDATE_DATE": "2020-05-26 10:33:20.443",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "HQ07-E",
+    "ITEM_ID": "APCAN0506B"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PC_ROLL_LENGTH",
+   "old": "850",
+   "new": "851",
+   "ok": true,
+   "error": null,
+   "before": "850",
+   "after": "851",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "SCM_SITE_ID": "HQ07-E",
+   "ITEM_ID": "APCAN0506B",
+   "ELECTRODE_POST_OPER_CODE": "OP05",
+   "PC_ROLL_LENGTH": 850,
+   "PACKAGE_TYPE_CODE": "SR",
+   "BOX_PER_CUT": "0.5000000000",
+   "STEELCRATE_PER_CUT": 1,
+   "STEELRACK_PER_CUT": "0.3300000000",
+   "DOM_EXP_TYPE_CODE": "DOM",
+   "FACTORY_ID": "ALL",
+   "REMARKS": "",
+   "CREATED_BY": "ssp_batch",
+   "CREATION_DATE": "2020-05-13 16:57:03.120",
+   "LAST_UPDATED_BY": "yhleea",
+   "LAST_UPDATE_DATE": "2020-05-26 10:33:20.443",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ]
+}

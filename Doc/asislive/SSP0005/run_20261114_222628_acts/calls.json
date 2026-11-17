@@ -1,0 +1,46 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 22:25:57.526",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0046_GET_ITEM_BY_DIVISION_POPUPEx",
+   "sp": "SSP0046_GET_ITEM_BY_DIVISION_POPUPEx",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27869,
+   "rows_kind": "DataSet rows",
+   "ms": 71845.25,
+   "params": {
+    "p_division_id": "81",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": "",
+    "p_biz_type": "P"
+   },
+   "inline": "EXEC SSP0046_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id='', @p_biz_type='P'",
+   "phase": "action:BtnInput"
+  },
+  {
+   "at": "2026-11-14 22:26:12.789",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0046_GET_TITLESET_POPUP",
+   "sp": "SSP0046_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 10,
+   "rows_kind": "DataSet rows",
+   "ms": 377.86,
+   "params": {
+    "p_program_id": "SSP0046",
+    "p_sheet_name": "Pack Biz",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin",
+    "p_division_id": ""
+   },
+   "inline": "EXEC SSP0046_GET_TITLESET_POPUP @p_program_id='SSP0046', @p_sheet_name='Pack Biz', @p_column_type='M', @p_user_id='jaeuk.shin', @p_division_id=''",
+   "phase": "action:btnInput"
+  }
+ ]
+}

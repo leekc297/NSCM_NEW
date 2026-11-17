@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 110,
+  "at": "2026-11-14T02:20:19.183Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 118,
+  "at": "2026-11-14T02:20:20.339Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ }
+]

@@ -1,0 +1,762 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboPlanDate",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:2026-10-09",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "drpPeriod2",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261010:20261204"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261009:20261203"
+     ]
+    },
+    {
+     "control": "dp1",
+     "before": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261010"
+     ],
+     "after": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261009"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp1(txt)",
+     "before": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261204"
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261203"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2(txt)",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "drpPeriod",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20260928:20261204"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20260928:20261203"
+     ]
+    },
+    {
+     "control": "dp2",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20261204"
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20261203"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2(txt)",
+     "before": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-S265dc3",
+    "SSP0023-S265dc3"
+   ]
+  },
+  {
+   "control": "cboPlanDate",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:2026-10-10",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "drpPeriod2",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261009:20261203"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261010:20261204"
+     ]
+    },
+    {
+     "control": "dp1",
+     "before": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261009"
+     ],
+     "after": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261010"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp1(txt)",
+     "before": [
+      "2026-10-09",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-10-10",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261203"
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "20261204"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2(txt)",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "drpPeriod",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20260928:20261203"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20260928:20261204"
+     ]
+    },
+    {
+     "control": "dp2",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20261203"
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "20261204"
+     ]
+    },
+    {
+     "control": "dtp",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "dp2(txt)",
+     "before": [
+      "2026-12-03",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-12-04",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-S265dc3",
+    "SSP0023-S265dc3"
+   ]
+  },
+  {
+   "control": "clbCompany_ID",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:ESNJ",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-Sa6f5e3",
+    "SSP0023-S77bc2b"
+   ]
+  },
+  {
+   "control": "clbCompany_ID",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:ESOC",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-Sa6f5e3",
+    "SSP0023-S77bc2b"
+   ]
+  },
+  {
+   "control": "clbDivision_ID",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbCompany_ID",
+     "before": [
+      "ESOC",
+      2,
+      0,
+      null,
+      true,
+      true,
+      "HQ00"
+     ],
+     "after": [
+      "ESOC",
+      5,
+      0,
+      null,
+      true,
+      true,
+      "HQ00"
+     ]
+    },
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-Sd21d61",
+    "SSP0023-Sd21d61",
+    "SSP0023-S6dafb1",
+    "SSP0023-S6dafb1"
+   ]
+  },
+  {
+   "control": "clbDivision_ID",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbCompany_ID",
+     "before": [
+      "ESOC",
+      5,
+      0,
+      null,
+      true,
+      true,
+      "HQ00"
+     ],
+     "after": [
+      "ESOC",
+      2,
+      0,
+      null,
+      true,
+      true,
+      "HQ00"
+     ]
+    },
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0023-Sd21d61",
+    "SSP0023-Sd21d61",
+    "SSP0023-S6dafb1",
+    "SSP0023-S6dafb1"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "clbCompanyID",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "rdButton1",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)",
+   "scenarios": 3
+  },
+  {
+   "control": "rdButton2",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)",
+   "scenarios": 3
+  },
+  {
+   "control": "spdDetail",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 13
+  }
+ ],
+ "at": "2026-11-15 01:56:35"
+}

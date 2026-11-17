@@ -22,6 +22,7 @@ import {
   SHEETS,
   SHEET_BY_LEVEL,
   type LevelNo,
+  type ProductGroup,
 } from './capa-line-master.constants';
 import type { CapaLineRow } from './capa-line-master.types';
 import styles from './CapaLineMaster.module.scss';
@@ -84,6 +85,7 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const sc = useCapaLineMasterStore(s => s.searchCondition);
+  const setSearchCondition = useCapaLineMasterStore(s => s.setSearchCondition);
   const applied = useCapaLineMasterStore(s => s.applied);
   const filters = useCapaLineMasterStore(s => s.filters);
   const drill = useCapaLineMasterStore(s => s.drill);
@@ -169,6 +171,68 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     tracker5.current?.clearChanges();
   };
 
+  const clearTrackersBelow = (level: LevelNo) => {
+    for (const candidate of LEVELS) {
+      if (candidate > level) trackerRefs[candidate].current?.clearChanges();
+    }
+  };
+
+  // 멀티그리드 편집 배타(AS-IS 파리티) — AS-IS 는 "한 그리드만 edit 모드"가 원칙이다: 시트는 기본 잠김
+  //   (SpreadInfo.AddSheet ht=true)이고 Insert/Save 가 IsLock==false(=edit 모드)를 요구하며(.cs:1202·784),
+  //   EditButton 이 editCnt>1 을 되돌려(.cs:498) 동시 2그리드 편집을 막고, 미저장 그리드는 edit 모드를
+  //   빠져나오지도 못한다(.cs:478~486). 그래서 두 그리드가 동시에 미저장이 될 수 없어, 저장후 하위 재조회
+  //   (FindData→InitSpread, .cs:935~954·689~721)가 다른 그리드 입력을 지우는 일이 AS-IS 엔 없다.
+  //   TO-BE 는 수정모드 토글을 미이식([[editbutton-toggle-not-ported]])해 5그리드 상시 편집이 되면서 이
+  //   유실이 회귀로 생겼다(SCP0114 수정요청 2026-11-11). 복원: edit 모드 토글이 없으니 "다른 그리드에
+  //   미저장(CRUD_TYPE)이 있으면 이 그리드의 편집/Insert 시작을 차단"으로 AS-IS 배타를 재현한다.
+  //   주의: tracker.hasChanges() 는 수정(M)만 보고 신규행(I)은 못 본다(editTracker.ts:125) — 신규행까지
+  //   잡으려 그리드 소스의 CRUD_TYPE 으로 판정한다.
+  const hasPending = (level: LevelNo): boolean => {
+    const source = (gridRefs[level].current?.collectionView?.sourceCollection ??
+      []) as Record<string, unknown>[];
+    return source.some(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'M');
+  };
+  const hasPendingOther = (level: LevelNo): boolean => LEVELS.some(l => l !== level && hasPending(l));
+  const hasPendingBelow = (level: LevelNo): boolean => LEVELS.some(l => l > level && hasPending(l));
+
+  // 미저장 작업 안내 — 등록 confirm 문구(MSG00703/00704)는 '조회/닫기' 전제라 안 맞아, 맥락 중립 차단 문구
+  //   MSG01210("작업중인 데이터가 있습니다. 작업 완료후 사용하세요.")을 쓴다(동일 유형 화면의 차단 패턴과 정합).
+  const alertUnsavedWork = () =>
+    void setAlert({
+      type: 'alert',
+      content: t('MSG01210', '_작업중인 데이터가 있습니다. 작업 완료후 사용하세요.'),
+    });
+
+  // 편집/Insert 시작 배타 — 다른 그리드에 미저장이 있으면 차단하고 안내(true=차단).
+  //   beginningEdit·pastingCell(그리드 컴포넌트)·handleInsert 공용.
+  const blockIfOtherGridDirty = (level: LevelNo): boolean => {
+    if (!hasPendingOther(level)) return false;
+    alertUnsavedWork();
+    return true;
+  };
+
+  // 드릴다운 — AS-IS CellDoubleClick(cs:1743~1814). 하위 레벨 재조회로 하위 미저장이 사라지므로, 편집 중인
+  //   그리드를 둔 채 부모를 드릴하는 경로는 차단·안내한다(배타로 드문 경우지만 유실 차단은 남긴다).
+  const handleDrillDown = (level: LevelNo, row: Record<string, unknown>) => {
+    if (hasPendingBelow(level)) {
+      alertUnsavedWork();
+      return;
+    }
+    clearTrackersBelow(level);
+    drillDown(level, row);
+  };
+
+  // Product Group 라디오 변경 — effect(resetForProductGroup)가 L4·L5 를 비운다. L1~L3 은 보존되므로
+  //   하위(>3=L4·L5)에 미저장이 있을 때만 차단·안내하고 shopGroupId 를 바꾸지 않는다(라디오 controlled 자동 유지).
+  const handleChangeShopGroup = (value: ProductGroup) => {
+    if (sc.shopGroupId === value) return;
+    if (hasPendingBelow(3)) {
+      alertUnsavedWork();
+      return;
+    }
+    setSearchCondition({ shopGroupId: value });
+  };
+
   useEffect(() => {
     // 진입 자동조회 금지 — keep-alive 잔여 filters 무효화(§5-7) + 컬럼메타 1회 fetch.
     clearFilters();
@@ -226,6 +290,9 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleInsert = () => {
     const grid = gridRefs[activeLevel].current;
     if (!grid) return;
+    // 편집 배타(AS-IS 파리티) — 다른 그리드에 미저장이 있으면 Insert 차단. AS-IS 는 한 그리드만 edit 모드라
+    //   다른 그리드가 미저장이면 이 그리드가 edit 모드(IsLock==false)에 들어갈 수 없어 Insert 자체가 안 됐다.
+    if (blockIfOtherGridDirty(activeLevel)) return;
     const guideAlert = () =>
       void setAlert({
         type: 'alert',
@@ -368,10 +435,9 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         trackerRefs[level].current?.clearChanges();
         // 저장 성공 후 AS-IS 는 FindData(activeLevel)(cs:935~954)을 부른다 — 활성 레벨 재조회 +
         //   InitSpread(activeLevel..5)로 하위 레벨 비움(cs:689~721). 하위를 남기면 방금 바뀐 부모
-        //   기준으로는 맞지 않는 행이 그대로 보인다. 하위 레벨의 편집 마킹도 함께 걷어낸다.
-        for (const candidate of LEVELS) {
-          if (candidate > level) trackerRefs[candidate].current?.clearChanges();
-        }
+        //   기준으로는 맞지 않는 행이 그대로 보인다. 하위 레벨의 편집 마킹도 함께 걷어낸다 — 편집 배타
+        //   (blockIfOtherGridDirty)로 하위엔 미저장이 있을 수 없어 여기서 지울 입력이 애초에 없다(AS-IS 동일).
+        clearTrackersBelow(level);
         clearBelowLevel(level);
         refetchByLevel[level]();
       } catch (e) {
@@ -413,6 +479,8 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
+    // 저장 시점에는 하위 미저장 가드를 두지 않는다 — 편집 배타(blockIfOtherGridDirty)로 활성 레벨 외 다른
+    //   그리드가 미저장일 수 없으므로, 저장 성공 후 clearBelowLevel+재조회가 지울 미저장이 애초에 없다(AS-IS 동일).
     // 공용 메타 기반 필수검증(INPUT_TP_CD=M/IM 또는 라벨 `*`) — 커스텀만 두면 SCP0020 실사고 재현.
     saveWithValidation(dirty, staticColumns[SHEET_BY_LEVEL[level]], rows => doSave(level, rows));
   };
@@ -435,8 +503,9 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       editTrackerRef={trackerRefs[level]}
       canEdit={canEdit}
       adminColumns={staticColumns[SHEET_BY_LEVEL[level]]}
-      onDrillDown={row => drillDown(level, row)}
+      onDrillDown={row => handleDrillDown(level, row)}
       onFocus={() => setActiveLevel(level)}
+      guardEditStart={() => blockIfOtherGridDirty(level)}
     />
   );
 
@@ -484,7 +553,7 @@ export const CapaLineMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           {/* 하단 영역 = Product Group 조회조건 바 + L4|L5 그리드. AS-IS 는 Product Group(rgrpSearchLevel)이
               Level1~3 과 Level4~5 사이에 위치(design 01 §1) — 바를 하단 Panel 최상단에 둬 재현한다. */}
           <div className={styles.bottomPane}>
-            <CapaLineMasterProductGroupBar />
+            <CapaLineMasterProductGroupBar onChangeShopGroup={handleChangeShopGroup} />
             {/* AS-IS Panel2: L4 고정 468 | L5 Fill(나머지) → 넓은 화면 기준 ~25/75. L5(Line, 5컬럼)가 넓다. */}
             <PanelGroup className={styles.bottomRowGroup} orientation='horizontal'>
               <Panel defaultSize={25} minSize={10}>

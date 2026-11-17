@@ -1,0 +1,187 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 16:03:53.966",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 439,
+   "rows_kind": "DataSet rows",
+   "ms": 12.59,
+   "params": {
+    "p_start_yyyymmdd": "20260824",
+    "p_end_yyyymmdd": "20270822"
+   },
+   "inline": "EXEC SCP0009_GET_SHEET_CALENDAR_3SPAN @p_start_yyyymmdd='20260824', @p_end_yyyymmdd='20270822'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:03:53.995",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 4.51,
+   "params": {
+    "p_program_id": "SCP0014",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Demand"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0014', @p_user_id='jaeuk.shin', @p_sheet_name='Demand'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:03:54.328",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 4.19,
+   "params": {
+    "p_program_id": "SCP0014",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Pegging Info"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0014', @p_user_id='jaeuk.shin', @p_sheet_name='Pegging Info'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:03:54.347",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 3.95,
+   "params": {
+    "p_program_id": "SCP0014",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Plan Problem"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0014', @p_user_id='jaeuk.shin', @p_sheet_name='Plan Problem'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:04:05.345",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0014_GET_PROBLEM_REPORT",
+   "sp": "SCP0014_GET_PROBLEM_REPORT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 10879.98,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P",
+    "p_sales_site_id": "Aeonus_KR_GUN,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,ANDURIL_US_CZM,ANODE_US_YFA,Arpiem_RO_OTP,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,audi as_BE_BRU,Audi CKD_DE_ING,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,AW_DE_LEJ,BAE_US_ENC,Banglilai_CN_SZX,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,CMC_TW_TYN,COENSYS_KR_HWS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,DBH_DE_MUC,dianchibao_CN_SHA,dianchibao_HK_MUN,DIS_DE_VBS,DSMT_KR_KMH,EDISON MOTORS_KR_TJN,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epiroc_CA_PIM,Epiroc_IN_BLR,equipmake(OTS)_GB_NRW,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,ESST_CA_WND,EVT_CA_SEU,Evyon_NO_OSL,E-Works Mobility GmbH_DE_IMG,FAW VW_CN_CGQ,FAW VW_CN_DLC,FBPS(OTS)_US_IGX,FBPS(OTS)_US_ILD,FCA AS_CA_BRP,FCA AS_CA_WND,FCA AS_GB_ABG,FCA AS_IT_AVG,FCA AS_IT_MEI,FCA AS_IT_TRN,FCA AS_JP_ZAE,FCA AS_MX_CUJ,FCA AS_PL_WRO,FCA AS_US_MNC,FCA AS_US_SEH,FCA AS_US_WAM,FCA_CA_WND,FCA_CN_NKG,FCA_IT_MEI,FCA_IT_MOD,FCA_IT_TRN,FCA_KR_ASA,FCA_KR_JCH,FCA_KR_UWN,FCA_MX_TLC,FCA_PL_WRO,FCA_US_ABH,FCA_US_CMH,FCA_US_ETA,FCA_US_HLM,FCA_US_IGX,FCA_US_LFC,FCA_US_PHL,FCA_US_SEH,FCA_US_TOL,FCA_US_WAM,FLASH_IT_SIZ,Ford AS_CA_BRP,Ford AS_DE_CGN,Ford AS_DE_QKL,Ford AS_MX_TPZ,Ford AS_US_DEO,Ford AS_US_HLM,Ford AS_US_NKY,Ford AS_US_RDF,Ford(MX-VMI)_TR_KCO,Ford_BE_ANR,Ford_BE_LML,Ford_CN_NJG,Ford_CN_NKG,Ford_DE_QKL,Ford_ES_VLC,Ford_GB_BAS,Ford_GB_ESX,Ford_GB_LAI,Ford_HU_BUD,Ford_MX_CTN,Ford_MX_MOT,Ford_MX_TPZ,Ford_PL_WRO,Ford_RO_CRV,Ford_TR_DOG,Ford_TR_GOK,Ford_TR_KCO,Ford_US_DEO,Ford_US_IGX,Ford_US_RDF,Ford_US_URI,Forsee_CN_ZSN,GCV_CN_HGH,GEELY_CN_NGB,GLOVIS_KR_SEL,GLOVIS_KR_USN,GM AS_US_BQN,GM AS_US_HZP,GM_CA_OSH,GM_CN_SHA,GM_KR_INC,GM_US_ABH,GM_US_BQN,GM_US_LRP,GM_US_MOI,GM_US_OMQ,GM_US_QBU,GM_US_WAM,GM_US_YPS,GM_WA_CA_OSH,GM_WA_DE_MIH,Guangdonglihua_CN_DGG,Hanwha Aero_KR_CHW,Hanwha Aero_KR_SGM,Hengyuan EU_CN_JHA,Hengyuan_CN_JHA,HKI_KR_WJU,HKMC AS_KR_UWN,HKMC_CZ_NVS,HKMC_KR_ASA,HKMC_KR_GMG,HKMC_KR_HWS,HKMC_KR_JNJ,HKMC_KR_OCH,HKMC_KR_SEL,HKMC_KR_TJN,HKMC_KR_USN,HKMC_KR_UWN,HKMC_US_GG3,HKMC_WA_CZ_NVS,HKMC_WA_SK_TEP,HLGP AS_KR_CHU,HLGP_KR_CHU,Honda Motor_JP_HG9,Honda Motor_KR_OCH,Honda Motor_KR_TJN,Honda Motor_US_OHB,HQ05-81-AS,Humanhorizons_CN_YCG,Hyperstrong_CN_BJS,ICPT(OTS)_PL_WAW,IM_US_SPK,Irizar EM_ES_ADU,Irizar_ES_ADU,jemado_GB_LON,JIANGSU_CN_SZH,JJ Solstice_KR_YNG,JLR AS_GB_GAY,JLR(OTS)_GB_CVT,JLR_GB_CVT,JLR_GB_GAY,JOBY_US_SQL,JOBYAR_US_SQL,JSLH_CN_NKG,KAIST_KR_TJN,Karma(OTS)_US_IVN,KGM Cheonan_KR_CHO,KIA_CZ_NVS,KIA_KR_GMG,KIA_KR_HWS,KIA_KR_KWJ,KIA_KR_SEL,KIA_SK_TEP,kokam_KR_NSN,KRAKEN_DE_RSK,KTC_CN_SZX,Lamborghini_IT_SBN,Landsuccess_CN_SZX,LGCDJ_KR_TJN,LGCEG_DE_FRA,LGCGC_KR_GCN,LGCNA_CN_NKG,LGCOC_KR_OCH,LGCOC2_KR_OCH,LGCPI_US_TYM,LGCWA_PL_WRO,LGE_KR_INC,LGE_US_HZP,LGE_US_LRP,LGE_US_QGB,LGESMI_US_HZP,LGESMI_US_LLO,LGESOC_KR_OCH,LGESOC_PL_WRO,LGESWA_PL_BYW,LGESWA_PL_INO,LGESWA_PL_WRO,Lion Bus_CA_SJE,London Taxi_GB_CVT,Magna BMW_AT_GRZ,Magna_AT_GRZ,Magna_Renault_AT_GRZ,Magtec_GB_RTH,Mahindra_IN_PNE,Mahindra_IN_PNQ,Mahindra_KR_PYK,Man Truck & Bus_DE_AGB,Man Truck & Bus_DE_EFG,Man Truck & Bus_DE_KAS,Man Truck & Bus_DE_MUC,Man Truck & Bus_DE_SCR,Man Truck & Bus_DE_STR,Man Truck & Bus_PL_STE,Maserati_DE_VBS,Maserati_IT_MOD,Maserati_IT_TRN,Maserati_US_CMH,Maxion_BR_CZI,MBAG_DE_STR,MBAG_KR_CHU,MI00-81-AS,MI03-81-AS,Misum Systech_KR_ANY,MITSUBISHI_JP_TBM,Mitsui_FR_HSP,MOBIS_AS_KR_CHU,MOBIS_AS_KR_PTK,MOBIS_CZ_NVS,MOBIS_KR_CHU,MOBIS_SK_GBY,MOBIS_US_MGM,MOBIS_US_SAV,Monarch_US_ZE2,NANO IN TECH_KR_WJU,NANO IN TECH_WA_KR_WJU,Nissan_GB_SUN,Nissan_JP_FUK,Nissan_JP_YOK,Nivalis(OTS)_US_WIX,Nordresa_CA_LAV,Nysa Motor_PL_WRO,Octave_BE_ECH,Peopleworks_KR_SEL,Piston_US_NKY,Piston_US_RDF,Porsche AS_DE_KAS,Porsche AS_DE_SSN,Porsche AS_HQ_DE_SSN,Porsche AS_WA_DE_SSN,Porsche_CN_BJS,Porsche_CN_NJG,Porsche_CZ_OSR,Porsche_DE_AAH,Porsche_DE_BBI,Porsche_DE_DTN,Porsche_DE_SHM,Porsche_DE_STR,Porsche_DE_VBS,Porsche_DE_WDB,Porsche_DE_WSC,Porsche_SK_BTS,Porsche_SK_DNV,Porsche_SK_HST,Porsche_SK_KNM,PSA AS_FR_VEL,PSA_DE_EIS,PSA_DE_RUM,PSA_FR_CSP,PSA_FR_JKI,PSA_FR_MHS,PSA_FR_PAL,PSA_FR_POI,PSA_FR_RNS,PSA_FR_SHX,PSA_FR_SVD,PSA_FR_VEL,PSA_FR_VER,PSA_FR_VSL,PSA_KR_TJN,PSA_PL_GWC,PSA_PL_WRO,PSA_SK_TNA,QEV_ES_ABE,Raymond_US_EEG,Rempus_KR_HWS,Renault AS HQ_FR_FNS,Renault AS HQ_FR_RHE,Renault AS_FR_FNS,Renault AS_FR_HRB,Renault AS_FR_RHE,Renault AS_KR_HAN,Renault AS_KR_PUS,Renault_ES_VLL,Renault_FR_BAT,Renault_FR_CLE,Renault_FR_DOI,Renault_FR_HRB,Renault_FR_SNV,Renault_GB_ABO,Renault_KR_PUS,Renault_SI_NMO,RVA_DE_NDH,SAIC_CN_SHA,Samsung SDI_AT_GRZ,Samsung SDI_CN_BJS,SEMIROAD_KR_HWS,SGM AS_CN_PDG,SGM_CN_PDG,Shanghai Feixiang_CN_SHA,Shinden Hihhtex_JP_SMZ,Shinden Hihhtex_KR_WJU,Siemens_NO_TRD,Sime Darby_MY_KKH,SKODA_CZ_MBV,Skysource_CH_BE1,Skysource_CN_NKG,Skyworth_CN_XUZ,Solaris_PL_OWA,Spear Power Systems_US_GVW,STB_DE_MUC,STRIX_US_MKC,Suzhou Anjin_CN_SZH,SYMC_KR_INC,SYMC_KR_PYK,SYMC_KR_TAE,Taiga_CA_MTR,Taiga_CA_QUE,Temsa bus & Coach_TR_ABK,TW sys_KR_TJN,TY_JP_7KA,TY_JP_FUK,TY_US_IGX,TY_US_VDH,VAL_DE_222,VAL_DE_FFO,VAL_DE_KRD,VALEO_KR_SEJ,Valmet_DE_FRA,Valmet_DE_HAM,Valmet_DE_KRD,Vanderhall_US_PVU,VIA(OTS)_US_OEU,Volta PS_US_HLM,Volvo AS_AU_SYD,Volvo AS_CN_SZH,Volvo AS_FR_HRB,Volvo AS_IL_TLV,Volvo AS_IN_MUB,Volvo AS_JP_NGO,Volvo AS_MY_KUL,Volvo AS_SE_GO5,Volvo AS_SE_GOT,Volvo AS_TH_BKK,Volvo AS_US_ONT,Volvo AS_WA_SE_GOT,Volvo_AU_SYD,Volvo_BE_GBU,Volvo_BE_GNE,Volvo_CN_SHA,Volvo_IL_TLV,Volvo_JP_NGO,Volvo_KR_SEL,Volvo_MY_KUL,Volvo_MY_SHA,Volvo_SE_ALO,Volvo_SE_GOT,Volvo_TH_BKK,Volvo_TW_TYN,Volvo_US_CHS,Volvo_US_HLM,Vremt AS_CN_SZH,Vremt_CN_SUZ,VW AS_BE_BRU,VW AS_DE_KAS,VW AS_DE_RSE,VW_CZ_MBV,VW_DE_74D,VW_DE_BDB,VW_DE_BWE,VW_DE_FAB,VW_DE_KAS,VW_DE_NEM,VW_DE_WOB,VW_DE_WVN,WA00-81-AS,WATTPACK_CN_BJS,WRSE_DE_ZCH,XL_US_BOS,Yuntong_CN_NGB,ZEEBUS_GB_BEF,ZeroEV(OTS)_US_TPE,Zhongjia_CN_CTU,Zhongjia_CN_DQG,Zhongjia_CN_SHA,Zhongjia_CN_TIZ",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_problem_type": "",
+    "p_from_yyyymmdd": "20260824",
+    "p_to_yyyymmdd": "20270822",
+    "p_plan_start_yyyymmdd": "20260824",
+    "p_plan_type": "MA",
+    "p_seq": "3",
+    "p_electrodeType": null
+   },
+   "inline": "EXEC SCP0014_GET_PROBLEM_REPORT @p_division_id='81', @p_plant_site_id='EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P', @p_sales_site_id='Aeonus_KR_GUN,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,ANDURIL_US_CZM,ANODE_US_YFA,Arpiem_RO_OTP,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,audi as_BE_BRU,Audi CKD_DE_ING,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,AW_DE_LEJ,BAE_US_ENC,Banglilai_CN_SZX,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,CMC_TW_TYN,COENSYS_KR_HWS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,DBH_DE_MUC,dianchibao_CN_SHA,dianchibao_HK_MUN,DIS_DE_VBS,DSMT_KR_KMH,EDISON MOTORS_KR_TJN,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epiroc_CA_PIM,Epiroc_IN_BLR,equipmake(OTS)_GB_NRW,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,ESST_CA_WND,EVT_CA_SEU,Evyon_NO_OSL,E-Works Mobility GmbH_DE_IMG,FAW VW_CN_CGQ,FAW VW_CN_DLC,FBPS(OTS)_US_IGX,FBPS(OTS)_US_ILD,FCA AS_CA_BRP,FCA AS_CA_WND,FCA AS_GB_ABG,FCA AS_IT_AVG,FCA AS_IT_MEI,FCA AS_IT_TRN,FCA AS_JP_ZAE,FCA AS_MX_CUJ,FCA AS_PL_WRO,FCA AS_US_MNC,FCA AS_US_SEH,FCA AS_US_WAM,FCA_CA_WND,FCA_CN_NKG,FCA_IT_MEI,FCA_IT_MOD,FCA_IT_TRN,FCA_KR_ASA,FCA_KR_JCH,FCA_KR_UWN,FCA_MX_TLC,FCA_PL_WRO,FCA_US_ABH,FCA_US_CMH,FCA_US_ETA,FCA_US_HLM,",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:04:05.517",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.28,
+   "params": {
+    "p_menu_id": "SCP0014",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "10.986",
+    "p_ui_time": "0.143",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0014', @p_log_type='FIND', @p_log_cnt='', @p_db_time='10.986', @p_ui_time='0.143', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 16:04:19.340",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.21,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-14 16:04:19.890",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 422.08,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0014"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0014'",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-14 16:04:45.766",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.72,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnProject"
+  },
+  {
+   "at": "2026-11-14 16:04:45.922",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_PROJECT_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_PROJECT_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1091,
+   "rows_kind": "DataSet rows",
+   "ms": 39.23,
+   "params": {
+    "p_division_id": "81",
+    "p_project_code": ""
+   },
+   "inline": "EXEC SCM0002_GET_PROJECT_BY_DIVISION_POPUP @p_division_id='81', @p_project_code=''",
+   "phase": "action:btnProject"
+  }
+ ]
+}

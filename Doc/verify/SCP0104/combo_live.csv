@@ -1,0 +1,16 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+CapaOperationByLineEE_SCP_ALL,"{""comboId"":""CapaOperationByLineEE_SCP_ALL"",""mnuId"":""SCP0104""}",8,1,,,PASS,응답 1건 = DB 1건
+Division_SCP,"{""comboId"":""Division_SCP"",""mnuId"":""SCP0104""}",14,14,,,PASS,응답 14건 = DB 14건
+OperationElectrodeType_SCP_ALL,"{""comboId"":""OperationElectrodeType_SCP_ALL"",""mnuId"":""SCP0104""}",125,12,,,PASS,응답 12건 = DB 12건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SCP0104""}",14,14,,,PASS,응답 14건 = DB 14건
+DummyCapaLineMasterEE_SCP_ALL,"{""comboId"":""DummyCapaLineMasterEE_SCP_ALL"",""mnuId"":""SCP0104""}",306,6,,,PASS,응답 6건 = DB 6건
+CapaVersion_SCP_ALL,"{""comboId"":""CapaVersion_SCP_ALL"",""mnuId"":""SCP0104""}",232,27,,,PASS,응답 27건 = DB 27건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0104""}",2,2,,,PASS,응답 2건 = DB 2건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0104"",""sheetName"":""'ELTR'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0104"",""sheetName"":""'SOP_ELTR'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+CapaNickname_SCP_ALL,"{""comboId"":""CapaNickname_SCP_ALL"",""mnuId"":""SCP0104""}",36365,8,,,FAIL,응답 36365건(수집 상한으로 코드 비교 생략) ↔ DB 8건
+CapaDummyCode_SCP_ALL,"{""comboId"":""CapaDummyCode_SCP_ALL"",""mnuId"":""SCP0104""}",617,612,,,PASS,응답 612건 = DB 612건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0104"",""sheetName"":""'ASSEMBLY'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0104"",""sheetName"":""'SOP_ASSEMBLY'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+DummyCapaLineMaster_SCP_ALL,"{""comboId"":""DummyCapaLineMaster_SCP_ALL"",""mnuId"":""SCP0104""}",659,6,,,PASS,응답 6건 = DB 6건
+CapaOperationByLine_SCP_ALL,"{""comboId"":""CapaOperationByLine_SCP_ALL"",""mnuId"":""SCP0104""}",67,12,,,PASS,응답 12건 = DB 12건

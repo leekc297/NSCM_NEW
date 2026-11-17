@@ -1,0 +1,37 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+    "SCP0020_GET_TACT_TIME_OSP",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "SCP0020-Sea1449",
+    "SCP0020-Sec3442"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:46:58.914",
+ "fills": 0,
+ "fill_left": []
+}

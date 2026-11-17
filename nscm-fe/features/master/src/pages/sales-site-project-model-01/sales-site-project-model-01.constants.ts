@@ -29,6 +29,21 @@ export const MODEL_CHANGE_SHEET = 'modelChange' as const;
 export const MODEL_CHANGE_BTN_CD = 'MODEL_CHANGE';
 export const MODEL_CHANGE_DIVISION = '40';
 
+/**
+ * 40 전용 조회조건 체크박스 두 개 (AS-IS chkEndCust / chkProjectInfo — DMF0005 와 같은 처리, 사용자 요청 2026-11-12).
+ *   체크하면 'Y', 아니면 'N' 을 조회 SP 에 넘기고 거르는 일은 SP 가 한다(화면은 거르지 않는다).
+ *     endCustReportYn = 'Y' : End Cust.(Report) 값이 유효한 END_CUST_REPORT 코드가 아닌 행만
+ *     projectInfoYn   = 'Y' : Project 가 빈 행만
+ *   조회 SP 인자 등록(SCM_ADM_PROC_M.COL_NM)이 이 두 이름으로 들어와야 값이 전달된다 — 등록 전에는 서버가 무시한다.
+ *   주의: 2026-11-12 현재 PKG_DMF0005_01 조회 SP 에는 이 두 인자가 없다. 화면만 먼저 맞춰 둔 상태다.
+ * 표시 조건은 Model Code Change 버튼과 같다(버튼 권한 AND Division 40). 라벨은 AS-IS 고정 영어 문구다.
+ */
+export const NULL_FILTER_DIVISION = '40';
+export const NULL_FILTER_LABEL = {
+  endCustReportYn: 'End Customer(Report) Null',
+  projectInfoYn: 'Project Null',
+} as const;
+
 export enum RESPONSE_SET {
   PRODUCTION = 'production',
   PURCHASE = 'purchase',
@@ -83,7 +98,7 @@ export const MODEL_POPUP_COLUMNS: ItemModalColumn[] = [
  * ⭐ Model 팝업 가로 폭 — CustomDialog 표준 프리셋 값(기본 1000 → 600, 실제 렌더는 ×1.5).
  *   검색조건 3개·컬럼 5개로 좁힌 이 화면에서만 적용(dialogSize prop). 다른 호출처는 1000 유지.
  */
-export const MODEL_POPUP_WIDTH = 600;
+export const MODEL_POPUP_WIDTH = 800;
 
 /**
  * Owner 를 한 명만 등록할 수 있는 division — 2명 이상 선택하고 OK 하면 팝업에서 경고.

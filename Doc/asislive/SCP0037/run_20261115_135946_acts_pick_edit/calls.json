@@ -1,0 +1,69 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 13:59:29.511",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.12,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:pick_retry:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 13:59:29.525",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_FROM_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_FROM_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 3.96,
+   "params": {
+    "p_division_id": "81"
+   },
+   "inline": "EXEC SCM0001_GET_FROM_SITE_BY_DIVISION @p_division_id='81'",
+   "phase": "action:pick_retry:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 13:59:29.538",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_FROM_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_FROM_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 3.8,
+   "params": {
+    "p_division_id": "81"
+   },
+   "inline": "EXEC SCM0001_GET_FROM_SITE_BY_DIVISION @p_division_id='81'",
+   "phase": "action:pick_retry:ITEM_ID"
+  },
+  {
+   "at": "2026-11-15 13:59:29.922",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_PLANT_SITE_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_PLANT_SITE_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 328,
+   "rows_kind": "DataSet rows",
+   "ms": 233.33,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "HQ07-E",
+    "p_item_id": "",
+    "p_assign_yn": "N"
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_PLANT_SITE_POPUP @p_division_id='81', @p_scm_site_id='HQ07-E', @p_item_id='', @p_assign_yn='N'",
+   "phase": "action:pick_retry:ITEM_ID"
+  }
+ ]
+}

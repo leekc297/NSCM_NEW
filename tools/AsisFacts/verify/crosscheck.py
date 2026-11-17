@@ -108,6 +108,9 @@ def main():
     a = ap.parse_args()
     cfg = json.load(open(a.config, encoding='utf-8-sig'))
     symbols = set(cfg.get('preprocessorSymbols', ['TRACE']))
+    # 2026-11-10: 속성 대입 sink 를 설정(sinks.propertyAssign)에서 그대로 가져와 독립 패턴을 만든다 — Roslyn 쪽과 목록이 어긋나지 않게(SSP0005 InsertQueryId 누락 대응)
+    for _sp in cfg.get('sinks', {}).get('propertyAssign', []):
+        PATS.setdefault('prop:' + _sp['property'], re.compile(r'\.\s*' + re.escape(_sp['property']) + r'\s*=(?!=)'))
     excl = {d.lower() for d in cfg.get('excludeDirs', [])}
 
     # Roslyn 결과 집계

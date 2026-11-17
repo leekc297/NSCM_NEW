@@ -8,11 +8,11 @@
 
 ## §0 PRE-WRITE 자기 점검
 
-- [ ] BE 메타 SQL (`BLOCK 6 SCM_ADM_MNU_M_SHEET_COLUMNS`) 작성 직전:
+- [ ] BE 메타 SQL (`BLOCK 6 SCM_MST_SHEET_COLUMNS`) 작성 직전: (2026-11-13 정정: 테이블명 `SCM_ADM_MNU_M_SHEET_COLUMNS` → `SCM_MST_SHEET_COLUMNS` · 컨트롤 컬럼 `CTRL_TP_CD` → `CELL_CONTROL_OBJECT_TYPE_CODE` · 값 `'COMBO'`/`'NUMBER'` → `'FPComboBox'`/`'FPNumber'` — `column-config.ts` `CELL_CONTROL_TYPE` 실값)
   - 모든 column 에 `INPUT_TP_CD` 명시 (O/R/M/IO/IM/D)
-  - popup cell 에 `CTRL_TP_CD='FPModal'` + `MODAL_KEY` 명시
-  - combo cell 에 `CTRL_TP_CD='COMBO'` + `DATA_MAP` 명시
-  - NUMBER cell 에 `CTRL_TP_CD='NUMBER'` + `FORMAT` 명시
+  - popup cell 에 `CELL_CONTROL_OBJECT_TYPE_CODE='FPModal'` + `MODAL_KEY` 명시 (11-13 정정)
+  - combo cell 에 `CELL_CONTROL_OBJECT_TYPE_CODE='FPComboBox'` + `DATA_MAP` 명시 (11-13 정정)
+  - NUMBER cell 에 `CELL_CONTROL_OBJECT_TYPE_CODE='FPNumber'` + `FORMAT` 명시 (11-13 정정)
 
 - [ ] FE Grid 컴포넌트 작성 시:
   - DataGrid 사용 (FlexGrid 직접 사용 X)
@@ -30,15 +30,16 @@
 SQL="_artifacts/{N}_{MENU_ID}_metadata.sql"
 
 # 1. INPUT_TP_CD 명시 (모든 column)
-COLS=$(grep -c "INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS" "$SQL")
-INPUT_TP_FILLED=$(grep -E "INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS" "$SQL" -A 50 | grep -c "INPUT_TP_CD\s*=\s*'[A-Z]+'")
+# (11-13 정정: SCM_ADM_MNU_M_SHEET_COLUMNS → SCM_MST_SHEET_COLUMNS · CTRL_TP_CD → CELL_CONTROL_OBJECT_TYPE_CODE · 'COMBO' → 'FPComboBox')
+COLS=$(grep -c "INSERT INTO SCM_MST_SHEET_COLUMNS" "$SQL")
+INPUT_TP_FILLED=$(grep -E "INSERT INTO SCM_MST_SHEET_COLUMNS" "$SQL" -A 50 | grep -c "INPUT_TP_CD\s*=\s*'[A-Z]+'")
 test "$INPUT_TP_FILLED" -eq "$COLS"
 
 # 2. popup cell 의 MODAL_KEY 의무
-grep -E "CTRL_TP_CD\s*=\s*'FPModal'" "$SQL" | grep -v "MODAL_KEY" | wc -l   # = 0
+grep -E "CELL_CONTROL_OBJECT_TYPE_CODE\s*=\s*'FPModal'" "$SQL" | grep -v "MODAL_KEY" | wc -l   # = 0
 
 # 3. combo cell 의 DATA_MAP 의무
-grep -E "CTRL_TP_CD\s*=\s*'COMBO'" "$SQL" | grep -v "DATA_MAP" | wc -l   # = 0
+grep -E "CELL_CONTROL_OBJECT_TYPE_CODE\s*=\s*'FPComboBox'" "$SQL" | grep -v "DATA_MAP" | wc -l   # = 0
 
 # 4. width 0 / 음수 검출
 grep -E "COL_WIDTH\s*=\s*0\b|COL_WIDTH\s*=\s*-" "$SQL" | wc -l   # = 0

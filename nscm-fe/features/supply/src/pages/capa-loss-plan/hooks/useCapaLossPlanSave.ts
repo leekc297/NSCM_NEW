@@ -151,12 +151,9 @@ export const useCapaLossPlanSave = ({
 
         void setToast({
           type: 'success',
-          // i18next 기본 보간자는 `{{ }}` 라 DB 메시지의 `{0}` 은 옵션 전달로 치환되지 않는다.
-          //   `MSG00004` 를 쓰면 TO-BE 에서 "No changes to save." 로 뜻이 뒤집힌다(hook #114 함정).
-          message: t(MSG.SAVE_SUCCESS, { defaultValue: '{0} data saved.' }).replace(
-            '{0}',
-            String(outcome.savedCount || rowsToSave.length)
-          ),
+          // 평문 "저장되었습니다"(MSG00002) — 사용자 지시 2026-11-11. AS-IS 건수 메시지(MSG00672
+          //   "{0}건 저장")는 쓰지 않는다. `MSG00004` 는 TO-BE 에서 "No changes to save." 라 금지(hook #114).
+          message: t(MSG.SAVE_SUCCESS, { defaultValue: 'Saved successfully.' }),
         });
         editTrackerRef.current?.clearChanges();
         // 저장 성공 후 재조회 — AS-IS 는 SAVE -> GET 을 연쇄한다(01 V-17). 편집모드 토글은 미이식이라

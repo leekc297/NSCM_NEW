@@ -1,0 +1,74 @@
+{
+ "id": "SSP0021",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BOH_TYPE",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016",
+    "SSP0021-Se42af7",
+    "SSP0021-Sf0c6eb",
+    "SSP0021-S576c6c",
+    "SSP0021-S8bdc75",
+    "SSP0021-Sb4aa88",
+    "SSP0021-S69f755"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "BOH_QTY",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,8 failed: InvalidOperationException: cell not visible: 0,8",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016",
+    "SSP0021-Se42af7",
+    "SSP0021-Sf0c6eb",
+    "SSP0021-S576c6c",
+    "SSP0021-S8bdc75",
+    "SSP0021-Sb4aa88",
+    "SSP0021-S69f755"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:50:11",
+ "plan": {
+  "scenarios": 14,
+  "used": [
+   "BOH_TYPE",
+   "BOH_QTY"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

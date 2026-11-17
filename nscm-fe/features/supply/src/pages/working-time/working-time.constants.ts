@@ -30,6 +30,13 @@ export enum SHEETS {
   MAIN = 'Working Time',
   // 동적 기간 컬럼은 별도 SP 시트가 아니다 — GET SP O_RC1 데이터 커서 자신의 alias(D_yyyymmdd)이며,
   //   BE 가 o_rc1_columns(ResultSetMetaData)로 컬럼 목록을 함께 노출한다(04_impl-gap-audit #1).
+
+  // Period 기본값 계산용 공용 SP 호출 시트(그리드 아님) — AS-IS dCalendar.InitValue = DateUtil.GetDayRange(...)
+  //   재현. call-proc 매핑 SCM_ADM_MNU_BTN_MPG_M(SCP0019,'MonthPeriod',SEARCH) → API_ID
+  //   SCM0001_SCP_MONTH_PERIOD_GET → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD. 사용자 등록 timezone(tmzCd)을
+  //   넘겨 오늘/기간을 timezone+달력테이블(SCM_SYS_CALENDAR_M) 기준으로 계산(브라우저 dayjs 근사 대체).
+  //   SHT_NM 은 DB 등록값과 대소문자 일치 필수(불일치 시 proc 해석 실패).
+  PERIOD = 'MonthPeriod',
 }
 
 // GET SP 는 단일 호출로 데이터(O_RC1) + 상태(O_RESULT_CURSOR) 2커서를 반환한다.

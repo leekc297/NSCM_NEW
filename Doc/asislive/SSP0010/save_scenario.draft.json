@@ -1,0 +1,66 @@
+{
+ "id": "SSP0010",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX",
+   "save_sp": "SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX",
+   "status": "키 일부 미대응",
+   "table": "SCP_ANL_SHIPMENT_PLAN_FIX",
+   "pk": [
+    "FIX_ID",
+    "DIVISION_ID",
+    "BIZ_TYPE",
+    "ITEM_ID",
+    "TO_SITE",
+    "FROM_SITE",
+    "BOD_ID",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "division_id",
+    "BIZ_TYPE": "operation_group",
+    "ITEM_ID": "item_id",
+    "TO_SITE": "to_site",
+    "FROM_SITE": "from_site",
+    "BOD_ID": "bod_id"
+   },
+   "unmatched_pk": [
+    "FIX_ID",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCP_ANL_SHIPMENT_PLAN_FIX_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Shipment Plan SEMI",
+   "writes": {
+    "SCP_ANL_SHIPMENT_PLAN_FIX": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX → SP SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_ANL_SHIPMENT_PLAN_FIX_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "FIX_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "p_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "match_basis": {
+    "BIZ_TYPE": "BIZ_TYPE ← @p_biz_type(SP 145줄(@v_biz_type) ← 106줄) ← 그리드 열 OPERATION_GROUP(SSP0010_Shipment_Plan_SEMI.cs:2487)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

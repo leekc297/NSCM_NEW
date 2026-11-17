@@ -1,0 +1,58 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,28회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP00621_AMEND_LINE,FP00621_PlanAmend_Line_Formation.cs:1089 FindTotalValue,1회 · 구간 find,MATCH,
+SP,PR_UI_FP_PLAN_FORM_CODE,FP00621_PlanAmend_Line_Formation.cs:323 Cbo_fpplanid_MouseClick,12회 · 구간 find/load,MATCH,
+SP,SELECT,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: DECLARE @OPTBL AS TABLE,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,3회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,3회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT AA.SEGMENT1 AS INSTANCE_ID, AA.SEG",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT INSTANCE_ID,USER_ID, LINE_ID, DIVI",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT SEGMENT1 AS MENU_KEY,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: WITH M_TABLE AS (,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP00621_AMEND_LINE_EXCEL,FP00621_PlanAmend_Line_Formation.cs:6433 Find_Data_Excel_Import,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_UI_FP00621_AMEND_LINE_EXCEL_SAVE,FP00621_PlanAmend_Line_Formation.cs:6969 Insert_Data_Excel_Buffer_Old,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_UI_FP00621_AMEND_LINE_SAVE,FP00621_PlanAmend_Line_Formation.cs:2084 Save_Data_ShipPlan,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),120개,79개,INFO,공통 65 · 선언만 55 · 실측만 14
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,mcbo_planner,Y,planner,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_fpplanid,Y,FP Plan ID,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,sCalendar_planday,Y,Plan Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_site,Y,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_plant,Y,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_factory,Y,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_Info,Y,layoutControlItem9,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_operation,Y,Operation,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dCalendar_planrange,Y,Plan Period,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_division,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnExcelImport,Y,lblImport,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnToggleSave,Y,Data,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnSql,Y,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,mcbo_nicknamelt,Y,Nick Name List,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,txtNickName,Y,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItem,Y,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtPjtGroup,Y,Pjt Group Nm,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_line,Y,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_allLine,Y,layoutControlItem11,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_plan_group,Y,Plan Group,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_includeSubOp,Y,layoutControlItem16,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Amend,정적 컬럼 사실 29행(시트 미지정 포함),컬럼 46(보임 45) · 헤더 2단 · 행 0 · 고정 12,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

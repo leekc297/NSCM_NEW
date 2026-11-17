@@ -1,0 +1,639 @@
+{
+ "id": "FP01570N",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 1.337s, UI : 0.015s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Main",
+     "rows": 0,
+     "cols": 38,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Plan Group",
+        "Plan Group"
+       ],
+       "label": "Plan Group",
+       "tag": "INSTANCE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "INSTANCE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "FP Plan ID",
+        "FP Plan ID"
+       ],
+       "label": "FP Plan ID",
+       "tag": "PLAN_ID",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "SCP Plan ID",
+        "SCP Plan ID"
+       ],
+       "label": "SCP Plan ID",
+       "tag": "SCP_PLAN_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SCP_PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plan Type",
+        "Plan Type"
+       ],
+       "label": "Plan Type",
+       "tag": "PLAN_TYPE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plan Start Time",
+        "Plan Start Time"
+       ],
+       "label": "Plan Start Time",
+       "tag": "PLAN_START_TIME",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_START_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Plan End Time",
+        "Plan End Time"
+       ],
+       "label": "Plan End Time",
+       "tag": "PLAN_END_TIME",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_END_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Plan Horizon",
+        "Plan Horizon"
+       ],
+       "label": "Plan Horizon",
+       "tag": "PLAN_HORIZON",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_HORIZON",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Demand Horizon",
+        "Demand Horizon"
+       ],
+       "label": "Demand Horizon",
+       "tag": "DEMAND_HORIZON",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DEMAND_HORIZON",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Fix Date",
+        "Fix Date"
+       ],
+       "label": "Fix Date",
+       "tag": "PRE_FIX_DATE",
+       "width": "85",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_DATE",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Fix Option",
+        "Fix Option"
+       ],
+       "label": "Fix Option",
+       "tag": "PRE_FIX_TYPE",
+       "width": "85",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Basic FP Plan ID",
+        "Basic FP Plan ID"
+       ],
+       "label": "Basic FP Plan ID",
+       "tag": "BASIS_PLAN_ID",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "BASIS_PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Demand Plan ID",
+        "Demand Plan ID"
+       ],
+       "label": "Demand Plan ID",
+       "tag": "DEMAND_PLAN_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DEMAND_PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Plan Week",
+        "Plan Week"
+       ],
+       "label": "Plan Week",
+       "tag": "PLAN_WEEK",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_WEEK",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Confirm Flag",
+        "Confirm Flag"
+       ],
+       "label": "Confirm Flag",
+       "tag": "CONFIRM_FLAG",
+       "width": "67",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CONFIRM_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Release Target Plan ID",
+        "Release Target Plan ID"
+       ],
+       "label": "Release Target Plan ID",
+       "tag": "AMEND_PLAN_LT",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "AMEND_PLAN_LT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Release Building",
+        "Release Building"
+       ],
+       "label": "Release Building",
+       "tag": "FACTORY_LT",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FACTORY_LT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Release Plan Group",
+        "Release Plan Group"
+       ],
+       "label": "Release Plan Group",
+       "tag": "PLAN_GROUP_ID",
+       "width": "125",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "MRP Flag",
+        "MRP Flag"
+       ],
+       "label": "MRP Flag",
+       "tag": "MRP_FLAG",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MRP_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Last Release version(W/O)",
+        "Last Release version(W/O)"
+       ],
+       "label": "Last Release version(W/O)",
+       "tag": "LATEST_RELEASE_FLAG",
+       "width": "110",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LATEST_RELEASE_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "MPP",
+        "Submit ID"
+       ],
+       "label": "Submit ID",
+       "tag": "MPP_DW_USER",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MPP_DW_USER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "MPP",
+        "Latest DW Submit Flag"
+       ],
+       "label": "Latest DW Submit Flag",
+       "tag": "MPP_LATEST_DW_SUBMIT_FLAG",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MPP_LATEST_DW_SUBMIT_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "MPP",
+        "DW Submit Time"
+       ],
+       "label": "DW Submit Time",
+       "tag": "MPP_DW_TIME",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MPP_DW_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "WPP",
+        "Submit ID"
+       ],
+       "label": "Submit ID",
+       "tag": "WPP_DW_USER",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "WPP_DW_USER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "WPP",
+        "Latest DW Submit Flag"
+       ],
+       "label": "Latest DW Submit Flag",
+       "tag": "WPP_LATEST_DW_SUBMIT_FLAG",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "WPP_LATEST_DW_SUBMIT_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "WPP",
+        "DW Submit Time"
+       ],
+       "label": "DW Submit Time",
+       "tag": "WPP_DW_TIME",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "WPP_DW_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Create ID",
+        "Create ID"
+       ],
+       "label": "Create ID",
+       "tag": "INSERT_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "INSERT_ID",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Create Time",
+        "Create Time"
+       ],
+       "label": "Create Time",
+       "tag": "INSERT_TIME",
+       "width": "125",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "INSERT_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Draft Plan Description",
+        "Draft Plan Description"
+       ],
+       "label": "Draft Plan Description",
+       "tag": "DESCRIPTION",
+       "width": "170",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "DESCRIPTION",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Release Plan Description",
+        "Release Plan Description"
+       ],
+       "label": "Release Plan Description",
+       "tag": "REL_DESC",
+       "width": "170",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "REL_DESC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Fix Date 1",
+        "Fix Date 1"
+       ],
+       "label": "Fix Date 1",
+       "tag": "PRE_FIX_DATE1",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_DATE1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Fix Option 1",
+        "Fix Option 1"
+       ],
+       "label": "Fix Option 1",
+       "tag": "PRE_FIX_TYPE1",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_TYPE1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "Fix Date 2",
+        "Fix Date 2"
+       ],
+       "label": "Fix Date 2",
+       "tag": "PRE_FIX_DATE2",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_DATE2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "Fix Option 2",
+        "Fix Option 2"
+       ],
+       "label": "Fix Option 2",
+       "tag": "PRE_FIX_TYPE2",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_FIX_TYPE2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "Release Flag",
+        "Confirm"
+       ],
+       "label": "Confirm",
+       "tag": "_CONFIRM_FLAG",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "_CONFIRM_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Release Flag",
+        "Release"
+       ],
+       "label": "Release",
+       "tag": "_RELEASE_FLAG",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "_RELEASE_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "Release Flag",
+        "MES Trans"
+       ],
+       "label": "MES Trans",
+       "tag": "_MES_TRANSFER_FLAG",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "_MES_TRANSFER_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "Release Flag",
+        "Queue"
+       ],
+       "label": "Queue",
+       "tag": "_QUEUE_FLAG",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "_QUEUE_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

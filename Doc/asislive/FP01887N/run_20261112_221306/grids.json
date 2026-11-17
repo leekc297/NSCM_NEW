@@ -1,0 +1,511 @@
+{
+ "id": "FP01887N",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "AuthorityApproval",
+     "rows": 0,
+     "cols": 32,
+     "visible": "True",
+     "frozen_cols": "13",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "False"
+       ],
+       "label": "False",
+       "tag": "CHK",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CHK",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Seq"
+       ],
+       "label": "Seq",
+       "tag": "SEQ",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "User ID"
+       ],
+       "label": "User ID",
+       "tag": "NEW_USER_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NEW_USER_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "User Name"
+       ],
+       "label": "User Name",
+       "tag": "NEW_USER_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NEW_USER_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "User Company"
+       ],
+       "label": "User Company",
+       "tag": "COMPANY_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "COMPANY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Department"
+       ],
+       "label": "Department",
+       "tag": "NEW_USER_DEPARTMENT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NEW_USER_DEPARTMENT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Authority"
+       ],
+       "label": "Authority",
+       "tag": "MENU_AUTHORITY_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "MENU_AUTHORITY_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Shop Group"
+       ],
+       "label": "Shop Group",
+       "tag": "SHOP_GROUP_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SHOP_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Instance"
+       ],
+       "label": "Instance",
+       "tag": "INSTANCE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "INSTANCE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Building"
+       ],
+       "label": "Building",
+       "tag": "FACTORY_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "FACTORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Plan Group"
+       ],
+       "label": "Plan Group",
+       "tag": "PLAN_GROUP_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLAN_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Rel.Msg."
+       ],
+       "label": "Rel.Msg.",
+       "tag": "RELEASE_NOTIFIY_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "RELEASE_NOTIFIY_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Request ID"
+       ],
+       "label": "Request ID",
+       "tag": "REQUEST_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "REQUEST_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Request Name"
+       ],
+       "label": "Request Name",
+       "tag": "REQUEST_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "REQUEST_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Request Time"
+       ],
+       "label": "Request Time",
+       "tag": "REQUEST_TIME",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "REQUEST_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Approval Flag"
+       ],
+       "label": "Approval Flag",
+       "tag": "APPROVAL_FLAG",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "APPROVAL_FLAG",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Approval ID"
+       ],
+       "label": "Approval ID",
+       "tag": "APPROVAL_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "APPROVAL_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Approval Name"
+       ],
+       "label": "Approval Name",
+       "tag": "APPROVAL_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "APPROVAL_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Approval Time"
+       ],
+       "label": "Approval Time",
+       "tag": "APPROVAL_TIME",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "APPROVAL_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Current Auth."
+       ],
+       "label": "Current Auth.",
+       "tag": "CUR_AUTH",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CUR_AUTH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "DESCRIPTION",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Org Division"
+       ],
+       "label": "Org Division",
+       "tag": "ORG_DIVISION_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Org Plant"
+       ],
+       "label": "Org Plant",
+       "tag": "ORG_PLANT_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Org Shop Group"
+       ],
+       "label": "Org Shop Group",
+       "tag": "ORG_SHOP_GROUP_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_SHOP_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Org Instance"
+       ],
+       "label": "Org Instance",
+       "tag": "ORG_INSTANCE_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_INSTANCE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Org Building"
+       ],
+       "label": "Org Building",
+       "tag": "ORG_FACTORY_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_FACTORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Org Plan Group"
+       ],
+       "label": "Org Plan Group",
+       "tag": "ORG_PLAN_GROUP_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_PLAN_GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Org Site"
+       ],
+       "label": "Org Site",
+       "tag": "ORG_SITE_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ORG_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

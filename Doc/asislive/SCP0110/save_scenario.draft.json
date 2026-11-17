@@ -1,0 +1,69 @@
+{
+ "id": "SCP0110",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0110_SAVE_GROUP_MASTER",
+   "save_sp": "SCP0110_SAVE_GROUP_MASTER",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_MST_ITEM_GROUP",
+   "pk": [
+    "DIVISION_ID",
+    "GROUP_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "GROUP_ID": "GROUP_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Group Name",
+   "writes": {
+    "SCP_MST_ITEM_GROUP": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "SCP_MST_ITEM_GROUP_DETAIL": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0110_SAVE_GROUP_MASTER → SP SCP0110_SAVE_GROUP_MASTER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SCP_MST_ITEM_GROUP_DETAIL"
+   ],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0110_SAVE_MODEL_LIST",
+   "save_sp": "SCP0110_SAVE_MODEL_LIST",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_MST_ITEM_GROUP_DETAIL",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PROJECT_CODE": "PROJECT_CODE",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdSub/Model List",
+   "writes": {
+    "SCP_MST_ITEM_GROUP_DETAIL": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0110_SAVE_MODEL_LIST → SP SCP0110_SAVE_MODEL_LIST 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

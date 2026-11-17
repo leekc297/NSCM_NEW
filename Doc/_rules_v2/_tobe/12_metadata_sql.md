@@ -26,10 +26,12 @@
 | BLOCK 3 | `SCM_ADM_MNU_M_SHEET` | 화면별 sheet 메타 (SHT_NM = 'main' 또는 의미명) | 3 |
 | BLOCK 4 | `SCM_ADM_PROC_M` | SP 파라미터 명세 (PROC_NM + COL_NM + DATA_TYPE + COL_TP_CD) | 4 |
 | BLOCK 5 | `SCM_ADM_API_M` | endpoint URL + sheet → SP 매핑 (API_TP_CD NOT NULL!) | 5 |
-| BLOCK 6 | `SCM_ADM_MNU_M_SHEET_COLUMNS` | grid column 메타 (룰 08) | 6 |
+| BLOCK 6 | `SCM_MST_SHEET_COLUMNS` (2026-11-13 정정: `SCM_ADM_MNU_M_SHEET_COLUMNS` → 실제 테이블명 — §14 · 저장소 SQL/하네스 사용명) | grid column 메타 (룰 08) | 6 |
 | BLOCK 7 | 권한 2 테이블 | `USER_GR_MNU_MPG_M` + `USER_GR_MNU_BTN_MPG_M` | 7 |
 
 ### §1.2 4-파일 SQL 세트 표준
+
+> (2026-11-13 정정: 4-파일 세트는 2026-07-29 사용자 지시로 폐기 — SQL 산출물은 SQL*Plus/SQLcl 단일본만 만들고 `_DBeaver` 변형은 만들지 않는다 · `22_PACKAGE_ARTIFACTS.md` §2.1). 이 절과 §1.3 의 DBeaver 호환 grep 은 예전 `_DBeaver*.sql` 파일을 고칠 때만 해당한다. 아래 "메모리 `feedback_sql_dual_output.md`: 항상 4 파일 세트 생성" 인용도 옛 내용이다(그 메모리는 현재 "단일본 — DBeaver 변형 생성 금지").
 
 > 메모리 `feedback_sql_dual_output.md`: 메타 SQL 등록 시 항상 4 파일 세트 생성.
 
@@ -60,24 +62,31 @@ grep -nE "^SET|^PROMPT|^DEFINE|^&\w|^/$" _DBeaver.sql | wc -l   # = 0
 ### §2.1 BLOCK 1 — i18n (LBL + MSG)
 
 ```sql
-INSERT INTO SCM_ADM_I18N_M (CTGY_CD, MSG_CD, LANG_CD, MSG_CTN, UPD_ID, UPD_DT)
-SELECT 'LBL', 'LBL00501', 'KO', 'Division', 'admin', SYSDATE FROM DUAL
+-- (2026-11-13 정정: 테이블 SCM_ADM_I18N_M (CTGY_CD, MSG_CD, LANG_CD, MSG_CTN, UPD_ID, UPD_DT) → 실제 다국어 테이블 SCM_ADM_MSG_M
+--  (MSG_ID, LANG_CD, MSG_TP_CD, MSG_NM, MSG_DESC, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+--  — 본 문서 §변경 이력 2026-06-12 · _artifacts/40_Register_5_DMF_Menus_in_Demand_Master.sql · nscm-be/tools/Harness 에 SCM_ADM_I18N_M 참조 0건.
+--  MSG_TP_CD 값은 같은 종류의 기존 등록 행을 조회해 맞춘다)
+INSERT INTO SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_TP_CD, MSG_NM, MSG_DESC, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'LBL00501', 'KO', '{MSG_TP_CD}', 'Division', 'Division', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
 WHERE NOT EXISTS (
-    SELECT 1 FROM SCM_ADM_I18N_M WHERE CTGY_CD='LBL' AND MSG_CD='LBL00501' AND LANG_CD='KO'
+    SELECT 1 FROM SCM_ADM_MSG_M WHERE MSG_ID='LBL00501' AND LANG_CD='KO'
 );
 -- (LBL00501 + EN, CN, LBL00502 + KO/EN/CN, ... 반복)
 
--- MSG 동일
-INSERT INTO SCM_ADM_I18N_M (CTGY_CD, MSG_CD, LANG_CD, MSG_CTN, ...)
-SELECT 'MSG', 'MSG00501', 'KO', '저장되었습니다', ... FROM DUAL
+-- MSG 동일 (11-13 정정)
+INSERT INTO SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_TP_CD, MSG_NM, ...)
+SELECT 'MSG00501', 'KO', '{MSG_TP_CD}', '저장되었습니다', ... FROM DUAL
 WHERE NOT EXISTS (...);
 ```
 
 ### §2.2 BLOCK 2 — 메뉴 등록 (`SCM_ADM_MNU_M`)
 
 ```sql
-INSERT INTO SCM_ADM_MNU_M (MNU_ID, MNU_NM, MNU_URL, UPPR_MNU_ID, MNU_TP_CD, ORDR_NO, USE_YN, ...)
-SELECT 'DMF0099', 'New Screen', 'new-screen', 'Demand_Master', 'SCREEN', 999, 'Y', ... FROM DUAL
+-- (2026-11-13 정정: 컬럼 (MNU_ID, MNU_NM, MNU_URL, UPPR_MNU_ID, MNU_TP_CD, ORDR_NO, USE_YN) → 실제 등록 형태
+--  (MNU_ID, UPPR_MNU_ID, MNU_URL, MNU_MSG_ID, MNU_DESC, SORT_ORD, MNU_LV_NO, MNU_TP_CD, UNIT_TP_CD, USE_YN, …)
+--  — _artifacts/40_Register_5_DMF_Menus_in_Demand_Master.sql · 룰 13 §10 MNU_DESC 필수 의무)
+INSERT INTO SCM_ADM_MNU_M (MNU_ID, UPPR_MNU_ID, MNU_URL, MNU_MSG_ID, MNU_DESC, SORT_ORD, MNU_LV_NO, MNU_TP_CD, UNIT_TP_CD, USE_YN, ...)
+SELECT 'DMF0099', 'Demand_Master', 'new-screen', 'MNU_DMF0099', 'New Screen', 999, 3, 'SCREEN', 'D', 'Y', ... FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0099');
 ```
 
@@ -134,7 +143,7 @@ WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_PROC_M WHERE PROC_NM='P_DMF0099_GET_MAIN
 
 | COL_NM | DATA_TP_CD | 비고 |
 |---|---|---|
-| `o_rc` (소문자) | `CURSOR` | **메인 데이터 cursor — FE 가 `data.o_rc` 로 읽음 (RESPONSE_SET.OUTPUT)** |
+| `o_rc` (소문자) | `CURSOR` | **메인 데이터 cursor — FE 가 `data.o_rc` 로 읽음 (RESPONSE_SET.OUTPUT)** (2026-11-13 정정: 커서 키는 SP 별 — PROC_M COL_NM 등록값을 따른다. DM 계열은 `o_rc1`(§2.3 `O_RCn` → `o_rc1`), 이 예시(SYS0012 · admin 계열)는 `o_rc`) |
 | `O_RESULT_CURSOR` (대문자) | `PROC_RESULT` | 결과 상태 cursor (CODE/MSG) |
 
 ```sql
@@ -177,6 +186,10 @@ INSERT INTO SCM_ADM_PROC_M VALUES ('P_SYS0012_GET_APPROVAL_LIST', 'O_RESULT_CURS
 ### §2.5 BLOCK 5 — API endpoint (`SCM_ADM_API_M`)
 
 ```sql
+-- (2026-11-13 정정: 아래 컬럼 구성 (MNU_ID, SHT_NM, ACTION_TP) 과 값 'RETRIEVE' 는 초안 표기 — 저장소 SQL 의 SCM_ADM_API_M 은
+--  (API_ID, API_TP_CD, API_MSG_ID, API_MSG_DESC, API_URL, USE_YN, …) 이고 메뉴·시트·버튼 → API 연결은
+--  SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID) 에 둔다. 조회 버튼 코드 = 'SEARCH' (§13 · RETRIEVE 금지)
+--  — _artifacts/41_DMF0043_meta.sql:50,70-73. 이 예시 문장 자체는 고치지 않았다)
 INSERT INTO SCM_ADM_API_M (MNU_ID, SHT_NM, ACTION_TP, API_URL, API_TP_CD, API_MSG_ID, ...)
 SELECT 'DMF0099', 'main', 'RETRIEVE', 'PKG_DMF0099.P_GET_MAIN', 'PKG_PROC', 'MSG_API_DMF0099_MAIN_RETRIEVE', ... FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_API_M WHERE MNU_ID='DMF0099' AND SHT_NM='main' AND ACTION_TP='RETRIEVE');
@@ -191,14 +204,20 @@ WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_API_M WHERE MNU_ID='DMF0099' AND SHT_NM=
   - PKG 안: `PKG_DMF0099.P_GET_MAIN`
   - 혼동 시 `PLS-00302 구성요소 정의되어야 합니다` 사고 (메모리 `feedback_standalone_vs_pkg_proc_api_url`)
 
-### §2.6 BLOCK 6 — Sheet columns (`SCM_ADM_MNU_M_SHEET_COLUMNS`)
+### §2.6 BLOCK 6 — Sheet columns (`SCM_MST_SHEET_COLUMNS`)
 
 ```sql
-INSERT INTO SCM_ADM_MNU_M_SHEET_COLUMNS (MNU_ID, SHT_NM, COL_NM, COL_HEAD, COL_WIDTH, COL_ALIGN, 
-    INPUT_TP_CD, CTRL_TP_CD, MODAL_KEY, IS_REQUIRED, IS_DISPLAY, ORDR_NO, USE_YN, ...) 
-SELECT 'DMF0099', 'main', 'PROJECT_CODE', 'Project Code', 100, 'center', 
-    'IO', 'FPModal', 'PROJECT', 'Y', 'N', 5, 'Y', ... FROM DUAL
-WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_MNU_M_SHEET_COLUMNS WHERE MNU_ID='DMF0099' AND SHT_NM='main' AND COL_NM='PROJECT_CODE');
+-- (2026-11-13 정정: 테이블 SCM_ADM_MNU_M_SHEET_COLUMNS (MNU_ID, SHT_NM, COL_NM, COL_HEAD, COL_WIDTH, COL_ALIGN, INPUT_TP_CD, CTRL_TP_CD, MODAL_KEY, …)
+--  → 실제 테이블 SCM_MGR.SCM_MST_SHEET_COLUMNS, 키 (PROGRAM_ID, SHEET_NAME, COLUMN_NAME) — §14.2/§14.3 ·
+--  _artifacts/75_SYS0014_GroupUser_full_create.sql 의 INSERT 컬럼 구성. 그 밖의 컬럼(입력 유형·콤보 등)은 §변경 이력 2026-06-12 · hook column-lookup-meta-standard.md 참조)
+INSERT INTO SCM_MGR.SCM_MST_SHEET_COLUMNS
+  (PROGRAM_ID, SHEET_NAME, COLUMN_NAME, COLUMN_LABEL_NAME, SORT_ORDER_NO, COLUMN_WIDTH,
+   FIXED_FLAG, VISIBLE_FLAG, HORIZONTAL_ALIGN_CODE, CELL_CONTROL_OBJECT_TYPE_CODE,
+   VALID_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'DMF0099', 'main', 'PROJECT_CODE', 'Project Code', 5, 100,
+   'N', 'Y', 'Center', 'FPModal',
+   'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID='DMF0099' AND SHEET_NAME='main' AND COLUMN_NAME='PROJECT_CODE');
 ```
 
 → 룰 08 column meta 상세 참조.
@@ -212,10 +231,12 @@ SELECT 'minyonglee1', 'ADMIN', 'DMF0099', 'Y', 'Y', 'Y', 'Y', 'Y', ... FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MNU_MPG_M WHERE USER_ID='minyonglee1' AND GR_ID='ADMIN' AND MNU_ID='DMF0099');
 
 -- 버튼 권한 (USER_GR_MNU_BTN_MPG_M) — 5 버튼 모두
-INSERT INTO SCM_ADM_USER_GR_MNU_BTN_MPG_M (USER_ID, GR_ID, MNU_ID, BTN_ID, AUTH_YN, ...)
-SELECT 'minyonglee1', 'ADMIN', 'DMF0099', 'FIND', 'Y', ... FROM DUAL
-WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE USER_ID='minyonglee1' AND GR_ID='ADMIN' AND MNU_ID='DMF0099' AND BTN_ID='FIND');
--- (INSERT/EDIT/SAVE/DELETE 동일 반복)
+-- (2026-11-13 정정: (USER_ID, GR_ID, MNU_ID, BTN_ID, AUTH_YN) + 'FIND' → 실제 형태 (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, …) + 'SEARCH'
+--  — §13 MNU_BTN_CD 표준(RETRIEVE 금지·SEARCH 의무) · _artifacts/41_DMF0043_meta.sql. EDIT 버튼은 TO-BE 에 없음(CR-093))
+INSERT INTO SCM_ADM_USER_GR_MNU_BTN_MPG_M (USER_GR_ID, MNU_ID, SHT_NM, MNU_BTN_CD, USE_YN, ...)
+SELECT 'ADMIN', 'DMF0099', 'main', 'SEARCH', 'Y', ... FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE USER_GR_ID='ADMIN' AND MNU_ID='DMF0099' AND SHT_NM='main' AND MNU_BTN_CD='SEARCH');
+-- (INSERT/SAVE/DELETE 등 화면에 있는 버튼 코드 동일 반복 — MNU_BTN_MPG_M 과 같은 값, §13.3)
 ```
 
 **의무**:
@@ -274,7 +295,9 @@ SQL_CTN: 'SELECT ... WHERE SEGMENT1 = @divisionId AND USE_YN = @useYn'
 ```sql
 SQL_CTN: 'SELECT ... WHERE SEGMENT1 = TO_CHAR(@divisionId) AND USE_YN = TO_CHAR(@useYn)'
 -- 또는 NVL 처리
-SQL_CTN: 'SELECT ... WHERE NVL(SEGMENT1, '''') = TO_CHAR(@divisionId)'
+SQL_CTN: 'SELECT ... WHERE NVL(SEGMENT1, ''/'') = TO_CHAR(@divisionId)'
+-- (2026-11-13 정정: NVL(SEGMENT1, '''') → NVL(SEGMENT1, ''/'') — Oracle 은 빈문자 = NULL 이라 NVL(x,'') 는 효과 없음.
+--  NULL 대체값(센티널) = '/' (2026-10-15 · hook oracle-null-sentinel-and-notnull-default.md §0.5 · .claude/rules/02-db-sql.md))
 ```
 
 → MSSQL `<> ''` → Oracle `IS NOT NULL` 변환 (Oracle 의 `''` = NULL 룰).
@@ -306,6 +329,8 @@ SQL_CTN: 'SELECT ... WHERE NVL(SEGMENT1, '''') = TO_CHAR(@divisionId)'
 ### §4.2 PL/SQL 표준 패턴
 
 ```sql
+-- (2026-11-13 정정: 아래 O_MSG / O_CD OUT 시그니처는 초안(06-03) 표기 — 현행 GET SP 표준은 §2.4.1 Dual OUT Cursor
+--  (데이터 cursor + O_RESULT_CURSOR, 2026-06-06 강화 · 룰 11 §3.1). 신규 SP 는 O_MSG/O_CD 대신 O_RESULT_CURSOR 를 쓴다)
 CREATE OR REPLACE PROCEDURE P_DMF0099_GET_MAIN (
     P_USER_ID    IN VARCHAR2,
     P_DIVISION   IN VARCHAR2,
@@ -370,6 +395,7 @@ SELECT ... FROM GT_DMF0099_MAIN;
 ### §5.1 SP body 표준
 
 ```sql
+-- (11-13 정정: O_MSG / O_CD 는 초안 표기 — 현행 GET SP 표준 = §2.4.1 Dual OUT Cursor (O_RESULT_CURSOR))
 CREATE OR REPLACE PROCEDURE P_DMF0099_GET_MAIN (
     P_USER_ID    IN  VARCHAR2,
     P_LANG_CD    IN  VARCHAR2,
@@ -387,6 +413,7 @@ BEGIN
         WHERE a.DIVISION_ID = NVL(P_DIVISION, a.DIVISION_ID)
           AND a.DEPT_ID     = NVL(P_DEPT_ID, a.DEPT_ID)
           AND a.USE_YN      = 'Y';
+        -- (2026-11-13 정정: 이 골격은 ORDER BY 를 생략했다 — 그리드에 표시되는 조회 SP 는 ORDER BY 의무(CR-075 · 없으면 FAIL). 실제 SP 에는 정렬 키를 넣는다)
     
     O_MSG := 'success';
     O_CD := '0';
@@ -408,9 +435,11 @@ INSERT INTO SCM_ADM_PROC_M ... ('P_DMF0099_GET_MAIN', 'deptId', 'IN', 5, 'VARCHA
 INSERT INTO SCM_ADM_PROC_M ... ('P_DMF0099_GET_MAIN', 'o_rc1', 'OUT', 1, 'SYS_REFCURSOR', 0, ...);
 INSERT INTO SCM_ADM_PROC_M ... ('P_DMF0099_GET_MAIN', 'o_msg', 'OUT', 2, 'VARCHAR2', 4000, ...);
 INSERT INTO SCM_ADM_PROC_M ... ('P_DMF0099_GET_MAIN', 'o_cd', 'OUT', 3, 'VARCHAR2', 10, ...);
+-- (11-13 정정: o_msg / o_cd 2행은 초안 표기 — 현행은 §2.4.1 대로 'O_RESULT_CURSOR' (PROC_RESULT) 1행)
 
 -- BLOCK 5: SCM_ADM_API_M
 INSERT INTO SCM_ADM_API_M ... ('DMF0099', 'main', 'RETRIEVE', 'PKG_DMF0099.P_GET_MAIN', 'PKG_PROC', 'MSG_API_DMF0099_MAIN_RETRIEVE', ...);
+-- (11-13 정정: 초안 표기 — 실제 컬럼 구성·버튼 코드 'SEARCH' 는 §2.5 단서 참조)
 ```
 
 ---
@@ -435,6 +464,9 @@ grep -E "UPPR_MNU_ID\s*=\s*'(DEMAND_MASTER|MASTER|DEMAND|REPORT)'" "$DEPLOY_SQL"
 # 4. SHT_NM 표준 검증
 grep -E "SHT_NM\s*=\s*'(futurePrice|salesSite|customerFcst)'" "$DEPLOY_SQL"   # 자유명 = 0
 # 의무: 'main' 또는 자매 화면 표준
+# (2026-11-13 정정: 위 3개 이름은 '금지 자유명' 이 아님 — 실제 FE sheetName 으로 사용 중
+#  (customer-fcst-master.constants.ts:4 'customerFcst' · erp-edi-master.constants.ts:15 'salesSite' · business-plan.constants.ts:17 'futurePrice')
+#  이고 룰 13 §8 의 SHT_NM 표준 목록에도 들어 있다. 이 grep 의 0건 기준은 적용하지 않는다)
 
 # 5. SCM_ADM_PROC_M 의 표준 COL_NM
 grep -cE "'sesUserId'|'sesLangCd'|'mnuId'" "$DEPLOY_SQL"   # ≥ 3 (모든 SP 가 3 표준 IN)
@@ -462,7 +494,7 @@ grep -nE "@\w+\s*[)=]" "$DEPLOY_SQL" | grep -v "TO_CHAR(@\|NVL(@\|@varname.*'" |
 **의무**:
 - AS-IS .pkg body 처음 ~ 끝 모두 read
 - 모든 JOIN / WHERE / CASE / PIVOT / EXISTS / NOT IN 1:1 보존
-- 변환 불가 항목 (Oracle 23ai 미지원) 시 사용자 명시 보고 후 결정
+- 변환 불가 항목 (Oracle 19c 미지원) 시 사용자 명시 보고 후 결정 (2026-11-13 정정: `23ai` → `19c` — 대상 DB = Oracle 19c · CLAUDE.md §0 · §1-4)
 
 **금지**:
 - "wrapper 가 ALL → '' 변환" 패턴 (메모리 `feedback_wrapper_sp_no_all_transform.md` 사고)
@@ -527,7 +559,7 @@ END;
 ```bash
 # §6 의 검증 명령 8 종 모두 통과 = PASS
 
-# 추가: 신규 화면 메타 SQL 4 파일 세트 존재 검증
+# 추가: 신규 화면 메타 SQL 4 파일 세트 존재 검증   (11-13 정정: 폐기 — 단일본 1개만 확인. 아래 _DBeaver 파일 검사는 실행하지 않는다)
 test -f "$SQL_DIR/{N}_{MENU_ID}_metadata.sql"
 test -f "$SQL_DIR/{N}_{MENU_ID}_metadata_DBeaver.sql"
 test -f "$SQL_DIR/{N}_{MENU_ID}_metadata_Verify.sql"
@@ -547,7 +579,7 @@ sqlplus -L "$DB_CONN" @"$SQL_DIR/{N}_{MENU_ID}_metadata_Verify.sql"
 | MSSQL DB schema (LGCE_SCMDEV / LGCE_SCMPROD) | Oracle 19c (TO-BE) — 룰 29 CSV 적재 표준 |
 | `SCM.SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX` | `P_SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX` (1:1 변환) |
 | `DataService.GetDMInnerTable("MyDivision")` | `useTabComboQueries({ filters: ['MyDivision'] })` + lookup SQL 등록 |
-| `FoxDataClient → AppService.GeneralExecuteQuery` | `POST /api/proc/{menuId}/{sheetName}/{tabId}` + 메타 4 테이블 분기 |
+| `FoxDataClient → AppService.GeneralExecuteQuery` | `POST /{mnuId}/{shtNm}/{mnuBtnCd}/call-proc` + 메타 4 테이블 분기 (2026-11-13 정정: `/api/proc/{menuId}/{sheetName}/{tabId}` → 실제 endpoint — `GeneralController.java:52` · 룰 11 §7) |
 
 ---
 
@@ -555,7 +587,7 @@ sqlplus -L "$DB_CONN" @"$SQL_DIR/{N}_{MENU_ID}_metadata_Verify.sql"
 
 | 위치 | 용도 |
 |---|---|
-| `_artifacts/` | 신규 화면 메타 SQL 4 파일 세트 |
+| `_artifacts/` | 신규 화면 메타 SQL 단일본 (11-13 정정: 4 파일 세트 폐기) |
 | `_artifacts/_diagnostics/` | AS-IS vs TO-BE 비교 도구 |
 | `_artifacts/_bulk_fix_v2_converted/` | Phase 1 Stage 3 SP body fix (SUBSTR / CLOB / LISTAGG) |
 | `To-be_v2_converted/` | DB 변환 산출물 (Phase 0 변환) |

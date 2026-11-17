@@ -1,7 +1,7 @@
 ﻿lang,result,why
-KO,PASS,KO 문구 22건 일치 · 사전에 없는 문구 22건
-EN,PASS,EN 문구 21건 일치 · 사전에 없는 문구 22건
-EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 TEAM_NAME 200행, CUST_GROUP 4행, SOLDTO_CUSTOMER 2행, SCM_SITE_ID 2행, CELL_S_OP_REPORT 124행, ATTRIBUTE9 21행, ATTRIBUTE1 5행, ATTRIBUTE2 5행 — 명칭 칸이면 언어 미반영"
-CN,FAIL,CN 화면에 다른 언어 문구 1건: 'Condition'→'条件' · 사전에 없는 문구 22건
-CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 TEAM_NAME 200행, CUST_GROUP 4행, SOLDTO_CUSTOMER 2행, SCM_SITE_ID 2행, CELL_S_OP_REPORT 124행, ATTRIBUTE9 21행, ATTRIBUTE1 5행, ATTRIBUTE2 5행 — 명칭 칸이면 언어 미반영"
+KO,PASS,KO 문구 22건 일치 · 사전에 없는 문구 19건
+EN,PASS,EN 문구 21건 일치 · 사전에 없는 문구 19건
+EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 TEAM_NAME 199행, CUST_GROUP 5행, SOLDTO_CUSTOMER 2행, CELL_S_OP_REPORT 123행, SCM_SITE_ID 2행, ATTRIBUTE2 5행, ATTRIBUTE9 21행, ATTRIBUTE1 5행 — 명칭 칸이면 언어 미반영"
+CN,FAIL,CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 19건
+CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 TEAM_NAME 199행, CUST_GROUP 5행, SOLDTO_CUSTOMER 2행, CELL_S_OP_REPORT 123행, SCM_SITE_ID 2행, ATTRIBUTE2 5행, ATTRIBUTE9 21행, ATTRIBUTE1 5행 — 명칭 칸이면 언어 미반영"
 조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

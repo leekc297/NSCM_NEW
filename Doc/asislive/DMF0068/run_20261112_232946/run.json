@@ -1,0 +1,187 @@
+{
+ "id": "DMF0068",
+ "started": "2026-11-12 23:29:46.432",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:29:46.774",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0068_DemandManager40",
+   "form_text": "Demand Manager ",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0068_DemandManager40.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:29:50.686"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:29:55.440",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_232946\\dump_load.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 33.609s, UI : 0.012s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:29:55.447"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:29:55.758",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_232946\\shots\\DMF0068_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:29:55.880"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 23:30:02.695",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_232946\\shots\\DMF0068_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:02.818"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:30:03.303",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:04.101"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:30:21.776",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_232946\\dump_find.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 11.864s, UI : 0.081s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:21.906"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:30:22.220",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0068\\run_20261112_232946\\shots\\DMF0068_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:22.359"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:30:22.845",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:23.497"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 3,
+  "calls": 14,
+  "calls_with_params": 14
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0068_DemandManager40",
+  "form_text": "Demand Manager ",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0068_DemandManager40.dll"
+ },
+ "fills": [
+  {
+   "rule": "Version 팝업 맨 위 행(Version)",
+   "set": {
+    "name": "txtVersion",
+    "popup": "DMF0068_VersionPopup",
+    "opener": "btnSPVer_Click"
+   },
+   "ok": true,
+   "applied": "popup:DMF0068_VersionPopup rows=30 value=R_S_20261028_V003",
+   "top": [
+    "R_S_20261028_V003",
+    "R_S_20261008_V004_C",
+    "R_S_20261008_V003_C",
+    "R_S_20261008_V002",
+    "R_S_20261007_V002_C"
+   ],
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "txtVersion",
+    "popup": "DMF0068_VersionPopup",
+    "opener": "btnSPVer_Click"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 11.864s, UI : 0.081s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 23:29:46.647",
+ "t_find": "2026-11-12 23:30:03.013",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 36,
+  "layout_items": 5,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 157,
+  "data_rows": 50,
+  "grid_rows": 72,
+  "calls_total": 14,
+  "calls_screen": 14,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:30:23.972",
+ "exit": 0
+}

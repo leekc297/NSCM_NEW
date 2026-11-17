@@ -23,14 +23,24 @@ public class UserSession implements Serializable {
 	private String userNm;
 	private String userEngNm;
 	private String langCd;
+	private String tmzCd;
 	private List<MenuDto> menus;
+	private boolean isGuest;
+	private List<String> groups;
+	private String div;
+	private String companyId;
 
 	@Builder
-	public UserSession(String userId, String userNm, String userEngNm, String langCd, List<MenuDto> menus) {
+	public UserSession(String userId, String userNm, String userEngNm, String langCd, String tmzCd, List<MenuDto> menus, boolean isGuest, List<String> groups, String div, String companyId) {
 		this.userId = userId;
 		this.userNm = userNm;
 		this.userEngNm = userEngNm;
 		this.langCd = langCd;
+		this.tmzCd = tmzCd;
 		this.menus = menus;
+		this.isGuest = isGuest;
+		this.groups = groups;
+		this.div = div;
+		this.companyId = companyId;
 	}
 }

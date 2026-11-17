@@ -46,6 +46,7 @@
 - ❌ **금지**: 조회한 기존 데이터를 편집·재저장하면서 `'I'` 전송 → 서버 "기존 존재" 검증 오탐.
 - ✅ 배치/일괄 입력처럼 **항상 기존 데이터를 편집**하는 화면은 `batch==='0' ? 'D' : 'M'`.
 - ⚠️ **SP를 고치지 말 것** (사내 원본과 정합 유지). AS-IS 동작(‘M’ 우회)을 FE로 재현.
+  (2026-11-13 정정: 이 항은 AS-IS 화면이 편집을 'M' 으로 저장하는 동작을 재현하는 경우에 한한다. 일반 보완은 **DB 객체 수정 우선**(CLAUDE.md §1-8, 2026-10-15)이며, FE 직접 수정 여부는 작업 모드 `tools/Harness/harness.json` repairScope 를 따른다 — UI/DB MODE(DB_FE) 직접 수정 / DB MODE(DB_ONLY) 가이드만(실행 hook `check-work-mode`))
 
 ## §2. FE payload dedup 키 = **배포 SP의 GROUP BY 검증 키와 정확히 일치**
 
@@ -69,7 +70,7 @@ SP가 해당 컬럼을 NVL/기본값 처리하지 않으면 **FE가 기존 데�
 ## §4. 저장 SQL 오류 근본원인 = **배포 SP + BE 로그로 확인 (추측 금지)**
 
 - BE 로그(`nscm-be/logs/nscm.log`)의 **`ORA-xxxxx / SQLERRM / SP 라인` + 전송 payload(^-delim)** 를 먼저 읽는다.
-- SP 본문은 **`ora.py` (USER_SOURCE)** 로 확인. ⚠️ **`ALL_SOURCE`는 동명 객체 2개가 섞여 LINE 매핑이 어긋남** → 반드시 **`USER_SOURCE`**(배포 owner) 사용.
+- SP 본문은 **`ora.py` (USER_SOURCE)** 로 확인. ⚠️ **`ALL_SOURCE`는 동명 객체 2개가 섞여 LINE 매핑이 어긋남** → 반드시 **`USER_SOURCE`**(배포 owner) 사용. (2026-11-14 정정: 현 접속 계정(SYSTEM)의 USER_SOURCE 에는 PKG 본문이 0줄. `ALL_SOURCE WHERE OWNER='SCM_MGR'` 로 조회한다. PKG_DMF% 본문의 OWNER 는 SCM_MGR 1개. 사내 DB 실측 2026-11-13 21:51)
 - 검증이 payload 기준인지 **기존 테이블(SCM_MST_*) 대조**인지 FROM/EXISTS 절로 구분 (오탐 범위가 다름).
 - ❌ 로그·SP 확인 없이 "아마 중복/통화" 추측 금지 (anti-simplification). 실제 원인은 §1~3처럼 전혀 다를 수 있음.
 
@@ -92,7 +93,7 @@ PIVOT/measure 다행 화면은 한 item이 measure 행(RTF/KRW/USD/LOC) 여러 �
 | 6.4 | placeholder 기본값 추측(예 'ALL') | 잘못된 데이터 저장/불일치 |
 | 6.5 | 중복검증 PK에 MEASURE 누락 | measure 다행 오탐(MSG00043) |
 | 6.6 | 로그·SP 미확인 채 원인 추측 | 헛수정 반복 (anti-simplification 위반) |
-| 6.7 | 오탐 회피하려 SP 수정 | 사내 원본과 divergence — 별도 검증·이관 부담 (FE 우회가 정답) |
+| 6.7 | 오탐 회피하려 SP 수정 | 사내 원본과 divergence — 별도 검증·이관 부담 (FE 우회가 정답) (11-13 정정: §1 의 AS-IS 'M' 재현 경우에 한함 — 일반 보완은 DB 객체 수정 우선 · FE 직접 수정은 작업 모드 repairScope 를 따름) |
 | 6.8 | 자체 행상태 필드(rowStatus 류) 신설 (§0) | 공통버튼·EditTracker 마킹과 단절 → 저장 payload 0건 (SYS0017) |
 | 6.9 | 감사키 빈문자열 전송 (§0.1) | ORA-01400 또는 감사값 silent 소실 (SYS0017) |
 
@@ -106,7 +107,7 @@ PIVOT/measure 다행 화면은 한 item이 measure 행(RTF/KRW/USD/LOC) 여러 �
 ## Cross-ref
 - `oracle-db-workflow.md` (통합 진입 — 저장 SP 디버깅 분기)
 - `proc-meta-signature-match.md` (PROC_M positional ↔ SP signature)
-- `sp-dual-out-cursor-pattern` / `sp-cursor-name-response-key` (OUT 커서)
+- `sp-dual-cursor-pattern` / `sp-cursor-name-response-key` (OUT 커서) (2026-11-13 정정: `sp-dual-out-cursor-pattern` → 실재 파일명 `sp-dual-cursor-pattern.md`)
 - `db-error-asis-cross-check.md` (ORA 오류 AS-IS 대조)
 - `screen-runtime-pitfalls-mandatory.md` §2.7 (dirty 3-union 표준 — §0 짝) / `post-write.md` §0.1 #18~#20 + §0.1-B (grep 게이트) / `screen-completion-gate.md` §1-3 (저장 결과 판정 의무)
 - 메모리: `feedback_asis_to_tobe_sp_no_omission`, `feedback_corporate_schema_dropped_col_save_default`, `feedback_ddl_grep_before_sql`, `feedback_callproc_audit_keys_fe_mandatory`

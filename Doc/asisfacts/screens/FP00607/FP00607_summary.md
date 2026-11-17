@@ -479,10 +479,10 @@
 | GoEditModeShortLT | Filter | PLAN_ID, PLAN_TYPE |
 | GoEditModeShortLT | row | S_ROW, PSI, FACTORY_ID, LINE_ID, SHORTER_LEAD_TIME |
 | GoEditModeShortLT | current_src.Rows[i] | PSI, FACTORY_ID, LINE_ID, SHORTER_LEAD_TIME |
-| InitControls | Filter | USER_ID, MASTER_ID, INSTANCE_ID, TOP_ITEM_ID, CELL_GROUP_CODE, PLAN_DATE, DATE, NICK_NAME, OPERATON_ID, PRODUCTION_TYPE, ITEM_TYPE, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION, PLAN_TYPE, MPP_WPP, PLAN_ID, DIVISION_ID, SITE_ID, PLANT_ID, LINE_ID, OPERATION_ID, FROM_OPERATION_ID, UI_END_DATE, BUCKET_FROM, CURR_DATE, BUCKET_TO |
+| InitControls | Filter | USER_ID, MASTER_ID, INSTANCE_ID, UI_END_DATE, BUCKET_FROM, CURR_DATE, BUCKET_TO, MPP_WPP, TOP_ITEM_ID, CELL_GROUP_CODE, PLAN_DATE, DATE, NICK_NAME, OPERATON_ID, PRODUCTION_TYPE, ITEM_TYPE, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION, PLAN_TYPE, PLAN_ID, DIVISION_ID, SITE_ID, PLANT_ID, LINE_ID, OPERATION_ID, FROM_OPERATION_ID |
+| InitControls | this.Filter | PLAN_TYPE, BUCKET_FROM, CURR_DATE, BUCKET_TO |
 | InitControls | InitRow | CELL_GROUP_CODE, NICK_NAME, OPERATION_ID, ITEM_TYPE, TOP_ITEM_ID, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION |
 | InitControls | dtCheckPlanDate.Rows[0] | CREATE_PLAN_FIX_DATE |
-| InitControls | this.Filter | PLAN_TYPE, BUCKET_FROM, CURR_DATE, BUCKET_TO |
 | Insert_Data_Excel_Buffer | result.Rows[0] | RESULT, EXCEPTION |
 | Insert_Data_Excel_Buffer_Old | dsData.Tables[0].Rows[i] | INSTANCE_ID, PLAN_DATE, PLAN_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID, OPERATION_ID, LINE_ID, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, PRODUCTION_TYPE, LOCATION, MARKET, ELECTRODE_TYPE, CELL_QTY, QTY, NEW_SEQ, MPP_WPP |
 | InsertButton | row | DATA_TYPE, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID |
@@ -693,6 +693,7 @@
 | this.btnOK | Click | btnOK_Click | InitializeComponent:583 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:611 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:612 |
+| this | Load | Form_Load | .ctor:161 |
 | this.dtpPeriod | ValueChanged | dtpPeriod_ValueChanged | InitializeComponent:180 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:256 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:308 |
@@ -720,7 +721,6 @@
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:624 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:669 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:810 |
-| this | Load | Form_Load | .ctor:161 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:282 |
 | this.btnLine | Click | btnLine_Click | InitializeComponent:479 |
 | this.btnMaterial | Click | btnMaterial_Click | InitializeComponent:534 |
@@ -806,7 +806,7 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: Amend, AddItemPopup, AutoExcelPopup
+- 코드에서 생성하는 시트: Amend, AutoExcelPopup, AddItemPopup
 - 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@DrawHeader:1655, SetSheetHeaderColumn_FP@SetSpreadInit:158
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 

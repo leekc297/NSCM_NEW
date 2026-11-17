@@ -1,0 +1,5 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0020-Sefd913,DIVISION,"42,44",,,화면 목록에 없는 Division,"if (fps != null) ▸ if (fps.Name == ""spdMain"" && spdMain.ActiveSheetIndex == 0) ▸ if (division==""42"" || division == ""44"")",
+SCP0020-S95749a,DIVISION,"42,44 (그 밖 값 필요)",82,82,실행함,"if (fps != null) ▸ if (fps.Name == ""spdMain"" && spdMain.ActiveSheetIndex == 0) ▸ else of (division==""42"" || division == ""44"")",
+SCP0020-S3435a4,DIVISION,"42,44",,,화면 목록에 없는 Division,"if (fps.Name == ""spdMain"" && (spdMain.ActiveSheetIndex == 0 || spdMain.ActiveSheetIndex == 1)) ▸ if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (strDIVISION_ID == ""42"" || str",
+SCP0020-S738724,DIVISION,"42,44 (그 밖 값 필요)",82,82,실행함,"if (fps.Name == ""spdMain"" && (spdMain.ActiveSheetIndex == 0 || spdMain.ActiveSheetIndex == 1)) ▸ if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ else of (strDIVISION_ID == ""42"" |",

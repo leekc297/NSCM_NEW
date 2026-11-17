@@ -1,9 +1,10 @@
 # SCP0127 · SCP0127_GET_SEARCH_INFO ↔ PKG_SCP0127.P_SCP0127_GET_SEARCH_INFO
 
-- 실행 2026-11-07 21:45:56 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-14 19:10:25 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 46행 전 컬럼 일치 · 키 원천 db_resultsets.csv is_nullable=0 · 키 CODE+NAME+DIVISION_ID · golden 집합 판정 DIFF
 - 호출 #1 sheet=init btn=SEARCH user=minyonglee1 FE 응답 행 2835 · 원천 Doc\verify\SCP0127\calls\_snap__snap_그리드_헤더_텍스트_모델_시트_0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "", "scmSiteId": ""}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}` · 같은 본문의 세션 조합 2종 중 최다(146회) 사용 — 나머지 [{'sesLangCd': 'KO', 'sesUserId': 'dana.robot'}]
 - AS-IS 인자(번역): `{"p_division_id": "ALL", "p_site_id": "Fabricators_CN_QIN"}` · 번역 메모: p_division_id: ''→'ALL'(all_semantics) · p_site_id: 본문에 siteId 없음 → default 'Fabricators_CN_QIN'
 - TO-BE 인자 중 값 없음(NULL 전달): P_SITE_ID
 

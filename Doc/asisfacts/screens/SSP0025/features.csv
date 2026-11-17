@@ -1,0 +1,59 @@
+﻿feature_id,type,method,line,key,detail,guard,ref
+F-13f47a43,DATA_CALL,FindData,292,"(() => { using (var client = new FoxDataClient(CAppSetting.SystemTypeGSCM, sBind","asyncProxy.ExecuteAsync(() => { using (var client = new FoxDataClient(CAppSetting.SystemTypeGSCM, sBinding)) { var request = new FoxDataRequest(""SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP…",,SSP0025_ItembyDivisionPopup.cs:292
+F-fc6ed244,DATA_CALL,FindData,296,SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP,"new FoxDataRequest(""SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP"")",lambda,SSP0025_ItembyDivisionPopup.cs:296
+F-8c248bfd,EXPRESSION,FindData,297,"request.Parameters[""p_division_id""]","request.Parameters[""p_division_id""] = (clbDivisionId.ControlValues == ""ALL"") ? """" : clbDivisionId.ControlValues",lambda,SSP0025_ItembyDivisionPopup.cs:297
+F-1f8c4fa4,EXPRESSION,FindData,298,"request.Parameters[""p_from_site_id""]","request.Parameters[""p_from_site_id""] = (clbFromSiteId.ControlValues == ""ALL"") ? """" : clbFromSiteId.ControlValues",lambda,SSP0025_ItembyDivisionPopup.cs:298
+F-454dbf1b,ASSIGN,FindData,299,"request.Parameters[""p_item_id""]","request.Parameters[""p_item_id""] = txtItemId.Text",lambda,SSP0025_ItembyDivisionPopup.cs:299
+F-6ff06f20,ASSIGN,FindData,300,"request.Parameters[""p_model_id""]","request.Parameters[""p_model_id""] = txtModelId.Text",lambda,SSP0025_ItembyDivisionPopup.cs:300
+F-f7ab15d4,EXPRESSION,FindData,301,"request.Parameters[""p_to_site_id""]","request.Parameters[""p_to_site_id""] = (sPlantSiteCode == ""ALL"") ? """" : sPlantSiteCode",lambda,SSP0025_ItembyDivisionPopup.cs:301
+F-2be47d6b,DATA_CALL,FindData,302,(request),client.ExecuteDataSet(request),lambda,SSP0025_ItembyDivisionPopup.cs:302
+F-1b96e4f6,STATE,InitControls,216,lbModelId.Visibility,lbModelId.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never,if ((PopupType.POPUP_ITEM).Equals(sBtnType)),SSP0025_ItembyDivisionPopup.cs:216
+F-78283b4c,STATE,InitControls,220,lbItemId.Visibility,lbItemId.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never,else of ((PopupType.POPUP_ITEM).Equals(sBtnType)),SSP0025_ItembyDivisionPopup.cs:220
+F-32c3cc64,VALIDATION,EditButton,212,MSG00251,"MessageHelper.GMessageBox(""MSG00251"", new object[] { args })",if (isOK == false),SSP0025_ShipmentRequestorPIC.cs:212
+F-dec0cc4b,DATA_CALL,FindData_Main,270,GSCM.SSP.Plan.WSL/FoxDataService.svc,"proxyPivot.ExecuteAsync(() => { using (var client = new FoxDataClient(CAppSetting.SystemTypeGSCM, ""GSCM.SSP.Plan.WSL/FoxDataService.svc"")) { var req = new FoxDataRequest(""SSP.SSP0025_…",try,SSP0025_ShipmentRequestorPIC.cs:270
+F-871b59e0,DATA_CALL,FindData_Main,274,SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC,"new FoxDataRequest(""SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC"")",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:274
+F-361f6c6a,ASSIGN,FindData_Main,276,"req.Parameters[""p_division_id""]","req.Parameters[""p_division_id""] = p_division_id",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:276
+F-30760813,ASSIGN,FindData_Main,277,"req.Parameters[""p_plant_site""]","req.Parameters[""p_plant_site""] = p_plant_site",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:277
+F-75577543,ASSIGN,FindData_Main,278,"req.Parameters[""p_item_id""]","req.Parameters[""p_item_id""] = p_item_id",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:278
+F-58ce6b9a,ASSIGN,FindData_Main,279,"req.Parameters[""p_nick_name""]","req.Parameters[""p_nick_name""] = p_nick_name",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:279
+F-a93cbbee,ASSIGN,FindData_Main,280,"req.Parameters[""p_model_id""]","req.Parameters[""p_model_id""] = p_model_id",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:280
+F-dd26ed44,ASSIGN,FindData_Main,281,"req.Parameters[""p_language""]","req.Parameters[""p_language""] = p_language",try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:281
+F-e2270353,DATA_CALL,FindData_Main,282,(req),client.ExecuteDataSet(req),try ▸ lambda,SSP0025_ShipmentRequestorPIC.cs:282
+F-c771bb5a,DATA_CALL,GetSSPUserCheck,511,SSP.SSP0002_GET_USER_INFO_LIST,"new FoxDataRequest(""SSP.SSP0002_GET_USER_INFO_LIST"")",,SSP0025_ShipmentRequestorPIC.cs:511
+F-94e55734,ASSIGN,GetSSPUserCheck,515,"request.Parameters[""Search""]","request.Parameters[""Search""] = UserInfoContext.Current.UserId",,SSP0025_ShipmentRequestorPIC.cs:515
+F-f3fbbf2c,EXPRESSION,GetSSPUserCheck,516,"request.Parameters[""Language""]","request.Parameters[""Language""] = UserInfoContext.Current[UserInfoProperites.Language].ToString()",,SSP0025_ShipmentRequestorPIC.cs:516
+F-d0d5e557,ASSIGN,GetSSPUserCheck,517,"request.Parameters[""SSOUserYN""]","request.Parameters[""SSOUserYN""] = ""N""",,SSP0025_ShipmentRequestorPIC.cs:517
+F-81c76784,DATA_CALL,GetSSPUserCheck,518,(request),client.ExecuteDataSet(request),,SSP0025_ShipmentRequestorPIC.cs:518
+F-ebefab69,DATA_CALL,GetSSPUserCheck,522,(request),client.ExecuteDataSet(request),,SSP0025_ShipmentRequestorPIC.cs:522
+F-96c12f87,DATA_CALL,GetUserIDChk,458,SSP.SSP0025_GET_USER_ID_CHECK,"new FoxDataRequest(""SSP.SSP0025_GET_USER_ID_CHECK"")",try,SSP0025_ShipmentRequestorPIC.cs:458
+F-05bbf5a2,ASSIGN,GetUserIDChk,459,"request.Parameters[""p_user_id""]","request.Parameters[""p_user_id""] = sUserID",try,SSP0025_ShipmentRequestorPIC.cs:459
+F-cdfa6d24,DATA_CALL,GetUserIDChk,461,(request),client.ExecuteDataSet(request),try,SSP0025_ShipmentRequestorPIC.cs:461
+F-ceb555db,CONFIRM,GetUserIDChk,496,MSG00251,"MessageHelper.GMessageBox(""MSG00251"", new object[] { args })",try ▸ if (iCnt > 0),SSP0025_ShipmentRequestorPIC.cs:496
+F-6502aa75,DATA_CALL,SaveData,410,SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC,"new FoxDataRequest(""SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC"")",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:410
+F-444af3c0,ASSIGN,SaveData,414,"request.Parameters[""p_active_flag""]","request.Parameters[""p_active_flag""] = p_active_flag",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:414
+F-477037e9,ASSIGN,SaveData,415,"request.Parameters[""p_division_id""]","request.Parameters[""p_division_id""] = p_division_id",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:415
+F-59282fc7,ASSIGN,SaveData,416,"request.Parameters[""p_to_site""]","request.Parameters[""p_to_site""] = p_plant_site",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:416
+F-ee7d360b,ASSIGN,SaveData,417,"request.Parameters[""p_item_id""]","request.Parameters[""p_item_id""] = p_item_id",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:417
+F-7a2d9edb,ASSIGN,SaveData,418,"request.Parameters[""p_user_id""]","request.Parameters[""p_user_id""] = p_user_id",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:418
+F-7914ce12,ASSIGN,SaveData,419,"request.Parameters[""p_create_id""]","request.Parameters[""p_create_id""] = p_create_id",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:419
+F-9dd9c115,ASSIGN,SaveData,420,"request.Parameters[""p_part_leader""]","request.Parameters[""p_part_leader""] = p_part_leader",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:420
+F-72178274,ASSIGN,SaveData,421,"request.Parameters[""p_team_leader""]","request.Parameters[""p_team_leader""] = p_team_leader",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:421
+F-1c5cd110,ASSIGN,SaveData,422,"request.Parameters[""p_valid_yn""]","request.Parameters[""p_valid_yn""] = p_valid_yn",try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:422
+F-02dc4d85,DATA_CALL,SaveData,424,(request),client.ExecuteDataSet(request),try ▸ if (iCount > 0),SSP0025_ShipmentRequestorPIC.cs:424
+F-7097826c,CONFIRM,SaveData,431,MSG00004,"MessageHelper.GMessageBox(""MSG00004"", new object[] { ds.Tables[0].Rows[0][1].ToString() })","try ▸ if (iCount > 0) ▸ if (ds.Tables[0].Rows[0][0].ToString() == ""S"")",SSP0025_ShipmentRequestorPIC.cs:431
+F-7639a8c8,CONFIRM,SaveData,438,MSG00284,"MessageHelper.GMessageBox(""MSG00284"", null)","try ▸ if (iCount > 0) ▸ else of (ds.Tables[0].Rows[0][0].ToString() == ""S"")",SSP0025_ShipmentRequestorPIC.cs:438
+F-33b4e02f,VALIDATION,SpdMain_CellClick,631,MSG00093,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Division"" })",if (siMain.IsLock(siMain.SheetName) == false) ▸ if (string.IsNullOrEmpty(sDivisionId) && e.Column != siMain.GetColumnIndex(DefColumns.DIVISION_ID)),SSP0025_ShipmentRequestorPIC.cs:631
+F-8f35e6c3,VALIDATION,SpdMain_CellClick,648,MSG00093,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Plant Site"" })","if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CAppSetting.FlagI) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ if (string.IsNullOrEmpty(sPlantSite))",SSP0025_ShipmentRequestorPIC.cs:648
+F-7af1b258,LOCK,EditButton,221,MODE,SwitchLock locked=TOGGLE ,,lock_rules:221
+F-09137017,LOCK,EditButton,223,DIVISION_ID;TO_SITE;SITE_DESCRIPTION;ITEM_ID;ELECTRODE_TYPE;MODEL_ID;NICK_NAME,LockColumn locked=Y ,,lock_rules:223
+F-cfdb258d,LOCK,EditButton,224,USER_NAME,LockColumn locked=Y ,,lock_rules:224
+F-5bb79957,LOCK,EditButton,225,PART_LEADER_NAME,LockColumn locked=Y ,,lock_rules:225
+F-8d8b3389,LOCK,EditButton,226,TEAM_LEADER_NAME,LockColumn locked=Y ,,lock_rules:226
+F-59eaab54,LOCK,EditButton,227,CREATED_BY;CREATION_DATE;LAST_UPDATED_BY;LAST_UPDATE_DATE,LockColumn locked=Y ,,lock_rules:227
+F-da0f1ee8,LOCK,FindData_Main,292,DIVISION_ID;TO_SITE;SITE_DESCRIPTION;ITEM_ID;ELECTRODE_TYPE;MODEL_ID;NICK_NAME;CELL_TYPE;USER_ID;USER_NAME;PART_LEADER;P,LockColumn locked=Y ,,lock_rules:292
+F-09d8598a,LOCK,InsertRow,319,TO_SITE,LockRange locked=Y ,,lock_rules:319
+F-d95639e8,LOCK,InsertRow,321,ELECTRODE_TYPE;MODEL_ID;NICK_NAME;CELL_TYPE,LockRange locked=Y ,,lock_rules:321
+F-36ca0a8b,LOCK,InsertRow,322,USER_NAME,LockRange locked=Y ,,lock_rules:322
+F-0c8e277c,LOCK,InsertRow,323,PART_LEADER_NAME,LockRange locked=Y ,,lock_rules:323
+F-9e8f71a5,LOCK,InsertRow,324,TEAM_LEADER_NAME,LockRange locked=Y ,,lock_rules:324
+F-21f1b908,LOCK,InsertRow,325,CREATED_BY;CREATION_DATE;LAST_UPDATED_BY;LAST_UPDATE_DATE,LockRange locked=Y ,,lock_rules:325

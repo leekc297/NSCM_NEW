@@ -1,0 +1,16 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0027-S7d9192,기타,ERP_PR_REQUEST_SEND,SSP0027_ShipmentPlanEss.cs:3362,호출 없음,,
+SSP0027-Sc18847,기타,ERP_PR_REQUEST_SEND,SSP0027_ShipmentPlanEss.cs:3394,호출 없음,,
+SSP0027-S20f481,저장,GetErpIFCheck,SSP0027_ShipmentPlanEss.cs:4205,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:3854; SSP0027_ShipmentPlanEss.cs:4088,
+SSP0027-Sf834bb,조회,GetErpIFCheck,SSP0027_ShipmentPlanEss.cs:4220,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:3854; SSP0027_ShipmentPlanEss.cs:4088,
+SSP0027-S0801b6,조회,GetErpIFCheck,SSP0027_ShipmentPlanEss.cs:4227,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:3854; SSP0027_ShipmentPlanEss.cs:4088,
+SSP0027-Sc71a7e,조회,GetErpIFCheck,SSP0027_ShipmentPlanEss.cs:4232,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:3854; SSP0027_ShipmentPlanEss.cs:4088,
+SSP0027-Se42905,저장,GetErpIFCheckNew_,SSP0027_ShipmentPlanEss.cs:4149,호출 없음,,
+SSP0027-S56adab,조회,GetErpIFCheckNew_,SSP0027_ShipmentPlanEss.cs:4164,호출 없음,,
+SSP0027-Sb9aa4b,조회,GetErpIFCheckNew_,SSP0027_ShipmentPlanEss.cs:4171,호출 없음,,
+SSP0027-Sa92932,조회,GetErpIFCheckNew_,SSP0027_ShipmentPlanEss.cs:4176,호출 없음,,
+SSP0027-Saa0e5f,조회,GetNewERPInterface,SSP0027_ShipmentPlanEss.cs:3248,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:2518,
+SSP0027-Sd86cd7,조회,GetNewERPInterface,SSP0027_ShipmentPlanEss.cs:3258,주석 안에서만 호출,SSP0027_ShipmentPlanEss.cs:2518,
+SSP0027-S7df84c,저장,NewNonSoNo,SSP0027_ShipmentPlanEss.cs:3599,같은 파일에서 호출,SSP0027_ShipmentPlanEss.cs:3286,GetNewERPInterface
+SSP0027-Sa443dc,기타,NewNonSoNo,SSP0027_ShipmentPlanEss.cs:3664,같은 파일에서 호출,SSP0027_ShipmentPlanEss.cs:3286,GetNewERPInterface
+SSP0027-S0ba413,기타,NewNonSoNo,SSP0027_ShipmentPlanEss.cs:3687,같은 파일에서 호출,SSP0027_ShipmentPlanEss.cs:3286,GetNewERPInterface

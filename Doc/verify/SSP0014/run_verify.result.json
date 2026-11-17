@@ -1,0 +1,286 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-14T21:23:39+09:00",
+ "producer": "run_verify",
+ "id": "SSP0014",
+ "skip_e2e": false,
+ "started": "2026-11-14 20:11:45",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-c951c278",
+   "class": "B2",
+   "msg": "조회조건 From Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3809bf77",
+   "class": "G9",
+   "msg": "조회조건 User ID(Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6784cbc4",
+   "class": "D1",
+   "msg": "Shipment Model PIC.DIVISION_ID (Div)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-849c95fd",
+   "class": "D1",
+   "msg": "Shipment Model PIC.OPERATION_GROUP (Operation Group)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d61664b1",
+   "class": "D1",
+   "msg": "Shipment Model PIC.FROM_SITE (From Site)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f3e00fd4",
+   "class": "D1",
+   "msg": "Shipment Model PIC.ITEM_ID (Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 21:23"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-788e51ee",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-830447ce",
+   "class": "B2",
+   "msg": "[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6d9a7223",
+   "class": "D1",
+   "msg": "[DMF0020 결함 유형] Team·End Customer 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-225a8aab",
+   "class": "B2",
+   "msg": "[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0242a661",
+   "class": "D1",
+   "msg": "[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a9bc120d",
+   "class": "D1",
+   "msg": "[DMF0042 결함 유형] Sales Site·End Customer 셀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9111a372",
+   "class": "D1",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ef7e8fee",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-21293198",
+   "class": "D1",
+   "msg": "[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c88d2fa4",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0a7c8441",
+   "class": "B2",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-066d4f8a",
+   "class": "G5",
+   "msg": "검색 팝업(공용 모달) 호출 인자",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-91247341",
+   "class": "D1",
+   "msg": "B-1~B-7 · 해당없음(AS-IS 무관)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 F1, F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 2168,
+  "PASS": 953,
+  "FAIL": 19,
+  "판정필요": 28,
+  "미검증": 365,
+  "해당없음": 803,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1272,
+   "없음(미검증)": 365,
+   "사람": 2,
+   "기계(상속·집계)": 497,
+   "없음(판정 대기)": 28,
+   "출처 미기록": 4
+  },
+  "fail_listed": 19,
+  "coverage": {
+   "rules": 91,
+   "measured": 781,
+   "not_run_error": 267,
+   "na": 223,
+   "suspect_na100": [
+    "F1",
+    "F6"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SSP0014_ShipmentModelPic_CheckList_v4.xlsx",
+  "ActionItemList": "Doc/CheckList/SSP0014_ShipmentModelPic_ActionItemList_v4.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0014/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F1, F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

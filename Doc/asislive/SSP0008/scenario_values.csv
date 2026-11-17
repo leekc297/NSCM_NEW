@@ -1,0 +1,22 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SSP0008-S163fb0,DIVISION,,,,값 미도출,"if (pDivisionID != ""EE"")",
+SSP0008-S7172f2,DIVISION,,,,값 미도출,"else of (pDivisionID != ""EE"")",
+SSP0008-S64eb3a,DIVISION,,,,값 미도출,"if (spdInfo.SheetName == SpdSheet.shtMain) ▸ if (pDivisionID != ""EE"")",
+SSP0008-Sf282b3,DIVISION,,,,값 미도출,"if (spdInfo.SheetName == SpdSheet.shtMain) ▸ else of (pDivisionID != ""EE"")",
+SSP0008-Sad7d74,DIVISION,,,,값 미도출,"if (pDivisionID == ""EE"")",
+SSP0008-Sdbba82,DIVISION,,,,값 미도출,"else of (pDivisionID == ""EE"")",
+SSP0008-S0c6437,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL""))",
+SSP0008-S2b3789,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (dtPlanType.Rows.Count > 0)",
+SSP0008-S2fea65,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (pDivisionID != ""EE"")",
+SSP0008-S9f37fd,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ else of (pDivisionID != ""EE"")",
+SSP0008-S0c6437,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL""))",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SSP0008-S2b3789,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (dtPlanType.Rows.Count > 0)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SSP0008-S2fea65,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ if (pDivisionID != ""EE"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SSP0008-S9f37fd,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL"")) ▸ else of (pDivisionID != ""EE"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SSP0008-Sd73a1d,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol < siObj.ActiveSheet.ColumnCount) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+SSP0008-S22ea04,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol < siObj.ActiveSheet.ColumnCount) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+SSP0008-S8db3bb,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol < siObj.ActiveSheet.ColumnCount) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0)",
+SSP0008-S641370,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol < siObj.ActiveSheet.ColumnCount) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ else of (siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0) ▸ if (siObj.GetColumnTag(",
+SSP0008-S14aca7,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,"for (iCol < siObj.ActiveSheet.ColumnCount) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0)",
+SSP0008-S6e6dad,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,for (iCol < siObj.ActiveSheet.ColumnCount) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ if (siObj.GetColu,
+SSP0008-S1691b9,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2,실행함,for (iCol < siObj.ActiveSheet.ColumnCount) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ else of (siObj.Ge,

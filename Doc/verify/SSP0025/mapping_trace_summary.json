@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SSP0025",
  "asis_id": "SSP0025",
- "generated": "2026-11-09T13:20:18",
+ "generated": "2026-11-15T06:05:13",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-requestor-pic\\__asis-mapping__.md",
  "rows": 565,
  "fe_rows": 55,
@@ -10,122 +10,120 @@
  "fe_page": "nscm-fe\\features\\shipping\\src\\pages\\shipment-requestor-pic",
  "fe_mapping_missing": false,
  "verdict": {
-  "검증완료": 200,
-  "FAIL": 315,
-  "미검증": 49,
+  "검증완료": 125,
+  "FAIL": 17,
+  "미검증": 422,
   "해당없음": 1
  },
- "instances": 457,
+ "instances": 517,
  "instance_result": {
-  "NA": 174,
-  "PASS": 173,
-  "REVIEW": 14,
-  "FAIL": 48,
-  "ERROR": 14,
+  "NA": 121,
+  "PASS": 218,
+  "FAIL": 5,
+  "ERROR": 148,
+  "REVIEW": 12,
   "NOT_RUN": 4,
-  "NOPATH": 30
+  "NOPATH": 9
  },
  "by_layer": {
   "동적 생성·조회": {
-   "NA": 67,
-   "REVIEW": 10,
-   "FAIL": 21,
-   "ERROR": 11,
-   "PASS": 21,
+   "NA": 59,
+   "REVIEW": 9,
+   "ERROR": 40,
+   "PASS": 22,
    "NOPATH": 1,
-   "NOT_RUN": 2
+   "NOT_RUN": 2,
+   "FAIL": 1
   },
   "공통 기능": {
-   "PASS": 3
+   "PASS": 2,
+   "ERROR": 1
   },
   "정적 디자인": {
-   "PASS": 27,
-   "REVIEW": 1,
-   "ERROR": 2,
-   "NA": 3,
+   "FAIL": 4,
+   "ERROR": 27,
+   "NA": 5,
+   "PASS": 30,
    "NOPATH": 2
   },
   "DB 실행·접근": {
-   "PASS": 11,
-   "NA": 3
+   "ERROR": 5,
+   "PASS": 9
   },
   "권한": {
    "PASS": 2
   },
   "편집·검증": {
-   "PASS": 64,
-   "NA": 31,
-   "FAIL": 5,
-   "NOPATH": 3
+   "PASS": 75,
+   "NA": 35,
+   "ERROR": 13
   },
   "CRUD": {
-   "FAIL": 2,
-   "PASS": 1,
-   "ERROR": 1
+   "ERROR": 3,
+   "PASS": 1
   },
   "Cascade": {
-   "NA": 21,
-   "PASS": 32,
-   "FAIL": 6
+   "ERROR": 39,
+   "NA": 1,
+   "PASS": 25
   },
   "팝업": {
-   "FAIL": 14,
-   "NA": 43,
-   "PASS": 6,
+   "PASS": 33,
+   "NA": 16,
+   "ERROR": 16,
    "NOT_RUN": 2,
-   "NOPATH": 8,
+   "NOPATH": 6,
    "REVIEW": 3
   },
   "콤보 후보": {
-   "PASS": 6,
-   "NOPATH": 16,
-   "NA": 6
+   "PASS": 19,
+   "ERROR": 4,
+   "NA": 5
   }
  },
  "by_check": {
   "A1": {
-   "REVIEW": 9
+   "REVIEW": 8,
+   "PASS": 1
   },
   "A10": {
-   "FAIL": 1
+   "PASS": 1
   },
   "A5": {
-   "PASS": 6,
-   "NA": 1
+   "FAIL": 4,
+   "PASS": 8,
+   "ERROR": 6
   },
   "A6": {
-   "FAIL": 3
+   "ERROR": 2,
+   "PASS": 1
   },
   "B1": {
-   "PASS": 1,
-   "NOPATH": 3
+   "PASS": 4
   },
   "B2": {
-   "PASS": 1,
-   "NOPATH": 3
+   "PASS": 3,
+   "NA": 1
   },
   "B3": {
-   "PASS": 2,
-   "NOPATH": 5,
-   "NA": 3
+   "PASS": 8,
+   "NA": 2
   },
   "B4": {
-   "PASS": 2,
-   "NOPATH": 5,
-   "NA": 3
+   "PASS": 4,
+   "ERROR": 4,
+   "NA": 2
   },
   "C1": {
-   "NA": 3,
-   "PASS": 2
+   "ERROR": 4,
+   "PASS": 1
   },
   "C2": {
-   "NA": 8,
-   "PASS": 7
+   "ERROR": 15
   },
   "C3": {
-   "PASS": 3,
-   "FAIL": 6,
-   "NA": 9
+   "ERROR": 20,
+   "PASS": 4
   },
   "C4": {
    "NA": 1
@@ -135,20 +133,23 @@
   },
   "D1": {
    "PASS": 18,
-   "NA": 4
+   "NA": 3
   },
   "D3": {
    "PASS": 29,
-   "NA": 3
+   "NA": 2
   },
   "D4": {
-   "NA": 3
+   "PASS": 1,
+   "ERROR": 2
   },
   "D5": {
-   "PASS": 7
+   "PASS": 9,
+   "NA": 2,
+   "ERROR": 6
   },
   "D6": {
-   "FAIL": 1
+   "PASS": 1
   },
   "DB-SYN": {
    "PASS": 7
@@ -158,24 +159,25 @@
    "NA": 1
   },
   "E4": {
-   "NA": 20,
-   "FAIL": 4
+   "NA": 27,
+   "PASS": 4,
+   "ERROR": 5
   },
   "E5": {
-   "NOPATH": 3
+   "PASS": 3
   },
   "F1": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "F2": {
    "PASS": 1
   },
   "F4": {
-   "PASS": 4,
-   "NA": 3
+   "ERROR": 5,
+   "PASS": 2
   },
   "F5": {
-   "FAIL": 1
+   "ERROR": 1
   },
   "F6": {
    "ERROR": 1
@@ -198,33 +200,39 @@
    "NOPATH": 2
   },
   "G5": {
-   "NA": 23,
-   "NOPATH": 5
+   "NA": 12,
+   "ERROR": 12,
+   "NOPATH": 4
   },
   "G6": {
-   "NA": 5,
+   "NA": 1,
+   "ERROR": 4,
    "PASS": 1
   },
   "H10": {
    "ERROR": 1
   },
   "H2": {
-   "PASS": 7
+   "ERROR": 9,
+   "PASS": 8,
+   "NA": 1
   },
   "H3": {
-   "REVIEW": 1
+   "NA": 1
   },
   "H4": {
-   "PASS": 1
+   "ERROR": 1
   },
   "H5": {
-   "PASS": 7
+   "ERROR": 9,
+   "PASS": 8,
+   "NA": 1
   },
   "H6": {
-   "FAIL": 14,
+   "PASS": 22,
+   "NA": 2,
    "NOT_RUN": 2,
-   "NOPATH": 3,
-   "NA": 9
+   "NOPATH": 2
   },
   "I1": {
    "ERROR": 1
@@ -239,15 +247,16 @@
    "PASS": 1
   },
   "K4": {
-   "PASS": 1
+   "ERROR": 1
   },
   "M3": {
-   "NA": 7
+   "ERROR": 4,
+   "PASS": 3
   },
   "M4": {
-   "PASS": 6,
-   "NA": 4,
-   "REVIEW": 3
+   "PASS": 8,
+   "REVIEW": 3,
+   "NA": 2
   },
   "SC1": {
    "NA": 1
@@ -263,18 +272,18 @@
    "PASS": 1
   },
   "X-ROW": {
-   "NA": 15,
-   "FAIL": 17,
-   "PASS": 7,
-   "ERROR": 4,
+   "NA": 11,
+   "ERROR": 27,
+   "FAIL": 1,
+   "PASS": 5,
    "REVIEW": 1
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 23,
-  "REVIEW": 20,
-  "NOT_RUN": 3,
-  "NOPATH": 52
+  "REVIEW": 53,
+  "ERROR": 822,
+  "NOT_RUN": 7,
+  "NOPATH": 26
  }
 }

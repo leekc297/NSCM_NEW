@@ -1,0 +1,87 @@
+{
+ "_doc": "SCP0104 시트 이동 사실(2026-11-16 10:1x 화면 실측 + CapaLineAssign.tsx 797~870행 · capa-line-assign.constants.ts 95~125행). 검사기는 AS-IS 시트 이름으로 탭을 찾지만 이 화면은 조회조건 Operation group 값과 바깥·안쪽 탭 버튼으로 시트가 정해진다. popup 은 그리드 셀 더블클릭으로 여는 팝업 안의 그리드다.",
+ "sheets": {
+  "ELTR": {
+   "cond": {
+    "Operation group": "Electrode"
+   },
+   "tabs": [
+    "Line Assign",
+    "ELTR"
+   ]
+  },
+  "ASSEMBLY": {
+   "cond": {
+    "Operation group": "Cell"
+   },
+   "tabs": [
+    "Line Assign",
+    "ASSEMBLY"
+   ]
+  },
+  "SOP_ELTR": {
+   "cond": {
+    "Div": "81_HG Automotive Battery(HG)",
+    "Operation group": "Electrode"
+   },
+   "tabs": [
+    "SOP",
+    "SOP_ELTR"
+   ]
+  },
+  "SOP_ASSEMBLY": {
+   "cond": {
+    "Div": "81_HG Automotive Battery(HG)",
+    "Operation group": "Cell"
+   },
+   "tabs": [
+    "SOP",
+    "SOP_ASSEMBLY"
+   ]
+  },
+  "LINE": {
+   "popup": "P03 CAPA Line",
+   "open": "dblclick",
+   "open_note": "Line Assign 그리드에서 NICK_NAME·ITEM_ID 가 아닌 칸 더블클릭(CapaLineAssign.tsx:597~604)",
+   "base": "ASSEMBLY",
+   "cell": "LINE_NAME"
+  },
+  "SOP_MODEL_ELTR": {
+   "popup": "P02 SOP Model",
+   "open": "insert",
+   "open_note": "SOP 탭에서 Insert(F8). 편집 권한·컷오프 아님 조건 필요(CapaLineAssign.tsx:394~401)",
+   "base": "SOP_ELTR"
+  },
+  "SOP_MODEL_ASSEMBLY": {
+   "popup": "P02 SOP Model",
+   "open": "insert",
+   "open_note": "SOP 탭에서 Insert(F8). 편집 권한·컷오프 아님 조건 필요(CapaLineAssign.tsx:394~401)",
+   "base": "SOP_ASSEMBLY"
+  }
+ },
+ "measured": {
+  "at": "2026-11-16",
+  "account": "minyonglee1",
+  "Operation group 후보": [
+   "Electrode",
+   "Cell",
+   "Module/Pack"
+  ],
+  "기본값": "Electrode",
+  "Electrode 조회 행": 275,
+  "Cell 조회 행": 608,
+  "탭 버튼(Electrode)": [
+   "Line Assign",
+   "SOP",
+   "ELTR"
+  ],
+  "탭 버튼(Cell·SOP)": [
+   "SOP",
+   "SOP_ASSEMBLY"
+  ]
+ },
+ "note_search": "조회는 활성 탭 1개만 한다(CapaLineAssign.tsx:383). 탭을 바꾼 뒤 Search 를 다시 눌러야 그 시트에 행이 찬다",
+ "cell_dblclick_popup": "CAPA Line Search",
+ "note_div": "SOP 테이블 행은 Division 81_HG(Cell 36 · Electrode 6) · 81_ST(Cell 16 · Electrode 6)에만 있다(TO-BE DB SCP_MST_CAPA_LINE_SOP · SCP_MST_CAPA_ELTR_LINE_SOP 2026-11-16 조회) — SOP 시트는 Div 81_HG 로 조회한다",
+ "note_dbl": "Line Assign 그리드 셀 더블클릭은 NICK_NAME·ITEM_ID 밖의 칸에서 CAPA Line Search 팝업을 연다(CapaLineAssign.tsx:597~604 · AS-IS spdAssign_CellDoubleClick). 편집 목적 더블클릭 뒤에는 팝업을 닫고 F2 로 편집한다"
+}

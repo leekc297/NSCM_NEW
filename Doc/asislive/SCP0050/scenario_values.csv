@@ -1,0 +1,3 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0050-Se5e794,AUTH,,,,값 미도출,if (UserService.HasExtraRole(UserInfoContext.Current.UserId)),
+SCP0050-S7ce188,AUTH,,,,값 미도출,else of (UserService.HasExtraRole(UserInfoContext.Current.UserId)),

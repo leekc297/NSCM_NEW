@@ -171,9 +171,9 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetSpdTitle | SetSpreadInit:337, InitSpread:421, InitSpread:258 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
-| CreateSheetHeaderColumn | SetSpreadInit:338, InitSpread:422, InitSpread:259 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
-| GetCheckedListValue | btnCreatePlan_ClickAsync:3213, btnCreatePlan_ClickAsync:3214, btnCreatePlan_ClickAsync:3217, btnCreatePlan_ClickAsync:3263, SetCboDivisionChangedControl:3314, Check_Exec_IsRunningEngine:3450, CreateSpread:360, InitSpread:427 | CString.GetCheckedListValue | CODE |
+| GetCheckedListValue | CreateSpread:360, InitSpread:427, InitSpread:441, SetCboDivisionChangedControl:468, EditButton:597, Find_Data:686, Find_Data:687, Find_Data:690 | CString.GetCheckedListValue | CODE |
+| GetSpdTitle | InitSpread:421, InitSpread:258, SetSpreadInit:337 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| CreateSheetHeaderColumn | InitSpread:422, InitSpread:259, SetSpreadInit:338 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
 | InitSpreadDateColumn | InitSpread:432, InitSpread:450, InitSpread:267 | SpreadInfo.InitSpreadDateColumn | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
 | SetSheetHeaderColumn | InitSpread:438, InitSpreadDateColumn:515, InitSpreadDateColumn:519, InitSpreadDateColumn:295, InitSpreadDateColumn:299 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
 | SaveData | SaveButton:589 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
@@ -181,6 +181,11 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this | Load | Form_Load | .ctor:255 |
+| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:461 |
+| cboPlanDate | SelectedIndexChanged | CboPlanDate_SelectedIndexChanged | InitEvent:462 |
+| this.spdSub | CellDoubleClick | spdSub_CellDoubleClick | InitEvent:464 |
+| this | Load | Form_Load | .ctor:161 |
 | this.usrRadio3 | CheckedChanged | usrRadio_CheckedChanged | InitializeComponent:219 |
 | this.btnSearch | Click | btnSearch_Click | InitializeComponent:257 |
 | this.usrRadio2 | CheckedChanged | usrRadio_CheckedChanged | InitializeComponent:311 |
@@ -203,11 +208,6 @@
 | this.spdSub | ActiveSheetChanging | spdSub_ActiveSheetChanging | InitializeComponent:922 |
 | this.spdSub | CellClick | spdSub_CellClick | InitializeComponent:923 |
 | this.spdSub | CellDoubleClick | spdSub_CellDoubleClick | InitializeComponent:924 |
-| this | Load | Form_Load | .ctor:255 |
-| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:461 |
-| cboPlanDate | SelectedIndexChanged | CboPlanDate_SelectedIndexChanged | InitEvent:462 |
-| this.spdSub | CellDoubleClick | spdSub_CellDoubleClick | InitEvent:464 |
-| this | Load | Form_Load | .ctor:161 |
 
 ## 6. 컨트롤 (97개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
@@ -218,9 +218,9 @@
 | UsrCheckedList2 | 6 | clbItemType, clbPlant, cboDivision, clbPlant, cboDivision, clbItemType |
 | UsrLayoutControl | 5 | usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl4 |
 | LayoutControlGroup | 5 | layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup3, layoutControlGroup2 |
+| FpSpread | 4 | spdMain, spdMain, spdMain, spdSub |
+| SheetView | 4 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, sheetView1 |
 | UsrCombo | 4 | cboMrpVersion, cboPlanDate, cboCreationType, cboPlanDate |
-| FpSpread | 4 | spdMain, spdMain, spdSub, spdMain |
-| SheetView | 4 | spdMain_Sheet1, spdMain_Sheet1, sheetView1, spdMain_Sheet1 |
 | UsrRadio | 3 | usrRadio3, usrRadio2, usrRadio1 |
 | UsrConditionPanel | 3 | usrConditionPanel1, usrConditionPanel2, usrConditionPanel1 |
 | ImageList | 2 | imageList1, imageList2 |
@@ -270,8 +270,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: PROCESS_POPUP, Long Term Stock Management, BOH Ending Inventory, PSI Detail, BOH Long-Term Stock, EXPORT_POPUP
-- 메타 컬럼 생성 호출(프레임워크): CreateSheetHeaderColumn@SetSpreadInit:338, CreateSheetHeaderColumn@InitSpread:422, SetSheetHeaderColumn@InitSpread:438, SetSheetHeaderColumn@InitSpreadDateColumn:515, SetSheetHeaderColumn@InitSpreadDateColumn:519, CreateSheetHeaderColumn@InitSpread:259, SetSheetHeaderColumn@InitSpreadDateColumn:295, SetSheetHeaderColumn@InitSpreadDateColumn:299
+- 코드에서 생성하는 시트: Long Term Stock Management, BOH Ending Inventory, PSI Detail, BOH Long-Term Stock, EXPORT_POPUP, PROCESS_POPUP
+- 메타 컬럼 생성 호출(프레임워크): CreateSheetHeaderColumn@InitSpread:422, SetSheetHeaderColumn@InitSpread:438, SetSheetHeaderColumn@InitSpreadDateColumn:515, SetSheetHeaderColumn@InitSpreadDateColumn:519, CreateSheetHeaderColumn@InitSpread:259, SetSheetHeaderColumn@InitSpreadDateColumn:295, SetSheetHeaderColumn@InitSpreadDateColumn:299, CreateSheetHeaderColumn@SetSpreadInit:338
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSpreadDateColumn
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

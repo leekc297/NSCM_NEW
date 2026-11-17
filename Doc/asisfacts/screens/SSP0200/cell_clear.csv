@@ -1,0 +1,24 @@
+﻿grid,src,tgt,src_col,tgt_col,cond,refilled,ref
+siMain,FROM_SITE_DESCRIPTION,INCOTERMS,FROM_SITE_DESCRIPTION,INCOTERMS,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5585 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,FROM_SITE_DESCRIPTION,TRANSPORT_MODE,FROM_SITE_DESCRIPTION,TRANSPORT_MODE,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5586 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,FROM_SITE_DESCRIPTION,BOD_ID,FROM_SITE_DESCRIPTION,BOD_ID,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5587 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,TO_SITE_DESCRIPTION,INCOTERMS,TO_SITE_DESCRIPTION,INCOTERMS,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5610 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,TO_SITE_DESCRIPTION,TRANSPORT_MODE,TO_SITE_DESCRIPTION,TRANSPORT_MODE,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5611 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,TO_SITE_DESCRIPTION,BOD_ID,TO_SITE_DESCRIPTION,BOD_ID,if (!string.IsNullOrEmpty(sItemId)),,SSP0200_ShipmentChangeRequest.cs:5612 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,FROM_SITE_DESCRIPTION,DIVISION_ID,FROM_SITE_DESCRIPTION,,,SSP0200_ShipmentChangeRequest.cs:5653 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,TO_SITE_DESCRIPTION,DIVISION_ID,TO_SITE_DESCRIPTION,,,SSP0200_ShipmentChangeRequest.cs:5654 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,ITEM_ID,DIVISION_ID,ITEM_ID,,,SSP0200_ShipmentChangeRequest.cs:5655 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,NICK_NAME,DIVISION_ID,NICK_NAME,,,SSP0200_ShipmentChangeRequest.cs:5656 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,PROJECT_CODE,DIVISION_ID,PROJECT_CODE,,Y,SSP0200_ShipmentChangeRequest.cs:5657 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,END_CUSTOMER,DIVISION_ID,END_CUSTOMER,,,SSP0200_ShipmentChangeRequest.cs:5658 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,FCST_TYPE,DIVISION_ID,FCST_TYPE,,,SSP0200_ShipmentChangeRequest.cs:5659 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,INCOTERMS,DIVISION_ID,INCOTERMS,,,SSP0200_ShipmentChangeRequest.cs:5660 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,TRANSPORT_MODE,DIVISION_ID,TRANSPORT_MODE,,,SSP0200_ShipmentChangeRequest.cs:5661 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,DIVISION_ID,BOD_ID,DIVISION_ID,BOD_ID,,,SSP0200_ShipmentChangeRequest.cs:5662 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,INCOTERMS,TRANSPORT_MODE,INCOTERMS,TRANSPORT_MODE,,,SSP0200_ShipmentChangeRequest.cs:5737 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,INCOTERMS,BOD_ID,INCOTERMS,BOD_ID,,,SSP0200_ShipmentChangeRequest.cs:5738 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,TRANSPORT_MODE,BOD_ID,TRANSPORT_MODE,BOD_ID,"if (siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString() == """")",,SSP0200_ShipmentChangeRequest.cs:5773 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,TRANSPORT_MODE,BOD_ID,TRANSPORT_MODE,BOD_ID,"if (siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.INCOTERMS)).ToString() == """")",,SSP0200_ShipmentChangeRequest.cs:5783 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,"if (string.IsNullOrWhiteSpace(sSoNo)) ▸ if (sNewChangeReasonCode == ""-"")",,SSP0200_ShipmentChangeRequest.cs:5874 SSP0200_ShipmentChangeRequest.SpdMain_ComboSelChange
+siMain,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,"if (sNewChangeReasonCode == ""-"" || string.IsNullOrWhiteSpace(siMain.GetText(e.Row, e.Column).ToString())) ▸ if (string.IsNullOrWhiteSpace(sSoNo))",,SSP0200_ShipmentChangeRequest.cs:6505 SSP0200_ShipmentChangeRequest.shtMain_Change
+siMain,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,CHANGE_REASON_CODE,CHANGE_REASON_DETAIL,"if (sNewChangeReasonCode == ""-"" || string.IsNullOrWhiteSpace(siMain.GetText(e.Row, e.Column).ToString())) ▸ else of (string.IsNullOrWhiteSpace(sSoNo))",,SSP0200_ShipmentChangeRequest.cs:6510 SSP0200_ShipmentChangeRequest.shtMain_Change

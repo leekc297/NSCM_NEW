@@ -7,7 +7,8 @@
     <select id="retrieveMenus" statementType="CALLABLE">
 		{ CALL SCM_MGR.PR_GET_MENU_LIST_V2(
 			#{userId},
-			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap},
+			#{systemCd}
 		) }
     </select>
 
@@ -67,19 +68,6 @@
 			#{mnuId}
 		) }
     </select>    
-    
-	<select id="retrieveTitleSet" statementType="CALLABLE">
-		{ CALL SCM_MGR.DMF0002_GET_TITLESET_POPUP(
-			#{programId, mode=IN, jdbcType=VARCHAR},
-			#{sheetName, mode=IN, jdbcType=VARCHAR},
-			#{columnType, mode=IN, jdbcType=VARCHAR},
-			#{sesUserId, mode=IN, jdbcType=VARCHAR},
-			#{divisionId, mode=IN, jdbcType=VARCHAR},
-			#{menuId, mode=IN, jdbcType=VARCHAR},
-			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
-		) }
-    </select>
-
 	<select id="saveTitleSet" statementType="CALLABLE">
 		{ CALL SCM_MGR.SCM0002_SET_TITLESET_POPUP(
 			#{programId, mode=IN, jdbcType=VARCHAR},
@@ -98,5 +86,15 @@
 			#{resultCursor, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
 		) }
     </select>
-    
+    <select id="retrieveTitleSet" statementType="CALLABLE">
+		{ CALL SCM_MGR.DMF0002_GET_TITLESET_POPUP(
+			#{programId, mode=IN, jdbcType=VARCHAR},
+			#{sheetName, mode=IN, jdbcType=VARCHAR},
+			#{columnType, mode=IN, jdbcType=VARCHAR},
+			#{sesUserId, mode=IN, jdbcType=VARCHAR},
+			#{divisionId, mode=IN, jdbcType=VARCHAR},
+			#{mnuId, mode=IN, jdbcType=VARCHAR},
+			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
+		) }
+    </select>
 </mapper>

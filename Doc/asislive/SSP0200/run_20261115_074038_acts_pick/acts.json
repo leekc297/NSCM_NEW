@@ -1,0 +1,126 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [
+  {
+   "grid": "spdMain",
+   "col": "ERP_SO_NO",
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0200-Sf2100a"
+   ],
+   "why": "spdMain/Shipment Change Request 행 없음"
+  },
+  {
+   "grid": "spdMain",
+   "col": "ITEM_ID",
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sedb272",
+    "SSP0200-S131435",
+    "SSP0200-S85b8aa",
+    "SSP0200-S2f9f02",
+    "SSP0200-S94b8b4"
+   ],
+   "why": "spdMain/Shipment Change Request 행 없음"
+  },
+  {
+   "grid": "spdMain",
+   "col": "PROJECT_CODE",
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sd79fbb",
+    "SSP0200-S29f2d4",
+    "SSP0200-S3dc01f",
+    "SSP0200-Se999c5",
+    "SSP0200-Sfc67b5",
+    "SSP0200-Sbc0cc5"
+   ],
+   "why": "spdMain/Shipment Change Request 행 없음"
+  },
+  {
+   "grid": "spdMain",
+   "col": null,
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sae259d",
+    "SSP0200-Sa21fb1",
+    "SSP0200-Se4684b"
+   ],
+   "why": "spdMain/Shipment Change Request 행 없음"
+  }
+ ],
+ "at": "2026-11-15 07:40:12",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ERP_SO_NO",
+   "col_after": false,
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0200-Sf2100a"
+   ],
+   "has_else": true
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sedb272",
+    "SSP0200-S131435",
+    "SSP0200-S85b8aa",
+    "SSP0200-S2f9f02",
+    "SSP0200-S94b8b4"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "PROJECT_CODE",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sd79fbb",
+    "SSP0200-S29f2d4",
+    "SSP0200-S3dc01f",
+    "SSP0200-Se999c5",
+    "SSP0200-Sfc67b5",
+    "SSP0200-Sbc0cc5"
+   ],
+   "has_else": true
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0200-Sae259d",
+    "SSP0200-Sa21fb1",
+    "SSP0200-Se4684b"
+   ],
+   "has_else": false
+  }
+ ]
+}

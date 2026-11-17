@@ -1,0 +1,568 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Sales Site Priority",
+     "rows_before": 61,
+     "rows_after": 61,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "",
+       "after": "81"
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "ATL_DE_RDG",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SCM_SITE_ID",
+       "before": "AMCOME782-A1-0A0",
+       "after": "ATL_DE_RDG"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "3",
+       "after": "AMCOME782-A1-0A0"
+      },
+      {
+       "row": 0,
+       "col": "PRIO_RANK",
+       "before": "2025-04-21",
+       "after": "3"
+      },
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2999-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "",
+       "after": "2999-12-31"
+      },
+      {
+       "row": 0,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0A0|20250421|29991231|3",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 0,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0A0|20250421|29991231|3"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "DIVISION_ID",
+       "before": "",
+       "after": "81"
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "ATL_DE_RDG",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "SCM_SITE_ID",
+       "before": "AMCOME782-A1-0K0",
+       "after": "ATL_DE_RDG"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "3",
+       "after": "AMCOME782-A1-0K0"
+      },
+      {
+       "row": 1,
+       "col": "PRIO_RANK",
+       "before": "2025-04-21",
+       "after": "3"
+      },
+      {
+       "row": 1,
+       "col": "FROM_YYYYMMDD",
+       "before": "2999-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 1,
+       "col": "TO_YYYYMMDD",
+       "before": "",
+       "after": "2999-12-31"
+      },
+      {
+       "row": 1,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0K0|20250421|29991231|3",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 1,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0K0|20250421|29991231|3"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "DIVISION_ID",
+       "before": "",
+       "after": "81"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "Cummins(OTS)_US_CLU",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "SCM_SITE_ID",
+       "before": "AMVWGEVO0-A1-0E0",
+       "after": "Cummins(OTS)_US_CLU"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "1",
+       "after": "AMVWGEVO0-A1-0E0"
+      },
+      {
+       "row": 2,
+       "col": "PRIO_RANK",
+       "before": "2025-04-21",
+       "after": "1"
+      },
+      {
+       "row": 2,
+       "col": "FROM_YYYYMMDD",
+       "before": "2999-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 2,
+       "col": "TO_YYYYMMDD",
+       "before": "",
+       "after": "2999-12-31"
+      },
+      {
+       "row": 2,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0E0|20250421|29991231|1",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 2,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0E0|20250421|29991231|1"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "DIVISION_ID",
+       "before": "",
+       "after": "81"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "Cummins(OTS)_US_CLU",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "SCM_SITE_ID",
+       "before": "AMVWGEVO0-A1-0L0",
+       "after": "Cummins(OTS)_US_CLU"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "1",
+       "after": "AMVWGEVO0-A1-0L0"
+      },
+      {
+       "row": 3,
+       "col": "PRIO_RANK",
+       "before": "2025-04-21",
+       "after": "1"
+      },
+      {
+       "row": 3,
+       "col": "FROM_YYYYMMDD",
+       "before": "2999-12-31",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 3,
+       "col": "TO_YYYYMMDD",
+       "before": "",
+       "after": "2999-12-31"
+      },
+      {
+       "row": 3,
+       "col": "VALUE_DESCRIPTION",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "VALID_YN",
+       "before": "SYSTEM",
+       "after": "Y"
+      },
+      {
+       "row": 3,
+       "col": "CREATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 3,
+       "col": "CREATION_DATE",
+       "before": "SYSTEM",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATED_BY",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATE_DATE",
+       "before": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0L0|20250421|29991231|1",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 3,
+       "col": "PRE_KEY_VALUES",
+       "before": null,
+       "after": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0L0|20250421|29991231|1"
+      }
+     ],
+     "more": 840
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Sales Site Priority",
+     "rows_before": 61,
+     "rows_after": 61,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 41,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 42,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 OPMZ_PLAN_GR_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 1, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 SCM_SITE_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Se6364d"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 ITEM_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0131-Se6364d"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 00:05:11",
+ "edit_mode": true
+}

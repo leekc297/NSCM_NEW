@@ -1,8 +1,6 @@
 import {
   COLUMN,
   MENU_ID,
-  RATE_DIVISOR,
-  SAVE_NO_RATE_CONVERT_MEASURES,
   SAVE_PERIOD_DELIMITER,
   SAVE_ROW_DELIMITER,
 } from '../capa-loss-plan.constants';
@@ -43,20 +41,13 @@ export const pickDirtyRows = (rows: readonly Scp0106Row[]): Scp0106Row[] =>
   rows.filter(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'M');
 
 /**
- * 저장 시 비율 환산 — `MSR_TP_CD` 가 제외 9종이 **아니면** `값/100` 으로 저장한다(03 §3.5, V-48).
- * 화면은 %, DB 는 비율이라 여기서만 나눈다.
+ * 저장 시 비율 `/100` 환산은 **2026-11-11 패키지(PKG_SCP0106)로 이전됐다(AJS).**
  *
- * **GET 쪽 `x100` 은 SP(6시트)/뷰(CURRENT 2시트)가 이미 했으므로 화면에서 재적용하지 않는다**
- * — 재적용하면 100배 오류다(C-13). 이 파일에 `* 100` 이 없는 것이 정상이다.
+ * 패키지가 제외 9종(`SCP_PROD_PLAN`·`PROD_CAPA_M`·`PROD_CAPA_D`·`SCP_PROD_PLAN_DDN`·`THRY_CAPA_D`·
+ * `SD_RT`·`WT_RT`·`TD_RT`·`MC_RT`)을 빼고 나머지 비율 measure·`PFRSLT_QTY`/`BASE_QTY`·기간 셀값을
+ * `값/100.0` 으로 직접 환산한다. 따라서 FE 는 **화면 원값(%)을 그대로** 보낸다 — 여기서 다시 나누면
+ * 이중 환산(1/100)이 된다. GET 쪽 `x100` 도 SP/뷰가 이미 하므로 화면 재적용 없음(C-13).
  */
-export const toSaveValue = (measure: string, raw: unknown): string => {
-  const text = toText(raw);
-  if (text === '') return '';
-  if (SAVE_NO_RATE_CONVERT_MEASURES.includes(measure)) return text;
-  const numeric = Number(text);
-  if (!Number.isFinite(numeric)) return text;
-  return String(numeric / RATE_DIVISOR);
-};
 
 export interface SavePayloadInput {
   rows: readonly Scp0106Row[];
@@ -115,22 +106,17 @@ export const buildSavePayload = ({
   let dateColumnValues = '';
 
   for (const row of rows) {
-    const measure = toText(row[COLUMN.MEASURE]);
     for (const [param, column] of Object.entries(columnOf)) {
-      let cell: string;
-      if (!isModelSave && column === COLUMN.ELTR_LN_TP_CD) {
-        cell = LINE_ELTR_LN_TP_CD_LITERAL;
-      } else if (column === COLUMN.PFRSLT_QTY || column === COLUMN.BASE_QTY) {
-        // 실적/기준 수량도 measure 기준 비율 환산 대상이다(§3.5 `PFRSLT_NVL`/`BASE_NVL`).
-        cell = toSaveValue(measure, row[column]);
-      } else {
-        cell = toText(row[column]);
-      }
+      // ELTR_LN_TP_CD 만 LINE 저장에서 리터럴 `'-'`, 그 외는 원값 그대로(비율 /100 은 패키지 소관).
+      const cell =
+        !isModelSave && column === COLUMN.ELTR_LN_TP_CD
+          ? LINE_ELTR_LN_TP_CD_LITERAL
+          : toText(row[column]);
       serialized[param] += `${cell}${SAVE_ROW_DELIMITER}`;
     }
     for (const name of periodColumnNames) {
       dateColumnNames += `${name}${SAVE_PERIOD_DELIMITER}`;
-      dateColumnValues += `${toSaveValue(measure, row[name])}${SAVE_PERIOD_DELIMITER}`;
+      dateColumnValues += `${toText(row[name])}${SAVE_PERIOD_DELIMITER}`;
     }
     dateColumnNames += SAVE_ROW_DELIMITER;
     dateColumnValues += SAVE_ROW_DELIMITER;

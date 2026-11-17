@@ -47,7 +47,7 @@ Layer 1  packages/foundation   ← 기반 (apis/assets/constants/lib/models/styl
 - ❌ feature 간 직접 import (`admin → demand` 등) — 조합은 `apps/web` 에서만
 - ❌ 하위 레이어가 상위 레이어 자원 참조
 
-> CLAUDE.md §3 원칙 2 + `_tobe/01_file_structure.md` 와 동일 — 본 hook 은 공식 설계서 출처로 이를 재확인.
+> CLAUDE.md §1-3 + `_tobe/01_file_structure.md` 와 동일 — 본 hook 은 공식 설계서 출처로 이를 재확인. (2026-11-13 정정: `CLAUDE.md §3 원칙 2` → `§1-3` — 2026-10-12 재구성 뒤 Layer 의존 방향은 §1 절대 원칙 3번, §3 은 작업 라우팅)
 
 ---
 
@@ -59,7 +59,7 @@ Layer 1  packages/foundation   ← 기반 (apis/assets/constants/lib/models/styl
 2. **Relative Import 금지** (패키지 사이) — 패키지 독립성 파괴 + 성능 저하. **Path Alias** 2-depth import 만 허용.
    - ✅ `@foundation/utils`, `@shared/hooks`, `@admin/...`
    - ❌ `../../../packages/shared/...`
-3. 동일 패키지 **내부**의 상대 import 는 ESLint 정렬 규칙(#relative-import-order) 준수.
+3. 동일 패키지 **내부**의 상대 import 는 ESLint 정렬 규칙(#relative-import-order) 준수. (2026-11-14 정정: 허용 범위는 같은 화면 폴더 안(`./`, `../`). 화면 밖 공용 컴포넌트는 비상대 경로 `'features/<도메인>/src/components'`)
 
 ---
 
@@ -113,7 +113,7 @@ grep -rEn "from '@demand/" features/admin/                                # 0
 
 ## 8. Cross-ref (본 hook 이 묶는 화면/인프라 hook)
 
-- 아키텍처 상세: `_tobe/01_file_structure.md` / `_tobe/02_imports.md` / CLAUDE.md §3·§4
+- 아키텍처 상세: `_tobe/01_file_structure.md` / `_tobe/02_imports.md` / CLAUDE.md §1-3·§4 (11-13 정정)
 - MDI 격리: `mdi-tab-isolation-mandatory.md`
 - 타입 SSOT: `procedure-dts-ssot-mandatory.md`
 - 컴포넌트 계층: `atomic-design-components.md`

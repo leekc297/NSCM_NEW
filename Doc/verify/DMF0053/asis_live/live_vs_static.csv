@@ -1,0 +1,61 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0003_GET_QTY_TYPE_CODE,DMF0053_CustFcstWaterfall.cs:1592 GetQtyData,1회 · 구간 load,MATCH,
+SP,DMF0003_GET_REPORT_BUCKET_TYPE_CODE,DMF0053_CustFcstWaterfall.cs:1579 GetBucketType,1회 · 구간 load,MATCH,
+SP,DMF0053_GET_SPREAD_TITLE,DMF0053_CustFcstWaterfall.cs:1563 GetSpdTitle,3회 · 구간 find/load,MATCH,
+SP,FP_SQL_LOG(로그 기록),,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_GET_DAY_RANGE,DMF0053_CustFcstWaterfall.cs:1540 GetDayRange,2회 · 구간 load,MATCH,
+SP,SCM0001_GET_LOOKUP_VALUES,DMF0053_CustFcstWaterfall.cs:1605 GetItemType,1회 · 구간 load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,9회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0053_GET_CUST_FCST_WATERFALL,DMF0053_CustFcstWaterfall.cs:734 FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_BIZ_TYPE_BY_DIVISION,DMF0053_CustFcstWaterfall.cs:1649 GetBizTypebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_CUSTOMER_BY_DIVISION,DMF0053_CustFcstWaterfall.cs:1634 GetCustomerbyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_DIVISION,DMF0053_CustFcstWaterfall.cs:1494 GetDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER,DMF0053_CustFcstWaterfall.cs:1524 GetPlantSitebyEndCustomer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_BY_DIVISION,DMF0053_CustFcstWaterfall.cs:1508 GetScmSitebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_TEAM_BY_DIVISION,DMF0053_CustFcstWaterfall.cs:1620 GetTeambyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),59개,43개,INFO,공통 25 · 선언만 34 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbSalesSite,Y,Sales Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtProject,Y,Project,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model / Nickname,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbBizType,Y,Biz Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbItemType,Y,Item Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbCustomer,Y,End Customer,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnProject,Y,layoutControlItem3,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtOwner,Y,Owner,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnOwner,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpCreateDate,Y,Input Date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboQTY,Y,QTY,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkSum,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtVersion,Y,Date* [필수],LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnVersion,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=False
+GRID,spdMain/CUST Fcst Waterfall,정적 컬럼 사실 66행(시트 미지정 포함),컬럼 52(보임 21) · 헤더 3단 · 행 0 · 고정 16,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

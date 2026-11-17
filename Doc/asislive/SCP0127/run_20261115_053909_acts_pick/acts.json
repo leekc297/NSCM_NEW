@@ -1,0 +1,33 @@
+{
+ "id": "SCP0127",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0127-Sdb912c",
+    "SCP0127-S7b4d50"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:38:35",
+ "plan": {
+  "scenarios": 2,
+  "used": [
+   "ITEM_ID"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

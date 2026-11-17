@@ -1,0 +1,764 @@
+{
+ "id": "SCP0111",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1713,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLAN_TYPE",
+       "before": "FN",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPERATION_GROUP",
+       "before": "Pack",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CELL_MODEL_NICK_NAME",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CELL_ITEM_ID",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NICK_NAME",
+       "before": "FMC-C727 24",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "AMDAU0459B",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CELL_CF",
+       "before": "24.0000",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "COMPANY_ID",
+       "before": "WA00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLANT_ID_DESCRIPTION",
+       "before": "WA00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "MEASURE_LABEL",
+       "before": "Inv.",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_PRODUCT",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALUE_TYPE",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LINE_ID",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE_DESCRIPTION",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "INCOTERMS",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BOH_QTY",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "UOM",
+       "before": "EA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SEQ_FLAG",
+       "before": "260",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "MEASURE",
+       "before": "INV",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLANT_ID",
+       "before": "WA00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_SITE",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202608",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202609",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202610",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202611",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202612",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "202701",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "FMC-C727 28",
+       "after": "FMC-C727 24"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "AMDAU0100J",
+       "after": "AMDAU0459B"
+      },
+      {
+       "row": 1,
+       "col": "CELL_CF",
+       "before": "28.0000",
+       "after": "24.0000"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "FMC-C727 30",
+       "after": "FMC-C727 28"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "AMDAU0098J",
+       "after": "AMDAU0100J"
+      },
+      {
+       "row": 2,
+       "col": "CELL_CF",
+       "before": "30.0000",
+       "after": "28.0000"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "AMDAU0098K",
+       "after": "AMDAU0098J"
+      },
+      {
+       "row": 3,
+       "col": "BOH_QTY",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202608",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202609",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202610",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202611",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202612",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "202701",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "FMC-C727 32",
+       "after": "FMC-C727 30"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "AMDAU0096J",
+       "after": "AMDAU0098K"
+      },
+      {
+       "row": 4,
+       "col": "CELL_CF",
+       "before": "32.0000",
+       "after": "30.0000"
+      },
+      {
+       "row": 5,
+       "col": "ITEM_ID",
+       "before": "AMDAU0096K",
+       "after": "AMDAU0096J"
+      },
+      {
+       "row": 6,
+       "col": "ITEM_ID",
+       "before": "AMDAU0097I",
+       "after": "AMDAU0096K"
+      },
+      {
+       "row": 7,
+       "col": "ITEM_ID",
+       "before": "AMDAU0097J",
+       "after": "AMDAU0097I"
+      },
+      {
+       "row": 7,
+       "col": "BOH_QTY",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202608",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202609",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202610",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202611",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202612",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 7,
+       "col": "202701",
+       "before": "19",
+       "after": "1"
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "AMDAU0461B",
+       "after": "AMDAU0097J"
+      },
+      {
+       "row": 8,
+       "col": "BOH_QTY",
+       "before": "1",
+       "after": "19"
+      },
+      {
+       "row": 8,
+       "col": "202608",
+       "before": "1",
+       "after": "19"
+      },
+      {
+       "row": 8,
+       "col": "202609",
+       "before": "1",
+       "after": "19"
+      }
+     ],
+     "more": 562
+    }
+   ],
+   "new_rows": {
+    "spdMain/Integration PSI": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:35:24.080",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Integration PSI",
+    "sheet": "Integration PSI",
+    "rows_total": 1713,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "PLAN_TYPE",
+      "label": "Plan Type",
+      "data_field": "PLAN_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "DIVISION_ID",
+      "label": "Div",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "OPERATION_GROUP",
+      "label": "Operation",
+      "data_field": "OPERATION_GROUP",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "CELL_MODEL_NICK_NAME",
+      "label": "Cell Model Nick Name",
+      "data_field": "CELL_MODEL_NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "CELL_ITEM_ID",
+      "label": "Cell Model",
+      "data_field": "CELL_ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "ITEM_ID",
+      "label": "Model",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "CELL_CF",
+      "label": "Cell Coversion Factor",
+      "data_field": "CELL_CF",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "COMPANY_ID",
+      "label": "Company",
+      "data_field": "COMPANY_ID",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "PLANT_ID_DESCRIPTION",
+      "label": "Plant",
+      "data_field": "PLANT_ID_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "MEASURE_LABEL",
+      "label": "Measure",
+      "data_field": "MEASURE_LABEL",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "TO_PRODUCT",
+      "label": "To Product",
+      "data_field": "TO_PRODUCT",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "VALUE_TYPE",
+      "label": "Valuation Type",
+      "data_field": "VALUE_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "LINE_ID",
+      "label": "Line",
+      "data_field": "LINE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "TO_SITE_DESCRIPTION",
+      "label": "To Site",
+      "data_field": "TO_SITE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "INCOTERMS",
+      "label": "Incoterms",
+      "data_field": "INCOTERMS",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "BOH_QTY",
+      "label": "BOH",
+      "data_field": "BOH_QTY",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "UOM",
+      "label": "UOM",
+      "data_field": "UOM",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "SEQ_FLAG",
+      "label": "SEQ_FLAG",
+      "data_field": "SEQ_FLAG",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "MEASURE",
+      "label": "MEASURE",
+      "data_field": "MEASURE",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "PLANT_ID",
+      "label": "Plant",
+      "data_field": "PLANT_ID",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "TO_SITE",
+      "label": "To Site",
+      "data_field": "TO_SITE",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "202608",
+      "label": "2026-08",
+      "data_field": "202608",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "202609",
+      "label": "2026-09",
+      "data_field": "202609",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "202610",
+      "label": "2026-10",
+      "data_field": "202610",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "202611",
+      "label": "2026-11",
+      "data_field": "202611",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "202612",
+      "label": "2026-12",
+      "data_field": "202612",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "202701",
+      "label": "2027-01",
+      "data_field": "202701",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "100100000000000000000000000000"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "81",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:35:24.088"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "모든 항목은 필수 입력입니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:34:32",
+ "edit_focus": "누르지 못함",
+ "edit_mode": true
+}

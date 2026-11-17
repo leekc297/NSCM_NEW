@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0033-Sb9414a,DIVISION,,,,값 미도출,"if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, 0) == ""I"") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ if (string.IsNullOrEmpty(divisionId))",

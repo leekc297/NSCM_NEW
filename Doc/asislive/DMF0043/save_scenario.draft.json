@@ -1,0 +1,79 @@
+{
+ "id": "DMF0043",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "save_sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "status": "고칠 열 후보 없음",
+   "table": "DM_MST_CONTRIBUTE_VER",
+   "pk": [
+    "VER_SEQ"
+   ],
+   "match": {
+    "VER_SEQ": "VER_SEQ"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/ContributeMain",
+   "writes": {
+    "DM_MST_CONTRIBUTE_VER": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ],
+    "DM_MST_CONTRIBUTE_RATIO_DTL": [
+     "INSERT INTO"
+    ],
+    "DM_MST_CONTRIBUTE_RATIO_MST": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0043_SAVE_DM_MST_CONTRIBUTE_VER → SP DMF0043_SAVE_DM_MST_CONTRIBUTE_VER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "DM_MST_CONTRIBUTE_RATIO_DTL",
+    "DM_MST_CONTRIBUTE_RATIO_MST"
+   ],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "save_sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "status": "키가 없는 테이블",
+   "table": "DM_MST_CONTRIBUTE_RATIO_DTL",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "VER_SEQ",
+    "db_col": "VER_SEQ",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/ContributeMain",
+   "writes": {
+    "DM_MST_CONTRIBUTE_RATIO_MST": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "DM_MST_CONTRIBUTE_RATIO_DTL": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO → SP DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "DM_MST_CONTRIBUTE_RATIO_MST"
+   ],
+   "edit_candidates": [
+    {
+     "col": "VER_SEQ",
+     "db_col": "VER_SEQ",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,98 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 02:19:02.806",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 4.39,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Main"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Main'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 02:19:02.831",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 65,
+   "rows_kind": "DataSet rows",
+   "ms": 4.98,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 02:19:02.906",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0102_GET_BOD_VALIDATION_REPORT",
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 55.49,
+   "params": {
+    "p_division_id": "40",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_PIVOT_yyyymm": "[202610]",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "inline": "EXEC SCP0102_GET_BOD_VALIDATION_REPORT @p_division_id='40', @p_from_yyyymmdd='20261001', @p_to_yyyymmdd='20261031', @p_from_site='', @p_to_site='', @p_PIVOT_yyyymm='[202610]', @p_from_country='', @p_to_country='', @p_from_city='', @p_to_city='', @p_from_area='', @p_to_area=''",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-14 02:19:41.138",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 62.84,
+   "params": {
+    "p_division_id": "40",
+    "p_from_yyyymmdd": "",
+    "p_to_yyyymmdd": "",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_bod_id": "",
+    "p_exfactory_from_yyyymmdd": "20261114",
+    "p_exfactory_to_yyyymmdd": "20261214",
+    "p_fdest_from_yyyymmdd": "",
+    "p_fdest_to_yyyymmdd": "",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "inline": "EXEC SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL @p_division_id='40', @p_from_yyyymmdd='', @p_to_yyyymmdd='', @p_from_site='', @p_to_site='', @p_bod_id='', @p_route_id ='', @p_exfactory_from_yyyymmdd='20261114', @p_exfactory_to_yyyymmdd='20261214', @p_fdest_from_yyyymmdd='', @p_fdest_to_yyyymmdd='', @p_from_country='', @p_to_country='', @p_from_city='', @p_to_city='', @p_from_area='', @p_to_area=''",
+   "phase": "action:btn_Search"
+  }
+ ]
+}

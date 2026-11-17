@@ -1,0 +1,60 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 11:53:48.269",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 3.68,
+   "params": {
+    "p_program_id": "SSP0020",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Delegate"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SSP0020', @p_user_id='jaeuk.shin', @p_sheet_name='Delegate'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-15 11:53:48.318",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0020_GET_DELEGATE",
+   "sp": "SSP0020_GET_DELEGATE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.05,
+   "params": {
+    "p_user_id": "jaeuk.shin",
+    "p_language": "KO"
+   },
+   "inline": "EXEC SSP0020_GET_DELEGATE @p_user_id='jaeuk.shin', @p_language='KO'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-15 11:53:48.431",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.47,
+   "params": {
+    "p_menu_id": "SSP0020",
+    "p_log_type": "FIND",
+    "p_log_cnt": "1",
+    "p_db_time": "0.022",
+    "p_ui_time": "0.093",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SSP0020', @p_log_type='FIND', @p_log_cnt='1', @p_db_time='0.022', @p_ui_time='0.093', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

@@ -1,0 +1,868 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-17 16:32:50.790",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 12.26,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:50.822",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.67,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:50.854",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.46,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:50.921",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 25.23,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.022",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 11.93,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.053",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.23,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.088",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 25.6,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.156",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 25.01,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.207",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 12.77,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.239",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 25.11,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.270",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 22.82,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.336",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.62,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.752",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 13.8,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.784",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 24.08,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.816",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.48,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:51.875",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 23.16,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.576",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 28.94,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.623",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 36.81,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.673",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.68,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.754",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 38.88,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.851",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 23.58,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.901",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 43.43,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:56.951",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.37,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.030",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.33,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.102",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 29.71,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.150",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 40.5,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.197",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 38.64,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.272",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.07,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.469",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 32.31,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.517",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 40.98,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.571",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 46.2,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:32:57.667",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 49.83,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboDivision"
+  },
+  {
+   "at": "2026-11-17 16:33:02.169",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 37.03,
+   "params": {
+    "p_from_yyyymm": "202610",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202610', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.217",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 40.2,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.265",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 39.39,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.344",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.91,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.416",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 27.4,
+   "params": {
+    "p_from_yyyymm": "202610",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202610', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.460",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 36.4,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.505",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 36.62,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:02.578",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 36.56,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.117",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 28.41,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.166",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 41.83,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.210",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 35.11,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.279",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 38.06,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.349",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 25.63,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": ""
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0104', @p_sheet_name=''",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.397",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 39.99,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.432",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 26.18,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  },
+  {
+   "at": "2026-11-17 16:33:07.495",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 26.28,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='ASSEMBLY'",
+   "phase": "action:set:cboVersion"
+  }
+ ]
+}

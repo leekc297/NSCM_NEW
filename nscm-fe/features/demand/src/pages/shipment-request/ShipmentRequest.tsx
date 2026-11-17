@@ -163,6 +163,28 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => applyBohFrontFill(mainData?.o_rc1 ?? []),
     [mainData]
   );
+
+  // From Plant 별 SHIP_FROZEN 맵 — 신규행 BOD 팝업이 From Site(plant)를 채울 때 그 plant 의 실제
+  //   frozen(SCM_MST_SITE.SHIP_FROZEN, SITE_TYPE='PLANT')을 반영하기 위함. SHIP_FROZEN 은 PLANT 에만
+  //   있어(SALES 전부 0) 공용 SCM0001(SALES 전용)로는 못 받는다 → PLANT 전용 격리 콤보를 신규 등록
+  //   (dmf0045_plant_ship_frozen_combo_register.sql). division 단위 로드, (DIVISION_ID,SCM_SITE_ID) 유일.
+  const [siteInfoRows] = useTabComboQueries({
+    filters: [{ comboId: 'DMF0045_GET_PLANT_SHIP_FROZEN', divisionId: sc.divisionId }],
+    enabled: !!sc.divisionId,
+  });
+  const siteFrozenMap = useMemo<Map<string, number>>(() => {
+    const m = new Map<string, number>();
+    (
+      siteInfoRows as
+        | Array<{ SCM_SITE_ID?: string; CODE?: string; SHIP_FROZEN?: unknown }>
+        | undefined
+    )?.forEach(r => {
+      const site = String(r.SCM_SITE_ID ?? r.CODE ?? '');
+      if (site) m.set(site, Math.max(0, Math.trunc(Number(r.SHIP_FROZEN ?? 0)) || 0));
+    });
+    return m;
+  }, [siteInfoRows]);
+
   // 신규(Insert) 행 — 저장 필수값 검증·조립 대상. Grid collectionView 에 직접 물려 있어 rows 파생.
   const pendingRows = rows.filter(r => r.CRUD_TYPE === 'I');
   useEffect(() => {
@@ -599,6 +621,23 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
           const target = rows.find(r => r.INSERT_GROUP_ID === popupGroupId);
           if (target) {
             Object.assign(target as Record<string, unknown>, patch);
+            // BOD 팝업이 From Site 를 채우면 그 사이트의 SHIP_FROZEN(SCM0001 콤보)으로 신규행 frozen 을
+            //   확정한다 — 초기 today+10 플랫 → 사이트 실제 frozen 교체(editLock 이 FROM_SITE 유무로 분기).
+            //   frozen 이 더 길어 새로 잠기는 선두 D_ 셀에 이미 입력값이 있으면 비운다 — 저장은 D_ 수집이라
+            //   안 비우면 마감일 값이 저장된다(잠금 셀 데이터 잔류 금지, 사용자 지시 2026-11-10).
+            if (typeof patch.FROM_SITE === 'string' && patch.FROM_SITE) {
+              const frozen = siteFrozenMap.get(patch.FROM_SITE) ?? 0;
+              const rec = target as Record<string, unknown>;
+              rec.SHIP_FROZEN = frozen;
+              if (frozen > 0) {
+                const frozenDays = spreadTitleRows
+                  .map(r => String(r.COLUMN_NAME ?? ''))
+                  .filter(b => /^D_\d{8}$/.test(b))
+                  .sort()
+                  .slice(0, frozen);
+                for (const b of frozenDays) if (b in rec) rec[b] = null;
+              }
+            }
             gridRef.current?.invalidate();
           }
           setPopupRow(null);

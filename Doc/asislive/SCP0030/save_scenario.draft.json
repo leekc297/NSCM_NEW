@@ -1,0 +1,97 @@
+{
+ "id": "SCP0030",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0030_SAVE_BOD_ITEM",
+   "save_sp": "SCP0030_SAVE_BOD_ITEM",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_BOD_ITEM",
+   "pk": [
+    "SEQ"
+   ],
+   "match": {
+    "SEQ": "SEQ"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "scp_mst_bod_item_h",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/BOD ITEM",
+   "writes": {
+    "SCP_MST_BOD_ITEM": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0030_SAVE_BOD_ITEM → SP SCP0030_SAVE_BOD_ITEM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "scp_mst_bod_item_h": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    {
+     "col": "SAFETY_STOCK",
+     "db_col": "SAFETY_STOCK",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 21:59:38"
+   }
+  },
+  {
+   "endpoint": "SCP.SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+   "save_sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_OPMZ_BOD_EXCLUDED_ITEM",
+   "pk": [
+    "DIVISION_ID",
+    "ITEM_ID",
+    "BOD_ID",
+    "BOD_EX_FROM_YYYYMMDD",
+    "BOD_EX_TO_YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "ITEM_ID": "ITEM_ID",
+    "BOD_ID": "BOD_ID",
+    "BOD_EX_FROM_YYYYMMDD": "BOD_EX_FROM_YYYYMMDD",
+    "BOD_EX_TO_YYYYMMDD": "BOD_EX_TO_YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Excluded Item",
+   "writes": {
+    "SCP_OPMZ_BOD_EXCLUDED_ITEM": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0030_SAVE_BOD_EXCLUDED_ITEM → SP SCP0030_SAVE_BOD_EXCLUDED_ITEM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

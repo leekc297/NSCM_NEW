@@ -71,12 +71,11 @@ export enum BUCKET_TYPE {
 // AS-IS DefineProperty `cboBucketType.SelectedValue = BucketType.Daily`(cs:187, G17).
 export const DEFAULT_BUCKET_TYPE = BUCKET_TYPE.DAILY;
 
-// AS-IS GetDayRange — SP02 `SCM0001_GET_SCP_DAY_PERIOD(p_from_date='', p_offset_day='55', p_timezone='AS054')`.
-//   결과는 '오늘(KST) ~ 오늘+55일' 을 달력 마스터 존재일로 clamp 한 값이다(design 02 §2.5).
+// AS-IS GetDayRange — SP02 `SCM0001_GET_SCP_DAY_PERIOD(p_from_date='', p_offset_day='55', p_timezone)`.
+//   결과는 '오늘 ~ 오늘+55일' 을 달력 마스터 존재일로 clamp 한 값이다(design 02 §2.5). p_timezone 은 호출부에서
+//   sessionTimeZone(session) 으로 넘긴다 — 사용자 등록 timezone 기준 '오늘'(종전 'AS054' 하드코딩 교정 2026-11-12).
 //   COMBO.DAY_PERIOD 의 @offsetDay(문자열화해 전달) / makeInitPeriod 의 dayjs add(number) 양쪽이 쓴다.
 export const PERIOD_OFFSET_DAY = 55;
-// COMBO.DAY_PERIOD 의 @timeZone — FN_MULTY_TIME 기준 KST. 빈 시작일을 서버 '오늘(KST)'로 산출한다.
-export const PERIOD_TIMEZONE = 'AS054';
 
 // 동적 기간칼럼 접두 (design 03 §2.2). `B_` 는 판정식이 `IndexOf("B_") > 0` 이라 도달 불가 — 구현하지 않는다.
 export const PIVOT_PREFIX = {

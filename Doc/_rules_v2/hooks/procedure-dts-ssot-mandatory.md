@@ -8,7 +8,7 @@
 
 ## 0. 원칙 — "procedure.d.ts 가 모든 타입 추론의 뿌리"
 
-모든 DB 프로시저의 IN/OUT 규격을 **`procedure.d.ts` 한 파일**에 전역 인터페이스로 정의한다. API 호출부에서 타입을 매번 재정의하지 않고, 프로젝트 전체가 동일 규격을 참조한다. TypeScript 가 매우 strict 하게 설정되어 있어 **제네릭을 통한 타입 추론의 기반이 곧 procedure.d.ts** 다. 이 파일이 틀리면 화면 전체가 잘못된 타입으로 컴파일된다.
+모든 DB 프로시저의 IN/OUT 규격을 **`procedures.d.ts` 한 파일**(`nscm-fe/configs/types/procedures.d.ts`)에 전역 인터페이스로 정의한다. (2026-11-13 정정: `procedure.d.ts` → 실재 파일명 `procedures.d.ts` — 본 문서의 나머지 `procedure.d.ts` 표기와 설계서·인수인계서 인용도 이 파일을 가리킨다) API 호출부에서 타입을 매번 재정의하지 않고, 프로젝트 전체가 동일 규격을 참조한다. TypeScript 가 매우 strict 하게 설정되어 있어 **제네릭을 통한 타입 추론의 기반이 곧 procedure.d.ts** 다. 이 파일이 틀리면 화면 전체가 잘못된 타입으로 컴파일된다.
 
 > 인수인계서 §3-3 명시: "(중요) procedure.d.ts 설정 — 프로시저 IN/OUT 을 정확하게 작성해야 함. 이후 페이지 내 모든 부분에서 이 정보를 바탕으로 작업이 이루어집니다."
 

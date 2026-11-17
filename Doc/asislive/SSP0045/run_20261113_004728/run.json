@@ -1,0 +1,153 @@
+{
+ "id": "SSP0045",
+ "started": "2026-11-13 00:47:28.427",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 00:47:28.681",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0045_ShipmentRequest",
+   "form_text": "Shipment Request SEMI",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:47:33.366"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 00:47:36.628",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0045\\run_20261113_004728\\dump_load.json",
+   "control_count": 37,
+   "grid_count": 1,
+   "total": "Total : 1,750",
+   "time_status": "DB : 13.228s, UI : 0.019s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:47:36.633"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 00:47:36.948",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0045\\run_20261113_004728\\shots\\SSP0045_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:47:37.091"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 00:47:37.755",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:47:38.303"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 00:53:42.312",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0045\\run_20261113_004728\\dump_find.json",
+   "control_count": 37,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 359.576s, UI : 0.017s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:42.333"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 00:53:42.494",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0045\\run_20261113_004728\\shots\\SSP0045_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:42.685"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 00:53:43.166",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:44.310"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 28,
+  "calls_with_params": 27
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0045_ShipmentRequest",
+  "form_text": "Shipment Request SEMI",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 359.576s, UI : 0.017s",
+  "total": "Total : ",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 357
+ },
+ "t_open": "2026-11-13 00:47:28.637",
+ "t_find": "2026-11-13 00:47:37.413",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 37,
+  "layout_items": 11,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 89,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 28,
+  "calls_screen": 28,
+  "calls_find": 9,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 00:53:44.519",
+ "exit": 0
+}

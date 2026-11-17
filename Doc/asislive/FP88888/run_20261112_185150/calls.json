@@ -1,0 +1,14 @@
+{
+ "id": "FP88888",
+ "window": [
+  "2026-11-12 18:51:50.465",
+  "2026-11-12 18:51:51.699"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": []
+}

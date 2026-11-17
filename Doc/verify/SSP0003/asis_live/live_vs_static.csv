@@ -1,0 +1,70 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCM0001_GET_SCP_DAY_PERIOD,SSP0003_ShipmentChangeRequestConfirm.cs:1864 GetDayRange,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SQL: DECLARE @TResult TABLE(,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM,SSP0003_ShipmentChangeRequestConfirm.cs:696 FindData_Main,1회 · 구간 find,MATCH,
+SP,SSP0200_GET_SHIPMENT_DIVISION,SSP0003_ShipmentChangeRequestConfirm.cs:317 InitControls,1회 · 구간 load,MATCH,
+SP,SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,UP_FX_GETCOMMONDATALIST,,16회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM,SSP0003_ShipmentChangeRequestConfirm.cs:1541 GetErpIFCheckNew,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM,SSP0003_ShipmentChangeRequestConfirm.cs:1458 GetErpIFCheckNew,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_GET_DELEGATEE_LOAD,SSP0003_ShipmentChangeRequestConfirm.cs:1834 Delegate_Load,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING,SSP0003_ShipmentChangeRequestConfirm.cs:772 FindData_Sub,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_GET_SSP_PLAN_PROCESSING_CHECK,SSP0003_ShipmentChangeRequestConfirm.cs:1619 EngProcessingChk,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM,SSP0003_ShipmentChangeRequestConfirm.cs:1207 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,SSP0003_ShipmentChangeRequestConfirm.cs:1207 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK,SSP0003_ShipmentChangeRequestConfirm.cs:1337 GetErpIFCheck,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0003_SAVE_SHIPMENT_REQUEST_DE_CONFIRM,SSP0003_ShipmentChangeRequestConfirm.cs:970 SaveDraftingData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0200_GET_SHIPMENT_STATUS,SSP0003_ShipmentChangeRequestConfirm.cs:1656 GetShipmentStatusChk,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),62개,51개,INFO,공통 30 · 선언만 32 · 실측만 21
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,FoxProgressDialog,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCancel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,loadingCircle,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,progressPanel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnSelfReject,Y,layoutControlItem10,LIVE,layout=usrLayoutControl1 visible=False
+CONDITION,drpPeriod,Y,Request Date,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboStatus,Y,Status,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnReject,Y,layoutControlItem10,LIVE,layout=usrLayoutControl1 visible=False
+CONDITION,btnApproval,Y,layoutControlItem10,LIVE,layout=usrLayoutControl1 visible=False
+CONDITION,btnRequestUser,Y,layoutControlItem13,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtRequest,Y,Requestor,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtItemID,Y,Model,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnItemId,Y,layoutControlItem2,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboChangeType,Y,Change Type,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtRequestNo,Y,Request No,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtRequestor,Y,Requestor,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtRequestDeptName,Y,Dept Name,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtApproval,Y,Approval,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtAppDeptName,Y,Dept Name,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtReasonDetail,Y,Reason Detail,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,usrLabel2,Y,layoutControlItem3,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtTitle,Y,Title,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtChangeReason,Y,Change Reason,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtRejectReason,Y,Reject Reason,LIVE,layout=usrLayoutControl3 visible=True
+GRID,spdMain/Shipment Change Request Confirm,정적 컬럼 사실 22행(시트 미지정 포함),컬럼 23(보임 19) · 헤더 1단 · 행 0 · 고정 7,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,txtApprovalDeptName/Shipment Change Request Confirm Detail,정적 컬럼 사실 54행(시트 미지정 포함),컬럼 55(보임 29) · 헤더 2단 · 행 0 · 고정 9,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

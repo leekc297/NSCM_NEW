@@ -1,2 +1,3 @@
 ﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
-DMF0005,production,DMF0005_GET_SALES_SITE_MODEL_PRODUCTION,REVIEW,0,15674,AS-IS 0행 · TO-BE 15674행 · 키 대조 없음,"미대응 인자 ['p_scm_site_id', 'p_valid_yn', 'p_created_by', 'p_userinfo', 'p_user_dept_id', 'p_end_cust_report_yn', 'p_project_info_yn']"
+DMF0005,production|같은 사용자,DMF0005_GET_SALES_SITE_MODEL_PRODUCTION,ERROR,0,15675,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+DMF0005,production,DMF0005_GET_SALES_SITE_MODEL_PRODUCTION,REVIEW,29,15675,"AS-IS 29행 · TO-BE 15675행 · 키 ['END_CUSTOMER', 'SOLDTO_CODE', 'SHIPTO_CODE', 'SCM_SITE_ID', 'ITEM_TYPE', 'ITEM_CLASS_NAME', 'ITEM_ID', 'ITEM_NAME'] AS-IS 전용 0 · TO-BE 전용 15646 · 값 대조 87칸(숫자 컬럼 3) · 불일치 컬럼 0","미대응 인자 ['p_scm_site_id', 'p_valid_yn', 'p_created_by', 'p_userinfo', 'p_user_dept_id']"

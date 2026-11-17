@@ -1,7 +1,7 @@
 {
  "id": "SSP0025",
  "asis": "SSP0025",
- "at": "2026-11-09 11:04:01",
+ "at": "2026-11-15 04:02:15",
  "has_asis": true,
  "tobe_cols": 18,
  "buttons": [
@@ -34,8 +34,10 @@
    "why_not": []
   },
   "p_delete": {
-   "rows": 1,
-   "why_not": []
+   "rows": 0,
+   "why_not": [
+    "AS-IS 삭제가 신규 행만(Delete:343 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
+   ]
   },
   "p_combo": {
    "rows": 18,
@@ -133,8 +135,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 25,
-   "used": 25
+   "rows": 24,
+   "used": 24
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -145,7 +147,7 @@
    "used": 0
   }
  },
- "rows": 25,
- "rows_used": 25,
+ "rows": 24,
+ "rows_used": 24,
  "dup_of_hand": 0
 }

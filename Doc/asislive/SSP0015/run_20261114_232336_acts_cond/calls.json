@@ -1,0 +1,238 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 23:23:17.668",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 3.76,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "81_HD",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='81_HD', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:18.326",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 652.54,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "81_HD",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='81_HD', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:18.335",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.48,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:18.343",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.05,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:18.359",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.96,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:18.368",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.73,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:25.722",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 3.75,
+   "params": {
+    "Code": "ShipmentRequestPlantSite",
+    "Param1": "81",
+    "Param2": "P",
+    "Param3": "E",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentRequestPlantSite', @Param1='81', @Param2='P', @Param3='E', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:26.376",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 651.33,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "81",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='81', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:26.384",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.85,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:26.393",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.91,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:26.410",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.81,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  },
+  {
+   "at": "2026-11-14 23:23:26.419",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 2.7,
+   "params": {
+    "p_from_date": "20261009",
+    "p_offset_day": "31",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='20261009', @p_offset_day=31, @p_timezone='AS054'",
+   "phase": "action:set:clbDivision"
+  }
+ ]
+}

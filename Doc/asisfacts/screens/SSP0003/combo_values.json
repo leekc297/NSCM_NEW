@@ -1,0 +1,18 @@
+{
+ "screen": "SSP0003",
+ "generated": "2026-11-14 19:26:33",
+ "vars": {
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:CHANGE_TYPE",
+    "GRID:FCST_TYPE",
+    "GRID:SHIPMENT_STATUS",
+    "GRID:STATUS_DETAIL"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0003/Shipment Change Request Confirm/CHANGE_TYPE ← SCM_MST_SHEET_COLUMNS SSP0003/Shipment Change Request Confirm Detail/STATUS_DETAIL",
+   "rows": []
+  }
+ }
+}

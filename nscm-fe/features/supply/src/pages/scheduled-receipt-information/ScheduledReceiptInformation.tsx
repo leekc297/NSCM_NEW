@@ -89,6 +89,9 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
   const staticColumns = useScheduledReceiptInformationStore(state => state.staticColumns);
   const fetchStaticColumns = useScheduledReceiptInformationStore(state => state.fetchStaticColumns);
   const searchParams = useScheduledReceiptInformationStore(state => state.searchParams);
+  const resetTabScopedConditions = useScheduledReceiptInformationStore(
+    state => state.resetTabScopedConditions
+  );
   const restoreSearchConditions = useScheduledReceiptInformationStore(
     state => state.restoreSearchConditions
   );
@@ -332,6 +335,10 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
       });
       return;
     }
+    // AS-IS SpdMain_ActiveSheetChanged(.cs:1466-1507) 등가 — 탭 전환 시 Plan Group/Site/Child Material
+    //   선택을 ALL 로 리셋(새 탭 콤보 재바인딩 재현). 안 하면 이전 탭 값이 남아 칸은 ALL 로 보이나 조회엔
+    //   이전 값이 실려 0행이 되는 desync(#4).
+    resetTabScopedConditions();
     setActiveTab(index as SHEET_INDEX);
   };
 
@@ -343,6 +350,14 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
     manual: false,
     upload: false,
   };
+
+  // Condition(F6) 개인화 저장에서 기간(fromDate)은 제외한다 — AS-IS BaseForm.SavePanelCondition 이
+  //   날짜/기간 컨트롤(UsrDatePicker/UsrDateRangePicker 등)을 저장 대상에서 제외(해당 분기 전체 주석,
+  //   .cs:2105-2126)하는 것과 등가(공통요건 R11 "Period/날짜 처리 안함"). 공용 EXCLUDED_DATE_PARAM
+  //   정규식이 'fromDate' 키를 못 잡아 저장되던 것을 화면에서 뺀다(#7). SubTitle 은 searchParam 을
+  //   F6 저장에만 쓰므로 fromDate 제외가 다른 동작에 영향 없다.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { fromDate: _omitFromDate, ...conditionSearchParam } = searchParams;
 
   return (
     <>
@@ -360,7 +375,7 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
         dataCount={countByTab[activeTab] ?? 0}
         excelFileName='ScheduledReceiptInformation'
         hotkeyConfig={hotkeyConfig}
-        searchParam={searchParams}
+        searchParam={conditionSearchParam}
       />
       <TabWrapper persist activeTabIndex={activeTab} setActiveTabIndex={onSheetChange}>
         <TabItem label='Virtual Bom'>

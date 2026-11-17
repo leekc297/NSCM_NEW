@@ -1,0 +1,180 @@
+{
+  "menuId": "SCP0033",
+  "page": "ShipmentSemiDeptDay",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-semi-dept-day",
+  "asisName": "Shipment_semi_dept_day",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Shipment Semi Dept Day",
+      "key": "SHIPMENT_SEMI_DEPT_DAY",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DEPARTURE_DAY",
+        "DIVISION_ID",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "OPERATION_GROUP",
+        "S_VALID_YN",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Departure day",
+        "Division*",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Operation Group",
+        "S_VALID_YN",
+        "Valid"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0033.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0033.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainKeyPress",
+      "target": "this.spdMain",
+      "event": "KeyPress",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

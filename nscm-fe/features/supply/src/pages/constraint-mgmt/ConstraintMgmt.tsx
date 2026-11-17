@@ -119,7 +119,10 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   // 하단은 row-context lazy fetch — 마스터를 클릭해 filters 가 세팅될 때만 발사한다.
-  const { data: detailData } = useTabProcQuery<MENU_ID, SHEETS.LOOKUP_DETAIL>({
+  const { data: detailData, refetch: refetchDetail } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.LOOKUP_DETAIL
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.LOOKUP_DETAIL,
     tabId,
@@ -397,6 +400,47 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  /**
+   * 상단 더블클릭 재조회(2026-11-09 사용자 요청, 하단 동반 재조회 2026-11-09 추가 요청) —
+   * Search 버튼과 같은 조회권한 게이트를 두고, 상단·하단 어느 쪽이든 미저장 변경이 있으면
+   * 한 번만 묻는다(둘 다 같은 MSG00704 라 따로 물으면 확인창이 두 번 뜬다).
+   * clearDetail 은 호출하지 않는다 — 하단은 비우는 게 아니라 같은 선택 상태로 다시 조회한다
+   * (filters[LOOKUP_DETAIL] 이 있을 때만 — 마스터를 아직 선택하지 않았으면 하단은 그대로 빈 채다).
+   */
+  const handleRefreshMaster = async () => {
+    if (!hasButton('SEARCH')) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_PERMISSION, '_You do not have permission.'),
+      });
+      return;
+    }
+    const isDirty = GridUtils.isDirty(masterGridRef.current) || GridUtils.isDirty(detailGridRef.current);
+    if (isDirty) {
+      const proceed = await setAlert({
+        type: 'confirm',
+        content: t(MSG.CONFIRM_DISCARD_DETAIL, '_There is data being modified. Would you like to retrieve it?'),
+      });
+      if (!proceed) return;
+    }
+    void refetchMaster();
+    if (filters[SHEETS.LOOKUP_DETAIL]) void refetchDetail();
+  };
+
+  /** 하단 더블클릭 재조회(2026-11-09 사용자 요청). 선택된 Lookup Type 조건 그대로 다시 조회한다. */
+  const handleRefreshDetail = async () => {
+    if (!hasButton('SEARCH')) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_PERMISSION, '_You do not have permission.'),
+      });
+      return;
+    }
+    if (!filters[SHEETS.LOOKUP_DETAIL]) return;
+    if (!(await confirmDiscardDetail())) return;
+    void refetchDetail();
+  };
+
   const handleSave = () => {
     // dirty 는 react-query 데이터가 아니라 그리드 소스에서 읽는다 — GridAction.addRow 는
     // sourceCollection 에 splice 만 하고 React state 를 건드리지 않아, 응답 데이터로 읽으면
@@ -490,6 +534,7 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
             data={masterRows}
             canEdit={canEdit}
             confirmDiscardDetail={confirmDiscardDetail}
+            onRefresh={handleRefreshMaster}
           />
         </Panel>
         <PanelSeparator className={styles.splitBar} />
@@ -509,6 +554,7 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
               data={detailRows}
               staticColumns={detailColumns}
               canEdit={canEdit}
+              onRefresh={handleRefreshDetail}
             />
           </div>
         </Panel>

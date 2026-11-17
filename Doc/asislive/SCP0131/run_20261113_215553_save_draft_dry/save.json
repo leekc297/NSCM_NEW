@@ -1,0 +1,159 @@
+{
+ "id": "SCP0131",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_SALES_SITE_PRIORITY",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "ITEM_ID",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "ITEM_ID": "ITEM_ID",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+  "side": [],
+  "basis": "foxml SCP0131_SAVE_SALES_SITE_PRIORITY → SP SCP0131_SAVE_SALES_SITE_PRIORITY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PRIO_RANK",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PRIO_RANK",
+     "db_col": "PRIO_RANK",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PRIO_RANK",
+    "db_col": "PRIO_RANK",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 21:55:53",
+ "status": "DRY_OK",
+ "steps": [],
+ "raw_key_used": [
+  {
+   "row": 0,
+   "shown": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "ATL_DE_RDG",
+    "OPMZ_PLAN_GR_ID": "",
+    "ITEM_ID": "AMCOME782-A1-0A0",
+    "FROM_YYYYMMDD": "2025-04-21",
+    "TO_YYYYMMDD": "2999-12-31"
+   },
+   "raw": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "ATL_DE_RDG",
+    "OPMZ_PLAN_GR_ID": "PG0031",
+    "ITEM_ID": "AMCOME782-A1-0A0",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "29991231"
+   }
+  }
+ ],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0031",
+   "SCM_SITE_ID": "ATL_DE_RDG",
+   "ITEM_ID": "AMCOME782-A1-0A0",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "29991231",
+   "PRIO_RANK": 3,
+   "VALUE_DESCRIPTION": "",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-12-03 17:54:41.857",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-12-03 17:54:41.857"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "ATL_DE_RDG",
+    "OPMZ_PLAN_GR_ID": "PG0031",
+    "ITEM_ID": "AMCOME782-A1-0A0",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "29991231"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PRIO_RANK",
+   "old": "3",
+   "new": "4",
+   "ok": true,
+   "error": null,
+   "before": "3",
+   "after": "4",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0031",
+   "SCM_SITE_ID": "ATL_DE_RDG",
+   "ITEM_ID": "AMCOME782-A1-0A0",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "29991231",
+   "PRIO_RANK": 3,
+   "VALUE_DESCRIPTION": "",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-12-03 17:54:41.857",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-12-03 17:54:41.857"
+  }
+ ]
+}

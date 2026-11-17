@@ -1,0 +1,48 @@
+{
+ "id": "SCP0055",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0055_SAVE_SHIPMENT_ALLO_PLAN",
+   "save_sp": "SCP0055_SAVE_SHIPMENT_ALLO_PLAN",
+   "status": "키 일부 미대응",
+   "table": "SCM_SHIP_ALLO_REPORT",
+   "pk": [
+    "SITE_ID",
+    "NICK_NAME",
+    "DEPT_ID",
+    "PLAN_DATE",
+    "GAP_DATE",
+    "INSDTTM"
+   ],
+   "match": {
+    "SITE_ID": "SITE_ID",
+    "NICK_NAME": "NICK_NAME",
+    "DEPT_ID": "DEPT_ID"
+   },
+   "unmatched_pk": [
+    "PLAN_DATE",
+    "GAP_DATE",
+    "INSDTTM"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Shipment(Allo) Report",
+   "writes": {
+    "SCM_SHIP_ALLO_REPORT": [
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0055_SAVE_SHIPMENT_ALLO_PLAN → SP SCP0055_SAVE_SHIPMENT_ALLO_PLAN 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PLAN_DATE": "P_PLAN_DATE←(그리드 열에서 오지 않음)",
+    "GAP_DATE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "INSDTTM": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

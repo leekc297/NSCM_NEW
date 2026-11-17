@@ -1,0 +1,451 @@
+{
+ "id": "SSP0017",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : s, UI : 63930141823.613s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/panel1/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Inventory Raw(Mobility & IT)",
+     "rows": 0,
+     "cols": 28,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "30",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "PLANT_SITE",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLANT_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Inventory Type"
+       ],
+       "label": "Inventory Type",
+       "tag": "INVENTORY_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "INVENTORY_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "MODEL",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MODEL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Lot ID"
+       ],
+       "label": "Lot ID",
+       "tag": "LOT_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "LOT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Lot"
+       ],
+       "label": "Lot",
+       "tag": "LOT",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "LOT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Production Date"
+       ],
+       "label": "Production Date",
+       "tag": "PRODUCTION_DATE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRODUCTION_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Building"
+       ],
+       "label": "Building",
+       "tag": "BUILDING",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "BUILDING",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Pallet ID"
+       ],
+       "label": "Pallet ID",
+       "tag": "PALLET_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PALLET_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Valtage"
+       ],
+       "label": "Valtage",
+       "tag": "VALTAGE",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "VALTAGE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Capacity"
+       ],
+       "label": "Capacity",
+       "tag": "CAPACITY",
+       "width": "55",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CAPACITY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "SOC"
+       ],
+       "label": "SOC",
+       "tag": "SOC",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SOC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Inventory Status"
+       ],
+       "label": "Inventory Status",
+       "tag": "INVENTORY_STATUS",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "INVENTORY_STATUS",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Route"
+       ],
+       "label": "Route",
+       "tag": "ROUTE",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "ROUTE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Operation"
+       ],
+       "label": "Operation",
+       "tag": "OPERATION",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPERATION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Line"
+       ],
+       "label": "Line",
+       "tag": "LINE",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LINE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Current OP Start Date"
+       ],
+       "label": "Current OP Start Date",
+       "tag": "CURRENT_OP_START_DATE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CURRENT_OP_START_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Remain Lead Time(Day)"
+       ],
+       "label": "Remain Lead Time(Day)",
+       "tag": "REMAIN_LEAD_TIME",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "REMAIN_LEAD_TIME",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Exp. Formation End Date"
+       ],
+       "label": "Exp. Formation End Date",
+       "tag": "EXP_FORMATION_END_DATE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "EXP_FORMATION_END_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Hold YN"
+       ],
+       "label": "Hold YN",
+       "tag": "HOLD_YN",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "HOLD_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Special YN"
+       ],
+       "label": "Special YN",
+       "tag": "SPECIAL_YN",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SPECIAL_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Stock Qty"
+       ],
+       "label": "Stock Qty",
+       "tag": "STOCK_QTY",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "STOCK_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Available Qty"
+       ],
+       "label": "Available Qty",
+       "tag": "AVAILABLE_QTY",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "AVAILABLE_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Hold Qty"
+       ],
+       "label": "Hold Qty",
+       "tag": "HOLD_QTY",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "HOLD_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Expiration Qty"
+       ],
+       "label": "Expiration Qty",
+       "tag": "EXPIRATION_QTY",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "EXPIRATION_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Customer"
+       ],
+       "label": "Customer",
+       "tag": "CUSTOMER",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "CUSTOMER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

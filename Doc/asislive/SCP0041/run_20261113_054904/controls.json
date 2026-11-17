@@ -1,0 +1,2880 @@
+{
+ "id": "SCP0041",
+ "from": "dump_find.json",
+ "screen": {
+  "type": "GSCM.SCP.Master.UIL.SCP0041_StockOSP",
+  "text": "Stock OSP",
+  "width": 1459,
+  "height": 834
+ },
+ "controls": [
+  {
+   "name": "spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/spdMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 43,
+   "w": 1459,
+   "h": 791,
+   "tab": 17
+  },
+  {
+   "name": "usrConditionPanel1",
+   "type": "GSCM.Windows.Forms.Controls.UsrConditionPanel",
+   "path": "/usrConditionPanel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 43,
+   "tab": 13,
+   "text": ""
+  },
+  {
+   "name": "usrLayoutControl2",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1439,
+   "h": 43,
+   "tab": 0,
+   "text": "usrLayoutControl2"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 43,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 17,
+   "h": 43,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 43,
+   "w": 1439,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "dCalendar",
+   "type": "GSCM.Windows.Forms.Controls.UsrDateRangePicker3",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar",
+   "visible": true,
+   "enabled": true,
+   "x": 495,
+   "y": 12,
+   "w": 210,
+   "h": 22,
+   "tab": 5,
+   "text": "",
+   "control_values": "20260813:20270813"
+  },
+  {
+   "name": "splitContainer1",
+   "type": "System.Windows.Forms.SplitContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 210,
+   "h": 22,
+   "tab": 10,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 100,
+   "h": 22,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 84,
+   "h": 22,
+   "tab": 4,
+   "text": ""
+  },
+  {
+   "name": "txtStart",
+   "type": "System.Windows.Forms.MaskedTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/panel1/txtStart",
+   "visible": true,
+   "enabled": true,
+   "x": 1,
+   "y": 1,
+   "w": 80,
+   "h": 21,
+   "tab": 0,
+   "text": "2026-08-13",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/textBox1",
+   "visible": true,
+   "enabled": false,
+   "x": 84,
+   "y": 0,
+   "w": 16,
+   "h": 15,
+   "tab": 3,
+   "text": "~",
+   "read_only": "False"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel",
+   "visible": true,
+   "enabled": true,
+   "x": 101,
+   "y": 0,
+   "w": 109,
+   "h": 22,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "panel2",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/panel2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 84,
+   "h": 22,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "txtEnd",
+   "type": "System.Windows.Forms.MaskedTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/panel2/txtEnd",
+   "visible": true,
+   "enabled": true,
+   "x": 1,
+   "y": 1,
+   "w": 80,
+   "h": 21,
+   "tab": 0,
+   "text": "2027-08-13",
+   "read_only": "False"
+  },
+  {
+   "name": "btnCalendar",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendar/splitContainer1/SplitterPanel/btnCalendar",
+   "visible": true,
+   "enabled": true,
+   "x": 84,
+   "y": 0,
+   "w": 25,
+   "h": 22,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "cboDivision",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision",
+   "visible": true,
+   "enabled": true,
+   "x": 40,
+   "y": 12,
+   "w": 33,
+   "h": 21,
+   "tab": 0,
+   "text": "82 ESS Battery",
+   "selected_index": 2,
+   "selected_text": "82 ESS Battery",
+   "selected_value": "82",
+   "items": [
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "81_UC Automotive Battery(UC)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)"
+   ],
+   "item_count": 8,
+   "control_values": "82"
+  },
+  {
+   "name": "clbPlantSite",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite",
+   "visible": true,
+   "enabled": true,
+   "x": 141,
+   "y": 12,
+   "w": 104,
+   "h": 21,
+   "tab": 2,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 104,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "Peopleworks_CN",
+     "checked": false
+    },
+    {
+     "text": "SHIP",
+     "checked": false
+    },
+    {
+     "text": "Intor",
+     "checked": false
+    },
+    {
+     "text": "PeopleWorks-KR-1",
+     "checked": false
+    },
+    {
+     "text": "PeopleWorks-KR-2",
+     "checked": false
+    },
+    {
+     "text": "PeopleWorks-KR-3",
+     "checked": false
+    },
+    {
+     "text": "INFAC",
+     "checked": false
+    },
+    {
+     "text": "PeopleWorks-US-AZ",
+     "checked": false
+    },
+    {
+     "text": "PeopleWorks-US CHI",
+     "checked": false
+    },
+    {
+     "text": "Sebang Lithium Battery Ohio LLC",
+     "checked": false
+    },
+    {
+     "text": "300MS 8ME SBS1_US_LAS",
+     "checked": false
+    },
+    {
+     "text": "425LM 8ME SBS2_US_LAS",
+     "checked": false
+    },
+    {
+     "text": "45MG 8ME_US_BJO",
+     "checked": false
+    },
+    {
+     "text": "8minute Energy_KR_KUV",
+     "checked": false
+    },
+    {
+     "text": "8minute Energy_US_BJO",
+     "checked": false
+    },
+    {
+     "text": "8minute Energy_US_EFS",
+     "checked": false
+    },
+    {
+     "text": "8minute Energy_US_LAX",
+     "checked": false
+    },
+    {
+     "text": "8minute Energy_US_PQA",
+     "checked": false
+    },
+    {
+     "text": "ABB CA_CA_SLA",
+     "checked": false
+    },
+    {
+     "text": "ABB USA_CN_NJG",
+     "checked": false
+    },
+    {
+     "text": "ABB USA_US_CFC",
+     "checked": false
+    },
+    {
+     "text": "ABB USA_US_NYC",
+     "checked": false
+    },
+    {
+     "text": "ABB_BE_JUM",
+     "checked": false
+    },
+    {
+     "text": "ABB_US_4CP",
+     "checked": false
+    },
+    {
+     "text": "ABB_US_CFC",
+     "checked": false
+    },
+    {
+     "text": "ABB_US_RIC",
+     "checked": false
+    },
+    {
+     "text": "Acciona SA_CL_ANF",
+     "checked": false
+    },
+    {
+     "text": "Acciona SA_ES_MAD",
+     "checked": false
+    },
+    {
+     "text": "Ace Engineering_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "AEE Solar_US_SAC",
+     "checked": false
+    },
+    {
+     "text": "AES Corp_US_ARP",
+     "checked": false
+    },
+    {
+     "text": "AES ES_AU_VIC",
+     "checked": false
+    },
+    {
+     "text": "AES ES_BR_SAO",
+     "checked": false
+    },
+    {
+     "text": "AES ES_IN_DEL",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_CBE",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_CHD",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_CNN",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_DNO",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_LQF",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_PCT",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_TAZ",
+     "checked": false
+    },
+    {
+     "text": "AES ES_US_WXN",
+     "checked": false
+    },
+    {
+     "text": "AGL Energy_AU_ADL",
+     "checked": false
+    },
+    {
+     "text": "AKA_CA_CRL",
+     "checked": false
+    },
+    {
+     "text": "Akatsuki_JP_STM",
+     "checked": false
+    },
+    {
+     "text": "AKUO ENERGY_ES_GRX",
+     "checked": false
+    },
+    {
+     "text": "AKUO ENERGY_MU_RTS",
+     "checked": false
+    },
+    {
+     "text": "AKUO ENERGY_RE_ZSE",
+     "checked": false
+    },
+    {
+     "text": "ALBIOMA_GP_BBR",
+     "checked": false
+    },
+    {
+     "text": "ALBIOMA_RE_REU",
+     "checked": false
+    },
+    {
+     "text": "Aldustria_GB_FXT",
+     "checked": false
+    },
+    {
+     "text": "Aldustria_GB_LON",
+     "checked": false
+    },
+    {
+     "text": "Alpha_DE_CHA",
+     "checked": false
+    },
+    {
+     "text": "Ampere_ES_PZU",
+     "checked": false
+    },
+    {
+     "text": "Anode Power_US_PIE",
+     "checked": false
+    },
+    {
+     "text": "Aratina_US_BJO",
+     "checked": false
+    },
+    {
+     "text": "Arlington Energy_GB_LON",
+     "checked": false
+    },
+    {
+     "text": "Asset Engineering_US_WAG",
+     "checked": false
+    },
+    {
+     "text": "Avangrid_US_ARF",
+     "checked": false
+    },
+    {
+     "text": "AVK_GB_DBE",
+     "checked": false
+    },
+    {
+     "text": "AVK_GB_GRC",
+     "checked": false
+    },
+    {
+     "text": "AWS_US_JAN",
+     "checked": false
+    },
+    {
+     "text": "AWS_US_PHX",
+     "checked": false
+    },
+    {
+     "text": "Baywa_US_SCH",
+     "checked": false
+    },
+    {
+     "text": "Baywa_US_XF7",
+     "checked": false
+    },
+    {
+     "text": "BJ Power_KR_PUS",
+     "checked": false
+    },
+    {
+     "text": "Blue sigma_KR_GYS",
+     "checked": false
+    },
+    {
+     "text": "BOSCH_DE_STR",
+     "checked": false
+    },
+    {
+     "text": "Bosung Power_KR_CHU",
+     "checked": false
+    },
+    {
+     "text": "Bosung Power_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "BS Hanyang_KR_KWA",
+     "checked": false
+    },
+    {
+     "text": "BYUCKSAN POWER_KR_JYG",
+     "checked": false
+    },
+    {
+     "text": "BYUCKSAN POWER_KR_OKK",
+     "checked": false
+    },
+    {
+     "text": "BYUCKSAN POWER_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Capital Energy_ES_MAD",
+     "checked": false
+    },
+    {
+     "text": "CAT_US_CH2",
+     "checked": false
+    },
+    {
+     "text": "CAT_US_CHI",
+     "checked": false
+    },
+    {
+     "text": "CAT_US_IGX",
+     "checked": false
+    },
+    {
+     "text": "CAT_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "CAT_US_PIA",
+     "checked": false
+    },
+    {
+     "text": "CCR_US_ASC",
+     "checked": false
+    },
+    {
+     "text": "CCR_US_WIQ",
+     "checked": false
+    },
+    {
+     "text": "CDN Energy_CA_ABT",
+     "checked": false
+    },
+    {
+     "text": "CED_US_ABU",
+     "checked": false
+    },
+    {
+     "text": "CED_US_RAL",
+     "checked": false
+    },
+    {
+     "text": "CED_US_SAC",
+     "checked": false
+    },
+    {
+     "text": "CED_US_SAN",
+     "checked": false
+    },
+    {
+     "text": "CED_US_SNH",
+     "checked": false
+    },
+    {
+     "text": "CED_US_STS",
+     "checked": false
+    },
+    {
+     "text": "CED_US_TPE",
+     "checked": false
+    },
+    {
+     "text": "CED_US_WCB",
+     "checked": false
+    },
+    {
+     "text": "CED_US_WPH",
+     "checked": false
+    },
+    {
+     "text": "Cen_ES_CCS",
+     "checked": false
+    },
+    {
+     "text": "Chint_CN_SHA",
+     "checked": false
+    },
+    {
+     "text": "Chint_US_DAL",
+     "checked": false
+    },
+    {
+     "text": "CHPP_TH_BKK",
+     "checked": false
+    },
+    {
+     "text": "Chubutsu_JP_CHC",
+     "checked": false
+    },
+    {
+     "text": "Chubutsu_JP_GIF",
+     "checked": false
+    },
+    {
+     "text": "Chubutsu_JP_KOJ",
+     "checked": false
+    },
+    {
+     "text": "Clearway Energy_US_ACC",
+     "checked": false
+    },
+    {
+     "text": "CLOU_CN_SZP",
+     "checked": false
+    },
+    {
+     "text": "CLOU_CN_SZX",
+     "checked": false
+    },
+    {
+     "text": "CLOU_CN_WUX",
+     "checked": false
+    },
+    {
+     "text": "Coenergia_IT_BON",
+     "checked": false
+    },
+    {
+     "text": "Con Edison_PR_PTR",
+     "checked": false
+    },
+    {
+     "text": "Con Edison_US_AYE",
+     "checked": false
+    },
+    {
+     "text": "Con Edison_US_GEE",
+     "checked": false
+    },
+    {
+     "text": "Con Edison_US_LAX",
+     "checked": false
+    },
+    {
+     "text": "Con Edison_US_PIA",
+     "checked": false
+    },
+    {
+     "text": "Controllis_GB_TFD",
+     "checked": false
+    },
+    {
+     "text": "Cooltech_CN_SHA",
+     "checked": false
+    },
+    {
+     "text": "Core Scientific_US_HUU",
+     "checked": false
+    },
+    {
+     "text": "Corvus Norway_CA_RBC",
+     "checked": false
+    },
+    {
+     "text": "Corvus Norway_NO_BGO",
+     "checked": false
+    },
+    {
+     "text": "Corvus Norway_US_BLI",
+     "checked": false
+    },
+    {
+     "text": "Corvus_CA_RBC",
+     "checked": false
+    },
+    {
+     "text": "CPH_DO_AZS",
+     "checked": false
+    },
+    {
+     "text": "CPH_US_MSK",
+     "checked": false
+    },
+    {
+     "text": "Critical Loop Equipment_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "CSR_AU_NRE",
+     "checked": false
+    },
+    {
+     "text": "Dasan Energy_KR_TJN",
+     "checked": false
+    },
+    {
+     "text": "DCBEL LLC_US_SXB",
+     "checked": false
+    },
+    {
+     "text": "Delta_CN_BJS",
+     "checked": false
+    },
+    {
+     "text": "Delta_CN_HGH",
+     "checked": false
+    },
+    {
+     "text": "Delta_CN_WJA",
+     "checked": false
+    },
+    {
+     "text": "Delta_JP_KOJ",
+     "checked": false
+    },
+    {
+     "text": "Delta_TW_CHW",
+     "checked": false
+    },
+    {
+     "text": "Delta_TW_NTC",
+     "checked": false
+    },
+    {
+     "text": "Delta_TW_TNN",
+     "checked": false
+    },
+    {
+     "text": "Delta_TW_TYN",
+     "checked": false
+    },
+    {
+     "text": "Delta_US_2TT",
+     "checked": false
+    },
+    {
+     "text": "Delta_US_AAZ",
+     "checked": false
+    },
+    {
+     "text": "Delta_US_LVI",
+     "checked": false
+    },
+    {
+     "text": "Delta_US_ZYQ",
+     "checked": false
+    },
+    {
+     "text": "DeltaX_KR_GYG",
+     "checked": false
+    },
+    {
+     "text": "DeltaX_KR_PJU",
+     "checked": false
+    },
+    {
+     "text": "DeltaX_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Demand Energy_US_GEG",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_ABQ",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_DJO",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_JPB",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_KTI",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_NB2",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_SXT",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_TFW",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_UTT",
+     "checked": false
+    },
+    {
+     "text": "DESRI_US_ZTZ",
+     "checked": false
+    },
+    {
+     "text": "Destin Power_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Destin Power_KR_SGM",
+     "checked": false
+    },
+    {
+     "text": "Develop_JP_TGI",
+     "checked": false
+    },
+    {
+     "text": "Diotech_EE_TLL",
+     "checked": false
+    },
+    {
+     "text": "DM Energy_KR_BUK",
+     "checked": false
+    },
+    {
+     "text": "DM Energy_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "DM Energy_KR_UJU",
+     "checked": false
+    },
+    {
+     "text": "DM Energy_KR_USN",
+     "checked": false
+    },
+    {
+     "text": "DM GEC_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Doosan Heavy_AU_ABX",
+     "checked": false
+    },
+    {
+     "text": "Doosan Heavy_GU_GUM",
+     "checked": false
+    },
+    {
+     "text": "Doosan Heavy_KR_CHW",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_2TT",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_CWA",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_DT7",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_MG8",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_MGC",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_MNC",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_NEP",
+     "checked": false
+    },
+    {
+     "text": "DTE_US_SJX",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_AOM",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_BZL",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_HKN",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_MRA",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_PCP",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_SFM",
+     "checked": false
+    },
+    {
+     "text": "Dynapower_US_SOX",
+     "checked": false
+    },
+    {
+     "text": "E2Z_KR_CHA",
+     "checked": false
+    },
+    {
+     "text": "E3DC_DE_OSN",
+     "checked": false
+    },
+    {
+     "text": "E3DC_DE_WTR",
+     "checked": false
+    },
+    {
+     "text": "Eaton_NO_TRD",
+     "checked": false
+    },
+    {
+     "text": "Eaton_US_RAG",
+     "checked": false
+    },
+    {
+     "text": "ECO Power_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "Eco Stor_DE_HAM",
+     "checked": false
+    },
+    {
+     "text": "Ecocoach_CH_WEI",
+     "checked": false
+    },
+    {
+     "text": "EDF_CA_MTR",
+     "checked": false
+    },
+    {
+     "text": "EDF_CA_TOR",
+     "checked": false
+    },
+    {
+     "text": "EDF_DE_HAM",
+     "checked": false
+    },
+    {
+     "text": "EDF_ES_VLC",
+     "checked": false
+    },
+    {
+     "text": "EDF_ES_ZCO",
+     "checked": false
+    },
+    {
+     "text": "EDF_FR_BPS",
+     "checked": false
+    },
+    {
+     "text": "EDF_FR_ECI",
+     "checked": false
+    },
+    {
+     "text": "EDF_FR_MRS",
+     "checked": false
+    },
+    {
+     "text": "EDF_FR_PAR",
+     "checked": false
+    },
+    {
+     "text": "EDF_PE_IQT",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_ABU",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_BSR",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_HOU",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_HQU",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_NYC",
+     "checked": false
+    },
+    {
+     "text": "EDF_US_ZTZ",
+     "checked": false
+    },
+    {
+     "text": "Edison Power_JP_CHB",
+     "checked": false
+    },
+    {
+     "text": "EDPR_GB_ASS",
+     "checked": false
+    },
+    {
+     "text": "EDPR_US_FAT",
+     "checked": false
+    },
+    {
+     "text": "Eesti Energia_EE_TL2",
+     "checked": false
+    },
+    {
+     "text": "Eesti Energia_EE_TLL",
+     "checked": false
+    },
+    {
+     "text": "EG01-82-AS",
+     "checked": false
+    },
+    {
+     "text": "EG4_US_OMC",
+     "checked": false
+    },
+    {
+     "text": "EG4_US_SLR",
+     "checked": false
+    },
+    {
+     "text": "EGEM_CZ_PRG",
+     "checked": false
+    },
+    {
+     "text": "Eguana_CA_CAL",
+     "checked": false
+    },
+    {
+     "text": "Eguana_US_HNL",
+     "checked": false
+    },
+    {
+     "text": "Electric Era_US_SEA",
+     "checked": false
+    },
+    {
+     "text": "Element Energy_US_MKU",
+     "checked": false
+    },
+    {
+     "text": "EN Tech_KR_GUN",
+     "checked": false
+    },
+    {
+     "text": "EN Tech_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "EN Technology_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "ENEFIT_EE_TAY",
+     "checked": false
+    },
+    {
+     "text": "ENEL X_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "Eneon_CA_MKH",
+     "checked": false
+    },
+    {
+     "text": "Energix_PL_WRO",
+     "checked": false
+    },
+    {
+     "text": "Energon_CZ_PRG",
+     "checked": false
+    },
+    {
+     "text": "Energy & HVAC_KR_CHC",
+     "checked": false
+    },
+    {
+     "text": "Energy & HVAC_KR_JEO",
+     "checked": false
+    },
+    {
+     "text": "Energy & HVAC_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "Energy & HVAC_KR_SYS",
+     "checked": false
+    },
+    {
+     "text": "Energy Australia_AU_LVH",
+     "checked": false
+    },
+    {
+     "text": "ENERGYGATE_KR_GJE",
+     "checked": false
+    },
+    {
+     "text": "ENERGYGATE_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "ENERGYGATE_KR_YJU",
+     "checked": false
+    },
+    {
+     "text": "Enerm_DE_SAJ",
+     "checked": false
+    },
+    {
+     "text": "Enerzent_KR_HNM",
+     "checked": false
+    },
+    {
+     "text": "Enerzent_KR_KMH",
+     "checked": false
+    },
+    {
+     "text": "Enerzent_KR_YJU",
+     "checked": false
+    },
+    {
+     "text": "Enodam_KR_CHO",
+     "checked": false
+    },
+    {
+     "text": "Entech_FR_UIP",
+     "checked": false
+    },
+    {
+     "text": "EON_IN_ABN",
+     "checked": false
+    },
+    {
+     "text": "EON_KR_SUO",
+     "checked": false
+    },
+    {
+     "text": "EPS_IT_MIL",
+     "checked": false
+    },
+    {
+     "text": "EQUIS Australia_AU_BTV",
+     "checked": false
+    },
+    {
+     "text": "EVO Power_AU_MEA",
+     "checked": false
+    },
+    {
+     "text": "EVO Power_US_BOS",
+     "checked": false
+    },
+    {
+     "text": "EVO Power_US_RSM",
+     "checked": false
+    },
+    {
+     "text": "Excelsior_US_EDM",
+     "checked": false
+    },
+    {
+     "text": "Excelsior_US_EXZ",
+     "checked": false
+    },
+    {
+     "text": "Facebook_IE_DUB",
+     "checked": false
+    },
+    {
+     "text": "Facebook_SE_UME",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_CLT",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_DAL",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_IOX",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_PRZ",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_QWB",
+     "checked": false
+    },
+    {
+     "text": "Facebook_US_UFS",
+     "checked": false
+    },
+    {
+     "text": "Fluence_AD_LAP",
+     "checked": false
+    },
+    {
+     "text": "Fluence_AE_ABU",
+     "checked": false
+    },
+    {
+     "text": "Fluence_AU_VIC",
+     "checked": false
+    },
+    {
+     "text": "Fluence_CA_OAK",
+     "checked": false
+    },
+    {
+     "text": "Fluence_CL_SCL",
+     "checked": false
+    },
+    {
+     "text": "Fluence_GB_BOS",
+     "checked": false
+    },
+    {
+     "text": "Fluence_GB_MBY",
+     "checked": false
+    },
+    {
+     "text": "Fluence_GB_RUN",
+     "checked": false
+    },
+    {
+     "text": "Fluence_GB_SHS",
+     "checked": false
+    },
+    {
+     "text": "Fluence_IE_KIR",
+     "checked": false
+    },
+    {
+     "text": "Fluence_IN_DEL",
+     "checked": false
+    },
+    {
+     "text": "Fluence_PH_MNL",
+     "checked": false
+    },
+    {
+     "text": "Fluence_PH_TAU",
+     "checked": false
+    },
+    {
+     "text": "Fluence_SG_SIN",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_AAI",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_ARP",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_BSR",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_CBE",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_CNN",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_FOR",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_LB3",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_PHX",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_RAL",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_SAN",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_TSE",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_WDA",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_WXN",
+     "checked": false
+    },
+    {
+     "text": "Fluence_US_WYM",
+     "checked": false
+    },
+    {
+     "text": "FMS_KR_ANY",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_ARI",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_GCS",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_KIV",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_PHX",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_VRB",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_XDX",
+     "checked": false
+    },
+    {
+     "text": "FPL_US_YFA",
+     "checked": false
+    },
+    {
+     "text": "Fronius_AT_WSL",
+     "checked": false
+    },
+    {
+     "text": "Fuji Electric_JP_TMK",
+     "checked": false
+    },
+    {
+     "text": "Gamesa_ES_ZAM",
+     "checked": false
+    },
+    {
+     "text": "GasiriGridPark_KR_CHA",
+     "checked": false
+    },
+    {
+     "text": "Gateway_US_SAN",
+     "checked": false
+    },
+    {
+     "text": "GE Fuel Cells_AD_LAP",
+     "checked": false
+    },
+    {
+     "text": "GE Fuel Cells_GB_CHV",
+     "checked": false
+    },
+    {
+     "text": "GE Fuel Cells_US_NYC",
+     "checked": false
+    },
+    {
+     "text": "GE Grid Solutions_US_JHY",
+     "checked": false
+    },
+    {
+     "text": "GE Vernova_US_JHY",
+     "checked": false
+    },
+    {
+     "text": "Ginlong_CN_CN_SHA",
+     "checked": false
+    },
+    {
+     "text": "Glidepath_US_CHI",
+     "checked": false
+    },
+    {
+     "text": "Glidepath_US_EP5",
+     "checked": false
+    },
+    {
+     "text": "Glidepath_US_MYD",
+     "checked": false
+    },
+    {
+     "text": "GM Energy_US_EKI",
+     "checked": false
+    },
+    {
+     "text": "GM Energy_US_PHX",
+     "checked": false
+    },
+    {
+     "text": "GOEN_TR_ABK",
+     "checked": false
+    },
+    {
+     "text": "Google_NL_AMS",
+     "checked": false
+    },
+    {
+     "text": "Google_SG_SIN",
+     "checked": false
+    },
+    {
+     "text": "Google_US_FBN",
+     "checked": false
+    },
+    {
+     "text": "Google_US_NUQ",
+     "checked": false
+    },
+    {
+     "text": "Google_US_UCG",
+     "checked": false
+    },
+    {
+     "text": "GPD_JP_KUH",
+     "checked": false
+    },
+    {
+     "text": "GPD_JP_SHB",
+     "checked": false
+    },
+    {
+     "text": "GPD_JP_TMK",
+     "checked": false
+    },
+    {
+     "text": "Gransolar_ES_MAD",
+     "checked": false
+    },
+    {
+     "text": "Green Diamond_TR_ANK",
+     "checked": false
+    },
+    {
+     "text": "Green Diamond_TR_ESB",
+     "checked": false
+    },
+    {
+     "text": "Green Power Tech_GB_YEO",
+     "checked": false
+    },
+    {
+     "text": "Green Power Tech_MX_LAP",
+     "checked": false
+    },
+    {
+     "text": "GREENSMITH_GB_TIL",
+     "checked": false
+    },
+    {
+     "text": "GREENSMITH_US_JEM",
+     "checked": false
+    },
+    {
+     "text": "Gresham House_GB_LON",
+     "checked": false
+    },
+    {
+     "text": "Growatt_CN_SZX",
+     "checked": false
+    },
+    {
+     "text": "GS Neotek_KR_HSO",
+     "checked": false
+    },
+    {
+     "text": "GS Neotek_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "GSENR_KR_YYG",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Convergence_KR_HSO",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Convergence_KR_HWS",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Defense_KR_CHW",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Energy_AU_ABX",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Energy_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Energy_KR_SJG",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Energy_US_PHA",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_KR_ICN",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_AAZ",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_ABH",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_CA2",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_JYV",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_SAN",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_TOA",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_ZOM",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_US_ZTZ",
+     "checked": false
+    },
+    {
+     "text": "Hanwha Q Cells_VN_BNE",
+     "checked": false
+    },
+    {
+     "text": "HD Infracore_KR_INC",
+     "checked": false
+    },
+    {
+     "text": "HKMC_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Honda Motor_JP_SKA",
+     "checked": false
+    },
+    {
+     "text": "HOPPECKE_DE_BRI",
+     "checked": false
+    },
+    {
+     "text": "HQ05-82-AS",
+     "checked": false
+    },
+    {
+     "text": "HYbrid Energy Solutions_IE_KLK",
+     "checked": false
+    },
+    {
+     "text": "Hybrid Energy_CN_WUX",
+     "checked": false
+    },
+    {
+     "text": "Hybrid Energy_IE_KLK",
+     "checked": false
+    },
+    {
+     "text": "Hybrid Systems_AU_PER",
+     "checked": false
+    },
+    {
+     "text": "Hyosung H.I_KR_PUS",
+     "checked": false
+    },
+    {
+     "text": "Hyosung H.I_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Hyosung_KR_SAN",
+     "checked": false
+    },
+    {
+     "text": "Hyperstrong_CN_BJS",
+     "checked": false
+    },
+    {
+     "text": "Hyperstrong_CN_NJG",
+     "checked": false
+    },
+    {
+     "text": "Hyperstrong_PL_WA1",
+     "checked": false
+    },
+    {
+     "text": "Hyperstrong_US_MNC",
+     "checked": false
+    },
+    {
+     "text": "Hyundai E.E.S_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Hyundai Global_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Hyundai H.I_KR_USN",
+     "checked": false
+    },
+    {
+     "text": "Hyundai Hyms_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "hyundai-ce_KR_INC",
+     "checked": false
+    },
+    {
+     "text": "I Power_KR_TAE",
+     "checked": false
+    },
+    {
+     "text": "IES_US_SNH",
+     "checked": false
+    },
+    {
+     "text": "IHI_CA_NWC",
+     "checked": false
+    },
+    {
+     "text": "IHI_CA_SNI",
+     "checked": false
+    },
+    {
+     "text": "Iljin_power_KR_UJU",
+     "checked": false
+    },
+    {
+     "text": "IM_CN_PDG",
+     "checked": false
+    },
+    {
+     "text": "IM_CN_SGP",
+     "checked": false
+    },
+    {
+     "text": "IM_US_EPD",
+     "checked": false
+    },
+    {
+     "text": "IM_US_HOU",
+     "checked": false
+    },
+    {
+     "text": "IM_US_XDI",
+     "checked": false
+    },
+    {
+     "text": "Ingeteam_ES_CDC",
+     "checked": false
+    },
+    {
+     "text": "Ingeteam_ES_MAD",
+     "checked": false
+    },
+    {
+     "text": "Ingeteam_ES_ZAM",
+     "checked": false
+    },
+    {
+     "text": "INGETEAM_RE_REU",
+     "checked": false
+    },
+    {
+     "text": "Ingeteam_US_ROC",
+     "checked": false
+    },
+    {
+     "text": "INOVAT_TR_IZM",
+     "checked": false
+    },
+    {
+     "text": "IntechFA_KR_YNG",
+     "checked": false
+    },
+    {
+     "text": "Integra_US_HOU",
+     "checked": false
+    },
+    {
+     "text": "Intilion_DE_HAM",
+     "checked": false
+    },
+    {
+     "text": "Invenergy_US_PWA",
+     "checked": false
+    },
+    {
+     "text": "IOWN_US_BLD",
+     "checked": false
+    },
+    {
+     "text": "IOWN_US_ZTZ",
+     "checked": false
+    },
+    {
+     "text": "Itochu_AU_ADL",
+     "checked": false
+    },
+    {
+     "text": "Itochu_DE_DRS",
+     "checked": false
+    },
+    {
+     "text": "Itochu_JP_YMG",
+     "checked": false
+    },
+    {
+     "text": "Itochu_US_HNL",
+     "checked": false
+    },
+    {
+     "text": "Itochu_US_SNA",
+     "checked": false
+    },
+    {
+     "text": "Jabil_IT_MRC",
+     "checked": false
+    },
+    {
+     "text": "Jabil_UG_KLA",
+     "checked": false
+    },
+    {
+     "text": "Jabil_US_YFA",
+     "checked": false
+    },
+    {
+     "text": "Jabil_ZA_JNB",
+     "checked": false
+    },
+    {
+     "text": "JCI_US_HNL",
+     "checked": false
+    },
+    {
+     "text": "JCI_US_LEX",
+     "checked": false
+    },
+    {
+     "text": "JCI_US_OIO",
+     "checked": false
+    },
+    {
+     "text": "Jeju electric vehicle_KR_CJU",
+     "checked": false
+    },
+    {
+     "text": "JFE_JP_HNA",
+     "checked": false
+    },
+    {
+     "text": "JFE_JP_NGI",
+     "checked": false
+    },
+    {
+     "text": "JFE_JP_SMZ",
+     "checked": false
+    },
+    {
+     "text": "JFE_JP_TYO",
+     "checked": false
+    },
+    {
+     "text": "JFE_JP_YOK",
+     "checked": false
+    },
+    {
+     "text": "JFE_KR_SUO",
+     "checked": false
+    },
+    {
+     "text": "JH Energy_KR_INC",
+     "checked": false
+    },
+    {
+     "text": "Jofemar SA_ES_PAA",
+     "checked": false
+    },
+    {
+     "text": "JSW_IN_MUB",
+     "checked": false
+    },
+    {
+     "text": "K.E.W.Power_KR_CHA",
+     "checked": false
+    },
+    {
+     "text": "KCS_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "kepco_AU_QLD",
+     "checked": false
+    },
+    {
+     "text": "kepco_ES_BCN",
+     "checked": false
+    },
+    {
+     "text": "kepco_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_GCH",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_GSG",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_HNG",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_JDO",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_SCE",
+     "checked": false
+    },
+    {
+     "text": "Kokam_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "Kongsberg Maritime AS_NO_AGO",
+     "checked": false
+    },
+    {
+     "text": "Kongsberg_NO_BGO",
+     "checked": false
+    },
+    {
+     "text": "Krannich_US_OCN",
+     "checked": false
+    },
+    {
+     "text": "Krannich_US_PPS",
+     "checked": false
+    },
+    {
+     "text": "Kyocera_JP_NGO",
+     "checked": false
+    },
+    {
+     "text": "L&T_IN_MAA",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_CA_KIN",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_CA_NWC",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_CH_YLB",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_DE_HAM",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_NL_HHW",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_NL_VSR",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_SK_SZS",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_US_AID",
+     "checked": false
+    },
+    {
+     "text": "Leclanche_US_FLI",
+     "checked": false
+    },
+    {
+     "text": "Legrand_FR_LIG",
+     "checked": false
+    },
+    {
+     "text": "Legrand_IT_BBB",
+     "checked": false
+    },
+    {
+     "text": "LG CNS_KR_PTK",
+     "checked": false
+    },
+    {
+     "text": "LGCAU_AU_BNE",
+     "checked": false
+    },
+    {
+     "text": "LGCAU_AU_VIC",
+     "checked": false
+    },
+    {
+     "text": "LGCDJ_KR_TJN",
+     "checked": false
+    },
+    {
+     "text": "LGCEG_DE_DAR",
+     "checked": false
+    },
+    {
+     "text": "LGCEG_DE_MWA",
+     "checked": false
+    },
+    {
+     "text": "LGCEG_DE_SUZ",
+     "checked": false
+    },
+    {
+     "text": "LGCMI_US_JID",
+     "checked": false
+    },
+    {
+     "text": "LGCMI_US_LGB",
+     "checked": false
+    },
+    {
+     "text": "LGCNS_KR_GYS",
+     "checked": false
+    },
+    {
+     "text": "LGCOC2_KR_OCH",
+     "checked": false
+    },
+    {
+     "text": "LGE RESU_KR_KUM",
+     "checked": false
+    },
+    {
+     "text": "LGE RESU_KR_PUS",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_ANY",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_BJG",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_BOR",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_CHU",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_CJJ",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_ESG",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_HCN",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_HDG",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_HWS",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_JEO",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_KAN",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_KWJ",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_MAS",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_MGG",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_PJU",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_PTK",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_SCE",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_SGO",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_TAN",
+     "checked": false
+    },
+    {
+     "text": "LGE_KR_TJN",
+     "checked": false
+    },
+    {
+     "text": "LGESMI_US_LUI",
+     "checked": false
+    },
+    {
+     "text": "LGESMI_US_RDO",
+     "checked": false
+    },
+    {
+     "text": "LGESVT_KR_CHU",
+     "checked": false
+    },
+    {
+     "text": "LGESVT_US_BOS",
+     "checked": false
+    },
+    {
+     "text": "LGESVT_US_ONT",
+     "checked": false
+    },
+    {
+     "text": "LGESVT_US_PHX",
+     "checked": false
+    },
+    {
+     "text": "LGESVT_US_WRO",
+     "checked": false
+    },
+    {
+     "text": "LG-Hitachi_KR_PTK",
+     "checked": false
+    },
+    {
+     "text": "LGnsys_KR_ASN",
+     "checked": false
+    },
+    {
+     "text": "LGnsys_KR_CUC",
+     "checked": false
+    },
+    {
+     "text": "LGnsys_KR_PTK",
+     "checked": false
+    },
+    {
+     "text": "LGU+_KR_SEL",
+     "checked": false
+    },
+    {
+     "text": "LM_KW_KWI",
+     "checked": false
+    },
+    {
+     "text": "LM_US_DAL",
+     "checked": false
+    },
+    {
+     "text": "LM_US_TOP",
+     "checked": false
+    },
+    {
+     "text": "Loccioni_GB_GGU",
+     "checked": false
+    },
+    {
+     "text": "Loccioni_IT_AOI",
+     "checked": false
+    },
+    {
+     "text": "Loccioni_IT_CBX",
+     "checked": false
+    },
+    {
+     "text": "looop_JP_TKX",
+     "checked": false
+    },
+    {
+     "text": "LS Energy Solutions_US_CLT",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_ANY",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_CHO",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_CJU",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_GUN",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_JAN",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_JNJ",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_NSN",
+     "checked": false
+    },
+    {
+     "text": "LSis_KR_YAM",
+     "checked": false
+    },
+    {
+     "text": "LSis_TH_PYX",
+     "checked": false
+    },
+    {
+     "text": "LTW_CZ_PRG",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "txtItemId",
+   "type": "GSCM.Windows.Forms.Controls.UsrMultiLineEditor",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId",
+   "visible": true,
+   "enabled": true,
+   "x": 294,
+   "y": 12,
+   "w": 100,
+   "h": 21,
+   "tab": 3,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "pictureBox1",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pictureBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 82,
+   "y": 3,
+   "w": 16,
+   "h": 15,
+   "tab": 7,
+   "text": ""
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pnlMain",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "textBox2",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pnlMain/textBox2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/textBox1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 100,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnItemId",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnItemId",
+   "visible": true,
+   "enabled": true,
+   "x": 406,
+   "y": 12,
+   "w": 31,
+   "h": 25,
+   "tab": 4,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "btnExcelUpload",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnExcelUpload",
+   "visible": true,
+   "enabled": true,
+   "x": 709,
+   "y": 12,
+   "w": 91,
+   "h": 21,
+   "tab": 6,
+   "text": "Upload",
+   "control_values": "Upload"
+  },
+  {
+   "name": "formDown",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/formDown",
+   "visible": true,
+   "enabled": true,
+   "x": 812,
+   "y": 12,
+   "w": 91,
+   "h": 21,
+   "tab": 7,
+   "text": "Excel Form",
+   "control_values": "Excel Form"
+  },
+  {
+   "name": "txtInspection",
+   "type": "GSCM.Windows.Forms.Controls.UsrMultiLineEditor",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtInspection",
+   "visible": false,
+   "enabled": true,
+   "x": 954,
+   "y": 12,
+   "w": 109,
+   "h": 21,
+   "tab": 1,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "pictureBox1",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtInspection/pictureBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 91,
+   "y": 3,
+   "w": 16,
+   "h": 15,
+   "tab": 7,
+   "text": ""
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtInspection/pnlMain",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "textBox2",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtInspection/pnlMain/textBox2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtInspection/textBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 109,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "cboStatus",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboStatus",
+   "visible": false,
+   "enabled": true,
+   "x": 950,
+   "y": 12,
+   "w": 62,
+   "h": 21,
+   "tab": 1,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": "ALL",
+   "items": [
+    "ALL",
+    "Hold",
+    "Release"
+   ],
+   "item_count": 3,
+   "control_values": "ALL"
+  },
+  {
+   "name": "dCalendarCutoff",
+   "type": "GSCM.Windows.Forms.Controls.UsrDateRangePicker3",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff",
+   "visible": false,
+   "enabled": true,
+   "x": 980,
+   "y": 12,
+   "w": 210,
+   "h": 22,
+   "tab": 1,
+   "text": "",
+   "control_values": "00010101:00010101"
+  },
+  {
+   "name": "splitContainer1",
+   "type": "System.Windows.Forms.SplitContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 210,
+   "h": 22,
+   "tab": 10,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 100,
+   "h": 22,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/panel1",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 84,
+   "h": 22,
+   "tab": 4,
+   "text": ""
+  },
+  {
+   "name": "txtStart",
+   "type": "System.Windows.Forms.MaskedTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/panel1/txtStart",
+   "visible": false,
+   "enabled": true,
+   "x": 1,
+   "y": 1,
+   "w": 80,
+   "h": 21,
+   "tab": 0,
+   "text": "0001-01-01",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/textBox1",
+   "visible": false,
+   "enabled": false,
+   "x": 84,
+   "y": 0,
+   "w": 16,
+   "h": 15,
+   "tab": 3,
+   "text": "~",
+   "read_only": "False"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel",
+   "visible": false,
+   "enabled": true,
+   "x": 101,
+   "y": 0,
+   "w": 109,
+   "h": 22,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "panel2",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/panel2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 84,
+   "h": 22,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "txtEnd",
+   "type": "System.Windows.Forms.MaskedTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/panel2/txtEnd",
+   "visible": false,
+   "enabled": true,
+   "x": 1,
+   "y": 1,
+   "w": 80,
+   "h": 21,
+   "tab": 0,
+   "text": "0001-01-01",
+   "read_only": "False"
+  },
+  {
+   "name": "btnCalendar",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl2/dCalendarCutoff/splitContainer1/SplitterPanel/btnCalendar",
+   "visible": false,
+   "enabled": true,
+   "x": 84,
+   "y": 0,
+   "w": 25,
+   "h": 22,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/Panel",
+   "visible": true,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 20,
+   "h": 43,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "Change",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/Panel/Change",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 28,
+   "w": 20,
+   "h": 15,
+   "tab": 0,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "statusStripBaseForm",
+   "type": "System.Windows.Forms.StatusStrip",
+   "path": "/statusStripBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 538,
+   "w": 875,
+   "h": 26,
+   "tab": 1,
+   "text": "statusStrip1"
+  },
+  {
+   "name": "pnlBaseForm",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/pnlBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 31,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "BaseRibbonCtl",
+   "type": "DevExpress.XtraBars.Ribbon.RibbonControl",
+   "path": "/pnlBaseForm/BaseRibbonCtl",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 78,
+   "tab": 0,
+   "text": ""
+  }
+ ],
+ "layout_items": [
+  {
+   "layout": "usrLayoutControl2",
+   "item": "Root",
+   "label": "Root",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "Division",
+   "label": "Div*",
+   "control": "cboDivision",
+   "required": true,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem7",
+   "label": "Plant Site",
+   "control": "clbPlantSite",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem1",
+   "label": "emptySpaceItem1",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "lblItemId",
+   "label": "Model",
+   "control": "txtItemId",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem4",
+   "label": "layoutControlItem4",
+   "control": "btnItemId",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem1",
+   "label": "Upload",
+   "control": "btnExcelUpload",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem2",
+   "label": "Excel Form",
+   "control": "formDown",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem5",
+   "label": "Period*",
+   "control": "dCalendar",
+   "required": true,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutInspection",
+   "label": "관리번호",
+   "control": "txtInspection",
+   "required": false,
+   "visible": "False",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layStatus",
+   "label": "Status",
+   "control": "cboStatus",
+   "required": false,
+   "visible": "False",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutCutoffDate",
+   "label": "Cutoff Date",
+   "control": "dCalendarCutoff",
+   "required": false,
+   "visible": "False",
+   "text_visible": "True"
+  }
+ ]
+}

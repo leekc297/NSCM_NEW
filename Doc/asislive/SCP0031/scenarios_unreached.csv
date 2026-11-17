@@ -1,0 +1,10 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0031-Sb77fbc,기타,Set_SumValues,SCP0031_GlobalPSI.cs:723,주석 안에서만 호출,SCP0031_GlobalPSI.cs:603,
+SCP0031-Sba0c04,기타,Set_SumValues,SCP0031_GlobalPSI.cs:735,주석 안에서만 호출,SCP0031_GlobalPSI.cs:603,
+SCP0031-S2ac6d0,기타,Check_PeriodDate,SCP0031_GlobalPSI.cs:1098,같은 파일에서 호출,SCP0031_GlobalPSI.cs:530,FindData_Main
+SCP0031-Sc12dbd,기타,Check_PeriodDate,SCP0031_GlobalPSI.cs:1108,같은 파일에서 호출,SCP0031_GlobalPSI.cs:530,FindData_Main
+SCP0031-Sbf7fe8,기타,Check_PeriodDate,SCP0031_GlobalPSI.cs:1125,같은 파일에서 호출,SCP0031_GlobalPSI.cs:530,FindData_Main
+SCP0031-Sa517a2,기타,Check_PeriodDate_New,SCP0031_GlobalPSI.cs:1146,호출 없음,,
+SCP0031-Sbec17e,기타,Check_PeriodDate_New,SCP0031_GlobalPSI.cs:1156,호출 없음,,
+SCP0031-Sd0e7a8,기타,Check_PeriodDate_New,SCP0031_GlobalPSI.cs:1173,호출 없음,,
+SCP0031-S4a20bb,조회,GetPeriodRange,SCP0031_GlobalPSI.cs:1059,같은 파일에서 호출,SCP0031_GlobalPSI.cs:984; SCP0031_GlobalPSI.cs:1020,"CheckArrayPlanPeriodRange,CheckPlanPeriodRange"

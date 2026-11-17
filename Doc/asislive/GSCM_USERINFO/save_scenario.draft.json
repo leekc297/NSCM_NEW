@@ -1,0 +1,136 @@
+{
+ "id": "GSCM_USERINFO",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "MenuContainer.UP_FX_DeleteFavorite",
+   "save_sp": "UP_FX_DeleteFavorite",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml UP_FX_DeleteFavorite → SP UP_FX_DeleteFavorite 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "MenuContainer.UP_FX_SaveFavorite",
+   "save_sp": "UP_FX_SaveFavorite",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml UP_FX_SaveFavorite → SP UP_FX_SaveFavorite 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "MenuContainer.UP_FX_SaveMenuConnect",
+   "save_sp": "UP_FX_SaveMenuConnect",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "VALUES": [
+     "INSERT"
+    ]
+   },
+   "basis": "foxml UP_FX_SaveMenuConnect → SP UP_FX_SaveMenuConnect 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "SCM.SCM_ADM_SAVE_NOTICE_CONFIRM",
+   "save_sp": "SCM_ADM_SAVE_NOTICE_CONFIRM",
+   "status": "키가 없는 테이블",
+   "table": "SCM_ADM_NOTICE_CONFIRM",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_ADM_NOTICE_CONFIRM_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/UserInfo",
+   "writes": {
+    "SCM_ADM_NOTICE_CONFIRM": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCM_ADM_SAVE_NOTICE_CONFIRM → SP SCM_ADM_SAVE_NOTICE_CONFIRM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_ADM_NOTICE_CONFIRM_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SystemManager.UP_FX_SavePersonalSetting",
+   "save_sp": "UP_FX_SavePersonalSetting",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml UP_FX_SavePersonalSetting → SP UP_FX_SavePersonalSetting 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "MenuContainer.UP_FX_SaveSearchCondition",
+   "save_sp": "UP_FX_SaveSearchCondition",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml UP_FX_SaveSearchCondition → SP UP_FX_SaveSearchCondition 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "MenuContainer.UP_FX_SaveUserConnect",
+   "save_sp": "UP_FX_SaveUserConnect",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "VALUES": [
+     "INSERT"
+    ]
+   },
+   "basis": "foxml UP_FX_SaveUserConnect → SP UP_FX_SaveUserConnect 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  }
+ ]
+}

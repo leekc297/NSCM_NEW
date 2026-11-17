@@ -425,10 +425,12 @@ export const MEASURE_COLOR_BY_CODE: Readonly<Record<string, MeasureColor>> = {
 // 숫자 포맷 (design 03 R-07 / V-33)
 // ====================================================================================
 //   화면상수 유지 파리티 확정(C-05 / I-05 — 2026-11-04 사용자 확정). 메타는 소수 컬럼이
-//   `DATA_SCALE_NUMBER` 1개뿐이라 AS-IS 의 2모드(조회 1 / 편집 10)를 **담을 수 없고**(ora.py 실측:
-//   스케일 컬럼 1개 · SCP0106 226행 전건 NULL), 전 컬럼 동일 스케일이라 per-column 메타가 더해줄
-//   값도 없다. AS-IS 는 measure 26종에 대해 조회 1자리 / 편집 10자리를 **모드로만** 가르므로
-//   상수 배열이 아니라 모드 상수 2개로 충분하다(컬럼명 배열 이식 아님).
+//   `DATA_SCALE_NUMBER` 1개뿐이라 AS-IS 의 2모드(조회 1 / 편집 10)를 **담을 수 없다**(ora.py 실측:
+//   스케일 컬럼 1개 · SCP0106 226행 전건 NULL).
+//   표시 규칙(사용자 지시 2026-11-06): **그냥 볼 때는 1자리 반올림**, **더블클릭으로 편집 진입한 그 셀만
+//     10자리**다. 편집모드여도 편집 중이 아닌 셀은 1자리를 유지한다(그리드 전체 10자리 아님).
+//   구현: formatItem 이 뷰 셀을 SCALE_VIEW(1)로 그리고, 편집 진입한 활성셀은 editRange 가드로 건너뛴 뒤
+//     prepareCellForEdit 가 Wijmo 편집기 값을 SCALE_EDIT(10) 자리로 채운다(toFixed, AS-IS 2 -> 2.0000000000).
 export const SCALE_VIEW = 1;
 export const SCALE_EDIT = 10;
 
@@ -450,23 +452,10 @@ export const HEADER_DEPTH = 3; // 3단 헤더(LARGE/SMALL/leaf). 총높이 = HEA
 export const SAVE_ROW_DELIMITER = '^';
 export const SAVE_PERIOD_DELIMITER = ';';
 
-/**
- * 저장 시 `/100` 환산에서 **제외**되는 measure 9종 (03 §3.5, V-48).
- * 나머지 비율 measure 는 `값/100` 으로 저장한다. `PFRSLT_QTY`/`BASE_QTY` 에도 같은 규칙.
- * 주의: GET 쪽 `x100` 은 SP(6시트)/뷰(CURRENT 2시트)가 이미 하므로 **화면에서 재적용 금지**
- * — 재적용하면 100배 오류다(C-13).
- */
-export const SAVE_NO_RATE_CONVERT_MEASURES: readonly string[] = [
-  MEASURE.SCP_PROD_PLAN,
-  MEASURE.PROD_CAPA_M,
-  MEASURE.PROD_CAPA_D,
-  MEASURE.SCP_PROD_PLAN_DDN,
-  MEASURE.THRY_CAPA_D,
-  MEASURE.SD_RT,
-  MEASURE.WT_RT,
-  MEASURE.TD_RT,
-  MEASURE.MC_RT,
-];
+// 저장 시 비율 `/100` 환산은 2026-11-11 패키지(PKG_SCP0106)로 이전됐다(AJS) — 제외 9종
+//   (SCP_PROD_PLAN·PROD_CAPA_M·PROD_CAPA_D·SCP_PROD_PLAN_DDN·THRY_CAPA_D·SD_RT·WT_RT·TD_RT·MC_RT)을
+//   빼고 패키지가 직접 `값/100.0` 한다. FE 는 원값을 전송하므로 저장용 제외목록 상수는 제거했다
+//   (utils/capaLossPlan.save.ts 주석 참조). `RATE_DIVISOR` 는 recalc 산식(100 기준)에서 계속 쓴다.
 
 export const RATE_DIVISOR = 100;
 
@@ -488,7 +477,7 @@ export const MSG = {
   PRE_READ_ONLY: 'MSG01406', // "Only inquiries are allowed when the status is Pre." (AS-IS MSG00419, L-12)
   READ_ONLY: 'MSG00109', // "Read-only mode."/"읽기전용 상태입니다" (AS-IS MSG00109 동일 의미 1:1, L-13/L-15)
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, L-22)
-  SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (AS-IS MSG00004)
+  SAVE_SUCCESS: 'MSG00002', // "Saved successfully."/"정상적으로 저장되었습니다." (사용자 지시 2026-11-11 — AS-IS 건수 메시지 MSG00672 대신 평문)
   SAVE_FAIL: 'MSG00006', // "Failed to save." (AS-IS MSG00006 동일 의미)
   NO_CHANGES: 'MSG00133', // "No modifications have been made." (AS-IS MSG00133 동일 의미)
 } as const;

@@ -108,19 +108,18 @@ export const buildPivotColumns = (months: PivotMonthMeta[]): FlexGridColumnConfi
 //   .cs 는 프로그램 1회 SortRows(4키)만 수행). pivot 월컬럼(buildPivotColumns)과 동일하게 명시 차단.
 export const buildDerivedColumns = (isGapTab: boolean): FlexGridColumnConfig[] => [
   { binding: 'SUBTOTAL', header: '소계', align: 'right', width: 70, isReadOnly: true, format: '#,##0', allowSorting: false },
-  ...(isGapTab
-    ? []
-    : [
-        {
-          binding: 'GAP',
-          header: 'GAP',
-          align: 'right',
-          width: 70,
-          isReadOnly: true,
-          format: '#,##0',
-          allowSorting: false,
-        } as FlexGridColumnConfig,
-      ]),
+  // GAP 컬럼은 Main/Gap 탭 모두 생성 — AS-IS InitSpreadDateColumn(cs:178)은 시트 분기 없는 공용 함수라
+  //   siMain·siGap 양쪽에 동일하게 GAP 칼럼(cs:254)을 만든다. 단 RefreshGridGAP(cs:604)이 siMain 에만
+  //   값을 채우므로 Gap 탭 GAP 은 항상 빈 칸(값 미할당)으로 남는다 — AS-IS siGap 파리티.
+  {
+    binding: 'GAP',
+    header: 'GAP',
+    align: 'right',
+    width: 70,
+    isReadOnly: true,
+    format: '#,##0',
+    allowSorting: false,
+  } as FlexGridColumnConfig,
   {
     binding: 'NOTE',
     header: '비고',
@@ -161,7 +160,10 @@ export const buildBaseRows = (teamRows: TeamRow[]): ShipmentAlloRow[] =>
 /**
  * 계획/실적 raw(o_rc1/o_rc3)를 pivot 칼럼에 매칭·가산(design 03 §4.1 — 동일 (행,월) 조합이 중복
  * 반환될 수 있어 가산(+=)한다, SP 가 1행 1값으로 집계해 준다고 가정하지 않는다).
- * SUBTOTAL = pivot~GAP 이전 전 칼럼 합산(design 03 §1.2 #10 — 기준월 Total 칼럼도 AS-IS 그대로 포함).
+ * SUBTOTAL = 기준월 Result/Plan 리프 + 나머지 월 값 합산(기준월 Total 칸은 제외) — AS-IS 파리티.
+ *   AS-IS 는 RefreshGrid(cs:595)에서 소계를 계산하는데(cs:974-982) 그 시점엔 기준월 Total 칸이
+ *   아직 비어(0) 있어 사실상 Result+Plan 만 더해진다. Total 은 그 뒤 RefreshGridGAP(cs:1138-1148)에서
+ *   표시용으로만 채워진다. 따라서 TO-BE 도 Total 바인딩을 소계 합산에서 빼야 기준월이 이중계산되지 않는다.
  */
 export const fillPivotValues = (
   rows: ShipmentAlloRow[],
@@ -172,6 +174,8 @@ export const fillPivotValues = (
   const byKey = new Map<string, ShipmentAlloRow>();
   rows.forEach(r => byKey.set(rowKeyOf(r), r));
   const allBindings = months.flatMap(pivotBindingsOf);
+  // 소계 합산 대상 = 기준월 Total 칸 제외(위 주석 참조 — AS-IS 소계 계산 시점엔 Total 이 빈 셀).
+  const subtotalBindings = allBindings.filter(b => !b.endsWith('_TOTAL'));
   rows.forEach(r => allBindings.forEach(b => { r[b] = n(r[b]); }));
 
   const monthByYyyymm = new Map<string, PivotMonthMeta>(months.map(m => [`20${m.yyMM}`, m]));
@@ -207,7 +211,7 @@ export const fillPivotValues = (
         const total = n(r[`M_${m.yyMM}_RESULT`]) + n(r[`M_${m.yyMM}_PLAN`]);
         r[`M_${m.yyMM}_TOTAL`] = total;
       });
-    r.SUBTOTAL = allBindings.reduce((sum, b) => sum + n(r[b]), 0);
+    r.SUBTOTAL = subtotalBindings.reduce((sum, b) => sum + n(r[b]), 0);
   });
 
   return rows;
@@ -255,19 +259,21 @@ export const insertSummaryRows = (rows: ShipmentAlloRow[], months: PivotMonthMet
       i += 1;
     }
     result.push(...group);
-    if (group.length > 1) {
-      const summary: ShipmentAlloRow = {
-        ...group[0],
-        TEAM_NAME: `${group[0].NICK_NAME} 요약`,
-        NOTE: '',
-        IS_SUMMARY: true,
-        IS_TEAM_BLANK: false,
-      };
-      bindings.forEach(b => {
-        summary[b] = group.reduce((sum, r) => sum + n(r[b]), 0);
-      });
-      result.push(summary);
-    }
+    // 그룹 크기 조건 없이 매 경계마다 요약행 삽입 — AS-IS RefreshGridGAP(cs:1157-1205)은 From Site+
+    //   Extra Spec+Nick Name 이 바뀌는 경계마다 요약행을 넣는다. 그룹이 1행이어도 경계는 성립하므로
+    //   1행 그룹에도 요약행이 생긴다(그 1행 값 그대로 합산). 이전의 `if (group.length > 1)` 는 1행
+    //   그룹 요약행을 누락시켜 AS-IS 와 어긋났다(G-07, 사용자 지시 2026-11-09 AS-IS 맞춤).
+    const summary: ShipmentAlloRow = {
+      ...group[0],
+      TEAM_NAME: `${group[0].NICK_NAME} 요약`,
+      NOTE: '',
+      IS_SUMMARY: true,
+      IS_TEAM_BLANK: false,
+    };
+    bindings.forEach(b => {
+      summary[b] = group.reduce((sum, r) => sum + n(r[b]), 0);
+    });
+    result.push(summary);
   }
   return result;
 };

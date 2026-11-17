@@ -1,0 +1,16 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+DMF0068-S723a40,DIVISION,,,,값 미도출,if (!anyDivision),
+DMF0068-Scb4869,AUTH,,,,값 미도출,"if (!viewAuth.Contains(UserInfoContext.Current[""NowGroupID""]))",
+DMF0068-S52be7e,DIVISION,,,,값 미도출,if (!anyDivision),
+DMF0068-S629014,AUTH,,,,값 미도출,"if (!viewAuth.Contains(UserInfoContext.Current[""NowGroupID""]))",
+DMF0068-S8bb340,DIVISION,,,,값 미도출,if (!anyDivision),
+DMF0068-S4dba68,COND,txtVersion.Text = ,,,값 미도출,"if (txtVersion.Text == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0068-S883346,COND,,,,값 미도출,"if (drpPeriodMonth.MonthText1 == """" || drpPeriodMonth.MonthText2 == """")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-S33ed98,COND,,,,값 미도출,"if (Convert.ToDateTime(drpPeriodMonth.MonthText1 + ""-01"") > Convert.ToDateTime(drpPeriodMonth.MonthText2 + ""-01""))",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-S77ccd0,COND,txtVersion.Text,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (txtVersion.Text.Substring(0, 3) == ""R_S"")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0068-S21f0a9,COND,txtVersion.Text,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ else of (txtVersion.Text.Substring(0, 3) == ""R_S"")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0068-Sdcc9d1,COND,,,,값 미도출,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (dtProd.Rows.Count > 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-S819515,COND,,,,값 미도출,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (dtProd.Rows.Count > 0) ▸ if (objChk != null && objChk.Count() > 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-S8f325e,COND,,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (dtProd.Rows.Count > 0) ▸ if (result.Rows[0][""result_code""].ToString() == ""S"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-Scc0e90,COND,,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (dtProd.Rows.Count > 0) ▸ else of (result.Rows[0][""result_code""].ToString() == ""S"") ▸ if",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0068-Sa2d97f,COND,,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (dtProd.Rows.Count > 0) ▸ else of (result.Rows[0][""result_code""].ToString() == ""S"") ▸ el",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

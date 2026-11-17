@@ -118,7 +118,7 @@ const handleInputConfirm = useCallback((target: string, value: string): boolean 
 | SCP0019 Work Calendar(OSP) | ❌ 미적용 | `working-time/components/WorkingTimeForm.tsx:175-219` — Day of the week·Input Value·Input 버튼이 조회영역에 그대로. 보정(touch) 시 본 hook 으로 이동 |
 | SSP0005 Shipment Working Day | ❌ 미적용 | `shipping/.../shipment-working-day/components/ShipmentWorkingDayForm.tsx:40,62-92` — Day of the week·Input Value·Input 버튼이 조회조건 격자 안. 보정(touch) 시 본 hook 으로 이동 |
 
-- **소급 일괄 수정 금지** — 화면 신규 작성·보완(touch) 시 적용. FE 수정은 사용자가 FE 직접 수정을 요청한 경우에만(2026-10-23 지시).
+- **소급 일괄 수정 금지** — 화면 신규 작성·보완(touch) 시 적용. FE 직접 수정 여부는 작업 모드(`tools/Harness/harness.json` repairScope · CLAUDE.md §1-8)를 따른다 — UI/DB MODE(DB_FE) = 직접 수정 / DB MODE(DB_ONLY) = 가이드만(실행 hook `check-work-mode`). (2026-11-13 정정: '사용자가 FE 직접 수정을 요청한 경우에만(2026-10-23 지시)' → 2026-11-02 작업 모드 기준)
 
 ---
 

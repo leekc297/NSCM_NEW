@@ -1,0 +1,290 @@
+{
+ "screen": "SSP0005",
+ "generated": "2026-11-14 19:48:12",
+ "vars": {
+  "dt": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "PERIOD_\" + value",
+   "targets": [
+    "SEARCH:control"
+   ],
+   "ref": "SSP0005_ShipmentWorkingDay.cs:153 ← SSP0005_ShipmentWorkingDay.cs:910",
+   "rows": []
+  },
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "MyDivision",
+   "targets": [
+    "SEARCH:clbDivision"
+   ],
+   "ref": "SSP0005_ShipmentWorkingDay.cs:164 ← SSP0005_ShipmentWorkingDay.cs:45",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtCompany": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Company",
+   "targets": [
+    "SEARCH:cboCompany"
+   ],
+   "ref": "SSP0005_ShipmentWorkingDay.cs:166 ← SSP0005_ShipmentWorkingDay.cs:46",
+   "rows": [
+    {
+     "CODE": "AA00",
+     "NAME": "AA통합테스트"
+    },
+    {
+     "CODE": "AB00",
+     "NAME": "AB통합테스트"
+    },
+    {
+     "CODE": "AC00",
+     "NAME": "AC통합테스트"
+    },
+    {
+     "CODE": "AE00",
+     "NAME": "LGES Arizona ESS Inc."
+    },
+    {
+     "CODE": "AH00",
+     "NAME": "AH통합테스트"
+    },
+    {
+     "CODE": "AJ00",
+     "NAME": "AJ통합테스트"
+    },
+    {
+     "CODE": "AK00",
+     "NAME": "AK통합테스트"
+    },
+    {
+     "CODE": "AP00",
+     "NAME": "AP통합테스트"
+    },
+    {
+     "CODE": "AU00",
+     "NAME": "LG CHEM AUSTRAILIA PTY LT"
+    },
+    {
+     "CODE": "AV00",
+     "NAME": "AV통합테스트"
+    },
+    {
+     "CODE": "AZ00",
+     "NAME": "LGES Arizona, Inc."
+    },
+    {
+     "CODE": "EG00",
+     "NAME": "LG Ensol Europe GmbH"
+    },
+    {
+     "CODE": "GM00",
+     "NAME": "Ultium Cells LLC"
+    },
+    {
+     "CODE": "HD00",
+     "NAME": "L-H Battery Company, Inc."
+    },
+    {
+     "CODE": "HG00",
+     "NAME": "HLBMA LLC"
+    },
+    {
+     "CODE": "HM00",
+     "NAME": "PT. HLI Green Power"
+    },
+    {
+     "CODE": "HQ00",
+     "NAME": "LG Energy Solution"
+    },
+    {
+     "CODE": "IL00",
+     "NAME": "LG ES India PVT.LTD"
+    },
+    {
+     "CODE": "MI00",
+     "NAME": "LGES Michigan Inc."
+    },
+    {
+     "CODE": "NA00",
+     "NAME": "LGES Battery (Nanjing)"
+    },
+    {
+     "CODE": "NB00",
+     "NAME": "LGES Tech (Nanjing)"
+    },
+    {
+     "CODE": "NJ00",
+     "NAME": "LGES (Nanjing)"
+    },
+    {
+     "CODE": "ST00",
+     "NAME": "NextStar Energy Inc."
+    },
+    {
+     "CODE": "VT00",
+     "NAME": "LGES Vertech Inc"
+    },
+    {
+     "CODE": "WA00",
+     "NAME": "LGES Wroclaw Sp. z o.o."
+    }
+   ]
+  },
+  "dtDayWeek": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboDayWeek"
+   ],
+   "ref": "SSP0005_ShipmentWorkingDay.cs:172 ← SSP0005_ShipmentWorkingDay.cs:47",
+   "rows": [
+    {
+     "CODE": "EveryDay",
+     "NAME": "EveryDay"
+    },
+    {
+     "CODE": "SelectDay",
+     "NAME": "SelectDay"
+    },
+    {
+     "CODE": "Mon",
+     "NAME": "Mon"
+    },
+    {
+     "CODE": "Tue",
+     "NAME": "Tue"
+    },
+    {
+     "CODE": "Wed",
+     "NAME": "Wed"
+    },
+    {
+     "CODE": "Thu",
+     "NAME": "Thu"
+    },
+    {
+     "CODE": "Fri",
+     "NAME": "Fri"
+    },
+    {
+     "CODE": "Sat",
+     "NAME": "Sat"
+    },
+    {
+     "CODE": "Sun",
+     "NAME": "Sun"
+    }
+   ]
+  },
+  "<meta Data.Type.Company>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Company",
+   "targets": [
+    "GRID:COMPANY_ID"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0005/Shipment Working Day/COMPANY_ID ← SCM_MST_SHEET_COLUMNS SSP0005/Shipment Working Day/COMPANY_ID",
+   "rows": [
+    {
+     "CODE": "AA00",
+     "NAME": "AA통합테스트"
+    },
+    {
+     "CODE": "AB00",
+     "NAME": "AB통합테스트"
+    },
+    {
+     "CODE": "AC00",
+     "NAME": "AC통합테스트"
+    },
+    {
+     "CODE": "AE00",
+     "NAME": "LGES Arizona ESS Inc."
+    },
+    {
+     "CODE": "AH00",
+     "NAME": "AH통합테스트"
+    },
+    {
+     "CODE": "AJ00",
+     "NAME": "AJ통합테스트"
+    },
+    {
+     "CODE": "AK00",
+     "NAME": "AK통합테스트"
+    },
+    {
+     "CODE": "AP00",
+     "NAME": "AP통합테스트"
+    },
+    {
+     "CODE": "AU00",
+     "NAME": "LG CHEM AUSTRAILIA PTY LT"
+    },
+    {
+     "CODE": "AV00",
+     "NAME": "AV통합테스트"
+    },
+    {
+     "CODE": "AZ00",
+     "NAME": "LGES Arizona, Inc."
+    },
+    {
+     "CODE": "EG00",
+     "NAME": "LG Ensol Europe GmbH"
+    },
+    {
+     "CODE": "GM00",
+     "NAME": "Ultium Cells LLC"
+    },
+    {
+     "CODE": "HD00",
+     "NAME": "L-H Battery Company, Inc."
+    },
+    {
+     "CODE": "HG00",
+     "NAME": "HLBMA LLC"
+    },
+    {
+     "CODE": "HM00",
+     "NAME": "PT. HLI Green Power"
+    },
+    {
+     "CODE": "HQ00",
+     "NAME": "LG Energy Solution"
+    },
+    {
+     "CODE": "IL00",
+     "NAME": "LG ES India PVT.LTD"
+    },
+    {
+     "CODE": "MI00",
+     "NAME": "LGES Michigan Inc."
+    },
+    {
+     "CODE": "NA00",
+     "NAME": "LGES Battery (Nanjing)"
+    },
+    {
+     "CODE": "NB00",
+     "NAME": "LGES Tech (Nanjing)"
+    },
+    {
+     "CODE": "NJ00",
+     "NAME": "LGES (Nanjing)"
+    },
+    {
+     "CODE": "ST00",
+     "NAME": "NextStar Energy Inc."
+    },
+    {
+     "CODE": "VT00",
+     "NAME": "LGES Vertech Inc"
+    },
+    {
+     "CODE": "WA00",
+     "NAME": "LGES Wroclaw Sp. z o.o."
+    }
+   ]
+  }
+ }
+}

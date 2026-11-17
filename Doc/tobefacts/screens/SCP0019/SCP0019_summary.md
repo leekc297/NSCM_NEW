@@ -1,7 +1,7 @@
 # SCP0019 — To-Be Fact Pack 요약
 
 - page_key: `supply/working-time` · feature: supply · As-is Fact Pack 있음
-- 파일 11 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 20 · 컴포넌트 사용 24 · 하드코딩 컬럼 3 · 메시지 22
+- 파일 11 · 엔드포인트 호출 7 (미해결 0, 주석 속 1) · 이벤트 20 · 컴포넌트 사용 24 · 하드코딩 컬럼 3 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
@@ -12,11 +12,11 @@
 | features/supply/src/pages/working-time/components/WorkingTimeInputModal.module.scss | component | 13 |
 | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | component | 135 |
 | features/supply/src/pages/working-time/index.ts | index | 2 |
-| features/supply/src/pages/working-time/useWorkingTimeStore.ts | store | 196 |
-| features/supply/src/pages/working-time/working-time.constants.ts | constants | 158 |
+| features/supply/src/pages/working-time/useWorkingTimeStore.ts | store | 199 |
+| features/supply/src/pages/working-time/working-time.constants.ts | constants | 165 |
 | features/supply/src/pages/working-time/working-time.dynamic-columns.ts | other | 89 |
 | features/supply/src/pages/working-time/working-time.types.ts | types | 85 |
-| features/supply/src/pages/working-time/WorkingTime.tsx | page | 433 |
+| features/supply/src/pages/working-time/WorkingTime.tsx | page | 469 |
 | features/supply/src/pages/working-time/__asis-mapping__.md | mapping | 150 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -24,10 +24,11 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | WorkingTimeForm.tsx:48 |
 | (useTabLookupQueries) | hook | 1 | Y | WorkingTimeInputModal.tsx:41 |
-| /admin/menu/SCP0019/column | http | 1 | Y | useWorkingTimeStore.ts:147 |
-| /admin/menu/SCP0019/search-conditions | http | 1 | Y | useWorkingTimeStore.ts:172 |
-| SCP0019/Working Time//call-proc | hook | 1 | Y | WorkingTime.tsx:73 |
-| /SCP0019/Working Time/SAVE/call-proc | http | 1 | Y | WorkingTime.tsx:244 |
+| /admin/menu/SCP0019/column | http | 1 | Y | useWorkingTimeStore.ts:150 |
+| /admin/menu/SCP0019/search-conditions | http | 1 | Y | useWorkingTimeStore.ts:175 |
+| SCP0019/Working Time//call-proc | hook | 1 | Y | WorkingTime.tsx:76 |
+| SCP0019/MonthPeriod//call-proc | hook | 1 | Y | WorkingTime.tsx:94 |
+| /SCP0019/Working Time/SAVE/call-proc | http | 1 | Y | WorkingTime.tsx:280 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -51,10 +52,10 @@
 | InputField | onKeyDown | <arrow> handleOk | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 108 |
 | Button | onClick | handleOk | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 120 |
 | Button | onClick | onClose | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 127 |
-| WorkingTimeForm | onSubmit | handleSearch | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 401 |
-| WorkingTimeForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 402 |
-| WorkingTimeInputModal | onClose | <arrow> setInputModalOpen | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 427 |
-| WorkingTimeInputModal | onConfirm | handleInputConfirm | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 428 |
+| WorkingTimeForm | onSubmit | handleSearch | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 437 |
+| WorkingTimeForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 438 |
+| WorkingTimeInputModal | onClose | <arrow> setInputModalOpen | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 463 |
+| WorkingTimeInputModal | onConfirm | handleInputConfirm | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 464 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -108,14 +109,14 @@
 | MSG00152 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0014(7), SCP0019(6), SCP0096(6), DMF0021(2), DMF0044(1), SCM0008(1), SCP0020(1), SCP0025(1), DMF0048(1), SCP0098(1)
-- SP/PKG: PKG_SCP0019(8), P_SCP0019_GET_WORKING_TIME(4), P_SCP0019_SAVE_WORKING_TIME_ROW(3), P_USER_ID(3), SCM0001_GET_SCP_MONTH_PERIOD(1)
+- 화면ID: SCP0019(7), DMF0014(7), SCP0096(6), DMF0021(2), DMF0044(1), SCM0008(1), SCP0020(1), SCP0025(1), DMF0048(1), SCP0098(1)
+- SP/PKG: PKG_SCP0019(8), P_SCP0019_GET_WORKING_TIME(4), P_SCP0019_SAVE_WORKING_TIME_ROW(3), P_USER_ID(3), PKG_COM0000(2), P_SCM0001_GET_SCP_MONTH_PERIOD(2), SCM0001_GET_SCP_MONTH_PERIOD(2)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영). | features/supply/src/pages/working-time/useWorkingTimeStore.ts | 144 |
-| code | return buildDynDayColumns(sidecar?.length ? sidecar : deriveDayColumnMeta(rows)); | features/supply/src/pages/working-time/WorkingTime.tsx | 93 |
-| code | 셀엔 들어가되 저장에서 차단. 첫 위반에서 MSG00203 표시 후 저장 중단(AS-IS GMessageBox+return 파리티). | features/supply/src/pages/working-time/WorkingTime.tsx | 196 |
+| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영). | features/supply/src/pages/working-time/useWorkingTimeStore.ts | 147 |
+| code | return buildDynDayColumns(sidecar?.length ? sidecar : deriveDayColumnMeta(rows)); | features/supply/src/pages/working-time/WorkingTime.tsx | 129 |
+| code | 셀엔 들어가되 저장에서 차단. 첫 위반에서 MSG00203 표시 후 저장 중단(AS-IS GMessageBox+return 파리티). | features/supply/src/pages/working-time/WorkingTime.tsx | 232 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 48

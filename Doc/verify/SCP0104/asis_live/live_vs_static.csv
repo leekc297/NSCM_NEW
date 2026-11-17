@@ -1,0 +1,46 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM_SYS_GET_SPREAD_TITLE,,3회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0104_GET_SPREAD_TITLE,SCP0104_CAPA_Line_Assign.cs:2094 GetSpdTitleAssign,1회 · 구간 find,MATCH,
+SP,SQL: DECLARE @v_time NVARCHAR(10);,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,11회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETFAVORITELIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMAUTHENTICATIONMENULIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMUSERAUTHENCTICATION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETMESSAGEINFOLIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETTERMINFOLIST,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEUSERCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0104_CHECK_NAME_ON_DUMMY_CODE,SCP0104_CAPA_Line_Assign_Model.cs:843 CheckNameOnDummyCodeDB,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),60개,33개,INFO,공통 24 · 선언만 36 · 실측만 9
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboVersion,Y,Plan Month,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbSite,Y,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlant,Y,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbOperation,Y,Operation,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,txtItem,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbElectrodeType,Y,Line Type,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,clbFactory,Y,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem10,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbLine,Y,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboVersionSeq,Y,Version,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtPlanType,Y,PlanType,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,rgrpDivisionType,Y,lciDivisionType,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboValid,Y,Valid,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdAssign/ASSEMBLY,정적 컬럼 사실 22행(시트 미지정 포함),컬럼 0(보임 0) · 헤더 3단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdAssign/ELTR,정적 컬럼 사실 25행(시트 미지정 포함),컬럼 54(보임 50) · 헤더 3단 · 행 275 · 고정 25,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSOP/SOP_ASSEMBLY,정적 컬럼 사실 24행(시트 미지정 포함),컬럼 0(보임 0) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSOP/SOP_ELTR,정적 컬럼 사실 24행(시트 미지정 포함),컬럼 21(보임 20) · 헤더 1단 · 행 0 · 고정 17,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

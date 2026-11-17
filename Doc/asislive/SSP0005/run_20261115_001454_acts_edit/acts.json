@@ -1,0 +1,78 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "edit": true,
+ "division": "",
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Input Value을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Input Value을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 00:13:53.585",
+ "fills": 0,
+ "fill_left": [],
+ "edit_mode": true,
+ "edit_dialogs": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

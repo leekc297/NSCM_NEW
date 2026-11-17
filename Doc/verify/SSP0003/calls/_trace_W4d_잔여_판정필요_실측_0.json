@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 390,
+  "at": "2026-11-14T10:32:23.171Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"KO\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 162,
+  "at": "2026-11-14T10:32:26.332Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 371,
+  "at": "2026-11-14T10:32:31.591Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"KO\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 173,
+  "at": "2026-11-14T10:32:34.428Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"KO\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 172,
+  "at": "2026-11-14T10:32:37.159Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"KO\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 176,
+  "at": "2026-11-14T10:32:39.948Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

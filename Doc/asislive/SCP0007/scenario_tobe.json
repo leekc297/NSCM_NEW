@@ -1,0 +1,38 @@
+{
+ "id": "SCP0007",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [],
+ "skipped": [
+  {
+   "param": "from_site",
+   "asis": "ST00-A,ST00-E,ST00-P,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,WA00-A,WA00-E,WA00-P,NA00-E,NA00-P,NB01-A,NB01-E,NB01-",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "incoterms",
+   "asis": "A01,Z01,Z04,EXW,FCA,FAS,FOB,CFR,CIF,CIP,CPT,Z02,DAT,DAP,DDP,DDU",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "incoterms_ssp",
+   "asis": "A01,Z01,Z04,EXW,FCA,FAS,FOB,CFR,CIF,CIP,CPT,Z02,DAT,DAP,DDP,DDU",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "to_site",
+   "asis": "AU00,EG00,EG00,EG00,IL00,MI00,AZ00-A,AZ00-E,CN00249500-P,CN00254300_40-P,CN00732500_40-P,CN02072800_40-P,CN05104100_82-P",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "trans_mode",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  }
+ ]
+}

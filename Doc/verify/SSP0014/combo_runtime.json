@@ -1,0 +1,618 @@
+{
+ "at": "2026-11-14T11:24:21.817Z",
+ "search": {
+  "Div": {
+   "label": "Div",
+   "opts": [
+    "40 Mobility & IT Battery",
+    "81 Automotive Battery",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_UC Automotive Battery(UC)",
+    "82 ESS Battery"
+   ],
+   "multi": false,
+   "sel": [
+    "40 Mobility & IT Battery"
+   ]
+  },
+  "Operation group": {
+   "label": "Operation group",
+   "opts": [
+    "ALL",
+    "Cell",
+    "Electrode",
+    "Pack",
+    "Warranty"
+   ],
+   "multi": false,
+   "sel": [
+    "ALL"
+   ]
+  },
+  "From Site": {
+   "label": "From Site",
+   "opts": [
+    "SELECT ALL",
+    "AZ Mobile Assy-Cell",
+    "AZ Mobile Assy-Cell",
+    "AZ Mobile Assy-Cell",
+    "AZ Mobile Elec-Electrode",
+    "C-TECH_CN_CQ",
+    "C-TECH_TW",
+    "DEOKYANG",
+    "DONGHWAES_KR",
+    "Elentec_CN",
+    "Elentec_IN",
+    "Elentec_KR",
+    "Elentec_Yongin",
+    "Enetech_KR_CJ_ELEC",
+    "HQ OC2 Mobile Prod-Cell",
+    "HQ OC2 Mobile Prod-Pack",
+    "INFAC_40",
+    "INFAC_KR",
+    "ITM_KR",
+    "ITM_KR_VN",
+    "LGESNJ BATTERY-Pack",
+    "LGESNJ Cell NJ01",
+    "LGESNJ Elec NJ01",
+    "LGESOC Cell HQ06",
+    "LGESOC Elec HQ06",
+    "LGESOC IT & New Application Waranty HQ05",
+    "NEXCON_CN_NJ",
+    "OC_2 Mobile Elec-Electrode",
+    "PeopleWorks-KR-1",
+    "POWERLOGICS_KR",
+    "POWERLOGICS_VN",
+    "SEOWON_NJ-CELL",
+    "SUNTEL_KR_VN"
+   ],
+   "multi": true,
+   "sel": []
+  },
+  "Active": {
+   "label": "Active",
+   "opts": [
+    "ALL",
+    "Y",
+    "N"
+   ],
+   "multi": false,
+   "sel": [
+    "ALL"
+   ]
+  }
+ },
+ "grid": {},
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "Mobility & IT Battery"
+    },
+    {
+     "c": "81",
+     "v": "Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'40'\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 32,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AC00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AT00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AZ00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AZ00-E",
+     "v": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "c": "CN00254300_40-P",
+     "v": "NEXCON_CN_NJ"
+    },
+    {
+     "c": "CN00732500_40-P",
+     "v": "C-TECH_CN_CQ"
+    },
+    {
+     "c": "CN02072800_40-P",
+     "v": "Elentec_CN"
+    },
+    {
+     "c": "HQ05_40-W",
+     "v": "LGESOC IT & New Application Waranty HQ05"
+    },
+    {
+     "c": "HQ06-A",
+     "v": "LGESOC Cell HQ06"
+    },
+    {
+     "c": "HQ06-E",
+     "v": "LGESOC Elec HQ06"
+    },
+    {
+     "c": "HQ10-A",
+     "v": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "c": "HQ10-E",
+     "v": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "c": "HQ10-P",
+     "v": "HQ OC2 Mobile Prod-Pack"
+    },
+    {
+     "c": "IN00142000_40-P",
+     "v": "Elentec_IN"
+    },
+    {
+     "c": "KR00496300_40-P",
+     "v": "SUNTEL_KR_VN"
+    },
+    {
+     "c": "KR00781800_40-P",
+     "v": "POWERLOGICS_KR"
+    },
+    {
+     "c": "KR00797800_40-P",
+     "v": "PeopleWorks-KR-1"
+    },
+    {
+     "c": "KR00995200_40-P",
+     "v": "DONGHWAES_KR"
+    },
+    {
+     "c": "KR01297200_40-P",
+     "v": "Elentec_KR"
+    },
+    {
+     "c": "KR02149300_40-A",
+     "v": "SEOWON_NJ-CELL"
+    },
+    {
+     "c": "KR02265100_40_KR-P",
+     "v": "ITM_KR"
+    },
+    {
+     "c": "KR02265100_40-P",
+     "v": "ITM_KR_VN"
+    },
+    {
+     "c": "KR03346900_40-P",
+     "v": "DEOKYANG"
+    },
+    {
+     "c": "KR04179400_40-E",
+     "v": "Enetech_KR_CJ_ELEC"
+    },
+    {
+     "c": "KR04595000_40-P",
+     "v": "INFAC_KR"
+    },
+    {
+     "c": "KR40408500_40-P",
+     "v": "Elentec_Yongin"
+    },
+    {
+     "c": "NJ01-A",
+     "v": "LGESNJ Cell NJ01"
+    },
+    {
+     "c": "NJ01-E",
+     "v": "LGESNJ Elec NJ01"
+    },
+    {
+     "c": "NJ01-P",
+     "v": "LGESNJ BATTERY-Pack"
+    },
+    {
+     "c": "PL01279700_40-P",
+     "v": "INFAC_40"
+    },
+    {
+     "c": "TW00177500_40-P",
+     "v": "C-TECH_TW"
+    },
+    {
+     "c": "VN00188600_40-P",
+     "v": "POWERLOGICS_VN"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 32,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AC00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AT00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AZ00-A",
+     "v": "AZ Mobile Assy-Cell"
+    },
+    {
+     "c": "AZ00-E",
+     "v": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "c": "CN00254300_40-P",
+     "v": "NEXCON_CN_NJ"
+    },
+    {
+     "c": "CN00732500_40-P",
+     "v": "C-TECH_CN_CQ"
+    },
+    {
+     "c": "CN02072800_40-P",
+     "v": "Elentec_CN"
+    },
+    {
+     "c": "HQ05_40-W",
+     "v": "LGESOC IT & New Application Waranty HQ05"
+    },
+    {
+     "c": "HQ06-A",
+     "v": "LGESOC Cell HQ06"
+    },
+    {
+     "c": "HQ06-E",
+     "v": "LGESOC Elec HQ06"
+    },
+    {
+     "c": "HQ10-A",
+     "v": "HQ OC2 Mobile Prod-Cell"
+    },
+    {
+     "c": "HQ10-E",
+     "v": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "c": "HQ10-P",
+     "v": "HQ OC2 Mobile Prod-Pack"
+    },
+    {
+     "c": "IN00142000_40-P",
+     "v": "Elentec_IN"
+    },
+    {
+     "c": "KR00496300_40-P",
+     "v": "SUNTEL_KR_VN"
+    },
+    {
+     "c": "KR00781800_40-P",
+     "v": "POWERLOGICS_KR"
+    },
+    {
+     "c": "KR00797800_40-P",
+     "v": "PeopleWorks-KR-1"
+    },
+    {
+     "c": "KR00995200_40-P",
+     "v": "DONGHWAES_KR"
+    },
+    {
+     "c": "KR01297200_40-P",
+     "v": "Elentec_KR"
+    },
+    {
+     "c": "KR02149300_40-A",
+     "v": "SEOWON_NJ-CELL"
+    },
+    {
+     "c": "KR02265100_40_KR-P",
+     "v": "ITM_KR"
+    },
+    {
+     "c": "KR02265100_40-P",
+     "v": "ITM_KR_VN"
+    },
+    {
+     "c": "KR03346900_40-P",
+     "v": "DEOKYANG"
+    },
+    {
+     "c": "KR04179400_40-E",
+     "v": "Enetech_KR_CJ_ELEC"
+    },
+    {
+     "c": "KR04595000_40-P",
+     "v": "INFAC_KR"
+    },
+    {
+     "c": "KR40408500_40-P",
+     "v": "Elentec_Yongin"
+    },
+    {
+     "c": "NJ01-A",
+     "v": "LGESNJ Cell NJ01"
+    },
+    {
+     "c": "NJ01-E",
+     "v": "LGESNJ Elec NJ01"
+    },
+    {
+     "c": "NJ01-P",
+     "v": "LGESNJ BATTERY-Pack"
+    },
+    {
+     "c": "PL01279700_40-P",
+     "v": "INFAC_40"
+    },
+    {
+     "c": "TW00177500_40-P",
+     "v": "C-TECH_TW"
+    },
+    {
+     "c": "VN00188600_40-P",
+     "v": "POWERLOGICS_VN"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P",
+     "v": "Pack"
+    },
+    {
+     "c": "A",
+     "v": "Cell"
+    },
+    {
+     "c": "E",
+     "v": "Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P",
+     "v": "Pack"
+    },
+    {
+     "c": "A",
+     "v": "Cell"
+    },
+    {
+     "c": "E",
+     "v": "Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
+  }
+ ]
+}

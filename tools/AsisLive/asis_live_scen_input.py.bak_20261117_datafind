@@ -1,0 +1,202 @@
+# -*- coding: utf-8 -*-
+"""셀 값 입력 분기 · 시트 전환 분기 실행 (2026-11-13, 플랜 P6-2)
+
+  python tools/AsisLive/asis_live_scen_input.py <ID> [ID ...] [--tabs] [--input]     (둘 다 생략 = 둘 다)
+대상  Doc/asislive/<ID>/scenarios_cov.csv 의 진입점
+        시트 전환  event:<그리드>.ActiveSheetChanged | ActiveSheetChanging   (SheetTabClick 은 탭을 마우스로 눌러야 나는 이벤트라 대상에서 뺀다 — 실행 근거로 적지 않는다)
+        셀 값 입력 event:<그리드·데이터 모델>.Change | Changed | EditChange | EditModeOff | LeaveCell | CellChanged
+방법  시트 전환  조회 뒤 그리드의 시트를 차례로 활성화(ActiveSheetIndex)하고 처음 시트로 되돌린다. 전환마다 호출·메시지·팝업·그리드 변화를 적는다.
+      셀 값 입력 조회 → 수정 모드 → 첫 행에서 잠기지 않은 열에 값을 넣는다(셀 편집 상태로 넣어 사용자가 친 것과 같은 이벤트가 난다).
+                 열 = 분기 조건식에 이름이 나온 열, 없으면 앞쪽 보이는 열 8개까지. 값 = 숫자면 +1, 글자면 같은 열 다른 행에 있는 다른 값(없으면 넣지 않는다).
+                 입력마다 메시지·호출·그리드 변화(변경 표시, 따라 바뀐 셀)를 적는다. 끝나면 저장하지 않고 닫는다(닫기 확인 = 저장 안 함).
+안전  저장 버튼을 누르지 않는다. 셀 입력 분기 가운데 서버 호출이 저장 계열 이름인 분기가 있는 화면은 입력하지 않는다(11-13 실측: 그런 분기 0개).
+      입력 뒤 저장 계열 이름의 호출이 기록되면 save_like_calls 에 적고 [WARN] 으로 알린다.
+산출  Doc/asislive/<ID>/run_<시각>_acts_tab/acts.json · run_<시각>_acts_input/acts.json   (분기별 대조 asis_live_scen_cmp.py 가 읽는다 · "cellrun" 형식)
+한계  주 그리드의 활성 시트 첫 행만 다룬다. 그 열에 값을 넣었다는 뜻이고 어느 분기를 탔는지는 관찰(메시지·호출·그리드 변화)로만 본다.
+      분기에 붙이는 기준 = 조건식·관찰점 글자에 그 열 이름이 나온 분기 + 열 이름이 하나도 안 나온 분기.
+"""
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+import asis_live_run as R
+import asis_live_fill as F
+import asis_live_excel as X
+import asis_live_scen_run as SR
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+IN = re.compile(r"^event:(?:this\.)?([\w.]+?)[._](Change|Changed|EditChange|EditModeOff|LeaveCell|CellChanged)$")
+TB = re.compile(r"^event:(?:this\.)?([\w.]+?)[._](ActiveSheetChanged|ActiveSheetChanging)$")
+SAVE = re.compile(r"save|delete|insert|upload|confirm|copy|create|apply|release|approve|reject|import|update|merge|set_", re.I)
+NUMRE = re.compile(r"^-?\d+(\.\d+)?$")
+
+
+def targets(mid):
+    """{"tab": {그리드 이름: [시나리오 ID]}, "input": [{"id", "text"}], "input_save_like": [시나리오 ID]}"""
+    sc = SR.rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or SR.rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    tab = {}; inp = []; bad = []
+    for r in sc:
+        for e in [x.strip() for x in (r.get("entry") or "").split("|") if x.strip()]:
+            m = TB.match(e)
+            if m:
+                l = tab.setdefault(m.group(1).split(".")[0], [])
+                if r["scenario_id"] not in l: l.append(r["scenario_id"])
+            if IN.match(e) and r["scenario_id"] not in [x["id"] for x in inp]:
+                inp.append({"id": r["scenario_id"], "text": (r.get("guard") or "") + " " + (r.get("observe") or "")})
+                if any(SAVE.search(x.split(".")[-1]) for x in (r.get("endpoints") or "").split(";") if x.strip()): bad.append(r["scenario_id"])
+    return {"tab": tab, "input": inp, "input_save_like": bad}
+
+
+def open_find(host, mid, out):
+    SR.sweep(host, out, None)
+    r = host.send("open", timeout=180, id=mid)
+    if not r.get("ok"): out["error"] = "화면 열기 실패: %s" % r.get("error"); out["restart"] = True; return None
+    R.wait_quiet(R.now(), 3, 60); F.LOCK.clear()
+    try: F.prefill(host, mid)
+    except Exception: pass
+    t0 = R.now(); host.send("find", timeout=60); R.wait_find(host, t0, 0, 300)
+    return host.send("dump", timeout=180, rows=30).get("data") or {}
+
+
+def observe(host, out, name, t1, d0, g0, xb, rr, calls):
+    R.wait_quiet(t1, 3, 90)
+    n2, _s = R.db_inflight()
+    if n2: R.wait_db_clear(600)
+    late = SR.sweep(host, out, name); cs = R.parse_dbprofile(t1, R.now())
+    for x in cs: x["phase"] = "action:" + name
+    calls += cs; gd = SR.grid_diff(g0, SR.grid_snap(host, rows=60)) if not out.get("restart") else []
+    xr = X.close_new(xb, X.host_pids()); dl = (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]
+    sl = sorted({str(x.get("sp")) for x in cs if SAVE.search(str(x.get("sp") or "").split(".")[-1].split("_", 1)[-1]) and "UP_FX_" not in str(x.get("sp"))})
+    if sl: out.setdefault("save_like_calls", []).extend(sl); print("   [WARN] 저장 계열 이름의 호출이 기록됨: %s" % sl, flush=True)
+    return {"popups": (rr.get("popups") or []) + [dict(p, late=True) for p in late], "new_screens": rr.get("new_screens") or [],
+            "dialogs": [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in dl], "calls": [x.get("sp") for x in cs if "UP_FX_" not in str(x.get("sp"))][:20],
+            "asis_timeout": sorted({str(x.get("sp")) for x in cs if SR.timed_out(x)}), "grid_changes": gd, "excel": xr.get("closed") or []}, len(cs)
+
+
+def close_nosave(host, out):
+    if not out.get("restart"):
+        host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); time.sleep(1); SR.sweep(host, out, None); host.send("policy", timeout=30, dialogs="default")
+
+
+def run_tabs(host, mid, group, tg):
+    out = {"id": mid, "group": group, "cellrun": True, "tabrun": True, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}; calls = []
+    d = open_find(host, mid, out)
+    if d is None: return out, calls
+    grids = {g.get("name"): g for g in d.get("grids") or []}; low = {str(k).lower(): k for k in grids}; xb = X.snap()
+    for ctl, ids in sorted(tg.items()):
+        gn = low.get(ctl.lower())
+        if not gn: out["skipped"].append({"control": ctl, "why": "화면 덤프에 그 이름의 그리드가 없음(%s)" % ",".join(map(str, grids)), "scenarios": ids}); print("   %s · 건너뜀(그리드 없음)" % ctl, flush=True); continue
+        sheets = grids[gn].get("sheets") or []
+        try: cur = int(grids[gn].get("active_sheet_index") or 0)
+        except Exception: cur = 0
+        if len(sheets) < 2: out["skipped"].append({"control": gn, "why": "시트가 %d개라 전환할 수 없음" % len(sheets), "scenarios": ids}); print("   %s · 건너뜀(시트 %d개)" % (gn, len(sheets)), flush=True); continue
+        order = [i for i in range(len(sheets)) if i != cur] + [cur]
+        for i in order:
+            g0 = SR.grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+            rr = host.send("set", timeout=120, name=gn, prop="ActiveSheetIndex", value=str(i)); ob, n = observe(host, out, "tab:%s:%d" % (gn, i), t1, d0, g0, xb, {}, calls)
+            now_d = host.send("dump", timeout=180, rows=1).get("data") or {}
+            act_i = next((str(g.get("active_sheet_index")) for g in now_d.get("grids") or [] if g.get("name") == gn), "")
+            ok = bool(rr.get("ok")) and act_i == str(i)
+            out["acts"].append(dict(ob, control=gn, kind="tab", change="시트 %s(%d) 활성화%s" % (sheets[i].get("name"), i, " — 처음 시트로 되돌림" if i == cur else ""), ok=ok,
+                                    error=rr.get("error") or ("" if ok else "활성 시트가 %s 로 읽힘" % act_i), scenarios=ids))
+            print("   %s · 시트 %s(%d) · %s · 메시지 %d · 호출 %d" % (gn, sheets[i].get("name"), i, "전환됨" if ok else "실패", len(ob["dialogs"]), n), flush=True)
+            if out.get("restart"): break
+        if out.get("restart"): break
+    close_nosave(host, out)
+    return out, calls
+
+
+def run_input(host, mid, group, inp, max_cols=8):
+    out = {"id": mid, "group": group, "cellrun": True, "inputrun": True, "edit": True, "acts": [], "skipped": [], "at": time.strftime("%Y-%m-%d %H:%M:%S")}; calls = []
+    d = open_find(host, mid, out)
+    if d is None: return out, calls
+    sheet = None; gname = ""
+    for g in d.get("grids") or []:
+        for sh in g.get("sheets") or []:
+            if sheet is None and str(sh.get("index", "")) in ("", str(g.get("active_sheet_index") or 0)): sheet = sh; gname = g.get("name") or ""
+        if sheet is None and (g.get("sheets") or []): sheet = g["sheets"][0]; gname = g.get("name") or ""
+        if sheet is not None: break
+    if not sheet or not (sheet.get("data") or []):
+        out["note"] = "조회 결과 행이 없어 값을 넣을 수 없음"; host.send("close_screen", timeout=60); SR.sweep(host, out, None); return out, calls
+    cols = sheet.get("columns") or []; tag = lambda c: (c.get("tag") or c.get("data_field") or c.get("label") or str(c.get("index")))
+    vis = [c for c in cols if str(c.get("visible")) == "True" and float(c.get("width") or 0) > 1 and int(c.get("index") or 0) > 0]
+    host.send("policy", timeout=30, dialogs="no")
+    er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); SR.sweep(host, out, "OnClickEditButton"); out["edit_mode"] = er.get("edit_mode")
+    print("   수정 모드 %s" % ("켜짐" if er.get("edit_mode") else "켜지지 않음"), flush=True)
+    if not er.get("edit_mode"): out["note"] = "수정 모드가 켜지지 않아 값을 넣지 않음"; close_nosave(host, out); return out, calls
+    alltags = {tag(c).upper() for c in vis}; words = {i["id"]: {w.upper() for w in re.findall(r"[A-Za-z_][A-Za-z0-9_]{2,}", i["text"])} for i in inp}
+    named = [c for c in vis if any(tag(c).upper() in w for w in words.values())]
+    free = [i["id"] for i in inp if not (words[i["id"]] & alltags)]                 # 조건식에 열 이름이 안 나온 분기 — 어느 열 입력에나 붙인다
+    pick = named + [c for c in vis if c not in named]
+    out["plan"] = {"grid": gname, "sheet": sheet.get("name"), "named_cols": [tag(c) for c in named][:40], "branches": len(inp), "branches_without_col_name": len(free),
+                   "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 %d개까지" % max_cols}
+    data = sheet.get("data") or []; done = 0; xb = X.snap()
+    for c in pick:
+        if done >= max_cols: break
+        ix = int(c.get("index")); old = str(data[0][ix]) if ix < len(data[0]) else ""; o2 = old.replace(",", "").strip()
+        ids = [i["id"] for i in inp if tag(c).upper() in words[i["id"]]] + free
+        if "CheckBox" in str(c.get("cell_type") or ""): new = None; why = "체크 상자 열 — 셀 편집 입력 대상 아님"
+        elif NUMRE.match(o2): new = str(int(o2) + 1) if "." not in o2 else ("%." + str(len(o2.split(".")[1])) + "f") % (float(o2) + 1); why = ""
+        else:
+            new = next((str(r[ix]) for r in data[1:] if ix < len(r) and str(r[ix]).strip() and str(r[ix]) != old), None); why = "" if new is not None else "같은 열에 다른 값이 없어 넣을 값을 정하지 못함"
+        if new is None:
+            if c in named: out["skipped"].append({"control": "%s[%s]" % (gname, tag(c)), "why": why, "scenarios": ids})
+            continue
+        g0 = SR.grid_snap(host, rows=60); t1 = R.now(); d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        cr = host.send("cell", timeout=60, row="0", col=str(ix), value=new)
+        if cr.get("locked") or not cr.get("entered"):
+            if c in named: out["skipped"].append({"control": "%s[%s]" % (gname, tag(c)), "why": "잠긴 셀" if cr.get("locked") else "편집 상태로 들어가지 않음(%s)" % (cr.get("edit_error") or cr.get("error") or ""), "scenarios": ids})
+            SR.sweep(host, out, tag(c)); continue
+        ob, n = observe(host, out, "input:" + tag(c), t1, d0, g0, xb, {}, calls); done += 1
+        out["acts"].append(dict(ob, control="%s[%s]" % (gname, tag(c)), kind="cell", change="첫 행 값 입력 %s → %s(수정 모드) · 입력 뒤 값 %s · 변경 표시 '%s' → '%s'" % (old, new, cr.get("after"), cr.get("action_before"), cr.get("action_after")),
+                                ok=bool(cr.get("ok")), error=cr.get("error"), scenarios=ids, cell={k: cr.get(k) for k in ("before", "after", "action_before", "action_after", "is_change")}))
+        print("   %s[%s] · %s → %s(입력 뒤 %s) · 변경 표시 '%s' · 메시지 %s · 호출 %d · 따라 바뀐 셀 %d" % (gname, tag(c), old, new, cr.get("after"), cr.get("action_after"), [x["text"][:40] for x in ob["dialogs"]], n,
+              sum(len(g.get("cells") or []) for g in ob["grid_changes"] if "cells" in g)), flush=True)
+        if out.get("restart"): break
+    if not out["acts"] and not out.get("note"): out["note"] = "값을 넣을 수 있는 열이 없음(잠김·체크 상자·넣을 값 없음)"
+    close_nosave(host, out)
+    return out, calls
+
+
+def main():
+    av = sys.argv[1:]; ids = [a.upper() for a in av if not a.startswith("-")]
+    do_t = "--tabs" in av or "--input" not in av; do_i = "--input" in av or "--tabs" not in av
+    if not ids: print(__doc__); return 2
+    plan = {m: targets(m) for m in ids}; work = []
+    for m in ids:
+        t = plan[m]
+        if do_t and t["tab"]: work.append((m, "tab"))
+        if do_i and t["input"]:
+            if t["input_save_like"]: print("[%s] 셀 입력 분기에 저장 계열 호출이 있는 분기 %d개 — 입력하지 않음" % (m, len(t["input_save_like"])))
+            else: work.append((m, "input"))
+        if not (t["tab"] or t["input"]): print("[%s] 시트 전환·셀 값 입력 분기 없음 — 런처를 띄우지 않음" % m)
+    if not work: return 0
+    if not R.acquire_lock("scen_input"): print("[ERROR] 다른 AS-IS 실측이 끝나지 않음"); return 3
+    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_input_" + time.strftime("%H%M%S")))
+    if host is None: print("[ERROR] 런처 세션 시작 실패: %s" % why); return 3
+    rc = 0
+    try:
+        grp = (host.send("group", timeout=60).get("current") or "")
+        for m, kind in work:
+            print("[%s] 그룹 %s · %s" % (m, grp, "시트 전환 분기" if kind == "tab" else "셀 값 입력 분기"), flush=True)
+            out, calls = run_tabs(host, m, grp, plan[m]["tab"]) if kind == "tab" else run_input(host, m, grp, plan[m]["input"])
+            d = P("Doc", "asislive", m, "run_%s_acts_%s" % (time.strftime("%Y%m%d_%H%M%S"), kind)); os.makedirs(d, exist_ok=True)
+            json.dump(out, open(os.path.join(d, "acts.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump({"calls": calls}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            json.dump({"id": m, "group": grp, "kind": "acts_" + kind, "acts": len(out["acts"]), "skipped": len(out["skipped"])}, open(os.path.join(d, "run.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            print("   → 실행 %d · 건너뜀 %d%s · %s" % (len(out["acts"]), len(out["skipped"]), (" · " + out["note"]) if out.get("note") else "", R.rel(d)), flush=True)
+            if out.get("error"): rc = max(rc, 3)
+            if out.get("restart"):
+                try: host.send("quit", timeout=30)
+                except Exception: pass
+                time.sleep(3); os.system("taskkill /F /IM AsisLive.Host.exe >nul 2>&1"); time.sleep(3)
+                host, info, why = R.start_session(P("Doc", "asislive", "_cmd_input_" + time.strftime("%H%M%S")))
+                if host is None: print("[ERROR] 런처 다시 시작 실패: %s" % why); return 3
+    finally:
+        try: host.send("policy", timeout=30, dialogs="close"); SR.sweep(host, {}, None); host.send("quit", timeout=30)
+        except Exception: pass
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main())

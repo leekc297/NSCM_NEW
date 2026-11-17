@@ -14,6 +14,7 @@ import { ConfirmDetailPanel } from './components/ConfirmDetailPanel';
 import { ShipmentChangeRequestConfirmForm } from './components/ShipmentChangeRequestConfirmForm';
 import { ShipmentChangeRequestConfirmMainGrid } from './components/ShipmentChangeRequestConfirmMainGrid';
 import { ShipmentChangeRequestConfirmSubGrid } from './components/ShipmentChangeRequestConfirmSubGrid';
+import { useConfirmDetailFold } from './hooks/useConfirmDetailFold';
 import { useShipmentChangeRequestConfirmActions } from './hooks/useShipmentChangeRequestConfirmActions';
 import {
   ACTION,
@@ -96,6 +97,8 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
   const setRejectReason = useShipmentChangeRequestConfirmStore(s => s.setRejectReason);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  // Request Confirm Detail 접기/펼치기·고정(사용자 지시 2026-11-12 — SSP0200 Request Info 와 같은 형태).
+  const confirmDetailFold = useConfirmDetailFold();
   const [openRequestor, setOpenRequestor] = useState(false);
   const [openItem, setOpenItem] = useState(false);
 
@@ -455,6 +458,10 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
                   rejectReason={rejectReason}
                   rejectEnabled={rejectEnabled}
                   onRejectReasonChange={setRejectReason}
+                  collapsed={confirmDetailFold.collapsed}
+                  pinned={confirmDetailFold.pin !== null}
+                  onToggleCollapsed={confirmDetailFold.toggleCollapsed}
+                  onTogglePin={confirmDetailFold.togglePin}
                 />
               </div>
 

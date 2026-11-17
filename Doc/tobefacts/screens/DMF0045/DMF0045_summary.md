@@ -1,27 +1,27 @@
 # DMF0045 — To-Be Fact Pack 요약
 
 - page_key: `demand/shipment-request` · feature: demand · As-is Fact Pack 있음
-- 파일 22 · 엔드포인트 호출 14 (미해결 0, 주석 속 5) · 이벤트 30 · 컴포넌트 사용 41 · 하드코딩 컬럼 18 · 메시지 44
+- 파일 22 · 엔드포인트 호출 15 (미해결 0, 주석 속 5) · 이벤트 30 · 컴포넌트 사용 41 · 하드코딩 컬럼 18 · 메시지 44
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 18건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.module.scss | component | 25 |
-| features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | component | 237 |
+| features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | component | 241 |
 | features/demand/src/pages/shipment-request/components/ShipmentRequestForm.tsx | component | 367 |
-| features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | component | 1094 |
+| features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | component | 1104 |
 | features/demand/src/pages/shipment-request/components/ShipmentRequestModals.tsx | component | 283 |
 | features/demand/src/pages/shipment-request/index.ts | index | 2 |
 | features/demand/src/pages/shipment-request/shipment-request.constants.ts | constants | 165 |
 | features/demand/src/pages/shipment-request/shipment-request.types.ts | types | 74 |
 | features/demand/src/pages/shipment-request/ShipmentRequest.module.scss | style | 75 |
-| features/demand/src/pages/shipment-request/ShipmentRequest.tsx | page | 611 |
+| features/demand/src/pages/shipment-request/ShipmentRequest.tsx | page | 650 |
 | features/demand/src/pages/shipment-request/useShipmentRequestStore.ts | store | 540 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.api.ts | api | 129 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.bohFrontFill.ts | util | 52 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.division.ts | util | 20 |
-| features/demand/src/pages/shipment-request/utils/shipment-request.editLock.ts | util | 184 |
+| features/demand/src/pages/shipment-request/utils/shipment-request.editLock.ts | util | 195 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.gridCombos.ts | util | 15 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.merge.ts | util | 194 |
 | features/demand/src/pages/shipment-request/utils/shipment-request.recalc.ts | util | 141 |
@@ -34,7 +34,7 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | SCP0030/bodPopup//call-proc | hook | 1 | Y | BodItemRouteModal.tsx:105 |
-| (useTabComboQueries) | hook | 3 | Y | ShipmentRequestForm.tsx:86 ShipmentRequestGrid.tsx:399 ShipmentRequest.tsx:70 |
+| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestForm.tsx:86 ShipmentRequestGrid.tsx:399 ShipmentRequest.tsx:70 ShipmentRequest.tsx:171 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentRequestForm.tsx:104 |
 | DMF0045/Pack Biz//call-proc | hook | 1 | Y | ShipmentRequest.tsx:112 |
 | DMF0045/Cell Biz//call-proc | hook | 1 | Y | ShipmentRequest.tsx:119 |
@@ -51,8 +51,8 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| Button | onClick | handleSubmit | jsx | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | 222 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | 229 |
+| Button | onClick | handleSubmit | jsx | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | 226 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | 233 |
 | CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/demand/src/pages/shipment-request/components/ShipmentRequestForm.tsx | 173 |
 | SearchArea | onSearch | onSearch | jsx | features/demand/src/pages/shipment-request/components/ShipmentRequestForm.tsx | 190 |
 | CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/demand/src/pages/shipment-request/components/ShipmentRequestForm.tsx | 209 |
@@ -66,21 +66,21 @@
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 649 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 706 |
 | g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 708 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 818 |
-| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 826 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 871 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 875 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 943 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 991 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 1062 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 828 |
+| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 836 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 881 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 885 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 953 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 1001 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 1072 |
 | ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:activeSheet,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/shipment-request/components/ShipmentRequestModals.tsx | 213 |
 | MeasureSelectModal | onApply | <arrow> onSettingChanged,applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:activeSheet,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/shipment-request/components/ShipmentRequestModals.tsx | 259 |
-| ShipmentRequestGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 515 |
-| ShipmentRequestForm | onSearch | handleSearch | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 530 |
-| ShipmentRequestForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 531 |
-| ShipmentRequestForm | onBucketChange | handleBucketChange | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 532 |
-| ShipmentRequestModals | onClose | <arrow> ({PROJECT:setOpenProject,BOD:setOpenBod,ITEM:setOpenItem,COLUMN:setOpenColumnSetting,MEASURE:setOpenMeasureSelect,})[key] | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 585 |
-| ShipmentRequestModals | onSettingChanged | handleSettingChanged | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 606 |
+| ShipmentRequestGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 537 |
+| ShipmentRequestForm | onSearch | handleSearch | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 552 |
+| ShipmentRequestForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 553 |
+| ShipmentRequestForm | onBucketChange | handleBucketChange | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 554 |
+| ShipmentRequestModals | onClose | <arrow> ({PROJECT:setOpenProject,BOD:setOpenBod,ITEM:setOpenItem,COLUMN:setOpenColumnSetting,MEASURE:setOpenMeasureSelect,})[key] | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 607 |
+| ShipmentRequestModals | onSettingChanged | handleSettingChanged | jsx | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 645 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -178,7 +178,7 @@
 | LBL00310 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0045(34), SCP0030(18), DMF0046(14), DMF0021(8), SCM0002(7), DMF0047(7), DMF0003(5), SSP0045(4), SYS0004(2), DMF0020(2), DMF0040(1), SSP0014(1), SCM0001(1), SCP0002(1)
+- 화면ID: DMF0045(34), SCP0030(18), DMF0046(14), DMF0021(8), SCM0002(7), DMF0047(7), DMF0003(5), SSP0045(4), SCM0001(4), SYS0004(2), DMF0020(2), DMF0040(1), SSP0014(1), SCP0002(1)
 - SP/PKG: P_CREATED_BY(9), P_DMF0045_GET_SPREAD_TITLE(5), P_DMF0045_GET_SHIPMENT_REQUEST(5), P_DMF0045_SAVE_SHIPMENT_REQUEST(3), P_DIVISION_ID(3), P_SCP0030_GET_BOD_POPUP(2), PKG_DMF0045(2), P_SHEET_NAME(2), P_PROJECT_CODE(2), P_ITEM_ID(2), P_TRANSPORT_MODE(2), PKG_SCP0030(1), PKG_SCM0002(1), P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP(1), PKG_NSCM_UI_COM_MENU(1), PR_GET_SHEET_COLUMN_LIST(1), DM0003_GET_BUCKET_TYPE_CODE(1), PR_GET_PROC_INFO_LIST(1), P_TEAM_ID(1), P_CUSTOMER(1), P_SCM_SITE_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_START_DT(1), P_END_DT(1), DMF0002_GET_TITLESET_POPUP(1), P_ACTIVE_FLAG(1), P_FROM_SITE(1), P_TO_SITE(1), P_INCOTERMS(1), P_FCST_TYPE(1), P_BOD_ID(1), P_MEASURE(1), P_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -186,7 +186,7 @@
 | endpoint | 롤백: BOD_SRC_MENU 를 MENU_ID 로 되돌리고, 하드코딩 POPUP_COLUMNS 를 admin 메타 fetch(popupColumns)로 | features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx | 54 |
 | code | 벗기면 원복: visibleColumns.map(c => ({ ...c, visible: true, display: true })). | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 236 |
 | code | 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx | 603 |
-| endpoint | mount 시 1회 admin 메타 fetch (동적 속성관리 baseline) + persist 된 이전 filters 무효화 + | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 173 |
+| endpoint | mount 시 1회 admin 메타 fetch (동적 속성관리 baseline) + persist 된 이전 filters 무효화 + | features/demand/src/pages/shipment-request/ShipmentRequest.tsx | 195 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. | features/demand/src/pages/shipment-request/useShipmentRequestStore.ts | 122 |
 | endpoint | master hook §2.3 "UI 생성의 동적 속성관리" — Column 동적 fetch (SHEET_COLUMNS, division 서버 필터). | features/demand/src/pages/shipment-request/useShipmentRequestStore.ts | 354 |
 | endpoint | master hook §5 — Measure 동적 fetch (SHEET_MEASURE — Measure Select 팝업 대상) | features/demand/src/pages/shipment-request/useShipmentRequestStore.ts | 388 |

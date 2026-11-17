@@ -1,0 +1,295 @@
+{
+ "id": "DMF0003",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0003_SAVE_MKT_FCST",
+   "save_sp": "DMF0003_SAVE_MKT_FCST",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_MKT_FCST",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "DOM_EXP",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "MEASURE",
+    "YYYYMMDD",
+    "PLANT_SITE_ID"
+   ],
+   "match": {
+    "DOM_EXP": "DOM_EXP",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "YYYYMMDD",
+    "PLANT_SITE_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_MKT_FCST_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Mkt Fcst",
+   "writes": {
+    "DM_PLN_MKT_FCST": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "DM_PLN_MKT_FCST_H": [
+     "INSERT INTO"
+    ],
+    "dm_pln_mkt_fcst": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0003_SAVE_MKT_FCST → SP DMF0003_SAVE_MKT_FCST 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "dm_pln_sales_plan": [
+     "DELETE",
+     "DELETE FROM",
+     "INSERT",
+     "INSERT INTO"
+    ],
+    "DM_PLN_SALES_PLAN": [
+     "DELETE",
+     "INSERT INTO"
+    ],
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "dm_pln_mkt_fcst"
+   ],
+   "unmatched_why": {
+    "DIVISION_ID": "P_DIVISION_ID←Division(변수)",
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SCM_SITE_ID": "p_scm_site_id←ScmSiteId(변수); p_scm_site_id←ScmSiteId40(변수); p_scm_site_id←SalesSite(변수); p_scm_site_id←SCM_SITE_ID(변수)",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+   "save_sp": "DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_SALES_PLAN",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "DOM_EXP",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "MEASURE",
+    "PLANT_SITE_ID",
+    "YYYYMMDD",
+    "CELL_PROD_SITE_ID"
+   ],
+   "match": {
+    "DOM_EXP": "DOM_EXP",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "PLANT_SITE_ID",
+    "YYYYMMDD",
+    "CELL_PROD_SITE_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_MKT_FCST_PK_DATA_UPDATE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Mkt Fcst",
+   "writes": {
+    "DM_PLN_MKT_FCST": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ],
+    "SCM_MST_FUTURE_PRICE": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "DM_PLN_SALES_PLAN": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "MERGE INTO"
+    ],
+    "DM_PLN_MKT_FCST_PK_DATA_UPDATE_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE → SP DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "DM_PLN_MKT_FCST",
+    "SCM_MST_FUTURE_PRICE"
+   ],
+   "unmatched_why": {
+    "DIVISION_ID": "p_division_id←Division(변수)",
+    "PROJECT_CODE": "p_project_code←Project(변수); p_project_code←Customer40(변수); p_project_code←ProjectCode(변수)",
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "CELL_PROD_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0003_SAVE_PRPOPUP",
+   "save_sp": "DMF0003_SAVE_PRPOPUP",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_MKT_FCST",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "DOM_EXP",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "MEASURE",
+    "YYYYMMDD",
+    "PLANT_SITE_ID"
+   ],
+   "match": {
+    "DOM_EXP": "DOM_EXP",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "YYYYMMDD",
+    "PLANT_SITE_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SSP_ANL_ESS_REQ_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Mkt Fcst",
+   "writes": {
+    "DM_PLN_MKT_FCST": [
+     "UPDATE"
+    ],
+    "DM_PLN_PR_DETAIL": [
+     "INSERT INTO"
+    ],
+    "date": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml DMF0003_SAVE_PRPOPUP → SP DMF0003_SAVE_PRPOPUP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "LOGIC": [
+     "INSERT"
+    ],
+    "SSP_ANL_ESS_REQ": [
+     "INSERT INTO",
+     "UPDATE"
+    ],
+    "SSP_ANL_ESS_REQ_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "DM_PLN_PR_DETAIL"
+   ],
+   "unmatched_why": {
+    "DIVISION_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+   "save_sp": "DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+   "status": "키 일부 미대응",
+   "table": "DM_ANL_MKT_PSI",
+   "pk": [
+    "DIVISION_ID",
+    "END_CUSTOMER",
+    "PROJECT_CODE",
+    "YYYYMM",
+    "CUST_FCST_M",
+    "MEASURE"
+   ],
+   "match": {
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "DIVISION_ID",
+    "END_CUSTOMER",
+    "PROJECT_CODE",
+    "YYYYMM",
+    "CUST_FCST_M"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Mkt Fcst",
+   "writes": {
+    "DM_ANL_MKT_PSI_DETAIL": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "DM_ANL_MKT_PSI": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL → SP DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "DM_ANL_MKT_PSI_DETAIL"
+   ],
+   "unmatched_why": {
+    "DIVISION_ID": "p_division_id←Division(변수)",
+    "END_CUSTOMER": "p_end_customer←(그리드 열에서 오지 않음)",
+    "PROJECT_CODE": "p_project_code←Project(변수); p_project_code←Customer40(변수); p_project_code←ProjectCode(변수)",
+    "YYYYMM": "p_yyyymm←(그리드 열에서 오지 않음)",
+    "CUST_FCST_M": "p_cust_fcst_m←MKT_FCST(변수)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

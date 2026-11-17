@@ -1,0 +1,23 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+DMF0042-Sf383c1,기타,ValidationCheck,DMF0042_1_BizPlan.cs:2728,호출 없음,,
+DMF0042-S731783,기타,ValidationCheck,DMF0042_1_BizPlan.cs:2731,호출 없음,,
+DMF0042-S9e67cd,조회,GetSLOC,DMF0042_1_RTF.cs:823,주석 안에서만 호출,DMF0042_1_RTF.cs:115; DMF0042_1_RTF.cs:754; DMF0042_1_RTF.cs:785,
+DMF0042-Sd1fce9,조회,GetSPlant,DMF0042_1_RTF.cs:805,주석 안에서만 호출,DMF0042_1_RTF.cs:114,
+DMF0042-Sf061c0,초기,Select_DpInit_Data,DMF0042_1_RTF.cs:1030,호출 없음,,
+DMF0042-S7762bc,초기,Select_DpInit_Data,DMF0042_1_RTF.cs:1183,호출 없음,,
+DMF0042-S9350d0,초기,Select_DpInit_Data,DMF0042_1_RTF.cs:1295,호출 없음,,
+DMF0042-Sd97bea,초기,Select_DpInit_Data,DMF0042_1_RTF.cs:1300,호출 없음,,
+DMF0042-S8a00ac,초기,Select_DpInit_Data,DMF0042_1_RTF.cs:1306,호출 없음,,
+DMF0042-Se26b52,조회,Select_DpResult_Data,DMF0042_1_RTF.cs:1383,주석 안에서만 호출,DMF0042_1_RTF.cs:1320,
+DMF0042-S34ac8b,조회,Select_DpResult_Data,DMF0042_1_RTF.cs:1529,주석 안에서만 호출,DMF0042_1_RTF.cs:1320,
+DMF0042-S0243b1,조회,Select_DpResult_Data,DMF0042_1_RTF.cs:1563,주석 안에서만 호출,DMF0042_1_RTF.cs:1320,
+DMF0042-Se4516c,조회,Select_DpResult_Data,DMF0042_1_RTF.cs:1568,주석 안에서만 호출,DMF0042_1_RTF.cs:1320,
+DMF0042-Sebf0b5,조회,Select_DpResult_Data,DMF0042_1_RTF.cs:1574,주석 안에서만 호출,DMF0042_1_RTF.cs:1320,
+DMF0042-Sbb02ae,기타,sheetSetting,DMF0042_1_RTF.cs:1640,같은 파일에서 호출,DMF0042_1_RTF.cs:1290; DMF0042_1_RTF.cs:1558,"Select_DpInit_Data,Select_DpResult_Data"
+DMF0042-S0debf1,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:154,호출 없음,,
+DMF0042-S7d289d,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:184,호출 없음,,
+DMF0042-S6d69d4,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:189,호출 없음,,
+DMF0042-S2748ef,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:197,호출 없음,,
+DMF0042-Sa6fe26,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:209,호출 없음,,
+DMF0042-S7af9aa,초기,InitSpread_X,DMF0042_ExchangeRatePopup.cs:216,호출 없음,,
+DMF0042-Sb52154,초기,LoadData,DMF0042_ExchangeRatePopup.cs:95,호출 없음,DMF0042_BizPlan.cs:3057; DMF0042_1_BizPlan.cs:2994; DMF0042_2_BizPlan.cs:3218; DMF0042_3_BizPlan.cs:3108; DMF0042_BizPlan_old.cs:2126,"btnCutOff_Click,btnExchangeRate_Click"

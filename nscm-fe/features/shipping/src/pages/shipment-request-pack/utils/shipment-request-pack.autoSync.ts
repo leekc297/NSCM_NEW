@@ -1,10 +1,15 @@
 import { parseDynamicColumnTag } from './shipment-request-pack.dynamicColumn';
 
-// Auto-Sync 3방향 배분(D↔W↔M, 03_grid-columns.md R20) — production-plan-line
-// (productionPlanLineDerive.ts)의 검증된 "균등분배 + 나머지 마지막 셀 가산" 산식을 그대로 따른다.
-// design 03 §2-4가 서술하는 `DefaultBucketDay`(기본요일 전량배정) 분기는 그 콤보의 DB 실측이
-// 이번 회차에도 없어(§6 확인 필요) 구현하지 않는다 — production-plan-line도 동일 분기 없이
-// 균등분배만 구현한 선례를 따른다(임의 추정 금지, 04_react-gap.md 이월).
+// Auto-Sync 3방향 배분(D↔W↔M, 03_grid-columns.md R20).
+//   - D→W/M: 합산(sumValues).
+//   - W→D / M→D: **AS-IS DefaultBucketDay(기본요일) 배분**(사용자 지시 2026-11-09). AS-IS spdMain_Changed
+//     (cs:2541~2924)는 DefaultBucketDay 콤보(SCM_ADM_LOOKUP_MASTER_DETAIL DEFAULT_BUCKET_DAY, division별
+//     요일 — 40=MON·81/82=FRI, ora.py 실측 2026-11-09)로 분배한다: W→D 는 그 주 기본요일 1일에 전량,
+//     M→D 는 그 달 기본요일 날짜들에 균등분배(+나머지 마지막). TO-BE 조회 SP(PKG_SSP0026)는 DB_(day-bucket
+//     플래그) 컬럼을 만들지 않으므로(ora.py 실측 0건) AS-IS 의 DB_ 균등분배 분기는 데이터가 없어 항상
+//     bWeekAll/bMonthAll(기본요일) 경로를 탄다 — 전 division 에 기본요일이 설정돼 있어 이 경로가 전부다.
+//   저장은 D_(일)만 전송한다(AS-IS SaveData cs:1621 과 동일, shipment-request-pack.save.ts collectPivotChanges).
+//   종전 균등분배(distributeToDaily)는 기본요일 미확보(콤보 0행) 시 폴백으로만 남긴다.
 
 const toNum = (v: unknown): number | null => {
   if (v === undefined || v === null || v === '') return null;
@@ -38,6 +43,62 @@ export const distributeToDaily = (total: number, dayCount: number): number[] => 
   const out = new Array<number>(dayCount).fill(base);
   out[dayCount - 1] = base + remainder;
   return out;
+};
+
+// yyyymmdd → 요일코드(SUN/MON/.../SAT). AS-IS 가 DefaultBucketDay(SCM_ADM_LOOKUP_MASTER_DETAIL
+//   DEFAULT_BUCKET_DAY SEGMENT3)와 `dtWekk.ToString("ddd", en-US).ToUpper()` 를 비교하는 것과 동일 코드체계.
+//   isoWeekYear 와 동일하게 UTC 로 계산해 TZ 영향(월말/주말 경계 오류)을 없앤다.
+const WEEKDAY_CODES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] as const;
+export const weekdayCode = (yyyymmdd: string): string => {
+  const d = new Date(
+    Date.UTC(+yyyymmdd.slice(0, 4), +yyyymmdd.slice(4, 6) - 1, +yyyymmdd.slice(6, 8))
+  );
+  return WEEKDAY_CODES[d.getUTCDay()] ?? '';
+};
+
+const byDate = (a: string, b: string): number =>
+  (parseDynamicColumnTag(a)?.yyyymmdd ?? '').localeCompare(parseDynamicColumnTag(b)?.yyyymmdd ?? '');
+
+/**
+ * W→D 배분(AS-IS spdMain_Changed Weekly bWeekAll, cs:2645~2695) — 그 주의 **기본요일(defaultDay) 1일에
+ * 전량 배정**, 나머지 일자는 0. 주에 기본요일 날짜가 없으면(부분주) **마지막 날**에 전량(AS-IS iSetCol fallback).
+ * 반환: 그 주 전 D_ 키의 {key, qty}(0 포함) — 호출측이 전부 setCell 해 하위 일자를 확정한다.
+ */
+export const splitWeeklyByDefaultDay = (
+  dayKeys: string[],
+  weeklyTotal: number,
+  defaultDay: string
+): Array<{ key: string; qty: number }> => {
+  const sorted = [...dayKeys].sort(byDate);
+  if (sorted.length === 0) return [];
+  const total = roundQty(weeklyTotal);
+  const targetKey =
+    sorted.find(k => weekdayCode(parseDynamicColumnTag(k)?.yyyymmdd ?? '') === defaultDay) ??
+    sorted[sorted.length - 1];
+  return sorted.map(k => ({ key: k, qty: k === targetKey ? total : 0 }));
+};
+
+/**
+ * M→D 배분(AS-IS spdMain_Changed Monthly bMonthAll, cs:2846~2924) — 그 달의 **기본요일 날짜들에 균등분배
+ * + 나머지 마지막 날짜 가산**, 나머지 일자는 0. 기본요일 날짜가 없으면 마지막 날 1곳에 전량.
+ * 주의: AS-IS 는 "이번주 월요일 이후" 날짜만 대상(과거 제외, cs:2743/2753)인데, 그 실시간 필터는
+ *   이식하지 않고(런타임 Today 의존 회피) 그 달의 전 기본요일에 배분한다 — 과거 일자 보호는 확정구간
+ *   잠금(editLock)이 별도로 담당. (Monthly 는 미검증 — 사용자/담당자 확인 필요.)
+ */
+export const splitMonthlyByDefaultDay = (
+  dayKeys: string[],
+  monthlyTotal: number,
+  defaultDay: string
+): Array<{ key: string; qty: number }> => {
+  const sorted = [...dayKeys].sort(byDate);
+  if (sorted.length === 0) return [];
+  const targets = sorted.filter(
+    k => weekdayCode(parseDynamicColumnTag(k)?.yyyymmdd ?? '') === defaultDay
+  );
+  const useTargets = targets.length > 0 ? targets : [sorted[sorted.length - 1]];
+  const amounts = distributeToDaily(monthlyTotal, useTargets.length);
+  const qtyByKey = new Map(useTargets.map((k, i) => [k, amounts[i]]));
+  return sorted.map(k => ({ key: k, qty: qtyByKey.get(k) ?? 0 }));
 };
 
 /** row의 모든 바인딩 중 D_ 바인딩이면서 `weekBinding`(W_yyyymmdd)과 같은 ISO 주차에 속하는 것들. */

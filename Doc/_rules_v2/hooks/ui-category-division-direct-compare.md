@@ -28,7 +28,7 @@
    (admin 적재가 정본 — hook ui-dynamic-property-management).
 4. **FE 표시 필터는 2개 boolean 만**: `visible`(VISIBLE_FLAG — admin 관리 노출) &&
    `display`(DISPLAY_FLAG — 사용자 Column Setup 선택). BE GridColumn DTO 가 'Y'/'N' 을 boolean 으로
-   직렬화한다 (GridColumn.java 실측). ColumnSettingModal 로컬 반영은 **display** 를 갱신한다
+   직렬화한다 (GridColumn.java 실측). ColumnSettingModal 로컬 반영은 **display** 를 갱신한다 (2026-11-13 정정: 현행 컬럼 모달 정본 = `ColumnLayoutModal`(`@shared/components`) — `ColumnSettingModal` 은 2026-08-13 신규 사용 금지·DEPRECATED, hook #132 §2-1)
    (visible 을 사용자 조작으로 덮어쓰지 않는다).
 
 ## §2. 정본

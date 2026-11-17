@@ -1,0 +1,228 @@
+[
+ {
+  "row_id": "T-96d7cbbb",
+  "rule_id": "X-ROW",
+  "target": "SCP0104_CAPA_Line_Assign.RefreshPlantSpread",
+  "same": []
+ },
+ {
+  "row_id": "T-bc2f6848",
+  "rule_id": "C2",
+  "target": "ELTR_LN_TP_CD / Equipment Type",
+  "same": [
+   "T-4ae38c68",
+   "T-b943b4c9"
+  ]
+ },
+ {
+  "row_id": "T-261e9e8e",
+  "rule_id": "X-ROW",
+  "target": "SCP0104_CAPA_Line_Assign.RefreshCompanySpread",
+  "same": [
+   "T-5b37f06a"
+  ]
+ },
+ {
+  "row_id": "T-9f7a81a0",
+  "rule_id": "C6",
+  "target": "SITE_ID / Site",
+  "same": [
+   "T-2157e939",
+   "T-9407819e",
+   "T-5e69f0c0",
+   "T-4a361502",
+   "T-a86b60fe",
+   "T-9669ca5f",
+   "T-932f5b37",
+   "T-fe6c000f",
+   "T-744b42e7",
+   "T-e3e85b8a",
+   "T-55e5ceee"
+  ]
+ },
+ {
+  "row_id": "T-04e8f5c3",
+  "rule_id": "C2",
+  "target": "FACTORY_ID / Building",
+  "same": [
+   "T-a8dd3fa6",
+   "T-0cb8d43f"
+  ]
+ },
+ {
+  "row_id": "T-228fc738",
+  "rule_id": "F4",
+  "target": "PKG_SCP0104.P_SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+  "same": [
+   "T-dacd5310"
+  ]
+ },
+ {
+  "row_id": "T-14b55da2",
+  "rule_id": "C2",
+  "target": "LINE_ID / Line",
+  "same": [
+   "T-07f53041",
+   "T-2ea34689"
+  ]
+ },
+ {
+  "row_id": "T-25489c40",
+  "rule_id": "X-ROW",
+  "target": "SCP0104_CAPA_Line_Assign.Edit_Row_Assign",
+  "same": []
+ },
+ {
+  "row_id": "T-f3de1469",
+  "rule_id": "M4",
+  "target": "NICK_NAME / Nickname",
+  "same": [
+   "T-2ad5be22",
+   "T-9f1114a7"
+  ]
+ },
+ {
+  "row_id": "T-79cc3699",
+  "rule_id": "G5",
+  "target": "SCP0104_CAPA_Line_Assign_Model",
+  "same": []
+ },
+ {
+  "row_id": "V-912ca6bd",
+  "rule_id": "E2",
+  "target": "SCP0104 시나리오 [자동] SOP_DT 없는 날짜 저장 차단",
+  "same": []
+ },
+ {
+  "row_id": "V-33c71af8",
+  "rule_id": "E2",
+  "target": "SCP0104 시나리오 [자동] LAST_UPDATE_DATE 없는 날짜 저장 차단",
+  "same": []
+ },
+ {
+  "row_id": "T-4ae38c68",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-bc2f6848"
+ },
+ {
+  "row_id": "T-b943b4c9",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-bc2f6848"
+ },
+ {
+  "row_id": "T-5b37f06a",
+  "rule_id": "X-ROW",
+  "target": "",
+  "folded_into": "T-261e9e8e"
+ },
+ {
+  "row_id": "T-2157e939",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-9407819e",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-5e69f0c0",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-4a361502",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-a86b60fe",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-9669ca5f",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-932f5b37",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-fe6c000f",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-744b42e7",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-e3e85b8a",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-55e5ceee",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "T-9f7a81a0"
+ },
+ {
+  "row_id": "T-a8dd3fa6",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-04e8f5c3"
+ },
+ {
+  "row_id": "T-0cb8d43f",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-04e8f5c3"
+ },
+ {
+  "row_id": "T-dacd5310",
+  "rule_id": "F4",
+  "target": "",
+  "folded_into": "T-228fc738"
+ },
+ {
+  "row_id": "T-07f53041",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-14b55da2"
+ },
+ {
+  "row_id": "T-2ea34689",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-14b55da2"
+ },
+ {
+  "row_id": "T-2ad5be22",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f3de1469"
+ },
+ {
+  "row_id": "T-9f1114a7",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f3de1469"
+ }
+]

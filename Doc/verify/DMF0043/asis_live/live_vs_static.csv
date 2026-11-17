@@ -1,0 +1,25 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0043_GET_CONTRIBUTE_MAIN_DATA,DMF0043_Contribute_Main.cs:289 FindData,1회 · 구간 find,MATCH,
+SP,DMF0043_GET_MAIN_SPREAD_TITLE,DMF0043_Contribute_Main.cs:145 InitSpread,2회 · 구간 find/load,MATCH,
+SP,DMF0043_GET_MAIN_VARSION_DATA,DMF0043_Contribute_Main.cs:716 GetVersionData,1회 · 구간 load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,12회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0043_GET_CONTRIBUTION_SALES_LIST,DMF0043_Contribute_View.cs:358 FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0043_GET_SALES_LIST_SPREAD_TITLE,DMF0043_Contribute_View.cs:146 InitSpread,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO,DMF0043_Contribute_Main.cs:435 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_LOOKUP_VALUES,DMF0043_Contribute_Main.cs:541 GetLookupData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),31개,12개,INFO,공통 8 · 선언만 23 · 실측만 4
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,usrYear,Y,Year,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkYear,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrDiscard,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnCutOff,Y,기여율버전관리,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrHis,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/ContributeMain,정적 컬럼 사실 16행(시트 미지정 포함),컬럼 127(보임 116) · 헤더 2단 · 행 1527 · 고정 10,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

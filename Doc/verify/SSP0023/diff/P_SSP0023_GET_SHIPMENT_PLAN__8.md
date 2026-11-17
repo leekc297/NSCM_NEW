@@ -1,0 +1,8 @@
+# SSP0023 · SSP0023_GET_SHIPMENT_PLAN ↔ PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN
+
+- 실행 2026-11-15 01:10:35 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 호출 #8 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 308 · 원천 Doc\verify\SSP0023\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"divisionId": "40", "companyId": "HQ00", "fromSite": "", "planStartYyyymmdd": "20261009", "fromYyyymmdd": "20260928", "toYyyymmdd": "20261203", "modelId": "", "itemId": "", "nickName": "", "userId": "minyonglee1", "programId": "SSP0023", "sheetName": "Shipment Plan(Electrode)", "realFlag": "N", "nonChk": "Y", "myModelChk": "N", "delegateeChk": "N", "partLeaderChk": "N", "teamLeaderChk": "N"}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
+- AS-IS 인자(번역): `{"P_DIVISION_ID": "40", "P_COMPANY_ID": "HQ00", "P_FROM_SITE": "", "P_PLAN_START_YYYYMMDD": "20261009", "P_FROM_YYYYMMDD": "20260928", "P_TO_YYYYMMDD": "20261203", "P_MODEL_ID": "", "P_ITEM_ID": "", "P_NICK_NAME": "", "P_USER_ID": "minyonglee1", "P_PROGRAM_ID": "SSP0023", "P_SHEET_NAME": "Shipment Plan(Electrode)", "P_REAL_FLAG": "N", "P_NON_CHK": "Y", "P_MY_MODEL_CHK": "N", "P_DELEGATEE_CHK": "N", "P_PART_LEADER_CHK": "N", "P_TEAM_LEADER_CHK": "N"}`
+- ERR: ('01003', "[01003] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Warning: Null value is eliminated by an aggregate or other SET operation. (8153) (SQLExecDirectW); [01003] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Incorrect syntax near ','. (102); [01003] [Microsoft][ODBC Driver 

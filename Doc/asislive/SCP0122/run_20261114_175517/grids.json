@@ -1,0 +1,398 @@
+{
+ "id": "SCP0122",
+ "from": "dump_find.json",
+ "total": "Total : 7",
+ "time_status": "DB : 0.036s, UI : 0.077s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Plan Activity Mgmt",
+     "rows": 7,
+     "cols": 16,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div."
+       ],
+       "label": "Div.",
+       "tag": "DIVISION_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Process CD"
+       ],
+       "label": "Process CD",
+       "tag": "OPMZ_PRS_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPMZ_PRS_CD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Process"
+       ],
+       "label": "Process",
+       "tag": "OPMZ_PRS_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_PRS_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plan Group ID"
+       ],
+       "label": "Plan Group ID",
+       "tag": "OPMZ_PLAN_GR_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPMZ_PLAN_GR_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plan Group"
+       ],
+       "label": "Plan Group",
+       "tag": "OPMZ_PLAN_GR_NAME",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_PLAN_GR_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Act. Seq"
+       ],
+       "label": "Act. Seq",
+       "tag": "OPMZ_ACTV_SEQ",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPMZ_ACTV_SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Activity Code"
+       ],
+       "label": "Activity Code",
+       "tag": "OPMZ_ACTV_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_ACTV_CD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Activity Name"
+       ],
+       "label": "Activity Name",
+       "tag": "OPMZ_ACTV_NAME",
+       "width": "200",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_ACTV_NAME",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Link UI Type"
+       ],
+       "label": "Link UI Type",
+       "tag": "LINK_UI_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "LINK_UI_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Program Name"
+       ],
+       "label": "Program Name",
+       "tag": "PROGRAM_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROGRAM_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Confirm Flag"
+       ],
+       "label": "Confirm Flag",
+       "tag": "CONFIRM_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CONFIRM_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Auto Flag"
+       ],
+       "label": "Auto Flag",
+       "tag": "AUTO_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "AUTO_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Option Flag"
+       ],
+       "label": "Option Flag",
+       "tag": "OPTION_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "OPTION_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "PRE_OPMZ_ACTV_CD"
+       ],
+       "label": "PRE_OPMZ_ACTV_CD",
+       "tag": "PRE_OPMZ_ACTV_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PRE_OPMZ_ACTV_CD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "PRE_OPMZ_ACTV_SEQ"
+       ],
+       "label": "PRE_OPMZ_ACTV_SEQ",
+       "tag": "PRE_OPMZ_ACTV_SEQ",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_OPMZ_ACTV_SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 7,
+     "data": [
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "1",
+       "A007",
+       "Input Constraint",
+       "UI",
+       "",
+       "Y",
+       "",
+       "",
+       "A007",
+       "1"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "2",
+       "A008",
+       "Constraint Validation",
+       "UI",
+       "",
+       "Y",
+       "",
+       "",
+       "A008",
+       "2"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "3",
+       "A002",
+       "Create Plan ID",
+       "Popup",
+       "",
+       "",
+       "",
+       "",
+       "A002",
+       "3"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "4",
+       "A003",
+       "Engine Run",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "A003",
+       "4"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "5",
+       "A004",
+       "Plan Out Review and Amend",
+       "",
+       "",
+       "",
+       "",
+       "Y",
+       "A004",
+       "5"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "6",
+       "A005",
+       "FP Target I/F",
+       "",
+       "",
+       "",
+       "",
+       "Y",
+       "A005",
+       "6"
+      ],
+      [
+       "",
+       "81",
+       "P001",
+       "SCP 엔진 최적화 프로세스",
+       "PG0001",
+       "E129A_E128A",
+       "7",
+       "A006",
+       "Release",
+       "",
+       "",
+       "",
+       "",
+       "",
+       "A006",
+       "7"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

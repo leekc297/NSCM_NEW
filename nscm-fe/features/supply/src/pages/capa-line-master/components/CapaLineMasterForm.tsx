@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -35,6 +35,15 @@ export const CapaLineMasterForm = ({ onSearch }: Props) => {
   const openSearchArea = useCapaLineMasterStore(s => s.openSearchArea);
 
   const tabId = useTabid();
+
+  // Division 콤보 강제 리마운트 키 — confirm 취소 시 표시값을 현재 divisionId 로 되돌리는 데 쓴다.
+  //   MUI Autocomplete 는 controlled 라도 '포커스 중 + value 미변경'이면 내부 입력 표시를 되돌리지
+  //   않는다(useAutocomplete.js: focused && !valueChange → 조기 return). 그래서 편집중 Div 를 바꿔
+  //   MSG00704 에서 Cancel 하면 value(sc.divisionId)는 이전 값 그대로인데 콤보 칸만 새 값으로 남아,
+  //   그 상태로 Search 하면 '칸=새 Div, 조회=이전 Div' 로 어긋난다(SCP0114 수정요청 2026-11-11).
+  //   취소 시 이 키를 올려 remount → value 기준으로 표시를 강제 복원한다(확정 시엔 value 가 바뀌어
+  //   MUI 가 스스로 resync 하므로 불필요).
+  const [divComboKey, setDivComboKey] = useState(0);
 
   // Division = Division_SCP (AS-IS Data_SCP.Common(Type.Division) = 권한필터 변형).
   //   mnuId='SCP0114' 필수 — 미전달 시 권한군 ALL 로 열린다(design 02 §2.1 WHERE @mnuId).
@@ -82,17 +91,20 @@ export const CapaLineMasterForm = ({ onSearch }: Props) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  key={divComboKey}
                   autoFocus
                   useClearIcon
                   value={sc.divisionId}
                   options={divisionOptions}
                   // Division 변경 = 검색조건(Div 제외 전부) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
-                  //   편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로
-                  //   복귀(commit 51d4e9fa 패턴). 조회(Search) 공통 가드와 동일 경로('search').
+                  //   편집중(dirty)이면 MSG00704 confirm 후에만 실행한다. 조회(Search) 공통 가드와 동일 경로('search').
+                  //   취소 시 표시 복원은 divComboKey remount 로 한다(위 주석 — MUI controlled 자동복귀가 안 됨).
                   onChange={(_, picked) => {
                     const v = String(picked ?? '');
+                    if (v === sc.divisionId) return;
                     void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                       if (ok) setDivision(v);
+                      else setDivComboKey(k => k + 1);
                     });
                   }}
                 />

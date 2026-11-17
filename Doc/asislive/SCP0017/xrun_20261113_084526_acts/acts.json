@@ -1,0 +1,106 @@
+{
+ "id": "SCP0017",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL"
+   ],
+   "scenarios": [
+    "SCP0017-Se946c7",
+    "SCP0017-S5ab99b",
+    "SCP0017-S8f3365",
+    "SCP0017-S13def4",
+    "SCP0017-S6177de",
+    "SCP0017-S739620",
+    "SCP0017-Se0573a",
+    "SCP0017-Sc96866",
+    "SCP0017-S9402aa",
+    "SCP0017-Se7543b",
+    "SCP0017-S481294",
+    "SCP0017-Sc91bf8",
+    "SCP0017-Sd9f09f",
+    "SCP0017-S8a009f",
+    "SCP0017-S400b22",
+    "SCP0017-Sba3da9",
+    "SCP0017-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 2575,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0017-Sea1449",
+    "SCP0017-S82161d"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0017-Se946c7",
+    "SCP0017-S5ab99b",
+    "SCP0017-S8f3365",
+    "SCP0017-S13def4",
+    "SCP0017-S6177de",
+    "SCP0017-S739620",
+    "SCP0017-Se0573a",
+    "SCP0017-Sc96866",
+    "SCP0017-S9402aa",
+    "SCP0017-Se7543b",
+    "SCP0017-S481294",
+    "SCP0017-Sc91bf8",
+    "SCP0017-Sd9f09f",
+    "SCP0017-S8a009f",
+    "SCP0017-S400b22",
+    "SCP0017-Sba3da9",
+    "SCP0017-Scf33ed",
+    "SCP0017-S963877",
+    "SCP0017-S3e4aef",
+    "SCP0017-S955b86"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:41:50.789",
+ "fills": 1,
+ "fill_left": []
+}

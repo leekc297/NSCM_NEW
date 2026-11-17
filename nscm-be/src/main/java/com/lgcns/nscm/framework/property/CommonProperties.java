@@ -20,6 +20,8 @@ public class CommonProperties {
     private final List<Datasource> datasources;
     private final Domain domain;
     private final Sso sso;
+    // 시스템 구분 — 메뉴 조회 PR_GET_MENU_LIST_V2 P_SYSTEM_CD 로 전달. NSCM/SPMS/COMMON, 배포 단위 상수
+    private final String systemCd;
 
     @Getter
     @RequiredArgsConstructor
@@ -34,6 +36,8 @@ public class CommonProperties {
     @RequiredArgsConstructor
     public static class Security {
     	private final List<String> skipUris;
+    	// ID 로그인(/user/login) 차단. prd 만 true 로 켜서 SSO 로만 로그인하게 한다. 미설정 profile 은 false(허용).
+    	private final boolean idLoginDisabled;
     }
 
     @Getter
@@ -63,6 +67,10 @@ public class CommonProperties {
     public static class Mybatis {
     	private final boolean loggingEnabled;
     	private final boolean loggingOnlyError;
+    	private final int queueCapacity;
+    	private final int batchSize;
+    	private final int logPoolSize;
+    	private final long flushIntervalMs;
     }
 
     @Getter

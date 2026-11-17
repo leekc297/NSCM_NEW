@@ -1,0 +1,2 @@
+﻿menu,call,cls,trig,axis,egs,result,expected,actual,basis,note
+SCP0007,0,SCP0007_DistributionRoutePopup,CELL:ROUTE_ID,ASIS,EG433;EG441;EG060,PASS,AS-IS SCP0005_GET_DISTRIBUTION_ROUTE 1행,"TO-BE 1행 · 인자 {""p_from_country"": ""KR"", ""p_from_city"": ""KRCOJ"", ""p_to_country"": ""KR"", ""p_to_city"": ""KRSEL"", ""p_transport_mode"": ""TRK"", ""p_valid_yn"": ""Y""} · 미대응 []",Doc/asisfacts/db/modules/dbo.SCP0005_GET_DISTRIBUTION_ROUTE.sql · SCP0007_DistributionRoutePopup.cs:432,행 1 · 계정 minyonglee1

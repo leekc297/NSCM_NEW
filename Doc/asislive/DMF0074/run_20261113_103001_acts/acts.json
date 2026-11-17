@@ -1,0 +1,109 @@
+{
+ "id": "DMF0074",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btmItem",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0074-Sde943e"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0074-S287784",
+    "DMF0074-S6ab4d3"
+   ]
+  },
+  {
+   "control": "btnSPVer",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ExceptionDialog",
+     "title": "ExceptionDialog",
+     "modal": true,
+     "grid_rows": -1,
+     "closed": true
+    },
+    {
+     "form": "DMF0073_VersionBySalesPricePopup",
+     "title": "VersionBySalesPrice Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0074-S895f79",
+    "DMF0074-S7122a3",
+    "DMF0074-S583236"
+   ]
+  },
+  {
+   "control": "btnTemplate",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0074_MetalLinkPricePopup",
+     "title": "Meta Link Template",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0074-S13efcb"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 8
+  }
+ ],
+ "at": "2026-11-13 10:27:41.433",
+ "fills": 0,
+ "fill_left": []
+}

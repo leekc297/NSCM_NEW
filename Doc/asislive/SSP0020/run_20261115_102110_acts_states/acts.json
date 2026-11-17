@@ -1,0 +1,103 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 10:20:54",
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 10:21:06.905",
+  "grid": "spdMain",
+  "sheet_index": 0,
+  "sheet_name": "Delegate",
+  "sheet": "Delegate",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "CHK",
+    "label": "False",
+    "data_field": "CHK",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "FROM_DATE",
+    "label": "From",
+    "data_field": "FROM_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "TO_DATE",
+    "label": "To",
+    "data_field": "TO_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "DELEGATEE",
+    "label": "Delegatee",
+    "data_field": "DELEGATEE",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "VALID",
+    "label": "Valid",
+    "data_field": "VALID",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "LAST_UPDATED_BY",
+    "label": "Last Updated By",
+    "data_field": "LAST_UPDATED_BY",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "LAST_UPDATE_DATE",
+    "label": "Last Update Date",
+    "data_field": "LAST_UPDATE_DATE",
+    "visible": "True"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 10:21:06.910"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 9,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

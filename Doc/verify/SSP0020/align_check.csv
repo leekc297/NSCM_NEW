@@ -1,0 +1,17 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SSP0020,Delegate,CHK,ALL,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,C,메타 SSP0020/Delegate,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegate,DELEGATEE,Delegatee,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,L,메타 SSP0020/Delegate,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegate,DIVISION_ID,Div,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,C,메타 SSP0020/Delegate,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegate,FROM_DATE,From,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,C,메타 SSP0020/Delegate,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegate,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,L,메타 SSP0020/Delegate,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegate,LAST_UPDATE_DATE,Last Update Date,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,L,메타 SSP0020/Delegate,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegate,TO_DATE,To,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,C,메타 SSP0020/Delegate,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegate,VALID,Valid,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegate),SSP0020,Delegate,C,메타 SSP0020/Delegate,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegated List,CHK,ALL,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,C,메타 SSP0020/Delegated List,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SSP0020,Delegated List,DELEGATOR,Delegator,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,L,메타 SSP0020/Delegated List,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegated List,DIVISION_ID,Div,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,C,메타 SSP0020/Delegated List,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegated List,FROM_DATE,From,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,C,메타 SSP0020/Delegated List,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegated List,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,L,메타 SSP0020/Delegated List,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegated List,LAST_UPDATE_DATE,Last Update Date,L,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,L,메타 SSP0020/Delegated List,PASS,AS-IS left ↔ TO-BE left
+SSP0020,Delegated List,TO_DATE,To,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,C,메타 SSP0020/Delegated List,PASS,AS-IS center ↔ TO-BE center
+SSP0020,Delegated List,VALID,Valid,C,META SCM_MST_SHEET_COLUMNS(SSP0020/Delegated List),SSP0020,Delegated List,C,메타 SSP0020/Delegated List,PASS,AS-IS center ↔ TO-BE center

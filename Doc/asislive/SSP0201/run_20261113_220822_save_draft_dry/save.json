@@ -1,0 +1,51 @@
+{
+ "id": "SSP0201",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM",
+  "pk": [
+   "CONFIRM_ID"
+  ],
+  "match": {
+   "CONFIRM_ID": "CONFIRM_ID"
+  },
+  "save_sp": "SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING",
+  "side": [],
+  "basis": "foxml SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING → SP SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "ROUTE_ID",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "ROUTE_ID",
+     "db_col": "ROUTE_ID",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "ROUTE_ID",
+    "db_col": "ROUTE_ID",
+    "rule": "plus1"
+   },
+   {
+    "col": "CUSTOMER_LT",
+    "db_col": "CUSTOMER_LT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:08:22",
+ "status": "ERROR",
+ "steps": [],
+ "find_dialogs": [],
+ "note": "조회 결과 행 없음(메시지 [])"
+}

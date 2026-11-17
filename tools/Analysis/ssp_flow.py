@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """SSP 도메인 데이터 흐름·프로세스 흐름 다이어그램 생성기 (2026-11-09 · 사용자: SSP 업무분석서·화면정의서 재작성 전 전체 흐름 파악)
 
-  python tools/Analysis/ssp_flow.py [--out Doc/화면분석서/SSP_FLOW_<YYYYMMDD>]
+  python tools/Analysis/ssp_flow.py [--out <폴더>]   (기본 = Doc/화면분석서/SSP_FLOW 고정, 2026-11-16)
 
 원천(전부 기계 추출 · 추정 없음):
   ① _analysis/Screen_POPUP_SP_Tables_Matrix.xlsx — 화면_SP_Tables_매트릭스(SSP 행) · 화면_인벤토리(SSP 화면·유형·부모·POPUP)
@@ -15,6 +15,10 @@ import argparse, csv, io, json, os, re, sys, time, collections, html
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'Harness', 'verify'))
+sys.path.insert(0, HERE)
+import ssp_ref  # 2026-11-11 사용자 제공 기존 분석 자료(PI 프로세스 · 운영 잡 스케줄 · 통합테스트 시나리오) 반영
+import ssp_shipplan  # 2026-11-11 사용자 제공 사업부별 Shipment Plan 산출 흐름도 · 산출 로직
+import ssp_master  # 2026-11-16 사용자 제공 Standard Information SSP Manual(기준정보 Master Flow) + 프로세스 PPT 11-16 판 → 한눈에 보기 탭
 MATRIX = os.path.join(ROOT, '_analysis', 'Screen_POPUP_SP_Tables_Matrix.xlsx')
 MODULES = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules')
 SCREENS = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens')
@@ -99,6 +103,7 @@ def parse_sp(sp, depth=0, seen=None):
     return out
 
 def stage_of(s):
+    if s.get('tobe_group') in ('Shipping Master', 'Shipping_Master'): return 'Master'  # TO-BE 메뉴 그룹이 기준정보면 이름과 무관하게 Master(11-10 SCP0005·0028·0033)
     n = (s.get('tobe_desc') or '') + ' ' + (s.get('name') or '')
     rules = [('ChangeConfirm', r'Change\s*Request\s*Confirm|ChangeRequestConfirm'), ('Change', r'Change\s*Request|ChangeRequest|Change History|ChangeHistory'), ('Confirm', r'Confirm'),
              ('Request', r'Request'), ('Plan', r'Plan|PSI|Problem|Adjust'), ('Master', r'Working\s*Day|PIC|Delegate|Master|Itemby|LT\s*Management|LTManagement'),
@@ -150,15 +155,25 @@ def main(out_dir):
     os.makedirs(out_dir, exist_ok=True)
     wb = openpyxl.load_workbook(MATRIX, read_only=True)
     rows = list(wb['화면_SP_Tables_매트릭스'].iter_rows(values_only=True)); H = rows[0]
-    mat = [dict(zip(H, r)) for r in rows[1:] if str(r[1]) == 'SSP']
+    SHIP_GROUPS = ('Shipping_Master', 'Shipping_Schedule')
+    all_menu = rd(MENU)
+    groups = {r['mnu_id']: r for r in all_menu if r.get('mnu_id') in ('Shipping',) + SHIP_GROUPS}
+    menus = {r['mnu_id'].upper(): r for r in all_menu if r.get('uppr_mnu_id') in SHIP_GROUPS or r.get('mnu_id', '').upper().startswith('SSP')}
+    ship_ids = {k for k, r in menus.items() if r.get('uppr_mnu_id') in SHIP_GROUPS}  # Shipping 메뉴 아래 TO-BE 화면(접두와 무관)
+    def in_scope(dom, sid_full):
+        sid = str(sid_full).split('_')[0].upper()
+        return str(dom) == 'SSP' or sid in ship_ids
+    mat = [dict(zip(H, r)) for r in rows[1:] if in_scope(r[1], r[H.index('화면 ID')])]
     inv_rows = list(wb['화면_인벤토리'].iter_rows(values_only=True)); IH = inv_rows[0]
-    inv = [dict(zip(IH, r)) for r in inv_rows[1:] if str(r[1]) == 'SSP']
-    menus = {r['mnu_id'].upper(): r for r in rd(MENU) if r.get('mnu_id', '').upper().startswith('SSP')}
-    groups = {r['mnu_id']: r for r in rd(MENU) if r.get('mnu_id') in ('Shipping', 'Shipping_Master', 'Shipping_Schedule')}
+    inv = [dict(zip(IH, r)) for r in inv_rows[1:] if in_scope(r[1], r[IH.index('화면 ID')])]
+    inv_ids = {str(r['화면 ID']).split('_')[0].upper() for r in inv}
+    for sid in sorted(ship_ids - inv_ids):  # 매트릭스 인벤토리에 없는 Shipping 메뉴 화면도 빠뜨리지 않는다(Fact Pack 만으로 진행)
+        inv.append({'화면 ID': sid, '유형': 'Main', '부모': None, 'POPUP 목록': '', 'cs': '', '_from': 'menu_only'})
     pm = collections.defaultdict(set)
     for r in rd(PROC_META):
-        if (r.get('menu_id') or '').upper().startswith('SSP') and r.get('proc'): pm[r['menu_id'].upper()].add(f"{r.get('btn') or ''}:{r['proc']}")
-    packs = {d for d in os.listdir(SCREENS) if d.startswith('SSP')}
+        mid = (r.get('menu_id') or '').upper()
+        if (mid.startswith('SSP') or mid in ship_ids) and r.get('proc'): pm[mid].add(f"{r.get('btn') or ''}:{r['proc']}")
+    packs = {d for d in os.listdir(SCREENS) if d.startswith('SSP') or d.upper() in ship_ids}
 
     # ── 화면 인벤토리
     def asis_is_popup(sid):
@@ -196,8 +211,16 @@ def main(out_dir):
         for sp in ep:
             e = screens[sid]['sps'].setdefault(sp, {'endpoint': '', 'matrix_tables': set(), 'in_matrix': False, 'in_endpoints': False})
             e['in_endpoints'] = True
+        # 2026-11-10(SSP0005 지적): 매트릭스에만 있는 SP 가 AS-IS 코드에서 주석 처리된 호출뿐이면 사실이 아니다 → 흐름에서 제외하고 기록
+        com = set()
+        for r in rd(os.path.join(SCREENS, sid, 'commented_calls.csv')):
+            k = (r.get('key') or r.get('candidate') or '').split('.')[-1].upper()
+            if k: com.add(k)
+        commented_only = sorted(sp for sp, e in screens[sid]['sps'].items() if e['in_matrix'] and sp not in ep and sp in com)
+        for sp in commented_only: del screens[sid]['sps'][sp]
         mset = {sp for sp, e in screens[sid]['sps'].items() if e['in_matrix']}
-        cross.append({'screen_id': sid, 'asis_pack': screens[sid]['asis_pack'], 'matrix_sp': len(mset), 'endpoints_sp': len(ep), 'only_matrix': ' '.join(sorted(mset - ep)), 'only_endpoints': ' '.join(sorted(ep - mset)), 'both': len(mset & ep)})
+        cross.append({'screen_id': sid, 'asis_pack': screens[sid]['asis_pack'], 'matrix_sp': len(mset) + len(commented_only), 'endpoints_sp': len(ep), 'only_matrix': ' '.join(sorted(mset - ep)), 'only_endpoints': ' '.join(sorted(ep - mset)), 'both': len(mset & ep),
+                      'excluded_commented_only': ' '.join(commented_only)})
     # ── SP 본문 파싱
     objs = {r['name'].upper(): r['type'].strip() for r in rd(DB_OBJECTS) if r.get('type', '').strip() in ('U', 'V', 'SN')}
     nonobj = collections.Counter()  # 본문 정규식이 잡았지만 AS-IS 객체가 아닌 이름(커서·임시 표·별칭·동적 SQL 조각) — 흐름에서 제외
@@ -362,7 +385,7 @@ def main(out_dir):
     L += ['### 2-2. 엔터티 군 → 테이블 대응표', '', '| 엔터티 | 테이블 수 | 테이블 |', '|---|---|---|']
     for en, ts in sorted(ent_tabs.items(), key=lambda x: -len(x[1])): L.append(f'| {en} | {len(ts)} | {", ".join(sorted(ts))} |')
     L += ['']
-    L += ['```', '', '## 3. SSP 테이블별 쓰기/읽기 화면 표', '', '| 테이블 | 도메인 | 쓰는 화면 | 읽는 화면 |', '|---|---|---|---|']
+    L += ['## 3. SSP 테이블별 쓰기/읽기 화면 표', '', '| 테이블 | 도메인 | 쓰는 화면 | 읽는 화면 |', '|---|---|---|---|']
     for t in sorted(tabdom, key=lambda x: (tabdom[x] != 'SSP', tabdom[x], x)):
         if t in log_tabs: continue
         L.append(f"| {t} | {tabdom[t]} | {', '.join(sorted(writers.get(t, []))) or '-'} | {', '.join(sorted(readers.get(t, set()) - writers.get(t, set()))) or '-'} |")
@@ -370,18 +393,35 @@ def main(out_dir):
     io.open(os.path.join(out_dir, 'SSP_DATA_FLOW.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(L) + '\n')
 
     # ── 상세(화면별)
-    D = [f'# SSP 데이터 흐름 상세 — 화면별 SP·테이블(R/W) · {time.strftime("%Y-%m-%d %H:%M")}', '', '> 다이어그램 = 화면 → SP(GET/SAVE) → 엔터티(SSP 테이블 군 · 타 도메인은 도메인명) · 라벨 = 테이블 수 · 테이블 단위는 각 절의 표 · R = SP 본문 FROM/JOIN · W = INSERT/UPDATE/MERGE/DELETE/TRUNCATE · R? = 매트릭스 참조 테이블인데 본문 정규식이 못 잡은 것(동적 SQL·본문 없음) · 중첩 EXEC 깊이 3 포함', '']
-    for s in sorted(screens.values(), key=lambda x: (x['type'] != 'Main', x['tobe_sort'], x['id'])):
+    D = [f'# SSP 데이터 흐름 상세 — 화면별 SP·테이블(R/W) · {time.strftime("%Y-%m-%d %H:%M")}', '', '> 다이어그램 = 화면 → SP(GET/SAVE) → 엔터티(SSP 테이블 군 · 타 도메인은 도메인명 — 노드 안에 이 화면이 쓰고/읽는 실제 테이블 이름) · 간선 라벨 = 테이블 수 · SP별 테이블은 각 절의 표 · R = SP 본문 FROM/JOIN · W = INSERT/UPDATE/MERGE/DELETE/TRUNCATE · R? = 매트릭스 참조 테이블인데 본문 정규식이 못 잡은 것(동적 SQL·본문 없음) · 중첩 EXEC 깊이 3 포함', '']
+    GORD = {'Shipping Master': 0, 'Shipping_Master': 0, 'Shipping Schedule': 1, 'Shipping_Schedule': 1}
+    def scr_order(x): return (0 if x['tobe_menu'] else 1, GORD.get(x['tobe_group'], 2), x['tobe_sort'], str(x['type']).startswith('Popup'), x['id'])  # TO-BE 메뉴 순서(Master→Schedule) → AS-IS 전용
+    ref_links, ref_issues = ssp_ref.screen_links() if ssp_ref.available() else ({}, {})
+    ref_order = ssp_ref.pi_process()[0] if ssp_ref.available() else []
+    def ref_line(sid):
+        tests = ref_links.get(sid, [])
+        if not tests and not ref_issues.get(sid): return []
+        pis = list(dict.fromkeys(q for t in tests for q in ssp_ref.pi_seq_expand(t[2], ref_order)))
+        out = [f"- 기존 분석 자료 연계: PI Seq {', '.join(pis) or '-'} · 통합테스트 {len(tests)}건 — " + ' · '.join(f'{t[0]}({t[1]})' for t in tests)]
+        for a, b in ref_issues.get(sid, []): out.append(f'- 통합테스트 수정 필요사항: {a} — 상태 {b}')
+        return out
+    for s in sorted(screens.values(), key=scr_order):
         D += [f"## {s['id']} {s['name']} ({s['type']}{' · 부모 ' + s['parent'] if s['parent'] else ''}){' · TO-BE ' + s['tobe_menu'] + ' ' + s['tobe_desc'] if s['tobe_menu'] else ' · AS-IS 전용(TO-BE 메뉴 없음)'}", '',
-              f"- SP {len(s['sps'])}개 · TO-BE PKG 배선 {len(s['tobe_pkg'])}건{(' · ' + ', '.join(s['tobe_pkg'][:6])) if s['tobe_pkg'] else ''} · 팝업 {s['popups'] or '-'}", '', '```mermaid', 'flowchart LR', f"  S[\"{s['id']}<br/>{html.escape(s['name'][:30])}\"]"]
+              f"- SP {len(s['sps'])}개 · TO-BE PKG 배선 {len(s['tobe_pkg'])}건{(' · ' + ', '.join(s['tobe_pkg'][:6])) if s['tobe_pkg'] else ''} · 팝업 {s['popups'] or '-'}", *ref_line(s['id']), '', '```mermaid', 'flowchart LR', f"  S[\"{s['id']}<br/>{html.escape(s['name'][:30])}\"]"]
+        def grp(t): return entity_of(t) if classify(t) == 'SSP' else classify(t)
+        en_tabs = collections.defaultdict(set)  # 이 화면 안에서 엔터티별 실제 테이블
+        for e_ in s['sps'].values():
+            for t in e_['writes'] | e_['reads'] | e_['matrix_only']: en_tabs[grp(t)].add(t)
+        def en_node(en):
+            ts = sorted(en_tabs.get(en, ()))
+            return f"E_{mm_id(en)}[(\"{html.escape(en)}<br/>{'<br/>'.join(html.escape(t) for t in ts)}\")]"
         for sp, e in s['sps'].items():
             kind = 'SAVE' if re.search(r'SAVE|INS|UPD|DEL|CONFIRM|SEND|ADJUST|MAIL', sp) else 'GET'
             D.append(f"  P_{mm_id(sp)}{{{{\"{sp}{'' if e['body'] else ' (본문 없음)'}\"}}}}")
             D.append(f"  S --{kind}--> P_{mm_id(sp)}")
-            def grp(t): return entity_of(t) if classify(t) == 'SSP' else classify(t)
-            for en, n in sorted(collections.Counter(grp(t) for t in e['writes']).items()): D.append(f"  P_{mm_id(sp)} ==\"W {n}\"==> E_{mm_id(en)}[(\"{html.escape(en)}\")]")
-            for en, n in sorted(collections.Counter(grp(t) for t in e['reads'] - e['writes']).items()): D.append(f"  E_{mm_id(en)}[(\"{html.escape(en)}\")] -.\"R {n}\".-> P_{mm_id(sp)}")
-            for en, n in sorted(collections.Counter(grp(t) for t in e['matrix_only']).items()): D.append(f"  E_{mm_id(en)}[(\"{html.escape(en)}\")] -.\"R? {n}\".-> P_{mm_id(sp)}")
+            for en, n in sorted(collections.Counter(grp(t) for t in e['writes']).items()): D.append(f"  P_{mm_id(sp)} ==\"W {n}\"==> {en_node(en)}")
+            for en, n in sorted(collections.Counter(grp(t) for t in e['reads'] - e['writes']).items()): D.append(f"  {en_node(en)} -.\"R {n}\".-> P_{mm_id(sp)}")
+            for en, n in sorted(collections.Counter(grp(t) for t in e['matrix_only']).items()): D.append(f"  {en_node(en)} -.\"R? {n}\".-> P_{mm_id(sp)}")
         D += ['```', '', '| SP | 출처 | 본문 | 쓰기(W) | 읽기(R) | 중첩 호출 |', '|---|---|---|---|---|---|']
         for sp, e in s['sps'].items():
             src = 'matrix+endpoints' if e['in_matrix'] and e['in_endpoints'] else ('matrix' if e['in_matrix'] else 'endpoints')
@@ -397,6 +437,7 @@ def main(out_dir):
             for b in readers.get(t, []):
                 if a != b: dep[(a, b)].add(t)
     P = [f'# SSP 프로세스 흐름(Process Flow) — {time.strftime("%Y-%m-%d %H:%M")} 생성', '',
+         '- **업무 프로세스(운영 순서)의 기준 = `SSP_REF_PROCESS.md`**(PI SSP CUTOFF Process 22 Seq · 통합테스트 흐름 단계(V2 2026-11-12) — 사용자 제공 기존 분석 자료). 이 문서는 SP 본문에서 뽑은 **데이터 의존**을 보여 주며 운영 순서를 대신하지 않는다',
          '- 근거: 화면 A 가 쓰는(W) 테이블을 화면 B 가 읽으면(R) A → B 선행(데이터 의존) · 공통 마스터·로그 표는 제외 · 메뉴 그룹 = TO-BE menu.csv(Shipping Master / Shipping Schedule) · AS-IS 전용 화면은 별도 묶음',
          '- 이 순서는 데이터가 흐르는 방향이지 운영 절차서의 순서가 아니다 — 업무 절차 확정은 화면정의서 재작성 때 담당자 확인', '',
          '## 1. TO-BE 메뉴 구조', '', '```mermaid', 'flowchart LR', '  M0["Shipping"]']
@@ -479,15 +520,23 @@ def main(out_dir):
           '> 화면별 실제 SP 이름·호출 종류(GET/SAVE)는 `SSP_DATA_FLOW_DETAIL.md` 각 절의 다이어그램 참조']
     io.open(os.path.join(out_dir, 'SSP_PROCESS_FLOW.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(P) + '\n')
 
+    # ── 기존 분석 자료 문서(SSP_REF_PROCESS.md) — 교차검증에 SP 본문 파싱·객체 카탈로그·배치 인벤토리 사용
+    ref_stat = ssp_ref.build(out_dir, parse_sp=parse_sp, objs=set(objs), screens=screens) if ssp_ref.available() else None
+    # ── 사업부별 Shipment Plan 산출 흐름(SSP_SHIPPLAN_FLOW.md — 사용자 제공 흐름도 pptx · 산출 로직 xlsx, 2026-11-11)
+    _mods = {f[4:-4].upper() for f in os.listdir(MODULES) if f.lower().endswith('.sql')}
+    sp_stat = ssp_shipplan.build(out_dir, parse_sp=parse_sp, objs=set(objs), mods=_mods) if ssp_shipplan.available() else None
+    # ── 한눈에 보기(SSP_OVERVIEW.md — 기준정보 순서 · 오류 확인 순서 · 하루 배치 · 진행 조건 · 자주 받는 문의, 2026-11-16)
+    ov_stat = ssp_master.build(out_dir, parse_sp=parse_sp, objs=set(objs)) if ssp_master.available() else None
     # ── HTML 뷰어(Mermaid · 탭)
     def inline(t):
         t = html.escape(t)
-        t = re.sub(r'`([^`]+)`', r'<code></code>', t)
-        t = re.sub(r'\*\*([^*]+)\*\*', r'<b></b>', t)
+        t = t.replace('&lt;br/&gt;', '<br/>')  # 표 칸 안 줄바꿈(md 원문의 <br/>)은 살린다 — 글자로 보이던 결함(11-11)
+        t = re.sub(r'`([^`]+)`', r'<code>\1</code>', t)
+        t = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', t)
         return t
-    def md2html(path):
+    def md2html(path, text=None):
         """간이 Markdown → HTML: 제목·mermaid·표·목록·인용·문단(다이어그램 사이의 설명 문장을 전부 보존)"""
-        lines = io.open(path, encoding='utf-8').read().split('\n'); out = []; i = 0; para = []; ul = []; tbl = []
+        lines = (text if text is not None else io.open(path, encoding='utf-8').read()).split('\n'); out = []; i = 0; para = []; ul = []; tbl = []
         def flush():
             nonlocal para, ul, tbl
             if para: out.append('<p>' + inline(' '.join(para)) + '</p>'); para = []
@@ -499,6 +548,8 @@ def main(out_dir):
                 tbl = []
         while i < len(lines):
             ln = lines[i]
+            if ln.startswith('<div class="spf'):   # 카드형 흐름(ssp_cards.py) — 한 줄짜리 HTML 은 그대로 통과
+                flush(); out.append(ln); i += 1; continue
             if ln.startswith('```mermaid'):
                 flush(); j = i + 1; buf = []
                 while j < len(lines) and not lines[j].startswith('```'): buf.append(lines[j]); j += 1
@@ -523,30 +574,58 @@ def main(out_dir):
             if not ln.strip(): flush(); i += 1; continue
             para.append(ln.strip()); i += 1
         flush(); return ''.join(out)
-    tabs = [('데이터 흐름(개요)', 'SSP_DATA_FLOW.md'), ('프로세스 흐름', 'SSP_PROCESS_FLOW.md'), ('화면별 상세', 'SSP_DATA_FLOW_DETAIL.md')]
-    for t_, fn_ in (('배치 흐름', 'SSP_BATCH_FLOW.md'), ('배치 분석서', 'SSP_BATCH_ANALYSIS.md')):  # ssp_batch_flow.py 산출이 있으면 탭 추가
-        if os.path.exists(os.path.join(out_dir, fn_)): tabs.append((t_, fn_))
+    # 탭 순서(2026-11-11 사용자 지정 · 11-16 맨 앞에 '한눈에 보기' 추가): 업무 프로세스 → 프로세스 흐름 → 데이터 흐름 → 배치 흐름 → 배치 분석서 → Shipment Plan 산출 흐름(6번) → 화면별 상세(7번). 파일이 없는 탭(기존 자료·배치 산출 전)은 빠진다
+    TAB_ORDER = [('한눈에 보기', 'SSP_OVERVIEW.md'), ('업무 프로세스(PI · 통합테스트)', 'SSP_REF_PROCESS.md'), ('프로세스 흐름', 'SSP_PROCESS_FLOW.md'), ('데이터 흐름(개요)', 'SSP_DATA_FLOW.md'),
+                 ('배치 흐름', 'SSP_BATCH_FLOW.md'), ('배치 분석서', 'SSP_BATCH_ANALYSIS.md'), ('Shipment Plan 산출 흐름', 'SSP_SHIPPLAN_FLOW.md'), ('화면별 상세', 'SSP_DATA_FLOW_DETAIL.md')]
+    tabs = [(t_, fn_) for t_, fn_ in TAB_ORDER if os.path.exists(os.path.join(out_dir, fn_)) and (fn_ != 'SSP_REF_PROCESS.md' or ref_stat)]
     body = []
     for i, (title, fn) in enumerate(tabs):
-        body.append(f'<section id="tab{i}" class="tab{" on" if i == 0 else ""}"><h2>{html.escape(title)} <small>({fn})</small></h2>')
-        body.append(md2html(os.path.join(out_dir, fn)))
+        body.append(f'<section id="tab{i}" data-file="{fn}" class="tab{" on" if i == 0 else ""}"><h2>{html.escape(title)} <small>({fn})</small></h2>')
+        if fn == 'SSP_DATA_FLOW_DETAIL.md':
+            # 화면 선택 드롭다운(11-10 사용자) — 절(## 화면ID …)마다 div 로 감싸고 선택한 화면만 표시 · 주소 #화면ID 로 바로 열기
+            txt = io.open(os.path.join(out_dir, fn), encoding='utf-8').read()
+            parts = re.split(r'\n(?=## )', txt)
+            head, secs = parts[0], parts[1:]
+            opts = []; divs = []
+            for sec in secs:
+                h1 = sec.split('\n', 1)[0][3:].strip(); sid_ = h1.split(' ', 1)[0]
+                scr = screens.get(sid_, {})
+                lab = f"{sid_} · {scr.get('tobe_desc') or scr.get('name', '')}" + (' (TO-BE)' if scr.get('tobe_menu') else ' (AS-IS 전용)') + (' [팝업]' if str(scr.get('type', '')).startswith('Popup') else '')
+                grp_ = (scr.get('tobe_group') or 'TO-BE') if scr.get('tobe_menu') else 'AS-IS 전용(TO-BE 메뉴 없음)'
+                opts.append((grp_, f'<option value="{html.escape(sid_)}">{html.escape(lab)}</option>'))
+                divs.append(f'<div class="scr" data-id="{html.escape(sid_)}">' + md2html(None, sec) + '</div>')
+            n_tb = sum(1 for x in secs if screens.get(x.split('\n', 1)[0][3:].strip().split(' ', 1)[0], {}).get('tobe_menu'))
+            body.append(md2html(None, head))
+            opt_html = ''.join('<optgroup label="' + html.escape(g) + '">' + ''.join(o for g2, o in opts if g2 == g) + '</optgroup>' for g in dict.fromkeys(g for g, _ in opts))
+            body.append(f'<div class="scrbar">화면 선택 <select id="scrSel" onchange="pickScr(this.value)"><option value="*">전체 화면({len(secs)})</option>{opt_html}</select> <small>TO-BE {n_tb} · AS-IS 전용 {len(secs) - n_tb} · 주소 끝에 #화면ID 를 붙이면 그 화면으로 바로 열림</small></div>')
+            body.append(''.join(divs))
+        else:
+            body.append(md2html(os.path.join(out_dir, fn)))
         body.append('</section>')
+    view_css = io.open(os.path.join(HERE, 'ssp_flow_view.css'), encoding='utf-8').read(); view_js = io.open(os.path.join(HERE, 'ssp_flow_view.js'), encoding='utf-8').read()  # 그림 보기 틀 · 카드형 흐름(2026-11-11 인식성 보완)
+    nav_js = io.open(os.path.join(HERE, 'ssp_flow_nav.js'), encoding='utf-8').read()  # 클릭 → 상세 창 · 본문 이동 · 이전 위치(2026-11-11)
     H = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>SSP 데이터·프로세스 흐름</title>
-<style>body{{font-family:Segoe UI,Malgun Gothic,sans-serif;margin:16px;background:#fafafa;color:#222}} nav button{{margin:0 4px 12px 0;padding:6px 12px;border:1px solid #888;background:#fff;cursor:pointer}} nav button.on{{background:#1f6feb;color:#fff}} .tab{{display:none}} .tab.on{{display:block}} pre.mermaid{{background:#fff;border:1px solid #ddd;padding:8px;overflow:auto}} pre.code{{background:#f3f3f3;padding:8px;overflow:auto}} h3,h4,h5{{margin:18px 0 6px}} small{{color:#666}} table{{border-collapse:collapse;margin:6px 0;font-size:13px}} th,td{{border:1px solid #ccc;padding:3px 8px;vertical-align:top}} th{{background:#eef}} code{{background:#eee;padding:0 3px}} blockquote{{color:#555;border-left:3px solid #bbb;margin:6px 0;padding:2px 10px}}</style></head><body>
+<style>body{{font-family:Segoe UI,Malgun Gothic,sans-serif;margin:16px;background:#fafafa;color:#222}} nav button{{margin:0 4px 12px 0;padding:6px 12px;border:1px solid #888;background:#fff;cursor:pointer}} nav button.on{{background:#1f6feb;color:#fff}} .tab{{display:none}} .tab.on{{display:block}} pre.mermaid{{background:#fff;border:1px solid #ddd;padding:8px;overflow:auto}} pre.code{{background:#f3f3f3;padding:8px;overflow:auto}} h3,h4,h5{{margin:18px 0 6px}} small{{color:#666}} table{{border-collapse:collapse;margin:6px 0;font-size:13px}} th,td{{border:1px solid #ccc;padding:3px 8px;vertical-align:top}} th{{background:#eef}} code{{background:#eee;padding:0 3px}} blockquote{{color:#555;border-left:3px solid #bbb;margin:6px 0;padding:2px 10px}} .scrbar{{position:sticky;top:0;z-index:5;background:#fafafa;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:8px}} .scrbar select{{font-size:14px;padding:4px 6px;min-width:420px}} .scr.off{{display:none}} .lnk{{color:#0b57d0;cursor:pointer;border-bottom:1px dotted #0b57d0}} .lnk:hover{{background:#e8f0fe}} g.nlnk{{cursor:pointer}} g.nlnk:hover rect,g.nlnk:hover polygon,g.nlnk:hover path,g.nlnk:hover circle{{stroke:#0b57d0!important;stroke-width:3px!important}} #navpop{{display:none;position:fixed;top:0;right:0;width:min(58vw,1100px);height:100vh;background:#fff;border-left:2px solid #1f6feb;box-shadow:-6px 0 18px rgba(0,0,0,.18);z-index:50;flex-direction:column}} #navpop.on{{display:flex}} .np-bar{{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#eef3fb;border-bottom:1px solid #c9d6ee}} .np-title{{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}} .np-bar button{{padding:5px 10px;border:1px solid #888;background:#fff;cursor:pointer}} .np-bar button:disabled{{opacity:.4;cursor:default}} .np-jump{{border-color:#1f6feb!important;color:#1f6feb}} .np-body{{flex:1;overflow:auto;padding:10px 14px}} .np-body svg{{max-width:none}} .np-card th{{width:170px;text-align:left;background:#eef;white-space:nowrap}} .np-src{{color:#666;font-size:12px;margin:0 0 6px}} #navback{{display:none;position:fixed;right:18px;bottom:18px;z-index:60;padding:10px 16px;border:0;border-radius:22px;background:#1f6feb;color:#fff;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}} #navpop.on ~ #navback{{right:calc(min(58vw,1100px) + 18px)}} .navflash{{outline:3px solid #f59e0b;outline-offset:3px;transition:outline-color .3s}} .navhint{{color:#555;font-size:12px;margin:-6px 0 10px}}</style><style>{view_css}</style></head><body>
 <h1>SSP 데이터 흐름 · 프로세스 흐름 <small>{time.strftime("%Y-%m-%d %H:%M")} · 원천 = AS-IS 매트릭스·endpoints·SP 본문 · 근거 CSV 동봉</small></h1>
 <div id="err" style="color:#b00"></div><nav>{''.join(f'<button onclick="show({i})" id="b{i}" class="{"on" if i == 0 else ""}">{html.escape(t)}</button>' for i, (t, _) in enumerate(tabs))}</nav>
+<div class="navhint">그림의 노드와 파란 점선 이름(화면 ID · 단계 · 잡 · 프로시저 · 테이블 · 테스트 ID)을 클릭하면 오른쪽에 상세가 열립니다 · 상세 창의 「본문에서 보기 ↗」 또는 Ctrl+클릭 = 해당 위치로 이동 · 이동 후에는 오른쪽 아래 「◀ 이전 위치」로 되돌아갑니다 · Esc = 상세 창 닫기<br/>그림은 처음에 화면에 맞춰 보입니다 · 그림 위 도구줄: 전체 보기 / 폭 맞춤 / 100% / －＋ / ⛶ 크게 보기 · Ctrl+휠 = 확대·축소 · 끌어서 이동 · 노드에 마우스를 올리면 이어진 선과 상대만 강조 · 노드 기본 색 <span class="kleg"><span><i style="background:#e7f0ff;border-color:#3a6ea5"></i>화면</span><span><i style="background:#fff4de;border-color:#d98e2b"></i>프로시저</span><span><i style="background:#e9f6ec;border-color:#4e8f4a"></i>테이블 · 엔터티</span><span><i style="background:#f1e9fb;border-color:#7b52b8"></i>배치 잡 · 그룹</span><span><i style="background:#e0f2f4;border-color:#1f7a8c"></i>업무 단계</span></span> (그림에 범례가 따로 있으면 그 색이 우선)</div>
 {''.join(body)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
-<script>document.querySelectorAll('.tab').forEach(e=>e.classList.add('on'));mermaid.initialize({{startOnLoad:false,maxTextSize:900000,flowchart:{{useMaxWidth:false}},securityLevel:'loose'}});mermaid.run({{querySelector:'pre.mermaid'}}).then(()=>show(0)).catch(e=>{{document.getElementById('err').textContent='Mermaid 오류: '+e;show(0);}});function show(i){{document.querySelectorAll('.tab').forEach((e,k)=>e.classList.toggle('on',k===i));document.querySelectorAll('nav button').forEach((e,k)=>e.classList.toggle('on',k===i));}}</script>
+<script>{view_js}</script>
+<script>{nav_js}</script>
+<script>document.querySelectorAll('.tab').forEach(e=>e.classList.add('on'));mermaid.initialize({{startOnLoad:false,maxTextSize:900000,theme:'base',themeVariables:{{fontFamily:'Segoe UI,Malgun Gothic,sans-serif',fontSize:'14px',primaryColor:'#f1f4f9',primaryBorderColor:'#7c8aa0',primaryTextColor:'#1b1f23',lineColor:'#66727f',clusterBkg:'#f7f9fb',clusterBorder:'#b9c3cf',edgeLabelBackground:'#ffffff',tertiaryColor:'#f7f9fb'}},flowchart:{{useMaxWidth:false,nodeSpacing:36,rankSpacing:64,padding:10}},securityLevel:'loose'}});function pickScr(v,q){{document.querySelectorAll('.scr').forEach(d=>d.classList.toggle('off',v!=='*'&&d.dataset.id!==v));const s=document.getElementById('scrSel');if(s&&s.value!==v)s.value=v;if(v!=='*'&&!q){{try{{history.replaceState(null,'','#'+v);}}catch(e){{}}}}}}function afterRender(){{const h=decodeURIComponent((location.hash||'').slice(1));const s=document.getElementById('scrSel');if(h&&s&&[...s.options].some(o=>o.value===h)){{const k=[...document.querySelectorAll('.tab')].findIndex(t=>t.querySelector('#scrSel'));show(k);pickScr(h);}}else{{show(0);if(s){{pickScr(s.options[1]?s.options[1].value:'*',1);}}}}}}mermaid.run({{querySelector:'pre.mermaid'}}).then(function(){{try{{SSPView.init();}}catch(e){{document.getElementById('err').textContent='그림 보기 틀 오류: '+e;}}afterRender();try{{SSPNav.init();}}catch(e){{document.getElementById('err').textContent='탐색 초기화 오류: '+e;}}}}).catch(e=>{{document.getElementById('err').textContent='Mermaid 오류: '+e;afterRender();}});function show(i){{document.querySelectorAll('.tab').forEach((e,k)=>e.classList.toggle('on',k===i));document.querySelectorAll('nav button').forEach((e,k)=>e.classList.toggle('on',k===i));}}</script>
 </body></html>"""
     io.open(os.path.join(out_dir, 'SSP_FLOW.html'), 'w', encoding='utf-8', newline='\n').write(H)
 
     # ── README
     nx = sum(1 for c in cross if c['only_endpoints']); nm = sum(1 for c in cross if c['only_matrix'])
     R = [f'# SSP 흐름 산출물 — {time.strftime("%Y-%m-%d %H:%M")} · 생성기 `tools/Analysis/ssp_flow.py`', '',
-         '## 원천·방법', '- 화면→SP: `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx`(SSP 608행) + `Doc/asisfacts/screens/SSP*/endpoints.csv`(39 팩트팩) 합집합 · 둘의 차이는 `ssp_crosscheck.csv`',
+         *((['## 기존 분석 자료 반영(2026-11-11)', f'- `SSP_REF_PROCESS.md` = PI SSP CUTOFF Process 단계 박스 {ref_stat["steps"]}개(Seq 1-1 ~ 22 · 흐름 간선 {ref_stat["edges_ok"]} · 풀지 못한 줄기 {ref_stat["edges"] - ref_stat["edges_ok"]}) · 통합테스트 {ref_stat["scenarios"]}건 · 운영 SSP 잡 {ref_stat["ssp_jobs"]} · 교차검증 {ref_stat["cross"]}행(`ssp_ref_crosscheck.csv`) · 화면 연계 `ssp_ref_screen_links.csv` · 원천 사본 `Doc/asisfacts/ref_ssp/src/`', '']) if ref_stat else []),
+         *((['## 한눈에 보기(2026-11-16)', f'- `SSP_OVERVIEW.md` = SSP Manual Master Flow 단계 {ov_stat["steps"]} · 화살표 {ov_stat["edges"]}(AS-IS SP 본문 데이터 연결 확인 {ov_stat["edges_data"]}) · 매뉴얼 장 {ov_stat["pages"]} · 자주 받는 문의 {ov_stat["faq"]}건 · 배치 진행 조건 {ov_stat["conds"]}묶음 · `ssp_master_steps.csv` · `ssp_master_crosscheck.csv` · 원천 `Doc/asisfacts/ref_ssp/src/Standard Information SSP Manual 1.pptx`', '- 프로세스 PPT = 2026-11-16 판(9장 · 「프로세스 진행여부 체크 기준」 추가)으로 교체 · 11-11 판 사본 `src/SSP 프로세스 확인 내용_20261111.pptx` · 진행 조건 표 `ssp_ref_run_conditions.csv`', '']) if ov_stat else []),
+         *(([f'- `SSP_SHIPPLAN_FLOW.md` = 사업부별 Shipment Plan 산출 흐름(흐름도 슬라이드 {sp_stat["slides"]} · 단계 카드 {sp_stat["cards"]} · 단계별 상세 {sp_stat["detail_rows"]}행 · AS-IS 본문 대조 {sp_stat["cmp"]}행 중 일치 {sp_stat["ok"]}) · `ssp_shipplan_steps.csv` · `ssp_shipplan_crosscheck.csv`', '']) if sp_stat else []),
+         '## 범위', f'- AS-IS SSP 화면 ∪ TO-BE Shipping 메뉴(Shipping Master · Shipping Schedule) 아래 전 화면 = {len(screens)}화면(TO-BE {len(tobe)}) · 접두가 SSP 가 아닌 Shipping 메뉴 화면 포함: {", ".join(sorted(x for x in ship_ids if not x.startswith("SSP")))} (11-10 사용자 지적으로 범위 보정)', '', '## 원천·방법', f'- 화면→SP: `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx`(범위 내 {len(mat)}행) + `Doc/asisfacts/screens/<화면>/endpoints.csv`(Fact Pack {len(packs)}) 합집합 · 둘의 차이는 `ssp_crosscheck.csv`',
          '- SP→테이블: `Doc/asisfacts/db/modules/dbo.<SP>.sql` 본문 — 읽기 FROM/JOIN · 쓰기 INSERT/UPDATE/MERGE(sp_dml_check.writes)+DELETE/TRUNCATE · 중첩 EXEC 깊이 3 · 로그 SP(PR_SCM_SYS_LOG_*)는 호출만 기록',
-         '- TO-BE: `Doc/tobefacts/db/menu.csv` SSP 메뉴 19 · `proc_meta.csv` PKG 배선', '',
+         f'- TO-BE: `Doc/tobefacts/db/menu.csv` Shipping 메뉴 {len(tobe)} · `proc_meta.csv` PKG 배선', '',
          '## 수치(이번 생성 실측)', f'- 화면 {len(screens)}(메인 {len(screens) - n_pop} · 팝업 전용 {n_pop} = AS-IS 파일이 전부 Popup 폴더인 화면 · 메인 화면 소속 팝업은 popups 열) · TO-BE 메뉴 화면 {len(tobe)} · AS-IS 전용 {len(asis_only)}',
          f'- 테이블 실존 검증: AS-IS 객체 카탈로그 `Doc/asisfacts/db/db_objects.csv`(U/V/SN {len(objs)}) 에 없는 이름 {len(nonobj)}종({sum(nonobj.values())}회) 은 흐름에서 제외 = 커서·임시 표·별칭·동적 SQL 조각: {", ".join(sorted(nonobj)[:40])}{" …" if len(nonobj) > 40 else ""}',
          f'- SP {len(sp_info)} · 본문 없음 {len(missing)}: {", ".join(sorted(missing)[:20])}{" …" if len(missing) > 20 else ""}', f'- 테이블 {len(tabdom)}(SSP {sum(1 for t in tabdom if tabdom[t] == "SSP")} · 공통 {sum(1 for t in tabdom if tabdom[t].startswith("공통"))} · 타 도메인/인터페이스/기타 {sum(1 for t in tabdom if tabdom[t] not in ("SSP",) and not tabdom[t].startswith("공통"))}) · 로그/이력 {len(log_tabs)}',
@@ -560,5 +639,7 @@ def main(out_dir):
 
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(); ap.add_argument('--out', default=os.path.join(ROOT, 'Doc', '화면분석서', f'SSP_FLOW_{time.strftime("%Y%m%d")}'))
-    a = ap.parse_args(); sys.exit(main(a.out))
+    # 2026-11-16 사용자 지시: 산출 폴더 = Doc/화면분석서/SSP_FLOW 고정(날짜 없음 · 사용자가 SSP_FLOW_20261111 을 이 이름으로 바꿈). --out 으로만 다른 곳에 쓴다
+    ap = argparse.ArgumentParser(); ap.add_argument('--out', default=None)
+    a = ap.parse_args()
+    sys.exit(main(a.out or os.path.join(ROOT, 'Doc', '화면분석서', 'SSP_FLOW')))

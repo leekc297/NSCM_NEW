@@ -80,7 +80,16 @@ interface Action {
   setDetailFilter: (
     sheet: SHEETS,
     dblFlag: 'Y' | 'N',
-    overrides?: { itemId?: string; fromSite?: string; planType?: string; seq?: string }
+    overrides?: {
+      itemId?: string;
+      fromSite?: string;
+      planType?: string;
+      seq?: string;
+      // 더블클릭 드릴 시 클릭한 기간셀(D_)의 날짜 — CONFIRM_DETAIL 의 p_from/to_yyyymmdd 로만 쓰인다.
+      //   없으면 하단 조회조건(period2) 로 폴백한다(= Detail Search 버튼 경로).
+      fromYyyymmdd?: string;
+      toYyyymmdd?: string;
+    }
   ) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -272,8 +281,11 @@ export const useShipmentPlanMobilityItStore = createPersistedStoreWithTab<State 
             divisionId: div, // 1
             fromSite, // 2
             itemId, // 3
-            fromYyyymmdd: c.period2From, // 4
-            toYyyymmdd: c.period2To, // 5
+            // AS-IS FindData_Detail(cs L3116-3117): 더블클릭 드릴은 클릭한 열의 날짜(D_ 태그)를 from/to 로
+            //   단일 조회한다. 하단 Shipment Date 조건(period2)이 아니다 — period2 는 Detail Search 버튼 경로
+            //   (FindData_Detail_btnSearch)만 쓴다. 따라서 드릴 override 가 있으면 그 날짜, 없으면 period2.
+            fromYyyymmdd: overrides?.fromYyyymmdd ?? c.period2From, // 4
+            toYyyymmdd: overrides?.toYyyymmdd ?? c.period2To, // 5
             planStartYyyymmdd: c.planDate, // 6
             language, // 7
             userId, // 8

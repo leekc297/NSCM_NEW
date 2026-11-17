@@ -1,0 +1,130 @@
+{
+ "id": "SCP0041",
+ "started": "2026-11-14 15:25:50.234",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-14 15:36:04.348",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0041_StockOSP",
+   "form_text": "Stock OSP",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0041_StockOSP.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:09.305"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-14 15:36:13.916",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261114_152550\\dump_load.json",
+   "control_count": 54,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:13.932"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-14 15:36:14.106",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261114_152550\\shots\\SCP0041_01_load.png",
+   "width": 987,
+   "height": 843,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:14.382"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-14 15:36:14.721",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:15.261"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-14 15:36:22.427",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261114_152550\\dump_find.json",
+   "control_count": 54,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 0.134s, UI : 0.073s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:22.443"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-14 15:36:22.604",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261114_152550\\shots\\SCP0041_02_find.png",
+   "width": 987,
+   "height": 843,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 15:36:22.899"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 17,
+  "calls_with_params": 16
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "AsisLive.Host.exe(6636)"
+ ],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0041_StockOSP",
+  "form_text": "Stock OSP",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0041_StockOSP.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.134s, UI : 0.073s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "t_open": "2026-11-14 15:36:04.310",
+ "t_find": "2026-11-14 15:36:14.503",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 54,
+  "layout_items": 12,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 31,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 124,
+  "calls_screen": 17,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-14 15:36:24.098",
+ "exit": 0
+}

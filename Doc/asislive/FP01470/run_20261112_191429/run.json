@@ -1,0 +1,151 @@
+{
+ "id": "FP01470",
+ "started": "2026-11-12 19:14:29.846",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:14:30.082",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Analysis.UIL.FP01470_OrderTracking",
+   "form_text": "Order Tracking",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Analysis\\FP01470_OrderTracking.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:14:46.206"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:14:49.857",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01470\\run_20261112_191429\\dump_load.json",
+   "control_count": 28,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:14:49.922"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:14:50.265",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01470\\run_20261112_191429\\shots\\FP01470_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:14:50.632"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:14:50.964",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:20.986"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:15:28.962",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01470\\run_20261112_191429\\dump_find.json",
+   "control_count": 28,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:28.991"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:15:29.154",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01470\\run_20261112_191429\\shots\\FP01470_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:29.424"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:15:29.759",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:30.397"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 26,
+  "calls_with_params": 26
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Analysis.UIL.FP01470_OrderTracking",
+  "form_text": "Order Tracking",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Analysis\\FP01470_OrderTracking.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 19:14:30.056",
+ "t_find": "2026-11-12 19:14:50.711",
+ "dialogs": [
+  {
+   "at": "2026-11-12 19:14:52.947",
+   "caption": "GSCM",
+   "text": "Plan ID 에 대한 선택값이 없습니다.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 28,
+  "layout_items": 10,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 35,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 26,
+  "calls_screen": 26,
+  "calls_find": 5,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:32.845",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:32"
+}

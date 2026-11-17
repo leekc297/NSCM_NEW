@@ -1,0 +1,22 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 12:48:50.679",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetUserInfoList",
+   "sp": "UP_FX_GetUserInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8587,
+   "rows_kind": "DataSet rows",
+   "ms": 173.81,
+   "params": {
+    "Search": "",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC UP_FX_GetUserInfoList @Search='', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:pickbtn:btnDelegatee"
+  }
+ ]
+}

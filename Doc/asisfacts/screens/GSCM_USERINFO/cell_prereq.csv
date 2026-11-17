@@ -1,0 +1,3 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+UserPopup,,Language,ALL,MODE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""Language"") })",if (siMain.ActiveSheet.Columns[CAppSetting.StringAction].Visible),UserInfo.cs:466 UserInfo.SpdMain_CellClick
+DeptPopup,,Language,ALL,MODE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""Language"") } )",if (siMain.ActiveSheet.Columns[CAppSetting.StringAction].Visible),UserInfo.cs:501 UserInfo.SpdMain_CellClick

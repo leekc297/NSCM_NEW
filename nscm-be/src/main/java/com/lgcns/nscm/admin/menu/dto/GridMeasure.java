@@ -26,6 +26,8 @@ public class GridMeasure {
 
     private boolean display;
 
+    private boolean defaultFlag;
+
     private String attribute1;
     private String attribute2;
     private String attribute3;
@@ -45,6 +47,7 @@ public class GridMeasure {
     		.lClsLblNm((String) data.get("LARGE_CLASS_LABEL_NAME"))
     		.personalizable(data.get("USER_SELECTABLE_FLAG").equals("Y") ? true : false)
     		.display(data.get("DISPLAY_FLAG").equals("Y") ? true : false)
+            .defaultFlag(data.get("DEFAULT_FLAG").equals("Y") ? true : false)
     		.attribute1((String) data.get("ATTRIBUTE1"))
     		.attribute2((String) data.get("ATTRIBUTE2"))
     		.attribute3((String) data.get("ATTRIBUTE3"))

@@ -1,0 +1,93 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "82",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "DMF0027_GET_DM_DYNAMIC_QUERYS",
+    "SCP0020_GET_TACT_TIME_OSP",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     18
+    ],
+    [
+     "DMF0027_GET_DM_DYNAMIC_QUERYS",
+     1
+    ],
+    [
+     "SCP0020_GET_TACT_TIME_OSP",
+     855
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     27
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 65906,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0020-Sea1449",
+    "SCP0020-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 19:12:27.566",
+ "division_control": {
+  "kind": "combo",
+  "name": "cboDivision",
+  "items": [
+   "82"
+  ]
+ },
+ "division_set": {
+  "ok": true,
+  "applied": "combo:0:82 ESS Battery",
+  "error": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

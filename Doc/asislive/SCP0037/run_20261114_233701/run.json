@@ -1,0 +1,148 @@
+{
+ "id": "SCP0037",
+ "started": "2026-11-14 23:37:01.287",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-14 23:37:01.786",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0037_OperationLT",
+   "form_text": "Operation LT",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0037_OperationLT.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:06.708"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-14 23:37:11.429",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0037\\run_20261114_233701\\dump_load.json",
+   "control_count": 28,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:11.441"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-14 23:37:11.602",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0037\\run_20261114_233701\\shots\\SCP0037_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:11.709"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-14 23:37:12.346",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:12.853"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-14 23:37:21.481",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0037\\run_20261114_233701\\dump_find.json",
+   "control_count": 28,
+   "grid_count": 1,
+   "total": "Total : 328",
+   "time_status": "DB : 2.924s, UI : 0.077s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:21.497"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-14 23:37:21.654",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0037\\run_20261114_233701\\shots\\SCP0037_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:21.781"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-14 23:37:22.252",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 23:37:22.936"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 19,
+  "calls_with_params": 19
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0037_OperationLT",
+  "form_text": "Operation LT",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0037_OperationLT.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 2.924s, UI : 0.077s",
+  "total": "Total : 328",
+  "how": "status"
+ },
+ "t_open": "2026-11-14 23:37:01.658",
+ "t_find": "2026-11-14 23:37:11.984",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 28,
+  "layout_items": 8,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 14,
+  "data_rows": 50,
+  "grid_rows": 328,
+  "calls_total": 19,
+  "calls_screen": 19,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-14 23:37:23.856",
+ "exit": 0
+}

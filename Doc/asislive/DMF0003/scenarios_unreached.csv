@@ -1,0 +1,8 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+DMF0003-Sf6dd4d,조회,GetCustomerbyDivision,DMF0003_1_MktFcst.cs:5636,호출 없음,,
+DMF0003-Sbf4efb,조회,GetDivision,DMF0003_1_MktFcst.cs:5472,주석 안에서만 호출,DMF0003_MatsterChgPopup.cs:176,
+DMF0003-Se0913b,조회,GetItemType2,DMF0003_1_MktFcst.cs:5610,주석 안에서만 호출,DMF0003_T_MktFcst.cs:1698; DMF0003_1_MktFcst.cs:1950; DMF0003_MktFcst.cs:2621,
+DMF0003-S53fcfb,조회,GetPlantSitebyEndCustomer,DMF0003_1_MktFcst.cs:5501,호출 없음,,
+DMF0003-Sf9f45a,조회,GetScmSitebyDivision,DMF0003_1_MktFcst.cs:5486,호출 없음,,
+DMF0003-Scc16d7,조회,GetTeambyDivision,DMF0003_1_MktFcst.cs:5623,주석 안에서만 호출,DMF0003_MatsterChgPopup.cs:179,
+DMF0003-S0afd42,저장,SetSaveSheetColor,DMF0003_1_MktFcst.cs:1883,호출 없음,,

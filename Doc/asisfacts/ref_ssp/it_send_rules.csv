@@ -1,0 +1,23 @@
+﻿block_title,송신 컬럼,값 결정 규칙,값 유형,케이스
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),SHIPMENT_STATUS,Save = C(변경 전 값) · 승인 = A · 반려 = D · 취소 = D · ERP 오류 되돌림 = E,A · C · D · E,S05-14 · S05-24 · S05-25 · S05-26 · S05-27
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),VERSION_TYPE,모든 행 'B',B,S05-14
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),TRANSFER_FLAG,적재 시 'P' (E 행은 'X'),P · X → Y,S05-27
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),DIVISION_ID,사업부 기준정보 ATTRIBUTE3 (81 계열 → 81) · 전극은 원 출하 사업부,40 · 81 · 82 · 원 사업부,S05-38 · S05-39
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),SALES_COMPANY_ID,"ELECTRODE_SHIP_FROM_TO 룩업 ATTRIBUTE2, 없으면 CELL_SHIP_FROM_TO 룩업 ATTRIBUTE2 (From/To 법인 · Site 일치)",룩업 값 · NULL,S05-39
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),FROM_SITE_TYPE / TO_SITE_TYPE,"Site 유형 SALES → A, PLANT · OSP_YN N → B, PLANT · OSP_YN Y → C. To 는 SSP_SITE_INFO_EXCEPTION site_type 예외 우선",A · B · C,S05-29 ~ S05-36
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),FROM_SITE_VENDOR_ID,"From Site HQ_VENDOR_CODE 있으면 그 값, 없으면 Packer Plant(유형 C 만)",Vendor · NULL,S05-32 · S05-34
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),TO_SITE_VENDOR_ID,"To Site HQ_VENDOR_CODE 있으면 그 값, 없으면 Packer Plant(유형 C 만)",Vendor · NULL,S05-32
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),FROM/TO_SITE_PLANT_ID,Site 물류 Plant(LOGISTIC_PLANT_ID),Plant,S05-33
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),TO_SITE_SOLDTO_CODE / SHIPTO_CODE,To Site 대표 고객(SCM_MST_SITE_CUSTOMER REP_YN Y). 없으면 저장 차단(no soldto code / no shipto code),고객 코드 · 차단,S05-44
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),TO_SITE_COMPANY_ID,"SSP_SITE_INFO_EXCEPTION company_id 예외(From Plant 기준) 우선, 없으면 To Site 법인",법인 · 예외 법인,S05-37
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),PROJECT_CODE,NULL 또는 '-' → 'TBD',Project · TBD,S05-42
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),INCOTERMS,"To Site VMI_YN Y 이면 MKT FCST Incoterms(없으면 입력값), 아니면 입력값",Incoterms,S05-31
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),YYYYMMDD · QTY,"C 행 = 변경 전, A 행 = 변경 후. 신규 확정은 수량 0 행 제외",날짜 · 수량,S05-14 · S05-20 · S05-22
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),LAST_CONFIRM_DATE,"신규 확정 = MAX(출하일, 실행일+9), 그 외 = 실행일+9",날짜,S05-20 · S05-23
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),BOD_ID · ROUTE_ID · TRANSPORT_MODE · 항구 · ETD · ETA,"A 행 = 새 BOD 값, C 행 = 변경 전 값",BOD 값,S05-21
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),FCST_TYPE,확정 행 값 그대로,MPS · AS · ASF · SDC · SDF · SMC · SMF · SPF · WS · TST · ETC,S05-41
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),CHANGE_CODE / CHANGE_CODE_NAME,"요청 사유 코드('Select' → NULL, 미입력 → T07) / 사유 룩업 이름(C00 → 'Shipment Plan Adjustment')",사유 코드,S05-43
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),회사 · Site · Plant · Vendor · 고객 코드,NERP_CONV_MASTER(COMPANY_ID · SCP_SITE_ID · PLANT_ID · VENDOR_ID · END_CUSTOMER_ID) 변환값 우선,신 ERP 코드,S05-45
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),ERP_ATTR4,변환 전 TO_SITE_PLANT_ID,Plant,S05-45
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),PACKAGE_TYPE · FACTORY_ID · PACKAGE_QTY · DOM_EXP,전극 행만 값 있음,Box · Steelcrate · Steelrack / ALL · E1 · E2 / DOM · EXP,S05-39
+변경요청 ERP 송신 컬럼 값 결정 규칙 (XIF_ERP_SHIP_PLAN_CONFIRM_S),ATTRIBUTE1,변경요청 번호,R+일자+순번,전체

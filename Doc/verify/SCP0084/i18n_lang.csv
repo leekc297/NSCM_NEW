@@ -1,7 +1,4 @@
 ﻿lang,result,why
-KO,PASS,KO 문구 18건 일치 · 사전에 없는 문구 37건
-EN,판정필요,"EN 화면 한글 고정 라벨 4건 — AS-IS 메타(SCM_MST_SHEET_COLUMNS)도 같은 한글 문자열(LBL 코드 아님 · AS-IS 와 동일): '발생사유 상세'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '발생사유 유형'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 상'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 유형'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)) · 사전에 없는 문구 33건 — 사용자 결정: EN 문구 등록(메타 라벨→LBL 코드) 또는 설계 결정(검사 대상 제외)"
-EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
-CN,FAIL,"CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 33건 · AS-IS 동일 고정 라벨 4건: '발생사유 상세'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '발생사유 유형'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.OCCR_RSN_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 상'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CTN 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님)), '소진방안 유형'(한글 · AS-IS 메타도 같은 고정 라벨 · 그리드 헤더 = 메타 Long Term Stock.EXHT_TP_CD 컬럼 라벨(SCM_MST_SHEET_COLUMNS 라벨이 문자열 — LBL 코드 아님))"
-CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
-조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)
+KO,ERROR,[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0041) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)
+EN,ERROR,[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0041) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)
+CN,ERROR,[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0041) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)

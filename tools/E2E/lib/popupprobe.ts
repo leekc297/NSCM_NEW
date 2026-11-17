@@ -299,13 +299,32 @@ export async function filterByF4(page: Page, dlg: Locator, tag: string): Promise
     const all = editor.locator('input[type="checkbox"]').first(); await all.click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(150);
     // 전체 해제 상태에서 두 번째 값만
     const chk = items.nth(1).locator('input[type="checkbox"]').first(); await chk.click({ timeout: 3_000, force: true }).catch(() => undefined); await page.waitForTimeout(150);
-    await editor.locator('a, button, [class*="wj-btn"]').filter({ hasText: /^\s*(Apply|적용|OK|확인)\s*$/i }).first().click({ timeout: 5_000 }); await page.waitForTimeout(700);
+    // 2026-11-16(SSP0020 EG-153fcc99 진단 18:4x · 값 목록 1,593개): 위 클릭이 시간 안에 안 되면 체크된 값이 0개라 Apply 가 비활성(wj-state-disabled)으로 남는다
+    //   → 체크된 값이 없으면 목록에서 보이는 첫 값의 체크 칸을 요소 클릭으로 누른다(전체 해제 뒤 값 1개만 선택 — 원래 의도와 같음)
+    if (!(await editor.locator('.wj-listbox-item input[type="checkbox"]:checked').count().catch(() => 0))) {
+      await editor.evaluate(e => { const hb = e.getBoundingClientRect(); const boxes = Array.from(e.querySelectorAll('.wj-listbox-item input[type="checkbox"]')) as HTMLInputElement[]; const vis = boxes.filter(b => { const r = b.getBoundingClientRect(); return r.height > 0 && r.top >= hb.top && r.bottom <= hb.bottom; }); const t = vis[1] || vis[0] || boxes[0]; if (t) t.click(); }).catch(() => undefined);
+      await page.waitForTimeout(300);
+    }
+    // 2026-11-16 SSP0020 EG-153fcc99(검사기 결함 · 진단 22:5x): 이 필터 편집기에는 '전체 선택' 칸이 따로 없어 첫 체크 칸 = 첫 값이다.
+    //   위의 '전체 해제' 클릭이 실제로는 값 하나를 껐다 켜는 것이라 적용 직전 1,592/1,592 전부 선택 → 필터 무동작이었다.
+    //   ListBox 컨트롤의 checkedItems 를 두 번째 값 1개로 맞춘다(사용자가 나머지를 모두 끄는 것과 같은 결과)
+    await editor.evaluate(e => { const lb = e.querySelector('.wj-listbox') as unknown as Record<string, unknown> | null; if (!lb) return; let c = lb['$WJ-CTRL'] as Record<string, unknown> | undefined; if (!c) for (const k of Object.getOwnPropertyNames(lb)) { const v = lb[k] as Record<string, unknown>; if (v && typeof v === 'object' && 'checkedItems' in v) { c = v; break; } } const cv = c && (c.collectionView as Record<string, unknown> | undefined); const items = cv ? (cv.items as unknown[]) : []; if (c && items.length >= 2) c.checkedItems = [items[1]]; }).catch(() => undefined);
+    await page.waitForTimeout(300);
+    // 2026-11-16 진단(SSP0020 EG-153fcc99 적용 뒤 행 수 불변): 적용 직전 체크 상태·적용 뒤 필터 정의를 남긴다
+    const chk0 = await editor.locator('.wj-listbox-item input[type="checkbox"]:checked').count().catch(() => -1); const allChk = await all.isChecked().catch(() => null);
+    // 목록은 가상 스크롤 — 화면 밖 항목은 DOM 에 없으므로 ListBox 컨트롤의 checkedItems 로 실제 체크 수를 읽는다
+    const lbChk = await editor.evaluate(e => { const lb = e.querySelector('.wj-listbox') as unknown as Record<string, unknown> | null; if (!lb) return 'no-lb'; let c = lb['$WJ-CTRL'] as Record<string, unknown> | undefined; if (!c) for (const k of Object.getOwnPropertyNames(lb)) { const v = lb[k] as Record<string, unknown>; if (v && typeof v === 'object' && 'checkedItems' in v) { c = v; break; } } if (!c) return 'no-ctrl'; const ci = c.checkedItems as unknown[] | undefined; const cv = c.collectionView as Record<string, unknown> | undefined; return `checked=${ci ? ci.length : '?'}/${cv ? (cv.items as unknown[]).length : '?'}`; }).catch(() => 'err');
+    const allBox = await editor.evaluate(e => { const b = e.querySelector('input[type="checkbox"]') as HTMLInputElement | null; return b ? `${b.closest('.wj-listbox-item') ? 'item' : 'select-all'} checked=${b.checked} ind=${b.indeterminate}` : 'none'; }).catch(() => 'err');
+    console.log(`[F4 진단-목록] ${tag} ${lbChk} · 첫 체크 칸 ${allBox}`);
+    await editor.locator('a, button, [class*="wj-btn"]').filter({ hasText: /^\s*(Apply|적용|OK|확인)\s*$/i }).first().click({ timeout: 20_000 }); await page.waitForTimeout(700);  // 2026-11-16: 값 목록이 큰 컬럼은 체크 반영이 5초를 넘는다(SSP0020 8,060개)
     res.n1 = await popRowCount(page, tag);
+    const fdef = await dlg.evaluate(e => { const g = e.querySelector('.wj-flexgrid') as unknown as Record<string, unknown> | null; if (!g) return ''; let c = g['$WJ-CTRL'] as Record<string, unknown> | undefined; if (!c) return 'no-ctrl'; const cv = c.collectionView as Record<string, unknown> | undefined; return `filter=${typeof (cv && cv.filter)} items=${cv && (cv.items as unknown[] | undefined)?.length} src=${cv && (cv.sourceCollection as unknown[] | undefined)?.length}`; }).catch(() => 'err');
+    console.log(`[F4 진단] ${tag} 값 목록 ${cnt} · 적용 직전 체크 ${chk0} · 전체 칸 ${allChk} · 적용 뒤 행 ${res.n1} · ${fdef}`);
     res.count1 = await dlg.evaluate(e => { const m = /(Total|총)\s*[:：]?\s*[\d,]+(\s*\/\s*[\d,]+)?|\(\s*[\d,]+\s*\/\s*[\d,]+\s*\)|[\d,]+\s*\/\s*[\d,]+/i.exec((e as HTMLElement).innerText || ''); return m ? m[0] : ''; }).catch(() => '');
     await icon.click({ timeout: 8_000 }); await editor.waitFor({ state: 'visible', timeout: 10_000 });
     await editor.locator('a, button, [class*="wj-btn"]').filter({ hasText: /^\s*(Clear|지우기|초기화)\s*$/i }).first().click({ timeout: 5_000 }); await page.waitForTimeout(600);
     res.n2 = await popRowCount(page, tag);
-  } catch (e) { res.why = String(e).replace(/\[[0-9;]*[A-Za-z]/g, '').replace(/\s+/g, ' ').slice(0, 160); // eslint-disable-line no-control-regex
+  } catch (e) { res.why = String(e).replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').replace(/\s+/g, ' ').slice(0, 160); // eslint-disable-line no-control-regex
     await page.keyboard.press('Escape').catch(() => undefined); }
   await page.keyboard.press('F4').catch(() => undefined); await page.waitForTimeout(300);
   return res;

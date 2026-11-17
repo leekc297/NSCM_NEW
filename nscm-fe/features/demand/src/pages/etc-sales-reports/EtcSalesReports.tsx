@@ -318,6 +318,15 @@ export const EtcSalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(vg.msgId!, '_권한이 없습니다.') });
       return;
     }
+    // 조회 전 — Measure 세트(GET_MEASURE)와 월 칸이 아직 없다. 아래 Measure 0건 안내(MSG00429)로
+    //   떨어지면 "Measure 필수" 로 오해되므로 조회부터 하라고 먼저 막는다(MSG01091).
+    if (!hasSearched) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.SEARCH_FIRST, '_조회 후 추가하십시오.'),
+      });
+      return;
+    }
     const measures = measureRows.map(r => toCellStr(r.CODE)).filter(Boolean);
     if (measures.length === 0) {
       void setAlert({

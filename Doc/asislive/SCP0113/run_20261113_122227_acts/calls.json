@@ -1,0 +1,115 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 12:21:52.761",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 184.79,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_sheet_name": "Long Term Stock Management",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0113', @p_sheet_name='Long Term Stock Management', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnColumn"
+  },
+  {
+   "at": "2026-11-13 12:22:04.961",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 22.47,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:btnProcessLongTerm"
+  },
+  {
+   "at": "2026-11-13 12:22:05.091",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 106.77,
+   "params": {
+    "Code": "PlantByGroup1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlantByGroup1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:btnProcessLongTerm"
+  },
+  {
+   "at": "2026-11-13 12:22:05.525",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 362.02,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+   "phase": "action:btnProcessLongTerm"
+  },
+  {
+   "at": "2026-11-13 12:22:14.801",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 9165.51,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+   "phase": "action:btnProcessLongTerm"
+  },
+  {
+   "at": "2026-11-13 12:22:14.825",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 5.0,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PROCESS_POPUP"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='PROCESS_POPUP'",
+   "phase": "action:btnProcessLongTerm"
+  }
+ ]
+}

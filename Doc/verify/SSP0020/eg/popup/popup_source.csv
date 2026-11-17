@@ -1,0 +1,2 @@
+﻿menu,call,cls,trig,axis,egs,result,expected,actual,basis,note
+SSP0020,0,UserInfoPopup,OTHER:UserPopup,ASIS,EG433;EG441;EG060,판정필요,AS-IS UP_FX_GetUserInfoList 10행,"TO-BE 8612행 · 인자 {""Search"": ""ALL"", ""Language"": ""ALL"", ""SSOUserYN"": ""N""} · 미대응 ['Search', 'Language']",Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql · UserInfoPopup.cs:177,행 8612 · 계정 minyonglee1

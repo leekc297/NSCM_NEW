@@ -1,0 +1,148 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "FROM_CITY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 FROM_CITY",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_COUNTRY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 FROM_COUNTRY",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ROUTE_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ROUTE_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,1 failed: InvalidOperationException: cell not visible: 0,1",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-S657802"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TO_CITY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 TO_CITY",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 06:57:41",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "FROM_CITY",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "FROM_COUNTRY",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ROUTE_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0005-S657802"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "TO_CITY",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0005-Sb99d39",
+    "SCP0005-S12f25e",
+    "SCP0005-S9bf568"
+   ],
+   "has_else": false
+  }
+ ]
+}

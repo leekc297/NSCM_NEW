@@ -1,0 +1,151 @@
+{
+ "id": "SCP0085",
+ "started": "2026-11-12 20:13:05.752",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 20:13:06.067",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Report.UIL.SCP0085_EndingInventory",
+   "form_text": "Ending Inventory",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0085_EndingInventory.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:13:25.499"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 20:13:29.179",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0085\\run_20261112_201305\\dump_load.json",
+   "control_count": 64,
+   "grid_count": 1,
+   "total": "Total : 10,274",
+   "time_status": "DB : 13.235s, UI : 0.107s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:13:29.187"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 20:13:29.348",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0085\\run_20261112_201305\\shots\\SCP0085_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:13:29.458"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 20:13:29.786",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:13:30.235"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 20:13:42.630",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0085\\run_20261112_201305\\dump_find.json",
+   "control_count": 64,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 20:13:42.636"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 20:13:42.797",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0085\\run_20261112_201305\\shots\\SCP0085_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 20:13:42.895"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 20:13:43.376",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 20:13:43.972"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 14,
+  "calls_with_params": 14
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Report.UIL.SCP0085_EndingInventory",
+  "form_text": "Ending Inventory",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0085_EndingInventory.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 20:13:05.958",
+ "t_find": "2026-11-12 20:13:29.462",
+ "dialogs": [
+  {
+   "at": "2026-11-12 20:13:31.174",
+   "caption": "GSCM",
+   "text": "시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 64,
+  "layout_items": 15,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 74,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 14,
+  "calls_screen": 14,
+  "calls_find": 3,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:53.772",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:53"
+}

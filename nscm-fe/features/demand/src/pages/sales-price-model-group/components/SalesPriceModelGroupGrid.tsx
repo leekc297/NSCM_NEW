@@ -31,6 +31,7 @@ import { keepMergeManager, ModelGroupMergeManager } from '../utils/sales-price-m
 import { convertLocPrice, type ExchangeRateMap } from '../utils/sales-price-model-group.util';
 import { isPastPeriodKey, isPeriodKey } from '../utils/sales-price-model-group.util';
 import { cellOf, numberOf, sameBundle } from '../utils/sales-price-model-group.util';
+import { hasFutureLocPrice, originBundleKeyOf } from '../utils/sales-price-model-group.util';
 
 import styles from './SalesPriceModelGroupGrid.module.scss';
 
@@ -82,8 +83,17 @@ export const SalesPriceModelGroupGrid = ({
   // LOC 수정으로 화면이 다시 계산해 덮어쓴 KRW · USD 칸의 원래 값. 공용 EditTracker 는 사용자가 고친 칸만
   //   기록하므로 따로 둔다. 조회 결과가 바뀌면 비운다.
   const siblingOriginalsRef = useRef(new WeakMap<ModelGroupRow, Record<string, WijmoPrimitive>>());
+  // 기존 묶음 Currency 변경 (2026-11-12, 화면인계_DMF0083_Currency수정 F1 ~ F6).
+  //   noticed : 변경 범위 안내(MSG01429)를 이미 본 묶음 — 묶음당 한 번만 띄운다. 첫 진입은 안내만 띄우고
+  //             다음 진입부터 편집기를 연다(편집기와 알림이 한 동작에 겹치면 콤보가 닫힌다, DMF0020_01 과 같은 방식).
+  //   changeable : 묶음별 "Currency 를 바꿀 수 있는가" 판정값 — 칸을 그릴 때마다 묶음을 다시 훑지 않게 둔다.
+  //   둘 다 조회 결과가 바뀌면 비우고, changeable 은 값을 고칠 때마다 비운다(LOC 를 넣으면 판정이 바뀐다).
+  const currencyNoticedRef = useRef(new Set<string>());
+  const currencyChangeableRef = useRef(new Map<string, boolean>());
   useEffect(() => {
     siblingOriginalsRef.current = new WeakMap();
+    currencyNoticedRef.current = new Set();
+    currencyChangeableRef.current = new Map();
   }, [data]);
 
   const visibleStatic = useMemo(
@@ -128,6 +138,19 @@ export const SalesPriceModelGroupGrid = ({
       !isPastPeriodKey(binding, monday) &&
       cellOf(row, 'PRC_RPSN') === PRC_RPSN.YES;
 
+    // 기존 묶음의 Currency 를 바꿀 수 있는가 — 이번 주 이후 LOC 가격이 있는 묶음만(util hasFutureLocPrice 주석).
+    const canChangeCurrency = (row: ModelGroupRow): boolean => {
+      const key = originBundleKeyOf(row);
+      const cached = currencyChangeableRef.current.get(key);
+      if (cached !== undefined) return cached;
+      const loc = (g.collectionView?.items ?? []).find(
+        item => cellOf(item, 'MEASURE') === MEASURE_CODE.LOC && sameBundle(item, row)
+      );
+      const result = hasFutureLocPrice(loc, monday, cellOf(loc, 'PRC_RPSN') !== PRC_RPSN.YES);
+      currencyChangeableRef.current.set(key, result);
+      return result;
+    };
+
     const formatHandler = (_s: unknown, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.Cell) return;
       const binding = e.panel.columns[e.col]?.binding ?? '';
@@ -142,6 +165,10 @@ export const SalesPriceModelGroupGrid = ({
       if (isAutoMapped(binding)) {
         toggleClass(e.cell, 'wj-cell-editable', false);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
+      }
+      // 기존 묶음 Currency — 바꿀 수 없는 묶음(이번 주 이후 가격 없음)은 입력 칸으로 칠하지 않는다.
+      if (binding === 'CURRENCY' && row && !isInsertRow(row) && !canChangeCurrency(row)) {
+        toggleClass(e.cell, 'wj-cell-editable', false);
       }
     };
 
@@ -169,6 +196,26 @@ export const SalesPriceModelGroupGrid = ({
         // Team · End Customer 는 자동 입력, Project Code · Model Group 은 팝업으로만 고른다(설계서 R48 · I50).
         e.cancel = true;
         return;
+      } else if (binding === 'CURRENCY' && row && !isInsertRow(row)) {
+        // 기존 묶음 Currency — 칸 설정(입력 구분 M)이 열어 준 경우에만 온다. 공용 판정이 이미 막았으면 그대로 둔다.
+        if (e.cancel) return;
+        if (!canChangeCurrency(row)) {
+          e.cancel = true;
+          return;
+        }
+        const noticeKey = originBundleKeyOf(row);
+        if (!currencyNoticedRef.current.has(noticeKey)) {
+          currencyNoticedRef.current.add(noticeKey);
+          e.cancel = true;
+          void useMessageStore.getState().setAlert({
+            type: 'alert',
+            content: t(
+              MSG.CURRENCY_CHANGE_SCOPE,
+              '_화면에 조회된 기간의 데이터만 Currency가 변경됩니다. 기간을 확인하시고 Currency 변경을 진행해주세요.'
+            ),
+          });
+          return;
+        }
       }
       editingRef.current = { binding, oldVal: row?.[binding] };
     };
@@ -177,6 +224,11 @@ export const SalesPriceModelGroupGrid = ({
       const binding = s.columns[e.col]?.binding ?? '';
       const row = s.rows[e.row]?.dataItem as ModelGroupRow | undefined;
       if (s.isReadOnly || isAutoMapped(binding) || isPopupColumn(metaOf.get(binding))) {
+        e.cancel = true;
+        return;
+      }
+      // 기존 묶음 Currency 는 붙여넣기로 바꾸지 않는다 — 안내 · 묶음 전파 · 재계산이 편집 흐름에 묶여 있다.
+      if (binding === 'CURRENCY' && row && !isInsertRow(row)) {
         e.cancel = true;
         return;
       }
@@ -218,6 +270,8 @@ export const SalesPriceModelGroupGrid = ({
       if (!row) return;
       const items = s.collectionView.items;
       const bundle = items.filter(item => sameBundle(item, row));
+      // 값이 바뀌었으니 Currency 변경 가능 판정을 다시 한다.
+      currencyChangeableRef.current.clear();
 
       // (1) LOC 칸 → 같은 묶음 KRW · USD 를 그 달 환율로 다시 계산 (설계서 W_ I57, [Measure 규칙] E4).
       //   덮어쓰기 전 값을 처음 한 번만 기억한다 — N 으로 바꿀 때 되돌린다((2) 참조).
@@ -263,6 +317,63 @@ export const SalesPriceModelGroupGrid = ({
         // N 으로 바꾸면 이 묶음의 LOC 는 저장되지 않는다(Y → N 은 PRC_RPSN 만 바뀜, 설계서 R51).
         //   화면에 고친 숫자가 잠긴 채 남지 않도록 LOC 와 다시 계산한 KRW · USD 를 원래 값으로 되돌린다(사용자 결정 2026-11-06).
         if (cellOf(row, 'PRC_RPSN') !== PRC_RPSN.YES) revertLocEdits(bundle);
+        s.invalidate(true);
+        return;
+      }
+
+      // (2b) 기존 묶음 Currency — 묶음 전 행에 새 통화, 조회된 이번 주 이후 칸의 KRW · USD 를 새 통화 환율로 다시 계산.
+      //   저장도 이 칸들만 새 통화로 보낸다 — 조회 기간 밖 · 지난 주는 옛 통화로 남는다(MSG01429, 프로시저 3-0).
+      //   저장은 utils/save 가 맡는다: 묶음 전 행의 CURRENCY 변경 기록이 "통화를 바꾼 묶음" 표식이다.
+      //   Currency 칸은 묶음 3행이 머지된 한 칸이라 그리드가 형제 행에도 새 값을 이미 써 넣었을 수 있다 —
+      //   묶음은 조회 시점 묶음 키로 찾고(sameBundle), 원래 값은 편집 시작 때 잡아 둔 값을 쓴다.
+      if (binding === 'CURRENCY' && !isInsertRow(row)) {
+        if (prev?.binding !== 'CURRENCY') return;
+        const tracker = editTrackerRef.current;
+        const oldCur = safeString(prev.oldVal).trim();
+        const newCur = cellOf(row, 'CURRENCY');
+        // 빈 통화로는 바꾸지 않는다 — 통화는 묶음 키라 비우면 저장할 수 없다. 묶음 전체를 직전 값으로 되돌린다.
+        if (newCur === '') {
+          for (const item of bundle) {
+            tracker?.storeChange(item, 'CURRENCY', oldCur, oldCur);
+            item.CURRENCY = oldCur;
+          }
+          s.invalidate(true);
+          return;
+        }
+        if (newCur === oldCur) return;
+        for (const item of bundle) {
+          // 편집한 행은 공용 EditTracker 가 먼저 기록했다 — 여기서 다시 기록하면 직전 값이 원본으로 잡힌다.
+          if (item !== row) tracker?.storeChange(item, 'CURRENCY', oldCur, newCur);
+          item.CURRENCY = newCur;
+        }
+        const loc = bundle.find(item => cellOf(item, 'MEASURE') === MEASURE_CODE.LOC);
+        if (loc) {
+          const locChanges = tracker?.getOriginalValues().get(loc);
+          // 조회 시점 통화로 되돌아왔는가 — 그러면 LOC 를 고치지 않은 칸의 KRW · USD 는 조회된 값으로 되돌린다.
+          const backToOrigin = !(locChanges && 'CURRENCY' in locChanges);
+          const division = cellOf(loc, 'DIVISION_ID');
+          for (const key of Object.keys(loc)) {
+            if (!isPeriodKey(key) || isPastPeriodKey(key, monday)) continue; // 지난 칸은 옛 통화 그대로
+            const price = numberOf(loc[key]);
+            const locEdited = !!locChanges && key in locChanges;
+            for (const item of bundle) {
+              const measure = cellOf(item, 'MEASURE');
+              if (item === loc || measure === MEASURE_CODE.LOC) continue;
+              const kept = siblingOriginalsRef.current.get(item) ?? {};
+              if (backToOrigin && !locEdited) {
+                if (key in kept) {
+                  item[key] = kept[key];
+                  delete kept[key];
+                }
+                continue;
+              }
+              if (price === null) continue; // 가격이 없는 칸은 바꿀 값이 없다
+              if (!(key in kept)) kept[key] = item[key] ?? null;
+              siblingOriginalsRef.current.set(item, kept);
+              item[key] = convertLocPrice(rateMapRef.current, division, newCur, measure, key.slice(2, 8), price);
+            }
+          }
+        }
         s.invalidate(true);
         return;
       }

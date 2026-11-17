@@ -1,0 +1,148 @@
+{
+ "id": "FP00212N",
+ "started": "2026-11-12 23:30:23.980",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:30:24.275",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP00212_BOMExplosionLevel",
+   "form_text": "BOM Explosion 1 Level",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00212_BOMExplosionLevel.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:34.092"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:30:38.839",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00212N\\run_20261112_233023\\dump_load.json",
+   "control_count": 39,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 11.864s, UI : 0.081s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:38.842"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:30:39.007",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00212N\\run_20261112_233023\\shots\\FP00212N_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:39.100"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:30:39.597",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:30:40.293"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:34:08.007",
+   "ok": false,
+   "error": "TimeoutException: UI thread busy (modal dialog?)",
+   "done": "2026-11-12 23:35:08.020"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:35:08.187",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00212N\\run_20261112_233023\\shots\\FP00212N_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:35:09.423"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:35:09.758",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:35:10.868"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 25,
+  "calls_with_params": 25
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP00212_BOMExplosionLevel",
+  "form_text": "BOM Explosion 1 Level",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00212_BOMExplosionLevel.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 170
+ },
+ "t_open": "2026-11-12 23:30:24.195",
+ "t_find": "2026-11-12 23:30:39.372",
+ "dialogs": [],
+ "dump_used": "dump_load.json",
+ "counts": {
+  "controls": 39,
+  "layout_items": 8,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 13,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 25,
+  "calls_screen": 25,
+  "calls_find": 5,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:35:11.392",
+ "exit": 0
+}

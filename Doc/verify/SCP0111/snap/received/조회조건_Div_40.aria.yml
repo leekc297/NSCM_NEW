@@ -1,0 +1,17 @@
+- img
+- text: Div
+- combobox: 81 Automotive Battery
+- button "Open"
+- text: Model/Nickname
+- textbox
+- button
+- text: Cell Model
+- textbox
+- img
+- text: Plan Date
+- combobox: {DATE} ({W})
+- button "Open"
+- text: Period 2026.09 ~ 2027.02
+- checkbox "Qty < 0"
+- text: Qty < 0
+# visual-order: Div > Model/Nickname > Cell Model > Plan Date > Qty < 0

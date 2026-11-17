@@ -464,8 +464,9 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
  * Model/Project 는 콤보가 아니라 팝업이 채우는 값이라 dataMap 재변환으로 갱신되지 않는다.
  */
 const CASCADE_COMPANION_COLS: Record<string, readonly string[]> = {
-  ITEM_ID: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
-  ITEM_ID40: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
+  // MDL_GR · MDL_PRDN_CTRY — Model 팝업이 함께 채우는 값이라 Model 이 지워지면 같이 지운다(2026-11-12).
+  ITEM_ID: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME', 'MDL_GR', 'MDL_PRDN_CTRY'],
+  ITEM_ID40: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME', 'MDL_GR', 'MDL_PRDN_CTRY'],
   // BIZ_TYPE 은 콤보지만 Project 팝업이 채우는 값이다 — AS-IS 도 Project 변경 시 비운다(.cs L2253).
   PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_STATUS', 'PROJECT_OWNER', 'BIZ_TYPE'],
 };

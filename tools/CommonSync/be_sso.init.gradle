@@ -1,0 +1,9 @@
+// 로컬 BE 의 build.gradle 에서 SSO jar 6줄이 주석인 동안, build.gradle 을 고치지 않고 SSO 라이브러리를 붙여 컴파일·기동하는 초기화 스크립트 (2026-11-12).
+// 사용(BE 폴더에서): gradlew.bat bootRun --offline -I <이 파일 경로>
+// build.gradle 98~103행 주석을 풀면 이 파일은 필요 없다.
+allprojects { p ->
+    p.plugins.withId('java') {
+        println "[init] sso jars -> ${p.name}"
+        p.dependencies.add('implementation', p.files('lib/sso/external_v4.2.1.00_LGEnSol_38.jar', 'lib/sso/INICrypto_v4.2.8.jar', 'lib/sso/jdom.jar', 'lib/sso/log4j-1.2.16.jar', 'lib/sso/poolit.jar', 'lib/sso/xercesImpl.jar'))
+    }
+}

@@ -1,0 +1,142 @@
+{
+ "id": "SCP0013",
+ "started": "2026-11-12 19:45:27.226",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:45:27.546",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0013_ProductionPlanLine",
+   "form_text": "Production Plan Line",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0013_ProductionPlanLine.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:45:35.235"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:45:38.762",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0013\\run_20261112_194527\\dump_load.json",
+   "control_count": 81,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:45:38.791"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:45:38.944",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0013\\run_20261112_194527\\shots\\SCP0013_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:45:39.142"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:45:39.645",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:45:42.376"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:46:12.579",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0013\\run_20261112_194527\\dump_find.json",
+   "control_count": 81,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:46:12.609"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:46:12.777",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0013\\run_20261112_194527\\shots\\SCP0013_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:46:12.983"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:46:13.307",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:46:13.811"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 26,
+  "calls_with_params": 25
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0013_ProductionPlanLine",
+  "form_text": "Production Plan Line",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0013_ProductionPlanLine.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 19:45:27.436",
+ "t_find": "2026-11-12 19:45:39.342",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 81,
+  "layout_items": 30,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 400,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 26,
+  "calls_screen": 26,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:46.510",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:46"
+}

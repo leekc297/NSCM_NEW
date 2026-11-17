@@ -1,0 +1,1546 @@
+# -*- coding: utf-8 -*-
+r"""
+cloud_pkg — 클라우드 이관 패키지 결정적 빌더 (2026-10-30 신설 · Claude 프롬프트 방식 대체)
+
+  python tools/CloudPkg/cloud_pkg.py <ID>               # ☁️ 클라우드 이관 패키지(수정본) — 범위 = 환경설정 작업 모드(--mode auto, 2026-11-02)
+  python tools/CloudPkg/cloud_pkg.py <ID> --full        # ☁️ 클라우드 이관 패키지(전체)   — 범위 = 환경설정 작업 모드
+  python tools/CloudPkg/cloud_pkg.py <ID> --mode db     # 범위 직접 지정 — PKG·META·MENU (DB MODE 와 같음)
+  python tools/CloudPkg/cloud_pkg.py <ID> --mode all    # 범위 직접 지정 — + FE·BE (UI/DB MODE 와 같음)
+  python tools/CloudPkg/cloud_pkg.py <ID> --stage       # 생성·보완 끝에 미리 만들어 둠(작업 모드 범위의 수정본+전체)
+  python tools/CloudPkg/cloud_pkg.py <ID> --applied     # ☁️ 클라우드 이관 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정
+
+동작
+  1) 사내 ZIOUI1 를 한 번 접속해 화면 소유 객체·참조 공용 객체·META 행·권한·시노님을 '지금' 조회한다(SOURCE-FRESH).
+  2) 입력 지문(fingerprint)이 미리 만든 묶음(_staging/<ID>/<mode>)과 같으면 그 묶음을 복사만 한다(수 초).
+     다르거나 없으면 그 자리에서 만든다(수십 초~수 분) — Claude 호출 없음.
+  3) 이관 대상 = 이관 기준선(_cloud_state/<ID>.json) 이후 바뀐 것 전부. 기준선이 없으면 화면 소유 전부(멱등이라 안전).
+     --full 이면 기준선 무시.
+     ⭐ 기준선은 --applied 로만 옮긴다(2026-11-03). 생성만으로 옮기면 적용 안 한 패키지 내용이 다음 수정본에서 빠진다
+     (SCP0111 10:21 생성 → 10:37 수정본에 PKG·META 누락). 적용 전까지 수정본은 누적된다.
+     입력이 같으면 기존 폴더를 알려 주고, 기준선 이후 바뀐 것이 없으면 빈 폴더를 만들지 않는다.
+  4) 사내 리허설(읽기 전용·ROLLBACK·DRY): 00 → 05 → 10(DRY) → 30(ROLLBACK) → 40 → 90 → 99(DRY) → 백업표 정리.
+  5) 결과 폴더 = _artifacts/_deploy_packages/<ID>_CLOUD[_DB]_<YYYYMMDD_HHMM>/ (A_DB · B_FE · FE_MERGE · B_BE · BE_MERGE · 00_README.md)
+
+판정 규칙(이 파일이 단일 원천 — 22_PACKAGE_ARTIFACTS.md · deploy-package-completeness.md 의 자동화본)
+  - 화면 소유 DB 객체 = SCM_MGR 객체 중 이름에 _<ID>_ 경계로 ID 가 든 것(백업·임시 사본 제외).
+    PKG/PROC/FUNC/VIEW = 사내 최신 원문 전체(CREATE OR REPLACE) — 05 백업 + 99 원복으로 되돌릴 수 있음.
+    GTT = 구조 비교 후 없음 CREATE / 다름 DROP+CREATE(+인덱스·권한) / 같음 SKIP.
+    영구 테이블·TYPE·SEQUENCE = 없을 때만 생성. 컬럼 차이는 00 PRECHECK 에 보고(데이터·PK 영향 → 자동 변경 안 함).
+  - 공용 객체(화면 소유가 아닌 참조 객체) = 넣지 않는다. 00 PRECHECK 에서 존재·VALID·컬럼 누락만 확인.
+    이 화면 몫 패치 파일(Doc/gen/<ID>/<공용객체>_*_<ID>.sql · 룰 H14)이 있으면 25_SHARED_*_<ID>.sql 로 동봉.
+  - META = 화면 전용 행 MERGE(없으면 INSERT · 값이 다르면 UPDATE) / 공용·권한·메뉴 행 = 없을 때만 INSERT /
+    MSG_M·콤보 = INSERT … NOT EXISTS 전용(#140) · 감사 컬럼 'admin'/SYSDATE · ON 키 = PK 실측(PK 없으면 유일 키 실측).
+  - FE(--mode all) = 페이지 폴더 + 이 화면을 참조하는 변경 파일 → 공통소스(common) 판정(tools/CommonSync, Upload(UI) 와 같은 규칙)
+    whole-new/whole-mine → B_FE(실경로) · merged-mine → FE_MERGE(공통 최신 + 내 수정분) · 충돌 → FE_MERGE/_conflicts.
+    페이지 폴더는 한 파일이라도 내 수정이면 폴더 전체를 B_FE 에 넣는다(index.ts 누락 = Page Not Found 방지).
+  - BE(--mode all) = nscm-be 변경 파일 중 경로·내용에 ID 가 있는 것 → 공통소스 이력 판정. 없으면 'BE 변경 없음'.
+금지: 클라우드 DB 접속·실행 · git push · 사내 DB 객체 기능 수정(리허설은 DRY/ROLLBACK, 백업표는 끝나면 삭제)
+"""
+import sys as _sys
+try:
+    _sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
+import os, re, sys, json, hashlib, shutil, datetime, argparse, subprocess, time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'CommonSync'))
+import dbconn  # noqa: E402
+
+VERSION = '1.1.0'
+PKG_ROOT = os.path.join(ROOT, '_artifacts', '_deploy_packages')
+STAGE_ROOT = os.path.join(PKG_ROOT, '_staging')
+STATE_ROOT = os.path.join(PKG_ROOT, '_cloud_state')
+GEN_ROOT = os.path.join(ROOT, 'Doc', 'gen')
+FE_ROOT = os.path.join(ROOT, 'nscm-fe')
+BE_ROOT = os.path.join(ROOT, 'nscm-be')
+OWNER = 'SCM_MGR'
+AUDIT = {'CREATED_BY', 'CREATION_DATE', 'LAST_UPDATED_BY', 'LAST_UPDATE_DATE'}
+CODE_TYPES = ('PACKAGE', 'PACKAGE BODY', 'PROCEDURE', 'FUNCTION', 'TYPE', 'TYPE BODY')
+EXCLUDE_NAME = re.compile(r'(^ZT_|^ZB_|^ZZ|BAK|BACKUP|_OLD$|_\d{8}(_\d+)?$|\$)', re.I)
+
+T0 = time.time()
+
+
+def log(msg):
+    print(f'[{time.time() - T0:6.1f}s] {msg}', flush=True)
+
+
+def sha(obj):
+    return hashlib.sha1(json.dumps(obj, ensure_ascii=False, sort_keys=True, default=str).encode('utf-8')).hexdigest()
+
+
+def now():
+    return datetime.datetime.now()
+
+
+# ───────────────────────── SQL 리터럴 ─────────────────────────
+def lit(v, dtype='VARCHAR2'):
+    if v is None:
+        return 'NULL'
+    if isinstance(v, (int, float)) and not isinstance(v, bool):
+        return repr(v) if not isinstance(v, float) or not v.is_integer() else str(int(v))
+    if hasattr(v, 'is_integer') and dtype == 'NUMBER':  # Decimal
+        return str(v)
+    if isinstance(v, datetime.datetime):
+        return f"TO_DATE('{v:%Y-%m-%d %H:%M:%S}', 'YYYY-MM-DD HH24:MI:SS')"
+    s = str(v)
+    if dtype == 'NUMBER':
+        return s
+    parts = re.split(r'(\r\n|\n|\r)', s)
+    out = []
+    for p in parts:
+        if p in ('\r\n', '\n', '\r'):
+            out.append({'\r\n': 'CHR(13) || CHR(10)', '\n': 'CHR(10)', '\r': 'CHR(13)'}[p])
+        elif p != '':
+            out.append("'" + p.replace("'", "''") + "'")
+    if not out:
+        return "''"
+    return ' || '.join(out)
+
+
+def qq(text):
+    """PL/SQL q-quote — 본문에 없는 구분자 선택"""
+    for o, c in (('~', '~'), ('!', '!'), ('#', '#'), ('^', '^'), ('|', '|'), ('[', ']'), ('{', '}'), ('<', '>')):
+        if (c + "'") not in text:
+            return f"q'{o}{text}{c}'"
+    raise ValueError('q-quote 구분자 없음')
+
+
+def clob_assign(var, text, indent='    '):
+    """긴 SQL 문자열을 CLOB 변수에 나눠 붙이는 PL/SQL 줄들(줄당 8,000자 이하)"""
+    lines = [f"{indent}{var} := NULL;"]
+    chunk = 8000
+    for i in range(0, len(text), chunk):
+        lines.append(f"{indent}{var} := {var} || {qq(text[i:i + chunk])};")
+    return lines
+
+
+# ───────────────────────── 사내 DB 조회 ─────────────────────────
+class Corp:
+    def __init__(self):
+        self.cfg = dbconn.load_cfg()
+        self.cx = dbconn.connect('tobe', self.cfg, write=True)
+        self.cur = self.cx.cursor()
+        self.cur.execute("SELECT SYS_CONTEXT('USERENV','SERVER_HOST'), SYS_CONTEXT('USERENV','DB_NAME'), USER, TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') FROM DUAL")
+        self.host, self.dbname, self.user, self.fetched = self.cur.fetchone()
+
+    def q(self, sql, **b):
+        self.cur.execute(sql, b)
+        cols = [d[0] for d in self.cur.description]
+        return [dict(zip(cols, r)) for r in self.cur.fetchall()]
+
+    def lob(self, v):
+        return v.read() if hasattr(v, 'read') else v
+
+
+def collect_db(c, ID, ctx):
+    """화면 소유 객체·공용 의존·META·권한 수집 → dict"""
+    D = {}
+    idre = f'(^|_){ID}(_|$)'
+    objs = c.q(f"""SELECT OBJECT_NAME, OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') LAST_DDL
+                     FROM ALL_OBJECTS WHERE OWNER = '{OWNER}' AND REGEXP_LIKE(OBJECT_NAME, :r)
+                      AND OBJECT_TYPE IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION','TYPE','TYPE BODY','TABLE','VIEW','SEQUENCE','INDEX','SYNONYM')
+                    ORDER BY OBJECT_NAME, OBJECT_TYPE""", r=idre)
+    D['excluded'] = sorted({o['OBJECT_NAME'] for o in objs if EXCLUDE_NAME.search(o['OBJECT_NAME'])})
+    objs = [o for o in objs if not EXCLUDE_NAME.search(o['OBJECT_NAME']) and o['OBJECT_TYPE'] not in ('INDEX', 'SYNONYM')]
+    D['objects'] = objs
+    names = sorted({o['OBJECT_NAME'] for o in objs})
+    D['names'] = names
+    inlist = lambda xs: ','.join("'" + x.replace("'", "''") + "'" for x in xs) or "'~'"
+
+    # 코드 원문
+    code = {}
+    for o in objs:
+        if o['OBJECT_TYPE'] in CODE_TYPES:
+            rows = c.q("SELECT TEXT FROM ALL_SOURCE WHERE OWNER = :o AND NAME = :n AND TYPE = :t ORDER BY LINE", o=OWNER, n=o['OBJECT_NAME'], t=o['OBJECT_TYPE'])
+            code[(o['OBJECT_NAME'], o['OBJECT_TYPE'])] = ''.join(r['TEXT'] or '' for r in rows)
+    D['code'] = code
+    # 뷰
+    views = {}
+    for o in objs:
+        if o['OBJECT_TYPE'] == 'VIEW':
+            r = c.q("SELECT TEXT FROM ALL_VIEWS WHERE OWNER = :o AND VIEW_NAME = :n", o=OWNER, n=o['OBJECT_NAME'])
+            cols = c.q("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = :o AND TABLE_NAME = :n ORDER BY COLUMN_ID", o=OWNER, n=o['OBJECT_NAME'])
+            views[o['OBJECT_NAME']] = {'text': c.lob(r[0]['TEXT']) if r else '', 'cols': [x['COLUMN_NAME'] for x in cols]}
+    D['views'] = views
+    # 테이블(GTT/영구)
+    tabs = {}
+    for o in objs:
+        if o['OBJECT_TYPE'] != 'TABLE':
+            continue
+        t = o['OBJECT_NAME']
+        ti = c.q("SELECT TEMPORARY, DURATION FROM ALL_TABLES WHERE OWNER = :o AND TABLE_NAME = :t", o=OWNER, t=t)
+        if not ti:
+            continue
+        cols = c.q("""SELECT COLUMN_NAME, DATA_TYPE, CHAR_LENGTH, CHAR_USED, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE, DATA_DEFAULT
+                        FROM ALL_TAB_COLUMNS WHERE OWNER = :o AND TABLE_NAME = :t ORDER BY COLUMN_ID""", o=OWNER, t=t)
+        for cc in cols:
+            cc['DATA_DEFAULT'] = (c.lob(cc['DATA_DEFAULT']) or '').strip() or None
+        idx = []
+        for ix in c.q("SELECT INDEX_NAME, UNIQUENESS FROM ALL_INDEXES WHERE TABLE_OWNER = :o AND TABLE_NAME = :t AND INDEX_TYPE LIKE '%NORMAL%' ORDER BY 1", o=OWNER, t=t):
+            ic = c.q("SELECT COLUMN_NAME, DESCEND FROM ALL_IND_COLUMNS WHERE INDEX_OWNER = :o AND INDEX_NAME = :i ORDER BY COLUMN_POSITION", o=OWNER, i=ix['INDEX_NAME'])
+            idx.append({'name': ix['INDEX_NAME'], 'unique': ix['UNIQUENESS'] == 'UNIQUE', 'cols': [x['COLUMN_NAME'] + (' DESC' if x['DESCEND'] == 'DESC' else '') for x in ic]})
+        pk = c.q("""SELECT C.CONSTRAINT_NAME, LISTAGG(K.COLUMN_NAME, ',') WITHIN GROUP (ORDER BY K.POSITION) COLS
+                      FROM ALL_CONSTRAINTS C JOIN ALL_CONS_COLUMNS K ON K.OWNER = C.OWNER AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME
+                     WHERE C.OWNER = :o AND C.TABLE_NAME = :t AND C.CONSTRAINT_TYPE = 'P' GROUP BY C.CONSTRAINT_NAME""", o=OWNER, t=t)
+        sig = c.q("""SELECT LISTAGG(COLUMN_NAME||'|'||DATA_TYPE||'|'||CHAR_LENGTH||'|'||DATA_PRECISION||'|'||DATA_SCALE||'|'||NULLABLE, ';')
+                            WITHIN GROUP (ORDER BY COLUMN_ID) S FROM ALL_TAB_COLUMNS WHERE OWNER = :o AND TABLE_NAME = :t""", o=OWNER, t=t)[0]['S']
+        ddl = None
+        if ti[0]['TEMPORARY'] != 'Y':
+            ddl = metadata_ddl(c, 'TABLE', t)
+        tabs[t] = {'temp': ti[0]['TEMPORARY'] == 'Y', 'duration': ti[0]['DURATION'], 'cols': cols, 'idx': idx, 'pk': pk[0] if pk else None, 'sig': sig, 'ddl': ddl}
+    D['tables'] = tabs
+    # TYPE / SEQUENCE DDL(없을 때만 생성용)
+    D['seq_ddl'] = {o['OBJECT_NAME']: metadata_ddl(c, 'SEQUENCE', o['OBJECT_NAME']) for o in objs if o['OBJECT_TYPE'] == 'SEQUENCE'}
+    # 권한·시노님
+    D['grants'] = c.q(f"""SELECT TABLE_NAME, GRANTEE, LISTAGG(PRIVILEGE, ', ') WITHIN GROUP (ORDER BY PRIVILEGE) PRIVS
+                           FROM ALL_TAB_PRIVS WHERE TABLE_SCHEMA = '{OWNER}' AND TABLE_NAME IN ({inlist(names)})
+                          GROUP BY TABLE_NAME, GRANTEE ORDER BY 1, 2""")
+    D['synonyms'] = c.q(f"""SELECT OWNER, SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM ALL_SYNONYMS
+                            WHERE TABLE_OWNER = '{OWNER}' AND TABLE_NAME IN ({inlist(names)}) AND OWNER <> 'PUBLIC' ORDER BY 1, 2""")
+    # 공용 의존(화면 소유가 아닌 참조)
+    deps = c.q(f"""SELECT DISTINCT D.REFERENCED_OWNER RO, D.REFERENCED_NAME RN, D.REFERENCED_TYPE RT
+                     FROM ALL_DEPENDENCIES D
+                    WHERE D.OWNER = '{OWNER}' AND D.NAME IN ({inlist(names)})
+                      AND D.REFERENCED_OWNER NOT IN ('SYS','PUBLIC','SYSTEM','XDB','MDSYS','CTXSYS','ORDSYS')
+                      AND D.REFERENCED_TYPE IN ('TABLE','VIEW','PACKAGE','PROCEDURE','FUNCTION','TYPE','SEQUENCE','SYNONYM')
+                    ORDER BY 1, 2""")
+    deps = [d for d in deps if not (d['RO'] == OWNER and d['RN'] in names)]
+    # 2026-11-06 W8: 동적 SQL(문자열) 안의 참조는 ALL_DEPENDENCIES 에 없다(SCP0016 WATERFALL 의 재고 뷰 SCP_PLN_SALES_ONHAND_V·SCP_OPT_PLANT_ONHAND_V)
+    #   → 화면 코드 원문의 식별자 토큰 중 SCM_MGR 실존 객체를 공용 의존(DYN=Y)으로 추가 — H14 패치 파일 매칭·00 PRECHECK 대상이 된다
+    try:
+        toks = set()
+        for src in D['code'].values():
+            toks |= set(re.findall(r'\b([A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+)\b', src or ''))
+        have = {d['RN'] for d in deps} | set(names)
+        cand = sorted(t for t in toks if t not in have and len(t) >= 8)
+        for i in range(0, len(cand), 500):
+            for r in c.q(f"""SELECT OBJECT_NAME RN, OBJECT_TYPE RT FROM ALL_OBJECTS WHERE OWNER = '{OWNER}'
+                              AND OBJECT_TYPE IN ('TABLE','VIEW','PACKAGE','PROCEDURE','FUNCTION','TYPE','SEQUENCE') AND OBJECT_NAME IN ({inlist(cand[i:i + 500])})"""):
+                deps.append({'RO': OWNER, 'RN': r['RN'], 'RT': r['RT'], 'DYN': 'Y'})
+    except Exception as _ex:
+        print(f'[WARN] 동적 SQL 참조 수집 실패(ALL_DEPENDENCIES 만 사용): {_ex}')
+    for d in deps:
+        st = c.q("""SELECT MAX(STATUS) ST, TO_CHAR(MAX(LAST_DDL_TIME),'YYYY-MM-DD HH24:MI:SS') LD FROM ALL_OBJECTS
+                     WHERE OWNER = :o AND OBJECT_NAME = :n AND OBJECT_TYPE IN (:t, :t || ' BODY')""", o=d['RO'], n=d['RN'], t=d['RT'])
+        d['STATUS'], d['LAST_DDL'] = (st[0]['ST'], st[0]['LD']) if st else (None, None)
+        if d['RT'] in ('TABLE', 'VIEW'):
+            d['COLS'] = [x['COLUMN_NAME'] for x in c.q("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = :o AND TABLE_NAME = :t ORDER BY COLUMN_ID", o=d['RO'], t=d['RN'])]
+    D['deps'] = deps
+    # META
+    D['meta'] = collect_meta(c, ID, D, ctx)
+    return D
+
+
+def metadata_ddl(c, typ, name):
+    try:
+        c.cur.execute("""BEGIN
+            DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'SEGMENT_ATTRIBUTES', FALSE);
+            DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'STORAGE', FALSE);
+            DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'EMIT_SCHEMA', FALSE);
+            DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'SQLTERMINATOR', FALSE);
+            DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM, 'REF_CONSTRAINTS', FALSE);
+          END;""")
+        c.cur.execute("SELECT DBMS_METADATA.GET_DDL(:t, :n, :o) FROM DUAL", t=typ, n=name, o=OWNER)
+        v = c.cur.fetchone()[0]
+        return (v.read() if hasattr(v, 'read') else v).strip()
+    except Exception as e:
+        return f'-- DDL 추출 실패: {str(e).splitlines()[0]}'
+
+
+# META 영역: (표, 조건, 방식, 설명) — 방식 upsert = 없으면 INSERT·다르면 UPDATE(화면 전용) / insert = 없을 때만
+META_AREAS = [
+    ('SCM_ADM_MNU_M', "MNU_ID = :id", 'insert', '메뉴 행 (메뉴 트리·노출은 클라우드 운영값 존중 — 없을 때만)'),
+    ('SCM_ADM_API_M', "API_ID LIKE :id || '\\_%' ESCAPE '\\'", 'upsert', '화면 전용 API'),
+    ('SCM_ADM_API_M', "API_ID IN (SELECT API_ID FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID = :id) AND API_ID NOT LIKE :id || '\\_%' ESCAPE '\\'", 'insert', '공용 API(이 화면 버튼이 씀)'),
+    ('SCM_ADM_MNU_BTN_MPG_M', "MNU_ID = :id", 'upsert', '버튼 → API 매핑'),
+    ('SCM_ADM_PROC_M', "PROC_NM LIKE 'PKG\\_' || :id || '.%' ESCAPE '\\'", 'upsert', '화면 PKG 프로시저 파라미터'),
+    ('SCM_ADM_PROC_M', "PROC_NM IN (SELECT A.API_URL FROM SCM_MGR.SCM_ADM_API_M A JOIN SCM_MGR.SCM_ADM_MNU_BTN_MPG_M B ON B.API_ID = A.API_ID WHERE B.MNU_ID = :id) AND PROC_NM NOT LIKE 'PKG\\_' || :id || '.%' ESCAPE '\\'", 'insert', '공용 프로시저 파라미터'),
+    ('SCM_ADM_USER_GR_MNU_MPG_M', "MNU_ID = :id", 'insert', '그룹 메뉴 권한'),
+    ('SCM_ADM_USER_GR_MNU_BTN_MPG_M', "MNU_ID = :id", 'insert', '그룹 버튼 권한'),
+    ('SCM_MST_SHEET_COLUMNS', "PROGRAM_ID = :id", 'upsert', '시트 컬럼'),
+    ('SCM_MST_SHEET_MEASURE', "PROGRAM_ID = :id", 'upsert', '시트 Measure'),
+]
+NOPK_KEYS = {
+    'SCM_MST_SHEET_COLUMNS': ['PROGRAM_ID', 'SHEET_NAME', 'COLUMN_NAME', 'DIVISION_ID', 'SMALL_CLASS_LABEL_NAME', 'LARGE_CLASS_LABEL_NAME', 'COLUMN_LABEL_NAME'],
+    'SCM_MST_SHEET_MEASURE': ['PROGRAM_ID', 'SHEET_NAME', 'COLUMN_NAME', 'DIVISION_ID', 'SMALL_CLASS_LABEL_NAME', 'LARGE_CLASS_LABEL_NAME', 'COLUMN_LABEL_NAME'],
+    'SCM_ADM_MSG_M': ['MSG_ID', 'LANG_CD'],
+}
+
+
+def table_cols(c, t):
+    return c.q("SELECT COLUMN_NAME, DATA_TYPE, NULLABLE FROM ALL_TAB_COLUMNS WHERE OWNER = :o AND TABLE_NAME = :t ORDER BY COLUMN_ID", o=OWNER, t=t)
+
+
+def table_pk(c, t):
+    r = c.q("""SELECT LISTAGG(K.COLUMN_NAME, ',') WITHIN GROUP (ORDER BY K.POSITION) COLS FROM ALL_CONSTRAINTS C
+                 JOIN ALL_CONS_COLUMNS K ON K.OWNER = C.OWNER AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME
+                WHERE C.OWNER = :o AND C.TABLE_NAME = :t AND C.CONSTRAINT_TYPE = 'P'""", o=OWNER, t=t)
+    return r[0]['COLS'].split(',') if r and r[0]['COLS'] else None
+
+
+def pick_key(t, rows, pk):
+    if pk:
+        return pk, 'PK'
+    cands = NOPK_KEYS.get(t, [])
+    for n in range(2, len(cands) + 1):
+        k = cands[:n]
+        seen = set()
+        ok = True
+        for r in rows:
+            v = tuple(r.get(x) for x in k)
+            if v in seen:
+                ok = False
+                break
+            seen.add(v)
+        if ok:
+            return k, '유일 키 실측(PK 없음)'
+    return cands, '유일 키 없음 — 동일 행 중복'
+
+
+def collect_meta(c, ID, D, ctx):
+    out = []
+    texts = []  # MSG/콤보 ID 탐색용 텍스트
+    for (code_txt) in D['code'].values():
+        texts.append(code_txt)
+    texts.extend(ctx.get('fe_texts', []))
+    for t, cond, mode, desc in META_AREAS:
+        cols = table_cols(c, t)
+        rows = c.q(f"SELECT * FROM {OWNER}.{t} WHERE {cond}", id=ID)
+        pk = table_pk(c, t)
+        key, how = pick_key(t, rows, pk)
+        out.append({'table': t, 'cond': cond, 'mode': mode, 'desc': desc, 'cols': cols, 'rows': rows, 'key': key, 'key_how': how})
+        for r in rows:
+            texts.extend(str(v) for v in r.values() if isinstance(v, str))
+    blob = '\n'.join(texts)
+    # MSG / LBL / MNU
+    ids = set(re.findall(r'\b(?:MSG|LBL|MNU)\d{3,6}\b', blob))
+    ids |= set(re.findall(r'\bMNU_[A-Z]{3}\d{4}\b', blob))
+    ids |= set(re.findall(r'\bMSG_API_[A-Z0-9_]+\b', blob))
+    msg_rows = c.q(f"SELECT * FROM {OWNER}.SCM_ADM_MSG_M WHERE MSG_ID LIKE '%' || :id || '%'", id=ID)
+    if ids:
+        idl = sorted(ids)
+        for i in range(0, len(idl), 500):
+            part = ','.join("'" + x + "'" for x in idl[i:i + 500])
+            msg_rows += c.q(f"SELECT * FROM {OWNER}.SCM_ADM_MSG_M WHERE MSG_ID IN ({part})")
+    uniq = {}
+    for r in msg_rows:
+        uniq[(r['MSG_ID'], r['LANG_CD'])] = r
+    msg_rows = [uniq[k] for k in sorted(uniq)]
+    out.append({'table': 'SCM_ADM_MSG_M', 'cond': '참조 MSG/LBL/MNU ID + 이름에 화면 ID', 'mode': 'insert', 'desc': '문구(MSG/LBL/MNU) — INSERT NOT EXISTS 전용(#140)',
+                'cols': table_cols(c, 'SCM_ADM_MSG_M'), 'rows': msg_rows, 'key': ['MSG_ID', 'LANG_CD'], 'key_how': '논리 키(MSG_ID, LANG_CD)'})
+    # 콤보 SQL
+    all_sql = [r['SQL_ID'] for r in c.q(f"SELECT DISTINCT SQL_ID FROM {OWNER}.SCM_ADM_CMBO_SQL_M")]
+    meta_vals = set()
+    for m in out:
+        for r in m['rows']:
+            meta_vals |= {v for v in r.values() if isinstance(v, str)}
+    used = sorted(s for s in all_sql if s in meta_vals or re.search(r"""['"`]""" + re.escape(s) + r"""['"`]""", blob))
+    cmb = []
+    for i in range(0, len(used), 500):
+        part = ','.join("'" + x.replace("'", "''") + "'" for x in used[i:i + 500])
+        cmb += c.q(f"SELECT * FROM {OWNER}.SCM_ADM_CMBO_SQL_M WHERE SQL_ID IN ({part}) ORDER BY SQL_ID, MDU_DIVS_CD")
+    out.append({'table': 'SCM_ADM_CMBO_SQL_M', 'cond': '화면 FE·PKG·META 가 부르는 콤보 SQL_ID', 'mode': 'insert', 'desc': '콤보 SQL(공용) — 없을 때만',
+                'cols': table_cols(c, 'SCM_ADM_CMBO_SQL_M'), 'rows': cmb, 'key': table_pk(c, 'SCM_ADM_CMBO_SQL_M') or ['SQL_ID', 'MDU_DIVS_CD'], 'key_how': 'PK'})
+    return out
+
+
+# ───────────────────────── FE / BE 판정 ─────────────────────────
+def page_dir(ID):
+    try:
+        r = json.load(open(os.path.join(GEN_ROOT, ID, 'register.json'), encoding='utf-8'))
+        p = os.path.join(FE_ROOT, 'features', r['feature'], 'src', 'pages', r['pageDir'])
+        if os.path.isdir(p):
+            return p
+    except Exception:
+        pass
+    feat = os.path.join(FE_ROOT, 'features')
+    for f in sorted(os.listdir(feat)) if os.path.isdir(feat) else []:
+        pg = os.path.join(feat, f, 'src', 'pages')
+        if not os.path.isdir(pg):
+            continue
+        for d in sorted(os.listdir(pg)):
+            mp = os.path.join(pg, d, '__asis-mapping__.md')
+            try:
+                if os.path.exists(mp) and re.search(rf'\b{ID}\b', open(mp, encoding='utf-8', errors='replace').read(4000)):
+                    return os.path.join(pg, d)
+            except Exception:
+                pass
+    return None
+
+
+def git_status(repo):
+    r = subprocess.run(['git', '-C', repo, 'status', '--porcelain', '-uall'], capture_output=True, text=True, encoding='utf-8', errors='replace')
+    out = []
+    for l in r.stdout.splitlines():
+        if len(l) < 4:
+            continue
+        p = l[3:].split(' -> ')[-1].strip().strip('"')
+        out.append((l[:2], p))
+    return out
+
+
+def fe_candidates(ID, pdir):
+    rel = lambda f: os.path.relpath(f, FE_ROOT).replace(os.sep, '/')
+    files = []
+    for dp, dn, fn in os.walk(pdir):
+        dn[:] = [d for d in dn if d not in ('node_modules', '.git')]
+        files += [rel(os.path.join(dp, f)) for f in fn]
+    pageRel = rel(pdir)
+    base = os.path.basename(pdir)
+    pathRe = re.compile(rf'{re.escape(base)}|\b{ID}\b', re.I)
+    bodyRe = re.compile(re.escape(base), re.I)
+    ALLOW = re.compile(r'^(features|apps/web/src|packages|configs)/')
+    DENY = re.compile(r'(^|/)(tools|\.vibe|\.claude|_artifacts|Doc|\.husky|node_modules|dist|build)(/|$)|VibeManager|Harness|\.vsix$|\.env(\.|$)', re.I)
+    related = []
+    for st, f in git_status(FE_ROOT):
+        if f.startswith(pageRel + '/') or (re.search(r'(^|/)src/pages/[^/]+/', f) and not f.startswith(pageRel + '/')):
+            continue
+        if DENY.search(f) or not ALLOW.search(f):
+            continue
+        full = os.path.join(FE_ROOT, f)
+        hit = bool(pathRe.search(f))
+        if not hit and os.path.isfile(full) and os.path.getsize(full) < 2 * 1024 * 1024:
+            try:
+                hit = bool(bodyRe.search(open(full, encoding='utf-8', errors='replace').read()))
+            except Exception:
+                hit = False
+        if not hit and f == 'configs/types/procedures.d.ts':
+            try:
+                hit = ID in open(full, encoding='utf-8', errors='replace').read()
+            except Exception:
+                pass
+        if hit:
+            related.append(f)
+    return sorted(files), sorted(related), pageRel
+
+
+def fe_judge(ID, files, tip_ref, workdir):
+    """common_sync --upload-prepare 재사용 → [{'rel','mode','note','out'}]"""
+    os.makedirs(workdir, exist_ok=True)
+    lst = os.path.join(workdir, 'files.txt')
+    open(lst, 'w', encoding='utf-8').write('\n'.join(files))
+    summ = os.path.join(workdir, 'summary.json')
+    cmd = [sys.executable, os.path.join(ROOT, 'tools', 'CommonSync', 'common_sync.py'), '--upload-prepare', '--fe', FE_ROOT,
+           '--tip', tip_ref, '--keys', ID, '--files-from', lst, '--out', workdir, '--summary', summ]
+    r = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace', env=dict(os.environ, PYTHONIOENCODING='utf-8'))
+    if r.returncode != 0 or not os.path.exists(summ):
+        raise RuntimeError('FE 공통소스 판정 실패: ' + (r.stdout + r.stderr)[-800:])
+    return json.load(open(summ, encoding='utf-8'))
+
+
+def be_judge(ID, tip_ref, full=False):
+    """nscm-be 변경 파일(full=True 면 src 전체) 중 경로·내용에 ID → 공통 이력 판정(common_sync History 를 BE 경로로)"""
+    import common_sync as cs
+    res = []
+    cands = []
+    other = []
+    if full:
+        pool = []
+        for dp, dn, fn in os.walk(os.path.join(BE_ROOT, 'src')):
+            dn[:] = [d for d in dn if d not in ('build', 'out', 'node_modules')]
+            pool += [('', os.path.relpath(os.path.join(dp, f), BE_ROOT).replace(os.sep, '/')) for f in fn]
+    else:
+        pool = git_status(BE_ROOT)
+    for st, f in pool:
+        full = os.path.join(BE_ROOT, f)
+        if not os.path.isfile(full) or not re.search(r'^src/', f) or not f.endswith(('.java', '.xml', '.yml', '.yaml', '.properties', '.sql')):
+            continue
+        hit = bool(re.search(rf'\b{ID}\b', f, re.I))
+        if not hit and os.path.getsize(full) < 2 * 1024 * 1024:
+            try:
+                hit = bool(re.search(rf'\b{ID}\b', open(full, encoding='utf-8', errors='replace').read(), re.I))
+            except Exception:
+                pass
+        (cands if hit else other).append(f)
+    if not cands:
+        return res, other
+    git = cs.Git(FE_ROOT)
+    tip = git.out('rev-parse', tip_ref).strip()
+    saved = cs.SCOPE
+    cs.SCOPE = ['src']
+    try:
+        hist = cs.History(git, 'nscm-be/', tip, tip)
+    finally:
+        cs.SCOPE = saved
+    for rel in cands:
+        lb = cs.rfile(os.path.join(BE_ROOT, rel))
+        tb = git.blob_at(tip, 'nscm-be/' + rel)
+        ln, tn = cs.norm(lb), cs.norm(tb)
+        r = {'rel': rel}
+        if tb is None:
+            r.update(mode='whole-new', note='공통에 없는 파일', data=lb)
+        elif ln == tn:
+            r.update(mode='skip-same', note='공통 최신과 동일')
+        elif hist.matches_history(rel, ln) or hist.matches_history_fmt(rel, ln):
+            r.update(mode='skip-notmine', note='내 편집 없음(공통 이력본과 같음)')
+        else:
+            okey, origin = hist.pick_base(rel, ln, None)
+            if origin is None:
+                r.update(mode='conflict', note='출발 판본 없음 — 사람 확인', data=lb)
+            elif cs.norm(origin) == tn:
+                r.update(mode='whole-mine', note=f'공통이 출발 판본({okey}) 이후 그대로 → 로컬 전체', data=lb)
+            else:
+                merged, nconf = cs.merge3(git, tb, origin, lb)
+                if nconf:
+                    r.update(mode='conflict', note=f'3-way 충돌 {nconf} (출발 판본 {okey})', data=merged)
+                else:
+                    r.update(mode='merged-mine', note=f'공통 최신 + 내 수정분(출발 판본 {okey})', data=cs.conv(merged, cs.eol_of(tb), cs.has_bom(tb)))
+        res.append(r)
+    git.close()
+    return res, other
+
+
+# ───────────────────────── SQL 생성 ─────────────────────────
+def hdr(title, ctx, extra=''):
+    return (f"-- SOURCE-FRESH: {OWNER} 화면 {ctx['ID']} 객체·META (DB={ctx['db']} SERVER_HOST={ctx['host']}) FETCHED={ctx['fetched']}\n"
+            f"/* {title}\n * 패키지 {ctx['pkg']} · 생성 tools/CloudPkg/cloud_pkg.py {VERSION} · {ctx['built']:%Y-%m-%d %H:%M}\n"
+            f" * 실행 계정 = SCM_MGR (전체 F5 · 반복 실행 안전){extra}\n */\nSET DEFINE OFF\nSET SERVEROUTPUT ON SIZE UNLIMITED\n")
+
+
+def coldef(cc):
+    dt = cc['DATA_TYPE']
+    if dt in ('VARCHAR2', 'NVARCHAR2', 'CHAR', 'NCHAR'):
+        t = f"{dt}({cc['CHAR_LENGTH']}{' CHAR' if cc['CHAR_USED'] == 'C' and dt in ('VARCHAR2', 'CHAR') else ''})"
+    elif dt == 'NUMBER':
+        p, s = cc['DATA_PRECISION'], cc['DATA_SCALE']
+        t = 'NUMBER' if p is None and s is None else (f'NUMBER({p},{s})' if p is not None else f'NUMBER(*,{s})')
+    elif dt == 'RAW':
+        t = f"RAW({cc['DATA_LENGTH']})"
+    else:
+        t = dt
+    if cc['DATA_DEFAULT']:
+        t += ' DEFAULT ' + cc['DATA_DEFAULT']
+    if cc['NULLABLE'] == 'N':
+        t += ' NOT NULL'
+    return f"{cc['COLUMN_NAME']} {t}"
+
+
+def gtt_ddl(t, info):
+    body = ',\n'.join('    ' + coldef(cc) for cc in info['cols'])
+    return f"CREATE GLOBAL TEMPORARY TABLE {t} (\n{body}\n) ON COMMIT {'PRESERVE' if info['duration'] == 'SYS$SESSION' else 'DELETE'} ROWS"
+
+
+SIG_FN = """    FUNCTION cur_sig(p_tab VARCHAR2) RETURN VARCHAR2 IS
+        v VARCHAR2(4000);
+    BEGIN
+        SELECT LISTAGG(COLUMN_NAME||'|'||DATA_TYPE||'|'||CHAR_LENGTH||'|'||DATA_PRECISION||'|'||DATA_SCALE||'|'||NULLABLE, ';')
+                 WITHIN GROUP (ORDER BY COLUMN_ID) INTO v
+          FROM USER_TAB_COLUMNS WHERE TABLE_NAME = p_tab;
+        RETURN v;
+    END;
+"""
+
+
+def build_10(ctx, D, inc_tabs, inc_seq):
+    L = [hdr('10_DDL — 화면 소유 테이블(GTT 구조 동기화 · 영구 테이블/SEQUENCE 없을 때만 생성)', ctx,
+             '\n * GTT: 없음 CREATE · 구조 다름 DROP 후 CREATE(+인덱스·권한, 세션 임시 데이터만이라 손실 없음) · 같음 SKIP\n * ORA-14452 = 이 GTT 를 쓰는 세션이 살아 있음 → BE 재기동 후 재실행')]
+    grants = {}
+    for g in D['grants']:
+        grants.setdefault(g['TABLE_NAME'], []).append(g)
+    L.append("""DECLARE
+    c_dry   CONSTANT BOOLEAN := FALSE;   -- 리허설용(TRUE = DDL 실행 안 함)
+    v_cre   PLS_INTEGER := 0;
+    v_rebld PLS_INTEGER := 0;
+    v_skip  PLS_INTEGER := 0;
+""" + SIG_FN + """
+    PROCEDURE run(p_sql VARCHAR2, p_tab VARCHAR2) IS
+    BEGIN
+        IF c_dry THEN
+            RAISE_APPLICATION_ERROR(-20901, 'DRY: ' || p_tab || ' 에 DDL 필요 — ' || SUBSTR(p_sql, 1, 120));
+        END IF;
+        EXECUTE IMMEDIATE p_sql;
+    EXCEPTION WHEN OTHERS THEN
+        IF SQLCODE IN (-14452, -14450) THEN
+            DBMS_OUTPUT.PUT_LINE('ERROR   ' || p_tab || ' : ' || SQLERRM || ' -> 사용 중 세션 존재, BE 재기동 후 재실행');
+        ELSIF SQLCODE <> -20901 THEN
+            DBMS_OUTPUT.PUT_LINE('ERROR   ' || p_tab || ' : ' || SQLERRM || ' :: ' || SUBSTR(p_sql, 1, 200));
+        END IF;
+        RAISE;
+    END;
+
+    PROCEDURE grant_to(p_tab VARCHAR2, p_grantee VARCHAR2, p_privs VARCHAR2) IS
+    BEGIN
+        IF c_dry THEN RETURN; END IF;
+        EXECUTE IMMEDIATE 'GRANT ' || p_privs || ' ON ' || p_tab || ' TO ' || p_grantee;
+    EXCEPTION WHEN OTHERS THEN
+        IF SQLCODE IN (-1917, -1919) THEN DBMS_OUTPUT.PUT_LINE('  WARN  ' || p_grantee || ' 없음, GRANT 생략 (' || p_tab || ')');
+        ELSE RAISE; END IF;
+    END;
+
+    FUNCTION exists_tab(p_tab VARCHAR2) RETURN BOOLEAN IS n PLS_INTEGER;
+    BEGIN SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME = p_tab; RETURN n > 0; END;
+
+    FUNCTION exists_obj(p_name VARCHAR2, p_type VARCHAR2) RETURN BOOLEAN IS n PLS_INTEGER;
+    BEGIN SELECT COUNT(*) INTO n FROM USER_OBJECTS WHERE OBJECT_NAME = p_name AND OBJECT_TYPE = p_type; RETURN n > 0; END;
+
+    /* GTT: TRUE = 새로 만들었음 */
+    FUNCTION ensure_gtt(p_tab VARCHAR2, p_sig VARCHAR2, p_ddl VARCHAR2) RETURN BOOLEAN IS
+        v VARCHAR2(4000);
+    BEGIN
+        IF NOT exists_tab(p_tab) THEN
+            run(p_ddl, p_tab); v_cre := v_cre + 1;
+            DBMS_OUTPUT.PUT_LINE('CREATE  ' || p_tab); RETURN TRUE;
+        END IF;
+        v := cur_sig(p_tab);
+        IF v = p_sig THEN
+            v_skip := v_skip + 1; DBMS_OUTPUT.PUT_LINE('SKIP    ' || p_tab || ' (구조 동일)'); RETURN FALSE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('DIFF    ' || p_tab);
+        DBMS_OUTPUT.PUT_LINE('  현재  ' || v);
+        DBMS_OUTPUT.PUT_LINE('  기준  ' || p_sig);
+        run('DROP TABLE ' || p_tab || ' PURGE', p_tab);
+        run(p_ddl, p_tab); v_rebld := v_rebld + 1;
+        DBMS_OUTPUT.PUT_LINE('REBUILD ' || p_tab); RETURN TRUE;
+    END;
+
+    PROCEDURE ensure_index(p_tab VARCHAR2, p_idx VARCHAR2, p_ddl VARCHAR2) IS n PLS_INTEGER;
+    BEGIN
+        SELECT COUNT(*) INTO n FROM USER_INDEXES WHERE INDEX_NAME = p_idx;
+        IF n = 0 THEN run(p_ddl, p_tab); DBMS_OUTPUT.PUT_LINE('  INDEX ' || p_idx); END IF;
+    END;
+BEGIN""")
+    for t in inc_tabs:
+        info = D['tables'][t]
+        if info['temp']:
+            ddl = gtt_ddl(t, info)
+            L.append(f"    /* {t} : GTT {len(info['cols'])} cols, index {len(info['idx'])} */")
+            L.append(f"    IF ensure_gtt('{t}',\n        {lit(info['sig'])},\n        {qq(ddl)}) THEN")
+            gl = grants.get(t, [])
+            for g in gl:
+                L.append(f"        grant_to('{t}', '{g['GRANTEE']}', '{g['PRIVS']}');")
+            if not gl:
+                L.append('        NULL;')
+            L.append('    END IF;')
+            for ix in info['idx']:
+                ixd = f"CREATE {'UNIQUE ' if ix['unique'] else ''}INDEX {ix['name']} ON {t} ({', '.join(ix['cols'])})"
+                L.append(f"    ensure_index('{t}', '{ix['name']}', {qq(ixd)});")
+        else:
+            L.append(f"    /* {t} : 영구 테이블 — 없을 때만 생성(있으면 컬럼 차이는 00_PRECHECK 보고만) */")
+            L.append(f"    IF NOT exists_tab('{t}') THEN")
+            L.append(f"        run({qq(info['ddl'])}, '{t}'); v_cre := v_cre + 1; DBMS_OUTPUT.PUT_LINE('CREATE  {t}');")
+            for g in grants.get(t, []):
+                L.append(f"        grant_to('{t}', '{g['GRANTEE']}', '{g['PRIVS']}');")
+            L.append(f"    ELSE DBMS_OUTPUT.PUT_LINE('EXISTS  {t} (구조 차이는 00_PRECHECK 참조)'); END IF;")
+        L.append('')
+    for s in inc_seq:
+        L.append(f"    IF NOT exists_obj('{s}', 'SEQUENCE') THEN run({qq(D['seq_ddl'][s])}, '{s}'); DBMS_OUTPUT.PUT_LINE('CREATE  {s}'); END IF;")
+    L.append("""    DBMS_OUTPUT.PUT_LINE('RESULT  CREATE=' || v_cre || '  REBUILD=' || v_rebld || '  SKIP=' || v_skip);
+END;
+/
+""")
+    return '\n'.join(L)
+
+
+def code_order(k):
+    order = {'TYPE': 0, 'PACKAGE': 1, 'FUNCTION': 2, 'PROCEDURE': 3, 'VIEW': 4, 'PACKAGE BODY': 5, 'TYPE BODY': 6}
+    return (order.get(k[1], 9), k[0])
+
+
+def build_20(ctx, D, name, types):
+    L = [hdr(f'20_PKG {name} — 사내 최신 원문 전체(CREATE OR REPLACE · 이 화면 전용 객체)', ctx,
+             '\n * 되돌리기 = 05_BACKUP 을 먼저 실행해 두면 99_ROLLBACK 이 이 객체를 실행 전 원문으로 복원')]
+    warns = []
+    for t in sorted(types, key=lambda x: code_order((name, x))):
+        if t == 'VIEW':
+            v = D['views'][name]
+            cols = ', '.join(v['cols'])
+            L.append(f"CREATE OR REPLACE FORCE VIEW {name} ({cols}) AS\n{v['text'].rstrip().rstrip(';')}\n;\n")
+            continue
+        src = D['code'][(name, t)]
+        if not src.strip():
+            warns.append(f'{t} {name} 원문 없음')
+            continue
+        lines = src.rstrip().split('\n')
+        if any(l.strip() == '/' for l in lines):
+            warns.append(f'{t} {name} 원문에 "/" 단독 줄 — SQL*Plus 실행 시 분할 위험')
+        L.append('CREATE OR REPLACE ' + src.rstrip() + '\n/\n')
+    L.append(f"""/* 확인 — VALID, 오류 0 */
+SELECT OBJECT_NAME, OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME, 'YYYY-MM-DD HH24:MI:SS') AS LAST_DDL
+  FROM USER_OBJECTS WHERE OBJECT_NAME = '{name}' ORDER BY OBJECT_TYPE;
+SELECT TYPE, LINE, POSITION, TEXT FROM USER_ERRORS WHERE NAME = '{name}' ORDER BY TYPE, SEQUENCE;
+""")
+    return '\n'.join(L), warns
+
+
+def key_pred(key, l='T', r='S'):
+    return ' AND '.join(f"NVL(TO_CHAR({l}.{k}), '~') = NVL(TO_CHAR({r}.{k}), '~')" for k in key)
+
+
+def row_select(m, row):
+    parts = []
+    for cc in m['cols']:
+        cn = cc['COLUMN_NAME']
+        if cn in AUDIT:
+            continue
+        parts.append(f"{lit(row.get(cn), cc['DATA_TYPE'])} {cn}")
+    return 'SELECT ' + ', '.join(parts) + ' FROM DUAL'
+
+
+def keys_view(m, rows):
+    if not rows:
+        return 'SELECT ' + ', '.join(f"CAST(NULL AS VARCHAR2(4000)) {k}" for k in m['key']) + ' FROM DUAL WHERE 1 = 0'
+    sels = []
+    for r in rows:
+        sels.append('SELECT ' + ', '.join(f"{lit(r.get(k))} {k}" for k in m['key']) + ' FROM DUAL')
+    return '\n    UNION ALL '.join(sels)
+
+
+def build_30(ctx, metas):
+    L = [hdr('30_META — 화면 메타 7영역 + MSG/LBL + 콤보 (멱등)', ctx,
+             '\n * upsert = 없으면 INSERT · 값이 다르면 UPDATE(화면 전용 행) / insert = 없을 때만 INSERT(공용·권한·메뉴·문구·콤보)'
+             '\n * 감사 컬럼 = admin / SYSDATE · ON 키 = PK 실측(없으면 유일 키 실측) · 클라우드에만 있는 행은 지우지 않음(90_VERIFY 보고)')]
+    for m in metas:
+        rows = m['inc_rows']
+        L.append(f"\n/* ── {m['table']} — {m['desc']} · {m['mode']} · 키 {', '.join(m['key'])} ({m['key_how']}) · {len(rows)}행 */")
+        if m.get('deleted'):
+            L.append(f"/*   사내에서 사라진 행 {len(m['deleted'])}건(직전 이관 대비) — 클라우드 정리 필요 여부 확인, 자동 삭제 안 함:")
+            for k in m['deleted'][:50]:
+                L.append(f"     {k}")
+            L.append('*/')
+        if not rows:
+            L.append('-- (대상 행 없음)')
+            continue
+        data_cols = [cc['COLUMN_NAME'] for cc in m['cols'] if cc['COLUMN_NAME'] not in AUDIT]
+        audit_cols = [cc['COLUMN_NAME'] for cc in m['cols'] if cc['COLUMN_NAME'] in AUDIT]
+        aud_val = {'CREATED_BY': "'admin'", 'LAST_UPDATED_BY': "'admin'", 'CREATION_DATE': 'SYSDATE', 'LAST_UPDATE_DATE': 'SYSDATE'}
+        ins_cols = data_cols + audit_cols
+        ins_vals = [f'S.{c}' for c in data_cols] + [aud_val[c] for c in audit_cols]
+        upd_cols = [c for c in data_cols if c not in m['key']]
+        if m['mode'] == 'insert':
+            for r in rows:
+                sel = row_select(m, r)
+                L.append(f"INSERT INTO {OWNER}.{m['table']} ({', '.join(ins_cols)})\nSELECT {', '.join(ins_vals)}\n  FROM ({sel}) S\n WHERE NOT EXISTS (SELECT 1 FROM {OWNER}.{m['table']} T WHERE {key_pred(m['key'])});")
+        else:
+            for i in range(0, len(rows), 40):
+                chunk = rows[i:i + 40]
+                using = '\n       UNION ALL '.join(row_select(m, r) for r in chunk)
+                L.append(f"MERGE INTO {OWNER}.{m['table']} T\nUSING ({using}) S\n   ON ({key_pred(m['key'])})")
+                if upd_cols:
+                    diff = ' OR '.join(f"DECODE(T.{c}, S.{c}, 0, 1) = 1" for c in upd_cols)
+                    sets = ', '.join(f"T.{c} = S.{c}" for c in upd_cols)
+                    au = ', '.join(f"T.{c} = {aud_val[c]}" for c in audit_cols if c.startswith('LAST_'))
+                    L.append(f" WHEN MATCHED THEN UPDATE SET {sets}{', ' + au if au else ''}\n      WHERE {diff}")
+                L.append(f" WHEN NOT MATCHED THEN INSERT ({', '.join(ins_cols)})\n      VALUES ({', '.join(ins_vals)});")
+    L.append('\nCOMMIT;\n')
+    return '\n'.join(L)
+
+
+def build_40(ctx, D, inc_names):
+    L = [hdr('40_GRANT — 화면 객체 권한·앱 계정 시노님 (사내 실측 그대로 · 멱등)', ctx)]
+    L.append("""DECLARE
+    c_dry CONSTANT BOOLEAN := FALSE;
+    PROCEDURE g(p_obj VARCHAR2, p_to VARCHAR2, p_privs VARCHAR2) IS n PLS_INTEGER;
+    BEGIN
+        SELECT COUNT(*) INTO n FROM USER_OBJECTS WHERE OBJECT_NAME = p_obj;
+        IF n = 0 THEN DBMS_OUTPUT.PUT_LINE('SKIP    ' || p_obj || ' 없음'); RETURN; END IF;
+        IF NOT c_dry THEN EXECUTE IMMEDIATE 'GRANT ' || p_privs || ' ON ' || p_obj || ' TO ' || p_to; END IF;
+        DBMS_OUTPUT.PUT_LINE('GRANT   ' || p_privs || ' ON ' || p_obj || ' TO ' || p_to);
+    EXCEPTION WHEN OTHERS THEN
+        IF SQLCODE IN (-1917, -1919) THEN DBMS_OUTPUT.PUT_LINE('  WARN  ' || p_to || ' 없음 — ' || p_obj);
+        ELSE RAISE; END IF;
+    END;
+    PROCEDURE s(p_owner VARCHAR2, p_syn VARCHAR2, p_obj VARCHAR2) IS n PLS_INTEGER;
+    BEGIN
+        SELECT COUNT(*) INTO n FROM ALL_SYNONYMS WHERE OWNER = p_owner AND SYNONYM_NAME = p_syn AND TABLE_OWNER = 'SCM_MGR' AND TABLE_NAME = p_obj;
+        IF n > 0 THEN RETURN; END IF;
+        IF NOT c_dry THEN EXECUTE IMMEDIATE 'CREATE OR REPLACE SYNONYM ' || p_owner || '.' || p_syn || ' FOR SCM_MGR.' || p_obj; END IF;
+        DBMS_OUTPUT.PUT_LINE('SYNONYM ' || p_owner || '.' || p_syn || ' -> SCM_MGR.' || p_obj);
+    EXCEPTION WHEN OTHERS THEN
+        IF SQLCODE = -1031 THEN DBMS_OUTPUT.PUT_LINE('  WARN  권한 부족(CREATE ANY SYNONYM) — ' || p_owner || '.' || p_syn || ' 는 system 계정으로');
+        ELSIF SQLCODE = -1917 THEN DBMS_OUTPUT.PUT_LINE('  WARN  사용자 ' || p_owner || ' 없음');
+        ELSE RAISE; END IF;
+    END;
+BEGIN""")
+    n = 0
+    for gr in D['grants']:
+        if gr['TABLE_NAME'] in inc_names:
+            L.append(f"    g('{gr['TABLE_NAME']}', '{gr['GRANTEE']}', '{gr['PRIVS']}');")
+            n += 1
+    for sy in D['synonyms']:
+        if sy['TABLE_NAME'] in inc_names:
+            L.append(f"    s('{sy['OWNER']}', '{sy['SYNONYM_NAME']}', '{sy['TABLE_NAME']}');")
+            n += 1
+    if not n:
+        L.append('    NULL;')
+    L.append('END;\n/\n')
+    return '\n'.join(L), n
+
+
+def build_00(ctx, D, metas):
+    L = [hdr('00_PRECHECK_CLOUD — 읽기 전용(변경 없음). 결과를 보고 진행', ctx)]
+    names = D['names']
+    exp = '\n    UNION ALL '.join(f"SELECT {lit(o['OBJECT_NAME'])} N, {lit(o['OBJECT_TYPE'])} T FROM DUAL" for o in D['objects']) or "SELECT 'X' N, 'X' T FROM DUAL WHERE 1 = 0"
+    L.append(f"""/* 1) 화면 소유 객체 — 클라우드 현재 상태 (CLOUD_STATUS 빈칸 = 클라우드에 없음 → 이 패키지가 생성) */
+SELECT E.N AS OBJECT_NAME, E.T AS OBJECT_TYPE, O.STATUS AS CLOUD_STATUS, TO_CHAR(O.LAST_DDL_TIME, 'YYYY-MM-DD HH24:MI') AS CLOUD_LAST_DDL
+  FROM ({exp}) E
+  LEFT JOIN USER_OBJECTS O ON O.OBJECT_NAME = E.N AND O.OBJECT_TYPE = E.T
+ ORDER BY 1, 2;
+""")
+    code_deps = [d for d in D['deps'] if d['RT'] not in ('TABLE', 'VIEW')]
+    if code_deps:
+        ex = '\n    UNION ALL '.join(f"SELECT {lit(d['RO'])} O, {lit(d['RN'])} N, {lit(d['RT'])} T FROM DUAL" for d in code_deps)
+        L.append(f"""/* 2) 공용 참조 객체(이 패키지가 만들지 않음) — 0건이어야 정상. 행 = 클라우드에 없거나 INVALID → 먼저 이관 필요 */
+SELECT E.O AS OWNER, E.N AS OBJECT_NAME, E.T AS OBJECT_TYPE, NVL(MAX(A.STATUS), '없음') AS CLOUD_STATUS
+  FROM ({ex}) E
+  LEFT JOIN ALL_OBJECTS A ON A.OWNER = E.O AND A.OBJECT_NAME = E.N AND A.OBJECT_TYPE IN (E.T, E.T || ' BODY')
+ GROUP BY E.O, E.N, E.T
+HAVING NVL(MAX(A.STATUS), '없음') <> 'VALID' OR MIN(A.STATUS) <> 'VALID'
+ ORDER BY 1, 2;
+""")
+    colrows = []
+    for d in D['deps']:
+        if d['RT'] in ('TABLE', 'VIEW'):
+            for cn in d.get('COLS', []):
+                colrows.append(f"SELECT {lit(d['RO'])} O, {lit(d['RN'])} T, {lit(cn)} C FROM DUAL")
+    for t, info in D['tables'].items():
+        if not info['temp']:
+            for cc in info['cols']:
+                colrows.append(f"SELECT '{OWNER}' O, {lit(t)} T, {lit(cc['COLUMN_NAME'])} C FROM DUAL")
+    if colrows:
+        L.append(f"""/* 3) 참조 테이블·뷰 컬럼 누락 — 0건이어야 정상. 행 = 클라우드 표에 그 컬럼 없음 → PKG 컴파일 ORA-00904 원인.
+ *    데이터·PK·배치 영향이 있어 자동 변경 안 함 — 결과를 그대로 전달(예: 2026-10-30 QA SCP_RPT_GLOBAL_PSI_MD_WW.PLAN_TYPE) */
+SELECT E.O AS OWNER, E.T AS TABLE_NAME, E.C AS MISSING_COLUMN
+  FROM ({chr(10).join(('    UNION ALL ' if i else '    ') + r for i, r in enumerate(colrows))}) E
+ WHERE EXISTS (SELECT 1 FROM ALL_TABLES X WHERE X.OWNER = E.O AND X.TABLE_NAME = E.T
+               UNION ALL SELECT 1 FROM ALL_VIEWS V WHERE V.OWNER = E.O AND V.VIEW_NAME = E.T)
+   AND NOT EXISTS (SELECT 1 FROM ALL_TAB_COLUMNS C WHERE C.OWNER = E.O AND C.TABLE_NAME = E.T AND C.COLUMN_NAME = E.C)
+ ORDER BY 1, 2, 3;
+""")
+        L.append(f"""/* 4) 참조 테이블·뷰 자체가 없음 — 0건이어야 정상 */
+SELECT DISTINCT E.O AS OWNER, E.T AS TABLE_NAME
+  FROM ({chr(10).join(('    UNION ALL ' if i else '    ') + r for i, r in enumerate(colrows))}) E
+ WHERE NOT EXISTS (SELECT 1 FROM ALL_TABLES X WHERE X.OWNER = E.O AND X.TABLE_NAME = E.T)
+   AND NOT EXISTS (SELECT 1 FROM ALL_VIEWS V WHERE V.OWNER = E.O AND V.VIEW_NAME = E.T)
+   AND NOT EXISTS (SELECT 1 FROM ALL_SYNONYMS S WHERE S.OWNER = E.O AND S.SYNONYM_NAME = E.T)
+ ORDER BY 1, 2;
+""")
+    mnu = next((m for m in metas if m['table'] == 'SCM_ADM_MNU_M'), None)
+    if mnu and mnu['rows']:
+        up = mnu['rows'][0].get('UPPR_MNU_ID')
+        if up:
+            L.append(f"""/* 5) 상위 메뉴 존재 — 1건이어야 정상 */
+SELECT MNU_ID, USE_YN FROM {OWNER}.SCM_ADM_MNU_M WHERE MNU_ID = {lit(up)};
+""")
+    L.append("/* 6) META 현재 건수 (참고) */")
+    for m in metas:
+        if m['table'] in ('SCM_ADM_MSG_M', 'SCM_ADM_CMBO_SQL_M'):
+            continue
+        cond = m['cond'].replace(':id', lit(ctx['ID']))
+        L.append(f"SELECT '{m['table']}' AS TBL, {lit(m['desc'])} AS AREA, COUNT(*) AS CLOUD_ROWS, {len(m['rows'])} AS CORP_ROWS FROM {OWNER}.{m['table']} WHERE {cond};")
+    return '\n'.join(L) + '\n'
+
+
+def zb(tag, suffix):
+    return f'ZB_{tag}_{suffix}'[:128]
+
+
+def build_05_99(ctx, D, inc_code, inc_tabs, metas):
+    tag = ctx['tag']
+    # 05 BACKUP
+    B = [hdr(f'05_BACKUP_CLOUD — 적용 전 클라우드 현재 상태 보관(표 이름 ZB_{tag}_*). 이미 있으면 건너뜀(첫 백업 유지)', ctx,
+             '\n * 99_ROLLBACK 이 이 백업으로 PKG 원문·GTT 구조·META 행을 되돌린다. 확인 끝나면 README 의 정리 SQL 로 ZB 표 삭제')]
+    B.append("DECLARE\n    v CLOB;\n    PROCEDURE mk(p_tab VARCHAR2, p_sql CLOB) IS n PLS_INTEGER;\n    BEGIN\n"
+             "        SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME = p_tab;\n"
+             "        IF n > 0 THEN DBMS_OUTPUT.PUT_LINE('SKIP    ' || p_tab || ' (이미 백업됨 — 첫 백업 유지)'); RETURN; END IF;\n"
+             "        EXECUTE IMMEDIATE p_sql;\n        DBMS_OUTPUT.PUT_LINE('BACKUP  ' || p_tab);\n    END;\nBEGIN")
+    code_names = sorted({n for n, t in inc_code})
+    tabs = list(inc_tabs)
+    objs_list = sorted({n for n, t in inc_code} | set(tabs))
+    if objs_list:
+        exp = ' UNION ALL '.join(f"SELECT '{n}' NAME FROM DUAL" for n in objs_list)
+        sql = (f"CREATE TABLE {zb(tag, 'OBJ')} AS SELECT E.NAME, O.OBJECT_TYPE, O.STATUS FROM ({exp}) E "
+               f"LEFT JOIN USER_OBJECTS O ON O.OBJECT_NAME = E.NAME AND O.OBJECT_TYPE IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION','TYPE','TYPE BODY','VIEW','TABLE','SEQUENCE')")
+        B += clob_assign('v', sql)
+        B.append(f"    mk('{zb(tag, 'OBJ')}', v);")
+    if code_names:
+        sql = (f"CREATE TABLE {zb(tag, 'SRC')} AS SELECT NAME, TYPE, LINE, TEXT FROM USER_SOURCE WHERE NAME IN ({', '.join(chr(39) + n + chr(39) for n in code_names)})")
+        B += clob_assign('v', sql)
+        B.append(f"    mk('{zb(tag, 'SRC')}', v);")
+    if tabs:
+        sql = (f"CREATE TABLE {zb(tag, 'TAB')} AS SELECT T.TABLE_NAME, "
+               "(SELECT LISTAGG(COLUMN_NAME||'|'||DATA_TYPE||'|'||CHAR_LENGTH||'|'||DATA_PRECISION||'|'||DATA_SCALE||'|'||NULLABLE, ';') WITHIN GROUP (ORDER BY COLUMN_ID) "
+               "FROM USER_TAB_COLUMNS C WHERE C.TABLE_NAME = T.TABLE_NAME) SIG, DBMS_METADATA.GET_DDL('TABLE', T.TABLE_NAME) DDL "
+               f"FROM USER_TABLES T WHERE T.TABLE_NAME IN ({', '.join(chr(39) + n + chr(39) for n in tabs)})")
+        B += clob_assign('v', sql)
+        B.append(f"    mk('{zb(tag, 'TAB')}', v);")
+        sql = (f"CREATE TABLE {zb(tag, 'IDX')} AS SELECT I.TABLE_NAME, I.INDEX_NAME, DBMS_METADATA.GET_DDL('INDEX', I.INDEX_NAME) DDL "
+               f"FROM USER_INDEXES I WHERE I.TABLE_NAME IN ({', '.join(chr(39) + n + chr(39) for n in tabs)}) AND I.INDEX_TYPE LIKE '%NORMAL%' "
+               "AND NOT EXISTS (SELECT 1 FROM USER_CONSTRAINTS K WHERE K.INDEX_NAME = I.INDEX_NAME)")
+        B += clob_assign('v', sql)
+        B.append(f"    mk('{zb(tag, 'IDX')}', v);")
+    for i, m in enumerate(metas, 1):
+        if not m['inc_rows']:
+            continue
+        sql = (f"CREATE TABLE {zb(tag, 'M%02d' % i)} AS SELECT T.* FROM {OWNER}.{m['table']} T WHERE EXISTS (SELECT 1 FROM ("
+               f"{keys_view(m, m['inc_rows'])}) S WHERE {key_pred(m['key'])})")
+        B += clob_assign('v', sql)
+        B.append(f"    mk('{zb(tag, 'M%02d' % i)}', v);  -- {m['table']} ({m['desc']})")
+    B.append("    NULL;\nEND;\n/\n")
+    # 99 ROLLBACK
+    R = [hdr(f'99_ROLLBACK — 05_BACKUP(ZB_{tag}_*) 기준으로 되돌림: META 행 → GTT 구조 → PKG/코드 원문', ctx,
+             '\n * 05_BACKUP 없이 적용했다면 실행하지 말 것(백업 표 없음 → 중단). 권한·시노님은 되돌리지 않음(무해).')]
+    R.append("DECLARE\n    c_dry CONSTANT BOOLEAN := FALSE;   -- 리허설용(TRUE = 실제 변경 없이 점검만, 끝에 ROLLBACK)\n    v CLOB;\n    n PLS_INTEGER;\n"
+             "    FUNCTION has(p_tab VARCHAR2) RETURN BOOLEAN IS k PLS_INTEGER;\n    BEGIN SELECT COUNT(*) INTO k FROM USER_TABLES WHERE TABLE_NAME = p_tab; RETURN k > 0; END;\n"
+             + SIG_FN.replace('    FUNCTION cur_sig', '    FUNCTION cur_sig') +
+             "    PROCEDURE ddl(p_sql CLOB, p_what VARCHAR2) IS\n    BEGIN\n"
+             "        IF c_dry THEN DBMS_OUTPUT.PUT_LINE('DRY     ' || p_what || ' (' || DBMS_LOB.GETLENGTH(p_sql) || '자)'); RETURN; END IF;\n"
+             "        EXECUTE IMMEDIATE p_sql; DBMS_OUTPUT.PUT_LINE('DONE    ' || p_what);\n    END;\nBEGIN")
+    R.append(f"    IF NOT has('{zb(tag, 'OBJ')}') THEN RAISE_APPLICATION_ERROR(-20990, '05_BACKUP 표 {zb(tag, 'OBJ')} 없음 — 되돌릴 기준 없음'); END IF;")
+    R.append("    /* 1) META 행 — 패키지 키 범위만 지우고 백업 행을 다시 넣음 */")
+    for i, m in enumerate(metas, 1):
+        if not m['inc_rows']:
+            continue
+        zt = zb(tag, 'M%02d' % i)
+        sql_del = f"DELETE FROM {OWNER}.{m['table']} T WHERE EXISTS (SELECT 1 FROM ({keys_view(m, m['inc_rows'])}) S WHERE {key_pred(m['key'])})"
+        R.append(f"    -- {m['table']} ({m['desc']})")
+        R.append(f"    IF has('{zt}') THEN")
+        R += clob_assign('v', sql_del, '        ')
+        R.append(f"        EXECUTE IMMEDIATE v; n := SQL%ROWCOUNT;")
+        R.append(f"        EXECUTE IMMEDIATE 'INSERT INTO {OWNER}.{m['table']} SELECT * FROM {zt}';")
+        R.append(f"        DBMS_OUTPUT.PUT_LINE('META    {m['table']} 삭제 ' || n || ' · 복원 ' || SQL%ROWCOUNT);")
+        R.append("    END IF;")
+    R.append("    IF c_dry THEN ROLLBACK; DBMS_OUTPUT.PUT_LINE('DRY     META ROLLBACK'); ELSE COMMIT; END IF;")
+    if tabs:
+        R.append("    /* 2) 테이블 — 백업 때 없던 것은 DROP, 구조가 바뀐 GTT 는 백업 DDL 로 재생성 */")
+        for t in tabs:
+            R.append(f"    SELECT COUNT(*) INTO n FROM {zb(tag, 'OBJ')} WHERE NAME = '{t}' AND OBJECT_TYPE = 'TABLE';")
+            R.append(f"    IF n = 0 THEN")
+            R.append(f"        IF has('{t}') THEN ddl('DROP TABLE {t} PURGE', 'DROP {t} (백업 시 없었음)'); END IF;")
+            R.append(f"    ELSE")
+            R.append(f"        EXECUTE IMMEDIATE 'SELECT MAX(SIG) FROM {zb(tag, 'TAB')} WHERE TABLE_NAME = ''{t}''' INTO v;")
+            R.append(f"        IF NVL(DBMS_LOB.SUBSTR(v, 4000, 1), '~') <> NVL(cur_sig('{t}'), '~') THEN")
+            R.append(f"            ddl('DROP TABLE {t} PURGE', 'DROP {t} (구조 원복)');")
+            R.append(f"            EXECUTE IMMEDIATE 'SELECT MAX(DDL) FROM {zb(tag, 'TAB')} WHERE TABLE_NAME = ''{t}''' INTO v;")
+            R.append(f"            ddl(v, 'CREATE {t} (백업 DDL)');")
+            for g in [g for g in D['grants'] if g['TABLE_NAME'] == t]:
+                R.append(f"            IF NOT c_dry THEN BEGIN EXECUTE IMMEDIATE 'GRANT {g['PRIVS']} ON {t} TO {g['GRANTEE']}'; EXCEPTION WHEN OTHERS THEN IF SQLCODE IN (-1917, -1919) THEN NULL; ELSE RAISE; END IF; END; END IF;")
+            R.append(f"        END IF;")
+            R.append(f"    END IF;")
+        R.append(f"    /* 2-1) 인덱스 — 백업에 있던 인덱스 중 없는 것 재생성 */")
+        R.append(f"    DECLARE TYPE t_cur IS REF CURSOR; c t_cur; v_ix VARCHAR2(128); v_ddl CLOB; k PLS_INTEGER;")
+        R.append(f"    BEGIN")
+        R.append(f"        OPEN c FOR 'SELECT INDEX_NAME, DDL FROM {zb(tag, 'IDX')}';")
+        R.append(f"        LOOP FETCH c INTO v_ix, v_ddl; EXIT WHEN c%NOTFOUND;")
+        R.append(f"            SELECT COUNT(*) INTO k FROM USER_INDEXES WHERE INDEX_NAME = v_ix;")
+        R.append(f"            IF k = 0 THEN ddl(v_ddl, 'INDEX ' || v_ix); END IF;")
+        R.append(f"        END LOOP; CLOSE c;")
+        R.append(f"    EXCEPTION WHEN OTHERS THEN IF SQLCODE = -942 THEN NULL; ELSE RAISE; END IF;")
+        R.append(f"    END;")
+    if code_names:
+        R.append("    /* 3) 코드 — 백업 때 없던 객체 DROP, 있던 객체는 백업 원문으로 CREATE OR REPLACE (스펙 → 본문 순) */")
+        order = ['TYPE', 'PACKAGE', 'FUNCTION', 'PROCEDURE', 'VIEW', 'PACKAGE BODY', 'TYPE BODY']
+        for nm in code_names:
+            types = sorted({t for n, t in inc_code if n == nm}, key=lambda x: order.index(x) if x in order else 9)
+            main_t = 'PACKAGE' if 'PACKAGE' in types or 'PACKAGE BODY' in types else types[0]
+            R.append(f"    SELECT COUNT(*) INTO n FROM {zb(tag, 'OBJ')} WHERE NAME = '{nm}' AND OBJECT_TYPE IS NOT NULL;")
+            R.append(f"    IF n = 0 THEN")
+            drop_t = 'VIEW' if main_t == 'VIEW' else main_t
+            R.append(f"        SELECT COUNT(*) INTO n FROM USER_OBJECTS WHERE OBJECT_NAME = '{nm}' AND OBJECT_TYPE = '{drop_t}';")
+            R.append(f"        IF n > 0 THEN ddl('DROP {drop_t} {nm}', 'DROP {nm} (백업 시 없었음)'); END IF;")
+            R.append(f"    ELSE")
+            for t in types:
+                if t == 'VIEW':
+                    R.append(f"        NULL; -- VIEW {nm}: 백업 원문 없음(USER_SOURCE 밖) — 필요 시 수동")
+                    continue
+                R.append(f"        v := NULL;")
+                R.append(f"        FOR r IN (SELECT TEXT FROM {zb(tag, 'SRC')} WHERE NAME = '{nm}' AND TYPE = '{t}' ORDER BY LINE) LOOP v := v || r.TEXT; END LOOP;")
+                R.append(f"        IF v IS NOT NULL THEN ddl('CREATE OR REPLACE ' || v, 'RESTORE {t} {nm}'); END IF;")
+            R.append(f"    END IF;")
+    R.append("    DBMS_OUTPUT.PUT_LINE('ROLLBACK 완료' || CASE WHEN c_dry THEN ' (DRY)' END);\nEND;\n/\n")
+    if code_names:
+        R.append(f"SELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM USER_OBJECTS WHERE OBJECT_NAME IN ({', '.join(chr(39) + n + chr(39) for n in code_names)}) ORDER BY 1, 2;\n")
+    return '\n'.join(B), '\n'.join(R)
+
+
+def build_90(ctx, D, inc_code, inc_tabs, metas):
+    L = [hdr('90_VERIFY — 읽기 전용. 각 조회의 기대값 확인', ctx)]
+    names = sorted({o['OBJECT_NAME'] for o in D['objects'] if o['OBJECT_TYPE'] in CODE_TYPES + ('VIEW',)})
+    if names:
+        il = ', '.join("'" + n + "'" for n in names)
+        L.append(f"/* 1) 화면 코드 객체 — 전부 VALID */\nSELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM USER_OBJECTS WHERE OBJECT_NAME IN ({il}) ORDER BY 1, 2;\n")
+        L.append(f"/* 2) 컴파일 오류 — 0건 */\nSELECT NAME, TYPE, LINE, POSITION, TEXT FROM USER_ERRORS WHERE NAME IN ({il}) ORDER BY NAME, TYPE, SEQUENCE;\n")
+    gtts = [t for t, i in D['tables'].items() if i['temp']]
+    if gtts:
+        ex = '\n    UNION ALL '.join(f"SELECT {lit(t)} T, {lit(D['tables'][t]['sig'])} S FROM DUAL" for t in gtts)
+        L.append(f"""/* 3) GTT 구조 — 0건(사내와 다른 GTT 가 있으면 행) */
+SELECT E.T AS TABLE_NAME
+  FROM ({ex}) E
+ WHERE NVL((SELECT LISTAGG(COLUMN_NAME||'|'||DATA_TYPE||'|'||CHAR_LENGTH||'|'||DATA_PRECISION||'|'||DATA_SCALE||'|'||NULLABLE, ';') WITHIN GROUP (ORDER BY COLUMN_ID)
+              FROM USER_TAB_COLUMNS C WHERE C.TABLE_NAME = E.T), '~') <> E.S
+ ORDER BY 1;
+""")
+    L.append("/* 4) META — 패키지 행이 클라우드에 모두 있음: MISSING = 0 */")
+    for m in metas:
+        if not m['rows']:
+            continue
+        L.append(f"SELECT '{m['table']}' AS TBL, {lit(m['desc'])} AS AREA, COUNT(*) AS PKG_ROWS, SUM(CASE WHEN EXISTS (SELECT 1 FROM {OWNER}.{m['table']} T WHERE {key_pred(m['key'])}) THEN 0 ELSE 1 END) AS MISSING\n  FROM ({keys_view(m, m['rows'])}) S;")
+    L.append("\n/* 5) 클라우드에만 있는 화면 META 행(사내에 없음) — 참고. 지우지 않음 */")
+    for m in metas:
+        if m['table'] in ('SCM_ADM_MSG_M', 'SCM_ADM_CMBO_SQL_M') or m['mode'] != 'upsert':
+            continue
+        cond = m['cond'].replace(':id', lit(ctx['ID']))
+        L.append(f"SELECT '{m['table']}' AS TBL, {', '.join('T.' + k for k in m['key'])}\n  FROM {OWNER}.{m['table']} T\n WHERE ({cond})\n   AND NOT EXISTS (SELECT 1 FROM ({keys_view(m, m['rows'])}) S WHERE {key_pred(m['key'])});")
+    return '\n'.join(L) + '\n'
+
+
+# ───────────────────────── 리허설(사내) ─────────────────────────
+class _Conn:
+    pass
+
+
+def owner_conn():
+    """리허설 = 패키지 소유 계정(SCM_MGR)으로 접속 — 생성 SQL 이 USER_* 뷰를 쓰므로(system 접속이면 USER_* 가 SYSTEM 기준)"""
+    import oracledb
+    r = dbconn.resolve('tobe', dbconn.load_cfg())
+    cx = oracledb.connect(user=OWNER, password=r['password'], dsn=f"{r['host']}:{r['port']}/{r['service']}")
+    o = _Conn(); o.cx = cx; o.cur = cx.cursor()
+    o.cur.execute('SELECT USER FROM DUAL')
+    if o.cur.fetchone()[0] != OWNER:
+        raise RuntimeError('리허설 계정이 SCM_MGR 아님')
+    return o
+
+
+def rehearse(c0, pkg_dir, ctx, files):
+    import run_sql
+    out = []
+    c = owner_conn()
+    cur = c.cur
+
+    def run_file(fname, transform=None, commit=False):
+        path = os.path.join(pkg_dir, 'A_DB', fname)
+        text = open(path, encoding='utf-8').read()
+        if transform:
+            text = transform(text)
+        stmts = run_sql.split_script(text, {})
+        cur.callproc('DBMS_OUTPUT.ENABLE', [None])
+        res = {'file': fname, 'stmts': len(stmts), 'fail': 0, 'notes': []}
+        for kind, st in stmts:
+            sql = st.strip()
+            if not sql:
+                continue
+            if re.match(r'^COMMIT\b', sql, re.I) and not commit:
+                c.cx.rollback()
+                res['notes'].append('COMMIT → ROLLBACK(리허설)')
+                continue
+            try:
+                cur.execute(sql)
+                if re.match(r'^\s*SELECT', sql, re.I):
+                    rows = cur.fetchall()
+                    res['notes'].append(f'SELECT {len(rows)}행' + (f' — {rows[:3]}' if rows and len(rows) <= 3 else ''))
+                elif re.match(r'^\s*(MERGE|INSERT|UPDATE|DELETE)', sql, re.I):
+                    res.setdefault('dml_rows', 0)
+                    res['dml_rows'] += cur.rowcount or 0
+            except Exception as e:
+                res['fail'] += 1
+                res['notes'].append('FAIL ' + str(e).splitlines()[0][:200] + ' :: ' + re.sub(r'\s+', ' ', sql)[:120])
+            lv = cur.var(str)
+            stv = cur.var(int)
+            while True:
+                cur.callproc('DBMS_OUTPUT.GET_LINE', (lv, stv))
+                if stv.getvalue() != 0:
+                    break
+                res['notes'].append('> ' + (lv.getvalue() or ''))
+        if not commit:
+            c.cx.rollback()
+        return res
+
+    dry = lambda t: t.replace('c_dry   CONSTANT BOOLEAN := FALSE', 'c_dry   CONSTANT BOOLEAN := TRUE').replace('c_dry CONSTANT BOOLEAN := FALSE', 'c_dry CONSTANT BOOLEAN := TRUE')
+    names = sorted(os.listdir(os.path.join(pkg_dir, 'A_DB')))
+    for f in names:
+        if f.startswith('00_') or f.startswith('90_'):
+            out.append(run_file(f))
+        elif f.startswith('05_'):
+            out.append(run_file(f, commit=True))  # ZB 백업표 생성(사내) — 끝에 삭제
+        elif f.startswith('10_') or f.startswith('40_'):
+            out.append(run_file(f, transform=dry))
+        elif f.startswith('30_'):
+            r = run_file(f)
+            r['notes'].insert(0, f"사내 기준 변경 행 {r.get('dml_rows', 0)} (0 이 정상 — 사내가 원천)")
+            out.append(r)
+        elif f.startswith('20_') or f.startswith('25_'):
+            # 컴파일하지 않음(사내 현행 원문 그대로 · 세션 상태 무효화 방지) — 문장 분할만 점검
+            import run_sql as rs
+            st = rs.split_script(open(os.path.join(pkg_dir, 'A_DB', f), encoding='utf-8').read(), {})
+            out.append({'file': f, 'stmts': len(st), 'fail': 0, 'notes': ['컴파일 생략(사내 원문 그대로) · 문장 분할 확인']})
+    for f in names:
+        if f.startswith('99_'):
+            out.append(run_file(f, transform=dry))
+    # 백업표 정리
+    cur.execute("SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME LIKE :p", p=f"ZB\\_{ctx['tag']}\\_%".replace('\\', ''))
+    zbs = [r[0] for r in cur.fetchall() if r[0].startswith(f"ZB_{ctx['tag']}_")]
+    for t in zbs:
+        cur.execute(f'DROP TABLE {t} PURGE')
+    out.append({'file': '(정리)', 'stmts': len(zbs), 'fail': 0, 'notes': [f'리허설 백업표 {len(zbs)}개 삭제']})
+    c.cx.close()
+    return out
+
+
+# ───────────────────────── 메인 ─────────────────────────
+VARIANTS = {
+    ('all', 'delta'): ('CLOUD_DBUI_MOD', '클라우드 이관 패키지(DB、UI)(수정본)'),
+    ('db', 'delta'): ('CLOUD_DB_MOD', '클라우드 이관 패키지(DB)(수정본)'),
+    ('all', 'full'): ('CLOUD_DBUI_FULL', '클라우드 이관 패키지(DB、UI) — 전체'),
+    ('db', 'full'): ('CLOUD_DB_FULL', '클라우드 이관 패키지(DB) — 전체'),
+}
+
+
+def variant_name(mode, scope):
+    return VARIANTS[(mode, scope)][0]
+
+
+def load_state(ID):
+    p = os.path.join(STATE_ROOT, f'{ID}.json')
+    try:
+        return json.load(open(p, encoding='utf-8'))
+    except Exception:
+        return None
+
+
+def new_pkg_path(ID, vname):
+    """같은 분에 다시 만들어도 이전 패키지를 덮어쓰지 않는다 — 이름이 있으면 초까지 붙인다."""
+    d = os.path.join(PKG_ROOT, f"{ID}_{vname}_{now():%Y%m%d_%H%M}")
+    return os.path.join(PKG_ROOT, f"{ID}_{vname}_{now():%Y%m%d_%H%M%S}") if os.path.exists(d) else d
+
+
+def write_state(ID, st):
+    os.makedirs(STATE_ROOT, exist_ok=True)
+    json.dump(st, open(os.path.join(STATE_ROOT, f'{ID}.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+
+def record_built(ID, mode, scope, dst, items, fingerprint, rehearsal_ok):
+    """생성 기록만 남긴다 — 이관 기준선(items)은 건드리지 않는다."""
+    st = load_state(ID) or {'items': {}}
+    st.setdefault('built', {})[f'{mode}_{scope}'] = {
+        'pkg': os.path.basename(dst), 'built': now().strftime('%Y-%m-%d %H:%M:%S'), 'fingerprint': fingerprint,
+        'rehearsal_ok': rehearsal_ok, 'mode': mode, 'scope': scope, 'items': items}
+    write_state(ID, st)
+
+
+def mark_applied(ID, mode):
+    """마지막 생성 패키지를 이관 기준선으로 확정한다. 클라우드 적용 여부는 빌더가 알 수 없어 사용자 표시로만 옮긴다."""
+    st = load_state(ID)
+    recs = [r for k, r in (st or {}).get('built', {}).items() if k.startswith(f'{mode}_')]
+    if not recs and (st or {}).get('items'):
+        # 1.1.0 이전에 만든 state — 기준선이 곧 마지막 생성분이라 값은 그대로 두고 확정 표시만 한다.
+        pkg = latest_pkg(ID, mode)
+        st.update(applied_at=now().strftime('%Y-%m-%d %H:%M:%S'), applied_pkg=pkg)
+        write_state(ID, st)
+        print(f"✅ 이관 완료 표시 · {pkg} (기준선 {st.get('built_at', '?')}) — 다음 수정본은 이 시점 이후 변경분만 담는다.")
+        return 0
+    if not recs:
+        print(f'⚠ {ID}: 범위 {mode} 로 생성한 패키지 기록이 없어 기준선을 옮기지 않았다.')
+        return 2
+    rec = max(recs, key=lambda r: r['built'])
+    if not os.path.isdir(os.path.join(PKG_ROOT, rec['pkg'])):
+        print(f"⚠ {ID}: 마지막 패키지 폴더 없음({rec['pkg']}) — 기준선을 옮기지 않았다.")
+        return 2
+    for k, v in rec['items'].items():
+        if mode == 'all' or not k.startswith(('FE:', 'BE:', 'BEF:')):
+            st['items'][k] = v
+    st.update(built_at=rec['built'], mode=mode, applied_at=now().strftime('%Y-%m-%d %H:%M:%S'), applied_pkg=rec['pkg'])
+    write_state(ID, st)
+    print(f"✅ 이관 완료 표시 · {rec['pkg']} ({rec['built']} 생성) — 다음 수정본은 이 시점 이후 변경분만 담는다.")
+    return 0
+
+
+def latest_pkg(ID, mode):
+    """적용할 파일이 든 가장 최근 패키지(수정본·전체 무관). 00·90 만 있는 빈 패키지는 건너뛴다."""
+    pat = re.compile(rf"^{ID}_CLOUD_{'DBUI' if mode == 'all' else 'DB'}_(MOD|FULL)_(\d{{8}}_\d{{4}}(?:\d{{2}})?)$")
+    found = []
+    for d in os.listdir(PKG_ROOT):
+        m = pat.match(d)
+        adb = os.path.join(PKG_ROOT, d, 'A_DB')
+        if m and os.path.isdir(adb) and any(not f.startswith(('00_', '90_')) for f in os.listdir(adb)):
+            found.append((m.group(2), d))
+    return max(found)[1] if found else None
+
+
+def print_nothing(ID, mode, state):
+    pkg = latest_pkg(ID, mode)
+    base = f"이관 완료 표시 {state['applied_at']}" if state.get('applied_at') else f"기준선 {state.get('built_at', '?')}(생성 시각 · 이관 확정 아님)"
+    print(f'\n✅ 변경 없음 · {base} 이후 바뀐 것이 없어 새 폴더를 만들지 않았다.')
+    if pkg:
+        print(f"   수정본 폴더: {os.path.relpath(os.path.join(PKG_ROOT, pkg), ROOT)}")
+        print(f"   README: {os.path.relpath(os.path.join(PKG_ROOT, pkg, '00_README.md'), ROOT)}")
+    if not state.get('applied_at'):
+        print('   클라우드에 아직 적용하지 않았다면 위 폴더를 적용한다. 적용했다면 ☁️ 클라우드 이관 완료 표시를 누른다.')
+
+
+def work_mode_scope():
+    """환경설정 작업 모드(tools/Harness/harness.json repairScope) → 이관 범위. DB_FE(UI/DB MODE) = all · 그 외(DB MODE) = db"""
+    try:
+        with open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            return 'all' if json.load(f).get('repairScope', 'DB_ONLY') == 'DB_FE' else 'db'
+    except (OSError, ValueError):
+        return 'db'
+
+
+def main():
+    ap = argparse.ArgumentParser(description='클라우드 이관 패키지 결정적 빌더')
+    ap.add_argument('id')
+    ap.add_argument('--mode', choices=['auto', 'db', 'all'], default='auto', help='auto = 환경설정 작업 모드(DB MODE → db · UI/DB MODE → all)')
+    ap.add_argument('--stage', action='store_true', help='미리 만들어 둠(_staging) — 기준선 미갱신 · 작업 모드 범위의 수정본+전체')
+    ap.add_argument('--full', action='store_true', help='전체 — 수정본이 아니라 화면 소유 DB·META 전부 + FE 페이지·참조 파일·ID 참조 BE 전부')
+    ap.add_argument('--no-rehearse', action='store_true')
+    ap.add_argument('--fetch', action='store_true', help='FE/BE 판정 전 공통소스 최신 받기(git fetch)')
+    ap.add_argument('--applied', action='store_true', help='클라우드 적용 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정')
+    a = ap.parse_args()
+    ID = a.id.strip().upper()
+    if not re.match(r'^[A-Z]{2,4}\d{4}$', ID):
+        sys.exit(f'화면 ID 형식 아님: {ID}')
+    auto_mode = a.mode == 'auto'
+    if auto_mode:
+        a.mode = work_mode_scope()
+    if a.applied:
+        return mark_applied(ID, a.mode)
+    need_fe = a.mode == 'all'
+    scope_src = ('작업 모드 ' + ('UI/DB MODE' if a.mode == 'all' else 'DB MODE')) if auto_mode else '직접 지정'
+    log(f'cloud_pkg {VERSION} · {ID} · 범위 {a.mode}({scope_src}) · {"stage(수정본+전체)" if a.stage else ("전체" if a.full else "수정본")}')
+
+    ctx = {'ID': ID, 'built': now()}
+    # FE 텍스트(MSG·콤보 탐색용) — 모드 무관(DB 메타가 FE 가 부르는 문구·콤보를 포함해야 함)
+    pdir = page_dir(ID)
+    fe_texts = []
+    if pdir:
+        for dp, dn, fn in os.walk(pdir):
+            for f in fn:
+                if f.endswith(('.ts', '.tsx', '.json')):
+                    try:
+                        fe_texts.append(open(os.path.join(dp, f), encoding='utf-8', errors='replace').read())
+                    except Exception:
+                        pass
+    ctx['fe_texts'] = fe_texts
+
+    c = Corp()
+    ctx.update(host=c.host, db=c.dbname, fetched=c.fetched)
+    log(f'사내 접속 {c.dbname} SERVER_HOST={c.host} · {c.user}')
+    D = collect_db(c, ID, ctx)
+    log(f"화면 객체 {len(D['objects'])} · 공용 참조 {len(D['deps'])} · META {sum(len(m['rows']) for m in D['meta'])}행")
+
+    # ── 이관 대상 항목 + 해시
+    items = {}
+    for (n, t), src in D['code'].items():
+        items[f'CODE:{n}:{t}'] = hashlib.sha1(src.encode('utf-8')).hexdigest()
+    for n, v in D['views'].items():
+        items[f'CODE:{n}:VIEW'] = sha(v)
+    for t, info in D['tables'].items():
+        items[f'TAB:{t}'] = sha({'sig': info['sig'], 'idx': info['idx'], 'temp': info['temp']})
+    for s in D['seq_ddl']:
+        items[f'SEQ:{s}'] = 'exists'
+    for gr in D['grants']:
+        items[f"GRANT:{gr['TABLE_NAME']}:{gr['GRANTEE']}"] = gr['PRIVS']
+    for sy in D['synonyms']:
+        items[f"SYN:{sy['OWNER']}.{sy['SYNONYM_NAME']}"] = sy['TABLE_NAME']
+    for i, m in enumerate(D['meta']):
+        for r in m['rows']:
+            k = '|'.join(str(r.get(x)) for x in m['key'])
+            items[f"META:{m['table']}:{m['mode']}:{k}"] = sha({cc['COLUMN_NAME']: r.get(cc['COLUMN_NAME']) for cc in m['cols'] if cc['COLUMN_NAME'] not in AUDIT})
+    # 공용 객체 패치 파일(H14) — Doc/gen/<ID>/<공용객체>_*_<ID>.sql
+    shared_files = []
+    gdir = os.path.join(GEN_ROOT, ID)
+    dep_names = {d['RN'] for d in D['deps']}
+    if os.path.isdir(gdir):
+        for f in sorted(os.listdir(gdir)):
+            if f.endswith(f'_{ID}.sql') and any(f.startswith(dn + '_') or f == f'{dn}_{ID}.sql' for dn in dep_names):
+                p = os.path.join(gdir, f)
+                shared_files.append(p)
+                items[f'SHARED:{f}'] = hashlib.sha1(open(p, 'rb').read()).hexdigest()
+
+    # FE/BE
+    fe_info = be_info = None
+    if need_fe:
+        tip_ref = 'refs/remotes/common/main'
+        if a.fetch:
+            r = subprocess.run(['git', '-C', FE_ROOT, 'fetch', 'common', 'main'], capture_output=True, text=True, timeout=120)
+            log('공통소스 fetch ' + ('OK' if r.returncode == 0 else 'FAIL — 기존 참조로 계속'))
+        tipc = subprocess.run(['git', '-C', FE_ROOT, 'log', '-1', '--format=%h %ci', tip_ref], capture_output=True, text=True).stdout.strip()
+        ctx['tip'] = tipc
+        if pdir:
+            files, related, pageRel = fe_candidates(ID, pdir)
+            wd = os.path.join(ROOT, '.vibe', 'cloudpkg', f'{ID}_{now():%Y%m%d_%H%M%S}')
+            summ = fe_judge(ID, files + related, tip_ref, wd)
+            fe_info = {'pageRel': pageRel, 'files': files, 'related': related, 'judge': summ['files'], 'wd': wd}
+            for fj in summ['files']:
+                fp = os.path.join(FE_ROOT, fj['rel'])
+                items[f"FE:{fj['rel']}"] = (hashlib.sha1(open(fp, 'rb').read()).hexdigest() if os.path.exists(fp) else '-') + ':' + fj['mode']
+        else:
+            fe_info = {'pageRel': None, 'files': [], 'related': [], 'judge': []}
+        bres, bother = be_judge(ID, tip_ref)
+        be_delta = {'judge': bres, 'other': bother}
+        for b in bres:
+            fp = os.path.join(BE_ROOT, b['rel'])
+            items[f"BE:{b['rel']}"] = hashlib.sha1(open(fp, 'rb').read()).hexdigest() + ':' + b['mode']
+        need_full = a.stage or a.full
+        be_full = be_delta
+        if need_full:
+            fres, _ = be_judge(ID, tip_ref, full=True)
+            be_full = {'judge': fres, 'other': bother}
+            for b in fres:
+                fp = os.path.join(BE_ROOT, b['rel'])
+                items[f"BEF:{b['rel']}"] = hashlib.sha1(open(fp, 'rb').read()).hexdigest() + ':' + b['mode']
+        be_info = be_delta
+        log(f"FE 후보 {len(fe_info['judge'])} · BE 후보 {len(bres)}" + (f" · BE 전체(ID 참조) {len(be_full['judge'])}" if need_full else ''))
+
+    state0 = load_state(ID)
+    variants = [(a.mode, s) for s in ('delta', 'full')] if a.stage else [(a.mode, 'full' if a.full else 'delta')]
+
+    for mode, scope in variants:
+        state = None if scope == 'full' or not (state0 or {}).get('items') else state0
+        prev = (state or {}).get('items', {})
+        changed = (lambda k: True) if state is None else (lambda k, _p=prev: _p.get(k) != items[k])
+        if mode == 'all' and be_info is not None:
+            be_info = be_full if scope == 'full' else be_delta
+        sub_items = {k: v for k, v in items.items() if (mode == 'all' or not k.startswith(('FE:', 'BE:', 'BEF:'))) and not (k.startswith('BEF:') and scope != 'full') and not (k.startswith('BE:') and scope == 'full')}
+        fp = sha({'v': VERSION, 'mode': mode, 'scope': scope, 'items': sub_items, 'state': sha(prev)})
+        vname = variant_name(mode, scope)
+        stage_dir = os.path.join(STAGE_ROOT, ID, f'{mode}_{scope}')
+        man_p = os.path.join(stage_dir, 'manifest.json')
+        rec = (state0 or {}).get('built', {}).get(f'{mode}_{scope}')
+        if not a.stage and rec and rec.get('fingerprint') == fp and rec.get('rehearsal_ok') and os.path.isfile(os.path.join(PKG_ROOT, rec['pkg'], '00_README.md')):
+            print(f"\n✅ 변경 없음 · 기존 폴더 그대로 사용 · {os.path.relpath(os.path.join(PKG_ROOT, rec['pkg']), ROOT)}  ({rec['built']} 생성 · 입력 지문 동일)")
+            print(f"   README: {os.path.relpath(os.path.join(PKG_ROOT, rec['pkg'], '00_README.md'), ROOT)}")
+            continue
+        if not a.stage and os.path.exists(man_p):
+            try:
+                man = json.load(open(man_p, encoding='utf-8'))
+            except Exception:
+                man = {}
+            if man.get('fingerprint') == fp and man.get('rehearsal_ok', False) and man.get('nothing'):
+                print_nothing(ID, mode, state or {})
+                continue
+            if man.get('fingerprint') == fp and man.get('rehearsal_ok', False):
+                dst = new_pkg_path(ID, vname)
+                shutil.copytree(stage_dir, dst, ignore=shutil.ignore_patterns('manifest.json'))
+                record_built(ID, mode, scope, dst, sub_items, fp, True)
+                log(f'미리 만든 묶음이 최신 — 복사만 함 ({man.get("built")})')
+                print(f'\n✅ 완료 · {os.path.relpath(dst, ROOT)}  (사전 생성 {man.get("built")} · 입력 지문 동일)')
+                print(f'   README: {os.path.relpath(os.path.join(dst, "00_README.md"), ROOT)}')
+                continue
+            log('미리 만든 묶음이 낡음(사내 객체·META·소스 변경) — 새로 만듦')
+        tag = f"{ID}_{now():%Y%m%d%H%M}"
+        dst = stage_dir if a.stage else new_pkg_path(ID, vname)
+        ctx.update(tag=tag, scope=scope, pkg=os.path.basename(dst) if not a.stage else f'{ID}_{vname}_<취합일시>')
+        warns = []
+
+        # 포함 판정
+        inc_code = sorted({(n, t) for (n, t) in D['code'] if changed(f'CODE:{n}:{t}')} | {(n, 'VIEW') for n in D['views'] if changed(f'CODE:{n}:VIEW')}, key=code_order)
+        # 패키지 스펙·본문은 같이 간다
+        names_inc = {n for n, t in inc_code}
+        inc_code = sorted({(n, t) for (n, t) in list(D['code']) + [(v, 'VIEW') for v in D['views']] if n in names_inc}, key=code_order)
+        inc_tabs = [t for t in D['tables'] if changed(f'TAB:{t}')]
+        inc_seq = [s for s in D['seq_ddl'] if changed(f'SEQ:{s}')]
+        for m in D['meta']:
+            m['inc_rows'] = [r for r in m['rows'] if changed(f"META:{m['table']}:{m['mode']}:" + '|'.join(str(r.get(x)) for x in m['key']))]
+            keys_now = {'|'.join(str(r.get(x)) for x in m['key']) for r in m['rows']}
+            pref = f"META:{m['table']}:{m['mode']}:"
+            m['deleted'] = sorted(k[len(pref):] for k in prev if k.startswith(pref) and k[len(pref):] not in keys_now)
+        inc_grant_names = {n for n, t in inc_code} | set(inc_tabs) | set(inc_seq)
+        if state is None:
+            inc_grant_names |= set(D['names'])
+
+        shared_inc = [p for p in shared_files if changed(f'SHARED:{os.path.basename(p)}')]
+        fe_be_changed = mode == 'all' and any(changed(k) for k in sub_items if k.startswith(('FE:', 'BE:', 'BEF:')))
+        db_changed = bool(inc_code or inc_tabs or inc_seq or shared_inc or any(m['inc_rows'] for m in D['meta']))
+        ctx['nothing'] = not db_changed and not fe_be_changed
+        if ctx['nothing'] and not a.stage and scope == 'delta':
+            print_nothing(ID, mode, state or {})
+            continue
+        if os.path.exists(dst):
+            shutil.rmtree(dst)
+        os.makedirs(os.path.join(dst, 'A_DB'))
+
+        # 파일 작성
+        W = lambda f, t: open(os.path.join(dst, 'A_DB', f), 'w', encoding='utf-8', newline='\n').write(t)
+        W('00_PRECHECK_CLOUD.sql', build_00(ctx, D, D['meta']))
+        b05, r99 = build_05_99(ctx, D, inc_code, inc_tabs, D['meta'])
+        if db_changed:
+            W('05_BACKUP_CLOUD.sql', b05)
+        if inc_tabs or inc_seq:
+            W(f'10_DDL_{ID}.sql', build_10(ctx, D, inc_tabs, inc_seq))
+        for nm in sorted({n for n, t in inc_code}):
+            body, w = build_20(ctx, D, nm, [t for n, t in inc_code if n == nm])
+            W(f'20_PKG_{nm}.sql', body)
+            warns += w
+        for p in shared_inc:
+            f = os.path.basename(p)
+            t = open(p, encoding='utf-8', errors='replace').read()
+            W(f'25_SHARED_{f}', f"-- 공용 객체 — 이 화면 몫만, 다른 화면 부분은 건드리지 않음 (원천 Doc/gen/{ID}/{f} · 룰 H14)\n" + t)
+        if any(m['inc_rows'] for m in D['meta']):
+            W(f'30_META_{ID}.sql', build_30(ctx, D['meta']))
+        g40, ng = build_40(ctx, D, inc_grant_names)
+        if ng:
+            W(f'40_GRANT_{ID}.sql', g40)
+        W('90_VERIFY.sql', build_90(ctx, D, inc_code, inc_tabs, D['meta']))
+        if db_changed:
+            W('99_ROLLBACK.sql', r99)
+
+        # 공용 객체 변경 감지(기준선 이후 LAST_DDL) — 패치 파일 없으면 경고
+        since = (state or {}).get('built_at')
+        if since is None and os.path.isdir(gdir):
+            try:
+                since = datetime.datetime.fromtimestamp(min(os.path.getmtime(os.path.join(gdir, f)) for f in os.listdir(gdir))).strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                since = None
+        shared_changed = [d for d in D['deps'] if since and d.get('LAST_DDL') and d['LAST_DDL'] > since and d['RT'] not in ('TABLE', 'VIEW', 'SYNONYM')]
+        shared_nopatch = [d for d in shared_changed if not any(os.path.basename(p).startswith(d['RN'] + '_') for p in shared_files)]
+
+        # FE/BE 파일
+        fe_rows, be_rows = [], []
+        if mode == 'all' and fe_info:
+            mine_modes = ('whole-new', 'whole-mine', 'merged-mine')
+            page_mine = any(j['mode'] in mine_modes for j in fe_info['judge'] if fe_info['pageRel'] and j['rel'].startswith(fe_info['pageRel'] + '/'))
+            for j in fe_info['judge']:
+                rel = j['rel']
+                in_page = fe_info['pageRel'] and rel.startswith(fe_info['pageRel'] + '/')
+                src_local = os.path.join(FE_ROOT, rel)
+                full_scope = scope == 'full'
+                if j['mode'] in ('whole-new', 'whole-mine') or ((full_scope or (in_page and page_mine)) and j['mode'] in ('skip-same', 'skip-notmine') and os.path.exists(src_local)):
+                    if not full_scope and not changed(f'FE:{rel}') and not (in_page and page_mine):
+                        fe_rows.append((rel, j['mode'], '직전 이관과 같음 — 제외'))
+                        continue
+                    d = os.path.join(dst, 'B_FE', 'nscm-fe', rel)
+                    os.makedirs(os.path.dirname(d), exist_ok=True)
+                    shutil.copy2(src_local, d)
+                    fe_rows.append((rel, j['mode'], 'B_FE' + ((' (전체 취합)' if full_scope else ' (페이지 폴더 단위)') if j['mode'].startswith('skip') else '')))
+                elif j['mode'] == 'merged-mine' and j.get('out'):
+                    if not full_scope and not changed(f'FE:{rel}'):
+                        fe_rows.append((rel, j['mode'], '직전 이관과 같음 — 제외'))
+                        continue
+                    d = os.path.join(dst, 'B_FE' if full_scope else 'FE_MERGE', 'nscm-fe', rel)
+                    os.makedirs(os.path.dirname(d), exist_ok=True)
+                    shutil.copy2(j['out'], d)
+                    fe_rows.append((rel, j['mode'], ('B_FE' if full_scope else 'FE_MERGE') + ' (공통 최신 + 내 수정분) — ' + j.get('note', '')))
+                elif j['mode'] == 'conflict':
+                    if j.get('out'):
+                        d = os.path.join(dst, 'FE_MERGE', '_conflicts', 'nscm-fe', rel)
+                        os.makedirs(os.path.dirname(d), exist_ok=True)
+                        shutil.copy2(j['out'], d)
+                    fe_rows.append((rel, j['mode'], '⚠ 사람 확인 — ' + j.get('note', '')))
+                    warns.append(f'FE 충돌 {rel}: {j.get("note", "")}')
+                else:
+                    fe_rows.append((rel, j['mode'], '제외 — ' + j.get('note', '')))
+            for b in be_info['judge']:
+                rel = b['rel']
+                if b['mode'] in ('whole-new', 'whole-mine', 'merged-mine', 'conflict') and b.get('data') is not None:
+                    if scope != 'full' and not changed(f'BE:{rel}'):
+                        be_rows.append((rel, b['mode'], '직전 이관과 같음 — 제외'))
+                        continue
+                    sub = {'whole-new': 'B_BE', 'whole-mine': 'B_BE', 'merged-mine': 'BE_MERGE', 'conflict': os.path.join('BE_MERGE', '_conflicts')}[b['mode']]
+                    d = os.path.join(dst, sub, 'nscm-be', rel)
+                    os.makedirs(os.path.dirname(d), exist_ok=True)
+                    open(d, 'wb').write(b['data'])
+                    be_rows.append((rel, b['mode'], sub + ' — ' + b['note']))
+                    if b['mode'] == 'conflict':
+                        warns.append(f'BE 충돌 {rel}: {b["note"]}')
+                elif scope == 'full' and os.path.exists(os.path.join(BE_ROOT, rel)):
+                    d = os.path.join(dst, 'B_BE', 'nscm-be', rel)
+                    os.makedirs(os.path.dirname(d), exist_ok=True)
+                    shutil.copy2(os.path.join(BE_ROOT, rel), d)
+                    be_rows.append((rel, b['mode'], 'B_BE (전체 취합) — ' + b['note']))
+                else:
+                    be_rows.append((rel, b['mode'], '제외 — ' + b['note']))
+
+        # 리허설
+        reh = []
+        reh_ok = True
+        if not a.no_rehearse:
+            log('사내 리허설 (DRY·ROLLBACK)')
+            try:
+                reh = rehearse(c, dst, ctx, None)
+                reh_ok = all(r['fail'] == 0 for r in reh)
+                for r in reh:
+                    if r['file'].startswith('30_') and r.get('dml_rows'):
+                        warns.append(f"리허설 30_META 사내 기준 변경 {r['dml_rows']}행 — 사내가 원천이면 0 이어야 함(키·값 확인)")
+            except Exception as e:
+                reh_ok = False
+                reh = [{'file': '리허설', 'stmts': 0, 'fail': 1, 'notes': [f'ERROR {e}']}]
+        # README
+        readme = build_readme(ctx, D, mode, inc_code, inc_tabs, inc_seq, shared_files, shared_changed, shared_nopatch, fe_info if mode == 'all' else None,
+                              be_info if mode == 'all' else None, fe_rows, be_rows, warns, reh, reh_ok, state, a.no_rehearse, os.listdir(os.path.join(dst, 'A_DB')))
+        open(os.path.join(dst, '00_README.md'), 'w', encoding='utf-8').write(readme)
+        man = {'fingerprint': fp, 'built': now().strftime('%Y-%m-%d %H:%M:%S'), 'mode': mode, 'rehearsal_ok': reh_ok and not a.no_rehearse, 'version': VERSION, 'nothing': ctx.get('nothing', False)}
+        if a.stage:
+            json.dump(man, open(man_p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+            log(f'사전 생성 완료 [{mode}/{scope}] {os.path.relpath(dst, ROOT)} · 리허설 {"OK" if reh_ok else "FAIL"}')
+        else:
+            record_built(ID, mode, scope, dst, sub_items, fp, reh_ok and not a.no_rehearse)
+            # 같은 지문으로 스테이징도 갱신(다음 취합 즉시)
+            if os.path.exists(stage_dir):
+                shutil.rmtree(stage_dir)
+            print(f'\n{"✅" if reh_ok and not warns else "⚠"} 완료 · {os.path.relpath(dst, ROOT)} · 리허설 {"OK" if reh_ok else "FAIL"} · 경고 {len(warns)}'
+                  + (' · 직전 이관 이후 변경 없음(확인 SQL 만)' if ctx.get('nothing') else ''))
+            print(f'   README: {os.path.relpath(os.path.join(dst, "00_README.md"), ROOT)}')
+            for w in warns[:20]:
+                print('   ⚠ ' + w)
+    log('끝')
+    c.cx.close()
+    return 0
+
+
+def build_readme(ctx, D, mode, inc_code, inc_tabs, inc_seq, shared_files, shared_changed, shared_nopatch, fe_info, be_info, fe_rows, be_rows, warns, reh, reh_ok, state, no_reh, adb):
+    ID = ctx['ID']
+    L = [f"# {ID} {VARIANTS[(mode, ctx.get('scope', 'delta'))][1]}", '',
+         f"- 생성 {ctx['built']:%Y-%m-%d %H:%M} · tools/CloudPkg/cloud_pkg.py {VERSION} (결정적 빌더 — Claude 미사용)",
+         f"- 원천 사내 {ctx['db']} (SERVER_HOST={ctx['host']}) 조회 {ctx['fetched']} — SOURCE-FRESH",
+         f"- 이관 범위 = {('전체 — 화면 소유 DB 객체·META 전부 + ' + ('FE 페이지 폴더·참조 파일·ID 참조 BE 파일 전부' if mode == 'all' else 'FE·BE 없음') + ' (모든 SQL 멱등)') if ctx.get('scope') == 'full' else (('수정본 — 이관 완료 표시(' + state['applied_at'] + ') 이후 바뀐 것 전부' if state.get('applied_at') else '수정본 — 기준선(' + state.get('built_at', '?') + ' 생성 시각 · 이관 확정 아님) 이후 바뀐 것 전부') if state else '수정본 — 이관 기준선이 없어 화면 소유 전부(모든 SQL 멱등)')}",
+         f"- 사내 리허설 = {'생략(--no-rehearse)' if no_reh else ('OK' if reh_ok else 'FAIL — 아래 리허설 표 확인')}",
+         *(['', '> **직전 이관 이후 바뀐 것이 없다.** 적용할 SQL 이 없으므로 00_PRECHECK·90_VERIFY 로 클라우드 상태만 확인한다. 전부 담으려면 전체 메뉴를 쓴다.'] if ctx.get('nothing') else []),
+         '', '## 실행 순서 (클라우드, SCM_MGR, 파일마다 전체 F5)', '']
+    desc = {'00': '사전 확인(읽기 전용) — 공용 객체 누락·컬럼 누락이 있으면 멈추고 전달', '05': '현재 상태 백업(ZB_* 표) — 원복 대비',
+            '10': 'GTT 구조 동기화·테이블/SEQUENCE 생성', '20': 'PKG/코드 전체 원문', '25': '공용 객체 이 화면 몫 패치', '30': 'META·문구·콤보',
+            '40': '권한·시노님', '90': '확인(읽기 전용)', '99': '원복(문제 시에만)'}
+    for f in sorted(adb):
+        L.append(f"1. `A_DB/{f}` — {desc.get(f[:2], '')}")
+    if mode == 'all':
+        L += ['', f"FE: `B_FE/` = 실경로 그대로 복사 · `FE_MERGE/` = 공통 최신 + 내 수정분(공통소스 반영본) · `_conflicts` = 사람 확인. 판정 기준 공통소스 {ctx.get('tip', '')}",
+              "BE: `B_BE/` 전체 복사 · `BE_MERGE/` 병합본. 없으면 BE 변경 없음."]
+    L += ['', '## 이관 축 점검표', '', '| 축 | 대상 | 이관 | 구분 | 근거 |', '|---|---|---|---|---|']
+    inc_set = set(inc_code)
+    for (n, t) in sorted(list(D['code']) + [(v, 'VIEW') for v in D['views']], key=code_order):
+        L.append(f"| PKG/코드 | {t} {n} | {'포함' if (n, t) in inc_set else '제외(직전과 같음)'} | 화면 전용 | 사내 원문 전체 · LAST_DDL {next((o['LAST_DDL'] for o in D['objects'] if o['OBJECT_NAME'] == n and o['OBJECT_TYPE'] == t), '')} |")
+    for t, info in D['tables'].items():
+        L.append(f"| {'GTT' if info['temp'] else 'TABLE'} | {t} | {'포함' if t in inc_tabs else '제외(직전과 같음)'} | 화면 전용 | {'구조 동기화' if info['temp'] else '없을 때만 생성 · 차이는 PRECHECK'} |")
+    for s in D['seq_ddl']:
+        L.append(f"| SEQUENCE | {s} | {'포함' if s in inc_seq else '제외'} | 화면 전용 | 없을 때만 생성 |")
+    for m in D['meta']:
+        L.append(f"| META | {m['table']} ({m['desc']}) | {len(m['inc_rows'])}/{len(m['rows'])}행 | {'화면 전용' if m['mode'] == 'upsert' else '공용·권한·메뉴'} | {m['mode']} · 키 {', '.join(m['key'])} ({m['key_how']}){' · 사내에서 사라진 행 ' + str(len(m['deleted'])) + '건(자동 삭제 안 함)' if m.get('deleted') else ''} |")
+    for d in D['deps']:
+        L.append(f"| 공용 참조 | {d['RT']} {d['RO']}.{d['RN']} | 제외 | 공용 | 존재·VALID·컬럼 PRECHECK · LAST_DDL {d.get('LAST_DDL') or ''} |")
+    for p in shared_files:
+        L.append(f"| 공용 패치 | {os.path.basename(p)} | 25_SHARED | 공용 — 이 화면 몫 | Doc/gen/{ID} 패치 파일(H14) |")
+    if D['excluded']:
+        L += ['', '이름에 화면 ID 가 있지만 백업·임시 사본으로 보고 제외: ' + ', '.join(D['excluded'][:30])]
+    if shared_nopatch:
+        L += ['', '## ⚠ 공용 객체 변경 감지 — 이 화면 몫 패치 파일 없음', '',
+              '기준선 이후 사내에서 바뀐 공용 객체다. 이 화면 작업 때문이면 Doc/gen/' + ID + '/<객체>_<멤버>_' + ID + '.sql 로 이 화면 몫만 남기고 다시 만들 것(다른 작업자 변경일 수 있음 — 임의 포함 안 함).', '']
+        for d in shared_nopatch:
+            L.append(f"- {d['RT']} {d['RO']}.{d['RN']} · LAST_DDL {d['LAST_DDL']}")
+    if mode == 'all':
+        L += ['', '## FE 판정 (공통소스 기준 · Upload(UI) 와 같은 규칙)', '', '| 파일 | 판정 | 처리 |', '|---|---|---|']
+        L += [f'| `{r}` | {m} | {n} |' for r, m, n in fe_rows] or ['| (페이지 폴더 없음) | | |']
+        L += ['', '## BE 판정', '']
+        if be_rows:
+            L += ['| 파일 | 판정 | 처리 |', '|---|---|---|'] + [f'| `{r}` | {m} | {n} |' for r, m, n in be_rows]
+        else:
+            L.append('BE 변경 없음 (nscm-be 변경 파일 중 이 화면 ID 를 담은 것이 없음)')
+        if be_info and be_info['other']:
+            L.append(f"\n참고: 화면 ID 가 없는 BE 변경 {len(be_info['other'])}건은 이 화면 몫으로 판정하지 않음(제외): " + ', '.join(be_info['other'][:10]))
+    if warns:
+        L += ['', '## ⚠ 확인 필요', ''] + [f'- {w}' for w in warns]
+    if reh:
+        L += ['', '## 사내 리허설 (DRY·ROLLBACK — 사내 변경 없음)', '', '| 파일 | 문장 | 실패 | 요약 |', '|---|---|---|---|']
+        for r in reh:
+            notes = [n for n in r['notes'] if not n.startswith('> SKIP') and not n.startswith('> BACKUP')][:6]
+            L.append(f"| {r['file']} | {r['stmts']} | {r['fail']} | {' · '.join(x.replace('|', '/') for x in notes)[:400]} |")
+    L += ['', '## 백업 표 정리 (클라우드 적용·확인 후)', '', '```sql',
+          f"BEGIN FOR t IN (SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME LIKE 'ZB\\_{ctx['tag']}\\_%' ESCAPE '\\') LOOP EXECUTE IMMEDIATE 'DROP TABLE ' || t.TABLE_NAME || ' PURGE'; END LOOP; END;",
+          '/', '```']
+    return '\n'.join(L) + '\n'
+
+
+if __name__ == '__main__':
+    sys.exit(main())

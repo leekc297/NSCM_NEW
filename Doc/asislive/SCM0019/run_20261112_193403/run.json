@@ -1,0 +1,141 @@
+{
+ "id": "SCM0019",
+ "started": "2026-11-12 19:34:03.350",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:34:03.681",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCM.Master.UIL.SCM0019_SCP_Interface_Blocking",
+   "form_text": "SCP IF Blocking",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:07.482"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:34:11.028",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0019\\run_20261112_193403\\dump_load.json",
+   "control_count": 27,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 0.867s, UI : 0.076s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:11.039"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:34:11.195",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0019\\run_20261112_193403\\shots\\SCM0019_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:11.311"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:34:11.636",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:12.507"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:34:17.295",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0019\\run_20261112_193403\\dump_find.json",
+   "control_count": 27,
+   "grid_count": 1,
+   "total": "Total : 48",
+   "time_status": "DB : 0.358s, UI : 0.065s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:17.311"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:34:17.467",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0019\\run_20261112_193403\\shots\\SCM0019_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:17.600"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:34:17.923",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:34:18.547"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 11,
+  "calls_with_params": 11
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCM.Master.UIL.SCM0019_SCP_Interface_Blocking",
+  "form_text": "SCP IF Blocking",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.358s, UI : 0.065s",
+  "total": "Total : 48",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:34:03.555",
+ "t_find": "2026-11-12 19:34:11.319",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 27,
+  "layout_items": 4,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 6,
+  "data_rows": 48,
+  "grid_rows": 48,
+  "calls_total": 11,
+  "calls_screen": 11,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:43.613",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:43"
+}

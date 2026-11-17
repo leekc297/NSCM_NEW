@@ -372,8 +372,8 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "SAVE",
-        "SEARCH"
+        "SEARCH",
+        "SAVE"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -396,28 +396,28 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "CAPA Planner": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "DM ADMIN": [
       "SEARCH",
       "SAVE"
     ],
     "DM Planner": [
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ],
     "DM Planner (W/S)": [
       "SEARCH",
       "SAVE"
     ],
     "DM Viewer": [
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ],
     "FP Planner": [
       "SAVE",
@@ -432,21 +432,21 @@
       "SEARCH"
     ],
     "SCM Viewer": [
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "SCP Planner": [
       "SEARCH",
       "SAVE"
     ],
     "SCP Tester": [
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
-    "SAVE",
-    "SEARCH"
+    "SEARCH",
+    "SAVE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

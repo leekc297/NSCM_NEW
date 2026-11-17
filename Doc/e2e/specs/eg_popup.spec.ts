@@ -134,6 +134,12 @@ async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promis
       const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
       if (b) { await b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `버튼 '${n}'`, why: '' }; }
     }
+    // 2026-11-16 SCP0104 EG-dcf17ea8: AS-IS 글자 버튼(btnColumn 'Column')이 TO-BE 에서 아이콘 버튼이 되면 접근 이름은 툴팁('Column Setting' · CapaLineAssign.tsx:582~583)이다 → 이름이 그 단어로 시작하는 버튼도 찾는다
+    for (const n of names) {
+      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
+      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}\\s+\\S.*$`, 'i') })).catch(() => null);
+      if (b) { const nm = ((await b.getAttribute('aria-label').catch(() => '')) || (await b.getAttribute('title').catch(() => '')) || '').trim(); await b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `버튼 '${n}' → TO-BE '${nm || n}'`, why: '' }; }
+    }
     // AS-IS 버튼이 TO-BE 에서 조회조건 칸 아이콘으로 옮겨진 경우
     if (k === 'BTN') { const r = await viaCond(); if (r) return { ...r, how: `(AS-IS 버튼 → TO-BE 칸) ${r.how}` }; }
     const all = await nscm.page.getByRole('button').allInnerTexts().catch(() => [] as string[]);
@@ -157,6 +163,26 @@ async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promis
       if (nr) { const q = await probe.cellCenter(p, nr.row, col); if (q) { await p.mouse.dblclick(q.x, q.y); d = await waitPopup(p, TAG, await dialogCount(p) - 0 > before ? before : before, 6_000); return { dlg: d, how: `신규행 ${col} 더블클릭`, why: '', row: nr.row }; } }
     }
     return { dlg: d, how: `기존행 ${col} 더블클릭`, why: '', row: ex.row };
+  }
+  // 2026-11-16(SSP0020 UserPopup · M3·H6·G5·M4 미검증): 이름 관례 밖의 보조 메서드가 여는 팝업 — AS-IS 진입점 사실(actions_entries.csv)에서 그 메서드에 닿는 버튼 Click 을 찾아
+  //   그 버튼 이름으로 TO-BE 버튼 → 조회영역 팝업형 칸 아이콘 순서로 연다(AS-IS 버튼이 TO-BE 에서 칸 아이콘으로 옮겨진 경우 포함). 진입점이 없으면 종전대로 분류 불가
+  {
+    const names: string[] = [];
+    try {
+      for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', (process.env.VERIFY_ASIS || ID).toUpperCase(), 'actions_entries.csv'), 'utf8').replace(/^﻿/, ''))) {
+        if (String(z.method || '') !== c.method || String(z.depth || '') !== '1') continue;  // 처리기가 그 메서드를 바로 부르는 버튼만(다른 버튼 경로의 조건부 호출은 그 버튼을 눌러도 팝업이 바로 열리지 않는다 — btnSave → UserName_Search → 확인창 → UserPopup)
+        const m = /^(?:this\.)?btn(\w+)\.Click$/i.exec(String(z.entry || '')); if (m && !names.includes(m[1])) names.push(m[1]);
+      }
+    } catch { /* 사실 없음 */ }
+    for (const n of names) {
+      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
+      if (b) { await b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `(AS-IS ${c.method} ← btn${n}.Click) 버튼 '${n}'`, why: '' }; }
+    }
+    if (names.length) {
+      const pc = await mainPopupConds(nscm); const hit = pc.find(x => names.some(n => nrm(x.label) === nrm(n))) || pc.find(x => names.some(n => nrm(n).length >= 4 && (nrm(x.label).includes(nrm(n)) || nrm(n).includes(nrm(x.label)))));
+      if (hit) { const t = await mainPopTrigger(p, hit.idx); await t.click({ timeout: 5_000, force: true }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `(AS-IS ${c.method} ← btn${names.join('/')}.Click → TO-BE 칸) 조건 '${hit.label}' 아이콘`, why: '', condIdx: hit.idx, label: hit.label }; }
+      return { dlg: null, how: k, why: `AS-IS 메서드 ${c.method} 는 버튼 btn${names.join('/')} 에서 열린다 — TO-BE 에 같은 이름의 버튼·조회영역 팝업형 칸 [${pc.map(x => x.label).join(', ')}] 없음` };
+    }
   }
   return { dlg: null, how: k, why: `AS-IS 메서드 ${c.method} — 트리거 분류 불가(이름 관례 밖)` };
 }
@@ -426,7 +452,8 @@ async function checkGridOps(nscm: Nscm, put: ReturnType<typeof makePut>, m: PopM
   // F4 필터 — 값 적용·건수·해제
   if (g.rows >= 2 && !hasMut('nofilter4')) {
     // F4 = 선택 컬럼 필터 토글(gridAction.toggleColumnFilter) — 값 2종 이상 컬럼의 셀을 먼저 선택
-    const r0 = await popRows(p, TAG, 200); const fb = cols.find(x => !/^(row_?no|no)$/i.test(x.binding) && x.width > 20 && r0 && new Set(r0.map(r => r[x.binding])).size >= 2)?.binding;
+    // 2026-11-16(SSP0020 EG-153fcc99 · 사용자 찾기 팝업 8,612행): 값이 전부 다른 첫 컬럼(USER_ID · 필터 값 목록 8,060개)을 고르면 목록 갱신이 5초를 넘겨 Apply 를 못 누른다 → 값 종류가 2개 이상이면서 가장 적은 컬럼을 고른다
+    const r0 = await popRows(p, TAG, 200); const fb = cols.filter(x => !/^(row_?no|no)$/i.test(x.binding) && x.width > 20 && r0 && new Set(r0.map(r => r[x.binding])).size >= 2).sort((a, b2) => new Set((r0 || []).map(r => r[a.binding])).size - new Set((r0 || []).map(r => r[b2.binding])).size)[0]?.binding;
     if (fb) await p.evaluate(`(() => { const r = document.querySelector('[data-e2e-pop=${JSON.stringify(TAG)}]'); const el = r && r.querySelector('.wj-flexgrid'); let c = el && el['$WJ-CTRL']; if (el && (!c || !c.columns)) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && typeof v === 'object' && v.columns) { c = v; break; } } if (c) { const col = c.columns.getColumn(${JSON.stringify(fb)}); c.select(0, col.index); c.focus(); } })()`).catch(() => undefined);
     const dlg = p.locator(`[data-e2e-pop="${TAG}"]`).first(); const f = await filterByF4(p, dlg, TAG);
     const ok = f.icons1 > f.icons0 && f.n1 > 0 && f.n1 < f.n0 && f.n2 === f.n0;

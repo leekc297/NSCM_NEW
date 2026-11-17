@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 87,
+  "at": "2026-11-16T17:45:53.134Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 262,
+  "at": "2026-11-16T17:45:53.269Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 109,
+  "at": "2026-11-16T17:45:54.399Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ }
+]

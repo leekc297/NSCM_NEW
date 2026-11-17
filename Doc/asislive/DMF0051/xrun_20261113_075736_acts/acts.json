@@ -1,0 +1,170 @@
+{
+ "id": "DMF0051",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnBPCutOff",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnBPCutOff failed: InvalidOperationException: control not found: btnBPCutOff",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL"
+   ],
+   "scenarios": [
+    "DMF0051-S8bbcf8"
+   ]
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 26,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0051-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0051-Sea1449"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0051-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnOwner failed: InvalidOperationException: control not found: btnOwner",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0051-S4fa471"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0051-S287784"
+   ]
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_VersionByWaterfallPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "scenarios": [
+    "DMF0051-S8f08c9",
+    "DMF0051-Sc9b6a0"
+   ]
+  },
+  {
+   "control": "usrButton1",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0051-S4fa471"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnConfirmBP",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnReleaseSCP",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-13 07:55:26.729",
+ "fills": 1,
+ "fill_left": []
+}

@@ -42,14 +42,14 @@ DMF0072 NN Master Mapping 화면:
 | 2 | 각 sheet 가 grid 인 경우 column 인벤토리 | FE `MAIN_COLUMNS` 또는 reference DMF0004 SalesSiteGrid 의 column 사용처 |
 | 3 | SHEET_COLUMNS INSERT SQL 작성 (해당 column 1:1 매핑) | `_artifacts/_deploy_packages/{MNU_ID}/03_META/0XX_dynamic_property_management.sql` BLOCK 3 |
 | 4 | **NOT NULL 컬럼 전수 cross-check** (#anti-simplification §1.4) | `python ora.py desc SCM_MST_SHEET_COLUMNS` → NULLABLE='N' 컬럼 모두 INSERT 명시 |
-| 5 | sheet 명명 규약 (camelCase) — `main` / `dataType` / `endCustomer` 등 | FE SHEETS 와 SQL SHEET_NAME 100% 일치 |
+| 5 | sheet 명명 규약 — **AS-IS 원본(기존 등록) SHEET_NAME 그대로** (camelCase 화·`main` 같은 generic 명칭 발명 금지 — `sheet-name-asis-preserve-mandatory.md`) (2026-11-13 정정: 'camelCase — `main` / `dataType` / `endCustomer` 등' → AS-IS 원본 그대로) | FE SHEETS 와 SQL SHEET_NAME 100% 일치 |
 
 ### §2.1 표준 INSERT 형식 (DMF0072 080 reference)
 ```sql
 INSERT INTO SCM_MGR.SCM_MST_SHEET_COLUMNS (
   PROGRAM_ID, SHEET_NAME, COLUMN_NAME,
   COLUMN_LABEL_NAME, SORT_ORDER_NO, COLUMN_WIDTH,
-  VISIBLE_FLAG, FIXED_FLAG, UPPERCASE_APPLY_FLAG, USER_SELECTABLE_FLAG, DEFAULT_FLAG, VALID_YN,  -- NOT NULL 12종
+  VISIBLE_FLAG, FIXED_FLAG, UPPERCASE_APPLY_FLAG, USER_SELECTABLE_FLAG, DEFAULT_FLAG, VALID_YN,  -- NOT NULL 12종 (2026-11-14 정정: 실제 NOT NULL 은 16개. PROGRAM_ID, SHEET_NAME, COLUMN_NAME, COLUMN_LABEL_NAME, SORT_ORDER_NO, FIXED_FLAG, COLUMN_WIDTH, HORIZONTAL_ALIGN_CODE, UPPERCASE_APPLY_FLAG, VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN, CREATED_BY, LAST_UPDATED_BY, INPUT_TP_CD. 사내 DB 실측 2026-11-13 21:51)
   INPUT_TP_CD, CELL_CONTROL_OBJECT_TYPE_CODE, HORIZONTAL_ALIGN_CODE,
   CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
 )
@@ -79,7 +79,7 @@ SELECT '{MNU_ID}', '{sheetNm}', NEW.COL,
 SELECT SHEET_NAME, COUNT(*) AS COL_CNT
   FROM SCM_MGR.SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID='{MNU_ID}'
  GROUP BY SHEET_NAME ORDER BY SHEET_NAME;
--- 기대: FE SHEETS enum 값과 동일 / 다른 sheet (구 PascalCase / 폐기) 0 row
+-- 기대: FE SHEETS enum 값과 동일 / 다른 sheet 0 row   (2026-11-14 정정: "(구 PascalCase / 폐기)" 삭제. 등록 시트명은 대문자 시작 714개, 소문자 시작 128개. 대소문자만 다른 중복 시트는 등록명 하나로 단일화한다. sheet-name-asis-preserve-mandatory.md §1)
 ```
 
 ### §3.2 BE 응답 확인
@@ -177,6 +177,6 @@ rg -n "INSERT INTO SCM_MGR\.SCM_MST_SHEET_COLUMNS" _artifacts/_deploy_packages/{
 ## §7. 짝 hook
 
 - `Doc/_rules_v2/hooks/ui-category-setup-column-meta.md` (#65 — admin 메타 동적 fetch 의무 — 본 hook 의 base 룰)
-- `Doc/_rules_v2/hooks/grid-column-meta-mandatory.md` (#19 — Grid Column 메타 표준 14 enum)
+- `Doc/_rules_v2/hooks/grid-column-meta.md` (2026-11-13 정정: 파일명 `grid-column-meta-mandatory.md` → 실제 파일 `grid-column-meta.md`) (#19 — Grid Column 메타 표준 14 enum)
 - `Doc/_rules_v2/hooks/feature-button-meta-completeness.md` (짝 hook — BTN_MPG_M 완전성)
 - `Doc/_rules_v2/anti-simplification.md` §1.4 (DDL NOT NULL 정책 cross-check 의무 — 080 첫 실행 ORA-01400 사고)

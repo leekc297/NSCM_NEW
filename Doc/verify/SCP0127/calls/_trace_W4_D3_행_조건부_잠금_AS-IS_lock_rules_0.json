@@ -7,8 +7,8 @@
   "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
   "status": 200,
   "rows": 2835,
-  "dur": 310,
-  "at": "2026-11-07T11:37:58.218Z",
+  "dur": 237,
+  "at": "2026-11-14T09:09:46.959Z",
   "user": "minyonglee1",
   "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261109\",\"periodTo\":\"20271108\"}",
   "status": 200,
   "rows": 535,
-  "dur": 205,
-  "at": "2026-11-07T11:38:01.339Z",
+  "dur": 173,
+  "at": "2026-11-14T09:09:50.145Z",
   "user": "minyonglee1",
   "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
  }

@@ -22,6 +22,7 @@
 """
 import sys, os, re, csv, json, glob, datetime, collections
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -488,8 +489,8 @@ def build_flows(S, L, div=None):
                   ['연쇄 후 조회 → 결과가 바뀐 조건을 만족'], ['상위 조건을 다른 값으로 바꾼다', '하위 조건 후보·값을 확인한다', '조회'], pre=divtxt,
                   ledger=L.cond_rows(labs, {'C1', 'C4'}), basis='O1 AS-IS SetChangeControl')
         B.add('SC', '결과 반영', '조회조건', lab, f"조회조건 [{lab}] 값 변경 → 조회 결과 반영",
-              ['특정 값 선택 후 조회 → 결과 행이 모두 조건 만족', 'ALL → 특정값 → ALL 재조회 시 건수 복원', '텍스트 조건은 콤마 다중·대소문자 무시(해당 시)'],
-              [f'[{lab}] 를 특정 값으로 바꿔 조회', '결과 행의 해당 컬럼 값을 확인', 'ALL 로 되돌려 재조회'], pre=divtxt,
+              ['값 1개 선택 후 조회 → 결과 행 전체가 조건 만족', 'ALL → 특정값 → ALL 재조회 시 건수 복원', '텍스트 조건은 콤마 다중·대소문자 무시(해당 시)'],
+              [f'[{lab}] 를 다른 값으로 바꿔 조회', '결과 행의 해당 컬럼 값을 확인', 'ALL 로 되돌려 재조회'], pre=divtxt,
               ledger=L.cond_rows(labs, {'G1', 'G2', 'G8'}) + L.cond_rows(labs), basis='O1 AS-IS 조회 결과')
     B.add('SC', '조회조건 저장', '조회조건', '조회조건 전체', '조회조건 저장·새 탭 복원',
           ['조회조건 저장 후 새 탭에서 복원(기간 조건은 저장 안 됨)'], ['조건 설정 → 저장', '새 탭으로 화면을 연다'], pre=divtxt, ledger=L.by_rule.get('G3', []), basis='O2 공통 표준')
@@ -768,7 +769,9 @@ def write_tc_sheet(wb, title, S, tcs):
             '검증방법\n(To-Be/Oracle)': t['verify'], '자동검증 결과': t['auto'], '자동검증 근거': t['auto_ev'], '원장 ID': t['lids'],
         }
         for i, h in enumerate(HEADERS, 1):
-            c = ws.cell(r, i, vals.get(h, '') if h else ''); c.font = BASE_F; c.alignment = WRAP; c.border = THIN
+            v_ = vals.get(h, '') if h else ''
+            if isinstance(v_, str): v_ = ILLEGAL_CHARACTERS_RE.sub('', v_)  # 2026-11-10 SSP0024: 원장 근거 문구의 제어 문자(Excel 금지) 제거 — 글자 외 의미 변화 없음
+            c = ws.cell(r, i, v_); c.font = BASE_F; c.alignment = WRAP; c.border = THIN
             c.fill = GAP_FILL if (t['gap'] and h == '테스트명') else RES_FILL.get(t['auto'], BODY_FILL) if h == '자동검증 결과' else (FLOW_FILL if i in NEW_COLS else BODY_FILL)
     for i, w in enumerate(WIDTHS, 1): ws.column_dimensions[get_column_letter(i)].width = w
     ws.auto_filter.ref = f'A1:{get_column_letter(len(HEADERS))}{max(r, 2)}'
@@ -798,7 +801,7 @@ class Plain:
 
 def build(ID):
     S = Screen(ID)
-    if not S.cols and not S.ledger: return None, {'reason': '원천 없음(컬럼 메타·정합검증 원장 모두 없음)'}
+    if not S.cols and not S.ledger: return None, {'reason': '원천 없음(컬럼 메타·정합검증 원장 둘 다 없음)'}
     L = Ledger(S)
     sheets = []
     if S.split:
@@ -868,7 +871,7 @@ def build(ID):
 
     # 권한·Division 차이 목록
     dd = Plain(wb.create_sheet('권한·Division 차이 목록'), [8, 18, 40, 60, 30])
-    dd.title('권한·Division 별로 이벤트·액션이 달라지는 지점', '테스트 시 권한·Division 을 바꿔 가며 반드시 확인할 항목 — 관련 TC 는 테스트 시트에서 대상 열로 찾는다')
+    dd.title('권한·Division 별로 이벤트·액션이 달라지는 지점', '테스트 시 권한·Division 을 바꿔 가며 확인할 항목 — 관련 TC 는 테스트 시트에서 대상 열로 찾는다')
     dd.hdr(['No', '축', '대상', '차이', '근거'])
     n = 0; seen_d = set()
     def drow(axis, tgt, diff, basis):
@@ -878,7 +881,7 @@ def build(ID):
     for b in ('INSERT', 'SAVE', 'DELETE', 'SEARCH'):
         yes = [r for r in S.roles if b in S.role_btns(r)]; no = [r for r in S.roles if b not in S.role_btns(r)]
         if yes and no: drow('권한 · 버튼', b, f"가능: {', '.join(yes)}\n불가(버튼 미노출): {', '.join(no)}", 'TO-BE btn_auth')
-        elif not yes: drow('권한 · 버튼', b, f'표준 권한 모두 불가({", ".join(no)})', 'TO-BE btn_auth')
+        elif not yes: drow('권한 · 버튼', b, f'표준 권한 전체 불가({", ".join(no)})', 'TO-BE btn_auth')
     for r in S.roles:
         acl = S.role_acl(r); btn = S.role_btns(r)
         if acl:
@@ -965,7 +968,13 @@ def save(wb, ID, name, out):
     os.makedirs(out, exist_ok=True)
     prefix = f'{ID}_{safe_name(name) or ID}_TestCases4'
     p = os.path.join(out, f'{prefix}_v{next_version(out, prefix)}.0.xlsx')
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     wb.save(p)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(p)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     import doc_archive; doc_archive.archive_previous(p)  # 같은 UI 의 이전 버전 → <폴더>/old/ (2026-10-28 사용자)
     return p
 

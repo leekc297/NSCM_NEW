@@ -59,7 +59,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.btn_Search | Click | btn_Search_Click | InitializeComponent:1067 |
 | this | Load | Form_Load | .ctor:95 |
 | clbDivision_ID | SelectedIndexChanged | clbDivision_ID_SelectedIndexChanged | InitEvent:444 |
 | cboFromCountry | SelectedIndexChanged | cboFromCountry_SelectedIndexChanged | InitEvent:445 |
@@ -67,6 +66,7 @@
 | cboInquiryClassification | SelectedIndexChanged | cboInquiryClassification_SelectedIndexChanged | InitEvent:447 |
 | spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitEvent:448 |
 | cboAccuracy | SelectedIndexChanged | cboAccuracy_SelectedIndexChanged | InitEvent:449 |
+| this.btn_Search | Click | btn_Search_Click | InitializeComponent:1067 |
 
 ## 6. 컨트롤 (65개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |

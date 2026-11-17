@@ -124,12 +124,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -138,22 +133,17 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 107413,
+                      "duration": 62675,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG271 NA\":1,\"EG275 NA\":1,\"EG369 NA\":1,\"EG369 PASS\":24,\"EG212 PASS\":1,\"EG257 PASS\":3,\"EG024 PASS\":1,\"EG024 NA\":1,\"EG294 NA\":1}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG271 NA\":1,\"EG275 NA\":1,\"EG257 NA\":1,\"EG024 NA\":1,\"EG212 NA\":1,\"EG369 NA\":1,\"EG294 NA\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:43:13.788Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:23:13.468Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -174,12 +164,7 @@
               "tests": [
                 {
                   "timeout": 1500000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -188,62 +173,62 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 139705,
+                      "duration": 606504,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 14s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 15s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 15s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 16s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 68s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 16s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 68s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 17s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 15s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 16s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 15s\n"
+                          "text": "[eg_auth] SCP/82/SCM Viewer 67s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
                           "text": "[eg_auth] SCP0108 {}\n"
@@ -251,13 +236,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:45:04.006Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:24:19.050Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -278,12 +258,7 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -292,46 +267,17 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20612,
+                      "duration": 62662,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG160 FAIL\":8,\"EG022 NA\":1,\"EG402 NA\":1}\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 40] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 82] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81_UC] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81_HM] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81_ST] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81_HD] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
-                        },
-                        {
-                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(CURRENT) [Div 81_HG] 기대 메타 필수 3개 · 실측 표시 0개 · 메타 밖 - · 표시 누락 Line Type, Basic Nickname, Operation Name · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                          "text": "[eg_auth] SCP0108 {\"EG022 NA\":1,\"EG402 NA\":1,\"EG160 NA\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:47:27.738Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:34:29.806Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -340,7 +286,7 @@
               ],
               "id": "fce9d8edbd378244cae8-1b86efcf107c53d5934e",
               "file": "eg_auth.spec.ts",
-              "line": 362,
+              "line": 366,
               "column": 7
             },
             {
@@ -352,12 +298,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -366,31 +307,26 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 19913,
+                      "duration": 116216,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG140 ERROR\":1,\"EG319 ERROR\":1,\"EG126 ERROR\":1}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG126 ERROR\":1,\"EG140 ERROR\":1,\"EG319 ERROR\":1}\n"
                         },
                         {
-                          "text": "  EG140 ERROR 병합 그룹 위 삽입 [병합 DIVISION_ID r0~31 · 선택 r1] 기대 신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15 · 실측 신규행 r-1 · 메시지 수정모드가 아니므로 추가할 수 없습니다.\nConfirm · DM 문서 GAPSELF-15 \n"
+                          "text": "  EG126 ERROR Insert [Div ] 기대 Insert 권한 있는 Div 에서 버튼 · 실측 권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369) · CR-070 \n"
                         },
                         {
-                          "text": "  EG319 ERROR 병합 그룹 위 삽입 [병합 DIVISION_ID r0~31 · 선택 r1] 기대 신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15 · 실측 신규행 r-1 · 메시지 수정모드가 아니므로 추가할 수 없습니다.\nConfirm · DM 문서 GAPSELF-15 \n"
+                          "text": "  EG140 ERROR Insert [Div ] 기대 Insert 권한 있는 Div 에서 버튼 · 실측 권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369) · CR-070 \n"
                         },
                         {
-                          "text": "  EG126 ERROR Sort 상태 Insert [SCP0108] 기대 헤더 클릭 정렬 · 실측 헤더 20칸 클릭 후 정렬 상태 없음 — 측정 경로 없음 ·  \n"
+                          "text": "  EG319 ERROR Insert [Div ] 기대 Insert 권한 있는 Div 에서 버튼 · 실측 권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369) · CR-070 \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:47:52.450Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:35:36.572Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -399,7 +335,7 @@
               ],
               "id": "fce9d8edbd378244cae8-9f1252d8d8fa05cde4ea",
               "file": "eg_auth.spec.ts",
-              "line": 413,
+              "line": 417,
               "column": 7
             },
             {
@@ -420,7 +356,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 365,
+                      "duration": 256,
                       "errors": [],
                       "stdout": [
                         {
@@ -429,7 +365,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:48:16.468Z",
+                      "startTime": "2026-11-14T08:37:37.016Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -439,7 +375,7 @@
               ],
               "id": "fce9d8edbd378244cae8-4d86eabcdec144a21623",
               "file": "eg_auth.spec.ts",
-              "line": 484,
+              "line": 488,
               "column": 7
             },
             {
@@ -451,12 +387,7 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -465,22 +396,20 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6257,
+                      "duration": 116224,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0108 {\"EG315 NA\":1}\n"
+                          "text": "[eg_auth] SCP0108 {\"EG315 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG315 ERROR 헤더 병합 [SCP0108] 기대 그리드 · 실측 그리드 컨트롤 없음 ·  \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:48:20.967Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:37:41.689Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -489,7 +418,7 @@
               ],
               "id": "fce9d8edbd378244cae8-d38dba6fc2ddd955cf84",
               "file": "eg_auth.spec.ts",
-              "line": 554,
+              "line": 558,
               "column": 7
             },
             {
@@ -510,19 +439,19 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 251,
+                      "duration": 269,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[eg_auth] SCP0108 {\"EG032 ERROR\":1}\n"
                         },
                         {
-                          "text": "  EG032 ERROR SCP0108 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 N · 미보유 Y) · SCM_MST_TITLESET_USER \n"
+                          "text": "  EG032 ERROR SCP0108 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 Y · 미보유 N) · SCM_MST_TITLESET_USER \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:48:31.354Z",
+                      "startTime": "2026-11-14T08:39:42.148Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -532,7 +461,7 @@
               ],
               "id": "fce9d8edbd378244cae8-5042488271db986cfdf2",
               "file": "eg_auth.spec.ts",
-              "line": 570,
+              "line": 574,
               "column": 7
             },
             {
@@ -544,12 +473,7 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -558,25 +482,20 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6484,
+                      "duration": 135508,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[eg_auth] SCP0108 {\"EG395 ERROR\":1}\n"
                         },
                         {
-                          "text": "  EG395 ERROR 설정 저장 직후 그리드 [조회 378행] 기대 저장 직후 그리드 비움 → 재조회로 구성 적용 — GAP-356 · 실측 저장 요청 0건(서버 미전송: ) · 직후 행 378 · GAP-356(문서 확정 2026-08-05) 실제 저장 구성대로 표시·복원은 실저장 필요 — integration.md\n"
+                          "text": "  EG395 ERROR SCP0108 [저장 후 비움] 기대 조회 행 · 실측 0행(기본 조회 0행 · 대안 없음 전부 0행) ·  \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:48:34.751Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T08:39:46.565Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -585,7 +504,7 @@
               ],
               "id": "fce9d8edbd378244cae8-96b4783c8befc05853e5",
               "file": "eg_auth.spec.ts",
-              "line": 600,
+              "line": 604,
               "column": 7
             },
             {
@@ -606,7 +525,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 179,
+                      "duration": 274,
                       "errors": [],
                       "stdout": [
                         {
@@ -618,7 +537,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:48:43.707Z",
+                      "startTime": "2026-11-14T08:42:06.156Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -628,7 +547,7 @@
               ],
               "id": "fce9d8edbd378244cae8-dd1e96016f21a8ccbd96",
               "file": "eg_auth.spec.ts",
-              "line": 625,
+              "line": 629,
               "column": 7
             }
           ]
@@ -638,8 +557,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-09T01:43:13.183Z",
-    "duration": 334285.301,
+    "startTime": "2026-11-14T08:23:12.970Z",
+    "duration": 1138035.346,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

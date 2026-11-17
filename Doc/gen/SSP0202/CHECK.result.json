@@ -1,0 +1,35 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-12T06:20:26.382Z",
+ "producer": "check.js",
+ "id": "SSP0202",
+ "final": false,
+ "page": "nscm-fe/features/shipping/src/pages/shipment-change-request-confirm",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 1,
+  "warn": 62
+ },
+ "issues": [
+  {
+   "id": "MS1",
+   "class": "BLOCK",
+   "msg": "AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)",
+   "where": "shipment-change-request-confirm.constants.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js MS1"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

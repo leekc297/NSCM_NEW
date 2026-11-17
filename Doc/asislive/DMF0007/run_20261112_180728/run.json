@@ -1,0 +1,141 @@
+{
+ "id": "DMF0007",
+ "started": "2026-11-12 18:07:28.632",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:07:28.928",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0007_CustFcstMaster",
+   "form_text": "Customer FCST Master",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0007_CustFcstMaster.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:35.497"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:07:38.873",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0007\\run_20261112_180728\\dump_load.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:38.896"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:07:39.207",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0007\\run_20261112_180728\\shots\\DMF0007_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:39.321"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:07:39.799",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:41.828"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:07:46.191",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0007\\run_20261112_180728\\dump_find.json",
+   "control_count": 36,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 0.773s, UI : 0.081s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:46.199"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:07:46.359",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0007\\run_20261112_180728\\shots\\DMF0007_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:46.466"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:07:46.787",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:07:47.411"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 39,
+  "calls_with_params": 39
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0007_CustFcstMaster",
+  "form_text": "Customer FCST Master",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0007_CustFcstMaster.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.773s, UI : 0.081s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:07:28.840",
+ "t_find": "2026-11-12 18:07:39.470",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 36,
+  "layout_items": 9,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 160,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 39,
+  "calls_screen": 39,
+  "calls_find": 10,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:13.232",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:13"
+}

@@ -9,18 +9,31 @@ const str = (v: unknown): string =>
 
 /**
  * 저장 전 커스텀 검증 — design/00_checklist.md §3a validations(MSG00001/00219/00458) 1:1 재현.
- * 메타 기반 필수검증(useSaveWithValidation)이 M 컬럼을 잡더라도, AS-IS 순차 가드(공백→역전→Item)를
- * 메시지/순서까지 정확히 재현하기 위한 추가 방어선이다(convert-core §2.4).
+ * 메타 기반 필수검증(useSaveWithValidation)이 M 컬럼을 잡더라도, AS-IS 순차 가드를 메시지/순서까지
+ * 정확히 재현하기 위한 추가 방어선이다(convert-core §2.4).
  *
- * @returns 위반 시 { msgId, message }, 통과 시 null. 첫 위반에서 멈춘다(AS-IS 순차 가드 재현).
+ * AS-IS 저장 루프(.cs:579~710)는 행마다 **공백(필수) → 중복 → 날짜 → 모델** 순으로 검사하고 첫
+ * 위반에서 멈춘다. 그 순서를 지키려면 중복 검사(findSafetyStockBlockedRows)가 공백과 날짜/모델
+ * 사이에 끼어야 하므로, 검증을 공백(아래)과 날짜·모델(validateRowDetails)로 분리해 호출부(onSave)가
+ * 행별로 공백 → 중복 → 날짜·모델 순으로 돌린다(2026-11-10 사용자 지시).
  */
-export const validateDemandExceptionRow = (
+
+/**
+ * 필수(공백) 검증 — AS-IS `.cs:621~626`(MSG00001)의 그리드 저장행 등가. 필수 8필드
+ *   (DIVISION_ID/OPMZ_PLAN_GR_ID/SCM_SITE_ID/ITEM_ID/STAGE/FROM_YYYYMMDD/TO_YYYYMMDD/VALID_YN).
+ *   VALID_YN(Active)은 메타 INPUT_TP_CD=O(DB 실측)라 공용 메타 필수검증이 안 잡으므로 AS-IS
+ *   `|| v_valid_yn == string.Empty` 파리티를 여기서 재현한다(2026-11-10 AS-IS 화면 실증).
+ *
+ * 공백 판정은 AS-IS `== string.Empty` 와 동일하게 **trim 없이** 빈 문자열만 본다. OPMZ_PLAN_GR_ID 는
+ *   컬럼 NOT NULL 이며 "미지정"을 공백 1글자(space, ASCII 32) sentinel 로 담은 기존 행이 실재한다
+ *   (DB 실측 5행). AS-IS 는 space 를 공백으로 안 보고 통과시키므로(space != string.Empty) 그런 행의
+ *   편집 저장이 가능하다 — trim 을 걸면 space 가 ''로 축약돼 TO-BE 만 과차단된다(2026-11-10 확정).
+ *   FROM/TO 는 그리드에서 Date(FPDate)일 수 있어 toYmd8 로 8자리 정규화 후 판정(str(Date)='').
+ * @returns 위반 시 { msgId, message }, 통과 시 null.
+ */
+export const validateRequiredFields = (
   row: WijmoRowItem
 ): { msgId: string; message: string } | null => {
-  // AS-IS MSG00001(line628, 8필드 조회조건 공백 검증) 의 그리드 저장행 등가 — 필수 라벨 7종
-  //   (design 03 §1: DIVISION_ID/OPMZ_PLAN_GR_ID/SCM_SITE_ID/ITEM_ID/STAGE/FROM_YYYYMMDD/
-  //   TO_YYYYMMDD) 공백 차단. TO-BE 코드는 역조회 확정(MSG00013, constants 주석 참조).
-  // FROM/TO 는 그리드에서 Date(FPDate)일 수 있어 toYmd8 로 8자리 정규화 후 공백 판정(str(Date)='').
   const requiredFields: [string, unknown][] = [
     ['DIVISION_ID', row.DIVISION_ID],
     ['OPMZ_PLAN_GR_ID', row.OPMZ_PLAN_GR_ID],
@@ -29,11 +42,22 @@ export const validateDemandExceptionRow = (
     ['STAGE', row.STAGE],
     ['FROM_YYYYMMDD', toYmd8(row.FROM_YYYYMMDD)],
     ['TO_YYYYMMDD', toYmd8(row.TO_YYYYMMDD)],
+    ['VALID_YN', row.VALID_YN],
   ];
-  if (requiredFields.some(([, value]) => str(value).trim() === '')) {
+  if (requiredFields.some(([, value]) => str(value) === '')) {
     return { msgId: MSG.REQUIRED_FIELDS, message: '_Please enter the required fields.' };
   }
+  return null;
+};
 
+/**
+ * 날짜·모델 검증 — AS-IS 저장 루프의 공백·중복 이후 단계(날짜 MSG00219 → 모델 MSG00458). 첫 위반에서
+ *   멈춘다. 공백/중복은 각각 validateRequiredFields / findSafetyStockBlockedRows 가 선행한다(onSave 순서).
+ * @returns 위반 시 { msgId, message }, 통과 시 null.
+ */
+export const validateRowDetails = (
+  row: WijmoRowItem
+): { msgId: string; message: string } | null => {
   // MSG00219(line998, 그리드 셀 더블클릭 편집 검증) — From > To 날짜 역전.
   const from = toYmd8(row.FROM_YYYYMMDD);
   const to = toYmd8(row.TO_YYYYMMDD);
@@ -43,7 +67,8 @@ export const validateDemandExceptionRow = (
 
   // MSG00458(line710, filterCalls#6 dtItemAll 연계) — 대상 Item 존재하지 않음. 실제 마스터 존재
   //   검증은 SP 응답으로만 최종 확정 가능(design 03 §6 확인 필요, PKG_SCP0129 미배포로 서버측
-  //   대사 불가) — 여기서는 형식(공백)만 재확인.
+  //   대사 불가) — 여기서는 형식(공백)만 재확인. AS-IS 는 ITEM_ID=space 도 마스터 미존재라
+  //   MSG00458 로 막으므로 여기서는 trim 으로 space 까지 거른다(필수 공백 판정과 달리 의도적).
   if (str(row.ITEM_ID).trim() === '') {
     return { msgId: MSG.ITEM_NOT_FOUND, message: '_Invalid model!' };
   }
@@ -90,7 +115,10 @@ export const findSafetyStockBlockedRows = (
     .some(row => existingKeys.has(key(row)));
 
   if (hasDuplicate) {
-    return { msgId: MSG.SAFETY_STOCK_EXISTS, message: '_Duplicate combination already exists.' };
+    return {
+      msgId: MSG.SAFETY_STOCK_EXISTS,
+      message: '_There are duplicate entries among the newly entered data.',
+    };
   }
   return null;
 };

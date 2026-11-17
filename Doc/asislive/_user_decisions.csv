@@ -1,0 +1,14 @@
+menu_id,handler,decision,at,reason
+SSP0003,BtnApproval_Click,실행 안 함,2026-11-15,확인 창(MSG00190) 전에 SaveDraftingData("O")·SaveData("O") 저장 · ERP I/F 점검 연동
+SSP0003,BtnReject_Click,실행 안 함,2026-11-15,반려 저장 경로 · ERP I/F 점검 연동
+SSP0003,BtnSelfReject_Click,실행 안 함,2026-11-15,자체 반려 저장 경로 · ERP I/F 점검 연동
+SSP0003,ChkDraftingData,실행 안 함,2026-11-15,호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐
+SSP0003,EngProcessingChk,실행 안 함,2026-11-15,호출처 BtnApproval_Click 뿐
+SSP0003,GetErpIFCheck,실행 안 함,2026-11-15,호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐
+SSP0003,GetErpIFCheckNew,실행 안 함,2026-11-15,호출처 BtnApproval_Click 뿐
+SSP0003,GetShipmentStatusChk,실행 안 함,2026-11-15,호출처 BtnApproval_Click 뿐
+SSP0003,chkERPIFBlockYn,실행 안 함,2026-11-15,호출처 BtnApproval_Click·BtnReject_Click·BtnSelfReject_Click 뿐
+SSP0200,BtnChangeRe_Click,실행 안 함,2026-11-15,필수 항목 통과 시 확인 창 없이 SaveDataDrafting 저장 · 연결 컨트롤 btnChangeRe2(394행 btnChangeRe 연결은 주석)
+SSP0200,BtnCancel_Click,실행 안 함,2026-11-15,취소 저장 경로(DeleteDataDrafting)
+SSP0200,DeleteDataDrafting,실행 안 함,2026-11-15,호출처 BtnCancel_Click 뿐
+SSP0200,checkRequired,실행 안 함,2026-11-15,호출처 BtnChangeRe_Click 뿐

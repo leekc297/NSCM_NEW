@@ -1,0 +1,26 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 07:48:26.744",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 15.15,
+   "params": {
+    "Code": "TransMode",
+    "Param1": "40",
+    "Param2": "HQ06-E",
+    "Param3": "IM_US_TXT",
+    "Param4": "FCA",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='TransMode', @Param1='40', @Param2='HQ06-E', @Param3='IM_US_TXT', @Param4='FCA', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:TRANSPORT_MODE"
+  }
+ ]
+}

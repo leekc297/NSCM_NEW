@@ -1,0 +1,4 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SSP0015,main|같은 사용자,SSP0015_GET_SHIPMENT_PSI,REVIEW,0,1080,AS-IS 0행 · TO-BE 1080행,사용자 jaeuk.shin(ADMIN) · 양쪽 직접 실행
+SSP0015,main|조회시간,SSP0015_GET_SHIPMENT_PSI,PASS,0,1080,조회 시간 TO-BE 3.0초(1080행) · AS-IS 40.4초(0행),사용자 jaeuk.shin(ADMIN) · 양쪽 직접 실행
+SSP0015,main,SSP0015_GET_SHIPMENT_PSI,REVIEW,0,90,"AS-IS 0행 · TO-BE 90행 · 키 ['from_site_nm', 'ITEM_ID', 'nick_name', 'MEASURE', 'MEASURE_NAME', 'PSI_NAME'] AS-IS 전용 0 · TO-BE 전용 90 · 값 대조 0칸(숫자 컬럼 43) · 불일치 컬럼 0",

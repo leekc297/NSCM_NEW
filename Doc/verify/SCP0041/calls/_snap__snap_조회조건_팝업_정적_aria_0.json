@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "COM0013",
+  "sheet": "materialByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SCP0041\"}",
+  "status": 200,
+  "rows": 9617,
+  "dur": 826,
+  "at": "2026-11-14T03:14:19.114Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 팝업 정적 aria"
+ }
+]

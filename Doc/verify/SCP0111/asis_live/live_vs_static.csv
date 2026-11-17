@@ -1,0 +1,37 @@
+﻿kind,item,static,live,verdict,note
+SP,DM0003_GET_BUCKET_TYPE_CODE,SCP0111_IntegrationPSI.cs:1095 GetBucketType,1회 · 구간 load,MATCH,
+SP,SCM_SYS_GET_SPREAD_TITLE,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0111_GET_ESS_PACK_LINE,SCP0111_IntegrationPSI.cs:490 GetEssPackLineAll,1회 · 구간 load,MATCH,
+SP,SCP0111_GET_INTEGRATION_PSI,SCP0111_IntegrationPSI.cs:874 FindData_Main,1회 · 구간 find,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP_ALL,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SCP0111_SAVE_INTEGRATION_PSI,SCP0111_IntegrationPSI.cs:1637 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCP0111_SAVE_INTEGRATION_PSI_ADMIN,SCP0111_IntegrationPSI.cs:1379 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),41개,23개,INFO,공통 15 · 선언만 26 · 실측만 8
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtCellItemId,Y,Cell Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanDate,Y,Plan date* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnNickName,Y,layoutControlItem3,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnCellItem_Id,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,txtNickName,Y,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cmbFromMonth,Y,Period,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboPlanType,Y,Plan type,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cmbToMonth,Y,~,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkQty,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Integration PSI,정적 컬럼 사실 25행(시트 미지정 포함),컬럼 30(보임 28) · 헤더 1단 · 행 1712 · 고정 20,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

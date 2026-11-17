@@ -1,0 +1,415 @@
+{
+  "menuId": "SSP0021",
+  "screenName": "ShipmentPlan",
+  "feature": "shipping",
+  "pageDir": "shipment-plan-auto-ess",
+  "routePath": "shipping/shipment-plan-auto-ess",
+  "sheets": [
+    {
+      "sheetName": "Hold stock",
+      "rule": "META+코드연결",
+      "columns": 12,
+      "popup": false
+    },
+    {
+      "sheetName": "Hold stock Detail",
+      "rule": "META+코드연결",
+      "columns": 12,
+      "popup": false
+    },
+    {
+      "sheetName": "MES Stock",
+      "rule": "META+코드연결",
+      "columns": 9,
+      "popup": false
+    },
+    {
+      "sheetName": "MES Stock Detail",
+      "rule": "META+코드연결",
+      "columns": 13,
+      "popup": false
+    },
+    {
+      "sheetName": "oWMS Detail",
+      "rule": "META+코드연결",
+      "columns": 25,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Plan",
+      "rule": "META+코드연결",
+      "columns": 13,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Plan Detail",
+      "rule": "META+코드연결",
+      "columns": 69,
+      "popup": false
+    },
+    {
+      "sheetName": "Shipment Result",
+      "rule": "META+코드연결",
+      "columns": 18,
+      "popup": false
+    },
+    {
+      "sheetName": "Stock Location Detail",
+      "rule": "META+코드연결",
+      "columns": 20,
+      "popup": false
+    },
+    {
+      "sheetName": "calendar",
+      "rule": "동적 헤더(기간 컬럼) — SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_DIVISION",
+      "asis_sp": "SSP0021_GET_SHIPMENT_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "SetChangedControl"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "asis_sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_SAVE_HOLD_STOCK_DATA",
+      "asis_sp": "SSP0021_SAVE_HOLD_STOCK_DATA",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_SAVE_HOLD_STOCK_DATA",
+      "sheet": "Hold stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "asis_sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetERPInterface"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "asis_sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetERPInterface",
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "asis_sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "NonSoNo",
+        "SoNo",
+        "NewNonSoNo"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_ERP_SO_NO_CNT",
+      "asis_sp": "SSP0021_GET_ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetErpSoNoCnt"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_ERP_SO_NO_CNT",
+      "sheet": "Hold stock",
+      "btn": "ERP_SO_NO_CNT"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_STATUS",
+      "asis_sp": "SSP0021_GET_SHIPMENT_STATUS",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetShipmentStatusChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Plan",
+      "btn": "SHIPMENT_STATUS"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "asis_sp": "SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetErpIFCheck",
+        "GetErpIFCheckNew_"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "asis_sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetErpIFCheckNew"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "sheet": "Hold stock",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "DM.DM0003_GET_BUCKET_TYPE_CODE",
+      "asis_sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetBucketType"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "allowed_gap": "공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_PLAN",
+      "asis_sp": "SSP0021_GET_SHIPMENT_PLAN",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+      "asis_sp": "SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_STOCK_LOCATION_DETAIL",
+      "asis_sp": "SSP0021_GET_STOCK_LOCATION_DETAIL",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_Stock_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_STOCK_LOCATION_DETAIL",
+      "sheet": "Hold stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_OWMS_DETAIL",
+      "asis_sp": "SSP0021_GET_OWMS_DETAIL",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_oWMS_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_OWMS_DETAIL",
+      "sheet": "oWMS Detail",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_RESULT",
+      "asis_sp": "SSP0021_GET_SHIPMENT_RESULT",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ],
+      "methods": [
+        "FindData_Shipment_Result"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_RESULT",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_HOLD_STOCK",
+      "asis_sp": "SSP0021_GET_HOLD_STOCK",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_hold_stock"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_HOLD_STOCK",
+      "sheet": "Hold stock",
+      "btn": "HOLD_STOCK"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_MES_STOCK",
+      "asis_sp": "SSP0021_GET_MES_STOCK",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_MES_stock"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_MES_STOCK",
+      "sheet": "MES Stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_MES_STOCK_DETAIL",
+      "asis_sp": "SSP0021_GET_MES_STOCK_DETAIL",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_MES_stock_Detail"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0021_GET_MES_STOCK_DETAIL",
+      "sheet": "MES Stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0002_GET_USER_INFO_LIST",
+      "asis_sp": "SSP0002_GET_USER_INFO_LIST",
+      "status": "MATCH",
+      "entries": [
+        "button:EditButton"
+      ],
+      "methods": [
+        "GetSSPUserCheck"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Hold stock",
+      "btn": "USER_INFO_LIST"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0021_GET_SHIPMENT_FROM_SITE",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "event:clbCompany_ID.SelectedIndexChanged"
+      ],
+      "methods": [
+        "clbCompanyID_SelectedIndexChanged"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_",
+      "sheet": "Hold stock",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "asis_sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:this.btnMeasure.Click",
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "event:clbCompany_ID.SelectedIndexChanged",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "asis_sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "ChkConfirmChangeTime"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0021.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "sheet": "Hold stock",
+      "btn": "ACTION"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

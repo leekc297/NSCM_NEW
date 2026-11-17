@@ -116,15 +116,27 @@ export const buildPivotColumns = (
     });
   }
 
-  return [...months.values()].map<FlexGridColumnConfig>(month => {
+  // 월 그룹을 yyyymm 오름차순으로 명시 정렬 — months Map 삽입순은 sorted 바인딩 순(D_<M_<W_)을 따르므로,
+  //   드릴다운으로 늦은 달의 D_ 가 앞 달의 W_/M_ 보다 먼저 삽입되면 달 순서가 뒤집힌다(늦은 달이 앞으로).
+  const orderedMonths = [...months.entries()].sort(([a], [b]) => a.localeCompare(b));
+  return orderedMonths.map<FlexGridColumnConfig>(([, month]) => {
     // SUM 을 블록의 시작에 둔다(AS-IS iLargeStartCol/iSmallStartCol, 자매 SCP0025 동형):
     //   (1) 월 SUM(M_) 그룹을 월 맨 앞으로, (2) 각 주 그룹 안에서 주 SUM(W_)·월 SUM(M_) leaf 를 일(D_) 앞으로.
     //   Weekly 는 이미 M_('SUM' 그룹)이 앞(정렬상 M_<W_)이라 동작 불변 — Daily 에서 W_ 주합계가 일자 뒤에,
     //   M_ 월합계 그룹이 월 끝에 붙던 것(sorted 순 D_<M_<W_)을 교정해 두 버킷을 '합계-앞' 정렬로 통일한다
     //   (사용자 지시 2026-10-13 — Daily+Sum 의 SUM 컬럼을 Weekly 처럼 합계대상 앞쪽으로).
+    //   주 SUM('SUM') 뒤의 상세 주(Wxx)는 삽입순이 아니라 ISO 주차로 명시 정렬한다 — 그러지 않으면 드릴다운으로
+    //   펼친 주(그 주 D_ 가 먼저 삽입)가 아직 접힌 앞 주(W_ SUM 만 존재, 정렬상 뒤)보다 먼저 생성돼 앞으로 튄다
+    //   (예: Weekly+SUM 에서 W38 을 펼치면 W38 이 W37 앞으로). 연말 월은 W52/53 과 다음 해 W01 이 섞일 수
+    //   있어 작은 주차(≤5)를 뒤로 보낸다.
+    const weekNumOf = (w: WeekGroup): number => Number(w.label.slice(1)) || 0;
+    const detailWeeks = [...month.weeks.values()].filter(w => w.label !== 'SUM');
+    const wrap = detailWeeks.some(w => weekNumOf(w) >= 48) && detailWeeks.some(w => weekNumOf(w) <= 5);
+    const weekSortKey = (w: WeekGroup): number => weekNumOf(w) + (wrap && weekNumOf(w) <= 5 ? 53 : 0);
+    detailWeeks.sort((a, b) => weekSortKey(a) - weekSortKey(b));
     const weekGroups = [
       ...[...month.weeks.values()].filter(w => w.label === 'SUM'),
-      ...[...month.weeks.values()].filter(w => w.label !== 'SUM'),
+      ...detailWeeks,
     ];
     for (const w of weekGroups) {
       w.leaves.sort((a, b) => {

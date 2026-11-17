@@ -29,16 +29,6 @@
 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
 		) }
 	</select>
-
-	<!-- 공통버튼 노출 = 사용자 × 선택 Division 권한 (2026-10-26) — divisionId NULL/'ALL'/복수 = 그룹 합집합 -->
-    <select id="retrieveMenuBtnAuthDiv" statementType="CALLABLE">
-		{ CALL SCM_MGR.PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV(
-			#{userId},
-			#{mnuId},
-			#{divisionId, jdbcType=VARCHAR},
-			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
-		) }
-	</select>
 	
 	<select id="checkMenuBtnAuthOri" statementType="CALLABLE">
 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_AUTH.PR_CHECK_MNU_BTN_AUTH(
@@ -64,5 +54,13 @@
 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
 		) }
 	</select>
-    
+
+	<!-- 메뉴에 정의된 버튼 전체(사용자 무관) — 그리드 시트 단위 SAVE 자동잠금의 saveDefined 판정용.
+	     사용자 권한(PR_GET_MNU_BTN_AUTH)과 달리 "이 화면에 SAVE 버튼이 정의돼 있나"를 안다. -->
+	<select id="retrieveMenuBtnDefs" resultMap="authResultMap">
+		SELECT SHT_NM, MNU_BTN_CD
+		  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
+		 WHERE MNU_ID = #{mnuId}
+	</select>
+
 </mapper>

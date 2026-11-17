@@ -1,0 +1,152 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "다음 항목(1 → 2)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:2:81_HD Automotive Battery(HD)",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      13,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0015-S95028d",
+    "SSP0015-S60ac8e",
+    "SSP0015-S60ac8e",
+    "SSP0015-Sea1076",
+    "SSP0015-Sea1076",
+    "SSP0015-S2dbd74",
+    "SSP0015-S2dbd74",
+    "SSP0015-S5dcee3",
+    "SSP0015-S5dcee3"
+   ]
+  },
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD",
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      13,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0015-S95028d",
+    "SSP0015-S60ac8e",
+    "SSP0015-S60ac8e",
+    "SSP0015-Sea1076",
+    "SSP0015-Sea1076",
+    "SSP0015-S2dbd74",
+    "SSP0015-S2dbd74",
+    "SSP0015-S5dcee3",
+    "SSP0015-S5dcee3"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboPlanDate",
+   "why": "콤보 항목이 1개라 바꿀 값이 없음",
+   "scenarios": 4
+  },
+  {
+   "control": "spdDetail",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 14
+  },
+  {
+   "control": "txtBefore_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "txtChange_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 4
+  },
+  {
+   "control": "txtCurrent_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "txtGap_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "txtProd_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  },
+  {
+   "control": "txtWHin_Qty",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-14 23:22:46"
+}

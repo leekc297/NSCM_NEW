@@ -1,0 +1,109 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 09:15:20.174",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.52,
+   "params": {
+    "Code": "CompanySalesSite",
+    "Param1": "40",
+    "Param2": "Peopleworks_KR_KUM",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CompanySalesSite', @Param1='40', @Param2='Peopleworks_KR_KUM', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:SALES_COMPANY"
+  },
+  {
+   "at": "2026-11-14 09:15:35.329",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.2,
+   "params": {
+    "CODE": "SALES_PLANT",
+    "PARAM1": "40",
+    "PARAM2": "NJ00",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='SALES_PLANT', @PARAM1='40', @PARAM2='NJ00', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:cell:SALES_PLANT"
+  },
+  {
+   "at": "2026-11-14 09:16:20.701",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.87,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner Base",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner Base', @p_division_id='40'",
+   "phase": "action:cell:USER_ID"
+  },
+  {
+   "at": "2026-11-14 09:16:20.717",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 6.07,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner User",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner User', @p_division_id='40'",
+   "phase": "action:cell:USER_ID"
+  },
+  {
+   "at": "2026-11-14 09:16:22.590",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF000_GET_OWNER_DATA",
+   "sp": "DMF000_GET_OWNER_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 101,
+   "rows_kind": "DataSet rows",
+   "ms": 1856.15,
+   "params": {
+    "p_division_id": "40",
+    "p_owner_id": "hyelin.jung",
+    "p_search": "",
+    "p_user_id": "jaeuk.shin",
+    "p_now_group_id": "ADMIN"
+   },
+   "inline": "EXEC DMF000_GET_OWNER_DATA @p_division_id='40', @p_owner_id='hyelin.jung', @p_search='', @p_user_id='jaeuk.shin', @p_now_group_id='ADMIN'",
+   "phase": "action:cell:USER_ID"
+  }
+ ]
+}

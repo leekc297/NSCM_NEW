@@ -1,0 +1,105 @@
+{
+ "id": "SCP0011",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+   "save_sp": "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+   "status": "키 일부 미대응",
+   "table": "scp_anl_production_plan",
+   "pk": [
+    "DIVISION_ID",
+    "PLAN_START_YYYYMMDD",
+    "PLAN_TYPE",
+    "SEQ",
+    "OPERATION_GROUP",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLAN_START_YYYYMMDD": "PLAN_START_YYYYMMDD",
+    "PLAN_TYPE": "PLAN_TYPE",
+    "SEQ": "PLAN_SEQ",
+    "OPERATION_GROUP": "OPERATION_GROUP",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCP_ANL_PRODUCTION_PLAN_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_ANL_PRODUCTION_PLAN_FIX_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_ANL_PRODUCTION_PLAN_FIX_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_ANL_PRODUCTION_PLAN_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdLine/Line",
+   "writes": {
+    "scp_anl_production_plan": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ],
+    "SCP_ANL_PRODUCTION_PLAN": [
+     "MERGE INTO"
+    ],
+    "SCP_ANL_PRODUCTION_PLAN_H": [
+     "INSERT INTO"
+    ],
+    "PP": [
+     "DELETE"
+    ],
+    "SCP_ANL_PRODUCTION_PLAN_FIX": [
+     "UPDATE"
+    ],
+    "PF": [
+     "UPDATE"
+    ],
+    "SCP_ANL_PRODUCTION_PLAN_FIX_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0011_SAVE_PRODUCTION_PLAN_LINE → SP SCP0011_SAVE_PRODUCTION_PLAN_LINE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [
+    "SCP_ANL_PRODUCTION_PLAN",
+    "SCP_ANL_PRODUCTION_PLAN_FIX"
+   ],
+   "match_basis": {
+    "SEQ": "SEQ ← @p_seq(SP 340줄(@v_seq AS SEQ) ← 237줄) ← 변수 strSEQ ← SCP0011_ProductionPlan.cs:2773 ← 그리드 열 PLAN_SEQ"
+   },
+   "unmatched_why": {
+    "YYYYMMDD": "p_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

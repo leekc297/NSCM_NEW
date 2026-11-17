@@ -1,0 +1,273 @@
+{
+ "id": "SSP0202",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ_de",
+  "pk": [
+   "CHANGE_REQ_NO",
+   "CONFIRM_ID",
+   "NEW_YN"
+  ],
+  "match": {
+   "CHANGE_REQ_NO": "CHANGE_REQ_NO",
+   "CONFIRM_ID": "CONFIRM_ID",
+   "NEW_YN": "NEW_YN"
+  },
+  "save_sp": "SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK",
+  "side": [],
+  "basis": "foxml SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK → SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "ROUTE_ID",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "ROUTE_ID",
+     "db_col": "ROUTE_ID",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "ROUTE_ID",
+    "db_col": "ROUTE_ID",
+    "rule": "plus1"
+   },
+   {
+    "col": "CUSTOMER_LT",
+    "db_col": "CUSTOMER_LT",
+    "rule": "plus1"
+   },
+   {
+    "col": "NEW_CUSTOMER_LT",
+    "db_col": "NEW_CUSTOMER_LT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-14 01:43:39",
+ "status": "ERROR",
+ "steps": [],
+ "division_derive": {
+  "table_divisions": [
+   [
+    "81",
+    361493
+   ],
+   [
+    "40",
+    304662
+   ],
+   [
+    "82",
+    48220
+   ],
+   [
+    "81_UC",
+    24504
+   ],
+   [
+    "81_ST",
+    1142
+   ],
+   [
+    "81_HM",
+    742
+   ],
+   [
+    "81_HG",
+    238
+   ],
+   [
+    "81_HD",
+    18
+   ]
+  ],
+  "screen_list": [
+   "40",
+   "81",
+   "81_HD",
+   "81_HG",
+   "81_HM",
+   "81_UC",
+   "82",
+   "EE_HD",
+   "EE_HG",
+   "EE_HM",
+   "EE_UC"
+  ],
+  "tried": [
+   {
+    "division": "81",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "40",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "82",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_UC",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_HM",
+    "set": true,
+    "rows": 0
+   },
+   {
+    "division": "81_HG",
+    "set": true,
+    "rows": 0
+   }
+  ]
+ },
+ "date_derive": [
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261010",
+   "from": "20260910",
+   "to": "20261010",
+   "division": "81_HG",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261010 (Division 81_HG)",
+   "division_try": "81_HG",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261027",
+   "from": "20260927",
+   "to": "20261027",
+   "division": "40",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261027 (Division 40)",
+   "division_try": "40",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261022",
+   "from": "20260922",
+   "to": "20261022",
+   "division": "81",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261022 (Division 81)",
+   "division_try": "81",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20260218",
+   "from": "20260119",
+   "to": "20260218",
+   "division": "81_HD",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20260218 (Division 81_HD)",
+   "division_try": "81_HD",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261009",
+   "from": "20260909",
+   "to": "20261009",
+   "division": "81_HM",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261009 (Division 81_HM)",
+   "division_try": "81_HM",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261021",
+   "from": "20260921",
+   "to": "20261021",
+   "division": "81_UC",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261021 (Division 81_UC)",
+   "division_try": "81_UC",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "sp": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM",
+   "param": "p_from_yyyymmdd",
+   "column": "request_time",
+   "table": "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "max": "20261029",
+   "from": "20260929",
+   "to": "20261029",
+   "division": "82",
+   "basis": "SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261029 (Division 82)",
+   "division_try": "82",
+   "set": {
+    "dp1": false,
+    "dp2": false,
+    "error": "InvalidOperationException: property not writable: DateTime"
+   },
+   "rows": 0
+  },
+  {
+   "why": "SP SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 의 FROM·JOIN 표 6개 가운데 컬럼 request_time 에 날짜 값이 있는 표가 없음",
+   "division_try": "EE_HD"
+  }
+ ],
+ "find_dialogs": [],
+ "note": "기간 도출 [{\"sp\": \"SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM\", \"param\": \"p_from_yyyymmdd\", \"column\": \"request_time\", \"table\": \"SSP_ANL_SHIP_CONFIRM_CHG_REQ\", \"max\": \"20261010\", \"from\": \"20260910\", \"to\": \"20261010\", \"division\": \"81_HG\", \"basis\": \"SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM 100줄 'request_time >= @p_from_yyyymmdd' · SSP_ANL_SHIP_CONFIRM_CHG_REQ.request_time 최댓값 20261010 (Division 81_HG)\", \"d · Division 도출 {\"table_divisions\": [[\"81\", 361493], [\"40\", 304662], [\"82\", 48220], [\"81_UC\", 24504], [\"81_ST\", 1142], [\"81_HM\", 742], [\"81_HG\", 238], [\"81_HD\", 18]], \"screen_list\": [\"40\", \"81\", \"81_HD\", \"81_HG\", \"81_HM\", \"81_UC\", \"82\", \"EE_HD\", \"EE_HG\", \"EE_HM\", \"EE_UC\"], \"tried\": [{\"division\": \"81\", \"set\": true,  · 조회 결과 행 없음(메시지 [])"
+}

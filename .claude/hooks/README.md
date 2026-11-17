@@ -1,13 +1,13 @@
-# `.claude/hooks/` — Claude Code 강제 실행 Hook (2026-10-12 동기화 — 실측 9 스크립트 / 10 wiring)
+# `.claude/hooks/` — Claude Code 강제 실행 Hook (2026-11-13 동기화 — 실측 10 스크립트 + 하네스 hook 3 = `settings.json` 연결 13)
 
 ## 목적
 
 룰 문서(`Doc/_rules_v2/hooks/*.md`)는 **AI 가 읽고 지키는 가이드("문서 hook")**.
 이 폴더의 스크립트는 **harness 가 자동 실행하는 차단/주입("실행 hook")** — AI 의지와 무관, `exit 2` 시 도구 호출 차단.
 
-> ⚠️ **용어(R-8)**: 문서 hook **153종**(`Doc/_rules_v2/hooks/*.md` 2026-10-12 실측) vs 실행 hook **9 스크립트**는 **별개**. 단일 진입·전체 카탈로그 = `Doc/_rules_consolidation/RULESET_MASTER.md`.
+> ⚠️ **용어(R-8)**: 문서 hook **156종**(`Doc/_rules_v2/hooks/*.md` 2026-11-13 실측 · 수의 단일 출처 = RULESET_MASTER 상단) vs 실행 hook **10 스크립트 + 하네스 3**은 **별개**. 단일 진입·전체 카탈로그 = `Doc/_rules_consolidation/RULESET_MASTER.md`.
 
-## 파일 구성 (실제 wiring = `../settings.json` 기준, 9 스크립트 / 10 wiring)
+## 파일 구성 (실제 wiring = `../settings.json` 기준 — 이 폴더 10 스크립트 · `tools/Harness/hooks` 3 스크립트 · 연결 13)
 
 | 파일 | 이벤트 | 차단/동작 | 위반 exit |
 |---|---|---|:---:|
@@ -21,13 +21,16 @@
 | `check-ui-gates.ps1` | **PostToolUse** | 페이지 ts/tsx G-A~G-G (자체 행상태 / call-proc 무판정 / 감사키 빈값 / util 미배선 / 모달 확정버튼 / 콤보 빈 catch / 콤보 quoting) | 2 / 1 |
 | `check-meta-sql.ps1` | **PostToolUse** | `SHEET_COLUMNS` INSERT/UPDATE 값 단언 (CTRL 화이트리스트 / INPUT_TP_CD / 전면 IM) | 2 / 1 |
 | `check-db-fresh-source.ps1` | **PostToolUse** | `_artifacts/**/*.sql` DDL `SOURCE-FRESH` 24h / `*.py` DB 재조회+`FRESH-GATE` (hook #152) | 2 |
+| `tools/Harness/hooks/check-asis-harness.ps1` | **PostToolUse (Write/Edit/MultiEdit)** | 하네스 게이트 — 저장 즉시 `check.js`; BLOCK 은 차단, WARN 은 추가 컨텍스트 (상세 `tools/Harness/README.md`) | 2 |
+| `tools/Harness/hooks/harness-gen-context.ps1` | **UserPromptSubmit** | (차단 없음) 화면ID + 생성 의도면 하네스 절차·GEN_NOTES 첨부 | 0 |
+| `tools/Harness/hooks/harness-stop-gate.ps1` | **Stop** | 바뀐 화면 폴더에 `--final`(미구현 0) 요구 — 아니면 종료 차단 | 2 |
 
-> 정정 (구 README 오류): "5 스크립트" → **9 스크립트** (check-ui-gates / check-meta-sql / check-db-fresh-source / check-rules-read 누락 표기). `.sh` parity 는 attach-context·block-dev-commands·check-dbeaver-sql·check-notnull-insert·check-fe-import 5종만 존재 — 나머지 4종 Linux 미지원.
+> 정정 (2026-11-13 전수 점검): 이 폴더 **10 스크립트**(10-12 의 "9" 뒤 11-02 `check-work-mode` 추가분이 제목에 반영 안 됐음) + 하네스 hook 3종 행 추가(연결은 돼 있었으나 이 표에 없었음). `.sh` parity 는 attach-context·block-dev-commands·check-dbeaver-sql·check-notnull-insert·check-fe-import 5종만 존재 — 나머지 5종(check-ui-gates · check-meta-sql · check-db-fresh-source · check-rules-read · check-work-mode) Linux 미지원.
 > 검증 일괄 실행: `powershell -File scripts\rules\verify_hooks.ps1` (구문·LITE/FULL 판별·rules-read 차단·추출본 drift·상시 컨텍스트 크기).
 
 ## OS 환경 (R-7)
 
-- **Windows (현재 wiring)**: `settings.json` 이 `powershell ... -File ....ps1` 호출. 5종 ps1 모두 존재.
+- **Windows (현재 wiring)**: `settings.json` 이 `powershell ... -File ....ps1` 호출. 13개 ps1 모두 존재(2026-11-13 실측).
 - **Linux/Mac/클라우드**: `.sh` 5종 완비 (2026-06-18 `block-dev-commands.sh` 신설로 parity 완성). 전환 시 `settings.json` 의 각 `command` 를 교체:
   ```diff
   - "command": "powershell -NoProfile -ExecutionPolicy Bypass -File C:/Projects/NSCM/.claude/hooks/check-dbeaver-sql.ps1"
@@ -53,4 +56,5 @@
 
 - 단일 진입/전체 카탈로그: `Doc/_rules_consolidation/RULESET_MASTER.md`
 - 진단/권고: `Doc/_rules_consolidation/00_DIAGNOSIS_진단보고서.md`
-- 문서 hook 본문: `Doc/_rules_v2/hooks/` (69)
+- 문서 hook 본문: `Doc/_rules_v2/hooks/` (156 · 2026-11-13 실측)
+- 전수 점검·정리안: `Doc/_rules_consolidation/2026-11-13_INVENTORY_정리안.md` · 재점검 `python scripts/rules/inventory_check.py`

@@ -1,0 +1,61 @@
+{
+ "id": "SSP0045",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+    "SSP0045_GET_SHIPMENT_REQUEST"
+   ],
+   "scenarios": [
+    "SSP0045-S647918",
+    "SSP0045-S6c43db"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0045-S647918",
+    "SSP0045-S6c43db"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 13:08:56.914",
+ "fills": 0,
+ "fill_left": []
+}

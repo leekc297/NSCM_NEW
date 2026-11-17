@@ -1,0 +1,128 @@
+{
+ "id": "SCP0122",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_PLAN_GR_ACTV_M",
+  "pk": [
+   "OPMZ_PRS_CD",
+   "OPMZ_PLAN_GR_ID",
+   "OPMZ_ACTV_CD"
+  ],
+  "match": {
+   "OPMZ_PRS_CD": "OPMZ_PRS_CD",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "OPMZ_ACTV_CD": "OPMZ_ACTV_CD"
+  },
+  "save_sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+  "side": [
+   {
+    "table": "SCP_OPMZ_PLAN_GR_ACTV_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0122_SAVE_PLAN_ACTIVITY_MGMT → SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "OPMZ_ACTV_SEQ",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "OPMZ_ACTV_SEQ",
+     "db_col": "OPMZ_ACTV_SEQ",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "OPMZ_ACTV_SEQ",
+    "db_col": "OPMZ_ACTV_SEQ",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 20:32:01",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "OPMZ_PRS_CD": "P001",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "OPMZ_ACTV_CD": "A007",
+   "OPMZ_ACTV_SEQ": 1,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "jaeuk.shin",
+   "CREATION_DATE": "2025-06-05 09:39:15.487",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2025-06-05 09:39:15.487"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "OPMZ_PRS_CD": "P001",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "OPMZ_ACTV_CD": "A007"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "OPMZ_ACTV_SEQ",
+   "old": "1",
+   "new": "2",
+   "ok": true,
+   "error": null,
+   "before": "1",
+   "after": "2",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "OPMZ_PRS_CD": "P001",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "OPMZ_ACTV_CD": "A007",
+   "OPMZ_ACTV_SEQ": 1,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "jaeuk.shin",
+   "CREATION_DATE": "2025-06-05 09:39:15.487",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2025-06-05 09:39:15.487"
+  }
+ ]
+}

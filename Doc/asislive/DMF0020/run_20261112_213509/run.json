@@ -1,0 +1,147 @@
+{
+ "id": "DMF0020",
+ "started": "2026-11-12 21:35:09.101",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:35:09.350",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0020_SalesFuturePrice",
+   "form_text": "Sales Price",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0020_SalesFuturePrice.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:16.757"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:35:21.256",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0020\\run_20261112_213509\\dump_load.json",
+   "control_count": 92,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:21.273"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:35:21.437",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0020\\run_20261112_213509\\shots\\DMF0020_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:21.580"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:35:22.223",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:22.906"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:35:54.237",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0020\\run_20261112_213509\\dump_find.json",
+   "control_count": 92,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:54.243"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:35:54.402",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0020\\run_20261112_213509\\shots\\DMF0020_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:54.539"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:35:54.868",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:35:55.381"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 21,
+  "calls_with_params": 19
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0020_SalesFuturePrice",
+  "form_text": "Sales Price",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0020_SalesFuturePrice.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 21:35:09.305",
+ "t_find": "2026-11-12 21:35:21.953",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 92,
+  "layout_items": 25,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 52,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 21,
+  "calls_screen": 21,
+  "calls_find": 0,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:35:55.636",
+ "exit": 0
+}

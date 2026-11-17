@@ -1,0 +1,230 @@
+{
+ "id": "SSP0046",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0046_GET_SPREAD_TITLE",
+    "SSP0046_GET_SPREAD_TITLE",
+    "SSP0046_GET_SHIPMENT_REQUEST"
+   ],
+   "rows": [
+    [
+     "SSP0046_GET_SPREAD_TITLE",
+     86
+    ],
+    [
+     "SSP0046_GET_SPREAD_TITLE",
+     86
+    ],
+    [
+     "SSP0046_GET_SHIPMENT_REQUEST",
+     499
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S96bd28",
+    "SSP0046-S67bbf1",
+    "SSP0046-S0debf1",
+    "SSP0046-S26ff5f",
+    "SSP0046-S18f2df",
+    "SSP0046-S6c59f3",
+    "SSP0046-S6a69a9",
+    "SSP0046-Sd59aae",
+    "SSP0046-Sf5f784",
+    "SSP0046-Sbb8d29",
+    "SSP0046-S252290",
+    "SSP0046-Sc14b34",
+    "SSP0046-Sd738d5",
+    "SSP0046-S2e76bd",
+    "SSP0046-S72a490",
+    "SSP0046-Sf409b9",
+    "SSP0046-S6bd4b3",
+    "SSP0046-S109112",
+    "SSP0046-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0046_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0046_GET_SITE_BY_DIVISION",
+    "SSP0046_GET_COMMON_SPREAD_TITLE",
+    "SSP0046_GET_COMMON_SPREAD_TITLE",
+    "SSP0046_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "SSP0046-Sea1449",
+    "SSP0046-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S30fcb6",
+    "SSP0046-S9f52d6",
+    "SSP0046-S997c01",
+    "SSP0046-S98491c",
+    "SSP0046-S575e43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0046_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0046_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0046-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "SSP0046-S287784",
+    "SSP0046-S6ab4d3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S30fcb6",
+    "SSP0046-S9f52d6",
+    "SSP0046-S997c01",
+    "SSP0046-S98491c",
+    "SSP0046-S575e43"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 01:48:16.924",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i1",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "1"
+  },
+  "label": "cboBucketType 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:Weekly",
+  "value": "WEEKLY",
+  "text": "Weekly",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

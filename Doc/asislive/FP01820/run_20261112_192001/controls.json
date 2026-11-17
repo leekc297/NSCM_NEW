@@ -1,0 +1,1633 @@
+{
+ "id": "FP01820",
+ "from": "dump_find.json",
+ "screen": {
+  "type": "GSCM.FP.Admin.UIL.FP01820_Net_Job",
+  "text": "Net Job",
+  "width": 1672,
+  "height": 967
+ },
+ "controls": [
+  {
+   "name": "spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/spdMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 86,
+   "w": 1672,
+   "h": 636,
+   "tab": 11
+  },
+  {
+   "name": "usrConditionPanel1",
+   "type": "GSCM.Windows.Forms.Controls.UsrConditionPanel",
+   "path": "/usrConditionPanel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1672,
+   "h": 86,
+   "tab": 14,
+   "text": ""
+  },
+  {
+   "name": "usrLayoutControl1",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1652,
+   "h": 86,
+   "tab": 0,
+   "text": "usrLayoutControl1"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl1/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1652,
+   "y": 86,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl1/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1652,
+   "y": 0,
+   "w": 17,
+   "h": 86,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl1/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 86,
+   "w": 1652,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl1/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "txtSearch",
+   "type": "GSCM.Windows.Forms.Controls.UsrTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/txtSearch",
+   "visible": true,
+   "enabled": true,
+   "x": 756,
+   "y": 15,
+   "w": 291,
+   "h": 20,
+   "tab": 77,
+   "text": "",
+   "control_values": "",
+   "read_only": "False"
+  },
+  {
+   "name": "clbJobList",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList2",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList",
+   "visible": true,
+   "enabled": true,
+   "x": 379,
+   "y": 15,
+   "w": 200,
+   "h": 22,
+   "tab": 16,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 200,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 200,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "FP DEMAND PEGGING RUN(CN)",
+     "checked": false
+    },
+    {
+     "text": "FP DEMAND PEGGING RUN(PL)",
+     "checked": false
+    },
+    {
+     "text": "FP DEMAND PEGGING RUN(US)",
+     "checked": false
+    },
+    {
+     "text": "PIC ALARM",
+     "checked": false
+    },
+    {
+     "text": "NERP WO 전송IF",
+     "checked": false
+    },
+    {
+     "text": "RECEIVE ESWA PLAN, ITEM ASSIGN ",
+     "checked": false
+    },
+    {
+     "text": "Queue Release",
+     "checked": false
+    },
+    {
+     "text": "PACK ALT MATERIAL DEFINIT",
+     "checked": false
+    },
+    {
+     "text": "MRP 실적전송 I/F",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F 한국",
+     "checked": false
+    },
+    {
+     "text": "ERP WO전송 I/F",
+     "checked": false
+    },
+    {
+     "text": "ITEM_LINE_ASSIGN_ERP_MMD_RTS",
+     "checked": false
+    },
+    {
+     "text": "법인 기타 수요 수신",
+     "checked": false
+    },
+    {
+     "text": "SSO 정보 I/F",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F 중국",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F 미국",
+     "checked": false
+    },
+    {
+     "text": "FP_TO_RCCP_기준정보",
+     "checked": false
+    },
+    {
+     "text": "법인 Item 정보 전송",
+     "checked": false
+    },
+    {
+     "text": "RCCP 정보 PR_XIF_RCCP_PROD_RESULT_S",
+     "checked": false
+    },
+    {
+     "text": "RCCP 정보 PR_XIF_RCCP_SETUP_S",
+     "checked": false
+    },
+    {
+     "text": "RCCP 정보 PR_XIF_RCCP_TACT_TIME_S",
+     "checked": false
+    },
+    {
+     "text": "PR_MK_SCM_MODEL_COMP",
+     "checked": false
+    },
+    {
+     "text": "PR_ZBK_DB_SCRPIT",
+     "checked": false
+    },
+    {
+     "text": "AUTO_MAILING",
+     "checked": false
+    },
+    {
+     "text": "SCM_ITEM_CLASS_INSERT",
+     "checked": false
+    },
+    {
+     "text": "Receive MMD",
+     "checked": false
+    },
+    {
+     "text": "MANUAL_WO_CREATE",
+     "checked": false
+    },
+    {
+     "text": "DW_UC_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "MES_WIP_R",
+     "checked": false
+    },
+    {
+     "text": "SSP 포장 재고 수신",
+     "checked": false
+    },
+    {
+     "text": "Clear Batch Group",
+     "checked": false
+    },
+    {
+     "text": "ERP PEGGING 전송 I/F",
+     "checked": false
+    },
+    {
+     "text": "PLM 일 생산 계획 전송 I/F",
+     "checked": false
+    },
+    {
+     "text": "생산 Target",
+     "checked": false
+    },
+    {
+     "text": "출하Target",
+     "checked": false
+    },
+    {
+     "text": "MES MPP WPP  DAILY_PP 전송 I /F",
+     "checked": false
+    },
+    {
+     "text": "특채 정보 수신",
+     "checked": false
+    },
+    {
+     "text": "작업의뢰 정보 수신, 환산자 형성",
+     "checked": false
+    },
+    {
+     "text": "MES 실시간, ERP 재고,W/O,라인대치 수신",
+     "checked": false
+    },
+    {
+     "text": "테이블 데이터 정리",
+     "checked": false
+    },
+    {
+     "text": "GMES 예외 결과",
+     "checked": false
+    },
+    {
+     "text": "KR_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F ID HM",
+     "checked": false
+    },
+    {
+     "text": "DW_GMES_INVENTORY 중국",
+     "checked": false
+    },
+    {
+     "text": "DW_GMES_INVENTORY 미국",
+     "checked": false
+    },
+    {
+     "text": "DW_오창_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW_중국_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW_미국_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "BOM CHANGE INFO",
+     "checked": false
+    },
+    {
+     "text": "DW_HM_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW_폴란드_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F UC",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F 폴란드",
+     "checked": false
+    },
+    {
+     "text": "13월 기준 정보 형성",
+     "checked": false
+    },
+    {
+     "text": "Capa 이력 정리",
+     "checked": false
+    },
+    {
+     "text": "PL_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "DEMAND HISTORY",
+     "checked": false
+    },
+    {
+     "text": "DW 임시 작업 수행",
+     "checked": false
+    },
+    {
+     "text": "MPP WPP RELEASE  메일링 오창",
+     "checked": false
+    },
+    {
+     "text": "MPP WPP RELEASE  메일링 중국",
+     "checked": false
+    },
+    {
+     "text": "MPP WPP RELEASE  메일링 미국",
+     "checked": false
+    },
+    {
+     "text": "MPP WPP RELEASE  메일링 폴란드",
+     "checked": false
+    },
+    {
+     "text": "Plan Snapshot For KPI",
+     "checked": false
+    },
+    {
+     "text": "MRP Line Send",
+     "checked": false
+    },
+    {
+     "text": "MRP PLM  SSP QMS 생산 계획 전송",
+     "checked": false
+    },
+    {
+     "text": "특성 계획 FCS 전송",
+     "checked": false
+    },
+    {
+     "text": "ERP 출하 정보수신",
+     "checked": false
+    },
+    {
+     "text": "DECOMMISSION_AUTHORITY",
+     "checked": false
+    },
+    {
+     "text": "MES WO 투입 일자",
+     "checked": false
+    },
+    {
+     "text": "MES OFF_CALENDAR 전송",
+     "checked": false
+    },
+    {
+     "text": "GMES TOTAL BATCH  I/F 전송",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F 빈강 NH",
+     "checked": false
+    },
+    {
+     "text": "DW_빈강_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "SCP In-Transit 정보 수신",
+     "checked": false
+    },
+    {
+     "text": "권한 승인 결과 메일링",
+     "checked": false
+    },
+    {
+     "text": "MES DAILY_PP 전송 I /F",
+     "checked": false
+    },
+    {
+     "text": "MES CELL SHIPMENT",
+     "checked": false
+    },
+    {
+     "text": "Get MRP Intransit, Supply Plan, 대치우선순위, 합산 조달품",
+     "checked": false
+    },
+    {
+     "text": "CAPA UI Mailing",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F UC2",
+     "checked": false
+    },
+    {
+     "text": "DW_UC2_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F HD",
+     "checked": false
+    },
+    {
+     "text": "DW_HD_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F ST",
+     "checked": false
+    },
+    {
+     "text": "DW_ST_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F HG",
+     "checked": false
+    },
+    {
+     "text": "DW_HG_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "DW 재고 I/F UC Pre",
+     "checked": false
+    },
+    {
+     "text": "FP_DPP_H EUM 전송",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F ALL",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F ALL 2",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F ALL 3",
+     "checked": false
+    },
+    {
+     "text": "COPY_ITEM_UPDATE",
+     "checked": false
+    },
+    {
+     "text": "SCM_ITEM_M SELF_REPAIR",
+     "checked": false
+    },
+    {
+     "text": "DW 재공 I/F AZ",
+     "checked": false
+    },
+    {
+     "text": "DW_AZ_투입 기준_YIELD",
+     "checked": false
+    },
+    {
+     "text": "FP DEMAND PEGGING RUN(KR)",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN AZ_CELL_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN AZ_E_PRE_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_AB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_EB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_M2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_M3",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_CELL_M5",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_E_PMIX",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_E_POST",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_E_PRE",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_E_PRE_AB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_E_PRE_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_AB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_EB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_FORM_T",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_PACK",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_PACK_AB",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN CN_PACK_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HD_CELL_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HD_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HD_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HD_PACK_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HG_CELL_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HG_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN HG_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ID_CELL_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ID_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ID_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_CELL",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_CELL_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_CELL_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_CELL_M2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PMIX",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_POST",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_POST_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_POST_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PRE",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PRE_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PRE_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_E_PRE_M2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_FORM_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_PACK",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_PACK_M",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN KR_SRS",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN PL_CELL",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN PL_E_PMIX",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN PL_E_PRE",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN PL_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN PL_PACK",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ST_CELL_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ST_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ST_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN ST_PACK_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_CELL_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_CELL_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_E_PRE_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_E_PRE_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN UC_FORM_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_CELL",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_CELL_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_CELL_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_E_PMIX",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_E_POST",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_E_PRE",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_E_PRE_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_E_PRE_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_FORM_A",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_FORM_A2",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_FORM_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_LINK_E",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_PACK",
+     "checked": false
+    },
+    {
+     "text": "FP ENGINE RUN US_PACK_E",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(AZ)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(CN)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(CNB)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(HD)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(HG)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(ID)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(KR)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(PL)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(ST)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(UC)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(UC2)",
+     "checked": false
+    },
+    {
+     "text": "FP FIRST ENGINE RUN(US)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(AZ)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(CN)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(HD)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(HG)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(ID)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(KR)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(PL)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(ST)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(UC)",
+     "checked": false
+    },
+    {
+     "text": "FP INSTANCE DATA DELETE RUN(US)",
+     "checked": false
+    },
+    {
+     "text": "PR_XLS_SAVE_FP_AMEND_PLAN_RECALC",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 18,
+   "y": 0,
+   "w": 148,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnOK",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain/panel1/btnOK",
+   "visible": true,
+   "enabled": true,
+   "x": 166,
+   "y": 0,
+   "w": 32,
+   "h": 20,
+   "tab": 6,
+   "text": "OK"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbJobList/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 15,
+   "h": 18,
+   "tab": 4,
+   "text": "",
+   "checked": false
+  },
+  {
+   "name": "clbDivision",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList2",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision",
+   "visible": true,
+   "enabled": true,
+   "x": 102,
+   "y": 15,
+   "w": 200,
+   "h": 22,
+   "tab": 16,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 200,
+   "h": 132,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 200,
+   "h": 132,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "(40)Mobility&IT Battery",
+     "checked": false
+    },
+    {
+     "text": "(81)Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "(81_HD)Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "(81_HM)Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "(81_ST)Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "(81_UC)Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "(82)Advanced Battery ESS",
+     "checked": false
+    },
+    {
+     "text": "(999)SYSTEM",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 18,
+   "y": 0,
+   "w": 148,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnOK",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain/panel1/btnOK",
+   "visible": true,
+   "enabled": true,
+   "x": 166,
+   "y": 0,
+   "w": 32,
+   "h": 20,
+   "tab": 6,
+   "text": "OK"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/clbDivision/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 15,
+   "h": 18,
+   "tab": 4,
+   "text": "",
+   "checked": false
+  },
+  {
+   "name": "btnSql",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl1/btnSql",
+   "visible": false,
+   "enabled": false,
+   "x": 1068,
+   "y": 15,
+   "w": 36,
+   "h": 22,
+   "tab": 51,
+   "text": "SQL",
+   "control_values": "SQL"
+  },
+  {
+   "name": "txtCreator",
+   "type": "GSCM.Windows.Forms.Controls.UsrTextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl1/txtCreator",
+   "visible": true,
+   "enabled": true,
+   "x": 1122,
+   "y": 15,
+   "w": 200,
+   "h": 21,
+   "tab": 75,
+   "text": "",
+   "control_values": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btn_except",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl1/btn_except",
+   "visible": true,
+   "enabled": true,
+   "x": 1507,
+   "y": 53,
+   "w": 122,
+   "h": 26,
+   "tab": 76,
+   "text": "Except",
+   "control_values": "Except"
+  },
+  {
+   "name": "btn_detail",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl1/btn_detail",
+   "visible": true,
+   "enabled": true,
+   "x": 1370,
+   "y": 53,
+   "w": 125,
+   "h": 26,
+   "tab": 76,
+   "text": "Detail",
+   "control_values": "Detail"
+  },
+  {
+   "name": "btn_stop",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl1/btn_stop",
+   "visible": true,
+   "enabled": true,
+   "x": 134,
+   "y": 53,
+   "w": 110,
+   "h": 26,
+   "tab": 76,
+   "text": "Stop",
+   "control_values": "Stop"
+  },
+  {
+   "name": "btn_start",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl1/btn_start",
+   "visible": true,
+   "enabled": true,
+   "x": 15,
+   "y": 53,
+   "w": 107,
+   "h": 26,
+   "tab": 76,
+   "text": "Start",
+   "control_values": "Start"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/Panel",
+   "visible": true,
+   "enabled": true,
+   "x": 1652,
+   "y": 0,
+   "w": 20,
+   "h": 86,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "Change",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/Panel/Change",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 71,
+   "w": 20,
+   "h": 15,
+   "tab": 0,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "splitter1",
+   "type": "System.Windows.Forms.Splitter",
+   "path": "/splitter1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 722,
+   "w": 1672,
+   "h": 4,
+   "tab": 13,
+   "text": ""
+  },
+  {
+   "name": "StockPanel",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/StockPanel",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 726,
+   "w": 1672,
+   "h": 241,
+   "tab": 12,
+   "text": ""
+  },
+  {
+   "name": "spdSub",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/StockPanel/spdSub",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 42,
+   "w": 1672,
+   "h": 199,
+   "tab": 12
+  },
+  {
+   "name": "usrLayoutControl3",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/StockPanel/usrLayoutControl3",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1672,
+   "h": 42,
+   "tab": 2,
+   "text": "usrLayoutControl3"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/StockPanel/usrLayoutControl3/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1672,
+   "y": 42,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/StockPanel/usrLayoutControl3/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1672,
+   "y": 0,
+   "w": 17,
+   "h": 42,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/StockPanel/usrLayoutControl3/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 42,
+   "w": 1672,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/StockPanel/usrLayoutControl3/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "label1",
+   "type": "System.Windows.Forms.Label",
+   "path": "/StockPanel/usrLayoutControl3/label1",
+   "visible": true,
+   "enabled": true,
+   "x": 15,
+   "y": 7,
+   "w": 150,
+   "h": 26,
+   "tab": 42,
+   "text": "Job Detail"
+  },
+  {
+   "name": "statusStripBaseForm",
+   "type": "System.Windows.Forms.StatusStrip",
+   "path": "/statusStripBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 538,
+   "w": 875,
+   "h": 26,
+   "tab": 1,
+   "text": "statusStrip1"
+  },
+  {
+   "name": "pnlBaseForm",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/pnlBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 31,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "BaseRibbonCtl",
+   "type": "DevExpress.XtraBars.Ribbon.RibbonControl",
+   "path": "/pnlBaseForm/BaseRibbonCtl",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 78,
+   "tab": 0,
+   "text": ""
+  }
+ ],
+ "layout_items": [
+  {
+   "layout": "usrLayoutControl1",
+   "item": "Root",
+   "label": "Root",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "lblDivision",
+   "label": "Div",
+   "control": "clbDivision",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "lblSite",
+   "label": "Job List",
+   "control": "clbJobList",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "emptySpaceItem1",
+   "label": "emptySpaceItem1",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "emptySpaceItem4",
+   "label": "emptySpaceItem4",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "emptySpaceItem5",
+   "label": "emptySpaceItem5",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "emptySpaceItem3",
+   "label": "emptySpaceItem3",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "lblExcelUpload",
+   "label": "lblExcelUpload",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "lblSql",
+   "label": "SQL",
+   "control": "btnSql",
+   "required": false,
+   "visible": "False",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem3",
+   "label": "Creator",
+   "control": "txtCreator",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem6",
+   "label": "Stop",
+   "control": "btn_stop",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem7",
+   "label": "Start",
+   "control": "btn_start",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem4",
+   "label": "Except",
+   "control": "btn_except",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem5",
+   "label": "Detail",
+   "control": "btn_detail",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "emptySpaceItem2",
+   "label": "emptySpaceItem2",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl1",
+   "item": "layoutControlItem1",
+   "label": "Job Description",
+   "control": "txtSearch",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl3",
+   "item": "Root",
+   "label": "Root",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl3",
+   "item": "layoutControlItem11",
+   "label": "layoutControlItem11",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl3",
+   "item": "layoutControlItem2",
+   "label": "layoutControlItem2",
+   "control": "label1",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  }
+ ]
+}

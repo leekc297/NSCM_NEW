@@ -1,0 +1,14 @@
+{
+ "id": "SCP0098",
+ "group": "ADMIN",
+ "acts": [],
+ "skipped": [
+  {
+   "control": "btnCopyData",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-13 09:40:28.039",
+ "error": "화면 열기 실패: TimeoutException: UI thread busy (modal dialog?)"
+}

@@ -12,6 +12,22 @@
 # Error details
 
 ```
+Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Plan Month' (VersionField) — 후보 [Plan Month]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
 Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]
 
 expect(received).toBeTruthy()
@@ -19,427 +35,221 @@ expect(received).toBeTruthy()
 Received: false
 ```
 
+```
+Error: 조회조건 '_plan_type' (InputField) — 후보 [Plant | Plan Type | _plan_type]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Operation group' (RadioGroup) — 후보 [Operation group]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Site' (CustomDropdown) — 후보 [Site]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Plant' (PlantSiteField) — 후보 [Plant]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Building' (CustomDropdown) — 후보 [Building]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Line' (CustomDropdown) — 후보 [Line]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Operation' (CustomDropdown) — 후보 [Operation]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Basic Nickname' (ItemField) — 후보 [Basic Nickname]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Bottleneck' (CustomDropdown) — 후보 [Bottleneck]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Line Type' (CustomDropdown) — 후보 [Line Type]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 조회조건 'Status' (CustomDropdown) — 후보 [Status]
+
+expect(received).toBeTruthy()
+
+Received: false
+```
+
+```
+Error: 그리드 ≥1 (메인시트 3)
+
+expect(received).toBeGreaterThanOrEqual(expected)
+
+Expected: >= 1
+Received:    0
+```
+
 # Page snapshot
 
 ```yaml
-- generic [ref=f2e1]:
-  - generic [ref=f2e2]:
-    - banner [ref=f2e3]:
-      - link "SCM 공급망관리시스템 Supply Chain Management system" [ref=f2e5] [cursor=pointer]:
-        - /url: /view/SCP0108
-        - generic [ref=f2e6]: SCM
-        - generic [ref=f2e7]:
-          - generic [ref=f2e8]: 공급망관리시스템
-          - generic [ref=f2e9]: Supply Chain Management system
-      - navigation [ref=f2e10]:
-        - link "Demand" [ref=f2e11] [cursor=pointer]:
-          - /url: /view/SCP0108
-        - link "Supply" [ref=f2e12] [cursor=pointer]:
-          - /url: /view/SCP0108
-        - link "Shipping" [ref=f2e13] [cursor=pointer]:
-          - /url: /view/SCP0108
-        - link "Authority" [ref=f2e14] [cursor=pointer]:
-          - /url: /view/SCP0108
-        - link "Admin" [ref=f2e15] [cursor=pointer]:
-          - /url: /view/SCP0108
-      - generic [ref=f2e16]:
-        - button "KOR" [ref=f2e18] [cursor=pointer]
-        - button "이 이민용" [ref=f2e22] [cursor=pointer]:
-          - paragraph [ref=f2e27]: 이
-          - generic [ref=f2e28]: 이민용
-    - generic [ref=f2e29]:
-      - button [ref=f2e30] [cursor=pointer]
-      - complementary [ref=f2e36]:
-        - navigation [ref=f2e37]:
-          - paragraph [ref=f2e38]: Supply
-          - generic [ref=f2e39]:
-            - link [ref=f2e40] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e41]: Supply Master
-            - link [ref=f2e44] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e45]: Line Master
-            - link [ref=f2e46] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e47]: Project Route
-            - link [ref=f2e48] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e49]: BOD
-            - link [ref=f2e50] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e51]: Plant Site
-            - link [ref=f2e52] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e53]: Production Plan
-            - link [ref=f2e54] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e55]: Work Calendar(OSP)
-            - link [ref=f2e56] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e57]: Tact Time(OSP)
-            - link [ref=f2e58] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e59]: Formation
-            - link [ref=f2e60] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e61]: Outsourcing Capacity
-            - link [ref=f2e62] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e63]: BOD ITEM
-            - link [ref=f2e64] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e65]: Master Validation
-            - link [ref=f2e66] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e67]: Stock OSP
-            - link [ref=f2e68] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e69]: ProjectRoute(Electrode)
-            - link [ref=f2e70] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e71]: ProjectRoute(Warranty)
-            - link [ref=f2e72] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e73]: CAPA
-            - link [ref=f2e74] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e75]: SCP BOM (Cell~Pack)
-            - link [ref=f2e76] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e77]: Model Code Master
-            - link [ref=f2e78] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e79]: MDM Class Master
-            - link [ref=f2e80] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e81]: Shipment Working Day(OSP)
-            - link [ref=f2e82] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e83]: SCP BOM(Elec)
-            - link [ref=f2e84] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e85]: CAPA (Mobility IT)
-            - link [ref=f2e86] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e87]: Line Assign
-            - link [ref=f2e88] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e89]: Speed Plan
-            - link [ref=f2e90] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e91]: Loss Plan
-            - link [ref=f2e92] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e93]: TEEP Report
-            - link [ref=f2e94] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e95]: LOB Report
-            - link [ref=f2e96] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e97]: Demand Group Master
-            - link [ref=f2e98] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e99]: CAPA LineMaster
-            - link [ref=f2e100] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e101]: Operation LT
-          - generic [ref=f2e102]:
-            - link [ref=f2e103] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e104]: Supply Plan
-            - link "Plan Management":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e107] [cursor=pointer]: Plan Management
-            - link "Shipment Plan FG":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e108] [cursor=pointer]: Shipment Plan FG
-            - link "Shipment Plan SEMI":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e109] [cursor=pointer]: Shipment Plan SEMI
-            - link "Production Plan Line":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e110] [cursor=pointer]: Production Plan Line
-            - link "Production Plan Fix":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e111] [cursor=pointer]: Production Plan Fix
-            - link "Shipment Plan Fix":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e112] [cursor=pointer]: Shipment Plan Fix
-            - link "Global PSI":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e113] [cursor=pointer]: Global PSI
-            - link "Global PSI Elec":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e114] [cursor=pointer]: Global PSI Elec
-            - link "Global PSI New":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e115] [cursor=pointer]: Global PSI New
-            - link "Integration PSI":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e116] [cursor=pointer]: Integration PSI
-          - generic [ref=f2e117]:
-            - link [ref=f2e118] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e119]: Waterfall
-            - link "Shipment Plan FG Waterfall":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e122] [cursor=pointer]: Shipment Plan FG Waterfall
-            - link "Production Plan Waterfall":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e123] [cursor=pointer]: Production Plan Waterfall
-            - link "Shipment Plan Semi Waterfall":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e124] [cursor=pointer]: Shipment Plan Semi Waterfall
-          - generic [ref=f2e125]:
-            - link [ref=f2e126] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e127]: OPT Plan
-            - link "Plan Control":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e130] [cursor=pointer]: Plan Control
-            - link "OPT CAPA":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e131] [cursor=pointer]: OPT CAPA
-            - link "Workbench":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e132] [cursor=pointer]: Workbench
-            - link "Constraint Mgmt":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e133] [cursor=pointer]: Constraint Mgmt
-            - link "Plan Group Master":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e134] [cursor=pointer]: Plan Group Master
-            - link "Plan Activity Mgmt":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e135] [cursor=pointer]: Plan Activity Mgmt
-            - link "Plan Group Dashboard":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e136] [cursor=pointer]: Plan Group Dashboard
-            - link "Precede/Safety Stock Day":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e137] [cursor=pointer]: Precede/Safety Stock Day
-            - link "Precede/Safety Stock Qty":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e138] [cursor=pointer]: Precede/Safety Stock Qty
-            - link "Demand Exception":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e139] [cursor=pointer]: Demand Exception
-            - link "Scheduled Receipt Information":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e140] [cursor=pointer]: Scheduled Receipt Information
-            - link "Sales Site Priority":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e141] [cursor=pointer]: Sales Site Priority
-            - link "Constraint Of Shipment Qty":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e142] [cursor=pointer]: Constraint Of Shipment Qty
-            - link "Warehouse Capacity":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e143] [cursor=pointer]: Warehouse Capacity
-          - generic [ref=f2e144]:
-            - link [ref=f2e145] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e146]: SCM Supply
-            - link "Shipment(Allo) Report":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e149] [cursor=pointer]: Shipment(Allo) Report
-            - link "Long-term stock":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e150] [cursor=pointer]: Long-term stock
-            - link "Ending Inventory":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e151] [cursor=pointer]: Ending Inventory
-            - link "Inventory Trend":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e152] [cursor=pointer]: Inventory Trend
-          - generic [ref=f2e153]:
-            - link [ref=f2e154] [cursor=pointer]:
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e155]: Validation
-            - link "Intransit Inventory":
-              - /url: /view/SCP0108
-              - paragraph [ref=f2e158] [cursor=pointer]: Intransit Inventory
-      - main [ref=f2e159]:
-        - generic [ref=f2e161]:
-          - generic [ref=f2e162]:
-            - generic [ref=f2e163]:
-              - button "Home" [ref=f2e164] [cursor=pointer]
-              - button "LOB Report" [ref=f2e166] [cursor=pointer]
-            - generic [ref=f2e171]:
-              - button "Scroll tabs left" [disabled] [ref=f2e172]
-              - button "Scroll tabs right" [disabled] [ref=f2e175]
-              - button "Close others" [ref=f2e178] [cursor=pointer]
-              - button "Close All" [ref=f2e179] [cursor=pointer]
-          - generic [ref=f2e180]:
-            - generic [ref=f2e183]:
-              - generic [ref=f2e185]:
-                - generic [ref=f2e186]:
-                  - img [aria-hidden] [ref=f2e188] [cursor=pointer]
-                  - paragraph [ref=f2e191]: LOB Report
-                - generic [ref=f2e192]:
-                  - generic [ref=f2e193]: Supply
-                  - generic [ref=f2e198]: Supply Master
-                  - generic [ref=f2e203]: LOB Report
-                - generic [ref=f2e205]:
-                  - generic [ref=f2e206]: Search Area
-                  - switch [checked] [ref=f2e209] [cursor=pointer]
-                - button "Full screen" [ref=f2e212] [cursor=pointer]
-              - generic [ref=f2e221]:
-                - generic [ref=f2e222]:
-                  - generic [ref=f2e223]:
-                    - generic [ref=f2e225]:
-                      - generic [ref=f2e226]: Division
-                      - generic [ref=f2e234]:
-                        - combobox [ref=f2e235]: 40 Mobility & IT Battery
-                        - button "Open" [ref=f2e237] [cursor=pointer]
-                        - group [aria-hidden]
-                    - generic [ref=f2e242]:
-                      - generic [ref=f2e243]: Plan Month
-                      - generic [ref=f2e251]:
-                        - combobox [ref=f2e252]: "202610"
-                        - button "Open" [ref=f2e254] [cursor=pointer]
-                        - group [aria-hidden]
-                    - generic [ref=f2e259]:
-                      - generic [ref=f2e260]: Version
-                      - generic [ref=f2e265]:
-                        - generic [ref=f2e270]:
-                          - combobox [ref=f2e271]: "1"
-                          - button "Open" [ref=f2e273] [cursor=pointer]
-                          - group [aria-hidden]
-                        - textbox [ref=f2e280]: RP
-                    - generic [ref=f2e282]:
-                      - generic [ref=f2e283]: Status
-                      - generic [ref=f2e291]:
-                        - combobox [disabled] [ref=f2e292]
-                        - generic [ref=f2e293]:
-                          - button "Open" [disabled]
-                        - group [aria-hidden]
-                    - generic [ref=f2e295]:
-                      - generic [ref=f2e296]: Site
-                      - generic [ref=f2e304] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e305]
-                        - button "Open" [ref=f2e307]
-                        - group [aria-hidden]
-                    - generic [ref=f2e312]:
-                      - generic [ref=f2e313]: Plant
-                      - generic [ref=f2e321] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e322]
-                        - button "Open" [ref=f2e324]
-                        - group [aria-hidden]
-                    - generic [ref=f2e329]:
-                      - generic [ref=f2e330]: Building
-                      - generic [ref=f2e338] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e339]
-                        - button "Open" [ref=f2e341]
-                        - group [aria-hidden]
-                    - generic [ref=f2e346]:
-                      - generic [ref=f2e347]: Line
-                      - generic [ref=f2e355] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e356]
-                        - button "Open" [ref=f2e358]
-                        - group [aria-hidden]
-                  - generic [ref=f2e362]:
-                    - button [active] [ref=f2e363] [cursor=pointer]
-                    - button [ref=f2e368] [cursor=pointer]
-                - generic [ref=f2e373]:
-                  - separator [ref=f2e374]
-                  - generic [ref=f2e376]:
-                    - generic [ref=f2e378]:
-                      - generic [ref=f2e379]: Operation group
-                      - generic [ref=f2e387]:
-                        - combobox [ref=f2e388]: Cell
-                        - button "Open" [ref=f2e390] [cursor=pointer]
-                        - group [aria-hidden]
-                    - generic [ref=f2e395]:
-                      - generic [ref=f2e396]: Operation
-                      - generic [ref=f2e404] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e405]
-                        - button "Open" [ref=f2e407]
-                        - group [aria-hidden]
-                    - generic [ref=f2e412]:
-                      - generic [ref=f2e413]: Line Type
-                      - generic [ref=f2e421] [cursor=pointer]:
-                        - combobox "ALL" [ref=f2e422]
-                        - button "Open" [ref=f2e424]
-                        - group [aria-hidden]
-                    - generic [ref=f2e429]:
-                      - generic [ref=f2e430]: Basic Nickname
-                      - generic [ref=f2e436]:
-                        - textbox [ref=f2e437]
-                        - button [ref=f2e438] [cursor=pointer]
-                    - generic [ref=f2e444]:
-                      - generic [ref=f2e445]: Bottleneck
-                      - generic [ref=f2e453]:
-                        - combobox [ref=f2e454]: ALL
-                        - button "Open" [ref=f2e456] [cursor=pointer]
-                        - group [aria-hidden]
-              - generic [ref=f2e460]:
-                - generic:
-                  - paragraph
-                - generic [ref=f2e461]:
-                  - generic "Column Setting" [ref=f2e462]:
-                    - button "Column Setting" [ref=f2e463] [cursor=pointer]
-                  - generic "Insert Row" [ref=f2e467]:
-                    - button [ref=f2e468] [cursor=pointer]
-                  - generic "Remove" [ref=f2e473]:
-                    - button [ref=f2e474] [cursor=pointer]
-                  - generic "Sort" [ref=f2e481]:
-                    - button [ref=f2e482] [cursor=pointer]
-                  - generic "Filter" [ref=f2e487]:
-                    - button [ref=f2e488] [cursor=pointer]
-                  - generic "Condition" [ref=f2e493]:
-                    - button [ref=f2e494] [cursor=pointer]
-                  - generic "Reset Condition" [ref=f2e504]:
-                    - button [ref=f2e505] [cursor=pointer]
-                  - generic "Excel" [ref=f2e512]:
-                    - button [ref=f2e513] [cursor=pointer]
-              - generic [ref=f2e521]:
-                - grid [ref=f2e522]:
-                  - rowgroup [ref=f2e523]:
-                    - generic:
-                      - row "Div Plant Name Line Name Basic Nickname Operation Name Line Type Operation Plan No":
-                        - columnheader "Div" [ref=f2e524]
-                        - columnheader "Plant Name" [ref=f2e525]
-                        - columnheader "Line Name" [ref=f2e526]
-                        - columnheader "Basic Nickname" [ref=f2e527]
-                        - columnheader "Operation Name" [ref=f2e528]
-                        - columnheader "Line Type" [ref=f2e529]
-                        - columnheader "Operation Plan" [ref=f2e530]
-                        - gridcell "No" [ref=f2e531]
-                      - row "2026 2027":
-                        - columnheader "2026" [ref=f2e532]
-                        - columnheader "2027" [ref=f2e533]
-                      - row "11 12 01 02 03 04 05 06 07 08 09":
-                        - columnheader "11" [ref=f2e534]
-                        - columnheader "12" [ref=f2e535]
-                        - columnheader "01" [ref=f2e536]
-                        - columnheader "02" [ref=f2e537]
-                        - columnheader "03" [ref=f2e538]
-                        - columnheader "04" [ref=f2e539]
-                        - columnheader "05" [ref=f2e540]
-                        - columnheader "06" [ref=f2e541]
-                        - columnheader "07" [ref=f2e542]
-                        - columnheader "08" [ref=f2e543]
-                        - columnheader "09" [ref=f2e544]
-                  - rowgroup [ref=f2e545]:
-                    - row "Focus helper":
-                      - gridcell "Focus helper" [ref=f2e547]
-                  - generic [ref=f2e549]:
-                    - generic:
-                      - row "No"
-                - generic [ref=f2e550]:
-                  - status
-                  - generic [ref=f2e551]: "0"
-            - alert [ref=f2e552]:
-              - generic [ref=f2e553] [cursor=pointer]
-  - link "Wijmo Evaluation Version (5.20252.44)" [ref=f2e556] [cursor=pointer]:
-    - /url: https://developer.mescius.com/licensing/wijmo?utm_source=Wijmo-In-App&utm_medium=Click-to-Site&utm_campaign=Wijmo-User-Analysis
+- generic [ref=f5e2]:
+  - banner [ref=f5e3]:
+    - link "SCM 공급망관리시스템 Supply Chain Management system" [ref=f5e5] [cursor=pointer]:
+      - /url: /view/home
+      - generic [ref=f5e6]: SCM
+      - generic [ref=f5e7]:
+        - generic [ref=f5e8]: 공급망관리시스템
+        - generic [ref=f5e9]: Supply Chain Management system
+    - navigation [ref=f5e10]:
+      - link "Demand" [ref=f5e11] [cursor=pointer]:
+        - /url: /view/home
+      - link "Supply" [ref=f5e12] [cursor=pointer]:
+        - /url: /view/home
+      - link "Shipping" [ref=f5e13] [cursor=pointer]:
+        - /url: /view/home
+      - link "Report" [ref=f5e14] [cursor=pointer]:
+        - /url: /view/home
+      - link "Authority" [ref=f5e15] [cursor=pointer]:
+        - /url: /view/home
+      - link "Admin" [ref=f5e16] [cursor=pointer]:
+        - /url: /view/home
+    - generic [ref=f5e17]:
+      - button "KOR" [ref=f5e19] [cursor=pointer]
+      - button "이 이민용" [ref=f5e23] [cursor=pointer]:
+        - paragraph [ref=f5e28]: 이
+        - generic [ref=f5e29]: 이민용
+  - generic [ref=f5e30]:
+    - button [ref=f5e31] [cursor=pointer]
+    - complementary [ref=f5e37]:
+      - navigation [ref=f5e38]:
+        - paragraph [ref=f5e39]
+    - main [ref=f5e40]:
+      - generic [ref=f5e42]:
+        - generic [ref=f5e43]:
+          - button "Home" [ref=f5e45] [cursor=pointer]
+          - generic [ref=f5e47]:
+            - button "Scroll tabs left" [disabled] [ref=f5e48]
+            - button "Scroll tabs right" [disabled] [ref=f5e51]
+            - button "Close others" [ref=f5e54] [cursor=pointer]
+            - button "Close All" [ref=f5e55] [cursor=pointer]
+        - generic [ref=f5e56]:
+          - generic [ref=f5e60]:
+            - generic [ref=f5e61]:
+              - generic [ref=f5e62]: Hello! 이민용
+              - button "Logout" [ref=f5e63] [cursor=pointer]
+            - generic [ref=f5e64]:
+              - generic [ref=f5e66]:
+                - generic [ref=f5e67]: Favorite Screens
+                - generic [ref=f5e69]:
+                  - generic [ref=f5e70]:
+                    - button "Fcst&Price MGMT Demand > Demand Plan" [ref=f5e71] [cursor=pointer]:
+                      - generic [ref=f5e72]: Fcst&Price MGMT
+                      - generic [ref=f5e73]: Demand > Demand Plan
+                    - button "Fcst MGMT delete" [ref=f5e74] [cursor=pointer]: 🗑️
+                  - generic [ref=f5e75]:
+                    - button "Model Code Master Supply > Supply Master" [ref=f5e76] [cursor=pointer]:
+                      - generic [ref=f5e77]: Model Code Master
+                      - generic [ref=f5e78]: Supply > Supply Master
+                    - button "Model Code Master delete" [ref=f5e79] [cursor=pointer]: 🗑️
+              - generic [ref=f5e80]:
+                - generic [ref=f5e81]:
+                  - generic [ref=f5e82]: Announcements
+                  - paragraph [ref=f5e85]: No announcements.
+                - generic [ref=f5e86]:
+                  - generic [ref=f5e87]: My Authorities
+                  - generic [ref=f5e89]:
+                    - generic [ref=f5e90]: DM Administrator
+                    - generic [ref=f5e93]: DM Planner
+                    - generic [ref=f5e96]: DM Planner (W/S)
+                    - generic [ref=f5e99]: DM Viewer
+                    - generic [ref=f5e102]: Guest
+                    - generic [ref=f5e105]: SCM PI Admin
+                    - generic [ref=f5e108]: SCP Planner
+                    - generic [ref=f5e111]: System Administrator
+                - generic [ref=f5e114]:
+                  - generic [ref=f5e115]: System Administrators
+                  - table [ref=f5e118]:
+                    - rowgroup [ref=f5e119]:
+                      - row [ref=f5e120]:
+                        - columnheader "Module" [ref=f5e121]
+                        - columnheader "Division" [ref=f5e122]
+                        - columnheader "PIC" [ref=f5e123]
+                    - rowgroup [ref=f5e124]:
+                      - row [ref=f5e125]:
+                        - cell "DM" [ref=f5e126]
+                        - cell "40" [ref=f5e127]
+                        - cell "김현기" [ref=f5e128]
+                      - row [ref=f5e129]:
+                        - cell "Logistics" [ref=f5e130]
+                        - cell "Shipping Dept" [ref=f5e131]
+                        - cell "David Choi" [ref=f5e132]
+                      - row [ref=f5e133]:
+                        - cell "SCP" [ref=f5e134]
+                        - cell "40" [ref=f5e135]
+                        - cell "임화영" [ref=f5e136]
+                      - row [ref=f5e137]:
+                        - cell "Reporting" [ref=f5e138]
+                        - cell "BI Team" [ref=f5e139]
+                        - cell "Emily Yoon" [ref=f5e140]
+                      - row [ref=f5e141]:
+                        - cell "SCM Core" [ref=f5e142]
+                        - cell "It Operations" [ref=f5e143]
+                        - cell "Alice Kim" [ref=f5e144]
+                      - row [ref=f5e145]:
+                        - cell "Procurement" [ref=f5e146]
+                        - cell "Purchasing Dept" [ref=f5e147]
+                        - cell "Brian Lee" [ref=f5e148]
+          - alert [ref=f5e149]:
+            - generic [ref=f5e150] [cursor=pointer]
 ```
 
 # Test source
 
 ```ts
-  1   | // 자동 생성 — tools/E2E/gen-e2e.js (2026-11-09) · 원천: Doc/gen/SCP0108/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+  1   | // 자동 생성 — tools/E2E/gen-e2e.js (2026-11-14) · 원천: Doc/gen/SCP0108/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
   2   | import { test, expect } from '../../../tools/E2E/fixtures/test';
   3   | import * as fs from 'node:fs';
   4   | const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0108.plan.json', 'utf8'));
@@ -469,13 +279,13 @@ Received: false
   28  |       const AL = loadLabelAliases(MENU); const cands = [...new Set([...cands0, ...cands0.map((l: string) => aliasFor(l, AL)?.tobe_label || '').filter(Boolean)])];
   29  |       const hit = await nscm.fieldExistsAny(cands);
   30  |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);
-> 31  |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();
-      |                                                                                                              ^ Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]
+  31  |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();
   32  |     }
   33  |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });
   34  |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
   35  |     const gridCount = await nscm.grids().count();
-  36  |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+> 36  |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+      |                                                                  ^ Error: 그리드 ≥1 (메인시트 3)
   37  |     // Division 선택(있으면) 후 조회
   38  |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
   39  |     const calls = await nscm.search();

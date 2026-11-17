@@ -1,0 +1,26 @@
+{
+ "id": "SCP0037",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [],
+ "skipped": [
+  {
+   "param": "item_id",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "scm_site_id",
+   "asis": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "scm_valid_yn",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  }
+ ]
+}

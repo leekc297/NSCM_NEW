@@ -330,10 +330,10 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
               표준 SRCH-06)하되, AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0017.cs L1302)이므로
               placeholder='' 로 미선택을 공백 표시한다(자매 SCP0018 과 동일 패턴 — 다중선택 기본 'ALL' 표시 억제).
               미선택 조회는 필수값 게이트(versionNos.length===0)로 차단되므로 공백 초기값과 양립한다. */}
-          {/* 라벨 'Ver.' 는 하드코딩(사용자 지시 2026-11-02, SCP0016 패턴 일치) — DB/번들 미등록 약어, KO/EN/CN 동일 표기라 i18n 불요. */}
+          {/* 라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체. */}
           {/* sortByLabel=false — WaterfallVer2_SCP 가 ORDER BY PLAN_START_YYYYMMDD DESC(최신 먼저, ora.py 실측
               2026-11-04)로 내려주므로 label 오름차순(최신 맨 아래)으로 덮지 않고 서버 순서를 보존한다. */}
-          {multi('Ver.', sc.versionNos, versionOptions, setVersions, undefined, true, true, '', false)}
+          {multi(t('LBL01275', '_Ver.'), sc.versionNos, versionOptions, setVersions, undefined, true, true, '', false)}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}

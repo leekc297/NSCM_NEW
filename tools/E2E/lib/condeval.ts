@@ -6,7 +6,7 @@ import * as path from 'node:path';
 //   규칙 목록은 AS-IS 원문 순서대로 적용한 마지막 상태가 정답(기본 = 편집 가능). 한 규칙이라도 RAW 를 평가해야 결론이 갈리면 '평가 불가'.
 //   화면 리터럴 없음 — GROUP 은 계정 속성(plan.json accounts: admin·groups·tobeGroups), DIV 는 조회 요청의 divisionId, COL 은 그 행의 dataItem.
 export type Rule = { g: string; lock: 'Y' | 'N'; ref: string };
-export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string };
+export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string; /** 2026-11-12 T264: 이 계정이 이 화면의 편집 권한자인가(모르면 생략 → AUTH 는 평가 불가) */ auth?: boolean; /** 지금 재는 그리드의 시트 이름(모르면 생략 → SHEET 는 평가 불가) */ sheet?: string };
 export type EvalResult = { editable: boolean; by: string } | { error: string };
 
 const nrm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -24,6 +24,11 @@ function evalAtom(a: string, ctx: CondCtx): boolean {
   if (a === 'TRUE') return true;
   if (a === 'FALSE') return false;
   if (/^RAW\(/.test(a)) throw new Unknown(a);
+  // 2026-11-12 T264: AUTH = AS-IS 편집 권한 플래그(bEdit_Auth) — 문맥에 권한 여부가 있을 때만 평가
+  if (a === 'AUTH') { if (ctx.auth === undefined) throw new Unknown('AUTH(계정 편집 권한 문맥 없음)'); return ctx.auth; }
+  // SHEET=="이름" = AS-IS 다중 시트 컨트롤의 활성 시트 조건 — 지금 재는 시트를 알 때만 평가(공백·기호 무시 비교)
+  const msh = /^SHEET\s*(==|!=)\s*"([^"]*)"$/.exec(a);
+  if (msh) { if (ctx.sheet === undefined || ctx.sheet === '') throw new Unknown(`SHEET(${msh[2]}) — 재는 시트 문맥 없음`); const same = nrm(ctx.sheet) === nrm(msh[2]); return msh[1] === '==' ? same : !same; }
   // SELF~"regex" — 지금 평가 중인 동적 binding(ctx.self) 이 정규식에 맞는가(AS-IS GetColumnTag(iCol).IndexOf("M_")==0 · 2026-10-31)
   const ms = /^SELF~"([^"]+)"$/.exec(a);
   if (ms) { try { return new RegExp(ms[1]).test(ctx.self || ''); } catch { throw new Unknown(a); } }
@@ -85,7 +90,24 @@ function split(s: string, op: string): string[] {
 }
 
 /** 규칙 목록 → 그 행·계정·Division 에서의 편집 가능 여부. 결론에 영향을 주는 규칙의 RAW 는 error */
+/** 2026-11-13 T301(CR-102): 그룹이 둘 이상인 계정은 그룹 하나씩 평가해 합집합(어느 그룹에서라도 편집 가능이면 편집 가능) */
 export function evalRules(rules: Rule[], ctx: CondCtx, defaultEditable = true): EvalResult {
+  const gs = [...new Set((ctx.group || []).filter(Boolean))];
+  const variants: { group: string[]; admin: boolean }[] = gs.map(g => ({ group: [g], admin: nrm(g) === 'admin' }));
+  if (ctx.admin && !variants.some(v => v.admin)) variants.push({ group: ['ADMIN'], admin: true });
+  if (variants.length < 2) return evalRulesOne(rules, ctx, defaultEditable);
+  let firstLock: EvalResult | null = null; let firstErr: EvalResult | null = null;
+  for (const v of variants) {
+    const r = evalRulesOne(rules, { ...ctx, group: v.group, admin: v.admin }, defaultEditable);
+    if ('error' in r) { firstErr = firstErr || r; continue; }
+    if (r.editable) return { editable: true, by: `${r.by} [그룹 ${v.group[0]} 기준, 보유 그룹 합집합 CR-102]` };
+    firstLock = firstLock || r;
+  }
+  if (firstErr) return firstErr;
+  return firstLock as EvalResult;
+}
+
+function evalRulesOne(rules: Rule[], ctx: CondCtx, defaultEditable = true): EvalResult {
   let editable = defaultEditable; let by = defaultEditable ? '기본(편집 모드 전체 해제)' : '기본(잠금)';
   for (const r of rules) {
     let hit: boolean;

@@ -18,3 +18,18 @@
   gap: 4px;
   align-items: center;
 }
+
+// 40 전용 조회조건 체크박스 두 개(End Customer(Report) Null · Project Null) 묶음.
+//   라벨이 길어 줄바꿈되면 서로 겹치므로 한 줄로 고정하고, 칸이 좁으면 둘째 체크박스가 아랫줄로 내려간다.
+.nullFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  align-items: center;
+  padding-left: 16px;
+  white-space: nowrap;
+
+  > div {
+    flex-shrink: 0;
+  }
+}

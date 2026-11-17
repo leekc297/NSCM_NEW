@@ -1,7 +1,7 @@
 {
  "id": "SCP0028",
  "asis": "SCP0028",
- "at": "2026-11-05 13:13:07",
+ "at": "2026-11-14 05:03:50",
  "has_asis": true,
  "tobe_cols": 15,
  "buttons": [
@@ -34,11 +34,11 @@
   "p_delete": {
    "rows": 0,
    "why_not": [
-    "AS-IS 삭제가 신규 행만(DeleteButton 223 guard == StringI) → 기존 행 D 저장 대상 아님"
+    "AS-IS 삭제가 신규 행만(DeleteButton:223 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
    ]
   },
   "p_combo": {
-   "rows": 8,
+   "rows": 12,
    "why_not": []
   },
   "p_decimal": {
@@ -129,8 +129,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 16,
-   "used": 14
+   "rows": 20,
+   "used": 18
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -141,7 +141,7 @@
    "used": 0
   }
  },
- "rows": 16,
- "rows_used": 14,
+ "rows": 20,
+ "rows_used": 18,
  "dup_of_hand": 2
 }

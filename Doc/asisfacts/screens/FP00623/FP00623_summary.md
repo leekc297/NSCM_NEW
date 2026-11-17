@@ -161,16 +161,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.btnClose | Click | btnClose_Click | InitializeComponent:137 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:192 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:193 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:122 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:124 |
-| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:125 |
-| this.spdMain | EnabledChanged | spdMain_EnabledChanged | InitializeComponent:126 |
-| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:127 |
-| this | Load | Form_Load | .ctor:109 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:122 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
 | this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:124 |
@@ -223,29 +213,39 @@
 | this.btn_category | Click | btnCatagory_Click | InitializeComponent:2498 |
 | this.btn_column | Click | btnSimulColumn_Click | InitializeComponent:2536 |
 | this | Load | Form_Load | .ctor:121 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:137 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:192 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:193 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:122 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:124 |
+| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:125 |
+| this.spdMain | EnabledChanged | spdMain_EnabledChanged | InitializeComponent:126 |
+| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:127 |
+| this | Load | Form_Load | .ctor:109 |
 
 ## 6. 컨트롤 (184개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 56 | layoutControlItem2, layoutControlItem1, layoutControlItem2, layoutControlItem4, layoutControlItem5, layoutControlItem10, layoutControlItem16, layoutControlItem18, layoutControlItem22, layoutControlItem23, layoutControlItem24, layoutControlItem25, layoutControlItem26, layoutControlItem27, layoutControlItem28 … |
+| LayoutControlItem | 56 | layoutControlItem1, layoutControlItem2, layoutControlItem4, layoutControlItem5, layoutControlItem10, layoutControlItem16, layoutControlItem18, layoutControlItem22, layoutControlItem23, layoutControlItem24, layoutControlItem25, layoutControlItem26, layoutControlItem27, layoutControlItem28, layoutControlItem31 … |
 | UsrCheckedList2 | 16 | mcbo_line, mcbo_division, mcbo_prodtype, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_planner, mcbo_site, usrCheckedList21, usrCheckedList22, usrCheckedList23, usrCheckedList24, usrCheckedList25, usrCheckedList26, usrCheckedList27 … |
-| UsrButton | 15 | btnClose, usrButton1, usrButton2, btnSql, btnToggleSave, usrButton1, btnExcelImport, usrButton2, btnPlanInfo, btn_bucket, btn_category, btn_column, usrButton3, usrButton4, usrButton5 |
-| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl3, usrLayoutControl4 |
-| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup4, layoutControlGroup2, layoutControlGroup5 |
-| EmptySpaceItem | 10 | emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem7, emptySpaceItem8, emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem6, emptySpaceItem9 |
+| UsrButton | 15 | usrButton1, usrButton2, btnSql, btnToggleSave, usrButton1, btnExcelImport, usrButton2, btnPlanInfo, btn_bucket, btn_category, btn_column, usrButton3, usrButton4, usrButton5, btnClose |
+| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl3, usrLayoutControl4, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup4, layoutControlGroup2, layoutControlGroup5, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
+| EmptySpaceItem | 10 | emptySpaceItem1, emptySpaceItem7, emptySpaceItem8, emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem6, emptySpaceItem9, emptySpaceItem1, emptySpaceItem1 |
 | UsrTextBox | 10 | edtModelNickName, edtNickName, edtItem, edtTopItemId, edt_pjtGroup, usrTextBox1, usrTextBox2, usrTextBox5, usrTextBox6, usrTextBox7 |
 | UsrCombo | 9 | cboUnit, cboUomType, cboPancakeType, cboCellType, cboPlanId, cbo_plan_group, cbo_fpplanid, usrCombo1, usrCombo2 |
 | CheckBox | 7 | chk_total, chk_inv, chk_shipment, chk_coater_yield, chk_shipment_in, chk_coater, chk_assy |
-| FpSpread | 6 | spdMain, spdMain, spdMain, spdMain, spdEdit, spdInfo |
-| SheetView | 6 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1 |
+| FpSpread | 6 | spdMain, spdMain, spdEdit, spdInfo, spdMain, spdMain |
+| SheetView | 6 | spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
 | UsrCheckBox | 6 | chkTotal, chk_release, chk_Info, usrCheckBox1, usrCheckBox2, usrCheckBox3 |
 | Panel | 5 | panel1, panel2, panel3, panel4, panel1 |
 | UsrConditionPanel | 4 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| ImageList | 2 | imageList1, imageList1 |
 | Label | 2 | label1, label1 |
 | UsrPopupTextBox | 2 | usrPopupTextBox1, usrPopupTextBox2 |
 | UsrDateRangePicker2 | 2 | dCalendar_planrange, usrDateRangePicker22 |
 | UsrLabel | 2 | txtPlanId, usrLabel2 |
+| ImageList | 2 | imageList1, imageList1 |
 | UsrDatePicker2 | 1 | drpPlanDate |
 | SplitContainer | 1 | splitter |
 | TextBox | 1 | tbLog |
@@ -287,7 +287,7 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: intransit, InvDetail, Amend, PlanInfoPopup
+- 코드에서 생성하는 시트: InvDetail, Amend, PlanInfoPopup, intransit
 - 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:167, SetSheetHeaderColumn_FP@InitSpread:614, SetSheetHeaderColumn_FP@DrawHeader_Simul:2378, SetSheetHeaderColumn_FP@InitSpread:166
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 

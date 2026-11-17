@@ -1,0 +1,56 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "shtMainDataModel_Changed",
+   "expect": "MSG00177",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3578 CELL_PER_CAR % CELL_PER_MODULE > 0",
+   "steps": [
+    {
+     "sheet": null,
+     "row": null,
+     "col": null,
+     "before": null,
+     "after": null,
+     "locked": null,
+     "entered": null,
+     "how": null,
+     "error": "InvalidOperationException: column not found: CELL_PER_MODULE",
+     "edit_error": null,
+     "set": {
+      "cell": "CELL_PER_MODULE",
+      "value": "3"
+     }
+    },
+    {
+     "sheet": null,
+     "row": null,
+     "col": null,
+     "before": null,
+     "after": null,
+     "locked": null,
+     "entered": null,
+     "how": null,
+     "error": "InvalidOperationException: column not found: CELL_PER_CAR",
+     "edit_error": null,
+     "set": {
+      "cell": "CELL_PER_CAR",
+      "value": "10"
+     }
+    }
+   ],
+   "dialogs": [],
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": false
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:31:24",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true
+}

@@ -1,0 +1,54 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdExcept",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 0개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0020-Sa5b51e"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 0개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0020-Sb39c49"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdMain",
+   "why": "조회 결과 행이 없어 붙여넣을 셀이 없음",
+   "scenarios": [
+    "SCP0020-Sf803b8",
+    "SCP0020-S39f2a8"
+   ]
+  }
+ ],
+ "at": "2026-11-14 11:05:42",
+ "edit_mode": true
+}

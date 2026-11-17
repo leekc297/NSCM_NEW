@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import type { ComboParam, ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
-import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useSessionStore, useTabid } from '@shared/stores';
 
 import {
   COMBO,
@@ -79,9 +80,11 @@ export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange }: Props)
   // AS-IS DateUtil.GetDayRange(division,"DAILY") 재현 — 조회기간 기본값은 서버 SP(dayRange)가 산정한다
   //   (SCP0096.cs:837 → DateUtil.cs:156 → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD). 클라 계산 아님.
   //   필터는 divisionId 가 바뀔 때만 새 참조가 되도록 useMemo 로 고정한다(useTabProcQuery 참조고정 규약).
+  //   timeZone 은 사용자 등록 timezone(session.tmzCd) — SP 가 FN_MULTY_TIME 으로 사용자 기준 '오늘'을 잡는다.
+  const tmzCd = sessionTimeZone(useSessionStore(state => state.session));
   const periodFilter = useMemo(
-    () => ({ divisionId: searchParams.divisionId, ...DAY_RANGE_PARAMS }),
-    [searchParams.divisionId]
+    () => ({ divisionId: searchParams.divisionId, ...DAY_RANGE_PARAMS, timeZone: tmzCd }),
+    [searchParams.divisionId, tmzCd]
   );
   const { data: periodData } = useTabProcQuery<MENU_ID, SHEETS.PERIOD>({
     menuId: MENU_ID,

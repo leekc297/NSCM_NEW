@@ -1,0 +1,480 @@
+{
+ "id": "SCP0130",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 0.067s, UI : 0.003s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Virtual BOM",
+     "rows": 0,
+     "cols": 15,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Group*"
+       ],
+       "label": "Plan Group*",
+       "tag": "OPMZ_PLAN_GR_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_PLAN_GR_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant Site*"
+       ],
+       "label": "Plant Site*",
+       "tag": "PLANT_SITE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PLANT_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Parent Item*"
+       ],
+       "label": "Parent Item*",
+       "tag": "ITEM_ID",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Child Item*"
+       ],
+       "label": "Child Item*",
+       "tag": "ITEM_ID_CHILD",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID_CHILD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Consume Qty*"
+       ],
+       "label": "Consume Qty*",
+       "tag": "TO_EXPC_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_EXPC_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Valid To*"
+       ],
+       "label": "Valid To*",
+       "tag": "TO_YYYYMMDD",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TO_YYYYMMDD",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "VALUE_DESCRIPTION",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "VALUE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Valid"
+       ],
+       "label": "Valid",
+       "tag": "VALID_YN",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "VALID_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Create By"
+       ],
+       "label": "Create By",
+       "tag": "CREATED_BY",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CREATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "CREATION_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CREATION_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Last Update By"
+       ],
+       "label": "Last Update By",
+       "tag": "LAST_UPDATED_BY",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "LAST_UPDATE_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATE_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "PRE_KEY_VALUES"
+       ],
+       "label": "PRE_KEY_VALUES",
+       "tag": "PRE_KEY_VALUES",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_KEY_VALUES",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "Scheduled Reciept Information",
+     "rows": 0,
+     "cols": 14,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Group*"
+       ],
+       "label": "Plan Group*",
+       "tag": "OPMZ_PLAN_GR_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "OPMZ_PLAN_GR_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant Site*"
+       ],
+       "label": "Plant Site*",
+       "tag": "PLANT_SITE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLANT_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Item*"
+       ],
+       "label": "Item*",
+       "tag": "ITEM_ID_CHILD",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID_CHILD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Arrival Date*"
+       ],
+       "label": "Arrival Date*",
+       "tag": "TO_YYYYMMDD",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "TO_YYYYMMDD",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Qty*"
+       ],
+       "label": "Qty*",
+       "tag": "TO_EXPC_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TO_EXPC_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "VALUE_DESCRIPTION",
+       "width": "300",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "VALUE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Valid"
+       ],
+       "label": "Valid",
+       "tag": "VALID_YN",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VALID_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Create By"
+       ],
+       "label": "Create By",
+       "tag": "CREATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CREATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "CREATION_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CREATION_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Last Update By"
+       ],
+       "label": "Last Update By",
+       "tag": "LAST_UPDATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "LAST_UPDATE_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATE_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "PRE_KEY_VALUES"
+       ],
+       "label": "PRE_KEY_VALUES",
+       "tag": "PRE_KEY_VALUES",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PRE_KEY_VALUES",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

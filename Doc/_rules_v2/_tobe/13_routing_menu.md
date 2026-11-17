@@ -35,8 +35,10 @@ MNU_URL = '/sales-future-price'   -- ❌ leading slash
 
 ### §1.2 FE route-paths.ts 매핑 의무
 
+> (2026-11-13 정정: 이 절의 화면별 `ROUTE_PATHS` 키 등록은 현행 구조에서 쓰지 않는다. 현재 `nscm-fe/packages/foundation/src/constants/route-paths.ts` 는 `ROUTE_PATHS = { HOME: 'home' }` 뿐이고("화면별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH"), 화면 연결은 `apps/web/src/mdi/viewRegistry.tsx` 가 `features/*/src/pages/*/index.ts` 를 자동 수집 + DB `SCM_ADM_MNU_M.ROUTE_PATH`(`<도메인>/<페이지폴더>`) 로 한다. 아래 의미명 키(`CUSTOMER_FORECAST_MASTER`)와 §1.5 의 `ROUTE_PATHS.{MNU_ID}` 키는 둘 다 현재 파일에 없다. `apps/web/src/app/router/` 폴더도 없다.)
+
 ```typescript
-// nscm-fe/apps/web/src/app/router/route-paths.ts
+// nscm-fe/apps/web/src/app/router/route-paths.ts   ← (11-13 정정) 없는 경로 · 현행 파일 = packages/foundation/src/constants/route-paths.ts (HOME 만)
 export const ROUTE_PATHS = {
   // ...
   CUSTOMER_FORECAST_MASTER: 'customer-forecast-master',   // ← MNU_URL 과 정확 일치
@@ -51,8 +53,10 @@ export const ROUTE_PATHS = {
 
 ### §1.3 React Router 등록
 
+> (2026-11-13 정정: `AppRouter.tsx` · `apps/web/src/app/router/` 는 저장소에 없다. 현행 `nscm-fe/apps/web/src/core/Router.tsx` 는 feature import 없이 앱 셸(MainLayout)만 매칭하고, 화면 컴포넌트 연결은 `apps/web/src/mdi/viewRegistry.tsx`(자동 수집 + DB `ROUTE_PATH`)가 맡는다 — 화면별 route 등록 코드는 쓰지 않는다. `@master/pages/...` 별칭도 풀리지 않는다(`@master/*` → `features/master/src/pages/*/index.ts`).)
+
 ```typescript
-// nscm-fe/apps/web/src/app/router/AppRouter.tsx (또는 동등)
+// nscm-fe/apps/web/src/app/router/AppRouter.tsx (또는 동등)   ← (11-13 정정) 없는 파일 — 위 단서 참조
 import { CustomerForecastMaster } from '@master/pages/customer-forecast-master';
 
 const routes = [
@@ -65,8 +69,10 @@ const routes = [
 
 ### §1.4 MDI Tab 통합 (룰 15 cross-ref)
 
+> (2026-11-13 정정: `LazyLoader` 는 `@shared/components` 에 없다 — 실제 위치 `nscm-fe/apps/web/src/core/LazyLoader.tsx`. `import('@master/pages/customer-forecast-master')` 별칭도 풀리지 않는다(올바른 별칭 = `@master/customer-forecast-master`). 현행 MDI 는 `apps/web/src/mdi/viewRegistry.tsx` 가 페이지를 lazy 로 자동 수집하므로 화면별 등록 코드는 쓰지 않는다. '룰 15' = `Doc/_dev_rules/_archive/15_ROUTING_MDI.md` 로 이동됨.)
+
 ```typescript
-import { LazyLoader } from '@shared/components';
+import { LazyLoader } from '@shared/components';   // ← (11-13 정정) 없는 export — 위 단서 참조
 
 // MDI 탭 정의
 {
@@ -89,6 +95,8 @@ navigate(tabs[activeIndex].mnuUrl, ...)                     // 그 경로로 이
 → 이동 경로 = **조상 MNU_URL 들의 join**. 따라서 **leaf `MNU_URL` 값 === `ROUTE_PATHS.{MNU_ID}` 값** 이어야 라우트 매칭. 불일치 = **Page Not Found**.
 
 **신규 화면 등록 시 아래 3곳을 반드시 동일 slug 로 원자 변경** (하나라도 빠지면 Page Not Found):
+
+> (2026-11-13 정정: 아래 표 1·2번(`route-paths.ts` 에 `ROUTE_PATHS.{MNU_ID}` 추가 · `Router.tsx` 에 LazyLoader nested route 추가)은 현행 코드 구조로 대체됐다. 현재 신규 화면 등록 = **페이지 폴더(`features/<도메인>/src/pages/<페이지폴더>/index.ts`) 추가 + DB `SCM_ADM_MNU_M.ROUTE_PATH`(`<도메인>/<페이지폴더>`) 등록** 이며 프론트 라우트 코드 수정은 없다 — `apps/web/src/mdi/viewRegistry.tsx` 머리 주석 · `packages/foundation/src/constants/route-paths.ts:4-10`(HOME 만) · `apps/web/src/core/Router.tsx`(feature import 없음). 3번(DB `MNU_URL`)은 viewRegistry 의 폴백 경로로 남아 있다.)
 
 | # | 파일/대상 | 내용 | 예 (DMF0048) |
 |---|---|---|---|
@@ -175,6 +183,7 @@ SHEETS.MAIN = 'futurePrice'   ❌
 **증상**: 화면 진입 시 `ORA-01403` at `PKG_NSCM_UI_COMM:17` (retrieveBtnInfoList) — SHT_NM 불일치로 메뉴 조회 실패.
 
 **의무**: 단일 sheet 는 항상 `'main'`. 다중 sheet 만 의미 이름 (DMF0008 `summary` / `repair` / `sspm`).
+(2026-11-13 정정: '단일 sheet 는 항상 main' 은 현행 코드·룰 05 와 다르다 — 룰 05 §1.3 은 단일 sheet 에 `'main'`(권장) 또는 의미 있는 camelCase 를 허용하고, reference 화면 DMF0006 은 `SHEETS.CUSTOMER_MODEL_MAPPING = 'customerModelMapping'`(customer-model-mapping.constants.ts:6-8), DMF0007 은 `'customerFcst'` 를 쓴다(본 문서 §8 #3 표준 목록에도 포함). 지켜야 하는 것은 DB `SHT_NM` ↔ FE `SHEETS` 값의 정확 일치다.)
 
 ---
 
@@ -194,8 +203,10 @@ SELECT MNU_URL FROM SCM_ADM_MNU_M WHERE MNU_ID = 'DMF0099';
 -- 결과: 'new-screen'
 
 # FE
-grep -n "ROUTE_PATHS.\|new-screen" nscm-fe/apps/web/src/app/router/route-paths.ts
-# 결과: ROUTE_PATHS.NEW_SCREEN = 'new-screen'  ← 일치 확인
+# (2026-11-13 정정: nscm-fe/apps/web/src/app/router/route-paths.ts 는 없는 경로이고 화면별 ROUTE_PATHS 키도 없음
+#  → 현행 확인 = 페이지 폴더 존재 + DB ROUTE_PATH('<도메인>/<페이지폴더>') — apps/web/src/mdi/viewRegistry.tsx)
+ls nscm-fe/features/*/src/pages/new-screen/index.ts
+# 결과: 페이지 폴더가 있고 SCM_ADM_MNU_M.ROUTE_PATH = '<도메인>/new-screen' (또는 MNU_URL 마지막 세그먼트 = 폴더명)  ← 일치 확인
 ```
 
 → 불일치 시 fix.
@@ -225,8 +236,9 @@ grep "SHEETS\." features/master/src/pages/new-screen/new-screen.constants.ts
 ### §4.5 Step 2 — FE 라우터 등록 정합
 
 ```bash
-grep -n "new-screen\|NewScreen" nscm-fe/apps/web/src/app/router/
-# AppRouter 또는 동등 안에 등록되어 있는지 확인
+# (2026-11-13 정정: nscm-fe/apps/web/src/app/router/ · AppRouter 는 없음 → 현행은 viewRegistry 자동 수집이라 라우터 등록 코드가 없다.
+#  페이지 index.ts 가 화면 컴포넌트를 export 하는지 확인한다)
+grep -n "export" nscm-fe/features/*/src/pages/new-screen/index.ts
 ```
 
 ### §4.6 Step 3 — 메뉴 권한 확인 (`SCM_ADM_USER_GR_MNU_MPG_M`)
@@ -270,7 +282,7 @@ SELECT COUNT(*) FROM SCM_ADM_API_M WHERE MNU_ID = 'DMF0099';
 ### §4.10 Step 7 — i18n 누락
 
 ```bash
-grep "MSG00099\|LBL00501" nscm-fe/apps/web/public/locales/ko/translation.json
+grep "MSG00099\|LBL00501" nscm-fe/public/locales/KO.json   # 2026-11-13 정정: apps/web/public/locales/ko/translation.json 은 없는 경로 → 실제 nscm-fe/public/locales/{KO,EN,CN}.json
 # 등록 안 되면 텍스트 = key 자체 표시 (사용성 ↓)
 ```
 
@@ -285,6 +297,8 @@ grep "MSG00099\|LBL00501" nscm-fe/apps/web/public/locales/ko/translation.json
 2. FE `ROUTE_PATHS.NEW_SCREEN = 'new-screen'` 추가
 3. AppRouter 안에 `path: ROUTE_PATHS.NEW_SCREEN, element: <NewScreen />` 등록
 
+(2026-11-13 정정: 2·3 은 현행 구조에서 하지 않는다 — `ROUTE_PATHS` 는 `{ HOME }` 뿐이고 AppRouter 는 없다. 현행 = 페이지 폴더 `features/<도메인>/src/pages/new-screen/index.ts` 추가 + DB `SCM_ADM_MNU_M.ROUTE_PATH = '<도메인>/new-screen'` 등록(§1.5 단서))
+
 ### §5.2 자동 검증
 
 ```bash
@@ -292,7 +306,8 @@ grep "MSG00099\|LBL00501" nscm-fe/apps/web/public/locales/ko/translation.json
 DB_URLS=$(sqlplus -s ... "SELECT MNU_URL FROM SCM_ADM_MNU_M WHERE MNU_URL IS NOT NULL")
 
 # FE 의 ROUTE_PATHS 값 추출
-FE_URLS=$(grep -oE "'\w+(-\w+)*'" nscm-fe/apps/web/src/app/router/route-paths.ts)
+# (2026-11-13 정정: app/router/route-paths.ts 는 없는 경로 · 화면별 ROUTE_PATHS 값도 없음 → FE 쪽 목록 = 페이지 폴더명)
+FE_URLS=$(ls -d nscm-fe/features/*/src/pages/*/ | xargs -n1 basename)
 
 # 차이 비교
 diff <(echo "$DB_URLS" | sort) <(echo "$FE_URLS" | sort)
@@ -355,7 +370,7 @@ SHT_NM = 'futurePrice'   ❌ (단일 sheet)
 SHT_NM = 'salesSite'     ❌
 ```
 
-**의무**: 단일 sheet = `'main'`. 다중 sheet = 의미명 (`summary` / `customer` 등).
+**의무**: 단일 sheet = `'main'`. 다중 sheet = 의미명 (`summary` / `customer` 등). (11-13 정정: 단일 sheet 도 의미 camelCase 허용 — §3.2 단서 · 룰 05 §1.3. `'salesSite'` 는 실제 시트명으로 사용 중(erp-edi-master.constants.ts:15))
 
 ### §7.4 FE slug 와 MNU_URL 불일치
 
@@ -389,7 +404,7 @@ sqlplus -s ... "SELECT MNU_ID, SHT_NM FROM SCM_ADM_MNU_M_SHEET WHERE SHT_NM NOT 
 # (위 §5.2 의 diff 명령)
 
 # 5. AppRouter 등록 확인
-grep -c "NewScreen" nscm-fe/apps/web/src/app/router/AppRouter.tsx   # ≥ 1
+grep -c "NewScreen" nscm-fe/features/*/src/pages/new-screen/index.ts   # ≥ 1   (2026-11-13 정정: app/router/AppRouter.tsx 는 없는 파일 → 페이지 index.ts export 확인 — viewRegistry 자동 수집 대상)
 
 # 6. ⭐ MNU_DESC NULL 검출 (2026-06-09 SYS0015 사고) — 메뉴 트리 sidebar 표시 의무
 sqlplus -s ... "SELECT COUNT(*) FROM SCM_ADM_MNU_M WHERE MNU_DESC IS NULL AND USE_YN='Y'"   # = 0
@@ -413,7 +428,7 @@ sqlplus -s ... "SELECT COUNT(*) FROM SCM_ADM_MNU_M WHERE MNU_DESC IS NULL AND US
 INSERT INTO SCM_ADM_MNU_M
   (MNU_ID, UPPR_MNU_ID, MNU_URL, MNU_MSG_ID, MNU_DESC, MNU_TP_CD, UNIT_TP_CD, MNU_LV_NO, USE_YN, SORT_ORD, ...)
 VALUES ('SYS0015', 'Admin_Menu', 'program', 'MNU_SYS0015',
-        'Program' /* ⭐ 의무 */, 'SCREEN', '-', 3, 'Y', 150, ...);
+        'Program' /* ⭐ 의무 */, 'SCREEN', '-', 3, 'Y', 150, ...);   -- (2026-11-14 정정: UNIT_TP_CD '-' 는 기존 admin 메뉴 값(81행). 컬럼 기본값은 '/' 라 신규 등록은 '/'. 사내 DB 실측 2026-11-13 21:51)
 ```
 
 ```sql
@@ -453,10 +468,10 @@ SELECT MNU_ID, MNU_DESC FROM SCM_ADM_MNU_M WHERE MNU_ID IN ('SYS0001','SYS0010',
 
 | 위치 | 용도 |
 |---|---|
-| `nscm-fe/apps/web/src/app/router/route-paths.ts` | FE ROUTE_PATHS 정의 |
-| `nscm-fe/apps/web/src/app/router/AppRouter.tsx` (또는 동등) | React Router 등록 |
+| `nscm-fe/packages/foundation/src/constants/route-paths.ts` (2026-11-13 정정: `apps/web/src/app/router/route-paths.ts` 는 없는 경로) | FE ROUTE_PATHS 정의 (현재 `HOME` 만) |
+| `nscm-fe/apps/web/src/core/Router.tsx` + `nscm-fe/apps/web/src/mdi/viewRegistry.tsx` (11-13 정정: `app/router/AppRouter.tsx` 는 없는 파일) | 앱 셸 라우트 / 화면 자동 수집·DB ROUTE_PATH 해석 |
 | `SCM_ADM_MNU_M` (DB) | MNU_URL / UPPR_MNU_ID 등록 |
-| `Doc/_dev_rules/15_ROUTING_MDI.md` (기존 룰 v1) | 상세 라우팅 정책 (Phase 4 에서 유지 결정 검토) |
+| `Doc/_dev_rules/_archive/15_ROUTING_MDI.md` (기존 룰 v1 · 2026-11-13 정정: `Doc/_dev_rules/15_ROUTING_MDI.md` → `_archive/` 로 이동됨) | 상세 라우팅 정책 (Phase 4 에서 유지 결정 검토) |
 
 ---
 

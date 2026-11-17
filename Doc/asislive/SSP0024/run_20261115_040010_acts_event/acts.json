@@ -1,0 +1,133 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 '1' · 활성 셀 첫 행 MATERIAL_ID · KeyPressEventArgs(char 49)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-Sa1b9c7"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 'a' · 활성 셀 첫 행 MATERIAL_ID · KeyPressEventArgs(char 97)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-Sa1b9c7"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 DIVISION_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 1, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-Sc5a661",
+    "SSP0024-S7b63e1",
+    "SSP0024-Se8fd94",
+    "SSP0024-Sdace47",
+    "SSP0024-S66bbcc"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 PLANT_SITE_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 3, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-Sc5a661",
+    "SSP0024-S7b63e1",
+    "SSP0024-Se8fd94",
+    "SSP0024-Sdace47",
+    "SSP0024-S66bbcc"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 PLANT_SITE_CODE 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 2, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-Sc5a661",
+    "SSP0024-S7b63e1",
+    "SSP0024-Se8fd94",
+    "SSP0024-Sdace47",
+    "SSP0024-S66bbcc"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "ClipboardPasted 처리기 직접 호출 · 범위 첫 행 MATERIAL_ID 1칸(값은 조회된 값 그대로) · ClipboardPastedEventArgs(sheetView=FarPoint.Win.Spread.SheetView,pasteOption=All,cellRange=CellRange: 0, 4, 1, 1,dataObject=null)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0024-S803ec4",
+    "SSP0024-Sc5a661",
+    "SSP0024-S7b63e1",
+    "SSP0024-Se8fd94",
+    "SSP0024-Sdace47",
+    "SSP0024-S66bbcc"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 03:58:39",
+ "edit_mode": true
+}

@@ -1,0 +1,111 @@
+[
+ {
+  "screen": "SSP0003",
+  "call": 0,
+  "cls": "UserInfoPopup",
+  "trig": "BTN:btnRequestUser",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS BtnRequestUser_Click 팝업(UserInfoPopup) 열림",
+  "actual": "BTN: 버튼 [Request User/RequestUser] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, Shipment Change Request Confirm, Close others, Close All, Search(F5), Approval, Reject, Self Reject, Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10)]",
+  "basis": "SSP0003_ShipmentChangeRequestConfirm.cs:1933",
+  "at": "2026-11-14T10:55:16.460Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0003",
+  "call": 1,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:btnItemId",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS btnItemId_Click 팝업(SCM0002_ItembyDivisionPopup) 열림",
+  "actual": "COND: 조회영역 팝업형 칸 [Request Date, Requestor, Model/Nickname] 중 라벨 [sItemId, sItemId, ItemID, Itemby] 없음",
+  "basis": "SSP0003_ShipmentChangeRequestConfirm.cs:2081",
+  "at": "2026-11-14T10:55:23.763Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0003",
+  "call": 1,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:btnItemId",
+  "check": "PICK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "선택 시험",
+  "actual": "COND: 조회영역 팝업형 칸 [Request Date, Requestor, Model/Nickname] 중 라벨 [sItemId, sItemId, ItemID, Itemby] 없음",
+  "basis": "",
+  "at": "2026-11-14T10:55:31.297Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0003",
+  "call": 1,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:btnItemId",
+  "check": "CORNERS",
+  "egs": [
+   "EG286",
+   "EG340"
+  ],
+  "result": "ERROR",
+  "expected": "버튼 전 영역",
+  "actual": "칸 못 찾음",
+  "basis": "",
+  "at": "2026-11-14T10:55:38.589Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0003",
+  "call": 1,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:btnItemId",
+  "check": "TEXT_PASS",
+  "egs": [
+   "EG288",
+   "EG137"
+  ],
+  "result": "ERROR",
+  "expected": "메인 텍스트 전달",
+  "actual": "COND: 조회영역 팝업형 칸 [Request Date, Requestor, Model/Nickname] 중 라벨 [sItemId, sItemId, ItemID, Itemby] 없음",
+  "basis": "",
+  "at": "2026-11-14T10:55:45.999Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ }
+]

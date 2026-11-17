@@ -1,0 +1,633 @@
+{
+ "id": "SSP0021",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch",
+   "why": "SSP0021_ShipmentPlan.cs BtnSearch_Click: spdDetail.ActiveSheetIndex 0~5 별 상세 조회(Detail·Stock Location·oWMS·MES Stock·MES Stock Detail·Shipment Result) · 상세 시트는 ActiveSheetIndex 지정 + SheetTabClick 이벤트(11-16 06:35 속성 지정만으로는 Plan Detail SP 만 불림)",
+   "steps": [
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "5"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "5",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=5)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "1"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "1",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=1)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "2",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=2)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "3",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=3)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "4"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "4",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=4)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    },
+    {
+     "set": {
+      "setc": {
+       "name": "spdDetail",
+       "prop": "ActiveSheetIndex",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "prop:ActiveSheetIndex"
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdDetail",
+       "raise": "SheetTabClick",
+       "index": "0",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdDetail.SheetTabClick",
+     "raised": "SheetTabClickEventArgs(sheetTabIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "click": "BtnSearch",
+       "wait": "15"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:BtnSearch",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 6
+     },
+     "ok": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_SHIPMENT_RESULT",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_STOCK_LOCATION_DETAIL",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_OWMS_DETAIL",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_MES_STOCK",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_MES_STOCK_DETAIL",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "(SP)SSP0021_GET_HOLD_STOCK",
+   "why": "SSP0021_ShipmentPlan.cs SpdMain_CellDoubleClick: BOH_QTY 칸 · BOH_TYPE == 'HOLD' → FindData_hold_stock(5283행 SSP0021_GET_HOLD_STOCK)",
+   "steps": [
+    {
+     "set": {
+      "sleep": 8
+     },
+     "ok": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:39:48",
+ "_pre_set": [],
+ "_post_find": [
+  {
+   "where": {
+    "BOH_TYPE": "HOLD"
+   },
+   "col_prefix": "BOH_QTY",
+   "nonzero": false
+  }
+ ],
+ "find_calls": [
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.97,
+   "at": "2026-11-16 06:40:01.435",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan"
+   },
+   "rows": 13,
+   "ms": 4.23,
+   "at": "2026-11-16 06:40:01.441",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.82,
+   "at": "2026-11-16 06:40:01.482",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "oWMS Detail"
+   },
+   "rows": 25,
+   "ms": 4.34,
+   "at": "2026-11-16 06:40:01.489",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.84,
+   "at": "2026-11-16 06:40:01.521",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan Detail"
+   },
+   "rows": 69,
+   "ms": 6.26,
+   "at": "2026-11-16 06:40:01.545",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.65,
+   "at": "2026-11-16 06:40:01.600",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Location Detail"
+   },
+   "rows": 20,
+   "ms": 3.89,
+   "at": "2026-11-16 06:40:01.616",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.51,
+   "at": "2026-11-16 06:40:01.633",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "oWMS Detail"
+   },
+   "rows": 25,
+   "ms": 4.04,
+   "at": "2026-11-16 06:40:01.647",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0021_GET_SHIPMENT_PLAN",
+   "params": {
+    "p_division_id": "81",
+    "p_company_id": "HQ00",
+    "p_from_site": "HQ05-W,HQ07-A,HQ07-P,HQ11-A,HQ11-P,KR02239900_81-P",
+    "p_plan_start_yyyymmdd": "20261010",
+    "p_from_yyyymmdd": "20261010",
+    "p_to_yyyymmdd": "20261204",
+    "p_item_id": "",
+    "p_user_id": "jaeuk.shin",
+    "p_program_id": "SSP0021",
+    "p_sheet_name": "Shipment Plan",
+    "p_real_flag": "Y"
+   },
+   "rows": 108,
+   "ms": 31394.37,
+   "at": "2026-11-16 06:40:33.074",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.55,
+   "at": "2026-11-16 06:47:38.807",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan"
+   },
+   "rows": 13,
+   "ms": 3.98,
+   "at": "2026-11-16 06:47:38.828",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.69,
+   "at": "2026-11-16 06:47:38.874",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "oWMS Detail"
+   },
+   "rows": 25,
+   "ms": 3.99,
+   "at": "2026-11-16 06:47:38.886",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 9.59,
+   "at": "2026-11-16 06:47:38.907",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Plan Detail"
+   },
+   "rows": 69,
+   "ms": 7.78,
+   "at": "2026-11-16 06:47:38.928",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.72,
+   "at": "2026-11-16 06:47:38.997",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Stock Location Detail"
+   },
+   "rows": 20,
+   "ms": 4.02,
+   "at": "2026-11-16 06:47:39.006",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0021",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "oWMS Detail"
+   },
+   "rows": 25,
+   "ms": 4.15,
+   "at": "2026-11-16 06:47:39.030",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "params": {
+    "p_start_yyyymmdd": "20261010",
+    "p_end_yyyymmdd": "20261204"
+   },
+   "rows": 70,
+   "ms": 8.72,
+   "at": "2026-11-16 06:47:39.030",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0021_GET_SHIPMENT_PLAN",
+   "params": {
+    "p_division_id": "81",
+    "p_company_id": "HQ00",
+    "p_from_site": "HQ05-W,HQ07-A,HQ07-P,HQ11-A,HQ11-P,KR02239900_81-P",
+    "p_plan_start_yyyymmdd": "20261010",
+    "p_from_yyyymmdd": "20261010",
+    "p_to_yyyymmdd": "20261204",
+    "p_item_id": "",
+    "p_user_id": "jaeuk.shin",
+    "p_program_id": "SSP0021",
+    "p_sheet_name": "Shipment Plan",
+    "p_real_flag": "Y"
+   },
+   "rows": 108,
+   "ms": 6988.13,
+   "at": "2026-11-16 06:47:46.037",
+   "phase": "find+post_find"
+  }
+ ],
+ "post_find": [
+  {
+   "step": {
+    "where": {
+     "BOH_TYPE": "HOLD"
+    },
+    "col_prefix": "BOH_QTY",
+    "nonzero": false
+   },
+   "ok": false,
+   "why": "조건 맞는 칸 없음"
+  }
+ ]
+}

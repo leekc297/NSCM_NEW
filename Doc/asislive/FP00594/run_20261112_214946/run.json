@@ -1,0 +1,176 @@
+{
+ "id": "FP00594",
+ "started": "2026-11-12 21:49:46.679",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:49:46.921",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00594_PlanAmend_Model_NJ_Pouch",
+   "form_text": "Plan Amend by Model(NJ_Pouch)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00594_PlanAmend_Model_NJ_Pouch.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:49:58.397"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:50:02.703",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00594\\run_20261112_214946\\dump_load.json",
+   "control_count": 144,
+   "grid_count": 3,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:02.720"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:50:02.888",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00594\\run_20261112_214946\\shots\\FP00594_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:03.048"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 21:50:07.600",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00594\\run_20261112_214946\\shots\\FP00594_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:07.731"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:50:08.212",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:08.682"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:50:30.344",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00594\\run_20261112_214946\\dump_find.json",
+   "control_count": 144,
+   "grid_count": 3,
+   "total": "Total : 201",
+   "time_status": "DB : 15.9s, UI : 0.615s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:30.400"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:50:30.558",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00594\\run_20261112_214946\\shots\\FP00594_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:30.739"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:50:31.217",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:50:31.901"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 3,
+  "calls": 83,
+  "calls_with_params": 83
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00594_PlanAmend_Model_NJ_Pouch",
+  "form_text": "Plan Amend by Model(NJ_Pouch)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00594_PlanAmend_Model_NJ_Pouch.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 최근 계획 날짜(SCM_FP_PLAN_H · Plan Group CN_CELL_M2)",
+   "set": {
+    "name": "sCalendar_planday",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "sCalendar_planday",
+    "prop": "DateTime",
+    "value": "20260919"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 15.9s, UI : 0.615s",
+  "total": "Total : 201",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 21:49:46.884",
+ "t_find": "2026-11-12 21:50:07.881",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 144,
+  "layout_items": 21,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 56,
+  "data_rows": 50,
+  "grid_rows": 201,
+  "calls_total": 83,
+  "calls_screen": 83,
+  "calls_find": 34,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:50:32.378",
+ "exit": 0
+}

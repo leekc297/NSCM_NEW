@@ -1,0 +1,15 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0006-S4dd274,조회,AfterFindDataBOM,SCP0006_ProjectRoute.cs:600,같은 파일에서 호출,SCP0006_ProjectRoute.cs:752,GetQueryInfoGetBOM
+SCP0006-S2d4f70,조회,AfterFindDataBOM,SCP0006_ProjectRoute.cs:619,같은 파일에서 호출,SCP0006_ProjectRoute.cs:752,GetQueryInfoGetBOM
+SCP0006-S76d962,조회,AfterFindDataPlant,SCP0006_ProjectRoute.cs:638,같은 파일에서 호출,SCP0006_ProjectRoute.cs:790,GetQueryInfoGetPlant
+SCP0006-Sbc71df,조회,AfterFindDataSite,SCP0006_ProjectRoute.cs:582,같은 파일에서 호출,SCP0006_ProjectRoute.cs:721,FindDataSite
+SCP0006-S746946,저장,AfterSaveDataPlant,SCP0006_ProjectRoute.cs:652,같은 파일에서 호출,SCP0006_ProjectRoute.cs:821,GetQueryInfoSavePlant
+SCP0006-S3542fe,저장,AfterSaveDataPlant,SCP0006_ProjectRoute.cs:662,같은 파일에서 호출,SCP0006_ProjectRoute.cs:821,GetQueryInfoSavePlant
+SCP0006-S1ccbe4,기타,ChkPlantOs,SCP0006_ProjectRoute.cs:1351,호출 없음,,
+SCP0006-Seb6c4c,기타,ClearUsrCheckedList,SCP0006_ProjectRoute.cs:1070,주석 안에서만 호출,SCP0006_ProjectRoute.cs:1146; SCP0006_ProjectRoute.cs:1147; SCP0006_ProjectRoute.cs:1157; SCP0006_ProjectRoute.cs:1158; SCP0006_ProjectRoute.cs:1171,
+SCP0006-S69ad11,조회,FindDataBOMPlant,SCP0006_ProjectRoute.cs:879,주석 안에서만 호출,SCP0006_ProjectRoute.cs:654,
+SCP0006-S95028d,조회,GetDayRange,SCP0006_ProjectRoute.cs:1134,호출 없음,,
+SCP0006-S39c421,초기,InitSpreadBOM,SCP0006_ProjectRoute.cs:568,같은 파일에서 호출,SCP0006_ProjectRoute.cs:751,GetQueryInfoGetBOM
+SCP0006-S6e3fcf,초기,InitSpreadPlant,SCP0006_ProjectRoute.cs:574,같은 파일에서 호출,SCP0006_ProjectRoute.cs:789,GetQueryInfoGetPlant
+SCP0006-S7bf79e,초기,InitSpreadSite,SCP0006_ProjectRoute.cs:562,같은 파일에서 호출,SCP0006_ProjectRoute.cs:720,FindDataSite
+SCP0006-S30bdd2,기타,checkValidN0,SCP0006_ProjectRoute.cs:1524,주석 안에서만 호출,SCP0006_ProjectRoute.cs:929,

@@ -293,10 +293,10 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "SEARCH",
-        "INSERT",
         "DELETE",
-        "SAVE"
+        "SAVE",
+        "INSERT",
+        "SEARCH"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -319,29 +319,29 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "SEARCH",
-      "INSERT",
       "DELETE",
-      "SAVE"
+      "SAVE",
+      "INSERT",
+      "SEARCH"
     ],
     "SCM PI Admin": [
       "SEARCH",
-      "INSERT",
       "SAVE",
+      "INSERT",
       "DELETE"
     ],
     "SCP Planner": [
-      "INSERT",
       "DELETE",
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "INSERT",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
-    "SEARCH",
-    "INSERT",
     "DELETE",
-    "SAVE"
+    "SAVE",
+    "INSERT",
+    "SEARCH"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

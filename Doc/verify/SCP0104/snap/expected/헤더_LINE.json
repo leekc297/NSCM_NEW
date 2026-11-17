@@ -1,0 +1,43 @@
+{
+ "kind": "헤더",
+ "scope": "LINE",
+ "columns": [
+  "V",
+  "Div",
+  "Site",
+  "Site Name",
+  "Company",
+  "Company Name",
+  "Plant",
+  "Plant Name",
+  "Building",
+  "Building Name",
+  "Line",
+  "Line Name",
+  "Last Updated By",
+  "Last Update Date"
+ ],
+ "meta_hidden": [
+  "Basic Nickname",
+  "Building",
+  "Company",
+  "Dummy",
+  "Equipment",
+  "Equipment Name",
+  "Equipment Type",
+  "Line",
+  "Model",
+  "Nickname",
+  "Plant",
+  "SOP_DDN",
+  "SOP_YM",
+  "Seq",
+  "Site",
+  "Ver"
+ ],
+ "headerSpec": null,
+ "dynamicHeader": true,
+ "src": "plan.json expectedCols[LINE][40](SHEET_COLUMNS)",
+ "personalized": null,
+ "note": "동적 기간 컬럼은 {YM}/{YMD}/{W} 토큰 · TO-BE 추가 컬럼(이름 컬럼 등)은 extra 로 보고(결함 아님 · 사람 확인)"
+}

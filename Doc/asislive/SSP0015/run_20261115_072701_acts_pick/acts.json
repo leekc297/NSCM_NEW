@@ -1,0 +1,172 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [
+  {
+   "grid": "spdMain",
+   "col": "FIGURE",
+   "row_conds": [],
+   "ids": [
+    "SSP0015-S588395",
+    "SSP0015-S6810b2",
+    "SSP0015-Sbcee88",
+    "SSP0015-S1c31d0",
+    "SSP0015-S17b67d"
+   ],
+   "why": "spdMain/Shipment PSI(Mobility & IT) 행 없음"
+  },
+  {
+   "grid": "spdMain",
+   "col": null,
+   "row_conds": [],
+   "ids": [
+    "SSP0015-S5cd96f",
+    "SSP0015-Sed3e1e",
+    "SSP0015-Sdad80e",
+    "SSP0015-S141c9c",
+    "SSP0015-Sad4d80",
+    "SSP0015-S83ae7b",
+    "SSP0015-S6d92ec",
+    "SSP0015-Sdcacd0",
+    "SSP0015-S7f8d23",
+    "SSP0015-S6e4589",
+    "SSP0015-S627349",
+    "SSP0015-S99e85f",
+    "SSP0015-S0d9a8c",
+    "SSP0015-S7565db",
+    "SSP0015-S5e7c18",
+    "SSP0015-Sb6dd64",
+    "SSP0015-S50f120",
+    "SSP0015-S8b0c70",
+    "SSP0015-Sf21294",
+    "SSP0015-S378aa8",
+    "SSP0015-Sb0dfd3",
+    "SSP0015-S5afef4",
+    "SSP0015-S59c9db",
+    "SSP0015-S3b1f59",
+    "SSP0015-Saab3f9",
+    "SSP0015-Sbad398",
+    "SSP0015-S091146",
+    "SSP0015-S0386ac",
+    "SSP0015-S001b29"
+   ],
+   "why": "spdMain/Shipment PSI(Mobility & IT) 행 없음"
+  },
+  {
+   "grid": "spdDetail",
+   "col": "ERP_SO_NO",
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0015-S342831"
+   ],
+   "why": "spdDetail/Shipment Confirm Detail 행 없음"
+  }
+ ],
+ "at": "2026-11-15 07:26:19",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 06:23:47~06:34:54 실측: SSP0015_GET_SHIPMENT_PSI(p_division_id=40, p_plan_start_yyyymmdd=20261010, 20261010~20261109) 23행 667초 · 최근 PLAN_START_YYYYMMDD 20261010(3,002,714건)",
+  "why": "기본 사업부 81 은 SSP_ANL_SHIP_PLAN_40 에 행 없음(테이블 전체가 DIVISION_ID=40·PLAN_TYPE=SP·SEQ=1, 5,480,002건). 사업부 40(clbDivision 0번)으로 바꾸면 clbDivision_SelectedIndexChanged(SSP0015_ShipmentPSI.cs:7897)가 Plan date 목록을 다시 불러옴 → 0번(최근) 선택",
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "0"
+    },
+    "ok": true,
+    "applied": "combo:0:40 Mobility & IT Battery",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "cboPlanDate",
+     "index": "0"
+    },
+    "ok": false,
+    "applied": null,
+    "error": "InvalidOperationException: combo index out of range: 0/0"
+   }
+  ]
+ },
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "FIGURE",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0015-S588395",
+    "SSP0015-S6810b2",
+    "SSP0015-Sbcee88",
+    "SSP0015-S1c31d0",
+    "SSP0015-S17b67d"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0015-S5cd96f",
+    "SSP0015-Sed3e1e",
+    "SSP0015-Sdad80e",
+    "SSP0015-S141c9c",
+    "SSP0015-Sad4d80",
+    "SSP0015-S83ae7b",
+    "SSP0015-S6d92ec",
+    "SSP0015-Sdcacd0",
+    "SSP0015-S7f8d23",
+    "SSP0015-S6e4589",
+    "SSP0015-S627349",
+    "SSP0015-S99e85f",
+    "SSP0015-S0d9a8c",
+    "SSP0015-S7565db",
+    "SSP0015-S5e7c18",
+    "SSP0015-Sb6dd64",
+    "SSP0015-S50f120",
+    "SSP0015-S8b0c70",
+    "SSP0015-Sf21294",
+    "SSP0015-S378aa8",
+    "SSP0015-Sb0dfd3",
+    "SSP0015-S5afef4",
+    "SSP0015-S59c9db",
+    "SSP0015-S3b1f59",
+    "SSP0015-Saab3f9",
+    "SSP0015-Sbad398",
+    "SSP0015-S091146",
+    "SSP0015-S0386ac",
+    "SSP0015-S001b29"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdDetail",
+   "sheet_key": "shtDetail",
+   "col": "ERP_SO_NO",
+   "col_after": false,
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0015-S342831"
+   ],
+   "has_else": false
+  }
+ ]
+}

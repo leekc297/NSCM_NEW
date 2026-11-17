@@ -1,0 +1,311 @@
+{
+ "id": "SCP0030",
+ "dry": false,
+ "name": "update",
+ "kind": "edit",
+ "scenario": {
+  "table": "SCP_MST_BOD_ITEM",
+  "pk": [
+   "SEQ"
+  ],
+  "match": {
+   "SEQ": "SEQ"
+  },
+  "save_sp": "SCP0030_SAVE_BOD_ITEM",
+  "side": [
+   {
+    "table": "scp_mst_bod_item_h",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "related": [],
+  "basis": "foxml SCP0030_SAVE_BOD_ITEM → SP SCP0030_SAVE_BOD_ITEM 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = MERGE SCP_MST_BOD_ITEM(SEQ) · PR_SCP_MST_BOD_ITEM_HIST 가 scp_mst_bod_item_h 에 이력 INSERT · PRIORITY 는 화면에서 잠긴 열(21:59 연습 실행) · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+  "name": "update",
+  "title": "DB 에 있는 행의 SAFETY_STOCK 수정(+1) 뒤 저장 · 복원",
+  "edits": [
+   {
+    "pick": {
+     "col": "SAFETY_STOCK",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "SAFETY_STOCK",
+     "db_col": "SAFETY_STOCK",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-14 01:20:57",
+ "status": "OK",
+ "steps": [],
+ "db_before": [
+  {
+   "SEQ": 274561,
+   "DIVISION_ID": "40",
+   "BOD_ID": "18159",
+   "ITEM_ID": "ACPN4041I-A1-300",
+   "PRIORITY": 99,
+   "FROM_YYYYMMDD": "20250707",
+   "TO_YYYYMMDD": "21000704",
+   "SAFETY_STOCK": "0E-10",
+   "VALID_YN": "Y",
+   "CREATED_BY": "scp_batch",
+   "CREATION_DATE": "2025-07-08 13:03:42.073",
+   "LAST_UPDATED_BY": "scp_batch",
+   "LAST_UPDATE_DATE": "2025-07-08 13:03:42.073",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "SEQ": "274561"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "SAFETY_STOCK",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "save_call": [
+  {
+   "sp": "SCP0030_SAVE_BOD_ITEM",
+   "params": {
+    "p_active_flag": "M",
+    "p_seq": "274561",
+    "p_bod_id": "18159",
+    "p_division_id": "40",
+    "p_item_id": "ACPN4041I-A1-300",
+    "p_priority": "99",
+    "p_from_yyyymmdd": "20250707",
+    "p_to_yyyymmdd": "21000704",
+    "p_safety_stock": "1",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "rows": 1,
+   "ms": 16.68
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "1개의 데이터가 저장되었습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null,
+  "popups": []
+ },
+ "save_wait": [
+  {
+   "at": "01:23:29",
+   "sid": 69,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 246,
+   "stmt": "INSERT INTO @TBL_ITEM_ALL SELECT A.DIVISION_ID , A.ITEM_ID , A.ACTIVE_FLAG FROM SCM_MST_ITEM_SN A WITH(NOLOCK) INNER HASH J",
+   "proc": "FN_GET_SCP_ITEM_INACTIVE",
+   "blocker": null,
+   "until": "01:23:30",
+   "elapsed_ms_last": 1261
+  },
+  {
+   "at": "01:23:31",
+   "sid": 69,
+   "status": "suspended",
+   "wait": "SLEEP_TASK",
+   "blocked_by": 0,
+   "elapsed_ms": 2275,
+   "stmt": "INSERT INTO @TBL_ITEM_ALL SELECT A.DIVISION_ID , A.ITEM_ID , A.ACTIVE_FLAG FROM SCM_MST_ITEM_SN A WITH(NOLOCK) INNER HASH J",
+   "proc": "FN_GET_SCP_ITEM_INACTIVE",
+   "blocker": null,
+   "until": "01:23:31",
+   "elapsed_ms_last": 2275
+  },
+  {
+   "at": "01:23:32",
+   "sid": 69,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 3292,
+   "stmt": "SELECT SEQ , A.DIVISION_ID , CUSTOMER , FROM_SITE_CODE , FROM_CITY , TO_SITE_CODE , TO_CITY , INCOTERMS , SAFETY_STOCK",
+   "proc": null,
+   "blocker": null,
+   "until": "01:23:59",
+   "elapsed_ms_last": 29628
+  },
+  {
+   "at": "01:24:00",
+   "sid": 69,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 30645,
+   "stmt": "CREATE FUNCTION [dbo].[FN_SCM_SYS_NVL]( @COL_VALUE VARCHAR(4000), @REPLACE_ARG VARCHAR(4000) ) RETURNS VARCHAR(4000) /* * Program ID",
+   "proc": "FN_SCM_SYS_NVL",
+   "blocker": null,
+   "until": "01:24:00",
+   "elapsed_ms_last": 30645
+  },
+  {
+   "at": "01:24:01",
+   "sid": 69,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 31664,
+   "stmt": "SELECT SEQ , A.DIVISION_ID , CUSTOMER , FROM_SITE_CODE , FROM_CITY , TO_SITE_CODE , TO_CITY , INCOTERMS , SAFETY_STOCK",
+   "proc": null,
+   "blocker": null,
+   "until": "01:24:09",
+   "elapsed_ms_last": 39785
+  },
+  {
+   "at": "01:24:10",
+   "sid": 69,
+   "status": "suspended",
+   "wait": "ASYNC_NETWORK_IO",
+   "blocked_by": 0,
+   "elapsed_ms": 40789,
+   "stmt": "SELECT SEQ , A.DIVISION_ID , CUSTOMER , FROM_SITE_CODE , FROM_CITY , TO_SITE_CODE , TO_CITY , INCOTERMS , SAFETY_STOCK",
+   "proc": null,
+   "blocker": null,
+   "until": "01:24:16",
+   "elapsed_ms_last": 47053
+  },
+  {
+   "at": "01:24:17",
+   "sid": 69,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 48105,
+   "stmt": "SELECT SEQ , A.DIVISION_ID , CUSTOMER , FROM_SITE_CODE , FROM_CITY , TO_SITE_CODE , TO_CITY , INCOTERMS , SAFETY_STOCK",
+   "proc": null,
+   "blocker": null,
+   "until": "01:24:17",
+   "elapsed_ms_last": 48105
+  },
+  {
+   "at": "01:24:18",
+   "sid": 69,
+   "status": "suspended",
+   "wait": "ASYNC_NETWORK_IO",
+   "blocked_by": 0,
+   "elapsed_ms": 49154,
+   "stmt": "SELECT SEQ , A.DIVISION_ID , CUSTOMER , FROM_SITE_CODE , FROM_CITY , TO_SITE_CODE , TO_CITY , INCOTERMS , SAFETY_STOCK",
+   "proc": null,
+   "blocker": null,
+   "until": "01:24:18",
+   "elapsed_ms_last": 49154
+  }
+ ],
+ "save_timeout": false,
+ "db_after": [
+  {
+   "SEQ": 274561,
+   "DIVISION_ID": "40",
+   "BOD_ID": "18159",
+   "ITEM_ID": "ACPN4041I-A1-300",
+   "PRIORITY": 99,
+   "FROM_YYYYMMDD": "20250707",
+   "TO_YYYYMMDD": "21000704",
+   "SAFETY_STOCK": "1.0000000000",
+   "VALID_YN": "Y",
+   "CREATED_BY": "scp_batch",
+   "CREATION_DATE": "2025-07-08 13:03:42.073",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2026-11-14 01:23:19.883",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "restore_sql": [
+  {
+   "op": "UPDATE(전 값으로)",
+   "key": [
+    274561
+   ],
+   "rows": 1
+  }
+ ],
+ "side_cleanup": [
+  {
+   "table": "scp_mst_bod_item_h",
+   "key": [
+    28018
+   ],
+   "rows": 1
+  }
+ ],
+ "db_restored": [
+  {
+   "SEQ": 274561,
+   "DIVISION_ID": "40",
+   "BOD_ID": "18159",
+   "ITEM_ID": "ACPN4041I-A1-300",
+   "PRIORITY": 99,
+   "FROM_YYYYMMDD": "20250707",
+   "TO_YYYYMMDD": "21000704",
+   "SAFETY_STOCK": "0E-10",
+   "VALID_YN": "Y",
+   "CREATED_BY": "scp_batch",
+   "CREATION_DATE": "2025-07-08 13:03:42.073",
+   "LAST_UPDATED_BY": "scp_batch",
+   "LAST_UPDATE_DATE": "2025-07-08 13:03:42.073",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "saved_check": [
+  true
+ ]
+}

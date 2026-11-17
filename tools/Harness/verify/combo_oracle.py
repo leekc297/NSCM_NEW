@@ -32,6 +32,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live i
 
 E2E_CFG = os.path.join(ROOT, 'tools', 'E2E', 'e2e.config.json')
 BIGFILTER = os.path.join(ROOT, 'GSCM', '04.WSL', 'FoxQuery', 'DM', 'Common', 'BigFilter.xml')
+BIGFILTER_SSP = os.path.join(ROOT, 'GSCM', '04.WSL', 'FoxQuery', 'SSP', 'Common', 'BigFilter.xml')
 INIT_METHODS = re.compile(r'^(<field>|SheetMeta|Init\w*|\w*_Load|Form_Load|SetInit\w*|Load\w*|\w*Constructor|SetChangeControl|SetControl\w*|Bind\w*)$', re.I)
 ALL_WORDS = re.compile(r'^(SELECT ALL|ALL|전체)$', re.I)
 CRS = [r for r in csv.DictReader(open(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'confirmed_requirements.csv'), encoding='utf-8-sig'))
@@ -117,6 +118,55 @@ class AsIs:
                     break
             self.bigfilter = sets
         return self.bigfilter
+
+    def run_bigfilter_ssp(self, lang='KO'):
+        """SSP/Common/BigFilter.xml list_line_ssp 를 AS-IS DB 에서 1회 실행 → 결과셋 목록(2026-11-11 · DataService.cs:4184-4190)"""
+        if getattr(self, 'bigfilter_ssp', None) is None:
+            t = fc.read_text(BIGFILTER_SSP)
+            body = t[t.find('list_line_ssp'):]
+            body = body[body.find('<![CDATA[') + 9:body.find(']]>')]
+            sql = "SET NOCOUNT ON; DECLARE @GROUP_ID NVARCHAR(200) = ?, @USER_ID NVARCHAR(200) = ?, @LANGUAGE_CODE NVARCHAR(20) = ?;\n" + body
+            cur = self.cx.cursor()
+            cur.execute(sql, [self.group, self.user, lang])
+            sets = []
+            while True:
+                if cur.description:
+                    cols = [d[0].upper() for d in cur.description]
+                    sets.append([dict(zip(cols, r)) for r in cur.fetchall()])
+                if not cur.nextset():
+                    break
+            self.bigfilter_ssp = sets
+        return self.bigfilter_ssp
+
+
+def ssp_inner_rows(rows, spec, ctx):
+    """GetSSPInnerTable 의 클라이언트 처리(필터 → 중복 제거 → 정렬)를 그대로 — 순수 함수(selftest 대상)"""
+    idx, keys, dedupe, order = spec
+    f = {k: [v for v in str(ctx.get(f'Filter.{k}', '') or '').split(',') if v and v.upper() != 'ALL'] for k in keys}
+    out, seen = [], set()
+    for r in rows:
+        if any(vals and str(r.get(k, '')) not in vals for k, vals in f.items()):
+            continue
+        if dedupe:
+            key = tuple(str(r.get(c, '')) for c in dedupe)
+            if key in seen:
+                continue
+            seen.add(key)
+        out.append({'CODE': str(r.get('CODE', '')), 'NAME': str(r.get('NAME', ''))})
+    if order == 'CODE':
+        return sorted(out, key=lambda r: net_sort_key(r['CODE']))
+    return out
+
+
+def ssp_inner(asis, col, ctx):
+    spec = fc.SSP_INNER[col]
+    sets = asis.run_bigfilter_ssp()
+    if spec[0] >= len(sets):
+        raise RuntimeError(f'SSP BigFilter 결과셋 {spec[0]} 없음(총 {len(sets)})')
+    rows = sets[spec[0]]
+    if rows and 'CODE' not in rows[0]:
+        raise RuntimeError(f'SSP BigFilter 결과셋 {spec[0]}({col}) 에 CODE 열 없음 — 열 {sorted(rows[0])[:6]}')
+    return ssp_inner_rows(rows, spec, ctx), True
 
 
 def dm_inner(asis, col, ctx):
@@ -667,6 +717,12 @@ def main():
                         ctx.setdefault(p['n'], ctx.get(p['n'], ''))
                 rows, _ = dm_inner(asis, r['code'], ctx)
                 return rows, {'mst': None, 'by_code': True, 'bigfilter': r['code']}
+            if r['sp'] == 'SSP_BIGFILTER':  # 2026-11-11 DataService.GetSSPInnerTable
+                for p in ps:
+                    if p['n'].startswith('Filter.'):
+                        ctx.setdefault(p['n'], ctx.get(p['n'], ''))
+                rows, _ = ssp_inner(asis, r['code'], ctx)
+                return rows, {'mst': None, 'by_code': True, 'bigfilter': r['code']}
             vals = {p['n']: resolve(p['expr'], ctx, asis, codes_of) for p in ps}
             if r['code'] and r['sp'].upper().startswith('UP_FX_'):
                 vals['@Code'] = r['code']
@@ -778,7 +834,7 @@ def main():
                 a_order = list(dict.fromkeys(k for k in a_keys if k in set(common)))
                 rec['b3'] = 'PASS' if common == a_order else 'FAIL'
                 rec['b3_why'] = f'고정 목록 순서 {"일치" if common == a_order else "다름"}: TO-BE {common[:6]} / AS-IS {a_order[:6]}'
-            elif x['sp'] != 'DM_BIGFILTER' and not meta.get('sql'):
+            elif x['sp'] not in ('DM_BIGFILTER', 'SSP_BIGFILTER') and not meta.get('sql'):
                 a_order = list(dict.fromkeys(k for k in a_keys if k in set(common)))
                 rec['b3'] = 'PASS' if common == a_order else '판정필요'
                 rec['b3_why'] = f'전용 SP {x["sp"]} 반환 순서 {"일치" if common == a_order else "다름(원문 ORDER BY 미해석 — 사람 확인)"}: TO-BE {common[:5]} / AS-IS {a_order[:5]}'

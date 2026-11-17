@@ -1,0 +1,49 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+MyDivision,"{""comboId"":""MyDivision"",""mnuId"":""DMF0005""}",8,8,,,PASS,응답 8건 = DB 8건
+ItemType,"{""comboId"":""ItemType"",""mnuId"":""DMF0005""}",4,4,,,PASS,응답 4건 = DB 4건
+FilterMyDivision,"{""comboId"":""FilterMyDivision"",""mnuId"":""DMF0005""}",8,8,,,PASS,응답 8건 = DB 8건
+EndCustomer,"{""comboId"":""EndCustomer"",""mnuId"":""DMF0005""}",1921,1622,,,PASS,응답 1622건 = DB 1622건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""DMF0005""}",2,2,,,PASS,응답 2건 = DB 2건
+TeambyDivision,"{""comboId"":""TeambyDivision"",""divisionId"":""''"",""mnuId"":""DMF0005""}",173,173,,,PASS,응답 173건 = DB 173건
+FilterSiteByEndCustomer,"{""comboId"":""FilterSiteByEndCustomer"",""mnuId"":""DMF0005""}",3797,2894,,,PASS,응답 2894건 = DB 2894건
+FilterTeambyDivision,"{""comboId"":""FilterTeambyDivision"",""mnuId"":""DMF0005""}",216,173,,,PASS,응답 173건 = DB 173건
+SalesSite,"{""comboId"":""SalesSite"",""mnuId"":""DMF0005""}",4388,2551,,,PASS,응답 2551건 = DB 2551건
+FilterEndCustomerByDivision,"{""comboId"":""FilterEndCustomerByDivision"",""mnuId"":""DMF0005""}",4011,1648,,,PASS,응답 1648건 = DB 1648건
+CustGroup,"{""comboId"":""CustGroup"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",37,37,,,PASS,응답 37건 = DB 37건
+EndCustomerByCustGroup,"{""comboId"":""EndCustomerByCustGroup"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1921,1622,,,PASS,응답 1622건 = DB 1622건
+ScmSitebyEndCustomer40,"{""comboId"":""ScmSitebyEndCustomer40"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1376,1376,,,PASS,응답 1376건 = DB 1376건
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",25,25,,,PASS,응답 25건 = DB 25건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",77,47,,,PASS,응답 47건 = DB 47건
+ItemType,"{""comboId"":""ItemType"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",4,4,,,PASS,응답 4건 = DB 4건
+ProductionProgress,"{""comboId"":""ProductionProgress"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",16,16,,,PASS,응답 16건 = DB 16건
+END_CUST_REPORT,"{""comboId"":""END_CUST_REPORT"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",923,923,,,PASS,응답 923건 = DB 923건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+SOLD_TO_CUST_REPORT,"{""comboId"":""SOLD_TO_CUST_REPORT"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",761,761,,,PASS,응답 761건 = DB 761건
+ProjectModelMapping,"{""comboId"":""ProjectModelMapping"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",35,35,,,PASS,응답 35건 = DB 35건
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""divisionId"":""''"",""scmSiteId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",25,25,,,PASS,응답 25건 = DB 25건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""divisionId"":""''"",""companyId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",77,47,,,PASS,응답 47건 = DB 47건
+ScmSitebyEndCustomer40,"{""comboId"":""ScmSitebyEndCustomer40"",""divisionId"":""''"",""endCustomer"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1376,1376,,,PASS,응답 1376건 = DB 1376건
+ScmSitebyEndCustomer40,"{""comboId"":""ScmSitebyEndCustomer40"",""divisionId"":""'40'"",""endCustomer"":""'Aima'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""divisionId"":""'40'"",""scmSiteId"":""'AJ상사_AB_TES'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1,1,,,PASS,응답 1건 = DB 1건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""divisionId"":""'40'"",""companyId"":""'AB00'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1,1,,,PASS,응답 1건 = DB 1건
+ScmSitebyEndCustomer40,"{""comboId"":""ScmSitebyEndCustomer40"",""divisionId"":""'40'"",""endCustomer"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1376,1376,,,PASS,응답 1376건 = DB 1376건
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""divisionId"":""'40'"",""scmSiteId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",25,25,,,PASS,응답 25건 = DB 25건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""divisionId"":""'40'"",""companyId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",18,18,,,PASS,응답 18건 = DB 18건
+CELL_TYPE_82,"{""comboId"":""CELL_TYPE_82"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",5,5,,,PASS,응답 5건 = DB 5건
+incotermsEdit,"{""comboId"":""incotermsEdit"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",10,10,,,PASS,응답 10건 = DB 10건
+EndCustomerByDivisionDept,"{""comboId"":""EndCustomerByDivisionDept"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",598,595,,,PASS,응답 595건 = DB 595건
+IncotermsEdit,"{""comboId"":""IncotermsEdit"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",10,10,,,PASS,응답 10건 = DB 10건
+EndCustomerByDivisionDept,"{""comboId"":""EndCustomerByDivisionDept"",""divisionId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",598,595,,,PASS,응답 595건 = DB 595건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",2546,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 ['divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId']"
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""''"",""endCustomer"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",2546,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"
+EndCustomerByDivisionDept,"{""comboId"":""EndCustomerByDivisionDept"",""divisionId"":""'81'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",236,236,,,PASS,응답 236건 = DB 236건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""'81'"",""endCustomer"":""'Alte'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",5,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""divisionId"":""'81'"",""scmSiteId"":""'Alte_AB_TES'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1,1,,,PASS,응답 1건 = DB 1건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""divisionId"":""'81'"",""companyId"":""'AB00'"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",1,1,,,PASS,응답 1건 = DB 1건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""'81'"",""endCustomer"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",455,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"
+CompanySalesSite,"{""comboId"":""CompanySalesSite"",""divisionId"":""'81'"",""scmSiteId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",25,25,,,PASS,응답 25건 = DB 25건
+SALES_PLANT_DM,"{""comboId"":""SALES_PLANT_DM"",""divisionId"":""'81'"",""companyId"":""''"",""mnuId"":""DMF0005"",""validYn"":""'Y'""}",19,19,,,PASS,응답 19건 = DB 19건

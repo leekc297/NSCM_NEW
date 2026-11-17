@@ -1,0 +1,12 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+DMF0048-S22c222,조회,GetBizTypebyDivisionAsync,DMF0048_SalesMonitoring.cs:1947,호출 없음,,
+DMF0048-Sf6dd4d,조회,GetCustomerbyDivision,DMF0048_SalesMonitoring.cs:1047,호출 없음,,
+DMF0048-Sbb70a1,조회,GetCustomerbyDivisionAsync,DMF0048_SalesMonitoring.cs:1974,호출 없음,,
+DMF0048-Sbf4efb,조회,GetDivision,DMF0048_SalesMonitoring.cs:962,주석 안에서만 호출,DMF0048_SalesMonitoring.cs:321; DMF0048_SalesPlanMonitoring.cs:223,
+DMF0048-Sa2e98d,조회,GetEndCustomerbyDivision,DMF0048_SalesMonitoring.cs:1074,호출 없음,,
+DMF0048-S53fcfb,조회,GetPlantSitebyEndCustomer,DMF0048_SalesMonitoring.cs:1787,호출 없음,,
+DMF0048-S3b2d53,조회,GetPlantSitebyEndCustomerAsync,DMF0048_SalesMonitoring.cs:1989,호출 없음,,
+DMF0048-Sf9f45a,조회,GetScmSitebyDivision,DMF0048_SalesMonitoring.cs:976,호출 없음,,
+DMF0048-Se0ad34,조회,GetScmSitebyDivisionAsync,DMF0048_SalesMonitoring.cs:2005,호출 없음,,
+DMF0048-Scc16d7,조회,GetTeambyDivision,DMF0048_SalesMonitoring.cs:1034,주석 안에서만 호출,DMF0048_SalesMonitoring.cs:329; DMF0048_SalesPlanMonitoring.cs:227,
+DMF0048-Sa3e417,조회,GetTeambyDivisionAsync,DMF0048_SalesMonitoring.cs:1961,호출 없음,,

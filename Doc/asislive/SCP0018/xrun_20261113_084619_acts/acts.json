@@ -1,0 +1,92 @@
+{
+ "id": "SCP0018",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0018-S647918",
+    "SCP0018-S6c43db"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0018-S647918",
+    "SCP0018-S6c43db"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0018-S908b8c",
+    "SCP0018-S313a2d",
+    "SCP0018-S4ebaaa",
+    "SCP0018-Sd20194",
+    "SCP0018-Sa2727f",
+    "SCP0018-S2501c9",
+    "SCP0018-S9402aa",
+    "SCP0018-Sddee9f",
+    "SCP0018-Sab4b85",
+    "SCP0018-S585b01",
+    "SCP0018-S3e4aef",
+    "SCP0018-S955b86"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:45:26.772",
+ "fills": 1,
+ "fill_left": []
+}

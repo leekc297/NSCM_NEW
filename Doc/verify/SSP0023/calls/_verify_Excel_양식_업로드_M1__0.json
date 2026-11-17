@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 408,
+  "at": "2026-11-14T15:21:25.887Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/GET_SHIPMENT_PLAN_DETAIL_EXCEL/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"itemId\":\"\",\"modelId\":\"\",\"nickName\":\"\",\"requestor\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20261010\",\"toYyyymmdd\":\"20261204\",\"dblFlag\":\"N\",\"realFlag\":\"Y\",\"language\":\"KO\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan Detail\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\",\"userId\":\"minyonglee1\",\"debugMode\":\"F\"}",
+  "status": 200,
+  "rows": 1568,
+  "dur": 200,
+  "at": "2026-11-14T15:21:27.401Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 405,
+  "at": "2026-11-14T15:21:54.168Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 143,
+  "at": "2026-11-14T15:22:21.885Z",
+  "user": "minyonglee1",
+  "test": "Excel 양식·업로드(M1)"
+ }
+]

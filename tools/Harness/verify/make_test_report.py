@@ -287,7 +287,7 @@ def main():
     total = stat(rows)
     started, ended = env.get('started') or '', (env.get('ts') or '')[:19].replace('T', ' ')
     ws0.append([f'{mid} {name} — 테스트결과서']); ws0['A1'].font = Font(bold=True, size=16)
-    ws0.append(['생성 시각', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '', '이 문서는 직전 UI CheckList 실행 결과를 읽어 만든 것으로, 새로 측정하지 않았다.'])
+    ws0.append(['생성 시각', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '', '직전 UI CheckList 실행 결과를 읽어 만들었고, 새로 측정하지 않았다.'])
     ws0.append(['테스트 실행', f'{started} ~ {ended}'.strip(' ~') or '(봉투 없음)', '', f"run_verify 봉투 상태 {env.get('state') or '-'} · 판정 {env.get('verdict') or '-'}"])
     ws0.append(['테스트 환경', f"FE {cfg.get('feUrl', '-')} · BE {cfg.get('beUrl', '-')}", '', f"계정 {cfg.get('forceAccount') or cfg.get('defaultAccount') or '-'} · 기본 Division {cfg.get('defaultDivision', '-')} · 사내오라클(ZIOUI1) 기준"])
     pw_ok = sum(1 for t in tests if t['status'] == 'passed'); pw_bad = [t for t in tests if t['status'] not in ('passed', 'skipped')]
@@ -422,7 +422,7 @@ def main():
             wf.append(['', '화면 캡처', '(이 항목의 캡처 없음 — 다음 UI CheckList 실행부터 실패 항목은 테스트 종료 시점 화면이 저장된다)', ''])
             wf.cell(wf.max_row, 2).font = Font(bold=True)
     if not fails:
-        wf.append(['실패 항목이 없습니다.'])
+        wf.append(['실패 항목이 없음.'])
     wf.sheet_view.showGridLines = False
 
     # ════ 4. 실행 테스트 ════
@@ -475,6 +475,14 @@ def main():
     if ci == 0:
         wc.append(['(캡처 없음 — 스모크 E2E 미실행이거나 Doc/e2e/results/<ID>/shots·Doc/e2e/results/shots 에 이 화면 파일 없음)'])
 
+    # ════ 5b. AS-IS 실측(2026-11-12 AS-IS Live P3) — 현행 프로그램을 실제 실행한 캡처·호출 SP·조회조건·그리드. 실측이 없으면 시트를 만들지 않는다
+    live_info = None
+    try:
+        import asis_live_doc
+        live_info = asis_live_doc.add_sheet(wb, mid, 'AS-IS 실측')
+    except Exception as ex_l:
+        print(f'[WARN] AS-IS 실측 시트 생성 실패(문서의 나머지는 정상): {str(ex_l)[:160]}')
+
     # ════ 6. 용어 설명 ════
     wg = wb.create_sheet('용어 설명')
     wg.append(['구분', '코드', '뜻', '이 화면 항목 수'])
@@ -506,9 +514,16 @@ def main():
     os.makedirs(OUTDIR, exist_ok=True)
     ver = doc_archive.next_version(OUTDIR, f'{mid}_{name}_{KIND}')
     out = os.path.join(OUTDIR, f'{mid}_{name}_{KIND}_v{ver}.xlsx')
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb, gaejo=doc_style.CHECKLIST_GAEJO, free=True)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     wb.save(out)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(out)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     doc_archive.archive_previous(out)
     print(f'테스트결과서 v{ver}: {out}')
+    print('  AS-IS 실측 시트: ' + (f"캡처 {live_info['shots']} · 호출 {live_info['calls']}(화면 고유 {live_info['own_calls']}) · 조회조건 {live_info['conditions']} · 그리드 시트 {live_info['sheets']}" if live_info else '없음(AS-IS 실측 미실행 — VM 🎥 AS-IS Live Run)'))
     print(f"  항목 {total['전체']} — 통과 {total['통과']} · 실패 {total['실패']} · 확인 필요 {total['확인 필요']} · 미검증 {total['미검증']} · 해당 없음 {total['해당 없음']} · 그룹 {len(by_area)} · 실패 캡처 {len(set(s['file'] for s in shots.values()))} · 스모크 캡처 {len(smokes)} · 실행 테스트 {len(tests)}")
     return 0
 

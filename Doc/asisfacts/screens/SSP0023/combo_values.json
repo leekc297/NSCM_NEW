@@ -1,0 +1,117 @@
+{
+ "screen": "SSP0023",
+ "generated": "2026-11-14 23:50:09",
+ "vars": {
+  "dtBucketType": {
+   "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+   "code": "",
+   "targets": [
+    "SEARCH:cboBucketType"
+   ],
+   "ref": "SSP0023_ShipmentPlanElectrode.cs:460 ← SSP0023_ShipmentPlanElectrode.cs:459",
+   "unresolved": "SP 매개변수 정보 없음"
+  },
+  "Tmp_dtPlanDate": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Plan_InforElectrode",
+   "targets": [
+    "SEARCH:cboPlanDate"
+   ],
+   "ref": "SSP0023_ShipmentPlanElectrode.cs:5691 ← SSP0023_ShipmentPlanElectrode.cs:5653",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "dtFromSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Com_FromSitePlantEE",
+   "targets": [
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SSP0023_ShipmentPlanElectrode.cs:5772 ← SSP0023_ShipmentPlanElectrode.cs:5771",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtPlanDate": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Plan_InforElectrode",
+   "targets": [
+    "SEARCH:cboPlanDate"
+   ],
+   "ref": "SSP0023_ShipmentPlanElectrode.cs:5778 ← SSP0023_ShipmentPlanElectrode.cs:5777",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:SHIPMENT_STATUS"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0023/Shipment Plan Detail/SHIPMENT_STATUS ← SCM_MST_SHEET_COLUMNS SSP0023/Shipment Plan Detail/SHIPMENT_STATUS",
+   "rows": []
+  },
+  "<meta Data.Type.Division>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Division",
+   "targets": [
+    "GRID:DIVISION_ID"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0023/Shipment Result/DIVISION_ID ← SCM_MST_SHEET_COLUMNS SSP0023/Shipment Result/DIVISION_ID",
+   "rows": [
+    {
+     "CODE": "40",
+     "NAME": "40"
+    },
+    {
+     "CODE": "81",
+     "NAME": "81"
+    },
+    {
+     "CODE": "81_HD",
+     "NAME": "81_HD"
+    },
+    {
+     "CODE": "81_HG",
+     "NAME": "81_HG"
+    },
+    {
+     "CODE": "81_HM",
+     "NAME": "81_HM"
+    },
+    {
+     "CODE": "81_ST",
+     "NAME": "81_ST"
+    },
+    {
+     "CODE": "81_UC",
+     "NAME": "81_UC"
+    },
+    {
+     "CODE": "82",
+     "NAME": "82"
+    },
+    {
+     "CODE": "EE",
+     "NAME": "EE"
+    },
+    {
+     "CODE": "EE_HD",
+     "NAME": "EE_HD"
+    },
+    {
+     "CODE": "EE_HG",
+     "NAME": "EE_HG"
+    },
+    {
+     "CODE": "EE_HM",
+     "NAME": "EE_HM"
+    },
+    {
+     "CODE": "EE_ST",
+     "NAME": "EE_ST"
+    },
+    {
+     "CODE": "EE_UC",
+     "NAME": "EE_UC"
+    }
+   ]
+  }
+ }
+}

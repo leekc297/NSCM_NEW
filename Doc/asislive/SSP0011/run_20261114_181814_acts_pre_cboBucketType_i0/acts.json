@@ -1,0 +1,115 @@
+{
+ "id": "SSP0011",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SSP0011_GET_PSI"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     70
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     18
+    ],
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     70
+    ],
+    [
+     "SSP0011_GET_PSI",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnNickName",
+   "ok": false,
+   "error": "InvalidOperationException: click:BtnNickName failed: InvalidOperationException: control not found: BtnNickName",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0011-S302278",
+    "SSP0011-S4444f3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0011-Sea1449",
+    "SSP0011-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 18:17:11.028",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 3,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

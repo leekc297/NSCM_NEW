@@ -1,0 +1,375 @@
+{
+ "id": "FP00609",
+ "started": "2026-11-13 04:44:52.012",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 04:44:52.353",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00609_Pancake_Simul_By_Bld_Elec",
+   "form_text": "Pancake Simul By Bld(Elec.)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00609_Pancake_Simul_By_Bld_Elec.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:44:57.023"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 04:45:00.562",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261113_044452\\dump_load.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:45:00.584"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 04:45:00.744",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261113_044452\\shots\\FP00609_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:45:00.872"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-13 04:45:37.093",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261113_044452\\shots\\FP00609_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:45:37.212"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 04:45:37.696",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:45:38.147"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 04:46:54.182",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261113_044452\\dump_find.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "DB : 71.104s, UI : 0.15s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:46:54.198"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 04:46:54.362",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261113_044452\\shots\\FP00609_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:46:54.562"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 04:46:54.898",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 04:46:55.546"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 106,
+  "calls_with_params": 106
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00609_Pancake_Simul_By_Bld_Elec",
+  "form_text": "Pancake Simul By Bld(Elec.)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00609_Pancake_Simul_By_Bld_Elec.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 계획 날짜 1번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 2번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 3번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 4번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 5번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 6번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 7번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 8번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 9번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 10번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 11번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 12번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "Plan ID 목록 없음 → Rel.(확정 계획) 체크(Plan Id(Coater))",
+   "set": {
+    "name": "chk_rel",
+    "prop": "Checked",
+    "value": "true"
+   },
+   "ok": true,
+   "applied": "prop:Checked",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   {
+    "name": "chk_rel",
+    "prop": "Checked",
+    "value": "true"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 71.104s, UI : 0.15s",
+  "total": "",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 0
+ },
+ "t_open": "2026-11-13 04:44:52.320",
+ "t_find": "2026-11-13 04:45:37.341",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 76,
+  "layout_items": 22,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 26,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 106,
+  "calls_screen": 106,
+  "calls_find": 49,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 04:46:55.853",
+ "exit": 0
+}

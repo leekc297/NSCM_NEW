@@ -1,0 +1,26 @@
+{
+ "at": "2026-11-11 14:48:14",
+ "menu_id": "SSP0021",
+ "rules_rerun": [
+  "I1"
+ ],
+ "seconds": 988,
+ "run_verify_rc": 0,
+ "targets": 1,
+ "closed": 0,
+ "still_open": 1,
+ "other": 0,
+ "regressions": 0,
+ "rows": [
+  {
+   "row_id": "V-e5a58b4b",
+   "rule_id": "I1",
+   "target": "SSP0021 화면",
+   "before": "FAIL",
+   "after": "FAIL",
+   "outcome": "미종결",
+   "evidence": "t() 코드 20개 중 미등록 1: MSG00251(KO/EN/CN 없음, fallback '', nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx:146)"
+  }
+ ],
+ "regression_rows": []
+}

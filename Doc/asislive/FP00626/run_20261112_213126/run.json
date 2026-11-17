@@ -1,0 +1,177 @@
+{
+ "id": "FP00626",
+ "started": "2026-11-12 21:31:26.761",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:31:27.079",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00626_PancakeSimulation_Assy",
+   "form_text": "Pancake Simulation(Assy)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Planning.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:31:31.839"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:31:35.971",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_213126\\dump_load.json",
+   "control_count": 44,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "DB : 32.497s, UI : 0.205s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:31:35.977"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:31:36.302",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_213126\\shots\\FP00626_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:31:36.445"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 21:31:37.426",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_213126\\shots\\FP00626_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:31:37.536"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:31:37.866",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:31:38.320"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:31:51.388",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_213126\\dump_find.json",
+   "control_count": 48,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 21:31:51.395"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:31:51.555",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00626\\run_20261112_213126\\shots\\FP00626_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 21:31:51.722"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:31:52.207",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 21:31:52.723"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 41,
+  "calls_with_params": 41
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00626_PancakeSimulation_Assy",
+  "form_text": "Pancake Simulation(Assy)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Planning.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 최근 계획 날짜",
+   "ok": false,
+   "error": "Plan Group(KR_CELL)·Plan Date 달력(None) 을 찾지 못함"
+  }
+ ],
+ "fill_left": [
+  "cbo_planid[Plan ID(Assy)·UsrCombo] 비어 있음(항목 0개)"
+ ],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 21:31:26.966",
+ "t_find": "2026-11-12 21:31:37.593",
+ "dialogs": [
+  {
+   "at": "2026-11-12 21:31:41.347",
+   "caption": "GSCM",
+   "text": "다시 확인하여 주십시오. PLAN ID",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 48,
+  "layout_items": 17,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 32,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 41,
+  "calls_screen": 41,
+  "calls_find": 14,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:31:53.127",
+ "exit": 0
+}

@@ -4,7 +4,7 @@
 > `pnpm type-check` 호출 없이 작성 직전 / 직후 self-check 로 17 패턴 사전 차단.
 
 작성: 2026-06-09 (cloud `fix/lint-cleanup-20260608` branch 8 회 push 차단 사고 후)
-상위 룰: [`anti-simplification.md`](./anti-simplification.md) / [`pre-write.md`](./pre-write.md) / [`post-write.md`](./post-write.md)
+상위 룰: [`anti-simplification.md`](../anti-simplification.md) (2026-11-13 정정: 링크 `./` → `../` — 실제 위치 `Doc/_rules_v2/anti-simplification.md`) / [`pre-write.md`](./pre-write.md) / [`post-write.md`](./post-write.md)
 관련 룰: [`fe-import-check.md`](../../_dev_rules/hooks/fe-import-check.md) / [`runtime-error-prevention.md`](./runtime-error-prevention.md) / [`_tobe/02_imports.md`](../_tobe/02_imports.md)
 
 ---
@@ -299,6 +299,7 @@ const popupBtnStyle = { ... };  // file 상단 helper 영역
 export const MyField = () => (
   <button style={popupBtnStyle}>...</button>
 );
+// (2026-11-13 정정: 이 예시는 '사용 전 정의' 순서만 보인다 — `style={...}` inline style 자체는 금지(CLAUDE.md §4 ⑤ · SCSS Module 사용))
 ```
 
 ---
@@ -330,7 +331,7 @@ filters: { divisionId },  // schema 와 일치만
 
 **procedures.d.ts 수정 의무**:
 - BE PROC_M 의 IN 파라미터와 일치
-- `sesUserId` / `menuId` 는 BE 자동 채움이므로 **optional 권장**
+- `sesUserId` / `menuId` 는 BE 자동 채움이므로 **optional 권장** (2026-11-14 정정: 요청 키 이름은 SP 별. `procedures.d.ts` 에 menuId 17건, mnuId 40건. BE `BaseService.java` 는 mnuId)
 - sheet key 누락 시 enum 사용처 모두 거부 (TS2344) → entry 추가 의무
 
 ### 패턴 13-bis: SHEETS enum 의 ProcedureMap key 정합

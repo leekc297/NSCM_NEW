@@ -1,0 +1,212 @@
+{
+ "id": "SCP0015",
+ "started": "2026-11-12 22:31:05.710",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:31:06.005",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0015_PlanManagement",
+   "form_text": "Plan Management",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0015_PlanManagement.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:31:11.993"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:31:16.602",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0015\\run_20261112_223105\\dump_load.json",
+   "control_count": 28,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:31:16.616"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:31:16.769",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0015\\run_20261112_223105\\shots\\SCP0015_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:31:16.878"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 22:31:27.731",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0015\\run_20261112_223105\\shots\\SCP0015_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:31:27.848"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:31:28.167",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:31:58.181"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:32:07.685",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0015\\run_20261112_223105\\dump_find.json",
+   "control_count": 28,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:07.692"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:32:08.008",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0015\\run_20261112_223105\\shots\\SCP0015_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:08.130"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:32:08.604",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:09.230"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 9,
+  "calls_with_params": 9
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0015_PlanManagement",
+  "form_text": "Plan Management",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0015_PlanManagement.dll"
+ },
+ "fills": [
+  {
+   "rule": "Division 변경 이벤트 발생(다른 값)",
+   "set": {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   "ok": true,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "error": null
+  },
+  {
+   "rule": "Division 원래 값으로 복귀",
+   "set": {
+    "name": "cboDivision",
+    "index": "0"
+   },
+   "ok": true,
+   "applied": "combo:0:81 Automotive Battery",
+   "error": null
+  },
+  {
+   "rule": "Division 을 바꿔 목록이 채워지는지 확인",
+   "set": {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   "ok": true,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   {
+    "name": "cboDivision",
+    "index": "0"
+   },
+   {
+    "name": "cboDivision",
+    "index": "1"
+   }
+  ]
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 22:31:05.914",
+ "t_find": "2026-11-12 22:31:27.884",
+ "dialogs": [
+  {
+   "at": "2026-11-12 22:31:29.399",
+   "caption": "GSCM",
+   "text": "시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 28,
+  "layout_items": 11,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 34,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 9,
+  "calls_screen": 9,
+  "calls_find": 2,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 22:32:09.641",
+ "exit": 0
+}

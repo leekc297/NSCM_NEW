@@ -1,0 +1,40 @@
+{
+ "table": "SCP_MST_DISTRIBUTION_ROUTE",
+ "pk": [
+  "ROUTE_ID"
+ ],
+ "match": {
+  "ROUTE_ID": "ROUTE_ID"
+ },
+ "save_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+ "side": [
+  {
+   "table": "SCP_MST_DISTRIBUTION_ROUTE_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [],
+ "basis": "foxml SCP0005_SAVE_DISTRIBUTION_ROUTE → SP SCP0005_SAVE_DISTRIBUTION_ROUTE 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 21:5x): 수정 경로 = UPDATE scp_mst_distribution_route WHERE route_id · PR_SCP_MST_DISTRIBUTION_ROUTE_HIST 가 SCP_MST_DISTRIBUTION_ROUTE_H 에 이력 INSERT · 트리거 0 · 초안(save_scenario.draft.json) 연습 실행 통과분을 옮김(사용자 승인 11-13 21:4x)",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 PRIORITY 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "PRIORITY",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "PRIORITY",
+      "db_col": "PRIORITY",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

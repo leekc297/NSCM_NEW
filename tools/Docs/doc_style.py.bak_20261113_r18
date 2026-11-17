@@ -1,0 +1,211 @@
+# -*- coding: utf-8 -*-
+"""문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13
+  ① 수식어 쓰지 않기  ② 문맥으로 아는 주어 빼기  ③ 번역투 빼기
+  규칙 정본   tools/VibeManager/rules/50_DOC_STYLE.md
+  검출 표현   tools/Docs/doc_style_rules.csv (kind · pattern · hint) — 표현을 더하거나 빼려면 이 CSV 만 고친다
+
+사용
+  python doc_style.py <파일…> [--out <폴더>] [--quiet]
+      .xlsx          모든 시트의 문장 셀
+      .md .txt       줄 단위
+      .py .js .cs    한글이 든 문자열 리터럴(생성기에 박힌 고정 문장)
+  생성기에서:  import doc_style; doc_style.after_save(xlsx_path)   # 저장 직후 1줄 요약 + 보고 CSV
+
+검사하지 않는 것(오탐 방지)
+  따옴표·백틱·「」 안 글자(AS-IS 원문 라벨·메시지 인용) · 한글 4자 미만 셀 · 경로·식별자만 있는 셀
+종료 코드  0 = 위반 0 · 1 = 위반 있음(문서 생성 실패가 아님 — 생성기는 이 값을 종료 코드로 쓰지 않는다)
+"""
+import csv, io, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(HERE))
+RULES_CSV = os.path.join(HERE, 'doc_style_rules.csv')
+OUT_DIR = os.path.join(ROOT, 'Doc', '_doc_style')
+KINDS = ('수식어', '주어', '번역투')
+
+_rules = None
+
+
+def rules():
+    global _rules
+    if _rules is None:
+        _rules = []
+        with open(RULES_CSV, encoding='utf-8-sig', newline='') as f:
+            for r in csv.DictReader(f):
+                if (r.get('kind') or '').strip() and (r.get('pattern') or '').strip():
+                    _rules.append((r['kind'].strip(), re.compile(r['pattern']), (r.get('hint') or '').strip()))
+    return _rules
+
+
+# 인용 구간 = AS-IS 원문·라벨·메시지 → 검사 제외. 같은 길이의 공백으로 바꿔 위치를 유지한다.
+_QUOTED = re.compile(r"'[^'\n]{0,200}'|\"[^\"\n]{0,200}\"|‘[^’\n]{0,200}’|“[^”\n]{0,200}”|`[^`\n]{0,200}`|「[^」\n]{0,200}」|『[^』\n]{0,200}』")
+_HANGUL = re.compile(r'[가-힣]')
+
+
+def mask_quoted(s):
+    return _QUOTED.sub(lambda m: ' ' * len(m.group(0)), s)
+
+
+def is_sentence(s):
+    return isinstance(s, str) and len(_HANGUL.findall(s)) >= 4
+
+
+def check_text(s):
+    """→ [(kind, 걸린 표현, 고치는 법)]"""
+    if not is_sentence(s):
+        return []
+    t = mask_quoted(s)
+    out = []
+    for kind, rx, hint in rules():
+        for m in rx.finditer(t):
+            a, b = max(0, m.start() - 6), min(len(s), m.end() + 6)
+            out.append((kind, s[a:b].replace('\n', ' ').strip(), hint))
+    return out
+
+
+def scan_xlsx(path):
+    import openpyxl
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    cells = 0
+    for ws in wb.worksheets:
+        for row in ws.iter_rows():
+            for c in row:
+                v = c.value
+                if not is_sentence(v):
+                    continue
+                cells += 1
+                for k, hit, hint in check_text(v):
+                    yield (ws.title, getattr(c, 'coordinate', ''), k, hit, hint, v)
+    wb.close()
+    scan_xlsx.cells = cells
+
+
+def scan_lines(path):
+    n = 0
+    with open(path, encoding='utf-8-sig', errors='replace') as f:
+        for i, line in enumerate(f, 1):
+            if not is_sentence(line):
+                continue
+            n += 1
+            for k, hit, hint in check_text(line.rstrip('\n')):
+                yield ('', f'L{i}', k, hit, hint, line.strip())
+    scan_lines.cells = n
+
+
+_STR = re.compile(r"\"\"\"(.*?)\"\"\"|'''(.*?)'''|\"((?:[^\"\\\n]|\\.)*)\"|'((?:[^'\\\n]|\\.)*)'|`((?:[^`\\]|\\.)*)`", re.S)
+
+
+def scan_source(path):
+    """생성기 소스의 문자열 리터럴 — 주석 줄은 제외. 리터럴 안에서는 인용 구간을 가리지 않는다(리터럴 자체가 따옴표라서)."""
+    src = open(path, encoding='utf-8-sig', errors='replace').read()
+    n = 0
+    for m in _STR.finditer(src):
+        s = next((g for g in m.groups() if g is not None), '')
+        if not is_sentence(s):
+            continue
+        ls = src.rfind('\n', 0, m.start()) + 1
+        head = src[ls:m.start()].lstrip()
+        if head.startswith('#') or head.startswith('//') or head.startswith('*'):
+            continue
+        n += 1
+        line = src.count('\n', 0, m.start()) + 1
+        t = re.sub(r"'[^'\n]{0,80}'|‘[^’\n]{0,80}’|「[^」\n]{0,80}」", lambda q: ' ' * len(q.group(0)), s) if m.group(1) or m.group(2) or m.group(3) or m.group(5) else s
+        for kind, rx, hint in rules():
+            for h in rx.finditer(t):
+                a, b = max(0, h.start() - 6), min(len(s), h.end() + 6)
+                yield ('', f'L{line}', kind, s[a:b].replace('\n', ' ').strip(), hint, s.replace('\n', ' ')[:300])
+    scan_source.cells = n
+
+
+def scan(path):
+    ext = os.path.splitext(path)[1].lower()
+    fn = scan_xlsx if ext in ('.xlsx', '.xlsm') else scan_source if ext in ('.py', '.js', '.cs', '.ps1') else scan_lines
+    rows = list(fn(path))
+    return rows, getattr(fn, 'cells', 0)
+
+
+def report(path, rows, cells, out_dir=None):
+    out_dir = out_dir or OUT_DIR
+    os.makedirs(out_dir, exist_ok=True)
+    out = os.path.join(out_dir, os.path.basename(path) + '.style.csv')
+    tmp = out + '.tmp'
+    with open(tmp, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.writer(f)
+        w.writerow(['시트', '위치', '규칙', '걸린 표현', '고치는 법', '문장'])
+        for r in rows:
+            w.writerow([r[0], r[1], r[2], r[3], r[4], r[5][:500]])
+    os.replace(tmp, out)
+    return out
+
+
+def summary(rows):
+    c = {k: 0 for k in KINDS}
+    for r in rows:
+        c[r[2]] = c.get(r[2], 0) + 1
+    return c
+
+
+def after_save(path, quiet=False):
+    """생성기 저장 직후 호출 — 실패해도 문서 생성에는 영향이 없다. → 위반 수(검사 실패 = -1)"""
+    try:
+        rows, cells = scan(path)
+        if not rows:
+            if not quiet:
+                print(f'[문장 규칙] 위반 0 · 문장 {cells}개 — {os.path.basename(path)}')
+            return 0
+        out = report(path, rows, cells)
+        c = summary(rows)
+        if not quiet:
+            print(f"[문장 규칙] 위반 {len(rows)}건(수식어 {c['수식어']} · 주어 {c['주어']} · 번역투 {c['번역투']}) · 문장 {cells}개 — {os.path.basename(path)} → {os.path.relpath(out, ROOT)}")
+        return len(rows)
+    except Exception as e:  # 검사 실패는 숨기지 않는다
+        print(f'[문장 규칙] ERROR 검사 못함 — {os.path.basename(str(path))}: {e}')
+        return -1
+
+
+PROMPT_RULE = """## 문장 규칙 (사용자 상시 지시 2026-11-13 · 모든 설명·문장에 적용 · 정본 tools/VibeManager/rules/50_DOC_STYLE.md)
+1. 수식어를 쓰지 않는다 — 매우·다소·실제로·모두·반드시·정확히·다양한·중요한·적절히·원활하게·효과적으로 같은 꾸밈말 삭제. 정도는 수치·조건으로 적는다.
+2. 문맥으로 아는 주어는 뺀다 — '이 화면은', '본 기능은', '사용자가', '시스템은' 으로 문장을 시작하지 않는다. 주체가 둘 이상이라 헷갈릴 때만 주어를 적는다.
+3. 번역투를 쓰지 않는다 — '~에 대한/관한', '~에 의해', '~로 인해', '~를 통해', '~에 있어서', '~의 경우', '~를 수행한다', '~를 가지고 있다', '~하는 것이 가능하다', '~되어진다', '~것으로 보인다', '~에서의' 금지. '조회 조건 검증', 'SP 가 저장한다', '조회한다', '~이 있다', '~할 수 있다' 처럼 쓴다.
+AS-IS 원문(라벨·메시지·코드·SP 본문) 인용은 고치지 않고 따옴표 안에 그대로 둔다."""
+
+
+def main(argv):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+    quiet = '--quiet' in argv
+    out_dir = argv[argv.index('--out') + 1] if '--out' in argv else None
+    files = [a for i, a in enumerate(argv) if not a.startswith('--') and (i == 0 or argv[i - 1] != '--out')]
+    if not files:
+        print(__doc__)
+        return 2
+    total = 0
+    for p in files:
+        if not os.path.isfile(p):
+            print(f'ERROR 파일 없음: {p}')
+            total += 1
+            continue
+        try:
+            rows, cells = scan(p)
+        except Exception as e:
+            print(f'ERROR 검사 못함: {p} — {e}')
+            total += 1
+            continue
+        c = summary(rows)
+        out = report(p, rows, cells, out_dir) if rows else ''
+        print(f"{os.path.basename(p)} | 문장 {cells} | 위반 {len(rows)} | 수식어 {c['수식어']} | 주어 {c['주어']} | 번역투 {c['번역투']}{' | ' + os.path.relpath(out, ROOT) if out else ''}")
+        if not quiet:
+            seen = {}
+            for r in rows:
+                seen.setdefault((r[2], r[3]), 0)
+                seen[(r[2], r[3])] += 1
+            for (k, hit), n in sorted(seen.items(), key=lambda x: -x[1])[:15]:
+                print(f'   {k} · {n}건 · …{hit}…')
+        total += len(rows)
+    return 1 if total else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

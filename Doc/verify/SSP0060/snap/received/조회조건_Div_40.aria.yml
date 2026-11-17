@@ -1,0 +1,297 @@
+- paragraph: Shipment Plan(Auto & ESS)-WA_UC
+- text: Shipping Shipping Schedule Shipment Plan(Auto & ESS)-WA_UC Search Area
+- switch [checked]
+- button "Full screen"
+- text: Div*
+- combobox: 82 ESS Battery
+- button "Open"
+- text: Company*
+- combobox: ESUC
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: Bucket
+- combobox: Daily
+- button "Open"
+- text: Plan Date*
+- combobox: {DATE}
+- button "Open"
+- img
+- text: Period
+- textbox "YYYY.MM.DD": 2026.10.09
+- text: ~
+- textbox "YYYY.MM.DD": 2026.10.23
+- text: Model/Nickname
+- textbox
+- button
+- text: Product Level1
+- combobox "ALL"
+- button "Open"
+- button "Search(F5)"
+- button
+- separator
+- checkbox "Sum"
+- text: Sum
+- paragraph
+- button "Measure":
+  - img
+- button "Insert(F8)"
+- button "Delete(F9)"
+- button "Save(F7)":
+  - img
+  - text: Save(F7)
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- grid:
+  - rowgroup:
+    - row "Div From Site Product Level1 Model Nick Name BOH PSI Measure To Site Transmode Incoterms FCST Type {DATE} No":
+      - columnheader "Div"
+      - columnheader "From Site"
+      - columnheader "Product Level1"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "BOH"
+      - columnheader "PSI"
+      - columnheader "Measure"
+      - columnheader "To Site"
+      - columnheader "Transmode"
+      - columnheader "Incoterms"
+      - columnheader "FCST Type"
+      - columnheader "{DATE}"
+      - gridcell "No"
+      - gridcell
+    - row "{W} {W}":
+      - columnheader "{W}"
+      - columnheader "{W}"
+    - row "09 10 11 12 13 14 15 16 17":
+      - columnheader "09"
+      - columnheader "10"
+      - columnheader "11"
+      - columnheader "12"
+      - columnheader "13"
+      - columnheader "14"
+      - columnheader "15"
+      - columnheader "16"
+      - columnheader "17"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- separator
+- img
+- text: Shipment Date
+- textbox "YYYY.MM.DD": 2026.10.09
+- text: ~
+- textbox "YYYY.MM.DD": 2026.10.23
+- text: Model/Nickname
+- textbox: ECE1592F1-01-H01
+- button
+- text: Requestor
+- textbox
+- button
+- text: Product Level1
+- combobox "ALL"
+- button "Open"
+- button "신규"
+- button "Search"
+- button "Shipment Plan Detail"
+- button "Stock Location Detail"
+- button "oWMS Detail"
+- button "MES Stock"
+- button "MES Stock Detail"
+- button "Shipment Result"
+- grid:
+  - rowgroup:
+    - row "Div Confirm/Plan ID SO No DO No Status Product Level1 Model Nick Name From Site To Site Project Code Project Name End Customer Incoterms FCST Type Shipment Qty Shipment Date Trans Mode Building Remarks Change Reason Reason Detail No":
+      - columnheader "Div"
+      - columnheader "Confirm/Plan ID"
+      - columnheader "SO No"
+      - columnheader "DO No"
+      - columnheader "Status"
+      - columnheader "Product Level1"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Project Code"
+      - columnheader "Project Name"
+      - columnheader "End Customer"
+      - columnheader "Incoterms"
+      - columnheader "FCST Type"
+      - columnheader "Shipment Qty"
+      - columnheader "Shipment Date"
+      - columnheader "Trans Mode"
+      - columnheader "Building"
+      - columnheader "Remarks"
+      - columnheader "Change Reason"
+      - columnheader "Reason Detail"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "0 Sum":
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell "0"
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell "Sum"
+    - gridcell
+  - row "Sum 0"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:37
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:37
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:37
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:37
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 04:10:38
+- button "Toggle Calendar"
+- button "Toggle Time List"
+# visual-order: Div > Company > From Site > Bucket > Plan Date > Period > Period > Model/Nickname > Product Level1 > Shipment Date > Model/Nickname > Requestor > Product Level1

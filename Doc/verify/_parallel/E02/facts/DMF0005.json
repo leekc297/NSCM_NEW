@@ -437,7 +437,7 @@
     "kind": "CELL",
     "control": "spdMain",
     "column": "USER_ID_82",
-    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EditFlag)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ if (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.USER_ID_82))"
+    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ if (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.USER_ID_82))"
    },
    "multi": "",
    "div_arg": "sDivision",
@@ -522,7 +522,7 @@
     "kind": "CELL",
     "control": "spdMain",
     "column": "PRJ_OWNR_ID",
-    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EditFlag)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ if (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.PRJ_OWNR_ID))"
+    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ if (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.PRJ_OWNR_ID))"
    },
    "multi": "",
    "div_arg": "sDivision",
@@ -587,7 +587,7 @@
     "kind": "CELL",
     "control": "spdMain",
     "column": "USER_ID",
-    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EditFlag)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ else of (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.USER_ID))"
+    "guard": "else of (siMain.IsLock(siMain.SheetName)) ▸ if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)) == \"Y\" || siMain.GetText(e.Row, siMain.GetColumnIndex(…) ▸ else of (clbDivision.SelectedValue.ToString() == \"82\") ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.USER_ID))"
    },
    "multi": "",
    "div_arg": "sDivision",
@@ -837,7 +837,7 @@
     "kind": "CELL",
     "control": "spdSub",
     "column": "USER_ID",
-    "guard": "if (!siSub.IsLock(siSub.SheetName)) ▸ if (siSub.GetText(e.Row, siSub.GetColumnIndex(DefColumns.EditFlag)) == \"Y\") ▸ if (e.Column == siSub.GetColumnIndex(DefColumns.USER_ID)) ▸ if (clbDivision.SelectedValue.ToString() == \"82\")"
+    "guard": "if (!siSub.IsLock(siSub.SheetName)) ▸ if (siSub.GetText(e.Row, siSub.GetColumnIndex(DefColumns.EDIT_FLAG)) == \"Y\") ▸ if (e.Column == siSub.GetColumnIndex(DefColumns.USER_ID)) ▸ if (clbDivision.SelectedValue.ToString() == \"82\")"
    },
    "multi": "",
    "div_arg": "sDivision",

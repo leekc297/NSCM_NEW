@@ -15,7 +15,7 @@
 | DBeaver 실행 시 `ORA-00922` / `ORA-00933` | DBeaver SQL 에 `/`, `SET DEFINE`, `PROMPT`, 다중 `;` 포함 | 룰 08 §7.1 |
 | AS-IS 의 동적 visibility 가 신규 화면에 미반영 | Designer.cs + .cs 동적 배치 누락 | 룰 24 / 룰 25 §4 |
 | 메뉴 클릭 시 빈 화면 / `No matching route` / MDI 탭만 열리고 비어있음 | `SCM_ADM_MNU_M.MNU_URL` ↔ FE `route-paths.ts` slug 불일치 (1차) → 권한 (3차) | hook `menu-not-displayed-debug.md` 5단계 의무 (1=URL, 2=라우터, 3=메뉴권한, 4=부모권한, 5=런타임) |
-| 조회 버튼 클릭 시 `ORA-06550 PLS-00306: 인수의 갯수나 유형이 잘못되었습니다` | `SCM_ADM_PROC_M` (PROC 메타) 미등록 → BE 가 파라미터 0개로 SP 호출 | 룰 08 §4.4 의 자동 변환 SQL 로 `ALL_ARGUMENTS` → `SCM_ADM_PROC_M` INSERT. 신규 화면 등록 시 BLOCK 4 절대 누락 금지 |
+| 조회 버튼 클릭 시 `ORA-06550 PLS-00306: 인수의 갯수나 유형이 잘못되었습니다` | `SCM_ADM_PROC_M` (PROC 메타) 미등록 → BE 가 파라미터 0개로 SP 호출 | 룰 08 §4.4 의 자동 변환 SQL 로 `ALL_ARGUMENTS` → `SCM_ADM_PROC_M` INSERT. 신규 화면 등록 시 BLOCK 4 절대 누락 금지 (2026-11-13 정정: 이 표·본문의 '룰 08·24·25·26' 은 룰 v1 보관본 — `Doc/_dev_rules/_archive/` (룰 08 = `_archive/08_SCREEN_REGISTRATION.md` §4.4 Procedure 메타). v2 흡수 위치는 `README.md` §2 표) |
 | ORA-06550 PLS-00306 이 **SP body 변경 직후** 발생 | dual/triple cursor 변환 후 PROC_M O_RESULT_CURSOR 누락 | §15.1 + 메모리 `feedback_proc_m_sync_after_sp_body_change.md` |
 | BE 로그 `ORA-20001: 오류가 발생했습니다. ORA-06512 at line N` 만 보임 (실제 사고 위치 추적 불가) | EXCEPTION OTHERS 가 generic raise 로 SQLERRM 가림 | §15.5 + hook `sp-exception-handler-debug-friendly.md` 진단 절차 (임시 patch → root cause → 복원) |
 | Repair grid 더블클릭 시 ORA-20001 / 실제 원인 `ORA-06533 Subscript beyond count` | `UTL_CALL_STACK.SUBPROGRAM(1)(2)` 안전 체크 누락 | §15.4 + hook `sp-utl-call-stack-safety.md` |
@@ -69,7 +69,7 @@ END;
 | 시나리오 | 원인 | 처치 |
 |---|---|---|
 | A 에서 데이터 0건 | 현재 주차 데이터 미적재 | `DM_MST_CUSTOMER_FCST` 적재 또는 SP 의 `V_PLAN_WEEK` 로직을 `NVL(P_PLAN_WEEK, V_PLAN_WEEK)` 로 보정 |
-| B 에서 0건 | 사용자에게 메뉴 권한 미부여 | `SCM_ADM_USER_GR_MNU_MPG_M` 에 `(USER_GR_ID, MENU_ID)` 등록 — 본 룰 §2 BLOCK 7 |
+| B 에서 0건 | 사용자에게 메뉴 권한 미부여 | `SCM_ADM_USER_GR_MNU_MPG_M` 에 `(USER_GR_ID, MENU_ID)` 등록 — 본 룰 §2 BLOCK 7 (2026-11-13 정정: 'BLOCK 7' 은 이 문서 §2 에 없음 — 룰 v1 보관본 `_archive/08_SCREEN_REGISTRATION.md` §4.7 Group MENU · '권한 분리 (BLOCK 7)') |
 | C 에서 SP INVALID | PKG 컴파일 실패 | §2.2 ORA-06575 진단 |
 | C 에서 컬럼 0 | SP OUT cursor 미정의 | SP 시그니처 점검 |
 
@@ -95,7 +95,7 @@ DBeaver 에서 `BEGIN ... END;` PL/SQL 익명 블록 실행 시 결과 영역에
 
 **옵션 1 — Verify SQL (권장)**:
 ```
-20_{MENU_ID}_Registration_DBeaver_Verify.sql 전체 선택 → Ctrl+Enter
+20_{MENU_ID}_Registration_DBeaver_Verify.sql 전체 선택 → Ctrl+Enter   (11-13 정정: 이 변형 파일은 이제 만들지 않음 — 단일본의 검증 SELECT 를 실행)
 ```
 결과 7 행 모두 `CNT ≥ EXPECT_MIN` 이어야 통과.
 
@@ -140,7 +140,7 @@ PL/SQL 블록 안의 `INSERT INTO ... SELECT ... WHERE NOT EXISTS (...)` 패턴�
 
 ### 2.1 DBeaver 호환 SQL 규칙
 
-NSCM 메타 등록 SQL 은 4-파일 세트로 작성:
+NSCM 메타 등록 SQL 은 4-파일 세트로 작성: (2026-11-13 정정: 4-파일 세트는 2026-07-29 사용자 지시로 폐기 — SQL 산출물은 SQL*Plus/SQLcl 단일본만 만들고 `_DBeaver` 변형은 만들지 않는다 · `22_PACKAGE_ARTIFACTS.md` §2.1) — 아래 목록과 "DBeaver 파일 금지 사항"은 예전 산출물(`_DBeaver*.sql`)을 다룰 때의 참고로만 남긴다
 
 ```
 {name}.sql                    — SQL*Plus / SQLcl (DEFINE/&V_X/PROMPT/UNDEFINE/`/` OK)
@@ -155,7 +155,7 @@ DBeaver 파일 금지 사항:
 - `END;` 뒤 `/` 종결자
 - 단일 파일 내 PL/SQL 블록 + SELECT 혼재
 
-→ 상세 룰: `Doc/_dev_rules/08_SCREEN_REGISTRATION.md` §7.1
+→ 상세 룰: `Doc/_dev_rules/_archive/08_SCREEN_REGISTRATION.md` §7.1 (2026-11-13 정정: `Doc/_dev_rules/08_…` → `_archive/` 보관 위치 — 룰 v1 보관본, 과거 자료)
 
 ### 2.2 ORA-06508 진단 SQL
 
@@ -337,13 +337,14 @@ Windows 설정 → 시간 및 언어 → 언어 및 지역 →
 2. **`apps/web/src/index.tsx`** 최상단 첫 줄 `import './dayjs-setup';`
 3. **`apps/web/vite.config.ts`** 의 `optimizeDeps.esbuildOptions.plugins` 에 `lgesDayjsLocalePatch` 추가하여 `lib-main.mjs` 의 dynamic import 5건을 `Promise.resolve()` 로 치환 + `optimizeDeps.include` 에 dayjs 와 3개 locale 추가
 
-상세: **`Doc/_dev_rules/26_VITE_DAYJS_LOCALE.md`**
+상세: **`Doc/_dev_rules/_archive/26_VITE_DAYJS_LOCALE.md`** (11-13 정정: `_archive/` 보관 위치)
 
 ### 6.4 검증
 
 ```
 Remove-Item -Recurse -Force apps/web/node_modules/.vite
 pnpm dev
+# (2026-11-13 정정: AI 는 `pnpm dev` 직접 실행 금지 — 실행 hook .claude/hooks/block-dev-commands.ps1 가 pnpm dev/local 차단. FE 기동은 사용자가 하거나 _artifacts/local-docker-oracle/start-all.ps1 로)
 # DMF0020 오픈 → 콘솔에서 'Failed to resolve' 사라짐
 ```
 
@@ -371,17 +372,17 @@ pnpm dev
 
 | # | 원인 | 확인 방법 |
 |---:|---|---|
-| 1 | `SCM_ADM_API_M` 메타 미등록 (MENU_ID + SHEET_NM + ACTION 조합 누락) | `SELECT * FROM SCM_ADM_API_M WHERE MENU_ID='{X}' AND SHEET_NM='{sheet}' AND ACTION='{ACTION}'` |
+| 1 | `SCM_ADM_API_M` 메타 미등록 (MENU_ID + SHEET_NM + ACTION 조합 누락) | `SELECT * FROM SCM_ADM_API_M WHERE API_ID='{X}_{sheet}_{ACTION}'` (2026-11-13 정정: `WHERE MENU_ID=… AND SHEET_NM=… AND ACTION=…` → API_ID — 등록 SQL 의 SCM_ADM_API_M 컬럼은 API_ID·API_TP_CD·API_MSG_ID·API_MSG_DESC·API_URL·USE_YN 이고 메뉴·시트·버튼 조합은 `SCM_ADM_MNU_BTN_MPG_M`(MNU_ID, SHT_NM, MNU_BTN_CD → API_ID)에 있음) |
 | 2 | Oracle SP 미배포 또는 INVALID 상태 | `SELECT object_name, status FROM USER_OBJECTS WHERE object_name LIKE 'PKG_{MENU}%'` |
 | 3 | 파라미터 mismatch — FE 가 배열 (`deptIds: string[]`) 을 그대로 전송, BE/SP 는 단일 String 기대 | DevTools Payload 탭의 필드 타입 vs SP IN 파라미터 비교 |
-| 4 | 권한 미부여 (`USER_GR_MNU_BTN_MPG_M`) — 단 500 이라기보단 403 응답 일반적 | `SELECT * FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MENU_ID='{X}'` |
+| 4 | 권한 미부여 (`USER_GR_MNU_BTN_MPG_M`) — 단 500 이라기보단 403 응답 일반적 | `SELECT * FROM SCM_ADM_USER_GR_MNU_BTN_MPG_M WHERE MNU_ID='{X}'` (2026-11-13 정정: 컬럼 MENU_ID → MNU_ID) |
 | 5 | 세션/인증 NPE (`@LoginUser` injection 실패) | 다른 화면도 동일 증상이면 BE 전체 장애 |
 
 ### 7.4 격리 진단 순서
 
 1. **다른 화면 (예: `MNF0010` 메뉴 관리) 조회** 가 정상 동작하는지 확인 → BE 전체 vs 본 화면 한정 분기
 2. **DevTools Network → Response body** 의 message / code 직접 확인 — 사용자 추측 금지 (anti-simplification)
-3. 4-파일 SQL 세트 (`_DBeaver_Verify.sql`) 실행하여 메타 등록 검증
+3. 등록 SQL 단일본의 검증 SELECT 를 실행하여 메타 등록 검증 (11-13 정정: "4-파일 SQL 세트 (`_DBeaver_Verify.sql`)" → 단일본 — 4-파일 세트 폐기 2026-07-29)
 4. BE 로그 (cloud BE 접근 가능 시) 의 X-Request-ID (FE 에서 ULID 생성 후 헤더 전송) 로 BE 측 stack trace 추적
 
 ---
@@ -553,7 +554,7 @@ String userId = ((CustomUserDetails) auth.getPrincipal()).getUserId();
 ls C:/Projects/NSCM/nscm-fe/node_modules/node_modules 2>/dev/null && echo "DUPLICATE EXISTS"
 ```
 
-**보완 절차**: `27_WIJMO_PIVOT_AND_MODULE.md §A` + `hooks/module-duplication-check.md` 참조. 핵심:
+**보완 절차**: `_archive/27_WIJMO_PIVOT_AND_MODULE.md §A` (11-13 정정: `_archive/` 보관 위치) + `hooks/module-duplication-check.md` 참조. 핵심:
 ```bash
 rm -rf nscm-fe/node_modules/node_modules
 rm -rf nscm-fe/apps/web/node_modules/.vite
@@ -566,7 +567,7 @@ rm -rf nscm-fe/apps/web/node_modules/.vite
 
 **원인**: React wrapper 가 data 변경 시 내부 engine 의 itemsSource 를 갱신하는 과정에서 fields 가 reset 됨. `useEffect` 마다 `fields.clear() + push` 호출도 매번 reset 의 원인.
 
-**해결 패턴** (`27_WIJMO_PIVOT_AND_MODULE.md §C`):
+**해결 패턴** (`_archive/27_WIJMO_PIVOT_AND_MODULE.md §C` — 11-13 정정):
 - `useMemo(() => new PivotEngine(), [])` 로 engine 인스턴스 1회 생성
 - `useEffect` 에서 itemsSource 만 갱신, fields 는 **`rowFields.length === 0 && fields.length > 0` 가드** 하에 1회만 push
 - `<PivotGrid itemsSource={engine}>` 으로 engine 인스턴스 직접 전달
@@ -606,7 +607,7 @@ rm -rf nscm-fe/apps/web/node_modules/.vite
 
 **원인**: `SCM_ADM_MNU_BTN_MPG_M` 에 (MNU_ID, SHT_NM, MNU_BTN_CD) 매핑 누락.
 
-**보완**: 신규 sheet 등록은 **5종 테이블 모두** 시드 필요 (`27_WIJMO_PIVOT_AND_MODULE.md §D`):
+**보완**: 신규 sheet 등록은 **5종 테이블 모두** 시드 필요 (`_archive/27_WIJMO_PIVOT_AND_MODULE.md §D` — 11-13 정정):
 1. `SCM_MST_SHEET_COLUMNS` (시트 컬럼 메타)
 2. `SCM_ADM_API_M` (API_ID → SP)
 3. `SCM_ADM_PROC_M` (SP 파라미터 메타)

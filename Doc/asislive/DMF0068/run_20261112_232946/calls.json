@@ -1,0 +1,281 @@
+{
+ "id": "DMF0068",
+ "window": [
+  "2026-11-12 23:29:46.432",
+  "2026-11-12 23:30:23.503"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 23:29:46.832",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 3.75,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:46.864",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.09,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "DMF0068"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='DMF0068'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:46.889",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 21.74,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:47.036",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156,
+   "rows_kind": "DataSet rows",
+   "ms": 24.82,
+   "params": {
+    "p_program_id": "DMF0068",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ContributeSalesList"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='DMF0068', @p_user_id='jaeuk.shin', @p_sheet_name='ContributeSalesList'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:47.230",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 111.99,
+   "params": {
+    "MenuID": "Demand Manager ",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Demand Manager ', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:47.304",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 2.93,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "DMF0068"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='DMF0068'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:56.532",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.79,
+   "params": {
+    "Code": "MULTITIMEZONECODE",
+    "Param1": "AS054",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MULTITIMEZONECODE', @Param1='AS054', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:56.627",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 4.14,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:56.641",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 3.1,
+   "params": {
+    "p_lookup_type": "MDF_TYPE"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='MDF_TYPE'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:29:56.729",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0068_GET_CONT_VIEW_VERSIONPOPUP",
+   "sp": "DMF0068_GET_CONT_VIEW_VERSIONPOPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 69.18,
+   "params": {
+    "p_start_yyyymmdd": "20260812",
+    "p_end_yyyymmdd": "20270212",
+    "p_division_id": "40",
+    "p_version_type": "REPORT_SP_W",
+    "p_description": ""
+   },
+   "inline": "EXEC DMF0068_GET_CONT_VIEW_VERSIONPOPUP @p_start_yyyymmdd='20260812', @p_end_yyyymmdd='20270212', @p_division_id='40', @p_version_type='REPORT_SP_W', @p_description=''",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 23:30:03.964",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156,
+   "rows_kind": "DataSet rows",
+   "ms": 6.6,
+   "params": {
+    "p_program_id": "DMF0068",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "ContributeSalesList"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='DMF0068', @p_user_id='jaeuk.shin', @p_sheet_name='ContributeSalesList'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 23:30:15.958",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0068_GET_ORDERLIST",
+   "sp": "DMF0068_GET_ORDERLIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 72,
+   "rows_kind": "DataSet rows",
+   "ms": 11852.99,
+   "params": {
+    "p_division_id": "40",
+    "p_version_no": "R_S_20261028_V003",
+    "p_fromdt": "202501",
+    "p_todt": "202712"
+   },
+   "inline": "EXEC DMF0068_GET_ORDERLIST @p_division_id='40', @p_version_no='R_S_20261028_V003', @p_fromdt='202501', @p_todt='202712'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 23:30:16.053",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.6,
+   "params": {
+    "p_menu_id": "DMF0068",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "11.864",
+    "p_ui_time": "0.081",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='DMF0068', @p_log_type='FIND', @p_log_cnt='', @p_db_time='11.864', @p_ui_time='0.081', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 23:30:22.853",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 5.12,
+   "params": {
+    "MenuID": "Demand Manager ",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Demand Manager ', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

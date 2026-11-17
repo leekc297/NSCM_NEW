@@ -12,8 +12,8 @@
 |---|---|---|---|
 | 1 | AS-IS `.cs` + `.Designer.cs` | `GSCM/06.UIL/...` | 처음~끝 전체 read (block 단위) |
 | 2 | xlsx 12 시트 | `_analysis/_screens/{27|28|29|30|31|32}_*/{prefix}{MENU_ID}.xlsx` | 모든 시트 30+ filled cells |
-| 3 | 8 MD 폴더 | `_analysis/domain_{X}/screens/{MENU_ID}/` | analysis / events / api / validation / expressions / dropdowns / popups / mapping 8 MD |
-| 4 | 룰셋 v2 진입점 3 파일 | `Doc/_rules_v2/{anti-simplification, CLAUDE.md, 00_INDEX.md}` | 모두 read |
+| 3 | 8 MD 폴더 | `Doc/_analysis/domain_{X}/screens/{MENU_ID}/` (2026-11-13 정정: `_analysis/domain_*` → `Doc/_analysis/domain_*` — domain_* 폴더는 `Doc/_analysis/` 아래에만 있음. 2번 행 `_analysis/_screens/` 는 저장소 루트 `_analysis/` 그대로) | analysis / events / api / validation / expressions / dropdowns / popups / mapping 8 MD |
+| 4 | 룰셋 v2 진입점 3 파일 | `Doc/_rules_v2/{anti-simplification, 00_INDEX.md}` + 루트 `CLAUDE.md` (2026-11-13 정정: `Doc/_rules_v2/CLAUDE.md` 는 보관 이동됨(`Doc/_archive/rules_v2_reports/CLAUDE.md` — 옛 사본) → 현행 진입점은 저장소 루트 `CLAUDE.md`) | 모두 read (2026-11-14 정정: `CLAUDE.md §3` 기준 진입은 anti-simplification, `TRIGGER_ROUTER.md`, 해당 T# 의 핵심 hook. `00_INDEX.md` 는 카탈로그가 필요할 때만 연다) |
 | 5 | Figma 디자인본 (있으면) | `Doc/_figma/screens/{MENU_ID}.md` | 룰 31 §6.1 매핑 cross-check |
 | 6 | **🆕 AS-IS Framework 인덱스** | `_rules_v2/_asis/00_framework/01_BaseForm.md` 외 6 | BaseForm override 가능 메서드 / DataService 호출 패턴 / MessageHelper MSG ID / UsrControls / Logging / Auth / FoxDataClient — 모두 cross-ref |
 
@@ -37,7 +37,7 @@
 - [ ] **12 metadata_sql**: 7-BLOCK 메타 + 멱등 INSERT + MSSQL→Oracle 변환 + 4 파일 세트
 - [ ] **13 routing_menu**: MNU_URL slug + ROUTE_PATHS 일치 + UPPR_MNU_ID PascalCase + SHT_NM 'main'
 
-### §1.2 AS-IS Framework cross-ref (6 인덱스 의무 read)
+### §1.2 AS-IS Framework cross-ref (7 인덱스 의무 read) (2026-11-13 정정: 6 → 7 — 아래 목록·§5 표·실제 파일 `_asis/00_framework/01~07.md` 7개)
 
 - [ ] `_asis/00_framework/01_BaseForm.md` — BaseForm CRUD 6대 + Aux 4대 + 권한 + 검색조건 + spread 초기 설정
 - [ ] `_asis/00_framework/02_DataService.md` — SP 호출 4 시스템 + BigFilter + Dynamic column
@@ -55,7 +55,7 @@
 - [ ] **__asis-mapping__.md**: 4축 매핑 (Event / API / Validation / Expression / Button)
 - [ ] **POPUP 자동 생성 5종** (메모리 룰): 호출 모든 popup 의 신규 modal 작성 (공용 11 외 신규 필요 시)
 - [ ] **메타 SQL 4 파일 세트**: `_artifacts/{N}_{MENU_ID}_metadata*.sql`
-- [ ] **Deploy 패키지**: `_artifacts/{N}_{MENU_ID}_deploy/` (SP body + 메타 SQL + FE 파일 인벤토리 + BE 파일 인벤토리)
+- [ ] **Deploy 패키지**: `_artifacts/{N}_{MENU_ID}_deploy/` (SP body + 메타 SQL + FE 파일 인벤토리 + BE 파일 인벤토리) (2026-11-14 정정: 패키지 구성 정본은 `deploy-package-completeness.md` 의 6종 인벤토리)
 
 ---
 

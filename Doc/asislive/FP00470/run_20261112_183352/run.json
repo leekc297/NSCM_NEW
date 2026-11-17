@@ -1,0 +1,141 @@
+{
+ "id": "FP00470",
+ "started": "2026-11-12 18:33:52.698",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:33:53.017",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP00470_Master_Data_Validation",
+   "form_text": "Master Data Validation",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:00.244"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:34:03.622",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00470\\run_20261112_183352\\dump_load.json",
+   "control_count": 56,
+   "grid_count": 1,
+   "total": "Total : 13",
+   "time_status": "DB : 6.49s, UI : 0.015s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:03.628"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:34:03.941",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00470\\run_20261112_183352\\shots\\FP00470_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:04.080"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:34:04.567",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:05.030"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:34:15.513",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00470\\run_20261112_183352\\dump_find.json",
+   "control_count": 56,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 6.188s, UI : 0.076s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:15.518"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:34:15.680",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00470\\run_20261112_183352\\shots\\FP00470_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:15.789"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:34:16.121",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:34:16.725"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 27,
+  "calls_with_params": 27
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP00470_Master_Data_Validation",
+  "form_text": "Master Data Validation",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.FP.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 6.188s, UI : 0.076s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:33:52.906",
+ "t_find": "2026-11-12 18:34:04.238",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 56,
+  "layout_items": 12,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 14,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 27,
+  "calls_screen": 27,
+  "calls_find": 5,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:22.573",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:22"
+}

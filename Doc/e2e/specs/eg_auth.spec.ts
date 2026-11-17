@@ -8,7 +8,7 @@ import { test } from '../../../tools/E2E/fixtures/test';
 import { evalRules, parseRules, type Rule } from '../../../tools/E2E/lib/condeval';
 import { GRID, accountId, buttonSnapshot, condOptions, condSnapshot, ctxOf, distinctAccounts, divState, expectState, findMerged, gridState, groupStates, isDivLabel, labelKey, loadFacts, selectDiv, sessionMenus, watchStatus, type Account, type EgRes, type Facts, type Verdict } from '../../../tools/E2E/lib/authprobe';
 import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
-import { CFG, type Nscm } from '../../../tools/E2E/lib/nscm';
+import { CFG, FE as FE_URL, type Nscm } from '../../../tools/E2E/lib/nscm';
 import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
@@ -264,8 +264,22 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       if (s.status !== 200) put('EG382', a.key, '세션 API', 'ERROR', '200', String(s.status));
       else put('EG382', '메뉴 트리', a.key, inTree === wantMenu ? 'PASS' : 'FAIL', `그룹 ${a.groups.length}개 중 메뉴 권한 ${a.menuGroups.length}개 → ${wantMenu ? '노출' : '비노출'}`, inTree ? '트리에 있음' : '트리에 없음', 'SCM_ADM_USER_GR_MNU_MPG_M');
       if (MUT === 'menu_leak' && s.menus.includes('ZZ_MUT_MENU')) put('EG382', '메뉴 트리 전체', a.key, 'FAIL', '권한 메뉴만', '권한 밖 메뉴 ZZ_MUT_MENU 노출', 'SCM_ADM_USER_GR_MNU_MPG_M');
-      const r = await nscm.openScreen(ID);
+      let r = await nscm.openScreen(ID);
       if (!wantMenu) {
+        // 2026-11-17 사용자 확인(SSP0020 EG-f6eeda7b 허위 FAIL): 이 탭은 앞 계정이 연 화면 탭 목록(sessionStorage 'MDI-store')을 물려받아 권한 없는 계정에도 화면이 그려졌다.
+        //   실제 사용자는 새 세션으로 들어오므로 직접 접근은 새 브라우저 환경(저장소 없음)에서 로그인 → 주소 입력 → 8초 뒤 주소·그리드로 잰다(09:5x 캡처: /view/home · 그리드 0)
+        const br = p.context().browser();
+        if (br) {
+          const ctx = await br.newContext(); const q = await ctx.newPage();
+          try {
+            await q.goto(FE_URL, { waitUntil: 'domcontentloaded' });
+            await q.evaluate(async (id) => { await fetch('/api/user/login', { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ userId: id }) }); }, uid);
+            await q.goto(`${FE_URL}/view/${ID}`, { waitUntil: 'domcontentloaded' }); await q.waitForTimeout(8_000);
+            const u2 = q.url(); const g2 = await q.locator('.wj-flexgrid').first().isVisible().catch(() => false);
+            r = { authorized: g2 && !/\/view\/home\b/i.test(u2), notFound: r.notFound };
+            console.log(`[직접 접근 새 세션] ${ID} ${uid} url=${u2} grid=${g2}`);
+          } finally { await ctx.close().catch(() => undefined); }
+        }
         put('EG382', '직접 접근', a.key, (!r.authorized || r.notFound) ? 'PASS' : '판정필요', '메뉴 권한 없는 계정의 URL 직접 접근 차단(문서 GAPSELF-22·DM-65)', `authorized=${r.authorized} notFound=${r.notFound}`, 'SCM_ADM_USER_GR_MNU_MPG_M', '라우트 가드 부재는 기존 기록(authcrud gap) — AS-IS 근거(메뉴에 없으면 못 연다)로 FAIL 승격 여부는 사용자 결정 필요');
         if (!r.authorized || r.notFound) continue;
       } else if (!r.authorized || r.notFound) { put('EG382', '직접 접근', a.key, 'FAIL', '메뉴 권한 있음 → 접근', `authorized=${r.authorized} notFound=${r.notFound}`, 'SCM_ADM_USER_GR_MNU_MPG_M'); continue; }
@@ -303,7 +317,11 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       // 2026-11-06(SCP0084 EG374·EG411 허위 FAIL 6건): Division 이 ALL·복수·빈값이면 FE 는 Division 축 없이 사용자 그룹 합집합으로 버튼을 낸다
       //   (useTabBtnPermissions.ts:31-57 — divisionId 미지정/'ALL'/'a,b' → PR_GET_MNU_BTN_AUTH_DIV 에 Division 을 보내지 않음). 종전엔 빈 Div 로 Div 별 권한을 찾아
       //   '권한 없음 → 비노출' 을 기대했다 → 그 경우 기대 = btn_auth 의 계정 그룹 합집합(USE_YN Y).
-      const divAxis = !!ds.code && !/^all$/i.test(ds.code) && !ds.code.includes(',');
+      // 2026-11-13 T288(주기 1 결과 점검 · DMF0005 10행·SCP0028 6행 허위 FAIL): 버튼 노출 기대를 '선택 Division 의 권한(PR_GET_MNU_BTN_AUTH_DIV(Div x))' 으로 잡아,
+      //   다른 Division·그룹에 그 버튼 권한이 있는 계정에서 '없음 → 비노출' 을 기대했다. 실제 TO-BE 는 Division 을 받지 않는다 —
+      //   FE useTabBtnPermissions.ts:57 `GET /admin/menu/${menuId}/auth`(menuId 만) · BE MenuController.java:67-69 retrieveMenuBtnAuth(userId, mnuId).
+      //   = USER_ID 가 가진 그룹 권한의 합집합(TO-BE 룰 CR-102). 기대값을 Division 축 없이 계정 그룹 합집합으로만 계산한다.
+      const divAxis = false;
       const auth = new Set(divAxis ? ((f.btnDiv?.[a.key] || {})[ds.code] || [])
         : f.db.btnAuth.filter(b => (b.use_yn || 'Y') === 'Y' && a.groups.includes(b.user_gr_id)).map(b => b.mnu_btn_cd));
       const judgeBtn = async () => {
@@ -373,7 +391,7 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       await p.waitForFunction(() => { const d = document.querySelector('[class*="_dualListContainer_"]'); return !!d && d.querySelectorAll('tbody tr').length > 0; }, undefined, { timeout: 15_000 }).catch(() => undefined);
       if (MUT === 'measure_leak') await p.evaluate(() => { const t = document.querySelector('[class*="_dualListContainer_"] tbody'); if (t) { const tr = t.querySelector('tr')?.cloneNode(true) as HTMLElement; if (tr) { const tds = tr.querySelectorAll('td'); tds[2].textContent = 'ZZ_MUT Measure'; t.appendChild(tr); } } });
       if (MUT === 'req_star' && /Column/.test(re.source)) await p.evaluate(() => { const c = Array.from(document.querySelectorAll('[class*="_dualListContainer_"] td')).find(e => /\*$/.test((e as HTMLElement).innerText.trim())) as HTMLElement | undefined; if (c) c.innerText = c.innerText.replace('*', ''); });
-      const items = await p.evaluate(() => Array.from(document.querySelectorAll('[class*="_dualListContainer_"] [class*="_sideTable_"]')).map(s => ({ title: ((s.querySelector('[class*="_dualTitle_"]') as HTMLElement | null)?.innerText || '').trim(), rows: Array.from(s.querySelectorAll('tbody tr')).map(tr => { const tds = Array.from(tr.querySelectorAll('td')) as HTMLElement[]; return (tds[2]?.innerText || '').trim(); }).filter(Boolean) })));
+      const items = await p.evaluate(() => Array.from(document.querySelectorAll('[class*="_dualListContainer_"] [class*="_sideTable_"]')).map(s => ({ title: ((s.querySelector('[class*="_dualTitle_"]') as HTMLElement | null)?.innerText || '').trim(), rows: Array.from(s.querySelectorAll('tbody tr')).map(tr => { const tds = Array.from(tr.querySelectorAll('td')) as HTMLElement[]; const t0 = (tds[2]?.innerText || '').trim(); if (!t0) return ''; /* 2026-11-16 SCP0104 EG160: 공용 컬럼 설정 팝업은 고정 컬럼(USER_SELECTABLE_FLAG N)을 라벨 끝 '*' 대신 빨간 라벨(keyLabel)로 표시한다(ColumnLayoutModal.tsx:398~404 · 2026-09-18 변경). 라벨 문구 자체의 '*'(Div* 등)는 지우고, 빨간 라벨이면 '*' 를 붙여 기존 판정에 넘긴다 */ const key = !!tds[2]?.querySelector('[class*="keyLabel"]'); const t1 = t0.replace(/\s*\*\s*$/, ''); return key ? `${t1}*` : t1; }).filter(Boolean) })));
       const cancel = dlg.getByRole('button', { name: /^(Cancel|취소|Close|닫기)$/i }).first();
       if (await cancel.isVisible({ timeout: 800 }).catch(() => false)) await cancel.click({ timeout: 3_000 }).catch(() => undefined); else await p.keyboard.press('Escape').catch(() => undefined);
       await p.waitForTimeout(400); await nscm.clearDialogs().catch(() => undefined);
@@ -471,7 +489,14 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     await nscm.expandSearchArea(); await nscm.search().catch(() => undefined); await probe.waitRows(p, 40_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); if (!curHas) { await selectDiv(nscm, toDiv); await nscm.search().catch(() => undefined); await probe.waitRows(p, 40_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); } await ensureRows(nscm, 1, `eg-ins-${toDiv}`);
     const heads = p.locator('.wj-flexgrid:visible .wj-colheaders .wj-cell'); const nh = await heads.count(); let col: { binding: string } | null = null;
     for (let h = 1; h < Math.min(nh, 12) && !col; h++) { await heads.nth(h).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(500); const st0 = await gridState(p); if (st0?.sort.length) col = { binding: st0.sort[0] }; }
-    if (!col) { put('EG126', 'Sort 상태 Insert', ID, 'ERROR', '헤더 클릭 정렬', `헤더 ${nh}칸 클릭 후 정렬 상태 없음 — 측정 경로 없음`); return; }
+    // 2026-11-16 SCP0104(EG126 미검증): 공용 그리드는 F3 정렬 스위치를 켠 뒤 머리글 클릭으로 정렬한다(CR-034 · 팝업 sortByF3 와 같은 경로) — 스위치 없이 클릭만 해서 '정렬 상태 없음'이었다
+    let viaF3 = false;
+    if (!col) {
+      await p.evaluate(`(() => { const c = ${GRID}; if (c) { c.select(0, 1); c.focus(); } })()`).catch(() => undefined); await p.keyboard.press('F3').catch(() => undefined); await p.waitForTimeout(400); viaF3 = true;
+      for (let h = 1; h < Math.min(nh, 12) && !col; h++) { await heads.nth(h).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(500); const st0 = await gridState(p); if (st0?.sort.length) col = { binding: st0.sort[0] }; }
+    }
+    if (!col) { put('EG126', 'Sort 상태 Insert', ID, 'ERROR', '헤더 클릭 정렬', `헤더 ${nh}칸 클릭 후 정렬 상태 없음(F3 정렬 스위치 켠 뒤 재시도 포함) — 측정 경로 없음`); return; }
+    if (viaF3) console.log(`[EG126] F3 정렬 스위치 켠 뒤 ${col.binding} 정렬`);
     const before = await gridState(p); const pickRow = Math.min(2, Math.max(0, (before?.rows || 1) - 1));
     await p.evaluate(`(() => { const c = ${GRID}; c.select(${pickRow}, 0); })()`); await p.waitForTimeout(200);
     const ins = await clickInsert(); await mutDom(nscm, 'after-insert'); const after = await gridState(p);
@@ -587,13 +612,23 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       if (er.rows <= 0) { put('EG032', a.key, lab, 'ERROR', '조회 행', `0행(${er.via.slice(0, 60)})`); return; }
       await mutDom(nscm, 'sort');
       const items: Record<string, string>[] = []; for (let i = 0; i < Math.min(er.rows, 30); i++) items.push((await probe.rowItem(p, i)) || {});
-      const key = (last?.keys || '').split(/[,\s]+/)[0]; const k2 = Object.keys(items[0] || {}).find(x => x.toUpperCase() === key.toUpperCase());
+      // 2026-11-17 SCP0104 EG032 ERROR('행 데이터에 정렬 키 없음'): 마지막 SQL 정렬이 그리드가 아닌 날짜 제목 SP(SORT_ORDER_NO)였다 → 그리드 행에 첫 키가 있는 정렬 사실 중 마지막 것을 쓴다
+      const ik = Object.keys(items[0] || {}).map(x => x.toUpperCase());
+      const fit = [...rules].reverse().find(rr => ik.includes((rr.keys.split(/[,\s]+/)[0] || '').replace(/^[A-Z]+\./i, '').toUpperCase()));
+      const use = fit || last;
+      const key = (use?.keys || '').split(/[,\s]+/)[0].replace(/^[A-Z]+\./i, ''); const k2 = Object.keys(items[0] || {}).find(x => x.toUpperCase() === key.toUpperCase());
       order[lab] = items.map(it => (k2 ? String(it[k2] ?? '') : ''));
       if (!last) { put('EG032', a.key, lab, 'ERROR', 'AS-IS 정렬 사실', 'sort_rules.csv 정적 ORDER BY 없음'); continue; }
-      if (!k2) { put('EG032', `정렬 키 ${key}`, `${lab} ${a.key}`, 'ERROR', `AS-IS ${last.line}`, '행 데이터에 정렬 키 없음 — 측정 불가', last.line); continue; }
+      if (!k2) {  // 그리드 행 키로 쓸 AS-IS 정렬 사실이 없음 → 두 계정(칸 설정 보유·미보유)의 행 순서가 같은지로 잰다(개인화가 데이터 순서를 바꾸지 않음)
+        const ck = Object.keys(items[0] || {}).filter(x => !/^(_|CRUD|CHK$)/i.test(x)).slice(0, 6);
+        order[lab] = items.map(it => ck.map(c => String(it[c] ?? '')).join('|'));
+        if (lab === '미보유' && order['보유']) { const same = JSON.stringify(order['보유']) === JSON.stringify(order['미보유']);
+          put('EG032', '행 순서 보유↔미보유', `${withTs.key} ↔ ${noTs.key} · Div ${div}`, same ? 'PASS' : 'FAIL', '칸 설정 보유·미보유 계정 행 순서 같음', `${order['미보유'].length}행 ${same ? '같음' : '다름'} · 비교 키 ${ck.join(',')} · AS-IS 정렬 사실 ${use ? use.line + ' 키 ' + key + ' 는 그리드 행에 없음' : '없음'}`, 'sort_rules.csv'); }
+        continue;
+      }
       const nums = order[lab].map(Number); const isNum = nums.every(n => Number.isFinite(n)); const seq = isNum ? nums : order[lab];
       const asc = seq.every((v, i) => i === 0 || (v as never) >= (seq[i - 1] as never)); const desc = seq.every((v, i) => i === 0 || (v as never) <= (seq[i - 1] as never));
-      put('EG032', `정렬 키 ${key}`, `${lab} ${a.key} · Div ${div}`, asc || desc ? 'PASS' : 'FAIL', `AS-IS ORDER BY ${last.keys}(${last.line})`, `${seq.length}행 ${asc ? '오름' : desc ? '내림' : '단조 아님'} · 처음 ${order[lab].slice(0, 4).join(',')}`, last.line, '혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만');
+      put('EG032', `정렬 키 ${key}`, `${lab} ${a.key} · Div ${div}`, asc || desc ? 'PASS' : 'FAIL', `AS-IS ORDER BY ${use.keys}(${use.line})`, `${seq.length}행 ${asc ? '오름' : desc ? '내림' : '단조 아님'} · 처음 ${order[lab].slice(0, 4).join(',')}`, last.line, '혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만');
     }
   });
 
@@ -609,7 +644,7 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     await b.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForSelector('[class*="_dualListContainer_"]', { timeout: 15_000 }).catch(() => undefined);
     const save = await nscm.visibleFirst(p.locator('[role="dialog"], .MuiDialog-paper').last().getByRole('button', { name: /^(Save|OK|저장|확인)$/i }));
     if (!save) { put('EG395', ID, '저장 후 비움', 'ERROR', '저장 버튼', '설정 창에 저장 버튼 없음'); return; }
-    { const moved = await p.evaluate(() => { const sides = Array.from(document.querySelectorAll('[class*="_dualListContainer_"] [class*="_sideTable_"]')); for (const side of sides) { const cb = side.querySelector('tbody input[type="checkbox"]') as HTMLInputElement | null; const name = ((side.querySelector('tbody tr td:nth-child(3)') as HTMLElement | null)?.innerText || '').trim(); if (cb && name && !/\*$/.test(name)) { cb.click(); return { side: ((side.querySelector('[class*="_dualTitle_"]') as HTMLElement | null)?.innerText || '').trim(), name }; } } return null; });
+    { const moved = await p.evaluate(() => { const sides = Array.from(document.querySelectorAll('[class*="_dualListContainer_"] [class*="_sideTable_"]')); /* 2026-11-16 SCP0104 EG-8c25ed3c: 첫 행이 고정 컬럼(빨간 라벨 keyLabel · 비표시로 못 옮김)이면 변경이 안 생겨 공용 팝업이 저장 없이 닫힌다(ColumnLayoutModal.tsx:502~507) → 고정이 아닌 행을 고른다 */ for (const side of sides) { for (const tr of Array.from(side.querySelectorAll('tbody tr'))) { const cb = tr.querySelector('input[type="checkbox"]') as HTMLInputElement | null; const td = tr.querySelector('td:nth-child(3)') as HTMLElement | null; const name = (td?.innerText || '').trim(); if (cb && name && !/\*$/.test(name) && !td?.querySelector('[class*="keyLabel"]')) { cb.click(); return { side: ((side.querySelector('[class*="_dualTitle_"]') as HTMLElement | null)?.innerText || '').trim(), name }; } } } return null; });
       if (moved) { const arrow = p.getByRole('button', { name: /invisible/i.test(moved.side) ? /^▶$/ : /^◀$/ }).first(); await arrow.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); } }
     // 안전: 이 구간 POST 전부 서버 미전송(실저장 금지) — 요청 본문만 기록
     const blocked: string[] = []; const h = (route: import('@playwright/test').Route) => { const q = route.request(); if (q.method() === 'GET') return route.continue(); blocked.push(q.url().replace(/^.*\/api\//, '').slice(0, 70)); return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ code: '0', message: 'success', result: {}, data: [] }) }); };

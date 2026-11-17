@@ -1,0 +1,17 @@
+- text: From Country
+- textbox
+- text: From City
+- textbox
+- button
+- text: To Country
+- textbox
+- text: To City
+- textbox
+- button
+- text: Trans Mode
+- combobox "ALL"
+- button "Open"
+- text: Valid
+- combobox: ALL
+- button "Open"
+# visual-order: From Country > From City > To Country > To City > Trans Mode > Valid

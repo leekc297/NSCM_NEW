@@ -1,0 +1,435 @@
+{
+  "id": "SSP0014",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SSP0014",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Operation group",
+    "From Site",
+    "Active",
+    "Model/Nickname",
+    "User ID(Name)"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "ShipmentModelPic",
+  "routePath": "shipping/shipment-model-pic",
+  "asisName": "ShipmentModelPIC",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup",
+      "tobeLabel": "Operation group",
+      "catalog": "",
+      "labels": [
+        "Operation group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite",
+      "tobeLabel": "From Site",
+      "catalog": "",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "user",
+      "label": "User ID(Name)",
+      "lbl": "LBL00339",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtUser",
+      "tobeLabel": "User ID(Name)",
+      "catalog": "",
+      "labels": [
+        "User ID(Name)"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-model-pic\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Shipment Model PIC",
+      "key": "SHIPMENT_MODEL_PIC",
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division",
+        "From Site",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Mail User1",
+        "Mail User2",
+        "Mail User3",
+        "Mail User4",
+        "Mail User5",
+        "Nick Name",
+        "Operation Group",
+        "Part Leader",
+        "Part Leader Name",
+        "Team Leader",
+        "Team Leader Name",
+        "User ID*",
+        "User Name",
+        "Valid*"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Model PIC",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0014.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0014_GET_USER_ID_CHECK",
+      "sheet": "Shipment Model PIC",
+      "btn": "USER_ID_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Shipment Model PIC": {
+      "40": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "User ID*",
+        "User Name",
+        "Part Leader",
+        "Part Leader Name",
+        "Team Leader",
+        "Team Leader Name",
+        "Mail User1",
+        "Mail User2",
+        "Mail User3",
+        "Mail User4",
+        "Mail User5",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "User ID*",
+        "User Name",
+        "Part Leader",
+        "Part Leader Name",
+        "Team Leader",
+        "Team Leader Name",
+        "Mail User1",
+        "Mail User2",
+        "Mail User3",
+        "Mail User4",
+        "Mail User5",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "Model",
+        "Nick Name",
+        "User ID*",
+        "User Name",
+        "Part Leader",
+        "Part Leader Name",
+        "Team Leader",
+        "Team Leader Name",
+        "Mail User1",
+        "Mail User2",
+        "Mail User3",
+        "Mail User4",
+        "Mail User5",
+        "Active*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "EDIT",
+        "SEARCH",
+        "SAVE",
+        "USER_CHECK"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "EDIT",
+      "SEARCH",
+      "SAVE",
+      "USER_CHECK"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "SAVE",
+      "USER_CHECK"
+    ],
+    "DM ADMIN": [
+      "SAVE",
+      "USER_CHECK",
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "SAVE",
+      "USER_CHECK",
+      "SEARCH"
+    ],
+    "DM Planner (W/S)": [
+      "SAVE",
+      "SEARCH",
+      "USER_CHECK"
+    ],
+    "DM Viewer": [
+      "SAVE",
+      "USER_CHECK",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE",
+      "EDIT"
+    ],
+    "FP Viewer": [
+      "SAVE",
+      "USER_CHECK",
+      "SEARCH"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE",
+      "EDIT"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "SAVE",
+      "USER_CHECK"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE",
+      "EDIT"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "USER_CHECK",
+      "EDIT",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "USER_CHECK",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "EDIT",
+      "SEARCH",
+      "SAVE",
+      "USER_CHECK"
+    ],
+    "SSP Viewer": [
+      "USER_CHECK",
+      "SAVE",
+      "SEARCH"
+    ]
+  },
+  "menuBtnCodes": [
+    "EDIT",
+    "SEARCH",
+    "SAVE",
+    "USER_CHECK"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

@@ -5,7 +5,7 @@
 
 원칙: 추측으로 채우지 않는다 — 1:1 로 이어지지 않는 인자는 UNRESOLVED 행으로 남기고 후보를 note 에 적는다. 짝이 없는 SP 도 행으로 남긴다(tobe_proc 공란).
 출력 1 tools/Harness/rules/sp_pair.csv  : menu_id, asis_sp, tobe_proc, kind, rs_map, source, note
-   짝 = gen_golden_cases.match_tobe 와 같은 알고리즘(같은 메뉴 proc_meta 우선 · 이름 토큰 동일(P_ 제거) exact > contains > none) + sp_replaced.csv(통합 구현 · SKIP 사유) + 기존 manual 행 보존
+   짝 = ① TO-BE PKG 명세에 적힌 AS-IS SP 이름(pkg_asis_map · source=pkgsrc · 2026-11-11) ② 없으면 gen_golden_cases.match_tobe 와 같은 알고리즘(같은 메뉴 proc_meta 우선 · 이름 토큰 동일(P_ 제거) exact > contains > none) + sp_replaced.csv(통합 구현 · SKIP 사유) + 기존 manual 행 보존
    kind = AS-IS SP 본문(Doc/asisfacts/db/modules/dbo.<SP>.sql)으로 판정: 주석 제거 후 INSERT/UPDATE/DELETE/MERGE 대상이 임시(#·@) 아니면 SAVE · 대상이 _LOG|SYS_LOG|HIST 뿐이면 LOG · 그 외 GET · EXEC 피호출 SP 재귀(깊이 3) · 본문 없음 = 미확인
    rs_map = 'ordinal'(결과셋 i ↔ O_RC{i}) — 사람이 바꾸면 '1:O_RC2;2:O_RC1' 형식
 출력 2 tools/Harness/rules/param_map.csv : tobe_proc, tobe_param, fe_key, asis_sp, asis_param, all_semantics, list_format, default, status, note
@@ -53,6 +53,47 @@ def wr(p, cols, rows):
 
 
 def norm(s): return re.sub(r'[^A-Z0-9]', '', (s or '').upper())
+
+
+def exact_key(name):
+    """인자 이름 정규화 키 — '@p_item_id' · 'p_item_id' · 'itemId' · 'sesItemId' → 'ITEMID'"""
+    s = (name or '').strip().lstrip('@')
+    s = re.sub(r'^(ses|session)(?=[A-Z_])', '', s)
+    s = re.sub(r'^[pP]_', '', s)
+    return re.sub(r'[^A-Z0-9]', '', s.upper())
+
+
+_SRC_CACHE = {}
+
+
+def asis_session_lang(mid, asis_param):
+    """화면 AS-IS 소스에서 `<인자> = UserInfoContext.Current[UserInfoProperites.Language]` 대입을 찾는다 → '파일:행' 또는 ''"""
+    pn = re.escape((asis_param or '').lstrip('@'))
+    if not pn:
+        return ''
+    rx = re.compile(r'(?:\b' + pn + r'|Parameters\[\"' + pn + r'\"\])\s*=\s*UserInfoContext\.Current\[\s*UserInfoProperites\.Language\s*\]')
+    files = []
+    for r in rd(P('Doc', 'asisfacts', 'screens', mid, 'endpoints.csv')):
+        f = (r.get('file') or '').replace(chr(92), '/')
+        if f and f not in files:
+            files.append(f)
+    for f in files:
+        full = P('GSCM', *f.split('/'))
+        if full not in _SRC_CACHE:
+            txt = ''
+            if os.path.exists(full):
+                raw = open(full, 'rb').read()
+                for enc in ('utf-8-sig', 'cp949', 'latin-1'):
+                    try:
+                        txt = raw.decode(enc)
+                        break
+                    except UnicodeDecodeError:
+                        continue
+            _SRC_CACHE[full] = txt.splitlines()
+        for i, line in enumerate(_SRC_CACHE[full]):
+            if rx.search(line):
+                return f"{os.path.basename(f)}:{i + 1}"
+    return ''
 
 
 def sp_text(sp):
@@ -171,6 +212,20 @@ def build(mids):
                 return p, 'contains'
         return '', 'none'
 
+    # 2026-11-11 EN-02 ②: 짝 1순위 = TO-BE PKG 명세에 적힌 AS-IS SP 이름(pkg_asis_map — 사내 ALL_SOURCE 실측). 이름 일치는 그다음.
+    #   실측: 차등 검증 SKIP 183 중 141 이 '짝 없음' — 이름을 줄여 옮긴 PROC·AS-IS 호출이 정적으로 안 풀린 화면이 이름 일치에서 빠졌다.
+    rec_by_sp, rec_note = {}, []
+    try:
+        import pkg_asis_map
+        want = sorted({p.split('.')[0] for mid in mids for p in tobe_by_menu.get(mid, []) if '.' in p})
+        rec, rec_note = pkg_asis_map.live_map(want) if want else ({}, [])
+        for proc, (sp, why) in rec.items():
+            rec_by_sp.setdefault(sp.upper(), []).append((proc, sp, why))
+    except Exception as e:  # 접속 실패 = 기록 미측정(이름 일치만으로 진행) — 숨기지 않고 출력
+        rec_note = [f'[미측정] PKG 원문 기록을 읽지 못함({type(e).__name__}: {str(e)[:120]}) — 이름 일치만 사용']
+    for n in rec_note:
+        print('   ~ ' + n)
+
     pairs, pmap, stats = [], [], {}
     for mid in mids:
         sps = []
@@ -180,6 +235,12 @@ def build(mids):
                 sp = m.group(1).split('.')[-1]
                 if sp not in sps:
                     sps.append(sp)
+        # PKG 명세에 기록된 AS-IS SP 중 화면 호출 추출(endpoints.csv)에 안 잡힌 것도 대상에 넣는다(그 화면 PKG 의 PROC 에 한함)
+        mine = {p.upper() for p in tobe_by_menu.get(mid, [])}
+        for spu, lst in sorted(rec_by_sp.items()):
+            for proc, sp, why in lst:
+                if proc.upper() in mine and sp not in sps and sp.upper() not in {s.upper() for s in sps}:
+                    sps.append(sp)
         reps = {x['asis_sp'].upper(): x for x in rep if (x.get('menu_id') or '').upper() == mid}
         for sp in sps:
             kind, why = classify_kind(sp)
@@ -188,9 +249,14 @@ def build(mids):
                 pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': '', 'kind': kind, 'rs_map': '', 'source': 'sp_replaced',
                               'note': f"통합 구현(SKIP) — TO-BE 호출 {x.get('tobe_calls')} · {x.get('reason', '')[:120]} · kind 근거: {why}"})
                 continue
-            tobe, how = match_tobe(sp, mid)
+            recs = rec_by_sp.get(sp.upper(), [])
+            recs = [x for x in recs if x[0].upper() in mine] or recs
+            if len(recs) == 1:
+                tobe, how, rwhy = recs[0][0], 'pkgsrc', recs[0][2]
+            else:
+                tobe, how = match_tobe(sp, mid); rwhy = (f"PKG 명세 기록이 PROC {len(recs)}개를 가리킴({[x[0] for x in recs]}) — 이름 일치로 대체" if recs else '')
             pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': tobe, 'kind': kind, 'rs_map': 'ordinal' if tobe else '', 'source': how,
-                          'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + f" · kind 근거: {why}"})
+                          'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + (f" · 짝 근거: {rwhy}" if rwhy else '') + f" · kind 근거: {why}"})
             if not tobe:
                 continue
             aps = sorted(asis_params.get(sp.upper(), []))
@@ -207,9 +273,20 @@ def build(mids):
             except ValueError:
                 gparams = {}
             used_a = set()
+            # 2026-11-11 T233: 1순위 = 이름 정규화 완전 일치(접두 @·p_·ses 제거 · 밑줄·대소문자 무시). 실측: SSP0025 itemId·nickName·modelId 가 동의어 개념 하나로
+            #   묶여 '후보 다중' UNRESOLVED(화면 전체 SKIP 20) · SCP0033 TO-BE 인자명이 p_division_id 형태라 개념 'pdivision'≠'division' 으로 안 이어짐(SKIP 11)
+            a_exact = {}
+            for _, an, adt in aps:
+                a_exact.setdefault(exact_key(an), []).append((an, adt))
+            exact_of = {}
+            for _, fk, tdt in tps:
+                hit = a_exact.get(exact_key(fk), [])
+                if len(hit) == 1 and sum(1 for _, f2, _ in tps if exact_key(f2) == exact_key(fk)) == 1:
+                    exact_of[fk] = hit[0]
+            exact_a = {v[0] for v in exact_of.values()}
             for _, fk, tdt in tps:
                 c = concept(fk)
-                cand = ac.get(c, [])
+                cand = [exact_of[fk]] if fk in exact_of else [x for x in ac.get(c, []) if x[0] not in exact_a]
                 tparam = 'P_' + re.sub(r'(?<!^)(?=[A-Z])', '_', fk).upper()
                 if len(cand) == 1:
                     an, adt = cand[0]; used_a.add(an)
@@ -229,19 +306,36 @@ def build(mids):
                 sem, note = all_semantics(sp, an)
                 dflt = gparams.get(an.lstrip('@')) or DEF.get(re.sub(r'^@?p_', '', an.lower()), '')
                 c = concept(re.sub(r'^@?p_', '', an))
-                multi = tc.get(c, [])
+                multi = [x for x in tc.get(c, []) if x[0] not in exact_of]
                 pmap.append({'tobe_proc': tobe, 'tobe_param': '', 'fe_key': '', 'asis_sp': sp, 'asis_param': an, 'all_semantics': sem, 'list_format': list_format(sp, an, ''),
                              'default': dflt, 'status': 'UNRESOLVED' if multi else 'ASIS_ONLY',
                              'note': (f"TO-BE 후보 다중 {[f for f, _ in multi]} — 사람이 fe_key 지정" if multi else f"TO-BE 에 개념 '{c}' 인자 없음(AS-IS 전용 — default 로 전달" + ('' if dflt else ' · default 없음=UNRESOLVED 값') + ')') + (f' · {note}' if note else '')})
+        # 2026-11-11 T235: AS-IS 전용 인자 중 화면 호출 지점에서 세션 언어를 대입하는 것 ↔ TO-BE 세션 인자 sesLangCd (근거 = AS-IS 원문 파일:행)
+        for tobe in sorted({p['tobe_proc'] for p in pairs if p['menu_id'] == mid and p['tobe_proc']}):
+            mine_rows = [m for m in pmap if m['tobe_proc'] == tobe]
+            ses_row = next((m for m in mine_rows if m['status'] == 'TOBE_ONLY' and m['fe_key'] == 'sesLangCd'), None)
+            if not ses_row:
+                continue
+            for m in mine_rows:
+                if m['status'] != 'ASIS_ONLY' or m['default']:
+                    continue
+                ev = asis_session_lang(mid, m['asis_param'])
+                if ev:
+                    m.update(status='OK', fe_key='sesLangCd', tobe_param=ses_row['tobe_param'], note=f"세션 언어 — AS-IS 호출 지점 {ev} 이 UserInfoContext Language 를 대입 ↔ TO-BE 세션 sesLangCd")
+                    pmap.remove(ses_row)
+                    break
         stats[mid] = {'sp': len(sps), 'pairs': sum(1 for p in pairs if p['menu_id'] == mid and p['tobe_proc']), 'none': sum(1 for p in pairs if p['menu_id'] == mid and not p['tobe_proc'] and p['source'] == 'none'),
                       'replaced': sum(1 for p in pairs if p['menu_id'] == mid and p['source'] == 'sp_replaced')}
     return pairs, pmap, stats
 
 
 def main():
-    mids = [a.upper() for a in sys.argv[1:] if not a.startswith('--')]
+    mids = [a.upper().strip('/').strip(chr(92)) for a in sys.argv[1:] if not a.startswith('--')]
     if not mids:
         print(__doc__); return 2
+    bad = [m for m in mids if not re.fullmatch(r'[A-Z0-9_]+', m)]
+    if bad:  # 2026-11-11: 'SSP0003/' 처럼 경로 조각이 들어오면 메뉴 대조가 전부 빗나가 잘못된 행이 쌓였다(173행 실측) — 실행 거부
+        print(f'[gen_param_map] 화면 ID 형식 아님: {bad} — 실행하지 않음'); return 2
     pairs, pmap, stats = build(mids)
 
     def work():

@@ -1,0 +1,31 @@
+/* 공용 SsoUserModal.module.scss 와 같은 3단 구조.
+   핵심은 `.gridWrapper { flex: 1; min-height: 0; }` —
+   min-height 가 없으면 flex 자식이 내용만큼 늘어나 그리드가 전 행을 펼치고
+   아래 버튼이 다이얼로그 밖으로 밀려 잘린다(2026-10-06 실사용 신고: 296명 조회 시 Confirm/Cancel 잘림).
+   min-height:0 을 주면 남은 높이에 맞춰 줄고 그리드 내부 스크롤이 생긴다. */
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.searchRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}

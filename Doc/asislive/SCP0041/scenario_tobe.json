@@ -1,0 +1,23 @@
+{
+ "id": "SCP0041",
+ "rule": "tobe",
+ "set": [
+  {
+   "name": "dCalendar",
+   "prop": "InitValue",
+   "value": "20261109:20271009",
+   "param": "from_yyyymmdd+to_yyyymmdd",
+   "from": "20260813:20270813",
+   "sheet": "Osp Stock"
+  }
+ ],
+ "unresolved": [],
+ "skipped": [
+  {
+   "param": "plant_site_id",
+   "asis": "CN00249500-P,CN05104100_82-P,KR00697200_82-P,KR00797800-P,KR04851000-P,KR32625300_82-P,PL01279700_82-P,US02182600_82-P,U",
+   "tobe": "",
+   "why": "ALL_FORM"
+  }
+ ]
+}

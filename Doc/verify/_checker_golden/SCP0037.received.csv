@@ -1,4 +1,248 @@
 ﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
-T-561c65ba,SC1,SCP0037 화면,FAIL,조회조건 순서가 Excel 과 다름 — 화면 operation → div → plantsite → material → active ↔ Excel,2026-11-07 18:24,,,received
-V-6d30ddef,F6,SCP0037 빈값 저장,ERROR,[검증엔진 미기동] 검증엔진 테스트 '저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장' 이 측정 전에 실패해 이 행은 실행되지 않음 — Ti,2026-11-07 18:24,,,received
-V-a7d94ca1,F1,SCP0037 2행 동시 저장,ERROR,[검증엔진 미기동] 검증엔진 테스트 '저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장' 이 측정 전에 실패해 이 행은 실행되지 않음 — Ti,2026-11-07 18:24,,,received
+V-85ec81e0,F5,SCP0037 화면,FAIL,Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0,2026-11-14 12:22,,,received
+V-686bd02b,K3,SCP0037 화면,FAIL,"copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Cop",2026-11-14 12:22,,,received
+V-40b09280,D1,Operation LT.LT_DAY (LT(Day)*),FAIL,[화면 오류] 신규행 r0 LT_DAY 셀 편집 시작 시 편집기 생성 오류 — LT_DAY: ** Assertion failed in Wijmo,2026-11-14 12:22,,,received
+V-494dc9ad,G1,SCP0037 텍스트 부분일치 Material,FAIL,Material · 'PCAN0506'(값 'APCAN0506B' 일부) 이 조회 요청 본문에 실렸는데 0행 — 텍스트 조건 부분일치(Like),2026-11-14 12:22,,,received
+V-d814cf98,K3,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),FAIL,hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: ,2026-11-14 12:22,,,received
+V-fbc20535,K3,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,FAIL,"copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Cop",2026-11-14 12:22,,,received
+T-ea497b53,F5,SCP0037 화면,FAIL,Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0,2026-11-14 12:22,,,received
+T-0b703554,D1,13 · SpdMain_ClipboardPasted,FAIL,행 집계 — 대조표 13 'SpdMain_ClipboardPasted' 의 D1 14요소: PASS:8 · ERROR:4 · FAIL:1 · N,2026-11-14 12:22,,,received
+T-2e5f6d9a,D1,"3,9 · lock",FAIL,"행 집계 — 대조표 3,9 'lock' 의 D1 14요소: PASS:8 · ERROR:4 · FAIL:1 · NA:1 · FAIL 요소: LT_",2026-11-14 12:22,,,received
+V-eed95e79,E1,Operation LT.LT_DAY (LT(Day)*),ERROR,[입력 경로 실패] LT_DAY r0: 유효값 '1' 이 편집기·키보드 모두 들어가지 않음 — 규칙 밖 값 거부를 판정할 수 없음(입력 안 됨(,2026-11-14 12:22,,,received
+V-5ad7c26d,F8,SCP0037 저장 감사 필드,ERROR, | [미검증] 검사기(tools/Harness/verify/save_audit.py(정리 백업 루트 행 감사 컬럼 = 저장 계정·)가 이 대상,2026-11-14 12:22,,,received
+V-c403d7eb,F7,SCP0037 저장 연계 테이블,ERROR, | [미검증] 검사기(tools/Harness/verify/save_audit.py(CRUD 실제 저장 정리 백업 ↔ AS-IS )가 이 대상,2026-11-14 12:22,,,received
+V-0ba1cc9a,F5,SCP0037 원값 복원 상태 해제,ERROR,[측정 경로 없음] LT_DAY 값 변경이 안 됨('5'),2026-11-14 12:22,,,received
+V-50589bf0,I1,SCP0037 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림,ERROR,[측정 경로 없음] [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP,2026-11-14 12:22,,,received
+V-6d30ddef,F6,SCP0037 빈값 저장,ERROR,LT_DAY r1 '5'→빈값 [사유 불명] 저장 요청 없음 · 원복 OK · 입력 경로 실패: 입력 안 됨('5'→'5' · 더블클릭 뒤 포커,2026-11-14 12:22,,,received
+V-0853bec7,F4,SCP0037 경계값 저장,ERROR,LT_DAY r1 원값 '5' · [업무 검증 차단] 경계값 '100' 저장 요청 없음 · 입력 경로 실패: 입력 안 됨('5'→'5' · 더블,2026-11-14 12:22,,,received
+V-e656c6ef,L1,SCP0037 저장 응답 시간,PASS,저장 4회 소요 102·100·111·107ms · 최소 100ms · 기준 3000ms,2026-11-14 12:22,,,received
+V-a7d94ca1,F1,SCP0037 2행 동시 저장,PASS,LT_DAY 저장 1회 — r1 '5'→'6' 재조회 '6' OK · r2 '5'→'6' 재조회 '6' OK · 원복 '5' OK · 원복 '5,2026-11-14 12:22,,,received
+V-179f4c67,A7,SCP0037_GET_OPERATION_LT,ERROR, | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상,2026-11-14 12:22,,,received
+V-b32d9831,B3,조회조건 Div,ERROR,"[화면 초기(선택 Div=81)] 원문 ORDER BY 있음·정렬 키 해석 불가 — AS-IS 반환 순서와 다름: TO-BE ['40', '81",2026-11-14 12:22,,,received
+V-589c1045,B7,조회조건 Div,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-8ad187cc,B3,조회조건 Operation,ERROR,[화면 초기(선택 Div=81)] ORDER BY ['DISPLAY_SEQ'] 키 기준 2번째 역전: 키 [50.0]→[30.0] (사내 값 기,2026-11-14 12:22,,,received
+V-b4e39c1c,B7,조회조건 Operation,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-edb492b0,B1,조회조건 Plant Site,ERROR,'Plant Site' 항목에 콤보 없음(텍스트/팝업형 — 가장 가까운 콤보가 다른 항목 소속 8개) → 기계 판정 불가 — 수동 검수 대상(작,2026-11-14 12:22,,,received
+V-ec1baad0,B2,조회조건 Plant Site,ERROR, | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검,2026-11-14 12:22,,,received
+V-7d76cf27,B3,조회조건 Plant Site,ERROR, | [미검증] 검사기(combo_oracle order_check — AS-IS ORDER BY 키(사내 값 재검사)·CODE 정)가 이 대상,2026-11-14 12:22,,,received
+V-14732525,B4,조회조건 Plant Site,ERROR, | [미검증] 검사기(combo_oracle.py(W1))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증],2026-11-14 12:22,,,received
+V-2a6266e9,B6,조회조건 Plant Site,ERROR, | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검,2026-11-14 12:22,,,received
+V-92afb0fd,B7,조회조건 Plant Site,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-62364943,G7,조회조건 Plant Site,ERROR, | [미검증] 검사기(combo_oracle.py(W1) G7 — AS-IS 컨트롤 표시 열(CControl.setListBox·)가 이 대상,2026-11-14 12:22,,,received
+V-723fbd3d,G2,조회조건 Material,ERROR, | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검,2026-11-14 12:22,,,received
+V-85e4ccdc,B4,조회조건 Active,ERROR,[화면 초기(선택 Div=81)] [CR-059 확정 규칙 대상 — Active 로 관리되는 마스터 기반 조회조건은 Active Y/N 과 무관,2026-11-14 12:22,,,received
+V-043a4079,B7,조회조건 Active,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-c3a3e825,G7,조회조건 Active,ERROR,[화면 초기(선택 Div=81)] CODE≠NAME 후보 8건이 TO-BE 표시 문구와 한 건도 안 맞음(데이터 차이 또는 다른 형식) · AS,2026-11-14 12:22,,,received
+V-e157f811,B4,Operation LT.SCM_SITE_ID (Plant Site*),ERROR,[신규행(DIVISION_ID=81)] AS-IS 83건 vs TO-BE 7건 · 마스터(SCM_MST_SITE) 행으로 설명 안 되는 차이 6,2026-11-14 12:22,,,received
+V-ff48f9b2,B4,Operation LT.LT_OPERATION (LT Operation),ERROR,[신규행(DIVISION_ID=81)] AS-IS 0건 vs TO-BE 4건 · 차이 4건 설명 불가: SLITTING: 설명 불가(공통 후보 ,2026-11-14 12:22,,,received
+V-538d39e3,B1,Operation LT.INV_FLAG (Inv Flag),ERROR,INV_FLAG 셀 콤보(dataMap) 없음 — 에디터 유형 확인(D5) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2026-11-14 12:22,,,received
+V-17151791,B2,Operation LT.INV_FLAG (Inv Flag),ERROR,INV_FLAG 셀 콤보(dataMap) 없음 — 에디터 유형 확인(D5) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2026-11-14 12:22,,,received
+V-ea05071d,B3,Operation LT.INV_FLAG (Inv Flag),ERROR, | [미검증] 검사기(combo_oracle order_check — AS-IS ORDER BY 키(사내 값 재검사)·CODE 정)가 이 대상,2026-11-14 12:22,,,received
+V-94faf551,B4,Operation LT.INV_FLAG (Inv Flag),ERROR, | [미검증] 검사기(combo_oracle.py(W1))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증],2026-11-14 12:22,,,received
+V-da65b711,A2,Operation LT.INV_FLAG (Inv Flag),ERROR,INV_FLAG dataMap 없음 — 에디터 유형(D5) 행 참고 · 표시 '' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2026-11-14 12:22,,,received
+V-b8b5792d,D1,siMain.SwitchLock,ERROR, | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect))가 이 대상을,2026-11-14 12:22,,,received
+V-377e14ec,E4,MSG00093,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+V-7190eeb3,C2,siMain.SetCellTypeCombo,ERROR,원천/대상 해석 불가 — 조건 'if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText,2026-11-14 12:22,,,received
+V-4acebdd4,C2,siMain.SetCellTypeCombo,ERROR,원천/대상 해석 불가 — 조건 'if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText,2026-11-14 12:22,,,received
+V-c142b42e,C2,siMain.SetCellTypeCombo,ERROR,원천/대상 해석 불가 — 조건 'if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText,2026-11-14 12:22,,,received
+V-4ada50f4,C2,siMain.SetCellTypeCombo,ERROR,원천/대상 해석 불가 — 조건 'if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText,2026-11-14 12:22,,,received
+V-9f6ae677,C2,DIVISION_ID,ERROR,원천/대상 해석 불가 — 조건 'if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText,2026-11-14 12:22,,,received
+V-05394fc0,E4,MSG00093,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+V-e2267fc9,E4,MSG00093,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+V-b25ddfb6,H6,new SCM0002_ItembyPlantSitePopup(),ERROR, | [미검증] 검사기(_verify.spec(@verify)·smoke popup)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 ,2026-11-14 12:22,,,received
+V-b8be05b3,M3,new SCM0002_ItembyPlantSitePopup(),ERROR,AS-IS 팝업 문장 'new SCM0002_ItembyPlantSitePopup()' → 팝업 SCM0002_ItembyPlantSitePop,2026-11-14 12:22,,,received
+V-fb8ba7b5,H6,"popItem.Form_Load(false, ""N"", division, sScmSite, sItemId)",ERROR, | [미검증] 검사기(_verify.spec(@verify)·smoke popup)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 ,2026-11-14 12:22,,,received
+V-1b077988,H6,popItem.ShowDialog(),ERROR, | [미검증] 검사기(_verify.spec(@verify)·smoke popup)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 ,2026-11-14 12:22,,,received
+V-56418b46,C6,SCM_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-5bd925f6,C6,PLANT_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-6db681bf,C3,SCM_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 ,2026-11-14 12:22,,,received
+V-330ac7a0,C6,SCM_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-eb20ee4b,C3,PLANT_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 ,2026-11-14 12:22,,,received
+V-0268fc25,C6,PLANT_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-3299618b,C2,SCM_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-64ed804a,F3,SCM_SITE_ID,ERROR,붙여넣기 프로브 전제 부족(기존행 true · 신규행 false) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2026-11-14 12:22,,,received
+V-3e69ded9,C3,SCM_SITE_ID,ERROR,원천 컬럼 분기 해석 불가 — 조건 'for (iRow < e.CellRange.Row + e.CellRange.RowCount) ▸ for (,2026-11-14 12:22,,,received
+V-dd17c93b,C6,NICK_NAME,ERROR,원천 ITEM_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오,2026-11-14 12:22,,,received
+V-68ba811e,C6,SCM_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-d2ccc99d,C6,ITEM_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-fcc521b2,C6,NICK_NAME,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-92864f4a,C6,PLANT_SITE_ID,ERROR,원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · ,2026-11-14 12:22,,,received
+V-e70d39e9,H6,new SCM0002_MaterialByDivisionPopup(),PASS,AS-IS 팝업 문장 'new SCM0002_MaterialByDivisionPopup()' → 팝업 SCM0002_MaterialByDivis,2026-11-14 12:22,,,received
+V-228dcbad,M3,new SCM0002_MaterialByDivisionPopup(),PASS,AS-IS 팝업 문장 'new SCM0002_MaterialByDivisionPopup()' → 팝업 SCM0002_MaterialByDivis,2026-11-14 12:22,,,received
+V-f713ebba,H6,"pop.Form_Load(true, division, """", sItemId, this.Name.Substring(0, 7))",PASS,"AS-IS 팝업 문장 'pop.Form_Load(true, division, """", sItemId, this.Na' → 팝업 SCM0002_Ma",2026-11-14 12:22,,,received
+V-31846a65,H6,pop.ShowDialog(),PASS,AS-IS 팝업 문장 'pop.ShowDialog()' → 팝업 SCM0002_MaterialByDivisionPopup 의 규칙 H6 실측 6,2026-11-14 12:22,,,received
+V-76575543,C2,siMain.SetCellTypeCombo,ERROR,"원천/대상 해석 불가 — 조건 'if (null != pdivision && """" != pdivision) ▸ if (pltopration ==",2026-11-14 12:22,,,received
+V-156ea5fa,C2,siMain.SetCellTypeCombo,ERROR,"원천/대상 해석 불가 — 조건 'if (null != pdivision && """" != pdivision) ▸ else of (pltoprati",2026-11-14 12:22,,,received
+V-709da79e,C2,siMain.SetCellTypeCombo,ERROR,"원천/대상 해석 불가 — 조건 'if (null != pdivision && """" != pdivision) ▸ else of (pltoprati",2026-11-14 12:22,,,received
+V-19e696b1,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-8403d04a,C1,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,ERROR,규칙 C1 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-f823dc1f] SCP0037 연쇄 후보 Plant Site: ,2026-11-14 12:22,,,received
+V-fcb0c09c,K3,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,ERROR,f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV · 미포함: 팝업 그리드(이 시험은 메인,2026-11-14 12:22,,,received
+V-7c1dbf96,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),ERROR,규칙 B2 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-ec1baad0] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-0f369fd7,B3,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),ERROR,규칙 B3 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-7d76cf27] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-5ecd3f66,B4,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-be48d473,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),ERROR,"ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=",2026-11-14 12:22,,,received
+V-2e5126a2,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),ERROR,규칙 B4 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 3 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-228e2bbd,E6,텍스트 입력 컨트롤(TEXT BOX · FPText) 마우스 드래그 선택 후 Delete/Backspace,NA,직접 실측 없음 — 같은 규칙 E6 의 다른 대상 2행 PASS 는 이 결함의 근거가 아님 · 참고 [V-e7904f5b] SCP0037 화면 ,2026-11-14 12:22,,,received
+V-09b71c1e,M4,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),ERROR,규칙 M4 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-e0cc811f] ITEM_ID / Material: 실측[T-e0,2026-11-14 12:22,,,received
+V-02da65c9,B4,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-4b1f80bc,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-3fd7c124,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-fdd693c5,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-44c40e6c,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-bf62042f,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-7dd39e7e,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-9297df2c,K3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,ERROR,K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인),2026-11-14 12:22,,,received
+V-e0ef6fb0,B4,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-10d91691,C1,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,ERROR,규칙 C1 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-f823dc1f] SCP0037 연쇄 후보 Plant Site: ,2026-11-14 12:22,,,received
+V-4b49bce0,B2,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,ERROR,규칙 B2 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-ec1baad0] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-ccf2940d,D1,[DMF0020 결함 유형] Team·End Customer 컬럼,ERROR,규칙 D1 판정 15행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-40aa5ae4] SCP0037 팝업 (TO-BE 메타 팝업) ,2026-11-14 12:22,,,received
+V-22a3110a,C3,[DMF0020 결함 유형] Team·End Customer 컬럼,ERROR,규칙 C3 판정 8행 중 FAIL 0 · 판정필요 0 · 미검증 6 — [V-6db681bf] SCM_SITE_ID: 원천 DIVISION_ID,2026-11-14 12:22,,,received
+V-4bb1b822,B4,[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-8e17e96c,B2,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,ERROR,규칙 B2 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-ec1baad0] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-4159d179,E4,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-3c2be75d] SCM_SITE_ID / Plant Site: M,2026-11-14 12:22,,,received
+V-57b6308d,B4,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-df9d76d2,C1,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,ERROR,규칙 C1 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-f823dc1f] SCP0037 연쇄 후보 Plant Site: ,2026-11-14 12:22,,,received
+V-6e7be61d,B5,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-d13f6501,B5,[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능,ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-4b144f6c,A5,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),PASS,규칙 A5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [T-2d98a351] SCM_SITE_ID / Plant Site: S,2026-11-14 12:22,,,received
+V-d84cb816,B4,[DMF0004 결함 유형] Sales Site 조회조건 표시값,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-7b368270,C3,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,ERROR,규칙 C3 판정 5행 중 FAIL 0 · 판정필요 0 · 미검증 3 — [V-eb20ee4b] PLANT_SITE_ID: 원천 DIVISION_,2026-11-14 12:22,,,received
+V-ceb976de,E4,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-3c2be75d] SCM_SITE_ID / Plant Site: M,2026-11-14 12:22,,,received
+V-a8970d68,E4,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-3c2be75d] SCM_SITE_ID / Plant Site: M,2026-11-14 12:22,,,received
+V-faf90952,D1,[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼,ERROR,규칙 D1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-40aa5ae4] SCP0037 팝업 (TO-BE 메타 팝업) C,2026-11-14 12:22,,,received
+V-44b43ac2,K3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),ERROR,K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인),2026-11-14 12:22,,,received
+V-92f9385a,E6,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),ERROR,ime NA: 신규행에 직접 입력하는 문자 컬럼 없음 | auto PASS: 신규행 SCM_SITE_ID 에 'OC' 입력 → 편집기 'OC_2,2026-11-14 12:22,,,received
+V-90b7d62d,C3,[DMF0042 결함 유형] Sales Site·End Customer 셀,ERROR,규칙 C3 판정 7행 중 FAIL 0 · 판정필요 0 · 미검증 5 — [V-6db681bf] SCM_SITE_ID: 원천 DIVISION_ID,2026-11-14 12:22,,,received
+V-2bdec4c5,B5,[DMF0003 결함 유형] 신규 행 Measure 후보,ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-e4738629,B4,[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-4276048d,B5,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-69a9cffc,B4,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-82c90a72,E4,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-3c2be75d] SCM_SITE_ID / Plant Site: M,2026-11-14 12:22,,,received
+V-591add62,C3,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,ERROR,규칙 C3 판정 7행 중 FAIL 0 · 판정필요 0 · 미검증 5 — [V-6db681bf] SCM_SITE_ID: 원천 DIVISION_ID,2026-11-14 12:22,,,received
+V-58a21bf6,B5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-235de567,B4,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-71594e51,B5,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",ERROR,규칙 B5 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-9740052f,B7,[DMF0005 결함 유형] Team 조회조건 후보,ERROR,"판정필요: (a) 저장 SP SCP0037_SAVE_OPERATION_LT 대상 SCP_MST_OPERATION_LT, SCP_MST_OPERA",2026-11-14 12:22,,,received
+V-5ddcb122,E4,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-3c2be75d] SCM_SITE_ID / Plant Site: M,2026-11-14 12:22,,,received
+V-f160f928,H6,[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name),ERROR,규칙 H6 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-4f9b7e94] NICK_NAME / Nick Name: 실측[T,2026-11-14 12:22,,,received
+V-5452a949,B4,[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant),ERROR,규칙 B4 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 4 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-c7bc69e8,C3,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,ERROR,규칙 C3 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-c653f122] NICK_NAME / Nick Name: NICK,2026-11-14 12:22,,,received
+V-3209c1f9,E4,[SYS0014 결함 유형] Division 시트 저장(JV Planner),ERROR,규칙 E4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-0e962d80] DIVISION_ID / Division: MSG,2026-11-14 12:22,,,received
+V-4ca4ec2f,B4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,ERROR,규칙 B4 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-85e4ccdc] 조회조건 Active: [화면 초기(선택 Div=,2026-11-14 12:22,,,received
+V-fdb86140,B4,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,ERROR,규칙 B4 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-97aa7727,K3,[DMF0035 결함 유형] F5 단축키,ERROR,f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV,2026-11-14 12:22,,,received
+V-8bfbc778,A5,[DMF0082 결함 유형] BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개),PASS,규칙 A5 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 0 — [T-2d98a351] SCM_SITE_ID / Plant Site: S,2026-11-14 12:22,,,received
+V-f6eb7715,K3,[DMF0035 결함 유형] 조회 버튼 단축키,ERROR,f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV,2026-11-14 12:22,,,received
+V-351b8092,B4,[SCP0007 결함 유형] To Site 조회조건 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-dc951cb2,B4,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-7568159d,C3,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,ERROR,규칙 C3 판정 7행 중 FAIL 0 · 판정필요 0 · 미검증 5 — [V-6db681bf] SCM_SITE_ID: 원천 DIVISION_ID,2026-11-14 12:22,,,received
+V-c9e7c1da,C3,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,ERROR,규칙 C3 판정 8행 중 FAIL 0 · 판정필요 0 · 미검증 6 — [V-6db681bf] SCM_SITE_ID: 원천 DIVISION_ID,2026-11-14 12:22,,,received
+V-5c473262,M4,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,ERROR,규칙 M4 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-e0cc811f] ITEM_ID / Material: 실측[T-e0,2026-11-14 12:22,,,received
+V-4919c6de,B4,[DMF0004 결함 일반화] 조회조건 Sales Site 콤보(SCM_SITE_ID · SiteByEndCustomer_DM validYn ',ERROR,규칙 B4 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 3 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-f09b2c4c,B5,[DMF0021 결함 일반화] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 ,ERROR,규칙 B5 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [T-c07eab72] DIVISION_ID / Division: 실측[,2026-11-14 12:22,,,received
+V-411978a2,B3,[DMF0048 결함 일반화] 조회조건 Team(DEPT_ID)·End Customer(END_CUSTOMER)·Sales Site(SCM_SI,ERROR,규칙 B3 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-7d76cf27] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-0dec26dd,B4,[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterE,ERROR,규칙 B4 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-85e4ccdc] 조회조건 Active: [화면 초기(선택 Div=,2026-11-14 12:22,,,received
+V-b826c043,I1,[DMF0004 결함 일반화] 변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS,NA,규칙 I1 요소 판정에 FAIL 0 · 판정필요 0 · 미검증 1 있으나 이 결함 대상과 직접 일치하는 요소 없음 — 규칙 전반 상속으로 FAI,2026-11-14 12:22,,,received
+V-e193736e,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,ERROR,규칙 B4 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 2 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-1037dab4,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),ERROR,규칙 B2 판정 3행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-ec1baad0] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-1ed055f4,C3,Sales Company·Sales Plant 셀,ERROR,규칙 C3 판정 5행 중 FAIL 0 · 판정필요 0 · 미검증 3 — [V-eb20ee4b] PLANT_SITE_ID: 원천 DIVISION_,2026-11-14 12:22,,,received
+V-e23c2aca,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),ERROR,"ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=",2026-11-14 12:22,,,received
+V-bc2e5f7a,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),ERROR,규칙 B4 판정 4행 중 FAIL 0 · 판정필요 0 · 미검증 3 — [V-14732525] 조회조건 Plant Site:  | [미검증] 검,2026-11-14 12:22,,,received
+V-c32b5b2a,G4,SCP0037 스냅샷 조회조건 Div 40,ERROR,[재실측 스냅샷 조회조건] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0037\snap\received\조회조건_D,2026-11-14 12:22,,,received
+V-3b66581a,K4,SCP0037 스냅샷 버튼 Div 40,ERROR,[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0037\snap\received\버튼_Div_4,2026-11-14 12:22,,,received
+V-607d5006,A5,SCP0037 스냅샷 헤더 Operation LT,ERROR,[재실측 스냅샷 헤더] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0037\snap\received\헤더_Opera,2026-11-14 12:22,,,received
+V-0466e31c,H6,SCP0037 스냅샷 팝업 Material,ERROR,[재실측 스냅샷 팝업] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0037\snap\received\팝업_Mater,2026-11-14 12:22,,,received
+V-ecf2a9a9,H4,SCP0037 스냅샷 화면샷 1920,ERROR,[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio,2026-11-14 12:22,,,received
+V-ade3e311,H4,SCP0037 스냅샷 화면샷 1366,ERROR,[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio,2026-11-14 12:22,,,received
+AD-eb3043fa,A6,SCP0037 SCP0037_GET_OPERATION_LT 공통·유일 행 상대 순서,ERROR,[ORDER] [차등 검증 #1] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP003,2026-11-14 12:22,,,received
+AD-7e1e9a98,A6,SCP0037 SCP0037_GET_OPERATION_LT 공통·유일 행 상대 순서,ERROR,[ORDER] [차등 검증 #3] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP003,2026-11-14 12:22,,,received
+AD-6c570bf4,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #4] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP00,2026-11-14 12:22,,,received
+AD-ab023f3c,A6,SCP0037 SCP0037_GET_OPERATION_LT 공통·유일 행 상대 순서,ERROR,[ORDER] [차등 검증 #5] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP003,2026-11-14 12:22,,,received
+AD-7c20b05b,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #6] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP00,2026-11-14 12:22,,,received
+AD-3ab6a1f9,A6,SCP0037 SCP0037_GET_OPERATION_LT 공통·유일 행 상대 순서,ERROR,[ORDER] [차등 검증 #8] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP003,2026-11-14 12:22,,,received
+AD-825346f9,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #9] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP00,2026-11-14 12:22,,,received
+AD-55597710,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #10] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP0,2026-11-14 12:22,,,received
+AD-c9d1a7bb,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #13] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP0,2026-11-14 12:22,,,received
+AD-24be7dc5,A6,SCP0037 SCP0037_GET_OPERATION_LT 공통·유일 행 상대 순서,ERROR,[ORDER] [차등 검증 #14] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP00,2026-11-14 12:22,,,received
+AD-e6f9f563,A7,SCP0037 SCP0037_GET_OPERATION_LT 공통행 컬럼 값(공통 0행 · 불일치 셀 0),ERROR,[VALUES] [차등 검증 #15] main/SEARCH AS-IS SCP0037_GET_OPERATION_LT ↔ TO-BE PKG_SCP0,2026-11-14 12:22,,,received
+T-b2a7c859,E3,1 · cellType,ERROR,행 집계 — 대조표 1 'cellType' 의 E3 4요소: PASS:2 · ERROR:2,2026-11-14 12:22,,,received
+T-85e253f9,X-LOC,2 · cboDivision.SelectedIndexChanged,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-0065624f,E3,2 · cboDivision.SelectedIndexChanged,ERROR,행 집계 — 대조표 2 'cboDivision.SelectedIndexChanged' 의 E3 4요소: PASS:2 · ERROR:2,2026-11-14 12:22,,,received
+T-1d457945,X-LOC,3 · cboLTOperation.SelectedIndexChanged,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-a53a2b6c,E3,3 · cboLTOperation.SelectedIndexChanged,ERROR,행 집계 — 대조표 3 'cboLTOperation.SelectedIndexChanged' 의 E3 4요소: PASS:2 · ERROR:2,2026-11-14 12:22,,,received
+T-8af94649,X-LOC,4 · spdMain.CellClick,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-3c2be75d,E4,SCM_SITE_ID / Plant Site,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+T-6422d572,E4,MSG00093,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+T-11a89af0,X-LOC,5 · spdMain.ClipboardPasted,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-6db03fd4,E4,ITEM_ID / Material,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+T-f0408cdf,X-LOC,6 · spdMain.ComboSelChange,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-20517b7a,X-LOC,7 · spdMain.KeyPress,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-4e4c4aeb,E3,7 · spdMain.KeyPress,ERROR,행 집계 — 대조표 7 'spdMain.KeyPress' 의 E3 4요소: PASS:2 · ERROR:2,2026-11-14 12:22,,,received
+T-7b41ee0b,A5,2 · cboDivision.SelectedIndexChanged,ERROR,행 집계 — 대조표 2 'cboDivision.SelectedIndexChanged' 의 A5 5요소: ERROR:3 · PASS:2,2026-11-14 12:22,,,received
+T-e0cc811f,M4,ITEM_ID / Material,ERROR,실측[T-e0cc811f]: 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행,2026-11-14 12:22,,,received
+T-0662316e,X-LOC,9 · SpdMain_ComboSelChange,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-acfa4892,C3,SCM_SITE_ID / Plant Site,ERROR,SCM_SITE_ID: 원천 DIVISION_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정) →,2026-11-14 12:22,,,received
+T-c211493e,X-LOC,10 · SpdMain_KeyPress,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-34f90402,X-LOC,11 · SpdMain_KeyPress,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-24ad6a47,X-LOC,12 · SpdMain_ClipboardPasted,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-d1c142e9,C3,12 · SpdMain_ClipboardPasted,ERROR,행 집계 — 대조표 12 'SpdMain_ClipboardPasted' 의 C3 12요소: ERROR:10 · NA:2,2026-11-14 12:22,,,received
+T-f65d0482,X-LOC,13 · SpdMain_ClipboardPasted,ERROR,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 ,2026-11-14 12:22,,,received
+T-88524230,C3,13 · SpdMain_ClipboardPasted,ERROR,행 집계 — 대조표 13 'SpdMain_ClipboardPasted' 의 C3 12요소: ERROR:10 · NA:2,2026-11-14 12:22,,,received
+T-38f3981e,C3,5 · spdMain.ClipboardPasted,ERROR,행 집계 — 대조표 5 'spdMain.ClipboardPasted' 의 C3 12요소: ERROR:10 · NA:2,2026-11-14 12:22,,,received
+T-f3b52974,C2,PLANT_SITE_ID / Plant Site Code,ERROR,원천 DIVISION_ID 신규행 편집 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 ,2026-11-14 12:22,,,received
+T-999dbb95,C3,PLANT_SITE_ID / Plant Site Code,ERROR,PLANT_SITE_ID: 원천 DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값,2026-11-14 12:22,,,received
+T-06533f7b,D4,"10,6 · other",ERROR,"행 집계 — 대조표 10,6 'other' 의 D4 2요소: ERROR:2",2026-11-14 12:22,,,received
+T-2bca1c80,D4,DIVISION_ID / Division,ERROR,신규행 DIVISION_ID='81' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값) — TO-BE 가 값을 채,2026-11-14 12:22,,,received
+T-9fac181c,D4,LT_OPERATION / LT Operation,ERROR,신규행 LT_OPERATION='SLITTING' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값) — TO-BE,2026-11-14 12:22,,,received
+T-7ccfb642,B1,DIVISION_ID / Division,ERROR,실측[T-7ccfb642]: 검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결,2026-11-14 12:22,,,received
+T-b013b8d0,B2,DIVISION_ID / Division,ERROR,실측[T-b013b8d0]: 검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결,2026-11-14 12:22,,,received
+T-c07eab72,B4,DIVISION_ID / Division,ERROR,실측[T-c07eab72]: 검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필,2026-11-14 12:22,,,received
+T-3d38ef12,D5,DIVISION_ID / Division,ERROR,DIVISION_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=N — 편집 불가 칸이라 입력 방,2026-11-14 12:22,,,received
+T-8400b42e,E5,DIVISION_ID / Division,ERROR,실측[T-8400b42e]: 검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결,2026-11-14 12:22,,,received
+T-4f9b7e94,H6,NICK_NAME / Nick Name,ERROR,실측[T-4f9b7e94]: 검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(COL)을 실행하는 경로 없,2026-11-14 12:22,,,received
+T-ae06ca86,G5,NICK_NAME / Nick Name,ERROR,실측[T-ae06ca86]: 검사기(popup_args_check.py · _verify.spec(@verify))는 있으나 이 대상(COL)을,2026-11-14 12:22,,,received
+T-ee230b89,A5,8 · dataSource,ERROR,행 집계 — 대조표 8 'dataSource' 의 A5 5요소: ERROR:3 · PASS:2,2026-11-14 12:22,,,received
+T-9c2a1bfc,A5,"COMMON:UC-01 · 필터링 상태 신규행 Insert 시 필터 유지한 채 추가 행 표시(keepRowVisibleUnderFilter, 필",ERROR,행 집계 — 대조표 COMMON:UC-01 '필터링 상태 신규행 Insert 시 필터 유지한 채 추가 행 표시(keepRowVisibl' 의 A,2026-11-14 12:22,,,received
+T-c14e320c,D4,"COMMON:UC-01 · 필터링 상태 신규행 Insert 시 필터 유지한 채 추가 행 표시(keepRowVisibleUnderFilter, 필",ERROR,행 집계 — 대조표 COMMON:UC-01 '필터링 상태 신규행 Insert 시 필터 유지한 채 추가 행 표시(keepRowVisibl' 의 D,2026-11-14 12:22,,,received
+T-cdb5edb2,A5,COMMON:UC-02 · 데이터 수정 중 다른 데이터 조회 시 '수정 중...조회?' confirm(MSG00703),ERROR,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시 '수정 중...조회?' confirm(MSG00703"" 의 A",2026-11-14 12:22,,,received
+T-c59fb327,D4,COMMON:UC-03 · 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 Reset 후 재조회 유도,ERROR,행 집계 — 대조표 COMMON:UC-03 '컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 Reset 후 재조회' 의 D,2026-11-14 12:22,,,received
+T-b5227dfc,E3,COMMON:UC-04 · CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 자동소멸,ERROR,행 집계 — 대조표 COMMON:UC-04 'CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 자동소멸' 의 E3 4요소: PASS:,2026-11-14 12:22,,,received
+T-6a63f281,A5,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 A,2026-11-14 12:22,,,received
+T-1591cd8c,B1,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 B,2026-11-14 12:22,,,received
+T-56905fc6,B2,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 B,2026-11-14 12:22,,,received
+T-82c4754e,B4,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 B,2026-11-14 12:22,,,received
+T-bfce2b46,D5,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 D,2026-11-14 12:22,,,received
+T-c7457504,E5,COMMON:UC-05 · Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계),ERROR,행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 Code 아닌 Name 출력(dataMap 승계)' 의 E,2026-11-14 12:22,,,received
+T-b89c4576,G4,COMMON:UC-06 · Key-in 조회조건 콤마 다중 입력 시 전건 조회,ERROR,행 집계 — 대조표 COMMON:UC-06 'Key-in 조회조건 콤마 다중 입력 시 전건 조회' 의 G4 4요소: PASS:3 · ERROR:,2026-11-14 12:22,,,received
+T-db2aa1cd,E3,COMMON:UC-06 · Key-in 조회조건 콤마 다중 입력 시 전건 조회,ERROR,행 집계 — 대조표 COMMON:UC-06 'Key-in 조회조건 콤마 다중 입력 시 전건 조회' 의 E3 4요소: PASS:2 · ERROR:,2026-11-14 12:22,,,received
+T-b04f7c4d,A5,COMMON:UC-07 · 필터 걸린 상태 재조회 시 조회+필터 유지(rebindFilterColumns),ERROR,행 집계 — 대조표 COMMON:UC-07 '필터 걸린 상태 재조회 시 조회+필터 유지(rebindFilterColumns)' 의 A5 5요소:,2026-11-14 12:22,,,received
+T-efdd4cbb,G03-WIRE,SCP0037 화면,ERROR,게이트 G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 / 게이트 G03 As-is 이벤트 cboDivision,2026-11-14 12:22,,,received
+T-f47f0bc6,C2,INV_FLAG / Inv Flag,ERROR,INV_FLAG 연쇄 원천 해석 불가 — AS-IS ClbDivision_SelectedIndexChanged:851 if (siMain.Act,2026-11-14 12:22,,,received
+T-1b223b2d,C2,SCP0037_OperationLT.ClbDivision_SelectedIndexChanged,ERROR,진입점 집계 — 대조표 SCP0037_OperationLT.ClbDivision_SelectedIndexChanged 의 C2 1요소: ERRO,2026-11-14 12:22,,,received
+T-7f4ce918,X-ROW,SCP0037_OperationLT.ClbDivision_SelectedIndexChanged,ERROR,진입점 집계 8검사 — ERROR:6 · NA:2,2026-11-14 12:22,,,received
+T-d29e9a59,D5,SCP0037_OperationLT.CreateSpread,ERROR,진입점 집계 — 대조표 SCP0037_OperationLT.CreateSpread 의 D5 5요소: PASS:3 · ERROR:1 · NA:1,2026-11-14 12:22,,,received
+T-29ce2242,G4,btnItemId,ERROR,실측[T-29ce2242]: 검사기(smoke 화면 열림(labels)·_verify)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증,2026-11-14 12:22,,,received
+T-57236465,X-ROW,SCP0037_OperationLT.InitSpread,ERROR,진입점 집계 10검사 — PASS:5 · NA:4 · ERROR:1,2026-11-14 12:22,,,received
+T-78e868b6,C3,DIVISION_ID / Division,ERROR,"DIVISION_ID 연쇄 원천 컬럼 해석 불가 — AS-IS SpdMain_CellClick:654 siMain.SetValue(e.Row, ",2026-11-14 12:22,,,received
+T-0e962d80,E4,DIVISION_ID / Division,ERROR,MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(,2026-11-14 12:22,,,received
+T-ff81ad3f,C3,SCP0037_OperationLT.SetChangedControl,ERROR,진입점 집계 — 대조표 SCP0037_OperationLT.SetChangedControl 의 C3 1요소: ERROR:1,2026-11-14 12:22,,,received
+T-045c4eb6,C3,ITEM_ID / Material,ERROR,ITEM_ID: 원천 DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사,2026-11-14 12:22,,,received
+T-c653f122,C3,NICK_NAME / Nick Name,ERROR,NICK_NAME: 원천 ITEM_ID/DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업,2026-11-14 12:22,,,received
+T-db7a2b6b,F3,SCM_SITE_ID,ERROR,붙여넣기 프로브 전제 부족(기존행 true · 신규행 false) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2026-11-14 12:22,,,received
+T-8cb2f576,C2,NICK_NAME / Nick Name,ERROR,원천 DIVISION_ID 신규행 편집 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 ,2026-11-14 12:22,,,received
+T-1440b56b,C2,ITEM_ID / Material,ERROR,원천 DIVISION_ID 신규행 편집 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 ,2026-11-14 12:22,,,received
+T-a20f9e04,C2,SCP0037_OperationLT.SpdMain_ComboSelChange,ERROR,진입점 집계 — 대조표 SCP0037_OperationLT.SpdMain_ComboSelChange 의 C2 5요소: ERROR:5,2026-11-14 12:22,,,received
+T-715a80dd,X-ROW,SCP0037_OperationLT.SpdMain_ComboSelChange,ERROR,진입점 집계 26검사 — ERROR:25 · PASS:1,2026-11-14 12:22,,,received
+T-93c09f13,X-ROW,SCP0037_OperationLT.SpdMain_KeyPress,ERROR,"실측[T-93c09f13]: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/EXPR/RETURN/UI_PROP, 연결된 ",2026-11-14 12:22,,,received
+T-d57e843b,X-ROW,SCP0037_OperationLT.btnItemId_Click,ERROR,진입점 집계 9검사 — PASS:5 · ERROR:2 · NA:2,2026-11-14 12:22,,,received
+T-3a5286bb,C3,SCP0037_OperationLT.setScmSiteId,ERROR,진입점 집계 — 대조표 SCP0037_OperationLT.setScmSiteId 의 C3 1요소: ERROR:1,2026-11-14 12:22,,,received
+T-8502c086,X-ROW,SCP0037_OperationLT.setScmSiteId,ERROR,진입점 집계 7검사 — ERROR:6 · NA:1,2026-11-14 12:22,,,received
+EG-56de5a03,H3,SCP0037 팝업 SCM0002_MaterialByDivisionPopup COND:Material MERGE,ERROR,기대 AS-IS 병합 호출 facts · 실제 AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2 · 근거  → 기,2026-11-14 12:22,,,received
+EG-6fea03ff,H4,SCP0037 팝업 SCM0002_MaterialByDivisionPopup COND:Material RESIZE_MIN,NA,기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이즈 핸들 없음 · 근거 ,2026-11-14 12:22,,,received
+EG-59c60dd7,G1,SCP0037 팝업 SCM0002_MaterialByDivisionPopup COND:Material PICK_SEARCH,ERROR,기대 선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0 · 실제 요청 값 포함 true · 괄호 false · 행 0 · 본문,2026-11-14 12:22,,,received
+EG-c9d256dc,D5,SCP0037 팝업 (TO-BE 메타 팝업) CELL:ITEM_ID CELL_KEYIN,ERROR,기대 FPTextModal = 키인 가능 + 팝업 · 실제 editor 열림 false(행 0) — 행 조건 잠금이면 다른 행 필요 · 근거 문,2026-11-14 12:22,,,received
+EG-60e9bb94,D5,SCP0037 팝업 (TO-BE 메타 팝업) CELL:ITEM_ID CELL_ICON,ERROR,기대 팝업 셀 아이콘 표시 · 실제 아이콘 false · 셀 클래스 'wj-cell wj-align-left wj-state-active wj-,2026-11-14 12:22,,,received
+EG-40aa5ae4,D1,SCP0037 팝업 (TO-BE 메타 팝업) CELL:ITEM_ID CELL_PASTE,ERROR,기대 붙여넣기 → ITEM_ID = 원천값 · 코드 컬럼 동반(문서 DM-18) · 실제 값 'APCAN0506B'→'APCAN0506B' (원,2026-11-14 12:22,,,received
+EG-99d0f9ce,I2,SCP0037 언어 전환 KO,ERROR,[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T,2026-11-14 12:22,,,received
+EG-bbb9cac6,I2,SCP0037 언어 전환 EN,ERROR,[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T,2026-11-14 12:22,,,received
+EG-f823dc1f,C1,SCP0037 연쇄 후보 Plant Site,ERROR,[CR-002 확정 규칙 대상 — Team(DEPT) 콤보·cascade 의 원천은 모든 화면에서 SCM_MST_SITE_ITEM(SSPM).D,2026-11-14 12:22,,,received

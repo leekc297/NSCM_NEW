@@ -10,8 +10,11 @@ import { BUCKET_PREFIX } from './shipment-request-pack.spreadHeader';
 const MAIN_EDITABLE_MEASURE = ['SHIP_REQ', 'Ship Req'];
 
 /**
- * 확정구간(회색) 판정(design 01 R18, AS-IS cs:718-724 SetBGColor 242,242,242) — 활성 D_ 날짜 컬럼 중
- * confirmDay(Pack=Plan_InforPacker_SCP NAME / Cell=CONFIRM_DAY, yyyymmdd) 이하(과거/확정) 셀. 전 행 적용.
+ * 확정구간(회색) 판정(design 01 R18, AS-IS 신세대 [E20250819-000452] cs:4236/4248 SetBGColor 242,242,242) —
+ * 활성 D_ 날짜 컬럼 중 confirmDay(yyyymmdd) 이하(과거/확정) 셀.
+ * confirmDay 는 **행별 확정일**이다: Pack=행 SHIP_FROZEN(= plan_start + 확정일수 - 1) / Cell=행 CONFIRM_DAY
+ * (= SYSDATE + 확정일수 - 1). 호출부(formatItem)가 시트별로 행의 해당 컬럼값을 뽑아 넘긴다 — 공장별
+ * SHIP_FROZEN(3/11/14일)이 밴드 길이에 반영된다. (종전 콤보 Plan_InforPacker_SCP 단일값 적용 버그 수정.)
  * W_/M_ 는 AS-IS 가 "D_"+confirmDay 컬럼 인덱스로만 회색 처리(일 단위)라 대상 아님.
  */
 export const isMainGridDateConfirmed = (columnBinding: string, confirmDay?: string): boolean => {
@@ -24,9 +27,11 @@ export const isMainGridDateConfirmed = (columnBinding: string, confirmDay?: stri
  * spdMain(Pack Biz/Cell Biz) 셀 편집 가능 판정(design 01 R7/R9/R18, `.cs:628-822`/`:2120-2186`).
  *
  * - 신규행(CRUD_TYPE='I')은 `INSERT_EDITABLE_COLUMNS_MAIN` 화이트리스트만 unlock(R9).
- * - 기존행(R7, DMF0045 shaded=lock 정합): Measure=="SHIP_REQ" 행의 **활성 버킷 동적(D_/W_/M_) 컬럼**만
- *   편집 가능하고, 그 중 **확정구간(D_ ≤ confirmDay)·정적 컬럼·비활성 버킷·他 measure** 는 잠금.
- *   confirmDay 미전달(조회 전/초기) 이면 확정구간 체크를 건너뛴다.
+ * - 기존행(R7): Measure=="SHIP_REQ" 행의 **활성 버킷 동적(D_/W_/M_) 컬럼**이 편집 가능하다. 확정구간
+ *   (D_ ≤ confirmDay)도 편집 가능하다 — AS-IS EditButton(Cell Biz) cs:713 `LockRange(startIdx..endIdx,
+ *   false)` 가 SHIP_REQ 행의 동적 전 구간(확정구간 포함)을 언락하고, cs:720/724 회색(242,242,242)은
+ *   색상만 입힌다(사용자 신고 2026-11-09 — 종전 TO-BE 는 확정구간을 잠가 AS-IS 와 어긋났다). 정적 컬럼·
+ *   비활성 버킷·他 measure 는 잠금. 회색 시각표시는 `isMainGridDateConfirmed`(formatItem) 로 그대로 유지.
  */
 export const isMainGridCellEditable = (params: {
   columnBinding: string;
@@ -52,7 +57,8 @@ export const isMainGridCellEditable = (params: {
   const tag = parseDynamicColumnTag(columnBinding);
   if (!tag) return false; // 정적 컬럼 잠금
   if (bucketType && tag.bucket !== BUCKET_PREFIX[bucketType]) return false; // 비활성 버킷 잠금
-  if (isMainGridDateConfirmed(columnBinding, confirmDay)) return false; // 확정구간 잠금
+  // 확정구간(D_ ≤ confirmDay)도 편집 가능 — AS-IS cs:713 가 SHIP_REQ 행 동적 전 구간을 언락(회색은 색상만,
+  //   item 4 사용자 신고 2026-11-09). 회색 표시는 isMainGridDateConfirmed(formatItem) 로 유지, 잠금은 하지 않는다.
   return true;
 };
 

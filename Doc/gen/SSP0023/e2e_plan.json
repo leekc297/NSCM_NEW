@@ -1,0 +1,1277 @@
+{
+  "menuId": "SSP0023",
+  "page": "ShipmentPlanElectrode",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-plan-electrode",
+  "asisName": "ShipmentPlanElectrode",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbDivision_ID"
+    },
+    {
+      "key": "companyId",
+      "label": "Company",
+      "lbl": "LBL00047",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbCompany_ID"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "resultType",
+      "label": "Result Type",
+      "lbl": "LBL01109",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbResultType"
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum"
+    },
+    {
+      "key": "rdButton1",
+      "label": "UOM",
+      "lbl": "LBL01126",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rdButton1"
+    },
+    {
+      "key": "rdButton2",
+      "label": "Cell",
+      "lbl": "LBL01059",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rdButton2"
+    },
+    {
+      "key": "rdButton3",
+      "label": "Pancake m",
+      "lbl": "LBL01099",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rdButton3"
+    },
+    {
+      "key": "pastPeriod",
+      "label": "Including Past Period",
+      "lbl": "LBL01081",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkPastPeriod"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "itemIds",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtModelId"
+    },
+    {
+      "key": "myModel",
+      "label": "My Model",
+      "lbl": "LBL01093",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkMyModel"
+    },
+    {
+      "key": "partLeader",
+      "label": "Part Leader",
+      "lbl": "LBL01101",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkPartLeader"
+    },
+    {
+      "key": "teamLeader",
+      "label": "Team Leader",
+      "lbl": "LBL01124",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkTeamLeader"
+    },
+    {
+      "key": "delegateeModel",
+      "label": "Delegatee Model",
+      "lbl": "LBL01070",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkDelegateeModel"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod3"
+    },
+    {
+      "key": "itemId2",
+      "label": "Material",
+      "lbl": "LBL00021",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItemId2"
+    },
+    {
+      "key": "model2",
+      "label": "Model/Nickname",
+      "lbl": "LBL00618",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtModel2"
+    },
+    {
+      "key": "requestor",
+      "label": "item.UserName",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestor"
+    },
+    {
+      "key": "lotId",
+      "label": "Lot ID",
+      "lbl": "LBL01090",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtLotID"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod2"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "formDown",
+      "label": "Excel Form",
+      "lbl": "LBL00762",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "formDown"
+    },
+    {
+      "key": "excelUpload",
+      "label": "Upload",
+      "lbl": "LBL01130",
+      "kind": "subtitle-custom",
+      "tobe": "EXCEL_UPLOAD",
+      "asis": "btnExcelUpload"
+    },
+    {
+      "key": "simulation",
+      "label": "Simulation",
+      "lbl": "LBL01119",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSimulation"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "requestor",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRequestor"
+    },
+    {
+      "key": "search",
+      "label": "Search",
+      "lbl": "LBL00112",
+      "kind": "search",
+      "tobe": "SearchArea.onSearch",
+      "asis": "btnSearch"
+    },
+    {
+      "key": "itemId2",
+      "label": "Item Id2",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItemId2"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Shipment Plan Detail",
+      "key": "SHIPMENT_PLAN_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "JR_BOH_QTY",
+        "JR_BOH_QTY_CELL",
+        "JR_BOH_QTY_PCM",
+        "PC_BOH_QTY",
+        "PC_BOH_QTY_CELL",
+        "PC_BOH_QTY_PCM",
+        "TOT_BOH_QTY",
+        "TOT_BOH_QTY_CELL",
+        "TOT_BOH_QTY_PCM",
+        "ATTRIBUTE10",
+        "BOD_ID",
+        "CELL_TYPE",
+        "CHANGE_REASON_CODE",
+        "CHANGE_REASON_DETAIL",
+        "CHANGE_REQ_NO",
+        "CHANGE_TYPE",
+        "CONFIRM_ID",
+        "CONFIRM_QTY_CELL",
+        "CONFIRM_QTY_JR",
+        "CONFIRM_QTY_PANCAKE",
+        "CONFIRM_QTY_ROLL_LENGTH",
+        "DAYOFWEEK_NAME",
+        "DIVISION_ID",
+        "DOM_EXP",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_POST_OPER",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "ERP_SO_NO",
+        "ERP_STATUS",
+        "ETA",
+        "ETD",
+        "Expected_Shipping_Date",
+        "FACTORY_ID",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "GAP",
+        "INCOTERMS",
+        "ITEM_ID",
+        "ITEM_ID_NICK_NAME",
+        "LT_DAY",
+        "MERGE_NUM",
+        "MODEL_ID",
+        "MODEL_ID_NICK_NAME",
+        "MODEL_USER",
+        "NEW_A_COUNTRY",
+        "NEW_A_PORT_CODE",
+        "NEW_BOD_ID",
+        "NEW_CUSTOMER_LT",
+        "NEW_D_COUNTRY",
+        "NEW_D_PORT_CODE",
+        "NEW_ETA",
+        "NEW_ETD",
+        "NEW_INCOTERMS",
+        "NEW_LT_DAY",
+        "NEW_ROUTE_ID",
+        "NEW_SHIPMENT_DATE",
+        "NEW_TO_CITY",
+        "NEW_TO_COUNTRY",
+        "NEW_TRANSPORT_MODE",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PACKAGE_QTY",
+        "PACKAGE_TYPE",
+        "REMARKS",
+        "REMARKS2",
+        "REMARKS3",
+        "REQUESTOR",
+        "SHIPMENT_CONFIRM_QTY",
+        "SHIPMENT_DATE",
+        "SHIPMENT_STATUS",
+        "SHIPPING_PLAN_QTY",
+        "SHIPTO_DESCRIPTION",
+        "SOLDTO_DESCRIPTION",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TRANSPORT_MODE",
+        "UPDATED_BY",
+        "UPDATED_DATE"
+      ],
+      "labels": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "ATTRIBUTE10",
+        "bod_id",
+        "Cell Type",
+        "Change Reason",
+        "Reason Detail",
+        "Change Request No",
+        "CHANGE_TYPE",
+        "Confirm/Plan ID",
+        "Confirm Qty (Cell)",
+        "Confirm Qty (Jumboroll m)",
+        "Confirm Qty (Pancake m)",
+        "Confirm Qty (Cut)",
+        "Day",
+        "Div",
+        "DOM/EXP.",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "Post Oper.",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "PO No",
+        "erp_status",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "Building Desc.*",
+        "From Site ID",
+        "From Site",
+        "Gap",
+        "Incoterms",
+        "Material",
+        "Nick Name",
+        "L/T(Day)",
+        "SSP0023",
+        "Model",
+        "Nick Name",
+        "Model PIC",
+        "A Country",
+        "A Port",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "new incoterms",
+        "L/T(Day)",
+        "Route",
+        "Shipment Date*",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "Package Qty",
+        "Package Type *",
+        "Remarks",
+        "Shipment No.",
+        "Customer Requirement",
+        "Shipment Requestor",
+        "Confirm Qty*",
+        "Shipment Date*",
+        "Status",
+        "Shipping Plan Qty",
+        "Ship To Party",
+        "Sold To Party",
+        "To Site ID",
+        "To Site",
+        "Trans Mode*",
+        "Updated By",
+        "Updated Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Plan Detail Excel",
+      "key": "SHIPMENT_PLAN_DETAIL_EXCEL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "JR_BOH_QTY",
+        "JR_BOH_QTY_CELL",
+        "JR_BOH_QTY_PCM",
+        "PC_BOH_QTY",
+        "PC_BOH_QTY_CELL",
+        "PC_BOH_QTY_PCM",
+        "TOT_BOH_QTY",
+        "TOT_BOH_QTY_CELL",
+        "TOT_BOH_QTY_PCM",
+        "COMPANY_ID",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "ITEM_ID",
+        "QTY",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Company*",
+        "Div*",
+        "FromSite*",
+        "Material*",
+        "Qty*",
+        "yyyyMMdd*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Plan(Electrode)",
+      "key": "SHIPMENT_PLAN_ELECTRODE",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "BACK_COLOR",
+        "CONFIRM_DAY",
+        "DIVISION_ID",
+        "ELECTRODE_POST_OPER_LT",
+        "ELECTRODE_TYPE",
+        "FROM_SITE",
+        "GUBUN_NUM",
+        "ITEM_ID",
+        "JR_BOH_QTY",
+        "JR_BOH_QTY_CELL",
+        "JR_BOH_QTY_PCM",
+        "LAST_UPDATED_BY",
+        "MEASURE",
+        "MEASURE_NAME",
+        "MODEL_ID",
+        "NICK_NAME",
+        "PC_BOH_QTY",
+        "PC_BOH_QTY_CELL",
+        "PC_BOH_QTY_PCM",
+        "PLANT_ID",
+        "PSI_NAME",
+        "SCM_SITE_ID",
+        "TEMPCOLUMN",
+        "TOT_BOH_QTY",
+        "TOT_BOH_QTY_CELL",
+        "TOT_BOH_QTY_PCM"
+      ],
+      "labels": [
+        "Back Color",
+        "Confrim Day",
+        "Div",
+        "Oper. L/T",
+        "Elec Type",
+        "From Site",
+        "GUBUN_NUM",
+        "Material",
+        "J/R",
+        "J/R",
+        "J/R",
+        "Requestor",
+        "Measure",
+        "Measure",
+        "Model",
+        "Nick Name",
+        "Pancake",
+        "Pancake",
+        "Pancake",
+        "Plant",
+        "PSI",
+        "SCM_SITE_ID",
+        "TEMPCOLUMN",
+        "BOH",
+        "BOH",
+        "BOH"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Result",
+      "key": "SHIPMENT_RESULT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "JR_BOH_QTY",
+        "JR_BOH_QTY_CELL",
+        "JR_BOH_QTY_PCM",
+        "PC_BOH_QTY",
+        "PC_BOH_QTY_CELL",
+        "PC_BOH_QTY_PCM",
+        "TOT_BOH_QTY",
+        "TOT_BOH_QTY_CELL",
+        "TOT_BOH_QTY_PCM",
+        "CONFIRM_ID",
+        "DIVISION_ID",
+        "END_CUSTOMER",
+        "ERP_SO_NO",
+        "ETA_DATE",
+        "ETD_DATE",
+        "FROM_SITE",
+        "INCOTERMS",
+        "ITEM_ID",
+        "MODEL_ID",
+        "NICK_NAME",
+        "QTY",
+        "SHIP_TYPE",
+        "TO_SITE",
+        "TRANSPORT_MODE",
+        "TYPE",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Confirm/Plan ID",
+        "Div",
+        "End Customer",
+        "SO No",
+        "ETA",
+        "ETD",
+        "From Site",
+        "Incoterms",
+        "Material",
+        "Model",
+        "Nick Name",
+        "Shipment Qty",
+        "Ship Type",
+        "To Site",
+        "Trans Mode",
+        "Status",
+        "Shipment Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock Detail",
+      "key": "STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "JR_BOH_QTY",
+        "JR_BOH_QTY_CELL",
+        "JR_BOH_QTY_PCM",
+        "PC_BOH_QTY",
+        "PC_BOH_QTY_CELL",
+        "PC_BOH_QTY_PCM",
+        "TOT_BOH_QTY",
+        "TOT_BOH_QTY_CELL",
+        "TOT_BOH_QTY_PCM",
+        "AVAILABLE_YN",
+        "CHANGE_STATUS",
+        "DIVISION_ID",
+        "EXPIRATION_DATE",
+        "FROM_SITE",
+        "GMES_QTY_PCM",
+        "GMES_QTY_UOM",
+        "ITEM_ID",
+        "IWMS_HOLD_YN",
+        "IWMS_QTY_PCM",
+        "IWMS_QTY_UOM",
+        "LANE",
+        "LOT_ID",
+        "MES_HOLD_YN",
+        "MODEL_ID",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OWMS_HOLD_YN",
+        "OWMS_QTY_PCM",
+        "OWMS_QTY_UOM",
+        "PACKAGE_TYPE_CODE",
+        "PALLET_ID",
+        "PLANT_ID",
+        "QMS_HOLD_YN",
+        "STORAGE_ID",
+        "TOTAL_QTY_PCM",
+        "TOTAL_QTY_UOM",
+        "VERSION"
+      ],
+      "labels": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Available Stock YN",
+        "Change Status",
+        "Div",
+        "Expiration Date",
+        "SCM Site",
+        "Pancake M",
+        "UOM",
+        "Material",
+        "iWMS Hold YN",
+        "Pancake M",
+        "UOM",
+        "Lane",
+        "Lot ID",
+        "MES Hold YN",
+        "Model",
+        "Nick Name",
+        "Operation",
+        "oWMS Hold YN",
+        "Pancake M",
+        "UOM",
+        "Package Type(oWMS)",
+        "Pallet ID",
+        "Plant",
+        "QMS Hold YN",
+        "Storage",
+        "Pancake M",
+        "UOM",
+        "Version"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Shipment Plan Detail",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_STATUS",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_ERP_SO_NO_CNT",
+      "sheet": "Shipment Plan Detail",
+      "btn": "ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_ERP_SO_NO_CNT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0023_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "sheet": "Shipment Plan Detail",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_PLAN",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN",
+      "entries": [
+        "event:this.btnExcelUpload.Click",
+        "event:this.btnSimulation.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+      "entries": [
+        "event:this.btnExcelUpload.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click",
+        "event:this.btnSimulation.Click",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_PLAN_RESULT",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN_RESULT",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.formDown.Click",
+        "event:this.btnExcelUpload.Click",
+        "event:this.Load",
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnMeasure.Click",
+        "event:this.btnSearch.Click",
+        "event:this.btnSimulation.Click",
+        "event:clbCompany_ID.SelectedIndexChanged",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0023_SAVE_SHIPMENT_PLAN_SIMU",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_PLAN_SIMU",
+      "entries": [
+        "event:this.btnSimulation.Click"
+      ]
+    },
+    {
+      "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+      "sheet": "Shipment Plan Detail",
+      "btn": "SHIPMENT_PLAN_DETAIL_EXCEL",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+      "entries": [
+        "event:this.formDown.Click"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "sheet": "Shipment Plan Detail",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Shipment Plan Detail",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0023.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleExcelFormDownload",
+      "target": "this.formDown",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleExcelUpload",
+      "target": "this.btnExcelUpload",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHIPMENT_PLAN",
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+      ]
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN",
+        "DM.DM0003_GET_BUCKET_TYPE_CODE"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlerdButton",
+      "target": "this.rdButton1",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlerdButton",
+      "target": "this.rdButton2",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleSpdMainChange",
+      "target": "this.spdMain",
+      "event": "Change",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMaterialId2",
+      "target": "this.btnItemId2",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSearch",
+      "target": "this.btnSearch",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_RESULT",
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL",
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+      ]
+    },
+    {
+      "name": "handleRequestor",
+      "target": "this.btnRequestor",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSimulation",
+      "target": "this.btnSimulation",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU",
+        "SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0023_GET_SHIPMENT_PLAN"
+      ]
+    },
+    {
+      "name": "handleSpdDetailSheetTab",
+      "target": "this.spdDetail",
+      "event": "SheetTabClick",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailActiveSheet",
+      "target": "this.spdDetail",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailCell",
+      "target": "this.spdDetail",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailComboSelChange",
+      "target": "this.spdDetail",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetail",
+      "target": "this.spdDetail",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailEditChange",
+      "target": "this.spdDetail",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailClipboardPasted",
+      "target": "this.spdDetail",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleDivisionID",
+      "target": "clbDivision_ID",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCompanyID",
+      "target": "clbCompany_ID",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handlePlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handlePastPeriod",
+      "target": "this.chkPastPeriod",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleshtPlanDetailChange",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlePlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

@@ -1,0 +1,5 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+PROJECT_CODE40,,TO_SITE,ALL,NONE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""To Site"") })",,SSP0002_ShipmentConfirmInsertPopup.cs:660 SSP0002_ShipmentConfirmInsertPopup.SpdMain_CellClick
+PROJECT_CODE40,,ITEM_ID,ALL,ROW,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""Model"") })",else of (string.IsNullOrEmpty(sToSite)),SSP0002_ShipmentConfirmInsertPopup.cs:670 SSP0002_ShipmentConfirmInsertPopup.SpdMain_CellClick
+ITEM_ID,,FROM_SITE,ALL,NONE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""From Site*"") })",,SSP0002_ShipmentConfirmInsertPopup.cs:728 SSP0002_ShipmentConfirmInsertPopup.SpdMain_CellClick
+ITEM_ID,,TO_SITE,ALL,NONE,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""To Site*"") })",,SSP0002_ShipmentConfirmInsertPopup.cs:736 SSP0002_ShipmentConfirmInsertPopup.SpdMain_CellClick

@@ -1,0 +1,17 @@
+{
+ "id": "SSP0015",
+ "started": "2026-11-14 23:14:03.782",
+ "tool": "asis_live_run.py",
+ "steps": [],
+ "status": "FAIL",
+ "gate": {},
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "AsisLive.Host.exe(32276)"
+ ],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "why": "메인 화면 대기 실패: host exited (code 1)",
+ "ended": "2026-11-14 23:18:12.376",
+ "exit": 2
+}

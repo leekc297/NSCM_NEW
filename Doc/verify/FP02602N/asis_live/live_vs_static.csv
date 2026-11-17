@@ -1,0 +1,21 @@
+﻿kind,item,static,live,verdict,note
+SP,(endpoints.csv),없음,8종,ERROR,정적 사실 파일 없음(미측정) — Fact Pack 먼저
+SP,FP_SQL_LOG(로그 기록),,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONDITION,clbFactory,,Factory,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlant,,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboSite,,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,tbNickName,,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtMaterial,,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboLine,,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboOperation,,Operation,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnSql,,lblSql,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,,Period,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Main,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 26(보임 25) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

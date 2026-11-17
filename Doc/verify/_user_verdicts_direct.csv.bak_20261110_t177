@@ -1,0 +1,110 @@
+﻿menu_id,row_id,verdict,opinion,decided_by,decided_at
+DMF0044,V-5c2e92ef,PASS,DM-75 Cell Prod Site 77 검증 — AS-IS 저장 SP 3종·화면 코드에 해당 로직 없음 확인(11-04 15:5x 원문 조회) → 사용자 지시 PASS,사용자(대화),2026-11-04
+DMF0044,V-57e56fb0,PASS,DM-75 — AS-IS 로직 없음 확인 → 사용자 지시 PASS(저장 후 Application Gr·Country Name 미조회 증상은 별도 측정 안 함),사용자(대화),2026-11-04
+DMF0044,V-77f44856,PASS,DM-75 — AS-IS 로직 없음 확인 → 사용자 지시 PASS,사용자(대화),2026-11-04
+DMF0082,V-81432f37,PASS,DM-58 Biz Type 없음 팝업 문구 — 현재 적용 문구가 최신(사용자 확인) → PASS,사용자(대화),2026-11-04
+DMF0005,V-9fb735ba,SKIP,DM-P13 Cust Group-End Customer-Sales Site 연계 — 개발필요 상태 유지(사용자) → SKIP,사용자(대화),2026-11-04
+DMF0005,V-a121bb62,SKIP,DM-P13 — 개발필요 상태 유지(사용자) → SKIP,사용자(대화),2026-11-04
+DMF0005,V-0738d59d,SKIP,DM-P13 — 개발필요 상태 유지(사용자) → SKIP,사용자(대화),2026-11-04
+SCP0084,V-c2b915da,PASS,"1번 저장 DB 반영(F1) — 사용자 확인 ""저장 잘되고 있음"". 검사기 결함: 편집 칸 MEMO 가 가로 가상화로 DOM 밖 → 편집 불가 칸 LONG_TERM_TYPE 을 저장 시험(crud.ts 수정 · 다음 실행부터 MEMO 로 실저장 왕복)",사용자(대화),2026-11-06
+SCP0084,V-854a8a97,PASS,"2번 저장 결과 메시지(F2) — 사용자 확인 ""저장 잘되고 있음"". 원인 = 1번과 같은 저장 실측 1회(편집 불가 칸 입력 → 수정한 내용이 없습니다)",사용자(대화),2026-11-06
+SCP0084,V-692823bb,PASS,"3번 SP 호출 오류·배선(F4) — 사용자 확인 ""저장 잘되고 있음"". 원인 = 1번과 같은 저장 실측 1회",사용자(대화),2026-11-06
+SCP0084,V-f33ab31a,PASS,"7번 폭 1366 조회조건 겹침(H4) — 사용자 확인 ""오류 아님. 정상으로 보임"" (재측정 14:57 에도 검사기는 화면 밖 칸 Long Term Type 으로 측정 — 검사기 원인 미확인)",사용자(대화),2026-11-06
+SCP0084,V-27405f80,PASS,"8번 저장 중 로딩 표시(H11) — 사용자 확인 ""오류 아님"" (재측정 14:57: 저장 1.5초 지연 동안 로딩 표시 0회 — TO-BE handleSave 는 진행 표시를 쓰지 않음, 사용자 판정으로 허용)",사용자(대화),2026-11-06
+SCP0084,V-8294a827,PASS,"1번에 묶여 있던 같은 저장 실측(F6 값 보존) — 사용자 확인 ""저장 잘되고 있음"" · 원인 = 편집 불가 칸 LONG_TERM_TYPE 저장 시험(crud.ts 수정)",사용자(대화),2026-11-06
+SCP0084,V-427eab01,NA,"12번 MS1 — 사용자 판정 '내용 동일 항목이라 오류에서 제외'. 근거: AS-IS MSG00003 KO '실행중 에러가 발생했습니다.
+
+ {0}' / EN 'Error occurred during execution.
+
+ {0}' (cs:467 저장 SP 오류·cs:774 Excel 오류) ↔ TO-BE 사용 MSG00003 KO '저장에 실패하였습니다.' / EN 'Failed to save.' (LongTermStock.tsx 저장 실패·서버 메시지 없을 때) · 같은 문구 TO-BE ID = MSG01041 → 바꾸려면 MSG01041 로 처리",사용자(대화),2026-11-06
+SCP0084,T-cd8baac8,FAIL,조회조건 순서 — PI 확인 대기로 오류 유지(사용자 2026-11-06). 문서 '조회조건 정렬원칙' 시트 기준 Div → Plant → Long Term Type → Month ↔ 화면 Month → Div → Plant → Long Term Type. 같은 문서 List 시트 567~570행·AS-IS 배치는 Month 먼저 — 사용자 확인으로는 이 화면은 Month 먼저가 맞음(PI 확인 후 판정 변경),사용자(대화),2026-11-06
+SCP0037,V-a9723cc4,PASS,2번 SCM_SITE_ID 셀 콤보 후보 ↔ 서버 콤보 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-d488067a,PASS,3번 SCM_SITE_ID 신규 행 콤보 붙여넣기 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-2e07802c,PASS,4번 돋보기 위치 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-036cfb38,PASS,5번 조회조건 겹침 1366 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-e510d658,PASS,7번 Material Enter 팝업 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-4cdc49e7,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-44ed8679,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-3fe029bf,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-3e269704,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-fdeb33b7,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-52397efe,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-79bf45bf,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-ae53fdd6,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-fc4fc8c9,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-51687ed9,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-56ee6e34,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-0e3a2b97,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-687b80fd,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-b51be921,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-0dc5f559,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,T-f4c72a16,PASS,6번 저장 실패 처리(같은 실측 묶음 16건) — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0037,V-a84926ac,PASS,10번 팝업 인자 itemId 연동 — TO-BE 룰에 맞춰 변경된 항목(사용자 확인 오류 아님),사용자(대화),2026-11-06
+SCP0037,EG-b32a3612,PASS,11번 ITEM_ID 셀 팝업 제목 — TO-BE 룰에 맞춰 변경된 항목(사용자 확인 오류 아님),사용자(대화),2026-11-06
+SCP0016,V-37af756e,PASS,1번 Reset Condition·Condition 비저장 — 사용자 확인 오류 아님(원인 조사 대상),사용자(대화),2026-11-06
+SCP0016,V-34521981,판정필요,2번 헤더 글자 잘림 — 사용자 지시 오류 아님 · 판정 필요로 이관,사용자(대화),2026-11-06
+SCP0016,V-1212da81,PASS,6번 Excel 컬럼 구성 — 사용자 확인 정상(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,V-3d4409e0,PASS,7번 조회조건 겹침 1366 — 사용자 확인 오류 아님(검사기 보완 대상),사용자(대화),2026-11-06
+SCP0016,V-da3be103,PASS,11번 필터 유지 재조회 — 공통 기능(사용자 확인 오류 아님),사용자(대화),2026-11-06
+SCP0016,V-d53bf32d,PASS,12번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,V-8ae3ead6,PASS,13번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,V-5f96f7ec,PASS,14번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,V-53485b38,PASS,15번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,T-8b0e1e8e,PASS,17번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,T-744d15dd,PASS,18번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,T-0e2756d8,PASS,19번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,T-c82de068,PASS,20번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,EG-1b7c9ab9,PASS,21번 — 사용자 확인 오류 아님(검사기 원인 조사·보완 대상),사용자(대화),2026-11-06
+SCP0016,V-7825a666,FAIL,4번 Division 변경 뒤 Version 빈값 — 사용자 신고 결함(Ver. 기본값이 ALL 아닌 빈값 · ALL 인데 선택 요구)과 같은 현상 → 오류 맞음,사용자(대화),2026-11-06
+SCP0016,T-d79b6bed,FAIL,16번 Version 초기값 — 사용자 확인 오류 맞음(AS-IS 선택 없음 = 전체 · TO-BE 기본값 ALL 이어야 함),사용자(대화),2026-11-06
+SCP0016,V-9c91b50b,PASS,8~10번 Division 40 컬럼 — sheet_columns 기준 정상(사용자 조건부 확인·원인 확인): PROJECT_CODE/VERSION_NO 는 화면에 있음(AS-IS 소문자 메타 ↔ TO-BE 대문자 바인딩 대소문자 비교 결함) · DEPT_NAME_KO 는 TO-BE SHEET_COLUMNS DEFAULT=Y·USER_SELECTABLE=Y 를 시험 계정 개인화(TITLESET 11-02)로 뺀 것,사용자(대화)+원인 확인,2026-11-06
+SCP0016,V-ae6234e3,PASS,8~10번 Division 81 컬럼 — sheet_columns 기준 정상(사용자 조건부 확인·원인 확인): PROJECT_CODE/VERSION_NO 는 화면에 있음(AS-IS 소문자 메타 ↔ TO-BE 대문자 바인딩 대소문자 비교 결함) · DEPT_NAME_KO 는 TO-BE SHEET_COLUMNS DEFAULT=Y·USER_SELECTABLE=Y 를 시험 계정 개인화(TITLESET 11-02)로 뺀 것,사용자(대화)+원인 확인,2026-11-06
+SCP0016,V-757c146b,PASS,8~10번 Division 82 컬럼 — sheet_columns 기준 정상(사용자 조건부 확인·원인 확인): PROJECT_CODE/VERSION_NO 는 화면에 있음(AS-IS 소문자 메타 ↔ TO-BE 대문자 바인딩 대소문자 비교 결함) · DEPT_NAME_KO 는 TO-BE SHEET_COLUMNS DEFAULT=Y·USER_SELECTABLE=Y 를 시험 계정 개인화(TITLESET 11-02)로 뺀 것,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-dfebf9b8,PASS,22번 btnMeasure 팝업 정체 — TO-BE 룰: AS-IS TitleSetForm(M) → 공용 MeasureSelectModal(tobe_catalog.csv button:^btnMeasure$ · map_control.csv) 대체 · AS-IS 와 달라도 오류 아님(사용자 확인),사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-05504a59,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-07b06c4d,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-0e5c2422,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-0ffe9a36,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-13730a6d,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-162f0910,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-189abb22,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-22165a74,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-29c9968a,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-524691a4,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-54bc68a5,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-62a0e182,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-6d64295b,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-74694ac5,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-9286157b,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-a8cf3ed2,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-afcc581c,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-bb07a9d1,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-c71427a3,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-d524fd85,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-de28ee4b,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-e566758c,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-e6eba129,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-ec3d36ab,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-ef3792a8,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-f0d2de2d,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-fb7d0789,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-fd9d7e01,PASS,23·25~37번 Measure 후보 — SCM_MST_SHEET_MEASURE(SCP0016/Shipment Plan FG) 유효 8행 전부가 공용 MeasureSelectModal 목록에 나옴(USER_SELECTABLE_FLAG=N 4행은 이동만 금지 · AS-IS TitleSetForm 도 같음) → sheet table 값대로 표기(사용자 조건부 확인·원인 확인) · 검사기가 N 행을 기대에서 뺀 결함,사용자(대화)+원인 확인,2026-11-06
+SCP0016,EG-404585aa,판정필요,38번 헤더 병합 — 측정 시점에 헤더 1행(조회 결과·동적 컬럼 반영 전)이라 병합 0 으로 잰 측정 실패(오류 아님) · AS-IS 13문장 중 1×1 span 은 병합 아님 · 검사기 보완(사전조건 ERROR·1×1 제외) 후 다음 실행에서 재측정,사용자(대화)+원인 확인,2026-11-06
+SCP0037,V-71299c05,PASS,"9번 MSG00006 — 사용자 확인 오류 아님: operation-lt.constants.ts:58 SAVE_FAIL='MSG00006' 은 정의만 있고 폴더 안 참조 0건 · 실제 저장 실패 처리는 공용 useProcMutation 기본(서버 메시지 → 없으면 MSG00003 Alert, useCustomQueryClient.ts:205-211) · 검사기(MS1)가 상수 정의를 사용으로 셈 → 보완(T104)",사용자(대화),2026-11-06
+SCP0127,EG-629cff83,FAIL,오류 — 팝업 SCM0002_MaterialByDivisionPopup ITEM_ID 셀 잘못된 값 직접 입력 시 되돌림·메시지 없음(사용자 판정 3-b),사용자(대화),2026-11-06 22:13
+SCP0016,AD-4a2e1baf,PASS,결함 아님 — DEPT_NAME_KO AS-IS DEV 데이터가 전부 '-'(DEV 부서 매핑 부재) ↔ TO-BE 팀명 표시는 정상(사용자 판정 2-a),사용자(대화),2026-11-06 22:13
+SCP0127,V-fd59482f,PASS,스냅샷 승인 Doc\verify\SCP0127\snap\golden\버튼_Div_40.aria.yml@757a887e — 1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0127,V-113b69fa,PASS,스냅샷 승인 Doc\verify\SCP0127\snap\golden\헤더_PRECEDE_SAFETY_STOCK_DAY.txt@c5479f17 — 1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0127,V-0bd48c8a,PASS,스냅샷 승인 Doc\verify\SCP0127\snap\golden\팝업_Model_Nickname.aria.yml@a56bc530 — 1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0127,V-c158fd73,PASS,스냅샷 승인 Doc\verify\SCP0127\snap\golden\화면샷_1920.png@e76d7b57 — 1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0127,V-1ea28358,PASS,스냅샷 승인 Doc\verify\SCP0127\snap\golden\화면샷_1366.png@6018db4b — 1-c: 조회조건 순서(SC1) 제외하고 승인 · 헤더 META 숨김 2건은 설계 결정 확인 사안,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0016,V-5a0ec62a,PASS,스냅샷 승인 Doc\verify\SCP0016\snap\golden\버튼_Div_40.aria.yml@f6ed179b — 1-c: 조회조건 순서(SC1)·헤더(Team 누락 차후확인 2-b) 제외하고 승인,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0016,V-1e39e729,PASS,스냅샷 승인 Doc\verify\SCP0016\snap\golden\팝업_PJT.aria.yml@4bee962f — 1-c: 조회조건 순서(SC1)·헤더(Team 누락 차후확인 2-b) 제외하고 승인,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0016,V-74b29c26,PASS,스냅샷 승인 Doc\verify\SCP0016\snap\golden\화면샷_1920.png@661539b6 — 1-c: 조회조건 순서(SC1)·헤더(Team 누락 차후확인 2-b) 제외하고 승인,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0016,V-7753e74e,PASS,스냅샷 승인 Doc\verify\SCP0016\snap\golden\화면샷_1366.png@b05b6326 — 1-c: 조회조건 순서(SC1)·헤더(Team 누락 차후확인 2-b) 제외하고 승인,사용자(대화 2026-11-06),2026-11-06 22:16
+SCP0084,V-1215a8c2,PASS,"조회조건 순서(SC1) — 사용자 판정 '오류 아닌 정상'(2026-11-09 VM CheckList 판정). 화면 Month → Div → Plant → Long Term Type = Excel List 시트 567~570행 순서와 같고 정렬원칙(Div 먼저)과만 다름 · 규칙 보완 CR-098: Excel 대조는 사용여부·EDIT 형태까지만, 순서는 판정 대상 제외 (11-06 'PI 확인 대기 FAIL 유지' 대체)",사용자(대화),2026-11-09
+SCP0084,T-cd8baac8,PASS,"조회조건 순서(SC1) — 사용자 판정 '오류 아닌 정상'(2026-11-09 VM CheckList 판정). 화면 Month → Div → Plant → Long Term Type = Excel List 시트 567~570행 순서와 같고 정렬원칙(Div 먼저)과만 다름 · 규칙 보완 CR-098: Excel 대조는 사용여부·EDIT 형태까지만, 순서는 판정 대상 제외 (11-06 'PI 확인 대기 FAIL 유지' 대체)",사용자(대화),2026-11-09
+SCP0127,V-a6f67e63,PASS,2번 VALUE_TYPE 신규 행 콤보 붙여넣기 — 사용자 확인 '정상 동작'(2026-11-09). 검사기 결함 T169: 시나리오 paste 단계가 헤드리스 Ctrl+V 를 써서 그리드에 붙여넣기 미도달('MIN' ''→'') → probe.pasteText 로 수정,사용자(대화),2026-11-09
+SCP0131,V-c8cd860a,NA,1번 G3 Condition(F6) Period 비저장 — 사용자 판정 'Period From/To 기간은 Condition 저장 대상 제외이므로 조치 필요 대상 아님'(2026-11-09). 검사기 결함 T170: 저장 키에 기간 키 존재만으로 FAIL → OK(참고)·복원 비교 제외로 수정,사용자(대화),2026-11-09
+SSP0025,V-f743fe58,NA,6번 Plant Site 후보 표시 중복(LGESOC Cell HQ07×3) — 데이터 정리 대상(화면 결함 아님): 중복 3코드 중 AC00-A(2026-10-12)·MT00-A(2026-10-26)는 TO-BE SCM_MST_SITE CREATED_BY='TEST' 행 · AS-IS PlantCell Div 81 원천 7건 중복 0(13:2x 실측),사용자(대화),2026-11-09
+SSP0025,EG-75b8b6b9,FAIL,17번 ITEM_ID 셀 팝업(TO-BE 메타 팝업) 제목 없음 — 오류 유지(사용자 판정 · SCP0037 EG-b32a3612 PASS 판정과 별개로 SSP0025 는 결함으로 둠),사용자(대화),2026-11-09

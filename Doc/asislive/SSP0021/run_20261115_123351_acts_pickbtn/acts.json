@@ -1,0 +1,861 @@
+{
+ "id": "SSP0021",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BtnItemID2",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 60187
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "81",
+     "Automotive Battery",
+     "A23US4001",
+     "Indego 50",
+     "Aeonus_KR_GUN",
+     "Aeonus_KR_GUN",
+     "AAEN1078I-A1-G00",
+     "ACEN1078I-A1-G00 P",
+     "H",
+     "E78-G00",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 60187,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    },
+    {
+     "control": "txtModel2#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "BtnMeasure",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "title": "Measure Setting",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdUser/User",
+    "cols": [
+     "COLUMN_NAME",
+     "LARGE_CLASS_LABEL_NAME",
+     "SMALL_CLASS_LABEL_NAME",
+     "COLUMN_LABEL_NAME",
+     "SORT_METHOD_CODE",
+     "SORT_ORDER_NO",
+     "USER_SORT_METHOD_CODE",
+     "SUB_TOTAL_FLAG",
+     "USER_SELECTABLE_FLAG"
+    ],
+    "row": [
+     "SHIP_REQ",
+     "",
+     "",
+     "Shipment Request",
+     "",
+     "1.00",
+     "",
+     "",
+     "Y"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "controls": [],
+    "grids": [
+     {
+      "grid": "spdBase",
+      "sheet": "Base",
+      "rows": 0,
+      "cols": [
+       "COLUMN_LABEL_NAME"
+      ]
+     },
+     {
+      "grid": "spdUser",
+      "sheet": "User",
+      "rows": 9,
+      "cols": [
+       "COLUMN_LABEL_NAME"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 9
+    }
+   },
+   "pick_act": {
+    "ok": false,
+    "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7"
+   },
+   "pick_button": "ButtonItem OK",
+   "pick_ok": {
+    "ok": true,
+    "closed": true,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Plan",
+     "rows_before": 108,
+     "rows_after": 0,
+     "cells": [
+      {
+       "row": 0,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 1,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 2,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 3,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 4,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 5,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 6,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 7,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 8,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 9,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 10,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 11,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 12,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 13,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 14,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 15,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 16,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 17,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 18,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 19,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 20,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 21,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 22,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 23,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 24,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 25,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 26,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 27,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 28,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 29,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 30,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 31,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 32,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 33,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 34,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 35,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 36,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 37,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 38,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 39,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 40,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 41,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 42,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 43,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 44,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 45,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 46,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 47,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 48,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 49,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 50,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 51,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 52,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 53,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 54,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 55,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 56,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 57,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 58,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 59,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP",
+    "SCM0002_SET_TITLESET_POPUP",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": [
+    {
+     "text": "저장 하였습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  },
+  {
+   "control": "BtnRequestor",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "UserInfoPopup"
+   ],
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 0,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 8587
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "txtRequestor#0",
+     "before": "",
+     "after": "CWA JULIA NOWAKOWSKA 요청"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 60187
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "81",
+     "Automotive Battery",
+     "A23US4001",
+     "Indego 50",
+     "Aeonus_KR_GUN",
+     "Aeonus_KR_GUN",
+     "AAEN1078I-A1-G00",
+     "ACEN1078I-A1-G00 P",
+     "H",
+     "E78-G00",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 60187,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#1",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    },
+    {
+     "control": "txtItemId#0",
+     "before": "",
+     "after": "AAEN1078I-A1-G00"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnItemID2": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125125_acts"
+  },
+  "BtnMeasure": {
+   "forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125125_acts"
+  },
+  "BtnRequestor": {
+   "forms": [
+    "UserInfoPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125125_acts"
+  },
+  "btnItemId": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125125_acts"
+  }
+ },
+ "at": "2026-11-15 12:30:43"
+}

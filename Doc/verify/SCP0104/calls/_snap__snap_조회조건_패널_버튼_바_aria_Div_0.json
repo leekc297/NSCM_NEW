@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 88,
+  "at": "2026-11-17T04:57:24.097Z",
+  "user": "minyonglee1",
+  "test": "@snap 조회조건 패널·버튼 바 aria ×Div"
+ }
+]

@@ -1,7 +1,7 @@
 {
  "menu_id": "SSP0025",
  "asis_id": "SSP0025",
- "generated": "2026-11-09 11:03:56",
+ "generated": "2026-11-15 04:02:08",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "5.2시간 전 export(기준 12시간)"
+   "evidence": "4.6시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -63,16 +63,16 @@
   {
    "key": "e2e_spec",
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
-   "status": "OK",
-   "producer": "tools/E2E/gen-e2e.js",
-   "evidence": "최신"
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SSP0025: AS-IS 팝업 클래스 안 시트 메인 제외 — Project SSP0025 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jinhuannj SSP0025 → SSP0025 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
   },
   {
    "key": "smoke",
    "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
-   "status": "OK",
-   "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 11-09 10:06 (FE 소스·smoke 엔진보다 최신)"
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 · rc=0 · 65s · cts\\NSCM\\Doc\\e2e\\logs\\SSP0025\\run_20261115_040103_smoke.log FE 5173 / BE 8080 responding Playwright smoke SSP0025 running - output goes to the log file # E2E 결과 — 2026-11-15 04:02 테스트 3 · PASS 3 · FAIL 0 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0025\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0025\\run_20261115_040103_smoke.log"
   }
  ]
 }

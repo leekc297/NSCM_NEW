@@ -123,8 +123,8 @@
 
 | AS-IS | TO-BE | 상태 |
 |---|---|---|
-| `SCP.SCP0104_GET_SPREAD_TITLE` (`GetSpdTitle` cs:1200~1223) | `SHEETS.SPREAD_TITLE` 쿼리 + `API_ID='P_SCP0107_TITLE'` -> `PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE` | **SP 미배포** — 메타만 등록 |
-| `SCP.SCP0107_GET_CAPA_TEEP_{ASSEMBLY\|ELTR}` (동적 QueryId, cs:1598 — Roslyn 미추출분) | `SHEETS.ASSEMBLY`/`ELTR` 쿼리 + `API_ID='P_SCP0107_GET_ASSEMBLY'`/`_GET_ELTR` | **SP 미배포** — 메타만 등록 |
+| `SCP.SCP0104_GET_SPREAD_TITLE` (`GetSpdTitle` cs:1200~1223) | `SHEETS.SPREAD_TITLE` 쿼리 + `API_ID='P_SCP0107_TITLE'` -> `PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE`(SCP0107 자체 proc) | **배포·VALID**(ora.py 2026-11-09) — 자체 proc 라 공용 PKG_SCP0104 키 충돌 무관 |
+| `SCP.SCP0107_GET_CAPA_TEEP_{ASSEMBLY\|ELTR}` (동적 QueryId, cs:1598 — Roslyn 미추출분) | `SHEETS.ASSEMBLY`/`ELTR` 쿼리 + `API_ID='P_SCP0107_GET_ASSEMBLY'`/`_GET_ELTR` | **배포·VALID** — DB 실측 조회 확인(ELTR/ASSEMBLY) |
 
 `p_from_yyyymm` = `_version` **+1개월**(`toFromYyyymm`) — 자매 SCP0106 과 다른 이 화면 고유 사양(S-9).
 GET IN 13개 중 FE 는 12건을 싣는다(`p_user_id` 는 BE `@LoginUser`). `p_prog_stat`·`p_nick_name` 없음.

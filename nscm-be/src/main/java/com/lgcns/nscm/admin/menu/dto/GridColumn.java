@@ -28,6 +28,7 @@ public class GridColumn {
     private String horzAlgnCd;
 
     private BigDecimal scale;
+    private BigDecimal dataMaxLength;
     private BigDecimal colWth;
 
     private boolean fixed;
@@ -59,6 +60,7 @@ public class GridColumn {
     		.inputTpCd((String) data.get("INPUT_TP_CD"))
     		.horzAlgnCd((String) data.get("HORIZONTAL_ALIGN_CODE"))
 		.scale((BigDecimal) data.get("DATA_SCALE_NUMBER"))
+    		.dataMaxLength((BigDecimal) data.get("DATA_MAX_LENGTH"))
     		.colWth((BigDecimal) data.get("COLUMN_WIDTH"))
     		.fixed(data.get("FIXED_FLAG").equals("Y") ? true : false)
     		.uppercase(data.get("UPPERCASE_APPLY_FLAG").equals("Y") ? true : false)

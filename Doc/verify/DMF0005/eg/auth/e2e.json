@@ -8,7 +8,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3810",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -19,7 +24,12 @@
   "expected": "AS-IS 보임((DIV==\"40\") && ((GROUP==\"ADMIN\" || GROUP==\"DM ADMIN\" || GROUP==\"SCM PI ADMIN\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3798",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -30,7 +40,12 @@
   "expected": "AS-IS 보임((DIV==\"40\") && ((GROUP==\"ADMIN\" || GROUP==\"DM ADMIN\" || GROUP==\"SCM PI ADMIN\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3800",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -41,7 +56,12 @@
   "expected": "AS-IS 비활성(표시+disabled)((DIV==\"40\"))",
   "actual": "이 Div 에서 칸 비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3786",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -52,7 +72,12 @@
   "expected": "AS-IS Div 분기 있음(4문장)",
   "actual": "컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3787",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -63,7 +88,12 @@
   "expected": "AS-IS 보임",
   "actual": "노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3797",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -74,7 +104,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -85,7 +120,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -96,7 +136,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -107,7 +152,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -118,7 +168,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -129,7 +184,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -140,7 +200,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -151,7 +216,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -162,7 +232,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -173,7 +248,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -184,7 +264,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -195,7 +280,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -206,7 +296,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -217,7 +312,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -228,7 +328,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -239,7 +344,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -250,7 +360,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -261,7 +376,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -272,7 +392,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -283,7 +408,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -294,7 +424,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -305,7 +440,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -316,7 +456,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -327,7 +472,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -338,7 +488,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -349,7 +504,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -360,7 +520,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -371,7 +536,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -382,7 +552,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -393,7 +568,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -404,7 +584,12 @@
   "expected": "AS-IS 보임((!(DIV==\"40\")))",
   "actual": "어느 Div 에서도 칸 없음 — 라벨 불일치 또는 설계 제외(대조표 확인 필요)",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3825",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -415,7 +600,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -426,7 +616,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG271",
@@ -437,7 +632,12 @@
   "expected": "AS-IS 활성((!(DIV==\"40\")))",
   "actual": "활성",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3820",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -448,7 +648,12 @@
   "expected": "AS-IS 숨김",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -459,7 +664,12 @@
   "expected": "AS-IS 분기 문장으로 설명",
   "actual": "Div 별 칸 집합 2종",
   "asis": "facts_auth",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -470,7 +680,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -481,7 +696,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -492,7 +712,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -503,7 +728,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -514,7 +744,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -525,7 +760,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -536,7 +776,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -547,7 +792,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -558,7 +808,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -569,7 +824,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -580,7 +840,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -591,7 +856,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -602,7 +872,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -613,7 +888,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -624,7 +904,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -635,7 +920,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -646,7 +936,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -657,7 +952,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -668,7 +968,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -679,7 +984,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -690,7 +1000,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -701,7 +1016,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -712,7 +1032,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -723,7 +1048,12 @@
   "expected": "Div 권한 있음 → 기능 있으면 노출",
   "actual": "노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG212",
@@ -734,7 +1064,12 @@
   "expected": "Division 전환 중 세션 오류(401/403) 0 — DM-163",
   "actual": "0건(5xx 0건 별도)",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG257",
@@ -745,7 +1080,12 @@
   "expected": "본문 Division=40 — DM-85",
   "actual": "40",
   "asis": "AS-IS: 조회 인자 = 선택 Division",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG257",
@@ -756,7 +1096,12 @@
   "expected": "본문 Division=81 — DM-85",
   "actual": "81",
   "asis": "AS-IS: 조회 인자 = 선택 Division",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG257",
@@ -767,7 +1112,12 @@
   "expected": "본문 Division=40 — DM-85",
   "actual": "40",
   "asis": "AS-IS: 조회 인자 = 선택 Division",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG024",
@@ -776,20 +1126,46 @@
   "ctx": "40→81→40",
   "result": "PASS",
   "expected": "원래 Div 복귀 시 처음 헤더와 동일 — DM-P60",
-  "actual": "동일(정적 33컬럼)",
+  "actual": "동일(정적 30컬럼)",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG024",
   "screen": "DMF0005",
   "target": "Div 전용 컬럼",
-  "ctx": "40/81",
-  "result": "NA",
-  "expected": "Div 별 DEFAULT 컬럼 차이",
-  "actual": "메타(production_40) 차이 0 — 재구성 대상 컬럼 없음",
-  "asis": "SCM_MST_SHEET_COLUMNS",
-  "note": ""
+  "ctx": "40→81",
+  "result": "PASS",
+  "expected": "메타(production_40) 40 전용 1·81 전용 0 재구성",
+  "actual": "재구성 일치",
+  "asis": "SCM_MST_SHEET_COLUMNS DIVISION_ID",
+  "note": "개인화(TITLESET_USER) 보유 계정이면 DEFAULT 와 다를 수 있음 — 같은 계정의 Div 간 차이만 비교",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "DMF0005",
+  "target": "헤더 재구성 시점",
+  "ctx": "40→81 조회 전",
+  "result": "PASS",
+  "expected": "AS-IS Div 변경 이벤트 가 헤더 재구성(InitSpread 류)",
+  "actual": "조회 전 재구성",
+  "asis": "InitSpread,SetSpreadHeaderSpan",
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG294",
@@ -800,7 +1176,12 @@
   "expected": "Year·Version 초기값 문장",
   "actual": "AS-IS 로드·변경 경로에 해당 문장 없음",
   "asis": "facts_auth",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -811,7 +1192,12 @@
   "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -822,7 +1208,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
   "actual": "후보 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -833,7 +1224,12 @@
   "expected": "단일 권한 → 40",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -844,7 +1240,12 @@
   "expected": "AS-IS 보임((DIV==\"40\") && ((GROUP==\"ADMIN\" || GROUP==\"DM ADMIN\" || GROUP==\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3798",
-  "note": "CR-070 권한·기능 게이트로 숨었을 수 있음"
+  "note": "CR-070 권한·기능 게이트로 숨었을 수 있음",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -855,7 +1256,12 @@
   "expected": "AS-IS 보임((DIV==\"40\") && ((GROUP==\"ADMIN\" || GROUP==\"DM ADMIN\" || GROUP==\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3800",
-  "note": "CR-070 권한·기능 게이트로 숨었을 수 있음"
+  "note": "CR-070 권한·기능 게이트로 숨었을 수 있음",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -866,7 +1272,12 @@
   "expected": "AS-IS 보임((DIV==\"40\") && ((GROUP==\"ADMIN\" || GROUP==\"DM ADMIN\" || GROUP==\"SCM PI)",
   "actual": "노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3797",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -875,9 +1286,14 @@
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -886,9 +1302,14 @@
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -896,10 +1317,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -907,10 +1333,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -918,10 +1349,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -929,10 +1365,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -940,10 +1381,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -951,10 +1397,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -965,7 +1416,12 @@
   "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -976,7 +1432,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,EE",
   "actual": "후보 40 · 권한 있는데 없음 EE",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -987,7 +1448,12 @@
   "expected": "단일 권한 → 40",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -998,7 +1464,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1009,7 +1480,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1020,7 +1496,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -1029,9 +1510,14 @@
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,EE",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -1040,9 +1526,14 @@
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,EE)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1050,10 +1541,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1061,10 +1557,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1072,10 +1573,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1083,10 +1589,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1094,10 +1605,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1105,10 +1621,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1119,7 +1640,12 @@
   "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1130,7 +1656,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
   "actual": "후보 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1141,7 +1672,12 @@
   "expected": "단일 권한 → 40",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1152,7 +1688,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1163,7 +1704,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1174,7 +1720,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -1183,9 +1734,14 @@
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -1194,9 +1750,14 @@
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1204,10 +1765,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1215,10 +1781,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1226,10 +1797,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1237,10 +1813,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1248,10 +1829,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1259,10 +1845,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/DM Viewer",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1273,7 +1864,12 @@
   "expected": "그룹 6개 중 메뉴 권한 3개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1284,7 +1880,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,EE",
   "actual": "후보 40,81 · 권한 있는데 없음 EE",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1295,7 +1896,12 @@
   "expected": "후보 안의 값(40,81)",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1306,7 +1912,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1317,18 +1928,28 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
   "screen": "DMF0005",
   "target": "Model Code change (그룹 조건)",
   "ctx": "DM/40/SCP Planner",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
-  "actual": "노출",
+  "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -1337,9 +1958,14 @@
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,EE",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -1348,9 +1974,14 @@
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,EE)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1358,10 +1989,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1369,10 +2005,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1380,10 +2021,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1391,10 +2037,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1402,10 +2053,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1413,10 +2069,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/40/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1427,7 +2088,12 @@
   "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1438,7 +2104,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC",
   "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1449,7 +2120,12 @@
   "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
   "actual": "81",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1460,7 +2136,12 @@
   "expected": "이전 계정 Div 잔존 0",
   "actual": "이전 40 · 이번 81",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1471,7 +2152,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1482,7 +2168,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1493,7 +2184,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -1502,9 +2198,14 @@
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC",
-  "actual": "43526행 Division 81",
+  "actual": "43532행 Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -1513,9 +2214,14 @@
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
-  "actual": "43526행 · Division 81",
+  "actual": "43532행 · Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1523,10 +2229,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1534,10 +2245,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1545,10 +2261,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1556,10 +2277,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -1567,10 +2293,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -1578,10 +2309,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Admin",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1592,7 +2328,12 @@
   "expected": "그룹 4개 중 메뉴 권한 3개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1603,18 +2344,28 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
   "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 권한 있는데 없음 EE",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/81/DM Planner",
-  "result": "판정필요",
-  "expected": "후보 다수 — 기본 선택",
-  "actual": "빈값",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC,82)",
+  "actual": "81",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1625,7 +2376,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1636,7 +2392,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1647,73 +2408,140 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0005",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
+  "actual": "43532행 Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0005",
+  "target": "권한 범위 조회",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE)",
+  "actual": "43532행 · Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1724,7 +2552,12 @@
   "expected": "그룹 6개 중 메뉴 권한 5개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1735,7 +2568,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
   "actual": "후보 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 권한 있는데 없음 EE",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1746,7 +2584,12 @@
   "expected": "후보 안의 값(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82)",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1757,7 +2600,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1768,7 +2616,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1779,7 +2632,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -1788,9 +2646,14 @@
   "ctx": "DM/81/DM Planner (W/S)",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -1799,75 +2662,110 @@
   "ctx": "DM/81/DM Planner (W/S)",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Planner (W/S)",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -1878,7 +2776,12 @@
   "expected": "그룹 5개 중 메뉴 권한 4개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -1889,18 +2792,28 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
   "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 권한 있는데 없음 EE",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/81/DM Viewer",
-  "result": "판정필요",
-  "expected": "후보 다수 — 기본 선택",
-  "actual": "빈값",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC,82)",
+  "actual": "81",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -1909,9 +2822,14 @@
   "ctx": "DM/81/DM Planner (W/S)→DM/81/DM Viewer",
   "result": "PASS",
   "expected": "이전 계정 Div 잔존 0",
-  "actual": "이전 40 · 이번 ",
+  "actual": "이전 40 · 이번 81",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1922,7 +2840,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -1933,7 +2856,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -1944,73 +2872,140 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0005",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Viewer",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE",
+  "actual": "43532행 Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0005",
+  "target": "권한 범위 조회",
+  "ctx": "DM/81/DM Viewer",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE)",
+  "actual": "43532행 · Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2021,7 +3016,12 @@
   "expected": "그룹 5개 중 메뉴 권한 4개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -2032,7 +3032,12 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
   "actual": "후보 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 권한 있는데 없음 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -2043,7 +3048,12 @@
   "expected": "후보 안의 값(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82)",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2054,7 +3064,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2065,18 +3080,28 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
   "screen": "DMF0005",
   "target": "Model Code change (그룹 조건)",
   "ctx": "DM/81/SCP Planner",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
-  "actual": "노출",
+  "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -2085,9 +3110,14 @@
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -2096,9 +3126,14 @@
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2106,10 +3141,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2117,10 +3157,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2128,10 +3173,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2139,10 +3189,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2150,10 +3205,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2161,10 +3221,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/81/SCP Planner",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2175,7 +3240,12 @@
   "expected": "그룹 4개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -2186,18 +3256,28 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
   "actual": "후보 82",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "후보 1개 → 자동 선택 82",
-  "actual": "빈값",
+  "result": "PASS",
+  "expected": "단일 권한 → 82",
+  "actual": "82",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
@@ -2206,9 +3286,14 @@
   "ctx": "DM/81/SCP Planner→DM/82/DM Admin",
   "result": "PASS",
   "expected": "이전 계정 Div 잔존 0",
-  "actual": "이전 40 · 이번 ",
+  "actual": "이전 40 · 이번 82",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2219,7 +3304,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2230,7 +3320,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -2241,73 +3336,140 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0005",
+  "target": "조회 행 범위",
+  "ctx": "DM/82/DM Admin",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 82",
+  "actual": "47575행 Division 82",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0005",
+  "target": "권한 범위 조회",
+  "ctx": "DM/82/DM Admin",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(82)",
+  "actual": "47575행 · Division 82",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Admin",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2318,7 +3480,12 @@
   "expected": "그룹 5개 중 메뉴 권한 4개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -2329,18 +3496,28 @@
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_ST,82,EE,EE_ST",
   "actual": "후보 81,81_ST,82 · 권한 있는데 없음 EE,EE_ST",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/82/DM Planner",
-  "result": "판정필요",
-  "expected": "후보 다수 — 기본 선택",
-  "actual": "빈값",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_ST,82)",
+  "actual": "81",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2351,7 +3528,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2362,7 +3544,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -2373,73 +3560,140 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0005",
+  "target": "조회 행 범위",
+  "ctx": "DM/82/DM Planner",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 81,81_ST,82,EE,EE_ST",
+  "actual": "43532행 Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0005",
+  "target": "권한 범위 조회",
+  "ctx": "DM/82/DM Planner",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(81,81_ST,82,EE,EE_ST)",
+  "actual": "43532행 · Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2450,7 +3704,12 @@
   "expected": "그룹 1개 중 메뉴 권한 0개 → 비노출",
   "actual": "트리에 없음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2461,29 +3720,60 @@
   "expected": "메뉴 권한 없는 계정의 URL 직접 접근 차단(문서 GAPSELF-22·DM-65)",
   "actual": "authorized=true notFound=false",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "라우트 가드 부재는 기존 기록(authcrud gap) — AS-IS 근거(메뉴에 없으면 못 연다)로 FAIL 승격 여부는 사용자 결정 필요"
+  "note": "라우트 가드 부재는 기존 기록(authcrud gap) — AS-IS 근거(메뉴에 없으면 못 연다)로 FAIL 승격 여부는 사용자 결정 필요",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
   "screen": "DMF0005",
   "target": "Division 후보",
   "ctx": "DM/82/DM Planner (W/S)",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) (없음)",
-  "actual": "후보 ",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": ""
+  "result": "ERROR",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한 (없음)",
+  "actual": "[측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 ''",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/82/DM Planner (W/S)",
-  "result": "판정필요",
-  "expected": "후보 다수 — 기본 선택",
-  "actual": "빈값",
+  "result": "ERROR",
+  "expected": "후보 안의 값",
+  "actual": "[측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 ''",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0005",
+  "target": "이전 세션 잔존",
+  "ctx": "DM/82/DM Planner→DM/82/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "이전 계정 Div 잔존 0",
+  "actual": "이전 81 · 이번 ",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2494,7 +3784,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2505,7 +3800,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -2516,7 +3816,12 @@
   "expected": "AS-IS 숨김((!(DIV==\"40\")))",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2524,10 +3829,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2535,10 +3845,15 @@
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2546,10 +3861,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2557,10 +3877,15 @@
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
@@ -2568,10 +3893,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
@@ -2579,10 +3909,15 @@
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/DM Planner (W/S)",
   "result": "PASS",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
   "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2593,128 +3928,28 @@
   "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
-  "eg": "EG366",
+  "eg": "EG382",
   "screen": "DMF0005",
-  "target": "Division 후보",
-  "ctx": "DM/82/DM Viewer",
-  "result": "판정필요",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
-  "actual": "후보  · 권한 있는데 없음 82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
- },
- {
-  "eg": "EG365",
-  "screen": "DMF0005",
-  "target": "자동 선택",
-  "ctx": "DM/82/DM Viewer",
-  "result": "판정필요",
-  "expected": "후보 다수 — 기본 선택",
-  "actual": "빈값",
-  "asis": "DM-65",
-  "note": ""
- },
- {
-  "eg": "EG275",
-  "screen": "DMF0005",
-  "target": "End Customer(Report) Null (그룹 조건)",
-  "ctx": "DM/82/DM Viewer",
-  "result": "PASS",
-  "expected": "AS-IS 숨김((!(DIV==\"40\")))",
-  "actual": "비노출",
-  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3826",
-  "note": ""
- },
- {
-  "eg": "EG275",
-  "screen": "DMF0005",
-  "target": "Project Null (그룹 조건)",
-  "ctx": "DM/82/DM Viewer",
-  "result": "PASS",
-  "expected": "AS-IS 숨김((!(DIV==\"40\")))",
-  "actual": "비노출",
-  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3828",
-  "note": ""
- },
- {
-  "eg": "EG369",
-  "screen": "DMF0005",
-  "target": "Model Code change (그룹 조건)",
-  "ctx": "DM/82/DM Viewer",
-  "result": "PASS",
-  "expected": "AS-IS 숨김((!(DIV==\"40\")))",
-  "actual": "비노출",
-  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3824",
-  "note": ""
- },
- {
-  "eg": "EG374",
-  "screen": "DMF0005",
-  "target": "SAVE 버튼 조회 전",
+  "target": "직접 접근",
   "ctx": "DM/82/DM Viewer",
   "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
- },
- {
-  "eg": "EG411",
-  "screen": "DMF0005",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "DM/82/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
- },
- {
-  "eg": "EG374",
-  "screen": "DMF0005",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "DM/82/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
- },
- {
-  "eg": "EG411",
-  "screen": "DMF0005",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "DM/82/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
- },
- {
-  "eg": "EG374",
-  "screen": "DMF0005",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "DM/82/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
- },
- {
-  "eg": "EG411",
-  "screen": "DMF0005",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "DM/82/DM Viewer",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div ) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "expected": "메뉴 권한 있음 → 접근",
+  "actual": "authorized=false notFound=false",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG382",
@@ -2725,7 +3960,12 @@
   "expected": "그룹 6개 중 메뉴 권한 4개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG366",
@@ -2734,20 +3974,30 @@
   "ctx": "DM/82/SCP Planner",
   "result": "판정필요",
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_ST,81_UC,82,EE,EE_HD,EE_ST,EE_UC",
-  "actual": "후보  · 권한 있는데 없음 40,81,81_HD,81_ST,81_UC,82,EE,EE_HD,EE_ST,EE_UC",
+  "actual": "후보 40,81,81_HD,81_ST,81_UC,82 · 권한 있는데 없음 EE,EE_HD,EE_ST,EE_UC",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요"
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG365",
   "screen": "DMF0005",
   "target": "자동 선택",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "후보 안의 값()",
+  "result": "PASS",
+  "expected": "후보 안의 값(40,81,81_HD,81_ST,81_UC,82)",
   "actual": "40",
   "asis": "DM-65",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2758,7 +4008,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3804",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG275",
@@ -2769,7 +4024,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3806",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG369",
@@ -2780,7 +4040,12 @@
   "expected": "AS-IS 숨김((DIV==\"40\") && ((GROUP!=\"ADMIN\" && GROUP!=\"DM ADMIN\" && GROUP!=\"SCM PI)",
   "actual": "비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:3803",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG368",
@@ -2789,9 +4054,14 @@
   "ctx": "DM/82/SCP Planner",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,81_HD,81_ST,81_UC,82,EE,EE_HD,EE_ST,EE_UC",
-  "actual": "15674행 Division 40",
+  "actual": "15675행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG007",
@@ -2800,75 +4070,110 @@
   "ctx": "DM/82/SCP Planner",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_ST,81_UC,82,EE,EE_HD,EE_ST,EE_UC)",
-  "actual": "15674행 · Division 40",
+  "actual": "15675행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리"
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "SAVE 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "INSERT 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG374",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG411",
   "screen": "DMF0005",
   "target": "DELETE 버튼 조회 전",
   "ctx": "DM/82/SCP Planner",
-  "result": "FAIL",
-  "expected": "PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 노출",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG022",
@@ -2879,7 +4184,12 @@
   "expected": "Measure 버튼",
   "actual": "버튼·설정 창 없음",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG402",
@@ -2890,7 +4200,12 @@
   "expected": "Measure 버튼",
   "actual": "버튼·설정 창 없음",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG160",
@@ -2901,7 +4216,12 @@
   "expected": "Column Setting 버튼",
   "actual": "버튼·설정 창 없음",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2912,7 +4232,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2923,7 +4248,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2934,18 +4264,44 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
   "screen": "DMF0005",
   "target": "Insert",
   "ctx": "DM/40/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCP Planner",
-  "result": "PASS",
-  "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
-  "actual": "신규행 1 · 메시지 -",
+  "result": "판정필요",
+  "expected": "허용",
+  "actual": "버튼 비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG373",
+  "screen": "DMF0005",
+  "target": "Insert 차단 메시지",
+  "ctx": "DM/40/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCP Planner",
+  "result": "판정필요",
+  "expected": "AS-IS MSG 안내",
+  "actual": "버튼 비노출 — 메시지 대상 아님(CR-070)",
+  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2956,7 +4312,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2967,7 +4328,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2978,7 +4344,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 0 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -2989,18 +4360,44 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
   "screen": "DMF0005",
   "target": "Insert",
   "ctx": "DM/81/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCM Viewer/SCP Planner",
-  "result": "PASS",
-  "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
-  "actual": "신규행 1 · 메시지 -",
+  "result": "판정필요",
+  "expected": "허용",
+  "actual": "버튼 비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG373",
+  "screen": "DMF0005",
+  "target": "Insert 차단 메시지",
+  "ctx": "DM/81/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCM Viewer/SCP Planner",
+  "result": "판정필요",
+  "expected": "AS-IS MSG 안내",
+  "actual": "버튼 비노출 — 메시지 대상 아님(CR-070)",
+  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -3011,7 +4408,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -3022,7 +4424,12 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
@@ -3033,18 +4440,44 @@
   "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
   "actual": "신규행 1 · 메시지 -",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG109",
   "screen": "DMF0005",
   "target": "Insert",
   "ctx": "DM/82/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCM Viewer/SCP Planner",
-  "result": "FAIL",
-  "expected": "차단 그룹 아님 → 신규행(또는 입력 창)",
-  "actual": "신규행 0 · 메시지 -",
+  "result": "판정필요",
+  "expected": "허용",
+  "actual": "버튼 비노출",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG373",
+  "screen": "DMF0005",
+  "target": "Insert 차단 메시지",
+  "ctx": "DM/82/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCM Viewer/SCP Planner",
+  "result": "판정필요",
+  "expected": "AS-IS MSG 안내",
+  "actual": "버튼 비노출 — 메시지 대상 아님(CR-070)",
+  "asis": "DMF0005_SaleSite_PjtModelMapping.cs:594",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG140",
@@ -3055,7 +4488,12 @@
   "expected": "AS-IS 병합 있으면 그룹 위 삽입",
   "actual": "TO-BE 표시 행 안 병합 범위 없음(allowMerging=2)",
   "asis": "AS-IS 병합 문장 없음",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG319",
@@ -3066,7 +4504,12 @@
   "expected": "AS-IS 병합 있으면 그룹 위 삽입",
   "actual": "TO-BE 표시 행 안 병합 범위 없음(allowMerging=2)",
   "asis": "AS-IS 병합 문장 없음",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG126",
@@ -3077,7 +4520,12 @@
   "expected": "헤더 클릭 정렬",
   "actual": "헤더 13칸 클릭 후 정렬 상태 없음 — 측정 경로 없음",
   "asis": "",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG113",
@@ -3088,7 +4536,12 @@
   "expected": "GET_ADMIN_GROUP_MEASURE 행",
   "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0005)",
   "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG376",
@@ -3099,7 +4552,12 @@
   "expected": "GET_ADMIN_GROUP_MEASURE 행",
   "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0005)",
   "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG067",
@@ -3110,7 +4568,12 @@
   "expected": "GET_ADMIN_GROUP_MEASURE 행",
   "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0005)",
   "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3118,10 +4581,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Admin · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3129,10 +4597,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Admin · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3140,10 +4613,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Admin · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3151,10 +4629,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Admin · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM ADMIN 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3162,10 +4645,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3173,10 +4661,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3184,10 +4677,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3195,10 +4693,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3206,10 +4709,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Viewer · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3217,10 +4725,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Viewer · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3228,10 +4741,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Viewer · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3239,10 +4757,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/DM Viewer · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102]) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Planner 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3250,10 +4773,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3261,10 +4789,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3272,10 +4805,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3283,10 +4821,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/40/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3294,10 +4837,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Admin · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3305,10 +4853,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Admin · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3316,10 +4869,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Admin · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3327,10 +4885,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Admin · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3338,10 +4901,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3349,10 +4917,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3360,10 +4933,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3371,10 +4949,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3382,10 +4965,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner (W/S) · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3393,10 +4981,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner (W/S) · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3404,10 +4997,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner (W/S) · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3415,10 +5013,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Planner (W/S) · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3426,10 +5029,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Viewer · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3437,10 +5045,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Viewer · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3448,10 +5061,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Viewer · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3459,10 +5077,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/DM Viewer · Div 81",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 30 · DIVISION_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; DIVISION_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 234셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3470,10 +5093,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3481,10 +5109,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3492,10 +5125,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3503,10 +5141,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/81/SCP Planner · Div 40",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 20",
-  "actual": "대조 201셀 · 불일치 51 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 2",
+  "actual": "대조 228셀 · 불일치 99 · CUST_GROUP r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102]) ; CUST_GROUP r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 DM Viewer 기준, 보유 그룹 합집합 CR-102])",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3514,10 +5157,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Admin · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3525,10 +5173,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Admin · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3536,10 +5189,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Admin · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3547,54 +5205,79 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Admin · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
   "screen": "DMF0005",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "DM/82/DM Planner · Div ",
-  "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 33 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "ctx": "DM/82/DM Planner · Div 81",
+  "result": "PASS",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
   "screen": "DMF0005",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "DM/82/DM Planner · Div ",
-  "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 33 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "ctx": "DM/82/DM Planner · Div 81",
+  "result": "PASS",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
   "screen": "DMF0005",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "DM/82/DM Planner · Div ",
-  "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 33 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "ctx": "DM/82/DM Planner · Div 81",
+  "result": "PASS",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
   "screen": "DMF0005",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "DM/82/DM Planner · Div ",
-  "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 234셀 · 불일치 33 · END_CUSTOMER r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; END_CUSTOMER r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "ctx": "DM/82/DM Planner · Div 81",
+  "result": "PASS",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3602,10 +5285,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Viewer · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3613,10 +5301,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Viewer · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3624,10 +5317,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Viewer · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3635,10 +5333,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/DM Viewer · Div 82",
   "result": "FAIL",
-  "expected": "규칙 255컬럼 · 평가 불가 0",
-  "actual": "대조 189셀 · 불일치 39 · PRJ_OWNR_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제)) ; PRJ_OWNR_ID r2 편집=false/AS-IS 가능(기본(편집 모드 전체 해제))",
+  "expected": "규칙 252컬럼 · 평가 불가 0",
+  "actual": "대조 189셀 · 불일치 30 · OWNER r0 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r1 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금) ; OWNER r2 편집=true/AS-IS 잠금(InsertRowLockRangeMain40:2939 (무조건) → 잠금)",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG377",
@@ -3646,10 +5349,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/SCP Planner · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG124",
@@ -3657,10 +5365,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/SCP Planner · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG378",
@@ -3668,10 +5381,15 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/SCP Planner · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG123",
@@ -3679,21 +5397,31 @@
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
   "ctx": "DM/82/SCP Planner · Div 40",
   "result": "PASS",
-  "expected": "규칙 255컬럼 · 평가 불가 58",
-  "actual": "대조 87셀 · 불일치 0",
+  "expected": "규칙 252컬럼 · 평가 불가 52",
+  "actual": "대조 78셀 · 불일치 0",
   "asis": "edit_expect.csv",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG315",
   "screen": "DMF0005",
   "target": "헤더 병합",
   "ctx": "AS-IS 문장 1건",
-  "result": "FAIL",
+  "result": "ERROR",
   "expected": "AS-IS 헤더 병합 (siMain.ColumnHeaderSpan(0, iCellCnt, 2, 1, 20, sColumnLabel,)",
-  "actual": "TO-BE 헤더 1행 병합 0개 ",
+  "actual": "[측정 전제 미충족] 헤더 1행 < 기대 2행(동적 컬럼·헤더 반영 전) — 화면 결함이 아니라 측정 실패(ERROR) · TO-BE 헤더 1행 병합 0개",
   "asis": "DMF0005_SaleSite_PjtModelMapping.cs:4564",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
  },
  {
   "eg": "EG032",
@@ -3704,6 +5432,43 @@
   "expected": "TITLESET_USER 보유·미보유 계정쌍",
   "actual": "명부에 쌍 없음(보유 N · 미보유 Y)",
   "asis": "SCM_MST_TITLESET_USER",
-  "note": ""
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG395",
+  "screen": "DMF0005",
+  "target": "DMF0005",
+  "ctx": "저장 후 비움",
+  "result": "NA",
+  "expected": "Column 버튼",
+  "actual": "버튼 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 3098,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG380",
+  "screen": "DMF0005",
+  "target": "무권한 첫 화면",
+  "ctx": "DM/82/DM Planner (W/S)",
+  "result": "FAIL",
+  "expected": "Auth Request(권한 신청) 화면 메인 — DM-247",
+  "actual": "URL /view/home · 본문 SCM 공급망관리시스템 Supply Chain Management system Demand Authority KOR 이 이미영 Home Close others C",
+  "asis": "DM-247·GAP-475",
+  "note": "명부 GUEST 전용 계정 1",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
  }
 ]

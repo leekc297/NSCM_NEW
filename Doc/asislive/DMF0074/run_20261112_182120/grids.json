@@ -1,0 +1,895 @@
+{
+ "id": "DMF0074",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "DB : 0.423s, UI : 0.001s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Metal Link Price",
+     "rows": 0,
+     "cols": 54,
+     "visible": "True",
+     "frozen_cols": "12",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "",
+        ""
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "30",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Date",
+        "Plan Date"
+       ],
+       "label": "Plan Date",
+       "tag": "PLAN_YYYYMM",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_YYYYMM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Team",
+        "Team"
+       ],
+       "label": "Team",
+       "tag": "DEPT_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DEPT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "End Customer",
+        "End Customer"
+       ],
+       "label": "End Customer",
+       "tag": "END_CUSTOMER",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "END_CUSTOMER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Model Code",
+        "Model Code"
+       ],
+       "label": "Model Code",
+       "tag": "ITEM_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Metal Link",
+        "Metal Link"
+       ],
+       "label": "Metal Link",
+       "tag": "METAL_LINK_YN",
+       "width": "40",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "METAL_LINK_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sales Site",
+        "Sales Site"
+       ],
+       "label": "Sales Site",
+       "tag": "SCM_SITE_ID",
+       "width": "110",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SCM_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Currency",
+        "Currency"
+       ],
+       "label": "Currency",
+       "tag": "CURRENCY",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CURRENCY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "FCST type",
+        "FCST type"
+       ],
+       "label": "FCST type",
+       "tag": "FCST_TYPE",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FCST_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Exception",
+        "Exception"
+       ],
+       "label": "Exception",
+       "tag": "METAL_EXCEPTION_YN",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "METAL_EXCEPTION_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Energy",
+        "Energy"
+       ],
+       "label": "Energy",
+       "tag": "ENERGY",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "ENERGY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Key",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "APPLY_PRICE_TYPE_CODE1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Key",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "APPLY_PRICE_TYPE_CODE2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Key",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "APPLY_PRICE_TYPE_CODE3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Key",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "APPLY_PRICE_TYPE_CODE4",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Key",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "APPLY_PRICE_TYPE_CODE5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Key",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "APPLY_PRICE_TYPE_CODE6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Key",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "APPLY_PRICE_TYPE_CODE7",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPLY_PRICE_TYPE_CODE7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Period(Fr)",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "FROM_PERIOD1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Period(Fr)",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "FROM_PERIOD2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Period(Fr)",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "FROM_PERIOD3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Period(Fr)",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "FROM_PERIOD4",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Period(Fr)",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "FROM_PERIOD5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Period(Fr)",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "FROM_PERIOD6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Period(Fr)",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "FROM_PERIOD7",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FROM_PERIOD7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Period(To)",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "TO_PERIOD1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Period(To)",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "TO_PERIOD2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Period(To)",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "TO_PERIOD3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Period(To)",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "TO_PERIOD4",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Period(To)",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "TO_PERIOD5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Period(To)",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "TO_PERIOD6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "Period(To)",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "TO_PERIOD7",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "TO_PERIOD7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "Contract Price(/kg)",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "CONTRACT_UNIT1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "Contract Price(/kg)",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "CONTRACT_UNIT2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Contract Price(/kg)",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "CONTRACT_UNIT3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "Contract Price(/kg)",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "CONTRACT_UNIT4",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "Contract Price(/kg)",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "CONTRACT_UNIT5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "Contract Price(/kg)",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "CONTRACT_UNIT6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "Contract Price(/kg)",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "CONTRACT_UNIT7",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CONTRACT_UNIT7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "Change Price(/kg)",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "METAL_APPLY1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "Change Price(/kg)",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "METAL_APPLY2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "Change Price(/kg)",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "METAL_APPLY3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "Change Price(/kg)",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "METAL_APPLY4",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "Change Price(/kg)",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "METAL_APPLY5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "Change Price(/kg)",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "METAL_APPLY6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "Change Price(/kg)",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "METAL_APPLY7",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_APPLY7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Ni"
+       ],
+       "label": "Ni",
+       "tag": "METAL_REQR1",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR1",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Co"
+       ],
+       "label": "Co",
+       "tag": "METAL_REQR2",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR2",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Li2CO3"
+       ],
+       "label": "Li2CO3",
+       "tag": "METAL_REQR3",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR3",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "LIOH"
+       ],
+       "label": "LIOH",
+       "tag": "METAL_REQR4",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR4",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Al"
+       ],
+       "label": "Al",
+       "tag": "METAL_REQR5",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR5",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Mn"
+       ],
+       "label": "Mn",
+       "tag": "METAL_REQR6",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR6",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "Metal Index (kg/Biz type)",
+        "Cu"
+       ],
+       "label": "Cu",
+       "tag": "METAL_REQR7",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "METAL_REQR7",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

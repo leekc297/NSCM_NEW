@@ -1,0 +1,717 @@
+{
+ "_doc": "SSP0020 폼 저장형 시나리오(2026-11-16). 근거 = GSCM/06.UIL/GSCM.SSP.Plan.UIL/SSP0020_Delegate.cs 원문 행 · 문구 = AS-IS TB_FX_MessageInfo Ko(Doc/verify/SSP0020/_msg_texts_20261116.json). 저장·해제 요청은 allowSave 시나리오만 서버로 보낸다.",
+ "saveRx": "/(SAVE|UNSET)[^/]*/call-proc",
+ "vars": {
+  "DELEGATEE": "jiangguoping",
+  "NOUSER": "ZZNOUSER987X"
+ },
+ "scenarios": [
+  {
+   "id": "B01",
+   "msg": "(동작)",
+   "meth": "SpdMain_SheetTabClick",
+   "asis_line": "cs:232",
+   "asis_text": "",
+   "kind": "dynamic",
+   "note": "시트 탭 전환 — AS-IS 는 첫 시트(Delegate)에서만 Save·UnSet 버튼을 보인다(cs:234~244)",
+   "steps": [
+    {
+     "op": "tab",
+     "name": "Delegated List"
+    },
+    {
+     "op": "expectButton",
+     "name": "Save",
+     "visible": false
+    },
+    {
+     "op": "expectButton",
+     "name": "UnSet",
+     "visible": false
+    },
+    {
+     "op": "tab",
+     "name": "Delegate"
+    },
+    {
+     "op": "expectButton",
+     "name": "Save",
+     "visible": true
+    },
+    {
+     "op": "expectButton",
+     "name": "UnSet",
+     "visible": true
+    }
+   ],
+   "covers": [
+    {
+     "rule": "X-ROW",
+     "target": "SpdMain_SheetTabClick$",
+     "aspect": "pass"
+    }
+   ]
+  },
+  {
+   "id": "P01",
+   "msg": "(동작)",
+   "meth": "UserPopup",
+   "asis_line": "cs:821",
+   "asis_text": "",
+   "kind": "dynamic",
+   "note": "Delegatee 찾기 팝업 — AS-IS 는 칸 값을 팝업 검색어로 넘기고(cs:829 popup.strSearch = txtDelegatee.Text) 고른 사용자의 이름을 칸에 넣는다(cs:838~844)",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "fieldButton",
+     "label": "Delegatee"
+    },
+    {
+     "op": "expectDialogInput",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "dialogPickFirst"
+    },
+    {
+     "op": "expectField",
+     "label": "Delegatee",
+     "not": "@DELEGATEE"
+    },
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": ""
+    }
+   ],
+   "covers": [
+    {
+     "rule": "M4",
+     "target": "txtDelegatee",
+     "aspect": "pass"
+    },
+    {
+     "rule": "G5",
+     "target": "txtDelegatee",
+     "aspect": "pass"
+    }
+   ]
+  },
+  {
+   "id": "F16",
+   "msg": "MSG00302",
+   "meth": "UserName_Search",
+   "asis_line": "cs:802",
+   "asis_text": "다중검색된 User입니다. 검색창을 여시겠습니까?",
+   "kind": "dynamic",
+   "note": "Delegatee 빈값으로 Save(빈 검색어가 여러 사용자와 일치)",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": ""
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "asis_text_alt": [
+    "This is a multiple-searched User. Open search box?",
+    "This is a multiple-searched User. Open search box?"
+   ],
+   "alt_basis": "TO-BE MSG01305 의 KO 문구가 AS-IS MSG00302 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F17",
+   "msg": "MSG00301",
+   "meth": "UserName_Search",
+   "asis_line": "cs:811",
+   "asis_text": "사용자를 찾지 못했습니다. 검색창을 여시겠습니까?",
+   "kind": "dynamic",
+   "note": "없는 사용자명으로 Save",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@NOUSER"
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "asis_text_alt": [
+    "No user were found. Open search box?",
+    "No user were found. Open search box?"
+   ],
+   "alt_basis": "TO-BE MSG01304 의 KO 문구가 AS-IS MSG00301 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F02",
+   "msg": "MSG00305",
+   "meth": "Validation_Check",
+   "asis_line": "cs:379",
+   "asis_text": "위임자와 수임자가 동일 합니다.",
+   "kind": "dynamic",
+   "note": "Delegatee 에 로그인 계정 입력",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@ME"
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    }
+   ],
+   "covers": [
+    {
+     "rule": "F4",
+     "target": "P_USER_CHECK$",
+     "aspect": "pass"
+    }
+   ],
+   "asis_text_alt": [
+    "The delegator and the officer are the same.",
+    "The delegator and the officer are the same."
+   ],
+   "alt_basis": "TO-BE MSG01308 의 KO 문구가 AS-IS MSG00305 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F03",
+   "msg": "MSG00134",
+   "meth": "Validation_Check",
+   "asis_line": "cs:385",
+   "asis_text": "날짜 선택 후 입력하세요.",
+   "kind": "dynamic",
+   "note": "Period 빈값",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "",
+     "to": ""
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    }
+   ],
+   "asis_text_alt": [
+    "Select a date and enter it.",
+    "Select a date and enter it."
+   ],
+   "alt_basis": "TO-BE MSG01153 의 KO 문구가 AS-IS MSG00134 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F04",
+   "msg": "MSG00219",
+   "meth": "Validation_Check",
+   "asis_line": "cs:393",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "kind": "dynamic",
+   "note": "Period From > To",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    }
+   ],
+   "asis_text_alt": [
+    "The start date can not be later than the end date.\\n\\rSearch the list and enter it again.",
+    "The start date can not be later than the end date.\\n\\rSearch the list and enter it again."
+   ]
+  },
+  {
+   "id": "F08",
+   "msg": "MSG00299",
+   "meth": "Validation_Check",
+   "asis_line": "cs:462",
+   "asis_text": "선택된 Division ID가 없습니다.",
+   "kind": "dynamic",
+   "note": "Division 전부 해제",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Div",
+     "mode": "none"
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    }
+   ],
+   "asis_text_alt": [
+    "No Division ID selected.",
+    "No Division ID selected."
+   ],
+   "alt_basis": "TO-BE MSG01302 의 KO 문구가 AS-IS MSG00299 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F09",
+   "msg": "MSG00004",
+   "meth": "SaveData",
+   "asis_line": "cs:523",
+   "asis_text": "개의 데이터가 저장되었습니다.",
+   "kind": "dynamic",
+   "phase": "setup",
+   "allowSave": true,
+   "expectSave": 1,
+   "note": "정상 저장(Division 전체 · 당일 하루 · 위임 행 생성)",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Div",
+     "mode": "all"
+    },
+    {
+     "op": "click",
+     "name": "Save",
+     "ms": 4500
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY",
+     "TO_DATE": "@TODAY"
+    },
+    "min": 1
+   },
+   "delayMs": 1500,
+   "checks": {
+    "msgCountEqualsMatch": true,
+    "audit": {
+     "LAST_UPDATED_BY": "~@ME"
+    },
+    "loading": true,
+    "noConfirm": true
+   },
+   "covers": [
+    {
+     "rule": "F1",
+     "target": "화면$",
+     "aspect": "reflect"
+    },
+    {
+     "rule": "F2",
+     "target": "화면$",
+     "aspect": "single"
+    },
+    {
+     "rule": "F4",
+     "target": "화면$",
+     "aspect": "noerror"
+    },
+    {
+     "rule": "F6",
+     "target": "화면$",
+     "aspect": "count"
+    },
+    {
+     "rule": "F8",
+     "target": "저장 감사 필드$",
+     "aspect": "audit"
+    },
+    {
+     "rule": "H10",
+     "target": "저장 취소 요청 없음$",
+     "aspect": "noconfirm"
+    },
+    {
+     "rule": "H11",
+     "target": "저장 중 로딩$",
+     "aspect": "loading"
+    },
+    {
+     "rule": "F4",
+     "target": "SAVE_DELEGATE$",
+     "aspect": "noerror"
+    }
+   ],
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved.",
+    "已保存 {0} 条数据."
+   ],
+   "alt_basis": "TO-BE MSG00672 의 KO 문구가 AS-IS MSG00004 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F09b",
+   "msg": "MSG00004",
+   "meth": "SaveData",
+   "asis_line": "cs:523",
+   "asis_text": "개의 데이터가 저장되었습니다.",
+   "kind": "dynamic",
+   "phase": "setup",
+   "allowSave": true,
+   "expectSave": 1,
+   "note": "정상 저장 2회차(Division 전체 · 다음 날 하루) — 그리드 행을 20행 이상으로 만든다(방향키 반복 이동 검사 전제)",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY+1",
+     "to": "@TODAY+1"
+    },
+    {
+     "op": "multi",
+     "label": "Div",
+     "mode": "all"
+    },
+    {
+     "op": "click",
+     "name": "Save",
+     "ms": 3000
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY+1",
+     "TO_DATE": "@TODAY+1"
+    },
+    "min": 1
+   },
+   "checks": {
+    "msgCountEqualsMatch": true
+   },
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved.",
+    "已保存 {0} 条数据."
+   ],
+   "alt_basis": "TO-BE MSG00672 의 KO 문구가 AS-IS MSG00004 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F05",
+   "msg": "MSG00105",
+   "meth": "Validation_Check",
+   "asis_line": "cs:426",
+   "asis_text": "중첩된 기간이 있습니다.",
+   "kind": "dynamic",
+   "expectRowsMin": 1,
+   "note": "같은 Division·기간으로 다시 Save",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Div",
+     "mode": "all"
+    },
+    {
+     "op": "click",
+     "name": "Save"
+    }
+   ],
+   "asis_text_alt": [
+    "There are overlapping periods.",
+    "There are overlapping periods.",
+    "The period overlaps with an existing one.",
+    "存在重叠的期间."
+   ],
+   "alt_basis": "TO-BE MSG00700 의 KO 문구가 AS-IS MSG00105 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F12",
+   "msg": "MSG00300",
+   "meth": "BtnUnSet_Click",
+   "asis_line": "cs:576",
+   "asis_text": "리스트에서 선택 후 설정해제 해주세요.",
+   "kind": "dynamic",
+   "expectRowsMin": 1,
+   "note": "행 선택 없이 UnSet",
+   "steps": [
+    {
+     "op": "click",
+     "name": "UnSet"
+    }
+   ],
+   "asis_text_alt": [
+    "Please select it from the list and unset it.",
+    "Please select it from the list and unset it."
+   ],
+   "alt_basis": "TO-BE MSG01303 의 KO 문구가 AS-IS MSG00300 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F13",
+   "msg": "MSG00004",
+   "meth": "UnSet",
+   "asis_line": "cs:749",
+   "asis_text": "개의 데이터가 저장되었습니다.",
+   "kind": "dynamic",
+   "phase": "teardown",
+   "allowSave": true,
+   "expectSave": 1,
+   "expectRowsMin": 1,
+   "note": "검증용으로 만든 위임 행만 선택 후 UnSet",
+   "steps": [
+    {
+     "op": "checkrows",
+     "where": {
+      "DELEGATEE_ID": "@DELEGATEE",
+      "FROM_DATE": "@TODAY",
+      "TO_DATE": "@TODAY"
+     }
+    },
+    {
+     "op": "click",
+     "name": "UnSet",
+     "ms": 3000
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY",
+     "TO_DATE": "@TODAY"
+    },
+    "max": 0
+   },
+   "checks": {
+    "maxMs": 3000
+   },
+   "covers": [
+    {
+     "rule": "F4",
+     "target": "화면$",
+     "aspect": "noerror"
+    },
+    {
+     "rule": "L1",
+     "target": "저장 응답 시간$",
+     "aspect": "time"
+    },
+    {
+     "rule": "F4",
+     "target": "SAVE_UNSET$",
+     "aspect": "noerror"
+    }
+   ],
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved.",
+    "已保存 {0} 条数据."
+   ],
+   "alt_basis": "TO-BE MSG00672 의 KO 문구가 AS-IS MSG00004 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "F13b",
+   "msg": "MSG00004",
+   "meth": "UnSet",
+   "asis_line": "cs:749",
+   "asis_text": "개의 데이터가 저장되었습니다.",
+   "kind": "dynamic",
+   "phase": "teardown",
+   "allowSave": true,
+   "expectSave": 1,
+   "expectRowsMin": 1,
+   "note": "검증용으로 만든 다음 날 위임 행만 선택 후 UnSet",
+   "steps": [
+    {
+     "op": "checkrows",
+     "where": {
+      "DELEGATEE_ID": "@DELEGATEE",
+      "FROM_DATE": "@TODAY+1",
+      "TO_DATE": "@TODAY+1"
+     }
+    },
+    {
+     "op": "click",
+     "name": "UnSet",
+     "ms": 3000
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY+1",
+     "TO_DATE": "@TODAY+1"
+    },
+    "max": 0
+   },
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved.",
+    "已保存 {0} 条数据."
+   ],
+   "alt_basis": "TO-BE MSG00672 의 KO 문구가 AS-IS MSG00004 KO 문구와 같아 같은 메시지로 확인 — 그 메시지의 EN·CN 문구도 대조에 쓴다(SCM_ADM_MSG_M 2026-11-16 조회)"
+  },
+  {
+   "id": "U01",
+   "msg": "MSG00298",
+   "meth": "Validation_Check",
+   "asis_line": "cs:372",
+   "asis_text": "Delegatee를 입력해 주세요.",
+   "kind": "unreachable",
+   "basis": "BtnSave_Click(cs:341) 이 Validation_Check 앞에서 항상 UserName_Search(txtDelegatee.Text) 를 부르고 1건일 때만 통과하면서 txtDelegatee.Text 를 사용자 이름으로 채운다(cs:791~796). 빈 이름은 cs:802 MSG00302 또는 cs:811 MSG00301 에서 끝난다"
+  },
+  {
+   "id": "U06",
+   "msg": "MSG00296",
+   "meth": "Validation_Check",
+   "asis_line": "cs:440",
+   "asis_text": "수임자의 다른 위임 현황이 있습니다.",
+   "kind": "unreachable",
+   "basis": "cs:430 의 건수 조건은 cs:416 MSG00105 조건에 USER_ID == sDelegateeID 를 더한 것이라, 이 조건이 참이면 cs:416 이 먼저 참이 되어 cs:426 에서 끝난다"
+  },
+  {
+   "id": "U07",
+   "msg": "MSG00297",
+   "meth": "Validation_Check",
+   "asis_line": "cs:454",
+   "asis_text": "중첩된 기간에 수임받은 현황이 있습니다.",
+   "kind": "unreachable",
+   "basis": "cs:444 의 건수 조건은 cs:416 MSG00105 조건에 DELEGATEE_ID == 로그인 계정을 더한 것이라, 이 조건이 참이면 cs:416 이 먼저 참이 되어 cs:426 에서 끝난다"
+  },
+  {
+   "id": "E10",
+   "msg": "MSG00284",
+   "meth": "SaveData",
+   "asis_line": "cs:528",
+   "asis_text": "실행중 에러가 발생했습니다.",
+   "kind": "error_branch",
+   "basis": "저장 SP 응답 첫 칸이 S 가 아닐 때(cs:521 else)"
+  },
+  {
+   "id": "E14",
+   "msg": "MSG00284",
+   "meth": "UnSet",
+   "asis_line": "cs:757",
+   "asis_text": "실행중 에러가 발생했습니다.",
+   "kind": "error_branch",
+   "basis": "해제 성공 표시 bolSuessceChk 가 false 일 때(cs:747 else)"
+  },
+  {
+   "id": "E11",
+   "msg": "(동적 메시지)",
+   "meth": "BtnSave_Click",
+   "asis_line": "cs:359",
+   "asis_text": "",
+   "kind": "error_branch",
+   "basis": "SaveData() 가 false 를 돌려줄 때 errorMsg·errCode 를 그대로 띄우는 분기(cs:357 else)"
+  },
+  {
+   "id": "E11c",
+   "msg": "(동적 메시지)",
+   "meth": "SaveData",
+   "asis_line": "cs:535",
+   "asis_text": "",
+   "kind": "error_branch",
+   "basis": "저장 호출 예외 catch 블록(cs:531) GMessageBoxForException"
+  },
+  {
+   "id": "E15",
+   "msg": "(동적 메시지)",
+   "meth": "BtnUnSet_Click",
+   "asis_line": "cs:571",
+   "asis_text": "",
+   "kind": "error_branch",
+   "basis": "UnSet() 이 false 를 돌려줄 때 errorMsg·errCode 를 그대로 띄우는 분기(cs:569 else)"
+  },
+  {
+   "id": "E15c",
+   "msg": "(동적 메시지)",
+   "meth": "UnSet",
+   "asis_line": "cs:761",
+   "asis_text": "",
+   "kind": "error_branch",
+   "basis": "해제 호출 예외 catch 블록(cs:760) GMessageBoxForException"
+  },
+  {
+   "id": "B02",
+   "msg": "(동작)",
+   "meth": "SpdMain_CellClick",
+   "asis_line": "cs:850",
+   "asis_text": "",
+   "kind": "dynamic",
+   "expectRowsMin": 1,
+   "note": "머리글 체크로 전 행 선택·해제 — AS-IS 는 CHK 머리글을 누르면 전 행 CHK 값을 뒤집는다(cs:852~875)",
+   "steps": [
+    {
+     "op": "selectAllToggle"
+    }
+   ],
+   "covers": [
+    {
+     "rule": "X-ROW",
+     "target": "SpdMain_CellClick$",
+     "aspect": "pass"
+    }
+   ]
+  }
+ ],
+ "fixture_where": {
+  "DELEGATEE_ID": "@DELEGATEE",
+  "FROM_DATE": "@TODAY",
+  "TO_DATE": "@TODAY"
+ },
+ "_covers_doc": "covers = 화면 규칙 행(RULE_SCREEN)을 이 시나리오의 측면으로 판정. H10 근거: AS-IS BtnSave_Click(cs:352)은 확인창 없이 SaveData 를 부른다. H11 은 저장 응답을 delayMs 만큼 늦춰 로딩 표시를 본다. L1 기준 3초(문서 DM-75)."
+}

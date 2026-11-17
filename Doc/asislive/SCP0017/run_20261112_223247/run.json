@@ -1,0 +1,175 @@
+{
+ "id": "SCP0017",
+ "started": "2026-11-12 22:32:47.510",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:32:47.738",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0017_WaterfallProductionPlan",
+   "form_text": "Production Plan Waterfall",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0017_WaterfallProductionPlan.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:53.371"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:32:57.960",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0017\\run_20261112_223247\\dump_load.json",
+   "control_count": 78,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 13.85s, UI : 0.08s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:57.971"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:32:58.128",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0017\\run_20261112_223247\\shots\\SCP0017_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:32:58.255"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 22:33:02.942",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0017\\run_20261112_223247\\shots\\SCP0017_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:33:03.069"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:33:03.549",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:33:04.096"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:33:36.566",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0017\\run_20261112_223247\\dump_find.json",
+   "control_count": 78,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:33:36.577"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:33:36.746",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0017\\run_20261112_223247\\shots\\SCP0017_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:33:36.879"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:33:37.356",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:33:37.858"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 18,
+  "calls_with_params": 18
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0017_WaterfallProductionPlan",
+  "form_text": "Production Plan Waterfall",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0017_WaterfallProductionPlan.dll"
+ },
+ "fills": [
+  {
+   "rule": "체크 목록 첫 항목(Version*)",
+   "set": {
+    "name": "clbVersion",
+    "check": "0"
+   },
+   "ok": true,
+   "applied": "check:0:PP_W_20260817 (W34)",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "clbVersion",
+    "check": "0"
+   }
+  ]
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 22:32:47.714",
+ "t_find": "2026-11-12 22:33:03.206",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 78,
+  "layout_items": 27,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 400,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 18,
+  "calls_screen": 18,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 22:33:38.196",
+ "exit": 0
+}

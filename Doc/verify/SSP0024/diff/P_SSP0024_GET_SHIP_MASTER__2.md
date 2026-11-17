@@ -1,6 +1,89 @@
-# SSP0024 · (AS-IS 짝 없음) ↔ PKG_SSP0024.P_SSP0024_GET_SHIP_MASTER
+# SSP0024 · SSP0024_GET_SHIP_MASTER ↔ PKG_SSP0024.P_SSP0024_GET_SHIP_MASTER
 
-- 실행 2026-11-09 12:10:47 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-15 03:14:37 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- **판정 DIFF** — 공통 190행 중 불일치 셀 62 — diff/P_SSP0024_GET_SHIP_MASTER__2.csv · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+PLANT_SITE_CODE+PLANT_SITE_ID+MATERIAL_ID · golden 집합 판정 DIFF
 - 호출 #2 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 191 · 원천 Doc\verify\SSP0024\calls\_snap__snap_그리드_헤더_텍스트_모델_시트_0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "81", "plantSiteId": "", "materialId": "", "nickName": "", "modelId": ""}`
-- SKIP: sp_pair.csv 에 이 TO-BE proc 의 AS-IS 짝 없음 — gen_param_map.py 또는 source=manual 행 추가
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}` · 같은 본문의 세션 조합 3종 중 최다(164회) 사용 — 나머지 [{'sesLangCd': 'EN', 'sesUserId': 'minyonglee1'}, {'sesLangCd': 'CN', 'sesUserId': 'minyonglee1'}]
+- AS-IS 인자(번역): `{"p_division_id": "81", "p_plant_site_id": "", "p_material_id": "", "p_nick_name": "", "p_model_id": ""}`
+
+### 결과셋 1  As-is 190행 ↔ To-Be O_RC1 190행
+- 값 차이: As-is 전용 61행 / To-Be 전용 61행 (공통 컬럼 25)
+| 측 | DIVISION_ID | PLANT_SITE_CODE | PLANT_SITE_ID | MATERIAL_ID | MODEL_ID | CELL_TYPE | NICK_NAME | ELECTRODE_TYPE | ITEM_UOM | POST_OPER | POST_OPER_LT | UOM_CONVERT_IN_TACT_TIME |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A | 81 | HQ07-E | HQ07-E | APCAN0520A | ACEN1057I-A1 |  | E57 | ANODE | M | OP00 | 0 | 3.691999 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0525A | ACHN1007I-A1 |  | F2-1 | ANODE | M | OP00 | 0 | 1.970001 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0526A | ACLN1010I-B1-000 |  | LV9.8A-000 | ANODE | M | OP00 | 0 | 2.856498 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0530A | ACLF1015I-A1 |  | S15 | ANODE | M | OP00 | 0 | 3.367003 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0531A | ACLF1020U-A2R000 |  | LV20A-R000 | ANODE | M | OP00 | 0 | 6.159987 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0534A | ACPN1029I-A1 |  | P28.5 | ANODE | M | OP00 | 0 | 2.677498 |
+| A | 81 | HQ07-E | HQ07-E | APCAN0820A | ACEN3066I-A1 |  | E66A-AE | ANODE | M | OP04 | 4 | 3.158101 |
+| A | 81 | HQ07-E | HQ07-E | APCAN1014A | ACEN3050I-A1 |  | E50A | ANODE | M | OP04 | 4 | 2.046999 |
+| A | 81 | HQ07-E | HQ07-E | APCAN1021A | ACEN1078I-A1-A02 |  | E78-A02 | ANODE | M | OP04 | 4 | 1.7064 |
+| A | 81 | HQ07-E | HQ07-E | APCAN1065A | ACEN1078I-A1-B01 |  | E78-B01 | ANODE | M | OP04 | 4 | 1.801201 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0520A | ACEN1057I-A1 |  | E57 | ANODE | M | OP00 | 0 | 3.691999 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0525A | ACHN1007I-A1 |  | F2-1 | ANODE | M | OP00 | 0 | 1.970001 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0526A | ACLN1010I-B1-000 |  | LV9.8A-000 | ANODE | M | OP00 | 0 | 2.856498 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0530A | ACLF1015I-A1 |  | S15 | ANODE | M | OP00 | 0 | 3.367003 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0531A | ACLF1020U-A2R000 |  | LV20A-R000 | ANODE | M | OP00 | 0 | 6.159987 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0534A | ACPN1029I-A1 |  | P28.5 | ANODE | M | OP00 | 0 | 2.677498 |
+| T | 81 | HQ07-E | HQ07-E | APCAN0820A | ACEN3066I-A1 |  | E66A-AE | ANODE | M | OP04 | 4 | 3.158101 |
+| T | 81 | HQ07-E | HQ07-E | APCAN1014A | ACEN3050I-A1 |  | E50A | ANODE | M | OP04 | 4 | 2.046999 |
+| T | 81 | HQ07-E | HQ07-E | APCAN1021A | ACEN1078I-A1-A02 |  | E78-A02 | ANODE | M | OP04 | 4 | 1.7064 |
+| T | 81 | HQ07-E | HQ07-E | APCAN1065A | ACEN1078I-A1-B01 |  | E78-B01 | ANODE | M | OP04 | 4 | 1.801201 |
+- 데이터 기준: 공통 129행 · AS-IS 전용 61행 · TO-BE 전용 61행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
+- 실제 순서(공통·유일 129행의 상대 순서): 일치
+
+## 불일치 셀(≤50) — diff/P_SSP0024_GET_SHIP_MASTER__2.csv
+| 키 | 컬럼 | AS-IS | TO-BE |
+|---|---|---|---|
+| 81|HQ07-E|HQ07-E|APCAN0525A | PC_ROLL_LENGTH | 1200 | 12312 |
+| 81|HQ07-E|HQ07-E|APCAN0526A | PC_ROLL_LENGTH | 1100 | -123 |
+| 81|HQ07-E|HQ07-E|APCAN0530A | PC_ROLL_LENGTH | 1100 | 1 |
+| 81|HQ07-E|HQ07-E|APCAN0531A | PC_ROLL_LENGTH | 1100 | 12 |
+| 81|HQ07-E|HQ07-E|APCAN0534A | PC_ROLL_LENGTH | 800 | 3 |
+| 81|HQ07-E|HQ07-E|APCAN0520A | STEELCRATE_PER_CUT | 1 | -1 |
+| 81|HQ07-E|HQ07-E|APCAN0526A | STEELCRATE_PER_CUT | 1 | -1223 |
+| 81|HQ07-E|HQ07-E|APCAN0820A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1014A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1021A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1065A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1120A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1133A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1144A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1173A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1182A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1184A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1200A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1214A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1356A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1361A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1414A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1430A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1476A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1480A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCAN1495A | BUILDING | OC5_E | E6 |
+| 81|HQ07-E|HQ07-E|APCCA0978A | BUILDING | OC5_E | E6 |
+| 81|MI00-E|MI00-E|APCAN1257B | BUILDING | MI1_E | E9 |
+| 81|MI00-E|MI00-E|APCCA0978A | BUILDING | MI1_E | E9 |
+| 81|NA00-E|NA00-E|APCAN0506B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN0507B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN0905B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1146A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1154A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1257B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1280B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1397A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN1731A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN2049A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN2049B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN2178A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN2369A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCAN2685A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA0522B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA0523B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA0549B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA0928B | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA0978A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA1197A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |
+| 81|NA00-E|NA00-E|APCCA1329A | BUILDING | (N/A)Nanjing Automotive Bldg 1 | E8 |

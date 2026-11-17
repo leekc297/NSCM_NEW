@@ -1,0 +1,5 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0110-Sad91e2,DIVISION,,,,값 미도출,if (dtMyDivision.Rows.Count > 0),
+SCP0110-S95247f,AUTH,,,,값 미도출,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ for (k < dtGroupMaster.Rows.Count) ▸ else of (action == CAppSetting.FlagI) ▸ if (groupID != g,
+SCP0110-S8de8fc,AUTH,,,,값 미도출,if (siSub != null && siSub.IsLock(siSub.SheetName) == false) ▸ if (siSub.SheetName == SpdSheet.shtSub) ▸ for (i < siSub.GetMaxRowIndex()) ▸ for (m <= siSub.GetMaxRowIndex()) ▸ if (i != m) ▸ if (groupID == groupIDM && projectCode != projectC,
+SCP0110-S320456,AUTH,,,,값 미도출,if (siSub != null && siSub.IsLock(siSub.SheetName) == false) ▸ if (siSub.SheetName == SpdSheet.shtSub) ▸ for (i < siSub.GetMaxRowIndex()) ▸ for (k < dtModelListAll.Rows.Count) ▸ if (groupID == groupIDK && projectCode != projectCodeK),

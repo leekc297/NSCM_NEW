@@ -1,0 +1,23 @@
+// Period From~To 날짜 2개 + 구분자 가로 배치 (drpPeriod 재현).
+.periodWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.periodSeparator {
+  flex: 0 0 auto;
+  padding: 0 2px;
+}
+
+// SAVE/UnSet 버튼 묶음(조회영역 우측). Delegated List 시트에서는 자리(폭)만 유지하고 숨긴다 —
+//   시트 전환 시 버튼 유무로 버튼그룹 폭이 변해 조회조건(Delegatee 등)이 늘었다/줄었다 하는 반동 방지.
+.actionButtons {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.actionButtonsHidden {
+  visibility: hidden;
+}

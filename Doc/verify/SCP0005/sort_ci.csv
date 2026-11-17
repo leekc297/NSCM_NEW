@@ -1,0 +1,3 @@
+﻿proc,result,why,order_by
+PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE,판정필요,"[SORT 기준 차이 → 판정필요] 문자 키 4/4건 AS-IS 콜레이션과 다를 수 있음: FROM_COUNTRY(대소문자 무시·NULL 먼저 없음), FROM_CITY(대소문자 무시·NULL 먼저 없음), TO_COUNTRY(대소문자 무시·NULL 먼저 없음), TO_CITY(대소문자 무시·NULL 먼저 없음)","ORDER BY T.FROM_COUNTRY, T.FROM_CITY, T.TO_COUNTRY, T.TO_CITY, T.PRIORITY NULLS FIRST, T.ROUTE_ID"
+PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY,판정필요,"[SORT 기준 차이 → 판정필요] 문자 키 3/3건 AS-IS 콜레이션과 다를 수 있음: COUNTRY(대소문자 무시·NULL 먼저 없음), CITY(대소문자 무시·NULL 먼저 없음), CITY_NAME(대소문자 무시·NULL 먼저 없음)","ORDER BY A.COUNTRY , A.CITY , A.CITY_NAME"

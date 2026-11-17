@@ -13,6 +13,11 @@ const cases = [
   ['else of FlagI 분기 삭제', f([A('DeleteButton', '1', 'DATA_OP', 'siMain.Delete', 'if (a == CAppSetting.FlagI)'), A('DeleteButton', '2', 'DATA_OP', 'siMain.Delete', 'else of (a == CAppSetting.FlagI)')]).newOnly, false],
   ['!= FlagI', f([A('DeleteButton', '1', 'DATA_OP', 'siMain.Delete', 'if (a != CAppSetting.FlagI)')]).newOnly, false],
   ['삭제 문장 없음', f([A('DeleteButton', '1', 'BRANCH', 'x', '')]).newOnly, false],
+  ['앞선 return != FlagI(SCP0033 · T180)', f([A('DeleteButton', '186', 'RETURN', 'return;', 'if (action != CAppSetting.FlagI)'), A('DeleteButton', '188', 'DATA_OP', 'siMain.Delete', '')]).newOnly, true],
+  ['앞선 return || != FlagI(SCP0001)', f([A('DeleteButton', '484', 'RETURN', 'return;', 'if (a) ▸ if (string.IsNullOrWhiteSpace(action) || action != CAppSetting.FlagI)'), A('DeleteButton', '486', 'DATA_OP', 'siMain.Delete', 'if (a)')]).newOnly, true],
+  ['앞선 return && 조건(제외)', f([A('DeleteButton', '1', 'RETURN', 'return;', 'if (b && action != CAppSetting.FlagI)'), A('DeleteButton', '2', 'DATA_OP', 'siMain.Delete', '')]).newOnly, false],
+  ['return 이 삭제 뒤', f([A('DeleteButton', '1', 'DATA_OP', 'siMain.Delete', ''), A('DeleteButton', '2', 'RETURN', 'return;', 'if (action != CAppSetting.FlagI)')]).newOnly, false],
+  ['다른 블록의 return', f([A('DeleteButton', '1', 'RETURN', 'return;', 'if (x) ▸ if (action != CAppSetting.FlagI)'), A('DeleteButton', '3', 'DATA_OP', 'siMain.Delete', 'if (y)')]).newOnly, false],
 ];
 let bad = 0; for (const [n, got, want] of cases) { const ok = got === want; if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${n} → ${got}(기대 ${want})`); }
 // 전 화면 Python 일치

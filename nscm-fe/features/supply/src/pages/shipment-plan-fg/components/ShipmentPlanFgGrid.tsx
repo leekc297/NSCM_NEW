@@ -313,7 +313,7 @@ export const ShipmentPlanFgGrid = ({
     g.cellEditEnded.addHandler(cellEditEndedHandler);
     g.pastedCell.addHandler(cellEditEndedHandler);
 
-    // Fix 하이라이트(행×일자 셀 단위, design 03 §2.5) + SHIP_PLAN_AMEND 입력밴드(R-G) — formatItem.
+    // Fix 하이라이트(행×일자 셀 단위, design 03 §2.5) + SHIP_PLAN_AMEND 편집밴드(R-G, 노란 공통표준) — formatItem.
     //   W_ 셀은 Weekly Bucket 일 때만 칠한다(AS-IS .cs:1710).
     const formatItemHandler = (
       sender: FlexGridType,
@@ -336,15 +336,19 @@ export const ShipmentPlanFgGrid = ({
       const dataItem = e.panel?.rows?.[e.row]?.dataItem as Record<string, unknown> | undefined;
       if (!dataItem || s(dataItem.MEASURE) !== MEASURE.SHIP_PLAN_AMEND || !kind) return;
       if ((kind === 'D' || (kind === 'W' && bucketType === BUCKET_TYPE.WEEKLY)) && isCellFixed(fixedCells, dataItem, binding)) {
+        // Fix 초록이 편집 노랑보다 우선 — DOM 재사용으로 남은 wj-cell-editable 잔상을 지우고 인라인 초록을 칠한다
+        //   (foundation .wj-cell-editable 는 !important 가 없어 인라인이 이기지만, 잔상 클래스는 명시 제거).
+        e.cell.classList.remove('wj-cell-editable');
         e.cell.style.backgroundColor = 'rgb(188,229,92)';
         return;
       }
-      // 입력밴드(회색)는 실제 편집가능 셀에만 — AS-IS 실측(FarPoint Locked 셀은 배경이 되살아남, 2026-10-13
-      //   사용자 확인) 결과 R-K 잠금 구간은 무색이다. design 03 §2.2(R-G) 의 "잠금 무관 전체 회색" 서술은
-      //   .cs 소스(Set_FPOperationColor) 정적 판독 기준이라, 실행 화면 기준으로 이 판정을 덮어쓴다.
-      if (isMainCellEditable(binding, dataItem, editCtxRef.current)) {
-        e.cell.style.backgroundColor = 'rgb(234,234,234)';
-      }
+      // 편집가능 셀 배경 — 전 화면 공통 노란 표준(공용 wj-cell-editable = $wj-editable-cell #fff8cd)으로 통일한다.
+      //   종전에는 AS-IS FarPoint 입력밴드 색(회색 rgb(234,234,234), design 03 §2.2 R-G)을 재현했으나, 편집가능
+      //   셀은 전 화면 공통으로 노란색이 표준(asis-parity-default-keep-common-standardization — 공통 표준은
+      //   단일 화면만 AS-IS 로 되돌리지 않음)이라 노랑으로 맞춘다(사용자 지시 2026-11-12). 잠금 구간은 무색 유지
+      //   (R-K 판정 false → 클래스 제거). 형제 화면 ShipmentPlanMainGrid(SSP) 와 동일한 클래스 토글 관용.
+      e.cell.style.backgroundColor = '';
+      e.cell.classList.toggle('wj-cell-editable', isMainCellEditable(binding, dataItem, editCtxRef.current));
     };
     g.formatItem.addHandler(formatItemHandler as never);
 

@@ -6,7 +6,8 @@ paths:
 
 ## A. 작업 진입 (FULL 모드 — 생략 금지)
 - T01(신규) / T01M(수정) / T04~T07 해당 여부를 먼저 판별 → `Doc/_rules_consolidation/TRIGGER_ROUTER.md` 행의 핵심 Hook Read.
-- T01/T01M 은 `Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md` PRE-WRITE 통과 + 종료 전 `hooks/screen-completion-gate.md` 8 게이트.
+- T01/T01M 은 `Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md` PRE-WRITE 통과 + 종료 전 `hooks/screen-completion-gate.md` 11 게이트(G1~G11).
+- **작업 모드 먼저 확인** (`tools/Harness/harness.json` repairScope · CLAUDE.md §1-8): **DB MODE**(DB_ONLY) 에서는 `nscm-fe`·`nscm-be` 직접 수정 금지 — 가이드만 작성(파일:라인 · 변경 전/후 · 이유 · 검증법). 실행 hook `check-work-mode` 가 차단한다. **UI/DB MODE**(DB_FE) 에서만 직접 수정.
 - **절대 누락 금지 3종** (admin 동적 속성관리 master): `hooks/ui-dynamic-property-management.md`(1순위) → `hooks/menu-button-dynamic-fetch.md` → `hooks/ui-category-setup-column-meta.md`. 누락 = admin 운영 결정이 화면에서 무효화 = 신뢰성 손상.
 - 실행 hook `check-rules-read.ps1` 가 `features/**/pages/**` 저장 전에 위 필수 hook 열람 여부를 검사해 미열람 시 차단한다.
 
@@ -17,7 +18,7 @@ paths:
 ## C. ⭐ 신규 화면 features 폴더 결정 5단계 (SCM0008 사고 — 9 파일 중복 작성 위험)
 1. `SCM_ADM_MNU_M` 트리 walk-up — `UPPR_MNU_ID` 최상위 부모(Lv 0) 식별
 2. 최상위 → features 매핑: Master/Demand/Report → 동명 폴더 / Admin → `features/admin` / **Authority(UPPR_MNU_ID=Auth_Mgmt 포함) → `features/authority`**
-3. `Router.tsx` import 검색 — `@authority/auth-request` 같은 import 가 있으면 **기존 작성 = cross-check 만**
+3. 기존 작성 여부 확인 — 화면 등록은 `apps/web/src/mdi/viewRegistry.tsx` 가 `features/*/src/pages/*/index.ts` 를 자동 수집하고 메뉴↔화면은 DB `SCM_ADM_MNU_M.ROUTE_PATH`(`<도메인>/<페이지폴더>`)로 정한다(`core/Router.tsx` 에 feature import 없음). 대상 `features/{layer}/src/pages/<페이지폴더>/index.ts` 가 있거나 ROUTE_PATH 가 이미 등록돼 있으면 **기존 작성 = cross-check 만**
 4. `features/{layer}/src/pages/` 인벤토리 grep — 자매 화면 표준 패턴 학습
 5. 결과 보고 — 신규 작성 / cross-check 결정 명시
 > 근거 룰: `_rules_v2/_tobe/01_file_structure.md` §1.3/§1.4
@@ -34,4 +35,4 @@ paths:
 - Grid = 공용 `DataGrid` 만(FlexGrid JSX 직접 금지) · Form = SearchArea/FormItem/CustomDropdown + `commonStyles.formItem` · 메시지 = `useMessageStore` (`window.alert` 금지) · 저장 행 판정 = `CRUD_TYPE` 전용 · `apiClient.post(call-proc)` 는 `res.status >= 400 || Number(res.data.code)` 판정 동반.
 
 ## F. 작성 직후 자기 점검
-✅ 명명 규약 ✅ Layer 위반 0 ✅ 기존 패턴 참조 ✅ 표준 호출 ✅ SCSS Module(inline style 0) ✅ `any`/`as unknown as` 0 ✅ validation/expressions 누락 0 + `__asis-mapping__.md` ✅ `pnpm lint:fix` · `pnpm type-check` · `pnpm build` 통과 → 상세 `hooks/post-write.md`
+✅ 명명 규약 ✅ Layer 위반 0 ✅ 기존 패턴 참조 ✅ 표준 호출 ✅ SCSS Module(inline style 0) ✅ `any`/`as unknown as` 0 ✅ validation/expressions 누락 0 + `__asis-mapping__.md` ✅ lint · type-check · build 통과 — **AI 가 로컬에서 `pnpm`/`eslint` 를 직접 실행하지 않는다**(실행 hook `block-dev-commands` 차단 · 자동 수행 금지). 변경 파일 목록을 보고하고, 사용자가 "타입체크/린트 해줘" 라고 요청할 때만 `_artifacts/_tools/fe-check.ps1` 로 실행한다. 실행하지 않았으면 PASS 가 아니라 **미실행(ERROR)** 으로 보고 → 상세 `hooks/post-write.md`

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lgcns.nscm.admin.user.UserSession;
 import com.lgcns.nscm.framework.annotation.LoginUser;
-import com.lgcns.nscm.framework.annotation.SystemLog;
-import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
 import com.lgcns.nscm.framework.base.BaseConstants;
 import com.lgcns.nscm.framework.base.BaseController;
 import com.lgcns.nscm.framework.exception.BusinessException;
@@ -45,7 +43,8 @@ public class LookupController extends BaseController {
 
 	private final LookupService lookupService;
 
-	@SystemLog(LogType.LOOKUP)
+	// lookup 조회도 combo 와 동일하게 화면 진입/다건 조회로 고빈도이고 menu/button 식별이 안 되어
+	// 로그가 노이즈로 과도하게 쌓이므로 @SystemLog는 적용하지 않는다.
 	@Operation(summary = "lookup 테이블 조회", description = "lookup 데이터를 조회합니다."
 			+ "\r\n데이터 샘플 {\r\n"
 			+ "  \"lookupType\": \"INPUT_TP_CD\"\r\n"
@@ -60,7 +59,7 @@ public class LookupController extends BaseController {
         return successResponseEntity(result);
     }
 
-	@SystemLog(LogType.LOOKUP)
+	// 위 lookup 과 동일 사유로 @SystemLog 미적용.
 	@Operation(summary = "lookup 테이블 조회", description = "다건의 lookup 데이터를 조회합니다."
 			+ "\r\n데이터 샘플 {\r\n"
 			+ "  \"lookupType\": \"INPUT_TP_CD,MNU_TP_CD\"\r\n"
@@ -73,7 +72,8 @@ public class LookupController extends BaseController {
         return successResponseEntity(lookupService.retrieveLookup(params));
     }
 
-	@SystemLog(LogType.COMBO)
+	// 콤보 조회는 화면 진입/필터 변경마다 고빈도로 발생하고 menu/button 식별도 안 되어
+	// 로그가 노이즈로 과도하게 쌓이므로 @SystemLog는 적용하지 않는다.
 	@Operation(summary = "combo용 다이나믹 쿼리 데이터 조회", description = "combo 데이터를 조회합니다."
 			+ "\r\n데이터 샘플 {\r\n"
 			+ "  \"comboId\": \"MyDivision\"\r\n"
@@ -86,7 +86,7 @@ public class LookupController extends BaseController {
         return successResponseEntity(result);
     }
 
-	@SystemLog(LogType.COMBO)
+	// 위 combo 와 동일 사유로 @SystemLog 미적용.
 	@Operation(summary = "combo용 다이나믹 쿼리 데이터 조회", description = "다건의 combo 데이터를 조회합니다."
 			+ "\r\n데이터 샘플  { \"comboList\": [{\"comboId\": \"MyDivision\"}, {\"comboId\": \"Company\"},  { \"comboId\": \"SystemLookup\", \"lookupType\":\"'MNU_TP_CD'\" }] }")
 	@PostMapping(value="combo-muti", produces = "application/json; charset=UTF-8")

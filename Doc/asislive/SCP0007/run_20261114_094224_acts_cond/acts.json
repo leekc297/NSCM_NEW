@@ -1,0 +1,36 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 8개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [],
+   "scenarios": [
+    "SCP0007-S547a16"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 1
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 7
+  }
+ ],
+ "at": "2026-11-14 09:42:00"
+}

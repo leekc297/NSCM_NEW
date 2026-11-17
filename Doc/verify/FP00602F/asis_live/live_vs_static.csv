@@ -1,0 +1,50 @@
+﻿kind,item,static,live,verdict,note
+SP,(endpoints.csv),없음,26종,ERROR,정적 사실 파일 없음(미측정) — Fact Pack 먼저
+SP,FP_SQL_LOG(로그 기록),,43회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP00599_FINDPLANNER_LIST,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,PR_UI_FP00599_FIND_TOTALVALUE,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,PR_UI_FP00599_FIND_YIELDINFO_CHILD,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,PR_UI_FP00602_FINDFPPLAN_INFO,,2회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,PR_UI_FP00602_FIND_FP00602,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,PR_UI_FP_PLAN_FORM_CODE,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT (CASE WHEN YYYYMMDD >= @PLAN_DATE THEN 'Y' ,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT * FROM SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK),,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT @INSTANCE_ID AS INSTANCE_ID,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT A.*,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT A.INSTANCE_ID, A.COMPANY_ID, A.DIVISION_ID,",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT A.SEGMENT1 AS INSTANCE_ID, A.SEGMENT2 AS UI",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT B.SETUP_COLOR_CODE, A.* FROM FP_AMEND_MEMO_",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,6회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT ISO_YYYYWW AS WEEK,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT U.PROGRAM_ID,,5회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT YYYYMM AS MONTH,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: WITH M_TABLE AS (,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONDITION,mcbo_planner,,Planner,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_fpplanid,,FP Plan Id,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_prodtype,,Prod.Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnSql,,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnExcelImport,,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_plan_group,,Plan Group,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,sCalendar_planday,,Plan Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnToggleSave,,Data,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,mcbo_division,,Division.,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_plant,,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_operation,,Operation,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,edt_item,,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,tbNickName,,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,edt_PjtGroup,,Pjt Group Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,dCalendar_planrange,,Plan Period,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_site,,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_line,,Line,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_allLine,,layoutControlItem12,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,mcbo_factory,,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,edt_topItem,,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_Info,,layoutControlItem13,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Amend,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 53(보임 52) · 헤더 2단 · 행 881 · 고정 19,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

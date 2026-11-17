@@ -96,7 +96,7 @@ AS-IS `MSG#####` 의 **실제 문구(한글)** 를 확보한다: `TB_FX_MessageI
 # 작성물에서 사용한 MSG ID 전수 추출
 grep -roE "MSG[0-9]{5}" {작성 파일들} | sort -u
 ```
-- 추출된 **각 ID 를 사내 `SCM_ADM_MSG_M` 실문구와 대사**하여 "이 화면에서 의도한 의미"와 일치하는지 표로 보고 (ID / 의도 문구 / DB 실문구 / 일치 여부).
+- 추출된 **각 ID 를 사내 `SCM_ADM_MSG_M` 실문구와 대조**하여 "이 화면에서 의도한 의미"와 일치하는지 표로 보고 (ID / 의도 문구 / DB 실문구 / 일치 여부). (2026-11-13 정정: 용어 대사 → 대조)
 - 1건이라도 불일치 = anti-simplification 위반, 수정 후 재검증.
 - `__asis-mapping__.md` Validation 축에는 **AS-IS ID → TO-BE ID 변환 관계를 명시** (예: `AS-IS MSG00225 → TO-BE MSG00666`).
 
@@ -161,5 +161,5 @@ SELECT DISTINCT MSG_ID, MSG_TP_CD FROM SCM_ADM_MSG_M
 
 ## §4. 요약 (한 줄 룰)
 
-> **AS-IS 의 MSG_ID 는 "번호"가 아니라 "문구"로 이관한다.** ID 를 복사하지 말고, ① AS-IS 문구 확보 → ② 대조표 매칭 컬럼 확인 → ③ 사내 DB 실측으로 EXACT 재사용/신규 채번/동일 유지 3분기 → ④ 사용 ID 전수 실문구 대사 보고.
+> **AS-IS 의 MSG_ID 는 "번호"가 아니라 "문구"로 이관한다.** ID 를 복사하지 말고, ① AS-IS 문구 확보 → ② 대조표 매칭 컬럼 확인 → ③ 사내 DB 실측으로 EXACT 재사용/신규 채번/동일 유지 3분기 → ④ 사용 ID 전수 실문구 대조 보고.
 > 채번했으면 **§5 3점 동시 반영**(DB 3언어 + locales 3파일 + 이관 PATCH) + `MSG_TP_CD` 접두사 일치.

@@ -43,18 +43,18 @@
 - WARN G04 As-is 컨트롤 txtReasonDetail / TextBox 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 txtChangeReason / TextBox 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 txtRejectReason / TextBox 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <ArrowChevronIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ConfirmDetailPanel.tsx
+- WARN D01 사전 밖 컴포넌트 <ListPinIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ConfirmDetailPanel.tsx
 - WARN V01 As-is Validation 3건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
 - BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @shipment-change-request-confirm.constants.ts
 - WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 5건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 편집(EDIT) SEQ1 [MSG00109] 읽기 전용입니다. / 실행(RUN) — Approval 버튼 SEQ1 [MSG00362] SCS에서 해당 Confirm ID / 실행(RUN) — Approval 버튼 SEQ2 [MSG00291] SSP Daily Plan 수행중입 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SSP_화면_VALIDATION_취합_20261022/SSP0202.md
-- WARN VR2 MSG01395 — VALIDATION 취합 판정: 실행(RUN) — Approval 버튼 SEQ3 AS-IS MSG00267 [메시지 미등록] — [메시지 미등록] 불일치 — TO-BE="ERP I/F로 인해 이전 작업 2분 이후 변경 진행 가능합니다."(2분 대기 안내). AS-IS=정해진 기간 동안 ER @shipment-change-request-confirm.constants.ts:175
 - WARN VC1 대조표 FAIL 12행 (Doc/verify/SSP0202/mapping_trace.md §FAIL)
 - WARN VC1 대조표 미검증 639행 — 검사 사유 REVIEW 448 · NOT_RUN 1329 · NOPATH 302 · TODO 4 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
 - WARN VC1 작업 원장 미완료 339건 / 검사 인스턴스 376 — W2 12 · W4 5 · W5 20 · W6 150 · W7 152 · 구현 의심 6 (Doc/verify/SSP0202/work_ledger.md)
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentChangeRequestConfirmSubGrid.tsx:95
-- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ShipmentChangeRequestConfirmSubGrid.tsx:91
-- WARN R16 진입 Page 416 라인 > 400 — components/ 분리 (#9) @ShipmentChangeRequestConfirm.tsx
-- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
-- WARN B08 As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 — As-is 기능 누락(members.csv SaveButton)
+- WARN VC1 대조표 검증 추적이 410시간 전 결과 — 재실행 후 판정
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentChangeRequestConfirmSubGrid.tsx:102
+- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ShipmentChangeRequestConfirmSubGrid.tsx:98
+- WARN R16 진입 Page 516 라인 > 400 — components/ 분리 (#9) @ShipmentChangeRequestConfirm.tsx
 - WARN B19 validation.md 3행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
 - WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
 - WARN B21 Doc/gen/SSP0202/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

@@ -18,6 +18,8 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
   const { t } = useTranslation();
   const openTab = useMDIStore(state => state.openTab);
   const sidebarOpenGroupId = useUIStore(state => state.sidebarOpenGroupId);
+  // 현재 활성 탭의 메뉴 — 같은 메뉴를 좌측에서 음영 처리한다.
+  const activeMnuId = useMDIStore(state => state.tabs[state.activeIndex]?.mnuId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -26,6 +28,12 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
   useEffect(() => {
     if (sidebarOpenGroupId && sidebarOpenGroupId === String(menu.mnuId)) setIsOpen(true);
   }, [sidebarOpenGroupId, menu.mnuId]);
+
+  // 활성 탭이 이 그룹의 하위 메뉴로 바뀌면 펼쳐 음영이 보이게 한다 (탭 전환·새로고침 복원 포함).
+  useEffect(() => {
+    if (activeMnuId == null) return;
+    if (menu.children?.some(sub => String(sub.mnuId) === String(activeMnuId))) setIsOpen(true);
+  }, [activeMnuId, menu.children]);
 
   // 탭 개수 제한 없음 — 넘치는 탭은 MDITabs 의 좌우 화살표로 스크롤한다.
   // (기존 10개 제한 + LBL00360/MSG00012 알림 제거)
@@ -70,7 +78,10 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
       {menu.children?.map(subMenu => (
         <Link
           to='#'
-          className={clsx(styles.subMenuLink, { [styles.isOpen]: isOpen })}
+          className={clsx(styles.subMenuLink, {
+            [styles.isOpen]: isOpen,
+            [styles.on]: activeMnuId != null && String(activeMnuId) === String(subMenu.mnuId),
+          })}
           onClick={() => handleMenuClick(subMenu)}
           onKeyDown={blockEnterActivation}
           key={subMenu.mnuId}

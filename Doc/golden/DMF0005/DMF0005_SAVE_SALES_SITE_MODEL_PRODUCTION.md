@@ -1,6 +1,6 @@
 # DMF0005 · DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION ↔ PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION
 
-- 실행: 2026-11-02 17:40:18
+- 실행: 2026-11-14 05:56:47
 - 파라미터: `{"p_active_flag": "", "p_division_id": "40", "p_project_code": "Inventus Power", "p_scm_site_id": "Fabricators_CN_QIN", "p_item_id": "MCCM134010A1", "p_currency": "", "p_cell_per_car": "", "p_cell_per_module": "", "p_liability_period": "", "p_sales_plan_adjust_yn": "", "p_item_hrcy_id": "", "p_bpms_exist": "", "p_valid_yn": "", "p_cust_group": "", "p_cust_group_dtl": "", "p_owner": "", "p_application": "", "p_route": "", "p_created_by": "bpark416", "p_attribute1": "", "p_attribute2": "", "p_attribute4": "", "p_attribute6": "", "p_edi_lt": "", "report_group1": "", "report_group2": "", "report_group3": "", "report_group4": "", "report_group6": "", "report_group7": "", "report_group8": "", "p_vmi_LT": "", "p_cell_name": "", "p_sales_company": "", "p_sales_plant": "", "p_partial_plan_yn": "", "p_kwh": "", "p_celltypeCD": "", "p_production_process": "", "p_consensus_Mkt": "", "p_consensus_Ess": "", "p_consensus_Scm": "", "p_inventory_Day": "", "p_change_Reason": "", "p_alt_sim_yn": "", "p_description": "", "p_projectinfo": "", "p_project_s_op_report": "", "p_cell_s_op_report": "", "p_prj_ownr_id": "", "p_crge_org_nm": "", "p_cust_eng_nm": ""}`
 - 종류: SAVE
 - SAVE 류 — `--write` 없이 건너뜀

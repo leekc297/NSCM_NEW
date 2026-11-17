@@ -1,7 +1,7 @@
 [
  {
-  "row_id": "V-c8cd860a",
-  "rule_id": "G3",
+  "row_id": "V-a98bdc43",
+  "rule_id": "K3",
   "target": "SCP0131 화면",
   "same": []
  },
@@ -10,14 +10,6 @@
   "rule_id": "F2",
   "target": "SCP0131 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
   "same": []
- },
- {
-  "row_id": "V-2bcf7fcf",
-  "rule_id": "E7",
-  "target": "Sales Site Priority.ITEM_ID (Model*)",
-  "same": [
-   "V-8e911390"
-  ]
  },
  {
   "row_id": "V-637991ac",
@@ -32,9 +24,15 @@
   "same": []
  },
  {
-  "row_id": "V-8e911390",
-  "rule_id": "E7",
-  "target": "",
-  "folded_into": "V-2bcf7fcf"
+  "row_id": "V-05281e8f",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
+ },
+ {
+  "row_id": "V-89f91e1c",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
  }
 ]

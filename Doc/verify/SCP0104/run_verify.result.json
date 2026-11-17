@@ -1,0 +1,2411 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-17T17:28:48+09:00",
+ "producer": "run_verify",
+ "id": "SCP0104",
+ "skip_e2e": true,
+ "started": "2026-11-17 17:18:25",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-33c71af8",
+   "class": "E2",
+   "msg": "SCP0104 시나리오 [자동] LAST_UPDATE_DATE 없는 날짜 저장 차단",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-17 17:25"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-912ca6bd",
+   "class": "E2",
+   "msg": "SCP0104 시나리오 [자동] SOP_DT 없는 날짜 저장 차단",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-17 17:25"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-698c2de5",
+   "class": "M4",
+   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ff4440ce",
+   "class": "F4",
+   "msg": "[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0ded47d3",
+   "class": "G5",
+   "msg": "[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-16484d6e",
+   "class": "B5",
+   "msg": "[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0097f070",
+   "class": "B5",
+   "msg": "[DMF0003 결함 유형] FCST Type 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-79c6b771",
+   "class": "B4",
+   "msg": "[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-030cf19c",
+   "class": "B5",
+   "msg": "[DMF0082 결함 유형] FCST Type 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4ddfc83b",
+   "class": "B4",
+   "msg": "[DMF0082 결함 유형] FCST Type 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5d1cba7f",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c1ef75f0",
+   "class": "B4",
+   "msg": "[SYS0006 결함 유형] API Type 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-669e3b5f",
+   "class": "G5",
+   "msg": "[DMF0005 결함 유형] Model 팝업 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-15ee2ce2",
+   "class": "G5",
+   "msg": "[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-21e261a9",
+   "class": "M4",
+   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3755e3ba",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-26cb2774",
+   "class": "M4",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 갱신",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-62147ff2",
+   "class": "G5",
+   "msg": "영역2 조회조건 S01~S15 · 15",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ee4366f4",
+   "class": "M4",
+   "msg": "영역2 조회조건 S01~S15 · 15",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7b982095",
+   "class": "G5",
+   "msg": "팝업 P01~P04 · 4",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cf8d4b28",
+   "class": "M4",
+   "msg": "팝업 P01~P04 · 4",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f3de1469",
+   "class": "M4",
+   "msg": "NICK_NAME / Nickname",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e4df5507",
+   "class": "B4",
+   "msg": "셀 콤보 16종 · `SheetUtils.SetComboDataRow` 60+ 런타임 주입",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-876e7515",
+   "class": "E5",
+   "msg": "셀 콤보 16종 · `SheetUtils.SetComboDataRow` 60+ 런타임 주입",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4c5c9cd2",
+   "class": "C2",
+   "msg": "코드↔명칭 동기 · `CheckValidId`/`CheckValidName`(cs:3160-3699)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3cce56a8",
+   "class": "C6",
+   "msg": "코드↔명칭 동기 · `CheckValidId`/`CheckValidName`(cs:3160-3699)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6b71ca54",
+   "class": "G5",
+   "msg": "행 추가 · `Insert_Row_Assign`/`_Line`/`_Sop`",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0ef38268",
+   "class": "M4",
+   "msg": "행 추가 · `Insert_Row_Assign`/`_Line`/`_Sop`",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-14ceb4b7",
+   "class": "F4",
+   "msg": "저장 · `SaveData` `^`/`;` 다발",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c0200f40",
+   "class": "C2",
+   "msg": "B04~B09 · `_defaultDataModel_Changed` 재진입/타입 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0e23982d",
+   "class": "C6",
+   "msg": "B04~B09 · `_defaultDataModel_Changed` 재진입/타입 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e9f8837f",
+   "class": "G5",
+   "msg": "B11~B13 · Insert 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f98a9194",
+   "class": "M4",
+   "msg": "B11~B13 · Insert 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6aa4720b",
+   "class": "B4",
+   "msg": "B26~B33 · 셀 콤보/클릭 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf954cea",
+   "class": "E5",
+   "msg": "B26~B33 · 셀 콤보/클릭 가드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2ad5be22",
+   "class": "M4",
+   "msg": "ITEM_ID / Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bb43ac31",
+   "class": "G5",
+   "msg": "버튼 노출 · 툴바 override 5종(Search/Insert/Edit/Delete/Save)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-30fc7347",
+   "class": "M4",
+   "msg": "버튼 노출 · 툴바 override 5종(Search/Insert/Edit/Delete/Save)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9f1114a7",
+   "class": "X-LOC",
+   "msg": "~~6-1~~ · ~~P01 Item 팝업 다중선택 → 행 추가(A-6)~~",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-10f9435f",
+   "class": "G5",
+   "msg": "~~6-1~~ · ~~P01 Item 팝업 다중선택 → 행 추가(A-6)~~",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2e80b6b4",
+   "class": "M4",
+   "msg": "~~6-1~~ · ~~P01 Item 팝업 다중선택 → 행 추가(A-6)~~",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-74b3daf9",
+   "class": "G5",
+   "msg": "6-11 · SOP·팝업 2종 그리드가 **3단 헤더로 렌더**된다(설계 C-8 = 1단)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9e83dc03",
+   "class": "M4",
+   "msg": "6-11 · SOP·팝업 2종 그리드가 **3단 헤더로 렌더**된다(설계 C-8 = 1단)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bc2f6848",
+   "class": "C2",
+   "msg": "ELTR_LN_TP_CD / Equipment Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4ae38c68",
+   "class": "E5",
+   "msg": "ELTR_LN_TP_CD / Equipment Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-79cc3699",
+   "class": "G5",
+   "msg": "SCP0104_CAPA_Line_Assign_Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7cf5bee2",
+   "class": "G5",
+   "msg": "MODAL:CustomDialog · P01 Item 팝업(AS-IS `ShowItem` → `SCM0002_CAPAItemPopup`) — 도구가 AS-IS 범용",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8fa78262",
+   "class": "M4",
+   "msg": "MODAL:CustomDialog · P01 Item 팝업(AS-IS `ShowItem` → `SCM0002_CAPAItemPopup`) — 도구가 AS-IS 범용",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5b9e834e",
+   "class": "M4",
+   "msg": "MODAL:ShowDialog · P04 컬럼 표시설정 + alert/toast 계열 범용 다이얼로그",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf5ec1db",
+   "class": "G5",
+   "msg": "COMMON:UC-06 · Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f273cda5",
+   "class": "M4",
+   "msg": "COMMON:UC-06 · Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-77cd5586",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c430f24b",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-06fd73a9",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7ab6d3b7",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ce4b58d4",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.CheckNameOnDummyCodeDB",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-228fc738",
+   "class": "F4",
+   "msg": "PKG_SCP0104.P_SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1e46f0b8",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.CheckValidName",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-04e8f5c3",
+   "class": "C2",
+   "msg": "FACTORY_ID / Building",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a8dd3fa6",
+   "class": "C2",
+   "msg": "FACTORY_NAME / Building Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-14b55da2",
+   "class": "C2",
+   "msg": "LINE_ID / Line",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-07f53041",
+   "class": "C2",
+   "msg": "LINE_NAME / Line Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-25489c40",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.Edit_Row_Assign",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-23268918",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-431c698d",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5e6154cf",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.FindDataAssign",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ae14e74e",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.FindDataAssign",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c8edf2aa",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.FindDataSOP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9e48f991",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.FindDataSOP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-49967b1b",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.GetCurrEditType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6d8fa997",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.GetCurrEditType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f24a82ad",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.GetDummyCheckedCode",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e247f416",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.GetDummyCheckedCode",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ba07a113",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.GetIdByName",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5f39530e",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.GetIdByName",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b983e96a",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.GetNameById",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2fad85b7",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.GetNameById",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-261e9e8e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshCompanySpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0cb8d43f",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshFactorySpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2ea34689",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshLineSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-96d7cbbb",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshPlantSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5b37f06a",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshSiteSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f55eed85",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.RefreshSpreadComboAll",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6b038cbb",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.SaveButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6fe8d6d0",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e851aca3",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.SaveDataAssign",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-92636de3",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign.SaveDataSOP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-dacd5310",
+   "class": "C2",
+   "msg": "ITEM_ID / Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9f7a81a0",
+   "class": "C6",
+   "msg": "SITE_ID / Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2157e939",
+   "class": "C6",
+   "msg": "SITE_NAME / Site Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9407819e",
+   "class": "C6",
+   "msg": "COMPANY_ID / Company",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5e69f0c0",
+   "class": "C6",
+   "msg": "COMPANY_NAME / Company Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4a361502",
+   "class": "C6",
+   "msg": "PLANT_ID / Plant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a86b60fe",
+   "class": "C6",
+   "msg": "PLANT_NAME / Plant Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9669ca5f",
+   "class": "C6",
+   "msg": "FACTORY_ID / Building",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-932f5b37",
+   "class": "C6",
+   "msg": "FACTORY_NAME / Building Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fe6c000f",
+   "class": "C6",
+   "msg": "LINE_ID / Line",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-744b42e7",
+   "class": "C6",
+   "msg": "LINE_NAME / Line Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e3e85b8a",
+   "class": "C6",
+   "msg": "OPERATION_ID / Operation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-55e5ceee",
+   "class": "C6",
+   "msg": "OPERATION_NAME / Operation Name",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0d1c7b4a",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign._defaultDataModel_Changed",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-188ac689",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign._defaultDataModel_Changed",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6348f27b",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign._defaultDataModel_Changed",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cba2fd0e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.cboDivision_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4561319b",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.cboDivision_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9608ee04",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.cboDivision_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-96fa5902",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersionSeq_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7732cb3f",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersionSeq_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a6c91096",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersionSeq_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-49d8acfa",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersion_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-97ae13a5",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersion_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9822b35e",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.cboVersion_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-aaa5d254",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.clbFactory_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d04fd991",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.clbFactory_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-71716514",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.clbFactory_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9d758f8c",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.clbLine_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4b2d5546",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.clbLine_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8f6a69a8",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.clbLine_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-409f4d49",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.clbOperation_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-58a18f72",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.clbOperation_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6073f1ca",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.clbOperation_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e93e6cf4",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.clbPlant_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a688327e",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.clbPlant_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-04e77300",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.clbPlant_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bec72d50",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.clbSite_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5728770a",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.clbSite_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3dcbbd81",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.clbSite_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-54c0574a",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cb451717",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9009b6d8",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4cf142e1",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-94a3e789",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignCompany",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-15e1caa5",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignCompany",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8ba6e15d",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f7bac3b1",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1586eeaf",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignDummyYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8eb79681",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignDummyYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e78646a1",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-724db72e",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c36dd3d7",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignFactory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fedbafc8",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignFactory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6dc20c05",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignLine",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-98da7c30",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignLine",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8ecceee9",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignOperation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-364d687d",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignOperation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b59a974e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignPlant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c66c9e8d",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignPlant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-782786c8",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6a38c949",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ad65c2f2",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignValidYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-377ebb82",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrAssignValidYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0f90c216",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3d61d46f",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopAction",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-54452fde",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopCompany",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cc335a04",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopCompany",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4e788ae0",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4c649a22",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-520839bd",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1687e3df",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-16e88552",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopFactory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b21741ae",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopFactory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-904e1af2",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopLine",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bde026f7",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopLine",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0a06bc42",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopOperation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-18cd7f15",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopOperation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ef1f8d4c",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopPlant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b64fb743",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopPlant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-14779581",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8d4ebcf8",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9c38afc1",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopValidYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ec89b772",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getCurrSopValidYn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b943b4c9",
+   "class": "B4",
+   "msg": "clbElectrodeType / Line Type / Electrode Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4f260450",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f2ce7005",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getIsPageSOP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e9390388",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getIsPageSOP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4c9b8e82",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getOriElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fb46c4f7",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getPlanType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b71cbc40",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getPlanType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a5355c94",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getProgressStatus",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eafffab7",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getProgressStatus",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-64dfa134",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.getShopGroup",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-19505a5c",
+   "class": "B4",
+   "msg": "SCP0104_CAPA_Line_Assign.getShopGroup",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ba65a7e6",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.rgrpDivisionType_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f014c5d8",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.rgrpDivisionType_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6b513bc7",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.rgrpDivisionType_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4c8aff4e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign.spdAssign_CellClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eee87b77",
+   "class": "M4",
+   "msg": "SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4fbd0451",
+   "class": "C2",
+   "msg": "SCP0104_CAPA_Line_Assign.spdAssign_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-92b86846",
+   "class": "C6",
+   "msg": "SCP0104_CAPA_Line_Assign.spdAssign_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-dfd93f9d",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-22bcc81e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-af296880",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-155bd6fd",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-016d9a39",
+   "class": "F4",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-918c0ba7",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.getElectrodeType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a2a73d7e",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d6d7dcc3",
+   "class": "X-ROW",
+   "msg": "SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [],
+ "summary": {
+  "rows": 3354,
+  "PASS": 1937,
+  "FAIL": 197,
+  "판정필요": 0,
+  "미검증": 0,
+  "해당없음": 1220,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 2322,
+   "사람": 13,
+   "기계(상속·집계)": 976,
+   "출처 미기록": 43
+  },
+  "fail_listed": 197,
+  "coverage": {
+   "rules": 91,
+   "measured": 1004,
+   "not_run_error": 0,
+   "na": 649,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/SCP0104_LineAssign_CheckList_v39.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0104_LineAssign_ActionItemList_v39.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  }
+ ],
+ "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증"
+}

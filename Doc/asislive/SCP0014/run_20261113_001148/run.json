@@ -1,0 +1,150 @@
+{
+ "id": "SCP0014",
+ "started": "2026-11-13 00:11:48.996",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 00:11:49.282",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0014_Problem_Report",
+   "form_text": "Plan Problem",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0014_Problem_Report.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:11:54.857"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 00:11:58.267",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0014\\run_20261113_001148\\dump_load.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "Total : ",
+   "time_status": "DB : 620.144s, UI : 0.129s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:11:58.287"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 00:11:58.452",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0014\\run_20261113_001148\\shots\\SCP0014_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:11:58.625"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 00:11:59.273",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:12:00.032"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 00:12:21.907",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0014\\run_20261113_001148\\dump_find.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "Total : ",
+   "time_status": "DB : 17.723s, UI : 0.184s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:12:21.919"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 00:12:22.073",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0014\\run_20261113_001148\\shots\\SCP0014_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:12:22.285"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 00:12:22.624",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 00:12:23.537"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 27,
+  "calls_with_params": 26
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0014_Problem_Report",
+  "form_text": "Plan Problem",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0014_Problem_Report.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 17.723s, UI : 0.184s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "t_open": "2026-11-13 00:11:49.208",
+ "t_find": "2026-11-13 00:11:58.930",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 76,
+  "layout_items": 20,
+  "grids": 3,
+  "sheets": 3,
+  "header_cols": 424,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 27,
+  "calls_screen": 27,
+  "calls_find": 7,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 00:12:23.623",
+ "exit": 0
+}

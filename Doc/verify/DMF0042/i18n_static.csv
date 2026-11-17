@@ -1,0 +1,11 @@
+﻿menu_id,kind,where,text
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx:487,데이터 조회 후 다시 시도해 주시기 바랍니다.
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx:625,삭제할 행을 선택해 주세요.
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx:666,중복된 데이터가 있습니다
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/components/modals/ReplaceByCutoffModal.tsx:195,${done} (${res.count.toLocaleString()}건)
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/components/modals/VersionCutoffModal.tsx:199,[DMF0042] Ver. Cutoff 실패:
+DMF0042,FE,nscm-fe/features/demand/src/pages/business-plan/utils/business-plan.validate.ts:93,"${t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', label)} (${i + 1})"
+DMF0042,DB,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF,선택한 버전에 되돌릴 자료가 없습니다. 다른 버전을 선택해 주십시오.
+DMF0042,DB,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST,한 번에 저장할 수 있는 양을 넘었습니다. 줄 수를 나누어 저장해 주십시오.
+DMF0042,DB,PKG_DMF0042.P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE,Division 값이 존재하지 않습니다.
+DMF0042,DUP,"MSG00002,MSG00606",[EN] Saved successfully.

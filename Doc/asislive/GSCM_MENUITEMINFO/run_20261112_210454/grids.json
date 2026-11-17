@@ -1,0 +1,834 @@
+{
+ "id": "GSCM_MENUITEMINFO",
+ "from": "dump_find.json",
+ "total": "Total : 8",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdLevel1",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdLevel1",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level1",
+     "rows": 8,
+     "cols": 12,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Level1 Menu*"
+       ],
+       "label": "Level1 Menu*",
+       "tag": "MenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "PrntMenuID"
+       ],
+       "label": "PrntMenuID",
+       "tag": "PrntMenuID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "PrntMenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Title*"
+       ],
+       "label": "Title*",
+       "tag": "Title",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Group Title*"
+       ],
+       "label": "Group Title*",
+       "tag": "Description",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Description",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Program ID"
+       ],
+       "label": "Program ID",
+       "tag": "ProgramID",
+       "width": "150",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "ProgramID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Parameter"
+       ],
+       "label": "Parameter",
+       "tag": "Parameter",
+       "width": "200",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Parameter",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SortOrder",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "MenuLevel"
+       ],
+       "label": "MenuLevel",
+       "tag": "MenuLevel",
+       "width": "80",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "MenuLevel",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "MenuAction"
+       ],
+       "label": "MenuAction",
+       "tag": "MenuAction",
+       "width": "50",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "MenuAction",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Icon Name"
+       ],
+       "label": "Icon Name",
+       "tag": "IConName",
+       "width": "150",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "IconName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 8,
+     "data": [
+      [
+       "",
+       "Master",
+       "",
+       "Master",
+       "Master",
+       "",
+       "",
+       "1",
+       "1",
+       "",
+       "if_check-mark_511949111.ico",
+       "Y"
+      ],
+      [
+       "",
+       "Demand",
+       "",
+       "Demand",
+       "Demand",
+       "",
+       "",
+       "2",
+       "1",
+       "",
+       "if_check-mark_511949111.ico",
+       "Y"
+      ],
+      [
+       "",
+       "Supply",
+       "",
+       "Supply",
+       "Supply",
+       "",
+       "",
+       "3",
+       "1",
+       "",
+       "",
+       "Y"
+      ],
+      [
+       "",
+       "Factory",
+       "",
+       "Factory",
+       "Factory",
+       "",
+       "",
+       "4",
+       "1",
+       "",
+       "if_check-mark_511949111.ico",
+       "Y"
+      ],
+      [
+       "",
+       "Shipping",
+       "",
+       "Shipping",
+       "Shipping",
+       "",
+       "",
+       "5",
+       "1",
+       "",
+       "",
+       "Y"
+      ],
+      [
+       "",
+       "Report",
+       "",
+       "Report",
+       "Report",
+       "",
+       "",
+       "6",
+       "1",
+       "",
+       "",
+       "Y"
+      ],
+      [
+       "",
+       "Authority",
+       "",
+       "Authority",
+       "Authority",
+       "",
+       "",
+       "7",
+       "1",
+       "",
+       "if_check-mark_511949111.ico",
+       "Y"
+      ],
+      [
+       "",
+       "Admin",
+       "",
+       "Admin",
+       "Admin",
+       "",
+       "",
+       "8",
+       "1",
+       "",
+       "if_check-mark_511949111.ico",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdLevel2",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdLevel2",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level2",
+     "rows": 0,
+     "cols": 13,
+     "visible": "True",
+     "frozen_cols": "3",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Level1 Menu",
+        "Level1 Menu"
+       ],
+       "label": "Level1 Menu",
+       "tag": "PrntMenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "PrntMenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Level2 Menu*",
+        "Level2 Menu*"
+       ],
+       "label": "Level2 Menu*",
+       "tag": "MenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Title*",
+        "Title*"
+       ],
+       "label": "Title*",
+       "tag": "Title",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Group Title",
+        "Group Title"
+       ],
+       "label": "Group Title",
+       "tag": "Description",
+       "width": "150",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Description",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Program ID",
+        "Program ID"
+       ],
+       "label": "Program ID",
+       "tag": "ProgramID",
+       "width": "150",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ProgramID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Parameter",
+        "Parameter"
+       ],
+       "label": "Parameter",
+       "tag": "Parameter",
+       "width": "200",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Parameter",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Sort Order*",
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SortOrder",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "MenuLevel",
+        "MenuLevel"
+       ],
+       "label": "MenuLevel",
+       "tag": "MenuLevel",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuLevel",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "MenuAction",
+        "MenuAction"
+       ],
+       "label": "MenuAction",
+       "tag": "MenuAction",
+       "width": "50",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuAction",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Icon",
+        "Icon Name"
+       ],
+       "label": "Icon Name",
+       "tag": "IConName",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "IConName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Icon",
+        "File"
+       ],
+       "label": "File",
+       "tag": "File",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "File",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Use YN*",
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdLevel3",
+   "path": "/splitContainer1/SplitterPanel/spdLevel3",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Level3",
+     "rows": 0,
+     "cols": 16,
+     "visible": "True",
+     "frozen_cols": "4",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Level1 Menu",
+        "Level1 Menu"
+       ],
+       "label": "Level1 Menu",
+       "tag": "Level1MenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Level1MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Level2 Menu",
+        "Level2 Menu"
+       ],
+       "label": "Level2 Menu",
+       "tag": "PrntMenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "PrntMenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Level3 Menu*",
+        "Level3 Menu*"
+       ],
+       "label": "Level3 Menu*",
+       "tag": "MenuID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Title*",
+        "Title*"
+       ],
+       "label": "Title*",
+       "tag": "Title",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Title",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Group Title*",
+        "Group Title*"
+       ],
+       "label": "Group Title*",
+       "tag": "Description",
+       "width": "150",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Description",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Program",
+        "Program ID*"
+       ],
+       "label": "Program ID*",
+       "tag": "ProgramID",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ProgramID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Program",
+        "Program Name*"
+       ],
+       "label": "Program Name*",
+       "tag": "ProgramName",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ProgramName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Program",
+        "Search*"
+       ],
+       "label": "Search*",
+       "tag": "ProgramPopup",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "ProgramPopup",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Parameter",
+        "Parameter"
+       ],
+       "label": "Parameter",
+       "tag": "Parameter",
+       "width": "200",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Parameter",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Sort Order*",
+        "Sort Order*"
+       ],
+       "label": "Sort Order*",
+       "tag": "SortOrder",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SortOrder",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "MenuLevel",
+        "MenuLevel"
+       ],
+       "label": "MenuLevel",
+       "tag": "MenuLevel",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuLevel",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "MenuAction",
+        "MenuAction"
+       ],
+       "label": "MenuAction",
+       "tag": "MenuAction",
+       "width": "50",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "MenuAction",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Icon",
+        "Icon Name"
+       ],
+       "label": "Icon Name",
+       "tag": "IConName",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "IConName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Icon",
+        "File"
+       ],
+       "label": "File",
+       "tag": "File",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "File",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Use YN*",
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

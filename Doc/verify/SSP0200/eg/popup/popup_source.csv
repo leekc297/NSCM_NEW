@@ -1,0 +1,2 @@
+﻿menu,call,cls,trig,axis,egs,result,expected,actual,basis,note
+SSP0200,2,SCM0002_ItembyDivisionPopup,CELL:ITEM_ID,ASIS,EG433;EG441;EG060,판정필요,AS-IS SCM0002_GET_ITEM_BY_DIVISION_POPUP 4행,"TO-BE 59행 · 인자 {""p_division_id"": ""40"", ""p_project_code"": ""ALL"", ""p_scm_site_id"": ""ALL"", ""p_item_id"": ""MCCH129520B1""} · 미대응 ['p_project_code', 'p_scm_site_id']",Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql · SCM0002_ItembyDivisionPopup.cs:242,행 59 · 계정 minyonglee1

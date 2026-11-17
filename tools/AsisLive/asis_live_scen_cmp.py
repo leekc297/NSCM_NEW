@@ -1,0 +1,228 @@
+# -*- coding: utf-8 -*-
+"""소스 분기 시나리오별 AS-IS 실행 결과 ↔ TO-BE 검증 결과 대조 (2026-11-13 · 플랜 P6-4)
+
+  python tools/AsisLive/asis_live_scen_cmp.py <ID> [ID ...]      (ID 생략 = scenarios_cov.csv 와 Doc/verify/<ID>/asis_live/scen_link.csv 가 둘 다 있는 화면)
+목적(사용자 11-13)  동적으로 바뀌는 부분은 소스로 1차 확인 → AS-IS·TO-BE 각각의 실행 결과로 2차 확인. 기준 축 = 소스 분기, 대조표는 연결 대상.
+입력  AS-IS  Doc/asislive/<ID>/scenarios_cov.csv(분기·실행 여부·실측 호출) · run_*_acts/acts.json(버튼별 팝업·메시지·Excel·호출)
+      TO-BE  Doc/verify/<ID>/eg/popup/popup_rowsets.json·popup_results.json(TO-BE 화면에서 같은 버튼으로 팝업을 실제로 연 결과 — 제목·행 수·검사)
+             Doc/verify/<ID>/asis_live/scen_link.csv(분기 ↔ 대조표 행 · 그 행의 판정·검사 결과) · Doc/verify/<ID>/diff/diff_summary.csv(AS-IS SP ↔ TO-BE PROC 실행 대조)
+      룰     tools/Harness/rules/tobe_rule_registry.csv(TO-BE 룰 원장 · kind=TOBE_DIFF) · tools/AsisLive/asis_obs_rule_map.csv(AS-IS 관찰 문구 → 룰)
+판정  양쪽 확인            AS-IS 에서 실행됐고, 연결된 대조표 행이 모두 검증완료(또는 호출 대조 PASS)
+      TO-BE 룰 차이        AS-IS 관찰(메시지 문구 등)이 TO-BE 룰로 정의된 차이와 일치 → **오류 아님**(룰 ID 를 근거로 남긴다)
+      판정필요             ① 연결 행에 FAIL 이 있고 그 검사 규칙에 걸린 TO-BE 룰이 있다(룰 적용 여부를 사람이 확인) ② 호출 대조에서 건수·값이 다르다(CR-101: DB 가 달라 생길 수 있음)
+      차이(오류 후보)      연결 행에 FAIL 이 있고 걸리는 TO-BE 룰이 없다
+      TO-BE 미검증         AS-IS 는 실행됐는데 연결 행이 미검증뿐이다(TO-BE 쪽을 아직 못 쟀다)
+      AS-IS 미실행         이 분기를 AS-IS 에서 아직 실행하지 않았다(TO-BE 판정은 열에 그대로 적는다)
+      연결 없음            이 분기에 연결된 대조표 행이 없다
+      도달 경로 없음       소스에서 진입 경로를 찾지 못한 분기
+산출  Doc/asislive/<ID>/scenario_compare.csv · scenario_compare_summary.json     전체 실행 시 Doc/asislive/_scenario_compare_summary.csv
+한계  ① 버튼을 눌러 실행한 분기는 그 버튼의 진입점이 실행됐다는 뜻이다. 같은 버튼 아래 여러 조건 분기 중 어느 것을 탔는지는 호출이 유일할 때만 특정된다(asis_evidence 열에 표시).
+      ② TO-BE 쪽 실행 결과는 팝업을 여는 분기만 있다(CheckList 의 팝업 검사기가 같은 버튼으로 연 결과). 그 밖의 분기는 CheckList 가 낸 대조표 행 판정을 쓴다. ③ 검사 규칙 코드로 고른 TO-BE 룰은 후보다 — 자동으로 정상 처리하지 않고 판정필요로 둔다.
+      ④ 판정 행·원장은 만들지 않는다(CheckList 판정에 영향 없음).
+"""
+import csv, glob, json, os, re, sys, collections
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+for _s in (sys.stdout, sys.stderr):
+    try: _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception: pass
+
+RESULTS = ["양쪽 확인", "TO-BE 룰 차이", "판정필요", "차이(오류 후보)", "TO-BE 미검증", "AS-IS 미실행", "연결 없음", "도달 경로 없음"]
+BAD_STATUS = {"보류", "N"}
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def norm(s):
+    return (s or "").strip().split(".")[-1].strip("[]").upper()
+
+
+def rules_for(mid):
+    """검사 규칙 코드 → 이 화면에 걸리는 TO-BE 차이 룰 [(rule_id, title)]"""
+    out = collections.defaultdict(list)
+    for r in rd(P("tools", "Harness", "rules", "tobe_rule_registry.csv")):
+        if r.get("kind") != "TOBE_DIFF" or (r.get("status") or "").strip() in BAD_STATUS: continue
+        sc = [x.strip() for x in re.split(r"[;,]", r.get("scope") or "") if x.strip()]
+        if "ALL" not in sc and mid not in sc: continue
+        for c in [x.strip() for x in (r.get("detect_rules") or "").split(";") if x.strip()]:
+            out[c].append((r["rule_id"], (r.get("title") or "")[:50]))
+    return out
+
+
+def obs_rules(mid=""):
+    """관찰 문구 → 룰 [(정규식, 룰 ID, 설명, level)] — 이 화면에 걸리는 것만(scope ALL 또는 화면 ID) · level confirmed = 오류 아님 / candidate = 판정필요"""
+    out = []
+    for r in rd(os.path.join(HERE, "asis_obs_rule_map.csv")):
+        if (r.get("level") or "confirmed") == "unusable" or not (r.get("pattern") or "").strip(): continue
+        sc = [x.strip() for x in re.split(r"[;,]", r.get("scope") or "ALL") if x.strip()]
+        if mid and "ALL" not in sc and mid not in sc: continue
+        try: out.append((re.compile(r["pattern"], re.I), r["rule_ids"], r.get("note") or "", r.get("level") or "confirmed"))
+        except re.error: pass
+    return out
+
+
+def tobe_popups(mid):
+    """TO-BE 팝업 검사기(eg_popup)가 실제로 연 팝업 — AS-IS 팝업 클래스 → [{trig, rows, title, division, checks:{PASS:n, FAIL:n…}, fails:[검사 이름]}]
+    같은 조작(AS-IS 버튼·조건 버튼)을 TO-BE 화면에서 실행한 결과다(Doc/verify/<ID>/eg/popup/popup_rowsets.json·popup_results.json)."""
+    out = collections.defaultdict(list); d = P("Doc", "verify", mid, "eg", "popup")
+    try: rs = json.load(open(os.path.join(d, "popup_rowsets.json"), encoding="utf-8"))
+    except Exception: rs = []
+    try: res = json.load(open(os.path.join(d, "popup_results.json"), encoding="utf-8"))
+    except Exception: res = []
+    chk = collections.defaultdict(collections.Counter); fails = collections.defaultdict(list)
+    for r in res if isinstance(res, list) else []:
+        k = (r.get("cls"), r.get("call")); chk[k][r.get("result") or ""] += 1
+        if r.get("result") == "FAIL": fails[k].append(str(r.get("check")))
+    for r in rs if isinstance(rs, list) else []:
+        try: body = json.loads(r.get("body") or "{}")
+        except Exception: body = {}
+        k = (r.get("cls"), r.get("call"))
+        out[r.get("cls")].append({"trig": r.get("trig"), "rows": r.get("rows"), "title": r.get("title"), "division": str(body.get("divisionId") or ""), "account": r.get("account"),
+                                  "checks": dict(chk.get(k) or {}), "fails": fails.get(k) or []})
+    return out
+
+
+def acts_by_scenario(mid):
+    """시나리오 ID → 버튼 실행 관찰 목록(가장 최근 실행 우선)"""
+    out = collections.defaultdict(list)
+    for d in sorted(glob.glob(P("Doc", "asislive", mid, "run_*_acts*")), reverse=True):
+        if os.path.exists(os.path.join(d, "overlap.json")): continue      # 11-14: 겹친 실행은 증거에서 뺀다
+        try: j = json.load(open(os.path.join(d, "acts.json"), encoding="utf-8")); grp = j.get("group") or ""
+        except Exception: continue
+        for a in j.get("acts") or []:
+            ob = {"run": os.path.basename(d), "group": grp, "edit": bool(j.get("edit")), "division": j.get("division") or "", "cond": a.get("change") if (j.get("cond") or j.get("cellrun")) else "", "cell": bool(j.get("cellrun")), "screens": [x.get("form") for x in a.get("new_screens") or []],
+                  "changed": [x.get("control") for x in a.get("changed_controls") or []], "control": a.get("control"), "ok": bool(a.get("ok")), "error": (a.get("error") or "")[:120],
+                  "popups": [(p.get("form"), p.get("grid_rows")) for p in a.get("popups") or [] if p.get("form") != "ProgressForm"],
+                  "dialogs": [(x.get("text") or "").replace("\n", " ")[:120] for x in a.get("dialogs") or []],
+                  "excel": [os.path.basename(str(x.get("path") or x.get("title") or "")) for x in a.get("excel") or []],
+                  "calls": [c for c in a.get("calls") or [] if c], "timeout": a.get("asis_timeout") or [],
+                  "grid": ["%s 행 %s→%s·셀 %d" % (g.get("sheet"), g.get("rows_before"), g.get("rows_after"), len(g.get("cells") or []) + (g.get("more") or 0)) for g in a.get("grid_changes") or [] if "cells" in g]}
+            for sid in a.get("scenarios") or []: out[sid].append(ob)
+    return out
+
+
+def one(mid):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv"))
+    if not sc: return None
+    link = rd(P("Doc", "verify", mid, "asis_live", "scen_link.csv"))
+    by_s = collections.defaultdict(list)
+    for r in link:
+        for sid in [x.strip() for x in re.split(r"[;|,\s]+", r.get("scenario_ids") or "") if x.strip()]: by_s[sid].append(r)
+    diff = collections.defaultdict(list)
+    for r in rd(P("Doc", "verify", mid, "diff", "diff_summary.csv")): diff[norm(r.get("asis_sp"))].append(r)
+    rmap = rules_for(mid); omap = obs_rules(mid); acts = acts_by_scenario(mid); rows = []; tpop = tobe_popups(mid)
+    for s in sc:
+        sid = s["scenario_id"]; cov = s.get("cov") or ""; obs = acts.get(sid) or []; okobs = [o for o in obs if o["ok"]]
+        executed = cov in ("EXECUTED", "EXECUTED_AMBIG") or bool(okobs)
+        ev = []
+        if cov == "EXECUTED": ev.append("호출로 분기 특정: " + (s.get("live_calls") or ""))
+        elif cov == "EXECUTED_AMBIG": ev.append("호출 있음(같은 호출의 분기 여럿): " + (s.get("live_calls") or ""))
+        if okobs:
+            o = okobs[0]
+            ev.append((("셀 %s %s%s" % (o["control"], o["cond"], (" · 새 화면 " + ",".join(o["screens"])) if o["screens"] else "")) if o.get("cell") else
+                       ("조건 %s 값 변경[%s]%s" % (o["control"], o["cond"], (" · 바뀐 컨트롤 " + ",".join(o["changed"][:6])) if o["changed"] else " · 다른 컨트롤 변화 없음")) if o["cond"] else ("버튼 %s 실행" % o["control"]))
+                      + ("" if (s.get("guard") or "") == "" else "(분기 미특정)") + (" · 그룹 " + o["group"] if o["group"] else "")
+                      + ((" · 팝업 " + ", ".join("%s(행 %s)" % p for p in o["popups"])) if o["popups"] else "") + ((" · 메시지 " + " / ".join(o["dialogs"])) if o["dialogs"] else "")
+                      + ((" · Excel " + ", ".join(o["excel"])) if o["excel"] else "") + ((" · 호출 " + ", ".join(o["calls"][:4])) if o["calls"] else ""))
+        elif obs: ev.append("버튼 %s 실패: %s" % (obs[0]["control"], obs[0]["error"]))
+        eo = next((o for o in okobs if o["edit"]), None); no = next((o for o in okobs if not o["edit"]), None)
+        if eo and no and okobs[0] is eo and no["dialogs"]: ev.append("수정 모드 아닐 때: 메시지 " + " / ".join(no["dialogs"]))
+        if eo: ev.append("수정 모드에서 실행(화면 닫을 때 저장하지 않음)" + ((" · 그리드 변화 " + ", ".join(eo["grid"])) if eo["grid"] else " · 그리드 변화 없음(덤프한 앞쪽 행 기준)"))
+        # TO-BE 쪽: 연결된 대조표 행
+        lr = by_s.get(sid) or []; vc = collections.Counter(r.get("verdict") or "" for r in lr); fail_codes = set(); err_codes = set()
+        for r in lr:
+            for m in re.finditer(r"([A-Za-z0-9\-]+)=(FAIL|ERROR|REVIEW)", r.get("checks") or ""):
+                (fail_codes if m.group(2) == "FAIL" else err_codes).add(m.group(1))
+        # 호출 대조
+        cc = []; call_review = False; call_pass = False
+        for e in [norm(x) for x in (s.get("endpoints") or "").split(";") if x.strip()]:
+            for d in diff.get(e, []):
+                v = (d.get("verdict") or "").strip(); cc.append("%s↔%s 행 %s/%s %s" % (e, norm(d.get("tobe_proc")), d.get("asis_rows"), d.get("tobe_rows"), v))
+                if v == "PASS": call_pass = True
+                elif v and v not in ("SKIP", "NA"): call_review = True
+        # TO-BE 룰
+        direct = []; obs_cand = []; text = " ".join(" ".join(o["dialogs"]) for o in okobs)
+        for rx, ids, note, level in omap:
+            if text and rx.search(text):
+                x = "%s(%s)" % (ids, note[:80])
+                if level == "confirmed" and x not in direct: direct.append(x)
+                elif level != "confirmed" and x not in obs_cand: obs_cand.append(x)
+        cand = sorted({rid for c in fail_codes for rid, _t in rmap.get(c, [])})
+        # 같은 팝업을 TO-BE 에서 실제로 연 결과(eg_popup) — AS-IS 는 TO-BE 와 같은 Division 으로 실행한 관찰을 우선 쓴다
+        pc = []; pop_res = None; pop_why = ""
+        forms = sorted({f for o in okobs for f, _r in o["popups"] if f and f != "ExceptionDialog"})
+        for f in forms:
+            tb = tpop.get(f) or []
+            if not tb: pc.append("%s: TO-BE 팝업 검사 기록에 없음" % f); pop_res = pop_res or "TO-BE 미검증"; pop_why = pop_why or "AS-IS 에서 연 팝업 %s 을 TO-BE 팝업 검사가 연 기록이 없음" % f; continue
+            # 같은 버튼으로 연 것끼리만 맞댄다(같은 팝업이라도 입력 버튼과 삭제 버튼은 내용이 다르다 — 11-13 SCP0028 btnInput ↔ btnDelete 오대응 보정)
+            actl = {str(o["control"]).lower() for o in okobs if any(x[0] == f for x in o["popups"])}
+            actl |= {m.group(1) for c in list(actl) for m in [re.search(r"\[([^\]]+)\]$", c)] if m}          # 셀 조작은 "그리드[열]" 로 적힌다 — TO-BE 쪽 표기(CELL:열)와 열 이름으로 맞춘다
+            same = [x for x in tb if str(x.get("trig") or "").split(":")[-1].lower() in actl]
+            if not same:
+                pc.append("%s: TO-BE 는 다른 버튼(%s)으로 연 기록뿐 — AS-IS 버튼 %s 과 맞댈 수 없음" % (f, ",".join(sorted({str(x.get("trig")) for x in tb})), ",".join(sorted(actl))))
+                pop_res = pop_res or "TO-BE 미검증"; pop_why = pop_why or "팝업 %s 을 TO-BE 에서 같은 버튼으로 연 기록이 없음" % f; continue
+            t = same[0]
+            ao = next((o for o in okobs if not o["edit"] and o["division"] == t["division"] and any(x[0] == f for x in o["popups"])), None) \
+                or next((o for o in okobs if not o["edit"] and o["division"] == "" and any(x[0] == f for x in o["popups"])), None) \
+                or next((o for o in okobs if any(x[0] == f for x in o["popups"])), None)
+            ar = next(x[1] for x in ao["popups"] if x[0] == f)
+            pc.append("%s: AS-IS 행 %s(Division %s) ↔ TO-BE '%s' 행 %s(Division %s · %s) · TO-BE 검사 %s" % (f, ar, ao["division"] or "기본", t["title"], t["rows"], t["division"] or "?", t["trig"],
+                      " ".join("%s:%d" % kv for kv in sorted(t["checks"].items())) or "없음"))
+            if t["fails"]: r1, w1 = "판정필요", "TO-BE 팝업 검사 FAIL %d(%s) — CheckList 판정·TO-BE 룰 적용 여부 확인" % (len(t["fails"]), ",".join(sorted(set(t["fails"])))[:80])
+            elif ar is not None and t["rows"] is not None and int(ar) == int(t["rows"]) and int(ar) > 0: r1, w1 = "양쪽 확인", "팝업 %s 양쪽에서 열림 · 행 수 같음(%s)" % (f, ar)
+            else: r1, w1 = "판정필요", "팝업 %s 양쪽에서 열림 · 행 수 AS-IS %s ↔ TO-BE %s — DB·조회 조건 차이(CR-101)인지 팝업 구성(조회 단위·컬럼) 차이인지 확인 필요" % (f, ar, t["rows"])
+            if pop_res in (None, "양쪽 확인") or r1 == "판정필요": pop_res, pop_why = r1, w1
+        # 판정
+        if s.get("status") == "UNREACHED": res, why = "도달 경로 없음", "소스에서 진입 경로를 찾지 못함"
+        elif not executed: res, why = "AS-IS 미실행", ("버튼 실행 실패: " + obs[0]["error"]) if obs else ("서버 호출이 실측에 없음" if cov == "NOT_EXECUTED" else "이 분기를 일으키는 조작을 아직 실행하지 않음")
+        elif okobs and okobs[0].get("timeout"): res, why = "AS-IS 미실행", "AS-IS 서버 호출 시간 초과(다시 눌러도 초과) — 조회 불가라 맞댈 결과 없음: " + ", ".join(okobs[0]["timeout"])
+        elif direct: res, why = "TO-BE 룰 차이", "AS-IS 관찰이 TO-BE 룰로 정의된 차이 — 오류 아님: " + " ; ".join(direct)
+        elif obs_cand: res, why = "판정필요", "AS-IS 메시지를 언급한 TO-BE 룰이 있음 — 룰이 정한 내용 확인: " + " ; ".join(obs_cand)[:300]
+        elif pop_res: res, why = pop_res, pop_why
+        elif not lr and not cc: res, why = "연결 없음", "연결된 대조표 행·호출 대조 없음"
+        elif vc.get("FAIL"):
+            if cand: res, why = "판정필요", "연결 행 FAIL %d — 검사 규칙 %s 에 TO-BE 룰 %s 이 걸려 있음(적용 여부 확인)" % (vc["FAIL"], ",".join(sorted(fail_codes)), ",".join(cand))
+            else: res, why = "차이(오류 후보)", "연결 행 FAIL %d(검사 규칙 %s) — 걸리는 TO-BE 룰 없음" % (vc["FAIL"], ",".join(sorted(fail_codes)) or "미상")
+        elif call_review: res, why = "판정필요", "호출 대조에서 건수·값 차이 — DB 가 달라 생길 수 있음(CR-101)"
+        elif (lr and vc.get("검증완료", 0) + vc.get("해당없음", 0) == len(lr) and vc.get("검증완료")) or (not lr and call_pass): res, why = "양쪽 확인", "연결 행 %d 모두 검증완료" % len(lr) if lr else "호출 대조 PASS"
+        elif vc.get("검증완료") or call_pass: res, why = "TO-BE 미검증", "연결 행 %d 중 검증완료 %d · 미검증 %d — 일부만 확인됨" % (len(lr), vc.get("검증완료", 0), vc.get("미검증", 0))
+        else: res, why = "TO-BE 미검증", "연결 행 %d 모두 미검증" % len(lr)
+        rows.append({"scenario_id": sid, "type": s.get("type"), "axes": s.get("axes"), "entry": (s.get("entry") or "")[:120], "method": s.get("method"), "guard": (s.get("guard") or "")[:200],
+                     "asis_cov": cov, "asis_evidence": " | ".join(ev)[:600], "linked_rows": len(lr), "tobe_verdicts": " ".join("%s:%d" % kv for kv in vc.most_common()),
+                     "tobe_fail_checks": ",".join(sorted(fail_codes)), "tobe_unverified_checks": ",".join(sorted(err_codes))[:120], "call_compare": " ; ".join(cc)[:400], "tobe_popup": " ; ".join(pc)[:500],
+                     "tobe_rules": (" ; ".join(direct) if direct else " ; ".join(obs_cand) if obs_cand else ",".join(cand)), "result": res, "why": why, "src": s.get("src")})
+    od = P("Doc", "asislive", mid)
+    with open(os.path.join(od, "scenario_compare.csv"), "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
+    c = collections.Counter(r["result"] for r in rows)
+    summ = {"id": mid, "scenarios": len(rows), **{k: c.get(k, 0) for k in RESULTS}, "linked": bool(link), "diff": bool(diff), "acts_runs": len(glob.glob(P("Doc", "asislive", mid, "run_*_acts*")))}
+    with open(os.path.join(od, "scenario_compare_summary.json"), "w", encoding="utf-8") as f: json.dump(summ, f, ensure_ascii=False, indent=1)
+    return summ
+
+
+def main():
+    ids = [a.upper() for a in sys.argv[1:] if not a.startswith("-")]; ALL = not ids
+    if not ids: ids = sorted(os.path.basename(os.path.dirname(f)) for f in glob.glob(P("Doc", "asislive", "*", "scenarios_cov.csv")))
+    out = [s for s in (one(i) for i in ids) if s]
+    for s in out if not ALL else []:
+        print("[%s] 분기 %d · %s%s" % (s["id"], s["scenarios"], " · ".join("%s %d" % (k, s[k]) for k in RESULTS if s[k]), "" if s["linked"] else " · (대조표 연결 파일 없음 — CheckList 를 먼저 실행)"))
+        print("@@LINK 📄 분기별 AS-IS↔TO-BE 대조|Doc/asislive/%s/scenario_compare.csv" % s["id"])
+    if ALL and out:
+        with open(P("Doc", "asislive", "_scenario_compare_summary.csv"), "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(out[0].keys())); w.writeheader(); w.writerows(out)
+        t = collections.Counter()
+        for s in out:
+            for k in ["scenarios"] + RESULTS: t[k] += s[k]
+        print("화면 %d · 분기 %d · %s" % (len(out), t["scenarios"], " · ".join("%s %d" % (k, t[k]) for k in RESULTS)))
+        print("@@LINK 📄 분기별 대조 요약|Doc/asislive/_scenario_compare_summary.csv")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

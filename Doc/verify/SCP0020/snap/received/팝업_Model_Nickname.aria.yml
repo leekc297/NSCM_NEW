@@ -1,0 +1,225 @@
+- dialog:
+  - heading "Material by Division" [level=2]
+  - text: Div
+  - combobox [disabled]: ESS Battery
+  - button "Open" [disabled]
+  - img
+  - text: Operation Group
+  - textbox [disabled]: Pack
+  - text: Material
+  - textbox
+  - button "Search"
+  - paragraph
+  - text: 총{N}건
+  - grid:
+    - rowgroup:
+      - row "No Div. Material Code Description Nickname Class Name":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Material Code"
+        - columnheader "Description"
+        - columnheader "Nickname"
+        - columnheader "Class Name"
+    - rowgroup:
+      - row "1 82 EA019170PC01 EA,19V,169.8,P,C,01 JF1 CMA [EA]CMA":
+        - gridcell "1" [selected]
+        - gridcell "82"
+        - gridcell "EA019170PC01"
+        - gridcell "EA,19V,169.8,P,C,01"
+        - gridcell "JF1 CMA"
+        - gridcell "[EA]CMA"
+      - row "2 82 EA102156PG01 EA,102V,156,P,G,01 JF2S CPNT CMA [EA]CMA":
+        - gridcell "2"
+        - gridcell "82"
+        - gridcell "EA102156PG01"
+        - gridcell "EA,102V,156,P,G,01"
+        - gridcell "JF2S CPNT CMA"
+        - gridcell "[EA]CMA"
+      - row "3 82 EH048030P2S1 EH,48V,30Ah,P,2,S,1 [EH]House":
+        - gridcell "3"
+        - gridcell "82"
+        - gridcell "EH048030P2S1"
+        - gridcell "EH,48V,30Ah,P,2,S,1"
+        - gridcell
+        - gridcell "[EH]House"
+      - row "4 82 EH048030P2S2 EH,48V,30Ah,P,2,S,2 [EH]House":
+        - gridcell "4"
+        - gridcell "82"
+        - gridcell "EH048030P2S2"
+        - gridcell "EH,48V,30Ah,P,2,S,2"
+        - gridcell
+        - gridcell "[EH]House"
+      - row "5 82 EH048063P2B1 EH,48V,63Ah,P,2,B,1 RESU3.2 [EH]House":
+        - gridcell "5"
+        - gridcell "82"
+        - gridcell "EH048063P2B1"
+        - gridcell "EH,48V,63Ah,P,2,B,1"
+        - gridcell "RESU3.2"
+        - gridcell "[EH]House"
+      - row "6 82 EH048063P2B1-K EH,48V,63Ah,P,2,B,1 RESU6.4EX [EH]House":
+        - gridcell "6"
+        - gridcell "82"
+        - gridcell "EH048063P2B1-K"
+        - gridcell "EH,48V,63Ah,P,2,B,1"
+        - gridcell "RESU6.4EX"
+        - gridcell "[EH]House"
+      - row "7 82 EH048063P3S1 EH,48V,63Ah,P,3,S,1 RESU3.3 [EH]House":
+        - gridcell "7"
+        - gridcell "82"
+        - gridcell "EH048063P3S1"
+        - gridcell "EH,48V,63Ah,P,3,S,1"
+        - gridcell "RESU3.3"
+        - gridcell "[EH]House"
+      - row "8 82 EH048063P3S1-K EH,48V,63Ah,P,3,S,1 RESU3.3 [EH]House":
+        - gridcell "8"
+        - gridcell "82"
+        - gridcell "EH048063P3S1-K"
+        - gridcell "EH,48V,63Ah,P,3,S,1"
+        - gridcell "RESU3.3"
+        - gridcell "[EH]House"
+      - row "9 82 EH048120PYS1 EH,48V,120Ah,P,Y,S,1 [EH]House":
+        - gridcell "9"
+        - gridcell "82"
+        - gridcell "EH048120PYS1"
+        - gridcell "EH,48V,120Ah,P,Y,S,1"
+        - gridcell
+        - gridcell "[EH]House"
+      - row "10 82 EH048120PYS2 EH,48V,120Ah,P,Y,S,2 [EH]House":
+        - gridcell "10"
+        - gridcell "82"
+        - gridcell "EH048120PYS2"
+        - gridcell "EH,48V,120Ah,P,Y,S,2"
+        - gridcell
+        - gridcell "[EH]House"
+      - row "11 82 EH048120PYS3 EH,48V,120Ah,P,Y,S,3 [EH]House":
+        - gridcell "11"
+        - gridcell "82"
+        - gridcell "EH048120PYS3"
+        - gridcell "EH,48V,120Ah,P,Y,S,3"
+        - gridcell
+        - gridcell "[EH]House"
+      - row "12 82 EH048126P2B1 EH,48V,126Ah,P,2,B,1 RESU6.4EXDUMMY [EH]House":
+        - gridcell "12"
+        - gridcell "82"
+        - gridcell "EH048126P2B1"
+        - gridcell "EH,48V,126Ah,P,2,B,1"
+        - gridcell "RESU6.4EXDUMMY"
+        - gridcell "[EH]House"
+      - row "13 82 EH048126P2S1 EH,48V,126Ah,P,2,S,1 RESU6.4 [EH]House":
+        - gridcell "13"
+        - gridcell "82"
+        - gridcell "EH048126P2S1"
+        - gridcell "EH,48V,126Ah,P,2,S,1"
+        - gridcell "RESU6.4"
+        - gridcell "[EH]House"
+      - row "14 82 EH048126P2S1-K EH,48V,126Ah,P,2,S,1 RESU6.4EXMAIN [EH]House":
+        - gridcell "14"
+        - gridcell "82"
+        - gridcell "EH048126P2S1-K"
+        - gridcell "EH,48V,126Ah,P,2,S,1"
+        - gridcell "RESU6.4EXMAIN"
+        - gridcell "[EH]House"
+      - row "15 82 EH048126P3S1 EH,48V,126Ah,P,3,S,1 RESU6.5 [EH]House":
+        - gridcell "15"
+        - gridcell "82"
+        - gridcell "EH048126P3S1"
+        - gridcell "EH,48V,126Ah,P,3,S,1"
+        - gridcell "RESU6.5"
+        - gridcell "[EH]House"
+      - row "16 82 EH048126P3S1-K EH,48V,126Ah,P,3,S,1 RESU6.5 [EH]House":
+        - gridcell "16"
+        - gridcell "82"
+        - gridcell "EH048126P3S1-K"
+        - gridcell "EH,48V,126Ah,P,3,S,1"
+        - gridcell "RESU6.5"
+        - gridcell "[EH]House"
+      - row "17 82 EH048126P3S2 EH,48V,126Ah,P,3,S,2 RESU 6.5 W RMD [EH]House":
+        - gridcell "17"
+        - gridcell "82"
+        - gridcell "EH048126P3S2"
+        - gridcell "EH,48V,126Ah,P,3,S,2"
+        - gridcell "RESU 6.5 W RMD"
+        - gridcell "[EH]House"
+      - row "18 82 EH048189P3S1 EH,48V,189Ah,P,3,S,1 RESU10 [EH]House":
+        - gridcell "18"
+        - gridcell "82"
+        - gridcell "EH048189P3S1"
+        - gridcell "EH,48V,189Ah,P,3,S,1"
+        - gridcell "RESU10"
+        - gridcell "[EH]House"
+      - row "19 82 EH048189P3S1-K EH,48V,189Ah,P,3,S,1 RESU10 [EH]House":
+        - gridcell "19"
+        - gridcell "82"
+        - gridcell "EH048189P3S1-K"
+        - gridcell "EH,48V,189Ah,P,3,S,1"
+        - gridcell "RESU10"
+        - gridcell "[EH]House"
+      - row "20 82 EH048189P3S2 EH,48V,189Ah,P,3,S,2 RESU10 W RMD [EH]House":
+        - gridcell "20"
+        - gridcell "82"
+        - gridcell "EH048189P3S2"
+        - gridcell "EH,48V,189Ah,P,3,S,2"
+        - gridcell "RESU10 W RMD"
+        - gridcell "[EH]House"
+      - row "21 82 EH048189P3S2-K EH,48V,189Ah,P,3,S,2 RESU10 W RMD [EH]House":
+        - gridcell "21"
+        - gridcell "82"
+        - gridcell "EH048189P3S2-K"
+        - gridcell "EH,48V,189Ah,P,3,S,2"
+        - gridcell "RESU10 W RMD"
+        - gridcell "[EH]House"
+      - row "22 82 EH048191P8S1 EH,48V,191Ah,P,8,S,1 RESU10-GEN3 [EH]House":
+        - gridcell "22"
+        - gridcell "82"
+        - gridcell "EH048191P8S1"
+        - gridcell "EH,48V,191Ah,P,8,S,1"
+        - gridcell "RESU10-GEN3"
+        - gridcell "[EH]House"
+      - row "23 82 EH048252P3S1 EH,48V,252Ah,P,3,S,1 RESU13 [EH]House":
+        - gridcell "23"
+        - gridcell "82"
+        - gridcell "EH048252P3S1"
+        - gridcell "EH,48V,252Ah,P,3,S,1"
+        - gridcell "RESU13"
+        - gridcell "[EH]House"
+      - row "24 82 EH048252P3S1-K EH,48V,252Ah,P,3,S,1 RESU13 [EH]House":
+        - gridcell "24"
+        - gridcell "82"
+        - gridcell "EH048252P3S1-K"
+        - gridcell "EH,48V,252Ah,P,3,S,1"
+        - gridcell "RESU13"
+        - gridcell "[EH]House"
+      - row "25 82 EH048252P3S2 EH,48V,252Ah,P,3,S,2 RESU12 [EH]House":
+        - gridcell "25"
+        - gridcell "82"
+        - gridcell "EH048252P3S2"
+        - gridcell "EH,48V,252Ah,P,3,S,2"
+        - gridcell "RESU12"
+        - gridcell "[EH]House"
+      - row "26 82 EH048252P3S2-A EH,48V,252Ah,P,3,S,2 RESU12 [EH]House":
+        - gridcell "26"
+        - gridcell "82"
+        - gridcell "EH048252P3S2-A"
+        - gridcell "EH,48V,252Ah,P,3,S,2"
+        - gridcell "RESU12"
+        - gridcell "[EH]House"
+      - row "27 82 EH048252P3S2-K EH,48V,252Ah,P,3,S,2 RESU12 [EH]House":
+        - gridcell "27"
+        - gridcell "82"
+        - gridcell "EH048252P3S2-K"
+        - gridcell "EH,48V,252Ah,P,3,S,2"
+        - gridcell "RESU12"
+        - gridcell "[EH]House"
+      - row "28 82 EH048252P3S3 EH,48V,252Ah,P,3,S,3 RESU12 W RMD [EH]House":
+        - gridcell "28"
+        - gridcell "82"
+        - gridcell "EH048252P3S3"
+        - gridcell "EH,48V,252Ah,P,3,S,3"
+        - gridcell "RESU12 W RMD"
+        - gridcell "[EH]House"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

@@ -1,7 +1,7 @@
 # DMF0003_01 — To-Be Fact Pack 요약
 
 - page_key: `demand/mkt-fcst-01` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 26 · 엔드포인트 호출 23 (미해결 2, 주석 속 4) · 이벤트 42 · 컴포넌트 사용 67 · 하드코딩 컬럼 26 · 메시지 82
+- 파일 26 · 엔드포인트 호출 23 (미해결 2, 주석 속 4) · 이벤트 45 · 컴포넌트 사용 67 · 하드코딩 컬럼 26 · 메시지 81
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 26건
 
 ## 1. 파일
@@ -12,21 +12,21 @@
 | features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx | component | 2220 |
 | features/demand/src/pages/mkt-fcst-01/components/modals/index.ts | index | 8 |
 | features/demand/src/pages/mkt-fcst-01/components/modals/mkt-fcst-01-modals.constants.ts | constants | 222 |
-| features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | component | 204 |
-| features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | component | 146 |
+| features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | component | 209 |
+| features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | component | 218 |
 | features/demand/src/pages/mkt-fcst-01/components/modals/SspSyncCompareModal.tsx | component | 123 |
 | features/demand/src/pages/mkt-fcst-01/components/modals/SspSyncResultModal.tsx | component | 83 |
 | features/demand/src/pages/mkt-fcst-01/index.ts | index | 2 |
 | features/demand/src/pages/mkt-fcst-01/mkt-fcst-01.constants.ts | constants | 390 |
 | features/demand/src/pages/mkt-fcst-01/mkt-fcst-01.types.ts | types | 72 |
-| features/demand/src/pages/mkt-fcst-01/MktFcst01.module.scss | style | 101 |
-| features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | page | 1204 |
+| features/demand/src/pages/mkt-fcst-01/MktFcst01.module.scss | style | 110 |
+| features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | page | 1208 |
 | features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts | store | 585 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.cell.ts | util | 24 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.comboDebug.ts | util | 261 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.division.ts | util | 160 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.editLock.ts | util | 297 |
-| features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.gridCombos.ts | util | 596 |
+| features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.gridCombos.ts | util | 597 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.merge.ts | util | 229 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.recalc.ts | util | 404 |
 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.save.ts | util | 235 |
@@ -40,7 +40,7 @@
 | (useTabComboQueries) | hook | 9 | Y | MktFcst01Form.tsx:57 MktFcst01Form.tsx:93 MktFcst01Grid.tsx:282 MktFcst01Grid.tsx:467 MktFcst01Grid.tsx:519 MktFcst01Grid.tsx:652 |
 | {?param} | http | 1 | N | MktFcst01Grid.tsx:588 |
 | {?buildVmiLookupParam(editedRowRec,division)} | http | 1 | N | MktFcst01Grid.tsx:1627 |
-| DMF0003_01/modelPopup//call-proc | hook | 1 | Y | ModelPopupModal.tsx:75 |
+| DMF0003_01/modelPopup//call-proc | hook | 1 | Y | ModelPopupModal.tsx:80 |
 | DMF0003_01/prdnCtry//call-proc | hook | 1 | Y | PrdnCtryModal.tsx:52 |
 | DMF0003_01/sspCompare//call-proc | hook | 1 | Y | SspSyncCompareModal.tsx:60 |
 | DMF0003_01/dayRange//call-proc | hook | 1 | Y | MktFcst01.tsx:110 |
@@ -90,23 +90,26 @@
 | g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx | 2098 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx | 2151 |
 | f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx | 2182 |
-| SearchArea | onSearch | handleSearch | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 141 |
-| InputField | onChange | <arrow> setItemId | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 159 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 160 |
-| Button | onClick | handleOk | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 195 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 197 |
-| Button | onClick | handleOk | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 136 |
-| Button | onClick | handleSkip | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 138 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 139 |
+| SearchArea | onSearch | handleSearch | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 146 |
+| InputField | onChange | <arrow> setItemId | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 164 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 165 |
+| Button | onClick | handleOk | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 200 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/ModelPopupModal.tsx | 202 |
+| g | updatedLayout | fillLast | addHandler | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 86 |
+| document | click | capture | addEventListener | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 130 |
+| document | click | adjust | addEventListener | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 131 |
+| Button | onClick | handleOk | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 208 |
+| Button | onClick | handleSkip | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 210 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/PrdnCtryModal.tsx | 211 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/SspSyncCompareModal.tsx | 115 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst-01/components/modals/SspSyncResultModal.tsx | 75 |
 | MktFcst01Form | onSearch | handleSearch | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 880 |
 | MktFcst01Grid | onPopupCellDblClick | <arrow> toCellStr,isEssItemPopupBlocked,cell,setAlert,t,setPopupGroupId | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 910 |
 | MktFcst01Grid | onSspCompare | handleSspCompare | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 942 |
 | ModelPopupModal | onSelect | <arrow> spRows.find,gridRef.current?.invalidate,setPopupGroupId | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1024 |
-| PrdnCtryModal | onConfirm | <arrow> Object.entries,editTrackerRef.current?.storeChange,editTrackerRef.current?.getOriginalValues().has,editTrackerRef.current?.getOriginalValues,gridRef.current?.invalidate | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1062 |
-| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1122 |
-| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1174 |
+| PrdnCtryModal | onConfirm | <arrow> Object.entries,editTrackerRef.current?.storeChange,editTrackerRef.current?.getOriginalValues().has,editTrackerRef.current?.getOriginalValues,gridRef.current?.invalidate | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1066 |
+| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1126 |
+| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx | 1178 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -232,7 +235,6 @@
 | LBL00765 | 1 |
 | LBL00748 | 1 |
 | LBL00669 | 2 |
-| LBL00091 | 1 |
 | LBL01141 | 1 |
 | LBL00024 | 1 |
 | MSG00004 | 1 |
@@ -257,6 +259,7 @@
 | code | 반환값 = 복원된 개인화(없으면 null). fetchStaticColumns 가 await 후 override 적용. | features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts | 112 |
 | code | display 도 함께 맞춰 공통 DataGrid(.filter(c => c.display)) 경로와도 정합. | features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts | 217 |
 | endpoint | ⭐ master hook §5 — Measure 동적 fetch (PIVOT 화면 의무) | features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts | 451 |
+| code | fields.push({ col: 'DOM_EXP', lblKey: 'LBL00091', fallback: 'Customs Handbook' }); | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.division.ts | 153 |
 | code | 머지 범위를 가르는 키 컬럼 — 표시 순서에서 0번부터 클릭한 컬럼까지의 정적 컬럼. 근거: 아래 HierarchicalMergeManager 의 데이터 셀 머지는 계층형이다. 컬럼 c 의 머지 키가 fixedBindings.slice(0, idx + 1) 값 전부(sameRow)라, 어떤 컬럼의 셀이 위아래로 붙어 보이려면 그 왼쪽 컬럼이 전부 같아야 한다. 즉 컬럼 c 의 병합 범위 = 0..c 값이 모두 같은 연속 행이고 | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.merge.ts | 76 |
 | jsx | AS-IS: D_<YYYYMMDD> 컬럼 셀에만 색 적용 (.cs L1430). Division 40·82 만 (.cs L1415). | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.sspSync.ts | 8 |
 | code | if (!str(c.divisionId)) { void setAlert({ type: 'alert', content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'), }); return { ok: false, msgId: MSG.REQUIRE_DIVISION }; } | features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.validate.ts | 41 |

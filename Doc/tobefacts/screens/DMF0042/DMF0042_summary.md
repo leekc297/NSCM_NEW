@@ -13,7 +13,7 @@
 | features/demand/src/pages/business-plan/BusinessPlan.tsx | page | 703 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.module.scss | component | 8 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | component | 430 |
-| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1160 |
+| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1167 |
 | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | component | 311 |
 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.module.scss | component | 38 |
 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | component | 850 |
@@ -103,11 +103,11 @@
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 761 |
 | g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 771 |
 | g | selectionChanged | selectionChangedHandler | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 798 |
-| g.hostElement | click | clickAsDblHandler | addEventListener | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 903 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 907 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1010 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1060 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1123 |
+| g.hostElement | click | clickAsDblHandler | addEventListener | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 909 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 913 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1017 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1067 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1130 |
 | ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 209 |
 | MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 256 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 401 |

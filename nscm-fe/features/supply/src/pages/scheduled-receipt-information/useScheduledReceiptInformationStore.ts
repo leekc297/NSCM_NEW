@@ -27,6 +27,7 @@ interface ScheduledReceiptInformationAction {
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
+  resetTabScopedConditions: () => void;
   clearGrid: () => void;
   setFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
@@ -87,6 +88,23 @@ export const useScheduledReceiptInformationStore = createPersistedStoreWithTab<
           fromDate: cur.fromDate,
         };
         state.filters = {};
+      });
+    },
+    // AS-IS SpdMain_ActiveSheetChanged(.cs:1466-1507) 재현 — 탭 전환 시 Plan Group/Site/Child Material
+    //   콤보를 새 탭 원천(Virtual Bom=Tables[0]/[7], Scheduled Receipt=Tables[8]/[7]/[5])으로 재바인딩
+    //   하며 setListBox 가 선택을 ALL 로 초기화한다. TO-BE 는 조회조건이 공유 스토어라 탭을 바꿔도 값이
+    //   남아, 새 탭 콤보에 없는 값이면 칸은 ALL 로 보이나 조회엔 이전 값이 실려 나가는 desync 가 생긴다
+    //   (SCP0130-#4: Virtual Bom 에서 Plan Group 선택 후 Scheduled Receipt 로 전환 시 칸 ALL·요청 PG0005
+    //   ·0행). 탭 전환 시 탭별 조회조건을 ALL 로 리셋해 AS-IS 재바인딩과 등가로 맞춘다. Division/Valid/
+    //   FromDate/ItemId 는 공통(또는 탭 유지) 값이라 보존(AS-IS 도 Refresh 대상 아님).
+    resetTabScopedConditions: () => {
+      set(state => {
+        state.searchParams = {
+          ...get().searchParams,
+          planGroupIds: 'ALL',
+          siteIds: 'ALL',
+          childMaterialIds: 'ALL',
+        };
       });
     },
     // AS-IS CboPlanGroup_SelectedIndexChanged(.cs:1301) SpreadInfo.ClearDataSource(spdMain) 재현 —
@@ -158,6 +176,11 @@ export const useScheduledReceiptInformationStore = createPersistedStoreWithTab<
         const patch: Partial<SearchCondition> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearchParams)) continue; // SearchCondition 필드만 allowlist
+          // 기간(fromDate)은 복원하지 않는다 — AS-IS BaseForm.SavePanelCondition 이 날짜/기간 컨트롤을
+          //   Condition 저장에서 제외(.cs:2105-2126 주석)하는 것과 등가(공통요건 R11). 저장측(Form 이
+          //   SubTitle 에 넘기는 searchParam)에서 이미 빼지만, 기존에 저장돼 있던 레거시 fromDate 행도
+          //   무시해 "다시 열면 기본값(이번주 월요일)" 을 보장한다(#7).
+          if (paramNm === 'fromDate') continue;
           patch[paramNm as keyof SearchCondition] = paramCtn ?? '';
         }
         set(state => {

@@ -1,0 +1,7 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0046-Sbf4efb,조회,GetDivision,SSP0046_ItembyDivisionPopupEx.cs:559,주석 안에서만 호출,SSP0046_ItembyDivisionPopupEx.cs:220; SSP0046_ItembyDivisionPopupEx.cs:223; SSP0046_ProjectbyDivisionPopupEx.cs:204; SSP0046_ProjectbyDivisionPopupEx.cs:216; SSP0046_ProjectbyDivisionPopupEx.cs:219,
+SSP0046-Sa2e98d,조회,GetEndCustomerbyDivision,SSP0046_ItembyDivisionPopupEx.cs:604,주석 안에서만 호출,SSP0046_ItembyDivisionPopupEx.cs:234; SSP0046_ItembyDivisionPopupEx.cs:250; SSP0046_ProjectbyDivisionPopupEx.cs:210; SSP0046_ProjectbyDivisionPopupEx.cs:228; SSP0046_ProjectbyDivisionPopupEx.cs:232,
+SSP0046-Scc16d7,조회,GetTeambyDivision,SSP0046_ItembyDivisionPopupEx.cs:590,주석 안에서만 호출,SSP0046_ItembyDivisionPopupEx.cs:227; SSP0046_ItembyDivisionPopupEx.cs:230; SSP0046_ItembyDivisionPopupEx.cs:231; SSP0046_ProjectbyDivisionPopupEx.cs:207; SSP0046_ProjectbyDivisionPopupEx.cs:222,
+SSP0046-Sf9f45a,조회,GetScmSitebyDivision,SSP0046_ProjectbyDivisionPopupEx.cs:576,주석 안에서만 호출,SSP0046_ProjectbyDivisionPopupEx.cs:213,
+SSP0046-S70a88d,조회,GetBizTypebyDivision,SSP0046_ShipmentRequest.cs:2305,호출 없음,,
+SSP0046-S9b79d9,기타,SetImageCell,SSP0046_ShipmentRequest.cs:1474,호출 없음,,

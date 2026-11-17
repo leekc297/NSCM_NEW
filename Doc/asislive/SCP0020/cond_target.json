@@ -1,0 +1,29 @@
+{
+ "file": "_verify_문서_시나리오_0.json",
+ "sheets": {
+  "packer": {
+   "params": {
+    "division_id": "82",
+    "plant_site_id": "ALL",
+    "line_id": "ALL",
+    "operation_group_id": "P",
+    "item_id": "ALL",
+    "debug_mode": "N"
+   },
+   "rows": 863,
+   "at": "2026-11-14T01:42:29.747Z"
+  },
+  "except": {
+   "params": {
+    "division_id": "82",
+    "plant_site": "US02182600_82-P",
+    "operation_id": "US02182600",
+    "item_id": "EP096636PFB1-CG0",
+    "line_id": "ALL",
+    "debug_mode": "N"
+   },
+   "rows": 1,
+   "at": "2026-11-14T01:42:35.660Z"
+  }
+ }
+}

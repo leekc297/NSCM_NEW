@@ -1,0 +1,132 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 23:26:51.198",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0037_SAVE_OPERATION_LT",
+   "sp": "SCP0037_SAVE_OPERATION_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 381.93,
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_scm_site_id": "HQ07-E",
+    "p_item_id": "APCAN0506B",
+    "p_lt_operation": "SLITTING",
+    "p_lt_day": "6",
+    "p_created_by": "attackgo",
+    "p_creation_date": "2019-07-16 09:50:59",
+    "p_last_updated_by": "jaeuk.shin",
+    "p_inv_flag": "N"
+   },
+   "inline": "EXEC SCP0037_SAVE_OPERATION_LT @p_active_flag='M', @p_division_id='81', @p_scm_site_id='HQ07-E', @p_item_id='APCAN0506B', @p_lt_operation='SLITTING', @p_lt_day='6', @p_created_by='attackgo', @p_creation_date='2019-07-16 09:50:59', @p_last_updated_by='jaeuk.shin', @p_inv_flag='N'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:26:54.995",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 4.4,
+   "params": {
+    "p_program_id": "SCP0037",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Operation LT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0037', @p_user_id='jaeuk.shin', @p_sheet_name='Operation LT'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:26:55.024",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 97,
+   "rows_kind": "DataSet rows",
+   "ms": 6.42,
+   "params": {
+    "Code": "PlantByDivisionOperation",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantByDivisionOperation', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:26:55.029",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 4.02,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "OPERATION_LT",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='OPERATION_LT', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:26:55.092",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0037_GET_OPERATION_LT",
+   "sp": "SCP0037_GET_OPERATION_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 328,
+   "rows_kind": "DataSet rows",
+   "ms": 36.08,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+    "p_item_id": "",
+    "p_scm_valid_yn": null,
+    "p_lt_operation": "SLITTING"
+   },
+   "inline": "EXEC SCP0037_GET_OPERATION_LT @p_division_id='81', @p_scm_site_id='HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E', @p_item_id='', @p_scm_valid_yn=NULL, @p_lt_operation='SLITTING'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:26:55.231",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.54,
+   "params": {
+    "p_menu_id": "SCP0037",
+    "p_log_type": "FIND",
+    "p_log_cnt": "328",
+    "p_db_time": "0.083",
+    "p_ui_time": "0.085",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0037', @p_log_type='FIND', @p_log_cnt='328', @p_db_time='0.083', @p_ui_time='0.085', @p_user_id='jaeuk.shin'",
+   "phase": "action:save"
+  }
+ ]
+}

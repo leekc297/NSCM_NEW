@@ -1,0 +1,724 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Ship Master Elec",
+     "rows_before": 190,
+     "rows_after": 191,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "PLANT_SITE_CODE",
+       "before": "HQ07-E",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLANT_SITE_ID",
+       "before": "LGESOC Elec HQ07",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0506B",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "MODEL_ID",
+       "before": "ECE0630N1-02",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CELL_TYPE",
+       "before": "Pouch",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NICK_NAME",
+       "before": "JH3",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ELECTRODE_TYPE",
+       "before": "ANODE",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_UOM",
+       "before": "M",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "POST_OPER",
+       "before": "General",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "POST_OPER_LT",
+       "before": "5",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "4.7400",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PC_ROLL_LENGTH",
+       "before": "850",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PACKAGE_TYPE_CODE",
+       "before": "Steelrack",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "STEELCRATE_PER_CUT",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BOX_PER_CUT",
+       "before": "0.50",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "STEELRACK_PER_CUT",
+       "before": "0.33",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DOM_EXP_TYPE_CODE",
+       "before": "DOM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BUILDING",
+       "before": "ALL",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "BUILDING_DESC",
+       "before": "ALL",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "ssp_batch",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2020-05-13 오후 4:57:03",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "yhleea",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2020-05-26 오전 10:33:20",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0507B",
+       "after": "APCAN0506B"
+      },
+      {
+       "row": 1,
+       "col": "MODEL_ID",
+       "before": "ECP0640N5-02",
+       "after": "ECE0630N1-02"
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "JP3",
+       "after": "JH3"
+      },
+      {
+       "row": 1,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "5.0244",
+       "after": "4.7400"
+      },
+      {
+       "row": 1,
+       "col": "PC_ROLL_LENGTH",
+       "before": "700",
+       "after": "850"
+      },
+      {
+       "row": 2,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0511A",
+       "after": "APCAN0507B"
+      },
+      {
+       "row": 2,
+       "col": "MODEL_ID",
+       "before": "ACEP1038I-A1",
+       "after": "ECP0640N5-02"
+      },
+      {
+       "row": 2,
+       "col": "CELL_TYPE",
+       "before": "",
+       "after": "Pouch"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "L4A",
+       "after": "JP3"
+      },
+      {
+       "row": 2,
+       "col": "POST_OPER",
+       "before": "-",
+       "after": "General"
+      },
+      {
+       "row": 2,
+       "col": "POST_OPER_LT",
+       "before": "0",
+       "after": "5"
+      },
+      {
+       "row": 2,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "4.1180",
+       "after": "5.0244"
+      },
+      {
+       "row": 3,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0514C",
+       "after": "APCAN0511A"
+      },
+      {
+       "row": 3,
+       "col": "MODEL_ID",
+       "before": "ACEP1041I-B1",
+       "after": "ACEP1038I-A1"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "E41L-P",
+       "after": "L4A"
+      },
+      {
+       "row": 3,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "4.5440",
+       "after": "4.1180"
+      },
+      {
+       "row": 4,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0518A",
+       "after": "APCAN0514C"
+      },
+      {
+       "row": 4,
+       "col": "MODEL_ID",
+       "before": "ACEN1052U-A1",
+       "after": "ACEP1041I-B1"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "E52A",
+       "after": "E41L-P"
+      },
+      {
+       "row": 4,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "3.5670",
+       "after": "4.5440"
+      },
+      {
+       "row": 4,
+       "col": "PC_ROLL_LENGTH",
+       "before": "600",
+       "after": "700"
+      },
+      {
+       "row": 5,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0520A",
+       "after": "APCAN0518A"
+      },
+      {
+       "row": 5,
+       "col": "MODEL_ID",
+       "before": "ACEN1057I-A1",
+       "after": "ACEN1052U-A1"
+      },
+      {
+       "row": 5,
+       "col": "NICK_NAME",
+       "before": "E57",
+       "after": "E52A"
+      },
+      {
+       "row": 5,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "3.6920",
+       "after": "3.5670"
+      },
+      {
+       "row": 5,
+       "col": "PC_ROLL_LENGTH",
+       "before": "700",
+       "after": "600"
+      },
+      {
+       "row": 6,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0521A",
+       "after": "APCAN0520A"
+      },
+      {
+       "row": 6,
+       "col": "MODEL_ID",
+       "before": "ACEN1058I-A1",
+       "after": "ACEN1057I-A1"
+      },
+      {
+       "row": 6,
+       "col": "NICK_NAME",
+       "before": "E58A-AE",
+       "after": "E57"
+      },
+      {
+       "row": 6,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "2.4882",
+       "after": "3.6920"
+      },
+      {
+       "row": 6,
+       "col": "PC_ROLL_LENGTH",
+       "before": "600",
+       "after": "700"
+      },
+      {
+       "row": 7,
+       "col": "MATERIAL_ID",
+       "before": "APCAN0522A",
+       "after": "APCAN0521A"
+      },
+      {
+       "row": 7,
+       "col": "MODEL_ID",
+       "before": "ACEN1060I-A1",
+       "after": "ACEN1058I-A1"
+      },
+      {
+       "row": 7,
+       "col": "NICK_NAME",
+       "before": "E61V",
+       "after": "E58A-AE"
+      },
+      {
+       "row": 7,
+       "col": "UOM_CONVERT_IN_TACT_TIME",
+       "before": "3.2198",
+       "after": "2.4882"
+      },
+      {
+       "row": 7,
+       "col": "PC_ROLL_LENGTH",
+       "before": "800",
+       "after": "600"
+      }
+     ],
+     "more": 323
+    }
+   ],
+   "new_rows": {
+    "spdMain/Ship Master Elec": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:49:35.782",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Ship Master Elec",
+    "sheet": "Ship Master Elec",
+    "rows_total": 191,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "PLANT_SITE_CODE",
+      "label": "Plant Site Code",
+      "data_field": "PLANT_SITE_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "PLANT_SITE_ID",
+      "label": "Plant Site*",
+      "data_field": "PLANT_SITE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "MATERIAL_ID",
+      "label": "Material*",
+      "data_field": "MATERIAL_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "MODEL_ID",
+      "label": "Model",
+      "data_field": "MODEL_ID",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "CELL_TYPE",
+      "label": "Cell Type",
+      "data_field": "CELL_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "ELECTRODE_TYPE",
+      "label": "Electrode Type",
+      "data_field": "ELECTRODE_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "ITEM_UOM",
+      "label": "UOM",
+      "data_field": "ITEM_UOM",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "POST_OPER",
+      "label": "Post Oper.*",
+      "data_field": "POST_OPER",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "POST_OPER_LT",
+      "label": "Post Oper.LT(Day)",
+      "data_field": "POST_OPER_LT",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "UOM_CONVERT_IN_TACT_TIME",
+      "label": "Pancake (m/cell)",
+      "data_field": "UOM_CONVERT_IN_TACT_TIME",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "PC_ROLL_LENGTH",
+      "label": "Pancake Roll Length",
+      "data_field": "PC_ROLL_LENGTH",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "PACKAGE_TYPE_CODE",
+      "label": "Package Type*",
+      "data_field": "PACKAGE_TYPE_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "STEELCRATE_PER_CUT",
+      "label": "Steelcrate/Cut*",
+      "data_field": "STEELCRATE_PER_CUT",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "BOX_PER_CUT",
+      "label": "Box/Cut*",
+      "data_field": "BOX_PER_CUT",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "STEELRACK_PER_CUT",
+      "label": "Steelrack/Cut*",
+      "data_field": "STEELRACK_PER_CUT",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "DOM_EXP_TYPE_CODE",
+      "label": "DOM/EXP.*",
+      "data_field": "DOM_EXP_TYPE_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "BUILDING",
+      "label": "Building*",
+      "data_field": "BUILDING",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "BUILDING_DESC",
+      "label": "Building Desc.",
+      "data_field": "BUILDING_DESC",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "REMARKS",
+      "label": "Remarks",
+      "data_field": "REMARKS",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "10100111110110000000101111"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "81",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:49:35.782"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Plant Site* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:48:46",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

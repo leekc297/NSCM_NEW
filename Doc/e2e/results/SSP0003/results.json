@@ -1,0 +1,1036 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "SSP0003",
+      "--grep",
+      "@smoke"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/SSP0003/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "SSP0003.smoke.spec.ts",
+      "file": "SSP0003.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SSP0003 ShipmentChangeRequestConfirm 스모크 @smoke",
+          "file": "SSP0003.smoke.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "console",
+                      "description": "열림 직후 오류 44(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "labels",
+                      "description": "펼침=false 일치 13 / 누락 1: sItemId"
+                    },
+                    {
+                      "type": "console",
+                      "description": "오류 54(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "columns",
+                      "description": "시트 Shipment Change Request Confirm(main) 헤더 19 / 기대 19 / 누락 0: "
+                    },
+                    {
+                      "type": "header",
+                      "description": "As-is 헤더 2행(병합 리터럴 Plan/Confirm/L/T(Day)/ETD/ETA/Trans Mode/Shipment Date/Qty/Shipment Date*/Qty*/Confirmed/Change) ↔ To-Be 행 1(높이 48=48px) · 리터럴 누락 Plan,Confirm,L/T(Day),ETD,ETA,Trans Mode,Shipment Date,Qty,Shipment Date*,Qty*,Confirmed,Change"
+                    },
+                    {
+                      "type": "calls",
+                      "description": "[[\"main\",\"SEARCH\",200,2,1263]]"
+                    },
+                    {
+                      "type": "i18n",
+                      "description": "'_' 노출 0"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13291,
+                      "error": {
+                        "message": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:31:110",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 110,
+                          "line": 31
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 29 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(cands)\u001b[33m;\u001b[39m\n \u001b[90m 30 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     }\n \u001b[90m 33 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 146,
+                            "line": 73
+                          },
+                          "message": "Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m1\u001b[39m\n\n  71 |       test.info().annotations.push({ type: 'header', description: `As-is 헤더 ${HS.rows}행(병합 리터럴 ${(HS.literals || []).join('/') || '-'}) ↔ To-Be 행 ${hr.rows.length}(높이 ${hr.rows.map(r => r.h).join('+')}=${hr.height}px)${missLit.length ? ' · 리터럴 누락 ' + missLit.join(',') : ''}` });\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n> 73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n     |                                                                                                                                                  ^\n  74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:73:146"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 93,
+                            "line": 74
+                          },
+                          "message": "Error: As-is 병합 헤더 리터럴 노출 [Plan, Confirm, L/T(Day), ETD, ETA, Trans Mode, Shipment Date, Qty, Shipment Date*, Qty*, Confirmed, Change]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m12\u001b[39m\n\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  77 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:74:93"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T10:22:15.469Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 44(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 13 / 누락 1: sItemId"
+                        },
+                        {
+                          "type": "console",
+                          "description": "오류 54(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "columns",
+                          "description": "시트 Shipment Change Request Confirm(main) 헤더 19 / 기대 19 / 누락 0: "
+                        },
+                        {
+                          "type": "header",
+                          "description": "As-is 헤더 2행(병합 리터럴 Plan/Confirm/L/T(Day)/ETD/ETA/Trans Mode/Shipment Date/Qty/Shipment Date*/Qty*/Confirmed/Change) ↔ To-Be 행 1(높이 48=48px) · 리터럴 누락 Plan,Confirm,L/T(Day),ETD,ETA,Trans Mode,Shipment Date,Qty,Shipment Date*,Qty*,Confirmed,Change"
+                        },
+                        {
+                          "type": "calls",
+                          "description": "[[\"main\",\"SEARCH\",200,2,1613]]"
+                        },
+                        {
+                          "type": "i18n",
+                          "description": "'_' 노출 0"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 110,
+                        "line": 31
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12416,
+                      "error": {
+                        "message": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:31:110",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 110,
+                          "line": 31
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 29 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(cands)\u001b[33m;\u001b[39m\n \u001b[90m 30 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     }\n \u001b[90m 33 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 146,
+                            "line": 73
+                          },
+                          "message": "Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m1\u001b[39m\n\n  71 |       test.info().annotations.push({ type: 'header', description: `As-is 헤더 ${HS.rows}행(병합 리터럴 ${(HS.literals || []).join('/') || '-'}) ↔ To-Be 행 ${hr.rows.length}(높이 ${hr.rows.map(r => r.h).join('+')}=${hr.height}px)${missLit.length ? ' · 리터럴 누락 ' + missLit.join(',') : ''}` });\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n> 73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n     |                                                                                                                                                  ^\n  74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:73:146"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 93,
+                            "line": 74
+                          },
+                          "message": "Error: As-is 병합 헤더 리터럴 노출 [Plan, Confirm, L/T(Day), ETD, ETA, Trans Mode, Shipment Date, Qty, Shipment Date*, Qty*, Confirmed, Change]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m12\u001b[39m\n\n  72 |       // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)\n  73 |       expect.soft(hr.rows.length, `헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn ${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));\n> 74 |       expect.soft(missLit.length, `As-is 병합 헤더 리터럴 노출 [${(HS.literals || []).join(', ')}]`).toBe(0);\n     |                                                                                             ^\n  75 |       expect.soft(hr.height, `헤더 총 높이 ≤ ${HS.maxRowPx}px × ${HS.rows}행 (headerRowHeight 재적용 — check.js H01)`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);\n  76 |       // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전\n  77 |       if (HS.literals && HS.literals.length && hr.rows.length >= 2) {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:74:93"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T10:22:33.153Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 44(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 13 / 누락 1: sItemId"
+                        },
+                        {
+                          "type": "console",
+                          "description": "오류 54(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "columns",
+                          "description": "시트 Shipment Change Request Confirm(main) 헤더 19 / 기대 19 / 누락 0: "
+                        },
+                        {
+                          "type": "header",
+                          "description": "As-is 헤더 2행(병합 리터럴 Plan/Confirm/L/T(Day)/ETD/ETA/Trans Mode/Shipment Date/Qty/Shipment Date*/Qty*/Confirmed/Change) ↔ To-Be 행 1(높이 48=48px) · 리터럴 누락 Plan,Confirm,L/T(Day),ETD,ETA,Trans Mode,Shipment Date,Qty,Shipment Date*,Qty*,Confirmed,Change"
+                        },
+                        {
+                          "type": "calls",
+                          "description": "[[\"main\",\"SEARCH\",200,2,1263]]"
+                        },
+                        {
+                          "type": "i18n",
+                          "description": "'_' 노출 0"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-0cebf--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 110,
+                        "line": 31
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "5ea544572c4c8506aa51-366491b529e1cfa5c585",
+              "file": "SSP0003.smoke.spec.ts",
+              "line": 11,
+              "column": 7
+            },
+            {
+              "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "cond",
+                      "description": "[OK] (기준 조회)(search) — call-proc 1"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Div(combo) — 옵션 '40 Mobility & IT Battery' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] From Site(combo) — 옵션 'AZ Mobile Assy-Cell' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Status(combo) — 옵션 'Requested' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Approval(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Request Date(period) — 기간 '2026.10.31' ~ '2026.11.14' → 조회 정상"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Requestor(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'yongqian' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] sItemId(InputField) — 라벨 [sItemId] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Change Type(combo) — 옵션 'Plan' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Request No(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Dept Name(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Title(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Change Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Reason Detail(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[ERROR] Reject Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → fromsite → status → requestdate → requestor → changetype → deptname → approval → title → changereason → reasondetail → rejectreason"
+                    },
+                    {
+                      "type": "condsum",
+                      "description": "7/15 OK · FAIL 0 · WARN 0 · ERROR 8 · NA 1"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 66659,
+                      "error": {
+                        "message": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                        "stack": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:113:131",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 131,
+                          "line": 113
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\n \u001b[90m 116 |\u001b[39m     test\u001b[33m.\u001b[39msetTimeout(\u001b[35m600\u001b[39m_000)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 131,
+                            "line": 113
+                          },
+                          "message": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:113:131"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T10:22:49.795Z",
+                      "annotations": [
+                        {
+                          "type": "cond",
+                          "description": "[OK] (기준 조회)(search) — call-proc 1"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Div(combo) — 옵션 '40 Mobility & IT Battery' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] From Site(combo) — 옵션 'AZ Mobile Assy-Cell' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Status(combo) — 옵션 'Requested' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Approval(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Request Date(period) — 기간 '2026.10.31' ~ '2026.11.14' → 조회 정상"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Requestor(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'yongqian' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] sItemId(InputField) — 라벨 [sItemId] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Change Type(combo) — 옵션 'Plan' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Request No(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Dept Name(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Title(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Change Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Reason Detail(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Reject Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → fromsite → status → requestdate → requestor → changetype → deptname → approval → title → changereason → reasondetail → rejectreason"
+                        },
+                        {
+                          "type": "condsum",
+                          "description": "7/15 OK · FAIL 0 · WARN 0 · ERROR 8 · NA 1"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 131,
+                        "line": 113
+                      }
+                    },
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 67348,
+                      "error": {
+                        "message": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                        "stack": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:113:131",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 131,
+                          "line": 113
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\n \u001b[90m 116 |\u001b[39m     test\u001b[33m.\u001b[39msetTimeout(\u001b[35m600\u001b[39m_000)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 131,
+                            "line": 113
+                          },
+                          "message": "Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:113:131"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T10:24:01.888Z",
+                      "annotations": [
+                        {
+                          "type": "cond",
+                          "description": "[OK] (기준 조회)(search) — call-proc 1"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Div(combo) — 옵션 '40 Mobility & IT Battery' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] From Site(combo) — 옵션 'AZ Mobile Assy-Cell' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Status(combo) — 옵션 'Requested' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Approval(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Request Date(period) — 기간 '2026.10.31' ~ '2026.11.14' → 조회 정상"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Requestor(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'yongqian' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] sItemId(InputField) — 라벨 [sItemId] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Change Type(combo) — 옵션 'Plan' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Request No(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Dept Name(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Title(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Change Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Reason Detail(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[ERROR] Reject Reason(text) — 조작 실패: locator.fill: Timeout 5000ms exceeded."
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → fromsite → status → requestdate → requestor → changetype → deptname → approval → title → changereason → reasondetail → rejectreason"
+                        },
+                        {
+                          "type": "condsum",
+                          "description": "7/15 OK · FAIL 0 · WARN 0 · ERROR 8 · NA 1"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-e8eaf-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 131,
+                        "line": 113
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "5ea544572c4c8506aa51-3a7c3d1706ad6685f854",
+              "file": "SSP0003.smoke.spec.ts",
+              "line": 106,
+              "column": 7
+            },
+            {
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (changeType, divisionIds, status)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 3개 재진입 후 그대로 복원"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 13개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 2건 재저장 HTTP 200"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Excel 다운로드(common) — 'ShipmentChangeRequestConfirm_20261114_072624.xlsx' 6664B"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[FAIL] Search Area 조회영역 토글(common) — 스위치는 바뀌었으나(스위치 true→false→true) 조회영역이 접히지/펼쳐지지 않음 true→true→true — isHidden 배선 결함 의심"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 33905,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:121:121"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T10:25:13.864Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (changeType, divisionIds, status)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 3개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 13개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 2건 재저장 HTTP 200"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Excel 다운로드(common) — 'ShipmentChangeRequestConfirm_20261114_072545.xlsx' 6665B"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[FAIL] Search Area 조회영역 토글(common) — 스위치는 바뀌었으나(스위치 true→false→true) 조회영역이 접히지/펼쳐지지 않음 true→true→true — isHidden 배선 결함 의심"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 34942,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Search Area 조회영역 토글\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts:121:121"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T10:25:52.331Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 3개 중 기간 키 0 (changeType, divisionIds, status)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 3개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 13개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 2건 재저장 HTTP 200"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Excel 다운로드(common) — 'ShipmentChangeRequestConfirm_20261114_072624.xlsx' 6664B"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[FAIL] Search Area 조회영역 토글(common) — 스위치는 바뀌었으나(스위치 true→false→true) 조회영역이 접히지/펼쳐지지 않음 true→true→true — isHidden 배선 결함 의심"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0003\\artifacts\\SSP0003.smoke-SSP0003-Ship-c873c-·Columns·Search-Area·Manual-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0003.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "5ea544572c4c8506aa51-7014d8188c2ab5a82359",
+              "file": "SSP0003.smoke.spec.ts",
+              "line": 115,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T10:22:14.812Z",
+    "duration": 256713.754,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,80 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 13:39:09.845",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 2.77,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:pick_retry:MATERIAL_ID"
+  },
+  {
+   "at": "2026-11-15 13:39:09.858",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 4.06,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:pick_retry:MATERIAL_ID"
+  },
+  {
+   "at": "2026-11-15 13:39:09.877",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 3.91,
+   "params": {
+    "Code": "PlantSiteByDivision",
+    "Param1": "81",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlantSiteByDivision', @Param1='81', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:pick_retry:MATERIAL_ID"
+  },
+  {
+   "at": "2026-11-15 13:39:10.155",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 265,
+   "rows_kind": "DataSet rows",
+   "ms": 144.4,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "HQ07-E",
+    "p_material_id": ""
+   },
+   "inline": "EXEC SSP0024_GET_ITEM_BY_DIVISION_POPUP @p_division_id='81', @p_plant_site_id='HQ07-E', @p_material_id=''",
+   "phase": "action:pick_retry:MATERIAL_ID"
+  }
+ ]
+}

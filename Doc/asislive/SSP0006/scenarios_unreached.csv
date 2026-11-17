@@ -1,0 +1,19 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0006-Sbf4efb,조회,GetDivision,SSP0006_Plan_Problem.cs:1295,호출 없음,,
+SSP0006-S1d7d4f,조회,GetLastPlanVersion,SSP0006_Plan_Problem.cs:775,호출 없음,,
+SSP0006-S0af853,조회,GetLastPlanVersion,SSP0006_Plan_Problem.cs:795,호출 없음,,
+SSP0006-S2a167b,조회,GetSalesSitebyDivision,SSP0006_Plan_Problem.cs:380,호출 없음,,
+SSP0006-S67bbf1,조회,GetSpdTitle,SSP0006_Plan_Problem.cs:1316,같은 파일에서 호출,SSP0006_Plan_Problem.cs:450,InitSpread
+SSP0006-Se946c7,초기,InitSpread,SSP0006_Plan_Problem.cs:411,주석 안에서만 호출,SSP0006_Plan_Problem.cs:400; SSP0006_Plan_Problem.cs:401; SSP0006_Plan_Problem.cs:402; SSP0006_Plan_Problem.cs:667; SSP0006_Plan_Problem.cs:668,
+SSP0006-Sd35dbd,초기,InitSpread,SSP0006_Plan_Problem.cs:459,주석 안에서만 호출,SSP0006_Plan_Problem.cs:400; SSP0006_Plan_Problem.cs:401; SSP0006_Plan_Problem.cs:402; SSP0006_Plan_Problem.cs:667; SSP0006_Plan_Problem.cs:668,
+SSP0006-Sa172eb,초기,InitSpread,SSP0006_Plan_Problem.cs:481,주석 안에서만 호출,SSP0006_Plan_Problem.cs:400; SSP0006_Plan_Problem.cs:401; SSP0006_Plan_Problem.cs:402; SSP0006_Plan_Problem.cs:667; SSP0006_Plan_Problem.cs:668,
+SSP0006-S7b31fe,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:531,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-S7a38e2,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:535,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-S29bc0f,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:540,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-S346303,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:547,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-Sede481,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:562,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-S00ad82,초기,InitSpreadDateColumn,SSP0006_Plan_Problem.cs:573,같은 파일에서 호출,SSP0006_Plan_Problem.cs:294; SSP0006_Plan_Problem.cs:452,"InitSpread,InitSpread_2"
+SSP0006-S6bf93b,기타,SetChangedPeriods,SSP0006_Plan_Problem.cs:1302,호출 없음,,
+SSP0006-S8539dc,기타,SetChangedPeriods,SSP0006_Plan_Problem.cs:1307,호출 없음,,
+SSP0006-S362018,기타,ValidateUserInput,SSP0006_Plan_Problem.cs:1174,주석 안에서만 호출,SSP0006_Plan_Problem.cs:816,
+SSP0006-S0ab7cb,기타,ValidateUserInput,SSP0006_Plan_Problem.cs:1181,주석 안에서만 호출,SSP0006_Plan_Problem.cs:816,

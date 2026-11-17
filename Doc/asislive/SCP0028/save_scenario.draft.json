@@ -1,0 +1,72 @@
+{
+ "id": "SCP0028",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+   "pk": [
+    "DIVISION_ID",
+    "OPERATION_GROUP",
+    "FROM_SITE",
+    "TO_SITE",
+    "ITEM_ID",
+    "TRANSPORT_MODE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "OPERATION_GROUP": "OPERATION_GROUP_ID",
+    "FROM_SITE": "FROM_SITE",
+    "TO_SITE": "TO_SITE",
+    "ITEM_ID": "ITEM_ID",
+    "TRANSPORT_MODE": "TRANS_MODE_CODE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "LOT_SIZE",
+    "db_col": "LOT_SIZE",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_SHIPMENT_LOT_SIZE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Shipment Lot Size",
+   "writes": {
+    "SCP_MST_SHIPMENT_LOT_SIZE": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0028_SAVE_SHIPMENT_LOT_SIZE → SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_SHIPMENT_LOT_SIZE_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "match_basis": {
+    "OPERATION_GROUP": "OPERATION_GROUP ← @p_operation_group(SP 174줄(@v_operation_group AS OPERATION_GROUP) ← 118줄) ← 그리드 열 OPERATION_GROUP_ID(SCP0028_Shipment_Lot_Size.cs:642)",
+    "TRANSPORT_MODE": "TRANSPORT_MODE ← @p_transport_mode(SP 178줄(@v_transport_mode AS TRANSPORT_MODE) ← 122줄) ← 그리드 열 TRANS_MODE_CODE(SCP0028_Shipment_Lot_Size.cs:646)"
+   },
+   "edit_candidates": [
+    {
+     "col": "LOT_SIZE",
+     "db_col": "LOT_SIZE",
+     "rule": "plus1"
+    },
+    {
+     "col": "INCREMENT",
+     "db_col": "INCREMENT",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,130 @@
+{
+ "id": "SCP0104",
+ "started": "2026-11-17 16:18:14.917",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-17 16:18:30.531",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0104_CAPA_Line_Assign",
+   "form_text": "Line Assign",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0104_CAPA_Line_Assign.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:18:48.598"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-17 16:18:52.109",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0104\\run_20261117_161814\\dump_load.json",
+   "control_count": 69,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:18:52.137"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-17 16:18:52.293",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0104\\run_20261117_161814\\shots\\SCP0104_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:18:52.420"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-17 16:18:52.901",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:18:53.593"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-17 16:19:00.008",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0104\\run_20261117_161814\\dump_find.json",
+   "control_count": 69,
+   "grid_count": 2,
+   "total": "Total : 275",
+   "time_status": "DB : 2.36s, UI : 0.052s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:19:00.087"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-17 16:19:00.253",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0104\\run_20261117_161814\\shots\\SCP0104_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-17 16:19:00.402"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 27,
+  "calls_with_params": 27
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "AsisLive.Host.exe(10528)"
+ ],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0104_CAPA_Line_Assign",
+  "form_text": "Line Assign",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0104_CAPA_Line_Assign.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 2.36s, UI : 0.052s",
+  "total": "Total : 275",
+  "how": "status"
+ },
+ "t_open": "2026-11-17 16:24:48.056",
+ "t_find": "2026-11-17 16:24:54.647",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 69,
+  "layout_items": 20,
+  "grids": 2,
+  "sheets": 4,
+  "header_cols": 74,
+  "data_rows": 50,
+  "grid_rows": 275,
+  "calls_total": 257,
+  "calls_screen": 27,
+  "calls_find": 22,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-17 16:25:18.926",
+ "exit": 0
+}

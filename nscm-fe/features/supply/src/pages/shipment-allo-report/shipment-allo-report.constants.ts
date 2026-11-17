@@ -69,6 +69,9 @@ export const MSG = {
   //   주의: TO-BE MSG00004 는 "수정한 내용이 없습니다."(No changes to save)로 의미가 반전돼 있어 성공 토스트에
   //   MSG00004 를 쓰면 저장돼도 "수정한 내용이 없습니다"로 뜬다(07_validation D2). 성공은 반드시 MSG00672 사용.
   SAVE_COUNT: 'MSG00672', // {0}개의 데이터가 저장되었습니다.
+  // 저장 대상 0건(아무 변경 없음) 안내 — TO-BE MSG00004 "수정한 내용이 없습니다." 그대로 사용.
+  //   공통 useProcMutation 의 빈배열 reject 경로를 타지 않고 직접 setAlert 로 띄운다(전역 스피너 깜빡임 회피).
+  NO_CHANGES: 'MSG00004', // 수정한 내용이 없습니다.
   // Division 권한 0건 — AS-IS SetDivisionAuthCheck(cs:144-145, BaseForm.cs:5995)가 MSG00097 "권한을 가진
   //   Division이 없습니다."로 안내. TO-BE MSG00097 은 "Please select Division."으로 의미가 달라 재사용 금지,
   //   등가 코드 MSG00667("No authority assigned." — ora.py 실측 등록)로 역매핑(convert-core §4.1).

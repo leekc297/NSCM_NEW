@@ -151,15 +151,11 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,24,1028]]"
+                      "description": "[[\"main\",\"SEARCH\",200,24,1035]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -170,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6426,
+                      "duration": 5573,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:16:00.352Z",
+                      "startTime": "2026-11-14T09:05:08.409Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -195,15 +191,11 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,24,1028]]"
+                          "description": "[[\"main\",\"SEARCH\",200,24,1035]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -219,7 +211,7 @@
             },
             {
               "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "smoke"
               ],
@@ -253,7 +245,7 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[ERROR] Period(PeriodField) — 라벨 [Period | From | To | 기간] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
+                      "description": "[OK] Period(period) — 기간 '2026.11.09' ~ '2027.11.08' → 조회 정상"
                     },
                     {
                       "type": "cond",
@@ -265,15 +257,11 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[FAIL] (기준표 순서)(order) — 화면 div → scmsite → type → stage → plangroup → modelnickname → active / 기준 div → plangroup → scmsite → stage → modelnickname → type → active"
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 div → scmsite → type → stage → plangroup → modelnickname → period → active / 기준 div → plangroup → scmsite → stage → modelnickname → type → period → active"
                     },
                     {
                       "type": "condsum",
-                      "description": "8/10 OK · FAIL 1 · WARN 0 · ERROR 1 · NA 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "9/9 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -283,40 +271,13 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 34161,
-                      "error": {
-                        "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:112:123",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                          "column": 123,
-                          "line": 112
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 110 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                            "column": 123,
-                            "line": 112
-                          },
-                          "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  110 |     const s = record(test.info(), 'cond', items);\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n> 112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:112:123"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                            "column": 131,
-                            "line": 113
-                          },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:113:131"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 37452,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:16:10.481Z",
+                      "startTime": "2026-11-14T09:05:16.492Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -344,7 +305,7 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[ERROR] Period(PeriodField) — 라벨 [Period | From | To | 기간] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
+                          "description": "[OK] Period(period) — 기간 '2026.11.09' ~ '2027.11.08' → 조회 정상"
                         },
                         {
                           "type": "cond",
@@ -356,152 +317,17 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[FAIL] (기준표 순서)(order) — 화면 div → scmsite → type → stage → plangroup → modelnickname → active / 기준 div → plangroup → scmsite → stage → modelnickname → type → active"
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 div → scmsite → type → stage → plangroup → modelnickname → period → active / 기준 div → plangroup → scmsite → stage → modelnickname → type → period → active"
                         },
                         {
                           "type": "condsum",
-                          "description": "8/10 OK · FAIL 1 · WARN 0 · ERROR 1 · NA 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "9/9 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
                         }
                       ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                        "column": 123,
-                        "line": 112
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 34316,
-                      "error": {
-                        "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
-                        "stack": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:112:123",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                          "column": 123,
-                          "line": 112
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 110 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                            "column": 123,
-                            "line": 112
-                          },
-                          "message": "Error: 조회조건 동작 FAIL 1: (기준표 순서)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  110 |     const s = record(test.info(), 'cond', items);\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n> 112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:112:123"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                            "column": 131,
-                            "line": 113
-                          },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts:113:131"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-11-08T07:16:52.098Z",
-                      "annotations": [
-                        {
-                          "type": "cond",
-                          "description": "[OK] (기준 조회)(search) — call-proc 1"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Plan Group(combo) — 옵션 'E129A_E128A' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] SCM Site(combo) — 옵션 'AC00-A' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Stage(combo) — 옵션 'ASSY' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AAEF1001I-A1-000' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[ERROR] Period(PeriodField) — 라벨 [Period | From | To | 기간] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Type(combo) — 옵션 'MIN' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[OK] Active(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
-                        },
-                        {
-                          "type": "cond",
-                          "description": "[FAIL] (기준표 순서)(order) — 화면 div → scmsite → type → stage → plangroup → modelnickname → active / 기준 div → plangroup → scmsite → stage → modelnickname → type → active"
-                        },
-                        {
-                          "type": "condsum",
-                          "description": "8/10 OK · FAIL 1 · WARN 0 · ERROR 1 · NA 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0127\\artifacts\\SCP0127.smoke-SCP0127-Prec-725ca-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0127.smoke.spec.ts",
-                        "column": 123,
-                        "line": 112
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "807bb13de09a01bd8d86-d6ff3fcb474500306229",
@@ -553,11 +379,11 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 7개 유지"
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 8개 유지"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'PrecedeSafetyStockDay_20261108_041854.xlsx' 6607B"
+                      "description": "[OK] Excel 다운로드(common) — 'PrecedeSafetyStockDay_20261114_060719.xlsx' 6601B"
                     },
                     {
                       "type": "common",
@@ -574,10 +400,6 @@
                     {
                       "type": "commonsum",
                       "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -585,15 +407,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 81929,
+                      "duration": 83424,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:17:32.722Z",
+                      "startTime": "2026-11-14T09:05:56.640Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -629,11 +451,11 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 7개 유지"
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 8개 유지"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'PrecedeSafetyStockDay_20261108_041854.xlsx' 6607B"
+                          "description": "[OK] Excel 다운로드(common) — 'PrecedeSafetyStockDay_20261114_060719.xlsx' 6601B"
                         },
                         {
                           "type": "common",
@@ -650,10 +472,6 @@
                         {
                           "type": "commonsum",
                           "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -674,11 +492,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-08T07:15:59.106Z",
-    "duration": 178577.971,
-    "expected": 2,
+    "startTime": "2026-11-14T09:05:07.807Z",
+    "duration": 135529.815,
+    "expected": 3,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

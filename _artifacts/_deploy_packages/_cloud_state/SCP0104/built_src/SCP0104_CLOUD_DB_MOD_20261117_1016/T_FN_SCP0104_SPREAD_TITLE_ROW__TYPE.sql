@@ -1,0 +1,9 @@
+TYPE           "T_FN_SCP0104_SPREAD_TITLE_ROW"                                          AS OBJECT
+(
+    COLUMN_NAME                 VARCHAR2(30 CHAR)
+  , COLUMN_LABEL_NAME           VARCHAR2(30 CHAR)
+  , SMALL_CLASS_LABEL_NAME      VARCHAR2(30 CHAR)
+  , LARGE_CLASS_LABEL_NAME      VARCHAR2(30 CHAR)
+  , DAY_CODE                    VARCHAR2(30 CHAR)
+  , SORT_ORDER_NO               VARCHAR2(30 CHAR)
+)

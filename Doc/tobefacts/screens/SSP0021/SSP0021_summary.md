@@ -13,12 +13,12 @@
 | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssDetailGrid.module.scss | component | 21 |
 | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssDetailGrid.tsx | component | 516 |
 | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssForm.tsx | component | 405 |
-| features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | component | 424 |
+| features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | component | 522 |
 | features/shipping/src/pages/shipment-plan-auto-ess/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-plan-auto-ess/shipment-plan-auto-ess.constants.ts | constants | 356 |
 | features/shipping/src/pages/shipment-plan-auto-ess/shipment-plan-auto-ess.types.ts | types | 34 |
 | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.module.scss | style | 60 |
-| features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | page | 988 |
+| features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | page | 1017 |
 | features/shipping/src/pages/shipment-plan-auto-ess/useShipmentPlanAutoEssStore.ts | store | 460 |
 | features/shipping/src/pages/shipment-plan-auto-ess/utils/shipment-plan-auto-ess.calc.ts | util | 189 |
 | features/shipping/src/pages/shipment-plan-auto-ess/utils/shipment-plan-auto-ess.dblClickGuard.ts | util | 54 |
@@ -33,21 +33,21 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 4 | Y | RequestorModal.tsx:42 ShipmentPlanAutoEssDetailGrid.tsx:96 ShipmentPlanAutoEssDetailGrid.tsx:108 ShipmentPlanAutoEssForm.tsx:139 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentPlanAutoEssDetailBar.tsx:50 ShipmentPlanAutoEss.tsx:285 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentPlanAutoEssDetailBar.tsx:50 ShipmentPlanAutoEss.tsx:286 |
 | SSP0021/division//call-proc | hook | 1 | Y | ShipmentPlanAutoEssForm.tsx:118 |
-| /SSP0021/main/USER_CHECK/call-proc | http,propagated | 2 | Y | ShipmentPlanAutoEss.tsx:156 |
-| SSP0021/main//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:211 |
-| SSP0021/calendar//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:218 |
-| SSP0021/planDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:225 |
-| SSP0021/stockDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:235 |
-| SSP0021/owmsDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:242 |
-| SSP0021/holdStock//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:249 |
-| SSP0021/mesStock//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:256 |
-| SSP0021/mesStockDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:263 |
-| SSP0021/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:270 |
-| /SSP0021/planDetail/SAVE/call-proc | http,propagated | 2 | Y | ShipmentPlanAutoEss.tsx:386 |
-| {?url} | http | 1 | N | ShipmentPlanAutoEss.tsx:565 |
-| {?params} | http | 1 | N | ShipmentPlanAutoEss.tsx:566 |
+| /SSP0021/main/USER_CHECK/call-proc | http,propagated | 2 | Y | ShipmentPlanAutoEss.tsx:157 |
+| SSP0021/main//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:212 |
+| SSP0021/calendar//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:219 |
+| SSP0021/planDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:226 |
+| SSP0021/stockDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:236 |
+| SSP0021/owmsDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:243 |
+| SSP0021/holdStock//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:250 |
+| SSP0021/mesStock//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:257 |
+| SSP0021/mesStockDetail//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:264 |
+| SSP0021/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanAutoEss.tsx:271 |
+| /SSP0021/planDetail/SAVE/call-proc | http,propagated | 2 | Y | ShipmentPlanAutoEss.tsx:387 |
+| {?url} | http | 1 | N | ShipmentPlanAutoEss.tsx:566 |
+| {?params} | http | 1 | N | ShipmentPlanAutoEss.tsx:567 |
 | /admin/menu/SSP0021/column | http,propagated | 2 | Y | useShipmentPlanAutoEssStore.ts:386 |
 | /admin/menu/SSP0021/measure | http,propagated | 2 | Y | useShipmentPlanAutoEssStore.ts:411 |
 | /admin/menu/SSP0021/search-conditions | http | 1 | Y | useShipmentPlanAutoEssStore.ts:437 |
@@ -104,27 +104,27 @@
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssForm.tsx | 376 |
 | Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssForm.tsx | 372 |
 | Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssForm.tsx | 395 |
-| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 246 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 269 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 284 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 309 |
-| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 321 |
-| g.hostElement | keydown | deleteKeyHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 351 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 369 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 381 |
-| ShipmentPlanAutoEssForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 768 |
-| ShipmentPlanAutoEssForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 769 |
-| ShipmentPlanAutoEssMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 807 |
-| ShipmentPlanAutoEssDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 817 |
-| ShipmentPlanAutoEssDetailBar | onModelSearch | <arrow> setOpenItemDetailBar | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 818 |
-| ShipmentPlanAutoEssDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 819 |
-| ShipmentPlanAutoEssDetailGrid | onOrderDetail | setOrderDetail | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 822 |
-| ShipmentPlanAutoEssDetailGrid | onConfirmDetail | setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 823 |
-| ShipmentPlanAutoEssDetailGrid | onItemCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 848 |
-| ShipmentPlanAutoEssDetailGrid | onProjectCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 849 |
-| OrderDetailModal | onClose | <arrow> setOrderDetail | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 939 |
-| ConfirmDetailModal | onClose | <arrow> setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 949 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:(codes??[]).map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,(codes??[]).map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 966 |
+| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 333 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 363 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 378 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 407 |
+| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 419 |
+| g.hostElement | keydown | deleteKeyHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 449 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 467 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 479 |
+| ShipmentPlanAutoEssForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 810 |
+| ShipmentPlanAutoEssForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 811 |
+| ShipmentPlanAutoEssMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 852 |
+| ShipmentPlanAutoEssDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 862 |
+| ShipmentPlanAutoEssDetailBar | onModelSearch | <arrow> setOpenItemDetailBar | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 863 |
+| ShipmentPlanAutoEssDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 864 |
+| ShipmentPlanAutoEssDetailGrid | onOrderDetail | setOrderDetail | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 867 |
+| ShipmentPlanAutoEssDetailGrid | onConfirmDetail | setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 868 |
+| ShipmentPlanAutoEssDetailGrid | onItemCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 877 |
+| ShipmentPlanAutoEssDetailGrid | onProjectCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 878 |
+| OrderDetailModal | onClose | <arrow> setOrderDetail | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 968 |
+| ConfirmDetailModal | onClose | <arrow> setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 978 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:(codes??[]).map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,(codes??[]).map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 995 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -166,7 +166,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | POPUP_COLUMNS | CODE | User ID | 140 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan-auto-ess/components/modals/RequestorModal.tsx | 28 |
 | POPUP_COLUMNS | NAME | User Name | 200 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan-auto-ess/components/modals/RequestorModal.tsx | 29 |
-| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM' | 80 | isDynVisible(m.kind, bucketType, chkSum) |  |  | object | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 176 |
+| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM' | 80 | isDynVisible(m.kind, bucketType, chkSum) |  |  | object | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 263 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -217,18 +217,19 @@
 | MSG00704 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0060(49), SSP0021(20), SSP0015(18), SSP0005(5), SSP0300(3), SSP0023(3), SSP0200(2), SCP0001(1), SCM0002(1), SCP0009(1), SSP0014(1)
+- 화면ID: SSP0060(54), SSP0021(21), SSP0015(18), SSP0005(5), SSP0300(3), SSP0023(3), SSP0200(2), SSP0026(2), SCP0001(1), SCM0002(1), SCP0009(1), SSP0014(1), SSP0202(1)
 - SP/PKG: PKG_SSP0021(17), P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM(4), P_USER_ID(4), P_SSP0003_SAVE_REQ_IF_CHECK(3), P_ACTIVE_FLAG(3), P_SSP0021_GET_SHIPMENT_DIVISION(2), P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING(2), PKG_SSP0003(2), P_SSP0300_GET_ORDER_DETAIL(2), PKG_SSP0002(2), P_SSP0002_GET_USER_INFO_LIST(2), P_TITLE(2), P_FROM_YYYYMMDD(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(1), P_SSP0021_GET_SHIPMENT_STATUS(1), P_SSP0021_GET_ERP_SO_NO_CNT(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM(1), P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM(1), P_SSP0200_USER_CHECK(1), P_ITEM_ID(1), SSP0002_GET_USER_INFO_LIST(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0021_GET_SHIPMENT_PLAN(1), P_SSP0021_GET_SHIPMENT_PLAN_DETAIL(1), P_FROM(1), P_SSP0021_GET_HOLD_STOCK(1), P_SSP0021_GET_SHIPMENT_RESULT(1), P_SSP0021_GET_MES_STOCK_DETAIL(1), P_SSP0021_GET_STOCK_LOCATION_DETAIL(1), P_SHIPMENT_DATE(1), P_PROGRAM_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
+| code | 그 외 measure 행은 확정구간(Frozen) BACK_COLOR 밴드를 칠한다(AS-IS Re_Design L4749~4758; | features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx | 399 |
 | code | - 툴바 5버튼: Find/Save/Insert = 실동작, Delete = NO-OP `() => undefined`(design 01 §2 확정 — 재판단 금지), | features/shipping/src/pages/shipment-plan-auto-ess/shipment-plan-auto-ess.constants.ts | 15 |
-| code | 툴바: Find/Save/Insert=실동작, Delete=NO-OP `() => undefined`(design 01 §2 — 노출 유지, false·키생략 금지), | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 75 |
-| code | `bool isOK = GetSSPUserCheck(); if (isOK == false) { GMessageBox("MSG00251", UserId); return; }` | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 145 |
-| code | 2023-10-04(jilee)에 들어간 무조건 return 이라 그 아래 `bEdit_Auth` 분기와 unlock 로직은 | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 190 |
-| code | 연쇄의 마지막 단계(④ CONFIRM)라 await 할 수 있게 mutateAsync 로 쓴다. 성공·실패 처리(onSuccess 재조회 B7, | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 381 |
-| endpoint | ── mount — keep-alive 잔여 filters 무효화 + 컬럼 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 430 |
-| code | 원본 행 STATUS 게이트 (AS-IS L2209/L2284 — RowCount>0 + SHIPMENT_STATUS!='C' return). | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 678 |
+| code | 툴바: Find/Save/Insert=실동작, Delete=NO-OP `() => undefined`(design 01 §2 — 노출 유지, false·키생략 금지), | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 76 |
+| code | `bool isOK = GetSSPUserCheck(); if (isOK == false) { GMessageBox("MSG00251", UserId); return; }` | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 146 |
+| code | 2023-10-04(jilee)에 들어간 무조건 return 이라 그 아래 `bEdit_Auth` 분기와 unlock 로직은 | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 191 |
+| code | 연쇄의 마지막 단계(④ CONFIRM)라 await 할 수 있게 mutateAsync 로 쓴다. 성공·실패 처리(onSuccess 재조회 B7, | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 382 |
+| endpoint | ── mount — keep-alive 잔여 filters 무효화 + 컬럼 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 431 |
+| code | 원본 행 STATUS 게이트 (AS-IS L2209/L2284 — RowCount>0 + SHIPMENT_STATUS!='C' return). | features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx | 679 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS fetch (mount + Search — ui-dynamic-property-management). | features/shipping/src/pages/shipment-plan-auto-ess/useShipmentPlanAutoEssStore.ts | 380 |
 | code | 사용법: 클릭 핸들러에서 **early return 보다 먼저** track() 을 부른다(헤더·빈 영역 클릭도 null 로 | features/shipping/src/pages/shipment-plan-auto-ess/utils/shipment-plan-auto-ess.dblClickGuard.ts | 12 |
 | code | 더블클릭 시 handleMainDrilldown 의 `if (!sheet) return` 으로 무반응. | features/shipping/src/pages/shipment-plan-auto-ess/utils/shipment-plan-auto-ess.detailSheets.ts | 89 |

@@ -15,9 +15,9 @@
 "target": "Team",
 "ctx": "DM/40/DM Admin · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "PASS",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 2개) 19건",
-"actual": "TO-BE 19건 · 권한 밖 [] · 없는 후보 []",
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 2개) 17건",
+"actual": "TO-BE 20건 · 권한 밖 ['30228984', '58183091', '71061668'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -38,8 +38,8 @@
 "ctx": "DM/40/DM Admin · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 2개) 1317건",
-"actual": "TO-BE 1376건 · 권한 밖 ['Airwheel_CN_DNN', 'Asus_CN_KUS', 'BorgWarner Akasol_DE_SUZ', 'Bosch Mcp_DE_REU', 'Chuanghuiyuan_CN_SZX', 'DLG_CN_JII', 'Debao_CN_SHA', 'Dell_US_NNJ'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 2개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -68,9 +68,9 @@
 "target": "Team",
 "ctx": "DM/40/DM Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "PASS",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 1개) 19건",
-"actual": "TO-BE 19건 · 권한 밖 [] · 없는 후보 []",
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 2개) 17건",
+"actual": "TO-BE 20건 · 권한 밖 ['30228984', '58183091', '71061668'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -80,7 +80,7 @@
 "ctx": "DM/40/DM Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 1개) 1098건",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 2개) 1098건",
 "actual": "TO-BE 1622건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['ChangHuiYuan', 'DMS', 'Darfon_01', 'Hero Motorcorp', 'Joycube', 'Joycube MDF', 'K2 Space', 'Kooroo']",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
@@ -91,8 +91,8 @@
 "ctx": "DM/40/DM Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 1개) 1317건",
-"actual": "TO-BE 1376건 · 권한 밖 ['Airwheel_CN_DNN', 'Asus_CN_KUS', 'BorgWarner Akasol_DE_SUZ', 'Bosch Mcp_DE_REU', 'Chuanghuiyuan_CN_SZX', 'DLG_CN_JII', 'Debao_CN_SHA', 'Dell_US_NNJ'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 2개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -121,9 +121,10 @@
 "target": "Team",
 "ctx": "DM/40/DM Viewer · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 1개) 17건",
+"actual": "TO-BE 20건 · 권한 밖 ['30228984', '58183091', '71061668'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
 "eg": "EG367",
@@ -131,9 +132,10 @@
 "target": "End Customer",
 "ctx": "DM/40/DM Viewer · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 1개) 1098건",
+"actual": "TO-BE 1622건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['ChangHuiYuan', 'DMS', 'Darfon_01', 'Hero Motorcorp', 'Joycube', 'Joycube MDF', 'K2 Space', 'Kooroo']",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
 "eg": "EG367",
@@ -141,9 +143,10 @@
 "target": "Sales Site",
 "ctx": "DM/40/DM Viewer · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 1개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
 "eg": "EG367",
@@ -172,8 +175,8 @@
 "ctx": "DM/40/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 19건",
-"actual": "TO-BE 123건 · 권한 밖 ['30234912', '30277380', '30303316', '30338000', '50003801', '50070352', '58124293', '58127819'] · 없는 후보 []",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 4개) 17건",
+"actual": "TO-BE 125건 · 권한 밖 ['30228984', '30234912', '30277380', '30303316', '30338000', '50003801', '50070352', '58124293'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -183,7 +186,7 @@
 "ctx": "DM/40/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 1098건",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 4개) 1098건",
 "actual": "TO-BE 1622건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['ChangHuiYuan', 'DMS', 'Darfon_01', 'Hero Motorcorp', 'Joycube', 'Joycube MDF', 'K2 Space', 'Kooroo']",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
@@ -194,8 +197,8 @@
 "ctx": "DM/40/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 1317건",
-"actual": "TO-BE 1376건 · 권한 밖 ['Airwheel_CN_DNN', 'Asus_CN_KUS', 'BorgWarner Akasol_DE_SUZ', 'Bosch Mcp_DE_REU', 'Chuanghuiyuan_CN_SZX', 'DLG_CN_JII', 'Debao_CN_SHA', 'Dell_US_NNJ'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 4개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -226,7 +229,7 @@
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
 "expected": "AS-IS UserTeamByDivision 합집합(그룹 1개) 109건",
-"actual": "TO-BE 127건 · 권한 밖 ['30339338', '30426977', '58099468', '58124984', '58183091', '58260040', '58520274', '70000478'] · 없는 후보 []",
+"actual": "TO-BE 129건 · 권한 밖 ['30228984', '30339338', '30426977', '58099468', '58124984', '58183091', '58260040', '58520274'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -247,8 +250,8 @@
 "ctx": "DM/81/DM Admin · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 1개) 455건",
-"actual": "TO-BE 499건 · 권한 밖 ['ESS_AB_TES', 'ESS_AP_TES', 'FCA_MX_CUT', 'FCA_US_DET', 'GM_CA_NWC', 'GM_MX_ARZ', 'GM_MX_RMA', 'GM_US_DEL'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 1개) 447건",
+"actual": "TO-BE 499건 · 권한 밖 ['Alte_AB_TES', 'Alte_AE_AAN', 'Alte_AE_ABU', 'Audi_AJ_TES', 'BMW_CZ_MOS', 'ESS_AB_TES', 'ESS_AP_TES', 'FCA AS_CN_NKG'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -265,7 +268,7 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Div",
-"ctx": "DM/81/DM Planner · Div ",
+"ctx": "DM/81/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -275,37 +278,40 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Team",
-"ctx": "DM/81/DM Planner · Div ",
+"ctx": "DM/81/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 109건",
+"actual": "TO-BE 173건 · 권한 밖 ['30228984', '30339338', '30385415', '30426977', '58099468', '58124984', '58141111', '58175902'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "End Customer",
-"ctx": "DM/81/DM Planner · Div ",
+"ctx": "DM/81/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 173건",
+"actual": "TO-BE 594건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['']",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Sales Site",
-"ctx": "DM/81/DM Planner · Div ",
+"ctx": "DM/81/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 447건",
+"actual": "TO-BE 1263건 · 권한 밖 ['300MS 8ME SBS1_US_LAS', '425LM 8ME SBS2_US_LAS', '45MG 8ME_US_BJO', '8minute Energy_KR_KUV', '8minute Energy_US_BJO', '8minute Energy_US_EFS', '8minute Energy_US_LAX', '8minute Energy_US_PQA'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Active",
-"ctx": "DM/81/DM Planner · Div ",
+"ctx": "DM/81/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -328,8 +334,8 @@
 "ctx": "DM/81/DM Planner (W/S) · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 0건",
-"actual": "TO-BE 170건 · 권한 밖 ['30234912', '30277380', '30303316', '30338000', '30339338', '30426977', '50003801', '50070352'] · 없는 후보 []",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 5개) 17건",
+"actual": "TO-BE 173건 · 권한 밖 ['30228984', '30234912', '30277380', '30303316', '30338000', '30339338', '30385415', '30426977'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -339,7 +345,7 @@
 "ctx": "DM/81/DM Planner (W/S) · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 1098건",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 5개) 1098건",
 "actual": "TO-BE 1622건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['ChangHuiYuan', 'DMS', 'Darfon_01', 'Hero Motorcorp', 'Joycube', 'Joycube MDF', 'K2 Space', 'Kooroo']",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
@@ -350,8 +356,8 @@
 "ctx": "DM/81/DM Planner (W/S) · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 0건",
-"actual": "TO-BE 1376건 · 권한 밖 ['1X Technologies_US_PAO', 'ABS_US_BUX', 'ABS_US_LRP', 'ACE KR_KR_IKS', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 5개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -368,7 +374,7 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Div",
-"ctx": "DM/81/DM Viewer · Div ",
+"ctx": "DM/81/DM Viewer · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -378,37 +384,40 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Team",
-"ctx": "DM/81/DM Viewer · Div ",
+"ctx": "DM/81/DM Viewer · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 109건",
+"actual": "TO-BE 173건 · 권한 밖 ['30228984', '30339338', '30385415', '30426977', '58099468', '58124984', '58141111', '58175902'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "End Customer",
-"ctx": "DM/81/DM Viewer · Div ",
+"ctx": "DM/81/DM Viewer · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 173건",
+"actual": "TO-BE 594건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['']",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Sales Site",
-"ctx": "DM/81/DM Viewer · Div ",
+"ctx": "DM/81/DM Viewer · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 447건",
+"actual": "TO-BE 1263건 · 권한 밖 ['300MS 8ME SBS1_US_LAS', '425LM 8ME SBS2_US_LAS', '45MG 8ME_US_BJO', '8minute Energy_KR_KUV', '8minute Energy_US_BJO', '8minute Energy_US_EFS', '8minute Energy_US_LAX', '8minute Energy_US_PQA'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Active",
-"ctx": "DM/81/DM Viewer · Div ",
+"ctx": "DM/81/DM Viewer · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -431,8 +440,8 @@
 "ctx": "DM/81/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 4개) 19건",
-"actual": "TO-BE 170건 · 권한 밖 ['30234912', '30277380', '30303316', '30338000', '30339338', '30426977', '50003801', '50070352'] · 없는 후보 []",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 4개) 17건",
+"actual": "TO-BE 173건 · 권한 밖 ['30228984', '30234912', '30277380', '30303316', '30338000', '30339338', '30385415', '30426977'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -453,8 +462,8 @@
 "ctx": "DM/81/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 4개) 1317건",
-"actual": "TO-BE 1376건 · 권한 밖 ['Airwheel_CN_DNN', 'Asus_CN_KUS', 'BorgWarner Akasol_DE_SUZ', 'Bosch Mcp_DE_REU', 'Chuanghuiyuan_CN_SZX', 'DLG_CN_JII', 'Debao_CN_SHA', 'Dell_US_NNJ'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 4개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -471,7 +480,7 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Div",
-"ctx": "DM/82/DM Admin · Div ",
+"ctx": "DM/82/DM Admin · Div 82",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -481,40 +490,40 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Team",
-"ctx": "DM/82/DM Admin · Div ",
+"ctx": "DM/82/DM Admin · Div 82",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 66건",
-"actual": "TO-BE 81건 · 권한 밖 ['58099468', '58260040', '58666055', '70000478', '70021343', '70090866', '70090867', '70174158'] · 없는 후보 []",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 64건",
+"actual": "TO-BE 83건 · 권한 밖 ['30228984', '30385415', '58099468', '58183091', '58260040', '58666055', '70000478', '70021343'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "End Customer",
-"ctx": "DM/82/DM Admin · Div ",
+"ctx": "DM/82/DM Admin · Div 82",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 1424건",
-"actual": "TO-BE 376건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', 'AES', 'CHROMAGEN', 'CPS America', 'Duke', 'EE'] · 없는 후보 ['', '-', '1X Technologies', 'ABS', 'ACE KR', 'AJ상사', 'ANDURIL', 'APRO']",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 344건",
+"actual": "TO-BE 376건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', 'AES', 'CHROMAGEN', 'CPS America', 'Duke', 'EE'] · 없는 후보 ['']",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Sales Site",
-"ctx": "DM/82/DM Admin · Div ",
+"ctx": "DM/82/DM Admin · Div 82",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 773건",
-"actual": "TO-BE 985건 · 권한 밖 ['ABB AUSTRALIA_AU_DBY', 'ABB AUSTRALIA_AU_LYD', 'ABB AUSTRALIA_AU_TSV', 'ABB USA_US_BAL', 'ABB_BE_NAM', 'AES ES_AU_MQL', 'AES ES_AU_SST', 'AES ES_AU_STT'] · 없는 후보 []",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 756건",
+"actual": "TO-BE 985건 · 권한 밖 ['ABB AUSTRALIA_AU_DBY', 'ABB AUSTRALIA_AU_LYD', 'ABB AUSTRALIA_AU_TSV', 'ABB USA_US_BAL', 'ABB_AA_TES', 'ABB_AB_TES', 'ABB_AC_TES', 'ABB_AV_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Active",
-"ctx": "DM/82/DM Admin · Div ",
+"ctx": "DM/82/DM Admin · Div 82",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -524,7 +533,7 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Div",
-"ctx": "DM/82/DM Planner · Div ",
+"ctx": "DM/82/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -534,37 +543,40 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Team",
-"ctx": "DM/82/DM Planner · Div ",
+"ctx": "DM/82/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 4개) 109건",
+"actual": "TO-BE 170건 · 권한 밖 ['30228984', '30385415', '58099468', '58124984', '58141111', '58175902', '58183091', '58188308'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "End Customer",
-"ctx": "DM/82/DM Planner · Div ",
+"ctx": "DM/82/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 4개) 173건",
+"actual": "TO-BE 592건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['']",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Sales Site",
-"ctx": "DM/82/DM Planner · Div ",
+"ctx": "DM/82/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
+"result": "FAIL",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 4개) 447건",
+"actual": "TO-BE 1225건 · 권한 밖 ['300MS 8ME SBS1_US_LAS', '425LM 8ME SBS2_US_LAS', '45MG 8ME_US_BJO', '8minute Energy_KR_KUV', '8minute Energy_US_BJO', '8minute Energy_US_EFS', '8minute Energy_US_LAX', '8minute Energy_US_PQA'] · 없는 후보 []",
+"note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Active",
-"ctx": "DM/82/DM Planner · Div ",
+"ctx": "DM/82/DM Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -586,10 +598,9 @@
 "target": "Team",
 "ctx": "DM/82/DM Planner (W/S) · Div ",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 1개) 155건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['30234912', '30277380', '30303316', '30338000', '50003801', '50070352', '58124293', '58124984']",
-"note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
+"result": "ERROR",
+"expected": "AS-IS 계정",
+"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
 },
 {
 "eg": "EG367",
@@ -597,10 +608,9 @@
 "target": "End Customer",
 "ctx": "DM/82/DM Planner (W/S) · Div ",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 1개) 1559건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['', '-', '1X Technologies', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA']",
-"note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
+"result": "ERROR",
+"expected": "AS-IS 계정",
+"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
 },
 {
 "eg": "EG367",
@@ -608,10 +618,9 @@
 "target": "Sales Site",
 "ctx": "DM/82/DM Planner (W/S) · Div ",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 1개) 1221건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['300MS 8ME SBS1_US_LAS', '425LM 8ME SBS2_US_LAS', '45MG 8ME_US_BJO', '8minute Energy_KR_KUV', '8minute Energy_US_BJO', '8minute Energy_US_EFS', '8minute Energy_US_LAX', '8minute Energy_US_PQA']",
-"note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
+"result": "ERROR",
+"expected": "AS-IS 계정",
+"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
 },
 {
 "eg": "EG367",
@@ -627,61 +636,11 @@
 "eg": "EG367",
 "screen": "DMF0005",
 "target": "Div",
-"ctx": "DM/82/DM Viewer · Div ",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 773개"
-},
-{
-"eg": "EG367",
-"screen": "DMF0005",
-"target": "Team",
-"ctx": "DM/82/DM Viewer · Div ",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
-},
-{
-"eg": "EG367",
-"screen": "DMF0005",
-"target": "End Customer",
-"ctx": "DM/82/DM Viewer · Div ",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
-},
-{
-"eg": "EG367",
-"screen": "DMF0005",
-"target": "Sales Site",
-"ctx": "DM/82/DM Viewer · Div ",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "ERROR",
-"expected": "AS-IS 계정",
-"actual": "AS-IS 권한표에 계정 없음 — 대조 불가"
-},
-{
-"eg": "EG367",
-"screen": "DMF0005",
-"target": "Active",
-"ctx": "DM/82/DM Viewer · Div ",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 773개"
-},
-{
-"eg": "EG367",
-"screen": "DMF0005",
-"target": "Div",
 "ctx": "DM/82/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 77개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6개"
 },
 {
 "eg": "EG367",
@@ -690,8 +649,8 @@
 "ctx": "DM/82/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserTeamByDivision 합집합(그룹 3개) 19건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['58099468', '58124984', '58183091', '58260040', '58520274', '58666055', '70000478', '70021343']",
+"expected": "AS-IS UserTeamByDivision 합집합(그룹 4개) 17건",
+"actual": "TO-BE 171건 · 권한 밖 ['30228984', '30234912', '30277380', '30303316', '30338000', '30385415', '50003801', '50070352'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:426 ← DMF0005_SaleSite_PjtModelMapping.cs:382"
 },
 {
@@ -701,8 +660,8 @@
 "ctx": "DM/82/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS EndCustomerByDivision 합집합(그룹 3개) 1098건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['-', '1X Technologies', 'ABS', 'ACE KR', 'AJ상사', 'ANDURIL', 'APRO', 'AXON']",
+"expected": "AS-IS EndCustomerByDivision 합집합(그룹 4개) 1098건",
+"actual": "TO-BE 1622건 · 권한 밖 ['300MS 8ME SBS1', '425LM 8ME SBS2', '45MG 8ME', '8minute Energy', 'ABB', 'ABB AUSTRALIA', 'ABB CA', 'ABB USA'] · 없는 후보 ['ChangHuiYuan', 'DMS', 'Darfon_01', 'Hero Motorcorp', 'Joycube', 'Joycube MDF', 'K2 Space', 'Kooroo']",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:469 ← DMF0005_SaleSite_PjtModelMapping.cs:390"
 },
 {
@@ -712,8 +671,8 @@
 "ctx": "DM/82/SCP Planner · Div 40",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "FAIL",
-"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 3개) 1317건",
-"actual": "TO-BE 47건 · 권한 밖 ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AU00'] · 없는 후보 ['1X Technologies_US_PAO', 'ABS_US_BUX', 'ABS_US_LRP', 'ACE KR_KR_IKS', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU']",
+"expected": "AS-IS UserSiteByEndCustomer 합집합(그룹 4개) 1294건",
+"actual": "TO-BE 1376건 · 권한 밖 ['ABS_US_BUX', 'AJ상사_AB_TES', 'AJ상사_AC_TES', 'AJ상사_AE_AAN', 'AJ상사_AE_ABU', 'Airwheel_CN_DNN', 'Anjin_AA_TES', 'Anjin_AK_TES'] · 없는 후보 []",
 "note": "DMF0005_SaleSite_PjtModelMapping.cs:477 ← DMF0005_SaleSite_PjtModelMapping.cs:399"
 },
 {
@@ -724,6 +683,6 @@
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 77개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
 }
 ]

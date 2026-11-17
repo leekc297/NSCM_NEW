@@ -1,0 +1,482 @@
+{
+ "id": "FP00540",
+ "from": "dump_find.json",
+ "total": "Total : 9",
+ "time_status": "DB : 9.596s, UI : 0.068s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Main",
+     "rows": 9,
+     "cols": 18,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "SCP Plan ID"
+       ],
+       "label": "SCP Plan ID",
+       "tag": "SCP_PLAN_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SCP_PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Group"
+       ],
+       "label": "Plan Group",
+       "tag": "INSTANCE_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "INSTANCE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "SCP Demand ID"
+       ],
+       "label": "SCP Demand ID",
+       "tag": "SCP_TARGET_ID",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "SCP_TARGET_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Customer"
+       ],
+       "label": "Customer",
+       "tag": "CUSTOMER_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CUSTOMER_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "To Site"
+       ],
+       "label": "To Site",
+       "tag": "TO_SITE_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TO_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "To Plant"
+       ],
+       "label": "To Plant",
+       "tag": "TO_PLANT_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TO_PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Ship Week"
+       ],
+       "label": "Ship Week",
+       "tag": "SHIP_WEEK",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SHIP_WEEK",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Ship Date"
+       ],
+       "label": "Ship Date",
+       "tag": "SHIP_DATE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "SHIP_DATE",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Ship Qty"
+       ],
+       "label": "Ship Qty",
+       "tag": "SHIP_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "SHIP_QTY",
+       "cell_type": "FPMaskCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Production Type"
+       ],
+       "label": "Production Type",
+       "tag": "PRODUCTION_TYPE",
+       "width": "116",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRODUCTION_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Transport Mode"
+       ],
+       "label": "Transport Mode",
+       "tag": "TRANSPORT_MODE",
+       "width": "117",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TRANSPORT_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Biz. Type"
+       ],
+       "label": "Biz. Type",
+       "tag": "BIZ_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "BIZ_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 9,
+     "data": [
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACHN1007I-B1^NA00-A^GM_US_BQN^20261112^SEA^MPS^E",
+       "ACHN1007I-B1",
+       "H07B",
+       "US00325500",
+       "GM_US_BQN",
+       "NA00",
+       "2026-W46",
+       "2026-11-12",
+       "87,000",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACHP2005I-A1-200^NA00-A^HKMC_KR_ASA^20260920^SEA^MPS^E",
+       "ACHP2005I-A1-200",
+       "H5.5A-200",
+       "KR10528700",
+       "HKMC_KR_ASA",
+       "NA00",
+       "2026-W38",
+       "2026-09-20",
+       "217,728",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACLF1015I-B1-002^NA00-A^GLOVIS_KR_SEL^20260928^SEA^MPS^E",
+       "ACLF1015I-B1-002",
+       "LV15A-002",
+       "KR01613700",
+       "GLOVIS_KR_SEL",
+       "NA00",
+       "2026-W40",
+       "2026-09-28",
+       "29,484",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACLF1015I-B1-002^NA00-A^GLOVIS_KR_SEL^20260923^SEA^MPS^E",
+       "ACLF1015I-B1-002",
+       "LV15A-002",
+       "KR01613700",
+       "GLOVIS_KR_SEL",
+       "NA00",
+       "2026-W39",
+       "2026-09-23",
+       "29,484",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACLN1010I-A1-103^NA00-A^MI00-P^20260923^SEA^MPS^E",
+       "ACLN1010I-A1-103",
+       "LV9.8-103",
+       "MI00",
+       "A003",
+       "MI00",
+       "2026-W39",
+       "2026-09-23",
+       "42,307",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACLN1010I-B1-100^NA00-A^MOBIS_SK_GBY^20260923^SEA^MPS^E",
+       "ACLN1010I-B1-100",
+       "LV9.8A-100",
+       "SK00104900",
+       "MOBIS_SK_GBY",
+       "NA00",
+       "2026-W39",
+       "2026-09-23",
+       "48,384",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACLN1010I-B1-100^NA00-A^MOBIS_KR_CHU^20260920^SEA^MPS^E",
+       "ACLN1010I-B1-100",
+       "LV9.8A-100",
+       "KR00110700",
+       "MOBIS_KR_CHU",
+       "NA00",
+       "2026-W38",
+       "2026-09-20",
+       "24,192",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACPN1034U-A1-100^NA00-A^WA00-P^20260921^SEA^MPS^E",
+       "ACPN1034U-A1-100",
+       "P34-100",
+       "WA00",
+       "A004",
+       "WA00",
+       "2026-W39",
+       "2026-09-21",
+       "400",
+       "MASS",
+       "SEA",
+       ""
+      ],
+      [
+       "",
+       "20260919_012",
+       "CN_CELL",
+       "81",
+       "A002",
+       "NA00",
+       "81^ACPN1034U-A1-A01^NA00-A^WA00-P^20260921^SEA^MPS^E",
+       "ACPN1034U-A1-A01",
+       "P34-F",
+       "WA00",
+       "A004",
+       "WA00",
+       "2026-W39",
+       "2026-09-21",
+       "400",
+       "MASS",
+       "SEA",
+       ""
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

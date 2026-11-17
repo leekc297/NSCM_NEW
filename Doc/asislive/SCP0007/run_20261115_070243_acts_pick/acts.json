@@ -1,0 +1,183 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ROUTE_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ROUTE_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Sca043c",
+    "SCP0007-Sa9fa28"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,2 failed: InvalidOperationException: cell not visible: 0,2",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "CUSTOMER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,3 failed: InvalidOperationException: cell not visible: 0,3",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_SITE_CODE",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_CITY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,5 failed: InvalidOperationException: cell not visible: 0,5",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TO_SITE_CODE",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,6 failed: InvalidOperationException: cell not visible: 0,6",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TO_CITY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 07:01:02",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ROUTE_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0007-Sca043c",
+    "SCP0007-Sa9fa28"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "has_else": false
+  }
+ ]
+}

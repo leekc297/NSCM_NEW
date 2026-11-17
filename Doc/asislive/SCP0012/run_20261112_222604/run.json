@@ -1,0 +1,147 @@
+{
+ "id": "SCP0012",
+ "started": "2026-11-12 22:26:04.193",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:26:04.479",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Analysis.UIL.SCP0012_PSI",
+   "form_text": "PSI",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0012_PSI.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:10.332"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:26:14.929",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0012\\run_20261112_222604\\dump_load.json",
+   "control_count": 56,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:14.953"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:26:15.114",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0012\\run_20261112_222604\\shots\\SCP0012_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:15.252"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:26:15.904",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:16.644"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:26:49.808",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0012\\run_20261112_222604\\dump_find.json",
+   "control_count": 56,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:49.818"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:26:49.975",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0012\\run_20261112_222604\\shots\\SCP0012_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:50.136"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:26:50.618",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:26:51.135"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 19,
+  "calls_with_params": 18
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Analysis.UIL.SCP0012_PSI",
+  "form_text": "PSI",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Analysis\\SCP0012_PSI.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 22:26:04.399",
+ "t_find": "2026-11-12 22:26:15.628",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 56,
+  "layout_items": 16,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 400,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 19,
+  "calls_screen": 19,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 22:26:51.664",
+ "exit": 0
+}

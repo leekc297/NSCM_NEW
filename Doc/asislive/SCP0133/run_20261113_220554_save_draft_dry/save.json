@@ -1,0 +1,66 @@
+{
+ "id": "SCP0133",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_WAREHOUSE_CAPACITY",
+  "pk": [
+   "DIVISION_ID",
+   "OPMZ_PLAN_GR_ID",
+   "WH_NM",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "WH_NM": "WH_NM",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+  "side": [],
+  "basis": "foxml SCP0133_SAVE_WAREHOUSE_CAPACITY → SP SCP0133_SAVE_WAREHOUSE_CAPACITY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "MAX_CAPA",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "MAX_CAPA",
+     "db_col": "MAX_CAPA",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "MAX_CAPA",
+    "db_col": "MAX_CAPA",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:05:54",
+ "status": "ERROR",
+ "steps": [],
+ "db_before": [],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "OPMZ_PLAN_GR_ID": "E129A_E128A",
+    "WH_NM": "E128A_CHAR_A",
+    "FROM_YYYYMMDD": "2025-01-01",
+    "TO_YYYYMMDD": "2099-12-31"
+   }
+  }
+ ],
+ "note": "DB 대상 행 수가 기대(1)와 다름(0 · 조건 {'DIVISION_ID': '81', 'OPMZ_PLAN_GR_ID': 'E129A_E128A', 'WH_NM': 'E128A_CHAR_A', 'FROM_YYYYMMDD': '2025-01-01', 'TO_YYYYMMDD': '2099-12-31'}) — 저장하지 않음"
+}

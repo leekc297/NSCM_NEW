@@ -13,6 +13,13 @@
   transition: none;
 }
 
+/* 특정 화면(대시보드 등)이 활성일 때만 콘텐츠 여백 제거 — 전역 기본값(17/30)은 유지하고
+   해당 탭에서만 full-bleed. 음수 마진은 .view(overflow-x:auto)에서 가로 스크롤을 유발하므로
+   컨테이너 패딩 자체를 0 으로 둔다. */
+.mdiContentFlush {
+  padding: 0;
+}
+
 .spinner {
   position: absolute;
   top: 0;

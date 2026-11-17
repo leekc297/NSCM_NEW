@@ -1,0 +1,20 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 02:03:14",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "Shipment Plan(Electrode)",
+  "named_cols": [],
+  "branches": 28,
+  "branches_without_col_name": 28,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ },
+ "note": "값을 넣을 수 있는 열이 없음(잠김·체크 상자·넣을 값 없음)"
+}

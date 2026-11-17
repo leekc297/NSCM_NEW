@@ -61,7 +61,7 @@ INSERT INTO SCM_ADM_PROC_M VALUES
 ### §1.1 GET SP signature
 
 ```sql
-CREATE OR REPLACE PROCEDURE SCM_MGR.P_{MENU_ID}_{ACTION} (
+CREATE OR REPLACE PROCEDURE SCM_MGR.P_{MENU_ID}_{ACTION} (   -- (2026-11-14 정정: 화면 조회 SP 는 PKG 안에 둔다(PKG_{MENU_ID}.P_...). SCM_ADM_API_M 조회 계열 551건 중 PKG 510건, 단독 41건. 이 예시는 커서 시그니처용)
     P_SES_USER_ID    IN  VARCHAR2,
     P_{FILTER1}      IN  VARCHAR2,
     P_{FILTER2}      IN  VARCHAR2,
@@ -101,7 +101,7 @@ INSERT INTO SCM_MGR.SCM_ADM_PROC_M (PROC_NM, COL_NM, COL_TP_CD, DATA_TP_CD, SORT
 
 | COL_NM | DATA_TP_CD | 비고 |
 |---|---|---|
-| `o_rc` (소문자) | `CURSOR` | 메인 데이터 cursor. **FE 가 `data.o_rc` 로 읽음** |
+| `o_rc` (소문자) | `CURSOR` | 메인 데이터 cursor. **FE 가 `data.o_rc` 로 읽음** (2026-11-13 정정: 커서 키는 SP 별 — `SCM_ADM_PROC_M` COL_NM 등록값을 따른다. DM 계열 화면은 `o_rc1`, admin 계열은 `o_rc` 가 실제로 쓰임 · `sp-cursor-name-response-key.md` 참조) |
 | `O_RESULT_CURSOR` (대문자) | `PROC_RESULT` | 결과 상태 cursor. FE 는 보통 무시 (BE 가 error 처리에 활용) |
 
 ### §1.3 SAVE / MUTATION SP 는 단일 cursor 도 허용
@@ -169,7 +169,7 @@ HAVING SUM(CASE WHEN COL_NM='o_rc' THEN 1 ELSE 0 END) = 0;  -- 위반 SP 목록
 
 ## §4. PR 머지 게이트
 
-- [ ] 모든 GET SP 는 O_RC + O_RESULT_CURSOR 2 OUT 의무
+- [ ] 모든 GET SP 는 O_RC + O_RESULT_CURSOR 2 OUT 의무 (2026-11-14 정정: 데이터 커서 이름은 SP 별. PROC_M 등록값 o_rc1 537, o_rc2 111, o_rc 52, o_rc3 43, 대문자 O_RC1 18. 사내 DB 실측 2026-11-13 21:51)
 - [ ] PROC_M COL_NM 정확히 `o_rc` (소문자) + `O_RESULT_CURSOR` (대문자)
 - [ ] `__asis-mapping__.md ## SP 변환` 표에 cursor 패턴 명시
 

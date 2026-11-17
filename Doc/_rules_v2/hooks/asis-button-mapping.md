@@ -140,9 +140,9 @@ fi
 
 | 키 | 정책 | false 허용 조건 |
 |---|---|---|
-| `insert` | **Hidden allowlist** | AS-IS InsertButton 없음 + customButtons 가 대체 |
-| `delete` | **Hidden allowlist** | AS-IS DeleteButton 없음 + customButtons 가 대체 |
-| `save` | **Hidden allowlist** | AS-IS SaveButton 없음 + customButtons 즉시 mutate |
+| `insert` | **Hidden allowlist** | AS-IS InsertButton 없음 + customButtons 가 대체 (2026-11-13 정정: CR-070 반영. 화면에 그 기능이 있어 `hotkeyConfig` 핸들러를 줄 때만 노출하고 버튼 코드 권한이 없으면 숨김. AS-IS override 본문이 비어 있으면 숨김) |
+| `delete` | **Hidden allowlist** | AS-IS DeleteButton 없음 + customButtons 가 대체 (11-13 정정) |
+| `save` | **Hidden allowlist** | AS-IS SaveButton 없음 + customButtons 즉시 mutate (11-13 정정) |
 | `search` | **Always-visible** | false 금지. SearchArea 처리 또는 `searchAction` prop 의무 |
 | `sort` | **Always-visible** | false 금지. 생략 = 자동 활성 |
 | `filter` | **Always-visible** | false 금지. 생략 = 자동 활성 |

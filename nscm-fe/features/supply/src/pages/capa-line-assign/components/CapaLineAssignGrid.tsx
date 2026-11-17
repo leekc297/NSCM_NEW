@@ -284,6 +284,24 @@ export const CapaLineAssignGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns, dateColumns]);
 
+  // 정수 입력제한(binding→규칙) — LANE_QTY(정적) + 동적 날짜컬럼 전건. AS-IS 패리티.
+  //   AS-IS 는 LANE_QTY(메타 FPTextBox) 와 동적 날짜컬럼을 C# `SetNumericColumnFormat(..., 0, 0)` 으로
+  //   정수 0자리화한다(cs:4158 / SheetUtils.cs:982-1005 — `fixedColumnName` 뒤 날짜컬럼 전 구간). 메타를
+  //   `FPNumber` 로 바꾸지 않고(= AS-IS 이탈 회피) 공용 DataGrid 의 `numberRules` prop 으로 코드 숫자제한을
+  //   건다(DataGrid.tsx:507-513 — 편집/붙여넣기 핸들러에서 binding 으로 읽음, 컬럼 생성과 무관해 안전).
+  //   주의: 동적 컬럼을 `FlexGridColumnConfig.integerOnly`(config 필드)로 주면 그 값이 wijmo Column 생성에
+  //   섞여 컬럼 전체가 렌더 실패한다(리포 전체 미사용 = 미검증 경로) — 그래서 동적 컬럼도 binding 을
+  //   numberRules 에 실어 안전 경로로 건다. LANE_QTY 는 ELTR 전용이라 ASSEMBLY 모드엔 무영향.
+  const numberRules = useMemo(() => {
+    const rules: Record<string, { integerOnly: true }> = { [COLUMN.LANE_QTY]: { integerOnly: true } };
+    for (const band of dateColumns) {
+      for (const leaf of band.columns ?? []) {
+        if (leaf.binding) rules[leaf.binding] = { integerOnly: true };
+      }
+    }
+    return rules;
+  }, [dateColumns]);
+
   return (
     <DataGrid
       gridRef={gridRef}
@@ -292,6 +310,7 @@ export const CapaLineAssignGrid = ({
       itemsSource={data as unknown as WijmoRowItem[]}
       staticColumns={columns}
       dynamicColumns={dateColumns}
+      numberRules={numberRules}
       comboParams={comboParams}
       sheetName={ADMIN_SHEET_NAME[sheet]}
       excelFileName='CapaLineAssign'

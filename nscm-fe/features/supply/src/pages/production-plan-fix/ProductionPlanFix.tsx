@@ -4,12 +4,14 @@ import dayjs from 'dayjs';
 import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
+import { sessionTimeZone } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ProductionPlanFixForm } from './components/ProductionPlanFixForm';
 import { ProductionPlanFixGrid } from './components/ProductionPlanFixGrid';
@@ -108,49 +110,86 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
-  // Unfix(btnUnfix) — R2 권한(CanUpdate→SAVE, MSG00096) / R1 조회선행 / R3 셀선택(MSG00134)+confirm(MSG00016).
+  // 선택 셀 존재 — AS-IS Unfix 전제(selCells<1 → MSG00134). 자매 SCP0025 hasSelectedCell 과 동일.
+  //   Wijmo 자동(0,0) 선택 탓에 데이터 로드 후엔 실질 상시 통과하나, 두 화면 구조 정합을 위해 유지한다.
+  const hasSelectedCell = (): boolean => {
+    const g = gridRef.current;
+    return !!g && g.rows.length > 0 && (g.selection?.row ?? -1) >= 0 && (g.selection?.col ?? -1) >= 0;
+  };
+
+  // Unfix(btnUnfix) — R2 권한(CanUpdate→SAVE, MSG00096) / R1 조회선행 / R3 셀선택→confirm→수집(AS-IS SaveData_FixInfo_U).
   //   payload 는 편집(dirty)이 아니라 선택 셀 기반 — AS-IS SaveData_FixInfo_U(cs:1249-1544)는 선택 range 의
   //   Prod Plan 행 × D_(수량 있는 일자, W_ 는 주 확장) 셀을 편집 없이 ACTIVE_FLAG='D' 로 전송한다
   //   (gap-resolve iter-2 — 종전 dirty 기반은 "편집한 셀만 해제 가능" 불일치. 자매 정본 SCP0025 동일 구조).
-  //   R3 판정은 grid.selection 존재 여부가 아니라 payload 조립 결과로 한다 — Wijmo FlexGrid 는 itemsSource
-  //   바인딩 시 (0,0) 셀을 자동 선택해 selection.row 만으로는 "선택 안 함"을 구분할 수 없다(자매 SCP0013
-  //   buildFixPayload/runFix 와 동일 패턴, 실사용 리포트 — 날짜 안 고르고 눌러도 selection 이 항상 존재해
-  //   confirm 으로 바로 넘어갔다). 기본 선택 셀은 Prod Plan 행의 날짜(D_/W_) 열이 아니므로 payload 가 0건이다.
+  //   AS-IS 순서: selCells 검사(cs:1312) → confirm(cs:1319) → 수집 → 수집 0건(cs:1535). 자매 SCP0025 와 동일하게
+  //   confirm 을 수집 검사보다 먼저 띄우고, 수량 없는 빈 셀만 선택한 경우는 confirm 후 "삭제할 데이터가 없습니다"
+  //   (NO_DELETE_DATA — AS-IS iCount==0 MSG00046→MSG01078)로 안내한다. 종전엔 수집 0건을 confirm 전에
+  //   SELECT_CELL 로 통합(2026-10-12 M9)했으나 SCP0025 기준 AS-IS 통일을 위해 되돌렸다(사용자 지시 2026-11-12).
   const handleUnfix = async () => {
     // R2 — 권한 게이트(AS-IS CanUpdate → TO-BE SAVE 권한). AS-IS 순서대로 0행 검사(cs:1259)보다 먼저 검사한다(cs:1204).
     if (!hasButton('SAVE')) {
       void setAlert({ type: 'alert', content: t(MSG.NO_PERMISSION, '_No permission.') });
       return;
     }
-    // R1 — 미조회(데이터 없음) 상태면 안내 후 return. AS-IS 는 무반응(cs:1259)이나 TO-BE 는 안내를 유지(사용자 결정).
+    // R1 — 미조회(데이터 없음). AS-IS 는 무반응(cs:1259)이나 TO-BE 는 안내를 유지한다. 데이터 0건은 선택 자체가
+    //   불가하므로 "행 미선택"(SELECT_CELL)으로 안내한다 — 자매 SCP0025 R1 정합(설계 07 R1 승인, 2026-11-12 통일).
     if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.SEARCH_FIRST, '_Search before unfix.') });
-      return;
-    }
-    // R3 — 셀 선택(payload 0건 → MSG00134) + confirm(AS-IS 순서: selCells 검사 → confirm → 수집, cs:1311-1319).
-    gridRef.current?.finishEditing();
-    const payload = buildUnfixPayload(gridRef.current);
-    if (payload.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.SELECT_CELL, '_Select a target cell.') });
       return;
     }
+    // R3a — 셀 선택 자체가 없으면 "행 미선택"(AS-IS selCells<1, cs:1312).
+    if (!hasSelectedCell()) {
+      void setAlert({ type: 'alert', content: t(MSG.SELECT_CELL, '_Select a target cell.') });
+      return;
+    }
+    // R3b — AS-IS 순서대로 confirm 을 수집보다 먼저 띄운다(cs:1319). 취소 시 return.
     const ok = await setAlert({ type: 'confirm', content: t(MSG.CONFIRM_UNFIX, 'Do you want to delete it?') });
     if (!ok) return;
+    // R3c — 확인 후 대상 수집. 수량 있는 셀 0건(빈 셀만 선택)이면 "삭제할 데이터가 없습니다"(AS-IS iCount==0, cs:1535).
+    gridRef.current?.finishEditing();
+    const payload = buildUnfixPayload(gridRef.current);
+    if (payload.length === 0) {
+      void setAlert({ type: 'alert', content: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
+      return;
+    }
     unfixCountRef.current = payload.length;
     mutateMain(payload as unknown as MainRow[]);
   };
 
-  // 기간 프리셋 — GetDayRange(weeks) 등가 클라 산정(from=오늘, to=오늘+weeks*7-1). dayjs 로컬(함정12).
-  const handlePreset = (weeks: number) => {
-    const from = dayjs();
-    const to = from.add(weeks * 7 - 1, 'day');
-    setSearchCondition({ fromYyyymmdd: from.format('YYYYMMDD'), toYyyymmdd: to.format('YYYYMMDD') });
+  const session = useSessionStore(state => state.session);
+  // 기간 프리셋 — AS-IS GetDayRange(W26/W52, cs:1184~1193): 전역 콤보 SCM0001_GET_SCP_DAY_PERIOD 를
+  //   fromDate=''(서버가 timezone 으로 '오늘' 산출)·offsetDay=weeks*7-1·timeZone=session.tmzCd 로 호출해
+  //   사용자 등록 timezone 기준 기간을 받는다(종전 dayjs().add 는 브라우저 로컬이라 비-KST 사용자 날짜경계
+  //   오차, 2026-11-12 교정). 서버 실패/빈값/tmzCd 없음이면 dayjs 로컬 근사로 폴백.
+  const handlePreset = async (weeks: number) => {
+    const offsetDay = weeks * 7 - 1;
+    try {
+      const rows = await apiClient.getCombo({
+        comboId: 'SCM0001_GET_SCP_DAY_PERIOD',
+        mnuId: MENU_ID,
+        fromDate: '',
+        offsetDay: String(offsetDay),
+        timeZone: sessionTimeZone(session),
+      });
+      const [from, to] = String(rows?.[0]?.CODE ?? '').split(':');
+      if (from?.length === 8 && to?.length === 8) {
+        setSearchCondition({ fromYyyymmdd: from, toYyyymmdd: to });
+        return;
+      }
+    } catch {
+      // 서버 실패 — 아래 dayjs 폴백으로 진행
+    }
+    const f = dayjs();
+    setSearchCondition({
+      fromYyyymmdd: f.format('YYYYMMDD'),
+      toYyyymmdd: f.add(offsetDay, 'day').format('YYYYMMDD'),
+    });
   };
 
   // 진입 시 조회기간 기본값 = W52 — AS-IS InitControls `dCalendar.InitValue = GetDayRange(PeriodType.W52)`
   //   (cs:430) 재현. 탭 저장값(persisted store)이 이미 있으면 유지, 빈 경우에만 세팅(gap-resolve iter-2).
   useEffect(() => {
-    if (!sc.fromYyyymmdd && !sc.toYyyymmdd) handlePreset(PRESET_W52);
+    if (!sc.fromYyyymmdd && !sc.toYyyymmdd) void handlePreset(PRESET_W52);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

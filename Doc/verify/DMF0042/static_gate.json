@@ -1,0 +1,66 @@
+{
+ "menu_id": "DMF0042",
+ "rows": 3834,
+ "static_judged": 3801,
+ "runtime_pending": 0,
+ "dist": {
+  "PASS": 102,
+  "ERROR": 2551,
+  "판정필요": 61,
+  "FAIL": 13,
+  "NA": 1074
+ },
+ "fail_direct": 1,
+ "fail_user": 0,
+ "fail_by_rule": {
+  "I4": 1
+ },
+ "error_by_prefix": {
+  " | [미검증] 검사기(_verify": 642,
+  " | [미검증] 검사기(_trace.": 515,
+  "진입점 집계 — 대조표 DMF0042": 103,
+  "진입점 집계 1검사 — ERROR:1": 52,
+  " | [미검증] 검사기(combo_o": 51,
+  "검사기 있음(_verify.spec(": 43,
+  "진입점 집계 2검사 — ERROR:2": 42,
+  "이 표에 구현 위치 열이 없고 행에도": 39,
+  " | [미검증] 검사기(smoke 조": 34,
+  "진입점 집계 4검사 — ERROR:4": 23,
+  "진입점 집계 11검사 — ERROR:": 23,
+  " | [미검증] 검사기(popup_a": 22
+ },
+ "runtime_fail_prev": 1,
+ "runtime_fail_rows": [
+  {
+   "row_id": "EG-150732a5",
+   "rule_id": "F4",
+   "target": "DMF0042 전 컬럼 선택 조회 Biz Plan",
+   "evidence": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA(Biz Plan) 칸 41개 전부 선택 조회 오류: ORA-00960: ambiguous column naming in select list"
+  }
+ ],
+ "rules_static_measured": [
+  "A6",
+  "B8",
+  "DB-SYN",
+  "F1",
+  "F10",
+  "G5",
+  "H1",
+  "I1",
+  "I4",
+  "MS1",
+  "N1",
+  "X-LOC",
+  "X-ROW"
+ ],
+ "fails": [
+  {
+   "row_id": "V-d3787247",
+   "rule_id": "I4",
+   "target": "DMF0042 화면",
+   "expect_src": "DOC:규칙 I4 정의 · 결함원장 유형(Doc/verify/_engine_gap.csv)",
+   "evidence": "t() 코드 16개 중 같은 문구의 앞선 코드가 있는데 새로 채번 1: LBL00711↔LBL00309",
+   "tobe_ref": "META SCM_ADM_MSG_M 중복 문구 · nscm-fe\\features\\demand\\src\\pages"
+  }
+ ]
+}

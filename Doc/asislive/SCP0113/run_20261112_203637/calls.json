@@ -1,0 +1,496 @@
+{
+ "id": "SCP0113",
+ "window": [
+  "2026-11-12 20:36:37.055",
+  "2026-11-12 20:37:32.628"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 20:36:37.461",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 27.67,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:37.591",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 28,
+   "rows_kind": "DataSet rows",
+   "ms": 122.41,
+   "params": {
+    "Code": "PlantByGroup1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlantByGroup1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:37.710",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.09,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0113"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0113'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:37.736",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 18.84,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:38.271",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0084_GET_COMBOBOX_DATA",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 15,
+   "rows_kind": "DataSet rows",
+   "ms": 384.4,
+   "params": {
+    "p_lookup_type": "SCM_LGTM_OCCR_RSN_CD",
+    "p_valid_yn": "Y"
+   },
+   "inline": "EXEC SCP0084_GET_COMBOBOX_DATA @p_lookup_type=N'SCM_LGTM_OCCR_RSN_CD',@p_valid_yn=N'Y'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:38.431",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0084_GET_COMBOBOX_DATA",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 139.98,
+   "params": {
+    "p_lookup_type": "SCM_LGTM_EXHT_TP_CD",
+    "p_valid_yn": "Y"
+   },
+   "inline": "EXEC SCP0084_GET_COMBOBOX_DATA @p_lookup_type=N'SCM_LGTM_EXHT_TP_CD',@p_valid_yn=N'Y'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:38.829",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 380.38,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:39.039",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MASTER_DATA",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 15,
+   "rows_kind": "DataSet rows",
+   "ms": 116.95,
+   "params": {
+    "p_lookup_type": "SCM_LGTM_CODE_NAME_FOR_REPORT",
+    "p_segment1": "SRCE_TP_CD",
+    "p_segment2": "EOH"
+   },
+   "inline": "EXEC SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MASTER_DATA @p_lookup_type=N'SCM_LGTM_CODE_NAME_FOR_REPORT',@p_segment1=N'SRCE_TP_CD',@p_segment2=N'EOH'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:45.017",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 5942.04,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:46.249",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_BASE_MONTH",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 1186.57,
+   "params": {
+    "p_plan_date": "20260914"
+   },
+   "inline": "EXEC SCP0113_GET_BASE_MONTH @p_plan_date=N'20260914'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:46.778",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0101_GET_INVENTORY_TREND",
+   "sp": "SCP0101_GET_INVENTORY_TREND",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 33469,
+   "rows_kind": "DataSet rows",
+   "ms": 807898.26,
+   "params": {
+    "p_yyyymm": "202609",
+    "p_division_id": "81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "p_plant_id": "",
+    "p_item_id": "",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0101_GET_INVENTORY_TREND @p_yyyymm='202609', @p_division_id='81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG', @p_plant_id='', @p_item_id='', @debug_mode='F'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:46.969",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LGTM_MONTHLY_QTY_INPUT_PERIOD",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 704.47,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LGTM_MONTHLY_QTY_INPUT_PERIOD",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.266",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 282.6,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Long Term Stock Management"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='Long Term Stock Management'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.313",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 5.56,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Long Term Stock Management"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='Long Term Stock Management'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.364",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 68,
+   "rows_kind": "DataSet rows",
+   "ms": 6.06,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOH Ending Inventory"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='BOH Ending Inventory'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.403",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 5.1,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PSI Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='PSI Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.414",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 4.28,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PSI Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='PSI Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:47.431",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 59,
+   "rows_kind": "DataSet rows",
+   "ms": 7.5,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOH Long-Term Stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='BOH Long-Term Stock'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:48.964",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 1492.19,
+   "params": {
+    "MenuID": "Long-term stock MGMT",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Long-term stock MGMT', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:49.306",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 2.43,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0113"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0113'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:36:55.492",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCP0080_GET_GROUP_CODE_MANAGEMENT",
+   "sp": "SCP0080_GET_GROUP_CODE_MANAGEMENT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4526,
+   "rows_kind": "DataSet rows",
+   "ms": 1517058.72,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_id": "A3000,A7000,A8000,A8200,A8210,A9000,F5300,F6000,F6200,F7000,F7100,F7200,F7300,P5000,P5500,P9500,PL500",
+    "p_model_id": "",
+    "p_nickname": "",
+    "p_check_fcst": "N",
+    "p_check_production": "N",
+    "p_check_active": "N",
+    "p_check_bom": "N",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0080_GET_GROUP_CODE_MANAGEMENT @p_division_id='81', @p_operation_id='A3000,A7000,A8000,A8200,A8210,A9000,F5300,F6000,F6200,F7000,F7100,F7200,F7300,P5000,P5500,P9500,PL500', @p_model_id='', @p_nickname='', @p_check_fcst='N', @p_check_production='N', @p_check_active='N', @p_check_bom='N', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:37:01.045",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_BASE_MONTH",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 15.16,
+   "params": {
+    "p_plan_date": "20260914"
+   },
+   "inline": "EXEC SCP0113_GET_BASE_MONTH @p_plan_date=N'20260914'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:37:01.062",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 2.93,
+   "params": {},
+   "inline": "EXEC SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:37:01.071",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 4.8,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Long Term Stock Management"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='Long Term Stock Management'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:37:01.101",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 4.5,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Long Term Stock Management"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='Long Term Stock Management'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:37:01.164",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 32.76,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PSI Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='PSI Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:37:01.179",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 13,
+   "rows_kind": "DataSet rows",
+   "ms": 3.74,
+   "params": {
+    "p_program_id": "SCP0113",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PSI Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0113', @p_user_id='jaeuk.shin', @p_sheet_name='PSI Detail'",
+   "phase": "find"
+  }
+ ]
+}

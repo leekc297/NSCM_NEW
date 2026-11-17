@@ -21,7 +21,7 @@
 | 11 | [11_asis_parity.md](11_asis_parity.md) | AS-IS 분석·정합 | 4축 매핑/원소스 전량 Read/분석서 표준 |
 | 12 | [12_process_ops.md](12_process_ops.md) | 프로세스·운영·배포 | 게이트 3종/사내 적용/이관 패키지/git/로컬 |
 
-## 전수 분류표 (hook 126 — 커버리지 검증 원장)
+## 전수 분류표 (hook 156 · 2026-11-13 디스크 실측 — 커버리지 검증 원장)
 
 > 형식: `#번호 hook파일명 → 소속 카테고리(첫 번째 = 주 소속)`. RULESET_MASTER §4 번호 체계.
 
@@ -178,6 +178,11 @@
 | 149 | remediation-closure-symptom-reproduction | 12, 10 |
 | 154 | search-condition-labelless-toggle-input-column | 01, 04 |
 | 155 | search-area-bulk-input-button-popup | 04, 01 |
+| 150 | dept-id-derivation-standard | 09, 12 |
+| 151 | asis-db-live-connection-mandatory | 11, 09, 12 |
+| 152 | db-source-refresh-before-work | 09, 12 |
+| 153 | pinpoint-request-scope-first | 12 |
+| 156 | ui-mandatory-12-behaviors | 01, 04, 03, 11 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 
@@ -222,3 +227,4 @@ ls Doc/_rules_v2/hooks/*.md | wc -l
 > 2026-10-21 **#154 search-condition-labelless-toggle-input-column 신설** — 카테고리 01(주·디자인 배치) + 04(조회조건). 라벨 없는 Radio/CheckBox 조회조건 = 입력창 열 배치(사용자 지시, SCP0100 캡처).
 > 2026-10-23 **#154 v2 개정** — 조회조건 Radio/CheckBox = 좌측 라벨 열(조건명/그룹명) + 입력 열 시작선(컨트롤). Checkbox 박스만(labelText 금지)·조건마다 1칸 · v1 NBSP 무라벨 폐지(사용자 지시, SCP0100 캡처 · 정본 GlobalPsiReportForm).
 > 2026-10-23 **#155 search-area-bulk-input-button-popup 신설** — 카테고리 04(주·조회조건) + 01(버튼·팝업 배치). AS-IS 조회영역 일괄 입력 묶음 = 버튼 영역 버튼 + 입력 팝업(정본 SCP0096).
+> 2026-11-13 **전수 점검 등재(신설 0)** — 표에 없던 5개 추가: #150 dept-id-derivation-standard(09·12) · #151 asis-db-live-connection-mandatory(11·09·12) · #152 db-source-refresh-before-work(09·12) · #153 pinpoint-request-scope-first(12) · #156 ui-mandatory-12-behaviors(01 주·04·03·11 — 파일 머리말의 카테고리 표기 그대로). #150~#153 의 카테고리는 RULESET_MASTER §4 의 분류·트리거 열에서 옮긴 것(2026-11-13 점검자 배정 · 조정 가능). 156 파일 / MISSING 0.

@@ -14,7 +14,7 @@
 
 > "local 에서는 pnpm 은 실행하지 않습니다."
 
-CLAUDE.md §8 의 일반 가이드 표 (`pnpm local`) 는 **로컬 실제 절차 아님** — 참조 금지.
+CLAUDE.md §8 의 일반 가이드 표 (`pnpm local`) 는 **로컬 실제 절차 아님** — 참조 금지. (2026-11-13 정정: 현행 CLAUDE.md(2026-10-12 경량 재구성)에는 §8 이 없음 — 그 표는 보관본 `Doc/_archive/CLAUDE_md_full_2026-10-12.md` §8 "도구 빠른 참조" 에 있다. 참조 금지는 그대로)
 
 ---
 
@@ -39,7 +39,7 @@ FE: cd /d C:\Projects\NSCM\nscm-fe\apps\web && node_modules\.bin\vite.cmd --port
 | 1 | ❌ `pnpm local` / `pnpm dev` / `pnpm start` (FE) | turbo daemon + shamefully-hoist 사이드이펙트 → lru-cache / js-tokens transform error 재현 위험 |
 | 2 | ❌ `cd nscm-fe && ...` (root 에서 시작) | FE 는 `apps/web/` 안에서 직접 vite 실행이 표준 |
 | 3 | ❌ `./gradlew bootRun` (profile 미지정) | `--spring.profiles.active=local` 미지정 시 default profile → 사내 Oracle 미연결 |
-| 4 | ❌ CLAUDE.md §8 의 `pnpm local` 표 인용 | 일반 가이드 — 로컬 실제 절차 아님 |
+| 4 | ❌ CLAUDE.md §8 의 `pnpm local` 표 인용 | 일반 가이드 — 로컬 실제 절차 아님 (11-13 정정: §8 은 현재 보관본에만 있음) |
 
 ---
 

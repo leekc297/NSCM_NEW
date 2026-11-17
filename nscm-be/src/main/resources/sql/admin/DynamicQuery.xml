@@ -7,7 +7,7 @@
 
 	<resultMap id="dynamicQueryValidateColumns" type="com.lgcns.nscm.framework.model.CustomMap" />
 
-	<select id="executeDynamicQuery" statementType="CALLABLE" resultType="java.util.HashMap">
+	<select id="executeDynamicQuery" statementType="CALLABLE" resultType="java.util.HashMap" timeout="300">
 		<![CDATA[
 		{ call SCM_MGR.PKG_SYS0013.P_SYS0013_EXECUTE_QUERY(
 			  #{sqlText, mode=IN, jdbcType=VARCHAR}

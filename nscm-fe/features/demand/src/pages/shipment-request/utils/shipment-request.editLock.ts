@@ -11,8 +11,10 @@
 //     R3 행 액션 게이트: 셀 편집·팝업은 action='I'(신규) 또는 조회행 변경('M') — 조회영역 기본 read-only는
 //                       canEdit(hasButton EDIT)이 mount 1회로 담당(#2 LockColumn 446 / convert-core §2.4).
 //     R4 Frozen(D_)  : 기존행=행별 SHIP_FROZEN(From Site별) 카운트만큼 선두 D_ 잠금(cs 654-693).
-//                       신규행(I)=From Site 미선택이라 SHIP_FROZEN 없음 → AS-IS 처럼 '오늘+10일' 이전 D_ 잠금
-//                       (cs 1012-1047 Today.AddDays(10)). isInsertFrozenDay / insertFrozenCutoffYmd.
+//                       신규행(I)=From Site 미선택이면 '오늘+10일' 이전 D_ 잠금(cs 1012-1047 Today.AddDays(10),
+//                       isInsertFrozenDay). BOD 팝업으로 From Site 가 채워지면 그 사이트 SHIP_FROZEN 으로 교체
+//                       (기존행과 동일 isFrozenLeadingDay) — AS-IS deviation(사용자 지시 2026-11-10, SCM0001 콤보
+//                       SHIP_FROZEN 재사용). 교체로 길어진 선두 D_ 의 기존 입력값은 applyToInsertRow 가 clear.
 //     R5 Insert 정적 : 신규행에서 편집 대상 정적 컬럼만 개방(#12-14/#18 LockRange) — 그 외 자동 read-only.
 import { BUCKET_TYPE, EDITABLE_MEASURE, INPUT_MEASURE_WHITELIST } from '../shipment-request.constants';
 import type { ShipmentRequestRow } from '../shipment-request.types';
@@ -92,12 +94,20 @@ export const evalShipmentDynCell = (params: {
   // R4 마감(frozen) D_ 판정 — AS-IS cs 486/540 은 마감 구간을 전 measure 행에 회색(242,242,242)+잠금으로 칠한다
   //   → 음영(shaded)에 포함(Daily D_ 에만 해당). 기존행: SHIP_FROZEN(From Site별) 선두 D_(cs 540).
   //   신규행(I): From Site 미선택이라 SHIP_FROZEN 이 없어, AS-IS 처럼 '오늘+10일' 이전 D_ 를 잠근다(cs 1022·1042).
+  // 신규행(I): From Site 미선택이면 '오늘+10일' 플랫(cs 1022). BOD 팝업으로 From Site 가 채워지면
+  //   그 사이트의 SHIP_FROZEN(SCM_MST_SITE)으로 교체 — 기존행과 동일한 isFrozenLeadingDay 를 탄다
+  //   (applyToInsertRow 가 SHIP_FROZEN 세팅 + 선두 frozen D_ clear). 기존행: 항상 SHIP_FROZEN 선두 D_.
+  const hasFromSite = typeof row?.FROM_SITE === 'string' && row.FROM_SITE.trim() !== '';
   const frozen =
-    action === 'I'
+    action === 'I' && !hasFromSite
       ? isInsertFrozenDay(binding, insertFrozenCutoffYmd)
       : isFrozenLeadingDay(binding, row, dOrderedDayBindings);
-  // 음영(Gray): 입력목록 밖(집계/시스템) measure 행 OR 마감(frozen) D_ 셀.
-  const shaded = !inputMeasure || frozen;
+  // 음영(Gray) = 마감(frozen) D_ 셀 뿐이다. AS-IS cs 486/540 은 회색(242,242,242)을 Frozen 선두 구간에만
+  //   칠하고, 집계/시스템 measure 행이라고 기간열 전체를 회색으로 덮지 않는다(공통 measure 는 ToSite~Requestor
+  //   정적열만 연파랑). `!inputMeasure` 를 음영에 넣으면 Frozen 이후까지 회색이 번져 AS-IS 와 어긋난다
+  //   (사용자 신고 2026-11-09 "Frozen 구간 이후, 공통 Measure 색상 불필요"). 편집 가부는 아래 R2 게이트가
+  //   별도로 막으므로 음영과 분리한다.
+  const shaded = frozen;
 
   // R1 버킷 게이트 — 활성 버킷 kind 만 편집.
   if (kind !== bucketKind(bucketType)) return { editable: false, shaded };
@@ -156,10 +166,11 @@ export const insertStaticEditable = (
   }
 };
 
-// R5 보조 — Insert 행 모달 전용 입력 셀 (직접 타이핑 불가, dblclick 팝업으로만 값 입력).
+// R5 보조 — Insert 행 모달 셀 (직접 키인 + dblclick 팝업 병행).
 //   PROJECT_CODE = 40 제외(design 02 §3 40 비활성) / TR_MODE = 상시(BOD 셀 아이콘 노출) /
-//   ITEM_ID = 상시. insertStaticEditable 은 false 를 유지(직접 편집 차단) — 대신 표시(편집 색)와
-//   팝업 아이콘 판정에 이 함수를 쓴다(mkt-fcst FPModal 셀과 동일 계약).
+//   ITEM_ID = 상시. AS-IS 는 이 셋을 TextCellType(cs 243-246, CharacterCasing.Upper)으로 두어
+//   직접 타이핑과 팝업 아이콘을 모두 허용한다 → 이 함수가 '키인 개방 + 팝업 아이콘' 판정을 겸한다
+//   (insertStaticEditable 는 콤보 화이트리스트 전용, 모달 셀은 beginningEdit 이 이 함수로 개방).
 //   주의: 이 함수는 "모달 셀 여부(아이콘/편집색)"만 판정한다 — TR_MODE(BOD) 의 ITEM_ID 선입력 전제
 //   (design 03 §3, AS-IS MSG00098)는 여기서 강제하지 않고 팝업 오픈 시점(canOpenBodPopup)에 차단한다.
 //   AS-IS 도 셀은 상시 클릭 가능하되 클릭 시 ITEM_ID 없으면 MSG 로 막았다 — 아이콘은 유지, 오픈만 가드.

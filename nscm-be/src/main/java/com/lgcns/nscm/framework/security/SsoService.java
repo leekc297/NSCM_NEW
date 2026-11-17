@@ -1,174 +1,108 @@
-// 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+package com.lgcns.nscm.framework.security;
 
-// package com.lgcns.nscm.framework.security;
+import java.io.IOException;
+import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
-// import java.io.IOException;
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.Vector;
+import org.springframework.stereotype.Service;
 
-// import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.stereotype.Service;
+import com.initech.eam.api.NXContext;
+import com.initech.eam.jakarta.nls.CookieManager;
+import com.initech.eam.smartenforcer.SECode;
+import com.initech.provider.crypto.InitechProvider;
+import com.lgcns.nscm.framework.property.CommonProperties;
+import com.lgcns.nscm.framework.property.CommonProperties.Sso;
 
-// import com.initech.eam.api.NXContext;
-// import com.initech.eam.jakarta.api.NXNLSAPI;
-// import com.initech.eam.jakarta.nls.CookieManager;
-// import com.initech.eam.smartenforcer.SECode;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
-// import jakarta.servlet.http.Cookie;
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.servlet.http.HttpServletResponse;
-// import lombok.extern.slf4j.Slf4j;
+/**
+ * LG에너지솔루션 SSO(INISAFE Nexess) Agent 연동 서비스.
+ * SSO 가이드(nexess_Agent config.jsp)의 표준 구현을 Spring Bean으로 옮긴 것.
+ */
+@Slf4j
+@Service
+public class SsoService {
 
-// @Slf4j
-// @Service
-// public class SsoService {
+    /** verifyNexessCookie 검증 옵션 (가이드 표준값) */
+    private static final int VERIFY_OPTION = 10;
+    /** 쿠키 검증 성공 코드 */
+    public static final String RET_CODE_SUCCESS = "0";
 
-//     @Value("${config.sso.service-name}")
-//     private String SERVICE_NAME;
-//     @Value("${config.sso.server-url}")
-//     private String SERVER_URL;
-//     @Value("${config.sso.server-port}")
-//     private String SERVER_PORT;
-//     private String ASCP_URL_SUFFIX = "/api/v1/sso/login_exec";
+    private final Sso sso;
+    private NXContext context;
 
-//     @Value("${config.sso.nls-url}")
-//     private String NLS_URL;
-//     @Value("${config.sso.nls-port}")
-//     private String NLS_PORT;
-//     private String NLS_LOGIN_URL_SUFFIX = "/nls3/clientLogin.jsp";
-//     private String NLS_LOGOUT_URL_SUFFIX = "/nls3/NCLogout.jsp";
-//     private String NLS_ERROR_URL_SUFFIX = "/nls3/error.jsp";
+    public SsoService(CommonProperties commonProperties) {
+        this.sso = commonProperties.getSso();
+    }
 
-//     @Value("${config.sso.nd-url}")
-//     private static String ND_URL;
-//     private String SSO_DOMAIN = ".lgensol.com";
-//     private String TOA = "1";
+    @PostConstruct
+    public void init() {
+        List<String> serverUrlList = new ArrayList<>();
+        serverUrlList.add(sso.getNdUrl());
+        context = new NXContext(serverUrlList, sso.getTimeout());
 
-//     private static int COOKIE_SESSION_TIMEOUT = 3000000;
-//     private static int TIMEOUT = 15000;
+        // Initech 암호화 Provider 등록 (가이드 표준 초기화)
+        if (InitechProvider.isProvenMode()) {
+            InitechProvider.changeMode();
+        }
+        if (Security.getProvider("Initech") != null) {
+            Security.removeProvider("Initech");
+        }
+        InitechProvider.addAsProvider(false, false);
 
-//     private static Vector<String> PROVIDER_LIST = new Vector<String>();
+        CookieManager.setEncStatus(true);
+        // NLS3 web.xml의 CookiePadding 설정과 일치해야 함
+        SECode.setCookiePadding("");
 
-//     private static NXContext context;
+        log.info("SsoService initialized. ndUrl={}, nlsUrl={}", sso.getNdUrl(), sso.getNlsUrl());
+    }
 
-//     static {
-//         List<String> serverurlList = new ArrayList<>();
-//         serverurlList.add(ND_URL);
+    /** Nexess 쿠키에서 SSO 사용자 ID 조회. 미로그인 시 null */
+    public String getSsoId(HttpServletRequest request) {
+        return CookieManager.getCookieValue(SECode.USER_ID, request);
+    }
 
-//         context = new NXContext(serverurlList, TIMEOUT);
+    /** SSO 포탈 로그인 페이지로 이동 (복귀 URL/인증타입 쿠키 설정 후 redirect) */
+    public void goLoginPage(HttpServletResponse response) throws IOException {
+        String ascpUrl = ascpUrl();
+        String nlsLoginUrl = sso.getNlsUrl() + ":" + sso.getNlsPort() + sso.getNlsLoginUrlSuffix();
 
-//         com.initech.provider.crypto.InitechProvider.isPrint = true;
+        log.debug("SSO goLoginPage. ascpUrl={}, nlsLoginUrl={}", ascpUrl, nlsLoginUrl);
 
-//         if (com.initech.provider.crypto.InitechProvider.isProvenMode())
-//             com.initech.provider.crypto.InitechProvider.changeMode();
+        CookieManager.addCookie(SECode.USER_URL, ascpUrl, sso.getSsoDomain(), response);
+        CookieManager.addCookie(SECode.R_TOA, sso.getToa(), sso.getSsoDomain(), response);
 
-//         if (java.security.Security.getProvider("Initech") != null) {
-//             java.security.Security.removeProvider("Initech");
-//         }
+        response.sendRedirect(nlsLoginUrl);
+    }
 
-//         com.initech.provider.crypto.InitechProvider.addAsProvider(false, false);
+    /** Nexess 쿠키 유효성 검증. 성공 시 "0", 실패 시 에러코드, 예외 시 "-1" */
+    public String verifySession(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return CookieManager.verifyNexessCookie(
+                    request, response, VERIFY_OPTION, sso.getCookieSessionTimeout(), sso.getProviderList());
+        } catch (Exception e) {
+            log.error("SSO 쿠키 검증 중 예외 발생", e);
+            return "-1";
+        }
+    }
 
-//         CookieManager.setEncStatus(true);
+    /** SSO 포탈 에러 페이지로 이동 (Nexess 쿠키 제거 후 redirect) */
+    public void goErrorPage(HttpServletResponse response, int errorCode) throws IOException {
+        String nlsErrorUrl = sso.getNlsUrl() + ":" + sso.getNlsPort() + sso.getNlsErrorUrlSuffix();
 
-//         PROVIDER_LIST.add("ssodev.lgensol.com");
-//         PROVIDER_LIST.add("ssolesdev.lgchem.com");
-//         PROVIDER_LIST.add("gssodev.ultiumcell.com");
-//         PROVIDER_LIST.add("gssodev.lgensol.com");
-//         PROVIDER_LIST.add("sso.lgensol.com");
-//         PROVIDER_LIST.add("ssoles.lgchem.com");
-//         PROVIDER_LIST.add("gsso.lgensol.com");
-//         PROVIDER_LIST.add("gssoles.lgchem.com");
-//         PROVIDER_LIST.add("gsso.ultiumcell.com");
+        log.warn("SSO goErrorPage. errorCode={}", errorCode);
 
-//         SECode.setCookiePadding("");
-//     }
+        CookieManager.removeNexessCookie(sso.getSsoDomain(), response);
+        CookieManager.addCookie(SECode.USER_URL, ascpUrl(), sso.getSsoDomain(), response);
 
-//     public String getSsoId(HttpServletRequest request) {
-//         System.out.println("SsoService.getSsoId()");
-//         System.out.println(request.toString());
-//         String sso_id = null;
-//         // sso_id = CookieManager.getCookieValue(SECode.USER_ID, request);
-//         sso_id = CookieManager.getCookieValue(SECode.USER_ID, request);
-//         System.out.println("sso_id: " + sso_id);
-//         return sso_id;
-//     }
+        response.sendRedirect(nlsErrorUrl + "?errorCode=" + errorCode);
+    }
 
-//     public void goLoginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//         System.out.println("SsoService.goLoginPage()");
-//         System.out.println(response.toString());
-//         System.out.println(NLS_URL);
-//         System.out.println(NLS_PORT);
-
-//         String ascpUrl = SERVER_URL + ":" + SERVER_PORT + ASCP_URL_SUFFIX;
-//         String nlsLoginUrl = NLS_URL + ":" + NLS_PORT + NLS_LOGIN_URL_SUFFIX;
-
-//         System.out.println("SECode.USER_URL: " + SECode.USER_URL);
-//         System.out.println("ascpUrl: " + ascpUrl);
-//         System.out.println("SSO_DOMAIN: " + SSO_DOMAIN);
-//         System.out.println("nlsLoginUrl: " + nlsLoginUrl);
-
-//         // 문제가 되는 부분
-//         Cookie[] cookies = request.getCookies();
-//         log.info("Cookie InitechEamUURL : {}", CookieManager.getCookieValue("initechEamUURL", request));
-//         CookieManager.addCookie("InitechEamUURL", ascpUrl, SSO_DOMAIN,
-//         response);
-//         log.info("Cookie InitechEamUURL : {}", CookieManager.getCookieValue("initechEamUURL", request));
-
-//         CookieManager.addCookie(SECode.R_TOA, "2", SSO_DOMAIN, response);
-//         response.sendRedirect(nlsLoginUrl);
-//     }
-
-//     public String getEamSessionCheckAndAgentVaild(HttpServletRequest request, HttpServletResponse response) {
-//         System.out.println("SsoService.getEamSessionCheckAndAgentVaild()");
-//         System.out.println(request.toString());
-//         System.out.println(response.toString());
-
-//         try {
-//             String retCode = CookieManager.verifyNexessCookieAndAgentVaild(request,
-//                     response, 10, COOKIE_SESSION_TIMEOUT, PROVIDER_LIST, SERVER_URL, context);
-//             System.out.println("retCode: " + retCode);
-//             return retCode;
-//         } catch (Exception npe) {
-//             System.out.println("SsoService.getEamSessionCheckAndAgentVaild() - Error Catched");
-//             npe.printStackTrace();
-//             return "-1";
-//         }
-//     }
-
-//     public String getEamSessionCheck(HttpServletRequest request, HttpServletResponse response) {
-//         String retCode = "";
-//         try {
-//             retCode = CookieManager.verifyNexessCookie(request, response, 10, COOKIE_SESSION_TIMEOUT, PROVIDER_LIST);
-//         } catch (Exception npe) {
-//             npe.printStackTrace();
-//         }
-//         return retCode;
-//     }
-
-//     public String getEamSessionCheck2(HttpServletRequest request, HttpServletResponse response) {
-//         String retCode = "";
-//         try {
-//             NXNLSAPI nxNLSAPI = new NXNLSAPI(context);
-//             retCode = nxNLSAPI.readNexessCookie(request, response, 0, 0);
-//         } catch (Exception npe) {
-//             npe.printStackTrace();
-//         }
-//         return retCode;
-//     }
-
-//     public void goErrorPage(HttpServletResponse response, int errorCode) throws IOException {
-//         System.out.println("SsoService.goErrorPage()");
-//         System.out.println(response.toString());
-
-//         String ascpUrl = SERVER_URL + ":" + SERVER_PORT + ASCP_URL_SUFFIX;
-//         System.out.println(ascpUrl);
-//         String nlsErrorUrl = NLS_URL + ":" + NLS_PORT + NLS_ERROR_URL_SUFFIX;
-//         System.out.println(nlsErrorUrl);
-
-//         CookieManager.removeNexessCookie(SSO_DOMAIN, response);
-//         CookieManager.addCookie(SECode.USER_URL, ascpUrl, SSO_DOMAIN,
-//                 response);
-//         response.sendRedirect(nlsErrorUrl + "?errorCode=" + errorCode);
-//     }
-// }
+    private String ascpUrl() {
+        return sso.getServerUrl() + ":" + sso.getServerPort() + sso.getAscpUrlSuffix();
+    }
+}

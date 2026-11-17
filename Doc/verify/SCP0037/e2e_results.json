@@ -129,7 +129,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f4b7b8bf",
@@ -141,19 +142,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3a91275c",
   "result": "PASS",
-  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0(공통 접속 로그 5xx 1건 제외 — 화면 무관 · /api/admin/log/menu-access) · 재오픈 직후 행 0(최초 진입 0)",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
   "tobe_ref": "E2E @trace",
   "cond": "4aa31e4a",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-61a2e3fb",
@@ -165,7 +168,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-729fdbcc",
@@ -177,7 +181,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-296b8c08",
@@ -189,7 +194,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-e7e34a3c",
@@ -201,7 +207,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-0653e17d",
@@ -213,7 +220,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-531ea0e2",
@@ -225,7 +233,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2229f478",
@@ -237,7 +246,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2baa5a25",
@@ -249,7 +259,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-29e08791",
@@ -261,7 +272,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-aff805b7",
@@ -273,7 +285,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-62d55b5f",
@@ -285,7 +298,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-eac4db93",
@@ -297,7 +311,8 @@
    "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-b8148d3c",
@@ -309,127 +324,138 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3d38ef12",
-  "result": "FAIL",
-  "evidence": "DIVISION_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=N — AS-IS COMBO 에디터가 아님",
+  "result": "판정필요",
+  "evidence": "DIVISION_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=N — 편집 불가 칸이라 입력 방식 차이 없음 · 표시 표본 [81] 을 AS-IS 콤보 표시(이름)와 대조 필요(T198)",
   "tobe_ref": "E2E @trace",
-  "cond": "04a42550",
+  "cond": "549110b4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-d95aab98",
-  "result": "PASS",
-  "evidence": "LT_OPERATION: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y",
-  "tobe_ref": "E2E @trace",
-  "cond": "0a7ce10e",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-7b4f5e20",
   "result": "PASS",
   "evidence": "SCM_SITE_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=Y",
   "tobe_ref": "E2E @trace",
-  "cond": "0aea12d0",
+  "cond": "19c63150",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
-  "row_id": "T-7127b90c",
-  "result": "NA",
-  "evidence": "INV_FLAG: AS-IS(Div 81) '기본 →숨김 →표시? →표시? →숨김?' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=N)",
+  "row_id": "T-d95aab98",
+  "result": "PASS",
+  "evidence": "LT_OPERATION: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y",
   "tobe_ref": "E2E @trace",
-  "cond": "f442507c",
+  "cond": "766522e2",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-4d76ffab",
   "result": "PASS",
   "evidence": "LT_DAY: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "08b04819",
+  "cond": "e09756e0",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
-  "row_id": "T-183c62a1",
+  "row_id": "T-7127b90c",
   "result": "NA",
-  "evidence": "INV_FLAG: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "evidence": "INV_FLAG: AS-IS(Div 81) '기본 →숨김 →표시? →표시? →숨김?' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=N)",
   "tobe_ref": "E2E @trace",
-  "cond": "f442507c",
+  "cond": "156e3cd5",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c80fc5a6",
   "result": "PASS",
   "evidence": "LT_DAY: AS-IS 'LT(Day)' = TO-BE 헤더 'LT(Day)'",
   "tobe_ref": "E2E @trace",
-  "cond": "08b04819",
+  "cond": "e09756e0",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-183c62a1",
+  "result": "NA",
+  "evidence": "INV_FLAG: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "156e3cd5",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-ceea9a9b",
+  "result": "PASS",
+  "evidence": "LT_DAY: AS-IS NUMBER(AS-IS 문장) ↔ TO-BE dataType=2 dataMap=N editor",
+  "tobe_ref": "E2E @trace",
+  "cond": "0e7ad6da",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-af607d4b",
   "result": "NA",
   "evidence": "INV_FLAG 현재 그리드에 없음 — 표시 여부는 A5",
   "tobe_ref": "E2E @trace",
-  "cond": "69103d31",
+  "cond": "7fe41784",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-ceea9a9b",
-  "result": "PASS",
-  "evidence": "LT_DAY: AS-IS NUMBER(AS-IS 문장) ↔ TO-BE dataType=2 dataMap=N",
-  "tobe_ref": "E2E @trace",
-  "cond": "367406eb",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2d98a351",
   "result": "PASS",
   "evidence": "SCM_SITE_ID: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
   "tobe_ref": "E2E @trace",
-  "cond": "cd578ece",
+  "cond": "2c870749",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c8b7049a",
@@ -440,7 +466,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1ac80500",
@@ -452,7 +479,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0f0a0d60",
@@ -464,7 +492,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5e4ca4fd",
@@ -476,7 +505,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a0dc0971",
@@ -488,571 +518,619 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-560425d5",
   "result": "FAIL",
   "evidence": "기존행 r0 ITEM_ID 편집=false (AS-IS 잠금) | 신규행 r0 ITEM_ID 편집=false (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "999b19ff",
+  "cond": "d21b5e1e",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-14fbf774",
-  "result": "NA",
-  "evidence": "기존행 r0 INV_FLAG: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 INV_FLAG: 현재 그리드에 없음 — 표시 여부는 A5",
-  "tobe_ref": "E2E @trace",
-  "cond": "ca31767e",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c87d8a68",
   "result": "PASS",
   "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금) | 신규행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "f1e62ced",
+  "cond": "12f27115",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-4902da8c",
   "result": "PASS",
   "evidence": "기존행 r0 LT_OPERATION 편집=false (AS-IS 잠금) | 신규행 r0 LT_OPERATION 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "666e47f0",
+  "cond": "e8e79a43",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-22abda95",
-  "result": "PASS",
-  "evidence": "기존행 r0 SITE_ITEM_VALID_YN 편집=false (AS-IS 잠금) | 신규행 r0 SITE_ITEM_VALID_YN 편집=false (AS-IS 잠금)",
-  "tobe_ref": "E2E @trace",
-  "cond": "ccb75984",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-866ff99b",
   "result": "PASS",
   "evidence": "기존행 r0 LT_DAY 편집=true (AS-IS 편집 가능) | 신규행 r0 LT_DAY 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "8cd0614e",
+  "cond": "7412ed15",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-14fbf774",
+  "result": "NA",
+  "evidence": "기존행 r0 INV_FLAG: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 INV_FLAG: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace",
+  "cond": "2e5d487a",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-22abda95",
+  "result": "PASS",
+  "evidence": "기존행 r0 SITE_ITEM_VALID_YN 편집=false (AS-IS 잠금) | 신규행 r0 SITE_ITEM_VALID_YN 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "df662c09",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-998d18cf",
   "result": "PASS",
   "evidence": "기존행 r0 SCM_SITE_ID 편집=false (AS-IS 잠금) | 신규행 r0 SCM_SITE_ID 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @trace",
-  "cond": "cd578ece",
+  "cond": "2c870749",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-757f0b8a",
   "result": "PASS",
   "evidence": "기존행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금) | 신규행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "7699d0f0",
+  "cond": "e226206b",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-fced7a32",
   "result": "PASS",
   "evidence": "기존행 r0 PLANT_SITE_ID 편집=false (AS-IS 잠금) | 신규행 r0 PLANT_SITE_ID 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "a1a6bc51",
+  "cond": "658306cc",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f65ef911",
   "result": "PASS",
   "evidence": "기존행 r0 NICK_NAME 편집=false (AS-IS 잠금) | 신규행 r0 NICK_NAME 편집=false (AS-IS 잠금)",
   "tobe_ref": "E2E @trace",
-  "cond": "e6e72b41",
+  "cond": "35a969b8",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2bca1c80",
   "result": "판정필요",
   "evidence": "신규행 DIVISION_ID='81' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값) — TO-BE 가 값을 채움: 의도 확인(연쇄 C3/팝업 M4 결과일 수 있음)",
   "tobe_ref": "E2E @trace",
-  "cond": "dc5a110d",
+  "cond": "6d2ef9fd",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-9fac181c",
   "result": "판정필요",
   "evidence": "신규행 LT_OPERATION='SLITTING' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값) — TO-BE 가 값을 채움: 의도 확인(연쇄 C3/팝업 M4 결과일 수 있음)",
   "tobe_ref": "E2E @trace",
-  "cond": "f9c9c25e",
+  "cond": "27e90d54",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-cab60bf4",
   "result": "NA",
   "evidence": "PLANT_SITE_ID AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "84a15e9b",
+  "cond": "eae80432",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f1aa4dad",
   "result": "NA",
   "evidence": "SCM_SITE_ID AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "2acdb3c4",
+  "cond": "14ce8b5f",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-789c4811",
   "result": "NA",
   "evidence": "DIVISION_ID AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "bdfcfa09",
+  "cond": "a78738dd",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-d71d9fa9",
-  "result": "NA",
-  "evidence": "LT_OPERATION AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
-  "tobe_ref": "E2E @trace",
-  "cond": "0bbeb897",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-938d5dcb",
-  "result": "NA",
-  "evidence": "NICK_NAME AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
-  "tobe_ref": "E2E @trace",
-  "cond": "28bc0f49",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-ce446c51",
   "result": "NA",
   "evidence": "ITEM_ID AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "d9f8b374",
+  "cond": "9b2698f2",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
-  "row_id": "T-17dd0bd2",
+  "row_id": "T-938d5dcb",
   "result": "NA",
-  "evidence": "INV_FLAG: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "evidence": "NICK_NAME AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
   "tobe_ref": "E2E @trace",
-  "cond": "f442507c",
+  "cond": "b8ae44d2",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-d71d9fa9",
+  "result": "NA",
+  "evidence": "LT_OPERATION AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "1c6d44db",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c14a29fe",
   "result": "PASS",
   "evidence": "LT_DAY: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @trace",
-  "cond": "08b04819",
+  "cond": "e09756e0",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-17dd0bd2",
+  "result": "NA",
+  "evidence": "INV_FLAG: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "156e3cd5",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-acfa4892",
   "result": "판정필요",
   "evidence": "SCM_SITE_ID: 원천 DIVISION_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "f6f509ed",
+  "cond": "d7472e94",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-999dbb95",
   "result": "판정필요",
   "evidence": "PLANT_SITE_ID: 원천 DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "84d366c6",
+  "cond": "4a4e99ab",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-a7c8b833",
   "result": "NA",
   "evidence": "INV_FLAG: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "4da835b2",
+  "cond": "7c65bc03",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-78e868b6",
   "result": "판정필요",
   "evidence": "DIVISION_ID 연쇄 원천 컬럼 해석 불가 — AS-IS SpdMain_CellClick:654 siMain.SetValue(e.Row, siMain.GetColumnIndex(DefColumns.DIVISION_ID), divisionId) [if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) =]",
   "tobe_ref": "E2E @trace",
-  "cond": "4ec841ac",
+  "cond": "c34db2a4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-045c4eb6",
   "result": "판정필요",
   "evidence": "ITEM_ID: 원천 DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "49e214bf",
+  "cond": "9fe618ca",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c653f122",
   "result": "판정필요",
   "evidence": "NICK_NAME: 원천 ITEM_ID/DIVISION_ID/SCM_SITE_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "83709009",
+  "cond": "a8ce92d4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2ed3882d",
   "result": "NA",
   "evidence": "LT_OPERATION: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)",
   "tobe_ref": "E2E @trace",
-  "cond": "2e95c7d1",
+  "cond": "551ee319",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-fa1be857",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "b042b220",
+  "cond": "093cd446",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f3b52974",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "60f74b50",
+  "cond": "2236810b",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f47f0bc6",
   "result": "판정필요",
   "evidence": "INV_FLAG 연쇄 원천 해석 불가 — AS-IS ClbDivision_SelectedIndexChanged:851 if (siMain.ActiveSheet != null) { if (CString.GetCheckedListValue(dtOperationLT, cboLTOperation.ControlValues) == \"PRE_INSP\") { siMain.Activ",
   "tobe_ref": "E2E @trace",
-  "cond": "e6d72a02",
+  "cond": "45a9a676",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-2abf995a",
   "result": "FAIL",
   "evidence": "신규행 DIVISION_ID 콤보 후보 없음 — 내 Division 목록 콤보 미구현(D00-3-009)",
   "tobe_ref": "E2E @trace",
-  "cond": "a638b2b5",
+  "cond": "bb0139e5",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-8cb2f576",
-  "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
-  "tobe_ref": "E2E @trace",
-  "cond": "397409c2",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-1440b56b",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "7fc010d8",
+  "cond": "d9533bcf",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-8cb2f576",
+  "result": "판정필요",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "tobe_ref": "E2E @trace",
+  "cond": "94c2e6a6",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-21158338",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "b042b220",
+  "cond": "093cd446",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-87286607",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "60f74b50",
+  "cond": "2236810b",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c742f130",
   "result": "판정필요",
   "evidence": "INV_FLAG 연쇄 원천 해석 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "e6d72a02",
+  "cond": "45a9a676",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-a290a3ba",
   "result": "판정필요",
   "evidence": "DIVISION_ID 연쇄 원천 해석 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "a638b2b5",
+  "cond": "bb0139e5",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-9b0dfda8",
-  "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
-  "tobe_ref": "E2E @trace",
-  "cond": "397409c2",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-9b152970",
   "result": "판정필요",
   "evidence": "원천 DIVISION_ID 신규행 편집 불가",
   "tobe_ref": "E2E @trace",
-  "cond": "7fc010d8",
+  "cond": "d9533bcf",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-9b0dfda8",
+  "result": "판정필요",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "tobe_ref": "E2E @trace",
+  "cond": "94c2e6a6",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-410cc3f1",
   "result": "NA",
   "evidence": "ITEM_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "ca7075f9",
+  "cond": "ed576099",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-1b49549c",
-  "result": "NA",
-  "evidence": "INV_FLAG: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
-  "tobe_ref": "E2E @trace",
-  "cond": "cff1830f",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-ed3ecaa7",
   "result": "NA",
   "evidence": "DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "233b9666",
+  "cond": "17b6205b",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-23e55502",
   "result": "NA",
   "evidence": "LT_OPERATION: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "357e1969",
+  "cond": "c8ad95c2",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-f146fa99",
-  "result": "NA",
-  "evidence": "SITE_ITEM_VALID_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
-  "tobe_ref": "E2E @trace",
-  "cond": "7b026346",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-dafa445b",
   "result": "NA",
   "evidence": "LT_DAY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "cdfe309f",
+  "cond": "83ef8298",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-1b49549c",
+  "result": "NA",
+  "evidence": "INV_FLAG: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "2ca49e21",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-f146fa99",
+  "result": "NA",
+  "evidence": "SITE_ITEM_VALID_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "a9dc3a1c",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-7d18156b",
   "result": "NA",
   "evidence": "SCM_SITE_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "3db90cd2",
+  "cond": "f5003aa8",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-b9c4345e",
   "result": "NA",
   "evidence": "LAST_UPDATE_DATE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "bd1ad4a5",
+  "cond": "d9bd4867",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-d4a827c4",
@@ -1064,7 +1142,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-828d9795",
@@ -1076,19 +1155,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-efdfb142",
   "result": "NA",
   "evidence": "PLANT_SITE_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "7ac4f46f",
+  "cond": "24ec024e",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-be691ca9",
@@ -1100,19 +1181,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-6adeb187",
   "result": "NA",
   "evidence": "NICK_NAME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "a930e232",
+  "cond": "7e61a610",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-8354ebff",
@@ -1124,7 +1207,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-13b25eb4",
@@ -1135,7 +1219,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-21bbbb3a",
@@ -1146,7 +1231,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f1c5f7d7",
@@ -1157,7 +1243,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b96f67d4",
@@ -1168,7 +1255,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-020f3c5a",
@@ -1180,7 +1268,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-fdeb33b7",
+  "result": "NA",
+  "evidence": "2: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "be23b506",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-c6268976",
@@ -1192,7 +1294,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3d948c43",
@@ -1204,7 +1307,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-52397efe",
+  "result": "NA",
+  "evidence": "7: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "1e0d1aa5",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-05956b0f",
@@ -1216,7 +1333,86 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-79bf45bf",
+  "result": "NA",
+  "evidence": "COMMON:UC-04: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "c5b793d1",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-ae53fdd6",
+  "result": "NA",
+  "evidence": "COMMON:UC-06: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "b361e37f",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-3a788071",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-51687ed9",
+  "result": "NA",
+  "evidence": "cboDivision: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "14a7a4f8",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-56ee6e34",
+  "result": "NA",
+  "evidence": "cboLTOperation: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "467a5a2a",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "T-0e3a2b97",
+  "result": "NA",
+  "evidence": "clbPlantSite: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "92d1e7d8",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3e840735",
@@ -1228,7 +1424,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-12988574",
@@ -1240,19 +1437,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
- },
- {
-  "row_id": "T-fdeb33b7",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "8c708d3c",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-0f6d291f",
@@ -1264,211 +1450,138 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3c2be75d",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "422bc5e4",
+  "cond": "241b7d25",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-6422d572",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
   "cond": "25d6eb73",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-6db03fd4",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "5f2e526a",
+  "cond": "d9e6d07d",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-7164b188",
-  "result": "판정필요",
-  "evidence": "MSG00060 — checkValidN1 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidN1)에서 판정",
+  "result": "NA",
+  "evidence": "MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
   "cond": "0ceac667",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-52397efe",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "8e576249",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-79bf45bf",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "77aed0a2",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-ae53fdd6",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "da3f7b33",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-3a788071",
-  "result": "NA",
-  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
-  "tobe_ref": "E2E @trace",
-  "cond": "9e647aa3",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-fc4fc8c9",
   "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
+  "evidence": "MSG00006: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'else of (t.DataSet.Tables[0].Rows[0][0].ToString() == \"N\")' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
-  "cond": "806a47e6",
+  "cond": "20a1cec5",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "T-51687ed9",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "ecdeadb3",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-56ee6e34",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "94861ee4",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "T-0e3a2b97",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
-  "tobe_ref": "E2E @trace",
-  "cond": "1b9cae03",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-0e962d80",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "b68da4bc",
+  "cond": "43ceca8c",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-687b80fd",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
+  "result": "판정필요",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "f88bc34c",
+  "cond": "13f65c8c",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-b51be921",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
+  "result": "판정필요",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "f88bc34c",
+  "cond": "13f65c8c",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-0dc5f559",
-  "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
+  "result": "판정필요",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
-  "cond": "f88bc34c",
+  "cond": "13f65c8c",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-f4c72a16",
   "result": "NA",
-  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인 — F1 최종 결과로 재판정(judge E4_F1LINK)",
+  "evidence": "MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
-  "cond": "8cd05735",
+  "cond": "458adf5a",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-44ed8679",
@@ -1479,7 +1592,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2b4bace7",
@@ -1490,7 +1604,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-804453d3",
@@ -1501,63 +1616,69 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-377e14ec",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-05394fc0",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e2267fc9",
   "result": "판정필요",
-  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
+  "evidence": "MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f50b5665",
-  "result": "판정필요",
-  "evidence": "MSG00060 — checkValidN1 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidN1)에서 판정",
+  "result": "NA",
+  "evidence": "MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-af09997b",
   "result": "FAIL",
-  "evidence": "NICK_NAME: SCM_SITE_ID 더블클릭 → 팝업 열림 감지 실패(H6) — 팝업에서 가져온 값이 행에 하나도 반영되지 않음",
+  "evidence": "NICK_NAME: ITEM_ID 더블클릭 → 팝업 열림 감지 실패(H6) · 시도 행 r0, r164, r327 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음",
   "tobe_ref": "E2E @trace",
-  "cond": "aeedb755",
+  "cond": "854cd6f4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-cd33e75d",
@@ -1569,7 +1690,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-8f7c065a",
@@ -1581,7 +1703,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f947ffd0",
@@ -1592,7 +1715,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1f084e80",
@@ -1603,7 +1727,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-036a48ef",
@@ -1614,7 +1739,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6f99a1ab",
@@ -1626,7 +1752,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-91c5a4df",
@@ -1638,7 +1765,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bbd4c091",
@@ -1650,7 +1778,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0555b2f4",
@@ -1662,7 +1791,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-036cfb38",
@@ -1674,30 +1804,33 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-ea497b53",
-  "result": "PASS",
-  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='M' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → 변화 없음(CRUD_TYPE='M' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일 (AS-IS CRUD Status I/U/D 표시)",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → 변화 없음(CRUD_TYPE='' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일 (AS-IS CRUD Status I/U/D 표시)",
   "tobe_ref": "E2E @trace",
   "cond": "4aa31e4a",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-85ec81e0",
-  "result": "PASS",
-  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='M' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → 변화 없음(CRUD_TYPE='M' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일 (AS-IS CRUD Status I/U/D 표시)",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 LT_DAY 편집 → CRUD_TYPE='' · 신규행 Delete → 신규행 1→0 · 기존행 Delete → 변화 없음(CRUD_TYPE='' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일 (AS-IS CRUD Status I/U/D 표시)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e324b261",
@@ -1709,19 +1842,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0ba1cc9a",
-  "result": "PASS",
-  "evidence": "LT_DAY 수정 'M' → 원값 복원 뒤 상태 해제",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] LT_DAY 값 변경이 안 됨('5')",
   "tobe_ref": "E2E @verify 병합 셀",
   "cond": "0c603b16",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-db7a2b6b",
@@ -1733,7 +1868,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-64ed804a",
@@ -1744,7 +1880,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5a26211b",
@@ -1755,7 +1892,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-71509ad6",
@@ -1767,7 +1905,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d26a6a4d",
@@ -1778,7 +1917,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-064a3f71",
@@ -1789,7 +1929,8 @@
    "calls": 4,
    "rows": 4743,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-213efca1",
@@ -1800,7 +1941,8 @@
    "calls": 4,
    "rows": 4743,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2e78175b",
@@ -1811,7 +1953,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b11e78c2",
@@ -1822,7 +1965,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bef622ab",
@@ -1833,7 +1977,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7bfeb3e1",
@@ -1844,7 +1989,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6ede5c29",
@@ -1855,7 +2001,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-22c7376a",
@@ -1866,7 +2013,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-69637bad",
@@ -1877,7 +2025,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dab71ba4",
@@ -1888,29 +2037,32 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-76ee10c4",
   "result": "PASS",
-  "evidence": "CREATION_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2019-07-16 09:50:59'(원값 '2019-07-16 09:50:59')",
+  "evidence": "CREATION_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy-MM-dd' 표시 '2019-07-16 09:50:59'(원값 '2019-07-16 09:50:59')",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9f72ca26",
   "result": "PASS",
-  "evidence": "LAST_UPDATE_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2026-11-07 08:35:38'(원값 '2026-11-07 08:35:38')",
+  "evidence": "LAST_UPDATE_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy-MM-dd' 표시 '2026-11-07 17:29:55'(원값 '2026-11-07 17:29:55')",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a62a1b1b",
@@ -1921,7 +2073,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-350c5c4b",
@@ -1932,7 +2085,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f6b69e68",
@@ -1944,7 +2098,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3f7bdd03",
@@ -1955,7 +2110,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-26bc75fb",
@@ -1966,7 +2122,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-70c61d02",
@@ -1977,7 +2134,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e01ffcc5",
@@ -1988,7 +2146,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a2633626",
@@ -1999,7 +2158,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-09e36265",
@@ -2010,7 +2170,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dd6c21ca",
@@ -2021,7 +2182,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-734a6d5e",
@@ -2032,7 +2194,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-52c33965",
@@ -2043,7 +2206,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-912b5479",
@@ -2054,7 +2218,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bad05fae",
@@ -2065,7 +2230,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7b3121a9",
@@ -2076,7 +2242,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dab3fc4f",
@@ -2087,7 +2254,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3e6471ea",
@@ -2098,7 +2266,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2dfd1a89",
@@ -2109,7 +2278,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-57e51d37",
@@ -2120,7 +2290,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1eac1190",
@@ -2131,7 +2302,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ca57541e",
@@ -2142,7 +2314,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e6ba0e46",
@@ -2153,7 +2326,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f1f1e4f3",
@@ -2164,7 +2338,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0542de28",
@@ -2175,7 +2350,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b31c38a3",
@@ -2186,7 +2362,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-89327cfc",
@@ -2197,7 +2374,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c3de246d",
@@ -2208,7 +2386,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ad2b1614",
@@ -2219,7 +2398,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f443d8e3",
@@ -2230,7 +2410,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-953df649",
@@ -2241,7 +2422,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-46ba41bc",
@@ -2252,7 +2434,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-83407ebe",
@@ -2263,7 +2446,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7a2becc5",
@@ -2274,7 +2458,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9be3844c",
@@ -2285,7 +2470,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-44e8287a",
@@ -2296,7 +2482,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f19cb76d",
@@ -2307,29 +2494,32 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-94d7a4bd",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 313ms(요청~응답 313ms · 벽시계 745ms) · 328행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 241ms(요청~응답 241ms · 벽시계 1115ms) · 328행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ab6d4d26",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 313ms(요청~응답 313ms · 벽시계 745ms) · 328행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 241ms(요청~응답 241ms · 벽시계 1115ms) · 328행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1a1f3edc",
@@ -2341,7 +2531,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-51786a7b",
@@ -2352,7 +2543,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fcfc2031",
@@ -2363,7 +2555,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-242e46d9",
@@ -2374,7 +2567,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5458182b",
@@ -2385,7 +2579,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8e54598d",
@@ -2396,7 +2591,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e8e9d182",
@@ -2407,7 +2603,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-84329c91",
@@ -2418,7 +2615,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-60006988",
@@ -2429,7 +2627,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f0de29d9",
@@ -2440,7 +2639,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-60d3ab1a",
@@ -2452,7 +2652,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-96d7adbf",
@@ -2464,7 +2665,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b06ede41",
@@ -2476,7 +2678,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-696ad1eb",
@@ -2487,7 +2690,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-00f7c53f",
@@ -2499,7 +2703,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-adc931a9",
@@ -2510,7 +2715,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c1aadad2",
@@ -2521,7 +2727,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f5a71b7b",
@@ -2532,7 +2739,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6bd203a2",
@@ -2543,7 +2751,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1b4ec995",
@@ -2555,7 +2764,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a4cef898",
@@ -2567,7 +2777,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-039c112f",
@@ -2578,7 +2789,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-33e62b13",
@@ -2589,7 +2801,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-86ca9aea",
@@ -2600,7 +2813,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1b687dac",
@@ -2611,7 +2825,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "T-3a8a92f4",
@@ -2623,7 +2838,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-cc7eaa08",
@@ -2634,7 +2850,8 @@
    "calls": 2,
    "rows": 4743,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-eaaac0d0",
@@ -2646,7 +2863,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c661343d",
@@ -2658,7 +2876,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2573455f",
@@ -2670,7 +2889,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-786aea51",
@@ -2682,7 +2902,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4657f862",
@@ -2694,7 +2915,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5fbe632a",
@@ -2706,7 +2928,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0b61ce55",
@@ -2718,7 +2941,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-47609c73",
@@ -2730,7 +2954,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6c3585d6",
@@ -2742,7 +2967,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3fe65210",
@@ -2754,7 +2980,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-09de260a",
@@ -2766,7 +2993,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3b66038c",
@@ -2778,7 +3006,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5540ed0b",
@@ -2790,7 +3019,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a22f97e8",
@@ -2802,7 +3032,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-963c267a",
@@ -2814,7 +3045,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9ff70e94",
@@ -2826,7 +3058,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8e4f7c87",
@@ -2838,7 +3071,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e136a86d",
@@ -2850,7 +3084,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-668904fb",
@@ -2862,7 +3097,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e3b4dfa2",
@@ -2874,19 +3110,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-40b09280",
-  "result": "PASS",
-  "evidence": "신규행 r0 LT_DAY 편집=true (AS-IS 편집 가능)",
+  "result": "FAIL",
+  "evidence": "[화면 오류] 신규행 r0 LT_DAY 셀 편집 시작 시 편집기 생성 오류 — LT_DAY: ** Assertion failed in Wijmo: Number expected. Error at assert (http://127.0.0.1:5173/node_modules/.vite/deps/chunk- — 사용자가 이 칸을 편집하면 오류가 난다(편집 시작 자체는 허용 · FE 셀 값 형식↔편집기 형식 불일치 확인)",
   "tobe_ref": "E2E @verify",
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d836dbfa",
@@ -2898,7 +3136,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-766c2f4b",
@@ -2910,7 +3149,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b02045b8",
@@ -2922,7 +3162,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7e36360d",
@@ -2934,7 +3175,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fae480d0",
@@ -2946,7 +3188,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0abd8a09",
@@ -2958,7 +3201,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-30836567",
@@ -2970,7 +3214,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f034009a",
@@ -2982,7 +3227,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-48ced9b2",
@@ -2994,7 +3240,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a6a469f5",
@@ -3006,7 +3253,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-538d39e3",
@@ -3018,7 +3266,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-17151791",
@@ -3030,7 +3279,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4b40e500",
@@ -3042,7 +3292,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b908d0ea",
@@ -3054,19 +3305,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-eed95e79",
-  "result": "FAIL",
-  "evidence": "신규행 r0 LT_DAY: 유효값 '1' 입력 OK(편집기) · 소수 0자리 초과 입력 '1.5' → 값 '' OK · 문자(숫자 아님) 입력 'ab' → 값 '' OK · 최소 1 미만 입력 '0' → 값 '' OK · 최대 100 초과 입력 '101' → 값 '101' NG (AS-IS cell_rules 기대: 소수 0자리 · 정수만(소수·문자 거부) · 최소 1 · 최대 100 · 천단위 Y — 규칙 밖 값 거부) — AS-IS 가 막는 값이 TO-BE 셀에 그대로 들어감(FE 컬럼 editor/dataType·scale 확인)",
+  "result": "ERROR",
+  "evidence": "[입력 경로 실패] LT_DAY r0: 유효값 '1' 이 편집기·키보드 모두 들어가지 않음 — 규칙 밖 값 거부를 판정할 수 없음(입력 안 됨(''→'5' · 더블클릭 뒤 포커스 INPUT:))",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-89ebdf6e",
@@ -3078,7 +3331,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-43857526",
@@ -3090,7 +3344,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d5c58d98",
@@ -3102,55 +3357,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "V-afa222b9",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.ActiveSheet != null) ▸ if (CString.GetCheckedListValue(dtOperationLT, cboLTOperation.Cont'",
-  "tobe_ref": "E2E @verify",
-  "cond": "79f108b9",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "V-007c1845",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.ActiveSheet != null) ▸ else of (CString.GetCheckedListValue(dtOperationLT, cboLTOperation'",
-  "tobe_ref": "E2E @verify",
-  "cond": "6f1a925f",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6db681bf",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가 — 연쇄 프로브 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가",
   "tobe_ref": "E2E @verify",
   "cond": "a94926b4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-eb20ee4b",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가 — 연쇄 프로브 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가",
   "tobe_ref": "E2E @verify",
   "cond": "a94926b4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3e69ded9",
@@ -3162,7 +3396,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6cd040b5",
@@ -3174,7 +3409,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-67029d65",
@@ -3186,7 +3422,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-105efd3f",
@@ -3198,7 +3435,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d16a0f4e",
@@ -3210,19 +3448,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b065c0b6",
   "result": "PASS",
-  "evidence": "LT_DAY: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N",
+  "evidence": "LT_DAY: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N · editor",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bf03e13a",
@@ -3234,7 +3474,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8c361920",
@@ -3246,31 +3487,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f546f1e6",
   "result": "PASS",
-  "evidence": "CREATION_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy.MM.dd",
+  "evidence": "CREATION_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy-MM-dd",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-149ad1fd",
   "result": "PASS",
-  "evidence": "LAST_UPDATE_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy.MM.dd",
+  "evidence": "LAST_UPDATE_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy-MM-dd",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3b364ce6",
@@ -3282,7 +3526,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5c8b764c",
@@ -3294,7 +3539,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1d55c970",
@@ -3306,7 +3552,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-27fc9cfe",
@@ -3318,7 +3565,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-240cbc4b",
@@ -3330,7 +3578,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a8e81a6f",
@@ -3342,7 +3591,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2c4b7016",
@@ -3354,7 +3604,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2e09645e",
@@ -3366,7 +3617,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a4d9ac5b",
@@ -3378,7 +3630,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-97b2b35c",
@@ -3390,7 +3643,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-73bfd2a3",
@@ -3402,7 +3656,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0c66f619",
@@ -3414,7 +3669,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-68657207",
@@ -3426,7 +3682,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2f8db07c",
@@ -3438,7 +3695,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-56999334",
@@ -3450,7 +3708,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-da65b711",
@@ -3462,7 +3721,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d0e553fc",
@@ -3474,7 +3734,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7190eeb3",
@@ -3486,7 +3747,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4acebdd4",
@@ -3498,7 +3760,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c142b42e",
@@ -3510,7 +3773,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4ada50f4",
@@ -3522,7 +3786,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9f6ae677",
@@ -3534,19 +3799,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3299618b",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "95f4e7da",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-76575543",
@@ -3558,7 +3825,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-156ea5fa",
@@ -3570,7 +3838,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-709da79e",
@@ -3582,127 +3851,112 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "V-d4879d11",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.ActiveSheet != null) ▸ if (CString.GetCheckedListValue(dtOperationLT, cboLTOperation.Cont'",
-  "tobe_ref": "E2E @verify",
-  "cond": "79f108b9",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
- },
- {
-  "row_id": "V-6a4092b4",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.ActiveSheet != null) ▸ else of (CString.GetCheckedListValue(dtOperationLT, cboLTOperation'",
-  "tobe_ref": "E2E @verify",
-  "cond": "6f1a925f",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-56418b46",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "481b51d1",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5bd925f6",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "481b51d1",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-330ac7a0",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "a94926b4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0268fc25",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "a94926b4",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-68ba811e",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "b01156f6",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d2ccc99d",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "b01156f6",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fcc521b2",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "b01156f6",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-92864f4a",
   "result": "판정필요",
-  "evidence": "원천 DIVISION_ID 신규행 편집 불가",
+  "evidence": "원천 DIVISION_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "b01156f6",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f8291a42",
@@ -3714,7 +3968,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-23c33660",
@@ -3726,7 +3981,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dd39650f",
@@ -3738,7 +3994,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8341c601",
@@ -3750,7 +4007,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8ab62d21",
@@ -3762,7 +4020,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-591ac3fc",
@@ -3774,7 +4033,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-445898a4",
@@ -3786,19 +4046,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dd17c93b",
   "result": "판정필요",
-  "evidence": "원천 ITEM_ID 신규행 편집 불가",
+  "evidence": "원천 ITEM_ID 신규행 편집 불가(신규행·기존행·앞 40행 모두)",
   "tobe_ref": "E2E @verify",
   "cond": "cd5b007d",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1a4c93da",
@@ -3810,7 +4072,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e9d21f80",
@@ -3822,7 +4085,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f3d94614",
@@ -3834,7 +4098,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1e19805d",
@@ -3846,7 +4111,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d842b316",
@@ -3858,7 +4124,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a669d6ba",
@@ -3870,7 +4137,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-be61904c",
@@ -3882,7 +4150,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2e0c0a52",
@@ -3894,7 +4163,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6f4d63d4",
@@ -3906,7 +4176,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-204d5e26",
@@ -3918,7 +4189,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d3326a86",
@@ -3930,7 +4202,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-85e2e594",
@@ -3942,7 +4215,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8ca1ee34",
@@ -3954,7 +4228,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-61c90634",
@@ -3966,7 +4241,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-804f757d",
@@ -3978,7 +4254,8 @@
    "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d9394c10",
@@ -3990,31 +4267,34 @@
    "calls": 9,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0853bec7",
-  "result": "PASS",
-  "evidence": "수정 저장 2회 SQL 오류 없음 — main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATAR | main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATAR",
-  "tobe_ref": "E2E @verify",
+  "result": "ERROR",
+  "evidence": "LT_DAY r1 원값 '5' · [업무 검증 차단] 경계값 '100' 저장 요청 없음 · 입력 경로 실패: 입력 안 됨('5'→'5' · 더블클릭 뒤 포커스 셀 위치 없음) · 원복 OK",
+  "tobe_ref": "E2E @verify 저장 세부",
   "cond": "5f790b2d",
   "mctx": {
-   "calls": 7,
+   "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6b287d82",
   "result": "PASS",
-  "evidence": "수정 저장 성공(Save 1회) — 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\",\"SCM_SITE_ID\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [4s] 행  · main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATAR | main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\"",
+  "evidence": "수정 저장 성공(Save 1회) — AS-IS Save 대상 시트 'Operation LT'(SaveButton→SaveData · shtMain=\"Operation LT\" (SCP0037_OperationLT.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 12개 중 100% 가 'Operation LT'(정의 13컬럼) · DOM 그리드 #0(T224) · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\" · main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATAR | main/SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\"",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4083b32b",
@@ -4023,46 +4303,50 @@
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "fd28131e",
   "mctx": {
-   "calls": 13,
+   "calls": 14,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9066b634",
   "result": "PASS",
-  "evidence": "저장 후 재조회에 수정값 반영 — DB 반영 확인 · 원복 저장·복원 확인(정리 완료) · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\",\"SCM_SITE_ID\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [4s] 행 ",
+  "evidence": "저장 후 재조회에 수정값 반영 — DB 반영 확인 · 원복 저장·복원 확인(정리 완료) · AS-IS Save 대상 시트 'Operation LT'(SaveButton→SaveData · shtMain=\"Operation LT\" (SCP0037_OperationLT.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 12개 중 100% 가 'Operation LT'(정의 13컬럼) · DOM 그리드 #0(T224) · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\"",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4cdc49e7",
-  "result": "FAIL",
-  "evidence": "LT_DAY r0 → 4 · 서버 실패 응답인데 화면 메시지 없음",
+  "result": "PASS",
+  "evidence": "LT_DAY r0 → 4 · 실패 문구 표시 '[저장 경로 시험] 강제 실패'",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "56594782",
   "mctx": {
-   "calls": 3,
+   "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a2f16f7c",
   "result": "PASS",
-  "evidence": "수정값·원복값 모두 재조회에 그대로(변형 없음) · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\",\"SCM_SITE_ID\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CODE\":\"0\",\"RESULT_MESSAGE\":\"SUCCESS\"}],\"o_rc1\":[{\" | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [4s] 행 ",
+  "evidence": "수정값·원복값 모두 재조회에 그대로(변형 없음) · AS-IS Save 대상 시트 'Operation LT'(SaveButton→SaveData · shtMain=\"Operation LT\" (SCP0037_OperationLT.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 12개 중 100% 가 'Operation LT'(정의 13컬럼) · DOM 그리드 #0(T224) · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"data\":[{\"CREATED_BY\":\"attackgo\",\"LAST_UPDATED_BY\":\"minyonglee1\",\"INV_FLAG\":\"N\",\"PLANT_SITE_ID\":\"HQ07-E\",\"CREATION_DATE\":\"2019-07-16 09:50:59\",\"ITEM_ID\":\"APCAN0506B\"",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3ed5cc00",
@@ -4074,7 +4358,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a5284f31",
@@ -4086,7 +4371,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-71bc7687",
@@ -4098,7 +4384,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e5a97fc3",
@@ -4110,7 +4397,8 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-00d27259",
@@ -4122,31 +4410,60 @@
    "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
-  "row_id": "V-a946d849",
-  "result": "PASS",
-  "evidence": "필수 조건 자동 채움 0건 — 조회가 기본값으로 바로 됨",
-  "tobe_ref": "E2E @verify",
-  "cond": "da39a3ee",
+  "row_id": "V-6d30ddef",
+  "result": "ERROR",
+  "evidence": "LT_DAY r1 '5'→빈값 [사유 불명] 저장 요청 없음 · 원복 OK · 입력 경로 실패: 입력 안 됨('5'→'5' · 더블클릭 뒤 포커스 셀 위치 없음)",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "86ca7438",
   "mctx": {
-   "calls": 1,
+   "calls": 8,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-a7d94ca1",
+  "result": "PASS",
+  "evidence": "LT_DAY 저장 1회 — r1 '5'→'6' 재조회 '6' OK · r2 '5'→'6' 재조회 '6' OK · 원복 '5' OK · 원복 '5' OK",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "92f0eb0a",
+  "mctx": {
+   "calls": 15,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-e656c6ef",
+  "result": "PASS",
+  "evidence": "저장 4회 소요 102·100·111·107ms · 최소 100ms · 기준 3000ms",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "338fc284",
+  "mctx": {
+   "calls": 15,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-92ce2e59",
   "result": "PASS",
-  "evidence": "LT_DAY r0 → 3 · 로딩 표시 30회 관측 · 응답 뒤 소멸 · 표본 33개·저장 구간 1501ms",
+  "evidence": "LT_DAY r0 → 4 · 로딩 표시 30회 관측 · 응답 뒤 소멸 · 표본 34개·저장 구간 1510ms",
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "670b4701",
   "mctx": {
-   "calls": 6,
+   "calls": 7,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9f43ad37",
@@ -4155,10 +4472,11 @@
   "tobe_ref": "E2E @verify 저장 경로",
   "cond": "e5202097",
   "mctx": {
-   "calls": 9,
+   "calls": 10,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1a53ec3d",
@@ -4170,7 +4488,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e136c68f",
@@ -4182,7 +4501,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-da4a2755",
@@ -4194,7 +4514,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-01c5f4c7",
@@ -4206,7 +4527,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d7f45112",
@@ -4218,7 +4540,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b2c6f2c7",
@@ -4230,7 +4553,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dd460423",
@@ -4242,7 +4566,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-98f5cbe1",
@@ -4254,7 +4579,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c80f2adf",
@@ -4266,7 +4592,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-689018ea",
@@ -4278,7 +4605,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ce83817c",
@@ -4290,7 +4618,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-99ba2a11",
@@ -4302,7 +4631,8 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1789c9ff",
@@ -4314,7 +4644,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9e1ac436",
@@ -4326,7 +4657,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-61cb1975",
@@ -4338,7 +4670,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-16769e24",
@@ -4350,7 +4683,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b62764b2",
@@ -4362,7 +4696,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6c110600",
@@ -4374,31 +4709,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6ba7f391",
   "result": "PASS",
-  "evidence": "신규행(이전 값 주입) · 초기화됨 · SCM_SITE_ID 'TEST'→'NEXCON_CN_NJ' · ITEM_ID 'E2ESEED'→'' (AS-IS SCP0037_OperationLT.cs:718 SCP0037_OperationLT.SpdMain_Combo)",
+  "evidence": "신규행(이전 값 주입) · 초기화됨 · SCM_SITE_ID 'HQ07-E'→'TEST' · ITEM_ID 'E2ESEED'→'' (AS-IS SCP0037_OperationLT.cs:718 SCP0037_OperationLT.SpdMain_Combo)",
   "tobe_ref": "E2E @verify 셀 초기화",
   "cond": "10d0fdcd",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6f78f914",
   "result": "PASS",
-  "evidence": "신규행(이전 값 주입) · 초기화됨 · SCM_SITE_ID 'TEST'→'NEXCON_CN_NJ' · NICK_NAME 'E2ESEED'→'' (AS-IS SCP0037_OperationLT.cs:719 SCP0037_OperationLT.SpdMain_Combo)",
+  "evidence": "신규행(이전 값 주입) · 초기화됨 · SCM_SITE_ID 'HQ07-E'→'TEST' · NICK_NAME 'E2ESEED'→'' (AS-IS SCP0037_OperationLT.cs:719 SCP0037_OperationLT.SpdMain_Combo)",
   "tobe_ref": "E2E @verify 셀 초기화",
   "cond": "99ef3071",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f6f6d7c4",
@@ -4410,7 +4748,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f429e7f0",
@@ -4422,7 +4761,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f2e01a78",
@@ -4434,7 +4774,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4a7b3054",
@@ -4446,7 +4787,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b8c05831",
@@ -4458,7 +4800,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-317a3164",
@@ -4470,7 +4813,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-30005e7f",
@@ -4482,7 +4826,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bcbbbdc3",
@@ -4494,7 +4839,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-78220df2",
@@ -4506,7 +4852,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6b98ba64",
@@ -4518,7 +4865,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f9d943b8",
@@ -4530,7 +4878,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fe777442",
@@ -4542,7 +4891,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b9b319fa",
@@ -4554,7 +4904,8 @@
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9dcbf311",
@@ -4566,7 +4917,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-33d9d98e",
@@ -4578,7 +4930,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-32c54d0c",
@@ -4590,19 +4943,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a1387a1e",
   "result": "PASS",
-  "evidence": "방향키 40회 — 앞 10회 평균 52ms · 뒤 10회 61ms · 누적 지연 없음",
+  "evidence": "방향키 40회 — 앞 10회 평균 45ms · 뒤 10회 46ms · 누적 지연 없음",
   "tobe_ref": "E2E @verify 동적·응답",
   "cond": "f0a74fbd",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f6460f47",
@@ -4614,7 +4969,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ba65dbbd",
@@ -4626,7 +4982,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-52506e73",
@@ -4638,7 +4995,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2a934806",
@@ -4650,7 +5008,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f457678a",
@@ -4662,31 +5021,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-50589bf0",
-  "result": "PASS",
-  "evidence": "[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 기대대로 문구 '수정한 내용이 없습니다.' · 저장 요청 0 · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청15 → 언어 KOR→KOR → search:0행·신규0·호출0·요청16 → save:328행·신규0·호출1·요청18 → 언어 복원 → KOR → 끝:328행·신규0·호출1·요청18 · 문서 자동 생성 P01 · btn_auth SAVE",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환 생략(T200) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청15 → 끝:0행·신규0·호출0·요청15 · 문서 자동 생성 P01 · btn_auth SAVE",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "aba8c369",
   "mctx": {
-   "calls": 1,
-   "rows": 3345,
+   "calls": 0,
+   "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-04376111",
-  "result": "FAIL",
-  "evidence": "[자동] CN 언어 조회 건수 총/건 표기: 화면 글자에 /(总|共|合计)\\s*[\\d,]+\\s*(条|行|件|个)/ 없음 — 근처 ' Material Active ​ Search(F5) Total328rows Insert(F8' · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청13 → 언어 KOR→CHN → search:0행·신규0·호출0·요청23 → pagetext:328행·신규0·호출1·요청25 → 언어 복원 → KOR → 끝:328행·신규0·호출1·요청25 · 문서 자동 생성 P02 · btn_auth SEARCH",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] CN 언어 조회 건수 총/건 표기: [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환 생략(T200) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출0·요청13 → 끝:0행·신규0·호출0·요청13 · 문서 자동 생성 P02 · btn_auth SEARCH",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "b4253da6",
   "mctx": {
-   "calls": 1,
-   "rows": 3345,
+   "calls": 0,
+   "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-35ce3b99",
@@ -4698,7 +5060,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bceee2f8",
@@ -4710,7 +5073,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a9723cc4",
@@ -4722,19 +5086,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d488067a",
-  "result": "FAIL",
-  "evidence": "[자동] SCM_SITE_ID 신규 행 콤보 붙여넣기 — 후보 값 반영: SCM_SITE_ID@0 값 '' 이 /\\S/ 아님 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → SCM_SITE_ID@0 붙여넣기 'LGESOC Elec HQ07': ''→'' → cell:329행·신규1·호출1·요청15 → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P08 · sheet_columns Operation LT.SCM_SITE_ID FPComboBox IM",
+  "result": "PASS",
+  "evidence": "[자동] SCM_SITE_ID 신규 행 콤보 붙여넣기 — 후보 값 반영: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → SCM_SITE_ID@0 붙여넣기 'LGESOC Elec HQ07': ''→'HQ07-E' → cell:329행·신규1·호출1·요청15 → SCM_SITE_ID@0='HQ07-E' → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P08 · sheet_columns Operation LT.SCM_SITE_ID FPComboBox IM",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "a09ea61a",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-29e26416",
@@ -4746,7 +5112,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-1816310a",
@@ -4758,7 +5125,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-4311020c",
+  "result": "PASS",
+  "evidence": "[자동] SCM_SITE_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영: 기대대로 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → SCM_SITE_ID@0 붙여넣기 'LGESOC Elec HQ07' [기존 행 r1 원값 'HQ07-E' Copy='LGESOC Elec HQ07'(이 행 후보 7건 안)]: ''→'HQ07-E' → cell:329행·신규1·호출1·요청15 → SCM_SITE_ID@0='HQ07-E' → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P31 · sheet_columns Operation LT.SCM_SITE_ID FPComboBox IM · 사용자 경로 Copy&Paste",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "038fde19",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-73e4a1cf",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] SCM_SITE_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사: 값 토큰 @copy:out 해석 실패(값 없음) — 이 행 후보 7건 밖 값을 가진 기존 행 없음 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P32 · sheet_columns Operation LT.SCM_SITE_ID FPComboBox IM · 사용자 경로 Copy&Paste(원본 값이 이 행 후보 밖)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "47533041",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5da1b280",
@@ -4770,7 +5164,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-73fdc183",
@@ -4782,7 +5177,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7fe7f82c",
@@ -4794,7 +5190,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bcedb81b",
@@ -4806,7 +5203,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-6eeb1651",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] INV_FLAG 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영: 값 토큰 @copy:in 해석 실패(컬럼·그리드 없음) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P31 · sheet_columns Operation LT.INV_FLAG FPComboBox O · 사용자 경로 Copy&Paste",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "48154cfb",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-f9fee002",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] INV_FLAG 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사: 값 토큰 @copy:out 해석 실패(컬럼·그리드 없음) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출0·요청13 → insert:328행·신규0·호출1·요청15 → paste:329행·신규1·호출1·요청15 → 끝:329행·신규1·호출1·요청15 · 문서 자동 생성 P32 · sheet_columns Operation LT.INV_FLAG FPComboBox O · 사용자 경로 Copy&Paste(원본 값이 이 행 후보 밖)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "55d5e7e1",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e1cd22b8",
@@ -4818,7 +5242,8 @@
    "calls": 3,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-be219de5",
@@ -4830,7 +5255,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-4b03037b",
@@ -4842,7 +5268,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5660f8b6",
@@ -4854,7 +5281,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5b0d9463",
@@ -4866,7 +5294,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a4d81f2c",
@@ -4878,7 +5307,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e4862c39",
@@ -4890,7 +5320,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-359e0716",
@@ -4902,7 +5333,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-60c31474",
@@ -4914,7 +5346,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ccdc57f2",
@@ -4926,7 +5359,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2e07802c",
@@ -4938,7 +5372,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9f77ae4b",
@@ -4950,7 +5385,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7900ad1b",
@@ -4962,7 +5398,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8a34f244",
@@ -4974,7 +5411,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0a5cf1c8",
@@ -4986,7 +5424,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dc8d3c74",
@@ -4998,7 +5437,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6679188d",
@@ -5010,7 +5450,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-74c271f9",
@@ -5022,7 +5463,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-33ff23e2",
@@ -5034,19 +5476,21 @@
    "calls": 2,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3e60dfa8",
   "result": "PASS",
-  "evidence": "조회 클릭 → 로딩 표시 관측 2회(100ms 폴링) · 응답 787ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "evidence": "조회 클릭 → 로딩 표시 관측 2회(100ms 폴링) · 응답 1122ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-15f07bf8",
@@ -5058,7 +5502,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-661fc982",
@@ -5070,7 +5515,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d3784ee4",
@@ -5082,31 +5528,34 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-686bd02b",
-  "result": "PASS",
-  "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide PASS: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "result": "FAIL",
+  "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fcb0c09c",
-  "result": "판정필요",
-  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회 · 미포함: 팝업 그리드(이 시험은 메인 그리드만), Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "result": "ERROR",
+  "evidence": "f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV · 미포함: 팝업 그리드(이 시험은 메인 그리드만), Sort/Filter·정렬 후 동작(K1 smoke 행)",
   "tobe_ref": "E2E @verify",
   "cond": "e2739692",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-be48d473",
@@ -5115,10 +5564,11 @@
   "tobe_ref": "E2E @verify",
   "cond": "0351e52e",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-623359cb",
@@ -5127,82 +5577,89 @@
   "tobe_ref": "E2E @verify",
   "cond": "e96c3a35",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9297df2c",
   "result": "판정필요",
-  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide PASS: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV",
   "tobe_ref": "E2E @verify",
   "cond": "3b134d2e",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-d814cf98",
-  "result": "판정필요",
-  "evidence": "hide PASS: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
+  "result": "FAIL",
+  "evidence": "hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
   "tobe_ref": "E2E @verify",
   "cond": "b6fc94a4",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fbc20535",
-  "result": "판정필요",
-  "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | hide PASS: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "result": "FAIL",
+  "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
   "tobe_ref": "E2E @verify",
   "cond": "567536cd",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-44b43ac2",
   "result": "판정필요",
-  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide PASS: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(DIVISION_ID) 클릭 → 선택 행 0~327/328 · 열 0~0(시험 열 0) — 열 전체 선택 | hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV",
   "tobe_ref": "E2E @verify",
   "cond": "0e8dbe71",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-97aa7727",
-  "result": "PASS",
-  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "result": "ERROR",
+  "evidence": "f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV",
   "tobe_ref": "E2E @verify",
   "cond": "90c3576b",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-f6eb7715",
-  "result": "PASS",
-  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "result": "ERROR",
+  "evidence": "f5 ERROR: 실행 실패: Error: 셀 좌표 확인 실패(0행 · DIVISION_ID): DIV",
   "tobe_ref": "E2E @verify",
   "cond": "794a7155",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c919cb49",
@@ -5211,10 +5668,11 @@
   "tobe_ref": "E2E @verify",
   "cond": "794a7155",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e23c2aca",
@@ -5223,10 +5681,11 @@
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-98884b09",
@@ -5235,10 +5694,11 @@
   "tobe_ref": "E2E @verify",
   "cond": "e96c3a35",
   "mctx": {
-   "calls": 2,
+   "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e7904f5b",
@@ -5250,19 +5710,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
- },
- {
-  "row_id": "V-228e2bbd",
-  "result": "PASS",
-  "evidence": "ime NA: 신규행에 직접 입력하는 문자 컬럼 없음 | auto PASS: 신규행 SCM_SITE_ID 에 'OC' 입력 → 편집기 'OC_2 Auto Elec-Electrode' · Enter 후 셀 'OC_2 Auto Elec-Electrode' (기대 후보 'OC_2 Auto Elec-Electrode') [전체: ime NA: 신규행에 직접 입력하는 문자 컬럼 없음 | auto PASS: 신규행 SCM_SITE_ID 에 'OC' 입력 → 편집기 'OC_2 Auto Elec-Electrode' · Enter 후 셀 'OC_2 Auto Elec-Electrode' (기대 후보 'OC_2 Auto Elec-Electrode')]",
-  "tobe_ref": "E2E @verify",
-  "cond": "e5cf1e91",
-  "mctx": {
-   "calls": 1,
-   "rows": 3345,
-   "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-92f9385a",
@@ -5274,7 +5723,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-589c1045",
@@ -5286,7 +5736,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b4e39c1c",
@@ -5298,7 +5749,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-92afb0fd",
@@ -5310,7 +5762,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-043a4079",
@@ -5322,7 +5775,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-3fd7c124",
@@ -5334,7 +5788,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-44c40e6c",
@@ -5346,7 +5801,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7dd39e7e",
@@ -5358,7 +5814,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e8dee6d5",
@@ -5370,7 +5827,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-9740052f",
@@ -5382,7 +5840,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8d26d112",
@@ -5394,7 +5853,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-13a41862",
@@ -5406,19 +5866,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a40eb627",
   "result": "PASS",
-  "evidence": "조회조건 Div: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "evidence": "조회조건 Div: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false · 기대 원천 AS-IS 원문 UsrCombo",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-5771f980",
@@ -5430,7 +5892,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-354140b3",
@@ -5442,19 +5905,21 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-75aa410d",
   "result": "PASS",
-  "evidence": "조회조건 Operation: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "evidence": "조회조건 Operation: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false · 기대 원천 AS-IS 원문 UsrCombo",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-069ac645",
@@ -5466,7 +5931,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-acd73964",
@@ -5478,7 +5944,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-edb492b0",
@@ -5490,7 +5957,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7619b87b",
@@ -5502,7 +5970,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a14c3f98",
@@ -5514,7 +5983,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-bf3e9ede",
@@ -5526,7 +5996,8 @@
    "calls": 0,
    "rows": -1,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-7f6afcd0",
@@ -5538,19 +6009,21 @@
    "calls": 3,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-494dc9ad",
-  "result": "ERROR",
-  "evidence": "Material · [확인 대상] 'PCAN0506'(값 'APCAN0506B' 일부) 조회 0행 — 부분일치 안 되는 것으로 보임 · AS-IS Like 여부 확인 필요",
+  "result": "FAIL",
+  "evidence": "Material · 'PCAN0506'(값 'APCAN0506B' 일부) 이 조회 요청 본문에 실렸는데 0행 — 텍스트 조건 부분일치(Like) 안 됨 · 기대 근거 요건 EG245(DM-181·GAP-75·GAP-419·SSP45-6)",
   "tobe_ref": "E2E @verify",
   "cond": "9a00109a",
   "mctx": {
    "calls": 4,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a3b0f62b",
@@ -5562,7 +6035,8 @@
    "calls": 5,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-37d6b220",
@@ -5574,7 +6048,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ac103b46",
@@ -5586,7 +6061,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-2b65ad4d",
@@ -5598,7 +6074,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-cbe06990",
@@ -5610,7 +6087,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-59e4534a",
@@ -5622,7 +6100,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-ce4df139",
@@ -5634,7 +6113,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-c8836541",
@@ -5646,7 +6126,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-55a8ec3b",
@@ -5658,7 +6139,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-99edde99",
@@ -5670,7 +6152,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-dbd326e7",
@@ -5682,7 +6165,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-e5dcadf2",
@@ -5694,7 +6178,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-cb576041",
@@ -5706,7 +6191,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-a54f513e",
@@ -5718,7 +6204,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-978d7310",
@@ -5730,7 +6217,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-fee9bb5e",
@@ -5742,7 +6230,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-52e8fc1f",
@@ -5754,7 +6243,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-0490d744",
@@ -5766,7 +6256,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-25f11c85",
@@ -5778,7 +6269,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-09053c56",
@@ -5790,7 +6282,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-b43959ff",
@@ -5802,7 +6295,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-86701b3d",
@@ -5814,7 +6308,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-21127235",
@@ -5826,7 +6321,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-6e78de51",
@@ -5838,7 +6334,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-8d132ae5",
@@ -5850,7 +6347,8 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "V-437c2d16",
@@ -5862,7 +6360,21 @@
    "calls": 1,
    "rows": 3345,
    "req": 0
-  }
+  },
+  "run": "20261114111306"
+ },
+ {
+  "row_id": "V-a946d849",
+  "result": "PASS",
+  "evidence": "필수 조건 자동 채움 0건 — 조회가 기본값으로 바로 됨",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 1,
+   "rows": 3345,
+   "req": 0
+  },
+  "run": "20261114111306"
  },
  {
   "row_id": "AD-ccbb14fe",
@@ -7136,8 +7648,8 @@
  },
  {
   "row_id": "EG-6fea03ff",
-  "result": "PASS",
-  "evidence": "기대 축소 → 조건·버튼 겹침 없음 · 실제 rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 [] · 근거 문서 DM-166",
+  "result": "NA",
+  "evidence": "기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이즈 핸들 없음 · 근거 ",
   "tobe_ref": "E2E @eg-popup",
   "mctx": {
    "calls": 7,
@@ -7246,8 +7758,8 @@
  },
  {
   "row_id": "EG-b32a3612",
-  "result": "FAIL",
-  "evidence": "기대 제목 등록 문구 · '_' 폴백/코드 노출 0 · 실제 제목 '' — 제목 없음 · 근거 문서 SCPSSP-16·GAP-33",
+  "result": "PASS",
+  "evidence": "[CR-100] TO-BE 공통 팝업(메타 셀 팝업 FPModal·FPTextModal) 규칙 — 팝업 제목 없음 는 결함 아님(사용자 판정 2026-11-10) · 기대 제목 등록 문구 · '_' 폴백/코드 노출 0 · 실제 제목 '' — 제목 없음 · 근거 문서 SCPSSP-16·GAP-33",
   "tobe_ref": "E2E @eg-popup",
   "mctx": {
    "calls": 1,
@@ -7808,7 +8320,7 @@
  {
   "row_id": "EG-51980d38",
   "result": "PASS",
-  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 1건 별도) · AS-IS ",
+  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 0건 별도) · AS-IS ",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 0,
@@ -7929,7 +8441,7 @@
  {
   "row_id": "EG-e2c19a07",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7940,7 +8452,7 @@
  {
   "row_id": "EG-be94e348",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7951,7 +8463,7 @@
  {
   "row_id": "EG-c795ba33",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7962,7 +8474,7 @@
  {
   "row_id": "EG-03589ed0",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7973,7 +8485,7 @@
  {
   "row_id": "EG-9c4036a2",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -7984,7 +8496,7 @@
  {
   "row_id": "EG-01c3be27",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8050,7 +8562,7 @@
  {
   "row_id": "EG-a7fa8a07",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8061,7 +8573,7 @@
  {
   "row_id": "EG-c99c022f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8072,7 +8584,7 @@
  {
   "row_id": "EG-ee81689d",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8083,7 +8595,7 @@
  {
   "row_id": "EG-563aa03f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8094,7 +8606,7 @@
  {
   "row_id": "EG-4c74ffda",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8105,7 +8617,7 @@
  {
   "row_id": "EG-111ed810",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8182,7 +8694,7 @@
  {
   "row_id": "EG-8b5282d1",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8193,7 +8705,7 @@
  {
   "row_id": "EG-f02370b2",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8204,7 +8716,7 @@
  {
   "row_id": "EG-9311f488",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8215,7 +8727,7 @@
  {
   "row_id": "EG-e37aa16d",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8226,7 +8738,7 @@
  {
   "row_id": "EG-296fbff6",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8237,7 +8749,7 @@
  {
   "row_id": "EG-cb8ace94",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8303,7 +8815,7 @@
  {
   "row_id": "EG-b57ed6c6",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8314,7 +8826,7 @@
  {
   "row_id": "EG-ea6e8140",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8325,7 +8837,7 @@
  {
   "row_id": "EG-99e9ca6d",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8336,7 +8848,7 @@
  {
   "row_id": "EG-aa334d9e",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8347,7 +8859,7 @@
  {
   "row_id": "EG-e0f269d2",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8358,7 +8870,7 @@
  {
   "row_id": "EG-d6408805",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8424,7 +8936,7 @@
  {
   "row_id": "EG-e0e4df7d",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8435,7 +8947,7 @@
  {
   "row_id": "EG-3788d7ee",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8446,7 +8958,7 @@
  {
   "row_id": "EG-b6f26193",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8457,7 +8969,7 @@
  {
   "row_id": "EG-2e4979e3",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8468,7 +8980,7 @@
  {
   "row_id": "EG-e03bcaa9",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8479,7 +8991,7 @@
  {
   "row_id": "EG-d20880d2",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8545,7 +9057,7 @@
  {
   "row_id": "EG-553228a8",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8556,7 +9068,7 @@
  {
   "row_id": "EG-2e595eeb",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8567,7 +9079,7 @@
  {
   "row_id": "EG-2a1317e2",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8578,7 +9090,7 @@
  {
   "row_id": "EG-e52b2a93",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8589,7 +9101,7 @@
  {
   "row_id": "EG-037b0b9f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8600,7 +9112,7 @@
  {
   "row_id": "EG-8169b1d4",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8666,7 +9178,7 @@
  {
   "row_id": "EG-c8859706",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8677,7 +9189,7 @@
  {
   "row_id": "EG-2283fe4c",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8688,7 +9200,7 @@
  {
   "row_id": "EG-8c23c58c",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8699,7 +9211,7 @@
  {
   "row_id": "EG-b6e05819",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8710,7 +9222,7 @@
  {
   "row_id": "EG-4c4615c1",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8721,7 +9233,7 @@
  {
   "row_id": "EG-758a3475",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8787,7 +9299,7 @@
  {
   "row_id": "EG-336567f3",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8798,7 +9310,7 @@
  {
   "row_id": "EG-bcf86ccf",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8809,7 +9321,7 @@
  {
   "row_id": "EG-f2f56bb9",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8820,7 +9332,7 @@
  {
   "row_id": "EG-db272896",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8831,7 +9343,7 @@
  {
   "row_id": "EG-61fd3ce1",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8842,7 +9354,7 @@
  {
   "row_id": "EG-5cdefaae",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 1,
@@ -8919,7 +9431,7 @@
  {
   "row_id": "EG-2dc14fbb",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -8930,7 +9442,7 @@
  {
   "row_id": "EG-f7e865c7",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -8941,7 +9453,7 @@
  {
   "row_id": "EG-896c726f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -8952,7 +9464,7 @@
  {
   "row_id": "EG-d0bf163f",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -8963,7 +9475,7 @@
  {
   "row_id": "EG-c3fdc1aa",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -8974,7 +9486,7 @@
  {
   "row_id": "EG-b5505898",
   "result": "PASS",
-  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "evidence": "기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
@@ -9214,64 +9726,20 @@
   }
  },
  {
+  "row_id": "EG-a29cb822",
+  "result": "PASS",
+  "evidence": "AS-IS 를 실제로 띄워 조회한 결과 328건 ↔ TO-BE 같은 조건 조회 결과 328건 — 같음 · 키 대조: 공통 328 · AS-IS 에만 0 · TO-BE 에만 0 · AS-IS 실구동 run_20261114_120556 · SP SCP0037_GET_OPERATION_LT · 조건 같음(인자 5개 일치)",
+  "tobe_ref": "E2E @a1-live",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
   "row_id": "EG-e77faa65",
   "result": "ERROR",
   "evidence": "[다국어 확인 필요] PROC 한글 문구 · PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT · 'Project Route 정보가 없습니다. '",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-7670afaa",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[CN] 保存失败。'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-f003a3bc",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[EN] Failed to save.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-d70e3a79",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00003,MSG00006 · '[KO] 저장에 실패하였습니다.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-0f4d42d4",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[KO] 수정한 내용이 없습니다.'",
-  "tobe_ref": "E2E @i18n-static",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-a2a95e11",
-  "result": "ERROR",
-  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00004,MSG00133 · '[CN] 没有修改的内容.'",
   "tobe_ref": "E2E @i18n-static",
   "mctx": {
    "calls": 0,
@@ -9292,8 +9760,8 @@
  },
  {
   "row_id": "EG-99d0f9ce",
-  "result": "PASS",
-  "evidence": "KO 문구 15건 일치 · 사전에 없는 문구 7건",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -9303,19 +9771,8 @@
  },
  {
   "row_id": "EG-bbb9cac6",
-  "result": "PASS",
-  "evidence": "EN 문구 16건 일치 · 사전에 없는 문구 7건",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-f7fea5fd",
-  "result": "PASS",
-  "evidence": "그리드 328행 · 칸 한글 0(앞 200행)",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -9325,30 +9782,8 @@
  },
  {
   "row_id": "EG-d9f6bca3",
-  "result": "FAIL",
-  "evidence": "CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 7건",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-fe71a473",
-  "result": "PASS",
-  "evidence": "그리드 328행 · 칸 한글 0(앞 200행)",
-  "tobe_ref": "E2E @i18n-lang",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-f618174a",
-  "result": "PASS",
-  "evidence": "조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SCP0033) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -9368,9 +9803,9 @@
   }
  },
  {
-  "row_id": "EG-53c24420",
+  "row_id": "EG-6a04e6fe",
   "result": "PASS",
-  "evidence": "응답 31건 = DB 31건",
+  "evidence": "응답 14건 = DB 14건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -9390,9 +9825,9 @@
   }
  },
  {
-  "row_id": "EG-567f3e16",
+  "row_id": "EG-53c24420",
   "result": "PASS",
-  "evidence": "응답 73건 = DB 73건",
+  "evidence": "응답 31건 = DB 31건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -9401,9 +9836,9 @@
   }
  },
  {
-  "row_id": "EG-6a04e6fe",
+  "row_id": "EG-567f3e16",
   "result": "PASS",
-  "evidence": "응답 14건 = DB 14건",
+  "evidence": "응답 73건 = DB 73건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -9423,7 +9858,29 @@
   }
  },
  {
+  "row_id": "EG-027fcb5d",
+  "result": "PASS",
+  "evidence": "응답 14건 = DB 14건",
+  "tobe_ref": "E2E @combo-live",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
   "row_id": "EG-582b801d",
+  "result": "PASS",
+  "evidence": "응답 0건 = DB 0건",
+  "tobe_ref": "E2E @combo-live",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "EG-91840c27",
   "result": "PASS",
   "evidence": "응답 0건 = DB 0건",
   "tobe_ref": "E2E @combo-live",
@@ -9445,20 +9902,9 @@
   }
  },
  {
-  "row_id": "EG-027fcb5d",
+  "row_id": "EG-071e9c39",
   "result": "PASS",
-  "evidence": "응답 14건 = DB 14건",
-  "tobe_ref": "E2E @combo-live",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-91840c27",
-  "result": "PASS",
-  "evidence": "응답 0건 = DB 0건",
+  "evidence": "응답 89건 = DB 89건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -9478,29 +9924,7 @@
   }
  },
  {
-  "row_id": "EG-071e9c39",
-  "result": "PASS",
-  "evidence": "응답 89건 = DB 89건",
-  "tobe_ref": "E2E @combo-live",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
   "row_id": "EG-9cb7a4be",
-  "result": "PASS",
-  "evidence": "SCP_MST_OPERATION_LT 생성 칸 불변 · 수정 칸 정상",
-  "tobe_ref": "E2E @save-audit-cols",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-75b9f8a0",
   "result": "PASS",
   "evidence": "SCP_MST_OPERATION_LT 생성 칸 불변 · 수정 칸 정상",
   "tobe_ref": "E2E @save-audit-cols",
@@ -9513,7 +9937,7 @@
  {
   "row_id": "EG-fd899807",
   "result": "ERROR",
-  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 61건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
+  "evidence": "[확인 대상] SCM_ADM_LOOKUP_MASTER_DETAIL AS-IS 키 64535건 중 64건 TO-BE 에 없음: CUST_FCST_MEASURE/81/CUTOMER FCST///, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0500/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/0720/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/1910/, DM_CHECKED_BEFOREHAND/DM/JOB.PR_DM_DNM_SALES_RESULT/ALL/2310/",
   "tobe_ref": "E2E @master_sweep",
   "mctx": {
    "calls": 0,

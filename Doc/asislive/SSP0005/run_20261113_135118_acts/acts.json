@@ -1,0 +1,64 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 13:50:26.946",
+ "fills": 0,
+ "fill_left": []
+}

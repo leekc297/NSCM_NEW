@@ -69,7 +69,24 @@ export async function divState(nscm: Nscm): Promise<{ value: string; code: strin
   const box = p.locator('[class*="_formItem_"]').filter({ has: p.locator('label', { hasText: new RegExp(`^\\s*${it.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`) }) }).first();
   await box.locator('[role="combobox"], input').first().click({ timeout: 5_000 }).catch(() => undefined);
   await p.getByRole('option').first().waitFor({ state: 'visible', timeout: 5_000 }).catch(() => undefined);
-  const raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
+  let raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
+  // 2026-11-16(SSP0020 EG365·EG366 '후보 0개'): 다중 선택 칸은 입력칸 클릭으로 목록이 안 열릴 때가 있다 — 열기 버튼(aria-label Open)으로 한 번 더 연다. diag 에 어느 경로로 읽었는지 남긴다
+  let how = raw.length ? '입력칸 클릭' : '';
+  if (!raw.length) {
+    const ob = box.locator('button[aria-label="Open"]').first();
+    if (await ob.count()) { await ob.click({ timeout: 5_000, force: true }).catch(() => undefined); await p.getByRole('option').first().waitFor({ state: 'visible', timeout: 5_000 }).catch(() => undefined); raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]); how = raw.length ? '열기 버튼' : '열기 버튼(후보 0)'; }
+    else how = '열기 버튼 없음';
+  }
+  // 2026-11-16: 그래도 0개면 화면을 가린 알림·대화상자(진입 안내 등) 때문일 수 있다 — 닫고 1.5초 뒤 한 번 더 읽는다(콤보 데이터 지연 도착 포함). 권한 Division 이 없는 계정은 다시 읽어도 0개다
+  if (!raw.length) {
+    await p.keyboard.press('Escape').catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); await p.waitForTimeout(1_500);
+    await box.locator('[role="combobox"], input').first().click({ timeout: 5_000 }).catch(() => undefined);
+    await p.getByRole('option').first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
+    raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
+    if (!raw.length) { const ob2 = box.locator('button[aria-label="Open"]').first(); if (await ob2.count()) { await ob2.click({ timeout: 5_000, force: true }).catch(() => undefined); await p.getByRole('option').first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined); raw = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]); } }
+    how += raw.length ? ' → 대화상자 닫고 재시도 성공' : ' → 대화상자 닫고 재시도해도 0';
+  }
+  if (process.env.E2E_DIAG_DIV) console.log(`[divState] ${how} · 후보 ${raw.length}`);
   await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(150);
   // 2026-11-06(SCP0084 EG366 허위 FAIL 10건): 다중선택 콤보의 전체 선택 항목('Select All')을 앞 토큰 'SELECT' 로 잘라 Division 코드로 셌다
   //   → 문구 전체가 전체 선택 항목이면 토큰화 전에 뺀다(condOptions 와 같은 규칙)

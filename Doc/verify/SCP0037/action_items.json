@@ -1,14 +1,46 @@
 [
  {
-  "row_id": "V-eed95e79",
-  "rule_id": "E1",
+  "row_id": "V-85ec81e0",
+  "rule_id": "F5",
+  "target": "SCP0037 화면",
+  "same": [
+   "T-ea497b53"
+  ]
+ },
+ {
+  "row_id": "V-686bd02b",
+  "rule_id": "K3",
+  "target": "SCP0037 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-40b09280",
+  "rule_id": "D1",
   "target": "Operation LT.LT_DAY (LT(Day)*)",
   "same": []
  },
  {
-  "row_id": "T-561c65ba",
-  "rule_id": "SC1",
-  "target": "SCP0037 화면",
+  "row_id": "V-494dc9ad",
+  "rule_id": "G1",
+  "target": "SCP0037 텍스트 부분일치 Material",
   "same": []
+ },
+ {
+  "row_id": "V-d814cf98",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
+ },
+ {
+  "row_id": "V-fbc20535",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
+ },
+ {
+  "row_id": "T-ea497b53",
+  "rule_id": "F5",
+  "target": "",
+  "folded_into": "V-85ec81e0"
  }
 ]

@@ -1,0 +1,103 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0020_GET_DELEGATE"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     8
+    ],
+    [
+     "SSP0020_GET_DELEGATE",
+     1
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "OnClickInsertButton",
+   "ok": false,
+   "error": "InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationException: control not found: OnClickInsertButton",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnDelegatee",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  },
+  {
+   "control": "BtnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 28
+  },
+  {
+   "control": "BtnUnSet",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnDelegatee",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  },
+  {
+   "control": "btnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 21
+  },
+  {
+   "control": "btnUnSet",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 7
+  }
+ ],
+ "at": "2026-11-15 11:53:33.337",
+ "preset": {
+  "name": "chkAll",
+  "token": "chkAll=cF",
+  "kw": {
+   "name": "chkAll",
+   "prop": "Checked",
+   "value": "False"
+  },
+  "label": "chkAll 체크 끔",
+  "ok": true,
+  "error": null,
+  "applied": "prop:Checked",
+  "value": "ALL",
+  "text": "All",
+  "checked": false,
+  "selected_index": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2159,
+  "at": "2026-11-13T20:56:23.723Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

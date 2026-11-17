@@ -209,10 +209,13 @@
 | dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 
-## 9. 주석/비활성 처리된 호출 (2건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (5건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 2185 |  | commented:EMPTY |
+| 2197 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
+| 2198 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
+| 2199 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
 | 2692 | SCP.SCP0024_SAVE_PRODUCTION_PLAN_FIX | commented:MATCH |
 
 ## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)

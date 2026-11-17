@@ -1,0 +1,534 @@
+{
+ "id": "SCP0033",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Semi Dept Day",
+     "rows_before": 54,
+     "rows_after": 54,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "Electrode",
+       "after": "40"
+      },
+      {
+       "row": 0,
+       "col": "OPERATION_GROUP",
+       "before": "APCAN0842A",
+       "after": "Electrode"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "X732",
+       "after": "APCAN0842A"
+      },
+      {
+       "row": 0,
+       "col": "NICK_NAME",
+       "before": "MON",
+       "after": "X732"
+      },
+      {
+       "row": 0,
+       "col": "DEPARTURE_DAY",
+       "before": "Y",
+       "after": "MON"
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "max.ts.lee",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "2024-12-12 16:23:21",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "max.ts.lee",
+       "after": "2024-12-12 16:23:21"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "2024-12-12 16:23:21",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "",
+       "after": "2024-12-12 16:23:21"
+      },
+      {
+       "row": 0,
+       "col": "S_VALID_YN",
+       "before": null,
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "DIVISION_ID",
+       "before": "Electrode",
+       "after": "40"
+      },
+      {
+       "row": 1,
+       "col": "OPERATION_GROUP",
+       "before": "APCAN2441A",
+       "after": "Electrode"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "M53F1B",
+       "after": "APCAN2441A"
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "MON",
+       "after": "M53F1B"
+      },
+      {
+       "row": 1,
+       "col": "DEPARTURE_DAY",
+       "before": "Y",
+       "after": "MON"
+      },
+      {
+       "row": 1,
+       "col": "VALID_YN",
+       "before": "jaeuk.shin",
+       "after": "Y"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "2024-12-12 16:18:33",
+       "after": "jaeuk.shin"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "jaeuk.shin",
+       "after": "2024-12-12 16:18:33"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "2024-12-12 16:18:33",
+       "after": "jaeuk.shin"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "",
+       "after": "2024-12-12 16:18:33"
+      },
+      {
+       "row": 1,
+       "col": "S_VALID_YN",
+       "before": null,
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "DIVISION_ID",
+       "before": "Electrode",
+       "after": "40"
+      },
+      {
+       "row": 2,
+       "col": "OPERATION_GROUP",
+       "before": "APCCA0861A",
+       "after": "Electrode"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "X732",
+       "after": "APCCA0861A"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "MON",
+       "after": "X732"
+      },
+      {
+       "row": 2,
+       "col": "DEPARTURE_DAY",
+       "before": "Y",
+       "after": "MON"
+      },
+      {
+       "row": 2,
+       "col": "VALID_YN",
+       "before": "max.ts.lee",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "2024-12-12 16:19:32",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "max.ts.lee",
+       "after": "2024-12-12 16:19:32"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATED_BY",
+       "before": "2024-12-12 16:19:32",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "",
+       "after": "2024-12-12 16:19:32"
+      },
+      {
+       "row": 2,
+       "col": "S_VALID_YN",
+       "before": null,
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "DIVISION_ID",
+       "before": "Cell",
+       "after": "81"
+      },
+      {
+       "row": 3,
+       "col": "OPERATION_GROUP",
+       "before": "ACEN1063I-A3",
+       "after": "Cell"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "E63E",
+       "after": "ACEN1063I-A3"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "TUE",
+       "after": "E63E"
+      },
+      {
+       "row": 3,
+       "col": "DEPARTURE_DAY",
+       "before": "Y",
+       "after": "TUE"
+      },
+      {
+       "row": 3,
+       "col": "VALID_YN",
+       "before": "aidenlee",
+       "after": "Y"
+      },
+      {
+       "row": 3,
+       "col": "CREATED_BY",
+       "before": "2018-10-25 18:39:19",
+       "after": "aidenlee"
+      },
+      {
+       "row": 3,
+       "col": "CREATION_DATE",
+       "before": "taewonkk",
+       "after": "2018-10-25 18:39:19"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATED_BY",
+       "before": "2018-11-08 14:28:22",
+       "after": "taewonkk"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATE_DATE",
+       "before": "",
+       "after": "2018-11-08 14:28:22"
+      },
+      {
+       "row": 3,
+       "col": "S_VALID_YN",
+       "before": null,
+       "after": ""
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "81",
+       "after": ""
+      },
+      {
+       "row": 4,
+       "col": "DIVISION_ID",
+       "before": "Cell",
+       "after": "81"
+      },
+      {
+       "row": 4,
+       "col": "OPERATION_GROUP",
+       "before": "ACEN1076I-A1",
+       "after": "Cell"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "E76A",
+       "after": "ACEN1076I-A1"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "TUE",
+       "after": "E76A"
+      },
+      {
+       "row": 4,
+       "col": "DEPARTURE_DAY",
+       "before": "Y",
+       "after": "TUE"
+      },
+      {
+       "row": 4,
+       "col": "VALID_YN",
+       "before": "ckwlsdn",
+       "after": "Y"
+      },
+      {
+       "row": 4,
+       "col": "CREATED_BY",
+       "before": "2019-05-02 20:21:00",
+       "after": "ckwlsdn"
+      },
+      {
+       "row": 4,
+       "col": "CREATION_DATE",
+       "before": "ckwlsdn",
+       "after": "2019-05-02 20:21:00"
+      },
+      {
+       "row": 4,
+       "col": "LAST_UPDATED_BY",
+       "before": "2019-05-02 20:21:00",
+       "after": "ckwlsdn"
+      },
+      {
+       "row": 4,
+       "col": "LAST_UPDATE_DATE",
+       "before": "",
+       "after": "2019-05-02 20:21:00"
+      },
+      {
+       "row": 4,
+       "col": "S_VALID_YN",
+       "before": null,
+       "after": ""
+      }
+     ],
+     "more": 588
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0033-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Semi Dept Day",
+     "rows_before": 54,
+     "rows_after": 54,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 37,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 41,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0033-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0033-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 '1' · 활성 셀 첫 행 ITEM_ID · KeyPressEventArgs(char 49)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0033-Se70b64"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "KeyPress 처리기 직접 호출 · 글자 'a' · 활성 셀 첫 행 ITEM_ID · KeyPressEventArgs(char 97)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0033-Se70b64"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 23:35:16",
+ "edit_mode": true
+}

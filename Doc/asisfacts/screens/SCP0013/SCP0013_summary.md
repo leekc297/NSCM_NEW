@@ -211,11 +211,14 @@
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 | dbo.TB_FX_SearchCondition | 4814 | dbmeta_dbo_TB_FX_SearchCondition.csv |
 
-## 9. 주석/비활성 처리된 호출 (7건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (10건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 2385 | SCP.SCP0011_SAVE_PRODUCTION_PLAN_LINE | commented:MATCH |
 | 2751 |  | commented:EMPTY |
+| 2763 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
+| 2764 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
+| 2765 | SCP.SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW | commented:MATCH |
 | 3258 | SCP.SCP0024_SAVE_PRODUCTION_PLAN_FIX | commented:MATCH |
 | 3387 | SCP.SCP0013_GET_PLAN_EDIT_INFO | commented:MATCH |
 | 3708 | SCP.PR_SCM_SYS_LOG_BATCH | commented:MATCH |

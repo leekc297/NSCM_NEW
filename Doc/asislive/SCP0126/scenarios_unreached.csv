@@ -1,0 +1,7 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0126-S72956d,조회,GetPlanGroupByUserID,SCP0126_CAPA.cs:358,같은 파일에서 호출,SCP0126_CAPA.cs:91,
+SCP0126-Sedadda,조회,GetSearchInfo,SCP0126_CAPA.cs:324,같은 파일에서 호출,SCP0126_CAPA.cs:90; SCP0126_NoWork_BatchPopup.cs:44,
+SCP0126-S29817f,초기,SetSpreadInit,SCP0126_CAPA.cs:723,주석 안에서만 호출,SCP0126_CAPA.cs:1176,
+SCP0126-S7b3573,초기,SetSpreadInit,SCP0126_CAPA.cs:728,주석 안에서만 호출,SCP0126_CAPA.cs:1176,
+SCP0126-Sa28e9a,기타,ChangeCurrentCell,SCP0126_SingleDatePopup.cs:294,이벤트·대리자 연결,SCP0126_SingleDatePopup.cs:283,SelectCell
+SCP0126-Scfd7e8,기타,tr_Mins_Scroll,SCP0126_SingleDatePopup.cs:614,호출 없음,,

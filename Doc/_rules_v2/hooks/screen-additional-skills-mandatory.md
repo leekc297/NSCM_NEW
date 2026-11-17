@@ -119,10 +119,9 @@ export const useSalesSiteStore = createPersistedStoreWithTab<...>(
   InputProps={{
     endAdornment: (
       <Button appearance='outlined' priority='normal'
-        iconComponent={
-          <FunctionSearchIcon appearance='lined'
-            onClick={() => setOpenProjectModal(true)} />
-        } />
+        iconComponent={<FunctionSearchIcon appearance='lined' />}
+        onClick={() => setOpenProjectModal(true)} />
+      // (2026-11-13 정정: onClick 위치 아이콘 → Button — 테두리 포함 버튼 전체 클릭 시 팝업(CR-062) · 실제 SalesSiteProjectModelForm.tsx:305-309 와 동일)
     ),
   }}
   onChange={e => setSearchParams({ projectCode: e.target.value })}

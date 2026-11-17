@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 344,
+  "at": "2026-11-13T21:02:09.784Z",
+  "user": "minyonglee1",
+  "test": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 434,
+  "at": "2026-11-13T21:02:09.848Z",
+  "user": "minyonglee1",
+  "test": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2330,
+  "at": "2026-11-13T21:02:14.598Z",
+  "user": "minyonglee1",
+  "test": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2"
+ }
+]

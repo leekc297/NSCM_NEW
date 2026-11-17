@@ -40,8 +40,9 @@ import { buildPeriodColumns, periodColumnSignature } from './utils/capaTeepRepor
  *   **그 파생값 하나가 시트축·GET SP 변형·헤더 SP 의 `p_sheet_name` 을 전부 결정한다**(03 §4.1) —
  *   AS-IS 가 헤더 호출만 다른 식을 쓰던 불일치(01 L-19)는 TO-BE 에서 단일 출처로 해소했다.
  *
- *   조회·동적 기간 헤더 런타임 체인은 `PKG_SCP0107`·`PKG_SCP0104` **미배포**라 미완이다
- *   (goal ② / 03 §6-6·§6-7 — convert-sp 후속). 이 회차에서 "조회 정상 동작" 으로 보고하지 않는다.
+ *   조회·동적 기간 헤더 런타임 체인은 `PKG_SCP0107`(ASSEMBLY/ELTR GET + 자체 SPREAD_TITLE) 배포·VALID
+ *   이며 DB 실측으로 조회(ELTR/ASSEMBLY)·기간컬럼 생성이 확인됐다(2026-11-09 ora.py). 색·병합·3단 48px
+ *   육안만 미확인이다.
  *
  *   Page 는 조립만 한다 — 콤보·cascade 는 `hooks/useCapaTeepReportCombos`, 조회조건 변경 시 그리드 비움·
  *   기간헤더 갱신은 `hooks/useCapaTeepReportConditionEffects`, 컬럼 모달은 `components/modals/*` 다.

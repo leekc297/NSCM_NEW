@@ -19,12 +19,12 @@
 | features/shipping/src/pages/shipment-plan-mobility-it/shipment-plan-mobility-it.constants.ts | constants | 346 |
 | features/shipping/src/pages/shipment-plan-mobility-it/shipment-plan-mobility-it.types.ts | types | 42 |
 | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.module.scss | style | 103 |
-| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | page | 1829 |
-| features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | store | 503 |
+| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | page | 1849 |
+| features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | store | 515 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.detailSheets.ts | util | 136 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.editLock.ts | util | 93 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | util | 137 |
-| features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | util | 297 |
+| features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | util | 301 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.sum.ts | util | 84 |
 | features/shipping/src/pages/shipment-plan-mobility-it/__asis-mapping__.md | mapping | 87 |
 
@@ -44,26 +44,26 @@
 | /SSP0015/main/GET_SHIPMENT_CONFIRM_DETAIL_PACKER/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:288 |
 | SSP0015/whStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:296 |
 | SSP0015/holdStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:303 |
-| SSP0015/mesStock//call-proc | hook | 2 | Y | ShipmentPlanMobilityIt.tsx:310 ShipmentPlanMobilityIt.tsx:597 |
+| SSP0015/mesStock//call-proc | hook | 2 | Y | ShipmentPlanMobilityIt.tsx:310 ShipmentPlanMobilityIt.tsx:604 |
 | SSP0015/scsStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:317 |
 | SSP0015/stockLocationDetail//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:324 |
 | SSP0015/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:331 |
-| /SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc | http | 2 | Y | ShipmentPlanMobilityIt.tsx:343 ShipmentPlanMobilityIt.tsx:1452 |
+| /SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc | http | 2 | Y | ShipmentPlanMobilityIt.tsx:343 ShipmentPlanMobilityIt.tsx:1472 |
 | /SSP0015/main/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:490 |
 | {?endpoint} | http | 1 | N | ShipmentPlanMobilityIt.tsx:519 |
-| /SSP0015/holdStock/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:570 |
-| /common/web-service/erpIf/call | http | 2 | Y | ShipmentPlanMobilityIt.tsx:777 ShipmentPlanMobilityIt.tsx:814 |
-| /SSP0015/main/IF_CHECK/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:803 |
-| /SSP0015/main/DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:832 |
-| /SSP0015/main/ERP_ERROR_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:864 |
-| /SSP0015/main/GET_SHIPMENT_STATUS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1055 |
-| /SSP0015/main/GET_ERP_SO_NO_CNT/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1118 |
-| /SSP0015/main/CHECK_CONFIRM_CHANGETIME/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1148 |
-| /SSP0015/main/{draftBtn}/call-proc | http | 1 | N | ShipmentPlanMobilityIt.tsx:1197 |
-| /SSP0015/main/SAVE_SHIPMENT_PSI_COMMENTS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1562 |
-| /admin/menu/SSP0015/column | http | 1 | Y | useShipmentPlanMobilityItStore.ts:422 |
-| /admin/menu/SSP0015/measure | http | 1 | Y | useShipmentPlanMobilityItStore.ts:450 |
-| /admin/menu/SSP0015/search-conditions | http | 1 | Y | useShipmentPlanMobilityItStore.ts:479 |
+| /SSP0015/holdStock/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:573 |
+| /common/web-service/erpIf/call | http | 2 | Y | ShipmentPlanMobilityIt.tsx:797 ShipmentPlanMobilityIt.tsx:834 |
+| /SSP0015/main/IF_CHECK/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:823 |
+| /SSP0015/main/DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:852 |
+| /SSP0015/main/ERP_ERROR_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:884 |
+| /SSP0015/main/GET_SHIPMENT_STATUS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1075 |
+| /SSP0015/main/GET_ERP_SO_NO_CNT/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1138 |
+| /SSP0015/main/CHECK_CONFIRM_CHANGETIME/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1168 |
+| /SSP0015/main/{draftBtn}/call-proc | http | 1 | N | ShipmentPlanMobilityIt.tsx:1217 |
+| /SSP0015/main/SAVE_SHIPMENT_PSI_COMMENTS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1582 |
+| /admin/menu/SSP0015/column | http | 1 | Y | useShipmentPlanMobilityItStore.ts:434 |
+| /admin/menu/SSP0015/measure | http | 1 | Y | useShipmentPlanMobilityItStore.ts:462 |
+| /admin/menu/SSP0015/search-conditions | http | 1 | Y | useShipmentPlanMobilityItStore.ts:491 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -141,21 +141,21 @@
 | InputField | onChange | <arrow> setComments | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 136 |
 | Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 154 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 161 |
-| ShipmentPsiMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1616 |
-| ShipmentPsiMainGrid | onFigureDrilldown | handleFigureDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1617 |
-| ShipmentPsiMainGrid | onMemo | canMemo ? handleMemo : undefined | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1620 |
-| ShipmentPsiForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1633 |
-| ShipmentPsiForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1633 |
-| ShipmentPsiDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1676 |
-| ShipmentPsiDetailBar | onModelSearch | <arrow> setOpenItemDetail | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1677 |
-| ShipmentPsiDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1678 |
-| ShipmentPsiDetailGrid | onConfirmDetail | setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1709 |
-| ShipmentPsiDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1710 |
-| MeasureSelectModal | onApply | <arrow> setOpenMeasure,applyVisibleMeasures,(staticMeasures[activeMainSheet]??[]).map,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[activeMainSheet]??'',columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1766 |
-| ShipmentPsiMemoModal | onClose | <arrow> setMemoCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1811 |
-| ShipmentPsiMemoModal | onSave | handleMemoSave | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1812 |
-| ShipmentOrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1817 |
-| ShipmentChangeRequestDraftingModal | onClose | <arrow> setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1824 |
+| ShipmentPsiMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1636 |
+| ShipmentPsiMainGrid | onFigureDrilldown | handleFigureDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1637 |
+| ShipmentPsiMainGrid | onMemo | canMemo ? handleMemo : undefined | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1640 |
+| ShipmentPsiForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1653 |
+| ShipmentPsiForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1653 |
+| ShipmentPsiDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1696 |
+| ShipmentPsiDetailBar | onModelSearch | <arrow> setOpenItemDetail | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1697 |
+| ShipmentPsiDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1698 |
+| ShipmentPsiDetailGrid | onConfirmDetail | setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1729 |
+| ShipmentPsiDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1730 |
+| MeasureSelectModal | onApply | <arrow> setOpenMeasure,applyVisibleMeasures,(staticMeasures[activeMainSheet]??[]).map,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[activeMainSheet]??'',columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1786 |
+| ShipmentPsiMemoModal | onClose | <arrow> setMemoCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1831 |
+| ShipmentPsiMemoModal | onSave | handleMemoSave | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1832 |
+| ShipmentOrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1837 |
+| ShipmentChangeRequestDraftingModal | onClose | <arrow> setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1844 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -284,8 +284,8 @@
 | MSG01309 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0015(36), SSP0200(5), SSP0300(5), SSP0003(5), SCM0002(4), SSP0021(2), SSP0060(1), SSP0012(1), SCP0020(1)
-- SP/PKG: PKG_SSP0003(4), P_SSP0003_GET_DRAFTING(4), SCM0001_GET_SCP_DAY_PERIOD(4), P_ACTIVE_FLAG(4), P_SSP0003_GET_REQ_DRAFTING(3), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0300_GET_ORDER_DETAIL(2), PKG_SSP0300(2), SSP0002_GET_USER_INFO_LIST(2), P_SSP0003_SAVE_REQ_IF_CHECK(2), P_PLAN_TYPE(2), P_SSP0015_SAVE_SHIPMENT_PSI(2), P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), FN_MULTY_TIME(1), PR_GET_PROC_INFO_LIST(1), SSP0300_GET_ORDER_DETAIL(1), P_SSP0200_USER_CHECK(1), PKG_SSP0002(1), P_SSP0002_GET_USER_INFO_LIST(1), P_SSP0015_SCM_SSP_DEL_DRAFTING_BY_CONFIRM(1), P_SSP0015_SCM_SSP_ERP_ERROR_CONFIRM(1), P_SSP0003_GET_IF_CHECK(1), P_SSP0003_IF_CHECK(1), P_SSP0015_GET_WH_STOCK(1), FN_STRING_SPLIT(1), P_NONCHK(1), P_DIVISION_ID(1), P_FROM_SITE(1), P_ITEM_ID(1), P_PLAN_START_YYYYMMDD(1), P_YYYYMMDD(1), P_MEASURE(1), P_USER_ID(1), P_DEBUG_MODE(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40(1), P_SSP0015_SAVE_BLOCK_STOCK_DATA(1)
+- 화면ID: SSP0015(36), SSP0200(5), SSP0300(5), SSP0003(5), SCM0002(4), SSP0021(2), SSP0060(2), SSP0012(1), SCP0020(1)
+- SP/PKG: PKG_SSP0003(4), P_SSP0003_GET_DRAFTING(4), SCM0001_GET_SCP_DAY_PERIOD(4), P_ACTIVE_FLAG(4), P_SSP0003_GET_REQ_DRAFTING(3), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0300_GET_ORDER_DETAIL(2), PKG_SSP0300(2), SSP0002_GET_USER_INFO_LIST(2), P_SSP0003_SAVE_REQ_IF_CHECK(2), P_PLAN_TYPE(2), P_SSP0015_SAVE_SHIPMENT_PSI(2), P_USER_ID(2), P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), FN_MULTY_TIME(1), PR_GET_PROC_INFO_LIST(1), SSP0300_GET_ORDER_DETAIL(1), P_SSP0200_USER_CHECK(1), PKG_SSP0002(1), P_SSP0002_GET_USER_INFO_LIST(1), P_SSP0015_SCM_SSP_DEL_DRAFTING_BY_CONFIRM(1), P_SSP0015_SCM_SSP_ERP_ERROR_CONFIRM(1), P_SSP0003_GET_IF_CHECK(1), P_SSP0003_IF_CHECK(1), P_SSP0015_GET_WH_STOCK(1), FN_STRING_SPLIT(1), P_NONCHK(1), P_DIVISION_ID(1), P_FROM_SITE(1), P_ITEM_ID(1), P_PLAN_START_YYYYMMDD(1), P_YYYYMMDD(1), P_MEASURE(1), P_DEBUG_MODE(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40(1), P_SSP0015_SAVE_BLOCK_STOCK_DATA(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -318,18 +318,18 @@
 | code | }; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 456 |
 | code | }, [staticColumns, mainSheet]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 457 |
 | code | setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 546 |
-| endpoint | const { mutate: mutateHold } = useProcMutation<MENU_ID, SHEETS.HOLD_STOCK>({ | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 556 |
-| code | onSuccess: () => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 560 |
-| code | holdStockEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 561 |
-| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 562 |
-| code | setDetailFilter(SHEETS.HOLD_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 563 |
-| code | }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 565 |
-| code | setDetailFilter(SHEETS.MES_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 604 |
-| code | setToast({ type: 'error', message: t(MSG.NO_MODIFICATION, '__No modifications have been made.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1035 |
-| code | mutateHold(dirty as unknown as HoldStockRow[]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1293 |
-| code | if (activeDetailSheet !== SHEETS.HOLD_STOCK) return; // AS-IS Insert 가드(Hold stock 한정, 01 R5) | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1348 |
-| code | const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER, SHEETS.CALENDAR]); | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 179 |
-| endpoint | Measure 동적 fetch (SCM_MST_SHEET_MEASURE) — MeasureSelectModal 대상. 시트별 보관. | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 443 |
+| endpoint | const { mutate: mutateHold } = useProcMutation<MENU_ID, SHEETS.HOLD_STOCK>({ | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 559 |
+| code | onSuccess: () => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 563 |
+| code | holdStockEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 564 |
+| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 565 |
+| code | setDetailFilter(SHEETS.HOLD_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 566 |
+| code | }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 568 |
+| code | setDetailFilter(SHEETS.MES_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 611 |
+| code | setToast({ type: 'error', message: t(MSG.NO_MODIFICATION, '__No modifications have been made.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1055 |
+| code | mutateHold(dirty as unknown as HoldStockRow[]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1313 |
+| code | if (activeDetailSheet !== SHEETS.HOLD_STOCK) return; // AS-IS Insert 가드(Hold stock 한정, 01 R5) | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1368 |
+| code | const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER, SHEETS.CALENDAR]); | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 188 |
+| endpoint | Measure 동적 fetch (SCM_MST_SHEET_MEASURE) — MeasureSelectModal 대상. 시트별 보관. | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 455 |
 | code | const blank = typeof va === 'string' && va.trim() === ''; | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | 67 |
 | code | return !blank && va === (rb[binding] ?? ''); | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | 68 |
 | code | shipmentDate: r => str(r.SHIPMENT_DATE), // proc 가 SUBSTR(1,10)+REPLACE('-') 로 정규화 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | 225 |

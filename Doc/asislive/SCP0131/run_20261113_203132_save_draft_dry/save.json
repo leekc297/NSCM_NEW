@@ -1,0 +1,69 @@
+{
+ "id": "SCP0131",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_SALES_SITE_PRIORITY",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "ITEM_ID",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "ITEM_ID": "ITEM_ID",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+  "side": [],
+  "basis": "foxml SCP0131_SAVE_SALES_SITE_PRIORITY → SP SCP0131_SAVE_SALES_SITE_PRIORITY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PRIO_RANK",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PRIO_RANK",
+     "db_col": "PRIO_RANK",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PRIO_RANK",
+    "db_col": "PRIO_RANK",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 20:31:32",
+ "status": "ERROR",
+ "steps": [],
+ "db_before": [],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "ATL_DE_RDG",
+    "OPMZ_PLAN_GR_ID": "",
+    "ITEM_ID": "AMCOME782-A1-0A0",
+    "FROM_YYYYMMDD": "2025-04-21",
+    "TO_YYYYMMDD": "2999-12-31"
+   }
+  }
+ ],
+ "note": "DB 대상 행 수가 기대(1)와 다름(0 · 조건 {'DIVISION_ID': '81', 'SCM_SITE_ID': 'ATL_DE_RDG', 'OPMZ_PLAN_GR_ID': '', 'ITEM_ID': 'AMCOME782-A1-0A0', 'FROM_YYYYMMDD': '2025-04-21', 'TO_YYYYMMDD': '2999-12-31'}) — 저장하지 않음"
+}

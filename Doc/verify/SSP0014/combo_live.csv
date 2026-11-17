@@ -1,0 +1,12 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SSP0014""}",2,2,,,PASS,응답 2건 = DB 2건
+PlantSiteByDivision,"{""comboId"":""PlantSiteByDivision"",""mnuId"":""SSP0014"",""divisionId"":""''"",""lookupType"":""'OPERATION_GROUP'"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
+PlantSiteByDivision,"{""comboId"":""PlantSiteByDivision"",""divisionId"":""''"",""mnuId"":""SSP0014""}",0,0,,,PASS,응답 0건 = DB 0건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SSP0014"",""divisionId"":""''"",""lookupType"":""'OPERATION_GROUP'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+MyDivision,"{""comboId"":""MyDivision"",""mnuId"":""SSP0014""}",8,8,,,PASS,응답 8건 = DB 8건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SSP0014""}",14,14,,,PASS,응답 14건 = DB 14건
+PlantSiteByDivision,"{""comboId"":""PlantSiteByDivision"",""divisionId"":""'40'"",""mnuId"":""SSP0014""}",32,32,,,PASS,응답 32건 = DB 32건
+PlantSiteByDivision,"{""comboId"":""PlantSiteByDivision"",""mnuId"":""SSP0014"",""divisionId"":""'40'"",""lookupType"":""'OPERATION_GROUP'"",""validYn"":""'Y'""}",32,32,,,PASS,응답 32건 = DB 32건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'OPERATION_GROUP'"",""mnuId"":""SSP0014"",""divisionId"":""'40'"",""validYn"":""'Y'""}",3,3,,,PASS,응답 3건 = DB 3건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'OPERATION_GROUP'"",""mnuId"":""SSP0014"",""divisionId"":""''"",""validYn"":""'Y'""}",3,3,,,PASS,응답 3건 = DB 3건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SSP0014"",""divisionId"":""'40'"",""lookupType"":""'OPERATION_GROUP'"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건

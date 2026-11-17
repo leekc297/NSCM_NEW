@@ -1,0 +1,181 @@
+{
+ "id": "DMF0021",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 32,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0021-S5a4a23",
+    "DMF0021-S26ff5f",
+    "DMF0021-S18f2df",
+    "DMF0021-S6c59f3",
+    "DMF0021-S6a69a9",
+    "DMF0021-Sd59aae",
+    "DMF0021-Sf5f784",
+    "DMF0021-Sbb8d29",
+    "DMF0021-S252290",
+    "DMF0021-Sc14b34",
+    "DMF0021-S45e776",
+    "DMF0021-Sffed87",
+    "DMF0021-S0ba399",
+    "DMF0021-Sd738d5",
+    "DMF0021-S2e76bd",
+    "DMF0021-S72a490",
+    "DMF0021-Sf409b9",
+    "DMF0021-S6bd4b3",
+    "DMF0021-S109112",
+    "DMF0021-Sac510b"
+   ]
+  },
+  {
+   "control": "btnCutOff",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnCutOff failed: InvalidOperationException: control not found: btnCutOff",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-Sd0a499",
+    "DMF0021-Se7e3bc"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0021-Sea1449"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 14,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0021-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0021-S4fa471"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S67cd45",
+    "DMF0021-S913dee"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S669149",
+    "DMF0021-S2348c7"
+   ]
+  },
+  {
+   "control": "layoutControlItem3",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationException: control not found: layoutControlItem3",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S67cd45",
+    "DMF0021-S913dee"
+   ]
+  },
+  {
+   "control": "layoutControlItem7",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem7 failed: InvalidOperationException: control not found: layoutControlItem7",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-Sd0a499",
+    "DMF0021-Se7e3bc"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 09:59:38.211",
+ "fills": 0,
+ "fill_left": []
+}

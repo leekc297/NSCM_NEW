@@ -1,0 +1,50 @@
+- dialog:
+  - heading "Material by Division" [level=2]
+  - text: Div
+  - combobox [disabled]: Automotive Battery
+  - button "Open" [disabled]
+  - img
+  - text: Operation Group
+  - textbox [disabled]
+  - text: Material
+  - textbox: FMC-HEVC
+  - button "Search"
+  - paragraph
+  - text: 총3건
+  - grid:
+    - rowgroup:
+      - row "No Div. Material Code Description Nickname Class Name":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Material Code"
+        - columnheader "Description"
+        - columnheader "Nickname"
+        - columnheader "Class Name"
+    - rowgroup:
+      - row "1 81 AMFMCHEVC-A1 AM,FMC,HEVC,A1 FMC-HEVC [AM]Module":
+        - gridcell "1" [selected]
+        - gridcell "81"
+        - gridcell "AMFMCHEVC-A1"
+        - gridcell "AM,FMC,HEVC,A1"
+        - gridcell "FMC-HEVC"
+        - gridcell "[AM]Module"
+      - row "2 81 AMFMCHEVC-A1-000 AM,FMC,HEVC,A1 FMC-HEVC-000 [AM]Module":
+        - gridcell "2"
+        - gridcell "81"
+        - gridcell "AMFMCHEVC-A1-000"
+        - gridcell "AM,FMC,HEVC,A1"
+        - gridcell "FMC-HEVC-000"
+        - gridcell "[AM]Module"
+      - row "3 81 AMFMCHEVC-A1T000 AM,FMC,HEVC,A1 FMC-HEVC-T000 [AM]Module":
+        - gridcell "3"
+        - gridcell "81"
+        - gridcell "AMFMCHEVC-A1T000"
+        - gridcell "AM,FMC,HEVC,A1"
+        - gridcell "FMC-HEVC-T000"
+        - gridcell "[AM]Module"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

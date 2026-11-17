@@ -1,0 +1,114 @@
+{
+ "id": "DMF0049",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0049_GET_SPREAD_TITLE",
+    "DMF0049_GET_SALES_ETC_REPORTS_DATA"
+   ],
+   "rows": [
+    [
+     "DMF0049_GET_SPREAD_TITLE",
+     41
+    ],
+    [
+     "DMF0049_GET_SALES_ETC_REPORTS_DATA",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0049-S96bd28",
+    "DMF0049-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnSPVer",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0044_United_VersionPopup",
+     "title": "Sales Reports Popup",
+     "modal": true,
+     "grid_rows": 3,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_LOOKUP_VALUES",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0044_GET_SALES_VERSION_POPUP"
+   ],
+   "scenarios": [
+    "DMF0049-S895f79"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 13:16:38.858",
+ "preset": {
+  "name": "clbType",
+  "token": "clbType=i1",
+  "kw": {
+   "name": "clbType",
+   "index": "1"
+  },
+  "label": "clbType 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:Biz Plan",
+  "value": "REPORT_BP_M",
+  "text": "Biz Plan",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 1,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

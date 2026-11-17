@@ -1,0 +1,69 @@
+{
+ "id": "SCP0053",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0053_SAVE_SCP_BOM",
+   "save_sp": "SCP0053_SAVE_SCP_BOM",
+   "status": "키 일부 미대응",
+   "table": "SCM_MST_ALTER_BOM",
+   "pk": [
+    "DIVISION_ID",
+    "SITE_ID",
+    "PLANT_ID",
+    "PARENT_ITEM_ID",
+    "CHILD_ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "PARENT_ITEM_ID": "PARENT_ITEM_ID",
+    "CHILD_ITEM_ID": "CHILD_ITEM_ID"
+   },
+   "unmatched_pk": [
+    "SITE_ID"
+   ],
+   "edit": {
+    "col": "ALT_PRIORITY",
+    "db_col": "ALT_PRIORITY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCM_MST_ALTER_BOM_H",
+     "pk": [
+      "HISTORY_SEQ",
+      "DIVISION_ID",
+      "SITE_ID",
+      "PLANT_ID",
+      "PARENT_ITEM_ID",
+      "CHILD_ITEM_ID"
+     ]
+    }
+   ],
+   "sheet": "spdMain/SCP BOM",
+   "writes": {
+    "SCM_MST_ALTER_BOM": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0053_SAVE_SCP_BOM → SP SCP0053_SAVE_SCP_BOM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_MST_ALTER_BOM_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": [
+    {
+     "col": "ALT_PRIORITY",
+     "db_col": "ALT_PRIORITY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

@@ -14,6 +14,9 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData | 260 | SystemManager.UP_FX_GetUserInfoSearchList | MATCH | SP UP_FX_GetUserInfoSearchList |
 | button:SaveButton | SaveButton > SaveData > FindData | 260 | SystemManager.UP_FX_GetUserInfoSearchList | MATCH | SP UP_FX_GetUserInfoSearchList |
+| button:SaveButton | SaveButton > SaveData | 402 | SystemManager.UP_FX_SaveUserInfo | MATCH | SP UP_FX_SaveUserInfo |
+| button:SaveButton | SaveButton > SaveData | 403 | SystemManager.UP_FX_DeleteUserInfo | MATCH | SP UP_FX_DeleteUserInfo |
+| button:SaveButton | SaveButton > SaveData | 404 | SystemManager.UP_FX_SaveUserInfo | MATCH | SP UP_FX_SaveUserInfo |
 | event:this.Load | Form_Load > InitControls | 129 | biz:CommonData.CommonDataList [code=GroupID] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 130 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 | event:this.spdMain.CellClick | SpdMain_CellClick | 527 | biz:CommonData.CommonDataList [code=MyGroupIDALL] | BIZ_MATCH |  |
@@ -51,8 +54,10 @@
 | MenuContainer.UP_FX_SaveSearchCondition | MATCH | 1 | SP UP_FX_SaveSearchCondition | EXEC:UP_FX_SAVESEARCHCONDITION, MERGE:TB_FX_SEARCHCONDITION |  |
 | MenuContainer.UP_FX_SaveUserConnect | MATCH | 1 | SP UP_FX_SaveUserConnect | EXEC:UP_FX_SAVEUSERCONNECT, MERGE:TB_FX_USERCONNECT, INSERT:TB_FX_USERCONNECTLOG |  |
 | SCM.SCM_ADM_SAVE_NOTICE_CONFIRM | MATCH | 1 | SP SCM_ADM_SAVE_NOTICE_CONFIRM | EXEC:SCM_ADM_SAVE_NOTICE_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, EXEC:PR_SCM_ADM_NOTICE_CONFIRM_HIST, SELECT:SCM_ADM_NOTICE_CONFIRM, INSERT:SCM_ADM_NOTICE_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCM_ADM_NOTICE_CONFIRM_H |  |
+| SystemManager.UP_FX_DeleteUserInfo | MATCH | 1 | SP UP_FX_DeleteUserInfo | EXEC:UP_FX_DELETEUSERINFO, DELETE:TB_FX_USER, DELETE:TB_FX_USERGROUPINFO, DELETE:TB_FX_USERMENUAUTH, DELETE:TB_FX_USERMENUAUTHEXTENSION, DELETE:TB_FX_USERGROUPAUTHEXTENTION |  |
 | SystemManager.UP_FX_GetUserInfoSearchList | MATCH | 1 | SP UP_FX_GetUserInfoSearchList | EXEC:UP_FX_GETUSERINFOSEARCHLIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPINFO |  |
 | SystemManager.UP_FX_SavePersonalSetting | MATCH | 1 | SP UP_FX_SavePersonalSetting | EXEC:UP_FX_SAVEPERSONALSETTING, UPDATE:TB_FX_USER |  |
+| SystemManager.UP_FX_SaveUserInfo | MATCH | 2 | SP UP_FX_SaveUserInfo | EXEC:UP_FX_SAVEUSERINFO, SELECT:TB_FX_USER, MERGE:TB_FX_USER, SELECT:SCM_MST_SSO_USER_INFO, EXEC:UP_FX_SAVEUSERGROUPINFO, UPDATE:TB_FX_USER, MERGE:TB_FX_USERGROUPINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

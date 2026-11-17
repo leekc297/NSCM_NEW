@@ -1,0 +1,864 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8036,
+     "rows_after": 8037,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "ROUTE_ID",
+       "before": "9917",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_TYPE",
+       "before": "AVERAGE",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_CITY_NAME",
+       "before": "WINDSOR, CANADA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_COUNTRY",
+       "before": "CA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_CITY",
+       "before": "CAWND",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TRANSPORT_MODE",
+       "before": "TRUCK",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRIORITY",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_MON",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_TUE",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_WED",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_THU",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_FRI",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_SAT",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DAYS_SUN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_PORT_NAME",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_COUNTRY",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_PORT_CODE",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "A_PORT_NAME",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "A_COUNTRY",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "A_PORT_CODE",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SHIPPING_COMPANY",
+       "before": "-",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_CITY_NAME",
+       "before": "WINDSOR, CANADA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_COUNTRY",
+       "before": "CA",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_CITY",
+       "before": "CAWND",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_DEPARTURE_INLAND",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_WAIT_SHIPPING",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_VOYAGE",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_LAY_OFF_CLEARANCE",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_ARRIVAL_INLAND",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "ohsun",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2024-01-22 14:07:22",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "sji.kwon",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2025-02-16 01:49:52",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ROUTE_ID",
+       "before": "10058",
+       "after": "9917"
+      },
+      {
+       "row": 1,
+       "col": "TRANSPORT_MODE",
+       "before": "AIR",
+       "after": "TRUCK"
+      },
+      {
+       "row": 1,
+       "col": "D_PORT_NAME",
+       "before": "TORONTO PEARSON APT",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "D_COUNTRY",
+       "before": "CA",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "D_PORT_CODE",
+       "before": "CAYYZ",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "A_PORT_NAME",
+       "before": "INCHON APT",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "A_COUNTRY",
+       "before": "KR",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "A_PORT_CODE",
+       "before": "KRICN",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "SHIPPING_COMPANY",
+       "before": "AIR",
+       "after": "-"
+      },
+      {
+       "row": 1,
+       "col": "TO_CITY_NAME",
+       "before": "CHONGJU,KOREA, REPUBLIC OF",
+       "after": "WINDSOR, CANADA"
+      },
+      {
+       "row": 1,
+       "col": "TO_COUNTRY",
+       "before": "KR",
+       "after": "CA"
+      },
+      {
+       "row": 1,
+       "col": "TO_CITY",
+       "before": "KRCOJ",
+       "after": "CAWND"
+      },
+      {
+       "row": 1,
+       "col": "LT_DEPARTURE_INLAND",
+       "before": "1",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "LT_WAIT_SHIPPING",
+       "before": "1",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "LT_VOYAGE",
+       "before": "1",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "LT_LAY_OFF_CLEARANCE",
+       "before": "1",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "LT_ARRIVAL_INLAND",
+       "before": "1",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "LT_SUM",
+       "before": "5",
+       "after": "0"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "cialcho",
+       "after": "ohsun"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "2024-07-16 13:21:03",
+       "after": "2024-01-22 14:07:22"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "cialcho",
+       "after": "sji.kwon"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-07-16 13:21:03",
+       "after": "2025-02-16 01:49:52"
+      },
+      {
+       "row": 2,
+       "col": "ROUTE_ID",
+       "before": "10059",
+       "after": "10058"
+      },
+      {
+       "row": 2,
+       "col": "TRANSPORT_MODE",
+       "before": "SEA",
+       "after": "AIR"
+      },
+      {
+       "row": 2,
+       "col": "PRIORITY",
+       "before": "2",
+       "after": "1"
+      }
+     ],
+     "more": 821
+    }
+   ],
+   "new_rows": {
+    "spdMain/Distribution Route": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:19:10.285",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Distribution Route",
+    "sheet": "Distribution Route",
+    "rows_total": 8037,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "ROUTE_ID",
+      "label": "Route Id",
+      "data_field": "route_id",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "LT_TYPE",
+      "label": "L/T Type*",
+      "data_field": "lt_type",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "FROM_CITY_NAME",
+      "label": "City Name",
+      "data_field": "from_city_name",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "FROM_COUNTRY",
+      "label": "Country*",
+      "data_field": "from_country",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "FROM_CITY",
+      "label": "City*",
+      "data_field": "from_city",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "TRANSPORT_MODE",
+      "label": "Trans Mode*",
+      "data_field": "transport_mode",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "PRIORITY",
+      "label": "Priority*",
+      "data_field": "priority",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "DAYS_MON",
+      "label": "MON",
+      "data_field": "days_mon",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "DAYS_TUE",
+      "label": "TUE",
+      "data_field": "days_tue",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "DAYS_WED",
+      "label": "WED",
+      "data_field": "days_wed",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "DAYS_THU",
+      "label": "THU",
+      "data_field": "days_thu",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "DAYS_FRI",
+      "label": "FRI",
+      "data_field": "days_fri",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "DAYS_SAT",
+      "label": "SAT",
+      "data_field": "days_sat",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "DAYS_SUN",
+      "label": "SUN",
+      "data_field": "days_sun",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "D_PORT_NAME",
+      "label": "Port*",
+      "data_field": "d_port_name",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "D_COUNTRY",
+      "label": "Country*",
+      "data_field": "d_country",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "D_PORT_CODE",
+      "label": "Port Code*",
+      "data_field": "d_port_code",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "A_PORT_NAME",
+      "label": "Port*",
+      "data_field": "a_port_name",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "A_COUNTRY",
+      "label": "Country*",
+      "data_field": "a_country",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "A_PORT_CODE",
+      "label": "Port Code*",
+      "data_field": "a_port_code",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "SHIPPING_COMPANY",
+      "label": "Forwarder*",
+      "data_field": "shipping_company",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "TO_CITY_NAME",
+      "label": "City Name",
+      "data_field": "to_city_name",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "TO_COUNTRY",
+      "label": "Country*",
+      "data_field": "to_country",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "TO_CITY",
+      "label": "City*",
+      "data_field": "to_city",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "SHIP_DOC_PREPARATION_DATE",
+      "label": "Shipping Document Preparation Date",
+      "data_field": "ship_doc_preparation_date",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "LT_DEPARTURE_INLAND",
+      "label": "Departure Inland",
+      "data_field": "lt_departure_inland",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "LT_WAIT_SHIPPING",
+      "label": "Waiting For Shipping",
+      "data_field": "lt_wait_shipping",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "LT_VOYAGE",
+      "label": "Voyage",
+      "data_field": "lt_voyage",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "LT_LAY_OFF_CLEARANCE",
+      "label": "Lay Off/Customs Clearance",
+      "data_field": "lt_lay_off_clearance",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "LT_ARRIVAL_INLAND",
+      "label": "Arrival Inland",
+      "data_field": "lt_arrival_inland",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "LT_SUM",
+      "label": "Total L/T",
+      "data_field": "lt_sum",
+      "visible": "True"
+     },
+     {
+      "index": 32,
+      "tag": "One_SEGMENT_COST",
+      "label": "Pick Up Cost",
+      "data_field": "One_SEGMENT_COST",
+      "visible": "True"
+     },
+     {
+      "index": 33,
+      "tag": "Two_SEGMENT_COST",
+      "label": "Freight Cost",
+      "data_field": "Two_SEGMENT_COST",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "Three_SEGMENT_COST",
+      "label": "Delivery Cost",
+      "data_field": "Three_SEGMENT_COST",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "VALID_YN",
+      "label": "Valid*",
+      "data_field": "valid_yn",
+      "visible": "True"
+     },
+     {
+      "index": 36,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "created_by",
+      "visible": "True"
+     },
+     {
+      "index": 37,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "creation_date",
+      "visible": "True"
+     },
+     {
+      "index": 38,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "last_updated_by",
+      "visible": "True"
+     },
+     {
+      "index": 39,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "last_update_date",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "1101000000000000000000100000000100001111"
+    ],
+    "back": [
+     [
+      "Blue",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:19:10.292"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "L/T Type* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:18:05",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true
+}

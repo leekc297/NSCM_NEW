@@ -1,1 +1,0 @@
-export { BusinessPlan } from './BusinessPlan';

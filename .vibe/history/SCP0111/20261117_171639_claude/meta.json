@@ -1,0 +1,39 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0111] · Doc/gen/SCP0111/CHECK.md · Doc/gen/SCP0111/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0111/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-17T17:16:39+09:00",
+  "end": "2026-11-17T17:23:56+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "오류 사항으로 아래 항목 발생하였습니다. 원인 확인 요청 합니다. \n\nPKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN 가 AS-IS와 다르게 동작하는 부분이 있는 것으로 확인됨. V_ACTIVE_FLAG='M' 분기가 measure별로 나눠져 있는데 이게 의도된 수정인지 확인 필요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T17:23:56+09:00",
+  "changed": []
+}

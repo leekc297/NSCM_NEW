@@ -1,0 +1,22 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0106-S8b3ce2,기타,SetSheetEditStatus,AssemblyUtils.cs:1362,같은 파일에서 호출,AssemblyUtils.cs:1243; EltrUtils.cs:1851; EltrUtils.cs:1869,SetValue
+SCP0106-S79802a,저장,ApplyToSheet,AssemblyUtils.cs:889,호출 없음,SCP0106_CAPA_Loss_Plan.cs:3656; SCP0106_CAPA_Loss_Plan.cs:3657; SCP0106_CAPA_Loss_Plan.cs:3658; SCP0106_CAPA_Loss_Plan.cs:3659; SCP0106_CAPA_Loss_Plan.cs:3660,"RecalcSheetLossColumnAllAssembly,RecalcSheetLossColumnAllEltr,RecalcSheetPlanColumnAllAssembly,RecalcSheetPlanColumnAllEltr,RecalcSheetPlanColumnOneAssembly,RecalcSheetPlanColumnOneEltr"
+SCP0106-S2e0373,저장,ApplyToSheetOnlyEditMode,AssemblyUtils.cs:924,같은 파일에서 호출,AssemblyUtils.cs:896; AssemblyUtils.cs:897; AssemblyUtils.cs:898; AssemblyUtils.cs:899; AssemblyUtils.cs:900,ApplyToSheetOnlyEditModeCurrent
+SCP0106-S94fbf5,기타,SetItemValues,EltrUtils.cs:1492,같은 파일에서 호출,EltrUtils.cs:1087,ApplyToSheet
+SCP0106-Sfc49a6,기타,Refresh,EltrUtils.cs:2477,다른 파일에서 호출,SCP0106_CAPA_Loss_Plan.cs:1207; SCP0106_CAPA_Loss_Plan.cs:1478; SCP0106_CAPA_Loss_Plan.cs:4262; SCP0106_CAPA_Loss_Plan.cs:4275,"Form_Load,RecalcSheetSelfLineAssembly,RecalcSheetSelfLineEltr,RefreshElectrodeType"
+SCP0106-S3ad3c1,저장,ApplyToSheet,EltrUtils.cs:1081,호출 없음,SCP0106_CAPA_Loss_Plan.cs:3656; SCP0106_CAPA_Loss_Plan.cs:3657; SCP0106_CAPA_Loss_Plan.cs:3658; SCP0106_CAPA_Loss_Plan.cs:3659; SCP0106_CAPA_Loss_Plan.cs:3660,"RecalcSheetLossColumnAllAssembly,RecalcSheetLossColumnAllEltr,RecalcSheetPlanColumnAllAssembly,RecalcSheetPlanColumnAllEltr,RecalcSheetPlanColumnOneAssembly,RecalcSheetPlanColumnOneEltr"
+SCP0106-S93aed0,조회,AfterFindData,SCP0106_CAPA_Loss_Plan.cs:2765,같은 파일에서 호출,SCP0106_CAPA_Loss_Plan.cs:3034,SetQueryInfoGet
+SCP0106-Sc874ef,조회,AfterFindData,SCP0106_CAPA_Loss_Plan.cs:2798,같은 파일에서 호출,SCP0106_CAPA_Loss_Plan.cs:3034,SetQueryInfoGet
+SCP0106-S814d22,저장,AfterSaveData,SCP0106_CAPA_Loss_Plan.cs:3011,같은 파일에서 호출,SCP0106_CAPA_Loss_Plan.cs:3076; SCP0106_CAPA_Loss_Plan.cs:3275,"SetQueryInfoSaveLine,SetQueryInfoSaveModel"
+SCP0106-Sc767cb,저장,AfterSaveData,SCP0106_CAPA_Loss_Plan.cs:3020,같은 파일에서 호출,SCP0106_CAPA_Loss_Plan.cs:3076; SCP0106_CAPA_Loss_Plan.cs:3275,"SetQueryInfoSaveLine,SetQueryInfoSaveModel"
+SCP0106-Seb6c4c,기타,ClearUsrCheckedList,SCP0106_CAPA_Loss_Plan.cs:1516,호출 없음,,
+SCP0106-Sf02f63,기타,RecalcSheetPlanColumnOneEltr,SCP0106_CAPA_Loss_Plan.cs:3768,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:4228,
+SCP0106-Sf39c3f,기타,SetLockColumnsOneRow,SCP0106_CAPA_Loss_Plan.cs:2344,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2534,
+SCP0106-S5e749f,기타,SetLockColumnsOneRow,SCP0106_CAPA_Loss_Plan.cs:2373,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2534,
+SCP0106-S37a5fc,기타,SetLockColumnsOneRow,SCP0106_CAPA_Loss_Plan.cs:2422,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2534,
+SCP0106-S3d5e3e,기타,SetLockColumnsOneRow,SCP0106_CAPA_Loss_Plan.cs:2475,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2534,
+SCP0106-Secd4b2,팝업,SetSheetNumericColumnFormatOneRow,SCP0106_CAPA_Loss_Plan.cs:1734,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2535,
+SCP0106-Sb047c8,팝업,SetSheetNumericColumnFormatOneRow,SCP0106_CAPA_Loss_Plan.cs:1765,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:2535,
+SCP0106-S7cb871,기타,spdMain_ClipboardPasting,SCP0106_CAPA_Loss_Plan.cs:2036,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:1870; SCP0106_CAPA_Loss_Plan.cs:3545,
+SCP0106-S335a08,기타,spdMain_ClipboardPasting,SCP0106_CAPA_Loss_Plan.cs:2043,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:1870; SCP0106_CAPA_Loss_Plan.cs:3545,
+SCP0106-S578952,기타,spdMain_ClipboardPasting,SCP0106_CAPA_Loss_Plan.cs:2048,주석 안에서만 호출,SCP0106_CAPA_Loss_Plan.cs:1870; SCP0106_CAPA_Loss_Plan.cs:3545,

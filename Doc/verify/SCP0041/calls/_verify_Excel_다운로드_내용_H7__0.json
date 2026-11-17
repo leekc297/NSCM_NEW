@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0041",
+  "sheet": "Osp Stock",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0041/Osp%20Stock/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261109\",\"toYyyymmdd\":\"20271009\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 101,
+  "at": "2026-11-14T05:39:40.666Z",
+  "user": "minyonglee1",
+  "test": "Excel 다운로드 내용(H7)"
+ },
+ {
+  "menu": "SCP0041",
+  "sheet": "Osp Stock",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0041/Osp%20Stock/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"plantSiteId\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20211109\",\"toYyyymmdd\":\"20271009\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2296,
+  "at": "2026-11-14T05:41:44.320Z",
+  "user": "minyonglee1",
+  "test": "Excel 다운로드 내용(H7)"
+ }
+]

@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- AS-IS 빌드 시험용(2026-11-12): DevExpress/FarPoint 라이선스 컴파일(lc.exe)을 건너뛴다. 소스는 수정하지 않고
+       -p:CustomAfterMicrosoftCommonTargets=<이 파일> 로만 적용한다. -->
+  <ItemGroup>
+    <EmbeddedResource Remove="**\*.licx" />
+  </ItemGroup>
+</Project>

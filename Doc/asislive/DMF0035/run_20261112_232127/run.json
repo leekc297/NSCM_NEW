@@ -1,0 +1,186 @@
+{
+ "id": "DMF0035",
+ "started": "2026-11-12 23:21:27.572",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:21:27.809",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0035_MktFcstWaterfall",
+   "form_text": "MKT FCST Waterfall",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0035_MktFcstWaterfall.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:21:35.920"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:21:40.834",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0035\\run_20261112_232127\\dump_load.json",
+   "control_count": 104,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 34.696s, UI : 0.121s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:21:40.845"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:21:41.008",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0035\\run_20261112_232127\\shots\\DMF0035_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:21:41.195"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 23:21:48.880",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0035\\run_20261112_232127\\shots\\DMF0035_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:21:49.035"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:21:49.366",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:21:50.485"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:24:09.290",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0035\\run_20261112_232127\\dump_find.json",
+   "control_count": 104,
+   "grid_count": 1,
+   "total": "Total : 319",
+   "time_status": "DB : 133.12s, UI : 0.196s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:09.352"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:24:09.659",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0035\\run_20261112_232127\\shots\\DMF0035_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:09.822"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:24:10.298",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:24:10.968"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 3,
+  "calls": 35,
+  "calls_with_params": 33
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0035_MktFcstWaterfall",
+  "form_text": "MKT FCST Waterfall",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0035_MktFcstWaterfall.dll"
+ },
+ "fills": [
+  {
+   "rule": "Version 팝업 맨 위 행(Version*)",
+   "set": {
+    "name": "txtVersion",
+    "popup": "SCM0002_VersionByWaterfallPopup",
+    "opener": "btnVersion_Click"
+   },
+   "ok": true,
+   "applied": "popup:SCM0002_VersionByWaterfallPopup rows=1 value=Current",
+   "top": [
+    "Current"
+   ],
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "txtVersion",
+    "popup": "SCM0002_VersionByWaterfallPopup",
+    "opener": "btnVersion_Click"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 133.12s, UI : 0.196s",
+  "total": "Total : 319",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 130
+ },
+ "t_open": "2026-11-12 23:21:27.790",
+ "t_find": "2026-11-12 23:21:49.148",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 104,
+  "layout_items": 27,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 50,
+  "data_rows": 50,
+  "grid_rows": 319,
+  "calls_total": 35,
+  "calls_screen": 35,
+  "calls_find": 9,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:24:11.651",
+ "exit": 0
+}

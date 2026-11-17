@@ -1,64 +1,32 @@
 [
  {
-  "row_id": "V-edb134ea",
+  "row_id": "V-8e81c3d0",
   "rule_id": "A5",
   "target": "DMF0005 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-954c0b8b",
+  "rule_id": "F1",
+  "target": "DMF0005 화면",
   "same": [
-   "T-35255dd3"
+   "V-6798ff11",
+   "V-7f35eef7",
+   "V-3b1d76dd",
+   "V-109d8239",
+   "V-83f50ca6"
   ]
  },
  {
-  "row_id": "V-86ca6178",
-  "rule_id": "G3",
+  "row_id": "V-b707c0c1",
+  "rule_id": "K3",
   "target": "DMF0005 화면",
   "same": []
  },
  {
-  "row_id": "V-da5d7d23",
-  "rule_id": "G4",
-  "target": "DMF0005 돋보기 위치",
-  "same": []
- },
- {
-  "row_id": "V-dd5016ae",
-  "rule_id": "H4",
-  "target": "DMF0005 조회조건 겹침 1366",
-  "same": []
- },
- {
-  "row_id": "V-cc00a632",
-  "rule_id": "A5",
-  "target": "DMF0005 Division 컬럼 40/Purchase",
-  "same": []
- },
- {
-  "row_id": "V-e70c3096",
-  "rule_id": "A5",
-  "target": "DMF0005 Division 컬럼 81/Production",
-  "same": []
- },
- {
-  "row_id": "V-96c3d486",
-  "rule_id": "A5",
-  "target": "DMF0005 Division 컬럼 81/Purchase",
-  "same": []
- },
- {
-  "row_id": "V-e7ef5152",
-  "rule_id": "A5",
-  "target": "DMF0005 Division 컬럼 82/Production",
-  "same": []
- },
- {
-  "row_id": "V-447781c5",
-  "rule_id": "A5",
-  "target": "DMF0005 Division 컬럼 82/Purchase",
-  "same": []
- },
- {
-  "row_id": "V-7ec3cb83",
-  "rule_id": "F1",
-  "target": "DMF0005 저장 실패 처리",
+  "row_id": "V-1b5024bd",
+  "rule_id": "F3",
+  "target": "DMF0005 시나리오 Team 붙여넣기 → 코드·명칭 동반",
   "same": []
  },
  {
@@ -68,51 +36,9 @@
   "same": []
  },
  {
-  "row_id": "V-579b8031",
-  "rule_id": "H12",
-  "target": "DMF0005 화면",
-  "same": []
- },
- {
-  "row_id": "V-911b832b",
-  "rule_id": "G10",
-  "target": "조회조건 Model / Nickname",
-  "same": []
- },
- {
-  "row_id": "V-a15169fd",
-  "rule_id": "G10",
-  "target": "조회조건 Owner",
-  "same": []
- },
- {
-  "row_id": "V-dd4ddf71",
-  "rule_id": "F10",
-  "target": "PKG_DMF0005.P_DMF0005_SAVE_MODEL_CHANGE_POPUP",
-  "same": []
- },
- {
-  "row_id": "V-e91f5725",
-  "rule_id": "F10",
-  "target": "PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
-  "same": []
- },
- {
-  "row_id": "V-cde3ec4f",
-  "rule_id": "G1",
-  "target": "조회조건 chkProjectInfo",
-  "same": []
- },
- {
-  "row_id": "V-bd83a23e",
-  "rule_id": "G5",
-  "target": "조회조건 Model / Nickname",
-  "same": []
- },
- {
-  "row_id": "V-4deadb98",
-  "rule_id": "G1",
-  "target": "조회조건 Project",
+  "row_id": "V-0a5f55f0",
+  "rule_id": "E1",
+  "target": "DMF0005 입력검증 음수 KWH",
   "same": []
  },
  {
@@ -128,33 +54,37 @@
   "same": []
  },
  {
-  "row_id": "V-6fde8919",
-  "rule_id": "G1",
-  "target": "조회조건 chkEndCust",
-  "same": []
- },
- {
-  "row_id": "V-97e96421",
-  "rule_id": "G1",
-  "target": "조회조건 chkDetail",
-  "same": []
- },
- {
-  "row_id": "V-95de7b5d",
+  "row_id": "V-c6d33cd5",
   "rule_id": "D1",
   "target": "production.DEPT_ID (Team ID)",
+  "same": [
+   "V-6575c118"
+  ]
+ },
+ {
+  "row_id": "V-e04685cd",
+  "rule_id": "D1",
+  "target": "production.END_CUSTOMER (End Customer)",
   "same": []
  },
  {
-  "row_id": "V-47d311af",
-  "rule_id": "D5",
-  "target": "production.DEPT_ID (Team ID)",
+  "row_id": "V-35a67f39",
+  "rule_id": "B1",
+  "target": "production.END_CUSTOMER (End Customer)",
   "same": []
  },
  {
-  "row_id": "V-40acf309",
-  "rule_id": "H2",
+  "row_id": "V-18ee80f9",
+  "rule_id": "D1",
   "target": "production.OWNER (Owner Name)",
+  "same": [
+   "V-aedf3fc3"
+  ]
+ },
+ {
+  "row_id": "V-f85ecfbe",
+  "rule_id": "D1",
+  "target": "production.SCM_SITE_ID (Sales Site)",
   "same": []
  },
  {
@@ -164,8 +94,8 @@
   "same": []
  },
  {
-  "row_id": "V-e5e07824",
-  "rule_id": "H2",
+  "row_id": "V-5f6b530c",
+  "rule_id": "D1",
   "target": "production.ITEM_ID (Model)",
   "same": []
  },
@@ -182,277 +112,69 @@
   "same": []
  },
  {
-  "row_id": "V-60048901",
-  "rule_id": "D1",
-  "target": "siMain.LockColumn",
+  "row_id": "V-fa69b1e2",
+  "rule_id": "E1",
+  "target": "purchase.KWH (KWh/Cell)",
   "same": []
  },
  {
-  "row_id": "V-056faecf",
-  "rule_id": "D1",
-  "target": "siSub.LockColumn",
+  "row_id": "V-0a05b43e",
+  "rule_id": "E1",
+  "target": "purchase.CELL_PER_CAR (Cell/Car)",
   "same": []
  },
  {
-  "row_id": "V-30b0a88f",
-  "rule_id": "D1",
-  "target": "DIVISION_ID,DIVISION_ID",
-  "same": [
-   "V-b0f4e560",
-   "V-8a46c8d3",
-   "V-4cd46ac2",
-   "V-ec28b642",
-   "V-2ca25ad4"
-  ]
+  "row_id": "V-d302e3b4",
+  "rule_id": "H13",
+  "target": "purchase.CELL_PER_CAR (Cell/Car)",
+  "same": []
  },
  {
-  "row_id": "V-65e05c15",
-  "rule_id": "D1",
+  "row_id": "V-12948777",
+  "rule_id": "E1",
+  "target": "purchase.EDI_LT (EDI Leadtime)",
+  "same": []
+ },
+ {
+  "row_id": "V-65d69908",
+  "rule_id": "D3",
   "target": "OWNER,OWNER",
-  "same": [
-   "V-3cde637b",
-   "V-af84e0dc",
-   "V-8eb7d233",
-   "V-e3490583",
-   "V-69a92c89"
-  ]
- },
- {
-  "row_id": "V-cc422665",
-  "rule_id": "D1",
-  "target": "SOLDTO_CODE,SOLDTO_CODE",
-  "same": [
-   "V-4668ff31",
-   "V-578d8d86",
-   "V-c07a4d36",
-   "V-678d26b0",
-   "V-eededa7a"
-  ]
- },
- {
-  "row_id": "V-631742ed",
-  "rule_id": "D1",
-  "target": "SHIPTO_CODE,SHIPTO_CODE",
-  "same": [
-   "V-d86fb115",
-   "V-ce0d335a",
-   "V-ac714fc6",
-   "V-f2d79507",
-   "V-a2990811"
-  ]
- },
- {
-  "row_id": "V-ed165ec9",
-  "rule_id": "D1",
-  "target": "ITEM_TYPE,ITEM_TYPE",
-  "same": [
-   "V-914db878",
-   "V-1433fa19",
-   "V-d00f432e",
-   "V-eec7efd1",
-   "V-34bbec01"
-  ]
- },
- {
-  "row_id": "V-a4fd447f",
-  "rule_id": "D1",
-  "target": "ITEM_CLASS_NAME,ITEM_CLASS_NAME",
-  "same": [
-   "V-e6999f45",
-   "V-1bca4930",
-   "V-1e562a89",
-   "V-3bfa3722",
-   "V-cd1a87a8"
-  ]
- },
- {
-  "row_id": "V-c25f8d1c",
-  "rule_id": "D1",
-  "target": "ITEM_ID,ITEM_ID",
-  "same": [
-   "V-917b41f2",
-   "V-5976e538",
-   "V-730d8ccc"
-  ]
- },
- {
-  "row_id": "V-582801c0",
-  "rule_id": "D1",
-  "target": "ITEM_NAME,ITEM_NAME",
-  "same": [
-   "V-e3bd9a2a",
-   "V-e617c3ad",
-   "V-94bf3fa9",
-   "V-210fd302",
-   "V-a4e61975"
-  ]
- },
- {
-  "row_id": "V-0e2399bd",
-  "rule_id": "D1",
-  "target": "NICK_NAME,NICK_NAME",
-  "same": [
-   "V-8de98e0e",
-   "V-5fdb002c",
-   "V-4c422a80",
-   "V-670b1c8a",
-   "V-636851bd"
-  ]
- },
- {
-  "row_id": "V-4b28c5fc",
-  "rule_id": "D1",
-  "target": "LAST_UPDATE_DATE,LAST_UPDATE_DATE",
-  "same": [
-   "V-00e0a344",
-   "V-c0e9cc82",
-   "V-348345de",
-   "V-a2e220ed",
-   "V-916e8b2c"
-  ]
- },
- {
-  "row_id": "V-70d9b432",
-  "rule_id": "D1",
-  "target": "LAST_UPDATED_BY,LAST_UPDATED_BY",
-  "same": [
-   "V-b6e04402",
-   "V-2d960c17",
-   "V-24f14a35",
-   "V-85c2ede0",
-   "V-3fcc68d2"
-  ]
- },
- {
-  "row_id": "V-02db13b0",
-  "rule_id": "D1",
-  "target": "ATTRIBUTE4,ATTRIBUTE4",
-  "same": [
-   "V-de02a5a3"
-  ]
- },
- {
-  "row_id": "V-bd35f418",
-  "rule_id": "D1",
-  "target": "ATTRIBUTE5,ATTRIBUTE5",
-  "same": [
-   "V-64afb5b5"
-  ]
- },
- {
-  "row_id": "V-74e01e33",
-  "rule_id": "D1",
-  "target": "SOLDTO_CUSTOMER,SOLDTO_CUSTOMER",
-  "same": [
-   "V-65868fda"
-  ]
- },
- {
-  "row_id": "V-b9f0a5ab",
-  "rule_id": "D1",
-  "target": "CELL_TYPE,CELL_TYPE",
-  "same": [
-   "V-0f6acb38"
-  ]
- },
- {
-  "row_id": "V-fd83c1a4",
-  "rule_id": "D1",
-  "target": "ENERGE_WH,ENERGE_WH",
   "same": []
  },
  {
-  "row_id": "V-d1ffc0c2",
-  "rule_id": "D1",
-  "target": "CELL_S_OP_REPORT,CELL_S_OP_REPORT",
+  "row_id": "V-d766e6e5",
+  "rule_id": "D3",
+  "target": "ATTRIBUTE1,ATTRIBUTE1",
   "same": []
  },
  {
-  "row_id": "V-1ed528f9",
-  "rule_id": "G5",
-  "target": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
-  "same": [
-   "V-5a109816"
-  ]
+  "row_id": "V-e914ef7f",
+  "rule_id": "D3",
+  "target": "ATTRIBUTE2,ATTRIBUTE2",
+  "same": []
  },
  {
-  "row_id": "V-faa2deca",
-  "rule_id": "G5",
-  "target": "popItem.ShowDialog()",
-  "same": [
-   "V-1ff8495d"
-  ]
+  "row_id": "V-7f2e1ccc",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
  },
  {
-  "row_id": "V-a4c0f0a8",
-  "rule_id": "G5",
-  "target": "popup.ShowDialog()",
-  "same": [
-   "V-a811ce85"
-  ]
+  "row_id": "V-730007d6",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
  },
  {
-  "row_id": "V-a39ef3cd",
-  "rule_id": "G5",
-  "target": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
-  "same": [
-   "V-6d600275"
-  ]
- },
- {
-  "row_id": "V-43438052",
-  "rule_id": "G5",
-  "target": "popProject.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSite, sProject)",
-  "same": [
-   "V-6faea28d",
-   "V-b0791953",
-   "V-7fb9c394"
-  ]
- },
- {
-  "row_id": "V-c9aefc36",
-  "rule_id": "G5",
-  "target": "popProject.ShowDialog()",
-  "same": [
-   "V-6cd0e2c5",
-   "V-3850c548",
-   "V-5cb1a1d4"
-  ]
- },
- {
-  "row_id": "V-84cb0129",
-  "rule_id": "G5",
-  "target": "popProject.Form_Load(false, sDivision, sProject)",
-  "same": [
-   "V-4bc8644d",
-   "V-4c6c99bf",
-   "V-b1ac7dc4"
-  ]
- },
- {
-  "row_id": "V-456083d6",
-  "rule_id": "G5",
-  "target": "popItem.Form_Load(true, sDivision, sScmSiteId, sProject, sItemId)",
-  "same": [
-   "V-d1bab590"
-  ]
+  "row_id": "T-a14fdc9e",
+  "rule_id": "F4",
+  "target": "PKG_DMF0005.P_DMF0005_SAVE_MODEL_CHANGE_POPUP",
+  "same": []
  },
  {
   "row_id": "T-5e14f6e9",
   "rule_id": "G4",
   "target": "chkDetail / Detail",
-  "same": []
- },
- {
-  "row_id": "T-2cdd0caa",
-  "rule_id": "G4",
-  "target": "clbDivision / Division / Div.",
-  "same": []
- },
- {
-  "row_id": "T-5c59bf43",
-  "rule_id": "D1",
-  "target": "DIVISION_ID / Division",
   "same": []
  },
  {
@@ -462,123 +184,9 @@
   "same": []
  },
  {
-  "row_id": "T-33015335",
-  "rule_id": "D1",
-  "target": "OWNER / Owner Name",
-  "same": []
- },
- {
-  "row_id": "T-667c15d7",
-  "rule_id": "D1",
-  "target": "SOLDTO_CODE / Sold-To",
-  "same": []
- },
- {
-  "row_id": "T-d0957fe3",
-  "rule_id": "D1",
-  "target": "SHIPTO_CODE / Rep Ship-To",
-  "same": []
- },
- {
-  "row_id": "T-22b84900",
-  "rule_id": "D1",
-  "target": "ITEM_TYPE / Item Type",
-  "same": []
- },
- {
-  "row_id": "T-eb49155e",
-  "rule_id": "D1",
-  "target": "ITEM_CLASS_NAME / Model Type",
-  "same": []
- },
- {
-  "row_id": "T-e10a1138",
-  "rule_id": "D1",
-  "target": "ITEM_ID / Model",
-  "same": []
- },
- {
-  "row_id": "T-edacfeec",
-  "rule_id": "D1",
-  "target": "ITEM_NAME / Model Name",
-  "same": []
- },
- {
-  "row_id": "T-c13dc534",
-  "rule_id": "D1",
-  "target": "NICK_NAME / Nick Name",
-  "same": []
- },
- {
-  "row_id": "T-7c2c6aa2",
-  "rule_id": "D1",
-  "target": "LAST_UPDATE_DATE / Update Date",
-  "same": []
- },
- {
-  "row_id": "T-f258071a",
-  "rule_id": "D1",
-  "target": "LAST_UPDATED_BY / Update By",
-  "same": []
- },
- {
-  "row_id": "T-65c42b44",
-  "rule_id": "D1",
-  "target": "ATTRIBUTE4 / Destination",
-  "same": []
- },
- {
-  "row_id": "T-46f83943",
-  "rule_id": "D1",
-  "target": "ATTRIBUTE5 / Cell Model",
-  "same": []
- },
- {
-  "row_id": "T-02f4a940",
-  "rule_id": "D1",
-  "target": "SOLDTO_CUSTOMER / Sold-To Customer",
-  "same": []
- },
- {
-  "row_id": "T-f6735a5f",
-  "rule_id": "D1",
-  "target": "CELL_TYPE / Product Group",
-  "same": []
- },
- {
-  "row_id": "T-f898bbb0",
-  "rule_id": "D1",
-  "target": "ENERGE_WH / Energy(Wh",
-  "same": []
- },
- {
-  "row_id": "T-e3ad45ef",
-  "rule_id": "D1",
-  "target": "CELL_S_OP_REPORT / Cell Prod. Site (S&OP Report",
-  "same": []
- },
- {
-  "row_id": "T-8387956a",
-  "rule_id": "G4",
-  "target": "clbTeam / Team",
-  "same": []
- },
- {
-  "row_id": "T-ca1dc383",
-  "rule_id": "G4",
-  "target": "clbEndCustomer / End Customer",
-  "same": []
- },
- {
-  "row_id": "T-32b233f5",
-  "rule_id": "G4",
-  "target": "clbSalesSite / Sales Site",
-  "same": []
- },
- {
-  "row_id": "T-76f8cc2a",
-  "rule_id": "G4",
-  "target": "cboActive / Active",
+  "row_id": "T-282bf707",
+  "rule_id": "E4",
+  "target": "MSG00097",
   "same": []
  },
  {
@@ -586,13 +194,14 @@
   "rule_id": "C2",
   "target": "DIVISION_ID",
   "same": [
-   "T-e101167c"
+   "T-e101167c",
+   "T-1a027234"
   ]
  },
  {
-  "row_id": "T-1a027234",
-  "rule_id": "C2",
-  "target": "DIVISION_ID / Division",
+  "row_id": "T-c9b014c3",
+  "rule_id": "F4",
+  "target": "PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
   "same": []
  },
  {
@@ -617,294 +226,15 @@
   "row_id": "EG-c527fc7a",
   "rule_id": "J2",
   "target": "DMF0005 EG369 Model Code change (그룹 조건) DM/40/DM Planner",
-  "same": []
+  "same": [
+   "EG-93427433",
+   "EG-90b26ab3"
+  ]
  },
  {
-  "row_id": "EG-93427433",
-  "rule_id": "J2",
-  "target": "DMF0005 EG369 Model Code change (그룹 조건) DM/40/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-4a1da13f",
-  "rule_id": "J2",
-  "target": "DMF0005 EG369 Model Code change (그룹 조건) DM/40/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-9c3f6694",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-c38a4070",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-c82e2660",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-6e603f62",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-555cee6b",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-269ef78d",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/81/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-90b26ab3",
-  "rule_id": "J2",
-  "target": "DMF0005 EG369 Model Code change (그룹 조건) DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-bb4bf145",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-92327bc3",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-6c126c9f",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-d3b6e257",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-348037e8",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-54836982",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/81/DM Planner (W/S)",
-  "same": []
- },
- {
-  "row_id": "EG-e6821066",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-2d8cf848",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-762cecc1",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-7116f775",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-e131301d",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-fafd82db",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/81/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-ce1979e1",
-  "rule_id": "J2",
-  "target": "DMF0005 EG369 Model Code change (그룹 조건) DM/81/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-dd5ffd8c",
-  "rule_id": "J1",
-  "target": "DMF0005 EG365 자동 선택 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-f39fa80c",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-9d1c6d6d",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-e97eecc3",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-56fab9f5",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-2945a0f0",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-fcae9385",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/82/DM Admin",
-  "same": []
- },
- {
-  "row_id": "EG-a6731031",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-9dc6938f",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-c85b47b7",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-b8789389",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-f0dae8e4",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-45dc3395",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/82/DM Planner",
-  "same": []
- },
- {
-  "row_id": "EG-05d53d15",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-5e0d08b3",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-57ba49cc",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-6f86b15a",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-b9548e44",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-90207447",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/82/DM Viewer",
-  "same": []
- },
- {
-  "row_id": "EG-9749a225",
-  "rule_id": "J1",
-  "target": "DMF0005 EG365 자동 선택 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-41b592fb",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 SAVE 버튼 조회 전 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-3e2aa084",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 SAVE 버튼 조회 전 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-52274f8c",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 INSERT 버튼 조회 전 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-62824f48",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 INSERT 버튼 조회 전 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-ea9e5386",
-  "rule_id": "J2",
-  "target": "DMF0005 EG374 DELETE 버튼 조회 전 DM/82/SCP Planner",
-  "same": []
- },
- {
-  "row_id": "EG-bf823379",
-  "rule_id": "K4",
-  "target": "DMF0005 EG411 DELETE 버튼 조회 전 DM/82/SCP Planner",
+  "row_id": "EG-a7d597f5",
+  "rule_id": "J4",
+  "target": "DMF0005 EG382 직접 접근 DM/82/DM Viewer",
   "same": []
  },
  {
@@ -914,723 +244,355 @@
   "same": []
  },
  {
-  "row_id": "EG-f607d259",
-  "rule_id": "D1",
-  "target": "DMF0005 EG109 Insert DM/82/SCP Planner 메뉴그룹 DM Viewer/FP Viewer/SCM Viewer/SCP Planner",
-  "same": []
- },
- {
   "row_id": "EG-87027c59",
   "rule_id": "J3",
   "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Admin · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-12105c85",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Admin · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-d9ed7b31",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Admin · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-1fed33a2",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Admin · Div 40",
-  "same": []
+  "same": [
+   "EG-12105c85",
+   "EG-d9ed7b31",
+   "EG-1fed33a2"
+  ]
  },
  {
   "row_id": "EG-bdea8c86",
   "rule_id": "J3",
   "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-ad22602b",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-af84f5c2",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-df3de311",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-a6ce8394",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Viewer · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-00f6e320",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Viewer · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-f7ef813a",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Viewer · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-e55bf407",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/DM Viewer · Div 40",
-  "same": []
+  "same": [
+   "EG-ad22602b",
+   "EG-af84f5c2",
+   "EG-df3de311",
+   "EG-a6ce8394",
+   "EG-00f6e320",
+   "EG-f7ef813a",
+   "EG-e55bf407"
+  ]
  },
  {
   "row_id": "EG-16499b24",
   "rule_id": "J3",
   "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-f6353be9",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-1152e4fc",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-e6f10ec3",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/40/SCP Planner · Div 40",
-  "same": []
+  "same": [
+   "EG-f6353be9",
+   "EG-1152e4fc",
+   "EG-e6f10ec3",
+   "EG-ea92df59",
+   "EG-2a3eaa48",
+   "EG-481a0312",
+   "EG-450ce593"
+  ]
  },
  {
   "row_id": "EG-53da0d0e",
   "rule_id": "J3",
   "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Admin · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-0cbb4061",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Admin · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-d2e00fe1",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Admin · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-03e9049f",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Admin · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-54615a88",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Planner · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-cf4c8d82",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Planner · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-669c3b29",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Planner · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-1e88a7fd",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Planner · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-495b6550",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Viewer · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-3648b9b3",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Viewer · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-9744a51c",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Viewer · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-25767be1",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/DM Viewer · Div 81",
-  "same": []
- },
- {
-  "row_id": "EG-ea92df59",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-2a3eaa48",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-481a0312",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/SCP Planner · Div 40",
-  "same": []
- },
- {
-  "row_id": "EG-450ce593",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/81/SCP Planner · Div 40",
-  "same": []
+  "same": [
+   "EG-0cbb4061",
+   "EG-d2e00fe1",
+   "EG-03e9049f",
+   "EG-54615a88",
+   "EG-cf4c8d82",
+   "EG-669c3b29",
+   "EG-1e88a7fd",
+   "EG-495b6550",
+   "EG-3648b9b3",
+   "EG-9744a51c",
+   "EG-25767be1"
+  ]
  },
  {
   "row_id": "EG-91c6aa48",
   "rule_id": "J3",
   "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Admin · Div 82",
+  "same": [
+   "EG-72fc981e",
+   "EG-ef4ba1fa",
+   "EG-73fe5331",
+   "EG-4400204e",
+   "EG-d5b68c8f",
+   "EG-4f622a5a",
+   "EG-c05e1c0e"
+  ]
+ },
+ {
+  "row_id": "EG-652ca90c",
+  "rule_id": "J4",
+  "target": "DMF0005 EG380 무권한 첫 화면 DM/82/DM Planner (W/S)",
   "same": []
  },
  {
-  "row_id": "EG-72fc981e",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Admin · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-ef4ba1fa",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Admin · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-73fe5331",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Admin · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-1225ce79",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Planner · Div",
-  "same": []
- },
- {
-  "row_id": "EG-d737993b",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Planner · Div",
-  "same": []
- },
- {
-  "row_id": "EG-1914b1d3",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Planner · Div",
-  "same": []
- },
- {
-  "row_id": "EG-120bf5dd",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Planner · Div",
-  "same": []
- },
- {
-  "row_id": "EG-4400204e",
-  "rule_id": "J3",
-  "target": "DMF0005 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Viewer · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-d5b68c8f",
-  "rule_id": "D1",
-  "target": "DMF0005 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Viewer · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-4f622a5a",
-  "rule_id": "J3",
-  "target": "DMF0005 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Viewer · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-c05e1c0e",
-  "rule_id": "D1",
-  "target": "DMF0005 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) DM/82/DM Viewer · Div 82",
-  "same": []
- },
- {
-  "row_id": "EG-cf32565b",
-  "rule_id": "D4",
-  "target": "DMF0005 EG315 헤더 병합 AS-IS 문장 1건",
-  "same": []
- },
- {
-  "row_id": "EG-45129bf5",
-  "rule_id": "I2",
-  "target": "DMF0005 언어 전환 CN",
-  "same": []
- },
- {
-  "row_id": "T-35255dd3",
-  "rule_id": "A5",
+  "row_id": "V-6798ff11",
+  "rule_id": "F1",
   "target": "",
-  "folded_into": "V-edb134ea"
+  "folded_into": "V-954c0b8b"
  },
  {
-  "row_id": "V-b0f4e560",
+  "row_id": "V-7f35eef7",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-954c0b8b"
+ },
+ {
+  "row_id": "V-3b1d76dd",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-954c0b8b"
+ },
+ {
+  "row_id": "V-109d8239",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-954c0b8b"
+ },
+ {
+  "row_id": "V-83f50ca6",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-954c0b8b"
+ },
+ {
+  "row_id": "V-6575c118",
   "rule_id": "D1",
   "target": "",
-  "folded_into": "V-30b0a88f"
+  "folded_into": "V-c6d33cd5"
  },
  {
-  "row_id": "V-8a46c8d3",
+  "row_id": "V-aedf3fc3",
   "rule_id": "D1",
   "target": "",
-  "folded_into": "V-30b0a88f"
- },
- {
-  "row_id": "V-4cd46ac2",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-30b0a88f"
- },
- {
-  "row_id": "V-ec28b642",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-30b0a88f"
- },
- {
-  "row_id": "V-2ca25ad4",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-30b0a88f"
- },
- {
-  "row_id": "V-3cde637b",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-65e05c15"
- },
- {
-  "row_id": "V-af84e0dc",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-65e05c15"
- },
- {
-  "row_id": "V-8eb7d233",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-65e05c15"
- },
- {
-  "row_id": "V-e3490583",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-65e05c15"
- },
- {
-  "row_id": "V-69a92c89",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-65e05c15"
- },
- {
-  "row_id": "V-4668ff31",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-cc422665"
- },
- {
-  "row_id": "V-578d8d86",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-cc422665"
- },
- {
-  "row_id": "V-c07a4d36",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-cc422665"
- },
- {
-  "row_id": "V-678d26b0",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-cc422665"
- },
- {
-  "row_id": "V-eededa7a",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-cc422665"
- },
- {
-  "row_id": "V-d86fb115",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-631742ed"
- },
- {
-  "row_id": "V-ce0d335a",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-631742ed"
- },
- {
-  "row_id": "V-ac714fc6",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-631742ed"
- },
- {
-  "row_id": "V-f2d79507",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-631742ed"
- },
- {
-  "row_id": "V-a2990811",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-631742ed"
- },
- {
-  "row_id": "V-914db878",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-ed165ec9"
- },
- {
-  "row_id": "V-1433fa19",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-ed165ec9"
- },
- {
-  "row_id": "V-d00f432e",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-ed165ec9"
- },
- {
-  "row_id": "V-eec7efd1",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-ed165ec9"
- },
- {
-  "row_id": "V-34bbec01",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-ed165ec9"
- },
- {
-  "row_id": "V-e6999f45",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-a4fd447f"
- },
- {
-  "row_id": "V-1bca4930",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-a4fd447f"
- },
- {
-  "row_id": "V-1e562a89",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-a4fd447f"
- },
- {
-  "row_id": "V-3bfa3722",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-a4fd447f"
- },
- {
-  "row_id": "V-cd1a87a8",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-a4fd447f"
- },
- {
-  "row_id": "V-917b41f2",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-c25f8d1c"
- },
- {
-  "row_id": "V-5976e538",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-c25f8d1c"
- },
- {
-  "row_id": "V-730d8ccc",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-c25f8d1c"
- },
- {
-  "row_id": "V-e3bd9a2a",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-582801c0"
- },
- {
-  "row_id": "V-e617c3ad",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-582801c0"
- },
- {
-  "row_id": "V-94bf3fa9",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-582801c0"
- },
- {
-  "row_id": "V-210fd302",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-582801c0"
- },
- {
-  "row_id": "V-a4e61975",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-582801c0"
- },
- {
-  "row_id": "V-8de98e0e",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-0e2399bd"
- },
- {
-  "row_id": "V-5fdb002c",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-0e2399bd"
- },
- {
-  "row_id": "V-4c422a80",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-0e2399bd"
- },
- {
-  "row_id": "V-670b1c8a",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-0e2399bd"
- },
- {
-  "row_id": "V-636851bd",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-0e2399bd"
- },
- {
-  "row_id": "V-00e0a344",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-4b28c5fc"
- },
- {
-  "row_id": "V-c0e9cc82",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-4b28c5fc"
- },
- {
-  "row_id": "V-348345de",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-4b28c5fc"
- },
- {
-  "row_id": "V-a2e220ed",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-4b28c5fc"
- },
- {
-  "row_id": "V-916e8b2c",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-4b28c5fc"
- },
- {
-  "row_id": "V-b6e04402",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-70d9b432"
- },
- {
-  "row_id": "V-2d960c17",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-70d9b432"
- },
- {
-  "row_id": "V-24f14a35",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-70d9b432"
- },
- {
-  "row_id": "V-85c2ede0",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-70d9b432"
- },
- {
-  "row_id": "V-3fcc68d2",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-70d9b432"
- },
- {
-  "row_id": "V-de02a5a3",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-02db13b0"
- },
- {
-  "row_id": "V-64afb5b5",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-bd35f418"
- },
- {
-  "row_id": "V-65868fda",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-74e01e33"
- },
- {
-  "row_id": "V-0f6acb38",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-b9f0a5ab"
- },
- {
-  "row_id": "V-5a109816",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-1ed528f9"
- },
- {
-  "row_id": "V-1ff8495d",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-faa2deca"
- },
- {
-  "row_id": "V-a811ce85",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-a4c0f0a8"
- },
- {
-  "row_id": "V-6d600275",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-a39ef3cd"
- },
- {
-  "row_id": "V-6faea28d",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-43438052"
- },
- {
-  "row_id": "V-b0791953",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-43438052"
- },
- {
-  "row_id": "V-7fb9c394",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-43438052"
- },
- {
-  "row_id": "V-6cd0e2c5",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-c9aefc36"
- },
- {
-  "row_id": "V-3850c548",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-c9aefc36"
- },
- {
-  "row_id": "V-5cb1a1d4",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-c9aefc36"
- },
- {
-  "row_id": "V-4bc8644d",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-84cb0129"
- },
- {
-  "row_id": "V-4c6c99bf",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-84cb0129"
- },
- {
-  "row_id": "V-b1ac7dc4",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-84cb0129"
- },
- {
-  "row_id": "V-d1bab590",
-  "rule_id": "G5",
-  "target": "",
-  "folded_into": "V-456083d6"
+  "folded_into": "V-18ee80f9"
  },
  {
   "row_id": "T-e101167c",
   "rule_id": "C2",
   "target": "",
   "folded_into": "T-ddefab1a"
+ },
+ {
+  "row_id": "T-1a027234",
+  "rule_id": "C2",
+  "target": "",
+  "folded_into": "T-ddefab1a"
+ },
+ {
+  "row_id": "EG-93427433",
+  "rule_id": "J2",
+  "target": "",
+  "folded_into": "EG-c527fc7a"
+ },
+ {
+  "row_id": "EG-90b26ab3",
+  "rule_id": "J2",
+  "target": "",
+  "folded_into": "EG-c527fc7a"
+ },
+ {
+  "row_id": "EG-12105c85",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-87027c59"
+ },
+ {
+  "row_id": "EG-d9ed7b31",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-87027c59"
+ },
+ {
+  "row_id": "EG-1fed33a2",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-87027c59"
+ },
+ {
+  "row_id": "EG-ad22602b",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-af84f5c2",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-df3de311",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-a6ce8394",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-00f6e320",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-f7ef813a",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-e55bf407",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-bdea8c86"
+ },
+ {
+  "row_id": "EG-f6353be9",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-1152e4fc",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-e6f10ec3",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-ea92df59",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-2a3eaa48",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-481a0312",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-450ce593",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-16499b24"
+ },
+ {
+  "row_id": "EG-0cbb4061",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-d2e00fe1",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-03e9049f",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-54615a88",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-cf4c8d82",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-669c3b29",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-1e88a7fd",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-495b6550",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-3648b9b3",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-9744a51c",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-25767be1",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-53da0d0e"
+ },
+ {
+  "row_id": "EG-72fc981e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-ef4ba1fa",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-73fe5331",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-4400204e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-d5b68c8f",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-4f622a5a",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
+ },
+ {
+  "row_id": "EG-c05e1c0e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-91c6aa48"
  }
 ]

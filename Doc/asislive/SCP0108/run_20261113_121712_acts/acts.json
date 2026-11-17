@@ -1,0 +1,67 @@
+{
+ "id": "SCP0108",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0108-S96bd28",
+    "SCP0108-S20acca",
+    "SCP0108-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItem",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItem failed: InvalidOperationException: control not found: btnItem",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0108-Sf9ae0a",
+    "SCP0108-Sd530a0"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CAPAItemPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 3860,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_CAPA_ITEM_POPUP"
+   ],
+   "scenarios": [
+    "SCP0108-Sf9ae0a",
+    "SCP0108-Sd530a0"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:16:17.325",
+ "fills": 0,
+ "fill_left": []
+}

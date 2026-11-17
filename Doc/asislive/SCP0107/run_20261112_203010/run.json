@@ -1,0 +1,142 @@
+{
+ "id": "SCP0107",
+ "started": "2026-11-12 20:30:10.328",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 20:30:10.610",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Report.UIL.SCP0107_CAPA_TEEP_Report",
+   "form_text": "TEEP Report",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0107_CAPA_TEEP_Report.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:22.107"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 20:30:26.081",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0107\\run_20261112_203010\\dump_load.json",
+   "control_count": 66,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:26.124"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 20:30:26.280",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0107\\run_20261112_203010\\shots\\SCP0107_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:26.474"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 20:30:26.975",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:27.572"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 20:30:57.994",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0107\\run_20261112_203010\\dump_find.json",
+   "control_count": 66,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:58.000"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 20:30:58.160",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0107\\run_20261112_203010\\shots\\SCP0107_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:58.291"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 20:30:58.769",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:30:59.273"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 16,
+  "calls_with_params": 16
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Report.UIL.SCP0107_CAPA_TEEP_Report",
+  "form_text": "TEEP Report",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0107_CAPA_TEEP_Report.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 20:30:10.533",
+ "t_find": "2026-11-12 20:30:26.620",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 66,
+  "layout_items": 17,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 47,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 16,
+  "calls_screen": 16,
+  "calls_find": 3,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:56.390",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:56"
+}

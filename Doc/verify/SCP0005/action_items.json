@@ -1,0 +1,110 @@
+[
+ {
+  "row_id": "V-f648eb06",
+  "rule_id": "J1",
+  "target": "SCP0005 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-27f100cb",
+  "rule_id": "K3",
+  "target": "SCP0005 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-e32d34a2",
+  "rule_id": "L1",
+  "target": "SCP0005 화면",
+  "same": [
+   "V-dac80ff3",
+   "V-536d9503"
+  ]
+ },
+ {
+  "row_id": "V-3aecb21a",
+  "rule_id": "F2",
+  "target": "SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
+  "same": []
+ },
+ {
+  "row_id": "V-e4a3ef56",
+  "rule_id": "C3",
+  "target": "SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움",
+  "same": []
+ },
+ {
+  "row_id": "V-9beff6f2",
+  "rule_id": "C3",
+  "target": "SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움",
+  "same": []
+ },
+ {
+  "row_id": "V-2ca073e5",
+  "rule_id": "N1",
+  "target": "SCP0005 센티널 표시",
+  "same": []
+ },
+ {
+  "row_id": "V-087d756b",
+  "rule_id": "E3",
+  "target": "SCP0005 Excel 필수 칸 빈 업로드",
+  "same": []
+ },
+ {
+  "row_id": "V-1d8d1afb",
+  "rule_id": "F10",
+  "target": "PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD",
+  "same": []
+ },
+ {
+  "row_id": "V-3134fc3e",
+  "rule_id": "E4",
+  "target": "MSG00043",
+  "same": [
+   "T-ece1c98b",
+   "T-f048d4a9"
+  ]
+ },
+ {
+  "row_id": "V-5e6d8247",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
+ },
+ {
+  "row_id": "V-36b6c266",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
+ },
+ {
+  "row_id": "V-660a833e",
+  "rule_id": "H5",
+  "target": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
+  "same": []
+ },
+ {
+  "row_id": "V-dac80ff3",
+  "rule_id": "L1",
+  "target": "",
+  "folded_into": "V-e32d34a2"
+ },
+ {
+  "row_id": "V-536d9503",
+  "rule_id": "L1",
+  "target": "",
+  "folded_into": "V-e32d34a2"
+ },
+ {
+  "row_id": "T-ece1c98b",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3134fc3e"
+ },
+ {
+  "row_id": "T-f048d4a9",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3134fc3e"
+ }
+]

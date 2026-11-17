@@ -1,0 +1,387 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "INCOTERMS_SSP",
+       "before": "DAP",
+       "after": "CIF"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[INCOTERMS_SSP]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 DAP → CIF(수정 모드) · 입력 뒤 값 CIF · 변경 표시 '' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "DAP",
+    "after": "CIF",
+    "action_before": "",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "PRIORITY",
+       "before": "4",
+       "after": "5"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[PRIORITY]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 4 → 5(수정 모드) · 입력 뒤 값 5 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "4",
+    "after": "5",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain[ROUTE_ID]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 10583 → 10584(수정 모드) · 입력 뒤 값 10583 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "10583",
+    "after": "10583",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "AFTER_LEAD_TIME",
+       "before": "0",
+       "after": "1"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[AFTER_LEAD_TIME]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2026-03-16",
+       "after": "2021-01-04"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[FROM_YYYYMMDD]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2026-03-16 → 2021-01-04(수정 모드) · 입력 뒤 값 2021-01-04 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "2026-03-16",
+    "after": "2021-01-04",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "2099-12-27",
+       "after": "2100-12-26"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[TO_YYYYMMDD]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2099-12-27 → 2100-12-26(수정 모드) · 입력 뒤 값 2100-12-26 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "2099-12-27",
+    "after": "2100-12-26",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "REMARKS",
+       "before": "",
+       "after": "외주패커 관련 동일 오창에 대하여 대신 등록함. E20260819-000729"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[REMARKS]",
+   "kind": "cell",
+   "change": "첫 행 값 입력  → 외주패커 관련 동일 오창에 대하여 대신 등록함. E20260819-000729(수정 모드) · 입력 뒤 값 외주패커 관련 동일 오창에 대하여 대신 등록함. E20260819-000729 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "",
+    "after": "외주패커 관련 동일 오창에 대하여 대신 등록함. E20260819-000729",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/BOD",
+     "rows_before": 15317,
+     "rows_after": 15317,
+     "cells": [
+      {
+       "row": 0,
+       "col": "BOD_VALID",
+       "before": "Y",
+       "after": "N"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[BOD_VALID]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 Y → N(수정 모드) · 입력 뒤 값 N · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ],
+   "cell": {
+    "before": "Y",
+    "after": "N",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdMain[TO_SITE_CODE]",
+   "why": "편집 상태로 들어가지 않음()",
+   "scenarios": [
+    "SCP0007-Seb2c1a",
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ]
+  },
+  {
+   "control": "spdMain[VMI_YN]",
+   "why": "같은 열에 다른 값이 없어 넣을 값을 정하지 못함",
+   "scenarios": [
+    "SCP0007-Sa7d228",
+    "SCP0007-S683cee",
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ]
+  },
+  {
+   "control": "spdMain[INCOTERMS]",
+   "why": "같은 열에 다른 값이 없어 넣을 값을 정하지 못함",
+   "scenarios": [
+    "SCP0007-Scfa9b7",
+    "SCP0007-Seb2c1a",
+    "SCP0007-Sc02248",
+    "SCP0007-S020e85",
+    "SCP0007-S289717",
+    "SCP0007-S4afad4"
+   ]
+  }
+ ],
+ "at": "2026-11-14 09:44:55",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "BOD",
+  "named_cols": [
+   "TO_SITE_CODE",
+   "VMI_YN",
+   "INCOTERMS"
+  ],
+  "branches": 8,
+  "branches_without_col_name": 4,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ }
+}

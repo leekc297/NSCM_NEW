@@ -1,0 +1,26 @@
+{
+ "screen": "SCP0033",
+ "generated": "2026-11-14 11:10:37",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "GRID:DIVISION_ID",
+    "SEARCH:clbDivision"
+   ],
+   "ref": "SCP0033_Shipment_semi_dept_day.cs:133 ← SCP0033_Shipment_semi_dept_day.cs:42",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:DEPARTURE_DAY",
+    "GRID:OPERATION_GROUP"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0033/Shipment Semi Dept Day/DEPARTURE_DAY ← SCM_MST_SHEET_COLUMNS SCP0033/Shipment Semi Dept Day/OPERATION_GROUP",
+   "rows": []
+  }
+ }
+}

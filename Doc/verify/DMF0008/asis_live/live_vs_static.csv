@@ -1,0 +1,44 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0000_GET_COMMON_SPREAD_TITLE,DMF0008_ErpEdiMaster.cs:2953 GetSpdTitle,7회 · 구간 find/load,MATCH,
+SP,DMF0000_GET_UPDATE_HISTORY,DMF0008_ErpEdiMaster.cs:3350 GetUpdateHistory,1회 · 구간 load,MATCH,
+SP,DMF0004_GET_SOLDTO_CUSTOMER_DATA,DMF0008_ErpEdiMaster.cs:2987 GetSoldToCustomerData,1회 · 구간 load,MATCH,
+SP,FP_SQL_LOG(로그 기록),,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_GET_DAY_RANGE,DMF0008_ErpEdiMaster.cs:2936 GetDayRange,1회 · 구간 load,MATCH,
+SP,SQL: Declare @AuthTypePara varchar(100) = 'D';,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,47회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0004_GET_SALES_SITE_CUSTOMER_DATA,DMF0008_ErpEdiMaster.cs:3295 FindData_SubCustomer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_GET_EDI_MST_REPAIR,DMF0008_ErpEdiMaster.cs:995 FindData_SubRepair,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_GET_EDI_MST_SUMMARY,DMF0008_ErpEdiMaster.cs:925 FindData_Main,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_GET_SALES_SITE,DMF0008_ErpEdiMaster.cs:1194 FindData_SubSalesSite,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_GET_SALES_SITE_PROJECT_MODEL,DMF0008_ErpEdiMaster.cs:1283 FindData_SubSalesSiteProjectModel,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_SAVE_SALES_SITE_EDI_REPAIR,DMF0008_ErpEdiMaster.cs:1517 SaveSalesSite,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR,DMF0008_ErpEdiMaster.cs:1716 SaveSSPM,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_DNM_EDI_CALLOFF_STATUS,DMF0008_ErpEdiMaster.cs:3027 btnStatusUpdate_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_PLANT_BY_DIVISION,DMF0008_ErpEdiMaster.cs:2973 GetPlantbyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_INFO_BY_DIVISION,DMF0008_ErpEdiMaster.cs:2129 GetScmSiteInfobyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),36개,24개,INFO,공통 15 · 선언만 21 · 실측만 9
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,lblRepair_Cnt,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,usrLabel1,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrLabel2,Y,layoutControlItem3,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnStatusUpdate,Y,STATUS UPDATE,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,lblUpdateHistory,Y,layoutControlItem5,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,lblTitle,Y,layoutControlItem6,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,drpPeriod,Y,Period* [필수],LIVE,layout=usrLayoutControl1 visible=False
+GRID,spdRepair/REPAIR,정적 컬럼 사실 22행(시트 미지정 포함),컬럼 23(보임 21) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSummary/SUMMARY,정적 컬럼 사실 5행(시트 미지정 포함),컬럼 6(보임 5) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/SALES_SITE,정적 컬럼 사실 25행(시트 미지정 포함),컬럼 26(보임 16) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/SSPM,정적 컬럼 사실 69행(시트 미지정 포함),컬럼 44(보임 37) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

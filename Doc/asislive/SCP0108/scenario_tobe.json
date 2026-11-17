@@ -1,0 +1,62 @@
+{
+ "id": "SCP0108",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [
+  {
+   "param": "sheet_name",
+   "asis": "CURRENT",
+   "tobe": "CUTOFF",
+   "why": "같은 값을 가진 컨트롤 0개",
+   "candidates": []
+  },
+  {
+   "param": "version",
+   "asis": "202610",
+   "tobe": "202608",
+   "why": "같은 값을 가진 컨트롤 2개",
+   "candidates": [
+    "cboVersion",
+    "cboVersionSeq"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "param": "electrode_type",
+   "asis": "Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking,-",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "factory_id",
+   "asis": "A2,A3,A4,A5,A6,A7,A8,A9,AA,AC,AH,AI",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "line_id",
+   "asis": "A2A10,A2A13,A2A14,A3A01,A3A02,A3A03,A3A04,A3A05,A3A06,A3A07,A3A08,A4A01,A4A05,A4A06,A4A07,A5A01,A5A03,A6A04,A6A05,A6A06,",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "operation_id",
+   "asis": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "plant_id",
+   "asis": "HQ07,MI00,MI02,NA00,NB01,WA00",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "site_id",
+   "asis": "A001,A002,A003,A004",
+   "tobe": "",
+   "why": "ALL_FORM"
+  }
+ ]
+}

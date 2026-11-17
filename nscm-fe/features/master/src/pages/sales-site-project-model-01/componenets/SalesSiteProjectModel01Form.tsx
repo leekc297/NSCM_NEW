@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
@@ -15,7 +15,14 @@ import {
   buildComboOptions,
   toSelectedCodes,
 } from '../../../components';
-import { SHEET_INDEX } from '../sales-site-project-model-01.constants';
+import {
+  MENU_ID,
+  MODEL_CHANGE_BTN_CD,
+  NULL_FILTER_DIVISION,
+  NULL_FILTER_LABEL,
+  SHEET_INDEX,
+} from '../sales-site-project-model-01.constants';
+import styles from '../SalesSiteProjectModel01.module.scss';
 import { useSalesSiteProjectModel01Store } from '../useSalesSiteProjectModel01Store';
 
 interface SalesSiteProjectModel01FormProps {
@@ -40,6 +47,11 @@ export const SalesSiteProjectModel01Form = ({
   //   searchParams.divisionId). 편집중(dirty)이면 MSG00704 confirm 후에만 바꾼다 — 조회 공통 가드
   //   confirmIfDirtyKey(..., 'search')를 콤보 변경에도 동일 적용. controlled 콤보라 취소 시 자동 복귀.
   const tabId = useTabid();
+
+  // 40 전용 체크박스 표시 여부 — Model Code Change 버튼과 같은 조건(버튼 권한 AND Division 40).
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  const showNullFilters =
+    hasButton(MODEL_CHANGE_BTN_CD) && searchParams.divisionId === NULL_FILTER_DIVISION;
 
   /**
    * 이 화면의 조회조건 콤보는 전부 필터 방식이다.
@@ -397,6 +409,28 @@ export const SalesSiteProjectModel01Form = ({
                 />
               )}
             </Grid>
+            {/* 40 전용 체크박스 두 개 — 값만 조회 SP 로 넘기고 거르는 일은 SP 가 한다.
+                표시 조건 · 인자 이름은 constants NULL_FILTER_LABEL 주석 참조. */}
+            {showNullFilters && (
+              <Grid size={3} className={commonStyles.customGrid}>
+                <div className={styles.nullFilters}>
+                  <div className={commonStyles.customCheckbox}>
+                    <Checkbox
+                      checked={searchParams.endCustReportYn === 'Y'}
+                      onChange={checked => setSearchParams({ endCustReportYn: checked ? 'Y' : 'N' })}
+                    />
+                    <Label labelText={NULL_FILTER_LABEL.endCustReportYn} depth='sub' />
+                  </div>
+                  <div className={commonStyles.customCheckbox}>
+                    <Checkbox
+                      checked={searchParams.projectInfoYn === 'Y'}
+                      onChange={checked => setSearchParams({ projectInfoYn: checked ? 'Y' : 'N' })}
+                    />
+                    <Label labelText={NULL_FILTER_LABEL.projectInfoYn} depth='sub' />
+                  </div>
+                </div>
+              </Grid>
+            )}
           </>
         }
       />

@@ -96,8 +96,10 @@ export const MSG = {
   REQUIRED_FIELD: 'MSG00429',
   // 필수 컬럼 — "필수 입력 컬럼이 없습니다." (EditButton L726/730 · SaveData L2024)
   REQUIRED_COLUMN: 'MSG00113',
-  // Bucket 변경 차단 — "Insert 된 행이 있어 Bucket 을 변경할 수 없습니다." (cboBucketType_Click L5475)
-  BUCKET_CHANGE_BLOCK: 'MSG00227',
+  // Bucket 변경 차단 — "변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요."
+  //   (cboBucketType_Click L5475). AS-IS MSG00227 은 'Insert 된 행' 문구라 수정 셀만 있어도 막는
+  //   TO-BE 조건과 맞지 않아, DM 화면 pending 차단 공용 MSG00680 으로 바꿨다(2026-11-11 사용자 결정).
+  BUCKET_CHANGE_BLOCK: 'MSG00680',
   // Catch_Up 음수 — "{0} 이상의 값만 입력 가능합니다." (SaveData L2587 — 40+Catch_Up+음수, {0}=0)
   CATCHUP_MIN_ZERO: 'MSG00085',
   // 라인 변경 없음 — "라인 [{0}] 에 변경된 값이 없습니다." (SaveData L2666 — iDateCount==0)

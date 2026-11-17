@@ -1,0 +1,40 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,9회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP00590_PLAN_CONTROL,FP00590_Plan_Control.cs:618 Find_Data_Main,1회 · 구간 find,MATCH,
+SP,PR_UI_FP_PLAN_FORM_CODE,FP00590_Plan_Control.cs:219 InitControls,5회 · 구간 find/load,MATCH,
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONTROL,(선언 ↔ 실측),33개,32개,INFO,공통 17 · 선언만 16 · 실측만 15
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,FoxProgressDialog,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCancel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,loadingCircle,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel3,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel4,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel_gap,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,progressPanel,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,btnSql,Y,lblSql,LIVE,layout=usrLayoutControl1 visible=False
+CONDITION,usrLabel2,Y,layoutControlItem8,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboSite,Y,Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboPlanGroup,Y,Plan Group,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,dtpPlanDate,Y,Plan Date,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnWowStatus,Y,WOW Status,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnFind,Y,Find,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,chkStatus,Y,layoutControlItem6,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,usrLabel1,Y,layoutControlItem7,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnPlanInfo,Y,Plan Info,LIVE,layout=usrLayoutControl3 visible=True
+GRID,spdMain/PlanControl,정적 컬럼 사실 32행(시트 미지정 포함),컬럼 33(보임 11) · 헤더 2단 · 행 4 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/EngineRun,정적 컬럼 사실 10행(시트 미지정 포함),컬럼 11(보임 6) · 헤더 2단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

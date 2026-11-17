@@ -134,7 +134,7 @@ const dmfTypeOptions = useMemo<Array<{ value: string; label: string }>>(() => {
 
 ```
 [필수 1] 하나의 메시지 코드(MSG_ID) = 하나의 의미/문구. 의미가 다르면 신규 코드 분리.
-  - MSG00004 (수정한 내용 없음) vs 저장 확인 → 의미별 코드 분리 (MSG_NO_CHANGE 등)
+  - MSG00004 (수정한 내용 없음) vs 저장 확인 → 의미별 코드 분리 (MSG+5자리 표준 코드 — 11-13 정정: 비규격 문자열 예시 MSG_NO_CHANGE 제거)
   - 공통 호출 지점(useCustomQueryClient 등)은 의미가 고정된 전용 코드 사용
 
 [필수 2] 메시지 코드 신규/변경 시 SCM_ADM_MSG_M 실 데이터를 single source 로 본다.
@@ -147,9 +147,9 @@ const dmfTypeOptions = useMemo<Array<{ value: string; label: string }>>(() => {
 
 ### 3.3 처리내역 (No.9 제안)
 
-`useCustomQueryClient.ts` 의 `MSG00004` → 의미 전용 코드(`MSG_NO_CHANGE`)로 분리. 신규 코드는 `SCM_ADM_MSG_M` 등록(실 데이터 기준) + i18n 3언어(`i18n-ko-en-alignment`) 동반.
+`useCustomQueryClient.ts` 의 `MSG00004` → 의미 전용 코드(`MSG_NO_CHANGE`)로 분리. (2026-11-13 정정: `MSG_NO_CHANGE` 는 비규격 문자열 코드 → 사용 금지, 분리 시 `MSG` + 5자리 표준 코드로 — screen-grid-edit-merge-and-meta-mandatory §5 · screen-conventions-mandatory §9.1. 현행 코드는 `MSG00004` 를 "수정한 내용이 없습니다" 전용으로 유지: `packages/foundation/src/constants/message-id.ts:5` NO_CHANGES · `useCustomQueryClient.ts:194`) 신규 코드는 `SCM_ADM_MSG_M` 등록(실 데이터 기준) + i18n 3언어(`i18n-ko-en-alignment`) 동반.
 
-> ⚠️ BE 변경 금지 룰(`feedback_be_no_modification_rule`) — 메시지 정비는 SP/메타(`SCM_ADM_MSG_M`)/FE(i18n·hook) 한정.
+> ⚠️ BE 변경 금지 룰(`feedback_be_no_modification_rule`) — 메시지 정비는 SP/메타(`SCM_ADM_MSG_M`)/FE(i18n·hook) 한정. (2026-11-13 정정: FE·BE 직접 수정 여부는 2026-11-02 작업 모드(`tools/Harness/harness.json` repairScope · `CLAUDE.md §1-8`)를 따른다 — UI/DB MODE(DB_FE) = 직접 수정 / DB MODE(DB_ONLY) = FE·BE 모두 가이드만(실행 hook `check-work-mode`). "BE 금지·FE 허용" 고정이 아님)
 
 ### 3.4 POST-WRITE 검증
 

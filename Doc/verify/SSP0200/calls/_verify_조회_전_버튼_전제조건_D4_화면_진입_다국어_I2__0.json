@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 197,
+  "at": "2026-11-14T20:54:08.920Z",
+  "user": "minyonglee1",
+  "test": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)"
+ }
+]

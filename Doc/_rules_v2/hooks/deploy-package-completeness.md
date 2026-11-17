@@ -165,7 +165,7 @@ COMMIT;
 
 대상 컬럼:
 - `SCM_ADM_MNU_M.UNIT_TP_CD` = `'D'` (Division)
-- `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` = `'IM'` (mandatory insert)
+- `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` = `'IM'` (mandatory insert) (2026-11-13 정정: 전 행 `'IM'` 일괄 강제 → 화면설계서 편집 규칙상 `'IM'` 인 컬럼만 보정 — 편집 화면의 전면 `'IM'` 일괄은 §1.0-C #2 금지)
 - 기타 표준값 강제 컬럼
 
 ### §1.8 ⭐⭐ FE 이관물 = **실제 저장소 디렉토리 구조 그대로** (2026-08-26 사용자 명시 — 상시 의무)
@@ -289,7 +289,7 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
    정본 구현 = `_ui_cloud_pkg_build_20260831.py::LOGICAL_KEY_FALLBACK`.
 3. **메타 존재 검사는 정확 키로**: API_M 은 `API_ID` 정확 일치 (`API_URL LIKE '%메뉴ID%'` 오진 —
    API_URL=SP명이라 메뉴ID 미포함 다수). 체인 확정 = `PR_GET_PROC_INFO_LIST` 1콜.
-4. **적용 후 검증 SQL 을 패키지에 동봉** (90_DIAGNOSE 폴더 표준 — SYS0012_APPROVAL_20260702 참조):
+4. **적용 후 검증 SQL 을 패키지에 동봉** (90_DIAGNOSE 폴더 표준 — SYS0012_APPROVAL_20260702 참조 (2026-11-13: 이 폴더는 현재 저장소에 없음 · 90_DIAGNOSE 폴더 실례 = `_artifacts/_deploy_packages/DMF0082_EXCHANGE_SAVE_20260724_1241/90_DIAGNOSE/90_VERIFY.sql`)):
    SP 시그니처 vs PROC_M **위치+이름** 대조 + 기대값 주석.
 
 ---
@@ -298,7 +298,7 @@ ls _artifacts/_deploy_packages/{화면}/04_Verify/*_Diagnose.sql        # Diagno
 
 | # | 의무 | 사고 근거 |
 |---|---|---|
-| 1 | **FE 변경분은 `fe/` 폴더에 repo 상대경로로 동봉** — README 에 경로 나열만 하고 파일 미동봉 금지. 동일 파일을 복수 패키지가 포함하면 "최신 스냅샷(양쪽 변경 포함)" 명시 + 함께 적용 권장 문구 | DMF0003 SEARCHCOND/IMMUNIZE 패키지 FE 3파일 누락 — 사용자 지적 |
+| 1 | **FE 변경분은 `fe/` 폴더에 repo 상대경로로 동봉** — README 에 경로 나열만 하고 파일 미동봉 금지 (2026-11-13 정정: 폴더명 `fe/` → 현행 `B_FE/`(통째 덮어쓰기)·`FE_MERGE/`(부분 병합) 분리 + 저장소 실경로 보존 — §1.8·§1.8-B). 동일 파일을 복수 패키지가 포함하면 "최신 스냅샷(양쪽 변경 포함)" 명시 + 함께 적용 권장 문구 | DMF0003 SEARCHCOND/IMMUNIZE 패키지 FE 3파일 누락 — 사용자 지적 |
 | 2 | **PKG SPEC/BODY 는 문장마다 `/` 종결자** — GET_DDL('PACKAGE') 원문은 spec+body 가 구분자 없이 연결됨 → 스크립트 실행 시 `PLS-00103: 심볼 "CREATE"`. 파일 생성 시 CREATE 문 수 == `/` 수 검증 | DMF0049 PKG_DMF0049_FULL_fixed 1차 실행 실패 |
 | 3 | **교차 PKG 의존은 PREREQ 로 동봉 + 번호 순서 파일명** — 본 PKG BODY 가 타 PKG 멤버를 호출하면(`PKG_A.P_...`) 그 PKG SPEC/BODY+GTT 를 `01_PREREQ_*` 로 폴더에 포함(이미 적용 환경은 skip 무해 명시). PKG BODY 는 반드시 **live 최신본 덤프**(구판 스냅샷 재사용 금지 — standalone 호출 잔존판이 클라우드에서 PLS-00201) | DMF0049 BODY 가 SCM_MGR.DMF0044_MOBILE_REPORT_CREATE(클라우드 미존재) 호출 → PLS-00201 |
 | 4 | 같은 PKG 를 여러 패키지가 갱신 중이면 **최신 BODY 단일본이 어느 패키지인지 README 상호 명기** | DMF0003 IMMUNIZE ↔ ORA12841_FIX BODY 중복 |

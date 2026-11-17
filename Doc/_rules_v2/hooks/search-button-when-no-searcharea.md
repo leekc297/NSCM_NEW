@@ -85,7 +85,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const queryClient = useQueryClient();
 
 const handleSearch = () => {
-  void queryClient.invalidateQueries({ queryKey: ['proc', MENU_ID] });
+  void queryClient.invalidateQueries({ queryKey: [tabId] });  // (2026-11-13 정정: ['proc', MENU_ID] → [tabId] — useTabProcQuery 키 = [tabId, sheetName, procedureAction, filters])
 };
 
 return (
@@ -111,9 +111,9 @@ return (
 ```typescript
 const handleSearch = () => {
   // 모든 sheet refetch
-  void queryClient.invalidateQueries({ queryKey: ['proc', MENU_ID] });
+  void queryClient.invalidateQueries({ queryKey: [tabId] });  // (11-13 정정)
   // 또는 특정 sheet 만
-  // void queryClient.invalidateQueries({ queryKey: ['proc', MENU_ID, SHEETS.MAIN] });
+  // void queryClient.invalidateQueries({ queryKey: [tabId, SHEETS.MAIN] });  // (11-13 정정)
 };
 ```
 

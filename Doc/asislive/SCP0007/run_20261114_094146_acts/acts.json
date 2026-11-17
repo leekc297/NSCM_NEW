@@ -1,0 +1,52 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "btnFromSrch",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnFromSrch failed: InvalidOperationException: control not found: btnFromSrch",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0007-Sd6fc80",
+    "SCP0007-Sfc760a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnToSrch",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnToSrch failed: InvalidOperationException: control not found: btnToSrch",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0007-S55ebc4",
+    "SCP0007-Sad92f9"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 09:40:42.349",
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

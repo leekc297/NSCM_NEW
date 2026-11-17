@@ -1,0 +1,1314 @@
+{
+  "menuId": "SSP0021",
+  "page": "ShipmentPlanAutoEss",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-plan-auto-ess",
+  "asisName": "ShipmentPlan",
+  "fields": [
+    {
+      "key": "sql",
+      "label": "Show SQL",
+      "lbl": "LBL01118",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSql"
+    },
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbDivision_ID"
+    },
+    {
+      "key": "companyId",
+      "label": "Company",
+      "lbl": "LBL00047",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbCompany_ID"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod2"
+    },
+    {
+      "key": "model2",
+      "label": "Model/Nickname",
+      "lbl": "LBL00618",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtModel2"
+    },
+    {
+      "key": "requestor",
+      "label": "item.UserName",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestor"
+    },
+    {
+      "key": "boxId",
+      "label": "Box ID",
+      "lbl": "LBL01057",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtBoxID"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod3"
+    },
+    {
+      "key": "resultType",
+      "label": "Result Type",
+      "lbl": "LBL01109",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbResultType"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "simulation",
+      "label": "Simulation",
+      "lbl": "LBL01119",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSimulation"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "requestor",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRequestor"
+    },
+    {
+      "key": "search",
+      "label": "Search",
+      "lbl": "LBL00112",
+      "kind": "search",
+      "tobe": "SearchArea.onSearch",
+      "asis": "btnSearch"
+    },
+    {
+      "key": "itemId2",
+      "label": "Item ID2",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItemID2"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Hold stock",
+      "key": "HOLD_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "HOLD_ID",
+        "HOLD_QTY",
+        "HOLD_YYYYMMDD",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "RELEASE_YYYYMMDD",
+        "REMARKS"
+      ],
+      "labels": [
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty*",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date*",
+        "Remarks"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Hold stock Detail",
+      "key": "HOLD_STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "HOLD_ID",
+        "HOLD_QTY",
+        "HOLD_YYYYMMDD",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "RELEASE_YYYYMMDD",
+        "REMARKS"
+      ],
+      "labels": [
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date",
+        "Remarks"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "MES Stock",
+      "key": "MES_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AVAILABLE_STOCK",
+        "BEFORE_OQC",
+        "ITEM_ID",
+        "NICK_NAME",
+        "OQC_COMPLETE",
+        "OQC_INSP_REQUEST",
+        "OQC_NG",
+        "QMS_MES_HOLD",
+        "TOTAL"
+      ],
+      "labels": [
+        "Available Stock",
+        "Before OQC",
+        "Model",
+        "Nick Name",
+        "OQC Complete",
+        "OQC Insp Request",
+        "OQC NG",
+        "QMS/MES Hold",
+        "Total"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "MES Stock Detail",
+      "key": "MES_STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AVAILABLE_YN",
+        "BOXID",
+        "EXP_INSP_VALID_DATE",
+        "LOT_QTY",
+        "LOTID",
+        "MES_HOLD_YN",
+        "MES_UNHOLD_SCHD_DATE",
+        "OQC_INSP_RESULT",
+        "PRJT_NAME",
+        "PROD_VALID_DATE",
+        "PRODID",
+        "QMS_HOLD_YN",
+        "QMS_UNHOLD_SCHD_DATE"
+      ],
+      "labels": [
+        "Available stock YN",
+        "Box ID",
+        "Exp Insp Vaild Date",
+        "Lot Qty",
+        "Lot ID",
+        "MES Hold YN",
+        "MES Unhold Sched Date",
+        "OQC Insp Result",
+        "Nick Name",
+        "Prod Valid Date",
+        "Model",
+        "QMS Hold YN",
+        "QMS Unhold Sched Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "oWMS Detail",
+      "key": "OWMS_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "ALLOCATION_QTY",
+        "AVAILABLE_QTY",
+        "CAPA_GRADE",
+        "CUSTOMER_CODE",
+        "CUSTOMER_NAME",
+        "DIVISION_ID",
+        "EXPIRATION_QTY",
+        "GRADE",
+        "HOLD_QTY",
+        "ITEM_ID",
+        "LONG_TERM_QTY",
+        "LOT_ID",
+        "LOT_ISSUE_DATE",
+        "MOVING_QTY",
+        "NICK_NAME",
+        "PACKING_QTY",
+        "PACKING_STATUS",
+        "PALLET_ID",
+        "PLANT_ID",
+        "RECEIVING_QTY",
+        "SOC",
+        "STOCK_QTY",
+        "STOCK_STATUS",
+        "STORAGE_ID",
+        "UNDECIDED_QTY"
+      ],
+      "labels": [
+        "Allocation Qty",
+        "Available Qty",
+        "Capa. Grade",
+        "Customer Code",
+        "Customer Name",
+        "Div",
+        "Expiration Qty",
+        "Grade",
+        "Hold Qty",
+        "Model",
+        "Long-term Qty",
+        "Lot ID",
+        "Lot Issue Date",
+        "Moving Qty",
+        "Nick Name",
+        "Packing Qty",
+        "Packing Status",
+        "Pallet ID",
+        "Plant ID",
+        "Reciving Qty",
+        "SOC",
+        "Stock Qty",
+        "Inventory Status",
+        "Storage",
+        "Undecided Qty"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Plan",
+      "key": "SHIPMENT_PLAN",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "BACK_COLOR",
+        "BOH_QTY",
+        "BOH_TYPE",
+        "CONFIRM_DAY",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "ITEM_ID",
+        "LOT_YN",
+        "MEASURE",
+        "MEASURE_NAME",
+        "NICK_NAME",
+        "PSI"
+      ],
+      "labels": [
+        "Back Color",
+        "BOH_QTY",
+        "BOH_TYPE",
+        "Confrim Day",
+        "Div",
+        "Site",
+        "From Site",
+        "Model",
+        "Lot_YN",
+        "Measure",
+        "Measure",
+        "Nick Name",
+        "PSI"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Plan Detail",
+      "key": "SHIPMENT_PLAN_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "A_COUNTRY",
+        "A_PORT_CODE",
+        "A_PORT_NAME",
+        "ATTRIBUTE10",
+        "BOD_ID",
+        "CHANGE_REASON_CODE",
+        "CHANGE_REASON_DETAIL",
+        "CHANGE_REQ_NO",
+        "CHANGE_TYPE",
+        "CHECK_NEED_YN",
+        "CITY_NAME",
+        "CONFIRM_ID",
+        "COUNTRY_NAME",
+        "DIVISION_ID",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "END_CUSTOMER",
+        "ERP_SO_NO",
+        "ERP_STATUS",
+        "ETA",
+        "ETD",
+        "Expected_Shipping_Date",
+        "FCST_TYPE",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LT_DAY",
+        "MODEL_USER",
+        "MTK_OWNER",
+        "NEW_A_COUNTRY",
+        "NEW_A_PORT_CODE",
+        "NEW_BOD_ID",
+        "NEW_CUSTOMER_LT",
+        "NEW_D_COUNTRY",
+        "NEW_D_PORT_CODE",
+        "NEW_ETA",
+        "NEW_ETD",
+        "NEW_INCOTERMS",
+        "NEW_LT_DAY",
+        "NEW_ROUTE_ID",
+        "NEW_SHIPMENT_DATE",
+        "NEW_TO_CITY",
+        "NEW_TO_COUNTRY",
+        "NEW_TRANSPORT_MODE",
+        "NICK_NAME",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "REMARKS",
+        "REMARKS2",
+        "REMARKS3",
+        "REQUESTOR",
+        "SHIPMENT_CONFIRM_QTY",
+        "SHIPMENT_DATE",
+        "SHIPMENT_STATUS",
+        "SHIPTO_CITY_NAME",
+        "SHIPTO_DESCRIPTION",
+        "SHIPTO_REGION_NAME",
+        "SOLDTO_DESCRIPTION",
+        "TEAM",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TRANSPORT_MODE",
+        "UPDATED_BY",
+        "UPDATED_DATE"
+      ],
+      "labels": [
+        "A Contry",
+        "A Port Code",
+        "A Port Name",
+        "ATTRIBUTE10",
+        "bod_id",
+        "Change Reason",
+        "Reason Detail",
+        "Change Request No",
+        "CHANGE_TYPE",
+        "Checked",
+        "City Name",
+        "Confirm/Plan ID",
+        "Country Name",
+        "Div",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "End Customer",
+        "SO No",
+        "erp_status",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "FCST Type",
+        "From Site ID",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "L/T(Day)",
+        "Model PIC",
+        "MKT Owner",
+        "A Country",
+        "A Port",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "new incoterms",
+        "L/T(Day)",
+        "Route",
+        "Shipment Date*",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "Nick Name",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "Project Code",
+        "Project Name",
+        "Remarks",
+        "Building",
+        "Customer Requirement",
+        "Shipment Requestor",
+        "Shipment Qty*",
+        "Shipment Date*",
+        "Status",
+        "Ship To City Name",
+        "Ship To Party",
+        "Ship To Region Name",
+        "Sold To Party",
+        "Team",
+        "To Site ID",
+        "To Site",
+        "Trans Mode*",
+        "Updated By",
+        "Updated Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Result",
+      "key": "SHIPMENT_RESULT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CHILD_QTY",
+        "CONFIRM_ID",
+        "DIVISION_ID",
+        "END_CUSTOMER",
+        "ERP_SO_NO",
+        "ETA_DATE",
+        "ETD_DATE",
+        "FROM_SITE",
+        "INCOTERMS",
+        "ITEM_ID",
+        "NICK_NAME",
+        "PROJECT_CODE",
+        "QTY",
+        "SHIP_TYPE",
+        "TO_SITE",
+        "TRANSPORT_MODE",
+        "TYPE",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "Shipment Pack Qty",
+        "Confirm/Plan ID",
+        "Div",
+        "End Customer",
+        "SO No",
+        "ETA",
+        "ETD",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Nick Name",
+        "Prj Code",
+        "Shipment Qty",
+        "Ship Type",
+        "To Site",
+        "Trans Mode",
+        "Status",
+        "Shipment Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock Location Detail",
+      "key": "STOCK_LOCATION_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AVAILABLE_DATE",
+        "AVAILABLE_QTY",
+        "COMPANY_ID",
+        "CUTOFF_DATE",
+        "DEFECT_QTY",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "HOLDING_DATE",
+        "ITEM_ID",
+        "MOVING_QTY",
+        "NICK_NAME",
+        "OUTSOURCING_FACTORY",
+        "OUTSOURCING_FLAG",
+        "PLANT_ID",
+        "QTY_UOM",
+        "STOCK_TYPE",
+        "STORAGE_DESCRIPTION",
+        "STORAGE_ID",
+        "TOTAL_QTY",
+        "WIPHOLD_YN"
+      ],
+      "labels": [
+        "Available Date",
+        "Available Qty",
+        "Company",
+        "Cutoff Date",
+        "Deffect Qty",
+        "Div",
+        "From Site",
+        "Holding Date",
+        "Model",
+        "Moving Qty",
+        "Nick Name",
+        "Outsourcing Factory",
+        "Outsourcing Flag",
+        "Plant",
+        "Qty Uom",
+        "Stock Type",
+        "Storage",
+        "Storage ID",
+        "Total Qty",
+        "Wiphold Yn"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SSP0021_GET_SHIPMENT_DIVISION",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_DIVISION",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_SAVE_HOLD_STOCK_DATA",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_SAVE_HOLD_STOCK_DATA",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_ERP_SO_NO_CNT",
+      "sheet": "Hold stock",
+      "btn": "ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_ERP_SO_NO_CNT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Plan",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_STATUS",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_SHIPMENT_PLAN",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_STOCK_LOCATION_DETAIL",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_STOCK_LOCATION_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_OWMS_DETAIL",
+      "sheet": "oWMS Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_OWMS_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_SHIPMENT_RESULT",
+      "sheet": "Shipment Plan",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_RESULT",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_HOLD_STOCK",
+      "sheet": "Hold stock",
+      "btn": "HOLD_STOCK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_HOLD_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_MES_STOCK",
+      "sheet": "MES Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_MES_STOCK",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0021_GET_MES_STOCK_DETAIL",
+      "sheet": "MES Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0021_GET_MES_STOCK_DETAIL",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Hold stock",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "NOT_IN_FOXQUERY",
+      "candidate": "PKG_SSP0021.P_",
+      "entries": [
+        "event:clbCompany_ID.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:this.btnMeasure.Click",
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.CellDoubleClick",
+        "event:clbCompany_ID.SelectedIndexChanged",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0021.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "DM.DM0003_GET_BUCKET_TYPE_CODE",
+        "SSP.SSP0021_GET_SHIPMENT_DIVISION"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailTopChange",
+      "target": "this.spdDetail",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemID2",
+      "target": "this.btnItemID2",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSearch",
+      "target": "this.btnSearch",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0021_GET_SHIPMENT_RESULT",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0021_GET_MES_STOCK_DETAIL",
+        "SSP.SSP0021_GET_MES_STOCK",
+        "SSP.SSP0021_GET_OWMS_DETAIL",
+        "SSP.SSP0021_GET_STOCK_LOCATION_DETAIL",
+        "SSP.SSP0021_GET_SHIPMENT_PLAN_DETAIL"
+      ]
+    },
+    {
+      "name": "handleRequestor",
+      "target": "this.btnRequestor",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSimulation",
+      "target": "this.btnSimulation",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailSheetTab",
+      "target": "this.spdDetail",
+      "event": "SheetTabClick",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailActiveSheet",
+      "target": "this.spdDetail",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailCell",
+      "target": "this.spdDetail",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailComboSelChange",
+      "target": "this.spdDetail",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetail",
+      "target": "this.spdDetail",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailEditChange",
+      "target": "this.spdDetail",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailClipboardPasted",
+      "target": "this.spdDetail",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "SSP.SSP0021_GET_MES_STOCK",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0021_GET_MES_STOCK_DETAIL",
+        "SSP.SSP0021_GET_HOLD_STOCK",
+        "SSP.SSP0021_GET_OWMS_DETAIL",
+        "SSP.SSP0021_GET_STOCK_LOCATION_DETAIL",
+        "SSP.SSP0021_GET_SHIPMENT_PLAN_DETAIL"
+      ]
+    },
+    {
+      "name": "handleSpdMainChange",
+      "target": "this.spdMain",
+      "event": "Change",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleDrpPeriod2Value",
+      "target": "this.drpPeriod2",
+      "event": "ValueChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleDivisionID",
+      "target": "clbDivision_ID",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCompanyID",
+      "target": "clbCompany_ID",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0021_GET_SHIPMENT_FROM_SITE",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handlePlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleshtDetailChange",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlePlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

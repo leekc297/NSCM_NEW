@@ -1,0 +1,78 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 09:10:59.336",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.91,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 09:11:04.038",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0037_GET_OPERATION_LT",
+   "sp": "SCP0037_GET_OPERATION_LT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 328,
+   "rows_kind": "DataSet rows",
+   "ms": 15274.66,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+    "p_item_id": "",
+    "p_scm_valid_yn": null,
+    "p_lt_operation": "SLITTING"
+   },
+   "inline": "EXEC SCP0037_GET_OPERATION_LT @p_division_id='81', @p_scm_site_id='HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E', @p_item_id='', @p_scm_valid_yn=NULL, @p_lt_operation='SLITTING'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 09:11:04.217",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 125.93,
+   "params": {
+    "p_menu_id": "SCP0037",
+    "p_log_type": "FIND",
+    "p_log_cnt": "328",
+    "p_db_time": "15.32",
+    "p_ui_time": "0.007",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0037', @p_log_type='FIND', @p_log_cnt='328', @p_db_time='15.32', @p_ui_time='0.007', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 09:11:06.557",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9616,
+   "rows_kind": "DataSet rows",
+   "ms": 7129.98,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0037"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0037'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

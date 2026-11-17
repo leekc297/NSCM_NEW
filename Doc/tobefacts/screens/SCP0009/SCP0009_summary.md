@@ -9,7 +9,7 @@
 |---|---|---|
 | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | component | 79 |
 | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | component | 517 |
-| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | component | 491 |
+| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | component | 495 |
 | features/supply/src/pages/shipment-plan-fg/index.ts | index | 2 |
 | features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.columns.ts | other | 77 |
 | features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.constants.ts | constants | 176 |
@@ -67,11 +67,11 @@
 | g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 292 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 313 |
 | g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 314 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 349 |
-| g | updatedLayout | applyDrill | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 398 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 414 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 468 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 487 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 353 |
+| g | updatedLayout | applyDrill | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 402 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 418 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 472 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 491 |
 | ShipmentPlanFgForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 474 |
 | ShipmentPlanFgForm | onChangeBucketType | handleChangeBucketType | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 475 |
 | ShipmentPlanFgForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 476 |
@@ -117,7 +117,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | toLeafConfig | l.binding | l.header | 90 | l.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 172 |
 | leaf | m.binding | m.kind === 'D' ? m.leaf : 'SUM' |  | isDynVisible(m.kind) |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 196 |
-| dynCols | c.binding ?? '' |  |  | c.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 410 |
+| dynCols | c.binding ?? '' |  |  | c.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 414 |
 | buildColumns | c.key | c.header | c.width ?? 100 | c.visible !== false |  |  | meta-map | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.buildColumns.ts | 29 |
 | col | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  | visible |  |  | object | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.drilldown.test.ts | 5 |
 | columns | MEASURE |  |  | true |  |  | object | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.fix.test.ts | 38 |

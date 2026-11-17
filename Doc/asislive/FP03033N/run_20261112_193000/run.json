@@ -1,0 +1,141 @@
+{
+ "id": "FP03033N",
+ "started": "2026-11-12 19:30:00.759",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:30:01.084",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP03033_Model_MeasureConversion",
+   "form_text": "Model Measure Conversion",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP03033_Model_MeasureConversion.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:13.834"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:30:17.570",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP03033N\\run_20261112_193000\\dump_load.json",
+   "control_count": 77,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:17.618"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:30:17.782",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP03033N\\run_20261112_193000\\shots\\FP03033N_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:18.143"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:30:18.622",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:20.446"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:30:31.890",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP03033N\\run_20261112_193000\\dump_find.json",
+   "control_count": 81,
+   "grid_count": 2,
+   "total": "Total : 2",
+   "time_status": "DB : 1.439s, UI : 0.094s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:32.090"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:30:32.408",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP03033N\\run_20261112_193000\\shots\\FP03033N_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:33.089"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:30:33.595",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 19:30:34.587"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 40,
+  "calls_with_params": 40
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP03033_Model_MeasureConversion",
+  "form_text": "Model Measure Conversion",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP03033_Model_MeasureConversion.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 1.439s, UI : 0.094s",
+  "total": "Total : 2",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:30:00.969",
+ "t_find": "2026-11-12 19:30:18.281",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 81,
+  "layout_items": 19,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 46,
+  "data_rows": 52,
+  "grid_rows": 11986,
+  "calls_total": 40,
+  "calls_screen": 40,
+  "calls_find": 11,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:38.813",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:38"
+}

@@ -114,6 +114,10 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.txtItemID | KeyDown | txtItemID_KeyDown | InitializeComponent:118 |
+| this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:158 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:213 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:339 |
 | this | Load | Form_Load | .ctor:156 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:222 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:459 |
@@ -138,24 +142,20 @@
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:264 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:506 |
 | this | Load | Form_Load | .ctor:160 |
-| this.txtItemID | KeyDown | txtItemID_KeyDown | InitializeComponent:118 |
-| this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:158 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:213 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:339 |
 
 ## 6. 컨트롤 (84개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 19 | layoutControlItem4, lblDivision, Team, lblEndCustomer, lblSalesSite, layoutControlItem1, layoutControlItem1, layoutControlItem3, layoutControlItem1, lblDivision, Team, lblDivision2, lblScmSite, lblProject, layoutControlItem2 … |
-| UsrCheckedList | 10 | clbDivision, clbTeam, clbSalesSite, clbEndCustomer, clbDivision, clbScmSite, clbTeam, clbEndCustomer, clbDivision, clbItemType |
-| EmptySpaceItem | 8 | emptySpaceItem1, emptySpaceItem3, emptySpaceItem4, emptySpaceItem2, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3 |
-| UsrLayoutControl | 7 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
-| LayoutControlGroup | 7 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| UsrButtonList | 6 | btnButtonList, btnButtonList, usrButtonList2, usrButtonList1, btnButtonList, btnButtonList |
-| FpSpread | 6 | spdMain, spdMain, spdBase, spdUser, spdMain, spdMain |
-| SheetView | 6 | spdMain_Sheet1, spdMain_Sheet1, spdBase_Sheet1, spdUser_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
+| LayoutControlItem | 19 | layoutControlItem1, lblDivision, layoutControlItem2, lblItemType, layoutControlItem4, lblDivision, Team, lblEndCustomer, lblSalesSite, layoutControlItem1, layoutControlItem1, layoutControlItem3, layoutControlItem1, lblDivision, Team … |
+| UsrCheckedList | 10 | clbDivision, clbItemType, clbDivision, clbTeam, clbSalesSite, clbEndCustomer, clbDivision, clbScmSite, clbTeam, clbEndCustomer |
+| EmptySpaceItem | 8 | emptySpaceItem1, emptySpaceItem3, emptySpaceItem1, emptySpaceItem3, emptySpaceItem4, emptySpaceItem2, emptySpaceItem2, emptySpaceItem1 |
+| UsrLayoutControl | 7 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 7 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2 |
+| UsrButtonList | 6 | btnButtonList, btnButtonList, btnButtonList, usrButtonList2, usrButtonList1, btnButtonList |
+| FpSpread | 6 | spdMain, spdMain, spdMain, spdBase, spdUser, spdMain |
+| SheetView | 6 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdBase_Sheet1, spdUser_Sheet1, spdMain_Sheet1 |
 | UsrConditionPanel | 4 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| TextBox | 3 | txtProject, txtItemID, txtItemID |
+| TextBox | 3 | txtItemID, txtProject, txtItemID |
 | Panel | 3 | pnlBottom, pnlCenter, pnlCenterButton |
 | Button | 2 | btnRight, btnLeft |
 | UsrTextBox | 1 | txtSearch |

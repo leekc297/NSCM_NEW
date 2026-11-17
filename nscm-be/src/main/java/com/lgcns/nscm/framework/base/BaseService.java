@@ -4,10 +4,19 @@ import static com.lgcns.nscm.framework.base.BaseConstants.DB_SESIONFACTORY_KEY;
 import static com.lgcns.nscm.framework.base.BaseConstants.DEFAULT_DATA_RESULT;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,10 +24,14 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgcns.nscm.framework.dao.NCommonDAO;
 import com.lgcns.nscm.framework.exception.SqlException;
+import com.lgcns.nscm.framework.model.CustomMap;
 import com.lgcns.nscm.framework.utils.MapUtils;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -334,6 +347,286 @@ public class BaseService {
             sqlSession.close();
             writer.write("]");
         }
+    }
+
+    /**
+     * @MethodName : callProcStream
+     * @Description: 동적 프로시저를 raw JDBC 로 실행하고 OUT 커서를 ResultSet -> JSON 으로
+     *   직접 스트리밍한다. CustomMap 재료화(행 객체 생성)와 별도 Jackson 패스를 건너뛰는 단일 패스 경로.
+     *   응답 형태는 기존 execBtn/callProc(BaseResponse)와 동일:
+     *   { "code":..., "message":..., "result": { "<커서COL_NM>":[..행..], "<스칼라OUT>":val } }
+     *   주의: 기존 callProc/execBtn 공용 경로와 분리된 실험 경로다(공용 경로 무영향).
+     */
+    @SuppressWarnings("unchecked")
+    public void callProcStream(Map<String, Object> params, HttpServletResponse response) throws Exception {
+
+        // 1. 프로시저 메타 (execBtn 과 동일 소스)
+        List<Map<String, Object>> procParam =
+                (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
+
+        // 2. JVARCHAR 처리 (execBtn 과 동일)
+        Set<String> jCols = new HashSet<>();
+        boolean isJvarchar = false;
+        for (Map<String, Object> o : procParam) {
+            if ("JVARCHAR".equals(o.get("DATA_TP_CD"))) { isJvarchar = true; jCols.add((String) o.get("COL_NM")); }
+        }
+        if (isJvarchar) MapUtils.cvtJsonToJVarchar(params, jCols);
+
+        // 3. {call PROC(?, ?, ...)} 생성
+        StringBuilder sb = new StringBuilder("{call ");
+        for (int i = 0; i < procParam.size(); i++) {
+            Map<String, Object> o = procParam.get(i);
+            if (i == 0) sb.append(o.get("PROC_NM").toString()).append("(");
+            else sb.append(", ");
+            sb.append("?");
+        }
+        if (!procParam.isEmpty()) sb.append(")");
+        sb.append("}");
+        String callSql = sb.toString();
+        log.debug("callProcStream: {}", callSql);
+
+        response.setContentType("application/json; charset=UTF-8");
+
+        long t0 = System.currentTimeMillis();
+        int totalRows = 0;
+        SqlSession sqlSession = "".equals(getDb(params)) ? ncommondao.getSqlSession() : ncommondao.getSqlSession(getDb(params));
+        CallableStatement cs = null;
+        try {
+            Connection conn = sqlSession.getConnection();
+            cs = conn.prepareCall(callSql);
+
+            List<Integer> cursorIdx = new ArrayList<>();
+            List<String> cursorKey = new ArrayList<>();
+            List<Integer> scalarIdx = new ArrayList<>();
+            List<String> scalarKey = new ArrayList<>();
+            for (int i = 0; i < procParam.size(); i++) {
+                Map<String, Object> o = procParam.get(i);
+                int idx = i + 1;
+                String colTp = String.valueOf(o.get("COL_TP_CD"));
+                String dataTp = String.valueOf(o.get("DATA_TP_CD"));
+                String colNm = String.valueOf(o.get("COL_NM"));
+                if ("IN".equals(colTp)) {
+                    cs.setObject(idx, params.get(colNm));
+                } else if ("OUT".equals(colTp)) {
+                    if ("CURSOR".equals(dataTp) || "PROC_RESULT".equals(dataTp)) {
+                        cs.registerOutParameter(idx, Types.REF_CURSOR);
+                        cursorIdx.add(idx); cursorKey.add(colNm);
+                    } else {
+                        cs.registerOutParameter(idx, Types.VARCHAR);
+                        scalarIdx.add(idx); scalarKey.add(colNm);
+                    }
+                }
+            }
+
+            cs.execute();
+
+            JsonGenerator gen = new JsonFactory().createGenerator(response.getOutputStream(), JsonEncoding.UTF8);
+            try {
+                gen.writeStartObject();
+                gen.writeStringField("code", BaseConstants.SUCCESS);
+                gen.writeStringField("message", BaseConstants.SUCCESS_MSG);
+                gen.writeFieldName("result");
+                gen.writeStartObject();
+
+                for (int k = 0; k < scalarIdx.size(); k++) {
+                    Object v = cs.getObject(scalarIdx.get(k));
+                    gen.writeStringField(scalarKey.get(k), v == null ? null : String.valueOf(v));
+                }
+                for (int k = 0; k < cursorIdx.size(); k++) {
+                    gen.writeArrayFieldStart(cursorKey.get(k));
+                    ResultSet rs = (ResultSet) cs.getObject(cursorIdx.get(k));
+                    try {
+                        rs.setFetchSize(1000);
+                        ResultSetMetaData md = rs.getMetaData();
+                        int cc = md.getColumnCount();
+                        String[] label = new String[cc + 1];
+                        int[] type = new int[cc + 1];
+                        for (int c = 1; c <= cc; c++) { label[c] = md.getColumnLabel(c); type[c] = md.getColumnType(c); }
+                        while (rs.next()) {
+                            totalRows++;
+                            gen.writeStartObject();
+                            for (int c = 1; c <= cc; c++) {
+                                gen.writeFieldName(label[c]);
+                                writeCell(gen, rs, c, type[c]);
+                            }
+                            gen.writeEndObject();
+                        }
+                    } finally {
+                        if (rs != null) rs.close();
+                    }
+                    gen.writeEndArray();
+                }
+                gen.writeEndObject(); // result
+                gen.writeEndObject(); // root
+                gen.flush();
+            } finally {
+                gen.close();
+            }
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            throw e;
+        } finally {
+            if (cs != null) try { cs.close(); } catch (Exception ignore) {}
+            sqlSession.close();
+            log.info("callProcStream done: {} ms, rows={}, mnuId={}, shtNm={}, mnuBtnCd={}",
+                    System.currentTimeMillis() - t0, totalRows, params.get("mnuId"), params.get("shtNm"), params.get("mnuBtnCd"));
+        }
+    }
+
+    /** callProcStream 셀 1개 값을 타입에 맞춰 JSON 으로 쓴다(숫자는 number, 그 외 문자열). */
+    private void writeCell(JsonGenerator gen, ResultSet rs, int c, int type) throws Exception {
+        switch (type) {
+            case Types.NUMERIC: case Types.DECIMAL: case Types.INTEGER:
+            case Types.BIGINT: case Types.SMALLINT: case Types.TINYINT:
+            case Types.FLOAT: case Types.DOUBLE: case Types.REAL: {
+                BigDecimal bd = rs.getBigDecimal(c);
+                if (bd == null) gen.writeNull(); else gen.writeNumber(bd);
+                break;
+            }
+            default: {
+                String s = rs.getString(c);
+                if (s == null) gen.writeNull(); else gen.writeString(s);
+            }
+        }
+    }
+
+    /**
+     * call-proc2 — SCM_ADM_PROC_M / procedures.d.ts 를 참조하지 않고, 살아있는 Oracle 카탈로그
+     * (ALL_ARGUMENTS)만으로 프로시저 IN/OUT 을 유도해 실행하는 경로. 신규/개선 화면의 점진 전환용.
+     *
+     * 파라미터 키 규약(카탈로그에서 유도 불가한 것만 여기서 보완):
+     * - IN 업무 파라미터: 오라클명에서 선두 'P_' 제거 + snake→camel 로 요청 키를 유도 (P_DIVISION_ID -> divisionId).
+     * - 세션 파라미터: 컨트롤러가 넣어준 ses* 값을 "요청에 없는 키의 default" 로만 채운다. 그래서
+     *   같은 오라클명 P_USER_ID 가 어떤 화면은 세션(요청에 userId 없음), 어떤 화면은 업무값(요청에 userId 있음)
+     *   이어도 충돌하지 않는다.
+     * - JVARCHAR: cvtJsonToVarchar 목록(요청 키)에 대해 data 그리드 배열을 '^' delim 으로 접는다(기존 규약 재사용).
+     * - OUT 커서/스칼라: 오라클명 소문자를 응답 키로 사용(O_RC1 -> o_rc1). 행 컬럼은 ResultSetMetaData 로 런타임 취득.
+     */
+    public Map<String, Object> callProc2(String procNm, Map<String, Object> params, Set<String> jvarcharCols) throws Exception {
+
+        // 0. PKG.PROC 분리
+        String pkg = null;
+        String obj = procNm;
+        int dot = procNm.indexOf('.');
+        if (dot > 0) { pkg = procNm.substring(0, dot); obj = procNm.substring(dot + 1); }
+
+        // 1. 세션 default (컨트롤러가 주입한 ses* 값 → 유도키에도 매핑). 요청에 키가 있으면 요청값이 이긴다.
+        Map<String, Object> sessionDefaults = new HashMap<>();
+        if (params.containsKey("sesUserId"))     { Object v = params.get("sesUserId");     sessionDefaults.put("sesUserId", v);     sessionDefaults.put("userId", v); }
+        if (params.containsKey("sesLangCd"))      { Object v = params.get("sesLangCd");      sessionDefaults.put("sesLangCd", v);      sessionDefaults.put("langCd", v); }
+        if (params.containsKey("sesDivisionId"))  { Object v = params.get("sesDivisionId");  sessionDefaults.put("sesDivisionId", v); }
+        if (params.containsKey("sesUserGrId"))    { Object v = params.get("sesUserGrId");    sessionDefaults.put("sesUserGrId", v); }
+        if (params.containsKey("sesMenuId"))      { Object v = params.get("sesMenuId");      sessionDefaults.put("sesMenuId", v); }
+
+        // 2. JVARCHAR 접기(그리드 배치) — 기존 규약 재사용
+        if (jvarcharCols != null && !jvarcharCols.isEmpty()) {
+            MapUtils.cvtJsonToJVarchar(params, jvarcharCols);
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        SqlSession sqlSession = "".equals(getDb(params)) ? ncommondao.getSqlSession() : ncommondao.getSqlSession(getDb(params));
+        try {
+            Connection conn = sqlSession.getConnection();
+
+            // 3. 카탈로그에서 파라미터 시그니처 취득 (POSITION 순)
+            List<String[]> args = new ArrayList<>(); // {ARGUMENT_NAME, IN_OUT, DATA_TYPE}
+            String metaSql = "SELECT ARGUMENT_NAME, IN_OUT, DATA_TYPE FROM ALL_ARGUMENTS WHERE "
+                    + (pkg == null ? "PACKAGE_NAME IS NULL" : "PACKAGE_NAME = ?")
+                    + " AND OBJECT_NAME = ? AND DATA_LEVEL = 0 AND (OVERLOAD IS NULL OR OVERLOAD = '1') ORDER BY POSITION";
+            try (PreparedStatement ps = conn.prepareStatement(metaSql)) {
+                int bi = 1;
+                if (pkg != null) ps.setString(bi++, pkg);
+                ps.setString(bi, obj);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) args.add(new String[] { rs.getString(1), rs.getString(2), rs.getString(3) });
+                }
+            }
+            if (args.isEmpty()) throw new Exception("call_proc2: no catalog arguments for " + procNm);
+
+            // 4. {call PKG.PROC(?, ?, ...)}
+            StringBuilder sb = new StringBuilder("{call ").append(procNm).append("(");
+            for (int i = 0; i < args.size(); i++) { if (i > 0) sb.append(", "); sb.append("?"); }
+            sb.append(")}");
+            String callSql = sb.toString();
+            log.debug("call_proc2: {}", callSql);
+
+            List<Integer> cursorIdx = new ArrayList<>();
+            List<String> cursorKey = new ArrayList<>();
+            List<Integer> scalarIdx = new ArrayList<>();
+            List<String> scalarKey = new ArrayList<>();
+
+            try (CallableStatement cs = conn.prepareCall(callSql)) {
+                for (int i = 0; i < args.size(); i++) {
+                    String[] a = args.get(i);
+                    int idx = i + 1;
+                    String name = a[0];
+                    String inOut = a[1];
+                    String dataType = a[2];
+
+                    if ("OUT".equals(inOut) || "IN/OUT".equals(inOut)) {
+                        String key = name.toLowerCase();
+                        if ("REF CURSOR".equals(dataType)) {
+                            cs.registerOutParameter(idx, Types.REF_CURSOR);
+                            cursorIdx.add(idx); cursorKey.add(key);
+                        } else {
+                            cs.registerOutParameter(idx, Types.VARCHAR);
+                            scalarIdx.add(idx); scalarKey.add(key);
+                        }
+                    } else { // IN
+                        String key = toCamelKey(name);
+                        Object val = params.containsKey(key) ? params.get(key) : sessionDefaults.get(key);
+                        cs.setObject(idx, val);
+                    }
+                }
+
+                cs.execute();
+
+                for (int k = 0; k < scalarIdx.size(); k++) {
+                    Object v = cs.getObject(scalarIdx.get(k));
+                    result.put(scalarKey.get(k), v == null ? null : String.valueOf(v));
+                }
+                for (int k = 0; k < cursorIdx.size(); k++) {
+                    List<Map<String, Object>> rows = new ArrayList<>();
+                    try (ResultSet rs = (ResultSet) cs.getObject(cursorIdx.get(k))) {
+                        if (rs != null) {
+                            ResultSetMetaData md = rs.getMetaData();
+                            int cc = md.getColumnCount();
+                            String[] label = new String[cc + 1];
+                            for (int c = 1; c <= cc; c++) label[c] = md.getColumnLabel(c);
+                            while (rs.next()) {
+                                Map<String, Object> row = new CustomMap();
+                                for (int c = 1; c <= cc; c++) {
+                                    Object v = rs.getObject(c);
+                                    if (v != null) row.put(label[c], v); // null 은 담지 않음(기존 MyBatis 동작과 동일)
+                                }
+                                rows.add(row);
+                            }
+                        }
+                    }
+                    result.put(cursorKey.get(k), rows);
+                }
+            }
+        } catch (Exception e) {
+            log.error("call_proc2 error (procNm = {})", procNm, e);
+            throw e;
+        } finally {
+            sqlSession.close();
+        }
+        return result;
+    }
+
+    /** 오라클 IN 파라미터명 -> 요청 키. 선두 'P_' 제거 후 snake_case -> camelCase. (P_FROM_YYYYMMDD -> fromYyyymmdd) */
+    private String toCamelKey(String oracleName) {
+        String s = oracleName;
+        if (s.startsWith("P_") || s.startsWith("p_")) s = s.substring(2);
+        String[] parts = s.toLowerCase().split("_");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].isEmpty()) continue;
+            if (sb.length() == 0) sb.append(parts[i]);
+            else sb.append(Character.toUpperCase(parts[i].charAt(0))).append(parts[i].substring(1));
+        }
+        return sb.toString();
     }
 
     /**

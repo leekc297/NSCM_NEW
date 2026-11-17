@@ -1,0 +1,4 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0050-Sc8ed80,저장,InsertRow,SCP0050_CAPA_PIC.cs:628,주석 안에서만 호출,SCP0050_CAPA_PIC.cs:313; SCP0050_CAPA_PIC.cs:303,
+SCP0050-Sc07aa0,조회,GetExcelFileName,SCP0050_ExcelPopup.cs:310,같은 파일에서 호출,SCP0050_ExcelPopup.cs:345,OpenAndLoadExcelData
+SCP0050-Sd2a9e6,초기,InitSpread_Merge,SCP0050_ExcelPopup.cs:209,호출 없음,,

@@ -3,7 +3,7 @@
 //   근거(라인 = AS-IS DMF0021_SalesPlan.cs):
 //     V-S1 Division 권한 (FindData L1513 — AS-IS MSG00097 의도 = 권한 Division 0건 → TO-BE MSG00667) / V-S2 기간 역전 (L1474 MSG00108) /
 //     V-S3 3년 초과 — 종료일 = 시작일+3년 보정 후 차단 (L1481 MSG00164. 주석은 "2년"이나 코드 = 3년) /
-//     V-E3 Bucket 변경 차단 — 변경분 존재 시 (cboBucketType_Click L5475 MSG00227) /
+//     V-E3 Bucket 변경 차단 — 변경분 존재 시 (cboBucketType_Click L5475 AS-IS MSG00227 → MSG00680) /
 //     V-V1 필수 13종 division 분기 (SaveData L2198~2239 — AS-IS MSG00002 용법 → 사내 MSG00429 재매핑) /
 //     V-V3 변경 0건 (MSG00004 '수정한 내용이 없습니다') — Catch_Up 음수(MSG00085)·라인 변경 0건
 //       (MSG00146)은 조립 단계(sales-plan.save.ts buildUnfoldRows)에서 검증.
@@ -65,7 +65,10 @@ export const useSalesPlanValidation = () => {
     if (hasPendingChanges) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.BUCKET_CHANGE_BLOCK, '_Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.'),
+        content: t(
+          MSG.BUCKET_CHANGE_BLOCK,
+          '_변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.'
+        ),
       });
       return { ok: false, msgId: MSG.BUCKET_CHANGE_BLOCK };
     }

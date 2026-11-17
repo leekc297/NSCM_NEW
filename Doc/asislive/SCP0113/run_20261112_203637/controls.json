@@ -1,0 +1,1337 @@
+{
+ "id": "SCP0113",
+ "from": "dump_find.json",
+ "screen": {
+  "type": "GSCM.SCP.Report.UIL.SCP0113_LongTermStockMgmt",
+  "text": "Long-term stock MGMT",
+  "width": 1459,
+  "height": 834
+ },
+ "controls": [
+  {
+   "name": "splitContainer2",
+   "type": "System.Windows.Forms.SplitContainer",
+   "path": "/splitContainer2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 74,
+   "w": 1459,
+   "h": 760,
+   "tab": 13,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/splitContainer2/SplitterPanel",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 589,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/splitContainer2/SplitterPanel/spdMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 589,
+   "tab": 14
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.SplitterPanel",
+   "path": "/splitContainer2/SplitterPanel",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 594,
+   "w": 1459,
+   "h": 166,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "spdSub",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/splitContainer2/SplitterPanel/spdSub",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 166,
+   "tab": 15
+  },
+  {
+   "name": "usrConditionPanel1",
+   "type": "GSCM.Windows.Forms.Controls.UsrConditionPanel",
+   "path": "/usrConditionPanel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 74,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "usrLayoutControl2",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1439,
+   "h": 74,
+   "tab": 0,
+   "text": "usrLayoutControl2"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 74,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 17,
+   "h": 74,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 74,
+   "w": 1439,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "btnProcessLongTerm",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnProcessLongTerm",
+   "visible": true,
+   "enabled": true,
+   "x": 1263,
+   "y": 37,
+   "w": 85,
+   "h": 25,
+   "tab": 25,
+   "text": "Process LongTerm",
+   "control_values": "Process LongTerm"
+  },
+  {
+   "name": "btnDownloadExcel",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnDownloadExcel",
+   "visible": true,
+   "enabled": true,
+   "x": 1160,
+   "y": 37,
+   "w": 91,
+   "h": 25,
+   "tab": 24,
+   "text": "PSI Export",
+   "control_values": "PSI Export"
+  },
+  {
+   "name": "lblBaseMonth",
+   "type": "GSCM.Windows.Forms.Controls.UsrLabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/lblBaseMonth",
+   "visible": true,
+   "enabled": true,
+   "x": 764,
+   "y": 37,
+   "w": 256,
+   "h": 25,
+   "tab": 23,
+   "text": "This is the expected long-term ending stock for",
+   "control_values": ""
+  },
+  {
+   "name": "txtGroupCode",
+   "type": "GSCM.Windows.Forms.Controls.UsrMultiLineEditor",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtGroupCode",
+   "visible": true,
+   "enabled": true,
+   "x": 1062,
+   "y": 12,
+   "w": 286,
+   "h": 21,
+   "tab": 22,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "pictureBox1",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtGroupCode/pictureBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 268,
+   "y": 3,
+   "w": 16,
+   "h": 15,
+   "tab": 7,
+   "text": ""
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtGroupCode/pnlMain",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "textBox2",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtGroupCode/pnlMain/textBox2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtGroupCode/textBox1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 286,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "usrLayoutControl4",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl2/usrLayoutControl4",
+   "visible": true,
+   "enabled": true,
+   "x": 1360,
+   "y": 12,
+   "w": 59,
+   "h": 50,
+   "tab": 21,
+   "text": "usrLayoutControl4"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/usrLayoutControl4/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 59,
+   "y": 50,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/usrLayoutControl4/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 59,
+   "y": 0,
+   "w": 17,
+   "h": 50,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/usrLayoutControl4/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 50,
+   "w": 59,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/usrLayoutControl4/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clbPlant",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList2",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant",
+   "visible": true,
+   "enabled": true,
+   "x": 538,
+   "y": 12,
+   "w": 214,
+   "h": 21,
+   "tab": 19,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 214,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 200,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 200,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "AZ Arizona Mobile Prod",
+     "checked": false
+    },
+    {
+     "text": "GM Ohio Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "GM Tennessee Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "HD Ohio Auto/ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "HG Georgia Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "HM Karawang Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "HQ OC1 Mobile Prod",
+     "checked": false
+    },
+    {
+     "text": "HQ OC1 Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "HQ OC1 ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "HQ OC2 Mobile Prod",
+     "checked": false
+    },
+    {
+     "text": "HQ OC2 Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "MI Michigan Holland Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "MI Michigan Holland ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "MI Michigan LS Auto/ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "MI Michigan HP Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "MI Arizona Phoenix ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "NA Nanjing Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "NB Nanjing Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "NB Nanjing ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "NJ Nanjing Mobile Prod",
+     "checked": false
+    },
+    {
+     "text": "NJ Nanjing ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "OT Ontario Auto/ESS Prod",
+     "checked": false
+    },
+    {
+     "text": "virtual plant(GM01)",
+     "checked": false
+    },
+    {
+     "text": "virtual plant(HD00)",
+     "checked": false
+    },
+    {
+     "text": "virtual plant(MI02)",
+     "checked": false
+    },
+    {
+     "text": "virtual plant(ST00)",
+     "checked": false
+    },
+    {
+     "text": "WA WRO Auto Prod",
+     "checked": false
+    },
+    {
+     "text": "WA WRO ESS Prod",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 18,
+   "y": 0,
+   "w": 148,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnOK",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain/panel1/btnOK",
+   "visible": true,
+   "enabled": true,
+   "x": 166,
+   "y": 0,
+   "w": 32,
+   "h": 20,
+   "tab": 6,
+   "text": "OK"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlant/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 15,
+   "h": 18,
+   "tab": 4,
+   "text": "",
+   "checked": false
+  },
+  {
+   "name": "cboDivision",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList2",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision",
+   "visible": true,
+   "enabled": true,
+   "x": 276,
+   "y": 12,
+   "w": 181,
+   "h": 21,
+   "tab": 18,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 181,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 200,
+   "h": 132,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 200,
+   "h": 132,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "81 Automotive Battery",
+     "checked": false
+    },
+    {
+     "text": "40 Mobility & IT Battery",
+     "checked": false
+    },
+    {
+     "text": "82 ESS Battery",
+     "checked": false
+    },
+    {
+     "text": "81_UC Automotive Battery(UC)",
+     "checked": false
+    },
+    {
+     "text": "81_HM Automotive Battery(HM)",
+     "checked": false
+    },
+    {
+     "text": "81_ST Automotive Battery(ST)",
+     "checked": false
+    },
+    {
+     "text": "81_HD Automotive Battery(HD)",
+     "checked": false
+    },
+    {
+     "text": "81_HG Automotive Battery(HG)",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 18,
+   "y": 0,
+   "w": 148,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnOK",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain/panel1/btnOK",
+   "visible": true,
+   "enabled": true,
+   "x": 166,
+   "y": 0,
+   "w": 32,
+   "h": 20,
+   "tab": 6,
+   "text": "OK"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 15,
+   "h": 18,
+   "tab": 4,
+   "text": "",
+   "checked": false
+  },
+  {
+   "name": "clbItemType",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList2",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType",
+   "visible": true,
+   "enabled": true,
+   "x": 81,
+   "y": 37,
+   "w": 114,
+   "h": 21,
+   "tab": 17,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 114,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 200,
+   "h": 68,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 200,
+   "h": 68,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "완제품",
+     "checked": false
+    },
+    {
+     "text": "반제품",
+     "checked": false
+    },
+    {
+     "text": "원재료",
+     "checked": false
+    },
+    {
+     "text": "상품",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 200,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 18,
+   "y": 0,
+   "w": 148,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnOK",
+   "type": "System.Windows.Forms.Button",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain/panel1/btnOK",
+   "visible": true,
+   "enabled": true,
+   "x": 166,
+   "y": 0,
+   "w": 32,
+   "h": 20,
+   "tab": 6,
+   "text": "OK"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbItemType/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 15,
+   "h": 18,
+   "tab": 4,
+   "text": "",
+   "checked": false
+  },
+  {
+   "name": "monthPicker",
+   "type": "GSCM.Windows.Forms.Controls.UsrMonthPicker",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker",
+   "visible": true,
+   "enabled": true,
+   "x": 538,
+   "y": 37,
+   "w": 214,
+   "h": 21,
+   "tab": 15,
+   "text": "",
+   "control_values": "202611",
+   "value": "0001-01-01 오전 12:00:00"
+  },
+  {
+   "name": "txt",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/txt",
+   "visible": true,
+   "enabled": true,
+   "x": 3,
+   "y": 3,
+   "w": 194,
+   "h": 14,
+   "tab": 3,
+   "text": "2026-11",
+   "read_only": "False"
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 70,
+   "h": 176,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "picLeft",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/pnlMain/picLeft",
+   "visible": true,
+   "enabled": true,
+   "x": 1,
+   "y": 0,
+   "w": 18,
+   "h": 16,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "picRight",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/pnlMain/picRight",
+   "visible": true,
+   "enabled": true,
+   "x": 54,
+   "y": 0,
+   "w": 17,
+   "h": 16,
+   "tab": 4,
+   "text": ""
+  },
+  {
+   "name": "lbMonth",
+   "type": "System.Windows.Forms.ListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/pnlMain/lbMonth",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 16,
+   "w": 70,
+   "h": 160,
+   "tab": 0,
+   "text": "2026-11 Nov"
+  },
+  {
+   "name": "lblYYYY",
+   "type": "System.Windows.Forms.Label",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/pnlMain/lblYYYY",
+   "visible": true,
+   "enabled": true,
+   "x": 17,
+   "y": 1,
+   "w": 35,
+   "h": 13,
+   "tab": 4,
+   "text": "2026"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/monthPicker/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 214,
+   "h": 21,
+   "tab": 0,
+   "text": "2026-11",
+   "selected_index": 0,
+   "selected_text": "2026-11",
+   "selected_value": null,
+   "items": [
+    "2026-11"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "btnColumn",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnColumn",
+   "visible": true,
+   "enabled": true,
+   "x": 1044,
+   "y": 37,
+   "w": 26,
+   "h": 25,
+   "tab": 14,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "cboCreationType",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboCreationType",
+   "visible": true,
+   "enabled": true,
+   "x": 809,
+   "y": 12,
+   "w": 172,
+   "h": 21,
+   "tab": 3,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL",
+    "수요(정책재고)",
+    "수요<생산계획",
+    "수요<재고(미착)",
+    "수요<재고(상품)",
+    "수요<재고(완제품)",
+    "수요<재고(원재료)",
+    "수요<재고(평가감)",
+    "수요<재고(활성화)",
+    "수요초과(AS)",
+    "수요초과(RTF)",
+    "수요초과(물동외)",
+    "수요초과(자재소요)",
+    "입고(정책재고)",
+    "입고실적",
+    "입고초과(PO)"
+   ],
+   "item_count": 16
+  },
+  {
+   "name": "cboPlanDate",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboPlanDate",
+   "visible": true,
+   "enabled": true,
+   "x": 75,
+   "y": 12,
+   "w": 120,
+   "h": 21,
+   "tab": 0,
+   "text": "2026-09-14 (W38)",
+   "selected_index": 0,
+   "selected_text": "2026-09-14 (W38)",
+   "selected_value": "20260914",
+   "items": [
+    "2026-09-14 (W38)",
+    "2026-09-07 (W37)",
+    "2026-08-31 (W36)",
+    "2026-08-24 (W35)",
+    "2026-08-17 (W34)",
+    "2026-08-10 (W33)",
+    "2026-08-03 (W32)",
+    "2026-07-27 (W31)",
+    "2026-07-20 (W30)",
+    "2026-07-13 (W29)",
+    "2026-07-06 (W28)"
+   ],
+   "item_count": 11,
+   "control_values": "20260914"
+  },
+  {
+   "name": "txtItemId",
+   "type": "GSCM.Windows.Forms.Controls.UsrMultiLineEditor",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId",
+   "visible": true,
+   "enabled": true,
+   "x": 253,
+   "y": 37,
+   "w": 204,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "pictureBox1",
+   "type": "System.Windows.Forms.PictureBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pictureBox1",
+   "visible": false,
+   "enabled": true,
+   "x": 186,
+   "y": 3,
+   "w": 16,
+   "h": 15,
+   "tab": 7,
+   "text": ""
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pnlMain",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "textBox2",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/pnlMain/textBox2",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "textBox1",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/txtItemId/textBox1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 204,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "btnImport",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/usrLayoutControl2/btnImport",
+   "visible": true,
+   "enabled": true,
+   "x": 1082,
+   "y": 37,
+   "w": 66,
+   "h": 25,
+   "tab": 13,
+   "text": "Upload",
+   "control_values": "Upload"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/Panel",
+   "visible": true,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 20,
+   "h": 74,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "Change",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/Panel/Change",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 59,
+   "w": 20,
+   "h": 15,
+   "tab": 0,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "statusStripBaseForm",
+   "type": "System.Windows.Forms.StatusStrip",
+   "path": "/statusStripBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 538,
+   "w": 875,
+   "h": 26,
+   "tab": 1,
+   "text": "statusStrip1"
+  },
+  {
+   "name": "pnlBaseForm",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/pnlBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 31,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "BaseRibbonCtl",
+   "type": "DevExpress.XtraBars.Ribbon.RibbonControl",
+   "path": "/pnlBaseForm/BaseRibbonCtl",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 78,
+   "tab": 0,
+   "text": ""
+  }
+ ],
+ "layout_items": [
+  {
+   "layout": "usrLayoutControl2",
+   "item": "Root",
+   "label": "Root",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem1",
+   "label": "Plan date*",
+   "control": "cboPlanDate",
+   "required": true,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem3",
+   "label": "Material",
+   "control": "txtItemId",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem5",
+   "label": "발생유형",
+   "control": "cboCreationType",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem1",
+   "label": "emptySpaceItem1",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem4",
+   "label": "Upload",
+   "control": "btnImport",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem10",
+   "label": "layoutControlItem10",
+   "control": "btnColumn",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem9",
+   "label": "EOH Month",
+   "control": "monthPicker",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem12",
+   "label": "Item Type",
+   "control": "clbItemType",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem2",
+   "label": "Div",
+   "control": "cboDivision",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem6",
+   "label": "Plant",
+   "control": "clbPlant",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem13",
+   "label": "layoutControlItem13",
+   "control": "usrLayoutControl4",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem14",
+   "label": "Group Code",
+   "control": "txtGroupCode",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem8",
+   "label": "layoutControlItem8",
+   "control": "lblBaseMonth",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem11",
+   "label": "PSI Export",
+   "control": "btnDownloadExcel",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem15",
+   "label": "Process LongTerm",
+   "control": "btnProcessLongTerm",
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl4",
+   "item": "Root",
+   "label": "Root",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  }
+ ]
+}

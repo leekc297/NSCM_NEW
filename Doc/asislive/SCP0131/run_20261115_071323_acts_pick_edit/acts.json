@@ -1,0 +1,170 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ITEM_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_MaterialByDivisionPopup",
+    "title": "Material by Division Popup",
+    "rows": 9616
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "COLMERGE",
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "X",
+     "",
+     "81",
+     "Automotive Battery",
+     "AAEF1001I-A1-000",
+     "ACEF1001I-A1-000 P",
+     "ELFP-000",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "scenarios": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_MaterialByDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Material",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtOperationGroup",
+      "type": "UsrMultiLineEditor",
+      "label": "Operation Group",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 9616,
+      "cols": [
+       "DIVISION_ID",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [
+      {
+       "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+       "rows": 9616,
+       "params": {
+        "p_division_id": "81",
+        "p_operation_group": "",
+        "p_item_id": "",
+        "p_scp_module_type": "SCP0131"
+       }
+      }
+     ],
+     "rows_after": 9616
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Sales Site Priority",
+     "rows_before": 61,
+     "rows_after": 61,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "AMCOME782-A1-0A0",
+       "after": "AAEF1001I-A1-000"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 07:12:21",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "has_else": false
+  }
+ ]
+}

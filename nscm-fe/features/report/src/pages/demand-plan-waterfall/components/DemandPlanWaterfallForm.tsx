@@ -160,9 +160,10 @@ export const DemandPlanWaterfallForm = ({
                   krw: '1',
                   usd: '1',
                   loc: '1',
-                  // Division 변경 시 조회조건 체크박스 전부 해제 (사용자 지시).
-                  //   Cell Qty / Qty≠0 은 gubunResetParams 가 이미 false 로 되돌리고, Sum 만 여기서 해제한다.
-                  isSumChecked: false,
+                  // Division 변경 시 조회조건 체크박스를 초기값으로 되돌린다 (사용자 지시).
+                  //   Cell Qty / Qty≠0 은 gubunResetParams 가 이미 false 로 되돌린다.
+                  //   Sum 은 초기값이 체크라(2026-11-10) 체크로 되돌린다.
+                  isSumChecked: true,
                 });
                 // UM-01 — AS-IS .cs:1397 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
                 onDivisionChange?.();
@@ -199,23 +200,17 @@ export const DemandPlanWaterfallForm = ({
               onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSiteIds: [] })}
               division={searchParams.divisionId}
             />
-            {/* UM-02 — Team → End Customer cascade (AS-IS clbTeam_SelectedIndexChanged .cs:339/366:
-                EndCustomerByDivision(division, team) 재적재). 공용 필드 cascade(DEPT_ID) 로 팀 선택 시 좁힌다.
-                [E20260831-UM02FIX] 기본 콤보('EndCustomer')는 DEPT_ID 속성이 없어 strict cascade 가 팀 선택 시
-                전 행을 탈락시켰다(40 실측 0행 — 사용자 신고 2026-08-31). 정본 콤보 'EndCustomerByDivision'
-                (40=SITE_ITEM owner-dept 축 DEPT_ID 보유 + lookup UNION) 로 교체. DEPT_ID 는 40 축에만 실리므로
-                cascade 는 40 한정(타 division 은 lookup 축 = 팀 무관 — AS-IS 등가). */}
+            {/* End Customer — 사업부 필터만 건다. Team 으로는 좁히지 않는다(2026-11-11 사용자 결정, 40 포함 전 사업부).
+                종전에는 40 에서 DEPT_ID strict cascade 를 걸었으나, 콤보 'EndCustomerByDivision' 이 DEPT_ID 컬럼을
+                내려주지 않아(2026-11-11 로컬 DB 실측) Team 을 하나라도 고르면 목록이 0건이 됐다. 81 계열 · 82 는
+                원래 팀 무관이었고, 메인 조회는 Team 조건을 따로 받으므로 조회 결과는 달라지지 않는다.
+                Team 변경 시 End Customer 선택값을 비우는 동작(TeamField onChange)은 그대로 둔다. */}
             <EndCustomerField
               gridSize={3}
               value={searchParams.endCustomers}
               onChange={v => setSearchParams({ endCustomers: v, salesSiteIds: [] })}
               division={searchParams.divisionId}
               comboId='EndCustomerByDivision'
-              cascade={
-                searchParams.divisionId === '40'
-                  ? { DEPT_ID: { values: searchParams.deptIds, strict: true } }
-                  : undefined
-              }
             />
             {/* AS-IS .cs:1440 — Sales Site 재적재의 team 파라미터: 81 계열·82 는 string.Empty / 40 은 team */}
             <SalesSiteField
@@ -468,12 +463,12 @@ export const DemandPlanWaterfallForm = ({
                 render={() => (
                   <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
                     {/* Sum 체크박스 미표시 (사용자 지시 2026-09-18) */}
-                    {/* <Checkbox
+                     <Checkbox
                       labelText={t('LBL00687', 'Sum')}
                       checked={searchParams.isSumChecked}
                       disabled={searchParams.bucket === BUCKET_TYPE.ONLY_WEEKLY}
                       onChange={checked => setSearchParams({ isSumChecked: checked })}
-                    /> */}
+                    />
                     {/* Cell Qty — MKT·BIZ div40 만. SALES 는 AS-IS Visible=false 라 미표시 */}
                     {!isSales && (
                       <Checkbox

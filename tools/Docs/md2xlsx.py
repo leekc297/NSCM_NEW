@@ -107,7 +107,13 @@ def build(ID):
         if os.path.exists(p): put_md(wb.create_sheet(title), open(p, encoding='utf-8-sig').read()); n += 1
     cover.cell(row=len(info) + 2, column=1, value='시트 수').font = TFONT; cover.cell(row=len(info) + 2, column=2, value=n)
     od = os.path.join(out_base, ID); os.makedirs(od, exist_ok=True)
+    try:  # 2026-11-13 문장 규칙 4·7 — 저장 직전 기호 정리(줄표·장식 기호·가운뎃점 나열) + '설명' 칸 개조식. 사용자 기입 칸은 그대로
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.before_save(wb)
+    except Exception as _e: print('[문장 규칙] ERROR 저장 전 정리 못함:', _e)
     out = os.path.join(od, f"{ID}_화면문서_{datetime.date.today().strftime('%Y%m%d')}.xlsx"); wb.save(out)
+    try:  # 2026-11-13 문장 규칙(수식어·아는 주어·번역투) 검사 — 보고만 하고 문서 생성은 막지 않는다(tools/Docs/doc_style.py)
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools', 'Docs')); import doc_style; doc_style.after_save(out)
+    except Exception as _e: print('[문장 규칙] ERROR 검사 못함:', _e)
     print(f'{ID} → {out}  (시트 {n + 1})'); return out
 
 for ID in args: build(ID)

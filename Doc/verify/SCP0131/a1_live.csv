@@ -1,2 +1,3 @@
 ﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
 SCP0131,main,SCP0131_GET_SALES_SITE_PRIORITY,PASS,61,61,"AS-IS 61행 · TO-BE 61행 · 키 ['OPMZ_PLAN_GR_ID', 'SCM_SITE_ID', 'ITEM_ID', 'VALID_YN'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 122칸(숫자 컬럼 2) · 불일치 컬럼 0",
+SCP0131,main · AS-IS 실구동,SCP0131_GET_SALES_SITE_PRIORITY,PASS,61,61,AS-IS 를 실제로 띄워 조회한 결과 61건 ↔ TO-BE 같은 조건 조회 결과 61건 — 같음 · 키 대조: 공통 61 · AS-IS 에만 0 · TO-BE 에만 0,AS-IS 실구동 run_20261114_193720 · SP SCP0131_GET_SALES_SITE_PRIORITY · 조건 같음(인자 7개 일치)

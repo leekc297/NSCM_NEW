@@ -1,7 +1,7 @@
 # SSP0026 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-request-pack` · feature: shipping · As-is Fact Pack 있음
-- 파일 21 · 엔드포인트 호출 24 (미해결 2, 주석 속 0) · 이벤트 62 · 컴포넌트 사용 96 · 하드코딩 컬럼 20 · 메시지 62
+- 파일 21 · 엔드포인트 호출 25 (미해결 2, 주석 속 0) · 이벤트 62 · 컴포넌트 사용 96 · 하드코딩 컬럼 20 · 메시지 62
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 20건
 
 ## 1. 파일
@@ -16,17 +16,17 @@
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailSearch.module.scss | component | 46 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailSearch.tsx | component | 144 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackForm.tsx | component | 308 |
-| features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | component | 600 |
+| features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | component | 669 |
 | features/shipping/src/pages/shipment-request-pack/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-request-pack/shipment-request-pack.constants.ts | constants | 178 |
+| features/shipping/src/pages/shipment-request-pack/shipment-request-pack.constants.ts | constants | 182 |
 | features/shipping/src/pages/shipment-request-pack/shipment-request-pack.types.ts | types | 56 |
 | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.module.scss | style | 57 |
-| features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | page | 1026 |
+| features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | page | 1073 |
 | features/shipping/src/pages/shipment-request-pack/useShipmentRequestPackStore.ts | store | 335 |
-| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.autoSync.ts | util | 101 |
+| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.autoSync.ts | util | 162 |
 | features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.dynamicColumn.ts | util | 30 |
-| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.editLock.ts | util | 80 |
-| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts | util | 329 |
+| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.editLock.ts | util | 86 |
+| features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts | util | 333 |
 | features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.spreadHeader.ts | util | 227 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -34,19 +34,19 @@
 |---|---|---|---|---|
 | /SSP0026/{sheetName}/UPLOAD/excel-upload | http | 1 | N | ExcelUploadModal.tsx:133 |
 | SCP0030/bodPopup//call-proc | hook | 1 | Y | BodItemRouteModal.tsx:102 |
-| (useTabComboQueries) | hook | 7 | Y | ShipmentRequestPackForm.tsx:50 ShipmentRequestPackForm.tsx:51 ShipmentRequestPackForm.tsx:54 ShipmentRequestPackForm.tsx:59 ShipmentRequestPackForm.tsx:68 ShipmentRequestPackForm.tsx:71 |
+| (useTabComboQueries) | hook | 8 | Y | ShipmentRequestPackForm.tsx:50 ShipmentRequestPackForm.tsx:51 ShipmentRequestPackForm.tsx:54 ShipmentRequestPackForm.tsx:59 ShipmentRequestPackForm.tsx:68 ShipmentRequestPackForm.tsx:71 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentRequestPack.tsx:155 |
-| SSP0026/pack//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:223 |
-| SSP0026/cell//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:230 |
-| SSP0026/requestDetail//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:237 |
-| SSP0026/resultDetail//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:247 |
-| SSP0026/spreadTitle//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:259 |
-| SSP0026/requestDetailExcel//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:289 |
-| SSP0026/bodItem/SEARCH/call-proc | callProc | 1 | Y | ShipmentRequestPack.tsx:445 |
-| /SSP0026/{ADMIN_SHEET_NAME[SHEETS.REQUEST_DETAIL_EXCEL]}/UPLOAD_SAVE/call-proc | http | 1 | N | ShipmentRequestPack.tsx:486 |
-| /SSP0026/pack/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:684 |
-| /SSP0026/cell/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:710 |
-| /SSP0026/requestDetail/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:773 |
+| SSP0026/pack//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:238 |
+| SSP0026/cell//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:245 |
+| SSP0026/requestDetail//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:252 |
+| SSP0026/resultDetail//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:262 |
+| SSP0026/spreadTitle//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:274 |
+| SSP0026/requestDetailExcel//call-proc | hook | 1 | Y | ShipmentRequestPack.tsx:304 |
+| SSP0026/bodItem/SEARCH/call-proc | callProc | 1 | Y | ShipmentRequestPack.tsx:460 |
+| /SSP0026/{ADMIN_SHEET_NAME[SHEETS.REQUEST_DETAIL_EXCEL]}/UPLOAD_SAVE/call-proc | http | 1 | N | ShipmentRequestPack.tsx:501 |
+| /SSP0026/pack/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:699 |
+| /SSP0026/cell/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:725 |
+| /SSP0026/requestDetail/SAVE/call-proc | http | 1 | Y | ShipmentRequestPack.tsx:788 |
 | /admin/menu/SSP0026/column | http | 1 | Y | useShipmentRequestPackStore.ts:266 |
 | /admin/menu/SSP0026/measure | http | 1 | Y | useShipmentRequestPackStore.ts:283 |
 | /admin/menu/SSP0026/search-conditions | http | 1 | Y | useShipmentRequestPackStore.ts:312 |
@@ -99,35 +99,35 @@
 | PopupInput | onOpen | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackForm.tsx | 207 |
 | CustomDropdown | onChange | <arrow> setSearchParams,option.split(',').filter,option.split | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackForm.tsx | 233 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackForm.tsx | 257 |
-| g | beginningEdit | guard | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 194 |
-| g | pastingCell | guard | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 195 |
-| g | cellEditEnded | handler | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 260 |
-| g | pastedCell | handler | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 261 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 356 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 431 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 485 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 573 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 595 |
-| ShipmentRequestPackForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 813 |
-| TabWrapper | onTabClick | <arrow> setActiveMainSheet | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 832 |
-| ShipmentRequestPackMainGrid | onDrillDetail | handleDrillDetail | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 847 |
-| ShipmentRequestPackMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 848 |
-| ShipmentRequestPackMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 868 |
-| ShipmentRequestPackMainGrid | onCellModelDblClick | handleCellModelDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 869 |
-| ShipmentRequestPackMainGrid | onBodCellDblClick | handleBodCellDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 870 |
-| ShipmentRequestPackDetailSearch | onSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 886 |
-| TabWrapper | onTabClick | <arrow> setActiveDetailSheet | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 889 |
-| ShipmentRequestPackDetailGrid | onModelCellDblClick | handleModelCellDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 903 |
-| ShipmentRequestPackDetailGrid | onBodCellChange | <arrow> refreshRowBod | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 904 |
-| ShipmentRequestPackDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 905 |
-| ShipmentRequestPackDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 916 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,setOpenMeasure | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 932 |
-| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 946 |
-| ExcelUploadModal | onUploaded | <arrow> setActiveDetailSheet,refetchPack,refetchCell,refetchRequestDetail | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 947 |
-| ModelByDivisionPopup | onClose | <arrow> setModelCellRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 960 |
-| ModelByDivisionPopup | onSelect | <arrow> gridRefRequest.current?.invalidate,refreshRowBod,setModelCellRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 961 |
-| ModelByDivisionPopup | onClose | <arrow> setCellModelRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 981 |
-| ModelByDivisionPopup | onSelect | <arrow> gridRefCell.current?.invalidate,setCellModelRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 982 |
+| g | beginningEdit | guard | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 243 |
+| g | pastingCell | guard | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 244 |
+| g | cellEditEnded | handler | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 313 |
+| g | pastedCell | handler | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 314 |
+| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 424 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 499 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 553 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 642 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 664 |
+| ShipmentRequestPackForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 856 |
+| TabWrapper | onTabClick | <arrow> setActiveMainSheet | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 878 |
+| ShipmentRequestPackMainGrid | onDrillDetail | handleDrillDetail | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 893 |
+| ShipmentRequestPackMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 894 |
+| ShipmentRequestPackMainGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 915 |
+| ShipmentRequestPackMainGrid | onCellModelDblClick | handleCellModelDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 916 |
+| ShipmentRequestPackMainGrid | onBodCellDblClick | handleBodCellDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 917 |
+| ShipmentRequestPackDetailSearch | onSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 933 |
+| TabWrapper | onTabClick | <arrow> setActiveDetailSheet | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 936 |
+| ShipmentRequestPackDetailGrid | onModelCellDblClick | handleModelCellDblClick | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 950 |
+| ShipmentRequestPackDetailGrid | onBodCellChange | <arrow> refreshRowBod | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 951 |
+| ShipmentRequestPackDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 952 |
+| ShipmentRequestPackDetailGrid | onFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 963 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,setOpenMeasure | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 979 |
+| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 993 |
+| ExcelUploadModal | onUploaded | <arrow> setActiveDetailSheet,refetchPack,refetchCell,refetchRequestDetail | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 994 |
+| ModelByDivisionPopup | onClose | <arrow> setModelCellRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 1007 |
+| ModelByDivisionPopup | onSelect | <arrow> gridRefRequest.current?.invalidate,refreshRowBod,setModelCellRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 1008 |
+| ModelByDivisionPopup | onClose | <arrow> setCellModelRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 1028 |
+| ModelByDivisionPopup | onSelect | <arrow> gridRefCell.current?.invalidate,setCellModelRow | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 1029 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -250,8 +250,8 @@
 | MSG00001 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0045(30), SSP0026(13), SCP0030(11), SSP0015(5), SSP0023(3), SYS0001(1), SSP0003(1)
-- SP/PKG: PKG_SSP0026(6), P_SCP0030_GET_BOD_POPUP(2), DM0003_GET_BUCKET_TYPE_CODE(2), P_SSP0026_GET_SHIPMENT_REQUEST_PACK(2), P_SSP0026_SAVE_SHIP_REQ_PACK(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_SSP0026_GET_REQUEST_DETAIL_PACK(1), P_SSP0026_GET_BOD_ITEM(1), PKG_NSCM_UI_COMM(1), PR_GET_PROC_INFO_LIST(1), P_SCM_SITE_ID(1), P_SSP0026_SAVE_SHIP_REQ_(1), P_SSP0026_SAVE_SHIP_REQ_CELL(1), P_SSP0026_SAVE_SHIP_REQ_DETAIL_PACK(1), P_SSP0026_GET_SPREAD_TITLE(1), SSP0026_GET_SPREAD_TITLE(1)
+- 화면ID: DMF0045(32), SSP0026(14), SCP0030(11), SSP0015(5), SSP0023(3), SYS0001(1), SSP0201(1), DMF0008(1), SSP0202(1), SSP0003(1)
+- SP/PKG: PKG_SSP0026(8), P_SCP0030_GET_BOD_POPUP(2), DM0003_GET_BUCKET_TYPE_CODE(2), P_SSP0026_GET_SHIPMENT_REQUEST_PACK(2), P_SSP0026_SAVE_SHIP_REQ_PACK(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_SSP0026_GET_REQUEST_DETAIL_PACK(1), P_SSP0026_GET_BOD_ITEM(1), PKG_NSCM_UI_COMM(1), PR_GET_PROC_INFO_LIST(1), P_SCM_SITE_ID(1), P_SSP0026_SAVE_SHIP_REQ_(1), P_SSP0026_SAVE_SHIP_REQ_CELL(1), P_SSP0026_SAVE_SHIP_REQ_DETAIL_PACK(1), P_SSP0026_GET_SPREAD_TITLE(1), SSP0026_GET_SPREAD_TITLE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

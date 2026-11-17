@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SSP0200,main|같은 사용자,SSP0200_GET_SHIPMENT_CHANGE_REQUEST,ERROR,0,25,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+SSP0200,main,SSP0200_GET_SHIPMENT_CHANGE_REQUEST,REVIEW,0,25,"AS-IS 0행 · TO-BE 25행 · 키 ['shipment_status', 'project_code', 'fcst_type', 'item_id', 'nick_name', 'remarks', 'remarks3', 'from_site_description'] AS-IS 전용 0 · TO-BE 전용 16 · 값 대조 0칸(숫자 컬럼 3) · 불일치 컬럼 0",

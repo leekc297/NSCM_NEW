@@ -1,0 +1,1032 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 31개 전부 원문 등장: `biz:CommonData.CommonDataList`, `SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`, `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM`, `SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK`, `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`, `SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM`, `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`, `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN`, `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH`, `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C`, `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE`, `SSP.SSP0060_GET_ERP_SO_NO_CNT`, `SSP.SSP0060_GET_SHIPMENT_STATUS`, `SSP.SSP0060_GET_SHIPMENT_DIVISION`, `SSP.SSP0060_SAVE_SHIPMENT_PLAN`, `SSP.SSP0060_SAVE_HOLD_STOCK_DATA`, `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING`, `SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `SSP.SSP0060_GET_SHIPMENT_PLAN`, `SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL`, `SSP.SSP0060_GET_STOCK_LOCATION_DETAIL`, `SSP.SSP0060_GET_OWMS_DETAIL`, `SSP.SSP0060_GET_SHIPMENT_RESULT`, `SSP.SSP0060_GET_HOLD_STOCK`, `SSP.SSP0060_GET_MES_STOCK`, `SSP.SSP0060_GET_MES_STOCK_DETAIL`, `SSP.SSP0002_GET_NERP_CODE`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME`, `SSP.SSP0002_GET_USER_INFO_LIST`
+2. business_analysis.md 에 SP 29개 전부 등장: `SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`, `SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM`, `SSP0003_GET_SSP_PLAN_PROCESSING_CHECK`, `SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`, `SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM`, `SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`, `SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN`, `PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH`, `PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C`, `SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE`, `SSP0060_GET_ERP_SO_NO_CNT`, `SSP0060_GET_SHIPMENT_STATUS`, `SSP0060_GET_SHIPMENT_DIVISION`, `SSP0060_SAVE_SHIPMENT_PLAN`, `SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING`, `SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING`, `DM0003_GET_BUCKET_TYPE_CODE`, `SSP0060_GET_SHIPMENT_PLAN`, `SSP0060_GET_SHIPMENT_PLAN_DETAIL`, `SSP0060_GET_STOCK_LOCATION_DETAIL`, `SSP0060_GET_OWMS_DETAIL`, `SSP0060_GET_SHIPMENT_RESULT`, `SSP0060_GET_HOLD_STOCK`, `SSP0060_GET_MES_STOCK`, `SSP0060_GET_MES_STOCK_DETAIL`, `SSP0002_GET_NERP_CODE`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`, `SCM_SSP_CHECK_CONFIRM_CHANGETIME`, `SSP0002_GET_USER_INFO_LIST`
+3. screen_design.md 에 컨트롤 43개 전부 등장: `usrLayoutControl1`, `usrConditionPanel1`, `usrLayoutControl2`, `btnButtonList`, `spdMain`, `spdMain_Sheet1`, `usrLayoutControl3`, `txtRequestNo`, `txtRequestor`, `txtRequestDeptName`, `txtApproval`, `txtAppDeptName`, `usrLabel2`, `usrButtonList1`, `cboChangeReason`, `txtReasonDetail`, `btnAutoSet`, `usrButton1`, `btnSimulation`, `clbCompany_ID`, `chkSum`, `btnMeasure`, `btnItemId`, `clbPlantSite`, `drpPeriod`, `txtItemId`, `clbDivision_ID`, `cboPlanDate`, `cboBucketType`, `chkTotPSI`, `clbProductLevel11`, `spdDetail`, `spdDetail_Sheet1`, `btnRequestor`, `btnSearch`, `txtModel2`, `btnItemID2`, `drpPeriod2`, `drpPeriod3`, `clbResultType`, `txtBoxID`, `btnNew`, `clbProductLevel12`
+4. screen_design.md 에 시트 10개 전부 등장: `Hold stock`, `Hold stock Detail`, `MES Stock`, `MES Stock Detail`, `oWMS Detail`, `Request Info`, `Shipment Plan`, `Shipment Plan Detail`, `Shipment Result`, `Stock Location Detail`
+5. screen_design.md 에 이벤트 핸들러 38개와 엔드포인트 전부 등장: `btnButtonList_UsrButtonList_Click_Detected`, `Form_Load`, `usrButtonList1_UsrButtonList_Click_Detected`, `btnAutoSet_Click`, `spdMain_ClipboardPasted`, `spdMain_Change`, `spdMain_KeyDown`, `SSP0060_ShipmentPlanRequestPopup_FormClosing`, `SSP0060_ShipmentPlanRequestPopup_Shown`, `spdMain_KeyUp`, `SSP0060_ShipmentPlan_Shown`, `SpdMain_TopChange`, `SpdDetail_TopChange`, `cboBucketType_SelectedIndexChanged`, `chkSum_CheckedChanged`, `chkTotPSI_CheckedChanged`, `BtnMeasure_Click`, `btnItemId_Click`, `BtnItemID2_Click`, `BtnSearch_Click`, `BtnNew_Click`, `BtnRequestor_Click`, `BtnSimulation_Click`, `SpdDetail_SheetTabClick`, `SpdDetail_ActiveSheetChanged`, `SpdDetail_CellClick`, `SpdDetail_ComboSelChange`, `SpdDetail_CellDoubleClick`, `SpdDetail_EditChange`, `SpdDetail_ClipboardPasted`, `SpdMain_CellDoubleClick`, `SpdMain_Change`, `DrpPeriod2_ValueChanged`, `SpdMain_ClipboardPasted`, `clbDivision_ID_SelectedIndexChanged`, `clbCompanyID_SelectedIndexChanged`, `cboPlanDate_SelectedIndexChanged`, `shtDetail_Change`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SSP0060-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SSP0060 As-is 분석서 (Shipment Plan)
+
+> 근거: AsisFacts 정적 추출 Fact Pack(SSP0060)만 사용했습니다. Fact Pack에 없는 내용은 **확인 필요**로 표기했습니다.
+> 정적 추출 결과이므로 런타임 분기의 실제 실행 여부는 따로 확인해야 합니다.
+
+## 1. 화면 개요
+
+| 항목 | 값 |
+|---|---|
+| 화면 ID | SSP0060 |
+| 도메인 | SSP (프로젝트 `06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj`) |
+| 메인 Form | `SSP0060_ShipmentPlan` |
+| 팝업 1 | `SSP0060_ShipmentPlanRequestPopup`, Form Text `"Shipment Request Popup"` |
+| 팝업 2 | `SSP0060_ShipmentPlanConfirmDetailPopup`, Form Text `"Request Info Popup"` |
+| 메뉴/프로그램 메타 | TB_FX_ProgramInfo 1행, TB_FX_MenuItemInfo 1행, TB_FX_GroupMenuAuth 13행, TB_FX_Favorite 1행 (행 내용은 Fact Pack에 없어 확인 필요) |
+
+### 1-1. 파일 구성
+
+| 구분 | 파일 | 줄수 |
+|---|---|---:|
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs | 8037 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.Designer.cs | 1766 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs | 2029 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.Designer.cs | 388 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs | 365 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.Designer.cs | 556 |
+| shared | 없음 (Fact Pack 미기재) | – |
+| legacy | 없음 (모든 파일 variant = `only`) | – |
+
+- 메인 화면에서 두 팝업을 여는 호출 지점(`new SSP0060_ShipmentPlanRequestPopup` 등)은 Fact Pack에 없습니다. **확인 필요**
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+### 2-1. 메인 `SSP0060_ShipmentPlan`
+
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 |
+|---|---|---:|---|---|
+| event `this.Load` | Form_Load > InitControls > SetChangedControl | 514 | `SSP.SSP0060_GET_SHIPMENT_DIVISION` | MATCH |
+| event `this.Load` | Form_Load > InitControls > GetBucketType | 5206 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH |
+| event `this.Load` | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| button `FindButton` | FindButton > FindData_Main | 5287 | `SSP.SSP0060_GET_SHIPMENT_PLAN` | MATCH |
+| button `FindButton` | FindButton > FindData_Main > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| button `SaveButton` | SaveButton > SaveData_Main | 3029 | `SSP.SSP0060_SAVE_SHIPMENT_PLAN` | MATCH |
+| button `SaveButton` | SaveButton > SaveData_Detail | 3286 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH |
+| button `SaveButton` | SaveButton > SaveData_Detail | 3460 | `SSP.SSP0060_SAVE_HOLD_STOCK_DATA` | **NOT_IN_FOXQUERY** |
+| button `SaveButton` | SaveData_Detail > GetERPInterface | 3990 | `SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface | 4031 | `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > NonSoNo | 4159 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > SoNo | 4380 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > GetErpSoNoCnt | 4481 | `SSP.SSP0060_GET_ERP_SO_NO_CNT` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > GetShipmentStatusChk | 4506 | `SSP.SSP0060_GET_SHIPMENT_STATUS` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > SoNo > GetErpIFCheckNew | 4657 | `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > SoNo > GetErpIFCheckNew | 4683, 4713 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH` | MATCH |
+| button `SaveButton` | SaveData_Detail > GetERPInterface > ChkConfirmChangeTime | 7962 | `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME` | MATCH |
+| button `SaveButton` | SaveData_Detail > FindData_Main / FindData_Detail / FindData_hold_stock | 5287 / 5656 / 6225 | `SSP.SSP0060_GET_SHIPMENT_PLAN` / `SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL` / `SSP.SSP0060_GET_HOLD_STOCK` | MATCH |
+| button `SaveButton` | SaveData_Detail > FindData_hold_stock > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| button `EditButton` | EditButton > GetSSPUserCheck | 8017 | `SSP.SSP0002_GET_USER_INFO_LIST` | MATCH |
+| event `clbDivision_ID.SelectedIndexChanged` | clbDivision_ID_SelectedIndexChanged > GetNERPCode | 7149 | `SSP.SSP0002_GET_NERP_CODE` | MATCH |
+| event `clbCompany_ID.SelectedIndexChanged` | clbCompanyID_SelectedIndexChanged > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| event `cboPlanDate.SelectedIndexChanged` | cboPlanDate_SelectedIndexChanged > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| event `chkTotPSI.CheckedChanged` | chkTotPSI_CheckedChanged > FindData_Main (> InitSpread > GetSpdTitle) | 5287 / 7449 | `SSP.SSP0060_GET_SHIPMENT_PLAN`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| event `btnMeasure.Click` | BtnMeasure_Click > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| event `btnSearch.Click` / `spdMain.CellDoubleClick` | BtnSearch_Click / SpdMain_CellDoubleClick > FindData_Detail | 5656 | `SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL` | MATCH |
+| 〃 | > FindData_Stock_Detail | 5781 | `SSP.SSP0060_GET_STOCK_LOCATION_DETAIL` | MATCH |
+| 〃 | > FindData_oWMS_Detail | 5882 | `SSP.SSP0060_GET_OWMS_DETAIL` | MATCH |
+| 〃 | > FindData_Shipment_Result (2곳) | 5977, 6117 | `SSP.SSP0060_GET_SHIPMENT_RESULT` | MATCH |
+| 〃 | > FindData_Shipment_Result > InitSpread > GetSpdTitle | 7449 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH |
+| 〃 | > FindData_MES_stock | 6328 | `SSP.SSP0060_GET_MES_STOCK` | MATCH |
+| 〃 | > FindData_MES_stock_Detail | 6432 | `SSP.SSP0060_GET_MES_STOCK_DETAIL` | MATCH |
+| `SpdMain_CellDoubleClick` 전용 | SpdMain_CellDoubleClick > FindData_hold_stock | 6225 | `SSP.SSP0060_GET_HOLD_STOCK` | MATCH |
+| event `spdDetail.EditChange` | SpdDetail_EditChange | 1380, 1389 | `biz:CommonData.CommonDataList` [code=TransMode] | BIZ_MATCH |
+| event `spdDetail.CellClick` | SpdDetail_CellClick | 1987 | `biz:CommonData.CommonDataList` [code=TransMode] | BIZ_MATCH |
+
+**진입점에 연결되지 않은 호출(unreached).** 주석 처리된 코드는 아닙니다. 다만 정적 분석으로는 어떤 진입점에서도 도달하지 않습니다.
+
+| 메서드 | 줄 | 엔드포인트 |
+|---|---:|---|
+| GetErpIFCheck | 4579 | `SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING` |
+| NewNonSoNo | 4928 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING` |
+| GetErpIFCheckNew_ | 5042 | `SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING` |
+
+### 2-2. 팝업 `SSP0060_ShipmentPlanRequestPopup`
+
+진입점은 `SaveButton`과 `usrButtonList1_UsrButtonList_Click_Detected` 두 가지이며, 둘 다 아래 SaveData 경로를 그대로 탑니다.
+
+| 경로 | 줄 | 엔드포인트 |
+|---|---:|---|
+| Form_Load / FindButton > FindData_Main | 371 | `SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING` |
+| SaveData | 584 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM` |
+| SaveData > ChkEngProcessing | 716 | `SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK` |
+| SaveData > GetERPInterface | 1044 | `SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM` |
+| SaveData > GetERPInterface | 1072 | `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` |
+| SaveData > GetERPInterface > SoNo | 1181 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN` |
+| SaveData > GetERPInterface > SoNo | 1253 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH` |
+| SaveData > GetERPInterface > NonSoNo | 1385 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN` |
+| SaveData > GetERPInterface > NonSoNo | 1408 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C` |
+| SoNo > GetErpIFCheckNew | 1525, 1642 | `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` |
+| SoNo > GetErpIFCheckNew | 1551, 1582 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C` |
+| SoNo > GetErpIFCheckNew | 1668, 1699 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH` |
+| GetERPInterface > ChkConfirmChangeTime | 1731 | `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE` |
+| GetERPInterface > GetErpSoNoCnt | 1759 | `SSP.SSP0060_GET_ERP_SO_NO_CNT` |
+| GetERPInterface > GetShipmentStatusChk | 1784 | `SSP.SSP0060_GET_SHIPMENT_STATUS` |
+| unreached: GetErpIFCheck | 842 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` |
+| unreached: `<field:dtFcstType>` | 41 | `biz:CommonData.CommonDataList` [code=LookupCommon] |
+
+### 2-3. 팝업 `SSP0060_ShipmentPlanConfirmDetailPopup`
+
+| 경로 | 줄 | 엔드포인트 |
+|---|---:|---|
+| Form_Load / FindButton > FindDataMain | 312 | `SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING` |
+| unreached: `<field:dtFcstType>` | 37 | `biz:CommonData.CommonDataList` [code=LookupCommon] |
+
+- `<field:dtFcstType>`는 필드 초기화식입니다. grid_code에서 `FCST Type` 콤보 컬럼의 데이터 소스로 `Data.Common(Data.Type.LookupCommon, false, "SALES_TYPE_CODE")`가 쓰이므로, 진입점 미연결로 표시됐어도 실제로는 Request Info 시트 콤보에 사용됩니다.
+
+### 2-4. 주석 처리됨 (현행 기능 아님)
+- `SSP0060_ShipmentPlan.cs:341`의 `SSP.SSP0046_GET_BUCKET_TYPE_CODE`는 **주석 처리됨**이며 활성 집계에서 제외했습니다.
+
+## 3. 엔드포인트 전체 표 (31종)
+
+| # | 엔드포인트 | 상태 | 호출 수 | SP | 주요 참조/쓰기 객체 |
+|---:|---|---|---:|---|---|
+| 1 | `biz:CommonData.CommonDataList` [LookupCommon] | BIZ_MATCH | 2 | (UP_FX_GetCommonDataList 코드분기) | SELECT SCM_ADM_LOOKUP_MASTER, SCM_ADM_LOOKUP_MASTER_DETAIL |
+| 1' | `biz:CommonData.CommonDataList` [TransMode] | BIZ_MATCH | 3 | (UP_FX_GetCommonDataList 코드분기) | SELECT SCP_MST_BOD_V |
+| 2 | `SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING` | MATCH | 2 | SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | SSP_ANL_SHIP_CONFIRM_CHG_REQ(_DE), SSP_ANL_SHIP_CONFIRM, SCP_MST_BOD_N_V, SCP_MST_FINAL_ITEM, SCM_MST_SSO_DEPT_INFO, TB_FX_USER, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_PROJECT, SCM_MST_ITEM_SN, SCM_MST_SITE, SCM_MST_CUSTOMER, SCM_MST_SITE_CUSTOMER |
+| 3 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM` | MATCH | 2 | SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | INSERT SSP_ANL_SHIP_CONFIRM / _H, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, XIF_SCS_PACK_SHIP_PLAN_S_SN, SSP_MST_SEND_MAIL_REQ; UPDATE SSP_ANL_SHIP_CONFIRM(_CHG_REQ_DE); EXEC PR_SSP_ANL_SHIP_CONFIRM_HIST 외 (oracle_migration.md §1 참조) |
+| 4 | `SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK` | MATCH | 1 | SSP0003_GET_SSP_PLAN_PROCESSING_CHECK | SCM_MST_PLAN, SCM_MST_DIVISION, SCM_MST_PLAN_DETAIL |
+| 5 | `SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK` | MATCH (unreached) | 1 | SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | INSERT XIF_ERP_PACK_SHIP_PLAN_S_SN, XIF_SCS_PACK_SHIP_PLAN_S_SN; EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER |
+| 6 | `SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM` | MATCH | 2 | SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | INSERT SSP_ANL_SHIP_ERP_ERROR_CONFIRM; UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ(_DE) |
+| 7 | `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` | MATCH | 5 | SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | DELETE/UPDATE SSP_ANL_SHIP_CONFIRM; INSERT XIF_ERP_SHIP_PLAN_CONFIRM_S_SN; #TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106 |
+| 8 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN` | MATCH | 2 | SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ(_DE) |
+| 9 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH` | MATCH | 5 | PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | INSERT XIF_ERP_SHIP_PLAN_CONFIRM_S_SN; UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE |
+| 10 | `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C` | MATCH | 3 | PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | INSERT XIF_ERP_SHIP_PLAN_CONFIRM_S_SN; UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE |
+| 11 | `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE` | MATCH | 1 | SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE | SELECT SSP_ANL_SHIP_CONFIRM |
+| 12 | `SSP.SSP0060_GET_ERP_SO_NO_CNT` | MATCH | 2 | SSP0060_GET_ERP_SO_NO_CNT | SELECT SSP_ANL_SHIP_CONFIRM |
+| 13 | `SSP.SSP0060_GET_SHIPMENT_STATUS` | MATCH | 2 | SSP0060_GET_SHIPMENT_STATUS | SELECT SSP_ANL_SHIP_CONFIRM, REF STRING_SPLIT |
+| 14 | `SSP.SSP0060_GET_SHIPMENT_DIVISION` | MATCH | 1 | SSP0060_GET_SHIPMENT_DIVISION | SCM_MST_DIVISION, TB_FX_USERGROUPAUTHEXTENTION, SCM_MST_SITE, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_CODE_LOOKUP_VALUE, #RETURNTABLE |
+| 15 | `SSP.SSP0060_SAVE_SHIPMENT_PLAN` | MATCH | 1 | SSP0060_SAVE_SHIPMENT_PLAN | INSERT SSP_ANL_SHIP_CONFIRM_CHG_REQ / _DE; SELECT SCP_MST_SHIPMENT_LOT_SIZE, SSP_MST_PARTIAL_SEQ 외 |
+| 16 | `SSP.SSP0060_SAVE_HOLD_STOCK_DATA` | **NOT_IN_FOXQUERY** | 1 | 없음 | DB에도 없음 (폐기 또는 오타 가능), 확인 필요 |
+| 17 | `SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING` | MATCH | 3 | SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | INSERT SSP_ANL_SHIP_CONFIRM_CHG_REQ / _DE, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN; EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| 18 | `SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING` | MATCH (unreached) | 2 | SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING | UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ(_DE) |
+| 19 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | 1 | DM0003_GET_BUCKET_TYPE_CODE | SCM_ADM_LOOKUP_MASTER_DETAIL |
+| 20 | `SSP.SSP0060_GET_SHIPMENT_PLAN` | MATCH | 1 | SSP0060_GET_SHIPMENT_PLAN | 동적 SQL, # 임시테이블 다수, SCM_MST_TITLESET_USER, SCM_MST_SHEET_MEASURE, SSP_ANL_SHIP_CONFIRM, DM_PLN_SHIPMENT_REQ 외, EXEC SSP0060_GET_SHIPMENT_PSI_COMMENTS |
+| 21 | `SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL` | MATCH | 1 | SSP0060_GET_SHIPMENT_PLAN_DETAIL | 동적 SQL, FN_GET_IN_STR, FN_SCM_SPLIT |
+| 22 | `SSP.SSP0060_GET_STOCK_LOCATION_DETAIL` | MATCH | 1 | SSP0060_GET_STOCK_LOCATION_DETAIL | SSP_MST_LOCATION_V, SSP_DNM_STOCK_C, SSP_DNM_ESS_PACKER_STOCK_V, SCM_MST_SLOC 외 |
+| 23 | `SSP.SSP0060_GET_OWMS_DETAIL` | MATCH | 1 | SSP0060_GET_OWMS_DETAIL | SSP_ANL_OWMS_STOCK_C2, SCM_MST_SLOC, SSP_MST_MODEL_USER 외 |
+| 24 | `SSP.SSP0060_GET_SHIPMENT_RESULT` | MATCH | 2 | SSP0060_GET_SHIPMENT_RESULT | SCM_DNM_EXFACTORY_RESULT, SSP_ANL_SHIP_PLAN_ALL, SSP_DNM_SHIP_RESULT_OWMS, SSP_DNM_SHIP_RETURN_OWMS 외 |
+| 25 | `SSP.SSP0060_GET_HOLD_STOCK` | MATCH | 1 | SSP0060_GET_HOLD_STOCK | SSP_ANL_HOLD_STOCK, TB_FX_USER, SSP_MST_MODEL_USER 외 |
+| 26 | `SSP.SSP0060_GET_MES_STOCK` | MATCH | 1 | SSP0060_GET_MES_STOCK | SSP_DNM_GMES_STOCK_81_82, SCP_MST_FINAL_ITEM |
+| 27 | `SSP.SSP0060_GET_MES_STOCK_DETAIL` | MATCH | 1 | SSP0060_GET_MES_STOCK_DETAIL | SSP_DNM_GMES_STOCK_81_82, SCP_MST_FINAL_ITEM |
+| 28 | `SSP.SSP0002_GET_NERP_CODE` | MATCH | 1 | SSP0002_GET_NERP_CODE | SCM_CODE_LOOKUP_VALUE |
+| 29 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | 1 | SCP0009_GET_SHEET_CALENDAR_3SPAN | SCM_SYS_CALENDAR_M |
+| 30 | `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME` | MATCH | 1 | SCM_SSP_CHECK_CONFIRM_CHANGETIME | SELECT SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE |
+| 31 | `SSP.SSP0002_GET_USER_INFO_LIST` | MATCH | 1 | SSP0002_GET_USER_INFO_LIST | SCM_MST_SSO_DEPT_INFO, TB_FX_GROUPINFO, TB_FX_USERGROUPINFO, TB_FX_USER, TB_FX_USERGROUPAUTHEXTENTION |
+
+- 주석 처리됨: `SSP.SSP0046_GET_BUCKET_TYPE_CODE` (`SSP0060_ShipmentPlan.cs:341`), 현행 기능 아님
+
+## 4. 이벤트 배선 표
+
+| 클래스 | 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|---|
+| ConfirmDetailPopup | this.btnButtonList | UsrButtonList_Click_Detected | `btnButtonList_UsrButtonList_Click_Detected` | Designer InitializeComponent:171 |
+| ConfirmDetailPopup | this | Load | `Form_Load` | .ctor:123 |
+| RequestPopup | this.usrButtonList1 | UsrButtonList_Click_Detected | `usrButtonList1_UsrButtonList_Click_Detected` | Designer:159 |
+| RequestPopup | this.btnAutoSet | Click | `btnAutoSet_Click` | Designer:189 |
+| RequestPopup | this.spdMain | ClipboardPasted | `spdMain_ClipboardPasted` | Designer:278 |
+| RequestPopup | this.spdMain | Change | `spdMain_Change` | Designer:279 |
+| RequestPopup | this.spdMain | KeyDown | `spdMain_KeyDown` | Designer:280 |
+| RequestPopup | this | FormClosing | `SSP0060_ShipmentPlanRequestPopup_FormClosing` | Designer:341 |
+| RequestPopup | this | Load | `Form_Load` | .ctor:140 |
+| RequestPopup | this | Shown | `SSP0060_ShipmentPlanRequestPopup_Shown` | .ctor:141 |
+| ShipmentPlan | this.spdMain | KeyDown | `spdMain_KeyDown` | Designer:910 |
+| ShipmentPlan | this.spdMain | KeyUp | `spdMain_KeyUp` | Designer:911 |
+| ShipmentPlan | this | Load | `Form_Load` | .ctor:306 |
+| ShipmentPlan | this | Shown | `SSP0060_ShipmentPlan_Shown` | .ctor:307 |
+| ShipmentPlan | this.spdMain | TopChange | `SpdMain_TopChange` | InitEvent:955 |
+| ShipmentPlan | this.spdDetail | TopChange | `SpdDetail_TopChange` | InitEvent:956 |
+| ShipmentPlan | this.cboBucketType | SelectedIndexChanged | `cboBucketType_SelectedIndexChanged` | InitEvent:958 |
+| ShipmentPlan | this.chkSum | CheckedChanged | `chkSum_CheckedChanged` | InitEvent:959 |
+| ShipmentPlan | this.chkTotPSI | CheckedChanged | `chkTotPSI_CheckedChanged` | InitEvent:960 |
+| ShipmentPlan | this.btnMeasure | Click | `BtnMeasure_Click` | InitEvent:961 |
+| ShipmentPlan | this.btnItemId | Click | `btnItemId_Click` | InitEvent:962 |
+| ShipmentPlan | this.btnItemID2 | Click | `BtnItemID2_Click` | InitEvent:963 |
+| ShipmentPlan | this.btnSearch | Click | `BtnSearch_Click` | InitEvent:964 |
+| ShipmentPlan | this.btnNew | Click | `BtnNew_Click` | InitEvent:965 |
+| ShipmentPlan | this.btnRequestor | Click | `BtnRequestor_Click` | InitEvent:966 |
+| ShipmentPlan | this.btnSimulation | Click | `BtnSimulation_Click` | InitEvent:967 |
+| ShipmentPlan | this.spdDetail | SheetTabClick | `SpdDetail_SheetTabClick` | InitEvent:969 |
+| ShipmentPlan | this.spdDetail | ActiveSheetChanged | `SpdDetail_ActiveSheetChanged` | InitEvent:970 |
+| ShipmentPlan | this.spdDetail | CellClick | `SpdDetail_CellClick` | InitEvent:971 |
+| ShipmentPlan | this.spdDetail | ComboSelChange | `SpdDetail_ComboSelChange` | InitEvent:972 |
+| ShipmentPlan | this.spdDetail | CellDoubleClick | `SpdDetail_CellDoubleClick` | InitEvent:973 |
+| ShipmentPlan | this.spdDetail | EditChange | `SpdDetail_EditChange` | InitEvent:974 |
+| ShipmentPlan | this.spdDetail | ClipboardPasted | `SpdDetail_ClipboardPasted` | InitEvent:975 |
+| ShipmentPlan | this.spdMain | CellDoubleClick | `SpdMain_CellDoubleClick` | InitEvent:977 |
+| ShipmentPlan | this.spdMain | Change | `SpdMain_Change` | InitEvent:978 |
+| ShipmentPlan | this.drpPeriod2 | ValueChanged | `DrpPeriod2_ValueChanged` | InitEvent:980 |
+| ShipmentPlan | this.spdMain | ClipboardPasted | `SpdMain_ClipboardPasted` | InitEvent:982 |
+| ShipmentPlan | clbDivision_ID | SelectedIndexChanged | `clbDivision_ID_SelectedIndexChanged` | InitEvent:984 |
+| ShipmentPlan | clbCompany_ID | SelectedIndexChanged | `clbCompanyID_SelectedIndexChanged` | InitEvent:985 |
+| ShipmentPlan | cboPlanDate | SelectedIndexChanged | `cboPlanDate_SelectedIndexChanged` | InitEvent:986 |
+| ShipmentPlan | dsdm | Changed | `shtDetail_Change` | InitEvent:989 |
+| ShipmentPlan | cboPlanDate | SelectedIndexChanged (`-=`) | `cboPlanDate_SelectedIndexChanged` | clbCompanyID_SelectedIndexChanged:7196 |
+| ShipmentPlan | cboPlanDate | SelectedIndexChanged (`+=`) | `cboPlanDate_SelectedIndexChanged` | clbCompanyID_SelectedIndexChanged:7200 |
+
+- 메인 화면 `spdMain`은 Designer에서 `spdMain_KeyDown`과 `spdMain_KeyUp`(소문자 s)을, InitEvent에서 `SpdMain_*`(대문자 S)를 따로 배선합니다. 서로 다른 핸들러입니다.
+- `clbCompanyID_SelectedIndexChanged`는 `cboPlanDate` 이벤트를 잠시 해제(7196)했다가 다시 연결(7200)합니다. 연쇄 발생을 막기 위한 처리입니다.
+
+## 5. Grid 구성 방식
+
+**구성 방식: `HYBRID: META(프레임워크) + DB루프(코드) + HARDCODED (+코드 표시/라벨 변경)`**
+
+| 축 | 내용 |
+|---|---|
+| META(프레임워크) | `SetSheetHeaderColumn`이 SCM_MST_SHEET_COLUMNS(196행)의 COLUMN_NAME, COLUMN_LABEL_NAME, VISIBLE_FLAG, VALID_YN, COLUMN_WIDTH, FIXED_FLAG, CELL_CONTROL_OBJECT_TYPE_CODE 등을 읽어 시트를 구성합니다. 호출 지점은 InitSpread:632/662/685/696/736/746/756입니다. |
+| DB 루프(코드) | 화면이 직접 정의한 `InitSpreadDateColumn`과 `SetSpreadColumn`이 날짜 컬럼과 `EDIT_YN_{sColumnName.Replace("D_","")}` 컬럼(헤더 `E{COLUMN_LABEL_NAME}`)을 루프로 추가합니다. 날짜 축은 `SCP0009_GET_SHEET_CALENDAR_3SPAN`(GetSpdTitle:7449)에서 가져옵니다. |
+| MEASURE | SCM_MST_SHEET_MEASURE 20행 중 Shipment Plan 시트는 필수+기본 14, 선택 6입니다. 사용자 타이틀셋은 SCM_MST_TITLESET_USER 140행이며, SP `SSP0060_GET_SHIPMENT_PLAN`이 직접 읽습니다. |
+| HARDCODED | Request Info 시트(두 팝업)는 메타 없이 `AddTextColumn`, `AddComboColumn`, `AddDateColumn`, `AddNumColumn`으로 전부 하드코딩되어 있습니다. |
+| 표시/라벨 변경 | Designer의 ColumnHeader 스타일(`HorizontalAlignment=General`, `NoteIndicatorColor=Red`, `Parent=ColumnHeaderDefaultEnhanced`), `ColumnHeaderSpan`의 `Confirmed`와 `Change` 2단 헤더 |
+
+시트 목록(메타 기준): Hold stock, Hold stock Detail, MES Stock, MES Stock Detail, oWMS Detail, Shipment Plan, Shipment Plan Detail, Shipment Result, Stock Location Detail. 코드 전용 시트는 Request Info입니다.
+
+### 5-1. Division별 차이
+- grid_rule과 grid_effective 기준으로는 14개 Division(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC) 모두 **컬럼 구성이 같습니다**. 메타에 DIVISION_ID별 행이 없습니다.
+- 코드에서 Division에 따라 갈리는 처리는 `clbDivision_ID_SelectedIndexChanged > GetNERPCode`(SEGMENT2 조회)와 `SetChangedControl`(DIVISION_ID 필터)입니다. 컬럼 표시가 Division별로 달라지는 분기는 grid_code에서 잘린 부분에 있을 수 있습니다. **확인 필요**
+- SP `SSP0060_GET_SHIPMENT_DIVISION`의 결과로 Division과 Site 콤보가 정해집니다(TB_FX_USERGROUPAUTHEXTENTION 기준 권한 필터).
+
+## 6. 화면 로직 사실 (DB 컬럼 사용)
+- `Validation_Check`(3644~3786)는 confirm_id 단위로 shipment_confirm_qty, shipment_date, TRANSPORT_MODE, remarks2, remarks를 비교합니다(Validationdr, SONoValidationdr).
+- `chkERPIFBlockYn`(3568/3577)과 팝업의 `ChkERPIFBlockYn`(756/765)은 BLOCK_YN과 PERIOD를 확인합니다. 조회 소스는 Fact Pack에 없습니다. **확인 필요**
+- `GetShipmentStatusChk`는 결과 테이블 3개(Tables[0..2])의 CONFIRM_ID를 확인합니다.
+- `GetErpSoNoCnt`는 CNT를 확인하며, SO No 유무에 따라 `SoNo`와 `NonSoNo` 분기로 나뉩니다.
+- `InitControls`는 dtShipmentInputPeriod 0·1행의 VALUE와 Diff_VALUE를 읽고(입력 기간), `FP_Log2`로 로그를 남깁니다(429, 440).
+- `CalcPlanQty`, `CalculateSum`, `Set_SumValues`, `SetNote_Display`, `EditByChange`, `Simulation`은 클라이언트에서 계산하거나 표시하는 로직입니다(BOH_QTY, measure, NOTE, QTY/NOEDIT_QTY, Container_Qty).
+
+## 7. 확인 필요 항목
+
+| # | 항목 | 근거 |
+|---:|---|---|
+| 1 | `SSP.SSP0060_SAVE_HOLD_STOCK_DATA`: FoxQuery와 DB 모두에 없음 (SaveData_Detail:3460) | NOT_IN_FOXQUERY. 실제로 실패하는 경로인지, Hold stock 저장을 TO-BE에서 어떻게 대체할지 결정 필요 |
+| 2 | unreached 호출 4종(`SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK`, `SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING` ×2, NewNonSoNo의 `SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING`)을 이관 대상에 넣을지 | 정적 분석상 진입점 없음 |
+| 3 | 메인 화면에서 RequestPopup과 ConfirmDetailPopup을 여는 지점 | Fact Pack 미기재 |
+| 4 | 메인 화면 LayoutControlItem의 Text(조회조건 라벨) | props.csv가 잘려 미포함 |
+| 5 | splitContainer1의 Orientation과 SplitterDistance | props.csv가 잘려 미포함 |
+| 6 | 시트별로 어느 Spread에 올라가는지(spdMain/spdDetail) | grid_code가 잘림. flow 기준 추정만 가능 |
+| 7 | Hold stock / Hold stock Detail 시트를 만드는 코드 위치 | 메타에는 있으나 "코드에서 생성하는 시트" 목록에는 없음 |
+| 8 | Request Info 하드코딩 컬럼의 헤더와 필드가 뒤바뀜: `NEW_TO_CITY`→ELECTRODE_YN, `ELECTRODE_YN`→NEW_TO_CITY | ConfirmDetailPopup 215/216, RequestPopup 240/241 원문 그대로 |
+| 9 | 표 4-2의 `SaveData`→`PersonalSettingPopup.SaveData` 매핑 | 같은 이름 때문에 파서가 오매칭했을 가능성. 화면 자체 SaveData와 구분 필요 |
+| 10 | `GetSpdTitle`이 프레임워크(`SpreadInfo.GetSpdTitle`) 호출인지, 화면 자체 메서드(7449)인지 | 두 기록이 함께 존재 |
+| 11 | SCM_MST_SHEET_MEASURE 행별 MEASURE 코드와 기본값 | 건수(14/6)만 있음 |
+| 12 | TB_FX_GroupMenuAuth 13행의 권한 내용 | 행 수만 있음 |
+
+
+# 1차 분석서 — web_components.md
+# SSP0060 Web 컴포넌트 매핑 (React + Wijmo)
+
+## 1. 컨트롤 → 컴포넌트 매핑
+
+### 1-1. 메인 `SSP0060_ShipmentPlan`: 상단 조건 패널 (usrConditionPanel1 > usrLayoutControl2)
+| AS-IS 컨트롤 | 타입 | 라벨(원문) | TO-BE 후보 |
+|---|---|---|---|
+| clbCompany_ID | UsrCombo | 확인 필요 (props 잘림) | Wijmo ComboBox |
+| clbDivision_ID | UsrCombo | 확인 필요 | Wijmo ComboBox |
+| clbPlantSite | UsrCheckedList | 확인 필요 | Wijmo MultiSelect |
+| cboPlanDate | UsrCombo | LayoutItem 이름 `PlanDate`, Text는 확인 필요 | Wijmo ComboBox |
+| cboBucketType | UsrCombo | LayoutItem `lblBucket`, Text는 확인 필요 | Wijmo ComboBox |
+| drpPeriod | UsrDateRangePicker | 확인 필요 | 기간(From/To) InputDate 쌍 |
+| txtItemId + btnItemId | UsrMultiLineEditor + UsrButton | LayoutItem `lblItemId`, Text는 확인 필요 | 다건 입력 + 품목 팝업 버튼 |
+| clbProductLevel11 | UsrCheckedList | LayoutItem `lcProductLevel11`, Text는 확인 필요 | Wijmo MultiSelect |
+| chkSum | UsrCheckBox | 확인 필요 | Checkbox |
+| chkTotPSI | UsrCheckBox | 확인 필요 | Checkbox (변경 시 재조회) |
+| btnMeasure | UsrButton | 확인 필요 | Measure 선택 버튼 |
+| btnSimulation | UsrButton | LayoutItem `lcbtnSimulation`, Text는 확인 필요 | Button |
+| usrButton1 | UsrButton | 확인 필요 (부모 없음) | 확인 필요 |
+| (프레임워크) FindButton / SaveButton / EditButton | 공통 버튼 | – | 공통 버튼바 (menu-button-dynamic-fetch) |
+
+### 1-2. 메인: 하단 Detail 영역 조건 (splitContainer1.Panel2 > usrLayoutControl3)
+| AS-IS 컨트롤 | 타입 | 라벨(원문) | TO-BE 후보 |
+|---|---|---|---|
+| txtRequestor + btnRequestor | UsrTextBox + UsrButton | LayoutItem `Requestor`, Text는 확인 필요 | 입력 + 사용자 팝업 |
+| txtModel2 + btnItemID2 | UsrMultiLineEditor + UsrButton | 확인 필요 | 다건 입력 + 품목 팝업 |
+| drpPeriod2 | UsrDateRangePicker | 확인 필요 | InputDate 쌍 (ValueChanged 처리) |
+| drpPeriod3 | UsrDateRangePicker | 확인 필요 | InputDate 쌍 |
+| clbResultType | UsrCheckedList | 확인 필요 | MultiSelect |
+| txtBoxID | UsrMultiLineEditor | 확인 필요 | 다건 입력 |
+| clbProductLevel12 | UsrCheckedList | LayoutItem `lcProductLevel12` | MultiSelect |
+| btnSearch | SimpleButton | 확인 필요 | Detail 조회 버튼 |
+| btnNew | UsrButton | LayoutItem `lcbtnNew` | 신규 버튼 |
+
+### 1-3. RequestPopup (Form Text `"Shipment Request Popup"`)
+| AS-IS 컨트롤 | 타입 | 라벨(원문) | TO-BE 후보 |
+|---|---|---|---|
+| usrButtonList1 | UsrButtonList | – | 팝업 버튼바 |
+| cboChangeReason | UsrComboBox | `Change Reason*` | ComboBox (필수) |
+| txtReasonDetail | TextBox | `Reason Detail*` | Input (필수) |
+| btnAutoSet | SimpleButton | Text `Auto Set` | Button |
+| spdMain | FpSpread | 시트 Request Info | FlexGrid |
+
+### 1-4. ConfirmDetailPopup (Form Text `"Request Info Popup"`)
+| AS-IS 컨트롤 | 타입 | 라벨(원문) | TO-BE 후보 |
+|---|---|---|---|
+| btnButtonList | UsrButtonList | – | 팝업 버튼바 |
+| txtRequestNo | TextBox ReadOnly | `Request No` | readonly Input |
+| txtRequestor | TextBox ReadOnly | `Requestor` | readonly Input |
+| txtRequestDeptName | TextBox ReadOnly | `Dept Name` | readonly Input |
+| txtApproval | TextBox ReadOnly | `Approval` | readonly Input |
+| txtAppDeptName | TextBox ReadOnly | `Dept Name` | readonly Input |
+| usrLabel2 | UsrLabel | `Request Confirm Detail` | 섹션 타이틀 |
+| spdMain | FpSpread | 시트 Request Info | FlexGrid (조회 전용 여부는 확인 필요) |
+
+## 2. 화면 배치
+
+| 화면 | 구조(props.csv 원문) | 분할 |
+|---|---|---|
+| 메인 | usrConditionPanel1(조건), splitContainer1: Panel1=spdMain, Panel2=spdDetail + usrLayoutControl3 | splitContainer1의 Orientation, SplitterDistance, Size는 props.csv가 잘려 **확인 필요**. Panel1(상단 또는 좌측)=Main grid, Panel2=Detail 조건+Detail grid |
+| RequestPopup | usrConditionPanel1 Dock=Top (1764×52), splitter1 Dock=Top (1764×3), spdMain Dock=Fill (1764×288) | 상하 배치: 조건 52 : 그리드 288 (≈15% : 85%) |
+| ConfirmDetailPopup | usrConditionPanel1 Dock=Top (1764×52), panel1 Dock=Top (1764×158, 요청 정보 readonly), splitter1 Dock=Top (1764×3), spdMain Dock=Fill (1764×157) | 상하 3단: 52 : 158 : 157 (≈14% : 43% : 43%) |
+
+## 3. 시트별 Grid 컬럼 (grid_effective 기준)
+
+모든 메타 시트는 14개 Division에서 표시가 같습니다(Division별 차이 없음). "기본"은 표시, "숨김"은 VISIBLE_FLAG≠Y 또는 숨김 처리입니다. CODE_LOOP 컬럼 `EDIT_YN_{sColumnName.Replace("D_","")}`(헤더 `E{COLUMN_LABEL_NAME}`)은 날짜 컬럼마다 코드가 추가하는 편집 여부 컬럼이며, grid_effective 표시는 `코드추가?`입니다.
+
+### 3-1. Shipment Plan (메타 13 표시 / 5 숨김 + CODE_LOOP, MEASURE 14/6)
+| 컬럼 | 라벨 | 표시 |
+|---|---|---|
+| DIVISION_ID | Div | 기본 |
+| FROM_SITE_DESCRIPTION | From Site | 기본 |
+| TO_SITE | To Site | 기본 |
+| PRODUCT_LEVEL1 | Product Level1 | 기본 |
+| ITEM_ID | Model | 기본 |
+| NICK_NAME | Nick Name | 기본 |
+| FCST_TYPE | FCST Type | 기본 |
+| INCOTERMS | Incoterms | 기본 |
+| TRANSPORT_MODE | Transmode | 기본 |
+| BOH_TYPE | BOH_TYPE | 기본 |
+| BOH_QTY | BOH_QTY | 기본 |
+| PSI | PSI | 기본 |
+| MEASURE_NAME | Measure | 기본 |
+| FROM_SITE / MEASURE / BACK_COLOR / CONFIRM_DAY / LOT_YN | Site / Measure / Back Color / Confrim Day / Lot_YN | 숨김 |
+| (날짜 컬럼) | SCP0009_GET_SHEET_CALENDAR_3SPAN 결과 + InitSpreadDateColumn | 코드 |
+| EDIT_YN_* | E{라벨} | 코드추가? |
+
+(메타 컬럼 순서는 SCM_MST_SHEET_COLUMNS 원문 순서를 따릅니다. 위 표는 알파벳 정렬된 grid_effective를 다시 묶은 것이므로 실제 순서는 메타에서 확인해야 합니다.)
+
+### 3-2. Shipment Plan Detail (44 표시 / 27 숨김 + CODE_LOOP)
+표시(44): A_COUNTRY "A Contry", A_PORT_CODE "A Port Code", A_PORT_NAME "A Port Name", ATTRIBUTE10, CHANGE_REASON_CODE "Change Reason*", CHANGE_REASON_DETAIL "Reason Detail*", CHANGE_REQ_NO "Change Request No", CITY_NAME, CONFIRM_ID "Confirm/Plan ID", COUNTRY_NAME, DIVISION_ID "Div", END_CUSTOMER, ERP_DO_NO "DO No", ERP_SO_NO "SO No", ETA, ETD, Expected_Shipping_Date, FCST_TYPE "FCST Type*", FROM_SITE_DESCRIPTION "From Site*", INCOTERMS "Incoterms*", ITEM_ID "Model*", LT_DAY "L/T(Day)", MKT_OWNER, MODEL_USER "Model PIC", NICK_NAME, PRODUCT_LEVEL1, PROJECT_CODE, PROJECT_NAME, REMARKS "Remarks", REMARKS2 "Building", REMARKS3 "Customer Requirement", REQUESTOR "Shipment Requestor", SHIPMENT_CONFIRM_QTY "Shipment Qty*", SHIPMENT_DATE "Shipment Date*", SHIPMENT_STATUS "Status", SHIPTO_CITY_NAME, SHIPTO_DESCRIPTION "Ship To Party", SHIPTO_REGION_NAME, SOLDTO_DESCRIPTION "Sold To Party", TEAM, TO_SITE_DESCRIPTION "To Site*", TRANSPORT_MODE "Trans Mode*", UPDATED_BY, UPDATED_DATE
+
+숨김(27): BOD_ID, CHANGE_TYPE, CHECK_NEED_YN "Checked", EDIT_MAIN, EDIT_REMARKS, ELECTRODE_TYPE, ELECTRODE_YN, ERP_STATUS, FROM_SITE "From Site ID", TO_SITE "To Site ID", ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, NEW_A_COUNTRY, NEW_A_PORT_CODE, NEW_BOD_ID, NEW_CUSTOMER_LT, NEW_D_COUNTRY, NEW_D_PORT_CODE, NEW_ETA, NEW_ETD, NEW_INCOTERMS, NEW_LT_DAY, NEW_ROUTE_ID, NEW_SHIPMENT_DATE, NEW_TO_CITY, NEW_TO_COUNTRY, NEW_TRANSPORT_MODE
+
+편집 관련 사실: TRANSPORT_MODE는 `SpdDetail_EditChange`(1380/1389)와 `SpdDetail_CellClick`(1987)에서 `CommonData [TransMode]`(SCP_MST_BOD_V)로 콤보 값을 다시 구합니다. `*` 라벨은 필수 입력 표시이며, 검증 로직은 `Validation_Check`에 있습니다.
+
+### 3-3. Stock Location Detail (20 표시)
+AVAILABLE_DATE, AVAILABLE_QTY, COMPANY_ID "Company", CUTOFF_DATE, DEFECT_QTY "Deffect Qty", DIVISION_ID "Div", FROM_SITE, HOLDING_DATE, ITEM_ID "Model", MOVING_QTY, NICK_NAME, OUTSOURCING_FACTORY, OUTSOURCING_FLAG, PLANT_ID "Plant", QTY_UOM "Qty Uom", STOCK_TYPE, STORAGE_DESCRIPTION "Storage", STORAGE_ID "Storage ID", TOTAL_QTY, WIPHOLD_YN "Wiphold Yn", 그리고 CODE_LOOP EDIT_YN_*
+
+### 3-4. oWMS Detail (25 표시)
+ALLOCATION_QTY, AVAILABLE_QTY, CAPA_GRADE "Capa. Grade", CUSTOMER_CODE, CUSTOMER_NAME, DIVISION_ID "Div", EXPIRATION_QTY, GRADE, HOLD_QTY, ITEM_ID "Model", LONG_TERM_QTY "Long-term Qty", LOT_ID, LOT_ISSUE_DATE, MOVING_QTY, NICK_NAME, PACKING_QTY, PACKING_STATUS, PALLET_ID, PLANT_ID, RECEIVING_QTY "Reciving Qty"(원문 오타), SOC, STOCK_QTY, STOCK_STATUS "Inventory Status", STORAGE_ID "Storage", UNDECIDED_QTY, 그리고 CODE_LOOP EDIT_YN_*
+
+### 3-5. Hold stock (10 표시 / 2 숨김)
+DIVISION_ID "Div", FROM_SITE_NM "From Site", ITEM_ID "Model", NICK_NAME, HOLD_QTY "Amend Qty*", HOLD_YYYYMMDD "Start Date", RELEASE_YYYYMMDD "End Date*", REMARKS, LAST_UPDATED_BY, LAST_UPDATE_DATE. 숨김: FROM_SITE "Site", HOLD_ID
+- 라벨에 `*`가 있어 편집 시트로 보입니다. 저장 엔드포인트 `SSP.SSP0060_SAVE_HOLD_STOCK_DATA`는 FoxQuery와 DB 모두에 없습니다. **확인 필요**
+
+### 3-6. Hold stock Detail (10 표시 / 2 숨김)
+Hold stock과 같은 컬럼이며, 라벨에 `*`가 없습니다(HOLD_QTY "Amend Qty", RELEASE_YYYYMMDD "End Date"). 숨김: FROM_SITE, HOLD_ID
+
+### 3-7. MES Stock (9 표시)
+ITEM_ID "Model", NICK_NAME, TOTAL, AVAILABLE_STOCK, BEFORE_OQC, OQC_INSP_REQUEST, OQC_COMPLETE, OQC_NG, QMS_MES_HOLD "QMS/MES Hold", 그리고 CODE_LOOP EDIT_YN_*
+
+### 3-8. MES Stock Detail (13 표시)
+PRODID "Model", PRJT_NAME "Nick Name", LOTID "Lot ID", BOXID "Box ID", LOT_QTY, AVAILABLE_YN "Available stock YN", OQC_INSP_RESULT, EXP_INSP_VALID_DATE "Exp Insp Vaild Date"(원문 오타), PROD_VALID_DATE, MES_HOLD_YN, MES_UNHOLD_SCHD_DATE, QMS_HOLD_YN, QMS_UNHOLD_SCHD_DATE, 그리고 CODE_LOOP EDIT_YN_*
+
+### 3-9. Shipment Result (16 표시)
+CONFIRM_ID "Confirm/Plan ID", DIVISION_ID "Div", END_CUSTOMER, ERP_SO_NO "SO No", ETA_DATE "ETA", ETD_DATE "ETD", FROM_SITE, TO_SITE, INCOTERMS, ITEM_ID "Model", NICK_NAME, QTY "Shipment Qty", SHIP_TYPE, TRANSPORT_MODE "Trans Mode", TYPE "Status", YYYYMMDD "Shipment Date", 그리고 CODE_LOOP EDIT_YN_*
+
+### 3-10. Request Info (두 팝업 모두 코드 하드코딩, 메타 없음)
+헤더 2행이며, 상위 ColumnHeaderSpan은 `Confirmed`(LT_DAY부터 6칸)와 `Change`(NEW_LT_DAY부터 6칸)입니다.
+
+| 필드 | 헤더 | 타입 | 폭 | ConfirmDetailPopup 표시 |
+|---|---|---|---:|---|
+| (CAppSetting.StringAction) | A | Text | 10 | 숨김 |
+| CHANGE_REQ_NO | change_req_no | Text | 100 | 숨김 |
+| DIVISION_ID | Division ID | Text | 100 | 숨김 |
+| NEW_YN *(RequestPopup만)* | New YN | Text | 10 | 숨김 (RequestPopup) |
+| CONFIRM_ID | Confirm/Plan ID | Text | 100 | 표시 |
+| ERP_SO_NO | SO No | Text | 100 | 표시 |
+| PROJECT_NAME | Project Name | Text | 100 | 표시 |
+| FCST_TYPE | FCST Type | Combo (LookupCommon `SALES_TYPE_CODE`) | 100 | 표시 |
+| ITEM_ID | Model | Text | 80 | 표시 |
+| FROM_SITE | From Site | Text | 60 | 표시 |
+| TO_SITE | To Site | Text | 100 | 표시 |
+| INCOTERMS | Incoterms | Text | 65 | 표시 |
+| LT_DAY / ETD / ETA / TRANSPORT_MODE / SHIPMENT_DATE / SHIPMENT_CONFIRM_QTY | [Confirmed] L/T(Day) / ETD / ETA / Trans Mode / Shipment Date / Qty | Text/Date/Date/Text/Date/Num | 60/70/70/45/70/60 | 표시 |
+| NEW_LT_DAY / NEW_ETD / NEW_ETA / NEW_TRANSPORT_MODE / NEW_SHIPMENT_DATE / NEW_SHIPMENT_CONFIRM_QTY | [Change] 같은 헤더 | 같은 타입 | 같은 폭 | 표시 |
+| DIFF_QTY | Diff Qty | Num | 60 | 표시 |
+| CHANGE_REASON_CODE | Change Reason | Combo (`GetSSPInnerTable("CHANGE_REASON_CODE_ALL")`) | 100 | 표시 |
+| CHANGE_REASON_DETAIL | Reason Detail | Text | 100 | 표시 |
+| NEW_BOD_ID, NEW_ROUTE_ID, NEW_D_COUNTRY, NEW_D_PORT_CODE, NEW_A_COUNTRY, NEW_A_PORT_CODE, NEW_TO_COUNTRY | 같은 이름 | Text | 100 | 숨김 |
+| **ELECTRODE_YN** | **NEW_TO_CITY** (원문 그대로, 헤더와 필드가 뒤바뀜) | Text | 100 | 숨김 |
+| **NEW_TO_CITY** | **ELECTRODE_YN** (원문 그대로) | Text | 100 | 숨김 |
+| ELECTRODE_TYPE, ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, EDIT_REMARKS, EDIT_MAIN, REMARKS, REMARKS2, REMARKS3, PRODUCT_LEVEL1, NICK_NAME, FROM_SITE_DESCRIPTION, TO_SITE_DESCRIPTION, PROJECT_CODE | 같은 이름 | Text | 100 | 숨김 |
+
+- ConfirmDetailPopup은 48컬럼, RequestPopup은 NEW_YN을 더해 49컬럼입니다.
+- RequestPopup 각 컬럼의 표시 여부, 폭, 정렬은 grid_code가 잘려 **확인 필요**입니다.
+
+## 4. 시트 연결 규칙
+
+| 트리거 | 동작 | 대상 시트(호출 SP 기준) |
+|---|---|---|
+| 조회(FindButton), chkTotPSI 변경 | FindData_Main | Shipment Plan (`SSP0060_GET_SHIPMENT_PLAN`) |
+| spdMain 셀 더블클릭 (`SpdMain_CellDoubleClick`) | FindData_Detail, Stock_Detail, oWMS_Detail, Shipment_Result, hold_stock, MES_stock, MES_stock_Detail | Shipment Plan Detail, Stock Location Detail, oWMS Detail, Shipment Result, Hold stock, MES Stock, MES Stock Detail |
+| Detail 영역 btnSearch (`BtnSearch_Click`) | 위와 같되 hold_stock 제외 | 활성 시트 기준인지는 확인 필요 |
+| spdDetail 시트 탭 (`SpdDetail_SheetTabClick`, `SpdDetail_ActiveSheetChanged`) | 시트 전환 처리 | 로직 내용은 확인 필요 |
+| cboPlanDate / clbCompany_ID / btnMeasure | InitSpread > GetSpdTitle로 날짜 헤더 재구성 | Shipment Plan |
+| 저장 후 (SaveData_Detail) | FindData_Main, FindData_Detail, FindData_hold_stock 재조회 | Shipment Plan, Shipment Plan Detail, Hold stock |
+| spdMain/spdDetail TopChange | 스크롤 동기화 핸들러(SpdMain_TopChange, SpdDetail_TopChange) | 동기화 대상은 확인 필요 |
+
+- 더블클릭한 셀(Measure 또는 컬럼)에 따라 어느 FindData_*가 실행되는지는 Fact Pack에 없습니다. **확인 필요**
+
+
+# 1차 분석서 — tobe_design.md
+# SSP0060 TO-BE 설계 입력
+
+## 1. 조회조건 (컨트롤 기준)
+
+### 1-1. 메인 조회 (FindButton → `SSP0060_GET_SHIPMENT_PLAN`)
+| 컨트롤 | 타입 | 데이터 소스 | 비고 |
+|---|---|---|---|
+| clbCompany_ID | 단일 콤보 | GetSSPInnerTable (InitControls) | 변경 시 InitSpread와 GetSpdTitle 재구성, cboPlanDate 이벤트 일시 해제 |
+| clbDivision_ID | 단일 콤보 | `SSP0060_GET_SHIPMENT_DIVISION` (SetChangedControl) | 변경 시 `SSP0002_GET_NERP_CODE`(SEGMENT2) |
+| clbPlantSite | 다중 선택 | GetSSPInnerTable 계열 (확인 필요) | GetCheckedListValue(CODE) |
+| cboPlanDate | 단일 콤보 | 확인 필요 (CODE, FROM_DATE, TO_DATE1 사용) | 변경 시 GetSpdTitle과 InitSpreadDateColumn |
+| cboBucketType | 단일 콤보 | `DM0003_GET_BUCKET_TYPE_CODE` | cboBucketType_SelectedIndexChanged |
+| drpPeriod | 기간 | dtShipmentInputPeriod VALUE/Diff_VALUE 기반 기본값 (확인 필요) | |
+| txtItemId (+btnItemId) | 다건 텍스트 + 품목 팝업 | – | |
+| clbProductLevel11 | 다중 선택 | 확인 필요 | |
+| chkTotPSI | 체크박스 | – | 변경 시 즉시 FindData_Main 재조회 |
+| chkSum | 체크박스 | – | 합계 표시(클라이언트 Set_SumValues/CalculateSum, 확인 필요) |
+| btnMeasure | 버튼 | SCM_MST_SHEET_MEASURE | Measure 선택 후 InitSpread |
+
+### 1-2. Detail 조회 (btnSearch / spdMain 더블클릭)
+txtRequestor(+btnRequestor), txtModel2(+btnItemID2), drpPeriod2(ValueChanged 처리), drpPeriod3, clbResultType, txtBoxID, clbProductLevel12. 컨트롤과 SP 파라미터의 대응 관계는 Fact Pack에 없습니다. **확인 필요**
+
+라벨 원문은 메인 화면 props.csv가 잘려 **확인 필요**입니다. TO-BE에서는 `ui-category-setup-column-meta` 기준으로 라벨을 확정해야 합니다.
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | AS-IS 경로 | 호출 SP(순서) | TO-BE API 후보 |
+|---|---|---|---|
+| 화면 진입 | Form_Load > InitControls | SSP0060_GET_SHIPMENT_DIVISION, DM0003_GET_BUCKET_TYPE_CODE, SCP0009_GET_SHEET_CALENDAR_3SPAN | 초기 콤보 API(division, bucketType), 캘린더 헤더 API |
+| 메인 조회 | FindButton / chkTotPSI | SSP0060_GET_SHIPMENT_PLAN (+ SCP0009 헤더) | 메인 PSI 조회 |
+| Detail 조회 7종 | btnSearch / SpdMain_CellDoubleClick | SSP0060_GET_SHIPMENT_PLAN_DETAIL, SSP0060_GET_STOCK_LOCATION_DETAIL, SSP0060_GET_OWMS_DETAIL, SSP0060_GET_SHIPMENT_RESULT, SSP0060_GET_HOLD_STOCK(더블클릭만), SSP0060_GET_MES_STOCK, SSP0060_GET_MES_STOCK_DETAIL | 시트별 조회 API 7개 |
+| 메인 저장 | SaveButton > SaveData_Main | SSP0060_SAVE_SHIPMENT_PLAN | 계획 저장 |
+| Detail 저장 | SaveButton > SaveData_Detail | Validation_Check, chkERPIFBlockYn → SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM → GetERPInterface: SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, SSP0060_GET_ERP_SO_NO_CNT, SSP0060_GET_SHIPMENT_STATUS, SCM_SSP_CHECK_CONFIRM_CHANGETIME, SoNo/NonSoNo 분기 SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING, GetErpIFCheckNew 분기 PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH → 재조회 | 확정 저장. 하나의 트랜잭션으로 묶을지, 단계별 커밋을 유지할지 결정 필요 |
+| Hold stock 저장 | SaveData_Detail:3460 | `SSP0060_SAVE_HOLD_STOCK_DATA` (없음) | **미확정** |
+| 변경요청 팝업 조회 | RequestPopup Form_Load / Find | SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | 변경요청 조회 |
+| 변경요청 팝업 저장 | RequestPopup SaveButton / usrButtonList1 | ChkEngProcessing: SSP0003_GET_SSP_PLAN_PROCESSING_CHECK → SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM → GetERPInterface: ERROR_CONFIRM, DELETE_…_BY_CONFIRM, SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE, GET_ERP_SO_NO_CNT, GET_SHIPMENT_STATUS, SoNo: SAVE_…_DRAFTING_MAIN + PR_…_CHG_BATCH / NonSoNo: SAVE_…_DRAFTING_MAIN + PR_…_CHG_BATCH_NEW_C, GetErpIFCheckNew 분기 | 변경요청 저장 |
+| 팝업 Auto Set | btnAutoSet_Click | 엔드포인트 없음 (클라이언트 로직) | FE 로직 |
+| 확정 상세 팝업 | ConfirmDetailPopup Form_Load / Find | SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | 조회 전용 팝업 |
+| 수정 버튼 | EditButton > GetSSPUserCheck | SSP0002_GET_USER_INFO_LIST | 사용자 권한 체크 |
+| Detail 셀 편집 | SpdDetail_EditChange / CellClick | CommonData [TransMode] | Trans Mode 콤보 API |
+| Simulation / New / Requestor | BtnSimulation_Click / BtnNew_Click / BtnRequestor_Click | 엔드포인트 없음 (Simulation은 Container_Qty 기반 클라이언트 계산) | FE 로직과 공용 팝업 |
+
+## 3. Division별 Grid 변형 요약
+- 메타 기준으로 14개 Division 모두 컬럼 구성이 같습니다. Division 변형 없이 단일 컬럼 정의로 구현합니다.
+- 다만 코드의 Division 분기(NERP 코드, 사이트 필터)는 조회 파라미터에 반영해야 합니다.
+- 날짜 컬럼과 EDIT_YN_* 컬럼은 Plan Date와 Bucket에 따라 동적으로 만들어지므로 FE 동적 컬럼 생성이 필요합니다.
+
+## 4. 권한(C/R/U/D) 관련 사실
+| 사실 | 출처 |
+|---|---|
+| 메뉴 권한 메타 TB_FX_GroupMenuAuth 13행 (값 미포함) | DB 메타 §8 |
+| 프레임워크 버튼 FindButton(R), SaveButton(C/U), EditButton 사용 | flow.csv |
+| EditButton에서 `SSP0002_GET_USER_INFO_LIST`로 사용자, 그룹, 권한 확장(TB_FX_USERGROUPAUTHEXTENTION)을 확인 | endpoints.csv |
+| Division과 Site 콤보를 TB_FX_USERGROUPAUTHEXTENTION 기준으로 필터 (`SSP0060_GET_SHIPMENT_DIVISION`) | endpoints.csv |
+| UserInfoContext.Current.NowGroupID 사용 (InitControls, SetChangedControl, SetChangeControl, InitSpread) | meta_reads.csv |
+| 삭제(D) 전용 버튼과 엔드포인트는 진입점에 연결되어 있지 않음 (`SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING`은 unreached) | flow.csv |
+
+## 5. 미확정 사항
+1. `SSP0060_SAVE_HOLD_STOCK_DATA`가 없는 상태에서 Hold stock 저장 기능을 유지할지, 대체할지
+2. unreached 호출 4건(SSP0202_…_IF_CHECK, DELETE_…_DRAFTING ×2, NewNonSoNo)을 이관 대상에 포함할지
+3. 메인 화면 조회조건 라벨, splitContainer1 분할 방향과 비율
+4. 시트와 Spread(spdMain/spdDetail) 귀속, 더블클릭 셀 위치별 Detail 조회 분기 조건
+5. Request Info의 ELECTRODE_YN과 NEW_TO_CITY 헤더/필드 교차를 TO-BE에서 그대로 둘지 (원문 결함 가능)
+6. RequestPopup과 ConfirmDetailPopup을 메인에서 여는 조건과 전달 파라미터
+7. 저장 체인(확정, ERP 인터페이스, 메일)의 트랜잭션 경계
+8. TB_FX_GroupMenuAuth 그룹별 C/R/U/D 값
+9. SCM_MST_SHEET_MEASURE의 Shipment Plan Measure 20행 상세(필수+기본 14 / 선택 6)
+
+
+# Fact Pack — SSP0060
+# SSP0060 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 365 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 556 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 2029 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 388 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 8037 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 1766 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:cboPlanDate.SelectedIndexChanged | cboPlanDate_SelectedIndexChanged > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:clbCompany_ID.SelectedIndexChanged | clbCompanyID_SelectedIndexChanged > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:clbDivision_ID.SelectedIndexChanged | clbDivision_ID_SelectedIndexChanged > GetNERPCode | 7149 | SSP.SSP0002_GET_NERP_CODE | MATCH | SP SSP0002_GET_NERP_CODE |
+| button:EditButton | EditButton > GetSSPUserCheck | 8017 | SSP.SSP0002_GET_USER_INFO_LIST | MATCH | SP SSP0002_GET_USER_INFO_LIST |
+| button:FindButton | FindButton > FindDataMain | 312 | SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING |
+| button:FindButton | FindButton > FindData_Main | 371 | SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING |
+| button:FindButton | FindButton > FindData_Main | 5287 | SSP.SSP0060_GET_SHIPMENT_PLAN | MATCH | SP SSP0060_GET_SHIPMENT_PLAN |
+| button:FindButton | FindButton > FindData_Main > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:SaveButton | SaveButton > SaveData | 584 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| button:SaveButton | SaveButton > SaveData > ChkEngProcessing | 716 | SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK | MATCH | SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface | 1044 | SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | MATCH | SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface | 1072 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo | 1181 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo | 1253 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > NonSoNo | 1385 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > NonSoNo | 1408 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1525 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1551 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1582 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1642 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1668 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1699 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > ChkConfirmChangeTime | 1731 | SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE | MATCH | SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > GetErpSoNoCnt | 1759 | SSP.SSP0060_GET_ERP_SO_NO_CNT | MATCH | SP SSP0060_GET_ERP_SO_NO_CNT |
+| button:SaveButton | SaveButton > SaveData > GetERPInterface > GetShipmentStatusChk | 1784 | SSP.SSP0060_GET_SHIPMENT_STATUS | MATCH | SP SSP0060_GET_SHIPMENT_STATUS |
+| button:SaveButton | SaveButton > SaveData_Main | 3029 | SSP.SSP0060_SAVE_SHIPMENT_PLAN | MATCH | SP SSP0060_SAVE_SHIPMENT_PLAN |
+| button:SaveButton | SaveButton > SaveData_Detail | 3286 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| button:SaveButton | SaveButton > SaveData_Detail | 3460 | SSP.SSP0060_SAVE_HOLD_STOCK_DATA | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface | 3990 | SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | MATCH | SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface | 4031 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > NonSoNo | 4159 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > SoNo | 4380 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > GetErpSoNoCnt | 4481 | SSP.SSP0060_GET_ERP_SO_NO_CNT | MATCH | SP SSP0060_GET_ERP_SO_NO_CNT |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > GetShipmentStatusChk | 4506 | SSP.SSP0060_GET_SHIPMENT_STATUS | MATCH | SP SSP0060_GET_SHIPMENT_STATUS |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > SoNo > GetErpIFCheckNew | 4657 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > SoNo > GetErpIFCheckNew | 4683 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > SoNo > GetErpIFCheckNew | 4713 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| button:SaveButton | SaveButton > SaveData_Detail > FindData_Main | 5287 | SSP.SSP0060_GET_SHIPMENT_PLAN | MATCH | SP SSP0060_GET_SHIPMENT_PLAN |
+| button:SaveButton | SaveButton > SaveData_Detail > FindData_Detail | 5656 | SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL | MATCH | SP SSP0060_GET_SHIPMENT_PLAN_DETAIL |
+| button:SaveButton | SaveButton > SaveData_Detail > FindData_hold_stock | 6225 | SSP.SSP0060_GET_HOLD_STOCK | MATCH | SP SSP0060_GET_HOLD_STOCK |
+| button:SaveButton | SaveButton > SaveData_Detail > FindData_hold_stock > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:SaveButton | SaveButton > SaveData_Detail > GetERPInterface > ChkConfirmChangeTime | 7962 | SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME | MATCH | SP SCM_SSP_CHECK_CONFIRM_CHANGETIME |
+| event:this.btnMeasure.Click | BtnMeasure_Click > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_Detail | 5656 | SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL | MATCH | SP SSP0060_GET_SHIPMENT_PLAN_DETAIL |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_Stock_Detail | 5781 | SSP.SSP0060_GET_STOCK_LOCATION_DETAIL | MATCH | SP SSP0060_GET_STOCK_LOCATION_DETAIL |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_oWMS_Detail | 5882 | SSP.SSP0060_GET_OWMS_DETAIL | MATCH | SP SSP0060_GET_OWMS_DETAIL |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_Shipment_Result | 5977 | SSP.SSP0060_GET_SHIPMENT_RESULT | MATCH | SP SSP0060_GET_SHIPMENT_RESULT |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_Shipment_Result | 6117 | SSP.SSP0060_GET_SHIPMENT_RESULT | MATCH | SP SSP0060_GET_SHIPMENT_RESULT |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_MES_stock | 6328 | SSP.SSP0060_GET_MES_STOCK | MATCH | SP SSP0060_GET_MES_STOCK |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_MES_stock_Detail | 6432 | SSP.SSP0060_GET_MES_STOCK_DETAIL | MATCH | SP SSP0060_GET_MES_STOCK_DETAIL |
+| event:this.btnSearch.Click | BtnSearch_Click > FindData_Shipment_Result > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.chkTotPSI.CheckedChanged | chkTotPSI_CheckedChanged > FindData_Main | 5287 | SSP.SSP0060_GET_SHIPMENT_PLAN | MATCH | SP SSP0060_GET_SHIPMENT_PLAN |
+| event:this.chkTotPSI.CheckedChanged | chkTotPSI_CheckedChanged > FindData_Main > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.Load | Form_Load > FindDataMain | 312 | SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING |
+| event:this.Load | Form_Load > FindData_Main | 371 | SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 514 | SSP.SSP0060_GET_SHIPMENT_DIVISION | MATCH | SP SSP0060_GET_SHIPMENT_DIVISION |
+| event:this.Load | Form_Load > InitControls > GetBucketType | 5206 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | SP DM0003_GET_BUCKET_TYPE_CODE |
+| event:this.Load | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.spdDetail.CellClick | SpdDetail_CellClick | 1987 | biz:CommonData.CommonDataList [code=TransMode] | BIZ_MATCH |  |
+| event:this.spdDetail.EditChange | SpdDetail_EditChange | 1380 | biz:CommonData.CommonDataList [code=TransMode] | BIZ_MATCH |  |
+| event:this.spdDetail.EditChange | SpdDetail_EditChange | 1389 | biz:CommonData.CommonDataList [code=TransMode] | BIZ_MATCH |  |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Detail | 5656 | SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL | MATCH | SP SSP0060_GET_SHIPMENT_PLAN_DETAIL |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Stock_Detail | 5781 | SSP.SSP0060_GET_STOCK_LOCATION_DETAIL | MATCH | SP SSP0060_GET_STOCK_LOCATION_DETAIL |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_oWMS_Detail | 5882 | SSP.SSP0060_GET_OWMS_DETAIL | MATCH | SP SSP0060_GET_OWMS_DETAIL |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Shipment_Result | 5977 | SSP.SSP0060_GET_SHIPMENT_RESULT | MATCH | SP SSP0060_GET_SHIPMENT_RESULT |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Shipment_Result | 6117 | SSP.SSP0060_GET_SHIPMENT_RESULT | MATCH | SP SSP0060_GET_SHIPMENT_RESULT |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_hold_stock | 6225 | SSP.SSP0060_GET_HOLD_STOCK | MATCH | SP SSP0060_GET_HOLD_STOCK |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_MES_stock | 6328 | SSP.SSP0060_GET_MES_STOCK | MATCH | SP SSP0060_GET_MES_STOCK |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_MES_stock_Detail | 6432 | SSP.SSP0060_GET_MES_STOCK_DETAIL | MATCH | SP SSP0060_GET_MES_STOCK_DETAIL |
+| event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Shipment_Result > InitSpread > GetSpdTitle | 7449 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData | 584 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > ChkEngProcessing | 716 | SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK | MATCH | SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface | 1044 | SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | MATCH | SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface | 1072 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo | 1181 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo | 1253 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > NonSoNo | 1385 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > NonSoNo | 1408 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1525 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1551 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1582 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1642 | SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1668 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew | 1699 | SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > ChkConfirmChangeTime | 1731 | SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE | MATCH | SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > GetErpSoNoCnt | 1759 | SSP.SSP0060_GET_ERP_SO_NO_CNT | MATCH | SP SSP0060_GET_ERP_SO_NO_CNT |
+| event:this.usrButtonList1.UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > GetShipmentStatusChk | 1784 | SSP.SSP0060_GET_SHIPMENT_STATUS | MATCH | SP SSP0060_GET_SHIPMENT_STATUS |
+| unreached:(진입점 미연결) | <field:dtFcstType> | 37 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtFcstType> | 41 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetErpIFCheck | 842 | SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK |
+| unreached:(진입점 미연결) | GetErpIFCheck | 4579 | SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING | MATCH | SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING |
+| unreached:(진입점 미연결) | NewNonSoNo | 4928 | SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | MATCH | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING |
+| unreached:(진입점 미연결) | GetErpIFCheckNew_ | 5042 | SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING | MATCH | SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=TransMode] | BIZ_MATCH | 3 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCP_MST_BOD_V |
+| DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | 1 | SP SCP0009_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M |  |
+| SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | MATCH | 5 | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH | EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST |  |
+| SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | MATCH | 3 | SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C | EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST |  |
+| SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | MATCH | 2 | SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM | EXEC:SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_ANL_SHIP_ERP_ERROR_CONFIRM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME | MATCH | 1 | SP SCM_SSP_CHECK_CONFIRM_CHANGETIME | EXEC:SCM_SSP_CHECK_CONFIRM_CHANGETIME, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE | MATCH | 1 | SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE | EXEC:SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | MATCH | 5 | SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM | EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST |  |
+| SSP.SSP0002_GET_NERP_CODE | MATCH | 1 | SP SSP0002_GET_NERP_CODE | EXEC:SSP0002_GET_NERP_CODE, SELECT:SCM_CODE_LOOKUP_VALUE |  |
+| SSP.SSP0002_GET_USER_INFO_LIST | MATCH | 1 | SP SSP0002_GET_USER_INFO_LIST | EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION |  |
+| SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK | MATCH | 1 | SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK | EXEC:SSP0003_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL |  |
+| SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING | MATCH | 2 | SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING | EXEC:SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SSP0060_GET_ERP_SO_NO_CNT | MATCH | 2 | SP SSP0060_GET_ERP_SO_NO_CNT | EXEC:SSP0060_GET_ERP_SO_NO_CNT, SELECT:SSP_ANL_SHIP_CONFIRM |  |
+| SSP.SSP0060_GET_HOLD_STOCK | MATCH | 1 | SP SSP0060_GET_HOLD_STOCK | EXEC:SSP0060_GET_HOLD_STOCK, REF:FN_GET_IN_STR, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_ITEM_NICKNAME, REF:FN_CHAR_TO_DATE, SELECT:SSP_ANL_HOLD_STOCK, SELECT:TB_FX_USER, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN |  |
+| SSP.SSP0060_GET_MES_STOCK | MATCH | 1 | SP SSP0060_GET_MES_STOCK | EXEC:SSP0060_GET_MES_STOCK, REF:FN_GET_IN_STR, SELECT:SSP_DNM_GMES_STOCK_81_82, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT |  |
+| SSP.SSP0060_GET_MES_STOCK_DETAIL | MATCH | 1 | SP SSP0060_GET_MES_STOCK_DETAIL | EXEC:SSP0060_GET_MES_STOCK_DETAIL, REF:FN_GET_IN_STR, SELECT:SSP_DNM_GMES_STOCK_81_82, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT |  |
+| SSP.SSP0060_GET_OWMS_DETAIL | MATCH | 1 | SP SSP0060_GET_OWMS_DETAIL | EXEC:SSP0060_GET_OWMS_DETAIL, REF:FN_GET_IN_STR, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_OWMS_STOCK_C2, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SLOC, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT, SELECT:SCM_MST_ITEM_SN |  |
+| SSP.SSP0060_GET_SHIPMENT_DIVISION | MATCH | 1 | SP SSP0060_GET_SHIPMENT_DIVISION | EXEC:SSP0060_GET_SHIPMENT_DIVISION, REF:FN_GET_LOOKUP_VALUE, INSERT:#RETURNTABLE, SELECT:SCM_MST_DIVISION, SELECT:TB_FX_USERGROUPAUTHEXTENTION, SELECT:SCM_MST_SITE, SELECT:#RETURNTABLE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_CODE_LOOKUP_VALUE |  |
+| SSP.SSP0060_GET_SHIPMENT_PLAN | MATCH | 1 | SP SSP0060_GET_SHIPMENT_PLAN | EXEC:SSP0060_GET_SHIPMENT_PLAN, SELECT:SCM_MST_TITLESET_USER, INSERT:#TBLDYNAMICTITLEST_SSP0060, CREATE:#TMP_RESULT_TABLE, CREATE:#TMP_RESULT_DETAIL_TABLE, INSERT:#TMP_BOHDATA_STORAGE, SELECT:SSP_DNM_GMES_STOCK_81_82, REF:STRING_SPLIT, SELECT:SSP_ANL_OWMS_STOCK_C2, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:MST_STOCK, SELECT:MST_LOCATION, SELECT:PACKER_STOCK, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_FINAL_ITEM, SELECT:SSP_DNM_STOCK_C, SELECT:SSP_DNM_ESS_PACKER_STOCK_V, SELECT:SSP_MST_LOCATION_V, INSERT:#TMP_BOHDATA, SELECT:#TMP_BOHDATA_STORAGE, INSERT:#TMP_SHIPMENT_RESULT, SELECT:SCM_DNM_EXFACTORY_RESULT, INSERT:#TMP_ROWDATA, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:#TMP_SHIPMENT_RESULT, SELECT:SSP_DNM_FP_PLAN_FROZEN, SELECT:SCP_ANL_PRODUCTION_PLAN, SELECT:SCP_PLAN_VERSION_V, REF:FN_GET_SSP_ETA_DATE, REF:UF_FX_STRING_SPLIT, SELECT:SSP_DNM_FP_AMEND_SHIPAVAL, UPDATE:#TMP_ROWDATA, INSERT:#TMP_RESULT_TABLE, SELECT:#TMP_ROWDATA, SELECT:SCM_MST_SHEET_MEASURE, SELECT:SCM_SYS_CALENDAR_M, INSERT:#TMP_RESULT_DETAIL_TABLE, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SSP_ANL_SHIP_PLAN_C, SELECT:#TMP_RESULT_TABLE, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TMP_RESULT_DETAIL_TABLE, SELECT:#TMP_BOHDATA, INSERT:#TMP_RESULT_PIVOT_TABLE, DYNAMIC@SSP0060_GET_SHIPMENT_PLAN, INSERT:#TMP_RESULT_PIVOT_TABLE_OLD, DELETE:#TMP_RESULT_PIVOT_TABLE_OLD, SELECT:#TMP_RESULT_PIVOT_TABLE_OLD, EXEC:SSP0060_GET_SHIPMENT_PSI_COMMENTS, SELECT:SCP_MST_BOD_N_V |  |
+| SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL | MATCH | 1 | SP SSP0060_GET_SHIPMENT_PLAN_DETAIL | EXEC:SSP0060_GET_SHIPMENT_PLAN_DETAIL, REF:FN_GET_IN_STR, DYNAMIC@SSP0060_GET_SHIPMENT_PLAN_DETAIL, REF:FN_SCM_SPLIT |  |
+| SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | MATCH | 2 | SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING | EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER |  |
+| SSP.SSP0060_GET_SHIPMENT_RESULT | MATCH | 2 | SP SSP0060_GET_SHIPMENT_RESULT | EXEC:SSP0060_GET_SHIPMENT_RESULT, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:PLAN_SSP, SELECT:RESULT_OWMS, SELECT:RETURN_OWMS, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, SELECT:SSP_MST_DELEGATE, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCM_MST_ITEM_SN, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_ANL_SHIP_PLAN_ALL, SELECT:SSP_DNM_SHIP_RESULT_OWMS, SELECT:SSP_DNM_SHIP_RETURN_OWMS |  |
+| SSP.SSP0060_GET_SHIPMENT_STATUS | MATCH | 2 | SP SSP0060_GET_SHIPMENT_STATUS | EXEC:SSP0060_GET_SHIPMENT_STATUS, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT |  |
+| SSP.SSP0060_GET_STOCK_LOCATION_DETAIL | MATCH | 1 | SP SSP0060_GET_STOCK_LOCATION_DETAIL | EXEC:SSP0060_GET_STOCK_LOCATION_DETAIL, REF:FN_GET_IN_STR, SELECT:SSP_MST_LOCATION_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_ITEM_NICKNAME, SELECT:SCM_MST_SLOC, SELECT:SSP_DNM_STOCK_C, SELECT:SCP_MST_FINAL_ITEM, SELECT:SSP_DNM_ESS_PACKER_STOCK_V, REF:FN_SCM_SPLIT, SELECT:SCM_MST_ITEM_SN |  |
+| SSP.SSP0060_SAVE_HOLD_STOCK_DATA | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| SSP.SSP0060_SAVE_SHIPMENT_PLAN | MATCH | 1 | SP SSP0060_SAVE_SHIPMENT_PLAN | EXEC:SSP0060_SAVE_SHIPMENT_PLAN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_SITE_ITEM_EE_V, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SSP_MST_PARTIAL_SEQ, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, SELECT:SCM_MST_SITE_CUSTOMER |  |
+| SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | MATCH | 2 | SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM | EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM, REF:FN_GET_SSP_ETA_DATE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, SELECT:SSP_MST_SEND_MAIL_REQ, INSERT:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_MST, REF:FN_MULTY_TIME, SELECT:SSP_PLAN_VERSION_V, SELECT:SCM_MST_SITE, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_MST_SITE_ITEM_EE_V, INSERT:SSP_ANL_SHIP_CONFIRM, INSERT:SSP_ANL_SHIP_CONFIRM_H, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, EXEC:PR_DM_SSP_CONFIRM_SYNC, EXEC:PR_SCP_SYS_LOG_BATCH, EXEC:PR_SSP_PLN_FP_SHIP_TARGET_WA, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_SYS_CALENDAR_M, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, INSERT:#TBLSSPADJUSTMAILSEND, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, REF:FN_GET_USER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER_EE, SELECT:#TBLSSPADJUSTMAILSEND, UPDATE:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_SUB, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_MST_SITE_CUSTOMER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT |  |
+| SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | MATCH | 3 | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING | EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST |  |
+| SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | MATCH | 2 | SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN | EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH |  |
+| SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | MATCH | 1 | SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK | EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| CalcPlanQty | dRow | DIVISION_ID, FROM_SITE, ITEM_ID, BOH_TYPE, MEASURE |
+| CalcPlanQty | dr | BOH_QTY |
+| CalculateSum | dr | measure |
+| cboPlanDate_SelectedIndexChanged | row | CODE |
+| cboPlanDate_SelectedIndexChanged | dr | FROM_DATE, TO_DATE1 |
+| chkERPIFBlockYn | dtERPBlockYnIF.Rows[0] | BLOCK_YN, PERIOD |
+| ChkERPIFBlockYn | dtERPBlockYnIF.Rows[0] | BLOCK_YN, PERIOD |
+| clbCompanyID_SelectedIndexChanged | UserInfoContext.Current | NowGroupID |
+| clbCompanyID_SelectedIndexChanged | c | CODE |
+| clbDivision_ID_SelectedIndexChanged | c | DIVISION_ID, CODE |
+| clbDivision_ID_SelectedIndexChanged | dtDiv_Company_ID.Rows[0] | NAME |
+| EditByChange | row | DIVISION_ID, FROM_SITE, ITEM_ID, TO_SITE, TRANSPORT_MODE, INCOTERMS, FCST_TYPE, YYYYMMDD |
+| EditByChange | drQty | QTY, NOEDIT_QTY |
+| GetErpIFCheck | ds.Tables[0].Rows[0] | result_code |
+| GetErpSoNoCnt | ds.Tables[0].Rows[0] | CNT |
+| GetFilteredDs | row | SEQ, DIVISION_ID, FROM_SITE, PRODUCT_LEVEL1, ORD_SEQ, ITEM_ID, TO_SITE, TRANSPORT_MODE, INCOTERMS, FCST_TYPE |
+| GetNERPCode | ds.Tables[0].Rows[0] | SEGMENT2 |
+| GetShipmentStatusChk | ds.Tables[0].Rows[iRow] | CONFIRM_ID |
+| GetShipmentStatusChk | ds.Tables[1].Rows[iRow] | CONFIRM_ID |
+| GetShipmentStatusChk | ds.Tables[2].Rows[iRow] | CONFIRM_ID |
+| InitControls | UserInfoContext.Current | NowGroupID |
+| InitControls | c | CODE, NAME |
+| InitControls | dtShipmentInputPeriod.Rows[0] | VALUE, Diff_VALUE |
+| InitControls | dtShipmentInputPeriod.Rows[1] | VALUE, Diff_VALUE |
+| InitSpread | Filter | GROUP_ID, USER_ID |
+| InitSpread | UserInfoContext.Current | NowGroupID |
+| Plan_Current_Check | Tmp_dtPlanDate.Rows[0] | CODE, NAME, FROM_DATE, TO_DATE1 |
+| SaveData | dsMain.Tables[1].Rows[0] | DIVISION_ID |
+| Set_SumValues | dsBinding.Tables[0].Columns | measure |
+| SetChangeControl | Filter | GROUP_ID, USER_ID |
+| SetChangeControl | UserInfoContext.Current | NowGroupID |
+| SetChangedControl | UserInfoContext.Current | NowGroupID |
+| SetChangedControl | c | DIVISION_ID |
+| SetChangedControl | dtMyCompany.Rows[0] | NAME |
+| SetChangeRequestInfo | dt.Rows[0] | CHANGE_REQ_NO, REQUEST_TITLE, REQUEST_USER, REQUEST_DEPT, APPROVAL_USER, CHANGE_REASON_CODE, CHANGE_REASON_DETAIL, APPROVAL_DEPT_NAME |
+| SetEndCustomer | dtEndCustomer.Rows[0] | CODE |
+| SetEndCustomer | drRow | CODE, NAME |
+| SetNote_Display | row | DIVISION_ID, FROM_SITE, ITEM_ID, TO_SITE, TRANSPORT_MODE, INCOTERMS, FCST_TYPE, YYYYMMDD |
+| SetNote_Display | drQty | NOTE |
+| Simulation | row | DIVISION_ID, FROM_SITE, ITEM_ID |
+| Simulation | dr | Container_Qty |
+| SpdDetail_ClipboardPasted | c | CODE |
+| Validation_Check | row | confirm_id |
+| Validation_Check | Validationdr | shipment_confirm_qty, shipment_date, TRANSPORT_MODE, remarks2, remarks |
+| Validation_Check | SONoValidationdr | shipment_confirm_qty, shipment_date, TRANSPORT_MODE, remarks2, remarks |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetSSPInnerTable | InitSpread:174, InitControls:171, SetChangeControl:366, SetChangeControl:371, SetChangeControl:376, SetChangeControl:381, SetChangeControl:386, SetChangeControl:391 | DataService.GetSSPInnerTable | CODE, COMPANY_ID, DEPT_ID, DIVISION_ID, END_CUSTOMER, LANGUAGE_CODE, NAME, PLANT_ID, SCM_SITE_ID |
+| SaveData | SaveButton:348, usrButtonList1_UsrButtonList_Click_Detected:1858 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| FP_Log2 | InitControls:429, InitControls:440 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| GetCheckedListValue | SetChangedControl:528, EditButton:2725, SaveData_Main:2943, SaveData_Main:2944, SaveData_Main:3008, SaveData_Detail:3118, SaveData_Detail:3422, FindData_Main:5256 | CString.GetCheckedListValue | CODE |
+| GetSpdTitle | InitSpread:626, cboPlanDate_SelectedIndexChanged:7254 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| SetSheetHeaderColumn | InitSpread:632, InitSpread:662, InitSpread:685, InitSpread:696, InitSpread:736, InitSpread:746, InitSpread:756 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| InitSpreadDateColumn | InitSpread:640, cboPlanDate_SelectedIndexChanged:7257 | SpreadInfo.InitSpreadDateColumn | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:171 |
+| this | Load | Form_Load | .ctor:123 |
+| this.usrButtonList1 | UsrButtonList_Click_Detected | usrButtonList1_UsrButtonList_Click_Detected | InitializeComponent:159 |
+| this.btnAutoSet | Click | btnAutoSet_Click | InitializeComponent:189 |
+| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:278 |
+| this.spdMain | Change | spdMain_Change | InitializeComponent:279 |
+| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:280 |
+| this | FormClosing | SSP0060_ShipmentPlanRequestPopup_FormClosing | InitializeComponent:341 |
+| this | Load | Form_Load | .ctor:140 |
+| this | Shown | SSP0060_ShipmentPlanRequestPopup_Shown | .ctor:141 |
+| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:910 |
+| this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:911 |
+| this | Load | Form_Load | .ctor:306 |
+| this | Shown | SSP0060_ShipmentPlan_Shown | .ctor:307 |
+| this.spdMain | TopChange | SpdMain_TopChange | InitEvent:955 |
+| this.spdDetail | TopChange | SpdDetail_TopChange | InitEvent:956 |
+| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:958 |
+| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitEvent:959 |
+| this.chkTotPSI | CheckedChanged | chkTotPSI_CheckedChanged | InitEvent:960 |
+| this.btnMeasure | Click | BtnMeasure_Click | InitEvent:961 |
+| this.btnItemId | Click | btnItemId_Click | InitEvent:962 |
+| this.btnItemID2 | Click | BtnItemID2_Click | InitEvent:963 |
+| this.btnSearch | Click | BtnSearch_Click | InitEvent:964 |
+| this.btnNew | Click | BtnNew_Click | InitEvent:965 |
+| this.btnRequestor | Click | BtnRequestor_Click | InitEvent:966 |
+| this.btnSimulation | Click | BtnSimulation_Click | InitEvent:967 |
+| this.spdDetail | SheetTabClick | SpdDetail_SheetTabClick | InitEvent:969 |
+| this.spdDetail | ActiveSheetChanged | SpdDetail_ActiveSheetChanged | InitEvent:970 |
+| this.spdDetail | CellClick | SpdDetail_CellClick | InitEvent:971 |
+| this.spdDetail | ComboSelChange | SpdDetail_ComboSelChange | InitEvent:972 |
+| this.spdDetail | CellDoubleClick | SpdDetail_CellDoubleClick | InitEvent:973 |
+| this.spdDetail | EditChange | SpdDetail_EditChange | InitEvent:974 |
+| this.spdDetail | ClipboardPasted | SpdDetail_ClipboardPasted | InitEvent:975 |
+| this.spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitEvent:977 |
+| this.spdMain | Change | SpdMain_Change | InitEvent:978 |
+| this.drpPeriod2 | ValueChanged | DrpPeriod2_ValueChanged | InitEvent:980 |
+| this.spdMain | ClipboardPasted | SpdMain_ClipboardPasted | InitEvent:982 |
+| clbDivision_ID | SelectedIndexChanged | clbDivision_ID_SelectedIndexChanged | InitEvent:984 |
+| clbCompany_ID | SelectedIndexChanged | clbCompanyID_SelectedIndexChanged | InitEvent:985 |
+| cboPlanDate | SelectedIndexChanged | cboPlanDate_SelectedIndexChanged | InitEvent:986 |
+| dsdm | Changed | shtDetail_Change | InitEvent:989 |
+| cboPlanDate | SelectedIndexChanged | cboPlanDate_SelectedIndexChanged | clbCompanyID_SelectedIndexChanged:7196 |
+| cboPlanDate | SelectedIndexChanged | cboPlanDate_SelectedIndexChanged | clbCompanyID_SelectedIndexChanged:7200 |
+
+## 6. 컨트롤 (110개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 35 | layoutControlItem6, layoutControlItem5, layoutControlItem4, layoutControlItem1, lcApproval, layoutControlItem9, layoutControlItem10, layoutControlItem3, lcChangeReason, lcReasonDetail, lcChgReq2, layoutControlItem7, layoutControlItem8, lblCombo1, lblItemId … |
+| EmptySpaceItem | 9 | emptySpaceItem1, emptySpaceItem6, emptySpaceItem2, emptySpaceItem6, emptySpaceItem3, emptySpaceItem1, emptySpaceItem4, emptySpaceItem2, emptySpaceItem5 |
+| UsrLayoutControl | 7 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl2, usrLayoutControl3 |
+| LayoutControlGroup | 7 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup2, layoutControlGroup3 |
+| UsrButton | 7 | usrButton1, btnSimulation, btnMeasure, btnItemId, btnRequestor, btnItemID2, btnNew |
+| TextBox | 6 | txtRequestNo, txtRequestor, txtRequestDeptName, txtApproval, txtAppDeptName, txtReasonDetail |
+| FpSpread | 4 | spdMain, spdMain, spdMain, spdDetail |
+| SheetView | 4 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdDetail_Sheet1 |
+| UsrCombo | 4 | clbCompany_ID, clbDivision_ID, cboPlanDate, cboBucketType |
+| UsrCheckedList | 4 | clbPlantSite, clbProductLevel11, clbResultType, clbProductLevel12 |
+| UsrConditionPanel | 3 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
+| UsrDateRangePicker | 3 | drpPeriod, drpPeriod2, drpPeriod3 |
+| UsrMultiLineEditor | 3 | txtItemId, txtModel2, txtBoxID |
+| UsrButtonList | 2 | btnButtonList, usrButtonList1 |
+| Splitter | 2 | splitter1, splitter1 |
+| SimpleButton | 2 | btnAutoSet, btnSearch |
+| UsrCheckBox | 2 | chkSum, chkTotPSI |
+| Panel | 1 | panel1 |
+| UsrLabel | 1 | usrLabel2 |
+| UsrComboBox | 1 | cboChangeReason |
+| SplitContainer | 1 | splitContainer1 |
+| UsrTextBox | 1 | txtRequestor |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (1건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+| 3460 | SaveData_Detail | SSP.SSP0060_SAVE_HOLD_STOCK_DATA | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 337 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL | 1 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL_H | 4 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL_H.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 196 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.SCM_MST_SHEET_MEASURE | 20 | dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv |
+| dbo.SCM_MST_TITLESET_USER | 140 | dbmeta_dbo_SCM_MST_TITLESET_USER.csv |
+| dbo.TB_FX_Favorite | 1 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 13 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+
+## 9. 주석/비활성 처리된 호출 (1건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 341 | SSP.SSP0046_GET_BUCKET_TYPE_CODE | commented:MATCH |
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Hold stock | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Hold stock Detail | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | MES Stock | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 | 9/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | MES Stock Detail | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | oWMS Detail | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Shipment Plan | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 | 13/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Shipment Plan Detail | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 | 44/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Shipment Result | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 |
+| SCM_MST_SHEET_COLUMNS | SSP0060 | Stock Location Detail | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 | 20/0 |
+| SCM_MST_SHEET_MEASURE | SSP0060 | Shipment Plan | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 | 14/6 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Request Info, Shipment Plan, Shipment Plan Detail, Stock Location Detail, oWMS Detail, MES Stock, MES Stock Detail, Shipment Result
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:632, SetSheetHeaderColumn@InitSpread:662, SetSheetHeaderColumn@InitSpread:685, SetSheetHeaderColumn@InitSpread:696, SetSheetHeaderColumn@InitSpread:736, SetSheetHeaderColumn@InitSpread:746, SetSheetHeaderColumn@InitSpread:756
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSpreadDateColumn, SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpread |  | 178 | 하드코딩 | AddTextColumn | A | {?CAppSetting.StringAction} | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 179 | 하드코딩 | AddTextColumn | change_req_no | CHANGE_REQ_NO | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 180 | 하드코딩 | AddTextColumn | Division ID | DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 181 | 하드코딩 | AddTextColumn | Confirm/Plan ID | CONFIRM_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 182 | 하드코딩 | AddTextColumn | SO No | ERP_SO_NO | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 183 | 하드코딩 | AddTextColumn | Project Name | PROJECT_NAME | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 184 | 하드코딩 | AddComboColumn | FCST Type | FCST_TYPE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 185 | 하드코딩 | AddTextColumn | Model | ITEM_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 186 | 하드코딩 | AddTextColumn | From Site | FROM_SITE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 187 | 하드코딩 | AddTextColumn | To Site | TO_SITE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 188 | 하드코딩 | AddTextColumn | Incoterms | INCOTERMS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 190 | 하드코딩 | AddTextColumn | L/T(Day) | LT_DAY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 191 | 하드코딩 | AddDateColumn | ETD | ETD | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 192 | 하드코딩 | AddDateColumn | ETA | ETA | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 193 | 하드코딩 | AddTextColumn | Trans Mode | TRANSPORT_MODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 194 | 하드코딩 | AddDateColumn | Shipment Date | SHIPMENT_DATE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 195 | 하드코딩 | AddNumColumn | Qty | SHIPMENT_CONFIRM_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 197 | 하드코딩 | AddTextColumn | L/T(Day) | NEW_LT_DAY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 198 | 하드코딩 | AddDateColumn | ETD | NEW_ETD | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 199 | 하드코딩 | AddDateColumn | ETA | NEW_ETA | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 200 | 하드코딩 | AddTextColumn | Trans Mode | NEW_TRANSPORT_MODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 201 | 하드코딩 | AddDateColumn | Shipment Date | NEW_SHIPMENT_DATE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 202 | 하드코딩 | AddNumColumn | Qty | NEW_SHIPMENT_CONFIRM_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 203 | 하드코딩 | AddNumColumn | Diff Qty | DIFF_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 205 | 하드코딩 | AddComboColumn | Change Reason | CHANGE_REASON_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 206 | 하드코딩 | AddTextColumn | Reason Detail | CHANGE_REASON_DETAIL | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 208 | 하드코딩 | AddTextColumn | NEW_BOD_ID | NEW_BOD_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 209 | 하드코딩 | AddTextColumn | NEW_ROUTE_ID | NEW_ROUTE_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 210 | 하드코딩 | AddTextColumn | NEW_D_COUNTRY | NEW_D_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 211 | 하드코딩 | AddTextColumn | NEW_D_PORT_CODE | NEW_D_PORT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 212 | 하드코딩 | AddTextColumn | NEW_A_COUNTRY | NEW_A_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 213 | 하드코딩 | AddTextColumn | NEW_A_PORT_CODE | NEW_A_PORT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 214 | 하드코딩 | AddTextColumn | NEW_TO_COUNTRY | NEW_TO_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 215 | 하드코딩 | AddTextColumn | NEW_TO_CITY | ELECTRODE_YN | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 216 | 하드코딩 | AddTextColumn | ELECTRODE_YN | NEW_TO_CITY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 217 | 하드코딩 | AddTextColumn | ELECTRODE_TYPE | ELECTRODE_TYPE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 218 | 하드코딩 | AddTextColumn | ORIGIN_FROM_DIVISION_ID | ORIGIN_FROM_DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 219 | 하드코딩 | AddTextColumn | ORIGIN_TO_DIVISION_ID | ORIGIN_TO_DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 220 | 하드코딩 | AddTextColumn | EDIT_REMARKS | EDIT_REMARKS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 221 | 하드코딩 | AddTextColumn | EDIT_MAIN | EDIT_MAIN | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 222 | 하드코딩 | AddTextColumn | REMARKS | REMARKS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 223 | 하드코딩 | AddTextColumn | REMARKS2 | REMARKS2 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 224 | 하드코딩 | AddTextColumn | REMARKS3 | REMARKS3 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 225 | 하드코딩 | AddTextColumn | PRODUCT_LEVEL1 | PRODUCT_LEVEL1 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 226 | 하드코딩 | AddTextColumn | NICK_NAME | NICK_NAME | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 227 | 하드코딩 | AddTextColumn | FROM_SITE_DESCRIPTION | FROM_SITE_DESCRIPTION | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 228 | 하드코딩 | AddTextColumn | TO_SITE_DESCRIPTION | TO_SITE_DESCRIPTION | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 229 | 하드코딩 | AddTextColumn | PROJECT_CODE | PROJECT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitializeComponent |  | 236 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 237 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 238 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 239 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+| InitSpread |  | 202 | 하드코딩 | AddTextColumn | A | {?CAppSetting.StringAction} | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 203 | 하드코딩 | AddTextColumn | change_req_no | CHANGE_REQ_NO | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 204 | 하드코딩 | AddTextColumn | Division ID | DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 205 | 하드코딩 | AddTextColumn | New YN | NEW_YN | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 206 | 하드코딩 | AddTextColumn | Confirm/Plan ID | CONFIRM_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 207 | 하드코딩 | AddTextColumn | SO No | ERP_SO_NO | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 208 | 하드코딩 | AddTextColumn | Project Name | PROJECT_NAME | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 209 | 하드코딩 | AddComboColumn | FCST Type | FCST_TYPE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 210 | 하드코딩 | AddTextColumn | Model | ITEM_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 211 | 하드코딩 | AddTextColumn | From Site | FROM_SITE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 212 | 하드코딩 | AddTextColumn | To Site | TO_SITE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 213 | 하드코딩 | AddTextColumn | Incoterms | INCOTERMS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 215 | 하드코딩 | AddTextColumn | L/T(Day) | LT_DAY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 216 | 하드코딩 | AddDateColumn | ETD | ETD | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 217 | 하드코딩 | AddDateColumn | ETA | ETA | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 218 | 하드코딩 | AddTextColumn | Trans Mode | TRANSPORT_MODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 219 | 하드코딩 | AddDateColumn | Shipment Date | SHIPMENT_DATE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 220 | 하드코딩 | AddNumColumn | Qty | SHIPMENT_CONFIRM_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 222 | 하드코딩 | AddTextColumn | L/T(Day) | NEW_LT_DAY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 223 | 하드코딩 | AddDateColumn | ETD | NEW_ETD | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 224 | 하드코딩 | AddDateColumn | ETA | NEW_ETA | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 225 | 하드코딩 | AddTextColumn | Trans Mode | NEW_TRANSPORT_MODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 226 | 하드코딩 | AddDateColumn | Shipment Date | NEW_SHIPMENT_DATE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 227 | 하드코딩 | AddNumColumn | Qty | NEW_SHIPMENT_CONFIRM_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 228 | 하드코딩 | AddNumColumn | Diff Qty | DIFF_QTY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 230 | 하드코딩 | AddComboColumn | Change Reason | CHANGE_REASON_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 231 | 하드코딩 | AddTextColumn | Reason Detail | CHANGE_REASON_DETAIL | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 233 | 하드코딩 | AddTextColumn | NEW_BOD_ID | NEW_BOD_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 234 | 하드코딩 | AddTextColumn | NEW_ROUTE_ID | NEW_ROUTE_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 235 | 하드코딩 | AddTextColumn | NEW_D_COUNTRY | NEW_D_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 236 | 하드코딩 | AddTextColumn | NEW_D_PORT_CODE | NEW_D_PORT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 237 | 하드코딩 | AddTextColumn | NEW_A_COUNTRY | NEW_A_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 238 | 하드코딩 | AddTextColumn | NEW_A_PORT_CODE | NEW_A_PORT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 239 | 하드코딩 | AddTextColumn | NEW_TO_COUNTRY | NEW_TO_COUNTRY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 240 | 하드코딩 | AddTextColumn | NEW_TO_CITY | ELECTRODE_YN | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 241 | 하드코딩 | AddTextColumn | ELECTRODE_YN | NEW_TO_CITY | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 242 | 하드코딩 | AddTextColumn | ELECTRODE_TYPE | ELECTRODE_TYPE | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 243 | 하드코딩 | AddTextColumn | ORIGIN_FROM_DIVISION_ID | ORIGIN_FROM_DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 244 | 하드코딩 | AddTextColumn | ORIGIN_TO_DIVISION_ID | ORIGIN_TO_DIVISION_ID | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 245 | 하드코딩 | AddTextColumn | EDIT_REMARKS | EDIT_REMARKS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 246 | 하드코딩 | AddTextColumn | EDIT_MAIN | EDIT_MAIN | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 247 | 하드코딩 | AddTextColumn | REMARKS | REMARKS | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 248 | 하드코딩 | AddTextColumn | REMARKS2 | REMARKS2 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 249 | 하드코딩 | AddTextColumn | REMARKS3 | REMARKS3 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 250 | 하드코딩 | AddTextColumn | PRODUCT_LEVEL1 | PRODUCT_LEVEL1 | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 251 | 하드코딩 | AddTextColumn | NICK_NAME | NICK_NAME | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 252 | 하드코딩 | AddTextColumn | FROM_SITE_DESCRIPTION | FROM_SITE_DESCRIPTION | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 253 | 하드코딩 | AddTextColumn | TO_SITE_DESCRIPTION | TO_SITE_DESCRIPTION | if(spreadInfo.SheetName == "Request Info") |
+| InitSpread |  | 254 | 하드코딩 | AddTextColumn | PROJECT_CODE | PROJECT_CODE | if(spreadInfo.SheetName == "Request Info") |
+| InitializeComponent |  | 296 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 297 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  
+… (truncated, 11026 chars more — 전체는 Fact Pack CSV 참조)
+
+### FILE endpoints.csv (55 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs","SSP0060_ShipmentPlanConfirmDetailPopup","<field:dtFcstType>","37","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs","SSP0060_ShipmentPlanConfirmDetailPopup","FindDataMain","312","ctor","fox","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","<field:dtFcstType>","41","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","FindData_Main","371","ctor","fox","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","SaveData","584","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM, REF:FN_GET_SSP_ETA_DATE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, SELECT:SSP_MST_SEND_MAIL_REQ, INSERT:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_MST, REF:FN_MULTY_TIME, SELECT:SSP_PLAN_VERSION_V, SELECT:SCM_MST_SITE, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_MST_SITE_ITEM_EE_V, INSERT:SSP_ANL_SHIP_CONFIRM, INSERT:SSP_ANL_SHIP_CONFIRM_H, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, EXEC:PR_DM_SSP_CONFIRM_SYNC, EXEC:PR_SCP_SYS_LOG_BATCH, EXEC:PR_SSP_PLN_FP_SHIP_TARGET_WA, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_SYS_CALENDAR_M, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, INSERT:#TBLSSPADJUSTMAILSEND, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, REF:FN_GET_USER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER_EE, SELECT:#TBLSSPADJUSTMAILSEND, UPDATE:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_SUB, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_MST_SITE_CUSTOMER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","ChkEngProcessing","716","ctor","fox","SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK","SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK","MATCH","SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK","EXEC:SSP0003_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheck","842","ctor","fox","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","MATCH","SP SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","EXEC:SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, REF:FN_ZERO_LPAD, INSERT:XIF_ERP_PACK_SHIP_PLAN_S_SN, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_MKT_OWNER_NAME, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER, SELECT:TB_FX_USER, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetERPInterface","1044","ctor","fox","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","MATCH","SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","EXEC:SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_ANL_SHIP_ERP_ERROR_CONFIRM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetERPInterface","1072","ctor","fox","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","SoNo","1181","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","SoNo","1253","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","NonSoNo","1385","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","NonSoNo","1408","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1525","ctor","fox","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1551","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1582","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1642","ctor","fox","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1668","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpIFCheckNew","1699","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","ChkConfirmChangeTime","1731","ctor","fox","SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE","SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE","MATCH","SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE","EXEC:SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetErpSoNoCnt","1759","ctor","fox","SSP.SSP0060_GET_ERP_SO_NO_CNT","SSP.SSP0060_GET_ERP_SO_NO_CNT","MATCH","SP SSP0060_GET_ERP_SO_NO_CNT","EXEC:SSP0060_GET_ERP_SO_NO_CNT, SELECT:SSP_ANL_SHIP_CONFIRM","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","GetShipmentStatusChk","1784","ctor","fox","SSP.SSP0060_GET_SHIPMENT_STATUS","SSP.SSP0060_GET_SHIPMENT_STATUS","MATCH","SP SSP0060_GET_SHIPMENT_STATUS","EXEC:SSP0060_GET_SHIPMENT_STATUS, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SetChangedControl","514","ctor","fox","SSP.SSP0060_GET_SHIPMENT_DIVISION","SSP.SSP0060_GET_SHIPMENT_DIVISION","MATCH","SP SSP0060_GET_SHIPMENT_DIVISION","EXEC:SSP0060_GET_SHIPMENT_DIVISION, REF:FN_GET_LOOKUP_VALUE, INSERT:#RETURNTABLE, SELECT:SCM_MST_DIVISION, SELECT:TB_FX_USERGROUPAUTHEXTENTION, SELECT:SCM_MST_SITE, SELECT:#RETURNTABLE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_CODE_LOOKUP_VALUE","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SpdDetail_EditChange","1380","derived","biz","CommonData.CommonDataList [code=TransMode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.TransMode:Type.TransMode] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SpdDetail_EditChange","1389","derived","biz","CommonData.CommonDataList [code=TransMode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.TransMode:Type.TransMode] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SpdDetail_CellClick","1987","derived","biz","CommonData.CommonDataList [code=TransMode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.TransMode:Type.TransMode] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SaveData_Main","3029","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_PLAN","SSP.SSP0060_SAVE_SHIPMENT_PLAN","MATCH","SP SSP0060_SAVE_SHIPMENT_PLAN","EXEC:SSP0060_SAVE_SHIPMENT_PLAN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_SITE_ITEM_EE_V, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SSP_MST_PARTIAL_SEQ, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, SELECT:SCM_MST_SITE_CUSTOMER","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SaveData_Detail","3286","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM, REF:FN_GET_SSP_ETA_DATE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, SELECT:SSP_MST_SEND_MAIL_REQ, INSERT:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_MST, REF:FN_MULTY_TIME, SELECT:SSP_PLAN_VERSION_V, SELECT:SCM_MST_SITE, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_MST_SITE_ITEM_EE_V, INSERT:SSP_ANL_SHIP_CONFIRM, INSERT:SSP_ANL_SHIP_CONFIRM_H, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, EXEC:PR_DM_SSP_CONFIRM_SYNC, EXEC:PR_SCP_SYS_LOG_BATCH, EXEC:PR_SSP_PLN_FP_SHIP_TARGET_WA, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_SYS_CALENDAR_M, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, INSERT:#TBLSSPADJUSTMAILSEND, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, REF:FN_GET_USER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER_EE, SELECT:#TBLSSPADJUSTMAILSEND, UPDATE:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_SUB, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_MST_SITE_CUSTOMER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SaveData_Detail","3460","ctor","fox","SSP.SSP0060_SAVE_HOLD_STOCK_DATA","SSP.SSP0060_SAVE_HOLD_STOCK_DATA","NOT_IN_FOXQUERY","","","","SP 직접호출 또는 미등록 — DB 단계에서 확인"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetERPInterface","3990","ctor","fox","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","MATCH","SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","EXEC:SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_ANL_SHIP_ERP_ERROR_CONFIRM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetERPInterface","4031","ctor","fox","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","NonSoNo","4159","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","SoNo","4380","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpSoNoCnt","4481","ctor","fox","SSP.SSP0060_GET_ERP_SO_NO_CNT","SSP.SSP0060_GET_ERP_SO_NO_CNT","MATCH","SP SSP0060_GET_ERP_SO_NO_CNT","EXEC:SSP0060_GET_ERP_SO_NO_CNT, SELECT:SSP_ANL_SHIP_CONFIRM","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetShipmentStatusChk","4506","ctor","fox","SSP.SSP0060_GET_SHIPMENT_STATUS","SSP.SSP0060_GET_SHIPMENT_STATUS","MATCH","SP SSP0060_GET_SHIPMENT_STATUS","EXEC:SSP0060_GET_SHIPMENT_STATUS, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpIFCheck","4579","ctor","fox","SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","MATCH","SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","EXEC:SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpIFCheckNew","4657","ctor","fox","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpIFCheckNew","4683","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpIFCheckNew","4713","ctor","fox","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","NewNonSoNo","4928","ctor","fox","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_SSP_ETA_DATE, INSERT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_SYS_CALENDAR_M, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetErpIFCheckNew_","5042","ctor","fox","SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","SSP.SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","MATCH","SP SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING","EXEC:SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetBucketType","5206","ctor","fox","DM.DM0003_GET_BUCKET_TYPE_CODE","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_Main","5287","ctor","fox","SSP.SSP0060_GET_SHIPMENT_PLAN","SSP.SSP0060_GET_SHIPMENT_PLAN","MATCH","SP SSP0060_GET_SHIPMENT_PLAN","EXEC:SSP0060_GET_SHIPMENT_PLAN, SELECT:SCM_MST_TITLESET_USER, INSERT:#TBLDYNAMICTITLEST_SSP0060, CREATE:#TMP_RESULT_TABLE, CREATE:#TMP_RESULT_DETAIL_TABLE, INSERT:#TMP_BOHDATA_STORAGE, SELECT:SSP_DNM_GMES_STOCK_81_82, REF:STRING_SPLIT, SELECT:SSP_ANL_OWMS_STOCK_C2, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:MST_STOCK, SELECT:MST_LOCATION, SELECT:PACKER_STOCK, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_FINAL_ITEM, SELECT:SSP_DNM_STOCK_C, SELECT:SSP_DNM_ESS_PACKER_STOCK_V, SELECT:SSP_MST_LOCATION_V, INSERT:#TMP_BOHDATA, SELECT:#TMP_BOHDATA_STORAGE, INSERT:#TMP_SHIPMENT_RESULT, SELECT:SCM_DNM_EXFACTORY_RESULT, INSERT:#TMP_ROWDATA, REF:FN_GET_ANL_SHIP_FROZEN_DAY_CNT, SELECT:DM_PLN_SHIPMENT_REQ, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:#TMP_SHIPMENT_RESULT, SELECT:SSP_DNM_FP_PLAN_FROZEN, SELECT:SCP_ANL_PRODUCTION_PLAN, SELECT:SCP_PLAN_VERSION_V, REF:FN_GET_SSP_ETA_DATE, REF:UF_FX_STRING_SPLIT, SELECT:SSP_DNM_FP_AMEND_SHIPAVAL, UPDATE:#TMP_ROWDATA, INSERT:#TMP_RESULT_TABLE, SELECT:#TMP_ROWDATA, SELECT:SCM_MST_SHEET_MEASURE, SELECT:SCM_SYS_CALENDAR_M, INSERT:#TMP_RESULT_DETAIL_TABLE, SELECT:SCP_MST_SHIPMENT_LOT_SIZE, SELECT:SSP_ANL_SHIP_PLAN_C, SELECT:#TMP_RESULT_TABLE, SELECT:SCM_DNM_CELL_INHOUSE_PLAN_SN, SELECT:#TMP_RESULT_DETAIL_TABLE, SELECT:#TMP_BOHDATA, INSERT:#TMP_RESULT_PIVOT_TABLE, DYNAMIC@SSP0060_GET_SHIPMENT_PLAN, INSERT:#TMP_RESULT_PIVOT_TABLE_OLD, DELETE:#TMP_RESULT_PIVOT_TABLE_OLD, SELECT:#TMP_RESULT_PIVOT_TABLE_OLD, EXEC:SSP0060_GET_SHIPMENT_PSI_COMMENTS, SELECT:SCP_MST_BOD_N_V","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_Detail","5656","ctor","fox","SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL","SSP.SSP0060_GET_SHIPMENT_PLAN_DETAIL","MATCH","SP SSP0060_GET_SHIPMENT_PLAN_DETAIL","EXEC:SSP0060_GET_SHIPMENT_PLAN_DETAIL, REF:FN_GET_IN_STR, DYNAMIC@SSP0060_GET_SHIPMENT_PLAN_DETAIL, REF:FN_SCM_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_Stock_Detail","5781","ctor","fox","SSP.SSP0060_GET_STOCK_LOCATION_DETAIL","SSP.SSP0060_GET_STOCK_LOCATION_DETAIL","MATCH","SP SSP0060_GET_STOCK_LOCATION_DETAIL","EXEC:SSP0060_GET_STOCK_LOCATION_DETAIL, REF:FN_GET_IN_STR, SELECT:SSP_MST_LOCATION_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_ITEM_NICKNAME, SELECT:SCM_MST_SLOC, SELECT:SSP_DNM_STOCK_C, SELECT:SCP_MST_FINAL_ITEM, SELECT:SSP_DNM_ESS_PACKER_STOCK_V, REF:FN_SCM_SPLIT, SELECT:SCM_MST_ITEM_SN","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_oWMS_Detail","5882","ctor","fox","SSP.SSP0060_GET_OWMS_DETAIL","SSP.SSP0060_GET_OWMS_DETAIL","MATCH","SP SSP0060_GET_OWMS_DETAIL","EXEC:SSP0060_GET_OWMS_DETAIL, REF:FN_GET_IN_STR, REF:FN_GET_ITEM_NICKNAME, SELECT:SSP_ANL_OWMS_STOCK_C2, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_SLOC, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT, SELECT:SCM_MST_ITEM_SN","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_Shipment_Result","5977","ctor","fox","SSP.SSP0060_GET_SHIPMENT_RESULT","SSP.SSP0060_GET_SHIPMENT_RESULT","MATCH","SP SSP0060_GET_SHIPMENT_RESULT","EXEC:SSP0060_GET_SHIPMENT_RESULT, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:PLAN_SSP, SELECT:RESULT_OWMS, SELECT:RETURN_OWMS, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, SELECT:SSP_MST_DELEGATE, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCM_MST_ITEM_SN, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_ANL_SHIP_PLAN_ALL, SELECT:SSP_DNM_SHIP_RESULT_OWMS, SELECT:SSP_DNM_SHIP_RETURN_OWMS","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_Shipment_Result","6117","ctor","fox","SSP.SSP0060_GET_SHIPMENT_RESULT","SSP.SSP0060_GET_SHIPMENT_RESULT","MATCH","SP SSP0060_GET_SHIPMENT_RESULT","EXEC:SSP0060_GET_SHIPMENT_RESULT, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, SELECT:RESULT_ERP_C_EXIST, SELECT:RESULT_ERP_C_NON, SELECT:PLAN_SSP, SELECT:RESULT_OWMS, SELECT:RETURN_OWMS, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, SELECT:SSP_MST_DELEGATE, SELECT:SCM_DNM_EXFACTORY_RESULT, SELECT:SCM_MST_ITEM_SN, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_ANL_SHIP_PLAN_ALL, SELECT:SSP_DNM_SHIP_RESULT_OWMS, SELECT:SSP_DNM_SHIP_RETURN_OWMS","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_hold_stock","6225","ctor","fox","SSP.SSP0060_GET_HOLD_STOCK","SSP.SSP0060_GET_HOLD_STOCK","MATCH","SP SSP0060_GET_HOLD_STOCK","EXEC:SSP0060_GET_HOLD_STOCK, REF:FN_GET_IN_STR, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_ITEM_NICKNAME, REF:FN_CHAR_TO_DATE, SELECT:SSP_ANL_HOLD_STOCK, SELECT:TB_FX_USER, SELECT:SSP_MST_MODEL_USER, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT, SELECT:SCM_MST_SITE, SELECT:SCM_MST_ITEM_SN","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_MES_stock","6328","ctor","fox","SSP.SSP0060_GET_MES_STOCK","SSP.SSP0060_GET_MES_STOCK","MATCH","SP SSP0060_GET_MES_STOCK","EXEC:SSP0060_GET_MES_STOCK, REF:FN_GET_IN_STR, SELECT:SSP_DNM_GMES_STOCK_81_82, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","FindData_MES_stock_Detail","6432","ctor","fox","SSP.SSP0060_GET_MES_STOCK_DETAIL","SSP.SSP0060_GET_MES_STOCK_DETAIL","MATCH","SP SSP0060_GET_MES_STOCK_DETAIL","EXEC:SSP0060_GET_MES_STOCK_DETAIL, REF:FN_GET_IN_STR, SELECT:SSP_DNM_GMES_STOCK_81_82, SELECT:SCP_MST_FINAL_ITEM, REF:STRING_SPLIT, REF:FN_SCM_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetNERPCode","7149","ctor","fox","SSP.SSP0002_GET_NERP_CODE","SSP.SSP0002_GET_NERP_CODE","MATCH","SP SSP0002_GET_NERP_CODE","EXEC:SSP0002_GET_NERP_CODE, SELECT:SCM_CODE_LOOKUP_VALUE","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetSpdTitle","7449","ctor","fox","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","ChkConfirmChangeTime","7962","ctor","fox","SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME","SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME","MATCH","SP SCM_SSP_CHECK_CONFIRM_CHANGETIME","EXEC:SCM_SSP_CHECK_CONFIRM_CHANGETIME, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0060_ShipmentPlan.cs","SSP0060_ShipmentPlan","GetSSPUserCheck","8017","ctor","fox","SSP.SSP0002_GET_USER_INFO_LIST","SSP.SSP0002_GET_USER_INFO_LIST","MATCH","SP SSP0002_GET_USER_INFO_LIST","EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION","",""
+```
+
+### FILE flow.csv (93 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs","SSP0060_ShipmentPlanConfirmDetailPopup","event","this.Load","Form_Load > FindDataMain","FindDataMain","312","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs","SSP0060_ShipmentPlanConfirmDetailPopup","button","FindButton","FindButton > FindDataMain","FindDataMain","312","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanConfirmDetailPopup.cs","SSP0060_ShipmentPlanConfirmDetailPopup","unreached","(진입점 미연결)","<field:dtFcstType>","<field:dtFcstType>","37","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData","SaveData","584","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM, REF:FN_GET_SSP_ETA_DATE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, SELECT:SSP_MST_SEND_MAIL_REQ, INSERT:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_MST, REF:FN_MULTY_TIME, SELECT:SSP_PLAN_VERSION_V, SELECT:SCM_MST_SITE, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_MST_SITE_ITEM_EE_V, INSERT:SSP_ANL_SHIP_CONFIRM, INSERT:SSP_ANL_SHIP_CONFIRM_H, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, EXEC:PR_DM_SSP_CONFIRM_SYNC, EXEC:PR_SCP_SYS_LOG_BATCH, EXEC:PR_SSP_PLN_FP_SHIP_TARGET_WA, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_SYS_CALENDAR_M, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, INSERT:#TBLSSPADJUSTMAILSEND, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, REF:FN_GET_USER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER_EE, SELECT:#TBLSSPADJUSTMAILSEND, UPDATE:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_SUB, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_MST_SITE_CUSTOMER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface","GetERPInterface","1044","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","MATCH","SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","EXEC:SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_ANL_SHIP_ERP_ERROR_CONFIRM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface","GetERPInterface","1072","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo","SoNo","1181","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo","SoNo","1253","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1525","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1551","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1582","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1642","SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","MATCH","SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM","EXEC:SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM, CREATE:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, DELETE:SSP_ANL_SHIP_CONFIRM, INSERT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:#TMP_XIF_ERP_SHIP_PLAN_CONFIRM_S_1106, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1668","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > SoNo > GetErpIFCheckNew","GetErpIFCheckNew","1699","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > NonSoNo","NonSoNo","1385","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > NonSoNo","NonSoNo","1408","SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","MATCH","SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C","EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW_C, EXEC:PR_SCP_SYS_LOG_BATCH, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, REF:FN_GET_SSP_VMI_YN, REF:FN_GET_SSP_MKT_FCST_INCOTERMS, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:NERP_CONV_MASTER, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:DM_PLN_MKT_FCST"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > ChkConfirmChangeTime","ChkConfirmChangeTime","1731","SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE","MATCH","SP SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE","EXEC:SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SSP_ANL_SHIP_CONFIRM, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > GetErpSoNoCnt","GetErpSoNoCnt","1759","SSP.SSP0060_GET_ERP_SO_NO_CNT","MATCH","SP SSP0060_GET_ERP_SO_NO_CNT","EXEC:SSP0060_GET_ERP_SO_NO_CNT, SELECT:SSP_ANL_SHIP_CONFIRM"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > GetERPInterface > GetShipmentStatusChk","GetShipmentStatusChk","1784","SSP.SSP0060_GET_SHIPMENT_STATUS","MATCH","SP SSP0060_GET_SHIPMENT_STATUS","EXEC:SSP0060_GET_SHIPMENT_STATUS, SELECT:SSP_ANL_SHIP_CONFIRM, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.usrButtonList1.UsrButtonList_Click_Detected","usrButtonList1_UsrButtonList_Click_Detected > SaveData > ChkEngProcessing","ChkEngProcessing","716","SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK","MATCH","SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK","EXEC:SSP0003_GET_SSP_PLAN_PROCESSING_CHECK, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_PLAN_DETAIL"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","event","this.Load","Form_Load > FindData_Main","FindData_Main","371","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","button","FindButton","FindButton > FindData_Main","FindData_Main","371","SSP.SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","MATCH","SP SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","EXEC:SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, REF:FN_GET_PROJECT_NAME, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SCP_MST_BOD_N_V, SELECT:SSP_ANL_SHIP_CONFIRM, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_USER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_PROJECT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SITE, SELECT:SCM_MST_CUSTOMER, SELECT:SCM_MST_SITE_CUSTOMER"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","button","SaveButton","SaveButton > SaveData","SaveData","584","SSP.SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","MATCH","SP SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM","EXEC:SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_MST_BOD_N_V, SELECT:SCP_MST_BOD_ITEM, UPDATE:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, SELECT:SSP_ANL_SHIP_CONFIRM, REF:FN_GET_SSP_ETA_DATE, UPDATE:SSP_ANL_SHIP_CONFIRM, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE, EXEC:PR_SSP_ANL_SHIP_CONFIRM_HIST, EXEC:PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS, SELECT:SSP_MST_SEND_MAIL_REQ, INSERT:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_MST, REF:FN_MULTY_TIME, SELECT:SSP_PLAN_VERSION_V, SELECT:SCM_MST_SITE, REF:FN_GET_SSP_SITE_INFO, REF:FN_GET_SSP_SITE_INFO_EXCEPTION, SELECT:SSP_MST_SITE_ITEM_EE_V, INSERT:SSP_ANL_SHIP_CONFIRM, INSERT:SSP_ANL_SHIP_CONFIRM_H, INSERT:XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCM_MST_DIVISION, SELECT:NERP_CONV_MASTER, EXEC:PR_DM_SSP_CONFIRM_SYNC, EXEC:PR_SCP_SYS_LOG_BATCH, EXEC:PR_SSP_PLN_FP_SHIP_TARGET_WA, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_SYS_CALENDAR_M, SELECT:SSP_ANL_SHIP_CONFIRM_CHG_REQ, INSERT:XIF_SCS_PACK_SHIP_PLAN_S_SN, REF:FN_ZERO_LPAD, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_SITE_CUSTOMER_INFO, SELECT:SCM_MST_PROJECT, INSERT:#TBLSSPADJUSTMAILSEND, REF:FN_GET_SCM_SITE_DESCRIPTION, REF:FN_GET_SSP_MKT_OWNER_NAME, REF:FN_GET_USER_NAME, SELECT:SCM_MST_SITE_ITEM, SELECT:SSP_MST_MODEL_USER_EE, SELECT:#TBLSSPADJUSTMAILSEND, UPDATE:SSP_MST_SEND_MAIL_REQ, EXEC:PR_SSP_MAIL_SEND_ADJUST_SUB, EXEC:SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_MST_SITE_CUSTOMER, EXEC:PR_SSP_ANL_SHIP_CONFIRM_ROUTE, REF:UF_FX_STRING_SPLIT, REF:FN_NEXT_DAY, CREATE:#T_CONFIRM_ID, CREATE:#T_SSP, CREATE:#T_SSP_SUM, CREATE:#T_MKT_RESULT, CREATE:#T_MKT_RESULT_SUM, CREATE:#TEMP_SALES_RESULT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0060_ShipmentPlanRequestPopup.cs","SSP0060_ShipmentPlanRequestPopup","button","SaveButton","SaveButton > SaveData > GetERPInterface","GetERPInterface","1044","SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","MATCH","SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM","EXEC:SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_ANL_SHIP_ERP_ERROR_CONFIRM, UPDATE:SSP_
+… (truncated, 161415 chars more — 전체는 Fact Pack CSV 참조)

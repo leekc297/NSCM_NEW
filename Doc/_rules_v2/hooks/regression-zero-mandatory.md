@@ -7,7 +7,7 @@
 
 ## 0. 원칙 (불변)
 
-1. **자기 작업 = 0 error**: 작성한 모든 파일 `pnpm type-check` + `pnpm lint:fix` 0 error / 0 warning (의도적 lint disable 시 주석 사유 + 메모리 entry).
+1. **자기 작업 = 0 error**: 작성한 모든 파일 `pnpm type-check` + `pnpm lint:fix` 0 error / 0 warning (의도적 lint disable 시 주석 사유 + 메모리 entry). (2026-11-13 정정: 0 error 기준은 유지 — 단 AI 는 `pnpm`/`eslint` 를 로컬에서 직접 실행하지 않는다(실행 hook `block-dev-commands` 차단). 변경 파일 목록을 보고하고 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`(type-check | lint | all) 사용 · 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 보고)
 2. **타 화면 영향 = 0**: 신규 작업은 자기 화면 폴더 + 자기 도메인 메타 (admin SQL) 외 **절대 다른 파일을 수정하지 않는다**. 공용 인프라 수정 = 분리 PR + 다른 화면 regression 0 검증.
 3. **사고 카탈로그 우선**: 본 hook §2 의 18 반복 패턴은 과거 실 사고로 발생한 것 — 작성 직전 의무 점검.
 
@@ -21,7 +21,7 @@
 |---|---|
 | `nscm-fe/features/{domain}/src/pages/{my-screen}/` | 신규 화면 폴더 전체 |
 | `nscm-fe/apps/web/src/core/Router.tsx` | 라우팅 추가 1 entry |
-| `nscm-fe/apps/web/src/lazy-loaders/...` | LazyLoader 1 entry |
+| `nscm-fe/apps/web/src/lazy-loaders/...` | LazyLoader 1 entry (2026-11-13 정정: `lazy-loaders/` 폴더는 현재 저장소에 없음 — 실재 = `nscm-fe/apps/web/src/core/LazyLoader.tsx`. 화면 모듈은 `apps/web/src/mdi/viewRegistry.tsx` 가 `features/*/src/pages/*/index.ts` 를 자동 수집하므로 entry 추가 불필요) |
 | `nscm-fe/configs/types/procedures.d.ts` | SHEETS 유니온 자기 화면 항목 |
 | `_artifacts/_deploy_packages/{MENU_ID}/` | DB 메타 SQL |
 | `Doc/_analysis/...` 자기 화면 분석 자료 | 분석 산출물 |
@@ -32,11 +32,11 @@
 |---|---|
 | **`nscm-fe/packages/shared/**`** | 전역 공용 — 1 화면 fix 가 모든 화면 regression. `feedback_shared_global_prop_change_forbidden.md` (#17 DataGrid `autoGenerateColumns={false}` 전역 사고) |
 | **`nscm-fe/packages/foundation/**`** | FE 인프라 — 동일 |
-| **`nscm-fe/packages/lges/**`** | 디자인 시스템 — 동일 |
+| **`nscm-fe/packages/lges/**`** | 디자인 시스템 — 동일 (2026-11-13 정정: `packages/lges/` 폴더는 현재 저장소에 없음 — `packages` 아래는 `foundation`·`shared` 뿐이고 `@shared/lges` 는 `packages/shared/src/lib/lges.ts` 이므로 위 `packages/shared/**` 금지에 포함) |
 | **`nscm-fe/features/{other-domain}/**`** | 타 도메인 화면 — 본인 화면 작업과 무관 |
 | **`nscm-fe/features/{same-domain}/src/pages/{other-screen}/**`** | 같은 도메인 다른 화면도 절대 금지 |
 | **`nscm-fe/features/{domain}/src/components/**`** (공용 인벤토리) | feature 도메인 공용 — 변경 시 도메인 내 다른 화면 regression. **단** 신규 prop 추가 (default = 기존 보존) 만 허용 + 분리 PR |
-| **`nscm-be/**`** | BE 변경 금지 (메모리 `feedback_be_no_modification_rule.md`) — fix 는 SP / admin 메타 / FE 측 한정 |
+| **`nscm-be/**`** | BE 변경 금지 (메모리 `feedback_be_no_modification_rule.md`) — fix 는 SP / admin 메타 / FE 측 한정 (2026-11-13 정정: FE·BE 직접 수정 여부는 작업 모드 `tools/Harness/harness.json` repairScope 를 따른다 — UI/DB MODE(DB_FE) = FE·BE 직접 수정 / DB MODE(DB_ONLY) = FE·BE 모두 가이드만(실행 hook `check-work-mode`) · 보완은 DB 객체 우선, CLAUDE.md §1-8) |
 | `Doc/_rules_v2/anti-simplification.md` | 룰 최상위 불변 |
 
 ### 1.3 ⚠️ 변경 시 PR 분리 + 다른 화면 regression cross-check 의무
@@ -94,7 +94,7 @@
 [ ] 1. 작성하려는 파일이 §1.1 (변경 가능) 안에 있는가? §1.2 (금지) 면 작업 재설계
 [ ] 2. shared/foundation/lges 공용 컴포넌트는 읽기만? 변경 시 §1.3 분리 PR
 [ ] 3. 같은 도메인 다른 화면 폴더는 절대 건드리지 않는가?
-[ ] 4. nscm-be/** 변경 0 — fix 는 SP / admin 메타 / FE 한정?
+[ ] 4. nscm-be/** 변경 0 — fix 는 SP / admin 메타 / FE 한정? (11-13 정정: FE·BE 직접 수정 여부 = 작업 모드 repairScope — §1.2)
 ```
 
 ### 3.2 사고 카탈로그 점검 (5~22)
@@ -181,6 +181,7 @@ git diff --name-only main...HEAD | \
 ```bash
 pnpm type-check   # 0 error
 pnpm lint:fix     # 0 error / 0 warning
+# (11-13 정정) AI 직접 실행 금지(block-dev-commands 차단 · §9.3 클라우드 실행) — 사용자 요청 시 _artifacts/_tools/fe-check.ps1, 미실행이면 미실행(ERROR) 보고
 # 의도적 lint disable 시: 주석 + 메모리 entry 작성 의무
 ```
 
@@ -197,7 +198,7 @@ DataGrid / SearchArea / SubTitle / MainTitle / ColumnSettingModal 등 공용 컴
 3. **다른 화면 regression cross-check** (최소 4 도메인 1 화면씩):
    - admin: `user-management` 또는 `menu`
    - authority: `auth-request`
-   - demand: `mkt_forecast` (DMF0003)
+   - demand: `mkt-fcst` (DMF0003) (2026-11-13 정정: `mkt_forecast` → 실제 폴더 `mkt-fcst`)
    - master: `sales-site` (DMF0004) + `contribute-main` (DMF0043) + `contribute-view` (DMF0043_01)
    - 각 화면 진입 → grid 표시 → 검색 → CRUD 동작 검증 보고서 첨부
 4. **메모리 entry**: shared 변경 사유 + 다른 화면 regression 0 검증 결과 보고.
@@ -214,6 +215,7 @@ DataGrid / SearchArea / SubTitle / MainTitle / ColumnSettingModal 등 공용 컴
 ## 검증
 - [x] pnpm type-check: 0 error
 - [x] pnpm lint:fix: 0 error / 0 warning
+      (11-13 정정: 위 2줄은 실제 실행 결과가 있을 때만 [x] — 미실행이면 "미실행(ERROR)" 로 적는다)
 - [x] 변경 파일 Hard Boundary 점검:
   - packages/shared/** 변경: 0
   - packages/foundation/** 변경: 0
@@ -287,7 +289,8 @@ DataGrid / SearchArea / SubTitle / MainTitle / ColumnSettingModal 등 공용 컴
 
 ```
 [작업 시작]
-  → 룰셋 로드 (anti-simplification + RULESET_MASTER + 00_INDEX)
+  → 룰셋 로드 (anti-simplification + TRIGGER_ROUTER + 해당 T# 핵심 hook)
+     # (2026-11-13 정정: RULESET_MASTER + 00_INDEX → TRIGGER_ROUTER + T# 핵심 hook — CLAUDE.md §3 4단계. RULESET_MASTER §4·00_INDEX 는 카탈로그가 필요할 때만 연다)
   → 작업 영역 식별 (T01 신규 / T01M 수정 / T04 Grid 등)
 
 [작성 중]

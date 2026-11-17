@@ -1,0 +1,146 @@
+{
+ "id": "SCP0110",
+ "started": "2026-11-12 22:52:54.902",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:52:55.194",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0110_GroupModelMapping",
+   "form_text": "Demand Group Master",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0110_GroupModelMapping.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:44.302"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:53:49.359",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0110\\run_20261112_225254\\dump_load.json",
+   "control_count": 31,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:49.373"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:53:49.542",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0110\\run_20261112_225254\\shots\\SCP0110_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:49.731"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:53:50.224",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:50.815"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:53:58.702",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0110\\run_20261112_225254\\dump_find.json",
+   "control_count": 31,
+   "grid_count": 2,
+   "total": "Total : 2,774",
+   "time_status": "DB : 0.12s, UI : 0.027s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:58.735"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:53:58.899",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0110\\run_20261112_225254\\shots\\SCP0110_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:53:59.062"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:53:59.386",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:54:00.220"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 22,
+  "calls_with_params": 22
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0110_GroupModelMapping",
+  "form_text": "Demand Group Master",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0110_GroupModelMapping.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.12s, UI : 0.027s",
+  "total": "Total : 2,774",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 22:52:55.117",
+ "t_find": "2026-11-12 22:53:49.945",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 31,
+  "layout_items": 10,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 12,
+  "data_rows": 100,
+  "grid_rows": 2853,
+  "calls_total": 22,
+  "calls_screen": 22,
+  "calls_find": 8,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 22:54:00.822",
+ "exit": 0
+}

@@ -64,7 +64,7 @@ export const COMBO = {
 export const MSG = {
   REQUIRED_FIELDS: 'MSG00013', // "Please enter the required fields." — AS-IS MSG00001(8필드 공백)의 TO-BE 등가(AS-IS MSG00001 은 TO-BE 에서 "저장하시겠습니까?" 로 의미가 다름 — 역조회로 확정)
   DATE_RANGE_INVALID: 'MSG00219', // "Invalid period (start > end)." — AS-IS 번호 그대로 일치 확인
-  SAFETY_STOCK_EXISTS: 'MSG00260', // "Duplicate combination ..." — AS-IS 저장 가드(안전재고 존재 시 차단)의 근접 TO-BE 매핑, 검사 컬럼 확인 필요(design 01 §5-2)
+  SAFETY_STOCK_EXISTS: 'MSG00428', // "신규 입력 데이터 중 중복된 데이터가 있습니다." — AS-IS MSG00260(동일 문구) 재번호. TO-BE Oracle 의 MSG00260 은 무관한 "중복된 조합이 존재합니다(Division/Project/Item/일자/Measure)."(예측·Measure 화면용)로 재번호돼, 그대로 쓰면 남의 화면 필드 목록이 뜬다 — 형제 safety-stock/precede-safety-stock-day 와 동일하게 MSG00428 로 매핑(rule 6, 2026-11-09 asis.py/ora.py 실측 확정).
   ITEM_NOT_FOUND: 'MSG00458', // "MODEL:{0} Invalid model!" — AS-IS 번호 그대로 일치 확인
   SAVE_SUCCESS: 'MSG00002', // "Saved successfully." — useProcMutation 기본 onSuccess 가 사용(화면 별도 배선 불필요, 문서화 목적)
   NO_CHANGE: 'MSG_NO_CHANGE',

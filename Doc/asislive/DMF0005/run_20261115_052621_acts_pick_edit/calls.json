@@ -1,0 +1,66 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 05:24:37.690",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.67,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner Base",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner Base', @p_division_id='40'",
+   "phase": "action:pick:USER_ID"
+  },
+  {
+   "at": "2026-11-15 05:24:37.706",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 5.57,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "DMF000",
+    "p_sheet_name": "Owner User",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='DMF000', @p_sheet_name='Owner User', @p_division_id='40'",
+   "phase": "action:pick:USER_ID"
+  },
+  {
+   "at": "2026-11-15 05:24:37.781",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF000_GET_OWNER_DATA",
+   "sp": "DMF000_GET_OWNER_DATA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 101,
+   "rows_kind": "DataSet rows",
+   "ms": 66.6,
+   "params": {
+    "p_division_id": "40",
+    "p_owner_id": "hyelin.jung",
+    "p_search": "",
+    "p_user_id": "jaeuk.shin",
+    "p_now_group_id": "ADMIN"
+   },
+   "inline": "EXEC DMF000_GET_OWNER_DATA @p_division_id='40', @p_owner_id='hyelin.jung', @p_search='', @p_user_id='jaeuk.shin', @p_now_group_id='ADMIN'",
+   "phase": "action:pick:USER_ID"
+  }
+ ]
+}

@@ -67,7 +67,7 @@ public class GeneralController extends BaseController {
 | MyBatis XML | ❌ 불필요 | (메타 SQL 의 SCM_ADM_API_M 으로 SP 직접 호출) |
 | **SCM_ADM_API_M 메타 등록** | ✅ 의무 | `_artifacts/{N}_DMF{XXX}_metadata.sql` BLOCK 5 |
 | **SCM_ADM_PROC_M 메타 등록** | ✅ 의무 | 동일 BLOCK 4 |
-| **SCM_ADM_MNU_M_SHEET_COLUMNS** | ✅ 의무 | 동일 BLOCK 6 (룰 08) |
+| **SCM_MST_SHEET_COLUMNS** (2026-11-13 정정: `SCM_ADM_MNU_M_SHEET_COLUMNS` → 실제 테이블명 `SCM_MST_SHEET_COLUMNS` — 룰 12 · 룰 07 변경 이력 2026-06-12 · 저장소 SQL/하네스 사용명) | ✅ 의무 | 동일 BLOCK 6 (룰 08) |
 | **SP body (Oracle PL/SQL)** | ✅ 의무 | `_artifacts/{N}_DMF{XXX}_PKG_*.sql` (룰 12) |
 | **권한 메타** (`USER_GR_MNU_MPG_M`/`BTN_MPG_M`) | ✅ 의무 | BLOCK 7 |
 
@@ -124,6 +124,8 @@ TO_BE_META_COUNT=$(grep -c "INSERT INTO SCM_ADM_PROC_M.*'P_DMF0015" _artifacts/G
 > 상세는 `_tobe/12_metadata_sql.md` §4 (MSSQL → Oracle 변환) + §7 (AS-IS SP 1:1 변환 의무) 참조.
 
 ### §3.1 표준 시그니처 — Dual OUT Cursor (2026-06-06 강화)
+
+> (2026-11-13 정정: 아래 §3.1·§3.2 의 `CREATE OR REPLACE PROCEDURE P_DMF{XXX}_…` 는 시그니처 골격 표기다. 현행 명명 = 패키지 안 프로시저 `PKG_{UI_ID}.P_{기능명}` — `.claude/rules/01-be.md` B · §2.1 예 `PKG_DMF0015.P_GET_BOD_M`)
 
 ```sql
 CREATE OR REPLACE PROCEDURE P_DMF{XXX}_GET_{SHEET}_M (
@@ -209,9 +211,11 @@ SP body 안에서 cross-check:
 AND EXISTS (
     SELECT 1 FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M a
     WHERE a.USER_ID = P_SES_USER_ID
-      AND a.GR_ID = P_SES_GR_ID
-      AND a.UNIT_VAL = b.DIVISION_ID
+      AND a.UNIT_TP_CD = 'D'
+      AND a.UNIT_ID = b.DIVISION_ID
 )
+-- (2026-11-13 정정: `AND a.GR_ID = P_SES_GR_ID` 삭제 — CR-102 "특정 권한 하나만 쓰지 않고 USER_ID 기준 보유 권한 합집합" ·
+--  `UNIT_VAL` → `UNIT_ID` + `UNIT_TP_CD = 'D'` — nscm-be/src/main/resources/sql/admin/User.xml:79-84 · 룰 12 §15)
 ```
 
 ---

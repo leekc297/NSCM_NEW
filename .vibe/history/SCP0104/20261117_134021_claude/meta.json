@@ -1,0 +1,34 @@
+{
+  "id": "SCP0104",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0104] · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0104/__asis-actions__.md · Doc/asisfacts/screens/SCP0104/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-17T13:40:21+09:00",
+  "end": "2026-11-17T13:42:18+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\capa-line-assign",
+      "files": 22
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0104",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "클로드에서 수행중인 CHECKLIST 보완이 수행되고 나면 UI_TEST 폴더에 테스트 SHEET 도 같이 생성이 되나요?",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T13:42:18+09:00",
+  "changed": []
+}

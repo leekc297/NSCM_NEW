@@ -1,0 +1,8 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0085-S1f5948,DIVISION,40,40,,실행 대상,"if (div.Contains(""40""))",
+SCP0085-S97207f,DIVISION,40 (그 밖 값 필요),40,,실행 대상,"else of (div.Contains(""40""))",
+SCP0085-Sc29405,COND,RdoMonth.Checked,,,값 미도출,if (siMain != null) ▸ if (RdoMonth.Checked),값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)
+SCP0085-S53a4f7,COND,RdoMonth.Checked,,,값 미도출,if (siMain != null) ▸ else of (RdoMonth.Checked),값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)
+SCP0085-S39127e,COND,RdoDate.Checked,,,값 미도출,if (RdoDate.Checked),값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)
+SCP0085-S090c2b,COND,RdoDate.Checked,,,값 미도출,else of (RdoDate.Checked) ▸ if (RdoMonth.Checked),값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)
+SCP0085-S090c2b,COND,RdoMonth.Checked,,,값 미도출,else of (RdoDate.Checked) ▸ if (RdoMonth.Checked),값을 고르는 규칙이 없는 컨트롤 형식(UsrRadio)

@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 400,
+  "at": "2026-11-14T15:18:56.878Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 102,
+  "at": "2026-11-14T15:18:58.449Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1851,
+  "at": "2026-11-14T15:19:00.083Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 99,
+  "at": "2026-11-14T15:19:01.174Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1756,
+  "at": "2026-11-14T15:19:02.698Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ }
+]

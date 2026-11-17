@@ -1,0 +1,4789 @@
+{
+"id": "SCP0020",
+"at": "2026-11-14 10:50:42",
+"asis": {
+"insertStmts": [
+{
+"kind": "BRANCH",
+"raw": "if (siMain.SheetName == SpdSheet.shtMain) { if (siMain.ActiveRowIndex < 0) return; FarPoint.Win.Spread.Cell insCell = siMain.Insert(); Dictionary<object, object",
+"ref": "SCP0020_TactTime.cs:758",
+"method": "InsertButton"
+},
+{
+"kind": "BRANCH",
+"raw": "if (siMain.ActiveRowIndex < 0) return;",
+"ref": "SCP0020_TactTime.cs:760",
+"method": "InsertButton"
+},
+{
+"kind": "LOCAL",
+"raw": "int nRow = siMain.ActiveRowIndex + 1;",
+"ref": "SCP0020_TactTime.cs:766",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.DIVISION_ID), strDIVISION_ID)",
+"ref": "SCP0020_TactTime.cs:781",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID), strPLANT_SITE_ID)",
+"ref": "SCP0020_TactTime.cs:782",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.PLANT_SITE_NAME), strPLANT_SITE_NAME)",
+"ref": "SCP0020_TactTime.cs:783",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.ITEM_ID), strITEM_ID)",
+"ref": "SCP0020_TactTime.cs:784",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.OPERATION_ID), strOPERATION_ID)",
+"ref": "SCP0020_TactTime.cs:785",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.OPERATION_NAME), strOPERATION_NAME)",
+"ref": "SCP0020_TactTime.cs:786",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.NICK_NAME), strNICK_NAME)",
+"ref": "SCP0020_TactTime.cs:788",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.VALID_YN), \"Y\")",
+"ref": "SCP0020_TactTime.cs:789",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.OPERATION_GROUP_ID), strOPERATION_GROUP_ID)",
+"ref": "SCP0020_TactTime.cs:795",
+"method": "InsertButton"
+},
+{
+"kind": "BRANCH",
+"raw": "if(siMain.SheetName == SpdSheet.shtPacker) { if (siMain.ActiveRowIndex < 0) return; FarPoint.Win.Spread.Cell insCell = siMain.Insert(); Dictionary<object, objec",
+"ref": "SCP0020_TactTime.cs:815",
+"method": "InsertButton"
+},
+{
+"kind": "BRANCH",
+"raw": "if (siMain.ActiveRowIndex < 0) return;",
+"ref": "SCP0020_TactTime.cs:817",
+"method": "InsertButton"
+},
+{
+"kind": "LOCAL",
+"raw": "int nRow = siMain.ActiveRowIndex + 1;",
+"ref": "SCP0020_TactTime.cs:823",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.DIVISION_ID), strDIVISION_ID)",
+"ref": "SCP0020_TactTime.cs:837",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION), strSiteDescription)",
+"ref": "SCP0020_TactTime.cs:838",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.ITEM_ID), strITEM_ID)",
+"ref": "SCP0020_TactTime.cs:839",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.NICK_NAME), strNICK_NAME)",
+"ref": "SCP0020_TactTime.cs:840",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID), strPLANT_SITE_ID)",
+"ref": "SCP0020_TactTime.cs:841",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.OPERATION_ID), strOPERATION_ID)",
+"ref": "SCP0020_TactTime.cs:842",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.INPUT_STATUS), \"I\")",
+"ref": "SCP0020_TactTime.cs:843",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.EXCEPT_YN), \"N\")",
+"ref": "SCP0020_TactTime.cs:844",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.OSP_YN), \"Y\")",
+"ref": "SCP0020_TactTime.cs:845",
+"method": "InsertButton"
+},
+{
+"kind": "BRANCH",
+"raw": "foreach (DataRow dr in drArr) { DataRow drRow = dtComboIns.NewRow(); drRow[\"CODE\"] = dr[\"CODE\"].ToString(); drRow[\"NAME\"] = dr[\"NAME\"].ToString(); dtComboIns.Ro",
+"ref": "SCP0020_TactTime.cs:856",
+"method": "InsertButton"
+},
+{
+"kind": "DATA_OP",
+"raw": "dtComboIns.Rows.Add(drRow)",
+"ref": "SCP0020_TactTime.cs:861",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.LINE_ID), dtComboIns)",
+"ref": "SCP0020_TactTime.cs:864",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.DIVISION_ID), strDIVISION_ID)",
+"ref": "SCP0020_TactTime.cs:917",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.PLANT_SITE_ID), strPLANT_SITE_ID)",
+"ref": "SCP0020_TactTime.cs:918",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.PLANT_SITE_NAME), strPLANT_SITE_NAME)",
+"ref": "SCP0020_TactTime.cs:919",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.ITEM_ID), strITEM_ID)",
+"ref": "SCP0020_TactTime.cs:920",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.OPERATION_ID), strOPERATION_ID)",
+"ref": "SCP0020_TactTime.cs:921",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.OPERATION_NAME), strOPERATION_NAME)",
+"ref": "SCP0020_TactTime.cs:922",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.LINE_ID), strLINE_ID)",
+"ref": "SCP0020_TactTime.cs:923",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.NICK_NAME), strNICK_NAME)",
+"ref": "SCP0020_TactTime.cs:924",
+"method": "InsertButton"
+},
+{
+"kind": "GRID_SET",
+"raw": "siExcept.SetValue(siExcept.ActiveRowIndex, siExcept.GetColumnIndex(DefColumns.USE_YN), \"Y\")",
+"ref": "SCP0020_TactTime.cs:925",
+"method": "InsertButton"
+}
+],
+"headerSpan": [],
+"planExcluded": [
+"cboValid"
+],
+"editRules": [
+{
+"column": "LINE_ID",
+"cond": "RULES:[{\"g\": \"COL(INPUT_STATUS)==\\\"M\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:588\"}, {\"g\": \"\", \"lock\": \"Y\", \"ref\": \"EditButton:676\"}]",
+"ref": "기존행 SCP0020_TactTime:588 LockRange | 기존행 SCP0020_TactTime:593 LockRange | 기존행 SCP0020_TactTime:621 LockRange | 기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange"
+},
+{
+"column": "LANE_QTY",
+"cond": "RULES:[{\"g\": \"COL(OPERATION_GROUP_ID)!=\\\"E\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:598\"}]",
+"ref": "기존행 SCP0020_TactTime:593 LockRange | 기존행 SCP0020_TactTime:598 LockRange | 신규행 SCP0020_TactTime:811 LockRange"
+},
+{
+"column": "DAILY_CAPACITY",
+"cond": "RULES:[{\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:577 LockColumn | 기존행 SCP0020_TactTime:681 LockColumn | 신규행 SCP0020_TactTime:806 LockRange | 신규행 SCP0020_TactTime:933 LockRange"
+},
+{
+"column": "ITEM_UOM",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}, {\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:806 LockRange"
+},
+{
+"column": "UOM_CONVERT_VALUE",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}, {\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:806 LockRange"
+},
+{
+"column": "TACT_TIME",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}, {\"g\": \"\", \"lock\": \"Y\", \"ref\": \"EditButton:684\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:611 LockColumn | 기존행 SCP0020_TactTime:684 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:848 LockRange | 신규행 SCP0020_TactTime:937 LockRange"
+},
+{
+"column": "LINE_ID",
+"cond": "RULES:[{\"g\": \"COL(INPUT_STATUS)==\\\"M\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:588\"}]",
+"ref": "기존행 SCP0020_TactTime:588 LockRange | 기존행 SCP0020_TactTime:593 LockRange | 기존행 SCP0020_TactTime:621 LockRange"
+},
+{
+"column": "LANE_QTY",
+"cond": "RULES:[{\"g\": \"COL(OPERATION_GROUP_ID)!=\\\"E\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:598\"}]",
+"ref": "기존행 SCP0020_TactTime:593 LockRange | 기존행 SCP0020_TactTime:598 LockRange | 신규행 SCP0020_TactTime:811 LockRange"
+},
+{
+"column": "DAILY_CAPACITY",
+"cond": "RULES:[{\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:806 LockRange"
+},
+{
+"column": "ITEM_UOM",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}, {\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:806 LockRange"
+},
+{
+"column": "UOM_CONVERT_VALUE",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}, {\"g\": \"(!(DIV==\\\"42\\\" || DIV==\\\"44\\\"))\", \"lock\": \"Y\", \"ref\": \"EditButton:577\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:806 LockRange"
+},
+{
+"column": "TACT_TIME",
+"cond": "RULES:[{\"g\": \"(DIV==\\\"42\\\" || DIV==\\\"44\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:573\"}]",
+"ref": "기존행 SCP0020_TactTime:573 LockColumn | 기존행 SCP0020_TactTime:611 LockColumn | 신규행 SCP0020_TactTime:802 LockRange | 신규행 SCP0020_TactTime:848 LockRange"
+}
+],
+"mainClass": "SCP0020_TactTime",
+"divControls": [
+"cboDivision"
+],
+"changeMethods": [
+"ClbDivision_SelectedIndexChanged",
+"RefreshLineByOperation",
+"RefreshLineByOperationOfSpd",
+"RefreshLineByPlantPacker",
+"RefreshPlantSiteByDivision",
+"SetChangedControl",
+"SetChangedControl_Osp"
+],
+"loadMethods": [
+".ctor",
+"CreateSpread",
+"DefineProperty",
+"Form_Load",
+"InitControls",
+"InitEvent",
+"InitSpread",
+"RefreshLineByPlantPacker",
+"SetChangedControl_Osp",
+"SetSpreadInit"
+],
+"states": [],
+"stateCountAll": 0,
+"defaults": [],
+"insertGuards": [],
+"deadExcluded": [
+"SCP0020_TactTime.ClearUsrCheckedList"
+],
+"hasMerge": false
+},
+"db": {
+"menu": {
+"mnu_id": "SCP0020",
+"uppr_mnu_id": "Supply_Master",
+"unit_tp_cd": "S",
+"use_yn": "Y",
+"n01_atr_ctn": "NSCM"
+},
+"menuGroups": [
+{
+"user_gr_id": "SSP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"use_yn": "N"
+}
+],
+"btnAuth": [
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "itemSearch",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "packer",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "except",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "except",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "packer",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "plant",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "except",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+}
+],
+"columns": [
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "CREATED_BY",
+"column_label_name": "Created By",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "CREATION_DATE",
+"column_label_name": "Creation Date",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "DAILY_CAPACITY",
+"column_label_name": "Daily Capacity*",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div*",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "EXCEPT_YN",
+"column_label_name": "EXCEPT_YN",
+"sort_order_no": "17",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "INPUT_STATUS",
+"column_label_name": "INPUT_STATUS",
+"sort_order_no": "16",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "ITEM_ID",
+"column_label_name": "Model*",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Updated By",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update Date",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "LINE_ID",
+"column_label_name": "Line*",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "OPERATION_ID",
+"column_label_name": "OPERATION_ID",
+"sort_order_no": "14",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "OSP_YN",
+"column_label_name": "OSP_YN",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "PLANT_SITE_ID",
+"sort_order_no": "15",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "PRIORITY",
+"column_label_name": "Priority*",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "SITE_DESCRIPTION",
+"column_label_name": "Plant Site*",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "TACT_TIME",
+"column_label_name": "Tact Time*",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Packer",
+"column_name": "YIELD",
+"column_label_name": "Yield(%)*",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "ACTUAL_CAPACITY",
+"column_label_name": "Actual Capacity",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "ACTUAL_OUTPUT",
+"column_label_name": "Actual Output",
+"sort_order_no": "19",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "BIG_LAST_UPDATE_DATE",
+"column_label_name": "Big Last Update Date",
+"sort_order_no": "28",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "BIG_TACT_TIME",
+"column_label_name": "Big Tact Time",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "BOM_MIN_DUE_DATE",
+"column_label_name": "Due Date",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "CREATED_BY",
+"column_label_name": "Created By",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "CREATION_DATE",
+"column_label_name": "Creation Date",
+"sort_order_no": "25",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "DAILY_CAPACITY",
+"column_label_name": "Daily Capacity",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "EFFECTIVE_DATA_COUNT",
+"column_label_name": "Effective Data Count",
+"sort_order_no": "23",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "EXCEPT_YN",
+"column_label_name": "EXCEPT_YN",
+"sort_order_no": "32",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "FROM_ACTUAL_CAPACITY",
+"column_label_name": "From Actual Capacity",
+"sort_order_no": "21",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "INPUT_STATUS",
+"column_label_name": "INPUT_STATUS",
+"sort_order_no": "31",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "ITEM_ID",
+"column_label_name": "Model",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "ITEM_UOM",
+"column_label_name": "Item UOM",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "JUMBO_MIN",
+"column_label_name": "Jumbo / Min",
+"sort_order_no": "16",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "LANE_QTY",
+"column_label_name": "Slitting Lane",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Updated By",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update Date",
+"sort_order_no": "27",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "LINE_ID",
+"column_label_name": "Line*",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "MODEL_SITE",
+"column_label_name": "Model Site",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "OPERATION_GROUP_ID",
+"column_label_name": "OPERATION_GROUP_ID",
+"sort_order_no": "33",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "OPERATION_ID",
+"column_label_name": "OPERATION_ID",
+"sort_order_no": "30",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "OPERATION_NAME",
+"column_label_name": "Operation",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "PLANT_SITE_ID",
+"sort_order_no": "29",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "PLANT_SITE_NAME",
+"column_label_name": "Plant Site",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "PRIORITY",
+"column_label_name": "Priority*",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "TACT_TIME",
+"column_label_name": "Tact Time*",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "TO_ACTUAL_CAPACITY",
+"column_label_name": "To Actual Capacity",
+"sort_order_no": "22",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "UOM_CONVERT_VALUE",
+"column_label_name": "UOM Convert",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "VALID_YN",
+"column_label_name": "Active*",
+"sort_order_no": "9",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Plant",
+"column_name": "YIELD",
+"column_label_name": "Yield(%)*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "ACTUAL_CAPACITY",
+"column_label_name": "Actual Capacity",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "ACTUAL_OUTPUT",
+"column_label_name": "Actual Output",
+"sort_order_no": "19",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "BIG_LAST_UPDATE_DATE",
+"column_label_name": "Big Last Update Date",
+"sort_order_no": "28",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "BIG_TACT_TIME",
+"column_label_name": "Big Tact Time",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "BOM_MIN_DUE_DATE",
+"column_label_name": "Due Date",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "CREATED_BY",
+"column_label_name": "Created By",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "CREATION_DATE",
+"column_label_name": "Creation Date",
+"sort_order_no": "25",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "DAILY_CAPACITY",
+"column_label_name": "Daily Capacity",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "EFFECTIVE_DATA_COUNT",
+"column_label_name": "Effective Data Count",
+"sort_order_no": "23",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "EXCEPT_YN",
+"column_label_name": "EXCEPT_YN",
+"sort_order_no": "32",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "FROM_ACTUAL_CAPACITY",
+"column_label_name": "From Actual Capacity",
+"sort_order_no": "21",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "INPUT_STATUS",
+"column_label_name": "INPUT_STATUS",
+"sort_order_no": "31",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "ITEM_ID",
+"column_label_name": "Model",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "ITEM_UOM",
+"column_label_name": "Item UOM",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "JUMBO_MIN",
+"column_label_name": "Jumbo / Min",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "LANE_QTY",
+"column_label_name": "Slitting Lane",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Updated By",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update Date",
+"sort_order_no": "27",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "LINE_ID",
+"column_label_name": "Line*",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "MODEL_SITE",
+"column_label_name": "Model Site",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "OPERATION_GROUP_ID",
+"column_label_name": "OPERATION_GROUP_ID",
+"sort_order_no": "33",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "OPERATION_ID",
+"column_label_name": "OPERATION_ID",
+"sort_order_no": "30",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "OPERATION_NAME",
+"column_label_name": "Operation",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "PLANT_SITE_ID",
+"sort_order_no": "29",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "PLANT_SITE_NAME",
+"column_label_name": "Plant Site",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "PRIORITY",
+"column_label_name": "Priority*",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "TACT_TIME",
+"column_label_name": "Tact Time*",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "TO_ACTUAL_CAPACITY",
+"column_label_name": "To Actual Capacity",
+"sort_order_no": "22",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "UOM_CONVERT_VALUE",
+"column_label_name": "UOM Convert",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "VALID_YN",
+"column_label_name": "Active*",
+"sort_order_no": "9",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time",
+"column_name": "YIELD",
+"column_label_name": "Yield(%)*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "CREATED_BY",
+"column_label_name": "Created By",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "CREATION_DATE",
+"column_label_name": "Creation Date",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "DAILY_CAPACITY",
+"column_label_name": "Daily Capacity",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "EXCEPT_COMMENT",
+"column_label_name": "Comment",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "INPUT_STATUS",
+"column_label_name": "INPUT_STATUS",
+"sort_order_no": "20",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ITEM_ID",
+"column_label_name": "Model",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Updated By",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update Date",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "LINE_ID",
+"column_label_name": "Line",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "OPERATION_ID",
+"column_label_name": "OPERATION_ID",
+"sort_order_no": "19",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "OPERATION_NAME",
+"column_label_name": "Operation",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_DIVISION_ID",
+"column_label_name": "ORG_DIVISION_ID",
+"sort_order_no": "21",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_ITEM_ID",
+"column_label_name": "ORG_ITEM_ID",
+"sort_order_no": "23",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_LINE_ID",
+"column_label_name": "ORG_LINE_ID",
+"sort_order_no": "25",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_OPERATION_ID",
+"column_label_name": "ORG_OPERATION_ID",
+"sort_order_no": "24",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_PLANT_SITE_ID",
+"column_label_name": "ORG_PLANT_SITE_ID",
+"sort_order_no": "22",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_TACT_TIME_END_DATE",
+"column_label_name": "ORG_TACT_TIME_END_DATE",
+"sort_order_no": "27",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "ORG_TACT_TIME_START_DATE",
+"column_label_name": "ORG_TACT_TIME_START_DATE",
+"sort_order_no": "26",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "PLANT_SITE_ID",
+"sort_order_no": "18",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "PLANT_SITE_NAME",
+"column_label_name": "Plant Site",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "TACT_TIME",
+"column_label_name": "Tact Time*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "TACT_TIME_END_DATE",
+"column_label_name": "End Date*",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "TACT_TIME_START_DATE",
+"column_label_name": "Start Date*",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "USE_YN",
+"column_label_name": "Product YN",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SCP0020",
+"sheet_name": "Tact Time Except",
+"column_name": "YIELD",
+"column_label_name": "Yield(%)*",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"measures": [],
+"lookupMeasure": [],
+"lookupAdmin": [
+{
+"segment1": "ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+}
+],
+"now": {
+"now_": "2026-11-14 10:50",
+"dow": "SAT",
+"hm": "1050"
+}
+},
+"accounts": [
+{
+"key": "SCP/40/SCP Planner",
+"keys": [
+"SCP/40/SCP Planner"
+],
+"groups": [
+"SCP Planner"
+],
+"menuGroups": [
+"SCP Planner"
+],
+"divsAll": [
+"40",
+"82"
+],
+"divsMenu": [
+"40",
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"Report",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0120",
+"SCP0121",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/40/SCP Tester",
+"keys": [
+"SCP/40/SCP Tester",
+"SCP/81/SCP Tester",
+"SCP/82/SCP Tester"
+],
+"groups": [
+"DM Viewer",
+"FP Viewer",
+"GUEST",
+"SCM Viewer",
+"SCP Tester",
+"SSP ADMIN",
+"SSP Planner",
+"SSP Viewer"
+],
+"menuGroups": [
+"DM Viewer",
+"FP Viewer",
+"SCM Viewer",
+"SCP Tester",
+"SSP ADMIN",
+"SSP Planner"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0020_01",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"DMF0083",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"Report",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/40/SCM Viewer",
+"keys": [
+"SCP/40/SCM Viewer"
+],
+"groups": [
+"GUEST",
+"SCM Viewer"
+],
+"menuGroups": [
+"SCM Viewer"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0037",
+"SCP0039",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/40/ADMIN",
+"keys": [
+"SCP/40/ADMIN",
+"SCP/81/ADMIN",
+"SCP/82/ADMIN"
+],
+"groups": [
+"ADMIN",
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"ADMIN",
+"SSP Planner"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"CAPA LineMaster",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"Capa Plan",
+"CommonPopup",
+"DMD0001",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0020_01",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0043",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"DMF0083",
+"Dashboard",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"LOB Report",
+"Loss Plan",
+"Popup",
+"Report",
+"SCM Supply",
+"SCM0002",
+"SCM0007",
+"SCM0014",
+"SCM0016",
+"SCM0019",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0120",
+"SCP0121",
+"SCP0122",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0001",
+"SYS0002",
+"SYS0003",
+"SYS0004",
+"SYS0005",
+"SYS0006",
+"SYS0007",
+"SYS0008",
+"SYS0009",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"SYS0014",
+"SYS0016",
+"SYS0017",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Speed Plan",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Validation",
+"Supply_Waterfall",
+"System",
+"TEEP Report",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/40/SCM PI Admin",
+"keys": [
+"SCP/40/SCM PI Admin"
+],
+"groups": [
+"GUEST",
+"SCM PI Admin"
+],
+"menuGroups": [
+"SCM PI Admin"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0014",
+"DMF0020",
+"DMF0020_01",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0068",
+"DMF0082",
+"DMF0083",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0007",
+"SCM0014",
+"SCM0016",
+"SCM0019",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0120",
+"SCP0121",
+"SCP0122",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0001",
+"SYS0002",
+"SYS0003",
+"SYS0004",
+"SYS0007",
+"SYS0008",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"SYS0014",
+"SYS0016",
+"SYS0017",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"System",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/81/SCP Planner",
+"keys": [
+"SCP/81/SCP Planner",
+"SCP/82/SCP Planner"
+],
+"groups": [
+"GUEST",
+"SCP Planner"
+],
+"menuGroups": [
+"SCP Planner"
+],
+"divsAll": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82"
+],
+"divsMenu": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"Report",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0120",
+"SCP0121",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/81/SCM Viewer",
+"keys": [
+"SCP/81/SCM Viewer"
+],
+"groups": [
+"GUEST",
+"SCM Viewer"
+],
+"menuGroups": [
+"SCM Viewer"
+],
+"divsAll": [
+"81"
+],
+"divsMenu": [
+"81"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0037",
+"SCP0039",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/81/SCM PI Admin",
+"keys": [
+"SCP/81/SCM PI Admin",
+"SCP/82/SCM PI Admin"
+],
+"groups": [
+"GUEST",
+"SCM PI Admin"
+],
+"menuGroups": [
+"SCM PI Admin"
+],
+"divsAll": [
+"81",
+"82",
+"EE"
+],
+"divsMenu": [
+"81",
+"82",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0014",
+"DMF0020",
+"DMF0020_01",
+"DMF0021",
+"DMF0021_01",
+"DMF0022",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0068",
+"DMF0082",
+"DMF0083",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0007",
+"SCM0014",
+"SCM0016",
+"SCM0019",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0120",
+"SCP0121",
+"SCP0122",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0001",
+"SYS0002",
+"SYS0003",
+"SYS0004",
+"SYS0007",
+"SYS0008",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"SYS0014",
+"SYS0016",
+"SYS0017",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"System",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SCP/82/SCM Viewer",
+"keys": [
+"SCP/82/SCM Viewer"
+],
+"groups": [
+"GUEST",
+"SCM Viewer"
+],
+"menuGroups": [
+"SCM Viewer"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0007",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0037",
+"SCP0039",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0110",
+"SCP0111",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+}
+],
+"btnDiv": {
+"__default__": {
+"40": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/40/SCP Planner": {
+"40": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/40/SCP Tester": {
+"40": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/40/SCM Viewer": {
+"40": [
+"SEARCH"
+]
+},
+"SCP/40/ADMIN": {
+"40": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE": [
+"SEARCH"
+],
+"EE_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/40/SCM PI Admin": {
+"40": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/81/SCP Planner": {
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HD": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HG": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_HM": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_ST": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"81_UC": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/81/SCM Viewer": {
+"81": [
+"SEARCH"
+]
+},
+"SCP/81/SCM PI Admin": {
+"81": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"82": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+],
+"EE": [
+"DELETE",
+"INSERT",
+"SAVE",
+"SEARCH"
+]
+},
+"SCP/82/SCM Viewer": {
+"82": [
+"SEARCH"
+]
+}
+}
+}

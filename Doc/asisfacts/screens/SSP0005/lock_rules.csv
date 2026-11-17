@@ -1,0 +1,4 @@
+﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
+EditButton,353,SwitchLock,MODE,TOGGLE,,,,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,siMain.SwitchLock()
+EditButton,355,LockColumn,ALL_ROWS,Y,,COMPANY;DIVISION,ENDPOINTS,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.COMPANY), siMain.GetColumnIndex(DefColumns.DIVISION), true)"
+FindData_Main,420,LockColumn,ALL_ROWS,Y,,COMPANY_ID;DIVISION_ID,ALL,,try,siMain,"siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)"

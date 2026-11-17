@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0041",
+  "sheet": "Osp Stock",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0041/Osp%20Stock/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261109\",\"toYyyymmdd\":\"20271009\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 105,
+  "at": "2026-11-14T05:44:17.777Z",
+  "user": "minyonglee1",
+  "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+ }
+]

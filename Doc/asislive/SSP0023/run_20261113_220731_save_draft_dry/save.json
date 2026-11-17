@@ -1,0 +1,45 @@
+{
+ "id": "SSP0023",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SSP_ANL_SHIP_CONFIRM",
+  "pk": [
+   "CONFIRM_ID"
+  ],
+  "match": {
+   "CONFIRM_ID": "CONFIRM_ID"
+  },
+  "save_sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+  "side": [],
+  "basis": "foxml SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM → SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PACKAGE_QTY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PACKAGE_QTY",
+     "db_col": "PACKAGE_QTY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PACKAGE_QTY",
+    "db_col": "PACKAGE_QTY",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:07:31",
+ "status": "ERROR",
+ "steps": [],
+ "note": "정의의 열 CONFIRM_ID,PACKAGE_QTY 이 주 그리드 활성 시트(spdMain/Shipment Plan(Electrode))에 없음 — 다른 시트·그리드의 저장은 이 도구가 아직 다루지 않음"
+}

@@ -1,0 +1,135 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlanGroup(clb)",
+     "before": [
+      "",
+      15,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      14,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      475,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0131-S1094a1",
+    "SCP0131-Sb349da"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlanGroup(clb)",
+     "before": [
+      "",
+      14,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      15,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      475,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0131-S1094a1",
+    "SCP0131-Sb349da"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "ClbDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-15 00:01:56"
+}

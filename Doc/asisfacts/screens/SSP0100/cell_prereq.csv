@@ -1,0 +1,3 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+ITEM_ID,,DIVISION_ID,ALL,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Div"" })","if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CA…)",SSP0100_LTManagement.cs:534 SSP0100_LTManagement.SpdMain_CellClick
+ITEM_ID,,FROM_SITE,ALL,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""From Site"" })","if (siMain.IsLock(siMain.SheetName) == false && siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == CA…)",SSP0100_LTManagement.cs:541 SSP0100_LTManagement.SpdMain_CellClick

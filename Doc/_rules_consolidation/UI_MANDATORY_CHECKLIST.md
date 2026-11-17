@@ -1,6 +1,6 @@
 # NSCM UI-MANDATORY CHECKLIST (T01 신규 / T01M 수정 — PRE-WRITE 통과 의무)
 
-> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-10-21)
+> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-11-13)
 
 ## §3. ⭐ UI-MANDATORY 통합 체크리스트 (TO-BE UI 누락 0 핵심) / UI Mandatory Checklist
 
@@ -83,14 +83,14 @@
   - [ ] `map(() => '')|createdBy: ''` = 0 (감사키 빈문자열 — hook #99 §0.1)
   - [ ] util export 함수별 동일 폴더 import 참조 grep — **0건 export = "미배선 의심" 보고 의무** (post-write §0.1-B, SYS0017 실측 5/10)
 
-### 3.4 종료 게이트 (T20 — 종료 선언 전 8 게이트)
+### 3.4 종료 게이트 (T20 — 종료 선언 전 11 게이트)
 > ⛔ ⭐ **완료 선언 = ui_gate_runner 리포트 경로 첨부 의무 (2026-08-07 신설 — 사용자 확인 규약)**:
 > `python _artifacts/_diagnostics/ui_gate_runner.py --menu {MNU_ID} --page <페이지폴더>` 실행 →
 > `_artifacts/_gate_reports/{MNU_ID}_{ts}.md` (①check-ui-gates G-A~G-G 전 파일 ②asis_mapping_gate --check EID 1:1
 > ③wiring_chain_check FE→BE→SP 체인+v2 액션·권한 축 L2A/L2P ④SHEET_COLUMNS 값 단언 ⑤**CRUD·모달 매트릭스**
 > --matrix-only) — **리포트 경로 없는 완료 보고 = 미완료 간주**. 런타임 짝 = G6-6 모달별 CRUD 왕복(열기→편집→OK→DB 반영).
 >
-> `screen-completion-gate.md` 의 8 게이트 의무 + 보고 양식:
+> `screen-completion-gate.md` 의 11 게이트(G1~G11) 의무 + 보고 양식 — 아래 ①~⑧ 에 더해 **⑨ G9 메타 실소비·셀 컨트롤 3요소·저장 경로 전수(2026-08-11 · hook #130) ⑩ G10 지정 보완요청 원장(2026-08-20 · hook #139) ⑪ G11 대조표 전 행 검증 커버리지 + DB 접근(2026-10-26)** (정본 = hook §0 표 · 2026-11-13 수 정정):
 > ① AS-IS 4축 매핑 (⭐ **EID 1:1 대사표 — 빈 칸 0**, asis-coverage-check §0.1) ② 버튼 매핑 ③ Grid/Column 메타 ④ 메타·라우팅 ⑤ 정적(type/lint) ⑥ 런타임 smoke (⭐ **§0.5 명시 체크리스트 5항**: 모달 전수 OK/Cancel · 편집→저장→toast+`SCM_COM_SQL_LOG` SAVE 실증 · 저장 후 DB SELECT 왕복 · 콤보 NAME 표시 · cascade 1회 — 2026-08-06 SYS0017 감사 정량화) ⑦ 표준 정합 ⑧ 이관 패키지
 >
 > ⭐ **G5 정적 검증 강화 (2026-06-19 DMF0043 회고 후)**: type/lint/build 3종 외 `_artifacts/_local_setup/regression-impact.ps1` 실행 → Hard Boundary 위반 0 / 영향 도메인 / `procedures.d.ts` 변경 여부 보고 의무. 사내 nexus 로컬 차단 환경에서 cross-screen 회귀를 commit 후 발견하는 사고 차단. (regression-zero-mandatory §9)

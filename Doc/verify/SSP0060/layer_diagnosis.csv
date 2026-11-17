@@ -1,0 +1,16 @@
+﻿row_id,rule_id,target,layer_default,layer_measured,probe,grade,basis
+V-500719ff,A5,SSP0060 화면,DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"(시트 미상): TO_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-455fa3da,F1,SSP0060 화면,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-71580525,I1,SSP0060 화면,DB_META,DB_META,P2 메시지 등록,E2 실측,사내 DB SCM_ADM_MSG_M 미등록: MSG00251(등록 언어 없음)
+V-6ffc13c4,F1,SSP0060 컬럼별 저장 왕복,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-23552254,F6,SSP0060 빈값 저장,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-4b42cf06,F6,SSP0060 0 값 저장,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-dee9ca2c,F10,PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING,FE,DB_OBJECT,P3 저장 경로 COMMIT,E2 실측,판정 근거가 PROC 본문(ALL_SOURCE)의 COMMIT 문장
+V-8533dfea,F10,PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM,FE,DB_OBJECT,P3 저장 경로 COMMIT,E2 실측,판정 근거가 PROC 본문(ALL_SOURCE)의 COMMIT 문장
+V-542960bd,B6,조회조건 Company,COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-c169ea6c,H1,Request Info.CONFIRM_ID (Confirm/Plan ID),FE,미확정,P1 컬럼 메타 대조,E2 실측,Request Info.CONFIRM_ID: AS-IS·TO-BE 메타 모두 이 컬럼 행 없음 — 메타 대조 불가
+V-c2145116,M3,"new SCM0002_TitleSetForm_Popup(""SSP0060"", shtName, false)",FE,DB_META,P5 팝업 메타 실행,E2-문장,검사기가 TO-BE 메타 PROC 을 실행한 결과 0건(AS-IS 메타에는 행 있음) — 메타 등록 누락
+T-a94eb0c9,C1,cboPlanDate / Plan-date / Plan Date,FE,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+EG-f0cdd5e6,M3,SSP0060 팝업 SCM0002_ItembyDivisionPopup CELL:ITEM_ID OPEN,FE,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+EG-5ed94944,J4,SSP0060 EG382 직접 접근 SSP/81/SSP Planner,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+EG-cdad3092,I2,SSP0060 언어 전환 조회 버튼,FE,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음

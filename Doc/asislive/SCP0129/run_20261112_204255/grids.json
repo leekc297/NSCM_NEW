@@ -1,0 +1,420 @@
+{
+ "id": "SCP0129",
+ "from": "dump_find.json",
+ "total": "Total : 7",
+ "time_status": "DB : 0.207s, UI : 0.004s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "DEMAND EXCEPTION",
+     "rows": 7,
+     "cols": 17,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Group*"
+       ],
+       "label": "Plan Group*",
+       "tag": "OPMZ_PLAN_GR_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "OPMZ_PLAN_GR_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "SCM site*"
+       ],
+       "label": "SCM site*",
+       "tag": "SCM_SITE_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "SCM_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Model*"
+       ],
+       "label": "Model*",
+       "tag": "ITEM_ID",
+       "width": "160",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Stage*"
+       ],
+       "label": "Stage*",
+       "tag": "STAGE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "STAGE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Type"
+       ],
+       "label": "Type",
+       "tag": "MODEL_TYPE_CD",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MODEL_TYPE_CD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Valid From*"
+       ],
+       "label": "Valid From*",
+       "tag": "FROM_YYYYMMDD",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FROM_YYYYMMDD",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Valid To*"
+       ],
+       "label": "Valid To*",
+       "tag": "TO_YYYYMMDD",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "TO_YYYYMMDD",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Stock Exception"
+       ],
+       "label": "Stock Exception",
+       "tag": "STOCK_EXCEPTION",
+       "width": "70",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "STOCK_EXCEPTION",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "VALUE_DESCRIPTION",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "VALUE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Valid"
+       ],
+       "label": "Valid",
+       "tag": "VALID_YN",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "VALID_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Create By"
+       ],
+       "label": "Create By",
+       "tag": "CREATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CREATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "CREATION_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CREATION_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Last Update By"
+       ],
+       "label": "Last Update By",
+       "tag": "LAST_UPDATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "LAST_UPDATE_DATE",
+       "width": "180",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATE_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "PRE_KEY_VALUES"
+       ],
+       "label": "PRE_KEY_VALUES",
+       "tag": "PRE_KEY_VALUES",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PRE_KEY_VALUES",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 7,
+     "data": [
+      [
+       "",
+       "81",
+       "E90B",
+       "Ampere Electricity_FR_HRB",
+       "ACEF1090I-A1-500",
+       "CELLBIZ",
+       "",
+       "2025-06-16",
+       "2026-12-31",
+       "N",
+       "E90 개발샘플",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0022|Ampere Electricity_FR_HRB|ACEF1090I-A1-500|20250616|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "",
+       "Ampere Electricity_FR_HRB",
+       "ACEF1090I-A1-500",
+       "CELLBIZ",
+       "",
+       "2025-06-09",
+       "2026-12-31",
+       "N",
+       "E90B는 별도 Plan Group으로 지정",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0031|Ampere Electricity_FR_HRB|ACEF1090I-A1-500|20250609|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "",
+       "Ampere Electricity_FR_HRB",
+       "ACEF1090I-A1T020",
+       "CELLBIZ",
+       "",
+       "2025-06-09",
+       "2026-12-31",
+       "N",
+       "E90B는 별도 Plan Group으로 지정",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0031|Ampere Electricity_FR_HRB|ACEF1090I-A1T020|20250609|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "",
+       "Ampere Electricity_FR_HRB",
+       "ACEF1090I-A1T021",
+       "CELLBIZ",
+       "",
+       "2025-06-09",
+       "2026-12-31",
+       "N",
+       "E90B는 별도 Plan Group으로 지정",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0031|Ampere Electricity_FR_HRB|ACEF1090I-A1T021|20250609|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "",
+       "Ampere Electricity_FR_HRB",
+       "ACEF1090I-A1T022",
+       "CELLBIZ",
+       "",
+       "2025-06-09",
+       "2026-12-31",
+       "N",
+       "E90B는 별도 Plan Group으로 지정",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0031|Ampere Electricity_FR_HRB|ACEF1090I-A1T022|20250609|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "",
+       "Ford_GB_ESX",
+       "ACEN4089I-A1-010",
+       "CELLBIZ",
+       "",
+       "2025-06-09",
+       "2026-12-31",
+       "N",
+       "E89A 개발샘플",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0031|Ford_GB_ESX|ACEN4089I-A1-010|20250609|20261231|CELLBIZ"
+      ],
+      [
+       "",
+       "81",
+       "E62B_E63F",
+       "HQ05-81-AS",
+       "ACEH1057I-B1-000",
+       "CELLBIZ",
+       "",
+       "2025-05-26",
+       "2026-12-31",
+       "N",
+       "",
+       "Y",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "SYSTEM",
+       "2025-12-05 오전 10:17:04",
+       "81|PG0003|HQ05-81-AS|ACEH1057I-B1-000|20250526|20261231|CELLBIZ"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+- img
+- text: Div
+- combobox "ALL"
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: To Site
+- combobox "ALL"
+- button "Open"
+- text: Incoterms
+- combobox "ALL"
+- button "Open"
+- text: SSP Incoterms
+- combobox "ALL"
+- button "Open"
+- text: Trans Mode
+- combobox "ALL"
+- button "Open"
+- text: Status
+- combobox: Completed
+- button "Open"
+- text: Active
+- combobox: ALL
+- button "Open"
+# visual-order: Div > From Site > To Site > Incoterms > SSP Incoterms > Trans Mode > Status > Active

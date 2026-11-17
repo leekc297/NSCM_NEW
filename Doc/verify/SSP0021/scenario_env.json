@@ -2,7 +2,7 @@
  "menu_id": "SSP0021",
  "asis_id": "SSP0021",
  "area": "SSP",
- "generated": "2026-11-05 06:14:41",
+ "generated": "2026-11-14 22:36:13",
  "division_cond": {
   "present": true,
   "labels": [
@@ -120,9 +120,47 @@
  ],
  "bucket_cond": "Bucket",
  "observed": {
-  "source": "e2e_results.json 없음",
-  "max_rows_after_search": null,
-  "zero_row_failures": []
+  "source": "e2e_results.json 2026-11-13 13:08 · 행 수 근거 20행",
+  "max_rows_after_search": 27,
+  "zero_row_failures": [
+   {
+    "row_id": "V-cc62bf71",
+    "via": "[측정 경로 없음] 조회 0행 — 스크롤 판정 불가"
+   },
+   {
+    "row_id": "V-fd3ff13c",
+    "via": "[측정 경로 없음] 조회 0행 — 토글 재료 없음 · 조건 Buc"
+   },
+   {
+    "row_id": "V-1f01af33",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=ERP_SO_NO)"
+   },
+   {
+    "row_id": "V-f368de36",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=ERP_SO_NO)"
+   },
+   {
+    "row_id": "V-4ce38b5f",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=ERP_SO_NO)"
+   },
+   {
+    "row_id": "V-ad33f8fd",
+    "via": "ALL(From Site) 조회 0행 · 필수 안내 없음"
+   },
+   {
+    "row_id": "V-acc3d709",
+    "via": "[측정 경로 없음] 조회 0행"
+   },
+   {
+    "row_id": "V-3f5633eb",
+    "via": "Division '81_HD' + 기간 5년 확대 대안 조회(기간 2년 확대(2024.09.19,2024.09.19~"
+   },
+   {
+    "row_id": "V-ece92a14",
+    "via": "Division '81_HD' + 기간 5년 확대 대안 조회(기간 2년 확대(2024.09.19,2024.09.19~"
+   }
+  ],
+  "zero_row_count": 9
  },
  "warnings": []
 }

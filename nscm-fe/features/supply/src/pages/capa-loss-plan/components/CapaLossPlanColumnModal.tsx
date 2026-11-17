@@ -1,8 +1,11 @@
-import { ColumnLayoutModal, toColumnLayoutSettings } from '@shared/components';
+import { useQueryClient } from '@foundation/query-client';
+import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '@shared/components';
+import { useMessageStore } from '@shared/stores';
 
 import {
   ADMIN_SHEET_NAME,
   MENU_ID,
+  MSG,
   TITLESET_COLUMN_TYPE,
   type GridSheet,
 } from '../capa-loss-plan.constants';
@@ -28,10 +31,13 @@ interface Props {
  */
 export const CapaLossPlanColumnModal = ({ open, onClose, sheetName, divisionId }: Props) => {
   const { t } = useTranslation();
+  const setAlert = useMessageStore.getState().setAlert;
+  const queryClient = useQueryClient();
   const staticColumns = useCapaLossPlanStore(state => state.staticColumns);
   const originalStaticColumns = useCapaLossPlanStore(state => state.originalStaticColumns);
   const applyColumnLayout = useCapaLossPlanStore(state => state.applyColumnLayout);
   const clearFilters = useCapaLossPlanStore(state => state.clearFilters);
+  const fetchStaticColumns = useCapaLossPlanStore(state => state.fetchStaticColumns);
 
   const columns = staticColumns[sheetName] ?? [];
   const originalColumns = originalStaticColumns[sheetName] ?? [];
@@ -71,6 +77,32 @@ export const CapaLossPlanColumnModal = ({ open, onClose, sheetName, divisionId }
         );
         // AS-IS 는 설정 확정 후 그리드를 비우고 헤더를 다시 만든다 — 조회는 사용자가 다시 누른다.
         clearFilters();
+        /**
+         * 서버 영속(SCM_MST_TITLESET_USER) — 이게 없으면 화면 로컬 store 만 갱신되어 새로고침/탭 닫기 시
+         * 개인화가 사라진다(자매 SCP0107 CapaTeepReportColumnModal 과 동일 계약). 저장 계약은 **표시
+         * 컬럼만** sortOrderNo 1..n(행 존재 = 표시). 실패하면 반드시 알린다(saveTitleSet 는 boolean).
+         * 전역 staleTime=Infinity 라 invalidate 없이는 팝업 titleSet 재조회가 안 일어난다.
+         */
+        const visible = settings.filter(setting => setting.USER_FLAG === 'Y');
+        void saveTitleSet({
+          menuId: MENU_ID,
+          sheetName: ADMIN_SHEET_NAME[sheetName],
+          columnType: TITLESET_COLUMN_TYPE,
+          rows: visible.map((setting, index) => ({
+            name: setting.COLUMN_NAME,
+            sortOrderNo: index + 1,
+            colWidth: Number(setting.COL_WIDTH ?? 100),
+            cellColor: String(setting.CELL_COLOR ?? ''),
+            textColor: String(setting.TEXT_COLOR ?? ''),
+          })),
+        }).then(ok => {
+          if (!ok) {
+            void setAlert({ type: 'alert', content: t(MSG.SAVE_FAIL, '_Failed to save.') });
+            return;
+          }
+          void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+          void fetchStaticColumns(sheetName, divisionId);
+        });
         onClose();
       }}
     />

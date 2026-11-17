@@ -1,0 +1,362 @@
+- paragraph: Shipment Plan(Mobility & IT)
+- text: Shipping Shipping Schedule Shipment Plan(Mobility & IT) Search Area
+- switch [checked]
+- button "Full screen"
+- text: Div
+- combobox [disabled]: 40 Mobility & IT Battery
+- button "Open" [disabled]
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: Bucket
+- combobox: Daily
+- button "Open"
+- text: Model/Nickname
+- textbox
+- button
+- text: Plan Date*
+- combobox: {DATE}
+- button "Open"
+- img
+- text: Period*
+- textbox "YYYY.MM.DD": 2026.10.10
+- text: ~
+- textbox "YYYY.MM.DD": 2026.11.10
+- checkbox "My Model"
+- text: My Model
+- checkbox "Part Leader"
+- text: Part Leader
+- checkbox "Team Leader"
+- text: Team Leader
+- checkbox "Delegatee Model"
+- text: Delegatee Model
+- checkbox "Sum"
+- text: Sum
+- button "Search(F5)"
+- paragraph
+- button "Measure":
+  - img
+- button "Insert(F8)"
+- button "Delete(F9)"
+- button "Save(F7)":
+  - img
+  - text: Save(F7)
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- button "Shipment PSI(Mobility & IT)"
+- button "Shipment PSI(Packer)"
+- grid:
+  - rowgroup:
+    - row "Div From Site Model Nick Name Aging L/T Yield(%) BOH PSI Measure No":
+      - columnheader "Div"
+      - columnheader "From Site"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "Aging L/T"
+      - columnheader "Yield(%)"
+      - columnheader "BOH"
+      - columnheader "PSI"
+      - columnheader "Measure"
+      - gridcell "No"
+      - gridcell
+    - row "TYPE Figure":
+      - columnheader "TYPE"
+      - columnheader "Figure"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- separator
+- img
+- text: Shipment Date
+- textbox "YYYY.MM.DD": 2026.10.10
+- text: ~
+- textbox "YYYY.MM.DD": 2026.11.10
+- text: Model/Nickname
+- textbox
+- button
+- text: Requestor
+- textbox
+- button
+- button "Search"
+- button "Shipment Confirm Detail"
+- button "W/H stock"
+- button "W/H stock Detail"
+- button "Hold stock"
+- button "Hold stock Detail"
+- button "Stock Detail"
+- button "WH In Plan Detail"
+- button "Shipment Result"
+- grid:
+  - rowgroup:
+    - row "Div Status SO No Confirm/Plan ID Model Nick Name From Site To Site End Customer MKT Owner Team FCST Type Shipment Qty Shipment Date Trans Mode Building No":
+      - columnheader "Div"
+      - columnheader "Status"
+      - columnheader "SO No"
+      - columnheader "Confirm/Plan ID"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "End Customer"
+      - columnheader "MKT Owner"
+      - columnheader "Team"
+      - columnheader "FCST Type"
+      - columnheader "Shipment Qty"
+      - columnheader "Shipment Date"
+      - columnheader "Trans Mode"
+      - columnheader "Building"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:42
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 21:31:43
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+# visual-order: Div > From Site > Bucket > Model/Nickname > Plan Date > Period > My Model > Part Leader > Team Leader > Delegatee Model > Sum > Shipment Date > Model/Nickname > Requestor

@@ -1,0 +1,37 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+DMF0022-S658458,DIVISION,40,40,,실행 대상,"if (sDivision == ""40"")",
+DMF0022-Sa421da,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"else of (sDivision == ""40"")",
+DMF0022-Sde9bfa,DIVISION,,,,값 미도출,"if (p_division_id == """")",
+DMF0022-Se01c75,DIVISION,40,40,,실행 대상,"if (sDivision == ""40"")",
+DMF0022-S73e0ef,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"else of (sDivision == ""40"")",
+DMF0022-Se9843f,DIVISION,,,,값 미도출,"switch (triggerControl) case ""MyDivision"":",
+DMF0022-Scf3183,DIVISION,,,,값 미도출,"switch (triggerControl) case ""UserTeamByDivision"":",
+DMF0022-S9623cc,DIVISION,,,,값 미도출,"switch (triggerControl) case ""EndCustomerByDivision"":",
+DMF0022-S80ad57,DIVISION,,,,값 미도출,"switch (triggerControl) case ""UserPlantSiteByDivision"":",
+DMF0022-S808157,DIVISION,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+DMF0022-S441708,DIVISION,40,40,,실행 대상,"if (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-Se0e944,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"else of (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-Se66925,DIVISION,40,40,,실행 대상,"if (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-Scb2ba0,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"else of (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-S195ca8,DIVISION,40,40,,실행 대상,"if (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-Sd0fb36,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"else of (clbDivision.SelectedValue.ToString() == ""40"")",
+DMF0022-S152fe7,COND,,,,값 미도출,if (drpPeriod.Value1.AddYears(3) < drpPeriod.Value2),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-Sbd6791,COND,,,,값 미도출,"else of ((dtStartPeriod.ToString(""yyyyMMdd"") == drpPeriod.Value1.ToString(""yyyyMMdd"") && dtEndPeriod.ToString(""yyyyMMdd"") == drpP…)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-S1c30d2,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"else of ((dtStartPeriod.ToString(""yyyyMMdd"") == drpPeriod.Value1.ToString(""yyyyMMdd"") && dtEndPeriod.ToString(""yyyyMMdd"") == drpP…) ▸ if (cboBucketType.ControlValues == BucketType.ONLY_WEEKLY)",
+DMF0022-S6c59f3,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siMain.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+DMF0022-S6a69a9,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (cboBucketType.ControlValues == BucketType.Daily) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""M_"") == 0 || siMain.GetColumnTag(iCol).IndexOf(""W_"") == 0)",
+DMF0022-Sd59aae,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""D_"") == 0)",
+DMF0022-Sf5f784,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ else of (siMain.GetColumnTag(iCol).IndexOf(""D_"") == 0) ▸ if (siMain.GetColumnTag(",
+DMF0022-Sbb8d29,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ if (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""M_"") == 0)",
+DMF0022-S252290,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ if (siMain.GetColum,
+DMF0022-Sc14b34,COND,cboBucketType.ControlValues,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,cboBucketType=i0 cboBucketType=i1 cboBucketType=i2 cboBucketType=i3,실행함,for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (cboBucketType.ControlValues == BucketType.Daily) ▸ else of (cboBucketType.ControlValues == BucketType.Weekly) ▸ if (cboBucketType.ControlValues == BucketType.Monthly) ▸ else of (siMain.Get,
+DMF0022-S67cbbb,COND,chkMem.Checked,chkMem=cT chkMem=cF,chkMem=cT chkMem=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (chkMem.Checked == false) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""M_"") == 0) ▸ if (siMain.GetColumnTag(iCol).Substring(2) == sResult_YYYYMMDD.Substring(0, 6))",
+DMF0022-Sa5d8be,COND,chkMem.Checked,chkMem=cT chkMem=cF,chkMem=cT chkMem=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (chkMem.Checked == false) ▸ else of (siMain.GetColumnTag(iCol).IndexOf(""M_"") == 0) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""W_"") == 0) ▸ if (iso_week == siMain.GetColumnTag(iCol).ToString().Subs",
+DMF0022-S7aca34,COND,chkMem.Checked,chkMem=cT chkMem=cF,chkMem=cT chkMem=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (chkMem.Checked == false) ▸ else of (siMain.GetColumnTag(iCol).IndexOf(""M_"") == 0) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""W_"") == 0) ▸ if (check == false) ▸ if (siMain.GetColumnTag(iCol).ToStr",
+DMF0022-S441708,COND,,,,값 미도출,"if (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-Se0e944,COND,,,,값 미도출,"else of (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-S3f9cc3,COND,,,,값 미도출,if (drpPeriod.Value1.AddYears(2) < drpPeriod.Value2),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-Se66925,COND,,,,값 미도출,"if (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-Scb2ba0,COND,,,,값 미도출,"else of (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-S195ca8,COND,,,,값 미도출,"if (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0022-Sd0fb36,COND,,,,값 미도출,"else of (clbDivision.SelectedValue.ToString() == ""40"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

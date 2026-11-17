@@ -1,0 +1,18 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SSP0200_GET_CHANGE_REQ_NO,PKG_SSP0200.P_SSP0200_GET_CHANGE_REQ_NO,GET,1,PASS:1,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+SSP0200_SAVE_SHIPMENT_CONFIRM_NEW,PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_CONFIRM_NEW,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_GET_SHIPMENT_CHANGE_REQUEST,PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST,GET,25,DIFF:1 PASS:1 ROWS_ONLY:19 SKIP:4,"인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — | 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),t",1,find,0,"{""p_division_id"": ""40"", ""p_from_site"": """", ""p_erp_so_no"": """", ""p_item_id"": """", ""p_from_yyyymmdd"": ""20261115"", ""p_to_yyyymmdd"": ""20261215"", ""p_change_type"": ""C"", ""p_status"": """", ""p_language"": ""KO"", ""debug_mode"": ""F"", ""p_to_site"": """", ""p_confirm_id"": """"}",BOTH,차등 검증·실측 모두 있음
+SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N,PKG_SSP0200.P_SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N,GET,1,ROWS_ONLY:1,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+SSP0200_GET_SHIPMENT_REQUEST_DRAFTING,PKG_SSP0200.P_SSP0200_GET_SHIPMENT_REQUEST_DRAFTING,GET,5,ROWS_ONLY:3 SKIP:2,"인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — | 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),t",1,find,0,"{""p_division_id"": ""40"", ""p_from_site"": """", ""p_to_site"": """", ""p_erp_so_no"": """", ""p_item_id"": """", ""p_bod_id"": """", ""p_incoterms"": """", ""p_transport_mode"": """", ""p_project_code"": """", ""p_fcst_type"": """", ""p_confirm_id"": """", ""p_from_yyyymmdd"": ""20261115"", ""p_to_yyyymmdd"": ""20261215"", ""p_change_request_no"": """", ""p_request_user_id"": ""jaeuk.shin"", ""p_request_status"": ""D"", ""p_language"": ""KO"", ""p_change_type"": ""C"", ""debug_mode"": ""F""}",BOTH,차등 검증·실측 모두 있음
+SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE,PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING,PKG_SSP0200.P_SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCM0001_GET_SCP_DAY_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,GET,1,PASS:1,,1,load,1,"{""p_from_date"": """", ""p_offset_day"": ""30"", ""p_timezone"": ""AS054""}",BOTH,차등 검증·실측 모두 있음
+SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM,PKG_SSP0200.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_GET_SHIPMENT_STATUS,PKG_SSP0200.P_SSP0200_GET_SHIPMENT_STATUS,GET,2,ROWS_ONLY:2,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+SSP0200_GET_ERP_SO_NO_CNT,PKG_SSP0200.P_SSP0200_GET_ERP_SO_NO_CNT,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING,PKG_SSP0200.P_SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM,PKG_SSP0200.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE,PKG_SSP0200.P_SSP0200_ERP_IFSEQ_MERGE,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0026_GET_BOD_ITEM,PKG_SSP0026.P_SSP0026_GET_BOD_ITEM,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_GET_ITEM_FROM_BOD,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0200_GET_SHIPMENT_DIVISION,,GET,0,,,1,load,12,"{""Param1"": ""ADMIN"", ""Param2"": ""jaeuk.shin""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음

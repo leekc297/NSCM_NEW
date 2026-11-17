@@ -1,0 +1,6 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0108-S69c336,DIVISION,,,,값 미도출,if (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.ELTR),
+SCP0108-S7461fb,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.MODULE_PACK || _division_type == DivisionType.ELTR),
+SCP0108-Sd8fa4a,DIVISION,,,,값 미도출,if (_division_type == DivisionType.ELTR),
+SCP0108-Sbd8fe2,DIVISION,,,,값 미도출,else of (_division_type == DivisionType.ELTR),
+SCP0108-S070f60,COND,cboProgressStatus.Items,cboProgressStatus=i0,cboProgressStatus=i0,실행함,if (cboProgressStatus.Items.Count > 0),콤보 항목 1개

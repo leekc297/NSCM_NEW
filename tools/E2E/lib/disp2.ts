@@ -20,7 +20,14 @@ export function badPeriod(v: string): boolean {
 }
 
 /** 칸 이름 기간(YYYYMM·YYYYMMWW) — 뒤 두 자리는 주차일 수 있어 월만 본다(DMF0082 W_20261144 = 2026년 11월 44주차 · 문서 20280001 = 월 00) */
-export function badPeriodName(v: string): boolean { const t = String(v ?? '').trim(); if (!/^\d{6}$|^\d{8}$/.test(t)) return false; const m = +t.slice(4, 6); return m < 1 || m > 12; }
+//   2026-11-10 T186(SCP0108 2번 허위 FAIL): 8자리 이름은 앞 번호 + 연월('01'+'202611' = 01202611)일 수도 있다 — 'YYYYMM??' · '??YYYYMM' 두 읽기 중
+//   하나라도 연도 1900~2100·월 1~12 이면 정상. 둘 다 아니면 이상값(문서 20280001: 2028년 00월 · '280001' 은 연도 2800)
+export function badPeriodName(v: string): boolean {
+  const t = String(v ?? '').trim(); if (!/^\d{6}$|^\d{8}$/.test(t)) return false;
+  const ym = (y: number, m: number) => y >= 1900 && y <= 2100 && m >= 1 && m <= 12;
+  if (t.length === 6) return !ym(+t.slice(0, 4), +t.slice(4, 6));
+  return !(ym(+t.slice(0, 4), +t.slice(4, 6)) || ym(+t.slice(2, 6), +t.slice(6, 8)));
+}
 
 /** 기간 칸 스윕 — cols 대상 칸 · checked 본 값 수 · bad 이상값 예시 */
 export function judgePeriodSweep(s: { cols: string[]; checked: number; bad: string[] }): J {
@@ -47,6 +54,8 @@ export function judgeDynSort(s: { binding: string; sorted: boolean; filterIcon: 
   if (!s.binding) return { result: 'NA', why: '동적 기간 칸 없음' };
   if (!s.sorted) return { result: 'FAIL', why: `동적 칸 ${s.binding} F3·헤더 클릭으로 정렬 안 됨` };
   if (!s.filterIcon) return { result: 'FAIL', why: `동적 칸 ${s.binding} F4 뒤 필터 아이콘 없음` };
+  // T187: 빈 칸 복사는 Copy 동작 증명 재료가 아니다(클립보드 '\n') — 판정 보류
+  if (!s.want.trim()) return { result: 'ERROR', why: `[측정 재료 부족] 동적 칸 ${s.binding} 값이 있는 행 없음 — Copy 미측정(정렬·필터 아이콘은 정상)` };
   const lines = s.clip.split(/\r?\n/).map(t => t.trim()).filter(Boolean);
   if (!lines.length || lines.some(t => t.replace(/,/g, '') !== s.want.trim().replace(/,/g, ''))) return { result: 'FAIL', why: `동적 칸 ${s.binding} Copy — 칸 '${s.want}' ≠ 클립보드 '${s.clip.slice(0, 40)}'` };
   return { result: 'PASS', why: `동적 칸 ${s.binding} 정렬·필터 아이콘·Copy '${s.want}' 정상` };

@@ -1,0 +1,76 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 08:49:43.342",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 6.58,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 08:49:43.718",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCP.SCM0002_GET_MATERIAL_BY_DIVISION",
+   "sp": "SCM0002_GET_MATERIAL_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1845,
+   "rows_kind": "DataSet rows",
+   "ms": 272.38,
+   "params": {
+    "p_division_id": "81",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_scp_module_type": "SCP0022"
+   },
+   "inline": "EXEC SCM0002_GET_MATERIAL_BY_DIVISION @p_division_id='81', @p_operation_group='', @p_item_id='', @p_scp_module_type='SCP0022'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 08:49:47.398",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0022_GET_FORMATION",
+   "sp": "SCP0022_GET_FORMATION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1361,
+   "rows_kind": "DataSet rows",
+   "ms": 6178.26,
+   "params": {
+    "p_division_id": "81",
+    "p_plant_site_id": "HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCP0022_GET_FORMATION @p_division_id='81', @p_plant_site_id='HQ07-A,HQ11-A,MI00-A,MI02-A,NA00-A,NB01-A,WA00-A', @p_item_id=''",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 08:49:47.478",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 6.76,
+   "params": {
+    "p_menu_id": "SCP0022",
+    "p_log_type": "FIND",
+    "p_log_cnt": "1361",
+    "p_db_time": "5.868",
+    "p_ui_time": "0.014",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0022', @p_log_type='FIND', @p_log_cnt='1361', @p_db_time='5.868', @p_ui_time='0.014', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

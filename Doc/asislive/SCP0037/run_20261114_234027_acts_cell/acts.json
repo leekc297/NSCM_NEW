@@ -1,0 +1,108 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0037-S4c6454",
+    "SCP0037-Sb11f3d",
+    "SCP0037-S6554af",
+    "SCP0037-Sd95957",
+    "SCP0037-S9c8cca",
+    "SCP0037-Se86f0f",
+    "SCP0037-S0ec411",
+    "SCP0037-S294db7",
+    "SCP0037-S83368b",
+    "SCP0037-S825bbb",
+    "SCP0037-S7bb42f"
+   ]
+  },
+  {
+   "control": "spdMain[SCM_SITE_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0037-S4c6454",
+    "SCP0037-Sb11f3d",
+    "SCP0037-S6554af",
+    "SCP0037-Sd95957",
+    "SCP0037-S9c8cca",
+    "SCP0037-Se86f0f",
+    "SCP0037-S0ec411",
+    "SCP0037-S294db7",
+    "SCP0037-S83368b",
+    "SCP0037-S825bbb",
+    "SCP0037-S7bb42f"
+   ]
+  },
+  {
+   "control": "spdMain[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0037-S4c6454",
+    "SCP0037-Sb11f3d",
+    "SCP0037-S6554af",
+    "SCP0037-Sd95957",
+    "SCP0037-S9c8cca",
+    "SCP0037-Se86f0f",
+    "SCP0037-S0ec411",
+    "SCP0037-S294db7",
+    "SCP0037-S83368b",
+    "SCP0037-S825bbb",
+    "SCP0037-S7bb42f"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 23:39:21",
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 11,
+   "named_cols": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "ITEM_ID"
+   ],
+   "used": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "ITEM_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

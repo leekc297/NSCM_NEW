@@ -1,0 +1,1 @@
+TYPE           "T_FN_SCP0104_SPREAD_TITLE_TAB"                                          AS TABLE OF T_FN_SCP0104_SPREAD_TITLE_ROW

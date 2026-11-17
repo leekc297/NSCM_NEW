@@ -11,7 +11,7 @@ DMF0004 (`sales-site`) / DMF0005 (`sales-site-project-model`) / DMF0006 (`custom
 
 ---
 
-## 1. 폴더 구조 표준 (4 master 동일)
+## 1. 폴더 구조 표준 (3 master 동일) (2026-11-13 정정: 4 master → 3 master — §0 DMF0004/0005/0006)
 
 ```
 nscm-fe/features/{domain}/src/pages/{kebab-case-screen}/
@@ -30,7 +30,7 @@ nscm-fe/features/{domain}/src/pages/{kebab-case-screen}/
    └─ {kebab-case-screen}.util.ts    ← 화면 전용 logic (auto-sync 등)
 ```
 
-### 1.1 명명 규약 매핑 (4 master 검증 완료)
+### 1.1 명명 규약 매핑 (3 master 검증 완료) (11-13 정정)
 
 | 항목 | 형식 | DMF0004 | DMF0005 | DMF0006 |
 |---|---|---|---|---|
@@ -167,7 +167,7 @@ export const applySalesSite = <
 
 ### 4.1 의무 사항
 - 데이터 변환 시 `String(value ?? '')` fallback (메모리 `feedback_fe_string_undefined_cast_guard.md`)
-- 셀 값 변경 시 `editTracker?.storeChange()` 호출 — CRUD_TYPE='U' 자동 + dirty flag (메모리 `feedback_sp_cursor_reassignment_overwrite.md` 와 별개로 FE side)
+- 셀 값 변경 시 `editTracker?.storeChange()` 호출 — CRUD_TYPE='M'(`CRUD_TYPE.MODIFY`) 자동 (2026-11-13 정정: 'U' → 'M' — `packages/foundation/src/constants/row-crud.ts` CREATE 'C'/INSERT 'I'/DELETE 'D'/MODIFY 'M', `editTracker.ts:83`) + dirty flag (메모리 `feedback_sp_cursor_reassignment_overwrite.md` 와 별개로 FE side)
 - AS-IS reference 주석 + DB 검증 결과 / Phase 적용 일자 + 작성자 (메모리 `feedback_asis_to_tobe_sp_no_omission.md` 동등 강도)
 - 제네릭 `<T extends ResponseData<MENU_ID, SHEETS.X> | ...>` 명시
 
@@ -347,12 +347,12 @@ import { CRUD_TYPE, CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE, BUTTON_TYPE } from 
 
 | Enum | 값 |
 |---|---|
-| `CRUD_TYPE` | `INSERT='I'` / `UPDATE='U'` / `DELETE='D'` |
+| `CRUD_TYPE` | `CREATE='C'` / `INSERT='I'` / `DELETE='D'` / `MODIFY='M'` (11-13 정정: `UPDATE='U'` 는 없음) |
 | `CELL_CONTROL_TYPE` | `TEXT` / `COMBO` / `MODAL` / `CHECK` 등 14종 (메모리) |
 | `CELL_INPUT_EDIT_TYPE` | `STATIC='S'` / `OPTIONAL='O'` / `MANDATORY='M'` / `OPTIONAL_INSERT_ONLY='IO'` / `MANDATORY_INSERT_ONLY='IM'` 5종 (메모리 `feedback_input_tp_cd_im_standard.md`) |
 | `BUTTON_TYPE` | `SEARCH='S'` / `SAVE='SAVE'` / `COMBO='C'` / `LOOKUP='L'` 등 |
 
-> ⛔ 화면 안 literal `'I'` / `'U'` / `'D'` 사용 금지. `CRUD_TYPE.INSERT` 등 의무.
+> ⛔ 화면 안 literal `'I'` / `'M'` / `'D'` 사용 금지 (11-13 정정: 'U' → 'M'). `CRUD_TYPE.INSERT` 등 의무.
 
 ---
 
@@ -505,7 +505,7 @@ grep -nE "t\\('LBL_[A-Z]+|t\\('MSG_[A-Z]+|t\\('BTN_[A-Z]+" "$SCREEN"
 
 ---
 
-## 17. 신규 화면 작성 시 4 master 비교 의무
+## 17. 신규 화면 작성 시 3 master 비교 의무 (11-13 정정)
 
 신규 화면 작성 직전 다음 3 화면 폴더를 **반드시 cross-check**:
 

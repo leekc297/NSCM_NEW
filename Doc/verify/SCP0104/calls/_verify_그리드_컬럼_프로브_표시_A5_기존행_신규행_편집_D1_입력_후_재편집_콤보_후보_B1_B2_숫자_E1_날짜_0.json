@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 115,
+  "at": "2026-11-17T08:35:27.980Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 90,
+  "at": "2026-11-17T08:35:31.703Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "ASSEMBLY",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/ASSEMBLY/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81\",\"p_site_id\":\"A001,A002,A003,A004\",\"p_plant_id\":\"HQ07,HQ11,MI00,MI02,NA00,NB01,WA00\",\"p_factory_id\":\"A1,A2,A3,A4,A5,A6,A7,A8,A9,AA,AC,AF,AH,AI,AL,AM\",\"p_line_id\":\"A9AP5,A9AV1,AAA10,AAA11,AAA12,AAA13,AAA14,AAAH1,AAAH2,ACA26,A1A02,ACA27,ACA28,ACA29,ACAH1,AFAP6,AHA01,AHA02,AHA03,AHA04,AHAH1,A1A03,AHAH2,AIA08,AIA09,AIA10,AIA11,ALA01,ALA02,ALAH1,DMY_3851,DMY_3852,A1A04,DMY_3853,DMY_3854,DMY_3855,DMY_3856,DMY_3857,DMY_3858,DMY_3859,A1A05,A1A06,A1A07,A1A08,A1AP1,A1AP2,A1AP3,A1AV1,A1AZ1,A2A10,A2A11,A2A13,A2A14,A2AP1,A2AP3,A2AP4,A2AP5,A2AV1,A2AZ1,A3A01,A3A02,A3A03,A3A04,A3A05,A3A06,A3A07,A3A08,A3AH1,A3AV1,A4A01,A4A02,A4A03,A4A04,A4A05,A4A06,A4A07,A4AH1,A4AV1,A5A01,A5A02,A5A03,A5AV1,A6A04,A6A05,A6A06,A6A07,A6A25,A6AV2,A7A08,A7A09,A7A10,A7A11,A7A12,A7A13,A7A14,A7A15,A7A16,A7A17,A7A18,A7A19,A7A20,A7A21,A7A22,A7A23,A7A24,A7AH1,A7AH2,A7AR1,A7AV3,A8A03,A8A04,A8A05,A8A06,A8A07,A8AA1,A8AA2,A8AB1,A8AB2,A8AF1,A8AF2,A8AH1,A8AH2,A8AH3,A8AL1,A8AL2,A9A01\",\"p_operation_id\":\"A5000,A7000,A7400,A8000,A8400,A9000,AFFFF\",\"p_electrode_type\":\"Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking\",\"p_valid_flag\":\"\",\"p_program_id\":\"SCP0104\",\"debug_mode\":\"F\",\"p_item_id\":\"\",\"p_sheet_name\":\"ASSEMBLY\"}",
+  "status": 200,
+  "rows": 609,
+  "dur": 335,
+  "at": "2026-11-17T08:35:35.095Z",
+  "user": "minyonglee1",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ }
+]

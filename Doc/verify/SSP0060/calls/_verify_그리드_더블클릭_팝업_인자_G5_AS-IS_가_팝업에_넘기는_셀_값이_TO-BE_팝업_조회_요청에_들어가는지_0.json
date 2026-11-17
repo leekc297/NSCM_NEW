@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0060",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 102,
+  "at": "2026-11-14T19:26:36.615Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 225,
+  "at": "2026-11-14T19:26:36.953Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 473,
+  "at": "2026-11-14T19:26:37.194Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 109,
+  "at": "2026-11-14T19:26:38.066Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 109,
+  "at": "2026-11-14T19:26:39.438Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"companyId\":\"GM00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261009\",\"fromYyyymmdd\":\"20261009\",\"toYyyymmdd\":\"20261023\",\"itemId\":\"\",\"productLevel1\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0060\",\"sheetName\":\"Shipment Plan\",\"realFlag\":\"Y\"}",
+  "status": 200,
+  "rows": 24,
+  "dur": 148,
+  "at": "2026-11-14T19:26:39.538Z",
+  "user": "minyonglee1",
+  "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+ }
+]

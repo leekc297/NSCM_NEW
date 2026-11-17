@@ -1,0 +1,260 @@
+{
+ "id": "SCP0125",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0125_SAVE_MKT_FCST_ADJ",
+   "save_sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_DMD_ADJ",
+   "pk": [
+    "DIVISION_ID",
+    "VERSION_NO",
+    "CUTOFF_YYYYMMDD",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "PLANT_SITE_ID",
+    "CELL_PROD_SITE_ID",
+    "DUE_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "VERSION_NO": "VERSION_NO",
+    "CUTOFF_YYYYMMDD": "CUTOFF_YYYYMMDD",
+    "PROJECT_CODE": "PROJECT_CODE",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "CELL_PROD_SITE_ID": "CELL_PROD_SITE_ID",
+    "DUE_DATE": "DUE_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/MKT FCST",
+   "writes": {
+    "SCP_OPMZ_DMD_ADJ": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0125_SAVE_MKT_FCST_ADJ → SP SCP0125_SAVE_MKT_FCST_ADJ 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "CHG_QTY",
+     "db_col": "CHG_QTY",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "ERROR",
+    "note": "Division 도출 {\"table_divisions\": [[\"82\", 6550], [\"40\", 1511], [\"81\", 430], [\"81_UC\", 244]], \"screen_list\": [\"81\", \"40\", \"82\", \"81_UC\", \"81_HM\", \"81_ST\", \"81_HD\", \"81_HG\"], \"tried\": [{\"division\": \"82\", \"set\": true, \"rows\": 0}, {\"division\": \"40\", \"set\": true, \"rows\": 0}, {\"division\": \"81\", \"set\": true, \"rows\": 0}, · 조회 결과 행 없음(메시지 [])",
+    "at": "2026-11-14 01:36:07"
+   }
+  },
+  {
+   "endpoint": "SCP.SCP0125_SAVE_STOCK_ADJ",
+   "save_sp": "SCP0125_SAVE_STOCK_ADJ",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_INV_ADJ",
+   "pk": [
+    "DIVISION_ID",
+    "SRCE_DIVS_CD",
+    "CUTOFF_YYYYMMDD",
+    "STOCK_TYPE",
+    "PROJECT_CODE",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "FROM_SITE_ID",
+    "SCM_SITE_ID",
+    "INV_DATE",
+    "LOCATION_CODE",
+    "LINE_ID",
+    "BEFORE_DEGAS"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SRCE_DIVS_CD": "SRCE_DIVS_CD",
+    "CUTOFF_YYYYMMDD": "CUTOFF_YYYYMMDD",
+    "STOCK_TYPE": "STOCK_TYPE",
+    "PROJECT_CODE": "PROJECT_CODE",
+    "ITEM_ID": "ITEM_ID",
+    "INCOTERMS": "INCOTERMS",
+    "FROM_SITE_ID": "FROM_SITE_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "INV_DATE": "INV_DATE",
+    "LINE_ID": "LINE_ID",
+    "BEFORE_DEGAS": "BEFORE_DEGAS"
+   },
+   "unmatched_pk": [
+    "FCST_TYPE",
+    "LOCATION_CODE"
+   ],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Stock",
+   "writes": {
+    "SCP_OPMZ_INV_ADJ": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0125_SAVE_STOCK_ADJ → SP SCP0125_SAVE_STOCK_ADJ 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "FCST_TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "LOCATION_CODE": "p_location_code←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "CHG_QTY",
+     "db_col": "CHG_QTY",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+   "save_sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_DMD_ELEC",
+   "pk": [
+    "DIVISION_ID",
+    "PLAN_START_YYYYMMDD",
+    "PLAN_TYPE",
+    "SEQ",
+    "PLANT_SITE_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "ITEM_ID",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLAN_START_YYYYMMDD": "PLAN_START_YYYYMMDD",
+    "PLAN_TYPE": "PLAN_TYPE",
+    "SEQ": "SEQ",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "YYYYMMDD": "YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Elec. Demand",
+   "writes": {
+    "SCP_OPMZ_DMD_ELEC": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0125_SAVE_MKT_FCST_ELEC_DEMAND → SP SCP0125_SAVE_MKT_FCST_ELEC_DEMAND 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "CHG_QTY",
+     "db_col": "CHG_QTY",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0125_SAVE_STOCK_SECOND_OCV",
+   "save_sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_INV_SECOND_OCV",
+   "pk": [
+    "DIVISION_ID",
+    "CUTOFF_YYYYMMDD",
+    "STOCK_TYPE",
+    "ITEM_ID",
+    "PLANT_ID",
+    "OPERATION_ID",
+    "SECOND_OCV_TIME",
+    "SECOND_OCV_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "CUTOFF_YYYYMMDD": "CUTOFF_YYYYMMDD",
+    "STOCK_TYPE": "STOCK_TYPE",
+    "ITEM_ID": "ITEM_ID",
+    "PLANT_ID": "PLANT_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "SECOND_OCV_TIME": "SECOND_OCV_TIME",
+    "SECOND_OCV_DATE": "SECOND_OCV_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Stock(2nd OCV)",
+   "writes": {
+    "SCP_OPMZ_INV_SECOND_OCV": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0125_SAVE_STOCK_SECOND_OCV → SP SCP0125_SAVE_STOCK_SECOND_OCV 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "CHG_QTY",
+     "db_col": "CHG_QTY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

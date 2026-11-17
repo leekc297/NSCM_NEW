@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 399,
+  "at": "2026-11-14T10:35:13.560Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"KO\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 172,
+  "at": "2026-11-14T10:35:16.479Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"EN\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 155,
+  "at": "2026-11-14T10:35:20.899Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ },
+ {
+  "menu": "SSP0003",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0003/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"fromSite\":\"ALL\",\"requestId\":\"\",\"fromYyyymmdd\":\"20261031\",\"toYyyymmdd\":\"20261114\",\"status\":\"D\",\"language\":\"CN\",\"itemId\":\"\",\"changeType\":\"ALL\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 158,
+  "at": "2026-11-14T10:35:25.367Z",
+  "user": "minyonglee1",
+  "test": "언어 전환 문구 덤프(I2)"
+ }
+]

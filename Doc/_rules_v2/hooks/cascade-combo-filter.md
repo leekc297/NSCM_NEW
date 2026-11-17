@@ -196,11 +196,11 @@ const handleAutoSalesSite = (s: FlexGrid<...>, e: CellRangeEventArgs) => {
 > combo 자동 부여(`SpreadInfo.cs L1444~1483`)는 `Data.Common(eDataType)` **파라미터 0개(전체 목록)** 다.
 > → TO-BE 등가 = **화면 constants 의 cascade 정의**(`GRID_CASCADE_FILTERS`/`GRID_CASCADE_CLEAR`). 메타 주도 확장(ATTRIBUTE 슬롯)은 사용자 결정 사항 — 임의 도입 금지.
 
-### 5-G.1 표준 5 의무 요소 (reference: DMF0020 `SalesFuturePriceGrid.tsx` + `CustDemandAnalysisModal.tsx`)
+### 5-G.1 표준 5 의무 요소 (reference: DMF0020 `SalesFuturePriceGrid.tsx` + `CustDemandAnalysisModal.tsx` (11-13: 현재 저장소에 없음))
 
 | # | 의무 | 구현 |
 |---:|---|---|
-| 1 | **beginningEdit dataMap 스왑** — FPComboBox 편집 진입 시 해당 행의 상위 셀 값으로 콤보 전체 결과(1RT fetch)를 `.filter()` 해 `col.dataMap` 교체. Wijmo dataMap 은 컬럼 전역이라 행별 콤보는 이 방법이 유일 (룰 07 §2.10.5) | `GRID_CASCADE_FILTERS[binding]` = `{rowKey, comboKey}[]` |
+| 1 | **beginningEdit dataMap 스왑** — FPComboBox 편집 진입 시 해당 행의 상위 셀 값으로 콤보 전체 결과(1RT fetch)를 `.filter()` 해 `col.dataMap` 교체. Wijmo dataMap 은 컬럼 전역이라 행별 콤보는 이 방법이 유일 (룰 07 §2.10.5) (2026-11-14 정정: 표준 변경. 공용 DataGrid 컬럼 메타(PARAM2, PARAM10) 처리가 표준(2026-09-01). 편집 진입 때 col.dataMap 교체 금지. `SalesFuturePriceGrid.tsx:267-276`. dataMap 교체를 쓰는 `ForecastPriceGrid.tsx:1345,1382` 는 보완 후보) | `GRID_CASCADE_FILTERS[binding]` = `{rowKey, comboKey}[]` |
 | 2 | ⭐ **cellEditEnded 진입 시 전체 dataMap 원복 필수** — 스왑이 남으면 필터 밖 CODE 를 가진 **다른 행의 CODE→NAME 표시가 깨짐** (편집 취소 포함 커버) | `dataMapsRef.current[binding]` 원복 — 핸들러 **맨 앞** |
 | 3 | **계단식 clear** — 상위 combo 값이 **실제로 변경된 경우만**(beginningEdit oldVal 캡처 비교) 하위 셀 + 팝업 파생 필드를 형제 행(INSERT_GROUP) 포함 일괄 `''` | `GRID_CASCADE_CLEAR[binding]` = 하위 컬럼 목록 (AS-IS clear 체인 1:1) |
 | 4 | **관대 통과 sentinel** — 행 상위 값이 비거나 'ALL' 이거나 **콤보 row 의 필터 키가 없으면 통과** (사내 미이관 필터 키는 데이터 적재 시 자동 활성 — 엄격 필터로 빈 콤보 사고 금지) | `!rv \|\| rv==='ALL' \|\| !cv \|\| rv===cv` |
@@ -298,7 +298,7 @@ grep -rnE "ATTRIBUTE1.*=.*'[A-Z]" features/*/src/pages/<screen>/components/*Form
 | §5 Grid Modal cascade | `features/master/src/pages/sales-site/components/SalesSiteGrid.tsx:82-86` |
 | §5-G Grid 셀 cascade (스왑/원복/clear) | `features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx` (beginningEdit 스왑 + cellEditEnded 원복·clear) + `sales-future-price.constants.ts` (GRID_CASCADE_FILTERS/CLEAR) |
 | §5-G modal preSearchParams=행값 | `features/master/src/pages/sales-future-price/SalesFuturePrice.tsx` (popupRow) |
-| §5-G 상수 기반 3단 cascade (팝업 내 grid) | `features/demand/src/pages/mkt-fcst/components/modals/CustDemandAnalysisModal.tsx` (CUST_DEMAND_CASCADE) |
+| §5-G 상수 기반 3단 cascade (팝업 내 grid) | `features/demand/src/pages/mkt-fcst/components/modals/CustDemandAnalysisModal.tsx` (CUST_DEMAND_CASCADE) (2026-11-13: 이 파일은 현재 저장소에 없음 — 2026-07-03 PSI 패널 제거로 삭제, `modals/index.ts` 주석) |
 
 ---
 

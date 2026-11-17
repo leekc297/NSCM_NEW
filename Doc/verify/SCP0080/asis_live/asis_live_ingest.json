@@ -1,0 +1,35 @@
+{
+ "id": "SCP0080",
+ "run_dir": "Doc/asislive/SCP0080/run_20261113_002127",
+ "live_at": "2026-11-13 00:21:27.893",
+ "user": "jaeuk.shin",
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 488.665s, UI : 0.575s",
+  "total": "Total : 4,526",
+  "how": "status",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 484
+ },
+ "mixed_risk": true,
+ "live_calls": 70,
+ "live_sp_distinct": 10,
+ "static_vs_live": {
+  "SP:FRAMEWORK": 8,
+  "SP:LIVE_ONLY": 1,
+  "SP:INLINE": 1,
+  "SP:NOT_CALLED": 1,
+  "CONTROL:INFO": 1,
+  "CONTROL:LIVE_ONLY": 14,
+  "CONDITION:LIVE": 8,
+  "GRID:LIVE": 7
+ },
+ "diff_gap": {},
+ "param_hints": 0,
+ "limits": [
+  "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
+  "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",
+  "원장 행 미생성(같은 조건 실측 전에는 판정 근거 없음)"
+ ]
+}

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgcns.nscm.admin.menu.MenuService;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
+import com.lgcns.nscm.admin.user.UserService;
 import com.lgcns.nscm.admin.user.UserSession;
 import com.lgcns.nscm.framework.annotation.SystemLog;
 import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
@@ -26,12 +27,16 @@ import com.lgcns.nscm.framework.utils.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final UserService userService;
 
     @Override
     @SystemLog(LogType.LOGIN)
@@ -40,6 +45,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json;charset=UTF-8");
+
+        // 로그인 성공 시 최종 로그인 일시 기록. 실패해도 로그인 응답을 막지 않는다.
+        try {
+            userService.updateLognDtm(SecurityUtil.getUserSession(authentication).getUserId());
+        } catch (Exception e) {
+            log.warn("LOGN_DTM 갱신 실패. {}", e.getMessage());
+        }
 
         Map<String, Object> body = new HashMap<>();
         body.put("code", SUCCESS);

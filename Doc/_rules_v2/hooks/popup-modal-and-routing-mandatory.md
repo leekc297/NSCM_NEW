@@ -1,6 +1,6 @@
 # Hook — Popup Modal 작성 + Router 등록 표준 (DMF0004 RegionModal master)
 
-> **Trigger**: T01 (신규 화면 / popup 작성) + T13 (Routing / 메뉴)
+> **Trigger**: T01 (신규 화면 / popup 작성) + T06 (Modal / Popup) + T09 (메뉴 / 라우팅) (2026-11-14 정정: T13 → T06, T09. `TRIGGER_ROUTER.md` 에서 T13 은 CSV 적재)
 > **PR 차단 강도**: ⭐⭐⭐ (anti-simplification 동등)
 > **신설일**: 2026-06-18 (자가 진화 #28, 사용자 명시 — "더 누락된 거 한번만 더 확인" 보강)
 > **세트 hook**: #60+#61+#62+#63+#64+#65+#66 + **#67 (본 hook)**
@@ -41,7 +41,7 @@ export * from './ownerModal/OwnerModal';
 // ... 신규 popup 추가 시 1 line 추가
 ```
 
-화면에서 사용: `import { RegionModal } from '../../../components';` (4 도메인 동일)
+화면에서 사용: `import { RegionModal } from 'features/{domain}/src/components';` (4 도메인 동일) (2026-11-13 정정: '../../../components' → 비상대 경로 — components 용 별칭은 tsconfig paths 에 없음)
 
 ---
 
@@ -123,7 +123,7 @@ export const RegionModal = ({ open, modalClose, setSelectedValue, country='', ci
     setModalFilters({ country, city });
   }, 50);
 
-  // 클라이언트 측 필터 (대용량 popup 데이터 BE 재호출 회피)
+  // 클라이언트 측 필터 (대용량 popup 데이터 BE 재호출 회피)   (2026-11-14 정정: master RegionModal 실물은 Search 때 프로시저를 다시 조회한다. RegionModal.tsx:52-79)
   const itemsSource = (regionData?.o_rc1 ?? []).filter(
     region => (region.COUNTRY_NAME ?? '').toLowerCase().includes(modalFilters.country.toLowerCase())
               && (region.CITY_NAME ?? '').toLowerCase().includes(modalFilters.city.toLowerCase())
@@ -132,11 +132,14 @@ export const RegionModal = ({ open, modalClose, setSelectedValue, country='', ci
   // 셀 더블클릭 → setSelectedValue + modalClose
   const handleDblClick = (mouseEvent: MouseEvent) => { ... setSelectedValue(...); modalClose(); };
 
+  // 2026-11-13 정정: onClose/title → handleClose/customHeaderTitle (master RegionModal.tsx 실물 · post-write §0.1 #15)
   return (
-    <CustomDialog open={open} onClose={modalClose} title={t('LBL00xxx', '_Region')} ...>
+    <CustomDialog open={open} handleClose={modalClose} customHeaderTitle={<h2 className='headerTitle'>{t('LBL00xxx', '_Region')}</h2>} ...>
       <SearchArea ... />
       <DataGrid<...> gridRef={gridRef} itemsSource={itemsSource} dblClick={handleDblClick} ... />
-      <Button onClick={() => { setSelectedValue(...); modalClose(); }}>Confirm</Button>
+      {/* 2026-11-13 정정: Confirm 단일 버튼 → OK → Close 순서 2 버튼 (CR-005 · master RegionModal.tsx 실물) */}
+      <Button buttonLabel='OK' onClick={() => { setSelectedValue(...); modalClose(); }} />
+      <Button buttonLabel='Close' onClick={modalClose} />
     </CustomDialog>
   );
 };
@@ -388,7 +391,7 @@ grep -nE '@media \\(' nscm-fe/features/*/src/pages/*/*.module.scss
 | 9 | `MNU_URL` 에 전체 경로 (`'/master/demand-master/sales-site'`) | leaf slug only (`'sales-site'`) — 메모리 `reference_scm_adm_mnu_m_url_slug.md` |
 | 10 | SCSS class kebab-case (`custom-form`) 또는 PascalCase (`CustomForm`) | camelCase (`customForm`) |
 | 11 | `@media (min-width: ...)` 직접 미디어 쿼리 | `@include respond-to('HD' \| 'FHD')` mixin |
-| 12 | popup barrel `index.ts` 누락 (화면이 `import { Modal } from './regionModal/RegionModal'` 직접) | `features/{domain}/src/components/index.ts` 1 line export 추가 후 `from '../../../components'` |
+| 12 | popup barrel `index.ts` 누락 (화면이 `import { Modal } from './regionModal/RegionModal'` 직접) | `features/{domain}/src/components/index.ts` 1 line export 추가 후 `from 'features/{domain}/src/components'` (11-13 정정) |
 
 ---
 

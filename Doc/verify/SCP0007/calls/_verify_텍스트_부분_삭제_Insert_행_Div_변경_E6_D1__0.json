@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0007",
+  "sheet": "countryCity",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/countryCity/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 176,
+  "at": "2026-11-13T23:36:15.858Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "SCP0007",
+  "sheet": "countryCity",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/countryCity/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"scmSiteId\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 166,
+  "at": "2026-11-13T23:36:16.982Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ },
+ {
+  "menu": "SCP0007",
+  "sheet": "bod",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0007/bod/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"fromSite\":\"ALL\",\"toSite\":\"ALL\",\"incoterms\":\"ALL\",\"incotermsSsp\":\"ALL\",\"transMode\":\"ALL\",\"inputStatus\":\"C\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 3777,
+  "at": "2026-11-13T23:36:20.069Z",
+  "user": "minyonglee1",
+  "test": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)"
+ }
+]

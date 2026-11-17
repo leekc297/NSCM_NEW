@@ -26,7 +26,7 @@
 | features/shipping/src/pages/shipment-request-electrode/useShipmentRequestElectrodeStore.ts | store | 379 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.dynamicColumn.ts | util | 76 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.editLock.ts | util | 121 |
-| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | util | 78 |
+| features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | util | 80 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.save.ts | util | 332 |
 | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.spreadHeader.ts | util | 235 |
 
@@ -136,7 +136,7 @@
 | ExcelUploadModal | onUploaded | <arrow> setActiveDetailTab,setFilters,refetchMain,setDetailFilters,refetchRequestDetail | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 879 |
 | ShipmentRequestInsertModal | onSaved | <arrow> setOpenRequestInsert,setFilters,refetchMain | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 901 |
 | BodItemModal | onSelect | handleBodItemSelected | jsx | features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx | 918 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | 67 |
+| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.footerSum.ts | 69 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

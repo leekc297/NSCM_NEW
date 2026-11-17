@@ -69,6 +69,10 @@ const s = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'num
 //   DB 실측 2026-10-13). '/' 를 빈값으로 바꿔 보내면 서버에서 NULL→NVL '-' 로 매칭된다.
 const normElectrode = (v: string): string => (v === '/' ? '' : v);
 
+// 일반 저장 키 정규화. GET SP 가 NULL 을 '-' 로 채워 내리는데(2026-10-22 '/' 에서 변경) 저장 SP 는
+//   DECODE(원장, 입력) 로 비교해 원장 NULL 과 매칭되지 않는다. '-'/'/' 를 빈값(NULL)으로 보낸다.
+const normBlankKey = (v: string): string => (v === '-' || v === '/' ? '' : v);
+
 // 변경된 D_ 셀만 순회해 24필드 행으로 변환한다. row 는 정보컬럼(design 03 §1)을 그대로 갖고
 //   있으므로 Division/BizType/OperGroup 등은 그 행에서 읽는다 — 단 PlanType/Seq 는 MAIN_COLUMNS
 //   27건 어디에도 없는 필드다(행별로 다를 수 없는 값 — 한 조회결과는 항상 단일 Plan). 조회조건
@@ -110,8 +114,10 @@ export const buildSaveRows = (
         qty: s(r[binding]),
         toSite: s(pickField(r, 'TO_SITE')),
         originFromDivisionId: s(pickField(r, 'ORIGIN_FROM_DIVISION_ID')),
-        originToDivisionId: s(pickField(r, 'ORIGIN_TO_DIVISION_ID')),
-        electrodeType: normElectrode(s(pickField(r, 'ELECTRODE_TYPE'))),
+        // originToDivisionId: s(pickField(r, 'ORIGIN_TO_DIVISION_ID')),
+        originToDivisionId: normBlankKey(s(pickField(r, 'ORIGIN_TO_DIVISION_ID'))),
+        // electrodeType: normElectrode(s(pickField(r, 'ELECTRODE_TYPE'))),
+        electrodeType: normBlankKey(s(pickField(r, 'ELECTRODE_TYPE'))),
         fixReason,
         createdBy: userId,
         lastUpdatedBy: userId,

@@ -1,7 +1,7 @@
 {
  "id": "SSP0024",
  "asis": "SSP0024",
- "at": "2026-11-09 11:03:57",
+ "at": "2026-11-15 02:14:06",
  "has_asis": true,
  "tobe_cols": 25,
  "buttons": [
@@ -36,7 +36,7 @@
   "p_delete": {
    "rows": 0,
    "why_not": [
-    "AS-IS 삭제가 신규 행만(DeleteButton 274 guard == StringI) → 기존 행 D 저장 대상 아님"
+    "AS-IS 삭제가 신규 행만(DeleteButton:274 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
    ]
   },
   "p_combo": {

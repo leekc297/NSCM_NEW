@@ -18,9 +18,9 @@
   ],
   "condOrder": [
     "Div",
-    "Plan Date",
     "Model/Nickname",
     "Cell Model",
+    "Plan Date",
     "Period",
     "Qty ＜ 0"
   ],
@@ -502,20 +502,20 @@
     ],
     "SCM PI Admin": [
       "SEARCH",
-      "SAVEDETAIL",
       "DELETE",
-      "EXCEL",
       "EDIT",
+      "EXCEL",
+      "SAVEDETAIL",
       "SAVE",
       "INSERT"
     ],
     "SCM Viewer": [
       "SEARCH",
-      "INSERT",
+      "SAVEDETAIL",
+      "SAVE",
       "EXCEL",
       "DELETE",
-      "SAVEDETAIL",
-      "SAVE"
+      "INSERT"
     ],
     "SCP Planner": [
       "SEARCH",
@@ -528,11 +528,11 @@
     ],
     "SCP Tester": [
       "SEARCH",
-      "DELETE",
+      "INSERT",
       "EXCEL",
       "SAVE",
-      "INSERT",
-      "SAVEDETAIL"
+      "SAVEDETAIL",
+      "DELETE"
     ]
   },
   "menuBtnCodes": [

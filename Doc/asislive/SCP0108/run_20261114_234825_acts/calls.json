@@ -1,0 +1,40 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 23:47:34.889",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 17.08,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "CURRENT",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0108', @p_sheet_name='CURRENT', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnColumn"
+  },
+  {
+   "at": "2026-11-14 23:48:05.441",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CAPA_ITEM_POPUP",
+   "sp": "SCM0002_GET_CAPA_ITEM_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9612,
+   "rows_kind": "DataSet rows",
+   "ms": 743.39,
+   "params": {
+    "p_division_id": "81",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_CAPA_ITEM_POPUP @p_division_id='81', @p_item_id=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

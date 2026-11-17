@@ -1,6 +1,6 @@
 # SCP0007 · SCP0007_GET_ROUTE_CNT ↔ PKG_SCP0007.P_SCP0007_GET_ROUTE_CNT
 
-- 실행: 2026-11-02 03:09:09
+- 실행: 2026-11-14 07:40:28
 - 파라미터: `{"p_from_city": "KRCOJ", "p_to_city": "KRSEL", "debug_mode": "F"}`
 - 종류: GET
 

@@ -1021,7 +1021,7 @@ export const MktFcst01 = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ModelPopupModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
-        onSelect={({ itemId, itemName, nickName, itemType }) => {
+        onSelect={({ itemId, itemName, nickName, itemType, mdlGr, mdlPrdnCtry }) => {
           if (!popupGroupId) return;
           const target = spRows.find(r => r.INSERT_GROUP_ID === popupGroupId);
           if (target) {
@@ -1032,6 +1032,10 @@ export const MktFcst01 = ({ tabId, title }: PageProps<MENU_ID>) => {
             // Item Type 자동 입력 — AS-IS Plan.UIL .cs L2557/L2568 popItem.ItemType(코드). ITEM_TYPE 칸은
             //   코드 콤보(ItemType)라 코드를 넣는다.
             rec.ITEM_TYPE = itemType;
+            // Model Group · Model Prod. Country — 팝업에 조회된 값을 그대로 보여 준다(사용자 요청 2026-11-12).
+            //   둘 다 조회 전용 칸이고 저장 인자에는 없다(저장 프로시저가 Model 로 다시 정한다).
+            rec.MDL_GR = mdlGr;
+            rec.MDL_PRDN_CTRY = mdlPrdnCtry;
             // Item(Model) 은 키 컬럼이지만 수량(D_/W_/M_)은 그대로 둔다 —
             //   이 파일 handleSave 위의 A-08 [CG-05] 주석 참조.
             gridRef.current?.invalidate();

@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SSP0060",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 99,
+  "at": "2026-11-14T19:34:23.158Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 219,
+  "at": "2026-11-14T19:34:23.516Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 475,
+  "at": "2026-11-14T19:34:23.740Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 95,
+  "at": "2026-11-14T19:34:24.604Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ }
+]

@@ -11,7 +11,7 @@ import {
   OrderDetailModal,
   type OrderDetailContext,
 } from 'features/shipping/src/components';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
@@ -28,6 +28,7 @@ import {
   registerDirtyReset,
   useMessageStore,
   useSessionStore,
+  useUIStore,
 } from '@shared/stores';
 
 import { ShipmentPlanAutoEssDetailBar } from './components/ShipmentPlanAutoEssDetailBar';
@@ -716,6 +717,41 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     setCellPopupKind(kind);
   };
 
+  // item 3(공통 기능키 하단 그리드 미작동, 사용자 신고 2026-11-09) — 공통 툴바 Sort(F3)/Filter(F4)·키보드
+  //   단축키 가드는 SubTitle 의 grid/gridFilter prop 을 대상으로 삼는데, 종전엔 메인에 고정돼 하단 7-sheet
+  //   에서 동작하지 않았다. 포커스된 그리드(activeGrid: click/gotFocus→'detail'/'main', activeDetailSheet)로
+  //   grid/gridFilter 를 라우팅한다(SSP0026 item3 동형). 건수(countGrid)·Excel 은 메인에 고정해 회귀 방지.
+  //   아래 두 맵은 하단 DetailGrid 의 gridRefs/gridFilterRefs prop 과 동일 원천(JSX 에서 재사용).
+  const detailGridRefBySheet = {
+    [SHEETS.PLAN_DETAIL]: planDetailGridRef,
+    [SHEETS.STOCK_DETAIL]: stockDetailGridRef,
+    [SHEETS.OWMS_DETAIL]: owmsDetailGridRef,
+    [SHEETS.HOLD_STOCK]: holdStockGridRef,
+    [SHEETS.MES_STOCK]: mesStockGridRef,
+    [SHEETS.MES_STOCK_DETAIL]: mesStockDetailGridRef,
+    [SHEETS.SHIPMENT_RESULT]: shipmentResultGridRef,
+  };
+  const detailGridFilterRefBySheet = {
+    [SHEETS.PLAN_DETAIL]: planDetailGridFilterRef,
+    [SHEETS.STOCK_DETAIL]: stockDetailGridFilterRef,
+    [SHEETS.OWMS_DETAIL]: owmsDetailGridFilterRef,
+    [SHEETS.HOLD_STOCK]: holdStockGridFilterRef,
+    [SHEETS.MES_STOCK]: mesStockGridFilterRef,
+    [SHEETS.MES_STOCK_DETAIL]: mesStockDetailGridFilterRef,
+    [SHEETS.SHIPMENT_RESULT]: shipmentResultGridFilterRef,
+  };
+  const focusedGridRef = (
+    activeGrid === 'detail'
+      ? (detailGridRefBySheet[activeDetailSheet as keyof typeof detailGridRefBySheet] ?? mainGridRef)
+      : mainGridRef
+  ) as RefObject<FlexGridType | undefined>;
+  const focusedGridFilterRef = (
+    activeGrid === 'detail'
+      ? (detailGridFilterRefBySheet[activeDetailSheet as keyof typeof detailGridFilterRefBySheet] ??
+        mainGridFilterRef)
+      : mainGridFilterRef
+  ) as RefObject<FlexGridFilter | undefined>;
+
   // ── hotkeyConfig (design 01 §2 확정값 — 재판단 금지) ──
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
@@ -723,6 +759,12 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: hasButton('INSERT') ? handleInsert : false,
     // Delete = NO-OP (AS-IS L2354-2356 빈 몸체) — 노출 유지 + 명시적 무동작. 키 생략·false 금지.
     delete: hasButton('DELETE') ? () => undefined : false,
+    // Excel 다운로드는 포커스와 무관하게 항상 메인 그리드를 받는다(grid prop 이 포커스로 바뀌어 하단이
+    //   다운로드되는 회귀 방지, SSP0026/SSP0202 선례).
+    excel: () => {
+      const g = mainGridRef.current;
+      if (g) void GridAction.excelDownload(g, 'ShipmentPlan', useUIStore.getState().setProgress);
+    },
     manual: false,
     upload: false,
   };
@@ -772,8 +814,11 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
       )}
       <SubTitle
         menuId={MENU_ID}
-        grid={mainGridRef}
-        gridFilter={mainGridFilterRef}
+        // item 3: Sort(F3)/Filter(F4)·키보드 가드를 포커스된 그리드(메인↔하단 7-sheet)로 라우팅.
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
+        // 건수 배지는 메인 그리드에 고정(포커스가 하단으로 가도 메인 건수 유지).
+        countGrid={mainGridRef}
         dataCount={mainRows.length}
         excelFileName='ShipmentPlan'
         useHotkey={true}
@@ -822,24 +867,8 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
             onOrderDetail={setOrderDetail}
             onConfirmDetail={setConfirmDetailNo}
             rowsBySheet={rowsBySheet}
-            gridRefs={{
-              [SHEETS.PLAN_DETAIL]: planDetailGridRef,
-              [SHEETS.STOCK_DETAIL]: stockDetailGridRef,
-              [SHEETS.OWMS_DETAIL]: owmsDetailGridRef,
-              [SHEETS.HOLD_STOCK]: holdStockGridRef,
-              [SHEETS.MES_STOCK]: mesStockGridRef,
-              [SHEETS.MES_STOCK_DETAIL]: mesStockDetailGridRef,
-              [SHEETS.SHIPMENT_RESULT]: shipmentResultGridRef,
-            }}
-            gridFilterRefs={{
-              [SHEETS.PLAN_DETAIL]: planDetailGridFilterRef,
-              [SHEETS.STOCK_DETAIL]: stockDetailGridFilterRef,
-              [SHEETS.OWMS_DETAIL]: owmsDetailGridFilterRef,
-              [SHEETS.HOLD_STOCK]: holdStockGridFilterRef,
-              [SHEETS.MES_STOCK]: mesStockGridFilterRef,
-              [SHEETS.MES_STOCK_DETAIL]: mesStockDetailGridFilterRef,
-              [SHEETS.SHIPMENT_RESULT]: shipmentResultGridFilterRef,
-            }}
+            gridRefs={detailGridRefBySheet}
+            gridFilterRefs={detailGridFilterRefBySheet}
             editTrackerRefs={{
               [SHEETS.PLAN_DETAIL]: planDetailEditTrackerRef,
             }}

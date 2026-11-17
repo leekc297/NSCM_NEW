@@ -9,7 +9,7 @@
   "diff": "",
   "lines": 13,
   "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0084\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(14줄 · formItem 공통 조상) · 시각 순서 4칸",
-  "at": "2026-11-08T07:50:28.129Z"
+  "at": "2026-11-14T03:27:31.901Z"
  },
  {
   "key": "버튼_Div_40",
@@ -21,7 +21,7 @@
   "diff": "",
   "lines": 8,
   "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0084\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(9줄) · 보이는 버튼 KOR,이 이민용,Home,Long-term stock,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,calendar,Open,Search(F5),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
-  "at": "2026-11-08T07:50:28.279Z"
+  "at": "2026-11-14T03:27:32.032Z"
  },
  {
   "key": "헤더_Long_Term_Stock",
@@ -33,7 +33,7 @@
   "diff": "",
   "lines": 1,
   "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0084\\snap\\received\\헤더_Long_Term_Stock.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 1행 · 칸 46",
-  "at": "2026-11-08T07:50:35.556Z"
+  "at": "2026-11-14T03:27:41.489Z"
  },
  {
   "key": "화면샷_1920",
@@ -41,10 +41,10 @@
   "scope": "1920",
   "status": "NEW",
   "golden": "Doc\\verify\\SCP0084\\snap\\golden\\화면샷_1920.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1493 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0084\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  },
  {
@@ -53,10 +53,10 @@
   "scope": "1366",
   "status": "NEW",
   "golden": "Doc\\verify\\SCP0084\\snap\\golden\\화면샷_1366.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1493 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SCP0084\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  }
 ]

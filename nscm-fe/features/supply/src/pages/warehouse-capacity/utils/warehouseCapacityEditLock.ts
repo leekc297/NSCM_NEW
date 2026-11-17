@@ -1,3 +1,5 @@
+import type { FlexGrid } from '@mescius/wijmo.grid';
+
 // design 01 §2(#2,#6) + design 03 §1.1/§3(gridSignals#7~18) 편집잠금 재현.
 //   AS-IS 규칙: DIVISION_ID·감사4컬럼(CREATED_BY/CREATION_DATE/LAST_UPDATED_BY/LAST_UPDATE_DATE)
 //   + PRE_KEY_VALUES 는 신규행 포함 항상 잠금(LockColumn/LockRange). AS-IS EditButton(SwitchLock)
@@ -35,6 +37,56 @@ export const clampNonNegative = (raw: unknown): { value: number; coerced: boolea
   const num = Number(raw);
   if (Number.isNaN(num) || num < 0) return { value: 0, coerced: true };
   return { value: num, coerced: false };
+};
+
+// MAX_CAPA(WhCapa)/STOR_PER(Item Mapping) 정수부 10자리 제한(사용자 요청 2026-11-10). admin
+//   DATA_MAX_LENGTH 는 두 컬럼 모두 NULL 이지만 메타는 건드리지 않고 화면 코드로만 막는다.
+//   천단위 콤마·부호·소수부는 자릿수에 넣지 않는다.
+export const MAX_INTEGER_DIGITS = 10;
+export const DIGIT_LIMITED_COLUMNS = ['MAX_CAPA', 'STOR_PER'] as const;
+export const isDigitLimitedColumn = (binding: string): boolean =>
+  (DIGIT_LIMITED_COLUMNS as readonly string[]).includes(binding);
+export const isWithinDigitLimit = (text: unknown): boolean => {
+  const raw = typeof text === 'string' || typeof text === 'number' ? String(text) : '';
+  const intPart = raw.split('.')[0] ?? '';
+  return intPart.replace(/\D/g, '').length <= MAX_INTEGER_DIGITS;
+};
+
+// 위 제한을 그리드에 건다(WarehouseCapacityGrid/WarehouseItemMappingGrid 공용). 타이핑은 초과 입력
+//   자체를 막고, 붙여넣기·확정은 값을 반영하지 않는다(공용 DataGrid numberRules 와 같은 방식). 반환값은
+//   핸들러 해제 함수.
+export const attachDigitLimit = (g: FlexGrid): (() => void) => {
+  const prepareHandler = (sender: FlexGrid, e: { col: number }) => {
+    if (!isDigitLimitedColumn(sender.columns[e.col]?.binding ?? '')) return;
+    const editor = sender.activeEditor;
+    if (!editor) return;
+    editor.addEventListener('beforeinput', (inputEvent: InputEvent) => {
+      if (inputEvent.data == null) return;
+      const { value, selectionStart, selectionEnd } = editor;
+      const next =
+        value.slice(0, selectionStart ?? value.length) +
+        inputEvent.data +
+        value.slice(selectionEnd ?? value.length);
+      if (!isWithinDigitLimit(next)) inputEvent.preventDefault();
+    });
+  };
+  const editEndingHandler = (sender: FlexGrid, e: { col: number; cancel: boolean }) => {
+    if (e.cancel || !isDigitLimitedColumn(sender.columns[e.col]?.binding ?? '')) return;
+    const editor = sender.activeEditor;
+    if (editor && !isWithinDigitLimit(editor.value)) e.cancel = true;
+  };
+  const pastingHandler = (sender: FlexGrid, e: { col: number; data: unknown; cancel: boolean }) => {
+    if (e.cancel || !isDigitLimitedColumn(sender.columns[e.col]?.binding ?? '')) return;
+    if (!isWithinDigitLimit(e.data)) e.cancel = true;
+  };
+  g.prepareCellForEdit.addHandler(prepareHandler as never);
+  g.cellEditEnding.addHandler(editEndingHandler as never);
+  g.pastingCell.addHandler(pastingHandler as never);
+  return () => {
+    g.prepareCellForEdit?.removeHandler(prepareHandler as never);
+    g.cellEditEnding?.removeHandler(editEndingHandler as never);
+    g.pastingCell?.removeHandler(pastingHandler as never);
+  };
 };
 
 // Warehouse Item Mapping 시트 전용(design 03 §1.2 #7~9, AS-IS SCP0133_WarehouseCapacity.cs:512-532).
@@ -95,6 +147,30 @@ export const isValidYmd = (ymd: string): boolean => {
   const d = Number(ymd.slice(6, 8));
   const dt = new Date(y, m - 1, d);
   return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+};
+
+// OPMZ_PLAN_GR_ID 빈 값 표시(QA I-06, 사용자 보고 2026-11-10) — formatItem 에서 텍스트만 지우고
+//   Wijmo 가 콤보 컬럼에 같이 심어 둔 드롭다운 화살표 등 자식 요소는 건드리지 않는다.
+//   `cell.textContent = ''` 는 자식 노드를 통째로 비워 그 요소까지 같이 지워버린다(2026-11-10
+//   실사고 — 편집 진입은 되는데 드롭다운 화살표/목록이 안 보임). 텍스트 노드만 선별해 비운다.
+export const clearCellText = (cell: HTMLElement): void => {
+  cell.childNodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE) node.textContent = '';
+  });
+};
+
+// 행의 OPMZ_PLAN_GR_ID 가 유효 Plan Group 집합 밖인지(= 화면에 빈값으로 보여야 하는지) 판정.
+//   validKeys 는 `DIVISION_ID|CODE` 형식(WarehouseCapacityGrid/WarehouseItemMappingGrid 공용).
+const toPlainString = (v: unknown): string =>
+  typeof v === 'string' || typeof v === 'number' ? String(v) : '';
+
+export const isInvalidPlanGroupRow = (
+  row: Record<string, unknown> | undefined,
+  validKeys: Set<string>
+): boolean => {
+  if (!row || !row.OPMZ_PLAN_GR_ID) return false;
+  const key = `${toPlainString(row.DIVISION_ID)}|${toPlainString(row.OPMZ_PLAN_GR_ID)}`;
+  return !validKeys.has(key);
 };
 
 // 저장 대상 행들의 날짜 결함을 찾는다. 'format' = YYYYMMDD 형식 오류(S3, AS-IS DateTime.ParseExact

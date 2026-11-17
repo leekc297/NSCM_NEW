@@ -1,0 +1,506 @@
+{
+ "id": "SCM0019",
+ "from": "dump_find.json",
+ "total": "Total : 48",
+ "time_status": "DB : 0.358s, UI : 0.065s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Main",
+     "rows": 48,
+     "cols": 6,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Start Date"
+       ],
+       "label": "Plan Start Date",
+       "tag": "PLAN_START_YYYYMMDD",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "PLAN_START_YYYYMMDD",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "FP Target YN"
+       ],
+       "label": "FP Target YN",
+       "tag": "FP_TARGET_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "FP_TARGET_YN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "MRP Target YN"
+       ],
+       "label": "MRP Target YN",
+       "tag": "MRP_TARGET_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "MRP_TARGET_YN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "DM RTF YN"
+       ],
+       "label": "DM RTF YN",
+       "tag": "DM_RTF_YN",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DM_RTF_YN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 48,
+     "data": [
+      [
+       "",
+       "40",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "40",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "40",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "40",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HD",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HD",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HD",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HD",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HG",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HG",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HG",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HG",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HM",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HM",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HM",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_HM",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_UC",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_UC",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_UC",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "81_UC",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "82",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "82",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "82",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "82",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HD",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HD",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HD",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HD",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HG",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HG",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HG",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HG",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HM",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HM",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HM",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_HM",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_UC",
+       "20261109",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_UC",
+       "20261116",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_UC",
+       "20261123",
+       "Y",
+       "Y",
+       "Y"
+      ],
+      [
+       "",
+       "EE_UC",
+       "20261130",
+       "Y",
+       "Y",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,3 +1,320 @@
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Source Backup — 폴더 묶음별 add · 수정 중 파일만 제외 (2026-11-17 17:26 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "Source Backup 오류 다시 발생 · 원인 확인 및 보완 · 폴더로 분할 · 수정 중 파일 때문이면 그 파일만 제외하고 나머지는 올림".
+- 원인(측정): git add -A 중 git.exe 2.56.0.4 비정상 종료 0xC0000005 · 오프셋 0x15dcd6 (Windows 이벤트 로그 Application 1000 · 11-11 20:50 · 11-11 21:26 · 11-17 16:23) → .git/index.lock 잔존 → 다음 실행 'File exists'. 11-17 15:5x VM 세션의 '강제 종료' 판단은 이벤트 로그와 다름. 충돌 원인 자체는 미확인.
+- 재현(임시 인덱스 GIT_INDEX_FILE · 실제 인덱스 무변경): 전체 1회 add = 충돌 2회(16:57 5.59s · 17:00 187s) · 폴더 48묶음 add = 충돌 0(16:36~16:42). 별도로 add 도중 Doc/asislive/_cmd_* 파일 사라짐 실패 2회(AS-IS 런처 명령 대기열 · 파일 40,561개).
+- workbench.js git-upload: ① git status -z 바뀐 경로(삭제 포함)를 최상위 폴더(Doc·_artifacts·tools 는 2단계)로 묶어 차례로 add ② Doc/asislive/_cmd_* 제외 ③ git 이 지목한 파일(사라짐·잠김·읽기 실패) = 그 파일만 :(exclude,literal) 로 빼고 같은 묶음 다시(묶음당 최대 20) ④ 파일 지목 없는 비정상 종료 = 잠금 정리 후 3회 · 그래도 실패면 그 묶음만 건너뜀 ⑤ 끝에 제외 파일·건너뛴 묶음 목록 · 묶음별 결과 .vibe/logs/*_Source_Backup_add_groups.log ⑥ 잠금 점검 clearLock() 함수화.
+- 확인: node --check · 시험 A(임시 저장소 · a/2.txt 를 다른 프로세스가 독점으로 연 상태) a/2.txt 만 'Permission denied' 로 제외 · a/1.txt·b/3.txt add · 시험 B(실제 저장소 · 임시 인덱스 · 17:24:31~17:26:14) 묶음 46/46 성공 · 103s · 충돌 0 · staged 40,963 · 남은 것 = _cmd_* 40,561 + 시험 중 다시 수정된 1개(DMF0042/combo_values.json 17:25:07). 설치 폴더 cmp 일치. VM 실화면 실행 미확인.
+- 되돌리기: workbench.js.bak_20261117_bkfix (저장소 · 설치 폴더).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Source Backup 실패 보완, 남은 index.lock 자동 정리, 단계별 실행 (2026-11-17 16:06, VS Code 창 다시 로드 필요)
+- 사용자(11-17): "VM 의 SOURCE BACKUP 기능이 실패하였습니다. 원인 확인해서 보완".
+- 원인: .vibe/logs/2026-11-17T15-52-28____Source_Backup.log = "fatal: Unable to create '.git/index.lock': File exists". 잠금 파일 생성 시각 2026-11-11 21:25:39, 크기 0 = 11-11 21:25:39 Source Backup(DMF0021) 시작 시각과 같음. 그 실행 로그는 git add -A 의 LF/CRLF 경고 줄에서 끝나고 commit·push 출력 없음. 중지·창 닫기(stopAll = taskkill /T /F)로 add 가 강제 종료되면 index.lock 이 남는 구조. 11-11 21:07:26 실행도 같은 오류. 마지막 성공 커밋 = ee7812a BACKUP_20261109_141729. 11-11 강제 종료 경위(중지 버튼인지 창 닫기인지)는 미확인.
+- 조치(16:00): 실행 중인 git 쓰기 프로세스 0 확인 후 .git/index.lock → .git/index.lock.stale_20261111_212539 로 이름 변경.
+- workbench.js git-upload: ① 실행 전 index.lock 점검 = git.exe 쓰기 명령(add·commit·merge·reset·checkout 등)이 살아 있으면 중단·목록 표시, 없으면 index.lock.stale_<생성시각> 으로 이름 변경 후 진행 ② add → commit → push 를 단계별 실행·종료코드·경과 초 보고(바뀐 파일 없으면 commit 생략 후 push) ③ add·commit 에 -c core.safecrlf=false(LF/CRLF 경고 줄 억제) ④ 같은 메뉴 중복 실행 차단.
+- 확인(16:06): node --check, 설치 폴더 cmp 일치, 보완 블록을 떼어 임시 저장소(로컬 bare 원격)에서 실행: 11-11 시각 잠금 파일 → 이름 변경 → add 0 → commit 0 → push 0, 원격 main 에 BACKUP 커밋 1건, 바뀐 파일 없이 재실행 = commit 생략·push 0. 다른 git 쓰기 프로세스가 살아 있을 때 중단하는 분기는 미시험. VS Code 실화면 미확인.
+- 남은 위험(미측정): 미추적 파일 70,619개, 2,396,598,755 bytes(Doc/asislive 59,229개 774MB, _artifacts/_apply_corporate .pkl 74개 524MB, Doc/UI_CHECKLIST xlsx 1,195개 446MB). GitHub 단일 push 2GB 제한에 걸리는지는 압축 후 크기 미측정.
+- 되돌리기: workbench.js.bak_20261117_backup, CHANGELOG.md.bak_20261117_backup (저장소, 설치 폴더 workbench.js).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Workbench Revision · Task History 검색 (2026-11-17 15:49 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "Revision, Task History 각각 검색 기능 추가".
+- history.js innerHtml: 목록 위 줄 오른쪽에 검색 칸(.hq) · 행마다 검색 문자열 data-s = 화면 ID, 메뉴 이름, 작업, 프롬프트 원문, 메모, 출처, 시각, 상태, 변경 파일 경로(소문자).
+- workbench.js: histFilter = 띄어쓰기로 나눈 단어가 모두 들어간 행만 표시(대소문자 무시) · 해당 행 없는 날짜·화면 묶음 숨김 · 묶음 건수 (보임/전체) · 검색 칸 옆 'N/전체건' · Esc = 지우기 · 검색어는 탭별(HQ.rev · HQ.task)로 기억해 새로고침·선택 후에도 유지.
+- 확인(2026-11-17 15:49): node --check 2개 · 실제 .vibe/history 로 그린 화면 Playwright 시험: Revision 104행 중 'scp0104' 2행 · 'SCP0104 pkg' 0 · Task History 217행 중 'scp0104' 6행(묶음 3) · 'checklist ssp0020' 3행 · Esc 후 전체 · 원본 이력에서 따로 센 건수와 일치. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: history.js.bak_20261117_hsearch · workbench.js.bak_20261117_hsearch (저장소 · 설치 폴더).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) 사이드바 제목 'Vibe Manager 2.0.1' 복원 · VM 로고 버튼 제거 (2026-11-17 15:12 · VS Code 재시작 필요)
+- 사용자(11-17): "Vibe Manager 다음 버전 표시를 다시 나오게 · VM 아이콘은 안 보이게".
+- package.json = package.json.bak_20261117_title 로 복원(제목·뷰 이름 'Vibe Manager 2.0.1' · vibeManager.brand 명령·버튼 없음 · navigation@0~5 원래 순서). extension.js = extension.js.bak_20261117_logo 로 복원(brand 등록 삭제). menu-view.js 로고 줄은 15:00 에 삭제된 상태 유지.
+- 확인(15:12): JSON 파싱 · node --check · 'vibeManager.brand'·brandHtml 잔존 0(저장소·설치 폴더) · extension.js 설치 폴더 cmp 일치.
+- 되돌리기: *.bak_20261117_unlogo (package.json · extension.js).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Workbench Log·Task Log 탭 통합 · 3칸 세로 + 분할 막대 (2026-11-17 15:03 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "Log, Task Log 2개 탭을 하나로 · Log 탭 아래 Task Log, FE Log, BE Log 세로 배치 · Split Bar 로 크기 조절".
+- workbench.js: Task Log 탭 버튼 삭제. #logs = 세로 flex · 순서 Task(#logwrap/#log) → FE(#felog) → BE(#belog) · 사이 .lsplit 2개.
+- 분할 막대: 끌면 위·아래 칸 높이를 나눔(칸 최소 48px) · 두 번 누르면 3칸 같은 높이 · 비율은 웹뷰 상태 logSplit 에 저장해 다시 열 때 복원.
+- 기존 'log' 탭 호출(showTab·markNew · 확장 쪽 showTab 'log' 4곳)은 Log 탭으로 연결. Log 탭을 열면 3칸 모두 최신 줄로 이동.
+- 확인(2026-11-17 15:03): node --check · 실제 CSS·마크업·분할 스크립트를 떼어 Playwright 시험(600px 창): 처음 194/194/194 → 첫 막대 +117px 끌기 311/77/194 → 둘째 막대 아래 끝까지 311/223/48(최소 48) · 저장값 [0.5344,0.3832,0.0825] · 두 번 누르기 194/194/194. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261117_logs (저장소 · 설치 폴더).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) VM 로고 = 사이드바 제목 줄 아이콘 버튼 맨 앞 (2026-11-17 15:00 · VS Code 재시작 필요)
+- 사용자(11-17): "VM 아이콘을 기능 아이콘과 같은 줄 맨 왼쪽에 · 2줄로 나옴".
+- package.json: 명령 vibeManager.brand(icon media/vibe-color.svg · title 'Vibe Manager') 추가 · view/title navigation@0 에 배치 · 기존 navigation@0~5 → @1~6.
+- extension.js: vibeManager.brand 등록 = 누르면 'Vibe Manager <version>' 알림.
+- menu-view.js: 웹뷰 첫 줄 로고(brandHtml · #brand CSS · CSP img-src data:) 삭제.
+- 확인(15:00): node --check 2개 · package.json JSON 파싱(저장소·설치 폴더) · navigation 순서 brand→openWorkbench→openFlow→qRestart→qSourceSync→qFullChain→qCheckList · extension.js·menu-view.js 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: *.bak_20261117_logo (package.json · extension.js · menu-view.js, 저장소 · 설치 폴더).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) 사이드바 제목 글자 숨김 · 로고로 대체 (2026-11-17 14:51 · VS Code 재시작 필요)
+- 사용자(11-17): "Vibe_Manager 2.0.1 자리에 아이콘을 넣고 글자를 대체". 제목 줄은 VS Code 가 글자만 표시하므로 사용자 선택안(제목 글자 숨김 + 웹뷰 첫 줄 로고) 적용.
+- package.json: 활동 바 컨테이너 title · 뷰 2개 name = "​"(폭 없는 공백, VS Code 빈 값 검사 통과). contextualTitle 'Vibe Manager' 유지. 활동 바 마우스 올림 이름은 빈 칸이 됨.
+- 확인: JSON 파싱 후 값 = U+200B(저장소·설치 폴더). VS Code 실화면 미확인. state.vscdb 에 옛 제목 'Vibe_Manager 2.0.1' 캐시 있음(14:4x 조회).
+- 되돌리기: package.json.bak_20261117_title (저장소 · 설치 폴더).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) 메뉴 창 로고 줄 · 제목 밑줄 삭제 · 주황 강조색 → 글자색 (2026-11-17 14:35 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "메뉴 창 상단 Vibe Manager 앞에 Workbench 로고 · Vibe_Manager 의 '_' 삭제 · 주황 부분 White 톤 일괄 · Menu Category·이모지 색 = 글자색".
+- package.json: 활동 바 컨테이너 title · 뷰 2개 name 'Vibe_Manager 2.0.1' → 'Vibe Manager 2.0.1' · contextualTitle 'Vibe Manager'. displayName·명령 category 'Vibe_Manager' 는 유지.
+- menu-view.js: 웹뷰 첫 줄 brandHtml() = media/vibe-color.svg(Workbench 탭 로고, data URI) + 'Vibe Manager' + package.json version. CSP 에 img-src data: 추가. 사이드바 제목 줄은 VS Code 가 글자만 표시해 그림을 넣을 수 없음.
+- menu-view.js CSS: --acc #D77A56(라이트 #C55F3D) → var(--fg). 대분류 아이콘·이름·펼침 화살표, 메뉴 아이콘, 인라인 버튼, 바탕 틴트가 글자색 기준. 펼친 대분류 아이콘 = 진한 틴트 바탕 + 글자색(기존 주황 바탕 + 배경색 글자). 상태 아이콘(ok·bad·warn)은 유지.
+- 확인(11-17 14:35): node --check · package.json JSON 파싱(저장소·설치 폴더) · menu-view.js 저장소↔설치 폴더 cmp 일치 · CSS·brandHtml 원문으로 그린 표본 Playwright 다크·라이트 캡처. VS Code 사이드바 실화면 미확인.
+- 14:37 추가(사용자 "이름 빼고 로고만"): 로고 줄에서 이름·판 번호 삭제, 로고만 남김(마우스를 올리면 Vibe Manager). node --check · 설치 폴더 cmp 일치 · 표본 캡처 확인.
+- 되돌리기: menu-view.js.bak_20261117_brand · package.json.bak_20261117_brand (저장소 · 설치 폴더).
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Revision History → Revision 나머지 3곳 (2026-11-17 14:31 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "나머지 3곳도 변경".
+- package.json 184 명령 제목 · history.js 93 패널 제목 · quick.json 978·981 메뉴 라벨(한글·영문). 저장소·설치 폴더 각각 해당 줄만 수정(설치 폴더 package.json 은 저장소와 내용이 달라 복사하지 않음).
+- 확인: 세 파일 'Revision History' 잔존 0(저장소·설치 폴더) · JSON 파싱 통과 · node --check history.js 통과 · history.js·quick.json 저장소↔설치 폴더 cmp 일치. 되돌리기 *.bak_20261117_rev.
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Workbench 탭 이름 Revision History → Revision (2026-11-17 13:55 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "WORKBENCH 의 REVISION HISTORY 을 Revision 으로 명칭 변경".
+- workbench.js 3곳: 탭 버튼 라벨(1452) · 다국어 tab_hist(215) · 로드 안내 hist_hint(222). 'Revision History' 잔존 0.
+- 바꾸지 않음: 명령 팔레트 제목(package.json 184) · quick.json 메뉴 라벨(978·981) · 별도 패널 제목(history.js 93).
+- 확인: node --check 통과 · 설치 폴더 사본 cmp 일치. 되돌리기 workbench.js.bak_20261117_rev.
+
+## (판 번호 없음 · VM 저장소 + 설치 폴더) Console 보드 반투명 (2026-11-17 13:35 · VS Code 창 다시 로드 필요)
+- 사용자(11-17): "Console 창 Board 박스와 Layout 을 반투명으로 은은하게". 미리보기에서 면 불투명 0.45, 선 불투명 0.85 선택.
+- workbench.js CSS: `.board` 에 상태색 변수 `--acc`(진행 중 주황 · 완료 초록 · 실패 빨강 · 기본 파랑)와 배율 `--kf .45`·`--kl .85`. 테두리, 헤더 색 번짐, 진행바(4px · 진행 중 광택), 상태 배지, Step 카드, 번호 원, 칩(`.sc`), 출력(`.ftail`), 하단 요약, 링크 칩을 같은 틴트로 변경. 라이트 테마(`body.vscode-light`) 별도 값.
+- `.board.fboard .bhead` 파란 헤더 규칙 삭제(헤더도 상태색을 따름). flowEnd 요약 줄에 `sum` 클래스 추가.
+- 확인(11-17 13:3x): `node --check` 통과 · workbench.js 스타일 원문을 보드 마크업에 입혀 Playwright 다크·라이트 캡처 확인 · 설치 폴더 사본 cmp 일치. VS Code 웹뷰 실화면은 미확인(창 다시 로드 후 확인).
+- 되돌리기: workbench.js.bak_20261117_glass (저장소 · 설치 폴더), CHANGELOG.md.bak_20261117_glass.
+
+## (판 번호 없음 · Harness + 설치 폴더) CheckList 폴더 Doc/CheckList → Doc/UI_CHECKLIST (2026-11-16 15:0x · VS Code 창 다시 로드 필요)
+- 사용자(11-16): "VM 과 현재 작업 중인 세션에서 사용중인 CHECKLIST 폴더를 Doc/CheckList 에서 Doc/UI_CHECKLIST 로 변경 · 이전 파일은 옮기고 · 앞으로 이 폴더를 생성".
+- 이동: `Doc/CheckList` 폴더째 `Doc/UI_CHECKLIST` 로(파일 1,112개 = 이동 전후 같음 · old 포함). `Doc/CheckList` 는 없음.
+- 쓰기: make_verify_docs.py OUTDIR = Doc/UI_CHECKLIST(없으면 doc_archive.next_version 이 생성). 읽기(사용자 의견 누적·판 번호): Doc/UI_CHECKLIST + 옛 Doc/CheckList + 옛 Doc/화면분석서.
+- 하네스 6개: make_verify_docs · judge(사용자판정 반입) · regress(--harvest) · run_verify(_latest_doc·문서 생성 확인) · precision(설명) · make_ui_test_sheet.
+- VM: workbench.js 📋 폴더 링크 · steps.json 'CheckList·ActionItemList 폴더 열기' · quick.json 보완 프롬프트 2곳. 저장소와 설치 폴더(marisoft.vibe-manager-2.0.1) 둘 다 수정(steps.json·workbench.js 는 설치 폴더 것을 읽음 · quick.json 은 저장소 것을 읽음).
+- 함께: CLAUDE.md §0 1줄 · `.claude/rules/03-analysis-docs.md` paths · 메모리.
+- 확인(11-16 15:0x): prior_docs SSP0020 31판 · 다음 판 Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v22 · made_docs_text 새 폴더 · regress 탐색 442판.
+- 백업: *.bak_20261116_uichk (하네스 6 · VM 저장소 3 · 설치 폴더 3 · CLAUDE.md · 03-analysis-docs.md).
+
+## (판 번호 없음 · Harness 만) CheckList 생성 시 UI 테스트 Excel 같이 생성 (2026-11-16 14:5x · make_verify_docs.py + make_ui_test_sheet.py — vsix 재설치 불필요)
+- 사용자(11-16): "Checklist 생성 후 Doc/UI_TEST(SCP&SSP) 폴더 내에 Test Excel 문서도 같이 생성하도록 VM 보완".
+- CheckList 저장 직후 `make_ui_test_sheet.build()` 호출. CheckList '조치 필요' 시트 행을 `☆NSCME_SCP&SSP 테스트_<ID>(<메뉴명>).xlsx` '검증내역' 시트에 기록. 콘솔에 'UI 테스트 Sheet:' 1줄.
+- 양식 `tools/Harness/verify/templates/ui_test_template.xlsx`(공통요건 23행 · 검증내역 머리, 원본 SCP0131 테스트 파일).
+- 칸: 구분 = ID 앞 3자 · UI명 = menu.csv mnu_desc · Div = 공통 · 테스트 내용 = [영역] 대상 + CheckList 설명(+ O1 행만 AS-IS 근거) · 유형 = 동적/정적-영역 · 테스트 결과 = O1 'asis 와 동일하게 수정' / O2 'TO-BE 확정 규칙(CR-n)으로 수정' 또는 'TO-BE 규칙(규칙)으로 수정' / O3 '오류 수정'. 검토담당·담당자·일자·조치결과는 비움.
+- 덮어쓰기 없음: 기록한 검증 ID = `Doc/verify/<ID>/ui_test_rows.json`. 다음 실행은 기록에 없는 행만 덧붙임(사람이 행 문구를 고치거나 지워도 다시 넣지 않음). 기존 파일 수정 전 원본 `Doc/verify/<ID>/ui_test_backup/`.
+- 기존 파일에 붙여 넣은 캡처 이미지가 있으면(11-16 기준 SCP0020·SCP0041·SCP0045·SCP0084·SCP0111) openpyxl 저장 시 이미지가 지워지므로 원본은 그대로 두고 `_추가항목.xlsx` 에 기록.
+- SCP·SSP 화면만 생성(폴더 이름 기준). 조치 필요 0행이면 파일을 만들지 않음. 실패(Excel 로 열려 있음 등)는 ERROR 1줄만, CheckList 생성 결과는 바꾸지 않음. 단독 실행 `python tools/Harness/verify/make_ui_test_sheet.py <ID>`.
+- 시험(11-16 14:4x · UI_TEST 폴더 사본): 8화면 63행 추가 · 재실행 추가 0 · 기존 셀 변경 0(SCP0131 대조) · 이미지 원본 3개 바이트 동일 · 테스트 결과 빈 칸 0/70 · 실제 폴더 11개 파일 변경 0.
+- SSP0020: 11-16 수동 생성 파일의 2행(V-3e374103 · V-d1f0e5dc)을 기록 파일에 미리 등록.
+- 백업: make_verify_docs.py.bak_20261116_uitest · run_verify.py.bak_20261116_uitest · CHANGELOG.md.bak_20261116_uitest.
+
+## 2.0.9 AS-IS 실측 메뉴 26개 → 1개 (2026-11-14 01:2x · quick.json + workbench.js — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-14): "AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 메뉴로 생성하고 실행하면 전체 과정을 수행" · "사용자는 상세 프로세스를 각각 수행할 수 없습니다".
+- quick.json: 단독 메뉴 26개(S1.live ~ S1.liveScreen) 삭제, 체인 `asislive`(🎥 AS-IS 실측) 1개 추가. steps.json 작업 정의는 그대로 둠(다른 체인과 CheckList 가 S1.live 를 씀).
+- 체인 12단계: 환경 점검 → 룰 대응표 갱신 → 런처 실측(asis_live_screen.py) → TO-BE 조건 시나리오 반복 → 저장 연습 → 저장 실행 → 저장 인자 대조 → 실행 현황 → 조회 조건 대조 → 분기별 대조 → 그룹·Division 비교표 → 분기 명세.
+- 런처 실측 단계가 종전 단독 메뉴 13개를 포함함: 필수 조건 채움, 소스 분기 도출, 버튼·수정 모드·조건 값·셀 클릭·셀 입력 분기, Division·그룹 값 실행, 저장 정의 초안과 초안 연습, 진입 경로 없는 분기 분류.
+- 저장 연습·실행·인자 대조는 `Doc/asislive/<ID>/save_scenario.json` 이 있는 화면만(11-14 01:18 기준 12개). 저장 실행은 연습이 OK 일 때만. AS-IS 개발 DB 에 저장 후 복원.
+- 조건 시나리오 반복·조회 조건 대조는 `Doc/verify/<ID>/calls` 가 있는 화면만(27개).
+- 메뉴에서 빠진 수동 입력 기능: 그룹 직접 지정, Division 직접 지정(all 포함), 그룹 목록 읽기. 분기 조건식에 적힌 그룹·Division 값은 런처 실측 단계가 실행함. 작업 id(S1.liveScenRunGroup·S1.liveScenRunDiv·S1.liveGroups)는 steps.json 에 남아 있음.
+- workbench.js 체인 단계 속성 3개: `ifExists`(자료가 없으면 SKIP) · `ifOk`(앞 단계가 OK 가 아니면 SKIP) · `okNote`(okCodes 경고 문구).
+- 백업: quick.json.bak_20261114_live1 · workbench.js.bak_20261114_live1.
+- (01:4x AS-IS Live 세션 덧붙임) steps.json 작업 `S1.liveScenEvent` 추가: 스크롤, 키 입력, 붙여넣기 분기 실행(`asis_live_scen_event.py`). 메뉴는 추가하지 않음. 런처 실측 단계(`asis_live_screen.py`)가 이 실행기를 포함함. 호스트 exe 재빌드 필요(act scroll, act raise).
+
+## 2.0.8 문장 규칙 4~18 — 사람이 쓴 업무 문서처럼 (2026-11-13 18:1x · rules/50_DOC_STYLE.md + 생성기 6종 — vsix 재설치)
+- 사용자(11-13): "문서를 보는 사용자가 AI 가 작성한 문서라고 인식하는 것을 줄이려고" → 추천 프롬프트 15개 승인 "적용해주세요 · 클로드코드와 VM 전체".
+- 규칙 문구: `~/.claude/CLAUDE.md`(전문) · `CLAUDE.md §1-10` · `50_DOC_STYLE.md` · `03-analysis-docs.md §F` · Agent.cs 프롬프트 2종 · `/단위테스트` · `10_RULES_KEEP A-0`.
+- 추천안에서 바꾼 2곳: 14번에서 '~할 수 있다' 제외(번역투 대체 표현으로 쓰는 말) · 4번 화살표는 순서·변경 전후 표기('조회 → 저장')에 허용.
+- 검출 표현 23줄 추가(기호 · 틀 · 접속 · 소개·맺음 · 추측 · 추상어) — 합계 57줄. 규칙 목록 읽기를 전부 성공했을 때만 쓰도록 수정(중간 실패 시 일부 규칙만으로 검사하던 결함).
+- 생성기 6종 저장 직전 `doc_style.before_save(wb)`: 줄표 → 쌍점·쉼표 · 띄어 쓴 가운뎃점 → 쉼표 · ⇒·이모지·굵은 글씨 삭제 · '설명' 칸 개조식(없습니다 → 없음 · 합니다 → 함). 사용자의견·사용자판정 칸과 따옴표 안은 그대로.
+- 생성기 고정 문장 정정 16곳(plain_detail 8 · make_verify_docs 3 · make_docs 3 · make_testcases 2).
+- 규칙 7 확대(18:2x · 사용자 "7번 규칙 적용"): 개조식 변환이 한다체도 바꿈(않는다 → 않음 · 한다 → 함 · 이다 → 임) · CheckList·테스트결과서는 `기대(AS-IS·규칙)` 칸과 표 밖 안내문도 · 생성기 고정 문장 12줄 개조식(make_docs 10 · make_test_report 1 · asis_live_doc 1). 시험 19개 PASS · 사본 11,872셀 정리 · 검증 ID·결과·규칙·사용자 칸 18,946셀 다름 0 · 개조식 칸에 남은 `~다` 종결 0.
+- 측정(18:1x · 기존 SCP0016 CheckList v23 사본): 정리 11,440셀 0.5초 · 위반 15,040 → 855 · 검증 ID·결과·규칙·사용자 칸 18,946셀 불변.
+
+## 2.0.7 문장 규칙 3개 — 수식어 금지 · 아는 주어 생략 · 번역투 금지 (2026-11-13 17:4x · workbench.js + rules/50_DOC_STYLE.md — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-13): "VM 의 문서(모든 EXCEL 문서) 생성 시 설명과 문장에서 반드시 — 1. 수식어 쓰지마 2. 문맥으로 아는 주어는 빼줘 3. 번역투는 빼 줘" · "VM 과 함께 내가 사용하는 클로드의 모든 문장생성에 적용".
+- 정본 `rules/50_DOC_STYLE.md`(규칙·바꿔 쓰기 표·그대로 두는 것·장치·한계) · 검출 표현 `tools/Docs/doc_style_rules.csv`(33줄) · 검사기 `tools/Docs/doc_style.py`(xlsx 셀 · md 줄 · 소스 문자열 · 따옴표 안 인용은 제외).
+- Claude 문장: `~/.claude/CLAUDE.md` 신설(전 프로젝트) · `CLAUDE.md §1-10` · `.claude/rules/03-analysis-docs.md §F`(경로에 Doc/CheckList · Doc/documents · tools/Docs 추가) · `10_RULES_KEEP.md A-0` · workbench.js 화면 컨텍스트에 규칙 파일 1줄 · Agent.cs 프롬프트 2종 · `/단위테스트`.
+- 생성기 고정 문장 정정 19곳(plain_detail 6 · make_verify_docs 5 · asis_live_doc 2 · make_test_report 1 · make_docs 5) — 판정·열 구성은 그대로, 문구만.
+- 생성기 6종(make_verify_docs 2곳 · make_test_report · make_docs · make_testcases · md2xlsx) 저장 직후 `doc_style.after_save()` — 위반 수 1줄 출력 + `Doc/_doc_style/<파일>.style.csv`. 보고만 하고 종료 코드는 바꾸지 않는다.
+- 추가(17:5x · 사용자 "이것도 빼주세요"): `모두` · `반드시` · `정확히` 도 수식어로 검출(CSV 34줄) · 생성기 문구 8곳 정정(make_docs 2 · make_testcases 4 · make_verify_docs 1 · plain_detail 1).
+- 측정(17:43): 생성기 7개 소스 위반 28 → 3(남은 3 = 주석·콘솔 문구) · 기존 CheckList 1건(SCP0016 v23 · 문장 24,491) 위반 142, 검사 1.9초.
+
+## (판 번호 없음 · steps.json 만) 작업 `S6.regen`(룰 반영 후 GAP 재실행 · gap.js) 삭제 (2026-11-13 15:30 · steps.json 만 — 설치 폴더 반영 · VS Code 창 다시 로드 필요)
+- 사용자 승인(11-13 룰·하네스 전수 점검 묶음 ⑤): GAP 분석은 2026-10-30 폐지(CheckList 로 대체)됐고 이 작업은 메뉴·체인·VM 코드 어디에도 연결되지 않고 Flow 패널 단계 목록에만 보였다.
+- 변경: `steps.json` S6 의 작업 1개 삭제(110 → 109) — 그 밖의 줄은 불변(차이 7줄 = 삭제한 객체뿐) · 형식 왕복 동일 확인 후 기록 · 백업 `steps.json.bak_20261113_s6regen`. `gap.js` 파일과 `quick.json` 은 그대로.
+- 검증(15:30): JSON 재파싱 OK · `python scripts/rules/inventory_check.py` PASS(작업 109 · 메뉴 78 · 체인 6 · 깨진 참조 0) · engine_selfcheck 전체 PASS. **미검증**: VS Code 에서 Flow 패널을 실제로 열어 본 것은 아님.
+- 근거: `Doc/_rules_consolidation/2026-11-13_INVENTORY_정리안.md` A-08 · §9.
+
+## 2.0.6 프롬프트 — 실행 중에도 전송(대기열) + 지금 보내기 (2026-11-13 15:1x · workbench.js — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-13): "실행 중일 때도 프롬프트를 입력하고 전송 · 현재 작업에서 감안하거나 완료 후 순차 반영 · 즉시 반영이 안 되면 프롬프트 하단에 지금 보내기".
+- 구조상 제약: `claude -p` 는 프롬프트 1건마다 프로세스 1개(입력 닫힘)라 도는 중인 응답에 글을 끼워 넣을 수 없다 → **대기열**(끝나면 순서대로 같은 세션에 이어 전송) + **지금 보내기**(진행 중 응답을 멈추고 바로 전송) 두 가지로 구현.
+- 실행 중에도 전송 버튼·Enter 가 동작한다(종전: 버튼 숨김 + "Claude 가 아직 응답 중" 경고로 거부). 보낸 프롬프트는 입력창 아래 대기열에 번호·내용·`지금 보내기`·`✕` 로 보인다.
+- 응답이 끝나면 0.5초 뒤 대기열 맨 앞을 자동 전송(같은 세션 `--resume`). 일괄 작업(체인) 중에 보낸 것은 체인이 끝난 뒤 전송 — 체인 단계 사이에 끼어들지 않는다.
+- `지금 보내기`: 그 프롬프트를 맨 앞으로 옮기고 진행 중인 Claude 응답을 중지(함께 종료되는 후속 작업 목록을 채팅에 표시) → 바로 전송. 일괄 작업 중에는 받지 않는다(안내 문구).
+- 검증(15:14 · 모의 vscode + 가짜 claude CLI): 14항목 PASS — 실행 중 2건 대기 · 끝난 뒤 A→B→C 순서 · 같은 세션 이어받기 · 지금 보내기(D 중지 → F → E) · 삭제 · 한가할 때 즉시 전송 · 화면 요소. 미검증: 일괄 작업(체인) 중 대기·지금 보내기 거부 경로 · VS Code 실제 창.
+
+## 2.0.5+ 워크벤치 탭 이름 Claude → Console (2026-11-13 · workbench.js — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-13): 워크벤치 첫 탭 이름을 `Console` 로. 탭 이름과, 일괄 작업 시작 알림의 "Claude 탭 Flow 보드" 문구 2곳을 함께 바꿨다. 탭의 내부 식별자(`data-t="chat"`)·기능은 그대로.
+
+## 2.0.9 AS-IS 실측 — 화면 단위 묶음 · CheckList 자동 구동 · 창/Excel 정리 · 그룹(권한) 지정 (2026-11-13 오후)
+- 사용자(11-13): "나머지 전체 실행은 지금 진행하지 않을게요. … 실제 AS-IS 런처 실행으로 필요한 데이터 취합 및 기준설정 부분은 화면별 CHECKLIST 작업 시 구동되도록" · "POPUP 이 너무 많이 띄워져 있습니다" · "EXCEL 확인 후 종료".
+- **작업**: `S1.liveScreen`(tools/AsisLive/asis_live_screen.py — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행 → 실행 현황 → TO-BE 조건 대조 · 24시간 안 묶음 재사용) · `S1.liveScenRunGroup`(asis_live_scen_run.py <ID> --group <그룹> — 권한별 실행) · `S1.liveGroups`(--groups-list — 계정의 그룹 목록 읽기).
+- **메뉴(분석·문서 · ▶️ 분기 시나리오 실행 뒤)**: 🧩 AS-IS 실측 묶음 (화면 1개) · 🪪 분기 시나리오 실행 — 그룹(권한) 지정 · 🪪 AS-IS 런처 그룹(권한) 목록 읽기.
+- **CheckList 체인**: run_verify.py 차등 검증 단계에서 asis_live_auto.py(기본 실측 자동 구동) 바로 뒤에 asis_live_screen.py --after-basic 실행(세부 6 → 7). 끄기 = 환경변수 VERIFY_ASIS_LIVE=off · --skip-e2e/--static/--only 에서는 돌지 않음.
+- **런처 자동화 보정**: 버튼을 누른 뒤 뜬 팝업·예외 창을 기록하고 닫힘을 확인(호스트 `sweep` · 남으면 그 화면 중단·런처 재시작) · 메시지 상자 재누름 · 런처가 띄운 Excel 은 파일 경로·시트별 행/열 기록 뒤 닫음(tools/AsisLive/asis_live_excel.py · 사용자가 열어 둔 Excel·문서는 유지) · 창 수 감시 asis_live_winwatch.py.
+- **추가(11-13 15:xx)**: `S1.liveScenCmp`(asis_live_scen_cmp.py · 🆚 분기별 AS-IS↔TO-BE 대조 — TO-BE 룰 원장 tobe_rule_registry.csv 조회 · 관찰 문구→룰 대응표 tools/AsisLive/asis_obs_rule_map.csv) · 실측 묶음 마지막 단계로도 실행.
+- **수정 모드 재실행**: asis_live_scen_run.py <ID> --edit — "수정모드가 아니므로 …" 메시지를 낸 버튼만 수정 모드에서 다시 누름(닫을 때 저장하지 않음) · 실측 묶음에 포함(새 VM 단계 없음).
+- **추가(11-13 17:xx)**: `S1.liveScenRunDiv`(asis_live_scen_run.py <ID> --division … · 🏭 Division 지정 실행) · `S1.liveScenMatrix`(asis_live_scen_matrix.py · 🧮 그룹·Division 별 비교표 · 실측 묶음 마지막 단계로도 실행) · 분기별 대조에 TO-BE 팝업 검사 결과 연결 · 버튼 실행의 서버 호출 시간 초과 재시도.
+- **추가(11-13 17:5x)**: `S1.liveSaveDry`·`S1.liveSave`(asis_live_save.py · 💾 AS-IS 저장 시나리오 연습/실행 — 셀 수정 → 저장 → 인자 포착 → 복원·대조 · 화면별 Doc/asislive/<ID>/save_scenario.json 필요 · 호스트 `cell` 명령).
+- **추가(11-13 18:0x)**: `S1.liveSaveCmp`(asis_live_save_cmp.py · 💾 AS-IS↔TO-BE 저장 인자 대조 · 실측 묶음에서도 실행 — 저장 실행 자체는 묶음에 넣지 않음) · 저장 시나리오 여러 개(scenarios)·이력 표 정리(side)·시간 초과 시 자기 세션 정리.
+- **추가(11-13 18:2x)**: `S1.liveScenSpec`(asis_live_scen_spec.py · 🗂️ 분기 시나리오 명세 — 전 분기 한 줄씩 · 실측 묶음에서도 실행) · `S1.liveRuleMap`(asis_live_rule_map.py · 📚 관찰 문구→TO-BE 룰 대응표) · 저장 시나리오 종류 확대(여러 행·검증 메시지·팝업 삭제).
+- **추가(11-13 18:3x)**: `S1.liveScenRunCond`(asis_live_scen_run.py <ID> --conds · 🎚️ 조건 값 변경 분기 실행 · 실측 묶음에서도 실행).
+- 추가(11-13 19:0x): `S1.liveScenRunCell`(asis_live_scen_run.py <ID> --cells, 셀 클릭·더블클릭 분기 실행, 실측 묶음에서도 실행).
+- 추가(11-13 19:1x): `S1.liveScenValues`(asis_live_scen_values.py <ID> --run, 분기 조건식의 Division, 그룹 값 도출 후 실행, 실측 묶음에서도 실행).
+- 추가(11-13 20:3x): `S1.liveSaveDraft`(asis_live_save_draft.py, 저장 정의 초안 생성), `S1.liveSaveDraftDry`(asis_live_save.py <ID> --draft --dry, 초안 연습 실행), 실측 묶음에 두 단계 추가.
+- 추가(11-13 22:1x): `S1.liveScenInput`(asis_live_scen_input.py, 셀 값 입력과 시트 전환 분기 실행, 저장 없음), `S1.liveScenUnreached`(asis_live_scen_unreached.py, 진입 경로 없는 분기 분류), 실측 묶음에 두 단계 추가. steps.json, quick.json 만 바뀜. 설치 폴더 반영과 VS Code 창 다시 로드 필요. VS Code 에서 눌러 본 적 없음.
+- 기존 항목은 바꾸지 않음(추가만) · 형식 왕복 동일 확인 후 기록 · 백업 steps.json.bak_20261113_livescreen/_group · quick.json 동일.
+- 미확인: VS Code 에서 새 메뉴 클릭 · 설치 폴더 반영(사용자 절차).
+
+## 2.0.8 AS-IS 실측 작업 4종 추가 — 필수 조건 채움 · 조건 대조 · 조건 시나리오 반복 · 소스 분기 시나리오 도출 (2026-11-13 07:16 · steps.json · quick.json)
+- 사용자(11-13): "지금 하는 모든 작업은 vm에 기능으로 추가되어야 하는 기능입니다."
+- **작업(steps.json S1 · S1.live 바로 뒤)**: `S1.liveFill`(asis_live_batch.py --fill recent) · `S1.liveCond`(asis_live_cond.py) · `S1.liveScen`(asis_live_scen_loop.py) · `S1.liveScenSrc`(asis_live_scen_src.py). 런처를 띄우는 2종만 requireServers:[8086].
+- **메뉴(quick.json 분석·문서 · 🧪 AS-IS 실행 환경 점검 바로 뒤)**: 🎯 필수 조건 최근 값 채움 · ⚖️ AS-IS↔TO-BE 조회 조건 대조 · 🔁 AS-IS 조건 시나리오 반복 · 🧬 소스 분기 시나리오 도출.
+- 기존 항목은 바꾸지 않음(추가만) · 형식 왕복 동일 확인 후 기록 · 백업 steps.json.bak_20261113_asislive · quick.json.bak_20261113_asislive.
+- **추가(11-13 07:3x)**: `S1.liveScenCov`(asis_live_scen_cov.py · 📊 분기 시나리오 실행 현황) · `S1.liveScenRun`(asis_live_scen_run.py · ▶️ 분기 시나리오 실행(화면 안 버튼) · requireServers:[8086]). 호스트 명령 `group`(그룹 전환) · `act`(버튼 누르기·메서드 실행·탭 전환 · 뜬 팝업 기록 후 닫기) 추가.
+- 미확인: VS Code 에서 메뉴를 실제로 눌러 본 것은 아님 · 설치 폴더 반영·VSIX 재설치는 기존 절차대로 별도.
+
+## 2.0.7 체인 5종에 AS-IS 실측 선택 단계 · 보완·변환 프롬프트 5종에 실측 참고 문단 (2026-11-12 · quick.json — 저장소 quick.json 이 바로 읽힘 · VS Code 창 다시 로드 필요 · 승인 플랜 velvet-conjuring-lake P4)
+- **체인**: `S1.live`(AS-IS 실측)를 선택 단계(optional · 실패해도 체인 계속 = WARN)로 추가 — `ifMissing: Doc/asislive/<ID>/latest.json`(실측이 이미 있으면 SKIP · 새로 재고 싶으면 메뉴 🎥). 🚀 full = Fact Pack 다음(2번째) · 📝 docs = Fact Pack 다음(2번째) · 🧩 new-asis-full = 맨 앞 · 🚒 autofix-full = 맨 앞 · 📋 testreport = 맨 앞. 📏 new-design-full(설계서 기반)은 AS-IS 가 기준이 아니라 넣지 않음.
+- **프롬프트**: 🛠️ 수동 보완 · 🧯 자동 보완 · 🔗 PKG 변환 · 🩺 PKG 보완 · 🧾 META 생성 및 보완에 `[AS-IS 실측 참고 — 2026-11-12]` 문단 — 실측이 있으면 summary.md·shots 를 AS-IS 동작 근거로 읽고, 정적 사실과 어긋나면 실측이 실제 동작, 실측 조건 = AS-IS 기본값이라 값·건수 대조 전 조건 일치 확인, 파일이 없으면 미적용(지어내지 않음). 🛠️ 는 끝의 "아래 항목만 수정 … 1) " 문구를 그대로 두고 그 앞에 삽입.
+- 기존 단계·프롬프트 문구는 바꾸지 않음(추가만). 백업 quick.json.bak_20261112_live_p4.
+- 검증(11-12): quick.json JSON 파싱 OK · 형식 왕복 동일(들여쓰기 2) 확인 후 기록 · 체인별 단계 수 full 18 · docs 6 · new-asis-full 16 · autofix-full 9 · testreport 3 · new-design-full 14(불변) · 프롬프트 5종 반영 · 🛠️ 끝 문구 유지 확인. **미검증**: VS Code 창에서 체인을 실제로 돌려 SKIP/실행 분기가 뜨는지(창 다시 로드 후 사용자 확인 필요).
+
+## 2.0.6 AS-IS 실측(AS-IS Live) 작업 2종 추가 — 런처를 실제 구동해 화면 열기·조회 → 덤프·캡처·서버 호출 수집 (2026-11-12 17:37 · steps.json · quick.json · tools/AsisLive · tools/AsisLocal — steps.json 설치 폴더 반영 · VS Code 창 다시 로드 필요 · package.json 버전 미변경)
+- 사용자(11-12): "VM 에서 파싱부터 개발, 보완, 테스트, CHECKLIST·문서작성까지 일련의 과정에서 AS-IS 런처를 직접 구동시켜 화면을 실행하고 그 결과를 확인" → 승인 플랜 `~/.claude/plans/velvet-conjuring-lake.md` 의 P0·P1.
+- **작업(steps.json S1)**: `S1.live`(tools/AsisLive/asis_live_run.py) · `S1.liveCheck`(tools/AsisLocal/asis_env_check.py). 둘 다 `requireServers:[8086]` — 로컬 AS-IS 서버가 꺼져 있으면 기존 `🖥 AS-IS IIS Start` 로 먼저 띄운다.
+- **메뉴(quick.json 분석·문서)**: `🎥 AS-IS Live Run` · `🧪 AS-IS Environment Check` (🔬 Parse 바로 아래 · 기존 항목 이름·순서 불변).
+- **구동 방식**: 창 밖 자동 조작이 아니라 호스트 exe(tools/AsisLive/host/AsisLiveHost.cs → Launcher bin\Debug\AsisLive.Host.exe)가 프로세스 안에서 `ApplicationStart.Run()` 을 부르고 명령 스레드로 login(OK 만 누름)·open(`OpenUserMenu(ProgramID)`)·find(`OnClickFindButton`)·dump·shot 을 실행. AS-IS 소스·csproj 무수정.
+- **산출물**: `Doc/asislive/<ID>/run_<시각>/` run.json · calls.json(DbProfile 시간 구간: SP·인자·건수·ms·구간) · controls.json · grids.json(FarPoint 시트·헤더·컬럼 속성·앞 50행) · shots/*.png · summary.md + `latest.json`. 종료코드 0 정상 · 2 FAIL · 3 미측정 · 5 서버 미기동. `@@LINK` 2종 출력.
+- **환경 도구 정리**: GSCM/_build_logs 의 make_local_wsl.py · force_asis_mssql.py · audit_foxquery.py · gen_foxquery_supplement.py · missing_menu_projects.proj · skip_licx.targets → tools/AsisLocal/ 로 이동.
+- 검증(11-12 실측): SSP0021 2회 실행(17:13 · 17:36) 모두 exit 0 — 화면 열림 · 그리드 7시트 헤더 244컬럼 · 주 그리드 108행 = 상태바 Total 108 · 캡처 2장(2회차 최대화 1936×1168) · 화면 호출 98건(두 번 동일 · SSP0021_GET_SHIPMENT_PLAN 인자 11개) · 대화상자 0. asis_env_check SSP0021 전 항목 OK · 제외 화면 SSP0060 = NA(exit 2). steps.json·quick.json JSON 파싱 OK. **미검증**: VS Code 창에서 메뉴 클릭 → Flow 보드 표시(창 다시 로드 후 사용자 확인 필요). 한계: 호출 기록은 시간 구간으로만 자름(다른 런처가 떠 있으면 [WARN] 출력 · calls.json mixed_risk). 백업 *.bak_20261112_live.
+
+## 2.0.5 Server 메뉴 = To-Be / As-Is 중분류 + As-Is 실행 3종 (2026-11-12 16:3x · quick.json · workbench.js · tools/AsisLocal/asis_iis.cmd — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-12): "Server 하위의 현재 메뉴를 To-Be 중간 Category 밑으로 · As-Is 를 To-Be 다음에 만들어 IIS 기동 + GSCM.Launcher.exe 실행 묶음 1개, IIS 기동, 런처 실행 3개 메뉴 추가".
+- **To-Be**: 기존 8개 항목에 중분류 표시(sub)만 추가 — 이름·명령·순서 불변.
+- **As-Is**(신규 3개):
+  - `▶ AS-IS IIS & Launcher Start`(multi) = 아래 둘을 차례로. 런처는 8086 이 열릴 때까지(최대 90초) 기다렸다 실행.
+  - `🖥 AS-IS IIS Start`(terminal · 8086) = `tools/AsisLocal/asis_iis.cmd` → IIS Express `/config:GSCM\_asis_local\applicationhost.config /site:AsisLocal`. 8086 이 이미 열려 있으면 기동 생략(기존 서버 메뉴와 같은 선점검).
+  - `🪟 AS-IS Launcher`(신규 kind `app`) = `GSCM\02.Launcher\GSCM.Launcher\bin\Debug\GSCM.Launcher.exe` 를 분리 실행.
+- 런처 실행 전 확인(workbench.launchApp): ① 이미 실행 중이면 또 띄우지 않음 ② `ClientConfig.xml` 의 GSCM 접속 주소가 `http://localhost:8086/` 가 아니면 실행 안 함(재빌드하면 원본 서버 주소로 되돌아가는 함정 — 설정은 자동으로 고치지 않고 안내만) ③ 8086 이 안 열려 있으면 실행 안 함.
+- As-Is 종료 메뉴는 요청에 없어 넣지 않았다.
+- 검증(16:34 · 모의 vscode · IIS·런처가 다른 세션에서 실행 중인 상태): 15항목 PASS — 중분류 2개·순서 · To-Be 8 · As-Is 3 · 기존 항목 내용 불변(63 → 66) · 아이콘 대응 · IIS 기동 생략 · 런처 중복 실행 방지 · 묶음 · 실행 파일 없음 · 접속 주소 불일치 차단 · 포트 미기동 차단 · 시험 전후 프로세스 수 동일. **미검증: IIS·런처가 꺼진 상태에서의 실제 기동(실행 중인 것을 끄지 않기 위해 시험하지 않음)** · VS Code 실제 창 확인.
+
+## 2.0.4 아이콘 색 = VM 아이콘 색으로 통일 (2026-11-12 14:0x · menu-view.js · workbench.js · package.json · media/tb-*.svg · build_vsix.py — vsix 재설치 + VS Code 창 다시 로드 필요)
+- 사용자(11-12): "메뉴의 이모지 단색, 메뉴 상단의 아이콘, WORKBENCH 상단 아이콘을 VM 아이콘이 사용하는 COLOR 로 단색을 맞추면".
+- 기준색 = `media/vibe-color.svg` 그라데이션(#E8956F→#C55F3D): 어두운 테마 `#D77A56`(두 끝의 중간값) · 밝은 테마 `#C55F3D`(어두운 끝, 대비 확보).
+- **사이드바 메뉴**: 강조색(--acc)을 링크 파랑 → VM 색. 항목 아이콘 · 대분류 아이콘 칩 · 펼친 구획 이름 · 뒤로/버튼에 적용. 중분류 머리줄 아이콘(회색)과 상태색(통과/실패/경고)은 그대로.
+- **사이드바 상단 버튼 6개**(Workbench · FLOW · 재기동 · Source Download · ID 하나로 전체 · CheckList): codicon 은 색을 줄 수 없어 VM 색 SVG 파일(`media/tb-<이름>-dark|light.svg` 12개)로 교체. 빌드 목록에 `media/tb-*.svg` 자동 포함.
+- **워크벤치 상단 탭**: 고정 탭 6개의 컬러 이모지(✴️📜🧾🎯🕒🧾) → VM 색 선 아이콘. 동적 탭(FLOW · 비교 · 폴더 · 파일)도 아이콘 + 이모지 뗀 제목(원문은 툴팁). 선택 탭 밑줄도 VM 색.
+- 바꾸지 않은 것: 활동 바 아이콘(VS Code 가 테마 색으로 강제) · 프롬프트 창의 모드 색 · 로그/본문 안의 이모지.
+- 검증(14:08 · 모의 vscode + Chrome): 10항목 PASS — 고정 탭 6/6 · 탭 전환 · 동적 탭 2종 · 밝은 테마 · 메뉴 항목 20개 색 · 상단 버튼 SVG 12개 색·렌더 · 페이지 오류 0. VS Code 실제 창 확인은 미실행.
+
+## 2.0.3++ 프롬프트 입력 전 안내 문구 단순화 (2026-11-12 11:0x · workbench.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "프롬프트 창에 입력 전에 나오는 가이드 메세지를 SIMPLE 하게 (영문으로)".
+- 종전 5개 항목 문구 → `Enter to send · Shift+Enter for new line` (언어 설정과 무관하게 영문). 뺀 안내(파일 첨부 · 화면 컨텍스트 자동 첨부 · 하네스 자동)의 동작은 그대로.
+- 검증(11:07 · 모의 vscode · ko/en): 입력창 placeholder 두 언어 모두 새 문구. VS Code 실제 창 확인은 미실행.
+
+## 2.0.5 ⬇️🔀 Source Download & Merge(BE) 메뉴 분리 + BE 로컬 환경 보호 보강 (2026-11-12 10:4x · common_sync.py · workbench.js · quick.json · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "Source Download & Merge 에서 BE 는 제거 · (BE) 메뉴를 추가해 필요할 때만 · 로컬 작업환경을 해치지 않게(로컬은 SSO 접속 안 함 · 사용자 ID 로그인 유지) · application.yml mybatis 4키와 config-local.yml system-cd 는 환경설정이라 DB MODE 에서도 적용".
+- 메뉴: ⬇️🔀 Source Download & Merge = FE 만(`--areas fe`) / ⬇️🔀 Source Download & Merge(BE) = BE 만(`--areas be` · kind `git-common-sync-be` · 요약 `last_summary_be.json`). 확인창에 BE 보호 안내와 로컬 로그인 점검 결과 표시.
+- 도구: ① 설정 키 보충(application.yml·config-local.yml 의 공통 전용 단일 값 키만 · 기존 값 무변경 · YAML 재검증) ② 로컬 필수 유지 소스 목록 `be_local_keep.txt`(첫 항목 CustomMap.java) ③ 로컬 ID 로그인 점검(실패 시 무변경 중단) ④ 되돌리기 `--restore-be-from/--restore-be-paths` ⑤ BE 전용 실행은 FE 기준선을 건드리지 않음.
+- 계기(11-12 10:09 DB MODE 로 BE 첫 적용 뒤 실사고 4건): build.gradle SSO jar 주석 → 컴파일 오류 / log-pool-size 없음 → 로그인 401 / system-cd 없음 / CustomMap null 가드가 덮여 전 화면 Sql Error(NullPointerException). 상세 = tools/CommonSync/README.md §0-1.
+- 검증(10:30~10:32): BE 전용 적용 = 설정 키 5개 보충(기존 줄 삭제 0)·환경 파일 8건 무변경·대상 밖 변경 0·로그인 점검 OK. CustomMap 되돌리기 1건. BE 재기동(추가 기동 인자 없음 · be_sso.init.gradle 사용) → 로그인 HTTP 200 · DMF0021 권한 응답에 Sales Plan/SAVE · measureInfo 조회 HTTP 200. VS Code 실제 창에서 두 메뉴 실행은 미실행. 백업 `quick.json.bak_20261112_be` · `common_sync.py.bak_20261112_split`.
+
+## 2.0.4 ⬇️🔀 Source Download & Merge 에 BE(nscm-be) 추가 + BE 작업환경 보호 (2026-11-12 10:0x · tools/CommonSync/common_sync.py · workbench.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "공통소스 다운로드 처리 시 BE 의 소스도 다운로드" · "VM 의 SOURCE DOWN & MERGE 에도 BE 추가" · "BE 다운로드 시 로컬 작업환경을 해치는 명령은 차단". 계기 = DMF0021 SAVE 버튼 미표시(공통 BE 11-02 `b6cc747d6` 의 시트 단위 버튼 권한 응답이 로컬 BE 에 없었음 — 다운로드 대상이 nscm-fe 뿐이었다).
+- 도구: 한 번 실행에 FE(nscm-fe 5폴더) + BE(공통 트리 `nscm-be/src` → 로컬 `nscm-be/src`)를 같은 판정 규칙으로 처리. BE 기준선 = `state.json` `baselineBe`(없는 첫 회차는 공통 최신 트리와 직접 대조). 옵션 `--be` `--no-be` `--base-be` `--be-work`. 요약 JSON 에 `areas.fe/be`.
+- BE 보호: ① 환경 파일(application*·config/*·mybatis-config.xml·logback*·log4j*·CorsConfig.java)은 작업 모드와 무관하게 항상 로컬 유지 ② 쓰기·삭제는 `nscm-be/src` 아래만(build.gradle·settings.gradle·gradle/·lib/·.git·build 등은 차단, 적용 전 가드에 걸리면 무변경 중단) ③ DB MODE 에서도 BE 는 내 편집본·환경 파일 삭제 차단 ④ BE 저장소에는 읽기 git 명령만(status·diff·config --get) ⑤ 적용 후 환경 파일 바이트 동일·대상 밖 무변경 검증, 실패 시 기준선 미갱신.
+- VM: 미리보기 로그·확인창에 FE/BE 건수를 나눠 표시, BE 가 바뀌면 "BE 재기동 필요" 안내. 백업 `workbench.js.bak_20261112_be` · `common_sync.py.bak_20261112_be`.
+- 검증(10:03 · 사본 시험 · 실제 nscm-be/기준선 불변): 보호 모드 = BE 공통 원문 51·병합 9·로컬 유지 17(결정 대기 7) / DB MODE = BE 공통 원문 70·로컬 유지 15 · 두 모드 모두 환경 파일 해시 불일치 0·대상 밖 변경 0·충돌 마커 0. 차단 부정 시험: checkout/reset/clean/stash/config 쓰기 5종 차단 · 가드 발동 시 사본 차이 0. VS Code 실제 창에서 메뉴 실행은 미실행. BE 컴파일(gradlew build)은 미실행.
+
+## 2.0.3+ 아코디언 메뉴 단계 들여쓰기 (2026-11-12 09:3x · menu-view.js CSS · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "GROUP 과 실제 메뉴가 구분되도록, 상단 CATEGORY 글자가 시작하는 지점에 MENU 아이콘이 시작 · 중분류가 있어도 마찬가지 · TREE LINE 없이 TREE 구조처럼 단계 구분".
+- 규칙 = 하위 아이콘의 시작 x = 상위 이름의 시작 x. 대분류 이름 38px → 중분류 아이콘 38px(접기 화살표는 그 왼쪽 20px) → 중분류 이름 56px → 그 안 메뉴 아이콘 56px. 중분류 없는 구획의 메뉴 아이콘은 38px.
+- 검증(09:34 · Chrome 실측 · 8구획 + 드릴다운 5곳): 아이콘 249개 전부 상위 이름 시작과 1px 이내 · 가로 넘침 없음 · 페이지 오류 0. 중분류 안의 중분류는 현재 메뉴에 0건이라 실데이터로 미검증(같은 규칙의 CSS 만 적용). VS Code 실제 창 확인은 미실행.
+
+## 2.0.3 사이드바 메뉴 = 아코디언 (2026-11-12 09:2x · menu-view.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "메뉴 구성을 현재 이모지와 COLOR 유지한 채로 … 리본메뉴가 아닌 아코디언 메뉴로"(리본은 취소 · 만든 것 없음).
+- 왼쪽 세로 구획 띠(D2 레일)를 없애고, 구획 8개의 머리줄(아이콘 칩 · 이름 · 건수 · 화살표)을 위아래로 쌓았다. 누른 구획만 그 자리에서 펼쳐지고(한 번에 하나), 다시 누르면 접힌다. 접힘 상태는 창 상태에 보존.
+- 펼친 구획의 머리줄은 스크롤해도 위에 고정. 안쪽 접힌 항목(▸)으로 들어가면 펼친 구획 안에 뒤로 버튼과 경로가 나온다.
+- 그대로: 단일 색상 아이콘 · 강조색 · 항목 원천(MenuProvider 트리)·명령·언어 설정·검색·Hook 켜기/끄기 버튼. 호스트 통신(load/run/act)은 바꾸지 않았다.
+- 백업 `menu-view.js.bak_20261112_acc`(D2 레일판).
+- 검증(09:25 · 모의 vscode + Chrome): 머리줄 8/8 · 구획별 펼침 7/7(하나만 열림) · 다시 눌러 접힘 · 드릴다운/뒤로 · 행 클릭 → 명령 · 검색 · 강조색 · 머리줄 고정 · 가로 넘침 없음(320·220px) · 페이지 오류 0 = 21항목 PASS. 트리↔뷰 항목 대조 스크립트 오류 호출 0. VS Code 실제 창 확인은 미실행.
+
+## 2.0.2++ DB MODE 에서 일괄 생성 작업 차단 (2026-11-12 09:2x · workbench.js · extension.js · flow-panel.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-12): "DB 모드에서는 FLOW 의 BATCH RUN 이나 ID 기준 일괄생성 등의 작업은 진행되지 않도록".
+- 판정 = 실행 시점의 `tools/Harness/harness.json` repairScope(DB_ONLY = DB MODE). 막히면 Task Log 와 경고 알림에 이유와 해제 방법(작업 모드 → UI/DB MODE)을 적는다.
+- **차단(DB MODE)**: FLOW `Batch Run`(기존 화면·새 화면 모두) · 체인 `full`(ID 하나로 전체)·`new-asis-full`·`new-design-full` · 작업 `S5.pipeline`·`S5.pipelinedesign`·`S5.pipelinedry`·`S5.pipelineregen`·`S5.new`(메뉴·트리·FLOW 칸 Build/Fix·명령 공통).
+- **그대로 실행**: 체인 `autofix-full`(메뉴 자동보완)·`docs`·`testreport` 와 그 밖의 작업(파싱·문서·CheckList·PKG·META·클라우드 이관).
+- FLOW 의 `Batch Run` 버튼은 DB MODE 일 때 흐리게 표시하고 툴팁에 이유를 적는다.
+- 검증(09:22 · 모의 vscode + Chrome · 가짜 ID ZZZ9999 · 현재 모드 DB_ONLY): 차단 6경로 PASS · 체인 시작 0건 · DB_FE 임시 루트에서는 차단 안 함 PASS · FLOW 버튼 84/84 흐림 · 페이지 오류 0. UI/DB MODE 에서 실제 체인 실행과 VS Code 실제 창 확인은 미실행.
+
+## 2.0.2+ FLOW 열 = 체인이 순서대로 실행하는 단계만 (2026-11-11 21:4x · flow-panel.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-11): "흐름에서 벗어나는 별도의 액션은 FLOW 에서 제외 — PKG 가 전체 흐름에서 순서대로 진행되면 유지, 별도 작업이면 제외".
+- 근거 = quick.json 'ID 하나로 전체' 체인 17단계 실측: 1 파싱 → 2 문서(MD) → 4 FE 골격 → 5 메타 등록 SQL → 6·8 PKG 골격·이식 → 7 FE 수선+게이트 → 13 CheckList → 14 자동 보완 → 15 재판정 → 16 문서 Excel.
+- **열(8개)**: Parse · Docs · Build · META · PKG · Gate · CheckList · Fix. PKG·META·Gate 는 체인 안(4~8단계)이라 유지 · 순서를 체인 순서로 맞춤(META → PKG → Gate).
+- **제외**: Test(E2E 단독 실행 `S7.smoke/crud/auth/authcrud/all` — 체인에 없음. 11-04 E2E 메뉴 단계 폐지 뒤 E2E 는 CheckList 안에서 실행) · Cloud(이관 완료 표시 = 수동 메뉴 · 2.0.2 에서 추가했던 열과 판정 코드 삭제).
+- 판정 함수의 E2E 4종 값과 `STAGES`(UI Status 탭 · CSV 저장)는 그대로 — FLOW 표에서만 뺐다. '전 단계 완료' 는 8열 기준(21:48 실측 1/84).
+- 검증(21:48 · 모의 vscode + Chrome): 머리글 8단계 영문 · 행 84 · 머리글 고정 유지 · 칸 클릭·Batch Run 전달 · 페이지 오류 0. VS Code 실제 창 확인은 미실행.
+
+## 2.0.2 FLOW 화면 재구성 (2026-11-11 21:3x · flow-panel.js·workbench.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-11): "Smoke·CRUD·Auth·Auth×CRUD 를 Test 하나로 · 문서와 Excel 도 하나로 · 6 수선 → 보완 · 상단 Header 고정 · Doc/gen 삭제 · 끝까지 → 일괄작업 영문 · Header 명칭 영문 · 파이프라인 삭제 · 현재 기준 Step 으로, 누락은 감안해 보완 · 디자인 세련되게".
+- **열(10개 · 머리글 영문 고정)**: Parse · Docs(문서+Excel) · Build · Gate · PKG · META(등록SQL) · CheckList · Fix(보완) · Test(E2E 4종) · Cloud. 순서 = 현재 일괄 작업 체인(파싱 → 문서 → 생성·게이트·PKG·META → CheckList → 보완 → 테스트 → 클라우드 이관). 종전 13열 + 파이프라인 열.
+- **묶음 판정**: 전부 완료 → 완료 · 하나라도 실패 → 실패 · 전부 없음 → 없음 · 그 외 부분. 숫자는 합계(Test = 4종 PASS 합/전체 합). 부분별 상태는 칸 툴팁. 판정 함수 `stageStatus` 와 내보내는 `STAGES`(UI Status·CSV)는 13단계 그대로.
+- **칸 클릭**: Docs = 아직 완료가 아닌 첫 부분의 작업(문서 `S3.agent` → Excel `S3.xlsx`) · Test = `S7.all`(4종 한 번에) · Cloud = `S5.cloudMod`.
+- **Cloud 열(추가)**: `_artifacts/_deploy_packages/_cloud_state/<ID>.json` 기준 — 패키지 생성 기록 없음 = 없음 · 생성했으나 이관 완료 표시 없음/그 뒤 재생성 = 부분 · 마지막 생성분까지 이관 완료 표시 = 완료. 칸 아래 날짜(MM-DD), 툴팁에 생성·완료 표시 시각.
+- **머리글 고정**: 종전엔 고정 기준 틀(#flow)과 실제 스크롤 틀(탭 본문)이 달라 표 머리글이 따라 올라갔다. 탭 안에서는 바깥 스크롤을 끄고 표 영역만 스크롤 → 요약 영역 + 표 머리글 고정.
+- **기타**: `★ 끝까지` → `Batch Run` · `📁 Doc/gen` 버튼 삭제 · 파이프라인 열 삭제 · '6 수선' → '6 보완'(UI Status 포함, 영문 '6 Fix') · 상태 기호를 점(●◐◆○)으로 · 단계 요약 칩에 막대 · 스타일은 `flow-panel.js` `FLOW_CSS` 한 곳(독립 패널 공용).
+- '전 단계 완료' 수는 이제 Cloud 열까지 포함해 센다.
+- 검증(21:39 · 모의 vscode + Chrome): 행 84 · 머리글 한글 0 · Doc/gen 버튼 0 · 스크롤 900px 후 요약·표 머리글 위치 불변 · Test 칸 → `flow:task S7.all` · Batch Run → `flow:pipeline` · 페이지 오류 0. VS Code 실제 창 확인은 미실행.
+
+## 2.0.1 사이드바 머리글 = 'Vibe_Manager <버전>' (2026-11-11 20:5x · package.json·build_vsix.py — VSIX 설치 후 창 다시 로드 필요)
+- 사용자(11-11): "Vibe_Manager 뒤에 버전을 보여 주고 ': 전체 메뉴' 는 삭제". 컨테이너 제목과 뷰 이름을 둘 다 `Vibe_Manager <버전>` 으로 맞춤 → VS Code 는 두 이름이 같으면 하나만 표시한다(이 동작은 VS Code 소스 기억에 근거 — 실제 창 확인 필요).
+- `build_vsix.py` 가 빌드 때마다 package.json 의 버전으로 두 이름을 다시 맞춘다(수동 편집 불필요). 같은 날 2.0.1·2.0.1+ 항목(D2 메뉴 · 언어 설정)도 이 패키지에 포함.
+
+## 2.0.1+ 사이드바 메뉴 이름 = 언어 설정을 따름 (2026-11-11 20:4x · menu-view.js · 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-11): "현재 설정이 한글인데 메뉴가 영문으로 나온다 — 한글일 때는 한글로, 영문으로 바꾸면 영문 메뉴". 2.0.0 의 '메뉴 항상 영문' 을 되돌림.
+- `vibeManager.language` = ko → 한글 이름·한글 고정 문구(메뉴 검색 등)·레일 짧은 이름(화면·리포트·서버·Git·단계·DoD·룰·설정) / en → 영문. 설정을 바꾸면 메뉴 화면을 다시 만든다.
+- 괄호 설명 제거는 두 언어 공통. 괄호를 떼면 겹치는 한글 이름 5개 = 새 화면 · AS-IS / 새 화면 · 설계서 / 클라우드 이관 패키지 · 수정본 / · 전체 / 자동보완 반복.
+- 검증(20:44 · 모의 vscode + 실제 extension.js): ko·en 각각 트리 ↔ 메뉴 273/273 일치(명령 234/234 · 인라인 61 · 아이콘 미대응 0) · 괄호 남은 이름 0 · en 한글 이름 4(파일명). VS Code 실제 창 확인은 미실행.
+
+## 2.0.1 사이드바 메뉴 = D2 형(왼쪽 좁은 레일 + 한 줄 목록) — 아이콘 타일·아래 아이콘 탭 인식성 개선 (2026-11-11 · menu-view.js 만 · 설치 폴더 marisoft.vibe-manager-2.0.0 반영 — VS Code 창 다시 로드 필요 · package.json 버전 미변경)
+- 사용자(11-11): "모바일 형태의 아이콘 형태로 VM 메뉴를 수정했는데 인식성이 떨어진다" → 시안 A·D 비교 후 "D2 적용".
+- **왼쪽 레일(58px)**: 종전 아래 아이콘 탭(이름 = 툴팁만) → 세로 레일 · 아이콘 아래 짧은 이름 상시 표시(Screen · Reports · Server · Git · Steps · DoD · Rules · Settings, `RAIL` 표) · 툴팁 = 구획 전체 이름 + 건수 · 선택 = 왼쪽 막대 + 강조.
+- **오른쪽 목록**: 아이콘 타일 격자 폐지 → 모든 항목 한 줄 행(아이콘 · 이름 말줄임 · 오른쪽 짧은 설명). 'ID' 배지는 2.0.0 지시대로 표시 안 함(툴팁 유지). 인라인 버튼(Hook 켜기/끄기 · 열기)은 행 오른쪽 그대로.
+- **하위 구획 접기/펼치기**: 구획 머리 = 버튼(› 회전 · 건수) · 접힘 상태는 탭·경로·구획 이름 키로 웹뷰 상태에 보존 · 검색 중에는 접힌 구획도 펼쳐 일치 항목 표시 · 최상위 구획 머리는 스크롤 시 상단 고정.
+- 항목 원천(MenuProvider getChildren)·명령 실행·드릴다운(‹ 뒤로)·검색·구 트리 복귀(`vibeManager.menuStyle=tree`)는 변경 없음.
+- 검증(11-11 20:24 · 모의 vscode 로 실제 extension.js 로드 → 웹뷰 HTML 을 브라우저에서 실행): 구획 8/8 · 최상위 화면 행 142(20·15·8·4·9·2·67·17 = 데이터 142 일치) · 하위 구획 12 · 아이콘 미대응 0 · 인라인 버튼 13/13 · 행 클릭 → run 메시지 · 접기/펼치기·검색 동작 · 가로 넘침 없음 · 콘솔 오류 0. **VS Code 실제 창 확인은 미실행**(창 다시 로드 후 사용자 확인 필요). 백업 menu-view.js.bak_20261111_d2(소스·설치 폴더).
+
+## 2.0.0 사이드바 메뉴 = 모바일 홈 화면형 · 프롬프트 창 = Claude Code 입력창 형태 (2026-11-11 · menu-view.js 신규 · extension.js·workbench.js·package.json — VSIX 설치 후 VS Code 창 다시 로드 필요)
+- 사용자(11-11): "VM 메뉴를 모바일 홈 화면처럼" · "컬러 이모지 배제, 단일 색상" · "메뉴명의 (설명) 제거, 메뉴명 전체 영문" · "프롬프트 창을 Claude Code 와 유사하게, 모드별 색 = 테두리 색, 추가 항목은 UI_ID·새 창·원격 3개만".
+- **사이드바 메뉴(`menu-view.js`)**: 기존 트리(`MenuProvider`)를 그대로 읽어 그리는 웹뷰. 아래 탭(구획 8개) · 큰 제목 · 검색 · 아이콘 타일 격자 · 접힌 항목은 눌러서 들어가고 ‹ 로 돌아옴. 클릭 = 트리 항목의 command 그대로 실행. 트리의 인라인 버튼(Hook 켜기/끄기 · 열기)은 행 오른쪽 버튼.
+- **아이콘**: 라벨 앞 이모지·codicon 을 단일 색상 선 아이콘(SVG)으로 치환. quick.json 라벨은 바꾸지 않음(체인·명령이 라벨로 항목을 찾음). 게이트 통과/실패/대기 색은 상태 표시라 유지.
+- **이름**: 메뉴는 언어 설정과 무관하게 영문(`*_en`) · 괄호 설명은 화면에서 빼고 툴팁에 원문. 괄호를 떼면 같아지는 5개는 표시 이름 지정(New Screen from AS-IS / from Design Doc · Cloud Package · Modified / Full · Auto Fix Loop). 트리 제공자의 한글 고정 이름은 `menu-view.js` TR 표로 영문 표시. 파일명(…VALIDATION_취합…)과 게이트 설명 문구는 데이터라 그대로.
+- **ID 배지 없음**: 타일 우측 상단 'ID' 표시는 뺐다(사용자 11-11: 생성~보완이 기본 ID 기반). 화면 ID 필요 여부는 툴팁에 남김.
+- **구 트리 복귀**: 설정 `vibeManager.menuStyle` = `tree` (뷰 `vibeManager.menuTree`). 기본 `mobile`.
+- **프롬프트 창(`workbench.js`)**: 둥근 상자 1개(입력 + 도구 줄). 도구 줄 = ＋첨부 · ／명령 · 화면 ID · 모델 · 새 창 · 원격 · 모드 · 전송. 지우기·새 세션·quick.json 편집·세션 표시는 ／ 메뉴로 이동(기능 삭제 없음 · 요소 id 유지). 중지 버튼은 실행 중일 때만 보이고, Claude 응답 중에는 전송 자리를 대신함.
+- **모델명 짧게**: `claude-fable-5-2` → `Fable 5.2` (날짜·접두 제거 · 원래 ID 는 툴팁). 기본 항목 = `기본`/`Default`. 사용 중 모델은 고른 항목과 이름이 다를 때만 옆에 흐리게 표시.
+- **전송 버튼 = 항상 맨 오른쪽**: 도구 줄을 왼쪽 묶음(줄바꿈 가능)과 오른쪽 묶음(모드·중지·전송)으로 나눠, 폭이 좁아 줄이 바뀌어도 전송은 오른쪽 아래에 고정.
+- **도구 줄 축소(11-11 20:3x)**: 글자 80%(11.5px → 9.2px) · 모델 선택 폭 절반(68px) · 모드 선택 폭 절반(123px → 62px) · 모드 이름 영문 짧게 = Bypass(자동승인 전부허용) / Auto(자동 수용) / Manual(수동) / Plan — 언어 설정 무관, 뜻은 항목 툴팁.
+- **모드 색**(테두리 = 모드 글자 = 전송 버튼): 자동승인·자동(수용) 주황 `#e8833a` · PLAN 파랑 `#4a9eff` · 수동 흰색(글자색 변수 · 밝은 테마에서는 어두운 글자색) — 사용자 지정 11-11. 색 값은 `workbench.js` `.pbox[data-mode=…]` 3줄.
+- 검증(11-11 20:00 · 모의 vscode 로 실제 extension.js 로드 + Chrome): 트리 ↔ 새 메뉴 항목 273/273 일치(명령 234/234 · 인라인 버튼 61 전부 가능 · 아이콘 미대응 0) · 메뉴 이름 273 중 한글 4(파일명) · 괄호 0 · 프롬프트 요소 15/15 · 버튼 메시지(pickFiles·pickId·newWindow·remote·editQuick·newSession·stop·prompt) 전달 · 페이지 오류 0. **VS Code 실제 창 확인은 미실행**(창 다시 로드 후 사용자 확인 필요).
+
+## 1.9.45 보완·생성 결과를 엔진이 실측으로 증명 — 자동보완 체인 3단계 추가 · PKG/META 메뉴 증명 단계(proofTasks) · S8 작업 6종 (2026-11-11 · workbench.js·quick.json·steps.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자(11-11 승인 플랜 '추측 대신 실행'): AI 가 서술로 결론 내는 지점을 실행·측정 엔진으로 교체. 종전 🧯·🩺·🔗·🧾 는 프롬프트의 "적용 후 확인" 지시뿐이었다.
+- **🚒 자동보완 체인**: CheckList(최신 아닐 때) → `S8.diagnose`(원인 계층 실측 · layer_diagnosis.csv) → `S8.repairSnapshot`(보완 전 판정 저장) → 🧯 보완 → CheckList 재판정 → `S8.repairCompare`(보완 전 ↔ 재판정: 종결·미종결·회귀 수 · repair_close.json) → 문서 → 이관 파일. 추가 3단계는 선택 단계(실패해도 체인 계속 · 경고 표시).
+- **proofTasks**(quick 항목 새 키 · 배열): Claude 보완이 끝나면 지정 작업을 순서대로 실행하고 종료코드가 0 이 아니면 경고(2 = FAIL · 3 = 미측정). 🩺 PKG 보완·🔗 PKG 변환 = `S8.pkgGate`(원문 반영·컴파일·시그니처·AS-IS↔TO-BE 실행 대조) · 🧾 META = `S8.metaLive`(메뉴·배선·PROC·인자·컬럼·콤보 사내 DB 실측).
+- **S8 작업 6종**(steps.json): diagnose · repairSnapshot · repairCompare · repairClose(바뀐 객체에서 영향 규칙만 재판정) · metaLive · pkgGate.
+- 🛠️ 수동 보완은 변경 없음(11-10 지시: CheckList 사전·재판정 없음).
+- **새 화면 체인(🚀·🧩·📏)**: 종전 체인은 pipeline 1~7 단계만 호출해 8단계(사내 DB 반영 확인)가 실행되지 않았다 → `8/8 사내 DB 반영 확인` + `S8.feGate`(실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회) 추가, 🚀·🧩 는 생성 전에 `S8.precheck`(생성 입력 구비 여부 실측). 모두 선택 단계.
+- S8 작업 추가 2종: feGate · precheck (합계 8종).
+
+## 1.9.44 작업 종료 시 Flow 보드에 클릭 링크(📂 폴더 · 📄 README · 🗂 A_DB) — 클라우드 이관 패키지(수정본·전체) (2026-11-11 · workbench.js · tools/CloudPkg/cloud_pkg.py 1.3.0)
+- 사용자: "클라우드 이관 패키지 선택 시 작업 종료 시 링크를 제공해서 VM 창에서 링크 선택할 수 있도록" — 종전엔 Task Log 에 경로 문자열만 찍혀 복사·탐색이 필요했다.
+- 규약: 작업 스크립트가 `@@LINK 라벨|경로` 줄을 출력하면 spawnStream 이 모아 두었다가 단일 작업 Flow 보드 결과 줄 아래 칩으로 붙인다. 폴더 = 탐색기 열기(openExternal) · 파일 = 워크벤치 탭(show). 존재하지 않는 경로는 붙이지 않는다.
+- cloud_pkg.py: 완료·변경 없음(기존 폴더)·사전 생성 복사·변경 없음(최근 폴더) 네 출구 모두 링크 3종 출력.
+
 ## 1.9.43 패널 가로 축소 시 맨 아래 항목 유지 — 채팅·로그 상자가 바닥에 붙어 있던 상태면 크기 변경 뒤 자동으로 맨 아래로(ResizeObserver) (2026-11-06 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
 - 사용자: "VM UI 를 가로로 줄였을 때 마지막 항목이 보이도록 VSCROLL 을 맨 아래로" — 종전엔 새 메시지가 올 때만 바닥으로 갔고, 가로 축소로 내용이 길어지면 스크롤 위치가 그대로라 마지막 줄이 가려졌다.
 

@@ -1,0 +1,157 @@
+{
+ "menu_id": "SSP0023",
+ "asis_id": "SSP0023",
+ "generated": "2026-11-14 23:50:26",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM 대상 SSP_ANL_SHIP_CONFIRM, SSP_ANL_SHIP_CONFIRM_CHG_REQ, SSP_ANL_SHIP_CONFIRM_H, SSP_MST_SEND_MAIL_REQ, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN 와 콤보 원천 16종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 11종: clbResultType, clbDivision_ID, clbCompany_ID, FACTORY_ID, ElectrodePackageType, DomExpTypeCode, CHANGE_REASON_CODE_ALL, BuildingByPlantSite, CHANGE_REASON_CODE, DOM_EXP, PACKAGE_TYPE",
+  "save_tables": [
+   "SSP_ANL_SHIP_CONFIRM",
+   "SSP_ANL_SHIP_CONFIRM_CHG_REQ",
+   "SSP_ANL_SHIP_CONFIRM_H",
+   "SSP_MST_SEND_MAIL_REQ",
+   "XIF_ERP_SHIP_PLAN_CONFIRM_S_SN"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboBucketType",
+    "label": "Bucket",
+    "src": "DM0003_GET_BUCKET_TYPE_CODE 원문",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbResultType",
+    "label": "Result Type",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision_ID",
+    "label": "Division*",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbCompany_ID",
+    "label": "Company*",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboPlanDate",
+    "label": "Plan-date*",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Plan_InforElectrode 분기",
+    "tables": [
+     "SSP_MST_SHIP_PLAN_SCHEDULE_EE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Com_FromSitePlantEE 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FACTORY_ID",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ElectrodePackageType",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "DomExpTypeCode",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "CHANGE_REASON_CODE_ALL",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "BuildingByPlantSite",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "CHANGE_REASON_CODE",
+    "label": "Change Reason",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DOM_EXP",
+    "label": "DOM/EXP.",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PACKAGE_TYPE",
+    "label": "Package Type *",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SHIPMENT_STATUS",
+    "label": "Status",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DIVISION_ID",
+    "label": "Div",
+    "src": "UP_FX_GetCommonDataList @Code=Division 분기",
+    "tables": [
+     "SCM_MST_DIVISION"
+    ],
+    "overlap": []
+   }
+  ]
+ }
+}

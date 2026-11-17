@@ -1,0 +1,46 @@
+{
+ "table": "DM_MST_CUSTOMER_MODEL",
+ "pk": [
+  "DIVISION_ID",
+  "CUSTOMER_PROJECT_CODE",
+  "CUSTOMER_MODEL",
+  "SCM_SITE_ID"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "CUSTOMER_PROJECT_CODE": "CUSTOMER_PROJECT_CODE",
+  "CUSTOMER_MODEL": "CUSTOMER_MODEL",
+  "SCM_SITE_ID": "SCM_SITE_ID"
+ },
+ "save_sp": "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+ "side": [
+  {
+   "table": "DM_MST_CUSTOMER_MODEL_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [],
+ "basis": "foxml PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA → SP PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = UPDATE DM_MST_CUSTOMER_MODEL WHERE 키 4컬럼(ATTRIBUTE1~10 을 NULL 로 씀 — 복원이 전 컬럼을 되돌림) · PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST 가 DM_MST_CUSTOMER_MODEL_H 에 이력 INSERT · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 CONVERT_QTY_PACK 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "CONVERT_QTY_PACK",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "CONVERT_QTY_PACK",
+      "db_col": "CONVERT_QTY_PACK",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

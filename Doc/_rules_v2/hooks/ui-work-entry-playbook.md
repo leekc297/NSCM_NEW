@@ -18,7 +18,7 @@
 | # | 필수 사항 | 근거 hook |
 |---:|---|---|
 | 1 | **공용 DataGrid 사용 필수** — 인라인 `<FlexGrid>` JSX 직접 사용 금지 (`@shared` DataGrid + `@foundation/utils` GridUtils/GridAction/EditTracker) | #60 datagrid-shared-component-mandatory |
-| 2 | **Sort/Filter/Condition/Reset 기본 버튼 자동 활성** — hotkeyConfig 에서 임의 false 금지 (생략=자동활성) | #64 subtitle-button-actions + feedback_search_aux_default_activation |
+| 2 | **Sort/Filter/Condition/Reset 기본 버튼 자동 활성** — hotkeyConfig 에서 임의 false 금지 (생략=자동활성) | #64 subtitle-button-actions-mandatory + feedback_search_aux_default_activation (2026-11-13 정정: hook 이름을 실제 파일명으로 — `subtitle-button-actions` → `subtitle-button-actions-mandatory`) |
 | 3 | **실제 기능(추가/삭제/저장)이 있으면 기능버튼 필수 노출** — 기능 구현하고 버튼 미추가 금지. hotkeyConfig insert/delete/save + 권한(hasButton) 배선 + BTN_MPG 메타 | #64/#68/#97 |
 | 4 | **UI Category Setup(SHEET_COLUMNS 등 admin 메타)은 실사용 데이터로 정비** — 실제 사용하는 컬럼/속성으로 채우고 **미사용 데이터는 VALID_YN='N'/삭제 처리** (임의 생성은 여전히 금지 — 기존·실사용 기준) | #13 ui-category-setup-no-arbitrary-data + #65 ui-category-setup-column-meta |
 
@@ -35,10 +35,13 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 
 ⓪ ⭐ 보완요청 원장 선행 (hook #139, 2026-08-20 — 다른 무엇보다 먼저):
    지정된 요구 원문(문서 셀/대화) 전문 채록 → 하위문구 분해 → `Doc/단위테스트_보완대상/보완요청_원장.md`
-   등재(전부 PENDING — 미적용 전제) → `asis_mapping_gate --init ... --menu {MNU_ID}` 로 대사표 REQ 축 편입.
+   등재(전부 PENDING — 미적용 전제) → `asis_mapping_gate --init ... --menu {MNU_ID}` 로 대조표 REQ 축 편입. (2026-11-13 정정: 용어 대사표 → 대조표)
    기존 등재분이 있으면 전 행 PENDING 전제로 재판정(실측 근거로만 전이·사전 판단 SKIP 금지).
 
 시작 전 Doc/_rules_consolidation/RULESET_MASTER.md 전체를 읽고:
+   (2026-11-13 정정: 현행 라우팅 = CLAUDE.md §3 — TRIGGER_ROUTER.md(§2 추출본) → 해당 T# 핵심 Hook →
+    UI_MANDATORY_CHECKLIST.md(§3 추출본) 를 읽는다. RULESET_MASTER 전문은 카탈로그(§4)가 필요할 때만 —
+    매 작업 전문 Read 금지. 아래 [시작 전 필독]의 RULESET_MASTER·00_INDEX 도 같다)
 ① Target UI 의 모든 자원(Page/Store/constants/types/utils/components/modals/SCSS/i18n + 관련 BE 메타·SP)을
    §3 UI-MANDATORY 체크리스트 + §4 hook 카탈로그(UI/공통) + §5 _tobe 13룰과 전수 대조해
    "준수 점검표"(룰/hook | 현재 상태 | 준수/위반/해당없음 | 위반 상세 | 조치안)로 보고하라.
@@ -46,9 +49,10 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 ② 점검표의 모든 위반을 교정하라(인라인 <FlexGrid> → 공용 DataGrid + @foundation/utils 변환,
    components/ 분리 포함). 단 regression-zero Hard Boundary(shared/foundation/lges/타화면/타도메인/BE)
    밖이면 분리 PR 로 제안.
-③ POST-WRITE grep 0 + screen-completion-gate 10게이트(G10=REQ 원장 축 포함) + 위반 전/후 건수·변경 파일 목록 보고.
+③ POST-WRITE grep 0 + screen-completion-gate 11게이트(G1~G11 · G10=REQ 원장 축 포함) + 위반 전/후 건수·변경 파일 목록 보고.
+   (2026-11-13 정정: 게이트 수 10/8 → 11 — screen-completion-gate.md §0, G11 = 2026-10-26 신설)
    단순화 금지. 불확실하면 reference(DMF0004/0005/0006) cross-check.
-④ FIGMA 에서 추출한 SVG 파일과 MD 파일을 기반으로 UI 디자인 상세 적용 (figma-layout-parity #90).
+④ FIGMA 에서 추출한 SVG 파일과 MD 파일을 기반으로 UI 디자인 상세 적용 (figma-layout-parity-mandatory #90 — 11-13 정정).
 ⑤ UI 개발 시 소스 구조를 분석한 RULE(_tobe 01~13 + reference 패턴)에 따라 기준을 지키며 진행.
 ```
 
@@ -76,7 +80,7 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 6. 산출: "적용대상 업무 정의" + 인벤토리 표 (Event/API/Validation/Expression/Button/POPUP/SP/Table 각 건수).
 
 [2단계 — 배치 결정]
-7. features 폴더: SCM_ADM_MNU_M 트리 walk-up → 최상위 부모 매핑 (CLAUDE.md Step 3.5,
+7. features 폴더: SCM_ADM_MNU_M 트리 walk-up → 최상위 부모 매핑 (`.claude/rules/00-fe-screen.md` features 폴더 결정 5단계 — 2026-11-13 정정: 구 'CLAUDE.md Step 3.5' 는 2026-10-12 재구성으로 이동,
    Router.tsx import 검색으로 기존작성/cross-check 판정).
 8. reference baseline = {{REFERENCE}}.
 
@@ -90,7 +94,7 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 12. __asis-mapping__.md — 1단계 인벤토리 카운트 = 코드 적용 건수 정확 일치 (모든 행 ✅).
 
 [4단계 — 검증·보고]
-13. §3.3 POST-WRITE grep 0 + screen-completion-gate 8 게이트.
+13. §3.3 POST-WRITE grep 0 + screen-completion-gate 11 게이트(G1~G11). (11-13 정정)
 14. 카운트 일치 보고 (Event/API/Validation/Expression/Button/POPUP 각각) + 필요 시 이관 패키지
     (deploy-package-completeness — "후속 보강" 잔류 금지).
 
@@ -104,7 +108,7 @@ Target UI 전면 점검·교정. 특정 기능 변경이 아니라 룰 미준수
 
 - 진입: `RULESET_MASTER.md` §2 T01/T01M (본 플레이북이 두 트리거의 실행 절차 원문)
 - 자동 첨부: `.claude/hooks/attach-context.ps1` — "보완"/"신규 생성" 키워드 그룹이 본 파일 첨부
-- 게이트: `screen-completion-gate.md` (8게이트) / `regression-zero-mandatory.md` (Hard Boundary)
+- 게이트: `screen-completion-gate.md` (11게이트 — 11-13 정정) / `regression-zero-mandatory.md` (Hard Boundary)
 - §0 필수 4대: #60/#64/#68/#97/#13/#65
 
 ## 변경 이력

@@ -22,12 +22,12 @@
 
 ## §0 4 축 cross-check (의무)
 
-### §0.1 Event 축 — ⭐ 이벤트 ID **1:1 대사표** (총합 비교 폐지, 2026-08-06)
+### §0.1 Event 축 — ⭐ 이벤트 ID **1:1 대조표** (총합 비교 폐지, 2026-08-06)
 
 > ❌ **폐지**: 구 판정식 `TO_EVENTS ≥ AS_EVENTS` (총합 비교) — 카운트가 맞아도 **개별 이벤트 누락을 검출하지 못한다**
 > (SYS0017: 다른 handler 가 수를 채워 총합 통과 → E01/E07/E13/E14/E15 미구현이 그대로 관통).
 
-**의무**: `__asis-mapping__.md` 에 **EID(E01~) 별 1:1 대사표** — §0.0 원천 md 의 **모든 E번호를 행으로 전수 나열**하고, 각 행에 [구현 위치 `파일:라인`] 또는 [미구현 사유] 를 기입한다. **빈 칸 1개 = 게이트 실패.**
+**의무**: `__asis-mapping__.md` 에 **EID(E01~) 별 1:1 대조표** — §0.0 원천 md 의 **모든 E번호를 행으로 전수 나열**하고, 각 행에 [구현 위치 `파일:라인`] 또는 [미구현 사유] 를 기입한다. **빈 칸 1개 = 게이트 실패.** (2026-11-13 정정: 용어 대사표 → 대조표)
 
 ```markdown
 ## Event 매핑 (EID 1:1 — 원천: {ID}_주요이벤트_상세분석.md E01~E{NN})
@@ -42,7 +42,7 @@
 
 **⭐ 도구 의무 (2026-08-07 신설 — `_artifacts/_diagnostics/asis_mapping_gate.py`)**:
 
-1. **스켈레톤 선생성 = 구현 시작 전 의무**: 구현 첫 파일 작성 **전에** `--init` 으로 대사표를 생성한다
+1. **스켈레톤 선생성 = 구현 시작 전 의무**: 구현 첫 파일 작성 **전에** `--init` 으로 대조표를 생성한다
    (수기 표 작성 금지 — 추출 누락 방지. 기존 파일 있으면 신규 ID 만 append, 기입값 보존):
    ```bash
    python _artifacts/_diagnostics/asis_mapping_gate.py --init "Doc/화면분석서/{ID}_*_주요이벤트_상세분석.md" <페이지폴더>
@@ -52,7 +52,7 @@
    판정: 전 행이 [상태=구현 + 구현 위치 기입] 또는 [상태=제외·해당없음 + 사유 기입]. 빈 사유 = FAIL.
    ui_gate_runner.py 섹션 (2) 가 이 검사를 자동 포함한다 (screen-completion-gate 참조).
 3. ⭐ **CRUD·모달 매트릭스 축 (2026-08-07 확장 — 사용자 요구 "MAIN UI 와 모달의 CRUD 누락 0")**:
-   `--init` 이 대사표에 `## CRUD·모달 매트릭스` 섹션을 자동 생성한다 —
+   `--init` 이 대조표에 `## CRUD·모달 매트릭스` 섹션을 자동 생성한다 —
    ① `CRUD:{EID}:{액션}` 행: CRUD 성격 이벤트(SEARCH/INSERT/DELETE/SAVE/EDIT 키워드 다중 분류)를 액션 축으로 재정렬
       (조회 전용 화면이면 SEARCH 행만 생성 — 강제 CRUD 행 없음, `해당없음+사유` 상태 허용)
    ② `MODAL:{이름}` 행: **MAIN UI 가 여는 모달 전수** = 분석 md 팝업 절(Pop*/…Modal/…Dialog 명칭) ∪ FE 실존 파일
@@ -60,7 +60,7 @@
    빈 셀 = `--check` FAIL. 매트릭스만 별도 판정 = `--check --matrix-only` (ui_gate_runner 섹션 (5)).
    런타임 짝 = screen-completion-gate §0.5 **G6-6** (모달별 CRUD 왕복: 열기→편집→OK→DB 반영).
 
-- 참고 grep (보조 — 대사표를 대체하지 못함):
+- 참고 grep (보조 — 대조표를 대체하지 못함):
 
 ```bash
 CS="GSCM/06.UIL/.../DMF{XXX}_*.cs"
@@ -91,6 +91,7 @@ AS_VAL=$(grep -oE "MSG\d{5}" "$CS" | sort -u | wc -l)
 TO_VAL=$(grep -roE "t\('MSG\d{5}'" "$TOBE" | sort -u | wc -l)
 
 # 매핑 의무: TO_VAL ≥ AS_VAL (각 MSG ID 사용)
+# (2026-11-13 정정: 예외 추가. AS-IS 편집(Edit) 버튼 경로에서만 닿는 안내 메시지는 TO-BE 에 없어도 정상이며 건수 비교에서 뺀다. CR-103, CR-093)
 ```
 
 ### §0.4 Expression 축
@@ -227,7 +228,7 @@ grep -E "^\| E[0-9]{2}" __asis-mapping__.md | awk -F'|' '$4 ~ /^ *—? *$/ && $5
 | **원천 브리지 (§0.0)** | `screen-analysis-workbook-standard.md`(#105 — 0단계 주요이벤트 md E번호 + 제약매트릭스) + `screen-modal-cascade-filter-analysis.md`(#123 — md 부재 시 선생성) |
 | Event | `_tobe/07_datagrid.md` (cellEditEnded / dblClick) + `_asis/02_screens/__TEMPLATE__.md` §6 |
 | API | `_tobe/03_main_component.md` (useTabProcQuery) + `_tobe/11_be_controller_service.md` + `_asis/00_framework/02_DataService.md` |
-| Validation | `_tobe/14_error_handling.md` (Phase 4 신규) + `_asis/00_framework/03_MessageHelper.md` (MSG ID 표) |
+| Validation | `_tobe/14_error_handling.md` (Phase 4 신규) (2026-11-13: 이 파일은 현재 저장소에 없음 — `_tobe/` 는 00~13 뿐) + `_asis/00_framework/03_MessageHelper.md` (MSG ID 표) |
 | Expression | `_tobe/08_column_meta.md` + `_tobe/07_datagrid.md` (cellEditEnded cascade) |
 | Button | `_tobe/09_subtitle_hotkey.md` + `_asis/00_framework/01_BaseForm.md` (CRUD 6대 + Aux 4대) |
 
@@ -238,7 +239,7 @@ grep -E "^\| E[0-9]{2}" __asis-mapping__.md | awk -F'|' '$4 ~ /^ *—? *$/ && $5
 
 > 사용자 질의: "앞으로는 UI 생성 시 AS-IS 의 모든 것을 놓치지 않도록 개발을 진행하고 CRUD 기능 테스트까지 완벽하게 할 수 있나요?"
 
-**구조적 한계 인정**: §0.0/§0.1 의 대사표는 **분석 md 의 E번호**에 묶여 있고, **AS-IS 소스의 실제 핸들러
+**구조적 한계 인정**: §0.0/§0.1 의 대조표는 **분석 md 의 E번호**에 묶여 있고, **AS-IS 소스의 실제 핸들러
 목록**에는 묶여 있지 않다. 따라서 **분석서가 놓친 핸들러는 게이트도 통과**시킨다.
 
 > 2026-08-08 실측 — DMF0082 AS-IS `.cs` 의 UI 이벤트 핸들러는 **25개**인데 대사표가 이름으로 참조하던 것은
@@ -293,7 +294,7 @@ grep -E "^\| E[0-9]{2}" __asis-mapping__.md | awk -F'|' '$4 ~ /^ *—? *$/ && $5
 ### 의무
 
 1. **제약매트릭스 md 를 `--init` 인자에 반드시 포함**한다. 제약 ID 는 `[A-Z]{1,3}-?\d{1,3}` 를 지원한다.
-2. **조용한 누락 차단**: 대사표에 *ID 행 꼴인데 파싱 안 되는* 행이 있으면 **FAIL** 이다
+2. **조용한 누락 차단**: 대조표에 *ID 행 꼴인데 파싱 안 되는* 행이 있으면 **FAIL** 이다
    (`RE_ID_LOOKALIKE`). 형식이 바뀌면 조용히 통과하지 못한다.
 3. `--init` 은 **자기가 관리하는 2개 섹션만 교체**하고 나머지(핸들러 인벤토리·토큰 대사표 등)는 보존한다.
    (2026-08-08 이전에는 파일을 통째로 덮어써 다른 축을 파괴했다.)
@@ -301,7 +302,7 @@ grep -E "^\| E[0-9]{2}" __asis-mapping__.md | awk -F'|' '$4 ~ /^ *—? *$/ && $5
 
 ### §0.3-b ⭐ 추출 수와 **문서 자체 카운트**를 대조하라 (2026-08-08 추가)
 
-행이 추출됐다고 전수가 아니다. 분석 md 가 §축별 카운트를 갖고 있으면 **그 값과 대사표 행 수를 축별로 대조**한다.
+행이 추출됐다고 전수가 아니다. 분석 md 가 §축별 카운트를 갖고 있으면 **그 값과 대조표 행 수를 축별로 대조**한다.
 DMF0082 실측 — 1차 추출 200행이 "전수"로 보였으나 문서 자체 카운트는 **224** 였다. 차이 24 의 원인:
 
 | 유형 | 실례 | 손실 |

@@ -1,0 +1,104 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "MATERIAL_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "새 행 · 열 MATERIAL_ID",
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0024_ItembyDivisionPopup",
+    "rows": 265,
+    "note": "값 채운 뒤 다시 누름 · 기록 후 닫음"
+   },
+   "picked": null,
+   "scenarios": [
+    "SSP0024-S4272cc"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [
+    {
+     "text": "Plant Site을(를) 선택하십시오.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "retry_fill": {
+    "ok": true,
+    "col": "PLANT_SITE_ID",
+    "value": "LGESOC Elec HQ07",
+    "after": "LGESOC Elec HQ07",
+    "how": "edit",
+    "error": null
+   },
+   "retry": {
+    "ok": true,
+    "error": null,
+    "popups": [
+     {
+      "form": "SSP0024_ItembyDivisionPopup",
+      "rows": 265
+     }
+    ],
+    "calls": [
+     "SCM0001_GET_DIVISION",
+     "SSP0024_GET_ITEM_BY_DIVISION_POPUP"
+    ],
+    "dialogs": []
+   }
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:37:15",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "MATERIAL_ID",
+   "col_after": false,
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "ids": [
+    "SSP0024-S4272cc"
+   ],
+   "has_else": true,
+   "single": true
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Ship Master Elec": [
+     0
+    ]
+   }
+  }
+ ]
+}

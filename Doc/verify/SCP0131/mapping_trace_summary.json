@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0131",
  "asis_id": "SCP0131",
- "generated": "2026-11-07T20:27:50",
+ "generated": "2026-11-14T19:46:05",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\sales-site-priority\\__asis-mapping__.md",
  "rows": 501,
  "fe_rows": 47,
@@ -10,69 +10,69 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\sales-site-priority",
  "fe_mapping_missing": false,
  "verdict": {
-  "미검증": 61,
-  "검증완료": 222,
-  "FAIL": 178,
-  "해당없음": 40
+  "미검증": 137,
+  "검증완료": 157,
+  "FAIL": 168,
+  "해당없음": 39
  },
- "instances": 359,
+ "instances": 365,
  "instance_result": {
   "REVIEW": 12,
-  "PASS": 177,
-  "NA": 133,
-  "ERROR": 27,
-  "FAIL": 4,
-  "NOPATH": 5,
+  "PASS": 167,
+  "ERROR": 68,
+  "NA": 112,
+  "FAIL": 2,
+  "NOPATH": 3,
   "NOT_RUN": 1
  },
  "by_layer": {
   "동적 생성·조회": {
    "REVIEW": 11,
-   "PASS": 52,
-   "ERROR": 14,
-   "NA": 33,
+   "PASS": 51,
+   "ERROR": 20,
+   "NA": 31,
    "NOPATH": 1,
    "FAIL": 1
   },
   "DB 실행·접근": {
-   "PASS": 28,
-   "NA": 2
+   "ERROR": 13,
+   "PASS": 17
   },
   "편집·검증": {
-   "NA": 46,
-   "PASS": 51,
-   "NOPATH": 2
+   "NA": 42,
+   "PASS": 53,
+   "ERROR": 7
   },
   "정적 디자인": {
-   "ERROR": 1,
-   "FAIL": 1,
-   "PASS": 27,
-   "NA": 14,
+   "ERROR": 2,
+   "PASS": 26,
+   "NA": 15,
    "NOPATH": 1
   },
   "CRUD": {
-   "ERROR": 3,
-   "FAIL": 1,
-   "PASS": 1
+   "ERROR": 4,
+   "FAIL": 1
   },
   "권한": {
-   "PASS": 2
+   "ERROR": 1,
+   "PASS": 1
   },
   "팝업": {
-   "ERROR": 9,
-   "PASS": 11,
-   "NA": 10,
+   "ERROR": 4,
+   "NA": 12,
+   "PASS": 14,
    "NOT_RUN": 1,
    "NOPATH": 1,
    "REVIEW": 1
   },
   "Cascade": {
-   "NA": 21,
-   "PASS": 4
+   "ERROR": 16,
+   "PASS": 4,
+   "NA": 5
   },
   "공통 기능": {
-   "PASS": 1,
-   "FAIL": 1
+   "ERROR": 1,
+   "PASS": 1
   },
   "콤보 후보": {
    "NA": 7
@@ -80,7 +80,7 @@
  },
  "by_check": {
   "A1": {
-   "PASS": 19
+   "PASS": 21
   },
   "A10": {
    "PASS": 1
@@ -104,32 +104,35 @@
    "NA": 3
   },
   "C1": {
-   "NA": 1,
+   "ERROR": 1,
    "PASS": 3
   },
   "C2": {
-   "NA": 6
+   "ERROR": 5,
+   "NA": 1
   },
   "C3": {
-   "NA": 10
+   "ERROR": 7,
+   "NA": 3
   },
   "C4": {
    "PASS": 1
   },
   "C6": {
-   "NA": 4
+   "ERROR": 3,
+   "NA": 1
   },
   "D1": {
-   "PASS": 13,
+   "PASS": 14,
    "NA": 2
   },
   "D3": {
    "NA": 4,
-   "PASS": 15
+   "PASS": 16
   },
   "D4": {
-   "PASS": 7,
-   "NA": 2
+   "PASS": 5,
+   "ERROR": 4
   },
   "D5": {
    "NA": 2
@@ -144,15 +147,16 @@
    "NA": 2
   },
   "E2": {
-   "NOPATH": 2
+   "PASS": 2
   },
   "E3": {
    "PASS": 13,
    "NA": 1
   },
   "E4": {
-   "NA": 32,
-   "PASS": 2
+   "NA": 30,
+   "PASS": 2,
+   "ERROR": 3
   },
   "E5": {
    "NA": 1
@@ -164,11 +168,11 @@
    "FAIL": 1
   },
   "F3": {
-   "PASS": 1
+   "ERROR": 1
   },
   "F4": {
-   "PASS": 13,
-   "NA": 2
+   "ERROR": 13,
+   "PASS": 2
   },
   "F5": {
    "ERROR": 1
@@ -180,12 +184,12 @@
    "NOPATH": 1
   },
   "G1": {
-   "ERROR": 7,
+   "ERROR": 8,
    "PASS": 3,
    "NA": 1
   },
   "G3": {
-   "FAIL": 1
+   "PASS": 1
   },
   "G4": {
    "NA": 2,
@@ -193,8 +197,7 @@
    "NOPATH": 1
   },
   "G5": {
-   "ERROR": 5,
-   "NA": 6,
+   "NA": 11,
    "NOPATH": 1
   },
   "G6": {
@@ -202,7 +205,7 @@
    "PASS": 2
   },
   "H10": {
-   "FAIL": 1
+   "PASS": 1
   },
   "H2": {
    "PASS": 13,
@@ -212,16 +215,15 @@
    "NA": 2
   },
   "H4": {
-   "PASS": 1
+   "ERROR": 1
   },
   "H5": {
    "NA": 9
   },
   "H6": {
    "ERROR": 3,
-   "PASS": 7,
-   "NOT_RUN": 1,
-   "NA": 1
+   "PASS": 8,
+   "NOT_RUN": 1
   },
   "I1": {
    "ERROR": 1
@@ -230,13 +232,13 @@
    "PASS": 1
   },
   "J2": {
-   "PASS": 1
+   "ERROR": 1
   },
   "K4": {
-   "PASS": 1
+   "ERROR": 1
   },
   "M3": {
-   "NA": 2
+   "PASS": 2
   },
   "M4": {
    "PASS": 4,
@@ -245,7 +247,7 @@
    "ERROR": 1
   },
   "SC1": {
-   "PASS": 1
+   "NA": 1
   },
   "X-LOC": {
    "REVIEW": 11,
@@ -256,17 +258,17 @@
    "PASS": 1
   },
   "X-ROW": {
-   "NA": 9,
-   "ERROR": 7,
-   "PASS": 10,
+   "NA": 7,
+   "ERROR": 12,
+   "PASS": 7,
    "FAIL": 1
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "REVIEW": 15,
-  "ERROR": 45,
-  "NOPATH": 15,
+  "REVIEW": 18,
+  "ERROR": 205,
+  "NOPATH": 14,
   "NOT_RUN": 2
  }
 }

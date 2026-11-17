@@ -1,0 +1,17 @@
+@media screen and (max-width: '1920px') {
+  .formItem {
+    grid-template-columns: 100px auto !important;
+    & > div:first-child {
+      width: 100px;
+    }
+  }
+}
+
+// AS-IS DMF0020 popup 버튼 압축 배치 — 119~136px 폭 × 25~26px 높이 (Designer.cs L272~1092)
+// gap 4px / 우측 정렬 (AS-IS 좌측 들여쓰기 없이 인접 배치)
+.popupButtonGroup {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}

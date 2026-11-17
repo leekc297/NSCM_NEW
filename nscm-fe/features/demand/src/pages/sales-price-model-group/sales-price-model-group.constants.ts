@@ -125,6 +125,9 @@ export const MSG = {
   PAST_PERIOD: 'MSG00409', // 과거 구간은 일괄입력이 불가합니다. 현재/미래 구간으로 기간 설정해주세요.
   DUPLICATE_NEW: 'MSG00428', // 신규 입력 데이터 중 중복된 데이터가 있습니다.
   CURRENCY_EMPTY: 'MSG00447', // Currency를 입력하세요.
+  // 기존 묶음 Currency 변경 범위 안내 — DMF0020 과 같은 문구(2026-11-12 프로시저가 "조회 기간 안만 변경"으로 바뀌어 LHS 지정).
+  //   처음 인계 때의 MSG01499("이번 주 이후 전체 기간")는 쓰지 않는다.
+  CURRENCY_CHANGE_SCOPE: 'MSG01429', // 화면에 조회된 기간의 데이터만 Currency가 변경됩니다. 기간을 확인하시고 …
   ONLY_NEW_DELETE: 'MSG00608', // 신규 입력 (Insert) 한 행만 삭제할 수 있습니다.
   SAVED: 'MSG00606', // 저장되었습니다.
   SAVE_FAIL: 'MSG00618', // 저장 중 오류가 발생했습니다.

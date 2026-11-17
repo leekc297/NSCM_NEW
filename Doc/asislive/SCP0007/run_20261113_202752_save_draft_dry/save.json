@@ -1,0 +1,124 @@
+{
+ "id": "SCP0007",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_BOD",
+  "pk": [
+   "BOD_ID"
+  ],
+  "match": {
+   "BOD_ID": "BOD_ID"
+  },
+  "save_sp": "SCP0007_SAVE_BOD",
+  "side": [
+   {
+    "table": "SCP_MST_BOD_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0007_SAVE_BOD → SP SCP0007_SAVE_BOD 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "SAFETY_STOCK",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "SAFETY_STOCK",
+     "db_col": "SAFETY_STOCK",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 20:27:52",
+ "status": "ERROR",
+ "steps": [],
+ "db_before": [
+  {
+   "BOD_ID": "7673",
+   "DIVISION_ID": "40",
+   "FROM_SITE": "CN00732500_40-P",
+   "TO_SITE": "CN00732500_40-P",
+   "INCOTERMS": "DAP",
+   "SAFETY_STOCK": "0E-10",
+   "PRIORITY": 1,
+   "ROUTE_ID": 3396,
+   "VALID_YN": "N",
+   "CREATED_BY": "yangwon_kim",
+   "CREATION_DATE": "2021-05-10 08:59:35.727",
+   "LAST_UPDATED_BY": "yangwon_kim",
+   "LAST_UPDATE_DATE": "2021-05-10 08:59:35.727",
+   "ATTRIBUTE1": "DAP",
+   "ATTRIBUTE2": "20210104",
+   "ATTRIBUTE3": "21001226",
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": "NERP VALID = N",
+   "ATTRIBUTE9": "DAP",
+   "ATTRIBUTE10": "NERP_SCP_2ND"
+  }
+ ],
+ "targets": [
+  {
+   "row": 1,
+   "where": {
+    "BOD_ID": "7673"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 1,
+   "col": "SAFETY_STOCK",
+   "old": "0.0",
+   "new": "1.0",
+   "ok": true,
+   "error": null,
+   "before": "0.0",
+   "after": "0.0",
+   "action_before": "",
+   "action_after": "",
+   "locked": true,
+   "entered": false
+  }
+ ],
+ "note": "셀 값·변경 표시가 기대대로 바뀌지 않음 — 저장하지 않음",
+ "db_after": [
+  {
+   "BOD_ID": "7673",
+   "DIVISION_ID": "40",
+   "FROM_SITE": "CN00732500_40-P",
+   "TO_SITE": "CN00732500_40-P",
+   "INCOTERMS": "DAP",
+   "SAFETY_STOCK": "0E-10",
+   "PRIORITY": 1,
+   "ROUTE_ID": 3396,
+   "VALID_YN": "N",
+   "CREATED_BY": "yangwon_kim",
+   "CREATION_DATE": "2021-05-10 08:59:35.727",
+   "LAST_UPDATED_BY": "yangwon_kim",
+   "LAST_UPDATE_DATE": "2021-05-10 08:59:35.727",
+   "ATTRIBUTE1": "DAP",
+   "ATTRIBUTE2": "20210104",
+   "ATTRIBUTE3": "21001226",
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": "NERP VALID = N",
+   "ATTRIBUTE9": "DAP",
+   "ATTRIBUTE10": "NERP_SCP_2ND"
+  }
+ ]
+}

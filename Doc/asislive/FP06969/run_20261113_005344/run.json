@@ -1,0 +1,160 @@
+{
+ "id": "FP06969",
+ "started": "2026-11-13 00:53:44.526",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 00:53:44.785",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Admin.UIL.FP06969_Distribute",
+   "form_text": "File Manager",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP06969_Distribute.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:48.503"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 00:53:51.766",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP06969\\run_20261113_005344\\dump_load.json",
+   "control_count": 23,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 359.576s, UI : 0.017s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:51.774"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 00:53:51.929",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP06969\\run_20261113_005344\\shots\\FP06969_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-13 00:53:52.053"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 00:53:52.546",
+   "call_timed_out": true,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 00:54:22.555"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 00:54:30.205",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP06969\\run_20261113_005344\\dump_find.json",
+   "control_count": 23,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 00:54:30.208"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 00:54:30.375",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP06969\\run_20261113_005344\\shots\\FP06969_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 00:54:30.490"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 00:54:30.814",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 00:54:31.638"
+  }
+ ],
+ "status": "ERROR",
+ "gate": {
+  "opened": true,
+  "grid_headers": false,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 12,
+  "calls_with_params": 12
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Admin.UIL.FP06969_Distribute",
+  "form_text": "File Manager",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP06969_Distribute.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-13 00:53:44.735",
+ "t_find": "2026-11-13 00:53:52.286",
+ "dialogs": [
+  {
+   "at": "2026-11-13 00:53:53.597",
+   "caption": "",
+   "text": "Please select valid base directory first",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 23,
+  "layout_items": 7,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 0,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 12,
+  "calls_screen": 12,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "증거 미측정: 그리드 헤더",
+ "ended": "2026-11-13 00:54:31.759",
+ "exit": 3
+}

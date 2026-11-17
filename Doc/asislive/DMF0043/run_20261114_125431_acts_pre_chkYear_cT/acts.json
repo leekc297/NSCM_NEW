@@ -1,0 +1,152 @@
+{
+ "id": "DMF0043",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0043_GET_MAIN_SPREAD_TITLE",
+    "DMF0043_GET_CONTRIBUTE_MAIN_DATA"
+   ],
+   "rows": [
+    [
+     "DMF0043_GET_MAIN_SPREAD_TITLE",
+     125
+    ],
+    [
+     "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+     1527
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnColumn failed: InvalidOperationException: control not found: btnColumn",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0043-S96bd28",
+    "DMF0043-S82cdcb",
+    "DMF0043-Seeb486",
+    "DMF0043-Sf2376e",
+    "DMF0043-S3f5b66",
+    "DMF0043-Sd738d5",
+    "DMF0043-S2e76bd",
+    "DMF0043-Sf409b9",
+    "DMF0043-S6bd4b3",
+    "DMF0043-S109112",
+    "DMF0043-Sac510b",
+    "DMF0043-S0debf1"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnCutOff",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0043_ContributeRatePopup",
+     "title": "기여율 버전관리",
+     "modal": true,
+     "grid_rows": 8,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0043_GET_CONTRIBUTE_RATE_POPUP"
+   ],
+   "scenarios": [
+    "DMF0043-Se7e3bc"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnSPVer",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnSPVer failed: InvalidOperationException: control not found: btnSPVer",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0043-S895f79",
+    "DMF0043-S927c39"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrDiscard",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0043_GET_MAIN_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0043-S40854f"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:52:59.314",
+ "preset": {
+  "name": "chkYear",
+  "token": "chkYear=cT",
+  "kw": {
+   "name": "chkYear",
+   "prop": "Checked",
+   "value": "True"
+  },
+  "label": "chkYear 체크 켬",
+  "ok": true,
+  "error": null,
+  "applied": "prop:Checked",
+  "value": "Y",
+  "text": "년도별",
+  "checked": true,
+  "selected_index": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

@@ -15,13 +15,18 @@
 | button:FindButton | FindButton > FindData | 181 | SystemManager.UP_FX_GetProgramInfoList | MATCH | SP UP_FX_GetProgramInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData > InitSpread | 110 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > SaveData > FindData | 181 | SystemManager.UP_FX_GetProgramInfoList | MATCH | SP UP_FX_GetProgramInfoList |
+| button:SaveButton | SaveButton > SaveData | 269 | SystemManager.UP_FX_SaveProgramInfo | MATCH | SP UP_FX_SaveProgramInfo |
+| button:SaveButton | SaveButton > SaveData | 270 | SystemManager.UP_FX_DeleteProgramInfo | MATCH | SP UP_FX_DeleteProgramInfo |
+| button:SaveButton | SaveButton > SaveData | 271 | SystemManager.UP_FX_SaveProgramInfo | MATCH | SP UP_FX_SaveProgramInfo |
 | event:this.Load | Form_Load > CreateSpread > InitSpread | 110 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteProgramInfo | MATCH | 1 | SP UP_FX_DeleteProgramInfo | EXEC:UP_FX_DELETEPROGRAMINFO, DELETE:TB_FX_PROGRAMINFO, UPDATE:TB_FX_PROGRAMINFO |  |
 | SystemManager.UP_FX_GetProgramInfoList | MATCH | 1 | SP UP_FX_GetProgramInfoList | EXEC:UP_FX_GETPROGRAMINFOLIST, SELECT:TB_FX_PROGRAMINFO |  |
+| SystemManager.UP_FX_SaveProgramInfo | MATCH | 2 | SP UP_FX_SaveProgramInfo | EXEC:UP_FX_SAVEPROGRAMINFO, MERGE:TB_FX_PROGRAMINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

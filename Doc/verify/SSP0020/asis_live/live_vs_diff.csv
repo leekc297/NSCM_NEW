@@ -1,0 +1,5 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SSP0020_GET_DELEGATE,PKG_SSP0020.P_GET_DELEGATE,GET,3,ROWS_ONLY:3,,2,find/load,"1,1","{""p_user_id"": ""jaeuk.shin"", ""p_language"": ""KO""}",BOTH,차등 검증·실측 모두 있음
+SSP0020_SAVE_DELEGATE,PKG_SSP0020.P_SAVE_DELEGATE,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0020_SAVE_UNSET,PKG_SSP0020.P_SAVE_UNSET,SAVE,2,SKIP:2,kind=SAVE — GET 만 실행(쓰기 SP 실행 금지) · 2026-11-16 수동 지정: ALL_ARGUMENTS 실측 인자명 일치(P_,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+UP_FX_GetSSPUserUseInfoList,PKG_SSP0020.P_USER_CHECK,GET,4,DIFF:1 PASS:2 ROWS_ONLY:1,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP

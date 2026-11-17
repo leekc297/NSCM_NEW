@@ -1,0 +1,7 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0115-Sd6ec20,DIVISION,,,,값 미도출,if (!siMain.IsLock()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (colIndex == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (!string.IsNullOrEmpty(divId)),
+SCP0115-S841c42,DIVISION,,,,값 미도출,if (!siMain.IsLock()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (colIndex == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (!string.IsNullOrEmpty(divId)) ▸ if (!string.IsNullOrEmpty(plantId)) ▸ if (checkVa,
+SCP0115-S34cac3,DIVISION,,,,값 미도출,if (!siMain.IsLock()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (colIndex == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ▸ if (!string.IsNullOrEmpty(divId)) ▸ if (!string.IsNullOrEmpty(plantId)) ▸ else of (ch,
+SCP0115-S59c6f6,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues.ToString() == ""ALL"")",
+SCP0115-S808157,DIVISION,,,,값 미도출,if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID)),
+SCP0115-S59c6f6,COND,,,,값 미도출,"if (cboDivision.ControlValues.ToString() == ""ALL"")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

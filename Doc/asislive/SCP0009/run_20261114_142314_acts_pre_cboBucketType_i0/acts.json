@@ -1,0 +1,455 @@
+{
+ "id": "SCP0009",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     439
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     39
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     24
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     12
+    ],
+    [
+     "SCP0009_GET_SHIPMENT_PLAN_FG",
+     0
+    ],
+    [
+     "SCP0009_GET_SHIPMENT_PLAN_FG",
+     0
+    ],
+    [
+     "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 5,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S6e3e4a",
+    "SCP0009-S67bbf1",
+    "SCP0009-S7b31fe",
+    "SCP0009-S7a38e2",
+    "SCP0009-S29bc0f",
+    "SCP0009-S346303",
+    "SCP0009-Sede481",
+    "SCP0009-S00ad82",
+    "SCP0009-S003e1c",
+    "SCP0009-S71a588",
+    "SCP0009-Sf059c1",
+    "SCP0009-S7fd36e",
+    "SCP0009-S653a38",
+    "SCP0009-S687343",
+    "SCP0009-S044ea4",
+    "SCP0009-S869cb6",
+    "SCP0009-S0bab83",
+    "SCP0009-Sfe741e",
+    "SCP0009-S8a6f22",
+    "SCP0009-S262f67",
+    "SCP0009-Sb3e88d",
+    "SCP0009-S024785",
+    "SCP0009-S67eeba",
+    "SCP0009-Se59316",
+    "SCP0009-S8e9b3d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S647918",
+    "SCP0009-S6c43db"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S354027",
+    "SCP0009-Sbfc2aa"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-S75f3d7",
+    "SCP0009-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-Sb00579",
+    "SCP0009-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-S5b9d5b",
+    "SCP0009-S95028d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 5,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S6e3e4a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S647918",
+    "SCP0009-S6c43db"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S3e4aef",
+    "SCP0009-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0009-S354027",
+    "SCP0009-Sbfc2aa"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-S75f3d7"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-Sb00579"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0009-S5b9d5b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnFix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 44
+  },
+  {
+   "control": "BtnNew",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 11
+  },
+  {
+   "control": "BtnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnFix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 13
+  },
+  {
+   "control": "btnNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 13
+  }
+ ],
+ "at": "2026-11-14 14:16:50.052",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

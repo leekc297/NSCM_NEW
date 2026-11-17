@@ -4,8 +4,10 @@
 //   기대값 = 원장 condition(JSON — AS-IS 문장 원문에서 추출). 원문으로 기대를 정할 수 없으면 실측만 남기고 판정필요(추측 PASS 금지).
 //   저장(Save)은 하지 않는다. 결과 = Doc/verify/<ID>/e2e_results.json(@verify 와 같은 파일에 row_id 단위 병합) → judge.py 가 원장에 반입.
 import { measurable as precond } from '../../../tools/E2E/lib/precond';
+import { fillPrereq } from '../../../tools/E2E/lib/prereq';  // 2026-11-09 T176 선행 칸(AS-IS 사용자 순서)
 import * as fs from 'node:fs';
-import { asisDeleteNewOnly, asisInsertNoop } from '../../../tools/E2E/lib/newrow';
+import { asisDeleteNewOnly, asisInsertGuard, asisInsertNoop } from '../../../tools/E2E/lib/newrow';
+import { gridSheetsResolved } from '../../../tools/E2E/lib/sheetid';  // 2026-11-10 T203
 import { createHash } from 'node:crypto';
 import * as path from 'node:path';
 import type { Locator } from '@playwright/test';
@@ -18,6 +20,7 @@ import { clickSheetTab, closeVisibleDialogs, ensureRows, findCondAny as findCond
 import { evalExpr, loadAccountCtx, type CondCtx } from '../../../tools/E2E/lib/condeval';  // 계정 그룹 컨텍스트(D3 GROUP 조건 · 2026-10-30)  // 모드 전환 뒤 숨은 조건까지(2026-10-29)
 import { staleKids } from '../../../tools/E2E/lib/cellclear';
 import { extraButtons } from '../../../tools/E2E/lib/extrabtn';
+import { combine, loadFormScen, loadResults, runFormScen, saveResult, scenariosOfRow, setVars } from '../../../tools/E2E/lib/formscen';  // 2026-11-16 폼 저장형 화면 시나리오
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
 const ACCT = loadAccountCtx(ID);
@@ -27,7 +30,9 @@ const LEDGER = path.join(DIR, 'verify_ledger.csv');
 const OUT = process.env.CL_RESULTS || path.join(DIR, 'e2e_results.json');  // CL_RESULTS = CheckList 자기검증(변이) 실행의 별도 결과 파일(2026-10-28)
 const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);  // 자기검증 기준선 실행도 공식 산출물 미기록  // 변이 실행 = 공식 산출물(combo_runtime·dyn_facts) 미기록
 
-type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number } };
+// 2026-11-09 T176: 실행 식별 — 결과 병합의 '확정 판정을 판정필요로 덮지 않음' 은 같은 실행 안에서만(이전 실행의 낡은 FAIL 이 재측정을 막던 결함 · SSP0025 V-1cd2a756)
+const RUN_ID = process.env.VERIFY_RUN_ID || '';
+type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; run?: string };
 const results: Res[] = [];
 // 2026-10-30: 조건 JSON "dead"(실행되지 않는 AS-IS 메서드에서만 나온 검사 — mapping_trace.asis_live) 행은 측정하지 않는다. 정적 단계가 NA 로 둔 행을 이 엔진이 다시 재 FAIL 하던 결함(SCP0041 SCP0040 F4)
 const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'TRACE' && !/"dead":\s*"/.test(r.condition || '')) : [];
@@ -47,8 +52,9 @@ const flush = () => {
   if (!ID || !results.length) return;
   const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
   // 같은 행에 이미 확정 판정(PASS/FAIL/NA)이 있으면 판정필요·ERROR 로 덮지 않는다(2026-10-28: 뒤 테스트의 '프로브 불가' 판정필요가 앞 실측 FAIL 을 지우던 결함)
-  const ded = new Set(fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(x => x.note === '전용').map(x => x.row_id) : []); /* 전용 행의 전용 시험(@verify TAG) 결과는 일괄 판정이 덮지 않는다(2026-11-02 T32) */ const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) { const ex = m.get(r.row_id); if (ex && ded.has(r.row_id) && /^E2E @verify \S/.test(ex.tobe_ref || '')) continue; if (ex && ['PASS', 'FAIL', 'NA'].includes(ex.result) && ['판정필요', 'ERROR'].includes(r.result)) continue; m.set(r.row_id, r); }
-  fs.writeFileSync(OUT, JSON.stringify([...m.values()], null, 1), 'utf8');
+  const ded = new Set(fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(x => x.note === '전용').map(x => x.row_id) : []); /* 전용 행의 전용 시험(@verify TAG) 결과는 일괄 판정이 덮지 않는다(2026-11-02 T32) */ const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) { const ex = m.get(r.row_id); if (ex && ded.has(r.row_id) && /^E2E @verify \S/.test(ex.tobe_ref || '')) continue; if (ex && ['PASS', 'FAIL', 'NA'].includes(ex.result) && ['판정필요', 'ERROR'].includes(r.result) && (!RUN_ID || ex.run === RUN_ID)) continue; m.set(r.row_id, r); }
+  // 2026-11-13 점검: 결과 파일 일시 잠금("UNKNOWN: unknown error, open …e2e_results.json" 11-12 SCP0028)으로 기록이 빠지지 않게 최대 5회 다시 쓴다(_verify.spec 과 같은 처리)
+  { const body = JSON.stringify([...m.values()], null, 1); for (let k = 0; ; k++) { try { fs.writeFileSync(OUT, body, 'utf8'); break; } catch (e) { if (k >= 4) throw e; Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 300 * (k + 1)); } } }
 };
 const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));  // 측정 시점의 검사 조건 — judge 가 조건이 바뀐 낡은 판정을 가려낸다(2026-10-29)
 // P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
@@ -57,7 +63,7 @@ const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows 
 // 2026-11-07 T142: 스냅샷 행(원장 target '<ID> 스냅샷 …' · _snap.spec 전용)은 규칙 묶음 판정(A5 컬럼 구성·H4 가로 스크롤 등 RULE_SCREEN 전체 put)이 덮지 않는다 —
 //   chain6b 에서 골든 없는 헤더·미승인 화면샷 행이 @trace 결과로 PASS 가 돼 '승인대기' 에서 빠졌다(SCP0037/0084/0122/0131)
 const SNAP_IDS = new Set(ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => /스냅샷/.test(r.target || '')).map(r => r.row_id) : []);
-const put = (row_id: string, result: Res['result'], evidence: string) => { if (SNAP_IDS.has(row_id)) return; results.push({ row_id, result, evidence: evidence.slice(0, 900), tobe_ref: 'E2E @trace', cond: COND_HASH.get(row_id), mctx: mctxOf() }); };
+const put = (row_id: string, result: Res['result'], evidence: string) => { if (SNAP_IDS.has(row_id)) return; results.push({ row_id, result, evidence: evidence.slice(0, 900), tobe_ref: 'E2E @trace', cond: COND_HASH.get(row_id), mctx: mctxOf(), run: RUN_ID }); };
 // 동적 facts(실행 시 수집) — 조회조건 콤보 code↔name · 팝업 선택 행 필드 · 사이트 유형 표본 → Doc/verify/<ID>/dyn_facts.json (2026-10-27 사용자 요청: 정합검증에 필요한 동적 데이터도 facts 로 보존)
 const DYN: { combos: Record<string, { c: string; v: string }[]>; popupFields: Record<string, string[]>; at: string } = { combos: {}, popupFields: {}, at: '' };
 const dynFlush = (nscm?: Nscm) => { if (!ID) return; try { const p0 = path.join(DIR, 'dyn_facts.json'); const prev = fs.existsSync(p0) ? JSON.parse(fs.readFileSync(p0, 'utf8')) as typeof DYN : { combos: {}, popupFields: {}, at: '' };
@@ -72,7 +78,7 @@ type Cond = { et?: string; name?: string; popup?: boolean; excluded?: string[]; 
   widths?: Record<string, { asis: string; tobe: string }>; divisions?: string[];
   d3?: { meth: string; line: string; locked: string; guard: string; cols: string }[];
   e4?: { meth: string; line: string; msg: string; tobe: string; text: string; args: string; guard: string; vars: Record<string, string> }[];
-  m4?: { handler: string; trigger: string; targets: string[]; popup: string }[];
+  m4?: { handler: string; trigger: string; targets: string[]; popup: string; newRow?: boolean }[];
   d3None?: boolean; e4None?: boolean; d5Src?: string; popupSheet?: string; trigger?: string[];
   siteSamples?: Record<string, string[]>; ctlType?: string; allFlag?: boolean; metaWidth?: Record<string, string>;
   src?: string[]; noAssign?: boolean; clearOnly?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
@@ -111,9 +117,20 @@ async function waitGridChange(p: import('@playwright/test').Page, before: string
   const t0 = Date.now(); while (Date.now() - t0 < ms) { if ((await gridSig(p)) !== before) { await p.waitForTimeout(500); return true; } await p.waitForTimeout(500); } return false;
 }
 
+// 2026-11-10 T215: Division 콤보가 비활성(고정)인지 + AS-IS actions.csv 의 STATE <…Division…>.Enabled=false 근거(파일:줄)
+async function divFixedOf(root: import('@playwright/test').Locator, id: string): Promise<{ shown: string; asis: string } | null> {
+  const cb = root.locator('[role="combobox"], input').first();
+  const dis = await cb.evaluate((e: Element) => (e as HTMLInputElement).disabled || e.getAttribute('aria-disabled') === 'true' || !!e.closest('.Mui-disabled')).catch(() => false);
+  if (!dis) return null;
+  const shown = ((await cb.inputValue().catch(() => '')) || (await root.innerText().catch(() => ''))).replace(/\s+/g, ' ').trim().slice(0, 40);
+  let asis = ''; try { for (const a of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', id, 'actions.csv'), 'utf8').replace(/^﻿/, ''))) if (a.kind === 'STATE' && /Division[^.]*\.Enabled$/i.test(a.target || '') && /^false$/i.test(String(a.value || '').trim())) { asis = `${a.target}=false · ${a.method}:${a.line}`; break; } } catch { /* 사실 없음 */ }
+  return { shown, asis };
+}
+
 test.describe(`검증엔진 ${ID} @trace`, () => {
   test.describe.configure({ retries: 0 });
   test.skip(!ID || !rows.length, `VERIFY_ID 없음 또는 원장 TRACE 행 없음: ${LEDGER} (mapping_trace.py ${ID} --to-ledger 먼저)`);
+  test.afterEach(() => { try { flush(); } catch (e) { console.log(`[flush] 테스트 뒤 결과 기록 실패: ${String(e).slice(0, 120)}`); } });  // 2026-11-12 T270: 테스트마다 결과를 파일에 — 뒤 테스트가 멈춰 작업자가 죽어도 앞 결과가 남는다(DMF0005 608행 소실)
   test.afterAll(() => flush());
   test.afterEach(({ nscm }) => dynFlush(nscm));
 
@@ -180,6 +197,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         if (names.length > 1) await clickSheetTab(nscm, names[0]);  // 첫 탭 복귀 — 안 돌아가면 이후 조회가 다른 탭 기준이 된다(2026-10-31 SCP0041)
       }
       if (!want.length) { put(x.row_id, '판정필요', `AS-IS 버튼 메서드 미식별 — TO-BE 보이는 버튼: ${vis.join(', ').slice(0, 200)}`); continue; }
+      // 2026-11-10 T193(SCP0108 3번 · 사용자 판정 '결함 아님'): AS-IS Delete 가 신규 행만 지우는데(asisDeleteNewOnly) Insert 는 무동작(빈 재정의 또는 실행 문장 0)이면
+      //   AS-IS 에서도 Delete 가 지울 행이 생기지 않는다 — TO-BE Delete 버튼 누락은 결함 아님(SCP0108_CAPA_LOB_Report.cs:1284-1286 Insert 빈 본문 · 1302-1304 FlagI 만 삭제)
+      if (miss.some(b => /^delete$/i.test(b))) { try { const acts0 = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^﻿/, '')); const ents0 = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^﻿/, '')); const dn = asisDeleteNewOnly(acts0); const insNo = asisInsertNoop(acts0, ents0); if (dn.newOnly && insNo.noop) { miss = miss.filter(b => !/^delete$/i.test(b)); tabNote += ` · Delete 누락 결함 아님(AS-IS Delete 신규 행 전용 ${dn.ref} · Insert 무동작 ${insNo.ref} → 지울 행이 생기지 않음 · T193)`; } } catch { /* 사실 파일 없음 */ } }
       // 없어야 할 버튼(EG410) — AS-IS 목록은 재정의 버튼 위주라 상속 버튼이 빠질 수 있어 확인 대상(ERROR) · 누락 FAIL 이 먼저
       const extra = extraButtons(vis, want, excl);
       put(x.row_id, miss.length ? 'FAIL' : extra.length ? 'ERROR' : 'PASS', `${extra.length ? `[확인 대상] AS-IS 목록에 없는 기능 버튼 노출 ${extra.join('·')} · ` : ''}AS-IS 버튼 ${want.join('·')} → TO-BE ${miss.length ? `누락 ${miss.join('·')}` : '전부 노출'}${tabNote}${excl.length ? ` · 대조표 제외 결정 ${excl.join('·')}(비교 제외)` : ''} (보이는 버튼: ${vis.join(', ').slice(0, 220)})${(condOf(x).custom || []).length ? ` · AS-IS ButtonList 항목 ${condOf(x).custom!.join('·')} 은 수동 대조` : ''}`);
@@ -307,7 +327,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const measurable = after.some(kd => !blank(kd.before) || (kd.optsBefore && kd.optsAfter));
         // 하위 선택 값 초기화(EG084) — AS-IS 핸들러가 그 하위를 비우면 값이 남아 있을 때 FAIL. 재요청만으로 PASS 하던 빈틈
         const acts0 = (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8')); } catch { return [] as Record<string, string>[]; } })();
-        const stale = staleKids(after.map(kd => ({ name: kd.name, before: kd.before, after: kd.after, asisClears: acts0.some(a => a.kind === 'VALUE_CLEAR' && (c.handlers || []).includes(a.method) && (a.target || '').includes(kd.name)) })));
+        const stale = staleKids(after.map(kd => ({ name: kd.name, before: kd.before, after: kd.after, asisClears: acts0.some(a => a.kind === 'VALUE_CLEAR' && (c.handlers || []).includes(a.method) && (a.target || '').includes(kd.name) && !acts0.some(z => z.kind === 'VALUE_SET' && z.method === a.method && (z.target || '').includes(kd.name) && Number(z.line) > Number(a.line))) }))); /* 2026-11-10 T219(SSP0060 v5 C1 'Company 변경 → AS-IS 는 cboPlanDate 비우는데 값 유지' 허위): 같은 핸들러에서 비운 뒤 다시 선택(cs:7199 SelectedIndex=-1 → cs:7228 SelectedIndex=0 첫 후보)하면 최종 상태는 비움이 아님 */
         const res: Res['result'] = stale.length ? 'FAIL' : !wantKids ? (comboReq.length ? 'PASS' : '판정필요') : missingKids.length === wantKids ? 'FAIL' : ok ? 'PASS' : measurable ? 'FAIL' : 'ERROR';
         const via = c.rebindVia === 'memory' ? ' · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상)' : '';
         put(x.row_id, res, `${stale.length ? `AS-IS 는 하위 ${stale.join(',')} 값을 비우는데 값 유지 · ` : ''}${res === 'ERROR' ? '[측정 실패] 하위 선택이 빈값이고 후보 목록을 읽지 못해 연쇄 여부를 잴 수 없음 — ' : ''}'${parent.label}' → '${picked.slice(0, 30)}' 변경 · 콤보 재요청 ${comboReq.length}건 · 하위 ${after.map(kd => `${kd.name}${kd.preset ? `(사전 선택 '${kd.preset.slice(0, 15)}')` : ''} '${kd.before.slice(0, 20)}'→'${kd.after.slice(0, 20)}'${kd.optsBefore && kd.optsAfter ? ` 후보 ${kd.optsBefore.length}→${kd.optsAfter.length}${optKey(kd.optsBefore) === optKey(kd.optsAfter) ? '(동일)' : '(변경)'}` : ''}`).join(', ') || '(없음)'}` +
@@ -355,6 +375,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       put(x.row_id, bad.length ? 'FAIL' : 'PASS', `${c.name}: ${hit.map(q => `${q.sheet}/${q.btn} HTTP ${q.status} ${q.rows ?? '?'}행`).join(', ')}`);
     }
     const all = (await probe.allBindings(p)) || []; const vis = (await probe.visibleBindings(p)) || [];
+    // 2026-11-10 T202(SSP0003 1번 A5 13개 누락): 대조표는 상세 시트(…Detail) 컬럼까지 포함하는데 vis 는 '보이는 첫 그리드'(메인) 컬럼뿐 — 상세 그리드 컬럼(CHK·NEW_* 등)을 메인에 없다고 누락 판정.
+    //   A5 표시 여부는 화면에 보이는 모든 그리드의 표시 컬럼 합집합으로 본다(다른 그리드에 있으면 표시된 것)
+    // T203: 컬럼마다 AS-IS 소속 시트(grid_effective) → 같은 이름의 TO-BE 그리드(DataGrid props 시트 이름)에서만 표시 여부를 본다
+    const gridSh = (await gridSheetsResolved(p, ID).catch(() => [])) || []; const nSh = (t: string) => String(t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+    const colSheets = (() => { const m = new Map<string, string[]>(); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'grid_effective.csv'), 'utf8').replace(/^﻿/, ''))) { const k = String(z.column || '').toUpperCase(); if (!k) continue; const a0 = m.get(k) || []; if (z.sheet && !a0.includes(z.sheet)) a0.push(z.sheet); m.set(k, a0); } } catch { /* 사실 없음 */ } return m; })();
+    // 2026-11-17 사용자의견(SCP0104 v22 1번 'WIDTH = 0 으로 설정되어 있으면 표시하지 않음. 오류 아님'): AS-IS 메타 COLUMN_WIDTH 0 은 VISIBLE_FLAG Y 여도 화면에 안 보임 → 기대 '숨김'
+    const asisW0 = new Set<string>();
+    { const gp = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'grid_columns_asis.csv'); if (fs.existsSync(gp)) for (const g of parseCsv(fs.readFileSync(gp, 'utf8'))) if ((g.source || '') === 'META' && String(g.width ?? '').trim() === '0') asisW0.add(`${nSh(g.sheet || '')}|${(g.column || '').toUpperCase()}`); }
+    const shownIn = (b: string): { shown: boolean | null; how: string; sheet?: string } => { const shs = colSheets.get(b.toUpperCase()) || []; const gs = gridSh.filter(g => shs.some(h => nSh(h) === nSh(g.sheet))); if (gs.length) return { shown: gs.some(g => g.cols.some(c2 => c2.toUpperCase() === b.toUpperCase())), how: `시트 '${gs[0].sheet}' 그리드(${gs[0].how})`, sheet: gs[0].sheet }; if (vis.some(c2 => c2.toUpperCase() === b.toUpperCase())) return { shown: true, how: '메인 그리드' }; return { shown: null, how: `AS-IS 시트 ${shs.join('/') || '?'} 의 TO-BE 그리드를 화면에서 찾지 못함` }; };
     const colInfoOf = async (b: string) => probe.colInfo(p, b);
     // A5 ENTRY — AS-IS 유효 그리드 컬럼 집합 ⊆ TO-BE 그리드(숨김 포함) · Division 별 '숨김' 은 제외
     for (const { x, c } of tr.filter(t => t.c.et === 'ENTRY')) {
@@ -382,12 +411,19 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         else put(x.row_id, 'FAIL', `${b}: AS-IS '${c.asisLabel}' ↔ TO-BE 헤더 '${info.header}' — 메타 라벨 '${metaLbl || '(없음)'}' 과도 다름`);
       } else if (x.rule_id === 'A5') {
         const av = (c.asisVisible || {}) as Record<string, string>; const exp = av[divKey] ?? av['40'] ?? '';
-        const shown = vis.includes(b);
+        const si = shownIn(b); if (si.shown === null) { put(x.row_id, 'ERROR', `${b}: [측정 경로 없음] ${si.how} — 표시 여부 미측정(T203)`); continue; } const shown = si.shown;
         if (!exp) { put(x.row_id, '판정필요', `${b} 표시=${shown ? 'Y' : 'N'} — AS-IS Division 별 표시 정보 없음(grid_effective)`); continue; }
         // grid_effective 값: '기본'(표시) · '숨김'·'… →숨김'(코드로 숨김) · '코드추가'(코드가 런타임에 추가 — 표시 여부는 원문 확인) · '선택'(사용자 선택)
         if (/코드추가|선택/.test(exp) && !/숨김\s*$/.test(exp)) { put(x.row_id, shown ? 'PASS' : '판정필요', `${b}: AS-IS(Div ${divKey || '40'}) '${exp}' ↔ TO-BE 표시=${shown ? 'Y' : 'N'}${shown ? '' : ' — AS-IS 코드 추가 컬럼의 표시 여부는 원문 확인(InitSpread 가 Visible=false 로 두는지)'} (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`); continue; }
         if (/\?/.test(exp)) { put(x.row_id, 'NA', `${b}: AS-IS(Div ${divKey || '40'}) '${exp}' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=${shown ? 'Y' : 'N'})`); continue; }
-        const wantShown = !/숨김\s*$/.test(exp);
+        const w0 = !!si.sheet && asisW0.has(`${nSh(si.sheet)}|${b.toUpperCase()}`);
+        const wantShown = !/숨김\s*$/.test(exp) && !w0;
+        if (w0) { a5Diff.push({ b, want: false, shown }); put(x.row_id, shown ? 'FAIL' : 'PASS', `${b}: AS-IS 시트 '${si.sheet}' 메타 COLUMN_WIDTH 0 → 화면 미표시(사용자의견 2026-11-17) ↔ TO-BE 표시=${shown ? 'Y' : 'N'}${shown ? ' — AS-IS 에 안 보이는 컬럼이 TO-BE 에 보임' : ''} (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`); continue; }
+        // 2026-11-16 CR-104(사용자 판정 SSP0020): AS-IS 행 선택용 CHK 컬럼 ↔ TO-BE 행 머리 선택기(공용 DataGrid useCheckbox = wijmo Selector, input.wj-column-selector) = TO-BE 룰. 선택기가 화면에 없으면 종전대로 FAIL
+        if (wantShown && !shown && b.toUpperCase() === 'CHK') {
+          const selN = await p.evaluate(`(() => [...document.querySelectorAll('.wj-flexgrid input.wj-column-selector')].filter(e => e.getClientRects().length > 0).length)()`).catch(() => -1) as number;
+          if (selN > 0) { a5Diff.push({ b, want: true, shown: true }); put(x.row_id, 'PASS', `[CR-104] ${b}: AS-IS(Div ${divKey || '40'}) '${exp}' 행 선택용 체크 컬럼 → TO-BE 행 머리 선택기(체크 ${selN}개 표시) — TO-BE 룰(사용자 판정 2026-11-16) (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`); continue; }
+        }
         a5Diff.push({ b, want: wantShown, shown });
         put(x.row_id, wantShown === shown ? 'PASS' : 'FAIL', `${b}: AS-IS(Div ${divKey || '40'}) '${exp}' ↔ TO-BE 표시=${shown ? 'Y' : 'N'}${wantShown === shown ? '' : ' — 표시 여부 불일치'} (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`);
       } else if (x.rule_id === 'D5') {
@@ -397,6 +433,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const isNum = info.dataType === 2 || /^[nNcCpP]\d*$/.test(info.format); const isDate = info.dataType === 4 || /y{2,}|M{2}|d{2}/.test(info.format);
         const ok = want === 'COMBO' ? (info.hasMap || !!info.editor) : want === 'NUMBER' ? isNum : want === 'DATE' ? isDate : want === 'CHECK' ? (info.dataType === 3 || info.hasMap) : want === 'IMAGE' ? true : want === 'TEXT' ? (!info.hasMap && !isNum && !isDate) : want === 'POPUP' ? !info.hasMap : null;
         const implicitText = /AS-IS 기본|TextCellType\)\s*$|기본\(TextCellType/.test(c.d5Src || '') && (!want || want === 'TEXT');
+        // T198: 콤보 기대인데 TO-BE 가 콤보 아님 + 편집 불가 칸 → 입력 방식 차이 없음 · 표시값(코드↔이름)만 남아 판정필요
+        if (ok === false && want === 'COMBO' && ex && (await probe.editable(p, ex.row, b).catch(() => null)) === false) { const dv = ((await probe.columnValues(p, b)) || []).map(v => String(v).trim()).filter(Boolean); const smp = [...new Set(dv)].slice(0, 5); put(x.row_id, smp.length ? '판정필요' : 'NA', `${b}: AS-IS COMBO(${c.d5Src || ''}) ↔ TO-BE dataType=${info.dataType} dataMap=N — 편집 불가 칸이라 입력 방식 차이 없음${smp.length ? ` · 표시 표본 [${smp.join(', ')}] 을 AS-IS 콤보 표시(이름)와 대조 필요` : ' · 표시 값 0건'}(T198)`); continue; }
         put(x.row_id, (implicitText ? 'PASS' : ok === null ? 'NA' : ok ? 'PASS' : 'FAIL'), `${b}: AS-IS ${want}(${c.d5Src || ''}) ↔ TO-BE dataType=${info.dataType} dataMap=${info.hasMap ? 'Y' : 'N'}${info.editor ? ' editor' : ''}${info.format ? ' format=' + info.format : ''}${ok === false ? ' — AS-IS ' + want + ' 에디터가 아님' : ok === null ? ' — IMAGE 등 비교 기준 미정' : ''}` + (implicitText ? ' — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님' : ok === null ? ' — AS-IS 셀 타입 미식별(대조 불가)' : ''));
       }
     }
@@ -438,11 +476,11 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // 2026-10-29 SCP0096: Insert 없는 화면(수정 저장형)에서 여기서 return 하던 탓에 E1·H2·C2·C3·C6 이 '판정필요 → NA(수동 검수)' 로 사라짐
     //   (Working Time Default AS-IS 정수 0~7 ↔ TO-BE 제한 없음 미검출). 신규행 전용 D4(Insert 기본값)만 대상 없음, 나머지는 편집 가능한 기존행으로 계속
     const hasInsert = await nscm.subButtonVisible('Insert');
-    let insDlg = ''; if (hasInsert) { await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_000); insDlg = (await nscm.alertText().catch(() => '')).replace(/[ ]+/g, ' ').slice(0, 80); await nscm.clearDialogs(); }
+    let insDlg = ''; if (hasInsert) { await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_000); insDlg = (await nscm.alertText().catch(() => '')).replace(/[ ]+/g, ' ').slice(0, 80); await nscm.clearDialogs(); }
     const nr = hasInsert ? await probe.findRow(p, 'new') : null;
     if (!hasInsert) for (const { x } of cols.filter(t => t.x.rule_id === 'D4')) put(x.row_id, '판정필요', 'Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음');
     else if (!nr && !insDlg && (() => { const insNoop = (() => { const ep = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'); if (!fs.existsSync(ep) || !fs.existsSync(ap)) return { noop: false, ref: '' }; return asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8')), parseCsv(fs.readFileSync(ep, 'utf8'))); })(); return insNoop.noop; })()) for (const { x } of cols.filter(t => ['D4', 'E1', 'C3', 'C2', 'C6', 'H2'].includes(t.x.rule_id))) put(x.row_id, 'NA', 'Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상');
-    else if (!nr) for (const { x } of cols.filter(t => ['D4', 'E1', 'C3', 'C2', 'C6', 'H2'].includes(t.x.rule_id))) put(x.row_id, insDlg ? 'ERROR' : 'FAIL', insDlg ? `[측정 경로 없음] Insert 가 대화상자를 띄움(신규 행 직접 생성 아님) '${insDlg}'` : '조회 후 Insert 했으나 신규행 없음');
+    else if (!nr) { const ig = (() => { try { return asisInsertGuard(parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^﻿/, ''))); } catch { return { guarded: false, guard: '', ref: '' }; } })(); /* T190 — AS-IS Insert 전제 guard 를 못 맞춘 신규행 없음 = 측정 실패 */ for (const { x } of cols.filter(t => ['D4', 'E1', 'C3', 'C2', 'C6', 'H2'].includes(t.x.rule_id))) put(x.row_id, insDlg || ig.guarded ? 'ERROR' : 'FAIL', insDlg ? `[측정 경로 없음] Insert 가 대화상자를 띄움(신규 행 직접 생성 아님) '${insDlg}'` : ig.guarded ? `[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(${ig.ref} · ${ig.guard}) 를 검사기가 맞추지 못함 · 신규행 검사 미측정` : '조회 후 Insert 했으나 신규행 없음'); }
     if (hasInsert && !nr) return;
     // Insert 가 맨 위에 넣으면 기존행 인덱스가 밀린다 — 기존행은 CRUD_TYPE 로 다시 찾는다
     const ex2 = hasInsert ? await probe.findRow(p, 'existing') : ex;
@@ -461,6 +499,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       else if (c.d4expr && c.d4expr.length) put(x.row_id, '판정필요', `신규행 ${b}='${got}' — AS-IS 기본값이 식(${c.d4expr[0].slice(0, 80)}) — 사람 확인`);
       else put(x.row_id, got === '' ? 'PASS' : '판정필요', `신규행 ${b}='${got}' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)${got === '' ? '' : ' — TO-BE 가 값을 채움: 의도 확인(연쇄 C3/팝업 M4 결과일 수 있음)'}`);
     }
+    // 2026-11-09 T176(SSP0025 D1·H2 허위 FAIL): D4(기본값)를 읽은 뒤 AS-IS 선행 칸(cell_prereq.csv)을 사용자 순서대로 채우고 나머지 칸을 측정한다
+    if (nr) await fillPrereq(p, ID, nr.row, { isNew: true });
     // D1 신규행(editExpect.new_row) — 기존행과 같은 TRACE 행(D1 은 컬럼당 1 인스턴스)이라 기존행 결과를 덮지 않고 추가 증거로 적는다
     if (nr) for (const { x, c } of cols.filter(t => t.x.rule_id === 'D1')) {
       const b = c.name || ''; const ee = c.editExpect; if (!ee) continue;
@@ -710,6 +750,24 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const r = await openReady(nscm);
     if (!r.authorized) { for (const { x } of tr) put(x.row_id, 'ERROR', '화면 권한 없음'); return; }
     const n0 = await searchAndRows(nscm);
+    // 2026-11-16 폼 저장형 화면(조회영역 입력 + 버튼으로 저장·해제 · 그리드 셀 편집 없음): Doc/verify/<ID>/form_scenarios.json 이 있으면 그 시나리오로 E4 를 잰다.
+    //   준비(setup)·정리(teardown) 시나리오는 _formfix.spec 이 E2E 앞뒤에서 실행하고 결과를 form_scen_results.json 에 쌓는다 — 여기서는 그 사이 시나리오만 실행(저장·해제 요청 차단)
+    const fsn = ID ? loadFormScen(ROOT, ID) : null;
+    if (fsn) {
+      const rx = new RegExp(fsn.saveRx || '/(SAVE|INS|UPD|DEL)[^/]*/call-proc', 'i'); let fsSaves = 0;
+      await p.route(rx, route => { fsSaves++; route.abort(); });
+      setVars({ ...(fsn.vars || {}), ME: (nscm as unknown as { curUser: string }).curUser || '' });
+      for (const sc of fsn.scenarios.filter(s => !s.phase)) { const fr = await runFormScen(nscm, sc, () => fsSaves, () => probe.rowCount(p)); saveResult(ROOT, ID, fr); console.log(`[formscen] ${fr.id} ${fr.result} ${fr.why.slice(0, 200)}`); }
+      await p.unroute(rx).catch(() => undefined); await nscm.clearDialogs();
+      const done = loadResults(ROOT, ID); const handled = new Set<string>();
+      for (const x of parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(q => q.rule_id === 'E4' && (q.source === 'TRACE' || q.source === 'ASIS'))) {
+        const scs = scenariosOfRow(x, fsn.scenarios); if (!scs.length) continue; handled.add(x.row_id);
+        const cb = combine(scs, done); if (cb) put(x.row_id, cb.result, cb.why);  // 정리 시나리오가 남은 행은 _formfix.spec(@formteardown)이 합산해 적는다
+      }
+      for (let i = tr.length - 1; i >= 0; i--) if (handled.has(tr[i].x.row_id)) tr.splice(i, 1);
+      for (let i = asisRows.length - 1; i >= 0; i--) if (handled.has(asisRows[i].row_id)) asisRows.splice(i, 1);
+      if (!tr.length && !asisRows.length) { await p.unroute(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i).catch(() => undefined); return; }
+    }
     if (n0 <= 0) { for (const { x } of tr) put(x.row_id, '판정필요', '조회 0행 — 기존행 기반 위반 입력 불가'); return; }
     const ex = await probe.findRow(p, 'existing'); if (!ex) return;
     type Viol = { kind: string; col: string; value: string; note: string };
@@ -737,12 +795,19 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const dowName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const items = [...tr.filter(t => !t.c.e4None).flatMap(({ x, c }) => (c.e4 || []).map(e => ({ rid: x.row_id, e }))), ...asisRows.map(x => ({ rid: x.row_id, e: { meth: (x.asis_ref.split('.').pop() || ''), line: '', msg: x.target, tobe: '', text: '', args: '', guard: x.condition, vars: guessVars(x.condition) } }))];
     // 위반 입력은 신규행에 넣는다(기존행은 키 컬럼이 잠겨 FROM/TO·Site 위반을 만들 수 없다) — Insert 가 있으면 1행 추가해 공용으로 쓴다
-    const nrE4 = (await nscm.subButtonVisible('Insert')) ? await (async () => { await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs(); return probe.findRow(p, 'new'); })() : null;
+    const nrE4 = (await nscm.subButtonVisible('Insert')) ? await (async () => { await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs(); const q = await probe.findRow(p, 'new'); if (q) await fillPrereq(p, ID, q.row, { isNew: true }); return q; })() : null;  // T176 선행 칸 먼저
     const f1Row = (ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : []).find(r => r.source === 'RULE_SCREEN' && r.rule_id === 'F1');
+    const saveReach = (() => { const s = new Set<string>(); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^\uFEFF/, ''))) if (/^SaveButton$|btnSave\b.*Click|^this\.btnSave/i.test(String(z.entry || '')) || /^SaveButton$/i.test(String(z.handler || ''))) s.add(String(z.method || '')); } catch { /* 사실 없음 = 종전 판별만 */ } return s; })();
+    // CR-103: AS-IS 편집 버튼 진입점(EditButton · btnEdit Click)에서 닿는 메서드 — Save 진입점에서도 닿는 것은 저장 검증이라 제외(saveReach 가 먼저 걸러진다)
+    const editReach = (() => { const by = new Map<string, boolean[]>(); const isEdit = (z: Record<string, string>) => /^EditButton$|btnEdit\b.*Click|^this\.btnEdit/i.test(String(z.entry || '')) || /^EditButton$/i.test(String(z.handler || '')); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^\uFEFF/, ''))) { const m = String(z.method || ''); if (!m) continue; if (!by.has(m)) by.set(m, []); by.get(m)!.push(isEdit(z)); } } catch { /* 사실 없음 */ } /* 그 메서드에 닿는 진입점이 전부 편집 버튼일 때만 — 셀 변경·다른 버튼에서도 닿으면 그 경로의 메시지일 수 있어 제외 */ const s = new Set<string>(); for (const [m, v] of by) if (v.length && v.every(Boolean)) s.add(m); return s; })();
     const seenRid = new Set<string>();
     for (const { rid, e } of items) {
       if (seenRid.has(rid)) continue; seenRid.add(rid);
-      if (!/^Save/i.test(e.meth)) { put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
+      // 2026-11-11 T243: 저장 전 검증인가 = 메서드 이름이 아니라 호출 경로 사실 — AS-IS Save 진입점(SaveButton·btnSave Click)에서 닿는 메서드면 저장 경로다
+      //   실측: SCP0005 CheckValid 는 'SaveButton > SaveData > CheckValid' 인데 이름이 Save 로 시작하지 않아 판정필요(수동)로 빠졌다 — 25개 화면 E4 424건
+      // 2026-11-12 CR-103(사용자 결정): AS-IS 편집(Edit) 버튼 진입점에서만 닿는 메시지 = TO-BE 는 편집 버튼이 없고 조회 때 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(해당없음 · TO-BE 룰)
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && editReach.has(e.meth)) { put(rid, 'NA', `${e.msg || '(동적)'} — ${e.meth} = AS-IS 편집(Edit) 버튼 경로 메시지 · TO-BE 는 편집 버튼 없이 조회 시 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(TO-BE 룰 CR-103 · 편집 가능·배경색은 D1·H2 에서 판정)`); continue; }
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth)) { put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
       const viol = planViolation(e.guard, e.vars);
       if (!viol) {
         const g = e.guard.split('▸').pop()?.trim() || '';
@@ -820,13 +885,36 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const col = c.name || '';
       for (const m of c.m4 || []) {
         if (!done.has(m.trigger)) {
-          const before = Object.fromEntries(await Promise.all(m.targets.map(async t => [t, (await probe.value(p, ex.row, t)) ?? ''] as const)));
-          const pt = await probe.cellCenter(p, ex.row, m.trigger);
-          if (!pt) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 셀 위치 확인 불가` }); continue; }
-          await p.mouse.dblclick(pt.x, pt.y);
-          let dlg: import('@playwright/test').Locator | null = null; const until = Date.now() + 10_000;
-          while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, `m4_${m.trigger}`); if (!dlg) await p.waitForTimeout(300); }
-          if (!dlg) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 더블클릭 → 팝업 열림 감지 실패(H6)` }); continue; }
+          // 2026-11-12 T274(Y18): ① 트리거 칸을 가진 그리드 찾기(보이는 그리드 → 탭 순회) ② 첫 행에서 안 열리면 다른 행에서도 시도
+          let hasTrig = ((await probe.allBindings(p)) || []).includes(m.trigger);
+          if (!hasTrig) { hasTrig = await probe.pickGrid(p, [m.trigger]).catch(() => false); if (!hasTrig) { await probe.pickGrid(p, null).catch(() => undefined); const tabs = (await p.getByRole('tab').allInnerTexts().catch(() => [] as string[])).map(z => z.trim()).filter(Boolean).slice(0, 8); for (const tb of tabs) { await p.getByRole('tab', { name: tb, exact: true }).first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(700); if (await probe.pickGrid(p, [m.trigger]).catch(() => false)) { hasTrig = true; console.log(`[M4] ${ID} 트리거 ${m.trigger}: 탭 '${tb}' 의 그리드에서 찾음`); break; } await probe.pickGrid(p, null).catch(() => undefined); } } }
+          if (!hasTrig) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 셀 위치 확인 불가(보이는 그리드·탭 순회에서도 그 칸 없음)` }); continue; }
+          let nRows = await probe.rowCount(p);
+          if (nRows <= 0) { /* 2026-11-14 T305: 트리거 그리드가 0행이면 다른 그리드의 첫 행을 눌러 하위 시트를 채운 뒤 다시 센다 */
+            const mp = await p.evaluate(`(() => { const want = ${JSON.stringify(m.trigger)}; for (const e of [...document.querySelectorAll('.wj-flexgrid')].filter(z => z.offsetParent !== null)) { const c = e['$WJ-CTRL']; if (!c || !c.columns || !c.rows.length || c.columns.getColumn(want)) continue; let ci = -1; for (let i = 0; i < c.columns.length; i++) { const k = c.columns[i]; if (k.visible !== false && k.binding) { ci = i; break; } } if (ci < 0) continue; c.scrollIntoView(0, ci); c.select(0, ci); const r = c.cells.getCellBoundingRect(0, ci); if (r) return { x: r.left + Math.min(r.width / 2, 20), y: r.top + r.height / 2 }; } return null; })()`).catch(() => null) as { x: number; y: number } | null;
+            if (mp) { await p.mouse.click(mp.x, mp.y).catch(() => undefined); const until0 = Date.now() + 6_000; while (Date.now() < until0 && (nRows = await probe.rowCount(p)) <= 0) await p.waitForTimeout(400); }
+            if (nRows <= 0) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 트리거 그리드 0행(${mp ? '다른 그리드 첫 행 선택 뒤에도 0행' : '행이 있는 다른 그리드 없음'} T305)` }); continue; }
+            console.log(`[M4] ${ID} 트리거 ${m.trigger}: 다른 그리드 첫 행 선택 뒤 ${nRows}행(T305)`);
+          }
+          let nrw = await probe.findRow(p, 'new'); const exw = await probe.findRow(p, 'existing');
+          if (m.newRow && !nrw) { /* 2026-11-14 T311: AS-IS 가 신규 행에서만 여는 팝업 — 신규 행을 만들어 거기서 시도 */
+            await nscm.clickInsert({ timeout: 10_000 }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs().catch(() => undefined); nrw = await probe.findRow(p, 'new');
+            if (!nrw) { done.set(m.trigger, { ok: false, ev: `[전제 부족 T311] ${m.trigger} 팝업은 AS-IS 에서 신규 행에서만 열림 — Insert 뒤 신규 행 없음${nscm.lastInsertTrail ? ' · ' + nscm.lastInsertTrail.slice(0, 200) : ''}` }); continue; }
+          }
+          const tryRows = m.newRow && nrw ? [nrw.row] : [...new Set([exw ? exw.row : -1, nrw ? nrw.row : -1, Math.floor(nRows / 2), nRows - 1].filter(z => z >= 0 && z < nRows))];
+          let useRow = tryRows.length ? tryRows[0] : ex.row; let dlg: import('@playwright/test').Locator | null = null; let noCell = true; const tried: number[] = [];
+          let before = Object.fromEntries(await Promise.all(m.targets.map(async t => [t, (await probe.value(p, useRow, t)) ?? ''] as const)));
+          for (const rw of tryRows.length ? tryRows : [ex.row]) {
+            const pt = await probe.cellCenter(p, rw, m.trigger); if (!pt) continue; noCell = false; tried.push(rw);
+            before = Object.fromEntries(await Promise.all(m.targets.map(async t => [t, (await probe.value(p, rw, t)) ?? ''] as const)));
+            await p.mouse.dblclick(pt.x, pt.y);
+            const until = Date.now() + (tried.length === 1 ? 10_000 : 5_000);
+            while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, `m4_${m.trigger}`); if (!dlg) await p.waitForTimeout(300); }
+            if (dlg) { useRow = rw; break; }
+            await p.keyboard.press('Escape').catch(() => undefined);
+          }
+          if (noCell) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 셀 위치 확인 불가` }); continue; }
+          if (!dlg) { done.set(m.trigger, { ok: false, ev: `${m.trigger} 더블클릭 → 팝업 열림 감지 실패(H6) · 시도 행 r${tried.join(', r')}` }); continue; }
           const dsearch = dlg.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }).first(); if (await dsearch.isVisible().catch(() => false)) { await dsearch.click().catch(() => undefined); await p.waitForTimeout(2_000); }
           const row = dlg.locator('.wj-cells .wj-row').first(); let picked = false;
           if (await row.isVisible({ timeout: 10_000 }).catch(() => false)) {
@@ -837,7 +925,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           if (await dlg.isVisible().catch(() => false)) { const okb = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first(); if (await okb.isVisible().catch(() => false)) await okb.click().catch(() => undefined); }
           await p.waitForTimeout(1_000);
           if (await dlg.isVisible().catch(() => false)) await closeVisibleDialogs(nscm);
-          const after = Object.fromEntries(await Promise.all(m.targets.map(async t => [t, (await probe.value(p, ex.row, t)) ?? ''] as const)));
+          const after = Object.fromEntries(await Promise.all(m.targets.map(async t => [t, (await probe.value(p, useRow, t)) ?? ''] as const)));
           const changed = m.targets.filter(t => before[t] !== after[t]); const filled = m.targets.filter(t => after[t]);
           done.set(m.trigger, { ok: filled.length > 0 || changed.length > 0, ev: `${m.trigger} 더블클릭 → Distribution Route 팝업(${m.popup || 'ROUTE_ID 더블클릭'}) ${picked ? '행 선택 후 OK' : 'OK(현재 행 적용)'} → 대상 ${m.targets.length}개 중 채워짐 ${filled.length} · 변경 ${changed.length}: ${m.targets.slice(0, 12).map(t => `${t}='${String(after[t]).slice(0, 12)}'`).join(', ')}` });
         }
@@ -960,7 +1048,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const ex = n0 > 0 ? await probe.findRow(p, 'existing') : null;
     if (f5.length || ruleF5.length) {
       const ev: string[] = []; let ok = true;
-      if (await nscm.subButtonVisible('Insert')) { await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs(); const nr = await probe.findRow(p, 'new'); ev.push(`Insert → 신규행 CRUD_TYPE='${nr?.crud ?? '없음'}'`); if (!nr || nr.crud !== 'I') ok = false; }
+      // 2026-11-10 T185(SCP0108 1번 허위 FAIL): AS-IS InsertButton 이 빈 본문 재정의(SCP0108_CAPA_LOB_Report.cs:1284-1286 · members.csv 에 있고 actions.csv 문장 0)면
+      //   AS-IS Insert 는 무동작 — TO-BE 도 신규행이 없으면 AS-IS 와 같다(종전엔 'Insert → I 행' 을 무조건 기대해 FAIL)
+      const asisInsertEmpty = (() => { try { const sd = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID); const mem = parseCsv(fs.readFileSync(path.join(sd, 'members.csv'), 'utf8').replace(/^﻿/, '')); const acts = parseCsv(fs.readFileSync(path.join(sd, 'actions.csv'), 'utf8').replace(/^﻿/, '')); const m = mem.find(r => Object.values(r).includes('InsertButton') && /override/.test(Object.values(r).join(' ')) && String(Object.values(r)[0] || '') !== 'legacy'); return m && !acts.some(a => a.method === 'InsertButton') ? `${String(Object.values(m)[1] || '').split(/[\\/]/).pop()}:${Object.values(m)[7] || ''}` : ''; } catch { return ''; } })();
+      if (await nscm.subButtonVisible('Insert')) { await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs(); const nr = await probe.findRow(p, 'new'); ev.push(`Insert → 신규행 CRUD_TYPE='${nr?.crud ?? '없음'}'${!nr && asisInsertEmpty ? ` — AS-IS InsertButton 빈 재정의(${asisInsertEmpty}) · Insert 무동작 = TO-BE 동일` : ''}`); if (asisInsertEmpty ? !!nr && nr.crud !== 'I' : (!nr || nr.crud !== 'I')) { const igF5 = (() => { try { return asisInsertGuard(parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^﻿/, ''))); } catch { return { guarded: false, guard: '', ref: '' }; } })(); if (!nr && igF5.guarded) ev.push(`(Insert 신규행 없음 — AS-IS Insert 전제 ${igF5.ref} 미충족 가능 · 판정 보류 T197)`); else ok = false; } }
       else { ev.push('Insert 버튼 비노출'); }
       // Insert 가 맨 위에 넣으면 기존행 인덱스가 밀린다 — CRUD_TYPE 로 다시 찾는다. DIVISION_ID 는 Insert 전용(기존행 잠금) 컬럼이라 수정 판정 대상에서 뺀다(2026-10-27)
       const ex2 = await probe.findRow(p, 'existing');
@@ -991,6 +1082,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           // 2026-11-07 T140(SCP0037 F5 \uD5C8\uC704 FAIL): AS-IS DeleteButton \uC774 `action == CAppSetting.FlagI` \uBD84\uAE30 \uC548\uC5D0\uC11C\uB9CC siMain.Delete() \uB97C \uBD80\uB974\uB294 \uD654\uBA74\uC740 \uAE30\uC874\uD589 Delete \uAC00 \uBB34\uB3D9\uC791\uC774\uB2E4
           //   (SCP0037_OperationLT.cs:294-296 \u00B7 TO-BE OperationLT.tsx:136 \uB3C4 INSERT \uD589\uB9CC) \u2192 \uAE30\uC874\uD589\uC5D0 D Flag \uAC00 \uC548 \uC0DD\uAE30\uB294 \uAC83\uC774 AS-IS \uC640 \uAC19\uB2E4 \u2014 actions.csv \uC0AC\uC2E4\uB85C \uD310\uC815
           const asisNewOnly = (() => { try { const acts = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^\uFEFF/, '')); return acts.some(a => /DeleteButton/i.test(String(a.method || '')) && /FlagI/.test(String(a.guard || '') + ' ' + String(a.target || '')) && /BRANCH/i.test(String(a.kind || ''))) || asisDeleteNewOnly(acts).newOnly; } catch { return false; } })(); // 2026-11-09 T173(SSP0025 2번): DeleteButton → this.Delete() 위임 · Rows.Remove · guard == StringI 까지(newrow.asisDeleteNewOnly = asis_delete.py)
+          // 2026-11-10 T211(SSP0060 v4 F5 허위 FAIL): AS-IS 화면 본체 클래스(<ID>_… · Popup 제외)의 DeleteButton 이 빈 재정의(SSP0060_ShipmentPlan.cs:2708-2710 '{ }' · actions.csv 문장 0)면
+          //   AS-IS Delete 는 무동작 — 기존행에 D 가 안 생기는 것이 AS-IS 와 같다(Insert 빈 재정의 T185 와 같은 사실 판정)
+          const asisDeleteEmpty = (() => { try { const sd = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID); const mem = parseCsv(fs.readFileSync(path.join(sd, 'members.csv'), 'utf8').replace(/^﻿/, '')).filter(r => r.member === 'DeleteButton' && /override/.test(r.modifiers || '') && (r.variant || '') !== 'legacy' && new RegExp(`^${ID}_`, 'i').test(r.class || '') && !/Popup/i.test(r.class || '')); const acts = parseCsv(fs.readFileSync(path.join(sd, 'actions.csv'), 'utf8').replace(/^﻿/, '')); return mem.length && mem.every(m => !acts.some(a => a.method === 'DeleteButton' && a.class === m.class)) ? mem.map(m => `${String(m.file || '').split(/[\/]/).pop()}:${m.line}-${m.end_line}`).join(',') : ''; } catch { return ''; } })();
           if (exD) {
             const actCols = asisToggle ? vb.filter(b => /ACTIVE|USE_YN|VALID_YN|DEL_YN/i.test(b)) : []; const act0 = await Promise.all(actCols.map(async c => (await probe.value(p, exD.row, c)) ?? ''));
             const pt = await probe.cellCenter(p, exD.row, focusCol); if (pt) await p.mouse.click(pt.x, pt.y);
@@ -1002,6 +1096,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
             else if (/^D$/i.test(crudD)) ev.push(`기존행 Delete → CRUD_TYPE='D'`);
             else if (toggled.length) ev.push(`기존행 Delete → ${toggled.map((c, i) => `${c} ${act0[actCols.indexOf(c)]}→${act1[actCols.indexOf(c)]}`).join(',')} (Active 토글형 · CR-057)`);
             else if (al) ev.push(`기존행 Delete → 알림 '${al.replace(/\s+/g, ' ').slice(0, 60)}' · CRUD_TYPE='${crudD}'`);
+            else if (asisDeleteEmpty) ev.push(`기존행 Delete → 변화 없음(CRUD_TYPE='${crudD}') — AS-IS DeleteButton 빈 재정의(${asisDeleteEmpty}) · Delete 무동작 = TO-BE 동일(T211)`);
             else if (asisNewOnly) ev.push(`기존행 Delete → 변화 없음(CRUD_TYPE='${crudD}' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일`);
             else { ev.push(`기존행 Delete → CRUD_TYPE='${crudD}' (D 아님 · Active 토글 없음)`); ok = false; }
           }
@@ -1039,6 +1134,11 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         try { const sc = parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'search_cond.csv'), 'utf8')).filter(r => (r.menu_id || '').toUpperCase() === ID && r.usage === 'USE' && ((r.tobe_required || r.asis_required || '').trim().toUpperCase() === 'O'));
           req = sc.map(r => ({ label: r.tobe_name || r.asis_name, labels: [r.tobe_name, r.asis_name].filter(Boolean), required: true, excluded: false })); } catch { /* 기준표 없음 */ }
       }
+      // 2026-11-10 T192(SSP0003 8번 허위 FAIL): 기준표 'Title' TO-BE 필수 O 를 조회 필수로 썼으나 AS-IS txtTitle 은 ReadOnly=true(Designer.cs:916 · 비고 '자동입력 표시') —
+      //   사용자가 입력하는 조회조건이 아니라 선택 요청 정보 표시 칸이라 AS-IS checkRequiredOfSearch 대상이 아니다. AS-IS 원문 ReadOnly 컨트롤(props.csv)은 필수 후보에서 뺀다
+      { const ro = (() => { try { return new Set(parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'props.csv'), 'utf8').replace(/^﻿/, '')).filter(r0 => String(Object.values(r0)[0] || '') !== 'legacy').map(r0 => Object.values(r0)).filter(v => v[6] === 'ReadOnly' && /^true$/i.test(String(v[7] || '').trim())).map(v => String(v[5]))); } catch { return new Set<string>(); } })();
+        const asisOf = (lab: string) => (plan?.fields as { label: string; labels?: string[]; asis?: string }[] | undefined || []).find(f2 => [f2.label, ...(f2.labels || [])].includes(lab))?.asis || '';
+        const dropped = req.filter(f => ro.has(asisOf(f.label))); if (dropped.length) { console.log(`[E3] AS-IS ReadOnly 표시 칸 필수 후보 제외: ${dropped.map(f => `${f.label}(${asisOf(f.label)})`).join(', ')}`); req = req.filter(f => !ro.has(asisOf(f.label))); } }
       if (!req.length) for (const x of asisE3s) put(x.row_id, 'NA', `필수 조회조건 없음(플랜 required 0 · 기준표 필수 표시 0) — 조회조건 필수 검증 대상 아님(AS-IS checkRequired 는 필수 컨트롤이 있을 때만 동작)`);
       else {
         const tried: string[] = []; let judged: 'PASS' | 'FAIL' | null = null; let ev = '';
@@ -1103,7 +1203,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       if (!picked) for (const x of asisD4msg) put(x.row_id, '판정필요', `Status 조회조건에서 'Required'(AS-IS '${lit}') 선택 불가 — 수동 확인`);
       else {
         await searchAndRows(nscm); const before = await probe.newRowCount(p);
-        await nscm.subButton('Insert').click({ timeout: 10_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
+        await nscm.clickInsert({ timeout: 10_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
         const alert = await nscm.alertText(); await nscm.clearDialogs(); const after = await probe.newRowCount(p);
         for (const x of asisD4msg) put(x.row_id, alert && after === before ? 'PASS' : 'FAIL', `Status='${picked}' 조회 후 Insert → 알림 '${(alert || '(없음)').slice(0, 80)}' · 신규행 ${before}→${after} (AS-IS ${x.target}: Required 상태에서 Insert 차단 메시지)`);
         // 원복: Completed 로 되돌려 재조회
@@ -1170,12 +1270,13 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const b0 = ((await probe.visibleBindings(p)) || [])[1] || 'DIVISION_ID';
       const pt = await probe.cellCenter(p, sel, b0); if (pt) await p.mouse.click(pt.x, pt.y);
       await p.waitForTimeout(300);
-      await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_200);
+      await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_200);
       const alert = await nscm.alertText(); if (alert) await nscm.clearDialogs();
       const nw = await probe.findRow(p, 'new'); const n1 = await probe.rowCount(p);
       const pos = !nw ? '신규행 없음' : nw.row === 0 ? '맨 위(0)' : nw.row === n1 - 1 ? `맨 아래(${nw.row})` : `${nw.row}`;
       const ok = !!nw && (n0 === 0 ? nw.row === n1 - 1 : nw.row === sel);
-      put(x.row_id, !nw && alert ? 'ERROR' : !nw && (() => { const insNoop = (() => { const ep = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'); if (!fs.existsSync(ep) || !fs.existsSync(ap)) return { noop: false, ref: '' }; return asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8')), parseCsv(fs.readFileSync(ep, 'utf8'))); })(); return insNoop.noop; })() ? 'NA' : ok || /맨 위/.test(String(pos)) ? 'PASS' : 'FAIL', `${!nw && alert ? '[측정 경로 없음] Insert 가 대화상자를 띄움 · ' : ''}조회 ${n0}행 · r${sel} 셀 클릭 후 Insert → 신규행 ${pos} · 행 ${n0}→${n1}${alert ? ` · 알림 '${alert.slice(0, 60)}'` : ''} — AS-IS SpreadInfo.Insert(): 활성 행 위치(r${sel})에 삽입${ok ? ' 일치' : /맨 위/.test(String(pos)) ? ' — TO-BE 룰 CR-074(사용자 판정 2026-10-27): 세트(그룹) 구조 없는 목록 그리드의 Insert 는 맨 위(공용 DataGrid 기본) → AS-IS 와 달라도 PASS' : ' — 위치 다름'}`);
+      const igD6 = (() => { try { return asisInsertGuard(parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^﻿/, ''))); } catch { return { guarded: false, guard: '', ref: '' }; } })(); // T197
+      put(x.row_id, !nw && (alert || igD6.guarded) ? 'ERROR' : !nw && (() => { const insNoop = (() => { const ep = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'); if (!fs.existsSync(ep) || !fs.existsSync(ap)) return { noop: false, ref: '' }; return asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8')), parseCsv(fs.readFileSync(ep, 'utf8'))); })(); return insNoop.noop; })() ? 'NA' : ok || /맨 위/.test(String(pos)) ? 'PASS' : 'FAIL', `${!nw && alert ? '[측정 경로 없음] Insert 가 대화상자를 띄움 · ' : ''}조회 ${n0}행 · r${sel} 셀 클릭 후 Insert → 신규행 ${pos} · 행 ${n0}→${n1}${alert ? ` · 알림 '${alert.slice(0, 60)}'` : ''} — AS-IS SpreadInfo.Insert(): 활성 행 위치(r${sel})에 삽입${ok ? ' 일치' : /맨 위/.test(String(pos)) ? ' — TO-BE 룰 CR-074(사용자 판정 2026-10-27): 세트(그룹) 구조 없는 목록 그리드의 Insert 는 맨 위(공용 DataGrid 기본) → AS-IS 와 달라도 PASS' : ' — 위치 다름'}`);
     }
   });
 
@@ -1204,11 +1305,17 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // ── J1 — 권한 Division 후보 = AS-IS SetDivisionAuthCheck(권한 없으면 비활성)·TO-BE MyDivision 콤보. 후보가 있고 Division 마스터 부분집합이면 PASS
     {
       await nscm.expandSearchArea(true); const dv = await fc(['Div', 'Division'], 'w4c_j1');
+      // 2026-11-10 T215(SSP0015 v3 J1 4건·A4 1건 허위 FAIL): Division 이 고정·비활성 조건(TO-BE '40' disabled · AS-IS SSP0015_ShipmentPSI.cs:563-564 ControlValues="40" · Enabled=false)이면
+      //   후보 목록이 열리지 않아 '후보 0건' 으로 FAIL 했다 → TO-BE 비활성 + AS-IS actions.csv STATE <Division 컨트롤>.Enabled=false 면 고정 조건 동일(PASS) · AS-IS 활성이면 FAIL
+      const dvFixed = dv ? await divFixedOf(dv.root, ID) : null;
+      if (dvFixed) { for (const x of [...trc('J1').map(t => t.x), ...all.filter(r => r.rule_id === 'J1' && ['ASIS', 'RULE_SCREEN', 'SEARCH'].includes(r.source))]) put(x.row_id, dvFixed.asis ? 'PASS' : 'FAIL', `Division 조회조건 비활성 고정 '${dvFixed.shown}' — ${dvFixed.asis ? `AS-IS 도 고정(${dvFixed.asis}) = 동일(T215)` : 'AS-IS 는 활성(Enabled=false 문장 없음) — 비활성 고정은 AS-IS 와 다름'}`); }
       let opts: string[] = [];
+      if (!dvFixed) {
       if (dv && dv.kind === 'combo') { const o = await comboOpts(dv.root); opts = o.texts.filter(t => t && !/^(select\s*)?all$/i.test(t)); await p.keyboard.press('Escape').catch(() => undefined); }
       const master = trc('J1')[0]?.c.divisions || []; const codes = opts.map(t => t.split(/\s+/)[0]); const outside = master.length ? codes.filter(k => !master.includes(k)) : [];
       const ev = `Division 후보 ${opts.length}건 [${opts.slice(0, 6).join(', ')}] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 ${outside.length ? outside.join(',') : '0'} · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보`;
       for (const x of [...trc('J1').map(t => t.x), ...all.filter(r => r.rule_id === 'J1' && ['ASIS', 'RULE_SCREEN', 'SEARCH'].includes(r.source))]) put(x.row_id, opts.length && !outside.length ? 'PASS' : 'FAIL', ev);
+      }
     }
     // ── G6 — 초기값 룰: AS-IS 가 값을 대입하지 않으면(디자이너·프레임워크 기본) TO-BE 기본값이 무엇이든 PASS · setListBox(…, true)/다중 체크리스트 = 'ALL'(전체) 기대
     for (const { x, c } of trc('G6').filter(t => t.c.et === 'COND' && !t.c.popup)) {
@@ -1223,11 +1330,26 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const match = o.texts.find(t => t === lit || t.startsWith(lit + ' ') || t.includes(`(${lit})`) || t.endsWith(' ' + lit));
         // 코드 → 라벨 환산은 콤보 API 응답(code/name 쌍)으로 — 머리글자 추정 금지(2026-10-27 사용자: 검사기 오류를 확인해 고친 것인지 물음 → 실데이터로 환산)
         const byApi = nscm.combos.flatMap(q => q.rows || []).find(r => String(r.c).toUpperCase() === lit.toUpperCase())?.v || '';
-        const ok = !!val && (nrm(val) === nrm(lit) || (match && nrm(val) === nrm(match)) || (byApi && nrm(val) === nrm(byApi)));
+        // 2026-11-16(SSP0020 T-78284f60 허위 FAIL): AS-IS 초기값이 빈 문자열(Text = "")이면 TO-BE 도 빈값이어야 같다 — 종전엔 빈값끼리를 불일치로 판정
+        const ok = lit === '' ? val === '' : (!!val && (nrm(val) === nrm(lit) || (match && nrm(val) === nrm(match)) || (byApi && nrm(val) === nrm(byApi))));
         put(x.row_id, ok ? 'PASS' : 'FAIL', `AS-IS 초기값 코드 '${lit}'(라벨 ${match ? `옵션 '${match}'` : byApi ? `콤보 API 코드표 '${byApi}'` : '미확인(옵션·콤보 API 응답에 코드 없음)'}) ↔ TO-BE 초기 표시 '${val}' ${ok ? '일치' : '불일치'}`);
+      } else if (raws.some(s2 => /\.SelectedIndex\s*=\s*\d+/.test(s2))) {
+        // 2026-11-10 T191(SSP0003 10번 허위 FAIL): AS-IS 'setListBox(…, true)'(ALL 추가) 뒤 'cboStatus.SelectedIndex = 2'(cs:327)로 세 번째 항목을 고른다 — 종전엔 SelectedIndex 를 읽지 않아 기대를 ALL 로 잡았다.
+        //   AS-IS 목록 = (ALL 추가면 ALL) + 원천 행 순서. TO-BE 목록에 ALL 이 없으면 한 칸 당겨 같은 항목을 기대로 본다
+        const n = Number((/\.SelectedIndex\s*=\s*(\d+)/.exec(raws.find(s2 => /\.SelectedIndex\s*=/.test(s2)) || '') || [])[1] || 0);
+        const asisAll = /true\s*[,)]/.test(raws.filter(s2 => /setListBox/.test(s2)).join(' '));
+        const o = await comboOpts(box.root); await p.keyboard.press('Escape').catch(() => undefined);
+        const tobeAll = /^(select\s*)?all$|^전체$/i.test(o.texts[0] || ''); const wi = asisAll && !tobeAll ? n - 1 : (!asisAll && tobeAll ? n + 1 : n); const want = o.texts[wi] || '';
+        const ok = !!want && nrm(val) === nrm(want);
+        put(x.row_id, want ? (ok ? 'PASS' : 'FAIL') : '판정필요', `AS-IS SelectedIndex = ${n}(${asisAll ? 'ALL 포함 목록' : '목록'}) → 기대 항목 '${want || '(목록 밖)'}'(TO-BE 목록 ${o.texts.length}건 · ${tobeAll ? 'ALL 포함' : 'ALL 없음'}) ↔ TO-BE 초기 '${val || '(전체)'}' ${ok ? '일치' : '불일치'}`);
       } else if (c.allFlag || /CheckedList/i.test(c.ctlType || '') || /true\s*[,)]/.test(raws.join(' '))) {
-        const ok = val === '' || /all|전체/i.test(val);
-        put(x.row_id, ok ? 'PASS' : 'FAIL', `AS-IS ${/CheckedList/i.test(c.ctlType || '') ? '다중 체크리스트(선택 없음 = 전체)' : 'setListBox(…, true) = ALL 선택'} ↔ TO-BE 초기 '${val || '(전체)'}'`);
+        // 2026-11-16(SSP0020 T-a82deb6b 허위 FAIL): 다중 선택 칸이 '첫 항목 +N' 으로 접혀 보일 때 1+N 이 후보 수와 같으면 전체 선택이다(AS-IS chkAll Checked 로 전부 체크한 것과 같음)
+        let allSel = false; let allNote = '';
+        { const mPlus = /\+\s*(\d+)\s*$/.exec(val); const o2 = await comboOpts(box.root); await p.keyboard.press('Escape').catch(() => undefined);
+          const cand = o2.texts.filter(t => t && !/^\(?(select\s*)?(all|전체)\)?$/i.test(t)); const picked = mPlus ? 1 + Number(mPlus[1]) : (val ? val.split(' | ').filter(Boolean).length : 0);
+          allSel = cand.length > 0 && picked === cand.length; allNote = ` · 선택 ${picked}개 / 후보 ${cand.length}개`; }
+        const ok = val === '' || /all|전체/i.test(val) || allSel;
+        put(x.row_id, ok ? 'PASS' : 'FAIL', `AS-IS ${/CheckedList/i.test(c.ctlType || '') ? '다중 체크리스트(선택 없음 = 전체)' : 'setListBox(…, true) = ALL 선택'} ↔ TO-BE 초기 '${val || '(전체)'}'${allNote}`);
       } else put(x.row_id, 'PASS', `AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '${val || '(빈값)'}' 허용 (사용자 룰 2026-10-26)`);
     }
     // ── C1 — AS-IS 에 상위 변경 핸들러가 없는 조건: TO-BE 가 하위 값을 바꾸지 않으면 PASS(연쇄 없음 = 동일)
@@ -1350,7 +1472,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const { x, c } of trc('D4').filter(t => t.c.et === 'COL' && (t.c.d4expr || []).some(e => /strSel_Division/.test(e)))) {
       if (!ex) break;
       if (!(await nscm.subButtonVisible('Insert'))) { put(x.row_id, 'FAIL', 'Insert 버튼 비노출'); continue; }
-      await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); const nr = await probe.findRow(p, 'new'); if (!nr) continue;
+      await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); const nr = await probe.findRow(p, 'new'); if (!nr) continue;
       const got = (await probe.value(p, nr.row, c.name || '')) ?? ''; const single = divSearched.length === 2 && !divSearched.includes(',');
       const want = single ? divSearched : '';
       put(x.row_id, got === want || (!single && got === '') ? 'PASS' : 'FAIL', `조회 Division '${divSearched}'(${single ? '단일 → 신규행 자동 세팅' : '복수/ALL → 빈값'}) ↔ 신규행 ${c.name}='${got}' (AS-IS strSel_Division.Length==2 분기)`);
@@ -1422,7 +1544,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     if (d3Tab) { await clickSheetTab(nscm, planSheets[0]); await searchAndRows(nscm); }
     // ── 신규행 기반: C2 사이트 타입별 INCOTERMS_SSP 후보 · C6 TO_CITY · F3 붙여넣기 — To Site 컬럼이 있는 화면(SCP0007 류)에서만(2026-10-28 화면 독립화)
     if (ex && has('TO_SITE_CODE') && (await nscm.subButtonVisible('Insert'))) {
-      await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
+      await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
       const nr = await probe.findRow(p, 'new');
       if (nr) {
         const toCands = ((await probe.candidates(p, nr.row, 'TO_SITE_CODE')) || []).filter(Boolean);
@@ -1430,7 +1552,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const plant = pick1('PLANT'), sales = pick1('SALES');
         for (const x of [...trc('C2').filter(t => t.c.et === 'COL' && /INCOTERMS/.test(t.c.name || '')).map(t => t.x), ...all.filter(r => r.source === 'ASIS' && r.rule_id === 'C2' && /INCOTERMS_SSP/.test(r.target))]) {
           const tgt = /INCOTERMS_SSP/.test(x.target || '') || /INCOTERMS_SSP/.test(condOf(x).name || '') ? 'INCOTERMS_SSP' : 'INCOTERMS';
-          if (!plant || !sales) { put(x.row_id, 'FAIL', `To Site 후보에 PLANT/SALES 타입이 모두 없음(PLANT '${plant}' · SALES '${sales}', 후보 ${toCands.length}) — 사이트 타입 분기 재현 불가`); continue; }
+          if (!plant || !sales) { put(x.row_id, 'ERROR', `[전제 미충족 T300] To Site 후보에 PLANT/SALES 타입이 모두 없음(PLANT '${plant}' · SALES '${sales}', 후보 ${toCands.length}) — 사이트 타입 분기 재현 불가`); continue; }
           const sig = async (v: string) => { if (!(await probe.setByEditor(p, nr.row, 'TO_SITE_CODE', v))) return null; await p.waitForTimeout(700); const c2 = (await probe.candidates(p, nr.row, tgt)) || []; const e = await probe.editable(p, nr.row, tgt); return { n: c2.length, e, s: [...c2].sort().join('|') }; };
           const a = await sig(plant), b = await sig(sales);
           if (!a || !b) { put(x.row_id, 'FAIL', `TO_SITE_CODE 입력 실패(PLANT '${plant}' ${!!a} · SALES '${sales}' ${!!b})`); continue; }
@@ -1512,8 +1634,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     }
     for (const x of all.filter(r => ['DEFECT', 'CONFIRMED'].includes(r.source) && r.rule_id === 'H8' && /총 ?건수/.test(r.target))) {
       const txt = await p.locator('body').innerText().catch(() => '');
-      const shown = new RegExp(`\\b${nAll}\\b`).test(txt) || new RegExp(`\\b${nAll.toLocaleString()}\\b`).test(txt);
-      put(x.row_id, shown ? 'PASS' : 'FAIL', `조회 ${nAll}행 — 화면에 건수 '${nAll}' 표시 ${shown ? '있음' : '없음'}(총 건수 표시 확정 규칙)`);
+      // 2026-11-10 T184(SCP0033 6번 허위 FAIL): 화면 글자는 'Total55rows'(span 이어붙임 · 공백 없음)로 읽혀 \b55\b 가 실패 — 숫자 경계(앞뒤 숫자·콤마 아님)로 찾는다
+      const numRx = (s: string) => new RegExp(`(?<![\\d,.])${s.replace(/[.,]/g, m => '\\' + m)}(?![\\d,.])`);
+      const shown = numRx(String(nAll)).test(txt) || numRx(nAll.toLocaleString()).test(txt);
+      // 2026-11-17 사용자의견(SCP0104 v22 11번 '총건수 표기는 TO-BE RULE 로 TO-BE 일반과 동일하면 오류 아님' · CR-110): 탭·시트가 여럿인 화면은 TO-BE 공용 건수 영역(Total N rows)이
+      //   활성 그리드 건수를 보여 준다. 공용 건수 영역이 있고 그 숫자가 화면에 보이는 그리드 행 수와 같으면 PASS
+      const tm = /Total\s*([\d,]+)\s*rows?|총\s*([\d,]+)\s*건/i.exec(txt); const tn = tm ? Number((tm[1] || tm[2]).replace(/,/g, '')) : NaN;  // 화면 언어 KO = '총 N건'
+      const gridRows = Number.isFinite(tn) ? await p.evaluate(`(() => { const out = []; document.querySelectorAll('.wj-flexgrid').forEach(g => { if (!g.getClientRects().length) return; const c = (window.wijmo && window.wijmo.Control && window.wijmo.Control.getControl(g)); if (c && c.rows) out.push(c.rows.length); }); return out; })()`).catch(() => []) as number[] : [];
+      const common = Number.isFinite(tn) && gridRows.includes(tn);
+      put(x.row_id, shown || common ? 'PASS' : 'FAIL', `조회 ${nAll}행 — 화면에 건수 '${nAll}' 표시 ${shown ? '있음' : '없음'}${Number.isFinite(tn) ? ` · TO-BE 공용 건수 영역 '${tm ? tm[0] : ''}'(보이는 그리드 행 수 ${gridRows.join('/') || '?'})${common ? ' = 활성 그리드 건수 → TO-BE 룰 CR-110 PASS' : ''}` : ' · 공용 건수 영역 없음'}(총 건수 표시 확정 규칙)`);
     }
     // ── H9 컬럼 기본 폭 = SHEET_COLUMNS COLUMN_WIDTH(개인화 없음)
     {
@@ -1521,7 +1650,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const widthsNow = (await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return {}; const o = {}; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding && x.visible !== false) o[String(x.binding)] = Number(x.width || x.renderWidth || 0); } return o; })()`).catch(() => ({}))) as Record<string, number>;
       const pairs = Object.entries(meta).filter(([k, v]) => widthsNow[k] && Number(v) > 0).map(([k, v]) => ({ k, m: Number(v), t: widthsNow[k] }));
       const off = pairs.filter(q => Math.abs(q.t - q.m) > Math.max(8, q.m * 0.25));
-      for (const x of all.filter(r => r.rule_id === 'H9')) put(x.row_id, pairs.length ? (off.length ? 'FAIL' : 'PASS') : 'NA', pairs.length ? `컬럼 폭 ${pairs.length}개 메타 대조 — 25% 초과 이탈 ${off.length}: ${off.slice(0, 8).map(q => `${q.k} 메타 ${q.m}→실측 ${q.t}`).join(', ') || '없음'}` : '메타 COLUMN_WIDTH 없음');
+      // 2026-11-10 T188(SCP0108 5번 · 사용자 판정): 컬럼 폭이 기준과 다를 때는 결함 확정(FAIL)이 아니라 판정필요 — 사람이 폭 차이를 보고 정한다(전 화면 같은 규칙)
+      for (const x of all.filter(r => r.rule_id === 'H9')) put(x.row_id, pairs.length ? (off.length ? '판정필요' : 'PASS') : 'NA', pairs.length ? `컬럼 폭 ${pairs.length}개 메타 대조 — 25% 초과 이탈 ${off.length}: ${off.slice(0, 8).map(q => `${q.k} 메타 ${q.m}→실측 ${q.t}`).join(', ') || '없음'}${off.length ? ' — 폭 차이는 판정필요(사용자 판정 2026-11-10 SCP0108 5번)' : ''}` : '메타 COLUMN_WIDTH 없음');
       for (const x of all.filter(r => r.rule_id === 'H4' && r.result !== 'PASS')) { const hscroll = await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 2).catch(() => false); put(x.row_id, hscroll ? 'FAIL' : 'PASS', `페이지 가로 스크롤 ${hscroll ? '있음' : '없음'} · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)`); }
     }
     // ── E4 — catch 예외 메시지(동적) = NA · SetRoute(팝업 선택 경로) = 팝업 시나리오에서
@@ -1691,7 +1821,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // ── 신규행 기본값(AS-IS InsertButton SetValue) · DIVISION_ID 콤보 · INCOTERMS 조건부 잠금 · C2/C6 값채움 컬럼 · ROUTE_CNT SP
     const ex = nAll > 0 ? await probe.findRow(p, 'existing') : null;
     if (await nscm.subButtonVisible('Insert')) {
-      await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
+      await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
       const nr = await probe.findRow(p, 'new');
       if (nr) {
         const val = async (col: string) => (await probe.value(p, nr.row, col)) ?? '';
@@ -1713,8 +1843,20 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const divCands = await probe.candidates(p, nr.row, 'DIVISION_ID'); const divVal = await val('DIVISION_ID'); const divEdit = await probe.editable(p, nr.row, 'DIVISION_ID');
         const myDivs = (await (async () => { await nscm.expandSearchArea(true); const b = await fc(['Div', 'Division'], 'w4d_div'); if (!b) return [] as string[]; const o = await comboOpts(b.root); await p.keyboard.press('Escape').catch(() => undefined); return o.texts.filter(t => t && !/select all|^all$/i.test(t)).map(t => t.split(/\s+/)[0]); })());
         const single = /^[A-Z0-9]{2}$/i.test(divSearched) && !divSearched.includes(',');
-        for (const x of byRule('ASIS', 'D4', /dtMyDivision|SetCellTypeCombo/)) put(x.row_id, divCands && divCands.length ? (myDivs.length && divCands.every(v => myDivs.includes(v.split(/\s+/)[0])) ? 'PASS' : 'FAIL') : 'FAIL', divCands && divCands.length ? `신규행 DIVISION_ID 콤보 후보 ${divCands.length} [${divCands.slice(0, 6).join(',')}] ↔ 내 Division ${myDivs.join(',')}` : `신규행 DIVISION_ID 콤보 후보 없음(dataMap 없음) — AS-IS SetCellTypeCombo(dtMyDivision) 미구현(대조표 D00-3-009)`);
-        for (const x of trc('C2').filter(t => t.c.name === 'DIVISION_ID')) put(x.x.row_id, divCands && divCands.length ? 'PASS' : 'FAIL', divCands && divCands.length ? `신규행 DIVISION_ID 후보 ${divCands.length}` : '신규행 DIVISION_ID 콤보 후보 없음 — 내 Division 목록 콤보 미구현(D00-3-009)');
+        // 2026-11-10 T182(SCP0033 5번 허위 FAIL): 기대 = AS-IS dtMyDivision 의 TO-BE 원천인 서버 Division 콤보 응답(nscm.combos) — 종전엔 조회조건 Div 목록(DOM 13건 · EE_UC 없음)을
+        //   기대로 써서 서버 응답과 같은 셀 후보 14건(EE_UC 포함 · 같은 실행 P07 '후보 14건 = 서버 Division 14건' PASS)을 FAIL 로 냈다. 서버 응답을 못 잡았을 때만 조회조건 목록으로 대조
+        const srvDivs = (() => { for (const z of [...nscm.combos].reverse()) { if (!/division/i.test(`${z.url} ${z.body}`)) continue; const codes = (z.rows || []).map(r => String(r.c || r.v || '').trim().split(/\s+/)[0]).filter(Boolean); if (codes.length && (!myDivs.length || myDivs.every(m => codes.includes(m)))) return codes; } return [] as string[]; })();
+        const wantDivs = srvDivs.length ? srvDivs : myDivs; const wantSrc = srvDivs.length ? `서버 Division 콤보 응답 ${srvDivs.length}건` : `조회조건 Div 목록 ${myDivs.length}건`;
+        const candCodes = (divCands || []).map(v => v.split(/\s+/)[0]).filter(v => v && !/^(-|\/|select|all)$/i.test(v));
+        const extraD = candCodes.filter(v => !wantDivs.includes(v)); const missD = wantDivs.filter(v => !candCodes.includes(v));
+        for (const x of byRule('ASIS', 'D4', /dtMyDivision|SetCellTypeCombo/)) put(x.row_id, divCands && divCands.length ? (wantDivs.length && !extraD.length ? 'PASS' : 'FAIL') : 'FAIL', divCands && divCands.length ? `신규행 DIVISION_ID 콤보 후보 ${divCands.length} [${divCands.slice(0, 6).join(',')}] ↔ 기대 ${wantSrc}(${wantDivs.join(',')})${extraD.length ? ` · 기대 밖 ${extraD.join(',')}` : ''}${missD.length ? ` · 후보에 없음 ${missD.join(',')}` : ''}${srvDivs.length && myDivs.length !== srvDivs.length ? ` · 참고: 조회조건 Div 목록 ${myDivs.length}건` : ''}` : `신규행 DIVISION_ID 콤보 후보 없음(dataMap 없음) — AS-IS SetCellTypeCombo(dtMyDivision) 미구현(대조표 D00-3-009)`);
+        // 2026-11-17 사용자의견(SCP0104 v27 조치 14번 'AS-IS 도 동일하게 동작 - 오류 아님'): 내 Division 콤보(D00-3-009) 기대는 AS-IS 가 DIVISION_ID 를 콤보로
+        //   선언한 화면에만 적용한다(asisCombo · AS-IS 근거 dtMyDivision/SetCellTypeCombo). SCP0104 는 메타 FPTextBox + Insert 값 대입(Edit_Row_Assign) 이라 후보 없음이 같은 동작
+        for (const x of trc('C2').filter(t => t.c.name === 'DIVISION_ID')) {
+          const asisDivCombo = !!x.c.asisCombo || /dtMyDivision|SetCellTypeCombo/.test(`${x.x.asis_ref || ''} ${x.x.expected || ''}`);
+          if (!asisDivCombo) { put(x.x.row_id, divCands && divCands.length ? 'NA' : 'PASS', divCands && divCands.length ? `신규행 DIVISION_ID 후보 ${divCands.length} — AS-IS 는 콤보 아님(${x.c.asisCellSrc || '메타 텍스트'} · 값 대입) · 후보 제공은 TO-BE 추가 편의(판정 대상 아님)` : `신규행 DIVISION_ID 콤보 후보 없음 — AS-IS 도 콤보 아님(${x.c.asisCellSrc || '메타 텍스트'} · Insert 때 조회 Division 값 대입) → 같은 동작`); continue; }
+          put(x.x.row_id, divCands && divCands.length ? 'PASS' : 'FAIL', divCands && divCands.length ? `신규행 DIVISION_ID 후보 ${divCands.length}` : '신규행 DIVISION_ID 콤보 후보 없음 — 내 Division 목록 콤보 미구현(D00-3-009)');
+        }
         for (const x of byRule('ASIS', 'D4', /strSel_Division|LockRange\(insCell, siMain\.GetColumnIndex\(DefColumns\.DIVISION_ID/)) {
           if (/SetCellTypeCombo/.test(x.expected)) continue;
           const ok = single ? (divVal === divSearched && divEdit === false) : (divVal === '' && divEdit !== false);
@@ -1741,13 +1883,13 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         for (const { x, c } of trc('C3').filter(t => t.c.et === 'COL' && ['FROM_COUNTRY', 'TO_COUNTRY', 'FROM_CITY', 'TO_CITY', 'ROUTE_CNT', 'VMI_YN'].includes(t.c.name || ''))) {
           const v = await val(c.name || ''); const src = /^FROM/.test(c.name || '') ? `FROM_SITE_CODE='${fromPick}'` : /^TO|VMI/.test(c.name || '') ? `TO_SITE_CODE='${sales || plant}'` : `From/To City(${await val('FROM_CITY')}/${await val('TO_CITY')})`;
           const need = /^FROM/.test(c.name || '') ? !!fromPick : /^TO|VMI/.test(c.name || '') ? !!(sales || plant) : !!(fromPick && (sales || plant));
-          if (!need) { put(x.row_id, 'FAIL', `${c.name}: 원천 Site 후보 입력 실패(From '${fromPick}' · To '${sales || plant}') — 연쇄 재현 불가`); continue; }
+          if (!need) { put(x.row_id, 'ERROR', `[전제 미충족 T300] ${c.name}: 원천 Site 후보 입력 실패(From '${fromPick}' · To '${sales || plant}') — 연쇄 재현 불가`); continue; }
           put(x.row_id, v !== '' ? 'PASS' : 'FAIL', `${src} 입력 → ${c.name}='${v}' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움${c.name === 'ROUTE_CNT' ? ' · 양쪽 City 로 ROUTE_CNT 조회' : ''}${v !== '' ? ' 일치' : ' — 비어 있음'}`);
         }
         const d1Rows = [...byRule('COLUMN', 'D1', /INCOTERMS/), ...trc('D1').filter(t => /INCOTERMS/.test(t.c.name || '')).map(t => t.x)];
         for (const x of d1Rows) {
           const col = /INCOTERMS_SSP/.test(x.target) ? 'INCOTERMS_SSP' : 'INCOTERMS'; const isNew = !/기존행/.test(x.evidence + x.expected);
-          if (!a || !b2) { put(x.row_id, 'FAIL', `To Site 후보에서 PLANT('${plant}')/비PLANT('${sales}') 입력 실패 — 조건부 잠금 재현 불가(후보 ${toCands.length})`); continue; }
+          if (!a || !b2) { put(x.row_id, 'ERROR', `[전제 미충족 T300] To Site 후보에서 PLANT('${plant}')/비PLANT('${sales}') 입력 실패 — 조건부 잠금 재현 불가(후보 ${toCands.length})`); continue; }
           if (isNew) {
             // AS-IS: PLANT 면 INCOTERMS 잠금·INCOTERMS_SSP 해제 / 아니면 INCOTERMS 해제·INCOTERMS_SSP 잠금
             const ok = col === 'INCOTERMS' ? (a.inc === false && b2.inc === true) : (a.ssp === true && b2.ssp === false);
@@ -1763,7 +1905,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         }
         // ASIS C3/C6 INCOTERMS_SSP,INCOTERMS 판정필요 행(원천 분기 해석 불가) — PLANT/DAP 분기 실측으로 판정
         for (const x of [...byRule('ASIS', 'C3', /INCOTERMS_SSP,INCOTERMS/), ...byRule('ASIS', 'C6', /INCOTERMS_SSP,INCOTERMS/)]) {  // 원장 결과와 무관하게 항상 실측(2026-10-28: 원장 재생성으로 NOT_RUN 이면 건너뛰어 _verify 의 '분기 해석 불가' 판정필요가 남던 결함)
-          if (!a) { put(x.row_id, 'FAIL', 'PLANT To Site 입력 실패 — 분기 재현 불가'); continue; }
+          if (!a) { put(x.row_id, 'ERROR', '[전제 미충족 T300] PLANT To Site 입력 실패 — 분기 재현 불가'); continue; }
           if (x.rule_id === 'C3') put(x.row_id, a.incV && a.incV === a.sspV ? 'PASS' : a.incV === 'EXW' && a.sspV === '' ? 'PASS' : 'FAIL', `TO_SITE PLANT '${plant}' → INCOTERMS='${a.incV}' · INCOTERMS_SSP='${a.sspV}' — AS-IS: DAP 면 SSP 에 복사, EXW 면 SSP 미복사${a.incV && (a.incV === a.sspV || (a.incV === 'EXW' && a.sspV === '')) ? ' 일치' : ' 불일치'}`);
           else { const pt = await probe.cellCenter(p, nr.row, 'TO_SITE_CODE'); if (pt) { await p.mouse.dblclick(pt.x, pt.y); await p.waitForTimeout(400); await p.keyboard.press('Escape'); await p.waitForTimeout(600); } const inc2 = await val('INCOTERMS'), ssp2 = await val('INCOTERMS_SSP'); put(x.row_id, inc2 === a.incV && ssp2 === a.sspV ? 'PASS' : 'FAIL', `To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → Incoterms '${a.incV}'→'${inc2}' · SSP Incoterms '${a.sspV}'→'${ssp2}'${inc2 === a.incV && ssp2 === a.sspV ? ' — 값 유지(정상)' : ' — 값이 바뀌지 않았는데 Incoterms 가 지워짐(AS-IS SetCityCode 는 Site 값이 실제로 바뀔 때만 재계산)'}`); }
         }
@@ -1932,7 +2074,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // ── A4 재조회 초기화 — Division 단일로 재조회 → 그리드 DIVISION_ID 가 전부 그 값(이전 ALL 결과 잔존 0) · MSG00159(Status Required → Insert)
     await nscm.expandSearchArea(true);
     const dv = await fc(['Div', 'Division'], 'w4d_a4');
-    if (dv) {
+    const dvFx = dv ? await divFixedOf(dv.root, ID) : null;  // T215 — Division 고정·비활성 조건이면 다른 값으로 재조회 자체가 성립하지 않음(AS-IS 동일 고정이면 NA)
+    if (dvFx) { for (const x of byRule('RULE_SCREEN', 'A4')) put(x.row_id, dvFx.asis ? 'NA' : 'FAIL', `Division 조회조건 비활성 고정 '${dvFx.shown}' — ${dvFx.asis ? `AS-IS 도 고정(${dvFx.asis}) · Division 을 바꿔 재조회하는 시나리오가 성립하지 않음(T215)` : 'AS-IS 는 활성 — 비활성 고정은 AS-IS 와 다름'}`); }
+    else if (dv) {
       const o = await comboOpts(dv.root); const allOn = await p.evaluate(() => { const c = [...document.querySelectorAll('.MuiAutocomplete-popper li[role="option"] input[type="checkbox"]')] as HTMLInputElement[]; return c.length > 0 && c.every(i => i.checked); });
       const sa = o.texts.findIndex(t => /select all|^all$/i.test(t)); if (allOn && sa >= 0) { await o.lis.nth(sa).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
       const first1 = o.texts.findIndex((t, i) => i !== sa && t); if (first1 >= 0) { await o.lis.nth(first1).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
@@ -1946,7 +2090,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         if (req >= 0) { await os.lis.nth(req).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); } await p.keyboard.press('Escape');
         const s3 = await searchWait();
         let alert = ''; const insVisible = await nscm.subButtonVisible('Insert');
-        if (insVisible) { const n0 = await probe.rowCount(p); await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); alert = await waitAlert(nscm, 5_000); const n1 = await probe.rowCount(p); await nscm.clearDialogs();
+        if (insVisible) { const n0 = await probe.rowCount(p); await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); alert = await waitAlert(nscm, 5_000); const n1 = await probe.rowCount(p); await nscm.clearDialogs();
           const texts = msgText('MSG01175'); const hit = !!alert && (texts.some(t => alert.includes(t.slice(0, 20))) || /completed/i.test(alert));
           for (const x of [...trc('E4').filter(t => /MSG00159/.test(t.c.name || '')).map(t => t.x), ...byRule('ASIS', 'E4', /MSG00159/), ...byRule('ASIS', 'D4', /MSG00159|strSel_InputStatus/)]) put(x.row_id, hit && n1 === n0 ? 'PASS' : 'FAIL', `Status=Required(${req >= 0 ? os.texts[req] : '옵션 없음'}) 조회 ${s3.n}행 → Insert → 알림 '${alert.slice(0, 80) || '없음'}' · 행 ${n0}→${n1} — AS-IS MSG00159 'Input Status가 Completed일때만 입력이 가능합니다'(TO-BE MSG01175) + 행 추가 없음${hit && n1 === n0 ? ' 일치' : hit ? ' — 메시지는 떴지만 행이 추가됨' : ' — 메시지 미발생'}`);
         } else for (const x of [...trc('E4').filter(t => /MSG00159/.test(t.c.name || '')).map(t => t.x), ...byRule('ASIS', 'E4', /MSG00159/)]) put(x.row_id, 'FAIL', `Status=Required 조회 후 Insert 버튼 비노출 — AS-IS 는 버튼 노출 + MSG00159 안내`);
@@ -1974,7 +2118,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const GA = grp(/^D00-(2-006|2-007|4b-009|4b-010)$/), GB = grp(/^D00-3-009$/), GC = grp(/^D00-3-03[46]$/), GD = grp(/^D00-(3-04[3-6])$/), GD2 = grp(/^D00-4c-011$/);
     const GE = grp(/^D00-3-06[56]$/), GF = grp(/^D00-(3-06[7-9]|3-07[4-6]|4d-00[6-8]|4e-00[6-9]|4e-01[0-2])$/), GG = grp(/^D00-(4d-005|4e-005)$/);
     const covered = new Set([...GA, ...GB, ...GC, ...GD, ...GD2, ...GE, ...GF, ...GG].map(x => x.row_id));
-    for (const { x, c } of ni) if (!covered.has(x.row_id)) put(x.row_id, 'FAIL', `대조표 ${c.name} 상태 '미구현' — 이 행을 재현하는 실측 검사가 아직 없음(W9 미포함) → 대조표 사유 기준 미구현(FAIL · 검사기 추가 대상)`);
+    // 2026-11-17(SCP0104 UC-02): 대조표 단계(mapping_trace)가 TO-BE 코드 실재로 PASS 를 낸 행은 '재현 검사 없음' FAIL 로 덮지 않는다
+    for (const { x, c } of ni) if (!covered.has(x.row_id) && !(x.result === 'PASS' && /^STATIC mapping_trace/.test(x.tobe_ref || ''))) put(x.row_id, 'FAIL', `대조표 ${c.name} 상태 '미구현' — 이 행을 재현하는 실측 검사가 아직 없음(W9 미포함) → 대조표 사유 기준 미구현(FAIL · 검사기 추가 대상)`);
     const putAll = (xs: typeof GA, res: Res['result'], ev: string) => { for (const x of xs) put(x.row_id, res, ev); };
     const code = (s: string) => String(s || '').trim().split(/\s+/)[0];
     const comboTexts = async (root: Locator) => { const combo = root.locator('[role="combobox"]').first(); await combo.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(400); const lis = p.locator('.MuiAutocomplete-popper [role="option"], .MuiPopover-root [role="option"], [role="listbox"] [role="option"]'); const texts = (await lis.allInnerTexts().catch(() => [] as string[])).map(s => s.trim()).filter(Boolean); await p.keyboard.press('Escape').catch(() => undefined); return texts; };
@@ -2009,7 +2154,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       }
     }
     if (!(await nscm.subButtonVisible('Insert'))) { putAll([...GA, ...GB, ...GD, ...GD2, ...GE, ...GF, ...GG], 'NA', 'Insert 버튼 비노출(권한) — 신규행 경로 재현 불가'); return; }
-    await nscm.subButton('Insert').click({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
+    await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs();
     const nr = await probe.findRow(p, 'new'); if (!nr) { putAll([...GA, ...GB, ...GD, ...GD2, ...GE, ...GF, ...GG], 'FAIL', 'Insert 후 신규행(CRUD_TYPE=I)을 찾지 못함'); return; }
     const nv = (k: string) => probe.value(p, nr.row, k).then(v => v ?? '');
     // ── G-B 신규행 Division 콤보 = 내 Division(조회조건 Div 목록)

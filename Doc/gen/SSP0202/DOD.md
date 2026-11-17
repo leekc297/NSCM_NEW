@@ -1,6 +1,6 @@
-# 완료 정의(DoD) — SSP0202 2026-10-26 06:30
+# 완료 정의(DoD) — SSP0202 2026-11-12 06:20
 
-20/30 충족
+23/31 충족
 
 | 코드 | 상태 | 항목 | 근거 |
 |---|---|---|---|
@@ -15,10 +15,10 @@
 | B07 | ✅ | hotkeyConfig.delete 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.upload 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.manual 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
-| B08 | ❌ | As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 | As-is 기능 누락(members.csv DeleteButton) |
-| B08 | ❌ | As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 | As-is 기능 누락(members.csv SaveButton) |
+| B08 | ✅ | As-is DeleteButton 는 NO-OP → hotkeyConfig.delete 는 false(기능 없는 공통버튼 숨김 — TO-BE 룰 2026-10-26) | 무동작 핸들러로 버튼을 노출 중 |
+| B08 | ✅ | As-is SaveButton 는 NO-OP → hotkeyConfig.save 는 false(기능 없는 공통버튼 숨김 — TO-BE 룰 2026-10-26) | 무동작 핸들러로 버튼을 노출 중 |
 | B08 | ✅ | As-is ExcelButton 없음 — excel 기본 활성 허용(SubTitle 기본) | 정보 |
-| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 9건 대비 AS-IS 참조 주석 11건 — 1:1 추적 근거 |
+| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 9건 대비 AS-IS 참조 주석 17건 — 1:1 추적 근거 |
 | B14 | ✅ | Form: SearchArea(@shared/components) | 룰 25 §1.5.4 표준 5종 import |
 | B15 | ✅ | Form: FormItem(@shared/lges) 라벨 규약 | 직접 <label> 금지 |
 | B16 | ✅ | Form: 라벨 리터럴 직접 입력 없음(t('LBL…')) | 룰 13 i18n — 라벨은 LBL 코드 |
@@ -33,4 +33,5 @@
 | B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0202_GET_DELEGATEE_LOAD · 시트 'delegate') | IN 2개 일치 |
 | B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM · 시트 'main') | 누락 language — 현재 키: divisionId, fromSite, requestId, fromYyyymmdd, toYyyymmdd, status, itemId, changeType · BE positional 매핑이라 값이 NULL 로 감 |
 | B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING · 시트 'sub') | 누락 changeReqNo, language — 현재 키: (toFilter 없음) · BE positional 매핑이라 값이 NULL 로 감 |
+| B24 | ✅ | As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값 | As-is: drpPeriod.InitValue = GetDayRange(); — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조) |
 | B26 | ✅ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | 4키 일치 |

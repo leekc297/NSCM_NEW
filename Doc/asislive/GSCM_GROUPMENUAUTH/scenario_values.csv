@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+GSCM_GROUPMENUAUTH-S9d7c05,AUTH,,,,값 미도출,if (spread.SheetName == SpdSheet.shtSub) ▸ if (CheckAuthManual() && CheckAuthMenuGroup()),

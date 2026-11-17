@@ -1,0 +1,655 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5085~5102 새 행(Action I) ITEM_ID 더블클릭 · Division 빈 값 → MSG00098(Div) · 새 행은 Division·From Site 가 미리 채워짐(11-16 06:00 실측: ITEM_ID 더블클릭에 품목 팝업 열림) → 앞 칸을 비운 뒤 실행",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 3,
+     "before": "40 Mobility & IT Battery",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DIVISION_ID",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "click": "ITEM_ID",
+      "double": 1,
+      "row": "new",
+      "wait": 6
+     },
+     "row": 0,
+     "col": 7,
+     "ok": true,
+     "error": null,
+     "popups": []
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "먼저 Div을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: DIVISION_ID (11-16 소급 표시)"
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5148~5162 새 행 PROJECT_CODE 더블클릭 · Division 빈 값 → MSG00098(Div) · 새 행은 Division·From Site 가 미리 채워짐(11-16 06:00 실측: ITEM_ID 더블클릭에 품목 팝업 열림) → 앞 칸을 비운 뒤 실행",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 3,
+     "before": "40 Mobility & IT Battery",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DIVISION_ID",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellDoubleClick",
+       "row": "new",
+       "col_tag": "PROJECT_CODE",
+       "wait": "6"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellDoubleClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=9,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=9)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "먼저 Div을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: DIVISION_ID (11-16 소급 표시)"
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5592~5602 새 행 TO_SITE_DESCRIPTION 콤보 변경 · FROM_SITE 빈 값 → MSG00098(From Site) · 새 행은 Division·From Site 가 미리 채워짐(11-16 06:00 실측: ITEM_ID 더블클릭에 품목 팝업 열림) → 앞 칸을 비운 뒤 실행",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 13,
+     "before": "LGESOC Elec HQ06",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "FROM_SITE_DESCRIPTION",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "ComboSelChange",
+       "row": "new",
+       "col_tag": "TO_SITE_DESCRIPTION",
+       "wait": "4"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=14)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "먼저 From Site을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "why": "SSP0200_ShipmentChangeRequest.cs:5685~5702 새 행 INCOTERMS 콤보 변경 · DIVISION_ID 빈 값 → MSG00098(Div*) · 새 행은 Division·From Site 가 미리 채워짐(11-16 06:00 실측: ITEM_ID 더블클릭에 품목 팝업 열림) → 앞 칸을 비운 뒤 실행",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "sheet": "Shipment Change Request",
+     "row": 0,
+     "col": 3,
+     "before": "40 Mobility & IT Battery",
+     "after": "",
+     "locked": true,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DIVISION_ID",
+      "value": "",
+      "mode": "value",
+      "row": "new"
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "ComboSelChange",
+       "row": "new",
+       "col_tag": "INCOTERMS",
+       "wait": "4"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=0,column=15)",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "먼저 Div*을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD",
+    "SSP0200_GET_ITEM_FROM_BOD"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "non_user_path": "잠긴 칸 값 지정: DIVISION_ID (11-16 소급 표시)"
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:01:01",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "done": [
+   {
+    "set": {
+     "name": "cboChangeType",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Confirm",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 5.13,
+   "at": "2026-11-16 06:01:24.720",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 6.86,
+   "at": "2026-11-16 06:01:24.873",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 99.19,
+   "at": "2026-11-16 06:01:25.022",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2844.48,
+   "at": "2026-11-16 06:01:27.721",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 5.3,
+   "at": "2026-11-16 06:02:28.358",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 4.94,
+   "at": "2026-11-16 06:02:28.501",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 98.2,
+   "at": "2026-11-16 06:02:28.644",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2837.86,
+   "at": "2026-11-16 06:02:31.350",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 6.27,
+   "at": "2026-11-16 06:03:32.686",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 5.57,
+   "at": "2026-11-16 06:03:32.838",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 96.42,
+   "at": "2026-11-16 06:03:32.988",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2876.46,
+   "at": "2026-11-16 06:03:35.723",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 5.07,
+   "at": "2026-11-16 06:04:34.938",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 4.89,
+   "at": "2026-11-16 06:04:35.081",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 98.74,
+   "at": "2026-11-16 06:04:35.223",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2831.58,
+   "at": "2026-11-16 06:04:37.921",
+   "phase": "find+post_find"
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Change Request": [
+     0
+    ]
+   }
+  }
+ ]
+}

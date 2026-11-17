@@ -49,7 +49,7 @@
 
 ```typescript
 import { useState } from 'react';
-import { ProjectByDivisionModal, ItemByDivisionModal } from '../../../components';
+import { ProjectByDivisionModal, ItemByDivisionModal } from 'features/master/src/components'; // 2026-11-13 정정: '../../../components' → 비상대 경로 (룰 02 §4 게이트 1 = 3단 상대경로 0건 · 실제 타 도메인 import 형태)
 
 // State
 const [openProjectModal, setOpenProjectModal] = useState<boolean>(false);
@@ -83,7 +83,7 @@ const [openProjectModal, setOpenProjectModal] = useState<boolean>(false);
 | `modalClose` | `() => void` | ⭐ 의무 | 닫기 콜백 |
 | `setSelectedValue` | `(value: string, name?: string, type?: string) => void` | ⭐ 의무 | 선택 결과 콜백 |
 | `preSearchParams` | `Partial<SearchParamProps>` | 의무 (대부분) | 초기 검색조건 |
-| `callFromCell` | `boolean` | 의무 (대부분) | `false` = Form 호출, `true` = Grid cell 호출 (필터 동작 차이) |
+| `callFromCell` | `boolean` | 의무 (대부분) | `false` = Form 호출, `true` = Grid cell 호출 (필터 동작 차이) (2026-11-14 정정: ProjectByDivisionModal, ItemByDivisionModal 은 이 값을 받기만 하고 쓰지 않음. Grid 호출처는 false(CustomerModelMappingGrid)와 true(NnMasterMappingGrid)가 함께 있음) |
 
 ### §2.3 useMemo preSearchParams (React Query refetch loop 방지)
 
@@ -204,9 +204,11 @@ export const {Name}Modal = ({
       <DataGrid ... />
       
       {/* 하단 button */}
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-        <Button onClick={handleApply}>{t('LBL_APPLY')}</Button>
-        <Button onClick={modalClose}>{t('LBL_CANCEL')}</Button>
+      {/* 2026-11-13 정정: inline style → SCSS Module class (CLAUDE.md §4 ⑤ inline style 금지 · 룰 07 §3 · 실제 공용 modal 의 styles.buttonWrapper) */}
+      <div className={styles.buttonWrapper}>
+        {/* 2026-11-13 정정: Apply / Cancel → OK / Close (CR-005 버튼 순서·명칭 OK → CLOSE · 실제 공용 modal CustomerModal.tsx:246-261 buttonLabel='OK' / 'Close') */}
+        <Button buttonLabel='OK' onClick={handleApply} />
+        <Button buttonLabel='Close' onClick={modalClose} />
       </div>
     </CustomDialog>
   );
@@ -294,8 +296,8 @@ import { CustomDialog } from '@shared/components';
   </div>
   
   <div className={styles.bottomRow}>
-    <Button onClick={handleApply}>{t('LBL_APPLY')}</Button>
-    <Button onClick={modalClose}>{t('LBL_CANCEL')}</Button>
+    <Button buttonLabel='OK' onClick={handleApply} />      {/* 11-13 정정 */}
+    <Button buttonLabel='Close' onClick={modalClose} />
   </div>
 </CustomDialog>
 ```
@@ -351,6 +353,8 @@ if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT && binding === 'PROJECT_CODE') {   �
 }
 ```
 
+> (2026-11-13 정정: 신규행에서만 입력하는 modal 셀에 한한다. 기존행도 팝업으로 값을 바꾸는 셀(FPModal · CR-072)은 `GridUtils.isEditableCell` 검사만 둔다 — 룰 07 §3.5 단서 · `CustomerModelMappingGrid.tsx:322-336`. §8 검증 7번의 `≥ 1` 도 신규행 전용 셀이 있는 화면에만 적용)
+
 ### §6.4 modal 자유 작성 (CustomDialog 미사용)
 
 **금지**:
@@ -387,8 +391,9 @@ useEffect(() => {
 ```bash
 SCREEN_DIR="features/{domain}/src/pages/{screen}"
 
-# 1. @master/components 공용 modal 사용 확인 (11 modal 중 1 이상)
-rg -c "from '\.\./\.\./\.\./components'" "$SCREEN_DIR"  # ≥ 1 (Form 또는 Grid 안 사용 시)
+# 1. master 공용 modal (features/master/src/components) 사용 확인 (11 modal 중 1 이상)
+#    (2026-11-13 정정: 3단 상대경로 '../../../components' ≥ 1 요구 → 비상대 경로 기준. 룰 02 §4 게이트 1 은 3단 상대경로 0건을 요구하므로 서로 어긋났음)
+rg -c "from 'features/master/src/components'" "$SCREEN_DIR"  # ≥ 1 (Form 또는 Grid 안 사용 시)
 
 # 2. CustomDialog 사용 (신규 modal 작성 시)
 NEW_MODAL_DIR="features/master/src/components/{newModal}"
@@ -425,7 +430,7 @@ grep -nE "from '@mui/material'.*Dialog\b" "$SCREEN_DIR"  # = 0
 | `popup.Form_Load(isMultiSelect, p1, p2, ...)` | `preSearchParams={{ ... }}` + `callFromCell?` | props 매핑 |
 | Spread cell dblClick → popup | `dblClick` handler → `setOpenModal` (CRUD_TYPE 가드 + binding 매핑) | 룰 07 §1 |
 | `cellTypeImage` (popup icon) | column meta `_ctrlType: 'FPModal' + _modalKey` | 룰 08 §1.3 |
-| `MessageHelper.GMessageBox` (popup 형식) | `setAlert / setConfirm` (`@shared/hooks`) — modal 아님 | 룰 14 (Phase 4) |
+| `MessageHelper.GMessageBox` (popup 형식) | `useMessageStore` 의 `setAlert` (`@shared/stores`) — modal 아님 (2026-11-13 정정: `setAlert / setConfirm (@shared/hooks)` → `useMessageStore.setAlert (@shared/stores)` — `@shared/hooks` 에 해당 export 없음 · `setConfirm` 은 저장소에 없음) | 룰 14 (Phase 4) (2026-11-13: `_tobe/` 에 14 번 문서는 현재 없음) |
 
 ---
 

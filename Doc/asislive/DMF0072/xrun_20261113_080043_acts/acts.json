@@ -1,0 +1,39 @@
+{
+ "id": "DMF0072",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0072-S287784"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnModelType",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 08:00:15.078",
+ "fills": 0,
+ "fill_left": []
+}

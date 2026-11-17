@@ -1,0 +1,142 @@
+{
+ "id": "DMF0082",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+   "save_sp": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP → SP DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "DM.DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+   "save_sp": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE → SP DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "DM.DMF0082_SAVE_MAIN_DATA",
+   "save_sp": "DMF0082_SAVE_MAIN_DATA",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_CFM_MKT_DEMAND_PLAN",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "END_CUSTOMER",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "DOM_EXP",
+    "FCST_TYPE",
+    "INCOTERMS",
+    "MEASURE",
+    "YYYYMMDD",
+    "PLANT_SITE_ID",
+    "CELL_PROD_SITE_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "END_CUSTOMER": "END_CUSTOMER",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "DOM_EXP": "DOM_EXP",
+    "FCST_TYPE": "FCST_TYPE",
+    "INCOTERMS": "INCOTERMS",
+    "MEASURE": "MEASURE",
+    "CELL_PROD_SITE_ID": "CELL_PROD_SITE_ID"
+   },
+   "unmatched_pk": [
+    "PROJECT_CODE",
+    "YYYYMMDD",
+    "PLANT_SITE_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_CFM_SELLING_PRICE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "DM_PLN_CFM_MKT_DEMAND_PLAN_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/FcstNPrice",
+   "writes": {
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": [
+     "DELETE FROM",
+     "INSERT INTO",
+     "MERGE INTO"
+    ],
+    "DM_PLN_CFM_SELLING_PRICE": [
+     "MERGE INTO"
+    ],
+    "WHEN": [
+     "DELETE"
+    ],
+    "DM_PLN_CFM_SELLING_PRICE_H": [
+     "INSERT INTO"
+    ],
+    "DM_PLN_CFM_MKT_DEMAND_PLAN_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0082_SAVE_MAIN_DATA → SP DMF0082_SAVE_MAIN_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_PLN_MKT_FCST": [
+     "INSERT INTO",
+     "MERGE INTO"
+    ],
+    "SCM_MST_FUTURE_PRICE": [
+     "INSERT INTO",
+     "MERGE INTO"
+    ]
+   },
+   "other_tables": [
+    "DM_PLN_CFM_SELLING_PRICE"
+   ],
+   "unmatched_why": {
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE",
+   "save_sp": "DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE → SP DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  }
+ ]
+}

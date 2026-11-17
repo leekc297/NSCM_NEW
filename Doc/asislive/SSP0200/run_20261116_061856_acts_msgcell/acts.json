@@ -1,0 +1,178 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "btnButtonList_UsrButtonList_Click_Detected",
+   "expect": "MSG00050",
+   "why": "SSP0200_ShipmentChangeRequestInsertPopup.cs:114~128 확인(OK) · txtCurrentInsert_Qty 가 1~50 정수가 아니면 MSG00050 · 팝업 = 주 화면 2924행(btnInsertMultiple)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "click": "btnInsertMultiple",
+       "wait": "8"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:btnInsertMultiple",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "setc": {
+       "form": "SSP0200_ShipmentChangeRequestInsertPopup",
+       "name": "txtCurrentInsert_Qty",
+       "value": "0"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "applied": "text"
+    },
+    {
+     "set": {
+      "popup_ok": "SSP0200_ShipmentChangeRequestInsertPopup"
+     },
+     "ok": true,
+     "error": null,
+     "how": "ButtonItem OK",
+     "closed": false
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "유효한 숫자 형식이 아닙니다. 0",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:17:42",
+ "_pre_set": [],
+ "_post_find": null,
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "done": [
+   {
+    "set": {
+     "name": "cboChangeType",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Confirm",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261031"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Shipment Change Request"
+   },
+   "rows": 60,
+   "ms": 4.83,
+   "at": "2026-11-16 06:18:06.238",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SSP0200",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Change Request"
+   },
+   "rows": 56,
+   "ms": 4.79,
+   "at": "2026-11-16 06:18:06.398",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_bod_id": "",
+    "p_incoterms": "",
+    "p_transport_mode": "",
+    "p_project_code": "",
+    "p_fcst_type": "",
+    "p_confirm_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_request_no": "",
+    "p_request_user_id": "jaeuk.shin",
+    "p_request_status": "D",
+    "p_language": "KO",
+    "p_change_type": "C",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 99.36,
+   "at": "2026-11-16 06:18:06.556",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+   "params": {
+    "p_division_id": "40",
+    "p_from_site": "",
+    "p_erp_so_no": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_change_type": "C",
+    "p_status": "",
+    "p_language": "KO",
+    "debug_mode": "F",
+    "p_to_site": "",
+    "p_confirm_id": ""
+   },
+   "rows": 637,
+   "ms": 2922.19,
+   "at": "2026-11-16 06:18:09.336",
+   "phase": "find+post_find"
+  }
+ ],
+ "edit_focus": "셀 0,3",
+ "edit_calls": [],
+ "edit_mode": true
+}

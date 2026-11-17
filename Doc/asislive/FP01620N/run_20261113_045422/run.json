@@ -1,0 +1,384 @@
+{
+ "id": "FP01620N",
+ "started": "2026-11-13 04:54:22.395",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 04:54:22.705",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP01620_WO_Create",
+   "form_text": "W/O Create",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP01620_WO_Create.UIL.dll",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:54:27.577"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 04:54:31.433",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261113_045422\\dump_load.json",
+   "control_count": 72,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 15.866s, UI : 0.001s",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:54:31.453"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 04:54:31.613",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261113_045422\\shots\\FP01620N_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:54:31.781"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-13 04:55:13.764",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261113_045422\\shots\\FP01620N_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 04:55:13.960"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 04:55:14.298",
+   "call_timed_out": true,
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-13 04:55:44.317"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 04:55:52.458",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261113_045422\\dump_find.json",
+   "control_count": 72,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-13 04:55:52.481"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 04:55:52.641",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01620N\\run_20261113_045422\\shots\\FP01620N_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-13 04:55:52.858"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 04:55:53.354",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 3,
+   "ok": true,
+   "done": "2026-11-13 04:55:54.088"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 69,
+  "calls_with_params": 69
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP01620_WO_Create",
+  "form_text": "W/O Create",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP01620_WO_Create.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 계획 날짜 1번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 2번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 3번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 4번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 5번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 6번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 7번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 8번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 9번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 10번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 11번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "FP 계획 날짜 12번째 최근(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  },
+  {
+   "rule": "Division 체크 목록에서 1번째만 체크(목록이 채워지는지 확인)",
+   "set": {
+    "name": "clbDivision",
+    "check": "0",
+    "only": "1"
+   },
+   "ok": true,
+   "applied": "check:0:(81) Automotive Battery",
+   "error": null
+  }
+ ],
+ "fill_left": [
+  "cboPlanID[FP Plan ID·UsrCombo] 비어 있음(항목 0개)"
+ ],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260918"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260917"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260916"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260915"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260914"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260913"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260912"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260911"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260910"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260909"
+   },
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260908"
+   },
+   {
+    "name": "clbDivision",
+    "check": "0",
+    "only": "1"
+   }
+  ]
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-13 04:54:22.609",
+ "t_find": "2026-11-13 04:55:14.079",
+ "dialogs": [
+  {
+   "at": "2026-11-13 04:55:15.208",
+   "caption": "GSCM",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 72,
+  "layout_items": 19,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 31,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 69,
+  "calls_screen": 69,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-13 04:55:54.406",
+ "exit": 0
+}

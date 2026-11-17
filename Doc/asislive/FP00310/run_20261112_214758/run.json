@@ -1,0 +1,146 @@
+{
+ "id": "FP00310",
+ "started": "2026-11-12 21:47:58.899",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:47:59.198",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP00310_Formation_Yield",
+   "form_text": "Formation Yield",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00310_Formation_Yield.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:11.268"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:48:15.564",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00310\\run_20261112_214758\\dump_load.json",
+   "control_count": 56,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:15.586"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:48:15.748",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00310\\run_20261112_214758\\shots\\FP00310_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:15.856"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:48:16.357",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:16.910"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:48:46.715",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00310\\run_20261112_214758\\dump_find.json",
+   "control_count": 60,
+   "grid_count": 1,
+   "total": "Total : 876",
+   "time_status": "DB : 24.052s, UI : 0.639s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:46.739"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:48:46.900",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00310\\run_20261112_214758\\shots\\FP00310_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:47.054"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:48:47.538",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:48:48.205"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 27,
+  "calls_with_params": 27
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP00310_Formation_Yield",
+  "form_text": "Formation Yield",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00310_Formation_Yield.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 24.052s, UI : 0.639s",
+  "total": "Total : 876",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 21:47:59.108",
+ "t_find": "2026-11-12 21:48:16.119",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 60,
+  "layout_items": 10,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 22,
+  "data_rows": 50,
+  "grid_rows": 876,
+  "calls_total": 27,
+  "calls_screen": 27,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:48:48.514",
+ "exit": 0
+}

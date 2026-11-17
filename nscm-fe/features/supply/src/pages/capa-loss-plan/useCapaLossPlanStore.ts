@@ -80,6 +80,7 @@ interface Action {
   setDivision: (divisionId: string) => void;
   setDivisionType: (divisionType: DivisionType) => void;
   setProgressStatus: (progressStatus: string) => void;
+  setSheetType: (sheetType: SheetType) => void;
   setDerivedVersionInfo: (planType: string, currVersionProgressStatus: string) => void;
   setFilters: (sheetName: GridSheet, payload: Record<string, string>, title?: Record<string, string>) => void;
   clearFilters: () => void;
@@ -302,6 +303,26 @@ export const useCapaLossPlanStore = createPersistedStoreWithTab<State & Action>(
           electrodeType: 'ALL',
         };
         // `BeforeFindData` 5트리거 중 SheetType 경유분 — 그리드를 비운다(자동 재조회 없음).
+        state.filters = {};
+        state.applied = null;
+      }),
+
+    /**
+     * SheetType 변경(cboSheetType, MODEL/LINE) — AS-IS `cboSheetType_SelectedIndexChanged`(cs:3484~3500)는
+     * Operation·Line Type 재구성 + ShowRate 가시성 + `BeforeFindData()`(그리드 비움)를 한다. Status
+     * (`setProgressStatus`)와 동일하게 재구성 범위는 Operation·Line Type 뿐이고(02 §0 #9, F-20) 그리드를
+     * 비운다(자동 재조회 없음). 종전 Form onChange 의 `setSearchCondition` 은 filters 를 비우지 않아
+     * **standalone SheetType 변경 시 그리드가 안 비워지던 누락**을 바로잡는다(AS-IS 파리티, TC-C-003).
+     */
+    setSheetType: sheetType =>
+      set(state => {
+        state.searchCondition = {
+          ...get().searchCondition,
+          sheetType,
+          operationId: 'ALL',
+          electrodeType: 'ALL',
+        };
+        // `BeforeFindData` 트리거 — 그리드를 비운다(setProgressStatus 와 동일 규약).
         state.filters = {};
         state.applied = null;
       }),

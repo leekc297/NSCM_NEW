@@ -4,10 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { ROUTE_PATHS } from '@foundation/constants';
 
 import { MainLayout } from '../layout/MainLayout';
-import { BackdoorLogin } from '../pages/BackdoorLogin';
 import { Templates } from '../pages/Templates';
-
-import { BACKDOOR_PATH } from './ssoLogin';
 
 // 화면 렌더링은 MDI(ViewContainer, keep-alive)가 소유한다.
 // 라우터는 앱 셸(MainLayout) 매칭과 URL 미러 용도만 담당하며,
@@ -19,11 +16,6 @@ export const router: RemixRouter = createBrowserRouter([
   {
     path: '/ui',
     element: <Templates />,
-  },
-  {
-    // 운영 백도어 ID 로그인 — 셸 밖에 둔다(core/ssoLogin.ts)
-    path: BACKDOOR_PATH,
-    element: <BackdoorLogin />,
   },
   {
     // 루트 · 홈(헤더 로고 링크) → 셸 매칭 후 RouterSync 가 활성 탭 URL 로 보정

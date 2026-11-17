@@ -1,0 +1,108 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-17 16:28:34.846",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 20,
+   "rows_kind": "DataSet rows",
+   "ms": 4.31,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "SOP_ASSEMBLY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0104', @p_user_id='jaeuk.shin', @p_sheet_name='SOP_ASSEMBLY'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-17 16:28:34.888",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY",
+   "sp": "SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36,
+   "rows_kind": "DataSet rows",
+   "ms": 14.35,
+   "params": {
+    "p_version": "202610",
+    "p_version_seq": "1",
+    "p_division_id": "81_HG",
+    "p_site_id": "A003",
+    "p_plant_id": "HG00",
+    "p_factory_id": "AK",
+    "p_line_id": "AKA01,AKA02_01,AKA02_02,DMY_9429,DMY_9430,DMY_9431,DMY_9432,DMY_9433,DMY_9434,DMY_9435,DMY_9436,DMY_9437",
+    "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF",
+    "p_electrode_type": "Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking,-",
+    "p_valid_flag": "",
+    "p_program_id": "SCP0104",
+    "p_sheet_name": "SOP_ASSEMBLY",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY @p_version='202610', @p_version_seq=1, @p_division_id='81_HG', @p_site_id='A003', @p_plant_id='HG00', @p_factory_id='AK', @p_line_id='AKA01,AKA02_01,AKA02_02,DMY_9429,DMY_9430,DMY_9431,DMY_9432,DMY_9433,DMY_9434,DMY_9435,DMY_9436,DMY_9437', @p_operation_id='A5000,A7000,A7400,A8000,A8400,A9000,AFFFF', @p_electrode_type='Anode,Cathode,A,C,Half,Mono,Folding,Stacking,AZS Stacking,-', @p_valid_flag='', @p_program_id='SCP0104', @p_sheet_name='SOP_ASSEMBLY', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-17 16:28:34.990",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.64,
+   "params": {
+    "p_menu_id": "SCP0104",
+    "p_log_type": "FIND",
+    "p_log_cnt": "36",
+    "p_db_time": "0.13",
+    "p_ui_time": "0.088",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0104', @p_log_type='FIND', @p_log_cnt='36', @p_db_time='0.13', @p_ui_time='0.088', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-17 16:28:53.669",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 25.41,
+   "params": {
+    "p_program_id": "SCP0104",
+    "p_sheet_name": "ASSEMBLY",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0104', @p_sheet_name='ASSEMBLY', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnColumn"
+  },
+  {
+   "at": "2026-11-17 16:29:20.421",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CAPA_ITEM_POPUP",
+   "sp": "SCM0002_GET_CAPA_ITEM_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 36,
+   "rows_kind": "DataSet rows",
+   "ms": 164.0,
+   "params": {
+    "p_division_id": "81_HG",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_CAPA_ITEM_POPUP @p_division_id='81_HG', @p_item_id=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+MyDivisionInEE,"{""comboId"":""MyDivisionInEE"",""mnuId"":""SCP0033""}",14,14,,,PASS,응답 14건 = DB 14건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0033""}",2,2,,,PASS,응답 2건 = DB 2건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'OPERATION_GROUP'"",""mnuId"":""SCP0033"",""validYn"":""'Y'""}",3,3,,,PASS,응답 3건 = DB 3건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'DEPARTURE_DAY'"",""mnuId"":""SCP0033"",""validYn"":""'Y'""}",7,7,,,PASS,응답 7건 = DB 7건
+MyDivisionInEE,"{""comboId"":""MyDivisionInEE"",""mnuId"":""SCP0033"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0033"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SCP0033""}",14,14,,,PASS,응답 14건 = DB 14건
+SCM0001_GET_SITE_BY_DIVISION,"{""comboId"":""SCM0001_GET_SITE_BY_DIVISION"",""divisionId"":""''"",""mnuId"":""SCP0033""}",0,0,,,PASS,응답 0건 = DB 0건

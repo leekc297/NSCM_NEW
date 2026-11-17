@@ -38,7 +38,7 @@ interface Props {
   //   (AS-IS Re_Design/proc: SHIP_FROZEN=0 → planDate, >0 → planDate+SHIP_FROZEN-1). 고정 +20 아님.
   planDate: string;
   // 기간셀 더블클릭 드릴다운 (design 03 §3.F) — 페이지가 detail sheet 전환 + 재조회
-  onDrilldown: (row: MainRow) => void;
+  onDrilldown: (row: MainRow, binding: string) => void;
   // BOH 'FIGURE' 정적열 더블클릭 드릴 (AS-IS L8109-8173) — measure 기준 Hold/Stock Detail 조회.
   onFigureDrilldown?: (row: MainRow) => void;
   // Memo(우클릭 코멘트, 엑셀 메모형) — WH_IN 행 D_ 셀에 코멘트 존재 여부(그리드 인디케이터/툴팁).
@@ -587,7 +587,7 @@ export const ShipmentPsiMainGrid = ({
         onMemoRef.current({ row, binding, whInQty, prodQty });
         return;
       }
-      onDrilldownRef.current(row);
+      onDrilldownRef.current(row, binding);
     };
     g.hostElement.addEventListener('dblclick', dblClickHandler);
 

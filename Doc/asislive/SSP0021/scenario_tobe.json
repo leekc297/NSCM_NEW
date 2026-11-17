@@ -1,0 +1,65 @@
+{
+ "id": "SSP0021",
+ "rule": "tobe",
+ "set": [
+  {
+   "name": "clbCompany_ID",
+   "prop": "ControlValues",
+   "value": "minyonglee1",
+   "param": "param2",
+   "from": "HQ00",
+   "sheet": "division"
+  },
+  {
+   "name": "dp2",
+   "prop": "Value",
+   "value": "20261113",
+   "param": "to_yyyymmdd",
+   "from": "20261204",
+   "sheet": "main"
+  }
+ ],
+ "unresolved": [
+  {
+   "param": "from_yyyymmdd",
+   "asis": "20261010",
+   "tobe": "20260919",
+   "why": "같은 값을 가진 컨트롤 2개",
+   "candidates": [
+    "dp1",
+    "cboPlanDate"
+   ]
+  },
+  {
+   "param": "plan_start_yyyymmdd",
+   "asis": "20261010",
+   "tobe": "20260919",
+   "why": "같은 값을 가진 컨트롤 2개",
+   "candidates": [
+    "dp1",
+    "cboPlanDate"
+   ]
+  },
+  {
+   "param": "real_flag",
+   "asis": "Y",
+   "tobe": "N",
+   "why": "같은 값을 가진 컨트롤 0개",
+   "candidates": []
+  }
+ ],
+ "skipped": [
+  {
+   "param": "param1",
+   "asis": "81",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "from_site",
+   "asis": "HQ05-W,HQ07-A,HQ07-P,HQ11-A,HQ11-P,KR02239900_81-P",
+   "tobe": "",
+   "why": "ALL_FORM"
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+﻿kind,item,static,live,verdict,note
+SP,FP_SQL_LOG(로그 기록),,40회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT A.*,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.P",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT A.PLAN_ID AS CODE, A.PLAN_ID AS NAME",,18회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT A.SEGMENT1 AS SITE_ID,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT CONVERT(VARCHAR, A.RECEIVING_DTTM, 112) AS ",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT CONVERT(VARCHAR, MAX(A.RELEASE_TIME), 20) A",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT SITE_ID AS CODE,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: WITH CURR_DATE AS (,,6회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: WITH SITE_T AS (,,2회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP_PLAN_FORM_CODE,FP00631_Cell_Simul_Cell_Pack_2.cs:5335 btnRelease_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),69개,48개,INFO,공통 37 · 선언만 32 · 실측만 11
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel3,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel_gap,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,btnSql,Y,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnToggleSave,Y,Data,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cbo_site,Y,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_form_plan_id,Y,Plan Id(Form),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,date_instance,Y,Instance Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,range_plan,Y,Plan Period,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_pack_plan_group,Y,Plan Group(Pack),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_pack_plan_group,Y,layoutControlItem8,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_pack_plan_id,Y,Plan Id(Pack),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_cell_plan_id,Y,Plan Id(Cell),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txt_pack_code,Y,Pack Code,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txt_pack_nick,Y,Pack Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txt_cell_code,Y,Cell Code,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txt_cell_nick,Y,Cell Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_form_plan_group,Y,PlanGroup(Form),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbo_cell_plan_group,Y,Plan Group(Cell),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_form_plan_group,Y,layoutControlItem13,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chk_cell_plan_group,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Main,정적 컬럼 사실 19행(시트 미지정 포함),컬럼 20(보임 19) · 헤더 2단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

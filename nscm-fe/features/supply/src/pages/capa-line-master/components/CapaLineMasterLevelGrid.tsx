@@ -26,6 +26,8 @@ interface Props {
   // 셀 더블클릭 -> 하위 레벨 재조회(L1~L4). L5 는 호출되지 않는다(design 01 §2 L6).
   onDrillDown: (row: Record<string, unknown>) => void;
   onFocus: () => void;
+  // 편집 배타(AS-IS 파리티) — 다른 그리드에 미저장이 있으면 true 반환(+안내). 편집/붙여넣기 시작을 막는다.
+  guardEditStart: () => boolean;
 }
 
 // Wijmo 는 셀 DOM 을 재사용하므로 조건 미해당 시에도 항상 클래스를 해제한다(hook #95 §1-4).
@@ -51,6 +53,7 @@ export const CapaLineMasterLevelGrid = ({
   adminColumns,
   onDrillDown,
   onFocus,
+  guardEditStart,
 }: Props) => {
   const columns = useMemo(() => buildColumns(level, adminColumns), [level, adminColumns]);
 
@@ -64,6 +67,8 @@ export const CapaLineMasterLevelGrid = ({
   rowCountRef.current = rows.length;
   const drillRef = useRef(onDrillDown);
   drillRef.current = onDrillDown;
+  const guardEditStartRef = useRef(guardEditStart);
+  guardEditStartRef.current = guardEditStart;
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -91,7 +96,18 @@ export const CapaLineMasterLevelGrid = ({
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      e.cancel = !isCellEditable(level, binding, row, canEditRef.current);
+      // 읽기전용 셀은 조용히 취소한다 — 이 셀 더블클릭은 '드릴 의도'라 배타 안내(MSG01210)를 띄우면 안 된다.
+      //   편집가능 판정을 먼저 두어야 배타 가드가 '진짜 편집 시도'(편집가능 셀)에만 걸린다.
+      if (!isCellEditable(level, binding, row, canEditRef.current)) {
+        e.cancel = true;
+        return;
+      }
+      // 편집 배타(AS-IS 파리티) — 다른 그리드가 미저장이면 편집가능 셀의 편집 시작을 막는다(안내 포함).
+      if (guardEditStartRef.current()) {
+        e.cancel = true;
+        return;
+      }
+      e.cancel = false;
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
 
@@ -103,26 +119,34 @@ export const CapaLineMasterLevelGrid = ({
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      if (!isCellEditable(level, binding, row, canEditRef.current)) e.cancel = true;
+      // 읽기전용 셀은 조용히 취소(배타 안내 없이). 붙여넣기도 편집이므로 편집가능 셀에만 배타를 건다.
+      if (!isCellEditable(level, binding, row, canEditRef.current)) {
+        e.cancel = true;
+        return;
+      }
+      if (guardEditStartRef.current()) e.cancel = true;
     };
     grid.pastingCell.addHandler(pastingCellHandler);
 
     // 드릴다운 — L1~L4 셀 더블클릭 시 하위 레벨 재조회(cs:1743~1814). 가드: L5 제외 / rows 0건.
-    //   수정 모드 억제축은 미이식(asis_to_tobe.md §11). 더블클릭의 주 동작은 드릴다운이다 —
-    //   편집가능 셀(노란 셀)이든 아니든 더블클릭하면 드릴다운한다(사용자 지시 2026-11-02).
-    //   주의: 편집가능 셀을 더블클릭하면 공용 DataGrid 가 네이티브 편집기를 띄워(DataGrid.tsx:1681)
-    //   그 input 이 셀을 덮어 hitTest 가 Cell 이 아니게 된다 → 현재 선택행(selection.row)으로 보정하고,
-    //   열린 편집기는 닫은 뒤 드릴다운한다. 셀 편집 자체는 단일클릭·F2·키인으로 시작한다(편집가능 표시는 유지).
+    //   편집 vs 드릴 구분(AS-IS 재현, 사용자 확정 2026-11-13): AS-IS CellDoubleClick 은 편집모드(Action
+    //   컬럼 visible)면 드릴을 억제하고 셀을 편집, 아니면(잠김) 드릴한다(cs:1748~). TO-BE 는 편집모드 토글이
+    //   없으니 셀 편집가능 여부로 가른다 — 편집가능 셀(노란 셀) 더블클릭 = 편집(드릴 X, 편집기 유지),
+    //   읽기전용 셀 = 드릴. 편집기가 셀을 덮어 hitTest 가 Cell 이 아니면 활성 셀(selection)로 보정해 판정한다.
     const dblClickHandler = (ev: MouseEvent) => {
       if (!canDrillDown(level, rowCountRef.current)) return;
       const hit = grid.hitTest(ev);
-      const rowIndex = hit.cellType === CellType.Cell ? hit.row : (grid.selection?.row ?? -1);
+      const isCell = hit.cellType === CellType.Cell;
+      const rowIndex = isCell ? hit.row : (grid.selection?.row ?? -1);
+      const colIndex = isCell ? hit.col : (grid.selection?.col ?? -1);
       if (rowIndex < 0) return;
       const row = GridUtils.getRow(grid, rowIndex) as Record<string, unknown> | undefined;
       if (!row) return;
-      // 신규행('I')은 자기 레벨 ID 가 빈 값이라 드릴다운하면 빈 키로 하위를 조회한다 — 무동작으로 막는다.
-      //   AS-IS 도 편집모드(Action 컬럼 visible)면 더블클릭 드릴다운을 억제했다(cs:1748~). 수정모드 토글
-      //   자체는 미이식(asis_to_tobe §11)하되, 신규행 드릴다운 억제 의도만은 유지한다(사용자 확정 2026-11-06).
+      // 편집가능 셀 더블클릭 = 편집 의도 → 드릴하지 않는다(편집기는 그대로 둔다). AS-IS 편집모드 셀과 동형.
+      const binding = colIndex >= 0 ? (grid.columns[colIndex]?.binding ?? '') : '';
+      if (isCellEditable(level, binding, row, canEditRef.current)) return;
+      // 신규행('I')은 자기 레벨 ID 가 빈 값이라 드릴다운하면 빈 키로 하위를 조회한다 — 무동작으로 막는다
+      //   (신규행 드릴 억제 의도 유지, 사용자 확정 2026-11-06).
       if (isInsertRow(row)) return;
       if (grid.activeEditor) grid.finishEditing(true);
       drillRef.current(row);

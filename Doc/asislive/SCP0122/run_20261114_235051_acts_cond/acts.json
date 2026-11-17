@@ -1,0 +1,96 @@
+{
+ "id": "SCP0122",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboPlanGroup",
+     "before": [
+      "E129A_E128A",
+      15,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "18650",
+      14,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0122-S1094a1"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboPlanGroup",
+     "before": [
+      "18650",
+      14,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "E129A_E128A",
+      15,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0122-S1094a1"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "ClbDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 1
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-14 23:50:27"
+}

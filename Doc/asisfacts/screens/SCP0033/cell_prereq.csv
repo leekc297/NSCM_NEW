@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+ITEM_ID,,DIVISION_ID,NEW,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""Division"" })","if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, 0) == ""I"")",SCP0033_Shipment_semi_dept_day.cs:466 SCP0033_Shipment_semi_dept_day.SpdMain_CellClick

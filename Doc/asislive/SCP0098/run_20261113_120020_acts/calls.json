@@ -1,0 +1,44 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 11:58:48.586",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 4,
+   "rows_kind": "DataSet rows",
+   "ms": 7.35,
+   "params": {
+    "p_program_id": "SCP0098",
+    "p_sheet_name": "CAPA_SMALL",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0098', @p_sheet_name='CAPA_SMALL', @p_column_type='M', @p_user_id='jaeuk.shin'",
+   "phase": "action:BtnMeasure"
+  },
+  {
+   "at": "2026-11-13 11:58:57.698",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 5.15,
+   "params": {
+    "p_menu_id": "SCP0098",
+    "p_log_type": "FIND",
+    "p_log_cnt": "1973",
+    "p_db_time": "28.738",
+    "p_ui_time": "8.409",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0098', @p_log_type='FIND', @p_log_cnt='1973', @p_db_time='28.738', @p_ui_time='8.409', @p_user_id='jaeuk.shin'",
+   "phase": "action:BtnMeasure"
+  }
+ ]
+}

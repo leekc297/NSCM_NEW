@@ -1,0 +1,136 @@
+{
+ "id": "SCP0011",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0011_GET_PRODUCTION_PLAN_MODEL"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     439
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     19
+    ],
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     439
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     19
+    ],
+    [
+     "SCP0011_GET_PRODUCTION_PLAN_MODEL",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 2575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "scenarios": [
+    "SCP0011-Sea1449",
+    "SCP0011-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0011-Scf33ed",
+    "SCP0011-S963877",
+    "SCP0011-S3e4aef",
+    "SCP0011-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnCal",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 12
+  }
+ ],
+ "at": "2026-11-14 15:01:07.410",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i1",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "1"
+  },
+  "label": "cboBucketType 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:Weekly",
+  "value": "WEEKLY",
+  "text": "Weekly",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

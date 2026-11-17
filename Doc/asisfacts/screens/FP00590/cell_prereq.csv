@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+ACTION_05_NAME,,,ALL,ROW,"MessageHelper.GMessageBox(""MSG00002"", new object[] { ""Plan ID"" })",if (siMain != null),FP00590_Plan_Control.cs:1662 FP00590_Plan_Control.SpdMain_CellClick

@@ -1,0 +1,78 @@
+{
+ "menu_id": "SSP0015",
+ "asis_id": "SSP0015",
+ "generated": "2026-11-14 21:30:11",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SSP0015)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "10.2시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-plan-mobility-it · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-plan-mobility-it\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "OK",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "화면 행 있음"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "38건 있음 · TO-BE PROC 미매칭 4건(SSP0015:DM0003_GET_BUCKET_TYPE_CODE, SSP0015:SSP0002_GET_NERP_CODE, SSP0015:PR_SCM_SYS_LOG_BATCH, SSP0015:SSP0003_GET_SSP_PLAN_PROCESSING_CHECK) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SSP0015 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jinhuannj SSP0015 → SSP0015 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 385s · SSP0015.smoke.spec.ts:115:7 › SSP0015 ShipmentPSI 스모크 @smoke › 공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual # E2E 결과 — 2026-11-14 21:30 테스트 5 · PASS 0 · FAIL 5 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0015\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0015\\run_20261114_212346_smoke.log"
+  }
+ ]
+}

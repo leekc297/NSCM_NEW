@@ -138,6 +138,7 @@ export const DemandExceptionForm = () => {
                   <CustomDropdown
                     multiple
                     allOption
+                    useClearIcon
                     value={searchParams.scmSiteId}
                     options={siteOptions}
                     onChange={(_, option) => setSearchParams({ scmSiteId: option })}
@@ -188,6 +189,7 @@ export const DemandExceptionForm = () => {
                   <CustomDropdown
                     multiple
                     allOption
+                    useClearIcon
                     value={searchParams.planGroupId}
                     options={planGroupOptions}
                     onChange={(_, option) => setSearchParams({ planGroupId: option })}

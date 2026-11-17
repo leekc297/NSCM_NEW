@@ -1,0 +1,40 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999",
+   "steps": [
+    {
+     "sheet": "Distribution Route",
+     "row": 0,
+     "col": 30,
+     "before": "0",
+     "after": "0",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "LT_ARRIVAL_INLAND",
+      "value": "1000"
+     }
+    }
+   ],
+   "dialogs": [],
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:32:48",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

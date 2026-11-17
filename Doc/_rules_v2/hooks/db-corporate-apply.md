@@ -10,13 +10,15 @@
 
 - "사내 DB 적용해줘 / 클라우드 적용 / cloud apply / corporate apply"
 - "Docker 적용분을 사내에 / 양쪽 DB 동기화"
-- 사내 DB (`175.211.29.206:2521/ZIOUI1`, 2026-06-15 IP · 2026-06-17 Service Name · 2026-07-27 IP:PORT · 2026-09-02 IP:PORT · 2026-09-05 DB 교체 AJS · ⭐ 2026-09-07 DB명 ZIOUI1) 에 SQL 실행 요청
+- 사내 DB (`175.211.29.206:2521/ZIOUI1`, 2026-06-15 IP · 2026-06-17 Service Name · 2026-07-27 IP:PORT · 2026-09-02 IP:PORT · 2026-09-05 DB 교체 AJS · ⭐ 2026-09-07 DB명 ZIOUI1) 에 SQL 실행 요청 (2026-11-13 정정: 현행 접속 주소 `175.211.29.206` → `59.19.252.148:2521/ZIOUI1`(2026-10-13 변경) · 접속 계정 `.env.asis` `TOBE_DB_USER=system` — 정본 = `.env.asis` `TOBE_DB_*` · `_artifacts/_apply_corporate/apply.sh` `CONN`. §1.1 명령 예시의 주소도 이 값으로 읽는다)
   - 이전 접속(보관/DEPRECATED): `175.211.29.206:3521/OCGSCMD_P01` · `100.65.143.121:1521/OCGSCMD_P01` · `121.162.245.167:2521/OCGSCMD_P01`
 - Docker 와 사내 DB row count 차이 검토 후 patch 작업
 
 ---
 
 ## §1. 접속 도구 — Docker exec sqlplus (사내 Oracle Instant Client 미설치 우회)
+
+> (2026-11-14 정정: 현행 접속 도구는 `tools/DbConn`(`dbconn.py`, `run_sql.py`). python-oracledb thin 방식이라 클라이언트 설치가 필요 없다. docker exec sqlplus 는 `_artifacts/_apply_corporate/apply.sh` 에 남은 구 방식이다.)
 
 ### 1.1 패턴 (의무)
 ```bash
@@ -74,13 +76,13 @@ tr -d '\r' < script.sql | docker exec -i nscm-oracle bash -c \
 ### 3.1 사내 DB baseline 캡쳐
 - 전체 row count (MNU/API/PROC/SHEET/BTN/GR_MNU/GR_BTN/MSG)
 - 대상 화면별 row count (MNU_ID/PROGRAM_ID/PROC_NM LIKE)
-- 메타 테이블 owner 확인 (SCM_MGR 본인 schema vs SCMC vs SCMD_APP SYNONYM)
+- 메타 테이블 owner 확인 (SCM_MGR 본인 schema vs SCMC vs SCMP_APP SYNONYM) (11-13 정정)
 
 ### 3.2 객체 owner 3-tier 패턴
 | Owner | 역할 |
 |---|---|
 | **SCM_MGR** | 메타 등록 + 본인 schema TABLE (INSERT/UPDATE 대상) |
-| **SCMD_APP** | application user — SCM_MGR.* 의 SYNONYM 보유 (DML 권한만) |
+| **SCMP_APP** | application user — SCM_MGR.* 의 SYNONYM 보유 (DML 권한만) (2026-11-13 정정: `SCMD_APP` → `SCMP_APP` — 사내 ZIOUI1 의 BE 앱 계정은 `SCMP_APP`, 이 DB 에 `SCMD_APP` 계정 없음) |
 | **SCMC** | 별도 schema (legacy/cross-system) — 직접 수정 금지 |
 
 ### 3.3 적용 전 사용자 결정 의무

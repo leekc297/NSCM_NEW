@@ -1,0 +1,438 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 4개 전부 원문 등장: `biz:CommonData.CommonDataList`, `biz:CommonData.YesOrNo`, `SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY`, `SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY`
+2. business_analysis.md 에 SP 2개 전부 등장: `SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY`, `SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY`
+3. screen_design.md 에 컨트롤 8개 전부 등장: `usrLayoutControl1`, `usrConditionPanel1`, `usrLayoutControl2`, `cboValidYN`, `txtItemId`, `clbDivision`, `spdMain`, `spdMain_Sheet1`
+4. screen_design.md 에 시트 1개 전부 등장: `Shipment Semi Dept Day`
+5. screen_design.md 에 이벤트 핸들러 4개와 엔드포인트 전부 등장: `Form_Load`, `SpdMain_CellClick`, `SpdMain_KeyPress`, `SpdMain_TopChange`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SCP0033-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SCP0033 Shipment Semi Dept Day — AS-IS 분석서
+
+> 출처: AsisFacts 정적 추출 Fact Pack(SCP0033). Fact Pack에 없는 내용은 **확인 필요**로 표시했습니다.
+
+## 1. 화면 개요
+
+| 항목 | 값 |
+|---|---|
+| 화면 ID | SCP0033 |
+| 도메인 | SCP (경로 `06.UIL\GSCM.SCP.Forms.UIL\Master\` 기준) |
+| 클래스 | `SCP0033_Shipment_semi_dept_day` |
+| Form Text | `SCP0033_Shipment_semi_dept_day` (Designer.cs:310) |
+| 프로젝트 | `06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.csproj` |
+| 메뉴명·화면 제목(업무 명칭) | 확인 필요 (TB_FX_MenuItemInfo 1행, TB_FX_ProgramInfo 1행이 있지만 Fact Pack에 내용이 없음) |
+
+### 1-1. 파일 구성
+
+| 구분 | 파일 | 줄수 |
+|---|---|---:|
+| current | `...\SCP0033_Shipment_semi_dept_day\Properties\AssemblyInfo.cs` | 37 |
+| current | `...\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs` | 584 |
+| current | `...\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs` | 351 |
+| shared | 없음 (Fact Pack에 없음) | - |
+| legacy | 없음 (Fact Pack에 없음) | - |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 258 | `SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY` | MATCH | SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY |
+| button:SaveButton | SaveButton > SaveData_Main | 380 | `SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY` | MATCH | SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main (저장 후 재조회) | 258 | `SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY` | MATCH | SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY |
+| unreached (진입점 미연결) | `<field:dtDepartureDay>` | 43 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | - |
+| unreached (진입점 미연결) | `<field:dtYesOrNo>` | 44 | `biz:CommonData.YesOrNo` | BIZ_MATCH | - |
+
+- 조회 시 `FindData_Main`은 `GetCheckedListValue`(CString.GetCheckedListValue, CODE 컬럼)를 241·242·244줄에서 호출합니다. 어떤 컨트롤의 값인지는 확인 필요입니다(조회조건 중 UsrCheckedList는 `clbDivision` 1개만 있음).
+- 필드 초기화(43·44줄)에서 공통 데이터를 받지만 이벤트·버튼 진입점과의 연결은 정적으로 확인되지 않았습니다. 이 데이터를 어느 컨트롤이나 Grid 셀에 바인딩하는지는 확인 필요입니다.
+
+## 3. 엔드포인트 전체 표
+
+| 엔드포인트 | 상태 | 호출 수 | SP | 참조 객체 (SP 내부 EXEC 전이 포함) |
+|---|---|---:|---|---|
+| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | - (Biz) | 코드분기 UP_FX_GetCommonDataList: SELECT SCM_ADM_LOOKUP_MASTER, SELECT SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `biz:CommonData.YesOrNo` | BIZ_MATCH | 1 | - (Biz) | 확인 필요 |
+| `SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY` | MATCH | 1 | SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | REF FN_GET_DIVISION_DIV, SELECT SCM_MST_ITEM_SN, SELECT SCP_MST_SHIPMENT_SEMI_DEPT_DAY, REF STRING_SPLIT, SELECT SCM_MST_DIVISION |
+| `SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY` | MATCH | 1 | SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY | EXEC PR_SCM_SYS_LOG_BATCH, REF SCM_ARR_SPL_CNT, REF SCM_ARR_SPL_VAL, EXEC PR_SCP_MST_SHIPMENT_SEMI_DEPT_DAY_HIST, UPDATE/INSERT SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT SCM_SYS_LOG_BATCH, INSERT SCP_MST_SHIPMENT_SEMI_DEPT_DAY_H |
+
+- 주석 처리된 호출: 0건
+
+## 4. 이벤트 배선
+
+| 대상 | 이벤트 | 핸들러 | 등록 위치 |
+|---|---|---|---|
+| this | Load | `Form_Load` | .ctor:83 |
+| this.spdMain | CellClick | `SpdMain_CellClick` | .ctor:84 |
+| this.spdMain | KeyPress | `SpdMain_KeyPress` | .ctor:85 |
+| spdMain | TopChange | `SpdMain_TopChange` | InitEvent:107 |
+
+- 각 핸들러의 처리 내용(본문)은 Fact Pack에 없어 확인 필요입니다.
+
+## 5. Grid 구성 방식
+
+**구성 방식: `META(프레임워크) (+코드 표시/라벨 변경)`**
+
+- 시트 생성: `CreateSpread`에서 `AddSheet`(147줄, 인자 `spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30`) → `GetSheetInfo`(148줄) → `ChangeSheet`(149줄). 시트 이름은 **Shipment Semi Dept Day**입니다.
+- 컬럼 생성: `InitSpread`에서 `InitSheet`(156줄) → `SetSheetHeaderColumn`(161줄, 컬럼 헤더 1행)을 호출합니다. 이 메서드가 SCM_MST_SHEET_COLUMNS 메타를 읽습니다(COLUMN_NAME, COLUMN_LABEL_NAME, COLUMN_WIDTH, VISIBLE_FLAG, VALID_YN, CELL_CONTROL_OBJECT_TYPE_CODE, CELL_COMBO_DATA_TYPE, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, UPPERCASE_APPLY_FLAG, ATTRIBUTE1~5 등).
+- 코드 보정:
+  - `InsertButton`(204줄): 시트가 `Shipment Semi Dept Day`이고 잠금 상태가 아니면, 새 행의 `DIVISION_ID` 셀을 Combo로 바꿉니다. 콤보 데이터는 `BLUtils.GetDivision(false, "")`(변수 `dtMyDivision`)입니다.
+  - `InitializeComponent`(Designer.cs 270~273줄): 컬럼 헤더 스타일만 바꿉니다(HorizontalAlignment·VerticalAlignment = General, NoteIndicatorColor = Red, Parent = ColumnHeaderDefaultEnhanced).
+- Division별 차이: **없음**. 40, 81, 81_HD/HG/HM/ST/UC, 82, EE, EE_HD/HG/HM/ST/UC 모두 메타 10컬럼(필수 10/선택 0)이고, 최종 표시도 10컬럼입니다. `S_VALID_YN`은 모든 division에서 숨김입니다.
+- 분기 조건 판단불가: 0건
+
+## 6. 확인 필요 항목
+
+1. `dtDepartureDay`(LookupCommon)와 `dtYesOrNo`의 바인딩 대상: 진입점 미연결이고, 어떤 Lookup 코드값을 쓰는지도 Fact Pack에 없습니다.
+2. 이벤트 핸들러 4개(`Form_Load`, `SpdMain_CellClick`, `SpdMain_KeyPress`, `SpdMain_TopChange`)의 본문 로직
+3. `FindData_Main` 241·242·244줄 `GetCheckedListValue` 3회 호출 각각의 대상 컨트롤과 SP 파라미터 매핑
+4. `cboValidYN` 콤보 항목의 데이터 소스
+5. 삭제(Delete) 버튼의 존재 여부: 흐름에는 Find·Save만, grid_code에는 Insert·Edit만 나타남
+6. 권한(TB_FX_GroupMenuAuth 11행)과 조회조건 메타(TB_FX_SearchCondition 2행)의 내용
+7. 실제 SP 실행 결과와 일치하는 시트가 없음(grid 단계 미실행 또는 시트명 불일치)
+
+
+# 1차 분석서 — web_components.md
+# SCP0033 웹 컴포넌트 매핑
+
+## 1. 컨트롤 → React/Wijmo 매핑
+
+| AS-IS 컨트롤 | 유형 | 라벨 (원문) | TO-BE 후보 | 비고 |
+|---|---|---|---|---|
+| txtItemId | TextBox | `Model` (layoutControlItem13) | 텍스트 입력 | Size 198×24 |
+| cboValidYN | UsrCombo | `Valid` (layoutControlItem3) | ComboBox (Wijmo) | Size 155×20, 항목 소스는 확인 필요 |
+| clbDivision | UsrCheckedList | `Division` (layoutControlItem4) | MultiSelect (Wijmo) | Size 199×21, GetCheckedListValue(CODE) |
+| emptySpaceItem3 | EmptySpaceItem | - | 여백 | 473×28 |
+| usrConditionPanel1 | UsrConditionPanel | - | 조회조건 영역 | Dock Top, PanelType HidePanel |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView | - | FlexGrid (Wijmo) | Dock Fill |
+| usrLayoutControl1 / layoutControlGroup1 | Layout | - | 확인 필요 | 657×184, parent 미확인 |
+| imageList1 | ImageList | - | 미사용 후보 | 용도는 확인 필요 |
+
+## 2. 화면 배치
+
+- props.csv에는 SplitContainer가 없습니다. 분할 컨트롤 없이 Dock으로만 배치합니다.
+- 상단: `usrConditionPanel1` Dock Top, 1168×48
+- 하단: `spdMain` Dock Fill, 1168×544
+- 상/하 비율(Designer 크기 기준): 48 : 544, 약 8.1% : 91.9%
+- 조회조건 순서(LayoutControl 기준): Model(239×28) · 여백(473×28) · Valid(189×28) · Division(247×28). 실제 좌표 순서는 Location이 Fact Pack에 없어 확인 필요입니다.
+
+## 3. 시트별 Grid 컬럼 — `Shipment Semi Dept Day`
+
+구성: META(SetSheetHeaderColumn) + 코드 보정(InsertButton의 DIVISION_ID Combo, 헤더 스타일)
+
+| 컬럼 | 라벨 (메타 원문) | 출처 | 40 | 81 계열 (81, _HD/_HG/_HM/_ST/_UC) | 82 | EE 계열 (EE, _HD/_HG/_HM/_ST/_UC) |
+|---|---|---|---|---|---|---|
+| DIVISION_ID | Division* | META (+코드 Combo, 행 추가 시) | 기본 | 기본 | 기본 | 기본 |
+| ITEM_ID | Model* | META | 기본 | 기본 | 기본 | 기본 |
+| NICK_NAME | Nick Name | META | 기본 | 기본 | 기본 | 기본 |
+| OPERATION_GROUP | Operation Group | META | 기본 | 기본 | 기본 | 기본 |
+| DEPARTURE_DAY | Departure day | META | 기본 | 기본 | 기본 | 기본 |
+| VALID_YN | Valid | META | 기본 | 기본 | 기본 | 기본 |
+| S_VALID_YN | S_VALID_YN | META | 숨김 | 숨김 | 숨김 | 숨김 |
+| CREATED_BY | Created By | META | 기본 | 기본 | 기본 | 기본 |
+| CREATION_DATE | Creation Date | META | 기본 | 기본 | 기본 | 기본 |
+| LAST_UPDATED_BY | Last Updated By | META | 기본 | 기본 | 기본 | 기본 |
+| LAST_UPDATE_DATE | Last Update Date | META | 기본 | 기본 | 기본 | 기본 |
+
+- 표시 컬럼 수: 모든 division에서 10개(division별 차이 없음)
+- 위 표의 행 순서는 grid_effective.csv의 순서가 아닙니다. 실제 컬럼 순서·폭·정렬·셀 타입(DEPARTURE_DAY, VALID_YN의 Combo 여부 등)은 SCM_MST_SHEET_COLUMNS 원문 확인이 필요합니다.
+- 헤더 스타일: Horizontal/VerticalAlignment General, NoteIndicatorColor Red, Parent ColumnHeaderDefaultEnhanced (Designer.cs 270~273)
+
+## 4. 시트 연결 규칙
+
+| 시트 | 연결 규칙 | 설명 |
+|---|---|---|
+| Shipment Semi Dept Day | META+코드연결 | 코드에서 AddSheet/ChangeSheet로 메타 시트를 사용함 (CreateSpread 147~149) |
+
+- 시트는 1개이고, 마스터-디테일 연결은 없습니다.
+
+
+# 1차 분석서 — tobe_design.md
+# SCP0033 TO-BE 설계 입력
+
+## 1. 조회조건 (컨트롤 기준)
+
+| 라벨 (AS-IS 원문) | AS-IS 컨트롤 | TO-BE 형태 | 값 소스 |
+|---|---|---|---|
+| Model | txtItemId (TextBox) | 텍스트 입력 | 자유 입력 |
+| Valid | cboValidYN (UsrCombo) | 단일 콤보 | 확인 필요 (biz:CommonData.YesOrNo 후보, 바인딩 미확인) |
+| Division | clbDivision (UsrCheckedList) | 다중 선택 | CODE 값 (GetCheckedListValue) |
+
+- 조회조건 메타 TB_FX_SearchCondition은 2행입니다. 컨트롤은 3개라서 개수가 다르며, 원인은 확인 필요입니다.
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | AS-IS | 호출 엔드포인트 | 비고 |
+|---|---|---|---|
+| 조회 | FindButton → FindData_Main | SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | |
+| 저장 | SaveButton → SaveData_Main | SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY → 재조회 GET | |
+| 행 추가 | InsertButton (204줄) | 서버 호출 없음 | DIVISION_ID 셀을 Combo로 설정, 데이터는 BLUtils.GetDivision(false, "") |
+| 편집 | EditButton (219줄) | 서버 호출 없음 (GetSheetInfo만 확인) | 상세 로직 확인 필요 |
+| 삭제 | 확인 필요 | 확인 필요 | Fact Pack에 없음 |
+| 화면 로드 | Form_Load | 확인 필요 | 본문 미추출 |
+| Grid 이벤트 | SpdMain_CellClick / SpdMain_KeyPress / SpdMain_TopChange | 확인 필요 | 본문 미추출 |
+| 공통 데이터 | 필드 43·44줄 | CommonData.CommonDataList [LookupCommon], CommonData.YesOrNo | 진입점 미연결 |
+
+## 3. Division별 Grid 변형 요약
+
+- 시트는 `Shipment Semi Dept Day` 1개입니다. 모든 division(40, 81 계열, 82, EE 계열)에서 표시 컬럼이 10개로 같아 변형이 없습니다.
+- 숨김 컬럼: `S_VALID_YN`
+- 필수 표시 라벨: `Division*`, `Model*`
+
+## 4. 권한 (C/R/U/D) 관련 사실
+
+- TB_FX_GroupMenuAuth 11행, TB_FX_MenuItemInfo 1행, TB_FX_ProgramInfo 1행이 있습니다. 그룹별 C/R/U/D 값은 Fact Pack에 없어 확인 필요입니다.
+- InsertButton 처리는 `siMain.IsLock(siMain.SheetName) == false`일 때만 Combo를 설정합니다(시트 잠금 조건).
+
+## 5. 미확정 사항
+
+1. 이벤트 핸들러 4개의 로직
+2. Valid 콤보와 Grid의 DEPARTURE_DAY·VALID_YN 셀 타입 및 콤보 소스(LookupCommon 코드값 포함)
+3. 삭제 기능 여부
+4. Grid 컬럼의 순서·폭·정렬·편집 가능 여부 (SCM_MST_SHEET_COLUMNS 원문)
+5. GET/SAVE SP의 파라미터 목록과 저장 키 구성
+6. 권한 행의 상세 값
+7. usrLayoutControl1(657×184)과 imageList1의 용도
+
+
+# Fact Pack — SCP0033
+# SCP0033 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.csproj | 584 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.csproj | 351 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 258 | SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | MATCH | SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main | 258 | SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | MATCH | SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY |
+| button:SaveButton | SaveButton > SaveData_Main | 380 | SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY | MATCH | SP SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY |
+| unreached:(진입점 미연결) | <field:dtDepartureDay> | 43 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtYesOrNo> | 44 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | MATCH | 1 | SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY | EXEC:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY, REF:FN_GET_DIVISION_DIV, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, REF:STRING_SPLIT, SELECT:SCM_MST_DIVISION |  |
+| SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY | MATCH | 1 | SP SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY | EXEC:SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_SEMI_DEPT_DAY_HIST, UPDATE:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY_H |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| SetSheetHeaderColumn | InitSpread:161 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| GetCheckedListValue | FindData_Main:241, FindData_Main:242, FindData_Main:244 | CString.GetCheckedListValue | CODE |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:83 |
+| this.spdMain | CellClick | SpdMain_CellClick | .ctor:84 |
+| this.spdMain | KeyPress | SpdMain_KeyPress | .ctor:85 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:107 |
+
+## 6. 컨트롤 (15개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 3 | layoutControlItem13, layoutControlItem3, layoutControlItem4 |
+| UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup2 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrCombo | 1 | cboValidYN |
+| TextBox | 1 | txtItemId |
+| UsrCheckedList | 1 | clbDivision |
+| EmptySpaceItem | 1 | emptySpaceItem3 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 3 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 11 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_GroupMenuAuth | 11 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 2 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0033 | Shipment Semi Dept Day | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 | 10/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Shipment Semi Dept Day
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:161
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 270 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 271 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 272 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 273 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Semi Dept Day | META+코드연결 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 | 10 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (4 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","<field:dtDepartureDay>","43","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","<field:dtYesOrNo>","44","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","FindData_Main","258","ctor","fox","SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","MATCH","SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","EXEC:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY, REF:FN_GET_DIVISION_DIV, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, REF:STRING_SPLIT, SELECT:SCM_MST_DIVISION","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","SaveData_Main","380","ctor","fox","SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY","SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY","MATCH","SP SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY","EXEC:SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_SEMI_DEPT_DAY_HIST, UPDATE:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY_H","",""
+```
+
+### FILE flow.csv (5 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","button","FindButton","FindButton > FindData_Main","FindData_Main","258","SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","MATCH","SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","EXEC:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY, REF:FN_GET_DIVISION_DIV, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, REF:STRING_SPLIT, SELECT:SCM_MST_DIVISION"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","button","SaveButton","SaveButton > SaveData_Main","SaveData_Main","380","SCP.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY","MATCH","SP SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY","EXEC:SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_SHIPMENT_SEMI_DEPT_DAY_HIST, UPDATE:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY_H"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","button","SaveButton","SaveButton > SaveData_Main > FindData_Main","FindData_Main","258","SCP.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","MATCH","SP SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY","EXEC:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY, REF:FN_GET_DIVISION_DIV, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_MST_SHIPMENT_SEMI_DEPT_DAY, REF:STRING_SPLIT, SELECT:SCM_MST_DIVISION"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","unreached","(진입점 미연결)","<field:dtYesOrNo>","<field:dtYesOrNo>","44","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","unreached","(진입점 미연결)","<field:dtDepartureDay>","<field:dtDepartureDay>","43","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (4 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day",".ctor","83","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day",".ctor","84","this.spdMain","CellClick","SpdMain_CellClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day",".ctor","85","this.spdMain","KeyPress","SpdMain_KeyPress","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","InitEvent","107","spdMain","TopChange","SpdMain_TopChange","+="
+```
+
+### FILE controls.csv (15 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","cboValidYN","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","txtItemId","System.Windows.Forms.TextBox","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","clbDivision","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","layoutControlItem13","DevExpress.XtraLayout.LayoutControlItem","","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","spdMain","FarPoint.Win.Spread.FpSpread","this","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","imageList1","System.Windows.Forms.ImageList","","47"
+```
+
+### FILE props.csv (26 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","67","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","71","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","80","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","85","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","88","usrConditionPanel1","Size","new System.Drawing.Size(1168, 48)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","90","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","98","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","102","usrLayoutControl2","Size","new System.Drawing.Size(1168, 48)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","104","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","136","cboValidYN","Size","new System.Drawing.Size(155, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","144","txtItemId","Size","new System.Drawing.Size(198, 24)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","179","clbDivision","Size","new System.Drawing.Size(199, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","197","layoutControlGroup2","Size","new System.Drawing.Size(1168, 48)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","202","layoutControlItem13","Control","this.txtItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","207","layoutControlItem13","Size","new System.Drawing.Size(239, 28)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","209","layoutControlItem13","Text","""Model"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","219","emptySpaceItem3","Size","new System.Drawing.Size(473, 28)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","224","layoutControlItem3","Control","this.cboValidYN"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","227","layoutControlItem3","Size","new System.Drawing.Size(189, 28)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","228","layoutControlItem3","Text","""Valid"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","235","layoutControlItem4","Control","this.clbDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","239","layoutControlItem4","Size","new System.Drawing.Size(247, 28)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","240","layoutControlItem4","Text","""Division"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","248","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","253","spdMain","Size","new System.Drawing.Size(1168, 544)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","310","this","Text","""SCP0033_Shipment_semi_dept_day"""
+```
+
+### FILE grid_effective.csv (11 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Shipment Semi Dept Day","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","DEPARTURE_DAY","Departure day","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","DIVISION_ID","Division*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","ITEM_ID","Model*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","OPERATION_GROUP","Operation Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Semi Dept Day","META+코드연결","S_VALID_YN","S_VALID_YN","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Shipment Semi Dept Day","META+코드연결","VALID_YN","Valid","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (11 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","CreateSpread","147","Shipment Semi Dept Day","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Semi Dept Day ¦ Shipment Semi Dept Day ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","CreateSpread","148","Shipment Semi Dept Day","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","CreateSpread","149","Shipment Semi Dept Day","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","InitSpread","156","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","InitSpread","161","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ 1","siObj,iColumnHeaderRowCount","","siMain ¦ 1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","InsertButton","204","","OTHER","SetCellTypeCombo","EXPR","","","DIVISION_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.DIVISION_ID)} ¦ {?BLUtils.GetDivision(false, """")}","iRow,iCol,dt","if(fps.Name == ""spdMain"") ⟫ if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Shipment Semi Dept Day"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.DIVISION_ID) ¦ dtMyDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.cs","SCP0033_Shipment_semi_dept_day","EditButton","219","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","","spdMain.Name ¦ fps.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","270","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","271","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","272","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0033_Shipment_semi_dept_day\SCP0033_Shipment_semi_dept_day.Designer.cs","SCP0033_Shipment_semi_dept_day","InitializeComponent","273","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (0 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

@@ -1,0 +1,308 @@
+{
+ "id": "SCP0001",
+ "dry": false,
+ "name": "update",
+ "kind": "edit",
+ "scenario": {
+  "table": "SCM_MST_SITE",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID"
+  },
+  "save_sp": "SCP0001_SAVE_PLANT_SITE",
+  "side": [
+   {
+    "table": "SCM_MST_SITE_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "related": [
+   {
+    "table": "SCM_MST_VENDOR",
+    "pk": [
+     "COMPANY_ID",
+     "VENDOR_CODE"
+    ],
+    "match": {
+     "COMPANY_ID": "COMPANY_ID",
+     "VENDOR_CODE": "PLANT_ID"
+    }
+   },
+   {
+    "table": "SCM_PLANT_M_SN",
+    "pk": [
+     "COMPANY_ID",
+     "DIVISION_ID",
+     "SITE_ID",
+     "PLANT_ID"
+    ],
+    "match": {
+     "DIVISION_ID": "DIVISION_ID",
+     "PLANT_ID": "PLANT_ID"
+    }
+   }
+  ],
+  "basis": "foxml SCP0001_SAVE_PLANT_SITE → SP SCP0001_SAVE_PLANT_SITE 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = MERGE SCM_MST_SITE(DIVISION_ID, SCM_SITE_ID) · PR_SCM_MST_SITE_HIST 이력 INSERT · SCP0001_SAVE_SCM_MST_VENDOR 가 OSP_YN=Y 면 SCM_MST_VENDOR.ATTRIBUTE1(COMPANY_ID, VENDOR_CODE=PLANT_ID), N 이면 SCM_PLANT_M_SN.DESCRIPTION(DIVISION_ID, PLANT_ID · LGCE_FPDEV_TR.dbo.SCM_PLANT_M 시노님)을 UPDATE — 두 표를 함께 기록·복원 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+  "name": "update",
+  "title": "DB 에 있는 행의 PROD_FROZEN 수정(+1) 뒤 저장 · 복원",
+  "edits": [
+   {
+    "pick": {
+     "col": "PROD_FROZEN",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PROD_FROZEN",
+     "db_col": "PROD_FROZEN",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 23:31:02",
+ "status": "OK",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "SCM_SITE_ID": "EG01_81-W",
+   "PLANT_ID": "EG01",
+   "OPERATION_GROUP": "W",
+   "SITE_DESCRIPTION": "LGESEG Automotive Waranty EG01",
+   "SITE_TYPE": "PLANT",
+   "CITY": "EGCAI",
+   "COUNTRY": "EG",
+   "DEPT_ID": "PLANT",
+   "VMI_YN": "N",
+   "VALID_YN": "Y",
+   "NEW_YN": "Y",
+   "SITE_HRCY_ID": null,
+   "OSP_YN": "N",
+   "SHIP_FROZEN": 11,
+   "PROD_FROZEN": 0,
+   "END_CUSTOMER": null,
+   "SOLDTO_CUSTOMER": null,
+   "FP_PLAN_PERIOD": 0,
+   "BUILD_AHEAD": 0,
+   "LOGISTIC_PLANT_ID": "EG01",
+   "PACKER_ITEM_ID_SUFFIX": "",
+   "HQ_VENDOR_CODE": "",
+   "COMPANY_ID": "EG00",
+   "SITE_ID": "A004",
+   "CREATED_BY": "scm_batch",
+   "CREATION_DATE": "2021-09-07 15:44:22.430",
+   "LAST_UPDATED_BY": "NERP_SCP_5TH",
+   "LAST_UPDATE_DATE": "2025-12-31 16:41:41.110",
+   "ATTRIBUTE1": "N",
+   "ATTRIBUTE2": "N",
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": "D11",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": "NERP_TOBE_DATA"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "EG01_81-W"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PROD_FROZEN",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "save_call": [
+  {
+   "sp": "SCP0001_SAVE_PLANT_SITE",
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_plant_id": "EG01",
+    "p_scm_site_id": "EG01_81-W",
+    "p_site_description": "LGESEG Automotive Waranty EG01",
+    "p_country": "EG",
+    "p_operation_group": "W",
+    "p_vmi_yn": "N",
+    "p_valid_yn": "Y",
+    "p_new_yn": "Y",
+    "p_fp_plan_period": "1",
+    "p_created_by": "scm_batch",
+    "p_creation_date": "2021-09-07 15:44:22",
+    "p_last_updated_by": "jaeuk.shin",
+    "p_company_id": "EG00",
+    "p_ship_frozen": "",
+    "p_prod_frozen": "1",
+    "p_build_ahead": "0",
+    "p_city": "EGCAI",
+    "p_logistic_plant_id": "EG01",
+    "p_packer_item_id_suffix": "",
+    "p_hq_vendor_code": "",
+    "p_packer_line_active_yn": "N",
+    "p_scm_vendor_name": "EG01",
+    "p_osp_yn_gb": "N",
+    "p_frozen_type": "D11",
+    "p_link_plant_site_id": ""
+   },
+   "rows": 1,
+   "ms": 392.29
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "개의 데이터가 저장되었습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null,
+  "popups": [
+   "ProgressForm"
+  ]
+ },
+ "save_wait": [],
+ "save_timeout": false,
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "SCM_SITE_ID": "EG01_81-W",
+   "PLANT_ID": "EG01",
+   "OPERATION_GROUP": "W",
+   "SITE_DESCRIPTION": "LGESEG Automotive Waranty EG01",
+   "SITE_TYPE": "PLANT",
+   "CITY": "EGCAI",
+   "COUNTRY": "EG",
+   "DEPT_ID": "PLANT",
+   "VMI_YN": "N",
+   "VALID_YN": "Y",
+   "NEW_YN": "Y",
+   "SITE_HRCY_ID": null,
+   "OSP_YN": "N",
+   "SHIP_FROZEN": 11,
+   "PROD_FROZEN": 1,
+   "END_CUSTOMER": null,
+   "SOLDTO_CUSTOMER": null,
+   "FP_PLAN_PERIOD": 1,
+   "BUILD_AHEAD": 0,
+   "LOGISTIC_PLANT_ID": "EG01",
+   "PACKER_ITEM_ID_SUFFIX": "",
+   "HQ_VENDOR_CODE": "",
+   "COMPANY_ID": "EG00",
+   "SITE_ID": "A004",
+   "CREATED_BY": "scm_batch",
+   "CREATION_DATE": "2021-09-07 15:44:22.430",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2026-11-13 23:31:38.163",
+   "ATTRIBUTE1": "N",
+   "ATTRIBUTE2": "N",
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": "D11",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": "NERP_TOBE_DATA"
+  }
+ ],
+ "restore_sql": [
+  {
+   "op": "UPDATE(전 값으로)",
+   "key": [
+    "81",
+    "EG01_81-W"
+   ],
+   "rows": 1
+  }
+ ],
+ "side_cleanup": [],
+ "db_restored": [
+  {
+   "DIVISION_ID": "81",
+   "SCM_SITE_ID": "EG01_81-W",
+   "PLANT_ID": "EG01",
+   "OPERATION_GROUP": "W",
+   "SITE_DESCRIPTION": "LGESEG Automotive Waranty EG01",
+   "SITE_TYPE": "PLANT",
+   "CITY": "EGCAI",
+   "COUNTRY": "EG",
+   "DEPT_ID": "PLANT",
+   "VMI_YN": "N",
+   "VALID_YN": "Y",
+   "NEW_YN": "Y",
+   "SITE_HRCY_ID": null,
+   "OSP_YN": "N",
+   "SHIP_FROZEN": 11,
+   "PROD_FROZEN": 0,
+   "END_CUSTOMER": null,
+   "SOLDTO_CUSTOMER": null,
+   "FP_PLAN_PERIOD": 0,
+   "BUILD_AHEAD": 0,
+   "LOGISTIC_PLANT_ID": "EG01",
+   "PACKER_ITEM_ID_SUFFIX": "",
+   "HQ_VENDOR_CODE": "",
+   "COMPANY_ID": "EG00",
+   "SITE_ID": "A004",
+   "CREATED_BY": "scm_batch",
+   "CREATION_DATE": "2021-09-07 15:44:22.430",
+   "LAST_UPDATED_BY": "NERP_SCP_5TH",
+   "LAST_UPDATE_DATE": "2025-12-31 16:41:41.110",
+   "ATTRIBUTE1": "N",
+   "ATTRIBUTE2": "N",
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": "D11",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": "NERP_TOBE_DATA"
+  }
+ ],
+ "related_restore": [
+  {
+   "table": "SCM_MST_VENDOR",
+   "before": 0,
+   "after": 0,
+   "changed_sql": 0,
+   "restored_same": true
+  },
+  {
+   "table": "SCM_PLANT_M_SN",
+   "before": 0,
+   "after": 0,
+   "changed_sql": 0,
+   "restored_same": true
+  }
+ ],
+ "saved_check": [
+  true
+ ]
+}

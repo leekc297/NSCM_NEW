@@ -1,0 +1,3 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0133-S463b53,DIVISION,,,,값 미도출,if (_sActiveSheetName == SpdSheet.sht02ItemMap) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (action == CAppSetting.FlagI) ▸ if (v_division_id == string.Empty || v_opmz_plan_gr_,
+SCP0133-Sabcdb7,DIVISION,,,,값 미도출,if (_sActiveSheetName == SpdSheet.sht01WhCapa) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (action == CAppSetting.FlagI || action == CAppSetting.FlagM) ▸ if (action == CAppSetting.FlagI) ▸ if (v_division_id == string.Empty || v_opmz_plan_gr_i,

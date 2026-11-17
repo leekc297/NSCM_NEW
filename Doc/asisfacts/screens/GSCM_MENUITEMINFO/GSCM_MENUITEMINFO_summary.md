@@ -13,6 +13,9 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData | 315 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | SP UP_FX_GetMenuItemInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData | 315 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | SP UP_FX_GetMenuItemInfoList |
+| button:SaveButton | SaveButton > SaveData | 460 | SystemManager.UP_FX_SaveMenuItemInfo | MATCH | SP UP_FX_SaveMenuItemInfo |
+| button:SaveButton | SaveButton > SaveData | 461 | SystemManager.UP_FX_DeleteMenuItemInfo | MATCH | SP UP_FX_DeleteMenuItemInfo |
+| button:SaveButton | SaveButton > SaveData | 462 | SystemManager.UP_FX_SaveMenuItemInfo | MATCH | SP UP_FX_SaveMenuItemInfo |
 | event:this.Load | Form_Load > FindData | 315 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | SP UP_FX_GetMenuItemInfoList |
 | event:this.spdLevel1.CellDoubleClick | SpdLevel1_CellDoubleClick > FindData | 315 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | SP UP_FX_GetMenuItemInfoList |
 | event:this.spdLevel2.CellDoubleClick | SpdLevel2_CellDoubleClick > FindData | 315 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | SP UP_FX_GetMenuItemInfoList |
@@ -22,7 +25,9 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteMenuItemInfo | MATCH | 1 | SP UP_FX_DeleteMenuItemInfo | EXEC:UP_FX_DELETEMENUITEMINFO, DELETE:TB_FX_MENUTITLEINFO, DELETE:TB_FX_MENUITEMINFO, DELETE:TB_FX_USERMENUAUTH, DELETE:TB_FX_USERMENUAUTHEXTENSION, DELETE:TB_FX_GROUPMENUAUTH, DELETE:TB_FX_GROUPMENUAUTHEXTENSION |  |
 | SystemManager.UP_FX_GetMenuItemInfoList | MATCH | 1 | SP UP_FX_GetMenuItemInfoList | EXEC:UP_FX_GETMENUITEMINFOLIST, SELECT:TB_FX_MENUITEMINFO, SELECT:TB_FX_PROGRAMINFO |  |
+| SystemManager.UP_FX_SaveMenuItemInfo | MATCH | 2 | SP UP_FX_SaveMenuItemInfo | EXEC:UP_FX_SAVEMENUITEMINFO, SELECT:TB_FX_MENUITEMINFO, MERGE:TB_FX_MENUITEMINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

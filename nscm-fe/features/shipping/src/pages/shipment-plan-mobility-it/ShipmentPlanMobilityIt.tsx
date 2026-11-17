@@ -547,6 +547,9 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       // 조회조건이 그대로면 필터를 다시 넣어도 재조회되지 않아 직접 다시 읽는다(I/D/M 표시 해제).
       if (!filters[SHEETS.CONFIRM_DETAIL]) setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N');
       else void (mainSheet === 'packer' ? refetchConfirmPacker() : refetchConfirm());
+      // AS-IS SaveData_Detail: 확정 저장 성공 시 상단 master 그리드도 재조회(FindData_Main(true), cs L5815).
+      //   단 Packer 경로(SaveData_Detail_Packer)는 이 호출이 주석 처리라 상단 재조회가 없다(cs L5577) → non-packer 한정.
+      if (mainSheet !== 'packer' && filters[SHEETS.MAIN]) void refetchMain();
     },
     onError: (error: Error) => {
       void setAlert({ type: 'alert', content: error.message || t(MSG.SAVE_FAILED, '__Save failed.') });
@@ -588,6 +591,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       // 조회조건이 그대로면 필터를 다시 넣어도 재조회되지 않아 직접 다시 읽는다.
       if (filters[SHEETS.HOLD_STOCK]) void refetchHoldStock();
       else setDetailFilter(SHEETS.HOLD_STOCK, 'N');
+      // AS-IS SaveData_Detail(Block Stock): 저장 성공 시 상단 master 그리드도 재조회(FindData_Main(true), cs L5981).
+      if (mainSheet === 'packer') {
+        if (filters[SHEETS.MAIN_PACKER]) void (isPackerPast ? refetchPackerPast() : refetchPacker());
+      } else if (filters[SHEETS.MAIN]) void refetchMain();
     },
     onError: (error: Error) => {
       void setAlert({ type: 'alert', content: error.message || t(MSG.SAVE_FAILED, '__Save failed.') });
@@ -605,6 +612,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       // 조회조건이 그대로면 필터를 다시 넣어도 재조회되지 않아 직접 다시 읽는다(I/D/M 표시 해제).
       if (filters[SHEETS.MES_STOCK]) void refetchMesStock();
       else setDetailFilter(SHEETS.MES_STOCK, 'N');
+      // AS-IS SaveData_Detail(MES Stock): 저장 성공 시 상단 master 그리드도 재조회(FindData_Main(true), cs L6083).
+      if (mainSheet === 'packer') {
+        if (filters[SHEETS.MAIN_PACKER]) void (isPackerPast ? refetchPackerPast() : refetchPacker());
+      } else if (filters[SHEETS.MAIN]) void refetchMain();
     },
   });
 
@@ -730,10 +741,19 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   };
 
   // ── master 기간셀 더블클릭 드릴다운 (design 03 §3.F) ──
-  const handleMainDrilldown = (row: MainRow) => {
+  const handleMainDrilldown = (row: MainRow, binding: string) => {
     const sheet = measureDrilldownOf(str(row.MEASURE));
     if (!sheet) return;
-    const overrides = { itemId: str(row.ITEM_ID), fromSite: str(row.FROM_SITE) };
+    // AS-IS FindData_Detail(cs L3116-3117 / L8140): 더블클릭한 기간셀(D_ 열)의 날짜를 p_from/to_yyyymmdd 로
+    //   넘겨 그 날짜 단일로 Confirm Detail 을 조회한다(하단 Shipment Date 조건이 아니다). Replace("D_","") 와
+    //   동일하게 D_ 일자열에서만 날짜를 뽑고, W_/M_(주·월 SUM) 드릴은 날짜 특정이 안 되므로 override 없이
+    //   period2 로 폴백한다. 날짜 override 는 CONFIRM_DETAIL 에서만 소비된다(WH_STOCK 드릴은 무시).
+    const clickedYyyymmdd = binding.startsWith('D_') ? binding.slice(2) : '';
+    const overrides = {
+      itemId: str(row.ITEM_ID),
+      fromSite: str(row.FROM_SITE),
+      ...(clickedYyyymmdd ? { fromYyyymmdd: clickedYyyymmdd, toYyyymmdd: clickedYyyymmdd } : {}),
+    };
     setActiveDetailSheet(sheet);
     setDetailFilter(sheet, 'Y', overrides);
     void fetchStaticColumns([sheet]);

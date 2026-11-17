@@ -15,6 +15,9 @@
 | button:FindButton | FindButton > FindData | 296 | SystemManager.UP_FX_GetGroupMenuAuthList | MATCH | SP UP_FX_GetGroupMenuAuthList |
 | button:SaveButton | SaveButton > SaveData > FindData | 264 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData | 296 | SystemManager.UP_FX_GetGroupMenuAuthList | MATCH | SP UP_FX_GetGroupMenuAuthList |
+| button:SaveButton | SaveButton > SaveData | 448 | SystemManager.UP_FX_SaveGroupMenuAuth | MATCH | SP UP_FX_SaveGroupMenuAuth |
+| button:SaveButton | SaveButton > SaveData | 449 | SystemManager.UP_FX_DeleteGroupMenuAuth | MATCH | SP UP_FX_DeleteGroupMenuAuth |
+| button:SaveButton | SaveButton > SaveData | 450 | SystemManager.UP_FX_SaveGroupMenuAuth | MATCH | SP UP_FX_SaveGroupMenuAuth |
 | event:this.Load | Form_Load > FindData | 264 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
 | event:this.Load | Form_Load > FindData | 296 | SystemManager.UP_FX_GetGroupMenuAuthList | MATCH | SP UP_FX_GetGroupMenuAuthList |
 | event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindSub > FindData | 264 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
@@ -26,8 +29,10 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteGroupMenuAuth | MATCH | 1 | SP UP_FX_DeleteGroupMenuAuth | EXEC:UP_FX_DELETEGROUPMENUAUTH, DELETE:TB_FX_GROUPMENUAUTHEXTENSION, DELETE:TB_FX_GROUPMENUAUTH |  |
 | SystemManager.UP_FX_GetGroupInfoList | MATCH | 1 | SP UP_FX_GetGroupInfoList | EXEC:UP_FX_GETGROUPINFOLIST, SELECT:TB_FX_GROUPINFO |  |
 | SystemManager.UP_FX_GetGroupMenuAuthList | MATCH | 2 | SP UP_FX_GetGroupMenuAuthList | EXEC:UP_FX_GETGROUPMENUAUTHLIST, SELECT:TB_FX_MENUITEMINFO, SELECT:TB_FX_PROGRAMINFO, SELECT:TB_FX_GROUPMENUAUTH |  |
+| SystemManager.UP_FX_SaveGroupMenuAuth | MATCH | 2 | SP UP_FX_SaveGroupMenuAuth | EXEC:UP_FX_SAVEGROUPMENUAUTH, MERGE:TB_FX_GROUPMENUAUTH |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

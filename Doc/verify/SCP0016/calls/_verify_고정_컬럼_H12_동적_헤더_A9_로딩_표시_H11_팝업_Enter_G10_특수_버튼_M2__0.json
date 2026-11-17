@@ -7,8 +7,8 @@
   "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
   "status": 200,
   "rows": 440,
-  "dur": 191,
-  "at": "2026-11-07T13:15:05.369Z",
+  "dur": 121,
+  "at": "2026-11-14T01:33:48.162Z",
   "user": "minyonglee1",
   "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "postData": "{\"divisionId\":\"81\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
   "status": 200,
-  "rows": 437,
-  "dur": 3200,
-  "at": "2026-11-07T13:15:08.264Z",
+  "rows": 991,
+  "dur": 7990,
+  "at": "2026-11-14T01:33:55.714Z",
   "user": "minyonglee1",
   "test": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
  }

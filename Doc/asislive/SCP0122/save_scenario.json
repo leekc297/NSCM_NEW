@@ -1,0 +1,44 @@
+{
+ "table": "SCP_OPMZ_PLAN_GR_ACTV_M",
+ "pk": [
+  "OPMZ_PRS_CD",
+  "OPMZ_PLAN_GR_ID",
+  "OPMZ_ACTV_CD"
+ ],
+ "match": {
+  "OPMZ_PRS_CD": "OPMZ_PRS_CD",
+  "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+  "OPMZ_ACTV_CD": "OPMZ_ACTV_CD"
+ },
+ "save_sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+ "side": [
+  {
+   "table": "SCP_OPMZ_PLAN_GR_ACTV_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [],
+ "basis": "foxml SCP0122_SAVE_PLAN_ACTIVITY_MGMT → SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 21:5x): 수정 경로 = UPDATE SCP_OPMZ_PLAN_GR_ACTV_M WHERE 키 3컬럼 · SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST 가 SCP_OPMZ_PLAN_GR_ACTV_H 에 이력 INSERT · 트리거 0 · 초안(save_scenario.draft.json) 연습 실행 통과분을 옮김(사용자 승인 11-13 21:4x)",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 OPMZ_ACTV_SEQ 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "OPMZ_ACTV_SEQ",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "OPMZ_ACTV_SEQ",
+      "db_col": "OPMZ_ACTV_SEQ",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

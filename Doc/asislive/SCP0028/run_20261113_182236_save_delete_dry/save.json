@@ -1,0 +1,160 @@
+{
+ "id": "SCP0028",
+ "dry": true,
+ "name": "delete",
+ "kind": "delete_popup",
+ "scenario": {
+  "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+  "pk": [
+   "DIVISION_ID",
+   "OPERATION_GROUP",
+   "FROM_SITE",
+   "TO_SITE",
+   "ITEM_ID",
+   "TRANSPORT_MODE"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "FROM_SITE": "FROM_SITE",
+   "TO_SITE": "TO_SITE",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+  "basis": "SCP0028_Shipment_Lot_Size.cs:575 SaveData · :659 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE · SP 원문(MERGE: 있으면 UPDATE·없으면 INSERT / DELETE · SCP_MST_SHIPMENT_LOT_SIZE PK 6컬럼 · 트리거 0 — 11-13 실측) · 저장 SP 가 PR_SCP_MST_SHIPMENT_LOT_SIZE_HIST 로 SCP_MST_SHIPMENT_LOT_SIZE_H 에 이력 1행을 덧붙임(11-13 18:0x 실측)",
+  "side": [
+   {
+    "table": "SCP_MST_SHIPMENT_LOT_SIZE_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "name": "delete",
+  "title": "삭제 팝업에서 한 조합을 체크해 삭제(FindDelete :462 — 그 조합의 운송 수단 전부 삭제) → 지워진 행 전부 되살림",
+  "kind": "delete_popup",
+  "button": "btnDelete",
+  "popup": "SCM0002_ShipmentLotSizePopup",
+  "popup_set": [
+   {
+    "name": "clbFromSite",
+    "from": "FROM_SITE"
+   }
+  ],
+  "popup_find": "FindData",
+  "popup_ok": "SaveData",
+  "popup_check_col": "CHK",
+  "popup_match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "FROM_SITE": "FROM_SITE",
+   "TO_SITE": "TO_SITE",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "pick": {
+   "col": "LOT_SIZE",
+   "nonempty": true,
+   "nth": 0
+  }
+ },
+ "at": "2026-11-13 18:22:36",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ],
+ "targets": [
+  {
+   "row": 3,
+   "where": {
+    "DIVISION_ID": "81",
+    "FROM_SITE": "HQ07-A",
+    "TO_SITE": "Club Car_US_AGS",
+    "ITEM_ID": "ACEP2065I-B1"
+   }
+  }
+ ],
+ "popup_set": [
+  {
+   "name": "clbFromSite",
+   "value": "HQ07-A",
+   "index": 2,
+   "ok": true,
+   "error": null
+  }
+ ],
+ "popup": {
+  "rows": 60,
+  "row": 0,
+  "values": {
+   "Action": "",
+   "CHK": "",
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP_ID": "A",
+   "OPERATION_GROUP_NAME": "Cell",
+   "FROM_SITE": "HQ07-A",
+   "FROM_SITE_DESCRIPTION": "LGESOC Cell HQ07",
+   "TO_SITE": "Club Car_US_AGS",
+   "TO_SITE_DESCRIPTION": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "NICK_NAME": "E65D"
+  },
+  "check": {
+   "ok": true,
+   "error": null,
+   "before": "",
+   "after": "True"
+  }
+ },
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP": "A",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "TRANSPORT_MODE": "SEA",
+   "LOT_SIZE": 12800,
+   "INCREMENT": 12800,
+   "VALID_YN": "Y",
+   "CREATED_BY": "ssp",
+   "CREATION_DATE": "2022-11-30 14:44:53.990",
+   "LAST_UPDATED_BY": "ssp",
+   "LAST_UPDATE_DATE": "2022-11-30 14:44:53.990",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "SPLIT_YN": "N"
+  }
+ ]
+}

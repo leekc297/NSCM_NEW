@@ -1,11 +1,12 @@
 # 22. 이관 패키지 (`_artifacts`) 표준
 
 > DB / 서버 미연결 환경에서 화면을 작성하고 클라우드 환경으로 이관할 때의 **압축 패키지 표준**.
-> 화면 단위로 `_{SCREEN_ID}_artifacts/` 폴더를 만들고, FE/SQL/가이드를 모아서 압축 → 클라우드에서 풀어 적용.
+> 화면 단위로 `{PROGRAM_ID}_{YYYYMMDD}_{HHMM}/` 폴더를 만들고, FE/SQL/가이드를 모아서 압축 → 클라우드에서 풀어 적용. (2026-11-13 정정: 폴더명 `_{SCREEN_ID}_artifacts/` → §2.1 현행 규칙(2026-07-10). 구 이름은 레거시)
 >
 > ⭐ **트리거**: 사용자가 "DB / 서버 미연결" 또는 "압축파일로 이관" 을 언급할 때.
-> ⭐ **선행 룰**: [`17_NEW_SCREEN_QUICKSTART.md`](17_NEW_SCREEN_QUICKSTART.md) (9 step), [`08_SCREEN_REGISTRATION.md`](08_SCREEN_REGISTRATION.md) (4-파일 SQL 세트)
-> ⭐ **연관**: [`18_CODE_REVIEW_CHECKLIST.md`](18_CODE_REVIEW_CHECKLIST.md) (GATE-1 빌드 검증 → 클라우드에서)
+> ⭐ **선행 룰**: [`17_NEW_SCREEN_QUICKSTART.md`](_archive/17_NEW_SCREEN_QUICKSTART.md) (9 step), [`08_SCREEN_REGISTRATION.md`](_archive/08_SCREEN_REGISTRATION.md) (4-파일 SQL 세트 — 2026-07-29 폐기, 현행 단일본 §2)
+> ⭐ **연관**: [`18_CODE_REVIEW_CHECKLIST.md`](_archive/18_CODE_REVIEW_CHECKLIST.md) (GATE-1 빌드 검증 → 클라우드에서)
+> (2026-11-13 정정: 위 3개 링크 대상 → `_archive/` 보관 위치. 룰 v1 보관본 — v2 흡수 위치는 `README.md` §2 표)
 
 > ⭐ **2026-10-30 화면 단위 클라우드 이관 = 결정적 빌더 `tools/CloudPkg/cloud_pkg.py`** (Vibe_Manager ☁️ 메뉴 2종 — 수정본·전체. 2026-11-02 범위는 환경설정 작업 모드가 정함: DB MODE = `--mode db` · UI/DB MODE = `--mode all`, 인자 `--mode auto`).
 > 수정본(`--mode db|all`) = 직전 이관(`_artifacts/_deploy_packages/_cloud_state/<ID>.json`) 이후 바뀐 것만 · 전체(`--full`) = 화면 소유 DB·META 전부(+FE 페이지·참조 파일·ID 참조 BE).
@@ -32,7 +33,7 @@
 ## 2. 폴더 구조 (표준)
 
 ```
-_{SCREEN_ID}_artifacts/                                      ← 워크스페이스 root 에 생성
+_{SCREEN_ID}_artifacts/                                      ← 워크스페이스 root 에 생성 (11-13 정정: 현행 폴더명 = {PROGRAM_ID}_{YYYYMMDD}_{HHMM} — §2.1)
 ├── fe/                                                       ← FE 신규 파일 (이관 대상)
 │   └── features/{domain}/src/pages/{kebab-page}/             ← 화면 폴더 그대로 (룰 05 §2.0.2)
 │       ├── {PageName}.tsx
@@ -74,6 +75,7 @@ _{SCREEN_ID}_artifacts/                                      ← 워크스페이
 ```
 [ ] BE Java 파일 (동적 호출만 사용 — 룰 10)
 [ ] PKG_{MENU_ID} Oracle PL/SQL (별도 To-be_v2_converted/ 로 PR)
+    (2026-11-13 정정: 이 항목은 §9(2026-06-02 신설)로 대체 — SP/PKG body 는 포함 금지가 아니라 03_SP_PKG/ 에 동봉 의무(§9.5·§9.6))
 [ ] node_modules / .turbo / dist (빌드 산출물)
 [ ] 분석 자료 (Doc/_analysis/...) — 룰 09 의 매트릭스만 폴더 안에 포함
 [ ] 공통 파일 (ROUTE_PATHS / Router.tsx / procedures.d.ts / locales) — _COMMON_FILES_GUIDE.md 에 patch 만
@@ -118,7 +120,7 @@ To-Be 도메인: `{domain}` | slug: `{slug}` | URL: `/{path}/{slug}`
 ### Step 3. DB 메타 등록 SQL 실행 (SQL*Plus/SQLcl — DBeaver 변형 미제공, 2026-07-29)
 ### Step 4. FE 파일 복사 (robocopy / cp -r)
 ### Step 5. 공통 파일 수정 (_COMMON_FILES_GUIDE.md 참조)
-### Step 6. 빌드 검증 (pnpm gen:procedures && pnpm build)
+### Step 6. 빌드 검증 (pnpm gen:procedures && pnpm build)  ← (2026-11-13: `gen:procedures` 스크립트는 현재 nscm-fe/package.json 에 없음 — procedures.d.ts 는 직접 수정)
 ### Step 7. 동작 검증 (브라우저)
 
 ## 4. 트러블슈팅
@@ -129,6 +131,7 @@ To-Be 도메인: `{domain}` | slug: `{slug}` | URL: `/{path}/{slug}`
 ### 4-5. Wijmo finishEditing null 에러 — 21_TROUBLESHOOTING §3
 
 ## 5. 룰셋 준수 확인 (체크리스트)
+(2026-11-13 정정: 아래 01~17 번호 룰은 룰 v1 — `Doc/_dev_rules/_archive/` 보관·v2 흡수. 현행 대응 룰은 `Doc/_dev_rules/README.md` §2 '흡수 위치(룰 v2)' 표로 확인. 08 의 '4-파일'은 2026-07-29 폐기 → 단일본)
 - [x] `01_CLAUDE` §6
 - [x] `05_SCREEN_TEMPLATE` §2.0.2 확장 패턴
 - [x] `07_DO_AND_DONT` Top 11
@@ -158,8 +161,8 @@ To-Be 도메인: `{domain}` | slug: `{slug}` | URL: `/{path}/{slug}`
 |---|---|---|
 | 1 | `nscm-fe/packages/foundation/src/constants/route-paths.ts` | `ROUTE_PATHS` 객체에 `{MENU_ID}: '{slug}'` 1 줄 추가 |
 | 2 | `nscm-fe/apps/web/src/core/Router.tsx` | LazyLoader 선언 + nested 라우트 등록 (2 곳) |
-| 3 | `nscm-fe/configs/types/procedures.d.ts` | `RawProcedureMap` 에 `{MENU_ID}` entry 추가 (또는 `pnpm gen:procedures`) |
-| 4 | `nscm-fe/apps/web/public/locales/{KO,EN,CN}.json` | `gen_i18n_msg_json.py` 실행 (자동) |
+| 3 | `nscm-fe/configs/types/procedures.d.ts` | `RawProcedureMap` 에 `{MENU_ID}` entry 추가 (또는 `pnpm gen:procedures`) (11-13: `gen:procedures` 스크립트는 현재 없음) |
+| 4 | `nscm-fe/public/locales/{KO,EN,CN}.json` (2026-11-13 정정: `apps/web/public/locales` → `nscm-fe/public/locales`) | `gen_i18n_msg_json.py` 실행 (자동) |
 
 ### 4.2 patch 형식 (Before/After)
 
@@ -215,7 +218,7 @@ To-Be 도메인: `{domain}` | slug: `{slug}` | URL: `/{path}/{slug}`
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
-$src = 'C:\Projects\NSCM\_{screen_id}_artifacts'
+$src = 'C:\Projects\NSCM\_{screen_id}_artifacts'   # (11-13 정정: 현행 폴더명 = {PROGRAM_ID}_{YYYYMMDD}_{HHMM} — §2.1)
 $dst = "$src\{SCREEN_ID}_To-Be_$(Get-Date -Format 'yyyyMMdd').zip"
 
 if (Test-Path $dst) { Remove-Item $dst -Force }
@@ -259,7 +262,7 @@ $zip.Dispose()
 3. `sql/{NN}_{SCREEN_ID}_Registration.sql` 실행 (SQL*Plus/SQLcl) → 스크립트 내 검증 SELECT 통과 확인
 4. `cp -r fe/features/{domain}/src/pages/{kebab-page} nscm-fe/features/{domain}/src/pages/`
 5. `_COMMON_FILES_GUIDE.md` §1~§4 patch 적용 (수동)
-6. `cd nscm-fe && pnpm install && pnpm gen:procedures && pnpm lint:fix && pnpm type-check && pnpm build`
+6. `cd nscm-fe && pnpm install && pnpm gen:procedures && pnpm lint:fix && pnpm type-check && pnpm build` (11-13: `gen:procedures` 스크립트는 현재 없음)
 7. `pnpm dev` → 브라우저 동작 검증 + POPUP / 사업부 분기 / 동적 컬럼 모두 동작 확인
 
 ---
@@ -267,7 +270,7 @@ $zip.Dispose()
 ## 7. 자기 점검 (패키지 작성 직후)
 
 ```
-[ ] 폴더 명명 _{screen_id}_artifacts 규약 준수
+[ ] 폴더 명명 {PROGRAM_ID}_{YYYYMMDD}_{HHMM} 규약 준수 (11-13 정정: _{screen_id}_artifacts → §2.1 현행 규칙)
 [ ] fe/ 안의 폴더 구조가 nscm-fe 상대 경로와 정확히 일치 (features/{domain}/src/pages/{kebab})
 [ ] sql/ 안에 SQL*Plus/SQLcl 단일본 포함 (DBeaver 변형 생성 금지 — 2026-07-29)
 [ ] _README.md 의 §3 적용 순서가 7-step 으로 명확
@@ -296,7 +299,7 @@ $zip.Dispose()
 
 ### 9.2 의무 인벤토리 (deploy 직전 필수 cross-check)
 
-deploy zip 작성 직전 다음 5종을 화면 별로 인벤토리 작성 + 4-파일 세트 작성 의무:
+deploy zip 작성 직전 다음 5종을 화면 별로 인벤토리 작성 + 메타 SQL 단일본(.sql) 작성 의무 (2026-11-13 정정: '4-파일 세트' → 단일본 — 2026-07-29 DBeaver 변형 생성 금지·4-파일 세트 폐기, §2·§9.6):
 
 | # | 인벤토리 | 추출 방법 | 산출물 |
 |---:|---|---|---|
@@ -307,6 +310,8 @@ deploy zip 작성 직전 다음 5종을 화면 별로 인벤토리 작성 + 4-�
 | 5 | 위 SP 들의 ALL_SOURCE body | `DBMS_METADATA.GET_DDL('PROCEDURE', name, owner)` 일괄 추출 | `03_SP_PKG/` 의 standalone SP body 파일 |
 
 ### 9.3 메타 보강 SQL — 4-파일 세트 양식
+
+(11-13 정정: 제목의 '4-파일 세트'는 폐기 — 현행은 단일본(.sql))
 
 기존 `44_DMF{XXXX}_meta.sql` 에 lookup/popup 누락 발견 시 별도 보강 파일 `{N}_DMF{XXXX}_{purpose}_meta_boost.sql` 작성 (덮어쓰기 금지 — NOT EXISTS 멱등 패턴).
 
@@ -370,7 +375,7 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 [ ] 멱등 검증 (재실행 시 0 rows created — NOT EXISTS 차단)?
 ```
 
-상세: [`hooks/deploy-package-completeness.md`](hooks/deploy-package-completeness.md), 메모리 `feedback_deploy_package_completeness.md`.
+상세: [`hooks/deploy-package-completeness.md`](../_rules_v2/hooks/deploy-package-completeness.md) (2026-11-13 정정: 링크 경로 → `Doc/_rules_v2/hooks/`), 메모리 `feedback_deploy_package_completeness.md`.
 
 ---
 
@@ -397,7 +402,7 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 ### 10.3 lint/type-check 는 **리포 전체 게이트**다
 
 - 이관 화면이 깨끗해도 **범위 밖 화면의 error** 가 게이트를 막는다(실사고: demand-manager 5건).
-  사내에서 `eslint`/`tsc` **error 0** 을 만든 판을 패키지에 담고, 관련 정정 파일(범위 밖 화면 포함)도 동봉.
+  사내에서 `eslint`/`tsc` **error 0** 을 만든 판을 패키지에 담고, 관련 정정 파일(범위 밖 화면 포함)도 동봉. (2026-11-13 정정: error 0 기준은 유지 — AI 는 `eslint`/`tsc` 를 직접 실행하지 않는다(실행 hook `block-dev-commands` 차단). 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`, 실행하지 않았으면 미실행(ERROR) 보고)
 - warning 은 게이트를 막지 않는다 — **사내 기준선과 같은 개수**면 세대 정렬의 증거로 판독한다.
 
 ### 10.4 메타 SQL — MERGE(무 DELETE) + PK 부재 테이블 주의
@@ -411,7 +416,7 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 
 ### 10.5 근본 해법 = git 동기화
 
-파일 단위 이관은 **세대 혼재를 구조적으로 재생산**한다. 반복 이관 상황이면 사내 push → 클라우드 pull
+파일 단위 이관은 **세대 혼재를 구조적으로 재생산**한다. 반복 이관 상황이면 (2026-11-14 정정: 현행은 이관 패키지 생성까지 AI, 클라우드 적용은 사용자. 이 PC 에서 사내 GitLab push 는 하지 않음. 룰 28) 사내 push → 클라우드 pull
 (룰 28 Multi-Remote)로 전환을 우선 검토한다. 패키지는 DB 미연결 환경의 차선책이다.
 
 ---
@@ -420,10 +425,10 @@ sqlplus -s SCM_MGR/<pw>@<dsn> <<< "SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS 
 
 | 룰 | 주제 |
 |---|---|
-| [`05_SCREEN_TEMPLATE.md`](05_SCREEN_TEMPLATE.md) §2.0 | FE 폴더 구조 (기본/확장 패턴) |
-| [`08_SCREEN_REGISTRATION.md`](08_SCREEN_REGISTRATION.md) §3, §7.1 | 7-BLOCK + 4-파일 SQL 세트 |
-| [`09_WIJMO_VALIDATION_EXPRESSION.md`](09_WIJMO_VALIDATION_EXPRESSION.md) §3 | `__asis-mapping__.md` 표준 양식 |
-| [`10_API_DYNAMIC_PROC.md`](10_API_DYNAMIC_PROC.md) | 동적 호출 (BE Java 코드 0) |
-| [`12_GRID_COMMON.md`](12_GRID_COMMON.md) §11 | Modal 통합 패턴 |
-| [`17_NEW_SCREEN_QUICKSTART.md`](17_NEW_SCREEN_QUICKSTART.md) | 9 step 신규 화면 절차 |
-| [`18_CODE_REVIEW_CHECKLIST.md`](18_CODE_REVIEW_CHECKLIST.md) | PR 머지 게이트 (GATE-1 빌드 검증) |
+| [`05_SCREEN_TEMPLATE.md`](_archive/05_SCREEN_TEMPLATE.md) §2.0 | FE 폴더 구조 (기본/확장 패턴) (11-13 정정: 이 표 링크 7건 → `_archive/` 보관 위치) |
+| [`08_SCREEN_REGISTRATION.md`](_archive/08_SCREEN_REGISTRATION.md) §3, §7.1 | 7-BLOCK + 4-파일 SQL 세트 (11-13 정정: 4-파일 세트는 2026-07-29 폐기 — 단일본) |
+| [`09_WIJMO_VALIDATION_EXPRESSION.md`](_archive/09_WIJMO_VALIDATION_EXPRESSION.md) §3 | `__asis-mapping__.md` 표준 양식 |
+| [`10_API_DYNAMIC_PROC.md`](_archive/10_API_DYNAMIC_PROC.md) | 동적 호출 (BE Java 코드 0) |
+| [`12_GRID_COMMON.md`](_archive/12_GRID_COMMON.md) §11 | Modal 통합 패턴 |
+| [`17_NEW_SCREEN_QUICKSTART.md`](_archive/17_NEW_SCREEN_QUICKSTART.md) | 9 step 신규 화면 절차 |
+| [`18_CODE_REVIEW_CHECKLIST.md`](_archive/18_CODE_REVIEW_CHECKLIST.md) | PR 머지 게이트 (GATE-1 빌드 검증) |

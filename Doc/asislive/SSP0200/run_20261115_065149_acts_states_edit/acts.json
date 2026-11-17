@@ -1,0 +1,469 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "states": true,
+ "edit": true,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 06:51:20",
+ "edit_focus": "행 없음",
+ "edit_mode": true,
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 06:51:45.952",
+  "grid": "spdMain",
+  "sheet_index": 0,
+  "sheet_name": "Shipment Change Request",
+  "sheet": "Shipment Change Request",
+  "rows_total": 0,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "True"
+   },
+   {
+    "index": 1,
+    "tag": "FROM_SITE",
+    "label": "From Site ID",
+    "data_field": "from_site",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "TO_SITE",
+    "label": "To Site ID",
+    "data_field": "to_site",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "division_id",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "ERP_SO_NO",
+    "label": "SO No",
+    "data_field": "erp_so_no",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "SHIPMENT_STATUS",
+    "label": "Status",
+    "data_field": "shipment_status",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "CONFIRM_ID",
+    "label": "Confirm/Plan ID",
+    "data_field": "confirm_id",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "ITEM_ID",
+    "label": "Model*",
+    "data_field": "item_id",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "NICK_NAME",
+    "label": "Nick Name",
+    "data_field": "nick_name",
+    "visible": "True"
+   },
+   {
+    "index": 9,
+    "tag": "PROJECT_CODE",
+    "label": "Project Code*",
+    "data_field": "project_code",
+    "visible": "False"
+   },
+   {
+    "index": 10,
+    "tag": "PROJECT_NAME",
+    "label": "Project Name",
+    "data_field": "project_name",
+    "visible": "False"
+   },
+   {
+    "index": 11,
+    "tag": "END_CUSTOMER",
+    "label": "End Customer*",
+    "data_field": "end_customer",
+    "visible": "True"
+   },
+   {
+    "index": 12,
+    "tag": "FCST_TYPE",
+    "label": "FCST Type*",
+    "data_field": "fcst_type",
+    "visible": "True"
+   },
+   {
+    "index": 13,
+    "tag": "FROM_SITE_DESCRIPTION",
+    "label": "From Site*",
+    "data_field": "from_site_description",
+    "visible": "True"
+   },
+   {
+    "index": 14,
+    "tag": "TO_SITE_DESCRIPTION",
+    "label": "To Site*",
+    "data_field": "to_site_description",
+    "visible": "True"
+   },
+   {
+    "index": 15,
+    "tag": "INCOTERMS",
+    "label": "Incoterms*",
+    "data_field": "INCOTERMS",
+    "visible": "True"
+   },
+   {
+    "index": 16,
+    "tag": "SHIPMENT_CONFIRM_QTY",
+    "label": "Shipment Confirm Qty*",
+    "data_field": "shipment_confirm_qty",
+    "visible": "True"
+   },
+   {
+    "index": 17,
+    "tag": "SHIPMENT_DATE",
+    "label": "Shipment Date*",
+    "data_field": "shipment_date",
+    "visible": "True"
+   },
+   {
+    "index": 18,
+    "tag": "TRANSPORT_MODE",
+    "label": "Trans Mode*",
+    "data_field": "transport_mode",
+    "visible": "True"
+   },
+   {
+    "index": 19,
+    "tag": "CHANGE_REASON_CODE",
+    "label": "Change Reason",
+    "data_field": "CHANGE_REASON_CODE",
+    "visible": "True"
+   },
+   {
+    "index": 20,
+    "tag": "CHANGE_REASON_DETAIL",
+    "label": "Reason Detail",
+    "data_field": "CHANGE_REASON_DETAIL",
+    "visible": "True"
+   },
+   {
+    "index": 21,
+    "tag": "REMARKS2",
+    "label": "Building",
+    "data_field": "remarks2",
+    "visible": "True"
+   },
+   {
+    "index": 22,
+    "tag": "REMARKS",
+    "label": "Remarks",
+    "data_field": "remarks",
+    "visible": "True"
+   },
+   {
+    "index": 23,
+    "tag": "REMARKS3",
+    "label": "Customer Requirement",
+    "data_field": "remarks3",
+    "visible": "True"
+   },
+   {
+    "index": 24,
+    "tag": "ERP_ATTR1",
+    "label": "Consignee Name",
+    "data_field": "ERP_ATTR1",
+    "visible": "True"
+   },
+   {
+    "index": 25,
+    "tag": "ERP_ATTR2",
+    "label": "Contact Point",
+    "data_field": "ERP_ATTR2",
+    "visible": "True"
+   },
+   {
+    "index": 26,
+    "tag": "ERP_ATTR3",
+    "label": "Lot",
+    "data_field": "ERP_ATTR3",
+    "visible": "True"
+   },
+   {
+    "index": 27,
+    "tag": "TO_SITE_SOLDTO_CODE",
+    "label": "Sold to",
+    "data_field": "TO_SITE_SOLDTO_CODE",
+    "visible": "True"
+   },
+   {
+    "index": 28,
+    "tag": "TO_SITE_SHIPTO_CODE",
+    "label": "Ship to",
+    "data_field": "TO_SITE_SHIPTO_CODE",
+    "visible": "True"
+   },
+   {
+    "index": 29,
+    "tag": "LT_DAY",
+    "label": "L/T(Day)",
+    "data_field": "lt_day",
+    "visible": "True"
+   },
+   {
+    "index": 30,
+    "tag": "ETD",
+    "label": "ETD",
+    "data_field": "etd",
+    "visible": "True"
+   },
+   {
+    "index": 31,
+    "tag": "ETA",
+    "label": "ETA",
+    "data_field": "eta",
+    "visible": "True"
+   },
+   {
+    "index": 32,
+    "tag": "MTK_OWNER",
+    "label": "MKT Owner",
+    "data_field": "MTK_OWNER",
+    "visible": "True"
+   },
+   {
+    "index": 33,
+    "tag": "REQUESTOR",
+    "label": "Shipment Requestor",
+    "data_field": "requestor",
+    "visible": "True"
+   },
+   {
+    "index": 34,
+    "tag": "REQUEST_DATE",
+    "label": "Request Date",
+    "data_field": "REQUEST_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 35,
+    "tag": "CHECK_NEED_YN",
+    "label": "Checked",
+    "data_field": "CHECK_NEED_YN",
+    "visible": "False"
+   },
+   {
+    "index": 36,
+    "tag": "ERP_STATUS",
+    "label": "erp_status",
+    "data_field": "erp_status",
+    "visible": "False"
+   },
+   {
+    "index": 37,
+    "tag": "BOD_ID",
+    "label": "bod_id",
+    "data_field": "bod_id",
+    "visible": "False"
+   },
+   {
+    "index": 38,
+    "tag": "CHANGE_TYPE",
+    "label": "CHANGE_TYPE",
+    "data_field": "change_type",
+    "visible": "False"
+   },
+   {
+    "index": 39,
+    "tag": "NEW_ROUTE_ID",
+    "label": "Route",
+    "data_field": "NEW_ROUTE_ID",
+    "visible": "False"
+   },
+   {
+    "index": 40,
+    "tag": "NEW_BOD_ID",
+    "label": "new bod",
+    "data_field": "NEW_BOD_ID",
+    "visible": "False"
+   },
+   {
+    "index": 41,
+    "tag": "NEW_INCOTERMS",
+    "label": "new incoterms",
+    "data_field": "NEW_INCOTERMS",
+    "visible": "False"
+   },
+   {
+    "index": 42,
+    "tag": "NEW_D_COUNTRY",
+    "label": "D Country",
+    "data_field": "NEW_D_COUNTRY",
+    "visible": "False"
+   },
+   {
+    "index": 43,
+    "tag": "NEW_D_PORT_CODE",
+    "label": "D Port",
+    "data_field": "NEW_D_PORT_CODE",
+    "visible": "False"
+   },
+   {
+    "index": 44,
+    "tag": "NEW_A_COUNTRY",
+    "label": "A Country",
+    "data_field": "NEW_A_COUNTRY",
+    "visible": "False"
+   },
+   {
+    "index": 45,
+    "tag": "NEW_A_PORT_CODE",
+    "label": "A Port",
+    "data_field": "NEW_A_PORT_CODE",
+    "visible": "False"
+   },
+   {
+    "index": 46,
+    "tag": "NEW_CUSTOMER_LT",
+    "label": "Customer LT",
+    "data_field": "NEW_CUSTOMER_LT",
+    "visible": "False"
+   },
+   {
+    "index": 47,
+    "tag": "NEW_TO_COUNTRY",
+    "label": "To Country",
+    "data_field": "NEW_TO_COUNTRY",
+    "visible": "False"
+   },
+   {
+    "index": 48,
+    "tag": "NEW_TO_CITY",
+    "label": "To City",
+    "data_field": "NEW_TO_CITY",
+    "visible": "False"
+   },
+   {
+    "index": 49,
+    "tag": "NEW_ETA",
+    "label": "ETA",
+    "data_field": "NEW_ETA",
+    "visible": "False"
+   },
+   {
+    "index": 50,
+    "tag": "NEW_ETD",
+    "label": "ETD",
+    "data_field": "NEW_ETD",
+    "visible": "False"
+   },
+   {
+    "index": 51,
+    "tag": "NEW_LT_DAY",
+    "label": "L/T(Day)",
+    "data_field": "NEW_LT_DAY",
+    "visible": "False"
+   },
+   {
+    "index": 52,
+    "tag": "NEW_TRANSPORT_MODE",
+    "label": "Trans Mode",
+    "data_field": "NEW_TRANSPORT_MODE",
+    "visible": "False"
+   },
+   {
+    "index": 53,
+    "tag": "NEW_SHIPMENT_DATE",
+    "label": "Shipment Date",
+    "data_field": "NEW_SHIPMENT_DATE",
+    "visible": "False"
+   },
+   {
+    "index": 54,
+    "tag": "EDIT_REMARKS",
+    "label": "EDIT_REMARKS",
+    "data_field": "EDIT_REMARKS",
+    "visible": "False"
+   },
+   {
+    "index": 55,
+    "tag": "EDIT_MAIN",
+    "label": "EDIT_MAIN",
+    "data_field": "EDIT_MAIN",
+    "visible": "True"
+   },
+   {
+    "index": 56,
+    "tag": "ELECTRODE_YN",
+    "label": "ELECTRODE_YN",
+    "data_field": "ELECTRODE_YN",
+    "visible": "False"
+   },
+   {
+    "index": 57,
+    "tag": "ELECTRODE_TYPE",
+    "label": "ELECTRODE_TYPE",
+    "data_field": "ELECTRODE_TYPE",
+    "visible": "False"
+   },
+   {
+    "index": 58,
+    "tag": "ORIGIN_FROM_DIVISION_ID",
+    "label": "ORIGIN_FROM_DIVISION_ID",
+    "data_field": "ORIGIN_FROM_DIVISION_ID",
+    "visible": "False"
+   },
+   {
+    "index": 59,
+    "tag": "ORIGIN_TO_DIVISION_ID",
+    "label": "ORIGIN_TO_DIVISION_ID",
+    "data_field": "ORIGIN_TO_DIVISION_ID",
+    "visible": "False"
+   },
+   {
+    "index": 60,
+    "tag": "ATTRIBUTE10",
+    "label": "ATTRIBUTE10",
+    "data_field": "ATTRIBUTE10",
+    "visible": "True"
+   }
+  ],
+  "locked": [],
+  "back": [],
+  "fore": [],
+  "text": [],
+  "how": [],
+  "sheet_locked": true,
+  "edit_mode": true,
+  "dialog_count": 0,
+  "done": "2026-11-15 06:51:45.952"
+ },
+ "summary": {
+  "rows": 0,
+  "rows_total": 0,
+  "cols": 61,
+  "lock_how": [],
+  "locked_cells": 0,
+  "open_cells": 0,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

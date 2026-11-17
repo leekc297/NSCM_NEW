@@ -1,0 +1,904 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-15T02:12:07+09:00",
+ "producer": "run_verify",
+ "id": "SSP0023",
+ "skip_e2e": false,
+ "started": "2026-11-14 23:45:42",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-0cd5524c",
+   "class": "K3",
+   "msg": "SSP0023 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ea9272fa",
+   "class": "H10",
+   "msg": "SSP0023 시나리오 [자동] 편집 중 Simulation 실행 → MSG00680(DM-52 일반 규칙)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-90fed00f",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 40/Shipment Plan(Electrode)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e8b89d37",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 40/Shipment Result",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fe879c31",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 81/Shipment Plan(Electrode)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-226b7501",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 81/Shipment Result",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a707779d",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 82/Shipment Plan(Electrode)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2ab8ecef",
+   "class": "A5",
+   "msg": "SSP0023 Division 컬럼 82/Shipment Result",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-973cee51",
+   "class": "E3",
+   "msg": "SSP0023 Excel 필수 칸 빈 업로드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Excel @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-877599dc",
+   "class": "M1",
+   "msg": "SSP0023 Excel 2단계 차단",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Excel 2단계 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-35f72ace",
+   "class": "A8",
+   "msg": "SSP0023 기간 동적 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 기간 동적 컬럼 @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-324a929d",
+   "class": "F10",
+   "msg": "PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f0541fc2",
+   "class": "F10",
+   "msg": "PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b7e18972",
+   "class": "B6",
+   "msg": "조회조건 Company",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cca3cf7e",
+   "class": "H8",
+   "msg": "Shipment Plan Detail.<DYNAMIC:LOOP> (동적 LOOP 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-513f4256",
+   "class": "G1",
+   "msg": "SSP0023 텍스트 부분일치 Material",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fa30cd2a",
+   "class": "G1",
+   "msg": "SSP0023 텍스트 부분일치 Model/Nickname",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7797c8e7",
+   "class": "M3",
+   "msg": "new SCM0002_TitleSetForm_Popup(\"SSP0023\", shtName, false)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC+DB popup_data_check (AS-IS 개인화 팝업 ↔ TO-BE 메타 조회 Division 별 행수)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5946b52f",
+   "class": "M4",
+   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-35a2742f",
+   "class": "M1",
+   "msg": "[DMF0014 결함 일반화] Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0475177f",
+   "class": "M1",
+   "msg": "[DMF0014 결함 유형] Excel Form 입력 버킷",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f9e2b066",
+   "class": "M1",
+   "msg": "[DMF0014 결함 유형] Excel Form 양식",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-683d1656",
+   "class": "A5",
+   "msg": "[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1c6ec245",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d45672ca",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b4cf5d5c",
+   "class": "M1",
+   "msg": "[DMF0014 결함 유형] Excel Form 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cb669751",
+   "class": "M1",
+   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-66c2e2f1",
+   "class": "E3",
+   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f7628b82",
+   "class": "M1",
+   "msg": "[DMF0014 결함 유형] Excel Upload 수량 미입력 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9485e3df",
+   "class": "M1",
+   "msg": "[DMF0014 결함 일반화] Excel Upload 헤더 검증 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e6242c71",
+   "class": "M1",
+   "msg": "[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e1ea306e",
+   "class": "M1",
+   "msg": "[DMF0074 결함 유형] Excel Form 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f1ff3b39",
+   "class": "M1",
+   "msg": "[DMF0074 결함 유형] Excel Form 양식 헤더",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-62b64ce1",
+   "class": "M1",
+   "msg": "[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-87f8bcee",
+   "class": "M1",
+   "msg": "[DMF0082 결함 유형] Excel Form 양식 Bucket",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-08066b3e",
+   "class": "G1",
+   "msg": "[DMF0053 결함 유형] Project·Owner 조회조건(Model/Nickname 정상)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9493cbe6",
+   "class": "M1",
+   "msg": "[DMF0082 결함 유형] Excel Form 팝업 Search",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-79ef4fef",
+   "class": "M1",
+   "msg": "[DMF0082 결함 유형] Excel Upload",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-62d009c3",
+   "class": "M3",
+   "msg": "[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-74ba6149",
+   "class": "G1",
+   "msg": "[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-80f3c459",
+   "class": "M3",
+   "msg": "[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1fa3544a",
+   "class": "G1",
+   "msg": "[SYS0003 결함 일반화] API Name 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8dd3fd1d",
+   "class": "A5",
+   "msg": "[DMF0082 결함 유형] BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2c702179",
+   "class": "A5",
+   "msg": "[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-75fd93e9",
+   "class": "M4",
+   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-63ff77be",
+   "class": "M1",
+   "msg": "[DMF0074 결함 일반화] 공용 Excel Upload 창 2단계 — Upload(검사 · 분류) → OK(저장) · 오류 1건 이상이면 저장 차단 MSG00657",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0c2b2fa1",
+   "class": "G1",
+   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-68ea8e05",
+   "class": "G1",
+   "msg": "텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7afc5921",
+   "class": "G1",
+   "msg": "API Name 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-68db142c",
+   "class": "M4",
+   "msg": "D00-2-025 · §2 spdMain / CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f9e80804",
+   "class": "M4",
+   "msg": "SP · 24",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-83129699",
+   "class": "X-ROW",
+   "msg": "SSP0023_ShipmentPlanElectrode.BtnMeasure_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-74048dfd",
+   "class": "M4",
+   "msg": "DIVISION_ID / Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c20e55cf",
+   "class": "M4",
+   "msg": "ERP_SO_NO / SO No",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-04a1f1e5",
+   "class": "M4",
+   "msg": "CONFIRM_ID / Confirm/Plan ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5078ebac",
+   "class": "M4",
+   "msg": "ITEM_ID / Material",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-84cb8fa6",
+   "class": "M4",
+   "msg": "SHIPMENT_DATE / Shipment Date",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e151f0f4",
+   "class": "M4",
+   "msg": "REMARKS2 / Shipment No.",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d17e06e1",
+   "class": "X-ROW",
+   "msg": "SSP0023_ShipmentPlanElectrode.SpdDetail_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-124e916b",
+   "class": "X-ROW",
+   "msg": "SSP0023_ShipmentPlanElectrode.SpdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c328c628",
+   "class": "M4",
+   "msg": "SHIPPING_PLAN_QTY / Shipping Plan Qty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b315f0ef",
+   "class": "M4",
+   "msg": "SHIPMENT_CONFIRM_QTY / Confirm Qty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-028fb6bf",
+   "class": "M4",
+   "msg": "GAP / Gap",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ee7447cb",
+   "class": "M4",
+   "msg": "CONFIRM_QTY_ROLL_LENGTH / Confirm Qty (Cut",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5839a8a1",
+   "class": "M4",
+   "msg": "PACKAGE_QTY / Package Qty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e662f6c8",
+   "class": "M4",
+   "msg": "CONFIRM_QTY_PANCAKE / Confirm Qty (Pancake m",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-261ca71c",
+   "class": "M4",
+   "msg": "CONFIRM_QTY_JR / Confirm Qty (Jumboroll m",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-191f08d7",
+   "class": "M4",
+   "msg": "CONFIRM_QTY_CELL / Confirm Qty (Cell",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d44ff13e",
+   "class": "M4",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-15 02:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-17af2c10",
+   "class": "M4",
+   "msg": "SSP0023_ShipmentPlanElectrode.SpdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 D1, E1, F2, F6, K-SA, D2, C5, H13 — Doc/verify/SSP0023/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 3604,
+  "PASS": 953,
+  "FAIL": 70,
+  "판정필요": 78,
+  "미검증": 1248,
+  "해당없음": 1255,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1677,
+   "없음(미검증)": 1248,
+   "사람": 2,
+   "없음(판정 대기)": 78,
+   "기계(상속·집계)": 576,
+   "출처 미기록": 23
+  },
+  "fail_listed": 70,
+  "coverage": {
+   "rules": 96,
+   "measured": 820,
+   "not_run_error": 1093,
+   "na": 745,
+   "suspect_na100": [
+    "D1",
+    "E1",
+    "F2",
+    "F6",
+    "K-SA",
+    "D2",
+    "C5",
+    "H13"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SSP0023_ShipmentPlanElectrode_CheckList_v7.xlsx",
+  "ActionItemList": "Doc/CheckList/SSP0023_ShipmentPlanElectrode_ActionItemList_v7.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0023/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 D1, E1, F2, F6, K-SA, D2, C5, H13 — Doc/verify/SSP0023/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

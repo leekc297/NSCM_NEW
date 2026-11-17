@@ -1,0 +1,5 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0048-Sbf4efb,조회,GetDivision,SCP0048_ItembyDivisionPopupEx.cs:501,주석 안에서만 호출,SCP0048_ItembyDivisionPopupEx.cs:208; SCP0048_ItembyDivisionPopupEx.cs:211,
+SCP0048-Sa2e98d,조회,GetEndCustomerbyDivision,SCP0048_ItembyDivisionPopupEx.cs:546,주석 안에서만 호출,SCP0048_ItembyDivisionPopupEx.cs:220; SCP0048_ItembyDivisionPopupEx.cs:224,
+SCP0048-Scc16d7,조회,GetTeambyDivision,SCP0048_ItembyDivisionPopupEx.cs:532,주석 안에서만 호출,SCP0048_ItembyDivisionPopupEx.cs:214; SCP0048_ItembyDivisionPopupEx.cs:217,
+SCP0048-Seb6c4c,기타,ClearUsrCheckedList,SCP0048_ProjectRoute_Warranty.cs:187,호출 없음,,

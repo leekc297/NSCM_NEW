@@ -124,12 +124,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -138,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44285,
+                      "duration": 44183,
                       "errors": [],
                       "stdout": [
                         {
@@ -153,13 +148,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:44:39.361Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:11:45.206Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -180,12 +170,7 @@
               "tests": [
                 {
                   "timeout": 1500000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -194,7 +179,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 84442,
+                      "duration": 95452,
                       "errors": [],
                       "stdout": [
                         {
@@ -216,13 +201,19 @@
                           "text": "[eg_auth] SCP0084 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 9s\n"
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\eg\\auth\\eg_combos.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/ADMIN 16s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0084 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 9s\n"
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0084\\eg\\auth\\eg_combos.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 16s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0084 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -240,7 +231,7 @@
                           "text": "[eg_auth] SCP0084 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 10s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0084 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -257,13 +248,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:45:26.619Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:12:33.045Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -284,12 +270,7 @@
               "tests": [
                 {
                   "timeout": 1200000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -298,7 +279,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44057,
+                      "duration": 44195,
                       "errors": [],
                       "stdout": [
                         {
@@ -331,13 +312,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:46:54.997Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:14:12.313Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -346,7 +322,7 @@
               ],
               "id": "fce9d8edbd378244cae8-2314a382f2ed8578c6f6",
               "file": "eg_auth.spec.ts",
-              "line": 362,
+              "line": 366,
               "column": 7
             },
             {
@@ -358,12 +334,7 @@
               "tests": [
                 {
                   "timeout": 900000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -372,7 +343,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6474,
+                      "duration": 6241,
                       "errors": [],
                       "stdout": [
                         {
@@ -381,13 +352,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:47:43.069Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:15:00.235Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -396,7 +362,7 @@
               ],
               "id": "fce9d8edbd378244cae8-56d2faf8e91ba6b2ef94",
               "file": "eg_auth.spec.ts",
-              "line": 413,
+              "line": 417,
               "column": 7
             },
             {
@@ -417,7 +383,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 326,
+                      "duration": 296,
                       "errors": [],
                       "stdout": [
                         {
@@ -426,7 +392,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:47:53.518Z",
+                      "startTime": "2026-11-14T04:15:10.295Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -436,7 +402,7 @@
               ],
               "id": "fce9d8edbd378244cae8-c6ec7677e60fc2117f4d",
               "file": "eg_auth.spec.ts",
-              "line": 484,
+              "line": 488,
               "column": 7
             },
             {
@@ -448,12 +414,7 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -462,7 +423,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5939,
+                      "duration": 5830,
                       "errors": [],
                       "stdout": [
                         {
@@ -471,13 +432,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:47:57.787Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:15:14.376Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -486,7 +442,7 @@
               ],
               "id": "fce9d8edbd378244cae8-150b3d90bc3590227482",
               "file": "eg_auth.spec.ts",
-              "line": 554,
+              "line": 558,
               "column": 7
             },
             {
@@ -507,7 +463,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 313,
+                      "duration": 310,
                       "errors": [],
                       "stdout": [
                         {
@@ -519,7 +475,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:48:07.658Z",
+                      "startTime": "2026-11-14T04:15:23.989Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -529,7 +485,7 @@
               ],
               "id": "fce9d8edbd378244cae8-1b3aeac2c1507e994275",
               "file": "eg_auth.spec.ts",
-              "line": 570,
+              "line": 574,
               "column": 7
             },
             {
@@ -541,12 +497,7 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
@@ -555,7 +506,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6002,
+                      "duration": 6100,
                       "errors": [],
                       "stdout": [
                         {
@@ -564,13 +515,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:48:11.756Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-14T04:15:28.034Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -579,7 +525,7 @@
               ],
               "id": "fce9d8edbd378244cae8-932729611a7e2d561dca",
               "file": "eg_auth.spec.ts",
-              "line": 600,
+              "line": 604,
               "column": 7
             },
             {
@@ -600,7 +546,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 309,
+                      "duration": 281,
                       "errors": [],
                       "stdout": [
                         {
@@ -612,7 +558,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-07T09:48:21.637Z",
+                      "startTime": "2026-11-14T04:15:37.978Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -622,7 +568,7 @@
               ],
               "id": "fce9d8edbd378244cae8-c8af292d8e7041c988e1",
               "file": "eg_auth.spec.ts",
-              "line": 625,
+              "line": 629,
               "column": 7
             }
           ]
@@ -632,8 +578,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-07T09:44:38.883Z",
-    "duration": 227967.854,
+    "startTime": "2026-11-14T04:11:44.771Z",
+    "duration": 237946.798,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

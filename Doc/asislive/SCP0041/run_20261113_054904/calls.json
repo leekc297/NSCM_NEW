@@ -1,0 +1,332 @@
+{
+ "id": "SCP0041",
+ "window": [
+  "2026-11-13 05:49:04.133",
+  "2026-11-13 05:49:22.665"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-13 05:49:04.451",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 22.17,
+   "params": {
+    "Code": "Division",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='Division', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:04.461",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 4.54,
+   "params": {
+    "Code": "PlantSiteByDivisionOSP1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlantSiteByDivisionOSP1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:04.473",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 38,
+   "rows_kind": "DataSet rows",
+   "ms": 4.75,
+   "params": {
+    "Code": "PlantSitePackerHoldStock1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlantSitePackerHoldStock1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:04.815",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2559,
+   "rows_kind": "DataSet rows",
+   "ms": 336.02,
+   "params": {
+    "Code": "SaleSiteByDivision1",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='SaleSiteByDivision1', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:04.961",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 6.94,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0041"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0041'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:04.996",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 23.66,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.081",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 7.76,
+   "params": {
+    "Code": "PERIOD_DEFAULT",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PERIOD_DEFAULT', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.105",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 3.14,
+   "params": {
+    "p_lookup_type": "PACKER_HOLD_STATUS"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='PACKER_HOLD_STATUS'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.171",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.8,
+   "params": {
+    "Code": "PERIOD_DEFAULT",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PERIOD_DEFAULT', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.188",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 4.39,
+   "params": {
+    "p_program_id": "SCP0041",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Osp Stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0041', @p_user_id='jaeuk.shin', @p_sheet_name='Osp Stock'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.203",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 15,
+   "rows_kind": "DataSet rows",
+   "ms": 5.83,
+   "params": {
+    "p_program_id": "SCP0041",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Pack Hold Stock"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0041', @p_user_id='jaeuk.shin', @p_sheet_name='Pack Hold Stock'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.230",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 6.91,
+   "params": {
+    "MenuID": "Stock OSP",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Stock OSP', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:05.400",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 3.75,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0041"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0041'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-13 05:49:16.378",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0041_GET_STOCK_OSP",
+   "sp": "SCP0041_GET_STOCK_OSP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 127,
+   "rows_kind": "DataSet rows",
+   "ms": 32.87,
+   "params": {
+    "p_division_id": "82",
+    "p_plant_site_id": "CN00249500-P,CN05104100_82-P,KR00697200_82-P,KR00797800-P,KR04851000-P,KR32625300_82-P,PL01279700_82-P,US02182600_82-P,US02279100_82-P,US02562600_82-P,300MS 8ME SBS1_US_LAS,425LM 8ME SBS2_US_LAS,45MG 8ME_US_BJO,8minute Energy_KR_KUV,8minute Energy_US_BJO,8minute Energy_US_EFS,8minute Energy_US_LAX,8minute Energy_US_PQA,ABB CA_CA_SLA,ABB USA_CN_NJG,ABB USA_US_CFC,ABB USA_US_NYC,ABB_BE_JUM,ABB_US_4CP,ABB_US_CFC,ABB_US_RIC,Acciona SA_CL_ANF,Acciona SA_ES_MAD,Ace Engineering_KR_SEL,AEE Solar_US_SAC,AES Corp_US_ARP,AES ES_AU_VIC,AES ES_BR_SAO,AES ES_IN_DEL,AES ES_US_CBE,AES ES_US_CHD,AES ES_US_CNN,AES ES_US_DNO,AES ES_US_LQF,AES ES_US_PCT,AES ES_US_TAZ,AES ES_US_WXN,AGL Energy_AU_ADL,AKA_CA_CRL,Akatsuki_JP_STM,AKUO ENERGY_ES_GRX,AKUO ENERGY_MU_RTS,AKUO ENERGY_RE_ZSE,ALBIOMA_GP_BBR,ALBIOMA_RE_REU,Aldustria_GB_FXT,Aldustria_GB_LON,Alpha_DE_CHA,Ampere_ES_PZU,Anode Power_US_PIE,Aratina_US_BJO,Arlington Energy_GB_LON,Asset Engineering_US_WAG,Avangrid_US_ARF,AVK_GB_DBE,AVK_GB_GRC,AWS_US_JAN,AWS_US_PHX,Baywa_US_SCH,Baywa_US_XF7,BJ Power_KR_PUS,Blue sigma_KR_GYS,BOSCH_DE_STR,Bosung Power_KR_CHU,Bosung Power_KR_SEL,BS Hanyang_KR_KWA,BYUCKSAN POWER_KR_JYG,BYUCKSAN POWER_KR_OKK,BYUCKSAN POWER_KR_SEL,Capital Energy_ES_MAD,CAT_US_CH2,CAT_US_CHI,CAT_US_IGX,CAT_US_LGB,CAT_US_PIA,CCR_US_ASC,CCR_US_WIQ,CDN Energy_CA_ABT,CED_US_ABU,CED_US_RAL,CED_US_SAC,CED_US_SAN,CED_US_SNH,CED_US_STS,CED_US_TPE,CED_US_WCB,CED_US_WPH,Cen_ES_CCS,Chint_CN_SHA,Chint_US_DAL,CHPP_TH_BKK,Chubutsu_JP_CHC,Chubutsu_JP_GIF,Chubutsu_JP_KOJ,Clearway Energy_US_ACC,CLOU_CN_SZP,CLOU_CN_SZX,CLOU_CN_WUX,Coenergia_IT_BON,Con Edison_PR_PTR,Con Edison_US_AYE,Con Edison_US_GEE,Con Edison_US_LAX,Con Edison_US_PIA,Controllis_GB_TFD,Cooltech_CN_SHA,Core Scientific_US_HUU,Corvus Norway_CA_RBC,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Corvus_CA_RBC,CPH_DO_AZS,CPH_US_MSK,Critical Loop Equipment_US_LGB,CSR_AU_NRE,Dasan Energy_KR_TJN,DCBEL LLC_US_SXB,Delta_CN_BJS,Delta_CN_HGH,Delta_CN_WJA,Delta_JP_KOJ,Delta_TW_CHW,Delta_TW_NTC,Delta_TW_TNN,Delta_TW_TYN,Delta_US_2TT,Delta_US_AAZ,Delta_US_LVI,Delta_US_ZYQ,DeltaX_KR_GYG,DeltaX_KR_PJU,DeltaX_KR_SEL,Demand Energy_US_GEG,DESRI_US_ABQ,DESRI_US_DJO,DESRI_US_JPB,DESRI_US_KTI,DESRI_US_NB2,DESRI_US_SXT,DESRI_US_TFW,DESRI_US_UTT,DESRI_US_ZTZ,Destin Power_KR_SEL,Destin Power_KR_SGM,Develop_JP_TGI,Diotech_EE_TLL,DM Energy_KR_BUK,DM Energy_KR_SEL,DM Energy_KR_UJU,DM Energy_KR_USN,DM GEC_KR_SEL,Doosan Heavy_AU_ABX,Doosan Heavy_GU_GUM,Doosan Heavy_KR_CHW,DTE_US_2TT,DTE_US_CWA,DTE_US_DT7,DTE_US_MG8,DTE_US_MGC,DTE_US_MNC,DTE_US_NEP,DTE_US_SJX,Dynapower_US_AOM,Dynapower_US_BZL,Dynapower_US_HKN,Dynapower_US_MRA,Dynapower_US_PCP,Dynapower_US_SFM,Dynapower_US_SOX,E2Z_KR_CHA,E3DC_DE_OSN,E3DC_DE_WTR,Eaton_NO_TRD,Eaton_US_RAG,ECO Power_KR_KWJ,Eco Stor_DE_HAM,Ecocoach_CH_WEI,EDF_CA_MTR,EDF_CA_TOR,EDF_DE_HAM,EDF_ES_VLC,EDF_ES_ZCO,EDF_FR_BPS,EDF_FR_ECI,EDF_FR_MRS,EDF_FR_PAR,EDF_PE_IQT,EDF_US_ABU,EDF_US_BSR,EDF_US_HOU,EDF_US_HQU,EDF_US_NYC,EDF_US_ZTZ,Edison Power_JP_CHB,EDPR_GB_ASS,EDPR_US_FAT,Eesti Energia_EE_TL2,Eesti Energia_EE_TLL,EG01-82-AS,EG4_US_OMC,EG4_US_SLR,EGEM_CZ_PRG,Eguana_CA_CAL,Eguana_US_HNL,Electric Era_US_SEA,Element Energy_US_MKU,EN Tech_KR_GUN,EN Tech_KR_KWJ,EN Technology_KR_SEL,ENEFIT_EE_TAY,ENEL X_US_LGB,Eneon_CA_MKH,Energix_PL_WRO,Energon_CZ_PRG,Energy & HVAC_KR_CHC,Energy & HVAC_KR_JEO,Energy & HVAC_KR_KWJ,Energy & HVAC_KR_SYS,Energy Australia_AU_LVH,ENERGYGATE_KR_GJE,ENERGYGATE_KR_SEL,ENERGYGATE_KR_YJU,Enerm_DE_SAJ,Enerzent_KR_HNM,Enerzent_KR_KMH,Enerzent_KR_YJU,Enodam_KR_CHO,Entech_FR_UIP,EON_IN_ABN,EON_KR_SUO,EPS_IT_MIL,EQUIS Australia_AU_BTV,EVO Power_AU_MEA,EVO Power_US_BOS,EVO Power_US_RSM,Excelsior_US_EDM,Excelsior_US_EXZ,Facebook_IE_DUB,Facebook_SE_UME,Facebook_US_CLT,Facebook_US_DAL,Facebook_US_IOX,Facebook_US_PRZ,Facebook_US_QWB,Facebook_US_UFS,Fluence_AD_LAP,Fluence_AE_ABU,Fluence_AU_VIC,Fluence_CA_OAK,Fluence_CL_SCL,Fluence_GB_BOS,Fluence_GB_MBY,Fluence_GB_RUN,Fluence_GB_SHS,Fluence_IE_KIR,Fluence_IN_DEL,Fluence_PH_MNL,Fluence_PH_TAU,Fluence_SG_SIN,Fluence_US_AAI,Fluence_US_ARP,Fluence_US_BSR,Fluence_US_CBE,Fluence_US_CNN,Fluence_US_FOR,Fluence_US_LB3,Fluence_US_LGB,Fluence_US_PHX,Fluence_US_RAL,Fluence_US_SAN,Fluence_US_TSE,Fluence_US_WDA,Fluence_US_WXN,Fluence_US_WYM,FMS_KR_ANY,FPL_US_ARI,FPL_US_GCS,FPL_US_KIV,FPL_US_PHX,FPL_US_VRB,FPL_US_XDX,FPL_US_YFA,Fronius_AT_WSL,Fuji Electric_JP_TMK,Gamesa_ES_ZAM,GasiriGridPark_KR_CHA,Gateway_US_SAN,GE Fuel Cells_AD_LAP,GE Fuel Cells_GB_CHV,GE Fuel Cells_US_NYC,GE Grid Solutions_US_JHY,GE Vernova_US_JHY,Ginlong_CN_CN_SHA,Glidepath_US_CHI,Glidepath_US_EP5,Glidepath_US_MYD,GM Energy_US_EKI,GM Energy_US_PHX,GOEN_TR_ABK,Google_NL_AMS,Google_SG_SIN,Google_US_FBN,Google_US_NUQ,Google_US_UCG,GPD_JP_KUH,GPD_JP_SHB,GPD_JP_TMK,Gransolar_ES_MAD,Green Diamond_TR_ANK,Green Diamond_TR_ESB,Green Power Tech_GB_YEO,Green Power Tech_MX_LAP,GREENSMITH_GB_TIL,GREENSMITH_US_JEM,Gresham House_GB_LON,Growatt_CN_SZX,GS Neotek_KR_HSO,GS Neotek_KR_SEL,GSENR_KR_YYG,Hanwha Convergence_KR_HSO,Hanwha Convergence_KR_HWS,Hanwha Defense_KR_CHW,Hanwha Energy_AU_ABX,Hanwha Energy_KR_SEL,Hanwha Energy_KR_SJG,Hanwha Energy_US_PHA,Hanwha Q Cells_KR_ICN,Hanwha Q Cells_KR_SEL,Hanwha Q Cells_US_AAZ,Hanwha Q Cells_US_ABH,Hanwha Q Cells_US_CA2,Hanwha Q Cells_US_JYV,Hanwha Q Cells_US_LGB,Hanwha Q Cells_US_SAN,Hanwha Q Cells_US_TOA,Hanwha Q Cells_US_ZOM,Hanwha Q Cells_US_ZTZ,Hanwha Q Cells_VN_BNE,HD Infracore_KR_INC,HKMC_KR_SEL,Honda Motor_JP_SKA,HOPPECKE_DE_BRI,HQ05-82-AS,HYbrid Energy Solutions_IE_KLK,Hybrid Energy_CN_WUX,Hybrid Energy_IE_KLK,Hybrid Systems_AU_PER,Hyosung H.I_KR_PUS,Hyosung H.I_KR_SEL,Hyosung_KR_SAN,Hyperstrong_CN_BJS,Hyperstrong_CN_NJG,Hyperstrong_PL_WA1,Hyperstrong_US_MNC,Hyundai E.E.S_KR_SEL,Hyundai Global_KR_SEL,Hyundai H.I_KR_USN,Hyundai Hyms_KR_KWJ,hyundai-ce_KR_INC,I Power_KR_TAE,IES_US_SNH,IHI_CA_NWC,IHI_CA_SNI,Iljin_power_KR_UJU,IM_CN_PDG,IM_CN_SGP,IM_US_EPD,IM_US_HOU,IM_US_XDI,Ingeteam_ES_CDC,Ingeteam_ES_MAD,Ingeteam_ES_ZAM,Ingeteam_RE_REU,Ingeteam_US_ROC,INOVAT_TR_IZM,IntechFA_KR_YNG,Integra_US_HOU,Intilion_DE_HAM,Invenergy_US_PWA,IOWN_US_BLD,IOWN_US_ZTZ,Itochu_AU_ADL,Itochu_DE_DRS,Itochu_JP_YMG,Itochu_US_HNL,Itochu_US_SNA,Jabil_IT_MRC,Jabil_UG_KLA,Jabil_US_YFA,Jabil_ZA_JNB,JCI_US_HNL,JCI_US_LEX,JCI_US_OIO,Jeju electric vehicle_KR_CJU,JFE_JP_HNA,JFE_JP_NGI,JFE_JP_SMZ,JFE_JP_TYO,JFE_JP_YOK,JFE_KR_SUO,JH Energy_KR_INC,Jofemar SA_ES_PAA,JSW_IN_MUB,K.E.W.Power_KR_CHA,KCS_KR_KWJ,kepco_AU_QLD,kepco_ES_BCN,kepco_KR_SEL,Kokam_KR_GCH,Kokam_KR_GSG,Kokam_KR_HNG,Kokam_KR_JDO,Kokam_KR_SCE,Kokam_KR_SEL,Kongsberg Maritime AS_NO_AGO,Kongsberg_NO_BGO,Krannich_US_OCN,Krannich_US_PPS,Kyocera_JP_NGO,L&T_IN_MAA,Leclanche_CA_KIN,Leclanche_CA_NWC,Leclanche_CH_YLB,Leclanche_DE_HAM,Leclanche_NL_HHW,Leclanche_NL_VSR,Leclanche_SK_SZS,Leclanche_US_AID,Leclanche_US_FLI,Legrand_FR_LIG,Legrand_IT_BBB,LG CNS_KR_PTK,LGCAU_AU_BNE,LGCAU_AU_VIC,LGCDJ_KR_TJN,LGCEG_DE_DAR,LGCEG_DE_MWA,LGCEG_DE_SUZ,LGCMI_US_JID,LGCMI_US_LGB,LGCNS_KR_GYS,LGCOC2_KR_OCH,LGE RESU_KR_KUM,LGE RESU_KR_PUS,LGE_KR_ANY,LGE_KR_BJG,LGE_KR_BOR,LGE_KR_CHU,LGE_KR_CJJ,LGE_KR_ESG,LGE_KR_HCN,LGE_KR_HDG,LGE_KR_HWS,LGE_KR_JEO,LGE_KR_KAN,LGE_KR_KWJ,LGE_KR_MAS,LGE_KR_MGG,LGE_KR_PJU,LGE_KR_PTK,LGE_KR_SCE,LGE_KR_SEL,LGE_KR_SGO,LGE_KR_TAN,LGE_KR_TJN,LGESMI_US_LUI,LGESMI_US_RDO,LGESVT_KR_CHU,LGESVT_US_BOS,LGESVT_US_ONT,LGESVT_US_PHX,LGESVT_US_WRO,LG-Hitachi_KR_PTK,LGnsys_KR_ASN,LGnsys_KR_CUC,LGnsys_KR_PTK,LGU+_KR_SEL,LM_KW_KWI,LM_US_DAL,LM_US_TOP,Loccioni_GB_GGU,Loccioni_IT_AOI,Loccioni_IT_CBX,looop_JP_TKX,LS Energy Solutions_US_CLT,LSis_KR_ANY,LSis_KR_CHO,LSis_KR_CJU,LSis_KR_GUN,LSis_KR_JAN,LSis_KR_JNJ,LSis_KR_NSN,LSis_KR_YAM,LSis_TH_PYX,LTW_CZ_PRG,LTW_CZ_SUA,Material in Motion_US_TYM,Material in Motion_US_UCG,MELCO_JP_ABI,Melfosur_CL_SCL,Memodo_DE_ODD,MEPPI_US_WRR,Merus Power_FI_NOK,METKA EGN_GB_BTH,METKA EGN_GB_IST,MHPS_JP_NGS,Microgrid Networks_US_NYC,MP2 Energy LLC_US_ABI,MPOWER GROUP _AU_DTO,MPOWER GROUP_AU_IGN,NEC ES_GB_BAS,NEC ES_GB_TIL,NEC ES_JP_TYO,NEC ES_US_WRO,NEC_CN_YUN,NEC_US_SND,Neoen_AU_SYD,NextEra_KR_CHU,NextEra_KR_SEL,NextEra_US_ABQ,NextEra_US_BIE,NextEra_US_BLN,NextEra_US_CHI,NextEra_US_EPC,NextEra_US_EQT,NextEra_US_FAT,NextEra_US_FMG,NextEra_US_GXY,NextEra_US_JAX,NextEra_US_JB2,NextEra_US_KIV,NextEra_US_LNK,NextEra_US_MTP,NextEra_US_MYD,NextEra_US_NOO,NextEra_US_NRC,NextEra_US_OFK,NextEra_US_P7N,NextEra_US_PHX,NextEra_US_RWX,NextEra_US_SWO,NextEra_US_TNY,NextEra_US_VUN,NextEra_US_XHO,NextEra_US_XUL,NextEra_US_YDG,NextEra_US_ZMT,NextEra_US_ZYN,Nhoa_IT_CVW,NIDEC_DE_BEX,NIDEC_DE_WLM,NIDEC_FI_HEL,NIDEC_FI_LPP,NIDEC_FR_AH3,NIDEC_FR_BGV,NIDEC_FR_ROC,NIDEC_GB_LIS,NIDEC_GB_RFO,NIDEC_GF_CAY,NIDEC_IT_MVO,NIDEC_NC_NOU,NIDEC_SE_DRT,NIDEC_SE_SLF,NIDEC_SV_LAP,NIDEC_SV_USU,NIDEC_US_CLE,NIDEC_US_TXT,NIPPONKOEI_JP_FKF,NJ02-82-AS,NKES_JP_AXT,Noriker_GB_LON,Northern Reliability_US_ASC,NRG ENERGY_CA_OAK,NRG ENERGY_US_BSR,NRG ENERGY_US_MNH,NRG ENERGY_VG_VIJ,Numeric_IN_MAA,NW Energy_CN_BJS,NW Energy_FR_EBU,NW Energy_FR_PAR,OCI Power_KR_KUV,OCI Power_KR_SEL,OCI Power_US_BMQ,OCI Power_US_GSB,OCI Power_US_HSR,OCI Power_US_TXA,Omexom_FR_UIP,Omnisystem_KR_YJU,OMRON_JP_KM1,OMRON_JP_OOO,OMRON_JP_YAT,One Stop Warehouse_AU_BNE,Onesource_US_OCN,ORMAT_US_CR3,ORMAT_US_NYC,ORMAT_US_QSB,Panasonic NA_US_TXA,Peopleworks_KR_KUM,PESCA_CA_NWC,PG&E_US_FOU,PGE_PL_GDN,PGE_PL_WLO,PGS_AU_PHA,PGS_ES_BCN,PIXII_NO_KRS,PIXII_NO_SKD,PIXII_SK_LIM,POSCO International_KR_PTK,posco_KR_KPO,Power-Tech_AU_NWD,Qinous_DE_BER,QIT_KR_PUS,Quewave_EG_CAI,Raychem_IN_ICD,Red Earth_AU_BNE,RES America_CA_TOR,REV Renewables_US_SAN,RNA Energy_GB_LON,Rosendin_US_BFL,RWE_AU_DNQ,RWE_GB_ELL,RWE_US_BFL,RWE_US_CJN,RWE_US_CQC,RWE_US_HQR,RWE_US_IIW,RWE_US_LAX,RWE_US_SGA,RWE_US_SLR,RWE_US_SWW,RWE_US_WNF,S&C_NZ_WHI,S&C_US_CHI,SAET_IT_SZZ,Saft_FR_LPT,Saman_KR_KUM,SB Energy_US_BAM,Schneider_TH_BAI,Schneider_US_CLT,SCLE_BE_AAB,SER_US_FAT,SER_US_MWL,SER_US_OSD,SER_US_SNK,SER_US_SPS,SER_US_SWW,Sharp_JP_37T,Sharp_JP_OSA,Shell_US_HOU,Shinden Hightex_JP_FUK,Shinden Hightex_JP_KGK,Shinden Hightex_JP_KMJ,Shinden Hightex_JP_KUH,Shinden Hightex_JP_SAK,Shinden Hightex_JP_SHO,Shinden Hightex_MN_AVK,Shinsegae-ENC_KR_HNM,Shinsegae-ENC_KR_PJU,Shinsegae-ENC_KR_SEL,Shinsegae-ENC_KR_TAE,Siemens AG_DE_ERL,Siemens_DE_ERL,Siemens_GB_MNC,Siemens_NO_OSL,Signature Solar_US_SLR,SLB_KR_GUN,SLB_KR_KAN,SMA_AU_FR3,SMA_CZ_KDA,SMA_DE_KAS,SMA_IT_VCE,Smart solar_JP_KUH,Smart solar_JP_TKX,Socomec_FR_HTN,Socomec_SN_DKR,Socomec_US_LAX,Socomec_ZA_AAM,Softbank_JP_TYO,Solar Juice_AU_WEH,Solar Turbines_US_SAN,Solaray(IISS)_US_HNL,SolarEdge_IL_IHA,SolarEdge_IN_BLR,SolarEdge_IN_DEL,SolarEdge_US_FNC,SolarWiz_KR_GIN,SolaX_AU_BUW,SolaX_GB_LAN,SolaX_GB_LDY,SolaX_GB_NTN,Sonepar_AU_MEL,Spear Power Systems_US_GVW,Statera_GB_LCT,Steag_DE_WLM,Sumitomo_JP_CH1,SUNDS_JP_NRI,Sungrid_CA_GAL,Sungrow_KR_SEL,Sunnova_US_HOU,SunRun_US_CSL,SunRun_US_THV,Sunwoda_CN_CZX,Sunwoda_CN_SZX,Synerzen_KR_INC,Synerzen_KR_SEL,Taehyung_KR_BCN,TAI ENGINEERING_TW_TPE,Terra-Gen_US_BSR,Terra-Gen_US_CA2,Terra-Gen_US_CRU,Terra-Gen_US_ENL,Terra-Gen_US_EWA,Terra-Gen_US_HDO,Terra-Gen_US_MEM,Terra-Gen_US_MOJ,Terra-Gen_US_NYC,Terra-Gen_US_PHX,Terra-Gen_US_PUC,Terra-Gen_US_WRO,Terra-Gen_US_ZTZ,TF KABLE_PL_MYC,TGOOD_AU_PER,Tmeic_BE_KSR,Tmeic_GB_COL,Tmeic_JP_DAT,Tmeic_JP_FKU,Tmeic_JP_ITI,Tmeic_JP_NAH,Tmeic_JP_OSA,Tmeic_JP_TYO,Tokyu Land_JP_MTM,Trinabess_CN_TAX,UBM_DE_BER,UniTest_KR_YNG,USDOE_US_GOE,VARTA RESU_DE_HGO,VARTA RESU_DE_NON,VARTA_DE_STR,Vector_AK_LAP,Vertiv Korea Ltd._KR_SEL,Vertiv_AU_SYD,Vertiv_IT_BLQ,Viridity_US_GTW,Vistra Energy_KR_SEL,Vistra Energy_US_MLG,Vistra Energy_US_OAK,VivintSolar_US_AIE,VivintSolar_US_TNS,Wartsila_FI_HEL,WCP Solar_US_NPV,WEG_US_BSR,WEG_US_VBR,WESCO_US_PHX,Woojin_KR_PU0,Yamabishi_JP_TMK,YOUNICOS_BE_DRB,YOUNICOS_US_AUS,ZEM ENERGY_NO_HVI,Zirgu_EE_VLG,ZPUE_PL_WLS,이엔테크_KR_KWJ",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20260813",
+    "p_to_yyyymmdd": "20270813"
+   },
+   "inline": "EXEC SCP0041_GET_STOCK_OSP @p_division_id='82', @p_plant_site_id='CN00249500-P,CN05104100_82-P,KR00697200_82-P,KR00797800-P,KR04851000-P,KR32625300_82-P,PL01279700_82-P,US02182600_82-P,US02279100_82-P,US02562600_82-P,300MS 8ME SBS1_US_LAS,425LM 8ME SBS2_US_LAS,45MG 8ME_US_BJO,8minute Energy_KR_KUV,8minute Energy_US_BJO,8minute Energy_US_EFS,8minute Energy_US_LAX,8minute Energy_US_PQA,ABB CA_CA_SLA,ABB USA_CN_NJG,ABB USA_US_CFC,ABB USA_US_NYC,ABB_BE_JUM,ABB_US_4CP,ABB_US_CFC,ABB_US_RIC,Acciona SA_CL_ANF,Acciona SA_ES_MAD,Ace Engineering_KR_SEL,AEE Solar_US_SAC,AES Corp_US_ARP,AES ES_AU_VIC,AES ES_BR_SAO,AES ES_IN_DEL,AES ES_US_CBE,AES ES_US_CHD,AES ES_US_CNN,AES ES_US_DNO,AES ES_US_LQF,AES ES_US_PCT,AES ES_US_TAZ,AES ES_US_WXN,AGL Energy_AU_ADL,AKA_CA_CRL,Akatsuki_JP_STM,AKUO ENERGY_ES_GRX,AKUO ENERGY_MU_RTS,AKUO ENERGY_RE_ZSE,ALBIOMA_GP_BBR,ALBIOMA_RE_REU,Aldustria_GB_FXT,Aldustria_GB_LON,Alpha_DE_CHA,Ampere_ES_PZU,Anode Power_US_PIE,Aratina_US_BJO,Arlington Energy_GB_LON,Asset Engineering_US_WAG,Avangrid_US_ARF,AVK_GB_DBE,AVK_GB_GRC,AWS_US_JAN,AWS_US_PHX,Baywa_US_SCH,Baywa_US_XF7,BJ Power_KR_PUS,Blue sigma_KR_GYS,BOSCH_DE_STR,Bosung Power_KR_CHU,Bosung Power_KR_SEL,BS Hanyang_KR_KWA,BYUCKSAN POWER_KR_JYG,BYUCKSAN POWER_KR_OKK,BYUCKSAN POWER_KR_SEL,Capital Energy_ES_MAD,CAT_US_CH2,CAT_US_CHI,CAT_US_IGX,CAT_US_LGB,CAT_US_PIA,CCR_US_ASC,CCR_US_WIQ,CDN Energy_CA_ABT,CED_US_ABU,CED_US_RAL,CED_US_SAC,CED_US_SAN,CED_US_SNH,CED_US_STS,CED_US_TPE,CED_US_WCB,CED_US_WPH,Cen_ES_CCS,Chint_CN_SHA,Chint_US_DAL,CHPP_TH_BKK,Chubutsu_JP_CHC,Chubutsu_JP_GIF,Chubutsu_JP_KOJ,Clearway Energy_US_ACC,CLOU_CN_SZP,CLOU_CN_SZX,CLOU_CN_WUX,Coenergia_IT_BON,Con Edison_PR_PTR,Con Edison_US_AYE,Con Edison_US_GEE,Con Edison_US_LAX,Con Edison_US_PIA,Controllis_GB_TFD,Cooltech_CN_SHA,Core Scientific_US_HUU,Corvus Norway_CA_RBC,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Corvus_CA_RBC,CPH_DO_AZS,CPH_US_MSK,Critical Loop Equipment_US_LGB,CSR_AU_NRE,Dasan Energy_KR_TJN,DCBEL LLC_US_SXB,Delta_CN_BJS,Delt",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:49:16.406",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.14,
+   "params": {
+    "p_menu_id": "SCP0041",
+    "p_log_type": "FIND",
+    "p_log_cnt": "127",
+    "p_db_time": "0.067",
+    "p_ui_time": "0.014",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0041', @p_log_type='FIND', @p_log_cnt='127', @p_db_time='0.067', @p_ui_time='0.014', @p_user_id='jaeuk.shin'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-13 05:49:21.968",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 7.04,
+   "params": {
+    "MenuID": "Stock OSP",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Stock OSP', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

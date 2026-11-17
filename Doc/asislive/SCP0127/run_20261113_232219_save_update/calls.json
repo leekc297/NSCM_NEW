@@ -1,0 +1,143 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 23:22:56.761",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0127_GET_SEARCH_INFO",
+   "sp": "SCP0127_GET_SEARCH_INFO",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 552.1,
+   "params": {
+    "p_division_id": "81",
+    "p_site_id": ""
+   },
+   "inline": "EXEC SCP0127_GET_SEARCH_INFO @p_division_id='81', @p_site_id=''",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:22:57.982",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+   "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 140.85,
+   "params": {
+    "p_active_flag": "M",
+    "p_value_type": "MAX",
+    "p_division_id": "81",
+    "p_opmz_plan_gr_id": "PG0001",
+    "p_scm_site_id": "WA00-A",
+    "p_item_id": "AAEN4128I-A1-000",
+    "p_stage": "ASSY",
+    "p_from_yyyymmdd": "20250421",
+    "p_to_yyyymmdd": "20261231",
+    "p_type_apply_day": "1",
+    "p_value_description": "",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "p_pre_value_type": "MAX",
+    "p_pre_division_id": "81",
+    "p_pre_opmz_plan_gr_id": "PG0001",
+    "p_pre_scm_site_id": "WA00-A",
+    "p_pre_item_id": "AAEN4128I-A1-000",
+    "p_pre_stage": "ASSY",
+    "p_pre_from_yyyymmdd": "20250421",
+    "p_pre_to_yyyymmdd": "20261231"
+   },
+   "inline": "EXEC SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY @p_active_flag='M', @p_value_type='MAX', @p_division_id='81', @p_opmz_plan_gr_id='PG0001', @p_scm_site_id='WA00-A', @p_item_id='AAEN4128I-A1-000', @p_stage='ASSY', @p_from_yyyymmdd='20250421', @p_to_yyyymmdd='20261231', @p_type_apply_day='1', @p_value_description='', @p_valid_yn='Y', @p_user_id='jaeuk.shin', @p_pre_value_type='MAX', @p_pre_division_id='81', @p_pre_opmz_plan_gr_id='PG0001', @p_pre_scm_site_id='WA00-A', @p_pre_item_id='AAEN4128I-A1-000', @p_pre_stage='ASSY', @p_pre_from_yyyymmdd='20250421', @p_pre_to_yyyymmdd='20261231'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:23:02.009",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 5.71,
+   "params": {
+    "p_program_id": "SCP0127",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "PRECEDE / SAFETY STOCK DAY"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0127', @p_user_id='jaeuk.shin', @p_sheet_name='PRECEDE / SAFETY STOCK DAY'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:23:02.079",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP_ALL",
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP_ALL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 46,
+   "rows_kind": "DataSet rows",
+   "ms": 5.12,
+   "params": {
+    "Code": "PlanGroup",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP_ALL @Code='PlanGroup', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:23:02.119",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+   "sp": "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 534,
+   "rows_kind": "DataSet rows",
+   "ms": 28.48,
+   "params": {
+    "p_division_id": "81",
+    "p_plan_group_id": "",
+    "p_scm_site_id": "",
+    "p_item_id": "",
+    "p_stage": "",
+    "p_valid_yn": "",
+    "p_value_type": "",
+    "p_period_from": "20261109",
+    "p_period_to": "20271108"
+   },
+   "inline": "EXEC SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY @p_division_id='81', @p_plan_group_id='', @p_scm_site_id='', @p_item_id='', @p_stage='', @p_valid_yn='', @p_value_type='', @p_period_from='20261109', @p_period_to='20271108'",
+   "phase": "action:save"
+  },
+  {
+   "at": "2026-11-13 23:23:02.247",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.58,
+   "params": {
+    "p_menu_id": "SCP0127",
+    "p_log_type": "FIND",
+    "p_log_cnt": "534",
+    "p_db_time": "0.05",
+    "p_ui_time": "0.1",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0127', @p_log_type='FIND', @p_log_cnt='534', @p_db_time='0.05', @p_ui_time='0.1', @p_user_id='jaeuk.shin'",
+   "phase": "action:save"
+  }
+ ]
+}

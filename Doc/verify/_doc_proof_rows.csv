@@ -1,244 +1,244 @@
 ﻿src,no,menu_id,rule_ids,grades,state,screen_run,target
 DM,C1,COMMON,A5;K2,F;D,반쪽,N,컬럼/Measure 셋팅(개인화 Default)
-DM,C2,COMMON,B4;C1;B8,D;Fm;F,반쪽,N,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보
+DM,C2,COMMON,B4;C1;B8,D;F;D,반쪽,N,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보
 DM,C3,SYS0002,A5,F,입증,Y,User 화면 Group 컬럼
-DM,C4,COMMON,H4;H9,F;F,입증,N,Main Grid 컬럼 폭
-DM,C5,COMMON,G5,F,입증,N,팝업 연결 조회조건·그리드 컬럼
-DM,C6,COMMON,H6,D,반쪽,N,전체 팝업 버튼 순서
+DM,C4,COMMON,H4;H9,F;Fm,입증,N,Main Grid 컬럼 폭
+DM,C5,COMMON,G5,D,반쪽,N,팝업 연결 조회조건·그리드 컬럼
+DM,C6,COMMON,H6,F,입증,N,전체 팝업 버튼 순서
 DM,C7,COMMON,H7,D,반쪽,N,Excel Download 양식(공통 모듈)
-DM,C8,COMMON,H6;K1;K3,D;D;F,반쪽,N,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드
+DM,C8,COMMON,H6;K1;K3,F;D;F,반쪽,N,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드
 DM,P4,COMMON,I1;I2,F;F,입증,N,팝업 메시지 다국어(MSG00445 등)
 DM,P6,COMMON,K1,D,반쪽,N,그리드 필터(F4)
 DM,P8,COMMON,B2;B3;B4,F;F;D,반쪽,N,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)
-DM,1,DMF0043,H1,D,반쪽,Y,Contribution Version Valid_YN 컬럼
-DM,2,DMF0043_01,B6;G2,D;D,반쪽,N,조회조건 Product Group·Biz Type
+DM,1,DMF0043,H1,F,입증,Y,Contribution Version Valid_YN 컬럼
+DM,2,DMF0043_01,B6;G2,F;F,입증,N,조회조건 Product Group·Biz Type
 DM,3,DMF0043_01,L1,F,입증,N,Customer Group 조회조건 텍스트 입력 · 그리드 셀 클릭 응답
 DM,4,DMF0007,C2,F,입증,N,그리드 End Customer→Sales Site cascade
 DM,5,DMF0007,B4;F1;F2;F6,D;F;F;F,반쪽,N,저장(성공 메시지) · Sales Site 셀 콤보
-DM,6,DMF0007,B1;B2;B3,Fm;F;F,입증,N,그리드 End Customer 콤보
-DM,7,DMF0007,B5;N1,C;D,미입증,N,Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/_H).MEASURE
+DM,6,DMF0007,B1;B2;B3,F;F;F,입증,N,그리드 End Customer 콤보
+DM,7,DMF0007,B5;N1,C;F,미입증,N,Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/_H).MEASURE
 DM,8,DMF0008,A4,D,반쪽,Y,ERP EDI Master Validation 2·3번 Sheet
-DM,9,DMF0048,A1,D,반쪽,Y,조회 결과 건수
+DM,9,DMF0048,A1,F,입증,Y,조회 결과 건수
 DM,10,DMF0004,F2;F1;B4;B7,F;F;D;F,반쪽,Y,저장 · Sales Site 조회조건 콤보
 DM,11,DMF0004,F2;F1;B4;B7,F;F;D;F,반쪽,Y,저장 · Sales Site 조회조건 콤보
 DM,12,DMF0004,F2;F1;B4;B7,F;F;D;F,반쪽,Y,저장 · Sales Site 조회조건 콤보
-DM,13,DMF0005,M3;G5,D;F,반쪽,Y,Team 팝업
-DM,14,DMF0005,C3;F6,D;F,반쪽,Y,Team·Owner 컬럼
+DM,13,DMF0005,M3;G5,F;D,반쪽,Y,Team 팝업
+DM,14,DMF0005,C3;F6,F;F,입증,Y,Team·Owner 컬럼
 DM,15,DMF0005,F1,F,입증,Y,하단 Purchase 탭 EDI Incoterms
-DM,16,DMF0005,B1;B2;B3,Fm;F;F,입증,Y,그리드 End Customer 콤보
-DM,17,DMF0004,G2,D,반쪽,Y,조회조건 Active
-DM,18,DMF0005,E3;F3;D1;K3,F;D;F;F,반쪽,Y,Team(팝업 컬럼)·Project 컬럼 필수 Validation
-DM,19,DMF0072,B1;B2;B3,Fm;F;F,입증,Y,그리드 End Customer 콤보
+DM,16,DMF0005,B1;B2;B3,F;F;F,입증,Y,그리드 End Customer 콤보
+DM,17,DMF0004,G2,F,입증,Y,조회조건 Active
+DM,18,DMF0005,E3;F3;D1;K3,F;F;F;F,입증,Y,Team(팝업 컬럼)·Project 컬럼 필수 Validation
+DM,19,DMF0072,B1;B2;B3,F;F;F,입증,Y,그리드 End Customer 콤보
 DM,20,DMF0006,B4,D,반쪽,Y,그리드 End Customer 콤보
-DM,21,DMF0006,B4;C1;B2;B8,D;Fm;F;F,반쪽,Y,조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보
-DM,22,DMF0020,G5;M3;N1;A8,F;D;D;D,반쪽,Y,Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE
-DM,23,DMF0020,D1;C3,F;D,반쪽,Y,Team·End Customer 컬럼
+DM,21,DMF0006,B4;C1;B2;B8,D;F;F;D,반쪽,Y,조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보
+DM,22,DMF0020,G5;M3;N1;A8,D;F;F;F,반쪽,Y,Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE
+DM,23,DMF0020,D1;C3,F;F,입증,Y,Team·End Customer 컬럼
 DM,24,DMF0020,D1,F,입증,Y,Price Exist 컬럼
-DM,25,DMF0020,D2;F6;F4;M3,C;F;F;D,미입증,Y,Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업
+DM,25,DMF0020,D2;F6;F4;M3,D;F;F;F,반쪽,Y,Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업
 DM,26,DMF0020,A5;K2,F;D,반쪽,Y,컬럼셋팅 팝업 Default
-DM,27,DMF0020,A1;A2;K2,D;D;D,반쪽,Y,조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정
-DM,28,DMF0020,J2;K4,F;D,반쪽,Y,Price Batch Input 버튼
-DM,29,DMF0020,M3;G5;A8,D;F;D,반쪽,Y,Price Batch Input 팝업
+DM,27,DMF0020,A1;A2;K2,F;D;D,반쪽,Y,조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정
+DM,28,DMF0020,J2;K4,F;F,입증,Y,Price Batch Input 버튼
+DM,29,DMF0020,M3;G5;A8,F;D;F,반쪽,Y,Price Batch Input 팝업
 DM,30,DMF0020,G4,F,입증,Y,조회조건 Project
-DM,31,DMF0068,G4;H6,F;D,반쪽,Y,Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭
+DM,31,DMF0068,G4;H6,F;F,입증,Y,Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭
 DM,P1,DMF0004,B4;B7,D;F,반쪽,Y,Sales Site 그리드 End Customer·Sold to Customer 콤보
 DM,P3,DMF0004,C2,F,입증,Y,그리드 End Customer→Sold-to Customer cascade
-DM,P5,DMF0004,N1;K1,D;D,반쪽,Y,Company 컬럼 공란 데이터
+DM,P5,DMF0004,N1;K1,F;D,반쪽,Y,Company 컬럼 공란 데이터
 DM,P11,DMF0005,C2,F,입증,Y,그리드 Sales Company→Sales Plant · Sales Site→Company/Plant
 DM,P12,DMF0005,C2;B2;K1,F;F;D,반쪽,Y,그리드 Cust Group→End Customer→Sales Site
 DM,P13,DMF0005,E4;F6;C2,F;F;F,입증,Y,Cust Group-End Customer-Sales Site 관계 · Active 컬럼
-DM,P14,DMF0006,B4;C1,D;Fm,반쪽,Y,Team·End Customer·Sales Site 후보
+DM,P14,DMF0006,B4;C1,D;F,반쪽,Y,Team·End Customer·Sales Site 후보
 DM,32,DMF0068,D4;D1;K1;D6,F;F;D;F,반쪽,Y,Insert 시 Project 컬럼 · Sort
 DM,33,DMF0068,H2,F,입증,Y,입력 불가 컬럼 배경색
-DM,34,DMF0014,M1,E,반쪽,Y,Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수
-DM,35,DMF0014,M1;G5,E;F,반쪽,Y,Excel Form 입력 버킷
-DM,36,DMF0014,M1,E,반쪽,Y,Excel Form 양식
-DM,37,DMF0003,B5;D3;C2,C;D;F,미입증,Y,Measure 콤보(입력 가능 Measure)
-DM,38,DMF0003,H2;D2,F;C,미입증,Y,실적 구간 배경색
+DM,34,DMF0014,M1,F,입증,Y,Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수
+DM,35,DMF0014,M1;G5,F;D,반쪽,Y,Excel Form 입력 버킷
+DM,36,DMF0014,M1,F,입증,Y,Excel Form 양식
+DM,37,DMF0003,B5;D3;C2,C;F;F,미입증,Y,Measure 콤보(입력 가능 Measure)
+DM,38,DMF0003,H2;D2,F;D,반쪽,Y,실적 구간 배경색
 DM,39,DMF0003,C2;F6,F;F,입증,Y,AS From Site 입력 후 W35~W38 수량
-DM,40,DMF0003,B8;C3;A2,F;D;D,반쪽,Y,Team 컬럼(MKT FCST 조회·신규행)
-DM,41,DMF0003,N1,D,반쪽,Y,AS From Site 공란 데이터
-DM,42,DMF0003,A1,D,반쪽,Y,조회 건수
-DM,43,DMF0003,G5;M3,F;D,반쪽,Y,Model 팝업(sMdmActive_Sw)
-DM,44,DMF0003,J1,D,반쪽,Y,Division 조회조건 후보
-DM,45,DMF0003,B5;D3,C;D,미입증,Y,FCST Type 콤보 · Measure 입력 가능
+DM,40,DMF0003,B8;C3;A2,D;F;D,반쪽,Y,Team 컬럼(MKT FCST 조회·신규행)
+DM,41,DMF0003,N1,F,입증,Y,AS From Site 공란 데이터
+DM,42,DMF0003,A1,F,입증,Y,조회 건수
+DM,43,DMF0003,G5;M3,D;F,반쪽,Y,Model 팝업(sMdmActive_Sw)
+DM,44,DMF0003,J1,F,입증,Y,Division 조회조건 후보
+DM,45,DMF0003,B5;D3,C;F,미입증,Y,FCST Type 콤보 · Measure 입력 가능
 DM,46,DMF0003,E1,F,입증,Y,MKT FCST[R+P] 수량
-DM,47,DMF0082,A5;K2;N1,F;D;D,반쪽,Y,컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼
-DM,48,DMF0082,A1,D,반쪽,Y,조회 건수
+DM,47,DMF0082,A5;K2;N1,F;D;F,반쪽,Y,컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼
+DM,48,DMF0082,A1,F,입증,Y,조회 건수
 DM,49,DMF0082,E1,F,입증,Y,MKT_FCST[R+P]·AS_In_Request[R+P]·Unit_Price(LOC)
 DM,50,DMF0082,F5;F4,F;F,입증,Y,CRUD Status · 대량 저장
-DM,51,DMF0082,M3;H3;G4,D;D;F,반쪽,Y,Price Batch Input 팝업 Model 조건 · End Customer 병합
+DM,51,DMF0082,M3;H3;G4,F;D;F,반쪽,Y,Price Batch Input 팝업 Model 조건 · End Customer 병합
 DM,52,DMF0082,H10,F,입증,Y,편집 중 타 기능 실행 메시지(MSG00680)
 DM,53,DMF0082,L2,F,입증,Y,조회조건(Model·Owner 등) 키 입력 · Main Grid
 DM,54,DMF0082,H3,D,반쪽,Y,셀병합(Unit Price Currency 등)
-DM,55,DMF0082,M3;F4;F3;F1,D;F;D;F,반쪽,Y,Exchange Rate 팝업 저장
-DM,56,DMF0082,M2;F1;A5,D;F;F,반쪽,Y,BPS I/F 버튼 · Last Update Date/By 컬럼
+DM,55,DMF0082,M3;F4;F3;F1,F;F;F;F,입증,Y,Exchange Rate 팝업 저장
+DM,56,DMF0082,M2;F1;A5,F;F;F,입증,Y,BPS I/F 버튼 · Last Update Date/By 컬럼
 DM,57,DMF0082,A2,D,반쪽,Y,Cell Prod Site 셀
 DM,58,DMF0082,E4,F,입증,Y,Biz Type 미존재 검증 팝업 메시지
 DM,59,DMF0082,E4,F,입증,Y,MKT FCST 수량 입력 시 Unit Price 필수
 DM,60,DMF0082,E1,F,입증,Y,QTY ≥ 0 검증
 DM,61,DMF0082,A5;K2;F6,F;D;F,반쪽,Y,필수 컬럼(Project Code·Plant Site) 표시 · 저장
-DM,62,DMF0082,A5;K2;N1,F;D;D,반쪽,Y,Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)
-DM,63,SYS0010,G1;G8;L2;H4,F;D;F;F,반쪽,Y,Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤
-DM,64,DMF0082,J3;B5;D2,F;C;C,미입증,Y,SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE)
-DM,65,DMF0082,J1;J4,D;D,반쪽,Y,Division 기본값 · 메뉴 트리(Admin-System)
+DM,62,DMF0082,A5;K2;N1,F;D;F,반쪽,Y,Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)
+DM,63,SYS0010,G1;G8;L2;H4,F;F;F;F,입증,Y,Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤
+DM,64,DMF0082,J3;B5;D2,F;C;D,미입증,Y,SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE)
+DM,65,DMF0082,J1;J4,F;F,입증,Y,Division 기본값 · 메뉴 트리(Admin-System)
 DM,66,DMF0082,J2,F,입증,Y,Insert·Save 버튼
-DM,67,DMF0082,J3;D2,F;C,미입증,Y,MKT_FCST[R+P] 편집
-DM,68,DMF0007,N1;A1,D;D,반쪽,N,Customer FCST Master 기준정보
-DM,69,DMF0004,N1;B4,D;D,반쪽,Y,Sales Site 조회조건 표시값
-DM,70,DMF0005,C3;C2;E4;E5,D;F;F;D,반쪽,Y,Sales Company·Sales Plant 셀
+DM,67,DMF0082,J3;D2,F;D,반쪽,Y,MKT_FCST[R+P] 편집
+DM,68,DMF0007,N1;A1,F;F,입증,N,Customer FCST Master 기준정보
+DM,69,DMF0004,N1;B4,F;D,반쪽,Y,Sales Site 조회조건 표시값
+DM,70,DMF0005,C3;C2;E4;E5,F;F;F;D,반쪽,Y,Sales Company·Sales Plant 셀
 DM,71,DMF0004,D4;C4;A5,F;D;F,반쪽,Y,Insert 행 Div · Div 변경 시 그리드
-DM,72,DMF0044,F4;F3;E1,F;D;F,반쪽,Y,붙여넣기 후 저장 · 자릿수
+DM,72,DMF0044,F4;F3;E1,F;F;F,입증,Y,붙여넣기 후 저장 · 자릿수
 DM,73,DMF0044,F4;E1;E4,F;F;F,입증,Y,저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지
-DM,74,DMF0020,G3;K4,F;D,반쪽,Y,Condition(F6) 저장 · Sales Report ETC Insert 기능
+DM,74,DMF0020,G3;K4,D;F,반쪽,Y,Condition(F6) 저장 · Sales Report ETC Insert 기능
 DM,75,DMF0044,E4;F1;L1,F;F;F,입증,Y,Cell Prod Site 검증 · Application Gr·Country Name
 DM,76,DMF0044,L1;F5;H3,F;F;D,반쪽,Y,Delete 속도 · 병합 셀 Delete CRUD Status
-DM,77,DMF0044,C1,Fm,입증,Y,조회조건 Report Type→Data Type
-DM,78,DMF0044,K4;J2,D;F,반쪽,Y,Delete 버튼
+DM,77,DMF0044,C1,F,입증,Y,조회조건 Report Type→Data Type
+DM,78,DMF0044,K4;J2,F;F,입증,Y,Delete 버튼
 DM,79,DMF0044,F6;F1,F;F,입증,Y,Biz Plan Cutoff Data 저장 값
-DM,80,DMF0044,D2,C,미입증,Y,입력 가능 Measure(Business Plan·Unit Price(LOC))
-DM,81,DMF0044,G5,F,입증,Y,Version 팝업 Div 조건
+DM,80,DMF0044,D2,D,반쪽,Y,입력 가능 Measure(Business Plan·Unit Price(LOC))
+DM,81,DMF0044,G5,D,반쪽,Y,Version 팝업 Div 조건
 DM,82,DMF0005,E4;F1;C5,F;F;C,미입증,Y,하단 Grid Owner 다건 · 상단 더블클릭 하단 조회
-DM,83,DMF0042,B6;G2;G7,D;D;D,반쪽,Y,조회조건 Item Type
-DM,84,DMF0042,D1;E4;D6;K4,F;F;F;D,반쪽,Y,Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼
+DM,83,DMF0042,B6;G2;G7,F;F;D,반쪽,Y,조회조건 Item Type
+DM,84,DMF0042,D1;E4;D6;K4,F;F;F;F,입증,Y,Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼
 DM,85,DMF0005,A5;G4;G1,F;F;F,입증,Y,Cust Group 조회조건 · Div 파라미터 · 그리드 헤더
 DM,86,DMF0042,L1;F4,F;F,입증,Y,조회
-DM,87,DMF0005,M3;G1,D;F,반쪽,Y,Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건
-DM,88,DMF0042,G5;M2;M3,F;D;D,반쪽,Y,Replace 버튼 팝업 Period·조회
-DM,89,DMF0042,G5;G4;H6;H4,F;F;D;F,반쪽,Y,Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건
-DM,90,DMF0042,H6,D,반쪽,Y,Cutoff 완료 후 버전 팝업
+DM,87,DMF0005,M3;G1,F;F,입증,Y,Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건
+DM,88,DMF0042,G5;M2;M3,D;F;F,반쪽,Y,Replace 버튼 팝업 Period·조회
+DM,89,DMF0042,G5;G4;H6;H4,D;F;F;F,반쪽,Y,Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건
+DM,90,DMF0042,H6,F,입증,Y,Cutoff 완료 후 버전 팝업
 DM,91,DMF0042,H3,D,반쪽,Y,그리드 셀 병합(신규 입력 중)
-DM,92,DMF0042,D1;C3,F;D,반쪽,Y,Team·End Customer·Energy(WH) 컬럼
-DM,93,DMF0044,M3;M2;E4;F1,D;D;F;F,반쪽,Y,BP Version 팝업 Version Create
-DM,94,DMF0049,B3;M3,F;D,반쪽,Y,버전 팝업 Version 목록 정렬
+DM,92,DMF0042,D1;C3,F;F,입증,Y,Team·End Customer·Energy(WH) 컬럼
+DM,93,DMF0044,M3;M2;E4;F1,F;F;F;F,입증,Y,BP Version 팝업 Version Create
+DM,94,DMF0049,B3;M3,F;F,입증,Y,버전 팝업 Version 목록 정렬
 DM,95,DMF0049,G4;G7,F;D,반쪽,Y,Version 조회조건 선택값 표시
-DM,96,COMMON,I1;N1;I4,F;D;F,반쪽,N,LBL/MSG/MENU 코드 사전
+DM,96,COMMON,I1;N1;I4,F;F;F,입증,N,LBL/MSG/MENU 코드 사전
 DM,97,DMF0049,D1,F,입증,Y,Cell Model·Cell Model Info 컬럼
 DM,98,DMF0004,H4,F,입증,Y,상/하 그리드 스크롤바
-DM,P23,DMF0014,I3;I2,D;F,반쪽,Y,Team 명칭 데이터
-DM,P24,DMF0014,B4;J1,D;D,반쪽,Y,Team 조회조건 후보
-DM,P25,DMF0014,G3,F,입증,Y,Condition(F6) 조회조건 저장·복원
+DM,P23,DMF0014,I3;I2,C;F,미입증,Y,Team 명칭 데이터
+DM,P24,DMF0014,B4;J1,D;F,반쪽,Y,Team 조회조건 후보
+DM,P25,DMF0014,G3,D,반쪽,Y,Condition(F6) 조회조건 저장·복원
 DM,P26,DMF0020,K1;K3,D;F,반쪽,Y,결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)
 DM,P27,DMF0020,G1,F,입증,Y,Biz.Type 조회조건
 DM,P28,DMF0020,K3;K1,F;D,반쪽,Y,Exchange Rate 그리드 Copy·Header Hide Column
-DM,P29,DMF0020,G2;M3,D;D,반쪽,Y,Price Batch Input 팝업 Sales Site 조건
+DM,P29,DMF0020,G2;M3,F;F,입증,Y,Price Batch Input 팝업 Sales Site 조건
 DM,P31,DMF0020,K1,D,반쪽,Y,그리드 Sort 토글(동적 영역 포함)
-DM,99,DMF0049,F3;K3;H3;E6,D;F;D;D,반쪽,Y,신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀)
-DM,100,DMF0044,G5,F,입증,Y,팝업 Period
-DM,101,DMF0014,M1,E,반쪽,Y,Excel Form 버튼
-DM,102,DMF0014,M1;F4;E3,E;F;F,반쪽,Y,Excel Upload OK·Customs Handbook/Project/Model 검증
-DM,103,DMF0014,M1,E,반쪽,Y,Excel Upload 수량 미입력 메시지
-DM,104,DMF0014,M1,E,반쪽,Y,Excel Upload 헤더 검증 메시지
-DM,105,DMF0014,M1;E4,E;F,반쪽,Y,Excel Upload Validation 메시지(Sales Site/Project/Model)
-DM,106,DMF0074,M1,E,반쪽,Y,Excel Form 버튼
-DM,107,DMF0074,M1;H7,E;D,반쪽,Y,Excel Form 양식 헤더
-DM,108,DMF0074,M1;F1;E4,E;F;F,반쪽,Y,Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지
-DM,109,DMF0082,M1,E,반쪽,Y,Excel Form 양식 Bucket
+DM,99,DMF0049,F3;K3;H3;E6,F;F;D;F,반쪽,Y,신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀)
+DM,100,DMF0044,G5,D,반쪽,Y,팝업 Period
+DM,101,DMF0014,M1,F,입증,Y,Excel Form 버튼
+DM,102,DMF0014,M1;F4;E3,F;F;F,입증,Y,Excel Upload OK·Customs Handbook/Project/Model 검증
+DM,103,DMF0014,M1,F,입증,Y,Excel Upload 수량 미입력 메시지
+DM,104,DMF0014,M1,F,입증,Y,Excel Upload 헤더 검증 메시지
+DM,105,DMF0014,M1;E4,F;F,입증,Y,Excel Upload Validation 메시지(Sales Site/Project/Model)
+DM,106,DMF0074,M1,F,입증,Y,Excel Form 버튼
+DM,107,DMF0074,M1;H7,F;D,반쪽,Y,Excel Form 양식 헤더
+DM,108,DMF0074,M1;F1;E4,F;F;F,입증,Y,Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지
+DM,109,DMF0082,M1,F,입증,Y,Excel Form 양식 Bucket
 DM,110,DMF0021,D1;B4;E3;D4,F;D;F;F,반쪽,Y,ETC 입력 Team·Measure 컬럼
-DM,111,SYS0013,A1;H4;F4,D;F;F,반쪽,N,Dynamic Query(ESS KWh 판가 계산 등)
-DM,112,SYS0012,H6,D,반쪽,N,Reject 팝업
-DM,113,SYS0012,F8,D,반쪽,N,Request 데이터 Reject Reason·Request Date
-DM,114,SYS0012,B4;B6;I2,D;D;F,반쪽,N,Approval Result 조회조건 콤보
+DM,111,SYS0013,A1;H4;F4,F;F;F,입증,N,Dynamic Query(ESS KWh 판가 계산 등)
+DM,112,SYS0012,H6,F,입증,N,Reject 팝업
+DM,113,SYS0012,F8,F,입증,N,Request 데이터 Reject Reason·Request Date
+DM,114,SYS0012,B4;B6;I2,D;F;F,반쪽,N,Approval Result 조회조건 콤보
 DM,115,SYS0003,D5,F,입증,Y,Menu Type·Auth Unit 컬럼
 DM,116,COMMON,K3,F,입증,N,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함)
 DM,117,DMF0040,G4,F,입증,Y,Version 조회조건 크기
-DM,118,DMF0040,H5;A9,D;D,반쪽,Y,Measure Version(A)/Version(B) 명칭
+DM,118,DMF0040,H5;A9,F;D,반쪽,Y,Measure Version(A)/Version(B) 명칭
 DM,119,DMF0040,H2,F,입증,Y,실적 구간 배경색
 DM,120,DMF0040,H3,D,반쪽,Y,셀 병합(계층 병합)
-DM,121,DMF0053,A1,D,반쪽,Y,조회 결과 건수
-DM,122,DMF0053,A3,Fm,입증,Y,Sum 행
+DM,121,DMF0053,A1,F,입증,Y,조회 결과 건수
+DM,122,DMF0053,A3,F,입증,Y,Sum 행
 DM,P34,DMF0042,K2,D,반쪽,Y,Column Setting 팝업 Default 버튼
-DM,P36,DMF0042,C2;C3;D1,F;D;F,반쪽,Y,Sales Site·End Customer 셀
-DM,P37,DMF0044,G4;G6,F;D,반쪽,Y,Year 조회조건
-DM,P38,DMF0044,A5;N1;B5,F;D;C,미입증,Y,Measure 항목 구성
+DM,P36,DMF0042,C2;C3;D1,F;F;F,입증,Y,Sales Site·End Customer 셀
+DM,P37,DMF0044,G4;G6,F;F,입증,Y,Year 조회조건
+DM,P38,DMF0044,A5;N1;B5,F;F;C,미입증,Y,Measure 항목 구성
 DM,128,COMMON,H4,F,입증,N,화면 축소 시 조회조건·스크롤
-DM,129,COMMON,G2;B6,D;D,반쪽,N,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력
-DM,130,DMF0005,M3;B4,D;D,반쪽,Y,Owner 팝업 사용자 목록
-DM,131,DMF0003,F3;F2,D;F,반쪽,Y,복사/붙여넣기 후 저장
+DM,129,COMMON,G2;B6,F;F,입증,N,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력
+DM,130,DMF0005,M3;B4,F;D,반쪽,Y,Owner 팝업 사용자 목록
+DM,131,DMF0003,F3;F2,F;F,입증,Y,복사/붙여넣기 후 저장
 DM,132,DMF0020,A5;K2,F;D,반쪽,Y,Div별 컬럼 구성(COL_LIST 등)
-DM,133,DMF0021,D2;H2,C;F,미입증,Y,Partial 주차 편집 구간·실적 구분선
+DM,133,DMF0021,D2;H2,D;F,반쪽,Y,Partial 주차 편집 구간·실적 구분선
 DM,134,DMF0082,E4;F1,F;F,입증,Y,Unit Price(LOC) 52주 Validation
-DM,135,DMF0003,B5;C2;D3,C;F;D,미입증,Y,신규 행 Measure 후보
+DM,135,DMF0003,B5;C2;D3,C;F;F,미입증,Y,신규 행 Measure 후보
 DM,136,DMF0003,A5,F,입증,Y,Measure 컬럼
-DM,137,DMF0003,B5;J1,C;D,미입증,Y,FCST Type 후보
+DM,137,DMF0003,B5;J1,C;F,미입증,Y,FCST Type 후보
 DM,138,DMF0082,A5;K2,F;D,반쪽,Y,조회 그리드 컬럼 구성
-DM,P48,DMF0040,G2,D,반쪽,Y,End Customer 다중 선택 조회조건
-DM,P49,DMF0040,I3;I2,D;F,반쪽,Y,Team 조회조건 vs 결과 컬럼 언어
+DM,P48,DMF0040,G2,F,입증,Y,End Customer 다중 선택 조회조건
+DM,P49,DMF0040,I3;I2,C;F,미입증,Y,Team 조회조건 vs 결과 컬럼 언어
 DM,P53,DMF0040,G1,F,입증,Y,Owner 조회조건
 DM,P54,DMF0040,K2;A5,D;F,반쪽,Y,Column Setting 저장·Default
-DM,P55,DMF0040,G4;G6,F;D,반쪽,Y,Ver. 조회조건 기본값
+DM,P55,DMF0040,G4;G6,F;F,입증,Y,Ver. 조회조건 기본값
 DM,P56,DMF0040,F4;G1,F;F,입증,Y,Plant Site 조회조건
 DM,P58,DMF0040,K2;J2,D;F,반쪽,Y,Measure Setting 버튼
 DM,P59,DMF0040,G4,F,입증,Y,Plant Site 조회조건
 DM,P60,DMF0053,K2;A5,D;F,반쪽,Y,Column Setting 필수 컬럼 표시·Div 전환 End Customer
 DM,P61,DMF0053,B4;G1,D;F,반쪽,Y,Biz Type·Plant Site 조건 후보 vs 결과 컬럼값
 DM,P62,DMF0053,G1,F,입증,Y,Project·Owner 조회조건(Model/Nickname 정상)
-DM,P64,DMF0053,M3;K1,D;D,반쪽,Y,팝업 Filter 텍스트 입력창
-DM,139,DMF0082,D2;J3;D3;B5;B4;C2,C;F;D;C;D;F,미입증,Y,Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From
+DM,P64,DMF0053,M3;K1,F;D,반쪽,Y,팝업 Filter 텍스트 입력창
+DM,139,DMF0082,D2;J3;D3;B5;B4;C2,D;F;F;C;D;F,미입증,Y,Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From
 DM,140,DMF0082,B5;B4,C;D,미입증,Y,FCST Type 후보
-DM,141,DMF0082,D2,C,미입증,Y,Daily Bucket 편집 Measure
-DM,142,DMF0082,D2,C,미입증,Y,Monthly Bucket 편집 구간
-DM,143,DMF0082,E4;N1;F1,F;D;F,반쪽,Y,MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID
-DM,144,DMF0082,D2,C,미입증,Y,Bucket 유형별 MKT_FCST·Unit Price(LOC) 편집 구간
+DM,141,DMF0082,D2,D,반쪽,Y,Daily Bucket 편집 Measure
+DM,142,DMF0082,D2,D,반쪽,Y,Monthly Bucket 편집 구간
+DM,143,DMF0082,E4;N1;F1,F;F;F,입증,Y,MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID
+DM,144,DMF0082,D2,D,반쪽,Y,Bucket 유형별 MKT_FCST·Unit Price(LOC) 편집 구간
 DM,145,DMF0082,F4,F,입증,Y,Bucket 전환 후 저장
-DM,146,DMF0082,M3;F2;M2;M4,D;F;D;D,반쪽,Y,Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)
+DM,146,DMF0082,M3;F2;M2;M4,F;F;F;F,입증,Y,Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)
 DM,147,DMF0082,E4;F1,F;F,입증,Y,신규 데이터셋 수량·판가 저장
-DM,148,DMF0021,D2;J3;E4,C;F;F,미입증,Y,RTF[R+P] 편집 가능 조건
+DM,148,DMF0021,D2;J3;E4,D;F;F,반쪽,Y,RTF[R+P] 편집 가능 조건
 DM,149,DMF0021,E4;F6;F1,F;F;F,입증,Y,Text 필수 Validation·ETC 수정 저장
 DM,150,DMF0021,H7;A2,D;D,반쪽,Y,Excel Download(TEAM·FCST Type·Measure·Project)
-DM,151,DMF0021,D1;C3;B5;M3;G5;D5,F;D;C;D;F;F,미입증,Y,신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼
+DM,151,DMF0021,D1;C3;B5;M3;G5;D5,F;F;C;F;D;F,미입증,Y,신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼
 DM,152,DMF0021,A5;K2,F;D,반쪽,Y,Div 전환 컬럼 구성·컬럼셋팅 OK 반영
-DM,153,DMF0082,D3;C2;B4;B5;J3,D;F;D;C;F,미입증,Y,"AS From Site 활성·콤보, Measure 후보"
+DM,153,DMF0082,D3;C2;B4;B5;J3,F;F;D;C;F,미입증,Y,"AS From Site 활성·콤보, Measure 후보"
 DM,154,DMF0082,B4;B5,D;C,미입증,Y,End Customer 셀 콤보 후보
-DM,155,DMF0082,A5;N1,F;D,반쪽,Y,Div 81 컬럼·Measure 구성(Project·Cust FCST 등)
-DM,156,DMF0082,M3;M1,D;E,반쪽,Y,Excel Form 팝업 Search
-DM,157,DMF0082,M1,E,반쪽,Y,Excel Upload
+DM,155,DMF0082,A5;N1,F;F,입증,Y,Div 81 컬럼·Measure 구성(Project·Cust FCST 등)
+DM,156,DMF0082,M3;M1,F;F,입증,Y,Excel Form 팝업 Search
+DM,157,DMF0082,M1,F,입증,Y,Excel Upload
 DM,158,DMF0082,K2,D,반쪽,Y,컬럼·메저 셋팅 Save/OK 재조회
 DM,159,DMF0082,B4,D,반쪽,Y,Customs Handbook 콤보 후보
 DM,160,DMF0005,B4;B7,D;F,반쪽,Y,Team 조회조건 후보
-DM,161,COMMON,M4,D,반쪽,N,팝업 입력 컬럼
+DM,161,COMMON,M4,F,입증,N,팝업 입력 컬럼
 DM,162,DMF0020,A5;D5,F;F,입증,Y,콤보 입력 컬럼·COL_LIST·Measure 위치
 DM,163,DMF0020,F4,F,입증,Y,Div 82→40 조회조건 전환
-DM,164,DMF0035,H5,D,반쪽,Y,Ver.·Waterfall Type 라벨
-DM,165,DMF0035,B4;M3,D;D,반쪽,Y,Version 조회조건
-DM,166,DMF0035,H4;H6,F;D,반쪽,Y,팝업 조회조건·버튼 레이아웃
-DM,167,DMF0035,A5;N1,F;D,반쪽,Y,Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등)
-DM,168,DMF0035,A1,D,반쪽,Y,조회 결과 건수
+DM,164,DMF0035,H5,F,입증,Y,Ver.·Waterfall Type 라벨
+DM,165,DMF0035,B4;M3,D;F,반쪽,Y,Version 조회조건
+DM,166,DMF0035,H4;H6,F;F,입증,Y,팝업 조회조건·버튼 레이아웃
+DM,167,DMF0035,A5;N1,F;F,입증,Y,Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등)
+DM,168,DMF0035,A1,F,입증,Y,조회 결과 건수
 DM,169,DMF0035,A7,D,반쪽,Y,결과 컬럼 값(Plan Type=MKT FCST Version 컬럼 등)
-DM,170,DMF0035,A3;A10,Fm;Fm,입증,Y,Sum 행
+DM,170,DMF0035,A3;A10,F;F,입증,Y,Sum 행
 DM,171,DMF0082,F1;F6,F;F,입증,Y,Unit Price(LOC) 저장
 DM,172,DMF0082,A5,F,입증,Y,그리드 표시 컬럼(AS-IS 미존재 컬럼)
 DM,173,DMF0021,E4;F1;F7,F;F;D,반쪽,Y,RTF 저장 판가 검증 / Sales Plan Waterfall 동기화
 DM,174,DMF0035,G4,F,입증,Y,Plan Type 조회조건 위치
-DM,175,DMF0035,H4;H6,F;D,반쪽,Y,Project/Model/Owner 조회조건 팝업
+DM,175,DMF0035,H4;H6,F;F,입증,Y,Project/Model/Owner 조회조건 팝업
 DM,176,COMMON,K3,F,입증,N,그리드 헤더 클릭
-DM,177,DMF0005,H6;M3,D;D,반쪽,Y,Team 팝업 조건(Team ID/Team Name)
-DM,178,DMF0005,B4;N1,D;D,반쪽,Y,Sales Plant 셀 콤보(3050 Plant)
-DM,179,DMF0005,H6,D,반쪽,Y,팝업 No. 컬럼(Model/Owner/Project/Version 팝업)
+DM,177,DMF0005,H6;M3,F;F,입증,Y,Team 팝업 조건(Team ID/Team Name)
+DM,178,DMF0005,B4;N1,D;F,반쪽,Y,Sales Plant 셀 콤보(3050 Plant)
+DM,179,DMF0005,H6,F,입증,Y,팝업 No. 컬럼(Model/Owner/Project/Version 팝업)
 DM,180,DMF0005,F4;F1,F;F,입증,Y,데이터 수정 저장
-DM,181,DMF0005,G1;M3,F;D,반쪽,Y,텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)
+DM,181,DMF0005,G1;M3,F;F,입증,Y,텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)
 DM,182,COMMON,H4,F,입증,N,조회조건·버튼 배치 / 조회조건 콤보 드롭다운
-DM,183,SYS0008,F1;F8,F;D,반쪽,N,Created By/Date·Updated By/Date 컬럼
-DM,184,SYS0002,G1;G2;F4,F;D;F,반쪽,Y,Active 조회조건(ALL)·User Group 다중선택
+DM,183,SYS0008,F1;F8,F;F,입증,N,Created By/Date·Updated By/Date 컬럼
+DM,184,SYS0002,G1;G2;F4,F;F;F,입증,Y,Active 조회조건(ALL)·User Group 다중선택
 DM,185,DMF0021,A5;K2,F;D,반쪽,Y,컬럼셋팅 Company ID(필수 표시·Invisible 이동)
-DM,186,DMF0035,K2;H5,D;D,반쪽,Y,Measure 명칭 MKT FCST[R+P]
-DM,187,DMF0035,A1,D,반쪽,Y,조회 결과 건수(SF_W_20260907_V001 W37)
+DM,186,DMF0035,K2;H5,D;F,반쪽,Y,Measure 명칭 MKT FCST[R+P]
+DM,187,DMF0035,A1,F,입증,Y,조회 결과 건수(SF_W_20260907_V001 W37)
 DM,188,SYS0012,H8,F,입증,N,Request Date 컬럼
-DM,189,SYS0002,D1;C3;H3;H5;F1;F6,F;D;D;D;F;F,반쪽,Y,Dept 컬럼 / Use Y/N·Active 헤더
+DM,189,SYS0002,D1;C3;H3;H5;F1;F6,F;F;D;F;F;F,반쪽,Y,Dept 컬럼 / Use Y/N·Active 헤더
 DM,190,SYS0014,A5,F,입증,Y,Email 컬럼
-DM,191,SYS0014,M3,D,반쪽,Y,User 팝업(User Info)
+DM,191,SYS0014,M3,F,입증,Y,User 팝업(User Info)
 DM,192,SYS0014,F1;F6;E4,F;F;F,입증,Y,Division 시트 저장(JV Planner)
 DM,193,SYS0010,D5;B4,F;D,반쪽,Y,System 컬럼 입력 방식
 DM,194,COM0007,K1,D,반쪽,N,Message ID 컬럼 필터
 DM,195,DMF0003,K2,D,반쪽,Y,Measure 표시 순서
 DM,196,SYS0003,A5;D1;F1,F;F;F,입증,Y,URL-ROUTE_PATH 컬럼
-DM,197,SCM0016,J4,D,반쪽,N,Batch log 화면(SCM0016)
-DM,198,SCM0007,J4,D,반쪽,Y,SMS Setup 화면(SCM0007)
-DM,199,SYS0005,B6;G2;G1,D;D;F,반쪽,N,Schema 조회조건
-DM,200,SYS0006,B6;B4;B1,D;D;Fm,반쪽,Y,API Type 조회조건
-DM,201,SYS0003,G1;G8,F;D,반쪽,Y,API Name 조회조건
-DM,202,SYS0016,B4;B6;G4;H5;D4;H6;K5,D;D;F;D;F;D;C,미입증,Y,Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 
-DM,203,SYS0017,B6;G4,D;F,반쪽,Y,Module / Sub Module 조회조건
+DM,197,SCM0016,J4,F,입증,N,Batch log 화면(SCM0016)
+DM,198,SCM0007,J4,F,입증,Y,SMS Setup 화면(SCM0007)
+DM,199,SYS0005,B6;G2;G1,F;F;F,입증,N,Schema 조회조건
+DM,200,SYS0006,B6;B4;B1,F;D;F,반쪽,Y,API Type 조회조건
+DM,201,SYS0003,G1;G8,F;F,입증,Y,API Name 조회조건
+DM,202,SYS0016,B4;B6;G4;H5;D4;H6;K5,D;F;F;F;F;F;C,미입증,Y,Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 
+DM,203,SYS0017,B6;G4,F;F,입증,Y,Module / Sub Module 조회조건
 DM,205,DMF0014,H10;H4,F;F,입증,Y,Search 시 Loading.... 플로팅 메시지
 DM,206,COMMON,L2;L1,F;F,입증,N,조회조건 텍스트 입력 중 그리드
 DM,207,COMMON,F5,F,입증,N,Delete 버튼·CRUD Status D Flag
@@ -246,390 +246,390 @@ DM,208,DMF0005,A5,F,입증,Y,Cell Prod. Site (S&OP Report) 컬럼
 DM,209,DMF0005,B4;C2;F2;F1,D;F;F;F,반쪽,Y,하단 그리드 Sales Company/Sales Plant 콤보
 DM,210,COMMON,K2,D,반쪽,N,Measure 순서·메저셋팅 순서 저장
 DM,211,COMMON,B4,D,반쪽,N,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)
-DM,212,DMF0005,H6;M3;G2,D;D;D,반쪽,Y,Project 팝업(그리드)
+DM,212,DMF0005,H6;M3;G2,F;F;F,입증,Y,Project 팝업(그리드)
 DM,213,SYS0010,B3,F,입증,Y,메인화면 System admin 정보(SYSTEM_ADM Lookup)
 DM,214,DMF0004,E4,F,입증,Y,Customer 탭 Sold to/Ship to 저장 검증
 DM,215,DMF0005,E3;E4,F;F,입증,Y,Project 컬럼 필수 검증
 DM,216,DMF0082,B7;A2;B4,F;D;D,반쪽,Y,Team(DEPT_ID) 셀 콤보 표시값
-DM,217,DMF0003,B7;A1,F;D,반쪽,Y,Team 정보(DEPT_ID)
+DM,217,DMF0003,B7;A1,F;F,입증,Y,Team 정보(DEPT_ID)
 DM,218,DMF0020,F7;F1,D;F,반쪽,Y,Unit Price(LOC) → Sales Price 연동
 DM,219,DMF0008,A5,F,입증,Y,하단 그리드 CRUD Status 컬럼
-DM,220,DMF0005,M3;G5,D;F,반쪽,Y,Model 팝업 조회
+DM,220,DMF0005,M3;G5,F;D,반쪽,Y,Model 팝업 조회
 DM,221,DMF0005,A5,F,입증,Y,Sold-to Cust(Report) 컬럼
 DM,222,SYS0004,E3;F4;F1;F5,F;F;F;F,입증,N,Insert 저장 / Delete CRUD Status
-DM,223,DMF0074,G5,F,입증,Y,Version 팝업 Period
+DM,223,DMF0074,G5,D,반쪽,Y,Version 팝업 Period
 DM,224,DMF0053,H3,D,반쪽,Y,셀병합 컬럼
 DM,225,DMF0021,F5;F2,F;F,입증,Y,CRUD Status M
-DM,226,DMF0040,H5,D,반쪽,Y,Version 조회조건 라벨
+DM,226,DMF0040,H5,F,입증,Y,Version 조회조건 라벨
 DM,227,SYS0012,B5,C,미입증,N,권한 신청 가능 Group 목록
 DM,228,DMF0082,H10,F,입증,Y,저장 완료 플로팅 팝업 배경색
 DM,229,DMF0035,K3,F,입증,Y,F5 단축키
 DM,230,DMF0035,A5,F,입증,Y,Div별 제외 컬럼(Project Status·Owner·Department 등)
-DM,231,DMF0035,C1,Fm,입증,Y,조회조건 전체(숫자·ITEM TYPE 포함)
+DM,231,DMF0035,C1,F,입증,Y,조회조건 전체(숫자·ITEM TYPE 포함)
 DM,232,DMF0082,A5,F,입증,Y,Project Name 컬럼
-DM,233,SYS0011,F8;F1,D;F,반쪽,N,Approval Date 컬럼
+DM,233,SYS0011,F8;F1,F;F,입증,N,Approval Date 컬럼
 DM,234,SYS0017,C5;F1;F5,C;F;F,미입증,Y,Mail Setup 탭 사용자 좌/우 그리드
 DM,235,DMF0035,H4,F,입증,Y,그리드 헤더 높이
 DM,236,DMF0035,G4;H4,F;F,입증,Y,Version 조회조건 돋보기 버튼
-DM,237,DMF0035,C1,Fm,입증,Y,Version 조회조건 기본값
+DM,237,DMF0035,C1,F,입증,Y,Version 조회조건 기본값
 DM,238,DMF0082,A5,F,입증,Y,BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개)
 DM,239,DMF0082,A5,F,입증,Y,Cust Group Dtl 컬럼
 DM,240,DMF0035,K3,F,입증,Y,조회 버튼 단축키
 DM,241,DMF0035,K3,F,입증,Y,Ctrl+클릭 다중선택
-DM,242,DMF0035,A3;H5;G4,Fm;D;F,반쪽,Y,Sum 행 표기 / Sum·Qty≠0 체크박스
+DM,242,DMF0035,A3;H5;G4,F;F;F,입증,Y,Sum 행 표기 / Sum·Qty≠0 체크박스
 DM,243,DMF0035,A5,F,입증,Y,Version 컬럼
 DM,244,DMF0035,K2,D,반쪽,Y,Measure 순서
 DM,245,DMF0049,H3;D1,D;F,반쪽,Y,병합 셀 콤보 입력
-DM,246,DMF0082,A1,D,반쪽,Y,RTF[R+P] Measure 행
-DM,247,COMMON,J4,D,반쪽,N,Home / Auth Request 메뉴
+DM,246,DMF0082,A1,F,입증,Y,RTF[R+P] Measure 행
+DM,247,COMMON,J4,F,입증,N,Home / Auth Request 메뉴
 DM,248,DMF0021,F7;F1,D;F,반쪽,Y,RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동
 SCPSSP,1,SCP0028,I2;I1,F;F,입증,Y,수정사항 없음 알림 메시지
-SCPSSP,2,SCP0028,G2;G1,D;F,반쪽,Y,From Site 조회조건
-SCPSSP,3,SCP0028,A6;M3,D;D,반쪽,Y,메인 그리드 행 정렬
-SCPSSP,4,COMMON,H6;G5,D;F,반쪽,N,From City 검색 버튼
+SCPSSP,2,SCP0028,G2;G1,F;F,입증,Y,From Site 조회조건
+SCPSSP,3,SCP0028,A6;M3,D;F,반쪽,Y,메인 그리드 행 정렬
+SCPSSP,4,COMMON,H6;G5,F;D,반쪽,N,From City 검색 버튼
 SCPSSP,5,COMMON,I2;I1,F;F,입증,N,조회 결과 총/건 표기
 SCPSSP,6,COMMON,H8,F,입증,N,총 건수 표시
-SCPSSP,7,SCP0005,L1,F,입증,N,그리드 방향키 이동 응답
+SCPSSP,7,SCP0005,L1,F,입증,Y,그리드 방향키 이동 응답
 SCPSSP,8,SCP0028,I2;I1;E4,F;F;F,입증,Y,Lot Size<Increment 검증 메시지
-SCPSSP,9,SCP0005,E4,F,입증,N,키 중복 저장 오류 메시지
-SCPSSP,10,SCP0006,A1;N1,D;D,반쪽,N,BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1)
-SCPSSP,11,SCP0006,D3;H2,D;F,반쪽,N,Plant Assign 그리드 색상
-SCPSSP,12,SCP0006,G5;M3,F;D,반쪽,N,Capa New Model 팝업 조건(Group/Plant)
+SCPSSP,9,SCP0005,E4,F,입증,Y,키 중복 저장 오류 메시지
+SCPSSP,10,SCP0006,A1;N1,F;F,입증,N,BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1)
+SCPSSP,11,SCP0006,D3;H2,F;F,입증,N,Plant Assign 그리드 색상
+SCPSSP,12,SCP0006,G5;M3,D;F,반쪽,N,Capa New Model 팝업 조건(Group/Plant)
 SCPSSP,13,SCP0006,L1,F,입증,N,Plant Assign 조회 시간
 SCPSSP,14,SCP0006,H2,F,입증,N,Main Grid 배경색
-SCPSSP,15,SCP0007,G4;H5,F;D,반쪽,Y,조회조건 명칭·순서 / 대응 컬럼명
-SCPSSP,16,SCP0007,I1;H6;H5,F;D;D,반쪽,Y,Route 검색 팝업 제목
-SCPSSP,17,SCP0007,G5,F,입증,Y,Route 검색 팝업 결과
+SCPSSP,15,SCP0007,G4;H5,F;F,입증,Y,조회조건 명칭·순서 / 대응 컬럼명
+SCPSSP,16,SCP0007,I1;H6;H5,F;F;F,입증,Y,Route 검색 팝업 제목
+SCPSSP,17,SCP0007,G5,D,반쪽,Y,Route 검색 팝업 결과
 SCPSSP,18,SCP0007,D1;C2,F;F,입증,Y,Insert 행 Div 셀 / 하위 Site
 SCPSSP,19,SCP0007,B4,D,반쪽,Y,To Site 조회조건 콤보
-SCPSSP,20,SCP0007,G2;B6,D;D,반쪽,Y,멀티선택 조회조건 Select ALL
-SCPSSP,21,SCP0007,G3,F,입증,Y,Active 조회조건 저장·복원
-SCPSSP,22,SCP0007,D4;B4;C3;F1,F;D;D;F,반쪽,Y,Insert 행 To Site 콤보·City
-SCPSSP,23,SCP0007,E2;F4,D;F,반쪽,Y,Period 날짜
+SCPSSP,20,SCP0007,G2;B6,F;F,입증,Y,멀티선택 조회조건 Select ALL
+SCPSSP,21,SCP0007,G3,D,반쪽,Y,Active 조회조건 저장·복원
+SCPSSP,22,SCP0007,D4;B4;C3;F1,F;D;F;F,반쪽,Y,Insert 행 To Site 콤보·City
+SCPSSP,23,SCP0007,E2;F4,F;F,입증,Y,Period 날짜
 SCPSSP,24,SCP0007,I1;I2,F;F,입증,Y,메시지 문구
 SCPSSP,25,SCP0007,E1,F,입증,Y,Additional Lead Time
-GAP,1,DMF0003,A1,D,반쪽,Y,그리드 Measure 행 AS In Request·AS In Plan·AS Inv 빈 줄(MEASURE AS_In_Req·AS_In_Plan·A
-GAP,2,DMF0003,G1;A1,F;D,반쪽,Y,조회조건 Sales Site 콤보(SCM_SITE_ID) · 결과 Sales Site 칸 · invalidExec
+GAP,1,DMF0003,A1,F,입증,Y,그리드 Measure 행 AS In Request·AS In Plan·AS Inv 빈 줄(MEASURE AS_In_Req·AS_In_Plan·A
+GAP,2,DMF0003,G1;A1,F;F,입증,Y,조회조건 Sales Site 콤보(SCM_SITE_ID) · 결과 Sales Site 칸 · invalidExec
 GAP,4,DMF0003,E4,F,입증,Y,저장 검사 BOM·Ship-To 대상 Measure(MKT_FCST·VMI_In_Req · P_DMF0003_SAVE_MKT_FCST)
 GAP,5,DMF0003,B4;B5,D;C,미입증,Y,조회조건 Sales Site 콤보(SiteByEndCustomer_DM · SCM_SITE_ID · AS 사이트 · validYn)
-GAP,6,DMF0003,G1;G6,F;D,반쪽,Y,조회조건 미등록 제외(invalidExec) · Team 콤보(DEPT_ID) 변경 시 유지
+GAP,6,DMF0003,G1;G6,F;F,입증,Y,조회조건 미등록 제외(invalidExec) · Team 콤보(DEPT_ID) 변경 시 유지
 GAP,7,DMF0003,F9,C,미입증,Y,그리드 주 단위 입력 수량 → 일자 분배(DefaultBucketDay · DEFAULT_BUCKET_DAY · DM_MST_BUCKET_CON
 GAP,8,DMF0003,A7,D,반쪽,Y,그리드 Project(S&OP Report) 컬럼(PROJECT_S_OP_REPORT · SCM_MST_SITE_ITEM)
 GAP,11,DMF0003,F4;F1,F;F,입증,Y,저장 SP P_DMF0003_SAVE_MKT_FCST 입력 인자 CLOB(SCM_ADM_PROC_M · USER_ARGUMENTS) 대량 저장
 GAP,12,DMF0003,H8,F,입증,Y,그리드 기간 칸 숫자 서식(NOTATION INTEGER·POINT·POINT3 · DM_MEASURE_POSITIONAL_NOTATION · 
-GAP,13,DMF0003,G8,D,반쪽,Y,조회조건 Model/Nickname 텍스트(ITEM_ID · NICK_NAME) 40 분기 UPPER 비교
+GAP,13,DMF0003,G8,F,입증,Y,조회조건 Model/Nickname 텍스트(ITEM_ID · NICK_NAME) 40 분기 UPPER 비교
 GAP,16,DMF0003,B5;A5,C;F,미입증,Y,Measure 설정 팝업 후보(SCM_MST_SHEET_MEASURE DMF0003 Mkt Fcst — TMM_FCST·VMI_DIO·VMI_I
 GAP,17,DMF0003,A7,D,반쪽,Y,그리드 VMI Inv. 행(Measure VMI_Inv) 마지막 재고 이후 일자 칸 이월 표시
 GAP,18,DMF0003,A7,D,반쪽,Y,그리드 VMI-In Request[R+P] 행(Measure VMI_In_Req) 자동 계산 — SCM_MST_SITE_ITEM.INVENTOR
-GAP,19,DMF0003,C3;M4,D;D,반쪽,Y,신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYP
-GAP,21,DMF0003,E2,D,반쪽,Y,조회 기간 From/To(FROM_DATE·TO_DATE) 3년 초과 검사 MSG00164 · 종료일 보정
-GAP,22,DMF0003,H5,D,반쪽,Y,컬럼 라벨 & 표기(SCM_MST_SHEET_COLUMNS COLUMN_LABEL_NAME — FORECAST_INFO_ALL Spec & Ve
-GAP,26,DMF0003,F7;F8,D;D,반쪽,Y,저장 후 수량 균형 재계산 PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE('CALL') → Balance 행(Measure
+GAP,19,DMF0003,C3;M4,F;F,입증,Y,신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYP
+GAP,21,DMF0003,E2,F,입증,Y,조회 기간 From/To(FROM_DATE·TO_DATE) 3년 초과 검사 MSG00164 · 종료일 보정
+GAP,22,DMF0003,H5,F,입증,Y,컬럼 라벨 & 표기(SCM_MST_SHEET_COLUMNS COLUMN_LABEL_NAME — FORECAST_INFO_ALL Spec & Ve
+GAP,26,DMF0003,F7;F8,D;F,반쪽,Y,저장 후 수량 균형 재계산 PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE('CALL') → Balance 행(Measure
 GAP,27,DMF0003,F7,D,반쪽,Y,저장 연계 DM_PLN_SALES_PLAN 금액 Measure(MKT_AMT_KRW·MKT_AMT_LOC·SalesAmt_KRW·SalesAmt
 GAP,29,DMF0003,F4,F,입증,Y,저장 SP P_DMF0003_SAVE_MKT_FCST BNPIn 대응 행 결합 조건 PLANT_SITE_ID(ORA-01427 방지)
-GAP,31,DMF0003,F7;N1,D;D,반쪽,Y,재계산 PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE Measure 표기(VMI_In_Plan·VMI_In_Req·AS_I
+GAP,31,DMF0003,F7;N1,D;F,반쪽,Y,재계산 PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE Measure 표기(VMI_In_Plan·VMI_In_Req·AS_I
 GAP,32,DMF0003,A2;B5,D;C,미입증,Y,그리드 FCST Type 컬럼(FCST_TYPE · CELL_COMBO_DATA_TYPE FCST_TYPE_NOT_ETC · ATTRIBUTE9
-GAP,33,DMF0003,I1;I2;MS1,F;F;F,입증,Y,화면 MSG/LBL 코드 MSG01165(ESS 3자리 안내)·MSG00004(수정한 내용 없음)·LBL00711(Column) 등록·표시
-GAP,38,DMF0003,D2,C,미입증,Y,Daily·Weekly 기간 칸 편집 잠금 기준일(이번 주 월요일 = 오늘 + (1 − 요일 번호)) Measure MKT_FCST_RP
-GAP,40,DMF0003,C2;C3,F;D,반쪽,Y,신규 행 Sales Site(SCM_SITE_ID) 변경 → PROJECT_CODE(PROJECT_NAME·PROJECT_STATUS·PROJE
+GAP,33,DMF0003,I1;I2;MS1,F;F;D,반쪽,Y,화면 MSG/LBL 코드 MSG01165(ESS 3자리 안내)·MSG00004(수정한 내용 없음)·LBL00711(Column) 등록·표시
+GAP,38,DMF0003,D2,D,반쪽,Y,Daily·Weekly 기간 칸 편집 잠금 기준일(이번 주 월요일 = 오늘 + (1 − 요일 번호)) Measure MKT_FCST_RP
+GAP,40,DMF0003,C2;C3,F;F,입증,Y,신규 행 Sales Site(SCM_SITE_ID) 변경 → PROJECT_CODE(PROJECT_NAME·PROJECT_STATUS·PROJE
 GAP,44,DMF0003,G4,F,입증,Y,조회조건 Sender Code(SENDER_CODE · senderEnabled) 활성 — Division 81 만
 GAP,62,DMF0005,F6;F1,F;F,입증,Y,Partial Plan YN(PARTIAL_PLAN_YN) 저장 보존 — P_DMF0005_GET/SAVE_SALES_SITE_MODEL_PRO
 GAP,68,DMF0005,F7,D,반쪽,Y,저장 행 변경 이력 기록 SCM_MST_SITE_ITEM_H(P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION)
 GAP,69,DMF0005,F7,D,반쪽,Y,81 EDI Leadtime(EDI_LT) 변경 저장 → DM_PLN_MKT_FCST EDI 측정 8종 일자 재배치 · DM_PLN_MKT_FC
 GAP,70,DMF0005,F7,D,반쪽,Y,81 신규 저장 → ERP 인터페이스 적재 INF_MGR.XIF_ERP_SITE_ITEM_S(GT_DXES_XIF_ERP_SITE_ITEM · 
 GAP,71,DMF0005,F6;F1,F;F,입증,Y,선택 칸 비움 저장(EDI_LT·VMI_LT·CELL_PER_CAR·CELL_PER_MODULE·ATTRIBUTE1·ATTRIBUTE2·CUST
-GAP,72,DMF0005,C3;E4;MS1,D;F;F,반쪽,Y,Production 그리드 Cell/Car(CELL_PER_CAR)·Cell/Module(CELL_PER_MODULE) 편집 종료 → Modul
-GAP,73,DMF0005,C3;F3;F7,D;D;D,반쪽,Y,Production 그리드 VMI LT(VMI_LT · SCP_VMI_LT) 편집·붙여넣기 → 같은 DIVISION_ID·SCM_SITE_ID·
-GAP,75,DMF0005,G1;A1,F;D,반쪽,Y,조회조건 Owner 텍스트(OWNER · 한글 이름 USER_NAME LIKE · FN_GET_MULTI_OWNER_NAME OWNER_NAME
-GAP,77,DMF0005,C3,D,반쪽,Y,신규 행 Sales Site(SCM_SITE_ID) 입력 → Sold-To(SOLDTO_CODE)·Rep Ship-To(SHIPTO_CODE) 
+GAP,72,DMF0005,C3;E4;MS1,F;F;D,반쪽,Y,Production 그리드 Cell/Car(CELL_PER_CAR)·Cell/Module(CELL_PER_MODULE) 편집 종료 → Modul
+GAP,73,DMF0005,C3;F3;F7,F;F;D,반쪽,Y,Production 그리드 VMI LT(VMI_LT · SCP_VMI_LT) 편집·붙여넣기 → 같은 DIVISION_ID·SCM_SITE_ID·
+GAP,75,DMF0005,G1;A1,F;F,입증,Y,조회조건 Owner 텍스트(OWNER · 한글 이름 USER_NAME LIKE · FN_GET_MULTI_OWNER_NAME OWNER_NAME
+GAP,77,DMF0005,C3,F,입증,Y,신규 행 Sales Site(SCM_SITE_ID) 입력 → Sold-To(SOLDTO_CODE)·Rep Ship-To(SHIPTO_CODE) 
 GAP,78,DMF0005,A7,D,반쪽,Y,그리드 Sold-To(SOLDTO_CODE)·Rep Ship-To(SHIPTO_CODE) — SCM_MST_SITE_CUSTOMER REP_YN
 GAP,79,DMF0005,A7,D,반쪽,Y,그리드 Destination 컬럼(ATTRIBUTE4) — 40 은 사이트 국가명(SCM_MST_COUNTRY.COUNTRY_NAME)
 GAP,80,DMF0005,A7;H8,D;F,반쪽,Y,"그리드 VMI LT 컬럼(VMI_LT · SCP_VMI_LT) NVL(…,0) 표시"
-GAP,81,DMF0005,A1,D,반쪽,Y,81 조회 결과 H·P 필터 — 팀 ID(DEPT_ID) 빈 행 NVL('/') 양변 연결(SITE_CNT 묶음)
+GAP,81,DMF0005,A1,F,입증,Y,81 조회 결과 H·P 필터 — 팀 ID(DEPT_ID) 빈 행 NVL('/') 양변 연결(SITE_CNT 묶음)
 GAP,82,DMF0005,A7,D,반쪽,Y,그리드 Model Name(ITEM_NAME)·Project Name 연결 키 UPPER(RTRIM(ITEM_ID)) 대소문자·끝 공백(전각) 
-GAP,83,DMF0005,I1;I2;MS1,F;F;F,입증,Y,저장 오류 MSG00210·MSG00156 사용자 언어(FN_GET_MSG_LANG) · 화면 코드 MSG00004·MSG01469·MSG014
-GAP,84,DMF0005,F8;F1,D;F,반쪽,Y,40 저장 ATTRIBUTE8(Energy Wh) 미기록 — 신규 INSERT·수정·대체 신규 3경로(P_DMF0005_SAVE_SALES_SI
+GAP,83,DMF0005,I1;I2;MS1,F;F;D,반쪽,Y,저장 오류 MSG00210·MSG00156 사용자 언어(FN_GET_MSG_LANG) · 화면 코드 MSG00004·MSG01469·MSG014
+GAP,84,DMF0005,F8;F1,F;F,입증,Y,40 저장 ATTRIBUTE8(Energy Wh) 미기록 — 신규 INSERT·수정·대체 신규 3경로(P_DMF0005_SAVE_SALES_SI
 GAP,85,DMF0005,J2;J3;D1,F;F;F,입증,Y,SCP Planner 그룹 Insert 차단(MSG00096) · 81·82 행 EDIT_FLAG N 편집·붙여넣기·저장 잠금(GET_ADMIN
-GAP,86,DMF0005,D3;J3,D;F,반쪽,Y,40 DM Planner 기존 행 EDIT_FLAG3='Y' 잠금 10칸(CUST_GROUP·SALES_COMPANY·SALES_PLANT·AT
+GAP,86,DMF0005,D3;J3,F;F,입증,Y,40 DM Planner 기존 행 EDIT_FLAG3='Y' 잠금 10칸(CUST_GROUP·SALES_COMPANY·SALES_PLANT·AT
 GAP,87,DMF0005,J2,F,입증,Y,Insert·Save·Delete 버튼 노출 = 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M DMF0005 produc
 GAP,89,DMF0005,F5,F,입증,Y,Delete(F9) 버튼 — 신규 행만 그리드 제거 · 기존 행 D 표시 없음(CRUD_TYPE · Active VALID_YN 관리)
-GAP,94,DMF0005,A1,D,반쪽,Y,81 조회 결과 H·P 필터 집계 단위 사이트·프로젝트·팀(DEPT_ID · SITE_CNT) — 팀 조회 ⊂ 전체 조회
+GAP,94,DMF0005,A1,F,입증,Y,81 조회 결과 H·P 필터 집계 단위 사이트·프로젝트·팀(DEPT_ID · SITE_CNT) — 팀 조회 ⊂ 전체 조회
 GAP,95,DMF0005,A5;D1,F;F,입증,Y,40 Production 그리드 Cell Prod. Site (S&OP Report) 컬럼(CELL_S_OP_REPORT · production
 GAP,96,DMF0005,A5;F1,F;F,입증,Y,40 Production 그리드 Sold-to Cust.(Report)(ATTRIBUTE1)·End Cust.(Report)(ATTRIBUTE2
-GAP,499,DMF0005,F8;F7,D;D,반쪽,Y,저장 끝 SCM_MST_SITE ETL_DEPT_ID 갱신을 값이 바뀌는 사이트로 한정 — LAST_UPDATED_BY·LAST_UPDATE_D
+GAP,499,DMF0005,F8;F7,F;D,반쪽,Y,저장 끝 SCM_MST_SITE ETL_DEPT_ID 갱신을 값이 바뀌는 사이트로 한정 — LAST_UPDATED_BY·LAST_UPDATE_D
 GAP,113,DMF0007,B4,D,반쪽,N,신규 행 End Customer 셀 콤보(CUSTOMER_CODE · SCM_ADM_CMBO_SQL_M CustFcstEndCustomer · 
 GAP,114,DMF0007,E4;I1,F;F,입증,N,같은 Division·End Customer(CUSTOMER_CODE)·Sales Site(SCM_SITE_ID)·Group(GROUP_ID) 
-GAP,117,DMF0007,A8,D,반쪽,N,Bucket Type 별 날짜 칸 구간(D_ 동적 컬럼) — Daily 당주 월요일~오늘+12개월 · Weekly 당주~오늘+30개월이 속한 주
+GAP,117,DMF0007,A8,F,입증,N,Bucket Type 별 날짜 칸 구간(D_ 동적 컬럼) — Daily 당주 월요일~오늘+12개월 · Weekly 당주~오늘+30개월이 속한 주
 GAP,118,DMF0007,B4;B5,D;C,미입증,N,신규 행 Measure 셀 콤보(MEASURE · CustFcstMeasure · ATTRIBUTE2 'DIVISION_ID:DIVISION_I
-GAP,120,DMF0007,E4;MS1;I1,F;F;F,입증,N,Summary Bucket Type 두 종류 저장 검사 — MSG00166 문구 반환(P_DMF0007_SAVE_CUST_FCST_DATA 12
+GAP,120,DMF0007,E4;MS1;I1,F;D;F,반쪽,N,Summary Bucket Type 두 종류 저장 검사 — MSG00166 문구 반환(P_DMF0007_SAVE_CUST_FCST_DATA 12
 GAP,123,DMF0007,A6,D,반쪽,N,"조회 결과 정렬 UPPER(TRANSLATE(CUSTOMER_CODE,'_-','/')) · SCM_SITE_ID 같은 식 — P_DMF0007"
 GAP,124,DMF0007,J2,F,입증,N,Insert·Save·Delete 버튼 표시 = 단추 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M DMF0007 SAVE·INSE
 GAP,125,DMF0007,J2,F,입증,N,DM Viewer 그룹 SAVE·INSERT·DELETE 단추 권한 USE_YN 'N'(SCM_ADM_USER_GR_MNU_BTN_MPG_M D
 GAP,126,DMF0007,E4,F,입증,N,저장 검사 — 판매 사이트 원장(SCM_MST_SITE)에 없는 Division·End Customer(CUSTOMER_CODE)·Sales S
-GAP,127,DMF0007,A1,D,반쪽,N,조회 사이트 원장(SCM_MST_SITE) 연결 VALID_YN 조건 없음 — Active N 사이트(Forsee_FR_MCR) 고객예측설정 행
+GAP,127,DMF0007,A1,F,입증,N,조회 사이트 원장(SCM_MST_SITE) 연결 VALID_YN 조건 없음 — Active N 사이트(Forsee_FR_MCR) 고객예측설정 행
 GAP,129,DMF0007,G4,F,입증,N,조회조건 Team(DEPT_ID) 없음 — Division·Bucket Type·End Customer·Sales Site·Active 만(조회
 GAP,170,DMF0020,F1;F6,F;F,입증,Y,LOC 행 0 입력 저장(activeFlag D^M^M) → KRW·USD 행 동반 삭제(SCM_MST_FUTURE_PRICE · PKG_DMF
-GAP,171,DMF0020,D1;C3;MS1;F1,F;D;F;F,반쪽,Y,기존 LOC 행 Currency 셀(CURRENCY · INPUT_TP_CD M) 편집 · MSG01429 안내 · 묶음 4행 통화 전파·KRW
-GAP,173,DMF0020,A1;A7,D;D,반쪽,Y,조회 결과 Price Exist 컬럼(PRICE_EXIST) 판정 단위 — 키당 RTF·KRW·USD·LOC 4행 한 묶음(P_DMF0020_G
-GAP,174,DMF0020,G8,D,반쪽,Y,조회조건 Owner 텍스트(OWNER) 대소문자 무시 비교(UPPER LIKE · Owner ID·영문명·한글명)
+GAP,171,DMF0020,D1;C3;MS1;F1,F;F;D;F,반쪽,Y,기존 LOC 행 Currency 셀(CURRENCY · INPUT_TP_CD M) 편집 · MSG01429 안내 · 묶음 4행 통화 전파·KRW
+GAP,173,DMF0020,A1;A7,F;D,반쪽,Y,조회 결과 Price Exist 컬럼(PRICE_EXIST) 판정 단위 — 키당 RTF·KRW·USD·LOC 4행 한 묶음(P_DMF0020_G
+GAP,174,DMF0020,G8,F,입증,Y,조회조건 Owner 텍스트(OWNER) 대소문자 무시 비교(UPPER LIKE · Owner ID·영문명·한글명)
 GAP,175,DMF0020,E4;F1,F;F,입증,Y,"LOC 0 삭제 저장 차단 검사 기준 주 FN_NEXT_DAY(SYSDATE,'MON')-7(이번 주 월요일) ~ 52주 — MKT_FCST·R"
-GAP,176,DMF0020,D2;F1,C;F,미입증,Y,Monthly Bucket 이번 달 월 칸(M_YYYYMM) LOC 편집 가능 · 저장 시 이번 주 월요일 이후 주 칸(YYYYMMDD)만 전개
-GAP,177,DMF0020,C3;M4,D;D,반쪽,Y,신규 행 Model 팝업(ITEM_ID · P_COM0008_GET_ITEM_BY_DIVISION_POPUP CURRENCY 반환) 선택 → 묶
-GAP,178,DMF0020,D3;MS1;I1,D;F;F,반쪽,Y,편집 불가 사업부(DM_UI_EDITABLE_DIVISION DMF0020 40·81='N') LOC 칸 더블클릭 → MSG01430 안내(KO
-GAP,179,DMF0020,D3;D4,D;F,반쪽,Y,조회 Version 이 'Current' 아닐 때(SP_W_… 과거 버전) LOC 셀 편집·붙여넣기·Insert·Save 차단
+GAP,176,DMF0020,D2;F1,D;F,반쪽,Y,Monthly Bucket 이번 달 월 칸(M_YYYYMM) LOC 편집 가능 · 저장 시 이번 주 월요일 이후 주 칸(YYYYMMDD)만 전개
+GAP,177,DMF0020,C3;M4,F;F,입증,Y,신규 행 Model 팝업(ITEM_ID · P_COM0008_GET_ITEM_BY_DIVISION_POPUP CURRENCY 반환) 선택 → 묶
+GAP,178,DMF0020,D3;MS1;I1,F;D;F,반쪽,Y,편집 불가 사업부(DM_UI_EDITABLE_DIVISION DMF0020 40·81='N') LOC 칸 더블클릭 → MSG01430 안내(KO
+GAP,179,DMF0020,D3;D4,F;F,입증,Y,조회 Version 이 'Current' 아닐 때(SP_W_… 과거 버전) LOC 셀 편집·붙여넣기·Insert·Save 차단
 GAP,181,DMF0020,F6,F,기계검출불가,Y,저장 재계산 Catch Up Measure 보호 — 비교 값 'Catch_Up'·'LOC_Catch_Up'·'SalesAmt_KRW_Catch_
-GAP,182,DMF0020,I1;H5,F;D,반쪽,Y,조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Search' 폴백 0
-GAP,186,DMF0020,H10;MS1,F;F,입증,Y,Save 버튼 → 검증 통과 후 MSG00001 「저장 하시겠습니까?」 확인창(CONFIRM_SAVE) → 아니오면 저장 요청 없음
+GAP,182,DMF0020,I1;H5,F;F,입증,Y,조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Search' 폴백 0
+GAP,186,DMF0020,H10;MS1,F;D,반쪽,Y,Save 버튼 → 검증 통과 후 MSG00001 「저장 하시겠습니까?」 확인창(CONFIRM_SAVE) → 아니오면 저장 요청 없음
 GAP,337,DMF0048,A7,D,반쪽,Y,Measure MKT FCST[R+P] Energy(MWH)·RTF[R+P] Energy(MWH) 값 = 수량 × ROUND(ENERGE/100
-GAP,338,DMF0048,G4;A3,F;Fm,입증,Y,조회조건 Sum 체크(LBL00687 · 기본 해제) → Weekly 월 합계(M_)·Daily 주·월 합계(W_·M_) 상위 합계 칸 표시
-GAP,339,DMF0048,A3,Fm,입증,Y,"그리드 하단 합계 줄 「Sum」 — 기간 칸(M_·W_·D_) 합계(필터로 숨긴 행 제외 · 서식 #,##0.###)"
+GAP,338,DMF0048,G4;A3,F;F,입증,Y,조회조건 Sum 체크(LBL00687 · 기본 해제) → Weekly 월 합계(M_)·Daily 주·월 합계(W_·M_) 상위 합계 칸 표시
+GAP,339,DMF0048,A3,F,입증,Y,"그리드 하단 합계 줄 「Sum」 — 기간 칸(M_·W_·D_) 합계(필터로 숨긴 행 제외 · 서식 #,##0.###)"
 GAP,340,DMF0048,F4;A7,F;D,반쪽,Y,Forecast Info All 컬럼(FORECAST_INFO_SPEC || FORECAST_INFOR_VERSION · 2142행) 선택 시 
-GAP,341,DMF0048,A7;N1,D;D,반쪽,Y,Company 컬럼(COMPANY_ID) 빈 값(NULL·공백·'/') → 사이트·품목 원장 SALES_COMPANY 대체(NVL(TRIM(A.
-GAP,342,DMF0048,A7;G1;B8,D;F;F,반쪽,Y,기타매출(FCST Type ETC) 행 Team 컬럼(DEPT_ID) 값 · Team 조회조건 필터 기준 — 사이트 임시 테이블 DEPT_ID(
-GAP,343,DMF0048,G1;A1,F;D,반쪽,Y,조회조건 Biz Type(BIZ_TYPE)·Project(PROJECT_CODE) 필터 — 프로젝트 마스터(SCM_MST_PROJECT)에 있는
-GAP,345,DMF0048,A7;N1,D;D,반쪽,Y,Currency 컬럼(CURRENCY) 빈 값(NULL·공백·'/') 실적 행 → SCM_MST_SITE_ITEM 통화 대체(NVL(TRIM(A
-GAP,346,DMF0048,A7;N1,D;D,반쪽,Y,기타매출 행 Text 컬럼(TEXT · REMARK_TEXT '/') 공란 표시(CASE WHEN TRIM(A.TEXT)='/' THEN NUL
+GAP,341,DMF0048,A7;N1,D;F,반쪽,Y,Company 컬럼(COMPANY_ID) 빈 값(NULL·공백·'/') → 사이트·품목 원장 SALES_COMPANY 대체(NVL(TRIM(A.
+GAP,342,DMF0048,A7;G1;B8,D;F;D,반쪽,Y,기타매출(FCST Type ETC) 행 Team 컬럼(DEPT_ID) 값 · Team 조회조건 필터 기준 — 사이트 임시 테이블 DEPT_ID(
+GAP,343,DMF0048,G1;A1,F;F,입증,Y,조회조건 Biz Type(BIZ_TYPE)·Project(PROJECT_CODE) 필터 — 프로젝트 마스터(SCM_MST_PROJECT)에 있는
+GAP,345,DMF0048,A7;N1,D;F,반쪽,Y,Currency 컬럼(CURRENCY) 빈 값(NULL·공백·'/') 실적 행 → SCM_MST_SITE_ITEM 통화 대체(NVL(TRIM(A
+GAP,346,DMF0048,A7;N1,D;F,반쪽,Y,기타매출 행 Text 컬럼(TEXT · REMARK_TEXT '/') 공란 표시(CASE WHEN TRIM(A.TEXT)='/' THEN NUL
 GAP,349,DMF0048,K2,D,반쪽,Y,Measure 표시 = 저장한 Measure 설정(특정 계정 park.choyi 시험용 분기 없음 — PKG_DMF0048 USER_SOURCE
 GAP,350,DMF0048,A6,D,반쪽,Y,조회 결과 정렬(V_ORDERLIST 조립 1885~1944행 · NLSSORT BINARY_CI · NULLS FIRST) · 숨김 칸 판정 
 GAP,352,DMF0048,C4,D,반쪽,Y,Division(DIVISION_ID) 변경 시 하위 조건·Sum 해제·칸 설정 적용 해제·그리드 비움 → Search 로 재조회(사업부별 칸 
-GAP,353,DMF0048,B8,F,입증,Y,Team 컬럼(DEPT_ID)·Team 조회조건 원천 = SCM_MST_SITE_ITEM.DEPT_ID(Team code 기준 · FilterT
+GAP,353,DMF0048,B8,D,반쪽,Y,Team 컬럼(DEPT_ID)·Team 조회조건 원천 = SCM_MST_SITE_ITEM.DEPT_ID(Team code 기준 · FilterT
 GAP,354,DMF0048,B3,F,입증,Y,조회조건 Team(DEPT_ID)·End Customer(END_CUSTOMER)·Sales Site(SCM_SITE_ID)·Plant Site
 GAP,355,DMF0048,H12,F,입증,Y,그리드 좌측 고정(틀고정) 칸 범위 = SCM_MST_SHEET_COLUMNS 'Sales Monitoring' FIXED_FLAG 'Y'(DI
 GAP,356,DMF0048,K2,D,반쪽,Y,Column Setting·Measure 설정 저장 후 그리드 비움 → Search 재조회로 바뀐 구성 적용
 GAP,358,DMF0049,E4,F,입증,Y,저장 중복 검사 12키(DIVISION_ID·DEPARTMENT_ID·DEPT_ID·ITEM_ID·MEASURE·YYYYMMDD·CURRENCY
 GAP,360,DMF0049,A5;A7,F;D,반쪽,Y,Department Name(T_DEPARTMENT_NAME)·Team Name(T_DEPT_NAME) 컬럼 표시(SCM_MST_SHEET_CO
 GAP,365,DMF0049,A6,D,반쪽,Y,조회 결과 정렬 ORDER BY 문자 칸 UPPER(CUST_REPORT·END_CUST_REPORT·ITEM_ID·NICK_NAME·CURRE
-GAP,366,DMF0049,E4;MS1,F;F,입증,Y,저장 중복 오류 안내 — 첫 중복 묶음 키 13줄(VERSION_NO_·DIVISION_ID_·DEPARTMENT_ID_·DEPT_ID_·ITE
+GAP,366,DMF0049,E4;MS1,F;D,반쪽,Y,저장 중복 오류 안내 — 첫 중복 묶음 키 13줄(VERSION_NO_·DIVISION_ID_·DEPARTMENT_ID_·DEPT_ID_·ITE
 GAP,367,DMF0049,H7;H8,D;F,반쪽,Y,"Excel Download 월 칸 서식(#,##0.000;[Red]-#,##0.000 · 메타 자릿수) · 음수 빨강 — 공용 엑셀 내려받기 칸"
-GAP,368,DMF0049,K4,D,반쪽,Y,상단 버튼 목록 Column Setting(COLUMN_SETUP) 숨김 — Measure 선택·Version 버튼만
-GAP,369,DMF0049,D2,C,미입증,Y,Report Type Biz Plan(REPORT_BP_M) · Plan/Result Result 월 칸 편집 잠금 — Plan 입력 조건과 같
+GAP,368,DMF0049,K4,F,입증,Y,상단 버튼 목록 Column Setting(COLUMN_SETUP) 숨김 — Measure 선택·Version 버튼만
+GAP,369,DMF0049,D2,D,반쪽,Y,Report Type Biz Plan(REPORT_BP_M) · Plan/Result Result 월 칸 편집 잠금 — Plan 입력 조건과 같
 GAP,370,DMF0049,H2,F,입증,Y,Biz Plan 조회 월 칸 회색 표시 기준월 BP_BASE_YM '201801'(6자리 상수 · 잠금 공통)
-GAP,371,DMF0049,F8,D,반쪽,Y,다건 저장 시 DEPARTMENT_NAME·DEPT_NAME·모델 부가정보 채움 — 사업부 대표값(v_division_id) 비교 [E20260
-GAP,372,DMF0049,MS1;E3,F;F,입증,Y,저장 전 버전 미조회 MSG00688 「Version을 검색 후 조회하신 후에 입력이 가능합니다.」 · Department 필수 MSG00429
-GAP,373,DMF0049,F6;N1,F;D,반쪽,Y,저장 시 SOLDTO_CODE·DOM_EXP·INCOTERMS·PLANT_SITE_ID 빈 값 적재 — NULL 허용 칸은 NULL('/' 아님
+GAP,371,DMF0049,F8,F,입증,Y,다건 저장 시 DEPARTMENT_NAME·DEPT_NAME·모델 부가정보 채움 — 사업부 대표값(v_division_id) 비교 [E20260
+GAP,372,DMF0049,MS1;E3,D;F,반쪽,Y,저장 전 버전 미조회 MSG00688 「Version을 검색 후 조회하신 후에 입력이 가능합니다.」 · Department 필수 MSG00429
+GAP,373,DMF0049,F6;N1,F;F,입증,Y,저장 시 SOLDTO_CODE·DOM_EXP·INCOTERMS·PLANT_SITE_ID 빈 값 적재 — NULL 허용 칸은 NULL('/' 아님
 GAP,375,DMF0049,E4,F,기계검출불가,Y,구 COMPANY_ID 저장 차단 검사 해제 — P_DMF0049_SAVE_SALES_ETC_REPORT_C 861~872행 주석 [E20261
-GAP,490,DMF0007,H5,D,반쪽,N,조회조건 Bucket Type 라벨 — 'Bucket Type' 문구 라벨 코드(현재 LBL00710 'Bucket' · 이전 LBL00032 
+GAP,490,DMF0007,H5,F,입증,N,조회조건 Bucket Type 라벨 — 'Bucket Type' 문구 라벨 코드(현재 LBL00710 'Bucket' · 이전 LBL00032 
 GAP,492,DMF0020,F1,F,입증,Y,Price Batch Input 저장(P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP) · 메인 저장 · 엑셀 업로드
-GAP,493,DMF0020,MS1;M3;H10,F;D;F,반쪽,Y,Version 팝업 OK 선택 없음(MSG00283) · Range Rate 팝업 Save 선택 없음(MSG00014) · 저장 완료 건수(MS
+GAP,493,DMF0020,MS1;M3;H10,D;F;F,반쪽,Y,Version 팝업 OK 선택 없음(MSG00283) · Range Rate 팝업 Save 선택 없음(MSG00014) · 저장 완료 건수(MS
 GAP,191,DMF0021,F1;F6,F;F,입증,Y,그리드 Measure Sales Amt.(LOC) 월 칸(M_ 태그) 저장 → P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL
 GAP,193,DMF0021,F1;F7,F;D,기계검출불가,Y,Save → P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL 트랜잭션 되돌림 범위(GATHER_TABLE_STATS·COMMI
 GAP,194,DMF0021,F1;F6,F;F,입증,Y,여러 행 동시 저장 전달값(^ 구분 18개 · deptId · plantSiteId) 분해 → DM_PLN_SALES_ETC_PLAN.ATTRI
 GAP,195,DMF0021,A7,D,반쪽,Y,그리드 Cell Model Info 컬럼(REPORT_GROUP6) · P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX
-GAP,196,DMF0021,A1;A7,D;D,반쪽,Y,"그리드 판매법인(Company · COMPANY_ID) 컬럼 — 실적 행 빈 값 판정 NVL(TRIM(A.COMPANY_ID),'/')='/' "
+GAP,196,DMF0021,A1;A7,F;D,반쪽,Y,"그리드 판매법인(Company · COMPANY_ID) 컬럼 — 실적 행 빈 값 판정 NVL(TRIM(A.COMPANY_ID),'/')='/' "
 GAP,197,DMF0021,A7,D,반쪽,Y,그리드 Measure RTF Energy · MKT FCST Energy(RTF_SYS_RP × ENERGE 환산) · P_DMF0021_GET
-GAP,198,DMF0021,A1;A7,D;D,반쪽,Y,"그리드 Currency(CURRENCY) 컬럼 — 실적 행 통화 채움 판정 NVL(TRIM(A.CURRENCY),'/')='/' · P_DMF0"
-GAP,199,DMF0021,G1;A1,F;D,반쪽,Y,조회조건 Model / Nickname(ITEM_ID · NICK_NAME) 텍스트 조건 — 품목 마스터 미등록 품목(ETC·MDF·물동보상금)
+GAP,198,DMF0021,A1;A7,F;D,반쪽,Y,"그리드 Currency(CURRENCY) 컬럼 — 실적 행 통화 채움 판정 NVL(TRIM(A.CURRENCY),'/')='/' · P_DMF0"
+GAP,199,DMF0021,G1;A1,F;F,입증,Y,조회조건 Model / Nickname(ITEM_ID · NICK_NAME) 텍스트 조건 — 품목 마스터 미등록 품목(ETC·MDF·물동보상금)
 GAP,203,DMF0021,B5;K2,C;D,미입증,Y,Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 재조회
 GAP,204,DMF0021,F1,F,기계검출불가,Y,저장 SP Catch_Up 선삭제·제외 판정 리터럴 비교('Catch_Up' · UPPER) · P_DMF0021_SAVE_DM_PLN_SALE
 GAP,205,DMF0021,A5;A7,F;D,반쪽,Y,그리드 Team 컬럼(TEAM_NAME · DEPT_ID) — 사용자 칸 설정 SCM_MST_TITLESET_USER 에 TEAM_NAME 행 
-GAP,206,DMF0021,G1;A1,F;D,반쪽,Y,조회조건 Project · Biz Type 조건 — 프로젝트 마스터(SCM_MST_PROJECT) 미등록 프로젝트 행 유지
-GAP,207,DMF0021,F8;F6,D;F,반쪽,Y,저장 시 From Site 채움 순서 — Cell Prod Site(CELL_PROD_SITE_ID) 'N/A'→'-' 변환 후 From Sit
-GAP,209,DMF0021,D2;J3,C;F,미입증,Y,81 RTF[R+P](RTF_SYS_RP) Cutoff 마감 시각 — LOOKUP GET_ADMIN_GROUP_MEASURE(SEGMENT2 D
-GAP,210,DMF0021,F6;D3,F;D,반쪽,Y,기타매출(ETC) 행 Team 컬럼(TEAM_NAME · DEPT_ID · ATTRIBUTE1) 저장 후 표시·편집 판정 · P_DMF0021_
-GAP,211,DMF0021,B8;M3,F;D,반쪽,Y,신규 행 Team 팝업 후보(P_COM0009_GET_TEAM_POPUP · SCM_MST_SITE_ITEM.DEPT_ID)
-GAP,212,DMF0021,MS1,F,입증,Y,조회 검사 Division 빈 값 안내 메시지(MSG00667 「권한을 가진 Division이 없습니다.」 / AS-IS MSG00097)
+GAP,206,DMF0021,G1;A1,F;F,입증,Y,조회조건 Project · Biz Type 조건 — 프로젝트 마스터(SCM_MST_PROJECT) 미등록 프로젝트 행 유지
+GAP,207,DMF0021,F8;F6,F;F,입증,Y,저장 시 From Site 채움 순서 — Cell Prod Site(CELL_PROD_SITE_ID) 'N/A'→'-' 변환 후 From Sit
+GAP,209,DMF0021,D2;J3,D;F,반쪽,Y,81 RTF[R+P](RTF_SYS_RP) Cutoff 마감 시각 — LOOKUP GET_ADMIN_GROUP_MEASURE(SEGMENT2 D
+GAP,210,DMF0021,F6;D3,F;F,입증,Y,기타매출(ETC) 행 Team 컬럼(TEAM_NAME · DEPT_ID · ATTRIBUTE1) 저장 후 표시·편집 판정 · P_DMF0021_
+GAP,211,DMF0021,B8;M3,D;F,반쪽,Y,신규 행 Team 팝업 후보(P_COM0009_GET_TEAM_POPUP · SCM_MST_SITE_ITEM.DEPT_ID)
+GAP,212,DMF0021,MS1,D,반쪽,Y,조회 검사 Division 빈 값 안내 메시지(MSG00667 「권한을 가진 Division이 없습니다.」 / AS-IS MSG00097)
 GAP,217,DMF0021,E3,F,입증,Y,신규 행 Team(DEPT_ID · LBL00044) 필수 검사 · MSG00429
 GAP,220,DMF0021,E4,F,입증,Y,신규 기타매출 행 통화(CURRENCY)만 다른 같은 키 중복 저장 차단 · MSG00461 · P_DMF0021_SAVE_DM_PLN_SALE
-GAP,222,DMF0021,J3;D2,F;C,미입증,Y,RTF[R+P](RTF_SYS_RP) 마감 시각 이후 저장 차단 대상 — 기준 코드(GET_ADMIN_GROUP_MEASURE SEGMENT1)
+GAP,222,DMF0021,J3;D2,F;D,반쪽,Y,RTF[R+P](RTF_SYS_RP) 마감 시각 이후 저장 차단 대상 — 기준 코드(GET_ADMIN_GROUP_MEASURE SEGMENT1)
 GAP,245,DMF0042,F1;F6,F;F,입증,Y,Business Plan 셀 수량 0·빈칸 저장 전달값(activeFlag M · qty 0) → DM_PLN_BP_FCST 행 유지
 GAP,246,DMF0042,E4;F1,F;F,입증,Y,Save 검사 실패(「[사이트] Invalid Sales Site !」) 시 전체 ROLLBACK — DM_PLN_BP_FCST · DM_PLN
 GAP,247,DMF0042,F1;F6,F;F,입증,Y,40 저장 키 Biz.Type(BIZ_TYPE) 고정 — 화면 표시값(CELL) 무관 '/' 적재 · P_DMF0042_SAVE_DM_PLN_B
-GAP,250,DMF0042,C1;B4,Fm;D,반쪽,Y,조회조건 End Customer → Sales Site 콤보 cascade(SCM_ADM_CMBO_SQL_M SiteByEndCustomer40
-GAP,253,DMF0042,F7;F8,D;D,반쪽,Y,Save 시 이력 테이블 DM_PLN_BP_FCST_H 기록(저장마다) · P_DMF0042_SAVE_DM_PLN_BP_FCST
+GAP,250,DMF0042,C1;B4,F;D,반쪽,Y,조회조건 End Customer → Sales Site 콤보 cascade(SCM_ADM_CMBO_SQL_M SiteByEndCustomer40
+GAP,253,DMF0042,F7;F8,D;F,반쪽,Y,Save 시 이력 테이블 DM_PLN_BP_FCST_H 기록(저장마다) · P_DMF0042_SAVE_DM_PLN_BP_FCST
 GAP,255,DMF0042,A7,D,반쪽,Y,그리드 보고 그룹 컬럼 6종 Application Gr. · Cust. (Report) · Product Gr.(Report) · Product
 GAP,256,DMF0042,A6,D,반쪽,Y,"조회 결과 행 정렬(Sales Site · Project · Model · Team ORDER BY — UPPER(TRANSLATE(칸,'_-'"
-GAP,257,DMF0042,F6;N1,F;D,반쪽,Y,저장 시 빈 FCST Type(FCST_TYPE)·Incoterms(INCOTERMS) 옛 행 키 보정('/' 단일 비교 · 칸끼리 대조) · 
-GAP,259,DMF0042,D2,C,미입증,Y,연초 과거 연도 월 칸 잠금 기준 = 오늘 날짜 연도(DateTime.Now.Year) — Business Plan 지난 연도 칸 편집 불가
-GAP,260,DMF0042,F4;M3,F;D,반쪽,Y,Exchange Rate 팝업 대량 저장(Exchange Price 80칸 이상) · P_DMF0042_SAVE_DM_BP_EXCHANGE_RA
+GAP,257,DMF0042,F6;N1,F;F,입증,Y,저장 시 빈 FCST Type(FCST_TYPE)·Incoterms(INCOTERMS) 옛 행 키 보정('/' 단일 비교 · 칸끼리 대조) · 
+GAP,259,DMF0042,D2,D,반쪽,Y,연초 과거 연도 월 칸 잠금 기준 = 오늘 날짜 연도(DateTime.Now.Year) — Business Plan 지난 연도 칸 편집 불가
+GAP,260,DMF0042,F4;M3,F;F,입증,Y,Exchange Rate 팝업 대량 저장(Exchange Price 80칸 이상) · P_DMF0042_SAVE_DM_BP_EXCHANGE_RA
 GAP,262,DMF0042,F1,F,입증,Y,40 외 사업부 저장 — 빈 키 보정 분기 사업부 한정 조건(V_DIVISION_ID = '40') · P_DMF0042_SAVE_DM_PLN_
-GAP,263,DMF0042,F1;F8,F;D,반쪽,Y,81 Car Qty(CAR_QTY) 저장 계산 — 품목 임시 자료 사업부 조건 '81' · P_DMF0042_SAVE_DM_PLN_BP_FCST
+GAP,263,DMF0042,F1;F8,F;F,입증,Y,81 Car Qty(CAR_QTY) 저장 계산 — 품목 임시 자료 사업부 조건 '81' · P_DMF0042_SAVE_DM_PLN_BP_FCST
 GAP,265,DMF0042,C4;H10,D;F,반쪽,Y,Bucket 변경 시 미저장 변경 차단 검사(신규 행·수정 셀) · MSG00227 「Insert 된 행이 있어 Bucket 을 변경할 수 없습
-GAP,266,DMF0042,M2,D,반쪽,Y,Replace 팝업 — 자료 없는 버전 선택 시 사전 중단 안내 · P_DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF
-GAP,267,DMF0042,M2;F1,D;F,반쪽,Y,Set Price 원장 반영(한 문장 MERGE — 값 바뀐 행 갱신·없는 행 입력) · P_DMF0042_SAVE_DM_PLN_BP_FCST_
+GAP,266,DMF0042,M2,F,입증,Y,Replace 팝업 — 자료 없는 버전 선택 시 사전 중단 안내 · P_DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF
+GAP,267,DMF0042,M2;F1,F;F,입증,Y,Set Price 원장 반영(한 문장 MERGE — 값 바뀐 행 갱신·없는 행 입력) · P_DMF0042_SAVE_DM_PLN_BP_FCST_
 GAP,268,DMF0042,E4,F,입증,Y,신규 행 같은 키 중복 저장 전 검사(MSG00043 「저장시 중복 오류가 발생하였습니다. {0}」) · SP 같은 16키 1건(RNUM=1) 
 GAP,269,DMF0042,F4,F,입증,Y,"대량 저장 한도 — 전달값 32,766자 초과 사전 차단 「한 번에 저장할 수 있는 양을 넘었습니다. 줄 수를 나누어 저장해 주십시오.」 · P"
-GAP,270,DMF0042,F8,D,반쪽,Y,수량만 고친 저장의 금액(SalesAmt_LOC) 재계산 — 원장 LOC 단가 보완 · P_DMF0042_SAVE_DM_PLN_BP_FCST ·
-GAP,271,DMF0042,B8;A7,F;D,반쪽,Y,그리드 Team(DEPT_ID) · End Customer(40 = 행 PROJECT_CODE) 컬럼 값 원천 · P_DMF0042_GET_DM
-GAP,272,DMF0042,A2;B6,D;D,반쪽,Y,조회조건 Item Type(ItemType 콤보 · P Product · H Semi Product · Q Purchase · R Materia
+GAP,270,DMF0042,F8,F,입증,Y,수량만 고친 저장의 금액(SalesAmt_LOC) 재계산 — 원장 LOC 단가 보완 · P_DMF0042_SAVE_DM_PLN_BP_FCST ·
+GAP,271,DMF0042,B8;A7,D;D,반쪽,Y,그리드 Team(DEPT_ID) · End Customer(40 = 행 PROJECT_CODE) 컬럼 값 원천 · P_DMF0042_GET_DM
+GAP,272,DMF0042,A2;B6,D;F,반쪽,Y,조회조건 Item Type(ItemType 콤보 · P Product · H Semi Product · Q Purchase · R Materia
 GAP,273,DMF0042,A5,F,입증,Y,그리드 Measure 컬럼(MEASURE) 보이는 고정 칸 — SCM_MST_SHEET_COLUMNS(DMF0042 · 'Biz Plan' · 
-GAP,274,DMF0042,F6;N1,F;D,반쪽,Y,저장 빈 값 처리 — NOT NULL 키 칸 '/' 채움 · NULL 허용 사업명(PROJECT_NAME) 은 공백 대체 없이 NULL 저장 ·
-GAP,309,DMF0044,M2;F8,D;D,반쪽,Y,Version 팝업 Version Copy · Version Create — 보고 분류 칸 Product Details(Report) · Cel
+GAP,274,DMF0042,F6;N1,F;F,입증,Y,저장 빈 값 처리 — NOT NULL 키 칸 '/' 채움 · NULL 허용 사업명(PROJECT_NAME) 은 공백 대체 없이 NULL 저장 ·
+GAP,309,DMF0044,M2;F8,F;F,입증,Y,Version 팝업 Version Copy · Version Create — 보고 분류 칸 Product Details(Report) · Cel
 GAP,310,DMF0044,A7,D,반쪽,Y,그리드 Application Gr(APPLICATION_GR) · Product Details(PRODUCT_DETAILS) 대체 표시 — 원장
-GAP,312,DMF0044,K4,D,반쪽,Y,ETC Data 조회 Insert 버튼(SCM_ADM_MNU_BTN_MPG_M DMF0044 · 'MDF Reports' · INSERT USE
+GAP,312,DMF0044,K4,F,입증,Y,ETC Data 조회 Insert 버튼(SCM_ADM_MNU_BTN_MPG_M DMF0044 · 'MDF Reports' · INSERT USE
 GAP,313,DMF0044,F7,D,반쪽,Y,전송 완료 버전(SEND_YN Y) 수정 저장 시 모바일 보고 자료 재생성 — Save(ETC Data · Cutoff Data) → P_DMF
 GAP,314,DMF0044,F6,F,입증,Y,Cutoff Data RTF[R+P](RTF_SYS_RP) 수정 월 분배 — 셀 생산지(CELL_PROD_SITE)·FCST_TYPE·INCOT
-GAP,316,DMF0044,M3;G1,D;F,반쪽,Y,Version 팝업(P_DMF0044_GET_SALES_VERSION_POPUP) Description 조건 빈 값 — 설명 NULL 버전(VE
+GAP,316,DMF0044,M3;G1,F;F,입증,Y,Version 팝업(P_DMF0044_GET_SALES_VERSION_POPUP) Description 조건 빈 값 — 설명 NULL 버전(VE
 GAP,317,DMF0044,A6,D,반쪽,Y,조회 결과 행 정렬(END_CUST_REPORT · CUST_REPORT 등 ORDER BY NULLS FIRST + 대소문자 무시 UPPER/
 GAP,318,DMF0044,A7,D,반쪽,Y,그리드 MODEL TYPE 컬럼(MODEL_TYPE) 판정 — UPPER(SINGLE.ITEM_CLASS_NAME) LIKE '%CELL%'·'
 GAP,319,DMF0044,H8,F,입증,Y,"그리드 Energy(KWH) 컬럼(ENERGE_KWH) 표시 형식 — TO_CHAR(ROUND(TO_NUMBER(ENERGE)/1000,3),'"
-GAP,322,DMF0044,M2;F4,D;F,반쪽,Y,81·82 Version Copy — 기준 코드 DMF0044_CONFIG RESULT_START_PERIOD 없음 처리(NO_DATA_FOUN
+GAP,322,DMF0044,M2;F4,F;F,입증,Y,81·82 Version Copy — 기준 코드 DMF0044_CONFIG RESULT_START_PERIOD 없음 처리(NO_DATA_FOUN
 GAP,324,DMF0044,F1;F6,F;F,입증,Y,Cutoff Data Save 전달값 25개(셀 생산지 cellProdSite · plantSiteId 키 추가) · P_DMF0044_SAVE
-GAP,325,DMF0044,K4,D,반쪽,Y,Delete 버튼(DELETE) — Data Type Cutoff Data 선택 시 숨김 · ETC Data 에서 표시
-GAP,326,DMF0044,C1,Fm,입증,Y,조회조건 Division · Report Type 변경 시 Data Type(MDF_TYPE2) ALL 초기화 · Version 비움
+GAP,325,DMF0044,K4,F,입증,Y,Delete 버튼(DELETE) — Data Type Cutoff Data 선택 시 숨김 · ETC Data 에서 표시
+GAP,326,DMF0044,C1,F,입증,Y,조회조건 Division · Report Type 변경 시 Data Type(MDF_TYPE2) ALL 초기화 · Version 비움
 GAP,327,DMF0044,F7,D,반쪽,Y,ETC 저장 · 버전 삭제 — ETC 원장 DM_PLN_SALES_ETC_REPORT_C 기록·삭제 연계 · P_DMF0044_SAVE_SALE
 GAP,328,DMF0044,E1;F6,F;F,입증,Y,Cutoff Data RTF[R+P] 수정 분배(기존 합계 0 → 기존 행 균등 배분 · 같은 키 중복 추가 방지) · 정수부 20자리 초과 입
-GAP,329,DMF0044,M3,D,반쪽,Y,Text 팝업(82 · TEXTBOX 버튼) 저장 — 수정한 행마다 저장 호출 · API DMF0044_textbox_SAVE → P_DMF00
-GAP,330,DMF0044,M2,D,반쪽,Y,Version Create 빈 원본 차단 「원본 버전에 복사할 데이터가 없습니다. 데이터가 있는 버전을 선택하세요.」(SP 는 DM_PLN_SA
-GAP,331,DMF0044,B8;F8,F;D,반쪽,Y,버전 생성 시 담당·팀(Team · DEPT_ID) 배정 원천 = SCM_MST_SITE_ITEM.DEPT_ID(SCM_MST_SSO_DEPT_
+GAP,329,DMF0044,M3,F,입증,Y,Text 팝업(82 · TEXTBOX 버튼) 저장 — 수정한 행마다 저장 호출 · API DMF0044_textbox_SAVE → P_DMF00
+GAP,330,DMF0044,M2,F,입증,Y,Version Create 빈 원본 차단 「원본 버전에 복사할 데이터가 없습니다. 데이터가 있는 버전을 선택하세요.」(SP 는 DM_PLN_SA
+GAP,331,DMF0044,B8;F8,D;F,반쪽,Y,버전 생성 시 담당·팀(Team · DEPT_ID) 배정 원천 = SCM_MST_SITE_ITEM.DEPT_ID(SCM_MST_SSO_DEPT_
 GAP,332,DMF0044,G7,D,반쪽,Y,조회조건 Version(VERSION_NO) 채택 표시 — 번호만(Description 미부착)
-GAP,333,DMF0044,F6;N1;F4,F;D;F,반쪽,Y,ETC Data 저장 병합 — 셀 생산지(CELL_PROD_SITE) 조건 · Cell Model 빈 값 비교 · DOM_EXP · ATTRIB
+GAP,333,DMF0044,F6;N1;F4,F;F;F,입증,Y,ETC Data 저장 병합 — 셀 생산지(CELL_PROD_SITE) 조건 · Cell Model 빈 값 비교 · DOM_EXP · ATTRIB
 GAP,334,DMF0044,H8,F,입증,Y,그리드 월 칸(기간 컬럼 YYYYMMDD · Measure 행 QTY) 0 표시 → 빈칸
-GAP,335,DMF0044,K4;D2,D;C,미입증,Y,Edit 버튼(EDIT) 없음 — 조회 시점 편집 판정 · Biz Plan Cutoff Data 편집 가능 Measure Business Pla
-GAP,336,DMF0044,M4,D,반쪽,Y,Exchange Rate 팝업(EXCHANGE_RATE) Save → 저장 후 팝업 닫기 · API DMF0044_exchangeRate_SAV
+GAP,335,DMF0044,K4;D2,F;D,반쪽,Y,Edit 버튼(EDIT) 없음 — 조회 시점 편집 판정 · Biz Plan Cutoff Data 편집 가능 Measure Business Pla
+GAP,336,DMF0044,M4,F,입증,Y,Exchange Rate 팝업(EXCHANGE_RATE) Save → 저장 후 팝업 닫기 · API DMF0044_exchangeRate_SAV
 GAP,500,DMF0042,D1;A5,F;F,입증,Y,기존 행 Business Plan · LOC 기간 칸 편집(EDIT_FLAG 숨은 고정 칸 조회 결과 포함) — SCM_MST_SHEET_COL
-GAP,45,DMF0004,C3;E4,D;F,반쪽,Y,신규 행 Sales Site 코드(SCM_SITE_ID) 자동 생성(Sold-To Customer + City) · 저장 중복 사이트 검사(P_
+GAP,45,DMF0004,C3;E4,F;F,입증,Y,신규 행 Sales Site 코드(SCM_SITE_ID) 자동 생성(Sold-To Customer + City) · 저장 중복 사이트 검사(P_
 GAP,46,DMF0004,B4,D,반쪽,Y,조회조건 Sold-To Customer 콤보(SOLDTO_CUSTOMER · 선택 목록 dmf0004GetSoldtoCustomerData · 
 GAP,47,DMF0004,F7,D,반쪽,Y,저장 프로시저 이력 기록(SCM_MST_SITE_H · SCM_MST_SITE_CUSTOMER_H · SCM_MST_LOCATION_H · DM
 GAP,48,DMF0004,C5;G1,C;F,미입증,Y,상단 행 더블클릭 → 하단 Sales Customer · Sales Location 탭 조회 전달값 activeFlag(조회조건 Active) 
-GAP,49,DMF0004,A7;A1,D;D,반쪽,Y,조회 결과 Country Name · City Name 컬럼(COUNTRY · CITY 연결) · 하단 Sales Customer 탭 행 수(S
+GAP,49,DMF0004,A7;A1,D;F,반쪽,Y,조회 결과 Country Name · City Name 컬럼(COUNTRY · CITY 연결) · 하단 Sales Customer 탭 행 수(S
 GAP,50,DMF0004,B4,D,반쪽,Y,조회조건 Sales Site 콤보(SCM_SITE_ID · SiteByEndCustomer_DM validYn 'N' · asYn 'Y' / S
-GAP,52,DMF0004,E4;MS1,F;F,입증,Y,하단 탭 중복 입력 검사 — Sales Location(LOCATION_CODE · PLANT_ID) · Sales Bucket(INCOTERM
+GAP,52,DMF0004,E4;MS1,F;D,반쪽,Y,하단 탭 중복 입력 검사 — Sales Location(LOCATION_CODE · PLANT_ID) · Sales Bucket(INCOTERM
 GAP,54,DMF0004,E4,F,입증,Y,Sales Customer 저장 옛 코드 Sold-To/Ship-To 차단(NERP_CONV_MASTER CODETYPE END_CUSTOMER
-GAP,55,DMF0004,D1;K4,F;D,반쪽,Y,툴바 Edit 버튼(EDIT) 없음 · 칸 설정 입력 구분(INPUT_TP_CD M·O·IM·S)대로 상시 편집 · 위/아래 그리드 동시 편집(
+GAP,55,DMF0004,D1;K4,F;F,입증,Y,툴바 Edit 버튼(EDIT) 없음 · 칸 설정 입력 구분(INPUT_TP_CD M·O·IM·S)대로 상시 편집 · 위/아래 그리드 동시 편집(
 GAP,56,DMF0004,B4,D,반쪽,Y,조회조건 End Customer 콤보(END_CUSTOMER · FilterEndCustomerByDivision 기준 코드 갈래)
 GAP,57,DMF0004,G4;A5;E3,F;F;F,입증,Y,Team 조회조건 · 그리드 Team 칸(DEPT_ID) · Team 팝업 · 저장 Team 필수 검사(81·82)
-GAP,58,DMF0004,N1;E3,D;F,반쪽,Y,Company 칸(COMPANY_ID) 이관 채움값 '-' 표시 · Bucket(BUCKET_PER) '-' · 저장 Company 필수 검사(
-GAP,59,DMF0004,C1,Fm,입증,Y,조회조건 Sold-To Customer 선택 → Sales Site 콤보 재구성(SiteByEndCustomerSold · endCustomer
+GAP,58,DMF0004,N1;E3,F;F,입증,Y,Company 칸(COMPANY_ID) 이관 채움값 '-' 표시 · Bucket(BUCKET_PER) '-' · 저장 Company 필수 검사(
+GAP,59,DMF0004,C1,F,입증,Y,조회조건 Sold-To Customer 선택 → Sales Site 콤보 재구성(SiteByEndCustomerSold · endCustomer
 GAP,60,DMF0004,A6,D,반쪽,Y,조회 결과 행 정렬(P_DMF0004_GET_SALES_SITE_DATA ORDER BY UPPER(TRANSLATE(END_CUSTOMER))
 GAP,61,DMF0004,G7,D,반쪽,Y,40 조회조건 Sales Site 콤보 표시 문구(SiteByEndCustomer40_DM · SCM_SITE_ID = SITE_DESCRIPT
-GAP,488,DMF0004,I1;MS1,F;F,입증,Y,변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS MSG00005 문구 = TO
-GAP,275,DMF0043,A8,D,반쪽,Y,그리드 동적 월 칸(칸 제목 조회 mainTitle · P_DMF0043_MAIN_TITLE → P_DMF0043_GET_MAIN_SPREAD_
-GAP,276,DMF0043,G4;G1;A1,F;F;D,반쪽,Y,조회조건 Discard · History 체크(전달값 dis · his) · P_DMF0043_GET_CONTRIBUTE_MAIN_DATA 불일
-GAP,277,DMF0043,F1;M3,F;D,반쪽,Y,Contribution Version 팝업 Save(version SAVE → P_DMF0043_VERSION_SAVE → P_DMF0043_S
-GAP,278,DMF0043,F8,D,반쪽,Y,기여율 Save 저장 감사 칸 CREATED_BY · LAST_UPDATED_BY(SCM_ADM_PROC_M PKG_DMF0043.P_DMF00
-GAP,280,DMF0043,I1;MS1,F;F,입증,Y,저장 검사 메시지 코드 MSG01306(합계 100 아님) · MSG01310(구분값 입력) KO·EN·CN 등록(AS-IS MSG00303 ·
+GAP,488,DMF0004,I1;MS1,F;D,반쪽,Y,변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS MSG00005 문구 = TO
+GAP,275,DMF0043,A8,F,입증,Y,그리드 동적 월 칸(칸 제목 조회 mainTitle · P_DMF0043_MAIN_TITLE → P_DMF0043_GET_MAIN_SPREAD_
+GAP,276,DMF0043,G4;G1;A1,F;F;F,입증,Y,조회조건 Discard · History 체크(전달값 dis · his) · P_DMF0043_GET_CONTRIBUTE_MAIN_DATA 불일
+GAP,277,DMF0043,F1;M3,F;F,입증,Y,Contribution Version 팝업 Save(version SAVE → P_DMF0043_VERSION_SAVE → P_DMF0043_S
+GAP,278,DMF0043,F8,F,입증,Y,기여율 Save 저장 감사 칸 CREATED_BY · LAST_UPDATED_BY(SCM_ADM_PROC_M PKG_DMF0043.P_DMF00
+GAP,280,DMF0043,I1;MS1,F;D,반쪽,Y,저장 검사 메시지 코드 MSG01306(합계 100 아님) · MSG01310(구분값 입력) KO·EN·CN 등록(AS-IS MSG00303 ·
 GAP,282,DMF0043,B3,F,입증,Y,Contribution Version 팝업 Year 목록 정렬(yearPopup SEARCH → P_DMF0043_YEAR_POPUP → P_D
 GAP,285,DMF0043,E4,F,입증,Y,월별 모드(By Year 해제) Save 검사 — 수정 행의 값 있는 달 수 = 12 가 아니면 MSG01306 차단(구분 칸 RBU_0999 
-GAP,286,DMF0043,H10;MS1,F;F,입증,Y,저장 검사 실패 알림 문구 덧붙임 — MSG01306 뒤 「(YYYY-MM: 합계)」 · 개수 실패 「(n/12)」
-GAP,291,DMF0043,J2;J4,F;D,반쪽,Y,Contribution Version 팝업 Insert · Delete · Save 버튼 표시 범위 · 메뉴 권한(SCM_ADM_USER_GR_
+GAP,286,DMF0043,H10;MS1,F;D,반쪽,Y,저장 검사 실패 알림 문구 덧붙임 — MSG01306 뒤 「(YYYY-MM: 합계)」 · 개수 실패 「(n/12)」
+GAP,291,DMF0043,J2;J4,F;F,입증,Y,Contribution Version 팝업 Insert · Delete · Save 버튼 표시 범위 · 메뉴 권한(SCM_ADM_USER_GR_
 GAP,402,DMF0072,F1;F4,F;F,입증,Y,신규 행 Company ID(COMPANY_ID) · Mapping Item(MAPPING_ITEM_ID) 빈 값 저장(P_DMF0072_SAV
 GAP,403,DMF0072,B4;B5;D1,D;C;F,미입증,Y,그리드 Company ID 셀 콤보(COMPANY_ID · 기준 코드 DM_EDI_COMPANY_LIST VALID_YN 'Y') — 신규 행만
-GAP,404,DMF0072,G5,F,입증,Y,그리드 Mapping Item(MAPPING_ITEM_ID) · MDM CODE(ITEM_ID) 팝업 사전 조건 = 더블클릭한 행의 END_CU
+GAP,404,DMF0072,G5,D,반쪽,Y,그리드 Mapping Item(MAPPING_ITEM_ID) · MDM CODE(ITEM_ID) 팝업 사전 조건 = 더블클릭한 행의 END_CU
 GAP,405,DMF0072,C2,F,입증,Y,그리드 셀 cascade — END_CUSTOMER 변경 시 SCM_SITE_ID · PROJECT_CODE · CUSTOMER_ITEM_ID 
-GAP,406,DMF0072,E2,D,반쪽,Y,Valid From(VALID_START_DATE · validFrom) · Valid To(VALID_END_DATE) YYYYMMDD 실제 
+GAP,406,DMF0072,E2,F,입증,Y,Valid From(VALID_START_DATE · validFrom) · Valid To(VALID_END_DATE) YYYYMMDD 실제 
 GAP,407,DMF0072,B4,D,반쪽,Y,그리드 신규 행 End Customer 셀 콤보(END_CUSTOMER · 칸 설정 EndCustomerByDivisionDeptAuth · 4
 GAP,408,DMF0072,A5,F,입증,Y,그리드 Project Code 칸(PROJECT_CODE) Div 40 숨김 · Project 조회칸 비활성(divisionId = '40')
-GAP,409,DMF0072,G6,D,반쪽,Y,"조회조건 Div(divisionId · FilterMyDivision) 초기값 — 세션 사업부가 목록에 있으면 그 값, 없으면 목록 첫 값"
-GAP,410,DMF0072,G10,E,반쪽,Y,조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Mode
+GAP,409,DMF0072,G6,F,입증,Y,"조회조건 Div(divisionId · FilterMyDivision) 초기값 — 세션 사업부가 목록에 있으면 그 값, 없으면 목록 첫 값"
+GAP,410,DMF0072,G10,C,미입증,Y,조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Mode
 GAP,412,DMF0072,E4;F1,F;F,입증,Y,신규(I) 행 키 중복 Save(P_DMF0072_SAVE_NNMASTER_MAPPING · 기본 키 DM_CUST_MODEL_MAPPING_M
 GAP,413,DMF0072,F6;F7,F;D,반쪽,Y,빈 하역지(UNLOADING_POINT) · Cust. Plant(CUSTOMER_PLANT) · Cust. Item ID(CUSTOMER_IT
-GAP,414,DMF0072,J1;A1,D;D,반쪽,Y,조회 결과 범위 — 사용자 × 메뉴 편집 권한 사업부(SCM_ADM_USER_MNU_EDIT_AUTH_V) · Div 목록 FilterMyDiv
-GAP,419,DMF0072,G8;G9;G1,D;F;F,반쪽,Y,조회조건 Project(PROJECT_CODE) · Model/Nickname(ITEM_ID) 조회 — UPPER 대소문자 무시 + 쉼표 다중 
-GAP,421,DMF0074,M1,E,반쪽,Y,Excel Form 버튼(EXCEL_FORM) — 양식 조회(template SEARCH → DMF0074_template_SEARCH → P_
-GAP,425,DMF0074,A1,D,반쪽,Y,조회 결과 행 수 · Team 칸(DEPT_ID LEFT JOIN SCM_MST_SSO_DEPT_INFO · P_DMF0074_GET_METAL
-GAP,427,DMF0074,G10;G5,E;F,반쪽,Y,조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item
+GAP,414,DMF0072,J1;A1,F;F,입증,Y,조회 결과 범위 — 사용자 × 메뉴 편집 권한 사업부(SCM_ADM_USER_MNU_EDIT_AUTH_V) · Div 목록 FilterMyDiv
+GAP,419,DMF0072,G8;G9;G1,F;F;F,입증,Y,조회조건 Project(PROJECT_CODE) · Model/Nickname(ITEM_ID) 조회 — UPPER 대소문자 무시 + 쉼표 다중 
+GAP,421,DMF0074,M1,F,입증,Y,Excel Form 버튼(EXCEL_FORM) — 양식 조회(template SEARCH → DMF0074_template_SEARCH → P_
+GAP,425,DMF0074,A1,F,입증,Y,조회 결과 행 수 · Team 칸(DEPT_ID LEFT JOIN SCM_MST_SSO_DEPT_INFO · P_DMF0074_GET_METAL
+GAP,427,DMF0074,G10;G5,C;D,미입증,Y,조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item
 GAP,428,DMF0074,I1;I2,F;F,입증,Y,공용 Excel Upload 창 안내 메시지 MSG00657(오류 행 저장 차단) · MSG00658 · MSG00659 EN · CN 등록값(
-GAP,429,DMF0074,M1,E,반쪽,Y,Excel Upload 오류 목록 칸 제목 = 양식 머리글 등록값(SCM_ADM_EXCEL_COLUMNS HEADER_CONTENT DMF007
-GAP,430,DMF0074,MS1;E3,F;F,입증,Y,Excel Upload Plan Date(PLAN_DATE) 필수 검사 알림 코드 MSG00614 「{0} 값은 필수 입력입니다.」(AS-IS 
-GAP,431,DMF0074,G4;E2,F;D,반쪽,Y,조회조건 Period(PERIOD · YYYYMM) 입력 방식 — 연 · 월 선택기(mode 'month') 직접 입력 불가 · 날짜 형식 오류
-GAP,432,DMF0074,M1,E,반쪽,Y,"양식 조회 프로시저 버전 조건(P_DMF0074_GET_METAL_LINK_TEMPLATE 632행 NVL(ATTRIBUTE7,'N') = 'Y"
-GAP,433,DMF0074,M1,E,반쪽,Y,공용 Excel Upload 창 2단계 — Upload(검사 · 분류) → OK(저장) · 오류 1건 이상이면 저장 차단 MSG00657
-GAP,434,DMF0074,M1;G1,E;F,반쪽,Y,Excel Upload 저장 성공 후 Version 조회조건 'Current' 설정 · 자동 재조회(올린 값 표시)
-GAP,435,DMF0074,B8;A7,F;D,반쪽,Y,그리드 Team 칸(TEAM · DEPT_ID) 원천 = SCM_MST_SITE_ITEM.DEPT_ID · LEFT JOIN(P_DMF0074_
-GAP,436,DMF0074,J1;A1,D;D,반쪽,Y,조회조건 Div 목록(FilterMyDivision · DIVISION_ID) · 조회 행 사업부 범위(사용자 사업부 권한 편집 권한 뷰)
-GAP,437,DMF0074,H5,D,반쪽,Y,그리드 Division 칸 제목(SCM_MST_SHEET_COLUMNS DMF0074 · DIVISION_ID COLUMN_LABEL_NAME 
-GAP,438,DMF0074,M4,D,반쪽,Y,조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 갱신
-GAP,505,DMF0074,G8,D,반쪽,Y,조회조건 Project(PROJECT_CODE) · Model/Nickname(ITEM_ID) 대소문자 무시 비교(P_DMF0074_GET_ME
-GAP,439,DMF0082,A1;G1,D;F,반쪽,Y,조회조건 Version 팝업 선택값(versionType · VERSION_NO) → 조회 결과(P_DMF0082_GET_MAIN_DATA)
-GAP,440,DMF0082,D2,C,미입증,Y,MKT FCST[R+P](MKT_FCST) 월 칸 편집 잠금 경계(M3_CUTOFF_DATE = 오늘 월 + 3개월)
+GAP,429,DMF0074,M1,F,입증,Y,Excel Upload 오류 목록 칸 제목 = 양식 머리글 등록값(SCM_ADM_EXCEL_COLUMNS HEADER_CONTENT DMF007
+GAP,430,DMF0074,MS1;E3,D;F,반쪽,Y,Excel Upload Plan Date(PLAN_DATE) 필수 검사 알림 코드 MSG00614 「{0} 값은 필수 입력입니다.」(AS-IS 
+GAP,431,DMF0074,G4;E2,F;F,입증,Y,조회조건 Period(PERIOD · YYYYMM) 입력 방식 — 연 · 월 선택기(mode 'month') 직접 입력 불가 · 날짜 형식 오류
+GAP,432,DMF0074,M1,F,입증,Y,"양식 조회 프로시저 버전 조건(P_DMF0074_GET_METAL_LINK_TEMPLATE 632행 NVL(ATTRIBUTE7,'N') = 'Y"
+GAP,433,DMF0074,M1,F,입증,Y,공용 Excel Upload 창 2단계 — Upload(검사 · 분류) → OK(저장) · 오류 1건 이상이면 저장 차단 MSG00657
+GAP,434,DMF0074,M1;G1,F;F,입증,Y,Excel Upload 저장 성공 후 Version 조회조건 'Current' 설정 · 자동 재조회(올린 값 표시)
+GAP,435,DMF0074,B8;A7,D;D,반쪽,Y,그리드 Team 칸(TEAM · DEPT_ID) 원천 = SCM_MST_SITE_ITEM.DEPT_ID · LEFT JOIN(P_DMF0074_
+GAP,436,DMF0074,J1;A1,F;F,입증,Y,조회조건 Div 목록(FilterMyDivision · DIVISION_ID) · 조회 행 사업부 범위(사용자 사업부 권한 편집 권한 뷰)
+GAP,437,DMF0074,H5,F,입증,Y,그리드 Division 칸 제목(SCM_MST_SHEET_COLUMNS DMF0074 · DIVISION_ID COLUMN_LABEL_NAME 
+GAP,438,DMF0074,M4,F,입증,Y,조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 갱신
+GAP,505,DMF0074,G8,F,입증,Y,조회조건 Project(PROJECT_CODE) · Model/Nickname(ITEM_ID) 대소문자 무시 비교(P_DMF0074_GET_ME
+GAP,439,DMF0082,A1;G1,F;F,입증,Y,조회조건 Version 팝업 선택값(versionType · VERSION_NO) → 조회 결과(P_DMF0082_GET_MAIN_DATA)
+GAP,440,DMF0082,D2,D,반쪽,Y,MKT FCST[R+P](MKT_FCST) 월 칸 편집 잠금 경계(M3_CUTOFF_DATE = 오늘 월 + 3개월)
 GAP,441,DMF0082,F1;F6,F;F,입증,Y,MKT FCST[R+P](MKT_FCST) 월 칸 수량 입력 → 일자 분배 저장(WEEK_DAY_CNT · DM_PLN_CFM_MKT_DEMAN
-GAP,442,DMF0082,F1;F8,F;D,반쪽,Y,수량 0 저장(MKT_FCST · SCM_FCST · VMI_In_Req) → DM_PLN_CFM_MKT_DEMAND_PLAN 행 유지 · QT
+GAP,442,DMF0082,F1;F8,F;F,입증,Y,수량 0 저장(MKT_FCST · SCM_FCST · VMI_In_Req) → DM_PLN_CFM_MKT_DEMAND_PLAN 행 유지 · QT
 GAP,443,DMF0082,F1;F6,F;F,입증,Y,Unit Price(LOC) 월 칸 입력 → 판가 저장 일자 범위(DM_PLN_CFM_SELLING_PRICE · MEASURE LOC · 이번
 GAP,444,DMF0082,F1;F2,F;F,입증,Y,VMI-In Request(VMI_In_Req) 주·월 칸 입력 → 버킷 요일 일자로 분배 저장(DM_PLN_CFM_MKT_DEMAND_PLAN
-GAP,445,DMF0082,A1;A7,D;D,반쪽,Y,Measure MKT FCST[P+P](MKT_FCST_PP) 행 수·값(Current · MF 버전) = MKT FCST[R+P] 계획 구간
-GAP,446,DMF0082,A1;A7,D;D,반쪽,Y,과거 버전(SF · MF · SP) 조회 결과 행 집합(DM_PLN_CFM_MKT_DEMAND_PLAN_C · MKT_FCST · SCM_FCS
-GAP,448,DMF0082,M3;H10,D;F,반쪽,Y,Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → RESULT_MSG 표시 · 창 
+GAP,445,DMF0082,A1;A7,F;D,반쪽,Y,Measure MKT FCST[P+P](MKT_FCST_PP) 행 수·값(Current · MF 버전) = MKT FCST[R+P] 계획 구간
+GAP,446,DMF0082,A1;A7,F;D,반쪽,Y,과거 버전(SF · MF · SP) 조회 결과 행 집합(DM_PLN_CFM_MKT_DEMAND_PLAN_C · MKT_FCST · SCM_FCS
+GAP,448,DMF0082,M3;H10,F;F,입증,Y,Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → RESULT_MSG 표시 · 창 
 GAP,451,DMF0082,E4,F,입증,Y,VMI-In Request(VMI_In_Req) 행 저장 Ship-To 검사 「[판매처] SITE SHIP-TO does not exist !」
 GAP,452,DMF0082,F10,F,입증,Y,저장 SP 트랜잭션 범위(P_DMF0082_SAVE_MAIN_DATA → P_PR_DM_PLN_CFM_TO_MKT_FCST → PR_DM_PLN
 GAP,455,DMF0082,J3,F,입증,Y,SCM FCST 입력 시간창의 MKT FCST[R+P](MKT_FCST) 잠금 판정 범위 = 사업부 전체 행(보유 그룹 합집합 · GET_ADM
 GAP,497,DMF0082,A7,D,반쪽,Y,VMI-In Request · VMI-In Plan · VMI Inv. 행 Currency 칸(CURRENCY · VMI_In_Req · VMI
-GAP,148,DMF0014,D3;J3,D;F,반쪽,Y,그리드 기간 칸 편집 가능 행(담당 부서 행 ↔ 전 행) — 관리자 판정 GET_ADMIN_GROUP(SEGMENT2 ALL) × 보유 그룹(S
-GAP,156,DMF0014,M1;MS1,E;F,반쪽,Y,공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠습니까?」(AS-IS MSG00
+GAP,148,DMF0014,D3;J3,F;F,입증,Y,그리드 기간 칸 편집 가능 행(담당 부서 행 ↔ 전 행) — 관리자 판정 GET_ADMIN_GROUP(SEGMENT2 ALL) × 보유 그룹(S
+GAP,156,DMF0014,M1;MS1,F;D,반쪽,Y,공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠습니까?」(AS-IS MSG00
 GAP,158,DMF0014,J2,F,입증,Y,저장 · 올리기 계열 단추(Save · Upload · Upload Save · Excel Form · Insert · Delete) 그룹 권한
 GAP,159,DMF0014,J2,F,입증,Y,DM Viewer 의 Save · Upload 단추 미노출 · 수량 저장 차단(SCM_ADM_USER_GR_MNU_BTN_MPG_M DM Vie
-GAP,491,DMF0014,MS1;H10,F;F,입증,Y,조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS-IS MSG00097 · MS
-GAP,467,SYS0014,A1;N1,D;D,반쪽,Y,Group Info 그룹 목록(SCM_ADM_USER_GR_M · CAPA Planner · System Monitor · SSP ADMIN ·
+GAP,491,DMF0014,MS1;H10,D;F,반쪽,Y,조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS-IS MSG00097 · MS
+GAP,467,SYS0014,A1;N1,F;F,입증,Y,Group Info 그룹 목록(SCM_ADM_USER_GR_M · CAPA Planner · System Monitor · SSP ADMIN ·
 GAP,468,SYS0014,D1;D4,F;F,입증,Y,Group Info 그리드 읽기 전용 — Insert · Delete 무동작 · Save MSG00627(그룹 등록 · 수정 · 연쇄 삭제 호출
-GAP,470,SYS0014,M4;C3;A5,D;D;F,반쪽,Y,User Info Insert → 사용자 찾기 팝업 선택값(USER_ID · USER_NM · 영문 이름 · 부서 이름) 새 줄 채움 · Ema
+GAP,470,SYS0014,M4;C3;A5,F;F;F,입증,Y,User Info Insert → 사용자 찾기 팝업 선택값(USER_ID · USER_NM · 영문 이름 · 부서 이름) 새 줄 채움 · Ema
 GAP,472,SYS0014,A2,D,반쪽,Y,Division 영역 Name 칸(UNIT_ID · CELL_COMBO_DATA_TYPE AllDivision_SCP) 표시값 「부문 코드 + 
 GAP,473,SYS0014,F7,D,반쪽,Y,User Info 행 Delete → Save 시 권한 요청(SCM_MST_AUTH_REQUEST GROUP_ID · USER_ID) 함께 삭제
-GAP,475,SYS0014,J4,D,반쪽,Y,마지막 그룹이 GUEST 만 남은 사용자의 로그인 메뉴 · 권한(nscm-be 로그인 판정 — 그룹 없음 또는 전부 GUEST 대소문자 무시 →
+GAP,475,SYS0014,J4,F,입증,Y,마지막 그룹이 GUEST 만 남은 사용자의 로그인 메뉴 · 권한(nscm-be 로그인 판정 — 그룹 없음 또는 전부 GUEST 대소문자 무시 →
 GAP,476,SYS0014,F7,D,반쪽,Y,Division 영역 부문(UNIT_TP_CD D) 권한 행 Delete → Save 시 하위 권한(UPPR_UNIT_ID = 그 부문) · 권
-GAP,477,SYS0014,D4;M4,F;D,반쪽,Y,User Info Insert → 사용자 찾기 팝업(다중 선택 체크) → 고른 사람 수만큼 줄 추가
-GAP,480,SYS0014,A1;N1,D;D,반쪽,Y,Division 영역 부문 권한 목록(P_SYS0014_GET_AUTH_LIST_M · SCM_MST_DIVISION 안쪽 결합 · UNIT_I
+GAP,477,SYS0014,D4;M4,F;F,입증,Y,User Info Insert → 사용자 찾기 팝업(다중 선택 체크) → 고른 사람 수만큼 줄 추가
+GAP,480,SYS0014,A1;N1,F;F,입증,Y,Division 영역 부문 권한 목록(P_SYS0014_GET_AUTH_LIST_M · SCM_MST_DIVISION 안쪽 결합 · UNIT_I
 GAP,498,SYS0014,A7;E3,D;F,반쪽,Y,User Info User Name 칸(USER_NM · P_SYS0014_GET_USER_BY_GROUP_M · 사용자 원장 바깥 결합) · 
-GAP,506,SYS0014,G8;M3,D;D,반쪽,Y,Division Insert 부문 찾기 팝업(DivisionPopup · P_SYS0014_GET_DIVISION_DATA searchText)
-GAPPI,1_r5,DMF0003,A8,D,반쪽,Y,그리드 일별(Day) Bucket 기간 컬럼(BUCKET=D · PERIOD)
+GAP,506,SYS0014,G8;M3,F;F,입증,Y,Division Insert 부문 찾기 팝업(DivisionPopup · P_SYS0014_GET_DIVISION_DATA searchText)
+GAPPI,1_r5,DMF0003,A8,F,입증,Y,그리드 일별(Day) Bucket 기간 컬럼(BUCKET=D · PERIOD)
 GAPPI,1_r6,DMF0007,D5,F,입증,N,Project Code(PROJECT_CODE)·Model(ITEM_ID) 입력 셀/조건 FPTextModal 에디터
 GAPPI,2,DMF0021,H4,F,입증,Y,Main Grid 헤더(Header) 높이
 GAPPI,3,DMF0003,B5;B4,C;D,미입증,Y,신규행 Incoterms 셀 콤보(INCOTERMS · 콤보 SQL ID incotermsEdit / AS_INCOTERMS)
 GAPPI,4,DMF0003,F9;F1;F6,C;F;F,미입증,Y,주(W) Bucket 입력값의 일(D) 분배 기준(Partial Week · DefaultBucketDay · SALES_SITE)
 GAPPI,5,DMF0082,B4,D,반쪽,Y,그리드 Cell Prod Site 셀 콤보(CELL_PROD_SITE_ID)
-GAPPI,6,DMF0014,M1,E,반쪽,Y,Excel Upload 검증(SSPM SITE_ITEM · Customer Project Model CHECK)
-GAPPI,7,COMMON,E6,D,반쪽,N,텍스트 입력 컨트롤(TEXT BOX · FPText) 마우스 드래그 선택 후 Delete/Backspace
+GAPPI,6,DMF0014,M1,F,입증,Y,Excel Upload 검증(SSPM SITE_ITEM · Customer Project Model CHECK)
+GAPPI,7,COMMON,E6,F,입증,N,텍스트 입력 컨트롤(TEXT BOX · FPText) 마우스 드래그 선택 후 Delete/Backspace
 GAPPI,8,DMF0005,F7,D,반쪽,Y,저장 연계 SCM_MST_SITE_ITEM.DEPT_ID → SCM_MST_SITE.ETL_DEPT_ID 업데이트
 GAPPI,9,COMMON,A7,D,기계검출불가,N,RTF Measure 금액(AMT) 계산 시 적용 LOC(판가) 기준(RTF · AMT · LOC)
-GAPPI,10,DMF0082,E5;F3,D;D,반쪽,Y,그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단
-GAPPI,11,DMF0003,E5;F3,D;D,반쪽,Y,그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단
+GAPPI,10,DMF0082,E5;F3,D;F,반쪽,Y,그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단
+GAPPI,11,DMF0003,E5;F3,D;F,반쪽,Y,그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단
 GAPPI,12,DMF0048,C4,D,반쪽,Y,조회조건 Bucket(BUCKET) 변경 시 Main Grid 초기화
 GAPPI,13,DMF0042,F1,F,입증,Y,행추가 세트(4 Row SET) 저장(Save · CRUD_TYPE) 전달 행 범위
 GAPPI,14,DMF0048,F1,F,입증,Y,행추가 세트(3 Row SET) 저장(Save · CRUD_TYPE) 전달 행 범위
-GAPPI,15,DMF0082,J2;K4,F;D,반쪽,Y,공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET_MNU_BTN_AUTH_DIV
+GAPPI,15,DMF0082,J2;K4,F;F,입증,Y,공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET_MNU_BTN_AUTH_DIV
 GAPPI,16,DMF0042,D5,F,입증,Y,Project Code(PROJECT_CODE)·Model(ITEM_ID) 입력 셀/조건 FPTextModal 에디터
-GAPPI,17,DMF0005,K4;J2,D;F,반쪽,Y,Model Code Change 버튼(MODEL_CODE_CHANGE) 활성화 조건
+GAPPI,17,DMF0005,K4;J2,F;F,입증,Y,Model Code Change 버튼(MODEL_CODE_CHANGE) 활성화 조건
 GAPPI,18,DMF0021,A5;K2,F;D,반쪽,Y,그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼)
 GAPPI,19,DMF0021,F4;F1,F;F,입증,Y,RTF Measure(RTF) 수량 셀 수정 저장
 GAPPI,20,DMF0044,A2,D,반쪽,Y,그리드 Team 컬럼(TEAM · DEPT_ID) 표시값
-GAPPI,21,DMF0003,D2;A9,C;D,미입증,Y,"Partial Week 컬럼(W+0 · PARTIAL) 입력 활성화 기준 · 헤더 ""+"" 표시"
-GAPPI,22,DMF0005,B8;M3,F;D,반쪽,Y,Team 팝업(TEAM · DEPT_ID) 조회 목록 원천(SSO_DEPT_INFO ⨝ SCM_ADM_USER_M)
-GAPPI,23,DMF0005,G5;M3,F;D,반쪽,Y,그리드 Model 셀 팝업(ITEM_ID · itemId) 조회조건 필터
-GAPPI,24,DMF0005,H6;H4,D;F,반쪽,Y,팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출
+GAPPI,21,DMF0003,D2;A9,D;D,반쪽,Y,"Partial Week 컬럼(W+0 · PARTIAL) 입력 활성화 기준 · 헤더 ""+"" 표시"
+GAPPI,22,DMF0005,B8;M3,D;F,반쪽,Y,Team 팝업(TEAM · DEPT_ID) 조회 목록 원천(SSO_DEPT_INFO ⨝ SCM_ADM_USER_M)
+GAPPI,23,DMF0005,G5;M3,D;F,반쪽,Y,그리드 Model 셀 팝업(ITEM_ID · itemId) 조회조건 필터
+GAPPI,24,DMF0005,H6;H4,F;F,입증,Y,팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출
 GAPPI,25,DMF0082,F2;F1,F;F,입증,Y,Measure VMI_REQ_IN·AS 등(MKT_FCST·LOC 외) 주(W)·월(M) Bucket 입력 저장
-GAPPI,27,COMMON,M4;H6,D;D,반쪽,N,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)
+GAPPI,27,COMMON,M4;H6,F;F,입증,N,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)
 GAPPI,28,DMF0005,E4;F4,F;F,입증,Y,Owner(OWNER)·Project Owner(PROJECT_OWNER) 선택 인원 제한(10명) · 컬럼 길이(100→200) 저장
-GAPPI,29,DMF0020,A8,D,반쪽,Y,그리드 기간 컬럼(PERIOD) 전 구간 조회 · Sales Site(SALES_SITE_ID) 조건
-GAPPI,30,DMF0005,H6,D,반쪽,Y,Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선(line)
-GAPPI,31,DMF0020,F6;N1,F;D,반쪽,Y,Plant Site(PLANT_SITE_ID) 저장값
+GAPPI,29,DMF0020,A8,F,입증,Y,그리드 기간 컬럼(PERIOD) 전 구간 조회 · Sales Site(SALES_SITE_ID) 조건
+GAPPI,30,DMF0005,H6,F,입증,Y,Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선(line)
+GAPPI,31,DMF0020,F6;N1,F;F,입증,Y,Plant Site(PLANT_SITE_ID) 저장값
 GAPPI,32,DMF0005,D4,F,입증,Y,신규행 Partial Plan YN(PARTIAL_PLAN_YN) 기본값
 GAPPI,33,DMF0003,H8,F,입증,Y,그리드 Last Update 컬럼(LAST_UPDATE_DATE) 표시 포맷
-GAPPI,34,DMF0082,H6,D,반쪽,Y,Batch Price Input 팝업(BATCH_PRICE Modal) 상단 LINE
+GAPPI,34,DMF0082,H6,F,입증,Y,Batch Price Input 팝업(BATCH_PRICE Modal) 상단 LINE
 GAPPI,35,DMF0004,D4,F,입증,Y,Sales Customer 탭 신규행 REP(REP_YN) 기본값
-GAPPI,36,DMF0005,C3;E3,D;F,반쪽,Y,Team(TEAM · DEPT_ID) 자동 채움 제거 · Team 필수 검증 · Owner(OWNER)
-GAPPI,37,DMF0082,B5;C1,C;Fm,미입증,Y,FCST Type 콤보(FCST_TYPE · SALES_TYPE) 후보 × W/S 조건
+GAPPI,36,DMF0005,C3;E3,F;F,입증,Y,Team(TEAM · DEPT_ID) 자동 채움 제거 · Team 필수 검증 · Owner(OWNER)
+GAPPI,37,DMF0082,B5;C1,C;F,미입증,Y,FCST Type 콤보(FCST_TYPE · SALES_TYPE) 후보 × W/S 조건
 GAPPI,38,DMF0021,G4;H4,F;F,입증,Y,조회조건 공통 컴포넌트(SearchCondition) 너비
 GAPPI,39,DMF0082,K1;C4,D;D,반쪽,Y,그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 · 건수 표시
-GAPPI,40,DMF0082,F8,D,반쪽,Y,Sales Price 수정 저장 → Last Updated By/Date(LAST_UPDATED_BY · LAST_UPDATE_DATE) 동기화
+GAPPI,40,DMF0082,F8,F,입증,Y,Sales Price 수정 저장 → Last Updated By/Date(LAST_UPDATED_BY · LAST_UPDATE_DATE) 동기화
 GAPPI,41,DMF0082,H10,F,입증,Y,Batch Price Input 실행 성공 메시지(BATCH · MSG)
 GAPPI,42,SYS0010,E3,F,입증,Y,Lookup Segment1~Segment5 컬럼(SEGMENT1 · SEGMENT2 · SEGMENT3 · SEGMENT4 · SEGMENT5
-GAPPI,43,DMF0082,A1;K2,D;D,반쪽,Y,그리드 Last Update(LAST_UPDATE_DATE)·Last Updated By(LAST_UPDATED_BY) 컬럼 추가/Invisib
+GAPPI,43,DMF0082,A1;K2,F;D,반쪽,Y,그리드 Last Update(LAST_UPDATE_DATE)·Last Updated By(LAST_UPDATED_BY) 컬럼 추가/Invisib
 GAPPI,44,,A7,D,기계검출불가,N,RTF 금액 산출 시 Origin Price 기준(SCP_PLN_RTF_ALLOCATION.DUE_DATE · ORIGIN_PRICE)
 GAPPI,45,DMF0005,F6;E1,F;F,입증,Y,KWH 컬럼(KWH · ATTRIBUTE8) 소수값 저장
 GAPPI,46,DMF0072,B5,C,미입증,Y,신규행 Incoterms 셀 콤보(INCOTERMS) 후보
 GAPPI,47,DMF0053,G4;H4,F;F,입증,Y,조회조건 공통 컴포넌트(SearchCondition) 영역·너비
 GAPPI,48,DMF0053,H8;E1,F;F,입증,Y,그리드 수량 Measure 컬럼 소수 표시(DATA_SCALE_NUMBER)
-GAPPI,49,DMF0007,B5;N1,C;D,미입증,N,신규행 Measure 셀 콤보(MEASURE · LOOKUP CUST_FCST_MEASURE) 후보
+GAPPI,49,DMF0007,B5;N1,C;F,미입증,N,신규행 Measure 셀 콤보(MEASURE · LOOKUP CUST_FCST_MEASURE) 후보
 GAPPI,50,SYS0013,H7,D,반쪽,N,실행 결과 그리드 Excel Download(EXCEL_DOWNLOAD) · Focus grid
-GAPSELF,1,DMF0074,J1;G4,D;F,반쪽,Y,조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기
+GAPSELF,1,DMF0074,J1;G4,F;F,입증,Y,조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기
 GAPSELF,2,COMMON,DB-SYN,Fm,입증,N,TO-BE PKG 소스(PKG_DMF0003·PKG_DMF0021·PKG_DMF0042·PKG_DMF0045·PKG_DMF0049·PKG_DMF
-GAPSELF,3,DMF0003,H11,F,입증,Y,저장(Save) 실행 중 스피너(Spinner · Loading)
-GAPSELF,4,DMF0072,B4;B1,D;Fm,반쪽,Y,신규행 End Customer 셀 콤보(END_CUSTOMER_ID · 콤보 SQL ID DM_EDI_COMPANY_LIST)
-GAPSELF,5,DMF0072,G5,F,입증,Y,그리드 Model(ITEM_ID · MDM Code)·Project Code(PROJECT_CODE) 셀 팝업 조건 연동(END_CUSTOMER
+GAPSELF,3,DMF0003,H11,Fm,입증,Y,저장(Save) 실행 중 스피너(Spinner · Loading)
+GAPSELF,4,DMF0072,B4;B1,D;F,반쪽,Y,신규행 End Customer 셀 콤보(END_CUSTOMER_ID · 콤보 SQL ID DM_EDI_COMPANY_LIST)
+GAPSELF,5,DMF0072,G5,D,반쪽,Y,그리드 Model(ITEM_ID · MDM Code)·Project Code(PROJECT_CODE) 셀 팝업 조건 연동(END_CUSTOMER
 GAPSELF,6,DMF0021,H2,F,입증,Y,Daily Bucket 실적 구간 컬럼(ACTUAL · BUCKET=D) 배경색
-GAPSELF,7,DMF0021,H11,F,입증,Y,저장(Save) 실행 중 스피너(Spinner · Loading)
-GAPSELF,9,DMF0006,E7;E4;C2,F;F;F,입증,Y,그리드 Project Code(PROJECT_CODE) 셀 Key-in 검증 · Project Code 변경 시 Model(ITEM_ID) 초기
-GAPSELF,10,DMF0004,J1,D,반쪽,Y,조회조건 Division 콤보(DIVISION_ID) 초기 선택값 · 사용자 권한
-GAPSELF,12,DMF0003,D1;D2,F;C,미입증,Y,값이 있는 수량 Measure 셀(편집 구간) 편집 가능 여부
+GAPSELF,7,DMF0021,H11,Fm,입증,Y,저장(Save) 실행 중 스피너(Spinner · Loading)
+GAPSELF,9,DMF0006,E7;E4;C2,D;F;F,반쪽,Y,그리드 Project Code(PROJECT_CODE) 셀 Key-in 검증 · Project Code 변경 시 Model(ITEM_ID) 초기
+GAPSELF,10,DMF0004,J1,F,입증,Y,조회조건 Division 콤보(DIVISION_ID) 초기 선택값 · 사용자 권한
+GAPSELF,12,DMF0003,D1;D2,F;D,반쪽,Y,값이 있는 수량 Measure 셀(편집 구간) 편집 가능 여부
 GAPSELF,14,DMF0008,F4;F1,F;F,입증,Y,Price Batch 저장(BATCH_PRICE · Save) 신규 키 조합
 GAPSELF,15,DMF0005,D6;H3,F;D,반쪽,Y,Insert 행 위치 · 셀 병합(FPMerge) 그룹
-GAPSELF,16,DMF0008,I1;M2;H10;H11,F;D;F;F,반쪽,Y,Updated_by 라벨(UPDATED_BY LBL) 다국어 · Status Update 버튼(STATUS_UPDATE) 확인창·스피너
+GAPSELF,16,DMF0008,I1;M2;H10;H11,F;F;F;Fm,입증,Y,Updated_by 라벨(UPDATED_BY LBL) 다국어 · Status Update 버튼(STATUS_UPDATE) 확인창·스피너
 GAPSELF,17,DMF0004,J2,F,입증,Y,공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용
 GAPSELF,18,DMF0006,J2,F,입증,Y,공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용
 GAPSELF,19,DMF0043,H3,D,반쪽,Y,그리드 헤더 병합(Header Merge · DIVISION/TEAM/CUSTOMER_GROUP/SALES_SITE/PRODUCT_GROUP/T
 GAPSELF,20,DMF0049,DB-SYN,Fm,입증,Y,UI Category SHEET_COLUMNS Column param9(ATTRIBUTE9 · 신규행 Combo Data Type SQL_ID)
-GAPSELF,21,COMMON,J1,D,반쪽,N,사용자 Division 권한 콤보 쿼리(DIVISION_ID · 권한 USE_YN) 필터
-GAPSELF,22,COMMON,J4;J2,D;F,반쪽,N,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화
-GAPSELF,23,DMF0074,C1;G6,Fm;D,반쪽,Y,조회조건 Version 콤보(VERSION_ID) Current 기본값 × Division(DIVISION_ID) 변경
-GAPSELF,24,DMF0044,H6;H4,D;F,반쪽,Y,Version 팝업(VERSION Modal) 레이아웃
+GAPSELF,21,COMMON,J1,F,입증,N,사용자 Division 권한 콤보 쿼리(DIVISION_ID · 권한 USE_YN) 필터
+GAPSELF,22,COMMON,J4;J2,F;F,입증,N,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화
+GAPSELF,23,DMF0074,C1;G6,F;F,입증,Y,조회조건 Version 콤보(VERSION_ID) Current 기본값 × Division(DIVISION_ID) 변경
+GAPSELF,24,DMF0044,H6;H4,F;F,입증,Y,Version 팝업(VERSION Modal) 레이아웃
 GAPSELF,25,DMF0020,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
 GAPSELF,26,DMF0048,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
 GAPSELF,27,DMF0014,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
@@ -638,7 +638,7 @@ GAPSELF,29,DMF0042,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count
 GAPSELF,30,DMF0021,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
 GAPSELF,31,DMF0044,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
 GAPSELF,32,DMF0049,K1,D,반쪽,Y,그리드 필터(Filter) 유지 · 건수(Count) 표시
-GAPSELF,33,DMF0082,H6;H4,D;F,반쪽,Y,Version 팝업(VERSION Modal) 레이아웃
+GAPSELF,33,DMF0082,H6;H4,F;F,입증,Y,Version 팝업(VERSION Modal) 레이아웃
 GAPSELF,34,DMF0020,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
 GAPSELF,35,DMF0003,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
 GAPSELF,36,DMF0048,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
@@ -648,103 +648,103 @@ GAPSELF,39,DMF0021,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(Se
 GAPSELF,40,DMF0082,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
 GAPSELF,41,DMF0035,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
 GAPSELF,42,DMF0040,G4;H4,F;F,입증,Y,조회조건 영역 공통 컴포넌트(SearchCondition) 너비
-GAP,99,DMF0006,E4;MS1,F;F,입증,Y,그리드 신규 행 4키(Division·Sales Site SCM_SITE_ID·Customer PJT·Customer Model) 중복 검사 ·
-GAP,100,DMF0006,E3;MS1,F;F,입증,Y,그리드 PJT Code(PROJECT_CODE) 필수 검사(40 외 사업부 신규 행) · Save
+GAP,99,DMF0006,E4;MS1,F;D,반쪽,Y,그리드 신규 행 4키(Division·Sales Site SCM_SITE_ID·Customer PJT·Customer Model) 중복 검사 ·
+GAP,100,DMF0006,E3;MS1,F;D,반쪽,Y,그리드 PJT Code(PROJECT_CODE) 필수 검사(40 외 사업부 신규 행) · Save
 GAP,101,DMF0006,E1,F,입증,Y,그리드 Convert Qty(Pack·Module·Cell) 컬럼 CONVERT_QTY_PACK·CONVERT_QTY_MODULE·CONVERT
 GAP,102,DMF0006,C2,F,입증,Y,그리드 상위 셀(Team·End Customer·Sales Site SCM_SITE_ID·PJT Code PROJECT_CODE) 변경 · PJ
 GAP,103,DMF0006,D4,F,입증,Y,Insert 신규 행 기본값 — Convert Qty(CONVERT_QTY_PACK·CONVERT_QTY_MODULE·CONVERT_QTY_CE
 GAP,104,DMF0006,D1,F,입증,Y,그리드 PJT Code(PROJECT_CODE)·PJT(PROJECT_NAME) 컬럼 81 하위 사업부(81_UC·81_HM·81_ST·81_H
 GAP,105,DMF0006,F1;F10,F;F,입증,Y,Save 다건 저장 트랜잭션 — PKG_DMF0006.P_PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA · 이력 
 GAP,108,DMF0006,E3;D1,F;F,입증,Y,그리드 Model(ITEM_ID) 컬럼 기존 행 편집(팝업) 가능 여부 · 필수 검사 범위(INPUT_TP_CD M/IM) · Save 시 MS
-GAP,133,DMF0008,A1,D,반쪽,Y,SSPM 탭 그리드(sspm) 조회 행 수 — PKG_DMF0008.P_DMF0008_GET_SALES_SITE_PROJECT_MODEL(같은 
+GAP,133,DMF0008,A1,F,입증,Y,SSPM 탭 그리드(sspm) 조회 행 수 — PKG_DMF0008.P_DMF0008_GET_SALES_SITE_PROJECT_MODEL(같은 
 GAP,134,DMF0008,A7,D,반쪽,Y,SSPM 조회 결과 Module/Car(MODULE_PER_CAR) 계산값 — TRUNC(CELL_PER_CAR)/TRUNC(CELL_PER_M
-GAP,135,DMF0008,A1,D,반쪽,Y,요약·정비·상태 갱신 52주 시작일 계산(P_DMF0008_GET_EDI_MST_SUMMARY·P_DMF0008_GET_EDI_MST_REPAI
+GAP,135,DMF0008,A1,F,입증,Y,요약·정비·상태 갱신 52주 시작일 계산(P_DMF0008_GET_EDI_MST_SUMMARY·P_DMF0008_GET_EDI_MST_REPAI
 GAP,136,DMF0008,H4,F,입증,Y,정비 목록(List of SCM Master Data Requiring Maintenance) 제목 옆 건수 표시 「총 N건」 · EDI 건수(
 GAP,137,DMF0008,A7;I1,D;F,반쪽,Y,"최종 갱신 영역 Last Update Start · Last Update End · Updated by(UPDATED_BY, 라벨 LBL0115"
-GAP,138,DMF0008,M2,D,반쪽,Y,STATUS_UPDATE 버튼(Status Update) 실행 결과 — PKG_DMF0008.P_DMF0008_STATUS_UPDATE 결과 커
-GAP,141,DMF0008,F8;N1,D;D,기계검출불가,Y,Sales Site 저장 사이트 이력(SCM_MST_SITE_H) DEPT_ID 적재값 — PKG_DMF0008.P_DMF0008_SAVE_SA
-GAP,142,DMF0008,B8;A7,F;D,반쪽,Y,SSPM 탭(sspm) Team 컬럼 값 원천 = SCM_MST_SITE_ITEM.DEPT_ID(PKG_DMF0008.P_DMF0008_GET_
-GAP,143,DMF0008,F8,D,기계검출불가,Y,SSPM 저장 이력(SCM_MST_SITE_ITEM_H) DEPT_ID 기록 — PKG_DMF0008.P_DMF0008_SAVE_SALES_SI
-GAP,145,DMF0008,A1,D,반쪽,Y,요약·정비·SSPM 조회 결과 EDIT_YN 컬럼 추가(P_DMF0008_GET_EDI_MST_SUMMARY) — 행 수·값 AS-IS 동일
+GAP,138,DMF0008,M2,F,입증,Y,STATUS_UPDATE 버튼(Status Update) 실행 결과 — PKG_DMF0008.P_DMF0008_STATUS_UPDATE 결과 커
+GAP,141,DMF0008,F8;N1,F;F,기계검출불가,Y,Sales Site 저장 사이트 이력(SCM_MST_SITE_H) DEPT_ID 적재값 — PKG_DMF0008.P_DMF0008_SAVE_SA
+GAP,142,DMF0008,B8;A7,D;D,반쪽,Y,SSPM 탭(sspm) Team 컬럼 값 원천 = SCM_MST_SITE_ITEM.DEPT_ID(PKG_DMF0008.P_DMF0008_GET_
+GAP,143,DMF0008,F8,F,기계검출불가,Y,SSPM 저장 이력(SCM_MST_SITE_ITEM_H) DEPT_ID 기록 — PKG_DMF0008.P_DMF0008_SAVE_SALES_SI
+GAP,145,DMF0008,A1,F,입증,Y,요약·정비·SSPM 조회 결과 EDIT_YN 컬럼 추가(P_DMF0008_GET_EDI_MST_SUMMARY) — 행 수·값 AS-IS 동일
 GAP,223,DMF0035,A7,D,반쪽,Y,MKT FCST Measure Cust. FCST EDI(CUST_FCST_EDI) 월 합계 — PKG_DMF0035.P_DMF0035_GET_
-GAP,226,DMF0035,M4,D,반쪽,Y,Version 팝업 OK 시 팝업 기간(Period) → 본 화면 조회 기간 반영(popVersion.sPeriod → drpPeriod)
+GAP,226,DMF0035,M4,F,입증,Y,Version 팝업 OK 시 팝업 기간(Period) → 본 화면 조회 기간 반영(popVersion.sPeriod → drpPeriod)
 GAP,237,DMF0040,H2,F,입증,Y,"조회 결과 실적 구간 셀 배경색(Version 기준 컷오프 이전 Weekly 칸) — 전 구간 흰색, 합계 행만 연회색(#d3d3d3)"
-GAP,238,DMF0040,H5,D,반쪽,Y,컬럼 FORECAST_INFO_SPEC 제목(COLUMN_LABEL_NAME) 'Spec & Version' — Column Setting 목록
-GAP,292,DMF0043_01,A3;N1,Fm;D,반쪽,N,합계 행 Total(기여매출 금액) — 부서(DEPT_ID) 매칭 · SCM_MST_SITE_ITEM 40 DEPT_ID 빈 행 · PKG_DM
-GAP,293,DMF0043_01,M3,D,반쪽,N,Version 팝업 조회(Description 빈 값) 목록 — PKG_DMF0043.P_DMF0043_GET_CONT_VIEW_VERSIONP
+GAP,238,DMF0040,H5,F,입증,Y,컬럼 FORECAST_INFO_SPEC 제목(COLUMN_LABEL_NAME) 'Spec & Version' — Column Setting 목록
+GAP,292,DMF0043_01,A3;N1,F;F,입증,N,합계 행 Total(기여매출 금액) — 부서(DEPT_ID) 매칭 · SCM_MST_SITE_ITEM 40 DEPT_ID 빈 행 · PKG_DM
+GAP,293,DMF0043_01,M3,F,입증,N,Version 팝업 조회(Description 빈 값) 목록 — PKG_DMF0043.P_DMF0043_GET_CONT_VIEW_VERSIONP
 GAP,294,DMF0043_01,A6,D,반쪽,N,조회 결과 행 정렬(ORDER BY NLSSORT BINARY_CI) — 고객 컬럼(CUST_REPORT·END_CUST_REPORT 등) 대소
 GAP,296,DMF0043_01,K2;A5,D;F,반쪽,N,Column Setting 팝업 년월 컬럼(YYYYMM) 필수(USER_SELECTABLE_FLAG 'N' · Invisible 이동 불가)
-GAP,299,DMF0043_01,H5;J4,D;D,반쪽,N,화면 상단 경로·탭 이름 — 메뉴 ID DMF0043_01(MNU00031 'Contribution Sales') 표시(호출용 DMF0043 '
-GAP,300,DMF0043_01,H5,D,반쪽,N,"Version 팝업 첫 칸(사업부, 값 40 고정 비활성) 라벨 — Div(LBL00001), Year(LBL00086) 아님"
-GAP,308,DMF0043_01,N1;A7,D;D,반쪽,N,조회 결과 Ship to Code(SHIPTO_CODE)·Cust.(Report)(REPORT_GROUP2) 빈 값 표시 — PKG_DMF004
-GAP,376,DMF0053,A1;F4,D;F,반쪽,Y,81 하위 사업부(81_UC·81_HD·81_HG) 조회 — GT_DMF0053_EDI_CALLOFF.DIVISION_ID VARCHAR2(5)
-GAP,377,DMF0053,A8;A7;A9,D;D;D,반쪽,Y,Bucket Only Weekly(ONLY_WEEKLY) 주 칸 생성·주 합계·머리글 기간 표기 — P_DMF0053_GET_CUST_FCST_
+GAP,299,DMF0043_01,H5;J4,F;F,입증,N,화면 상단 경로·탭 이름 — 메뉴 ID DMF0043_01(MNU00031 'Contribution Sales') 표시(호출용 DMF0043 '
+GAP,300,DMF0043_01,H5,F,입증,N,"Version 팝업 첫 칸(사업부, 값 40 고정 비활성) 라벨 — Div(LBL00001), Year(LBL00086) 아님"
+GAP,308,DMF0043_01,N1;A7,F;D,반쪽,N,조회 결과 Ship to Code(SHIPTO_CODE)·Cust.(Report)(REPORT_GROUP2) 빈 값 표시 — PKG_DMF004
+GAP,376,DMF0053,A1;F4,F;F,입증,Y,81 하위 사업부(81_UC·81_HD·81_HG) 조회 — GT_DMF0053_EDI_CALLOFF.DIVISION_ID VARCHAR2(5)
+GAP,377,DMF0053,A8;A7;A9,F;D;D,반쪽,Y,Bucket Only Weekly(ONLY_WEEKLY) 주 칸 생성·주 합계·머리글 기간 표기 — P_DMF0053_GET_CUST_FCST_
 GAP,378,DMF0053,A6,D,반쪽,Y,"조회 결과 행 정렬 — 입력일(Input Date, CREATE_DATE DESC) + SORT_ORDER_NO · 사용자 칸 설정(SCM_MS"
 GAP,379,DMF0053,K2,D,반쪽,Y,사용자별 칸(C)·Measure(M) 설정(SCM_MST_TITLESET_USER DMF0053 · CUST Fcst Waterfall) 이관 
 GAP,381,DMF0053,A7;H8,D;F,반쪽,Y,기간 컬럼 수량(QTY) 정수 절삭 합계 · DATA_SCALE_NUMBER 0 · 합계 서식 n0 — P_DMF0053_GET_CUST_FCS
-GAP,382,DMF0053,H5,D,반쪽,Y,컬럼 FORECAST_INFO_ALL 제목 3곳(COLUMN_LABEL_NAME·SMALL_CLASS_LABEL_NAME·LARGE_CLASS_
-GAP,384,DMF0053,K4;D1,D;F,반쪽,Y,조회 전용 화면(custFcstWaterfall) — Save·Insert·Delete 버튼 미표시 · 셀 편집 불가(SCM_ADM_MNU_BT
+GAP,382,DMF0053,H5,F,입증,Y,컬럼 FORECAST_INFO_ALL 제목 3곳(COLUMN_LABEL_NAME·SMALL_CLASS_LABEL_NAME·LARGE_CLASS_
+GAP,384,DMF0053,K4;D1,F;F,입증,Y,조회 전용 화면(custFcstWaterfall) — Save·Insert·Delete 버튼 미표시 · 셀 편집 불가(SCM_ADM_MNU_BT
 GAP,385,DMF0053,A7,D,반쪽,Y,조회 결과 수량(QTY) 셀 수량 환산(CellQtyYN) 미적용 — 원천 수량 그대로
-GAP,386,DMF0053,G6,D,반쪽,Y,"조회조건 Div.(Division, DIVISION_ID) 기본 선택 — 세션 사업부 또는 목록 첫 행(FilterMyDivision)"
-GAP,387,DMF0053,G8;G9,D;F,반쪽,Y,조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPP
-GAP,388,DMF0053,B8;G1,F;F,입증,Y,조회조건 Team(DEPT_ID) 원천 — SCM_MST_SITE_ITEM.DEPT_ID 기준 필터(P_DMF0053_GET_CUST_FCST_
+GAP,386,DMF0053,G6,F,입증,Y,"조회조건 Div.(Division, DIVISION_ID) 기본 선택 — 세션 사업부 또는 목록 첫 행(FilterMyDivision)"
+GAP,387,DMF0053,G8;G9,F;F,입증,Y,조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPP
+GAP,388,DMF0053,B8;G1,D;F,반쪽,Y,조회조건 Team(DEPT_ID) 원천 — SCM_MST_SITE_ITEM.DEPT_ID 기준 필터(P_DMF0053_GET_CUST_FCST_
 GAP,389,DMF0053,G4,F,입증,Y,"조회조건 Version(Date*)(versionNo·P_VERSION_NO) 미표시 — 빈 값 고정 전달, 조회 결과 영향 없음"
-GAP,390,DMF0053,C1;B4,Fm;D,반쪽,Y,조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterEndCustomerByDivis
+GAP,390,DMF0053,C1;B4,F;D,반쪽,Y,조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterEndCustomerByDivis
 GAP,391,DMF0053,A5,F,입증,Y,Measure 컬럼(MEASURE) 조회 결과 항상 편입(VISIBLE·DEFAULT 무관) · 숨김 칸(FORECAST_INFO_PRODUCT
 GAP,392,DMF0068,A6;B3,D;F,반쪽,Y,조회 결과 Project(PROJECT_CODE·PROJECT_NAME) 행 정렬 · 신규 행 Project 선택 목록 정렬 — PKG_DMF0
-GAP,394,DMF0068,E2;MS1,D;F,반쪽,Y,수주 기간(YYYYMM_FROM·YYYYMM_TO)·조회 Period 형식 오류 안내 MSG01081 「유효한 날짜 형식이 아닙니다. {0}」(
-GAP,395,DMF0068,MS1,F,입증,Y,화면 메시지 코드 대체 13건 — 실행 오류 MSG00618 · 신규 중복 MSG00260 · 버전 미선택 MSG00283(AS-IS 문구는 M
+GAP,394,DMF0068,E2;MS1,F;D,반쪽,Y,수주 기간(YYYYMM_FROM·YYYYMM_TO)·조회 Period 형식 오류 안내 MSG01081 「유효한 날짜 형식이 아닙니다. {0}」(
+GAP,395,DMF0068,MS1,D,반쪽,Y,화면 메시지 코드 대체 13건 — 실행 오류 MSG00618 · 신규 중복 MSG00260 · 버전 미선택 MSG00283(AS-IS 문구는 M
 GAP,399,DMF0068,A7,D,반쪽,Y,월 컬럼 수주 기간(YYYYMM_FROM·YYYYMM_TO) 밖 0 표시 — 첫 표시 월(Period 시작) 포함 여부
-GAP,494,DMF0043_01,I2;MS1,F;F,입증,N,Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 1개만 선택해 주세요.」/「Pleas
-SSP45REQ,1,COMMON,C1;C4;A4,Fm;D;D,반쪽,N,조회조건 Division 콤보(DIVISION_ID · 단일 선택 화면) · 하위 조회조건 전부 · 전 그리드(Sheet)
+GAP,494,DMF0043_01,I2;MS1,F;D,반쪽,N,Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 1개만 선택해 주세요.」/「Pleas
+SSP45REQ,1,COMMON,C1;C4;A4,F;D;D,반쪽,N,조회조건 Division 콤보(DIVISION_ID · 단일 선택 화면) · 하위 조회조건 전부 · 전 그리드(Sheet)
 SSP45REQ,2,COMMON,A5,F,입증,N,그리드 표시 컬럼 구성(SHEET_COLUMNS DIVISION_ID 별 DEFAULT_FLAG/VISIBLE_FLAG)
 SSP45REQ,3,COMMON,B4,D,반쪽,N,조회조건 콤보 후보(Team·End Customer·Sales Site·Plant Site 등 combo SQL 원천)
-SSP45REQ,4,COMMON,C1,Fm,입증,N,"조회조건 콤보 cascade(상위 콤보 → 하위 콤보 후보 재구성, 예 Div→Team·Sales Site→End Customer)"
-SSP45REQ,5,COMMON,G1;B6,F;D,반쪽,N,조회조건 콤보 single select / multi select(ALL 옵션·다중선택 사양 · 콤보 selected values)
-SSP45REQ,6,COMMON,G5,F,입증,N,Main 조회조건 textbox(Project·Model/Nickname 등) → 연결 팝업 조회조건
-SSP45REQ,7,COMMON,G8,D,반쪽,N,Main 조회조건 textbox(Project·Model/Nickname 등 텍스트 조건)
-SSP45REQ,8,COMMON,G2;G9,D;F,반쪽,N,Main 조회조건 textbox 콤마 다중값 입력(Project·Model/Nickname 등)
+SSP45REQ,4,COMMON,C1,F,입증,N,"조회조건 콤보 cascade(상위 콤보 → 하위 콤보 후보 재구성, 예 Div→Team·Sales Site→End Customer)"
+SSP45REQ,5,COMMON,G1;B6,F;F,입증,N,조회조건 콤보 single select / multi select(ALL 옵션·다중선택 사양 · 콤보 selected values)
+SSP45REQ,6,COMMON,G5,D,반쪽,N,Main 조회조건 textbox(Project·Model/Nickname 등) → 연결 팝업 조회조건
+SSP45REQ,7,COMMON,G8,F,입증,N,Main 조회조건 textbox(Project·Model/Nickname 등 텍스트 조건)
+SSP45REQ,8,COMMON,G2;G9,F;F,입증,N,Main 조회조건 textbox 콤마 다중값 입력(Project·Model/Nickname 등)
 SSP45REQ,9,COMMON,K1,D,반쪽,N,각 그리드 공통 버튼 Sort(F3) · 단축키
 SSP45REQ,10,COMMON,K1,D,반쪽,N,각 그리드 공통 버튼 Filter(F4) · 단축키
-SSP45REQ,11,COMMON,G3,F,입증,N,공통 버튼 Condition(F6) 조회조건 저장·복원(Period 제외)
-SSP45REQ,12,COMMON,G3;G6,F;D,반쪽,N,공통 버튼 Reset Condition(F10) 조회조건 초기화
-SSP45REQ,13,COMMON,G8;M3,D;D,반쪽,N,팝업 조회조건 텍스트(팝업 내 Model·Project 등 textbox)
-SSP45REQ,14,COMMON,G9;M3,F;D,반쪽,N,팝업 조회조건 텍스트 콤마 다중값 입력(팝업 내 Model·Project 등 textbox)
+SSP45REQ,11,COMMON,G3,D,반쪽,N,공통 버튼 Condition(F6) 조회조건 저장·복원(Period 제외)
+SSP45REQ,12,COMMON,G3;G6,D;F,반쪽,N,공통 버튼 Reset Condition(F10) 조회조건 초기화
+SSP45REQ,13,COMMON,G8;M3,F;F,입증,N,팝업 조회조건 텍스트(팝업 내 Model·Project 등 textbox)
+SSP45REQ,14,COMMON,G9;M3,F;F,입증,N,팝업 조회조건 텍스트 콤마 다중값 입력(팝업 내 Model·Project 등 textbox)
 SSP45REQ,15,COMMON,D1,F,입증,N,그리드 편집 가능 컬럼(INPUT_TP_CD · AS-IS EDIT(F2) 모드 편집 컬럼)
 SSP45REQ,16,COMMON,D4;D6,F;F,입증,N,공통 버튼 Insert(F8) 신규행(기본값·자동세팅·삽입 위치·편집 상태)
 SSP45REQ,17,COMMON,F5;F1,F;F,입증,N,공통 버튼 Delete(F9) · CRUD Status D 표시 · 저장 후 DB 삭제 반영
 SSP45REQ,18,COMMON,D5,F,입증,N,그리드 셀 에디터 유형(CELL_CONTROL_OBJECT_TYPE_CODE FPComboBox/FPModal) · AS-IS 콤보/팝업 셀
 SSP45REQ,19,COMMON,B4,D,반쪽,N,그리드 셀 콤보 후보(Incoterms·FCST Type·Measure 등 셀 combo 원천)
 SSP45REQ,20,COMMON,F1;F2;F6,F;F;F,입증,N,공통 버튼 Save(F7) — 기존행 값 수정 + Insert 신규행 저장(SAVE SP · DB 원장)
-SSP45REQ,21,COMMON,C5;K6;M4,C;D;D,미입증,N,다중 그리드 더블클릭 연동(상단 그리드 행 더블클릭 → 하단 그리드 조회 / 셀 더블클릭 팝업)
+SSP45REQ,21,COMMON,C5;K6;M4,C;D;F,미입증,N,다중 그리드 더블클릭 연동(상단 그리드 행 더블클릭 → 하단 그리드 조회 / 셀 더블클릭 팝업)
 SSP45REQ,22,COMMON,E5,D,반쪽,N,그리드 콤보 셀 Key-in(FPComboBox 컬럼) 후보 외 값
-SSP45REQ,23,COMMON,E7,F,입증,N,그리드 팝업 셀 Key-in(FPModal 컬럼 · Project Code·Model·Trans Mode 등) 잘못된 값
+SSP45REQ,23,COMMON,E7,D,반쪽,N,그리드 팝업 셀 Key-in(FPModal 컬럼 · Project Code·Model·Trans Mode 등) 잘못된 값
 SSP45REQ,24,COMMON,E3,F,입증,N,그리드 필수 컬럼(라벨 * · SHEET_COLUMNS USER_SELECTABLE_FLAG=N) 미입력 저장 검증 팝업
 SSP45REQ,25,COMMON,A5;K2;E3,F;D;F,반쪽,N,그리드 필수 컬럼 Setting(SHEET_COLUMNS USER_SELECTABLE_FLAG=N · DIVISION_ID 별) · 컬럼셋팅 필
-SSP45,1,DMF0045,G4;H5,F;D,반쪽,Y,조회조건 배열순 · 라벨 Project(PROJECT)→PJT · Plant Site(PLANT_SITE/FROM_SITE)→From Site
+SSP45,1,DMF0045,G4;H5,F;F,입증,Y,조회조건 배열순 · 라벨 Project(PROJECT)→PJT · Plant Site(PLANT_SITE/FROM_SITE)→From Site
 SSP45,2,DMF0045,B3,F,입증,Y,조회조건 Div 콤보(DIVISION_ID) 후보 순서
 SSP45,3,DMF0045,D5,F,입증,Y,신규행 Model 셀(ITEM_ID) 팝업 = Material by Division(MaterialByDivisionModal) — Item P
-SSP45,4,DMF0045,C3;M4,D;D,반쪽,Y,신규행 Model 셀(ITEM_ID)·Nick Name 셀(NICK_NAME) — 품목 팝업 선택 시 자동 설정
-SSP45,5,DMF0045,J2;M3,F;D,반쪽,Y,신규행 Trans Mode 셀(TR_MODE) BOD Item Master 팝업(bodPopup SEARCH · DMF0046 GetBODIte
-SSP45,6,DMF0045,G1;G8;G9,F;D;F,반쪽,Y,조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수
+SSP45,4,DMF0045,C3;M4,F;F,입증,Y,신규행 Model 셀(ITEM_ID)·Nick Name 셀(NICK_NAME) — 품목 팝업 선택 시 자동 설정
+SSP45,5,DMF0045,J2;M3,F;F,입증,Y,신규행 Trans Mode 셀(TR_MODE) BOD Item Master 팝업(bodPopup SEARCH · DMF0046 GetBODIte
+SSP45,6,DMF0045,G1;G8;G9,F;F;F,입증,Y,조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수
 SSP45,7,DMF0045,E3,F,입증,Y,신규행 필수 컬럼(ITEM_ID·FROM_SITE·TO_SITE·PROJECT_CODE·INCOTERMS·FCST_TYPE·TR_MODE·MEA
 SSP45,8,DMF0045,A5,F,입증,Y,메인그리드 컬럼 순서 Measure(MEASURE sort 63) → Requestor(LAST_UPDATED_BY sort 64) — TO-B
-SSP45,9,DMF0045,D2;D4,C;F,미입증,Y,신규행(Insert) Ship Req 일자 셀(D_ 컬럼) Frozen 구간 잠금 — SHIP_FROZEN · AS-IS 오늘+10일 이후만 입
+SSP45,9,DMF0045,D2;D4,D;F,반쪽,Y,신규행(Insert) Ship Req 일자 셀(D_ 컬럼) Frozen 구간 잠금 — SHIP_FROZEN · AS-IS 오늘+10일 이후만 입
 DM,204-1,SYS0017,A5,F,입증,Y,Main 그리드 Sub Module 컬럼(SUB_MODULE_CODE)
 DM,204-2,SYS0017,A5;A2,F;D,반쪽,Y,Category 코드 컬럼(CATEGORY_ID) 숨김
-DM,204-3,SYS0017,F4;M2,F;D,반쪽,Y,SQL View 버튼(VIEW)
+DM,204-3,SYS0017,F4;M2,F;F,입증,Y,SQL View 버튼(VIEW)
 DM,204-4,SYS0017,F1,F,입증,Y,신규 행 Insert 후 Save
 DM,204-5,SYS0017,D4,F,입증,Y,하단 메시지설정 탭 Insert
 DM,204-6,SYS0017,F1,F,입증,Y,사용자 우측 그리드(allReceiver) 추가 후 Save
 DM,204-7,SYS0017,C5,C,미입증,Y,사용자 조회 후 더블클릭 추가/제거
 DM,204-8,SYS0017,H4,F,입증,Y,우측 사용자 영역 높이
-DM,204-9,SYS0017,M3,D,반쪽,Y,SQL 버튼 팝업 저장
+DM,204-9,SYS0017,M3,F,입증,Y,SQL 버튼 팝업 저장
 DM,204-1S,SCM0007,A5,F,입증,Y,Main 그리드 Sub Module 컬럼(SUB_MODULE_CODE)
 DM,204-2S,SCM0007,A5;A2,F;D,반쪽,Y,Category 코드 컬럼(CATEGORY_ID) 숨김
-DM,204-3S,SCM0007,F4;M2,F;D,반쪽,Y,SQL View 버튼(VIEW)
+DM,204-3S,SCM0007,F4;M2,F;F,입증,Y,SQL View 버튼(VIEW)
 DM,204-4S,SCM0007,F1,F,입증,Y,신규 행 Insert 후 Save
 DM,204-5S,SCM0007,D4,F,입증,Y,하단 메시지설정 탭 Insert
 DM,204-6S,SCM0007,F1,F,입증,Y,사용자 우측 그리드(allReceiver) 추가 후 Save
 DM,204-7S,SCM0007,C5,C,미입증,Y,사용자 조회 후 더블클릭 추가/제거
 DM,204-8S,SCM0007,H4,F,입증,Y,우측 사용자 영역 높이
-DM,204-9S,SCM0007,M3,D,반쪽,Y,SQL 버튼 팝업 저장
+DM,204-9S,SCM0007,M3,F,입증,Y,SQL 버튼 팝업 저장

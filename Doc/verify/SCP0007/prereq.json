@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0007",
  "asis_id": "SCP0007",
- "generated": "2026-10-29 17:27:14",
+ "generated": "2026-11-14 07:36:39",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "6.0시간 전 export(기준 12시간)"
+   "evidence": "9.1시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -57,7 +57,7 @@
    "key": "e2e_plan",
    "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
    "status": "OK",
-   "producer": "생성 절차(tools/Harness/gen.js · pipeline.js)",
+   "producer": "tools/Harness/gen.js",
    "evidence": "있음"
   },
   {
@@ -65,14 +65,14 @@
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
    "status": "DONE",
    "producer": "tools/E2E/gen-e2e.js <ID>",
-   "evidence": "rc=0 · 5s · SCP0007 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0007 → SCP0007 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행)"
+   "evidence": "rc=0 · 0s · SCP0007: AS-IS 팝업 클래스 안 시트 메인 제외 — Distribution Route SCP0007 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0007 → SCP0007 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
   },
   {
    "key": "smoke",
-   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
-   "status": "OK",
-   "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 10-28 07:51 (FE 소스보다 최신)"
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 152s · ─────────── 1 failed [chromium] › ..\\..\\Doc\\e2e\\specs\\SCP0007.smoke.spec.ts:11:7 › SCP0007 BOD 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 2 passed (2.3m) # E2E 결과 — 2026-11-14 07:36 테스트 10 · PASS 7 · FAIL 3 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0007\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0007\\run_20261114_073408_smoke.log"
   }
  ]
 }

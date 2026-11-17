@@ -1,0 +1,2 @@
+﻿method,api,color,guard,tobe_hits,result,why
+SaveData,SetBGColor,,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (action ==,7,PASS,TO-BE 셀 색 변경 코드 7곳 존재(예 nscm-fe\features\shipping\src\pages\shipment-lot-size\components\ShipmentLotSizeGrid.tsx:2) — 조건·색 일치는 E2E H2 실측 · AS-IS SaveData SetBGColor  [if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.She]

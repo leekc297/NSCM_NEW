@@ -1,0 +1,412 @@
+{
+  "id": "SSP0005",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 없음)",
+  "menuId": "SSP0005",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plant Site",
+    "Period"
+  ],
+  "condGone": [
+    {
+      "name": "Day of the week",
+      "usage": "BUTTON_AREA"
+    },
+    {
+      "name": "Input Value",
+      "usage": "BUTTON_AREA"
+    },
+    {
+      "name": "Input",
+      "usage": "BUTTON_AREA"
+    }
+  ],
+  "condNotUse": [],
+  "page": "ShipmentWorkingDay",
+  "routePath": "shipping/shipment-working-day",
+  "asisName": "ShipmentWorkingDay",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "company",
+      "label": "Company",
+      "lbl": "LBL00047",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboCompany",
+      "tobeLabel": "Company",
+      "catalog": "",
+      "labels": [
+        "Company"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod",
+      "tobeLabel": "Period",
+      "catalog": "",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 3,
+    "spans": 12,
+    "literals": [
+      "Company",
+      "Division",
+      "SUM"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-working-day\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "input",
+      "label": "Input",
+      "lbl": "LBL00872",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnInput"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Shipment Working Day",
+      "key": "SHIPMENT_WORKING_DAY",
+      "labels": [
+        "Company",
+        "Divison"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Working Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0005.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_PERIOD",
+      "sheet": "Shipment Working Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0005.P_SCM0001_GET_SCP_PERIOD",
+      "entries": [
+        "event:this.Load"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Shipment Working Day": {
+      "40": [
+        "Company",
+        "Divison"
+      ],
+      "81": [
+        "Company",
+        "Divison"
+      ],
+      "82": [
+        "Company",
+        "Divison"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [
+      "InitSpreadDateColumn:263"
+    ],
+    "titleSheets": [
+      "calendar"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "calendar",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "COMPANY_ID",
+      "DIVISION_ID"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "EDIT",
+        "GET_SCP_PERIOD",
+        "INSERT",
+        "DELETE",
+        "EXCEL",
+        "SEARCH",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "DELETE",
+      "SAVE",
+      "EDIT",
+      "INSERT",
+      "GET_SCP_PERIOD",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "CAPA Planner": [
+      "INSERT",
+      "SAVE",
+      "SEARCH",
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "DELETE"
+    ],
+    "DM ADMIN": [
+      "INSERT",
+      "DELETE",
+      "SAVE",
+      "EXCEL",
+      "GET_SCP_PERIOD",
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "SAVE"
+    ],
+    "DM Viewer": [
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "EXCEL",
+      "GET_SCP_PERIOD",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "GET_SCP_PERIOD",
+      "INSERT",
+      "DELETE"
+    ],
+    "FP Viewer": [
+      "DELETE",
+      "INSERT",
+      "EXCEL",
+      "GET_SCP_PERIOD",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "INSERT",
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "EDIT",
+      "DELETE",
+      "SAVE"
+    ],
+    "SCM Viewer": [
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "EXCEL",
+      "GET_SCP_PERIOD",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "INSERT",
+      "SAVE",
+      "DELETE",
+      "GET_SCP_PERIOD",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "SCP Tester": [
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "EXCEL",
+      "GET_SCP_PERIOD"
+    ],
+    "SSP ADMIN": [
+      "EXCEL",
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "GET_SCP_PERIOD",
+      "SAVE"
+    ],
+    "SSP Planner": [
+      "EDIT",
+      "GET_SCP_PERIOD",
+      "INSERT",
+      "DELETE",
+      "EXCEL",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "DELETE",
+    "SAVE",
+    "EDIT",
+    "INSERT",
+    "GET_SCP_PERIOD",
+    "SEARCH",
+    "EXCEL"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

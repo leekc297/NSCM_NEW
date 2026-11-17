@@ -1,0 +1,151 @@
+{
+ "id": "FP01551A",
+ "started": "2026-11-12 19:15:30.697",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:15:31.050",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP01551_In_House_Request_Plan",
+   "form_text": "In-house Request Plan(Pack)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP01551_In_House_Request_Plan.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:43.583"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:15:47.328",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01551A\\run_20261112_191530\\dump_load.json",
+   "control_count": 110,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:47.366"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:15:47.531",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01551A\\run_20261112_191530\\shots\\FP01551A_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:15:47.839"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:15:48.307",
+   "call_timed_out": true,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:16:18.323"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:16:26.427",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01551A\\run_20261112_191530\\dump_find.json",
+   "control_count": 110,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:16:26.445"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:16:26.608",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01551A\\run_20261112_191530\\shots\\FP01551A_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:16:26.998"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:16:27.543",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-12 19:16:28.186"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 40,
+  "calls_with_params": 40
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP01551_In_House_Request_Plan",
+  "form_text": "In-house Request Plan(Pack)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP01551_In_House_Request_Plan.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 19:15:30.922",
+ "t_find": "2026-11-12 19:15:47.981",
+ "dialogs": [
+  {
+   "at": "2026-11-12 19:15:51.081",
+   "caption": "",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 110,
+  "layout_items": 20,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 24,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 40,
+  "calls_screen": 40,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:33.067",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:33"
+}

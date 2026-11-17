@@ -130,8 +130,8 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
       return false;
     }
     if (sc.versionNos.length === 0) {
-      // 라벨 'Ver.' 하드코딩(조회조건 라벨과 일치, 사용자 지시 2026-10-20) — DB/번들 미등록 약어.
-      void setAlert({ type: 'alert', content: requiredMsg('Ver.') });
+      // 라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체.
+      void setAlert({ type: 'alert', content: requiredMsg(t('LBL01275', '_Ver.')) });
       return false;
     }
     if (!sc.fromYyyymmdd || !sc.toYyyymmdd) {
@@ -141,17 +141,22 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
     const fromDigits = sc.fromYyyymmdd.replace(/-/g, '');
     const toDigits = sc.toYyyymmdd.replace(/-/g, '');
     if (fromDigits > toDigits) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_RANGE, '_Invalid period (start > end).') });
+      // AS-IS MSG00108 → TO-BE MSG01135 "시작일자가 종료일자보다 늦을 수 없습니다." (AS-IS 정확문구, SCP0018 파리티).
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_RANGE, '_The start date can not be later than the end date.'),
+      });
       return false;
     }
-    // 최대 조회기간(AS-IS DateUtil.Check_PeriodDate, G7): to >= from + 1년 + 7일 이면 차단. {0}='371 days'.
+    // 최대 조회기간(AS-IS DateUtil.Check_PeriodDate, G7): to >= from + 1년 + 7일 이면 차단.
+    //   안내 인자는 AS-IS 하드코딩 그대로 '371'(=364+7, days 접미 없음 — AS-IS "...From Date + 371." 파리티).
     const maxToExclusive = dayjs(fromDigits, 'YYYYMMDD').add(1, 'year').add(7, 'day');
     if (maxToExclusive.isValid() && Number(toDigits) >= Number(maxToExclusive.format('YYYYMMDD'))) {
       void setAlert({
         type: 'alert',
         content: t(MSG.PERIOD_MAX, '_Maximum Period is From Date + {0}.').replace(
           '{0}',
-          `${MAX_PERIOD_DAYS} days`
+          String(MAX_PERIOD_DAYS)
         ),
       });
       return false;

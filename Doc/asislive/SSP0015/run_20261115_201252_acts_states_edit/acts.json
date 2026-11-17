@@ -1,0 +1,36 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "states": true,
+ "edit": true,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 20:11:02",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 실측: SP 직접 실행 사업부 40·plan_start 20261010 → 23행(06:23:47~06:34:54, 667초) · PlanDateShip(40,A) 0행 · PlanDateShip(81,A) 1행 20261009 (07:50)",
+  "why": "SSP0015_GET_SHIPMENT_PSI 는 시트와 상관없이 SSP_ANL_SHIP_PLAN_40 을 읽음(SP 503·561행). 이 테이블은 DIVISION_ID=40·PLAN_TYPE=SP·SEQ=1 만 5,480,002건. 사업부 40 은 Plan date* 목록(UP_FX_GetCommonDataList PlanDateShip → SSP_PLAN_VERSION_V)이 0개라 화면에서 고를 수 없음. 사업부 81 은 Plan date 2026-10-09 1개, 그 조건 조회 0행(런처 11-14 23:18 실측)",
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "0"
+    },
+    "ok": true,
+    "applied": "combo:0:40 Mobility & IT Battery",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "cboPlanDate",
+     "index": "0"
+    },
+    "ok": true,
+    "applied": "combo:0:2026-10-09",
+    "error": null
+   }
+  ]
+ },
+ "edit_focus": "셀 0,2",
+ "edit_mode": false,
+ "note": "수정 모드가 켜지지 않음"
+}

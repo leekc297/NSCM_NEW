@@ -1,0 +1,352 @@
+{
+ "id": "SCP0102",
+ "window": [
+  "2026-11-12 20:24:06.052",
+  "2026-11-12 20:25:44.771"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": true,
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "calls": [
+  {
+   "at": "2026-11-12 20:24:06.331",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 3.62,
+   "params": {
+    "Code": "MyDivisionInEE",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='MyDivisionInEE', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:06.657",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.13,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0102"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0102'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:06.687",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 19.61,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:07.538",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 34,
+   "rows_kind": "DataSet rows",
+   "ms": 589.91,
+   "params": {
+    "Code": "ShipmentPlanPlantSite",
+    "Param1": "40",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentPlanPlantSite', @Param1='40', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:12.957",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1336,
+   "rows_kind": "DataSet rows",
+   "ms": 5414.83,
+   "params": {
+    "Code": "ShipmentPlanToSite",
+    "Param1": "40",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='ShipmentPlanToSite', @Param1='40', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:24.247",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SSP.SSP0028_GET_COUNTRY",
+   "sp": "SSP0028_GET_COUNTRY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 8,
+   "rows_kind": "DataSet rows",
+   "ms": 11026.3,
+   "params": {},
+   "inline": "SSP0028_GET_COUNTRY",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:24:52.893",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SSP.SSP0028_GET_CITY",
+   "sp": "SSP0028_GET_CITY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 42,
+   "rows_kind": "DataSet rows",
+   "ms": 28623.04,
+   "params": {
+    "p_country_parameter": "",
+    "p_kind": "A"
+   },
+   "inline": "EXEC SSP0028_GET_CITY @p_country_parameter='', @p_kind='A'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:00.020",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SSP.SSP0028_GET_AREA",
+   "sp": "SSP0028_GET_AREA",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 6986.32,
+   "params": {},
+   "inline": "SSP0028_GET_AREA",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:00.086",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.58,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "30",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=30, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:00.094",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCM0001_GET_SCP_DAY_PERIOD",
+   "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 4.36,
+   "params": {
+    "p_from_date": "",
+    "p_offset_day": "30",
+    "p_timezone": "AS054"
+   },
+   "inline": "EXEC SCM0001_GET_SCP_DAY_PERIOD @p_from_date='', @p_offset_day=30, @p_timezone='AS054'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:00.789",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 677.9,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Main"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Main'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:00.812",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 65,
+   "rows_kind": "DataSet rows",
+   "ms": 4.54,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Detail'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:04.132",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 3191.83,
+   "params": {
+    "MenuID": "BOD Validation Report",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='BOD Validation Report', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:04.539",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetSearchCondition",
+   "sp": "UP_FX_GetSearchCondition",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 2.54,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0102"
+   },
+   "inline": "EXEC UP_FX_GetSearchCondition @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0102'",
+   "phase": "load"
+  },
+  {
+   "at": "2026-11-12 20:25:12.981",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 4.62,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Main"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Main'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:25:12.999",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 65,
+   "rows_kind": "DataSet rows",
+   "ms": 4.67,
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Detail"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0102', @p_user_id='jaeuk.shin', @p_sheet_name='BOD Detail'",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:25:43.046",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0102_GET_BOD_VALIDATION_REPORT",
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 30015.66,
+   "params": {
+    "p_division_id": "40",
+    "p_from_yyyymmdd": "20261001",
+    "p_to_yyyymmdd": "20261031",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_PIVOT_yyyymm": "[202610]",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "inline": "EXEC SCP0102_GET_BOD_VALIDATION_REPORT @p_division_id='40', @p_from_yyyymmdd='20261001', @p_to_yyyymmdd='20261031', @p_from_site='', @p_to_site='', @p_PIVOT_yyyymm='[202610]', @p_from_country='', @p_to_country='', @p_from_city='', @p_to_city='', @p_from_area='', @p_to_area=''\nEXCEPTION            :   실행 제한 시간을 초과했습니다. 작업이 완료되기 전에 실행 제한 시간이 지났거나 서버가 응답하지 않습니다.",
+   "phase": "find"
+  },
+  {
+   "at": "2026-11-12 20:25:43.810",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 5.87,
+   "params": {
+    "MenuID": "BOD Validation Report",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='BOD Validation Report', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "find"
+  }
+ ]
+}

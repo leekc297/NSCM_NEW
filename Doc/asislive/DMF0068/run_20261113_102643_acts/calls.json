@@ -1,0 +1,84 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 10:26:27.969",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.67,
+   "params": {
+    "Code": "MULTITIMEZONECODE",
+    "Param1": "AS054",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MULTITIMEZONECODE', @Param1='AS054', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnSPVer"
+  },
+  {
+   "at": "2026-11-13 10:26:28.075",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 3.85,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnSPVer"
+  },
+  {
+   "at": "2026-11-13 10:26:28.092",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 3.9,
+   "params": {
+    "p_lookup_type": "MDF_TYPE"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='MDF_TYPE'",
+   "phase": "action:btnSPVer"
+  },
+  {
+   "at": "2026-11-13 10:26:28.118",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0068_GET_CONT_VIEW_VERSIONPOPUP",
+   "sp": "DMF0068_GET_CONT_VIEW_VERSIONPOPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 7.13,
+   "params": {
+    "p_start_yyyymmdd": "20260813",
+    "p_end_yyyymmdd": "20270213",
+    "p_division_id": "40",
+    "p_version_type": "REPORT_SP_W",
+    "p_description": ""
+   },
+   "inline": "EXEC DMF0068_GET_CONT_VIEW_VERSIONPOPUP @p_start_yyyymmdd='20260813', @p_end_yyyymmdd='20270213', @p_division_id='40', @p_version_type='REPORT_SP_W', @p_description=''",
+   "phase": "action:btnSPVer"
+  }
+ ]
+}

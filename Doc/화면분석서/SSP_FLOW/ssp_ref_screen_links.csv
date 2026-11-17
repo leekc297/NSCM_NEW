@@ -1,0 +1,203 @@
+﻿screen_id,screen_name,test_id,flow_stage,pi,test_name
+DMF0045,Shipment Request(Auto & ESS),S01-03,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81 선적요청 · 반제품(SEMI) 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-04,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HD 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-05,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-06,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HM 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-07,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_ST 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-08,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_UC 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+DMF0045,Shipment Request(Auto & ESS),S01-09,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 82 선적요청 · 반제품(SEMI) · FG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCM0016,,S03-02,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15 · 16,진입 조건 충족 법인마다 순서대로 진행되는지 확인 / ERP 재고 확인 → OWMS 재고 마감(SSP_ANL_OWMS_STOCK_C2) → 마감 계획(SSP_ANL_SHIP_PLAN_C) → 확정 원장 · ERP 송신 자료 → FP 목표 송신 표시 → 음수재고 · 삭제 대상 메일 → 오늘 행 완료(Y) → SCS 팩 출하계획 송신(82 법인)
+SCM0016,,S10-03,⑩ 조회 확인 · 최종 판정,-,하루 단위 종료 판정 : 81·82 · 전극 일 마감 단계 완료 · 오늘 SSP 배치 오류 0건 확인
+SCM0016,,P-02,사전 점검,-,SSP 잡 등록 · 사용 상태 확인
+SCM0019,,P-05,사전 점검,-,확정 연계 차단 여부 확인(FP 목표 · MRP 목표 · DM RTF)
+SCP0005,Distribution Route,P-09,사전 점검,-,기준정보 : Distribution Route
+SCP0007,,P-08,사전 점검,-,기준정보 : BOD
+SCP0009,,S01-01,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-2,SCP FINAL 확정 연계로 40 선적요청(DM_PLN_SHIPMENT_REQ) 생성 확인 / [화면] SSP0026 Shipment Request(Mobility & IT) 조회 결과 일치
+SCP0009,,S01-02,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-2,SCP FINAL 확정 연계 안의 Packer 선적요청 생성(SSP_ANL_SHIP_REQ_P) 확인
+SCP0009,,S01-03,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81 선적요청 · 반제품(SEMI) 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-04,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HD 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-05,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-06,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HM 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-07,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_ST 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-08,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_UC 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0009,,S01-09,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 82 선적요청 · 반제품(SEMI) · FG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-03,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81 선적요청 · 반제품(SEMI) 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-04,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HD 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-05,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-06,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HM 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-07,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_ST 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-08,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_UC 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0010,,S01-09,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 82 선적요청 · 반제품(SEMI) · FG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SCP0028,Shipment Lot Size,P-07,사전 점검,-,기준정보 : Shipment Lot Size
+SCP0134,,P-04,사전 점검,-,시작 조건 : 이번 주 SCP FINAL(FN) 정상 종료 · 확정 여부 확인(사업부별)
+SSP0003,Shipment Change Request Confirm,S05-03,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,"[화면] SSP0003 Shipment Change Request Confirm 에서 S05-02 요청의 하단 2건 중 1건만 체크해 승인 / → 헤더 Partial Approved(P) · 체크 행 A · 미체크 행 R 확인, 재조회 시 A 행 체크 · R 행 해제 확인"
+SSP0003,Shipment Change Request Confirm,S05-04,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0003 에서 별도 요청 전체 반려 → 헤더 R · 확정 원장 변화 없음 · ERP 송신 자료 반려(D) 행 적재 확인
+SSP0003,Shipment Change Request Confirm,S05-09,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 81 · 82 확정 건 변경요청 → [화면] SSP0003 승인 / → 확정 원장 반영 · ERP 송신 자료 적재 · SCS 송신(CHG_BATCH_SCS) 확인
+SSP0003,Shipment Change Request Confirm,S05-13,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 전극 확정 건 변경요청 → [화면] SSP0003 승인 → 확정 원장 · ERP 송신 자료 확인
+SSP0003,Shipment Change Request Confirm,S05-14,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 ERP SO 가 없는 확정 행 1건 수량 변경 → Save → Request Confirm → [화면] SSP0003 승인
+SSP0003,Shipment Change Request Confirm,S05-15,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 같은 ERP SO 번호를 가진 확정 행 2줄 이상을 함께 수정 → Save
+SSP0003,Shipment Change Request Confirm,S05-20,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 출하일을 D+10 이후로 변경 → 요청 → SSP0003 승인
+SSP0003,Shipment Change Request Confirm,S05-21,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 BOD(Route) 변경 → 운송모드 · Incoterms · 선적/도착항 · ETD · ETA 가 새 BOD 값으로 송신되는지 확인
+SSP0003,Shipment Change Request Confirm,S05-22,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 확정 행 수량을 0 으로 변경 → Request Confirm
+SSP0003,Shipment Change Request Confirm,S05-23,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 하단 Insert 로 새 출하 행 추가 → Save → Request Confirm → SSP0003 승인
+SSP0003,Shipment Change Request Confirm,S05-24,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0003 에서 요청 2줄 중 1줄만 승인
+SSP0003,Shipment Change Request Confirm,S05-25,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0003 요청 전체 반려
+SSP0003,Shipment Change Request Confirm,S05-29,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 같은 국가 고객 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-30,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 해외 고객 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-31,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,To Site 가 VMI(VMI_YN Y)인 확정 행 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-32,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,"From 공장(B) → To Packer(C, OSP_YN Y) 사급 출하 변경요청 승인"
+SSP0003,Shipment Change Request Confirm,S05-33,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,From 공장(B) → To 공장(B) 법인간 출하 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-34,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,82 From Packer(C) → To 판매(A) 출하 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-35,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,82 From Packer(C) → To 공장(B) 또는 Packer(C) 이동 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-36,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,To Site 가 SSP_SITE_INFO_EXCEPTION 의 Site 유형 예외(LGESVT_US_PHX · LGESVT_US_WRO)인 행 변경요청
+SSP0003,Shipment Change Request Confirm,S05-37,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,"To Site 법인이 From 공장에 따라 바뀌는 예외 Site 변경요청(From MI → MI00, From HQ07 · HQ11 → HQ00)"
+SSP0003,Shipment Change Request Confirm,S05-38,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,81 계열 사업부 확정 행 변경요청 승인 — 송신 사업부가 81 로 바뀌는지 확인
+SSP0003,Shipment Change Request Confirm,S05-39,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,전극 확정 행(ELECTRODE_YN Y) 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-41,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,FCST_TYPE 별(MPS · AS · ASF · SDC · SDF · SMC · SMF · SPF · WS · TST) 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-42,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,Project Code 가 없거나 '-' 인 확정 행 변경요청 승인
+SSP0003,Shipment Change Request Confirm,S05-43,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,Change Reason 을 비우고 저장되는 경로에서 송신 CHANGE_CODE 확인
+SSP0003,Shipment Change Request Confirm,S05-45,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,송신 직전 회사 · Site · Plant · Vendor · 고객 코드가 신 ERP 코드로 바뀌는지 확인
+SSP0005,Shipment Working Day,P-14,사전 점검,-,기준정보 : Shipment Working Day
+SSP0012,Shipment Plan Detail,S03-03,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,"81 사업부 법인(HQ00, MI00, NA00, NB00, ST00, WA00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치"
+SSP0012,Shipment Plan Detail,S03-04,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HD 사업부 법인(HD00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-05,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HG 사업부 법인(HG00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-06,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HM 사업부 법인(HM00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-07,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_ST 사업부 법인(ST00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-08,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_UC 사업부 법인(GM00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0060 Shipment Plan(Auto & ESS)-WA_UC 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-09,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,"82 사업부 법인(HQ00, NJ00, MI00, NB00, WA00, GM00, HD00, ST00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / 82 법인 SCS 팩 출하계획 송신 포함 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치"
+SSP0012,Shipment Plan Detail,S03-11,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15,전극 법인별 출하요청 반영 → 출하계획(SSP_ANL_SHIP_PLAN_EE) → 확정 원장 · ERP 송신 자료 → 재고 스냅샷(SSP_ANL_STOCK_EE_C) · 기초재고 마감(SSP_ANL_BOH_CUTOFF_EE) → 일 마감 표시(_EE) 확인 / [화면] SSP0022 · SSP0023 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-14,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 HQ00 기준 잔량 정리 → 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-15,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 AZ00 기준 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S03-16,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 NJ00 기준 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 재고 원장(Inventory Raw) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) · SSP0017 Inventory Raw(Mobility & IT) 조회 결과 일치
+SSP0012,Shipment Plan Detail,S04-04,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,ESS 출하 확정 반영(DM MKT FCST 반영 · 확정 원장 · ERP 송신 자료 적재) 확인
+SSP0012,Shipment Plan Detail,S05-01,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0015 하단 Confirm Detail 에서 확정 수량 · 출하일 수정 후 저장 1회로 변경요청 생성 → ERP 송신 → 확정 반영까지 진행되는지 확인(IF-11)
+SSP0012,Shipment Plan Detail,S05-07,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0021 하단 Shipment Plan Detail 에서 ① 기존 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 변경요청 · ERP 송신 · 확정 반영 ② 신규 확정 ID 생성 · ERP 송신 자료(A) 적재 확인
+SSP0012,Shipment Plan Detail,S05-08,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0060 Shipment Plan(Auto & ESS)-WA_UC 에서 상단 Save · 팝업 Save · 하단 수정 · 하단 Insert 4경로 각각 저장 / → 경로별 헤더 · 상세 · 확정 원장 · ERP 송신 자료 상태 확인
+SSP0012,Shipment Plan Detail,S05-12,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0023 Shipment Plan(Electrode) 하단 Plan Detail 에서 ① 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 확정 기록(_H) · 상태 재확인 ② 새 확정 ID · ERP 송신 자료(A) 적재 확인
+SSP0012,Shipment Plan Detail,S10-01,⑩ 조회 확인 · 최종 판정,-,[화면] SSP0012 Shipment Plan Detail / 사업부별 오늘 확정 건이 확정 원장과 같은 건수 · 수량으로 조회되는지 확인
+SSP0014,Shipment Model PIC,S09-04,⑨ KPI · 보고 · 정리,-,SCS 재고 미수신 메일(월~토 16:00 · 일 10:00) · 법인간 거래 PO 메일(10분) 수행 확인
+SSP0014,Shipment Model PIC,P-10,사전 점검,-,기준정보 : Shipment Model PIC
+SSP0015,Shipment Plan(Mobility & IT),S02-03,② 일 계획 · 재고 · FP 입력 수신,PI 5,법인별 전일 재고(INVENTORY) 생성 확인 / = 81·82 일 마감 진입 조건(ERP 재고 존재)
+SSP0015,Shipment Plan(Mobility & IT),S02-14,② 일 계획 · 재고 · FP 입력 수신,-,SCS 생산계획 · 재고 수신 확인
+SSP0015,Shipment Plan(Mobility & IT),S03-12,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 3 · 14 · 15,Packer 출하계획 생성 → 확정 원장 반영 → ERP(팩) · SCS(팩) 송신 자료 적재 확인
+SSP0015,Shipment Plan(Mobility & IT),S03-14,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 HQ00 기준 잔량 정리 → 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) 조회 결과 일치
+SSP0015,Shipment Plan(Mobility & IT),S03-15,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 AZ00 기준 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) 조회 결과 일치
+SSP0015,Shipment Plan(Mobility & IT),S03-16,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 NJ00 기준 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 재고 원장(Inventory Raw) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) · SSP0017 Inventory Raw(Mobility & IT) 조회 결과 일치
+SSP0015,Shipment Plan(Mobility & IT),S04-03,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,사업부별 출하계획 · 확정 원장을 통합본으로 생성 확인 / [화면] SSP0015 · SSP0021 · SSP0023 · SSP0060 조회 결과와 일치
+SSP0015,Shipment Plan(Mobility & IT),S05-01,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0015 하단 Confirm Detail 에서 확정 수량 · 출하일 수정 후 저장 1회로 변경요청 생성 → ERP 송신 → 확정 반영까지 진행되는지 확인(IF-11)
+SSP0015,Shipment Plan(Mobility & IT),S05-03,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,"[화면] SSP0003 Shipment Change Request Confirm 에서 S05-02 요청의 하단 2건 중 1건만 체크해 승인 / → 헤더 Partial Approved(P) · 체크 행 A · 미체크 행 R 확인, 재조회 시 A 행 체크 · R 행 해제 확인"
+SSP0015,Shipment Plan(Mobility & IT),S05-04,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0003 에서 별도 요청 전체 반려 → 헤더 R · 확정 원장 변화 없음 · ERP 송신 자료 반려(D) 행 적재 확인
+SSP0015,Shipment Plan(Mobility & IT),S05-06,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 19 · 22,[화면] SSP0202 Shipment Change Request Confirm(Packer) 승인 → 확정 반영 · ERP(팩) · SCS(팩) 송신 자료가 승인 시각에 적재되는지 확인
+SSP0015,Shipment Plan(Mobility & IT),S05-29,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 같은 국가 고객 변경요청 승인
+SSP0015,Shipment Plan(Mobility & IT),S05-30,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 해외 고객 변경요청 승인
+SSP0015,Shipment Plan(Mobility & IT),S06-04,⑥ ERP 송신 · 회신,-,ERP 가 보낸 판매오더(S/O) · 출고지시(D/O) 회신을 확정 원장에 반영하는지 확인
+SSP0015,Shipment Plan(Mobility & IT),S08-01,⑧ 출하 실적 수신,-,창고(OWMS) 출하 실적 수신 확인
+SSP0015,Shipment Plan(Mobility & IT),S08-02,⑧ 출하 실적 수신,-,창고(OWMS) 반품 실적 수신 확인
+SSP0015,Shipment Plan(Mobility & IT),S08-03,⑧ 출하 실적 수신,-,SCS 출하 실적 · 조립 생산 실적 수신 확인
+SSP0017,Inventory Raw(Mobility & IT),S03-16,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15 · 16,법인 NJ00 기준 확정 원장 반영(경로 · 선적요청 차감 · ERP 송신 자료) → 출하계획 생성(일 계획 SP) → 재고 원장(Inventory Raw) → 선적요청 부족 메일 확인 / [화면] SSP0015 Shipment Plan(Mobility & IT) · SSP0017 Inventory Raw(Mobility & IT) 조회 결과 일치
+SSP0019,Shipment Change History,S04-04,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,ESS 출하 확정 반영(DM MKT FCST 반영 · 확정 원장 · ERP 송신 자료 적재) 확인
+SSP0019,Shipment Change History,S05-01,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0015 하단 Confirm Detail 에서 확정 수량 · 출하일 수정 후 저장 1회로 변경요청 생성 → ERP 송신 → 확정 반영까지 진행되는지 확인(IF-11)
+SSP0019,Shipment Change History,S05-03,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,"[화면] SSP0003 Shipment Change Request Confirm 에서 S05-02 요청의 하단 2건 중 1건만 체크해 승인 / → 헤더 Partial Approved(P) · 체크 행 A · 미체크 행 R 확인, 재조회 시 A 행 체크 · R 행 해제 확인"
+SSP0019,Shipment Change History,S05-07,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0021 하단 Shipment Plan Detail 에서 ① 기존 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 변경요청 · ERP 송신 · 확정 반영 ② 신규 확정 ID 생성 · ERP 송신 자료(A) 적재 확인
+SSP0019,Shipment Change History,S05-08,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0060 Shipment Plan(Auto & ESS)-WA_UC 에서 상단 Save · 팝업 Save · 하단 수정 · 하단 Insert 4경로 각각 저장 / → 경로별 헤더 · 상세 · 확정 원장 · ERP 송신 자료 상태 확인
+SSP0019,Shipment Change History,S05-09,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 81 · 82 확정 건 변경요청 → [화면] SSP0003 승인 / → 확정 원장 반영 · ERP 송신 자료 적재 · SCS 송신(CHG_BATCH_SCS) 확인
+SSP0019,Shipment Change History,S05-12,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0023 Shipment Plan(Electrode) 하단 Plan Detail 에서 ① 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 확정 기록(_H) · 상태 재확인 ② 새 확정 ID · ERP 송신 자료(A) 적재 확인
+SSP0019,Shipment Change History,S05-14,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 ERP SO 가 없는 확정 행 1건 수량 변경 → Save → Request Confirm → [화면] SSP0003 승인
+SSP0019,Shipment Change History,S05-20,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 출하일을 D+10 이후로 변경 → 요청 → SSP0003 승인
+SSP0019,Shipment Change History,S05-25,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0003 요청 전체 반려
+SSP0019,Shipment Change History,S05-43,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,Change Reason 을 비우고 저장되는 경로에서 송신 CHANGE_CODE 확인
+SSP0019,Shipment Change History,S07-02,⑦ 외부 송신 (SCS · PLM · DW · SSPM),-,출하 변경 이력 DW 송신 자료 적재 확인
+SSP0019,Shipment Change History,S10-02,⑩ 조회 확인 · 최종 판정,-,[화면] SSP0019 Shipment Change History / 오늘 화면 저장 · 승인 · 일 마감으로 생긴 확정 이력이 조회되는지 확인
+SSP0020,Delegate,P-11,사전 점검,-,기준정보 : Delegate
+SSP0021,Shipment Plan(Auto & ESS),S02-05,② 일 계획 · 재고 · FP 입력 수신,PI 6~8,81·82 MES 재고(LOT · BOX LOT) 수신 · 수신 확인 표시(PLAN_AUTO / MES_W) 갱신 확인
+SSP0021,Shipment Plan(Auto & ESS),S02-12,② 일 계획 · 재고 · FP 입력 수신,-,FP 확정(Frozen) 생산계획 · SSP 재고 스냅샷 · 화성 후 셀 · MES 재공 이력 생성 확인
+SSP0021,Shipment Plan(Auto & ESS),S02-13,② 일 계획 · 재고 · FP 입력 수신,-,FP 출하가능량 변경분 수신 확인
+SSP0021,Shipment Plan(Auto & ESS),S03-02,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15 · 16,진입 조건 충족 법인마다 순서대로 진행되는지 확인 / ERP 재고 확인 → OWMS 재고 마감(SSP_ANL_OWMS_STOCK_C2) → 마감 계획(SSP_ANL_SHIP_PLAN_C) → 확정 원장 · ERP 송신 자료 → FP 목표 송신 표시 → 음수재고 · 삭제 대상 메일 → 오늘 행 완료(Y) → SCS 팩 출하계획 송신(82 법인)
+SSP0021,Shipment Plan(Auto & ESS),S03-03,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,"81 사업부 법인(HQ00, MI00, NA00, NB00, ST00, WA00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치"
+SSP0021,Shipment Plan(Auto & ESS),S03-04,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HD 사업부 법인(HD00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0021,Shipment Plan(Auto & ESS),S03-05,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HG 사업부 법인(HG00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0021,Shipment Plan(Auto & ESS),S03-06,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_HM 사업부 법인(HM00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0021,Shipment Plan(Auto & ESS),S03-07,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_ST 사업부 법인(ST00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치
+SSP0021,Shipment Plan(Auto & ESS),S03-09,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,"82 사업부 법인(HQ00, NJ00, MI00, NB00, WA00, GM00, HD00, ST00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / 82 법인 SCS 팩 출하계획 송신 포함 / [화면] SSP0021 Shipment Plan(Auto & ESS) 조회 결과 일치"
+SSP0021,Shipment Plan(Auto & ESS),S04-03,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,사업부별 출하계획 · 확정 원장을 통합본으로 생성 확인 / [화면] SSP0015 · SSP0021 · SSP0023 · SSP0060 조회 결과와 일치
+SSP0021,Shipment Plan(Auto & ESS),S04-04,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,ESS 출하 확정 반영(DM MKT FCST 반영 · 확정 원장 · ERP 송신 자료 적재) 확인
+SSP0021,Shipment Plan(Auto & ESS),S05-07,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0021 하단 Shipment Plan Detail 에서 ① 기존 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 변경요청 · ERP 송신 · 확정 반영 ② 신규 확정 ID 생성 · ERP 송신 자료(A) 적재 확인
+SSP0021,Shipment Plan(Auto & ESS),S05-09,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 81 · 82 확정 건 변경요청 → [화면] SSP0003 승인 / → 확정 원장 반영 · ERP 송신 자료 적재 · SCS 송신(CHG_BATCH_SCS) 확인
+SSP0021,Shipment Plan(Auto & ESS),S05-23,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 하단 Insert 로 새 출하 행 추가 → Save → Request Confirm → SSP0003 승인
+SSP0021,Shipment Plan(Auto & ESS),S05-34,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,82 From Packer(C) → To 판매(A) 출하 변경요청 승인
+SSP0021,Shipment Plan(Auto & ESS),S05-38,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,81 계열 사업부 확정 행 변경요청 승인 — 송신 사업부가 81 로 바뀌는지 확인
+SSP0021,Shipment Plan(Auto & ESS),S06-04,⑥ ERP 송신 · 회신,-,ERP 가 보낸 판매오더(S/O) · 출고지시(D/O) 회신을 확정 원장에 반영하는지 확인
+SSP0021,Shipment Plan(Auto & ESS),S08-01,⑧ 출하 실적 수신,-,창고(OWMS) 출하 실적 수신 확인
+SSP0021,Shipment Plan(Auto & ESS),S08-02,⑧ 출하 실적 수신,-,창고(OWMS) 반품 실적 수신 확인
+SSP0022,Shipment Request(Electrode),S03-11,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15,전극 법인별 출하요청 반영 → 출하계획(SSP_ANL_SHIP_PLAN_EE) → 확정 원장 · ERP 송신 자료 → 재고 스냅샷(SSP_ANL_STOCK_EE_C) · 기초재고 마감(SSP_ANL_BOH_CUTOFF_EE) → 일 마감 표시(_EE) 확인 / [화면] SSP0022 · SSP0023 조회 결과 일치
+SSP0022,Shipment Request(Electrode),S05-11,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0022 Shipment Request(Electrode) 하단 Insert → From Site · To Site · Incoterms · Trans Mode 입력 → Material 칸 더블클릭 팝업으로 품목 선택 → 출하일 · 수량 입력 저장 / → 출하요청 생성 · 재조회 확인
+SSP0023,Shipment Plan(Electrode),S03-11,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15,전극 법인별 출하요청 반영 → 출하계획(SSP_ANL_SHIP_PLAN_EE) → 확정 원장 · ERP 송신 자료 → 재고 스냅샷(SSP_ANL_STOCK_EE_C) · 기초재고 마감(SSP_ANL_BOH_CUTOFF_EE) → 일 마감 표시(_EE) 확인 / [화면] SSP0022 · SSP0023 조회 결과 일치
+SSP0023,Shipment Plan(Electrode),S04-03,④ 일 마감 감시 · 출하계획 통합 · FP 목표,-,사업부별 출하계획 · 확정 원장을 통합본으로 생성 확인 / [화면] SSP0015 · SSP0021 · SSP0023 · SSP0060 조회 결과와 일치
+SSP0023,Shipment Plan(Electrode),S05-12,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0023 Shipment Plan(Electrode) 하단 Plan Detail 에서 ① 확정 행 수량 · 출하일 수정 저장 ② Insert 신규 행 저장 / → ① 확정 기록(_H) · 상태 재확인 ② 새 확정 ID · ERP 송신 자료(A) 적재 확인
+SSP0023,Shipment Plan(Electrode),S05-13,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 전극 확정 건 변경요청 → [화면] SSP0003 승인 → 확정 원장 · ERP 송신 자료 확인
+SSP0023,Shipment Plan(Electrode),S05-39,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,전극 확정 행(ELECTRODE_YN Y) 변경요청 승인
+SSP0023,Shipment Plan(Electrode),S06-04,⑥ ERP 송신 · 회신,-,ERP 가 보낸 판매오더(S/O) · 출고지시(D/O) 회신을 확정 원장에 반영하는지 확인
+SSP0023,Shipment Plan(Electrode),S08-01,⑧ 출하 실적 수신,-,창고(OWMS) 출하 실적 수신 확인
+SSP0023,Shipment Plan(Electrode),S08-02,⑧ 출하 실적 수신,-,창고(OWMS) 반품 실적 수신 확인
+SSP0024,Shipment Master Electrode,P-12,사전 점검,-,기준정보 : Shipment Master Electrode
+SSP0025,Shipment Requestor PIC,S09-04,⑨ KPI · 보고 · 정리,-,SCS 재고 미수신 메일(월~토 16:00 · 일 10:00) · 법인간 거래 PO 메일(10분) 수행 확인
+SSP0025,Shipment Requestor PIC,P-13,사전 점검,-,기준정보 : Shipment Requestor PIC
+SSP0026,Shipment Request(Mobility & IT),S01-01,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-2,SCP FINAL 확정 연계로 40 선적요청(DM_PLN_SHIPMENT_REQ) 생성 확인 / [화면] SSP0026 Shipment Request(Mobility & IT) 조회 결과 일치
+SSP0026,Shipment Request(Mobility & IT),S01-02,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-2,SCP FINAL 확정 연계 안의 Packer 선적요청 생성(SSP_ANL_SHIP_REQ_P) 확인
+SSP0026,Shipment Request(Mobility & IT),S02-12,② 일 계획 · 재고 · FP 입력 수신,-,FP 확정(Frozen) 생산계획 · SSP 재고 스냅샷 · 화성 후 셀 · MES 재공 이력 생성 확인
+SSP0026,Shipment Request(Mobility & IT),S02-14,② 일 계획 · 재고 · FP 입력 수신,-,SCS 생산계획 · 재고 수신 확인
+SSP0026,Shipment Request(Mobility & IT),S03-12,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 3 · 14 · 15,Packer 출하계획 생성 → 확정 원장 반영 → ERP(팩) · SCS(팩) 송신 자료 적재 확인
+SSP0026,Shipment Request(Mobility & IT),S08-03,⑧ 출하 실적 수신,-,SCS 출하 실적 · 조립 생산 실적 수신 확인
+SSP0045,Shipment Request SEMI,S01-03,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81 선적요청 · 반제품(SEMI) 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-04,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HD 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-05,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-06,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_HM 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-07,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_ST 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-08,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 81_UC 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S01-09,① Shipment Request(선적요청) 생성 (SCP FINAL 확정 연계),PI 2-1 ~ 2-4,SCP FINAL 확정 연계로 82 선적요청 · 반제품(SEMI) · FG 선적요청 생성 확인 / [화면] DMF0045 Shipment Request(Auto & ESS) · SSP0045 Shipment Request SEMI 조회 결과 일치
+SSP0045,Shipment Request SEMI,S05-10,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 2-4 · 22,[화면] SSP0045 Shipment Request SEMI 에서 Ship Req 수량 수정 · 빈 값 저장 후 재조회 확인
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S02-05,② 일 계획 · 재고 · FP 입력 수신,PI 6~8,81·82 MES 재고(LOT · BOX LOT) 수신 · 수신 확인 표시(PLAN_AUTO / MES_W) 갱신 확인
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S02-13,② 일 계획 · 재고 · FP 입력 수신,-,FP 출하가능량 변경분 수신 확인
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S03-02,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 13 · 14 · 15 · 16,진입 조건 충족 법인마다 순서대로 진행되는지 확인 / ERP 재고 확인 → OWMS 재고 마감(SSP_ANL_OWMS_STOCK_C2) → 마감 계획(SSP_ANL_SHIP_PLAN_C) → 확정 원장 · ERP 송신 자료 → FP 목표 송신 표시 → 음수재고 · 삭제 대상 메일 → 오늘 행 완료(Y) → SCS 팩 출하계획 송신(82 법인)
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S03-08,③ Shipment Plan(사업부별 일 마감) (Daily Cutoff),PI 14 · 15,81_UC 사업부 법인(GM00) 일 마감 완료 · 확정 원장 · ERP 송신 자료 확인 / [화면] SSP0060 Shipment Plan(Auto & ESS)-WA_UC 조회 결과 일치
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S05-08,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0060 Shipment Plan(Auto & ESS)-WA_UC 에서 상단 Save · 팝업 Save · 하단 수정 · 하단 Insert 4경로 각각 저장 / → 경로별 헤더 · 상세 · 확정 원장 · ERP 송신 자료 상태 확인
+SSP0060,Shipment Plan(Auto & ESS)-WA_UC,S06-04,⑥ ERP 송신 · 회신,-,ERP 가 보낸 판매오더(S/O) · 출고지시(D/O) 회신을 확정 원장에 반영하는지 확인
+SSP0200,Shipment Change Request,S05-02,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 Shipment Change Request 에서 40 확정 건 수정 · 신규 행 작성 → 요청(Request Confirm) 저장 확인
+SSP0200,Shipment Change Request,S05-09,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 81 · 82 확정 건 변경요청 → [화면] SSP0003 승인 / → 확정 원장 반영 · ERP 송신 자료 적재 · SCS 송신(CHG_BATCH_SCS) 확인
+SSP0200,Shipment Change Request,S05-13,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0200 에서 전극 확정 건 변경요청 → [화면] SSP0003 승인 → 확정 원장 · ERP 송신 자료 확인
+SSP0200,Shipment Change Request,S05-14,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 ERP SO 가 없는 확정 행 1건 수량 변경 → Save → Request Confirm → [화면] SSP0003 승인
+SSP0200,Shipment Change Request,S05-15,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 같은 ERP SO 번호를 가진 확정 행 2줄 이상을 함께 수정 → Save
+SSP0200,Shipment Change Request,S05-16,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 같은 SO 의 일부 줄만 선택해 Request Confirm
+SSP0200,Shipment Change Request,S05-17,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 조회 화면의 SO 줄 수와 DB 의 SO 줄 수가 다를 때 Save
+SSP0200,Shipment Change Request,S05-18,⑤-1 Change Request : SO 상태별,PI 22,[화면] SSP0200 에서 ERP DO 가 생성된 확정 행(ERP_STATUS C) 수정 시도
+SSP0200,Shipment Change Request,S05-19,⑤-1 Change Request : SO 상태별,PI 22,[화면] 사용자 A 가 요청 중(R)인 확정 행을 사용자 B 가 수정 → Save
+SSP0200,Shipment Change Request,S05-20,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 출하일을 D+10 이후로 변경 → 요청 → SSP0003 승인
+SSP0200,Shipment Change Request,S05-21,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 BOD(Route) 변경 → 운송모드 · Incoterms · 선적/도착항 · ETD · ETA 가 새 BOD 값으로 송신되는지 확인
+SSP0200,Shipment Change Request,S05-22,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 확정 행 수량을 0 으로 변경 → Request Confirm
+SSP0200,Shipment Change Request,S05-23,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 하단 Insert 로 새 출하 행 추가 → Save → Request Confirm → SSP0003 승인
+SSP0200,Shipment Change Request,S05-26,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,[화면] SSP0200 Save 후 하단 작성중 행 Cancel
+SSP0200,Shipment Change Request,S05-27,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,ERP 가 일부 CONFIRM 을 오류로 회신할 때 해당 CONFIRM 초안만 되돌리고 오류 안내
+SSP0200,Shipment Change Request,S05-28,⑤-2 Change Request : 변경 항목 · 처리 결과별,PI 22,ERP 연계 서버 미기동 · 응답 없음 상태에서 Save
+SSP0200,Shipment Change Request,S05-29,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 같은 국가 고객 변경요청 승인
+SSP0200,Shipment Change Request,S05-30,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,40 From 공장(B) → To 판매(A) · 해외 고객 변경요청 승인
+SSP0200,Shipment Change Request,S05-31,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,To Site 가 VMI(VMI_YN Y)인 확정 행 변경요청 승인
+SSP0200,Shipment Change Request,S05-32,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,"From 공장(B) → To Packer(C, OSP_YN Y) 사급 출하 변경요청 승인"
+SSP0200,Shipment Change Request,S05-33,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,From 공장(B) → To 공장(B) 법인간 출하 변경요청 승인
+SSP0200,Shipment Change Request,S05-34,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,82 From Packer(C) → To 판매(A) 출하 변경요청 승인
+SSP0200,Shipment Change Request,S05-35,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,82 From Packer(C) → To 공장(B) 또는 Packer(C) 이동 변경요청 승인
+SSP0200,Shipment Change Request,S05-36,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,To Site 가 SSP_SITE_INFO_EXCEPTION 의 Site 유형 예외(LGESVT_US_PHX · LGESVT_US_WRO)인 행 변경요청
+SSP0200,Shipment Change Request,S05-37,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,"To Site 법인이 From 공장에 따라 바뀌는 예외 Site 변경요청(From MI → MI00, From HQ07 · HQ11 → HQ00)"
+SSP0200,Shipment Change Request,S05-38,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,81 계열 사업부 확정 행 변경요청 승인 — 송신 사업부가 81 로 바뀌는지 확인
+SSP0200,Shipment Change Request,S05-39,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,전극 확정 행(ELECTRODE_YN Y) 변경요청 승인
+SSP0200,Shipment Change Request,S05-41,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,FCST_TYPE 별(MPS · AS · ASF · SDC · SDF · SMC · SMF · SPF · WS · TST) 변경요청 승인
+SSP0200,Shipment Change Request,S05-42,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,Project Code 가 없거나 '-' 인 확정 행 변경요청 승인
+SSP0200,Shipment Change Request,S05-43,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,Change Reason 을 비우고 저장되는 경로에서 송신 CHANGE_CODE 확인
+SSP0200,Shipment Change Request,S05-44,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,To Site 대표 고객(Sold-to · Ship-to)이 없는 Site 로 변경 · 신규 저장
+SSP0200,Shipment Change Request,S05-45,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,송신 직전 회사 · Site · Plant · Vendor · 고객 코드가 신 ERP 코드로 바뀌는지 확인
+SSP0200,Shipment Change Request,S05-46,⑤-4 Change Request : 송신 컬럼 값 유형별,PI 22,ERP 연계 중단 기간 설정 중 Save · Request Confirm
+SSP0200,Shipment Change Request,S06-07,⑥ ERP 송신 · 회신,-,작성 중(D) 상태로 2일 지난 변경요청 정리 · 재송신 대상 생성 · 호출 결과 기록 확인
+SSP0201,Shipment Change Request(Packer),S05-05,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 22,[화면] SSP0201 Shipment Change Request(Packer) 에서 팩 확정 건 수정 → 요청(Request Confirm) 확인
+SSP0201,Shipment Change Request(Packer),S05-40,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,Packer 변경 승인 시 팩 ERP 송신 테이블의 ORDER_TYPE_DETAIL 이 FCST_TYPE 명칭으로 들어가는지 확인
+SSP0202,Shipment Change Request Confirm(Packer),S05-06,⑤ 출하확정 변경 · 긴급 출하 (화면),PI 19 · 22,[화면] SSP0202 Shipment Change Request Confirm(Packer) 승인 → 확정 반영 · ERP(팩) · SCS(팩) 송신 자료가 승인 시각에 적재되는지 확인
+SSP0202,Shipment Change Request Confirm(Packer),S05-40,⑤-3 Change Request : From Site · To Site 유형별 (ERP SO 오더타입),PI 22,Packer 변경 승인 시 팩 ERP 송신 테이블의 ORDER_TYPE_DETAIL 이 FCST_TYPE 명칭으로 들어가는지 확인
+SSP0202,Shipment Change Request Confirm(Packer),S08-03,⑧ 출하 실적 수신,-,SCS 출하 실적 · 조립 생산 실적 수신 확인

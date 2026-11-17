@@ -1,0 +1,22 @@
+{
+ "id": "SSP0024",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [
+  {
+   "param": "plant_site_id",
+   "asis": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+   "tobe": "HQ07-E",
+   "why": "같은 값을 가진 컨트롤 0개",
+   "candidates": []
+  }
+ ],
+ "skipped": [
+  {
+   "param": "plant_site_id",
+   "asis": "HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E",
+   "tobe": "",
+   "why": "ALL_FORM"
+  }
+ ]
+}

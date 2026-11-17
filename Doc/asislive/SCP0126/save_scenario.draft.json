@@ -1,0 +1,518 @@
+{
+ "id": "SCP0126",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0126_SAVE_DAILY_CAPA",
+   "save_sp": "SCP0126_SAVE_DAILY_CAPA",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_DDLY_CAPA",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "ITEM_ID",
+    "YYYYMM"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "ITEM_ID": "ITEM_ID",
+    "YYYYMM": "YYYYMM"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "CAPA",
+    "db_col": "CAPA",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Daily Capa",
+   "writes": {
+    "SCP_OPMZ_DDLY_CAPA": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_DAILY_CAPA → SP SCP0126_SAVE_DAILY_CAPA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "CAPA",
+     "db_col": "CAPA",
+     "rule": "plus1"
+    },
+    {
+     "col": "LANE",
+     "db_col": "LANE",
+     "rule": "plus1"
+    },
+    {
+     "col": "PRDN_OPER_RT",
+     "db_col": "PRDN_OPER_RT",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "ERROR",
+    "note": "",
+    "at": "2026-11-13 22:03:19"
+   }
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_NO_WORK",
+   "save_sp": "SCP0126_SAVE_NO_WORK",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_NO_WORK",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "NO_WORK_DATE",
+    "TYPE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "NO_WORK_DATE": "NO_WORK_DATE"
+   },
+   "unmatched_pk": [
+    "TYPE"
+   ],
+   "edit": {
+    "col": "OFF_TIME",
+    "db_col": "OFF_TIME",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/No Work",
+   "writes": {
+    "SCP_OPMZ_NO_WORK": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_NO_WORK → SP SCP0126_SAVE_NO_WORK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": [
+    {
+     "col": "OFF_TIME",
+     "db_col": "OFF_TIME",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_NO_WORK_WEEK",
+   "save_sp": "SCP0126_SAVE_NO_WORK_WEEK",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_NO_WORK",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "NO_WORK_DATE",
+    "TYPE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "NO_WORK_DATE": "NO_WORK_DATE"
+   },
+   "unmatched_pk": [
+    "TYPE"
+   ],
+   "edit": {
+    "col": "OFF_TIME",
+    "db_col": "OFF_TIME",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/No Work",
+   "writes": {
+    "SCP_OPMZ_NO_WORK": [
+     "DELETE",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_NO_WORK_WEEK → SP SCP0126_SAVE_NO_WORK_WEEK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": [
+    {
+     "col": "OFF_TIME",
+     "db_col": "OFF_TIME",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_PREP_RT",
+   "save_sp": "SCP0126_SAVE_PREP_RT",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_PREP_RT",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "FROM_DATE",
+    "TO_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID"
+   },
+   "unmatched_pk": [
+    "FROM_DATE",
+    "TO_DATE"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/No Work",
+   "writes": {
+    "SCP_OPMZ_PREP_RT": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_PREP_RT → SP SCP0126_SAVE_PREP_RT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "FROM_DATE": "p_from_date←(그리드 열에서 오지 않음); p_pre_from_date←(그리드 열에서 오지 않음)",
+    "TO_DATE": "p_to_date←(그리드 열에서 오지 않음); p_pre_to_date←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_RAMP_UP",
+   "save_sp": "SCP0126_SAVE_RAMP_UP",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_RAMP_UP",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "ITEM_ID",
+    "START_DATE",
+    "END_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "ITEM_ID": "ITEM_ID",
+    "START_DATE": "START_DATE",
+    "END_DATE": "END_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "EFCY",
+    "db_col": "EFCY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Ramp-up(From/To)",
+   "writes": {
+    "SCP_OPMZ_RAMP_UP": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_RAMP_UP → SP SCP0126_SAVE_RAMP_UP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "EFCY",
+     "db_col": "EFCY",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_RAMP_UP_ITVL",
+   "save_sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_RAMP_UP_ITVL",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "ITEM_ID",
+    "START_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "ITEM_ID": "ITEM_ID",
+    "START_DATE": "START_DATE"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "ITVL1",
+    "db_col": "ITVL1",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Ramp-up(Interval)",
+   "writes": {
+    "SCP_OPMZ_RAMP_UP_ITVL": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_RAMP_UP_ITVL → SP SCP0126_SAVE_RAMP_UP_ITVL 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "ITVL1",
+     "db_col": "ITVL1",
+     "rule": "plus1"
+    },
+    {
+     "col": "EFCY1",
+     "db_col": "EFCY1",
+     "rule": "plus1"
+    },
+    {
+     "col": "ITVL2",
+     "db_col": "ITVL2",
+     "rule": "plus1"
+    },
+    {
+     "col": "EFCY2",
+     "db_col": "EFCY2",
+     "rule": "plus1"
+    },
+    {
+     "col": "ITVL3",
+     "db_col": "ITVL3",
+     "rule": "plus1"
+    },
+    {
+     "col": "EFCY3",
+     "db_col": "EFCY3",
+     "rule": "plus1"
+    },
+    {
+     "col": "ITVL4",
+     "db_col": "ITVL4",
+     "rule": "plus1"
+    },
+    {
+     "col": "EFCY4",
+     "db_col": "EFCY4",
+     "rule": "plus1"
+    }
+   ]
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_SOP_EOP",
+   "save_sp": "SCP0126_SAVE_SOP_EOP",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_OPMZ_SOP_EOP",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "ITEM_ID",
+    "TYPE",
+    "DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "ITEM_ID": "ITEM_ID",
+    "TYPE": "TYPE",
+    "DATE": "DATE"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/SOP/EOP",
+   "writes": {
+    "SCP_OPMZ_SOP_EOP": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_SOP_EOP → SP SCP0126_SAVE_SOP_EOP 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_UTIL_RT",
+   "save_sp": "SCP0126_SAVE_UTIL_RT",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_UTIL_RT",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "FROM_DATE",
+    "TO_DATE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID"
+   },
+   "unmatched_pk": [
+    "FROM_DATE",
+    "TO_DATE"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/No Work",
+   "writes": {
+    "SCP_OPMZ_UTIL_RT": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_UTIL_RT → SP SCP0126_SAVE_UTIL_RT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "FROM_DATE": "p_from_date←(그리드 열에서 오지 않음); p_pre_from_date←(그리드 열에서 오지 않음)",
+    "TO_DATE": "p_to_date←(그리드 열에서 오지 않음); p_pre_to_date←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_YLD_ELEC",
+   "save_sp": "SCP0126_SAVE_YLD_ELEC",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_OPMZ_YLD_ELEC",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "ITEM_ID",
+    "YYYYMM"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "ITEM_ID": "ITEM_ID",
+    "YYYYMM": "YYYYMM"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Daily Capa",
+   "writes": {
+    "SCP_OPMZ_YLD_ELEC": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_YLD_ELEC → SP SCP0126_SAVE_YLD_ELEC 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0126_SAVE_NO_WORK_BATCH",
+   "save_sp": "SCP0126_SAVE_NO_WORK_BATCH",
+   "status": "키 일부 미대응",
+   "table": "SCP_OPMZ_NO_WORK",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "LINE_ID",
+    "OPERATION_ID",
+    "LINE_TYPE",
+    "NO_WORK_DATE",
+    "TYPE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "LINE_ID": "LINE_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_TYPE": "LINE_TYPE",
+    "NO_WORK_DATE": "NO_WORK_DATE"
+   },
+   "unmatched_pk": [
+    "TYPE"
+   ],
+   "edit": {
+    "col": "OFF_TIME",
+    "db_col": "OFF_TIME",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/No Work",
+   "writes": {
+    "SCP_OPMZ_NO_WORK": [
+     "DELETE",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0126_SAVE_NO_WORK_BATCH → SP SCP0126_SAVE_NO_WORK_BATCH 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": [
+    {
+     "col": "OFF_TIME",
+     "db_col": "OFF_TIME",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

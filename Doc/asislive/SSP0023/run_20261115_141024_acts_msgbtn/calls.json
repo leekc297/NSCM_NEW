@@ -1,0 +1,42 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 14:09:18.837",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 18.44,
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_sheet_name": "Shipment Plan(Electrode)",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SSP0023', @p_sheet_name='Shipment Plan(Electrode)', @p_column_type='M', @p_user_id='jaeuk.shin'",
+   "phase": "action:msgbtn:BtnMeasure:선택 없음"
+  },
+  {
+   "at": "2026-11-15 14:10:01.545",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 11,
+   "rows_kind": "DataSet rows",
+   "ms": 18.28,
+   "params": {
+    "p_program_id": "SSP0023",
+    "p_sheet_name": "Shipment Plan(Electrode)",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SSP0023', @p_sheet_name='Shipment Plan(Electrode)', @p_column_type='M', @p_user_id='jaeuk.shin'",
+   "phase": "action:msgbtn:BtnMeasure:첫 행 선택"
+  }
+ ]
+}

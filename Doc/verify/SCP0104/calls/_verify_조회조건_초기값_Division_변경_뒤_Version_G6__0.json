@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 163,
+  "at": "2026-11-17T05:54:57.799Z",
+  "user": "minyonglee1",
+  "test": "조회조건 초기값·Division 변경 뒤 Version(G6)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 173,
+  "at": "2026-11-17T05:55:04.369Z",
+  "user": "minyonglee1",
+  "test": "조회조건 초기값·Division 변경 뒤 Version(G6)"
+ }
+]

@@ -1,7 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
 import type { FlexGridColumnConfig } from '@foundation/models';
-import { isInsertRow } from '@foundation/utils';
+import { isInsertRow, safeString } from '@foundation/utils';
 
 /**
  * P_SSP0022_GET_SHEET_CALENDAR_3SPAN(배포됨) 동적 헤더 빌더 — AS-IS SetSpreadHeaderSpan/
@@ -206,7 +206,7 @@ export class SpreadHeaderMergeManager extends MergeManager {
         const ra = rowAt(a);
         const rb = rowAt(b);
         if (!ra || !rb || isInsertRow(ra) || isInsertRow(rb)) return false;
-        return leftBindings.every(k => String(ra[k] ?? '') === String(rb[k] ?? ''));
+        return leftBindings.every(k => safeString(ra[k]) === safeString(rb[k]));
       };
       const minRow = panel.viewRange.row;
       const maxRow = panel.viewRange.row2;

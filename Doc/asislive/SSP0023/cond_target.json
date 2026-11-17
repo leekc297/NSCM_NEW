@@ -1,0 +1,65 @@
+{
+ "file": "_verify_Excel_2단계_차단_M1__0.json",
+ "sheets": {
+  "calendar": {
+   "params": {
+    "start_yyyymmdd": "20260928",
+    "end_yyyymmdd": "20261204"
+   },
+   "rows": 255,
+   "at": "2026-11-12T02:33:16.890Z"
+  },
+  "main": {
+   "params": {
+    "division_id": "40",
+    "company_id": "HQ00",
+    "from_site": "",
+    "plan_start_yyyymmdd": "20261010",
+    "from_yyyymmdd": "20260928",
+    "to_yyyymmdd": "20261204",
+    "model_id": "",
+    "item_id": "",
+    "nick_name": "",
+    "user_id": "minyonglee1",
+    "program_id": "SSP0023",
+    "sheet_name": "Shipment Plan(Electrode)",
+    "real_flag": "Y",
+    "non_chk": "Y",
+    "my_model_chk": "N",
+    "delegatee_chk": "N",
+    "part_leader_chk": "N",
+    "team_leader_chk": "N"
+   },
+   "rows": 308,
+   "at": "2026-11-12T02:33:20.769Z"
+  },
+  "planDetail": {
+   "params": {
+    "division_id": "40",
+    "company_id": "HQ00",
+    "from_site": "",
+    "item_id": "",
+    "model_id": "",
+    "nick_name": "",
+    "requestor": "",
+    "plan_start_yyyymmdd": "20261010",
+    "from_yyyymmdd": "20261010",
+    "to_yyyymmdd": "20261204",
+    "dbl_flag": "N",
+    "real_flag": "Y",
+    "language": "KO",
+    "program_id": "SSP0023",
+    "sheet_name": "Shipment Plan Detail",
+    "non_chk": "Y",
+    "my_model_chk": "N",
+    "delegatee_chk": "N",
+    "part_leader_chk": "N",
+    "team_leader_chk": "N",
+    "user_id": "minyonglee1",
+    "debug_mode": "F"
+   },
+   "rows": 150,
+   "at": "2026-11-12T02:33:20.771Z"
+  }
+ }
+}

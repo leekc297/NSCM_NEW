@@ -1,0 +1,151 @@
+{
+ "id": "FP00590",
+ "started": "2026-11-12 18:37:14.893",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:37:15.217",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00590_Plan_Control",
+   "form_text": "Plan Control",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00590_Plan_Control.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:37:21.572"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:37:25.015",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00590\\run_20261112_183714\\dump_load.json",
+   "control_count": 37,
+   "grid_count": 2,
+   "total": "Total : 9",
+   "time_status": "DB : 9.596s, UI : 0.068s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:37:25.022"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:37:25.334",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00590\\run_20261112_183714\\shots\\FP00590_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:37:25.490"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:37:25.822",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:37:26.967"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:37:37.099",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00590\\run_20261112_183714\\dump_find.json",
+   "control_count": 41,
+   "grid_count": 2,
+   "total": "Total : 4",
+   "time_status": "DB : 5.125s, UI : 0.067s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:37:37.107"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:37:37.265",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00590\\run_20261112_183714\\shots\\FP00590_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:37:37.404"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:37:37.740",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 18:37:38.345"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 30,
+  "calls_with_params": 30
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00590_Plan_Control",
+  "form_text": "Plan Control",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00590_Plan_Control.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 5.125s, UI : 0.067s",
+  "total": "Total : 4",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:37:15.099",
+ "t_find": "2026-11-12 18:37:25.593",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:37:33.206",
+   "caption": "GSCM",
+   "text": "다시 확인하여 주십시오. not run master validation today",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 41,
+  "layout_items": 12,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 44,
+  "data_rows": 4,
+  "grid_rows": 4,
+  "calls_total": 30,
+  "calls_screen": 30,
+  "calls_find": 7,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:24.269",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:24"
+}

@@ -1,0 +1,35 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ROUTE_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0007-Sca043c",
+    "SCP0007-Sa9fa28",
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:30:13",
+ "plan": {
+  "scenarios": 4,
+  "used": [
+   "ROUTE_ID"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

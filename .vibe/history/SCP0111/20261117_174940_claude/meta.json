@@ -1,0 +1,36 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0111] · Doc/gen/SCP0111/CHECK.md · Doc/gen/SCP0111/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0111/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-17T17:49:40+09:00",
+  "end": null,
+  "exit": null,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "EXCEL 이나 문서에 자연스러운 단어로 변경하도록 보완하는 것을 적용하였습니다. \nFE 가이드 생성시에도 이 RULE 적용하도록 해주세요. 그리고 지금의 FE 가이드에 대해서도 보완한 것으로 다시 제공해주세요.",
+  "user": "LG",
+  "host": "LEE-03"
+}

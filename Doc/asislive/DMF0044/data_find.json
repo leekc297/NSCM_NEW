@@ -1,0 +1,139 @@
+{
+ "sheets": {
+  "DMF0044_GET_SALES_REPORTS_DATA": {
+   "sp": "DMF0044_GET_SALES_REPORTS_DATA",
+   "conds": [],
+   "divs": [],
+   "tried": [
+    {
+     "cond": "Division 81",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:13"
+    },
+    {
+     "cond": "Division 81(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:21"
+    },
+    {
+     "cond": "Division 81_HD",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:22"
+    },
+    {
+     "cond": "Division 81_HD(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:23"
+    },
+    {
+     "cond": "Division 81_HG",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:24"
+    },
+    {
+     "cond": "Division 81_HG(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:25"
+    },
+    {
+     "cond": "Division 81_HM",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:26"
+    },
+    {
+     "cond": "Division 81_HM(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:27"
+    },
+    {
+     "cond": "Division 81_UC",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:28"
+    },
+    {
+     "cond": "Division 81_UC(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:29"
+    },
+    {
+     "cond": "Division 82",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:42"
+    },
+    {
+     "cond": "Division 82(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:12:56"
+    },
+    {
+     "cond": "usrYear=2025",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:02"
+    },
+    {
+     "cond": "usrYear=2027",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:09"
+    },
+    {
+     "cond": "usrYear=2024",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:16"
+    },
+    {
+     "cond": "usrYear=2028",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:24"
+    },
+    {
+     "cond": "usrYear=2023",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:33"
+    },
+    {
+     "cond": "usrYear=2029",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:41"
+    },
+    {
+     "cond": "usrDataType=Cutoff Data",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:50"
+    },
+    {
+     "cond": "usrDataType=ETC Data",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-17 17:13:58"
+    }
+   ],
+   "axes": [
+    "division",
+    "combo:usrYear",
+    "combo:usrDataType"
+   ],
+   "at": "2026-11-17 17:13:59"
+  }
+ },
+ "at": "2026-11-17 17:13:59",
+ "source": "AS-IS 조회 SP 재실행(팝업 행·Division·콤보·기간 후보 · .env.asis)"
+}

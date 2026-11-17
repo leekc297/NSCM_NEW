@@ -3,6 +3,7 @@ import type { Column, FlexGrid } from '@mescius/wijmo.grid';
 import { CellRange, CellType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import { t } from '@foundation/i18n';
 import { GridUtils } from '@foundation/utils';
 
@@ -216,6 +217,50 @@ const notifyWidth = (options: GridContextMenuOptions, column: Column | undefined
   if (column?.binding) options.onWidthChanged?.(column.binding, column.renderWidth);
 };
 
+/**
+ * 숨김 가능한 컬럼인지 — 바인딩이 있고 필수 컬럼이 아니어야 한다.
+ * 필수 판정은 dataGridUtils 의 빨간점(`is-required`) 규칙과 동일하게 컬럼 메타로 본다:
+ *   `_requiredMark`(관리자 라벨 '*' 를 columnMapping 이 떼어 보존) 또는 inputTpCd=M/IM.
+ *   (AS-IS 라벨 '*' 는 이제 헤더에 남지 않으므로 header 문자열로 판정하면 안 된다.)
+ */
+const isHideableColumn = (grid: FlexGrid, col: number): boolean => {
+  const column = grid.columns[col];
+  if (!column?.binding) return false;
+  const columnConfig = GridUtils.getColumn(grid, col);
+  const isRequired =
+    columnConfig?._requiredMark === true ||
+    columnConfig?._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
+    columnConfig?._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY;
+  return !isRequired;
+};
+
+/** 현재 표시 중인(visible) 바인딩 컬럼 수 */
+const visibleColumnCount = (grid: FlexGrid): number => {
+  let count = 0;
+  for (let i = 0; i < grid.columns.length; i++) {
+    if (grid.columns[i].visible && grid.columns[i].binding) count += 1;
+  }
+  return count;
+};
+
+/**
+ * 숨김 대상 컬럼 인덱스들 — 우클릭 지점이 다중 컬럼 선택 범위 안이면 그 범위 전체,
+ * 아니면 우클릭 컬럼 하나. (여러 컬럼을 드래그 선택한 상태에서 일괄 숨김)
+ */
+const hideTargetColumns = (grid: FlexGrid, hitCol: number): number[] => {
+  const sel = grid.selection;
+  if (sel.isValid && sel.col !== sel.col2) {
+    const lo = Math.min(sel.col, sel.col2);
+    const hi = Math.max(sel.col, sel.col2);
+    if (hitCol >= lo && hitCol <= hi) {
+      const cols: number[] = [];
+      for (let i = lo; i <= hi; i++) cols.push(i);
+      return cols;
+    }
+  }
+  return [hitCol];
+};
+
 const buildHeaderItems = (options: GridContextMenuOptions): GridContextMenuItem[] => [
   {
     label: t('CTX_PIN_COLUMN', 'Pin Column'),
@@ -276,24 +321,19 @@ const buildHeaderItems = (options: GridContextMenuOptions): GridContextMenuItem[
           label: t('CTX_HIDE_COLUMN', 'Hide Column'),
           separatorBefore: true,
           // 필수(라벨 '*') 컬럼과 마지막 남은 표시 컬럼은 숨김 금지 (ColumnLayoutModal 규칙과 동일)
-          disabled: ({ grid, hitCol }) => {
-            const column = grid.columns[hitCol];
-            if (!column?.binding) return true;
-            if (
-              String(column.header ?? '')
-                .trim()
-                .endsWith('*')
-            )
-              return true;
-            let visibleCount = 0;
-            for (let i = 0; i < grid.columns.length; i++) {
-              if (grid.columns[i].visible && grid.columns[i].binding) visibleCount += 1;
-            }
-            return visibleCount <= 1;
-          },
+          disabled: ({ grid, hitCol }) =>
+            !isHideableColumn(grid, hitCol) || visibleColumnCount(grid) <= 1,
+          // 여러 컬럼을 드래그 선택한 상태에서 우클릭하면 선택 범위의 컬럼을 일괄 숨김.
+          // 필수(라벨 '*')·이미 숨김 컬럼은 건너뛰고, 최소 한 컬럼은 남긴다.
           action: ({ grid, hitCol }) => {
-            const binding = grid.columns[hitCol]?.binding;
-            if (binding) options.onHideColumn?.(binding);
+            let remaining = visibleColumnCount(grid);
+            for (const col of hideTargetColumns(grid, hitCol)) {
+              if (remaining <= 1) break;
+              const column = grid.columns[col];
+              if (!column?.visible || !isHideableColumn(grid, col) || !column.binding) continue;
+              options.onHideColumn?.(column.binding);
+              remaining -= 1;
+            }
           },
         },
         {

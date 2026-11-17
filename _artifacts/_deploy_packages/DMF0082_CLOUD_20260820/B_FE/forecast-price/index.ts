@@ -1,1 +1,0 @@
-export { ForecastPrice } from './ForecastPrice';

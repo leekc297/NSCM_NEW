@@ -1,0 +1,67 @@
+{
+ "id": "SCP0050",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0050_SAVE_CAPA_PIC",
+   "save_sp": "SCP0050_SAVE_CAPA_PIC",
+   "status": "주 테이블 미확정",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {
+    "SCM_MASTER_MANAGER_M_SN": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0050_SAVE_CAPA_PIC → SP SCP0050_SAVE_CAPA_PIC 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {}
+  },
+  {
+   "endpoint": "biz:FPCommonDataBLL.GeneralExecuteNonQuery [batchId=delete_tmp_capa_pic] | FP\\Capa\\CAPA_PIC#delete_tmp_capa_pic",
+   "save_sp": "GeneralExecuteNonQuery [batchId=delete_tmp_capa_pic] | FP\\Capa\\CAPA_PIC#delete_tmp_capa_pic",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml GeneralExecuteNonQuery [batchId=delete_tmp_capa_pic] | FP\\Capa\\CAPA_PIC#delete_tmp_capa_pic → SP GeneralExecuteNonQuery [batchId=delete_tmp_capa_pic] | FP\\Capa\\CAPA_PIC#delete_tmp_capa_pic 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  },
+  {
+   "endpoint": "biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=merge_capa_pic] | FP\\Capa\\CAPA_PIC#merge_capa_pic",
+   "save_sp": "GeneralExecuteQuery [batchId=merge_capa_pic] | FP\\Capa\\CAPA_PIC#merge_capa_pic",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml GeneralExecuteQuery [batchId=merge_capa_pic] | FP\\Capa\\CAPA_PIC#merge_capa_pic → SP GeneralExecuteQuery [batchId=merge_capa_pic] | FP\\Capa\\CAPA_PIC#merge_capa_pic 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  },
+  {
+   "endpoint": "biz:FPCommonDataBLL.GeneralPseudoBatch [batchId=upload_pic] | FP\\Capa\\CAPA_PIC#upload_pic",
+   "save_sp": "GeneralPseudoBatch [batchId=upload_pic] | FP\\Capa\\CAPA_PIC#upload_pic",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml GeneralPseudoBatch [batchId=upload_pic] | FP\\Capa\\CAPA_PIC#upload_pic → SP GeneralPseudoBatch [batchId=upload_pic] | FP\\Capa\\CAPA_PIC#upload_pic 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  }
+ ]
+}

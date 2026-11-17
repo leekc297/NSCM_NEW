@@ -1,0 +1,2140 @@
+{
+ "at": "2026-11-14T15:03:48.790Z",
+ "search": {
+  "Div": {
+   "label": "Div",
+   "opts": [
+    "40 Mobility & IT Battery",
+    "81 Automotive Battery",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_UC Automotive Battery(UC)",
+    "82 ESS Battery",
+    "EE_HD Electrode(HD)",
+    "EE_HG Electrode(HG)",
+    "EE_HM Electrode(HM)",
+    "EE_ST Electrode(ST)",
+    "EE_UC Electrode(UC)"
+   ],
+   "multi": false,
+   "sel": [
+    "40 Mobility & IT Battery"
+   ]
+  },
+  "Company": {
+   "label": "Company",
+   "opts": [
+    "ESOC",
+    "ESNJ"
+   ],
+   "multi": false,
+   "sel": [
+    "ESOC"
+   ]
+  },
+  "From Site": {
+   "label": "From Site",
+   "opts": [
+    "SELECT ALL",
+    "Enetech_KR_CJ_ELEC",
+    "LGESCJ Elec 3050",
+    "LGESOC Elec HQ06",
+    "OC_2 Mobile Elec-Electrode"
+   ],
+   "multi": true,
+   "sel": []
+  },
+  "Bucket": {
+   "label": "Bucket",
+   "opts": [
+    "Daily",
+    "Weekly",
+    "Monthly"
+   ],
+   "multi": false,
+   "sel": [
+    "Daily"
+   ]
+  },
+  "Plan Date": {
+   "label": "Plan Date",
+   "opts": [
+    "2026-10-10",
+    "2026-10-09",
+    "2026-10-08",
+    "2026-10-07",
+    "2026-10-06",
+    "2026-10-05",
+    "2026-10-04",
+    "2026-10-03",
+    "2026-10-02",
+    "2026-10-01",
+    "2026-09-30",
+    "2026-09-29",
+    "2026-09-28",
+    "2026-09-27",
+    "2026-09-26",
+    "2026-09-25",
+    "2026-09-24",
+    "2026-09-23",
+    "2026-09-22",
+    "2026-09-21",
+    "2026-09-20",
+    "2026-09-19",
+    "2026-09-18",
+    "2026-09-17",
+    "2026-09-16",
+    "2026-09-15",
+    "2026-09-14",
+    "2026-09-13",
+    "2026-09-12",
+    "2026-09-11",
+    "2026-09-10",
+    "2026-09-09",
+    "2026-09-08",
+    "2026-09-07",
+    "2026-09-06",
+    "2026-09-05",
+    "2026-09-04",
+    "2026-09-03",
+    "2026-09-02",
+    "2026-09-01",
+    "2026-08-31",
+    "2026-08-30",
+    "2026-08-29",
+    "2026-08-28",
+    "2026-08-27",
+    "2026-08-26",
+    "2026-08-25",
+    "2026-08-24",
+    "2026-08-23",
+    "2026-08-22"
+   ],
+   "multi": false,
+   "sel": [
+    "2026-10-10"
+   ]
+  }
+ },
+ "grid": {},
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Com_FromSitePlantEE\",\"mnuId\":\"SSP0023\",\"divisionId\":\"''\",\"companyId\":\"''\"}",
+   "status": 200,
+   "n": 23,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "3050-E",
+     "v": "LGESCJ Elec 3050"
+    },
+    {
+     "c": "G676-E",
+     "v": "GM3_LS Auto Elec-Electrode"
+    },
+    {
+     "c": "G484-E",
+     "v": "WA ESS Assy-Electrode"
+    },
+    {
+     "c": "AZ00-E",
+     "v": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "c": "HQ06-E",
+     "v": "LGESOC Elec HQ06"
+    },
+    {
+     "c": "HQ10-E",
+     "v": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "c": "NJ01-E",
+     "v": "LGESNJ Elec NJ01"
+    },
+    {
+     "c": "KR04179400_40-E",
+     "v": "Enetech_KR_CJ_ELEC"
+    },
+    {
+     "c": "HQ07-E",
+     "v": "LGESOC Elec HQ07"
+    },
+    {
+     "c": "HQ11-E",
+     "v": "OC_2 Auto Elec-Electrode"
+    },
+    {
+     "c": "MI00-E",
+     "v": "LGESMI Elec MI00"
+    },
+    {
+     "c": "MI02-E",
+     "v": "MI_LS Auto Elec-Electrode"
+    },
+    {
+     "c": "NA00-E",
+     "v": "LGESNA Elec NA00"
+    },
+    {
+     "c": "NB01-E",
+     "v": "LGESNB Electrode-Electrode NB01"
+    },
+    {
+     "c": "HG00-E",
+     "v": "ESHG Auto Elec-Electrode"
+    },
+    {
+     "c": "HM00-E",
+     "v": "HM Auto Elec-Electrode"
+    },
+    {
+     "c": "ST00-E",
+     "v": "OT Auto Elec-Electrode"
+    },
+    {
+     "c": "GM00-E",
+     "v": "Ultium Cells (E) - Lordstown-Electrode"
+    },
+    {
+     "c": "GM01-E",
+     "v": "GM2_TN Auto Elec-Electrode"
+    },
+    {
+     "c": "WA00-E",
+     "v": "LGESWA Elec WA00"
+    },
+    {
+     "c": "HD00-E",
+     "v": "ES Honda JV Auto Elec-Electrode"
+    },
+    {
+     "c": "MI01-E",
+     "v": "MI ESS Elec-Electrode"
+    },
+    {
+     "c": "WA01-E",
+     "v": "PL WRO ESS Prod-Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Div_Company\",\"mnuId\":\"SSP0023\",\"divisionId\":\"''\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "GM00",
+     "v": "ESUC"
+    },
+    {
+     "c": "HD00",
+     "v": "ESHD"
+    },
+    {
+     "c": "HG00",
+     "v": "ESHG"
+    },
+    {
+     "c": "HM00",
+     "v": "ESHM"
+    },
+    {
+     "c": "HQ00",
+     "v": "ESOC"
+    },
+    {
+     "c": "HQ00",
+     "v": "ESOC"
+    },
+    {
+     "c": "MI00",
+     "v": "ESMI"
+    },
+    {
+     "c": "MI00",
+     "v": "ESMI"
+    },
+    {
+     "c": "NA00",
+     "v": "ESNA"
+    },
+    {
+     "c": "NB00",
+     "v": "ESNB"
+    },
+    {
+     "c": "NJ00",
+     "v": "ESNJ"
+    },
+    {
+     "c": "ST00",
+     "v": "ESST"
+    },
+    {
+     "c": "WA00",
+     "v": "ESWA"
+    },
+    {
+     "c": "WA00",
+     "v": "ESWA"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"MyDivisionInEE\",\"mnuId\":\"SSP0023\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "EE Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"BUCKET_TYPE_CODE\",\"mnuId\":\"SSP0023\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "DAILY",
+     "v": "Daily"
+    },
+    {
+     "c": "WEEKLY",
+     "v": "Weekly"
+    },
+    {
+     "c": "MONTHLY",
+     "v": "Monthly"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Plan_InforElectrode\",\"mnuId\":\"SSP0023\",\"companyId\":\"''\"}",
+   "status": 200,
+   "n": 50,
+   "keys": [
+    "PLAN_YN",
+    "FROM_DATE",
+    "CODE",
+    "TO_DATE",
+    "TO_DATE1",
+    "COMPANY_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261005",
+     "v": "2026-10-05"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0023\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "Mobility & IT Battery"
+    },
+    {
+     "c": "81",
+     "v": "Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Div_Company\",\"mnuId\":\"SSP0023\",\"divisionId\":\"'40'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "HQ00",
+     "v": "ESOC"
+    },
+    {
+     "c": "NJ00",
+     "v": "ESNJ"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Com_FromSitePlantEE\",\"mnuId\":\"SSP0023\",\"divisionId\":\"'40'\",\"companyId\":\"''\"}",
+   "status": 200,
+   "n": 6,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "3050-E",
+     "v": "LGESCJ Elec 3050"
+    },
+    {
+     "c": "AZ00-E",
+     "v": "AZ Mobile Elec-Electrode"
+    },
+    {
+     "c": "HQ06-E",
+     "v": "LGESOC Elec HQ06"
+    },
+    {
+     "c": "HQ10-E",
+     "v": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "c": "KR04179400_40-E",
+     "v": "Enetech_KR_CJ_ELEC"
+    },
+    {
+     "c": "NJ01-E",
+     "v": "LGESNJ Elec NJ01"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Com_FromSitePlantEE\",\"mnuId\":\"SSP0023\",\"divisionId\":\"'40'\",\"companyId\":\"'HQ00'\"}",
+   "status": 200,
+   "n": 4,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "3050-E",
+     "v": "LGESCJ Elec 3050"
+    },
+    {
+     "c": "HQ06-E",
+     "v": "LGESOC Elec HQ06"
+    },
+    {
+     "c": "HQ10-E",
+     "v": "OC_2 Mobile Elec-Electrode"
+    },
+    {
+     "c": "KR04179400_40-E",
+     "v": "Enetech_KR_CJ_ELEC"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Plan_InforElectrode\",\"mnuId\":\"SSP0023\",\"companyId\":\"'HQ00'\"}",
+   "status": 200,
+   "n": 50,
+   "keys": [
+    "PLAN_YN",
+    "FROM_DATE",
+    "CODE",
+    "TO_DATE",
+    "TO_DATE1",
+    "COMPANY_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "20261010",
+     "v": "2026-10-10"
+    },
+    {
+     "c": "20261009",
+     "v": "2026-10-09"
+    },
+    {
+     "c": "20261008",
+     "v": "2026-10-08"
+    },
+    {
+     "c": "20261007",
+     "v": "2026-10-07"
+    },
+    {
+     "c": "20261006",
+     "v": "2026-10-06"
+    },
+    {
+     "c": "20261005",
+     "v": "2026-10-05"
+    },
+    {
+     "c": "20261004",
+     "v": "2026-10-04"
+    },
+    {
+     "c": "20261003",
+     "v": "2026-10-03"
+    },
+    {
+     "c": "20261002",
+     "v": "2026-10-02"
+    },
+    {
+     "c": "20261001",
+     "v": "2026-10-01"
+    },
+    {
+     "c": "20260930",
+     "v": "2026-09-30"
+    },
+    {
+     "c": "20260929",
+     "v": "2026-09-29"
+    },
+    {
+     "c": "20260928",
+     "v": "2026-09-28"
+    },
+    {
+     "c": "20260927",
+     "v": "2026-09-27"
+    },
+    {
+     "c": "20260926",
+     "v": "2026-09-26"
+    },
+    {
+     "c": "20260925",
+     "v": "2026-09-25"
+    },
+    {
+     "c": "20260924",
+     "v": "2026-09-24"
+    },
+    {
+     "c": "20260923",
+     "v": "2026-09-23"
+    },
+    {
+     "c": "20260922",
+     "v": "2026-09-22"
+    },
+    {
+     "c": "20260921",
+     "v": "2026-09-21"
+    },
+    {
+     "c": "20260920",
+     "v": "2026-09-20"
+    },
+    {
+     "c": "20260919",
+     "v": "2026-09-19"
+    },
+    {
+     "c": "20260918",
+     "v": "2026-09-18"
+    },
+    {
+     "c": "20260917",
+     "v": "2026-09-17"
+    },
+    {
+     "c": "20260916",
+     "v": "2026-09-16"
+    },
+    {
+     "c": "20260915",
+     "v": "2026-09-15"
+    },
+    {
+     "c": "20260914",
+     "v": "2026-09-14"
+    },
+    {
+     "c": "20260913",
+     "v": "2026-09-13"
+    },
+    {
+     "c": "20260912",
+     "v": "2026-09-12"
+    },
+    {
+     "c": "20260911",
+     "v": "2026-09-11"
+    },
+    {
+     "c": "20260910",
+     "v": "2026-09-10"
+    },
+    {
+     "c": "20260909",
+     "v": "2026-09-09"
+    },
+    {
+     "c": "20260908",
+     "v": "2026-09-08"
+    },
+    {
+     "c": "20260907",
+     "v": "2026-09-07"
+    },
+    {
+     "c": "20260906",
+     "v": "2026-09-06"
+    },
+    {
+     "c": "20260905",
+     "v": "2026-09-05"
+    },
+    {
+     "c": "20260904",
+     "v": "2026-09-04"
+    },
+    {
+     "c": "20260903",
+     "v": "2026-09-03"
+    },
+    {
+     "c": "20260902",
+     "v": "2026-09-02"
+    },
+    {
+     "c": "20260901",
+     "v": "2026-09-01"
+    },
+    {
+     "c": "20260831",
+     "v": "2026-08-31"
+    },
+    {
+     "c": "20260830",
+     "v": "2026-08-30"
+    },
+    {
+     "c": "20260829",
+     "v": "2026-08-29"
+    },
+    {
+     "c": "20260828",
+     "v": "2026-08-28"
+    },
+    {
+     "c": "20260827",
+     "v": "2026-08-27"
+    },
+    {
+     "c": "20260826",
+     "v": "2026-08-26"
+    },
+    {
+     "c": "20260825",
+     "v": "2026-08-25"
+    },
+    {
+     "c": "20260824",
+     "v": "2026-08-24"
+    },
+    {
+     "c": "20260823",
+     "v": "2026-08-23"
+    },
+    {
+     "c": "20260822",
+     "v": "2026-08-22"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"DomExpTypeCode\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "DOM",
+     "v": "DOM"
+    },
+    {
+     "c": "EXP",
+     "v": "EXP"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"BuildingByPlantSite\",\"pPlantSiteId\":\"''\",\"divisionId\":\"''\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 123,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "A1 : OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "A2 : OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "A3 : NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "A4 : MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "A5 : WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "A6 : WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "A7 : WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "A8 : NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "A9 : OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "AA : NB2_A"
+    },
+    {
+     "c": "AB",
+     "v": "AB : UC1_A"
+    },
+    {
+     "c": "AC",
+     "v": "AC : WA8_A"
+    },
+    {
+     "c": "AD",
+     "v": "AD : HLI1_A"
+    },
+    {
+     "c": "AE",
+     "v": "AE : UC2_A"
+    },
+    {
+     "c": "AF",
+     "v": "AF : OC8_A"
+    },
+    {
+     "c": "AG",
+     "v": "AG : NE1_A"
+    },
+    {
+     "c": "AH",
+     "v": "AH : MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "AI : (N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AJ",
+     "v": "AJ : LH_A"
+    },
+    {
+     "c": "AK",
+     "v": "AK : HG1_A"
+    },
+    {
+     "c": "AL",
+     "v": "AL : OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "AM : OC10_A(Pilot)"
+    },
+    {
+     "c": "B2",
+     "v": "B2 : (B2)AZ1_F"
+    },
+    {
+     "c": "E1",
+     "v": "E1 : 청주 소형1동 전극"
+    },
+    {
+     "c": "E2",
+     "v": "E2 : OC1_E"
+    },
+    {
+     "c": "E3",
+     "v": "E3 : OC2_E"
+    },
+    {
+     "c": "E4",
+     "v": "E4 : OC3_E"
+    },
+    {
+     "c": "E5",
+     "v": "E5 : OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "E6 : OC5_E"
+    },
+    {
+     "c": "E7",
+     "v": "E7 : NJ5_E"
+    },
+    {
+     "c": "E8",
+     "v": "E8 : (N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "E9 : MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "EA : NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "EB : WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "EC : NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "ED : WA4_E"
+    },
+    {
+     "c": "EE",
+     "v": "EE : NJ7_E"
+    },
+    {
+     "c": "EF",
+     "v": "EF : NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "EG : OC3_E(Pilot)"
+    },
+    {
+     "c": "EH",
+     "v": "EH : NJ1_E"
+    },
+    {
+     "c": "EI",
+     "v": "EI : UC1_E"
+    },
+    {
+     "c": "EJ",
+     "v": "EJ : WA8_E"
+    },
+    {
+     "c": "EK",
+     "v": "EK : NJ8_E"
+    },
+    {
+     "c": "EL",
+     "v": "EL : NJ9_E"
+    },
+    {
+     "c": "EM",
+     "v": "EM : TVB3_E(Pilot)"
+    },
+    {
+     "c": "EN",
+     "v": "EN : HLI1_E"
+    },
+    {
+     "c": "EO",
+     "v": "EO : UC2_E"
+    },
+    {
+     "c": "EP",
+     "v": "EP : OC4_E(Mobile)"
+    },
+    {
+     "c": "EQ",
+     "v": "EQ : NE1_E"
+    },
+    {
+     "c": "ER",
+     "v": "ER : OC9_E"
+    },
+    {
+     "c": "ES",
+     "v": "ES : (N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "ET : MI_LS_E"
+    },
+    {
+     "c": "EU",
+     "v": "EU : LH_E"
+    },
+    {
+     "c": "EV",
+     "v": "EV : HG2_A"
+    },
+    {
+     "c": "EW",
+     "v": "EW : MI2_E(ESS)"
+    },
+    {
+     "c": "EX",
+     "v": "EX : WA13_E"
+    },
+    {
+     "c": "EY",
+     "v": "EY : OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "EZ : OC10_E(Pilot)"
+    },
+    {
+     "c": "F1",
+     "v": "F1 : LH_F"
+    },
+    {
+     "c": "F2",
+     "v": "F2 : NE1_F"
+    },
+    {
+     "c": "F3",
+     "v": "F3 : MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "F4 : MI1_F"
+    },
+    {
+     "c": "F5",
+     "v": "F5 : HG1_F"
+    },
+    {
+     "c": "F9",
+     "v": "F9 : (F9)HLI1_F"
+    },
+    {
+     "c": "FA",
+     "v": "FA : (FA)UC1_F"
+    },
+    {
+     "c": "FB",
+     "v": "FB : (FB)UC2_F"
+    },
+    {
+     "c": "L1",
+     "v": "L1 : OC10_E(Mobile Pilot)"
+    },
+    {
+     "c": "L2",
+     "v": "L2 : AZ1_E"
+    },
+    {
+     "c": "M1",
+     "v": "M1 : OC1_A"
+    },
+    {
+     "c": "M2",
+     "v": "M2 : OC2_A"
+    },
+    {
+     "c": "M3",
+     "v": "M3 : NJ1_A"
+    },
+    {
+     "c": "M4",
+     "v": "M4 : NJ2_A"
+    },
+    {
+     "c": "M5",
+     "v": "M5 : NJ3_A"
+    },
+    {
+     "c": "M6",
+     "v": "M6 : NJ4_A"
+    },
+    {
+     "c": "M7",
+     "v": "M7 : NJ5_A"
+    },
+    {
+     "c": "M8",
+     "v": "M8 : NJ6_A"
+    },
+    {
+     "c": "M9",
+     "v": "M9 : TVB3_A(Pilot)"
+    },
+    {
+     "c": "MA",
+     "v": "MA : OC4_A(Mobile)"
+    },
+    {
+     "c": "MB",
+     "v": "MB : NJ9_A"
+    },
+    {
+     "c": "MC",
+     "v": "MC : OC9_A"
+    },
+    {
+     "c": "MD",
+     "v": "MD : AZ1_A"
+    },
+    {
+     "c": "ME",
+     "v": "ME : TVB5_A"
+    },
+    {
+     "c": "N1",
+     "v": "N1 : MI2_F(ESS)"
+    },
+    {
+     "c": "N2",
+     "v": "N2 : (N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "P1 : OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "P2 : OC5_P"
+    },
+    {
+     "c": "P3",
+     "v": "P3 : (N/A)OC_ESS"
+    },
+    {
+     "c": "P4",
+     "v": "P4 : NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "P5 : MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "P6 : OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "P7 : WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "P8 : WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "P9 : NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "PA : WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "PB : HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "PC : NB2_P"
+    },
+    {
+     "c": "PD",
+     "v": "PD : NJ3_P"
+    },
+    {
+     "c": "PE",
+     "v": "PE : OC9_P"
+    },
+    {
+     "c": "PF",
+     "v": "PF : NE2_P"
+    },
+    {
+     "c": "PG",
+     "v": "PG : MI4_P"
+    },
+    {
+     "c": "PH",
+     "v": "PH : LH_P"
+    },
+    {
+     "c": "PI",
+     "v": "PI : MI4_P(ESS)"
+    },
+    {
+     "c": "PJ",
+     "v": "PJ : MI3_P2"
+    },
+    {
+     "c": "PK",
+     "v": "PK : OC9_P2"
+    },
+    {
+     "c": "PL",
+     "v": "PL : WA11_P(ESS)"
+    },
+    {
+     "c": "PN",
+     "v": "PN : MI_AZ_ESS"
+    },
+    {
+     "c": "S2",
+     "v": "S2 : OC5_A(ESS)"
+    },
+    {
+     "c": "S3",
+     "v": "S3 : NJ2_A(ESS)"
+    },
+    {
+     "c": "S4",
+     "v": "S4 : NB1_A(ESS)"
+    },
+    {
+     "c": "S5",
+     "v": "S5 : NJ4_A(ESS)"
+    },
+    {
+     "c": "S6",
+     "v": "S6 : (N/A)NJ ESS Elec #2"
+    },
+    {
+     "c": "S7",
+     "v": "S7 : NB ESS Assy Bldg#2"
+    },
+    {
+     "c": "S8",
+     "v": "S8 : MI2_A(ESS)"
+    },
+    {
+     "c": "S9",
+     "v": "S9 : WA3_A(ESS)"
+    },
+    {
+     "c": "SA",
+     "v": "SA : (SA)MI_LS2_A(ESS)"
+    },
+    {
+     "c": "VF_AE",
+     "v": "VF_AE : GM UC2_A"
+    },
+    {
+     "c": "VF_AG",
+     "v": "VF_AG : ST NE1_A"
+    },
+    {
+     "c": "VF_AH",
+     "v": "VF_AH : VF MI_LS_A"
+    },
+    {
+     "c": "VF_AJ",
+     "v": "VF_AJ : HD LH_A"
+    },
+    {
+     "c": "VF_PF",
+     "v": "VF_PF : VF NE2_P"
+    },
+    {
+     "c": "VT",
+     "v": "VT : VT temp building"
+    },
+    {
+     "c": "W2",
+     "v": "W2 : (N/A)NJ Mobile Bldg#6"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"BuildingByPlantSite\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 123,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "ALL",
+     "v": "ALL"
+    },
+    {
+     "c": "A1",
+     "v": "A1 : OC4_A"
+    },
+    {
+     "c": "A2",
+     "v": "A2 : OC5_A"
+    },
+    {
+     "c": "A3",
+     "v": "A3 : NA1_A"
+    },
+    {
+     "c": "A4",
+     "v": "A4 : MI1_A"
+    },
+    {
+     "c": "A5",
+     "v": "A5 : WA1_A"
+    },
+    {
+     "c": "A6",
+     "v": "A6 : WA3_A"
+    },
+    {
+     "c": "A7",
+     "v": "A7 : WA5_A"
+    },
+    {
+     "c": "A8",
+     "v": "A8 : NB1_A"
+    },
+    {
+     "c": "A9",
+     "v": "A9 : OC3_A"
+    },
+    {
+     "c": "AA",
+     "v": "AA : NB2_A"
+    },
+    {
+     "c": "AB",
+     "v": "AB : UC1_A"
+    },
+    {
+     "c": "AC",
+     "v": "AC : WA8_A"
+    },
+    {
+     "c": "AD",
+     "v": "AD : HLI1_A"
+    },
+    {
+     "c": "AE",
+     "v": "AE : UC2_A"
+    },
+    {
+     "c": "AF",
+     "v": "AF : OC8_A"
+    },
+    {
+     "c": "AG",
+     "v": "AG : NE1_A"
+    },
+    {
+     "c": "AH",
+     "v": "AH : MI_LS_A"
+    },
+    {
+     "c": "AI",
+     "v": "AI : (N/A)(AI)MI2_A"
+    },
+    {
+     "c": "AJ",
+     "v": "AJ : LH_A"
+    },
+    {
+     "c": "AK",
+     "v": "AK : HG1_A"
+    },
+    {
+     "c": "AL",
+     "v": "AL : OC10_A"
+    },
+    {
+     "c": "AM",
+     "v": "AM : OC10_A(Pilot)"
+    },
+    {
+     "c": "B2",
+     "v": "B2 : (B2)AZ1_F"
+    },
+    {
+     "c": "E1",
+     "v": "E1 : 청주 소형1동 전극"
+    },
+    {
+     "c": "E2",
+     "v": "E2 : OC1_E"
+    },
+    {
+     "c": "E3",
+     "v": "E3 : OC2_E"
+    },
+    {
+     "c": "E4",
+     "v": "E4 : OC3_E"
+    },
+    {
+     "c": "E5",
+     "v": "E5 : OC4_E"
+    },
+    {
+     "c": "E6",
+     "v": "E6 : OC5_E"
+    },
+    {
+     "c": "E7",
+     "v": "E7 : NJ5_E"
+    },
+    {
+     "c": "E8",
+     "v": "E8 : (N/A)Nanjing Automotive Bldg 1"
+    },
+    {
+     "c": "E9",
+     "v": "E9 : MI1_E"
+    },
+    {
+     "c": "EA",
+     "v": "EA : NA2_E"
+    },
+    {
+     "c": "EB",
+     "v": "EB : WA2_E"
+    },
+    {
+     "c": "EC",
+     "v": "EC : NB1_E"
+    },
+    {
+     "c": "ED",
+     "v": "ED : WA4_E"
+    },
+    {
+     "c": "EE",
+     "v": "EE : NJ7_E"
+    },
+    {
+     "c": "EF",
+     "v": "EF : NB2_E"
+    },
+    {
+     "c": "EG",
+     "v": "EG : OC3_E(Pilot)"
+    },
+    {
+     "c": "EH",
+     "v": "EH : NJ1_E"
+    },
+    {
+     "c": "EI",
+     "v": "EI : UC1_E"
+    },
+    {
+     "c": "EJ",
+     "v": "EJ : WA8_E"
+    },
+    {
+     "c": "EK",
+     "v": "EK : NJ8_E"
+    },
+    {
+     "c": "EL",
+     "v": "EL : NJ9_E"
+    },
+    {
+     "c": "EM",
+     "v": "EM : TVB3_E(Pilot)"
+    },
+    {
+     "c": "EN",
+     "v": "EN : HLI1_E"
+    },
+    {
+     "c": "EO",
+     "v": "EO : UC2_E"
+    },
+    {
+     "c": "EP",
+     "v": "EP : OC4_E(Mobile)"
+    },
+    {
+     "c": "EQ",
+     "v": "EQ : NE1_E"
+    },
+    {
+     "c": "ER",
+     "v": "ER : OC9_E"
+    },
+    {
+     "c": "ES",
+     "v": "ES : (N/A)(ES)MI2_E"
+    },
+    {
+     "c": "ET",
+     "v": "ET : MI_LS_E"
+    },
+    {
+     "c": "EU",
+     "v": "EU : LH_E"
+    },
+    {
+     "c": "EV",
+     "v": "EV : HG2_A"
+    },
+    {
+     "c": "EW",
+     "v": "EW : MI2_E(ESS)"
+    },
+    {
+     "c": "EX",
+     "v": "EX : WA13_E"
+    },
+    {
+     "c": "EY",
+     "v": "EY : OC8_E(Pilot)"
+    },
+    {
+     "c": "EZ",
+     "v": "EZ : OC10_E(Pilot)"
+    },
+    {
+     "c": "F1",
+     "v": "F1 : LH_F"
+    },
+    {
+     "c": "F2",
+     "v": "F2 : NE1_F"
+    },
+    {
+     "c": "F3",
+     "v": "F3 : MI_LS_F"
+    },
+    {
+     "c": "F4",
+     "v": "F4 : MI1_F"
+    },
+    {
+     "c": "F5",
+     "v": "F5 : HG1_F"
+    },
+    {
+     "c": "F9",
+     "v": "F9 : (F9)HLI1_F"
+    },
+    {
+     "c": "FA",
+     "v": "FA : (FA)UC1_F"
+    },
+    {
+     "c": "FB",
+     "v": "FB : (FB)UC2_F"
+    },
+    {
+     "c": "L1",
+     "v": "L1 : OC10_E(Mobile Pilot)"
+    },
+    {
+     "c": "L2",
+     "v": "L2 : AZ1_E"
+    },
+    {
+     "c": "M1",
+     "v": "M1 : OC1_A"
+    },
+    {
+     "c": "M2",
+     "v": "M2 : OC2_A"
+    },
+    {
+     "c": "M3",
+     "v": "M3 : NJ1_A"
+    },
+    {
+     "c": "M4",
+     "v": "M4 : NJ2_A"
+    },
+    {
+     "c": "M5",
+     "v": "M5 : NJ3_A"
+    },
+    {
+     "c": "M6",
+     "v": "M6 : NJ4_A"
+    },
+    {
+     "c": "M7",
+     "v": "M7 : NJ5_A"
+    },
+    {
+     "c": "M8",
+     "v": "M8 : NJ6_A"
+    },
+    {
+     "c": "M9",
+     "v": "M9 : TVB3_A(Pilot)"
+    },
+    {
+     "c": "MA",
+     "v": "MA : OC4_A(Mobile)"
+    },
+    {
+     "c": "MB",
+     "v": "MB : NJ9_A"
+    },
+    {
+     "c": "MC",
+     "v": "MC : OC9_A"
+    },
+    {
+     "c": "MD",
+     "v": "MD : AZ1_A"
+    },
+    {
+     "c": "ME",
+     "v": "ME : TVB5_A"
+    },
+    {
+     "c": "N1",
+     "v": "N1 : MI2_F(ESS)"
+    },
+    {
+     "c": "N2",
+     "v": "N2 : (N2)MI_LS2_F(ESS)"
+    },
+    {
+     "c": "P1",
+     "v": "P1 : OC4_P"
+    },
+    {
+     "c": "P2",
+     "v": "P2 : OC5_P"
+    },
+    {
+     "c": "P3",
+     "v": "P3 : (N/A)OC_ESS"
+    },
+    {
+     "c": "P4",
+     "v": "P4 : NA1_P"
+    },
+    {
+     "c": "P5",
+     "v": "P5 : MI3_P"
+    },
+    {
+     "c": "P6",
+     "v": "P6 : OC2_P"
+    },
+    {
+     "c": "P7",
+     "v": "P7 : WA10_P"
+    },
+    {
+     "c": "P8",
+     "v": "P8 : WA11_P"
+    },
+    {
+     "c": "P9",
+     "v": "P9 : NB1_P"
+    },
+    {
+     "c": "PA",
+     "v": "PA : WA12_P"
+    },
+    {
+     "c": "PB",
+     "v": "PB : HP_P"
+    },
+    {
+     "c": "PC",
+     "v": "PC : NB2_P"
+    },
+    {
+     "c": "PD",
+     "v": "PD : NJ3_P"
+    },
+    {
+     "c": "PE",
+     "v": "PE : OC9_P"
+    },
+    {
+     "c": "PF",
+     "v": "PF : NE2_P"
+    },
+    {
+     "c": "PG",
+     "v": "PG : MI4_P"
+    },
+    {
+     "c": "PH",
+     "v": "PH : LH_P"
+    },
+    {
+     "c": "PI",
+     "v": "PI : MI4_P(ESS)"
+    },
+    {
+     "c": "PJ",
+     "v": "PJ : MI3_P2"
+    },
+    {
+     "c": "PK",
+     "v": "PK : OC9_P2"
+    },
+    {
+     "c": "PL",
+     "v": "PL : WA11_P(ESS)"
+    },
+    {
+     "c": "PN",
+     "v": "PN : MI_AZ_ESS"
+    },
+    {
+     "c": "S2",
+     "v": "S2 : OC5_A(ESS)"
+    },
+    {
+     "c": "S3",
+     "v": "S3 : NJ2_A(ESS)"
+    },
+    {
+     "c": "S4",
+     "v": "S4 : NB1_A(ESS)"
+    },
+    {
+     "c": "S5",
+     "v": "S5 : NJ4_A(ESS)"
+    },
+    {
+     "c": "S6",
+     "v": "S6 : (N/A)NJ ESS Elec #2"
+    },
+    {
+     "c": "S7",
+     "v": "S7 : NB ESS Assy Bldg#2"
+    },
+    {
+     "c": "S8",
+     "v": "S8 : MI2_A(ESS)"
+    },
+    {
+     "c": "S9",
+     "v": "S9 : WA3_A(ESS)"
+    },
+    {
+     "c": "SA",
+     "v": "SA : (SA)MI_LS2_A(ESS)"
+    },
+    {
+     "c": "VF_AE",
+     "v": "VF_AE : GM UC2_A"
+    },
+    {
+     "c": "VF_AG",
+     "v": "VF_AG : ST NE1_A"
+    },
+    {
+     "c": "VF_AH",
+     "v": "VF_AH : VF MI_LS_A"
+    },
+    {
+     "c": "VF_AJ",
+     "v": "VF_AJ : HD LH_A"
+    },
+    {
+     "c": "VF_PF",
+     "v": "VF_PF : VF NE2_P"
+    },
+    {
+     "c": "VT",
+     "v": "VT : VT temp building"
+    },
+    {
+     "c": "W2",
+     "v": "W2 : (N/A)NJ Mobile Bldg#6"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ElectrodePackageType\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "BX",
+     "v": "Box"
+    },
+    {
+     "c": "SC",
+     "v": "Steelcrate"
+    },
+    {
+     "c": "SR",
+     "v": "Steelrack"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'SHIPMENT_STATUS'\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 4,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P",
+     "v": "Plan"
+    },
+    {
+     "c": "C",
+     "v": "Confirm"
+    },
+    {
+     "c": "D",
+     "v": "Request Drafting"
+    },
+    {
+     "c": "R",
+     "v": "Request Complete"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"Division\",\"mnuId\":\"SSP0023\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "40"
+    },
+    {
+     "c": "81",
+     "v": "81"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC"
+    },
+    {
+     "c": "82",
+     "v": "82"
+    },
+    {
+     "c": "EE",
+     "v": "EE"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC"
+    }
+   ],
+   "user": "minyonglee1"
+  }
+ ]
+}

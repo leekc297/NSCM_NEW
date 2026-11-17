@@ -1,0 +1,21 @@
+{
+  "set": [
+    {
+      "name": "cboChangeType",
+      "index": 1
+    },
+    {
+      "name": "dp1",
+      "prop": "Value",
+      "value": "20261001"
+    },
+    {
+      "name": "dp2",
+      "prop": "Value",
+      "value": "20261031"
+    }
+  ],
+  "why": "기본 기간 2026-11-15~12-15 은 SSP_ANL_SHIP_CONFIRM(사업부 40) 행 없음. 2026-10월 사업부 40 787건 · Change Type = Confirm(1번, 화면 기본값 493행) 고정: Plan 이면 ERP_SO_NO·CONFIRM_ID 열 폭 0(604~608행) · SP 실측 637행도 change_type C 기준",
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 07:43 실측: SSP0200_GET_SHIPMENT_CHANGE_REQUEST(사업부 40, 20261001~20261031, change_type C) 637행 5.9초 · 기본 조건 런처 실행 0행(run_20261115_074122)",
+  "at": "2026-11-15 11:55"
+}

@@ -1,0 +1,3 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SCP0037_GET_OPERATION_LT,PKG_SCP0037.P_SCP0037_GET_OPERATION_LT,GET,14,PASS:8 ROWS_ONLY:6,,1,find,328,"{""p_division_id"": ""81"", ""p_scm_site_id"": ""HQ07-E,HQ11-E,MI00-E,MI02-E,NA00-E,NB01-E,WA00-E"", ""p_item_id"": """", ""p_scm_valid_yn"": null, ""p_lt_operation"": ""SLITTING""}",BOTH,차등 검증·실측 모두 있음
+SCP0037_SAVE_OPERATION_LT,PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)

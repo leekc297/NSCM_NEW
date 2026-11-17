@@ -1,0 +1,319 @@
+{
+ "id": "DMF0035",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0035_GET_SPREAD_TITLE",
+    "DMF0035_GET_MKT_FCST_WATERFALL"
+   ],
+   "rows": [
+    [
+     "DMF0035_GET_SPREAD_TITLE",
+     49
+    ],
+    [
+     "DMF0035_GET_MKT_FCST_WATERFALL",
+     319
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 30,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0035-S67bbf1",
+    "DMF0035-S96bd28",
+    "DMF0035-S66b2c3",
+    "DMF0035-S26ff5f",
+    "DMF0035-S18f2df",
+    "DMF0035-S6c59f3",
+    "DMF0035-S6a69a9",
+    "DMF0035-Sd59aae",
+    "DMF0035-Sf5f784",
+    "DMF0035-Sbb8d29",
+    "DMF0035-S252290",
+    "DMF0035-Sc14b34",
+    "DMF0035-S45e776",
+    "DMF0035-Sffed87",
+    "DMF0035-S0ba399",
+    "DMF0035-Sf6ff58",
+    "DMF0035-Sbc6685",
+    "DMF0035-S36e4d3",
+    "DMF0035-Sd738d5",
+    "DMF0035-S2e76bd",
+    "DMF0035-S72a490",
+    "DMF0035-Sf409b9",
+    "DMF0035-S6bd4b3",
+    "DMF0035-S109112",
+    "DMF0035-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnDrawTest",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0035-Seffa4a",
+    "DMF0035-Sfdb183"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0035-Sea1449",
+    "DMF0035-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 17,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0035-S67bbf1",
+    "DMF0035-S96bd28",
+    "DMF0035-S66b2c3",
+    "DMF0035-S26ff5f",
+    "DMF0035-S18f2df",
+    "DMF0035-S6c59f3",
+    "DMF0035-S6a69a9",
+    "DMF0035-Sd59aae",
+    "DMF0035-Sf5f784",
+    "DMF0035-Sbb8d29",
+    "DMF0035-S252290",
+    "DMF0035-Sc14b34",
+    "DMF0035-S45e776",
+    "DMF0035-Sffed87",
+    "DMF0035-S0ba399",
+    "DMF0035-Sf6ff58",
+    "DMF0035-Sbc6685",
+    "DMF0035-S36e4d3",
+    "DMF0035-Sd738d5",
+    "DMF0035-S2e76bd",
+    "DMF0035-S72a490",
+    "DMF0035-Sf409b9",
+    "DMF0035-S6bd4b3",
+    "DMF0035-S109112",
+    "DMF0035-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 146,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0035-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "DMF0035-S287784",
+    "DMF0035-S6ab4d3"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_VersionByWaterfallPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "scenarios": [
+    "DMF0035-S8f08c9",
+    "DMF0035-Sc9b6a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrButton1",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton1 failed: InvalidOperationException: control not found: usrButton1",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0035-Seffa4a",
+    "DMF0035-Sfdb183"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:27:14.715",
+ "preset": {
+  "name": "chkColor",
+  "token": "chkColor=cF",
+  "kw": {
+   "name": "chkColor",
+   "prop": "Checked",
+   "value": "False"
+  },
+  "label": "chkColor 체크 끔",
+  "ok": true,
+  "error": null,
+  "applied": "prop:Checked",
+  "value": "ALL",
+  "text": "Color",
+  "checked": false,
+  "selected_index": null
+ },
+ "fills": 1,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

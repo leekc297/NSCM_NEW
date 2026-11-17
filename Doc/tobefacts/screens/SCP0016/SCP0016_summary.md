@@ -1,14 +1,14 @@
 # SCP0016 — To-Be Fact Pack 요약
 
 - page_key: `supply/waterfall-shipment-plan-fg` · feature: supply · As-is Fact Pack 있음
-- 파일 15 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 17 · 컴포넌트 사용 27 · 하드코딩 컬럼 2 · 메시지 23
+- 파일 15 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 17 · 컴포넌트 사용 27 · 하드코딩 컬럼 2 · 메시지 25
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | component | 292 |
-| features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | component | 340 |
+| features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | component | 304 |
+| features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | component | 352 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/index.ts | index | 2 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/useWaterfallShipmentPlanFgStore.ts | store | 339 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/utils/waterfall.columns.ts | util | 259 |
@@ -17,10 +17,10 @@
 | features/supply/src/pages/waterfall-shipment-plan-fg/utils/waterfall.merge.ts | util | 118 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/utils/waterfall.periods.test.ts | test | 80 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/utils/waterfall.periods.ts | util | 100 |
-| features/supply/src/pages/waterfall-shipment-plan-fg/waterfall-shipment-plan-fg.constants.ts | constants | 128 |
+| features/supply/src/pages/waterfall-shipment-plan-fg/waterfall-shipment-plan-fg.constants.ts | constants | 132 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/waterfall-shipment-plan-fg.types.ts | types | 21 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.module.scss | style | 12 |
-| features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | page | 342 |
+| features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | page | 347 |
 | features/supply/src/pages/waterfall-shipment-plan-fg/__asis-mapping__.md | mapping | 222 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -45,23 +45,23 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 140 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 167 |
-| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 196 |
-| Button | onClick | onOpen | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 192 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 207 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 262 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 281 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 153 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 187 |
-| g | scrollPositionChanged | onScroll | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 221 |
-| host | dblclick | onDblClick | addEventListener | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 278 |
-| g | formatItem | handler | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 311 |
-| WaterfallShipmentPlanFgForm | onSearch | handleSearch | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 250 |
-| WaterfallShipmentPlanFgForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 251 |
-| WaterfallShipmentPlanFgForm | onProjectSearch | <arrow> setOpenProject | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 252 |
-| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 328 |
-| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 337 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 148 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 175 |
+| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 204 |
+| Button | onClick | onOpen | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 200 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 215 |
+| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 274 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx | 293 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 165 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 199 |
+| g | scrollPositionChanged | onScroll | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 233 |
+| host | dblclick | onDblClick | addEventListener | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 290 |
+| g | formatItem | handler | addHandler | features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx | 323 |
+| WaterfallShipmentPlanFgForm | onSearch | handleSearch | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 255 |
+| WaterfallShipmentPlanFgForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 256 |
+| WaterfallShipmentPlanFgForm | onProjectSearch | <arrow> setOpenProject | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 257 |
+| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 333 |
+| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx | 342 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -96,9 +96,10 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
+| LBL01275 | 2 |
 | MSG00667 | 1 |
 | MSG00429 | 1 |
-| MSG00108 | 1 |
+| MSG01135 | 1 |
 | MSG01187 | 1 |
 | LBL00001 | 1 |
 | LBL00027 | 1 |
@@ -119,7 +120,7 @@
 | MSG00606 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0016(12), SCP0017(11), SCP0018(8), SCP0025(1)
+- 화면ID: SCP0016(12), SCP0017(11), SCP0018(10), SCP0025(1)
 - SP/PKG: PKG_COM0000(4), PKG_SCP0016(3), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(3), P_DIVISION_ID(2), SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO(1), SCM0001_GET_SCP_MONTH_PERIOD(1), PR_GET_SHEET_MEASURE_LIST(1), P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

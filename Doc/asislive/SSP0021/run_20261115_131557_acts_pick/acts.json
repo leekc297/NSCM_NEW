@@ -1,0 +1,821 @@
+{
+ "id": "SSP0021",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BOH_QTY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 5,
+   "rule": "열 BOH_QTY",
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "ERP"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S576c6c"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_STOCK_LOCATION_DETAIL"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "BOH_QTY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 6,
+   "rule": "열 BOH_QTY",
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "oWMS"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S8bdc75"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_OWMS_DETAIL"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "BOH_QTY",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 7,
+   "rule": "열 BOH_QTY",
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "MES"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S69f755"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_MES_STOCK_DETAIL",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_MES_STOCK"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "D_20261013",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 1,
+   "rule": "열 MEASURE 다음 열 중 값 있는 첫 열",
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "SHIP_PLAN"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-Sf0c6eb"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdDetail/Shipment Plan Detail",
+     "rows_before": 0,
+     "rows_after": 1,
+     "cells": [
+      {
+       "row": 0,
+       "col": "(행)",
+       "before": "없음",
+       "after": "있음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "DIVISION_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdDetail/Shipment Plan Detail",
+     "rows_before": 1,
+     "rows_after": 0,
+     "cells": [
+      {
+       "row": 0,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_SITE_DESCRIPTION",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "BOH_TYPE",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "PSI",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 조건 없는 분기: 앞쪽 보이는 열 6개",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "CHANGE_REQ_NO",
+   "grid": "spdDetail",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 CHANGE_REQ_NO",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ShipmentPlanRequestPopup",
+    "title": "Request Info Popup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/Request Info",
+    "cols": [
+     "ERP_SO_NO",
+     "PROJECT_NAME",
+     "FCST_TYPE",
+     "ITEM_ID",
+     "FROM_SITE",
+     "TO_SITE",
+     "INCOTERMS",
+     "LT_DAY",
+     "ETD",
+     "ETA",
+     "TRANSPORT_MODE",
+     "SHIPMENT_DATE",
+     "SHIPMENT_CONFIRM_QTY",
+     "NEW_LT_DAY",
+     "NEW_ETD",
+     "NEW_ETA",
+     "NEW_TRANSPORT_MODE",
+     "NEW_SHIPMENT_DATE",
+     "NEW_SHIPMENT_CONFIRM_QTY",
+     "CONFIRM_ID"
+    ],
+    "row": [
+     "",
+     "OS EV",
+     "A/S(Chargeable)",
+     "ACEN1063I-D1",
+     "HQ05-W",
+     "MOBIS_AS_KR_CHU",
+     "DAP",
+     "0",
+     "2026-10-13",
+     "2026-10-13",
+     "TRK",
+     "2026-10-13",
+     "6,156",
+     "0",
+     "2026-10-13",
+     "2026-10-13",
+     "TRK",
+     "2026-10-13",
+     "6,156",
+     "C20261001210018"
+    ]
+   },
+   "scenarios": [
+    "SSP0021-Sd2c186"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ShipmentPlanRequestPopup",
+    "controls": [
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Request Info",
+      "rows": 1,
+      "cols": [
+       "ERP_SO_NO",
+       "PROJECT_NAME",
+       "FCST_TYPE",
+       "ITEM_ID",
+       "FROM_SITE",
+       "TO_SITE",
+       "INCOTERMS",
+       "LT_DAY",
+       "ETD",
+       "ETA",
+       "TRANSPORT_MODE",
+       "SHIPMENT_DATE",
+       "SHIPMENT_CONFIRM_QTY",
+       "NEW_LT_DAY",
+       "NEW_ETD",
+       "NEW_ETA",
+       "NEW_TRANSPORT_MODE",
+       "NEW_SHIPMENT_DATE",
+       "NEW_SHIPMENT_CONFIRM_QTY",
+       "CONFIRM_ID"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [
+      {
+       "sp": "SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+       "rows": 1,
+       "params": {
+        "p_change_request_no": "R20261001547970",
+        "p_language": "KO"
+       }
+      }
+     ],
+     "rows_after": 1
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "pick_button": null,
+   "pick_ok": {
+    "ok": false,
+    "closed": null,
+    "error": "InvalidOperationException: no OK/Confirm button on SCM0002_ShipmentPlanRequestPopup",
+    "buttons": [
+     "btnCancel|■||off",
+     "Change|||on",
+     "|Close|Close|on"
+    ]
+   },
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "SCM0002_ShipmentPlanRequestPopup",
+     "title": "Request Info Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "text": "statusStrip1 | usrLayoutControl2 | ButtonList | usrLayoutControl3 | R20261001547970 | E63F AS 출하  | 자동차.마케팅.마케팅2.AS마케팅팀 | 오창생산.파우치형생산.생산관리P | E63F AS 출하  | Request Confirm Detail | 품질이슈 | ",
+     "closed": true
+    }
+   ],
+   "calls": [
+    "SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+    "SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "ERP_SO_NO",
+   "grid": "spdDetail",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ERP_SO_NO",
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0300_OrderDetailPopup",
+    "title": "ERP Order Detail",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/OrderDetail",
+    "cols": [
+     "SO_NO",
+     "SO_ITEM_NO",
+     "SO_ITEM_QTY",
+     "DO_NO",
+     "DO_ITEM_NO",
+     "DO_ITEM_QTY",
+     "CONFIRM_ID"
+    ],
+    "row": [
+     "1400001958",
+     "000010",
+     "6,156",
+     "",
+     "",
+     "",
+     "C20261001210018"
+    ]
+   },
+   "scenarios": [
+    "SSP0021-Se42af7"
+   ],
+   "popup_inside": {
+    "form": "SSP0300_OrderDetailPopup",
+    "controls": [
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "OrderDetail",
+      "rows": 1,
+      "cols": [
+       "SO_NO",
+       "SO_ITEM_NO",
+       "SO_ITEM_QTY",
+       "DO_NO",
+       "DO_ITEM_NO",
+       "DO_ITEM_QTY",
+       "CONFIRM_ID"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [
+      {
+       "sp": "SSP0300_GET_ORDER_DETAIL",
+       "rows": 1,
+       "params": {
+        "P_DIVISION_ID": "81",
+        "P_ERP_SO_NO": "1400001958",
+        "P_CONFIRM_ID": "C20261001210018",
+        "P_ITEM_ID": "ACEN1063I-D1"
+       }
+      }
+     ],
+     "rows_after": 1
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "pick_button": null,
+   "pick_ok": {
+    "ok": false,
+    "closed": null,
+    "error": "InvalidOperationException: no OK/Confirm button on SSP0300_OrderDetailPopup",
+    "buttons": [
+     "btnCancel|■||off",
+     "Change|||on"
+    ]
+   },
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "SSP0300_OrderDetailPopup",
+     "title": "ERP Order Detail",
+     "modal": true,
+     "grid_rows": 1,
+     "text": "statusStrip1 | ",
+     "closed": true
+    }
+   ],
+   "calls": [
+    "SSP0300_GET_ORDER_DETAIL",
+    "SSP0300_GET_ORDER_DETAIL"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [
+  {
+   "grid": "spdMain",
+   "col": "BOH_QTY",
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "HOLD"
+    ]
+   ],
+   "ids": [
+    "SSP0021-Sb4aa88"
+   ],
+   "why": "행 조건 [('BOH_TYPE', '==', 'HOLD')] 를 만족하는 행 없음(앞 108행)"
+  }
+ ],
+ "at": "2026-11-15 13:09:18",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "BOH_QTY",
+   "col_after": false,
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "ERP"
+    ]
+   ],
+   "ids": [
+    "SSP0021-S576c6c"
+   ],
+   "has_else": true,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "BOH_QTY",
+   "col_after": false,
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "oWMS"
+    ]
+   ],
+   "ids": [
+    "SSP0021-S8bdc75"
+   ],
+   "has_else": true,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "BOH_QTY",
+   "col_after": false,
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "HOLD"
+    ]
+   ],
+   "ids": [
+    "SSP0021-Sb4aa88"
+   ],
+   "has_else": true,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "BOH_QTY",
+   "col_after": false,
+   "row_conds": [
+    [
+     "BOH_TYPE",
+     "==",
+     "MES"
+    ]
+   ],
+   "ids": [
+    "SSP0021-S69f755"
+   ],
+   "has_else": true,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "MEASURE",
+   "col_after": true,
+   "row_conds": [
+    [
+     "MEASURE",
+     "==",
+     "SHIP_PLAN"
+    ]
+   ],
+   "ids": [
+    "SSP0021-Sf0c6eb"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": null,
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0021-S5cd96f",
+    "SSP0021-S0402eb",
+    "SSP0021-S28aee3",
+    "SSP0021-S459dcd",
+    "SSP0021-S5df63d",
+    "SSP0021-S51dc06",
+    "SSP0021-S521e47",
+    "SSP0021-Sa00016"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdDetail",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "CHANGE_REQ_NO",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0021-Sd2c186"
+   ],
+   "has_else": false,
+   "single": true
+  },
+  {
+   "grid": "spdDetail",
+   "sheet_key": "shtPlanDetail",
+   "sheet_name": "Shipment Plan Detail",
+   "col": "ERP_SO_NO",
+   "col_after": false,
+   "row_conds": [
+    [
+     "ERP_SO_NO",
+     "!=",
+     ""
+    ]
+   ],
+   "ids": [
+    "SSP0021-Se42af7"
+   ],
+   "has_else": false,
+   "single": false
+  }
+ ],
+ "feed": [
+  {
+   "target": "spdDetail[CHANGE_REQ_NO]",
+   "feeder": "spdMain[MEASURE 다음]",
+   "tries": [
+    {
+     "row": 1,
+     "col": "D_20261013",
+     "ok": true,
+     "detail_rows": 1,
+     "calls": [
+      {
+       "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 70
+      },
+      {
+       "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 70
+      },
+      {
+       "sp": "SSP0021_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 1
+      }
+     ]
+    }
+   ],
+   "found": true
+  }
+ ]
+}

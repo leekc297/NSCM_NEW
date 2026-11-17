@@ -29,6 +29,23 @@ export const MODEL_CHANGE_SHEET = 'modelChange' as const;
 export const MODEL_CHANGE_BTN_CD = 'MODEL_CHANGE';
 export const MODEL_CHANGE_DIVISION = '40';
 
+/**
+ * 40 전용 조회조건 체크박스 두 개 (AS-IS chkEndCust / chkProjectInfo, 사용자 요청 2026-11-12).
+ *   체크하면 'Y', 아니면 'N' 을 조회 SP 에 넘기고 거르는 일은 SP 가 한다(AS-IS 와 같음 — 화면은 거르지 않는다).
+ *     endCustReportYn = 'Y' : End Cust.(Report) 값이 유효한 END_CUST_REPORT 코드가 아닌 행만
+ *     projectInfoYn   = 'Y' : Project 가 빈 행만
+ *   AS-IS 인자명 p_end_cust_report_yn / p_project_info_yn 에 맞춘 이름이다. 조회 SP 인자 등록
+ *   (SCM_ADM_PROC_M.COL_NM)이 이 두 이름으로 들어와야 값이 전달된다 — 등록 전에는 서버가 무시한다.
+ * 표시 조건은 Model Code Change 버튼과 같다 — AS-IS 가 세 컨트롤을 한 조건(40 AND 관리자 그룹)으로
+ *   함께 켜고 껐다(정본 3792~3808). 그룹명을 화면에 두지 않으려고 같은 버튼 권한으로 판정한다.
+ * 라벨은 AS-IS Designer.cs:523 의 고정 영어 문구다. 다국어 코드가 없어 Model Code Change 와 같이 고정 문자열로 둔다.
+ */
+export const NULL_FILTER_DIVISION = '40';
+export const NULL_FILTER_LABEL = {
+  endCustReportYn: 'End Customer(Report) Null',
+  projectInfoYn: 'Project Null',
+} as const;
+
 export enum RESPONSE_SET {
   PRODUCTION = 'production',
   PURCHASE = 'purchase',

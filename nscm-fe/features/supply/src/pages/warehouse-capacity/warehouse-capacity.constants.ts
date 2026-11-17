@@ -49,7 +49,14 @@ export const COMBO = {
   //   더 넓은 후보(Division, 권한필터도 없음)보다는 안전하나, 이 값 자체가 확인 필요다.
   DIVISION: 'Division_SCP',
   // 강한 후보(design 02 §2.3) — SQL_ID 존재 확인(ora.py). Division 컬럼 반환 → FE 클라 필터.
+  //   Warehouse Capacity 탭 전용(AS-IS dsSearchInfo.Tables[0] 과 동일 데이터셋, SCP_OPMZ_PLAN_GR_M
+  //   전체 VALID_YN='Y' ORDER BY NAME). Item Mapping 탭은 PLAN_GROUP_ITEM_MAPPING 을 쓴다.
   PLAN_GROUP: 'PlanGroup_SCP_ALL',
+  // Item Mapping 탭 전용(사용자 보고 2026-11-09 QA I-03 — AS-IS spdMain_ActiveSheetChanged .cs:1412
+  //   dsSearchInfo.Tables[6] "7.WAREHOUSE_CAPACITY등록된 PLAN Group" 재현, 09_itemmap_plan_group_
+  //   registered_source.sql 로 신규 등록. SCP_OPMZ_WAREHOUSE_CAPACITY 에 실제 등록된 Plan Group만,
+  //   DIVISION_ID+CODE 순 — WhCapa 탭의 전체 마스터 목록과 후보·순서가 다르다).
+  PLAN_GROUP_ITEM_MAPPING: 'PlanGroup_WhCapaReg',
   // A1 해소(gap-resolve iter-2): 기존 'SiteMasterAll_SCP' 는 `A.SITE_TYPE = @siteType`(등호, IS NULL
   //   완화 없음)인데 이 화면은 @siteType 를 공급하지 않아 항상 0행이었다(ora.py SQL 본문 실측).
   //   전용 'Site' 콤보로 교체 — DIVISION_ID/CODE/NAME 반환(SALES+PLANT, 창고 CAPA 조인), @token 없이

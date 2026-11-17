@@ -1,0 +1,58 @@
+PACKAGE PKG_SSP0024
+IS
+    /*
+     * Program ID   : PKG_SSP0024
+     * Description  : SSP0024 Shipment Master(Electrode) 화면 — 조회 · 저장 · 품목 목록
+     * Program History
+     *===================================================================================================
+     *   Date       In Charge      Description
+     *===================================================================================================
+     * 2026.09.27   ZIONEX       [PJ202650304] MSSQL -> Oracle 전환
+     */
+
+    /* Shipment Master(Electrode) 조회 */
+    PROCEDURE P_SSP0024_GET_SHIP_MASTER
+    (
+        P_DIVISION_ID       IN  CLOB
+      , P_PLANT_SITE_ID     IN  CLOB
+      , P_MATERIAL_ID       IN  CLOB
+      , P_NICK_NAME         IN  CLOB
+      , P_MODEL_ID          IN  CLOB
+      , O_RC1               OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR     OUT SYS_REFCURSOR
+    );
+
+    /* Material 목록 */
+    PROCEDURE P_SSP0024_GET_ITEM_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID       IN  CLOB
+      , P_PLANT_SITE_ID     IN  CLOB
+      , P_MATERIAL_ID       IN  CLOB
+      , O_RC1               OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR     OUT SYS_REFCURSOR
+    );
+
+    /* Shipment Master(Electrode) 저장 */
+    PROCEDURE P_SSP0024_SAVE_SHIP_MASTER
+    (
+        P_ACTIVE_FLAG               IN  CLOB
+      , P_DIVISION_ID               IN  CLOB
+      , P_PLANT_SITE_CODE           IN  CLOB
+      , P_MATERIAL_ID               IN  CLOB
+      , P_ELECTRODE_POST_OPER_CODE  IN  CLOB
+      , P_PC_ROLL_LENGTH            IN  CLOB
+      , P_PACKAGE_TYPE_CODE         IN  CLOB
+      , P_STEELCRATE_PER_CUT        IN  CLOB
+      , P_BOX_PER_CUT               IN  CLOB
+      , P_STEELRACK_PER_CUT         IN  CLOB
+      , P_DOM_EXP_TYPE_CODE         IN  CLOB
+      , P_FACTORY_ID                IN  CLOB
+      , P_REMARKS                   IN  CLOB
+      , P_CREATED_BY                IN  CLOB
+      , P_CREATION_DATE             IN  CLOB
+      , P_LAST_UPDATED_BY           IN  CLOB
+      , O_RC1                       OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR             OUT SYS_REFCURSOR
+    );
+
+END PKG_SSP0024;

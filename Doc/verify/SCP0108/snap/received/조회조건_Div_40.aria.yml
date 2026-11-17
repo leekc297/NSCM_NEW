@@ -1,44 +1,76 @@
-- text: Division
-- combobox: 81 Automotive Battery
-- button "Open"
-- text: Plan Month
-- combobox: "{YM}"
-- button "Open"
-- text: Version
-- combobox: "1"
-- button "Open"
-- textbox: RP
-- text: Status
-- combobox [disabled]: Current
-- button "Open" [disabled]
-- text: Site
-- combobox "ALL"
-- button "Open"
-- text: Plant
-- combobox "ALL"
-- button "Open"
-- text: Building
-- combobox "ALL"
-- button "Open"
-- text: Line
-- combobox "ALL"
-- button "Open"
-- button "Search(F5)"
-- button
-- separator
-- text: Operation group
-- combobox: Cell
-- button "Open"
-- text: Operation
-- combobox "ALL"
-- button "Open"
-- text: Line Type
-- combobox "ALL"
-- button "Open"
-- text: Basic Nickname
-- textbox
-- button
-- text: Bottleneck
-- combobox: ALL
-- button "Open"
-# visual-order: Division > Plan Month > Version > Status > Site > Plant > Plant > Building > Line > Operation group > Operation > Line Type > Basic Nickname > Bottleneck
+- banner:
+  - link "SCM 공급망관리시스템 Supply Chain Management system":
+    - /url: /view/home
+  - navigation:
+    - link "Demand":
+      - /url: /view/home
+    - link "Supply":
+      - /url: /view/home
+    - link "Shipping":
+      - /url: /view/home
+    - link "Report":
+      - /url: /view/home
+    - link "Authority":
+      - /url: /view/home
+    - link "Admin":
+      - /url: /view/home
+  - button "KOR"
+  - button "이 이민용":
+    - paragraph: 이
+    - text: 이민용
+- button:
+  - img
+- complementary:
+  - navigation:
+    - paragraph
+- main:
+  - button "Home"
+  - button "Scroll tabs left" [disabled]:
+    - img
+  - button "Scroll tabs right" [disabled]:
+    - img
+  - button "Close others"
+  - button "Close All"
+  - text: Hello! 이민용
+  - button "Logout"
+  - text: Favorite Screens
+  - button "Fcst&Price MGMT Demand > Demand Plan"
+  - button "Fcst MGMT delete": 🗑️
+  - button "Model Code Master Supply > Supply Master"
+  - button "Model Code Master delete": 🗑️
+  - text: Announcements
+  - paragraph: No announcements.
+  - text: My Authorities DM Administrator DM Planner DM Planner (W/S) DM Viewer Guest SCM PI Admin SCP Planner System Administrator System Administrators
+  - table:
+    - rowgroup:
+      - row "Module Division PIC":
+        - columnheader "Module"
+        - columnheader "Division"
+        - columnheader "PIC"
+    - rowgroup:
+      - row "DM 40 김현기":
+        - cell "DM"
+        - cell "40"
+        - cell "김현기"
+      - row "Logistics Shipping Dept David Choi":
+        - cell "Logistics"
+        - cell "Shipping Dept"
+        - cell "David Choi"
+      - row "SCP 40 임화영":
+        - cell "SCP"
+        - cell "40"
+        - cell "임화영"
+      - row "Reporting BI Team Emily Yoon":
+        - cell "Reporting"
+        - cell "BI Team"
+        - cell "Emily Yoon"
+      - row "SCM Core It Operations Alice Kim":
+        - cell "SCM Core"
+        - cell "It Operations"
+        - cell "Alice Kim"
+      - row "Procurement Purchasing Dept Brian Lee":
+        - cell "Procurement"
+        - cell "Purchasing Dept"
+        - cell "Brian Lee"
+  - alert
+# visual-order: 

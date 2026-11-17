@@ -74,13 +74,13 @@
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:556 |
 | this | Load | Form_Load | .ctor:90 |
 | this | Load | Form_Load | .ctor:99 |
-| this | Load | Form_Load | .ctor:87 |
-| this | Load | Form_Load | .ctor:96 |
 | this.txtDes | KeyDown | txtItemID_KeyDown | InitializeComponent:146 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:201 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged_1 | InitializeComponent:238 |
 | this.drpPeriod | ValueChanged | drpPeriod_ValueChanged | InitializeComponent:377 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:556 |
+| this | Load | Form_Load | .ctor:87 |
+| this | Load | Form_Load | .ctor:96 |
 
 ## 6. 컨트롤 (58개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |

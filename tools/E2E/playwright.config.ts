@@ -1,6 +1,30 @@
 import { defineConfig } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+// 2026-11-12 T275: 결과 파일 쓰기가 간헐적으로 'UNKNOWN: unknown error, open …' 로 실패해 측정 결과가 사라졌다
+//   (주기 1 시험 화면 SCP0028 17:12~17:50 실측 4건 — e2e_results.json 2 · combo_cascade.json 1 · popup_results.json 1 · 실패 원인 미확인).
+//   설정 파일은 실행기·작업 프로세스 모두 스펙보다 먼저 읽으므로, 여기서 node:fs 의 쓰기 함수에 재시도를 건다(최대 8회 · 0.25초씩 늘림). 끝내 실패하면 원래 오류를 그대로 던진다.
+{
+  const realFs = require('node:fs') as Record<string, unknown>;
+  const RETRY_CODES = new Set(['UNKNOWN', 'EBUSY', 'EPERM', 'EACCES', 'EINVAL']);
+  const nap = (ms: number) => { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); };
+  for (const name of ['writeFileSync', 'appendFileSync', 'renameSync', 'copyFileSync']) {
+    const orig = realFs[name] as ((...a: unknown[]) => unknown) & { __nscmRetry?: boolean };
+    if (typeof orig !== 'function' || orig.__nscmRetry) continue;
+    const wrapped = function (this: unknown, ...a: unknown[]) {
+      for (let i = 0; ; i++) {
+        try { return orig.apply(this, a); } catch (e) {
+          const code = String((e as { code?: string }).code || '');
+          if (i >= 8 || !RETRY_CODES.has(code)) throw e;
+          if (i === 0) console.log(`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`);
+          nap(250 * (i + 1));
+        }
+      }
+    } as typeof orig;
+    wrapped.__nscmRetry = true;
+    realFs[name] = wrapped;
+  }
+}
 const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'e2e.config.json'), 'utf8').replace(/^\uFEFF/, ''));
 const results = process.env.E2E_RESULTS || cfg.resultsDir;
 // 2026-10-21: 경로 대소문자 통일 — VS Code(Vibe_Manager)가 'c:\…' 로 실행하면 설정의 'C:\…' 스펙 폴더와 드라이브 문자가 달라

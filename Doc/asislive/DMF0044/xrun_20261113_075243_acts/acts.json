@@ -1,0 +1,103 @@
+{
+ "id": "DMF0044",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 5,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0044-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnSPVer",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0044_United_VersionPopup",
+     "title": "Sales Reports Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_LOOKUP_VALUES",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0044_GET_SALES_VERSION_POPUP"
+   ],
+   "scenarios": [
+    "DMF0044-S895f79"
+   ]
+  },
+  {
+   "control": "btnTextbox",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0044-Sfa668c",
+    "DMF0044-S692044"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnCopy",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 7
+  },
+  {
+   "control": "btnExchangeRate",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  },
+  {
+   "control": "btnTranCancel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  },
+  {
+   "control": "btnTransfer",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 9
+  },
+  {
+   "control": "btnVerCopy",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnVerCre",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 3
+  },
+  {
+   "control": "btnVerDel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  }
+ ],
+ "at": "2026-11-13 07:51:45.318",
+ "fills": 1,
+ "fill_left": []
+}

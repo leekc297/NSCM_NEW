@@ -1,0 +1,274 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BtnMaterialId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0024_ItembyDivisionPopup",
+    "title": "Item by DivisionPopup",
+    "rows": 970
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PLANT_SITE_CODE",
+     "PLANT_SITE_ID",
+     "MATERIAL_ID",
+     "MODEL_ID",
+     "CELL_TYPE",
+     "NICK_NAME",
+     "ELECTRODE_TYPE",
+     "ITEM_UOM",
+     "UOM_CONVERT_IN_TACT_TIME"
+    ],
+    "row": [
+     "",
+     "81",
+     "",
+     "HQ07-E",
+     "LGESOC Elec HQ07",
+     "APCAN0506B",
+     "ECE0630N1-02",
+     "Pouch",
+     "JH3",
+     "ANODE",
+     "M",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SSP0024_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SSP0024_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtMaterialId",
+      "type": "UsrMultiLineEditor",
+      "label": "Material",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivisionId",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbPlantSiteId",
+      "type": "UsrCheckedList",
+      "label": "Plant Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 970,
+      "cols": [
+       "DIVISION_ID",
+       "PLANT_SITE_CODE",
+       "PLANT_SITE_ID",
+       "MATERIAL_ID",
+       "MODEL_ID",
+       "CELL_TYPE",
+       "NICK_NAME",
+       "ELECTRODE_TYPE",
+       "ITEM_UOM",
+       "UOM_CONVERT_IN_TACT_TIME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#0",
+     "before": "",
+     "after": "APCAN0506B"
+    },
+    {
+     "control": "txtMaterialId#0",
+     "before": "",
+     "after": "APCAN0506B"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0024_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnModelId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0024_ItembyDivisionPopup",
+    "title": "Item by DivisionPopup",
+    "rows": 3
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PLANT_SITE_CODE",
+     "PLANT_SITE_ID",
+     "MATERIAL_ID",
+     "MODEL_ID",
+     "CELL_TYPE",
+     "NICK_NAME",
+     "ELECTRODE_TYPE",
+     "ITEM_UOM",
+     "UOM_CONVERT_IN_TACT_TIME"
+    ],
+    "row": [
+     "",
+     "81",
+     "",
+     "HQ07-E",
+     "LGESOC Elec HQ07",
+     "APCAN0506B",
+     "ECE0630N1-02",
+     "Pouch",
+     "JH3",
+     "ANODE",
+     "M",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "SSP0024_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SSP0024_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtMaterialId",
+      "type": "UsrMultiLineEditor",
+      "label": "Material",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivisionId",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbPlantSiteId",
+      "type": "UsrCheckedList",
+      "label": "Plant Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 3,
+      "cols": [
+       "DIVISION_ID",
+       "PLANT_SITE_CODE",
+       "PLANT_SITE_ID",
+       "MATERIAL_ID",
+       "MODEL_ID",
+       "CELL_TYPE",
+       "NICK_NAME",
+       "ELECTRODE_TYPE",
+       "ITEM_UOM",
+       "UOM_CONVERT_IN_TACT_TIME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#1",
+     "before": "",
+     "after": "ECE0630N1-02"
+    },
+    {
+     "control": "txtModelId#0",
+     "before": "",
+     "after": "ECE0630N1-02"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0024_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnMaterialId": {
+   "forms": [
+    "SSP0024_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125850_acts"
+  },
+  "btnModelId": {
+   "forms": [
+    "SSP0024_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "scenarios_src:SSP0024-Sa3637a"
+  }
+ },
+ "at": "2026-11-15 12:49:34"
+}

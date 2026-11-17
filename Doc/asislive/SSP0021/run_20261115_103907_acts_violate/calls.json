@@ -1,0 +1,63 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 10:38:26.333",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 21.4,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 10:38:26.358",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 22.43,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 10:38:46.680",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList_SCP",
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList_SCP",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.25,
+   "params": {
+    "Code": "SSPBlockCheckIF",
+    "Param1": "SSP0021",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "Param6": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList_SCP @Code='SSPBlockCheckIF', @Param1='SSP0021', @Param2='', @Param3='', @Param4='', @Param5='', @Param6='', @TimeZone='AS054'",
+   "phase": "action:save_violate_detail"
+  }
+ ]
+}

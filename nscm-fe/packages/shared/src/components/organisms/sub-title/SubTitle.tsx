@@ -24,6 +24,7 @@ import {
 } from '@shared/hooks';
 import type { ButtonProps } from '@shared/lges';
 import { Button, TitleArea, Tooltip } from '@shared/lges';
+import { Box, Typography, useTheme } from '@shared/mui';
 import {
   confirmIfDirtyKey,
   DialogScopeContext,
@@ -104,6 +105,12 @@ interface SubTitleProps {
   searchDirtyKey?: string;
   /** 건수 배지와 우측 버튼 그룹 사이에 표시할 내용(예: 헤더 요약). */
   children?: ReactNode;
+  /**
+   * 건수 배지 '바로 오른쪽'(좌측 클러스터 안)에 붙일 내용(예: 그리드 표시 토글 체크박스).
+   * children 은 우측 버튼 그룹 쪽 클러스터에 렌더되므로, 건수에 바로 잇고 싶을 때는 이 슬롯을 쓴다.
+   * 지정하면 디자인시스템 customCount 경로로 '건수 + afterCount' 를 함께 그린다(건수 표기 동일 재현).
+   */
+  afterCount?: ReactNode;
 }
 
 const SubTitleComp = ({
@@ -126,8 +133,12 @@ const SubTitleComp = ({
   searchAction,
   searchDirtyKey,
   children,
+  afterCount,
 }: SubTitleProps) => {
   const { t } = useTranslation();
+  const {
+    palette: { semantic },
+  } = useTheme();
   // 이 SubTitle이 속한 단축키 스코프. 다이얼로그 안이면 그 스코프 id, 페이지 최상위면 null(root).
   const scopeId = useContext(DialogScopeContext);
   const setAlert = useMessageStore.getState().setAlert;
@@ -143,6 +154,30 @@ const SubTitleComp = ({
   const displayTotalCases = hideTotalCases ? undefined : formatTotalCases(totalCasesValue);
   // 건수 표기 언어(총/건 ↔ Total/rows) — 화면 언어를 따른다(useTitleAreaLanguage 주석).
   const titleAreaLanguage = useTitleAreaLanguage();
+
+  // afterCount(옵션) — 건수 배지 오른쪽(좌측 클러스터)에 붙일 내용. 디자인시스템 SubTitleArea 의 좌측
+  //   클러스터는 [title, count, helpertext] 뿐이고 count 뒤에 끼울 슬롯이 없다. 그래서 customCount 로
+  //   'count + afterCount' 를 함께 그려 넣는다 — count 표기(총 N건 / Total N rows)를 디자인시스템과 동일한
+  //   변형(bodyBasic)·토큰(commonTextBasic/Primary)으로 재현해 totalCases 네이티브 렌더와 같게 맞춘다.
+  //   건수가 없으면(0·undefined·hideTotalCases) count 는 생략하고 afterCount 만 표시한다(네이티브 동작과 동일).
+  const customCount = afterCount ? (
+    <Box display='inline-flex' alignItems='center' gap='8px'>
+      {displayTotalCases != null && (
+        <Typography variant='bodyBasic' sx={{ color: semantic.color.commonTextBasic }}>
+          {titleAreaLanguage === 'ko' ? '총' : 'Total'}
+          <Typography
+            component='span'
+            variant='bodyBasic'
+            sx={{ color: semantic.color.commonTextPrimary, mx: '2px' }}
+          >
+            {displayTotalCases}
+          </Typography>
+          {titleAreaLanguage === 'ko' ? '건' : 'rows'}
+        </Typography>
+      )}
+      {afterCount}
+    </Box>
+  ) : undefined;
 
   const DefaultButtonActions: HotkeyConfig = {
     [Hotkeys.F1]: () => GridAction.getManual(menuId),
@@ -338,6 +373,7 @@ const SubTitleComp = ({
         title={title}
         depth={depth}
         totalCases={displayTotalCases}
+        customCount={customCount}
         language={titleAreaLanguage}
         isSubTitle
       />
@@ -353,6 +389,7 @@ const SubTitleComp = ({
         title={title}
         depth={depth}
         totalCases={displayTotalCases}
+        customCount={customCount}
         language={titleAreaLanguage}
         isSubTitle
         rightButtons={

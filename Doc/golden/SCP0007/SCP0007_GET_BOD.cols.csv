@@ -1,41 +1,41 @@
-﻿set,column,asis_fill,tobe_fill,key_rows,mismatch,verdict,note
-1,DIVISION_ID,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,BOD_ID,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,CUSTOMER,0.000,0.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: ''↔'-' / 20936: ''↔'-'
-1,INCOTERMS,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'DAP'↔'DDP' / 20936: 'DAP'↔'DDP'
-1,INCOTERMS_SSP,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'DAP'↔'DDP' / 20936: 'DAP'↔'DDP'
-1,FROM_SITE_CODE,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'CN00774400_40-A'↔'HQ10-A' / 20936: 'CN00774400_40-E'↔'HQ10-A'
-1,TO_SITE_CODE,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'CN00254300_40-P'↔'B&S_CN_SHA' / 20936: 'AZ00-A'↔'B&S_CN_SHA'
-1,FROM_COUNTRY,0.977,0.981,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20937: ''↔'KR' / 20936: ''↔'KR'
-1,FROM_CITY,0.977,0.981,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20937: ''↔'KRCOJ' / 20936: ''↔'KRCOJ'
-1,TO_COUNTRY,0.987,0.988,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20936: 'US'↔'CN' / 20934: 'CN'↔'US'
-1,TO_CITY,0.987,0.988,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'CNNKG'↔'CNSHA' / 20936: 'USAAZ'↔'CNSHA'
-1,TRANSPORT_MODE_CODE,1.000,1.000,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20936: 'SEA'↔'FRY' / 20934: 'SEA'↔'TRK'
-1,transport_mode,1.000,1.000,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20936: 'SEA'↔'FERRY' / 20934: 'SEA'↔'TRUCK'
-1,SAFETY_STOCK,0.837,0.779,6481,4,REVIEW,같은 키(bodid) 6481행 중 4행 값 다름(0%) 예: 20937: '0'↔'' / 20934: '0'↔''
-1,PRIORITY,1.000,1.000,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20936: '1'↔'2' / 20933: '1'↔'4'
-1,BOD_VALID,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,ROUTE_VALID,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,ROUTE_ID,1.000,1.000,6481,7,REVIEW,같은 키(bodid) 6481행 중 7행 값 다름(0%) 예: 20937: '1512'↔'615' / 20936: '9205'↔'617'
-1,LT_TYPE,0.761,0.768,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20937: ''↔'AVERAGE' / 20936: 'MAX'↔''
-1,DAYS_MON,0.673,0.684,6481,3,REVIEW,같은 키(bodid) 6481행 중 3행 값 다름(0%) 예: 20937: ''↔'Y' / 20936: ''↔'Y'
-1,DAYS_TUE,0.675,0.689,6481,4,REVIEW,같은 키(bodid) 6481행 중 4행 값 다름(0%) 예: 20937: ''↔'Y' / 20936: ''↔'Y'
-1,DAYS_WED,0.731,0.749,6481,4,REVIEW,같은 키(bodid) 6481행 중 4행 값 다름(0%) 예: 20937: ''↔'Y' / 20936: ''↔'Y'
-1,DAYS_THU,0.689,0.695,6481,1,REVIEW,같은 키(bodid) 6481행 중 1행 값 다름(0%) 예: 20936: ''↔'Y'
-1,DAYS_FRI,0.688,0.699,6481,4,REVIEW,같은 키(bodid) 6481행 중 4행 값 다름(0%) 예: 20937: ''↔'Y' / 20936: ''↔'Y'
-1,DAYS_SAT,0.656,0.653,6481,3,REVIEW,같은 키(bodid) 6481행 중 3행 값 다름(0%) 예: 20934: 'Y'↔'' / 20933: ''↔'Y'
-1,DAYS_SUN,0.495,0.469,6481,3,REVIEW,같은 키(bodid) 6481행 중 3행 값 다름(0%) 예: 20937: ''↔'Y' / 20933: ''↔'Y'
-1,LEAD_TIME,0.995,0.996,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: ''↔'12' / 20936: ''↔'5'
-1,DIS_TOTAL_LEAD_TIME,1.000,1.000,6481,7,REVIEW,같은 키(bodid) 6481행 중 7행 값 다름(0%) 예: 20937: '10'↔'12' / 20936: '32'↔'5'
-1,FROM_YYYYMMDD,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: '2021-01-04'↔'2026-09-14' / 20936: '2026-09-21'↔'2026-09-14'
-1,TO_YYYYMMDD,1.000,1.000,6481,5,REVIEW,같은 키(bodid) 6481행 중 5행 값 다름(0%) 예: 20925: '9999-01-03'↔'2099-12-27' / 20936: '2099-12-27'↔'2100-12-26'
-1,BEFORE_LEAD_TIME,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,AFTER_LEAD_TIME,1.000,1.000,6481,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6481행 중 다름 0
-1,REMARKS,0.000,0.000,6481,0,PASS,채움 AS-IS 0% ↔ TO-BE 0% · 같은 키 6481행 중 다름 0
-1,CREATED_BY,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: 'firstlight'↔'rlatjdghks1' / 20936: 'yanbn82'↔'rlatjdghks1'
-1,CREATION_DATE,1.000,1.000,6481,6,REVIEW,같은 키(bodid) 6481행 중 6행 값 다름(0%) 예: 20937: '2019-06-03 18:34:5'↔'2026-09-15 16:26:2' / 20936: '2026-09-22 14:12:3'↔'2026-09-15 16:26:2'
-1,LAST_UPDATED_BY,1.000,1.000,6481,7,REVIEW,같은 키(bodid) 6481행 중 7행 값 다름(0%) 예: 20925: 'jaeuk.shin'↔'cialcho' / 20937: 'yanbn82'↔'rlatjdghks1'
-1,LAST_UPDATE_DATE,1.000,1.000,6481,8,REVIEW,같은 키(bodid) 6481행 중 8행 값 다름(0%) 예: 20925: '2026-10-22 19:16:4'↔'2026-09-08 11:55:4' / 20937: '2026-09-22 15:08:3'↔'2026-09-15 16:26:2'
-1,ROUTE_CHK,1.000,1.000,6481,4,REVIEW,같은 키(bodid) 6481행 중 4행 값 다름(0%) 예: 20937: 'N'↔'Y' / 20936: 'N'↔'Y'
-1,route_cnt,1.000,1.000,6481,7,REVIEW,같은 키(bodid) 6481행 중 7행 값 다름(0%) 예: 20937: '0'↔'3' / 20936: '0'↔'3'
-1,vmi_yn,0.999,0.999,6481,1,REVIEW,같은 키(bodid) 6481행 중 1행 값 다름(0%) 예: 20935: ''↔'N'
+﻿set,column,asis_fill,tobe_fill,key_rows,mismatch,verdict,note,key_source,keys
+1,DIVISION_ID,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,BOD_ID,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,CUSTOMER,0.000,0.000,6549,16,REVIEW,같은 키(bodid) 6549행 중 16행 값 다름(0%) 예: 21109: ''↔'-' / 20923: ''↔'-',auto,bodid
+1,INCOTERMS,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,INCOTERMS_SSP,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,FROM_SITE_CODE,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,TO_SITE_CODE,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,FROM_COUNTRY,0.978,0.981,6549,0,PASS,채움 AS-IS 98% ↔ TO-BE 98% · 같은 키 6549행 중 다름 0,auto,bodid
+1,FROM_CITY,0.978,0.981,6549,0,PASS,채움 AS-IS 98% ↔ TO-BE 98% · 같은 키 6549행 중 다름 0,auto,bodid
+1,TO_COUNTRY,0.985,0.988,6549,50,REVIEW,같은 키(bodid) 6549행 중 50행 값 다름(1%) 예: 21109: ''↔'ID' / 20923: ''↔'ID',auto,bodid
+1,TO_CITY,0.985,0.988,6549,50,REVIEW,같은 키(bodid) 6549행 중 50행 값 다름(1%) 예: 21109: ''↔'IDJKT' / 20923: ''↔'IDJKT',auto,bodid
+1,TRANSPORT_MODE_CODE,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,transport_mode,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,SAFETY_STOCK,0.827,0.779,6549,0,PASS,채움 AS-IS 83% ↔ TO-BE 78% · 같은 키 6549행 중 다름 0,auto,bodid
+1,PRIORITY,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,BOD_VALID,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,ROUTE_VALID,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,ROUTE_ID,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,LT_TYPE,0.762,0.768,6549,0,PASS,채움 AS-IS 76% ↔ TO-BE 77% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_MON,0.673,0.684,6549,0,PASS,채움 AS-IS 67% ↔ TO-BE 68% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_TUE,0.674,0.689,6549,0,PASS,채움 AS-IS 67% ↔ TO-BE 69% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_WED,0.731,0.749,6549,0,PASS,채움 AS-IS 73% ↔ TO-BE 75% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_THU,0.687,0.695,6549,0,PASS,채움 AS-IS 69% ↔ TO-BE 69% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_FRI,0.689,0.699,6549,0,PASS,채움 AS-IS 69% ↔ TO-BE 70% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_SAT,0.653,0.653,6549,0,PASS,채움 AS-IS 65% ↔ TO-BE 65% · 같은 키 6549행 중 다름 0,auto,bodid
+1,DAYS_SUN,0.495,0.469,6549,0,PASS,채움 AS-IS 49% ↔ TO-BE 47% · 같은 키 6549행 중 다름 0,auto,bodid
+1,LEAD_TIME,0.993,0.996,6549,17,REVIEW,같은 키(bodid) 6549행 중 17행 값 다름(0%) 예: 21109: ''↔'5' / 20923: ''↔'5',auto,bodid
+1,DIS_TOTAL_LEAD_TIME,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,FROM_YYYYMMDD,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,TO_YYYYMMDD,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,BEFORE_LEAD_TIME,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,AFTER_LEAD_TIME,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,REMARKS,0.000,0.000,6549,0,PASS,채움 AS-IS 0% ↔ TO-BE 0% · 같은 키 6549행 중 다름 0,auto,bodid
+1,CREATED_BY,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,CREATION_DATE,1.000,1.000,6549,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 6549행 중 다름 0,auto,bodid
+1,LAST_UPDATED_BY,1.000,1.000,6549,1,REVIEW,같은 키(bodid) 6549행 중 1행 값 다름(0%) 예: 20846: 'attackgo'↔'minyonglee1',auto,bodid
+1,LAST_UPDATE_DATE,1.000,1.000,6549,1,REVIEW,같은 키(bodid) 6549행 중 1행 값 다름(0%) 예: 20846: '2026-08-19 17:42:2'↔'2026-11-12 19:58:4',auto,bodid
+1,ROUTE_CHK,1.000,1.000,6549,44,REVIEW,같은 키(bodid) 6549행 중 44행 값 다름(1%) 예: 21109: 'N'↔'Y' / 20923: 'N'↔'Y',auto,bodid
+1,route_cnt,1.000,1.000,6549,44,REVIEW,같은 키(bodid) 6549행 중 44행 값 다름(1%) 예: 21109: '0'↔'1' / 20923: '0'↔'1',auto,bodid
+1,vmi_yn,0.996,0.999,6549,17,REVIEW,같은 키(bodid) 6549행 중 17행 값 다름(0%) 예: 21109: ''↔'N' / 20923: ''↔'N',auto,bodid

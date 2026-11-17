@@ -87,31 +87,13 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | InitControls:191, InitControls:197, InitControls:214, InitControls:225, InitControls:226, InitControls:227, FindData:438, FindData:439 | CString.GetCheckedListValue | CODE |
-| GetSpdTitle | InitSpread:266, InitSpread:234 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
-| CreateSheetHeaderColumn | InitSpread:267, InitSpread:235 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
+| GetCheckedListValue | InitControls:174, InitControls:180, InitControls:188, InitControls:199, InitControls:200, InitControls:201, FindData:407, FindData:408 | CString.GetCheckedListValue | CODE |
+| GetSpdTitle | InitSpread:234, InitSpread:266 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| CreateSheetHeaderColumn | InitSpread:235, InitSpread:267 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.btnOwner | Click | btnOwner_Click | InitializeComponent:213 |
-| this.btnVersion | Click | btnVersion_Click | InitializeComponent:288 |
-| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:326 |
-| this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:402 |
-| this.btnColumn | Click | btnColumn_Click | InitializeComponent:439 |
-| this.btnProject | Click | btnProject_Click | InitializeComponent:475 |
-| this.btnItemId | Click | btnItemId_Click | InitializeComponent:545 |
-| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitializeComponent:582 |
-| this.txtVersion | KeyDown | txtVersion_KeyDown | InitializeComponent:848 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1248 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1249 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:1250 |
-| this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:1251 |
-| this | Load | Form_Load | .ctor:162 |
-| cboDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | InitEvent:383 |
-| this.clbTeam | SelectedIndexChanged | clbTeam_SelectedIndexChanged | InitEvent:384 |
-| this.clbCustomer | SelectedIndexChanged | clbCustomer_SelectedIndexChanged | InitEvent:385 |
-| cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:386 |
 | this.btnVersion | Click | btnVersion_Click | InitializeComponent:203 |
 | this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:241 |
 | this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:317 |
@@ -130,18 +112,36 @@
 | clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:352 |
 | clbSalesSite | SelectedIndexChanged | ClbSalesSite_SelectedIndexChanged | InitEvent:353 |
 | clbPlantSite | SelectedIndexChanged | ClbPlantSite_SelectedIndexChanged | InitEvent:354 |
+| this.btnOwner | Click | btnOwner_Click | InitializeComponent:213 |
+| this.btnVersion | Click | btnVersion_Click | InitializeComponent:288 |
+| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:326 |
+| this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:402 |
+| this.btnColumn | Click | btnColumn_Click | InitializeComponent:439 |
+| this.btnProject | Click | btnProject_Click | InitializeComponent:475 |
+| this.btnItemId | Click | btnItemId_Click | InitializeComponent:545 |
+| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitializeComponent:582 |
+| this.txtVersion | KeyDown | txtVersion_KeyDown | InitializeComponent:848 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1248 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1249 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:1250 |
+| this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:1251 |
+| this | Load | Form_Load | .ctor:162 |
+| cboDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | InitEvent:383 |
+| this.clbTeam | SelectedIndexChanged | clbTeam_SelectedIndexChanged | InitEvent:384 |
+| this.clbCustomer | SelectedIndexChanged | clbCustomer_SelectedIndexChanged | InitEvent:385 |
+| cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:386 |
 
 ## 6. 컨트롤 (99개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 38 | lblCustomer, lblSalesSite, lblProject, layoutControlItem1, lblBucket, layoutControlItem2, layoutControlItem4, lblPlantSite, lblVersion, layoutControlItem5, layoutControlItem6, Period, lblBizType, lblTeam, layoutControlItem3 … |
-| UsrCheckedList | 13 | clbItemType, clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam, clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam, clbDivision, clbItemType |
-| UsrButton | 11 | btnOwner, btnVersion, btnMeasure, btnColumn, btnProject, btnItemId, btnVersion, btnMeasure, btnColumn, btnProject, btnItemId |
-| EmptySpaceItem | 9 | emptySpaceItem8, emptySpaceItem6, emptySpaceItem1, emptySpaceItem13, emptySpaceItem3, emptySpaceItem6, emptySpaceItem1, emptySpaceItem13, emptySpaceItem8 |
-| UsrMultiLineEditor | 7 | txtProject, txtItemId, txtVersion, txtOwner, txtProject, txtItemId, txtVersion |
+| LayoutControlItem | 38 | lblCustomer, lblSalesSite, lblProject, layoutControlItem1, lblBucket, layoutControlItem2, layoutControlItem4, lblPlantSite, lblVersion, layoutControlItem5, layoutControlItem6, lblDivision, Period, lblBizType, lblTeam … |
+| UsrCheckedList | 13 | clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam, clbDivision, clbItemType, clbItemType, clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam |
+| UsrButton | 11 | btnVersion, btnMeasure, btnColumn, btnProject, btnItemId, btnOwner, btnVersion, btnMeasure, btnColumn, btnProject, btnItemId |
+| EmptySpaceItem | 9 | emptySpaceItem6, emptySpaceItem1, emptySpaceItem13, emptySpaceItem8, emptySpaceItem8, emptySpaceItem6, emptySpaceItem1, emptySpaceItem13, emptySpaceItem3 |
+| UsrMultiLineEditor | 7 | txtProject, txtItemId, txtVersion, txtProject, txtItemId, txtVersion, txtOwner |
 | UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| UsrCombo | 3 | cboBucketType, cboDivision, cboBucketType |
+| UsrCombo | 3 | cboBucketType, cboBucketType, cboDivision |
 | UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
 | UsrCheckBox | 2 | chkSum, chkSum |
 | UsrDateRangePicker | 2 | drpPeriod, drpPeriod |
@@ -185,7 +185,7 @@
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
 - 코드에서 생성하는 시트: Mkt Fcst Waterfall
-- 메타 컬럼 생성 호출(프레임워크): CreateSheetHeaderColumn@InitSpread:267, CreateSheetHeaderColumn@InitSpread:235
+- 메타 컬럼 생성 호출(프레임워크): CreateSheetHeaderColumn@InitSpread:235, CreateSheetHeaderColumn@InitSpread:267
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): SetSpreadHeaderSpan, SetSpreadColumn
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

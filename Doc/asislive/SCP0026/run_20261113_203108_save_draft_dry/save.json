@@ -1,0 +1,54 @@
+{
+ "id": "SCP0026",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_FINAL_ITEM",
+  "pk": [
+   "DIVISION_ID",
+   "ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "save_sp": "SCP0026_SAVE_DEMAND_GROUPING",
+  "side": [
+   {
+    "table": "SCP_MST_FINAL_ITEM_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0026_SAVE_DEMAND_GROUPING → SP SCP0026_SAVE_DEMAND_GROUPING 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "DEMAND_GROUPING_DAYS",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "DEMAND_GROUPING_DAYS",
+     "db_col": "DEMAND_GROUPING_DAYS",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "DEMAND_GROUPING_DAYS",
+    "db_col": "DEMAND_GROUPING_DAYS",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 20:31:08",
+ "status": "ERROR",
+ "steps": [],
+ "note": "대상 행을 찾지 못함(pick {'col': 'DEMAND_GROUPING_DAYS', 'nonempty': True} · 앞 500행)"
+}

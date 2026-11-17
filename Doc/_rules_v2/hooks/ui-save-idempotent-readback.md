@@ -43,6 +43,7 @@ PIVOT ( SUM(QTY) FOR YYYYMM IN (...) )   -- 암묵 GROUP BY = SELECT 목록의 "
   DOM_EXP / INCOTERMS / PLANT_SITE_ID : '-' 209,671 vs NULL 93   → '-' 가 정본
   PROJECT_NAME                        : 전량(209,764) NULL        → '' 유지 ('-' 로 바꾸면 반대로 갈라짐)
   ```
+  (2026-11-13 정정: 2026-10-15 개정 반영 — 신규 NULL 대체값(센티널)은 `'/'`. 위처럼 원래 데이터가 `'-'` 인 컬럼은 `'-'` 유지, 과도기 비교는 `IN ('-','/')` — hook `oracle-null-sentinel-and-notnull-default.md` §0.5)
 - AS-IS 원문이 `''` 라는 사실은 **면죄부가 아니다** — 방언 차이는 TO-BE 가 흡수해야 할 변환 의무다
   (hook #119 계보. 같은 날 `SOLDTO_CODE` 도 동일 정정 — 마커 SOLDTO-SENTINEL / PIVOT-SENTINEL).
 

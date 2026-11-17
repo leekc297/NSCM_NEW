@@ -1,0 +1,3003 @@
+{
+ "id": "SSP0046",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Pack Biz",
+     "rows": 0,
+     "cols": 87,
+     "visible": "True",
+     "frozen_cols": "17",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*",
+        "Div*",
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Model*",
+        "Model*",
+        "Model*"
+       ],
+       "label": "Model*",
+       "tag": "ITEM_ID",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Nick Name",
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "From ( Plant )*",
+        "From ( Plant )*",
+        "From ( Plant )*"
+       ],
+       "label": "From ( Plant )*",
+       "tag": "FROM_SITE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FROM_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "To ( Sales-Site )*",
+        "To ( Sales-Site )*",
+        "To ( Sales-Site )*"
+       ],
+       "label": "To ( Sales-Site )*",
+       "tag": "TO_SITE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TO_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Team",
+        "Team",
+        "Team"
+       ],
+       "label": "Team",
+       "tag": "TEAM_NAME_KO",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TEAM_NAME_KO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "End Customer",
+        "End Customer",
+        "End Customer"
+       ],
+       "label": "End Customer",
+       "tag": "END_CUSTOMER",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "END_CUSTOMER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Project Code*",
+        "Project Code*",
+        "Project Code*"
+       ],
+       "label": "Project Code*",
+       "tag": "PROJECT_CODE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PROJECT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Incoterms*",
+        "Incoterms*",
+        "Incoterms*"
+       ],
+       "label": "Incoterms*",
+       "tag": "INCOTERMS",
+       "width": "45",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "INCOTERMS",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "FCST Type*",
+        "FCST Type*",
+        "FCST Type*"
+       ],
+       "label": "FCST Type*",
+       "tag": "FCST_TYPE",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FCST_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Trans Mode*",
+        "Trans Mode*",
+        "Trans Mode*"
+       ],
+       "label": "Trans Mode*",
+       "tag": "TR_MODE",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TR_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "SSP0046",
+        "SSP0046",
+        "SSP0046"
+       ],
+       "label": "SSP0046",
+       "tag": "SHIP_FROZEN",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SHIP_FROZEN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "BOD ID*",
+        "BOD ID*",
+        "BOD ID*"
+       ],
+       "label": "BOD ID*",
+       "tag": "BOD_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BOD_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Measure*",
+        "Measure*",
+        "Measure*"
+       ],
+       "label": "Measure*",
+       "tag": "MEASURE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEASURE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "MEASUR_COLOR",
+        "MEASUR_COLOR",
+        "MEASUR_COLOR"
+       ],
+       "label": "MEASUR_COLOR",
+       "tag": "MEASURE_COLOR",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "MEASURE_COLOR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Requestor",
+        "Requestor",
+        "Requestor"
+       ],
+       "label": "Requestor",
+       "tag": "LAST_UPDATED_BY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "2026-11",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202611",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202611",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "2026-11",
+        "W46",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261146",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261146",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "2026-11",
+        "W46",
+        "12"
+       ],
+       "label": "12",
+       "tag": "D_20261112",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261112",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "2026-11",
+        "W46",
+        "13"
+       ],
+       "label": "13",
+       "tag": "D_20261113",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261113",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "2026-11",
+        "W46",
+        "14"
+       ],
+       "label": "14",
+       "tag": "D_20261114",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261114",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "2026-11",
+        "W46",
+        "15"
+       ],
+       "label": "15",
+       "tag": "D_20261115",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261115",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "2026-11",
+        "W47",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261147",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261147",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "2026-11",
+        "W47",
+        "16"
+       ],
+       "label": "16",
+       "tag": "D_20261116",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261116",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "2026-11",
+        "W47",
+        "17"
+       ],
+       "label": "17",
+       "tag": "D_20261117",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261117",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "2026-11",
+        "W47",
+        "18"
+       ],
+       "label": "18",
+       "tag": "D_20261118",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261118",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "2026-11",
+        "W47",
+        "19"
+       ],
+       "label": "19",
+       "tag": "D_20261119",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261119",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "2026-11",
+        "W47",
+        "20"
+       ],
+       "label": "20",
+       "tag": "D_20261120",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261120",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "2026-11",
+        "W47",
+        "21"
+       ],
+       "label": "21",
+       "tag": "D_20261121",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261121",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "2026-11",
+        "W47",
+        "22"
+       ],
+       "label": "22",
+       "tag": "D_20261122",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261122",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "2026-11",
+        "W48",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261148",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261148",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "2026-11",
+        "W48",
+        "23"
+       ],
+       "label": "23",
+       "tag": "D_20261123",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261123",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "2026-11",
+        "W48",
+        "24"
+       ],
+       "label": "24",
+       "tag": "D_20261124",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261124",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "2026-11",
+        "W48",
+        "25"
+       ],
+       "label": "25",
+       "tag": "D_20261125",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261125",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "2026-11",
+        "W48",
+        "26"
+       ],
+       "label": "26",
+       "tag": "D_20261126",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261126",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "2026-11",
+        "W48",
+        "27"
+       ],
+       "label": "27",
+       "tag": "D_20261127",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261127",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "2026-11",
+        "W48",
+        "28"
+       ],
+       "label": "28",
+       "tag": "D_20261128",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261128",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "2026-11",
+        "W48",
+        "29"
+       ],
+       "label": "29",
+       "tag": "D_20261129",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261129",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "2026-11",
+        "W49",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261149",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261149",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "2026-11",
+        "W49",
+        "30"
+       ],
+       "label": "30",
+       "tag": "D_20261130",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261130",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "2026-12",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202612",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202612",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "2026-12",
+        "W49",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261249",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261249",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "2026-12",
+        "W49",
+        "01"
+       ],
+       "label": "01",
+       "tag": "D_20261201",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261201",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "2026-12",
+        "W49",
+        "02"
+       ],
+       "label": "02",
+       "tag": "D_20261202",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261202",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "2026-12",
+        "W49",
+        "03"
+       ],
+       "label": "03",
+       "tag": "D_20261203",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261203",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "2026-12",
+        "W49",
+        "04"
+       ],
+       "label": "04",
+       "tag": "D_20261204",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261204",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "2026-12",
+        "W49",
+        "05"
+       ],
+       "label": "05",
+       "tag": "D_20261205",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261205",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "2026-12",
+        "W49",
+        "06"
+       ],
+       "label": "06",
+       "tag": "D_20261206",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261206",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "2026-12",
+        "W50",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261250",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261250",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "2026-12",
+        "W50",
+        "07"
+       ],
+       "label": "07",
+       "tag": "D_20261207",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261207",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "2026-12",
+        "W50",
+        "08"
+       ],
+       "label": "08",
+       "tag": "D_20261208",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261208",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "2026-12",
+        "W50",
+        "09"
+       ],
+       "label": "09",
+       "tag": "D_20261209",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261209",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "2026-12",
+        "W50",
+        "10"
+       ],
+       "label": "10",
+       "tag": "D_20261210",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261210",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "2026-12",
+        "W50",
+        "11"
+       ],
+       "label": "11",
+       "tag": "D_20261211",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261211",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "2026-12",
+        "W50",
+        "12"
+       ],
+       "label": "12",
+       "tag": "D_20261212",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261212",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "2026-12",
+        "W50",
+        "13"
+       ],
+       "label": "13",
+       "tag": "D_20261213",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261213",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "2026-12",
+        "W51",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261251",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261251",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "2026-12",
+        "W51",
+        "14"
+       ],
+       "label": "14",
+       "tag": "D_20261214",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261214",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "2026-12",
+        "W51",
+        "15"
+       ],
+       "label": "15",
+       "tag": "D_20261215",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261215",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 60,
+       "header": [
+        "2026-12",
+        "W51",
+        "16"
+       ],
+       "label": "16",
+       "tag": "D_20261216",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261216",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 61,
+       "header": [
+        "2026-12",
+        "W51",
+        "17"
+       ],
+       "label": "17",
+       "tag": "D_20261217",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261217",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 62,
+       "header": [
+        "2026-12",
+        "W51",
+        "18"
+       ],
+       "label": "18",
+       "tag": "D_20261218",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261218",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 63,
+       "header": [
+        "2026-12",
+        "W51",
+        "19"
+       ],
+       "label": "19",
+       "tag": "D_20261219",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261219",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 64,
+       "header": [
+        "2026-12",
+        "W51",
+        "20"
+       ],
+       "label": "20",
+       "tag": "D_20261220",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261220",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 65,
+       "header": [
+        "2026-12",
+        "W52",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261252",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261252",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 66,
+       "header": [
+        "2026-12",
+        "W52",
+        "21"
+       ],
+       "label": "21",
+       "tag": "D_20261221",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261221",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 67,
+       "header": [
+        "2026-12",
+        "W52",
+        "22"
+       ],
+       "label": "22",
+       "tag": "D_20261222",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261222",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 68,
+       "header": [
+        "2026-12",
+        "W52",
+        "23"
+       ],
+       "label": "23",
+       "tag": "D_20261223",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261223",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 69,
+       "header": [
+        "2026-12",
+        "W52",
+        "24"
+       ],
+       "label": "24",
+       "tag": "D_20261224",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261224",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 70,
+       "header": [
+        "2026-12",
+        "W52",
+        "25"
+       ],
+       "label": "25",
+       "tag": "D_20261225",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261225",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 71,
+       "header": [
+        "2026-12",
+        "W52",
+        "26"
+       ],
+       "label": "26",
+       "tag": "D_20261226",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261226",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 72,
+       "header": [
+        "2026-12",
+        "W52",
+        "27"
+       ],
+       "label": "27",
+       "tag": "D_20261227",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261227",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 73,
+       "header": [
+        "2026-12",
+        "W53",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261253",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261253",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 74,
+       "header": [
+        "2026-12",
+        "W53",
+        "28"
+       ],
+       "label": "28",
+       "tag": "D_20261228",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261228",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 75,
+       "header": [
+        "2026-12",
+        "W53",
+        "29"
+       ],
+       "label": "29",
+       "tag": "D_20261229",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261229",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 76,
+       "header": [
+        "2026-12",
+        "W53",
+        "30"
+       ],
+       "label": "30",
+       "tag": "D_20261230",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261230",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 77,
+       "header": [
+        "2026-12",
+        "W53",
+        "31"
+       ],
+       "label": "31",
+       "tag": "D_20261231",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261231",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 78,
+       "header": [
+        "2027-01",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202701",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202701",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 79,
+       "header": [
+        "2027-01",
+        "W53",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20270153",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20270153",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 80,
+       "header": [
+        "2027-01",
+        "W53",
+        "01"
+       ],
+       "label": "01",
+       "tag": "D_20270101",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270101",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 81,
+       "header": [
+        "2027-01",
+        "W53",
+        "02"
+       ],
+       "label": "02",
+       "tag": "D_20270102",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270102",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 82,
+       "header": [
+        "2027-01",
+        "W53",
+        "03"
+       ],
+       "label": "03",
+       "tag": "D_20270103",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270103",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 83,
+       "header": [
+        "2027-01",
+        "W01",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20270101",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20270101",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 84,
+       "header": [
+        "2027-01",
+        "W01",
+        "04"
+       ],
+       "label": "04",
+       "tag": "D_20270104",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270104",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 85,
+       "header": [
+        "2027-01",
+        "W01",
+        "05"
+       ],
+       "label": "05",
+       "tag": "D_20270105",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270105",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 86,
+       "header": [
+        "2027-01",
+        "W01",
+        "06"
+       ],
+       "label": "06",
+       "tag": "D_20270106",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270106",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "Cell Biz",
+     "rows": 0,
+     "cols": 87,
+     "visible": "True",
+     "frozen_cols": "17",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 3,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*",
+        "Div*",
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Model*",
+        "Model*",
+        "Model*"
+       ],
+       "label": "Model*",
+       "tag": "ITEM_ID",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Nick Name",
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "From ( Plant )*",
+        "From ( Plant )*",
+        "From ( Plant )*"
+       ],
+       "label": "From ( Plant )*",
+       "tag": "FROM_SITE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FROM_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "To ( Sales-Site )*",
+        "To ( Sales-Site )*",
+        "To ( Sales-Site )*"
+       ],
+       "label": "To ( Sales-Site )*",
+       "tag": "TO_SITE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TO_SITE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Team",
+        "Team",
+        "Team"
+       ],
+       "label": "Team",
+       "tag": "TEAM_NAME_KO",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TEAM_NAME_KO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "End Customer",
+        "End Customer",
+        "End Customer"
+       ],
+       "label": "End Customer",
+       "tag": "END_CUSTOMER",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "END_CUSTOMER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Project Code*",
+        "Project Code*",
+        "Project Code*"
+       ],
+       "label": "Project Code*",
+       "tag": "PROJECT_CODE",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PROJECT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Incoterms*",
+        "Incoterms*",
+        "Incoterms*"
+       ],
+       "label": "Incoterms*",
+       "tag": "INCOTERMS",
+       "width": "45",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "INCOTERMS",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "FCST Type*",
+        "FCST Type*",
+        "FCST Type*"
+       ],
+       "label": "FCST Type*",
+       "tag": "FCST_TYPE",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "FCST_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Trans Mode*",
+        "Trans Mode*",
+        "Trans Mode*"
+       ],
+       "label": "Trans Mode*",
+       "tag": "TR_MODE",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "TR_MODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "SSP0046",
+        "SSP0046",
+        "SSP0046"
+       ],
+       "label": "SSP0046",
+       "tag": "SHIP_FROZEN",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SHIP_FROZEN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "BOD ID*",
+        "BOD ID*",
+        "BOD ID*"
+       ],
+       "label": "BOD ID*",
+       "tag": "BOD_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "BOD_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Measure*",
+        "Measure*",
+        "Measure*"
+       ],
+       "label": "Measure*",
+       "tag": "MEASURE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEASURE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "MEASUR_COLOR",
+        "MEASUR_COLOR",
+        "MEASUR_COLOR"
+       ],
+       "label": "MEASUR_COLOR",
+       "tag": "MEASURE_COLOR",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "MEASURE_COLOR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Requestor",
+        "Requestor",
+        "Requestor"
+       ],
+       "label": "Requestor",
+       "tag": "LAST_UPDATED_BY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATED_BY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "2026-11",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202611",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202611",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "2026-11",
+        "W46",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261146",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261146",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "2026-11",
+        "W46",
+        "12"
+       ],
+       "label": "12",
+       "tag": "D_20261112",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261112",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "2026-11",
+        "W46",
+        "13"
+       ],
+       "label": "13",
+       "tag": "D_20261113",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261113",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "2026-11",
+        "W46",
+        "14"
+       ],
+       "label": "14",
+       "tag": "D_20261114",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261114",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "2026-11",
+        "W46",
+        "15"
+       ],
+       "label": "15",
+       "tag": "D_20261115",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261115",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "2026-11",
+        "W47",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261147",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261147",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "2026-11",
+        "W47",
+        "16"
+       ],
+       "label": "16",
+       "tag": "D_20261116",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261116",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "2026-11",
+        "W47",
+        "17"
+       ],
+       "label": "17",
+       "tag": "D_20261117",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261117",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "2026-11",
+        "W47",
+        "18"
+       ],
+       "label": "18",
+       "tag": "D_20261118",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261118",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "2026-11",
+        "W47",
+        "19"
+       ],
+       "label": "19",
+       "tag": "D_20261119",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261119",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "2026-11",
+        "W47",
+        "20"
+       ],
+       "label": "20",
+       "tag": "D_20261120",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261120",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "2026-11",
+        "W47",
+        "21"
+       ],
+       "label": "21",
+       "tag": "D_20261121",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261121",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "2026-11",
+        "W47",
+        "22"
+       ],
+       "label": "22",
+       "tag": "D_20261122",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261122",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "2026-11",
+        "W48",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261148",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261148",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "2026-11",
+        "W48",
+        "23"
+       ],
+       "label": "23",
+       "tag": "D_20261123",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261123",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "2026-11",
+        "W48",
+        "24"
+       ],
+       "label": "24",
+       "tag": "D_20261124",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261124",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "2026-11",
+        "W48",
+        "25"
+       ],
+       "label": "25",
+       "tag": "D_20261125",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261125",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "2026-11",
+        "W48",
+        "26"
+       ],
+       "label": "26",
+       "tag": "D_20261126",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261126",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "2026-11",
+        "W48",
+        "27"
+       ],
+       "label": "27",
+       "tag": "D_20261127",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261127",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "2026-11",
+        "W48",
+        "28"
+       ],
+       "label": "28",
+       "tag": "D_20261128",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261128",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "2026-11",
+        "W48",
+        "29"
+       ],
+       "label": "29",
+       "tag": "D_20261129",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261129",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "2026-11",
+        "W49",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261149",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261149",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "2026-11",
+        "W49",
+        "30"
+       ],
+       "label": "30",
+       "tag": "D_20261130",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261130",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "2026-12",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202612",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202612",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "2026-12",
+        "W49",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261249",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261249",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "2026-12",
+        "W49",
+        "01"
+       ],
+       "label": "01",
+       "tag": "D_20261201",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261201",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "2026-12",
+        "W49",
+        "02"
+       ],
+       "label": "02",
+       "tag": "D_20261202",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261202",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "2026-12",
+        "W49",
+        "03"
+       ],
+       "label": "03",
+       "tag": "D_20261203",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261203",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "2026-12",
+        "W49",
+        "04"
+       ],
+       "label": "04",
+       "tag": "D_20261204",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261204",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "2026-12",
+        "W49",
+        "05"
+       ],
+       "label": "05",
+       "tag": "D_20261205",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261205",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "2026-12",
+        "W49",
+        "06"
+       ],
+       "label": "06",
+       "tag": "D_20261206",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261206",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "2026-12",
+        "W50",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261250",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261250",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "2026-12",
+        "W50",
+        "07"
+       ],
+       "label": "07",
+       "tag": "D_20261207",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261207",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "2026-12",
+        "W50",
+        "08"
+       ],
+       "label": "08",
+       "tag": "D_20261208",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261208",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "2026-12",
+        "W50",
+        "09"
+       ],
+       "label": "09",
+       "tag": "D_20261209",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261209",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "2026-12",
+        "W50",
+        "10"
+       ],
+       "label": "10",
+       "tag": "D_20261210",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261210",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "2026-12",
+        "W50",
+        "11"
+       ],
+       "label": "11",
+       "tag": "D_20261211",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261211",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "2026-12",
+        "W50",
+        "12"
+       ],
+       "label": "12",
+       "tag": "D_20261212",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261212",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "2026-12",
+        "W50",
+        "13"
+       ],
+       "label": "13",
+       "tag": "D_20261213",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261213",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "2026-12",
+        "W51",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261251",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261251",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "2026-12",
+        "W51",
+        "14"
+       ],
+       "label": "14",
+       "tag": "D_20261214",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261214",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "2026-12",
+        "W51",
+        "15"
+       ],
+       "label": "15",
+       "tag": "D_20261215",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261215",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 60,
+       "header": [
+        "2026-12",
+        "W51",
+        "16"
+       ],
+       "label": "16",
+       "tag": "D_20261216",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261216",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 61,
+       "header": [
+        "2026-12",
+        "W51",
+        "17"
+       ],
+       "label": "17",
+       "tag": "D_20261217",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261217",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 62,
+       "header": [
+        "2026-12",
+        "W51",
+        "18"
+       ],
+       "label": "18",
+       "tag": "D_20261218",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261218",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 63,
+       "header": [
+        "2026-12",
+        "W51",
+        "19"
+       ],
+       "label": "19",
+       "tag": "D_20261219",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261219",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 64,
+       "header": [
+        "2026-12",
+        "W51",
+        "20"
+       ],
+       "label": "20",
+       "tag": "D_20261220",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261220",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 65,
+       "header": [
+        "2026-12",
+        "W52",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261252",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261252",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 66,
+       "header": [
+        "2026-12",
+        "W52",
+        "21"
+       ],
+       "label": "21",
+       "tag": "D_20261221",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261221",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 67,
+       "header": [
+        "2026-12",
+        "W52",
+        "22"
+       ],
+       "label": "22",
+       "tag": "D_20261222",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261222",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 68,
+       "header": [
+        "2026-12",
+        "W52",
+        "23"
+       ],
+       "label": "23",
+       "tag": "D_20261223",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261223",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 69,
+       "header": [
+        "2026-12",
+        "W52",
+        "24"
+       ],
+       "label": "24",
+       "tag": "D_20261224",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261224",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 70,
+       "header": [
+        "2026-12",
+        "W52",
+        "25"
+       ],
+       "label": "25",
+       "tag": "D_20261225",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261225",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 71,
+       "header": [
+        "2026-12",
+        "W52",
+        "26"
+       ],
+       "label": "26",
+       "tag": "D_20261226",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261226",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 72,
+       "header": [
+        "2026-12",
+        "W52",
+        "27"
+       ],
+       "label": "27",
+       "tag": "D_20261227",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261227",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 73,
+       "header": [
+        "2026-12",
+        "W53",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20261253",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20261253",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 74,
+       "header": [
+        "2026-12",
+        "W53",
+        "28"
+       ],
+       "label": "28",
+       "tag": "D_20261228",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261228",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 75,
+       "header": [
+        "2026-12",
+        "W53",
+        "29"
+       ],
+       "label": "29",
+       "tag": "D_20261229",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261229",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 76,
+       "header": [
+        "2026-12",
+        "W53",
+        "30"
+       ],
+       "label": "30",
+       "tag": "D_20261230",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261230",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 77,
+       "header": [
+        "2026-12",
+        "W53",
+        "31"
+       ],
+       "label": "31",
+       "tag": "D_20261231",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20261231",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 78,
+       "header": [
+        "2027-01",
+        "SUM",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "M_202701",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M_202701",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 79,
+       "header": [
+        "2027-01",
+        "W53",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20270153",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20270153",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 80,
+       "header": [
+        "2027-01",
+        "W53",
+        "01"
+       ],
+       "label": "01",
+       "tag": "D_20270101",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270101",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 81,
+       "header": [
+        "2027-01",
+        "W53",
+        "02"
+       ],
+       "label": "02",
+       "tag": "D_20270102",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270102",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 82,
+       "header": [
+        "2027-01",
+        "W53",
+        "03"
+       ],
+       "label": "03",
+       "tag": "D_20270103",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270103",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 83,
+       "header": [
+        "2027-01",
+        "W01",
+        "SUM"
+       ],
+       "label": "SUM",
+       "tag": "W_20270101",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "W_20270101",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 84,
+       "header": [
+        "2027-01",
+        "W01",
+        "04"
+       ],
+       "label": "04",
+       "tag": "D_20270104",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270104",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 85,
+       "header": [
+        "2027-01",
+        "W01",
+        "05"
+       ],
+       "label": "05",
+       "tag": "D_20270105",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270105",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 86,
+       "header": [
+        "2027-01",
+        "W01",
+        "06"
+       ],
+       "label": "06",
+       "tag": "D_20270106",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "D_20270106",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

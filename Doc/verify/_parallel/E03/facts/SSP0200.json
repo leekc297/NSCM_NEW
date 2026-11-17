@@ -1,0 +1,4872 @@
+{
+"id": "SSP0200",
+"at": "2026-11-15 06:38:39",
+"asis": {
+"insertStmts": [
+{
+"kind": "CALL_LOCAL",
+"raw": "InsertRow()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:766",
+"method": "InsertButton"
+},
+{
+"kind": "BRANCH",
+"raw": "if (siMain.ActiveSheet.RowCount > 0) { FarPoint.Win.Spread.Cell insCell = siMain.Insert(); Dictionary<object, object> defaultData = new Dictionary<object, objec",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2680",
+"method": "InsertRow"
+},
+{
+"kind": "LOCAL",
+"raw": "int activeRow = siMain.ActiveSheet.ActiveRowIndex + 1;",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2685",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.DIVISION_ID)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2687",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.ITEM_ID)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2690",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.FROM_SITE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2691",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.TO_SITE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2692",
+"method": "InsertRow"
+},
+{
+"kind": "BRANCH",
+"raw": "if (clbDivision_ID.ControlValues == \"40\") { PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.END_CUSTOMER)).ToString(); setEndCustomer",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2694",
+"method": "InsertRow"
+},
+{
+"kind": "LOCAL",
+"raw": "PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.END_CUSTOMER)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2696",
+"method": "InsertRow"
+},
+{
+"kind": "CALL_LOCAL",
+"raw": "setEndCustomer(siMain.ActiveRowIndex)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2697",
+"method": "InsertRow"
+},
+{
+"kind": "LOCAL",
+"raw": "PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.PROJECT_CODE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2701",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2704",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2705",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.INCOTERMS)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2707",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.TRANSPORT_MODE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2708",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.FCST_TYPE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2709",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.FROM_SITE_DESCRIPTION), dtFromSite)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2728",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.TO_SITE_DESCRIPTION), dtToSite)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2729",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.NICK_NAME)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2756",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.MTK_OWNER)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2757",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.ActiveSheet.Cells[siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.ITEM_ID)].CellType = cellTypeImage",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2763",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.ActiveSheet.Cells[siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.PROJECT_CODE)].CellType = cellTypeImage",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2764",
+"method": "InsertRow"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.DIVISION_ID), dtMyDivision)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2765",
+"method": "InsertRow"
+},
+{
+"kind": "LOCAL",
+"raw": "int activeRow = 0;",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2785",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "BRANCH",
+"raw": "for (int i = 0; i < inputCount; i++) { FarPoint.Win.Spread.Cell insCell = siMain.Insert(); Dictionary<object, object> defaultData = new Dictionary<object, objec",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2790",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "BRANCH",
+"raw": "if(activeRow == 0) activeRow = siMain.ActiveSheet.ActiveRowIndex + 1; else activeRow++;",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2795",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "LOCAL",
+"raw": "activeRow = siMain.ActiveSheet.ActiveRowIndex + 1",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2796",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "LOCAL",
+"raw": "activeRow++;",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2798",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.DIVISION_ID)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2800",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.ITEM_ID)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2803",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.FROM_SITE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2804",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.TO_SITE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2805",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "BRANCH",
+"raw": "if (clbDivision_ID.ControlValues == \"40\") { PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.END_CUSTOMER)).ToString(); setEndCustomer",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2807",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "LOCAL",
+"raw": "PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.END_CUSTOMER)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2809",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "CALL_LOCAL",
+"raw": "setEndCustomer(siMain.ActiveRowIndex)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2810",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "LOCAL",
+"raw": "PROJECT_CODE = siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.PROJECT_CODE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2814",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2830",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2831",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.INCOTERMS)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2833",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.TRANSPORT_MODE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2834",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.FCST_TYPE)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2835",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.FROM_SITE_DESCRIPTION), dtFromSite)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2854",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.TO_SITE_DESCRIPTION), dtToSite)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2855",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.NICK_NAME)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2882",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "EXPR",
+"raw": "siMain.GetValue(activeRow, siMain.GetColumnIndex(DefColumns.MTK_OWNER)).ToString()",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2883",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "GRID_SET",
+"raw": "siMain.ActiveSheet.Cells[siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.PROJECT_CODE)].CellType = cellTypeImage",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2890",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "GRID_COMBO",
+"raw": "siMain.SetCellTypeCombo(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.DIVISION_ID), dtMyDivision)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2891",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "BRANCH",
+"raw": "if (hasElec == true) { siMain.SetDecimal(siMain.ActiveRowIndex, qty_idx, siMain.ActiveRowIndex, qty_idx, 3, true); } else { siMain.SetDecimal(siMain.ActiveRowIn",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2902",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "CALL_EXT",
+"raw": "siMain.SetDecimal(siMain.ActiveRowIndex, qty_idx, siMain.ActiveRowIndex, qty_idx, 3, true)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2904",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "CALL_EXT",
+"raw": "siMain.SetDecimal(siMain.ActiveRowIndex, qty_idx, siMain.ActiveRowIndex, qty_idx, 0, true)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2908",
+"method": "InsertRowMultiple"
+},
+{
+"kind": "CALL_LOCAL",
+"raw": "InsertRowMultiple(iCount)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:2937",
+"method": "btnInsertMultiple_Click"
+}
+],
+"headerSpan": [
+{
+"raw": "siSub.ColumnHeaderSpan(0, siSub.GetColumnIndex(DefColumns.LT_DAY), 1, 6, 20, \"Plan\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:703",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(0, siSub.GetColumnIndex(DefColumns.NEW_LT_DAY), 1, 6, 20, \"Confirm\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:704",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.LT_DAY), 2, 1, 30, \"L/T(Day)\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:706",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.ETD), 2, 1, 30, \"ETD\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:707",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.ETA), 2, 1, 30, \"ETA\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:708",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE), 2, 1, 30, \"Trans Mode\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:709",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE), 2, 1, 30, \"Shipment Date\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:710",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY), 2, 1, 30, \"Qty\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:711",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_LT_DAY), 2, 1, 30, \"L/T(Day)\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:713",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_ETD), 2, 1, 30, \"ETD\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:714",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_ETA), 2, 1, 30, \"ETA\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:715",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE), 2, 1, 30, \"Trans Mode\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:716",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE), 2, 1, 30, \"Shipment Date*\", FPHAlign.Cente",
+"ref": "SSP0200_ShipmentChangeRequest.cs:717",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY), 2, 1, 30, \"Qty*\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:718",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(0, siSub.GetColumnIndex(DefColumns.LT_DAY), 1, 6, 20, \"Confirmed\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:725",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(0, siSub.GetColumnIndex(DefColumns.NEW_LT_DAY), 1, 6, 20, \"Change\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:726",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.LT_DAY), 2, 1, 30, \"L/T(Day)\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:728",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.ETD), 2, 1, 30, \"ETD\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:729",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.ETA), 2, 1, 30, \"ETA\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:730",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.TRANSPORT_MODE), 2, 1, 30, \"Trans Mode\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:731",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.SHIPMENT_DATE), 2, 1, 30, \"Shipment Date\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:732",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY), 2, 1, 30, \"Qty\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:733",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_LT_DAY), 2, 1, 30, \"L/T(Day)\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:735",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_ETD), 2, 1, 30, \"ETD\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:736",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_ETA), 2, 1, 30, \"ETA\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:737",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE), 2, 1, 30, \"Trans Mode\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:738",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE), 2, 1, 30, \"Shipment Date*\", FPHAlign.Cente",
+"ref": "SSP0200_ShipmentChangeRequest.cs:739",
+"method": "InitSpread"
+},
+{
+"raw": "siSub.ColumnHeaderSpan(1, siSub.GetColumnIndex(DefColumns.NEW_SHIPMENT_CONFIRM_QTY), 2, 1, 30, \"Qty*\", FPHAlign.Center)",
+"ref": "SSP0200_ShipmentChangeRequest.cs:740",
+"method": "InitSpread"
+}
+],
+"planExcluded": [
+"cboChangeType",
+"dtDate"
+],
+"editRules": [],
+"mainClass": "SSP0200_ShipmentChangeRequest",
+"divControls": [
+"clbDivision_ID"
+],
+"changeMethods": [
+"GetShipmentPlanPlantSite",
+"InitSpread",
+"SetChangedControl",
+"clbDivision_ID_SelectedIndexChanged"
+],
+"loadMethods": [
+".ctor",
+"CreateSpread",
+"DefineProperty",
+"Form_Load",
+"GetDayRange",
+"GetDivision",
+"GetShipmentPlanPlantSite",
+"InitControls",
+"InitEvent",
+"InitSpread",
+"SetChangeControl",
+"SetChangedControl"
+],
+"states": [],
+"stateCountAll": 9,
+"defaults": [
+{
+"target": "dtDate.InitValue",
+"raw": "dtDate.InitValue = Convert.ToDateTime(DateTime.Now.Date).ToString()",
+"cond": "",
+"phase": "load",
+"ref": "SSP0200_ShipmentChangeRequest.cs:502",
+"labels": [
+"Date"
+]
+}
+],
+"insertGuards": [],
+"deadExcluded": [
+"SSP0200_ShipmentChangeRequest.Backup_Value",
+"SSP0200_ShipmentChangeRequest.Change_ReValue",
+"SSP0200_ShipmentChangeRequest.SSP_Main_Validation_SoldTo_ShipTo",
+"SSP0200_ShipmentChangeRequest.SetButtonVisual",
+"SSP0200_ShipmentChangeRequest.SetChangeRequestSOGrid",
+"SSP0200_ShipmentChangeRequest.SetMainStatus",
+"SSP0200_ShipmentChangeRequest.SetStatus"
+],
+"hasMerge": false
+},
+"db": {
+"menu": {
+"mnu_id": "SSP0200",
+"uppr_mnu_id": "Shipping_Schedule",
+"unit_tp_cd": "S",
+"use_yn": "Y",
+"n01_atr_ctn": "NSCM"
+},
+"menuGroups": [
+{
+"user_gr_id": "DM Planner (W/S)",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"use_yn": "Y"
+}
+],
+"btnAuth": [
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SCP_DAY_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_IFSEQ_MERGE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "sub",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_CHANGE_REQ_NO",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_REQUEST_COMPLETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH_NEW",
+"use_yn": "Y"
+}
+],
+"columns": [
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "A_COUNTRY",
+"column_label_name": "A Country",
+"sort_order_no": "31",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "A_PORT_CODE",
+"column_label_name": "A Port",
+"sort_order_no": "32",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "BOD_ID",
+"column_label_name": "BOD",
+"sort_order_no": "28",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "CHANGE_REQ_NO",
+"column_label_name": "Change Req.No",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "CHK",
+"column_label_name": "ALL",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "CONFIRM_ID",
+"column_label_name": "Confirm id",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "CUSTOMER_LT",
+"column_label_name": "Customer LT",
+"sort_order_no": "33",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "DIVISION_ID",
+"column_label_name": "division",
+"sort_order_no": "48",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "D_COUNTRY",
+"column_label_name": "D Country",
+"sort_order_no": "29",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "D_PORT_CODE",
+"column_label_name": "D Port",
+"sort_order_no": "30",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ELECTRODE_TYPE",
+"column_label_name": "ELECTRODE_TYPE",
+"sort_order_no": "53",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ELECTRODE_YN",
+"column_label_name": "ELECTRODE_YN",
+"sort_order_no": "52",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ERP_SO_NO",
+"column_label_name": "SO No",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ETA",
+"column_label_name": "ETA",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ETD",
+"column_label_name": "ETD",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "FCST_TYPE",
+"column_label_name": "FCST Type",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "FROM_SITE",
+"column_label_name": "From Site",
+"sort_order_no": "7",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "FROM_SITE_DESCRIPTION",
+"column_label_name": "From Site",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ITEM_ID",
+"column_label_name": "Model",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_A_COUNTRY",
+"column_label_name": "A Country",
+"sort_order_no": "40",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_A_PORT_CODE",
+"column_label_name": "A Port",
+"sort_order_no": "41",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_BASE_CONFIRM_YN",
+"column_label_name": "NEW_BASE_CONFIRM_YN",
+"sort_order_no": "56",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_BOD_ID",
+"column_label_name": "new bod",
+"sort_order_no": "49",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_CUSTOMER_LT",
+"column_label_name": "Customer LT",
+"sort_order_no": "42",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_D_COUNTRY",
+"column_label_name": "D Country",
+"sort_order_no": "38",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_D_PORT_CODE",
+"column_label_name": "D Port",
+"sort_order_no": "39",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_ETA",
+"column_label_name": "ETA",
+"sort_order_no": "19",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_ETD",
+"column_label_name": "ETD",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_INCOTERMS",
+"column_label_name": "new incoterms",
+"sort_order_no": "50",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_ROUTE_ID",
+"column_label_name": "Route",
+"sort_order_no": "37",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_SHIPMENT_CONFIRM_QTY",
+"column_label_name": "Qty*",
+"sort_order_no": "21",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_SHIPMENT_DATE",
+"column_label_name": "Shipment Date*",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_TO_CITY",
+"column_label_name": "To City",
+"sort_order_no": "44",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_TO_COUNTRY",
+"column_label_name": "To Country",
+"sort_order_no": "43",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_TRANSPORT_MODE",
+"column_label_name": "Trans Mode",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NEW_YN",
+"column_label_name": "new_yn",
+"sort_order_no": "47",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ORIGIN_FROM_DIVISION_ID",
+"column_label_name": "ORIGIN_FROM_DIVISION_ID",
+"sort_order_no": "54",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ORIGIN_TO_DIVISION_ID",
+"column_label_name": "ORIGIN_TO_DIVISION_ID",
+"sort_order_no": "55",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "PLAN_CONFIRM_ID",
+"column_label_name": "PLAN_CONFIRM_ID",
+"sort_order_no": "51",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "PROJECT_CODE",
+"column_label_name": "Project Code",
+"sort_order_no": "36",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "PROJECT_NAME",
+"column_label_name": "Project Name",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "REMARKS",
+"column_label_name": "Remarks",
+"sort_order_no": "23",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "REMARKS2",
+"column_label_name": "Building",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "REMARKS3",
+"column_label_name": "Customer requirement",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "ROUTE_ID",
+"column_label_name": "Route",
+"sort_order_no": "27",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "SHIPMENT_CONFIRM_QTY",
+"column_label_name": "Qty",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "SHIPMENT_DATE",
+"column_label_name": "Shipment Date",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "TO_CITY",
+"column_label_name": "To City",
+"sort_order_no": "35",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "TO_COUNTRY",
+"column_label_name": "To Country",
+"sort_order_no": "34",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "TO_SITE",
+"column_label_name": "To Site",
+"sort_order_no": "9",
+"visible_flag": "N",
+"default_flag": "-",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "TO_SITE_DESCRIPTION",
+"column_label_name": "To Site",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Change Request",
+"column_name": "TRANSPORT_MODE",
+"column_label_name": "Trans Mode",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ATTRIBUTE10",
+"column_label_name": "ATTRIBUTE10",
+"sort_order_no": "66",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "BOD_ID",
+"column_label_name": "bod_id",
+"sort_order_no": "43",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CHANGE_REASON_CODE",
+"column_label_name": "Change Reason",
+"sort_order_no": "17",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CHANGE_REASON_DETAIL",
+"column_label_name": "Reason Detail",
+"sort_order_no": "18",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CHANGE_REQ_NO",
+"column_label_name": "Change Request No",
+"sort_order_no": "39",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CHANGE_TYPE",
+"column_label_name": "CHANGE_TYPE",
+"sort_order_no": "44",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CHECK_NEED_YN",
+"column_label_name": "Checked",
+"sort_order_no": "40",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "CONFIRM_ID",
+"column_label_name": "Confirm/Plan ID",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "EDIT_MAIN",
+"column_label_name": "EDIT_MAIN",
+"sort_order_no": "61",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "EDIT_REMARKS",
+"column_label_name": "EDIT_REMARKS",
+"sort_order_no": "60",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ELECTRODE_TYPE",
+"column_label_name": "ELECTRODE_TYPE",
+"sort_order_no": "63",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ELECTRODE_YN",
+"column_label_name": "ELECTRODE_YN",
+"sort_order_no": "62",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "END_CUSTOMER",
+"column_label_name": "End Customer*",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ERP_ATTR1",
+"column_label_name": "Consignee Name",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ERP_ATTR2",
+"column_label_name": "Contact Point",
+"sort_order_no": "25",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ERP_ATTR3",
+"column_label_name": "Lot",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ERP_SO_NO",
+"column_label_name": "SO No",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ERP_STATUS",
+"column_label_name": "erp_status",
+"sort_order_no": "42",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ETA",
+"column_label_name": "ETA",
+"sort_order_no": "31",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ETD",
+"column_label_name": "ETD",
+"sort_order_no": "30",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "EXPECTED_SHIPPING_DATE",
+"column_label_name": "Expected Shipping Date",
+"sort_order_no": "32",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "FCST_TYPE",
+"column_label_name": "FCST Type*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "FROM_SITE",
+"column_label_name": "From Site ID",
+"sort_order_no": "0",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "FROM_SITE_DESCRIPTION",
+"column_label_name": "From Site*",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms*",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ITEM_ID",
+"column_label_name": "Model*",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "29",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "MODEL_USER",
+"column_label_name": "Model PIC",
+"sort_order_no": "41",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "MTK_OWNER",
+"column_label_name": "MKT Owner",
+"sort_order_no": "33",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_A_COUNTRY",
+"column_label_name": "A Country",
+"sort_order_no": "50",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_A_PORT_CODE",
+"column_label_name": "A Port",
+"sort_order_no": "51",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_BOD_ID",
+"column_label_name": "new bod",
+"sort_order_no": "46",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_CUSTOMER_LT",
+"column_label_name": "Customer LT",
+"sort_order_no": "52",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_D_COUNTRY",
+"column_label_name": "D Country",
+"sort_order_no": "48",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_D_PORT_CODE",
+"column_label_name": "D Port",
+"sort_order_no": "49",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_ETA",
+"column_label_name": "ETA",
+"sort_order_no": "55",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_ETD",
+"column_label_name": "ETD",
+"sort_order_no": "56",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_INCOTERMS",
+"column_label_name": "new incoterms",
+"sort_order_no": "47",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "57",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_ROUTE_ID",
+"column_label_name": "Route",
+"sort_order_no": "45",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_SHIPMENT_DATE",
+"column_label_name": "Shipment Date",
+"sort_order_no": "59",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_TO_CITY",
+"column_label_name": "To City",
+"sort_order_no": "54",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_TO_COUNTRY",
+"column_label_name": "To Country",
+"sort_order_no": "53",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NEW_TRANSPORT_MODE",
+"column_label_name": "Trans Mode",
+"sort_order_no": "58",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ORIGIN_FROM_DIVISION_ID",
+"column_label_name": "ORIGIN_FROM_DIVISION_ID",
+"sort_order_no": "64",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "ORIGIN_TO_DIVISION_ID",
+"column_label_name": "ORIGIN_TO_DIVISION_ID",
+"sort_order_no": "65",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "PROJECT_CODE",
+"column_label_name": "Project Code*",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "PROJECT_NAME",
+"column_label_name": "Project Name",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "REMARKS",
+"column_label_name": "Remarks",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "REMARKS2",
+"column_label_name": "Building",
+"sort_order_no": "19",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "REMARKS3",
+"column_label_name": "Customer Requirement",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "REQUESTOR",
+"column_label_name": "Shipment Requestor",
+"sort_order_no": "35",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "REQUEST_DATE",
+"column_label_name": "Request Date",
+"sort_order_no": "37",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "SHIPMENT_CONFIRM_QTY",
+"column_label_name": "Shipment Qty*",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "SHIPMENT_DATE",
+"column_label_name": "Shipment Date*",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "SHIPMENT_STATUS",
+"column_label_name": "Status",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "SHIPTO_DESCRIPTION",
+"column_label_name": "Ship To Party",
+"sort_order_no": "23",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "SOLDTO_DESCRIPTION",
+"column_label_name": "Sold To Party",
+"sort_order_no": "21",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TEAM",
+"column_label_name": "Team",
+"sort_order_no": "34",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TO_SITE",
+"column_label_name": "To Site ID",
+"sort_order_no": "0",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TO_SITE_DESCRIPTION",
+"column_label_name": "To Site*",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TO_SITE_SHIPTO_CODE",
+"column_label_name": "Ship to",
+"sort_order_no": "28",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TO_SITE_SOLDTO_CODE",
+"column_label_name": "Sold to",
+"sort_order_no": "27",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "TRANSPORT_MODE",
+"column_label_name": "Trans Mode*",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "UPDATED_BY",
+"column_label_name": "Updated By",
+"sort_order_no": "36",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0200",
+"sheet_name": "Shipment Change Request",
+"column_name": "UPDATED_DATE",
+"column_label_name": "Updated Date",
+"sort_order_no": "38",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"measures": [],
+"lookupMeasure": [],
+"lookupAdmin": [
+{
+"segment1": "ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+}
+],
+"now": {
+"now_": "2026-11-15 06:38",
+"dow": "SUN",
+"hm": "0638"
+}
+},
+"accounts": [
+{
+"key": "SSP/40/SSP Planner",
+"keys": [
+"SSP/40/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/40/SSP Viewer",
+"keys": [
+"SSP/40/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/81/SSP Planner",
+"keys": [
+"SSP/81/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"81_HM"
+],
+"divsMenu": [
+"81_HM"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/81/SSP Viewer",
+"keys": [
+"SSP/81/SSP Viewer",
+"SSP/82/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40",
+"81",
+"82",
+"EE"
+],
+"divsMenu": [
+"40",
+"81",
+"82",
+"EE"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "SSP/82/SSP Planner",
+"keys": [
+"SSP/82/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 0
+}
+],
+"btnDiv": {
+"__default__": {
+"40": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81_HD": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81_HG": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81_HM": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81_ST": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81_UC": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"82": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE_HD": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE_HG": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE_HM": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE_ST": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE_UC": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+},
+"SSP/40/SSP Planner": {
+"40": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+},
+"SSP/40/SSP Viewer": {
+"40": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+},
+"SSP/81/SSP Planner": {
+"81_HM": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+},
+"SSP/81/SSP Viewer": {
+"40": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"81": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"82": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+],
+"EE": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+},
+"SSP/82/SSP Planner": {
+"82": [
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"EDIT",
+"ERP_ERROR_CONFIRM",
+"ERP_IFSEQ_MERGE",
+"EXCEL",
+"GET_CHANGE_REQ_NO",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_SCP_DAY_PERIOD",
+"GET_SHIPMENT_STATUS",
+"INSERT",
+"SAVE",
+"SAVE_SHIPMENT_REQUEST_COMPLETE",
+"SAVE_SHIPMENT_REQUEST_DRAFTING",
+"SEARCH",
+"SEARCH_NEW",
+"USER_CHECK"
+]
+}
+}
+}

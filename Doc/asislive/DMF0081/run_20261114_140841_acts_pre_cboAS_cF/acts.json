@@ -1,0 +1,27 @@
+{
+ "id": "DMF0081",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [],
+ "skipped": [
+  {
+   "control": "btnCalculation",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnIncotermsChg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-14 14:05:39.795",
+ "error": "화면 열기 실패: no response within 180s (cmd=open)",
+ "restart": true
+}

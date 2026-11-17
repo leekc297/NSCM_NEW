@@ -1,0 +1,29 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <ItemGroup>
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0104_CAPA_Line_Assign\SCP0104_CAPA_Line_Assign.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0105_CAPA_Speed_Plan\SCP0105_CAPA_Speed_Plan.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0114_CAPA_LineMaster\SCP0114_CAPA_LineMaster.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0120_ConstraintMgmt\SCP0120_ConstraintMgmt.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0121_PlanGroupMaster\SCP0121_PlanGroupMaster.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0123_PlanControl\SCP0123_PlanControl.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0124_PlanGroupDashboard\SCP0124_PlanGroupDashboard.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0125_Workbench\SCP0125_Workbench.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0126_CAPA\SCP0126_CAPA.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0127_PrecedeSafetyStockDay\SCP0127_PrecedeSafetyStockDay.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0128_SafetyStock\SCP0128_SafetyStock.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0130_ScheduledRecieptInformation\SCP0130_ScheduledRecieptInformation.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0131_SalesSitePriority\SCP0131_SalesSitePriority.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0132_ConstraintOfShipmentQty\SCP0132_ConstraintOfShipmentQty.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0133_WarehouseCapacity\SCP0133_WarehouseCapacity.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0107_CAPA_TEEP_Report\SCP0107_CAPA_TEEP_Report.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0108_CAPA_LOB_Report\SCP0108_CAPA_LOB_Report.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0112_CellTraySimulation\SCP0112_CellTraySimulation.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0114_CAPA_LineMaster\SCP0114_CAPA_LineMaster.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0115_PolicyInvManagement\SCP0115_PolicyInvMgmt.csproj" />
+    <P Include="C:\Projects\NSCM\GSCM\06.UIL\GSCM.SSP.Forms.UIL\Plan\SSP0046_ShipmentRequest.UIL\SSP0046_ShipmentRequest.UIL.csproj" />
+  </ItemGroup>
+  <Target Name="Build"><MSBuild Projects="@(P)" Targets="Build" BuildInParallel="true" ContinueOnError="true" /></Target>
+</Project>

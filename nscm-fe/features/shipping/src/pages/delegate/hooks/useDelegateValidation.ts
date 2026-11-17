@@ -127,7 +127,10 @@ export const useDelegateValidation = () => {
   //   1건=통과(UserID 확정, cs:791) / 다건=MSG00302 "검색창 여시겠습니까?"(cs:802) / 0건=MSG00301(cs:811).
   //   PKG_SSP0020 미배포·호출 실패는 'error'(저장 중단, false-success 방지).
   const searchDelegatee = async (search: string): Promise<DelegateeSearch> => {
-    if (!search.trim()) return { status: 'none' };
+    // AS-IS UserName_Search(cs:780)는 빈 이름도 그대로 서버(UP_FX_GetSSPUserUseInfoList / TO-BE
+    //   P_USER_CHECK)로 보낸다 — 빈 검색어가 LIKE 전체 매칭돼 다건('many')으로 분기하는 것이 AS-IS
+    //   동작이다(화면 열자마자 Save 시 MSG00302 "다중검색된 User…"). 따라서 여기서 빈값을 'none' 으로
+    //   조기 반환하지 않고 서버 판정에 맡긴다(사용자 지시 2026-11-10 — 빈값을 서버로 흘림, 완전 파리티).
     try {
       // useYn — AS-IS UseYN='Y' 파리티. P_USER_CHECK 는 NVL(...,'Y') 로 기본값을 두지만
       //   (PKG_SSP0020 body 426), 계약(SCM_ADM_PROC_M 3파라미터)대로 명시 전송한다.

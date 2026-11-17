@@ -1,0 +1,50 @@
+{
+ "table": "SCP_MST_BOD",
+ "pk": [
+  "BOD_ID"
+ ],
+ "match": {
+  "BOD_ID": "BOD_ID"
+ },
+ "save_sp": "SCP0007_SAVE_BOD",
+ "side": [
+  {
+   "table": "SCP_MST_BOD_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [
+  {
+   "table": "SCP_MST_BOD_ITEM",
+   "pk": [
+    "SEQ"
+   ],
+   "match": {
+    "BOD_ID": "BOD_ID"
+   }
+  }
+ ],
+ "basis": "foxml SCP0007_SAVE_BOD → SP SCP0007_SAVE_BOD 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 21:5x): 수정 경로 = MERGE SCP_MST_BOD(BOD_ID) + UPDATE SCP_MST_BOD_ITEM WHERE BOD_ID · COMMIT 뒤 PR_SCP_MST_BOD_ITEM(@v_bod_list) 가 그 BOD 의 SCP_MST_BOD_ITEM 에 없는 품목을 INSERT 하고 from/to 일자를 UPDATE · PR_SCP_MST_BOD_HIST 가 SCP_MST_BOD_H 에 이력 INSERT · 트리거 0 · SAFETY_STOCK 은 화면에서 잠긴 열(20:29 연습 실행) · 초안(save_scenario.draft.json) 연습 실행 통과분을 옮김(사용자 승인 11-13 21:4x)",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 PRIORITY 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "PRIORITY",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "PRIORITY",
+      "db_col": "PRIORITY",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

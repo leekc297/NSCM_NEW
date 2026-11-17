@@ -1,0 +1,116 @@
+{
+ "menu_id": "SSP0003",
+ "asis_id": "SSP0003",
+ "area": "SSP",
+ "generated": "2026-11-14 19:26:34",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "EDIT",
+   "ERP_ERROR_CONFIRM",
+   "IF_CHECK",
+   "INSERT",
+   "PLAN_CHECK",
+   "SAVE",
+   "SAVE_40",
+   "SAVE_DE",
+   "SCS_CHECK",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Title",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Change Reason",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Reason Detail",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Reject Reason",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 2026-11-13 07:13 · 행 수 근거 16행",
+  "max_rows_after_search": 8,
+  "zero_row_failures": [
+   {
+    "row_id": "V-431c6ceb",
+    "via": "[측정 경로 없음] 조회 0행 — 스크롤 판정 불가"
+   },
+   {
+    "row_id": "V-497a4395",
+    "via": "ALL(Div,From Site,Change Type) 조회 0행 · 필수 안내 없음"
+   },
+   {
+    "row_id": "V-0cb208f6",
+    "via": "[측정 경로 없음] 조회 0행"
+   },
+   {
+    "row_id": "V-9c84a20a",
+    "via": "[측정 경로 없음] 조회 0행 — 편집 가능 여부 판정 불가"
+   }
+  ],
+  "zero_row_count": 4
+ },
+ "warnings": []
+}

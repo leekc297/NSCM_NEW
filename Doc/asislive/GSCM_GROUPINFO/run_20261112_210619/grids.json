@@ -1,0 +1,206 @@
+{
+ "id": "GSCM_GROUPINFO",
+ "from": "dump_find.json",
+ "total": "Total : 19",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "GroupInfo",
+     "rows": 19,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group ID*"
+       ],
+       "label": "Group ID*",
+       "tag": "GroupID",
+       "width": "250",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GroupID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Group Name*"
+       ],
+       "label": "Group Name*",
+       "tag": "GrpName",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GrpName",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Use YN*"
+       ],
+       "label": "Use YN*",
+       "tag": "UseYN",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "UseYN",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 19,
+     "data": [
+      [
+       "",
+       "ADMIN",
+       "System Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "CAPA Planner",
+       "CAPA Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM ADMIN",
+       "DM Administrator",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner",
+       "DM Planner",
+       "Y"
+      ],
+      [
+       "",
+       "DM Planner (W/S)",
+       "DM Planner (W/S)",
+       "Y"
+      ],
+      [
+       "",
+       "DM Viewer",
+       "DM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "FP Planner",
+       "FP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "FP Viewer",
+       "FP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "GMES Viewer",
+       "GMES Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "Guest",
+       "Guest",
+       "Y"
+      ],
+      [
+       "",
+       "JV Planner",
+       "JV Planner",
+       "N"
+      ],
+      [
+       "",
+       "SCM PI Admin",
+       "SCM PI Admin",
+       "Y"
+      ],
+      [
+       "",
+       "SCM Viewer",
+       "SCM Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Planner",
+       "SCP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SCP Tester",
+       "SCP Tester",
+       "Y"
+      ],
+      [
+       "",
+       "SSP ADMIN",
+       "SSP ADMIN",
+       "N"
+      ],
+      [
+       "",
+       "SSP Planner",
+       "SSP Planner",
+       "Y"
+      ],
+      [
+       "",
+       "SSP Viewer",
+       "SSP Viewer",
+       "Y"
+      ],
+      [
+       "",
+       "System Monitor",
+       "System Monitor",
+       "Y"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

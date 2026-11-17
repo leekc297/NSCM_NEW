@@ -1,0 +1,85 @@
+{
+ "mid": "SSP0021",
+ "asis_id": "SSP0021",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 6,
+   "asis_src": "SSP_BIGFILTER MyDivisionOut40 @SetChangedControl (SSP0021_ShipmentPlan.cs:505 ← SSP0021_ShipmentPlan.cs:345)",
+   "asis_n": 7,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [
+    "81_UC"
+   ],
+   "tobe_only": [],
+   "asis_only_n": 1,
+   "tobe_only_n": 0,
+   "explain": {
+    "81_UC": "설명 불가(BigFilter MyDivisionOut40 원천 마스터 미등록)"
+   },
+   "b4": "판정필요",
+   "why": "AS-IS 7건 vs TO-BE 6건 · 차이 1건 설명 불가: 81_UC: 설명 불가(BigFilter MyDivisionOut40 원천 마스터 미등록)",
+   "b3": "PASS",
+   "b3_why": "공통 6건 CODE 정렬 일치",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0021_ShipmentPlan.cs:505) = TO-BE 표시 NAME (CODE≠NAME 후보 6/7건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Company",
+   "label": "Company*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 5,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtDiv_Company_ID 원천 대입 미발견(필드 초기화·외부 주입 확인)' / 'dtDiv_Company_ID 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 7,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtFromSite 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Bucket",
+   "label": "Bucket",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 3,
+   "asis_src": "DM0003_GET_BUCKET_TYPE_CODE  @InitControls (SSP0021_ShipmentPlan.cs:441 ← SSP0021_ShipmentPlan.cs:440)",
+   "asis_n": 3,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 3건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "전용 SP DM0003_GET_BUCKET_TYPE_CODE 반환 순서 일치: TO-BE ['DAILY', 'WEEKLY', 'MONTHLY'] / AS-IS ['DAILY', 'WEEKLY', 'MONTHLY']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0021_ShipmentPlan.cs:441) = TO-BE 표시 NAME (CODE≠NAME 후보 3/3건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plan Date",
+   "label": "Plan-date*",
+   "scenario": "화면 초기(선택 Div=81)",
+   "tobe_n": 50,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '행 변수 strCompanyID 의 셀 대응 미등록(ROW_VAR)' / '행 변수 strSelCompany_ID 의 셀 대응 미등록(ROW_VAR)'"
+  }
+ ]
+}

@@ -1,8 +1,10 @@
+import { ControlCloseIcon } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import { IcSave } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SsoUserModal, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueryResults, useTabProcQuery } from '@shared/hooks';
@@ -15,6 +17,7 @@ import {
   COMBO,
   DELEGATED_COLUMNS,
   DELEGATE_COLUMNS,
+  LBL,
   MENU_ID,
   MSG,
   SHEETS,
@@ -29,6 +32,16 @@ const str = (v: unknown): string =>
 
 // yyyymmdd — 날짜 표시문자열('2026-09-22' 등)의 숫자만 8자리 추출.
 const toYmd = (v: unknown): string => str(v).replace(/\D/g, '').slice(0, 8);
+
+// yyyy-MM-dd 표시 정규화 (FROM_DATE/TO_DATE). BE 가 이 두 컬럼을 Oracle DATE(TO_DATE 변환,
+//   PKG_SSP0020 커서 L36-37)로 반환해 '2021-09-06 00:00:00' 문자열로 내려오는데, 메타가 FPDate
+//   라도 공용 getDataType 이 DATE 를 DataType.Date 로 안 잡아(columnMapping.ts) 컬럼이 String 으로
+//   추론돼 format('yyyy-MM-dd')이 무시된다 → 시분초까지 그대로 노출. AS-IS FPDate 표시(yyyy-MM-dd,
+//   SpreadInfo.cs:4110)에 맞춰 이 화면에서만 숫자 8자리를 yyyy-MM-dd 로 재조립한다(공용 로직 불변).
+const toYmdDash = (v: unknown): string => {
+  const d = toYmd(v);
+  return d.length === 8 ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : str(v);
+};
 
 // "이름(id)" 표시문자열의 괄호 안 id 파싱 (AS-IS UNSET 키 도출, design 03 §4-4). raw hidden 키가
 //   없을 때만 사용 — DELEGATEE 는 hidden DELEGATEE_ID 우선, LAST_UPDATED_BY 는 표시문자열만이라 파싱.
@@ -58,12 +71,12 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
   const savingRef = useRef(false);
   const allCheckedInitRef = useRef(false);
   const noAuthAlertedRef = useRef(false);
+  const autoSearchedRef = useRef(false); // 진입 1회 자동조회 가드(AS-IS Form_Load 파리티)
 
   const input = useDelegateStore(s => s.input);
   const setInput = useDelegateStore(s => s.setInput);
   const filters = useDelegateStore(s => s.filters);
   const setFilter = useDelegateStore(s => s.setFilter);
-  const clearFilters = useDelegateStore(s => s.clearFilters);
   const openSearchArea = useDelegateStore(s => s.openSearchArea);
   const setOpenSearchArea = useDelegateStore(s => s.setOpenSearchArea);
   const activeSheet = useDelegateStore(s => s.activeSheet);
@@ -107,13 +120,35 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.DELEGATE],
     enabled: !!filters[SHEETS.DELEGATE],
   });
-  const delegateRows = useMemo<DelegateRow[]>(() => data?.o_rc1 ?? [], [data]);
-  const delegatedRows = useMemo<DelegatedRow[]>(() => data?.o_rc2 ?? [], [data]);
+  // FROM_DATE/TO_DATE(FPDate) 표시를 yyyy-MM-dd 로 정규화 — BE DATE 직렬화 '…00:00:00' 노출 차단(toYmdDash).
+  const delegateRows = useMemo<DelegateRow[]>(
+    () =>
+      (data?.o_rc1 ?? []).map(r => ({
+        ...r,
+        FROM_DATE: toYmdDash(r.FROM_DATE),
+        TO_DATE: toYmdDash(r.TO_DATE),
+      })),
+    [data]
+  );
+  const delegatedRows = useMemo<DelegatedRow[]>(
+    () =>
+      (data?.o_rc2 ?? []).map(r => ({
+        ...r,
+        FROM_DATE: toYmdDash(r.FROM_DATE),
+        TO_DATE: toYmdDash(r.TO_DATE),
+      })),
+    [data]
+  );
 
   useEffect(() => {
-    // 진입 자동조회 금지 — keep-alive 잔여 filters 무효화(§5-7) + 컬럼메타 1회 fetch(2시트).
-    clearFilters();
+    // 진입 자동조회 — AS-IS Form_Load(cs:116)가 InitControls 직후 FindData_Main() 을 바로 호출하는
+    //   파리티. GET 은 입력영역과 무관(p_user_id/p_language)하므로 division 준비를 기다릴 필요가 없다.
+    //   keep-alive 복귀 중복 자동조회는 autoSearchedRef 로 1회 가드(명시 Search 는 그 뒤로도 가능).
     if (!initialized) void fetchStaticColumns();
+    if (!autoSearchedRef.current) {
+      autoSearchedRef.current = true;
+      setFilter();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
@@ -156,11 +191,17 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
     void (async () => {
       if (savingRef.current) return;
 
-      // 위임자 실존 검증(UserName_Search, cs:341/776-817). 팝업(SsoUserModal SingleSelect)이 유효 id 를
-      //   보장하는 경우는 AS-IS 의 이름 재검색을 생략한다(의도적 차이 — 확정 id 가 이름 재검색보다 견고).
-      //   수기입력(팝업 미경유)이면 AS-IS 그대로: 1건 통과 / 다건 MSG00302 / 0건 MSG00301 로 검색창 유도.
+      // 위임자 실존 검증(UserName_Search, cs:341-344). AS-IS BtnSave_Click(cs:344):
+      //   `string.IsNullOrEmpty(sDelegateeID) && UserName_Search(txtDelegatee.Text) == false → return`
+      //   — 확정 id(sDelegateeID)가 비어 있으면 txtDelegatee.Text 로 UserName_Search 를 돌린다.
+      //   이름이 빈값이어도 예외 없이 그대로 서버로 흘려(P_USER_CHECK), 빈 검색어가 전체 매칭돼 다건
+      //   (MSG00302) 다이얼로그가 뜬다 — 화면 열자마자 Save 시 AS-IS 가 "다중검색된 User… 검색창
+      //   여시겠습니까?" 를 띄우는 동작이다(사용자 지시 2026-11-10 — 완전 파리티, 빈값도 검색에 태운다).
+      //   그래서 가드는 "이름이 있을 때"가 아니라 "확정 id 가 없을 때"다. 이름이 있으면 id 확정 여부와
+      //   무관하게 항상 재검색해 동명이인(다건) 다이얼로그도 유지한다. 1건이면 그 UserID 로 확정(cs:795)
+      //   / 다건 MSG00302 / 0건 MSG00301 로 검색창 유도.
       let delegateeId = input.delegateeId;
-      if (!delegateeId && input.delegatee.trim()) {
+      if (!delegateeId || input.delegatee.trim()) {
         const found = await searchDelegatee(input.delegatee);
         if (found.status === 'one') {
           delegateeId = found.userId;
@@ -338,8 +379,8 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
   const activeFilterRef = isDelegateSheet ? delegateFilterRef : delegatedFilterRef;
   const activeCount = isDelegateSheet ? delegateRows.length : delegatedRows.length;
 
-  // 툴바 공통버튼: SEARCH(F5 조회)만 유지. 저장/해제는 SearchArea 버튼으로 이동, Insert/Delete/Save 는
-  //   사용자 지시로 툴바에서 숨김(false — no-op 노출도 하지 않음, design 01 toolbar override 는 원래 no-op).
+  // 툴바 공통버튼: SEARCH(F5 조회)만 유지. 저장/해제는 SubTitle customButtons 로 노출(공용 툴바 우측).
+  //   Insert/Delete/Save(공통 save 핫키)는 사용자 지시로 숨김(false — no-op 노출도 하지 않음).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton(BTN.SEARCH) ? handleSearch : false,
     save: false,
@@ -352,6 +393,35 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+  // SAVE/UnSet 을 공용 툴바(SubTitle 우측)로 배치 — 버튼이 늘 있는 위치로 통일(사용자 지시 2026-11-10).
+  //   권한(hasButton, AUTH-01) 보유 버튼만 렌더하되, Delegate 시트에서만 노출한다(R1/R2 isDelegateSheet).
+  //   Delegated List(view-only) 시트에선 버튼 자체를 숨긴다(사용자 지시 2026-11-10 — 비활성 노출이 아니라 미노출).
+  //   Delegate 시트에서 Division 무권한(R3)이면 노출하되 비활성.
+  const customButtons = [
+    ...(hasButton(BTN.SAVE) && isDelegateSheet
+      ? [
+          {
+            label: t(LBL.SAVE, 'Save'),
+            action: handleSave,
+            // AS-IS btnSave ImageBeforeText(아이콘+텍스트, Designer:224) 재현 — 공통 Save 핫키와 동일 IcSave.
+            iconComponent: <IcSave />,
+            disabled: !hasDivisionAuth,
+          },
+        ]
+      : []),
+    ...(hasButton(BTN.UNSET) && isDelegateSheet
+      ? [
+          {
+            label: t(LBL.UNSET, 'UnSet'),
+            action: handleUnset,
+            // AS-IS btnUnSet ImageBeforeText(Designer:260) 재현 — 해제(위임 취소) 의미의 X(닫기) 아이콘.
+            iconComponent: <ControlCloseIcon size='small' />,
+            disabled: !hasDivisionAuth,
+          },
+        ]
+      : []),
+  ];
+
   return (
     <>
       <MainTitle
@@ -363,15 +433,7 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
       {openSearchArea && (
         <DelegateForm
           onSearch={handleSearch}
-          onSave={handleSave}
-          onUnset={handleUnset}
           onDelegateeSearch={() => setOpenUser(true)}
-          // R1/R2 — 권한(hasButton) 보유 시 SAVE/UnSet 렌더(버튼그룹 폭 고정), Delegate 시트에서만 활성.
-          //   Delegated List 시트에선 visibility:hidden 로 자리만 유지(시트 전환 시 조회영역 폭 반동 방지).
-          //   AUTH-01 — SAVE·UnSet 은 버튼마다 독립 판정한다(한쪽 권한만 있는 그룹에서 다른 쪽이 새지 않게).
-          canSave={hasButton(BTN.SAVE)}
-          canUnset={hasButton(BTN.UNSET)}
-          actionsActive={isDelegateSheet}
           disabled={!hasDivisionAuth}
           divisionOptions={divisionOptions}
           allDivisionCodes={allDivisionCodes}
@@ -385,6 +447,7 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='Delegate'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
+        customButtons={customButtons}
         searchParam={input}
       />
 

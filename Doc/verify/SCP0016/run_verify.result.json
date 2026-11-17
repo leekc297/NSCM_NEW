@@ -1,18 +1,187 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T16:15:25+09:00",
+ "ts": "2026-11-14T11:10:23+09:00",
  "producer": "run_verify",
  "id": "SCP0016",
  "skip_e2e": false,
- "started": "2026-11-08 16:12:21",
- "state": "error",
- "verdict": null,
- "why": "exit 2 — 멈춘 단계: 인자",
+ "started": "2026-11-14 09:40:53",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-c34ab6ef",
+   "class": "I4",
+   "msg": "SCP0016 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META SCM_ADM_MSG_M 중복 문구 · nscm-fe\\features\\supply\\src\\pages\\waterfall-shipment-plan-fg"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7825a666",
+   "class": "G6",
+   "msg": "SCP0016 Division 변경 뒤 Version",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9f68a0da",
+   "class": "G8",
+   "msg": "조회조건 PJT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e3552224",
+   "class": "G9",
+   "msg": "조회조건 PJT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a90ffd2a",
+   "class": "G1",
+   "msg": "SCP0016 텍스트 부분일치 PJT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1e39e729",
+   "class": "H6",
+   "msg": "SCP0016 스냅샷 팝업 PJT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @snap 팝업 @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-74b29c26",
+   "class": "H4",
+   "msg": "SCP0016 스냅샷 화면샷 1920",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @snap 화면샷 @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7753e74e",
+   "class": "H4",
+   "msg": "SCP0016 스냅샷 화면샷 1366",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @snap 화면샷 @11-14 11:09"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d79b6bed",
+   "class": "G6",
+   "msg": "clbVersion / Version / Ver. / Version.",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9bb44e06",
+   "class": "X-ROW",
+   "msg": "SCP0016_WaterfallShipmentPlanFG.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a851e7f6",
+   "class": "X-ROW",
+   "msg": "SCP0016_WaterfallShipmentPlanFG.SpdMain_TopChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0016/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
+ ],
+ "summary": {
+  "rows": 2188,
+  "PASS": 830,
+  "FAIL": 11,
+  "판정필요": 68,
+  "미검증": 365,
+  "해당없음": 914,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1190,
+   "사람": 47,
+   "없음(미검증)": 365,
+   "없음(판정 대기)": 68,
+   "기계(상속·집계)": 511,
+   "출처 미기록": 7
+  },
+  "fail_listed": 11,
+  "coverage": {
+   "rules": 89,
+   "measured": 591,
+   "not_run_error": 293,
+   "na": 300,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0016_ShipmentPlanFgWaterfall_CheckList_v24.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0016_ShipmentPlanFgWaterfall_ActionItemList_v24.xlsx"
+ },
  "evidence": [
   {
    "kind": "exec",
    "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0016/e2e_results.json"
   }
  ],
- "issues": []
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0016/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
 }

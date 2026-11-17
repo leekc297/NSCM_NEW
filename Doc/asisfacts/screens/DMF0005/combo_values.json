@@ -1,6 +1,6 @@
 {
  "screen": "DMF0005",
- "generated": "2026-11-02 17:39:36",
+ "generated": "2026-11-14 05:56:31",
  "vars": {
   "dtTeam": {
    "sp": "UP_FX_GetCommonDataList",
@@ -8603,10 +8603,6 @@
    "ref": "SCM_MST_SHEET_COLUMNS DMF0005/Production/DEPT_ID ← SCM_MST_SHEET_COLUMNS DMF0005/Production/DEPT_ID_82",
    "rows": [
     {
-     "CODE": "70021414",
-     "NAME": "AI/빅데이터1.빅데이터분석팀"
-    },
-    {
      "CODE": "30339327",
      "NAME": "Corporate Management Team"
     },
@@ -8755,24 +8751,12 @@
      "NAME": "구매.자재.전극자재운영팀"
     },
     {
-     "CODE": "12345678",
-     "NAME": "소형.마케팅.테스트"
-    },
-    {
-     "CODE": "58183091",
-     "NAME": "업무혁신.SCM PI.공급/생산SCM PI팀"
-    },
-    {
      "CODE": "58410080",
      "NAME": "자동차.PM.미주PM.Stellantis PM팀"
     },
     {
      "CODE": "71060742",
      "NAME": "자동차.PM.미주PM.수주PM팀"
-    },
-    {
-     "CODE": "70021336",
-     "NAME": "자동차.PM.유럽PM.Porsche PM팀"
     },
     {
      "CODE": "70000346",
@@ -8868,10 +8852,6 @@
    ],
    "ref": "SCM_MST_SHEET_COLUMNS DMF0005/Production/DEPT_ID2 ← SCM_MST_SHEET_COLUMNS DMF0005/Production/DEPT_ID2",
    "rows": [
-    {
-     "CODE": "70021414",
-     "NAME": "AI/빅데이터1.빅데이터분석팀"
-    },
     {
      "CODE": "70021414",
      "NAME": "AI/빅데이터1.빅데이터분석팀"
@@ -9034,7 +9014,7 @@
     },
     {
      "CODE": "70090866",
-     "NAME": "소형.마케팅.FT.FT1팀"
+     "NAME": "소형.마케팅.IM.IM1팀"
     },
     {
      "CODE": "58124984",
@@ -9085,20 +9065,8 @@
      "NAME": "소형.마케팅.아시아2.일본팀"
     },
     {
-     "CODE": "12345678",
-     "NAME": "소형.마케팅.테스트"
-    },
-    {
      "CODE": "70174158",
      "NAME": "소형.상품기획/전략.KooRoo사업팀"
-    },
-    {
-     "CODE": "58183091",
-     "NAME": "업무혁신.SCM PI.공급/생산SCM PI팀"
-    },
-    {
-     "CODE": "58183091",
-     "NAME": "업무혁신.SCM PI.공급/생산SCM PI팀"
     },
     {
      "CODE": "58410080",
@@ -9107,10 +9075,6 @@
     {
      "CODE": "71060742",
      "NAME": "자동차.PM.미주PM.수주PM팀"
-    },
-    {
-     "CODE": "70021336",
-     "NAME": "자동차.PM.유럽PM.Porsche PM팀"
     },
     {
      "CODE": "70000346",
@@ -9195,10 +9159,6 @@
     {
      "CODE": "58148696",
      "NAME": "자동차.마케팅.유럽1.Volvo팀"
-    },
-    {
-     "CODE": "71061668",
-     "NAME": "중국지역Group,중국경영관리담당,물류T,대형전지물류1Part"
     }
    ]
   },
@@ -11019,10 +10979,6 @@
     {
      "CODE": "Sumitomo",
      "NAME": "Sumitomo"
-    },
-    {
-     "CODE": "Summit Ridge Energy",
-     "NAME": "Summit Ridge Energy"
     },
     {
      "CODE": "SUNDS",
@@ -20801,22 +20757,6 @@
      "NAME": "ABB USA_US_NYC"
     },
     {
-     "CODE": "ABB_AA_TES",
-     "NAME": "ABB_AA_TES"
-    },
-    {
-     "CODE": "ABB_AB_TES",
-     "NAME": "ABB_AB_TES"
-    },
-    {
-     "CODE": "ABB_AC_TES",
-     "NAME": "ABB_AC_TES"
-    },
-    {
-     "CODE": "ABB_AV_TES",
-     "NAME": "ABB_AV_TES"
-    },
-    {
      "CODE": "ABB_BE_JUM",
      "NAME": "ABB_BE_JUM"
     },
@@ -20831,10 +20771,6 @@
     {
      "CODE": "ABB_US_RIC",
      "NAME": "ABB_US_RIC"
-    },
-    {
-     "CODE": "ABS_US_BUX",
-     "NAME": "ABS_US_BUX"
     },
     {
      "CODE": "ABS_US_LRP",
@@ -20899,14 +20835,6 @@
     {
      "CODE": "Acme_IN_RUD",
      "NAME": "Acme_IN_RUD"
-    },
-    {
-     "CODE": "AEE Solar_AE_AAN",
-     "NAME": "AEE Solar_AE_AAN"
-    },
-    {
-     "CODE": "AEE Solar_AE_ABU",
-     "NAME": "AEE Solar_AE_ABU"
     },
     {
      "CODE": "AEE Solar_US_SAC",
@@ -20989,22 +20917,6 @@
      "NAME": "Airwheel_CN_CZX"
     },
     {
-     "CODE": "AJ상사_AB_TES",
-     "NAME": "AJ상사_AB_TES"
-    },
-    {
-     "CODE": "AJ상사_AC_TES",
-     "NAME": "AJ상사_AC_TES"
-    },
-    {
-     "CODE": "AJ상사_AE_AAN",
-     "NAME": "AJ상사_AE_AAN"
-    },
-    {
-     "CODE": "AJ상사_AE_ABU",
-     "NAME": "AJ상사_AE_ABU"
-    },
-    {
      "CODE": "AJ상사_JP_OSA",
      "NAME": "AJ상사_JP_OSA"
     },
@@ -21085,18 +20997,6 @@
      "NAME": "Alta Motors_US_BSA"
     },
     {
-     "CODE": "Alte_AB_TES",
-     "NAME": "Alte_AB_TES"
-    },
-    {
-     "CODE": "Alte_AE_AAN",
-     "NAME": "Alte_AE_AAN"
-    },
-    {
-     "CODE": "Alte_AE_ABU",
-     "NAME": "Alte_AE_ABU"
-    },
-    {
      "CODE": "Alte_KR_SEL",
      "NAME": "Alte_KR_SEL"
     },
@@ -21171,14 +21071,6 @@
     {
      "CODE": "ANDURIL_US_CZM",
      "NAME": "ANDURIL_US_CZM"
-    },
-    {
-     "CODE": "Anjin_AA_TES",
-     "NAME": "Anjin_AA_TES"
-    },
-    {
-     "CODE": "Anjin_AK_TES",
-     "NAME": "Anjin_AK_TES"
     },
     {
      "CODE": "Anjin_CN_SHA",
@@ -21355,10 +21247,6 @@
     {
      "CODE": "Audi CKD_DE_ING",
      "NAME": "Audi CKD_DE_ING"
-    },
-    {
-     "CODE": "Audi_AJ_TES",
-     "NAME": "Audi_AJ_TES"
     },
     {
      "CODE": "Audi_DE_ING",
@@ -21581,10 +21469,6 @@
      "NAME": "BMW_AT_SER"
     },
     {
-     "CODE": "BMW_CZ_MOS",
-     "NAME": "BMW_CZ_MOS"
-    },
-    {
      "CODE": "BMW_DE_BKB",
      "NAME": "BMW_DE_BKB"
     },
@@ -21643,14 +21527,6 @@
     {
      "CODE": "BMZ_CN_SZX",
      "NAME": "BMZ_CN_SZX"
-    },
-    {
-     "CODE": "BMZ_DE_FRA",
-     "NAME": "BMZ_DE_FRA"
-    },
-    {
-     "CODE": "BMZ_DE_KSN",
-     "NAME": "BMZ_DE_KSN"
     },
     {
      "CODE": "BMZ_HK_HKG",
@@ -21835,10 +21711,6 @@
     {
      "CODE": "Caterpillar_US_ZFT",
      "NAME": "Caterpillar_US_ZFT"
-    },
-    {
-     "CODE": "CCR_ES_VLC",
-     "NAME": "CCR_ES_VLC"
     },
     {
      "CODE": "CCR_US_ASC",
@@ -22177,10 +22049,6 @@
      "NAME": "Critical Loop Equipment_US_LGB"
     },
     {
-     "CODE": "Critical Loop Equipment_US_TOA",
-     "NAME": "Critical Loop Equipment_US_TOA"
-    },
-    {
      "CODE": "CRR_IL_BEV",
      "NAME": "CRR_IL_BEV"
     },
@@ -22339,10 +22207,6 @@
     {
      "CODE": "DCBEL LLC_US_SXB",
      "NAME": "DCBEL LLC_US_SXB"
-    },
-    {
-     "CODE": "DDC_US_DET",
-     "NAME": "DDC_US_DET"
     },
     {
      "CODE": "Debao_CN_SZX",
@@ -22613,10 +22477,6 @@
      "NAME": "DM GEC_KR_SEL"
     },
     {
-     "CODE": "DMS_ID_JKT",
-     "NAME": "DMS_ID_JKT"
-    },
-    {
      "CODE": "DNA MOTORS_KR_CHW",
      "NAME": "DNA MOTORS_KR_CHW"
     },
@@ -22689,6 +22549,10 @@
      "NAME": "DTE_US_CWA"
     },
     {
+     "CODE": "DTE_US_DT7",
+     "NAME": "DTE_US_DT7"
+    },
+    {
      "CODE": "DTE_US_MG8",
      "NAME": "DTE_US_MG8"
     },
@@ -22701,20 +22565,12 @@
      "NAME": "DTE_US_MNC"
     },
     {
-     "CODE": "DTE_US_MVV",
-     "NAME": "DTE_US_MVV"
-    },
-    {
      "CODE": "DTE_US_NEP",
      "NAME": "DTE_US_NEP"
     },
     {
      "CODE": "DTE_US_SJX",
      "NAME": "DTE_US_SJX"
-    },
-    {
-     "CODE": "DTE_US_UCI",
-     "NAME": "DTE_US_UCI"
     },
     {
      "CODE": "Dualtron_CN_JHA",
@@ -23045,10 +22901,6 @@
      "NAME": "Elentec_VN_HAN"
     },
     {
-     "CODE": "Elentec_VN_HAP",
-     "NAME": "Elentec_VN_HAP"
-    },
-    {
      "CODE": "Elentec_VN_HPH",
      "NAME": "Elentec_VN_HPH"
     },
@@ -23265,14 +23117,6 @@
      "NAME": "EQUIS Australia_AU_BTV"
     },
     {
-     "CODE": "ESS_AB_TES",
-     "NAME": "ESS_AB_TES"
-    },
-    {
-     "CODE": "ESS_AP_TES",
-     "NAME": "ESS_AP_TES"
-    },
-    {
      "CODE": "ESS_CN_NKG",
      "NAME": "ESS_CN_NKG"
     },
@@ -23487,10 +23331,6 @@
     {
      "CODE": "FCA AS_CA_WND",
      "NAME": "FCA AS_CA_WND"
-    },
-    {
-     "CODE": "FCA AS_CN_NKG",
-     "NAME": "FCA AS_CN_NKG"
     },
     {
      "CODE": "FCA AS_GB_ABG",
@@ -24045,10 +23885,6 @@
      "NAME": "Fronius_AT_WSL"
     },
     {
-     "CODE": "Fronius_AU_TME",
-     "NAME": "Fronius_AU_TME"
-    },
-    {
      "CODE": "FSP_TW_TYN",
      "NAME": "FSP_TW_TYN"
     },
@@ -24075,10 +23911,6 @@
     {
      "CODE": "Fushida_CN_SZX",
      "NAME": "Fushida_CN_SZX"
-    },
-    {
-     "CODE": "Futaihua Shenzhen_CN_SZX",
-     "NAME": "Futaihua Shenzhen_CN_SZX"
     },
     {
      "CODE": "Futurepath_CN_DGG",
@@ -24637,10 +24469,6 @@
      "NAME": "Hanwha Q Cells_KR_SEL"
     },
     {
-     "CODE": "Hanwha Q Cells_KR_TJN",
-     "NAME": "Hanwha Q Cells_KR_TJN"
-    },
-    {
      "CODE": "Hanwha Q Cells_US_AAZ",
      "NAME": "Hanwha Q Cells_US_AAZ"
     },
@@ -24993,10 +24821,6 @@
      "NAME": "Hongfugang_HK_KWN"
     },
     {
-     "CODE": "Hongfujin Chengdu_CN_CTU",
-     "NAME": "Hongfujin Chengdu_CN_CTU"
-    },
-    {
      "CODE": "Honhai_CN_HGH",
      "NAME": "Honhai_CN_HGH"
     },
@@ -25185,8 +25009,12 @@
      "NAME": "HUAYOU_CN_HUI"
     },
     {
-     "CODE": "HUAYOU_CN_KUS",
-     "NAME": "HUAYOU_CN_KUS"
+     "CODE": "HUAYOU_CN_NJG",
+     "NAME": "HUAYOU_CN_NJG"
+    },
+    {
+     "CODE": "HUAYOU_CN_NJP",
+     "NAME": "HUAYOU_CN_NJP"
     },
     {
      "CODE": "HUAYOU_CN_NKG",
@@ -25195,6 +25023,14 @@
     {
      "CODE": "HUAYOU_HK_HKG",
      "NAME": "HUAYOU_HK_HKG"
+    },
+    {
+     "CODE": "HUAYOU_HK_YUE",
+     "NAME": "HUAYOU_HK_YUE"
+    },
+    {
+     "CODE": "HUAYOU_SG_SIN",
+     "NAME": "HUAYOU_SG_SIN"
     },
     {
      "CODE": "HUAYOU_VN_SGN",
@@ -25391,10 +25227,6 @@
     {
      "CODE": "IM_US_HOU",
      "NAME": "IM_US_HOU"
-    },
-    {
-     "CODE": "IM_US_LRO",
-     "NAME": "IM_US_LRO"
     },
     {
      "CODE": "IM_US_PAO",
@@ -25909,10 +25741,6 @@
      "NAME": "K.E.W.Power_KR_CHA"
     },
     {
-     "CODE": "K2 Space_US_TOA",
-     "NAME": "K2 Space_US_TOA"
-    },
-    {
      "CODE": "Kabra Extrusion_IN_MUB",
      "NAME": "Kabra Extrusion_IN_MUB"
     },
@@ -26361,10 +26189,6 @@
      "NAME": "LGCNS_KR_GYS"
     },
     {
-     "CODE": "LGCNS_KR_PYK",
-     "NAME": "LGCNS_KR_PYK"
-    },
-    {
      "CODE": "LGCOC_KR_OCH",
      "NAME": "LGCOC_KR_OCH"
     },
@@ -26529,10 +26353,6 @@
      "NAME": "LGE_US_LRP"
     },
     {
-     "CODE": "LGE_US_MNC",
-     "NAME": "LGE_US_MNC"
-    },
-    {
      "CODE": "LGE_US_QGB",
      "NAME": "LGE_US_QGB"
     },
@@ -26561,16 +26381,8 @@
      "NAME": "LGESKR_KR_GCN"
     },
     {
-     "CODE": "LGESKR_KR_SEL",
-     "NAME": "LGESKR_KR_SEL"
-    },
-    {
      "CODE": "LGESMI_US_HZP",
      "NAME": "LGESMI_US_HZP"
-    },
-    {
-     "CODE": "LGESMI_US_IGX",
-     "NAME": "LGESMI_US_IGX"
     },
     {
      "CODE": "LGESMI_US_LLO",
@@ -26595,14 +26407,6 @@
     {
      "CODE": "LGESOC_PL_WRO",
      "NAME": "LGESOC_PL_WRO"
-    },
-    {
-     "CODE": "LGESOC2_KR_CHU",
-     "NAME": "LGESOC2_KR_CHU"
-    },
-    {
-     "CODE": "LGESOC2_KR_OCH",
-     "NAME": "LGESOC2_KR_OCH"
     },
     {
      "CODE": "LGESVT_KR_CHU",
@@ -27199,10 +27003,6 @@
     {
      "CODE": "MOBIS_ID_CKR",
      "NAME": "MOBIS_ID_CKR"
-    },
-    {
-     "CODE": "MOBIS_IN_MAA",
-     "NAME": "MOBIS_IN_MAA"
     },
     {
      "CODE": "MOBIS_KR_CHU",
@@ -27881,10 +27681,6 @@
      "NAME": "OMRON_JP_YAT"
     },
     {
-     "CODE": "OMRON_KR_BNP",
-     "NAME": "OMRON_KR_BNP"
-    },
-    {
      "CODE": "One Stop Warehouse_AU_BNE",
      "NAME": "One Stop Warehouse_AU_BNE"
     },
@@ -28489,16 +28285,8 @@
      "NAME": "RES America_CA_TOR"
     },
     {
-     "CODE": "REV Renewables_US_NVT",
-     "NAME": "REV Renewables_US_NVT"
-    },
-    {
      "CODE": "REV Renewables_US_SAN",
      "NAME": "REV Renewables_US_SAN"
-    },
-    {
-     "CODE": "REV Renewables_US_ZTZ",
-     "NAME": "REV Renewables_US_ZTZ"
     },
     {
      "CODE": "Reynosa_MX_REX",
@@ -29017,10 +28805,6 @@
      "NAME": "Shinden Hightex_JP_KUH"
     },
     {
-     "CODE": "Shinden Hightex_JP_OSA",
-     "NAME": "Shinden Hightex_JP_OSA"
-    },
-    {
      "CODE": "Shinden Hightex_JP_SAK",
      "NAME": "Shinden Hightex_JP_SAK"
     },
@@ -29079,10 +28863,6 @@
     {
      "CODE": "Shinsung_KR_SEL",
      "NAME": "Shinsung_KR_SEL"
-    },
-    {
-     "CODE": "Shivam Electronics_IN_GNO",
-     "NAME": "Shivam Electronics_IN_GNO"
     },
     {
      "CODE": "Shunzao_CN_BJS",
@@ -29437,10 +29217,6 @@
      "NAME": "Sumitomo_JP_CH1"
     },
     {
-     "CODE": "Summit Ridge Energy_US_AZZ",
-     "NAME": "Summit Ridge Energy_US_AZZ"
-    },
-    {
      "CODE": "SUNDS_JP_NRI",
      "NAME": "SUNDS_JP_NRI"
     },
@@ -29451,10 +29227,6 @@
     {
      "CODE": "Sungrow_KR_SEL",
      "NAME": "Sungrow_KR_SEL"
-    },
-    {
-     "CODE": "Sungwoo Hightech_KR_PUS",
-     "NAME": "Sungwoo Hightech_KR_PUS"
     },
     {
      "CODE": "Sunnova_US_HOU",
@@ -29905,10 +29677,6 @@
      "NAME": "Turnlife_CN_SZX"
     },
     {
-     "CODE": "TVS Indeon_IN_MAA",
-     "NAME": "TVS Indeon_IN_MAA"
-    },
-    {
      "CODE": "TVS Motor_IN_HSR",
      "NAME": "TVS Motor_IN_HSR"
     },
@@ -29995,10 +29763,6 @@
     {
      "CODE": "Unit Pack Power_CN_SZH",
      "NAME": "Unit Pack Power_CN_SZH"
-    },
-    {
-     "CODE": "Unit Pack Power_HK_KWN",
-     "NAME": "Unit Pack Power_HK_KWN"
     },
     {
      "CODE": "UniTest_KR_YNG",
@@ -30885,14 +30649,6 @@
      "NAME": "인도 E-BUS_IN_BLR"
     },
     {
-     "CODE": "제일무역_ID_JKT",
-     "NAME": "제일무역_ID_JKT"
-    },
-    {
-     "CODE": "제일무역_KR_SEL",
-     "NAME": "제일무역_KR_SEL"
-    },
-    {
      "CODE": "중국 E-Bike_CN_SZX",
      "NAME": "중국 E-Bike_CN_SZX"
     },
@@ -30937,10 +30693,6 @@
     {
      "CODE": "1X Technologies_US_PAO",
      "NAME": "1X Technologies_US_PAO"
-    },
-    {
-     "CODE": "ABS_US_BUX",
-     "NAME": "ABS_US_BUX"
     },
     {
      "CODE": "ABS_US_LRP",
@@ -31017,22 +30769,6 @@
     {
      "CODE": "Airwheel_CN_DNN",
      "NAME": "Airwheel_CN_DNN"
-    },
-    {
-     "CODE": "AJ상사_AB_TES",
-     "NAME": "AJ상사_AB_TES"
-    },
-    {
-     "CODE": "AJ상사_AC_TES",
-     "NAME": "AJ상사_AC_TES"
-    },
-    {
-     "CODE": "AJ상사_AE_AAN",
-     "NAME": "AJ상사_AE_AAN"
-    },
-    {
-     "CODE": "AJ상사_AE_ABU",
-     "NAME": "AJ상사_AE_ABU"
     },
     {
      "CODE": "AJ상사_JP_OSA",
@@ -31121,14 +30857,6 @@
     {
      "CODE": "ANDURIL_US_CZM",
      "NAME": "ANDURIL_US_CZM"
-    },
-    {
-     "CODE": "Anjin_AA_TES",
-     "NAME": "Anjin_AA_TES"
-    },
-    {
-     "CODE": "Anjin_AK_TES",
-     "NAME": "Anjin_AK_TES"
     },
     {
      "CODE": "Anjin_CN_SHA",
@@ -31421,10 +31149,6 @@
     {
      "CODE": "BMZ_CN_SZX",
      "NAME": "BMZ_CN_SZX"
-    },
-    {
-     "CODE": "BMZ_DE_FRA",
-     "NAME": "BMZ_DE_FRA"
     },
     {
      "CODE": "BMZ_DE_KSN",
@@ -31839,10 +31563,6 @@
      "NAME": "DC EnergySolution_KR_CHU"
     },
     {
-     "CODE": "DDC_US_DET",
-     "NAME": "DDC_US_DET"
-    },
-    {
      "CODE": "Debao_CN_SHA",
      "NAME": "Debao_CN_SHA"
     },
@@ -31973,10 +31693,6 @@
     {
      "CODE": "DLG1_CN_SHA",
      "NAME": "DLG1_CN_SHA"
-    },
-    {
-     "CODE": "DMS_ID_JKT",
-     "NAME": "DMS_ID_JKT"
     },
     {
      "CODE": "DNA MOTORS_KR_CHW",
@@ -32157,10 +31873,6 @@
     {
      "CODE": "Elentec_VN_HAN",
      "NAME": "Elentec_VN_HAN"
-    },
-    {
-     "CODE": "Elentec_VN_HAP",
-     "NAME": "Elentec_VN_HAP"
     },
     {
      "CODE": "Elentec_VN_HPH",
@@ -32549,10 +32261,6 @@
     {
      "CODE": "Fushida_CN_SZX",
      "NAME": "Fushida_CN_SZX"
-    },
-    {
-     "CODE": "Futaihua Shenzhen_CN_SZX",
-     "NAME": "Futaihua Shenzhen_CN_SZX"
     },
     {
      "CODE": "Futurepath_CN_DGG",
@@ -33023,10 +32731,6 @@
      "NAME": "Hongfugang_HK_KWN"
     },
     {
-     "CODE": "Hongfujin Chengdu_CN_CTU",
-     "NAME": "Hongfujin Chengdu_CN_CTU"
-    },
-    {
      "CODE": "Honhai_CN_HGH",
      "NAME": "Honhai_CN_HGH"
     },
@@ -33243,10 +32947,6 @@
      "NAME": "HUAYOU_CN_HUI"
     },
     {
-     "CODE": "HUAYOU_CN_KUS",
-     "NAME": "HUAYOU_CN_KUS"
-    },
-    {
      "CODE": "HUAYOU_CN_NJG",
      "NAME": "HUAYOU_CN_NJG"
     },
@@ -33365,10 +33065,6 @@
     {
      "CODE": "IM_US_FNC",
      "NAME": "IM_US_FNC"
-    },
-    {
-     "CODE": "IM_US_LRO",
-     "NAME": "IM_US_LRO"
     },
     {
      "CODE": "IM_US_PAO",
@@ -33711,10 +33407,6 @@
      "NAME": "Junchang_CN_YBN"
     },
     {
-     "CODE": "K2 Space_US_TOA",
-     "NAME": "K2 Space_US_TOA"
-    },
-    {
      "CODE": "Kabra Extrusion_IN_MUB",
      "NAME": "Kabra Extrusion_IN_MUB"
     },
@@ -34023,14 +33715,6 @@
      "NAME": "LGE_KR_SEL"
     },
     {
-     "CODE": "LGE_US_MNC",
-     "NAME": "LGE_US_MNC"
-    },
-    {
-     "CODE": "LGE_US_TYM",
-     "NAME": "LGE_US_TYM"
-    },
-    {
      "CODE": "LGE_VN_HAN",
      "NAME": "LGE_VN_HAN"
     },
@@ -34051,20 +33735,8 @@
      "NAME": "LGESKR_KR_GCN"
     },
     {
-     "CODE": "LGESKR_KR_SEL",
-     "NAME": "LGESKR_KR_SEL"
-    },
-    {
      "CODE": "LGESNJ_CN_NJG",
      "NAME": "LGESNJ_CN_NJG"
-    },
-    {
-     "CODE": "LGESOC2_KR_CHU",
-     "NAME": "LGESOC2_KR_CHU"
-    },
-    {
-     "CODE": "LGESOC2_KR_OCH",
-     "NAME": "LGESOC2_KR_OCH"
     },
     {
      "CODE": "LGI_KR_INC",
@@ -35299,10 +34971,6 @@
      "NAME": "Shinsung_KR_SEL"
     },
     {
-     "CODE": "Shivam Electronics_IN_GNO",
-     "NAME": "Shivam Electronics_IN_GNO"
-    },
-    {
      "CODE": "Shunzao_CN_BJS",
      "NAME": "Shunzao_CN_BJS"
     },
@@ -35775,10 +35443,6 @@
      "NAME": "Turnlife_CN_SZX"
     },
     {
-     "CODE": "TVS Indeon_IN_MAA",
-     "NAME": "TVS Indeon_IN_MAA"
-    },
-    {
      "CODE": "TVS Motor_IN_HSR",
      "NAME": "TVS Motor_IN_HSR"
     },
@@ -35841,10 +35505,6 @@
     {
      "CODE": "Unit Pack Power_CN_SZH",
      "NAME": "Unit Pack Power_CN_SZH"
-    },
-    {
-     "CODE": "Unit Pack Power_HK_KWN",
-     "NAME": "Unit Pack Power_HK_KWN"
     },
     {
      "CODE": "Univ. of Warwick_GB_CVT",
@@ -36397,14 +36057,6 @@
     {
      "CODE": "인도 E-BUS_IN_BLR",
      "NAME": "인도 E-BUS_IN_BLR"
-    },
-    {
-     "CODE": "제일무역_ID_JKT",
-     "NAME": "제일무역_ID_JKT"
-    },
-    {
-     "CODE": "제일무역_KR_SEL",
-     "NAME": "제일무역_KR_SEL"
     },
     {
      "CODE": "중국 E-Bike_CN_SZX",

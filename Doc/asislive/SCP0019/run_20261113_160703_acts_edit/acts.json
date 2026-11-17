@@ -1,0 +1,435 @@
+{
+ "id": "SCP0019",
+ "group": "ADMIN",
+ "edit": true,
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Working Time",
+     "rows_before": 1,
+     "rows_after": 1,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "D_20261113",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261114",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261115",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261116",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261117",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261118",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261119",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261120",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261121",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261122",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261123",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261124",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261125",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261126",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261127",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261128",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261129",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261130",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261201",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261202",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261203",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261204",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261205",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261206",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261207",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261208",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261209",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261210",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261211",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261212",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261213",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261214",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261215",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261216",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261217",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261218",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261219",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261220",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261221",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261222",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261223",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261224",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261225",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261226",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261227",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261228",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261229",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261230",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20261231",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270101",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270102",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270103",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270104",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270105",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270106",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270107",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270108",
+       "before": "1,440",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270109",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "D_20270110",
+       "before": "0",
+       "after": ""
+      }
+     ],
+     "more": 301
+    }
+   ],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 16:05:56.431",
+ "fills": 0,
+ "fill_left": [],
+ "edit_mode": true,
+ "edit_dialogs": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": [
+   {
+    "text": "작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?",
+    "action": "yes_button(id=6 · 저장 없이 닫기)"
+   }
+  ]
+ }
+}

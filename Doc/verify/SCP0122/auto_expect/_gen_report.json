@@ -1,7 +1,7 @@
 {
  "id": "SCP0122",
  "asis": "SCP0122",
- "at": "2026-11-08 22:00:57",
+ "at": "2026-11-14 17:10:05",
  "has_asis": true,
  "tobe_cols": 11,
  "buttons": [
@@ -36,7 +36,7 @@
    "why_not": []
   },
   "p_combo": {
-   "rows": 4,
+   "rows": 6,
    "why_not": []
   },
   "p_decimal": {
@@ -88,8 +88,10 @@
    ]
   },
   "p_modins": {
-   "rows": 1,
-   "why_not": []
+   "rows": 0,
+   "why_not": [
+    "기존 행 편집 글자 칸 없음"
+   ]
   },
   "p_popfill": {
    "rows": 0,
@@ -127,8 +129,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 13,
-   "used": 13
+   "rows": 14,
+   "used": 14
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -139,7 +141,7 @@
    "used": 0
   }
  },
- "rows": 13,
- "rows_used": 13,
+ "rows": 14,
+ "rows_used": 14,
  "dup_of_hand": 0
 }

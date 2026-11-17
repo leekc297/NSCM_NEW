@@ -1,0 +1,173 @@
+{
+ "menu_id": "SCP0104",
+ "rows": 3240,
+ "static_judged": 2097,
+ "runtime_pending": 0,
+ "dist": {
+  "PASS": 304,
+  "ERROR": 879,
+  "NA": 871,
+  "FAIL": 40,
+  "판정필요": 3
+ },
+ "fail_direct": 0,
+ "fail_user": 0,
+ "fail_by_rule": {},
+ "error_by_prefix": {
+  "진입점 집계 — 대조표 SCP0104": 159,
+  " | [미검증] 검사기(_verify": 34,
+  "진입점 집계 1검사 — ERROR:1": 28,
+  "진입점 집계 2검사 — ERROR:1": 28,
+  "이 표에 구현 위치 열이 없고 행에도": 18,
+  "화면 초기(선택 Div=81)": 16,
+  "규칙 B4 판정 3행 중 FAIL 0": 13,
+  "원천 NICK_NAME 신규행 편집 ": 13,
+  "진입점 집계 2검사 — NOT_RUN": 11,
+  "규칙 C2 판정 2행 중 FAIL 0": 10,
+  "진입점 집계 4검사 — ERROR:3": 10,
+  " | [미검증] 검사기(_trace.": 9
+ },
+ "runtime_fail_prev": 17,
+ "runtime_fail_rows": [
+  {
+   "row_id": "V-e44a626b",
+   "rule_id": "A5",
+   "target": "SCP0104 화면",
+   "evidence": "그리드 컬럼 구성(AS-IS Div 40 기준 12컬럼 대조): 누락(AS-IS 표시인데 TO-BE 미표시) 2개 = DUMMY_YN, ELTR_LN_TP_CD · 추가 없음"
+  },
+  {
+   "row_id": "V-b9259c14",
+   "rule_id": "I2",
+   "target": "SCP0104 화면",
+   "evidence": "조회·Insert 후 '_' 폴백 노출: _Ver."
+  },
+  {
+   "row_id": "V-6af7fe19",
+   "rule_id": "K3",
+   "target": "SCP0104 화면",
+   "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(DIVISION_ID) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤"
+  },
+  {
+   "row_id": "V-d86a0134",
+   "rule_id": "D1",
+   "target": "ELTR.NICK_NAME (Nickname)",
+   "evidence": "신규행 r0 NICK_NAME 편집=false (AS-IS 편집 가능)"
+  },
+  {
+   "row_id": "V-79b744aa",
+   "rule_id": "K3",
+   "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": "hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼"
+  },
+  {
+   "row_id": "V-5d83a36f",
+   "rule_id": "K3",
+   "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": "copy PASS: 선택 0,0,0,0 · 0행 DIVISION_ID 표시값 '81' · Ctrl+C 클립보드 '81'(일치) · 우클릭 Copy '81'(일치) | hide FAIL: 헤더(DIVISION_ID) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smok"
+  },
+  {
+   "row_id": "T-6fb50552",
+   "rule_id": "D1",
+   "target": "NICK_NAME / Nickname",
+   "evidence": "기존행 r0 NICK_NAME 편집=false — AS-IS 기대 미식별(edit_expect 'UNKNOWN') | 신규행 r0 NICK_NAME 편집=false (AS-IS 편집 가능)"
+  },
+  {
+   "row_id": "T-21b52657",
+   "rule_id": "C1",
+   "target": "clbLine / Line",
+   "evidence": "'Line' → 'E5DP1 Elec Pilot #1-01' 변경 · 콤보 재요청 1건 · 하위 (없음) · 화면에서 못 찾은 AS-IS 하위 조건 clbElectrodeType,clbOperation · AS-IS 핸들러 -= clbLine_SelectedIndexChanged,clbLine_SelectedIndexChanged · AS-IS 하위 후보 "
+  },
+  {
+   "row_id": "T-dba78bc7",
+   "rule_id": "C2",
+   "target": "DIVISION_ID / Div",
+   "evidence": "신규행 DIVISION_ID 콤보 후보 없음 — 내 Division 목록 콤보 미구현(D00-3-009)"
+  },
+  {
+   "row_id": "EG-00c8c971",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/40/SCP Planner",
+   "evidence": "기대 그룹 1개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-f9a90510",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/40/SCP Tester",
+   "evidence": "기대 그룹 8개 중 메뉴 권한 3개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-3227f00d",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/40/SCM Viewer",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-56ece477",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/40/SCM PI Admin",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-abaf6619",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/81/SCP Planner",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-597fc463",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/81/SCM Viewer",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-bde3c084",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/81/SCM PI Admin",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  },
+  {
+   "row_id": "EG-5a0729e4",
+   "rule_id": "J4",
+   "target": "SCP0104 EG382 메뉴 트리 SCP/82/SCM Viewer",
+   "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 없음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M"
+  }
+ ],
+ "rules_static_measured": [
+  "A1",
+  "A5",
+  "A6",
+  "B2",
+  "B3",
+  "B4",
+  "B6",
+  "C1",
+  "C2",
+  "C4",
+  "D1",
+  "D6",
+  "DB-SYN",
+  "F10",
+  "F5",
+  "G1",
+  "G2",
+  "G4",
+  "G5",
+  "G7",
+  "H1",
+  "H10",
+  "H3",
+  "H5",
+  "H7",
+  "I1",
+  "I4",
+  "J1",
+  "J4",
+  "K-SA",
+  "M3",
+  "MS1",
+  "X-LOC",
+  "X-REASON",
+  "X-ROW"
+ ],
+ "fails": []
+}

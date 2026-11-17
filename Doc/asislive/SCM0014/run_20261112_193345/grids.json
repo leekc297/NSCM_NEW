@@ -1,0 +1,415 @@
+{
+ "id": "SCM0014",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 0.867s, UI : 0.076s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Validation Shipment Rsult",
+     "rows": 0,
+     "cols": 24,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Result Date",
+        "Result Date"
+       ],
+       "label": "Result Date",
+       "tag": "result_date",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "result_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Result Type",
+        "Result Type"
+       ],
+       "label": "Result Type",
+       "tag": "result_type",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "result_type",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "division_id",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "division_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Shipment No"
+       ],
+       "label": "Shipment No",
+       "tag": "shipment_no",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "shipment_no",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Project Code"
+       ],
+       "label": "Project Code",
+       "tag": "project_code",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "project_code",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "item_id",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "item_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "nick_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "plant",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "plant",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Trans Mode"
+       ],
+       "label": "Trans Mode",
+       "tag": "Trans_Mode",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "Trans_Mode",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Operation Group"
+       ],
+       "label": "Operation Group",
+       "tag": "operation_group",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "operation_group",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Delivery Qty"
+       ],
+       "label": "Delivery Qty",
+       "tag": "delivery_qty",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "delivery_qty",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Sold-To"
+       ],
+       "label": "Sold-To",
+       "tag": "customer_code",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "customer_code",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Ship-To"
+       ],
+       "label": "Ship-To",
+       "tag": "shipto_code",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "shipto_code",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "ERP Shipment Performance Info",
+        "Incoterms"
+       ],
+       "label": "Incoterms",
+       "tag": "incoterms",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "incoterms",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "SCM Info",
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "from_scm_site_id",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "from_scm_site_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "SCM Info",
+        "Sales Site"
+       ],
+       "label": "Sales Site",
+       "tag": "to_scm_site_id",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "to_scm_site_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "SCM Info",
+        "BOD"
+       ],
+       "label": "BOD",
+       "tag": "bod_lead_time",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "bod_lead_time",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "ETA Infomation",
+        "Ex-Factory Date"
+       ],
+       "label": "Ex-Factory Date",
+       "tag": "plant_issue_date",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "plant_issue_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "ETA Infomation",
+        "POL Date(Departure)"
+       ],
+       "label": "POL Date(Departure)",
+       "tag": "pol_atd_date",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "pol_atd_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "ETA Infomation",
+        "POD Date(Arrive)"
+       ],
+       "label": "POD Date(Arrive)",
+       "tag": "pod_ata_date",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "pod_ata_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "ETA Infomation",
+        "POD Date (Departure)"
+       ],
+       "label": "POD Date (Departure)",
+       "tag": "pod_atd_date",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "pod_atd_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "ETA Infomation",
+        "F.Dest Date (ETA)"
+       ],
+       "label": "F.Dest Date (ETA)",
+       "tag": "f_dest_eta_date",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "f_dest_eta_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "ETA Infomation",
+        "Incoterms       F.Dest Date(ETA)"
+       ],
+       "label": "Incoterms       F.Dest Date(ETA)",
+       "tag": "f_dest_eta_date2",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "f_dest_eta_date2",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

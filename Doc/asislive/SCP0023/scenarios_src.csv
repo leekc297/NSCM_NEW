@@ -1,0 +1,18 @@
+﻿scenario_id,type,axes,entry,method,guard,observe,endpoints,n_observe,src,status
+SCP0023-Sf548c5,팝업,NONE,event:BtnItemId_Click | event:btnItemId.Click,BtnItemId_Click,,"팝업 3, 표시·활성 1 · 팝업:new SCM0002_ItembyDivisionPopup ; 팝업:popItem.Form_Load ; 표시·활성:popItem.StartPosition ; 팝업:popItem.ShowDialog",,4,SCP0023_OutsourcingCapacity.cs:206,DERIVED
+SCP0023-Saeb0aa,연쇄,OTHER,event:BtnItemId_Click | event:btnItemId.Click,BtnItemId_Click,"if (popItem.ItemID != """")",값 자동 세팅 1 · 값 자동 세팅:txtItemId.Text,,1,SCP0023_OutsourcingCapacity.cs:215,DERIVED
+SCP0023-Se53a90,연쇄,STATE,event:SpdMain_Changed | event:dsdmMain.Changed,CheckDigitValueEntered,if (fps.Name == spdMain.Name) ▸ if (nCol == siMain.GetColumnIndex(DefMain.DAILY_CAPA_QTY)) ▸ if (nVal < 1 || res == false),"그리드 값·서식 1, 메시지 1 · 메시지:MessageHelper.GMessageBox",,2,SCP0023_OutsourcingCapacity.cs:460,DERIVED
+SCP0023-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,그리드 구성 2,,2,SCP0023_OutsourcingCapacity.cs:142,DERIVED
+SCP0023-Sd7efec,초기,NONE,event:Form_Load | event:this.Load,DefineProperty,,표시·활성 1 · 표시·활성:usrConditionPanel1.Height,,1,SCP0023_OutsourcingCapacity.cs:125,DERIVED
+SCP0023-Sa58ddf,기타,OTHER,button:EditButton,EditButton,if (spdMain != null) ▸ if (this.fps != null) ▸ if (fps.Name.Equals(spdMain.Name)),잠금 3 · 잠금:siMain.SwitchLock ; 잠금:siMain.LockColumn ; 잠금:siMain.LockColumn,,3,SCP0023_OutsourcingCapacity.cs:246,DERIVED
+SCP0023-Sed3e1e,조회,NONE,button:FindButton | button:SaveButton,FindData_Main,,"데이터 처리 6, 서버 호출 3, 팝업 2, 표시·활성 2, 메시지 1 · SCP.SCP0023_GET_OUTSOURCING_CAPA · 팝업:new GSCM.Windows.Forms.UI.ProgressForm ; 팝업:prg.Show ; 표시·활성:proxyPivot.ShowProgress ; 표시·활성:req.CommandTimeout",SCP.SCP0023_GET_OUTSOURCING_CAPA,14,SCP0023_OutsourcingCapacity.cs:354,DERIVED
+SCP0023-Sc8d85b,조회,DATA,button:FindButton | button:SaveButton,FindData_Main,if (ds.Tables[0].Rows.Count > 0),잠금 1 · 잠금:siMain.LockColumn,,1,SCP0023_OutsourcingCapacity.cs:386,DERIVED
+SCP0023-S67bbf1,조회,NONE,,GetSpdTitle,,콤보 채움 1,,1,SCP0023_OutsourcingCapacity.cs:158,UNREACHED
+SCP0023-Sfc19ed,초기,NONE,event:Form_Load | event:this.Load,InitControls,,목록 다시 채움 1,,1,SCP0023_OutsourcingCapacity.cs:135,DERIVED
+SCP0023-S96bd28,초기,NONE,,InitSpread,,그리드 구성 4,,4,SCP0023_OutsourcingCapacity.cs:165,UNREACHED
+SCP0023-Sddee9f,초기,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,InitSpread_2,,그리드 구성 1,,1,SCP0023_OutsourcingCapacity.cs:152,DERIVED
+SCP0023-S2db6ca,저장,NONE,button:SaveButton,SaveButton,,메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0023_OutsourcingCapacity.cs:255,DERIVED
+SCP0023-Sefa30e,저장,DATA,button:SaveButton,SaveData,if (iCount > 0),"데이터 처리 8, 서버 호출 3, 표시·활성 1 · SCP.SCP0023_SAVE_OUTSOURCING_CAPA · 표시·활성:asyncProxy.ShowProgress",SCP.SCP0023_SAVE_OUTSOURCING_CAPA,12,SCP0023_OutsourcingCapacity.cs:296,DERIVED
+SCP0023-Sd14bf3,저장,DATA,button:SaveButton,SaveData,if (iCount > 0) ▸ if (tran.Success),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0023_OutsourcingCapacity.cs:315,DERIVED
+SCP0023-S5dcee3,초기,NONE,event:CboDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,SetChangedControl,,"콤보 채움 1, 목록 다시 채움 1",,2,SCP0023_OutsourcingCapacity.cs:328,DERIVED
+SCP0023-S466b3c,저장,STATE,button:SaveButton,checkValidN,if (!isPass),메시지 1 · 메시지:MessageHelper.GMessageBox,,1,SCP0023_OutsourcingCapacity.cs:526,DERIVED

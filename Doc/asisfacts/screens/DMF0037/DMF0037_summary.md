@@ -88,19 +88,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:168 |
-| this.txtProject | KeyDown | txtProject_KeyDown | DefineProperty:290 |
-| this.txtItemId | KeyDown | txtItemId_KeyDown | DefineProperty:291 |
-| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:483 |
-| clbSalesSite | SelectedIndexChanged | ClbSalesSite_SelectedIndexChanged | InitEvent:484 |
-| clbPlantSite | SelectedIndexChanged | ClbPlantSite_SelectedIndexChanged | InitEvent:485 |
-| cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:486 |
-| cboKRW | SelectedIndexChanged | cboKRW_SelectedIndexChanged | FindData:733 |
-| cboUSD | SelectedIndexChanged | cboUSD_SelectedIndexChanged | FindData:734 |
-| cboLOC | SelectedIndexChanged | cboLOC_SelectedIndexChanged | FindData:735 |
-| cboKRW | SelectedIndexChanged | cboKRW_SelectedIndexChanged | FindData:737 |
-| cboUSD | SelectedIndexChanged | cboUSD_SelectedIndexChanged | FindData:738 |
-| cboLOC | SelectedIndexChanged | cboLOC_SelectedIndexChanged | FindData:739 |
 | this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:269 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:306 |
 | this.btnProject | Click | btnProject_Click | InitializeComponent:342 |
@@ -119,6 +106,19 @@
 | this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1459 |
 | this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:1460 |
 | this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:1461 |
+| this | Load | Form_Load | .ctor:168 |
+| this.txtProject | KeyDown | txtProject_KeyDown | DefineProperty:290 |
+| this.txtItemId | KeyDown | txtItemId_KeyDown | DefineProperty:291 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:483 |
+| clbSalesSite | SelectedIndexChanged | ClbSalesSite_SelectedIndexChanged | InitEvent:484 |
+| clbPlantSite | SelectedIndexChanged | ClbPlantSite_SelectedIndexChanged | InitEvent:485 |
+| cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitEvent:486 |
+| cboKRW | SelectedIndexChanged | cboKRW_SelectedIndexChanged | FindData:733 |
+| cboUSD | SelectedIndexChanged | cboUSD_SelectedIndexChanged | FindData:734 |
+| cboLOC | SelectedIndexChanged | cboLOC_SelectedIndexChanged | FindData:735 |
+| cboKRW | SelectedIndexChanged | cboKRW_SelectedIndexChanged | FindData:737 |
+| cboUSD | SelectedIndexChanged | cboUSD_SelectedIndexChanged | FindData:738 |
+| cboLOC | SelectedIndexChanged | cboLOC_SelectedIndexChanged | FindData:739 |
 
 ## 6. 컨트롤 (59개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |

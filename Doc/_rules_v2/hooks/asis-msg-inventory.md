@@ -43,7 +43,7 @@ grep -hE "MSG[0-9]{4,5}" nscm-fe/public/locales/*.json
 
 ### 1.3 본문 추출 시 한계 명시 의무 (anti-simplification)
 - `__asis-mapping__.md` 의 표 내용 → "용도 설명" vs "AS-IS 원본 본문" 혼재 가능 — 100% 정확 보장 X
-- **AS-IS DB (`165.244.95.223:1433` MSSQL) 의 메시지 카탈로그 직접 query 가 정확 본문 source** — 가능 시 우선
+- **AS-IS DB (`165.244.95.223:1433` MSSQL) 의 메시지 카탈로그 직접 query 가 정확 본문 source** — 가능 시 우선 (2026-11-13 정정: 접속 주소는 이 문서 기재값을 쓰지 않고 `.env.asis` 의 `ASIS_DB_*` 값만 쓴다. 접속 불가 시 사용자 확인 후 진행. hook `asis-db-live-connection-mandatory.md` §1-3, §1-6)
 - EN/CN 본문 정확 번역은 사용자/PM 결정 의무 (KO fallback 으로 작성)
 - 본문 미상 ID 는 `[TODO] MSG{ID} 본문 결정 필요` placeholder 명시
 

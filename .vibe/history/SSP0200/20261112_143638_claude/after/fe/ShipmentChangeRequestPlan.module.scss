@@ -1,0 +1,86 @@
+// 상/하 3분할: Grid1(main) / 요청정보 폼(px 고정) / Grid2(sub).
+//   폼 Panel 은 px 고정(min=max)이라 두 스플리터가 각각 위·아래 그리드만 리사이즈한다(폼 높이 불변).
+.splitWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+
+// PanelGroup 은 basis 0(`flex:1 1 0`)이어야 뷰포트 높이를 즉시 확정받아 채운다. basis auto 면 그룹이
+//   내용 높이로 잡혀 패널 분배가 어긋나고(그리드1 크고 그리드2 붕괴) 아래 빈 공간이 생긴다(batch-log 처방 동일).
+.panelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  // Wijmo 그리드가 Panel 높이를 넘지 않게 — Panel 이 준 높이 안에서 내부 스크롤이 생긴다.
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  // Group > 각 Panel 내부 콘텐츠 래퍼를 flex column 으로 — Panel 높이가 mainPane/formPane/subPane 로 전파된다.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.splitBar {
+  height: 6px;
+  cursor: row-resize;
+}
+
+// 상단 Panel1 = master 그리드 전용.
+.mainPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+// 가운데 고정 폼 Panel = 요청정보(RequestInfoPanel) + 액션바. 컴팩트하게 스크롤 없이 담는다.
+//   Panel 이 px 고정이라 내용이 넘치면 잘리므로, 폼은 FORM_PANEL_SIZE 안에 들어가는 컴팩트 크기여야 한다.
+.formPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.requestInfo {
+  flex: 0 0 auto; // 내용(컴팩트 폼) 자연 높이 — 고정 패널 안에서 늘어나 필드 간 빈틈이 생기지 않게.
+  padding: 6px 12px 0;
+}
+
+.actionBar {
+  flex: 0 0 auto;
+  padding: 2px 12px 6px;
+}
+
+// spdSub 영역. mainPane 과 동일하게 flex 컨테이너로 둬야 한다 — 공용 DataGrid 는
+//   `flex:1 1 0%` + `height:100%` 로 부모를 채우는데, 이 컨테이너가 display:flex 가 아니면
+//   flex 규칙이 무시되고 basis auto 와 겹쳐 Wijmo 가 초기 높이를 0 으로 측정한다
+//   (그리드가 안 보이고 내부 스크롤도 죽는다). flex-basis 는 0 으로 둬 측정 즉시 확정 높이를 준다.
+.subPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+// 저장/요청확정/요청취소 진행 스피너 — 조회 로딩(전역 MDIContainer .spinner)과 동일한 딤 오버레이 + 중앙 원형.
+//   수동 apiClient 경로라 전역 useIsBusy 스피너가 안 잡혀 화면에서 직접 렌더한다(기준: 조회 로딩).
+.actionSpinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.4);
+}

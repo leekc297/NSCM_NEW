@@ -1,0 +1,145 @@
+{
+ "id": "SSP0046",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S96bd28",
+    "SSP0046-S0debf1",
+    "SSP0046-S26ff5f",
+    "SSP0046-S18f2df",
+    "SSP0046-S6c59f3",
+    "SSP0046-S6a69a9",
+    "SSP0046-Sd59aae",
+    "SSP0046-Sf5f784",
+    "SSP0046-Sbb8d29",
+    "SSP0046-S252290",
+    "SSP0046-Sc14b34",
+    "SSP0046-Sd738d5",
+    "SSP0046-S2e76bd",
+    "SSP0046-S72a490",
+    "SSP0046-Sf409b9",
+    "SSP0046-S6bd4b3",
+    "SSP0046-S109112",
+    "SSP0046-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0046_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0046_GET_SITE_BY_DIVISION",
+    "SSP0046_GET_COMMON_SPREAD_TITLE",
+    "SSP0046_GET_COMMON_SPREAD_TITLE",
+    "SSP0046_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "SSP0046-Sea1449",
+    "SSP0046-Sec3442"
+   ]
+  },
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S30fcb6",
+    "SSP0046-S9f52d6",
+    "SSP0046-S997c01",
+    "SSP0046-S98491c",
+    "SSP0046-S575e43"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0046_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0046_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0046-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 884,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "SSP0046-S287784",
+    "SSP0046-S6ab4d3"
+   ]
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0046-S30fcb6",
+    "SSP0046-S9f52d6",
+    "SSP0046-S997c01",
+    "SSP0046-S98491c",
+    "SSP0046-S575e43"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 13:21:49.217",
+ "fills": 0,
+ "fill_left": []
+}

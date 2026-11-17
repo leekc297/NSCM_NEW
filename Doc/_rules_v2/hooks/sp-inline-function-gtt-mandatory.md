@@ -13,7 +13,7 @@
 **의도**:
 - Oracle 의 row-by-row scalar function 호출 (`SELECT col, FN_GET_X(col) FROM tbl`) 은 row 수만큼 N 번 호출 → 대용량 결과 시 분~시간 단위 성능 저하.
 - 대신 function 결과를 **GTT (Global Temporary Table)** 에 사전 적재 + 본 SQL 의 `FROM` 절에서 **JOIN** 으로 사용 = 1회 일괄 조회.
-- DBMS_PROFILER 측정 결과: scalar function 호출 22,095초 → GTT JOIN 변환 후 32초 (memory `feedback_correlated_subquery_perf`).
+- DBMS_PROFILER 측정 결과: scalar function 호출 22,095초 → GTT JOIN 변환 후 32초 (memory `feedback_correlated_subquery_perf` — 2026-11-13: 이 메모리 파일은 현재 없음).
 
 ---
 
@@ -139,7 +139,7 @@ SELECT B.NAME, B.LINE
 | ref | 용도 |
 |---|---|
 | `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` §부록 C-5 | GTT DELETE 의무 |
-| `feedback_correlated_subquery_perf` (메모리) | DBMS_PROFILER 22095s → 32s 변환 사례 |
+| `feedback_correlated_subquery_perf` (메모리) | DBMS_PROFILER 22095s → 32s 변환 사례 (11-13: 파일 없음) |
 | `feedback_sp_truncate_gtt_grant.md` | TRUNCATE GTT → DELETE 변환 의무 |
 | `feedback_sp_substr_zero_index_pitfall.md` | 분리자 SUBSTR-0 사고 |
 

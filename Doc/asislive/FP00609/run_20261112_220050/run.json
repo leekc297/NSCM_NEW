@@ -1,0 +1,188 @@
+{
+ "id": "FP00609",
+ "started": "2026-11-12 22:00:50.351",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:00:50.670",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00609_Pancake_Simul_By_Bld_Elec",
+   "form_text": "Pancake Simul By Bld(Elec.)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00609_Pancake_Simul_By_Bld_Elec.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:00:55.487"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:00:59.936",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261112_220050\\dump_load.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "Total : 21",
+   "time_status": "DB : 18.791s, UI : 0.299s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:00:59.951"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:01:00.119",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261112_220050\\shots\\FP00609_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:01:00.276"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 22:01:04.590",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261112_220050\\shots\\FP00609_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 22:01:04.708"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:01:05.034",
+   "call_timed_out": true,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:01:35.051"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:01:43.932",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261112_220050\\dump_find.json",
+   "control_count": 76,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:01:43.938"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:01:44.103",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00609\\run_20261112_220050\\shots\\FP00609_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:01:44.244"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:01:44.560",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:01:45.200"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 34,
+  "calls_with_params": 34
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00609_Pancake_Simul_By_Bld_Elec",
+  "form_text": "Pancake Simul By Bld(Elec.)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00609_Pancake_Simul_By_Bld_Elec.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "FP 최근 계획 날짜(SCM_FP_PLAN_H · Plan Group KR_E_PRE_A)",
+   "set": {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   },
+   "ok": true,
+   "applied": "prop:DateTime",
+   "error": null
+  }
+ ],
+ "fill_left": [
+  "cboPlanId[Plan Id(Coater)·UsrCombo] 비어 있음(항목 0개)"
+ ],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "drpPlanDate",
+    "prop": "DateTime",
+    "value": "20260919"
+   }
+  ]
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 22:00:50.556",
+ "t_find": "2026-11-12 22:01:04.775",
+ "dialogs": [
+  {
+   "at": "2026-11-12 22:01:06.040",
+   "caption": "",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 76,
+  "layout_items": 22,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 26,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 34,
+  "calls_screen": 34,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 22:01:45.554",
+ "exit": 0
+}

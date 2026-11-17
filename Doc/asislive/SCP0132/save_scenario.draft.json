@@ -1,0 +1,79 @@
+{
+ "id": "SCP0132",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+   "save_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY",
+   "pk": [
+    "DIVISION_ID",
+    "OPMZ_PLAN_GR_ID",
+    "MDL_GR_NM",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "MDL_GR_NM": "MDL_GR_NM",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "SIPM_MIN_QYT",
+    "db_col": "SIPM_MIN_QYT",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Constraint Of Shipment Qty",
+   "writes": {
+    "SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY → SP SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "SIPM_MIN_QYT",
+     "db_col": "SIPM_MIN_QYT",
+     "rule": "plus1"
+    },
+    {
+     "col": "SIPM_MAX_QTY",
+     "db_col": "SIPM_MAX_QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "SAT_SIPM_MIN_QTY",
+     "db_col": "SAT_SIPM_MIN_QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "SAT_SIPM_MAX_QTY",
+     "db_col": "SAT_SIPM_MAX_QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "SUN_SIPM_MIN_QTY",
+     "db_col": "SUN_SIPM_MIN_QTY",
+     "rule": "plus1"
+    },
+    {
+     "col": "SUN_SIPM_MAX_QTY",
+     "db_col": "SUN_SIPM_MAX_QTY",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 22:05:11"
+   }
+  }
+ ]
+}

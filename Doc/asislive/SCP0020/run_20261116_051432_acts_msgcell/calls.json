@@ -1,0 +1,126 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-16 05:13:54.715",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 4.38,
+   "params": {
+    "p_program_id": "SCP0020",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Tact Time Except"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0020', @p_user_id='jaeuk.shin', @p_sheet_name='Tact Time Except'",
+   "phase": "action:msgcell:InsertButton"
+  },
+  {
+   "at": "2026-11-16 05:13:54.783",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1724,
+   "rows_kind": "DataSet rows",
+   "ms": 57.5,
+   "params": {
+    "Code": "LineByOperation",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LineByOperation', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:InsertButton"
+  },
+  {
+   "at": "2026-11-16 05:13:54.826",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 27,
+   "rows_kind": "DataSet rows",
+   "ms": 4.08,
+   "params": {
+    "p_program_id": "SCP0020",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Tact Time Except"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0020', @p_user_id='jaeuk.shin', @p_sheet_name='Tact Time Except'",
+   "phase": "action:msgcell:InsertButton"
+  },
+  {
+   "at": "2026-11-16 05:13:54.874",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1724,
+   "rows_kind": "DataSet rows",
+   "ms": 50.57,
+   "params": {
+    "Code": "LineByOperation",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LineByOperation', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:InsertButton"
+  },
+  {
+   "at": "2026-11-16 05:13:55.003",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "sp": "SCP0020_GET_TACT_TIME_EXCEPT_OSP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.79,
+   "params": {
+    "p_division_id": "82",
+    "p_plant_site": "CN00249500-P",
+    "p_operation_id": "CN00249500",
+    "p_item_id": "EM048063P3N1",
+    "p_line_id": "",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0020_GET_TACT_TIME_EXCEPT_OSP @p_division_id='82', @p_plant_site='CN00249500-P', @p_operation_id='CN00249500', @p_item_id='EM048063P3N1', @p_line_id='', @debug_mode='F'",
+   "phase": "action:msgcell:InsertButton"
+  },
+  {
+   "at": "2026-11-16 05:13:55.080",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.5,
+   "params": {
+    "p_menu_id": "SCP0020",
+    "p_log_type": "FIND",
+    "p_log_cnt": "",
+    "p_db_time": "0.149",
+    "p_ui_time": "0",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0020', @p_log_type='FIND', @p_log_cnt='', @p_db_time='0.149', @p_ui_time='0', @p_user_id='jaeuk.shin'",
+   "phase": "action:msgcell:InsertButton"
+  }
+ ]
+}

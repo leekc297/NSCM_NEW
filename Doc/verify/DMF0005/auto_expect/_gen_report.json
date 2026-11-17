@@ -1,9 +1,9 @@
 {
  "id": "DMF0005",
  "asis": "DMF0005",
- "at": "2026-11-05 13:12:52",
+ "at": "2026-11-14 05:56:34",
  "has_asis": true,
- "tobe_cols": 348,
+ "tobe_cols": 331,
  "buttons": [
   "DELETE",
   "INSERT",
@@ -14,7 +14,7 @@
  "env": {
   "division": "40",
   "user": "",
-  "basis": "sheet_columns 단일 Division 칸 최다 40(23칸 · 분포 {'82': 14, '40': 23})"
+  "basis": "sheet_columns 단일 Division 칸 최다 40(23칸 · 분포 {'40': 23, '82': 14})"
  },
  "patterns": {
   "p_lang": {
@@ -34,11 +34,11 @@
   "p_delete": {
    "rows": 0,
    "why_not": [
-    "AS-IS 삭제가 신규 행만(DeleteButton 610 guard == StringI) → 기존 행 D 저장 대상 아님"
+    "AS-IS 삭제가 신규 행만(DeleteButton:172 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
    ]
   },
   "p_combo": {
-   "rows": 44,
+   "rows": 72,
    "why_not": []
   },
   "p_decimal": {
@@ -119,8 +119,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 58,
-   "used": 53
+   "rows": 86,
+   "used": 81
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -131,7 +131,7 @@
    "used": 0
   }
  },
- "rows": 58,
- "rows_used": 53,
+ "rows": 86,
+ "rows_used": 81,
  "dup_of_hand": 5
 }

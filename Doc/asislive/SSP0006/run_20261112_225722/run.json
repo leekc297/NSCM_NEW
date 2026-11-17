@@ -1,0 +1,202 @@
+{
+ "id": "SSP0006",
+ "started": "2026-11-12 22:57:22.582",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 22:57:22.845",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0006_Plan_Problem",
+   "form_text": "Plan Problem (SSP)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:57:33.277"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 22:57:38.504",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0006\\run_20261112_225722\\dump_load.json",
+   "control_count": 74,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:57:38.528"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 22:57:38.686",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0006\\run_20261112_225722\\shots\\SSP0006_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:57:38.835"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 22:57:53.988",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0006\\run_20261112_225722\\shots\\SSP0006_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:57:54.193"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 22:57:54.671",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:57:55.196"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 22:58:01.222",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0006\\run_20261112_225722\\dump_find.json",
+   "control_count": 74,
+   "grid_count": 3,
+   "total": "Total : ",
+   "time_status": "DB : 0.109s, UI : 0.028s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:58:01.247"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 22:58:01.403",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0006\\run_20261112_225722\\shots\\SSP0006_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:58:01.600"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 22:58:01.925",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 22:58:02.917"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 3,
+  "calls": 48,
+  "calls_with_params": 47
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0006_Plan_Problem",
+  "form_text": "Plan Problem (SSP)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll"
+ },
+ "fills": [
+  {
+   "rule": "Division 변경 이벤트 발생(다른 값)",
+   "set": {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   "ok": true,
+   "applied": "combo:1:81 Automotive Battery",
+   "error": null
+  },
+  {
+   "rule": "Division 원래 값으로 복귀",
+   "set": {
+    "name": "cboDivision",
+    "index": "0"
+   },
+   "ok": true,
+   "applied": "combo:0:40 Mobility & IT Battery",
+   "error": null
+  },
+  {
+   "rule": "Division 을 바꿔 목록이 채워지는지 확인",
+   "set": {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   "ok": true,
+   "applied": "combo:1:81 Automotive Battery",
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "cboDivision",
+    "index": "1"
+   },
+   {
+    "name": "cboDivision",
+    "index": "0"
+   },
+   {
+    "name": "cboDivision",
+    "index": "1"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.109s, UI : 0.028s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 22:57:22.789",
+ "t_find": "2026-11-12 22:57:54.349",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 74,
+  "layout_items": 19,
+  "grids": 3,
+  "sheets": 3,
+  "header_cols": 181,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 48,
+  "calls_screen": 48,
+  "calls_find": 7,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 22:58:03.513",
+ "exit": 0
+}

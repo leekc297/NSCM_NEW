@@ -1,0 +1,100 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0037_GET_OPERATION_LT"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     13
+    ],
+    [
+     "SCP0037_GET_OPERATION_LT",
+     12
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 9616,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SELECT *",
+    "SCM0002_GET_MATERIAL_BY_DIVISION",
+    "DMF0003_GET_REPORT_BUCKET_TYPE_CODE",
+    "PR_GET_DAY_RANGE",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "DMF0003_GET_QTY_TYPE_CODE",
+    "DMF0035_GET_SPREAD_TITLE",
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]",
+    "DMF0035_GET_SPREAD_TITLE",
+    "PR_UI_SQL_LOG",
+    "INSERT INTO [dbo].[TH_UIS_SQL_LOG]"
+   ],
+   "scenarios": [
+    "SCP0037-Sea1449",
+    "SCP0037-S82161d"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 12:18:54.764",
+ "preset": {
+  "name": "cboLTOperation",
+  "token": "cboLTOperation=i2",
+  "kw": {
+   "name": "cboLTOperation",
+   "index": "2"
+  },
+  "label": "cboLTOperation 콤보 2번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:2:Pre Inspection",
+  "value": "PRE_INSP",
+  "text": "Pre Inspection",
+  "checked": null,
+  "selected_index": 2
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

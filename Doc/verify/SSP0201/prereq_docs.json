@@ -1,0 +1,43 @@
+{
+ "menu_id": "SSP0201",
+ "asis_id": "SSP0201",
+ "generated": "2026-11-10 13:19:29",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SSP0201)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "4.3시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-change-request · 인덱스 최신"
+  },
+  {
+   "key": "gen_register",
+   "what": "생성 절차 산출물(Doc/gen/<ID>/register.json)",
+   "status": "SKIP",
+   "producer": "생성 절차(gen.js)",
+   "evidence": "없음(다른 PC·생성 절차 밖 UI) — 생성 절차는 돌리지 않음. 문서의 페이지 폴더는 TO-BE 인덱스로 찾는다(make_docs)"
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 # SCP0123 — To-Be Fact Pack 요약
 
 - page_key: `supply/plan-control` · feature: supply · As-is Fact Pack 있음
-- 파일 17 · 엔드포인트 호출 16 (미해결 3, 주석 속 1) · 이벤트 32 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
+- 파일 17 · 엔드포인트 호출 16 (미해결 3, 주석 속 1) · 이벤트 34 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -10,11 +10,11 @@
 | features/supply/src/pages/plan-control/components/EngineRunGrid.tsx | component | 47 |
 | features/supply/src/pages/plan-control/components/PlanControlForm.tsx | component | 198 |
 | features/supply/src/pages/plan-control/components/PlanControlGrid.module.scss | component | 44 |
-| features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | component | 231 |
+| features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | component | 256 |
 | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.module.scss | component | 160 |
 | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | component | 892 |
-| features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts | hook | 504 |
-| features/supply/src/pages/plan-control/hooks/usePlanControlPolling.ts | hook | 128 |
+| features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts | hook | 514 |
+| features/supply/src/pages/plan-control/hooks/usePlanControlPolling.ts | hook | 132 |
 | features/supply/src/pages/plan-control/index.ts | index | 2 |
 | features/supply/src/pages/plan-control/plan-control.constants.ts | constants | 212 |
 | features/supply/src/pages/plan-control/plan-control.types.ts | types | 52 |
@@ -34,7 +34,7 @@
 | SCP0123/planIdInfo/SEARCH/call-proc | callProc | 1 | Y | PlanIdCreatePopup.tsx:149 |
 | /SCP0123/planIdCreate82/SAVE/call-proc | http | 1 | Y | PlanIdCreatePopup.tsx:408 |
 | /SCP0123/planIdCreate/SAVE/call-proc | http | 1 | Y | PlanIdCreatePopup.tsx:501 |
-| SCP0123/planControl/SEARCH/call-proc | callProc | 2 | Y | usePlanControlCellActions.ts:134 usePlanControlCellActions.ts:475 |
+| SCP0123/planControl/SEARCH/call-proc | callProc | 2 | Y | usePlanControlCellActions.ts:134 usePlanControlCellActions.ts:478 |
 | /SCP0123/planControl/SAVE/call-proc | http | 1 | Y | usePlanControlCellActions.ts:178 |
 | SCP0123/planControl//call-proc | hook | 2 | Y | usePlanControlPolling.ts:81 PlanControl.tsx:136 |
 | SCP0123/engineRun//call-proc | hook | 1 | Y | usePlanControlPolling.ts:90 |
@@ -65,9 +65,11 @@
 | grid | beginningEdit | handleBeginningEdit | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 179 |
 | grid | formatItem | handleFormatItem | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 180 |
 | grid.hostElement | keydown | blockComboCellKey | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 206 |
-| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 225 |
-| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 226 |
-| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 227 |
+| document | click | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 227 |
+| document | keydown | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 228 |
+| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 250 |
+| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 251 |
+| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 252 |
 | DatePickerCalendar | onChange | <arrow> onChange | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 557 |
 | Checkbox | onChange | onToggleNoFrozen | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 584 |
 | CustomDropdown | onChange | <arrow> handleLevelCdChange(setLevels,key),handleLevelCdChange,String | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 613 |

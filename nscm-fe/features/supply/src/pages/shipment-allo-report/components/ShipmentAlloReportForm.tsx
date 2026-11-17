@@ -5,7 +5,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -212,7 +212,10 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
                 />
               ),
             }}
-            onChange={() => undefined}
+            // AS-IS txtModel_ID 는 읽기전용이 아니라 직접 입력(복사·붙여넣기)도 가능하다
+            //   (design 02 §4.6: "텍스트 input(읽기전용 아님, 팝업으로 채움)"). 직접 입력 시
+            //   itemId 를 갱신하고 nickName(팝업이 함께 채운 값)은 비운다(형제 화면 동일 패턴).
+            onChange={e => set({ itemId: e.target.value, nickName: '' })}
           />
         )}
       />
@@ -286,13 +289,15 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(70px, 140px) auto', marginTop: 2 }}>
                   <span />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#666' }}>
-                    {/* From 박스(.dateBox ~91px) 아래 중앙 — AS-IS ulPlanType_Seq1 MiddleCenter */}
-                    <span style={{ flex: 'none', width: 91, textAlign: 'center', whiteSpace: 'nowrap' }}>Main: {mainPlanSeq || '-'}</span>
+                    {/* From 박스(.dateBox ~91px) 아래 중앙 — AS-IS ulPlanType_Seq1 MiddleCenter.
+                        AS-IS 는 PlanType/Seq 값만 찍는다(.cs:595, Designer .Text 초기값 없음) — "Main:" 접두어 없음. */}
+                    <span style={{ flex: 'none', width: 91, textAlign: 'center', whiteSpace: 'nowrap' }}>{mainPlanSeq}</span>
                     {/* .trigger 의 '~' 구분자와 동일 폭(그쪽 '~'는 16px 내용폭)으로 자리만 비워
                         From/To 박스 사이 간격을 똑같이 맞춘다 — 이 행 글자(11px)와 무관하게 16px 고정. */}
                     <span style={{ flex: 'none', visibility: 'hidden', fontSize: 16 }}>~</span>
-                    {/* To 박스(.dateBox ~91px) 아래 중앙 — AS-IS ulPlanType_Seq2 MiddleCenter */}
-                    <span style={{ flex: 'none', width: 91, textAlign: 'center', whiteSpace: 'nowrap' }}>Gap: {gapPlanSeq || '-'}</span>
+                    {/* To 박스(.dateBox ~91px) 아래 중앙 — AS-IS ulPlanType_Seq2 MiddleCenter.
+                        AS-IS 는 PlanType/Seq 값만 찍는다(.cs:597) — "Gap:" 접두어 없음. */}
+                    <span style={{ flex: 'none', width: 91, textAlign: 'center', whiteSpace: 'nowrap' }}>{gapPlanSeq}</span>
                   </div>
                 </div>
               )}
@@ -300,8 +305,28 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
 
             {single(t(LABEL.PLAN_DATE, { defaultValue: 'Plan Date' }), sc.planDate, dateOptions, handlePlanDateChange, true)}
 
-            {/* FCST Pegging — AS-IS chkFCST.Visible=false(Designer L1315)라 항상 숨김 → UI 미노출(설계 01 §5.3,
-                사용자 결정 2026-11-03). 조회 파라미터 P_FCST_YN 은 sc.fcstYn 기본값(false='N')으로 그대로 전송된다. */}
+            {/* FCST Pegging — AS-IS 3행(Plan Date 옆) 체크박스 chkFCST("FCST Pegging", Designer L1313). 체크 시
+                P_FCST_YN='Y' 전송(.cs:765-769,796). Designer L1315 가 chkFCST.Visible=false 지만 이 컨트롤은
+                DevExpress LayoutControlItem(layoutFCST)에 담겨 있고 layoutFCST 에 Visibility 설정이 없어(기본
+                Always) 런타임엔 레이아웃이 표시한다 → AS-IS 실화면에 노출됨(사용자 실관찰 2026-11-06). 이전
+                '숨김' 결정(설계 01 §5.3·02 §4.3, 2026-11-03)은 Visible=false 한 줄만 본 오판이라 '노출'로 정정. */}
+            {/* SCP0009(Shipment Plan FG)의 Sum 체크박스와 동일 간격·정렬: FormItem 라벨 칸은 공백,
+                customGrid(flex·align-items:center)로 체크박스를 행 높이 기준 세로 중앙 정렬한다. */}
+            <Grid size={3} className={commonStyles.customGrid}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={' '}
+                labelAlign='right'
+                render={() => (
+                  <Checkbox
+                    disabled={noDivisionAuth}
+                    checked={sc.fcstYn}
+                    labelText={t(LABEL.FCST_PEGGING, { defaultValue: 'FCST Pegging' })}
+                    onChange={checked => set({ fcstYn: Boolean(checked) })}
+                  />
+                )}
+              />
+            </Grid>
           </>
         }
       />

@@ -1,0 +1,180 @@
+{
+ "menu_id": "SSP0200",
+ "asis_id": "SSP0200",
+ "generated": "2026-11-15 05:41:11",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SSP0200_SAVE_SHIPMENT_CONFIRM_NEW 대상 SSP_ANL_SHIP_CONFIRM 와 콤보 원천 16종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 4종: clbDivision_ID, cboStatus, cboChangeType, DIVISION_ID",
+  "save_tables": [
+   "SSP_ANL_SHIP_CONFIRM"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision_ID",
+    "label": "Div",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboStatus",
+    "label": "Status",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboChangeType",
+    "label": "Change Type",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE 원문",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbToSite",
+    "label": "To Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=ShipmentPlanToSite 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbToSite",
+    "label": "To Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=ToSiteByDivisionEEForSSP 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FROM_SITE_DESCRIPTION",
+    "label": "",
+    "src": "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION 원문",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TO_SITE_DESCRIPTION",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=ShipmentPlanToSite 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TO_SITE_DESCRIPTION",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=ToSiteByDivisionEEForSSP 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DIVISION_ID",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TRANSPORT_MODE",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=TransMode 분기",
+    "tables": [
+     "SCP_MST_BOD_V"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "END_CUSTOMER",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=EndCustomerByItemForSSP 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FCST_TYPE",
+    "label": "FCST Type",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "CHANGE_REASON_CODE",
+    "label": "Change Reason",
+    "src": "UP_FX_GetCommonDataList @Code=CHANGE_REASON_CODE_ALL 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "TB_FX_USER"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS",
+    "label": "Incoterms*",
+    "src": "UP_FX_GetCommonDataList @Code=Incoterms 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SHIPMENT_STATUS",
+    "label": "Status",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   }
+  ]
+ }
+}

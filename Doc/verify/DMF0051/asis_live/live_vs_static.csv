@@ -1,0 +1,69 @@
+﻿kind,item,static,live,verdict,note
+SP,DMF0003_GET_QTY_TYPE_CODE,DMF0051_1_BizPlanWaterfall.cs:1909 GetQtyData,1회 · 구간 load,MATCH,
+SP,DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL,DMF0051_BizPlanWaterfall.cs:586 FindData,1회 · 구간 find,MATCH,
+SP,DMF0051_GET_SPREAD_TITLE,DMF0051_BizPlanWaterfall.cs:1334 GetSpdTitle,2회 · 구간 find/load,MATCH,
+SP,PR_GET_DAY_RANGE,DMF0051_1_BizPlanWaterfall.cs:1818 GetDayRange,1회 · 구간 load,MATCH,
+SP,SCM0001_GET_LOOKUP_VALUES,DMF0051_1_BizPlanWaterfall.cs:1854 GetBucketType,2회 · 구간 load,MATCH,
+SP,SCM0002_GET_VERSIONBYWATERFALLPOPUP,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,17회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,DMF0009_GET_CODE,DMF0051_1_BizPlanWaterfall.cs:4122 GetComboData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0051_1_BIZPLAN_TO_BPS,DMF0051_1_BizPlanWaterfall.cs:4068 btnConfirmBP_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0051_1_GET_DM_PLN_BIZ_PLAN_WATERFALL,DMF0051_1_BizPlanWaterfall.cs:831 FindData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0051_1_GET_SPREAD_TITLE,DMF0051_1_BizPlanWaterfall.cs:1835 GetSpdTitle,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,DMF0051_1_SAVE_DM_PLN_BIZ_PLAN_WATERFALL,DMF0051_1_BizPlanWaterfall.cs:2841 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,PR_DM_PLN_BIZPLAN_TO_NET_DEMAND,DMF0051_1_BizPlanWaterfall.cs:4028 btnReleaseSCP_Click,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_BIZ_TYPE_BY_DIVISION,DMF0051_1_BizPlanWaterfall.cs:1881 GetBizTypebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER,DMF0051_1_BizPlanWaterfall.cs:1413 GetPlantSitebyEndCustomer,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SCM0001_GET_SITE_BY_DIVISION,DMF0051_1_BizPlanWaterfall.cs:1397 GetScmSitebyDivision,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),72개,48개,INFO,공통 30 · 선언만 42 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,btnCalendar,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,splitContainer1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtEnd,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtStart,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbTeam,Y,Team,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbCustomer,Y,End Customer,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbBizType,Y,Biz.Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbSalesSite,Y,Sales Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,Y,Model / Nickname,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnProject,Y,layoutControlItem3,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnItemId,Y,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,Y,layoutControlItem2,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnMeasure,Y,layoutControlItem4,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,drpPeriod,Y,Period* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtProject,Y,Project,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlantSite,Y,Plant Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtVersion,Y,Version* [필수],LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnVersion,Y,layoutControlItem6,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboKRW,Y,KRW,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboUSD,Y,USD,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboLOC,Y,LOC,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkSum,Y,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbItemType,Y,Item Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboBucketType,Y,Bucket,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkMem,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,Y,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtOwner,Y,Owner,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrButton1,Y,layoutControlItem8,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboQTY,Y,QTY,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cbxQty,Y,layoutControlItem7,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboCellQty,Y,.,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Biz Plan Waterfall,정적 컬럼 사실 67행(시트 미지정 포함),컬럼 25(보임 18) · 헤더 3단 · 행 9450 · 고정 14,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

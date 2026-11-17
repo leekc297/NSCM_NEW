@@ -1,0 +1,56 @@
+{
+ "id": "SCP0019",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ]
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0019-S04b664",
+    "SCP0019-Sae2550",
+    "SCP0019-Sbfb208",
+    "SCP0019-S74dcc7",
+    "SCP0019-Sb8a5f3",
+    "SCP0019-S6de7dc",
+    "SCP0019-Scdfefb",
+    "SCP0019-Sdd5213"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:46:19.461",
+ "fills": 0,
+ "fill_left": []
+}

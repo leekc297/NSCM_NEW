@@ -1,0 +1,331 @@
+{
+ "id": "SCM0009",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "My Authority List",
+     "rows": 0,
+     "cols": 20,
+     "visible": "True",
+     "frozen_cols": "1",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "False"
+       ],
+       "label": "False",
+       "tag": "CHK",
+       "width": "25",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CHK",
+       "cell_type": "CheckBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "User ID"
+       ],
+       "label": "User ID",
+       "tag": "USER_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "USER_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "User Name"
+       ],
+       "label": "User Name",
+       "tag": "USER_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "USER_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "COMPANY_ID"
+       ],
+       "label": "COMPANY_ID",
+       "tag": "COMPANY_ID",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "COMPANY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "WORKING_NAME"
+       ],
+       "label": "WORKING_NAME",
+       "tag": "WORKING_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "WORKING_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "SSO_LOCATE"
+       ],
+       "label": "SSO_LOCATE",
+       "tag": "SSO_LOCATE",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "SSO_LOCATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "DEPT_ID"
+       ],
+       "label": "DEPT_ID",
+       "tag": "DEPT_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "DEPT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Department"
+       ],
+       "label": "Department",
+       "tag": "DEPT_NAME_KO",
+       "width": "220",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "DEPT_NAME_KO",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Authority"
+       ],
+       "label": "Authority",
+       "tag": "GROUP_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "GROUP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_NAME",
+       "width": "150",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "DIVISION_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "PLANT_ID"
+       ],
+       "label": "PLANT_ID",
+       "tag": "PLANT_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_NAME",
+       "width": "160",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "PLANT_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 13,
+       "header": [
+        "CUSTOMER_CODE"
+       ],
+       "label": "CUSTOMER_CODE",
+       "tag": "CUSTOMER_CODE",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "CUSTOMER_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Customer"
+       ],
+       "label": "Customer",
+       "tag": "CUSTOMER_NAME",
+       "width": "165",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "CUSTOMER_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Request Date"
+       ],
+       "label": "Request Date",
+       "tag": "REQUEST_DATE",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "REQUEST_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Approval Result"
+       ],
+       "label": "Approval Result",
+       "tag": "APPROVAL_RESULT",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "APPROVAL_RESULT",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Approval User"
+       ],
+       "label": "Approval User",
+       "tag": "APPROVAL_USER",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "APPROVAL_USER",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Approval Date"
+       ],
+       "label": "Approval Date",
+       "tag": "APPROVAL_DATE",
+       "width": "165",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "APPROVAL_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Reject Reason"
+       ],
+       "label": "Reject Reason",
+       "tag": "REJECT_REASON",
+       "width": "220",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "REJECT_REASON",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

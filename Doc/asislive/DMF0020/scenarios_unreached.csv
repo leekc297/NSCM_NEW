@@ -1,0 +1,14 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+DMF0020-Sf6dd4d,조회,GetCustomerbyDivision,DMF0020_SalesFuturePrice.cs:3585,호출 없음,,
+DMF0020-Sbb70a1,조회,GetCustomerbyDivisionAsync,DMF0020_SalesFuturePrice.cs:3600,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:1558,
+DMF0020-Sbf4efb,조회,GetDivision,DMF0020_SalesFuturePrice.cs:3360,주석 안에서만 호출,DMF0020_SalesFuturePrice.cs:301; DMF0020_SalesPriceTemplatePopup.cs:93; DMF0020_SalesFuturePricePopUp.cs:116; DMF0020_SaveSalesFuturePrice_Popup.cs:237; _DMF0020_SalesFuturePrice.cs:179,
+DMF0020-Sa2e98d,조회,GetEndCustomerbyDivision,DMF0020_SalesFuturePrice.cs:3419,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:1701; _DMF0020_SalesFuturePrice.cs:1773; _DMF0020_SalesFuturePrice.cs:1859; _DMF0020_SalesFuturePrice.cs:1884,
+DMF0020-S53fcfb,조회,GetPlantSitebyEndCustomer,DMF0020_SalesFuturePrice.cs:3448,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:222,
+DMF0020-S3b2d53,조회,GetPlantSitebyEndCustomerAsync,DMF0020_SalesFuturePrice.cs:3615,주석 안에서만 호출,DMF0020_SalesFuturePrice.cs:2656; _DMF0020_SalesFuturePrice.cs:1564; _DMF0020_SalesFuturePrice.cs:1680,
+DMF0020-Sac59f6,조회,GetScmSiteInfobyDivision,DMF0020_SalesFuturePrice.cs:3390,호출 없음,,
+DMF0020-Sf9f45a,조회,GetScmSitebyDivision,DMF0020_SalesFuturePrice.cs:3374,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:1541,
+DMF0020-Se0ad34,조회,GetScmSitebyDivisionAsync,DMF0020_SalesFuturePrice.cs:3645,주석 안에서만 호출,DMF0020_SalesFuturePrice.cs:2649; _DMF0020_SalesFuturePrice.cs:1561; _DMF0020_SalesFuturePrice.cs:1674; _DMF0020_SalesFuturePrice.cs:1755,
+DMF0020-Scc16d7,조회,GetTeambyDivision,DMF0020_SalesFuturePrice.cs:3405,주석 안에서만 호출,DMF0020_SalesFuturePrice.cs:313; DMF0020_SaveSalesFuturePrice_Popup.cs:249; _DMF0020_SalesFuturePrice.cs:187; _DMF0020_SalesFuturePrice.cs:1696; _DMF0020_SalesFuturePrice.cs:1854,
+DMF0020-Sa3e417,조회,GetTeambyDivisionAsync,DMF0020_SalesFuturePrice.cs:3572,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:1555,
+DMF0020-Sb52154,초기,LoadData,DMF0020_SalesFuturePricePopUp.cs:103,호출 없음,DMF0020_SalesFuturePrice.cs:1942; DMF0020_SalesFuturePrice.cs:2379; DMF0020_SalesFuturePrice.cs:2409; DMF0020_SaveSalesFuturePrice_Popup.cs:1879; _DMF0020_SalesFuturePrice.cs:1483,"SaveData,btnExchangeRate_Click,btnSavePricePeriod_Click"
+DMF0020-S494a47,조회,GetCurrencyBySCM_MST_SITE_ITEM,_DMF0020_SalesFuturePrice.cs:2263,주석 안에서만 호출,_DMF0020_SalesFuturePrice.cs:2242,

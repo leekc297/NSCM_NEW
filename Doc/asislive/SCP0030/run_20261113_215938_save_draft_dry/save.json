@@ -1,0 +1,150 @@
+{
+ "id": "SCP0030",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_BOD_ITEM",
+  "pk": [
+   "SEQ"
+  ],
+  "match": {
+   "SEQ": "SEQ"
+  },
+  "save_sp": "SCP0030_SAVE_BOD_ITEM",
+  "side": [
+   {
+    "table": "scp_mst_bod_item_h",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0030_SAVE_BOD_ITEM → SP SCP0030_SAVE_BOD_ITEM 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "PRIORITY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   {
+    "col": "SAFETY_STOCK",
+    "db_col": "SAFETY_STOCK",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 21:59:38",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "SEQ": 274561,
+   "DIVISION_ID": "40",
+   "BOD_ID": "18159",
+   "ITEM_ID": "ACPN4041I-A1-300",
+   "PRIORITY": 99,
+   "FROM_YYYYMMDD": "20250707",
+   "TO_YYYYMMDD": "21000704",
+   "SAFETY_STOCK": "0E-10",
+   "VALID_YN": "Y",
+   "CREATED_BY": "scp_batch",
+   "CREATION_DATE": "2025-07-08 13:03:42.073",
+   "LAST_UPDATED_BY": "scp_batch",
+   "LAST_UPDATE_DATE": "2025-07-08 13:03:42.073",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "SEQ": "274561"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PRIORITY",
+   "old": "99",
+   "new": "100",
+   "ok": true,
+   "error": null,
+   "before": "99",
+   "after": "99",
+   "action_before": "",
+   "action_after": "",
+   "locked": false,
+   "entered": true
+  },
+  {
+   "row": 0,
+   "col": "SAFETY_STOCK",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "edit_col_used": "SAFETY_STOCK",
+ "db_after": [
+  {
+   "SEQ": 274561,
+   "DIVISION_ID": "40",
+   "BOD_ID": "18159",
+   "ITEM_ID": "ACPN4041I-A1-300",
+   "PRIORITY": 99,
+   "FROM_YYYYMMDD": "20250707",
+   "TO_YYYYMMDD": "21000704",
+   "SAFETY_STOCK": "0E-10",
+   "VALID_YN": "Y",
+   "CREATED_BY": "scp_batch",
+   "CREATION_DATE": "2025-07-08 13:03:42.073",
+   "LAST_UPDATED_BY": "scp_batch",
+   "LAST_UPDATE_DATE": "2025-07-08 13:03:42.073",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ]
+}

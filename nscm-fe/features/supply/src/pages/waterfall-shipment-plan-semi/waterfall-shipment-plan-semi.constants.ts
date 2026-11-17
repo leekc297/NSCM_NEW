@@ -49,7 +49,17 @@ export const kindOf = (binding: string): 'D' | 'W' | 'M' | 'B' | null => {
 export const MSG = {
   DIVISION_NO_AUTH: 'MSG00097', // 권한을 가진 Division이 없습니다. (01_layout.md §2 트리거C)
   EDIT_READONLY: 'MSG00109', // Read-only mode. (Edit 버튼 NO-OP 안내, §4d)
-  REQUIRED_INPUT: 'MSG00013', // 필수값을 입력하세요. (FindData_Main 이중 필수값 체크, §6#7)
+  // 필수값 미입력 — AS-IS FindData_Main → DataUtil.checkRequired 의 MSG00002("{0} 값은 필수 입력입니다",
+  //   arg=필드 라벨)를 TO-BE 재채번 MSG00429("{0} 값은 필수 입력 항목입니다.")로 매핑(EtcSalesReports 선례).
+  //   AS-IS MSG00002 는 TO-BE 에서 '저장 성공' 으로 재채번되어 그대로 쓰면 오문구가 난다(ora.py 실측).
+  REQUIRED_FIELD: 'MSG00429',
+  // Period 범위 검증 — AS-IS DateUtil.Check_PeriodDate(dCalendar)(cs:645) 파리티. AS-IS MSG 번호를
+  //   TO-BE 문구로 역조회(rule 6, ora.py SCM_ADM_MSG_M 실측):
+  //   시작일 > 종료일 — AS-IS MSG00108 → TO-BE MSG01135 "The start date can not be later than the end date."
+  PERIOD_START_AFTER_END: 'MSG01135',
+  //   최대 조회기간 초과(to >= from + 1년 + 7일) — AS-IS MSG00172 → TO-BE MSG01187
+  //   "Maximum Period is From Date + {0}." ({0}=371=AS-IS 하드코딩 364+7).
+  MAX_PERIOD: 'MSG01187',
 } as const;
 
 export const LBL = {
@@ -61,7 +71,10 @@ export const LBL = {
   MODEL_NICKNAME: 'LBL00618',
   ELECTRODE: 'LBL00038',
   BUCKET: 'LBL00710',
-  VERSION: 'LBL00606', // Version (참조용 — 화면 표기는 'Ver.' 하드코딩. DB/번들 'Ver.' 미등록 약어, SCP0016/FG 동일)
+  VERSION: 'LBL00606', // Version (full term, 참조용).
+  // Ver. 약어 — 화면 라벨·필수 미입력 메시지 {0} 공용. LBL01275=KO/EN/CN 모두 'Ver.'(DB 등록 2026-11-12,
+  //   SCM_ADM_MSG_M MSG_TP_CD='LBL'). 과거 LBL01231 참조는 오매핑(실제 "요청일"/"Date of Request")이라 교정.
+  VER: 'LBL01275',
   // 확인 필요(02_search-combo.md §7#3) — LBL00013 vs 공용 PeriodField LBL00505 중복.
   //   전용 라벨(LBL00013)을 채택 — 공용 PeriodField 재사용 여부는 __asis-mapping__.md 에 기록.
   PERIOD: 'LBL00013',

@@ -1,5 +1,5 @@
 {
- "at": "2026-11-08T12:03:47.315Z",
+ "at": "2026-11-14T09:13:23.819Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -6478,85 +6478,69 @@
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0127\"}",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0127\"}",
    "status": 200,
    "n": 14,
    "keys": [
-    "CREATED_BY",
-    "ATTRIBUTE3",
-    "ATTRIBUTE10",
-    "LAST_UPDATED_BY",
-    "ATTRIBUTE2",
-    "ATTRIBUTE1",
-    "DAILY_PLAN_PERIOD",
-    "CREATION_DATE",
-    "ATTRIBUTE9",
-    "ATTRIBUTE8",
-    "LAST_UPDATE_DATE",
-    "ATTRIBUTE7",
-    "ATTRIBUTE6",
-    "ATTRIBUTE5",
-    "NAME",
-    "ATTRIBUTE4",
     "CODE",
-    "VALID_YN"
+    "NAME"
    ],
    "rows": [
     {
-     "c": "81",
-     "v": "81 Automotive Battery"
-    },
-    {
      "c": "40",
-     "v": "40 Mobility & IT Battery"
+     "v": "Mobility & IT Battery"
     },
     {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "EE",
-     "v": "EE Electrode"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "EE_UC",
-     "v": "EE_UC Electrode(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "EE_HM Electrode(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "EE_ST Electrode(ST)"
+     "c": "81",
+     "v": "Automotive Battery"
     },
     {
      "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "EE_HD",
-     "v": "EE_HD Electrode(HD)"
+     "v": "Automotive Battery(HD)"
     },
     {
      "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
     },
     {
      "c": "EE_HG",
-     "v": "EE_HG Electrode(HG)"
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
     }
    ],
    "user": "minyonglee1"
@@ -6782,69 +6766,85 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0127\"}",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0127\"}",
    "status": 200,
    "n": 14,
    "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
     "CODE",
-    "NAME"
+    "VALID_YN"
    ],
    "rows": [
     {
-     "c": "40",
-     "v": "Mobility & IT Battery"
-    },
-    {
      "c": "81",
-     "v": "Automotive Battery"
+     "v": "81 Automotive Battery"
     },
     {
-     "c": "81_HD",
-     "v": "Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "Automotive Battery(HG)"
-    },
-    {
-     "c": "81_HM",
-     "v": "Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "Automotive Battery(ST)"
-    },
-    {
-     "c": "81_UC",
-     "v": "Automotive Battery(UC)"
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
     },
     {
      "c": "82",
-     "v": "ESS Battery"
+     "v": "82 ESS Battery"
     },
     {
      "c": "EE",
-     "v": "Electrode"
+     "v": "EE Electrode"
     },
     {
-     "c": "EE_HD",
-     "v": "Electrode(HD)"
-    },
-    {
-     "c": "EE_HG",
-     "v": "Electrode(HG)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "Electrode(HM)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "Electrode(ST)"
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
     },
     {
      "c": "EE_UC",
-     "v": "Electrode(UC)"
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
     }
    ],
    "user": "minyonglee1"
@@ -7064,27 +7064,6 @@
     {
      "c": "PG0058",
      "v": "Test"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0127\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
     }
    ],
    "user": "minyonglee1"
@@ -7311,6 +7290,27 @@
     {
      "c": "TARGETBIZ",
      "v": "TARGETBIZ"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0127\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
     }
    ],
    "user": "minyonglee1"

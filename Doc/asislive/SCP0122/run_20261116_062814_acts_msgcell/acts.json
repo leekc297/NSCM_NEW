@@ -1,0 +1,174 @@
+{
+ "id": "SCP0122",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellClick",
+   "expect": "(STATE)spdMain_CellClick row",
+   "why": "SCP0122_PlanActivityMgmt.cs:555~558 CellClick = _currRowIdx 갱신 · 224~243 ComboSelChange(OPMZ_ACTV_NAME) 가 _currRowIdx 행에 ACTV_CD·LINK_UI_TYPE·PROGRAM_NAME·CONFIRM_YN·AUTO_YN·OPTION_YN 채움 · 1행 ACTV_CD·LINK_UI_TYPE 비운 뒤 1행 클릭·콤보 변경 → 다시 채워지는지 관찰(저장 안 함)",
+   "steps": [
+    {
+     "sheet": "Plan Activity Mgmt",
+     "row": 1,
+     "col": 7,
+     "before": "A008",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "OPMZ_ACTV_CD",
+      "value": "",
+      "mode": "value",
+      "row": 1
+     }
+    },
+    {
+     "sheet": "Plan Activity Mgmt",
+     "row": 1,
+     "col": 9,
+     "before": "UI",
+     "after": "",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "LINK_UI_TYPE",
+      "value": "",
+      "mode": "value",
+      "row": 1
+     }
+    },
+    {
+     "set": {
+      "values": {
+       "row": 1,
+       "cols": [
+        "OPMZ_ACTV_NAME",
+        "OPMZ_ACTV_CD",
+        "LINK_UI_TYPE",
+        "PROGRAM_NAME",
+        "CONFIRM_YN",
+        "AUTO_YN",
+        "OPTION_YN"
+       ]
+      }
+     },
+     "ok": true,
+     "values": {
+      "OPMZ_ACTV_NAME": "Constraint Validation",
+      "OPMZ_ACTV_CD": "",
+      "LINK_UI_TYPE": "",
+      "PROGRAM_NAME": "",
+      "CONFIRM_YN": "Y",
+      "AUTO_YN": "",
+      "OPTION_YN": ""
+     }
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "1",
+       "col": "1",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=1,column=1,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=1,actualColumnLayoutIndex=1)",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "ComboSelChange",
+       "row": "1",
+       "col_tag": "OPMZ_ACTV_NAME",
+       "wait": "3"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.ComboSelChange",
+     "raised": "EditorNotifyEventArgs(view=FarPoint.Win.Spread.SpreadView,editingControl=ctl,row=1,column=8)",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "values": {
+       "row": 1,
+       "cols": [
+        "OPMZ_ACTV_NAME",
+        "OPMZ_ACTV_CD",
+        "LINK_UI_TYPE",
+        "PROGRAM_NAME",
+        "CONFIRM_YN",
+        "AUTO_YN",
+        "OPTION_YN"
+       ]
+      }
+     },
+     "ok": true,
+     "values": {
+      "OPMZ_ACTV_NAME": "Constraint Validation",
+      "OPMZ_ACTV_CD": "A008",
+      "LINK_UI_TYPE": "UI",
+      "PROGRAM_NAME": "",
+      "CONFIRM_YN": "Y",
+      "AUTO_YN": "",
+      "OPTION_YN": ""
+     }
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 06:27:19",
+ "_pre_set": [],
+ "_post_find": null,
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0122",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Plan Activity Mgmt"
+   },
+   "rows": 15,
+   "ms": 4.57,
+   "at": "2026-11-16 06:27:29.939",
+   "phase": "find+post_find"
+  },
+  {
+   "sp": "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+   "params": {
+    "p_division_id": "81",
+    "p_plan_group_id": "PG0001",
+    "p_prs_cd": "P001"
+   },
+   "rows": 7,
+   "ms": 3.24,
+   "at": "2026-11-16 06:27:29.986",
+   "phase": "find+post_find"
+  }
+ ],
+ "edit_focus": "셀 0,1",
+ "edit_calls": [],
+ "edit_mode": true
+}

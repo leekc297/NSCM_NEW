@@ -18,12 +18,7 @@ export interface DivisionOption {
 
 interface Props {
   onSearch: () => void; // 조회(GET) — SubTitle SEARCH 와 동일 핸들러
-  onSave: () => void; // 위임 저장 (btnSave)
-  onUnset: () => void; // 위임 해제 (btnUnSet)
   onDelegateeSearch: () => void; // UserInfoPopup(SsoUserModal) 오픈
-  canSave: boolean; // AUTH-01 — hasButton('SAVE') 판정. 권한 없으면 Save 버튼을 그리지 않는다
-  canUnset: boolean; // AUTH-01 — hasButton('UNSET') 판정. 권한 없으면 UnSet 버튼을 그리지 않는다
-  actionsActive: boolean; // R1/R2 — Delegate 시트에서만 활성. 그 외 시트는 visibility:hidden 로 자리만 유지
   disabled: boolean; // R3 — Division 무권한(EE 제외 0건) 시 헤더 폼 전체 disable
   divisionOptions: DivisionOption[];
   allDivisionCodes: string[]; // "All" 선택 시 확장 대상(권한 division 전건)
@@ -38,15 +33,11 @@ const toDate = (value: string): dayjs.Dayjs | null =>
     : null;
 
 // AS-IS usrConditionPanel1 헤더 폼(design 01 §1) — Delegatee(입력+팝업) / Division(다중 체크리스트) /
-//   Period(From~To) + SAVE·UnSet 헤더 버튼. 조회조건이 아니라 위임 설정 입력 영역(design 02 §5).
+//   Period(From~To). 조회조건이 아니라 위임 설정 입력 영역(design 02 §5). SAVE·UnSet 버튼은 공용
+//   툴바(SubTitle customButtons)로 분리됐다(사용자 지시 2026-11-10 — 버튼이 늘 있는 위치로 통일).
 export const DelegateForm = ({
   onSearch,
-  onSave,
-  onUnset,
   onDelegateeSearch,
-  canSave,
-  canUnset,
-  actionsActive,
   disabled,
   divisionOptions,
   allDivisionCodes,
@@ -62,36 +53,6 @@ export const DelegateForm = ({
       searchButtonLabel={t(LBL.SEARCH, 'Search(F5)')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
-      extraButtons={
-        canSave || canUnset ? (
-          // 권한이 있으면 두 시트 모두에서 렌더해 버튼그룹 폭을 고정한다. Delegate 시트가 아니면
-          //   visibility:hidden 으로 자리만 남기고 비활성(disabled) — 시트 전환 시 조회영역 폭 반동 방지.
-          <div
-            className={`${styles.actionButtons}${actionsActive ? '' : ` ${styles.actionButtonsHidden}`}`}
-          >
-            {canSave && (
-              <Button
-                appearance='contained'
-                priority='primary'
-                size='medium'
-                buttonLabel={t(LBL.SAVE, 'Save')}
-                disabled={disabled || !actionsActive}
-                onClick={onSave}
-              />
-            )}
-            {canUnset && (
-              <Button
-                appearance='outlined'
-                priority='normal'
-                size='medium'
-                buttonLabel={t(LBL.UNSET, 'UnSet')}
-                disabled={disabled || !actionsActive}
-                onClick={onUnset}
-              />
-            )}
-          </div>
-        ) : undefined
-      }
       conditions={
         <>
           {/* Delegatee* (필수, 기본포커스 — design 02 §2.3) 입력 + 돋보기(UserInfoPopup=SsoUserModal). */}

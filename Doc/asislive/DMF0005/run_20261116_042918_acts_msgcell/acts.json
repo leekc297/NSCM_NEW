@@ -1,0 +1,234 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:635 fps=spdMain 이고 siSub 활성 시트가 잠금 해제(수정 중) · 사업부 81 은 상세 패널 표시(3822행) · 상세 수정 = fps=spdSub 에서 EditButton(864행 SwitchLock)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:860 fps=spdSub 이고 siMain 활성 시트가 수정 중 · 주 수정 = fps=spdMain 에서 EditButton(640행)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Production 시트를 수정 중이어서 Purchase 시트를 수정 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00128",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3329 주 시트 잠김 상태에서 siSub 활성 시트가 수정 중일 때 주 그리드 더블클릭 · 행 0개면 3324행 return",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "click": "DIVISION_ID",
+      "double": 1,
+      "row": 0
+     },
+     "row": 0,
+     "col": 2,
+     "ok": true,
+     "error": null,
+     "popups": []
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Purchase를 수정 중이어서 조회를 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [
+  {
+   "handler": "EditButton",
+   "expect": "MSG00096",
+   "why": "그룹 SCP Planner 실행에서만(현재 ADMIN)"
+  }
+ ],
+ "at": "2026-11-16 04:25:13",
+ "_pre_set": [
+  {
+   "name": "clbDivision",
+   "index": "1",
+   "wait": 3
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:81 Automotive Battery",
+    "error": null
+   }
+  ]
+ }
+}

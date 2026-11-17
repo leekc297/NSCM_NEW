@@ -1,0 +1,141 @@
+{
+ "id": "FP00450",
+ "started": "2026-11-12 18:32:35.715",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:32:36.067",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP00450_Setup_Condition",
+   "form_text": "Setup Condition",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00450_Setup_Condition.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:42.489"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:32:46.338",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00450\\run_20261112_183235\\dump_load.json",
+   "control_count": 41,
+   "grid_count": 2,
+   "total": "Total : 561",
+   "time_status": "DB : 4.447s, UI : 0.362s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:46.345"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:32:46.506",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00450\\run_20261112_183235\\shots\\FP00450_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:46.621"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:32:46.948",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:47.462"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:32:56.712",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00450\\run_20261112_183235\\dump_find.json",
+   "control_count": 41,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "DB : 4.934s, UI : 0.073s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:56.728"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:32:57.046",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00450\\run_20261112_183235\\shots\\FP00450_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:57.183"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:32:57.516",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:58.730"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 43,
+  "calls_with_params": 37
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP00450_Setup_Condition",
+  "form_text": "Setup Condition",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00450_Setup_Condition.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 4.934s, UI : 0.073s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:32:35.921",
+ "t_find": "2026-11-12 18:32:46.638",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 41,
+  "layout_items": 13,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 25,
+  "data_rows": 60,
+  "grid_rows": 344,
+  "calls_total": 43,
+  "calls_screen": 43,
+  "calls_find": 24,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:21.771",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:21"
+}

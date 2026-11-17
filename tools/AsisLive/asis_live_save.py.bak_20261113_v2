@@ -1,0 +1,259 @@
+# -*- coding: utf-8 -*-
+"""AS-IS 저장 시나리오 시범 — 셀 1개 수정 → 저장 → 저장 인자 포착 → 원래 값 복원·대조 (2026-11-13 · 플랜 P6-2 · 사용자 승인 "네, 시범 진행")
+
+  python tools/AsisLive/asis_live_save.py <ID> [--dry] [--name 시나리오이름]     (정의에 "scenarios" 가 있으면 전부 차례로 · --name 으로 하나만)
+입력  Doc/asislive/<ID>/save_scenario.json   화면별 저장 시나리오 정의(사람이 소스·SP 원문을 보고 적는다 — 자동 추정하지 않는다)
+        {"table": 저장 대상 테이블, "pk": [테이블 키 컬럼…], "match": {테이블 컬럼: 그리드 열 Tag …}  ← 그리드 행에서 대상 DB 행을 찾는 조건,
+         "edit": {"col": 그리드 열 Tag, "rule": "plus1"}, "pick": {"col": 그리드 열 Tag, "nonempty": true}  ← 어떤 행을 고칠지,
+         "side": [{"table": 저장 SP 가 행을 덧붙이는 표(이력 등), "pk": [그 표의 키]}]  ← 이번 실행으로 덧붙은 행만 지운다,
+         "save_sp": 저장 SP 이름, "basis": 근거(파일:줄), "expect_before": 저장 전 DB 대상 행 수(기본 1 · 0 = DB 에 없던 행이 저장으로 생기는 경우 → 복원은 키로 DELETE)}
+        여러 개면 {"table":…, "pk":…, 공통 항목…, "scenarios": [{"name": "update", …}, {"name": "insert", …}]}
+순서  ① 화면 열기 → 필수 조건 → 조회 → 고칠 행 선택(pick)  ② DB 에서 그 행의 지금 값 기록(전)  ③ 수정 모드 → 셀 값 입력(사용자 편집 경로) → 변경 표시 확인
+      ④ (--dry) 저장하지 않고 닫는다 → DB 가 그대로인지 확인
+         (실행) 저장 버튼(OnClickSaveButton) → 뜬 메시지 기록 → 저장 SP 호출·인자 포착 → DB 값 기록(후)
+      ⑤ 복원: 전 기록의 행은 키로 찾아 키가 아닌 컬럼을 전 값으로 UPDATE · 전에 없던 행은 키로 DELETE(모두 WHERE 키 지정 · 행 단위) → 다시 읽어 전 기록과 전 컬럼 대조
+산출  Doc/asislive/<ID>/run_<시각>_save/save.json(전·후·복원 뒤 값 · 저장 호출 인자 · 메시지 · 판정) · calls.json
+      저장 SP 가 시간 초과로 끊기면: 서비스 접속에 열린 채 남은 이 실행의 트랜잭션 세션만 끝내(미커밋 되돌림) 잠금을 푼다 · 저장 중 대기 상태는 save_wait 에 기록
+판정  SAVE_TIMEOUT = 저장 SP 가 제한 시간 안에 끝나지 않음(DB 는 저장 전 상태로 되돌림) /
+      OK = 저장 SP 가 호출됐고, DB 값이 입력대로 바뀌었고, 복원 뒤 전 기록과 전 컬럼이 같다 / RESTORE_FAIL = 복원 뒤 값이 다르다(즉시 보고 · 복원 SQL 을 save.json 에 남긴다)
+제약  AS-IS 개발 DB 에만 쓴다(.env.asis). 테이블 전체 삭제·구조 변경 없음. 대상 행이 1개가 아니거나 전 기록을 못 읽으면 저장하지 않는다.
+"""
+import datetime as dt, decimal, json, os, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+ROOT = os.path.abspath(os.path.join(HERE, "..", "..")); sys.path.insert(0, os.path.join(ROOT, "tools", "DbConn"))
+import asis_live_run as R
+import asis_live_fill as F
+import asis_live_scen_run as SR
+P = lambda *a: os.path.join(ROOT, *a)
+
+
+def jv(v):
+    if isinstance(v, (dt.datetime, dt.date)): return v.strftime("%Y-%m-%d %H:%M:%S.%f")[:23]
+    if isinstance(v, decimal.Decimal): return str(v)
+    return v
+
+
+def db_rows(table, where):
+    import dbconn
+    cx = dbconn.connect("asis"); cur = cx.cursor()
+    cur.execute("SELECT * FROM %s WHERE %s" % (table, " AND ".join("%s = ?" % k for k in where)), list(where.values()))
+    cols = [d[0] for d in cur.description]; rows = [dict(zip(cols, r)) for r in cur.fetchall()]; cx.close()
+    return cols, rows
+
+
+def restore(table, pk, before, after):
+    """전 기록으로 되돌린다 — 행 단위 UPDATE/DELETE(모두 키 조건). 실행한 문장 목록을 돌려준다."""
+    import dbconn
+    cx = dbconn.connect("asis"); cur = cx.cursor(); done = []
+    key = lambda r: tuple(r[k] for k in pk)
+    bset = {key(r): r for r in before}
+    for r in after:
+        if key(r) not in bset:
+            sql = "DELETE FROM %s WHERE %s" % (table, " AND ".join("%s = ?" % k for k in pk)); cur.execute(sql, [r[k] for k in pk])
+            done.append({"sql": sql, "key": [jv(r[k]) for k in pk], "rows": cur.rowcount})
+    for r in before:
+        nk = [c for c in r if c not in pk]
+        sql = "UPDATE %s SET %s WHERE %s" % (table, ", ".join("%s = ?" % c for c in nk), " AND ".join("%s = ?" % k for k in pk))
+        cur.execute(sql, [r[c] for c in nk] + [r[k] for k in pk]); done.append({"sql": sql[:60] + "…", "key": [jv(r[k]) for k in pk], "rows": cur.rowcount})
+        if cur.rowcount == 0:                                   # 저장이 그 행을 지웠다면 다시 넣는다
+            cols = list(r); sql = "INSERT INTO %s (%s) VALUES (%s)" % (table, ", ".join(cols), ", ".join("?" for _ in cols)); cur.execute(sql, [r[c] for c in cols])
+            done.append({"sql": sql[:60] + "…", "key": [jv(r[k]) for k in pk], "rows": cur.rowcount})
+    cx.commit(); cx.close()
+    return done
+
+
+def watch_requests(stop, log, sp):
+    """저장하는 동안 이 PC 에서 온 실행 중 요청의 대기 상태를 1초마다 적는다(멈춘 지점·막고 있는 세션 확인용 · 조회만)"""
+    import dbconn, socket
+    try: cx = dbconn.connect("asis"); cur = cx.cursor()
+    except Exception as ex: log.append({"error": str(ex)[:150]}); return
+    me = socket.gethostname()
+    while not stop.is_set():
+        try:
+            cur.execute("""select r.session_id, r.status, r.wait_type, r.wait_time, r.blocking_session_id, r.total_elapsed_time, r.open_transaction_count,
+ substring(t.text, r.statement_start_offset/2+1, 160), object_name(t.objectid, t.dbid),
+ (select top 1 substring(bt.text,1,120) from sys.dm_exec_connections bc cross apply sys.dm_exec_sql_text(bc.most_recent_sql_handle) bt where bc.session_id = r.blocking_session_id),
+ (select top 1 bs.host_name + '/' + bs.program_name from sys.dm_exec_sessions bs where bs.session_id = r.blocking_session_id)
+from sys.dm_exec_requests r join sys.dm_exec_sessions s on s.session_id = r.session_id cross apply sys.dm_exec_sql_text(r.sql_handle) t
+where s.host_name = ? and s.program_name like '.Net SqlClient%' and r.session_id <> @@spid""", me)
+            for r in cur.fetchall():
+                log.append({"at": time.strftime("%H:%M:%S"), "sid": r[0], "status": r[1], "wait": r[2], "wait_ms": r[3], "blocked_by": r[4], "elapsed_ms": r[5], "tran": r[6],
+                            "stmt": " ".join(str(r[7] or "").split())[:150], "proc": r[8], "blocker_sql": " ".join(str(r[9] or "").split())[:110], "blocker": r[10]})
+        except Exception as ex:
+            log.append({"error": str(ex)[:150]})
+        stop.wait(1.0)
+    try: cx.close()
+    except Exception: pass
+
+
+def kill_own_open_tran(sp):
+    """저장 SP 가 시간 초과로 끊기면 서비스 접속에 트랜잭션이 열린 채 남는다(11-13 18:01 실측: 미커밋 행 + X 잠금).
+    이 PC 에서 온 접속 중 **열린 트랜잭션이 있고 마지막 문장이 그 저장 SP 인 세션만** 끝내 되돌린다(남의 세션은 건드리지 않는다)."""
+    import dbconn, socket
+    cx = dbconn.connect("asis"); cx.autocommit = True; cur = cx.cursor(); out = []
+    cur.execute("""select s.session_id, s.open_transaction_count, s.last_request_start_time, (select top 1 text from sys.dm_exec_sql_text(c.most_recent_sql_handle))
+from sys.dm_exec_sessions s join sys.dm_exec_connections c on c.session_id = s.session_id
+where s.host_name = ? and s.program_name like '.Net SqlClient%' and s.open_transaction_count > 0 and s.status = 'sleeping' and s.session_id <> @@spid""", socket.gethostname())
+    for sid, n, st, txt in cur.fetchall():
+        if sp.upper() in str(txt or "").upper():
+            cur.execute("KILL %d" % int(sid)); out.append({"session_id": sid, "open_tran": n, "last_request_start": jv(st), "action": "KILL(미커밋 되돌림)"})
+    cx.close()
+    return out
+
+
+def side_keys(side, where):
+    """저장 SP 가 덧붙이는 표(이력 등)의 지금 행 키 — {표: 키 값 집합} · where 의 컬럼 중 그 표에 있는 것만 조건으로 쓴다"""
+    import dbconn
+    out = {}; cx = dbconn.connect("asis"); cur = cx.cursor()
+    for sd in side or []:
+        cur.execute("select name from sys.columns where object_id = object_id(?)", sd["table"]); have = {r[0].upper() for r in cur.fetchall()}
+        w = {k: v for k, v in where.items() if k.upper() in have}
+        if not w: out[sd["table"]] = None; continue
+        cur.execute("SELECT %s FROM %s WHERE %s" % (", ".join(sd["pk"]), sd["table"], " AND ".join("%s = ?" % k for k in w)), list(w.values()))
+        out[sd["table"]] = {tuple(r) for r in cur.fetchall()}
+    cx.close()
+    return out
+
+
+def side_clean(side, where, pre):
+    """이번 실행으로 덧붙은 행만 지운다(저장 전에 없던 키 · 표마다 키 조건 DELETE)"""
+    import dbconn
+    now_k = side_keys(side, where); done = []; cx = dbconn.connect("asis"); cur = cx.cursor()
+    for sd in side or []:
+        a, b = pre.get(sd["table"]), now_k.get(sd["table"])
+        if a is None or b is None: done.append({"table": sd["table"], "note": "대상 조건으로 쓸 컬럼이 없어 손대지 않음"}); continue
+        for key in sorted(b - a, key=str):
+            cur.execute("DELETE FROM %s WHERE %s" % (sd["table"], " AND ".join("%s = ?" % k for k in sd["pk"])), list(key))
+            done.append({"table": sd["table"], "key": [jv(x) for x in key], "rows": cur.rowcount})
+    cx.commit(); cx.close()
+    return done
+
+
+def same(a, b, pk):
+    ka = sorted(a, key=lambda r: [str(r[k]) for k in pk]); kb = sorted(b, key=lambda r: [str(r[k]) for k in pk])
+    return [{c: jv(v) for c, v in r.items()} for r in ka] == [{c: jv(v) for c, v in r.items()} for r in kb]
+
+
+def main():
+    av = sys.argv[1:]; ids = [a.upper() for i, a in enumerate(av) if not a.startswith("-") and not (i > 0 and av[i - 1] == "--name")]; dry = "--dry" in av
+    if len(ids) != 1: print(__doc__); return 2
+    mid = ids[0]
+    try: sc = json.load(open(P("Doc", "asislive", mid, "save_scenario.json"), encoding="utf-8"))
+    except Exception as ex: print("[ERROR] 저장 시나리오 정의 없음: Doc/asislive/%s/save_scenario.json (%s)" % (mid, ex)); return 3
+    name = av[av.index("--name") + 1] if "--name" in av and av.index("--name") + 1 < len(av) else ""
+    if isinstance(sc, dict) and "scenarios" in sc:
+        base = {k: v for k, v in sc.items() if k != "scenarios"}; lst = [dict(base, **x) for x in sc["scenarios"]]
+        if not name:                                            # 시나리오 여러 개 = 하나씩 따로 실행(화면·런처를 새로 연다 — 앞 시나리오의 화면 상태가 남지 않게)
+            import subprocess
+            worst = 0
+            for x in lst:
+                print("=== 시나리오 %s — %s" % (x.get("name"), x.get("title") or ""), flush=True)
+                rc1 = subprocess.call([sys.executable, os.path.abspath(__file__), mid, "--name", str(x.get("name"))] + (["--dry"] if dry else []), cwd=ROOT)
+                worst = max(worst, rc1)
+            return worst
+        sc = next((x for x in lst if str(x.get("name")) == name), None)
+        if sc is None: print("[ERROR] 시나리오 이름 없음: %s" % name); return 2
+    table, pk = sc["table"], sc["pk"]; expect = int(sc.get("expect_before", 1))
+    out = {"id": mid, "dry": dry, "name": sc.get("name") or "", "scenario": sc, "at": time.strftime("%Y-%m-%d %H:%M:%S"), "status": "", "steps": []}
+    d = P("Doc", "asislive", mid, "run_%s_save%s%s" % (time.strftime("%Y%m%d_%H%M%S"), ("_" + str(sc["name"])) if sc.get("name") else "", "_dry" if dry else "")); os.makedirs(d, exist_ok=True)
+    def save_out():
+        json.dump(out, open(os.path.join(d, "save.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=jv)
+    if not R.acquire_lock("save"): print("[ERROR] 다른 AS-IS 실측이 끝나지 않음"); return 3
+    host, info, why = R.start_session(P("Doc", "asislive", "_cmd_save_" + time.strftime("%H%M%S")))
+    if host is None: print("[ERROR] 런처 세션 시작 실패: %s" % why); return 3
+    before = None; rc = 3
+    try:
+        t0 = R.now()
+        r = host.send("open", timeout=180, id=mid)
+        if not r.get("ok"): out["status"] = "ERROR"; out["note"] = "화면 열기 실패: %s" % r.get("error"); return 3
+        R.wait_quiet(R.now(), 3, 60); F.LOCK.clear()
+        try: F.prefill(host, mid)
+        except Exception: pass
+        tf = R.now(); host.send("find", timeout=60); R.wait_find(host, tf, 0, 300)
+        g = SR.grid_snap(host, rows=500); sheet = next(iter(g.values()), None)
+        if not sheet or not sheet["data"]: out["status"] = "ERROR"; out["note"] = "조회 결과 행 없음"; return 3
+        cols = sheet["cols"]; ci = lambda tag: cols.index(tag)
+        pick = sc.get("pick") or {}; row = None
+        for i, rw in enumerate(sheet["data"]):
+            if not pick or (str(rw[ci(pick["col"])]).strip() != "") == bool(pick.get("nonempty", True)): row = i; break
+        if row is None: out["status"] = "ERROR"; out["note"] = "고칠 행을 찾지 못함(pick %s · 앞 %d행)" % (pick, len(sheet["data"])); return 3
+        rw = sheet["data"][row]; where = {tc: rw[ci(gt)] for tc, gt in sc["match"].items()}
+        out["grid_row"] = {"index": row, "values": dict(zip(cols, rw))}; out["where"] = where
+        _c, before = db_rows(table, where); out["db_before"] = before
+        side_pre = side_keys(sc.get("side"), where)
+        print("[1] 대상 행 %d · 조건 %s · DB 전 기록 %d행" % (row, where, len(before)), flush=True)
+        if len(before) != expect: out["status"] = "ERROR"; out["note"] = "DB 대상 행 수가 기대(%d)와 다름(%d) — 저장하지 않음" % (expect, len(before)); return 3
+        ecol = sc["edit"]["col"]; old = str(rw[ci(ecol)]).replace(",", "").strip()
+        if sc["edit"].get("rule") == "plus1" and not old.lstrip("-").isdigit(): out["status"] = "ERROR"; out["note"] = "숫자가 아닌 값(%r)에는 +1 규칙을 쓸 수 없음" % old; return 3
+        new = str(int(old) + 1) if sc["edit"].get("rule") == "plus1" else str(sc["edit"].get("value"))
+        out["edit"] = {"col": ecol, "old": old, "new": new}
+        host.send("policy", timeout=30, dialogs="no")                    # 저장 전까지는 어떤 확인 창에도 '아니오'
+        er = host.send("act", timeout=120, method="OnClickEditButton", wait=5); SR.sweep(host, out, "OnClickEditButton")
+        out["edit_mode"] = er.get("edit_mode")
+        if not er.get("edit_mode"): out["status"] = "ERROR"; out["note"] = "수정 모드가 켜지지 않음"; return 3
+        cr = host.send("cell", timeout=60, row=str(row), col=ecol, value=new); out["cell"] = {k: cr.get(k) for k in ("ok", "error", "before", "after", "action_before", "action_after", "locked", "entered", "how", "is_change", "edit_error")}
+        print("[2] 셀 입력 %s: %s → %s · 변경 표시 '%s' → '%s' · 편집 상태 진입 %s" % (ecol, cr.get("before"), cr.get("after"), cr.get("action_before"), cr.get("action_after"), cr.get("entered")), flush=True)
+        changed = cr.get("ok") and str(cr.get("after") or "").replace(",", "") == new and (cr.get("action_after") or "") in ("M", "I")
+        if not changed: out["note"] = "셀 값·변경 표시가 기대대로 바뀌지 않음 — 저장하지 않음"
+        d0 = len((host.send("dialogs", timeout=30).get("dialogs") or []))
+        if dry or not changed:
+            host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); time.sleep(2); SR.sweep(host, out, None)
+            _c, after = db_rows(table, where); out["db_after"] = after
+            out["status"] = ("DRY_OK" if changed else "ERROR") if same(before, after, pk) else "RESTORE_NEEDED"
+            print("[3] 저장하지 않고 닫음 · DB 그대로 %s" % same(before, after, pk), flush=True)
+        else:
+            host.send("policy", timeout=30, dialogs="default")
+            import threading
+            wlog = []; stop = threading.Event(); th = threading.Thread(target=watch_requests, args=(stop, wlog, sc["save_sp"]), daemon=True); th.start()
+            ts = R.now(); sr = host.send("act", timeout=180, method="OnClickSaveButton", wait=10); R.wait_quiet(ts, 3, 120)
+            n, _s = R.db_inflight()
+            if n: R.wait_db_clear(600)
+            cs = R.parse_dbprofile(ts, R.now())
+            for c in cs: c["phase"] = "action:save"
+            json.dump({"calls": cs}, open(os.path.join(d, "calls.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+            stop.set(); th.join(5)
+            seen = []                                               # 같은 상태가 이어지면 처음·마지막만 남긴다
+            for w in wlog:
+                k = (w.get("sid"), w.get("wait"), w.get("blocked_by"), w.get("stmt"))
+                if seen and seen[-1]["k"] == k: seen[-1]["last"] = w
+                else: seen.append({"k": k, "first": w, "last": w})
+            out["save_wait"] = [dict(x["first"], until=x["last"].get("at"), elapsed_ms_last=x["last"].get("elapsed_ms")) for x in seen][:40]
+            sv = [c for c in cs if str(c.get("sp") or "").upper().endswith(sc["save_sp"].upper())]
+            out["save_timeout"] = any("EXCEPTION" in str(c.get("inline") or "") for c in sv)
+            if out["save_timeout"]:
+                time.sleep(2); out["killed_sessions"] = kill_own_open_tran(sc["save_sp"])
+                print("[3] 저장 SP 가 시간 초과로 끊김 → 이 실행이 남긴 열린 트랜잭션 세션 %d개 종료(미커밋 되돌림)" % len(out["killed_sessions"]), flush=True); time.sleep(2)
+            out["save_call"] = [{"sp": c.get("sp"), "params": c.get("params"), "rows": c.get("rows"), "ms": c.get("ms")} for c in sv]
+            out["save_dialogs"] = [{"text": (x.get("text") or "")[:200], "action": x.get("action")} for x in (host.send("dialogs", timeout=30).get("dialogs") or [])[d0:]]
+            out["save_act"] = {"ok": sr.get("ok"), "error": sr.get("error")}
+            _c, after = db_rows(table, where); out["db_after"] = after
+            saved = bool(sv) and len(after) == 1 and str(after[0].get(sc["edit"].get("db_col") or ecol)) == new
+            print("[3] 저장 호출 %d · 메시지 %s · DB 행 %d → %d · 값 %s → %s" % (len(sv), [x["text"][:40] for x in out["save_dialogs"]], len(before), len(after), before[0].get(sc["edit"].get("db_col") or ecol) if before else "(행 없음)", after[0].get(sc["edit"].get("db_col") or ecol) if after else None), flush=True)
+            host.send("policy", timeout=30, dialogs="close"); host.send("close_screen", timeout=60); time.sleep(2); SR.sweep(host, out, None)
+            out["restore_sql"] = restore(table, pk, before, after)
+            out["side_cleanup"] = side_clean(sc.get("side"), where, side_pre)      # 저장 SP 가 덧붙인 이력 행 등 — 이번 실행분만 삭제
+            _c, fin = db_rows(table, where); out["db_restored"] = fin; ok_r = same(before, fin, pk)
+            print("[4] 복원 %d문 · 덧붙은 행 삭제 %d · 복원 뒤 전 기록과 같음 %s" % (len(out["restore_sql"]), sum(1 for x in out["side_cleanup"] if x.get("rows")), ok_r), flush=True)
+            out["status"] = "RESTORE_FAIL" if not ok_r else ("OK" if saved else "SAVE_TIMEOUT" if out.get("save_timeout") else "SAVE_NOT_CONFIRMED")
+        rc = 0 if out["status"] in ("OK", "DRY_OK") else 2
+        return rc
+    except Exception as ex:
+        out["status"] = out["status"] or "ERROR"; out["exception"] = "%s: %s" % (type(ex).__name__, str(ex)[:300]); print("[ERROR] " + out["exception"]); return 3
+    finally:
+        try:
+            if before is not None and out.get("status") not in ("OK", "DRY_OK"):
+                _c, now_rows = db_rows(table, out["where"])
+                if not same(before, now_rows, pk):                  # 어떤 경로로 끝났든 DB 가 전 기록과 다르면 되돌린다
+                    out["restore_sql_final"] = restore(table, pk, before, now_rows); _c, fin = db_rows(table, out["where"]); out["db_restored_final"] = fin
+                    print("[복원] 비정상 종료 경로 · 복원 뒤 전 기록과 같음 %s" % same(before, fin, pk), flush=True)
+        except Exception as ex2:
+            out["restore_error"] = str(ex2)[:300]; print("[ERROR] 복원 확인 실패: %s" % out["restore_error"])
+        try: host.send("policy", timeout=30, dialogs="close"); host.send("quit", timeout=30)
+        except Exception: pass
+        save_out()
+        print("[%s] %s 저장 시나리오%s · %s" % (out.get("status"), mid, " (저장 안 함)" if dry else "", out.get("note") or R.rel(d)))
+
+
+if __name__ == "__main__":
+    sys.exit(main())

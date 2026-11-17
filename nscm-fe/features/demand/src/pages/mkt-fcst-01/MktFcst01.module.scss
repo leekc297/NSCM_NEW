@@ -72,6 +72,15 @@
   height: 50vh;
 }
 
+// Prod. Country 팝업 전용 — 그리드 영역이 팝업 높이(CustomDialog height)를 따라간다.
+//   modalGridWrapper 와 같되 height: 50vh 가 없다. 줄이 넘치면 그리드 안에서 세로 스크롤이 생긴다.
+.prdnCtryGridWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .modalButtonWrapper {
   display: flex;
   justify-content: flex-end;

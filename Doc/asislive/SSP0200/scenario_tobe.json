@@ -1,0 +1,36 @@
+{
+ "id": "SSP0200",
+ "rule": "tobe",
+ "set": [
+  {
+   "name": "drpPeriod",
+   "prop": "InitValue",
+   "value": "20261111:20261211",
+   "param": "from_yyyymmdd+to_yyyymmdd",
+   "from": "20261113:20261213",
+   "sheet": "sub",
+   "kept": true
+  }
+ ],
+ "unresolved": [],
+ "skipped": [
+  {
+   "param": "from_site",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "status",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "to_site",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  }
+ ]
+}

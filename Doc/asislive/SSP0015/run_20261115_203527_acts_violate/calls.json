@@ -1,0 +1,120 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 20:33:28.971",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 22.17,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 20:33:28.996",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 21.04,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 20:33:29.641",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 638.91,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "40",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='40', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 20:34:59.920",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 23.16,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 20:34:59.947",
+   "service": "GSCM.SSP.Plan.WSL",
+   "foxquery_id": "SSP.SSP0002_GET_USER_INFO_LIST",
+   "sp": "SSP0002_GET_USER_INFO_LIST",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 21.11,
+   "params": {
+    "Search": "jaeuk.shin",
+    "Language": "KO",
+    "SSOUserYN": "N"
+   },
+   "inline": "EXEC SSP0002_GET_USER_INFO_LIST @Search='jaeuk.shin', @Language='KO', @SSOUserYN='N'",
+   "phase": "action:insert_detail"
+  },
+  {
+   "at": "2026-11-15 20:35:00.609",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 653.84,
+   "params": {
+    "Code": "PlanDateShip",
+    "Param1": "40",
+    "Param2": "A",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='PlanDateShip', @Param1='40', @Param2='A', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:insert_detail"
+  }
+ ]
+}

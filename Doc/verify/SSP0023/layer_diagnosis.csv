@@ -1,0 +1,22 @@
+﻿row_id,rule_id,target,layer_default,layer_measured,probe,grade,basis
+V-0cd5524c,K3,SSP0023 화면,COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-ea9272fa,H10,SSP0023 시나리오 [자동] 편집 중 Simulation 실행 → MSG00680(DM-52 일반 규칙),COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-90fed00f,A5,SSP0023 Division 컬럼 40/Shipment Plan(Electrode),DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Plan(Electrode): FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-e8b89d37,A5,SSP0023 Division 컬럼 40/Shipment Result,DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Result: FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-fe879c31,A5,SSP0023 Division 컬럼 81/Shipment Plan(Electrode),DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Plan(Electrode): FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-226b7501,A5,SSP0023 Division 컬럼 81/Shipment Result,DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Result: FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-a707779d,A5,SSP0023 Division 컬럼 82/Shipment Plan(Electrode),DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Plan(Electrode): FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-2ab8ecef,A5,SSP0023 Division 컬럼 82/Shipment Result,DB_META,FE_OR_ASIS_CODE,P1 컬럼 메타 대조,E2 실측,"Shipment Result: FROM_SITE → FE_OR_ASIS_CODE(메타 속성(VISIBLE_FLAG, DEFAULT_FLAG, USER_SELECTABLE_FLAG, VALID_YN)이 AS-IS 와 같음(1개 Division )"
+V-973cee51,E3,SSP0023 Excel 필수 칸 빈 업로드,FE,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-877599dc,M1,SSP0023 Excel 2단계 차단,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-35f72ace,A8,SSP0023 기간 동적 컬럼,DB_OBJECT,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-324a929d,F10,PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM,FE,DB_OBJECT,P3 저장 경로 COMMIT,E2 실측,판정 근거가 PROC 본문(ALL_SOURCE)의 COMMIT 문장
+V-f0541fc2,F10,PKG_SSP0023.P_SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING,FE,DB_OBJECT,P3 저장 경로 COMMIT,E2 실측,판정 근거가 PROC 본문(ALL_SOURCE)의 COMMIT 문장
+V-b7e18972,B6,조회조건 Company,COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-cca3cf7e,H8,Shipment Plan Detail.<DYNAMIC:LOOP> (동적 LOOP 컬럼),FE,미확정,P1 컬럼 메타 대조,E2 실측,X_M_202609: AS-IS·TO-BE 메타 모두 이 컬럼 행 없음 — 메타 대조 불가
+V-513f4256,G1,SSP0023 텍스트 부분일치 Material,FE,DB_OBJECT,P4 조회 요청 실림,E2-문장,E2E 측정: 입력값이 조회 요청 본문에 실렸는데 0행 — PROC 의 조건 처리
+V-fa30cd2a,G1,SSP0023 텍스트 부분일치 Model/Nickname,FE,DB_OBJECT,P4 조회 요청 실림,E2-문장,E2E 측정: 입력값이 조회 요청 본문에 실렸는데 0행 — PROC 의 조건 처리
+V-7797c8e7,M3,"new SCM0002_TitleSetForm_Popup(""SSP0023"", shtName, false)",FE,DB_META,P5 팝업 메타 실행,E2-문장,검사기가 TO-BE 메타 PROC 을 실행한 결과 0건(AS-IS 메타에는 행 있음) — 메타 등록 누락
+V-1c6ec245,K3,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+V-d45672ca,K3,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,COMMON,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음
+EG-b9505107,I2,SSP0023 언어 전환 조회 버튼,FE,미확정,(측정 경로 없음),,이 규칙·행 유형에 맞는 계층 측정이 아직 없다 — 규칙 기본 계층으로 채우지 않음

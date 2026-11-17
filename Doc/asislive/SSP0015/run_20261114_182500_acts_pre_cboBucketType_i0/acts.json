@@ -1,0 +1,291 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0015_GET_SHIPMENT_PSI"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     41
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     17
+    ],
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     41
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     67
+    ],
+    [
+     "SSP0015_GET_SHIPMENT_PSI",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnItemID2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0015-Sf87f6b",
+    "SSP0015-S82ee9a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0015-S97242e",
+    "SSP0015-S6442a1",
+    "SSP0015-S569dec"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "TsmNotepad",
+   "ok": false,
+   "error": "InvalidOperationException: click:TsmNotepad failed: InvalidOperationException: control not found: TsmNotepad",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0015-Sed3e1e",
+    "SSP0015-Sdad80e",
+    "SSP0015-S141c9c",
+    "SSP0015-Sad4d80",
+    "SSP0015-S83ae7b",
+    "SSP0015-S6d92ec",
+    "SSP0015-Sdcacd0",
+    "SSP0015-S8b0c70",
+    "SSP0015-Sf21294",
+    "SSP0015-S378aa8",
+    "SSP0015-Sb0dfd3",
+    "SSP0015-S5afef4",
+    "SSP0015-S59c9db",
+    "SSP0015-S3b1f59",
+    "SSP0015-Sac7fc9",
+    "SSP0015-Sc1780c"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemID2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0015-Sf87f6b",
+    "SSP0015-S82ee9a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 60187,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0015-Sea1449",
+    "SSP0015-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0015-S0aa70a",
+    "SSP0015-S963877",
+    "SSP0015-S3e4aef",
+    "SSP0015-S955b86"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0015-S97242e",
+    "SSP0015-S6442a1",
+    "SSP0015-S569dec"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnSearch",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 60
+  },
+  {
+   "control": "btnSearch",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 24
+  }
+ ],
+ "at": "2026-11-14 18:22:02.896",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 3,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

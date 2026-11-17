@@ -1,0 +1,946 @@
+{
+  "id": "SCP0104",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0104",
+  "divCascade": [
+    [
+      "Version"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Month",
+    "Ver.",
+    "Operation group",
+    "Site",
+    "Plant",
+    "Building",
+    "Line",
+    "Material",
+    "Active"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "CapaLineAssign",
+  "routePath": "supply/capa-line-assign",
+  "asisName": "CAPA_Line",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionType",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rgrpDivisionType",
+      "tobeLabel": "Operation group",
+      "catalog": "",
+      "labels": [
+        "Operation group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "siteIds",
+      "label": "Site",
+      "lbl": "LBL00015",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbSite",
+      "tobeLabel": "Site",
+      "catalog": "",
+      "labels": [
+        "Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant",
+      "lbl": "LBL00030",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlant",
+      "tobeLabel": "Plant",
+      "catalog": "",
+      "labels": [
+        "Plant"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "factory",
+      "label": "Building",
+      "lbl": "LBL00008",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFactory",
+      "tobeLabel": "Building",
+      "catalog": "",
+      "labels": [
+        "Building"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "line",
+      "label": "Line",
+      "lbl": "LBL00010",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbLine",
+      "tobeLabel": "Line",
+      "catalog": "",
+      "labels": [
+        "Line"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Line Assign",
+  "asisMapping": "features\\supply\\src\\pages\\capa-line-assign\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "buttonList",
+      "label": "Button List",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnButtonList"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "ASSEMBLY",
+      "key": "ASSEMBLY",
+      "labels": [
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Dummy",
+        "Line Type*",
+        "Building*",
+        "Building Name",
+        "Model",
+        "Line*",
+        "Line Name",
+        "Basic Nickname*",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "Valid",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "ELTR",
+      "key": "ELTR",
+      "labels": [
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Dummy",
+        "Equipment Type",
+        "Equipment",
+        "Equipment Name",
+        "Building*",
+        "Building Name",
+        "Model*",
+        "Lane Number",
+        "Line*",
+        "Line Name",
+        "Nickname",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "Valid",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "LINE",
+      "key": "LINE",
+      "labels": [
+        "V",
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Building*",
+        "Building Name",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Line Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name"
+      ]
+    },
+    {
+      "name": "SOP_ASSEMBLY",
+      "key": "SOP_ASSEMBLY",
+      "labels": [
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Line Type*",
+        "Building*",
+        "Building Name",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "SOP_DDN",
+        "SOP",
+        "SOP_YM",
+        "Valid",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "SOP_ELTR",
+      "key": "SOP_ELTR",
+      "labels": [
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Equipment Type",
+        "Building*",
+        "Building Name",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "SOP_DDN",
+        "SOP",
+        "SOP_YM",
+        "Valid",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "SOP_MODEL_ASSEMBLY",
+      "key": "SOP_MODEL_ASSEMBLY",
+      "labels": [
+        "V",
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Line Type*",
+        "Building*",
+        "Building Name",
+        "Model",
+        "Line*",
+        "Line Name",
+        "Basic Nickname",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ]
+    },
+    {
+      "name": "SOP_MODEL_ELTR",
+      "key": "SOP_MODEL_ELTR",
+      "labels": [
+        "V",
+        "Company*",
+        "Company Name",
+        "Div*",
+        "Equipment Type",
+        "Building*",
+        "Building Name",
+        "Model",
+        "Line*",
+        "Line Name",
+        "Nickname*",
+        "Operation*",
+        "Operation Name",
+        "Plant*",
+        "Plant Name",
+        "Site*",
+        "Site Name",
+        "Ver",
+        "Seq"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+      "sheet": "ASSEMBLY",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0104.P_SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+      "entries": [
+        "event:this.spdAssign.Change",
+        "event:_defaultDataModel.Changed",
+        "event:spdAssign.Change",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "ASSEMBLY",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0104.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0104_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:this.cboDivision.SelectedIndexChanged",
+        "event:this.cboVersion.SelectedIndexChanged",
+        "event:this.cboVersionSeq.SelectedIndexChanged",
+        "event:this.rgrpDivisionType.SelectedIndexChanged"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "ASSEMBLY": {
+      "40": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Basic Nickname*",
+        "Operation*",
+        "Operation Name",
+        "Line Type*",
+        "Active"
+      ],
+      "81": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Basic Nickname*",
+        "Operation*",
+        "Operation Name",
+        "Line Type*",
+        "Active"
+      ],
+      "82": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Basic Nickname*",
+        "Operation*",
+        "Operation Name",
+        "Line Type*",
+        "Active"
+      ]
+    },
+    "ELTR": {
+      "40": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Model*",
+        "Nickname",
+        "Operation*",
+        "Operation Name",
+        "Lane Number",
+        "Active"
+      ],
+      "81": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Model*",
+        "Nickname",
+        "Operation*",
+        "Operation Name",
+        "Lane Number",
+        "Active"
+      ],
+      "82": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Model*",
+        "Nickname",
+        "Operation*",
+        "Operation Name",
+        "Lane Number",
+        "Active"
+      ]
+    },
+    "LINE": {
+      "40": [
+        "V",
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "V",
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "V",
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "SOP_ASSEMBLY": {
+      "40": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "SOP",
+        "Line Type*",
+        "Last Updated By",
+        "Last Update Date",
+        "Active"
+      ],
+      "81": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "SOP",
+        "Line Type*",
+        "Last Updated By",
+        "Last Update Date",
+        "Active"
+      ],
+      "82": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "SOP",
+        "Line Type*",
+        "Last Updated By",
+        "Last Update Date",
+        "Active"
+      ]
+    },
+    "SOP_ELTR": {
+      "40": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type",
+        "Last Updated By",
+        "SOP",
+        "Last Update Date",
+        "Active"
+      ],
+      "81": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type",
+        "Last Updated By",
+        "SOP",
+        "Last Update Date",
+        "Active"
+      ],
+      "82": [
+        "Div*",
+        "Site*",
+        "Site Name",
+        "Company*",
+        "Company Name",
+        "Plant*",
+        "Plant Name",
+        "Building*",
+        "Building Name",
+        "Line*",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type",
+        "Last Updated By",
+        "SOP",
+        "Last Update Date",
+        "Active"
+      ]
+    },
+    "SOP_MODEL_ASSEMBLY": {
+      "40": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Line Type*"
+      ],
+      "81": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Line Type*"
+      ],
+      "82": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Line Type*"
+      ]
+    },
+    "SOP_MODEL_ELTR": {
+      "40": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type"
+      ],
+      "81": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type"
+      ],
+      "82": [
+        "V",
+        "Div*",
+        "Site Name",
+        "Company Name",
+        "Plant Name",
+        "Building Name",
+        "Line Name",
+        "Operation*",
+        "Operation Name",
+        "Equipment Type"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0104_GET_SPREAD_TITLE",
+        "members": [
+          "GetSpdTitleAssign"
+        ]
+      }
+    ],
+    "dbLoop": [],
+    "titleSheets": [
+      "spreadTitle"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "spreadTitle",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "VER_ID",
+      "VER_SEQ",
+      "DIVISION_ID",
+      "SITE_ID",
+      "SITE_NAME",
+      "COMPANY_ID",
+      "COMPANY_NAME",
+      "PLANT_ID",
+      "PLANT_NAME",
+      "FACTORY_ID",
+      "FACTORY_NAME",
+      "LINE_ID",
+      "LINE_NAME",
+      "ITEM_ID",
+      "NICK_NAME",
+      "OPERATION_ID",
+      "OPERATION_NAME",
+      "ELTR_LN_TP_CD",
+      "VALID_YN",
+      "DUMMY_YN",
+      "EQUIPMENT_ID",
+      "EQUIPMENT_NAME",
+      "LANE_QTY",
+      "CHK",
+      "LAST_UPDATED_BY",
+      "LAST_UPDATE_DATE",
+      "SOP_DT",
+      "SOP_YM",
+      "SOP_DDN"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "CHECK_NAME_ON_DUMMY_CODE",
+        "SAVE",
+        "INSERT",
+        "EXCEL",
+        "EDIT",
+        "DELETE",
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "SAVE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "DELETE",
+      "SEARCH"
+    ],
+    "CAPA Planner": [
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "EXCEL",
+      "INSERT",
+      "SAVE",
+      "DELETE",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "INSERT",
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "CHECK_NAME_ON_DUMMY_CODE"
+    ],
+    "FP Viewer": [
+      "SAVE",
+      "SEARCH",
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "DELETE",
+      "INSERT",
+      "EXCEL"
+    ],
+    "SCM PI Admin": [
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "EXCEL",
+      "EDIT",
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "DELETE",
+      "EXCEL",
+      "INSERT",
+      "SAVE"
+    ],
+    "SCP Planner": [
+      "INSERT",
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "EXCEL"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "DELETE",
+      "SAVE",
+      "EDIT",
+      "EXCEL",
+      "CHECK_NAME_ON_DUMMY_CODE",
+      "INSERT"
+    ]
+  },
+  "menuBtnCodes": [
+    "CHECK_NAME_ON_DUMMY_CODE",
+    "SAVE",
+    "INSERT",
+    "EXCEL",
+    "EDIT",
+    "DELETE",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

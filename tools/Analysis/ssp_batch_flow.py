@@ -6,7 +6,7 @@ SSP 배치 프로그램 분석서·흐름 생성기 (2026-11-09)
   - SSP 자체 스케줄러        : Doc/asisfacts/db/batch/ssp_int_systemexe.csv (PR_SSP_INT_SYSTEMEXEC_RUNJOB 이 읽는 잡 표)
   - SP 본문                  : Doc/asisfacts/db/modules/dbo.<SP>.sql (ssp_flow.parse_sp 재사용 · 읽기 FROM/JOIN · 쓰기 INSERT/UPDATE/MERGE/DELETE · 중첩 EXEC 깊이 3)
   - 객체 카탈로그            : Doc/asisfacts/db/db_objects.csv (비객체 이름 제외)
-  - 화면↔테이블              : Doc/화면분석서/SSP_FLOW_<date>/ssp_screen_sp_table.csv (ssp_flow.py 산출)
+  - 화면↔테이블              : Doc/화면분석서/SSP_FLOW/ssp_screen_sp_table.csv (ssp_flow.py 산출)
   - TO-BE 이관 상태          : Doc/tobefacts/db/procs_catalog.csv
   - 외부 실행기 소스         : GSCM/20.RFC/SAPRFC_Batch_NERP/NERP.cs (RFC 함수 카탈로그) · GSCM/24.WebSheduler (Quartz 프로토타입)
 산출: SSP_BATCH_ANALYSIS.md · SSP_BATCH_FLOW.md · ssp_batch_inventory.csv · ssp_batch_sp_table.csv (ssp_flow 출력 폴더에 함께)
@@ -14,6 +14,7 @@ SSP 배치 프로그램 분석서·흐름 생성기 (2026-11-09)
 import sys, os, io, re, csv, json, html, time, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ssp_flow as SF
+import ssp_ref  # 2026-11-11 운영 잡 스케줄 · 프로시저 목록(TO-BE 객체 상태 · I/F 구분) — 사용자 제공 SCP_SSP_Batch List_261103
 
 ROOT = SF.ROOT
 BATCH = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'batch')
@@ -72,8 +73,7 @@ def decode_schedule(s):
 
 def main():
     t0 = time.strftime('%Y-%m-%d %H:%M')
-    out_dirs = sorted([d for d in os.listdir(os.path.join(ROOT, 'Doc', '화면분석서')) if d.startswith('SSP_FLOW_')])
-    out_dir = os.path.join(ROOT, 'Doc', '화면분석서', out_dirs[-1])
+    out_dir = os.path.join(ROOT, 'Doc', '화면분석서', 'SSP_FLOW')  # 2026-11-16 날짜 없는 고정 폴더(사용자 지정)
     rd = SF.rd
     jobs = {j['name']: j for j in rd(os.path.join(BATCH, 'agent_jobs.csv'))}
     steps = rd(os.path.join(BATCH, 'agent_jobsteps.csv'))
@@ -108,6 +108,10 @@ def main():
                 for r in rows: hits.append(f"{r['object_name']}{('.' + r['procedure_name']) if r['procedure_name'] else ''}({r['status']})")
         return ' · '.join(sorted(set(hits))) if hits else '미이관(TO-BE 카탈로그 없음)'
 
+    prod = ssp_ref.prod_schedule() if ssp_ref.available() else {}; blist = ssp_ref.batch_list() if ssp_ref.available() else {}; ift = ssp_ref.if_tables() if ssp_ref.available() else {}
+    def prod_sched(jn): return ssp_ref.sched_text(prod[jn]) if jn in prod else ('운영 잡 시트에 없음' if prod else '')
+    def ora_state(sps_): return ' / '.join(f"{sp}: {(blist.get(sp.upper(), {}).get('dev_ora_1028') or '목록에 없음')}" for sp in dict.fromkeys(sps_)) if blist else ''
+    def if_info(sps_): return ' / '.join(sorted({f'{k}:{t}' for sp in sps_ for k, t in ift.get(sp.upper(), set())}))
     # ── SP 파싱(캐시)
     sp_cache = {}
     def sp_info(sp):
@@ -153,6 +157,7 @@ def main():
         job_sps[jn] = sps; job_rw[jn] = (reads, writes, closure, missing)
         inv.append({'job_name': jn, 'category': cat, 'group': grp, 'enabled': 'Y' if j['enabled'] == '1' else 'N', 'description': ' '.join((j['description'] or '').split()),
                     'created': (j['date_created'] or '')[:10], 'modified': (j['date_modified'] or '')[:10], 'steps': len(sts), 'sp_chain': ' → '.join(sp for _, sp, _ in sps),
+                    'prod_schedule': prod_sched(jn), 'tobe_ora_state_1028': ora_state([sp for _, sp, _ in sps]), 'if_tables': if_info([sp for _, sp, _ in sps]),
                     'schedule': ' | '.join(decode_schedule(x) + f"[{x['schedule_name']}]" for x in sch) or '스케줄 없음(DEV 복제본)',
                     'history_runs': hist.get(jn, {}).get('runs', ''), 'writes_ssp': ' '.join(ssp_w), 'reads_ssp': ' '.join(ssp_r),
                     'writes_other': ' '.join(sorted(t for t in writes if SF.classify(t) != 'SSP')), 'reads_other_n': len([t for t in reads if SF.classify(t) != 'SSP']),
@@ -166,6 +171,7 @@ def main():
         reads, writes = inf['reads'], inf['writes']
         inv.append({'job_name': f"SYSTEMEXE:{r['jobid']}", 'category': 'SSP 배치(자체 스케줄러)', 'group': group_of(sp), 'enabled': 'Y' if r['useyn'] == 'Y' else 'N', 'description': r['jobdesc'],
                     'created': (r.get('insdttm') or '')[:10], 'modified': (r.get('upddttm') or '')[:10], 'steps': 1, 'sp_chain': sp,
+                    'prod_schedule': (f"러너 {prod_sched('JOB.PR_SSP_INT_SYSTEMEXEC_RUNJOB')} → " if prod else '') + f"{r['execclcval']} {r['execclctype']} 주기", 'tobe_ora_state_1028': ora_state([sp]), 'if_tables': if_info([sp]),
                     'schedule': f"{r['execclcval']} {r['execclctype']} 주기 · 다음 실행 {r['nextexecdttm']} · 러너 PR_SSP_INT_SYSTEMEXEC_RUNJOB(SQL Agent JOB.PR_SSP_INT_SYSTEMEXEC_RUNJOB)",
                     'history_runs': '', 'writes_ssp': ' '.join(sorted(t for t in writes if SF.classify(t) == 'SSP')), 'reads_ssp': ' '.join(sorted(t for t in reads if SF.classify(t) == 'SSP')),
                     'writes_other': ' '.join(sorted(t for t in writes if SF.classify(t) != 'SSP')), 'reads_other_n': len([t for t in reads if SF.classify(t) != 'SSP']),
@@ -226,7 +232,7 @@ def main():
     for r in inv: by_group[r['group']].append(r)
     stage_of_screen = {}
     inv_scr = rd(os.path.join(out_dir, 'ssp_screen_inventory.csv'))
-    for r in inv_scr: stage_of_screen[r['screen_id']] = SF.stage_of({'tobe_desc': r['tobe_desc'], 'name': r['asis_name']})
+    for r in inv_scr: stage_of_screen[r['screen_id']] = SF.stage_of({'tobe_desc': r['tobe_desc'], 'name': r['asis_name'], 'tobe_group': r['tobe_group']})
     unref = [sp for sp in all_pr if not callers.get(sp)]
     ui_batch = sorted({(c.split(' ')[1], c.split(' ')[2], sp) for sp, cs in callers.items() for c in cs if c.startswith('화면 ') and sp in set(all_pr)})
     n_hist = sum(1 for r in inv if r['history_runs'])
@@ -238,7 +244,8 @@ def main():
          f"- 잡 정의 원천 = **AS-IS DEV(LGCE_SCMDEV) msdb** 2026-11-09 06:08 추출(`Doc/asisfacts/db/batch/_extract_log.md`): 잡 {len(jobs)} · 스텝 {len(steps)} · 스케줄 {len(scheds)} · 실행 이력 보유 잡 {len(hist)}. **enabled 잡 {sum(1 for j in jobs.values() if j['enabled'] == '1')}개** — DEV 복제본이라 운영 스케줄·실행 이력은 여기 없다. 아래 '스케줄' 열은 DEV 에 남은 스케줄 정의만이며, 없는 잡은 '스케줄 없음(DEV 복제본)' 으로 표기 · 운영 주기는 잡 설명(description) 문구를 그대로 인용했다.",
          f'- SP→테이블 = SP 본문 정규식(ssp_flow 와 동일) · 객체 카탈로그에 없는 이름 {len(nonobj)}종 제외 · 본문 없는 SP 는 `missing_body` 열.',
          f'- SSP 자체 스케줄러 로그 `SSP_INT_SYSTEMEXELOG` 는 DEV 에서 0행(06:08 조회) — 실행 이력 미측정.',
-         '- 운영 실행 시각·소요·성공률은 **미측정**(운영 msdb 또는 `SCM_SYS_LOG_BATCH` 8,006,871행 — 인덱스 없음, GROUP BY 금지 기억) — 측정하려면 운영 DBA 에게 `msdb.dbo.sysjobhistory` 추출 요청.', '',
+         *([f'- **운영 스케줄 = `SCP_SSP_Batch List_261103.xlsx`(운영 LGCE_SCMPROD 잡 시트 · 사용자 제공 11-11)** 를 「운영 스케줄」 열에 반영 — 운영 잡 {len(prod)}개 중 이 문서의 SSP 배치와 이름이 맞는 것 {sum(1 for r in inv if r["job_name"] in prod)}개. TO-BE 객체 상태 = 같은 자료 Batch List 시트(개발서버 Oracle 10-28 확인분)'] if prod else []),
+         '- 운영 실행 소요·성공률은 **미측정**(운영 msdb 또는 `SCM_SYS_LOG_BATCH` 8,006,871행 — 인덱스 없음, GROUP BY 금지 기억) — 측정하려면 운영 DBA 에게 `msdb.dbo.sysjobhistory` 추출 요청.', '',
          '## 1. 실행 기반', '',
          '| 경로 | 실체 | SSP 관련 수량(이번 실측) | 비고 |', '|---|---|---|---|',
          f"| SQL Agent 잡 | msdb sysjobs · T-SQL 스텝 EXEC PR_* | SSP 배치 {len([r for r in ssp_inv if not r['job_name'].startswith('SYSTEMEXE')])} · SSP 표 연계 타 도메인 배치 {len(other_inv)} | 스텝 서브시스템 TSQL {sum(1 for s in steps if s['subsystem'] == 'TSQL')} · SSIS {sum(1 for s in steps if s['subsystem'] == 'SSIS')} · PowerShell {sum(1 for s in steps if s['subsystem'] == 'PowerShell')} |",
@@ -251,9 +258,9 @@ def main():
     for g, _ in GROUPS + [('기타', '')]:
         rows = [r for r in ssp_inv if r['group'] == g]
         if not rows: continue
-        A += [f'### {g} ({len(rows)})', '', '| 잡 | 사용 | 스케줄(DEV 정의) | 설명(원문) | SP 체인 | SSP 쓰기 표 | 출력을 읽는 화면 | 외부 |', '|---|---|---|---|---|---|---|---|']
+        A += [f'### {g} ({len(rows)})', '', '| 잡 | 운영 스케줄(Batch List 261103) | DEV 사용 · DEV 스케줄 정의 | 설명(원문) | SP 체인 | TO-BE 객체 상태(10-28) | SSP 쓰기 표 | 출력을 읽는 화면 | 외부 · I/F 표 |', '|---|---|---|---|---|---|---|---|---|']
         for r in sorted(rows, key=lambda x: x['job_name']):
-            A.append(f"| {r['job_name']} | {r['enabled']} | {r['schedule']} | {r['description'][:120]} | {r['sp_chain'] or '-'} | {r['writes_ssp'] or '-'} | {r['screens_reading_output'] or '-'} | {r['ext_system'] or '-'} |")
+            A.append(f"| {r['job_name']} | {r.get('prod_schedule') or '-'} | {r['enabled']} · {r['schedule']} | {r['description'][:120]} | {r['sp_chain'] or '-'} | {r.get('tobe_ora_state_1028') or '-'} | {r['writes_ssp'] or '-'} | {r['screens_reading_output'] or '-'} | {r['ext_system'] or '-'}{(' · ' + r['if_tables']) if r.get('if_tables') else ''} |")
         A.append('')
     A += [f'### 타 도메인 배치 중 SSP 표를 쓰거나 읽는 잡 ({len(other_inv)})', '', '| 잡 | 분류 | 설명 | SP 체인 | SSP 쓰기 | SSP 읽기 |', '|---|---|---|---|---|---|']
     for r in sorted(other_inv, key=lambda x: (x['category'], x['job_name'])):
@@ -261,7 +268,7 @@ def main():
     A += ['', '## 3. 잡별 상세(SSP 배치)', '', '> 스텝 순서 · 실행 명령 원문 · SP 가 쓰는/읽는 표(엔터티) · 연계 화면 · TO-BE 이관 상태. 중첩 호출은 깊이 3 까지 포함.', '']
     for r in sorted(ssp_inv, key=lambda x: (x['group'], x['job_name'])):
         jn = r['job_name']; reads, writes, closure, missing = job_rw[jn]
-        A += [f"### {jn}", '', f"- 그룹 {r['group']} · 사용 {r['enabled']} · 생성 {r['created']} · 수정 {r['modified']} · 스케줄 {r['schedule']}", f"- 설명(원문): {r['description'] or '-'}", f"- TO-BE: {r['tobe']}", '']
+        A += [f"### {jn}", '', f"- 그룹 {r['group']} · **운영 스케줄 {r.get('prod_schedule') or '-'}** · DEV 사용 {r['enabled']} · 생성 {r['created']} · 수정 {r['modified']} · DEV 스케줄 {r['schedule']}", f"- TO-BE 객체 상태(개발서버 Oracle 10-28): {r.get('tobe_ora_state_1028') or '-'}" + (f" · I/F 표 {r['if_tables']}" if r.get('if_tables') else ''), f"- 설명(원문): {r['description'] or '-'}", f"- TO-BE: {r['tobe']}", '']
         if jn.startswith('SYSTEMEXE:'):
             A += ['| 순서 | SP | 인자 |', '|---|---|---|', f"| 1 | {r['sp_chain']} | (러너가 조회 기간 인자 전달) |", '']
         else:

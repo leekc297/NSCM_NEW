@@ -1,0 +1,323 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 10:35:06.010",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 4.1,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:06.074",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 17,
+   "rows_kind": "DataSet rows",
+   "ms": 49.09,
+   "params": {
+    "Code": "TeambyDivision",
+    "Param1": "40",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='TeambyDivision', @Param1='40', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:06.182",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1098,
+   "rows_kind": "DataSet rows",
+   "ms": 96.65,
+   "params": {
+    "Code": "EndCustomerByDivision40",
+    "Param1": "",
+    "Param2": "ALL",
+    "Param3": "ADMIN",
+    "Param4": "jaeuk.shin",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivision40', @Param1='', @Param2='ALL', @Param3='ADMIN', @Param4='jaeuk.shin', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:08.851",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1497,
+   "rows_kind": "DataSet rows",
+   "ms": 2504.04,
+   "params": {
+    "Code": "SiteByEndCustomer",
+    "Param1": "ALL",
+    "Param2": "-,1X Technologies,ABS,Acculon Energy,ACE KR,Acell,Acell Electronic,acer,acer(개발),Acer(개발1),Acme,Aeon Motor,Aigo,Aima,Aimsak,Airbus,Airtek,Airwheel,AJ상사,Akasol,Akku,Alelion,All Good Energy,AllCell,Also,Alta Motors,Alte,Amara Raja Batteries,Amazon,Amazon Prime Air,Amazon Web Services,Amazon(개발),Ambrane,Ample,Ananda,Ananda(Selectric),ANDURIL,Anjin,Anker,Anker MDF,Anrui,Ansmann,Aoxiang,Apack Tech,Apex,Apex Tech,APRO,Arb Accessories,Archer,Arcimoto,Ari Tech,Arima,Arlo,Arris,Arrival,Arrival(US),Askoll,Asus,Atemitech,Atemitech_01,Atex,Ather Energy,Audi,Audi(개발),Aurora Flight,Avant Tecno,AXON,B&S,B2B,BAE,BAE Systems,Bafang,Bafang MDF,BAIC,Baicheng,Bajaj Auto,BakNew Power,Banglilai,Bear robotics,Beta Technologies,BFG,Bikebank,Biostar,Bissell,Bitland,BK Energy,Bluebird,Blueway,Blueway Energy,Blueway Energy VC,Blueway MDF,BMC,Bmspow,Bmspow Deyi,Bmspow Dianzi,BMSPro,BMW,BMW(개발),BMZ,BMZ ETC,BMZ Gardentool,BMZ LEV(CV),BMZ LEV(E-bike),BMZ LEV(Forklift),BMZ Powertool,BMZ Vacuum,Bodo,Bollinger,Bonsung,Boosted,Bosch,Bosch Mcp,Bosch PgP,Bosch(GardenTool),BOSE,Boston Dynamics,Boston Dynamics(개발),Brisk EV,BRP,Bumhan Unisolution,Bumhan Unisolution(개발),BYD,BYD Electronics,BYD Group,BYD LEV,BYD MDF,BYD VC,BYD-1,C&T Asia,Caban,Candela,Canoo,Caterpillar,Cell Plus,Celltech,Celxpert,Celxpert_01,CEM S.P.A,Changan,ChangHuiYuan,Chaoli,Charmlink,CHC,Chehejia,Chennuo,Chennuo LEV,Chervon,Chery_CV,Chery_PV,Chezhiyi,China Effort,China Effort LEV,Chuangdian,Chuanghuiyuan,Chuanghuiyuan LEV,Chunju,Cleantron,Clover,Comlink,Compal,Compal Elec,Compal Wireless,Continental,Coppercell,Corun,Corvus,CS Enertech,C-Tech,C-Tech_01,CTNS,Cummins,Curo,Cygni Energy,Cyoshin,D.Throne,d2 Engineering,DA Technology,Daechang Motors,Daedong Mobility,DAFTRUCKS N.V.,Daimler(Evobus),Damon Motors,Darfon,Darfon_01,Dayang,Dayi,DBK,DC EnergySolution,Debao,Debo,Debo LEV,Delingxun,Delingxun LEV,Dell,Dell(개발),DEOKYANG,Desay,Desay LEV,Desay_01,Desay-1,Dexun,Dhoot,DIC,Didi,DJI,DLG,DLG LEV,DMS,DNA MOTORS,DongCheng,Donlim,Doosan,Dreame,DRN,DRN LEV,DTAG(개발),Dualtron,Duracell,Dynapack,Dynapack_01,Dynavolt,Dyson,E3 Mobility,EATON,EATON_01,Eclipse Space,Ecocoach,Ecovacs,Edison Tech,Eicher Motors,E-jens,Electrochem,Electrolux,Electrum,Elentec,eleo_tech,Elite Electronic,Elitop,Elitop LEV,Elring Klinger AG,EM Tech,EMBS,EMI,EMNI,Enable Int’l,ENCOS,Enertect Vision,Enervision,ENU Systems,EPI,EPlus,Estes,E-tess,Etica,EUP,EVC,EVE,Evolute Solutions,EVThai,Evva,Exicom,Fabricators,Facebook,Facebook(개발),Fangde,Faraday&Future,FAW Hongqi,FEIXIANG,Fengxi,Fengxi LEV,Ferrari,FEY,Fiberdraft,Figure,Figure(미주),Fisker,Flex Ltd.,Flextronics,FLEXTRONICS (Shenzhen),FLEXTRONICS (Shenzhen)_01,Ford,Ford(개발),Formosa,Forsee,Foxconn,Foxlink,FSP,Fuhrmeister,Fuji,Fushida,Futurepath,Gaius,Gamma,Gamma LEV,Ganfeng,GBT,GBT_01,GEEK,Genju,Gesits,GETAC,Ghost Robotics,Giken Sakata,Gillig,Gims,Global Powersource,Globe Tools,Globetools,GLW,GM,Goertek Inc.,Gogoro,Gooda,Google,Google_01,Grab,GREAT POWER,Great Power1,Green Battery,Greenfuel,Greenfuel Energy,Greenway,Greenway Dongguan,GREENWAY LEV,Greenway MDF,Greenway(개발),Greyp,G-tech,Gushine,Gushine MDF,Guxin,GWKC,Haimao,Han Win Tech,HansungWT,Hanwha Aerospace,Hanwha Defense,Hanwha Engine,Hanyu,Hanyu LEV,Harbinger Motors,Harley Davidson,Harman,HDI LEV,HD건설기계,HD한국조선해양,HEID,Hello bike,Hello Tech,Henes,Hero Motocorp,Hero Motorcorp,Hexagon Purus,High Power (Boke),High Power (Icon),Highpower,Hilti,Himcen,Hitachi,Hitachi(GardenTool),HLDS,HMG,HMG_UL,Hogstger,Honda,Hongfugang,Honhai,Honhai(개발),Hope,HP,HP Inc.,HP(개발),HP_01,HTE,Huachuangli LEV,Huagreen,Huapu,Huaqin Telecom,Huawei,HUAYOU,HUAYOU MDF,Huilai,Husqvarna,HWT,HY Mobility,Hyosung,Hyundai Kefico,Hyundai Mobis,Hyundai Motor,Hyundai Motor Lab,Hyundai Motor Lab(개발1),Hyundai Motor Lab(개발2),IBS,IBS(ESS),IBS(LEV),ICON,ICON LEV,ICON-1,ideaForge,Idneo,Igreatpower,Igreatpower LEV,IKEA,IM,IM MDF,IM(개발NJ),IM(개발OC),Impossible Aero,IM-Re,Incell,INFAC,Ingeniarts,Initra,Innotech,InnoTM,Innov,Innov LEV,Intilion,Intretech,Inventec,Inventus Power,Inventus power-1,Invox,iRobot,Isuzu,Isuzu(개발),Isuzu(개발1),ITM,J Starcom,Jan Hui Power,Jetech,Jetech LEV,Jiade,Jiaxin,Jiedian,Jiexin,Jinding,Jinkang,Jinle,Jinle_01,Jiutong,Jiuyi,JJ Solstice,JLR,JMBS,JMS,Joby,Jofemar,Joffe,John Deere,John Deere(개발),Joway,Joycube,Joycube MDF,JRBS,JRES,JS Tech,Judong,Judong LEV,Junchang,K2 Space,Kabra Extrusion,Kaercher,Kais,Kawasaki,Kayo,KDP,Kenmec,Keyang,Keyway,KGM,Kingclean,Kingclean CNY,Kingclean USD,Kingin,Kingsmile,Kinpo Electronics,Kion,KLM,Koland,Kooroo,Korea Post,KR Motors,Kreisel Elec.,KRJ,Kstrong,Kstrong LEV,Kswheel,Kswheel LEV,KT&G,KTM AG,Kubota,KULR,Kwonnie,Kymco,Kyocera,Lamborghini,Lanwwei,Large,LCFC,Leineng,Lenovo,Lenovo MBG,Lenovo MBG_01,Lenovo(개발),LERA,LGCDJ,LGCEG,LGCN,LGE,LGE(개발),LGESMI,LGESNJ,LGESOC2,LGI,LGI-1,Li Auto,Lianghan,Lichi,Lika,Limeng,Lingguan,Lion Electric,LIPC,Litens,Lithos Energy,Livewire,Liwei Tech,Longji,Longood,Lordstown,Lucid Motors,Lucid Motors(개발),Luxshare Electronic,Luxshare Technology,LX INTL SINGAPORE,Lyft,Mac Beyond,Magna Yuma,Mahindra,Mahindra(개발),Maisui,Maitrox,Makita,Makita(GardenTool),Makita(개발),Masstex,Matter Energy,MAX,MAZDA,MBAG,MBAG(개발),MEC,Media,Medion,Medion AG,Meiko,Meituan,Mercedes Benz,Merry,Meta,Metabo,MG Energy,MG Energy_01,Mica,Micro Powertronics,Micromax,Micropower,Microsoft,Microtronics,Midea,Millor Battery,Mingmei (TWS),Mini Battery,Mini Motors,Misum Systech,Mitaki,MITSUBISHI,Mobike,Mobiletron,Mombike,Mophie,MOR Electric,MPS,MPS Energy,MPS Korea,MPST,MS Tablet,Mycharge,Myvelo,Nanku,NASA,Naverlabs,Navistar,Near East Univ.,NEC,Newflyer,Nexcon,Next EV,Nikola Motor,Nikola Motor(개발),Ninebot,Ninebot Beijing,Ninebot Changzhou,Ninebot LEV,Ninebot Tianjin,Nintendo,Nintendo(개발),NIO,Nissan,Non Hyper Scaler,Noras,Noritz,Novonix,NT,NT Computer,NT(개발1),NT(개발10),NT(개발11),NT(개발12),NT(개발13),NT(개발14),NT(개발15),NT(개발16),NT(개발17),NT(개발18),NT(개발19),NT(개발2),NT(개발20),NT(개발21),NT(개발22),NT(개발23),NT(개발24),NT(개발25),NT(개발26),NT(개발27),NT(개발28),NT(개발29),NT(개발3),NT(개발30),NT(개발31),NT(개발32),NT(개발33),NT(개발34),NT(개발35),NT(개발36),NT(개발37),NT(개발38),NT(개발39),NT(개발4),NT(개발40),NT(개발41),NT(개발42),NT(개발43),NT(개발44),NT(개발45),NT(개발46),NT(개발47),NT(개발48),NT(개발49),NT(개발5),NT(개발50),NT(개발51),NT(개발52),NT(개발53),NT(개발54),NT(개발55),NT(개발56),NT(개발57),NT(개발58),NT(개발59),NT(개발6),NT(개발60),NT(개발61),NT(개발7),NT(개발8),NT(개발9),Number king,NVT,O&J,OCEANWING,Oceanwing Anker,OCEANWING-1,Octillion,Oculus,OLA Electric,OnePlus,OP Mobility,OP Mobility_01,Oshkosh,OTS_신시장,Palfinger,Pana JV,Panacycle,Panasonic,Pantrue,Panture,Partron,Patron,PCTEST,Pegatron,Peg-Perego,Pellenc,Penghui,Peopleworks,Philip Morris,Philip Morris(개발),Philips,Philips Bodine,phisemi,Phisemi MDF,Phylion,PHYLION LEV,Phylion MDF,Piaggio,Pinxin,PN Telecom,PNE SYSTEMS,Polaris,Polstar,Porsche,Porta Power,Porta Power LEV,Portronics,Positec,Power Plaza,Power7,Powergene,Powerglobal,Powerlogics,Powertech,Powtech,Powtech MDF,Probest,Proterra,Proterra(개발),PT Bluetek,PT TVS Motor,PT. Garda,Pure Watercraft,Puyi,PYTES,PYTES LEV,PYTES MDF,PYTES VN,Qiji,Qisda,Quanta,Razor,ReBuild,Regent,Renault Korea Motors,Reynosa,Rihuida,Rihuida MDF,Rihuida_01,Rimac Automobili,Rimac Technology,Ring,Ritwin,River Mobility,Rivian Automotive,Rivian Automotive(개발),Roam,Robostar,Rockrobo,Rockrobo_Desay,Roidmi,Romeo Power,Romeo Power(개발),Roofer,Rowenta,Rugged Logic,Ruide,Ruipu,Runeng,Runing Power,Ryder,Ryder LEV,Salcomp PIC,Samsung Electronics,Samsung Electronics(개발),Samsung Electronics(개발1),Samsung Electronics(개발10),Samsung Electronics(개발11),Samsung Electronics(개발12),Samsung Electronics(개발13),Samsung Electronics(개발14),Samsung Electronics(개발15),Samsung Electronics(개발16),Samsung Electronics(개발17),Samsung Electronics(개발18),Samsung Electronics(개발19),Samsung Electronics(개발2),Samsung Electronics(개발20),Samsung Electronics(개발21),Samsung Electronics(개발22),Samsung Electronics(개발23),Samsung Electronics(개발24),Samsung Electronics(개발25),Samsung Electronics(개발26),Samsung Electronics(개발27),Samsung Electronics(개발28),Samsung Electronics(개발29),Samsung Electronics(개발3),Samsung Electronics(개발30),Samsung Electronics(개발31),Samsung Electronics(개발32),Samsung Electronics(개발4),Samsung Electronics(개발5),Samsung Electronics(개발6),Samsung Electronics(개발7),Samsung Electronics(개발8),Samsung Electronics(개발9),Sanchuang,Sany,SB&D,SB&D(GardenTool),SB&D(개발),SBD,SBS,SCUD,SCUD LEV,SCUD MDF,SCUD_01,SCUD-1,Scutum,Sebang,SEDA-M,SEGL Energy,Selex,Semiroad,SF Motors,SFT,SFT LEV,Shangde,Shark Ninja,Shimano,SHINDEN,Shin-Heung SEC,Shinko,Shinsung,Shin-Sung Delta Tech,Shivam Electronics,Shunzao,Shuodao,Shuodao(OC),Shuofang,Silence,Simplo,Simplo(CN),Singh,Sino EV,Sino EV_01,Skio,SKIO LEV,Skio_01,Skyline Mobility,Skypower,Skyworth power,Slate Auto,Smartec,SOBEN,Softbank,Soho,SOKON,Solaredge,Solution,SONGUO,Sony,Sony(개발),Sotech,SpaceX,Spard,Spard LEV,Spear Power,Spear Power Systems,SRAM TW,Stark Future,Stellantis,Stihl,STL,STL_01,Sumec,Suntone,Sunvalley,SUNWODA,SUNWODA LEV,SUNWODA_01,SUNWODA-1,SUZUKI,Swag,Synnex,Tabos,Taehyong,Taiba,Taiding,Tailing,Taotao,Taotao tech LEV,TBD,Tech-com,Techfront,Tecyea,Tesla,TFI,THAMLEV,Thinked,THIX tech,Thor Trucks,Thunder Power,Tianhong,Tianhong LEV,Tianhong MDF,TIG,TIH,TIMI,Tiveni,TL Power,Tocad Donghwa,Tocad Energy,Tongfan,Topband,Topband Battery,Topband Battery LEV,Topband LEV,Topband MDF,Toshiba,Totex Manufacturing,Toyota,Toyota Tsusho KR,TP Link,TQ Systems,Trend Energy,Trend Power,TREND POWER(개발),Trend Power_01,Triteck,Tritek,TS ECO,TS Motors,TTi,TTi(Garden Tool),TTi(PDL),TTi(개발),TTi_2,Turnlife,Turnlife LEV,TVS Indeon,TVS Motor,TVS Motor MDF,TVS Motors MDF,TWEnersys,Twenty Two Motors,TWS,TWS LEV,TWS Liangshi,TWS MDF,TWS SEA,TWS_01,TWS-N.A2,Tyva-Energie,Uber Technologies,Ubinetsys,Ubiquiti,UBP,Ugowork,Ultraviolette,Unicoba,Unit Pack Power,Unit Pack Power MDF,Univ. of Warwick,Urim Korea,Usrich,Usti,V.S. Industry,Valeo,Vanmoof,Varta,Varta CN,VARTA(LEV),VARTA(Vacuum),VBS(Proterra),Veger,Veken,Veken LEV,Veken MDF,Venture,Vertical Aerospace,Vestel,Videoton,Vinfast,Vinfast EV,Vinzo,VIVO,VL Battery,VLBP,Volta,Volta LEV,Volta MDF,Voltabox AG,Volvo,Volvo Truck,Volvo(개발),Vorwerk,VS Electronics,Wacco,Wacom,Waitley,Wandadian,Wandadian LEV,Wandadian MDF,Wandadian1,Wandadian2,Wanghsing,Webasto,Webasto Roof,Weidian,Weimu,Welldone,Wheel,Whill,Wingtech,WINLIFE,Wistron,WOERTA,WOOJIN,WTE,Wuxi,Xerotech,Xiaju,Xianzhong,Xiaogou,Xiaomi,Xiaomi Eco-system,Xiaoniu,Xiaoniu LEV,Xiaoniu1,Xiaoniu2,Xiaopeng,Xiexun Electronic,Xing Mobility,Xing Mobility_01,Xing Mobility_SEA,Xingte,Xinhe,Xinhe LEV,Xinpengcheng,Xinshili,Xinshili LEV,XOS,XPT Energy,X-Shore,Yadea,Yamaha,Yashinuo,YAT,Yeong Kwang,Yilink,Yinhai,Yongchang,Yoobao,Youlai Power,YouLead,Younth,Yunzhong,ZEBRA,Zeekr,Zentropy,Zhongxin,Zimi,Zipline,Zoox,ZTE,동남아 LEV,두산밥캣,마크원테크놀로지,미주 BBU,미주 Drone,미주 LEV,미주 UAM,미주 상용,신시장 건설장비,신시장 로봇,신시장 선박,유럽 E-bike,유럽 E-scooter,유럽 Gardentool,유럽 청소기,인도 E-BUS,제일무역,중국 E-Bike,중국 LEV(염가),중국 로봇청소기,중국 특화 E-Bike,중국Mobile(개발),탭리스 기타,후마이스타",
+    "Param3": "ADMIN",
+    "Param4": "jaeuk.shin",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='SiteByEndCustomer', @Param1='ALL', @Param2='-,1X Technologies,ABS,Acculon Energy,ACE KR,Acell,Acell Electronic,acer,acer(개발),Acer(개발1),Acme,Aeon Motor,Aigo,Aima,Aimsak,Airbus,Airtek,Airwheel,AJ상사,Akasol,Akku,Alelion,All Good Energy,AllCell,Also,Alta Motors,Alte,Amara Raja Batteries,Amazon,Amazon Prime Air,Amazon Web Services,Amazon(개발),Ambrane,Ample,Ananda,Ananda(Selectric),ANDURIL,Anjin,Anker,Anker MDF,Anrui,Ansmann,Aoxiang,Apack Tech,Apex,Apex Tech,APRO,Arb Accessories,Archer,Arcimoto,Ari Tech,Arima,Arlo,Arris,Arrival,Arrival(US),Askoll,Asus,Atemitech,Atemitech_01,Atex,Ather Energy,Audi,Audi(개발),Aurora Flight,Avant Tecno,AXON,B&S,B2B,BAE,BAE Systems,Bafang,Bafang MDF,BAIC,Baicheng,Bajaj Auto,BakNew Power,Banglilai,Bear robotics,Beta Technologies,BFG,Bikebank,Biostar,Bissell,Bitland,BK Energy,Bluebird,Blueway,Blueway Energy,Blueway Energy VC,Blueway MDF,BMC,Bmspow,Bmspow Deyi,Bmspow Dianzi,BMSPro,BMW,BMW(개발),BMZ,BMZ ETC,BMZ Gardentool,BMZ LEV(CV),BMZ LEV(E-bike),BMZ LEV(Forklift),BMZ Powertool,BMZ Vacuum,Bodo,Bollinger,Bonsung,Boosted,Bosch,Bosch Mcp,Bosch PgP,Bosch(GardenTool),BOSE,Boston Dynamics,Boston Dynamics(개발),Brisk EV,BRP,Bumhan Unisolution,Bumhan Unisolution(개발),BYD,BYD Electronics,BYD Group,BYD LEV,BYD MDF,BYD VC,BYD-1,C&T Asia,Caban,Candela,Canoo,Caterpillar,Cell Plus,Celltech,Celxpert,Celxpert_01,CEM S.P.A,Changan,ChangHuiYuan,Chaoli,Charmlink,CHC,Chehejia,Chennuo,Chennuo LEV,Chervon,Chery_CV,Chery_PV,Chezhiyi,China Effort,China Effort LEV,Chuangdian,Chuanghuiyuan,Chuanghuiyuan LEV,Chunju,Cleantron,Clover,Comlink,Compal,Compal Elec,Compal Wireless,Continental,Coppercell,Corun,Corvus,CS Enertech,C-Tech,C-Tech_01,CTNS,Cummins,Curo,Cygni Energy,Cyoshin,D.Throne,d2 Engineering,DA Technology,Daechang Motors,Daedong Mobility,DAFTRUCKS N.V.,Daimler(Evobus),Damon Motors,Darfon,Darfon_01,Dayang,Dayi,DBK,DC EnergySolution,Debao,Debo,Debo LEV,Delingxun,Delingxun LEV,Dell,Dell(개발),DEOKYANG,Desay,Desay LEV,Desay_01,Desay-1,Dexun,",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:08.994",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1294,
+   "rows_kind": "DataSet rows",
+   "ms": 19.22,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:09.183",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 9.09,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "SCM0002_40",
+    "p_sheet_name": "ItemPopup",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='SCM0002_40', @p_sheet_name='ItemPopup', @p_division_id='40'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:09.296",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1098,
+   "rows_kind": "DataSet rows",
+   "ms": 106.57,
+   "params": {
+    "Code": "EndCustomerByDivision40",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivision40', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:10.693",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.15,
+   "params": {
+    "CODE": "DM_CUSTOMS_HANDBOOK",
+    "PARAM1": "",
+    "PARAM2": "",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='DM_CUSTOMS_HANDBOOK', @PARAM1='', @PARAM2='', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:10.705",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 12,
+   "rows_kind": "DataSet rows",
+   "ms": 4.57,
+   "params": {
+    "CODE": "FCST_TYPE",
+    "PARAM1": "ADMIN",
+    "PARAM2": "",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='FCST_TYPE', @PARAM1='ADMIN', @PARAM2='', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:10.723",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.33,
+   "params": {
+    "p_menu_id": "DMF0082",
+    "p_log_type": "FIND",
+    "p_log_cnt": "7368",
+    "p_db_time": "51.331",
+    "p_ui_time": "1.33",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='DMF0082', @p_log_type='FIND', @p_log_cnt='7368', @p_db_time='51.331', @p_ui_time='1.33', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:10.753",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 25.08,
+   "params": {
+    "Code": "DefaultBucketDay",
+    "Param1": "40",
+    "Param2": "WEEKLY",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='DefaultBucketDay', @Param1='40', @Param2='WEEKLY', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:11.541",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+   "sp": "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 15317,
+   "rows_kind": "DataSet rows",
+   "ms": 2168.51,
+   "params": {
+    "p_division_id": "40",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": "",
+    "p_mdmActive_Sw": ""
+   },
+   "inline": "EXEC DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id='40', @p_dept_id='ALL', @p_end_customer='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id='', @p_mdmActive_Sw=''",
+   "phase": "action:btnItemId"
+  },
+  {
+   "at": "2026-11-13 10:35:22.657",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM.DMF0002_GET_TITLESET_POPUP",
+   "sp": "DMF0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 6.36,
+   "params": {
+    "p_program_id": "DMF0082",
+    "p_sheet_name": "FcstNPrice",
+    "p_column_type": "M",
+    "p_user_id": "jaeuk.shin",
+    "p_division_id": "40"
+   },
+   "inline": "EXEC DMF0002_GET_TITLESET_POPUP @p_program_id='DMF0082', @p_sheet_name='FcstNPrice', @p_column_type='M', @p_user_id='jaeuk.shin', @p_division_id='40'",
+   "phase": "action:btnMeasure"
+  },
+  {
+   "at": "2026-11-13 10:35:34.820",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 4.42,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:btnVersion"
+  },
+  {
+   "at": "2026-11-13 10:35:34.858",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM.SCM0002_GET_VERSIONBYWATERFALLPOPUP",
+   "sp": "SCM0002_GET_VERSIONBYWATERFALLPOPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 5.62,
+   "params": {
+    "p_start_yyyymmdd": "20261101",
+    "p_end_yyyymmdd": "20270430",
+    "p_created_by": "jaeuk.shin",
+    "p_division_id": "40",
+    "p_version_type": "MF_SP_SF_W,ME_S",
+    "p_version_no": ""
+   },
+   "inline": "EXEC SCM0002_GET_VERSIONBYWATERFALLPOPUP @p_start_yyyymmdd='20261101', @p_end_yyyymmdd='20270430', @p_created_by='jaeuk.shin', @p_division_id='40', @p_version_type='MF_SP_SF_W,ME_S', @p_version_no=''",
+   "phase": "action:btnVersion"
+  }
+ ]
+}

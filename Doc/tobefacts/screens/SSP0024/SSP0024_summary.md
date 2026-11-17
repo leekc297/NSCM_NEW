@@ -10,10 +10,10 @@
 | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.module.scss | component | 26 |
 | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx | component | 291 |
 | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | component | 237 |
-| features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | component | 338 |
+| features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | component | 346 |
 | features/shipping/src/pages/shipment-master-electrode/hooks/useShipmentMasterElectrodeValidation.ts | hook | 67 |
 | features/shipping/src/pages/shipment-master-electrode/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-master-electrode/shipment-master-electrode.constants.ts | constants | 230 |
+| features/shipping/src/pages/shipment-master-electrode/shipment-master-electrode.constants.ts | constants | 247 |
 | features/shipping/src/pages/shipment-master-electrode/shipment-master-electrode.types.ts | types | 33 |
 | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.module.scss | style | 6 |
 | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | page | 483 |
@@ -27,8 +27,8 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 2 | Y | ElectrodeItemByDivisionModal.tsx:85 ShipmentMasterElectrodeForm.tsx:51 |
 | SSP0024/popup//call-proc | hook | 1 | Y | ElectrodeItemByDivisionModal.tsx:117 |
-| (useTabLookupQueries) | hook | 1 | Y | ShipmentMasterElectrodeGrid.tsx:94 |
-| {?{comboId:COMBO.CELL_PLANT_SITE,divisionId}} | http | 1 | N | ShipmentMasterElectrodeGrid.tsx:228 |
+| (useTabLookupQueries) | hook | 1 | Y | ShipmentMasterElectrodeGrid.tsx:96 |
+| {?{comboId:COMBO.CELL_PLANT_SITE,divisionId}} | http | 1 | N | ShipmentMasterElectrodeGrid.tsx:235 |
 | /SSP0024/main/USER_CHECK/call-proc | http | 1 | Y | useShipmentMasterElectrodeValidation.ts:28 |
 | SSP0024/main//call-proc | hook | 1 | Y | ShipmentMasterElectrode.tsx:106 |
 | /SSP0024/main/SAVE/call-proc | http | 1 | Y | ShipmentMasterElectrode.tsx:314 |
@@ -53,13 +53,13 @@
 | Button | onClick | onMaterialSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 187 |
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 227 |
 | Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 222 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 137 |
-| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 155 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 170 |
-| g | cellEditEnded | applyDerivations | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 258 |
-| g | pastedCell | pastedCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 259 |
-| g.hostElement? | keydown | keyDownHandler | addEventListener | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 276 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 334 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 139 |
+| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 157 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 177 |
+| g | cellEditEnded | applyDerivations | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 265 |
+| g | pastedCell | pastedCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 266 |
+| g.hostElement? | keydown | keyDownHandler | addEventListener | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 283 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 342 |
 | ShipmentMasterElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 387 |
 | ShipmentMasterElectrodeForm | onMaterialSearch | <arrow> setOpenMaterial | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 388 |
 | ShipmentMasterElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 389 |

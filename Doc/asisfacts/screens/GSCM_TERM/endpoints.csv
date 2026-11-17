@@ -1,3 +1,6 @@
 ﻿"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
 "only","06.UIL\GSCM.SystemMgmt.UIL\TermInfo.cs","TermInfo","<field:dtYesOrNo>","42","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
 "only","06.UIL\GSCM.SystemMgmt.UIL\TermInfo.cs","TermInfo","FindData","170","ctor","fox","SystemManager.UP_FX_GetTermInfoList","SystemManager.UP_FX_GetTermInfoList","MATCH","SP UP_FX_GetTermInfoList","EXEC:UP_FX_GETTERMINFOLIST, SELECT:TB_FX_TERMINFO","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\TermInfo.cs","TermInfo","SaveData","264","prop","fox","SystemManager.UP_FX_SaveTermInfo","SystemManager.UP_FX_SaveTermInfo","MATCH","SP UP_FX_SaveTermInfo","EXEC:UP_FX_SAVETERMINFO, MERGE:TB_FX_TERMINFO","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\TermInfo.cs","TermInfo","SaveData","265","prop","fox","SystemManager.UP_FX_DeleteTermInfo","SystemManager.UP_FX_DeleteTermInfo","MATCH","SP UP_FX_DeleteTermInfo","EXEC:UP_FX_DELETETERMINFO, DELETE:TB_FX_TERMINFO","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\TermInfo.cs","TermInfo","SaveData","266","prop","fox","SystemManager.UP_FX_SaveTermInfo","SystemManager.UP_FX_SaveTermInfo","MATCH","SP UP_FX_SaveTermInfo","EXEC:UP_FX_SAVETERMINFO, MERGE:TB_FX_TERMINFO","",""

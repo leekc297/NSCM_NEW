@@ -1,0 +1,131 @@
+# -*- coding: utf-8 -*-
+"""분기 조건식에서 전제 값(Division, 그룹) 도출 → 실행 계획 → 실행 (2026-11-13, 플랜 P6-3)
+
+  python tools/AsisLive/asis_live_scen_values.py <ID> [ID ...] [--run]     (ID 생략 = scenarios_cov.csv 가 있는 전 화면, 계획만)
+입력  Doc/asislive/<ID>/scenarios_cov.csv(분기 조건식 guard, 축 axes) · run_*_acts*/acts.json(이미 실행한 Division, 그룹)
+      Doc/asislive/_groups.json(런처 계정이 가진 그룹, asis_live_scen_run.py --groups-list) · run_*/dump_find.json(화면의 Division 목록)
+방법  Division 축 분기: 조건식에서 division, div 가 든 마디의 따옴표 값 중 Division 코드 모양(숫자 2자리, 숫자 2자리_영문 2자리)만 뽑는다.
+        화면의 Division 목록을 알면 그 목록에 있는 값만 실행 대상으로 둔다. "else of (…)" 마디는 적힌 값이 아닌 Division 이 필요하므로 목록의 다른 값 1개를 고른다.
+      그룹 축 분기: GroupID, NowGroup, Auth, Role 이 든 마디의 따옴표 값 중 계정이 가진 그룹 이름과 같은 것만 실행 대상으로 둔다. 계정에 없는 그룹은 실행할 수 없다고 적는다.
+      값이 조건식에 글자로 없으면(변수, 메타 조회 결과로 정해짐) 도출하지 않는다.
+산출  Doc/asislive/<ID>/scenario_values.csv   분기별 axis, 조건식의 값, 실행 대상 값, 이미 실행한 값, 상태
+      Doc/asislive/<ID>/scenario_values_plan.json   {"divisions": [...], "groups": [...], "todo_divisions": [...], "todo_groups": [...]}
+      --run 이면 todo 를 실행한다: asis_live_scen_run.py <ID> --division a,b  그리고 그룹마다 asis_live_scen_run.py <ID> --group <그룹>
+상태  실행함(그 값으로 버튼 분기 실행 기록 있음) / 실행 대상(값 도출, 아직 실행 안 함) / 계정에 없는 그룹 / 화면 목록에 없는 Division / 값 미도출
+한계  그 값으로 화면을 실행했다는 뜻이다. 그 분기가 탔는지는 분기 실행 현황과 분기별 대조가 따로 본다. 조회 조건, 데이터 상태, 화면 상태 축의 값은 다루지 않는다.
+"""
+import csv, glob, json, os, re, subprocess, sys, collections
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+for _s in (sys.stdout, sys.stderr):
+    try: _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception: pass
+DIVSEG = re.compile(r"division|\bdiv\b|sDiv", re.I)
+DIVCODE = re.compile(r"^\d{2}(_[A-Z]{2})?$")
+GRPSEG = re.compile(r"GroupID|NowGroup|Auth|Role", re.I)
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding="utf-8-sig", newline="") as f: return list(csv.DictReader(f))
+
+
+def screen_divisions(mid):
+    """화면의 Division 목록(코드) — 버튼 실행 기록의 division_control, 없으면 조회 덤프의 Division 콤보"""
+    for f in sorted(glob.glob(P("Doc", "asislive", mid, "run_*_acts*", "acts.json")), reverse=True):
+        try: it = (json.load(open(f, encoding="utf-8")).get("division_control") or {}).get("items")
+        except Exception: it = None
+        if it: return [x for x in it if x]
+    for f in sorted(glob.glob(P("Doc", "asislive", mid, "run_*", "dump_find.json")), reverse=True):
+        try: d = json.load(open(f, encoding="utf-8")); d = d.get("data", d)
+        except Exception: continue
+        for c in d.get("controls") or []:
+            if re.search(r"division", c.get("name") or "", re.I) and c.get("items") and isinstance(c["items"][0], str):
+                return [str(x).strip().split(" ")[0] for x in c["items"]]
+    return []
+
+
+def executed(mid):
+    dv, gp = set(), set()
+    for f in glob.glob(P("Doc", "asislive", mid, "run_*_acts*", "acts.json")):
+        try: j = json.load(open(f, encoding="utf-8"))
+        except Exception: continue
+        if not j.get("acts"): continue
+        if j.get("division"): dv.add(str(j["division"]))
+        if j.get("group"): gp.add(str(j["group"]))
+    return dv, gp
+
+
+def one(mid, groups):
+    sc = rd(P("Doc", "asislive", mid, "scenarios_cov.csv")) or rd(P("Doc", "asislive", mid, "scenarios_src.csv"))
+    if not sc: return None
+    dlist = screen_divisions(mid); ex_d, ex_g = executed(mid); rows = []; want_d, want_g = [], []
+    for r in sc:
+        ax = (r.get("axes") or "").split("+"); g = r.get("guard") or ""; segs = [x.strip() for x in g.split("▸") if x.strip()]
+        if "DIVISION" in ax:
+            lits, other = [], False
+            for s in segs:
+                if not DIVSEG.search(s): continue
+                v = [x for x in re.findall(r'"([^"]{1,12})"', s) if DIVCODE.match(x)]
+                if s.startswith("else of") and v: other = True
+                lits += [x for x in v if x not in lits]
+            run = [x for x in lits if not dlist or x in dlist]
+            if other and dlist:
+                o = next((x for x in dlist if x not in lits), None)
+                if o and o not in run: run.append(o)
+            st = ("값 미도출" if not lits else "화면 목록에 없는 Division" if not run else "실행함" if all(x in ex_d for x in run) else "실행 대상")
+            rows.append({"scenario_id": r["scenario_id"], "axis": "DIVISION", "guard_values": ",".join(lits) + (" (그 밖 값 필요)" if other else ""), "run_values": ",".join(run), "executed": ",".join(x for x in run if x in ex_d), "status": st, "guard": g[:240]})
+            want_d += [x for x in run if x not in want_d]
+        if "AUTH" in ax:
+            lits = []
+            for s in segs:
+                if GRPSEG.search(s): lits += [x for x in re.findall(r'"([^"]{1,30})"', s) if x not in lits and x not in ("NowGroupID", "Y", "N", "PgmAuthId")]
+            run = [x for x in lits if x in groups]; miss = [x for x in lits if x not in groups and re.search(r"admin|planner|viewer|tester", x, re.I)]
+            st = ("값 미도출" if not (run or miss) else "계정에 없는 그룹" if not run else "실행함" if all(x in ex_g for x in run) else "실행 대상")
+            rows.append({"scenario_id": r["scenario_id"], "axis": "AUTH", "guard_values": ",".join(run + miss), "run_values": ",".join(run), "executed": ",".join(x for x in run if x in ex_g), "status": st, "guard": g[:240]})
+            want_g += [x for x in run if x not in want_g]
+    plan = {"id": mid, "screen_divisions": dlist, "divisions": want_d, "groups": want_g, "todo_divisions": [x for x in want_d if x not in ex_d], "todo_groups": [x for x in want_g if x not in ex_g],
+            "account_groups_known": bool(groups)}
+    if rows:
+        with open(P("Doc", "asislive", mid, "scenario_values.csv"), "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
+    with open(P("Doc", "asislive", mid, "scenario_values_plan.json"), "w", encoding="utf-8") as f: json.dump(plan, f, ensure_ascii=False, indent=1)
+    c = collections.Counter((x["axis"], x["status"]) for x in rows)
+    return dict(plan, rows=len(rows), counts={"%s %s" % k: v for k, v in sorted(c.items())})
+
+
+def main():
+    av = sys.argv[1:]; ids = [a.upper() for a in av if not a.startswith("-")]; run = "--run" in av; ALL = not ids
+    if not ids: ids = sorted(os.path.basename(os.path.dirname(f)) for f in glob.glob(P("Doc", "asislive", "*", "scenarios_cov.csv")))
+    try: groups = [x.get("code") for x in json.load(open(P("Doc", "asislive", "_groups.json"), encoding="utf-8")).get("items") or []]
+    except Exception: groups = []
+    tot = collections.Counter(); rc = 0
+    for mid in ids:
+        s = one(mid, groups)
+        if not s: continue
+        for k, v in s["counts"].items(): tot[k] += v
+        if not ALL:
+            print("[%s] Division·그룹 축 분기 %d = %s" % (mid, s["rows"], ", ".join("%s %d" % kv for kv in s["counts"].items()) or "없음"))
+            print("   화면 Division 목록 %s / 실행 대상 Division %s(남은 것 %s) / 실행 대상 그룹 %s(남은 것 %s)" % (",".join(s["screen_divisions"]) or "미확인", ",".join(s["divisions"]) or "없음", ",".join(s["todo_divisions"]) or "없음",
+                                                                                              ",".join(s["groups"]) or "없음", ",".join(s["todo_groups"]) or "없음"))
+        if run and not ALL:
+            T = os.path.join("tools", "AsisLive", "asis_live_scen_run.py")
+            if s["todo_divisions"]:
+                print("   실행: Division %s" % ",".join(s["todo_divisions"]), flush=True)
+                rc = max(rc, subprocess.call([sys.executable, T, mid, "--division", ",".join(s["todo_divisions"])], cwd=ROOT))
+            for g in s["todo_groups"]:
+                print("   실행: 그룹 %s" % g, flush=True)
+                rc = max(rc, subprocess.call([sys.executable, T, mid, "--group"] + g.split(" "), cwd=ROOT))
+            if s["todo_divisions"] or s["todo_groups"]:
+                s2 = one(mid, groups); print("   실행 뒤: %s" % ", ".join("%s %d" % kv for kv in s2["counts"].items()))
+    if ALL:
+        print("화면 %d, Division·그룹 축 분기 상태: %s" % (len(ids), ", ".join("%s %d" % kv for kv in sorted(tot.items()))))
+        if not groups: print("계정 그룹 목록(Doc/asislive/_groups.json) 없음. asis_live_scen_run.py --groups-list 를 먼저 실행")
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main())

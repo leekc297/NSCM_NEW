@@ -1,0 +1,1987 @@
+{
+ "menu_id": "SCP0104",
+ "at": "2026-11-17 15:53:49",
+ "source": "sqllog_calls.json GET 호출 재실행(TO-BE 사내 Oracle · AS-IS MSSQL .env.asis)",
+ "div_opts": [
+  "81",
+  "40",
+  "82",
+  "81_UC",
+  "81_HM",
+  "81_ST",
+  "81_HD",
+  "81_HG"
+ ],
+ "sheets": {
+  "LINE": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY",
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 126,
+     "asis_rows": 126,
+     "cond": {
+      "p_division_id": "81"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "40",
+     "tobe_rows": 156,
+     "asis_rows": 156,
+     "cond": {
+      "p_division_id": "40"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 229,
+     "asis_rows": 229,
+     "cond": {
+      "p_division_id": "81"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 159,
+     "asis_rows": 159,
+     "cond": {
+      "p_division_id": "40"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 48,
+     "asis_rows": 48,
+     "cond": {
+      "p_division_id": "82"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 27,
+     "asis_rows": 27,
+     "cond": {
+      "p_division_id": "81_UC"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 4,
+     "asis_rows": 4,
+     "cond": {
+      "p_division_id": "81_HM"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 21,
+     "asis_rows": 21,
+     "cond": {
+      "p_division_id": "81_ST"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 23,
+     "asis_rows": 23,
+     "cond": {
+      "p_division_id": "81_HD"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 12,
+     "asis_rows": 12,
+     "cond": {
+      "p_division_id": "81_HG"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 80,
+     "asis_rows": 79,
+     "cond": {
+      "p_division_id": "81"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 80,
+     "asis_rows": 79,
+     "cond": {
+      "p_division_id": "81"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 54,
+     "asis_rows": 54,
+     "cond": {
+      "p_division_id": "40"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 12,
+     "asis_rows": 12,
+     "cond": {
+      "p_division_id": "82"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 18,
+     "asis_rows": 18,
+     "cond": {
+      "p_division_id": "81_UC"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 3,
+     "asis_rows": 3,
+     "cond": {
+      "p_division_id": "81_HM"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 15,
+     "asis_rows": 15,
+     "cond": {
+      "p_division_id": "81_ST"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 12,
+     "asis_rows": 12,
+     "cond": {
+      "p_division_id": "81_HD"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 8,
+     "asis_rows": 8,
+     "cond": {
+      "p_division_id": "81_HG"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ELTR"
+    }
+   ],
+   "tobe": {
+    "div": "40",
+    "rows": 156,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "40"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+   },
+   "asis": {
+    "div": "40",
+    "rows": 156,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "40"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSEMBLY"
+   },
+   "divs": [
+    "81",
+    "40",
+    "82",
+    "81_UC",
+    "81_HD",
+    "81_ST",
+    "81_HG",
+    "81_HM"
+   ],
+   "both": [
+    "81",
+    "40",
+    "82",
+    "81_UC",
+    "81_HD",
+    "81_ST",
+    "81_HG",
+    "81_HM"
+   ]
+  },
+  "ASSEMBLY": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 608,
+     "asis_rows": 608,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 74,
+     "asis_rows": 74,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 74,
+     "asis_rows": 74,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 96,
+     "asis_rows": 96,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "P9500,P5500"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "40",
+     "tobe_rows": 294,
+     "asis_rows": 294,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A3000,A8210,A9000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "82",
+     "tobe_rows": 136,
+     "asis_rows": 136,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:53:59",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 608,
+     "asis_rows": 608,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:00",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:01",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 136,
+     "asis_rows": 136,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:01",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 80,
+     "asis_rows": 80,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:02",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 25,
+     "asis_rows": 25,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:02",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 88,
+     "asis_rows": 88,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:03",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 40,
+     "asis_rows": 40,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:03",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 75,
+     "asis_rows": 75,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:03",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+    }
+   ],
+   "tobe": {
+    "div": "81",
+    "rows": 608,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+   },
+   "asis": {
+    "div": "81",
+    "rows": 608,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ASSEMBLY"
+   },
+   "divs": [
+    "81",
+    "40",
+    "82",
+    "81_ST",
+    "81_UC",
+    "81_HG",
+    "81_HD",
+    "81_HM"
+   ],
+   "both": [
+    "81",
+    "40",
+    "82",
+    "81_ST",
+    "81_UC",
+    "81_HG",
+    "81_HD",
+    "81_HM"
+   ]
+  },
+  "ELTR": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 275,
+     "asis_rows": 275,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:06",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "40",
+     "tobe_rows": 403,
+     "asis_rows": 403,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:09",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "82",
+     "tobe_rows": 26,
+     "asis_rows": 26,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:11",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 275,
+     "asis_rows": 275,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202609",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:13",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 275,
+     "asis_rows": 275,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202608",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:16",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 31,
+     "asis_rows": 31,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:18",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:20",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:22",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 1,
+     "asis_rows": 1,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:24",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 183,
+     "asis_rows": 183,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:27",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 92,
+     "asis_rows": 92,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:29",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 7,
+     "asis_rows": 7,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:31",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 275,
+     "asis_rows": 275,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:33",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 403,
+     "asis_rows": 403,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:36",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 26,
+     "asis_rows": 26,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:38",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 16,
+     "asis_rows": 16,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:40",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 4,
+     "asis_rows": 4,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:42",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 30,
+     "asis_rows": 30,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:44",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 10,
+     "asis_rows": 10,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:46",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 7,
+     "asis_rows": 7,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:48",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+    }
+   ],
+   "tobe": {
+    "div": "40",
+    "rows": 403,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "40",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+   },
+   "asis": {
+    "div": "40",
+    "rows": 403,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "40",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_ELTR"
+   },
+   "divs": [
+    "40",
+    "81",
+    "81_ST",
+    "82",
+    "81_UC",
+    "81_HD",
+    "81_HG",
+    "81_HM"
+   ],
+   "both": [
+    "40",
+    "81",
+    "81_ST",
+    "82",
+    "81_UC",
+    "81_HD",
+    "81_HG",
+    "81_HM"
+   ]
+  },
+  "SOP_MODEL_ASSEMBLY": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY",
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 27,
+     "asis_rows": 27,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:48",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 168,
+     "asis_rows": 168,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:49",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 168,
+     "asis_rows": 168,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 31,
+     "asis_rows": 31,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 42,
+     "asis_rows": 42,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 12,
+     "asis_rows": 12,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 16,
+     "asis_rows": 16,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:50",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 30,
+     "asis_rows": 30,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 27,
+     "asis_rows": 27,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:53",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    }
+   ],
+   "tobe": {
+    "div": "81",
+    "rows": 168,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+   },
+   "asis": {
+    "div": "81",
+    "rows": 168,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+   },
+   "divs": [
+    "81",
+    "81_UC",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_ST",
+    "81_HM"
+   ],
+   "both": [
+    "81",
+    "81_UC",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_ST",
+    "81_HM"
+   ]
+  },
+  "SOP_MODEL_ELTR": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY",
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:51",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:52",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81_ST",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 50,
+     "asis_rows": 50,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 50,
+     "asis_rows": 50,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:54",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 36,
+     "asis_rows": 36,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 10,
+     "asis_rows": 10,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 16,
+     "asis_rows": 16,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 2,
+     "asis_rows": 2,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 8,
+     "asis_rows": 8,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:55",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+    }
+   ],
+   "tobe": {
+    "div": "81",
+    "rows": 50,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+   },
+   "asis": {
+    "div": "81",
+    "rows": 50,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_ELTR"
+   },
+   "divs": [
+    "81",
+    "40",
+    "81_UC",
+    "82",
+    "81_HD",
+    "81_ST",
+    "81_HG",
+    "81_HM"
+   ],
+   "both": [
+    "81",
+    "40",
+    "81_UC",
+    "82",
+    "81_HD",
+    "81_ST",
+    "81_HG",
+    "81_HM"
+   ]
+  },
+  "SOP_ASSEMBLY": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 27,
+     "asis_rows": 27,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A3000,A8210,A9000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:56",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "rec",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 12,
+     "asis_rows": 12,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 27,
+     "asis_rows": 27,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+    }
+   ],
+   "tobe": {
+    "div": "81_HG",
+    "rows": 27,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81_HG",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+   },
+   "asis": {
+    "div": "81_HG",
+    "rows": 27,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81_HG",
+     "p_version": "202610",
+     "p_operation_id": "A5000,A7000,A7400,A8000,A8400,A9000,AFFFF"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+   },
+   "divs": [
+    "81_HG",
+    "81_ST"
+   ],
+   "both": [
+    "81_HG",
+    "81_ST"
+   ]
+  },
+  "SOP_ELTR": {
+   "procs": [
+    "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+   ],
+   "tried": [
+    {
+     "kind": "rec",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81_ST",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "81_HG",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:57",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "rec",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "40",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "40",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "82",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "82",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_UC",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_UC",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HM",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HM",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_ST",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_ST",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HD",
+     "tobe_rows": 0,
+     "asis_rows": 0,
+     "cond": {
+      "p_division_id": "81_HD",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    },
+    {
+     "kind": "div",
+     "div": "81_HG",
+     "tobe_rows": 6,
+     "asis_rows": 6,
+     "cond": {
+      "p_division_id": "81_HG",
+      "p_version": "202610",
+      "p_operation_id": "E2000"
+     },
+     "note": "",
+     "at": "2026-11-17 15:54:58",
+     "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+    }
+   ],
+   "tobe": {
+    "div": "81_ST",
+    "rows": 6,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81_ST",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+   },
+   "asis": {
+    "div": "81_ST",
+    "rows": 6,
+    "kind": "rec",
+    "cond": {
+     "p_division_id": "81_ST",
+     "p_version": "202610",
+     "p_operation_id": "E2000"
+    },
+    "proc": "PKG_SCP0104.P_SCP0104_GET_CAPA_LINE_SOP_ELTR"
+   },
+   "divs": [
+    "81_ST",
+    "81_HG"
+   ],
+   "both": [
+    "81_ST",
+    "81_HG"
+   ]
+  }
+ }
+}

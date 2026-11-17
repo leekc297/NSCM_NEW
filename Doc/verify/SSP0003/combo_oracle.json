@@ -1,0 +1,96 @@
+{
+ "mid": "SSP0003",
+ "asis_id": "SSP0003",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 13,
+   "asis_src": "SSP_BIGFILTER MyDivision @InitControls (SSP0003_ShipmentChangeRequestConfirm.cs:332 ← SSP0003_Shipme)",
+   "asis_n": 14,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [
+    "EE"
+   ],
+   "tobe_only": [],
+   "asis_only_n": 1,
+   "tobe_only_n": 0,
+   "explain": {
+    "EE": "보조 조건 차이 의심 — 두 DB 원천 ['SCM_MST_DIVISION'] 에 모두 있음(BigFilter 사용자·부서 조인 조건 확인)"
+   },
+   "b4": "판정필요",
+   "why": "AS-IS 14건 vs TO-BE 13건 · 차이 1건 설명 불가: EE: 보조 조건 차이 의심 — 두 DB 원천 ['SCM_MST_DIVISION'] 에 모두 있음(BigFilter 사용자·부서 조인 조건 확인)",
+   "b3": "PASS",
+   "b3_why": "공통 13건 CODE 정렬 일치",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCheckedList.DataSource → row[1]=NAME) = TO-BE 표시 NAME (CODE≠NAME 후보 13/14건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 104,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlantSiteByDivision 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Status",
+   "label": "Status",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 8,
+   "asis_src": "SSP_BIGFILTER CHANGE_REQ_STATUS @InitControls (SSP0003_ShipmentChangeRequestConfirm.cs:334 ← SSP0003_Shipme)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "FAIL",
+   "b3_why": "CODE 정렬 기준 1번째부터 다름: TO-BE ['D', 'Q', 'A', 'P'] / 기대 ['A', 'D', 'E', 'O']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0003_ShipmentChangeRequestConfirm.cs:334) = TO-BE 표시 NAME (CODE≠NAME 후보 8/8건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Change Type",
+   "label": "Change Type",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 4,
+   "asis_src": "SSP_BIGFILTER CHANGE_REQ_TYPE @InitControls (SSP0003_ShipmentChangeRequestConfirm.cs:336 ← SSP0003_Shipme)",
+   "asis_n": 4,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 4건 집합 일치",
+   "b3": "FAIL",
+   "b3_why": "CODE 정렬 기준 1번째부터 다름: TO-BE ['P', 'C', 'N', 'A'] / 기대 ['A', 'C', 'N', 'P']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0003_ShipmentChangeRequestConfirm.cs:336) = TO-BE 표시 NAME (CODE≠NAME 후보 4/4건 확인)"
+  },
+  {
+   "kind": "CASCADE",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "상위 Div=40",
+   "tobe_n": 32,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — 'dtPlantSiteByDivision 원천 대입 미발견(필드 초기화·외부 주입 확인)'"
+  }
+ ]
+}

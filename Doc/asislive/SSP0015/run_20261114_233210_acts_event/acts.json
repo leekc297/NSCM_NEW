@@ -1,0 +1,57 @@
+{
+ "id": "SSP0015",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 0개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0015-Sb39c49"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "txtChange_Qty",
+   "why": "화면 덤프에 그 이름의 컨트롤이 없음",
+   "scenarios": [
+    "SSP0015-Sa6f0f4"
+   ]
+  },
+  {
+   "control": "spdDetail",
+   "why": "조회 결과 행이 없어 붙여넣을 셀이 없음",
+   "scenarios": [
+    "SSP0015-S3ffea1",
+    "SSP0015-Sa33579",
+    "SSP0015-Sd2d172",
+    "SSP0015-S9afa62",
+    "SSP0015-S6b13ca",
+    "SSP0015-S38dc9f",
+    "SSP0015-S9df1b2",
+    "SSP0015-S9bf49f",
+    "SSP0015-Sa791d4",
+    "SSP0015-S9e4fc2",
+    "SSP0015-S2f2f86",
+    "SSP0015-S2cb6ae",
+    "SSP0015-Sb1cc58",
+    "SSP0015-S91aa3c",
+    "SSP0015-Sef6aef"
+   ]
+  }
+ ],
+ "at": "2026-11-14 23:30:46",
+ "edit_mode": false
+}

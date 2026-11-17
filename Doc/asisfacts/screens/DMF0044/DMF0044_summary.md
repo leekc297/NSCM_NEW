@@ -209,6 +209,11 @@
 | clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:198 |
 | dsdm | Changed | spdMain_Changed | DefineProperty:207 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | DefineProperty:208 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:171 |
+| this.btnCopy | Click | btnCopy_Click | InitializeComponent:283 |
+| this.btnTransfer | Click | btnTransfer_Click | InitializeComponent:320 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:430 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:431 |
 | this | Load | Form_Load | .ctor:85 |
 | this.btnVerCopy | Click | btnVerCopy_Click | InitializeComponent:272 |
 | this.btnVerDel | Click | btnVerDel_Click | InitializeComponent:309 |
@@ -223,11 +228,11 @@
 | this.chkMV | CheckedChanged | chkMV_CheckedChanged | InitializeComponent:788 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1066 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1067 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:177 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:382 |
 | this | Load | Form_Load | .ctor:89 |
 | clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:129 |
 | clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:138 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:177 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:382 |
 | this | Load | Form_Load | .ctor:96 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:187 |
 | this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:278 |
@@ -239,21 +244,16 @@
 | this.btnTransfer | Click | btnTransfer_Click | InitializeComponent:302 |
 | this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:417 |
 | this | Load | Form_Load | .ctor:84 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:171 |
-| this.btnCopy | Click | btnCopy_Click | InitializeComponent:283 |
-| this.btnTransfer | Click | btnTransfer_Click | InitializeComponent:320 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:430 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:431 |
 
 ## 6. 컨트롤 (152개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 46 | lblSPVersion, layoutControlItem1, lblType, lblYear, lblDataType, layoutControlItem4, layoutControlItem2, lblDivision, lci_btnTextBox, lblDivion, Period, LayoutControl_Result, LayoutControl_Transfer, LayoutControl_Cancel, LayoutControl_VersionDelete … |
-| UsrButton | 15 | btnTextbox, btnExchangeRate, btnSPVer, btnMeasure, btnVerCopy, btnVerDel, btnTranCancel, btnTransfer, btnVerCre, btnOK, btnClose, usrButton1, btnTransfer, btnCopy, btnTransfer |
+| LayoutControlItem | 46 | lblSPVersion, layoutControlItem1, lblType, lblYear, lblDataType, layoutControlItem4, layoutControlItem2, lblDivision, lci_btnTextBox, layoutControlItem2, Period, clbDivisions, layoutControlItem6, layoutControlItem1, lblDivion … |
+| UsrButton | 15 | btnTextbox, btnExchangeRate, btnSPVer, btnMeasure, btnCopy, btnTransfer, btnVerCopy, btnVerDel, btnTranCancel, btnTransfer, btnVerCre, btnOK, btnClose, usrButton1, btnTransfer |
 | UsrLayoutControl | 14 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 14 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| EmptySpaceItem | 11 | emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
-| UsrCombo | 10 | clbType, usrYear, usrDataType, clbDivision, clbDivision, clbType, clbDivision, usrYear, clbDivision, clbDivision |
+| EmptySpaceItem | 11 | emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
+| UsrCombo | 10 | clbType, usrYear, usrDataType, clbDivision, clbDivision, clbDivision, clbType, clbDivision, usrYear, clbDivision |
 | UsrConditionPanel | 7 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
 | SheetView | 7 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
 | FpSpread | 7 | spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain |

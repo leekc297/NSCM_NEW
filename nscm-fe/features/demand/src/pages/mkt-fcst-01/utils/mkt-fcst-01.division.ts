@@ -150,7 +150,7 @@ export const requiredFieldsFor = (divisionId: string): RequiredField[] => {
     fields.push({ col: cols.item, lblKey: 'LBL00669', fallback: 'Model' });
   }
   // 공통 필수 — CustomsHandbook(DOM_EXP)/FcstType/Incoterms/Measure (L4390~4409).
-  fields.push({ col: 'DOM_EXP', lblKey: 'LBL00091', fallback: 'Customs Handbook' });
+  // fields.push({ col: 'DOM_EXP', lblKey: 'LBL00091', fallback: 'Customs Handbook' });
   fields.push({ col: 'FCST_TYPE', lblKey: 'LBL01141', fallback: 'FCST Type' }); // 2026-08-10 채번
 
   fields.push({ col: 'INCOTERMS', lblKey: 'LBL00024', fallback: 'Incoterms' });

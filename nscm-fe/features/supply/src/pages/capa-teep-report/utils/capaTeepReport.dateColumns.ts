@@ -11,7 +11,7 @@ import {
 import type { SpreadTitleFilters, SpreadTitleRow } from '../capa-teep-report.types';
 
 /**
- * 동적 기간 컬럼 조립 — `PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE` 결과를 3단 헤더로 만든다(03 §2).
+ * 동적 기간 컬럼 조립 — `PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE`(SCP0107 자체 proc) 결과를 3단 헤더로 만든다(03 §2).
  *
  * 컬럼명 규약: 월 `M_01` + `yyyymm`(예 `M_01202602`) / 연 `Y_` + `yyyy`(예 `Y_2029`).
  * **SP 가 준 `COLUMN_NAME` 을 그대로 바인딩에 쓴다**(재조립 금지, V-12) — `M_` 뒤 `01` 두 자리를

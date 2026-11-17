@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 311,
+  "at": "2026-11-13T22:15:35.143Z",
+  "user": "minyonglee1",
+  "test": "Excel 2단계 차단(M1)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 402,
+  "at": "2026-11-13T22:15:35.259Z",
+  "user": "minyonglee1",
+  "test": "Excel 2단계 차단(M1)"
+ }
+]

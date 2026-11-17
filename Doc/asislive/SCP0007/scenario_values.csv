@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0007-S9d7fb6,DIVISION,,,,값 미도출,"else of (strSel_InputStatus == ""R"") ▸ if (strSel_InputStatus == ""C"") ▸ if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (strSel_Division!=null && s",

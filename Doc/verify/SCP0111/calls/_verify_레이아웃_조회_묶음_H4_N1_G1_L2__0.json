@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20260907\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202609\",\"toYyyymm\":\"202702\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1715,
+  "dur": 943,
+  "at": "2026-11-14T07:11:01.044Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81_HG\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202703\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 32,
+  "dur": 301,
+  "at": "2026-11-14T07:11:10.328Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

@@ -1,0 +1,9 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SCP0020_GET_TACT_TIME_OSP,PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP,GET,13,SKIP:13,인자 미해결(UNRESOLVED): debug_mode — param_map.csv 에 값/대응 지정,1,find,855,"{""p_division_id"": ""82"", ""p_plant_site_id"": """", ""p_line_id"": """", ""p_operation_group_id"": ""P"", ""p_item_id"": """", ""debug_mode"": ""F""}",LIVE_CAN_FILL,차등 검증은 전부 건너뜀 · AS-IS 실측에 결과(건수·인자) 있음 → 같은 조건 실측(조건 시나리오)으로 대조 가능
+SCP0020_GET_TACT_TIME,PKG_SCP0020.P_SCP0020_GET_TACT_TIME,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0020_GET_TACT_TIME_EXCEPT_OSP,PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0020_GET_TACT_TIME_EXCEPT,PKG_SCP0020.P_SCP0020_GET_TACT_TIME_EXCEPT_OSP,GET,5,SKIP:5,"인자 미해결(UNRESOLVED): debug_mode,debug_mode — param_map.csv 에 값/대응 지정",0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+SCP0020_SAVE_TACT_TIME_OSP,PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0020_SAVE_TACT_TIME,PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0020_SAVE_TACT_TIME_EXCEPT_OSP,PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0020_SAVE_TACT_TIME_EXCEPT,PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)

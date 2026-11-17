@@ -1,0 +1,142 @@
+{
+ "id": "DMF0021",
+ "started": "2026-11-12 18:10:04.469",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:10:04.775",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0021_SalesPlan",
+   "form_text": "Sales Plan",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0021_SalesPlan.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:10:19.408"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:10:22.807",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0021\\run_20261112_181004\\dump_load.json",
+   "control_count": 88,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:10:22.827"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:10:22.988",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0021\\run_20261112_181004\\shots\\DMF0021_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:10:23.116"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:10:23.584",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:10:24.245"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:11:01.929",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0021\\run_20261112_181004\\dump_find.json",
+   "control_count": 88,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:11:01.936"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:11:02.097",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0021\\run_20261112_181004\\shots\\DMF0021_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:11:02.208"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:11:02.677",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:11:03.180"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 30,
+  "calls_with_params": 28
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0021_SalesPlan",
+  "form_text": "Sales Plan",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0021_SalesPlan.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 18:10:04.675",
+ "t_find": "2026-11-12 18:10:23.312",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 88,
+  "layout_items": 25,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 50,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 30,
+  "calls_screen": 30,
+  "calls_find": 9,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:14.179",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:14"
+}

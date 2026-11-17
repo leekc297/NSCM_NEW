@@ -133,11 +133,23 @@ export const WaterfallShipmentPlanFgGrid = ({
     const kindByBinding = new Map(dynBindings.map(b => [b, dynKindOf(b)]));
 
     const applyDynVisibility = () => {
+      // 우클릭 Hide Column 으로 숨긴 컬럼(공용 DataGrid 가 grid 인스턴스에 얹어 준다 — Column 객체의
+      //   커스텀 플래그는 wijmo 생성자가 `_` 로 시작하는 키를 무시해 전달되지 않는다).
+      const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+        ._userHiddenColumns;
       let changed = false;
       for (let i = 0; i < g.columns.length; i += 1) {
         const col = g.columns[i];
         const binding = col.binding ?? '';
         if (!dynSet.has(binding)) continue;
+        // Hide Column 으로 숨긴 컬럼은 sum/드릴 재계산 대상에서 제외 — 숨김 유지.
+        if (userHiddenColumns?.has(binding)) {
+          if (col.visible !== false) {
+            col.visible = false;
+            changed = true;
+          }
+          continue;
+        }
         const kind = kindByBinding.get(binding);
         const base = kind ? baseVisibleOf(bucket, chkSum, kind, isIsoWeek(binding)) : true;
         const want = drillVisRef.current.get(binding) ?? base;

@@ -113,7 +113,7 @@ g.scrollPositionChanged.addHandler(() => g.invalidate());
 | **DataGrid wrapper 사용 화면** (자동 적용) | `packages/foundation/src/utils/mergeManager.ts` 의 `CustomMergeManager._getCellMergedRange` |
 | **FlexGrid 직접 사용 화면** (수동 적용) | `features/master/src/pages/contribute-main/components/ContributeMainGrid.tsx` 의 `HeaderMergeManager` Cell case |
 
-`CustomMergeManager` 추가 보강: 캐시 (`_mergeKeyCache`) + `bindInvalidateEvents` (cellEditEnded/collectionChanged/sortedColumn 시 cache 무효화). 성능 + dirty mark 정합.
+`CustomMergeManager` 추가 보강: 캐시 (`_mergeKeyCache`) + `bindInvalidateEvents` (cellEditEnded/collectionChanged/sortedColumn 시 cache 무효화). 성능 + dirty mark 정합. (2026-11-13 정정: 현재 코드의 캐시 무효화 이벤트 = cellEditEnded(해당 행 + `grid.invalidate()`) · loadedRows · collectionChanged · itemsSourceChanged · sortedColumn — `mergeManager.ts` `bindInvalidateEvents` L65~100. `grid.invalidate()` 를 부르는 것은 cellEditEnded 뿐)
 
 ---
 

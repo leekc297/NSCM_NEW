@@ -1,0 +1,241 @@
+{
+ "id": "FP00470",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "DB : 6.188s, UI : 0.076s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Main",
+     "rows": 0,
+     "cols": 14,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Plan Date"
+       ],
+       "label": "Plan Date",
+       "tag": "PLAN_DATE",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PLAN_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plan Group"
+       ],
+       "label": "Plan Group",
+       "tag": "INSTANCE_NAME",
+       "width": "200",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "INSTANCE_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Demand Material"
+       ],
+       "label": "Demand Material",
+       "tag": "TOP_ITEM_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "TOP_ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "TOP_ITEM_ID_NICK",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "TOP_ITEM_ID_NICK",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Problem Material"
+       ],
+       "label": "Problem Material",
+       "tag": "PROBLEM_DATA",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROBLEM_DATA",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Problem Group"
+       ],
+       "label": "Problem Group",
+       "tag": "PROBLEM_TYPE",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROBLEM_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "PJT Code"
+       ],
+       "label": "PJT Code",
+       "tag": "PROBLEM_DATA_NICK",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROBLEM_DATA_NICK",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Problem Type"
+       ],
+       "label": "Problem Type",
+       "tag": "CHECK_UI",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "CHECK_UI",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Problem Description"
+       ],
+       "label": "Problem Description",
+       "tag": "PROBLEM_DESCRIPTION",
+       "width": "600",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROBLEM_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Update Time"
+       ],
+       "label": "Update Time",
+       "tag": "INSERT_TIME",
+       "width": "130",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "INSERT_TIME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

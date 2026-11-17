@@ -5,8 +5,11 @@ import type { Page } from '@playwright/test';
 
 // 보이는 첫 Wijmo 그리드 컨트롤(lib/nscm.ts gridColumnsMeta 와 같은 탐색: $WJ-CTRL 또는 columns 보유 속성)
 // 2026-11-01: 한 화면에 그리드가 여럿(상단 메인 + 하단 시트)이면 첫 그리드만 보여 하위 시트 컬럼을 못 쟀다(DMF0004 Sales Customer) — pickGrid 로 지정하면 그 컬럼을 가진 그리드를 쓴다. 지정 없으면 종전과 같음
-const CTL = `(() => { const ctlOf = el => { let c = el['$WJ-CTRL']; if (!c || !c.columns) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && typeof v === 'object' && v.columns && typeof v.columns.length === 'number') { c = v; break; } } return c || null; };
-  const els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null); if (!els.length) return null; const want = window.__e2eGridCols;
+// 2026-11-10 T203(사용자: '각 시트는 어떤 시트를 사용했는지 확인해서 검사'): 그리드 → admin SHEET_NAME 을 React props(DataGrid layoutKey.sheetName · sheetName)에서 직접 읽는다.
+//   FE 수정 없이 화면 그리드와 시트를 정확히 대응 — 컬럼 겹침 추정(T196) 대신 시트 식별을 우선한다
+const SHEET_OF = `const sheetOf = el => { let f = null; for (let n = el; n && !f; n = n.parentElement) { const k = Object.keys(n).find(z => z.startsWith('__reactFiber$')); if (k) f = n[k]; } for (let i = 0; f && i < 80; i++, f = f.return) { const pr = f.memoizedProps; if (pr && typeof pr === 'object') { const s = (pr.layoutKey && pr.layoutKey.sheetName) || pr.sheetName; if (typeof s === 'string' && s) return s; } } return ''; }; const nrmSh = t => String(t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');`;
+const CTL = `(() => { ${SHEET_OF} const ctlOf = el => { let c = el['$WJ-CTRL']; if (!c || !c.columns) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && typeof v === 'object' && v.columns && typeof v.columns.length === 'number') { c = v; break; } } return c || null; };
+  const els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null); if (!els.length) return null; const want = window.__e2eGridCols; const wantSh = window.__e2eGridSheet; if (wantSh) { for (const e of els) { const c = ctlOf(e); if (c && nrmSh(sheetOf(e)) === nrmSh(wantSh)) return c; } }
   if (want) for (const e of els) { const c = ctlOf(e); if (c && want.every(b => { const x = c.columns.getColumn(b); return x && x.visible !== false; })) return c; } return ctlOf(els[0]); })()`;
 const J = (v: unknown) => JSON.stringify(v);
 
@@ -35,6 +38,12 @@ export const probe = {
   /** 이 컬럼들을 모두 표시한 그리드를 이후 프로브 대상으로 지정(없으면 false · null 이면 해제) */
   pickGrid: (p: Page, cols: string[] | null) =>
     p.evaluate(`(() => { window.__e2eGridCols = ${J(cols)}; if (!window.__e2eGridCols) return true; const c = ${CTL}; return !!c && window.__e2eGridCols.every(b => { const x = c.columns.getColumn(b); return x && x.visible !== false; }); })()`) as Promise<boolean>,
+  /** T203: 보이는 그리드별 admin 시트 이름(React props)과 표시 컬럼 */
+  gridSheets: (p: Page) =>
+    p.evaluate(`(() => { ${SHEET_OF} const out = []; for (const e of [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null)) { const c = e['$WJ-CTRL']; if (!c) continue; const cols = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding && x.visible !== false) cols.push(String(x.binding)); } out.push({ sheet: sheetOf(e), cols }); } return out; })()`) as Promise<{ sheet: string; cols: string[] }[]>,
+  /** T203: 이 admin 시트 이름의 그리드를 이후 프로브 대상으로 지정(찾으면 true · null 이면 해제) */
+  pickGridBySheet: (p: Page, sheet: string | null) =>
+    p.evaluate(`(() => { ${SHEET_OF} window.__e2eGridSheet = ${J(sheet)}; if (!window.__e2eGridSheet) return true; return [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null).some(e => nrmSh(sheetOf(e)) === nrmSh(window.__e2eGridSheet)); })()`) as Promise<boolean>,
   /** 보이는 컬럼 binding 목록 */
   visibleBindings: (p: Page) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const o = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding && x.visible !== false) o.push(String(x.binding)); } return o; })()`) as Promise<string[] | null>,
@@ -106,7 +115,8 @@ export const probe = {
         el = c.cells.getCellElement(${row}, col.index);
         if (!el) for (const cand of c.cells.hostElement.querySelectorAll('.wj-cell')) { const rc = cand.getBoundingClientRect(); if (!rc.width) continue; const ht = c.hitTest(rc.left + rc.width / 2, rc.top + rc.height / 2); if (ht && ht.row === ${row} && ht.col === col.index && ht.panel === c.cells) { el = cand; break; } }
       } catch { el = null; } }
-      if (el) { const r = el.getBoundingClientRect(); if (r.width > 0) return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+      { const fz = c.frozenColumns || 0; if (el && col.index < fz) { /* 2026-11-14 T310: 고정 컬럼은 y 를 같은 행의 고정 아닌 셀에서 얻는다 */ let ni = -1; for (let i = fz; i < c.columns.length; i++) { if (c.columns[i].visible !== false) { ni = i; break; } } if (ni >= 0) { c.scrollIntoView(${row}, ni); await new Promise(r => requestAnimationFrame(r)); const nb = c.cells.getCellElement(${row}, ni); const fe = c.cells.getCellElement(${row}, col.index) || el; if (nb) { const rn = nb.getBoundingClientRect(); const rf = fe.getBoundingClientRect(); const fx = rf.left + rf.width / 2, fy = rn.top + rn.height / 2; const ft = fx >= 0 && fy >= 0 && fx <= window.innerWidth && fy <= window.innerHeight ? document.elementFromPoint(fx, fy) : null; const fc = ft && ft.closest ? ft.closest('.wj-cell') : null; if (rf.width > 0 && fc && !fc.classList.contains('wj-header') && fc.classList.contains('wj-frozen') && (fc.innerText || '').trim() === (fe.innerText || '').trim()) return { x: fx, y: fy }; } } await new Promise(res => setTimeout(res, 200)); continue; } }
+      if (el) { const r = el.getBoundingClientRect(); const cx = r.left + r.width / 2, cy = r.top + r.height / 2; /* 2026-11-14 T310: 화면 밖(SCP0005 4018행 y=-78609)이거나 머리글에 가려진(3행 y=291) 좌표를 돌려주지 않는다 */ const top = cx >= 0 && cy >= 0 && cx <= window.innerWidth && cy <= window.innerHeight ? document.elementFromPoint(cx, cy) : null; const tc = top && top.closest ? top.closest('.wj-cell') : null; const tr = tc ? tc.getBoundingClientRect() : null; if (r.width > 0 && top && (top === el || el.contains(top) || (tc && tr && !tc.classList.contains('wj-header') && Math.abs(tr.left - r.left) < 2 && Math.abs(tr.top - r.top) < 2))) return { x: cx, y: cy }; try { const fz = c.frozenColumns || 0; if (col.index < fz && fz < c.columns.length) { c.scrollIntoView(${row}, fz); c.refresh(false); } else el.scrollIntoView({ block: 'center', inline: 'nearest' }); } catch { /* ignore */ } }
         await new Promise(res => setTimeout(res, 200)); }
       return null; })()`) as Promise<{ x: number; y: number } | null>,
   /** 콤보 셀 후보 중 원천 행에 지정 필드(예 CITY)가 채워진 것의 표시값 */

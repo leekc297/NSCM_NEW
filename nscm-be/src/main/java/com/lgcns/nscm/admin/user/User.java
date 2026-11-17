@@ -17,6 +17,7 @@ public class User {
 	private String userNm;
 	private String userEngNm;
 	private String langCd;
+	private String tmzCd;
 
 	public static User of(Map<String, Object> data) {
 		return User.builder()
@@ -25,6 +26,7 @@ public class User {
 			.userNm((String) data.get("USER_NM"))
 			.userEngNm((String) data.get("USER_ENG_NM"))
 			.langCd((String) data.get("LANG_CD"))
+			.tmzCd((String) data.get("TMZ_CD"))
 			.build();
 	}
 

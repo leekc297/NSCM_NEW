@@ -1,0 +1,242 @@
+{
+ "id": "DMF0006",
+ "dry": false,
+ "name": "update",
+ "kind": "edit",
+ "scenario": {
+  "table": "DM_MST_CUSTOMER_MODEL",
+  "pk": [
+   "DIVISION_ID",
+   "CUSTOMER_PROJECT_CODE",
+   "CUSTOMER_MODEL",
+   "SCM_SITE_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "CUSTOMER_PROJECT_CODE": "CUSTOMER_PROJECT_CODE",
+   "CUSTOMER_MODEL": "CUSTOMER_MODEL",
+   "SCM_SITE_ID": "SCM_SITE_ID"
+  },
+  "save_sp": "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+  "side": [
+   {
+    "table": "DM_MST_CUSTOMER_MODEL_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "related": [],
+  "basis": "foxml PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA → SP PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = UPDATE DM_MST_CUSTOMER_MODEL WHERE 키 4컬럼(ATTRIBUTE1~10 을 NULL 로 씀 — 복원이 전 컬럼을 되돌림) · PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST 가 DM_MST_CUSTOMER_MODEL_H 에 이력 INSERT · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+  "name": "update",
+  "title": "DB 에 있는 행의 CONVERT_QTY_PACK 수정(+1) 뒤 저장 · 복원",
+  "edits": [
+   {
+    "pick": {
+     "col": "CONVERT_QTY_PACK",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "CONVERT_QTY_PACK",
+     "db_col": "CONVERT_QTY_PACK",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 23:32:26",
+ "status": "OK",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "CUSTOMER_PROJECT_CODE": "48V GEN 1.5 CLAR",
+   "CUSTOMER_MODEL": "APBMW48CL-B1-B01",
+   "SCM_SITE_ID": "BMW_DE_MUC",
+   "PROJECT_CODE": "A18BW2003",
+   "ITEM_ID": "",
+   "VALID_YN": "Y",
+   "CUSTOMER_MODEL_TYPE": "",
+   "CONVERT_QTY_PACK": "30.0000000000",
+   "CONVERT_QTY_MODULE": "0E-10",
+   "CONVERT_QTY_CELL": "0E-10",
+   "CREATED_BY": "kyoungtae",
+   "CREATION_DATE": "2019-07-08 16:09:56.817",
+   "LAST_UPDATED_BY": "kyoungtae",
+   "LAST_UPDATE_DATE": "2019-10-27 21:19:53.010",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "CUSTOMER_PROJECT_CODE": "48V GEN 1.5 CLAR",
+    "CUSTOMER_MODEL": "APBMW48CL-B1-B01",
+    "SCM_SITE_ID": "BMW_DE_MUC"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "CONVERT_QTY_PACK",
+   "old": "30",
+   "new": "31",
+   "ok": true,
+   "error": null,
+   "before": "30",
+   "after": "31",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "save_call": [
+  {
+   "sp": "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_customer_project_code": "48V GEN 1.5 CLAR",
+    "p_customer_model": "APBMW48CL-B1-B01",
+    "p_scm_site_id": "BMW_DE_MUC",
+    "p_project_code": "A18BW2003",
+    "p_item_id": "",
+    "p_valid_yn": "Y",
+    "p_customer_model_type": "",
+    "p_convert_qty_pack": "31",
+    "p_convert_qty_module": "0.0000000000",
+    "p_convert_qty_cell": "0.0000000000",
+    "p_created_by": "jaeuk.shin",
+    "p_creation_date": "2026-11-13 오후 11:33:33",
+    "p_last_updated_by": "jaeuk.shin",
+    "p_last_update_date": "2026-11-13 오후 11:33:33"
+   },
+   "rows": 1,
+   "ms": 5.6
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "1개의 데이터가 저장되었습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null,
+  "popups": []
+ },
+ "save_wait": [
+  {
+   "at": "23:33:38",
+   "sid": 52,
+   "status": "running",
+   "wait": null,
+   "blocked_by": 0,
+   "elapsed_ms": 207,
+   "stmt": "SELECT A.DIVISION_ID, B.DIVISION_NAME, A.CUSTOMER_PROJECT_CODE, A.CUSTOMER_MODEL, A.SCM_SITE_ID, C.SITE_DESCRIPTION, DEPRTM",
+   "proc": "DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA",
+   "blocker": null,
+   "until": "23:33:44",
+   "elapsed_ms_last": 6286
+  }
+ ],
+ "save_timeout": false,
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "CUSTOMER_PROJECT_CODE": "48V GEN 1.5 CLAR",
+   "CUSTOMER_MODEL": "APBMW48CL-B1-B01",
+   "SCM_SITE_ID": "BMW_DE_MUC",
+   "PROJECT_CODE": "A18BW2003",
+   "ITEM_ID": "",
+   "VALID_YN": "Y",
+   "CUSTOMER_MODEL_TYPE": "",
+   "CONVERT_QTY_PACK": "31.0000000000",
+   "CONVERT_QTY_MODULE": "0E-10",
+   "CONVERT_QTY_CELL": "0E-10",
+   "CREATED_BY": "kyoungtae",
+   "CREATION_DATE": "2019-07-08 16:09:56.817",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2026-11-13 23:33:34.600",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "restore_sql": [
+  {
+   "op": "UPDATE(전 값으로)",
+   "key": [
+    "81",
+    "48V GEN 1.5 CLAR",
+    "APBMW48CL-B1-B01",
+    "BMW_DE_MUC"
+   ],
+   "rows": 1
+  }
+ ],
+ "side_cleanup": [
+  {
+   "table": "DM_MST_CUSTOMER_MODEL_H",
+   "key": [
+    268
+   ],
+   "rows": 1
+  }
+ ],
+ "db_restored": [
+  {
+   "DIVISION_ID": "81",
+   "CUSTOMER_PROJECT_CODE": "48V GEN 1.5 CLAR",
+   "CUSTOMER_MODEL": "APBMW48CL-B1-B01",
+   "SCM_SITE_ID": "BMW_DE_MUC",
+   "PROJECT_CODE": "A18BW2003",
+   "ITEM_ID": "",
+   "VALID_YN": "Y",
+   "CUSTOMER_MODEL_TYPE": "",
+   "CONVERT_QTY_PACK": "30.0000000000",
+   "CONVERT_QTY_MODULE": "0E-10",
+   "CONVERT_QTY_CELL": "0E-10",
+   "CREATED_BY": "kyoungtae",
+   "CREATION_DATE": "2019-07-08 16:09:56.817",
+   "LAST_UPDATED_BY": "kyoungtae",
+   "LAST_UPDATE_DATE": "2019-10-27 21:19:53.010",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "saved_check": [
+  true
+ ]
+}

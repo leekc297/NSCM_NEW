@@ -1,0 +1,543 @@
+{
+ "id": "SCM0016",
+ "from": "dump_find.json",
+ "total": "Total : 1",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer1/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Batch Log",
+     "rows": 1,
+     "cols": 13,
+     "visible": "True",
+     "frozen_cols": "6",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "JOB_ID"
+       ],
+       "label": "JOB_ID",
+       "tag": "JOB_ID",
+       "width": "40",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "job_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "JobName"
+       ],
+       "label": "JobName",
+       "tag": "JOB_NAME",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "job_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Job Description"
+       ],
+       "label": "Job Description",
+       "tag": "JOB_DESCRIPTION",
+       "width": "200",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "job_description",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "STEP_ID"
+       ],
+       "label": "STEP_ID",
+       "tag": "STEP_ID",
+       "width": "160",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "step_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Step Name"
+       ],
+       "label": "Step Name",
+       "tag": "STEP_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "step_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "SCHEDULE_UID"
+       ],
+       "label": "SCHEDULE_UID",
+       "tag": "SCHEDULE_UID",
+       "width": "160",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "schedule_uid",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Schedule Name"
+       ],
+       "label": "Schedule Name",
+       "tag": "SCHEDULE_NAME",
+       "width": "170",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "schedule_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Last Run Date"
+       ],
+       "label": "Last Run Date",
+       "tag": "RUN_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "run_date",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "RUN_STATUS"
+       ],
+       "label": "RUN_STATUS",
+       "tag": "RUN_STATUS",
+       "width": "80",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "run_status",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Last Run Status"
+       ],
+       "label": "Last Run Status",
+       "tag": "RUN_STATUS_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "run_status_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Last Run Duration"
+       ],
+       "label": "Last Run Duration",
+       "tag": "RUN_DURATION",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "run_duration",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Last Run Status Message"
+       ],
+       "label": "Last Run Status Message",
+       "tag": "RUN_STATUS_MESSAGE",
+       "width": "250",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "run_status_message",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Next Run Date"
+       ],
+       "label": "Next Run Date",
+       "tag": "NEXT_RUN_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "next_run_date",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 1,
+     "data": [
+      [
+       "dc4b58b6-6d34-4f6f-be20-785e2b134235",
+       "SSIS Server Maintenance Job",
+       "Runs every day. The job removes operation records from the database that are outside the retention window and maintains a maximum number of versions per project.",
+       "1",
+       "SSIS Server Operation Records Maintenance",
+       "c0c49f0c-c24f-4a15-a888-2939b81f7aba",
+       "SSISDB Scheduler",
+       "2026-11-12 00:00:00",
+       "1",
+       "Succeeded",
+       "00:00:00",
+       "작업이 성공했습니다.  작업이 일정 1198 (SSISDB Scheduler)에 의해 호출되었습니다. 실행할 마지막 단계는 단계 2(SSIS Server Max Version Per Project Maintenance)입니다.",
+       "2026-11-13 00:00:00"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "spdStep",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdStep",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Step Info",
+     "rows": 0,
+     "cols": 11,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "JOB_ID"
+       ],
+       "label": "JOB_ID",
+       "tag": "JOB_ID",
+       "width": "40",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "JOB_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "JOB_NAME"
+       ],
+       "label": "JOB_NAME",
+       "tag": "JOB_NAME",
+       "width": "300",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "JOB_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "STEP_UID"
+       ],
+       "label": "STEP_UID",
+       "tag": "STEP_UID",
+       "width": "200",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_UID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "STEP_ID"
+       ],
+       "label": "STEP_ID",
+       "tag": "STEP_ID",
+       "width": "160",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Step Name"
+       ],
+       "label": "Step Name",
+       "tag": "STEP_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Step Type"
+       ],
+       "label": "Step Type",
+       "tag": "STEP_TYPE",
+       "width": "160",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Command"
+       ],
+       "label": "Command",
+       "tag": "EXEC_COMMAND",
+       "width": "170",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "EXEC_COMMAND",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 7,
+       "header": [
+        "OnSuccessAction"
+       ],
+       "label": "OnSuccessAction",
+       "tag": "ON_SUCCESS_ACTION",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ON_SUCCESS_ACTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Retry Attempts"
+       ],
+       "label": "Retry Attempts",
+       "tag": "RETRY_ATTEMPTS",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RETRY_ATTEMPTS",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Retry Interval(Minutes)"
+       ],
+       "label": "Retry Interval(Minutes)",
+       "tag": "RETRY_INTERVAL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RETRY_INTERVAL",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "OnFailureAction"
+       ],
+       "label": "OnFailureAction",
+       "tag": "ON_FAILURE_ACTION",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ON_FAILURE_ACTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdHist",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdHist",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Batch Run Log",
+     "rows": 0,
+     "cols": 6,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "JOB_ID"
+       ],
+       "label": "JOB_ID",
+       "tag": "JOB_ID",
+       "width": "40",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "JOB_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "RUN_DATE"
+       ],
+       "label": "RUN_DATE",
+       "tag": "RUN_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "RUN_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "RUN_STATUS"
+       ],
+       "label": "RUN_STATUS",
+       "tag": "RUN_STATUS",
+       "width": "200",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "RUN_STATUS",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Run Status"
+       ],
+       "label": "Run Status",
+       "tag": "RUN_STATUS_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "RUN_STATUS_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Run Duration"
+       ],
+       "label": "Run Duration",
+       "tag": "RUN_DURATION",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "RUN_DURATION",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Run Status Message"
+       ],
+       "label": "Run Status Message",
+       "tag": "RUN_STATUS_MESSAGE",
+       "width": "250",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "RUN_STATUS_MESSAGE",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

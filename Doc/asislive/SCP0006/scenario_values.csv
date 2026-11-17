@@ -1,0 +1,8 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0006-S721c3f,DIVISION,"82,40","82,40",,실행 대상,"if (division.ToString() == ""82"" || division.ToString() == ""40"")",
+SCP0006-Sffb1e4,DIVISION,"82,40 (그 밖 값 필요)","82,40,81",,실행 대상,"else of (division.ToString() == ""82"" || division.ToString() == ""40"")",
+SCP0006-S6173f4,DIVISION,"82,40","82,40",,실행 대상,"if (_siteDivision.ToString() == ""82"" || _siteDivision.ToString() == ""40"")",
+SCP0006-Sde3708,DIVISION,"82,40 (그 밖 값 필요)","82,40,81",,실행 대상,"else of (_siteDivision.ToString() == ""82"" || _siteDivision.ToString() == ""40"")",
+SCP0006-S0c6437,DIVISION,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL""))",
+SCP0006-S96ec52,COND,,,,값 미도출,if (spreadInfo.SheetName == SpdSheet.shtPlant) ▸ if (dtPlantSiteSpread != null),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCP0006-S0c6437,COND,,,,값 미도출,"if (cboDivision.ControlValues != null && !cboDivision.ControlValues.Equals(""ALL""))",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

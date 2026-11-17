@@ -1,0 +1,7 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0080-S93aed0,조회,AfterFindData,SCP0080_GroupCodeManagement.cs:934,같은 파일에서 호출,SCP0080_GroupCodeManagement.cs:986,SetQueryInfoGet
+SCP0080-S814d22,저장,AfterSaveData,SCP0080_GroupCodeManagement.cs:957,같은 파일에서 호출,SCP0080_GroupCodeManagement.cs:1061,SetQueryInfoSave
+SCP0080-Sc767cb,저장,AfterSaveData,SCP0080_GroupCodeManagement.cs:963,같은 파일에서 호출,SCP0080_GroupCodeManagement.cs:1061,SetQueryInfoSave
+SCP0080-S926cb8,기타,ChangeColumnTitle,SCP0080_GroupCodeManagement.cs:1786,호출 없음,,
+SCP0080-S0733a0,초기,InitSpreadMain,SCP0080_GroupCodeManagement.cs:925,같은 파일에서 호출,SCP0080_GroupCodeManagement.cs:985,SetQueryInfoGet
+SCP0080-S2a92fd,기타,SetSheetLock,SCP0080_GroupCodeManagement.cs:821,호출 없음,,

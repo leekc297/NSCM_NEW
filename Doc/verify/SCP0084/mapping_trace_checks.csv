@@ -1,50 +1,50 @@
 ﻿row_id,source,check,instance,result
 "monthPicker (Month, 단일)",FE 대조표,X-LOC,"X-LOC|ROW:monthPicker (Month, 단일)",NA
 "monthPicker (Month, 단일)",FE 대조표,G4,"G4|ROW:monthPicker (Month, 단일)",PASS
-"monthPicker (Month, 단일)",FE 대조표,SC1,SC1|SCREEN,FAIL
+"monthPicker (Month, 단일)",FE 대조표,SC1,SC1|SCREEN,PASS
 "monthPicker (Month, 단일)",FE 대조표,G1,"G1|ROW:monthPicker (Month, 단일)",ERROR
 "monthPicker (Month, 단일)",FE 대조표,G6,"G6|ROW:monthPicker (Month, 단일)",NA
 "monthPicker (Month, 단일)",FE 대조표,A1,A1|SP:SCP0084_GET_MONTH_RANGE,REVIEW
-"monthPicker (Month, 단일)",FE 대조표,A6,A6|SP:SCP0084_GET_MONTH_RANGE,REVIEW
+"monthPicker (Month, 단일)",FE 대조표,A6,A6|SP:SCP0084_GET_MONTH_RANGE,ERROR
 "monthPicker (Month, 단일)",FE 대조표,F4,F4|SP:SCP0084_GET_MONTH_RANGE,PASS
 "monthPicker (Month, 단일)",FE 대조표,DB-SYN,DB-SYN|SP:SCP0084_GET_MONTH_RANGE,NOPATH
 "monthPicker (Month, 단일)",FE 대조표,J2,J2|SCREEN,ERROR
 "cboDivision (Division, 다중)",FE 대조표,X-LOC,"X-LOC|ROW:cboDivision (Division, 다중)",NA
 "cboDivision (Division, 다중)",FE 대조표,G4,G4|COND:cboDivision,PASS
-"cboDivision (Division, 다중)",FE 대조표,SC1,SC1|SCREEN,FAIL
+"cboDivision (Division, 다중)",FE 대조표,SC1,SC1|SCREEN,PASS
 "cboDivision (Division, 다중)",FE 대조표,G1,G1|COND:cboDivision,PASS
 "cboDivision (Division, 다중)",FE 대조표,G6,G6|COND:cboDivision,PASS
 "cboDivision (Division, 다중)",FE 대조표,A1,"A1|ROW:cboDivision (Division, 다중)",REVIEW
 "cboDivision (Division, 다중)",FE 대조표,J2,J2|SCREEN,ERROR
 "clbPlant (Plant, 다중, cascade)",FE 대조표,X-LOC,"X-LOC|ROW:clbPlant (Plant, 다중, cascade)",NA
 "clbPlant (Plant, 다중, cascade)",FE 대조표,G4,G4|COND:clbPlant,PASS
-"clbPlant (Plant, 다중, cascade)",FE 대조표,SC1,SC1|SCREEN,FAIL
+"clbPlant (Plant, 다중, cascade)",FE 대조표,SC1,SC1|SCREEN,PASS
 "clbPlant (Plant, 다중, cascade)",FE 대조표,G1,G1|COND:clbPlant,ERROR
 "clbPlant (Plant, 다중, cascade)",FE 대조표,G6,G6|COND:clbPlant,PASS
 "clbPlant (Plant, 다중, cascade)",FE 대조표,A1,"A1|ROW:clbPlant (Plant, 다중, cascade)",REVIEW
 "clbPlant (Plant, 다중, cascade)",FE 대조표,J2,J2|SCREEN,ERROR
 cboLongTermType (다중),FE 대조표,X-LOC,X-LOC|ROW:cboLongTermType (다중),NA
 cboLongTermType (다중),FE 대조표,G4,G4|COND:cboLongTermType,PASS
-cboLongTermType (다중),FE 대조표,SC1,SC1|SCREEN,FAIL
+cboLongTermType (다중),FE 대조표,SC1,SC1|SCREEN,PASS
 cboLongTermType (다중),FE 대조표,G1,G1|COND:cboLongTermType,PASS
 cboLongTermType (다중),FE 대조표,G6,G6|COND:cboLongTermType,PASS
 cboLongTermType (다중),FE 대조표,A1,A1|ROW:cboLongTermType (다중),REVIEW
 cboLongTermType (다중),FE 대조표,J2,J2|SCREEN,ERROR
-cboLongTermType (다중),FE 대조표,B4,B4|COND:cboLongTermType,REVIEW
+cboLongTermType (다중),FE 대조표,B4,B4|COND:cboLongTermType,ERROR
 cboLongTermType (다중),FE 대조표,B3,B3|COND:cboLongTermType,PASS
 GetCheckedListValue → CSV 조립,FE 대조표,X-LOC,X-LOC|ROW:GetCheckedListValue → CSV 조립,NA
 GetCheckedListValue → CSV 조립,FE 대조표,G4,G4|ROW:GetCheckedListValue → CSV 조립,PASS
-GetCheckedListValue → CSV 조립,FE 대조표,SC1,SC1|SCREEN,FAIL
+GetCheckedListValue → CSV 조립,FE 대조표,SC1,SC1|SCREEN,PASS
 GetCheckedListValue → CSV 조립,FE 대조표,G1,G1|ROW:GetCheckedListValue → CSV 조립,ERROR
 GetCheckedListValue → CSV 조립,FE 대조표,G6,G6|ROW:GetCheckedListValue → CSV 조립,NA
 GetCheckedListValue → CSV 조립,FE 대조표,A1,A1|ROW:GetCheckedListValue → CSV 조립,REVIEW
 GetCheckedListValue → CSV 조립,FE 대조표,J2,J2|SCREEN,ERROR
 checkRequiredOfSearch,FE 대조표,X-LOC,X-LOC|ROW:checkRequiredOfSearch,NA
 checkRequiredOfSearch,FE 대조표,G4,G4|ROW:checkRequiredOfSearch,PASS
-checkRequiredOfSearch,FE 대조표,SC1,SC1|SCREEN,FAIL
+checkRequiredOfSearch,FE 대조표,SC1,SC1|SCREEN,PASS
 checkRequiredOfSearch,FE 대조표,G1,G1|ROW:checkRequiredOfSearch,ERROR
 checkRequiredOfSearch,FE 대조표,G6,G6|ROW:checkRequiredOfSearch,NA
-checkRequiredOfSearch,FE 대조표,D4,D4|ROW:checkRequiredOfSearch,NA
+checkRequiredOfSearch,FE 대조표,D4,D4|ROW:checkRequiredOfSearch,ERROR
 checkRequiredOfSearch,FE 대조표,A1,A1|ROW:checkRequiredOfSearch,REVIEW
 checkRequiredOfSearch,FE 대조표,J2,J2|SCREEN,ERROR
 checkRequiredOfSearch,FE 대조표,E3,E3|ROW:checkRequiredOfSearch,PASS
@@ -53,7 +53,7 @@ SetDivisionAuthCheck (권한0행),FE 대조표,X-LOC,X-LOC|ROW:SetDivisionAuthCh
 SetDivisionAuthCheck (권한0행),FE 대조표,K-SA,K-SA|SCREEN,PASS
 SetDivisionAuthCheck (권한0행),FE 대조표,G3,G3|SCREEN,PASS
 SetDivisionAuthCheck (권한0행),FE 대조표,G4,G4|ROW:SetDivisionAuthCheck (권한0행),PASS
-SetDivisionAuthCheck (권한0행),FE 대조표,SC1,SC1|SCREEN,FAIL
+SetDivisionAuthCheck (권한0행),FE 대조표,SC1,SC1|SCREEN,PASS
 SetDivisionAuthCheck (권한0행),FE 대조표,G1,G1|ROW:SetDivisionAuthCheck (권한0행),ERROR
 SetDivisionAuthCheck (권한0행),FE 대조표,G6,G6|ROW:SetDivisionAuthCheck (권한0행),NA
 SetDivisionAuthCheck (권한0행),FE 대조표,A1,A1|ROW:SetDivisionAuthCheck (권한0행),REVIEW
@@ -65,7 +65,7 @@ SetDivisionAuthCheck (권한0행),FE 대조표,H10,H10|SCREEN,PASS
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,A5,"A5|ROW:조회 후 전 컬럼 Lock (R2, W4)",PASS
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,H5,"H5|ROW:조회 후 전 컬럼 Lock (R2, W4)",PASS
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,H2,"H2|ROW:조회 후 전 컬럼 Lock (R2, W4)",PASS
-"조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,D1,"D1|ROW:조회 후 전 컬럼 Lock (R2, W4)",PASS
+"조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,D1,"D1|ROW:조회 후 전 컬럼 Lock (R2, W4)",ERROR
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,D3,"D3|ROW:조회 후 전 컬럼 Lock (R2, W4)",NA
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,J2,J2|SCREEN,ERROR
 "조회 후 전 컬럼 Lock (R2, W4)",FE 대조표,G1,"G1|ROW:조회 후 전 컬럼 Lock (R2, W4)",ERROR
@@ -75,31 +75,31 @@ SetDivisionAuthCheck (권한0행),FE 대조표,H10,H10|SCREEN,PASS
 "EditButton → SwitchLock + LockRange (MEMO만 해제, R3/W6/W7)",FE 대조표,D3,D3|COL:MEMO,NA
 "EditButton → SwitchLock + LockRange (MEMO만 해제, R3/W6/W7)",FE 대조표,J2,J2|SCREEN,ERROR
 **EditButton 노출**,FE 대조표,X-LOC,X-LOC|ROW:**EditButton 노출**,NA
-**EditButton 노출**,FE 대조표,D1,D1|ROW:**EditButton 노출**,PASS
+**EditButton 노출**,FE 대조표,D1,D1|ROW:**EditButton 노출**,ERROR
 **EditButton 노출**,FE 대조표,D3,D3|ROW:**EditButton 노출**,NA
 **EditButton 노출**,FE 대조표,F1,F1|SCREEN,ERROR
 **EditButton 노출**,FE 대조표,F2,F2|SCREEN,ERROR
 **EditButton 노출**,FE 대조표,J2,J2|SCREEN,ERROR
 Edit 가드 fps==null (R4),FE 대조표,X-LOC,X-LOC|ROW:Edit 가드 fps==null (R4),NA
-Edit 가드 fps==null (R4),FE 대조표,D1,D1|ROW:Edit 가드 fps==null (R4),PASS
+Edit 가드 fps==null (R4),FE 대조표,D1,D1|ROW:Edit 가드 fps==null (R4),ERROR
 Edit 가드 fps==null (R4),FE 대조표,D3,D3|ROW:Edit 가드 fps==null (R4),NA
 Edit 가드 fps==null (R4),FE 대조표,J2,J2|SCREEN,ERROR
 Edit 가드 RowCount==0 (R5),FE 대조표,X-LOC,X-LOC|ROW:Edit 가드 RowCount==0 (R5),NA
-Edit 가드 RowCount==0 (R5),FE 대조표,D1,D1|ROW:Edit 가드 RowCount==0 (R5),PASS
+Edit 가드 RowCount==0 (R5),FE 대조표,D1,D1|ROW:Edit 가드 RowCount==0 (R5),ERROR
 Edit 가드 RowCount==0 (R5),FE 대조표,D3,D3|ROW:Edit 가드 RowCount==0 (R5),NA
 Edit 가드 RowCount==0 (R5),FE 대조표,J2,J2|SCREEN,ERROR
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,X-LOC,X-LOC|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),NA
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,A5,A5|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),PASS
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,H5,H5|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),PASS
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,H2,H2|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),PASS
-Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,D1,D1|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),PASS
+Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,D1,D1|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),ERROR
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,D3,D3|ROW:Edit 가드 Action(String) 컬럼 hidden (R6),NA
 Edit 가드 Action(String) 컬럼 hidden (R6),FE 대조표,J2,J2|SCREEN,ERROR
 cellclipboardPast=false (R7),FE 대조표,X-LOC,X-LOC|ROW:cellclipboardPast=false (R7),NA
 cellclipboardPast=false (R7),FE 대조표,F3,F3|SCREEN,ERROR
 cellclipboardPast=false (R7),FE 대조표,E1,E1|ROW:cellclipboardPast=false (R7),NA
-cellclipboardPast=false (R7),FE 대조표,C3,C3|ROW:cellclipboardPast=false (R7),NA
-cellclipboardPast=false (R7),FE 대조표,D1,D1|ROW:cellclipboardPast=false (R7),PASS
+cellclipboardPast=false (R7),FE 대조표,C3,C3|ROW:cellclipboardPast=false (R7),ERROR
+cellclipboardPast=false (R7),FE 대조표,D1,D1|ROW:cellclipboardPast=false (R7),ERROR
 cellclipboardPast=false (R7),FE 대조표,D3,D3|ROW:cellclipboardPast=false (R7),NA
 cellclipboardPast=false (R7),FE 대조표,J2,J2|SCREEN,ERROR
 "SetSheetHeaderColumn + ColumnHeaderHeight(0,50) 다단 헤더 (R1/W2",FE 대조표,X-LOC,"X-LOC|ROW:SetSheetHeaderColumn + ColumnHeaderHeight(0,50) 다단 헤더 (R1/W2",NA
@@ -110,21 +110,33 @@ cellclipboardPast=false (R7),FE 대조표,J2,J2|SCREEN,ERROR
 "SetSheetHeaderColumn + ColumnHeaderHeight(0,50) 다단 헤더 (R1/W2",FE 대조표,F2,F2|SCREEN,ERROR
 "SetSheetHeaderColumn + ColumnHeaderHeight(0,50) 다단 헤더 (R1/W2",FE 대조표,J2,J2|SCREEN,ERROR
 SmartColMerge (W2/W5),FE 대조표,X-LOC,X-LOC|ROW:SmartColMerge (W2/W5),NA
-SmartColMerge (W2/W5),FE 대조표,A5,A5|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,A5,A5|COL:YYYYMM,PASS
 SmartColMerge (W2/W5),FE 대조표,A5,A5|COL:DIVISION_ID,PASS
-SmartColMerge (W2/W5),FE 대조표,H5,H5|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,A5,A5|COL:PLANT_DESCRIPTION,PASS
+SmartColMerge (W2/W5),FE 대조표,A5,A5|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H5,H5|COL:YYYYMM,PASS
 SmartColMerge (W2/W5),FE 대조표,H5,H5|COL:DIVISION_ID,PASS
-SmartColMerge (W2/W5),FE 대조표,H2,H2|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H5,H5|COL:PLANT_DESCRIPTION,PASS
+SmartColMerge (W2/W5),FE 대조표,H5,H5|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H2,H2|COL:YYYYMM,PASS
 SmartColMerge (W2/W5),FE 대조표,H2,H2|COL:DIVISION_ID,PASS
-SmartColMerge (W2/W5),FE 대조표,H3,H3|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H2,H2|COL:PLANT_DESCRIPTION,PASS
+SmartColMerge (W2/W5),FE 대조표,H2,H2|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H3,H3|COL:YYYYMM,PASS
 SmartColMerge (W2/W5),FE 대조표,H3,H3|COL:DIVISION_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,H3,H3|COL:PLANT_DESCRIPTION,PASS
+SmartColMerge (W2/W5),FE 대조표,H3,H3|COL:PLANT_ID,PASS
 SmartColMerge (W2/W5),FE 대조표,F1,F1|SCREEN,ERROR
 SmartColMerge (W2/W5),FE 대조표,F2,F2|SCREEN,ERROR
 SmartColMerge (W2/W5),FE 대조표,J2,J2|SCREEN,ERROR
-SmartColMerge (W2/W5),FE 대조표,E3,E3|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,E3,E3|COL:YYYYMM,PASS
 SmartColMerge (W2/W5),FE 대조표,E3,E3|COL:DIVISION_ID,PASS
-SmartColMerge (W2/W5),FE 대조표,E4,E4|COL:PLANT_ID,NA
+SmartColMerge (W2/W5),FE 대조표,E3,E3|COL:PLANT_DESCRIPTION,PASS
+SmartColMerge (W2/W5),FE 대조표,E3,E3|COL:PLANT_ID,PASS
+SmartColMerge (W2/W5),FE 대조표,E4,E4|COL:YYYYMM,NA
 SmartColMerge (W2/W5),FE 대조표,E4,E4|COL:DIVISION_ID,NA
+SmartColMerge (W2/W5),FE 대조표,E4,E4|COL:PLANT_DESCRIPTION,NA
+SmartColMerge (W2/W5),FE 대조표,E4,E4|COL:PLANT_ID,NA
 siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,X-LOC,X-LOC|ROW:siMain.Query(ds) 컬럼명 바인딩 (W3),NA
 siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,A5,A5|ROW:siMain.Query(ds) 컬럼명 바인딩 (W3),PASS
 siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,H5,H5|ROW:siMain.Query(ds) 컬럼명 바인딩 (W3),PASS
@@ -133,9 +145,9 @@ siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,F1,F1|SCREEN,ERROR
 siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,F2,F2|SCREEN,ERROR
 siMain.Query(ds) 컬럼명 바인딩 (W3),FE 대조표,J2,J2|SCREEN,ERROR
 FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,X-LOC,X-LOC|ROW:FIXED_FLAG=Y (ITEM_UOM) 틀고정,NA
-FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,A5,A5|ROW:FIXED_FLAG=Y (ITEM_UOM) 틀고정,PASS
-FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,H5,H5|ROW:FIXED_FLAG=Y (ITEM_UOM) 틀고정,PASS
-FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,H2,H2|ROW:FIXED_FLAG=Y (ITEM_UOM) 틀고정,PASS
+FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,A5,A5|COL:ITEM_UOM,PASS
+FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,H5,H5|COL:ITEM_UOM,PASS
+FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,H2,H2|COL:ITEM_UOM,PASS
 FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,F1,F1|SCREEN,ERROR
 FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,F2,F2|SCREEN,ERROR
 FIXED_FLAG=Y (ITEM_UOM) 틀고정,FE 대조표,J2,J2|SCREEN,ERROR
@@ -174,43 +186,55 @@ ExcelButton + MSG00100 confirm (R9),FE 대조표,H2,H2|ROW:ExcelButton + MSG0010
 ExcelButton + MSG00100 confirm (R9),FE 대조표,F1,F1|SCREEN,ERROR
 ExcelButton + MSG00100 confirm (R9),FE 대조표,F2,F2|SCREEN,ERROR
 ExcelButton + MSG00100 confirm (R9),FE 대조표,J2,J2|SCREEN,ERROR
-ExcelButton + MSG00100 confirm (R9),FE 대조표,E4,E4|MSG:MSG00100,NA
+ExcelButton + MSG00100 confirm (R9),FE 대조표,E4,E4|MSG:MSG00100,ERROR
 ExcelButton + MSG00100 confirm (R9),FE 대조표,E4,E4|MSG:MSG00719,NA
 ExcelButton + MSG00100 confirm (R9),FE 대조표,I1,I1|SCREEN,ERROR
 ExcelButton + MSG00100 confirm (R9),FE 대조표,H10,H10|SCREEN,PASS
 ExcelButton + MSG00100 confirm (R9),FE 대조표,E3,E3|ROW:ExcelButton + MSG00100 confirm (R9),PASS
 ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,X-LOC,X-LOC|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),NA
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,A5,A5|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),PASS
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H5,H5|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),PASS
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H2,H2|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,A5,A5|COL:OCCR_RSN_CD,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,A5,A5|COL:EXHT_TP_CD,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,A5,A5|COL:QTY_1,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H5,H5|COL:OCCR_RSN_CD,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H5,H5|COL:EXHT_TP_CD,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H5,H5|COL:QTY_1,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H2,H2|COL:OCCR_RSN_CD,NA
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H2,H2|COL:EXHT_TP_CD,PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,H2,H2|COL:QTY_1,PASS
 ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,F1,F1|SCREEN,ERROR
 ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,F2,F2|SCREEN,ERROR
 ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,J2,J2|SCREEN,ERROR
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,D4,D4|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),NA
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,D4,D4|COL:OCCR_RSN_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,D4,D4|COL:EXHT_TP_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,D4,D4|COL:QTY_1,ERROR
 ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,D6,D6|SCREEN,NA
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B4,B4|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),REVIEW
-ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B3,B3|ROW:ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),PASS
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B4,B4|COL:OCCR_RSN_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B4,B4|COL:EXHT_TP_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B4,B4|COL:QTY_1,NA
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B3,B3|COL:OCCR_RSN_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B3,B3|COL:EXHT_TP_CD,ERROR
+ORPHAN 18컬럼(OCCR_RSN_CD·EXHT_TP_CD·QTY_1~12 등),FE 대조표,B3,B3|COL:QTY_1,NA
 ACT:SCP0084_LongTermStock..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0084_LongTermStock..ctor:114:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0084_LongTermStock..ctor:117:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged:810:1,AS-IS 액션,C2,C2|ENTRY:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,NA
-ACT:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged:810:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,NA
+ACT:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged:810:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,ERROR
 ACT:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged:810:1,AS-IS 액션,C6,C6|ENTRY:SCP0084_LongTermStock.CboDivision_SelectedIndexChanged,NA
 ACT:SCP0084_LongTermStock.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.CreateSpread,ERROR
-ACT:SCP0084_LongTermStock.CreateSpread:186:1,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
+ACT:SCP0084_LongTermStock.CreateSpread:186:1,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:186:1,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:186:1,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:186:1,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
-ACT:SCP0084_LongTermStock.CreateSpread:188:2,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
+ACT:SCP0084_LongTermStock.CreateSpread:188:2,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:188:2,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:188:2,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:188:2,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
-ACT:SCP0084_LongTermStock.CreateSpread:190:3,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
+ACT:SCP0084_LongTermStock.CreateSpread:190:3,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:190:3,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:190:3,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:190:3,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
-ACT:SCP0084_LongTermStock.CreateSpread:191:4,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
+ACT:SCP0084_LongTermStock.CreateSpread:191:4,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:191:4,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:191:4,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.CreateSpread,PASS
 ACT:SCP0084_LongTermStock.CreateSpread:191:4,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.CreateSpread,NA
@@ -220,37 +244,37 @@ ACT:SCP0084_LongTermStock.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PAS
 ACT:SCP0084_LongTermStock.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
 ACT:SCP0084_LongTermStock.EditButton,AS-IS 액션,D1,D1|COL:MEMO,PASS
 ACT:SCP0084_LongTermStock.EditButton,AS-IS 액션,D3,D3|COL:MEMO,NA
-ACT:SCP0084_LongTermStock.EditButton:229:1,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:229:1,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:229:1,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:229:2,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:229:2,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:229:2,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:231:3,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:231:3,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:231:3,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:231:4,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:231:4,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:231:4,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:232:5,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:232:5,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:232:5,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:233:6,AS-IS 액션,D1,D1|LEDGER:V-a91c9b1c,NA
-ACT:SCP0084_LongTermStock.EditButton:235:7,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:233:6,AS-IS 액션,D1,D1|LEDGER:V-a91c9b1c,ERROR
+ACT:SCP0084_LongTermStock.EditButton:235:7,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:235:7,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:236:8,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:236:8,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:236:8,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:237:9,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:237:9,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:237:9,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:239:10,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:239:10,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:239:10,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
 ACT:SCP0084_LongTermStock.EditButton:242:11,AS-IS 액션,D1,D1|LEDGER:V-08d8aa9d,PASS
-ACT:SCP0084_LongTermStock.EditButton:244:12,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:244:12,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:244:12,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
-ACT:SCP0084_LongTermStock.EditButton:246:13,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,PASS
+ACT:SCP0084_LongTermStock.EditButton:246:13,AS-IS 액션,D1,D1|ENTRY:SCP0084_LongTermStock.EditButton,ERROR
 ACT:SCP0084_LongTermStock.EditButton:246:13,AS-IS 액션,D3,D3|ENTRY:SCP0084_LongTermStock.EditButton,NA
 ACT:SCP0084_LongTermStock.EditButton:249:14,AS-IS 액션,D1,D1|LEDGER:V-ce55cccc,PASS
 ACT:SCP0084_LongTermStock.EditButton:249:14,AS-IS 액션,D1,D1|COL:MEMO,PASS
 ACT:SCP0084_LongTermStock.EditButton:249:14,AS-IS 액션,D3,D3|COL:MEMO,NA
 ACT:SCP0084_LongTermStock.ExcelButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExcelButton,ERROR
-ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,E4,E4|LEDGER:V-8a056ad0,NA
+ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,E4,E4|LEDGER:V-8a056ad0,ERROR
 ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExcelButton,ERROR
-ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,E4,E4|MSG:MSG00100,NA
+ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,E4,E4|MSG:MSG00100,ERROR
 ACT:SCP0084_LongTermStock.ExcelButton:263:1,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.ExcelButton:265:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExcelButton,ERROR
 ACT:SCP0084_LongTermStock.ExcelButton:266:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExcelButton,ERROR
@@ -301,8 +325,12 @@ ACT:SCP0084_LongTermStock.ExportExcelData:603:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:
 ACT:SCP0084_LongTermStock.ExportExcelData:605:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:606:42,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:614:43,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
+ACT:SCP0084_LongTermStock.ExportExcelData:614:43,AS-IS 액션,C3,C3|COL:LONG_TERM_STOCK_QTY,ERROR
+ACT:SCP0084_LongTermStock.ExportExcelData:614:43,AS-IS 액션,C3,C3|COL:LONG_TERM_STOCK_AMOUNT,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:615:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:622:45,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
+ACT:SCP0084_LongTermStock.ExportExcelData:622:45,AS-IS 액션,C3,C3|COL:LONG_TERM_STOCK_AMOUNT_XLS,ERROR
+ACT:SCP0084_LongTermStock.ExportExcelData:622:45,AS-IS 액션,C3,C3|COL:LONG_TERM_STOCK_QTY_XLS,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:623:46,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:629:47,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:631:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
@@ -358,8 +386,8 @@ ACT:SCP0084_LongTermStock.ExportExcelData:748:97,AS-IS 액션,X-ROW,X-ROW|ENTRY:
 ACT:SCP0084_LongTermStock.ExportExcelData:749:98,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:750:99,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:751:100,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
-ACT:SCP0084_LongTermStock.ExportExcelData:752:101,AS-IS 액션,G5,G5|LEDGER:V-17e9559b,NA
-ACT:SCP0084_LongTermStock.ExportExcelData:752:101,AS-IS 액션,H6,H6|LEDGER:V-05a7b55d,NA
+ACT:SCP0084_LongTermStock.ExportExcelData:752:101,AS-IS 액션,G5,G5|LEDGER:V-17e9559b,ERROR
+ACT:SCP0084_LongTermStock.ExportExcelData:752:101,AS-IS 액션,H6,H6|LEDGER:V-05a7b55d,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:752:101,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:755:102,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
 ACT:SCP0084_LongTermStock.ExportExcelData:757:103,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.ExportExcelData,ERROR
@@ -442,10 +470,10 @@ ACT:SCP0084_LongTermStock.GetMonthRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_L
 ACT:SCP0084_LongTermStock.GetMonthRange:352:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
 ACT:SCP0084_LongTermStock.GetMonthRange:354:2,AS-IS 액션,F4,F4|SP:SCP0084_GET_MONTH_RANGE,PASS
 ACT:SCP0084_LongTermStock.GetMonthRange:354:2,AS-IS 액션,DB-SYN,DB-SYN|SP:SCP0084_GET_MONTH_RANGE,NOPATH
-ACT:SCP0084_LongTermStock.GetMonthRange:355:3,AS-IS 액션,B4,B4|ENTRY:SCP0084_LongTermStock.GetMonthRange,REVIEW
-ACT:SCP0084_LongTermStock.GetMonthRange:355:3,AS-IS 액션,B3,B3|ENTRY:SCP0084_LongTermStock.GetMonthRange,PASS
-ACT:SCP0084_LongTermStock.GetMonthRange:357:4,AS-IS 액션,B4,B4|ENTRY:SCP0084_LongTermStock.GetMonthRange,REVIEW
-ACT:SCP0084_LongTermStock.GetMonthRange:357:4,AS-IS 액션,B3,B3|ENTRY:SCP0084_LongTermStock.GetMonthRange,PASS
+ACT:SCP0084_LongTermStock.GetMonthRange:355:3,AS-IS 액션,B4,B4|ENTRY:SCP0084_LongTermStock.GetMonthRange,ERROR
+ACT:SCP0084_LongTermStock.GetMonthRange:355:3,AS-IS 액션,B3,B3|ENTRY:SCP0084_LongTermStock.GetMonthRange,ERROR
+ACT:SCP0084_LongTermStock.GetMonthRange:357:4,AS-IS 액션,B4,B4|ENTRY:SCP0084_LongTermStock.GetMonthRange,ERROR
+ACT:SCP0084_LongTermStock.GetMonthRange:357:4,AS-IS 액션,B3,B3|ENTRY:SCP0084_LongTermStock.GetMonthRange,ERROR
 ACT:SCP0084_LongTermStock.InitControls,AS-IS 액션,G6,G6|COND:cboDivision,PASS
 ACT:SCP0084_LongTermStock.InitControls,AS-IS 액션,G6,G6|COND:cboLongTermType,PASS
 ACT:SCP0084_LongTermStock.InitControls,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -517,387 +545,387 @@ ACT:SCP0084_LongTermStock.SCM_SYS_LOG_BATCH:528:11,AS-IS 액션,X-ROW,X-ROW|ENTR
 ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveButton,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveButton:255:1,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo,AS-IS 액션,F2,F2|SCREEN,ERROR
-ACT:SCP0084_LongTermStock.SaveData_Memo,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:374:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SaveData_Memo,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:378:2,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:381:3,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:4,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:383:5,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:385:6,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:387:7,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:388:8,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:389:9,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:390:10,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:391:11,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:392:12,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:393:13,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:394:14,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:395:15,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:396:16,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:397:17,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:398:18,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:400:19,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:402:20,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:404:21,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:405:22,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:406:23,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:408:24,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:409:25,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:411:26,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:412:27,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:413:28,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:414:29,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:415:30,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:416:31,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:417:32,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:418:33,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:419:34,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:420:35,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:422:36,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:432:37,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:435:38,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:436:39,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:436:39,AS-IS 액션,F2,F2|SCREEN,ERROR
-ACT:SCP0084_LongTermStock.SaveData_Memo:436:39,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:436:39,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:436:39,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:438:40,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:440:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SaveData_Memo,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:441:42,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:443:43,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:447:44,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:449:45,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:450:46,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:452:47,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:453:48,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:455:49,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:457:50,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,E4,E4|LEDGER:V-d95d50c8,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,E4,E4|MSG:MSG00004,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:458:51,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:459:52,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:463:53,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:465:54,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:466:55,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,E4,E4|LEDGER:V-b7834ea4,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,E4,E4|MSG:MSG00003,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:467:56,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:473:57,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:474:58,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:475:59,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:476:60,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,E4,E4|LEDGER:V-a7c693c9,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SaveData_Memo,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:478:61,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:482:62,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:484:63,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:497:64,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,E4,E4|LEDGER:V-de3dcfeb,NA
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SaveData_Memo,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:498:65,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:502:66,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F2,F2|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F4,F4|SP:P_SCP0084_GET_LONG_TERM_STOCK,PASS
-ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,NA
+ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F4,F4|SP:P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET,PASS
 ACT:SCP0084_LongTermStock.SaveData_Memo:503:67,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0084_LongTermStock.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetChangedControl,ERROR
 ACT:SCP0084_LongTermStock.SetChangedControl,AS-IS 액션,E4,E4|COND:cboDivision,NA
 ACT:SCP0084_LongTermStock.SetChangedControl,AS-IS 액션,E4,E4|COND:clbPlant,NA
 ACT:SCP0084_LongTermStock.SetChangedControl:175:1,AS-IS 액션,E4,E4|COND:cboDivision,NA
-ACT:SCP0084_LongTermStock.SetChangedControl:176:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
+ACT:SCP0084_LongTermStock.SetChangedControl:176:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,ERROR
 ACT:SCP0084_LongTermStock.SetChangedControl:176:2,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
-ACT:SCP0084_LongTermStock.SetChangedControl:177:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
+ACT:SCP0084_LongTermStock.SetChangedControl:177:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,ERROR
 ACT:SCP0084_LongTermStock.SetChangedControl:177:3,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
-ACT:SCP0084_LongTermStock.SetChangedControl:179:4,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
+ACT:SCP0084_LongTermStock.SetChangedControl:179:4,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetChangedControl,ERROR
 ACT:SCP0084_LongTermStock.SetChangedControl:179:4,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetChangedControl,NA
 ACT:SCP0084_LongTermStock.SetChangedControl:181:5,AS-IS 액션,E4,E4|COND:clbPlant,NA
 ACT:SCP0084_LongTermStock.SetChangedControl:181:5,AS-IS 액션,C1,C1|COND:clbPlant,PASS
 ACT:SCP0084_LongTermStock.SetChangedControl:181:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetChangedControl,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
-ACT:SCP0084_LongTermStock.SetColumnFooterData:791:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
+ACT:SCP0084_LongTermStock.SetColumnFooterData:791:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData:791:1,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
-ACT:SCP0084_LongTermStock.SetColumnFooterData:792:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
+ACT:SCP0084_LongTermStock.SetColumnFooterData:792:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData:792:2,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
-ACT:SCP0084_LongTermStock.SetColumnFooterData:794:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
+ACT:SCP0084_LongTermStock.SetColumnFooterData:794:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData:794:3,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,NA
 ACT:SCP0084_LongTermStock.SetColumnFooterData:796:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData:797:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
@@ -905,28 +933,28 @@ ACT:SCP0084_LongTermStock.SetColumnFooterData:798:6,AS-IS 액션,X-ROW,X-ROW|ENT
 ACT:SCP0084_LongTermStock.SetColumnFooterData:799:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetColumnFooterData:801:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetColumnFooterData,ERROR
 ACT:SCP0084_LongTermStock.SetMonthRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetMonthRange,ERROR
-ACT:SCP0084_LongTermStock.SetMonthRange:363:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetMonthRange,NA
+ACT:SCP0084_LongTermStock.SetMonthRange:363:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetMonthRange,ERROR
 ACT:SCP0084_LongTermStock.SetMonthRange:363:1,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetMonthRange,NA
-ACT:SCP0084_LongTermStock.SetMonthRange:365:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetMonthRange,NA
+ACT:SCP0084_LongTermStock.SetMonthRange:365:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetMonthRange,ERROR
 ACT:SCP0084_LongTermStock.SetMonthRange:365:2,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetMonthRange,NA
 ACT:SCP0084_LongTermStock.SetMonthRange:366:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetMonthRange,ERROR
 ACT:SCP0084_LongTermStock.SetMonthRange:367:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetMonthRange,ERROR
 ACT:SCP0084_LongTermStock.SetSpreadInit,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0084_LongTermStock.SetSpreadInit,ERROR
-ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
-ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,ERROR
 ACT:SCP0084_LongTermStock.SetSpreadInit:205:1,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
-ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
-ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,ERROR
 ACT:SCP0084_LongTermStock.SetSpreadInit:206:2,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
-ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,A5,A5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,H2,H2|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,H5,H5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,PASS
 ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,D5,D5|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
-ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA
+ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,C3,C3|ENTRY:SCP0084_LongTermStock.SetSpreadInit,ERROR
 ACT:SCP0084_LongTermStock.SetSpreadInit:207:3,AS-IS 액션,E4,E4|ENTRY:SCP0084_LongTermStock.SetSpreadInit,NA

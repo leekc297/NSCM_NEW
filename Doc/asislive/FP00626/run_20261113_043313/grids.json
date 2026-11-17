@@ -1,0 +1,559 @@
+{
+ "id": "FP00626",
+ "from": "dump_find.json",
+ "total": "Total : ",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdSub",
+   "path": "/splitter/SplitterPanel/infoPanel/spdSub",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": false,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "PlanInfo",
+     "rows": 0,
+     "cols": 7,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Type"
+       ],
+       "label": "Type",
+       "tag": "PLAN_TYPE",
+       "width": "110",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Instance"
+       ],
+       "label": "Instance",
+       "tag": "INSTANCE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plan ID"
+       ],
+       "label": "Plan ID",
+       "tag": "RELEASE_PLAN_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Building"
+       ],
+       "label": "Building",
+       "tag": "RELEASE_VALUE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Creator"
+       ],
+       "label": "Creator",
+       "tag": "INSERT_ID",
+       "width": "200",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Create Dttm"
+       ],
+       "label": "Create Dttm",
+       "tag": "INSERT_TIME",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdMain",
+   "path": "/splitter/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Amend",
+     "rows": 0,
+     "cols": 25,
+     "visible": "True",
+     "frozen_cols": "15",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site",
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Applied Model",
+        "Applied Model"
+       ],
+       "label": "Applied Model",
+       "tag": "MODEL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MODEL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "MODEL_NICK_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MODEL_NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Material (Pancake)",
+        "Material (Pancake)"
+       ],
+       "label": "Material (Pancake)",
+       "tag": "ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Material (Notched-Pancake)",
+        "Material (Notched-Pancake)"
+       ],
+       "label": "Material (Notched-Pancake)",
+       "tag": "NPC_ITEM_ID",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "NPC_ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Item UOM",
+        "Item UOM"
+       ],
+       "label": "Item UOM",
+       "tag": "ITEM_UOM",
+       "width": "70",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Item Class",
+        "Item Class"
+       ],
+       "label": "Item Class",
+       "tag": "MODEL_LEVEL_3_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MODEL_LEVEL_3_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "L/T",
+        "L/T"
+       ],
+       "label": "L/T",
+       "tag": "LT",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "BOH",
+        "Total"
+       ],
+       "label": "Total",
+       "tag": "BOH",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "BOH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "BOH",
+        "J/R"
+       ],
+       "label": "J/R",
+       "tag": "JR_BOH",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "JR_BOH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "BOH",
+        "Pancake"
+       ],
+       "label": "Pancake",
+       "tag": "PC_BOH",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PC_BOH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Cate ID",
+        "Cate ID"
+       ],
+       "label": "Cate ID",
+       "tag": "CATEGORY_ID",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CATEGORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Category",
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATEGORY_NAME",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CATEGORY_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Data Type",
+        "Data Type"
+       ],
+       "label": "Data Type",
+       "tag": "DATA_TYPE",
+       "width": "80",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DATA_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Prev Boh Qty",
+        "Prev Boh Qty"
+       ],
+       "label": "Prev Boh Qty",
+       "tag": "PREV_BOH_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PREV_BOH_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Post Boh Qty",
+        "Post Boh Qty"
+       ],
+       "label": "Post Boh Qty",
+       "tag": "POST_BOH_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "POST_BOH_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Boh Qty",
+        "Boh Qty"
+       ],
+       "label": "Boh Qty",
+       "tag": "BOH_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "BOH_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "PC Boh Qty",
+        "PC Boh Qty"
+       ],
+       "label": "PC Boh Qty",
+       "tag": "PC_BOH_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PC_BOH_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "JR Boh Qty",
+        "JR Boh Qty"
+       ],
+       "label": "JR Boh Qty",
+       "tag": "JR_BOH_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "JR_BOH_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Hold Qty",
+        "Hold Qty"
+       ],
+       "label": "Hold Qty",
+       "tag": "HOLD_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "HOLD_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "PC Hold Qty",
+        "PC Hold Qty"
+       ],
+       "label": "PC Hold Qty",
+       "tag": "PC_HOLD_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PC_HOLD_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "JR Hold Qty",
+        "JR Hold Qty"
+       ],
+       "label": "JR Hold Qty",
+       "tag": "JR_HOLD_QTY",
+       "width": "0",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "JR_HOLD_QTY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

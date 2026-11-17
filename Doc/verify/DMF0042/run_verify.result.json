@@ -1,0 +1,18 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-17T15:12:52+09:00",
+ "producer": "run_verify",
+ "id": "DMF0042",
+ "skip_e2e": false,
+ "started": "2026-11-17 15:03:59",
+ "state": "error",
+ "verdict": null,
+ "why": "exit 2 — 멈춘 단계: 인자",
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  }
+ ],
+ "issues": []
+}

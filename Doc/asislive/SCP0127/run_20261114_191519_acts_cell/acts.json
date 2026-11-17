@@ -1,0 +1,181 @@
+{
+ "id": "SCP0127",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[VALUE_TYPE]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0021_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-S42f879",
+    "SCP0127-Sa802ed",
+    "SCP0127-S906e15",
+    "SCP0127-S6bf6e9",
+    "SCP0127-S38532f"
+   ]
+  },
+  {
+   "control": "spdMain[OPMZ_PLAN_GR_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-S42f879",
+    "SCP0127-Sa802ed",
+    "SCP0127-S906e15",
+    "SCP0127-S6bf6e9",
+    "SCP0127-S38532f"
+   ]
+  },
+  {
+   "control": "spdMain[SCM_SITE_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-S42f879",
+    "SCP0127-Sa802ed",
+    "SCP0127-S906e15",
+    "SCP0127-S6bf6e9",
+    "SCP0127-S38532f"
+   ]
+  },
+  {
+   "control": "spdMain[STAGE]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-S42f879",
+    "SCP0127-Sa802ed",
+    "SCP0127-S906e15",
+    "SCP0127-S6bf6e9",
+    "SCP0127-S38532f"
+   ]
+  },
+  {
+   "control": "spdMain[VALID_YN]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-S42f879",
+    "SCP0127-Sa802ed",
+    "SCP0127-S906e15",
+    "SCP0127-S6bf6e9",
+    "SCP0127-S38532f"
+   ]
+  },
+  {
+   "control": "spdMain[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0127-Sdb912c",
+    "SCP0127-S7b4d50"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 19:13:26",
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 5,
+   "named_cols": [
+    "VALUE_TYPE",
+    "OPMZ_PLAN_GR_ID",
+    "SCM_SITE_ID",
+    "STAGE",
+    "VALID_YN"
+   ],
+   "used": [
+    "VALUE_TYPE",
+    "OPMZ_PLAN_GR_ID",
+    "SCM_SITE_ID",
+    "STAGE",
+    "VALID_YN"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  },
+  {
+   "kind": "dbl",
+   "scenarios": 2,
+   "named_cols": [
+    "ITEM_ID"
+   ],
+   "used": [
+    "ITEM_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

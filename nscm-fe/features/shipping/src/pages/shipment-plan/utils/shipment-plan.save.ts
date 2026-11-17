@@ -261,6 +261,11 @@ export const collectRequestConfirmSaveRows = (
   for (const [key, getter] of Object.entries(map)) {
     payload[key] = dirty.map(getter).join('^');
   }
+  // userId 는 감사컬럼(P_USER_ID 스칼라) — SP 가 '^' 분해 없이 CREATED_BY/CHG_REQ 에 그대로 넣으므로
+  //   폴딩하면 안 된다(형제 collectConfirmSaveRows L393·drafting L426 과 동일 규칙, 결함 D-2 동형).
+  //   위 루프가 N행만큼 접은 값을 단일 userId 로 복구한다 — 종전 누락으로 XIF CREATED_BY 가
+  //   "userId^userId^…" 로 적재됐다(사용자 신고 2026-11-11).
+  payload.userId = userId;
   return payload;
 };
 

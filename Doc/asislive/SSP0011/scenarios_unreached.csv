@@ -1,0 +1,16 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0011-S681f1e,조회,GetFromSiteByDivision,SSP0011_PSI.cs:208,호출 없음,,
+SSP0011-S1d7d4f,조회,GetLastPlanVersion,SSP0011_PSI.cs:620,호출 없음,,
+SSP0011-S0af853,조회,GetLastPlanVersion,SSP0011_PSI.cs:641,호출 없음,,
+SSP0011-S96bd28,초기,InitSpread,SSP0011_PSI.cs:291,주석 안에서만 호출,SSP0011_PSI.cs:222; SSP0011_PSI.cs:664,
+SSP0011-S78a5a8,초기,InitSpreadDateColumn,SSP0011_PSI.cs:374,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-Sf6182a,초기,InitSpreadDateColumn,SSP0011_PSI.cs:377,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-Sba87dc,초기,InitSpreadDateColumn,SSP0011_PSI.cs:380,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-S346303,초기,InitSpreadDateColumn,SSP0011_PSI.cs:386,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-Sede481,초기,InitSpreadDateColumn,SSP0011_PSI.cs:400,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-S00ad82,초기,InitSpreadDateColumn,SSP0011_PSI.cs:411,같은 파일에서 호출,SSP0011_PSI.cs:246; SSP0011_PSI.cs:336,"InitSpread,InitSpread_2"
+SSP0011-Sd2f3b0,기타,SetChangedPeriod,SSP0011_PSI.cs:988,호출 없음,,
+SSP0011-Sb69d72,기타,SetChangedPeriod,SSP0011_PSI.cs:991,호출 없음,,
+SSP0011-Sc2c5b0,기타,SetChangedPeriod,SSP0011_PSI.cs:997,호출 없음,,
+SSP0011-S362018,기타,ValidateUserInput,SSP0011_PSI.cs:911,호출 없음,,
+SSP0011-S0ab7cb,기타,ValidateUserInput,SSP0011_PSI.cs:918,호출 없음,,

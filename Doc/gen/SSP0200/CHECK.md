@@ -1,0 +1,102 @@
+# [Harness] SSP0200 shipment-change-request-plan — BLOCK 3 / WARN 97
+
+- BLOCK F01 상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용 @components/ChangeRequestPlanSubGrid.tsx:8
+- BLOCK F01 상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용 @components/ShipmentChangeRequestPlanMainGrid.tsx:9
+- WARN F13 native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7) @components/ChangeRequestPlanSubGrid.tsx:76
+- WARN AC1 액션 대조표 미처리 1170행: AC-2d194e33(상태 빈칸 UI_PROP a.division_id), AC-70a48957(상태 빈칸 UI_PROP a.bod_id), AC-8a311040(상태 빈칸 UI_PROP a.incoterms), AC-5a7dd5bd(상태 빈칸 UI_PROP a.priority), AC-9533cc9d(상태 빈칸 UI_PROP a.transport_mode), AC-8ba95582(상태 빈칸 UI_PROP a.operation_group), AC-d7f98413(상태 빈칸 DATA_OP returnList.Add), AC-2a214cd2(상태 빈칸 RETURN return returnList;) … @Doc/asisfacts/screens/SSP0200/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 24행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-d30783e8(siMain.SetDecimal @SSP0200_ShipmentChangeRequest.cs:1569), AC-b84f3ade(service.FN_ERP_UIWebService @SSP0200_ShipmentChangeRequest.cs:4919), AC-fb749b54(service.FN_ERP_UIWebService @SSP0200_ShipmentChangeRequest.cs:4984), AC-d2337b98(service.FN_ERP_UIWebService @SSP0200_ShipmentChangeRequest.cs:4005), AC-b51df3af(Item.ClassToItem @SSP0200_ShipmentChangeRequest.cs:6769), AC-d23e162e(clsCtrl.setListBoxEx @SSP0200_ShipmentChangeRequest.cs:487), AC-76467f2d(lcSave.Move @SSP0200_ShipmentChangeRequest.cs:539), AC-d27ed61a(spreadInfo.SetDecimal @SSP0200_ShipmentChangeRequest.cs:690) … @Doc/asisfacts/screens/SSP0200/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_CHANGE_REQ_NO (SSP0200_GET_CHANGE_REQ_NO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_SAVE_SHIPMENT_CONFIRM_NEW (SSP0200_SAVE_SHIPMENT_CONFIRM_NEW) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST (SSP0200_GET_SHIPMENT_CHANGE_REQUEST) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N (SSP0200_GET_SHIPMENT_CHANGE_REQUEST_N) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_REQUEST_DRAFTING (SSP0200_GET_SHIPMENT_REQUEST_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE (SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING (SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAY_PERIOD (SCM0001_GET_SCP_DAY_PERIOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM (SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_STATUS (SSP0200_GET_SHIPMENT_STATUS) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_ERP_SO_NO_CNT (SSP0200_GET_ERP_SO_NO_CNT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING (SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM (SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE (PR_SSP_XIF_ERP_UI_SHIP_PLAN_IFSEQ_MERGE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0026_GET_BOD_ITEM (SSP0026_GET_BOD_ITEM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_ITEM_FROM_BOD (SSP0200_GET_ITEM_FROM_BOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_DIVISION (SSP0200_GET_SHIPMENT_DIVISION) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE () 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION () 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 btnInsertMultiple.Click → btnInsertMultiple_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision_ID.SelectedIndexChanged → clbDivision_ID_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnApprovalUser.Click → BtnApprovalUser_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → shtMain_Change 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnSave.Click → BtnSave_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnChangeRe2.Click → BtnChangeRe_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnNew.Click → BtnNew_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.EditChange → SpdMain_EditChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ClipboardPasted → SpdMain_ClipboardPasted 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboChangeType.SelectedIndexChanged → CboChangeType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CursorChanged → SpdMain_CursorChanged 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnInsertMultiple / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtConfirmId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision_ID / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtSoNo / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 drpPeriod / UsrDateRangePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboStatus / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequest / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboChangeType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbToSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnNew / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkSingleProcess / CheckEdit 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSub / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dtDate / UsrDatePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnDel / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnSave / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnAdd / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnChangeRe2 / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestNo / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtTitle / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestor / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestDeptName / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtAppDeptName / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboChangeReason / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtReasonDetail / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnApprovalUser / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtApproval / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN H03 조회조건 <Checkbox> 디자인(hook #154 v2): FormItem 없음(라벨 열부터 시작). 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/ShipmentChangeRequestPlanForm.tsx:305
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/InsertMultipleModal.tsx
+- BLOCK V01 Validation 마커 누락 37/37: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) V-004(Lundefined) V-005(Lundefined) V-006(Lundefined) V-007(Lundefined) V-008(Lundefined) @hooks/useShipmentChangeRequestPlanValidation.ts
+- WARN V01 As-is Expression 190건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00012 — AS-IS '저장하시겠습니까?' / TO-BE MSG00012 = '최대 10개의 탭만 허용됩니다.' → 문구로 찾은 TO-BE ID MSG00001 @hooks/useShipmentChangeRequestPlanSaveActions.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 9건 — 셀 클릭(CLICK) — Shipment Change Request SEQ1 [MSG00098] 먼저 GetTerm("Div")을( / 셀 클릭(CLICK) — Shipment Change Request(더블클릭) SEQ2 [MSG00098] 먼저 GetTerm("Div") / / 셀 입력(CHANGE) — 콤보 선택 SEQ1 [MSG00098] 먼저 GetTerm("From Si / 저장(SAVE) SEQ3 [MSG00194] 변경요청은 현재일 기준 D+CHAN / 저장(SAVE) SEQ4 [MSG00359] 변경요청은 Shipmnet Date / 저장(SAVE) SEQ5 [MSG00286] 행 번호(i+1)열 출하 변경사항이 … → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SSP_화면_VALIDATION_취합_20261022/SSP0200.md
+- WARN VR2 MSG00050 — VALIDATION 취합 판정: 팝업(POPUP) — SSP0200_ShipmentChangeRequestInsertPopup SEQ1 AS-IS MSG00050 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — constants 주석은 "DB 실측 등록"이라 하나 10-23 마스터에 MSG00050 행 없음 → "_This is n @components/modals/InsertMultipleModal.tsx:27
+- WARN VC1 대조표 FAIL 1363행 (Doc/verify/SSP0200/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미구현 13행 — 작업 원장 Doc/verify/SSP0200/work_ledger.md W1(기능 구현)
+- WARN VC1 대조표 미검증 1164행 — 검사 사유 REVIEW 224 · ERROR 2235 · NOPATH 222 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 652건 / 검사 인스턴스 1338 — W1 13 · W2 3 · W3 127 · W5 61 · W7 147 · W8 22 · W9 279 · 구현 의심 7 (Doc/verify/SSP0200/work_ledger.md)
+- WARN R01 페이지 폴더 밖 상대 import / alias deep import — 2-depth alias 만 (#71 framework-foundation-entry) @components/ChangeRequestPlanSubGrid.tsx:8
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ChangeRequestPlanSubGrid.tsx:74
+- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ChangeRequestPlanSubGrid.tsx:69
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/modals/ApprovalUserModal.tsx:166
+- WARN R01 페이지 폴더 밖 상대 import / alias deep import — 2-depth alias 만 (#71 framework-foundation-entry) @components/ShipmentChangeRequestPlanMainGrid.tsx:9
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentChangeRequestPlanMainGrid.tsx:575
+- WARN R03 window.alert/confirm → useMessageStore (#26 messaging-api) @hooks/useShipmentChangeRequestPlanSaveActions.ts:147
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @hooks/useShipmentChangeRequestPlanSaveActions.ts:387
+- WARN R03 window.alert/confirm → useMessageStore (#26 messaging-api) @ShipmentChangeRequestPlan.tsx:270
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ShipmentChangeRequestPlan.tsx:428
+- WARN R16 진입 Page 641 라인 > 400 — components/ 분리 (#9) @ShipmentChangeRequestPlan.tsx
+- WARN B06 SubTitle hotkeyConfig 에 search 지정 — F5 조회 배선(룰 25 §1.5.1)
+- WARN B10 As-is 팝업 SSP0200_ShipmentChangeRequestInsertPopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- WARN B19 expressions.md 190행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0200/SSP0200_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0200/SSP0200_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

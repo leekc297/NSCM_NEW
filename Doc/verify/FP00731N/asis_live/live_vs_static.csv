@@ -1,0 +1,26 @@
+﻿kind,item,static,live,verdict,note
+SP,(endpoints.csv),없음,13종,ERROR,정적 사실 파일 없음(미측정) — Fact Pack 먼저
+SP,FP_SQL_LOG(로그 기록),,14회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SELECT,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: DECLARE @OPTBL AS TABLE,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,4회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT AA.SEGMENT1 AS INSTANCE_ID, AA.SEG",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT INSTANCE_ID,USER_ID, LINE_ID, DIVI",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT SEGMENT1 AS MENU_KEY,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONDITION,drpCutoffDate,,Cut Off Date,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnSql,,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,clbSite,,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlant,,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFactory,,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbOperation,,Operation,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbStockType,,Stock Type,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemId,,Material(FP),LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtNickName,,Nick Name,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/Main,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 42(보임 41) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

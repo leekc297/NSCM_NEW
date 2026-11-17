@@ -10,6 +10,12 @@ interface RadioItem {
   label: string;
 }
 
+interface Props {
+  // 변경 라우팅은 부모가 소유한다 — 하위(L4·L5) 미저장 폐기 확인창을 거친 뒤에만 shopGroupId 를 바꾼다
+  //   (CapaLineMaster.handleChangeShopGroup). 라디오는 controlled 라 취소 시 선택이 자동 복귀한다.
+  onChangeShopGroup: (value: ProductGroup) => void;
+}
+
 // AS-IS SCP0114 의 Product Group(rgrpSearchLevel, Designer.cs:589/597~601)은 상단 조회조건이 아니라
 //   Level1~3 그리드와 Level4~5 그리드 사이의 라디오 바다. TO-BE 도 상단 SearchArea 가 아니라 이 자리에
 //   둔다(사용자 지시 2026-10-30). 조회조건 영역이 아니므로 SearchArea 같은 회색 박스 스타일을 쓰지 않고,
@@ -19,11 +25,10 @@ interface RadioItem {
 //   바 라벨 = LBL00027 "Operation group" — 이 축은 shop_group(E/A/P)을 가르므로, AS-IS 캡션
 //   "Product Group"(LBL00088)이 아니라 자매 SCP0104(Line Assign)의 Operation group 라벨과 통일한다
 //   (사용자 확정 2026-11-06). 컴포넌트/파일명은 유지하되 표시 라벨만 교체.
-export const CapaLineMasterProductGroupBar = () => {
+export const CapaLineMasterProductGroupBar = ({ onChangeShopGroup }: Props) => {
   const { t } = useTranslation();
 
   const sc = useCapaLineMasterStore(s => s.searchCondition);
-  const setSearchCondition = useCapaLineMasterStore(s => s.setSearchCondition);
 
   // 'Module/Pack' 은 등가 LBL 미존재(LBL00379 는 'Module' 전용) -> 영문 리터럴 유지(hook #114).
   const items = useMemo<RadioItem[]>(
@@ -46,7 +51,7 @@ export const CapaLineMasterProductGroupBar = () => {
               name='scp0114-product-group'
               value={item.value}
               checked={sc.shopGroupId === item.value}
-              onChange={() => setSearchCondition({ shopGroupId: item.value })}
+              onChange={() => onChangeShopGroup(item.value)}
             />
             <span>{item.label}</span>
           </label>

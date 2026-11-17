@@ -7,8 +7,8 @@
   "postData": "{\"divisionId\":\"\",\"scmSiteId\":\"\"}",
   "status": 200,
   "rows": 2835,
-  "dur": 284,
-  "at": "2026-11-07T12:19:36.697Z",
+  "dur": 251,
+  "at": "2026-11-14T09:58:37.745Z",
   "user": "minyonglee1",
   "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0127/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261102\",\"periodTo\":\"20271101\"}",
+  "postData": "{\"divisionId\":\"81\",\"planGroupId\":\"ALL\",\"scmSiteId\":\"ALL\",\"itemId\":\"\",\"stage\":\"ALL\",\"validYn\":\"\",\"valueType\":\"\",\"periodFrom\":\"20261109\",\"periodTo\":\"20271108\"}",
   "status": 200,
   "rows": 535,
-  "dur": 216,
-  "at": "2026-11-07T12:19:37.873Z",
+  "dur": 163,
+  "at": "2026-11-14T09:58:38.862Z",
   "user": "minyonglee1",
   "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
  }

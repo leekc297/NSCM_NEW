@@ -1,0 +1,19 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0104-S93aed0,조회,AfterFindData,SCP0104_CAPA_Line.cs:784,같은 파일에서 호출,SCP0104_CAPA_Line.cs:824; SCP0104_CAPA_Line_Assign_Model.cs:1082,SetQueryInfoGet
+SCP0104-S5d8026,조회,AfterFindData,SCP0104_CAPA_Line.cs:808,같은 파일에서 호출,SCP0104_CAPA_Line.cs:824; SCP0104_CAPA_Line_Assign_Model.cs:1082,SetQueryInfoGet
+SCP0104-Seb6c4c,기타,ClearUsrCheckedList,SCP0104_CAPA_Line.cs:513,호출 없음,,
+SCP0104-Se441fd,조회,GetDataByRowIndex,SCP0104_CAPA_Line.cs:973,같은 파일에서 호출,SCP0104_CAPA_Line.cs:1010; SCP0104_CAPA_Line.cs:1018; SCP0104_CAPA_Line.cs:1052; SCP0104_CAPA_Line.cs:1089; SCP0104_CAPA_Line_Assign_Model.cs:1310,"GetSelectedItemsByChecked,GetSelectedLinesByChecked,GetSelectedValuesByChecked,GetSelectedValuesByRange"
+SCP0104-S46c129,조회,SetSelectedColor,SCP0104_CAPA_Line.cs:627,주석 안에서만 호출,SCP0104_CAPA_Line.cs:644; SCP0104_CAPA_Line.cs:892; SCP0104_CAPA_Line_Assign_Model.cs:778; SCP0104_CAPA_Line_Assign_Model.cs:1184,
+SCP0104-S51f1ff,조회,SetSelectedColor,SCP0104_CAPA_Line.cs:634,주석 안에서만 호출,SCP0104_CAPA_Line.cs:644; SCP0104_CAPA_Line.cs:892; SCP0104_CAPA_Line_Assign_Model.cs:778; SCP0104_CAPA_Line_Assign_Model.cs:1184,
+SCP0104-Sf34b30,조회,AfterFindDataAssign,SCP0104_CAPA_Line_Assign.cs:4513,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:4631,SetQueryInfoGetAssign
+SCP0104-S5b009b,조회,AfterFindDataSOP,SCP0104_CAPA_Line_Assign.cs:4538,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:4664,SetQueryInfoGetSOP
+SCP0104-S814d22,저장,AfterSaveData,SCP0104_CAPA_Line_Assign.cs:4572,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:4950; SCP0104_CAPA_Line_Assign.cs:5049; SCP0104_CAPA_Line_Assign.cs:5155,"SetQueryInfoSaveAssignASSEMBLY,SetQueryInfoSaveAssignELTR,SetQueryInfoSaveSOP"
+SCP0104-Sc767cb,저장,AfterSaveData,SCP0104_CAPA_Line_Assign.cs:4592,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:4950; SCP0104_CAPA_Line_Assign.cs:5049; SCP0104_CAPA_Line_Assign.cs:5155,"SetQueryInfoSaveAssignASSEMBLY,SetQueryInfoSaveAssignELTR,SetQueryInfoSaveSOP"
+SCP0104-S5926e2,기타,RefreshVersionAll,SCP0104_CAPA_Line_Assign.cs:1539,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:4344,AfterAddNewVersion
+SCP0104-Safb65d,조회,SetQueryInfoTestIF,SCP0104_CAPA_Line_Assign.cs:6082,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:6063,TestIFAssign
+SCP0104-S4ee24a,기타,TestIFAssign,SCP0104_CAPA_Line_Assign.cs:6065,같은 파일에서 호출,SCP0104_CAPA_Line_Assign.cs:6070,TestIF
+SCP0104-S67eb5b,기타,SetLockColumnsAll,SCP0104_CAPA_Line_Assign_Model.cs:974,같은 파일에서 호출,SCP0104_CAPA_Line_Assign_Model.cs:934,SetLockColumns
+SCP0104-S1789bc,기타,SetLockColumnsAll,SCP0104_CAPA_Line_Assign_Model.cs:984,같은 파일에서 호출,SCP0104_CAPA_Line_Assign_Model.cs:934,SetLockColumns
+SCP0104-Sc24736,기타,SetLockColumnsAll,SCP0104_CAPA_Line_Assign_Model.cs:989,같은 파일에서 호출,SCP0104_CAPA_Line_Assign_Model.cs:934,SetLockColumns
+SCP0104-Sc8a840,기타,SetLockColumnsAll,SCP0104_CAPA_Line_Assign_Model.cs:993,같은 파일에서 호출,SCP0104_CAPA_Line_Assign_Model.cs:934,SetLockColumns
+SCP0104-Sd9425a,기타,SetLockColumnsAll,SCP0104_CAPA_Line_Assign_Model.cs:998,같은 파일에서 호출,SCP0104_CAPA_Line_Assign_Model.cs:934,SetLockColumns

@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 359,
+  "at": "2026-11-13T20:58:36.037Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 416,
+  "at": "2026-11-13T20:58:36.127Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "DMF0005",
+  "sheet": "production",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0005/production/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"salesSite\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"activeFlag\":\"ALL\",\"owner\":\"\",\"endCustReportYn\":\"N\",\"projectInfoYn\":\"N\"}",
+  "status": 200,
+  "rows": null,
+  "dur": 2284,
+  "at": "2026-11-13T20:58:40.925Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 360,
+  "at": "2026-11-13T20:58:45.457Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 457,
+  "at": "2026-11-13T20:58:45.614Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ }
+]

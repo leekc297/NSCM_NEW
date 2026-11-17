@@ -1,34 +1,19 @@
 package com.lgcns.nscm.general;
 
-import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lgcns.nscm.framework.base.BaseConstants;
 import com.lgcns.nscm.framework.base.BaseService;
-import com.lgcns.nscm.framework.model.CustomMap;
 import com.lgcns.nscm.framework.utils.MapUtils;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,6 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 public class GeneralServiceImpl extends BaseService implements GeneralService {
 
     private final String nameSpace = BaseConstants.MYBATIS_NAME_SPACE;
+
+    /** 프로시저 결과커서(O_RESULT_CURSOR 등)의 에러 메시지 필드명 — 원시 DB 에러 마스킹 대상. */
+    private static final Set<String> ERROR_MSG_KEYS =
+            Set.of("MSG", "ERR_MESSAGE", "ERR_MSG", "ERROR_MESSAGE", "SQLERRM");
+    /** 시스템 Oracle 에러코드 추출 패턴(ORA-NNNNN). 20000~20999 는 RAISE_APPLICATION_ERROR(업무 메시지)라 보존. */
+    private static final Pattern ORA_CODE = Pattern.compile("ORA-(\\d{5})");
 
     /**
      * 버튼별 api 호출
@@ -62,220 +53,16 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
     	}
     	// 세션 정보 파라미터에 추가
     	if(isJvarchar) MapUtils.cvtJsonToJVarchar(params, jCols);
-    	return selectList("callProc", makeProcedure(params, procParam));
+    	Map<String, Object> result = selectList("callProc", makeProcedure(params, procParam));
+    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
     }
 
-    /* ======================================================================================================
-     * [E20261015-STREAMPROC] 대량 조회 스트리밍
-     *  - 기존 call-proc 는 OUT 커서 전량을 List<CustomMap> 으로 모은 뒤 한 번에 JSON 직렬화한다
-     *    (SCP0030 289,551행 x 37컬럼 = 234MB → 화면 표시까지 50~85초, 그동안 화면은 빈 상태).
-     *  - 스트리밍은 같은 메타로 같은 SP 를 1회 실행하고, 커서를 읽는 즉시 묶음 단위 NDJSON 한 줄씩 흘려보낸다.
-     *    FE 는 첫 묶음부터 그리드에 표시한다. 값 변환은 기존과 동일(CustomMap + 동일 날짜 포맷)해서 행 내용이 같다.
-     *  - 응답 줄 형식(줄마다 JSON 1개):
-     *      {"t":"cursor","c":"<COL_NM>","cols":[...]}       커서 시작
-     *      {"t":"rows","c":"<COL_NM>","rows":[{...},...]}   행 묶음
-     *      {"t":"cursorEnd","c":"<COL_NM>","count":N}       커서 끝
-     *      {"t":"out","c":"<COL_NM>","v":값}                 커서 아닌 OUT 파라미터
-     *      {"t":"error","message":"..."}                     실행 중 오류
-     *      {"t":"end","rows":총행수,"ms":소요}                전송 완료
-     *    상태 커서(PROC_RESULT, 예: O_RESULT_CURSOR)는 데이터 커서보다 먼저 보낸다 → FE 가 CODE 오류를 먼저 판정.
-     * ====================================================================================================== */
-    private static final int STREAM_FIRST_BATCH = 1000;   // 첫 화면용 — 작게 보내 빨리 그린다
-    private static final int STREAM_BATCH = 30000;          // 사용자 지정(2026-10-15) — 5,000 → 30,000 (브라우저 묶음 처리 횟수 축소)
-    private static final int STREAM_FETCH_SIZE = 1000;
-    private static final ObjectMapper STREAM_MAPPER = createStreamMapper();
-
-    /** 응답 JSON 과 같은 설정 — CustomWebConfig.configureMessageConverters 와 동일하게 맞춘다 */
-    private static ObjectMapper createStreamMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        mapper.getFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        // 기본값(true)이면 gen.writeObject(행) 마다 flush → 행마다 gzip 동기 flush + 소켓 쓰기 (28.9만 행 365초 실측).
-        //   flush 는 묶음 끝(endLine)에서만 한다.
-        mapper.disable(SerializationFeature.FLUSH_AFTER_WRITE_VALUE);
-        return mapper;
-    }
-
+    /**
+     * execBtn 의 스트리밍 변형 — BaseService.callProcStream(raw JDBC, ResultSet->JSON 단일패스)에 위임.
+     */
     @Override
-    public StreamingResponseBody execBtnStream(Map<String, Object> params) throws Exception {
-    	// 1) 메타 해석 — 호출 스레드에서 끝낸다(오류는 일반 응답으로 돌아감)
-    	List<Map<String, Object>> procParam = (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
-    	Set<String> jCols = new HashSet<>();
-    	for(Map<String, Object> paramMap:procParam) {
-    		if("JVARCHAR".equals(paramMap.get("DATA_TP_CD"))) jCols.add((String)paramMap.get("COL_NM"));
-    	}
-    	if(!jCols.isEmpty()) MapUtils.cvtJsonToJVarchar(params, jCols);
-    	final Map<String, Object> callParams = new HashMap<>(params);
-    	final String procNm = String.valueOf(procParam.get(0).get("PROC_NM"));
-
-    	// 2) 실행·전송 — StreamingResponseBody 안에서
-    	return out -> {
-    		long st = System.currentTimeMillis();
-    		long total = 0;
-    		JsonGenerator gen = STREAM_MAPPER.getFactory().createGenerator(out, JsonEncoding.UTF8);
-    		SqlSession ses = null;
-    		try {
-    			ses = ncommondao.getSqlSession();
-    			Connection con = ses.getConnection();
-    			StringBuilder sql = new StringBuilder("{call ").append(procNm);
-    			List<Map<String, Object>> args = new ArrayList<>();
-    			for(Map<String, Object> p:procParam) {
-    				String tp = String.valueOf(p.get("COL_TP_CD"));
-    				if("IN".equals(tp) || "OUT".equals(tp)) args.add(p);
-    			}
-    			if(!args.isEmpty()) {
-    				sql.append("(");
-    				for(int i=0; i<args.size(); i++) sql.append(i==0 ? "?" : ", ?");
-    				sql.append(")");
-    			}
-    			sql.append("}");
-
-    			try (CallableStatement cs = con.prepareCall(sql.toString())) {
-    				for(int i=0; i<args.size(); i++) bindStreamArg(con, cs, i+1, args.get(i), callParams);
-    				cs.execute();
-
-    				// 상태 커서(PROC_RESULT) 먼저, 그 다음 데이터 커서, 마지막에 일반 OUT
-    				for(String pass : new String[]{"PROC_RESULT", "CURSOR", "OTHER"}) {
-    					for(int i=0; i<args.size(); i++) {
-    						Map<String, Object> a = args.get(i);
-    						if(!"OUT".equals(a.get("COL_TP_CD"))) continue;
-    						String dt = String.valueOf(a.get("DATA_TP_CD"));
-    						String nm = String.valueOf(a.get("COL_NM"));
-    						boolean isCursor = "CURSOR".equals(dt) || "PROC_RESULT".equals(dt);
-    						if("OTHER".equals(pass) ? isCursor : !pass.equals(dt)) continue;
-    						// getObject(int, Class) 는 log4jdbc(CallableStatementSpy)가 구현하지 않음 → getObject(int) (MyBatis 와 동일 경로)
-    						if(isCursor) total += writeCursor(gen, out, nm, (ResultSet) cs.getObject(i+1));
-    						else {
-    							gen.writeStartObject();
-    							gen.writeStringField("t", "out");
-    							gen.writeStringField("c", nm);
-    							gen.writeFieldName("v");
-    							gen.writeObject(cs.getObject(i+1));
-    							gen.writeEndObject();
-    							endLine(gen, out);
-    						}
-    					}
-    				}
-    			}
-    		} catch (Throwable e) {
-    			// 응답 헤더(x-ndjson)가 이미 정해져 일반 오류 응답으로 바꿀 수 없다 → 오류 줄로 알린다. JVM 치명 오류만 다시 던짐
-    			log.error("[execBtnStream] {} error: {}", procNm, e.getMessage(), e);
-    			gen.writeStartObject();
-    			gen.writeStringField("t", "error");
-    			gen.writeStringField("message", String.valueOf(e.getMessage()));
-    			gen.writeEndObject();
-    			endLine(gen, out);
-    			if(e instanceof VirtualMachineError vme) throw vme;
-    		} finally {
-    			if(ses != null) { ses.clearCache(); ses.close(); }
-    		}
-    		gen.writeStartObject();
-    		gen.writeStringField("t", "end");
-    		gen.writeNumberField("rows", total);
-    		gen.writeNumberField("ms", System.currentTimeMillis() - st);
-    		gen.writeEndObject();
-    		endLine(gen, out);
-    		gen.close();
-    		log.info("[execBtnStream] {} {}/{}/{} rows={} ms={}", procNm, callParams.get("mnuId"), callParams.get("shtNm"),
-    				callParams.get("mnuBtnCd"), total, System.currentTimeMillis() - st);
-    	};
-    }
-
-    /** IN/OUT 바인딩 — makeProcedure 의 DATA_TP_CD 매핑과 같은 규칙 */
-    private void bindStreamArg(Connection con, CallableStatement cs, int idx, Map<String, Object> a, Map<String, Object> params) throws SQLException {
-    	String dt = String.valueOf(a.get("DATA_TP_CD"));
-    	String nm = String.valueOf(a.get("COL_NM"));
-    	if("OUT".equals(a.get("COL_TP_CD"))) {
-    		switch (dt) {
-    			case "CURSOR", "PROC_RESULT" -> cs.registerOutParameter(idx, Types.REF_CURSOR);
-    			case "NUMBER", "NUMERIC" -> cs.registerOutParameter(idx, Types.NUMERIC);
-    			case "CLOB" -> cs.registerOutParameter(idx, Types.CLOB);
-    			case "DATE" -> cs.registerOutParameter(idx, Types.TIMESTAMP);
-    			default -> cs.registerOutParameter(idx, Types.VARCHAR);
-    		}
-    		return;
-    	}
-    	Object v = params.get(nm);
-    	switch (dt) {
-    		case "NUMBER", "NUMERIC" -> {
-    			if(v == null || String.valueOf(v).isBlank()) cs.setNull(idx, Types.NUMERIC);
-    			else cs.setBigDecimal(idx, new BigDecimal(String.valueOf(v)));
-    		}
-    		case "CLOB" -> {
-    			if(v == null) cs.setNull(idx, Types.CLOB);
-    			else { Clob c = con.createClob(); c.setString(1, String.valueOf(v)); cs.setClob(idx, c); }
-    		}
-    		default -> {
-    			if(v == null) cs.setNull(idx, Types.VARCHAR);
-    			else cs.setString(idx, String.valueOf(v));
-    		}
-    	}
-    }
-
-    /** 커서 1개를 묶음 단위로 전송. 행 변환은 CustomMap(기존 call-proc 와 동일) */
-    private long writeCursor(JsonGenerator gen, java.io.OutputStream out, String nm, ResultSet rs) throws Exception {
-    	long count = 0;
-    	if(rs == null) return 0;
-    	try (rs) {
-    		rs.setFetchSize(STREAM_FETCH_SIZE);
-    		ResultSetMetaData md = rs.getMetaData();
-    		int cc = md.getColumnCount();
-    		String[] cols = new String[cc];
-    		for(int c=0; c<cc; c++) cols[c] = md.getColumnLabel(c+1);
-
-    		gen.writeStartObject();
-    		gen.writeStringField("t", "cursor");
-    		gen.writeStringField("c", nm);
-    		gen.writeArrayFieldStart("cols");
-    		for(String col:cols) gen.writeString(col);
-    		gen.writeEndArray();
-    		gen.writeEndObject();
-    		endLine(gen, out);
-
-    		int inBatch = 0;
-    		int limit = STREAM_FIRST_BATCH;
-    		boolean open = false;
-    		while(rs.next()) {
-    			if(!open) {
-    				gen.writeStartObject();
-    				gen.writeStringField("t", "rows");
-    				gen.writeStringField("c", nm);
-    				gen.writeArrayFieldStart("rows");
-    				open = true;
-    			}
-    			CustomMap row = new CustomMap();
-    			for(int c=0; c<cc; c++) row.put(cols[c], rs.getObject(c+1));
-    			gen.writeObject(row);
-    			count++;
-    			if(++inBatch >= limit) {
-    				gen.writeEndArray();
-    				gen.writeEndObject();
-    				endLine(gen, out);
-    				open = false;
-    				inBatch = 0;
-    				limit = STREAM_BATCH;
-    			}
-    		}
-    		if(open) {
-    			gen.writeEndArray();
-    			gen.writeEndObject();
-    			endLine(gen, out);
-    		}
-    		gen.writeStartObject();
-    		gen.writeStringField("t", "cursorEnd");
-    		gen.writeStringField("c", nm);
-    		gen.writeNumberField("count", count);
-    		gen.writeEndObject();
-    		endLine(gen, out);
-    	}
-    	return count;
-    }
-
-    private void endLine(JsonGenerator gen, java.io.OutputStream out) throws java.io.IOException {
-    	gen.writeRaw('\n');
-    	gen.flush();
-    	out.flush();
+    public void execBtnStream(Map<String, Object> params, HttpServletResponse response) throws Exception {
+    	callProcStream(params, response);
     }
 
     /**
@@ -290,7 +77,78 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
      */
     public Map<String, Object> callProc(Map<String, Object> params) throws Exception {
     	List<Map<String, Object>> procParam = (List<Map<String, Object>>) selectList("retrieveProcInfoList", params).get("procInfo");
-    	return selectList("callProc", makeProcedure(params, procParam));
+    	Map<String, Object> result = selectList("callProc", makeProcedure(params, procParam));
+    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
+    }
+
+    /**
+     * call-proc2 — 카탈로그 기반 프로시저 실행(SCM_ADM_PROC_M 파라미터 메타 미사용).
+     * 프로시저명(PROC_NM=API_URL)만 기존 버튼->API_M 해석(retrieveBtnInfoList)에서 취하고,
+     * IN/OUT 유도·바인딩은 BaseService.callProc2(살아있는 카탈로그)에 위임한다. 버튼권한(@AuthCheck)은 그대로.
+     */
+    @Override
+    public Map<String, Object> callProc2(Map<String, Object> params) throws Exception {
+    	List<Map<String, Object>> procInfo = (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
+    	if (procInfo == null || procInfo.isEmpty() || procInfo.get(0).get("PROC_NM") == null) {
+    		throw new Exception("call_proc2: cannot resolve PROC_NM for " + params.get("mnuId") + "/" + params.get("shtNm") + "/" + params.get("mnuBtnCd"));
+    	}
+    	String procNm = String.valueOf(procInfo.get(0).get("PROC_NM"));
+
+    	Set<String> jCols = new HashSet<>();
+    	Object cvt = params.get("cvtJsonToVarchar");
+    	if (cvt != null && !String.valueOf(cvt).isBlank()) {
+    		for (String c : String.valueOf(cvt).split(",")) {
+    			if (!c.trim().isEmpty()) jCols.add(c.trim());
+    		}
+    	}
+    	Map<String, Object> result = callProc2(procNm, params, jCols);
+    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
+    }
+
+    /**
+     * 프로시저 결과커서의 원시 DB 에러(SQLERRM/ORA-NNNNN)를 generic 문구로 치환한다(보안 — 스키마/제약조건/
+     * 테이블/컬럼명·입력값이 클라이언트로 유출되는 것을 막는다). 원문은 서버 로그(log.error)에만 남긴다.
+     *
+     * 판별: 결과 Map 의 List 값(각 커서) 각 행에서 에러메시지 필드({@link #ERROR_MSG_KEYS})가 시스템 Oracle
+     * 에러(ORA-NNNNN, 단 20000~20999 제외)를 포함하면 원시 DB 에러로 간주한다. 통제된 업무 에러(앱 코드
+     * 99010/99020 친화 메시지, RAISE_APPLICATION_ERROR ORA-20xxx)는 메시지에 시스템 ORA 코드가 없으므로
+     * 보존된다. CODE/ERR_CODE·행 식별자 필드는 그대로 둔다(FE 실패 판정·셀 색칠 로직 유지).
+     */
+    private Map<String, Object> maskRawDbErrors(Map<String, Object> result, String langCd) {
+    	if (result == null) return result;
+    	// MSG00003 (SCM_ADM_MSG_M 기준): KO="저장에 실패하였습니다." / EN·CN="Failed to save."
+    	//   AS-IS SCP0005 는 raw 저장오류에 generic MSG00006 만 띄웠으나(원문 표시 라인 주석처리), MSG00006 은
+    	//   TO-BE 미등록이라 등가 generic 코드 MSG00003 으로 대체한다. 메시지원문 drift 방지는 전역 공통 관리.
+    	boolean english = "EN".equalsIgnoreCase(langCd) || "CN".equalsIgnoreCase(langCd);
+    	String generic = english ? "Failed to save." : "저장에 실패하였습니다.";
+    	for (Object cursor : result.values()) {
+    		if (!(cursor instanceof List)) continue;
+    		for (Object rowObj : (List<Object>) cursor) {
+    			if (!(rowObj instanceof Map)) continue;
+    			Map<String, Object> row = (Map<String, Object>) rowObj;
+    			boolean raw = false;
+    			for (String key : ERROR_MSG_KEYS) {
+    				Object val = row.get(key);
+    				if (val != null && isSystemOraError(String.valueOf(val))) { raw = true; break; }
+    			}
+    			if (!raw) continue;
+    			log.error("[call-proc] 원시 DB 에러 마스킹: {}", row); // 원문은 서버에만 기록
+    			for (String key : ERROR_MSG_KEYS) {
+    				if (row.containsKey(key)) row.put(key, generic);
+    			}
+    		}
+    	}
+    	return result;
+    }
+
+    /** 메시지에 시스템 Oracle 에러코드(ORA-NNNNN, 20000~20999 제외)가 있으면 true. */
+    private boolean isSystemOraError(String msg) {
+    	Matcher m = ORA_CODE.matcher(msg);
+    	while (m.find()) {
+    		int code = Integer.parseInt(m.group(1));
+    		if (code < 20000 || code > 20999) return true;
+    	}
+    	return false;
     }
 
 

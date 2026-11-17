@@ -1,0 +1,79 @@
+{
+ "id": "SSP0024",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SSP.SSP0024_SAVE_SHIP_MASTER",
+   "save_sp": "SSP0024_SAVE_SHIP_MASTER",
+   "status": "키 대응 완료",
+   "table": "SSP_MST_SHIP_MASTER_EE",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "PLANT_SITE_CODE",
+    "ITEM_ID": "MATERIAL_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PC_ROLL_LENGTH",
+    "db_col": "PC_ROLL_LENGTH",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SSP_MST_SHIP_MASTER_EE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Ship Master Elec",
+   "writes": {
+    "SSP_MST_SHIP_MASTER_EE_H": [
+     "INSERT INTO"
+    ],
+    "SSP_MST_SHIP_MASTER_EE": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SSP0024_SAVE_SHIP_MASTER → SP SSP0024_SAVE_SHIP_MASTER 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "match_basis": {
+    "SCM_SITE_ID": "SCM_SITE_ID ← @p_plant_site_code(SP 186줄(@v_plant_site_code AS SCM_SITE_ID) ← 125줄) ← 그리드 열 PLANT_SITE_CODE(SSP0024_ShipmentMasterElectrode.cs:437)",
+    "ITEM_ID": "ITEM_ID ← @p_material_id(SP 187줄(@v_material_id AS ITEM_ID) ← 126줄) ← 그리드 열 MATERIAL_ID(SSP0024_ShipmentMasterElectrode.cs:438)"
+   },
+   "edit_candidates": [
+    {
+     "col": "PC_ROLL_LENGTH",
+     "db_col": "PC_ROLL_LENGTH",
+     "rule": "plus1"
+    },
+    {
+     "col": "BOX_PER_CUT",
+     "db_col": "BOX_PER_CUT",
+     "rule": "plus1"
+    },
+    {
+     "col": "STEELCRATE_PER_CUT",
+     "db_col": "STEELCRATE_PER_CUT",
+     "rule": "plus1"
+    },
+    {
+     "col": "STEELRACK_PER_CUT",
+     "db_col": "STEELRACK_PER_CUT",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-15 04:00:12"
+   }
+  }
+ ]
+}

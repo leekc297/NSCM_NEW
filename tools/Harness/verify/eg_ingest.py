@@ -11,7 +11,9 @@
     - 한 번도 잴 수 없었던 ERROR 는 ERROR 그대로. 판정필요를 FAIL 로 올리지 않는다
     - 그 밖의 판정필요는 judge 가 기존 지시(A1 외 판정필요 금지)대로 수동 검수(W7) NA 로 돌린다 — 사유는 증거에 남는다
 """
-import argparse, csv, hashlib, json, os, sys
+import argparse, csv, hashlib, io, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import safe_io  # 2026-11-13 T284: 기존 파일 'w' 재열기 Errno 22(SCP0028 15:57) 대비 — safe_io(재시도 → r+b)
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 csv.field_size_limit(10 ** 8)
@@ -44,6 +46,45 @@ def popup_rule(check):
         if check.startswith(pre):
             return rule
     return ''
+
+
+# CR-100(2026-11-10 사용자 판정 · T178): TO-BE 메타 공통 셀 팝업(SCM_MST_SHEET_COLUMNS CELL_CONTROL_OBJECT_TYPE_CODE = FPModal·FPTextModal)은
+#   TO-BE 팝업 룰을 따른다 — 제목 없음 · 조회 건수 표시 없음 · ↓ 키 행 이동 없음 은 결함이 아니다(SSP0024 MATERIAL_ID · SSP0025 ITEM_ID/USER_ID/PART_LEADER/TEAM_LEADER ·
+#   SCP0037 ITEM_ID). 그 밖의 팝업 표준(버튼 순서 OK→CLOSE · No. 컬럼 · '_' 폴백/코드 노출 제목)은 종전대로 검사한다. 화면 고유 팝업(조회조건 돋보기 등)은 대상 아님.
+CR100_TAG = '[CR-100]'
+CR100_WHAT = {'TITLE': '팝업 제목 없음', 'COUNT': '조회 건수 표시 없음', 'GRID_KEYS': '↓ 키 행 이동 없음'}
+
+
+def meta_modal_cols(mid):
+    """TO-BE 메타에서 셀 팝업(FPModal·FPTextModal)인 컬럼 — eg_popup 이 쓰는 같은 메타 사본(Doc/verify/_parallel/E02/facts/<ID>.meta.json)"""
+    p = os.path.join(ROOT, 'Doc', 'verify', '_parallel', 'E02', 'facts', f'{mid}.meta.json')
+    try:
+        with open(p, encoding='utf-8') as f:
+            mj = json.load(f)
+        return {c.get('COLUMN_NAME', '').upper() for c in mj.get('columns') or [] if re.search(r'FP(Text)?Modal', c.get('CELL_CONTROL_OBJECT_TYPE_CODE') or '', re.I)}
+    except (OSError, ValueError):
+        return set()
+
+
+# 2026-11-10 T194·T195: TO-BE 공통 팝업 클래스(AS-IS 클래스명) — 셀·버튼 어느 트리거든 같은 공통 컴포넌트라 CR-100 을 트리거 무관 적용
+#   UserInfoPopup(공통 사용자 선택 SsoUserModal · SSP0003 11·12번) · SCM0002_ItembyDivisionPopup(공통 Item 팝업 · 사용자 '동일 항목 공통 반영')
+CR100_COMMON_POPUPS = {'UserInfoPopup', 'SCM0002_ItembyDivisionPopup'}
+
+
+def cr100_hit(check, x, modal_cols):
+    trig = str(x.get('trig') or '')
+    user_pop = str(x.get('cls') or '') in CR100_COMMON_POPUPS
+    # T194(SSP0003 11·12번 사용자 판정 '오류 아님'): UserInfoPopup 은 버튼으로 열어도 TO-BE 공통 팝업 룰 — 닫기(X) 아이콘 없음도 결함 아님(뷰포트 밖 버튼이 있으면 결함 유지)
+    if user_pop and check == 'LAYOUT_VIEW':
+        a = str(x.get('actual') or '')
+        return '닫기 아이콘 false' in a and '밖 버튼 []' in a
+    if check not in CR100_WHAT:
+        return False
+    if not user_pop and (not trig.upper().startswith('CELL:') or trig.split(':', 1)[1].strip().upper() not in modal_cols):
+        return False
+    if check == 'TITLE':  # 제목이 '없음'일 때만 — '_' 폴백·코드 노출 제목은 결함으로 남긴다
+        return bool(re.search(r"제목 ''|제목 없음", str(x.get('actual') or '')))
+    return True
 
 
 def load(path):
@@ -162,6 +203,7 @@ def main():
     with open(lp, encoding='utf-8-sig', newline='') as f:
         rd = csv.DictReader(f); fields = rd.fieldnames; rows = [r for r in rd if not r['row_id'].startswith('EG-')]  # 이전 반입분은 다시 만든다
     out, unmapped = [], []
+    modal_cols = meta_modal_cols(mid)  # CR-100 대상 셀 팝업 컬럼
 
     cur = {'mctx': None}  # P1(2026-11-06): 지금 반입 중인 검사기 결과 행의 측정 맥락
     def add(check_key, rule, target, cond, expected, asis, result, evidence, tag, defect=''):
@@ -181,6 +223,11 @@ def main():
         res = x.get('result', 'ERROR'); ev = f"기대 {x.get('expected', '')} · 실제 {x.get('actual', '')} · 근거 {x.get('basis', '')}"
         if check == 'ORDER' and res == 'FAIL':  # 사용자 결정 — 정렬 기준 차이는 오류가 아니다(ORDER BY 자체가 없을 때만 FAIL 은 B3 행이 담당)
             res = '판정필요'; ev = '[SORT 기준 차이 → 판정필요] ' + ev  # judge SORT_REVIEW_TAG 와 같은 표시 — 판정필요로 남는다
+        if res == 'FAIL' and cr100_hit(check, x, modal_cols):
+            what = CR100_WHAT.get(check, '닫기(X) 아이콘 없음')
+            res = 'PASS'; ev = f"{CR100_TAG} TO-BE 공통 팝업({str(x.get('cls')) if str(x.get('cls') or '') in CR100_COMMON_POPUPS else '메타 셀 팝업 FPModal·FPTextModal'}) 규칙 — {what} 는 결함 아님(사용자 판정 2026-11-10) · " + ev
+        elif res == 'FAIL' and check == 'IDENTITY' and str(x.get('cls') or '') in CR100_COMMON_POPUPS and "제목 ''" in str(x.get('actual') or ''):
+            res = '판정필요'; ev = f"{CR100_TAG} TO-BE 공통 사용자 팝업은 제목이 없어(CR-100) 제목 토큰으로 같은 팝업인지 식별 불가 — 결함 판정 보류 · " + ev  # T194
         add(f"P|{x.get('call')}|{x.get('trig')}|{check}", rule, f"{mid} 팝업 {x.get('cls', '')} {x.get('trig', '')} {check}", ' '.join(x.get('egs') or []), x.get('expected', ''), x.get('basis', ''), res, ev, 'eg-popup')
     for x in auth:
         cur['mctx'] = x.get('mctx') if isinstance(x, dict) else None
@@ -194,7 +241,7 @@ def main():
         ev = f"AS-IS {x.get('asis_ref')} '{x.get('asis_msg')}' · {x.get('tobe') or '[대응 문구 없음] TO-BE 저장 PROC·1단계 호출·사전·화면 코드에서 못 찾음 — 검증 분기 누락 또는 문구 변경 확인 필요'}"
         add(f"S|{x.get('asis_ref')}|{x.get('asis_msg')}", 'E4', f"{mid} SP 검증 {x.get('asis_msg', '')[:40]}", '저장 SP 검증 분기 정적 대조', 'AS-IS 검증 문구가 TO-BE 에 있음', x.get('asis_ref', ''), res, ev, 'sp-branch')
     for x in a1:  # EG006 실전송 인자 AS-IS 대조 — 차이는 판정필요(A1 · 원천 DB 시점 차이 가능)
-        res = {'PASS': 'PASS', 'FAIL': 'FAIL', 'REVIEW': '판정필요'}.get(x.get('verdict'), 'ERROR')
+        res = {'PASS': 'PASS', 'FAIL': 'FAIL', 'REVIEW': '판정필요', 'NA': 'NA'}.get(x.get('verdict'), 'ERROR')  # NA = 근거 있는 판정 제외(2026-11-16 asis_live_rows 계정 의존 SP)
         add(f"L|{x.get('sheet')}|{x.get('asis_sp')}", 'A7' if '행구성' in str(x.get('sheet')) else 'L1' if '조회시간' in str(x.get('sheet')) else 'A1', f"{mid} {'Measure 행 구성' if '행구성' in str(x.get('sheet')) else '실전송 건수'} {x.get('sheet', '')}", '화면 실전송 인자로 AS-IS 조회 SP 실행', '건수·키 집합 = AS-IS', x.get('asis_sp', ''), res, f"{x.get('detail', '')}{' · ' + x['note'] if x.get('note') else ''}", 'a1-live')
     for x in dml:  # EG238·EG230·EG223 정적 쓰기 대조 — 놓친 쓰기 경로가 있을 수 있어 ERROR(확인 대상) · FOUND 는 행을 만들지 않는다
         add(f"D|{x.get('table')}|{x.get('column')}", 'F8', f"{mid} SP 쓰기 {x.get('table', '')}.{x.get('column', '')}", '저장 SP 쓰기 컬럼 정적 대조', 'AS-IS 저장 SP 가 쓰는 컬럼을 TO-BE 도 씀', 'AS-IS 저장 SP', 'ERROR', f"[쓰기 대조 불일치] {x.get('verdict')} · {x.get('detail', '')}", 'sp-dml')
@@ -248,11 +295,11 @@ def main():
             print(f"[eg_ingest] 적용성 보충 {len(need)}행 → {cnt}")
     except Exception as _ex:
         print(f'[eg_ingest] 적용성 보충 실패(무시): {_ex}')
-    with open(lp, 'w', encoding='utf-8-sig', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    _buf = io.StringIO(newline='')
+    w = csv.DictWriter(_buf, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    safe_io.write_text(lp, _buf.getvalue(), 'utf-8-sig', log=print)
     ej = os.path.join(vd, 'e2e_results.json'); prev = load(ej); keep = [e for e in prev if not str(e.get('row_id', '')).startswith('EG-')]
-    with open(ej, 'w', encoding='utf-8') as f:
-        json.dump(keep + list(last.values()), f, ensure_ascii=False, indent=1)
+    safe_io.write_text(ej, json.dumps(keep + list(last.values()), ensure_ascii=False, indent=1).replace('\n', os.linesep), 'utf-8', log=print)
     import collections
     print(f"[eg_ingest] {mid}: 팝업 {len(pop)}건·권한 {len(auth)}건·SP 문구 {len(sp)}건 → 원장 행 {len(last)} · 결과 {dict(collections.Counter(o['result'] for o in last.values()))}" + (f" · 규칙 대응 없음 {sorted(set(unmapped))}" if unmapped else ''))
     return 0

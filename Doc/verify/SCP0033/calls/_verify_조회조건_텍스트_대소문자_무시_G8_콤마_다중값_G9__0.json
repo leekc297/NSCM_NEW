@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 113,
+  "at": "2026-11-14T02:43:17.108Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"APCAN0842A\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 57,
+  "dur": 125,
+  "at": "2026-11-14T02:43:18.515Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"apcan0842a\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 57,
+  "dur": 103,
+  "at": "2026-11-14T02:43:19.738Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"PCAN0842\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 57,
+  "dur": 120,
+  "at": "2026-11-14T02:43:20.908Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"APCAN0842A,APCAN2441A\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 58,
+  "dur": 107,
+  "at": "2026-11-14T02:43:22.087Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

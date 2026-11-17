@@ -1,0 +1,259 @@
+{
+ "id": "SCP0049",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S6e3e4a",
+    "SCP0049-S67bbf1",
+    "SCP0049-Sae5db4",
+    "SCP0049-Se946c7",
+    "SCP0049-S8924d0",
+    "SCP0049-S169d68",
+    "SCP0049-S9c4951",
+    "SCP0049-Sf5d3f6",
+    "SCP0049-S95c568",
+    "SCP0049-Sde6f15",
+    "SCP0049-Sdef03b",
+    "SCP0049-S12a1e4",
+    "SCP0049-S1ac6fd",
+    "SCP0049-S5ce906",
+    "SCP0049-S1fb2b4",
+    "SCP0049-S6049eb",
+    "SCP0049-Sbf7bd5",
+    "SCP0049-S96bd28",
+    "SCP0049-Sb1eee5",
+    "SCP0049-S3d1c94",
+    "SCP0049-S857bad"
+   ]
+  },
+  {
+   "control": "BtnVersionInfo",
+   "ok": false,
+   "error": "InvalidOperationException: click:BtnVersionInfo failed: InvalidOperationException: control not found: BtnVersionInfo",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S18c78d",
+    "SCP0049-S692b3e"
+   ]
+  },
+  {
+   "control": "CboVersionId",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S1369c0"
+   ]
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S6e3e4a"
+   ]
+  },
+  {
+   "control": "btnColumn2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0049-S6e3e4a"
+   ]
+  },
+  {
+   "control": "buttonVersionInfo",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCP0049_CAPANewVersionInfoPopup",
+     "title": "CAPA Version Info",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S18c78d",
+    "SCP0049-S692b3e"
+   ]
+  },
+  {
+   "control": "cboVersionId",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S1369c0"
+   ]
+  },
+  {
+   "control": "formDown",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCP0049_ExcelSelect_Popup",
+     "title": "Excel Down",
+     "modal": true,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-Sa9585f",
+    "SCP0049-Sd5f772",
+    "SCP0049-S8a1353",
+    "SCP0049-Sa8099d",
+    "SCP0049-S49f7ed",
+    "SCP0049-S271173",
+    "SCP0049-S24a3af",
+    "SCP0049-S45b552",
+    "SCP0049-S0b08ff",
+    "SCP0049-Sb298d5",
+    "SCP0049-Sf6f086",
+    "SCP0049-Sddbc36",
+    "SCP0049-Sf94c78",
+    "SCP0049-S7ada87",
+    "SCP0049-S64a164",
+    "SCP0049-S323530",
+    "SCP0049-S95443a",
+    "SCP0049-S4b3c6d",
+    "SCP0049-Sccaeb0",
+    "SCP0049-S042371",
+    "SCP0049-S23c230"
+   ]
+  },
+  {
+   "control": "rbOpt1",
+   "ok": false,
+   "error": "InvalidOperationException: click:rbOpt1 failed: InvalidOperationException: control not found: rbOpt1",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-S3e1173"
+   ]
+  },
+  {
+   "control": "rbOpt2",
+   "ok": false,
+   "error": "InvalidOperationException: click:rbOpt2 failed: InvalidOperationException: control not found: rbOpt2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0049-See437a"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnConfirm",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 12
+  },
+  {
+   "control": "BtnNewModel",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 107
+  },
+  {
+   "control": "BtnNewVersion",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  },
+  {
+   "control": "BtnRequest",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  },
+  {
+   "control": "OnClose",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "OnOpen",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 5
+  },
+  {
+   "control": "btnCancel",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "btnConfirm",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 12
+  },
+  {
+   "control": "btnExcelFormDownload",
+   "why": "파일·Excel·인쇄 버튼(이름 규칙)",
+   "scenarios": 21
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  },
+  {
+   "control": "btnOpen",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 5
+  },
+  {
+   "control": "btnRequest",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  },
+  {
+   "control": "buttonNewModel",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  },
+  {
+   "control": "buttonNewVersion",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 11:42:57.001",
+ "fills": 0,
+ "fill_left": []
+}

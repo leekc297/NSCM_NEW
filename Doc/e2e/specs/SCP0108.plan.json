@@ -3,7 +3,12 @@
   "mode": "single",
   "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
   "menuId": "SCP0108",
-  "divCascade": [],
+  "divCascade": [
+    [
+      "Ver.",
+      "Version."
+    ]
+  ],
   "divLabels": [
     "Div",
     "Div."
@@ -461,15 +466,8 @@
       }
     ],
     "dbLoop": [],
-    "titleSheets": [
-      "spreadTitle"
-    ],
-    "titlePairs": [
-      {
-        "sheet": "spreadTitle",
-        "btn": "SEARCH"
-      }
-    ],
+    "titleSheets": [],
+    "titlePairs": [],
     "staticBindings": [
       "DIVISION_ID",
       "PLANT_NAME",
@@ -527,9 +525,9 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "DELETE",
+        "EXCEL",
         "SEARCH",
-        "INSERT",
-        "EXCEL"
+        "INSERT"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -553,58 +551,58 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "DELETE",
+      "EXCEL",
       "SEARCH",
-      "INSERT",
-      "EXCEL"
+      "INSERT"
     ],
     "CAPA Planner": [
-      "INSERT",
-      "EXCEL",
       "SEARCH",
-      "DELETE"
+      "INSERT",
+      "DELETE",
+      "EXCEL"
     ],
     "FP Planner": [
-      "DELETE",
-      "INSERT",
+      "SEARCH",
       "EXCEL",
-      "SEARCH"
+      "INSERT",
+      "DELETE"
     ],
     "FP Viewer": [
       "DELETE",
       "INSERT",
-      "SEARCH",
-      "EXCEL"
+      "EXCEL",
+      "SEARCH"
     ],
     "SCM PI Admin": [
       "DELETE",
-      "SEARCH",
       "INSERT",
+      "SEARCH",
       "EXCEL"
     ],
     "SCM Viewer": [
-      "EXCEL",
       "DELETE",
-      "INSERT",
-      "SEARCH"
+      "EXCEL",
+      "SEARCH",
+      "INSERT"
     ],
     "SCP Planner": [
+      "EXCEL",
       "INSERT",
       "DELETE",
-      "SEARCH",
-      "EXCEL"
+      "SEARCH"
     ],
     "SCP Tester": [
       "DELETE",
-      "SEARCH",
       "INSERT",
-      "EXCEL"
+      "EXCEL",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
     "DELETE",
+    "EXCEL",
     "SEARCH",
-    "INSERT",
-    "EXCEL"
+    "INSERT"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

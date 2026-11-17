@@ -1,0 +1,95 @@
+{
+ "id": "SCP0050",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnCheckAll",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnCheckAll failed: InvalidOperationException: control not found: btnCheckAll",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0050_GET_CAPA_PIC"
+   ],
+   "scenarios": [
+    "SCP0050-Sd9f422"
+   ]
+  },
+  {
+   "control": "btnFind",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnFind failed: InvalidOperationException: control not found: btnFind",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0050-S5bc1f8",
+    "SCP0050-S96bd28",
+    "SCP0050-S7b3573"
+   ]
+  },
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0050-S294a3e",
+    "SCP0050-S9abe42",
+    "SCP0050-S141f15",
+    "SCP0050-S4e500c",
+    "SCP0050-Sec8d2b",
+    "SCP0050-S30641d"
+   ]
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0050-S294a3e",
+    "SCP0050-S9abe42",
+    "SCP0050-S141f15",
+    "SCP0050-S4e500c",
+    "SCP0050-Sec8d2b",
+    "SCP0050-S30641d"
+   ]
+  },
+  {
+   "control": "btnUncheckAll",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnUncheckAll failed: InvalidOperationException: control not found: btnUncheckAll",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0050-S64a8db"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnExcelImport",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "btnUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 3
+  }
+ ],
+ "at": "2026-11-13 09:27:26.304",
+ "fills": 0,
+ "fill_left": []
+}

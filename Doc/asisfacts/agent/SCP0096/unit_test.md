@@ -1,59 +1,60 @@
 ﻿# SCP0096 — Shipment Working Day OSP 단위테스트
 
-> **작성 근거**: 업무분석서 §5 / 화면설계서 §3·§5와 같은 이름을 씁니다. 기대결과 중 사실 묶음으로 정할 수 없는 부분은 **확인 필요**로 표기했고, 실행할 때 AS-IS 동작을 확인해 확정합니다.
-> 주석 처리된 호출은 현행 기능이 아니므로 테스트 대상에서 제외했습니다.
+> 근거 열은 업무분석서 §5 / 화면설계서 §5 와 같은 엔드포인트·SP·핸들러·시트 이름을 씁니다. 절차 열은 화면설계서 §3 의 컨트롤명을 그대로 씁니다.
+> 기대결과에 "확인 필요"가 있는 케이스는 AS-IS 실행 결과를 기대값으로 기록한 뒤 To-Be 와 대조합니다(정적 추출로 동작을 확정할 수 없음).
+> 주석 처리된 호출은 테스트 대상이 아닙니다.
 
 ## 테스트 케이스
 
 | TC-ID | 구분 | 사전조건 | 절차 | 입력값 | 기대결과 | 근거 |
 |---|---|---|---|---|---|---|
-| TC-SCP0096-001 | 초기화 | 화면 권한이 있는 사용자로 로그인 | 메뉴에서 SCP0096 화면을 연다 | — | `Form_Load` → InitControls → GetBucketType 이 Bucket Type 코드를 1회 호출하고 오류 없이 화면이 열림(결과 바인딩 컨트롤은 확인 필요) | `Form_Load`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `DM0003_GET_BUCKET_TYPE_CODE` |
-| TC-SCP0096-002 | 초기화 | TC-001과 같음 | 화면을 열고 `spdMain` 의 시트를 확인한다 | — | 시트 `Shipment Working Day OSP` 1개가 생성되고 컬럼 헤더가 3행임. 달력 헤더 조회가 호출됨 | `Form_Load`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`, `Shipment Working Day OSP` |
-| TC-SCP0096-003 | 초기화 | TC-001과 같음 | 화면을 열고 `chkSum` 의 표시·체크 상태를 확인한다 | — | `chkSum` 화면에 보이지 않음(Visible=false), Checked=false. `M_`/`W_` Tag 컬럼 숨김 | `Form_Load`, `chkSum_CheckedChanged`(SetSpreadColumn 355), `Shipment Working Day OSP` |
-| TC-SCP0096-004 | 그리드 | 화면 열림 | `spdMain_Sheet1` 의 META 컬럼 헤더를 확인한다 | — | Division / Plant Site ID / Plant Site / Measure / Working Time Default / Last Input Date 6개 컬럼이 표시됨(순서는 META SORT_ORDER_NO 확인 필요) | `Shipment Working Day OSP`, SetSheetHeaderColumn(InitSpread:156) |
-| TC-SCP0096-005 | 그리드 | 조회 데이터가 있는 조건 | `cboDivision`·`dCalendar` 를 입력하고 조회 후 날짜 컬럼을 확인한다 | Period = 임의 2주 | MEASURE 다음 열부터 날짜 컬럼이 SCP0009 결과 행 수만큼 생성됨. 폭 50, 가운데 정렬, Y/N 콤보 셀 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `biz:CommonData.YesOrNo`, `Shipment Working Day OSP` |
-| TC-SCP0096-006 | 그리드 | TC-005 조회 완료 | 날짜 셀의 콤보 목록을 펼친다 | — | 목록이 Yes/No(YesOrNo 공통 데이터)로 구성됨 | `biz:CommonData.YesOrNo`, `Shipment Working Day OSP` |
-| TC-SCP0096-007 | 그리드 | TC-005 조회 완료 | 컬럼명에 `B_` 가 위치 1 이상에 포함된 컬럼이 있는지 확인한다 | — | 해당 컬럼은 폭 0 Text, 숨김 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `Shipment Working Day OSP` (InitSpreadDateColumn 196) |
-| TC-SCP0096-008 | 그리드 | 토·일요일이 들어간 기간 | 토·일 날짜 컬럼의 글자색을 확인한다 | Period에 토·일 포함 | DAY_CODE SAT 컬럼은 파랑, SUN 컬럼은 빨강, 평일은 기본색 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `Shipment Working Day OSP` (208) |
-| TC-SCP0096-009 | 그리드 | 여러 Large/Small 그룹에 걸친 기간 | 헤더 0~2행을 확인한다 | Period = 그룹 경계를 넘는 기간 | 0행 LARGE_CLASS_LABEL_NAME, 1행 SMALL_CLASS_LABEL_NAME으로 Span. 각 그룹 시작 열에 `SUM` 헤더 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `Shipment Working Day OSP` (215~244) |
-| TC-SCP0096-010 | 조회 | 데이터가 있는 Division / Plant Site | `cboDivision`·`clbPlantSite`·`dCalendar` 를 입력하고 조회 버튼을 누른다 | Division=유효값, Plant Site 1개 이상 체크 | 조회 SP가 호출되고, 체크한 Plant Site 행만 그리드에 표시됨. 달력 헤더 재생성. 결과 행이 있으므로 SetSpreadColumn 실행 | FindButton > `FindData_Main`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` |
-| TC-SCP0096-011 | 조회 | 데이터가 없는 조건 | 데이터가 없는 조건으로 조회 버튼을 누른다 | 데이터 없는 Plant Site/기간 | 그리드 0행, 오류 없음. `GetMaxRowIndex() > 0` 이 아니므로 SetSpreadColumn 생략. 결과 없음 메시지 여부는 확인 필요 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `FindData_Main`(484) |
-| TC-SCP0096-012 | 조회 | 조회 SP 오류를 유발할 수 있는 환경 | 조회 SP가 오류를 반환하는 상태에서 조회 버튼을 누른다 | (오류 응답) | 오류 메시지 표시, 그리드 이전 상태 유지 여부 확인 필요. 화면 비정상 종료 없음 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
-| TC-SCP0096-013 | 조회 | 화면 열림 | `cboDivision` 또는 `dCalendar` 를 비우고 조회 버튼을 누른다 | Division 빈값 / Period 빈값 | 필수(`Division*`, `Period*`) 검증 동작·메시지 **확인 필요** | FindButton > `FindData_Main`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
-| TC-SCP0096-014 | 조회 | 달력 헤더 결과가 없는 기간 | 달력 데이터가 없는 기간으로 화면을 열거나 조회한다 | Period = 달력 미등록 기간 | 날짜 컬럼 0개, META 6개 컬럼만 표시. 오류 여부 확인 필요 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`, `Shipment Working Day OSP` |
-| TC-SCP0096-015 | 조회 | Bucket Type 코드 결과가 0건인 환경 | 화면을 연다 | — | 화면 초기화가 오류 없이 끝남(DM0003 결과 사용처 확인 필요) | `Form_Load`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `DM0003_GET_BUCKET_TYPE_CODE` |
-| TC-SCP0096-016 | 저장 | TC-010 조회 완료 | `spdMain` 날짜 셀 1개를 Y↔N로 바꾸고 저장 버튼을 누른다 | 셀 값 변경 1건 | 변경 행(ROW_ID)만 저장 파라미터 `p_division_id, p_plant_site_id, p_measure, p_user_id, p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default` 로 구성. 저장 후 재조회 결과에 변경값이 반영됨(저장 SP 확인 필요) | SaveButton > `SaveData_Main` > `FindData_Main`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` |
-| TC-SCP0096-017 | 저장 | TC-010 조회 완료 | 아무것도 바꾸지 않고 저장 버튼을 누른다 | 변경 없음 | GetChanges 결과 0건. 저장 호출 여부·메시지 확인 필요 | `SaveData_Main`(609 GetChanges), `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
-| TC-SCP0096-018 | 저장 | 저장 오류를 유발할 수 있는 환경 | 셀을 바꾸고 저장 버튼을 누른다 | (오류 응답) | 오류 메시지 표시, 데이터 미반영. 재조회 여부 확인 필요 | `SaveData_Main`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
-| TC-SCP0096-019 | 이벤트 | TC-010 조회 완료 | `spdMain` 셀을 더블클릭한다 | 임의 데이터 셀 | 핸들러가 실행되고 오류 없음. 동작 내용 확인 필요 | `SpdMain_CellDoubleClick`, `Shipment Working Day OSP` |
-| TC-SCP0096-020 | 이벤트 | TC-010 조회 완료(행이 화면보다 많음) | `spdMain` 을 세로로 스크롤한다 | — | 핸들러가 실행되고 오류 없음. 동작 내용 확인 필요 | `SpdMain_TopChange`, `Shipment Working Day OSP` |
-| TC-SCP0096-021 | 이벤트 | 화면 열림 | `cboDivision` 값을 바꾼다 | Division A → B | 핸들러가 실행되고 오류 없음. `clbPlantSite` 목록 재조회 등 연동은 확인 필요 | `CboDivision_SelectedIndexChanged` |
-| TC-SCP0096-022 | 이벤트 | 화면 열림 | `clbPlantSite` 체크를 바꾼다 | Plant Site 체크/해제 | 핸들러가 실행되고 오류 없음. 연동 동작 확인 필요 | `ClbPlantSite_SelectedIndexChanged` |
-| TC-SCP0096-023 | 이벤트 | 화면 열림 | `cboDayWeek` 를 서로 다른 값으로 두 번 바꾸며 `cboInputValue` 활성 상태를 본다 | 값 1 / 값 2 | 선택 조건에 따라 `cboInputValue.Enabled` 가 false(675) / true(679)로 바뀜(조건 확인 필요) | `CboDayWeek_SelectedIndexChanged` |
-| TC-SCP0096-024 | 이벤트 | 화면 열림 | `cboDayWeek` 목록을 펼친다 | — | 요일 목록 표시. 원천이 Lookup 공통코드인지 확인 필요 | `biz:CommonData.CommonDataList`, `CboDayWeek_SelectedIndexChanged` |
-| TC-SCP0096-025 | 이벤트 | TC-010 조회 완료 | `cboDayWeek`·`cboInputValue` 를 고르고 `btnInput` 을 누른다 | 요일 값, Input Value 값 | 지정한 요일 조건의 날짜 셀에 Input Value가 일괄 반영됨(대상 행/열 범위 확인 필요). 서버 호출 없음 | `BtnInput_Click`, `Shipment Working Day OSP` |
-| TC-SCP0096-026 | 이벤트 | TC-010 조회 완료, `chkSum` 을 조작할 수 있는 테스트 환경 | `chkSum` 을 체크 → 해제한다 | Checked true → false | true: `M_`/`W_` 컬럼 표시, `D_` 표시 유지. false: `M_`/`W_` 숨김, `D_` 표시 유지 | `chkSum_CheckedChanged`, `Shipment Working Day OSP` (SetSpreadColumn 350·355) |
-| TC-SCP0096-027 | division | 14개 division(40 / 81 / 81_HD / 81_HG / 81_HM / 81_ST / 81_UC / 82 / EE / EE_HD / EE_HG / EE_HM / EE_ST / EE_UC) 데이터 | division별로 `cboDivision` 을 바꿔 조회 버튼을 누르고 META 컬럼을 비교한다 | division 14개 | 모든 division에서 META 6개 컬럼이 똑같이 표시됨(division별 변형 없음) | `CboDivision_SelectedIndexChanged`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `Shipment Working Day OSP` |
-| TC-SCP0096-028 | 권한 | 조회 권한만 있는 그룹 / 저장 권한이 있는 그룹 | 각 계정으로 화면을 열고 조회·저장 버튼이 보이는지·동작하는지 확인한다 | 권한 그룹 2종 | TB_FX_GroupMenuAuth 값에 따라 버튼 노출·동작(권한 값 확인 필요) | `Form_Load`, FindButton > `FindData_Main`, SaveButton > `SaveData_Main`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-001 | 초기화 | 메뉴 권한 보유 사용자 로그인 | 1. SCP0096 화면을 연다 | — | `DM.DM0003_GET_BUCKET_TYPE_CODE` 가 1회 호출되고 오류 없이 로드된다. 결과 반영 컨트롤은 확인 필요 | `Form_Load` · `DM.DM0003_GET_BUCKET_TYPE_CODE` · SP `DM0003_GET_BUCKET_TYPE_CODE` |
+| TC-SCP0096-002 | 초기화 | 동일 | 1. 화면을 연다 2. spdMain 의 시트를 확인한다 | — | 시트 `Shipment Working Day OSP` 1개가 생성되고 `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` 이 호출되어 3단 헤더가 그려진다 | `Form_Load` · `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` · SP `SCP0009_GET_SHEET_CALENDAR_3SPAN` · 시트 `Shipment Working Day OSP` |
+| TC-SCP0096-003 | 초기화 | 동일 | 1. 화면을 연다 2. chkSum 상태를 확인한다 | — | chkSum Checked=false, Visible=false(Designer:346). usrConditionPanel1 은 상단(Dock Top), spdMain 은 나머지 영역(Fill) | `Form_Load` · props.csv DefineProperty:121 |
+| TC-SCP0096-004 | 조회 | 저장 데이터가 있는 Division/Plant Site | 1. cboDivision 선택 2. clbPlantSite 다중 선택 3. dCalendar 기간 입력 4. 조회(FindButton) | Division, Plant Site 2건, Period 1개월 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` 호출 후 spdMain 에 행이 표시되고, 결과 행이 있으면 SetSpreadColumn 이 다시 적용된다(484) | FindData_Main · `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` · SP `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-005 | 조회 | 동일 | 1. TC-004 조회 후 dCalendar 기간을 바꿔 다시 조회 | 기간 변경 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` 이 다시 호출되어 날짜 컬럼 수·헤더가 새 기간에 맞게 바뀐다 | FindData_Main > InitSpread > GetSpdTitle · `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` |
+| TC-SCP0096-006 | 조회 | 데이터가 없는 조건 | 1. cboDivision·clbPlantSite·dCalendar 를 데이터 없는 조건으로 지정 2. 조회 | 데이터 없는 Plant Site/기간 | 빈 결과: spdMain 0행, 오류 없음. SetSpreadColumn 재호출 안 됨(484 조건). 안내 메시지는 확인 필요 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` · grid_code.csv 484 |
+| TC-SCP0096-007 | 조회 | SP 오류 유발 환경(예: SP 미배포 또는 잘못된 파라미터) | 1. 조회 실행 | 오류 유발 조건 | 오류 응답: 화면이 비정상 종료되지 않는다. 오류 메시지 문구·그리드 유지 여부는 확인 필요 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` · SP `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-008 | 조회 | 화면 로드 | 1. cboDivision 을 비운다(가능한 경우) 2. 조회 | Division 빈값 | `Division*` 필수: 조회가 막히는지와 메시지는 확인 필요 | 업무분석서 BR-01 · `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-009 | 조회 | 화면 로드 | 1. dCalendar 를 비운다(가능한 경우) 2. 조회 | Period 빈값 | `Period*` 필수: 조회가 막히는지와 메시지는 확인 필요 | 업무분석서 BR-02 · `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-010 | 그리드 | TC-004 조회 완료 | 1. spdMain 메타 컬럼 헤더를 확인한다 | — | 시트 `Shipment Working Day OSP` 에 Division, Plant Site ID, Plant Site, Measure, Working Time Default, Last Input Date 6컬럼이 표시된다(순서는 메타 원문 확인 필요) | 시트 `Shipment Working Day OSP` · grid_effective.csv |
+| TC-SCP0096-011 | 그리드 | TC-004 조회 완료 | 1. 날짜 컬럼을 확인한다 2. 날짜 셀 콤보를 연다 | — | `B_` 포함(위치 > 0) 컬럼은 숨김(폭 0). 그 외는 폭 50, 가운데 정렬 Y/N 콤보이며 콤보 항목은 `biz:CommonData.YesOrNo` 결과 | `biz:CommonData.YesOrNo` · InitSpreadDateColumn 196·203 · 시트 `Shipment Working Day OSP` |
+| TC-SCP0096-012 | 그리드 | 토·일요일이 포함된 기간 조회 | 1. 주말 날짜 컬럼을 확인한다 | 주말 포함 기간 | DAY_CODE SAT 컬럼 글자색 Blue, SUN 컬럼 Red | InitSpreadDateColumn 208 · `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` |
+| TC-SCP0096-013 | 그리드 | TC-004 조회 완료 | 1. 헤더 3단을 확인한다 | — | 0행 대분류 라벨 Span, 1행 소분류 라벨 Span, 각 구간 시작 열에 `SUM` 헤더 | InitSpreadDateColumn 215~244 · 시트 `Shipment Working Day OSP` |
+| TC-SCP0096-014 | 저장 | TC-004 조회 완료 | 1. spdMain 날짜 셀 Y→N 변경 2. 저장(SaveButton) | 셀 1개 변경 | `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` 호출 → SCP_MST_SHIPMENT_WORKING_DAY_OSP MERGE, SCM_SYS_LOG_BATCH 기록 → `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` 재조회로 변경값 유지 표시 | SaveData_Main · `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` · SP `SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-015 | 저장 | TC-004 조회 완료 | 1. Working Time Default 셀 변경(편집 가능한 경우) 2. 저장 | 값 변경 | SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT MERGE 여부를 확인한다(`p_is_save_defalut` 조건 확인 필요) | `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` · meta_reads.csv 572·580 |
+| TC-SCP0096-016 | 저장 | TC-004 조회 완료, 변경 없음 | 1. 저장 | 변경 0건 | GetChanges 결과 0건일 때 SP 호출 여부·메시지 확인 필요 | SaveData_Main:609 · `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-017 | 저장 | SP 오류 유발 환경 | 1. 셀 변경 후 저장 | 오류 유발 조건 | 오류 응답: 테이블 변경 없음(롤백). 오류 메시지·재조회 여부 확인 필요 | `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-018 | 저장 | TC-014 저장 완료 | 1. 저장 뒤 헤더 확인 | — | 재조회 경로에서 `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` 이 다시 호출되어 헤더가 같게 유지된다 | SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle · `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` |
+| TC-SCP0096-019 | 이벤트 | TC-004 조회 완료 | 1. spdMain 셀을 더블클릭 | 데이터 셀 | 동작 확인 필요(AS-IS 결과 기록 후 대조) | `SpdMain_CellDoubleClick` |
+| TC-SCP0096-020 | 이벤트 | 화면 높이를 넘는 행 조회 | 1. spdMain 을 세로 스크롤 | — | 동작 확인 필요(AS-IS 결과 기록 후 대조) | `SpdMain_TopChange` |
+| TC-SCP0096-021 | 이벤트 | 화면 로드 | 1. cboDivision 값을 바꾼다 | 다른 Division | 동작 확인 필요(clbPlantSite 목록 갱신 여부 등 AS-IS 결과 기록) | `CboDivision_SelectedIndexChanged` |
+| TC-SCP0096-022 | 이벤트 | 화면 로드 | 1. clbPlantSite 선택을 바꾼다 | Plant Site 선택 변경 | 동작 확인 필요(AS-IS 결과 기록 후 대조) | `ClbPlantSite_SelectedIndexChanged` |
+| TC-SCP0096-023 | 이벤트 | 화면 로드 | 1. cboDayWeek 값을 바꾼다(각 선택지) | Day of the week 각 값 | 선택값에 따라 cboInputValue.Enabled 가 false 또는 true 가 된다. 값별 분기는 확인 필요 | `CboDayWeek_SelectedIndexChanged` · props.csv 675·679 |
+| TC-SCP0096-024 | 이벤트 | 화면 로드 | 1. cboDayWeek 콤보 항목을 연다 | — | 콤보 항목이 `biz:CommonData.CommonDataList`(LookupCommon) 결과와 같은지 확인한다(바인딩 확인 필요) | `biz:CommonData.CommonDataList` · `<field:dtDayWeek>`:49 |
+| TC-SCP0096-025 | 이벤트 | TC-004 조회 완료 | 1. cboDayWeek 선택 2. cboInputValue 선택 3. btnInput 클릭 | Day of the week, Input Value | 서버 호출 없이 그리드에 값이 반영된다. 반영 대상·규칙은 확인 필요 | `BtnInput_Click` |
+| TC-SCP0096-026 | 이벤트 | TC-004 조회 완료, chkSum 조작 가능 상태(Visible=false 이므로 조작 경로 확인 필요) | 1. chkSum 체크 2. chkSum 해제 | Checked true/false | `M_`·`W_` 태그 컬럼이 체크 시 표시, 해제 시 숨김. `W_` 최종값은 확인 필요 | `chkSum_CheckedChanged` · SetSpreadColumn 350·355 |
+| TC-SCP0096-027 | division | Division 40, 81, 82, EE 사용자 각각 | 1. 각 Division 으로 조회 | Division 40 / 81 / 82 / EE | 4개 모두 시트 `Shipment Working Day OSP` 메타 6컬럼이 같다(division 변형 없음) | 시트 `Shipment Working Day OSP` · grid_effective.csv · `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` |
+| TC-SCP0096-028 | 권한 | TB_FX_GroupMenuAuth 4개 그룹 사용자 | 1. 그룹별로 화면을 연다 2. 조회·저장 실행 | 그룹별 계정 | 그룹별 C/R/U/D 에 따라 조회·저장 가능 여부가 갈린다. 값은 확인 필요 | TB_FX_GroupMenuAuth · `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` |
 
 ## 커버리지 점검
 
 | 대상 | 항목 | TC |
 |---|---|---|
-| 이벤트 핸들러 | `Form_Load` | 001, 002, 003, 015, 028 |
-| | `SpdMain_CellDoubleClick` | 019 |
-| | `SpdMain_TopChange` | 020 |
-| | `CboDivision_SelectedIndexChanged` | 021, 027 |
-| | `ClbPlantSite_SelectedIndexChanged` | 022 |
-| | `CboDayWeek_SelectedIndexChanged` | 023, 024 |
-| | `BtnInput_Click` | 025 |
-| | `chkSum_CheckedChanged` | 003, 026 |
+| 핸들러 | `Form_Load` | 001·002·003 |
+| 핸들러 | `SpdMain_CellDoubleClick` | 019 |
+| 핸들러 | `SpdMain_TopChange` | 020 |
+| 핸들러 | `CboDivision_SelectedIndexChanged` | 021 |
+| 핸들러 | `ClbPlantSite_SelectedIndexChanged` | 022 |
+| 핸들러 | `CboDayWeek_SelectedIndexChanged` | 023 |
+| 핸들러 | `BtnInput_Click` | 025 |
+| 핸들러 | `chkSum_CheckedChanged` | 026 |
 | 엔드포인트 | `biz:CommonData.CommonDataList` | 024 |
-| | `biz:CommonData.YesOrNo` | 005, 006 |
-| | `DM.DM0003_GET_BUCKET_TYPE_CODE` | 001, 015 |
-| | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | 010~013, 016~018, 027, 028 |
-| | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | 002, 005, 007~010, 014, 016 |
-| 시트 | `Shipment Working Day OSP` | 002~009, 014, 019, 020, 025~027 |
-| 빈 결과 | 조회 0건 / 달력 0건 / 코드 0건 / 변경 0건 | 011, 014, 015, 017 |
-| 오류 응답 | 조회 / 저장 | 012, 018 |
-| division | 14개 division 동일(변형 없음) | 027 |
+| 엔드포인트 | `biz:CommonData.YesOrNo` | 011 |
+| 엔드포인트 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | 001 |
+| 엔드포인트 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | 004·006·007·008·009·027 |
+| 엔드포인트 | `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` | 014·015·016·017·028 |
+| 엔드포인트 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | 002·005·012·018 |
+| 시트 | `Shipment Working Day OSP` | 002·010·011·013·027 |
+| 빈 결과 / 오류 응답 | — | 006 / 007·017 |
+| division | 변형 없음 확인 | 027 |

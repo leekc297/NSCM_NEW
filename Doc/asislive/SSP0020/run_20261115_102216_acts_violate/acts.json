@@ -1,0 +1,53 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {},
+   "after_edit": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 10:21:22",
+ "insert_src": {
+  "file": "C:\\Projects\\NSCM\\GSCM\\06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+  "exists": false,
+  "targets": [],
+  "evidence": "GSCM\\06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs:897 InsertButton 본문 비어 있음(주석만)"
+ },
+ "edit_focus": "행 없음",
+ "edit_mode": false
+}

@@ -1,0 +1,127 @@
+{
+ "id": "SCP0126",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnExit",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnExit failed: InvalidOperationException: control not found: btnExit",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-Sc74b8e"
+   ]
+  },
+  {
+   "control": "btnOK",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-S19e531"
+   ]
+  },
+  {
+   "control": "btn_NextMonth",
+   "ok": false,
+   "error": "InvalidOperationException: click:btn_NextMonth failed: InvalidOperationException: control not found: btn_NextMonth",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-S5bb8c8",
+    "SCP0126-Sd10d7d",
+    "SCP0126-S716bf2",
+    "SCP0126-S6e005e",
+    "SCP0126-S4d2e95",
+    "SCP0126-S1e7c3f",
+    "SCP0126-S9ca55d",
+    "SCP0126-Sa1db56",
+    "SCP0126-Se88ffe",
+    "SCP0126-S7e62bf",
+    "SCP0126-S763417",
+    "SCP0126-S961978",
+    "SCP0126-S5e2087"
+   ]
+  },
+  {
+   "control": "btn_PrevMonth",
+   "ok": false,
+   "error": "InvalidOperationException: click:btn_PrevMonth failed: InvalidOperationException: control not found: btn_PrevMonth",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-S5bb8c8",
+    "SCP0126-Sd10d7d",
+    "SCP0126-S716bf2",
+    "SCP0126-S6e005e",
+    "SCP0126-S4d2e95",
+    "SCP0126-S1e7c3f",
+    "SCP0126-S9ca55d",
+    "SCP0126-Sa1db56",
+    "SCP0126-Se88ffe",
+    "SCP0126-S7e62bf",
+    "SCP0126-S763417",
+    "SCP0126-S961978",
+    "SCP0126-S5e2087"
+   ]
+  },
+  {
+   "control": "exitButton",
+   "ok": false,
+   "error": "InvalidOperationException: click:exitButton failed: InvalidOperationException: control not found: exitButton",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-Sc74b8e"
+   ]
+  },
+  {
+   "control": "lbl_Today",
+   "ok": false,
+   "error": "InvalidOperationException: click:lbl_Today failed: InvalidOperationException: control not found: lbl_Today",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0126-Sa951ba",
+    "SCP0126-S5bf020"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnBatchSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 18
+  },
+  {
+   "control": "BtnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnBatchSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 11
+  },
+  {
+   "control": "btnCancel",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-13 12:22:59.836",
+ "fills": 0,
+ "fill_left": []
+}

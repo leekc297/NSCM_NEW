@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+ITEM_ID,,DIVISION_ID,NEW,MODE,"MessageHelper.GMessageBox(""MSG00093"", new object[] { ""JIG Name"" })","if (siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.GetText(e.Row, 0) == ""I"")",SCP0036_JigItem.cs:462 SCP0036_JigItem.SpdMain_CellClick

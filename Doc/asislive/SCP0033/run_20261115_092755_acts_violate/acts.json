@@ -1,0 +1,584 @@
+{
+ "id": "SCP0033",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Semi Dept Day",
+     "rows_before": 54,
+     "rows_after": 55,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "DIVISION_ID",
+       "before": "40",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPERATION_GROUP",
+       "before": "Electrode",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "APCAN0842A",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NICK_NAME",
+       "before": "X732",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "DEPARTURE_DAY",
+       "before": "MON",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "max.ts.lee",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2024-12-12 16:23:21",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "max.ts.lee",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-12-12 16:23:21",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "APCAN2441A",
+       "after": "APCAN0842A"
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "M53F1B",
+       "after": "X732"
+      },
+      {
+       "row": 1,
+       "col": "CREATED_BY",
+       "before": "jaeuk.shin",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 1,
+       "col": "CREATION_DATE",
+       "before": "2024-12-12 16:18:33",
+       "after": "2024-12-12 16:23:21"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATED_BY",
+       "before": "jaeuk.shin",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 1,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-12-12 16:18:33",
+       "after": "2024-12-12 16:23:21"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "APCCA0861A",
+       "after": "APCAN2441A"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "X732",
+       "after": "M53F1B"
+      },
+      {
+       "row": 2,
+       "col": "CREATED_BY",
+       "before": "max.ts.lee",
+       "after": "jaeuk.shin"
+      },
+      {
+       "row": 2,
+       "col": "CREATION_DATE",
+       "before": "2024-12-12 16:19:32",
+       "after": "2024-12-12 16:18:33"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATED_BY",
+       "before": "max.ts.lee",
+       "after": "jaeuk.shin"
+      },
+      {
+       "row": 2,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-12-12 16:19:32",
+       "after": "2024-12-12 16:18:33"
+      },
+      {
+       "row": 3,
+       "col": "DIVISION_ID",
+       "before": "81",
+       "after": "40"
+      },
+      {
+       "row": 3,
+       "col": "OPERATION_GROUP",
+       "before": "Cell",
+       "after": "Electrode"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "ACEN1063I-A3",
+       "after": "APCCA0861A"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "E63E",
+       "after": "X732"
+      },
+      {
+       "row": 3,
+       "col": "DEPARTURE_DAY",
+       "before": "TUE",
+       "after": "MON"
+      },
+      {
+       "row": 3,
+       "col": "CREATED_BY",
+       "before": "aidenlee",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 3,
+       "col": "CREATION_DATE",
+       "before": "2018-10-25 18:39:19",
+       "after": "2024-12-12 16:19:32"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATED_BY",
+       "before": "taewonkk",
+       "after": "max.ts.lee"
+      },
+      {
+       "row": 3,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2018-11-08 14:28:22",
+       "after": "2024-12-12 16:19:32"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "ACEN1076I-A1",
+       "after": "ACEN1063I-A3"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "E76A",
+       "after": "E63E"
+      },
+      {
+       "row": 4,
+       "col": "CREATED_BY",
+       "before": "ckwlsdn",
+       "after": "aidenlee"
+      },
+      {
+       "row": 4,
+       "col": "CREATION_DATE",
+       "before": "2019-05-02 20:21:00",
+       "after": "2018-10-25 18:39:19"
+      },
+      {
+       "row": 4,
+       "col": "LAST_UPDATED_BY",
+       "before": "ckwlsdn",
+       "after": "taewonkk"
+      },
+      {
+       "row": 4,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2019-05-02 20:21:00",
+       "after": "2018-11-08 14:28:22"
+      },
+      {
+       "row": 5,
+       "col": "ITEM_ID",
+       "before": "ACLN1010U-A1",
+       "after": "ACEN1076I-A1"
+      },
+      {
+       "row": 5,
+       "col": "NICK_NAME",
+       "before": "F10",
+       "after": "E76A"
+      },
+      {
+       "row": 5,
+       "col": "CREATED_BY",
+       "before": "taewonkk",
+       "after": "ckwlsdn"
+      },
+      {
+       "row": 5,
+       "col": "CREATION_DATE",
+       "before": "2018-11-15 18:31:45",
+       "after": "2019-05-02 20:21:00"
+      },
+      {
+       "row": 5,
+       "col": "LAST_UPDATED_BY",
+       "before": "taewonkk",
+       "after": "ckwlsdn"
+      },
+      {
+       "row": 5,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2018-11-15 18:31:45",
+       "after": "2019-05-02 20:21:00"
+      },
+      {
+       "row": 6,
+       "col": "ITEM_ID",
+       "before": "ACPN1030U-B1",
+       "after": "ACLN1010U-A1"
+      },
+      {
+       "row": 6,
+       "col": "NICK_NAME",
+       "before": "P30B",
+       "after": "F10"
+      },
+      {
+       "row": 6,
+       "col": "DEPARTURE_DAY",
+       "before": "THU",
+       "after": "TUE"
+      },
+      {
+       "row": 6,
+       "col": "CREATED_BY",
+       "before": "ckwlsdn",
+       "after": "taewonkk"
+      },
+      {
+       "row": 6,
+       "col": "CREATION_DATE",
+       "before": "2018-10-16 11:26:45",
+       "after": "2018-11-15 18:31:45"
+      },
+      {
+       "row": 6,
+       "col": "LAST_UPDATED_BY",
+       "before": "ckwlsdn",
+       "after": "taewonkk"
+      },
+      {
+       "row": 6,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2018-10-16 11:26:45",
+       "after": "2018-11-15 18:31:45"
+      },
+      {
+       "row": 7,
+       "col": "ITEM_ID",
+       "before": "ACPN1034U-A1",
+       "after": "ACPN1030U-B1"
+      },
+      {
+       "row": 7,
+       "col": "NICK_NAME",
+       "before": "P34",
+       "after": "P30B"
+      },
+      {
+       "row": 7,
+       "col": "DEPARTURE_DAY",
+       "before": "TUE",
+       "after": "THU"
+      },
+      {
+       "row": 7,
+       "col": "CREATION_DATE",
+       "before": "2019-02-21 19:16:38",
+       "after": "2018-10-16 11:26:45"
+      },
+      {
+       "row": 7,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2019-02-21 19:16:38",
+       "after": "2018-10-16 11:26:45"
+      },
+      {
+       "row": 8,
+       "col": "DIVISION_ID",
+       "before": "EE",
+       "after": "81"
+      },
+      {
+       "row": 8,
+       "col": "OPERATION_GROUP",
+       "before": "Electrode",
+       "after": "Cell"
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "APCAN0005A",
+       "after": "ACPN1034U-A1"
+      },
+      {
+       "row": 8,
+       "col": "NICK_NAME",
+       "before": "MH1",
+       "after": "P34"
+      },
+      {
+       "row": 8,
+       "col": "DEPARTURE_DAY",
+       "before": "MON",
+       "after": "TUE"
+      }
+     ],
+     "more": 246
+    }
+   ],
+   "new_rows": {
+    "spdMain/Shipment Semi Dept Day": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:27:34.574",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Shipment Semi Dept Day",
+    "sheet": "Shipment Semi Dept Day",
+    "rows_total": 55,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "OPERATION_GROUP",
+      "label": "Operation Group",
+      "data_field": "OPERATION_GROUP",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "DEPARTURE_DAY",
+      "label": "Departure day",
+      "data_field": "DEPARTURE_DAY",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "VALID_YN",
+      "label": "Valid",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "CREATED_BY",
+      "label": "Created By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Updated By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "S_VALID_YN",
+      "label": "S_VALID_YN",
+      "data_field": "S_VALID_YN",
+      "visible": "False"
+     }
+    ],
+    "locked": [
+     "101010011110"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:27:34.574"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Div* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:26:46",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

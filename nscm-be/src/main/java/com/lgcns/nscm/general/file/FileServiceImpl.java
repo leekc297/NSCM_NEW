@@ -17,6 +17,7 @@ import com.lgcns.nscm.framework.base.BaseConstants;
 import com.lgcns.nscm.framework.base.BaseService;
 import com.lgcns.nscm.framework.exception.BusinessException;
 import com.lgcns.nscm.framework.utils.ExcelUtils;
+import com.lgcns.nscm.framework.utils.SecurityUtil;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +101,8 @@ public class FileServiceImpl extends BaseService implements FileService {
 				params.put("validProc", validProc);
 				params.put("mode", 0);
 				selectList("admin.excel.excelUploadValid", params);
+				// 동적 컬럼(DMF0082 월 / DMF0074 메탈 / DMF0014 기간)이 한 칸도 없는 행은 Error Detail 로 보낸다.
+				markRowsWithoutDynamicValue(params, uploadRows, headerContent, mnuId);
 				// 조회용 프로시저 실행
 				params.put("@O_CUR_CNT", null);
 				params.put("@O_CUR_LIST", null);
@@ -150,6 +153,46 @@ public class FileServiceImpl extends BaseService implements FileService {
 			//   잘못된(누락된) 헤더명을 메시지 본문에 줄바꿈으로 나열한다(2026-09-22 사용자 요청).
 			throw new BusinessException("Invalid Column Header Title\n\n" + String.join("\n", missing));
 		}
+	}
+
+	// DMF0082 월 버킷 토큰(M0~M12)
+	private static final java.util.regex.Pattern MONTH_TOKEN = java.util.regex.Pattern.compile("^M\\d+$");
+
+	// 동적 컬럼이 전부 빈 SUCCESS 행을 ERROR 로 바꾼다. @TITLE 행(_COLn = 헤더명)으로 ATTRIBUTE 번호를 찾는다.
+	private void markRowsWithoutDynamicValue(Map<String, Object> params, List<Map<String, Object>> uploadRows,
+			String headerContent, String mnuId) throws Exception {
+		if (uploadRows.isEmpty()) return;
+		Set<String> headerTokens = Arrays.stream(headerContent.split("\\|", -1))
+				.map(String::trim)
+				.collect(Collectors.toSet());
+
+		List<String> dynamicHeaders = new ArrayList<>();
+		List<String> blankConds = new ArrayList<>();
+		for (Map.Entry<String, Object> e : uploadRows.get(0).entrySet()) {
+			if (!e.getKey().startsWith("_COL")) continue;
+			String header = String.valueOf(e.getValue());
+			if (!isDynamicColumn(mnuId, header, headerTokens)) continue;
+			dynamicHeaders.add(header);
+			blankConds.add("TRIM(ATTRIBUTE" + Integer.parseInt(e.getKey().substring(4)) + ") IS NULL");
+		}
+		if (blankConds.isEmpty()) return;
+
+		params.put("dynamicBlankCond", String.join(" AND ", blankConds));
+		params.put("dynamicBlankMsg", "At least one value is required in "
+				+ dynamicHeaders.get(0) + " ~ " + dynamicHeaders.get(dynamicHeaders.size() - 1) + ".");
+		// update 경로는 sesUserId 를 자동 주입하지 않으므로(selectList 만 주입) 세션에서 직접 넣는다.
+		params.put("sesUserId", SecurityUtil.getUserSession().getUserId());
+		update("admin.excel.excelUploadDynamicBlank", params);
+	}
+
+	// 메인 조회 그리드 기준 동적 컬럼 판정 — DMF0082 월 / DMF0074 메탈 2단 헤더(그룹_원소) / DMF0014 기간
+	private boolean isDynamicColumn(String mnuId, String header, Set<String> headerTokens) {
+		if (mnuId.startsWith("DMF0082")) return MONTH_TOKEN.matcher(header).matches();
+		if (mnuId.startsWith("DMF0074")) return header.contains("_");
+		if (mnuId.startsWith("DMF0014")) {
+			return !headerTokens.contains(header) || WEEK_LABEL_TOKEN.matcher(header).matches();
+		}
+		return false;
 	}
 
 	// 모든 행의 모든 값이 공백인지 확인 — 값만 지운 빈 행은 POI 상 Row 객체가 남아있어

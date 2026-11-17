@@ -1,0 +1,67 @@
+{
+ "table": "SCM_MST_SITE",
+ "pk": [
+  "DIVISION_ID",
+  "SCM_SITE_ID"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "SCM_SITE_ID": "SCM_SITE_ID"
+ },
+ "save_sp": "SCP0001_SAVE_PLANT_SITE",
+ "side": [
+  {
+   "table": "SCM_MST_SITE_H",
+   "pk": [
+    "HISTORY_SEQ"
+   ]
+  }
+ ],
+ "related": [
+  {
+   "table": "SCM_MST_VENDOR",
+   "pk": [
+    "COMPANY_ID",
+    "VENDOR_CODE"
+   ],
+   "match": {
+    "COMPANY_ID": "COMPANY_ID",
+    "VENDOR_CODE": "PLANT_ID"
+   }
+  },
+  {
+   "table": "SCM_PLANT_M_SN",
+   "pk": [
+    "COMPANY_ID",
+    "DIVISION_ID",
+    "SITE_ID",
+    "PLANT_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID"
+   }
+  }
+ ],
+ "basis": "foxml SCP0001_SAVE_PLANT_SITE → SP SCP0001_SAVE_PLANT_SITE 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = MERGE SCM_MST_SITE(DIVISION_ID, SCM_SITE_ID) · PR_SCM_MST_SITE_HIST 이력 INSERT · SCP0001_SAVE_SCM_MST_VENDOR 가 OSP_YN=Y 면 SCM_MST_VENDOR.ATTRIBUTE1(COMPANY_ID, VENDOR_CODE=PLANT_ID), N 이면 SCM_PLANT_M_SN.DESCRIPTION(DIVISION_ID, PLANT_ID · LGCE_FPDEV_TR.dbo.SCM_PLANT_M 시노님)을 UPDATE — 두 표를 함께 기록·복원 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 PROD_FROZEN 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "PROD_FROZEN",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "PROD_FROZEN",
+      "db_col": "PROD_FROZEN",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

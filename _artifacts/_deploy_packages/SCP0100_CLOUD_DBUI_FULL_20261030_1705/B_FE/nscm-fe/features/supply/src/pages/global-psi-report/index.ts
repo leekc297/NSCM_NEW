@@ -1,1 +1,0 @@
-export { GlobalPsiReport } from './GlobalPsiReport';

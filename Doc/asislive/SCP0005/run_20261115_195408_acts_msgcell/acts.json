@@ -1,0 +1,42 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999",
+   "steps": [
+    {
+     "sheet": null,
+     "row": null,
+     "col": null,
+     "before": null,
+     "after": null,
+     "locked": null,
+     "entered": null,
+     "how": null,
+     "error": "ArgumentException: 지정한 값이 잘못되었습니다.\r\n매개 변수 이름: value",
+     "edit_error": null,
+     "set": {
+      "cell": "LT_ARRIVAL_INLAND",
+      "value": "1000",
+      "mode": "value"
+     }
+    }
+   ],
+   "dialogs": [],
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": false
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:53:20",
+ "_pre_set": [],
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

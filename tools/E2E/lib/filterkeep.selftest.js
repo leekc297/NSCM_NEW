@@ -6,7 +6,7 @@ const m = { exports: {} }; new Function('module', 'exports', ts.transpileModule(
 const { judgeFilterKeep: j } = m.exports;
 const B = { n0: 100, n1: 10, n2: 10, n3: 100, label: 'Total: 10 / 100', why: '' };
 const cases = [
-  ['정상', j(B), 'PASS'], ['건수 표시 없음', j({ ...B, label: '' }), 'PASS'], ['필터 풀림', j({ ...B, n2: 100 }), 'FAIL'], ['건수 불일치', j({ ...B, label: 'Total: 100 / 100' }), 'FAIL'], ['해제 안 됨', j({ ...B, n3: 10 }), 'FAIL'], ['필터 효과 없음', j({ ...B, n1: 100 }), 'ERROR'], ['측정 실패', j({ ...B, why: 'x' }), 'ERROR'],
+  ['정상', j(B), 'PASS'], ['건수 표시 없음', j({ ...B, label: '' }), 'PASS'], ['필터 초기화(CR-097 허용 · 건수 표시 일치)', j({ ...B, n2: 100 }), 'PASS'], ['필터 초기화인데 건수 표시 불일치', j({ ...B, n2: 100, label: 'Total: 10' }), 'FAIL'], ['유지도 초기화도 아님', j({ ...B, n2: 50 }), 'FAIL'], ['건수 불일치', j({ ...B, label: 'Total: 100 / 100' }), 'FAIL'], ['해제 안 됨', j({ ...B, n3: 10 }), 'FAIL'], ['필터 효과 없음', j({ ...B, n1: 100 }), 'ERROR'], ['측정 실패', j({ ...B, why: 'x' }), 'ERROR'],
 ];
 let bad = 0; for (const [n, got, want] of cases) { const ok = got.result === want; if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${n} → ${got.result}(기대 ${want}) ${got.why}`); }
 console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

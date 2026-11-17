@@ -1,0 +1,118 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 12:19:35.509",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 6,
+   "rows_kind": "DataSet rows",
+   "ms": 16.25,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "CURRENT",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0108', @p_sheet_name='CURRENT', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:pickbtn:btnColumn"
+  },
+  {
+   "at": "2026-11-15 12:20:07.778",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_SET_TITLESET_POPUP",
+   "sp": "SCM0002_SET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 412.68,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "CURRENT",
+    "p_column_type": "C",
+    "p_active_flag": "^I^I^I^I^I^I",
+    "p_column_name": "^DIVISION_ID^PLANT_NAME^LINE_NAME^NICK_NAME^OPERATION_NAME^ELTR_LN_TP_CD",
+    "p_sort_order_no": "^6^7^8^9^10^11",
+    "p_sub_total_flag": "^N^N^N^N^N^N",
+    "p_sort_method_code": "^ASC^ASC^ASC^ASC^ASC^ASC",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_SET_TITLESET_POPUP @p_program_id='SCP0108', @p_sheet_name='CURRENT', @p_column_type='C', @p_active_flag='^I^I^I^I^I^I', @p_column_name='^DIVISION_ID^PLANT_NAME^LINE_NAME^NICK_NAME^OPERATION_NAME^ELTR_LN_TP_CD', @p_sort_order_no='^6^7^8^9^10^11', @p_sub_total_flag='^N^N^N^N^N^N', @p_sort_method_code='^ASC^ASC^ASC^ASC^ASC^ASC', @p_user_id='jaeuk.shin'",
+   "phase": "action:pickbtn:btnColumn"
+  },
+  {
+   "at": "2026-11-15 12:20:08.357",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0104_GET_SPREAD_TITLE",
+   "sp": "SCP0104_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 29,
+   "rows_kind": "DataSet rows",
+   "ms": 14.03,
+   "params": {
+    "p_from_yyyymm": "202611",
+    "p_program_id": "SCP0108",
+    "p_sheet_name": "MAIN"
+   },
+   "inline": "EXEC SCP0104_GET_SPREAD_TITLE @p_from_yyyymm='202611', @p_program_id='SCP0108', @p_sheet_name='MAIN'",
+   "phase": "action:pickbtn:btnColumn"
+  },
+  {
+   "at": "2026-11-15 12:20:08.375",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 14.68,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "action:pickbtn:btnColumn"
+  },
+  {
+   "at": "2026-11-15 12:20:08.399",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 14.36,
+   "params": {
+    "p_program_id": "SCP0108",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "CURRENT"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0108', @p_user_id='jaeuk.shin', @p_sheet_name='CURRENT'",
+   "phase": "action:pickbtn:btnColumn"
+  },
+  {
+   "at": "2026-11-15 12:20:18.168",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_CAPA_ITEM_POPUP",
+   "sp": "SCM0002_GET_CAPA_ITEM_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 9612,
+   "rows_kind": "DataSet rows",
+   "ms": 294.25,
+   "params": {
+    "p_division_id": "81",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_CAPA_ITEM_POPUP @p_division_id='81', @p_item_id=''",
+   "phase": "action:pickbtn:btnItemId"
+  }
+ ]
+}

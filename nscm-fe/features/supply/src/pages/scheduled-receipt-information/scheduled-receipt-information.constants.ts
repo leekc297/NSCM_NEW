@@ -90,8 +90,12 @@ export const MSG = {
   // 소수 10자리 초과(AS-IS literal 메시지, msgId 없음) — TO-BE 근접 등록 코드 재사용
   //   (MSG00165 "자리수를 초과했습니다", ora.py 실측).
   QTY_DECIMAL_OVERFLOW: 'MSG00165',
-  // AS-IS MSG00260(Division/PlanGroup/Site/ItemChild/ValidTo 조합 중복) — TO-BE 등록·본문 존재.
-  DUPLICATE_EXISTS: 'MSG00260',
+  // 신규행 중복 안내 — AS-IS .cs:1097 은 MSG00260 호출, AS-IS MSG00260 문구 = "신규 입력 데이터 중
+  //   중복된 데이터가 있습니다."(asis.py TB_FX_MessageInfo Ko/En 실측). 그러나 TO-BE 에선 MSG00260 이
+  //   다른 메시지로 재배정됨("중복된 조합이 존재합니다 (Division/Project/Item/일자/Measure)", ora.py 실측)
+  //   이라 코드번호를 그대로 쓰면 틀린 문구가 나온다. 문구가 동일한 TO-BE 코드 MSG00428("신규 입력
+  //   데이터 중 중복된 데이터가 있습니다.", KO/EN/CN ora.py 실측)로 매핑(convert-core §4.1, SCP0130-#12).
+  DUPLICATE_EXISTS: 'MSG00428',
   NO_CHANGE: 'MSG00004',
   // AS-IS MSG00129(.cs:1515 spdSub_ActiveSheetChanging, "{0}를 수정 중이어서 시트를 변경 할 수
   //   없습니다.") — TO-BE MSG00129 는 문구가 다르나("시트 별 편집 모드 안내."), 문구 완전 동일한
@@ -111,17 +115,23 @@ export const QTY_DECIMAL_MAX_DIGITS = 10;
 //   - DIVISION: LBL00641('Division')→LBL00001('Div', KO='Div'·EN/CN='Div.') — AS-IS 'Div' 복원
 //     (design 02 §4.5 의 LBL00641 지정은 AS-IS 표시와 불일치 — AS-IS 우선).
 //   - SITE: LBL00015('Site')→LBL00005('Plant Site', 3언어 완비. LBL00509 는 KO 누락이라 제외).
-//   - ITEM_ID: LBL01142('Item')→LBL01100('Parent Model', 3언어). 조회 라벨은 'Parent Model',
-//     그리드 컬럼은 'Parent Item'(메타)으로 AS-IS 가 서로 다름 — 각자 원문 유지.
+//   - ITEM_ID: AS-IS 는 'Parent Model'(LBL01100)이나, MaterialByDivisionModal 아이템 팝업 조회조건의
+//     전 화면 공통 표준은 'Model/Nickname'(LBL00618, project-route·formation·safety-stock 등 수십 화면
+//     사용 — 코드가 모델/닉네임 양쪽으로 찾아주는 통합 픽커라서). SCP0130 만 'Parent Model' 로 남은
+//     outlier 였다 → 표준(LBL00618)으로 통일(SCP0130-#9, asis-parity-default-keep-common-standardization).
+//     그리드 컬럼은 'Parent Item'(메타) 유지 — 조회 라벨만 표준화.
 export const LABEL = {
   DIVISION: 'LBL00001',
   PLAN_GROUP: 'LBL00002',
   SITE: 'LBL00005',
-  CHILD_MATERIAL: 'LBL01062',
-  VALID: 'LBL00639',
+  // VALID_YN 조회 라벨 — AS-IS 'Valid'(LBL00639)이나 전 화면 공통 표준은 'Active'(LBL00007, 72화면 사용).
+  //   SCP0130 만 'Valid' 로 남은 outlier 라 표준으로 통일(SCP0130-#11, asis-parity-default-keep-common-
+  //   standardization). 의미 동일.
+  VALID: 'LBL00007',
   FROM_DATE: 'LBL00062',
-  ITEM_ID: 'LBL01100',
-  // Child Material 필드 라벨은 활성 시트로 스왑(SCP0130-08, AS-IS .cs:1477/1493): Virtual Bom =
-  //   'Child Material'(LBL01062) / Scheduled Receipt = 'Material'(LBL00021, ora.py 실측).
+  ITEM_ID: 'LBL00618',
+  // item_id_child/material 조회조건 라벨 — 두 탭 모두 'Material'(LBL00021) 표준으로 통일(SCP0130-#10).
+  //   AS-IS 는 Virtual Bom 탭만 'Child Material'(LBL01062, .cs:1477)로 달랐으나, 'Material' 이 전 화면
+  //   공통 표준이고 'Child Material' 은 SCP0130 고유라 표준으로 맞춘다(탭별 스왑 제거).
   MATERIAL: 'LBL00021',
 } as const;

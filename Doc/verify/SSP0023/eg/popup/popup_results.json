@@ -1,0 +1,3398 @@
+[
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Material by Division'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-14T15:58:16.293Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'Model by DivisionPopup'(SCM0002_ItembyDivisionPopup) 과 같은 팝업",
+  "actual": "TO-BE 제목 'Material by Division' · 제목 공통 토큰 [division] · 클래스 공통 토큰 [division] · 호출 ",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:830 · 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "at": "2026-11-14T15:58:16.293Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Open, Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-14T15:58:16.293Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-14T15:58:16.293Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 23309행)",
+  "actual": "행머리 폭 0px · No 컬럼 폭 56px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-14T15:58:16.293Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총23,309'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T15:58:16.294Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-14T15:58:16.294Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "DIV_FIXED",
+  "egs": [
+   "EG284"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS Division 비활성(SCM0002_ItembyDivisionPopup.cs:164) → 팝업 Div 메인값 고정·수정 불가",
+  "actual": "disabled=true · 값 [Mobility & IT Battery] · 메인 Div '40'",
+  "basis": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs:SCM0002_ItembyDivisionPopup.cs:164",
+  "at": "2026-11-14T15:58:16.295Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 조건 라벨 [Model, Division, Site, Project]",
+  "actual": "TO-BE [Div:combo:비활성, Operation Group:text:비활성, Material:text] · 누락 [Model, Site, Project] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "at": "2026-11-14T15:58:16.295Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Div, Operation Group, Material]",
+  "basis": "",
+  "at": "2026-11-14T15:58:16.295Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 23309 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-14T15:58:16.580Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS ORDER BY D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+  "actual": "대조 키 [DIVISION_ID] · 미대조 [SCM_SITE_ID] · 행 3000 · 위반 없음",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql:64",
+  "at": "2026-11-14T15:58:16.582Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T15:58:16.583Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → ITEM_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 ITEM_ID ASC · 2회 ITEM_ID DESC · 첫 행 'AMDAU0348A'→'MUP647363A12'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T15:58:18.940Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 23309→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-14T15:58:51.198Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T15:58:51.198Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T15:58:51.591Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 잠금 호출 있음(SCM0002_ItembyDivisionPopup.cs:264 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
+  "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center'",
+  "basis": "SCM0002_ItembyDivisionPopup.cs:264",
+  "at": "2026-11-14T15:58:51.594Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Material'='MUP647363A12' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"operationGroup\":\"\",\"itemId\":\"MUP647363A12\",\"scpModuleType\":\"SSP0023\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-14T15:58:57.207Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Material'='MUP647363A12' → 값 포함 행만(기준 23309행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'Material Code'",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T15:58:57.207Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'UP647363A1' → 포함 행(≥ 1)",
+  "actual": "2행 · 전행 포함 true · AS-IS LIKE=true",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T15:58:59.599Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'mup647363a12' 행수 = 'MUP647363A12' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=false",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-14T15:59:01.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'MUP647363A12,MUP647363A11' → 두 값 모두 조회",
+  "actual": "2행 · 'MUP647363A12' true · 'MUP647363A11' true · AS-IS 콤마 분해=true",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T15:59:04.696Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 23309행",
+  "actual": "23309행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-14T15:59:08.055Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Div:combo:비활성, Operation Group:text:비활성, Material:text]",
+  "basis": "",
+  "at": "2026-11-14T15:59:08.056Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:08.057Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 153px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-14T15:59:08.057Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-14T15:59:08.057Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-14T15:59:08.057Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:09.078Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:09.852Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:10.860Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:11.804Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 0,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "BTN:BtnMaterialId2",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-14T15:59:12.790Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Measure'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-14T15:59:32.263Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'TitleSetForm'(SCM0002_TitleSetForm_Popup) → TO-BE 룰 공용 모달 MeasureSelectModal(tobe_catalog.csv 대응표)",
+  "actual": "TO-BE 제목 'Measure' · 대응 컴포넌트 MeasureSelectModal · 제목 토큰 일치 [measure] — AS-IS 와 달라도 TO-BE 룰 대체라 오류 아님",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:879 · tools/Harness/rules/tobe_catalog.csv",
+  "at": "2026-11-14T15:59:32.263Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [▶, ◀, Default, OK, Cancel]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-14T15:59:32.263Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "NA",
+  "expected": "No. 컬럼 1개·건수 표시",
+  "actual": "팝업에 그리드 없음",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.263Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 조건 라벨 []",
+  "actual": "TO-BE [] · 누락 [] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "NA",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 0건 · Search 버튼 없음 · 행 -1 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "NA",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "행 0 — 순서 대조 불가",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "GRID_OPS",
+  "egs": [
+   "EG384",
+   "EG403",
+   "EG437",
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "팝업 그리드 조작",
+  "actual": "팝업에 그리드 없음",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.264Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "FILTER",
+  "egs": [
+   "EG248",
+   "EG281",
+   "EG432",
+   "EG261",
+   "EG297",
+   "EG299",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "팝업 텍스트 조건 입력 → 필터",
+  "actual": "입력 가능한 텍스트 조건 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":330,\"y\":270,\"w\":1260,\"h\":540} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 0px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 []",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-14T15:59:32.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":330,\"y\":270,\"w\":1260,\"h\":540} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:33.230Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":330,\"y\":270,\"w\":1260,\"h\":540}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:34.170Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(540)",
+  "actual": "조절 후 {\"x\":255,\"y\":270,\"w\":1410,\"h\":540}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:35.142Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T15:59:35.998Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "NA",
+  "expected": "축소 → 조건·버튼 간섭 없음",
+  "actual": "리사이즈 핸들 없음",
+  "basis": "",
+  "at": "2026-11-14T15:59:36.012Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TS_REQ_DIV",
+  "egs": [
+   "EG064"
+  ],
+  "result": "ERROR",
+  "expected": "진입 직후 팝업 메타 조회가 화면 Division '40' 기준",
+  "actual": "요청 0건 · ",
+  "basis": "문서 GAP-203",
+  "at": "2026-11-14T15:59:51.186Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TS_SET",
+  "egs": [
+   "EG064"
+  ],
+  "result": "ERROR",
+  "expected": "시트 Shipment Plan(Electrode) · Division 40 메타 후보 11개(DIVISION_ID·USER_SELECTABLE_FLAG·VALID_YN)",
+  "actual": "팝업 0개 · 추가 [] · 누락 [P_SCP_PROD_PLAN,P_SCP_SHIP_PLAN_ETD,P_SHIP_REQ_ETD,P_SHIP_PLAN_SIMU_ETD,P_SHIP_CONFIRM_ETD,P_FP_NPC_ASSY_PLAN,P_FP_COATER_PLAN,P_FP_COATER_POST_PLAN]",
+  "basis": "문서 GAP-16·GAP-203·DM-P38 · SCM_MST_SHEET_MEASURE",
+  "at": "2026-11-14T15:59:51.186Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TS_PERSONAL",
+  "egs": [
+   "EG030",
+   "EG401"
+  ],
+  "result": "NA",
+  "expected": "실행 계정 개인화 유무 기록",
+  "actual": "계정 minyonglee1 · 시트 Shipment Plan(Electrode) 개인화 32행 · Default 메타 11개 — 개인화 있음: Default 대조 불가",
+  "basis": "SCM_MST_TITLESET_USER",
+  "at": "2026-11-14T15:59:51.186Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 1,
+  "cls": "SCM0002_TitleSetForm_Popup",
+  "trig": "BTN:btnMeasure",
+  "check": "TS_DIV_RELOAD",
+  "egs": [
+   "EG064",
+   "EG401"
+  ],
+  "result": "NA",
+  "expected": "Division 변경 재조회",
+  "actual": "메타 DIVISION_ID 값 종류 없음",
+  "basis": "",
+  "at": "2026-11-14T15:59:51.896Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'User Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'UserInfoPopup'(UserInfoPopup) 과 같은 팝업",
+  "actual": "TO-BE 제목 'User Popup' · 제목 공통 토큰 [userinfo] · 클래스 공통 토큰 [user] · 호출 ",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:1846 · 06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'User ID' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(34px, 8612행)",
+  "actual": "행머리 폭 50px · No 컬럼 폭 0px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "FAIL",
+  "expected": "조회 건수 표시",
+  "actual": "건수 문구 없음 · 팝업 글자 'User Popup User ID(Name) Search User ID User Name English Name Dept Name yongqian 주영천 Yongqian Zhu 파우치형그룹,생산담당,생산관리팀,생산계'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "COND_ENABLED",
+  "egs": [
+   "EG278"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조건 'User ID(Name)' 입력 가능(AS-IS 비활성 문장 없음)",
+  "actual": "TO-BE 'User ID(Name)' disabled=false · 값 []",
+  "basis": "06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs:UserInfoPopup.Designer.cs:37",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 조건 라벨 [User ID(Name)]",
+  "actual": "TO-BE [User ID(Name):text] · 누락 [] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [User ID(Name)]",
+  "basis": "",
+  "at": "2026-11-14T16:00:01.312Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 8612 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-14T16:00:01.568Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "NA",
+  "expected": "AS-IS UP_FX_GetUserInfoList ORDER BY 없음",
+  "actual": "행 3000",
+  "basis": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql",
+  "at": "2026-11-14T16:00:01.568Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T16:00:01.568Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → USER_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 USER_ID ASC · 2회 USER_ID DESC · 첫 행 '329navy'→'zzzbaby'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:00:03.925Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 8612→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-14T16:00:19.835Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:00:19.835Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "FAIL",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 0",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:00:20.219Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 잠금 호출 있음(UserInfoPopup.cs:188 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
+  "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-left'",
+  "basis": "UserInfoPopup.cs:188",
+  "at": "2026-11-14T16:00:20.221Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'User ID(Name)'='zzzbaby' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"user\":\"zzzbaby\",\"ssoUserYn\":\"N\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-14T16:00:24.737Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'User ID(Name)'='zzzbaby' → 값 포함 행만(기준 8612행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'User ID'",
+  "basis": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql (AS-IS LIKE)",
+  "at": "2026-11-14T16:00:24.737Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'zzbab' → 포함 행(≥ 1)",
+  "actual": "1행 · 전행 포함 true · AS-IS LIKE=true",
+  "basis": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql (AS-IS LIKE)",
+  "at": "2026-11-14T16:00:26.937Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'ZZZBABY' 행수 = 'zzzbaby' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=false",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-14T16:00:29.122Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'zzzbaby,zzuzzung' → 두 값 모두 조회",
+  "actual": "2행 · 'zzzbaby' true · 'zzuzzung' true · AS-IS 콤마 분해=false",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-14T16:00:31.388Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 8612행",
+  "actual": "8612행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-14T16:00:34.010Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [User ID(Name):text]",
+  "basis": "",
+  "at": "2026-11-14T16:00:34.010Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:00:34.011Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 126px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-14T16:00:34.011Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1150,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-14T16:00:34.011Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-14T16:00:34.011Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:00:37.106Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":360,\"y\":135,\"w\":1200,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:00:39.977Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":248,\"y\":135,\"w\":1425,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:00:41.150Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:00:42.177Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-14T16:00:43.271Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-14T16:00:53.305Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 '' → ''",
+  "basis": "문서 EG443",
+  "at": "2026-11-14T16:00:54.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "NA",
+  "expected": "단일/다중 선택 구분",
+  "actual": "AS-IS 인자 없음(multi='') 또는 행 8612",
+  "basis": "",
+  "at": "2026-11-14T16:00:56.129Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "대상 '' → '주영천' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [USER_NM]",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:1846",
+  "at": "2026-11-14T16:00:58.039Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 2",
+  "basis": "",
+  "at": "2026-11-14T16:00:58.042Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PICK_FORMAT",
+  "egs": [
+   "EG273",
+   "EG295",
+   "EG251"
+  ],
+  "result": "PASS",
+  "expected": "칸 표시 = 선택 행의 키 값만(설명 미부착)",
+  "actual": "칸 '주영천' · 행 값 일치 true · 괄호 false",
+  "basis": "문서 DM-95·GAP-332",
+  "at": "2026-11-14T16:00:58.042Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PICK_SEARCH",
+  "egs": [
+   "EG251",
+   "EG004"
+  ],
+  "result": "FAIL",
+  "expected": "선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0",
+  "actual": "요청 값 포함 false · 괄호 false · 행 308 · 본문 {\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "basis": "문서 GAP-439",
+  "at": "2026-11-14T16:01:00.382Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "AFTER_SORT",
+  "egs": [
+   "EG033"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 후 재조회·재정렬",
+  "actual": "AS-IS 후처리 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T16:01:00.382Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "PICK_DBL",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "더블클릭 결과 = OK 결과('주영천')",
+  "actual": "더블클릭 '주영천'",
+  "basis": "문서 GAP-19",
+  "at": "2026-11-14T16:01:03.825Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "CORNERS",
+  "egs": [
+   "EG286",
+   "EG340"
+  ],
+  "result": "PASS",
+  "expected": "버튼 테두리 포함 전 영역 클릭 → 팝업 열림",
+  "actual": "좌상:열림 · 우상:열림 · 좌하:열림 · 우하:열림 · 중앙:열림 · 버튼 36x36",
+  "basis": "문서 SCPSSP-4",
+  "at": "2026-11-14T16:01:19.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "TEXT_INPUT",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "텍스트 입력 + 아이콘 팝업 공통 입력 칸",
+  "actual": "입력 가능 true · 칸 'Requestor'",
+  "basis": "문서 GAPPI-1·GAPPI-16",
+  "at": "2026-11-14T16:01:30.019Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 2,
+  "cls": "UserInfoPopup",
+  "trig": "COND:btnRequestor",
+  "check": "TEXT_PASS",
+  "egs": [
+   "EG288"
+  ],
+  "result": "PASS",
+  "expected": "메인 입력 'yongqian' → 팝업 조건·요청 전달 · 그 기준 조회",
+  "actual": "팝업 조건 표시 [User ID(Name)] · 요청 포함 true · 행 1 · 전행 포함 true · 본문 {\"user\":\"yongqian\",\"ssoUserYn\":\"N\"} · AS-IS 인자 [SSOUserYN=LITERAL]",
+  "basis": "문서 DM-C5·SSP45REQ-6",
+  "at": "2026-11-14T16:01:31.997Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 3,
+  "cls": "SCM0002_ShipmentPlanRequestPopup",
+  "trig": "OTHER:SpdDetail_CellClick",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS SpdDetail_CellClick 팝업(SCM0002_ShipmentPlanRequestPopup) 열림",
+  "actual": "OTHER: AS-IS 메서드 SpdDetail_CellClick — 트리거 분류 불가(이름 관례 밖)",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:1785",
+  "at": "2026-11-14T16:01:40.228Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 4,
+  "cls": "SSP0300_OrderDetailPopup",
+  "trig": "CELL:ERP_SO_NO",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS SpdDetail_CellDoubleClick 팝업(SSP0300_OrderDetailPopup) 열림",
+  "actual": "CELL: 컬럼 ERP_SO_NO 이 현재 그리드에 없음(바인딩 269개 — Division·개인화·시트 차이 가능)",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:1191",
+  "at": "2026-11-14T16:01:50.093Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 4,
+  "cls": "SSP0300_OrderDetailPopup",
+  "trig": "CELL:ERP_SO_NO",
+  "check": "PICK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "선택 시험",
+  "actual": "CELL: 컬럼 ERP_SO_NO 이 현재 그리드에 없음(바인딩 269개 — Division·개인화·시트 차이 가능)",
+  "basis": "",
+  "at": "2026-11-14T16:02:00.267Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 4,
+  "cls": "SSP0300_OrderDetailPopup",
+  "trig": "CELL:ERP_SO_NO",
+  "check": "CELL",
+  "egs": [
+   "EG104",
+   "EG176",
+   "EG137"
+  ],
+  "result": "NA",
+  "expected": "셀 팝업 컬럼",
+  "actual": "ERP_SO_NO 그리드에 없음(Division·개인화)",
+  "basis": "",
+  "at": "2026-11-14T16:02:10.138Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 5,
+  "cls": "ExcelUploadForm",
+  "trig": "BTN:Upload",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS btnExcelUpload_Click 팝업(ExcelUploadForm) 열림",
+  "actual": "BTN: 버튼 [Upload/Upload/ExcelUpload] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, Shipment Plan(Electrode), Close others, Close All, Search(F5), Simulation, Excel Form, Excel Upload, Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Search, Shipment Plan Detail, Stock Detail, Shipment Result]",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:6400",
+  "at": "2026-11-14T16:02:17.825Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Material by Division'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-14T16:02:28.143Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'Model by DivisionPopup'(SCM0002_ItembyDivisionPopup) 과 같은 팝업",
+  "actual": "TO-BE 제목 'Material by Division' · 제목 공통 토큰 [division] · 클래스 공통 토큰 [division] · 호출 ",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:2309 · 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Open, Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 23309행)",
+  "actual": "행머리 폭 0px · No 컬럼 폭 56px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총23,309'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "DIV_FIXED",
+  "egs": [
+   "EG284"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS Division 비활성(SCM0002_ItembyDivisionPopup.cs:164) → 팝업 Div 메인값 고정·수정 불가",
+  "actual": "disabled=true · 값 [Mobility & IT Battery] · 메인 Div '40'",
+  "basis": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs:SCM0002_ItembyDivisionPopup.cs:164",
+  "at": "2026-11-14T16:02:28.144Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 조건 라벨 [Model, Division, Site, Project]",
+  "actual": "TO-BE [Div:combo:비활성, Operation Group:text:비활성, Material:text] · 누락 [Model, Site, Project] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "at": "2026-11-14T16:02:28.145Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Div, Operation Group, Material]",
+  "basis": "",
+  "at": "2026-11-14T16:02:28.145Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 23309 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-14T16:02:28.414Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS ORDER BY D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+  "actual": "대조 키 [DIVISION_ID] · 미대조 [SCM_SITE_ID] · 행 3000 · 위반 없음",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql:64",
+  "at": "2026-11-14T16:02:28.416Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T16:02:28.416Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → ITEM_ID 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 ITEM_ID ASC · 2회 ITEM_ID DESC · 첫 행 'AMDAU0348A'→'MUP647363A12'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:02:30.763Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 23309→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-14T16:03:03.257Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:03:03.258Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-14T16:03:03.632Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 잠금 호출 있음(SCM0002_ItembyDivisionPopup.cs:264 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);)",
+  "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center'",
+  "basis": "SCM0002_ItembyDivisionPopup.cs:264",
+  "at": "2026-11-14T16:03:03.635Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Material'='MUP647363A12' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"divisionId\":\"40\",\"operationGroup\":\"\",\"itemId\":\"MUP647363A12\",\"scpModuleType\":\"SSP0023\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-14T16:03:09.026Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Material'='MUP647363A12' → 값 포함 행만(기준 23309행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'Material Code'",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T16:03:09.026Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'UP647363A1' → 포함 행(≥ 1)",
+  "actual": "2행 · 전행 포함 true · AS-IS LIKE=true",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T16:03:11.387Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'mup647363a12' 행수 = 'MUP647363A12' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=false",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-14T16:03:13.782Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'MUP647363A12,MUP647363A11' → 두 값 모두 조회",
+  "actual": "2행 · 'MUP647363A12' true · 'MUP647363A11' true · AS-IS 콤마 분해=true",
+  "basis": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "at": "2026-11-14T16:03:16.480Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 23309행",
+  "actual": "23309행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Div:combo:비활성, Operation Group:text:비활성, Material:text]",
+  "basis": "",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 153px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-14T16:03:19.660Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:03:20.758Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:03:21.573Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:03:22.738Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-14T16:03:23.657Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "NA",
+  "expected": "축소 → 조건·버튼 간섭 없음",
+  "actual": "리사이즈 핸들 없음",
+  "basis": "",
+  "at": "2026-11-14T16:03:23.670Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-14T16:03:34.628Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 '' → ''",
+  "basis": "문서 EG443",
+  "at": "2026-11-14T16:03:35.685Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS _bMultiSelect=true → 다중",
+  "actual": "Ctrl+클릭 2행 → 선택 2행 · selectionMode=6",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:2309 · 문서 GAPPI-27",
+  "at": "2026-11-14T16:03:39.074Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "대상 '' → 'AMDAU0348A' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [ITEM_ID]",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:2309",
+  "at": "2026-11-14T16:03:40.988Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 2",
+  "basis": "",
+  "at": "2026-11-14T16:03:40.991Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PICK_FORMAT",
+  "egs": [
+   "EG273",
+   "EG295",
+   "EG251"
+  ],
+  "result": "PASS",
+  "expected": "칸 표시 = 선택 행의 키 값만(설명 미부착)",
+  "actual": "칸 'AMDAU0348A' · 행 값 일치 true · 괄호 false",
+  "basis": "문서 DM-95·GAP-332",
+  "at": "2026-11-14T16:03:40.991Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PICK_SEARCH",
+  "egs": [
+   "EG251",
+   "EG004"
+  ],
+  "result": "판정필요",
+  "expected": "선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0",
+  "actual": "요청 값 포함 true · 괄호 false · 행 0 · 본문 {\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"AMDAU0348A\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"",
+  "basis": "문서 GAP-439",
+  "at": "2026-11-14T16:04:42.331Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "AFTER_SORT",
+  "egs": [
+   "EG033"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 후 재조회·재정렬",
+  "actual": "AS-IS 후처리 facts 없음",
+  "basis": "",
+  "at": "2026-11-14T16:04:42.331Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "PICK_DBL",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "더블클릭 결과 = OK 결과('AMDAU0348A')",
+  "actual": "더블클릭 'AMDAU0348A'",
+  "basis": "문서 GAP-19",
+  "at": "2026-11-14T16:04:46.709Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "CORNERS",
+  "egs": [
+   "EG286",
+   "EG340"
+  ],
+  "result": "PASS",
+  "expected": "버튼 테두리 포함 전 영역 클릭 → 팝업 열림",
+  "actual": "좌상:열림 · 우상:열림 · 좌하:열림 · 우하:열림 · 중앙:열림 · 버튼 36x36",
+  "basis": "문서 SCPSSP-4",
+  "at": "2026-11-14T16:05:03.389Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "TEXT_INPUT",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "텍스트 입력 + 아이콘 팝업 공통 입력 칸",
+  "actual": "입력 가능 true · 칸 'Material'",
+  "basis": "문서 GAPPI-1·GAPPI-16",
+  "at": "2026-11-14T16:05:14.625Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 23310,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SSP0023",
+  "call": 6,
+  "cls": "SCM0002_ItembyDivisionPopup",
+  "trig": "COND:Material",
+  "check": "TEXT_PASS",
+  "egs": [
+   "EG288"
+  ],
+  "result": "PASS",
+  "expected": "메인 입력 'AMDAU0348A' → 팝업 조건·요청 전달 · 그 기준 조회",
+  "actual": "팝업 조건 표시 [Material] · 요청 포함 true · 행 1 · 전행 포함 true · 본문 {\"divisionId\":\"40\",\"operationGroup\":\"\",\"itemId\":\"AMDAU0348A\",\"scpModuleType\":\"SSP0023\"} · AS-IS 인자 [_bMultiSelect=LITERAL,_DivisionID=CONTROL,_ScmSiteId=CONTROL,_ProjectCode=LITERAL,_ItemID=CONTROL]",
+  "basis": "SSP0023_ShipmentPlanElectrode.cs:2309",
+  "at": "2026-11-14T16:05:16.842Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 23310,
+   "req": 0
+  }
+ }
+]

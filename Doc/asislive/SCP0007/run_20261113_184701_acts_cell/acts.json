@@ -1,0 +1,43 @@
+{
+ "id": "SCP0007",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[ROUTE_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0007-Sca043c",
+    "SCP0007-Sa9fa28",
+    "SCP0007-Saeb674",
+    "SCP0007-S40af62"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 18:46:08",
+ "plan": [
+  {
+   "kind": "dbl",
+   "scenarios": 4,
+   "named_cols": [
+    "ROUTE_ID"
+   ],
+   "used": [
+    "ROUTE_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

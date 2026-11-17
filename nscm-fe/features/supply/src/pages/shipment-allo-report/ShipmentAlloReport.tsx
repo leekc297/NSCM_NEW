@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQuery } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
@@ -118,13 +119,32 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
     tabId,
   });
 
+  // 피벗 월(헤더) 은 라이브 검색조건(sc)이 아니라 조회 실행 스냅샷(mainFilter/gapFilter)에서 뽑는다 —
+  //   AS-IS 파리티. AS-IS 는 헤더 세팅(InitSpreadDateColumn)을 조회(FindData_Main) 안에서만 하므로
+  //   Plan/Gap Date 콤보만 바꾸고 조회하지 않으면 헤더가 그대로다(cs:579/582, Find 경로 전용). 반면 sc 직결
+  //   파생은 날짜를 고르는 즉시 헤더가 재세팅돼 AS-IS 와 어긋났다. 스냅샷(…Yyyymmdd 8자리)에서 YYYYMM 을
+  //   잘라 쓰고, 조회 전(filter undefined)이면 빈 배열이라 헤더가 뜨지 않는다(조회해야 생성 — AS-IS 동일).
   const months = useMemo(
-    () => buildPivotMonths(sc.fromYyyymm, sc.toYyyymm, sc.planDate.slice(0, 6)),
-    [sc.fromYyyymm, sc.toYyyymm, sc.planDate]
+    () =>
+      mainFilter
+        ? buildPivotMonths(
+            String(mainFilter.fromYyyymmdd).slice(0, 6),
+            String(mainFilter.toYyyymmdd).slice(0, 6),
+            String(mainFilter.planStartYyyymmdd).slice(0, 6)
+          )
+        : [],
+    [mainFilter]
   );
   const gapMonths = useMemo(
-    () => buildPivotMonths(sc.fromYyyymm, sc.toYyyymm, sc.gapDate.slice(0, 6)),
-    [sc.fromYyyymm, sc.toYyyymm, sc.gapDate]
+    () =>
+      gapFilter
+        ? buildPivotMonths(
+            String(gapFilter.fromYyyymmdd).slice(0, 6),
+            String(gapFilter.toYyyymmdd).slice(0, 6),
+            String(gapFilter.planStartYyyymmdd).slice(0, 6)
+          )
+        : [],
+    [gapFilter]
   );
 
   const gapRows = useMemo(() => buildRowsFor(gapQuery.data, gapMonths), [gapQuery.data, gapMonths]);
@@ -141,17 +161,30 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
   //   행별로 GET_SHIPMENT_ALLO_NOTE 를 1건씩 부르는 구조 그대로다(사용자 지시 2026-11-02: AS-IS 동일).
   //   팀명 공백 행은 스킵(.cs:1041), 요약행은 P_DEPT_ID 자리에 "{닉}요약". GAP_DATE 는 넘기되 프로시저가
   //   무시('ALL' 고정, DB 실측). Gap 탭은 비고 편집·로드 대상 아님(AS-IS siGap 제외)이라 Main 만 로드한다.
-  const [noteByKey, setNoteByKey] = useState<Map<string, string>>(new Map());
-  useEffect(() => {
-    const targets = mainRowsBase.filter(r => !r.IS_TEAM_BLANK);
-    if (!targets.length || !sc.planDate) {
-      setNoteByKey(new Map());
-      return;
-    }
-    let cancelled = false;
-    void (async () => {
+  //
+  // useQuery 로 감싸는 이유(2종 파리티):
+  //   1) 전역 조회 스피너 — queryKey 첫 요소가 tabId 라 MDIContainer useIsBusy([tabId]) 에 집계된다.
+  //      메인 쿼리가 끝나고 비고(N+1)만 로드되는 구간에도 스피너가 유지돼, AS-IS WinScreen 의 동기
+  //      RefreshNote 블로킹과 동일하게 "조회 중"이 비고까지 이어진다(사용자 지시 2026-11-09).
+  //   2) 분할 렌더 제거 — 아래 mainRows 는 비고 data 가 '현재 뼈대 세대'와 일치할 때만 입히고(아니면
+  //      이전 완성본 유지), 메인 뼈대를 먼저 그린 뒤 비고를 덧입히는 "비고 늦게 뜸"을 없앤다. AS-IS 는
+  //      메인+비고가 한 번에 표시된다.
+  // 대상 행 식별 리스트 — 비고 조회 단위(site|dept|nick)의 안정 문자열. 뼈대가 바뀌면 이 키가 바뀌어
+  //   비고 쿼리가 재실행되고, 커밋 시 세대 일치 판정("이 비고가 지금 뼈대의 것인가")의 기준이 된다.
+  const noteTargets = useMemo(() => mainRowsBase.filter(r => !r.IS_TEAM_BLANK), [mainRowsBase]);
+  const noteTargetSig = useMemo(() => noteTargets.map(noteKeyOf).join('~'), [noteTargets]);
+  // 비고 기준일은 라이브 조회조건(sc)이 아니라 조회 실행 스냅샷(mainFilter/gapFilter)에서 뽑는다 —
+  //   피벗 월 산출과 동일 원칙(아래 months useMemo). AS-IS cboPlanDate_SelectedIndexChanged 는 GapDate
+  //   동기화만 하고 비고를 재조회하지 않으므로(.cs:469·1358), Plan Date 를 바꿔도 Search 전엔 비고가
+  //   재조회되면 안 된다. sc.planDate 를 직접 쓰면 drop-down 변경만으로 queryKey 가 바뀌어 비고 N+1 이
+  //   다시 돌았다(AS-IS 에 없는 동작). 조회 시점 planStartYyyymmdd 를 쓰면 Search 로만 갱신된다.
+  const notePlanDate = mainFilter?.planStartYyyymmdd ?? '';
+  const noteGapDate = gapFilter?.planStartYyyymmdd ?? '';
+  const noteQuery = useQuery<Map<string, string>>({
+    queryKey: [tabId, 'note', notePlanDate, noteGapDate, userId, noteTargetSig],
+    queryFn: async () => {
       const entries = await Promise.all(
-        targets.map(async r => {
+        noteTargets.map(async r => {
           const res = await apiClient.callProc<typeof MENU_ID, SHEETS.NOTE>(
             MENU_ID,
             SHEETS.NOTE,
@@ -160,30 +193,36 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
               siteId: r.SITE_ID,
               deptId: r.IS_SUMMARY ? r.TEAM_NAME : r.DEPT_ID, // 요약행은 "{닉}요약"(AS-IS .cs:1054)
               nickName: r.NICK_NAME,
-              planDate: sc.planDate,
-              gapDate: sc.gapDate,
+              planDate: notePlanDate,
+              gapDate: noteGapDate,
               userId,
             }
           );
           return [noteKeyOf(r), String(res.result?.o_rc1?.[0]?.NOTE ?? '')] as const;
         })
       );
-      if (!cancelled) setNoteByKey(new Map(entries));
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [mainRowsBase, sc.planDate, sc.gapDate, userId]);
+      return new Map(entries);
+    },
+    enabled: noteTargets.length > 0 && !!notePlanDate,
+  });
 
-  // 로드한 비고를 행에 입힌다(팀공백 행 제외 — 배경 회색·저장 제외). 조회 직후 1회 적용이고,
-  //   이후 사용자 편집은 EditTracker 가 추적하며 저장은 tracker 직접순회(handleSave)라 영향 없다.
-  const mainRows = useMemo(
-    () =>
-      mainRowsBase.map(r =>
-        r.IS_TEAM_BLANK ? r : { ...r, NOTE: noteByKey.get(noteKeyOf(r)) ?? r.NOTE }
-      ),
-    [mainRowsBase, noteByKey]
-  );
+  // 완성본 커밋 — 비고 로드 대상이 없으면(또는 planDate 미설정) 뼈대 그대로, 비고가 현재 뼈대 세대에
+  //   대해 도착했으면(noteQuery.data) 그 비고를 입힌 완성본, 아직 로드 중이면 undefined 로 두고 아래
+  //   useEffect 가 이전 완성본을 유지한다(분할 렌더 방지). 팀공백 행은 제외(배경 회색·저장 제외).
+  //   사용자 편집은 EditTracker 가 추적하며 저장은 tracker 직접순회(handleSave)라 이 재계산과 무관하다.
+  const committedMainRows = useMemo(() => {
+    if (!noteTargets.length || !notePlanDate) return mainRowsBase;
+    if (!noteQuery.data) return undefined; // 비고 로딩 중 — 커밋 보류
+    const noteByKey = noteQuery.data;
+    return mainRowsBase.map(r =>
+      r.IS_TEAM_BLANK ? r : { ...r, NOTE: noteByKey.get(noteKeyOf(r)) ?? r.NOTE }
+    );
+  }, [mainRowsBase, noteTargets.length, notePlanDate, noteQuery.data]);
+
+  const [mainRows, setMainRows] = useState<ShipmentAlloRow[]>([]);
+  useEffect(() => {
+    if (committedMainRows) setMainRows(committedMainRows);
+  }, [committedMainRows]);
   // Gap 탭은 요약행을 넣지 않는다 — AS-IS siGap 은 RefreshGridGAP(요약 생성·노랑) 대상이 아니다
   //   (cs:604 RefreshGridGAP 는 svMain 만). Gap 은 팀행 그대로 표시(편집·색상 없음).
   const activeRowCount = activeTab === TAB.MAIN ? mainRows.length : gapRows.length;
@@ -230,10 +269,13 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
     // 저장 대상(AS-IS 실측): 일반행·요약행은 저장, 팀명 공백 행(IS_TEAM_BLANK)은 입력은 되나 저장 제외
     //   (design 03 §3 #29-부속, 비고 회색). 요약행은 저장 포함 — AS-IS SaveData 가 P_DEPT_ID 에 "요약"
     //   팀명을 실어 저장한다(cs:1054 `sTEAM_NAME.IndexOf("요약")>=0 ? sTEAM_NAME : sDEPT_ID`).
-    const changed = [...(tracker?.getOriginalValues().entries() ?? [])]
+    // 비고를 실제로 편집한 행(회색 포함) — 두 '저장 0건' 케이스를 가르는 기준이다(사용자 결정 2026-11-09).
+    //   AS-IS 는 소스상 둘 다 무음 재조회지만(iCount==0), 사용자 요구는 "아무 변경 없음=알림 / 회색만=무음".
+    const editedRows = [...(tracker?.getOriginalValues().entries() ?? [])]
       .filter(([, orig]) => 'NOTE' in orig)
-      .map(([row]) => row as unknown as ShipmentAlloRow)
-      .filter(r => !r.IS_TEAM_BLANK);
+      .map(([row]) => row as unknown as ShipmentAlloRow);
+    // 저장 대상 = 편집행 중 팀명 공백(회색) 행 제외(AS-IS cs:1265 `if IsNullOrEmpty(sTEAM_NAME) continue`).
+    const changed = editedRows.filter(r => !r.IS_TEAM_BLANK);
     const payload = changed.map(r => ({
       SITE_NAME: r.FROM_SITE,
       SITE_ID: r.SITE_ID,
@@ -248,6 +290,23 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
       PROGRAM_ID: MENU_ID,
       USER_ID: userId,
     }));
+    // 저장 0건을 두 케이스로 구분한다(사용자 결정 2026-11-09):
+    //   (A) 회색(팀명 공백) 셀만 편집 — editedRows>0 이지만 전부 회색이라 payload 0 → 알림 없이 무음
+    //       재조회(입력값 원복). AS-IS 가 cs:1265 로 회색행을 건너뛰어 iCount==0 이 되는 것과 등가.
+    //   (B) 아무것도 편집 안 함 — editedRows==0 → "수정한 내용이 없습니다"(MSG00004) 알림만, 재조회 안 함.
+    //       setAlert 로 직접 띄운다. 공통 useProcMutation 에 빈 배열을 넘기면 reject 전에 mutation 이
+    //       pending→error 를 거쳐 전역 스피너(MDIContainer useIsBusy — mutationKey 접두 tabId 집계,
+    //       query-client.ts:170)가 깜빡이므로, mutation 을 돌리지 않고 알림만 띄운다.
+    if (payload.length === 0) {
+      if (editedRows.length > 0) {
+        runSearch(userId); // (A) 회색만 편집 — 무음 재조회
+      } else {
+        void useMessageStore
+          .getState()
+          .setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') }); // (B)
+      }
+      return;
+    }
     saveMutation.mutate(payload, {
       onSuccess: () => {
         useMessageStore.getState().setToast({

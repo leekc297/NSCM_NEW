@@ -1,6 +1,9 @@
-# verify_hooks.ps1 — 2026-10-12 재구성 검증 (Windows PowerShell 에서 실행)
+﻿# verify_hooks.ps1 — 2026-10-12 재구성 검증 (Windows PowerShell 에서 실행)
 #   powershell -NoProfile -ExecutionPolicy Bypass -File C:\Projects\NSCM\scripts\rules\verify_hooks.ps1
 $ErrorActionPreference = 'Stop'
+# 2026-11-13: Windows PowerShell 5.1 에서 한글 프롬프트가 깨져 2단계 판별이 FAIL 로 나오던 것 — 이 파일을 UTF-8 BOM 으로 저장하고 파이프·콘솔 인코딩을 UTF-8 로 고정
+$OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+try { [Console]::OutputEncoding = $OutputEncoding; [Console]::InputEncoding = $OutputEncoding } catch { }
 $root = 'C:\Projects\NSCM'
 $hooks = "$root\.claude\hooks"
 Write-Host "== 1. 구문 검사 (parse) =="
@@ -30,8 +33,12 @@ Write-Host "== 3. check-rules-read (가짜 transcript) =="
 $tmp = Join-Path $env:TEMP 'nscm_fake_transcript.jsonl'
 '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Read","input":{"file_path":"C:\\Projects\\NSCM\\Doc\\_rules_consolidation\\TRIGGER_ROUTER.md"}}]}}' | Set-Content $tmp -Encoding UTF8
 $payload = @{ tool_name = 'Write'; tool_input = @{ file_path = 'C:\Projects\NSCM\nscm-fe\features\demand\src\pages\x\X.tsx' }; transcript_path = $tmp } | ConvertTo-Json -Compress
+# 2026-11-13: 차단 메시지(stderr)가 ErrorActionPreference=Stop 에 걸려 여기서 스크립트가 끝나던 것(4·5단계 미실행) — 이 호출만 Continue
+$ErrorActionPreference = 'Continue'
 $payload | powershell -NoProfile -ExecutionPolicy Bypass -File "$hooks\check-rules-read.ps1" 2>&1 | Out-String | Write-Host
-Write-Host ("  exit={0}  (기대: 2 — ui-work-entry-playbook 등 3개 미열람 차단)" -f $LASTEXITCODE)
+$rrExit = $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
+Write-Host ("  exit={0}  (기대: 2 — ui-work-entry-playbook 등 3개 미열람 차단)" -f $rrExit)
 Write-Host "== 4. 추출본 drift =="
 python "$root\scripts\rules\build_router.py" --check
 Write-Host "== 5. 상시 컨텍스트 크기 =="

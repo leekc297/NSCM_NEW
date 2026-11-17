@@ -106,13 +106,17 @@ export const usePlanControlPolling = ({ tabId, gridRef, rows }: Args) => {
     if (!statusRow || !engineRunContext) return;
     const target = rows.find(row => str(row.OPMZ_ACTV_CD) === engineRunContext.actvCd);
     if (!target) return;
+    // 행의 Plan ID 가 폴링 중인 Plan ID 와 다르면 쓰지 않는다 — 콤보 변경 직후 늦게 도착한 이전
+    //   Plan ID 응답이 새 Plan ID 행을 덮어쓰지 않게 한다.
+    if (str(target.OPMZ_PLAN_ID) !== engineRunContext.planId) return;
     const nextStatus = str(statusRow.OPMZ_ACTV_RUN_STAT_CD);
     // AS-IS 도 변화가 있을 때만 쓴다(cs:598).
     if (str(target.OPMZ_ACTV_RUN_STAT_CD) === nextStatus) return;
     target.OPMZ_ACTV_RUN_STAT_CD = nextStatus;
     target.LAST_UPDATE_DATE = str(statusRow.LAST_UPDATE_DATE);
     target.LAST_UPDATED_BY = str(statusRow.LAST_UPDATED_BY);
-    gridRef.current?.collectionView?.refresh();
+    // 편집 중인 행이면 collectionView.refresh() 가 미뤄지므로 invalidate 로 바로 다시 그린다.
+    gridRef.current?.invalidate();
   }, [statusRow, engineRunContext, rows, gridRef]);
 
   // X13 — AS-IS 는 하단 시트의 기존 행에 4컬럼을 덮어써서 행수가 어긋나면 엉뚱한 행을 갱신할 수 있어

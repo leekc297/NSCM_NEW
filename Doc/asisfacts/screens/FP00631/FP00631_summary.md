@@ -152,10 +152,10 @@
 | button:FindButton | FindButton > UIFindData > FindMainData | 2239 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2253 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_WeekCnt] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2253 | FP\Common\FP00602_PlanAmendLineAssy#find_WeekCnt | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_WeekCnt.sql |
-| button:FindButton | FindButton > UIFindData > FindListData | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:FindButton | FindButton > UIFindData > FindListData | 2254 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_DateMap] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2254 | FP\Common\FP00602_PlanAmendLineAssy#find_DateMap | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_DateMap.sql |
+| button:FindButton | FindButton > UIFindData > FindListData | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:FindButton | FindButton > UIFindData > FindListData | 2254 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2255 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_MonthCnt] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2255 | FP\Common\FP00602_PlanAmendLineAssy#find_MonthCnt | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_MonthCnt.sql |
 | button:FindButton | FindButton > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2256 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_bukInfo] | BIZ_MATCH |  |
@@ -166,12 +166,12 @@
 | button:FindButton | FindButton > UIFindData > FindMainData | 2267 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindListData | 2294 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_BOM_RATE] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindListData | 2294 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_BOM_RATE | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_BOM_RATE.sql |
+| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
+| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindListData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_YLD_F6000] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindListData | 2295 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_YLD_F6000 | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_YLD_F6000.sql |
-| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
-| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:FindButton | FindButton > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:FindButton | FindButton > UIFindData > FindListData | 2296 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_AGING_STOCK] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData > FindListData | 2296 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_AGING_STOCK | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_AGING_STOCK.sql |
 | button:FindButton | FindButton > UIFindData > FindListData | 2297 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Cell_ExchangeValue] | BIZ_MATCH |  |
@@ -324,10 +324,10 @@
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2239 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2253 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_WeekCnt] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2253 | FP\Common\FP00602_PlanAmendLineAssy#find_WeekCnt | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_WeekCnt.sql |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2254 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_DateMap] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2254 | FP\Common\FP00602_PlanAmendLineAssy#find_DateMap | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_DateMap.sql |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2254 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2254 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2255 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_MonthCnt] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2255 | FP\Common\FP00602_PlanAmendLineAssy#find_MonthCnt | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP00602_PlanAmendLineAssy_find_MonthCnt.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData > ApplyAmendCalendarCondition | 2256 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_bukInfo] | BIZ_MATCH |  |
@@ -338,12 +338,12 @@
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2267 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2294 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_BOM_RATE] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2294 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_BOM_RATE | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_BOM_RATE.sql |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_YLD_F6000] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2295 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_YLD_F6000 | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_YLD_F6000.sql |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Release_Plan_list] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 2295 | FP\Planning\FP00631_CellSimul_CellPack#find_Release_Plan_list | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_Release_Plan_list.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2296 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_AGING_STOCK] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2296 | FP\Planning\FP00631_CELLSIMUL_CELLPACK#find_AGING_STOCK | MATCH | [sql] foxquery_sql\FP_Planning_FP00631_CellSimul_CellPack_find_AGING_STOCK.sql |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindListData | 2297 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_Cell_ExchangeValue] | BIZ_MATCH |  |
@@ -693,9 +693,9 @@
 | btnDwSubmit_Click | Filter | PLAN_ID, PLAN_TYPE, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_DATE, PLANT_ID, SITE_ID, FACTORY_ID, DIVISION_ID |
 | btnDwSubmit_Click | DwSubmit.Filter | SUBMIT_TYPE, MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_ID, PLAN_DATE, PLANT_ID, SITE_ID, FACTORY_ID, DIVISION_ID, USER_ID |
 | btnExcelImport_Click | colPopup.KeyColumns | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE |
-| btnExcelImport_Click | colPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, MARKET, PRODUCTION_TYPE, LINE_ID, LINE_NAME, ELECTRODE_TYPE, ELECTROD_TYPE |
+| btnExcelImport_Click | colPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, MARKET, PRODUCTION_TYPE, LINE_ID, LINE_NAME, ELECTROD_TYPE, ELECTRODE_TYPE |
 | btnExcelImport_Click | rowPopup.KeyColumns | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, PLAN_DATE, QTY |
-| btnExcelImport_Click | rowPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, LINE_NAME, ELECTRODE_TYPE, PLAN_DATE, QTY, MESSAGE, ELECTROD_TYPE |
+| btnExcelImport_Click | rowPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, MARKET, PRODUCTION_TYPE, LINE_ID, LINE_NAME, ELECTROD_TYPE, PLAN_DATE, QTY, MESSAGE, ELECTRODE_TYPE |
 | btnMemo_Click | Filter | MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, TOP_ITEM_ID, ITEM_ID, PLAN_ID, PLAN_DATE, DIVISION_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PLANT_ID, SITE_ID |
 | btnMemo_Click | memoPopup.Filter | MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, MODEL_ID, TOP_ITEM_ID, ITEM_ID, PLAN_ID, PLAN_DATE, DIVISION_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PLANT_ID, SITE_ID, USER_ID |
 | btnMRP_Click | Filter | PLAN_ID, PLAN_TYPE, MASTER_ID, INSTANCE_ID |
@@ -722,8 +722,8 @@
 | call_Excel_Row_Save | row | JOB_ORDER, MPP_WPP, NEW_SEQ, IN_QTY, OUT_QTY, CELL_IN_QTY, CELL_OUT_QTY, QTY, INSTANCE_ID, FP_PLAN_ID |
 | call_Excel_Row_Search | popup.Filter | PLAN_TYPE |
 | call_Excel_Row_Validation | popup.Filter | PLAN_TYPE |
-| cbo_cell_plan_id_changed | Filter | ASSY_PLAN_ID, BUCKET_FROM, BUCKET_TO |
 | cbo_cell_plan_id_changed | dtPlanId.Rows[selected] | PLAN_START_DATE, PLAN_END_DATE, SITE_ID, DESCRIPTION, PLAN_TYPE, READ_ONLY, NAME, CODE, INSERT_ID, INSERT_Time, BASIC_VERSION, FACTORY_LT |
+| cbo_cell_plan_id_changed | Filter | BUCKET_FROM, BUCKET_TO, ASSY_PLAN_ID |
 | cbo_form_plan_id_changed | Filter | FORM_PLAN_ID |
 | cbo_pack_plan_id_changed | Filter | PACK_PLAN_ID |
 | cbo_site_changed | Filter | SITE_ID |
@@ -744,7 +744,7 @@
 | FindFP00631 | Filter | PARMA_CATE_INFO, PACK_AMEND_TABLE, PACK_AMEND_SALES_TABLE, FORM_AMEND_TABLE, CELL_AMEND_TABLE, CELL_AMEND_SALES_TABLE, IS_REL_PACK, TARGET_INSTANCE, PACK_INSTANCE_ID, PACK_PLAN_LT, PACK_CONFIRM_AREA, PACK_PLAN_ID |
 | FindListData | Filter | PACK_AMEND_TABLE, PACK_AMEND_SALES_TABLE, FORM_AMEND_TABLE, CELL_AMEND_TABLE, CELL_AMEND_SALES_TABLE, IS_REL_PACK, TARGET_INSTANCE, PACK_INSTANCE_ID, PACK_PLAN_LT, PACK_PLAN_ID, IS_REL_FORM, FORM_INSTANCE_ID, FORM_PLAN_LT, FORM_PLAN_ID, IS_REL_ASSY, ASSY_INSTANCE_ID, ASSY_PLAN_LT, ASSY_PLAN_ID, PLAN_ID_SCRIPT |
 | FindListData | dtReleasePlanList.Rows[i] | release_plan_id |
-| FindMainData | Filter | CATE_INFO, PACK_AMEND_TABLE, PACK_AMEND_SALES_TABLE, FORM_AMEND_TABLE, CELL_AMEND_TABLE, CELL_AMEND_SALES_TABLE, IS_REL_PACK, TARGET_INSTANCE, PACK_INSTANCE_ID, PACK_PLAN_LT, PACK_CONFIRM_AREA, PACK_PLAN_ID, IS_REL_FORM, FORM_INSTANCE_ID, FORM_PLAN_LT, FORM_CONFIRM_AREA, FORM_PLAN_ID, IS_REL_ASSY, ASSY_INSTANCE_ID, ASSY_PLAN_LT, ASSY_CONFIRM_AREA, ASSY_PLAN_ID, BUCKET_SCRIPT_PART0, BUCKET_SCRIPT_PART1, BUCKET_SCRIPT_PART2, BUCKET_SCRIPT_PART3, BUCKET_SCRIPT_PART4, BUCKET_SCRIPT_PART5, BUCKET_SCRIPT_PART6, BUCKET_SCRIPT_PART7, BUCKET_SCRIPT_PART8, BUCKET_SCRIPT_PART9, BUCKET_SCRIPT_PART10, BUCKET_SCRIPT_PART11, BUCKET_SCRIPT_PART12, FP_PLAN_ID, PLAN_ID |
+| FindMainData | Filter | FP_PLAN_ID, PLAN_ID, CATE_INFO, PACK_AMEND_TABLE, PACK_AMEND_SALES_TABLE, FORM_AMEND_TABLE, CELL_AMEND_TABLE, CELL_AMEND_SALES_TABLE, IS_REL_PACK, TARGET_INSTANCE, PACK_INSTANCE_ID, PACK_PLAN_LT, PACK_CONFIRM_AREA, PACK_PLAN_ID, IS_REL_FORM, FORM_INSTANCE_ID, FORM_PLAN_LT, FORM_CONFIRM_AREA, FORM_PLAN_ID, IS_REL_ASSY, ASSY_INSTANCE_ID, ASSY_PLAN_LT, ASSY_CONFIRM_AREA, ASSY_PLAN_ID, BUCKET_SCRIPT_PART0, BUCKET_SCRIPT_PART1, BUCKET_SCRIPT_PART2, BUCKET_SCRIPT_PART3, BUCKET_SCRIPT_PART4, BUCKET_SCRIPT_PART5, BUCKET_SCRIPT_PART6, BUCKET_SCRIPT_PART7, BUCKET_SCRIPT_PART8, BUCKET_SCRIPT_PART9, BUCKET_SCRIPT_PART10, BUCKET_SCRIPT_PART11, BUCKET_SCRIPT_PART12 |
 | FindMainData | dtReleasePlanList.Rows[i] | release_plan_id |
 | FindMainData | dateMap.Tables[0].Rows[i] | _DATE |
 | GetCellDataOfCellGroup | x | DATA_TYPE, SHOP_TYPE, CELL_GROUP_CODE, CELL_GROUP_CODE_RANK, PACK_RANK |
@@ -801,7 +801,7 @@
 | lfn_setPack_EOH_ShippingPlan | planout | LT |
 | lfn_setUpdateTotalValue | Filter | PLAN_DATE |
 | lfn_setUpdateTotalValue | x | CELL_GROUP_CODE, DATA_TYPE, SHOP_TYPE |
-| MakeInstanceLT | Filter | PACK_INSTANCE_ID, FORM_INSTANCE_ID, ASSY_INSTANCE_ID, INSTANCE_LT |
+| MakeInstanceLT | Filter | INSTANCE_LT, PACK_INSTANCE_ID, FORM_INSTANCE_ID, ASSY_INSTANCE_ID |
 | MakeMemoBold | dsMainFiltered.Tables[0].Rows[i] | CATE |
 | onMemoMenu | frm.Filter | MEMO_TYPE |
 | onNLFAmendMenu | frm.Filter | MASTER_ID, INSTANCE_ID, FP_PLAN_ID, PLAN_ID |
@@ -860,118 +860,17 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | InitControls:191, MakeInstanceLT:259, MakeInstanceLT:260, MakeInstanceLT:261, SetChangeControl:393, GetPlan:1980, GetPlan:1999, GetPlan:2002 | CString.GetCheckedListValue | CODE |
-| SetFilter | SetChangePlanDate:287, SetChangeControl:393, Save_Data:1213, mcbo_operation_changed:4847, cell_code_changed:4917, pack_code_changed:4922, pack_nick_changed:4927, cell_nick_changed:4932 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
-| FP_UpdateBatch | Save_Data:1237, call_Excel_Col_Validation:3098, call_Excel_Row_Validation:3286, call_Excel_Row_Validation:3301, Save_Data:1090, Save_Data:1226, call_Excel_Col_Validation:2684, call_Excel_Row_Validation:2872 | DataService.FP_UpdateBatch | COUNT, RESULT |
-| FP_Log2 | cbo_pack_plan_group_changed:6655, cbo_pack_plan_group_changed:6668 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| GetCheckedListValue | InitControls:191, MakeInstanceLT:254, MakeInstanceLT:255, MakeInstanceLT:256, SetChangeControl:384, GetPlan:1965, GetPlan:1983, GetPlan:2001 | CString.GetCheckedListValue | CODE |
+| SetFilter | SetChangePlanDate:278, SetChangeControl:384, Save_Data:1202, cbo_cell_plan_id_changed:4333, cbo_cell_plan_id_changed:4334, cbo_cell_plan_id_changed:4337, cbo_cell_plan_id_changed:4338, cbo_cell_plan_id_changed:4339 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetMeasure | CheckAndGetMeasure:478, RefreshSpreadSheet:1697 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| FP_UpdateBatch | Save_Data:1226, call_Excel_Col_Validation:2684, call_Excel_Row_Validation:2872, call_Excel_Row_Validation:2887, Save_Data:1090, Save_Data:1237, call_Excel_Col_Validation:3098, call_Excel_Row_Validation:3286 | DataService.FP_UpdateBatch | COUNT, RESULT |
 | SetRowVisibleOnMeasureDatatypeCategory | CreateFilterDataSet:1543 | MeasureService.SetRowVisibleOnMeasureDatatypeCategory | CATEGORY_ID, DATA_TYPE, MEASURE_ID, _MM_ |
 | SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1544 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
+| FP_Log2 | cbo_pack_plan_group_changed:6655, cbo_pack_plan_group_changed:6668 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:124 |
-| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:411 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:413 |
-| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:417 |
-| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:418 |
-| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:419 |
-| date_instance | ValueChanged | plan_day_changed | InitEvent:422 |
-| range_plan | ValueChanged | plan_range_changed | InitEvent:423 |
-| txt_pack_code | TextChanged | pack_code_changed | InitEvent:425 |
-| txt_cell_code | TextChanged | cell_code_changed | InitEvent:426 |
-| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:427 |
-| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:428 |
-| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:431 |
-| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:432 |
-| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:433 |
-| spdMain | CellClick | spdMain_CellClick2 | InitEvent:435 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1285 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1905 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1932 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick2:4580 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick2:4590 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4605 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4617 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick2:4624 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4939 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4947 |
-| this | Load | Form_Load | .ctor:124 |
-| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:411 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:413 |
-| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:417 |
-| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:418 |
-| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:419 |
-| date_instance | ValueChanged | plan_day_changed | InitEvent:422 |
-| range_plan | ValueChanged | plan_range_changed | InitEvent:423 |
-| txt_pack_code | TextChanged | pack_code_changed | InitEvent:425 |
-| txt_cell_code | TextChanged | cell_code_changed | InitEvent:426 |
-| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:427 |
-| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:428 |
-| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:431 |
-| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:432 |
-| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:433 |
-| spdMain | CellClick | spdMain_CellClick2 | InitEvent:435 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1285 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1905 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1932 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick2:4580 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick2:4590 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4605 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4617 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick2:4624 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4939 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4947 |
-| this | Load | Form_Load | .ctor:136 |
-| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:424 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:426 |
-| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:430 |
-| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:431 |
-| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:432 |
-| date_instance | ValueChanged | plan_day_changed | InitEvent:435 |
-| range_plan | ValueChanged | plan_range_changed | InitEvent:436 |
-| txt_pack_code | TextChanged | pack_code_changed | InitEvent:438 |
-| txt_cell_code | TextChanged | cell_code_changed | InitEvent:439 |
-| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:440 |
-| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:441 |
-| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:444 |
-| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:445 |
-| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:446 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1138 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1414 |
-| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1448 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:6950 |
-| range_plan | ValueChanged | plan_range_changed | plan_range_changed:6958 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:7367 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick:7377 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:7392 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:7404 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:7411 |
-| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:527 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:886 |
-| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1233 |
-| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1234 |
-| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1235 |
-| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1236 |
-| this.spdMain | ColumnWidthChanged | spdMain_ColumnWidthChanged | InitializeComponent:1237 |
-| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1238 |
-| this.spdMain | Change | spdMain_Change | InitializeComponent:1239 |
-| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1240 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1241 |
-| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1242 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1243 |
-| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1244 |
-| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1245 |
-| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1246 |
-| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1247 |
-| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1248 |
-| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1249 |
-| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1250 |
-| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1251 |
-| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1252 |
-| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1253 |
-| this.btn_column | Click | btnColumn_Click | InitializeComponent:1492 |
 | this | Load | Form_Load | .ctor:124 |
 | cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:402 |
 | cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:404 |
@@ -1027,31 +926,132 @@
 | this.spdMain | Validated | spdMain_Validated | InitializeComponent:1596 |
 | this.button1 | Click | button1_Click | InitializeComponent:1727 |
 | this.btn_column | Click | btnColumn_Click | InitializeComponent:2011 |
+| this | Load | Form_Load | .ctor:136 |
+| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:424 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:426 |
+| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:430 |
+| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:431 |
+| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:432 |
+| date_instance | ValueChanged | plan_day_changed | InitEvent:435 |
+| range_plan | ValueChanged | plan_range_changed | InitEvent:436 |
+| txt_pack_code | TextChanged | pack_code_changed | InitEvent:438 |
+| txt_cell_code | TextChanged | cell_code_changed | InitEvent:439 |
+| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:440 |
+| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:441 |
+| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:444 |
+| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:445 |
+| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:446 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1138 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1414 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1448 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:6950 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:6958 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:7367 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick:7377 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:7392 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:7404 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:7411 |
+| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:527 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:886 |
+| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1233 |
+| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1234 |
+| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1235 |
+| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1236 |
+| this.spdMain | ColumnWidthChanged | spdMain_ColumnWidthChanged | InitializeComponent:1237 |
+| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1238 |
+| this.spdMain | Change | spdMain_Change | InitializeComponent:1239 |
+| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1240 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1241 |
+| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1242 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1243 |
+| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1244 |
+| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1245 |
+| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1246 |
+| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1247 |
+| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1248 |
+| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1249 |
+| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1250 |
+| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1251 |
+| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1252 |
+| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1253 |
+| this.btn_column | Click | btnColumn_Click | InitializeComponent:1492 |
+| this | Load | Form_Load | .ctor:124 |
+| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:411 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:413 |
+| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:417 |
+| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:418 |
+| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:419 |
+| date_instance | ValueChanged | plan_day_changed | InitEvent:422 |
+| range_plan | ValueChanged | plan_range_changed | InitEvent:423 |
+| txt_pack_code | TextChanged | pack_code_changed | InitEvent:425 |
+| txt_cell_code | TextChanged | cell_code_changed | InitEvent:426 |
+| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:427 |
+| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:428 |
+| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:431 |
+| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:432 |
+| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:433 |
+| spdMain | CellClick | spdMain_CellClick2 | InitEvent:435 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1285 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1905 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1932 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick2:4580 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick2:4590 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4605 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4617 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick2:4624 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4939 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4947 |
+| this | Load | Form_Load | .ctor:124 |
+| cbo_site | SelectedIndexChanged | cbo_site_changed | InitEvent:411 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | InitEvent:413 |
+| cbo_pack_plan_id | SelectedIndexChanged | cbo_pack_plan_id_changed | InitEvent:417 |
+| cbo_form_plan_id | SelectedIndexChanged | cbo_form_plan_id_changed | InitEvent:418 |
+| cbo_cell_plan_id | SelectedIndexChanged | cbo_cell_plan_id_changed | InitEvent:419 |
+| date_instance | ValueChanged | plan_day_changed | InitEvent:422 |
+| range_plan | ValueChanged | plan_range_changed | InitEvent:423 |
+| txt_pack_code | TextChanged | pack_code_changed | InitEvent:425 |
+| txt_cell_code | TextChanged | cell_code_changed | InitEvent:426 |
+| txt_pack_nick | TextChanged | pack_nick_changed | InitEvent:427 |
+| txt_cell_nick | TextChanged | cell_nick_changed | InitEvent:428 |
+| chk_form_plan_group | CheckedChanged | chk_changed | InitEvent:431 |
+| chk_pack_plan_group | CheckedChanged | chk_changed | InitEvent:432 |
+| chk_cell_plan_group | CheckedChanged | chk_changed | InitEvent:433 |
+| spdMain | CellClick | spdMain_CellClick2 | InitEvent:435 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1285 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1905 |
+| cbo_pack_plan_group | SelectedIndexChanged | cbo_pack_plan_group_changed | GetInstance:1932 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick2:4580 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick2:4590 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4605 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick2:4617 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick2:4624 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4939 |
+| range_plan | ValueChanged | plan_range_changed | plan_range_changed:4947 |
 
 ## 6. 컨트롤 (161개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 37 | lblSql, lblData, layoutControlItem15, layoutControlItem10, layoutControlItem22, layoutControlItem11, layoutControlItem29, layoutControlItem8, layoutControlItem5, layoutControlItem3, layoutControlItem30, layoutControlItem20, layoutControlItem17, layoutControlItem6, layoutControlItem4 … |
-| UsrButton | 19 | btnToggleSave, btnSql, btnReplan, usrButton2, btn_column, btnToggleSave, btnSql, btnExcelImport, btnStatus, btnDWSubmit, btnDppCopy, btnSSP, btnMRP, btnRelease, btnReplan … |
+| LayoutControlItem | 37 | lblSql, layoutControlItem2, lblData, layoutControlItem15, layoutControlItem10, layoutControlItem22, layoutControlItem11, layoutControlItem29, layoutControlItem8, layoutControlItem5, layoutControlItem3, layoutControlItem30, layoutControlItem20, layoutControlItem17, layoutControlItem6 … |
+| UsrButton | 19 | btnToggleSave, btnSql, btnExcelImport, btnStatus, btnDWSubmit, btnDppCopy, btnSSP, btnMRP, btnRelease, btnReplan, btnCreatePlan, btnMemo, usrButton2, btn_column, btnToggleSave … |
 | UsrCombo | 14 | cbo_form_plan_id, cbo_form_plan_group, cbo_cell_plan_id, cbo_cell_plan_group, cbo_pack_plan_group, cbo_pack_plan_id, cbo_site, cbo_form_plan_id, cbo_form_plan_group, cbo_cell_plan_id, cbo_cell_plan_group, cbo_pack_plan_group, cbo_pack_plan_id, cbo_site |
 | EmptySpaceItem | 14 | emptySpaceItem4, emptySpaceItem2, emptySpaceItem3, emptySpaceItem1, emptySpaceItem5, emptySpaceItem6, emptySpaceItem7, emptySpaceItem4, emptySpaceItem2, emptySpaceItem3, emptySpaceItem1, emptySpaceItem5, emptySpaceItem6, emptySpaceItem7 |
-| Label | 13 | label1, label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1 |
+| Label | 13 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label1 |
 | UsrTextBox | 8 | txt_cell_nick, txt_pack_code, txt_pack_nick, txt_cell_code, txt_cell_nick, txt_pack_code, txt_pack_nick, txt_cell_code |
-| Panel | 8 | panel2, panel4, panel1, infoPanel, menuPanel, panel2, panel4, panel1 |
+| Panel | 8 | infoPanel, menuPanel, panel2, panel4, panel1, panel2, panel4, panel1 |
 | UsrCheckBox | 6 | chk_pack_plan_group, chk_cell_plan_group, chk_form_plan_group, chk_pack_plan_group, chk_cell_plan_group, chk_form_plan_group |
-| FpSpread | 5 | spdMain, spdEdit, spdMain, spdEdit, spdInfo |
-| SheetView | 5 | spdMain_Sheet1, spdEdit_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1 |
+| FpSpread | 5 | spdMain, spdEdit, spdInfo, spdMain, spdEdit |
+| SheetView | 5 | spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdEdit_Sheet1 |
 | UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
 | UsrLabel | 4 | txtPlanId, usrLabel2, txtPlanId, usrLabel2 |
-| DataGridView | 4 | dgEditCell, dgEditForm, dgEditPack, dgEdit |
+| DataGridView | 4 | dgEdit, dgEditCell, dgEditForm, dgEditPack |
 | UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
 | UsrDatePicker2 | 2 | date_instance, date_instance |
 | UsrDateRangePicker2 | 2 | range_plan, range_plan |
 | SplitContainer | 2 | splitter, splitter |
+| ImageList | 2 | imageList1, imageList1 |
 | TextBox | 2 | tbLog, tbLog |
 | Splitter | 2 | splitter2, splitter1 |
-| ImageList | 2 | imageList1, imageList1 |
 | Button | 1 | button1 |
 | GroupBox | 1 | groupBox1 |
 
@@ -1167,7 +1167,7 @@
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
 - 코드에서 생성하는 시트: Main
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:704, SetSheetHeaderColumn_FP@RefreshHeaderOnly:610, SetSheetHeaderColumn_FP@RefreshHeaderOnly:693
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:693, SetSheetHeaderColumn_FP@RefreshHeaderOnly:610, SetSheetHeaderColumn_FP@RefreshHeaderOnly:704
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

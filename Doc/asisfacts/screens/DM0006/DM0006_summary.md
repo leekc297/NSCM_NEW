@@ -29,6 +29,9 @@
 | button:FindButton | FindButton > FindData > ParameterData | 411 | DM_H.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS | MATCH | SP DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS |
 | button:FindButton | FindButton > FindData > InitSpread > GetSpdTitle | 1362 | DM_H.DM0000_GET_COMMON_SPREAD_TITLE | MATCH | SP DM0000_GET_COMMON_SPREAD_TITLE |
 | button:SaveButton | SaveButton > SaveData > FindData | 154 | xxxx.xxxx | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 233 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 234 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 235 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > SaveData_DataService > FindData | 306 | DM.DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA | MATCH | SP DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA |
 | button:SaveButton | SaveButton > SaveData > FindData | 320 | DM_H.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST | MATCH | SP DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST |
 | button:SaveButton | SaveButton > SaveData > FindData > GroupData | 396 | DM_H.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS | MATCH | SP DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS |
@@ -66,6 +69,9 @@
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection | 625 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection2 | 650 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection2 | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection3 | 694 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection3 | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | SaveData | 766 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| unreached:(진입점 미연결) | SaveData | 767 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| unreached:(진입점 미연결) | SaveData | 768 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | GetScmSiteInfobyDivision | 1293 | SCM.SCM0001_GET_SITE_INFO_BY_DIVISION | MATCH | SP SCM0001_GET_SITE_INFO_BY_DIVISION |
 | unreached:(진입점 미연결) | GetTeambyDivision | 1308 | SCM.SCM0001_GET_TEAM_BY_DIVISION | MATCH | SP SCM0001_GET_TEAM_BY_DIVISION |
 | unreached:(진입점 미연결) | GetEndCustomerbyDivision | 1322 | SCM.SCM0001_GET_CUSTOMER_BY_DIVISION | MATCH | SP SCM0001_GET_CUSTOMER_BY_DIVISION |
@@ -97,6 +103,9 @@
 | SCM.SCM0001_GET_SITE_BY_DIVISION | MATCH | 3 | SP SCM0001_GET_SITE_BY_DIVISION | EXEC:SCM0001_GET_SITE_BY_DIVISION, SELECT:SCM_MST_SITE, REF:VALUE, REF:NODES |  |
 | SCM.SCM0001_GET_SITE_INFO_BY_DIVISION | MATCH | 1 | SP SCM0001_GET_SITE_INFO_BY_DIVISION | EXEC:SCM0001_GET_SITE_INFO_BY_DIVISION, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:SCM_MST_SITE_CUSTOMER, SELECT:SCM_MST_CUSTOMER, REF:STRING_SPLIT |  |
 | SCM.SCM0001_GET_TEAM_BY_DIVISION | MATCH | 2 | SP SCM0001_GET_TEAM_BY_DIVISION | EXEC:SCM0001_GET_TEAM_BY_DIVISION, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SSO_DEPT_INFO, REF:VALUE, REF:NODES |  |
+| xxxx.DeleteQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.InsertQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.UpdateQueryId | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
 | xxxx.xxxx | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
@@ -185,10 +194,16 @@
 | ImageList | 1 | imageList1 |
 | Panel | 1 | panel1 |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (7건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 154 | FindData | xxxx.xxxx | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 233 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 234 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 235 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 766 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 767 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 768 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

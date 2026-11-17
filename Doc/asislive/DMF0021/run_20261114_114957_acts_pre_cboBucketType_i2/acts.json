@@ -1,0 +1,278 @@
+{
+ "id": "DMF0021",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0021_GET_SPREAD_TITLE",
+    "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEx"
+   ],
+   "rows": [
+    [
+     "DMF0021_GET_SPREAD_TITLE",
+     49
+    ],
+    [
+     "DMF0021_GET_DM_PLN_SALES_PLAN_DATAEx",
+     2033
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 32,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0021-S67bbf1",
+    "DMF0021-S5a4a23",
+    "DMF0021-S26ff5f",
+    "DMF0021-S18f2df",
+    "DMF0021-S6c59f3",
+    "DMF0021-S6a69a9",
+    "DMF0021-Sd59aae",
+    "DMF0021-Sf5f784",
+    "DMF0021-Sbb8d29",
+    "DMF0021-S252290",
+    "DMF0021-Sc14b34",
+    "DMF0021-S45e776",
+    "DMF0021-Sffed87",
+    "DMF0021-S0ba399",
+    "DMF0021-Sd738d5",
+    "DMF0021-S2e76bd",
+    "DMF0021-S72a490",
+    "DMF0021-Sf409b9",
+    "DMF0021-S6bd4b3",
+    "DMF0021-S109112",
+    "DMF0021-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnCutOff",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnCutOff failed: InvalidOperationException: control not found: btnCutOff",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-Sd0a499",
+    "DMF0021-Se7e3bc"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 15317,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0021-Sea1449"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 14,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0021-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 102,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0021-S4fa471"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S67cd45",
+    "DMF0021-S913dee"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S669149",
+    "DMF0021-S2348c7"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "layoutControlItem3",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationException: control not found: layoutControlItem3",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-S67cd45",
+    "DMF0021-S913dee"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "layoutControlItem7",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem7 failed: InvalidOperationException: control not found: layoutControlItem7",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0021-Sd0a499",
+    "DMF0021-Se7e3bc"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-14 11:47:23.107",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i2",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "2"
+  },
+  "label": "cboBucketType 콤보 2번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:2:Monthly",
+  "value": "MONTHLY",
+  "text": "Monthly",
+  "checked": null,
+  "selected_index": 2
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

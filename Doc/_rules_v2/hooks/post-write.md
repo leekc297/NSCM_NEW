@@ -54,11 +54,11 @@ grep -nP '<(Project|Item|Owner|Customer)ByDivisionModal' "$F" | grep -v 'callFro
 
 # 12. as XxxRow[] direct cast (TS2352)
 grep -nP 'as [A-Z]\w*Row\[\]' "$F" | grep -v 'as unknown as' \
-  && echo "⚠ TS2352: direct cast 차단 — 'as unknown as XxxRow[]' 우회 (use type-check-error-patterns §2)"
+  && echo "⚠ TS2352: direct cast 차단 — 타입을 procedures.d.ts 에서 맞춘다('as unknown as' 우회 금지)"   # (2026-11-13 정정: 'as unknown as' 우회 안내 삭제 — 실행 hook check-fe-import 가 'as unknown as' 를 경고)
 
 # 13. as Record<string, unknown> direct cast (TS2352)
 grep -nP 'as Record<string, unknown>' "$F" | grep -v 'as unknown as' \
-  && echo "⚠ TS2352: Record direct cast — 'as unknown as Record<string, unknown>' 우회"
+  && echo "⚠ TS2352: Record direct cast — 타입을 맞춘다('as unknown as' 우회 금지)"   # (11-13 정정)
 
 # 14. DialogNavigationSize string literal 거부 (TS2322)
 grep -nP "size='(large|medium|small)'" "$F" \

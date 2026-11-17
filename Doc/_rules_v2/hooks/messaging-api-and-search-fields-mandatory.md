@@ -7,9 +7,9 @@
 
 ## 0. 원칙 — 4 영역
 
-1. **`useMessageStore`** 표준 (`@shared/stores`) — `setAlert` / `setToast` / `setConfirmYesNoCancel` 만 사용. `window.alert` / `window.confirm` 직접 사용 절대 금지
+1. **`useMessageStore`** 표준 (`@shared/stores`) — `setAlert` / `setToast` / `setConfirmYesNoCancel` 만 사용. `window.alert` / `window.confirm` 직접 사용 절대 금지 (2026-11-13 정정: `setConfirmYesNoCancel` · `YesNoCancelResult` 는 현재 `nscm-fe` 소스에 없음 — `useMessageStore.ts` 선언은 `setToast` · `setAlert` 뿐)
 2. **`apiClient` 10 메서드 인벤토리** (`@foundation/apis`) — HTTP 4 + SP 호출 2 + Combo legacy 2 + G2 BigFilter 2. `fetch` / `axios` 직접 사용 금지
-3. **`searchFields` 카탈로그 14 컴포넌트** (`@master/components` 또는 `../../../components`) — Form 작성 시 카탈로그 우선 사용
+3. **`searchFields` 카탈로그 14 컴포넌트** (`'features/master/src/components'` — 2026-11-13 정정: 별칭 `@master/components` 는 tsconfig paths 에 없음 · 상대경로 `../../../components` 대신 비상대 경로로 통일)) — Form 작성 시 카탈로그 우선 사용
 4. **`CustomDialog` 표준 size 7** (400/600/800/1000/1200/1400/1600) — 자체 modal / MUI Dialog 직접 사용 금지
 
 ---
@@ -23,7 +23,7 @@ import type { YesNoCancelResult } from '@shared/stores';
 
 const setAlert = useMessageStore(state => state.setAlert);
 const setToast = useMessageStore(state => state.setToast);
-const setConfirmYesNoCancel = useMessageStore(state => state.setConfirmYesNoCancel);
+const setConfirmYesNoCancel = useMessageStore(state => state.setConfirmYesNoCancel);   // (11-13 정정) 현재 store 에 없음
 
 // 또는 component 외부 (handler 등) — getState()
 const setAlert = useMessageStore.getState().setAlert;
@@ -35,7 +35,7 @@ const setAlert = useMessageStore.getState().setAlert;
 |---|---|---|
 | **A. 단순 알림** | `await setAlert({ type: 'alert', content: t('MSG00010', '_저장됨') })` → `Promise<true>` | 결과 통지 (저장 완료 / 검색 결과 / 에러 메시지) |
 | **B. Confirm** | `const ok = await setAlert({ type: 'confirm', content: t('MSG00009', '_초기화?') })` → `Promise<boolean>` | 사용자 확인 (삭제 / 초기화 / 저장 직전) |
-| **C. YesNoCancel (G6)** | `const result = await setConfirmYesNoCancel({ content: ... })` → `Promise<'yes' \| 'no' \| 'cancel'>` | AS-IS MessageHelper Button '0202004' 매핑 — 3 옵션 분기 |
+| **C. YesNoCancel (G6)** | `const result = await setConfirmYesNoCancel({ content: ... })` → `Promise<'yes' \| 'no' \| 'cancel'>` | AS-IS MessageHelper Button '0202004' 매핑 — 3 옵션 분기 (11-13 정정: 현재 store 에 없음) |
 | **D. Toast** | `setToast({ message: t('MSG00020', '_성공'), type: 'success', duration: 4000 })` | 자동 사라지는 알림 (저장 성공 / 임시 상태) |
 | **E. Header 포함** | `setAlert({ type: 'alert', header: t('TITLE001', '_경고'), content: ... })` | 강조 알림 |
 
@@ -81,8 +81,8 @@ import { apiClient, mockApiClient } from '@foundation/apis';
 | 7 | `getCombo(params)` | `(ComboParam) => Promise<ComboResponse[]>` | 단일 combo (legacy — `useTabComboQueries` 권장) |
 | 8 | `getLookup(params)` | `(LookupParam) => Promise<LookupResponse[]>` | 단일 lookup (legacy) |
 | **G2 BigFilter 2** ⭐ | | | |
-| 9 | `getCombosMulti(comboList[])` | `(ComboParam[]) => Promise<Record<string, ComboResponse[]>>` | **1 round-trip 다중 combo** — DM 도메인 BigFilter (AS-IS BaseForm DataService.GetDMInnerTable 동등). URL `admin/combo-muti`. body `{ comboList: [{comboId: 'MyDivision'}, ...] }`. 응답 `{ MyDivision: [...], TeambyDivision: [...] }` |
-| 10 | `getLookupsMulti(lookupTypes[])` | `(string[]) => Promise<Record<string, LookupResponse[]>>` | **1 round-trip 다중 lookup** — URL `admin/lookup-muti`. body `{ lookupType: 'INPUT_TP_CD,MNU_TP_CD' }` (csv) |
+| 9 | `getCombosMulti(comboList[])` | `(ComboParam[]) => Promise<Record<string, ComboResponse[]>>` | **1 round-trip 다중 combo** — DM 도메인 BigFilter (AS-IS BaseForm DataService.GetDMInnerTable 동등). URL `admin/combo-muti`. body `{ comboList: [{comboId: 'MyDivision'}, ...] }`. 응답 `{ MyDivision: [...], TeambyDivision: [...] }` (2026-11-13 정정: `getCombosMulti` 는 현재 `nscm-fe` 소스에 없음 — `axios.ts` 의 콤보 메서드는 `getCombo` · `getLookup` 뿐) |
+| 10 | `getLookupsMulti(lookupTypes[])` | `(string[]) => Promise<Record<string, LookupResponse[]>>` | **1 round-trip 다중 lookup** — URL `admin/lookup-muti`. body `{ lookupType: 'INPUT_TP_CD,MNU_TP_CD' }` (csv) (11-13 정정: `getLookupsMulti` 현재 소스에 없음) |
 
 ### 2.3 표준 사용 우선순위 (의무)
 
@@ -138,7 +138,7 @@ const toOptions = (rows: ...) => ({ label, value })[]
 import {
   DivisionField, TeamField, EndCustomerField, SalesSiteField,
   ProjectField, ItemField, OwnerField, BucketField, PeriodField,
-} from '../../../components';   // 또는 @master/components
+} from 'features/master/src/components';   // (11-13 정정: '../../../components' · @master/components → 비상대 경로)
 
 <DivisionField
   value={searchParams.divisionId}
@@ -221,7 +221,7 @@ import { CustomDialog } from '@shared/components';
 ```
 [Messaging]
 [ ] 1.  window.alert / window.confirm / alert(...) 직접 사용 0?
-[ ] 2.  setAlert({ type: 'alert' / 'confirm' / 'yesNoCancel' }) 의무?
+[ ] 2.  setAlert({ type: 'alert' / 'confirm' / 'yesNoCancel' }) 의무?   # (2026-11-13 정정: 현재 store 의 setAlert type 은 'alert' | 'confirm' 뿐 — 'yesNoCancel' 은 `useMessageStore.ts` 에 없음)
 [ ] 3.  setAlert 호출 시 `await` (confirm 결과 사용 시)?
 [ ] 4.  message content = t('MSG00xxx', ...) i18n 키?
 

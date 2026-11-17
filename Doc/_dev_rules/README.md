@@ -14,6 +14,7 @@
 ```
 
 상세는 루트 `CLAUDE.md` → `Doc/_rules_consolidation/RULESET_MASTER.md` 참조.
+(2026-11-13 정정: 위 2·3번은 2026-10-12 CLAUDE.md 경량 재구성 전 내용 — 현행 진입은 `CLAUDE.md` §3 4단계: Step 2 = `Doc/_rules_consolidation/TRIGGER_ROUTER.md`(RULESET_MASTER §2/§2.5/§7 추출본) → Step 3 해당 T# 핵심 Hook → Step 4 T01/T01M 이면 `UI_MANDATORY_CHECKLIST.md`. `RULESET_MASTER.md`·`00_INDEX.md` 전문은 카탈로그가 필요할 때만 연다 — 매 작업 전문 Read 금지)
 
 ---
 
@@ -43,7 +44,7 @@
 | Archived 룰 # | 흡수 위치 (룰 v2) |
 |---:|---|
 | `00_INDEX.md` | `Doc/_rules_v2/00_INDEX.md` (재작성) |
-| `01_CLAUDE.md` | `Doc/_rules_v2/CLAUDE.md` (재작성) |
+| `01_CLAUDE.md` | `Doc/_rules_v2/CLAUDE.md` (재작성) *(2026-11-13 보관 이동 → `Doc/_archive/rules_v2_reports/CLAUDE.md`)* |
 | `03_FE_RULES.md` | `_tobe/01~10.md` |
 | `04_BE_RULES.md` | `_tobe/11_be_controller_service.md` |
 | `05_SCREEN_TEMPLATE.md` | `_tobe/03_main_component.md` + `_tobe/04_store.md` |
@@ -79,7 +80,7 @@
 - 잔존 10종 (v2 미흡수): screen-analysis-pre/post/pre-submit · new-screen-pre-build · fe-import-check · module-duplication-check · encoding-check · rule-md-organize · figma-mapping-check · pivot-frozen-columns
 - 이동 16종 위치: `Doc/_dev_rules/_archive/hooks/` · v2 대응: `Doc/_rules_v2/hooks/`
 
-신규 작업 시: 룰 v2 hooks (69) 우선. v1 hooks 는 참고용만.
+신규 작업 시: 룰 v2 hooks (156 — 2026-11-13 정정: 69 → `Doc/_rules_v2/hooks/*.md` 실측 156) 우선. v1 hooks 는 참고용만.
 
 ---
 

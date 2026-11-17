@@ -1,0 +1,302 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-16 05:28:38.528",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 249,
+   "rows_kind": "DataSet rows",
+   "ms": 4.63,
+   "params": {
+    "Code": "COUNTRY_MST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='COUNTRY_MST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.528",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 249,
+   "rows_kind": "DataSet rows",
+   "ms": 4.85,
+   "params": {
+    "Code": "COUNTRY_MST",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='COUNTRY_MST', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.544",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 3.49,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "TRANSPORT_MODE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='TRANSPORT_MODE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.576",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMSecurityACL",
+   "sp": "UP_FX_GetGSCMSecurityACL",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetSecurityACL",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 3.43,
+   "params": {
+    "GroupID": "ADMIN",
+    "UserID": "jaeuk.shin",
+    "MenuID": "SCP0005"
+   },
+   "inline": "EXEC UP_FX_GetGSCMSecurityACL @GroupID='ADMIN', @UserID='jaeuk.shin', @MenuID='SCP0005'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.607",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SELECT *",
+   "caller": "GSCM.Common.DLL.AppServiceSupport::GeneralExecuteQueryDataSet",
+   "exec_type": "ExecuteDataSet",
+   "rows": 874,
+   "rows_kind": "DataSet rows",
+   "ms": 19.69,
+   "params": {
+    "USER_ID": ""
+   },
+   "inline": "SELECT *  \n     FROM   SCM_CODE_LOOKUP_VALUE A WITH(NOLOCK)",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.719",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 39,
+   "rows_kind": "DataSet rows",
+   "ms": 4.57,
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0005', @p_user_id='jaeuk.shin', @p_sheet_name='Distribution Route'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.734",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 3.33,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "LT_TYPE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='LT_TYPE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.734",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 3.63,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "TRANSPORT_MODE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='TRANSPORT_MODE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.893",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 5.61,
+   "params": {
+    "MenuID": "Distribution Route",
+    "CnntCode": "0104001",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Distribution Route', @CnntCode='0104001', @UserID='jaeuk.shin'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.988",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 3,
+   "rows_kind": "DataSet rows",
+   "ms": 3.82,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "LT_TYPE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='LT_TYPE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:38.988",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 39,
+   "rows_kind": "DataSet rows",
+   "ms": 4.42,
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0005', @p_user_id='jaeuk.shin', @p_sheet_name='Distribution Route'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:39.005",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 4.01,
+   "params": {
+    "Code": "LookupCommon",
+    "Param1": "TRANSPORT_MODE_CODE",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='LookupCommon', @Param1='TRANSPORT_MODE_CODE', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:39.112",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 15.97,
+   "params": {
+    "p_route_id": "10243"
+   },
+   "inline": "EXEC SCP0005_GET_DISTRIBUTION_ROUTEID @p_route_id='10243'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:39.142",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 11.51,
+   "params": {
+    "p_menu_id": "SCP0005",
+    "p_log_type": "FIND",
+    "p_log_cnt": "1",
+    "p_db_time": "0.053",
+    "p_ui_time": "0.002",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0005', @p_log_type='FIND', @p_log_cnt='1', @p_db_time='0.053', @p_ui_time='0.002', @p_user_id='jaeuk.shin'",
+   "phase": "action:msgcell:FindButton"
+  },
+  {
+   "at": "2026-11-16 05:28:39.509",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0005_GET_COUNTRY_CITY",
+   "sp": "SCP0005_GET_COUNTRY_CITY",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 89426,
+   "rows_kind": "DataSet rows",
+   "ms": 385.29,
+   "params": {
+    "p_country": "",
+    "p_city": "",
+    "p_city_name": "",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0005_GET_COUNTRY_CITY @p_country='', @p_city='', @p_city_name='', @debug_mode='F'",
+   "phase": "action:msgcell:FindButton"
+  }
+ ]
+}

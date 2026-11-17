@@ -1,6 +1,6 @@
 # DMF0005 · SCM0001_GET_LOOKUP_VALUES ↔ (미매칭)
 
-- 실행: 2026-11-02 17:40:18
+- 실행: 2026-11-14 05:56:47
 - 파라미터: `{"p_lookup_type": ""}`
 - 종류: GET
 - To-Be proc 미매칭 — golden_cases.csv 의 tobe_proc 를 지정(manual=Y)

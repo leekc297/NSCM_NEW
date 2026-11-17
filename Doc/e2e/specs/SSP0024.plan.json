@@ -101,23 +101,6 @@
   "buttons": [],
   "mainSheets": [
     {
-      "name": "Project",
-      "key": "PROJECT",
-      "labels": [
-        "Cell Type",
-        "division",
-        "division",
-        "Electrode Type",
-        "UOM",
-        "Material",
-        "Model",
-        "Nick Name",
-        "Plant Site Code",
-        "Plant Site",
-        "Pancake (m/cell)"
-      ]
-    },
-    {
       "name": "Ship Master Elec",
       "key": "SHIP_MASTER_ELEC",
       "labels": [
@@ -216,11 +199,6 @@
     }
   ],
   "expectedCols": {
-    "Project": {
-      "40": [],
-      "81": [],
-      "82": []
-    },
     "Ship Master Elec": {
       "40": [
         "Div*",
@@ -338,12 +316,12 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "INSERT",
         "DELETE",
+        "INSERT",
+        "SEARCH",
         "EDIT",
         "USER_CHECK",
         "EXCEL",
-        "SEARCH",
         "SAVE"
       ],
       "matrix": [],
@@ -364,102 +342,102 @@
       "USER_CHECK"
     ],
     "CAPA Planner": [
-      "SEARCH",
-      "DELETE",
-      "INSERT",
-      "EXCEL",
       "USER_CHECK",
-      "SAVE"
+      "EXCEL",
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "DELETE"
     ],
     "DM ADMIN": [
-      "EXCEL",
-      "SEARCH",
-      "USER_CHECK",
+      "INSERT",
       "DELETE",
-      "SAVE",
-      "INSERT"
+      "USER_CHECK",
+      "SEARCH",
+      "EXCEL",
+      "SAVE"
     ],
     "DM Planner": [
+      "DELETE",
+      "USER_CHECK",
+      "EXCEL",
+      "SAVE",
       "INSERT",
+      "SEARCH"
+    ],
+    "DM Viewer": [
       "SEARCH",
       "USER_CHECK",
       "DELETE",
+      "INSERT",
       "SAVE",
       "EXCEL"
     ],
-    "DM Viewer": [
-      "EXCEL",
-      "SEARCH",
-      "USER_CHECK",
-      "SAVE",
-      "INSERT",
-      "DELETE"
-    ],
     "FP Planner": [
-      "INSERT",
-      "DELETE",
       "SAVE",
       "USER_CHECK",
-      "EDIT",
+      "SEARCH",
+      "INSERT",
       "EXCEL",
-      "SEARCH"
+      "EDIT",
+      "DELETE"
     ],
     "FP Viewer": [
-      "INSERT",
       "USER_CHECK",
-      "EXCEL",
       "SEARCH",
-      "DELETE",
-      "SAVE"
+      "EXCEL",
+      "INSERT",
+      "SAVE",
+      "DELETE"
     ],
     "SCM PI Admin": [
-      "SEARCH",
       "USER_CHECK",
+      "SEARCH",
       "SAVE",
       "INSERT",
       "EXCEL",
-      "EDIT",
-      "DELETE"
+      "DELETE",
+      "EDIT"
     ],
     "SCM Viewer": [
       "DELETE",
-      "USER_CHECK",
-      "SAVE",
-      "SEARCH",
-      "INSERT",
-      "EXCEL"
-    ],
-    "SCP Planner": [
-      "USER_CHECK",
-      "SEARCH",
-      "SAVE",
-      "INSERT",
-      "DELETE",
-      "EXCEL"
-    ],
-    "SCP Tester": [
-      "USER_CHECK",
-      "SAVE",
-      "DELETE",
-      "INSERT",
       "EXCEL",
+      "SAVE",
+      "USER_CHECK",
+      "INSERT",
       "SEARCH"
     ],
-    "SSP Planner": [
+    "SCP Planner": [
+      "SAVE",
+      "EXCEL",
+      "SEARCH",
+      "USER_CHECK",
       "INSERT",
+      "DELETE"
+    ],
+    "SCP Tester": [
+      "EXCEL",
+      "SEARCH",
+      "USER_CHECK",
+      "INSERT",
+      "SAVE",
+      "DELETE"
+    ],
+    "SSP Planner": [
       "DELETE",
+      "INSERT",
+      "SEARCH",
       "EDIT",
       "USER_CHECK",
       "EXCEL",
-      "SEARCH",
       "SAVE"
     ],
     "SSP Viewer": [
-      "EXCEL",
       "INSERT",
       "SAVE",
-      "SEARCH",
       "DELETE",
+      "EXCEL",
+      "SEARCH",
       "USER_CHECK"
     ]
   },

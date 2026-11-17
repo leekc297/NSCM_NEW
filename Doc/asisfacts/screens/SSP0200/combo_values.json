@@ -1,0 +1,150 @@
+{
+ "screen": "SSP0200",
+ "generated": "2026-11-15 05:40:55",
+ "vars": {
+  "dtPlantSiteByDivision": {
+   "sp": "SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE",
+   "code": "",
+   "targets": [
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SSP0200_ShipmentChangeRequest.cs:564 ← SSP0200_ShipmentChangeRequest.cs:559",
+   "unresolved": "실행 중에만 정해지는 인자: @p_division_id, @p_now_group_id, @p_user_id"
+  },
+  "dtToSite": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "ShipmentPlanToSite",
+   "targets": [
+    "GRID:TO_SITE_DESCRIPTION",
+    "SEARCH:clbToSite"
+   ],
+   "ref": "SSP0200_ShipmentChangeRequest.cs:566 ← SSP0200_ShipmentChangeRequest.cs:562",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  },
+  "dtFromSite": {
+   "sp": "SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION",
+   "code": "",
+   "targets": [
+    "GRID:FROM_SITE_DESCRIPTION"
+   ],
+   "ref": "SSP0200_ShipmentChangeRequest.cs:2728 ← SSP0200_ShipmentChangeRequest.cs:2716",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "dtTransMode": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "TransMode",
+   "targets": [
+    "GRID:TRANSPORT_MODE"
+   ],
+   "ref": "SSP0200_ShipmentChangeRequest.cs:5468 ← SSP0200_ShipmentChangeRequest.cs:5466",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3, @Param4"
+  },
+  "dtEndCustomer": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "EndCustomerByItemForSSP",
+   "targets": [
+    "GRID:END_CUSTOMER"
+   ],
+   "ref": "SSP0200_ShipmentChangeRequest.cs:6656 ← SSP0200_ShipmentChangeRequest.cs:6655",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:FCST_TYPE",
+    "GRID:SHIPMENT_STATUS"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0200/Change Request/FCST_TYPE ← SCM_MST_SHEET_COLUMNS SSP0200/Shipment Change Request/SHIPMENT_STATUS",
+   "rows": []
+  },
+  "<meta Data.Type.CHANGE_REASON_CODE_ALL>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "CHANGE_REASON_CODE_ALL",
+   "targets": [
+    "GRID:CHANGE_REASON_CODE"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0200/Shipment Change Request/CHANGE_REASON_CODE ← SCM_MST_SHEET_COLUMNS SSP0200/Shipment Change Request/CHANGE_REASON_CODE",
+   "rows": [
+    {
+     "CODE": "-",
+     "NAME": "None"
+    }
+   ]
+  },
+  "<meta Data.Type.Incoterms>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "Incoterms",
+   "targets": [
+    "GRID:INCOTERMS"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SSP0200/Shipment Change Request/INCOTERMS ← SCM_MST_SHEET_COLUMNS SSP0200/Shipment Change Request/INCOTERMS",
+   "rows": [
+    {
+     "CODE": "A01",
+     "NAME": "A01"
+    },
+    {
+     "CODE": "Z01",
+     "NAME": "Z01"
+    },
+    {
+     "CODE": "Z04",
+     "NAME": "Z04"
+    },
+    {
+     "CODE": "EXW",
+     "NAME": "EXW"
+    },
+    {
+     "CODE": "FCA",
+     "NAME": "FCA"
+    },
+    {
+     "CODE": "FAS",
+     "NAME": "FAS"
+    },
+    {
+     "CODE": "FOB",
+     "NAME": "FOB"
+    },
+    {
+     "CODE": "CFR",
+     "NAME": "CFR"
+    },
+    {
+     "CODE": "CIF",
+     "NAME": "CIF"
+    },
+    {
+     "CODE": "CIP",
+     "NAME": "CIP"
+    },
+    {
+     "CODE": "CPT",
+     "NAME": "CPT"
+    },
+    {
+     "CODE": "Z02",
+     "NAME": "Z02"
+    },
+    {
+     "CODE": "DAT",
+     "NAME": "DAT"
+    },
+    {
+     "CODE": "DAP",
+     "NAME": "DAP"
+    },
+    {
+     "CODE": "DDP",
+     "NAME": "DDP"
+    },
+    {
+     "CODE": "DDU",
+     "NAME": "DDU"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,98 @@
+{
+ "id": "SCP0020",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbPlantSite",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 10개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:Peopleworks_CN",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      29,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(panel1)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "clbLine(chkAll)",
+     "before": [
+      "ALL",
+      null,
+      null,
+      false,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "txtTextKeyin",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    }
+   ],
+   "scenarios": [
+    "SCP0020-S234f9c",
+    "SCP0020-S03f4be"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboDivision",
+   "why": "콤보 항목이 1개라 바꿀 값이 없음",
+   "scenarios": 4
+  },
+  {
+   "control": "ClbDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-14 11:03:18"
+}

@@ -96,10 +96,10 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **useTabComboQueries** | `@shared/hooks` | 231 |  |  |
-| **useTabProcQuery** | `@shared/hooks` | 212 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
-| **useTabBtnPermissions** | `@shared/hooks` | 117 |  |  |
-| **useTabid** | `@shared/stores` | 74 |  |  |
+| **useTabComboQueries** | `@shared/hooks` | 237 |  |  |
+| **useTabProcQuery** | `@shared/hooks` | 216 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
+| **useTabBtnPermissions** | `@shared/hooks` | 121 |  |  |
+| **useTabid** | `@shared/stores` | 75 |  |  |
 | **useSaveWithValidation** | `@shared/hooks` | 71 |  |  |
 | **useTabLookupQueries** | `@shared/hooks` | 58 |  |  |
 | **useProcMutation** | `@shared/hooks` | 34 |  |  |

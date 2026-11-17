@@ -1,0 +1,569 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "pickbtn": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "BtnMeasure",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "title": "Measure Setting",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdUser/User",
+    "cols": [
+     "COLUMN_NAME",
+     "LARGE_CLASS_LABEL_NAME",
+     "SMALL_CLASS_LABEL_NAME",
+     "COLUMN_LABEL_NAME",
+     "SORT_METHOD_CODE",
+     "SORT_ORDER_NO",
+     "USER_SORT_METHOD_CODE",
+     "SUB_TOTAL_FLAG",
+     "USER_SELECTABLE_FLAG"
+    ],
+    "row": [
+     "P_SCP_PROD_PLAN",
+     "SCP Target (Coater)",
+     "SCP Target (Coater)",
+     "SCP Target (Coater)",
+     "",
+     "1.00",
+     "",
+     "",
+     "Y"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_TitleSetForm_Popup",
+    "controls": [],
+    "grids": [
+     {
+      "grid": "spdBase",
+      "sheet": "Base",
+      "rows": 0,
+      "cols": [
+       "LARGE_CLASS_LABEL_NAME",
+       "SMALL_CLASS_LABEL_NAME",
+       "COLUMN_LABEL_NAME"
+      ]
+     },
+     {
+      "grid": "spdUser",
+      "sheet": "User",
+      "rows": 11,
+      "cols": [
+       "LARGE_CLASS_LABEL_NAME",
+       "SMALL_CLASS_LABEL_NAME",
+       "COLUMN_LABEL_NAME"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 11
+    }
+   },
+   "pick_act": {
+    "ok": false,
+    "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7"
+   },
+   "pick_button": "ButtonItem OK",
+   "pick_ok": {
+    "ok": true,
+    "closed": true,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Plan(Electrode)",
+     "rows_before": 11,
+     "rows_after": 0,
+     "cells": [
+      {
+       "row": 0,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 1,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 2,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 3,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 4,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 5,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 6,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 7,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 8,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 9,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      },
+      {
+       "row": 10,
+       "col": "(행)",
+       "before": "있음",
+       "after": "없음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP",
+    "SCM0002_SET_TITLESET_POPUP",
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "dialogs": [
+    {
+     "text": "저장 하였습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  },
+  {
+   "control": "BtnRequestor",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 0
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "expected_forms": [
+    "UserInfoPopup"
+   ],
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 0,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ],
+    "find": {
+     "ok": true,
+     "error": null,
+     "calls": [],
+     "rows_after": 8587
+    }
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "txtRequestor#0",
+     "before": "",
+     "after": "CWA JULIA NOWAKOWSKA 요청"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "btnItemId",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 3
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "40",
+     "Mobility & IT Battery",
+     "-",
+     "-",
+     "HQ06-E",
+     "LGESOC Elec HQ06",
+     "APCCA3122A",
+     "MCMM792027F1-M02 46800 C A",
+     "H",
+     "W80F1",
+     "[APCCA]Cathode Pancake"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 3,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  },
+  {
+   "control": "btnItemId2",
+   "kind": "pickbtn",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "title": "Model by DivisionPopup",
+    "rows": 29575
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "PROJECT_CODE",
+     "PROJECT_NAME",
+     "SCM_SITE_ID",
+     "SITE_DESCRIPTION",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "ITEM_TYPE",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "",
+     "40",
+     "Mobility & IT Battery",
+     "-",
+     "-",
+     "1X Technologies_US_PAO",
+     "1X Technologies_US_PAO",
+     "MCCM351015B1-D01",
+     "MC,C,M,21700,5.1Ah,15.3A,B1",
+     "P",
+     "M53L",
+     "[MCC]18/21 Cylindrical"
+    ]
+   },
+   "expected_forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "popup_inside": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "controls": [
+     {
+      "name": "txtItemID",
+      "type": "UsrMultiLineEditor",
+      "label": "Model",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "clbDivision",
+      "type": "UsrCheckedList",
+      "label": "Div",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "clbScmSite",
+      "type": "UsrCheckedList",
+      "label": "Site",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "txtProject",
+      "type": "UsrMultiLineEditor",
+      "label": "Project",
+      "value": null,
+      "items": [],
+      "enabled": false
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "Project",
+      "rows": 29575,
+      "cols": [
+       "DIVISION_ID",
+       "PROJECT_CODE",
+       "PROJECT_NAME",
+       "SCM_SITE_ID",
+       "SITE_DESCRIPTION",
+       "ITEM_ID",
+       "ITEM_NAME",
+       "ITEM_TYPE",
+       "NICK_NAME",
+       "ITEM_CLASS_NAME"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "cond_changes": [
+    {
+     "control": "textBox1#1",
+     "before": "",
+     "after": "MCCM351015B1-D01"
+    },
+    {
+     "control": "txtItemId2#0",
+     "before": "",
+     "after": "MCCM351015B1-D01"
+    }
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnMeasure": {
+   "forms": [
+    "SCM0002_TitleSetForm_Popup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125812_acts"
+  },
+  "BtnRequestor": {
+   "forms": [
+    "UserInfoPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125812_acts"
+  },
+  "btnItemId": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125812_acts"
+  },
+  "btnItemId2": {
+   "forms": [
+    "SCM0002_ItembyDivisionPopup"
+   ],
+   "edit": false,
+   "src": "run_20261113_125812_acts"
+  }
+ },
+ "at": "2026-11-15 12:34:04",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ }
+}

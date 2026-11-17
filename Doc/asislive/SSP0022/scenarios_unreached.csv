@@ -1,0 +1,13 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0022-S1b6aa1,기타,SetParseFormat,SSP0022_ShipmentRequestElectrode.cs:4784,호출 없음,SSP0022_ShipmentRequestElectrode.cs:4779; SSP0022_ShipmentRequestElectrode.cs:4789,Format
+SSP0022-Sd80e2e,기타,BodItemValidChk,SSP0022_ShipmentRequestElectrode.cs:4143,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:2635; SSP0022_ShipmentRequestPopup.cs:523,
+SSP0022-S79305f,기타,BodItemValidChk,SSP0022_ShipmentRequestElectrode.cs:4162,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:2635; SSP0022_ShipmentRequestPopup.cs:523,
+SSP0022-S30a307,기타,BodItemValidChk_main,SSP0022_ShipmentRequestElectrode.cs:4094,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:1423,
+SSP0022-S807bb2,기타,BodItemValidChk_main,SSP0022_ShipmentRequestElectrode.cs:4113,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:1423,
+SSP0022-S9d69f9,기타,ControlClear,SSP0022_ShipmentRequestElectrode.cs:561,호출 없음,,
+SSP0022-Se22df7,기타,Set_Sum_Inventory,SSP0022_ShipmentRequestElectrode.cs:3312,호출 없음,,
+SSP0022-Sf6a67f,기타,Set_Sum_Inventory,SSP0022_ShipmentRequestElectrode.cs:3349,호출 없음,,
+SSP0022-Sffa7a7,기타,BodValidChk,SSP0022_ShipmentRequestPopup.cs:663,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:2629; SSP0022_ShipmentRequestElectrode.cs:3987; SSP0022_ShipmentRequestPopup.cs:510,
+SSP0022-S9281f8,기타,BodValidChk,SSP0022_ShipmentRequestPopup.cs:684,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:2629; SSP0022_ShipmentRequestElectrode.cs:3987; SSP0022_ShipmentRequestPopup.cs:510,
+SSP0022-S8a01e1,기타,BodValidChk,SSP0022_ShipmentRequestPopup.cs:703,주석 안에서만 호출,SSP0022_ShipmentRequestElectrode.cs:2629; SSP0022_ShipmentRequestElectrode.cs:3987; SSP0022_ShipmentRequestPopup.cs:510,
+SSP0022-Sa9b112,기타,SetImageCell,SSP0022_ShipmentRequestPopup.cs:340,주석 안에서만 호출,SSP0022_ShipmentRequestPopup.cs:166,

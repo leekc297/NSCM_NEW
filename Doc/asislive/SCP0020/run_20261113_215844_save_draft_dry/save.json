@@ -1,0 +1,70 @@
+{
+ "id": "SCP0020",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_TACT_TIME_EXCEPT",
+  "pk": [
+   "DIVISION_ID",
+   "PLANT_SITE_ID",
+   "ITEM_ID",
+   "OPERATION_ID",
+   "LINE_ID",
+   "TACT_TIME_START_DATE",
+   "TACT_TIME_END_DATE"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "PLANT_SITE_ID": "PLANT_SITE_ID",
+   "ITEM_ID": "ITEM_ID",
+   "OPERATION_ID": "OPERATION_ID",
+   "LINE_ID": "LINE_ID",
+   "TACT_TIME_START_DATE": "TACT_TIME_START_DATE",
+   "TACT_TIME_END_DATE": "TACT_TIME_END_DATE"
+  },
+  "save_sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+  "side": [
+   {
+    "table": "SCP_MST_TACT_TIME_EXCEPT_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0020_SAVE_TACT_TIME_EXCEPT → SP SCP0020_SAVE_TACT_TIME_EXCEPT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "TACT_TIME",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "TACT_TIME",
+     "db_col": "TACT_TIME",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "TACT_TIME",
+    "db_col": "TACT_TIME",
+    "rule": "plus1"
+   },
+   {
+    "col": "YIELD",
+    "db_col": "YIELD",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 21:58:44",
+ "status": "ERROR",
+ "steps": [],
+ "find_dialogs": [],
+ "note": "조회 결과 행 없음(메시지 [])"
+}

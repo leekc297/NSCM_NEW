@@ -1,0 +1,450 @@
+{
+ "combos": {
+  "{\"comboId\":\"ShipmentRequestPlantSite_SCP\",\"mnuId\":\"SSP0015\",\"divisionId\":\"'40'\",\"operationGroup\":\"'P'\",\"param3\":\"'E'\"}": [
+   {
+    "c": "AC00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "HQ05_40-W",
+    "v": "LGESOC IT & New Application Waranty HQ05"
+   },
+   {
+    "c": "HQ06-A",
+    "v": "LGESOC Cell HQ06"
+   },
+   {
+    "c": "HQ10-A",
+    "v": "HQ OC2 Mobile Prod-Cell"
+   },
+   {
+    "c": "AT00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "AZ00-A",
+    "v": "AZ Mobile Assy-Cell"
+   },
+   {
+    "c": "NJ01-A",
+    "v": "LGESNJ Cell NJ01"
+   },
+   {
+    "c": "NJ01-P",
+    "v": "LGESNJ BATTERY-Pack"
+   }
+  ],
+  "{\"comboId\":\"MyDivisionInEE\",\"mnuId\":\"SSP0015\"}": [
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "EE Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"BucketType\",\"mnuId\":\"SSP0015\"}": [
+   {
+    "c": "DAILY",
+    "v": "Daily"
+   },
+   {
+    "c": "WEEKLY",
+    "v": "Weekly"
+   },
+   {
+    "c": "MONTHLY",
+    "v": "Monthly"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"''\",\"offsetDay\":\"'31'\",\"timeZone\":\"''\"}": [
+   {
+    "c": "20261112:20261213",
+    "v": "20261112:20261213"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SSP0015\"}": [
+   {
+    "c": "40",
+    "v": "Mobility & IT Battery"
+   },
+   {
+    "c": "81",
+    "v": "Automotive Battery"
+   },
+   {
+    "c": "81_HD",
+    "v": "Automotive Battery(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "Automotive Battery(HG)"
+   },
+   {
+    "c": "81_HM",
+    "v": "Automotive Battery(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "Automotive Battery(ST)"
+   },
+   {
+    "c": "81_UC",
+    "v": "Automotive Battery(UC)"
+   },
+   {
+    "c": "82",
+    "v": "ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "Electrode"
+   },
+   {
+    "c": "EE_HD",
+    "v": "Electrode(HD)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "Electrode(HG)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "Electrode(HM)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "Electrode(ST)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "Electrode(UC)"
+   }
+  ],
+  "{\"comboId\":\"PlanDateShip\",\"mnuId\":\"SSP0015\",\"divisionId\":\"'40'\",\"shipPlanType\":\"'A'\"}": [
+   {
+    "c": "20261010",
+    "v": "2026-10-10"
+   },
+   {
+    "c": "20261009",
+    "v": "2026-10-09"
+   },
+   {
+    "c": "20261008",
+    "v": "2026-10-08"
+   },
+   {
+    "c": "20261007",
+    "v": "2026-10-07"
+   },
+   {
+    "c": "20261006",
+    "v": "2026-10-06"
+   },
+   {
+    "c": "20261005",
+    "v": "2026-10-05"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261010'\",\"offsetDay\":\"'31'\",\"timeZone\":\"''\"}": [
+   {
+    "c": "20261010:20261110",
+    "v": "20261010:20261110"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'SHIPMENT_STATUS'\",\"mnuId\":\"SSP0015\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "P",
+    "v": "Plan"
+   },
+   {
+    "c": "C",
+    "v": "Confirm"
+   },
+   {
+    "c": "D",
+    "v": "Request Drafting"
+   },
+   {
+    "c": "R",
+    "v": "Request Complete"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'SALES_TYPE_CODE'\",\"mnuId\":\"SSP0015\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "AS",
+    "v": "A/S(Chargeable)"
+   },
+   {
+    "c": "ASF",
+    "v": "A/S(Free)"
+   },
+   {
+    "c": "ETC",
+    "v": "ETC"
+   },
+   {
+    "c": "MPS",
+    "v": "Mass"
+   },
+   {
+    "c": "RMA",
+    "v": "RMA"
+   },
+   {
+    "c": "Recall",
+    "v": "Recall"
+   },
+   {
+    "c": "WSF",
+    "v": "WS(Free)"
+   },
+   {
+    "c": "SDF",
+    "v": "Sample(Dev/Free)"
+   },
+   {
+    "c": "SMC",
+    "v": "Sample(Mass/Chargeable)"
+   },
+   {
+    "c": "SMF",
+    "v": "Sample(Mass/Free)"
+   },
+   {
+    "c": "SPF",
+    "v": "Spare Parts(FREE)"
+   },
+   {
+    "c": "TST",
+    "v": "Internal Test"
+   },
+   {
+    "c": "WS",
+    "v": "WS(Chargeable)"
+   },
+   {
+    "c": "SDC",
+    "v": "Sample(Dev/Chargeable)"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon3\",\"lookupType\":\"'OWMS_STOCK_STATUS'\",\"mnuId\":\"SSP0015\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "00",
+    "v": "00 : 정상"
+   },
+   {
+    "c": "10",
+    "v": "10 : 미판정"
+   },
+   {
+    "c": "20",
+    "v": "20 : 반품보류"
+   },
+   {
+    "c": "30",
+    "v": "30 : 품질검사"
+   },
+   {
+    "c": "40",
+    "v": "40 : 품질HOLD"
+   },
+   {
+    "c": "50",
+    "v": "50 : 취급불량"
+   },
+   {
+    "c": "94",
+    "v": "94 : Second Request Inspection"
+   },
+   {
+    "c": "70",
+    "v": "70 : 검사생략"
+   },
+   {
+    "c": "80",
+    "v": "80 : 검사합격"
+   },
+   {
+    "c": "91",
+    "v": "91 : 1'st waiting"
+   },
+   {
+    "c": "92",
+    "v": "92 : Request Inspection"
+   },
+   {
+    "c": "93",
+    "v": "93 : 2'nd waiting"
+   },
+   {
+    "c": "60",
+    "v": "60 : 포장중"
+   }
+  ],
+  "{\"comboId\":\"Division\",\"mnuId\":\"SSP0015\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "40",
+    "v": "40"
+   },
+   {
+    "c": "81",
+    "v": "81"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC"
+   },
+   {
+    "c": "82",
+    "v": "82"
+   },
+   {
+    "c": "EE",
+    "v": "EE"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'MES_CHANGE_STATUS'\",\"mnuId\":\"SSP0015\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "N",
+    "v": "New"
+   },
+   {
+    "c": "D",
+    "v": "Deleted"
+   },
+   {
+    "c": "C",
+    "v": "Change"
+   },
+   {
+    "c": "X",
+    "v": "-"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261009'\",\"offsetDay\":\"'31'\",\"timeZone\":\"''\"}": [
+   {
+    "c": "20261009:20261109",
+    "v": "20261009:20261109"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261008'\",\"offsetDay\":\"'31'\",\"timeZone\":\"''\"}": [
+   {
+    "c": "20261008:20261108",
+    "v": "20261008:20261108"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"''\",\"offsetDay\":\"'31'\",\"timeZone\":\"'AS054'\"}": [
+   {
+    "c": "20261114:20261215",
+    "v": "20261114:20261215"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261010'\",\"offsetDay\":\"'31'\",\"timeZone\":\"'AS054'\"}": [
+   {
+    "c": "20261010:20261110",
+    "v": "20261010:20261110"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261009'\",\"offsetDay\":\"'31'\",\"timeZone\":\"'AS054'\"}": [
+   {
+    "c": "20261009:20261109",
+    "v": "20261009:20261109"
+   }
+  ],
+  "{\"comboId\":\"SCM0001_GET_SCP_DAY_PERIOD\",\"mnuId\":\"SSP0015\",\"fromDate\":\"'20261008'\",\"offsetDay\":\"'31'\",\"timeZone\":\"'AS054'\"}": [
+   {
+    "c": "20261008:20261108",
+    "v": "20261008:20261108"
+   }
+  ]
+ },
+ "popupFields": {},
+ "at": "2026-11-14T12:41:28.530Z"
+}

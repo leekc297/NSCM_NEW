@@ -1,7 +1,7 @@
 {
  "id": "SCP0108",
  "asis": "SCP0108",
- "at": "2026-11-09 10:06:58",
+ "at": "2026-11-14 13:51:08",
  "has_asis": true,
  "tobe_cols": 12,
  "buttons": [
@@ -35,7 +35,7 @@
   "p_delete": {
    "rows": 0,
    "why_not": [
-    "AS-IS 삭제가 신규 행만(DeleteButton 1304 guard == StringI) → 기존 행 D 저장 대상 아님"
+    "AS-IS 삭제가 신규 행만(DeleteButton:1304 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
    ]
   },
   "p_combo": {

@@ -1,0 +1,141 @@
+{
+ "id": "SCP0046",
+ "started": "2026-11-12 20:05:13.963",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 20:05:14.186",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0046_ModelAllocation",
+   "form_text": "Model Allocation",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0046_ModelAllocation.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:05:20.042"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 20:05:23.564",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0046\\run_20261112_200513\\dump_load.json",
+   "control_count": 55,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 0.957s, UI : 0.079s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:05:23.575"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 20:05:23.885",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0046\\run_20261112_200513\\shots\\SCP0046_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:05:23.983"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 20:05:24.464",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:05:25.105"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 20:06:04.325",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0046\\run_20261112_200513\\dump_find.json",
+   "control_count": 55,
+   "grid_count": 1,
+   "total": "Total : 1",
+   "time_status": "DB : 34.256s, UI : 0.113s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:06:04.360"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 20:06:04.524",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0046\\run_20261112_200513\\shots\\SCP0046_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:06:04.690"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 20:06:05.164",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:06:06.568"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 25,
+  "calls_with_params": 25
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0046_ModelAllocation",
+  "form_text": "Model Allocation",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0046_ModelAllocation.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 34.256s, UI : 0.113s",
+  "total": "Total : 1",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 20:05:14.167",
+ "t_find": "2026-11-12 20:05:24.148",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 55,
+  "layout_items": 11,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 399,
+  "data_rows": 1,
+  "grid_rows": 1,
+  "calls_total": 25,
+  "calls_screen": 25,
+  "calls_find": 9,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:52.224",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:52"
+}

@@ -407,11 +407,23 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     // SCM_ADM_PROC_M(PROC_NM=PKG_SCP0010.P_SCP0010_SAVE_SEMI_DATASET) 등록 COL_NM = data/sesUserId
     //   (ora.py 실측, iter-2) — pData/pUserId 로 보내면 name-lookup 바인딩이 NULL 처리돼 저장이
     //   빈 값으로 실행된다.
-    const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string }[] }>(
-      // `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
-      `/${MENU_ID}/${SHEETS.MAIN}/${isWeeklySave ? SAVE_WEEKLY_BTN : 'SAVE'}/call-proc`,
-      { data: buildSavePayloadJson(rows), sesUserId: useSessionStore.getState().session.userId ?? '' }
-    );
+    // 인터셉터가 SP 실패(O_RESULT_CURSOR CODE<>0)를 throw 하므로 잡아서 알림으로 띄운다.
+    let res;
+    try {
+      res = await apiClient.post<{
+        o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string; ERR_MESSAGE?: string }[];
+      }>(
+        // `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+        `/${MENU_ID}/${SHEETS.MAIN}/${isWeeklySave ? SAVE_WEEKLY_BTN : 'SAVE'}/call-proc`,
+        { data: buildSavePayloadJson(rows), sesUserId: useSessionStore.getState().session.userId ?? '' }
+      );
+    } catch (e) {
+      void setAlert({
+        type: 'alert',
+        content: (e instanceof Error && e.message.trim()) || t(MSG.SAVE_FAIL, '_Save failed.'),
+      });
+      return;
+    }
     if (isSaveResultFailure(res)) {
       void setAlert({
         type: 'alert',
@@ -422,7 +434,12 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     const result = (res.data?.result?.o_rc1 ?? [])[0];
     // 성공 코드 'S'(AS-IS SaveData_Main result_code.Equals("S"), .cs:2920) — saveFixDataset 와 동일 교정.
     if (result && String(result.RESULT_CODE ?? '') !== 'S') {
-      void setAlert({ type: 'alert', content: String(result.RESULT_MSG ?? t(MSG.SAVE_FAIL, '_Save failed.')) });
+      // void setAlert({ type: 'alert', content: String(result.RESULT_MSG ?? t(MSG.SAVE_FAIL, '_Save failed.')) });
+      // 실패 메시지는 SP 가 ERR_MESSAGE 로 내린다.
+      void setAlert({
+        type: 'alert',
+        content: String(result.ERR_MESSAGE ?? result.RESULT_MSG ?? t(MSG.SAVE_FAIL, '_Save failed.')),
+      });
       return;
     }
     setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved successfully.') });

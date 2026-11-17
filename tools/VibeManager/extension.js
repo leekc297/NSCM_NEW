@@ -2,6 +2,7 @@
 'use strict';
 const vscode = require('vscode');
 const promptPanel = require('./prompt-panel');
+const menuView = require('./menu-view');
 const flowPanel = require('./flow-panel');
 const history = require('./history');
 const workbench = require('./workbench');
@@ -172,6 +173,7 @@ function pageDirOfId(id) { try { const p = paths(); const r = JSON.parse(fs.read
 async function runTask(task, preset) {
   if (!task) { const items = allTasks().map(x => ({ label: x.task.title, description: x.step.title, task: x.task })); const pick = await vscode.window.showQuickPick(items, { placeHolder: '실행할 작업' }); if (!pick) return; task = pick.task; }
   const p = paths(); if (!p.root) { vscode.window.showErrorMessage('Vibe_Manager: 프로젝트 루트를 찾지 못했습니다. 설정 vibeManager.projectRoot 를 지정하세요.'); return; }
+  if (workbench.GEN_TASK.test(task.id || '') && workbench.dbModeBlock(p, `${task.id} ${task.title || ''}`.trim(), t => log(t.trim()))) return; // 2026-11-12: DB MODE = 일괄 생성 작업 차단(트리·FLOW 칸·명령 팔레트 공통)
   const vars = await collectInputs(task, preset); if (!vars) return;
   log(`▶ ${task.id} ${task.title}`);
   switch (task.kind) {
@@ -450,10 +452,12 @@ class DodProvider {
 //   카테고리 내용은 기존 트리 제공자(StepsProvider·DodProvider·HarnessProvider·EnvProvider)를 그대로 위임 → 항목 누락 없음.
 //   quick.json 의 '환경설정' 그룹은 환경설정 카테고리로 합친다(같은 이름 메뉴 2개 방지).
 // 1.8.3: 언어 선택 — quick.json/steps.json 의 *_en 필드를 쓰고(없으면 원문), 카테고리·액션 문구는 아래 사전
-const L = (o, k = 'label') => { const p = paths(); return (p.language === 'en' && o && o[k + '_en']) ? o[k + '_en'] : (o ? o[k] : ''); };
+let menuEn = false; // 영문 강제 스위치 — 2026-11-11 저녁부터 메뉴도 언어 설정을 따르므로 menu-view 는 쓰지 않는다(남겨 둠)
+const isEn = () => menuEn || paths().language === 'en';
+const L = (o, k = 'label') => (isEn() && o && o[k + '_en']) ? o[k + '_en'] : (o ? o[k] : '');
 const CAT = { steps: ['NSCM Migration Steps', 'NSCM 전환 단계'], dod: ['Definition of Done — Current Screen', '완료 정의(DoD) — 현재 화면'], harness: ['Rules · Hooks · Harness', '룰 · Hook · 하네스'], env: ['Settings', '환경설정'],
   recheck: ['🔄 Re-check gates', '🔄 게이트 다시 판정'], pick: ['📍 Pick screen · step tasks', '📍 화면 선택 · 단계 작업'], current: ['📋 Current settings', '📋 현재 설정값'] };
-const T = k => CAT[k][paths().language === 'ko' ? 1 : 0];
+const T = k => CAT[k][isEn() ? 0 : 1];
 function menuSections() {
   const p = paths(); const groups = (promptPanel.loadQuick(p.extDir, p.root).groups || []);
   const envG = groups.find(g => /환경|settings/i.test(g.title)) || null;
@@ -497,7 +501,7 @@ class MenuProvider {
       if (qs.some(q => q.sub)) {
         const order = []; const bucket = new Map();
         for (const q of qs) { const k = q.sub || '기타'; if (!bucket.has(k)) { bucket.set(k, []); order.push(k); } bucket.get(k).push(q); }
-        for (const k of order) { const first = bucket.get(k)[0]; const title = (paths().language === 'ko' ? k : (first.sub_en || k)); const hd = new vscode.TreeItem(`${first.sub_icon || '📂'} ${title}`, vscode.TreeItemCollapsibleState.Expanded); hd.description = String(bucket.get(k).length); hd._subItems = bucket.get(k); items.push(hd); }
+        for (const k of order) { const first = bucket.get(k)[0]; const title = (isEn() ? (first.sub_en || k) : k); const hd = new vscode.TreeItem(`${first.sub_icon || '📂'} ${title}`, vscode.TreeItemCollapsibleState.Expanded); hd.description = String(bucket.get(k).length); hd._subItems = bucket.get(k); items.push(hd); }
       } else for (const q of qs) items.push(quickLeaf(q));
       for (const a of s.actions || []) { const it = plain(a.label); it.command = { command: a.command, title: a.label }; items.push(it); }
       if (s.kind === 'cat') {
@@ -602,7 +606,9 @@ function activate(context) {
     vscode.commands.registerCommand('vibeManager.claudeNew', () => promptPanel.ensureClaude(paths(), { fresh: true })),
     vscode.commands.registerCommand('vibeManager.refreshPrompt', () => vscode.commands.executeCommand('vibeManager.openWorkbench')),
     // 1.7.3: 사이드바 = 워크벤치와 동일한 전체 메뉴 1개 (구 4개 뷰 내용은 카테고리로 포함)
-    vscode.window.registerTreeDataProvider('vibeManager.menu', menuTree),
+    // 2.0.0: 사이드바 = 모바일 홈 화면형 웹뷰(menu-view.js · 항목 원천은 menuTree 그대로). 구 트리는 설정 vibeManager.menuStyle='tree' 일 때 vibeManager.menuTree 로 보인다
+    vscode.window.registerWebviewViewProvider('vibeManager.menu', new menuView.MenuViewProvider({ menuTree, paths, english: fn => { menuEn = true; try { return fn(); } finally { menuEn = false; } } }), { webviewOptions: { retainContextWhenHidden: true } }),
+    vscode.window.registerTreeDataProvider('vibeManager.menuTree', menuTree),
     vscode.commands.registerCommand('vibeManager.runQuick', async item => { if (!item) return; await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(item, workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''), false); }),
     // 2026-10-28 상단 아이콘(사용자 지정): quick.json 메뉴를 label 접두로 찾아 runQuick 으로 실행 — view/title 메뉴는 인자를 못 넘겨 아이콘마다 명령 1개
     ...[['vibeManager.qRestart', '🔄 BE & FE Finish & Start'], ['vibeManager.qSourceSync', '⬇️🔀 Source Download & Merge'], ['vibeManager.qFullChain', '🚀 ID 하나로 전체'], ['vibeManager.qCheckList', '🔎 CheckList']]

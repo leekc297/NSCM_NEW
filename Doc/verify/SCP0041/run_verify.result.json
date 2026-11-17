@@ -1,21 +1,33 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-10-31T14:33:54+09:00",
+ "ts": "2026-11-14T15:41:11+09:00",
  "producer": "run_verify",
  "id": "SCP0041",
  "skip_e2e": false,
- "started": "2026-10-31 13:07:40",
+ "started": "2026-11-14 12:10:58",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-d7866b99",
-   "class": "G3",
-   "msg": "SCP0041 화면",
+   "id": "V-c1ce9e15",
+   "class": "N1",
+   "msg": "SCP0041 센티널 표시",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약"
+     "ref": "E2E @verify 표시 @11-14 15:40"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4e045022",
+   "class": "E3",
+   "msg": "SCP0041 Excel 필수 칸 빈 업로드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Excel @11-14 15:40"
     }
    ],
    "grade": "hard"
@@ -33,85 +45,97 @@
    "grade": "hard"
   },
   {
-   "id": "V-7952b39b",
-   "class": "F10",
-   "msg": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+   "id": "V-1d4e59c4",
+   "class": "G2",
+   "msg": "조회조건 Plant Site",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+     "ref": "E2E @trace @11-14 15:40"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-5e98adcc",
-   "class": "MS1",
-   "msg": "MSG00108",
+   "id": "V-51805658",
+   "class": "H13",
+   "msg": "Pack Hold Stock.QTY (수량)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC msgmap(문구 일치) + 코드 사용 ID"
+     "ref": "E2E @verify @11-14 15:40"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-afc6e4cf",
-   "class": "B8",
-   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "id": "V-4dc694a5",
+   "class": "D3",
+   "msg": "siMain.LockRange",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 14:21"
+     "ref": "E2E @trace @11-14 15:40"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-df20a51c",
-   "class": "M1",
-   "msg": "Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수",
+   "id": "V-b7a11e18",
+   "class": "D3",
+   "msg": "siMain.LockRange",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 14:21"
+     "ref": "E2E @trace @11-14 15:40"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-feea4bdc",
-   "class": "B8",
-   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "id": "V-0bd071e5",
+   "class": "D3",
+   "msg": "siMain.LockRange",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 14:21"
+     "ref": "E2E @trace @11-14 15:40"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-3bb11760",
-   "class": "M1",
-   "msg": "Excel Upload 헤더 검증 메시지",
+   "id": "V-b74108f4",
+   "class": "G2",
+   "msg": "[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 14:21"
+     "ref": "규칙 판정 상속"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-ffbefefd",
-   "class": "M1",
-   "msg": "Excel Upload Validation 메시지(Sales Site/Project/Model)",
+   "id": "V-f095d3d3",
+   "class": "E3",
+   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 14:21"
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2eed35e2",
+   "class": "G2",
+   "msg": "[SCP0028 결함 유형] From Site 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
     }
    ],
    "grade": "hard"
@@ -141,9 +165,57 @@
    "grade": "hard"
   },
   {
+   "id": "T-caff59d5",
+   "class": "D3",
+   "msg": "D00-2-006 · §2 spdMain / EditChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fecb3d44",
+   "class": "D3",
+   "msg": "D00-3-004 · §3 LockRange / (전체셀 잠금 iRowStart..iColEnd, true)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d4360bb5",
+   "class": "D3",
+   "msg": "D00-3-008 · §3 LockRange / (iRow, iCol_QTY, true) — 非HOLD 행 잠금",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "T-5d67715e",
    "class": "G4",
    "msg": "COMMON:UC-06 · Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e6015a34",
+   "class": "D3",
+   "msg": "`sheet[1] shtPacker \"Pack Hold Stock\"` · `<PackHoldStockGrid>` (15컬럼, HOLD행 편집)",
    "evidence": [
     {
      "kind": "exec",
@@ -177,6 +249,54 @@
    "grade": "hard"
   },
   {
+   "id": "T-a4730e6a",
+   "class": "D3",
+   "msg": "[R1] · dtDivision 0건 → SetDivisionAuthCheck 조회영역 잠금",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3ae73d0e",
+   "class": "D3",
+   "msg": "[R6] · EditButton 모드토글",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1d7e5258",
+   "class": "D3",
+   "msg": "[R10] · 탭 전환 시 조건세트/기간 재계산",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e16954f8",
+   "class": "D3",
+   "msg": "[R12/R13] · 조회 후 전열 LockColumn (조회모드)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "T-7c94a720",
    "class": "X-ROW",
    "msg": "SCP0041_StockOSP.FindButton",
@@ -201,18 +321,6 @@
    "grade": "hard"
   },
   {
-   "id": "T-ddbb0ff3",
-   "class": "X-ROW",
-   "msg": "SCP0041_StockOSP.FindData_Pack",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "T-955703b7",
    "class": "X-ROW",
    "msg": "SCP0041_StockOSP.InitControls",
@@ -225,41 +333,40 @@
    "grade": "hard"
   }
  ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 F2, F6 — Doc/verify/SCP0041/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
  "summary": {
-  "rows": 1440,
-  "PASS": 482,
-  "FAIL": 18,
-  "판정필요": 26,
-  "미검증": 124,
-  "해당없음": 790,
+  "rows": 1857,
+  "PASS": 506,
+  "FAIL": 27,
+  "판정필요": 64,
+  "미검증": 457,
+  "해당없음": 803,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 627,
-   "없음(미검증)": 124,
-   "없음(판정 대기)": 26,
-   "기계(상속·집계)": 660,
-   "출처 미기록": 3
+   "기계": 793,
+   "없음(미검증)": 457,
+   "사람": 2,
+   "없음(판정 대기)": 64,
+   "기계(상속·집계)": 536,
+   "출처 미기록": 5
   },
-  "fail_listed": 18,
+  "fail_listed": 27,
   "coverage": {
-   "rules": 84,
-   "measured": 178,
-   "not_run_error": 97,
-   "na": 296,
+   "rules": 91,
+   "measured": 411,
+   "not_run_error": 312,
+   "na": 217,
    "suspect_na100": [
-    "D1",
-    "D3",
-    "E1",
-    "E3",
-    "F1",
     "F2",
     "F6"
    ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0041_StockOsp_CheckList_v22.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0041_StockOsp_ActionItemList_v22.xlsx"
+  "CheckList": "Doc/CheckList/SCP0041_StockOsp_CheckList_v25.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0041_StockOsp_ActionItemList_v25.xlsx"
  },
  "evidence": [
   {
@@ -271,5 +378,5 @@
    "ref": "Doc/verify/SCP0041/e2e_results.json"
   }
  ],
- "note": "⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음"
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F2, F6 — Doc/verify/SCP0041/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

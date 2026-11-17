@@ -2,11 +2,15 @@
 export type J = { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA' | '판정필요'; why: string };
 
 /** 시점별 헤더 높이(px) — 1px 넘게 달라지면 FAIL */
-export function judgeHeaderHeight(s: { steps: { name: string; h: number }[] }): J {
-  const ok = s.steps.filter(x => x.h > 0);
-  if (ok.length < 2) return { result: 'ERROR', why: `[측정 경로 없음] 헤더 높이 측정 ${ok.length}회` };
+// 2026-11-10 T216(SSP0015 v3 H4 '조회 전 48 · 조회 뒤 72' 허위 FAIL): 조회 뒤 동적 기간 컬럼(다단 헤더 연월/주/일)이 생기는 화면은 컬럼 구성이 바뀌어 헤더 높이가 바뀐다 —
+//   요건 EG325 는 'Division 전환 뒤' 같은 컬럼 구성에서의 높이 유지. 시점별 컬럼 수(cols)가 있으면 마지막 시점과 컬럼 수가 같은 시점끼리만 비교한다
+export function judgeHeaderHeight(s: { steps: { name: string; h: number; cols?: number }[] }): J {
+  const all = s.steps.filter(x => x.h > 0); const last = all[all.length - 1];
+  const ok = last && last.cols != null ? all.filter(x => x.cols == null || x.cols === last.cols) : all; const skipped = all.filter(x => !ok.includes(x));
+  const sk = skipped.length ? ` · 컬럼 구성 다른 시점 제외: ${skipped.map(x => `${x.name} ${Math.round(x.h)}(컬럼 ${x.cols})`).join(', ')}(T216)` : '';
+  if (ok.length < 2) return { result: skipped.length ? 'NA' : 'ERROR', why: skipped.length ? `같은 컬럼 구성에서 비교할 시점 ${ok.length}개 — Division 전환 단계 없음(고정·비활성 조건 등)${sk}` : `[측정 경로 없음] 헤더 높이 측정 ${ok.length}회` };
   const lo = Math.min(...ok.map(x => x.h)), hi = Math.max(...ok.map(x => x.h)); const txt = ok.map(x => `${x.name} ${Math.round(x.h)}`).join(' · ');
-  return hi - lo > 1 ? { result: 'FAIL', why: `헤더 높이 변함 — ${txt}` } : { result: 'PASS', why: `헤더 높이 유지 — ${txt}` };
+  return hi - lo > 1 ? { result: 'FAIL', why: `헤더 높이 변함 — ${txt}${sk}` } : { result: 'PASS', why: `헤더 높이 유지 — ${txt}${sk}` };
 }
 
 /** page 페이지 자체 세로 스크롤 · nested 그리드 바깥 스크롤 영역 */

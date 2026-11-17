@@ -10,7 +10,7 @@ applied: DMF0003 (MktForecastMasterForm.tsx) / DMF0020 (SalesFuturePriceForm.tsx
 
 # Hook — SearchArea 2단 초과 시 extraConditions 분리 의무 (확장 화살표 자동)
 
-> ⭐ **핵심 룰** — 조회조건 영역이 12 column Grid 기준 **2단 (6 필드)** 을 초과하면, 표준 공용 `SearchArea` 컴포넌트의 **`extraConditions` prop 으로 3단 이후 분리** 의무.
+> ⭐ **핵심 룰** — 조회조건 영역이 12 column Grid 기준 **2단 (Grid size 합계 24 — 1단 4개(size=3) 기준 8 필드)** 을 초과하면 (2026-11-13 정정: '6 필드' → size 합계 24 · size=3 기준 8 필드 — §1 표·§2.3 sample·hook #94 와 일치. size=4 배치면 6 필드), 표준 공용 `SearchArea` 컴포넌트의 **`extraConditions` prop 으로 3단 이후 분리** 의무.
 > 분리 시 `SearchArea` 가 자동으로 **Search 버튼 우측에 아래 화살표 (확장/축소 토글)** 표시 — 사용자가 필요 시만 확장 단 노출.
 > 위반 — 조회 영역 무한 확장 → 메인 grid 영역 압박 + UX 일관성 손상.
 
@@ -29,7 +29,7 @@ applied: DMF0003 (MktForecastMasterForm.tsx) / DMF0020 (SalesFuturePriceForm.tsx
 
 ```tsx
 <SearchArea
-  searchButtonLabel={t('LBL00514', { defaultValue: 'Search' })}
+  searchButtonLabel={t('LBL00112', '_Search')}  // (2026-11-13 정정: LBL00514 → LBL00112 — sample DMF0006 실물과 동일 코드)
   isHidden={!openSearchArea}
   onSearch={onSearch}
   conditions={ /* 기본 1~2단 (항상 표시) */ }
@@ -93,19 +93,19 @@ applied: DMF0003 (MktForecastMasterForm.tsx) / DMF0020 (SalesFuturePriceForm.tsx
 ## 4. POST-WRITE 검증
 
 ```bash
-# 1) 6 필드 초과 form 에 extraConditions 누락 검출
+# 1) 8 필드(size=3 기준 2단) 초과 form 에 extraConditions 누락 검출  # (11-13 정정: 6 → 8 · size=4 배치 화면은 6)
 grep -l "SearchArea" features/**/components/*Form.tsx | while read f; do
   cond_cnt=$(grep -c "<\(DivisionField\|TeamField\|EndCustomerField\|BizTypeField\|SalesSiteField\|PlantSiteField\|PeriodField\|BucketField\|ProjectField\|ItemField\|OwnerField\|VersionField\)" "$f")
   has_extra=$(grep -c "extraConditions=" "$f")
-  if [ "$cond_cnt" -gt 6 ] && [ "$has_extra" -eq 0 ]; then
+  if [ "$cond_cnt" -gt 8 ] && [ "$has_extra" -eq 0 ]; then  # (11-13 정정)
     echo "⚠️ $f 의 조회 필드 $cond_cnt 개 — extraConditions 누락"
   fi
 done
 
-# 2) extraConditions 사용 form 의 conditions 측 필드 수 ≤ 6 검증
+# 2) extraConditions 사용 form 의 conditions 측 필드 수 ≤ 8 검증  # (11-13 정정)
 grep -A 30 "conditions={" features/**/components/*Form.tsx \
   | grep -c "<[A-Z][a-zA-Z]*Field" \
-  # ≤ 6 expect
+  # ≤ 8 expect (11-13 정정)
 ```
 
 ## 5. 안티 패턴 (위반 사례)

@@ -1,0 +1,246 @@
+- dialog:
+  - heading "Owner Popup" [level=2]
+  - text: Div
+  - combobox [disabled]: 40 Mobility & IT Battery
+  - button "Open" [disabled]
+  - img
+  - text: Team
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - img
+  - text: End Customer
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Sales Site
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Owner
+  - textbox
+  - button "Search"
+  - paragraph
+  - text: 총87건
+  - grid:
+    - rowgroup:
+      - row "No Div. Team ID Team Owner User Name User Name (EN)":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Team ID"
+        - columnheader "Team"
+        - columnheader "Owner"
+        - columnheader "User Name"
+        - columnheader "User Name (EN)"
+    - rowgroup:
+      - row "1 40 70021414 AI/빅데이터1.빅데이터분석팀 kbkwon 권기범":
+        - gridcell "1" [selected]
+        - gridcell "40"
+        - gridcell "70021414"
+        - gridcell "AI/빅데이터1.빅데이터분석팀"
+        - gridcell "kbkwon"
+        - gridcell "권기범"
+        - gridcell
+      - row "2 40 70021414 AI/빅데이터1.빅데이터분석팀 kunwonsaw 서군원 KUN WON SAW":
+        - gridcell "2"
+        - gridcell "40"
+        - gridcell "70021414"
+        - gridcell "AI/빅데이터1.빅데이터분석팀"
+        - gridcell "kunwonsaw"
+        - gridcell "서군원"
+        - gridcell "KUN WON SAW"
+      - row "3 40 71059518 ESS.SCM.SCM2팀 hyelin.jung 정혜린 HYE LIN JUNG":
+        - gridcell "3"
+        - gridcell "40"
+        - gridcell "71059518"
+        - gridcell "ESS.SCM.SCM2팀"
+        - gridcell "hyelin.jung"
+        - gridcell "정혜린"
+        - gridcell "HYE LIN JUNG"
+      - row "4 40 71067310 소형.PM.PM1팀 kdh31001 권동훈 DONGHOON KWON":
+        - gridcell "4"
+        - gridcell "40"
+        - gridcell "71067310"
+        - gridcell "소형.PM.PM1팀"
+        - gridcell "kdh31001"
+        - gridcell "권동훈"
+        - gridcell "DONGHOON KWON"
+      - row "5 40 70090866 소형.마케팅.FT.FT1팀 chiho0406 윤치호 CHIHO YOUN":
+        - gridcell "5"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "chiho0406"
+        - gridcell "윤치호"
+        - gridcell "CHIHO YOUN"
+      - row "6 40 70090866 소형.마케팅.FT.FT1팀 gwonjung 정지원 JIWON JUNG":
+        - gridcell "6"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "gwonjung"
+        - gridcell "정지원"
+        - gridcell "JIWON JUNG"
+      - row "7 40 70090866 소형.마케팅.FT.FT1팀 jeongki.kim 김정기 Jack Kim":
+        - gridcell "7"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "jeongki.kim"
+        - gridcell "김정기"
+        - gridcell "Jack Kim"
+      - row "8 40 70090866 소형.마케팅.FT.FT1팀 jihu_kim 김지후 Jihu Kim":
+        - gridcell "8"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "jihu_kim"
+        - gridcell "김지후"
+        - gridcell "Jihu Kim"
+      - row "9 40 70090866 소형.마케팅.FT.FT1팀 juno95 김준오 JUNOH KIM":
+        - gridcell "9"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "juno95"
+        - gridcell "김준오"
+        - gridcell "JUNOH KIM"
+      - row "10 40 70090866 소형.마케팅.FT.FT1팀 kyuhyeon97 이규현 KYUHYEON LEE":
+        - gridcell "10"
+        - gridcell "40"
+        - gridcell "70090866"
+        - gridcell "소형.마케팅.FT.FT1팀"
+        - gridcell "kyuhyeon97"
+        - gridcell "이규현"
+        - gridcell "KYUHYEON LEE"
+      - row "11 40 58124984 소형.마케팅.미주/유럽.미주팀 cheon7943 오종천 JONGCHUN OH":
+        - gridcell "11"
+        - gridcell "40"
+        - gridcell "58124984"
+        - gridcell "소형.마케팅.미주/유럽.미주팀"
+        - gridcell "cheon7943"
+        - gridcell "오종천"
+        - gridcell "JONGCHUN OH"
+      - row "12 40 58124984 소형.마케팅.미주/유럽.미주팀 doochoi 최두원 DOO WON CHOI":
+        - gridcell "12"
+        - gridcell "40"
+        - gridcell "58124984"
+        - gridcell "소형.마케팅.미주/유럽.미주팀"
+        - gridcell "doochoi"
+        - gridcell "최두원"
+        - gridcell "DOO WON CHOI"
+      - row "13 40 58124984 소형.마케팅.미주/유럽.미주팀 jnw.lee 이준우 JUNWOO LEE":
+        - gridcell "13"
+        - gridcell "40"
+        - gridcell "58124984"
+        - gridcell "소형.마케팅.미주/유럽.미주팀"
+        - gridcell "jnw.lee"
+        - gridcell "이준우"
+        - gridcell "JUNWOO LEE"
+      - row "14 40 58124984 소형.마케팅.미주/유럽.미주팀 khw0621 김하원 HAWON KIM":
+        - gridcell "14"
+        - gridcell "40"
+        - gridcell "58124984"
+        - gridcell "소형.마케팅.미주/유럽.미주팀"
+        - gridcell "khw0621"
+        - gridcell "김하원"
+        - gridcell "HAWON KIM"
+      - row "15 40 58124984 소형.마케팅.미주/유럽.미주팀 seran.lee 이세란 SERAN LEE":
+        - gridcell "15"
+        - gridcell "40"
+        - gridcell "58124984"
+        - gridcell "소형.마케팅.미주/유럽.미주팀"
+        - gridcell "seran.lee"
+        - gridcell "이세란"
+        - gridcell "SERAN LEE"
+      - row "16 40 58260040 소형.마케팅.미주/유럽.유럽1팀 haikjang1 장하익 HAIK JANG":
+        - gridcell "16"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "haikjang1"
+        - gridcell "장하익"
+        - gridcell "HAIK JANG"
+      - row "17 40 58260040 소형.마케팅.미주/유럽.유럽1팀 jakecho 조윤재 YOONJAE CHO":
+        - gridcell "17"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "jakecho"
+        - gridcell "조윤재"
+        - gridcell "YOONJAE CHO"
+      - row "18 40 58260040 소형.마케팅.미주/유럽.유럽1팀 mins2914 민찬욱 Austin Min":
+        - gridcell "18"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "mins2914"
+        - gridcell "민찬욱"
+        - gridcell "Austin Min"
+      - row "19 40 58260040 소형.마케팅.미주/유럽.유럽1팀 mykim2 김무엽 MUYUP KIM":
+        - gridcell "19"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "mykim2"
+        - gridcell "김무엽"
+        - gridcell "MUYUP KIM"
+      - row "20 40 58260040 소형.마케팅.미주/유럽.유럽1팀 soon21 유순 Sean Yoo":
+        - gridcell "20"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "soon21"
+        - gridcell "유순"
+        - gridcell "Sean Yoo"
+      - row "21 40 58260040 소형.마케팅.미주/유럽.유럽1팀 ssong0222 송윤지 YUNJI SONG":
+        - gridcell "21"
+        - gridcell "40"
+        - gridcell "58260040"
+        - gridcell "소형.마케팅.미주/유럽.유럽1팀"
+        - gridcell "ssong0222"
+        - gridcell "송윤지"
+        - gridcell "YUNJI SONG"
+      - row "22 40 70090867 소형.마케팅.미주/유럽.유럽2팀 caiyun31 김재윤 JAEYUN KIM":
+        - gridcell "22"
+        - gridcell "40"
+        - gridcell "70090867"
+        - gridcell "소형.마케팅.미주/유럽.유럽2팀"
+        - gridcell "caiyun31"
+        - gridcell "김재윤"
+        - gridcell "JAEYUN KIM"
+      - row "23 40 70090867 소형.마케팅.미주/유럽.유럽2팀 henrystar 최요한 YOHAN CHOI":
+        - gridcell "23"
+        - gridcell "40"
+        - gridcell "70090867"
+        - gridcell "소형.마케팅.미주/유럽.유럽2팀"
+        - gridcell "henrystar"
+        - gridcell "최요한"
+        - gridcell "YOHAN CHOI"
+      - row "24 40 70090867 소형.마케팅.미주/유럽.유럽2팀 jhy0111 전현영 Sally Chun":
+        - gridcell "24"
+        - gridcell "40"
+        - gridcell "70090867"
+        - gridcell "소형.마케팅.미주/유럽.유럽2팀"
+        - gridcell "jhy0111"
+        - gridcell "전현영"
+        - gridcell "Sally Chun"
+      - row "25 40 70090867 소형.마케팅.미주/유럽.유럽2팀 lee.sy 이승연 SEUNGYEON LEE":
+        - gridcell "25"
+        - gridcell "40"
+        - gridcell "70090867"
+        - gridcell "소형.마케팅.미주/유럽.유럽2팀"
+        - gridcell "lee.sy"
+        - gridcell "이승연"
+        - gridcell "SEUNGYEON LEE"
+      - row "26 40 70090867 소형.마케팅.미주/유럽.유럽2팀 yooah.chung 정유아 Ashley Chung":
+        - gridcell "26"
+        - gridcell "40"
+        - gridcell "70090867"
+        - gridcell "소형.마케팅.미주/유럽.유럽2팀"
+        - gridcell "yooah.chung"
+        - gridcell "정유아"
+        - gridcell "Ashley Chung"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

@@ -97,6 +97,7 @@ import { toggleClass } from '@mescius/wijmo';
 ### 3.2 의무 패턴 (알파벳 정렬)
 ```ts
 // ✅ wijmo (base) → wijmo.grid → wijmo.react.grid
+// (2026-11-13 정정: import 순서 예시일 뿐 — 신규·수정 화면에서 `@mescius/wijmo.react.grid` 의 FlexGrid JSX 직접 사용은 금지, `@shared/components` DataGrid 사용 · datagrid-shared-component-mandatory §1)
 import { toggleClass } from '@mescius/wijmo';
 import { CellRange, CellType, /* ... */ } from '@mescius/wijmo.grid';
 import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
@@ -113,7 +114,7 @@ import { SalesPriceVersionModal } from './components/modals/SalesPriceVersionMod
 import { SalesFuturePriceFlexGrid } from './components/SalesFuturePriceFlexGrid';
 import { SalesFuturePriceForm } from './components/SalesFuturePriceForm';
 import { useSalesFuturePriceValidation } from './hooks/useSalesFuturePriceValidation';
-import { type BUCKET_TYPE, MAIN_COLUMNS, MENU_ID, SHEETS } from './sales-future-price.constants';
+import { type BUCKET_TYPE, MAIN_COLUMNS, MENU_ID, SHEETS } from './sales-future-price.constants'; // (2026-11-13 정정: import 순서 예시일 뿐 — 화면 안 `MAIN_COLUMNS` 컬럼 하드코딩·메타 미응답 대체 컬럼은 금지, 신규 화면에서 따라 쓰지 않는다 · datagrid-shared-component-mandatory §6)
 import type { FuturePriceRow } from './sales-future-price.types';
 import styles from './SalesFuturePrice.module.scss';
 import { useSalesFuturePriceStore } from './useSalesFuturePriceStore';
@@ -187,26 +188,29 @@ const cellsRoot = root.querySelector('.wj-cells');
 ## §7. POST-WRITE 검증 (사내 환경 명령)
 
 ```bash
+# (2026-11-13 정정: AI 가 아래 명령을 직접 실행 → AI 직접 실행 금지(실행 hook .claude/hooks/block-dev-commands.ps1 차단).
+#  사용자가 "타입체크/린트 해줘" 요청 시에만 _artifacts/_tools/fe-check.ps1 (type-check | lint | all) 사용.
+#  AI 는 변경 파일 목록을 보고하고, 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 으로 보고. 아래는 사용자·사내 환경 참고용)
 cd nscm-fe/features/{domain}
 
 # type-check (사내)
-pnpm type-check    # tsc --noEmit
+pnpm type-check    # tsc --noEmit  (11-13 정정: 사용자 요청 시 fe-check.ps1 type-check)
 
 # lint
-pnpm exec eslint src --quiet   # errors 만 표시 (warnings 무시)
+pnpm exec eslint src --quiet   # errors 만 표시 (warnings 무시)  (11-13 정정: 사용자 요청 시 fe-check.ps1 lint)
 
 # 클라우드 환경 정합 가능 시
-pnpm exec eslint src --fix    # auto-fix import/order + no-unnecessary-as
+pnpm exec eslint src --fix    # auto-fix import/order + no-unnecessary-as  (11-13 정정)
 ```
 
-⚠ `pnpm install` 자동 호출 금지 (메모리 `feedback_pnpm_install_avoidance`). `pnpm exec eslint` 만 사용.
+⚠ `pnpm install` 자동 호출 금지 (메모리 `feedback_pnpm_install_avoidance`). `pnpm exec eslint` 만 사용. (2026-11-13 정정: `pnpm exec eslint` 도 AI 직접 실행 금지 → 사용자 요청 시에만 `_artifacts/_tools/fe-check.ps1 lint`)
 
 ---
 
 ## §8. PRE-SUBMIT 의무 (클라우드 이관 패키지)
 
-- [ ] 사내 `pnpm type-check` PASS 확인
-- [ ] 사내 `pnpm exec eslint src` errors 0 건 (warnings 가능)
+- [ ] 사내 `pnpm type-check` PASS 확인 (2026-11-13 정정: 통과 기준은 유지 · AI 직접 실행 → 사용자 요청 시 `_artifacts/_tools/fe-check.ps1 type-check` 결과로 확인, 미실행이면 PASS 가 아니라 미실행(ERROR) 보고)
+- [ ] 사내 `pnpm exec eslint src` errors 0 건 (warnings 가능) (11-13 정정: 사용자 요청 시 `fe-check.ps1 lint`)
 - [ ] 클라우드 `procedures.d.ts` 확인 — FE `SHEETS` 일치
 - [ ] DB SCM_ADM_MNU_BTN_MPG_M.SHT_NM 정렬 SQL 포함
 - [ ] 이관 README §3 적용 순서에 type-check 명시

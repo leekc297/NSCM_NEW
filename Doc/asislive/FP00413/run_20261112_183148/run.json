@@ -1,0 +1,141 @@
+{
+ "id": "FP00413",
+ "started": "2026-11-12 18:31:48.150",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:31:48.449",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP00413_Formation_Tray_Master",
+   "form_text": "Formation Tray Master",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00413_Formation_Tray_Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:31:58.850"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:32:02.363",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00413\\run_20261112_183148\\dump_load.json",
+   "control_count": 38,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:02.378"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:32:02.546",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00413\\run_20261112_183148\\shots\\FP00413_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:02.653"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:32:02.987",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:03.435"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:32:12.721",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00413\\run_20261112_183148\\dump_find.json",
+   "control_count": 38,
+   "grid_count": 1,
+   "total": "Total : 503",
+   "time_status": "DB : 4.628s, UI : 0.312s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:12.744"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:32:12.897",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00413\\run_20261112_183148\\shots\\FP00413_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:13.038"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:32:13.519",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:32:14.153"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 29,
+  "calls_with_params": 28
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP00413_Formation_Tray_Master",
+  "form_text": "Formation Tray Master",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Master\\FP00413_Formation_Tray_Master.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 4.628s, UI : 0.312s",
+  "total": "Total : 503",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 18:31:48.357",
+ "t_find": "2026-11-12 18:32:02.676",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 38,
+  "layout_items": 16,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 16,
+  "data_rows": 50,
+  "grid_rows": 503,
+  "calls_total": 29,
+  "calls_screen": 29,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:21.264",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:21"
+}

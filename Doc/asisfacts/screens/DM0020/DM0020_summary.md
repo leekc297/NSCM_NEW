@@ -115,11 +115,11 @@
 | DefineProperty | UserInfoContext.Current | NowGroupID |
 | EditButton | dtWeek.Rows[i] | BASIS_START_DATE |
 | EditButton | UserInfoContext.Current | NowGroupID |
-| FindData | dt.Rows[i] | CURRENCY, UNIT_CURRENCY, YYYYMMDD, EXCHANGE_PRICE, DIVISION_ID |
 | FindData | nvc | p_division_id, p_dept_id, p_end_customer, p_scm_site_id, p_project_code, p_item_id, p_plant_site_id, p_customer_project_code, p_customer_model, p_from_yyyymmdd, p_to_yyyymmdd, p_biztype, p_created_by, p_userinfo |
 | FindData | UserInfoContext.Current | NowGroupID |
 | FindData | ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1] | MEASURE |
 | FindData | dtWeek.Rows[i] | BASIS_START_DATE |
+| FindData | dt.Rows[i] | CURRENCY, UNIT_CURRENCY, YYYYMMDD, EXCHANGE_PRICE, DIVISION_ID |
 | GetCurrencyBySCM_MST_SITE_ITEM | ds.Tables[0].Rows[0] | CURRENCY |
 | GetExchangeRate | row[0] | EXCHANGE_PRICE |
 | GetExchangeRate | row1[0] | EXCHANGE_PRICE |
@@ -127,8 +127,8 @@
 | GetExchangeRate | row5[0] | EXCHANGE_PRICE |
 | InitControls | UserInfoContext.Current | NowGroupID |
 | InitSpread | dt.Rows[i] | CALENDAR_YYYY, CALENDAR_MONTH, BASIS_START_DATE |
-| InitSpread_X | dt.Rows[i] | CALENDAR_YYYY, WEEK_NAME, BASIS_START_DATE, CALENDAR_MONTH, BASIS_YYYYMM, DATE_SHORT1_NAME |
 | InitSpread_X | nvc | p_start_yyyymmdd, p_end_yyyymmdd, p_created_by |
+| InitSpread_X | dt.Rows[i] | BASIS_YYYYMM, DATE_SHORT1_NAME, BASIS_START_DATE, WEEK_NAME, CALENDAR_YYYY, CALENDAR_MONTH |
 | InsertRow | UserInfoContext.Current | NowGroupID |
 | InsertRow | dtMeasureCount.Rows[i] | LOOKUP_CODE |
 | InsertRow | dtWeek.Rows[j] | BASIS_START_DATE |
@@ -140,18 +140,15 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| SaveData | SaveButton:303, btnButtonList_UsrButtonList_Click_Detected:482, SaveButton:601, SaveButton:294, btnButtonList_UsrButtonList_Click_Detected:651 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
 | GetCheckedListValue | InitControls:182, InitControls:189, InitControls:195, FindData:636, usrButton1_Click:1304, btnModelType_Click:1321, clbDivisions_SelectedIndexChanged:1370, clbDivisions_SelectedIndexChanged:1375 | CString.GetCheckedListValue | CODE |
 | GetSpdTitle | InitSpread:402, InitSpread:228 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
 | CreateSheetHeaderColumn | InitSpread:403, InitSpread:229 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
+| SaveData | SaveButton:601, SaveButton:303, btnButtonList_UsrButtonList_Click_Detected:482, SaveButton:294, btnButtonList_UsrButtonList_Click_Detected:651 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
 | LoadData | btnExchangeRate_Click:1287 | UsrCheckedListBox.LoadData | APPLFACTORY, APPLSITE, CODE, FACTORY, NAME, OPERGROUP, PANELFACTORY, PANELSITE, RESOURCE, SCHGROUP, SHIFTTYPE, SITE, ShiftType |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:267 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:345 |
-| this | Load | Form_Load | .ctor:73 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:132 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:133 |
 | this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:134 |
@@ -173,6 +170,9 @@
 | this.umltProject | KeyDown | umltProject_KeyDown | DefineProperty:281 |
 | this.umltModel | KeyDown | umltModel_KeyDown | DefineProperty:282 |
 | dsdm | Changed | Dsdm_Changed | InitEvent:379 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:267 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:345 |
+| this | Load | Form_Load | .ctor:73 |
 | this.txtOwner | KeyDown | txtItemID_KeyDown | InitializeComponent:126 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:166 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:260 |
@@ -185,16 +185,16 @@
 ## 6. 컨트롤 (96개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 27 | layoutControlItem2, layoutControlItem1, layoutControlItem3, lblDivision, layoutControlItem1, lblCustomer, Period, lblSalesSite, layoutControlItem4, lblModel, lblProject, layoutControlItem6, lblPlantSite, lblBizType, layoutControlItem7 … |
+| LayoutControlItem | 27 | lblDivision, layoutControlItem1, lblCustomer, Period, lblSalesSite, layoutControlItem4, lblModel, lblProject, layoutControlItem6, lblPlantSite, lblBizType, layoutControlItem7, layoutControlItem3, layoutControlItem5, layoutControlItem2 … |
 | UsrCheckedList | 11 | clbSalesSite, clbEndCustomer, clbTeam, clbDivisions, clbPlantSite, clbBizType, clbDivision, clbScmSite, clbTeam, clbEndCustomer, clbDivisions |
-| EmptySpaceItem | 9 | emptySpaceItem1, emptySpaceItem3, emptySpaceItem3, emptySpaceItem1, emptySpaceItem2, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3 |
-| UsrLayoutControl | 8 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
-| LayoutControlGroup | 8 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
+| EmptySpaceItem | 9 | emptySpaceItem3, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3 |
+| UsrLayoutControl | 8 | usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 8 | layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
 | UsrButton | 5 | btnBatch, btnExchangeRate, usrButton1, btnItemId, btnSetPrice |
-| UsrConditionPanel | 4 | usrConditionPanel1, usrConditionPanel2, usrConditionPanel1, usrConditionPanel1 |
-| UsrMonthPicker | 4 | usrMonthTo, usrMonthFrom, usrMonthTo, usrMonthFrom |
 | FpSpread | 4 | spdMain, spdMain, spdMain, spdMain |
 | SheetView | 4 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
+| UsrConditionPanel | 4 | usrConditionPanel2, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
+| UsrMonthPicker | 4 | usrMonthTo, usrMonthFrom, usrMonthTo, usrMonthFrom |
 | UsrButtonList | 3 | btnButtonList, btnButtonList, btnButtonList |
 | UsrMultiLineEditor | 2 | umltProject, umltModel |
 | UsrDateRangePicker | 1 | drpDateTime |
@@ -241,7 +241,7 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: Sales Price PopUp, Sales Price, Owner Popup
+- 코드에서 생성하는 시트: Sales Price, Sales Price PopUp, Owner Popup
 - 메타 컬럼 생성 호출(프레임워크): CreateSheetHeaderColumn@InitSpread:403, CreateSheetHeaderColumn@InitSpread:229
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

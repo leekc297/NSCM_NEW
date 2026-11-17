@@ -1,10 +1,11 @@
 # SCP0127 · SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY ↔ PKG_SCP0127.P_SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
 
-- 실행 2026-11-07 21:45:56 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-14 19:10:25 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 81행 전 컬럼 일치 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['opmzplangrname'] · 키 원천 cleanup_spec.json · 키 DIVISION_ID+SCM_SITE_ID+OPMZ_PLAN_GR_ID+STAGE+ITEM_ID+VALUE_TYPE+FROM_YYYYMMDD+TO_YYYYMMDD · golden 집합 판정 COLS
 - 호출 #15 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 82 · 원천 Doc\verify\SCP0127\calls\_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
-- TO-BE 인자(FE 본문): `{"divisionId": "81_UC", "planGroupId": "ALL", "scmSiteId": "ALL", "itemId": "", "stage": "ALL", "validYn": "", "valueType": "", "periodFrom": "20261102", "periodTo": "20271101"}`
-- AS-IS 인자(번역): `{"p_division_id": "81_UC", "p_plan_group_id": "", "p_scm_site_id": "", "p_item_id": "", "p_stage": "", "p_valid_yn": "", "p_value_type": "", "p_period_from": "20261102", "p_period_to": "20271101"}` · 번역 메모: p_plan_group_id: 'ALL'→''(all_semantics: 빈 값 = 전체) · p_scm_site_id: 'ALL'→''(all_semantics: 빈 값 = 전체) · p_stage: 'ALL'→''(all_semantics: 빈 값 = 전체)
+- TO-BE 인자(FE 본문): `{"divisionId": "81_UC", "planGroupId": "ALL", "scmSiteId": "ALL", "itemId": "", "stage": "ALL", "validYn": "", "valueType": "", "periodFrom": "20261109", "periodTo": "20271108"}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
+- AS-IS 인자(번역): `{"p_division_id": "81_UC", "p_plan_group_id": "", "p_scm_site_id": "", "p_item_id": "", "p_stage": "", "p_valid_yn": "", "p_value_type": "", "p_period_from": "20261109", "p_period_to": "20271108"}` · 번역 메모: p_plan_group_id: 'ALL'→''(all_semantics: 빈 값 = 전체) · p_scm_site_id: 'ALL'→''(all_semantics: 빈 값 = 전체) · p_stage: 'ALL'→''(all_semantics: 빈 값 = 전체)
 
 ### 결과셋 1  As-is 81행 ↔ To-Be O_RC1 81행
 - As-is 에만 있는 컬럼: -

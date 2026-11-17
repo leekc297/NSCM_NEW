@@ -1,0 +1,153 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-14T12:10:55+09:00",
+ "producer": "run_verify",
+ "id": "SCP0033",
+ "skip_e2e": false,
+ "started": "2026-11-14 11:09:07",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-21d3e1bc",
+   "class": "K3",
+   "msg": "SCP0033 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-81ce40ed",
+   "class": "E6",
+   "msg": "SCP0033 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fe8ac5dc",
+   "class": "M4",
+   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-41acc325",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-dc794050",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b2bf05d9",
+   "class": "E6",
+   "msg": "[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 12:10"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3923932b",
+   "class": "M4",
+   "msg": "[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE) · Model 팝업(ITEM_ID → ITEM_TYPE) · Sales Site(SCM_SITE_ID → VMI_YN·VMI_STD_DIO) 자동 채움",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e38c5e1e",
+   "class": "M4",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 갱신",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 K-SA — Doc/verify/SCP0033/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 1724,
+  "PASS": 631,
+  "FAIL": 8,
+  "판정필요": 36,
+  "미검증": 266,
+  "해당없음": 783,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 821,
+   "없음(미검증)": 266,
+   "사람": 2,
+   "없음(판정 대기)": 36,
+   "기계(상속·집계)": 597,
+   "출처 미기록": 2
+  },
+  "fail_listed": 8,
+  "coverage": {
+   "rules": 88,
+   "measured": 414,
+   "not_run_error": 192,
+   "na": 178,
+   "suspect_na100": [
+    "K-SA"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0033_ShipmentSemiDeptDay_CheckList_v5.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0033_ShipmentSemiDeptDay_ActionItemList_v5.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0033/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 K-SA — Doc/verify/SCP0033/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

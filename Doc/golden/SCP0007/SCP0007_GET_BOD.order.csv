@@ -1,2 +1,2 @@
 ﻿set,asis_rows,tobe_rows,common_rows,asis_only,tobe_only,uniq_rows,order,first_mismatch,sentinel_cols,null_order_cols,capped
-1,6487,8194,6472,15,1722,6472,DIFF,"r0: AS-IS=['40', '2942', '', 'CIP', 'CIP', 'NJ01-A'] ↔ TO-BE=['40', '20597', '', 'CFR', 'CFR', 'NJ01-A']",,"CUSTOMER(빈 값 110행 AS-IS 앞↔TO-BE 뒤),vmi_yn(빈 값 9행 AS-IS 앞↔TO-BE 뒤)",
+1,6549,8194,6498,51,1696,6498,DIFF,"r0: AS-IS=['40', '2942', '', 'CIP', 'CIP', 'NJ01-A'] ↔ TO-BE=['40', '20597', '', 'CFR', 'CFR', 'NJ01-A']",,"CUSTOMER(빈 값 119행 AS-IS 앞↔TO-BE 뒤),vmi_yn(빈 값 25행 AS-IS 앞↔TO-BE 뒤)",

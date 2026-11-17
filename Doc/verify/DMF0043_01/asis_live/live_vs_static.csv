@@ -1,0 +1,23 @@
+﻿kind,item,static,live,verdict,note
+SP,(endpoints.csv),없음,11종,ERROR,정적 사실 파일 없음(미측정) — Fact Pack 먼저
+SP,DMF0043_GET_CONTRIBUTION_SALES_LIST,,1회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,DMF0043_GET_CONT_VIEW_VERSIONPOPUP,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,DMF0043_GET_MAIN_VARSION_DATA,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,DMF0043_GET_SALES_LIST_SPREAD_TITLE,,2회 · 구간 find/load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SCM0001_GET_LOOKUP_VALUES,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UP_FX_GETCOMMONDATALIST,,4회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONDITION,txtVersion,,Version,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnSPVer,,layoutControlItem1,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrYear,,Year,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,chkM,,layoutControlItem5,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrBiz,,Biz,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrCust,,고객군,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrChk,,tst,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnColumn,,layoutControlItem8,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,usrType,,제품군,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/ContributeSalesList,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 29(보임 27) · 헤더 2단 · 행 1 · 고정 11,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

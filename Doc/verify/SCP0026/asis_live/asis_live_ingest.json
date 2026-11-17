@@ -1,0 +1,32 @@
+{
+ "id": "SCP0026",
+ "run_dir": "Doc/asislive/SCP0026/run_20261112_195716",
+ "live_at": "2026-11-12 19:57:16.895",
+ "user": "jaeuk.shin",
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.932s, UI : 0.072s",
+  "total": "Total : 2,575",
+  "how": "status"
+ },
+ "mixed_risk": true,
+ "live_calls": 11,
+ "live_sp_distinct": 9,
+ "static_vs_live": {
+  "SP:FRAMEWORK": 7,
+  "SP:MATCH": 1,
+  "SP:INLINE": 1,
+  "SP:NOT_CALLED": 1,
+  "CONTROL:INFO": 1,
+  "CONTROL:LIVE_ONLY": 8,
+  "CONDITION:LIVE": 4,
+  "GRID:LIVE": 1
+ },
+ "diff_gap": {},
+ "param_hints": 0,
+ "limits": [
+  "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
+  "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",
+  "원장 행 미생성(같은 조건 실측 전에는 판정 근거 없음)"
+ ]
+}

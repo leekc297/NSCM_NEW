@@ -1,0 +1,10 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0113-Sa8067c,기타,RunSqlSource,SCP0113_LongTermProcessPopup.cs:3815,주석 안에서만 호출,SCP0113_LongTermProcessPopup.cs:3186,
+SCP0113-Seb6c4c,기타,ClearUsrCheckedList,SCP0113_LongTermStockMgmt.cs:354,호출 없음,,
+SCP0113-S96ce66,조회,GetMonthRange,SCP0113_LongTermStockMgmt.cs:1038,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:329,
+SCP0113-S61bee0,초기,LoadExcelToDataTable,SCP0113_LongTermStockMgmt.cs:1768,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:2647,
+SCP0113-Sf413e9,초기,LoadExcelToDataTable,SCP0113_LongTermStockMgmt.cs:1830,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:2647,
+SCP0113-Sedb1d6,저장,Save_Data_Import,SCP0113_LongTermStockMgmt.cs:1999,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:2678,
+SCP0113-S86ca07,저장,Save_Data_Import,SCP0113_LongTermStockMgmt.cs:2114,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:2678,
+SCP0113-S316635,저장,Save_Data_Import,SCP0113_LongTermStockMgmt.cs:2147,주석 안에서만 호출,SCP0113_LongTermStockMgmt.cs:2678,
+SCP0113-Sb39c49,기타,SpdMain_TopChange,SCP0113_LongTermStockMgmt.cs:345,호출 없음,,

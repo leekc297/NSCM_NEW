@@ -1,0 +1,499 @@
+PACKAGE BODY PKG_SSP0024
+IS
+    /*
+     * Program ID   : PKG_SSP0024
+     * Description  : SSP0024 Shipment Master(Electrode) 화면 — 조회 · 저장 · 품목 목록
+     * Program History
+     *===================================================================================================
+     *   Date       In Charge      Description
+     *===================================================================================================
+     * 2026.09.27   ZIONEX       [PJ202650304] MSSQL -> Oracle 전환
+     * 2026.10.07   AJS          화면검증 — 동 칸 값을 셀 목록 코드(동 번호)로 · 저장 최종변경자 · 최초등록자 보완
+     * 2026.10.07   AJS            조회조건 Model/Nickname : 코드 또는 닉네임 부분일치·대소문자 무시
+     */
+
+/****************************************************************************************************/
+/* Program ID  : P_SSP0024_GET_SHIP_MASTER                                                          */
+/* Description : Shipment Master(Electrode) 조회                                                    */
+/****************************************************************************************************/
+PROCEDURE P_SSP0024_GET_SHIP_MASTER
+(
+    P_DIVISION_ID       IN  CLOB
+  , P_PLANT_SITE_ID     IN  CLOB
+  , P_MATERIAL_ID       IN  CLOB
+  , P_NICK_NAME         IN  CLOB
+  , P_MODEL_ID          IN  CLOB
+  , O_RC1               OUT SYS_REFCURSOR
+  , O_RESULT_CURSOR     OUT SYS_REFCURSOR
+)
+IS
+
+    V_DIVISION_ID       VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_DIVISION_ID,   1, 4000));
+    V_PLANT_SITE_ID     VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_PLANT_SITE_ID, 1, 4000));
+    V_MATERIAL_ID       VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_MATERIAL_ID,   1, 4000));
+    V_NICK_NAME         VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_NICK_NAME,     1, 4000));
+    V_MODEL_ID          VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_MODEL_ID,      1, 4000));
+
+BEGIN
+
+    OPEN O_RC1 FOR
+        SELECT A.DIVISION_ID                                    AS DIVISION_ID
+             , A.SCM_SITE_ID                                    AS PLANT_SITE_CODE
+             , A.SCM_SITE_ID                                    AS PLANT_SITE_ID
+             , A.ITEM_ID                                        AS MATERIAL_ID
+             , B.MODEL_ID                                       AS MODEL_ID
+             , B.CELL_TYPE                                      AS CELL_TYPE
+             , B.ITEM_ID_NICK_NAME                              AS NICK_NAME
+             , B.ELECTRODE_TYPE                                 AS ELECTRODE_TYPE
+             , B.ITEM_UOM                                       AS ITEM_UOM
+             , A.ELECTRODE_POST_OPER_CODE                       AS POST_OPER
+             , B.ELECTRODE_POST_OPER_LT                         AS POST_OPER_LT
+             /* , B.UOM_CONVERT_IN_TACT_TIME                    AS UOM_CONVERT_IN_TACT_TIME -- PANCAKE(CELL/M) */
+             , B.METER_PER_CELL                                 AS UOM_CONVERT_IN_TACT_TIME   /* PANCAKE(CELL/M) */
+             , A.PC_ROLL_LENGTH                                 AS PC_ROLL_LENGTH             /* 정권길이 */
+             , B.PACKAGE_TYPE_CODE                              AS PACKAGE_TYPE_CODE
+             , A.STEELCRATE_PER_CUT                             AS STEELCRATE_PER_CUT         /* STEELCRATE/CUT */
+             , CAST(A.BOX_PER_CUT       AS NUMBER(10, 2))       AS BOX_PER_CUT
+             , CAST(A.STEELRACK_PER_CUT AS NUMBER(10, 2))       AS STEELRACK_PER_CUT
+             , A.DOM_EXP_TYPE_CODE                              AS DOM_EXP_TYPE_CODE
+             /* , CASE WHEN B.FACTORY_ID = 'ALL' THEN B.FACTORY_ID */ /* AJS 20261007 화면검증 원본 */
+             /*        ELSE B.FACTORY_NAME END                     AS BUILDING */ /* AJS 20261007 화면검증 원본 */
+             , B.FACTORY_ID                                     AS BUILDING                   /* 셀 목록 코드(동 번호)와 같은 값 · 이름은 목록이 보인다 */ /* AJS 20261007 화면검증 */
+             , CASE WHEN B.FACTORY_ID = 'ALL' THEN B.FACTORY_ID
+                    ELSE B.FACTORY_NAME END                     AS BUILDING_DESC
+             , A.REMARKS                                        AS REMARKS
+             , A.CREATED_BY                                     AS CREATED_BY
+             , A.CREATION_DATE                                  AS CREATION_DATE
+             , A.LAST_UPDATED_BY                                AS LAST_UPDATED_BY
+             , A.LAST_UPDATE_DATE                               AS LAST_UPDATE_DATE
+          FROM SSP_MST_SHIP_MASTER_EE A
+             , SSP_MST_SITE_ITEM_EE_V B
+             , SCM_MST_SITE C
+         WHERE B.DIVISION_ID = A.DIVISION_ID
+           AND B.SCM_SITE_ID = A.SCM_SITE_ID
+           AND B.ITEM_ID     = A.ITEM_ID
+           AND C.DIVISION_ID = A.DIVISION_ID
+           AND C.SCM_SITE_ID = A.SCM_SITE_ID
+           AND (TRIM(V_DIVISION_ID) IS NULL
+            OR  UPPER(V_DIVISION_ID) = 'ALL'                    /* 조회조건 ALL 은 조건 없음 */
+            OR  A.DIVISION_ID IN (SELECT COLUMN_VALUE
+                                    FROM TABLE(STRING_SPLIT(V_DIVISION_ID, ','))))
+           AND (TRIM(V_PLANT_SITE_ID) IS NULL
+            OR  UPPER(V_PLANT_SITE_ID) = 'ALL'                  /* 조회조건 ALL 은 조건 없음 */
+            OR  A.SCM_SITE_ID IN (SELECT COLUMN_VALUE
+                                    FROM TABLE(STRING_SPLIT(V_PLANT_SITE_ID, ','))))
+           AND (TRIM(V_MATERIAL_ID) IS NULL
+            OR  UPPER(V_MATERIAL_ID) = 'ALL'                    /* 조회조건 ALL 은 조건 없음 */
+            OR  A.ITEM_ID IN (SELECT COLUMN_VALUE
+                                FROM TABLE(STRING_SPLIT(V_MATERIAL_ID, ','))))
+           AND (TRIM(V_NICK_NAME) IS NULL
+            OR  UPPER(V_NICK_NAME) = 'ALL'                      /* 조회조건 ALL 은 조건 없음 */
+            OR  B.ITEM_ID_NICK_NAME IN (SELECT COLUMN_VALUE
+                                          FROM TABLE(STRING_SPLIT(V_NICK_NAME, ','))))
+           AND (TRIM(V_MODEL_ID) IS NULL
+            OR  UPPER(V_MODEL_ID) = 'ALL'                       /* 조회조건 ALL 은 조건 없음 */
+/* 2026.10.07 AJS Model/Nickname 검색 (START) */
+--            OR  B.MODEL_ID IN (SELECT COLUMN_VALUE
+--                                 FROM TABLE(STRING_SPLIT(V_MODEL_ID, ','))))
+            OR  EXISTS (SELECT 1
+                          FROM TABLE(STRING_SPLIT(V_MODEL_ID, ',')) SA
+                         WHERE SA.COLUMN_VALUE IS NOT NULL
+                           AND (UPPER(B.MODEL_ID) LIKE '%' || UPPER(TRIM(SA.COLUMN_VALUE)) || '%'
+                             OR UPPER(B.MODEL_ID_NICK_NAME) LIKE '%' || UPPER(TRIM(SA.COLUMN_VALUE)) || '%')))
+/* 2026.10.07 AJS Model/Nickname 검색 (END) */
+         ORDER BY FN_ASIS_SORT_KEY(A.DIVISION_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(A.SCM_SITE_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(A.ITEM_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(B.MODEL_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(B.CELL_TYPE) NULLS FIRST;
+
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0'          AS RESULT_CODE
+             , 'SUCCESS'    AS RESULT_MESSAGE
+          FROM DUAL;
+
+END P_SSP0024_GET_SHIP_MASTER;
+
+/****************************************************************************************************/
+/* Program ID  : P_SSP0024_GET_ITEM_BY_DIVISION_POPUP                                               */
+/* Description : Material 조회                                                                      */
+/****************************************************************************************************/
+PROCEDURE P_SSP0024_GET_ITEM_BY_DIVISION_POPUP
+(
+    P_DIVISION_ID       IN  CLOB
+  , P_PLANT_SITE_ID     IN  CLOB
+  , P_MATERIAL_ID       IN  CLOB
+  , O_RC1               OUT SYS_REFCURSOR
+  , O_RESULT_CURSOR     OUT SYS_REFCURSOR
+)
+IS
+
+    V_DIVISION_ID       VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_DIVISION_ID,   1, 4000));
+    V_PLANT_SITE_ID     VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_PLANT_SITE_ID, 1, 4000));
+    V_MATERIAL_ID       VARCHAR2(4000 CHAR) := TO_CHAR(SUBSTR(P_MATERIAL_ID,   1, 4000));
+
+BEGIN
+
+    OPEN O_RC1 FOR
+        SELECT A.DIVISION_ID                AS DIVISION_ID
+             , A.SCM_SITE_ID                AS PLANT_SITE_CODE
+             , B.SITE_DESCRIPTION           AS PLANT_SITE_ID
+             , A.ITEM_ID                    AS MATERIAL_ID
+             , A.MODEL_ID                   AS MODEL_ID
+             , A.CELL_TYPE                  AS CELL_TYPE
+             , A.ITEM_ID_NICK_NAME          AS NICK_NAME
+             , A.ELECTRODE_TYPE             AS ELECTRODE_TYPE
+             , A.ITEM_UOM                   AS ITEM_UOM
+             , A.UOM_CONVERT_IN_TACT_TIME   AS UOM_CONVERT_IN_TACT_TIME
+          FROM SSP_MST_SITE_ITEM_EE_V A
+             , SCM_MST_SITE B
+         WHERE B.DIVISION_ID = A.DIVISION_ID
+           AND B.SCM_SITE_ID = A.SCM_SITE_ID
+           AND (TRIM(V_DIVISION_ID) IS NULL
+            OR  UPPER(V_DIVISION_ID) = 'ALL'                    /* 조회조건 ALL 은 조건 없음 */
+            OR  A.DIVISION_ID IN (SELECT COLUMN_VALUE
+                                    FROM TABLE(STRING_SPLIT(V_DIVISION_ID, ','))))
+           AND (TRIM(V_PLANT_SITE_ID) IS NULL
+            OR  UPPER(V_PLANT_SITE_ID) = 'ALL'                  /* 조회조건 ALL 은 조건 없음 */
+            OR  B.SCM_SITE_ID IN (SELECT COLUMN_VALUE
+                                    FROM TABLE(STRING_SPLIT(V_PLANT_SITE_ID, ','))))
+           AND (TRIM(V_MATERIAL_ID) IS NULL
+            OR  UPPER(V_MATERIAL_ID) = 'ALL'                    /* 조회조건 ALL 은 조건 없음 */
+            OR  A.ITEM_ID IN (SELECT COLUMN_VALUE
+                                FROM TABLE(STRING_SPLIT(V_MATERIAL_ID, ','))))
+         ORDER BY FN_ASIS_SORT_KEY(A.DIVISION_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(B.SCM_SITE_ID) NULLS FIRST
+                , FN_ASIS_SORT_KEY(B.SITE_DESCRIPTION) NULLS FIRST
+                , FN_ASIS_SORT_KEY(A.ITEM_ID) NULLS FIRST;
+
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0'          AS RESULT_CODE
+             , 'SUCCESS'    AS RESULT_MESSAGE
+          FROM DUAL;
+
+END P_SSP0024_GET_ITEM_BY_DIVISION_POPUP;
+
+/****************************************************************************************************/
+/* Program ID  : P_SSP0024_SAVE_SHIP_MASTER                                                         */
+/* Description : Shipment Master(Electrode) 저장                                                    */
+/****************************************************************************************************/
+PROCEDURE P_SSP0024_SAVE_SHIP_MASTER
+(
+    P_ACTIVE_FLAG               IN  CLOB
+  , P_DIVISION_ID               IN  CLOB
+  , P_PLANT_SITE_CODE           IN  CLOB
+  , P_MATERIAL_ID               IN  CLOB
+  , P_ELECTRODE_POST_OPER_CODE  IN  CLOB
+  , P_PC_ROLL_LENGTH            IN  CLOB
+  , P_PACKAGE_TYPE_CODE         IN  CLOB
+  , P_STEELCRATE_PER_CUT        IN  CLOB
+  , P_BOX_PER_CUT               IN  CLOB
+  , P_STEELRACK_PER_CUT         IN  CLOB
+  , P_DOM_EXP_TYPE_CODE         IN  CLOB
+  , P_FACTORY_ID                IN  CLOB
+  , P_REMARKS                   IN  CLOB
+  , P_CREATED_BY                IN  CLOB
+  , P_CREATION_DATE             IN  CLOB
+  , P_LAST_UPDATED_BY           IN  CLOB
+  , O_RC1                       OUT SYS_REFCURSOR
+  , O_RESULT_CURSOR             OUT SYS_REFCURSOR
+)
+IS
+
+    C_DELIMITER                 CONSTANT VARCHAR2(1 CHAR) := '^';
+
+    V_ACTIVE_FLAG               VARCHAR2(4000 CHAR);
+    V_DIVISION_ID               VARCHAR2(4000 CHAR);
+    V_PLANT_SITE_CODE           VARCHAR2(4000 CHAR);
+    V_MATERIAL_ID               VARCHAR2(4000 CHAR);
+    V_ELECTRODE_POST_OPER_CODE  VARCHAR2(4000 CHAR);
+    V_PC_ROLL_LENGTH            VARCHAR2(4000 CHAR);
+    V_PACKAGE_TYPE_CODE         VARCHAR2(4000 CHAR);
+    V_STEELCRATE_PER_CUT        VARCHAR2(4000 CHAR);
+    V_BOX_PER_CUT               VARCHAR2(4000 CHAR);
+    V_STEELRACK_PER_CUT         VARCHAR2(4000 CHAR);
+    V_DOM_EXP_TYPE_CODE         VARCHAR2(4000 CHAR);
+    V_FACTORY_ID                VARCHAR2(4000 CHAR);
+    V_REMARKS                   VARCHAR2(4000 CHAR);
+    V_CREATED_BY                VARCHAR2(4000 CHAR);
+    V_CREATION_DATE             VARCHAR2(4000 CHAR);
+    V_LAST_UPDATED_BY           VARCHAR2(4000 CHAR);
+
+    N_MAX_LOOP_CNT              NUMBER(10) := 0;
+    N_MST_LOOP_CNT              NUMBER(10) := 0;
+
+    /* 이력 저장 용 변수 설정 */
+    N_HISTORY_SEQ               NUMBER(19);
+
+    /* LOG 용 변수 설정 */
+    V_PROGRAM_NAME              VARCHAR2(150 CHAR) := 'SSP0024_SAVE_SHIP_MASTER';
+    V_LOG_TYPE                  VARCHAR2(30 CHAR);      /* START/END/ERROR/... */
+    N_LOG_COUNT                 NUMBER(10) := 0;
+    V_LOG_MESSAGE               VARCHAR2(1000 CHAR);
+    V_DESCRIPTION               VARCHAR2(500 CHAR);
+    D_EVENT_DATE                DATE;
+
+    /* 예외처리 변수 설정 */
+    V_ERR_MESSAGE               VARCHAR2(4000 CHAR) := '';
+    V_SQLCODE                   NUMBER;
+    V_SQLERRM                   VARCHAR2(4000 CHAR);
+
+BEGIN
+
+    SAVEPOINT SP_SSP0024_SAVE;
+
+    /* 시작 LOG */
+    V_LOG_TYPE    := 'START';
+    V_LOG_MESSAGE := '########## Start of procedure ##########';
+    V_DESCRIPTION := '';
+    D_EVENT_DATE  := SYSDATE;
+
+    PR_SCM_SYS_LOG_BATCH_CALL_TRAN(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    /* 프로시저 LOOP 길이를 판단 */
+    N_MAX_LOOP_CNT := SCM_ARR_SPL_CNT(P_ACTIVE_FLAG, C_DELIMITER);
+
+    N_MST_LOOP_CNT := 0;
+
+    WHILE N_MST_LOOP_CNT < N_MAX_LOOP_CNT
+    LOOP
+
+        /* @mst_loop_cnt 1증가 */
+        N_MST_LOOP_CNT := N_MST_LOOP_CNT + 1;
+
+        /* 각 컬럼들에 대한 스플릿처리로직 스타트 */
+        V_ACTIVE_FLAG              := SCM_ARR_SPL_VAL(P_ACTIVE_FLAG,              C_DELIMITER, N_MST_LOOP_CNT);
+        V_DIVISION_ID              := SCM_ARR_SPL_VAL(P_DIVISION_ID,              C_DELIMITER, N_MST_LOOP_CNT);
+        V_PLANT_SITE_CODE          := SCM_ARR_SPL_VAL(P_PLANT_SITE_CODE,          C_DELIMITER, N_MST_LOOP_CNT);
+        V_MATERIAL_ID              := SCM_ARR_SPL_VAL(P_MATERIAL_ID,              C_DELIMITER, N_MST_LOOP_CNT);
+        V_ELECTRODE_POST_OPER_CODE := SCM_ARR_SPL_VAL(P_ELECTRODE_POST_OPER_CODE, C_DELIMITER, N_MST_LOOP_CNT);
+        V_PC_ROLL_LENGTH           := SCM_ARR_SPL_VAL(P_PC_ROLL_LENGTH,           C_DELIMITER, N_MST_LOOP_CNT);
+        V_STEELCRATE_PER_CUT       := SCM_ARR_SPL_VAL(P_STEELCRATE_PER_CUT,       C_DELIMITER, N_MST_LOOP_CNT);
+        V_PACKAGE_TYPE_CODE        := SCM_ARR_SPL_VAL(P_PACKAGE_TYPE_CODE,        C_DELIMITER, N_MST_LOOP_CNT);
+        V_BOX_PER_CUT              := SCM_ARR_SPL_VAL(P_BOX_PER_CUT,              C_DELIMITER, N_MST_LOOP_CNT);
+        V_STEELRACK_PER_CUT        := SCM_ARR_SPL_VAL(P_STEELRACK_PER_CUT,        C_DELIMITER, N_MST_LOOP_CNT);
+        V_DOM_EXP_TYPE_CODE        := SCM_ARR_SPL_VAL(P_DOM_EXP_TYPE_CODE,        C_DELIMITER, N_MST_LOOP_CNT);
+        V_FACTORY_ID               := SCM_ARR_SPL_VAL(P_FACTORY_ID,               C_DELIMITER, N_MST_LOOP_CNT);
+        V_REMARKS                  := SCM_ARR_SPL_VAL(P_REMARKS,                  C_DELIMITER, N_MST_LOOP_CNT);
+        V_CREATED_BY               := SCM_ARR_SPL_VAL(P_CREATED_BY,               C_DELIMITER, N_MST_LOOP_CNT);
+        V_CREATION_DATE            := SCM_ARR_SPL_VAL(P_CREATION_DATE,            C_DELIMITER, N_MST_LOOP_CNT);
+        /* V_LAST_UPDATED_BY          := SCM_ARR_SPL_VAL(P_LAST_UPDATED_BY,          C_DELIMITER, N_MST_LOOP_CNT); */ /* AJS 20261007 화면검증 원본 */
+
+        /* 화면은 세션 사용자 한 값(createId)만 보낸다 — 구분자가 없으면 모든 행에 같은 값을 쓴다 */ /* AJS 20261007 화면검증 */
+        IF DBMS_LOB.INSTR(P_LAST_UPDATED_BY, C_DELIMITER) > 0 /* AJS 20261007 화면검증 */
+        THEN /* AJS 20261007 화면검증 */
+            V_LAST_UPDATED_BY := SCM_ARR_SPL_VAL(P_LAST_UPDATED_BY, C_DELIMITER, N_MST_LOOP_CNT); /* AJS 20261007 화면검증 */
+        ELSE /* AJS 20261007 화면검증 */
+            V_LAST_UPDATED_BY := TO_CHAR(SUBSTR(P_LAST_UPDATED_BY, 1, 4000)); /* AJS 20261007 화면검증 */
+        END IF; /* AJS 20261007 화면검증 */
+
+        /* 수정 행의 최초등록자 · 최초등록일시는 화면이 보내지 않으므로 원장 값으로 채운다(원문은 화면 값을 이력에 남긴다) */ /* AJS 20261007 화면검증 */
+        IF V_CREATED_BY IS NULL /* AJS 20261007 화면검증 */
+       AND V_ACTIVE_FLAG = 'M' /* AJS 20261007 화면검증 */
+        THEN /* AJS 20261007 화면검증 */
+            BEGIN /* AJS 20261007 화면검증 */
+                SELECT CREATED_BY /* AJS 20261007 화면검증 */
+                     , TO_CHAR(CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS') /* AJS 20261007 화면검증 */
+                  INTO V_CREATED_BY /* AJS 20261007 화면검증 */
+                     , V_CREATION_DATE /* AJS 20261007 화면검증 */
+                  FROM SSP_MST_SHIP_MASTER_EE /* AJS 20261007 화면검증 */
+                 WHERE DIVISION_ID = V_DIVISION_ID /* AJS 20261007 화면검증 */
+                   AND SCM_SITE_ID = V_PLANT_SITE_CODE /* AJS 20261007 화면검증 */
+                   AND ITEM_ID     = V_MATERIAL_ID /* AJS 20261007 화면검증 */
+                   AND ROWNUM      = 1; /* AJS 20261007 화면검증 */
+            EXCEPTION /* AJS 20261007 화면검증 */
+                WHEN NO_DATA_FOUND /* AJS 20261007 화면검증 */
+                THEN /* AJS 20261007 화면검증 */
+                    NULL; /* AJS 20261007 화면검증 */
+            END; /* AJS 20261007 화면검증 */
+        END IF; /* AJS 20261007 화면검증 */
+
+        /* 새 행의 최초등록자는 현재 사용자(원문 : 새 행이면 로그인 사용자를 보낸다) */ /* AJS 20261007 화면검증 */
+        V_CREATED_BY := NVL(V_CREATED_BY, V_LAST_UPDATED_BY); /* AJS 20261007 화면검증 */
+
+        /* 이력저장 */
+        SELECT SEQ1_SSP_MST_SHIP_MASTER_EE_H.NEXTVAL
+          INTO N_HISTORY_SEQ
+          FROM DUAL;
+
+        INSERT INTO SSP_MST_SHIP_MASTER_EE_H
+                    ( HISTORY_SEQ
+                    , DIVISION_ID
+                    , SCM_SITE_ID
+                    , ITEM_ID
+                    , ELECTRODE_POST_OPER_CODE
+                    , PC_ROLL_LENGTH
+                    , STEELCRATE_PER_CUT
+                    , PACKAGE_TYPE_CODE
+                    , BOX_PER_CUT
+                    , STEELRACK_PER_CUT
+                    , DOM_EXP_TYPE_CODE
+                    , FACTORY_ID
+                    , REMARKS
+                    , CREATED_BY
+                    , CREATION_DATE
+                    , LAST_UPDATED_BY
+                    , LAST_UPDATE_DATE
+                    , HISTORY_CREATION_DATE )
+             VALUES ( N_HISTORY_SEQ
+                    , V_DIVISION_ID
+                    , V_PLANT_SITE_CODE
+                    , V_MATERIAL_ID
+                    , V_ELECTRODE_POST_OPER_CODE
+                    , TO_NUMBER(V_PC_ROLL_LENGTH)
+                    , TO_NUMBER(V_STEELCRATE_PER_CUT)
+                    , V_PACKAGE_TYPE_CODE
+                    , TO_NUMBER(V_BOX_PER_CUT)
+                    , TO_NUMBER(V_STEELRACK_PER_CUT)
+                    , V_DOM_EXP_TYPE_CODE
+                    , V_FACTORY_ID
+                    , V_REMARKS
+                    , V_CREATED_BY
+                    , TO_DATE(V_CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS')   /* 화면이 보내는 형태 · 새 행이면 빈 값이라 값 없음으로 들어간다 */
+                    , V_LAST_UPDATED_BY
+                    , SYSDATE
+                    , SYSDATE );
+
+        /* 데이터 저장 — 원문은 MERGE 한 문장이나 온라인 SQL 에서 쓰지 않는 규칙이라 두 문장으로 나눈다 */
+        IF N_MST_LOOP_CNT > 0
+        THEN
+
+            UPDATE SSP_MST_SHIP_MASTER_EE
+               SET ELECTRODE_POST_OPER_CODE = V_ELECTRODE_POST_OPER_CODE
+                 , PC_ROLL_LENGTH           = CAST(TO_NUMBER(V_PC_ROLL_LENGTH)     AS NUMBER(10))
+                 , STEELCRATE_PER_CUT       = CAST(TO_NUMBER(V_STEELCRATE_PER_CUT) AS NUMBER(10))
+                 , PACKAGE_TYPE_CODE        = V_PACKAGE_TYPE_CODE
+                 , BOX_PER_CUT              = CAST(TO_NUMBER(V_BOX_PER_CUT)        AS NUMBER(20, 2))
+                 , STEELRACK_PER_CUT        = CAST(TO_NUMBER(V_STEELRACK_PER_CUT)  AS NUMBER(10, 2))
+                 , DOM_EXP_TYPE_CODE        = V_DOM_EXP_TYPE_CODE
+                 , FACTORY_ID               = V_FACTORY_ID
+                 , REMARKS                  = V_REMARKS
+                 , LAST_UPDATED_BY          = V_LAST_UPDATED_BY
+                 , LAST_UPDATE_DATE         = SYSDATE
+             WHERE DIVISION_ID = V_DIVISION_ID
+               AND SCM_SITE_ID = V_PLANT_SITE_CODE
+               AND ITEM_ID     = V_MATERIAL_ID;
+
+            IF SQL%ROWCOUNT = 0
+            THEN
+
+                INSERT INTO SSP_MST_SHIP_MASTER_EE
+                            ( DIVISION_ID
+                            , SCM_SITE_ID
+                            , ITEM_ID
+                            , ELECTRODE_POST_OPER_CODE
+                            , PC_ROLL_LENGTH
+                            , STEELCRATE_PER_CUT
+                            , PACKAGE_TYPE_CODE
+                            , BOX_PER_CUT
+                            , STEELRACK_PER_CUT
+                            , DOM_EXP_TYPE_CODE
+                            , FACTORY_ID
+                            , REMARKS
+                            , CREATED_BY
+                            , CREATION_DATE
+                            , LAST_UPDATED_BY
+                            , LAST_UPDATE_DATE )
+                     VALUES ( V_DIVISION_ID
+                            , V_PLANT_SITE_CODE
+                            , V_MATERIAL_ID
+                            , V_ELECTRODE_POST_OPER_CODE
+                            , TO_NUMBER(V_PC_ROLL_LENGTH)
+                            , TO_NUMBER(V_STEELCRATE_PER_CUT)
+                            , V_PACKAGE_TYPE_CODE
+                            , TO_NUMBER(V_BOX_PER_CUT)
+                            , TO_NUMBER(V_STEELRACK_PER_CUT)
+                            , V_DOM_EXP_TYPE_CODE
+                            , V_FACTORY_ID
+                            , V_REMARKS
+                            , V_CREATED_BY
+                            , SYSDATE
+                            , V_CREATED_BY                      /* 원문도 최종변경자에 최초등록자를 넣는다 */
+                            , SYSDATE );
+
+            END IF;
+
+        END IF;   /* END OF STMT. IF( @mst_loop_cnt > 0 ) */
+
+    END LOOP;     /* END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt */
+
+    V_LOG_TYPE    := 'END';
+    V_LOG_MESSAGE := '########## END of procedure ##########';
+    V_DESCRIPTION := '';
+    D_EVENT_DATE  := SYSDATE;
+
+    PR_SCM_SYS_LOG_BATCH_CALL_TRAN(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    COMMIT;
+
+    /* 결과코드, 결과 카운트 반환 */
+    OPEN O_RC1 FOR
+        SELECT 'S'              AS RESULT_CODE
+             , N_MAX_LOOP_CNT   AS RESULT_CNT
+          FROM DUAL;
+
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0'          AS RESULT_CODE
+             , 'SUCCESS'    AS RESULT_MESSAGE
+          FROM DUAL;
+
+EXCEPTION
+    WHEN OTHERS
+    THEN
+
+        V_SQLCODE := SQLCODE;
+        V_SQLERRM := SQLERRM;
+
+        ROLLBACK TO SP_SSP0024_SAVE;    /* 입력 데이타 롤백 처리 */
+
+        INSERT INTO SCM_SYS_LOG_BATCH
+                    ( PROGRAM_NAME
+                    , LOG_TYPE
+                    , LOG_COUNT
+                    , LOG_MESSAGE
+                    , DESCRIPTION
+                    , EVENT_DATE
+                    , CREATION_DATE
+                    , CREATED_BY
+                    , LAST_UPDATE_DATE
+                    , LAST_UPDATED_BY )
+             VALUES ( V_PROGRAM_NAME
+                    , 'ERROR'
+                    , NULL
+                    , V_SQLERRM
+                    , NULL
+                    , SYSDATE
+                    , SYSDATE
+                    , V_PROGRAM_NAME
+                    , SYSDATE
+                    , V_PROGRAM_NAME );
+
+        COMMIT;
+
+        /* error코드, errror 메시지 반환 */
+        IF V_ERR_MESSAGE IS NULL
+        THEN
+
+            OPEN O_RC1 FOR
+                SELECT 'F'  AS RESULT_CODE
+                  FROM DUAL;
+
+            OPEN O_RESULT_CURSOR FOR
+                SELECT '[' || TO_CHAR(V_SQLCODE) || ']' || V_SQLERRM    AS ERR_MESSAGE
+                  FROM DUAL;
+
+        ELSE
+
+            OPEN O_RC1 FOR
+                SELECT 'N'  AS RESULT_CODE
+                  FROM DUAL;
+
+            OPEN O_RESULT_CURSOR FOR
+                SELECT V_ERR_MESSAGE    AS ERR_MESSAGE
+                  FROM DUAL;
+
+        END IF;
+
+END P_SSP0024_SAVE_SHIP_MASTER;
+
+END PKG_SSP0024;

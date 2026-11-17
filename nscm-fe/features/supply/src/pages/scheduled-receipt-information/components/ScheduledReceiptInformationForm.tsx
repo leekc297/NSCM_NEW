@@ -1,6 +1,6 @@
 import dayjs, { type Dayjs } from 'dayjs';
 import { MaterialByDivisionModal } from 'features/master/src/components';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -59,6 +59,22 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
   const tabId = useTabid();
 
   const [openItemModal, setOpenItemModal] = useState(false);
+
+  // Division 변경 confirm 취소 시 콤보 표시 강제 복귀용 키(#8). CustomDropdown 단일선택은 inputValue 를
+  //   제어하지 않아, controlled value(이전 Div)가 그대로여도 MUI 가 방금 고른(거부된) 옵션 텍스트를 붙들고
+  //   blur 로도 복귀하지 않는다(실측 2026-11-09: 값=81인데 칸=40 유지). 취소 시 이 키를 올려 Division
+  //   CustomDropdown 을 remount → value 라벨로 표시를 되돌린다(그리드와 일치).
+  const [divisionRevertKey, setDivisionRevertKey] = useState(0);
+
+  // From Date 빈값 거부·직전값 복원(#15). AS-IS 공용 컨트롤 UsrDatePicker 의 nullValueYN=false 재현:
+  //   From Date 를 지우고 포커스아웃하면 컨트롤이 직전 유효값으로 되돌린다(SCP0130_ScheduledRecieptInformation.
+  //   Designer.cs:342). TO-BE 공용 DatePickerCalendar 에는 빈값불허 프롭이 없다.
+  //   복원은 반드시 blur(포커스아웃) 시점에만 — onChange 에서 remount 하면 키인 도중 미완성값(null)마다
+  //   리셋돼 타이핑이 깨진다(공용 MUI DatePicker 는 섹션 편집 중 null 을 반복 발생). 그래서:
+  //   onChange 는 유효값만 저장하고 빈값/미완성은 ref 플래그만 세운 뒤, 래퍼 div 의 onBlur(focusout 버블)에서
+  //   플래그가 서 있으면 remount 로 controlled value(직전 fromDate) 표시를 복원한다.
+  const [fromDateRevertKey, setFromDateRevertKey] = useState(0);
+  const fromDateClearedRef = useRef(false);
 
   const [divisions] = useTabComboQueries({ filters: [COMBO.DIVISION] });
   // Plan Group 조회콤보는 활성 시트별로 원천이 다르다(SCP0130-08/AS-IS .cs:1479/1500):
@@ -157,15 +173,19 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 required
                 render={() => (
                   <CustomDropdown
+                    // 취소 시 remount 로 표시를 controlled value 로 되돌린다(#8, 위 divisionRevertKey 주석).
+                    key={divisionRevertKey}
                     value={searchParams.divisionId}
                     options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
                     // Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
-                    //   편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로
-                    //   복귀(commit 51d4e9fa 패턴).
+                    //   편집중(dirty)이면 MSG00704 confirm 후에만 실행. 취소(ok=false)면 setDivision 미호출로
+                    //   값은 이전 Div 유지되지만, 콤보 표시는 MUI 가 거부된 선택을 붙들어 어긋나므로(실측)
+                    //   divisionRevertKey 를 올려 remount 로 표시를 강제 복귀시킨다.
                     onChange={(_, option) => {
                       const next = option ?? '';
                       void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                         if (ok) setDivision(next);
+                        else setDivisionRevertKey(k => k + 1);
                       });
                     }}
                   />
@@ -206,7 +226,7 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
             {/* Parent Model(Item ID) — Row1 맨 끝(AS-IS Designer lblItemId x=730, Valid x=540 뒤).
                 Virtual Bom 시트에서만 노출(SCP0130-08, AS-IS btnItemId.Visible .cs:1473/1488);
                 Scheduled Receipt 시트에서는 조회조건 자체를 숨긴다(itemId 파라미터도 store 에서 ''). */}
-            {isVirtualBom && (
+            {isVirtualBom ? (
               <Grid size={3}>
                 <FormItem
                   className={commonStyles.formItem}
@@ -232,6 +252,12 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                   )}
                 />
               </Grid>
+            ) : (
+              // Scheduled Receipt 탭: Parent Model 숨김으로 비는 Row1 4번째 칸을 빈 placeholder 로 채운다.
+              //   없으면 Grid auto-flow 로 Plan Group 이 1행 4번째로 올라가 배치가 어긋난다(#13). AS-IS 는
+              //   절대배치라 숨겨도 다른 필드가 안 밀리므로, placeholder 로 Plan Group/Material/From Date 를
+              //   2행에 고정해 등가로 맞춘다.
+              <Grid size={3} />
             )}
             {/* Row2(design 01 §1 y=29/41 행): PlanGroup/ChildMaterial/FromDate. */}
             <Grid size={3}>
@@ -259,15 +285,15 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 )}
               />
             </Grid>
-            {/* Child Material(SCP0130-03) — 등록 콤보 ItemIdChild, Division 단일필터 + CODE dedup. */}
+            {/* Child Material(SCP0130-03) — 등록 콤보 ItemIdChild, Division 단일필터 + CODE dedup.
+                라벨은 두 탭 모두 'Material'(LBL00021) 표준으로 통일(SCP0130-#10). AS-IS 는 Virtual Bom 탭에서만
+                'Child Material'(.cs:1477)로 달랐으나, item_id_child/material 조회조건의 전 화면 공통 표준이
+                'Material'(LBL00021)이고 'Child Material'(LBL01062)은 SCP0130 고유라, 표준으로 맞춘다
+                (asis-parity-default-keep-common-standardization). 탭별 스왑 제거. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={
-                  isVirtualBom
-                    ? t(LABEL.CHILD_MATERIAL, '_Child Material')
-                    : t(LABEL.MATERIAL, '_Material')
-                }
+                label={t(LABEL.MATERIAL, '_Material')}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
@@ -286,17 +312,38 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 label={t(LABEL.FROM_DATE, '_From Date')}
                 labelAlign='right'
                 render={() => (
-                  <DatePickerCalendar
-                    usecase='date'
-                    elevation
-                    size='small'
-                    value={ymdToDayjs(searchParams.fromDate)}
-                    onChange={
-                      ((date: Dayjs | null) => {
-                        setSearchParams({ fromDate: date?.format('YYYYMMDD') ?? '' });
-                      }) as never
-                    }
-                  />
+                  // onBlur(focusout)는 버블링되므로 래퍼 div 에서 포커스아웃을 받는다(#15, 위 주석).
+                  //   공용 DatePickerCalendar 의 slotProps.textField 를 직접 넘기면 내부 하드코딩 textField
+                  //   (달력아이콘·inputRef·내부 onChange)를 덮어써 깨지므로, 래퍼 div 경유로 처리한다.
+                  <div
+                    style={{ display: 'contents' }}
+                    onBlur={() => {
+                      if (!fromDateClearedRef.current) return;
+                      fromDateClearedRef.current = false;
+                      // 비운 채 포커스아웃 → remount 로 직전 유효값(controlled value) 표시 복원.
+                      setFromDateRevertKey(k => k + 1);
+                    }}
+                  >
+                    <DatePickerCalendar
+                      key={fromDateRevertKey}
+                      usecase='date'
+                      elevation
+                      size='small'
+                      value={ymdToDayjs(searchParams.fromDate)}
+                      onChange={
+                        ((date: Dayjs | null) => {
+                          // 유효값만 저장. 빈값/미완성은 타이핑 중일 수 있어 여기선 복원하지 않고
+                          //   플래그만 세운다(실제 복원은 위 onBlur 에서). AS-IS nullValueYN=false 재현.
+                          if (date?.isValid()) {
+                            fromDateClearedRef.current = false;
+                            setSearchParams({ fromDate: date.format('YYYYMMDD') });
+                            return;
+                          }
+                          fromDateClearedRef.current = true;
+                        }) as never
+                      }
+                    />
+                  </div>
                 )}
               />
             </Grid>
@@ -306,7 +353,13 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
       <MaterialByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
-        preSearchParams={{ divisionId: searchParams.divisionId, scpModuleType: MENU_ID }}
+        // 조회조건 Parent Model(itemId) 입력값을 팝업 초기 검색어로 연동 — 형제 화면
+        //   (project-route/formation/workbench 등)과 동일 계약. 빠지면 값이 있어도 팝업 Material 이 빈칸.
+        preSearchParams={{
+          divisionId: searchParams.divisionId,
+          scpModuleType: MENU_ID,
+          itemId: searchParams.itemId,
+        }}
         setSelectedValue={items => setSearchParams({ itemId: items })}
       />
     </>

@@ -1,0 +1,41 @@
+{
+ "id": "SCP0130",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+   "save_sp": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+   "status": "고칠 열 후보 없음",
+   "table": "SCP_OPMZ_SCHEDULED_RECIEPT_INFORMATION",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "OPMZ_PLAN_GR_ID",
+    "ITEM_ID_CHILD",
+    "TO_YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_SITE_ID": "PLANT_SITE_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "ITEM_ID_CHILD": "ITEM_ID_CHILD",
+    "TO_YYYYMMDD": "TO_YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Virtual BOM",
+   "writes": {
+    "SCP_OPMZ_SCHEDULED_RECIEPT_INFORMATION": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION → SP SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

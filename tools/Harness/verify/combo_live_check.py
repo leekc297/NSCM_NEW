@@ -104,11 +104,27 @@ def main(mid, res_dir=None, user=None):
             u_rec = (c.get('user') or '').strip() or user
             sql, miss_keys = subst(str(row[0]), params, u_rec)
             note = f" · SQL {row[1]}자(BE 4000자 절단)" if row[1] and int(row[1]) > 4000 else ''
+            err = ''; desc = None
             try:
-                cur.execute(sql); rows = cur.fetchall()
+                cur.execute(sql); rows = cur.fetchall(); desc = cur.description
             except Exception as e:
-                res.append({'combo_id': cid, 'body': body[:300], 'resp_n': c.get('n'), 'db_n': '', 'missing': '', 'extra': '', 'result': 'ERROR', 'why': f'[확인 대상] 치환 SQL 실행 오류 {str(e)[:120]}{note} · 미치환 키 {miss_keys}'}); continue
-            cols = [d[0].upper() for d in cur.description]
+                err = str(e)
+                # 2026-11-10 T209(SSP0060 Plan_Infor_SCP ORA-01830 ×N): 접속 모듈(dbconn)이 세션 NLS_DATE_FORMAT 을 'YYYY-MM-DD HH24:MI:SS' 로 고정 —
+                #   형식 없는 TO_CHAR(날짜) 를 다시 TO_DATE(…,'YYYY-MM-DD') 하는 콤보 SQL 이 시간 부분 때문에 실패(BE 세션은 응답 50건 정상).
+                #   날짜 형식 오류(ORA-01830·01840·01841·01843·01847·01858·01861)면 DB 기본 NLS_DATE_FORMAT 으로 한 번 더 실행하고 근거에 남긴다(코드 열 비교는 형식 무관)
+                rows = None
+                if re.search(r'ORA-018(30|40|41|43|47|58|61)', str(e)):
+                    try:
+                        cur.execute("SELECT VALUE FROM NLS_DATABASE_PARAMETERS WHERE PARAMETER='NLS_DATE_FORMAT'"); dbf = cur.fetchone()[0]
+                        cur.execute(f"ALTER SESSION SET NLS_DATE_FORMAT='{dbf}'"); cur.execute(sql); rows = cur.fetchall(); desc = cur.description; note += f" · 세션 날짜 형식 'YYYY-MM-DD HH24:MI:SS' 에서 {str(e)[:9]} → DB 기본 '{dbf}' 로 재실행(T209)"
+                    except Exception as e2:
+                        err = str(e2)
+                    finally:
+                        try: cur.execute("ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'")
+                        except Exception: pass
+            if rows is None:
+                res.append({'combo_id': cid, 'body': body[:300], 'resp_n': c.get('n'), 'db_n': '', 'missing': '', 'extra': '', 'result': 'ERROR', 'why': f'[확인 대상] 치환 SQL 실행 오류 {err[:120]}{note} · 미치환 키 {miss_keys}'}); continue
+            cols = [d[0].upper() for d in desc]  # T209 재실행 뒤 ALTER SESSION 이 cur.description 을 지우므로 실행 직후 보관본
             # 2026-11-06(SCP0084 조치 필요 29번 허위 FAIL): CODE 열이 없는 콤보(MIN_YYYYMM/MAX_YYYYMM 한 행 같은 범위 조회)는
             #   응답 쪽 코드 = 응답 JSON 첫 키(nscm.ts pairs: code 열 없으면 keys[0] = MAX_YYYYMM), DB 쪽 = SELECT 첫 열(MIN_YYYYMM) 로 서로 다른 열을 비교했다
             #   → 응답이 코드로 쓴 열 이름을 DB 결과에서 같은 이름으로 찾는다(없을 때만 첫 열).

@@ -135,35 +135,11 @@
                   "annotations": [
                     {
                       "type": "console",
-                      "description": "열림 직후 오류 40(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                      "description": "열림 직후 오류 92(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
                       "type": "labels",
-                      "description": "펼침=true 일치 13 / 누락 1: Ver."
-                    },
-                    {
-                      "type": "console",
-                      "description": "오류 42(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
-                    },
-                    {
-                      "type": "columns",
-                      "description": "시트 CURRENT(CUTOFF) 헤더 24 / 기대 6 / 누락 0: "
-                    },
-                    {
-                      "type": "dynamic",
-                      "description": "As-is SCP0104_GET_SPREAD_TITLE · DB루프 - · 컬럼정의 35 / 정적밖 29 (M_01202611,M_01202612,M_01202701,M_01202702,M_01202703) · 타이틀 시트 spreadTitle 호출 2"
-                    },
-                    {
-                      "type": "calls",
-                      "description": "[[\"spreadTitle\",\"SEARCH\",200,30,627],[\"CUTOFF\",\"SEARCH\",200,1,627]]"
-                    },
-                    {
-                      "type": "i18n",
-                      "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                      "description": "펼침=false 일치 0 / 누락 14: Div, Plan Month, Ver., _plan_type, Operation group, Site, Plant, Building, Line, Operation, Basic Nickname, Bottleneck, Line Type, Status"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -174,10 +150,10 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 10828,
+                      "duration": 122919,
                       "error": {
-                        "message": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110",
+                        "message": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
                           "column": 110,
@@ -192,45 +168,133 @@
                             "column": 110,
                             "line": 31
                           },
+                          "message": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Plan Month' (VersionField) — 후보 [Plan Month]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
                           "message": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 '_plan_type' (InputField) — 후보 [Plant | Plan Type | _plan_type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Operation group' (RadioGroup) — 후보 [Operation group]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Site' (CustomDropdown) — 후보 [Site]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Plant' (PlantSiteField) — 후보 [Plant]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Building' (CustomDropdown) — 후보 [Building]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Line' (CustomDropdown) — 후보 [Line]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Operation' (CustomDropdown) — 후보 [Operation]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Basic Nickname' (ItemField) — 후보 [Basic Nickname]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Bottleneck' (CustomDropdown) — 후보 [Bottleneck]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Line Type' (CustomDropdown) — 후보 [Line Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Status' (CustomDropdown) — 후보 [Status]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 66,
+                            "line": 36
+                          },
+                          "message": "Error: 그리드 ≥1 (메인시트 3)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m0\u001b[39m\n\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  35 |     const gridCount = await nscm.grids().count();\n> 36 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n     |                                                                  ^\n  37 |     // Division 선택(있으면) 후 조회\n  38 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);\n  39 |     const calls = await nscm.search();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:36:66"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:04:34.656Z",
+                      "startTime": "2026-11-14T04:41:37.767Z",
                       "annotations": [
                         {
                           "type": "console",
-                          "description": "열림 직후 오류 40(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "열림 직후 오류 92(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "labels",
-                          "description": "펼침=true 일치 13 / 누락 1: Ver."
-                        },
-                        {
-                          "type": "console",
-                          "description": "오류 42(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
-                        },
-                        {
-                          "type": "columns",
-                          "description": "시트 CURRENT(CUTOFF) 헤더 24 / 기대 6 / 누락 0: "
-                        },
-                        {
-                          "type": "dynamic",
-                          "description": "As-is SCP0104_GET_SPREAD_TITLE · DB루프 - · 컬럼정의 35 / 정적밖 29 (M_01202611,M_01202612,M_01202701,M_01202702,M_01202703) · 타이틀 시트 spreadTitle 호출 2"
-                        },
-                        {
-                          "type": "calls",
-                          "description": "[[\"spreadTitle\",\"SEARCH\",200,30,611],[\"CUTOFF\",\"SEARCH\",200,1,611]]"
-                        },
-                        {
-                          "type": "i18n",
-                          "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                          "description": "펼침=false 일치 0 / 누락 14: Div, Plan Month, Ver., _plan_type, Operation group, Site, Plant, Building, Line, Operation, Basic Nickname, Bottleneck, Line Type, Status"
                         }
                       ],
                       "attachments": [
@@ -260,10 +324,10 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 10935,
+                      "duration": 122431,
                       "error": {
-                        "message": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110",
+                        "message": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
                           "column": 110,
@@ -278,45 +342,133 @@
                             "column": 110,
                             "line": 31
                           },
+                          "message": "Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Plan Month' (VersionField) — 후보 [Plan Month]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
                           "message": "Error: 조회조건 'Ver.' (CustomDropdown) — 후보 [Ver. | Version.]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 '_plan_type' (InputField) — 후보 [Plant | Plan Type | _plan_type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Operation group' (RadioGroup) — 후보 [Operation group]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Site' (CustomDropdown) — 후보 [Site]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Plant' (PlantSiteField) — 후보 [Plant]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Building' (CustomDropdown) — 후보 [Building]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Line' (CustomDropdown) — 후보 [Line]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Operation' (CustomDropdown) — 후보 [Operation]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Basic Nickname' (ItemField) — 후보 [Basic Nickname]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Bottleneck' (CustomDropdown) — 후보 [Bottleneck]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Line Type' (CustomDropdown) — 후보 [Line Type]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 110,
+                            "line": 31
+                          },
+                          "message": "Error: 조회조건 'Status' (CustomDropdown) — 후보 [Status]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  29 |       const hit = await nscm.fieldExistsAny(cands);\n  30 |       if (hit) labelHits.push(`${f.label}→${hit}`); else labelMiss.push(f.label);\n> 31 |       expect.soft(!!hit, `조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`).toBeTruthy();\n     |                                                                                                              ^\n  32 |     }\n  33 |     test.info().annotations.push({ type: 'labels', description: `펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}` });\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:31:110"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 66,
+                            "line": 36
+                          },
+                          "message": "Error: 그리드 ≥1 (메인시트 3)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m0\u001b[39m\n\n  34 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  35 |     const gridCount = await nscm.grids().count();\n> 36 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n     |                                                                  ^\n  37 |     // Division 선택(있으면) 후 조회\n  38 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);\n  39 |     const calls = await nscm.search();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:36:66"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-09T01:04:49.800Z",
+                      "startTime": "2026-11-14T04:43:44.199Z",
                       "annotations": [
                         {
                           "type": "console",
-                          "description": "열림 직후 오류 40(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "열림 직후 오류 92(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "labels",
-                          "description": "펼침=true 일치 13 / 누락 1: Ver."
-                        },
-                        {
-                          "type": "console",
-                          "description": "오류 42(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
-                        },
-                        {
-                          "type": "columns",
-                          "description": "시트 CURRENT(CUTOFF) 헤더 24 / 기대 6 / 누락 0: "
-                        },
-                        {
-                          "type": "dynamic",
-                          "description": "As-is SCP0104_GET_SPREAD_TITLE · DB루프 - · 컬럼정의 35 / 정적밖 29 (M_01202611,M_01202612,M_01202701,M_01202702,M_01202703) · 타이틀 시트 spreadTitle 호출 2"
-                        },
-                        {
-                          "type": "calls",
-                          "description": "[[\"spreadTitle\",\"SEARCH\",200,30,627],[\"CUTOFF\",\"SEARCH\",200,1,627]]"
-                        },
-                        {
-                          "type": "i18n",
-                          "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                          "description": "펼침=false 일치 0 / 누락 14: Div, Plan Month, Ver., _plan_type, Operation group, Site, Plant, Building, Line, Operation, Basic Nickname, Bottleneck, Line Type, Status"
                         }
                       ],
                       "attachments": [
@@ -363,43 +515,43 @@
                   "annotations": [
                     {
                       "type": "cond",
-                      "description": "[OK] (기준 조회)(search) — call-proc 2"
+                      "description": "[FAIL] (기준 조회)(search) — 조회 call-proc 없음"
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
+                      "description": "[ERROR] Div(DivisionField) — 라벨 [Div | Div.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] Plan Month(combo) — 옵션 '202609' → 조회 정상 · 조회 인자 변화 있음"
+                      "description": "[ERROR] Plan Month(VersionField) — 라벨 [Plan Month] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Ver.(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Ver.(CustomDropdown) — 라벨 [Ver. | Version.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] _plan_type(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] _plan_type(InputField) — 라벨 [Plant | Plan Type | _plan_type] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Operation group(combo) — 옵션 'Electrode' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                      "description": "[ERROR] Operation group(RadioGroup) — 라벨 [Operation group] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Site(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Site(CustomDropdown) — 라벨 [Site] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Plant(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Plant(PlantSiteField) — 라벨 [Plant] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Building(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Building(CustomDropdown) — 라벨 [Building] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Line(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Line(CustomDropdown) — 라벨 [Line] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
@@ -407,11 +559,11 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Basic Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 '' — 팝업 행 선택이 칸에 채워지지 않음(데이터 0건이면 정상)"
+                      "description": "[ERROR] Basic Nickname(ItemField) — 라벨 [Basic Nickname] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] Bottleneck(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
+                      "description": "[ERROR] Bottleneck(CustomDropdown) — 라벨 [Bottleneck] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
@@ -419,19 +571,15 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Status(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[ERROR] Status(CustomDropdown) — 라벨 [Status] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                     },
                     {
                       "type": "cond",
-                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 planmonth → status → site → plant → plant → building → line → operationgroup → basicnickname → bottleneck / 기준 planmonth → status → operationgroup → site → plant → building → line → basicnickname → bottleneck"
+                      "description": "[NA] (기준표 순서)(order) — 비교 대상 2개 미만"
                     },
                     {
                       "type": "condsum",
-                      "description": "4/15 OK · FAIL 0 · WARN 9 · ERROR 2 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                      "description": "0/15 OK · FAIL 1 · WARN 0 · ERROR 14 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -442,71 +590,79 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 35534,
+                      "duration": 75803,
                       "error": {
-                        "message": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m",
-                        "stack": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131",
+                        "message": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:112:123",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
-                          "column": 131,
-                          "line": 113
+                          "column": 123,
+                          "line": 112
                         },
-                        "snippet": "\u001b[0m \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\n \u001b[90m 116 |\u001b[39m     test\u001b[33m.\u001b[39msetTimeout(\u001b[35m600\u001b[39m_000)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 110 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 123,
+                            "line": 112
+                          },
+                          "message": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  110 |     const s = record(test.info(), 'cond', items);\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n> 112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:112:123"
+                        },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
                             "column": 131,
                             "line": 113
                           },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131"
+                          "message": "Error: 조회조건 판정 불가(ERROR) 14: Div, Plan Month, Ver., _plan_type, Operation group, Site, Plant, Building, Line, Operation, Basic Nickname, Bottleneck, Line Type, Status\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m14\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:05:04.191Z",
+                      "startTime": "2026-11-14T04:45:50.169Z",
                       "annotations": [
                         {
                           "type": "cond",
-                          "description": "[OK] (기준 조회)(search) — call-proc 2"
+                          "description": "[FAIL] (기준 조회)(search) — 조회 call-proc 없음"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Div(DivisionField) — 라벨 [Div | Div.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Plan Month(combo) — 옵션 '202609' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Plan Month(VersionField) — 라벨 [Plan Month] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Ver.(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Ver.(CustomDropdown) — 라벨 [Ver. | Version.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] _plan_type(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] _plan_type(InputField) — 라벨 [Plant | Plan Type | _plan_type] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Operation group(combo) — 옵션 'Electrode' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                          "description": "[ERROR] Operation group(RadioGroup) — 라벨 [Operation group] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Site(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Site(CustomDropdown) — 라벨 [Site] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Plant(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Plant(PlantSiteField) — 라벨 [Plant] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Building(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Building(CustomDropdown) — 라벨 [Building] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Line(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Line(CustomDropdown) — 라벨 [Line] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
@@ -514,11 +670,11 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Basic Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 '' — 팝업 행 선택이 칸에 채워지지 않음(데이터 0건이면 정상)"
+                          "description": "[ERROR] Basic Nickname(ItemField) — 라벨 [Basic Nickname] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Bottleneck(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Bottleneck(CustomDropdown) — 라벨 [Bottleneck] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
@@ -526,19 +682,15 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Status(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Status(CustomDropdown) — 라벨 [Status] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 planmonth → status → site → plant → plant → building → line → operationgroup → basicnickname → bottleneck / 기준 planmonth → status → operationgroup → site → plant → building → line → basicnickname → bottleneck"
+                          "description": "[NA] (기준표 순서)(order) — 비교 대상 2개 미만"
                         },
                         {
                           "type": "condsum",
-                          "description": "4/15 OK · FAIL 0 · WARN 9 · ERROR 2 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다. | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                          "description": "0/15 OK · FAIL 1 · WARN 0 · ERROR 14 · NA 1"
                         }
                       ],
                       "attachments": [
@@ -560,79 +712,87 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
-                        "column": 131,
-                        "line": 113
+                        "column": 123,
+                        "line": 112
                       }
                     },
                     {
                       "workerIndex": 3,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 35491,
+                      "duration": 75309,
                       "error": {
-                        "message": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m",
-                        "stack": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131",
+                        "message": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:112:123",
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
-                          "column": 131,
-                          "line": 113
+                          "column": 123,
+                          "line": 112
                         },
-                        "snippet": "\u001b[0m \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\n \u001b[90m 116 |\u001b[39m     test\u001b[33m.\u001b[39msetTimeout(\u001b[35m600\u001b[39m_000)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 110 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'cond'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 111 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_cond`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 112 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 113 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39merror\u001b[33m,\u001b[39m \u001b[32m`조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 115 |\u001b[39m   test(\u001b[32m'공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ nscm }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 123,
+                            "line": 112
+                          },
+                          "message": "Error: 조회조건 동작 FAIL 1: (기준 조회)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  110 |     const s = record(test.info(), 'cond', items);\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n> 112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                           ^\n  113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:112:123"
+                        },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
                             "column": 131,
                             "line": 113
                           },
-                          "message": "Error: 조회조건 판정 불가(ERROR) 2: Operation, Line Type\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131"
+                          "message": "Error: 조회조건 판정 불가(ERROR) 14: Div, Plan Month, Ver., _plan_type, Operation group, Site, Plant, Building, Line, Operation, Basic Nickname, Bottleneck, Line Type, Status\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m14\u001b[39m\n\n  111 |     await nscm.snapshot(`${MENU}_cond`);\n  112 |     expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n> 113 |     expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                                   ^\n  114 |   });\n  115 |   test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {\n  116 |     test.setTimeout(600_000);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:113:131"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-09T01:05:44.769Z",
+                      "startTime": "2026-11-14T04:47:09.419Z",
                       "annotations": [
                         {
                           "type": "cond",
-                          "description": "[OK] (기준 조회)(search) — call-proc 2"
+                          "description": "[FAIL] (기준 조회)(search) — 조회 call-proc 없음"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Div(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Div(DivisionField) — 라벨 [Div | Div.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Plan Month(combo) — 옵션 '202609' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Plan Month(VersionField) — 라벨 [Plan Month] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Ver.(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Ver.(CustomDropdown) — 라벨 [Ver. | Version.] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] _plan_type(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] _plan_type(InputField) — 라벨 [Plant | Plan Type | _plan_type] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Operation group(combo) — 옵션 'Electrode' → 조회 정상 · 조회 인자 변화 없음(화면 표시용 조건이면 정상 — 배선 확인)"
+                          "description": "[ERROR] Operation group(RadioGroup) — 라벨 [Operation group] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Site(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Site(CustomDropdown) — 라벨 [Site] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Plant(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Plant(PlantSiteField) — 라벨 [Plant] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Building(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Building(CustomDropdown) — 라벨 [Building] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Line(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Line(CustomDropdown) — 라벨 [Line] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
@@ -640,11 +800,11 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Basic Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 '' — 팝업 행 선택이 칸에 채워지지 않음(데이터 0건이면 정상)"
+                          "description": "[ERROR] Basic Nickname(ItemField) — 라벨 [Basic Nickname] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] Bottleneck(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
+                          "description": "[ERROR] Bottleneck(CustomDropdown) — 라벨 [Bottleneck] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
@@ -652,19 +812,15 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Status(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[ERROR] Status(CustomDropdown) — 라벨 [Status] 칸을 찾지 못함 — 라벨 문구/다국어 확인"
                         },
                         {
                           "type": "cond",
-                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 화면 planmonth → status → site → plant → plant → building → line → operationgroup → basicnickname → bottleneck / 기준 planmonth → status → operationgroup → site → plant → building → line → basicnickname → bottleneck"
+                          "description": "[NA] (기준표 순서)(order) — 비교 대상 2개 미만"
                         },
                         {
                           "type": "condsum",
-                          "description": "4/15 OK · FAIL 0 · WARN 9 · ERROR 2 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                          "description": "0/15 OK · FAIL 1 · WARN 0 · ERROR 14 · NA 1"
                         }
                       ],
                       "attachments": [
@@ -686,8 +842,8 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
-                        "column": 131,
-                        "line": 113
+                        "column": 123,
+                        "line": 112
                       }
                     }
                   ],
@@ -701,7 +857,7 @@
             },
             {
               "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
-              "ok": true,
+              "ok": false,
               "tags": [
                 "smoke"
               ],
@@ -711,51 +867,43 @@
                   "annotations": [
                     {
                       "type": "common",
-                      "description": "[OK] Search(조회 버튼)(common) — call-proc 2 · 행 30/1"
+                      "description": "[FAIL] Search(조회 버튼)(common) — 조회 call-proc 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                      "description": "[NA] F5 단축키(조회)(common) — 그리드 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                      "description": "[NA] Sort(F3)(common) — 버튼 없음(hotkeyConfig=false)"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                      "description": "[NA] Filter(F4)(common) — 버튼 없음(hotkeyConfig=false)"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 11"
+                      "description": "[NA] Condition(F6) 조회조건 저장(common) — 버튼 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 11개 중 기간 키 0 (bottleneckFlag, divisionId, divisionType, electrodeType, factoryId, lineId)"
+                      "description": "[WARN] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 없음 — 판정 재료 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                      "description": "[NA] Reset Condition(F10) 조회조건 초기화(common) — 버튼 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                      "description": "[NA] Excel 다운로드(common) — 버튼 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 9개 유지"
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'CapaLobReport_20261109_100653.xlsx' 7084B"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Columns 컬럼 설정(common) — 설정 창 열림·닫힘(X)"
-                    },
-                    {
-                      "type": "common",
-                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                      "description": "[NA] Search Area 조회영역 토글(common) — 스위치 없음"
                     },
                     {
                       "type": "common",
@@ -763,11 +911,7 @@
                     },
                     {
                       "type": "commonsum",
-                      "description": "12/12 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 3건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                      "description": "0/2 OK · FAIL 1 · WARN 1 · ERROR 0 · NA 9"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -777,61 +921,72 @@
                     {
                       "workerIndex": 4,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 28781,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 75198,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:121:121"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:06:24.961Z",
+                      "startTime": "2026-11-14T04:48:28.224Z",
                       "annotations": [
                         {
                           "type": "common",
-                          "description": "[OK] Search(조회 버튼)(common) — call-proc 2 · 행 30/1"
+                          "description": "[FAIL] Search(조회 버튼)(common) — 조회 call-proc 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                          "description": "[NA] F5 단축키(조회)(common) — 그리드 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                          "description": "[NA] Sort(F3)(common) — 버튼 없음(hotkeyConfig=false)"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                          "description": "[NA] Filter(F4)(common) — 버튼 없음(hotkeyConfig=false)"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 11"
+                          "description": "[NA] Condition(F6) 조회조건 저장(common) — 버튼 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 11개 중 기간 키 0 (bottleneckFlag, divisionId, divisionType, electrodeType, factoryId, lineId)"
+                          "description": "[WARN] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 없음 — 판정 재료 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                          "description": "[NA] Reset Condition(F10) 조회조건 초기화(common) — 버튼 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                          "description": "[NA] Excel 다운로드(common) — 버튼 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 9개 유지"
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'CapaLobReport_20261109_100653.xlsx' 7084B"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Columns 컬럼 설정(common) — 설정 창 열림·닫힘(X)"
-                        },
-                        {
-                          "type": "common",
-                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                          "description": "[NA] Search Area 조회영역 토글(common) — 스위치 없음"
                         },
                         {
                           "type": "common",
@@ -839,17 +994,136 @@
                         },
                         {
                           "type": "commonsum",
-                          "description": "12/12 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 3건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                          "description": "0/2 OK · FAIL 1 · WARN 1 · ERROR 0 · NA 9"
                         }
                       ],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 75439,
+                      "error": {
+                        "message": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                        "stack": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:121:121",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                          "column": 121,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mconst\u001b[39m s \u001b[33m=\u001b[39m record(test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[32m'common'\u001b[39m\u001b[33m,\u001b[39m items)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_common`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(s\u001b[33m.\u001b[39mfail\u001b[33m,\u001b[39m \u001b[32m`공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                            "column": 121,
+                            "line": 121
+                          },
+                          "message": "Error: 공통 기능 FAIL 1: Search(조회 버튼)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  119 |     const s = record(test.info(), 'common', items);\n  120 |     await nscm.snapshot(`${MENU}_common`);\n> 121 |     expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);\n      |                                                                                                                         ^\n  122 |   });\n  123 | });\n  124 |\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts:121:121"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-14T04:49:46.887Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[FAIL] Search(조회 버튼)(common) — 조회 call-proc 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] F5 단축키(조회)(common) — 그리드 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Sort(F3)(common) — 버튼 없음(hotkeyConfig=false)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Filter(F4)(common) — 버튼 없음(hotkeyConfig=false)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Condition(F6) 조회조건 저장(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[WARN] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 없음 — 판정 재료 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Reset Condition(F10) 조회조건 초기화(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Excel 다운로드(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Search Area 조회영역 토글(common) — 스위치 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "0/2 OK · FAIL 1 · WARN 1 · ERROR 0 · NA 9"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0108\\artifacts\\SCP0108.smoke-SCP0108-CAPA-70c6c-·Columns·Search-Area·Manual-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0108.smoke.spec.ts",
+                        "column": 121,
+                        "line": 121
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "4ae015fd336d23417c05-8452b8e167379ddbf912",
@@ -864,11 +1138,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-09T01:04:33.650Z",
-    "duration": 143076.687,
-    "expected": 1,
+    "startTime": "2026-11-14T04:41:37.141Z",
+    "duration": 568369.101,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 3,
     "flaky": 0
   }
 }

@@ -1,0 +1,29 @@
+{
+  "id": "DMF0021",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0021] · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0021/__asis-actions__.md · Doc/asisfacts/screens/DMF0021/ · 룰: tools/VibeManager/rules",
+  "start": "2026-11-11T09:42:38+09:00",
+  "end": "2026-11-11T09:55:23+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0021",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "81 DIVISION 에서 CELL_PROD_SITE_ID COLUMN이 비활성 COLUMN입니다. jaehun_cho 계정으로 조회 시 개인화에 저장되어 있더라도 해당 division 에서 제외되는 column은 빠져야 하는데 나오면서 문제가 되는 것 같습니다. 이부분 확인 후 필요 시 보완해주세요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-11T09:55:23+09:00",
+  "changed": []
+}

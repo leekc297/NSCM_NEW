@@ -20,6 +20,7 @@ import json
 import os
 import re
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
 from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -48,6 +49,25 @@ DM_INNER = {
     'BizType': (3, ['DIVISION_ID']), 'UserSiteByEndCustomer': (4, ['DIVISION_ID', 'DEPT_ID', 'END_CUSTOMER']),
     'UserPlantSiteByDivision': (5, ['DIVISION_ID']), 'UserPlantSiteByEndCustomer': (6, ['DIVISION_ID', 'END_CUSTOMER']),
     'EdiSender': (7, []), 'ScmSitebyEndCustomer40': (8, []),
+}
+
+# SSP 조회조건 공통 원천 — DataService.GetSSPInnerTable(열, Filter)(DataService.cs:4176-5257 · 2026-11-11 원문에서 기계 추출):
+#   FoxQuery SSP/Common/BigFilter.xml list_line_ssp 1회 실행(결과셋 27개 · 인자 @GROUP_ID·@USER_ID·@LANGUAGE_CODE)
+#   열 이름 → (결과셋 번호, Filter 키, 중복 제거 열(빈 튜플 = Copy 그대로), 정렬 열). Filter 키 = 쉼표 목록 포함 여부(빈값·'ALL' = 전체)
+#   실측 배경: 콤보 원천 미해석 108행 중 46행(7개 화면)이 이 함수 미등록 → 콤보 AS-IS 실행 대조가 전부 판정필요로 남았다.
+def _ssp(idx, keys=(), dedupe=('CODE',), order='CODE'):
+    return (idx, list(keys), tuple(dedupe), order)
+
+
+SSP_INNER = {
+    'MyDivision': _ssp(0), 'Div_Company': _ssp(1, dedupe=()), 'MyCompanyID': _ssp(2), 'CellTypeGr': _ssp(3), 'MyModelChk': _ssp(4),
+    'SHIPMENT_PERIOD_DAY': _ssp(5, dedupe=()), 'PgmAuthId': _ssp(6, dedupe=()), 'MyDivisionOut40': _ssp(7), 'CHANGE_REASON_CODE_ALL': _ssp(8),
+    'OWMS_STOCK_STATUS': _ssp(9), 'SSP_SHIPMENT_RESULT_TYPE': _ssp(10), 'CHANGE_REQ_DAY': _ssp(11),
+    'Div_CompanyEE': _ssp(12, ['DIVISION_ID'], ('CODE', 'DIVISION_ID')), 'DomExpTypeCode': _ssp(13), 'ElectrodePackageType': _ssp(14),
+    'BuildingForShipMasterElec': _ssp(15, ['DIVISION_ID', 'PLANT_ID'], ('CODE', 'SCM_SITE_ID')), 'SALES_TYPE_CODE': _ssp(16),
+    'CompanyID': _ssp(17, dedupe=(), order='COMPANY_ID'), 'SHIPMENT_STATUS': _ssp(18), 'CHANGE_REQ_TYPE': _ssp(19), 'AllDivision': _ssp(20),
+    'ESS_STOCK_STORAGE_ID': _ssp(21), 'Dept': _ssp(22), 'CHANGE_REQ_APP_DAY': _ssp(23), 'CHANGE_REQ_STATUS': _ssp(24), 'MyDivisionCMM': _ssp(25),
+    'OPERATION_GROUP': _ssp(26),
 }
 
 
@@ -222,6 +242,13 @@ def resolve_source(call, args, cat):
             return call, 'DM_BIGFILTER', col, [], f'GetDMInnerTable 열 {col} 미등록(DataService.cs 원문 확인 후 DM_INNER 등록)'
         idx, keys = DM_INNER[col]
         return call, 'DM_BIGFILTER', col, [('@GROUP_ID', 'UserInfoContext.Current["NowGroupID"]'), ('@USER_ID', 'UserInfoContext.Current.UserId')] \
+            + [(f'Filter.{k}', f'Filter["{k}"]') for k in keys], ''
+    if call == 'DataService.GetSSPInnerTable':
+        col = args[0].strip('"') if args else ''
+        if col not in SSP_INNER:
+            return call, 'SSP_BIGFILTER', col, [], f'GetSSPInnerTable 열 {col} 미등록(DataService.cs 원문 확인 후 SSP_INNER 등록)'
+        idx, keys, _, _ = SSP_INNER[col]
+        return call, 'SSP_BIGFILTER', col, [('@GROUP_ID', 'UserInfoContext.Current["NowGroupID"]'), ('@USER_ID', 'UserInfoContext.Current.UserId')] \
             + [(f'Filter.{k}', f'Filter["{k}"]') for k in keys], ''
     if call.startswith('local:'):
         return local_source(call[6:], args)

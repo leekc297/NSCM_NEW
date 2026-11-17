@@ -1,0 +1,4702 @@
+{
+"MSG00001": {
+"MessageID": "MSG00001",
+"Ko": "모든 항목은 필수 입력입니다.",
+"En": "All entries are mandatory.",
+"Ch": "All entries are mandatory.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00002": {
+"MessageID": "MSG00002",
+"Ko": "{0} 값은 필수 입력입니다",
+"En": "Value {0} is a required input.",
+"Ch": "Value {0} is a required input.",
+"Type": "0201003",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00003": {
+"MessageID": "MSG00003",
+"Ko": "실행중 에러가 발생했습니다.\\n\\r {0}",
+"En": "Error occurred during execution.\\n\\r {0}",
+"Ch": "Error occurred during execution.\\n\\r {0}",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00004": {
+"MessageID": "MSG00004",
+"Ko": "{0}개의 데이터가 저장되었습니다.",
+"En": "{0} data saved.",
+"Ch": "{0} data saved.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00005": {
+"MessageID": "MSG00005",
+"Ko": "변경/추가된 데이터가 없습니다.",
+"En": "No data to save.",
+"Ch": "No data to save.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00006": {
+"MessageID": "MSG00006",
+"Ko": "저장에 실패하였습니다.",
+"En": "Failed to save.",
+"Ch": "Failed to save.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00007": {
+"MessageID": "MSG00007",
+"Ko": "선택한 Spread 가 없습니다.",
+"En": "No Spread is selected.",
+"Ch": "No Spread is selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00008": {
+"MessageID": "MSG00008",
+"Ko": "수정모드가 아니므로 추가할 수 없습니다.",
+"En": "Can not add as it is not in modify mode.",
+"Ch": "Can not add as it is not in modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00009": {
+"MessageID": "MSG00009",
+"Ko": "수정모드가 아니므로 삭제할 수 없습니다.",
+"En": "Can not delete as it is not in modify mode.",
+"Ch": "Can not delete as it is not in modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00010": {
+"MessageID": "MSG00010",
+"Ko": "수정모드가 아니므로 저장할 수 없습니다.",
+"En": "Can not save as it is not in modify mode.",
+"Ch": "Can not save as it is not in modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00011": {
+"MessageID": "MSG00011",
+"Ko": "{0} 에 {1} 인 경우입니다. 맞습니까?",
+"En": "{0} for {1}. Is it right?",
+"Ch": "{0} for {1}. Is it right?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00012": {
+"MessageID": "MSG00012",
+"Ko": "저장하시겠습니까?",
+"En": "Do you want to save it?",
+"Ch": "Do you want to save it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00013": {
+"MessageID": "MSG00013",
+"Ko": "작업중인 데이터가 있습니다. 이 화면을 닫으시겠습니까?",
+"En": "There is data that is being worked on. Do you want to close this screen?",
+"Ch": "There is data that is being worked on. Do you want to close this screen?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00014": {
+"MessageID": "MSG00014",
+"Ko": "조회 되었습니다.",
+"En": "You have been inquired.",
+"Ch": "You have been inquired.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00015": {
+"MessageID": "MSG00015",
+"Ko": "수정 하시겠습니까?",
+"En": "Do you want to correct it?",
+"Ch": "Do you want to correct it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00016": {
+"MessageID": "MSG00016",
+"Ko": "삭제 하시겠습니까?",
+"En": "Do you want to delete it?",
+"Ch": "Do you want to delete it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00017": {
+"MessageID": "MSG00017",
+"Ko": "변경된 사항이 없습니다.",
+"En": "There are no changes.",
+"Ch": "There are no changes.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00018": {
+"MessageID": "MSG00018",
+"Ko": "조회시 오류가 발생하였습니다.",
+"En": "An error has occurred when inquiring.",
+"Ch": "An error has occurred when inquiring.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00019": {
+"MessageID": "MSG00019",
+"Ko": "조회된 데이터가 없습니다.",
+"En": "No data have been retrieved.",
+"Ch": "No data have been retrieved.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00020": {
+"MessageID": "MSG00020",
+"Ko": "저장 하였습니다.",
+"En": "Saved it.",
+"Ch": "Saved it.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00021": {
+"MessageID": "MSG00021",
+"Ko": "체크된 행이 없습니다.",
+"En": "No rows are checked.",
+"Ch": "No rows are checked.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00022": {
+"MessageID": "MSG00022",
+"Ko": "{0} 와 {1} 둘 중에 하나는 필수 입력입니다.",
+"En": "Either {0} or {1} is a required input.",
+"Ch": "Either {0} or {1} is a required input.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00023": {
+"MessageID": "MSG00023",
+"Ko": "불일치 건이 있습니다.",
+"En": "There are inconsistencies.",
+"Ch": "There are inconsistencies.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00024": {
+"MessageID": "MSG00024",
+"Ko": "즐겨찾기에서 제외되었습니다.",
+"En": "Removed from favourites.",
+"Ch": "Removed from favourites.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00025": {
+"MessageID": "MSG00025",
+"Ko": "검색 조건은 {0}글자 이상입니다.",
+"En": "Search criteria are more than {0} characters.",
+"Ch": "Search criteria are more than {0} characters.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00026": {
+"MessageID": "MSG00026",
+"Ko": "저장하지 않은 데이터가 있습니다.",
+"En": "There are unsaved data.",
+"Ch": "There are unsaved data.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00027": {
+"MessageID": "MSG00027",
+"Ko": "수정 하였습니다.",
+"En": "corrections.",
+"Ch": "corrections.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00028": {
+"MessageID": "MSG00028",
+"Ko": "계속하시겠습니까?",
+"En": "Do you want to continue?",
+"Ch": "Do you want to continue?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00029": {
+"MessageID": "MSG00029",
+"Ko": "변경된 내용이 있습니다. 계속 조회 하시겠습니까?",
+"En": "There are changes. Do you want to continue to inquire?",
+"Ch": "There are changes. Do you want to continue to inquire?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00030": {
+"MessageID": "MSG00030",
+"Ko": "{0} 에 대한 선택값이 없습니다.",
+"En": "No selection for {0}.",
+"Ch": "No selection for {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00031": {
+"MessageID": "MSG00031",
+"Ko": "삭제 하였습니다.",
+"En": "deleted it.",
+"Ch": "deleted it.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00032": {
+"MessageID": "MSG00032",
+"Ko": "{0}에 데이터 존재합니다. 데이터 삭제후 처리 가능합니다.",
+"En": "Data exists on {0}. Data can be deleted and processed.",
+"Ch": "Data exists on {0}. Data can be deleted and processed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00033": {
+"MessageID": "MSG00033",
+"Ko": "업로드는 {0}개까지 가능합니다.",
+"En": "Up to {0} uploads are allowed.",
+"Ch": "Up to {0} uploads are allowed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00034": {
+"MessageID": "MSG00034",
+"Ko": "MKT FCST 수량이 입력된 일자가 없습니다. \\n\\r Row 기준으로 하루 이상의 일자에 수량이 입력되어야 합니다.",
+"En": "There is no date when the MKT FCST quantity was entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Ch": "There is no date when the MKT FCST quantity was entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00035": {
+"MessageID": "MSG00035",
+"Ko": "파일업로드가 실패했습니다.",
+"En": "File upload failed.",
+"Ch": "File upload failed.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00036": {
+"MessageID": "MSG00036",
+"Ko": "확장자가 {0}인 파일만 업로드 가능합니다.",
+"En": "Only files with extension {0} can be uploaded.",
+"Ch": "Only files with extension {0} can be uploaded.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00037": {
+"MessageID": "MSG00037",
+"Ko": "입력불가능한 특수문자가 포함되어 있습니다.[{0}]",
+"En": "Contains special characters that can not be typed.[{0}]",
+"Ch": "Contains special characters that can not be typed.[{0}]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00038": {
+"MessageID": "MSG00038",
+"Ko": "동일한 파일명이 존재합니다.",
+"En": "The same filename exists.",
+"Ch": "The same filename exists.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00039": {
+"MessageID": "MSG00039",
+"Ko": "삭제할 파일을 선택해주세요.",
+"En": "Select files to delete.",
+"Ch": "Select files to delete.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00040": {
+"MessageID": "MSG00040",
+"Ko": "전체 조회 후 전체 삭제 가능합니다.",
+"En": "You can delete all data after inquiring all.",
+"Ch": "You can delete all data after inquiring all.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00041": {
+"MessageID": "MSG00041",
+"Ko": "업데이트 대상이 맞지 않습니다.엑셀 파일을 다시 확인하세요.",
+"En": "The update is not eligible.Please check the Excel file again.",
+"Ch": "The update is not eligible.Please check the Excel file again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00042": {
+"MessageID": "MSG00042",
+"Ko": "시스템 오류입니다. 담당자에게 화면 캡쳐해서 시스템 담당자에게 전달하세요.",
+"En": "System error. Capture the screen and pass it on to the system manager.",
+"Ch": "System error. Capture the screen and pass it on to the system manager.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00043": {
+"MessageID": "MSG00043",
+"Ko": "저장시 중복 오류가 발생하였습니다.{0}",
+"En": "A duplicate error occurred when saving.{0}",
+"Ch": "A duplicate error occurred when saving.{0}",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00044": {
+"MessageID": "MSG00044",
+"Ko": "수정시 오류가 발생하였습니다.",
+"En": "Error occurred during modification.",
+"Ch": "Error occurred during modification.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00045": {
+"MessageID": "MSG00045",
+"Ko": "삭제시 오류가 발생하였습니다.",
+"En": "Error occurred during deleting.",
+"Ch": "Error occurred during deleting.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00046": {
+"MessageID": "MSG00046",
+"Ko": "삭제할 데이터가 없습니다.",
+"En": "No data to delete.",
+"Ch": "No data to delete.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00047": {
+"MessageID": "MSG00047",
+"Ko": "존재하지 않는 {0}입니다. ",
+"En": "Not existing {0}.",
+"Ch": "Not existing {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00048": {
+"MessageID": "MSG00048",
+"Ko": "처리가능한 날짜 범위가 아닙니다. {0}",
+"En": "Not a processing date range. {0}",
+"Ch": "Not a processing date range. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00049": {
+"MessageID": "MSG00049",
+"Ko": "유효한 날짜 형식이 아닙니다. {0}",
+"En": "This is not a valid date format. {0}",
+"Ch": "This is not a valid date format. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00050": {
+"MessageID": "MSG00050",
+"Ko": "유효한 숫자 형식이 아닙니다. {0}",
+"En": "This is not a valid numeric format. {0}",
+"Ch": "This is not a valid numeric format. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00051": {
+"MessageID": "MSG00051",
+"Ko": "입력하신 값이 조건에 맞지 않습니다. {0}",
+"En": "The values entered do not meet the conditions. {0}",
+"Ch": "The values entered do not meet the conditions. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00052": {
+"MessageID": "MSG00052",
+"Ko": "입력 가능한 형식이 아닙니다. {0}",
+"En": "It is not an input form. {0}",
+"Ch": "It is not an input form. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00053": {
+"MessageID": "MSG00053",
+"Ko": "첨부 파일 용량 크기가 한도{0}를 초과하였습니다.",
+"En": "Attachment capacity size exceeded the limit {0}.",
+"Ch": "Attachment capacity size exceeded the limit {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00054": {
+"MessageID": "MSG00054",
+"Ko": "복사할 데이터를 선택하십시오.",
+"En": "Select the data to copy.",
+"Ch": "Select the data to copy.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00055": {
+"MessageID": "MSG00055",
+"Ko": "엑셀 업로드 양식이 맞지 않습니다.",
+"En": "Excel upload form does not fit.",
+"Ch": "Excel upload form does not fit.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00056": {
+"MessageID": "MSG00056",
+"Ko": "엑셀 다운로드 완료 되었습니다.",
+"En": "Excel download has been completed.",
+"Ch": "Excel download has been completed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00057": {
+"MessageID": "MSG00057",
+"Ko": "첨부 파일 다운로드 완료하였습니다.",
+"En": "Attachments have been downloaded.",
+"Ch": "Attachments have been downloaded.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00058": {
+"MessageID": "MSG00058",
+"Ko": "첨부 파일 업로드 완료하였습니다.",
+"En": "Attachments have been uploaded successfully",
+"Ch": "Attachments have been uploaded successfully",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00059": {
+"MessageID": "MSG00059",
+"Ko": "조회 후 추가하십시오.",
+"En": "Check before adding.",
+"Ch": "Check before adding.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00060": {
+"MessageID": "MSG00060",
+"Ko": "동일한 {0}이(가) 존재합니다.",
+"En": "The same {0} exists.",
+"Ch": "The same {0} exists.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00060,": {
+"MessageID": "MSG00060,",
+"Ko": "동일한 {0}이(가) 존재합니다.",
+"En": "The same {0} exists.",
+"Ch": "The same {0} exists.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hsj0511"
+},
+"MSG00061": {
+"MessageID": "MSG00061",
+"Ko": "조회 조건을 다시 설정하십시오. {0}",
+"En": "Reset the search conditions. {0}",
+"Ch": "Reset the search conditions. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00062": {
+"MessageID": "MSG00062",
+"Ko": "더 이상 찾을 문자열이 존재하지 않습니다. {0}",
+"En": "There are no more strings to find. {0}",
+"Ch": "There are no more strings to find. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00063": {
+"MessageID": "MSG00063",
+"Ko": "조회 조건이 변경되었습니다.",
+"En": "The search criteria have been changed.",
+"Ch": "The search criteria have been changed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00064": {
+"MessageID": "MSG00064",
+"Ko": "시스템 담당자에게 문의하십시오.",
+"En": "Contact your system representative.",
+"Ch": "Contact your system representative.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00065": {
+"MessageID": "MSG00065",
+"Ko": "다시 조회하십시오.",
+"En": "Please re-inquirement",
+"Ch": "Please re-inquirement",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00066": {
+"MessageID": "MSG00066",
+"Ko": "로그아웃 하시겠습니까?",
+"En": "Do you want to logout?",
+"Ch": "Do you want to logout?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00067": {
+"MessageID": "MSG00067",
+"Ko": "권한 변경을 하시겠습니까?",
+"En": "Do you want to change the authority?",
+"Ch": "Do you want to change the authority?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00068": {
+"MessageID": "MSG00068",
+"Ko": "조회가 취소되었습니다.",
+"En": "The query has been canceled.",
+"Ch": "The query has been canceled.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00069": {
+"MessageID": "MSG00069",
+"Ko": "변경된 사항이 있습니다. 저장 하시겠습니까?",
+"En": "There are changes. Will you save it?",
+"Ch": "There are changes. Will you save it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00070": {
+"MessageID": "MSG00070",
+"Ko": "오늘보다 과거의 일자로 변경할 수 없습니다.",
+"En": "It can not be changed to a date older than today.",
+"Ch": "It can not be changed to a date older than today.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00071": {
+"MessageID": "MSG00071",
+"Ko": "선택된 행이 없습니다.",
+"En": "No rows selected.",
+"Ch": "No rows selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00072": {
+"MessageID": "MSG00072",
+"Ko": "{0} 이하의 값만 입력 가능합니다.",
+"En": "Only values less than or equal to {0} are allowed.",
+"Ch": "Only values less than or equal to {0} are allowed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00073": {
+"MessageID": "MSG00073",
+"Ko": "Assign 하시겠습니까?",
+"En": "Would you like to allocate?",
+"Ch": "Would you like to allocate?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00074": {
+"MessageID": "MSG00074",
+"Ko": "Unassign 하시겠습니까?",
+"En": "Would you like to unassign?",
+"Ch": "Would you like to unassign?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00075": {
+"MessageID": "MSG00075",
+"Ko": "화면은 {0} 개까지 열 수 있습니다.",
+"En": "screens can be opened up to {0}.",
+"Ch": "screens can be opened up to {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00076": {
+"MessageID": "MSG00076",
+"Ko": "기존보다 과거의 일자로 입력할 수 없습니다.",
+"En": "It is not possible to enter a date that is older than the previous one.",
+"Ch": "It is not possible to enter a date that is older than the previous one.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00077": {
+"MessageID": "MSG00077",
+"Ko": "이전 데이터는 모두 삭제됩니다. 계속하시겠습니까? {0}",
+"En": "All previous data is deleted. Would you like to go on? {0}",
+"Ch": "All previous data is deleted. Would you like to go on? {0}",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00078": {
+"MessageID": "MSG00078",
+"Ko": "복사하였습니다.",
+"En": "Copied it.",
+"Ch": "Copied it.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00079": {
+"MessageID": "MSG00079",
+"Ko": "기간을 다시 선택하여 주십시오.",
+"En": "Select period again.",
+"Ch": "Select period again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00080": {
+"MessageID": "MSG00080",
+"Ko": "복사하시겠습니까?",
+"En": "Do you want to copy it?",
+"Ch": "Do you want to copy it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00081": {
+"MessageID": "MSG00081",
+"Ko": "접속 권한이 없습니다. 시스템 담당자에게 문의하십시오.",
+"En": "No access rights. Contact your system manager.",
+"Ch": "No access rights. Contact your system manager.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00082": {
+"MessageID": "MSG00082",
+"Ko": "{0} 건은 삭제할 수 없습니다.",
+"En": "You can not delete {0} cases.",
+"Ch": "You can not delete {0} cases.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00083": {
+"MessageID": "MSG00083",
+"Ko": "조회 조건 {0} 중 하나를 입력하십시오.",
+"En": "Enter one of the search criteria {0}.",
+"Ch": "Enter one of the search criteria {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00084": {
+"MessageID": "MSG00084",
+"Ko": "0보다 큰 정수를 입력하십시오.",
+"En": "Enter an integer greater than 0.",
+"Ch": "Enter an integer greater than 0.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00085": {
+"MessageID": "MSG00085",
+"Ko": "{0} 이상의 값만 입력 가능합니다.",
+"En": "Only values {0} or higher are allowed.",
+"Ch": "Only values {0} or higher are allowed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00086": {
+"MessageID": "MSG00086",
+"Ko": "다시 확인하여 주십시오. {0}",
+"En": "Check again. {0}",
+"Ch": "Check again. {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00087": {
+"MessageID": "MSG00087",
+"Ko": "체크된 열이 없습니다.",
+"En": "No columns are checked.",
+"Ch": "No columns are checked.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00088": {
+"MessageID": "MSG00088",
+"Ko": "{0} 컬럼은 수정만 가능합니다.",
+"En": "Column {0} can only be modified.",
+"Ch": "Column {0} can only be modified.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00089": {
+"MessageID": "MSG00089",
+"Ko": "즐겨찾기에 추가하였습니다.",
+"En": "Added to favorites.",
+"Ch": "Added to favorites.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00090": {
+"MessageID": "MSG00090",
+"Ko": "승인되었습니다.",
+"En": "Approved.",
+"Ch": "Approved.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00091": {
+"MessageID": "MSG00091",
+"Ko": "월 합계가 100 이상 입니다. ",
+"En": "Month totals more than 100.",
+"Ch": "Month totals more than 100.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00092": {
+"MessageID": "MSG00092",
+"Ko": "주 합계가 100 이상 입니다. ",
+"En": "The main total is above 100.",
+"Ch": "The main total is above 100.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00093": {
+"MessageID": "MSG00093",
+"Ko": "{0}을(를) 선택하십시오.",
+"En": "Select {0}.",
+"Ch": "Select {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00094": {
+"MessageID": "MSG00094",
+"Ko": "서식을 포함하시겠습니까?",
+"En": "Do you want to include forms?",
+"Ch": "Do you want to include forms?",
+"Type": "0201002",
+"Button": "0202004",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00095": {
+"MessageID": "MSG00095",
+"Ko": "화면을 더 이상 열 수 없습니다.\\n\\r기존 화면중 하나를 닫고 다시 시도하십시오.",
+"En": "The screen can no longer be opened.Close one of the \\n\\r existing screens and try again.",
+"Ch": "The screen can no longer be opened.Close one of the \\n\\r existing screens and try again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00096": {
+"MessageID": "MSG00096",
+"Ko": "사용 권한이 없습니다.",
+"En": "You do not have permission.",
+"Ch": "You do not have permission.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00097": {
+"MessageID": "MSG00097",
+"Ko": "권한을 가진 Division이 없습니다.",
+"En": "No authority assigned.",
+"Ch": "No authority assigned.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00098": {
+"MessageID": "MSG00098",
+"Ko": "먼저 {0}을(를) 선택하십시오.",
+"En": "First, select {0}.",
+"Ch": "First, select {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00099": {
+"MessageID": "MSG00099",
+"Ko": "{0}은 {1} 보다 클 수 없습니다.",
+"En": "{0} can not be greater than {1}.",
+"Ch": "{0} can not be greater than {1}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00100": {
+"MessageID": "MSG00100",
+"Ko": "저장하지 않고 바로 열겠습니까?",
+"En": "Open it without saving it?",
+"Ch": "Open it without saving it?",
+"Type": "0201002",
+"Button": "0202004",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00101": {
+"MessageID": "MSG00101",
+"Ko": "중첩되는 종료일자가 있습니다.",
+"En": "There are overlapping end dates.",
+"Ch": "There are overlapping end dates.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00102": {
+"MessageID": "MSG00102",
+"Ko": "중첩되는 시작일자가 있습니다.",
+"En": "There is a starting date that overlaps.",
+"Ch": "There is a starting date that overlaps.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00103": {
+"MessageID": "MSG00103",
+"Ko": "동일 기간에 Plant Site가 중복되었습니다.",
+"En": "Plant site was duplicated during the same period.",
+"Ch": "Plant site was duplicated during the same period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00104": {
+"MessageID": "MSG00104",
+"Ko": "동일 기간에 Priority가 중복되었습니다.",
+"En": "Priority was duplicated during the same period.",
+"Ch": "Priority was duplicated during the same period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00105": {
+"MessageID": "MSG00105",
+"Ko": "중첩된 기간이 있습니다.",
+"En": "There are overlapping periods.",
+"Ch": "There are overlapping periods.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00106": {
+"MessageID": "MSG00106",
+"Ko": "기간은 연속적으로 입력하여야 합니다.",
+"En": "Period must be entered consecutively.",
+"Ch": "Period must be entered consecutively.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00107": {
+"MessageID": "MSG00107",
+"Ko": "Priority는 양의 정수입니다.",
+"En": "Priority is a positive integer.",
+"Ch": "Priority is a positive integer.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00108": {
+"MessageID": "MSG00108",
+"Ko": "시작일자가 종료일자보다 늦을 수 없습니다.",
+"En": "The start date can not be later than the end date.",
+"Ch": "The start date can not be later than the end date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00109": {
+"MessageID": "MSG00109",
+"Ko": "읽기 전용입니다.",
+"En": "Read-only.",
+"Ch": "Read-only.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00110": {
+"MessageID": "MSG00110",
+"Ko": "해당 기간에 Priority 1이 없습니다.",
+"En": "Priority 1 is not available for that period.",
+"Ch": "Priority 1 is not available for that period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00111": {
+"MessageID": "MSG00111",
+"Ko": "모듈을 먼저 선택해 주세요 !",
+"En": "Select a module first!",
+"Ch": "Select a module first!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00112": {
+"MessageID": "MSG00112",
+"Ko": "주기를 먼저 선택해 주세요 !",
+"En": "Select Period first!",
+"Ch": "Select Period first!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00113": {
+"MessageID": "MSG00113",
+"Ko": "필수 입력 컬럼이 없습니다.",
+"En": "There are no mandatory input columns.",
+"Ch": "There are no mandatory input columns.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00114": {
+"MessageID": "MSG00114",
+"Ko": "선택하신 Measure는 수정 할 수 없는 Measure입니다.",
+"En": "The selected Measure is a non-modifiable Measure.",
+"Ch": "The selected Measure is a non-modifiable Measure.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00115": {
+"MessageID": "MSG00115",
+"Ko": "Allow Group일 경우 수정모드로 변경할 수 없습니다.",
+"En": "If it is allowed group, it is not possible to change to modify mode.",
+"Ch": "If it is allowed group, it is not possible to change to modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00116": {
+"MessageID": "MSG00116",
+"Ko": "더블클릭하여 BOM Item을 선택한 후 사용하세요!",
+"En": "Double click to select and use the BOM Item!",
+"Ch": "Double click to select and use the BOM Item!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00117": {
+"MessageID": "MSG00117",
+"Ko": "FROM SITE, TO SITE, PRIORITY가 동일한 행이 존재합니다.",
+"En": "The same lines of FROM SITE, TO SITE, PRIORITY exist.",
+"Ch": "The same lines of FROM SITE, TO SITE, PRIORITY exist.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00118": {
+"MessageID": "MSG00118",
+"Ko": "Lead Time에는 음수를 입력 할 수 없습니다.",
+"En": "No negative numbers can be entered in Lead Time.",
+"Ch": "No negative numbers can be entered in Lead Time.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00119": {
+"MessageID": "MSG00119",
+"Ko": "기간은 3개월을 초과할 수 없습니다.",
+"En": "Period shall not exceed 3 months.",
+"Ch": "Period shall not exceed 3 months.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00120": {
+"MessageID": "MSG00120",
+"Ko": "Ship To, Sold To, Rep Y/N는 필수 컬럼입니다",
+"En": "Ship To, Sold To, and Rep Y / N are mandatory columns",
+"Ch": "Ship To, Sold To, and Rep Y / N are mandatory columns",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00121": {
+"MessageID": "MSG00121",
+"Ko": "삭제할 데이터가 포함되어 있습니다. 해당 카테고리에 등록된 메세지와 수신자 정보도 함께 삭제됩니다. \\r\\n계속하시겠습니까?",
+"En": "Contains the data to be deleted. Messages and recipient information that are registered in that category are also deleted. \\r\\n Do you want to continue?",
+"Ch": "Contains the data to be deleted. Messages and recipient information that are registered in that category are also deleted. \\r\\n Do you want to continue?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00122": {
+"MessageID": "MSG00122",
+"Ko": "Main 정보가 MONTH/WEEK인 경우, SUB1과 SUB2는 필수입력사항입니다.",
+"En": "SUB1 and SUB2 are mandatory inputs when the main information is MONTH / WEEK.",
+"Ch": "SUB1 and SUB2 are mandatory inputs when the main information is MONTH / WEEK.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00123": {
+"MessageID": "MSG00123",
+"Ko": "Main 정보가 DAY/RT인 경우, SUB1는 필수입력사항입니다.",
+"En": "If Main information is DAY / RT, SUB1 is a mandatory entry.",
+"Ch": "If Main information is DAY / RT, SUB1 is a mandatory entry.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00124": {
+"MessageID": "MSG00124",
+"Ko": "Main 정보는 필수입력사항입니다.",
+"En": "Main information is mandatory.",
+"Ch": "Main information is mandatory.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00125": {
+"MessageID": "MSG00125",
+"Ko": "버튼을 클릭 하면 메세지가 다시 표시 되지 않습니다.",
+"En": "If you click the button, the message will not be displayed again.",
+"Ch": "If you click the button, the message will not be displayed again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00126": {
+"MessageID": "MSG00126",
+"Ko": "8시간 동안 이벤트가 없어 GSCM 세션이 끊겼습니다.",
+"En": "GSCM System Session Out.There was no event for 8 Hours.",
+"Ch": "GSCM System Session Out.There was no event for 8 Hours.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00127": {
+"MessageID": "MSG00127",
+"Ko": "작업중인 데이터가 있습니다 조회 하시겠습니까?",
+"En": "There are data in operation. Do you want to inquire?",
+"Ch": "There are data in operation. Do you want to inquire?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00128": {
+"MessageID": "MSG00128",
+"Ko": "{0}를 수정 중이어서 조회를 할 수 없습니다.",
+"En": "{0} is being modified, can not inquire.",
+"Ch": "{0} is being modified, can not inquire.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00129": {
+"MessageID": "MSG00129",
+"Ko": "{0}를 수정 중이어서 시트를 변경 할 수 없습니다.",
+"En": "You are modifying {0} and can not change the sheet.",
+"Ch": "You are modifying {0} and can not change the sheet.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00130": {
+"MessageID": "MSG00130",
+"Ko": "{0} 시트를 수정 중이어서 {1} 시트를 수정 할 수 없습니다.",
+"En": "The sheet {0} can not be modified because it is being modified.",
+"Ch": "The sheet {0} can not be modified because it is being modified.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00131": {
+"MessageID": "MSG00131",
+"Ko": "엑셀 파일의 Header 정보 확인 후 재 Upload 하세요!",
+"En": "Check the header information of the Excel file and upload again!",
+"Ch": "Check the header information of the Excel file and upload again!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00132": {
+"MessageID": "MSG00132",
+"Ko": "파일이 존재하지 않습니다. [{0}]",
+"En": "The file does not exist. [{0}]",
+"Ch": "The file does not exist. [{0}]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00133": {
+"MessageID": "MSG00133",
+"Ko": "수정한 내용이 없습니다.",
+"En": "No modifications have been made.",
+"Ch": "No modifications have been made.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00134": {
+"MessageID": "MSG00134",
+"Ko": "날짜 선택 후 입력하세요.",
+"En": "Select a date and enter it.",
+"Ch": "Select a date and enter it.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00135": {
+"MessageID": "MSG00135",
+"Ko": "수정모드가 아니므로 입력할 수 없습니다.",
+"En": "Can not be entered as it is not in modify mode.",
+"Ch": "Can not be entered as it is not in modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00136": {
+"MessageID": "MSG00136",
+"Ko": "동일 구간에 하나의 Y만 가능합니다.",
+"En": "Only one Y is possible in the same bucket.",
+"Ch": "Only one Y is possible in the same bucket.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00137": {
+"MessageID": "MSG00137",
+"Ko": "전 작업이 아직 실행 중입니다.",
+"En": "All operations are still in progress.",
+"Ch": "All operations are still in progress.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00138": {
+"MessageID": "MSG00138",
+"Ko": "라인[{0}] : 중복된 데이타입니다.",
+"En": "Line [{0}] : Duplicate data.",
+"Ch": "Line [{0}] : Duplicate data.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00139": {
+"MessageID": "MSG00139",
+"Ko": "Sort 상태에서는 수정모드를 할 수 없습니다.",
+"En": "Modification mode is not allowed in the Sort state.",
+"Ch": "Modification mode is not allowed in the Sort state.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00140": {
+"MessageID": "MSG00140",
+"Ko": "수정모드에서는 Sort를 할 수 없습니다.",
+"En": "Sort is not allowed in modify mode.",
+"Ch": "Sort is not allowed in modify mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00141": {
+"MessageID": "MSG00141",
+"Ko": "FCST 입력 여부가 설정된 구간이 없습니다. \\n\\r Row 기준으로 하나 이상의 일자에 Y/N이 입력되어야 합니다.",
+"En": "Check if the target date is set.",
+"Ch": "Check if the target date is set.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00142": {
+"MessageID": "MSG00142",
+"Ko": "Edit Mode 에서는 수행할 수 없습니다.",
+"En": "No alterations are allowed.",
+"Ch": "No alterations are allowed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00143": {
+"MessageID": "MSG00143",
+"Ko": "매출계획 생성이 완료되었습니다. [Divison ID : {0} ] {1}",
+"En": "Batch operation completed. [Divison ID : {0}] {1}",
+"Ch": "Batch operation completed. [Divison ID : {0}] {1}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00144": {
+"MessageID": "MSG00144",
+"Ko": "Edit Mode 에서만 수행이 가능합니다.",
+"En": "It can be executed in the change mode.",
+"Ch": "It can be executed in the change mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00145": {
+"MessageID": "MSG00145",
+"Ko": "전체 Price를 재계산 하시겠습니까?",
+"En": "Do you want to set all of KOR or USD existed?",
+"Ch": "Do you want to set all of KOR or USD existed?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00146": {
+"MessageID": "MSG00146",
+"Ko": "라인 [{0}] 날짜(Daily)가 값이 없습니다.",
+"En": "The line [{0}] date has no value.",
+"Ch": "The line [{0}] date has no value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00147": {
+"MessageID": "MSG00147",
+"Ko": "ESS 혹은 ESS를 포함할 때 프로젝트 코드나 모델 코드는 3자리 이상이어야 합니다.",
+"En": "It Should be more 3 digit of Project Code or Model Code when selecting ESS or All inclueded ESS.",
+"Ch": "It Should be more 3 digit of Project Code or Model Code when selecting ESS or All inclueded ESS.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00148": {
+"MessageID": "MSG00148",
+"Ko": "SQL구문이 확인되었습니다.",
+"En": "The SQL syntax has been verified.",
+"Ch": "The SQL syntax has been verified.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00149": {
+"MessageID": "MSG00149",
+"Ko": "Rep Yn = Y 인 데이터 동일 Sales Site 기준으로 하나만 존재할 수 있습니다.",
+"En": "Only one Rep Yn=Y in data can exist based on the same sales site.",
+"Ch": "Only one Rep Yn=Y in data can exist based on the same sales site.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00150": {
+"MessageID": "MSG00150",
+"Ko": "Customer PSI 수량이 입력된 일자가 없습니다. \\n\\r Row 기준으로 하루 이상의 일자에 수량이 입력되어야 합니다.",
+"En": "Customer PSI quantity has not been entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Ch": "Customer PSI quantity has not been entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00151": {
+"MessageID": "MSG00151",
+"Ko": "Manual Cutoff가 완료되었습니다.[Divison ID : {0} ] {1}",
+"En": "Manual Cutoff has been completed.[Divison ID : {0}] {1}",
+"Ch": "Manual Cutoff has been completed.[Divison ID : {0}] {1}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00152": {
+"MessageID": "MSG00152",
+"Ko": "Customer FCST 수량이 입력된 일자가 없습니다. \\n\\r Row 기준으로 하루 이상의 일자에 수량이 입력되어야 합니다.",
+"En": "No Customer FCST quantity has been entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Ch": "No Customer FCST quantity has been entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00153": {
+"MessageID": "MSG00153",
+"Ko": "왼쪽에 필요한 정보를 입력하십시오.",
+"En": "Fill up your information at the left side.",
+"Ch": "Fill up your information at the left side.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00154": {
+"MessageID": "MSG00154",
+"Ko": "User Name (Department) 존재하지 않아 권한 신청할 수 없습니다.",
+"En": "User Name does not exist to apply for permission.",
+"Ch": "User Name does not exist to apply for permission.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00155": {
+"MessageID": "MSG00155",
+"Ko": "조회 조건이 저장되었습니다.",
+"En": "Query criteria has been saved.",
+"Ch": "Query criteria has been saved.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00156": {
+"MessageID": "MSG00156",
+"Ko": "해당프로젝트에 연결된 모델이 없습니다.  프로젝트 모델 연결 정보를 확인해주세요.",
+"En": "There are no models associated with the project. Please check the project model connection information.",
+"Ch": "There are no models associated with the project. Please check the project model connection information.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00157": {
+"MessageID": "MSG00157",
+"Ko": "저장시 중복 오류가 발생하였습니다. : [Division], [Sales Site], [Customer PJT], [Customer MODEL]",
+"En": "Duplicate error occurred during save. : [Division], [Sales Site], [Customer PJT], [Customer MODEL]",
+"Ch": "Duplicate error occurred during save. : [Division], [Sales Site], [Customer PJT], [Customer MODEL]",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00158": {
+"MessageID": "MSG00158",
+"Ko": "권한이 신청되었습니다.",
+"En": "Permission has been requested.",
+"Ch": "Permission has been requested.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00159": {
+"MessageID": "MSG00159",
+"Ko": "Input Status가 Completed일때만 입력이 가능합니다.",
+"En": "Input is only possible when Input Status is Completed.",
+"Ch": "Input is only possible when Input Status is Completed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00160": {
+"MessageID": "MSG00160",
+"Ko": "{0} 이하의 값만 입력할 수 있습니다.",
+"En": "You can input a digit under {0}.",
+"Ch": "You can input a digit under {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00161": {
+"MessageID": "MSG00161",
+"Ko": "더블클릭하여 {0}을 선택한 후 사용하세요!",
+"En": "Double click to select the {0} and then use it!",
+"Ch": "Double click to select the {0} and then use it!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00162": {
+"MessageID": "MSG00162",
+"Ko": "Sort 후에는 조회 후 수정모드로 가능합니다.",
+"En": "After Sort, you can inquire and modify the mode.",
+"Ch": "After Sort, you can inquire and modify the mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "Admin"
+},
+"MSG00163": {
+"MessageID": "MSG00163",
+"Ko": "종료 하시겠습니까?",
+"En": "Do you want to exit?",
+"Ch": "Do you want to exit?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00164": {
+"MessageID": "MSG00164",
+"Ko": "조회 기간은 3년 이상 설정 할 수 없습니다.",
+"En": "Searching period can't be set more than 3 years.",
+"Ch": "Searching period can't be set more than 3 years.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songgolmea"
+},
+"MSG00165": {
+"MessageID": "MSG00165",
+"Ko": "입력할 수 있는 자리수를 초과하였습니다.",
+"En": "You have exceeded the number of digits you can enter.",
+"Ch": "You have exceeded the number of digits you can enter.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00166": {
+"MessageID": "MSG00166",
+"Ko": "하나의 SITE에는 두가지 이상의 SUMMARY BUCKET TYPE(DAILY, WEEKLY, MONTHLY)이 설정 될 수 없습니다.\\n\\r기존에 입력된 SUMMARY BUCKET TYPE에 대해 각 날짜별 N으로 저장하여 주십시오.",
+"En": "No more than one SUMMARY BUCKET (DAILY, WEEKLY, MONTHLY) can be set on one SITE.\\ n\\r Save the previously entered SUMMARY BUCKET TYPE for each day N.",
+"Ch": "No more than one SUMMARY BUCKET (DAILY, WEEKLY, MONTHLY) can be set on one SITE.\\ n\\r Save the previously entered SUMMARY BUCKET TYPE for each day N.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songgolmea"
+},
+"MSG00167": {
+"MessageID": "MSG00167",
+"Ko": "잘못된 도시코드입니다.",
+"En": "Invalid city code.",
+"Ch": "Invalid city code.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00168": {
+"MessageID": "MSG00168",
+"Ko": "Outsourcing Vendor는 Location을 등록할 수 없습니다.",
+"En": "Outsourcing Vendor locations can not be registered.",
+"Ch": "Outsourcing Vendor locations can not be registered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00169": {
+"MessageID": "MSG00169",
+"Ko": "{0} 날짜만 편집할 수 있습니다.",
+"En": "You can edit the only {0} date.",
+"Ch": "You can edit the only {0} date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00170": {
+"MessageID": "MSG00170",
+"Ko": "이전 Plan은 편집할 수 없습니다.",
+"En": "You can not edit the old Plan.",
+"Ch": "You can not edit the old Plan.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00171": {
+"MessageID": "MSG00171",
+"Ko": "조회 시작일은 Plan Date보다 크거나 같아야 합니다.",
+"En": "Begin Date is early or equal to Plan Date.",
+"Ch": "Begin Date is early or equal to Plan Date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00172": {
+"MessageID": "MSG00172",
+"Ko": "최대 조회일은 From Date + {0} 입니다.",
+"En": "Maximum Period is From Date + {0}.",
+"Ch": "Maximum Period is From Date + {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00173": {
+"MessageID": "MSG00173",
+"Ko": "확정 출하 계획 변경 요청이 완료되었습니다.",
+"En": "Your confirmed shipment plan change request has been completed.",
+"Ch": "Your confirmed shipment plan change request has been completed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00174": {
+"MessageID": "MSG00174",
+"Ko": "이미 출하 계획 변경 요청이 완료되었습니다.",
+"En": "You have already requested to change your shipment plan",
+"Ch": "You have already requested to change your shipment plan",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00175": {
+"MessageID": "MSG00175",
+"Ko": "{0}은(는) 0보다 큰 정수를 입력하십시오.",
+"En": "{0} must be an integer greater than 0.",
+"Ch": "{0} must be an integer greater than 0.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songgolmea"
+},
+"MSG00176": {
+"MessageID": "MSG00176",
+"Ko": "Confirm 상태에서만 변경 요청이 가능합니다.",
+"En": "Change requests can only be made in the Confirm state.",
+"Ch": "Change requests can only be made in the Confirm state.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00177": {
+"MessageID": "MSG00177",
+"Ko": "Module/Car는 0보다 큰 정수이여야만 합니다.\\n\\rCell/Car, Cell/Module 수량을 다시 입력 하십시오.",
+"En": "Module/Car must have an integer greater than 0.\\n\\rPlease re-enter the Cell/Car, Cell/Module quantity.",
+"Ch": "Module/Car must have an integer greater than 0.\\n\\rPlease re-enter the Cell/Car, Cell/Module quantity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songgolmea"
+},
+"MSG00178": {
+"MessageID": "MSG00178",
+"Ko": "다른 사용자가 출하 계획 변경 요청을 하였습니다.",
+"En": "Another user made a request to change the shipping plan.",
+"Ch": "Another user made a request to change the shipping plan.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00179": {
+"MessageID": "MSG00179",
+"Ko": "{0} Sales Site 에서  {1} Ship-To Code가 이미 사용중입니다.",
+"En": "{1} Ship-To Code is already in use on {0} Sales Site.",
+"Ch": "{1} Ship-To Code is already in use on {0} Sales Site.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songgolmea"
+},
+"MSG00180": {
+"MessageID": "MSG00180",
+"Ko": "실행시킨 플랜이 있습니다.  종료하시겠습니까?",
+"En": "There's the Plan you excute. Do you want to exit?",
+"Ch": "There's the Plan you excute. Do you want to exit?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00181": {
+"MessageID": "MSG00181",
+"Ko": "Reject Reason을 입력하세요.",
+"En": "Please enter Reject Reason.",
+"Ch": "Please enter Reject Reason.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00182": {
+"MessageID": "MSG00182",
+"Ko": "수정할 수 없는 플랜입니다.",
+"En": "This Plan can not be modified.",
+"Ch": "This Plan can not be modified.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kaiser99"
+},
+"MSG00183": {
+"MessageID": "MSG00183",
+"Ko": "실행하시겠습니까?",
+"En": "Do you want to run?",
+"Ch": "Do you want to run?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00184": {
+"MessageID": "MSG00184",
+"Ko": "Confirm하시겠습니까?",
+"En": "Do you want to confirm?",
+"Ch": "Do you want to confirm?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00185": {
+"MessageID": "MSG00185",
+"Ko": "에러종료합니다. 실행하시겠습니까?",
+"En": "The Plan will be terminated of the Error Status. Do you want to run?",
+"Ch": "The Plan will be terminated of the Error Status. Do you want to run?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00186": {
+"MessageID": "MSG00186",
+"Ko": "Add Date 버튼으로만 추가가 가능합니다.",
+"En": "It can be added only with the Add Date button.",
+"Ch": "It can be added only with the Add Date button.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00187": {
+"MessageID": "MSG00187",
+"Ko": "추가한 Shipment Date보다 작거나 같은 날짜를 추가할 수 없습니다.",
+"En": "You can not add a date that is less than or equal to the Shipment Date you added.",
+"Ch": "You can not add a date that is less than or equal to the Shipment Date you added.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00188": {
+"MessageID": "MSG00188",
+"Ko": "확정 출하 계획 변경 요청을 하시겠습니까?",
+"En": "Are you sure you want to confirm the shipping plan change requests?",
+"Ch": "Are you sure you want to confirm the shipping plan change requests?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00189": {
+"MessageID": "MSG00189",
+"Ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+"En": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+"Ch": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00190": {
+"MessageID": "MSG00190",
+"Ko": "요청하신 내용을 승인 하시겠습니까?",
+"En": "Are you sure you want to approve your request?",
+"Ch": "Are you sure you want to approve your request?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00191": {
+"MessageID": "MSG00191",
+"Ko": "요청하신 내용을 반려 하시겠습니까?",
+"En": "Are you sure you want to Reject?",
+"Ch": "Are you sure you want to Reject?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00192": {
+"MessageID": "MSG00192",
+"Ko": "요청하신 내용을 자기반려 하시겠습니까?",
+"En": "Are you sure you want to your request Self Reject?",
+"Ch": "Are you sure you want to your request Self Reject?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00193": {
+"MessageID": "MSG00193",
+"Ko": "{0} 초과의 값만 입력 가능합니다.",
+"En": "You can only enter values above {0}.",
+"Ch": "You can only enter values above {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00194": {
+"MessageID": "MSG00194",
+"Ko": "변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.",
+"En": "Change requests are possible from the current D + {0} ship date.",
+"Ch": "Change requests are possible from the current D + {0} ship date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00195": {
+"MessageID": "MSG00195",
+"Ko": "취소하시겠습니까?",
+"En": "Are you sure you want to cancel?",
+"Ch": "Are you sure you want to cancel?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00196": {
+"MessageID": "MSG00196",
+"Ko": "선택한 일자를 추가하시겠습니까?",
+"En": "Do you want to add the selected date?",
+"Ch": "Do you want to add the selected date?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00197": {
+"MessageID": "MSG00197",
+"Ko": "하기 ERP ISSUE로 인해 처리할 수 없습니다.  \\n\\rERP 해결 후 재처리 바랍니다. \\n\\r{0}",
+"En": "ERP can not be processed due to ISSUE. \\n\\rPlease fix the ERP and reprocess it. \\n\\r{0}",
+"Ch": "ERP can not be processed due to ISSUE. \\n\\rPlease fix the ERP and reprocess it. \\n\\r{0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00198": {
+"MessageID": "MSG00198",
+"Ko": "최초 선택된 항목은 삭제할 수 없습니다. \\n\\r삭제할려면 전체 취소하고 재 진행 하시기 바랍니다.",
+"En": "The first selected item can not be deleted. \\n\\rIf you want to delete it, cancel it all and try again.",
+"Ch": "The first selected item can not be deleted. \\n\\rIf you want to delete it, cancel it all and try again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00199": {
+"MessageID": "MSG00199",
+"Ko": "작업중인 데이터가 있습니다. 작업 완료후 사용하세요.",
+"En": "There is data in operation. Use after work is completed.",
+"Ch": "There is data in operation. Use after work is completed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00200": {
+"MessageID": "MSG00200",
+"Ko": "변경 요청 출하일이 현재일 기준 D+{0} 이전은 승인 할 수 없습니다. \\n\\r반려 후 다시 요청하시기 바랍니다.",
+"En": "You can not approve the change request shipping date to D + {0} on the current day. \\n\\rPlease request again after Reject.",
+"Ch": "You can not approve the change request shipping date to D + {0} on the current day. \\n\\rPlease request again after Reject.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00201": {
+"MessageID": "MSG00201",
+"Ko": "현재일 기준 D+{0} 이전은 요청 할 수 없습니다. \\n\\r삭제 후 다시 요청하시기 바랍니다.",
+"En": "Current D + {0} days can not be requested. \\n\\rPlease delete and request again.",
+"Ch": "Current D + {0} days can not be requested. \\n\\rPlease delete and request again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00202": {
+"MessageID": "MSG00202",
+"Ko": "0보다 큰 수를 입력하십시오.",
+"En": "Enter a number greater than 0.",
+"Ch": "Enter a number greater than 0.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00203": {
+"MessageID": "MSG00203",
+"Ko": "{0}~{1} 사이의 수를 입력하세요.",
+"En": "Please enter a number between {0} and {1}.",
+"Ch": "Please enter a number between {0} and {1}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00204": {
+"MessageID": "MSG00204",
+"Ko": "시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. \\n\\rRequest No : {0}",
+"En": "system error. Capture the screen and send it to the system administrator. \\n\\rRequest No : {0}",
+"Ch": "system error. Capture the screen and send it to the system administrator. \\n\\rRequest No : {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00205": {
+"MessageID": "MSG00205",
+"Ko": "Modeling ID  또는 Plan Type이 없습니다. 재조회 후 다시 실행시켜 주세요",
+"En": "There is no Modeling ID or Plan Type. Please re-search and try again.",
+"Ch": "There is no Modeling ID or Plan Type. Please re-search and try again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00206": {
+"MessageID": "MSG00206",
+"Ko": "Target-Plan(Amend)을 재계산하시겠습니까?",
+"En": "Do you want to recalculate Target-Plan (Amend)?",
+"Ch": "Do you want to recalculate Target-Plan (Amend)?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00207": {
+"MessageID": "MSG00207",
+"Ko": "기 확정된 내용은 변경요청 절차로 진행 바랍니다.",
+"En": "Proceed with the change request process for the confirmed shipment.",
+"Ch": "Proceed with the change request process for the confirmed shipment.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00208": {
+"MessageID": "MSG00208",
+"Ko": "Target-Plan(Amend) 재계산이 완료되었습니다.",
+"En": "Target-Plan (Amend) Recalculation is complete.",
+"Ch": "Target-Plan (Amend) Recalculation is complete.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00209": {
+"MessageID": "MSG00209",
+"Ko": "{0}은 {1} 이하 입니다.",
+"En": "{0} is less than {1}.",
+"Ch": "{0} is less than {1}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "pasun2"
+},
+"MSG00210": {
+"MessageID": "MSG00210",
+"Ko": "동일한 EndCustomer, SalesSite, Model에 대하여 중복저장이 불가합니다.",
+"En": "Duplicate storage is not possible for the same EndCustomer, SalesSite, and Model",
+"Ch": "Duplicate storage is not possible for the same EndCustomer, SalesSite, and Model",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "songkeeho"
+},
+"MSG00211": {
+"MessageID": "MSG00211",
+"Ko": "해당 Valid는 수정할 수 없습니다.",
+"En": "Can not modify its Valid.",
+"Ch": "Can not modify its Valid.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00212": {
+"MessageID": "MSG00212",
+"Ko": "중첩되는 종료일자가 있습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "There are overlapping end dates.\\n\\rSearch the list and enter it again.",
+"Ch": "There are overlapping end dates.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00213": {
+"MessageID": "MSG00213",
+"Ko": "중첩되는 시작일자가 있습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "There is a starting date that overlaps.\\n\\rSearch the list and enter it again.",
+"Ch": "There is a starting date that overlaps.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00214": {
+"MessageID": "MSG00214",
+"Ko": "동일 기간에 Plant Site가 중복되었습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "Plant site was duplicated during the same period.\\n\\rSearch the list and enter it again.",
+"Ch": "Plant site was duplicated during the same period.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00215": {
+"MessageID": "MSG00215",
+"Ko": "동일 기간에 Priority가 중복되었습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "Priority was duplicated during the same period.\\n\\rSearch the list and enter it again.",
+"Ch": "Priority was duplicated during the same period.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00216": {
+"MessageID": "MSG00216",
+"Ko": "중첩된 기간이 있습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "There are overlapping periods.\\n\\rSearch the list and enter it again.",
+"Ch": "There are overlapping periods.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00217": {
+"MessageID": "MSG00217",
+"Ko": "기간은 연속적으로 입력하여야 합니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "Period must be entered consecutively.\\n\\rSearch the list and enter it again.",
+"Ch": "Period must be entered consecutively.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00218": {
+"MessageID": "MSG00218",
+"Ko": "Priority는 양의 정수입니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "Priority is a positive integer.\\n\\rSearch the list and enter it again.",
+"Ch": "Priority is a positive integer.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00219": {
+"MessageID": "MSG00219",
+"Ko": "시작일자가 종료일자보다 늦을 수 없습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "The start date can not be later than the end date.\\n\\rSearch the list and enter it again.",
+"Ch": "The start date can not be later than the end date.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00220": {
+"MessageID": "MSG00220",
+"Ko": "해당 기간에 Priority 1이 없습니다.\\n\\r리스트 확인 후 입력하십시오.",
+"En": "Priority 1 is not available for that period.\\n\\rSearch the list and enter it again.",
+"Ch": "Priority 1 is not available for that period.\\n\\rSearch the list and enter it again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00221": {
+"MessageID": "MSG00221",
+"Ko": "계획변경은 당일까지 요청완료 하지 않을 경우 \\n\\r요청이 자동 취소됩니다. \\n\\r계획변경요청을 하시겠습니까?",
+"En": "If the plan change is not completed by the same day, \\n\\rthe request will be automatically canceled. \\n\\rDo you want to request a change of plan?",
+"Ch": "If the plan change is not completed by the same day, \\n\\rthe request will be automatically canceled. \\n\\rDo you want to request a change of plan?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00222": {
+"MessageID": "MSG00222",
+"Ko": "선택할 수 없습니다. Departure Days를 확인하여 주십시오.",
+"En": "Can not be selected. Please check Departure Days.",
+"Ch": "Can not be selected. Please check Departure Days.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00223": {
+"MessageID": "MSG00223",
+"Ko": "저장할 수 없습니다. Departure Days를 확인하여 주십시오.",
+"En": "Can not save. Please check Departure Days",
+"Ch": "Can not save. Please check Departure Days",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00224": {
+"MessageID": "MSG00224",
+"Ko": "Outsourcing Vendor만 Location(OSP)을 등록할 수 있습니다.",
+"En": "Only Outsourcing Vendors can register Location (OSP).",
+"Ch": "Only Outsourcing Vendors can register Location (OSP).",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00225": {
+"MessageID": "MSG00225",
+"Ko": "실적 수량보다 작은 숫자를 넣을 수 없습니다.",
+"En": "Input greater than Sales Result",
+"Ch": "Input greater than Sales Result",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "herosson"
+},
+"MSG00226": {
+"MessageID": "MSG00226",
+"Ko": "선택한 PLANT SITE에 해당하는 외주 PACKER ITEM이 등록되어 있지 않습니다.",
+"En": "Outsourcing Packer Item corresponding to selected PLANT SITE is not registered.",
+"Ch": "Outsourcing Packer Item corresponding to selected PLANT SITE is not registered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00227": {
+"MessageID": "MSG00227",
+"Ko": "INSERT 모드에서는 저장 후 Bucket 변경이 가능합니다.",
+"En": "In INSERT mode, you can change the Bucket after saving.",
+"Ch": "In INSERT mode, you can change the Bucket after saving.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00228": {
+"MessageID": "MSG00228",
+"Ko": "설정된 확정기간이 없어 편집할 수 없습니다.",
+"En": "You can not edit because there is no period of ship frozen",
+"Ch": "You can not edit because there is no period of ship frozen",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00229": {
+"MessageID": "MSG00229",
+"Ko": "필터 설정을 해제한 이후에 입력 가능합니다.",
+"En": "It is possible to input after disabling filter setting.",
+"Ch": "It is possible to input after disabling filter setting.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00230": {
+"MessageID": "MSG00230",
+"Ko": "저장할 수 없습니다. Capacity Rate를 확인하여 주십시오.",
+"En": "Can not save. Please check Total Capacity Rate.",
+"Ch": "Can not save. Please check Total Capacity Rate.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00231": {
+"MessageID": "MSG00231",
+"Ko": "이미 해당 모델의 생산계획이 등록되어 있습니다.",
+"En": "Production plan for this model is already registered.",
+"Ch": "Production plan for this model is already registered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00232": {
+"MessageID": "MSG00232",
+"Ko": "해당 라인의 Tact Time이 등록되어 있지 않습니다.",
+"En": "The Tact Time for this line is not registered.",
+"Ch": "The Tact Time for this line is not registered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00233": {
+"MessageID": "MSG00233",
+"Ko": "Insert한 Row는 최소 1개의 값을 등록해야 합니다.",
+"En": "Inserted Row must register at least one value.",
+"Ch": "Inserted Row must register at least one value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00234": {
+"MessageID": "MSG00234",
+"Ko": "해당 아이템으로 조회된 데이터가 없습니다.",
+"En": "No data has been inquired for this item.",
+"Ch": "No data has been inquired for this item.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00235": {
+"MessageID": "MSG00235",
+"Ko": "BOM 등록하시기 바랍니다.",
+"En": "Please check the registration of BOM.",
+"Ch": "Please check the registration of BOM.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00236": {
+"MessageID": "MSG00236",
+"Ko": "Project Route 혹은 BOM 등록하시기 바랍니다.",
+"En": "Please check project Route or BOM registration.",
+"Ch": "Please check project Route or BOM registration.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00237": {
+"MessageID": "MSG00237",
+"Ko": "Project Route 등록하시기 바랍니다.",
+"En": "Please check project Route registration.",
+"Ch": "Please check project Route registration.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00238": {
+"MessageID": "MSG00238",
+"Ko": "BOD 등록하시기 바랍니다.",
+"En": "Please check the registration of BOD.",
+"Ch": "Please check the registration of BOD.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00239": {
+"MessageID": "MSG00239",
+"Ko": "Project Route 혹은 BOD 의 기간을 올바로 등록하시기 바랍니다.",
+"En": "Please check if Project Route or BOD period is registered correctly.",
+"Ch": "Please check if Project Route or BOD period is registered correctly.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00240": {
+"MessageID": "MSG00240",
+"Ko": "Distribute Route 항차를 올바로 등록하시기 바랍니다.",
+"En": "Please check if the Distribution Route is registered correctly.",
+"Ch": "Please check if the Distribution Route is registered correctly.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00241": {
+"MessageID": "MSG00241",
+"Ko": "Tact Time, Outsourcing Capacity 등록하시기 바랍니다.",
+"En": "Please Check if you have registered Tact Time and Outsourcing Capacity.",
+"Ch": "Please Check if you have registered Tact Time and Outsourcing Capacity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00242": {
+"MessageID": "MSG00242",
+"Ko": "Plan 시작일자보다 이른 Demand Due Date를 확인하시기 바랍니다.",
+"En": "Please check the Demand Date earlier than the Plan start date.",
+"Ch": "Please check the Demand Date earlier than the Plan start date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00243": {
+"MessageID": "MSG00243",
+"Ko": "Plan 마지막일자보다 늦은 Demand Due Date를 확인하시기 바랍니다.",
+"En": "Please check the Demand Date later than the last date of the plan.",
+"Ch": "Please check the Demand Date later than the last date of the plan.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00244": {
+"MessageID": "MSG00244",
+"Ko": "Item Type이 제품(P) 혹은 반제품(H)일 경우만 추가할 수 있습니다.",
+"En": "Item Type must be Product (P) or Semi-Product (H).",
+"Ch": "Item Type must be Product (P) or Semi-Product (H).",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00245": {
+"MessageID": "MSG00245",
+"Ko": "Tact Time 등록하시기 바랍니다.",
+"En": "Please check the registration of Tact Time.",
+"Ch": "Please check the registration of Tact Time.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00246": {
+"MessageID": "MSG00246",
+"Ko": "{0} 검색 조건은 {1}글자 이상입니다.",
+"En": "{0} search base must be at least {1} character.",
+"Ch": "{0} search base must be at least {1} character.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00247": {
+"MessageID": "MSG00247",
+"Ko": "동일 SO번호로 생성된 다른 건이 존재합니다.\\n\\r변경은 SO번호기준으로 동일하게 변경해야 합니다.\\n\\r[ SO NO : {0} ]",
+"En": "There other cases SO generated by the same number.\\n\\rMake the same changes based on the SO number.\\n\\r[ SO NO : {0} ]",
+"Ch": "There other cases SO generated by the same number.\\n\\rMake the same changes based on the SO number.\\n\\r[ SO NO : {0} ]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00248": {
+"MessageID": "MSG00248",
+"Ko": "다른 사용자가 출하 계획 변경 요청을 한 ConfirmID가 존재합니다.\\n\\r[ CONFIRM ID : {0} ]",
+"En": "ConfirmID exists when another user makes a request to change the shipment plan.\\n\\r[ CONFIRM ID : {0} ]",
+"Ch": "ConfirmID exists when another user makes a request to change the shipment plan.\\n\\r[ CONFIRM ID : {0} ]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00249": {
+"MessageID": "MSG00249",
+"Ko": "확정계획이 삭제된(Qty:0) Confirm ID가 있습니다.\\n\\r재 조회하여 최신정보 확인 후 다시 시도 바랍니다.\\n\\r[ Confirm ID : {0} ]",
+"En": "Confirm ID has been deleted (Qty: 0).\\n\\rPlease check again and try again.\\n\\r[ Confirm ID : {0} ]",
+"Ch": "Confirm ID has been deleted (Qty: 0).\\n\\rPlease check again and try again.\\n\\r[ Confirm ID : {0} ]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00250": {
+"MessageID": "MSG00250",
+"Ko": "동일 기간에 Item이 중복되었습니다.",
+"En": "Item was duplicated during the same period.",
+"Ch": "Item was duplicated during the same period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00251": {
+"MessageID": "MSG00251",
+"Ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+"En": "This user does not have permission to the SSP Planner.\\n\\rUser ID : {0}",
+"Ch": "This user does not have permission to the SSP Planner.\\n\\rUser ID : {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "addio777"
+},
+"MSG00252": {
+"MessageID": "MSG00252",
+"Ko": "선택된 일자가 없습니다.\\n\\rFix/Unfix할 일자를 선택하여 주세요.",
+"En": "No date selected.Select \\n\\rFix/Unfix date.",
+"Ch": "No date selected.Select \\n\\rFix/Unfix date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00253": {
+"MessageID": "MSG00253",
+"Ko": "From Site와 To Site는 동일할 수 없습니다.",
+"En": "From Site and To Site cannot be the same.",
+"Ch": "From Site and To Site cannot be the same.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00254": {
+"MessageID": "MSG00254",
+"Ko": "해당 PLANT에 모델이 확장되어있지 않습니다.",
+"En": "The model has not been expanded for that PLANT.",
+"Ch": "The model has not been expanded for that PLANT.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00255": {
+"MessageID": "MSG00255",
+"Ko": "버전은 2개까지만 가능함",
+"En": "Up to 2 versions available",
+"Ch": "Up to 2 versions available",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00256": {
+"MessageID": "MSG00256",
+"Ko": "변경수량 합계가 Confirm 수량을 초과 할 수 없습니다.",
+"En": "The sum of the change quantities can not exceed the Confirm quantity.",
+"Ch": "The sum of the change quantities can not exceed the Confirm quantity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00257": {
+"MessageID": "MSG00257",
+"Ko": "전극 아이템만 입력 가능합니다.",
+"En": "Only electrode item can be entered.",
+"Ch": "Only electrode item can be entered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00258": {
+"MessageID": "MSG00258",
+"Ko": "Plant의 Total이 입력되지 않았습니다.({0})",
+"En": "Plant's Total is not entered.({0})",
+"Ch": "Plant's Total is not entered.({0})",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00259": {
+"MessageID": "MSG00259",
+"Ko": "조회 후 수정모드로 가능합니다.",
+"En": "You can inquire and modify the mode.",
+"Ch": "You can inquire and modify the mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00260": {
+"MessageID": "MSG00260",
+"Ko": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+"En": "There is duplicated data among new input data.",
+"Ch": "There is duplicated data among new input data.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00261": {
+"MessageID": "MSG00261",
+"Ko": "Model 조회 후 입력하여 주십시오.",
+"En": "Please check the model before entering.",
+"Ch": "Please check the model before entering.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00262": {
+"MessageID": "MSG00262",
+"Ko": "{0} 버전을 입력해 주십시요.",
+"En": "Please enter the {0} version.",
+"Ch": "Please enter the {0} version.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00263": {
+"MessageID": "MSG00263",
+"Ko": "이미 해당 모델의 생산계획이 등록되어 있습니다.\\n\\r {0}",
+"En": "Production plan for this model is already registered.\\n\\r {0}",
+"Ch": "Production plan for this model is already registered.\\n\\r {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00264": {
+"MessageID": "MSG00264",
+"Ko": "해당 라인의 Tact Time이 등록되어 있지 않습니다.\\n\\r {0}",
+"En": "The Tact Time for this line is not registered.\\n\\r {0}",
+"Ch": "The Tact Time for this line is not registered.\\n\\r {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00265": {
+"MessageID": "MSG00265",
+"Ko": "다시 조회하시겠습니까?",
+"En": "Do you want to re-search?",
+"Ch": "Do you want to re-search?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00266": {
+"MessageID": "MSG00266",
+"Ko": "수정모드에서는 진행할 수 없습니다.",
+"En": "You can not proceed in edit mode.",
+"Ch": "You can not proceed in edit mode.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00267": {
+"MessageID": "MSG00267",
+"Ko": "하기 기간동안 서버 교체 작업으로 인한 SCM 시스템 가동 중단 됩니다. \\n\\r 기간:{0}",
+"En": "The SCM system will be shut down due to server replacement during the following period. \\n\\r period:{0}",
+"Ch": "The SCM system will be shut down due to server replacement during the following period. \\n\\r period:{0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00268": {
+"MessageID": "MSG00268",
+"Ko": "조회된 요청가능 기간이 없습니다.",
+"En": "No requestable period detected.",
+"Ch": "No requestable period detected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00269": {
+"MessageID": "MSG00269",
+"Ko": "입력 또는 수정할 수 있는 기간이 아닙니다.",
+"En": "This is not a period that can be entered or modified.",
+"Ch": "This is not a period that can be entered or modified.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00270": {
+"MessageID": "MSG00270",
+"Ko": "요청수량 합계가 Balance 수량을 초과 할 수 없습니다.",
+"En": "The sum of the request quantities can not exceed the Balance quantity.",
+"Ch": "The sum of the request quantities can not exceed the Balance quantity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00271": {
+"MessageID": "MSG00271",
+"Ko": "신규추가 시 수량이 입력되지 않았습니다.",
+"En": "Quantity was not entered for new additions.",
+"Ch": "Quantity was not entered for new additions.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00272": {
+"MessageID": "MSG00272",
+"Ko": "접속 경로를 확인해 주세요.",
+"En": "Please check the connection path.",
+"Ch": "Please check the connection path.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00273": {
+"MessageID": "MSG00273",
+"Ko": "{0} 은 하나만 선택해 주세요.",
+"En": "Please select only {0}.",
+"Ch": "Please select only {0}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00274": {
+"MessageID": "MSG00274",
+"Ko": "{0}일 마이너스 BALANCE 수량이 존재 합니다.",
+"En": "{0} days minus BALANCE quantity exists.",
+"Ch": "{0} days minus BALANCE quantity exists.",
+"Type": "0201003",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00275": {
+"MessageID": "MSG00275",
+"Ko": "입력 가능한 데이터가 없습니다.",
+"En": "There is no data available.",
+"Ch": "There is no data available.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00276": {
+"MessageID": "MSG00276",
+"Ko": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+"En": "Searching period can't be set more than 6 years.",
+"Ch": "Searching period can't be set more than 6 years.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00277": {
+"MessageID": "MSG00277",
+"Ko": "{0}열 {1}일 이후 출하일은 입력할 수 없습니다.",
+"En": "{0}Row Shipment date cannot be entered after {1}days",
+"Ch": "{0}Row Shipment date cannot be entered after {1}days",
+"Type": "0201003",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00278": {
+"MessageID": "MSG00278",
+"Ko": "Trans Mode를 선택해 주세요.",
+"En": "Please select Trans Mode",
+"Ch": "Please select Trans Mode",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00279": {
+"MessageID": "MSG00279",
+"Ko": "버전은 1개만 선택해 주세요.",
+"En": "Please select only one version.",
+"Ch": "Please select only one version.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00280": {
+"MessageID": "MSG00280",
+"Ko": "전송모드에서는 저장이 불가능합니다",
+"En": "It can not be saved in transfer mode.",
+"Ch": "It can not be saved in transfer mode",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00281": {
+"MessageID": "MSG00281",
+"Ko": "Version을 검색 후 조회하신 후에 입력이 가능합니다.",
+"En": "You can enter version after you search and search.",
+"Ch": "You can enter version after you search and search.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00282": {
+"MessageID": "MSG00282",
+"Ko": "변경된 환율을 적용하시겠습니까?",
+"En": "Do you want to apply the changed exchange rate?",
+"Ch": "Do you want to apply the changed exchange rate?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00283": {
+"MessageID": "MSG00283",
+"Ko": "Version을 선택하고 조회하세요.",
+"En": "Select Version to view.",
+"Ch": "Select Version to view.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00284": {
+"MessageID": "MSG00284",
+"Ko": "실행중 에러가 발생했습니다.",
+"En": "Error occurred during execution.",
+"Ch": "Error occurred during execution.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00285": {
+"MessageID": "MSG00285",
+"Ko": "{0}열 출하 변경사항이 있습니다.\\n\\rChange_Reason을 입력해 주세요.",
+"En": "There is a shipment change in {0} row.\\n\\rPlease enter Change_Reason.",
+"Ch": "There is a shipment change in {0} row.\\n\\rPlease enter Change_Reason.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00286": {
+"MessageID": "MSG00286",
+"Ko": "{0}열 출하 변경사항이 없습니다.\\n\\r Change_Reason를 입력 할 수 없습니다.",
+"En": "{0}Row There is a Shipment not change.\\n\\r Unable To enter Change_Reason",
+"Ch": "{0}Row There is a Shipment not change.\\n\\r Unable To enter Change_Reason",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00287": {
+"MessageID": "MSG00287",
+"Ko": "Reason Code를 입력 해주세요",
+"En": "Please enter Reason Code.",
+"Ch": "Please enter Reason Code.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00288": {
+"MessageID": "MSG00288",
+"Ko": "{0}일 이후 출하일은 입력할 수 없습니다.",
+"En": "Shipment date cannot be entered after {0}days",
+"Ch": "Shipment date cannot be entered after {0}days",
+"Type": "0201003",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00289": {
+"MessageID": "MSG00289",
+"Ko": "Business Plan 데이터는 정수로 입력해 주세요.",
+"En": "Please enter 'Business Plan' data as an integer.",
+"Ch": "Please enter 'Business Plan' data as an integer.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00290": {
+"MessageID": "MSG00290",
+"Ko": "Line Assign 체크 시 Model을 입력해야 합니다.",
+"En": "You must enter a model when checking the Line Assign.",
+"Ch": "You must enter a model when checking the Line Assign.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00291": {
+"MessageID": "MSG00291",
+"Ko": "SSP Daily Plan 수행중입니다.약 {0} 분후에 다시 수행 바랍니다.",
+"En": "SSP Daily Plan Processing now. Please, Try again after {0} minutes.",
+"Ch": "SSP Daily Plan Processing now. Please, Try again after {0} minutes.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00292": {
+"MessageID": "MSG00292",
+"Ko": "Cutoff 된 Container Qty는 시뮬레이션이 적용 받지 않습니다.",
+"En": "Cutoff Container Qty does not apply simulation.",
+"Ch": "Cutoff Container Qty does not apply simulation.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00293": {
+"MessageID": "MSG00293",
+"Ko": "Div, From Site, To Site 에 해당되는 BOD(Trans mode, Incoterms) 정보가 유효하지 않습니다.",
+"En": "BOD (Trans mode, Incoterms) information corresponding to Div, From Site, To Site is invalid.",
+"Ch": "BOD (Trans mode, Incoterms) information corresponding to Div, From Site, To Site is invalid.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00294": {
+"MessageID": "MSG00294",
+"Ko": "4시간 동안 이벤트가 없어 GSCM 세션이 끊겼습니다",
+"En": "GSCM System Session Out.There was no event for 4 hours.",
+"Ch": "GSCM System Session Out.There was no event for 4 hours.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00295": {
+"MessageID": "MSG00295",
+"Ko": "이미 해당 모델의 출하계획이 등록되어 있습니다.",
+"En": "Shipment plan for this model is already registered.",
+"Ch": "Shipment plan for this model is already registered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00296": {
+"MessageID": "MSG00296",
+"Ko": "수임자의 다른 위임 현황이 있습니다.",
+"En": "There is another delegation status of the appointed person.",
+"Ch": "There is another delegation status of the appointed person.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00297": {
+"MessageID": "MSG00297",
+"Ko": "중첩된 기간에 수임받은 현황이 있습니다.",
+"En": "You have a status that you have received in the nested period.",
+"Ch": "You have a status that you have received in the nested period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00298": {
+"MessageID": "MSG00298",
+"Ko": "Delegatee를 입력해 주세요.",
+"En": "Please enter Delegatee.",
+"Ch": "Please enter Delegatee.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00299": {
+"MessageID": "MSG00299",
+"Ko": "선택된 Division ID가 없습니다.",
+"En": "No Division ID selected.",
+"Ch": "No Division ID selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00300": {
+"MessageID": "MSG00300",
+"Ko": "리스트에서 선택 후 설정해제 해주세요.",
+"En": "Please select it from the list and unset it.",
+"Ch": "Please select it from the list and unset it.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00301": {
+"MessageID": "MSG00301",
+"Ko": "사용자를 찾지 못했습니다. 검색창을 여시겠습니까?",
+"En": "No user were found. Open search box?",
+"Ch": "No user were found. Open search box?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00302": {
+"MessageID": "MSG00302",
+"Ko": "다중검색된 User입니다. 검색창을 여시겠습니까?",
+"En": "This is a multiple-searched User. Open search box?",
+"Ch": "This is a multiple-searched User. Open search box?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00303": {
+"MessageID": "MSG00303",
+"Ko": "입력한 데이터가 100을 초과하거나 미만입니다.",
+"En": "The entered data is more than or less than 100.",
+"Ch": "The entered data is more than or less than 100.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00304": {
+"MessageID": "MSG00304",
+"Ko": "Weekly Plan 수행중입니다. Plan 수행완료 후 시도해주세요.",
+"En": "Weekly Plan Processing now. Please, Please try after finishing the plan.",
+"Ch": "Weekly Plan Processing now. Please, Please try after finishing the plan.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00305": {
+"MessageID": "MSG00305",
+"Ko": "위임자와 수임자가 동일 합니다.",
+"En": "The delegator and the officer are the same.",
+"Ch": "The delegator and the officer are the same.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00306": {
+"MessageID": "MSG00306",
+"Ko": "데이터 전송 중 오류가 발생하였습니다. \\n\\r화면 캡쳐해서 시스템 담당자에게 전달하세요.",
+"En": "An error occurred while transferring data. \\n\\rCapture the screen and send it to the system administrator.",
+"Ch": "An error occurred while transferring data. \\n\\rCapture the screen and send it to the system administrator.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "ayj8017"
+},
+"MSG00307": {
+"MessageID": "MSG00307",
+"Ko": "해외법인 기여도 미 맵핑된 마스터가 존재합니다.",
+"En": "There is an unmapped master who contributes overseas.",
+"Ch": "There is an unmapped master who contributes overseas.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00308": {
+"MessageID": "MSG00308",
+"Ko": "구분값을 입력해 주세요.",
+"En": "Please enter a break value.",
+"Ch": "Please enter a break value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00309": {
+"MessageID": "MSG00309",
+"Ko": "Change Role이 변경되었습니다.\\n\\r열려있는 화면이 모두 닫힙니다. 변경하시겠습니까?",
+"En": "The Change Role has been changed.\\n\\rAll open menus are closed. Do you want to change it?",
+"Ch": "The Change Role has been changed.\\n\\rAll open menus are closed. Do you want to change it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00310": {
+"MessageID": "MSG00310",
+"Ko": "필수 입력 칼럼 값을 입력해 주세요.",
+"En": "Please enter a required input column value",
+"Ch": "Please enter a required input column value",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00311": {
+"MessageID": "MSG00311",
+"Ko": "마감되었습니다. 영업관리팀에 문의하세요.",
+"En": "Closed Please contact sales management",
+"Ch": "Closed Please contact sales management",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00312": {
+"MessageID": "MSG00312",
+"Ko": "실시간 Data가 아닙니다.",
+"En": "It is not real time data.",
+"Ch": "It is not real time data.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00313": {
+"MessageID": "MSG00313",
+"Ko": "변경된 Plan Date가 존재 합니다.",
+"En": "The changed Plan Date exists.",
+"Ch": "The changed Plan Date exists.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kahonmalu"
+},
+"MSG00314": {
+"MessageID": "MSG00314",
+"Ko": "실적은 포함하지 않고, 계획만 복사하시겠습니까?",
+"En": "Do you want to copy just the plan without the performance?",
+"Ch": "Do you want to copy just the plan without the performance?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "greenzun"
+},
+"MSG00315": {
+"MessageID": "MSG00315",
+"Ko": "전송하시겠습니까?",
+"En": "Do you want to Transfer it?",
+"Ch": "Do you want to Transfer it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "hwi1993"
+},
+"MSG00316": {
+"MessageID": "MSG00316",
+"Ko": "등록된 모델 담당자가 없어 승인자를 지정할 수 없습니다. \\n\\r해당 모델에 대한 담당자를 지정 하시기 바랍니다.(SCM PI팀 담당자 문의)",
+"En": "The approver cannot be specified because there is no registered model owner.\\n\\rPlease specify the model owner.",
+"Ch": "The approver cannot be specified because there is no registered model owner.\\n\\rPlease specify the model owner.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00317": {
+"MessageID": "MSG00317",
+"Ko": "{0} 미만의 값만 입력 가능합니다.",
+"En": "Only values below {0} can be entered.",
+"Ch": "Only values below {0} can be entered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwwoonins"
+},
+"MSG00318": {
+"MessageID": "MSG00318",
+"Ko": "SEND_YN 이 N인 값만 전송할 수 있습니다.",
+"En": "Only values with SEND_YN N can be sent.",
+"Ch": "Only values with SEND_YN N can be sent.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwi1993"
+},
+"MSG00319": {
+"MessageID": "MSG00319",
+"Ko": "SEND_YN 이 Y인 값만 취소할 수 있습니다.",
+"En": "Only values with SEND_YN Y can be cancel.",
+"Ch": "Only values with SEND_YN Y can be cancel.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwi1993"
+},
+"MSG00320": {
+"MessageID": "MSG00320",
+"Ko": "SEND_YN 이 N 또는 C 인 값만 삭제할 수 있습니다.",
+"En": "Only values with SEND_YN N or C can be deleted.",
+"Ch": "Only values with SEND_YN N or C can be deleted.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwi1993"
+},
+"MSG00321": {
+"MessageID": "MSG00321",
+"Ko": "Data Type 이 ALL 인 상태에서는 편집할 수 없습니다.",
+"En": "Editing is not allowed with Data Type ALL.",
+"Ch": "Editing is not allowed with Data Type ALL.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "hwi1993"
+},
+"MSG00322": {
+"MessageID": "MSG00322",
+"Ko": "Warranty의 Priority 는 11 이상 입력해야 합니다.",
+"En": "Warranty Priority must be at least 11.",
+"Ch": "Warranty Priority must be at least 11.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00323": {
+"MessageID": "MSG00323",
+"Ko": "{0} 이전 출하일은 입력할 수 없습니다.",
+"En": "Shipment date cannot be entered before {0}",
+"Ch": "Shipment date cannot be entered before {0}days",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00324": {
+"MessageID": "MSG00324",
+"Ko": "기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?",
+"En": "Standard information is not registered. Would you like to browse references?",
+"Ch": "Standard information is not registered. Would you like to browse references?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00325": {
+"MessageID": "MSG00325",
+"Ko": "Confirm Qty가 0인 PO가 삭제됩니다. 진행하시겠습니까?",
+"En": "Confirm Qty 0 will be deleted Do you want to proceed?",
+"Ch": "Confirm Qty 0 will be deleted Do you want to proceed?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00326": {
+"MessageID": "MSG00326",
+"Ko": "조회 기간은 {0}년 이상 설정 할 수 없습니다.\\n\\rCAPA 조회 기간{0} 년",
+"En": "You cannot setting the out of the period.\\n\\rCapa Search : in {0} Year Possible",
+"Ch": "You cannot setting the out of the period.\\n\\rCapa Search : in {0} Year Possible",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00327": {
+"MessageID": "MSG00327",
+"Ko": "{0} 와 {1},{2} 중에 하나는 필수 입력입니다.",
+"En": "It is mendatory to input {0}, {1} and {2}.",
+"Ch": "It is mendatory to input {0}, {1} and {2}.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00328": {
+"MessageID": "MSG00328",
+"Ko": "판가 미입력 상태입니다. 판가 입력 후 진행해 주세요. (13주 후 월요일까지)",
+"En": "The sales price is missing. Please enter the sales price and proceed. (By Monday, 13 weeks from now)",
+"Ch": "The sales price is missing. Please enter the sales price and proceed. (By Monday, 13 weeks from now)",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00329": {
+"MessageID": "MSG00329",
+"Ko": "{0} 체크를 해제해 주세요",
+"En": "Please uncheck {0}",
+"Ch": "Please uncheck {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00330": {
+"MessageID": "MSG00330",
+"Ko": "기간을 다시 선택하여 주십시오.(월요일)",
+"En": "Select period again.(Monday)",
+"Ch": "Select period again.(Monday)",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kuniid"
+},
+"MSG00331": {
+"MessageID": "MSG00331",
+"Ko": "조회 기간은 {0}년 이상 설정 할 수 없습니다.\\n\\r엑셀 다운로드 {0}년",
+"En": "You cannot setting the out of the period.\\n\\r Excel Download : in {0} Year Possible",
+"Ch": "You cannot setting the out of the period.\\n\\r Excel Download : in {0} Year Possible",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00332": {
+"MessageID": "MSG00332",
+"Ko": "조회 기간은 {0}년 이상 설정 할 수 없습니다.\\n\\rCAPA Report 조회기간 {0}년",
+"En": "You cannot setting the out of the period.\\n\\r Capa Report Search : in {0} Year Possible",
+"Ch": "You cannot setting the out of the period.\\n\\r Capa Report Search : in {0} Year Possible",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00333": {
+"MessageID": "MSG00333",
+"Ko": "Model ID, Parent ID, Child ID 중 최소 1개는 입력해주세요.",
+"En": "Plese input at least one of Model ID, Parent ID, Child ID",
+"Ch": "Plese input at least one of Model ID, Parent ID, Child ID",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00334": {
+"MessageID": "MSG00334",
+"Ko": "Model ID 는 Pack Item 만 조회 가능합니다.",
+"En": "Inputed Model ID is not Pack Type",
+"Ch": "Inputed Model ID is not Pack Type",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00335": {
+"MessageID": "MSG00335",
+"Ko": "Parent ID 는 Pack Item 만 조회 가능합니다.",
+"En": "Inputed Parent ID is not Pack Type",
+"Ch": "Inputed Parent ID is not Pack Type",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00336": {
+"MessageID": "MSG00336",
+"Ko": "Child ID 는 Cell Item 만 조회 가능합니다.",
+"En": "Inputed Child ID is not Cell Type",
+"Ch": "Inputed Child ID is not Cell Type",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00337": {
+"MessageID": "MSG00337",
+"Ko": "Lane QTY 값 확인이 필요합니다.\\n\\rLane QTY 값이 없을 경우, FP Planner에게 등록 요청하시기 바랍니다.",
+"En": "You need to check Lane QTY.\\n\\rPlease request to FP Planner to input Lane QTY if there is no Lane QTY to select.",
+"Ch": "You need to check Lane QTY.\\n\\rPlease request to FP Planner to input Lane QTY if there is no Lane QTY to select.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00338": {
+"MessageID": "MSG00338",
+"Ko": "{0}열 납품 요청 수량 보다  큰 수는 입력할 수 없습니다.",
+"En": "{0}열 납품 요청 수량 보다  큰 수는 입력할 수 없습니다.",
+"Ch": "{0}열 납품 요청 수량 보다  큰 수는 입력할 수 없습니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00339": {
+"MessageID": "MSG00339",
+"Ko": "Success to send requestion e-mail.",
+"En": "Success to send requestion e-mail.",
+"Ch": "Success to send requestion e-mail.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00340": {
+"MessageID": "MSG00340",
+"Ko": "PR 생성에 실패했습니다.",
+"En": "PR creation failed.",
+"Ch": "PR creation failed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00341": {
+"MessageID": "MSG00341",
+"Ko": "Monthly(BOH)기준 ALLO 수량이 초과하였습니다.",
+"En": "Monthly(BOH)기준 ALLO 수량이 초과하였습니다.",
+"Ch": "Monthly(BOH)기준 ALLO 수량이 초과하였습니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00342": {
+"MessageID": "MSG00342",
+"Ko": "PR 요청 시 Check되지 않은 동일 Request No가 존재합니다.",
+"En": "PR 요청 시 Check되지 않은 동일 Request No가 존재합니다.",
+"Ch": "PR 요청 시 Check되지 않은 동일 Request No가 존재합니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00343": {
+"MessageID": "MSG00343",
+"Ko": "52주 구간에 대해, 변경된 FCST Type의 Sales Price를 재확인 후 필요시 Update하세요.(무상은 Sales Price를 등록하지 않습니다.)",
+"En": "For the 52-week section, recheck the changed FCST Type's Sales Price and update it if nesessary.(We do not register Sales Price for free)",
+"Ch": "For the 52-week section, recheck the changed FCST Type's Sales Price and update it if nesessary.(We do not register Sales Price for free)",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "choiya2"
+},
+"MSG00344": {
+"MessageID": "MSG00344",
+"Ko": "Period 선택이 잘못되었습니다.",
+"En": "Please check the Period.",
+"Ch": "Please check the Period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00345": {
+"MessageID": "MSG00345",
+"Ko": "Plan date 는 Gap date 보다 빠릅니다.",
+"En": "plan date is earlier than gap date",
+"Ch": "plan date is earlier than gap date",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00346": {
+"MessageID": "MSG00346",
+"Ko": "Plan date 가 Period 기간에 포함되지 않습니다.",
+"En": "Plan date not in between Period.",
+"Ch": "Plan date not in between Period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00347": {
+"MessageID": "MSG00347",
+"Ko": "Gap date 가 Period 기간에 포함되지 않습니다.",
+"En": "Gap date not in between Period.",
+"Ch": "Gap date not in between Period.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00348": {
+"MessageID": "MSG00348",
+"Ko": "Gap date 와 Plan date 는 같을 수 없습니다.",
+"En": "Gap date and Plan date must not be equal.",
+"Ch": "Gap date and Plan date must not be equal.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "moonli0816"
+},
+"MSG00351": {
+"MessageID": "MSG00351",
+"Ko": "PR PO Detail 재조회 후 진행하세요.",
+"En": "Please Search Button again.",
+"Ch": "Please Search Button again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00352": {
+"MessageID": "MSG00352",
+"Ko": "Site가 선택되지 않았습니다.",
+"En": "You have not selected a site.",
+"Ch": "You have not selected a site.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "lgda106"
+},
+"MSG00353": {
+"MessageID": "MSG00353",
+"Ko": "서로 다른 Model이 있습니다. 동일 Model에 대해서 요청 가능합니다.",
+"En": "There are different Model. You can request for the same model.",
+"Ch": "There are different Model. You can request for the same model.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00354": {
+"MessageID": "MSG00354",
+"Ko": "{0} 체크 시 {1} 년만 조회 가능 합니다.",
+"En": "{0} check Only year {1} can be viewed",
+"Ch": "{0} check Only year {1} can be viewed",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00355": {
+"MessageID": "MSG00355",
+"Ko": "{0} 기간을 다시 선택하여 주십시오.({1})",
+"En": "You should input \"{1}\" in \"{0}\"",
+"Ch": "You should input \"{1}\" in \"{0}\"",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00356": {
+"MessageID": "MSG00356",
+"Ko": "서로 다른 Model PIC가 있습니다. 동일 PIC에 대해서 요청 가능합니다.",
+"En": "There are different Model PICs. You can request for the same PIC.",
+"Ch": "There are different Model PICs. You can request for the same PIC.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00357": {
+"MessageID": "MSG00357",
+"Ko": "제품(Product)은 Cell Type에 '해당없음'을 선택할 수 없습니다",
+"En": "Products (Products) cannot choose 'No' on the Cell Type",
+"Ch": "Products (Products) cannot choose 'No' on the Cell Type",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "winter1203"
+},
+"MSG00358": {
+"MessageID": "MSG00358",
+"Ko": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+"En": "There is data stored in the product as Cell Type - 'No Reason'",
+"Ch": "There is data stored in the product as Cell Type - 'No Reason'",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "winter1203"
+},
+"MSG00359": {
+"MessageID": "MSG00359",
+"Ko": "변경요청은 Shipmnet Date 조회 구간에서 가능합니다.",
+"En": "Change request can be made within the inquiry date.",
+"Ch": "Change request can be made within the inquiry date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00360": {
+"MessageID": "MSG00360",
+"Ko": "{0} 만 Fix,UnFix 처리 할 수 있습니다.",
+"En": "Only {0} can be processed with Fix,Unfix.",
+"Ch": "Only {0} can be processed with Fix,Unfix.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00361": {
+"MessageID": "MSG00361",
+"Ko": "WEEKLY타입에서 편집해주세요.",
+"En": "Please edit from WEEKLY type.",
+"Ch": "Please edit from WEEKLY type.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "rosia27"
+},
+"MSG00362": {
+"MessageID": "MSG00362",
+"Ko": "SCS에서 해당 Confirm ID기준 출하 실적이 발생 했습니다. 출하계획 변경 불가 합니다.",
+"En": "The Shipment performance based on the Confirm ID occurred in SCS. Shipment plan cannot be changed.",
+"Ch": "The Shipment performance based on the Confirm ID occurred in SCS. Shipment plan cannot be changed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "corewhite11"
+},
+"MSG00363": {
+"MessageID": "MSG00363",
+"Ko": "SCS에서 해당 Confirm ID 기준 출하 실적이 발생했거나 재고가 없어 변경할 수 없습니다.",
+"En": "It cannot be changed because the shipment performance has occurred in scs or there is no inventory.",
+"Ch": "It cannot be changed because the shipment performance has occurred in scs or there is no inventory.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kimyh8848"
+},
+"MSG00364": {
+"MessageID": "MSG00364",
+"Ko": "사유 저장은 컬럼 설정을 전체로 해야 됩니다.",
+"En": "To save the reason, the column setting must be set as a whole.",
+"Ch": "To save the reason, the column setting must be set as a whole.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "khj79"
+},
+"MSG00366": {
+"MessageID": "MSG00366",
+"Ko": "AS 를 체크했을 경우 반드시 SALES SITE 를 선택해야 합니다.",
+"En": "Sales Site is mandatory when AS is selected",
+"Ch": "Sales Site is mandatory when AS is selected",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kdw2819"
+},
+"MSG00367": {
+"MessageID": "MSG00367",
+"Ko": "You have no FP Instance Authority. Please request FP Instance Authority.\\r\\nUI path : Authority - FP Auth Mgmt - FP Auth Request",
+"En": "You have no FP Instance Authority. Please request FP Instance Authority.\\r\\nUI path : Authority - FP Auth Mgmt - FP Auth Request",
+"Ch": "You have no FP Instance Authority. Please request FP Instance Authority.\\r\\nUI path : Authority - FP Auth Mgmt - FP Auth Request",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "chkim.68"
+},
+"MSG00368": {
+"MessageID": "MSG00368",
+"Ko": "You need more than default role before saving. Please request role first.",
+"En": "You need more than default role before saving. Please request role first.",
+"Ch": "You need more than default role before saving. Please request role first.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "chkim.68"
+},
+"MSG00370": {
+"MessageID": "MSG00370",
+"Ko": "* 단가 및 자재 마스터 추후 업데이트 예정",
+"En": "* Price and  Material Master to be updated later",
+"Ch": "* Price and  Material Master to be updated later",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00371": {
+"MessageID": "MSG00371",
+"Ko": "금요일~월요일 12시까지 입력 및 수정 가능 합니다.",
+"En": "can be Insert or edit from Friday to Monday at 12:00",
+"Ch": "can be Insert or edit from Friday to Monday at 12:00",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00372": {
+"MessageID": "MSG00372",
+"Ko": "cutoff 컬럼은 yyyymmdd 형식으로 입력하세요!",
+"En": "CutOff Column the Month column in yyyymmdd format.",
+"Ch": "CutOff Column the Month column in yyyymmdd format.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00373": {
+"MessageID": "MSG00373",
+"Ko": "Month 컬럼은 yyyymm 형식으로 입력하세요!",
+"En": "Enter the Month column in yyyymm format.",
+"Ch": "Enter the Month column in yyyymm format.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00374": {
+"MessageID": "MSG00374",
+"Ko": "ITEM_ID 가 존재하지 않습니다.",
+"En": "ITEM_ID does not exist.",
+"Ch": "ITEM_ID does not exist.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00375": {
+"MessageID": "MSG00375",
+"Ko": "금요일 ~ 월요일 까지 Confirm 가능 합니다.",
+"En": "can be Confirm from Friday to Monday",
+"Ch": "can be Confirm from Friday to Monday",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00376": {
+"MessageID": "MSG00376",
+"Ko": "Gap 체크 시 version(2) 선택해야 합니다.",
+"En": "Choose two versions.",
+"Ch": "Choose two versions.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jahn1501"
+},
+"MSG00377": {
+"MessageID": "MSG00377",
+"Ko": "부서정보 {0} 가 존재하지 않습니다.",
+"En": "Dept info does not exist.",
+"Ch": "Dept info does not exist.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "wonyeoulb"
+},
+"MSG00378": {
+"MessageID": "MSG00378",
+"Ko": "일별 기준 데이터는 매일 각 법인별 시업시간 기준 ERP(ZMMCMR6014) 재고를 가져옵니다.",
+"En": "Daily cutoff inventory data comes from ERP(ZMMCMR6014) at the beginning of the day(local time) from each site.",
+"Ch": "Daily cutoff inventory data comes from ERP(ZMMCMR6014) at the beginning of the day(local time) from each site.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00379": {
+"MessageID": "MSG00379",
+"Ko": "월마감 기준 데이터는 매월 본사 4 영업일에 집계하며, ERP(ZMMCMR6014) 전월말 재고를 가져옵니다.",
+"En": "Monthly cutoff inventory data is consolidated by headquarters on the 4th business day of each month and is based on the previous month's ending inventory from ERP (ZMMCMR6014).",
+"Ch": "Monthly cutoff inventory data is consolidated by headquarters on the 4th business day of each month and is based on the previous month's ending inventory from ERP (ZMMCMR6014).",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "yanbn82"
+},
+"MSG00380": {
+"MessageID": "MSG00380",
+"Ko": "직접 INSERT 불가한 화면이므로, 엑셀 업로드를 이용해 주시기 바랍니다.",
+"En": "This screen does not allow direct INSERT, so please use the Excel upload.",
+"Ch": "This screen does not allow direct INSERT, so please use the Excel upload.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00381": {
+"MessageID": "MSG00381",
+"Ko": "이미 생성 된 버전입니다.",
+"En": "This is the already created version.",
+"Ch": "This is the already created version.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00382": {
+"MessageID": "MSG00382",
+"Ko": "버전 생성 중 입니다.",
+"En": "Version is being created.",
+"Ch": "Version is being created.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00383": {
+"MessageID": "MSG00383",
+"Ko": "생성 되지 않은 버전입니다.",
+"En": "This is the uncreated version.",
+"Ch": "This is the uncreated version.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00384": {
+"MessageID": "MSG00384",
+"Ko": "3 보다 작은 값이 입력 되었습니다.",
+"En": "A value less than 3 was entered.",
+"Ch": "A value less than 3 was entered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00385": {
+"MessageID": "MSG00385",
+"Ko": "12 보다 큰 값이 입력 되었습니다.",
+"En": "A value greater than 12 was entered.",
+"Ch": "A value greater than 12 was entered.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00386": {
+"MessageID": "MSG00386",
+"Ko": "[API 첨부파일 리스트] 정보가 없습니다.",
+"En": "[API Attachment List] No information.",
+"Ch": "[API Attachment List] No information.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00387": {
+"MessageID": "MSG00387",
+"Ko": "[API 첨부파일 리스트] 호출 시 오류가 발생하였습니다.",
+"En": "[API Attachment List] An error occurred when calling.",
+"Ch": "[API Attachment List] An error occurred when calling.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00388": {
+"MessageID": "MSG00388",
+"Ko": "[API 첨부파일 업로드] Error",
+"En": "[API Attachment Upload] Error",
+"Ch": "[API Attachment Upload] Error",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00389": {
+"MessageID": "MSG00389",
+"Ko": "[API 첨부파일 업로드] Return 정보가 없습니다.",
+"En": "[API Attachment Upload] There is no return information.",
+"Ch": "[API Attachment Upload] There is no return information.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00390": {
+"MessageID": "MSG00390",
+"Ko": "[파일 용량] 10MB 초과 하였습니다.",
+"En": "[File Size] exceeds 10MB.",
+"Ch": "[File Size] exceeds 10MB.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00391": {
+"MessageID": "MSG00391",
+"Ko": "[파일 확장자] 업로드 할 수 없는 확장자입니다.",
+"En": "[File Extension] This is an extension that cannot be uploaded.",
+"Ch": "[File Extension] This is an extension that cannot be uploaded.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00392": {
+"MessageID": "MSG00392",
+"Ko": "최대 5개까지 첨부 할 수 있습니다.",
+"En": "You can attach up to five.",
+"Ch": "You can attach up to five.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00393": {
+"MessageID": "MSG00393",
+"Ko": "선택한 파일정보가 없습니다.",
+"En": "There is no selected file information.",
+"Ch": "There is no selected file information.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00394": {
+"MessageID": "MSG00394",
+"Ko": "완료 상태에서는 수정할 수 없습니다",
+"En": "Can't edit in Complete State",
+"Ch": "Can't edit in Complete State",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00395": {
+"MessageID": "MSG00395",
+"Ko": "종료/반려 상태에서는 수정할 수 없습니다",
+"En": "Can't edit in Finish / Reject State",
+"Ch": "Can't edit in Finish / Reject State",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00396": {
+"MessageID": "MSG00396",
+"Ko": "[발의자 또는 관리자] 만 수정 할 수 있습니다.",
+"En": "Only [Creator or Admin] can edit.",
+"Ch": "Only [Creator or Admin] can edit.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00397": {
+"MessageID": "MSG00397",
+"Ko": "저장된 검색조건을 초기화 하겠습니까?",
+"En": "Do you want to reset saved search conditions?",
+"Ch": "Do you want to reset saved search conditions?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00398": {
+"MessageID": "MSG00398",
+"Ko": "검색조건이 초기화 되었습니다",
+"En": "The search condition has been initialized.",
+"Ch": "The search condition has been initialized.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00399": {
+"MessageID": "MSG00399",
+"Ko": "검색조건 초기화중 오류가 발생하였습니다.",
+"En": "An error occurred while initializing the search conditions.",
+"Ch": "An error occurred while initializing the search conditions.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00400": {
+"MessageID": "MSG00400",
+"Ko": "선택하신 기간 {0}년 {1}월 ~ {2}년 {3}월 데이터가 {4}로 대체됩니다.\\n\\r진행하시겠습니까? ",
+"En": "It will replace the data you selected by the {4} data {0}-{1} and {2}-{3}.\\n\\r Will you save?",
+"Ch": "It will replace the data you selected by the {4} data {0}-{1} and {2}-{3}.\\n\\r Will you save?",
+"Type": "0201001",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "chano0612"
+},
+"MSG00401": {
+"MessageID": "MSG00401",
+"Ko": "{0}건의 데이터가 적용되었습니다. 팝업을 닫고 검색을 다시 진행해 주십시오.",
+"En": "{0} cases of data applied, Please close the pop-up and proceed with the search again.",
+"Ch": "{0} cases of data applied, please close the pop-up and proceed with the search again.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "chano0612"
+},
+"MSG00402": {
+"MessageID": "MSG00402",
+"Ko": "SCP구간 내 Plan 조회가 가능합니다\\r\\n(~계획수립주차 + {0}주 = {1})",
+"En": "You can search plans within the SCP section\\r\\n(~planning week + {0} weeks = {1})",
+"Ch": "You can search plans within the SCP section\\r\\n(~planning week + {0} weeks = {1})",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00403": {
+"MessageID": "MSG00403",
+"Ko": "Mail User 1번부터 순차적으로 입력하셔야 합니다.",
+"En": "You must enter them sequentially, starting with Mail User 1.",
+"Ch": "You must enter them sequentially, starting with Mail User 1.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jungilsetup"
+},
+"MSG00404": {
+"MessageID": "MSG00404",
+"Ko": "ERP I/F로 인해 이전 작업 2분 이후 변경 진행 가능합니다.",
+"En": "Due to ERP I/F, changes can be made after 2 minutes of previous work.",
+"Ch": "Due to ERP I/F, changes can be made after 2 minutes of previous work.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jungilsetup"
+},
+"MSG00407": {
+"MessageID": "MSG00407",
+"Ko": "작업시트에 수정한 데이터가 있으면 지워집니다. 그래도 계속하시겠습니까?",
+"En": "If there any data that is being worked on in main sheet, it would be erased. Do you want to proceed?",
+"Ch": "If there any data that is being worked on in main sheet, it would be erased. Do you want to proceed?",
+"Type": "0201002",
+"Button": "0202002",
+"UseYN": "Y",
+"RegtUserID": "chkim.68"
+},
+"MSG00408": {
+"MessageID": "MSG00408",
+"Ko": "수정모드에서는 입력할 수 없습니다",
+"En": "수정모드에서는 입력할 수 없습니다",
+"Ch": "수정모드에서는 입력할 수 없습니다",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "leetw85"
+},
+"MSG00409": {
+"MessageID": "MSG00409",
+"Ko": "과거 구간은 일괄입력이 불가합니다. 현재/미래 구간으로 기간 설정해주세요.",
+"En": "과거 구간은 일괄입력이 불가합니다. 현재/미래 구간으로 기간 설정해주세요.",
+"Ch": "과거 구간은 일괄입력이 불가합니다. 현재/미래 구간으로 기간 설정해주세요.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "leetw85"
+},
+"MSG00410": {
+"MessageID": "MSG00410",
+"Ko": "[입력 가능한 Cell 모델] 정보가 없습니다. \\r\\n[입력 가능한 Cell 모델] 정보를 다시 조회 하겠습니다  \\r\\n잠시후 다시 입력 해 주십시오.",
+"En": "[Cell Model information] No Data, \\r\\n[Cell Model information] Re Search, \\r\\nPlease Wait And Re Try.",
+"Ch": "[Cell Model information] No Data, \\r\\n[Cell Model information] Re Search, \\r\\nPlease Wait And Re Try.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "vadabi3"
+},
+"MSG00411": {
+"MessageID": "MSG00411",
+"Ko": "Report Type [MA : W0 PKG SE(MA) Plan, W-1 Elec FN Plan // FN W0 PKG FN Plan, W0 Elec FN Plan]",
+"En": "Report Type [MA : W0 PKG SE(MA) Plan, W-1 Elec FN Plan // FN W0 PKG FN Plan, W0 Elec FN Plan]",
+"Ch": "Report Type [MA : W0 PKG SE(MA) Plan, W-1 Elec FN Plan // FN W0 PKG FN Plan, W0 Elec FN Plan]",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00412": {
+"MessageID": "MSG00412",
+"Ko": "필수 입력 컬럼이 없습니다\\r\\n{0}",
+"En": "There are no mandatory input columns \\r\\n{0}",
+"Ch": "There are no mandatory input columns \\r\\n{0}",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00413": {
+"MessageID": "MSG00413",
+"Ko": "해당 계획에 대한 ERP D/O(Delivery Order) 생성되어 \\r\\n SSP 계획 변경 불가합니다.",
+"En": "ERP D/O (Delivery Order) has been created for the plan, so the SSP plan cannot be changed.",
+"Ch": "ERP D/O (Delivery Order) has been created for the plan, so the SSP plan cannot be changed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jungilsetup"
+},
+"MSG00414": {
+"MessageID": "MSG00414",
+"Ko": "SALES SITE: {0}\\n\\r{1}: {2}\\n\\rMODEL: {3}\\n\\r해당행 LOC값 입력이 필요합니다.",
+"En": "SALES SITE: {0}\\n\\r{1}: {2}\\n\\rMODEL: {3}\\n\\r해당행 LOC값 입력이 필요합니다.",
+"Ch": "SALES SITE: {0}\\n\\r{1}: {2}\\n\\rMODEL: {3}\\n\\r해당행 LOC값 입력이 필요합니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00415": {
+"MessageID": "MSG00415",
+"Ko": "40번 사업부 전용 화면입니다.",
+"En": "40번 사업부 전용 화면입니다.",
+"Ch": "40번 사업부 전용 화면입니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00416": {
+"MessageID": "MSG00416",
+"Ko": "Plant Site, SLOC은 필수입력 사항이며 입력하지 않을 경우 BNP In/PR요청이 자동생성되지 않습니다.",
+"En": "Plant Site, SLOC은 필수입력 사항이며 입력하지 않을 경우 BNP In/PR요청이 자동생성되지 않습니다.",
+"Ch": "Plant Site, SLOC은 필수입력 사항이며 입력하지 않을 경우 BNP In/PR요청이 자동생성되지 않습니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00417": {
+"MessageID": "MSG00417",
+"Ko": "Biz Plan Price(Master) 화면의 변경사항은 Biz Plan Price 화면에서 F2 Edit-> F7 Save 후에 최종 반영됩니다",
+"En": "Changes made on the Biz Plan Price (Master) screen will be reflected only after pressing F2 Edit -> F7 Save on the Biz Plan Price screen",
+"Ch": "Changes made on the Biz Plan Price (Master) screen will be reflected only after pressing F2 Edit -> F7 Save on the Biz Plan Price screen",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00418": {
+"MessageID": "MSG00418",
+"Ko": "Valid 구간이 입력되지 않은 데이터는 Inactive 처리됩니다. 계속하시겠습니까?",
+"En": "Valid 구간이 입력되지 않은 데이터는 Inactive 처리됩니다. 계속하시겠습니까?",
+"Ch": "Valid 구간이 입력되지 않은 데이터는 Inactive 처리됩니다. 계속하시겠습니까?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00419": {
+"MessageID": "MSG00419",
+"Ko": "진행상태가 Pre 일 때는 조회만 가능합니다",
+"En": "Only inquiries are allowed when the status is Pre.",
+"Ch": "Only inquiries are allowed when the status is Pre.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00420": {
+"MessageID": "MSG00420",
+"Ko": "승인 대상을 체크해주세요.",
+"En": "Please check the approval targets.",
+"Ch": "Please check the approval targets.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00421": {
+"MessageID": "MSG00421",
+"Ko": "전체 체크 후 Reject 버튼 눌러 주세요. 부분 승인 필요 시, 승인 대상 체크 후 Approval 눌러주세요.",
+"En": "Please press the reject button after checking the whole thing. If partial approval is required, please check the approval target and press the approval.",
+"Ch": "Please press the reject button after checking the whole thing. If partial approval is required, please check the approval target and press the approval.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00422": {
+"MessageID": "MSG00422",
+"Ko": "전체 체크 후 Self Reject 버튼 눌러주세요.",
+"En": "After the full check, press the Self Reject button.",
+"Ch": "After the full check, press the Self Reject button.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00423": {
+"MessageID": "MSG00423",
+"Ko": "진행상태 {0} 이전에는 조회 할 수 없습니다",
+"En": "Cannot be retrieved because the progress status is before {0}",
+"Ch": "Cannot be retrieved because the progress status is before {0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00424": {
+"MessageID": "MSG00424",
+"Ko": "수정사항이 있습니다. 재조회해주세요.",
+"En": "There is a correction. Please check again.\r\n",
+"Ch": "There is a correction. Please check again.\r\n",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "iamarock"
+},
+"MSG00425": {
+"MessageID": "MSG00425",
+"Ko": "최소입력수량 이상 입력해야 합니다.",
+"En": "You must enter more than the minimum input quantity.",
+"Ch": "You must enter more than the minimum input quantity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "flystone98"
+},
+"MSG00427": {
+"MessageID": "MSG00427",
+"Ko": "Sales Plan Waterfall에 Monthly Rolling Forecast:Y인 버전이 존재하지 않습니다.",
+"En": "There is no version of Monthly Rolling Forest:Y in Sales Plan Waterfall.",
+"Ch": "There is no version of Monthly Rolling Forest:Y in Sales Plan Waterfall.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00428": {
+"MessageID": "MSG00428",
+"Ko": "신규 입력 데이터 중 중복된 데이터가 있습니다.\\r\\n{0}",
+"En": "There is duplicated data among new input data.\\r\\n{0}",
+"Ch": "There is duplicated data among new input data.\\r\\n{0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00429": {
+"MessageID": "MSG00429",
+"Ko": "필수 입력 컬럼이 없습니다\\r\\n{0}",
+"En": "There are no mandatory input columns \\r\\n{0}",
+"Ch": "There are no mandatory input columns \\r\\n{0}",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjj0070"
+},
+"MSG00430": {
+"MessageID": "MSG00430",
+"Ko": "Owner(Sales)는 1명만 선택 가능합니다.",
+"En": "Please select only one Owner",
+"Ch": "Please select only one Owner",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00432": {
+"MessageID": "MSG00432",
+"Ko": "ERP 연동 이슈로, 출하계획 수량 증가는 불가합니다.",
+"En": "Due to ERP integration issue, it is not possible to increase the shipment planned quantity.",
+"Ch": "Due to ERP integration issue, it is not possible to increase the shipment planned quantity.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jungilsetup"
+},
+"MSG00434": {
+"MessageID": "MSG00434",
+"Ko": "Project , Project Code 컬럼을 추가하시기 바랍니다.",
+"En": "Please add Project, Project Code column.",
+"Ch": "Please add Project, Project Code column.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00435": {
+"MessageID": "MSG00435",
+"Ko": "Project 컬럼을 추가하시기 바랍니다.",
+"En": "Please add Project column.",
+"Ch": "Please add Project column.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00436": {
+"MessageID": "MSG00436",
+"Ko": "Project Code 컬럼을 추가하시기 바랍니다.",
+"En": "Please add Project Code column.",
+"Ch": "Please add Project Code column.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00437": {
+"MessageID": "MSG00437",
+"Ko": "선택된 사업부 정보가 없습니다.",
+"En": "No Division selected.",
+"Ch": "No Division selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00438": {
+"MessageID": "MSG00438",
+"Ko": "선택된 End Customer 정보가 없습니다.",
+"En": "No End Customer selected.",
+"Ch": "No End Customer selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00439": {
+"MessageID": "MSG00439",
+"Ko": "선택된 Project Code 정보가 없습니다.",
+"En": "No Project Code selected.",
+"Ch": "No Project Code selected.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00440": {
+"MessageID": "MSG00440",
+"Ko": "입력된 데이터가 없습니다.",
+"En": "No Data input.",
+"Ch": "No Data input.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00441": {
+"MessageID": "MSG00441",
+"Ko": "GAP이 0이 아닙니다.",
+"En": "GAP is not 0.",
+"Ch": "GAP is not 0.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00442": {
+"MessageID": "MSG00442",
+"Ko": "선택되지 않은 항목이 있습니다.",
+"En": "There is unselected item.",
+"Ch": "There is unselected item.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00443": {
+"MessageID": "MSG00443",
+"Ko": "중복된 항목이 있습니다.",
+"En": "Duplicate Data found.",
+"Ch": "Duplicate Data found.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00444": {
+"MessageID": "MSG00444",
+"Ko": "Detailed description에 내용을 입력하세요.",
+"En": "Input the content in the Detailed description.",
+"Ch": "Input the content in the Detailed description.",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00445": {
+"MessageID": "MSG00445",
+"Ko": "Sales Site UI에서 Sales Site를 추가하시기 바랍니다.",
+"En": "Add a Sales Site in the Sales Site UI.",
+"Ch": "Add a Sales Site in the Sales Site UI.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00446": {
+"MessageID": "MSG00446",
+"Ko": "Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다.",
+"En": "Add a Sales Site Project Model in the Sales Site Project Model UI.",
+"Ch": "Add a Sales Site Project Model in the Sales Site Project Model UI.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00447": {
+"MessageID": "MSG00447",
+"Ko": "화면에 조회된 기간의 데이터만 Currency가 변경됩니다.\\n\\r기간을 확인하시고 Currency 변경을 진행해주세요.",
+"En": "화면에 조회된 기간의 데이터만 Currency가 변경됩니다.\\n\\r기간을 확인하시고 Currency 변경을 진행해주세요.",
+"Ch": "화면에 조회된 기간의 데이터만 Currency가 변경됩니다.\\n\\r기간을 확인하시고 Currency 변경을 진행해주세요.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00448": {
+"MessageID": "MSG00448",
+"Ko": "해당 사업부 편집은\\n\\rDemand - Demand Plan - FcstPrice MGMT\\n\\r에서 할 수 있습니다.",
+"En": "해당 사업부 편집은\\n\\rDemand - Demand Plan - FcstPrice MGMT\\n\\r에서 할 수 있습니다.",
+"Ch": "해당 사업부 편집은\\n\\rDemand - Demand Plan - FcstPrice MGMT\\n\\r에서 할 수 있습니다.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00449": {
+"MessageID": "MSG00449",
+"Ko": "추가된 행에 입력된 수량 또는 가격이 없습니다.\\n\\r각 행 별로 하루 이상의 일자에 수량 또는 가격이 입력되어야 합니다.",
+"En": "There is no date when the New Row quantity was entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Ch": "There is no date when the New Row quantity was entered. Quantity must be entered at least one day on the basis of the \\n\\r Row.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "dsiol"
+},
+"MSG00450": {
+"MessageID": "MSG00450",
+"Ko": "엑셀 파일의 Header 정보 확인 후 재 Upload 하세요",
+"En": "Please re-upload after checking the header information in the Excel file",
+"Ch": "Please re-upload after checking the header information in the Excel file",
+"Type": "0201004",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00451": {
+"MessageID": "MSG00451",
+"Ko": "업로드할 데이터가 Excel 파일에 없습니다",
+"En": "There's no data in Excel File to upload",
+"Ch": "There's no data in Excel File to upload",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00452": {
+"MessageID": "MSG00452",
+"Ko": "입력하신 데이터의 메져: LOC값을 확인 후 재저장 하시기 바랍니다.",
+"En": "Please check the LOC value: Please check the LOC value after checking the LOC value.",
+"Ch": "Please check the LOC value: Please check the LOC value after checking the LOC value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00453": {
+"MessageID": "MSG00453",
+"Ko": "Line 정보가 입력되지 않았습니다. 저장하시겠습니까?",
+"En": "Line 정보가 입력되지 않았습니다. 저장하시겠습니까?",
+"Ch": "Line 정보가 입력되지 않았습니다. 저장하시겠습니까?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00454": {
+"MessageID": "MSG00454",
+"Ko": "성공하였습니다.",
+"En": "Succeed.",
+"Ch": "Succeed.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjiyoon_es"
+},
+"MSG00455": {
+"MessageID": "MSG00455",
+"Ko": "실패하였습니다.",
+"En": "Fail.",
+"Ch": "Fail.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjiyoon_es"
+},
+"MSG00456": {
+"MessageID": "MSG00456",
+"Ko": "Sales Price Recalculation is complete.",
+"En": "Sales Price Recalculation is complete.",
+"Ch": "Sales Price Recalculation is complete.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "kjiyoon_es"
+},
+"MSG00457": {
+"MessageID": "MSG00457",
+"Ko": "PROJECT_CODE: {0} \\r\\n유효하지 않은 프로젝트 코드입니다! ",
+"En": "PROJECT_CODE: {0} \\r\\nInvalid Project Code ! ",
+"Ch": "PROJECT_CODE: {0} \\r\\nInvalid Project Code ! ",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00458": {
+"MessageID": "MSG00458",
+"Ko": "MODEL: {0} \\r\\n유효하지 않은 모델입니다!",
+"En": "MODEL: {0} \\r\\nInvalid MODEL Code! ",
+"Ch": "MODEL: {0} \\r\\nInvalid MODEL Code! ",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00459": {
+"MessageID": "MSG00459",
+"Ko": "반품수량(RMA)은 음수값만 입력가능합니다!",
+"En": "Only negative values ​​can be entered for the Return Amount (RMA)!",
+"Ch": "Only negative values ​​can be entered for the Return Amount (RMA)!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00460": {
+"MessageID": "MSG00460",
+"Ko": "정수값만 입력가능합니다!",
+"En": "Only integer values ​​can be entered!",
+"Ch": "Only integer values ​​can be entered!",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00461": {
+"MessageID": "MSG00461",
+"Ko": "동일한 일자에 DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, TEXT, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE가 동일한 CURRENCY는 등록할 수 없습니다.\\r\\n",
+"En": "CURRENCY with the same DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, TEXT, DOM_EXP, FCST_TYPE, INCOTERMS, and MEASURE cannot be registered on the same date.\\r\\n",
+"Ch": "CURRENCY with the same DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, TEXT, DOM_EXP, FCST_TYPE, INCOTERMS, and MEASURE cannot be registered on the same date.\\r\\n",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00462": {
+"MessageID": "MSG00462",
+"Ko": "동일 주차에 Price 정보가 아직 등록되지 않았습니다.\\r\\n",
+"En": "Price information for the same week has not yet been registered.\\r\\n",
+"Ch": "Price information for the same week has not yet been registered.\\r\\n",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00463": {
+"MessageID": "MSG00463",
+"Ko": "Plan 시작일자보다 이른 Date를 확인하시기 바랍니다.",
+"En": "Please check the Date earlier than the Plan start date.",
+"Ch": "Please check the Date earlier than the Plan start date.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00464": {
+"MessageID": "MSG00464",
+"Ko": "수정할 수 없는 메져입니다.",
+"En": "This is an unmodifiable Measure",
+"Ch": "This is an unmodifiable Measure",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00465": {
+"MessageID": "MSG00465",
+"Ko": "Release 하시겠습니까?",
+"En": "Do you want to release?",
+"Ch": "Do you want to release?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00466": {
+"MessageID": "MSG00466",
+"Ko": "이미 실행된 Plan ID 입니다. 재샐행 하시겠습니까?",
+"En": "This Plan ID has already been executed. Would you like to re-execute it?",
+"Ch": "This Plan ID has already been executed. Would you like to re-execute it?",
+"Type": "0201002",
+"Button": "0202005",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00467": {
+"MessageID": "MSG00467",
+"Ko": "구코드 INCOTERMS는 저장할 수 없습니다.",
+"En": "The old INCOTERMS cannot be saved.",
+"Ch": "The old INCOTERMS cannot be saved.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00468": {
+"MessageID": "MSG00468",
+"Ko": "ShipTo, SoltTo Code가 없습니다",
+"En": "There's no ShipTo and/or SoltTo code",
+"Ch": "There's no ShipTo and/or SoltTo code",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "chkim.68"
+},
+"MSG00469": {
+"MessageID": "MSG00469",
+"Ko": "Master Validation을 진행해 주세요.",
+"En": "Please proceed with Master Validation.",
+"Ch": "Please proceed with Master Validation.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00470": {
+"MessageID": "MSG00470",
+"Ko": "Master Validation Critical 위반 건수가 있습니다. \\r\\n조치 후 진행해 주세요.",
+"En": "There are a number of Master Validation Critical violations. \\r\\nPlease take action before proceeding.",
+"Ch": "There are a number of Master Validation Critical violations. \\r\\nPlease take action before proceeding.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "mrchois"
+},
+"MSG00471": {
+"MessageID": "MSG00471",
+"Ko": "Model은 한개만 선택하여 입력해주세요.",
+"En": "Please select only one Model",
+"Ch": "Please select only one Model",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00472": {
+"MessageID": "MSG00472",
+"Ko": "FCST TYPE을 AS또는 WS용으로 선택하는 경우, AS FROM SITE를 필수로 입력해야 합니다. \\r\\nAS FROM SITE 컬럼이 없습니다. \\r\\n\\r\\n컬럼셋팅 버튼을 클릭하여 AS FROM SITE 컬럼을 추가하여 입력해주시기 바랍니다.",
+"En": "If you select AS or WS for the FCST TYPE, you must enter AS FROM SITE. \\r\\nThe AS FROM SITE column is missing. \\r\\n\\r\\nPlease click the Column Settings button to add the AS FROM SITE column and enter the value.",
+"Ch": "If you select AS or WS for the FCST TYPE, you must enter AS FROM SITE. \\r\\nThe AS FROM SITE column is missing. \\r\\n\\r\\nPlease click the Column Settings button to add the AS FROM SITE column and enter the value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00473": {
+"MessageID": "MSG00473",
+"Ko": "해당주차 SCP Final Plan이 수행된 이후부터 RTF수정 가능합니다",
+"En": "You can edit the RTF starting from the week in which the SCP Final Plan was implemented.",
+"Ch": "You can edit the RTF starting from the week in which the SCP Final Plan was implemented.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00474": {
+"MessageID": "MSG00474",
+"Ko": "당주 Sales Plan Cutoff가 완료되어 더이상 Sales Plan RTF[R+P]값을 변경하실 수 없습니다.",
+"En": "The Sales Plan cutoff for this period has been completed, so you can no longer change the Sales Plan RTF [R+P] value.",
+"Ch": "The Sales Plan cutoff for this period has been completed, so you can no longer change the Sales Plan RTF [R+P] value.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00475": {
+"MessageID": "MSG00475",
+"Ko": "Div 오류, 해당 메뉴는 자동차, ESS에 특화된 메뉴로, 소형 사업부 Menu는 Shipping에 Shipment Request(Mobility & IT)를 이용해주시기 바랍니다.",
+"En": "Div 오류, 해당 메뉴는 자동차, ESS에 특화된 메뉴로, 동일 모델을 여러 고객에 보내는 소형 사업부에는 적용하기 어려운 메뉴입니다. ",
+"Ch": "Div 오류, 해당 메뉴는 자동차, ESS에 특화된 메뉴로, 동일 모델을 여러 고객에 보내는 소형 사업부에는 적용하기 어려운 메뉴입니다. ",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jooyong026"
+},
+"MSG00476": {
+"MessageID": "MSG00476",
+"Ko": "고객향 Sales Site이며 FCST Type이 WS, AS 종류인 경우, AS From Site 컬럼은 필수 입력 대상입니다.",
+"En": "If this is a customer-facing sales site and the FCST type is WS or AS, the \"AS From Site\" column is required.",
+"Ch": "If this is a customer-facing sales site and the FCST type is WS or AS, the \"AS From Site\" column is required.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00477": {
+"MessageID": "MSG00477",
+"Ko": "SCP Planner 권한사용자의 수정 가능한 시간이 아닙니다.",
+"En": "This is not an editable time for SCP Planner users.",
+"Ch": "This is not an editable time for SCP Planner users.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+},
+"MSG00478": {
+"MessageID": "MSG00478",
+"Ko": "{0} 권한 사용자가 {1} {2} 부터 {3} 까지 수정하는 시간입니다.\\r\\n{4} 권한 사용자는 해당 시간에 수정이 불가합니다.",
+"En": "Users with {0} permissions can edit {1} from {2} to {3}.\\r\\nUsers with {4} permissions cannot make edits during that time.",
+"Ch": "Users with {0} permissions can edit {1} from {2} to {3}.\\r\\nUsers with {4} permissions cannot make edits during that time.",
+"Type": "0201001",
+"Button": "0202001",
+"UseYN": "Y",
+"RegtUserID": "jssbae"
+}
+}

@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 108,
+  "at": "2026-11-14T02:40:17.793Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 65,
+  "dur": 146,
+  "at": "2026-11-14T02:40:22.440Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 111,
+  "at": "2026-11-14T02:40:38.902Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 102,
+  "at": "2026-11-14T02:40:41.962Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"N\"}",
+  "status": 200,
+  "rows": 59,
+  "dur": 123,
+  "at": "2026-11-14T02:40:44.315Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ },
+ {
+  "menu": "SCP0033",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0033/main/SEARCH/call-proc",
+  "postData": "{\"p_division_id\":\"40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC\",\"p_item_id\":\"\",\"p_valid\":\"\"}",
+  "status": 200,
+  "rows": 111,
+  "dur": 122,
+  "at": "2026-11-14T02:40:59.437Z",
+  "user": "minyonglee1",
+  "test": "선택 조회 복수·단일·전체 왕복(G2·B6)"
+ }
+]

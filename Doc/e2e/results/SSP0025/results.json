@@ -147,19 +147,15 @@
                     },
                     {
                       "type": "columns",
-                      "description": "시트 Project(main) 헤더 18 / 기대 0 / 누락 0: "
+                      "description": "시트 Shipment Requestor PIC(main) 헤더 18 / 기대 18 / 누락 0: "
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,105,978]]"
+                      "description": "[[\"main\",\"SEARCH\",200,105,1169]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -170,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4465,
+                      "duration": 5348,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:05:25.170Z",
+                      "startTime": "2026-11-14T19:01:13.166Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -191,19 +187,15 @@
                         },
                         {
                           "type": "columns",
-                          "description": "시트 Project(main) 헤더 18 / 기대 0 / 누락 0: "
+                          "description": "시트 Shipment Requestor PIC(main) 헤더 18 / 기대 18 / 누락 0: "
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,105,978]]"
+                          "description": "[[\"main\",\"SEARCH\",200,105,1169]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -254,10 +246,6 @@
                     {
                       "type": "condsum",
                       "description": "3/5 OK · FAIL 0 · WARN 2 · ERROR 0 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -268,12 +256,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15209,
+                      "duration": 17913,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:05:32.374Z",
+                      "startTime": "2026-11-14T19:01:20.924Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -302,10 +290,6 @@
                         {
                           "type": "condsum",
                           "description": "3/5 OK · FAIL 0 · WARN 2 · ERROR 0 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
                         }
                       ],
                       "attachments": []
@@ -367,7 +351,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'ShipmentRequestorPic_20261109_100610.xlsx' 6619B"
+                      "description": "[OK] Excel 다운로드(common) — 'ShipmentRequestorPic_20261115_040205.xlsx' 6615B"
                     },
                     {
                       "type": "common",
@@ -384,10 +368,6 @@
                     {
                       "type": "commonsum",
                       "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
                     }
                   ],
                   "expectedStatus": "passed",
@@ -398,12 +378,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20467,
+                      "duration": 23789,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:05:49.836Z",
+                      "startTime": "2026-11-14T19:01:41.459Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -443,7 +423,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'ShipmentRequestorPic_20261109_100610.xlsx' 6619B"
+                          "description": "[OK] Excel 다운로드(common) — 'ShipmentRequestorPic_20261115_040205.xlsx' 6615B"
                         },
                         {
                           "type": "common",
@@ -460,10 +440,6 @@
                         {
                           "type": "commonsum",
                           "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
                         }
                       ],
                       "attachments": []
@@ -484,8 +460,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-09T01:05:24.547Z",
-    "duration": 48443.941999999995,
+    "startTime": "2026-11-14T19:01:12.632Z",
+    "duration": 55695.30699999999,
     "expected": 3,
     "skipped": 0,
     "unexpected": 0,

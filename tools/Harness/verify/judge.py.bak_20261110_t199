@@ -1,0 +1,2220 @@
+"""검증 항목 원장 판정 — Doc/verify/<ID>/verify_ledger.csv 의 result·evidence·tobe_ref 를 채운다.
+
+  python tools/Harness/verify/judge.py <MENU_ID> [--no-db]
+
+판정 원천:
+  E2E     Doc/verify/<ID>/e2e_results.json (Doc/e2e/specs/_verify.spec.ts @verify 산출) — row_id 단위 반입
+  META    I1 — FE 화면 소스의 t('코드', …) 전부가 사내 SCM_ADM_MSG_M 에 KO/EN/CN 으로 등록됐는지 (DB 실조회, --no-db 면 건너뜀)
+  STATIC  H5·G4 — 조회조건 Form 의 라벨 문구·순서 ↔ 조회조건 기준표(search_cond.csv)
+  DEFECT  결함 원장 행 — 같은 규칙의 실측 판정을 근거와 함께 이어받는다(대상 일치 행 우선). 근거 없으면 NOT_RUN 유지
+미검증은 PASS 로 두지 않는다(정직 보고) — NOT_RUN / ERROR 는 '미검증' 시트로 간다.
+"""
+import hashlib
+import argparse
+import csv
+import datetime
+import json
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+import re, collections
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+P = lambda *a: os.path.join(ROOT, *a)
+sys.path.insert(0, P('tools', 'DbConn'))
+
+
+def read_csv(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def test_ownership(spec_paths):
+    """T61(2026-11-06): 스펙 본문이 실제로 고르는 행 — {(runner, 테스트 제목): {'sources': {...}, 'rules': {...}}} + 키 '_tmpl' = 템플릿 제목 목록.
+    test('제목', …) / test(`템플릿`, async …) 부터 다음 test( 전까지에서 `source === 'X'` · `rule_id === 'Y'` 비교를 모은다.
+    템플릿 제목(`그리드 컬럼 프로브${…} — …`)은 첫 ${ 앞 고정부 + 마지막 } 뒤 고정부로 맞춘다(own_of)."""
+    out = {'_tmpl': []}
+    for sp in spec_paths:
+        try:
+            src = open(sp, encoding='utf-8').read()
+        except OSError:
+            continue
+        runner = 'trace' if '_trace' in os.path.basename(sp) else 'verify'
+        heads = [(m.start(), m.end(), m.group(1).replace("\\'", "'"), False) for m in re.finditer(r"\btest\('((?:[^'\\]|\\.)*)'", src)]
+        heads += [(m.start(), m.end(), m.group(1), True) for m in re.finditer(r"\btest\(`(.+?)`,\s*async", src)]
+        heads.sort()
+        for i, (st, en, title, tmpl) in enumerate(heads):
+            body = src[en: heads[i + 1][0] if i + 1 < len(heads) else len(src)]
+            v = {'sources': set(re.findall(r"\bsource\s*===\s*'([A-Z_]+)'", body)),
+                 'rules': set(re.findall(r"\brule_id\s*===\s*'([A-Z][A-Za-z0-9-]*)'", body))}
+            if tmpl and '${' in title:
+                out['_tmpl'].append((runner, title.split('${')[0], title[title.rfind('}') + 1:], v))
+            else:
+                out[(runner, title)] = v
+    return out
+
+
+def own_of(own, runner, title):
+    """T61: 테스트 제목 → 담당 {'sources','rules'} (없으면 {})"""
+    v = own.get((runner, title))
+    if v:
+        return v
+    for r, pre, suf, tv in own.get('_tmpl', []):
+        if r == runner and title.startswith(pre) and title.endswith(suf):
+            return tv
+    return {}
+
+
+def page_dir(mid):
+    for r in read_csv(P('Doc', 'tobefacts', 'screens', '_index.csv')):
+        if r['menu_id'].upper() == mid and '/components/' not in r['page_key']:
+            feat, *rest = r['page_key'].split('/')
+            return P('nscm-fe', 'features', feat, 'src', 'pages', *rest)
+    return ''
+
+
+def fe_sources(pdir):
+    out = {}
+    for dp, _, fs in os.walk(pdir):
+        if 'node_modules' in dp:
+            continue
+        for f in fs:
+            if f.endswith(('.ts', '.tsx')) and not f.endswith(('.test.ts', '.spec.ts')):
+                p = os.path.join(dp, f)
+                with open(p, encoding='utf-8') as h:
+                    out[p] = h.read()
+    return out
+
+
+T_CALL = re.compile(r"""\bt\(\s*['"]([A-Za-z][A-Za-z0-9_]*)['"]\s*(?:,\s*['"]([^'"]*)['"])?""")
+
+
+
+def lbl_consts(srcs):
+    """페이지 소스의 `export const LBL = { KEY: 'LBL…' }` → {KEY: code}"""
+    import re as _re
+    out = {}
+    for p, s in srcs.items():
+        m = _re.search(r'export\s+const\s+LBL\s*=\s*\{(.*?)\}', s, _re.S)
+        if m:
+            for k, v in _re.findall(r"""([A-Z0-9_]+)\s*:\s*['"]([^'"]+)['"]""", m.group(1)):
+                out.setdefault(k, v)
+    return out
+
+
+def label_codes(srcs):
+    """화면 소스의 라벨/메시지 코드 전부 → {code: (loc, fallback)} — t('LBL00001','_x') 와 t(LBL.KEY,'_x')·multi(LBL.KEY,'_x',…)(2026-10-28 상수 코드 미인식 교정)"""
+    import re as _re
+    consts = lbl_consts(srcs); codes = {}
+    rx = _re.compile(r"""\b\w+\(\s*(?:['"]([A-Za-z][A-Za-z0-9_]*)['"]|LBL\.([A-Z0-9_]+))\s*(?:,\s*['"]([^'"]*)['"])?""")
+    for p, s in srcs.items():
+        for i, line in enumerate(s.splitlines(), 1):
+            for m in rx.finditer(line):
+                code = m.group(1) or consts.get(m.group(2) or '')
+                if not code or not _re.match(r'^(LBL|MSG|MNU)\d+$', code):
+                    continue
+                codes.setdefault(code, (os.path.relpath(p, ROOT).replace('\\', '/') + f':{i}', (m.group(3) or '')))
+    return codes
+
+
+def meta_i1(srcs, use_db):
+    """FE t() 코드 → SCM_ADM_MSG_M 언어별 등록 여부"""
+    codes = label_codes(srcs)
+    if not codes:
+        return None, '화면 소스에 라벨/메시지 코드 호출 없음'
+    if not use_db:
+        return None, f'DB 미조회(--no-db) — 코드 {len(codes)}개'
+    from dbconn import connect  # noqa: E402
+    have = {}
+    with connect('tobe') as cx:
+        cur = cx.cursor()
+        keys = list(codes)
+        for i in range(0, len(keys), 500):
+            chunk = keys[i:i + 500]
+            binds = ','.join(f':b{j}' for j in range(len(chunk)))
+            cur.execute(f"SELECT MSG_ID, LANG_CD FROM SCM_ADM_MSG_M WHERE USE_YN = 'Y' AND MSG_ID IN ({binds})", {f'b{j}': c for j, c in enumerate(chunk)})
+            for mid_, lang in cur:
+                have.setdefault(mid_, set()).add((lang or '').upper())
+    miss = []
+    for c, (loc, fb) in sorted(codes.items()):
+        lacking = [l for l in ('KO', 'EN', 'CN') if l not in have.get(c, set())]
+        if lacking:
+            miss.append(f"{c}({'/'.join(lacking)} 없음, fallback '{fb}', {loc})")
+    return (not miss), (f"t() 코드 {len(codes)}개 중 미등록 {len(miss)}: " + '; '.join(miss)) if miss else f't() 코드 {len(codes)}개 KO/EN/CN 전부 등록'
+
+
+def meta_i4(srcs, use_db):
+    """I4 중복 채번(2026-10-28) — 화면 t() 코드마다 같은 유형(MSG_TP_CD)·KO·EN 문구(TRIM, 대소문자 구분)가 모두 같은 다른 MSG_ID(USE_YN=Y)가 있는가.
+    단위테스트 결함 DM-96(동일 문구는 하나의 ID 만 채번·재사용). 이 화면 코드보다 앞선 ID 가 있으면 재사용 대신 새로 채번한 것 → FAIL,
+    이 화면이 가장 앞선 ID 를 쓰면 다른 곳의 중복이라 PASS(근거에 함께 적음). 한계: 메뉴명(MNU)은 화면 t() 에 나오는 코드만 본다"""
+    codes = sorted(label_codes(srcs))
+    if not codes:
+        return None, '화면 소스에 라벨/메시지 코드 호출 없음'
+    if not use_db:
+        return None, f'DB 미조회(--no-db) — 코드 {len(codes)}개'
+    from dbconn import connect  # noqa: E402
+    with connect('tobe') as cx:
+        cur = cx.cursor()
+        cur.execute("""WITH T AS (SELECT MSG_ID, MSG_TP_CD, MAX(CASE WHEN LANG_CD = 'KO' THEN TRIM(MSG_NM) END) KO, MAX(CASE WHEN LANG_CD = 'EN' THEN TRIM(MSG_NM) END) EN
+                       FROM SCM_ADM_MSG_M WHERE USE_YN = 'Y' GROUP BY MSG_ID, MSG_TP_CD)
+                       SELECT MSG_ID, MSG_TP_CD, KO, EN FROM T WHERE KO IS NOT NULL AND EN IS NOT NULL""")
+        grp = {}
+        for mid_, tp, ko, en in cur:
+            grp.setdefault((tp, ko, en), []).append(mid_)
+    twin = {i: sorted(v) for v in grp.values() if len(v) > 1 for i in v}
+    bad, other = [], []
+    for c in codes:
+        if c in twin:
+            ids = twin[c]
+            (bad if ids[0] != c else other).append(f"{c}↔{'/'.join(x for x in ids if x != c)}")
+    if bad:
+        return False, f"t() 코드 {len(codes)}개 중 같은 문구의 앞선 코드가 있는데 새로 채번 {len(bad)}: {'; '.join(bad)}" + (f" · (이 화면이 앞선 코드 사용 {len(other)}: {'; '.join(other)})" if other else '')
+    return True, f"t() 코드 {len(codes)}개 — 같은 문구 다른 코드 중복 없음" + (f" · 이 화면이 앞선 코드를 쓰는 다른 곳 중복 {len(other)}: {'; '.join(other)}" if other else '')
+
+
+LBL_CALL = re.compile(r"""\b\w+\(\s*(?:['"]([A-Za-z][A-Za-z0-9_]*)['"]|LBL\.([A-Z0-9_]+))\s*,\s*['"](_?[^'"]*)['"]""")  # 폴백의 '_' 는 선택(2026-10-29 SCP0100 t(LBL.AS, 'A/S'))
+
+
+def form_labels(srcs):
+    """Form 파일의 라벨 호출 순서 → [(code, fallback, loc)].
+    인식: t('LBL00001','_Div') · t(LBL.DIVISION,'_Div.') · multi(LBL.PLANT_SITE,'_Plant Site', …) 처럼 1번째 인자가 라벨 코드(문자열 또는 LBL 상수)이고
+    2번째 인자가 '_문구' 인 호출 전부(2026-10-28: 'label' 단어가 있는 줄의 t('문자열') 만 보던 탓에 SCP0096 라벨 0건 → G4/H5 전부 허위 FAIL).
+    LBL.KEY 는 같은 페이지 소스의 `LBL = { KEY: 'LBL…' }` 로 코드를 푼다(없으면 KEY 그대로)."""
+    consts = {}
+    for p, s in srcs.items():
+        m = re.search(r'export\s+const\s+LBL\s*=\s*\{(.*?)\}', s, re.S)
+        if m:
+            for k, v in re.findall(r"""([A-Z0-9_]+)\s*:\s*['"]([^'"]+)['"]""", m.group(1)):
+                consts.setdefault(k, v)
+    out = []
+    for p, s in srcs.items():
+        if not re.search(r'Form\.tsx$', p):
+            continue
+        for i, line in enumerate(s.splitlines(), 1):
+            if 'LBL' not in line and 'label' not in line:
+                continue
+            if re.match(r'\s*(//|/?\*)', line):
+                continue  # 주석(예: "호출부는 t(LBL.KEY, '_Fallback')")은 라벨이 아님(2026-10-29 SCP0100 'Fallback' 허위 라벨)
+            for m in LBL_CALL.finditer(line):
+                if not m.group(2) and not (m.group(3) or '').startswith('_'):
+                    continue  # 문자열 코드일 때는 '_폴백' 형태만(일반 t('MSG…','문구') 오인 방지)
+                code = m.group(1) or consts.get(m.group(2) or '', m.group(2) or '')
+                fb = (m.group(3) or '').lstrip('_')
+                if not fb or fb.lower() in ('search', 'reset', 'clear', 'input', 'ok', 'close', 'cancel', 'save'):
+                    continue  # 버튼 라벨은 조회조건이 아님
+                out.append((code, fb, os.path.relpath(p, ROOT).replace('\\', '/') + f':{i}'))
+    if len(out) < 3:  # 라벨 문구를 constants 의 조건 정의에 두는 화면(SCP0100 GlobalPsiReport: Form 은 labelText 변수) — 폴백으로 constants 를 본다(주석 제외)
+        for p, s in srcs.items():
+            if not re.search(r'\.constants\.ts$', p):
+                continue
+            for i, line in enumerate(s.splitlines(), 1):
+                if ('LBL' not in line and 'label' not in line) or re.match(r'\s*(//|/?\*)', line):
+                    continue
+                for m in LBL_CALL.finditer(line):
+                    if not m.group(2) and not (m.group(3) or '').startswith('_'):
+                        continue
+                    code = m.group(1) or consts.get(m.group(2) or '', m.group(2) or '')
+                    fb = (m.group(3) or '').lstrip('_')
+                    if not fb or fb.lower() in ('search', 'reset', 'clear', 'input', 'ok', 'close', 'cancel', 'save', 'monthly', 'weekly', 'daily'):
+                        continue
+                    out.append((code, fb, os.path.relpath(p, ROOT).replace(chr(92), '/') + f':{i}'))
+    return out
+
+
+def norm(s):
+    return re.sub(r'[\s.*_]+', '', (s or '').lower())
+
+
+# 결함원장·일반화 상속 매칭에서 빼는 일반 UI 단어 — 여러 팝업·화면 클래스명에 공통으로 박혀 있어 대상 식별력이 없다(2026-10-30 T6)
+GENERIC_TOKENS = {'FORM', 'POPUP', 'MODAL', 'SEARCH', 'BUTTON', 'GRID', 'SHEET', 'LIST', 'DATA', 'DIALOG', 'CLICK', 'SPREAD', 'VIEW'}
+
+
+def rules_how(rid):
+    return next((r.get('how', '') for r in read_csv(os.path.join(HERE, 'detect_rules.csv')) if r.get('rule_id') == rid), '')
+
+
+# A6 정렬 기준 차이 = 판정필요(사용자 2026-10-30 SCP0100 조치 필요 1번: "SORT 기준 다른 부분은 오류로 하지말고 판정필요 항목으로")
+#   대상: 정적 ORDER BY 키 차이(sort_check FAIL) · golden 실측 순서 차이 · E2E 행 순서 차이 · 그 상속/집계 행
+#   제외(FAIL 유지): CR-075 'TO-BE PKG 에 ORDER BY 없음'(정렬 기준 자체가 없음 — 사용자 판정 2026-10-28) · 사용자판정 반입 행
+#   판정필요 정리(A1 외 → NA) 앞과 최종 스윕 앞에서 두 번 부른다 — 뒤 단계(상속·집계)가 다시 FAIL 을 만들어도 조치 필요에 남지 않게
+SORT_REVIEW_TAG = '[SORT 기준 차이 → 판정필요]'
+FORM_REVIEW_TAG = '[Excel Form 팝업 없음 → 판정필요]'  # CR-095 팝업 없는 Excel Form = 사용자 판정(사용자 2026-11-03) — tools/E2E/lib/scenario.ts 와 같은 문구
+ORDER_REVIEW_TAG = '[조회조건 배치 차이 → 판정필요]'  # SC1 — 기준표·AS-IS 배치 둘 다와 다를 때(2026-10-30 SCP0100)
+ALIGN_REVIEW_TAG = '[정렬 원천 추정 → 판정필요]'  # H1 — 같은 화면 메타 시트가 없어 다른 화면 메타를 추정해 비교한 FAIL(align_check.py · 2026-11-09 사용자 지시 SSP0025 팝업 MODEL_ID·NICK_NAME 정렬 = 판정필요)
+
+
+def not_target(r):
+    """검사 대상 아님 행(2026-10-30): 실행되지 않는 AS-IS 메서드에서만 나온 검사(mapping_trace asis_live → 조건 JSON "dead") 또는 정적 단계가 '검사 대상 아님' 으로 둔 행.
+    E2E 반입·FAIL 스윕 어느 단계도 이 행을 판정하지 않는다 — 정적 결론이 하류에 전달되지 않아 SCP0041 SCP0040 F4 가 되살아나던 결함"""
+    return (r.get('evidence') or '').startswith('검사 대상 아님') or '"dead":' in (r.get('condition') or '')[:400]
+
+
+def sort_review(rows, stat):
+    n = 0
+    for r in rows:
+        ev = r.get('evidence') or ''
+        if r['rule_id'] != 'A6' or r['result'] != 'FAIL' or ev.startswith('[사용자판정]') or ev.startswith(SORT_REVIEW_TAG):
+            continue
+        if 'CR-075' in ev or 'CR-075' in (r.get('tobe_ref') or ''):
+            continue
+        r['result'] = '판정필요'
+        r['evidence'] = (SORT_REVIEW_TAG + ' 정렬 기준이 AS-IS 와 다름 — 결함 여부는 사람이 판정(사용자 지시 2026-10-30) · ' + ev)[:1500]
+        n += 1
+    stat['SORT_REVIEW'] = stat.get('SORT_REVIEW', 0) + n
+
+
+# ── W8-A 3-증거 FAIL 계약(2026-11-06 플랜 1-3): FAIL 은 기대값 원천(expect_src)·증거 경로(evidence_ref)·측정 전제(precond)가 전부 있을 때만 발행한다 ──
+#   expect_src 순위·FAIL 허용 = tools/Harness/rules/expected_source_rank.csv · 규칙의 오라클 분류 HOLD(Doc/verify/_oracle_class.csv) = 판정필요
+RX_SRC_ASIS = re.compile(r'AS-IS|\.cs:\d+|golden|차등|\bSP\b|actions\.csv|sort_rules|lock_rules|cell_rules|plan\.json|AS-IS SP')
+RX_SRC_META = re.compile(r'SHEET_COLUMNS|TB_FX_|search_cond|기준표|msgmap|SCM_ADM_|PROC_M|btn_auth|메타')
+RX_SRC_RULE = re.compile(r'CR-0\d\d|KEEP|DD-\d+|확정\s*규칙|확정규칙|TO-BE 룰|설계 결정|디자인 룰|공통 규칙|확정 요구|확정규칙')
+
+
+def derive_expect_src(r):
+    ev = r.get('evidence') or ''; t = r.get('tobe_ref') or ''; a = r.get('asis_ref') or ''
+    if ev.startswith('[사용자판정]') or t.startswith('수동 사용자판정'): return 'USER_VERDICT'
+    m = re.search(r'계약\((CC-\d+)\)', t) or re.search(r'계약 (CC-\d+)', ev)
+    if m: return f'CONTRACT:{m.group(1)}'
+    if r.get('rule_id') in ('SC1', 'SC2'): return 'META:search_cond 기준표(SCP_화면별 조회조건 정리 List 시트 · CR-071)'  # T149/T159: 화면 규칙 SC1 행의 asis_ref 기본값('규칙 정의 · 결함원장')보다 기준표가 원천
+    if r.get('defect_ref'): return f"DOC:{r['defect_ref']}"
+    if '결함원장' in a or 'auto_expect' in a or '_engine_gap' in a: return 'DOC:' + re.sub(r'\s+', ' ', a)[:80]  # 전용 검사·엔진 갭·자동 기대 행 = 3개 문서 결함 유형이 원천
+    m = re.search(r'(CR-0\d\d|DD-\d+|KEEP\s*H\d+)', t + ' ' + a)
+    if m: return f'RULE:{m.group(1)}'
+    # 2026-11-07 T149(SCP0037·SCP0016 SC1): 조회조건 순서(check.js SC1·smoke 기준표 순서)의 기대 원천은 조회조건 기준표(search_cond.csv = SCP_화면별 조회조건 정리 List 시트 · CR-071)인데
+    #   asis_ref 가 'COMMON:UC-06'·화면 ID 뿐이라 GENERAL → G2 게이트가 실제 순서 불일치 FAIL 을 '[증거 부족]' ERROR 로 숨겼다(사용자 문제 제기 ② '조치필요에 없는 오류를 알 수 없다')
+    if r.get('rule_id') in ('SC1', 'SC2') or 'Excel 조회조건 정리' in t or re.search(r'E2E smoke cond (order|gone)', t + ' ' + (r.get('note') or '')):
+        return 'META:search_cond 기준표(SCP_화면별 조회조건 정리 List 시트 · CR-071)'
+    if RX_SRC_ASIS.search(a) or t.startswith('DB @diff') or t.startswith('E2E @snap'): return 'ASIS:' + re.sub(r'\s+', ' ', a)[:80]
+    if RX_SRC_META.search(a): return 'META:' + re.sub(r'\s+', ' ', a)[:80]
+    if RX_SRC_RULE.search(a + ' ' + (r.get('expected') or '')) or r.get('source') == 'CONFIRMED': return 'RULE:' + re.sub(r'\s+', ' ', a)[:80]
+    return 'GENERAL'
+
+
+def derive_evidence_ref(r, mid):
+    t = r.get('tobe_ref') or ''
+    if t.startswith('E2E') or t.startswith('수동 E2E'): return f"Doc/verify/{mid}/e2e_results.json#{r['row_id']}"
+    if re.match(r'^(STATIC|META|SYN|DB|W1 |sort)', t): return f"Doc/verify/{mid}/verify_ledger.csv#{r['row_id']}({t[:40]})"
+    if t.startswith('상속') or t.startswith('규칙 판정 상속'):
+        m = re.findall(r'\[((?:V|T|EG|AD)-[0-9a-f]{8})\]', r.get('evidence') or '')
+        return f"Doc/verify/{mid}/verify_ledger.csv#{','.join(m[:4])}" if m else ''
+    if t.startswith('TO-BE'): return t[:120]
+    if r.get('source') == 'TRACE':  # 2026-11-07 T149: 대조표 추적 행은 증거 경로가 늘 공란이라 FAIL 이 전부 '[증거 부족: 증거 경로 없음]' ERROR 로 내려갔다
+        if re.search(r'smoke|Excel 조회조건 정리', t + ' ' + (r.get('note') or '')): return f"Doc/e2e/results/{mid}/_summary.csv#{r['rule_id']}"
+        return f"Doc/verify/{mid}/mapping_trace.md#{r['row_id']}"
+    return ''
+
+
+def evidence_gate(rows, stat, mid):
+    rank = {}
+    for x in read_csv(P('tools', 'Harness', 'rules', 'expected_source_rank.csv')):
+        rank[(x.get('prefix') or '').strip()] = (x.get('fail_allowed') or 'N').strip().upper() == 'Y'
+    oc = {x['rule_id']: (x.get('oracle_class') or 'HOLD') for x in read_csv(P('Doc', 'verify', '_oracle_class.csv'))}
+    stat.setdefault('EVIDENCE_GATE', 0); stat.setdefault('HOLD_RULE', 0)
+    for r in rows:
+        # 2026-11-07 T149: 이전 판정이 이 게이트에서 내린 ERROR/판정필요(원판정 FAIL)면 원판정으로 되돌려 다시 심사 — 재판정(--skip-e2e·judge 단독)이 이전 강등을 그대로 물려받지 않게
+        if '원판정:FAIL(G2 게이트' in (r.get('note') or '') and (r.get('evidence') or '').startswith(('[증거 부족', '[보류 규칙')) and r['result'] in ('ERROR', '판정필요'):
+            r['result'] = 'FAIL'; r['evidence'] = re.sub(r'^\[(증거 부족|보류 규칙)[^\]]*\]\s*', '', r['evidence']); r['note'] = re.sub(r'\s*\|\s*원판정:FAIL\(G2 게이트[^)]*\)', '', r['note']); r['expect_src'] = ''; r['evidence_ref'] = ''
+        if not r.get('expect_src') or r['expect_src'] == 'GENERAL' or (r.get('evidence') or '').startswith('[증거 부족'): r['expect_src'] = derive_expect_src(r)  # 이전 실행의 파생값은 다시 계산
+        if not r.get('evidence_ref'): r['evidence_ref'] = derive_evidence_ref(r, mid)
+        if r.get('_mctx') is not None and not r.get('precond'): r['precond'] = json.dumps({'mctx': r['_mctx']}, ensure_ascii=False)[:600]
+        # 2026-11-08 T163(변이 시험 M5): 원장에 박힌 oracle_class 만 믿어 마스터 _oracle_class.csv 를 HOLD 로 바꿔도 FAIL 이 그대로 통과했다 → 마스터가 정본(CONFIRMED 행은 RULE 고정)
+        r['oracle_class'] = 'RULE' if r.get('source') == 'CONFIRMED' else oc.get(r['rule_id'], r.get('oracle_class') or 'HOLD')
+        if r['result'] != 'FAIL' or r['expect_src'] == 'USER_VERDICT' or (r.get('evidence') or '').startswith('[사용자판정]'): continue
+        if re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|선행 미구현에 종속|선행 대조표 |규칙 \w+ 판정 \d+행)', r.get('evidence') or ''): continue  # 집계·상속 행은 원천 행이 게이트를 지난다(조치 필요에도 오르지 않음)
+        if r.get('oracle_class') == 'HOLD':
+            r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(G2 게이트 HOLD)')[:600]; r['result'] = '판정필요'
+            r['evidence'] = ('[보류 규칙: Doc/verify/_oracle_class.csv 미분류 — 오라클(ASIS/RULE/RUNTIME) 지정 뒤 재판정] ' + (r.get('evidence') or ''))[:1500]; stat['HOLD_RULE'] += 1; continue
+        pre = next((p for p in sorted(rank, key=len, reverse=True) if p and r['expect_src'].startswith(p)), '')
+        allowed = rank.get(pre, rank.get('', False))
+        ev_ok = bool(r.get('evidence_ref'))
+        pc_ok = True
+        if (r.get('tobe_ref') or '').startswith('E2E') and not r.get('precond'): pc_ok = False
+        if r['rule_id'] in ('F1', 'F2', 'F3', 'F5', 'F6', 'F7', 'F8'):  # 저장 계열은 조회 행이 있어야 측정이 성립(2026-11-06 SCP0127 F2: 시나리오 search 0행·'저장 요청 없음' FAIL)
+            # 2026-11-07 T153: 시나리오 첫 단계는 응답 전에 재어 늘 'search:0행·신규0·호출N' 로 시작(6화면 시나리오 F행 42 중 33 매칭 · 전부 뒤 단계 행>0 실측) → 옛 regex('신규0·호출' 포함)가
+            #   모든 시나리오 FAIL 을 '조회 0행' 전제 미충족 ERROR 로 내렸다(SCP0127·SCP0131 F2 '저장 요청 없음' 은폐). 뒤 단계(type/insert/save…)에 행>0 이 있으면 조회 행은 있었던 것
+            _ev0 = r.get('evidence') or ''
+            if re.search(r'search:0행|조회 결과 0행|조회 0행', _ev0) and not re.search(r'(type|insert|save|savehas|delrow|paste|edit|끝):[1-9]\d*행', _ev0): pc_ok = False  # 시나리오 내부 조회 0행(테스트 전체 mctx 는 다른 조회로 행이 있어도)
+            try:
+                _m = (json.loads(r['precond']) or {}).get('mctx') or {} if r.get('precond') else {}
+                if isinstance(_m, dict) and _m.get('rows') is not None and int(_m.get('rows')) <= 0: pc_ok = False
+            except (ValueError, TypeError): pass
+        if allowed and ev_ok and pc_ok: continue
+        why = []
+        if not allowed: why.append(f"기대원천 {r['expect_src'][:40]} = FAIL 불가 순위(expected_source_rank.csv)")
+        if not ev_ok: why.append('증거 경로 없음')
+        if not pc_ok: why.append('측정 전제 미충족(전제 기록 없음 또는 저장 계열인데 조회 행 0)')
+        r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(G2 게이트)')[:600]
+        r['result'] = 'ERROR' if (not ev_ok or not pc_ok) else '판정필요'
+        r['evidence'] = (f"[증거 부족: {' · '.join(why)}] " + (r.get('evidence') or ''))[:1500]; stat['EVIDENCE_GATE'] += 1
+
+
+def order_rule(rows, stat, mid, asis_id):
+    """2026-11-07 T159: 조회조건 순서 판정(SC1 smoke · G4 정적)을 함수로 — smoke 반입 뒤에도 한 번 더 돌려 RULE_SCREEN SC1 행(화면마다 생성)이 Excel 기준으로 판정되게 한다"""
+    # 조회조건 순서(SC1 E2E smoke · G4 정적) — 기준표 tobe_order 와 달라도 TO-BE 화면 순서가 AS-IS 디자이너 배치 순서와 같으면 PASS
+    #   (2026-10-30 SCP0100 조치 필요 6번 '판정 오류': 기준표 번호는 화면 좌표 순서가 아니다 — 검사기 결함 T11). 기준표·AS-IS 배치 둘 다와 다를 때만 FAIL.
+    #   SC1 은 smoke 어노테이션의 '화면 … / 기준 …' 원문이 있어야 판정한다 — 요약에서 잘렸으면 근거 없는 FAIL 이므로 ERROR '[근거 불충분]'(재측정)
+    import asis_layout
+    stat.setdefault('ORDER_LAYOUT', 0)
+    order_ann = ''
+    import e2e_paths  # 2026-11-06: 화면별 E2E 요약 Doc/e2e/results/<ID>/_summary.csv 우선(없으면 공용 색인) — 동시 실행 화면끼리 덮어쓰기 방지
+    for x in read_csv(e2e_paths.summary_path(mid)):
+        if (x.get('menu_id') or '').upper() == mid and x.get('kind') == 'smoke':
+            order_ann = next((s_ for s_ in (x.get('annotations') or '').split(' || ') if '(기준표 순서)(order)' in s_), '') or order_ann
+    mo = re.search(r'화면 (.+?) / 기준 (.+?)\s*$', order_ann)
+    for r in rows:
+        ev = r.get('evidence') or ''
+        if r['result'] != 'FAIL' or ev.startswith('[사용자판정]'):
+            continue
+        if r['rule_id'] == 'SC1' and 'smoke cond order' in ev + ' ' + (r.get('tobe_ref') or '') and 'smoke cond gone' not in ev + ' ' + (r.get('tobe_ref') or ''):
+            # 2026-11-09 CR-098(사용자 지시 · SCP0084): 조회조건 순서는 판정 대상 제외 — Excel(tobe_seq)·정렬원칙(tobe_order)·AS-IS 배치 어느 것과 달라도 FAIL/판정필요 금지 → NA(실측은 참고로 보존)
+            #   Excel 조회조건 정리 대조 = 사용여부(기준표 제외 조건 잔존 SC1 gone · 기준표 조건 누락 H5) + EDIT 형태까지만
+            r['result'] = 'NA'; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 순서 판정 제외(CR-098)'; stat['ORDER_LAYOUT'] += 1
+            r['evidence'] = ('조회조건 순서는 판정 대상 제외(CR-098 · 사용자 지시 2026-11-09 — Excel 대조는 사용여부·EDIT 형태까지만) · 참고 실측: ' + (order_ann or ev)[:600])[:1500]
+            continue
+        if r['rule_id'] == 'SC1' and 'smoke cond gone' in ev + ' ' + (r.get('tobe_ref') or ''):
+            continue  # CR-098: 사용여부(기준표 제외 조건 잔존) FAIL — 순서 참고 문구가 같이 붙어 있어도 순서 분기로 보내지 않는다(종전엔 순서 분기가 ERROR/PASS 로 덮을 수 있었음)
+        if r['rule_id'] == 'SC1' and 'smoke cond order' in ev + ' ' + (r.get('tobe_ref') or ''):
+            if not mo:
+                r['result'] = 'ERROR'; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 근거 불충분'
+                r['evidence'] = ('[근거 불충분] E2E smoke 기준표 순서 FAIL 이나 실측 원문(화면 순서 / 기준 순서)이 요약(_summary.csv)에 없음(어노테이션 잘림) — 무엇이 다른지 확인할 수 없어 FAIL 로 쓰지 않음 · smoke 재측정 필요 · 원문: ' + (order_ann or ev)[:300])[:1500]
+                stat['ORDER_LAYOUT'] += 1; continue
+            scr = [t.strip() for t in mo.group(1).split('→') if t.strip()]
+            c_ = asis_layout.compare(mid, scr, asis_id)
+            base = f"화면 {' → '.join(scr)} / 기준표 {mo.group(2)[:300]} / AS-IS 배치 {' → '.join(c_['asis_seq'])}{(' (이름 못 맞춤: ' + ', '.join(c_['unmatched']) + ')') if c_['unmatched'] else ''}"
+            # 2026-11-06 사용자 지시(SCP0016 5번): 조회조건 순서·구성의 기준 = Excel 문서(SCP_화면별 조회조건 정리 — List 시트 행 순서 = search_cond.csv tobe_seq).
+            #   Excel 순서·구성과 다를 때만 오류이고, 오류로 적을 때는 Excel 의 순서·구성을 함께 적는다. AS-IS 배치는 참고로만(종전 'AS-IS 배치와 같으면 PASS' 폐지).
+            _sc = [x for x in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')) if (x.get('menu_id') or '').upper() == mid and (x.get('area') or 'MAIN').upper() == 'MAIN']
+            _use = sorted([x for x in _sc if x.get('usage') == 'USE' and (x.get('tobe_seq') or x.get('tobe_order'))], key=lambda x: int(x.get('tobe_seq') or x.get('tobe_order') or 0))
+            _xl = list(dict.fromkeys(x['tobe_name'] for x in _use))
+            if _xl:
+                _nz = lambda t: re.sub(r'[^a-z0-9가-힣]', '', str(t).lower())
+                _src = sorted({f"{x.get('src_file')} {x.get('src_row')}행" for x in _use})[:1]
+                _gone = sorted({f"{x.get('asis_name')}({x.get('usage')})" for x in _sc if x.get('usage') not in ('USE', '') and x.get('asis_name') not in ('', '-')})
+                _scr_in = [s for s in scr if _nz(s) in {_nz(t) for t in _xl}]
+                _want = [t for t in _xl if _nz(t) in {_nz(s) for s in scr}]
+                xl_txt = f"Excel(List 시트 순서 · {_src[0] if _src else 'search_cond.csv'}) 순서·구성: {' → '.join(_xl)}" + (f" · 제외 {', '.join(_gone[:8])}" if _gone else '')
+                if [_nz(s) for s in _scr_in] == [_nz(t) for t in _want]:
+                    r['result'] = 'PASS'; r['evidence'] = (f"조회조건 순서 = Excel 순서 · 화면 {' → '.join(scr)} · {xl_txt}")[:1500]
+                else:
+                    r['result'] = 'FAIL'; r['evidence'] = (f"조회조건 순서가 Excel 과 다름 — 화면 {' → '.join(scr)} ↔ {xl_txt} · (참고) AS-IS 배치 {' → '.join(c_['asis_seq'])}")[:1500]
+                r['tobe_ref'] = (r.get('tobe_ref') or '') + ' + Excel 조회조건 정리(List 시트)'; stat['ORDER_LAYOUT'] += 1
+                continue
+            if c_['ok']:
+                r['result'] = 'PASS'; r['evidence'] = ('조회조건 순서 = AS-IS 화면 배치 순서(디자이너 좌표: 위→아래 줄, 줄 안 왼→오른) — 기준표 tobe_order 번호와는 다르나 그 번호는 화면 좌표 순서가 아님(2026-10-30 SCP0100 판정 오류) · ' + base)[:1500]
+            elif c_['ok'] is None:
+                r['result'] = 'ERROR'; r['evidence'] = (f"[근거 불충분] 기준표 순서와 다르나 AS-IS 배치 대조 불가({c_['reason']}) — FAIL 로 쓰지 않음 · " + base)[:1500]
+            else:
+                # 기준표·AS-IS 배치 둘 다와 다름 — TO-BE 는 화면 폭·레이아웃 규칙(#154 체크박스 입력 열 · 2줄 고정 지시)으로 줄바꿈이 달라질 수 있어 기계가 결함으로 확정할 수 없다
+                #   (2026-10-30 SCP0100: 1행 동일 · 2행 이후 Search Level 콤보가 Cell Qty·A/S 앞 — 사용자 판정 '오류 아님') → FAIL 이 아니라 판정필요(사람 판정) · 세 순서를 증거로
+                r['result'] = '판정필요'
+                r['evidence'] = (ORDER_REVIEW_TAG + ' 조회조건 배치 순서가 기준표와도, AS-IS 화면 배치와도 다름 — 레이아웃(줄바꿈) 차이인지 순서 결함인지 사람이 판정 · ' + base)[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' + AS-IS 디자이너 배치'; stat['ORDER_LAYOUT'] += 1
+        elif r['rule_id'] == 'G4' and r['source'] == 'SEARCH' and (r.get('tobe_ref') or '').startswith('STATIC Form 라벨'):
+            m4 = re.search(r'/ 화면: (.+?) \(순서 차이', ev)
+            if not m4:
+                continue
+            # 2026-11-07 T159: 종전 'AS-IS 배치와 같으면 PASS'(10-30) 는 11-06 사용자 지시(기준 = Excel 조회조건 정리)와 충돌 — SCP0127 은 G4 가 PASS 로 덮고 SC1 행은 없어 Excel 과 다른 순서가 어디에도 안 남았다.
+            #   정적 G4 순서 FAIL 은 순서 판정 단일 창구인 SC1 행(smoke 실측 · Excel 기준)으로 위임(NA · 원 판정 보존) — 같은 결함이 조건 수만큼 중복 등재되는 것도 막는다
+            r['result'] = 'NA'; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 순서 판정 제외(CR-098)'; stat['ORDER_LAYOUT'] += 1
+            r['evidence'] = ('조회조건 순서는 판정 대상 제외(CR-098 · 사용자 지시 2026-11-09 — Excel 대조는 사용여부·EDIT 형태까지만) · 참고 원 판정: ' + ev[:400])[:1500]
+    # T159: 같은 화면에 대조표 SC1 행(TRACE)과 화면 규칙 SC1 행(RULE_SCREEN)이 둘 다 판정되면 조치 필요가 2건으로 중복 — TRACE 행이 있으면 RULE_SCREEN 행은 그 행을 가리키는 NA
+    _tr = [x for x in rows if x['rule_id'] == 'SC1' and x['source'] == 'TRACE' and x['result'] not in ('NOT_RUN', '')]
+    if _tr:
+        for r in rows:
+            if r['rule_id'] == 'SC1' and r['source'] == 'RULE_SCREEN' and r['result'] not in ('NOT_RUN', '') and not (r.get('evidence') or '').startswith('[사용자판정]'):
+                r['result'] = 'NA'; r['evidence'] = (f"조회조건 순서는 대조표 SC1 행 [{_tr[0]['row_id']}] 로 판정({_tr[0]['result']}) — 중복 등재 방지 · 원 실측: " + (r.get('evidence') or '')[:600])[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 대조표 SC1 행으로 판정'
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('menu_id')
+    ap.add_argument('--no-db', action='store_true')
+    a = ap.parse_args()
+    mid = a.menu_id.upper()
+    asis_id = next((m['asis_id'].upper() for m in read_csv(P('tools', 'Harness', 'rules', 'map_screen.csv')) if m.get('tobe_id', '').upper() == mid), mid)
+    led_p = P('Doc', 'verify', mid, 'verify_ledger.csv')
+    rows = read_csv(led_p)
+    if not rows:
+        print(f'[ERROR] 원장 없음: {led_p} — ledger.py 먼저')
+        return 2
+    for r in rows:  # W8-A 열(ledger.py COLS 2026-11-06) — 옛 원장(19열)도 같은 키 집합으로 쓴다(fieldnames=rows[0].keys())
+        for k in ('oracle_class', 'expect_src', 'evidence_ref', 'precond', 'applicable', 'applicable_why'): r.setdefault(k, '')
+    by_id = {r['row_id']: r for r in rows}
+    stat = {'E2E': 0, 'META': 0, 'STATIC': 0, 'DEFECT': 0}
+
+    # 사용자판정(CheckList 반입) 행 되돌리기(2026-10-30 SCP0100 — 검사기 결함 T12 회귀 오라클 무력화):
+    #   이전 실행의 사용자판정 결과(tobe_ref '수동 사용자판정(CheckList)')로 시작하면 E2E 반입·판정 단계가 그 행을 건너뛰어 검사기 자신의 판정이 다시 계산되지 않고,
+    #   아래 사용자판정 반입이 그 PASS 를 '원판정' 으로 적어 regress.py 가 같은 허위 FAIL 재발을 보지 못했다(SCP0100 note '원판정:PASS' 누적).
+    #   → 매 실행 검사기 상태(최근 원판정 · 실측 증거)로 되돌려 판정하고, 사용자판정은 CheckList 에서 다시 반입한다(사용자 판정 결과는 그대로 남는다)
+    stat.setdefault('USER_RESET', 0)
+    for r in rows:
+        if (r.get('tobe_ref') or '') == '수동 사용자판정(CheckList)':
+            origs = re.findall(r'원판정:(\w+)', r.get('note') or '')
+            r['result'] = origs[-1] if origs else 'NOT_RUN'
+            r['evidence'] = re.sub(r'^(\[사용자(판정|의견)[^\]]*\].*?— 실측: )+', '', r.get('evidence') or '', flags=re.S)
+            r['tobe_ref'] = ''
+            r['note'] = re.sub(r'\s*\|\s*(사용자판정|사용자의견|원판정):[^|]*', '', r.get('note') or '')
+            stat['USER_RESET'] += 1
+
+    # E2E 반입
+    e2e_ids = set()  # 이번 실행에 E2E 결과가 들어온 행 — 뒤 단계(상속·스윕)가 덮지 않는다(2026-10-26)
+    e2e_p = P('Doc', 'verify', mid, 'e2e_results.json')
+    if os.path.exists(e2e_p):
+        import datetime  # noqa: E402
+        at = datetime.datetime.fromtimestamp(os.path.getmtime(e2e_p)).strftime('%m-%d %H:%M')  # 어느 실행 결과인지(--skip-e2e 재판정 시 이전 실행값임을 드러냄)
+        with open(e2e_p, encoding='utf-8') as f:
+            for e in json.load(f):
+                r = by_id.get(e['row_id'])
+                if r and '스냅샷' in (r.get('target') or '') and not str(e.get('tobe_ref') or '').startswith('E2E @snap'):
+                    stat.setdefault('SNAP_GUARD', 0); stat['SNAP_GUARD'] += 1
+                    continue  # 2026-11-07 T142: 스냅샷 행은 _snap.spec(@snap) 결과만 반입 — @trace A5/H4 묶음 put 이 덮어 골든 없는 행이 PASS 되던 결함(스펙 put 가드와 이중)
+                if r and (r.get('tobe_ref') or '').startswith('수동') and not (str(e.get('evidence') or '').startswith('[재실측') and e.get('result') in ('PASS', 'FAIL')):
+                    continue  # 사람·전용 프로브로 확정한 판정이 우선(자동 재실행이 덮어쓰지 않음 — 2026-10-24) · 단 '[재실측' 표식의 확정 결과(검사기 결함 교정 후 재측정)는 실측 전 판정을 대체(2026-10-28 H2 Set_ValidTextColor)
+                if r and r.get('result') == 'NA' and (r.get('evidence') or '').startswith('기준표 제외'):
+                    continue  # 조회조건 기준표가 제외한 AS-IS 조건(TO-BE 룰 CR-071) — 엔진의 '칸 없음' FAIL 로 덮지 않는다
+                if r and not_target(r) and not str(e.get('evidence') or '').startswith('[재실측'):
+                    continue  # 2026-10-30: 실행되지 않는 AS-IS 코드(dead)·검사 대상 아님 행 — 이전 실행의 E2E 결과로 덮지 않는다(SCP0041 SCP0040 F4)
+                if r:
+                    # 2026-10-29(재발 방지 ①): 측정 시점 조건 해시가 현재 원장 조건과 다르면 낡은 판정 — 반입하지 않고 재측정 필요(ERROR)로. 배선 해석·대조표 갱신 뒤 옛 FAIL 이 조치 필요에 남던 구조적 원인
+                    cur_h = hashlib.sha1(str(r.get('condition') or '').encode('utf-8')).hexdigest()[:8]
+                    if e.get('cond') and e.get('cond') != cur_h and e.get('result') in ('PASS', 'FAIL', 'NA'):
+                        r['result'] = 'ERROR'; r['evidence'] = (f"[재측정 필요] 검사 조건이 바뀐 뒤 아직 재실행되지 않음(측정 시점 조건 {e.get('cond')} ≠ 현재 {cur_h}) — 이전 판정 {e['result']} 보류: " + str(e.get('evidence') or '')[:400])[:1500]
+                        r['tobe_ref'] = f"{e.get('tobe_ref', 'E2E')} @{at} (조건 변경)"; stat.setdefault('E2E_STALE', 0); stat['E2E_STALE'] += 1; e2e_ids.add(r['row_id']); continue
+                    r['result'], r['evidence'], r['tobe_ref'] = e['result'], e['evidence'], f"{e.get('tobe_ref', 'E2E')} @{at}"
+                    stat['E2E'] += 1; e2e_ids.add(r['row_id'])
+                    if isinstance(e.get('mctx'), dict): r['_mctx'] = e['mctx']
+                    # W8-A 3-증거 기록(플랜 1-3): 스펙·반입기가 준 기대원천·증거 경로 우선, 전제 = 측정 맥락(mctx)+조건 해시+측정 시각(+스펙 precond) · 이전 실행 값은 비운다(재판정마다 다시 파생)
+                    r['expect_src'] = ''; r['evidence_ref'] = ''
+                    if e.get('expect_src'): r['expect_src'] = str(e['expect_src'])[:200]
+                    if e.get('evidence_ref'): r['evidence_ref'] = str(e['evidence_ref'])[:300]
+                    _pc = {'mctx': e.get('mctx'), 'cond': e.get('cond'), 'at': at}
+                    if isinstance(e.get('precond'), dict): _pc.update(e['precond'])
+                    r['precond'] = json.dumps(_pc, ensure_ascii=False)[:600]
+
+    # ── P1 측정 전제 게이트(2026-11-06 근본 보완 — 사용자: '오류 아닌데 오류로 판정'): FAIL 은 측정이 성공했을 때만 쓴다.
+    #   E2E 결과 행의 측정 맥락(mctx: 그 테스트의 call-proc 수·조회 최대 행·필수 자동 채움 수)과 증거 문구를 함께 보고,
+    #   (1) 조회가 한 번도 행을 받지 못한 상태(rows<=0)에서 '없음·0개·못 찾음·읽지 못함' 류 증거로 적힌 FAIL, (2) 그리드 컬럼 검사(COLUMN)인데 서버 호출이 0건인 FAIL
+    #   은 화면 결함이 아니라 측정 실패 → ERROR '[측정 전제 미충족]'. 사용자 판정 행·재실측 행은 건드리지 않는다. 개별 검사기가 빠뜨린 ERROR 처리의 공통 백스톱.
+    stat.setdefault('PRECOND_ERROR', 0)
+    RX_NOMEAS = re.compile(r'후보 0|후보를 읽지|읽지 못|못 찾|찾지 못|판정 가능한 [^·]{0,20}없음|편집 가능 셀 없음|옵션 없음|없음\(표시 자체|헤더 1행|병합 0개|대상 없음|0개\)|\b0건 \(|측정 경로')
+    for r in rows:
+        mc = r.get('_mctx')
+        if not mc or r['result'] != 'FAIL' or r['row_id'] not in e2e_ids: continue
+        ev = r.get('evidence') or ''
+        if ev.startswith('[사용자판정]') or ev.startswith('[재실측') or (r.get('tobe_ref') or '').startswith('수동'): continue
+        rows_n = int(mc.get('rows') if mc.get('rows') is not None else -1); calls_n = int(mc.get('calls') or 0)
+        why = ''
+        if rows_n <= 0 and RX_NOMEAS.search(ev): why = f'조회 응답 행 {rows_n if rows_n >= 0 else "없음"}·호출 {calls_n}건 상태에서 대상 없음 류 증거'
+        elif r['source'] == 'COLUMN' and calls_n == 0: why = '그리드 컬럼 검사인데 서버 호출 0건(조회 전)'
+        if not why: continue
+        r['note'] = ((r.get('note') or '') + f" | 원판정:FAIL(P1 게이트)")[:600]
+        r['result'] = 'ERROR'; r['evidence'] = (f"[측정 전제 미충족] {why} — 화면 결함이 아니라 측정 실패로 분류(P1 게이트) · 원 실측: {ev[:600]}")[:1500]
+        stat['PRECOND_ERROR'] += 1
+
+    # ── P3 시험 검사 게이트(2026-11-06 근본 보완): 새로 만든·오늘 허위 FAIL 을 낸 검사(tools/Harness/rules/check_maturity.csv status=trial)는
+    #   사용자가 서로 다른 화면 2개 이상에서 FAIL 을 확인하기 전까지 FAIL 을 '판정필요' 로만 낸다(FAIL 승격 게이트). confirmed 로 바꾸면 종전대로.
+    #   사용자 직접 판정(_user_verdicts_direct.csv)은 뒤 단계에서 이 결과를 덮으므로 사용자가 FAIL 로 확정한 행은 FAIL 로 남는다.
+    stat.setdefault('TRIAL', 0)
+    _cm = [x for x in read_csv(P('tools', 'Harness', 'rules', 'check_maturity.csv')) if (x.get('status') or '').strip().lower() == 'trial']
+    def _cm_hit(r):
+        for x in _cm:
+            if r['rule_id'] not in [t.strip() for t in (x.get('rule_ids') or '').split(';') if t.strip()]: continue
+            sf = [t.strip() for t in (x.get('source_filter') or 'ALL').split('|')]
+            if 'ALL' not in sf and r['source'] not in sf: continue
+            try:
+                if x.get('target_re') and not re.search(x['target_re'], r.get('target') or ''): continue
+                if x.get('evidence_re') and not re.search(x['evidence_re'], r.get('evidence') or ''): continue
+            except re.error:
+                continue
+            return x
+        return None
+    for r in rows:
+        if r['result'] != 'FAIL' or r['row_id'] not in e2e_ids: continue
+        ev = r.get('evidence') or ''
+        if ev.startswith('[사용자판정]') or ev.startswith('[재실측') or (r.get('tobe_ref') or '').startswith('수동'): continue
+        x = _cm_hit(r)
+        if not x: continue
+        r['note'] = ((r.get('note') or '') + f" | 원판정:FAIL(시험 검사 {x['check_id']})")[:600]
+        r['result'] = '판정필요'
+        r['evidence'] = (f"[시험 검사 {x['check_id']} — FAIL 승격 전(화면 2개 이상 사용자 확인 뒤 check_maturity.csv status=confirmed)] {x.get('note') or ''} · 실측: {ev[:700]}")[:1500]
+        stat['TRIAL'] += 1
+
+    # ── P5 유사 사용자 판정(2026-11-06 근본 보완): 다른 화면에서 사용자가 '오류 아님(PASS/NA/판정필요)' 으로 판정한 행과 같은 규칙·같은 대상(화면 ID 뗀 이름) 또는
+    #   같은 증거 핵심을 가진 이 화면 FAIL 에 표식을 붙인다 — 조치 목록에 '전 화면 제외 여부 결정 요청' 으로 보이게(오늘 CN·필터 유지처럼 수동으로 찾던 일을 자동화).
+    stat.setdefault('SIMILAR_VERDICT', 0)
+    try:
+        _nz = lambda t: re.sub(r'[^a-z0-9가-힣]', '', str(t or '').lower())
+        _tcore = lambda t: _nz(re.sub(r'^[A-Z]{2,3}\d{4}(_\d+)?\s*', '', str(t or '')))
+        _ecore = lambda e: _nz(re.sub(r'^(\[[^\]]*\]\s*)+', '', re.sub(r'^\[사용자판정\].*?— 실측: ', '', str(e or ''), flags=re.S))[:60])
+        _uv = [d for d in read_csv(P('Doc', 'verify', '_user_verdicts_direct.csv')) if (d.get('menu_id') or '').upper() != mid and (d.get('verdict') or '').strip().upper() in ('PASS', 'NA', 'SKIP', '판정필요')]
+        _led_cache = {}
+        _pat = {}
+        for d in _uv:
+            om = (d.get('menu_id') or '').upper()
+            if om not in _led_cache:
+                lp2 = P('Doc', 'verify', om, 'verify_ledger.csv'); _led_cache[om] = {x['row_id']: x for x in read_csv(lp2)} if os.path.exists(lp2) else {}
+            x = _led_cache[om].get((d.get('row_id') or '').strip())
+            if not x: continue
+            tag = f"{om} {d.get('row_id')} {d.get('verdict')}({(d.get('opinion') or '')[:50]})"
+            _pat.setdefault((x['rule_id'], 't', _tcore(x.get('target'))), tag)
+            ec = _ecore(x.get('evidence'))
+            if len(ec) >= 20: _pat.setdefault((x['rule_id'], 'e', ec), tag)
+        if _pat:
+            _mine = {(d.get('row_id') or '').strip() for d in read_csv(P('Doc', 'verify', '_user_verdicts_direct.csv')) if (d.get('menu_id') or '').upper() == mid}
+            for r in rows:
+                if r['result'] not in ('FAIL', '판정필요') or r['row_id'] in _mine or (r.get('evidence') or '').startswith('[사용자판정]'): continue  # 시험 검사로 판정필요가 된 행도 대상
+                tag = _pat.get((r['rule_id'], 't', _tcore(r.get('target')))) or _pat.get((r['rule_id'], 'e', _ecore(r.get('evidence'))))
+                if not tag: continue
+                r['note'] = ((r.get('note') or '') + f" | 유사 사용자 판정: {tag}")[:600]; stat['SIMILAR_VERDICT'] += 1
+    except Exception as _ex:
+        print(f'[WARN] 유사 사용자 판정 대조 실패: {_ex}')
+
+    # ── 검증엔진 미기동(2026-10-29): Playwright 테스트가 측정 전에 죽으면(로그인 401 — BE 커넥션 풀 고갈 · 테스트 타임아웃 · 픽스처 오류) 그 테스트가 맡은 행은 결과를 받지 못해
+    #   NOT_RUN 으로 남고 뒤 단계에서 NA('검사기 있음 — 실행 필요')로 가라앉는다. 이는 화면 판정이 아니라 도구 실패 → ERROR '[검증엔진 미기동]' + 테스트명·오류 머리(미검증 시트).
+    #   실측: 21:18 5화면 동시 CheckList 중 SCP0020·SCP0096·SCP0111 의 @trace 1개씩이 21:23~25 로그인 실패(풀 고갈 60초 대기 → 401 -9998) → C1·C4·G6 행이 조용히 NA.
+    stat.setdefault('ENGINE_FAIL_ERROR', 0)
+    failed_tests = []
+    pw_p = P('Doc', 'verify', mid, 'e2e', 'results.json')
+    if os.path.exists(pw_p) and os.path.exists(e2e_p) and os.path.getmtime(pw_p) >= os.path.getmtime(e2e_p) - 3600:
+        try:
+            import datetime as _dt
+            at_pw = _dt.datetime.fromtimestamp(os.path.getmtime(pw_p)).strftime('%m-%d %H:%M')
+            with open(pw_p, encoding='utf-8') as f:
+                pw = json.load(f)
+
+            def _walk(s, file_):
+                file_ = s.get('file') or file_
+                for sp in s.get('specs', []):
+                    for t in sp.get('tests', []):
+                        rs = t.get('results') or []
+                        if rs and all(x.get('status') in ('failed', 'timedOut', 'interrupted') for x in rs):
+                            err = ((rs[-1].get('error') or {}).get('message') or rs[-1].get('status') or '')
+                            failed_tests.append({'title': sp.get('title') or '', 'file': file_ or '', 'at': at_pw, 'err': re.sub(r'\x1b\[[0-9;]*m|\s+', ' ', err).strip()[:160]})
+                for c in s.get('suites', []):
+                    _walk(c, file_)
+            for s in pw.get('suites', []):
+                _walk(s, '')
+        except Exception as ex:
+            print(f'[WARN] Playwright 결과(results.json) 읽기 실패 — 검증엔진 미기동 귀속 생략: {ex}')
+    # ── 검증엔진 무판정(2026-10-30 SCP0111: 25 테스트 전부 passed 인데 C4·F1·G3·K4 판정 0 — Playwright 통과 ≠ 판정 생성): passed 테스트가 맡은 규칙에
+    #   e2e 결과가 하나도 없고 원장에 그 규칙의 미실행 행이 있으면 '프로브가 대상을 찾지 못함' = 검사기 결함 → ERROR(미검증 시트 · W4/W5). NA 로 가라앉히지 않는다(T13)
+    stat.setdefault('ENGINE_NOJUDGE', 0)
+    # 2026-11-06 T61(SCP0127·SCP0131): 테스트 제목의 규칙 코드만으로 담당 행을 정하면 RULE_SCREEN 전용 테스트('실적 구간 색(H2)' — 대상 문서 행이 없으면 즉시 return·passed)가
+    #   COLUMN H2 행 15·13개를 '무판정' ERROR 로 가져갔다. 실제 담당 = 그리드 컬럼 프로브(제목에 H2 없음 · 그 테스트는 실패). 스펙 본문의 pick 필터가 고르는
+    #   source·rule_id 로 담당을 정한다: 본문에 source 비교가 있으면 그 source 행만 · 실패 귀속은 제목 규칙 ∪ 본문 rule_id 비교.
+    own = test_ownership([P('Doc', 'e2e', 'specs', '_verify.spec.ts'), P('Doc', 'e2e', 'specs', '_trace.spec.ts')])
+    passed_tests = []
+    if os.path.exists(pw_p) and os.path.exists(e2e_p) and os.path.getmtime(pw_p) >= os.path.getmtime(e2e_p) - 3600:
+        try:
+            with open(pw_p, encoding='utf-8') as f:
+                pw2 = json.load(f)
+
+            def _walk2(s, file_):
+                file_ = s.get('file') or file_
+                for sp in s.get('specs', []):
+                    for t in sp.get('tests', []):
+                        rs = t.get('results') or []
+                        if rs and rs[-1].get('status') == 'passed':
+                            passed_tests.append({'title': sp.get('title') or '', 'file': file_ or ''})
+                for c in s.get('suites', []):
+                    _walk2(c, file_)
+            for s in pw2.get('suites', []):
+                _walk2(s, '')
+        except Exception:
+            pass
+    if passed_tests and os.path.exists(e2e_p):
+        with open(e2e_p, encoding='utf-8') as f:
+            e2e_rules = {by_id[e['row_id']]['rule_id'] for e in json.load(f) if e.get('row_id') in by_id}
+        for pt in passed_tests:
+            rules = set(re.findall(r'(?<![A-Za-z0-9])([A-Z]\d{1,2}|X-[A-Z]+)(?![A-Za-z0-9])', pt['title']))
+            runner = 'trace' if '_trace' in pt['file'] else 'verify'
+            srcs = own_of(own, runner, pt['title']).get('sources') or set()  # T61: 비어 있으면 종전대로(제목 규칙만)
+            for rid in rules - e2e_rules:
+                for r in rows:
+                    if r['row_id'] in e2e_ids or r['rule_id'] != rid or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL') or r['result'] not in ('NOT_RUN', '') or not_target(r):
+                        continue
+                    if srcs and r['source'] not in srcs:
+                        continue  # T61: 이 테스트가 고르지 않는 출처의 행
+                    if (r['source'] == 'TRACE') != (runner == 'trace'):
+                        continue
+                    r['result'] = 'ERROR'
+                    r['evidence'] = (f"[검증엔진 무판정] 검증엔진 테스트 '{pt['title']}' 은 passed 인데 규칙 {rid} 판정이 0건 — 프로브가 이 대상을 찾지 못하거나 측정 경로 없이 끝남(검사기 결함: 대상 탐색·경로 확인)")[:1500]
+                    r['tobe_ref'] = f"검증엔진(@{runner}) 무판정 @{at_pw if 'at_pw' in dir() else ''}"; stat['ENGINE_NOJUDGE'] += 1
+    for ft in failed_tests:
+        rules = set(re.findall(r'(?<![A-Za-z0-9])([A-Z]\d{1,2}|X-[A-Z]+)(?![A-Za-z0-9])', ft['title']))
+        runner = 'trace' if '_trace' in ft['file'] else 'verify'
+        o = own_of(own, runner, ft['title']); srcs = o.get('sources') or set()
+        rules |= o.get('rules') or set()  # T61: 제목에 없는 담당 규칙(그리드 컬럼 프로브의 H2·H5·D5…)
+        if not rules:
+            continue
+        for r in rows:
+            if r['row_id'] in e2e_ids or r['rule_id'] not in rules or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL') or r['result'] not in ('NOT_RUN', ''):
+                continue
+            if srcs and r['source'] not in srcs:
+                continue
+            if (r['source'] == 'TRACE') != (runner == 'trace'):
+                continue  # TRACE 행 = @trace 엔진, 원장 행 = @verify 엔진이 측정한다
+            r['result'] = 'ERROR'
+            r['evidence'] = (f"[검증엔진 미기동] 검증엔진 테스트 '{ft['title']}' 이 측정 전에 실패해 이 행은 실행되지 않음 — {ft['err']} → 서버 상태(BE 커넥션 풀·CPU·동시 실행 수) 확인 후 재실행")[:1500]
+            r['tobe_ref'] = f"검증엔진(@{runner}) 미기동 @{ft['at']}"
+            stat['ENGINE_FAIL_ERROR'] += 1
+    if failed_tests:
+        print(f"[INFO] 측정 전 실패한 검증엔진 테스트 {len(failed_tests)}개 → 담당 미실행 행 {stat['ENGINE_FAIL_ERROR']}건 ERROR(검증엔진 미기동): " + ' | '.join(f"{t['title'][:50]}: {t['err'][:60]}" for t in failed_tests[:4]))
+
+    # ── 차단(BLOCKER, 2026-10-29): 앱 계정(SCMP_APP) 시노님·권한 누락 → 화면 조회·콤보 ORA-00942 → 검증엔진 테스트 중단(SCP0020 17/22 · SCP0111 18/22)
+    #   원인 1건은 RULE_SCREEN DB-SYN FAIL(조치 필요 1번) · 그 때문에 못 돈 행은 FAIL/NA 가 아니라 ERROR(차단 미실행) · 오류 증거(ORA-00942·HTTP 500·후보 없음)로 난 FAIL 은 ERROR(차단 영향)
+    stat.setdefault('BLOCKER', 0)
+    syn_rows = [x for x in read_csv(P('Doc', 'verify', mid, 'syn_check.csv')) if x.get('kind') != 'NOTE']
+    syn_bad = [x for x in syn_rows if (x.get('verdict') or 'OK') != 'OK']
+    pw_fail = []
+    try:
+        def _walk(s):
+            for sp in s.get('specs', []):
+                for t in sp.get('tests', []):
+                    for rr in t.get('results', []):
+                        if rr.get('status') not in ('passed', 'skipped'):
+                            pw_fail.append((sp.get('title', ''), ((rr.get('error') or {}).get('message') or '')))
+            for c in s.get('suites', []):
+                _walk(c)
+        pj = P('Doc', 'verify', mid, 'e2e', 'results.json')
+        if os.path.exists(pj):
+            for s in json.load(open(pj, encoding='utf-8')).get('suites', []):
+                _walk(s)
+    except Exception:
+        pw_fail = []
+    db_aborts = [(t, m) for t, m in pw_fail if 'BE DB 오류' in m]
+    # 부분 차단(2026-10-29): 콤보·룩업 API 오류는 fixture 가 중단하지 않고 e2e/dberr_partial.json 에 기록 — 콤보 의존 검사만 차단 영향
+    soft_hits = []
+    try:
+        pp = P('Doc', 'verify', mid, 'e2e', 'dberr_partial.json')
+        if os.path.exists(pp) and os.path.getmtime(pp) >= os.path.getmtime(e2e_p) - 3 * 3600 if os.path.exists(e2e_p) else os.path.exists(pp):
+            soft_hits = json.load(open(pp, encoding='utf-8'))
+    except Exception:
+        soft_hits = []
+    syn_hard = [x for x in syn_bad if x.get('kind') in ('PROC', 'META')]
+    syn_soft = [x for x in syn_bad if x.get('kind') not in ('PROC', 'META')]
+    soft_objs = sorted({o for h in soft_hits for o in (h.get('objects') or [])} | {x['name'] for x in syn_soft})
+    objs = sorted({x.get('name', '') for x in syn_bad if x.get('name')} | {o for _, m in db_aborts for o in re.findall(r'"SCMP_APP"\."([A-Z0-9_$#]+)"', m)} | set(soft_objs))
+    blocked = bool(syn_hard) or bool(db_aborts)          # 전면 차단 — 미실행 행 = ERROR
+    partial = (bool(syn_soft) or bool(soft_hits)) and not blocked  # 부분 차단 — DB-SYN 행 FAIL(조치 필요 1번) · 오류 증거 행만 ERROR
+    blk_id = ''
+    # 시노님 자동 보완 이력(2026-10-29 사용자 지시) — 이 화면에 대해 오늘 보완한 객체는 '누락 → 자동 추가' 로 DB-SYN 행에 남긴다(오류가 났던 사실과 조치가 CheckList 에 보이게)
+    syn_hist = [h for h in read_csv(P('Doc', 'verify', '_synonym_history.csv')) if h.get('menu_id') == mid]
+    syn_fixed = [h for h in syn_hist if h.get('action') == 'APPLY' and '적용' in (h.get('result') or '')]
+    syn_pending = [h for h in syn_hist if 'PRIV_MISSING' in (h.get('verdict_after') or '') or 'DBA 실행 필요' in (h.get('result') or '')]
+    hist_note = ''
+    if syn_fixed:
+        hist_note = ' · 시노님 자동 보완 ' + ', '.join(f"{h['object']}→{h['target']}({h['ts'][5:16]} · {h['error_evidence'][:60]})" for h in syn_fixed[-4:]) + ' — 이력 Doc/verify/_synonym_history.csv'
+    for r in rows:
+        if r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'DB-SYN':
+            blk_id = r['row_id']
+            if partial:
+                KINDLBL = {'SYN_MISSING': '시노님 없음', 'PRIV_MISSING': '권한 없음', 'TARGET_MISSING': 'DB 객체 없음', 'INVALID': 'DB 객체 컴파일 오류', 'META_MISSING': '메타 없음'}
+                src_ = ' · '.join(f"{x['name']}({KINDLBL.get(x['verdict'], x['verdict'])}: {(x.get('path') or '')[:80]})" for x in syn_soft[:6])
+                hit_ = ' · '.join(f"{h.get('test', '')[:24]}: {', '.join(h.get('urls') or [])[:60]} {', '.join(h.get('codes') or [])}" for h in soft_hits[:4])
+                r['result'] = 'FAIL'
+                r['evidence'] = (f"[부분 차단] 콤보 SQL 객체 {len(soft_objs)}건(시노님·권한 오류 — 메인 조회는 DEFINER 패키지로 정상): {', '.join(soft_objs)} — 정적 검사 {len(syn_soft)}건 {src_}"
+                                 + (f" · 실행 중 콤보/룩업 API 오류 {len(soft_hits)}회({hit_})" if soft_hits else '')
+                                 + " → 이 콤보에 의존하는 조회조건·셀 콤보 검사(B1~B4·G1·G2·C1·C4·D5)는 '차단 영향' 으로 미검증, 나머지 검사는 정상 판정 · 조치: 시노님은 syn_fix 자동 추가(이력 Doc/verify/_synonym_history.csv) · 권한/객체는 등록·GRANT 뒤 **CheckList 재작성 요청**")[:1500]
+                r['tobe_ref'] = 'STATIC syn_check.py + E2E fixture dberr-soft'; r['fix_layer'] = 'DB_OBJECT'; r['fix_class'] = 'SYNONYM'
+                stat['BLOCKER'] += 1
+                continue
+            if blocked:
+                KINDLBL = {'SYN_MISSING': '시노님 없음', 'PRIV_MISSING': '권한 없음', 'TARGET_MISSING': 'DB 객체 없음', 'INVALID': 'DB 객체 컴파일 오류', 'META_MISSING': '메타 없음'}
+                fix = ' · '.join(f"{x['name']}({KINDLBL.get(x['verdict'], x['verdict'])}: {(x.get('path') or '')[:90]})" for x in syn_bad[:6])
+                kinds_ = __import__('collections').Counter(KINDLBL.get(x['verdict'], x['verdict']) for x in syn_bad)
+                for _, m_ in db_aborts:
+                    for k_, lbl_ in (('시노님·권한 누락', '시노님·권한 없음(실행 중 ORA)'), ('DB 객체 오류', 'DB 객체 오류(실행 중)'), ('메타(PROC_M/API_M) 오류', '메타 오류(실행 중)')):
+                        if k_ in m_: kinds_[lbl_] += 1
+                kind_txt = ' · '.join(f"{k} {v}" for k, v in kinds_.items()) or 'ORA 오류'
+                r['result'] = 'FAIL'
+                r['evidence'] = (f"[차단] DB 객체·메타·시노님 오류 {max(len(objs), len(syn_bad))}건({kind_txt}): {', '.join(objs) or ', '.join(x['name'] for x in syn_bad[:6])} — 정적 검사 {len(syn_bad)}건 {fix}"
+                                 + (f" · 검증엔진 테스트 {len(db_aborts)}개가 ORA-00942 로 중단({', '.join(t[:18] for t, _ in db_aborts[:4])}…)" if db_aborts else '')
+                                 + f" → 조치(DB/메타): 시노님은 syn_fix 자동 추가(이력 Doc/verify/_synonym_history.csv) · 권한/객체/메타는 적힌 대상을 등록·컴파일·GRANT 한 뒤 **CheckList 재작성 요청**(이 CheckList 의 미검증 항목은 재실행해야 판정됨)")[:1500]
+                r['tobe_ref'] = 'STATIC syn_check.py + E2E fixture dberr'; r['fix_layer'] = 'DB_OBJECT'; r['fix_class'] = 'SYNONYM'
+            else:
+                r['result'] = 'PASS'; r['evidence'] = (f"시노님검사 {len(syn_rows)}건 전부 OK · 검증엔진 테스트의 DB 오류 중단 0" + hist_note)[:1500]; r['tobe_ref'] = 'STATIC syn_check.py + E2E fixture dberr'
+            if blocked and syn_pending:
+                r['evidence'] = (r['evidence'] + ' · 남은 조치(DBA): ' + ' / '.join(sorted({re.sub(r'.*DBA 실행 필요: ', '', h.get('result') or '')[:120] for h in syn_pending})) + hist_note)[:1500]
+            stat['BLOCKER'] += 1
+    if blocked or partial:
+        try:  # 제안 SQL(미적용 — 정합검증 단계는 보완 금지(2026-10-28 지시) · 보완실행 단계에서 검토 후 적용)
+            pd = P('Doc', 'verify', mid, 'repair_proposals'); os.makedirs(pd, exist_ok=True)
+            lines = [f"-- {mid} 앱 계정(SCMP_APP) 시노님 미적용 제안 — 정합검증(CheckList)이 발견한 차단 원인. 적용은 보완실행 단계에서(검토 후).",
+                     f"-- 생성 {__import__('datetime').datetime.now():%Y-%m-%d %H:%M} · 근거 Doc/verify/{mid}/syn_check.csv", '']
+            for x in syn_bad:
+                m_ = re.search(r'→\s*([A-Z0-9_$#]+)\.([A-Z0-9_$#]+)', x.get('path') or '')
+                if x.get('verdict') == 'SYN_MISSING' and m_:
+                    lines += [f"-- {x['name']} ({x['source']}): {x['path']}", f"CREATE OR REPLACE SYNONYM SCMP_APP.{x['name']} FOR {m_.group(1)}.{m_.group(2)};",
+                              f"-- SELECT 권한이 없으면: GRANT SELECT ON {m_.group(1)}.{m_.group(2)} TO SCMP_APP;  (DBA_TAB_PRIVS 확인 후)", '']
+                else:
+                    lines += [f"-- {x['name']} ({x['source']}): {x['verdict']} — {x.get('path') or ''}  ※ 대상 객체를 확인해 수동 작성", '']
+            open(os.path.join(pd, f'{mid}_SYNONYM_미적용제안.sql'), 'w', encoding='utf-8').write('\n'.join(lines))
+        except Exception:
+            pass
+        RX_BLK = re.compile(r'ORA-00942|ORA-00904|ORA-01031|ORA-04043|ORA-04063|ORA-04068|ORA-06508|PLS-00201|PLS-00306|PLS-00302|BE DB 오류|HTTP 500|5xx [1-9]|호출 오류|서버 오류|Sql Error|후보 없음|후보 (0|1)\)|선택할 옵션 없음|조회 결과 0행|기본\(ALL\) 조회 0행|그리드 컬럼 0|titleset')
+        why_ = f"DB 객체 접근 오류(ORA-00942 {', '.join(objs[:3])})" + (f"로 검증엔진 테스트 {len(db_aborts)}개 중단" if db_aborts else ' — 정적 시노님검사에서 발견돼 E2E 생략')
+        for r in rows:
+            if r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL') or (r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'DB-SYN'):
+                continue
+            ev = r.get('evidence') or ''
+            stale_e2e = (r.get('tobe_ref') or '').startswith('E2E') and r['row_id'] not in e2e_ids  # 이전 실행(차단된 실행)의 E2E 결과가 원장 prev-merge 로 남은 행
+            if blocked and (r['result'] == 'NOT_RUN' or stale_e2e) and 'E2E' in (r.get('method') or ''):
+                r['result'] = 'ERROR'; r['evidence'] = f"[차단 미실행] {why_} — 이 항목 미실행 · [{blk_id}] 해소 후 재실행"; r['tobe_ref'] = '차단(DB-SYN)'
+            elif r['result'] == 'FAIL' and RX_BLK.search(ev) and not ev.startswith('[사용자판정]') and (blocked or r['rule_id'] in ('B1', 'B2', 'B3', 'B4', 'B6', 'B7', 'G1', 'G2', 'C1', 'C4', 'D5', 'A2', 'E5', 'G6', 'G5', 'M4')):
+                r['result'] = 'ERROR'; r['evidence'] = ('[차단 영향] ' + ev + f" → DB 객체 접근 오류의 결과일 수 있어 화면 결함으로 판정하지 않음 · [{blk_id}] 해소 후 재실행")[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 차단(DB-SYN)'
+
+    # 2026-10-29(재발 방지 ①-b): F4 '배선 없음' 판정인데 현재 조건의 callProc 이 채워져 있으면(배선 해석 갱신) 그 판정은 낡은 것 — 재측정 필요
+    stat.setdefault('F4_STALE', 0)
+    for r in rows:
+        if r['source'] == 'TRACE' and r['rule_id'] == 'F4' and r['result'] in ('FAIL', '판정필요') and not not_target(r) and 'PROC_M 배선 없음' in (r.get('evidence') or '') and re.search(r'"callProc": \[\{', r.get('condition') or ''):
+            cps = re.findall(r'"sheet": "([^"]*)", "btn": "([^"]*)"', r.get('condition') or '')
+            r['result'] = 'ERROR'; r['evidence'] = (f"[재측정 필요] 배선 해석이 갱신돼 지금은 {', '.join(s + '/' + b for s, b in cps[:3])} 로 배선 확인됨 — 이전 '배선 없음' 판정은 낡은 것(다음 E2E 실행에서 호출 여부 실측) · 이전: " + (r.get('evidence') or '')[:200])[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' (배선 해석 변경)'; stat['F4_STALE'] += 1
+
+    pdir = page_dir(mid)
+    srcs = fe_sources(pdir) if pdir and os.path.isdir(pdir) else {}
+
+    # META I1
+    try:
+        ok, ev = meta_i1(srcs, not a.no_db)
+    except Exception as ex:  # 접속 실패 = ERROR (PASS 금지)
+        ok, ev = None, f'DB 조회 실패: {ex}'
+    for r in rows:
+        # 2026-11-05 META 판정은 화면 단위 META 행에만 — 시나리오·권한 시험(E2E) 행의 실측을 덮어쓰지 않는다
+        #   (SCP0111 [자동] CN 건수 E2E FAIL 이 'KO/EN/CN 전부 등록' META PASS 로 덮여 CheckList v23 에 PASS — 놓친 결함 · EG-c892f15f 도 같은 덮어쓰기)
+        if r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'I1' and (r.get('method') or 'META').upper().startswith('META'):
+            r['result'] = 'ERROR' if ok is None else ('PASS' if ok else 'FAIL')
+            r['evidence'], r['tobe_ref'] = ev[:1500], f'META SCM_ADM_MSG_M · {os.path.relpath(pdir, ROOT) if pdir else "-"}'
+            stat['META'] += 1
+    # META I4 중복 채번(2026-10-28)
+    try:
+        ok4, ev4 = meta_i4(srcs, not a.no_db)
+    except Exception as ex:
+        ok4, ev4 = None, f'DB 조회 실패: {ex}'
+    for r in rows:
+        # 2026-11-05 META 판정은 화면 단위 META 행에만 — 시나리오·권한 시험(E2E) 행의 실측을 덮어쓰지 않는다
+        #   (SCP0111 [자동] CN 건수 E2E FAIL 이 'KO/EN/CN 전부 등록' META PASS 로 덮여 CheckList v23 에 PASS — 놓친 결함 · EG-c892f15f 도 같은 덮어쓰기)
+        if r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'I4' and (r.get('method') or 'META').upper().startswith('META'):
+            r['result'] = 'ERROR' if ok4 is None else ('PASS' if ok4 else 'FAIL')
+            r['evidence'], r['tobe_ref'] = ev4[:1500], f'META SCM_ADM_MSG_M 중복 문구 · {os.path.relpath(pdir, ROOT) if pdir else "-"}'
+            stat['META'] += 1
+
+    # STATIC H5·G4 (조회조건 라벨·순서)
+    labels = form_labels(srcs)
+    msg_en = {}
+    for m in read_csv(P('Doc', 'tobefacts', 'db', 'msg_master.csv')):
+        if (m.get('lang_cd') or '').upper() == 'EN':
+            msg_en[m['msg_id']] = m['msg_nm']
+    shown = [(code, msg_en.get(code) or fb, loc) for code, fb, loc in labels]
+    sc = sorted([r for r in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')) if r['menu_id'].upper() == mid and r['usage'] == 'USE'],
+                key=lambda r: float(r.get('tobe_order') or 0))
+    names = [norm(s[1]) for s in shown]
+    alias = {'div': 'division', 'division': 'div'}
+    scopes_ = {(c.get('scope') or '').strip() for c in sc}
+    common_scope = max(scopes_, key=lambda x: (x.count(',') + 1, len(x))) if scopes_ else ''  # 탭이 둘 이상이면 콤마로 묶인 scope 가 공통(전 탭) 조건
+    g4_first = None  # 순서 차이는 화면당 1건으로 집계(2026-10-29 SCP0041 G4 7행 = 같은 순서 차이 1건)
+    for idx, c in enumerate(sc):
+        want = c.get('tobe_name') or c.get('asis_name')
+        hit = next((i for i, n in enumerate(names) if n == norm(want) or n == alias.get(norm(want))), None)
+        tab_only = len(scopes_) > 1 and (c.get('scope') or '').strip() != common_scope
+        for r in rows:
+            if r['source'] != 'SEARCH' or r['target'] != f'조회조건 {want}' or r['rule_id'] not in ('H5', 'G4'):
+                continue
+            asis_nm = c.get('asis_name') or ''
+            tag = f" · AS-IS '{asis_nm}' → 기준표 명칭(TO-BE 룰 CR-071: 기준표 라벨이 정답, AS-IS 와 달라도 PASS)" if asis_nm and norm(asis_nm) != norm(want) else ' · 기준표 라벨(CR-071)'
+            if hit is None and tab_only:
+                r['result'] = 'NA'; r['evidence'] = f"기준표 조건 '{want}' 은 탭 '{c.get('scope')}' 전용 — 기본 탭 Form 라벨({', '.join(s[1] for s in shown)})에 없는 것은 정상 · 탭 전환 검사는 미구현(수동 검수 W7)"
+                r['tobe_ref'] = 'STATIC Form 라벨 ↔ search_cond.csv(scope)'; stat['STATIC'] += 1; continue
+            if r['rule_id'] == 'H5':
+                r['result'] = 'PASS' if hit is not None else 'FAIL'
+                r['evidence'] = f"기준 명칭 '{want}' — 화면 라벨 {'일치 ' + shown[hit][2] if hit is not None else '없음 (화면 라벨: ' + ', '.join(s[1] for s in shown) + ') — 기준표 조건 누락 또는 라벨이 기준표와 다름'}{tag}"
+            else:
+                r['result'] = 'PASS' if hit == idx else 'FAIL'
+                r['evidence'] = f"기준 순서 {idx + 1}번째 '{want}' — 화면 {('없음' if hit is None else str(hit + 1) + '번째')} (화면 순서: {' → '.join(s[1] for s in shown)}) · 기준표 순서(CR-071)"
+                if r['result'] == 'FAIL' and hit is not None:
+                    if g4_first is None:
+                        g4_first = r['row_id']
+                        r['evidence'] = f"조회조건 순서가 기준표(CR-071)와 다름 — 기준: {' → '.join((x.get('tobe_name') or x.get('asis_name')) for x in sc if not (len(scopes_) > 1 and (x.get('scope') or '').strip() != common_scope))} / 화면: {' → '.join(s[1] for s in shown)} (순서 차이는 이 1행으로 집계)"
+                    else:
+                        r['result'] = 'NA'; r['evidence'] = f"기준 순서 {idx + 1}번째 '{want}' — 화면 {hit + 1}번째 · 순서 차이는 [{g4_first}] 1건으로 집계(같은 원인)"
+            r['tobe_ref'] = 'STATIC Form 라벨 ↔ search_cond.csv'
+            stat['STATIC'] += 1
+
+    # 정적 라벨 추출이 불완전한 화면(Form 이 labelText 변수를 받아 constants 폴백을 쓴 경우 — SCP0100): H5 '라벨 없음' 은 E2E 가 그 조건 칸을 찾았으면 PASS, G4 순서는 정적으로 판정 불가 → NA(순서는 SC1 E2E smoke 기준표 순서로) (2026-10-29)
+    stat.setdefault('H5_E2E_DEFER', 0)
+    found = {}
+    for x in rows:
+        if x['source'] == 'SEARCH' and x['rule_id'] in ('G1', 'G2', 'G6') and x['result'] in ('PASS', 'FAIL', 'ERROR', 'NA') and (x.get('tobe_ref') or '').startswith('E2E') and not re.search(r'칸 없음|라벨 없음|라벨 미식별', x.get('evidence') or ''):
+            found[x['target']] = x
+    deferred = 0
+    for r in rows:
+        if r['source'] == 'SEARCH' and r['rule_id'] == 'H5' and r['result'] == 'FAIL' and (r.get('tobe_ref') or '').startswith('STATIC Form 라벨') and r['target'] in found:
+            r['result'] = 'PASS'; r['evidence'] = f"기준 명칭 '{r['target'][5:].strip()}' — E2E 가 이 라벨의 조건 칸을 찾음([{found[r['target']]['row_id']}] {found[r['target']]['evidence'][:80]}) · 정적 Form 라벨 추출이 이 조건을 놓침(labelText 변수·문자열 조합) → 실측 우선"; stat['H5_E2E_DEFER'] += 1; deferred += 1
+    if deferred:  # 정적 라벨 목록이 불완전한 화면 — 소스 순서로 낸 G4 는 믿을 수 없다 → NA(순서는 SC1 E2E smoke 기준표 순서 행이 판정)
+        for r in rows:
+            if r['source'] == 'SEARCH' and r['rule_id'] == 'G4' and r['result'] == 'FAIL' and (r.get('tobe_ref') or '').startswith('STATIC Form 라벨'):
+                r['result'] = 'NA'; r['evidence'] = (f"정적 순서 판정 불가 — Form 라벨 추출이 조건 {deferred}개를 놓쳐(labelText 변수) 소스 순서가 화면 순서를 대표하지 않음 · 순서는 SC1(E2E smoke 기준표 순서) 행으로 판정 · 원 판정: " + (r.get('evidence') or '')[:200])[:1500]; stat['H5_E2E_DEFER'] += 1
+
+    order_rule(rows, stat, mid, asis_id)
+
+    # G9 콤마 다중값 — 기준표 유형2 가 '단일' 인 텍스트 조건은 검사 대상 아님(2026-10-30 SCP0100 Cell Group: AS-IS 도 콤마 다중 미지원 · 사용자 판정 오류)
+    #   ledger.py 가 새 원장에서는 만들지 않지만, 이전 원장 행이 남아 있으면 FAIL 이 다시 오르므로 여기서도 NA(원 실측은 증거에 보존)
+    for r in rows:
+        if r['source'] == 'SEARCH' and r['rule_id'] == 'G9' and r['result'] in ('FAIL', 'ERROR', '판정필요') and not (r.get('evidence') or '').startswith('[사용자판정]') \
+                and re.search(r'·\s*텍스트/단일\s*·', r.get('expected') or ''):
+            r['result'] = 'NA'; r['tobe_ref'] = 'STATIC 기준표 유형2(단일)'
+            r['evidence'] = ('기준표 유형 텍스트/단일 — 콤마 다중값 입력은 이 조건의 요건이 아님(CR-040 은 유형2 다중인 Key-in 조건) · 원 실측: ' + (r.get('evidence') or '')[:300])[:1500]
+            stat['G9_SINGLE_NA'] = stat.get('G9_SINGLE_NA', 0) + 1
+
+    # F10 저장 트랜잭션 원자성 — f10_check.csv(저장 PROC+1단계 하위 호출 본문의 COMMIT/TRUNCATE/DDL/DBMS_STATS/자율 트랜잭션, 2026-10-30 WP9). 원장 SP F10 행에 연결
+    f10_p = P('Doc', 'verify', mid, 'f10_check.csv')
+    if os.path.exists(f10_p):
+        stat.setdefault('F10', 0)
+        f10 = {(x.get('proc') or '').upper(): x for x in read_csv(f10_p)}
+        for r in rows:
+            if r['rule_id'] != 'F10' or r['source'] != 'SP':
+                continue
+            x = f10.get((r.get('target') or '').upper())
+            if not x:
+                continue
+            r['result'] = {'PASS': 'PASS', 'FAIL': 'FAIL', 'REVIEW': 'ERROR'}.get(x['verdict'], 'ERROR')
+            r['evidence'] = (f"{x['note']}" + (f" — {x['hits']}" if x.get('hits') else '') + (f" · 하위 호출 {x['callee']}" if x.get('callee') else ''))[:1500]
+            r['tobe_ref'] = 'STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)'; stat['F10'] += 1
+
+    # A6 결과 정렬 — sort_check.csv(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY 정적 대조, 2026-10-26). 원장 SP 행(source=SP, target=SP 이름, condition=가드)에 연결
+    sc_p = P('Doc', 'verify', mid, 'sort_check.csv')
+    if os.path.exists(sc_p):
+        stat.setdefault('SORT', 0)
+        scs = read_csv(sc_p)
+        for r in rows:
+            if r['rule_id'] != 'A6' or r['source'] != 'SP' or (r.get('tobe_ref') or '').startswith('수동'):
+                continue
+            x = next((s for s in scs if s['sp'] == r['target'] and (s.get('guard') or '') == (r.get('condition') or '')), None) or next((s for s in scs if s['sp'] == r['target']), None)
+            if not x:
+                continue
+            r['result'] = {'PASS': 'PASS', 'FAIL': 'FAIL', 'NA': 'NA', 'REVIEW': '판정필요'}.get(x['verdict'], '판정필요')
+            r['evidence'] = (f"AS-IS ORDER BY [{x['asis_keys']}]{(' 가드 ' + x['guard'][:80]) if x.get('guard') else ''} ↔ TO-BE {x['tobe_proc']} [{x['tobe_keys']}] — {x['note']}")[:1500]
+            r['tobe_ref'] = f"STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL {x.get('tobe_last_ddl', '')})"
+            stat['SORT'] += 1
+
+    # A6 실측 순서 — golden.py(2026-10-28) 가 같은 인자의 AS-IS·TO-BE 결과에서 공통·유일 행의 상대 순서를 대조(Doc/golden/<ID>/<sp>.order.csv · _summary.csv order)
+    #   사용자 2026-10-28: "AS-IS 와 TO-BE 의 데이터가 조회되는 기준이 달라서 비교가 불가 — 정합검증에 추가" → 정적 ORDER BY 가 같아도 실제 순서가 다르면 FAIL, 데이터 기준(공통/전용)을 증거에 명시
+    import e2e_paths
+    gs_p = e2e_paths.golden_path(mid)  # 2026-11-06 화면 폴더 골든 요약 우선 · 없으면 공용 색인
+    if os.path.exists(gs_p):
+        stat.setdefault('SORT_ACTUAL', 0)
+        tl = lambda s: (s or '').split('.')[-1].upper()
+        gsum = [g for g in read_csv(gs_p) if (g.get('screen') or '').upper() == str(mid).upper()]
+        for r in rows:
+            if r['rule_id'] != 'A6' or r['source'] != 'SP' or (r.get('tobe_ref') or '').startswith('수동'):
+                continue
+            g = next((g for g in gsum if tl(g.get('asis_sp')) == tl(r['target']) or tl(g.get('tobe_proc')) == tl(r['target'])), None)
+            if not g or (g.get('order') or '') not in ('PASS', 'DIFF'):
+                continue
+            # 분기(가드)가 여럿인 SP — 골든 인자와 같은 분기 1행에만 실측 순서를 붙인다(2026-10-28 사용자: "같은 오류는 1건만")
+            gl = re.search(r"=\s*'([^']*)'", r.get('condition') or '')
+            if gl:
+                try:
+                    import json as _json
+                    gc = next((c for c in read_csv(P('Doc', 'golden', 'golden_cases.csv')) if c.get('case_id') == g.get('case_id')), {})
+                    pv = {k.lower(): str(v) for k, v in _json.loads(gc.get('params') or '{}').items()}
+                    pn = re.search(r'@(p_\w+)', r.get('condition') or '')
+                    val = pv.get((pn.group(1) if pn else '').lower())
+                    if val is not None and val != gl.group(1):
+                        r['evidence'] = ((r.get('evidence') or '') + f" · 실측 순서대조는 골든 인자({pn.group(1) if pn else ''}='{val}') 분기 행에 기재 — 이 분기('{gl.group(1)}')는 실측 인자 없음(정적 대조만)")[:1500]
+                        continue
+                except Exception:
+                    pass
+            if 'ORDER BY 없음' in (r.get('evidence') or '') or (r.get('condition') or '') == 'ORDER BY 없음':
+                r['evidence'] = ((r.get('evidence') or '') + f" · 실측 순서대조 생략(AS-IS ORDER BY 없음 → 순서 미정 — golden 공통 {g.get('common_rows', '')}행의 순서 차이는 결함 아님)")[:1500]
+                continue
+            op = P('Doc', 'golden', mid, f"{g['asis_sp']}.order.csv")
+            o = (read_csv(op) or [{}])[0] if os.path.exists(op) else {}
+            txt = (f" · 실측 순서대조(같은 인자 · 공통 {g.get('common_rows', '')}행 중 유일 {o.get('uniq_rows', '')}행의 상대 순서 · AS-IS 전용 {g.get('asis_only', '')}/TO-BE 전용 {g.get('tobe_only', '')}행은 환경 데이터 차이로 제외): "
+                   + ('일치' if g['order'] == 'PASS' else '불일치 — 첫 차이 ' + (o.get('first_mismatch') or ''))
+                   + (f" · 센티널 차이 컬럼 {o['sentinel_cols']} — 빈 값 표기(''↔'-'/'/')가 달라 정렬 위치 변동(TO-BE 센티널 정책 2026-10-15 — 순서 차이를 허용할지 결정 필요)" if o.get('sentinel_cols') else '')
+                   + (f" · 원인: NULL 정렬 위치 {o['null_order_cols']} — MSSQL 은 빈 값을 맨 앞, Oracle 은 NULL 을 맨 뒤(NULLS LAST)에 둠 → TO-BE PKG ORDER BY 해당 컬럼에 NULLS FIRST(DB 객체 보완)" if o.get('null_order_cols') else ''))
+            if g['order'] == 'DIFF':
+                r['result'] = 'FAIL'
+            r['evidence'] = ((r.get('evidence') or '') + txt)[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' + golden 실측 순서'
+            stat['SORT_ACTUAL'] += 1
+
+    # CR-075: sort_check FAIL(그리드 조회 SP ORDER BY 없음) 을 같은 PKG 의 TRACE A6 요소 행에도 반영 — E2E 는 'ORDER BY 없음 → NA' 로 적기 때문
+    if os.path.exists(sc_p):
+        tl2 = lambda s_: (s_ or '').split('.')[-1].upper()
+        for x in read_csv(sc_p):
+            if x.get('verdict') != 'FAIL' or 'CR-075' not in (x.get('note') or ''): continue
+            for r in rows:
+                if r['rule_id'] == 'A6' and r['source'] == 'TRACE' and tl2(r['target']) == tl2(x.get('tobe_proc')) and r['result'] in ('NA', 'NOT_RUN', '판정필요', ''):
+                    r['result'] = 'FAIL'; r['evidence'] = (f"[CR-075] {x['note']} — E2E: " + (r.get('evidence') or ''))[:1500]; r['tobe_ref'] = 'STATIC sort_check CR-075'
+
+    # A7 컬럼별 결과 값 — Doc/golden/<ID>/<sp>.cols.csv(golden.py: AS-IS SP ↔ TO-BE PROC 같은 인자 · 공란 컬럼·같은 키 불일치, 2026-10-27). 원장 SP A7 행(target = AS-IS SP)
+    stat.setdefault('A7', 0)
+    for r in rows:
+        if r['rule_id'] != 'A7' or r['source'] != 'SP' or (r.get('tobe_ref') or '').startswith('수동'):
+            continue
+        cp = P('Doc', 'golden', mid, f"{r['target']}.cols.csv")
+        if not os.path.exists(cp):
+            continue
+        prof = read_csv(cp)
+        fails = [x for x in prof if x['verdict'] == 'FAIL']
+        rev = [x for x in prof if x['verdict'] == 'REVIEW']
+        r['result'] = 'FAIL' if fails else ('판정필요' if rev else 'PASS')
+        pick = fails or rev
+        r['evidence'] = (f"공통 컬럼 {len(prof)} 중 공란 컬럼 {len(fails)} · 확인 필요 {len(rev)}"
+                         + (' — ' + ' | '.join(f"{x['column']}: {x['note']}" for x in pick[:6]) if pick else ' — 전 컬럼 채움 이상 없음'))[:1500]
+        r['tobe_ref'] = f"STATIC golden 컬럼 프로파일 ({os.path.basename(cp)})"
+        stat['A7'] += 1
+
+    # F8 감사 필드 · F7 저장 연계 — save_audit.json(실제 저장 정리 백업 ↔ AS-IS 저장 SP DML 대상, 2026-10-27). 원장 RULE_SCREEN F8/F7 행
+    sa_p = P('Doc', 'verify', mid, 'save_audit.json')
+    if os.path.exists(sa_p):
+        with open(sa_p, encoding='utf-8') as f:
+            sa = json.load(f)
+        stat.setdefault('SAVE_AUDIT', 0)
+        run_ = sa.get('run') or {}
+        for r in rows:
+            if r['rule_id'] not in ('F7', 'F8') or r['source'] != 'RULE_SCREEN' or (r.get('tobe_ref') or '').startswith('수동'):
+                continue
+            x = sa.get(r['rule_id']) or {}
+            if not x or x.get('verdict') == 'NOT_RUN':
+                continue
+            r['result'] = x['verdict']
+            r['evidence'] = (f"{x['note']} · 저장 {run_.get('saved_at', '')} 계정 {run_.get('account', '')} · 기록 테이블 {run_.get('tables', {})} · {run_.get('cleanup_sql', '')}")[:1500]
+            r['tobe_ref'] = 'STATIC save_audit (CRUD 실제 저장 정리 백업)'
+            stat['SAVE_AUDIT'] += 1
+
+    # H1 가로 정렬 — align_check.csv(AS-IS 정렬 ↔ TO-BE 메타 HORIZONTAL_ALIGN_CODE·화면 FE 지정, 2026-10-27). 원장 COLUMN H1 행(target = '시트.컬럼 (라벨)')
+    al_p = P('Doc', 'verify', mid, 'align_check.csv')
+    if os.path.exists(al_p):
+        stat.setdefault('ALIGN', 0)
+        als = {(a['sheet'], a['column']): a for a in read_csv(al_p)}
+        for r in rows:
+            if r['rule_id'] != 'H1' or r['source'] != 'COLUMN' or (r.get('tobe_ref') or '').startswith('수동'):
+                continue
+            sh, _, rest = r['target'].partition('.')
+            x = als.get((sh, rest.split(' (')[0]))
+            if not x:
+                continue
+            r['result'] = x['verdict']
+            r['evidence'] = f"{x['note']} · AS-IS {x['asis_ref']} · TO-BE {x['tobe_source']}"[:1500]
+            r['tobe_ref'] = 'STATIC align_check (ZIOUI1 SHEET_COLUMNS)'
+            stat['ALIGN'] += 1
+
+    # G5 팝업 조건 연동 — popup_args.csv(AS-IS 팝업 인자 ↔ TO-BE 모달 전달값 · 화면 조회조건 연동, 2026-10-29 SCP0020 Operation Group 고정값 누락).
+    #   G5 는 E2E(@verify) 전용이라 못 돈 행이 전부 NA(W7)로 지나갔다 → 정적 판정을 원장 G5 행에 싣는다.
+    #   ASIS 축 = 인자 있는 호출 행(file:line) · TOBE 축 = 팝업을 여는 조회조건 SEARCH 행(라벨 일치) — 못 찾으면 짝지은 AS-IS 호출 행.
+    #   행 판정 = FAIL 1건이라도 FAIL · 아니면 ERROR · 아니면 PASS(NA 항목은 증거에만) · 전부 NA 면 NA. E2E FAIL·사용자판정은 덮지 않는다.
+    pa_p = P('Doc', 'verify', mid, 'popup_args.csv')
+    if os.path.exists(pa_p):
+        stat.setdefault('POPUP_ARGS', 0)
+        pa = read_csv(pa_p)
+
+        def _agg(items):
+            vs = [x['verdict'] for x in items]
+            res = 'FAIL' if 'FAIL' in vs else 'ERROR' if 'ERROR' in vs else 'PASS' if 'PASS' in vs else 'NA'
+            order = {'FAIL': 0, 'ERROR': 1, 'NA': 2, 'PASS': 3}
+            ev = ' | '.join(f"[{x['verdict']}] {x['tobe_key'] or x['asis_param']}: {x['note']}" for x in sorted(items, key=lambda x: order.get(x['verdict'], 9)))
+            return res, ev
+
+        def _put(r, items, head):
+            if not items or (r.get('tobe_ref') or '').startswith('수동') or (r.get('evidence') or '').startswith('[사용자판정]'):
+                return
+            res, ev = _agg(items)
+            if r['row_id'] in e2e_ids and r['result'] == 'FAIL' and res != 'FAIL':
+                r['evidence'] = (r['evidence'] + f" · 정적 팝업 인자 대조 {res}: {ev}")[:1500]; return
+            r['result'] = res
+            r['evidence'] = f"{head} — {ev}"[:1500]
+            r['tobe_ref'] = 'STATIC popup_args_check (AS-IS 팝업 인자 ↔ TO-BE 모달 전달값)'
+            stat['POPUP_ARGS'] += 1
+
+        by_pair = {}
+        for x in pa:
+            by_pair.setdefault(x['pair'], []).append(x)
+        asis_g5 = [r for r in rows if r['rule_id'] == 'G5' and r['source'] == 'ASIS']
+        search_g5 = [r for r in rows if r['rule_id'] == 'G5' and r['source'] == 'SEARCH']
+        for pid, items in by_pair.items():
+            a_items = [x for x in items if x['side'] == 'ASIS']
+            t_items = [x for x in items if x['side'] == 'TOBE']
+            aref = next((x['asis_ref'] for x in a_items if x['asis_ref']), '')
+            loc = aref.split(' ')[0] if aref else ''
+            meth = aref.split(' ', 1)[1] if ' ' in aref else ''
+            hl = next((x['host_label'] for x in items if x['host_label']), '')
+            tref = next((x['tobe_ref'] for x in items if x['tobe_ref']), '')
+            modal = next((x['tobe_modal'] for x in items if x['tobe_modal']), '')
+            call_row = next((r for r in asis_g5 if loc and (r.get('asis_ref') or '').split(' ')[0] == loc), None)
+            host_row = None
+            if hl:
+                nh = norm(hl)
+                host_row = next((r for r in search_g5 if any(nh and (nh == norm(p) or nh in norm(p)) for p in re.split(r'[/,]', re.sub(r'^조회조건\s*', '', r['target'])))), None)
+            if call_row:
+                _put(call_row, a_items + ([] if host_row else t_items), f"AS-IS {a_items[0]['asis_popup']} 호출 인자 ↔ TO-BE {modal} ({tref})")
+                # 같은 진입점의 인자 없는 팝업 문장(new X() · ShowDialog()) — 인자 판정은 호출 행에서(중복 FAIL 방지)
+                for r in asis_g5:
+                    if r is not call_row and meth and (r.get('asis_ref') or '').endswith(meth) and r['result'] in ('NOT_RUN', 'NA') and not (r.get('tobe_ref') or '').startswith('수동') and r['row_id'] not in e2e_ids:
+                        r['result'] = 'NA'; r['evidence'] = f"인자 없는 팝업 문장 — 팝업 인자 판정은 [{call_row['row_id']}] {call_row['target'][:60]} 에서"; r['tobe_ref'] = 'STATIC popup_args_check (인자 판정 행 참조)'
+            if host_row:
+                _put(host_row, t_items, f"조회조건 {hl} 팝업 {modal} ({tref}) 전달값 ↔ 화면 조회조건")
+            elif not call_row and any(x['verdict'] == 'FAIL' for x in t_items):
+                # 짝 AS-IS 호출도 여는 조회조건도 못 찾은 TO-BE FAIL — 버리지 않고 같은 규칙의 첫 SEARCH/ASIS 행에 싣는다(누락 0)
+                tgt = next((r for r in search_g5 + asis_g5 if r['result'] in ('NOT_RUN', 'NA') and not (r.get('tobe_ref') or '').startswith('수동')), None)
+                if tgt:
+                    _put(tgt, t_items, f"TO-BE {modal} ({tref}) 전달값 ↔ 화면 조회조건 (여는 위치 미확정)")
+
+    # M3 팝업 데이터 조회 — popup_data.csv(AS-IS 개인화 팝업 ↔ TO-BE 메타 조회를 Division 값별 DB 실행, 2026-10-30 SCP0100 Measure 팝업 0건 미검출).
+    #   원장 ASIS M3 행(팝업 생성 문장 file:line) 에 싣는다. 같은 문장의 항목(시트별) = FAIL 1건이라도 FAIL · 아니면 ERROR · 아니면 PASS · 전부 NA 면 NA.
+    #   E2E FAIL·수동·사용자판정은 덮지 않는다.
+    pd_p = P('Doc', 'verify', mid, 'popup_data.csv')
+    if os.path.exists(pd_p):
+        stat.setdefault('POPUP_DATA', 0)
+        by_loc = {}
+        for x in read_csv(pd_p):
+            if x.get('asis_ref'):
+                by_loc.setdefault(x['asis_ref'].split(' ')[0], []).append(x)
+        order = {'FAIL': 0, 'ERROR': 1, 'PASS': 2, 'NA': 3}
+        for r in rows:
+            if r['rule_id'] != 'M3' or r['source'] != 'ASIS' or (r.get('tobe_ref') or '').startswith('수동') or (r.get('evidence') or '').startswith('[사용자판정]'):
+                continue
+            items = by_loc.get((r.get('asis_ref') or '').split(' ')[0])
+            if not items:
+                continue
+            vs = [x['verdict'] for x in items]
+            res = 'FAIL' if 'FAIL' in vs else 'ERROR' if 'ERROR' in vs else 'PASS' if 'PASS' in vs else 'NA'
+            ev = ' | '.join(f"[{x['verdict']}] {x['kind']} 시트 '{x['sheet']}' ({x['tobe_ref']}): {x['note']}" for x in sorted(items, key=lambda x: order.get(x['verdict'], 9)))
+            if r['row_id'] in e2e_ids and r['result'] == 'FAIL' and res != 'FAIL':
+                r['evidence'] = (r['evidence'] + f" · 정적+DB 팝업 목록 {res}: {ev}")[:1500]; continue
+            r['result'] = res
+            r['evidence'] = f"팝업 목록 조회(TO-BE 메타 PROC 를 Division 값별 실행) — {ev}"[:1500]
+            r['tobe_ref'] = 'STATIC+DB popup_data_check (AS-IS 개인화 팝업 ↔ TO-BE 메타 조회 Division 별 행수)'
+            stat['POPUP_DATA'] += 1
+
+    # W1 콤보 AS-IS 원천 비교(B4 집합·B3 순서·G7 표시 형식 10-28) — combo_oracle.json(2026-10-24). 조회조건 = 라벨, 그리드 = 바인딩으로 원장 행에 연결
+    co_p = P('Doc', 'verify', mid, 'combo_oracle.json')
+    if os.path.exists(co_p):
+        with open(co_p, encoding='utf-8') as f:
+            co = json.load(f)
+        by_s = {norm(x['target']): x for x in co.get('results', []) if x['kind'] == 'SEARCH'}
+        by_g = {norm(x['target']): x for x in co.get('results', []) if x['kind'] == 'GRID'}
+        # 기존행 판정(EG059) — 신규행이 통과해도 기존행 후보가 틀리면 그 결과를 쓴다
+        for x in co.get('results', []):
+            if x['kind'] == 'GRID_EX' and x.get('b4') == 'FAIL' and (by_g.get(norm(x['target'])) or {}).get('b4') != 'FAIL':
+                by_g[norm(x['target'])] = x
+        stat.setdefault('W1', 0)
+        for r in rows:
+            if r['rule_id'] not in ('B4', 'B3', 'G7') or r['source'] not in ('SEARCH', 'COLUMN') or (r.get('tobe_ref') or '').startswith('수동'):
+                continue
+            if r['rule_id'] == 'G7' and r['source'] != 'SEARCH':
+                continue
+            if r['source'] == 'SEARCH':
+                x = by_s.get(norm(r['target'].replace('조회조건', '', 1)))
+            else:
+                x = by_g.get(norm((re.search(r'\.([A-Za-z0-9_]+)', r['target']) or [None, ''])[1]))
+            if not x:
+                continue
+            res, why = {'B4': (x.get('b4'), x.get('why', '')), 'B3': (x.get('b3'), x.get('b3_why', '')), 'G7': (x.get('g7'), x.get('g7_why', ''))}[r['rule_id']]
+            if not res:
+                continue
+            extra = '' if r['rule_id'] in ('B3', 'G7') else (f" · AS-IS만 {x.get('asis_only_n', 0)} {x.get('asis_only', [])[:8]} · TO-BE만 {x.get('tobe_only_n', 0)} {x.get('tobe_only', [])[:8]}" if x.get('asis_only_n') or x.get('tobe_only_n') else '')
+            r['result'] = res
+            r['evidence'] = (f"[{x.get('scenario', '')}] {why}{extra} · 원천 {x.get('asis_src', '-')} · 표현 {x.get('rep', '-')}")[:1500]
+            r['tobe_ref'] = f"W1 combo_oracle (AS-IS {co.get('asis_id')} DB 동시 실행 · 계정 {co.get('account')}/{co.get('group')})"
+            stat['W1'] += 1
+
+    # A5(표시 여부) FAIL 중 그 컬럼이 확정 규칙·결함 원장에 언급되면 AS-IS 와 달라도 확정 요구일 수 있다 → 판정필요
+    #   (2026-10-23 DMF0082: MEASURE·VERSION 표시 = DM-47 확정 요구 'Measure 컬럼 항상 표시'와 겹침)
+    o2_text = ' '.join(x.get('requirement', '') + ' ' + x.get('target', '') for x in read_csv(P('tools', 'Harness', 'rules', 'confirmed_requirements.csv')))
+    o2_text += ' ' + ' '.join(x.get('expected', '') + ' ' + x.get('target', '') for x in read_csv(P('Doc', 'verify', 'defects_classified.csv')) if x.get('menu_id') in (mid, 'COMMON'))
+    o2_up = o2_text.upper()
+    for r in rows:
+        if r['rule_id'] == 'A5' and r['result'] == 'FAIL':
+            col = (re.search(r'\.([A-Z0-9_]+)', r['target']) or [None, ''])[1]
+            label = (re.search(r'\(([^)]*)\)', r['target']) or [None, ''])[1].replace('*', '').strip()
+            if col and (col in o2_up or (label and label.upper() in o2_up)):
+                r['result'] = '판정필요'
+                r['evidence'] += f" — 이 컬럼({col}/{label})이 확정 규칙·결함 원장에 언급됨: AS-IS 와 다른 확정 요구인지 확인"
+
+    # 화면 단위 규칙(RULE_SCREEN)·조회조건(SEARCH) ← E2E smoke/auth 요약(Doc/e2e/results/_summary.csv) 반입 (2026-10-26: 원장 화면 규칙 12행이 smoke 를 돌려도 NOT_RUN 으로 남던 구멍)
+    stat.setdefault('SMOKE', 0)
+    import e2e_paths  # 2026-11-06: 화면별 요약(Doc/e2e/results/<ID>/_summary.csv) 우선 · 없으면 공용 색인
+    summ = [x for x in read_csv(e2e_paths.summary_path(mid)) if x.get('menu_id', '').upper() == mid]
+    ev_screen = {}  # rule → (result, evidence)
+    ev_cond = {}    # (rule, norm(label)) → (result, evidence)
+    V = {'OK': 'PASS', 'FAIL': 'FAIL', 'WARN': '판정필요', 'NA': 'NA', 'ERROR': 'ERROR'}
+    for x in summ:
+        kind, st = x.get('kind', ''), x.get('status', '')
+        for part in (x.get('annotations') or '').split(' || '):
+            t, _, desc = part.partition(': '); t = t.strip()
+            m = re.match(r'\[(\w+)\]\s*(.+?)\((\w+)\)\s*—\s*(.*)', desc) if t in ('cond', 'common') else None
+            if t == 'common' and m:
+                v, name, _k2, note = m.groups()
+                rule = 'K1' if re.search(r'sort|filter', name, re.I) else 'K2' if re.search(r'column|measure', name, re.I) else 'H7' if re.search(r'excel', name, re.I) else 'G3' if re.search(r'condition|reset', name, re.I) else 'K3' if re.search(r'manual', name, re.I) else ''
+                if rule:
+                    prev = ev_screen.get(rule)
+                    # 2026-11-07 T150(SCP0084 H7): '조회된 데이터가 없습니다' 알림으로 끝난 공통 기능(Excel 다운로드 등)은 기능 결함이 아니라 측정 전제(조회 행) 미충족 → ERROR 로 반입
+                    if v == 'FAIL' and re.search(r'조회된 데이터가 없|데이터가 없습니다|No data', note or ''): v = 'ERROR'; note = '[측정 전제 미충족: 조회 0행 알림] ' + (note or '')
+                    res = V.get(v, '판정필요'); worse = prev and ({'FAIL': 0, 'ERROR': 1, '판정필요': 2, 'PASS': 3, 'NA': 4}.get(prev[0], 2) < {'FAIL': 0, 'ERROR': 1, '판정필요': 2, 'PASS': 3, 'NA': 4}.get(res, 2))
+                    ev_screen[rule] = prev if worse else (res, f"E2E smoke 공통 '{name}' [{v}] {note[:100]}" + (f" | {prev[1][:80]}" if prev else ''))
+            elif t == 'cond' and m:
+                v, name, k2, note = m.groups()
+                if k2 in ('combo', 'checkbox', 'radio', 'text', 'period', 'search'): ev_cond[('G1', norm(name))] = (V.get(v, '판정필요'), f"E2E smoke 조회조건 '{name}' [{v}] {note[:100]}")
+                # 2026-11-07 T159: 기준표 순서(order)·제외 조건 잔존(gone) → 화면 규칙 SC1(RULE_SCREEN · 모든 화면) — 대조표에 SC1 이 걸리는 행이 없는 화면(SCP0127)도 원장에 들어오게. 판정은 order_rule(Excel 기준)
+                elif k2 == 'order':
+                    # 2026-11-09 CR-098(사용자 지시 · SCP0084 조치 필요 1건 '오류 아님'): Excel 조회조건 정리 대조는 사용여부·EDIT 형태까지만 — 순서는 판정 대상 제외.
+                    #   순서 실측은 참고로만 남기고(NA), 같은 SC1 행의 사용여부(gone) FAIL 은 덮지 않는다(gone 이 뒤에 와도 NA 를 덮어쓴다)
+                    ev_screen.setdefault('SC1', ('NA', f"E2E smoke cond order [{v}] — 조회조건 순서는 판정 대상 제외(CR-098 · 사용자 지시 2026-11-09) · 참고 실측: {note[:300]}"))
+                elif k2 == 'gone':
+                    prev = ev_screen.get('SC1'); res = V.get(v, '판정필요')
+                    if not prev or res == 'FAIL' or prev[0] not in ('FAIL',): ev_screen['SC1'] = (res, f"E2E smoke cond {k2} [{v}] {note[:300]}" + (f" | {prev[1][:120]}" if prev else ''))
+            elif t == 'columns': ev_screen.setdefault('A5', ('PASS' if re.search(r'누락 0', desc) else 'FAIL', f'E2E smoke columns {desc[:120]}'))
+            elif t in ('access', 'buttons', 'authcrud') and kind.startswith('auth'):
+                # 메뉴 접근 권한이 없는 그룹(menuAccess=N)의 기대값 없는 기록은 이 화면의 J2 판정 근거가 아니다(DM Admin 은 SCP 화면 접근 대상 아님) — 2026-10-27 v57 허위 FAIL
+                if re.search(r'menuAccess=N', desc) and re.search(r'expected=(\s|$)', desc):
+                    ev_screen.setdefault('J2', ('NA', f'E2E {kind} {desc[:100]} — 메뉴 접근 권한이 없는 그룹(menuAccess=N)의 기록은 이 화면 J2 판정 근거가 아님(접근 대상 아님 · 버튼 권한 실측은 J1/authcrud 다른 기록)')); continue
+                if re.search(r'예외: ?(TimeoutError|Error)|Timeout \d+ms exceeded', desc):  # E2E 실행 예외(클릭 타임아웃 등)는 판정이 아니라 측정 실패 — FAIL 근거로 쓰지 않음(2026-10-28 jaeuk.shin authcrud)
+                    ev_screen.setdefault('J2', ('NA', f'E2E {kind} 측정 실패(실행 예외) — {desc[:120]}')); continue
+                prev = ev_screen.get('J2'); res = 'PASS' if st == 'PASS' else 'FAIL' if st == 'FAIL' else '판정필요'
+                # 2026-11-07 T155(SCP0122 J2): FAIL 근거(errors 열 '[계정] 재조회 후 신규 행 존재' 등)가 evidence 에 없어 왜 FAIL 인지 알 수 없었다 → errors 를 붙인다.
+                #   오류가 전부 마커 행 CRUD 왕복(저장·재조회·정리)뿐이고 버튼 권한 기대(btn_auth SAVE/INSERT/DELETE/EDIT) 불일치가 없으면 권한 판정이 아니라 측정 전제(마커 저장 불가) → ERROR
+                errs = (x.get('errors') or '').strip()
+                if res == 'FAIL' and errs:
+                    parts = [p.strip() for p in re.split(r'<br>|\n', errs) if p.strip()]
+                    marker_only = all(re.search(r'마커 행 저장|재조회 후 신규 행 존재|SAVE call-proc 없음|마커 행 정리|restored|cleaned', p) for p in parts)
+                    if marker_only: res = 'ERROR'; desc = f'[측정 전제 미충족: 마커 행 CRUD 왕복 불가(저장 요청 없음·화면 검증) — 버튼 권한 기대 불일치 없음] {desc}'
+                    desc = f'{desc[:100]} · 오류: {"; ".join(parts)[:300]}'
+                # 2026-11-08 T164: 종전엔 FAIL 만 고정이라 T155 가 만든 ERROR(허용 계정 마커 저장 불가)가 뒤 기록의 PASS(비허용 계정 no-save)에 덮여 J2 PASS 로 둔갑(SCP0122 16:5x 실측) → 나쁜 쪽 우선(FAIL > ERROR > 판정필요 > PASS > NA)
+                _rk = {'FAIL': 0, 'ERROR': 1, '판정필요': 2, 'PASS': 3, 'NA': 4}
+                if prev and _rk.get(prev[0], 2) <= _rk.get(res, 2):
+                    ev_screen['J2'] = (prev[0], (prev[1] + f' | E2E {kind} {desc[:160]}')[:1500])
+                else:
+                    ev_screen['J2'] = (res, f'E2E {kind} {desc[:420]}' + (f' | {prev[1][:200]}' if prev else ''))
+            elif t == 'cascade' and kind.startswith('auth'):
+                # 2026-10-27: 권한·Division CASCADE(authcrud) — J1 = Division 후보 ⊆ 계정 권한·대표 Division 포함 / C1 = Division 연동 조회조건 후보 1건 이상
+                leak = (re.search(r'권한밖=(\S+)', desc) or [None, '?'])[1]; listed = (re.search(r'대표포함=(\w+)', desc) or [None, 'null'])[1]
+                j1 = ('판정필요' if '후보=[]' in desc else 'PASS' if leak == '0' and listed in ('true', 'null') else
+                      'FAIL' if leak not in ('0', '?') or listed == 'false' else '판정필요')   # 후보를 못 읽음 = 미확인(PASS 아님)
+                dep_txt = (re.search(r'연동=(.*?)(?: 비고=|$)', desc) or [None, ''])[1]
+                deps = [tuple(x.rsplit(':', 1)) for x in dep_txt.split(',') if re.search(r':\d+$', x)]
+                c1 = ('PASS' if all(int(n) > 0 for _, n in deps) else 'FAIL') if deps else None
+                for rule, res in (('J1', j1), ('C1', c1)):
+                    if res is None: continue
+                    prev = ev_screen.get(rule)
+                    if prev and prev[0] == 'FAIL': continue
+                    ev_screen[rule] = (res, f'E2E {kind} cascade {desc[:140]}' + (f' | {prev[1][:80]}' if prev else ''))
+            elif t == 'i18n': ev_screen.setdefault('I2', ('PASS' if desc.startswith("'_' 노출 0") else 'FAIL', f'E2E smoke i18n {desc[:100]}'))
+    for r in rows:
+        if r['result'] != 'NOT_RUN' or (r.get('tobe_ref') or '').startswith('수동'):
+            continue
+        if r['source'] == 'RULE_SCREEN' and r['rule_id'] in ev_screen and '스냅샷' not in (r.get('target') or ''):  # 스냅샷 행(W8-C)은 _snap.spec 결과만(2026-11-06 smoke A5 가 헤더 스냅샷 행에 붙던 결함)
+            r['result'], r['evidence'], r['tobe_ref'] = ev_screen[r['rule_id']][0], ev_screen[r['rule_id']][1][:1500], 'E2E smoke/auth 요약'; stat['SMOKE'] += 1
+            # 2026-11-07 T150: smoke/auth 요약 행은 전제(precond) 가 늘 공란이라 G2 게이트가 FAIL 을 전부 '[증거 부족: 전제 기록 없음]' ERROR 로 내렸다(SCP0122 J2·SCP0131 G3 실제 FAIL 은폐) → 요약 파일·상태·시각을 전제로 기록
+            try:
+                _sp = e2e_paths.summary_path(mid); _st = next((x.get('status') for x in summ if x.get('kind') == 'smoke'), '')
+                r['precond'] = json.dumps({'smoke': os.path.relpath(_sp, ROOT).replace('\\', '/'), 'status': _st, 'at': datetime.datetime.fromtimestamp(os.path.getmtime(_sp)).strftime('%m-%d %H:%M')}, ensure_ascii=False)[:600]
+            except (OSError, StopIteration, ValueError): r['precond'] = json.dumps({'smoke': 'E2E smoke/auth 요약'}, ensure_ascii=False)
+        elif r['source'] == 'SEARCH' and r['rule_id'] in ('G1', 'G2'):
+            k = ('G1', norm(r['target'].replace('조회조건', '', 1)))
+            if k in ev_cond:
+                res, ev = ev_cond[k]
+                if r['rule_id'] == 'G2': res = 'PASS' if res == 'PASS' else '판정필요'; ev = ev + ' — ALL/다중 사양은 @verify G2 미실행(6개 초과 조건) · smoke 동작 결과로 대체'
+                r['result'], r['evidence'], r['tobe_ref'] = res, ev[:1500], 'E2E smoke 조회조건 동작'; stat['SMOKE'] += 1
+        elif r['source'] == 'SEARCH' and r['rule_id'] == 'C1':
+            t = [j for j in rows if j['source'] == 'TRACE' and j['rule_id'] == 'C1' and j['result'] not in ('NOT_RUN', '') and norm(r['target'].replace('조회조건', '', 1)) in norm(j['target'])]
+            if t: r['result'], r['evidence'], r['tobe_ref'] = t[0]['result'], f"상속(TRACE {t[0]['row_id']}): {t[0]['evidence'][:300]}", '상속(검증엔진 @trace)'; stat['SMOKE'] += 1
+    # 사용자판정·사용자의견 반입(2026-10-26 · 10-27 확장) — 정합검증서 xlsx 의 '사용자판정'(이전 라운드) 과 '사용자의견'(최신 라운드) 열.
+    #   같은 행에 둘 다 있으면 판정 문구가 되는 '사용자의견' 이 이기고, 의견이 메모형(상세 설명/이해 불가/중복) 이면 '사용자판정' 의 판정을 유지한 채 메모만 붙인다.
+    #   집계·상속(SCREEN_AGG·DEFECT/CONFIRMED) 보다 앞에 두어 사용자가 바로잡은 요소 판정이 상위 집계에도 반영되게 한다(10-27: B2 요소 PASS 인데 결함원장 B2 가 FAIL 로 남던 문제).
+    MAP = [(r'^pass', 'PASS'), (r'^fail', 'FAIL'), (r'to-?be\s*기준\s*준수', 'PASS'), (r'^구현\s*필요', 'FAIL'), (r'^(na|해당\s*없음)(\s*—|$)', 'NA'),  # 2026-11-06: 직접 판정 'NA — 의견' 도 NA(종전 '$' 만이라 미반영) · '구현대상인데 미구현이면 fail' 은 조건부 지시 — W9 실측이 판정하므로 메모로만(2026-10-27)
+           (r'판정\s*오류|판단\s*오류|오류\s*아님|이상\s*없음|^정상|정상\s*확인|오류\s*재현\s*안\s*됨', 'PASS'), (r'대상\s*아님|대상이\s*아니', 'NA')]
+    RX_NOTE = re.compile(r'상세\s*설명|이해\s*불가|중복|정확하게|정확한|어디서')
+    EXPLAIN = {('H2', 'SetFGColor'): "AS-IS Set_ValidTextColor: Route Valid='N' 인 행은 Trans Mode~Distribution Total 셀 글자색을 '유효하지 않음' 색으로, Route Check 가 'Y' 가 아닌 행은 Route Id 글자색을 표시색으로 바꿔 보여준다 — TO-BE 그리드는 이 글자색 구분이 없음"}
+    uv, un = {}, {}
+    uv_src = {}
+    try:
+        import glob, openpyxl
+        # 2026-10-28: 정합검증서 → CheckList(Doc/CheckList) — 사용자 의견은 새 폴더·old·이전 위치(Doc/화면분석서 옛 이름)의 전 버전에서 누적
+        sys.path.insert(0, P('tools', 'Docs')); import doc_archive
+        files = [f for f in doc_archive.all_versions([P('Doc', 'CheckList'), P('Doc', '화면분석서')], f'{mid}_*_CheckList_v*.xlsx')
+                 + doc_archive.all_versions([P('Doc', 'CheckList'), P('Doc', '화면분석서')], f'{mid}_*_정합검증서_v*.xlsx')
+                 if not re.match(rf'^{re.escape(mid)}_\d+_', os.path.basename(f)) and not os.path.basename(f).startswith('~$')]
+        files = sorted(set(files), key=os.path.getmtime)
+        for f in files:  # 오래된 → 최신 순으로 덮어써 최신 기입이 남는다
+            try: wb = openpyxl.load_workbook(f, read_only=True, data_only=True)
+            except Exception: continue
+            for ws in wb.worksheets:
+                rws = list(ws.iter_rows(values_only=True))
+                hi = next((i for i, rr in enumerate(rws[:5]) if any(c and ('사용자판정' in str(c) or '사용자의견' in str(c)) for c in rr)), None)
+                if hi is None: continue
+                c_j = [k for k, c in enumerate(rws[hi]) if c and '사용자판정' in str(c)]
+                c_o = [k for k, c in enumerate(rws[hi]) if c and '사용자의견' in str(c)]
+                for rr in rws[hi + 1:]:
+                    rid = str(rr[1]) if len(rr) > 1 and rr[1] else ''
+                    if not rid: continue
+                    for ci in c_j:
+                        if ci < len(rr) and rr[ci] and str(rr[ci]).strip(): uv[rid] = str(rr[ci]).strip(); uv_src[rid] = 'J'
+                    for ci in c_o:
+                        if ci < len(rr) and rr[ci] and str(rr[ci]).strip():
+                            o = str(rr[ci]).strip()
+                            if any(re.search(rx, o, re.I) for rx, _ in MAP): uv[rid] = o; uv_src[rid] = 'O'
+                            else: un[rid] = o
+    except Exception as ex:
+        print(f'[WARN] 사용자판정 반입 실패: {ex}')
+    # 2026-11-04 대화로 받은 사용자 판정(CheckList 엑셀 밖) — Doc/verify/_user_verdicts_direct.csv(menu_id,row_id,verdict,opinion,decided_by,decided_at)
+    #   verdict = PASS | FAIL | NA | SKIP(= 측정 제외 · NA 로 기록하고 상태(개발필요 등)는 그대로) · 엑셀 판정보다 나중(최신)으로 덮는다
+    try:
+        for d in read_csv(P('Doc', 'verify', '_user_verdicts_direct.csv')):
+            if (d.get('menu_id') or '').upper() != mid or not (d.get('row_id') or '').strip(): continue
+            vv = (d.get('verdict') or '').strip().upper()
+            if vv not in ('PASS', 'FAIL', 'NA', 'SKIP', '판정필요'): continue  # 판정필요 = 사용자가 '판정 필요로 이관' 지시(2026-11-06 SCP0016 2번)
+            uv[d['row_id'].strip()] = f"{vv} — {(d.get('opinion') or '').strip()} ({d.get('decided_by') or ''} {d.get('decided_at') or ''})"; uv_src[d['row_id'].strip()] = 'D'
+    except Exception as ex:
+        print(f'[WARN] 직접 사용자판정 반입 실패: {ex}')
+    MAP = [(r'^skip', 'NA'), (r'^판정필요', '판정필요')] + MAP
+    stat.setdefault('USER', 0)
+    # 2026-11-08 T165: 사용자 판정의 row_id 가 이번 원장에 없으면(생성 경로 변경 — SCP0084 SC1 TRACE T-cd8baac8 → RULE_SCREEN SC1) 판정이 증발하고 regress 도 못 본다
+    #   → 검사기 기준선(_checker_golden/<ID>.csv)에서 그 행의 (rule_id, target) 을 찾아 같은 (rule_id, target) 의 현재 행으로 재매핑(1행일 때만 · 추정 금지) · note 에 원 행 ID
+    try:
+        _now_ids = {r['row_id'] for r in rows}
+        _lost = [k for k in list(uv) + list(un) if k not in _now_ids]
+        if _lost:
+            _gold = {g['row_id']: g for g in read_csv(P('Doc', 'verify', '_checker_golden', f'{mid}.csv'))}
+            stat.setdefault('USER_REMAP', 0)
+            for k in dict.fromkeys(_lost):
+                g = _gold.get(k)
+                if not g: continue
+                cand = [r for r in rows if r['rule_id'] == g.get('rule_id') and r['target'] == g.get('target')]
+                if len(cand) != 1: continue
+                tgt = cand[0]['row_id']
+                if k in uv and tgt not in uv: uv[tgt] = uv[k]; uv_src[tgt] = uv_src.get(k, '')
+                if k in un and tgt not in un: un[tgt] = un[k]
+                cand[0]['note'] = ((cand[0].get('note') or '') + f' | 사용자 판정 재매핑: 원 행 {k} 소멸 → 이 행(T165)')[:600]; stat['USER_REMAP'] += 1
+    except Exception as _ex:
+        print(f'[WARN] 사용자 판정 재매핑 실패(무시): {_ex}')
+    for r in rows:
+        u = uv.get(r['row_id']); n = un.get(r['row_id'])
+        if not u and not n: continue
+        r['note'] = re.sub(r'\s*\|\s*(사용자판정|사용자의견|원판정):[^|]*', '', r.get('note') or '')[:200] + (f' | 사용자판정: {u[:160]}' if u else '') + (f' | 사용자의견: {n[:160]}' if n else '')  # 이전 실행분 제거 후 1회만(누적 금지 · 2026-10-30)
+        base_ev = re.sub(r'^(\[사용자(판정|의견)[^\]]*\].*?(— 실측: |\] ))+', '', r.get('evidence') or '', flags=re.S)  # 판정 문구에 줄바꿈이 있어도 접두를 전부 벗긴다(2026-10-27 11중 중첩 실측)
+        for (rid_, tg), txt in EXPLAIN.items():
+            if r['source'] == 'ASIS' and r['rule_id'] == rid_ and tg in (r.get('target') or ''): base_ev = txt + ' · 실측: ' + base_ev[:300]
+        res = next((val for rx, val in MAP if re.search(rx, u or '', re.I)), None) if u else None
+        if res and (r.get('evidence') or '').startswith('[재실측') and r['result'] in ('PASS', 'FAIL'):  # 재실측이 확정이면 열 종류와 무관하게 옛 판정은 덮지 않음(재실측 NA 면 판정 유지)
+            # 옛 '사용자판정' 열(실측 전·검사기 결함 시점의 판정)은 재실측 결과를 덮지 않는다(2026-10-28 H2 Set_ValidTextColor) — 재판정은 '사용자의견' 열로
+            u0 = re.sub(r'\s+', ' ', u)[:40]
+            r['note'] = (r.get('note') or '') + ' | 이전 사용자판정 ' + repr(u0) + ' 은 재실측으로 대체'
+            r['evidence'] = ((r.get('evidence') or '') + ' (이전 사용자 판정 ' + repr(u0) + ' 은 검사기 결함 시점의 판정 — 재실측으로 대체)')[:1500]
+            continue
+        if res:
+            u1 = re.sub(r'\s+', ' ', u).strip()
+            r['note'] = (r.get('note') or '') + f" | 원판정:{r['result']}"  # 회귀 오라클(regress.py)이 검사기 자체의 판정을 보게 — 사용자판정으로 덮기 전 값(2026-10-29)
+            r['result'] = res; r['evidence'] = (f"[사용자판정] {u1} — 실측: {base_ev[:700]}")[:1500]; r['tobe_ref'] = '수동 사용자판정(CheckList)'; stat['USER'] += 1
+            r['expect_src'] = 'USER_VERDICT'; r['evidence_ref'] = {'J': 'CheckList 사용자판정 열', 'O': 'CheckList 사용자의견 열', 'D': 'Doc/verify/_user_verdicts_direct.csv'}.get(uv_src.get(r['row_id'], ''), 'CheckList')  # W8-A 3-증거
+            e2e_ids.add(r['row_id'])  # 사용자 판정 행은 뒤 단계(상속·스윕)가 덮지 않는다
+        elif n:
+            r['evidence'] = base_ev[:1500]  # 메모형 의견(상세 설명·이해 불가·중복 등)은 note 와 정합검증서 '사용자의견' 열에만 — 증거 문장을 오염시키지 않는다(2026-10-27)
+    # 그리드 컬럼 헤더 라벨 = 조회조건 기준표 라벨(CR-071 확장, 2026-10-27 사용자: SSP Incoterms 는 조회조건 라벨을 그리드에도 같이 쓰는 것이 TO-BE 룰)
+    sc_names = {norm(x.get('tobe_name') or '') for x in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')) if x['menu_id'].upper() == mid and (x.get('tobe_name') or '').strip()}
+    stat.setdefault('H5_CR071', 0)
+    for r in rows:
+        if r['source'] != 'TRACE' or r['rule_id'] != 'H5' or r['result'] != 'FAIL' or r['row_id'] in e2e_ids and r.get('tobe_ref') == '수동 사용자판정(CheckList)': continue
+        m = re.search(r"TO-BE 헤더 '([^']+)'", r.get('evidence') or '')
+        if m and norm(m.group(1)) in sc_names:
+            r['result'] = 'PASS'; r['evidence'] = (f"{r['evidence'].split(' — ')[0]} = 조회조건 기준표 라벨 '{m.group(1)}' — TO-BE 룰(CR-071 확장: 조회조건으로 쓰는 컬럼은 그리드 헤더도 기준표 라벨) → AS-IS 명칭과 달라도 PASS")[:1500]; r['tobe_ref'] = 'TO-BE 룰 CR-071(그리드 헤더 = 기준표 라벨)'; stat['H5_CR071'] += 1
+    # ── TO-BE 룰 CR-092(사용자 지시 2026-10-30): SCP·SSP 컬럼·조회조건 라벨 'Valid' → 'Active' — 정본 tools/Harness/rules/label_alias.csv(scope·asis_label·tobe_label) ──
+    #   ① H5 FAIL 중 AS-IS 'Valid' ↔ TO-BE 'Active' = PASS(명칭 변경이 룰이라 AS-IS 와 달라도 오류 아님)
+    #   ② TO-BE 에 변경 전 라벨이 남아 있으면(메타 SHEET_COLUMNS.COLUMN_LABEL_NAME · 조회조건 실측 라벨 · 기준표 tobe_name · 그리드 헤더 실측) CR-092 확정규칙 행 = FAIL(실제 개발·보완 시 Active 로 변경 대상)
+    stat.setdefault('H5_CR092', 0); stat.setdefault('CR092_LEFT', 0)
+    def _alias_scope_ok(sc):
+        ss = [x.strip().upper() for x in (sc or 'ALL').split(';') if x.strip()]
+        return 'ALL' in ss or mid in ss or any(len(x) == 3 and mid.startswith(x) for x in ss)
+    aliases = [x for x in read_csv(P('tools', 'Harness', 'rules', 'label_alias.csv')) if (x.get('asis_label') or '').strip() and _alias_scope_ok(x.get('scope'))]
+    if aliases:
+        _ss = lambda v: re.sub(r'\*', '', v or '').strip()
+        amap = {norm(x['asis_label']): x for x in aliases}
+        left = []
+        for r in rows:
+            ev = r.get('evidence') or ''
+            if ev.startswith('[사용자판정]') or (r.get('tobe_ref') or '').startswith('수동') or r['rule_id'] != 'H5': continue
+            m = re.search(r"AS-IS '([^']+)'\s*(?:↔|→|=)\s*TO-BE 헤더 '([^']+)'", ev)
+            if not m: continue
+            a_, t_ = _ss(m.group(1)), _ss(m.group(2))
+            al = amap.get(norm(a_))
+            if al and r['result'] == 'FAIL' and norm(t_) == norm(al['tobe_label']):
+                r['result'] = 'PASS'
+                r['evidence'] = (f"{ev.split(' — ')[0]} — TO-BE 룰 {al['req_id']}: SCP·SSP 라벨 '{al['asis_label']}' 은 '{al['tobe_label']}' 로 변경(AS-IS 와 달라도 PASS)")[:1500]
+                r['tobe_ref'] = f"TO-BE 룰 {al['req_id']}(라벨 {al['asis_label']}→{al['tobe_label']})"; stat['H5_CR092'] += 1
+            if norm(t_) in amap and r['result'] in ('PASS', 'FAIL', '판정필요'):
+                left.append(('그리드 헤더(실측)', (r.get('target') or '')[:60], t_))
+        meta_n = 0
+        for x in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')):
+            if (x.get('program_id') or '').upper() != mid or (x.get('valid_yn') or 'Y') != 'Y': continue
+            meta_n += 1; lb = _ss(x.get('column_label_name'))
+            if norm(lb) in amap: left.append(('메타 SHEET_COLUMNS', f"{x.get('sheet_name')}.{x.get('column_name')}", lb))
+        rt_search = {}
+        try:
+            with open(P('Doc', 'verify', mid, 'combo_runtime.json'), encoding='utf-8') as f: rt_search = (json.load(f).get('search') or {})
+        except Exception: pass
+        for k, v in rt_search.items():
+            lb = _ss((v or {}).get('label') or k)
+            if norm(lb) in amap: left.append(('조회조건(실측)', k, lb))
+        for x in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')):
+            if x['menu_id'].upper() == mid and x.get('usage') == 'USE' and norm(_ss(x.get('tobe_name'))) in amap: left.append(('조회조건 기준표 tobe_name', x.get('asis_name') or '', x.get('tobe_name')))
+        _seen = set(); left = [l for l in left if not (l in _seen or _seen.add(l))]
+        hdr_n = sum(1 for r2 in rows if r2['rule_id'] == 'H5' and 'TO-BE 헤더' in (r2.get('evidence') or ''))
+        for r in rows:
+            if r['source'] != 'CONFIRMED': continue
+            req = next((a['req_id'] for a in aliases if f"확정규칙 {a['req_id']} " in (r.get('asis_ref') or '')), None)
+            if not req or (r.get('evidence') or '').startswith('[사용자판정]') or (r.get('tobe_ref') or '').startswith('수동'): continue
+            pairs = ' · '.join(f"{a['asis_label']}→{a['tobe_label']}" for a in aliases if a['req_id'] == req)
+            if left:
+                r['result'] = 'FAIL'; stat['CR092_LEFT'] += len(left)
+                r['evidence'] = (f"TO-BE 에 변경 전 라벨 잔존 {len(left)}건 — " + ' | '.join(f"{k} {w} '{l}'" for k, w, l in left[:12]) + (f" … 외 {len(left) - 12}건" if len(left) > 12 else '')
+                                 + f" — TO-BE 룰 {req}({pairs}): 실제 개발·보완 시 변경 대상 — 그리드 = SHEET_COLUMNS.COLUMN_LABEL_NAME 메타 UPDATE(사내 적용 절차) · 조회조건 = 기준표 tobe_name·Form 라벨")[:1500]
+                r['tobe_ref'] = f'META+E2E {req} 라벨 잔존'
+            else:
+                r['result'] = 'PASS'
+                r['evidence'] = f"변경 전 라벨 잔존 0 — 메타 컬럼 {meta_n} · 조회조건 실측 {len(rt_search)} · 그리드 헤더 실측 {hdr_n} 검사 — TO-BE 룰 {req}({pairs})"
+                r['tobe_ref'] = f'META+E2E {req}'
+            e2e_ids.add(r['row_id'])  # 직접 판정 — 뒤 규칙 상속이 덮지 않게
+    # J2 — 이전 실행이 남긴 'E2E smoke/auth 요약' 중 메뉴 접근 권한 없는 그룹 기록(menuAccess=N · expected 없음)은 판정 근거가 아님 → NA (2026-10-28, v57~v60 허위 FAIL)
+    stat.setdefault('J2_NOACCESS', 0)
+    try: import e2e_paths; summ_rows_cache = read_csv(e2e_paths.summary_path(mid))  # 2026-11-06 화면별 요약 우선
+    except Exception: summ_rows_cache = []
+    for r in rows:
+        ev0 = r.get('evidence') or ''
+        if r['rule_id'] == 'J2' and r['result'] == 'FAIL' and (r.get('tobe_ref') or '').startswith('E2E smoke/auth'):
+            key0 = re.sub(r'^E2E authcrud\s*', '', ev0)[:40]
+            full = next(((x.get('annotations') or '') + ' ' + (x.get('errors') or '') for x in summ_rows_cache if (x.get('menu_id') or '').upper() == mid and (x.get('kind') or '') == 'authcrud' and key0 and re.sub(r'^authcrud:\s*', '', x.get('annotations') or '').startswith(key0)), ev0)
+            if re.search(r'menuAccess=N', ev0) and re.search(r'expected=(\s|$)', ev0):
+                r['result'] = 'NA'; r['evidence'] = (ev0 + ' — 메뉴 접근 권한이 없는 그룹(menuAccess=N)의 기록은 이 화면 J2 판정 근거가 아님(접근 대상 아님)')[:1500]; r['tobe_ref'] = 'E2E smoke/auth 요약(접근 대상 아님 · NA)'; stat['J2_NOACCESS'] += 1
+            elif re.search(r'예외: ?(TimeoutError|Error)|Timeout \d+ms exceeded|허용 계정 마커 행 저장', full + ' ' + ev0):
+                r['result'] = 'NA'; r['evidence'] = (f'E2E authcrud 측정 실패(실행 예외 — 클릭 타임아웃·마커 행 저장 실패, saveCalls=0) — 권한별 CRUD 는 재실행으로 판정: {full[:300]}')[:1500]; r['tobe_ref'] = 'E2E smoke/auth 요약(측정 실패 · 재실행)'; stat['J2_NOACCESS'] += 1
+    # MASTER 화면 = 권한별 CRUD(J2) 수행 안 함 — ADMIN 기준 CRUD(F1·F2·F5~F8)만 판정(2026-10-28 사용자 지시). MASTER = 메뉴 상위 계층에 '*_Master'(Supply/Demand/Shipping_Master)
+    menu = {m['mnu_id']: m.get('uppr_mnu_id') or '' for m in read_csv(P('Doc', 'tobefacts', 'db', 'menu.csv'))}
+    chain, m_ = [], menu.get(mid, '')
+    while m_ and m_ not in chain:
+        chain.append(m_); m_ = menu.get(m_, '')
+    master = next((c for c in chain if c.endswith('_Master')), '')
+    stat.setdefault('J2_MASTER', 0)
+    if master:
+        for r in rows:
+            if r['rule_id'] == 'J2' and r['row_id'] not in e2e_ids:
+                r['result'] = 'NA'
+                r['evidence'] = f"MASTER 화면(상위 메뉴 {master}) — 권한별 CRUD 검증 대상 아님(사용자 지시 2026-10-28) · CRUD 는 ADMIN 계정 기준 F1·F2·F5~F8 행에서 판정"
+                r['tobe_ref'] = 'TO-BE 룰(MASTER 화면 = ADMIN CRUD 만)'; stat['J2_MASTER'] += 1
+    # Insert 위치 TO-BE 룰 CR-074(2026-10-27 사용자 판정 "정상"): 목록 그리드의 Insert 는 맨 위 — AS-IS 활성 행 위치와 달라도 PASS
+    stat.setdefault('D6_CR074', 0)
+    for r in rows:
+        # 2026-11-09 T173(SSP0025 3번 허위 FAIL): 자동 시나리오 P05(_verify.spec.ts insertat)는 같은 현상을 '선택 행 N 위가 아니라 0 위치에 신규 행 생김' 으로 쓴다 — 문구 하나에만 걸면 CR-074 가 비껴간다.
+        #   신규 행이 0(맨 위) 한 곳에만 생긴 경우만 인정(0 과 다른 위치·여러 위치는 그대로 FAIL)
+        _ev = r.get('evidence') or ''
+        if r['rule_id'] == 'D6' and r['result'] == 'FAIL' and ('신규행 맨 위' in _ev or re.search(r'선택 행 \d+ 위가 아니라 0 위치에 신규 행 생김', _ev)):
+            r['result'] = 'PASS'; r['evidence'] = ((r.get('evidence') or '').split(' — AS-IS')[0] + ' — TO-BE 룰 CR-074(사용자 판정 2026-10-27): 세트(그룹) 구조 없는 목록 그리드의 Insert 는 맨 위(공용 DataGrid 기본) → AS-IS 활성 행 위치와 달라도 PASS')[:1500]; r['tobe_ref'] = 'TO-BE 룰 CR-074(Insert 맨 위)'; stat['D6_CR074'] += 1
+    # 셀 병합 TO-BE 룰 CR-073(2026-10-27 사용자 판정 "셀병합 적용되어 있음 — 오류 아님"): 화면이 병합 대상에서 뺀 컬럼 · 왼쪽 비병합 컬럼 때문에 병합되지 않는 컬럼 = PASS
+    stat.setdefault('H3_CR073', 0)
+    for r in rows:
+        if r['source'] != 'TRACE' or r['rule_id'] != 'H3' or r['result'] != 'FAIL': continue
+        ev = r.get('evidence') or ''
+        if 'TO-BE 가 이 컬럼을 병합 대상에서 뺌' in ev or 'column.allowMerging=false' in ev:
+            r['result'] = 'PASS'; r['evidence'] = (ev.split(' ↔ ')[0] + ' ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS')[:1500]; r['tobe_ref'] = 'TO-BE 룰 CR-073(키 컬럼만 병합)'; stat['H3_CR073'] += 1
+        elif '병합 대상인데 안 됨' in ev:
+            r['result'] = 'PASS'; r['evidence'] = (ev.split(' — 병합 대상인데')[0] + ' — 병합 대상 컬럼이지만 왼쪽에 비병합 컬럼(SSP Incoterms·Priority·Route Count 등)이 있어 공용 CustomMergeManager 의 계층 병합 구조상 병합되지 않음 — TO-BE 룰 CR-073: 오류 아님(MERGE_COLUMNS 위치 설계 확인 권고)')[:1500]; r['tobe_ref'] = 'TO-BE 룰 CR-073(키 컬럼만 병합)'; stat['H3_CR073'] += 1
+    # E4 저장 성공 메시지(MSG00004 등) — _trace 가 F1(CRUD 실저장) 결과를 원장에서 읽지만 _verify 가 뒤에 돌아 NOT_RUN 이던 결함(2026-10-28) → F1 최종 결과로 재판정
+    stat.setdefault('E4_F1LINK', 0)
+    f1 = [x for x in rows if x['rule_id'] == 'F1' and x['result'] in ('PASS', 'FAIL', 'ERROR') and not (x.get('tobe_ref') or '').startswith('규칙 판정 상속') and x['source'] not in ('GENERAL', 'DEFECT', 'CONFIRMED')]
+    for r in rows:
+        if r['rule_id'] != 'E4' or 'CRUD 실저장(@verify F1' not in (r.get('evidence') or ''):
+            continue
+        bad = next((x for x in f1 if x['result'] == 'FAIL'), None); good = next((x for x in f1 if x['result'] == 'PASS'), None)
+        err_ = next((x for x in f1 if x['result'] == 'ERROR'), None)
+        if bad: res, why = 'FAIL', bad['evidence'][:160]
+        elif good: res, why = 'PASS', good['evidence'][:160]
+        elif err_: res, why = 'ERROR', err_['evidence'][:160]
+        else: res, why = 'NA', 'F1 실저장 미실행 — 판정 근거 없음(수동 검수 W5)'
+        head = r['evidence'].split(' — CRUD 실저장(')[0]
+        r['result'] = res; r['evidence'] = f"{head} — CRUD 실저장 F1 최종 {res}: {why}"[:1500]; stat['E4_F1LINK'] += 1
+    # MS1 메시지 의미 대조(2026-10-28 사용자): AS-IS MSG_ID 와 같은 뜻(문구)의 TO-BE MSG_ID 를 쓰는지 — ID 동일 여부가 아니라 의미. TO-BE 코드는 FE 페이지 폴더(주석 제외) + PKG 본문(sort_check tobe_pkg_msgs.csv)
+    stat.setdefault('MS1', 0)
+    ms1_rows = [r for r in rows if r['rule_id'] == 'MS1' and r['source'] == 'MSG' and not (r.get('tobe_ref') or '').startswith('수동')]
+    if ms1_rows:
+        try:
+            sys.path.insert(0, HERE); from impl_engine import msg_mapper as _mm_; mm_ = _mm_()
+        except Exception:
+            mm_ = lambda x: ('', '')
+        nmz = lambda t: re.sub(r"""[\s.,!?。！？:;'"`·~\-_()\[\]]""", '', re.sub(r'\{\s*\d+\s*\}', '{n}', str(t or '')).lower())
+        tobe_txt = {}
+        for x in read_csv(P('Doc', 'tobefacts', 'db', 'msg_master.csv')):
+            if x.get('msg_id', '').startswith('MSG') and x.get('lang_cd', '').upper() == 'KO': tobe_txt[x['msg_id']] = x.get('msg_nm', '')
+        used = {}
+        try:
+            plan = json.load(open(P('Doc', 'e2e', 'specs', f'{mid}.plan.json'), encoding='utf-8'))
+            # 대조표 경로가 비면 dirname 이 nscm-fe 가 되어 node_modules 까지 훑다 멈췄다(2026-10-31 DMF0005 judge 2시간 정지) → routePath(feature/page)로 페이지 폴더를 찾는다
+            if plan.get('asisMapping'):
+                fe_dir = os.path.dirname(P('nscm-fe', *re.split(r'[\\/]', plan['asisMapping'])))
+            else:
+                rp_ = [x for x in re.split(r'[\\/]', plan.get('routePath') or '') if x]
+                fe_dir = P('nscm-fe', 'features', rp_[0], 'src', 'pages', rp_[-1]) if len(rp_) >= 2 else ''
+        except Exception:
+            fe_dir = ''
+        if fe_dir and os.path.isdir(fe_dir):
+            for root_, dirs_, files in os.walk(fe_dir):
+                dirs_[:] = [d_ for d_ in dirs_ if d_ != 'node_modules']
+                for fn_ in files:
+                    if not re.search(r'\.(tsx?|js)$', fn_): continue
+                    src_ = open(os.path.join(root_, fn_), encoding='utf-8', errors='ignore').read()
+                    src_ = re.sub(r'/\*.*?\*/', '', src_, flags=re.S); src_ = re.sub(r'(^|[^:])//[^\n]*', r'\1', src_)  # 주석 제외(AS-IS ID 를 주석에 적어 둔 것은 사용이 아님)
+                    for mid_ in re.findall(r'MSG\d{5}', src_): used.setdefault(mid_, set()).add('FE ' + fn_)
+            # 2026-11-06 사용자(SCP0037 9번 MSG00006 오류 아님): 상수 파일(*.constants.ts)에 `KEY: 'MSGnnnnn'` 로 정의만 되고 폴더 안 어디서도 KEY 를 쓰지 않으면
+            #   그 ID 는 '사용' 이 아니다(실제 처리는 공용 useProcMutation 기본 — 서버 메시지 → 없으면 MSG00003 · 성공 MSG00002). 정의만 있는 ID 는 used 에서 뺀다.
+            try:
+                _srcs = {}
+                for root_, dirs_, files in os.walk(fe_dir):
+                    dirs_[:] = [d_ for d_ in dirs_ if d_ != 'node_modules']
+                    for fn_ in files:
+                        if re.search(r'\.(tsx?|js)$', fn_):
+                            t_ = open(os.path.join(root_, fn_), encoding='utf-8', errors='ignore').read()
+                            _srcs[fn_] = re.sub(r'(^|[^:])//[^\n]*', r'\1', re.sub(r'/\*.*?\*/', '', t_, flags=re.S))
+                _unused_const = {}
+                for fn_, t_ in _srcs.items():
+                    if not fn_.endswith('.constants.ts'): continue
+                    others = '\n'.join(v for k, v in _srcs.items() if k != fn_)
+                    for key_, mid_ in re.findall(r"\b([A-Z][A-Z0-9_]+)\s*:\s*'(MSG\d{5})'", t_):
+                        if not re.search(r'\b' + re.escape(key_) + r'\b', others) and not re.search("'" + mid_ + "'", others):
+                            _unused_const.setdefault(mid_, []).append(f'{key_}@{fn_}')
+                for mid_, keys_ in _unused_const.items():
+                    if mid_ in used and all(u.startswith('FE ') and u.endswith('.constants.ts') for u in used[mid_]):
+                        used.pop(mid_, None); stat.setdefault('MS1_CONST_UNUSED', 0); stat['MS1_CONST_UNUSED'] += 1
+                        print(f"[MS1] {mid_}: 상수 정의만 있고 미사용({', '.join(keys_)}) — 사용으로 치지 않음(실제 처리 = 공용 useProcMutation 기본 MSG00003/MSG00002)")
+            except Exception as _ex:
+                print(f'[WARN] MS1 상수 사용 분석 실패: {_ex}')
+        for x in read_csv(P('Doc', 'verify', mid, 'tobe_pkg_msgs.csv')):
+            for mid_ in (x.get('msg_ids') or '').split(','):
+                if mid_: used.setdefault(mid_, set()).add(f"PKG {x.get('pkg')}.{x.get('proc')}")
+        fe_default = {}  # T112(2026-11-06): FE 가 t('MSGnnnnn', '_기본 문구') · { msgId: MSG.KEY, message: '_문구' } 로 둔 기본 문구 — TO-BE 미등록 ID 의 실제 화면 문구
+        try:
+            if fe_dir and os.path.isdir(fe_dir):
+                cmap_ = {}; srcs_ = []
+                for root_, dirs_, files in os.walk(fe_dir):
+                    dirs_[:] = [d_ for d_ in dirs_ if d_ != 'node_modules']
+                    for fn_ in files:
+                        if re.search(r'\.(tsx?|js)$', fn_): srcs_.append(open(os.path.join(root_, fn_), encoding='utf-8', errors='ignore').read())
+                for t_ in srcs_:
+                    for k_, m_ in re.findall(r"\b([A-Z][A-Z0-9_]+)\s*:\s*'(MSG\d{5})'", t_): cmap_[k_] = m_
+                    for m_, txt_ in re.findall(r"'(MSG\d{5})'\s*,\s*'_?([^']{2,160})'", t_): fe_default.setdefault(m_, txt_)
+                for t_ in srcs_:
+                    for k_, txt_ in re.findall(r"MSG\.([A-Z][A-Z0-9_]+)\s*,\s*message:\s*'_?([^']{2,160})'", t_):
+                        if k_ in cmap_: fe_default.setdefault(cmap_[k_], txt_)
+        except Exception as _ex:
+            print(f'[WARN] FE 기본 문구 수집 실패: {_ex}')
+        _CATS = [('저장 성공', r'저장.*(되었습니다|완료|성공)|성공적으로 저장'), ('저장 실패', r'저장.*실패'), ('중복', r'중복'), ('필수 입력', r'필수|입력하(세요|십시오)'), ('확인 질문', r'하시겠습니까'), ('삭제', r'삭제')]
+        def _cat(txt):
+            for nm_, rx_ in _CATS:
+                if re.search(rx_, str(txt or '')): return nm_
+            return ''
+        e4_by_msg = {}
+        for x in rows:
+            if x['rule_id'] == 'E4' and x['source'] == 'ASIS' and x['result'] in ('PASS', 'FAIL'): e4_by_msg.setdefault(x['target'], []).append(x)
+        # 2026-11-06(SCP0084 12번 MSG00003 사용자 판정 '오류에서 제외'): 같은 메시지 ID 의 한 행에 사용자 판정이 있으면 그 메시지는 판정 완료 —
+        #   종전엔 사용자 판정 행을 빼고 남은 사용 위치 행(V-65679e0b)이 새 대표가 되어 같은 FAIL 이 다시 올라왔다
+        ms1_done = {r['target']: r['row_id'] for r in rows if r['rule_id'] == 'MS1' and r['source'] == 'MSG' and (r.get('tobe_ref') or '').startswith('수동')}
+        for r in ms1_rows:
+            m_ = r['target']; mapped, atext = mm_(m_); mt = tobe_txt.get(mapped, ''); same_txt = tobe_txt.get(m_, '')
+            if m_ in ms1_done:  # 같은 메시지 ID 는 사용 위치마다 행이 있어도 판정은 1건(2026-10-29 SCP0020 MSG00109 ×7 허위 FAIL 집계)
+                r['result'] = 'NA'; r['evidence'] = f"같은 메시지 {m_} — [{ms1_done[m_]}] 에서 판정(이 행은 사용 위치 {(r.get('condition') or '')[:60]})"; r['tobe_ref'] = 'MS1 집계(메시지 ID 1건)'; stat['MS1'] += 1
+                continue
+            ms1_done[m_] = r['row_id']
+            _tobe_use_txt = same_txt[:60] if same_txt else ('미등록(SCM_ADM_MSG_M 행 없음) → 화면엔 FE 기본 문구 ' + repr((fe_default.get(m_) or '?')[:40]))
+            where_map = sorted(used.get(mapped, [])) if mapped else []; where_same = sorted(used.get(m_, []))
+            head = f"AS-IS {m_} '{(atext or '')[:40]}' → 같은 문구의 TO-BE ID {mapped or '없음'}{(' ' + repr(mt[:40])) if mt else ''}"
+            if mapped and where_map:
+                res, why = 'PASS', f"TO-BE 가 {mapped} 사용({', '.join(where_map[:3])}) — 의미 일치" + (f" · AS-IS ID {m_} 는 TO-BE 에서 '{same_txt[:30]}'(다른 뜻)이라 쓰지 않음(정상)" if same_txt and nmz(same_txt) != nmz(atext) else '')
+            elif where_same and same_txt and nmz(same_txt) == nmz(atext):
+                res, why = 'PASS', f"TO-BE 가 같은 ID {m_} 사용({', '.join(where_same[:3])}) — TO-BE 문구도 같음"
+            elif _cat(atext) and any(_cat(tobe_txt.get(u, '')) == _cat(atext) for u in used if u != m_):
+                u2 = next(u for u in used if u != m_ and _cat(tobe_txt.get(u, '')) == _cat(atext))
+                res, why = 'PASS', f"TO-BE 가 같은 유형({_cat(atext)})의 ID {u2} '{tobe_txt.get(u2, '')[:30]}' 사용({', '.join(sorted(used[u2])[:2])}) — 문구는 다르나 의미 같음(AS-IS 건수 자리표시자 생략 등)"
+            elif where_same and not same_txt and fe_default.get(m_) and nmz(fe_default[m_]) == nmz(atext):
+                res, why = 'PASS', f"TO-BE 가 같은 ID {m_} 사용({', '.join(where_same[:2])}) — SCM_ADM_MSG_M 미등록이지만 FE 기본 문구 '{fe_default[m_][:40]}' = AS-IS 문구(같은 문구 사용 · 등록만 권장 · T112)"
+            elif where_same and same_txt and _cat(atext) and _cat(same_txt) == _cat(atext):
+                res, why = 'PASS', f"TO-BE 가 같은 ID {m_} 를 같은 유형({_cat(atext)})의 문구 '{same_txt[:40]}' 로 사용({', '.join(where_same[:2])}) — AS-IS '{(atext or '')[:40]}' 와 뜻 같음(문구 차이는 오류 아님 · T112)"
+            elif where_same:
+                # 2026-11-06 사용자 지시(SCP0084 12번·SCP0037 9번): AS-IS 코드·문구 / TO-BE 가 쓰는 코드·문구(위치) / 같은 문구의 TO-BE 코드(처리 방법)를 나란히 적어 사람이 바로 대조하게
+                #   T105: TO-BE 가 같은 ID 를 TO-BE 뜻(예 MSG00004='수정한 내용이 없습니다')으로 쓰는 것 자체는 결함이 아니다 — AS-IS 상황(저장 성공/실패)은 공용 useProcMutation 기본 처리가 맡으면 PASS, 그 외는 사람 판정
+                _tobe_cat = _cat(same_txt) if same_txt else ''
+                if _cat(atext) in ('저장 성공', '저장 실패') and _tobe_cat != _cat(atext):
+                    res, why = 'PASS', f"AS-IS {m_} '{(atext or '')[:40]}'(저장 결과) ↔ TO-BE 는 같은 ID {m_} 를 '{same_txt[:40]}' 뜻으로 씀({', '.join(where_same[:2])}) — AS-IS 상황은 공용 useProcMutation 기본 처리(성공 MSG00002 토스트 · 실패 서버 메시지→MSG00003 Alert)가 담당 · 같은 문구 TO-BE 코드 {mapped or '없음'}"
+                else:
+                    res, why = '판정필요', (f"[AS-IS] {m_} '{(atext or '')[:60]}' ({(r.get('asis_ref') or '')[:60]}) | [TO-BE 사용] {m_} "
+                                        f"'{_tobe_use_txt}' ({', '.join(where_same[:3])}) | "
+                                        f"[같은 문구 TO-BE 코드] {mapped + ' ' + repr(mt[:60]) if mapped else '없음'} → {('TO-BE 는 ' + mapped + ' 로 처리') if mapped else '신규 등록(MSG01001+) 후 처리'}")
+            else:
+                e4s = e4_by_msg.get(m_, [])
+                if any(x['result'] == 'PASS' for x in e4s): res, why = 'PASS', f"TO-BE 코드에 {m_}/{mapped or '-'} 직접 참조 없음(공통 처리) — E4 실측 알림 문구 일치: {next(x for x in e4s if x['result'] == 'PASS')['evidence'][:120]}"
+                elif e4s: res, why = 'NA', f"TO-BE 코드에 {m_}/{mapped or '-'} 참조 없음 — 이 상황의 메시지 유무·문구는 E4 행에서 판정(E4 실측 {e4s[0]['result']}: {e4s[0]['evidence'][:100]}) · MS1 은 'ID 를 다른 뜻으로 쓰는지' 만 본다"
+                elif mapped and _cat(atext) in ('저장 성공', '저장 실패'): res, why = 'PASS', f"TO-BE 화면 코드에 {m_}/{mapped} 참조 없음 — 저장 결과 메시지는 공용 useProcMutation 기본 처리(성공 MSG00002 토스트 · 실패 서버 메시지→없으면 MSG00003 Alert, useCustomQueryClient.ts:203-211)가 담당 · 같은 뜻(AS-IS '{(atext or '')[:30]}')"
+                elif not mapped: res, why = 'NA', f"TO-BE 메시지 사전에 같은 문구 없고 TO-BE 코드에 {m_} 참조도 없음 — TO-BE 가 이 메시지를 쓰지 않음(해당 상황의 처리 여부는 E4·D1 등 동작 행에서 판정 · 필요하면 MSG01001+ 신규 등록)"
+                else: res, why = 'NA', f"TO-BE 코드(FE {os.path.basename(fe_dir) or '-'} 폴더 · PKG)에 {m_}/{mapped} 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+            r['result'] = res; r['evidence'] = f"{head} — {why}"[:1500]; r['tobe_ref'] = 'STATIC msgmap(문구 일치) + 코드 사용 ID'; stat['MS1'] += 1
+
+    # T8 측정 경로 편중(2026-10-29 SCP0096 Working Time Default 0~7·정수 미검출): 검사기가 'Insert 없음/신규행 없음' 을 이유로 못 돈 행은
+    #   신규행 전용(D4 · 조건 '신규행')만 대상 없음이다. 입력 검증(E1·E2·E5·E6)·색(H2)·연쇄(C2·C3·C6)·표시(D5·A2·I2)는 편집 가능한 기존행으로 측정해야 하므로
+    #   아래 판정필요→NA 정리로 묻지 않고 ERROR '[측정 경로 누락]'(미검증)으로 드러낸다 — 검사기가 다시 신규행만 전제하면 CheckList 에 보인다
+    stat.setdefault('PATH_GAP_ERROR', 0)
+    for r in rows:
+        ev = r.get('evidence') or ''
+        if r['result'] not in ('판정필요', 'NA') or ev.startswith('[사용자판정]') or '(권한)' in ev:
+            continue
+        if r['rule_id'] in ('E1', 'E2', 'E5', 'E6', 'H2', 'C2', 'C3', 'C6', 'D5', 'A2', 'I2') and (r.get('condition') or '') != '신규행' \
+                and re.search(r'Insert 버튼 (비노출|없음)', ev) and not re.search(r'신규행 조건 행|D4\)', ev):
+            r['result'] = 'ERROR'; r['evidence'] = ('[측정 경로 누락] Insert 가 없다는 이유로 검사하지 않음 — 이 규칙은 기존행으로 측정해야 함(검사기 결함 T8) — ' + ev)[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 측정 경로 누락'; stat['PATH_GAP_ERROR'] += 1
+
+    # 판정필요 정리(2026-10-28 사용자: 판정필요는 A1 건수 차이 외 남기지 않음)
+    #  · K3 그리드 조작: 실측한 하위 항목은 PASS 이고 '미포함' 항목(팝업 그리드·Sort/Filter 동적 컬럼)이 남은 행 → NA 수동 검수(W7), 실측 결과는 증거에 유지
+    #  · C3/C6 '원천 … 신규행 편집 불가'·'연쇄 원천 해석 불가': 검사기가 원천 셀을 열 수 없어 측정 못 함(검사기 한계) → NA 수동 검수(W7)
+    stat.setdefault('REVIEW_SWEEP', 0)
+    sort_review(rows, stat)  # A6 정렬 기준 차이 = 판정필요(사용자 2026-10-30) — 아래 정리에서 NA 로 묻히지 않게 먼저 표식
+    # D1 잠금 해석 실패(facts_lockrules 가 AS-IS 잠금 문장을 해석하지 못함) = 검사기 한계 → NA(수동 검수)가 아니라 ERROR(미검증 · W4 검사기 과제)(2026-10-30 T11)
+    stat.setdefault('LOCK_PARSE_ERROR', 0)
+    for r in rows:
+        if r['rule_id'] == 'D1' and '[잠금 해석 실패]' in (r.get('note') or '') and r['result'] in ('판정필요', 'NA', 'NOT_RUN', '') and not (r.get('evidence') or '').startswith('[사용자판정]'):
+            r['result'] = 'ERROR'; r['evidence'] = ('[잠금 해석 실패] ' + (r.get('note') or '').split('[잠금 해석 실패]')[-1].strip()[:300] + ' — AS-IS 잠금 문장을 해석하지 못해 기대값 없음(검사기 facts_lockrules 보강 대상) · 실측: ' + (r.get('evidence') or '')[:300])[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 잠금 해석 실패'; stat['LOCK_PARSE_ERROR'] += 1
+    for r in rows:
+        if r['result'] not in ('판정필요', 'FAIL') or r['rule_id'] == 'A1' or (r.get('evidence') or '').startswith(('[사용자판정]', SORT_REVIEW_TAG, ORDER_REVIEW_TAG, FORM_REVIEW_TAG, ALIGN_REVIEW_TAG, '[시험 검사', '[AS-IS 에만 있는 후보', '[필수 조건 자동 채움', '[날짜 편집기 재확인 필요]')):  # P3·P7 표식 행은 사람 판정으로 남긴다(2026-11-06)
+            continue
+        ev = r.get('evidence') or ''
+        if r['result'] == 'FAIL' and not (r['rule_id'] in ('C3', 'M4') and r['source'] == 'TRACE' and '2초 뒤 신규행' in ev):
+            continue  # FAIL 은 popMap 교정 건만 손댄다
+        if r['rule_id'] == 'K3' and 'PASS:' in ev and ('미포함' in ev or '별도 확인' in ev) and 'FAIL:' not in ev:
+            r['result'] = 'NA'; r['evidence'] = (ev + ' → 실측 범위 PASS · 미포함 항목은 수동 검수 대상(작업 원장 W7)')[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 부분 실측'; stat['REVIEW_SWEEP'] += 1
+        elif r['rule_id'] in ('C3', 'M4') and r['source'] == 'TRACE' and '2초 뒤 신규행' in ev and '"popMap"' not in (r.get('condition') or ''):
+            # 팝업 반영 대상이 아닌 컬럼(다른 메서드의 고정값 대입 — TO_YYYYMMDD '2099-12-27' 은 InsertButton 기본값, D4 에서 판정)을 W9 가 재실측한 결과 — 대조표 popMap 교정 뒤 조건에서 빠짐 → NA
+            r['result'] = 'NA'; r['evidence'] = (ev + ' — 이 컬럼은 팝업(SetRoute) 반영 대상이 아님(다른 메서드의 대입) → 기본값은 D4 에서 판정 · 팝업 검사 대상 아님')[:1500]; r['tobe_ref'] = 'popMap 교정(검사 대상 아님)'; stat['REVIEW_SWEEP'] += 1
+        elif r['rule_id'] in ('C3', 'C6', 'C2') and ('신규행 편집 불가' in ev or '원천 해석 불가' in ev or '연쇄 프로브 불가' in ev):
+            r['result'] = 'NA'; r['evidence'] = (ev + ' — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7)')[:1500]; r['tobe_ref'] = 'W7 시나리오'; stat['REVIEW_SWEEP'] += 1
+        elif (r['source'] not in ('DEFECT', 'CONFIRMED', 'GENERAL') or (r.get('tobe_ref') or '').startswith('E2E')) and r['result'] == '판정필요' and not re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|선행 미구현에 종속|선행 대조표 )', ev):
+            # 사용자 지시(2026-10-27/28): 판정필요는 A1 건수 차이 외 남기지 않음 — 기계가 결론 못 낸 요소는 NA(수동 검수 W7), 사유는 증거에 보존
+            r['result'] = 'NA'; r['evidence'] = (ev + ' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)')[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · W7'; stat['REVIEW_SWEEP'] += 1
+
+    # E6 한글 IME — CDP 입력 모사는 OS IME 와 다르다(검사기 자체가 '동일하지 않음' 명시) → 기계 FAIL 금지, NA 수동 확인(사용자 2026-10-28 "동일하게 동작함 확인" · 판정오류)
+    for r in rows:
+        if r['rule_id'] == 'E6' and r['result'] == 'FAIL' and 'CDP IME 모사' in (r.get('evidence') or '') and not (r.get('evidence') or '').startswith('[사용자판정]'):
+            r['result'] = 'NA'; r['evidence'] = ((r.get('evidence') or '') + ' → CDP IME 모사 한계 — 기계 판정 불가(수동 확인 · 사용자 2026-10-28 동일 동작 확인)')[:1500]; r['tobe_ref'] = 'E6 IME 모사 한계(수동 확인)'
+    # CR-071 조회조건 기준표 — 기준표(USE)에 없는 AS-IS 조회조건(버튼 영역 이동·제외)은 TO-BE 조회조건 대상이 아니다 → 그 조건의 TRACE 요소 검사(G4·G1·C4·C1·G6·H5·C6)는 NA (2026-10-28 SCP0096 chkSum·usrButton1 허위 FAIL)
+    stat.setdefault('CR071_COND_NA', 0)
+    sc_all = [x for x in read_csv(P('tools', 'Harness', 'rules', 'search_cond.csv')) if x['menu_id'].upper() == mid]
+    if sc_all:
+        use_names = {norm(x.get(k) or '') for x in sc_all if x.get('usage') == 'USE' for k in ('asis_name', 'tobe_name') if (x.get(k) or '').strip()}
+        use_names |= {alias[n] for n in list(use_names) if n in alias}
+        sc_scopes = {(x.get('scope') or '').strip() for x in sc_all if x.get('usage') == 'USE'}
+        sc_common = max(sc_scopes, key=lambda x: (x.count(',') + 1, len(x))) if sc_scopes else ''
+        tab_names = {norm(x.get(k) or '') for x in sc_all if x.get('usage') == 'USE' and len(sc_scopes) > 1 and (x.get('scope') or '').strip() != sc_common for k in ('asis_name', 'tobe_name') if (x.get(k) or '').strip()}
+        off_names = {norm(x.get(k) or ''): (x.get('usage') or '') + ((' · ' + x.get('usage_reason')) if x.get('usage_reason') else '') for x in sc_all if x.get('usage') != 'USE' for k in ('asis_name', 'tobe_name') if (x.get(k) or '').strip()}
+        # SEARCH 행(target '조회조건 X')도 같은 기준 — W4c G1/G2·STATIC G4/H5 가 기준표 조건 이름으로 만든 행(2026-10-29 SCP0041 Cutoff Date·관리번호·Status '칸 없음')
+        for r in rows:
+            if r['source'] == 'SEARCH' and r['rule_id'] in ('G1', 'G2', 'G4', 'H5', 'C1', 'C4') and r['result'] in ('FAIL', 'ERROR') and re.search(r'칸 없음|라벨 없음|화면 없음', r.get('evidence') or ''):
+                nm_ = norm(re.sub(r'^조회조건\s*', '', r['target']))
+                if nm_ in tab_names:
+                    r['result'] = 'NA'; r['evidence'] = (f"조회조건 '{r['target'][5:].strip()}' 은 다른 탭(scope) 전용 — 기본 탭에 칸이 없는 것은 정상 · 탭 전환 검사 미구현(수동 검수 W7) · 원 실측: " + (r.get('evidence') or '')[:200])[:1500]
+                    r['tobe_ref'] = 'STATIC CR-071 기준표(scope)'; stat['CR071_COND_NA'] += 1
+        for r in rows:
+            if r['source'] != 'TRACE' or r['rule_id'] not in ('G4', 'G1', 'C4', 'C1', 'G6', 'H5', 'C6', 'G2') or r['result'] in ('NA', 'PASS'):
+                continue
+            cond = r.get('condition') or ''
+            if '"et": "COND"' not in cond[:60] or '"popup": true' in cond[:200]:
+                continue
+            m = re.search(r'"labels": \[(.*?)\]', cond); labels = [norm(x) for x in re.findall(r'"([^"]*)"', m.group(1) if m else '')]
+            nm = re.search(r'"name": "([^"]*)"', cond); labels.append(norm(nm.group(1) if nm else ''))
+            labels = [x for x in labels if x and not re.match(r'^(cbo|clb|txt|chk|usr|btn|rd|rgrp)', x)]
+            if labels and any(x in tab_names for x in labels) and re.search(r'칸 없음|라벨 없음', r.get('evidence') or ''):  # (TRACE 행)
+                r['result'] = 'NA'; r['evidence'] = (f"조회조건 '{labels[0]}' 은 다른 탭(scope) 전용 — 기본 탭에 칸이 없는 것은 정상 · 탭 전환 검사 미구현(수동 검수 W7) · 원 실측: " + (r.get('evidence') or '')[:200])[:1500]
+                r['tobe_ref'] = 'STATIC CR-071 기준표(scope)'; stat['CR071_COND_NA'] += 1; continue
+            if not labels or any(x in use_names for x in labels):
+                continue
+            why = next((off_names[x] for x in labels if x in off_names), '기준표에 없는 AS-IS 조건')
+            r['result'] = 'NA'; r['evidence'] = (f"조회조건 '{', '.join(labels[:2])}' 은 TO-BE 조회조건 기준표(search_cond.csv) 대상이 아님({why}) — TO-BE 룰 CR-071(기준표 정의 조건만) → 검사 대상 아님 · 원 실측: " + (r.get('evidence') or '')[:300])[:1500]
+            r['tobe_ref'] = 'STATIC CR-071 기준표 제외'; stat['CR071_COND_NA'] += 1
+
+    # ── 설계 결정(2026-10-30 · GAP 분석 종합 처리 상태 '제외' 등): TO-BE 가 의도적으로 AS-IS 와 다르게 확정한 동작은 결함이 아니다(검사기 결함 유형 T7 '설계 결정과 결함 혼동').
+    #   tools/Harness/rules/design_decisions.csv(DD-nnn · defects_sources_merge.py 가 분류 status=DESIGN 에서 생성) 중 human_check 가 '확인…' 인 행만 적용:
+    #   같은 화면(또는 scope ALL/접두) · rule_id 일치 · target_tokens(영문 토큰 ; 또는 '*'=화면 전체) 가 판정 행 target/condition 에 있으면 FAIL/판정필요/ERROR → NA '설계 결정(GAP F-xx)'.
+    #   보류(human_check≠확인) 행은 덮지 않고 note 에 '설계 결정 후보(미확인)' 만 남긴다 — 사람이 확인하기 전엔 숨기지 않는다. 적용 내역은 Doc/verify/<ID>/design_decisions_applied.csv.
+    stat.setdefault('DESIGN_NA', 0); stat.setdefault('DESIGN_CAND', 0)
+    dd_rows = read_csv(P('tools', 'Harness', 'rules', 'design_decisions.csv'))
+    def _dd_scope_ok(d):
+        sc = [s.strip().upper() for s in (d.get('scope') or d.get('menu_id') or '').split(';') if s.strip()]
+        return (d.get('menu_id') or '').upper() == mid or 'ALL' in sc or mid in sc or any(len(s) == 3 and mid.startswith(s) for s in sc)
+    dd_rows = [d for d in dd_rows if _dd_scope_ok(d) and (d.get('rule_ids') or '').strip()]
+    dd_applied = []
+    # 2026-11-06(사용자 지시 SCP0122): '검사 대상 제외' 결정(tobe 가 '검사 대상 제외' 로 시작 · DD-215/216 CN 언어 검사)은 대상 자체가 아니므로
+    #   미실행(NOT_RUN) 행도 NA 로 둔다 — 대상 밖 항목이 '미검증' 으로 남지 않게. 그 밖의 설계 결정은 종전대로 FAIL·판정필요·ERROR 만.
+    _excl_only = lambda d: (d.get('tobe') or '').startswith('검사 대상 제외')
+    if dd_rows:
+        stat.setdefault('DESIGN_UV', 0)
+        for r in rows:
+            if r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL'):
+                continue
+            ev0 = r.get('evidence') or ''
+            # 2026-11-07 T137(SCP0037 regress 판정오류 10·11번): 사용자판정(PASS)으로 덮인 행이라도 note 의 원판정이 FAIL 이고 설계 결정이 맞으면
+            #   원판정을 NA(설계 결정)로 적어 regress 오라클이 '검사기 원판정 FAIL 유지' 로 보지 않게 한다 — 결과·증거(사용자판정)는 그대로
+            uv = ev0.startswith('[사용자판정]') or (r.get('tobe_ref') or '').startswith('수동')
+            uv_fail = uv and (re.findall(r'원판정:(\w+)', r.get('note') or '') or [''])[-1] == 'FAIL'
+            if r['result'] not in ('FAIL', '판정필요', 'ERROR') and not (r['result'] == 'NOT_RUN' and any(_excl_only(d) for d in dd_rows)) and not uv_fail:
+                continue
+            if uv and not uv_fail:
+                continue
+            hay = (r['target'] + ' ' + (r.get('condition') or '')[:600] + ' ' + (r.get('expected') or '')[:200]).upper()
+            for d in dd_rows:
+                if r['rule_id'] not in [x.strip() for x in d['rule_ids'].split(';')]:
+                    continue
+                if r['result'] == 'NOT_RUN' and not _excl_only(d):
+                    continue
+                toks = [t.strip() for t in (d.get('target_tokens') or '').split(';') if t.strip()]
+                if toks == ['*']:
+                    if r['source'] != 'RULE_SCREEN' and r.get('area') not in ('화면', '조회조건'):
+                        continue
+                elif not toks or not any(t.upper() in hay for t in toks):
+                    continue
+                tag = f"GAP {d.get('gap_item') or d.get('src') + '-' + d.get('no')} · {d['dd_id']}"
+                if not (d.get('human_check') or '').startswith('확인'):
+                    r['note'] = ((r.get('note') or '') + f" | 설계 결정 후보 {tag}(미확인 — 사람 확인 후 NA)")[:600]; stat['DESIGN_CAND'] += 1
+                    continue
+                if uv_fail:  # T137: 사용자판정 행 — 결과·증거는 두고 원판정만 NA(설계 결정)로
+                    r['note'] = ((r.get('note') or '') + f" | 원판정:NA(설계 결정 {tag} · 사용자판정 유지)")[:600]; stat['DESIGN_UV'] += 1
+                    dd_applied.append({'dd_id': d['dd_id'], 'gap_item': d.get('gap_item') or '', 'row_id': r['row_id'], 'rule_id': r['rule_id'], 'target': r['target'][:120], 'human_check': d.get('human_check') or ''})
+                    break
+                r['note'] = ((r.get('note') or '') + f" | 원판정:{r['result']}")[:600]
+                r['result'] = 'NA'
+                r['evidence'] = (f"설계 결정({tag} · {d.get('human_check')} · {d.get('decided_by')}): AS-IS '{(d.get('asis') or '')[:120]}' → TO-BE '{(d.get('tobe') or '')[:120]}' — {(d.get('reason') or '')[:160]} · 원 실측: {ev0[:400]}")[:1500]
+                r['tobe_ref'] = f"TO-BE 설계 결정({tag})"
+                stat['DESIGN_NA'] += 1; dd_applied.append({'dd_id': d['dd_id'], 'gap_item': d.get('gap_item') or '', 'row_id': r['row_id'], 'rule_id': r['rule_id'], 'target': r['target'][:120], 'human_check': d.get('human_check') or ''})
+                break
+        try:
+            _pd = P('Doc', 'verify', mid); os.makedirs(_pd, exist_ok=True)
+            with open(os.path.join(_pd, 'design_decisions_applied.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+                w = csv.DictWriter(f, fieldnames=['dd_id', 'gap_item', 'row_id', 'rule_id', 'target', 'human_check']); w.writeheader(); [w.writerow(x) for x in dd_applied]
+        except Exception as _ex:
+            print(f'[WARN] design_decisions_applied.csv 기록 실패: {_ex}')
+
+    # ── P2 공용 컴포넌트 계약(2026-11-06 근본 보완): tools/Harness/rules/common_contract.csv — 공용 컴포넌트·foundation 의 확정 동작(최소 폭 1460 가로 스크롤 ·
+    #   popupSearchField 40px 칸 · CustomDropdown SELECT ALL · MeasureSelectModal 목록 · axios 500 처리 …)을 기대 원천으로 둔다. 기대 원천 우선순위 =
+    #   TO-BE 확정 결정(CR/DD) > TO-BE 메타 > 공용 컴포넌트 계약 > AS-IS 원문. 계약에 걸리는 FAIL 은 계약 verdict(판정필요/PASS/NA)로 바꾸고 근거(basis)를 적는다.
+    #   공용 컴포넌트를 고칠 때 이 표도 같이 고친다(설계 결정 DD 와 같은 방식 · 사용자 판정 행은 건드리지 않음).
+    stat.setdefault('CONTRACT', 0)
+    _cc = [x for x in read_csv(P('tools', 'Harness', 'rules', 'common_contract.csv')) if (x.get('verdict') or '').strip() in ('PASS', 'NA', '판정필요')]
+    for r in rows:
+        if r['result'] not in ('FAIL', '판정필요', 'ERROR') or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL'): continue
+        ev0 = r.get('evidence') or ''
+        if ev0.startswith('[사용자판정]') or ev0.startswith('[재실측') or (r.get('tobe_ref') or '').startswith('수동') or '공용 컴포넌트 계약 CC-' in ev0: continue
+        for x in _cc:
+            if r['rule_id'] not in [t.strip() for t in (x.get('rule_ids') or '').split(';') if t.strip()]: continue
+            sc = [t.strip().upper() for t in (x.get('scope') or 'ALL').split(';')]
+            if 'ALL' not in sc and mid not in sc and not any(len(t) == 3 and mid.startswith(t) for t in sc): continue
+            sf = [t.strip() for t in (x.get('source_filter') or 'ALL').split('|')]
+            if 'ALL' not in sf and r['source'] not in sf: continue
+            fld = (x.get('field') or 'evidence').strip()
+            hay = (r.get('target') or '') if fld == 'target' else ev0 if fld == 'evidence' else (r.get('target') or '') + '\n' + ev0
+            try:
+                if not re.search(x.get('trigger_re') or '$^', hay): continue
+            except re.error:
+                continue
+            v = x['verdict'].strip()
+            if r['result'] == v: break
+            r['note'] = ((r.get('note') or '') + f" | 원판정:{r['result']}")[:600]
+            r['result'] = v
+            r['evidence'] = (f"공용 컴포넌트 계약 {x['contract_id']}({(x.get('basis') or '')[:140]}): {(x.get('reason') or '')[:220]} · 원 실측: {ev0[:500]}")[:1500]
+            r['tobe_ref'] = f"TO-BE 공용 컴포넌트 계약({x['contract_id']})"; stat['CONTRACT'] += 1
+            r['expect_src'] = f"CONTRACT:{x['contract_id']}"; r['evidence_ref'] = (x.get('basis') or '')[:300]  # W8-A 3-증거
+            break
+
+    # C4/C1 — Division(상위) 변경 뒤 그리드가 비는 것은 TO-BE 룰(10_RULES_KEEP E2: Division 변경 시 하위 reset + Grid 비움, 재조회는 Search) → AS-IS 가 유지하더라도 PASS. 자동 재조회가 있었으면 그건 룰 위반이라 FAIL 사유를 룰로 적는다
+    stat.setdefault('C4_DIV_CLEAR', 0)
+    for r in rows:
+        if r['source'] != 'TRACE' or r['rule_id'] not in ('C4', 'C1') or r['result'] != 'FAIL':
+            continue
+        ev = r.get('evidence') or ''
+        m = re.search(r"'(Div\.?|Division)' 변경\('[^']*'\) 후 (\d+)행(?:\([^)]*\))? · 자동 재조회 (\d+)건", ev)  # 2026-11-06(SCP0016 17·20번): '(그리드별 0)' 꼬리로 정규식 불일치 → KEEP E2 PASS 미적용
+        if not m or int(m.group(2)) != 0:
+            continue
+        if int(m.group(3)) == 0:
+            r['result'] = 'PASS'; r['evidence'] = (ev + ' → TO-BE 룰(KEEP E2): Division 변경 시 그리드를 비운다 — AS-IS 가 유지하더라도 TO-BE 룰로 PASS')[:1500]; r['tobe_ref'] = 'TO-BE 룰 KEEP E2(Division 변경 시 그리드 비움)'
+        else:
+            r['evidence'] = (ev + ' → TO-BE 룰(KEEP E2): Division 변경 시 그리드는 비우되 재조회는 Search 버튼으로 — 자동 재조회가 있어 룰과 다름')[:1500]
+        stat['C4_DIV_CLEAR'] += 1
+
+    # B2 표시명 중복(2026-10-29): 같은 대상의 B4(AS-IS 원천 집합 일치)가 PASS 면 중복은 원천 데이터 특성(AS-IS 도 같음) → PASS
+    stat.setdefault('B2_B4', 0)
+    for r in rows:
+        if r['rule_id'] != 'B2' or r['result'] != 'FAIL' or '중복' not in (r.get('evidence') or ''):
+            continue
+        b4 = [x for x in rows if x['rule_id'] == 'B4' and x['source'] == r['source'] and x['target'] == r['target'] and x['result'] == 'PASS']
+        if b4:
+            r['result'] = 'PASS'; r['evidence'] = ((r.get('evidence') or '') + f" → AS-IS 원천과 후보 집합 일치(B4 [{b4[0]['row_id']}] PASS) — 표시명 중복은 원천 데이터 특성(AS-IS 도 같음)")[:1500]; stat['B2_B4'] += 1
+
+    # 2026-10-29 사용자(SCP0020 v5 의견): 오류가 아닌 것을 오류로 — AS-IS 를 끝까지 확인하지 못한 판정은 FAIL 로 적지 않는다
+    stat.setdefault('R37_NA', 0)
+    RX_GUARD = re.compile(r'(ActiveSheetIndex[^)▸]*|fps\.Name[^)▸]*)')
+    for r in rows:
+        if r['result'] != 'FAIL' or (r.get('evidence') or '').startswith('[사용자판정]') or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL'):
+            continue
+        ev = r.get('evidence') or ''; cond = r.get('condition') or ''; asis = r.get('asis_ref') or ''
+        # (a) 문서 보강용 행(대조표 기록·구현 위치) — 화면 오류 아님 → 조치 필요 금지
+        if r['rule_id'] in ('X-LOC', 'X-NOTIMPL') and re.search(r'화면 오류 아님|대조표 기록 보강|구현 위치 실존 안 함', ev):
+            r['result'] = 'NA'; r['evidence'] = (ev + ' → 대조표 문서 보강 항목(화면 결함 아님) — 조치 필요에 올리지 않음(2026-10-29)')[:1500]; stat['R37_NA'] += 1; continue
+        # (b) Insert 기본값(D4/C3)의 AS-IS 문장이 시트·화면 상태 가드(ActiveSheetIndex·fps.Name) 안에 있으면 TO-BE 어느 시트와 대응하는지 기계가 모른다 → NA
+        if r['rule_id'] in ('D4', 'C3') and re.search(r'ActiveSheetIndex|fps\.Name|SelectedIndex\b', cond + ' ' + asis) and '기본값' in ev:
+            gm_ = RX_GUARD.search(cond + ' ' + asis); gtxt_ = (gm_.group(1) if gm_ else '')[:80]
+            r['result'] = 'NA'; r['evidence'] = (ev + ' → AS-IS 문장이 시트 상태 가드(' + gtxt_ + ') 안에 있어 TO-BE 시트와의 대응을 기계가 확정할 수 없음 — 사람 확인(W7)')[:1500]; r['tobe_ref'] = 'W7 시나리오'; stat['R37_NA'] += 1; continue
+        # (c) A5 메타 표시 여부: AS-IS 메타 VISIBLE Y ↔ TO-BE 메타 VISIBLE N 은 TO-BE 설계로 숨긴 것 — 설계 확정 여부는 사람 판단(FAIL 아님)
+        if r['rule_id'] == 'A5' and r['source'] == 'COLUMN' and re.search(r"AS-IS VISIBLE_FLAG 'Y' \(TO-BE 'N'\)", ev + ' ' + (r.get('expected') or '')):
+            r['result'] = 'NA'; r['evidence'] = (ev + ' → TO-BE 메타(SHEET_COLUMNS VISIBLE=N)가 의도적으로 숨긴 컬럼 — AS-IS 메타와 다르지만 설계 결정 여부는 사람 확인(W7) · 렌더링 불일치(메타 Y 인데 미표시)만 FAIL')[:1500]; r['tobe_ref'] = 'W7 시나리오'; stat['R37_NA'] += 1; continue
+        # (d) D1 잠금 가드가 화면 상태(Division 선택값·활성 시트)에 걸린 조건부 — 그 행 값으로 계산할 수 없는 조건이면 NA
+        if r['rule_id'] == 'D1' and re.search(r'잠금 when .*(division|strDIVISION_ID|ActiveSheetIndex|ControlValues|SelectedValue)', (r.get('expected') or '')) and '(AS-IS 잠금)' in ev:
+            g_ = re.search(r'잠금 when ([^|]*)', r.get('expected') or ''); gt_ = (g_.group(1) if g_ else '')[:90]; r['result'] = 'NA'
+            r['evidence'] = (ev + ' → AS-IS 잠금은 화면 상태 조건(' + gt_ + ')에 걸려 있어 이 실행의 상태로는 기계 판정 불가 — 사람 확인(W7)')[:1500]; r['tobe_ref'] = 'W7 시나리오'; stat['R37_NA'] += 1; continue
+
+    # FAIL 발행 계약(2026-10-29 재발 방지 ③): 직접 실측 FAIL 은 (a) AS-IS 근거가 있어야 하고 (b) 대상 시트와 AS-IS 근거 시트가 같아야 한다 — 어느 하나라도 없으면 결함이 아니라 '근거 불충분'(ERROR, 미검증 시트)
+    stat.setdefault('CONTRACT_ERROR', 0)
+    RX_ASIS = re.compile(r'결함원장|AS-IS|\.cs:\d+|SHEET_COLUMNS|TB_FX_|sort_rules|lock_rules|cell_rules|edit_expect|기준표|search_cond|CR-0\d\d|KEEP|대조표|골든|golden|msgmap|TB_FX_MessageInfo|ORDER BY|VISIBLE_FLAG|확정 규칙|TO-BE 룰|O3|무결성|서버 오류|HTTP|ORA-|SQL 오류|허위 성공|무반응|pageerror|콘솔')
+    for r in rows:
+        if r['result'] != 'FAIL' or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL') or (r.get('evidence') or '').startswith('[사용자판정]'):
+            continue
+        ev = r.get('evidence') or ''
+        if re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|선행 미구현에 종속|선행 대조표 |규칙 \w+ )', ev):
+            continue
+        # (c) 실측 내용 없는 FAIL(2026-10-30 SCP0100 SC1: 증거 = 'E2E smoke cond order' 출처 이름뿐 · 근거 등급 '출처 미기록' 인데 조치 필요에 오름)
+        #     — 무엇이 기대와 달랐는지가 증거에 없으면 사람이 확인할 수 없는 FAIL 이다 → ERROR(미검증)
+        if re.fullmatch(r'(E2E|STATIC|META|원장|golden)[\w\s@.:-]{0,40}', ev.strip()) and not re.search(r'\d+\s*(행|건|px)|→|≠|↔|없음|다름|실패|오류', ev):
+            r['result'] = 'ERROR'; r['evidence'] = ('[근거 불충분] FAIL 이나 증거에 실측 내용이 없음(출처 이름만: ' + ev.strip()[:60] + ') — 무엇이 기대와 달랐는지 확인할 수 없어 FAIL 로 쓰지 않음 · 재측정 필요')[:1500]
+            r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 근거 불충분'; stat['CONTRACT_ERROR'] += 1; continue
+        basis = (r.get('asis_ref') or '') + ' ' + (r.get('expected') or '') + ' ' + ev + ' ' + (r.get('oracle') or '')
+        if not RX_ASIS.search(basis):
+            r['result'] = 'ERROR'; r['evidence'] = ('[근거 불충분] FAIL 로 적을 AS-IS/확정 규칙 근거가 판정에 없음(검사기가 기대값 출처를 제시하지 못함) — ' + ev)[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 근거 불충분'; stat['CONTRACT_ERROR'] += 1; continue
+        # 시트 축 불일치: 대상 'Sheet.COL' 의 Sheet 와 asis_ref 의 'SHEET_COLUMNS Sheet.COL' 시트가 다르면 다른 시트의 규칙을 빌린 판정(2026-10-29 H8 YIELD 사례)
+        mt = re.match(r'^([^.()]+)\.([A-Z0-9_]+)', r.get('target') or ''); ma = re.search(r'SHEET_COLUMNS ([^.]+)\.([A-Z0-9_]+)', r.get('asis_ref') or '')
+        nz_ = lambda x: re.sub(r'[^a-z0-9]', '', (x or '').lower())  # 'bod' ↔ 'BOD' 같은 대소문자·구분자 차이는 같은 시트(2026-10-29 SCP0007 E2 허위 '축 불일치')
+        if mt and ma and r['source'] == 'COLUMN' and mt.group(2) == ma.group(2) and nz_(mt.group(1)) != nz_(ma.group(1)) and 'TO-BE SHEET_COLUMNS' not in (r.get('asis_ref') or '').split('SHEET_COLUMNS')[0]:
+            r['result'] = 'ERROR'; r['evidence'] = (f"[근거 축 불일치] 대상 시트 '{mt.group(1).strip()}' 의 판정에 다른 시트 '{ma.group(1).strip()}' 의 AS-IS 규칙을 썼음 — " + ev)[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 근거 축 불일치'; stat['CONTRACT_ERROR'] += 1
+
+    # 측정 실패 ≠ FAIL(2026-10-28 사용자): 검사기가 추출·측정을 못 한 흔적이 증거에 있으면 FAIL 이 아니라 ERROR(미검증 시트)로 — 화면 결함과 도구 실패를 섞지 않는다
+    stat.setdefault('TOOLFAIL_ERROR', 0)
+    RX_TOOLFAIL = re.compile(r'조건 계산 불가|실행 결과 없음|열림 감지 실패|입력 실패\(|위치 확인 불가|읽지 못함|프로브 불가|자동 생성 불가|전제 부족|측정 실패|Timeout \d+ms|타입 미확인|화면 순서: \)|화면 라벨: \)|검사기 미검증|golden SKIP|조회 결과 0행|후보가 1개 이하|기본\(ALL\) 조회 0행|식 해석 불가')
+    for r in rows:
+        if r['result'] != 'FAIL' or (r.get('evidence') or '').startswith('[사용자판정]') or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL'):
+            continue
+        ev = r.get('evidence') or ''
+        if re.match(r'^(\[[^\]]*\]\s*|실측\[T-[0-9a-f]+\]: )*(행 집계|진입점 집계|선행 미구현에 종속|선행 대조표 )', ev):
+            continue  # 집계는 요소 결과를 다시 모으면 따라온다
+        if RX_TOOLFAIL.search(ev):
+            r['result'] = 'ERROR'; r['evidence'] = ('[검사기 미검증] ' + ev)[:1500]; r['tobe_ref'] = (r.get('tobe_ref') or '') + ' · 측정 실패'; stat['TOOLFAIL_ERROR'] += 1
+
+    # F4 결과 미사용 SP(2026-10-28 사용자 세션 분석 C): AS-IS 가 `dtX = GetY();` 로 받기만 하고 dtX 를 어디서도 쓰지 않으면 실제 실행 동작이 없다 → TO-BE 배선 없음은 결함 아님(NA)
+    # F4 공통 룩업·코드 SP(2026-10-29): AS-IS 가 SCM0001_GET_LOOKUP_VALUES·UP_FX_*·DM0003_* 같은 공통 SP 로 받던 코드/후보는 TO-BE 에서 콤보 메타(SCM_ADM_CMBO_SQL_M)·공통 PKG 로 대체된다 → '화면 PROC_M 배선 없음' 은 결함이 아니다
+    stat.setdefault('F4_COMMON_NA', 0)
+    for r in rows:
+        if r['source'] == 'TRACE' and r['rule_id'] == 'F4' and r['result'] in ('FAIL', '판정필요') and not not_target(r) and 'PROC_M 배선 없음' in (r.get('evidence') or '') and re.match(r'^(SCM0001_|UP_FX_|DM0003_|SYS\d{4}_GET_|COM\d{4}_)', (r.get('target') or '').split('.')[-1].upper()):
+            r['result'] = 'NA'; r['evidence'] = (f"{r['target']}: AS-IS 공통 룩업/코드 SP — TO-BE 는 콤보 메타(SCM_ADM_CMBO_SQL_M)·공통 PKG 로 대체해 화면 PROC_M 배선이 없는 것이 정상 · 후보 값은 B1~B4·D5 행에서 판정 · 원 판정: " + (r.get('evidence') or '')[:200])[:1500]
+            r['tobe_ref'] = 'STATIC 공통 SP 대체'; stat['F4_COMMON_NA'] += 1
+
+    # F4 콤보 API 배선(2026-11-06 SCP0084 조치 필요 13번 허위 FAIL): AS-IS 화면 SP 를 TO-BE 가 PROC_M(call-proc) 이 아니라 콤보 메타
+    #   (SCM_ADM_CMBO_SQL_M SQL_ID = SP 이름 · /admin/combo comboId) 로 옮겨 부르는 경우가 있다(SCP0084_GET_MONTH_RANGE → Month 범위·기본값).
+    #   이번 E2E 가 그 comboId 로 실제 호출해 HTTP 2xx 를 받았으면(Doc/verify/<ID>/combo_runtime.json) 배선·호출 오류 없음 = PASS(측정 근거).
+    #   호출 기록이 없으면 판정을 바꾸지 않는다(콤보 메타 등록만으로 PASS 하지 않음).
+    stat.setdefault('F4_COMBO_WIRED', 0)
+    try:
+        _cr = json.load(open(P('Doc', 'verify', mid, 'combo_runtime.json'), encoding='utf-8'))
+        _calls = [c for v in (_cr.values() if isinstance(_cr, dict) else [_cr]) if isinstance(v, list) for c in v if isinstance(c, dict)]
+    except Exception:
+        _calls = []
+    _combo_ok = {}
+    for c in _calls:
+        try:
+            cid = (json.loads(c.get('body') or '{}').get('comboId') or '').upper()
+        except Exception:
+            cid = ''
+        if cid and 200 <= int(c.get('status') or 0) < 300:
+            _combo_ok.setdefault(cid, c)
+    for r in rows:
+        if r['source'] != 'TRACE' or r['rule_id'] != 'F4' or r['result'] not in ('FAIL', '판정필요') or not_target(r) or 'PROC_M 배선 없음' not in (r.get('evidence') or ''):
+            continue
+        sp = (r.get('target') or '').split('.')[-1].upper()
+        c = _combo_ok.get(sp)
+        if not c:
+            continue
+        r['result'] = 'PASS'
+        r['evidence'] = (f"{r['target']}: TO-BE 는 콤보 메타(SCM_ADM_CMBO_SQL_M SQL_ID={sp})로 대체해 /admin/combo 로 호출 — 이번 E2E 실측 HTTP {c.get('status')} · {c.get('n')}행 · 열 {','.join(c.get('keys') or [])} (combo_runtime.json) → 배선·호출 오류 없음 · 원 판정: " + (r.get('evidence') or '')[:200])[:1500]
+        r['tobe_ref'] = 'E2E 콤보 API 실호출'; stat['F4_COMBO_WIRED'] += 1
+
+    # F4 SP 통합·대체(2026-11-06 SCP0016 19번): AS-IS SP 를 TO-BE 가 다른 시트/버튼 호출로 통합한 경우 — tools/Harness/rules/sp_replaced.csv(menu_id,asis_sp,tobe_calls 'sheet/BTN;…')
+    #   이번 실행 원장(TRACE F4)에 대체 호출 전부가 HTTP 2xx 로 실측돼 있으면 PASS(대체 배선). 실측이 없으면 바꾸지 않는다
+    stat.setdefault('F4_REPLACED', 0)
+    _rep = [x for x in read_csv(P('tools', 'Harness', 'rules', 'sp_replaced.csv')) if (x.get('menu_id') or '').upper() in (mid, 'ALL')]
+    if _rep:
+        _ev_all = ' || '.join((x.get('evidence') or '') for x in rows if x['source'] == 'TRACE' and x['rule_id'] == 'F4')
+        for r in rows:
+            if r['source'] != 'TRACE' or r['rule_id'] != 'F4' or r['result'] not in ('FAIL', '판정필요') or not_target(r) or 'PROC_M 배선 없음' not in (r.get('evidence') or ''):
+                continue
+            sp = (r.get('target') or '').split('.')[-1].upper()
+            d = next((x for x in _rep if (x.get('asis_sp') or '').upper() == sp), None)
+            if not d:
+                continue
+            calls = [c.strip() for c in (d.get('tobe_calls') or '').split(';') if c.strip()]
+            okc = [c for c in calls if re.search(re.escape(c) + r'[^|]{0,40}HTTP 2\d\d', _ev_all)]
+            if calls and len(okc) == len(calls):
+                r['note'] = ((r.get('note') or '') + f" | 원판정:{r['result']}")[:600]
+                r['result'] = 'PASS'; r['tobe_ref'] = 'STATIC SP 통합 대체(sp_replaced.csv) + E2E 실호출'
+                r['evidence'] = (f"{r['target']}: TO-BE 는 {', '.join(calls)} 로 통합 호출(이번 실행 HTTP 2xx 실측) — {(d.get('reason') or '')[:300]} · 원 판정: " + (r.get('evidence') or '')[:150])[:1500]
+                stat['F4_REPLACED'] += 1
+
+    stat.setdefault('F4_UNUSED', 0)
+    try:
+        eps = read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'endpoints.csv'))
+    except Exception:
+        eps = []
+    src_cache = {}
+    for r in rows:
+        if r['rule_id'] != 'F4' or r['source'] != 'TRACE' or not_target(r) or 'PROC_M 배선 없음' not in (r.get('evidence') or '') or r['result'] not in ('FAIL', '판정필요', 'ERROR'):
+            continue
+        sp = r['target'].split('.')[-1]
+        ep = next((e for e in eps if sp.upper() in (e.get('sp_or_sql') or '').upper() and is_main(e, P('Doc', 'asisfacts', 'screens', asis_id))), None)
+        if not ep:
+            continue
+        fpath = P('GSCM', *re.split(r'[\\/]', ep.get('file') or ''))
+        if fpath not in src_cache:
+            try:
+                src_cache[fpath] = open(fpath, encoding='utf-8', errors='replace').read()
+            except Exception:
+                src_cache[fpath] = ''
+        src = src_cache[fpath]; meth = ep.get('member') or ''
+        if not src or not meth:
+            continue
+        m = re.search(r'\b(\w+)\s*=\s*' + re.escape(meth) + r'\s*\(', src)
+        if not m:
+            continue
+        var = m.group(1)
+        uses = [x for x in re.finditer(r'\b' + re.escape(var) + r'\b', src)]
+        others = [x for x in uses if not re.match(r'\s*(private|public|protected|internal)?\s*(static\s+)?[\w<>\[\]]+\s+' + re.escape(var) + r'\s*(=|;)', src[src.rfind('\n', 0, x.start()) + 1:src.find('\n', x.end())]) and x.start() != m.start(1)]
+        if not others:
+            r['result'] = 'NA'
+            r['evidence'] = (f"AS-IS {ep.get('class')}.{meth}():{ep.get('line')} 가 {sp} 를 호출해 {var} 에 받기만 하고 어디서도 쓰지 않음(선언·대입 외 참조 0) — 실제 실행 동작 없음 → TO-BE 가 호출하지 않아도 결함 아님(2026-10-28 결과 미사용 SP 규칙)")[:1500]
+            r['tobe_ref'] = 'STATIC AS-IS 원문(결과 미사용)'; stat['F4_UNUSED'] += 1
+
+    # TO-BE UI 에 없는 항목 = 정합 대상 아님 → NA (2026-10-27 사용자: "정합검증 대상 UI 에 존재하지 않고 정합 대상도 아닌 항목을 표기하고 FAIL 로 분류할 필요 없다")
+    #   검사기가 '칸/컬럼/버튼 없음' 을 FAIL 로 적은 요소 행을 NA 로 바꾼다. 단 대조표 상태 '미구현'(구현해야 할 항목 · X-NOTIMPL · '구현 후 검증') 과 사용자판정 행은 그대로 FAIL.
+    #   집계(SCREEN_AGG·DEFECT/CONFIRMED 상속) 보다 앞에 두어 분모에서도 빠지게 한다.
+    RX_ABSENT = re.compile(r'(없음\(표시 자체가 없어|칸을 찾지 못함|현재 그리드에 없음|\) 칸 없음|조회조건 [^ ]+\([^)]*\) 칸 없음|TO-BE (화면|UI|그리드|팝업)에 (해당 )?(입력칸|컬럼|버튼|요소)?\s*없음|표시 자체가 없|not found)')
+    stat.setdefault('ABSENT_NA', 0)
+    for r in rows:
+        if r['result'] != 'FAIL' or r['source'] in ('DEFECT', 'CONFIRMED', 'GENERAL'):
+            continue
+        ev = r.get('evidence') or ''
+        if re.match(r'^(대조표 상태 미구현|\[사용자판정\])', ev) or '미구현' in ev[:120] or '구현 후 검증' in ev or (r.get('tobe_ref') or '').startswith('W8'):
+            continue
+        if RX_ABSENT.search(ev):
+            r['result'] = 'NA'; r['evidence'] = ('TO-BE UI 에 없는 항목(정합 대상 아님 · 대조표 미구현 아님) — ' + ev)[:1500]; r['tobe_ref'] = '대상 없음(TO-BE UI 미존재 · NA)'; stat['ABSENT_NA'] += 1
+    order_rule(rows, stat, mid, asis_id)  # 2026-11-07 T159: smoke 반입으로 들어온 RULE_SCREEN SC1(FAIL)도 Excel 기준으로 다시 판정(1회차 judge 에서 바로)
+    # 화면 단위 규칙(RULE_SCREEN) 이 아직 NOT_RUN 이면 같은 규칙의 요소 실측(TRACE·COLUMN·SEARCH·ASIS, 이번 실행 판정)을 집계해 이어받는다 — 2026-10-26
+    #   FAIL 1건이라도 → FAIL · 판정필요 있으면 → 판정필요 · 전부 PASS/NA → PASS(NA 만이면 NA). 증거에 분포와 대표 행을 적는다.
+    stat.setdefault('SCREEN_AGG', 0)
+    for r in rows:
+        stale = ((r.get('tobe_ref') or '') in ('W7 시나리오', 'W4 검사기 구현 대상', '요소 판정 집계(검증엔진)'))  # 이전 실행의 스윕·집계 결과 — 매 실행 요소 실측으로 다시 집계(2026-10-27: A5 집계 FAIL 이 분모 보정 뒤에도 남던 결함)
+        if r['source'] != 'RULE_SCREEN' or (r['result'] != 'NOT_RUN' and not stale) or (r.get('tobe_ref') or '').startswith('수동') or (r.get('note') or '') == '전용' or '스냅샷' in (r.get('target') or ''):  # 전용 검사 행·스냅샷 행(W8-C · 2026-11-06)은 규칙 집계로 덮지 않는다(2026-11-01 키 중복 행 사고)
+            continue
+        # 화면 규칙 집계의 분모 = 요소 실측(COL/COND/SP 등)만 — 행·진입점 집계·'대조표 미구현(BLOCKED)' 종속 FAIL 은 제 행에서 세고 화면 규칙에는 올리지 않는다(2026-10-27: A5 가 무관한 미구현 행 1건으로 FAIL)
+        same = [j for j in rows if j['source'] in ('TRACE', 'COLUMN', 'SEARCH', 'ASIS') and j['rule_id'] == r['rule_id'] and j['result'] not in ('NOT_RUN', '')
+                and not re.search(r'"et": "(ROW|ENTRY|LEDGER)"', (j.get('condition') or '')[:40]) and not re.match(r'^(대조표 상태 미구현|행 집계|진입점 집계)', j.get('evidence') or '')]
+        if not same:
+            continue
+        cnt = collections.Counter(j['result'] for j in same)
+        res = 'FAIL' if cnt.get('FAIL') else '판정필요' if (cnt.get('판정필요') or cnt.get('ERROR')) else 'PASS' if cnt.get('PASS') else 'NA'
+        pick = [j for j in same if j['result'] == res][:3]
+        r['result'] = res; r['tobe_ref'] = '요소 판정 집계(검증엔진)'
+        r['evidence'] = f"규칙 {r['rule_id']} 요소 {len(same)}행 집계 — " + ' · '.join(f'{k} {v}' for k, v in cnt.most_common()) + ' | ' + ' | '.join(f"[{j['row_id']}] {j['target'][:40]}: {(j['evidence'] or '')[:120]}" for j in pick)
+        stat['SCREEN_AGG'] += 1
+    # 대조표가 '제외/해당없음' 으로 결정한 AS-IS 메서드의 ASIS 문장 행 → NA(대조표 사유 인용) — 2026-10-26 (EditButton 토글 어포던스 미이식 등)
+    excl = [x for x in read_csv(P('Doc', 'verify', mid, 'mapping_trace.csv')) if x.get('source') == 'FE 대조표' and re.match(r'^(제외|해당없음|N/A)', x.get('status', ''))]
+    for r in rows:
+        if r['source'] != 'ASIS' or r['result'] != 'NOT_RUN':
+            continue
+        meth = (re.search(r'\.(\w+)\s*$', r.get('asis_ref', '').split('·')[0].strip()) or [None, ''])[1]
+        if not meth:
+            continue
+        hit = next((x for x in excl if re.search(r'(?<![A-Za-z0-9_])' + re.escape(meth) + r'(?![A-Za-z0-9_])', x.get('summary', ''))), None)
+        if hit:
+            r['result'], r['evidence'], r['tobe_ref'] = 'NA', f"검사 대상 아님 — 대조표 {hit['row_id']} 가 {meth} 를 '{hit['status']}' 로 결정: {hit['summary'][:160]}", '대조표 제외 결정'
+    # ASIS 예외 처리 메시지(GMessageBoxForException — catch 블록) = 프레임워크 공통 오류 표시, 화면 고유 동작 아님 → NA(검사 대상 아님) 2026-10-26
+    for r in rows:
+        if r['source'] == 'ASIS' and r['result'] == 'NOT_RUN' and r['target'] == '(동적 메시지)' and re.search(r'catch\s*\(', r.get('condition', '')):
+            r['result'], r['evidence'], r['tobe_ref'] = 'NA', '검사 대상 아님 — catch 블록의 예외 메시지(프레임워크 공통 오류 표시). 화면 고유 검증 메시지가 아니다', 'STATIC judge'
+    # ── 2026-11-06 사용자 지시(SCP0037 '오류 아닌데 오류') — 상속 전에 적용해야 ASIS 상속이 다시 FAIL 로 덮지 않는다
+    stat.setdefault('POPUP_CELL', 0); stat.setdefault('LOCKED_BOTH', 0); stat.setdefault('CR093', 0)
+    colof = lambda t: (re.findall(r'(?<![A-Za-z0-9_])([A-Z][A-Z0-9_]{2,})(?![A-Za-z0-9_])', re.sub(r'\s*\(.*?\)\s*$', '', t or '')) or [''])[-1]
+    meta = [x for x in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')) if (x.get('program_id') or '').upper() == mid]
+    # T76: TO-BE 팝업 입력 칸(셀 타입 *Modal · 입력 가능 INPUT_TP_CD I/M) — 셀 직접 편집은 막고 더블클릭 팝업으로 값을 넣는다(TO-BE 룰 CR-072).
+    #   AS-IS '편집 가능' 기대에 대해 편집기 미열림(편집=false)·노랑 표시는 정상(SCP0037 ITEM_ID V-e136a86d·V-27fc9cfe·T-560425d5)
+    popcols = {(x.get('column_name') or '').upper() for x in meta if re.search(r'(?i)Modal', x.get('cell_control_object_type_code') or '') and re.search(r'[IM]', x.get('input_tp_cd') or '')}
+    for r in rows:
+        if r['result'] != 'FAIL' or r['rule_id'] not in ('D1', 'H2') or r['source'] not in ('COLUMN', 'TRACE'):
+            continue
+        c = colof(r['target']); ev = r.get('evidence') or ''
+        if c not in popcols:
+            continue
+        bad_other = re.search(r'편집=true \(AS-IS 잠금\)', ev)
+        if r['rule_id'] == 'D1' and re.search(r'편집=false \(AS-IS 편집 가능\)', ev) and not bad_other:
+            r['result'], r['evidence'] = 'PASS', f"[CR-072 팝업 입력 칸] {c} 는 셀 직접 편집을 막고 더블클릭 팝업으로 입력(TO-BE 메타 {next((x.get('cell_control_object_type_code') for x in meta if (x.get('column_name') or '').upper() == c), '')}) — {ev}"[:1500]; stat['POPUP_CELL'] += 1
+        elif r['rule_id'] == 'H2' and re.search(r'편집 불가인데 노랑', ev) and not re.search(r'편집 가능인데 (흰|회)', ev):
+            r['result'], r['evidence'] = 'PASS', f"[CR-072 팝업 입력 칸] {c} 노랑 = 팝업으로 값을 바꿀 수 있는 칸(정상) — {ev}"[:1500]; stat['POPUP_CELL'] += 1
+    # T77: AS-IS·TO-BE 모두 편집 불가로 실측된 칸(기존행·신규행 D1 '편집=false (AS-IS 잠금)')은 셀 입력 방식(D5)·연쇄 후보(C2) 대상이 아니다
+    #   (SCP0037 DIVISION_ID T-3d38ef12 D5 · T-3a8a92f4 C2 — AS-IS InsertRow 도 신규행 Division 잠금)
+    alltxt = ' '.join(r.get('evidence') or '' for r in rows if r['rule_id'] == 'D1')
+    for r in rows:
+        if r['result'] != 'FAIL' or r['rule_id'] not in ('D5', 'C2'):
+            continue
+        c = colof(r['target'])
+        if c and re.search(r'기존행 r\d+ ' + c + r' 편집=false \(AS-IS 잠금\)', alltxt) and re.search(r'신규행 r\d+ ' + c + r' 편집=false \(AS-IS 잠금\)', alltxt):
+            r['result'], r['evidence'], r['tobe_ref'] = 'NA', f"검사 대상 아님 — {c} 는 AS-IS·TO-BE 모두 편집 불가(기존행·신규행 D1 실측) · 셀 입력 방식·연쇄 후보는 편집 칸에만 해당 — 원 판정: {(r.get('evidence') or '')[:300]}", 'STATIC judge T77'; stat['LOCKED_BOTH'] += 1
+    # T78 TO-BE 룰 CR-093(사용자 결정 2026-10-30, 2026-11-06 재확인 SCP0037): EditButton(SwitchLock) 화면도 TO-BE 는 진입 즉시 편집 모드 —
+    #   AS-IS 조회 직후 '전 컬럼 잠금' 문장(LockColumn(0, GetMaxColumnIndex(), true))은 편집 모드 이전 상태라 비교 대상이 아니다. 편집 기대 = EditButton 뒤 상태(D1 컬럼 행)
+    asis_sd = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', mid)
+    toggle = any((l.get('locked') or '').upper() == 'TOGGLE' for l in read_csv(os.path.join(asis_sd, 'lock_rules.csv')))
+    if toggle:
+        for r in rows:
+            if r['source'] == 'ASIS' and r['rule_id'] == 'D1' and r['result'] in ('FAIL', 'NOT_RUN', '판정필요', 'ERROR') and re.search(r'LockColumn\(\s*0\s*,\s*\w+\.GetMaxColumnIndex\(\)\s*,\s*true\s*\)', r.get('expected') or ''):
+                r['result'], r['evidence'], r['tobe_ref'] = 'NA', f"TO-BE 룰 CR-093 — TO-BE 는 진입 즉시 편집 모드. AS-IS 조회 직후 전 컬럼 잠금({r.get('asis_ref', '')[:80]})은 EditButton 이전 상태라 비교 대상 아님 · 편집 기대는 편집 모드 ON 상태의 D1 컬럼 행에서 판정", 'TO-BE 룰 CR-093'; stat['CR093'] += 1
+        # 2026-11-06(SCP0084 조치 필요 14번 허위 FAIL · 사용자 '항상 편집 가능 모드 이므로 오류 아님'): 대조표 D3(행 조건부 잠금) 행도 같은 규칙 —
+        #   실측 NG 가 전부 'AS-IS 잠금 EditButton:NNN'(편집 모드 OFF 쪽 잠금 문장)이고 EditButton 해제 쪽은 OK 이면 편집 모드 ON 상태와 일치 = NA(CR-093)
+        for r in rows:
+            if r['source'] != 'TRACE' or r['rule_id'] != 'D3' or r['result'] not in ('FAIL', '판정필요'):
+                continue
+            ev = r.get('evidence') or ''
+            ng = re.findall(r'\(AS-IS (잠금|해제) ([A-Za-z_]\w*):\d+\) NG', ev)
+            if ng and all(k == '잠금' and re.search(r'Edit', fn, re.I) for k, fn in ng) and re.search(r'\(AS-IS 해제 [A-Za-z_]*Edit\w*:\d+\) OK', ev, re.I):
+                r['note'] = ((r.get('note') or '') + f" | 원판정:{r['result']}")[:600]
+                r['result'], r['tobe_ref'] = 'NA', 'TO-BE 룰 CR-093'
+                r['evidence'] = (f"TO-BE 룰 CR-093 — TO-BE 는 진입 즉시 편집 모드. NG 는 모두 AS-IS 편집 모드 OFF 쪽 잠금 문장(EditButton 잠금)이고 편집 모드 ON 쪽(EditButton 해제)은 일치 · 원 실측: {ev[:600]}")[:1500]
+                stat['CR093'] += 1
+    # ASIS 행(문장 단위) 상속 — 같은 규칙·같은 컬럼의 COLUMN/TRACE 실측이 있으면 이어받는다(2026-10-26: EditButton LockColumn D1 7행·InsertButton SetValue D4 19행이 영원히 NOT_RUN).
+    #   AS-IS 문장과 TO-BE 컬럼 검사는 같은 사실(그 컬럼의 편집 가능·기본값·색·셀타입)을 두 각도로 본 것 — 가장 나쁜 결과를 취한다
+    stat.setdefault('INHERIT', 0)
+    worst = lambda rs: 'FAIL' if 'FAIL' in rs else 'ERROR' if 'ERROR' in rs else '판정필요' if '판정필요' in rs else 'PASS' if 'PASS' in rs else 'NA' if rs and all(x == 'NA' for x in rs) else ''
+    for r in rows:
+        stale_inh = (r.get('tobe_ref') or '') == '상속(COLUMN/TRACE 실측)'  # 이전 실행의 상속 결과 — 원천(COLUMN/TRACE)이 바뀌면 다시 상속(2026-10-26: INCOTERMS COLUMN PASS 인데 ASIS 행이 옛 판정필요로 남던 구멍)
+        if r['source'] != 'ASIS' or (r['result'] != 'NOT_RUN' and not stale_inh) or r['rule_id'] not in ('D1', 'D4', 'H2', 'D5', 'E1', 'E2', 'E5', 'B1', 'B2'):
+            continue
+        cols = [c for c in re.split(r'[,\s]+', r['target']) if re.fullmatch(r'[A-Z][A-Z0-9_]+', c)]
+        if not cols:
+            # 대상에 컬럼이 없는 잠금 문장(siMain.LockColumn 범위형) — lock_rules.csv 의 같은 줄(line) 컬럼 목록을 쓴다
+            m = re.search(r'\.cs:(\d+)', r.get('asis_ref', ''))
+            if m:
+                lr = next((l for l in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'lock_rules.csv')) if l.get('line') == m.group(1) and l.get('columns')), None)
+                if lr: cols = [c for c in lr['columns'].split(';') if c]
+        if not cols and r['rule_id'] == 'H2' and re.search(r'SetFGColor', r['target'] + r['expected']) and 'Set_ValidTextColor' in (r.get('asis_ref') or ''):
+            cols = ['ROUTE_ID', 'TRANSPORT_MODE', 'DIS_TOTAL_LEAD_TIME']  # Set_ValidTextColor: ROUTE_VALID='N' 행의 Trans Mode~Distribution Total 글자색 · ROUTE_CHK 에 따른 Route Id 글자색
+        if not cols:
+            continue
+        got = []
+        for c in cols:
+            same = [j for j in rows if j['rule_id'] == r['rule_id'] and j['source'] in ('COLUMN', 'TRACE') and j['result'] not in ('NOT_RUN', '')
+                    and (re.match(r'^[^.\s]+\.' + re.escape(c) + r'\b', j['target']) or re.match(r'^' + re.escape(c) + r'(\s|/|$)', j['target']))]
+            # D1: 조건에 '기존행/신규행' 이 있으면 AS-IS 문장 위치로 고른다(EditButton·FindData = 기존행, InsertButton = 신규행)
+            if r['rule_id'] == 'D1':
+                want = '신규행' if 'InsertButton' in r['asis_ref'] else '기존행'
+                same = [j for j in same if j['source'] != 'COLUMN' or j['condition'] in ('', want)]
+            got += [(c, j) for j in same]
+        if not got:
+            continue
+        res = worst([j['result'] for _, j in got])
+        if not res:
+            continue
+        r['result'] = res
+        meaning = {'D1': '컬럼 잠금/편집 가능', 'D4': '신규행 기본값·자동세팅', 'H2': '셀 색(편집 가능 노랑 · 글자색)', 'D5': '셀 에디터 유형', 'E1': '숫자 입력 규칙', 'E2': '날짜 입력 규칙', 'E5': '입력 규칙', 'B1': '콤보 후보', 'B2': '콤보 후보 중복'}.get(r['rule_id'], r['rule_id'])
+        r['evidence'] = (f"AS-IS 문장 '{r['target'][:40]}' 의 {meaning} 기대를 TO-BE 컬럼 실측으로 판정 — " + ' | '.join(f"{c}: {j['result']} — {j['evidence'][:110]}" for c, j in got[:4]))[:1500]
+        r['tobe_ref'] = '상속(COLUMN/TRACE 실측)'
+        stat['INHERIT'] += 1
+
+    rule_defs = {d['check']: d for d in read_csv(os.path.join(HERE, 'mapping_checkdefs.csv'))}  # 검사기 구현 여부(impl) — 허위 PASS 차단용
+    # DEFECT·CONFIRMED 행 — 같은 규칙의 실측 판정 이어받기(대상 일치 우선). CONFIRMED(확정 규칙)도 같은 방식(2026-10-26: 67행이 영원히 NOT_RUN)
+    # 결함원장·확정규칙의 상속 분모 = 요소 실측만 — 행·진입점 집계와 '대조표 미구현' 종속 FAIL 은 제외(2026-10-27 사용자: 무관한 미구현 행 때문에 A5/G4/G1 결함이 FAIL 로 보임)
+    judged = [r for r in rows if r['source'] not in ('DEFECT', 'CONFIRMED', 'GENERAL') and r['result'] not in ('NOT_RUN', '')
+              and not re.search(r'"et": "(ROW|ENTRY|LEDGER)"', (r.get('condition') or '')[:40]) and not re.match(r'^(대조표 상태 미구현|행 집계|진입점 집계)', r.get('evidence') or '')]
+    for r in rows:
+        if r['source'] not in ('DEFECT', 'CONFIRMED', 'GENERAL') or (r.get('tobe_ref') or '').startswith('수동'):
+            continue
+        if r.get('applicable') == 'N':  # W8-A 적용성(플랜 1-4): 이 화면에 그 기능이 없음(ledger applicability.py 근거) — 상속·미검증 집계에서 뺀다
+            r['result'] = 'NA'; r['evidence'] = (f"대상 없음 — {r.get('applicable_why') or ''}")[:1500]; r['tobe_ref'] = '적용 불가(applicability)'; stat.setdefault('APPLICABLE_N', 0); stat['APPLICABLE_N'] += 1
+            continue
+        if r['row_id'] in e2e_ids:
+            continue  # 검증 엔진이 이 행을 직접 판정(예: H9 컬럼 폭·M1 업로드 유무) — 규칙 상속으로 덮지 않는다
+        r['result'], r['evidence'], r['tobe_ref'] = 'NOT_RUN', '', ''  # 매 실행 다시 상속(낡은 상속 판정 방지)
+        # 상속 별칭(2026-10-30 신설 검사기 연결): D2(Measure×기간 편집 구간) 의 실측 = D1 동적 컬럼(<DYNAMIC:…>) 조건부 잠금 행 · B5(허용 목록) 의 실측 = B4(콤보 후보 = AS-IS 원천+필터)
+        alias_ok = (lambda j: j['rule_id'] == 'D1' and '<DYNAMIC' in j['target']) if r['rule_id'] == 'D2' else (lambda j: j['rule_id'] == 'B4') if r['rule_id'] == 'B5' else (lambda j: False)
+        same = [j for j in judged if j['rule_id'] == r['rule_id'] or alias_ok(j)]
+        if not same:
+            continue
+        # 일반 UI 단어(Form·Popup·Search…)는 대상 식별 토큰이 아니다 — 'Excel Form 팝업 Search' 가 'TitleSet[Form]_Popup' 에 부분 일치해
+        #   Measure 팝업 M3 FAIL 을 물려받아 조치 항목이 중복됐다(2026-10-30 SCP0100 V-c9b3e1fa · 같은 구조 DMF0003 V-e415dce9 G5, 결함 유형 T6)
+        toks = {t for t in re.findall(r'[A-Za-z][A-Za-z_]{2,}', r['target'] + ' ' + r['expected']) if len(t) > 3 and t.upper() not in GENERIC_TOKENS}
+        matched = [j for j in same if any(t.upper() in j['target'].upper() for t in toks)]
+        focus = matched or same
+        fails = [j for j in focus if j['result'] == 'FAIL']
+        undecided = [j for j in focus if j['result'] in ('판정필요', 'ERROR')]
+        measured = [j for j in focus if j['result'] in ('PASS', 'FAIL', '판정필요', 'ERROR')]
+        impl_y = (rule_defs.get(r['rule_id'], {}).get('impl') == 'Y')
+        # 허위 PASS 차단(2026-10-27 사용자: 사람이 찾은 오류를 같은 형태로 찾을 수 있는가)
+        #   ① 같은 규칙 판정이 전부 NA 인데 대상이 직접 일치하지 않으면(예: K3 'Ctrl+클릭 다중선택' ← 'Manual(F1) 버튼 없음' NA) 실측 근거가 없다
+        #   ② 검사기 미구현 규칙은 다른 대상의 PASS 를 빌려 PASS 로 두지 않는다(대상 직접 일치 실측이 있을 때만 상속)
+        # 화면 단위 규칙(RULE_SCREEN 이 그 규칙의 화면 실측 1건)이 '대상 기능 없음' NA 면 결함 행도 그 근거로 NA(2026-10-28: K2 'Columns 버튼 없음'인데 '자동 실측 없음'으로 남음).
+        #   측정 실패·미실행·검사기 없음 NA 는 근거가 아니므로 제외
+        scr_na = [j for j in focus if j['source'] == 'RULE_SCREEN' and j['result'] == 'NA'
+                  and not re.search(r'측정 실패|실행 예외|검사기 없음|실측 없음|미실행|권한 없음', j.get('evidence') or '')]
+        if not fails and not undecided and (not measured or (not impl_y and not matched)):
+            if impl_y and not measured and scr_na and len(scr_na) == len(focus):
+                r['result'] = 'NA'
+                r['evidence'] = (f"규칙 {r['rule_id']} 화면 실측 {len(scr_na)}행이 '대상 기능 없음' NA — " + ' | '.join(f"[{j['row_id']}] {j['evidence'][:160]}" for j in scr_na[:3]))[:1500]
+                r['tobe_ref'] = '규칙 판정 상속(화면 실측 · 대상 없음)'
+            elif measured == [] and matched:
+                r['result'] = 'NA'
+                r['evidence'] = f"규칙 {r['rule_id']} 대상 일치 {len(matched)}행이 모두 NA — " + ' | '.join(f"[{j['row_id']}] {j['target']}: {j['evidence'][:140]}" for j in matched[:3])
+                r['tobe_ref'] = '규칙 판정 상속(대상 없음)'
+            else:
+                r['result'] = 'NA'  # 기계 실측이 없는 결함원장·확정규칙 항목 = 수동 검수 대상(사용자 지시: 판정필요는 A1 건수 차이 외 남기지 않음, 2026-10-27)
+                r['evidence'] = (f"자동 검사기 없음 — 수동 검수 대상(작업 원장 W4): {rule_defs.get(r['rule_id'], {}).get('how', '')}" if not impl_y else
+                                 f"자동 실측 없음 — 수동 검수 대상(작업 원장 W5): 규칙 {r['rule_id']} 판정 {len(focus)}행이 모두 NA · 이 결함 대상과 직접 일치하는 실측 없음")
+                r['tobe_ref'] = 'W4 검사기 구현 대상' if not impl_y else 'W5 검사기 연결'
+            stat['DEFECT'] += 1
+            continue
+        pending = [x for x in undecided if x['result'] == '판정필요']; errs = [x for x in undecided if x['result'] == 'ERROR']
+        if not matched and (fails or pending or errs):
+            # 2026-10-29 사용자(5화면 허위 FAIL): 결함원장·일반화·확정규칙 행이 '대상 직접 일치 없음' 인데 같은 규칙의 다른 요소 FAIL 을 물려받아 FAIL 수가 3~4배로 불었다
+            #   → 직접 일치 없는 행은 부정 판정(FAIL·판정필요·ERROR)을 만들지 않는다(NA · 원천 행 참조). PASS 만 상속(같은 규칙 요소가 전부 PASS = 그 결함 유형이 이 화면에서 재발하지 않음)
+            src_ = fails or pending or errs
+            r['result'] = 'NA'
+            r['evidence'] = (f"규칙 {r['rule_id']} 요소 판정에 FAIL {len(fails)} · 판정필요 {len(pending)} · 미검증 {len(errs)} 있으나 이 결함 대상과 직접 일치하는 요소 없음 — 규칙 전반 상속으로 FAIL 을 만들지 않음(원천 행 참조: "
+                             + ' | '.join(f"[{x['row_id']}] {x['target'][:40]}" for x in src_[:3]) + ')')[:1500]
+            r['tobe_ref'] = '규칙 판정 상속 생략(대상 불일치)'
+            stat['DEFECT'] += 1
+            continue
+        if not matched and not fails and not pending and not errs:  # 다른 대상의 PASS 를 물려받지 않는다 — 이 결함을 잰 적이 없다(2026-10-31 엔진 갭 대조: 대상이 달라도 전부 PASS 면 PASS 로 보이던 결함)
+            r['result'] = 'NA'; r['evidence'] = (f"직접 실측 없음 — 같은 규칙 {r['rule_id']} 의 다른 대상 {len(focus)}행 PASS 는 이 결함의 근거가 아님 · 참고 " + ' | '.join(f"[{x['row_id']}] {x['target'][:40]}" for x in focus[:3]))[:1500]; r['tobe_ref'] = '직접 실측 없음(상속 안 함)'; stat['DEFECT'] += 1; continue
+        r['result'] = 'FAIL' if fails else ('판정필요' if pending else ('ERROR' if errs else 'PASS'))  # 요소 ERROR(검사기 미검증)는 판정필요가 아니라 미검증으로(2026-10-28)
+        pick = fails or pending or errs or focus
+        r['evidence'] = f"규칙 {r['rule_id']} 판정 {len(focus)}행 중 FAIL {len(fails)} · 판정필요 {len(pending)} · 미검증 {len(errs)}{'' if matched else ' (대상 직접 일치 없음 · 규칙 전반 상속)'} — " + ' | '.join(f"[{j['row_id']}] {j['target']}: {j['evidence'][:140]}" for j in pick[:4])
+        r['tobe_ref'] = '규칙 판정 상속'
+        stat['DEFECT'] += 1
+
+    sort_review(rows, stat)  # 상속·집계 단계가 다시 만든 A6 정렬 차이 FAIL 도 판정필요로(사용자 2026-10-30)
+
+    # 최종 스윕(2026-10-26 사용자: PASS/FAIL 아닌 항목이 '사유 없이' 남지 않게) — 여기까지 NOT_RUN 인 행은 이유를 적어 분류한다
+    #   검사기 미구현 규칙 → 판정필요(검증 엔진 확장 대상) · 확정규칙/결함원장 행인데 같은 규칙 판정 행이 없음 → NA(이 화면에 대상 기능 없음) · 그 외 → 판정필요(시나리오 필요)
+    try:
+        slow_pending = bool(json.load(open(P('Doc', 'verify', mid, 'tier.json'), encoding='utf-8')).get('slow_pending'))
+    except (OSError, ValueError):
+        slow_pending = False
+    defs = {d['check']: d for d in read_csv(os.path.join(HERE, 'mapping_checkdefs.csv'))}
+    for r in rows:
+        if r['result'] == '판정필요' and (r.get('tobe_ref') or '') in ('W7 시나리오',) and not (r.get('evidence') or '').startswith('[사용자판정]'):
+            r['result'] = 'NOT_RUN'  # 이전 실행의 스윕 결과(시나리오 수동)는 매번 다시 분류한다 — 분류 규칙이 바뀌면 따라가게(2026-10-27)
+        if r['result'] != 'NOT_RUN':
+            continue
+        d = defs.get(r['rule_id'], {})
+        if r.get('applicable') == 'N':  # W8-A 적용성 — 대상 기능 없는 행은 미검증이 아니라 NA(근거 명기)
+            r['result'] = 'NA'; r['evidence'] = (f"대상 없음 — {r.get('applicable_why') or ''}")[:1500]; r['tobe_ref'] = '적용 불가(applicability)'; stat.setdefault('APPLICABLE_N', 0); stat['APPLICABLE_N'] += 1; continue
+        if not_target(r):
+            r['result'] = 'NA'; r['tobe_ref'] = r.get('tobe_ref') or 'STATIC asis_live(실행되지 않는 AS-IS 코드)'; continue  # (본 줄 뒤 tier 처리)
+        if slow_pending and r['source'] not in ('GENERAL', 'DEFECT', 'CONFIRMED'):  # 오래 걸리는 W4c 를 따로 돌리는 중 — 측정 전 행을 NA 로 묻지 않는다(2026-10-31)
+            r['result'] = 'ERROR'; r['evidence'] = '[분리 실행 대기] 정밀 판정(W4c) 미실행 — run_verify --tier slow 뒤 판정'; r['tobe_ref'] = 'W4c 대기'; continue  # 검사 대상 아님 행은 '검사기가 실행하지 못함' 으로 분류하지 않는다(2026-10-30)
+        if r['source'] == 'TRACE' and '구현 후 검증' in (r.get('evidence') or ''):
+            r['result'] = 'FAIL'; r['tobe_ref'] = r.get('tobe_ref') or 'W8 선행 미구현(FAIL)'
+        elif d.get('impl') not in ('Y',):
+            # 자동 검사기가 없는 규칙 = 기계 판정 불가 → 사람 검수 항목(작업 원장 W4). 사용자 지시(2026-10-26/27): 판정필요는 A1 건수 차이 외 남기지 않음 → NA 로 분류하고 사유를 적는다
+            r['result'] = 'NA'; r['evidence'] = f"자동 검사기 없음 — 수동 검수 대상(작업 원장 W4): {d.get('how', rules_how(r['rule_id']))}"; r['tobe_ref'] = 'W4 검사기 구현 대상(수동 검수)'
+        elif r['source'] in ('CONFIRMED', 'DEFECT', 'GENERAL'):
+            r['result'] = 'NA'; r['evidence'] = f"이 화면에 규칙 {r['rule_id']} 의 대상 요소·기능이 없음(같은 규칙의 판정 행 0) — 확정규칙·결함원장 공통 항목"; r['tobe_ref'] = '규칙 판정 상속(대상 없음)'
+        elif r['rule_id'] == 'E2' and r['source'] == 'TRACE' and not re.search(r'DATE|YYYYMMDD|_DT|_YMD', (r.get('target') or '').upper()) and not re.search(r'"cell_control_object_type_code": "[^"]*(Date|Calendar)', r.get('condition') or ''):
+            r['result'] = 'NA'; r['evidence'] = f"{(r.get('target') or '').split(' / ')[0]} 는 날짜 컬럼이 아님(AS-IS 문장의 컬럼 범위에 끼어 들어온 대상) — 날짜 입력 규칙 E2 대상 아님"; r['tobe_ref'] = '대상 없음(비날짜 컬럼 · NA)'
+        else:
+            # 검사기는 있지만 이번 실행에서 이 대상을 못 돌림(잠긴 셀·데이터 부재 등) = 수동 검수 항목(작업 원장 W7). 사용자 지시: 판정필요는 A1 건수 차이 외 남기지 않음(2026-10-28)
+            r['result'] = 'NA'; r['evidence'] = (r.get('evidence') or '') + f" | 검사기({d.get('checker', '')[:60]})가 이 대상을 실행하지 못함 — 수동 검수 대상(작업 원장 W7)"; r['tobe_ref'] = 'W7 시나리오'
+
+    # ── P7(a) 2026-11-06: 콤보 후보 대조(B4)에서 AS-IS 에만 있는 후보가 1건 이상인데 '설명 불가(자동 대조 불가)' 로 NA 가 되면 실결함이 묻힌다
+    #   (SCP0016 Div 81 Operation group 'ele' 누락 — 사용자 신고 · 원장 V-72ef7746 NA). AS-IS 전용 후보가 있으면 판정필요로 남겨 사람이 Division 별로 본다.
+    stat.setdefault('B4_ASIS_ONLY', 0)
+    for r in rows:
+        if r['rule_id'] != 'B4' or r['result'] != 'NA' or (r.get('evidence') or '').startswith('[사용자판정]'): continue
+        m = re.search(r'AS-IS만 (\d+) (\[[^\]]*\])', r.get('evidence') or '')
+        if not m or int(m.group(1)) <= 0: continue
+        r['note'] = ((r.get('note') or '') + ' | 원판정:NA(B4 AS-IS 전용 후보)')[:600]
+        r['result'] = '판정필요'
+        r['evidence'] = (f"[AS-IS 에만 있는 후보 {m.group(1)}건 {m.group(2)} — Division 별 실측 확인 필요(자동 대조 불가로 묻지 않음)] " + (r.get('evidence') or ''))[:1500]
+        stat['B4_ASIS_ONLY'] += 1
+    # ── T111(2026-11-06 SCP0127 2번): 저장 결과(F1/F2) 시나리오가 '저장 요청 없음' 으로 끝났는데 앞 단계에 입력 실패가 있으면 저장은 측정되지 않은 것 — ERROR(선행 입력 실패 칸 명시)
+    stat.setdefault('SAVE_PRECOND_ERROR', 0)
+    for r in rows:
+        if r['rule_id'] not in ('F1', 'F2', 'F4', 'F6') or r['result'] != 'FAIL': continue
+        ev = r.get('evidence') or ''
+        if ev.startswith('[사용자판정]') or '저장 요청 없음' not in ev: continue
+        bad = re.findall(r'([A-Z][A-Z0-9_]+)@\d+=(\S+) 입력 뒤 값이 다른 값으로 바뀜\(([^)]{0,60})', ev)
+        if not bad: continue
+        r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(선행 입력 실패)')[:600]
+        r['result'] = 'ERROR'
+        r['evidence'] = (f"[측정 전제 미충족] 저장 요청이 나가기 전 입력 단계 실패 {len(bad)}건: " + ' · '.join(f"{c}='{v}'({w})" for c, v, w in bad[:4]) + " — 저장 결과는 측정되지 않음(입력 실패 원인은 해당 컬럼 D1/E1 행) · 원 실측: " + ev[:500])[:1500]
+        stat['SAVE_PRECOND_ERROR'] += 1
+    # ── CR-096(2026-11-06 사용자 결정): 검색 팝업 호출 인자 연동 차이(G5 '연동 누락 … 고정값 전달'·'요청에 없음'·'더블클릭 후 팝업 조회 호출 없음')는 TO-BE 공용 모달 룰 — 오류 아님
+    stat.setdefault('CR096', 0)
+    for r in rows:
+        if r['rule_id'] != 'G5' or r['result'] not in ('FAIL', '판정필요') or r['source'] not in ('ASIS', 'SEARCH', 'RULE_SCREEN'): continue
+        ev = r.get('evidence') or ''
+        if ev.startswith('[사용자판정]') or not re.search(r'연동 누락|요청에 없음|팝업 조회 호출 없음', ev): continue
+        r['note'] = ((r.get('note') or '') + f" | 원판정:{r['result']}")[:600]
+        r['result'] = 'NA'; r['tobe_ref'] = 'TO-BE 룰 CR-096(공용 검색 모달 인자)'
+        r['evidence'] = ("TO-BE 룰 CR-096 — 공용 검색 모달은 모달이 받는 인자(Division·입력값)만 연동, AS-IS 의 그 밖 인자·자동 조회는 TO-BE 룰로 변경(사용자 결정 2026-11-06) · 원 실측: " + ev[:600])[:1500]
+        stat['CR096'] += 1
+    # ── 재실행 전 백스톱(2026-11-06 T106·T107·T108): 이전 실행 원장의 판정을 새 검사기 규칙에 맞춘다(다음 CheckList 부터는 검사기가 직접 낸다)
+    stat.setdefault('BACKSTOP', 0)
+    try:  # T114: AS-IS 셀 타입(cell_rules) — 일반 텍스트 셀(CELL=-)이면 더블클릭 팝업이 있어도 직접 입력이 된다
+        _cr_plain = {(x.get('column') or '').upper() for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'cell_rules.csv')) if (x.get('cell_type') or 'TEXT').upper() in ('TEXT', '') and 'CELL=-' in (x.get('ref') or 'CELL=-')}
+    except Exception:
+        _cr_plain = set()
+    try:
+        _acts = read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv'))
+        _asis_toggle = any(re.search(r'delete', ' '.join(str(v) for v in list(a.values())[:3]), re.I) and re.search(r'VALID_YN|USE_YN|ACTIVE_YN|DEL_YN', ' '.join(str(v) for v in a.values())) for a in _acts)
+    except Exception:
+        _asis_toggle = None
+    for r in rows:
+        ev = r.get('evidence') or ''
+        if ev.startswith('[사용자판정]'): continue
+        if r['rule_id'] == 'G1' and r['result'] == 'FAIL' and re.search(r'^조회조건 .+ 칸 없음$', ev.strip()):
+            r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(T106)')[:600]; r['result'] = 'ERROR'
+            r['evidence'] = ('[측정 경로 없음] ' + ev.strip() + ' — 칸을 찾지 못한 것(라벨·구조)이지 없다는 근거가 아님 · 존재 여부는 smoke 조회조건 검사(T106)')[:1500]; stat['BACKSTOP'] += 1
+        elif r['rule_id'] == 'F5' and r['result'] == 'FAIL' and 'D Flag 표시됨(결함)' in ev and _asis_toggle is False:
+            r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(T107)')[:600]; r['result'] = 'PASS'
+            r['evidence'] = ("AS-IS Delete 는 Active 토글이 아니라 D Flag(siMain.Delete) — CR-057(Active 토글형) 대상 아님 · 기존행 Delete 에 D 표시는 AS-IS 와 같음(T107) · 원 실측: " + ev[:600])[:1500]; stat['BACKSTOP'] += 1
+        elif r['rule_id'] == 'D1' and r['result'] == 'FAIL' and '직접 편집=true (AS-IS 직접 입력 차단·더블클릭 팝업으로만 입력' in ev \
+                and (re.findall(r'(?<![A-Za-z0-9_])([A-Z][A-Z0-9_]{2,})(?![A-Za-z0-9_])', re.sub(r'\s*\(.*?\)\s*$', '', r.get('target') or '')) or [''])[-1] in _cr_plain:
+            r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(T114)')[:600]; r['result'] = 'PASS'
+            r['evidence'] = ("AS-IS 셀이 일반 텍스트 셀(cell_rules TEXT · CELL=-)이라 AS-IS 도 직접 입력이 되고 더블클릭 팝업은 보조 입력 — TO-BE 직접 입력 + 팝업 정상(CR-072 · 잘못된 값 처리는 E7 · T114) · 원 실측: " + ev[:500])[:1500]; stat['BACKSTOP'] += 1
+        elif r['rule_id'] == 'D1' and r['result'] == 'FAIL' and '[화면 오류]' in ev and 'Date expected' in ev:
+            r['note'] = ((r.get('note') or '') + ' | 원판정:FAIL(T108)')[:600]; r['result'] = '판정필요'
+            r['evidence'] = ("[날짜 편집기 재확인 필요] 'Date expected' 는 프로브(빈 셀 startEditing) 경로에서 나는 것일 수 있음 — 다음 실행에서 실제 더블클릭·입력으로 재판정(T108) · 원 실측: " + ev[:600])[:1500]; stat['BACKSTOP'] += 1
+    evidence_gate(rows, stat, mid)  # W8-A 최종 게이트(플랜 1-3): 3-증거 없는 FAIL → ERROR/판정필요 · HOLD 규칙 FAIL → 판정필요 · expect_src/evidence_ref/precond 채움
+    for r in rows: r.pop('_mctx', None)  # P1 내부 필드 — 원장에 쓰지 않는다
+    with open(led_p, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+    cnt = {}
+    for r in rows:
+        cnt[r['result']] = cnt.get(r['result'], 0) + 1
+    print(f'{mid}: 판정 반영 ' + ' · '.join(f'{k} {v}' for k, v in stat.items()))
+    print('  결과 분포: ' + ' · '.join(f'{k} {v}' for k, v in sorted(cnt.items())))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

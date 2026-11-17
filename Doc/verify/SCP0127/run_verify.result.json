@@ -1,21 +1,21 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T21:12:31+09:00",
+ "ts": "2026-11-14T19:21:55+09:00",
  "producer": "run_verify",
  "id": "SCP0127",
  "skip_e2e": false,
- "started": "2026-11-08 20:53:21",
+ "started": "2026-11-14 18:04:53",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-e385fc64",
-   "class": "SC1",
+   "id": "V-d2ad7bf2",
+   "class": "K3",
    "msg": "SCP0127 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약 + Excel 조회조건 정리(List 시트)"
+     "ref": "E2E @verify @11-14 19:20"
     }
    ],
    "grade": "hard"
@@ -27,7 +27,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-08 21:11"
+     "ref": "E2E @verify 시나리오 @11-14 19:20"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7c59138f",
+   "class": "D1",
+   "msg": "main.TYPE_APPLY_DAY (Day*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 19:20"
     }
    ],
    "grade": "hard"
@@ -40,6 +52,30 @@
     {
      "kind": "exec",
      "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c85fd492",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 19:20"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e5c25444",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 19:20"
     }
    ],
    "grade": "hard"
@@ -105,25 +141,25 @@
    "grade": "hard"
   },
   {
-   "id": "T-2180ea12",
-   "class": "X-ROW",
-   "msg": "SCP0127_PrecedeSafetyStockDay.FindButton",
+   "id": "V-c158fd73",
+   "class": "H4",
+   "msg": "SCP0127 스냅샷 화면샷 1920",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @snap 화면샷 @11-14 19:20"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-6d4f4de1",
-   "class": "X-ROW",
-   "msg": "SCP0127_PrecedeSafetyStockDay.FindData_Main",
+   "id": "V-1ea28358",
+   "class": "H4",
+   "msg": "SCP0127 스냅샷 화면샷 1366",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @snap 화면샷 @11-14 19:20"
     }
    ],
    "grade": "hard"
@@ -132,6 +168,18 @@
    "id": "T-d9bcbc79",
    "class": "X-ROW",
    "msg": "SCP0127_PrecedeSafetyStockDay.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-90086cae",
+   "class": "X-ROW",
+   "msg": "SCP0127_PrecedeSafetyStockDay.SpdMain_TopChange",
    "evidence": [
     {
      "kind": "exec",
@@ -154,37 +202,36 @@
   }
  ],
  "warnings": [
-  "커버리지 게이트 SUSPECT_NA100 H13 — Doc/verify/SCP0127/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0127/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
  ],
  "summary": {
-  "rows": 1629,
-  "PASS": 644,
-  "FAIL": 12,
-  "판정필요": 15,
-  "미검증": 83,
-  "해당없음": 875,
+  "rows": 1743,
+  "PASS": 702,
+  "FAIL": 16,
+  "판정필요": 23,
+  "미검증": 292,
+  "해당없음": 710,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1154,
-   "없음(미검증)": 83,
-   "사람": 3,
-   "없음(판정 대기)": 15,
-   "기계(상속·집계)": 374
+   "기계": 1025,
+   "없음(미검증)": 292,
+   "사람": 4,
+   "없음(판정 대기)": 23,
+   "기계(상속·집계)": 398,
+   "출처 미기록": 1
   },
-  "fail_listed": 12,
+  "fail_listed": 16,
   "coverage": {
    "rules": 90,
-   "measured": 463,
-   "not_run_error": 48,
-   "na": 255,
-   "suspect_na100": [
-    "H13"
-   ]
+   "measured": 531,
+   "not_run_error": 181,
+   "na": 157,
+   "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_CheckList_v20.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_ActionItemList_v20.xlsx"
+  "CheckList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_CheckList_v23.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0127_PrecedeSafetyStockDay_ActionItemList_v23.xlsx"
  },
  "evidence": [
   {
@@ -196,5 +243,5 @@
    "ref": "Doc/verify/SCP0127/e2e_results.json"
   }
  ],
- "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 H13 — Doc/verify/SCP0127/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0127/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
 }

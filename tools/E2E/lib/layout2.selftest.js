@@ -7,6 +7,9 @@ const { judgeHeaderHeight: hh, judgeScroll: sc, judgeHeaderFit: hf, judgeCandDas
 const S = n => ({ name: 'a', h: n }); const A = { allFields: ['T'], sent: true, dialog: '', rows: 3 }; const T = { typed: true, idle: 0, typing: 0, moved: false };
 const cases = [
   ['높이 유지', hh({ steps: [S(40), S(40.5)] }), 'PASS'], ['높이 변함', hh({ steps: [S(40), S(60)] }), 'FAIL'], ['1회만', hh({ steps: [S(40), S(0)] }), 'ERROR'],
+  ['T216 조회 뒤 동적 컬럼 생김·전환 없음', hh({ steps: [{ name: '조회 전', h: 48, cols: 20 }, { name: '조회 뒤', h: 72, cols: 120 }] }), 'NA'],
+  ['T216 같은 컬럼 구성 전환 뒤 높이 변함', hh({ steps: [{ name: '조회 전', h: 48, cols: 20 }, { name: '조회 뒤', h: 72, cols: 120 }, { name: 'Div 전환 조회 뒤', h: 96, cols: 120 }] }), 'FAIL'],
+  ['T216 같은 컬럼 구성 유지', hh({ steps: [{ name: '조회 전', h: 48, cols: 20 }, { name: '조회 뒤', h: 72, cols: 120 }, { name: 'Div 전환 조회 뒤', h: 72, cols: 120 }] }), 'PASS'],
   ['스크롤 없음', sc({ page: false, nested: [], rows: 5 }), 'PASS'], ['페이지 스크롤', sc({ page: true, nested: [], rows: 5 }), 'FAIL'], ['중첩 스크롤', sc({ page: false, nested: ['x'], rows: 5 }), 'FAIL'], ['0행', sc({ page: false, nested: [], rows: 0 }), 'ERROR'],
   ['헤더 정상', hf({ seen: 5, clipped: [] }), 'PASS'], ['헤더 잘림', hf({ seen: 5, clipped: ['A'] }), '판정필요'], ['렌더 0', hf({ seen: 0, clipped: [] }), 'ERROR'],
   ['후보 정상', cd({ fields: [{ name: 'A', opts: ['-', 'x'] }] }), 'PASS'], ['후보 - 일색', cd({ fields: [{ name: 'A', opts: ['-', '-'] }] }), 'FAIL'], ['후보 / 일색', cd({ fields: [{ name: 'A', opts: ['/'] }] }), 'FAIL'], ['콤보 없음', cd({ fields: [] }), 'NA'],

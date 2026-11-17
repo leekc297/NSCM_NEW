@@ -1,0 +1,130 @@
+{
+  "menuId": "SCP0005",
+  "screenName": "DistributionRoute",
+  "feature": "shipping",
+  "pageDir": "distribution-route",
+  "routePath": "shipping/distribution-route",
+  "sheets": [
+    {
+      "sheetName": "Distribution Route",
+      "rule": "META+코드연결",
+      "columns": 39,
+      "popup": false
+    },
+    {
+      "sheetName": "POPUP",
+      "rule": "META+코드연결",
+      "columns": 16,
+      "popup": true
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtFromCountry>",
+        "<field:dtToCountry>",
+        "<field:dtTransMode>",
+        "GetFromSitebyDivision",
+        "GetToSitebyDivision",
+        "GetBodType",
+        "GetTransMode"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_",
+      "sheet": "Distribution Route",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "<field:dtValidYN>"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_",
+      "sheet": "Distribution Route",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0005_GET_DISTRIBUTION_ROUTE",
+      "asis_sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnEaxel_Upload.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindDataMain"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "asis_sp": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindDataReceive"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "asis_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_SCP0005_SAVE_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0005_GET_COUNTRY_CITY",
+      "asis_sp": "SCP0005_GET_COUNTRY_CITY",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "GetData_Country"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "asis_sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

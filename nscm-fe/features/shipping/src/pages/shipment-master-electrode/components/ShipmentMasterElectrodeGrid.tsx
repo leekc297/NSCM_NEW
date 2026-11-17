@@ -4,7 +4,7 @@ import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
-import { GridUtils } from '@foundation/utils';
+import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabLookupQueries } from '@shared/hooks';
@@ -18,6 +18,8 @@ import {
   MAIN_COLUMNS,
   MENU_ID,
   MSG,
+  NEGATIVE_RED_COLUMNS,
+  NUMBER_RULES,
 } from '../shipment-master-electrode.constants';
 import type { MainRow } from '../shipment-master-electrode.types';
 import { buildColumns } from '../utils/shipmentMasterElectrodeColumns';
@@ -166,6 +168,11 @@ export const ShipmentMasterElectrodeGrid = ({
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       e.cell.style.backgroundColor =
         row && isCellEditable(binding, row, isEditMode) ? EDITABLE_CELL_BG : '';
+      // 음수 → 빨간 글자 (보완요청 이규철 2026-11-10) — Pancake Roll Length / Steelcrate/Cut.
+      //   paintNegativeText 는 음수 아닐 때 color 를 지우므로 대상 컬럼은 매번 호출해 재활용 잔상을 막는다.
+      if (NEGATIVE_RED_COLUMNS.has(binding)) {
+        paintNegativeText(e.cell, toGridNumber(row?.[binding]));
+      }
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -329,6 +336,7 @@ export const ShipmentMasterElectrodeGrid = ({
       isReadOnly={false}
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={columns}
+      numberRules={NUMBER_RULES}
       comboParams={comboParams}
       dblClick={handleDblClick}
       gotFocus={onFocus}

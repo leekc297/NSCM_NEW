@@ -1,0 +1,26 @@
+{
+ "id": "SCP0127",
+ "rule": "tobe",
+ "set": [],
+ "unresolved": [],
+ "skipped": [
+  {
+   "param": "division_id",
+   "asis": "81",
+   "tobe": "",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "plan_group_id",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  },
+  {
+   "param": "scm_site_id",
+   "asis": "",
+   "tobe": "ALL",
+   "why": "ALL_FORM"
+  }
+ ]
+}

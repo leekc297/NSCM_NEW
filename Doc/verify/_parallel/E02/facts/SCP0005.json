@@ -1,0 +1,55 @@
+{
+ "screen": "SCP0005",
+ "calls": [
+  {
+   "cls": "ExcelUploadForm2",
+   "method": "btnEaxel_Upload_Click",
+   "asis_ref": "SCP0005_DistributionRoute.cs:376",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnEaxel_Upload",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SCP0005\""
+    },
+    {
+     "param": "#2",
+     "kind": "EXPR",
+     "arg": "this.spdMain.ActiveSheet.SheetName"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:383",
+     "raw": "FindDataMain()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:378",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "ExcelUploadForm2": {
+   "cls": "ExcelUploadForm2",
+   "in_pack": false,
+   "from": "none"
+  }
+ }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0111] · Doc/gen/SCP0111/CHECK.md · Doc/gen/SCP0111/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0111/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-17T17:30:19+09:00",
+  "end": "2026-11-17T17:40:29+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "작업을 아래 방법으로 진행하고자 합니다. \nFE에서 작업해야할 것에 대한 가이드를 제공해주세요. \n그리고 DB 객체에 대해서는 FE 가 수정될 것을 감안해서 작업 진행해주세요.\n\nFE 의 `buildAdminPayload` 를 AS-IS 처럼 절대값 전송으로 바꾸고, SP 의 'M' 분기를 AS-IS 의 UPDATE 1문으로 되돌리는 방법. AS-IS 와 같아지지만 FE 를 고쳐야 합니다. 현재 DB MODE 라 FE 는 가이드로만 남깁니다.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T17:40:29+09:00",
+  "changed": []
+}

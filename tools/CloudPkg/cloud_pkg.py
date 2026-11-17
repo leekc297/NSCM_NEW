@@ -15,6 +15,15 @@ cloud_pkg — 클라우드 이관 패키지 결정적 빌더 (2026-10-30 신설 
      다르거나 없으면 그 자리에서 만든다(수십 초~수 분) — Claude 호출 없음.
   3) 이관 대상 = 이관 기준선(_cloud_state/<ID>.json) 이후 바뀐 것 전부. 기준선이 없으면 화면 소유 전부(멱등이라 안전).
      --full 이면 기준선 무시.
+     ⭐ 2026-11-11(1.2.0): 기준선(이관 완료 표시)이 없을 때 수정본 = '최근 수정분만' — 사내 수정 시각
+     (코드·테이블 LAST_DDL_TIME · META 행 GREATEST(CREATION_DATE, LAST_UPDATE_DATE) · 공용 패치 파일 수정 시각)이
+     기준 시각 이후인 것만 담는다. 기준 시각 = 이 화면 항목 중 가장 최근 수정일의 0시(--since 'YYYY-MM-DD HH:MI' 로 직접 지정).
+     그 이전 수정분은 README 에 '기준 시각 이전 — 제외' 로 건수를 남긴다(필요하면 전체 메뉴).
+     ⭐ 1.4.x(같은 날): 수정본 PKG/코드 = 바뀐 구간만 패치(patchgen.py) — 클라우드 USER_SOURCE 를 읽어 hunk 치환 후 CREATE OR REPLACE.
+     기준본 = 이관 완료 원문(_cloud_state/<ID>/applied_src) → 없으면 사내 적용 백업(ASIS·BACKUP·BEFORE, LAST_DDL 이전).
+     가드: 이미 같음 SKIP · 기준 문구 1건 아님/조립 결과≠사내면 중단(원문 무변경) · 컴파일 실패면 원문 자동 복원.
+     기준본 없음 + 기준 시각 이전 수정 타입(예: SPEC) = 적용 없이 같은지 확인만. 그 외 = 전체 원문(지문 다를 때만 교체).
+     전체(--full) 메뉴 = 전체 원문(지문 다를 때만 교체) 그대로.
      ⭐ 기준선은 --applied 로만 옮긴다(2026-11-03). 생성만으로 옮기면 적용 안 한 패키지 내용이 다음 수정본에서 빠진다
      (SCP0111 10:21 생성 → 10:37 수정본에 PKG·META 누락). 적용 전까지 수정본은 누적된다.
      입력이 같으면 기존 폴더를 알려 주고, 기준선 이후 바뀐 것이 없으면 빈 폴더를 만들지 않는다.
@@ -48,8 +57,10 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'CommonSync'))
 import dbconn  # noqa: E402
+sys.path.insert(0, HERE)
+import patchgen  # noqa: E402
 
-VERSION = '1.1.0'
+VERSION = '1.4.1'
 PKG_ROOT = os.path.join(ROOT, '_artifacts', '_deploy_packages')
 STAGE_ROOT = os.path.join(PKG_ROOT, '_staging')
 STATE_ROOT = os.path.join(PKG_ROOT, '_cloud_state')
@@ -641,7 +652,11 @@ def code_order(k):
 
 
 def build_20(ctx, D, name, types):
-    L = [hdr(f'20_PKG {name} — 사내 최신 원문 전체(CREATE OR REPLACE · 이 화면 전용 객체)', ctx,
+    """1.3.0(2026-11-11): SPEC·BODY 를 각각 '클라우드 원문이 사내와 다를 때만' 적용한다.
+    Oracle 은 패키지 일부 멤버만 반영할 수 없어(BODY 는 통째 CREATE OR REPLACE) 반영 단위 = 객체 타입(SPEC/BODY/PROC…).
+    클라우드 USER_SOURCE 지문(SUM(ORA_HASH(LINE~TEXT))·줄수)이 사내와 같으면 SKIP — 바뀐 타입만 컴파일(세션 무효화 최소)."""
+    L = [hdr(f'20_PKG {name} — 수정분만 적용(클라우드 원문이 사내와 다른 SPEC/BODY 만 CREATE OR REPLACE · 같으면 SKIP)', ctx,
+             '\n * 결과 = DBMS_OUTPUT(DBeaver Output 창) 의 SKIP(같음·미적용) / APPLY(교체) / ERROR 줄로 확인'
              '\n * 되돌리기 = 05_BACKUP 을 먼저 실행해 두면 99_ROLLBACK 이 이 객체를 실행 전 원문으로 복원')]
     warns = []
     for t in sorted(types, key=lambda x: code_order((name, x))):
@@ -654,10 +669,48 @@ def build_20(ctx, D, name, types):
         if not src.strip():
             warns.append(f'{t} {name} 원문 없음')
             continue
-        lines = src.rstrip().split('\n')
-        if any(l.strip() == '/' for l in lines):
-            warns.append(f'{t} {name} 원문에 "/" 단독 줄 — SQL*Plus 실행 시 분할 위험')
-        L.append('CREATE OR REPLACE ' + src.rstrip() + '\n/\n')
+        pp = (D.get('patch') or {}).get((name, t)) if ctx.get('scope') == 'delta' else None
+        if pp and pp['kind'] == 'patch':
+            L += patchgen.plsql_patch(name, t, pp['hunks'], pp['h'], pp['l'], pp['label'], clob_assign)
+            continue
+        if pp and pp['kind'] == 'same':
+            L += patchgen.plsql_check_same(name, t, pp['h'], pp['l'], pp['label'])
+            continue
+        ld = next((o['LAST_DDL'] for o in D['objects'] if o['OBJECT_NAME'] == name and o['OBJECT_TYPE'] == t), None)
+        if pp and ctx.get('since') and ld and ld < ctx['since']:
+            # 기준본은 없지만 최근 수정 기준 시각 이전 수정(예: BODY 만 바뀌고 SPEC 은 그대로) — 적용하지 않고 같은지 확인만
+            pp.update(kind='same', label=f"LAST_DDL {ld} < 기준 시각 {ctx['since']} — 이번 수정분 아님")
+            L += patchgen.plsql_check_same(name, t, pp['h'], pp['l'], pp['label'])
+            continue
+        if ctx.get('scope') == 'delta':
+            L.append(f"/* {t} {name} — 수정분 패치를 만들 수 없어 전체 원문(지문 다를 때만 적용) · 사유: {(pp or {}).get('why', '-')} */")
+        h, n = D['srchash'][(name, t)]
+        L.append(f"""DECLARE
+    c_dry   CONSTANT BOOLEAN := FALSE;
+    v_h     NUMBER;
+    v_n     NUMBER;
+    v_src   CLOB;
+BEGIN
+    SELECT NVL(SUM(ORA_HASH(LINE || '~' || TEXT)), 0), COUNT(*) INTO v_h, v_n
+      FROM USER_SOURCE WHERE NAME = '{name}' AND TYPE = '{t}';
+    IF v_h = {h} AND v_n = {n} THEN
+        DBMS_OUTPUT.PUT_LINE('> SKIP  {t} {name} — 클라우드 원문이 사내와 같음({n}줄) · 적용 안 함');
+    ELSIF c_dry THEN
+        DBMS_OUTPUT.PUT_LINE('> DRY   {t} {name} — 적용 대상(클라우드 ' || v_n || '줄 · 사내 {n}줄)');
+    ELSE
+""")
+        L += clob_assign('v_src', src, indent='        ')
+        L.append(f"""        BEGIN
+            EXECUTE IMMEDIATE 'CREATE OR REPLACE ' || v_src;
+            DBMS_OUTPUT.PUT_LINE('> APPLY {t} {name} — 사내 원문으로 교체(이전 클라우드 ' || v_n || '줄 → {n}줄)');
+        EXCEPTION WHEN OTHERS THEN
+            -- ORA-24344(컴파일 오류 동반 생성) 포함 — 파일 끝 확인 SELECT 로 오류 확인
+            DBMS_OUTPUT.PUT_LINE('> ERROR {t} {name} — ' || SQLERRM);
+        END;
+    END IF;
+END;
+/
+""")
     L.append(f"""/* 확인 — VALID, 오류 0 */
 SELECT OBJECT_NAME, OBJECT_TYPE, STATUS, TO_CHAR(LAST_DDL_TIME, 'YYYY-MM-DD HH24:MI:SS') AS LAST_DDL
   FROM USER_OBJECTS WHERE OBJECT_NAME = '{name}' ORDER BY OBJECT_TYPE;
@@ -1061,7 +1114,14 @@ def rehearse(c0, pkg_dir, ctx, files):
             r = run_file(f)
             r['notes'].insert(0, f"사내 기준 변경 행 {r.get('dml_rows', 0)} (0 이 정상 — 사내가 원천)")
             out.append(r)
-        elif f.startswith('20_') or f.startswith('25_'):
+        elif f.startswith('20_'):
+            # 1.3.0: 지문 비교 블록 실행(DRY — 컴파일 안 함). 사내 = 원천이므로 전부 SKIP 이어야 정상
+            r = run_file(f, transform=dry)
+            if any(n.startswith('> DRY') for n in r['notes']):
+                r['fail'] += 1
+                r['notes'].insert(0, 'FAIL 사내 지문 불일치 — 빌드 후 사내 원문이 바뀜(다시 생성)')
+            out.append(r)
+        elif f.startswith('25_'):
             # 컴파일하지 않음(사내 현행 원문 그대로 · 세션 상태 무효화 방지) — 문장 분할만 점검
             import run_sql as rs
             st = rs.split_script(open(os.path.join(pkg_dir, 'A_DB', f), encoding='utf-8').read(), {})
@@ -1120,6 +1180,14 @@ def record_built(ID, mode, scope, dst, items, fingerprint, rehearsal_ok):
     write_state(ID, st)
 
 
+def save_built_src(ID, pkg, D):
+    """1.4.0: 이 패키지가 담은 시점의 사내 코드 원문 보관 — 이관 완료 표시 때 applied_src(다음 수정본 패치의 기준본)로 확정"""
+    d = os.path.join(STATE_ROOT, ID, 'built_src', os.path.basename(pkg))
+    os.makedirs(d, exist_ok=True)
+    for (n, t), src in D['code'].items():
+        open(os.path.join(d, f"{n}__{t.replace(' ', '_')}.sql"), 'w', encoding='utf-8', newline='').write(src)
+
+
 def mark_applied(ID, mode):
     """마지막 생성 패키지를 이관 기준선으로 확정한다. 클라우드 적용 여부는 빌더가 알 수 없어 사용자 표시로만 옮긴다."""
     st = load_state(ID)
@@ -1143,6 +1211,12 @@ def mark_applied(ID, mode):
             st['items'][k] = v
     st.update(built_at=rec['built'], mode=mode, applied_at=now().strftime('%Y-%m-%d %H:%M:%S'), applied_pkg=rec['pkg'])
     write_state(ID, st)
+    bs = os.path.join(STATE_ROOT, ID, 'built_src', rec['pkg'])
+    if os.path.isdir(bs):   # 1.4.0: 다음 수정본 PKG 패치의 기준본
+        ap = os.path.join(STATE_ROOT, ID, 'applied_src')
+        if os.path.isdir(ap):
+            shutil.rmtree(ap)
+        shutil.copytree(bs, ap)
     print(f"✅ 이관 완료 표시 · {rec['pkg']} ({rec['built']} 생성) — 다음 수정본은 이 시점 이후 변경분만 담는다.")
     return 0
 
@@ -1159,6 +1233,15 @@ def latest_pkg(ID, mode):
     return max(found)[1] if found else None
 
 
+def emit_links(pkg_dir):
+    """VM 워크벤치가 Flow 보드에 클릭 링크로 붙이는 줄(@@LINK 라벨|경로) — 2026-11-11"""
+    print(f"@@LINK 📂 패키지 폴더 {os.path.basename(pkg_dir)}|{os.path.relpath(pkg_dir, ROOT)}")
+    print(f"@@LINK 📄 README|{os.path.relpath(os.path.join(pkg_dir, '00_README.md'), ROOT)}")
+    adb = os.path.join(pkg_dir, 'A_DB')
+    if os.path.isdir(adb):
+        print(f"@@LINK 🗂 A_DB|{os.path.relpath(adb, ROOT)}")
+
+
 def print_nothing(ID, mode, state):
     pkg = latest_pkg(ID, mode)
     base = f"이관 완료 표시 {state['applied_at']}" if state.get('applied_at') else f"기준선 {state.get('built_at', '?')}(생성 시각 · 이관 확정 아님)"
@@ -1166,6 +1249,7 @@ def print_nothing(ID, mode, state):
     if pkg:
         print(f"   수정본 폴더: {os.path.relpath(os.path.join(PKG_ROOT, pkg), ROOT)}")
         print(f"   README: {os.path.relpath(os.path.join(PKG_ROOT, pkg, '00_README.md'), ROOT)}")
+        emit_links(os.path.join(PKG_ROOT, pkg))
     if not state.get('applied_at'):
         print('   클라우드에 아직 적용하지 않았다면 위 폴더를 적용한다. 적용했다면 ☁️ 클라우드 이관 완료 표시를 누른다.')
 
@@ -1188,7 +1272,10 @@ def main():
     ap.add_argument('--no-rehearse', action='store_true')
     ap.add_argument('--fetch', action='store_true', help='FE/BE 판정 전 공통소스 최신 받기(git fetch)')
     ap.add_argument('--applied', action='store_true', help='클라우드 적용 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정')
+    ap.add_argument('--since', help="기준선이 없을 때 수정본 기준 시각 직접 지정 'YYYY-MM-DD HH:MI' (기본 = 가장 최근 수정일 0시)")
     a = ap.parse_args()
+    if a.since and not re.match(r'^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}(:\d{2})?)?$', a.since.strip()):
+        sys.exit(f"--since 형식 아님: {a.since} (예: 2026-11-11 09:00)")
     ID = a.id.strip().upper()
     if not re.match(r'^[A-Z]{2,4}\d{4}$', ID):
         sys.exit(f'화면 ID 형식 아님: {ID}')
@@ -1220,6 +1307,30 @@ def main():
     log(f'사내 접속 {c.dbname} SERVER_HOST={c.host} · {c.user}')
     D = collect_db(c, ID, ctx)
     log(f"화면 객체 {len(D['objects'])} · 공용 참조 {len(D['deps'])} · META {sum(len(m['rows']) for m in D['meta'])}행")
+    D['srchash'] = {}
+    for (n, t) in D['code']:
+        r = c.q(f"SELECT NVL(SUM(ORA_HASH(LINE || '~' || TEXT)), 0) H, COUNT(*) N FROM ALL_SOURCE WHERE OWNER = '{OWNER}' AND NAME = :n AND TYPE = :t", n=n, t=t)[0]
+        D['srchash'][(n, t)] = (int(r['H']), int(r['N']))
+    # 1.4.0: 수정본 PKG/코드 = 기준본 대비 바뀐 구간만 패치(patchgen) — 기준본 없거나 검증 실패면 전체 원문(지문 가드)
+    D['patch'] = {}
+    if not a.full or a.stage:
+        for (n, t), src0 in D['code'].items():
+            ld = next((o['LAST_DDL'] for o in D['objects'] if o['OBJECT_NAME'] == n and o['OBJECT_TYPE'] == t), None)
+            ld_ts = datetime.datetime.strptime(ld, '%Y-%m-%d %H:%M:%S').timestamp() if ld else None
+            base, label = patchgen.find_base(ROOT, STATE_ROOT, ID, n, t, src0, ld_ts)
+            hh, ll = patchgen.expect_hash(c.cur, patchgen.norm(src0))
+            if base is None:
+                D['patch'][(n, t)] = {'kind': 'same' if '같음' in label else 'full', 'why': label, 'label': label, 'h': hh, 'l': ll}
+                log(f"PKG 수정분 {t} {n}: {D['patch'][(n, t)]['kind']} · {label}")
+                continue
+            hunks, why = patchgen.make_hunks(base, src0)
+            if hunks is None:
+                D['patch'][(n, t)] = {'kind': 'full', 'why': f'{label} — {why}', 'label': label, 'h': hh, 'l': ll}
+            elif not hunks:
+                D['patch'][(n, t)] = {'kind': 'same', 'why': label, 'label': label, 'h': hh, 'l': ll}
+            else:
+                D['patch'][(n, t)] = {'kind': 'patch', 'hunks': hunks, 'why': why, 'label': label, 'h': hh, 'l': ll}
+            log(f"PKG 수정분 {t} {n}: {D['patch'][(n, t)]['kind']} · {D['patch'][(n, t)]['why'] if D['patch'][(n, t)]['kind'] != 'patch' else why + ' · ' + label}")
 
     # ── 이관 대상 항목 + 해시
     items = {}
@@ -1285,17 +1396,52 @@ def main():
         be_info = be_delta
         log(f"FE 후보 {len(fe_info['judge'])} · BE 후보 {len(bres)}" + (f" · BE 전체(ID 참조) {len(be_full['judge'])}" if need_full else ''))
 
+    # ── 사내 수정 시각(기준선 없을 때 '최근 수정분만' 판정용 · 1.2.0)
+    def _ts(v):
+        if v is None:
+            return None
+        return v.strftime('%Y-%m-%d %H:%M:%S') if hasattr(v, 'strftime') else str(v)[:19]
+    obj_ddl = {(o['OBJECT_NAME'], o['OBJECT_TYPE']): o.get('LAST_DDL') for o in D['objects']}
+    modt = {}
+    for (n, t) in D['code']:
+        modt[f'CODE:{n}:{t}'] = obj_ddl.get((n, t))
+    for n in D['views']:
+        modt[f'CODE:{n}:VIEW'] = obj_ddl.get((n, 'VIEW'))
+    for t in D['tables']:
+        modt[f'TAB:{t}'] = obj_ddl.get((t, 'TABLE'))
+    for s in D['seq_ddl']:
+        modt[f'SEQ:{s}'] = obj_ddl.get((s, 'SEQUENCE'))
+    for m in D['meta']:
+        for r in m['rows']:
+            k = f"META:{m['table']}:{m['mode']}:" + '|'.join(str(r.get(x)) for x in m['key'])
+            modt[k] = max([x for x in (_ts(r.get('CREATION_DATE')), _ts(r.get('LAST_UPDATE_DATE'))) if x] or [None]) if any((r.get('CREATION_DATE'), r.get('LAST_UPDATE_DATE'))) else None
+    for p in shared_files:
+        modt[f'SHARED:{os.path.basename(p)}'] = datetime.datetime.fromtimestamp(os.path.getmtime(p)).strftime('%Y-%m-%d %H:%M:%S')
+    known = [v for v in modt.values() if v]
+    if a.since:
+        since_auto = a.since.strip() + ('' if len(a.since.strip()) > 10 else ' 00:00') + ('' if a.since.strip().count(':') >= 2 else ':00')
+    else:
+        since_auto = (max(known)[:10] + ' 00:00:00') if known else None
+
     state0 = load_state(ID)
     variants = [(a.mode, s) for s in ('delta', 'full')] if a.stage else [(a.mode, 'full' if a.full else 'delta')]
 
     for mode, scope in variants:
         state = None if scope == 'full' or not (state0 or {}).get('items') else state0
         prev = (state or {}).get('items', {})
-        changed = (lambda k: True) if state is None else (lambda k, _p=prev: _p.get(k) != items[k])
+        recent = scope == 'delta' and state is None and since_auto is not None
+        ctx['since'] = since_auto if recent else None
+        if recent:
+            # 기준선 없음 → 사내 수정 시각이 기준 시각 이후인 항목만. FE/BE 는 공통소스 판정(내 수정분)을 그대로 따른다.
+            changed = (lambda k, _s=since_auto: k.startswith(('FE:', 'BE:', 'BEF:')) or bool(modt.get(k)) and modt[k] >= _s)
+            ctx['older'] = sum(1 for k, v in modt.items() if v and v < since_auto)
+            ctx['notime'] = sum(1 for k in items if k in modt and not modt[k])
+        else:
+            changed = (lambda k: True) if state is None else (lambda k, _p=prev: _p.get(k) != items[k])
         if mode == 'all' and be_info is not None:
             be_info = be_full if scope == 'full' else be_delta
         sub_items = {k: v for k, v in items.items() if (mode == 'all' or not k.startswith(('FE:', 'BE:', 'BEF:'))) and not (k.startswith('BEF:') and scope != 'full') and not (k.startswith('BE:') and scope == 'full')}
-        fp = sha({'v': VERSION, 'mode': mode, 'scope': scope, 'items': sub_items, 'state': sha(prev)})
+        fp = sha({'v': VERSION, 'mode': mode, 'scope': scope, 'items': sub_items, 'state': sha(prev), 'since': ctx['since'], 'patch': sha({f'{k[0]}:{k[1]}': (v['kind'], v['label'], v['h'], v['l']) for k, v in D['patch'].items()}) if scope == 'delta' else ''})
         vname = variant_name(mode, scope)
         stage_dir = os.path.join(STAGE_ROOT, ID, f'{mode}_{scope}')
         man_p = os.path.join(stage_dir, 'manifest.json')
@@ -1303,6 +1449,7 @@ def main():
         if not a.stage and rec and rec.get('fingerprint') == fp and rec.get('rehearsal_ok') and os.path.isfile(os.path.join(PKG_ROOT, rec['pkg'], '00_README.md')):
             print(f"\n✅ 변경 없음 · 기존 폴더 그대로 사용 · {os.path.relpath(os.path.join(PKG_ROOT, rec['pkg']), ROOT)}  ({rec['built']} 생성 · 입력 지문 동일)")
             print(f"   README: {os.path.relpath(os.path.join(PKG_ROOT, rec['pkg'], '00_README.md'), ROOT)}")
+            emit_links(os.path.join(PKG_ROOT, rec['pkg']))
             continue
         if not a.stage and os.path.exists(man_p):
             try:
@@ -1316,9 +1463,11 @@ def main():
                 dst = new_pkg_path(ID, vname)
                 shutil.copytree(stage_dir, dst, ignore=shutil.ignore_patterns('manifest.json'))
                 record_built(ID, mode, scope, dst, sub_items, fp, True)
+                save_built_src(ID, dst, D)
                 log(f'미리 만든 묶음이 최신 — 복사만 함 ({man.get("built")})')
                 print(f'\n✅ 완료 · {os.path.relpath(dst, ROOT)}  (사전 생성 {man.get("built")} · 입력 지문 동일)')
                 print(f'   README: {os.path.relpath(os.path.join(dst, "00_README.md"), ROOT)}')
+                emit_links(dst)
                 continue
             log('미리 만든 묶음이 낡음(사내 객체·META·소스 변경) — 새로 만듦')
         tag = f"{ID}_{now():%Y%m%d%H%M}"
@@ -1339,7 +1488,7 @@ def main():
             pref = f"META:{m['table']}:{m['mode']}:"
             m['deleted'] = sorted(k[len(pref):] for k in prev if k.startswith(pref) and k[len(pref):] not in keys_now)
         inc_grant_names = {n for n, t in inc_code} | set(inc_tabs) | set(inc_seq)
-        if state is None:
+        if state is None and not recent:
             inc_grant_names |= set(D['names'])
 
         shared_inc = [p for p in shared_files if changed(f'SHARED:{os.path.basename(p)}')]
@@ -1468,12 +1617,14 @@ def main():
             log(f'사전 생성 완료 [{mode}/{scope}] {os.path.relpath(dst, ROOT)} · 리허설 {"OK" if reh_ok else "FAIL"}')
         else:
             record_built(ID, mode, scope, dst, sub_items, fp, reh_ok and not a.no_rehearse)
+            save_built_src(ID, dst, D)
             # 같은 지문으로 스테이징도 갱신(다음 취합 즉시)
             if os.path.exists(stage_dir):
                 shutil.rmtree(stage_dir)
             print(f'\n{"✅" if reh_ok and not warns else "⚠"} 완료 · {os.path.relpath(dst, ROOT)} · 리허설 {"OK" if reh_ok else "FAIL"} · 경고 {len(warns)}'
                   + (' · 직전 이관 이후 변경 없음(확인 SQL 만)' if ctx.get('nothing') else ''))
             print(f'   README: {os.path.relpath(os.path.join(dst, "00_README.md"), ROOT)}')
+            emit_links(dst)
             for w in warns[:20]:
                 print('   ⚠ ' + w)
     log('끝')
@@ -1481,17 +1632,28 @@ def main():
     return 0
 
 
+def pkg_how(ctx, D, n, t):
+    pp = (D.get('patch') or {}).get((n, t)) if ctx.get('scope') == 'delta' else None
+    if not pp or t == 'VIEW':
+        return '사내 원문 전체(클라우드 지문 다를 때만 적용)'
+    if pp['kind'] == 'patch':
+        return f"**수정분만 패치 {len(pp['hunks'])}개 구간** (기준본: {pp['label']})"
+    if pp['kind'] == 'same':
+        return f"변경 없음 — 적용 안 함(클라우드 같음 확인만 · {pp['label']})"
+    return f"전체 원문(지문 다를 때만) — 패치 불가: {pp['why']}"
+
+
 def build_readme(ctx, D, mode, inc_code, inc_tabs, inc_seq, shared_files, shared_changed, shared_nopatch, fe_info, be_info, fe_rows, be_rows, warns, reh, reh_ok, state, no_reh, adb):
     ID = ctx['ID']
     L = [f"# {ID} {VARIANTS[(mode, ctx.get('scope', 'delta'))][1]}", '',
          f"- 생성 {ctx['built']:%Y-%m-%d %H:%M} · tools/CloudPkg/cloud_pkg.py {VERSION} (결정적 빌더 — Claude 미사용)",
          f"- 원천 사내 {ctx['db']} (SERVER_HOST={ctx['host']}) 조회 {ctx['fetched']} — SOURCE-FRESH",
-         f"- 이관 범위 = {('전체 — 화면 소유 DB 객체·META 전부 + ' + ('FE 페이지 폴더·참조 파일·ID 참조 BE 파일 전부' if mode == 'all' else 'FE·BE 없음') + ' (모든 SQL 멱등)') if ctx.get('scope') == 'full' else (('수정본 — 이관 완료 표시(' + state['applied_at'] + ') 이후 바뀐 것 전부' if state.get('applied_at') else '수정본 — 기준선(' + state.get('built_at', '?') + ' 생성 시각 · 이관 확정 아님) 이후 바뀐 것 전부') if state else '수정본 — 이관 기준선이 없어 화면 소유 전부(모든 SQL 멱등)')}",
+         f"- 이관 범위 = {('전체 — 화면 소유 DB 객체·META 전부 + ' + ('FE 페이지 폴더·참조 파일·ID 참조 BE 파일 전부' if mode == 'all' else 'FE·BE 없음') + ' (모든 SQL 멱등)') if ctx.get('scope') == 'full' else (('수정본 — 이관 완료 표시(' + state['applied_at'] + ') 이후 바뀐 것 전부' if state.get('applied_at') else '수정본 — 기준선(' + state.get('built_at', '?') + ' 생성 시각 · 이관 확정 아님) 이후 바뀐 것 전부') if state else (('수정본 — 이관 기준선 없음 → 사내 수정 시각 ' + ctx['since'] + ' 이후 바뀐 것만(최근 수정분 · 코드/테이블 LAST_DDL · META 행 CREATION/LAST_UPDATE_DATE). 그 이전 수정 ' + str(ctx.get('older', 0)) + '건 제외' + (' · 수정 시각 없음 ' + str(ctx.get('notime', 0)) + '건 제외' if ctx.get('notime') else '') + ' — 그 이전 수정분이 클라우드에 없으면 전체 메뉴 또는 --since 로 기준 시각을 앞당긴다') if ctx.get('since') else '수정본 — 이관 기준선이 없어 화면 소유 전부(모든 SQL 멱등)'))}",
          f"- 사내 리허설 = {'생략(--no-rehearse)' if no_reh else ('OK' if reh_ok else 'FAIL — 아래 리허설 표 확인')}",
          *(['', '> **직전 이관 이후 바뀐 것이 없다.** 적용할 SQL 이 없으므로 00_PRECHECK·90_VERIFY 로 클라우드 상태만 확인한다. 전부 담으려면 전체 메뉴를 쓴다.'] if ctx.get('nothing') else []),
          '', '## 실행 순서 (클라우드, SCM_MGR, 파일마다 전체 F5)', '']
     desc = {'00': '사전 확인(읽기 전용) — 공용 객체 누락·컬럼 누락이 있으면 멈추고 전달', '05': '현재 상태 백업(ZB_* 표) — 원복 대비',
-            '10': 'GTT 구조 동기화·테이블/SEQUENCE 생성', '20': 'PKG/코드 전체 원문', '25': '공용 객체 이 화면 몫 패치', '30': 'META·문구·콤보',
+            '10': 'GTT 구조 동기화·테이블/SEQUENCE 생성', '20': 'PKG/코드 — 수정본: 바뀐 구간만 패치(클라우드 USER_SOURCE 치환) · 전체: 지문 다른 SPEC·BODY 만 교체 · Output 창에서 SKIP/APPLY 확인', '25': '공용 객체 이 화면 몫 패치', '30': 'META·문구·콤보',
             '40': '권한·시노님', '90': '확인(읽기 전용)', '99': '원복(문제 시에만)'}
     for f in sorted(adb):
         L.append(f"1. `A_DB/{f}` — {desc.get(f[:2], '')}")
@@ -1500,10 +1662,11 @@ def build_readme(ctx, D, mode, inc_code, inc_tabs, inc_seq, shared_files, shared
               "BE: `B_BE/` 전체 복사 · `BE_MERGE/` 병합본. 없으면 BE 변경 없음."]
     L += ['', '## 이관 축 점검표', '', '| 축 | 대상 | 이관 | 구분 | 근거 |', '|---|---|---|---|---|']
     inc_set = set(inc_code)
+    exc = '제외(기준 시각 ' + ctx['since'] + ' 이전 수정)' if ctx.get('since') else '제외(직전과 같음)'
     for (n, t) in sorted(list(D['code']) + [(v, 'VIEW') for v in D['views']], key=code_order):
-        L.append(f"| PKG/코드 | {t} {n} | {'포함' if (n, t) in inc_set else '제외(직전과 같음)'} | 화면 전용 | 사내 원문 전체 · LAST_DDL {next((o['LAST_DDL'] for o in D['objects'] if o['OBJECT_NAME'] == n and o['OBJECT_TYPE'] == t), '')} |")
+        L.append(f"| PKG/코드 | {t} {n} | {'포함' if (n, t) in inc_set else exc} | 화면 전용 | {pkg_how(ctx, D, n, t)} · LAST_DDL {next((o['LAST_DDL'] for o in D['objects'] if o['OBJECT_NAME'] == n and o['OBJECT_TYPE'] == t), '')} |")
     for t, info in D['tables'].items():
-        L.append(f"| {'GTT' if info['temp'] else 'TABLE'} | {t} | {'포함' if t in inc_tabs else '제외(직전과 같음)'} | 화면 전용 | {'구조 동기화' if info['temp'] else '없을 때만 생성 · 차이는 PRECHECK'} |")
+        L.append(f"| {'GTT' if info['temp'] else 'TABLE'} | {t} | {'포함' if t in inc_tabs else exc} | 화면 전용 | {'구조 동기화' if info['temp'] else '없을 때만 생성 · 차이는 PRECHECK'} |")
     for s in D['seq_ddl']:
         L.append(f"| SEQUENCE | {s} | {'포함' if s in inc_seq else '제외'} | 화면 전용 | 없을 때만 생성 |")
     for m in D['meta']:

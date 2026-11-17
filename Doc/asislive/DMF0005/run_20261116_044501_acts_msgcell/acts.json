@@ -1,0 +1,589 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:635 fps=spdMain 이고 siSub 활성 시트가 잠금 해제(수정 중) · 사업부 81 은 상세 패널 표시(3822행) · 상세 수정 = fps=spdSub 에서 EditButton(864행 SwitchLock)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Purchase 시트를 수정 중이어서 Production 시트를 수정 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:860 fps=spdSub 이고 siMain 활성 시트가 수정 중 · 주 수정 = fps=spdMain 에서 EditButton(640행)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Production 시트를 수정 중이어서 Purchase 시트를 수정 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00128",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3329 주 시트 잠김 상태에서 siSub 활성 시트가 수정 중일 때 주 그리드 더블클릭 · 행 0개면 3324행 return",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "click": "DIVISION_ID",
+      "double": 1,
+      "row": 0
+     },
+     "row": 0,
+     "col": 2,
+     "ok": true,
+     "error": null,
+     "popups": []
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Purchase를 수정 중이어서 조회를 할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00471",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3397~3431 주 시트 수정 중 Action=I 행의 ITEM_ID 더블클릭 → DM0002_ItembySmallDivPopup(다중 선택 true) · 여러 행 선택 뒤 확인이면 ItemID 에 ',' → MSG00471",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "click": "ITEM_ID",
+      "double": 1,
+      "row": "new",
+      "keep_popup": 1,
+      "wait": 10
+     },
+     "row": 0,
+     "col": 18,
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "DM0002_ItembySmallDivPopup",
+       "rows": 0
+      },
+      {
+       "form": "ProgressForm",
+       "rows": -1
+      }
+     ]
+    },
+    {
+     "set": {
+      "act": {
+       "form": "DM0002_ItembySmallDivPopup",
+       "select": "0,1",
+       "wait": "2"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "select:0,1",
+     "raised": "selections 1 rows 0-1 of 16941 cols 13",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "popup_ok": "DM0002_ItembySmallDivPopup"
+     },
+     "ok": true,
+     "error": null,
+     "how": "ButtonItem OK",
+     "closed": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Model은 한개만 선택하여 입력해주세요.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00430",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3460~3479 Division 82 · 주 시트 수정 중 EditFlag=Y 또는 Action=I 행의 USER_ID_82 더블클릭 → DMF000_OwnerSet_Popup · 오른쪽 목록 2명 이상이면 owner 에 ',' → MSG00430",
+   "steps": [
+    {
+     "set": {
+      "insert": true
+     },
+     "new_row": 0,
+     "error": null
+    },
+    {
+     "set": {
+      "click": "USER_ID_82",
+      "double": 1,
+      "row": "new",
+      "keep_popup": 1,
+      "wait": 10
+     },
+     "row": 0,
+     "col": 7,
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "DMF000_OwnerSet_Popup",
+       "rows": 112
+      }
+     ]
+    },
+    {
+     "set": {
+      "act": {
+       "form": "DMF000_OwnerSet_Popup",
+       "grid": "spdBase",
+       "select": "0,1",
+       "wait": "2"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "select:0,1",
+     "raised": "selections 1 rows 0-1 of 112 cols 7",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "form": "DMF000_OwnerSet_Popup",
+       "click": "btnRight",
+       "wait": "2"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:btnRight",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "popup_ok": "DMF000_OwnerSet_Popup"
+     },
+     "ok": true,
+     "error": null,
+     "how": "ButtonItem OK",
+     "closed": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "제품(Product)이 Cell Type - '해당없음' 으로 저장된 데이터가 존재합니다",
+     "action": "cancel_button(id=2)"
+    },
+    {
+     "text": "Owner(Sales)는 1명만 선택 가능합니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF000_GET_OWNER_DATA"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdSub_CellDoubleClick",
+   "expect": "MSG00430",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3975~3995 Division 82 · 상세 시트 수정 중 EditFlag=Y 행의 USER_ID 더블클릭 → DMF000_OwnerSet_Popup · 상세 행은 주 그리드 잠금 상태 더블클릭(FindData_Sub 3345행)으로 채움",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "grid": "spdMain",
+       "cell": "0,2",
+       "double": "1",
+       "wait": "8"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "celldbl:0,2",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "target": "spdSub",
+       "raise": "CellClick",
+       "row": "0",
+       "col": "0",
+       "wait": "2"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdSub.CellClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=0,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=0)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "raised": null,
+     "edit_mode": true
+    },
+    {
+     "set": {
+      "click": "USER_ID",
+      "double": 1,
+      "row": 0,
+      "keep_popup": 1,
+      "wait": 10
+     },
+     "row": 0,
+     "col": 18,
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "DMF000_OwnerSet_Popup",
+       "rows": 112
+      }
+     ]
+    },
+    {
+     "set": {
+      "act": {
+       "form": "DMF000_OwnerSet_Popup",
+       "grid": "spdBase",
+       "select": "0,1",
+       "wait": "2"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "select:0,1",
+     "raised": "selections 1 rows 0-1 of 112 cols 7",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "form": "DMF000_OwnerSet_Popup",
+       "click": "btnRight",
+       "wait": "2"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:btnRight",
+     "raised": null,
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "popup_ok": "DMF000_OwnerSet_Popup"
+     },
+     "ok": true,
+     "error": null,
+     "how": "ButtonItem OK",
+     "closed": true
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Owner(Sales)는 1명만 선택 가능합니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF000_GET_OWNER_DATA"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [
+  {
+   "handler": "EditButton",
+   "expect": "MSG00096",
+   "why": "그룹 SCP Planner 실행에서만(현재 ADMIN)"
+  }
+ ],
+ "at": "2026-11-16 04:35:47",
+ "_pre_set": [
+  {
+   "name": "clbDivision",
+   "index": "6",
+   "wait": 3
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision",
+     "index": "6"
+    },
+    "ok": true,
+    "applied": "combo:6:82 ESS Battery",
+    "error": null
+   }
+  ]
+ },
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Production": [
+     0
+    ]
+   }
+  },
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Production": [
+     0
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20260907\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202609\",\"toYyyymm\":\"202702\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1715,
+  "dur": 885,
+  "at": "2026-11-14T07:07:49.843Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20260907\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202609\",\"toYyyymm\":\"202702\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1715,
+  "dur": 944,
+  "at": "2026-11-14T07:08:11.525Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ }
+]

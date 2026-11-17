@@ -1,6 +1,7 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { sessionTimeZone } from '@foundation/utils';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import {
   ADMIN_SHEET_NAME,
@@ -152,14 +153,14 @@ export const useShipmentPlanFixStore = createPersistedStoreWithTab<State & Actio
       });
     },
     // 기간 기본값 — 공용 PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD 서버 산정(AS-IS GetDayRange(W52), cs:240).
-    //   IN fromDate(""=오늘)/offsetDay(363=52*7-1)/timeZone(""=SP 기본), OUT o_rc1 1행 1열 "YYYYMMDD:YYYYMMDD"
+    //   IN fromDate(""=오늘)/offsetDay(363=52*7-1)/timeZone(session.tmzCd — 사용자 등록 timezone 기준 '오늘'), OUT o_rc1 1행 1열 "YYYYMMDD:YYYYMMDD"
     //   (SCM_SYS_CALENDAR_M 기준). dayjs 근사 금지 — 자매 SSP0200 fetchDayRange 1:1. SP/권한 미배포 시 조용히 무시
     //   (사용자가 직접 기간 지정, 근사 대체 안 함). 버튼맵 SCM_ADM_MNU_BTN_MPG_M(SCP0025,main,GET_SCP_DAY_PERIOD).
     fetchDayRange: async fromDate => {
       try {
         const res = await apiClient.post<Record<string, Record<string, string>[]>>(
           `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DAY_PERIOD}/call-proc`,
-          { fromDate, offsetDay: PERIOD_OFFSET_DAY, timeZone: '' }
+          { fromDate, offsetDay: PERIOD_OFFSET_DAY, timeZone: sessionTimeZone(useSessionStore.getState().session) }
         );
         if (res.status >= 400 || Number(res.data.code)) return;
         const first = res.data.result?.o_rc1?.[0];

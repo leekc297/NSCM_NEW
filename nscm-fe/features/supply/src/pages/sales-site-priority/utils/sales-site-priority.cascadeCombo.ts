@@ -80,3 +80,18 @@ export const findPlanGroupCodeByName = (
   divisionId: string,
   name: string
 ): string | undefined => filterByDivision(rows, divisionId).find(r => r.NAME === name)?.CODE;
+
+// AS-IS 그리드 Plan Group 셀 표시 등가 — FarPoint ComboBoxCellType 은 셀 저장값이 바인딩된 콤보
+//   후보(그 행 DIVISION_ID 로 좁힌 활성 VALID_YN='Y' 목록)에 없으면 빈칸으로 렌더한다(라이브러리
+//   기본, SpreadInfo.LoadCombo). 반면 TO-BE Wijmo DataMap.getDisplayValue 는 미매칭 시 코드 원문을
+//   그대로 돌려줘 비활성/삭제 Plan Group 코드(예: VALID_YN='N' 인 PG0031)가 셀에 노출된다.
+//   SCP0131 한정으로 "후보에 없는 코드는 빈칸"을 재현한다 — 조회 데이터(저장값)는 건드리지 않고
+//   표시만 비운다. 빈 코드('')는 신규/미입력 행이므로 미매칭 취급하지 않는다.
+export const isPlanGroupCodeInCombo = (
+  rows: CascadeComboSource[],
+  divisionId: string,
+  code: string
+): boolean => {
+  if (!code) return true;
+  return filterByDivision(rows, divisionId).some(r => r.CODE === code);
+};

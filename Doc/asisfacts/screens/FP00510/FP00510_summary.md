@@ -99,7 +99,7 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | FindButton:297, btnFind_Click:390, CboOrderType_SelectedIndexChanged:734, GetOrderType:246, GetOrderType:251, GetOrderType:256, GetOrderType:261, GetScpPlantID:291 | CString.GetCheckedListValue | CODE |
+| GetCheckedListValue | GetOrderType:246, GetOrderType:251, GetOrderType:256, GetOrderType:261, GetScpPlantID:291, GetScpPlantID:296, GetScpPlantID:301, GetScpPlantID:306 | CString.GetCheckedListValue | CODE |
 | FP_Log2 | CboPlanGroup_SelectedIndexChanged:1179, CboPlanGroup_SelectedIndexChanged:1181 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
 | OnShown | OnShown:1284 | BaseForm.OnShown | NowGroupID, USER_ID |
 | GetInnerTable | GetPlanGroup:1391, SetChangeControl:1415, SetChangeControl:1424, SetChangeControl:1437, SetChangeControl:1446, SetChangeControl:1458 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
@@ -108,9 +108,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:164 |
-| cboOrderType | SelectedIndexChanged | CboOrderType_SelectedIndexChanged | InitControls:204 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:414 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:177 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:325 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:374 |
@@ -134,6 +131,9 @@
 | this.btnClose | Click | btnClose_Click | InitializeComponent:346 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:385 |
 | this.txtQtySplit | TextChanged | txtQtySplit_TextChanged | InitializeComponent:453 |
+| this | Load | Form_Load | .ctor:164 |
+| cboOrderType | SelectedIndexChanged | CboOrderType_SelectedIndexChanged | InitControls:204 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:414 |
 
 ## 6. 컨트롤 (101개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
@@ -196,8 +196,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: {?this.sSheetName}, SCPTarget, SCPTargetSub
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:267, SetSheetHeaderColumn_FP@InitSpread:346, SetSheetHeaderColumn_FP@InitSpread:363
+- 코드에서 생성하는 시트: SCPTarget, SCPTargetSub, {?this.sSheetName}
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:346, SetSheetHeaderColumn_FP@InitSpread:363, SetSheetHeaderColumn_FP@SetSpreadInit:267
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

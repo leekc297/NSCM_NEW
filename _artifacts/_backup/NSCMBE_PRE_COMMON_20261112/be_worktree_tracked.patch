@@ -1,0 +1,3877 @@
+diff --git a/build.gradle b/build.gradle
+index 65aa1d3..142e207 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -10,17 +10,20 @@ plugins {
+ group = 'com.lgcns'
+ version = '0.0.1-SNAPSHOT'
+ description = 'nscm'
+-java.sourceCompatibility = JavaVersion.VERSION_21
++// ⭐ [로컬 2026-08-14] 이 PC 에는 JDK 17 만 설치돼 있어 21 로는 'invalid source release: 21' 로 컴파일 불가.
++//   ⚠ 클라우드 배포 시 VERSION_21 로 되돌릴 것 (아래 줄과 교체).
++// java.sourceCompatibility = JavaVersion.VERSION_21
++java.sourceCompatibility = JavaVersion.VERSION_17
+ 
+ repositories {
+-    maven {
+-        allowInsecureProtocol true
+-        credentials {
+-            username "anonymous"
+-            //password "anonymous"
+-        }
+-        url "http://10.94.57.6:8081/repository/maven-public/"
+-    }
++    // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
++    //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 mavenCentral() 을 주석 처리할 것.
++    mavenCentral()
++    // maven {
++    //     allowInsecureProtocol true
++    //     credentials { username "anonymous" }
++    //     url "http://10.94.57.6:8081/repository/maven-public/"
++    // }
+ }
+ 
+ configurations.all {
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+index 9db6d3d..967d0a7 100644
+--- a/gradle/wrapper/gradle-wrapper.properties
++++ b/gradle/wrapper/gradle-wrapper.properties
+@@ -1,6 +1,10 @@
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+-//distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-bin.zip
+-distributionUrl=http\://10.94.57.6:8081/repository/maven-releases/org/gradle/services/distributions/gradle/8.8/gradle-8.8-bin.zip
++# ⭐ [로컬 2026-08-14] 사내망에서는 클라우드 Nexus(10.94.57.6)에 도달할 수 없어 배포본 내려받기가
++#   무한 대기한다(실제로 dists/…/gradle-8.8-bin.zip.part 만 남아 있었다).
++#   공식 URL 로 되돌린다 — 이 URL 로 받은 dist(dl7vupf4psengwqhwktix4v1)가 이미 캐시에 있어 재다운로드도 없다.
++#   ⚠ 클라우드 배포 시에는 아래 두 줄을 서로 바꿔야 한다.
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.8-bin.zip
++#distributionUrl=http\://10.94.57.6:8081/repository/maven-releases/org/gradle/services/distributions/gradle/8.8/gradle-8.8-bin.zip
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+diff --git a/settings.gradle b/settings.gradle
+index cd46396..12441b4 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1,14 +1,14 @@
+ pluginManagement {
+     repositories {
+-        //maven { url "https://plugins.gradle.org/m2/" }
+-        maven {
+-            url "http://10.94.57.6:8081/repository/maven-public/"
+-            credentials {
+-                username "anonymous"
+-                //password "anonymous"
+-            }
+-            allowInsecureProtocol true
+-        }
++        // ⭐ [로컬 2026-08-14] 사내망에서 클라우드 Nexus(10.94.57.6) 미도달 → 공식 저장소 사용.
++        //   ⚠ 클라우드 배포 시 아래 nexus 블록의 주석을 풀고 이 두 줄을 주석 처리할 것.
++        gradlePluginPortal()
++        mavenCentral()
++        // maven {
++        //     url "http://10.94.57.6:8081/repository/maven-public/"
++        //     credentials { username "anonymous" }
++        //     allowInsecureProtocol true
++        // }
+     }
+ }
+ 
+diff --git a/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java b/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
+index 9db7437..2a2af28 100644
+--- a/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
++++ b/src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
+@@ -2,6 +2,7 @@ package com.lgcns.nscm.admin.auth;
+ 
+ import java.util.List;
+ 
++import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
+ import com.lgcns.nscm.admin.auth.dto.UnitDto;
+ 
+ public interface AuthService {
+@@ -9,6 +10,8 @@ public interface AuthService {
+ 	boolean checkMenuAuth(String userId, String mnuId) throws Exception;
+ 	boolean checkMenuBtnAuth(String userId, String mnuId, String shtNm, String mnuBtnCd) throws Exception;
+ 	List<String> retrieveMenuBtnAuth(String userId, String mnuId) throws Exception;
++	List<MnuBtnAuthSheet> retrieveMenuBtnAuthSheets(String userId, String mnuId) throws Exception;
++	List<MnuBtnAuthSheet> retrieveMenuBtnDefs(String mnuId) throws Exception;
+ 	List<UnitDto> retrieveUnitAuth(String userId, String mnuId) throws Exception;
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
+index 9810761..33b5f6c 100644
+--- a/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
+@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
+ 
+ import org.springframework.stereotype.Service;
+ 
++import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
+ import com.lgcns.nscm.admin.auth.dto.UnitDto;
+ import com.lgcns.nscm.framework.base.BaseService;
+ import com.lgcns.nscm.framework.utils.MapUtils;
+@@ -72,6 +73,29 @@ public class AuthServiceImpl extends BaseService implements AuthService {
+ 
+ 	}
+ 
++	@Override
++	public List<MnuBtnAuthSheet> retrieveMenuBtnAuthSheets(String userId, String mnuId) throws Exception {
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++		params.put("mnuId", mnuId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuth", params);
++		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
++
++		return MnuBtnAuthSheet.listOf(data);
++	}
++
++	@Override
++	public List<MnuBtnAuthSheet> retrieveMenuBtnDefs(String mnuId) throws Exception {
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("mnuId", mnuId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnDefs", params);
++		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
++
++		return MnuBtnAuthSheet.listOf(data);
++	}
++
+ 	@Override
+ 	public List<UnitDto> retrieveUnitAuth(String userId, String mnuId) throws Exception {
+ 		Map<String, Object> params = new HashMap<String, Object>();
+diff --git a/src/main/java/com/lgcns/nscm/admin/log/LogController.java b/src/main/java/com/lgcns/nscm/admin/log/LogController.java
+index 772b714..68f7b58 100644
+--- a/src/main/java/com/lgcns/nscm/admin/log/LogController.java
++++ b/src/main/java/com/lgcns/nscm/admin/log/LogController.java
+@@ -1,5 +1,7 @@
+ 	package com.lgcns.nscm.admin.log;
+ 
++import java.sql.Timestamp;
++import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -11,14 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RestController;
+ 
++import com.github.f4b6a3.ulid.UlidCreator;
+ import com.lgcns.nscm.admin.log.dto.LogDto;
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.LoginUser;
+ import com.lgcns.nscm.framework.base.BaseController;
++import com.lgcns.nscm.framework.interceptor.LogInterceptor;
+ import com.lgcns.nscm.framework.model.BaseResponse;
+ 
+ import io.swagger.v3.oas.annotations.Operation;
+ import io.swagger.v3.oas.annotations.tags.Tag;
++import jakarta.servlet.http.HttpServletRequest;
+ import lombok.RequiredArgsConstructor;
+ import lombok.extern.slf4j.Slf4j;
+ 
+@@ -32,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
+ public class LogController extends BaseController {
+ 
+     private final LogService logService;
++    private final LogInterceptor logInterceptor;
+ 
+     @Operation(summary = "System Log 조회", description = "System Log 데이터를 조회합니다.")
+ 	@PostMapping(value="common", produces = "application/json; charset=UTF-8")
+@@ -65,5 +71,43 @@ public class LogController extends BaseController {
+     	logService.logBack(ULID);
+     }
+ 
++    /**
++     * 메뉴 접속 로그. 사용자가 메뉴(화면)를 최초로 열 때 FE(useMDIStore.openTab)가 1회 호출한다.
++     * SSO LOGIN 적재와 동일하게 명시적 insert 로 처리한다 — @SystemLog 를 붙이면 LogInterceptor.afterCompletion
++     * 이 MENU 타입을 한 번 더 적재해 중복되므로 애너테이션은 쓰지 않는다. 적재 실패가 응답을 막지 않는다.
++     */
++    @Operation(summary = "메뉴 접속 로그", description = "메뉴(화면) 최초 오픈 시 접속 로그를 기록합니다.")
++    @PostMapping(value="menu-access", produces = "application/json; charset=UTF-8")
++    public void menuAccess(
++    		@LoginUser UserSession userSession
++    	  , @RequestBody(required = false) Map<String, Object> params
++    	  , HttpServletRequest request) {
++    	String mnuId = (params == null || params.get("mnuId") == null) ? null : params.get("mnuId").toString();
++    	if (mnuId == null || mnuId.isEmpty()) return;
++    	recordMenuAccessLog(userSession, request, mnuId);
++    }
++
++    /** SystemLogAspect 의 LOGIN 분기와 동일한 logParam 구성으로 MENU 로그를 적재한다. */
++    private void recordMenuAccessLog(UserSession userSession, HttpServletRequest request, String mnuId) {
++    	try {
++    		Timestamp ts = new Timestamp(System.currentTimeMillis());
++    		Map<String, Object> logParam = new HashMap<>();
++    		logParam.put("traceId", UlidCreator.getUlid().toString());
++    		logParam.put("userId", userSession != null ? userSession.getUserId() : null);
++    		logParam.put("typeCd", "MENU");
++    		logParam.put("requestUrl", "MENU");
++    		logParam.put("clientIp", logInterceptor.getClientIp(request));
++    		logParam.put("menuId", mnuId);
++    		logParam.put("clientStTm", ts);
++    		logParam.put("serverStTm", ts);
++    		logParam.put("sqlStTm", ts);
++    		logParam.put("sqlEdTm", ts);
++    		logParam.put("serverEdTm", ts);
++    		logParam.put("clientEdTm", ts);
++    		logInterceptor.insertSystemLog(logParam);
++    	} catch (Exception e) {
++    		log.warn("메뉴 접속 로그 적재 실패. {}", e.getMessage());
++    	}
++    }
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/lookup/LookupController.java b/src/main/java/com/lgcns/nscm/admin/lookup/LookupController.java
+index 817fcf6..b7b2000 100644
+--- a/src/main/java/com/lgcns/nscm/admin/lookup/LookupController.java
++++ b/src/main/java/com/lgcns/nscm/admin/lookup/LookupController.java
+@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
+ 
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.LoginUser;
+-import com.lgcns.nscm.framework.annotation.SystemLog;
+-import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
+ import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseController;
+ import com.lgcns.nscm.framework.exception.BusinessException;
+@@ -45,7 +43,8 @@ public class LookupController extends BaseController {
+ 
+ 	private final LookupService lookupService;
+ 
+-	@SystemLog(LogType.LOOKUP)
++	// lookup 조회도 combo 와 동일하게 화면 진입/다건 조회로 고빈도이고 menu/button 식별이 안 되어
++	// 로그가 노이즈로 과도하게 쌓이므로 @SystemLog는 적용하지 않는다.
+ 	@Operation(summary = "lookup 테이블 조회", description = "lookup 데이터를 조회합니다."
+ 			+ "\r\n데이터 샘플 {\r\n"
+ 			+ "  \"lookupType\": \"INPUT_TP_CD\"\r\n"
+@@ -60,7 +59,7 @@ public class LookupController extends BaseController {
+         return successResponseEntity(result);
+     }
+ 
+-	@SystemLog(LogType.LOOKUP)
++	// 위 lookup 과 동일 사유로 @SystemLog 미적용.
+ 	@Operation(summary = "lookup 테이블 조회", description = "다건의 lookup 데이터를 조회합니다."
+ 			+ "\r\n데이터 샘플 {\r\n"
+ 			+ "  \"lookupType\": \"INPUT_TP_CD,MNU_TP_CD\"\r\n"
+@@ -73,7 +72,8 @@ public class LookupController extends BaseController {
+         return successResponseEntity(lookupService.retrieveLookup(params));
+     }
+ 
+-	@SystemLog(LogType.COMBO)
++	// 콤보 조회는 화면 진입/필터 변경마다 고빈도로 발생하고 menu/button 식별도 안 되어
++	// 로그가 노이즈로 과도하게 쌓이므로 @SystemLog는 적용하지 않는다.
+ 	@Operation(summary = "combo용 다이나믹 쿼리 데이터 조회", description = "combo 데이터를 조회합니다."
+ 			+ "\r\n데이터 샘플 {\r\n"
+ 			+ "  \"comboId\": \"MyDivision\"\r\n"
+@@ -86,7 +86,7 @@ public class LookupController extends BaseController {
+         return successResponseEntity(result);
+     }
+ 
+-	@SystemLog(LogType.COMBO)
++	// 위 combo 와 동일 사유로 @SystemLog 미적용.
+ 	@Operation(summary = "combo용 다이나믹 쿼리 데이터 조회", description = "다건의 combo 데이터를 조회합니다."
+ 			+ "\r\n데이터 샘플  { \"comboList\": [{\"comboId\": \"MyDivision\"}, {\"comboId\": \"Company\"},  { \"comboId\": \"SystemLookup\", \"lookupType\":\"'MNU_TP_CD'\" }] }")
+ 	@PostMapping(value="combo-muti", produces = "application/json; charset=UTF-8")
+diff --git a/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
+index a678661..938d5de 100644
+--- a/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
+@@ -77,8 +77,15 @@ public class LookupServiceImpl extends BaseService implements LookupService {
+ 
+ 		params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
+ 		params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++		// mnuId 는 FE 가 raw 로 보내므로 @sesUserId 처럼 여기서 홑따옴표를 붙인다. 미전달/빈 값은 건드리지
++		//   않아 makeComboQuery 가 '' 로 치환하게 두고, 이미 인용된 값(구 화면 quoteParam)은 그대로 둔다.
++		if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
+ 		String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT)).get(0).get("SQL_DTL_CTN").toString(), params);
+ 		queryMap.put("sQuery", query);
++		// 길이가 4,000자(리터럴)·999개(함수 인자)를 넘길 수 있는 파라미터는 @ 치환 대신 #{} 바인드로
++		//   받는다. 콤보 본문이 #{endCustomer} 를 쓰면 execStmt 의 ${sQuery} 가 펼친 뒤 MyBatis 가
++		//   그 #{} 를 바인드로 잡는다. FE 가 홑따옴표로 감싸 보낸 값은 벗겨 raw 로 바인드한다.
++		if (!NullUtils.isNone(params.get("endCustomer"))) queryMap.put("endCustomer", unquote(params.get("endCustomer")));
+ 		result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
+ 
+ 		return result;
+@@ -98,16 +105,45 @@ public class LookupServiceImpl extends BaseService implements LookupService {
+ 			if(NullUtils.isNone(queryMap)) throw new BusinessException("Query is not exist.");
+ 
+ 			params.put("userId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
++			params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
+ 			params.put("langCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++			params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
++			if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
+ 			String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT))
+ 										.get(0).get("SQL_DTL_CTN").toString()
+ 										, params);
+ 			queryMap.put("sQuery", query);
++			if (!NullUtils.isNone(params.get("endCustomer"))) queryMap.put("endCustomer", unquote(params.get("endCustomer")));
+ 			result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
+ 		}
+ 		return result;
+ 	}
+ 
++	/**
++	 * makeComboQuery 의 @키 는 bind 가 아니라 raw 문자열 치환이라, 문자열 값은 홑따옴표로 감싸야 SQL
++	 * 리터럴이 된다(@sesUserId 와 동일 규약). 이미 홑따옴표로 감싼 값은 그대로 둔다 — 이중 인용 방지.
++	 * @MethodName : quoteLiteral
++	 * @param      : value 감쌀 값(호출부에서 null/공백 여부는 미리 거른다)
++	 * @return     : String 홑따옴표로 감싼 리터럴
++	 */
++	private String quoteLiteral(Object value) {
++		String v = value.toString().trim();
++		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'")) ? v : "'" + v + "'";
++	}
+ 
++	/**
++	 * quoteComboValue(FE)/quoteLiteral 의 역 - #{} 바인드로 넘길 raw 값을 만든다. 겉 홑따옴표 한 겹을
++	 * 벗기고, 내부에서 '' 로 이스케이프된 홑따옴표는 ' 로 되돌린다. 안 벗기면 바인드 값에 따옴표가
++	 * 섞여 조건이 어긋난다(오류 없이 결과만 달라짐).
++	 * @MethodName : unquote
++	 * @param      : value 벗길 값(호출부에서 null/공백 여부는 미리 거른다)
++	 * @return     : String 홑따옴표를 벗긴 raw 값
++	 */
++	private String unquote(Object value) {
++		String v = value.toString().trim();
++		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'"))
++				? v.substring(1, v.length() - 1).replace("''", "'")
++				: v;
++	}
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
+index 8832ec6..f95aea4 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
+@@ -1,6 +1,7 @@
+ package com.lgcns.nscm.admin.menu;
+ 
+ import java.util.List;
++import java.util.Map;
+ 
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.security.access.AccessDeniedException;
+@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RestController;
+ 
+ import com.lgcns.nscm.admin.auth.AuthService;
++import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
+ import com.lgcns.nscm.admin.auth.dto.UnitDto;
+ import com.lgcns.nscm.admin.menu.dto.ColumnRetrieveRequest;
+ import com.lgcns.nscm.admin.menu.dto.FavoriteRequest;
+@@ -23,6 +25,8 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuAuthDto;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
++import com.lgcns.nscm.admin.menu.dto.TitleSetRetrieveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.LoginUser;
+ import com.lgcns.nscm.framework.base.BaseController;
+@@ -64,9 +68,13 @@ public class MenuController extends BaseController {
+     public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
+ 
+ 		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId);
++		List<MnuBtnAuthSheet> mnuBtnAuthSheets = authService.retrieveMenuBtnAuthSheets(userSession.getUserId(), mnuId);
++		List<MnuBtnAuthSheet> mnuBtnDefs = authService.retrieveMenuBtnDefs(mnuId);
+ 		List<UnitDto> unitAuth = authService.retrieveUnitAuth(userSession.getUserId(), mnuId);
+ 		MenuAuthDto mnuAuthDto = MenuAuthDto.builder()
+ 			.mnuBtnAuth(mnuBtnAuth)
++			.mnuBtnAuthSheets(mnuBtnAuthSheets)
++			.mnuBtnDefs(mnuBtnDefs)
+ 			.unitAuth(unitAuth)
+ 			.build();
+ 
+@@ -113,6 +121,18 @@ public class MenuController extends BaseController {
+ 		return successResponseEntity();
+ 	}
+ 
++	@Operation(summary = "컬럼 개인화 저장", description = "공용 Column 팝업의 컬럼 표시/순서/폭/색을 저장합니다.")
++	@PostMapping(value="/admin/menu/{mnuId}/titleset", produces = "application/json; charset=UTF-8")
++	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> saveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSaveRequest dto) throws Exception {
++		return successResponseEntity(menuService.saveTitleSet(userSession.getUserId(), mnuId, dto));
++	}
++
++	@Operation(summary = "컬럼 개인화 조회", description = "공용 Column 팝업이 저장한 컬럼 표시/순서/폭/색을 조회합니다.")
++	@PostMapping(value="/admin/menu/{mnuId}/titleset/search", produces = "application/json; charset=UTF-8")
++	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> retrieveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetRetrieveRequest dto) throws Exception {
++		return successResponseEntity(menuService.retrieveTitleSet(userSession.getUserId(), mnuId, dto));
++	}
++
+ 	@Operation(summary = "검색조건 초기화", description = "검색조건을 초기화합니다.")
+ 	@PostMapping(value="/admin/menu/{mnuId}/search-conditions/reset", produces = "application/json; charset=UTF-8")
+ 	public ResponseEntity<BaseResponse<Void>> resetSearchConditions(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
+index f844122..a364992 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
+@@ -1,11 +1,14 @@
+ package com.lgcns.nscm.admin.menu;
+ 
+ import java.util.List;
++import java.util.Map;
+ 
+ import com.lgcns.nscm.admin.menu.dto.GridColumn;
+ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
++import com.lgcns.nscm.admin.menu.dto.TitleSetRetrieveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
+ 
+ public interface MenuService {
+ 
+@@ -17,5 +20,7 @@ public interface MenuService {
+ 	List<SearchCondition> retrieveSearchCondition(String userId, String mnuId) throws Exception;
+ 	void saveSearchCondition(String userId, String mnuId, List<SearchCondition> searchConditions) throws Exception;
+ 	void resetSearchCondition(String userId, String mnuId) throws Exception;
++	List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception;
++	List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetRetrieveRequest request) throws Exception;
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
+index e61320e..ba1fe7f 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
+@@ -18,7 +18,10 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+ import com.lgcns.nscm.admin.menu.dto.SearchConditionForDB;
++import com.lgcns.nscm.admin.menu.dto.TitleSetRetrieveRequest;
++import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
+ import com.lgcns.nscm.framework.base.BaseService;
++import com.lgcns.nscm.framework.property.CommonProperties;
+ import com.lgcns.nscm.framework.security.CustomUserDetails;
+ 
+ import lombok.RequiredArgsConstructor;
+@@ -31,11 +34,14 @@ public class MenuServiceImpl extends BaseService implements MenuService {
+ 
+ 	private final String nameSpace = "admin.menu.";
+ 
++	private final CommonProperties commonProperties;
++
+ 	@Override
+ 	public List<MenuDto> retrieveMenus(String userId) throws Exception {
+ 
+ 		Map<String, Object> params = new HashMap<String, Object>();
+ 		params.put("userId", userId);
++		params.put("systemCd", commonProperties.getSystemCd());
+ 
+ 		Map<String, Object> result = selectList(nameSpace + "retrieveMenus", params);
+ 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
+@@ -137,4 +143,63 @@ public class MenuServiceImpl extends BaseService implements MenuService {
+ 
+ 		return;
+ 	}
++
++	/**
++	 * 컬럼 개인화(titleSet) 저장 — 공용 Column 팝업 전용.
++	 *
++	 * <p>프로시저가 programId/sheetName 을 인자로 받아 메뉴 종속이 없으므로, 화면마다
++	 * SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SAVE') 를 등록하는 대신 고정 매핑을 쓴다.
++	 * programId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
++	 *
++	 * <p>반환값 = 프로시저 첫 OUT 커서 행. 호출측(FE)이 기존과 동일하게 CODE 로 성공 여부를 판정한다.
++	 */
++	@SuppressWarnings("unchecked")
++	@Override
++	public List<Map<String, Object>> saveTitleSet(String userId, String mnuId, TitleSetSaveRequest request) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("programId", mnuId);
++		params.put("sheetName", request.getSheetName());
++		params.put("columnType", request.getColumnType());
++		params.put("activeFlag", request.getActiveFlag());
++		params.put("columnName", request.getColumnName());
++		params.put("sortOrderNo", request.getSortOrderNo());
++		params.put("subTotalFlag", request.getSubTotalFlag());
++		params.put("sortMethodCode", request.getSortMethodCode());
++		params.put("sesUserId", userId);
++		params.put("columnWidth", request.getColumnWidth());
++		params.put("cellColor", request.getCellColor());
++		params.put("textColor", request.getTextColor());
++
++		Map<String, Object> result = selectList(nameSpace + "saveTitleSet", params);
++
++		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
++	}
++
++	/**
++	 * 컬럼 개인화(titleSet) 조회 — 공용 Column 팝업 전용. {@link #saveTitleSet} 과 대칭.
++	 *
++	 * <p>DMF0002_GET_TITLESET_POPUP 은 programId/sheetName 을 인자로 받아 메뉴 종속이 없으므로,
++	 * 화면마다 SCM_ADM_MNU_BTN_MPG_M 에 (MNU_ID, 'titleSet', 'SEARCH') 를 등록하는 대신 고정 매핑을 쓴다.
++	 * programId/mnuId 는 path 의 mnuId, P_USER_ID 는 로그인 세션에서 채운다(클라이언트 신뢰 금지).
++	 *
++	 * <p>반환값 = O_CURSOR 행 목록. 커서가 하나뿐이라 호출측은 배열을 그대로 받는다
++	 * (call-proc 경로에서 화면마다 o_rc1 / o_cursor 로 갈리던 별칭 불일치가 여기서 사라진다).
++	 */
++	@SuppressWarnings("unchecked")
++	@Override
++	public List<Map<String, Object>> retrieveTitleSet(String userId, String mnuId, TitleSetRetrieveRequest request) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("programId", mnuId);
++		params.put("sheetName", request.getSheetName());
++		params.put("columnType", request.getColumnType());
++		params.put("sesUserId", userId);
++		params.put("divisionId", request.getDivisionId());
++		params.put("mnuId", mnuId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveTitleSet", params);
++
++		return (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
++	}
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/dto/GridColumn.java b/src/main/java/com/lgcns/nscm/admin/menu/dto/GridColumn.java
+index c54d947..b24f068 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/dto/GridColumn.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/dto/GridColumn.java
+@@ -28,6 +28,7 @@ public class GridColumn {
+     private String horzAlgnCd;
+ 
+     private BigDecimal scale;
++    private BigDecimal dataMaxLength;
+     private BigDecimal colWth;
+ 
+     private boolean fixed;
+@@ -59,6 +60,7 @@ public class GridColumn {
+     		.inputTpCd((String) data.get("INPUT_TP_CD"))
+     		.horzAlgnCd((String) data.get("HORIZONTAL_ALIGN_CODE"))
+ 		.scale((BigDecimal) data.get("DATA_SCALE_NUMBER"))
++    		.dataMaxLength((BigDecimal) data.get("DATA_MAX_LENGTH"))
+     		.colWth((BigDecimal) data.get("COLUMN_WIDTH"))
+     		.fixed(data.get("FIXED_FLAG").equals("Y") ? true : false)
+     		.uppercase(data.get("UPPERCASE_APPLY_FLAG").equals("Y") ? true : false)
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/dto/GridMeasure.java b/src/main/java/com/lgcns/nscm/admin/menu/dto/GridMeasure.java
+index 2bcc10e..c8cfe1d 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/dto/GridMeasure.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/dto/GridMeasure.java
+@@ -26,6 +26,8 @@ public class GridMeasure {
+ 
+     private boolean display;
+ 
++    private boolean defaultFlag;
++
+     private String attribute1;
+     private String attribute2;
+     private String attribute3;
+@@ -45,6 +47,7 @@ public class GridMeasure {
+     		.lClsLblNm((String) data.get("LARGE_CLASS_LABEL_NAME"))
+     		.personalizable(data.get("USER_SELECTABLE_FLAG").equals("Y") ? true : false)
+     		.display(data.get("DISPLAY_FLAG").equals("Y") ? true : false)
++            .defaultFlag(data.get("DEFAULT_FLAG").equals("Y") ? true : false)
+     		.attribute1((String) data.get("ATTRIBUTE1"))
+     		.attribute2((String) data.get("ATTRIBUTE2"))
+     		.attribute3((String) data.get("ATTRIBUTE3"))
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuAuthDto.java b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuAuthDto.java
+index 4595f7e..b9b3470 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuAuthDto.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuAuthDto.java
+@@ -2,6 +2,7 @@ package com.lgcns.nscm.admin.menu.dto;
+ 
+ import java.util.List;
+ 
++import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
+ import com.lgcns.nscm.admin.auth.dto.UnitDto;
+ 
+ import lombok.AllArgsConstructor;
+@@ -13,5 +14,11 @@ import lombok.Getter;
+ @AllArgsConstructor
+ public class MenuAuthDto {
+     private List<String> mnuBtnAuth;
++    // 시트 단위 버튼 권한 (SHT_NM, MNU_BTN_CD). 그리드 편집가부를 시트 단위 SAVE 권한으로 잠그는
++    //   FE 용 추가 필드 — 기존 mnuBtnAuth(메뉴 단위 버튼 노출)는 그대로 둔다.
++    private List<MnuBtnAuthSheet> mnuBtnAuthSheets;
++    // 이 메뉴에 "정의된" 버튼 전체 (사용자 무관, SCM_ADM_MNU_BTN_MPG_M). 그리드 자동 SAVE 잠금의
++    //   saveDefined 판정용 — SAVE 미부여가 (A)권한없음인지 (B)화면에 SAVE 정의 자체가 없음(EXECUTE 저장)인지 가른다.
++    private List<MnuBtnAuthSheet> mnuBtnDefs;
+     private List<UnitDto> unitAuth;
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
+index 41c90ed..2b9655c 100644
+--- a/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
++++ b/src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
+@@ -21,6 +21,7 @@ public class MenuDto {
+     private String mnuId;
+     private String upprMnuId;
+     private String mnuUrl;
++    private String routePath;
+     private String mnuMsgId;
+     private String mnuDesc;
+     private BigDecimal sortOrd;
+@@ -37,6 +38,7 @@ public class MenuDto {
+     		.mnuId((String) data.get("MNU_ID"))
+     		.upprMnuId((String) data.get("UPPR_MNU_ID"))
+     		.mnuUrl((String) data.get("MNU_URL"))
++            .routePath((String) data.get("ROUTE_PATH"))
+     		.mnuMsgId((String) data.get("MNU_MSG_ID"))
+     		.mnuDesc((String) data.get("MNU_DESC"))
+     		.sortOrd((BigDecimal) data.get("SORT_ORD"))
+diff --git a/src/main/java/com/lgcns/nscm/admin/message/MessageController.java b/src/main/java/com/lgcns/nscm/admin/message/MessageController.java
+index 6eb8c37..8a81ac9 100644
+--- a/src/main/java/com/lgcns/nscm/admin/message/MessageController.java
++++ b/src/main/java/com/lgcns/nscm/admin/message/MessageController.java
+@@ -3,8 +3,10 @@ package com.lgcns.nscm.admin.message;
+ import java.util.List;
+ 
+ import org.springframework.http.ResponseEntity;
++import org.springframework.util.StringUtils;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.RequestMapping;
++import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.RestController;
+ 
+ import com.lgcns.nscm.admin.message.dto.MessageDto;
+@@ -61,16 +63,23 @@ public class MessageController extends BaseController {
+ 	 * @author     : story55
+ 	 * @date       : 2026. 2. 5.
+ 	 * @param      : @param userSession
++	 * @param      : @param langCd 요청 언어코드(FE i18next 가 로드할 언어 버킷). 비어 있으면 세션 langCd 로 폴백.
+ 	 * @param      : @return
+ 	 * @param      : @throws Exception
+ 	 * @return     : ResponseEntity<BaseResponse<List<MessageDto>>>
+ 	 */
+-	@Operation(summary = "다국어 메시지 조회", description = "언어코드에 따른 다국어 메시지를 조회합니다.")
++	@Operation(summary = "다국어 메시지 조회", description = "요청 langCd(없으면 세션 langCd)에 따른 다국어 메시지를 조회합니다.")
+ 	@AuthCheck(Type.NONE)
+ 	@GetMapping(value="", produces = "application/json; charset=UTF-8")
+-    public ResponseEntity<BaseResponse<List<MessageDto>>> retrieveMessage(@LoginUser UserSession userSession) throws Exception {
+-		log.info("userSession.LANG_CD : " + userSession.getLangCd());
+-        return successResponseEntity(messageService.retrieveMessages(userSession.getLangCd()));
++    public ResponseEntity<BaseResponse<List<MessageDto>>> retrieveMessage(
++            @LoginUser UserSession userSession,
++            @RequestParam(value = "langCd", required = false) String langCd) throws Exception {
++        // 요청 언어 우선 — i18next 가 채우는 언어 버킷과 응답 언어를 일치시킨다. 세션 langCd 로만 응답하면
++        //   i18next 언어 버킷 캐시와 어긋나 "KOR 표시 + 다른 언어 메시지" desync 가 발생한다(공통 i18n 결함).
++        //   파라미터가 없을 때만(로그인 전 등) 세션 langCd 로 폴백한다.
++        String effectiveLangCd = StringUtils.hasText(langCd) ? langCd : userSession.getLangCd();
++        log.info("retrieveMessage langCd(param)={}, session={}, effective={}", langCd, userSession.getLangCd(), effectiveLangCd);
++        return successResponseEntity(messageService.retrieveMessages(effectiveLangCd));
+     }
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/test/TestController.java b/src/main/java/com/lgcns/nscm/admin/test/TestController.java
+index 8e44ec5..27f9149 100644
+--- a/src/main/java/com/lgcns/nscm/admin/test/TestController.java
++++ b/src/main/java/com/lgcns/nscm/admin/test/TestController.java
+@@ -52,7 +52,7 @@ public class TestController extends BaseController {
+     @GetMapping("/health-check")
+     public ResponseEntity healthCheck(@RequestHeader(value = "X-Request-ID", required = false) String requestId) throws Exception {
+ 		log.info("X-Request-ID : {}", requestId);
+-		return successResponseEntity((Object) "API is Listening!");
++		return successResponseEntity((Object) "API is Listening!!");
+     }
+ 
+ 	@Operation(summary = "단건 조회", description = "단건 조회")
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/SsoController.java b/src/main/java/com/lgcns/nscm/admin/user/SsoController.java
+index 906c55f..b134cbc 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/SsoController.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/SsoController.java
+@@ -1,105 +1,140 @@
+-// 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+-
+-// package com.lgcns.nscm.admin.user;
+-
+-// import java.io.IOException;
+-
+-// import org.springframework.beans.factory.annotation.Value;
+-// import org.springframework.stereotype.Controller;
+-// import org.springframework.web.bind.annotation.GetMapping;
+-// import org.springframework.web.bind.annotation.RequestMapping;
+-// import org.springframework.web.bind.annotation.RestController;
+-
+-// import com.initech.eam.jakarta.nls.CookieManager;
+-// import com.initech.eam.smartenforcer.SECode;
+-// import com.lgcns.nscm.admin.auth.AuthService;
+-// import com.lgcns.nscm.admin.menu.MenuController;
+-// import com.lgcns.nscm.admin.menu.MenuService;
+-// import com.lgcns.nscm.framework.annotation.AuthCheck;
+-// import com.lgcns.nscm.framework.annotation.AuthCheck.Type;
+-// import com.lgcns.nscm.framework.property.CommonProperties;
+-// import com.lgcns.nscm.framework.security.SsoService;
+-// import com.lgcns.nscm.general.GeneralService;
+-
+-// import io.swagger.v3.oas.annotations.tags.Tag;
+-// import jakarta.servlet.http.HttpServletRequest;
+-// import jakarta.servlet.http.HttpServletResponse;
+-// import jakarta.servlet.http.HttpSession;
+-// import lombok.RequiredArgsConstructor;
+-// import lombok.extern.slf4j.Slf4j;
+-
+-// @Slf4j
+-// @Controller
+-// @RequestMapping
+-// @Tag(name = "0. SSO")
+-// @RequiredArgsConstructor
+-// public class SsoController {
+-
+-//     private final SsoService ssoService;
+-//     private final CommonProperties properties;
+-// //    private final SessionService sessionService;
+-
+-// //    @Value("${domain.be}")
+-// //    private String DOMAIN_BE;
+-// //    @Value("${domain.fe}")
+-// //    private String DOMAIN_FE;
+-// //    private String REDIRECT_SUFFIX = "api/v1/sso/login_exec";
+-
+-// //    @GetMapping(value = "/v1/sso/redirect-url", produces = MediaType.APPLICATION_JSON_VALUE)
+-// //    public ResponseEntity<CommonResponseVO> ssoRedirectUrl(HttpServletRequest request, HttpServletResponse response)
+-// //            throws Exception {
+-// //        String redirectUrl = DOMAIN_BE + REDIRECT_SUFFIX;
+-// //        return new ResponseEntity<>(
+-// //                CommonResponseVO.builder()
+-// //                        .successOrNot(CommonConstants.YES_FLAG)
+-// //                        .statusCode(StatusCodeConstants.SUCCESS)
+-// //                        .data(redirectUrl)
+-// //                        .build(),
+-// //                HttpStatus.OK);
+-// //    }
+-
+-//     @AuthCheck(Type.NONE)
+-//     @GetMapping("/sso/login")
+-//     public void loginExec(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+-
+-//         System.out.println("=== Request ===");
+-//         System.out.println(request.toString());
+-//         System.out.println("=== Response ===");
+-//         System.out.println(response.toString());
+-//         System.out.println("=== Session ===");
+-//         System.out.println(session.toString());
+-
+-//         String ssoId = ssoService.getSsoId(request);
+-//         System.out.println("[login_exec] sso_id = " + ssoId);
+-
+-//         if (ssoId == null || ssoId.isEmpty()) {
+-//             ssoService.goLoginPage(request, response);
+-//             return;
+-//         }
+-
+-// //        String retCode = ssoService.getEamSessionCheck(request, response);
+-// //        System.out.println("[login_exec] retCode = " + retCode);
+-// //
+-// //        if (!"0".equals(retCode)) {
+-// //            ssoService.goErrorPage(response, Integer.parseInt(retCode));
+-// //            return;
+-// //        }
+-// //
+-// //        String eamId = (String) session.getAttribute("SSO_ID");
+-// //        if (eamId == null || eamId.isEmpty()) {
+-// //            session.setAttribute("SSO_ID", ssoId);
+-// //        }
+-// //
+-// //        System.out.println("SSO Success");
+-
+-//         return;
+-
+-// //        String ip1 = NetworkUtil.getClientIP(request);
+-// //        String ip2 = CookieManager.getCookieValue(SECode.USER_IP, request);
+-// //        System.out.println("NetworkUtil.getClientIP(request): " + ip1);
+-// //        System.out.println("CookieManager.getCookieValue(SECode.USER_IP, request): " + ip2);
+-// //        UserSessionVO userSession = sessionService.createUserSession(ssoId, "en", ip1);
+-// //        session.setAttribute(CommonConstants.HTTP_SESSION_KEY, userSession);
+-// //        response.sendRedirect(DOMAIN_FE);
+-//     }
+-// }
++package com.lgcns.nscm.admin.user;
++
++import java.io.IOException;
++import java.sql.Timestamp;
++import java.util.HashMap;
++import java.util.Map;
++
++import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++import org.springframework.security.core.Authentication;
++import org.springframework.security.core.context.SecurityContext;
++import org.springframework.security.core.context.SecurityContextHolder;
++import org.springframework.security.core.userdetails.UserDetails;
++import org.springframework.security.core.userdetails.UsernameNotFoundException;
++import org.springframework.security.web.context.SecurityContextRepository;
++import org.springframework.stereotype.Controller;
++import org.springframework.web.bind.annotation.GetMapping;
++
++import com.github.f4b6a3.ulid.UlidCreator;
++import com.lgcns.nscm.framework.interceptor.LogInterceptor;
++import com.lgcns.nscm.framework.property.CommonProperties;
++import com.lgcns.nscm.framework.security.CustomUserDetailsService;
++import com.lgcns.nscm.framework.security.SsoService;
++import com.lgcns.nscm.framework.utils.SecurityUtil;
++
++import io.swagger.v3.oas.annotations.tags.Tag;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import lombok.RequiredArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
++
++/**
++ * SSO 진입점. SSO 포탈 인증 사용자를 Spring Security 세션으로 로그인 처리 후 FE로 redirect.
++ * 플로우: SSO ID 조회 → 쿠키 검증 → 사용자 조회 → SecurityContext 세션 저장 → FE redirect
++ */
++@Slf4j
++@Controller
++@Tag(name = "0. SSO")
++@RequiredArgsConstructor
++public class SsoController {
++
++    /** 사용자 조회 실패(쿠키검증 통과 후 DB 오류 등) 에러코드. 미등록 사용자는 게스트로 로그인되므로 여기 해당하지 않는다. */
++    static final int ERROR_CODE_USER_NOT_FOUND = 999;
++
++    private final SsoService ssoService;
++    private final CustomUserDetailsService userDetailsService;
++    private final SecurityContextRepository securityContextRepository;
++    private final CommonProperties properties;
++    private final LogInterceptor logInterceptor;
++    private final UserService userService;
++
++    /** SSO Agent 표준 진입 URL (config.sso.ascp-url-suffix와 일치해야 함) */
++    @GetMapping("/sso/login_exec")
++    public void loginExec(HttpServletRequest request, HttpServletResponse response) throws IOException {
++
++        // 1. Nexess 쿠키에서 SSO ID 조회 — 없으면 SSO 로그인 페이지로
++        String ssoId = ssoService.getSsoId(request);
++        if (ssoId == null || ssoId.isEmpty()) {
++            ssoService.goLoginPage(response);
++            return;
++        }
++
++        // 2. 쿠키 유효성 검증 — 실패 시 SSO 에러 페이지로
++        String retCode = ssoService.verifySession(request, response);
++        if (!SsoService.RET_CODE_SUCCESS.equals(retCode)) {
++            log.warn("SSO 쿠키 검증 실패. ssoId={}, retCode={}", ssoId, retCode);
++            ssoService.goErrorPage(response, parseRetCode(retCode));
++            return;
++        }
++
++        // 3. NSCM 사용자 조회 — 미등록자는 loadUserByUsername이 게스트로 폴백 로그인시킴.
++        //    여기 예외는 조회 실패(DB 오류 등)만 해당한다.
++        UserDetails userDetails;
++        try {
++            userDetails = userDetailsService.loadUserByUsername(ssoId);
++        } catch (UsernameNotFoundException e) {
++            log.warn("SSO 사용자 조회 실패. ssoId={}", ssoId);
++            ssoService.goErrorPage(response, ERROR_CODE_USER_NOT_FOUND);
++            return;
++        }
++
++        // 4. Spring Security 인증 컨텍스트를 세션에 저장 (/user/login과 동일한 세션 상태)
++        Authentication authentication =
++                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
++        SecurityContext context = SecurityContextHolder.createEmptyContext();
++        context.setAuthentication(authentication);
++        SecurityContextHolder.setContext(context);
++        securityContextRepository.saveContext(context, request, response);
++
++        // SSO 는 JsonLoginFilter/LoginSuccessHandler 를 거치지 않아 @SystemLog(LOGIN) 가 안 탄다.
++        // 폼 로그인과 동일하게 SCM_COM_SYS_LOG 에 LOGIN 로그를 직접 적재한다.
++        recordLoginLog(request, authentication);
++
++        // 폼 로그인(LoginSuccessHandler)과 동일하게 최종 로그인 일시를 기록한다. 실패해도 로그인을 막지 않는다.
++        try {
++            userService.updateLognDtm(ssoId);
++        } catch (Exception e) {
++            log.warn("SSO LOGN_DTM 갱신 실패. {}", e.getMessage());
++        }
++
++        log.info("SSO 로그인 성공. userId={}", ssoId);
++
++        // 5. FE로 이동
++        response.sendRedirect(properties.getDomain().getFe());
++    }
++
++    /**
++     * SSO 로그인 성공 시스템 로그 적재. SystemLogAspect 의 LOGIN 분기와 동일한 logParam 구성.
++     * insertSystemLog 는 @Async + 내부 try/catch 이며, logParam 구성 실패도 로그인을 막지 않도록 감싼다.
++     */
++    private void recordLoginLog(HttpServletRequest request, Authentication authentication) {
++        try {
++            Timestamp ts = new Timestamp(System.currentTimeMillis());
++            Map<String, Object> logParam = new HashMap<>();
++            logParam.put("traceId", UlidCreator.getUlid().toString());
++            logParam.put("userId", SecurityUtil.getUserSession(authentication).getUserId());
++            logParam.put("typeCd", "LOGIN");
++            logParam.put("requestUrl", "LOGIN");
++            logParam.put("clientIp", logInterceptor.getClientIp(request));
++            logParam.put("menuId", "LOGIN");
++            logParam.put("buttonCd", "LOGIN");
++            logParam.put("clientStTm", ts);
++            logParam.put("serverStTm", ts);
++            logParam.put("sqlStTm", ts);
++            logParam.put("sqlEdTm", ts);
++            logParam.put("serverEdTm", ts);
++            logParam.put("clientEdTm", ts);
++            logInterceptor.insertSystemLog(logParam);
++        } catch (Exception e) {
++            log.warn("SSO 로그인 로그 적재 실패. {}", e.getMessage());
++        }
++    }
++
++    private int parseRetCode(String retCode) {
++        try {
++            return Integer.parseInt(retCode);
++        } catch (NumberFormatException e) {
++            return -1;
++        }
++    }
++}
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/User.java b/src/main/java/com/lgcns/nscm/admin/user/User.java
+index 2fdb917..df8c502 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/User.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/User.java
+@@ -17,6 +17,7 @@ public class User {
+ 	private String userNm;
+ 	private String userEngNm;
+ 	private String langCd;
++	private String tmzCd;
+ 
+ 	public static User of(Map<String, Object> data) {
+ 		return User.builder()
+@@ -25,6 +26,7 @@ public class User {
+ 			.userNm((String) data.get("USER_NM"))
+ 			.userEngNm((String) data.get("USER_ENG_NM"))
+ 			.langCd((String) data.get("LANG_CD"))
++			.tmzCd((String) data.get("TMZ_CD"))
+ 			.build();
+ 	}
+ 
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/UserController.java b/src/main/java/com/lgcns/nscm/admin/user/UserController.java
+index 64ba29c..98ba736 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/UserController.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/UserController.java
+@@ -1,19 +1,26 @@
+ package com.lgcns.nscm.admin.user;
+ 
+ import java.sql.SQLException;
++import java.util.List;
++import java.util.Map;
+ 
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+ import org.springframework.security.core.Authentication;
+ import org.springframework.security.core.context.SecurityContextHolder;
+ import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.PathVariable;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RestController;
+ 
++import com.lgcns.nscm.admin.menu.MenuService;
++import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.user.dto.LangCdRequest;
+ import com.lgcns.nscm.admin.user.dto.LoginRequest;
++import com.lgcns.nscm.admin.user.dto.TmzCdRequest;
+ import com.lgcns.nscm.framework.annotation.LoginUser;
++import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseController;
+ import com.lgcns.nscm.framework.model.BaseResponse;
+ import com.lgcns.nscm.framework.security.CustomUserDetails;
+@@ -21,20 +28,44 @@ import com.lgcns.nscm.framework.security.CustomUserDetails;
+ import io.swagger.v3.oas.annotations.Operation;
+ import io.swagger.v3.oas.annotations.tags.Tag;
+ import lombok.RequiredArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
+ 
++@Slf4j
+ @Tag(name = "0. 로그인 관리")
+ @RestController
+ @RequiredArgsConstructor
+ public class UserController extends BaseController {
+ 
+ 	private final UserService userService;
++	private final MenuService menuService;
+ 
+ 	@Operation(summary = "유저 세션 확인", description = "현재 로그인 된 유저 세션 정보를 확인합니다.")
+     @GetMapping("/user/session")
+ 	public ResponseEntity<BaseResponse<UserSession>> getUserSession(@LoginUser UserSession userSession) throws SQLException {
++		// 세션 확인 시마다 메뉴를 DB 에서 재조회해 세션 캐시(CustomUserDetails.menus)를 갱신한다.
++		// 메뉴 관리(Active 등)·권한 변경분이 재로그인 없이 새로고침으로 반영되도록 하기 위함이다.
++		// 조회 실패 시에는 로그인 시점 캐시를 그대로 반환한다 — 세션 확인 자체가 DB 오류로
++		// 로그아웃(FE fetchSession 실패 처리)을 유발하지 않게 한다.
++		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
++		if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
++			try {
++				List<MenuDto> menus = menuService.retrieveMenus(
++					userDetails.isGuest() ? BaseConstants.GUEST_USER_ID : userDetails.getUserId());
++				userDetails.setMenus(menus);
++				userSession.setMenus(menus);
++			} catch (Exception e) {
++				log.info("session menu refresh exception. userId={}", userSession.getUserId());
++			}
++		}
+ 		return successResponseEntity(userSession);
+ 	}
+ 
++	@Operation(summary = "사용자 소속 그룹 조회", description = "특정 사용자가 속한 그룹(USER_GR_ID/USER_GR_NM) 목록을 조회합니다. USE_YN='Y' 만. 화면 Assign Group 조회용.")
++    @GetMapping("/user/{userId}/groups")
++	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> getUserGroups(@PathVariable String userId) throws Exception {
++		return successResponseEntity(userService.retrieveUserGroupList(userId));
++	}
++
+ 	@Operation(summary = "유저 세션 언어코드 변경", description = "현재 로그인 된 유저 세션의 언어코드를 변경합니다.")
+     @PostMapping("/user/session/lang-cd")
+ 	public ResponseEntity<BaseResponse<Void>> setLangCd(@LoginUser UserSession userSession, @RequestBody LangCdRequest dto) throws Exception {
+@@ -57,6 +88,28 @@ public class UserController extends BaseController {
+ 		return successResponseEntity();
+ 	}
+ 
++	@Operation(summary = "유저 세션 타임존 변경", description = "현재 로그인 된 유저 세션의 타임존(TMZ_CD)을 변경합니다.")
++    @PostMapping("/user/session/tmz-cd")
++	public ResponseEntity<BaseResponse<Void>> setTmzCd(@LoginUser UserSession userSession, @RequestBody TmzCdRequest dto) throws Exception {
++
++		userService.updateTmzCd(userSession.getUserId(), dto.getTmzCd());
++
++		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
++
++		CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
++		userDetails.setTmzCd(dto.getTmzCd()); // 필드값 변경
++
++		Authentication newAuth = new UsernamePasswordAuthenticationToken(
++		    userDetails,
++		    auth.getCredentials(),
++		    auth.getAuthorities()
++		);
++
++		SecurityContextHolder.getContext().setAuthentication(newAuth);
++
++		return successResponseEntity();
++	}
++
+ 	// Spring Security의 JsonLoginFilter가 요청을 가로채기 때문에 이 메서드는 실제 실행되지 않습니다.
+ 	@Operation(summary = "로그인", description = "ID를 이용해 로그인을 진행합니다.")
+     @PostMapping("/user/login")
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/UserService.java b/src/main/java/com/lgcns/nscm/admin/user/UserService.java
+index 08550ff..80be3d3 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/UserService.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/UserService.java
+@@ -1,8 +1,27 @@
+ package com.lgcns.nscm.admin.user;
+ 
++import java.util.List;
++import java.util.Map;
++
+ public interface UserService {
+ 
+ 	User retrieveUser(String userId) throws Exception;
+ 	void updateLangCd(String userId, String langCd) throws Exception;
++	void updateTmzCd(String userId, String tmzCd) throws Exception;
++
++	/** 로그인 성공 시 최종 로그인 일시(SCM_ADM_USER_M.LOGN_DTM) 기록 */
++	void updateLognDtm(String userId) throws Exception;
++
++	/** 사용자가 속한 그룹 권한명(USER_GR_NM) 목록 */
++	List<String> retrieveUserGroups(String userId) throws Exception;
++
++	/** 사용자가 속한 그룹(USER_GR_ID + USER_GR_NM) 목록. USE_YN='Y' 만. 화면 Assign Group 조회용. */
++	List<Map<String, Object>> retrieveUserGroupList(String userId) throws Exception;
++
++	/** 로그인 사용자의 기본 사업부(권한 사업부 중 최상단 1건). 없으면 null. */
++	String retrieveUserDefaultDiv(String userId) throws Exception;
++
++	/** 로그인 사용자의 소속 회사(SCM_MST_SSO_USER_INFO.COMPANY_ID). 없으면 null. */
++	String retrieveUserCompanyId(String userId) throws Exception;
+ 
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/UserServiceImpl.java b/src/main/java/com/lgcns/nscm/admin/user/UserServiceImpl.java
+index 91ce81d..37f05ab 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/UserServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/UserServiceImpl.java
+@@ -2,6 +2,7 @@ package com.lgcns.nscm.admin.user;
+ 
+ import static com.lgcns.nscm.framework.base.BaseConstants.DEFAULT_DATA_RESULT;
+ 
++import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -33,9 +34,96 @@ public class UserServiceImpl extends BaseService implements UserService {
+ 		Map<String, Object> result = selectList(nameSpace + "retrieveUser", params);
+ 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
+ 
++		if (data == null || data.isEmpty()) {
++			return null; // Case 3(빈 커서) → 백엔드가 공유 GUEST 폴백 로그인 처리
++		}
++
+ 		return User.of(data.get(0));
+ 	}
+ 
++	@Override
++	@SuppressWarnings("unchecked")
++	public List<String> retrieveUserGroups(String userId) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveUserGroups", params);
++		List<Object> data = (List<Object>) result.get(DEFAULT_DATA_RESULT);
++
++		List<String> groups = new ArrayList<String>();
++		if (data != null) {
++			for (Object row : data) {
++				if (row == null) continue;
++				// resultType=string 이면 String, 혹시 Map 으로 오면 첫 값 사용
++				if (row instanceof Map) {
++					Object v = ((Map<String, Object>) row).values().stream().findFirst().orElse(null);
++					if (v != null) groups.add(String.valueOf(v));
++				} else {
++					groups.add(String.valueOf(row));
++				}
++			}
++		}
++		return groups;
++	}
++
++	@Override
++	@SuppressWarnings("unchecked")
++	public List<Map<String, Object>> retrieveUserGroupList(String userId) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveUserGroupList", params);
++		List<Map<String, Object>> data = (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
++
++		return data == null ? new ArrayList<Map<String, Object>>() : data;
++	}
++
++	@Override
++	@SuppressWarnings("unchecked")
++	public String retrieveUserDefaultDiv(String userId) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveUserDefaultDiv", params);
++		List<Object> data = (List<Object>) result.get(DEFAULT_DATA_RESULT);
++
++		if (data == null || data.isEmpty()) return null;
++
++		Object row = data.get(0);
++		if (row == null) return null;
++		// resultType=string 이면 String, 혹시 Map 으로 오면 첫 값 사용
++		if (row instanceof Map) {
++			Object v = ((Map<String, Object>) row).values().stream().findFirst().orElse(null);
++			return v == null ? null : String.valueOf(v);
++		}
++		return String.valueOf(row);
++	}
++
++	@Override
++	@SuppressWarnings("unchecked")
++	public String retrieveUserCompanyId(String userId) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++
++		Map<String, Object> result = selectList(nameSpace + "retrieveUserCompanyId", params);
++		List<Object> data = (List<Object>) result.get(DEFAULT_DATA_RESULT);
++
++		if (data == null || data.isEmpty()) return null;
++
++		Object row = data.get(0);
++		if (row == null) return null;
++		// resultType=string 이면 String, 혹시 Map 으로 오면 첫 값 사용
++		if (row instanceof Map) {
++			Object v = ((Map<String, Object>) row).values().stream().findFirst().orElse(null);
++			return v == null ? null : String.valueOf(v);
++		}
++		return String.valueOf(row);
++	}
++
+ 	@Override
+ 	public void updateLangCd(String userId, String langCd) throws Exception {
+ 
+@@ -47,4 +135,27 @@ public class UserServiceImpl extends BaseService implements UserService {
+ 
+ 		return;
+ 	}
++
++	@Override
++	public void updateTmzCd(String userId, String tmzCd) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++		params.put("tmzCd", tmzCd);
++
++		selectList(nameSpace + "updateTmzCd", params);
++
++		return;
++	}
++
++	@Override
++	public void updateLognDtm(String userId) throws Exception {
++
++		Map<String, Object> params = new HashMap<String, Object>();
++		params.put("userId", userId);
++
++		selectList(nameSpace + "updateLognDtm", params);
++
++		return;
++	}
+ }
+diff --git a/src/main/java/com/lgcns/nscm/admin/user/UserSession.java b/src/main/java/com/lgcns/nscm/admin/user/UserSession.java
+index a76053d..ccf9a4b 100644
+--- a/src/main/java/com/lgcns/nscm/admin/user/UserSession.java
++++ b/src/main/java/com/lgcns/nscm/admin/user/UserSession.java
+@@ -23,14 +23,24 @@ public class UserSession implements Serializable {
+ 	private String userNm;
+ 	private String userEngNm;
+ 	private String langCd;
++	private String tmzCd;
+ 	private List<MenuDto> menus;
++	private boolean isGuest;
++	private List<String> groups;
++	private String div;
++	private String companyId;
+ 
+ 	@Builder
+-	public UserSession(String userId, String userNm, String userEngNm, String langCd, List<MenuDto> menus) {
++	public UserSession(String userId, String userNm, String userEngNm, String langCd, String tmzCd, List<MenuDto> menus, boolean isGuest, List<String> groups, String div, String companyId) {
+ 		this.userId = userId;
+ 		this.userNm = userNm;
+ 		this.userEngNm = userEngNm;
+ 		this.langCd = langCd;
++		this.tmzCd = tmzCd;
+ 		this.menus = menus;
++		this.isGuest = isGuest;
++		this.groups = groups;
++		this.div = div;
++		this.companyId = companyId;
+ 	}
+ }
+diff --git a/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java b/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
+index 9a51cbd..371b16d 100644
+--- a/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
++++ b/src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
+@@ -68,9 +68,12 @@ public class SystemLogAspect {
+         Object result = null;
+         try {
+             result = joinPoint.proceed();
+-            String resultJson = toJson(result);
+-            if(bLog) log.info("END: {}.{}() | Result: {} | Time: {}ms",
+-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
++            if(bLog && log.isDebugEnabled()) {
++                String resultJson = toJson(result);
++                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
++                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++            }
+ 
+             return result;
+         } catch (Throwable throwable) {
+@@ -148,9 +151,12 @@ public class SystemLogAspect {
+         try {
+ 
+             result = joinPoint.proceed();
+-            String resultJson = toJson(result);
+-            log.info("END: {}.{}() | Result: {} | Time: {}ms",
+-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++            // 대량 조회 결과의 직렬화 비용을 피하기 위해 debug 레벨이 켜진 경우에만 toJson 수행
++            if(log.isDebugEnabled()) {
++                String resultJson = toJson(result);
++                log.debug("END: {}.{}() | Result: {} | Time: {}ms",
++                        className, methodName, resultJson, (System.currentTimeMillis() - startTime));
++            }
+ 
+             return result;
+         } catch (Throwable throwable) {
+diff --git a/src/main/java/com/lgcns/nscm/framework/base/BaseConstants.java b/src/main/java/com/lgcns/nscm/framework/base/BaseConstants.java
+index 14000e4..4b407bc 100644
+--- a/src/main/java/com/lgcns/nscm/framework/base/BaseConstants.java
++++ b/src/main/java/com/lgcns/nscm/framework/base/BaseConstants.java
+@@ -57,7 +57,14 @@ public class BaseConstants {
+     public static final String BUSINESS_ERROR = "-9995";
+     public static final String BUSINESS_ERROR_MSG = "Business Error";
+ 
++    /** 공유 게스트 계정 ID (미등록 사용자의 메뉴·권한 판정 기준). Oracle 대소문자 구분. */
++    public static final String GUEST_USER_ID = "Guest";
++    public static final String GUEST_GROUP_NM = "GUEST";
++
+     public static final String SQL_ERROR = "-9994";
+     public static final String SQL_ERROR_MSG = "Sql Error";
+ 
++    public static final String INVALID_INPUT = "-9993";
++    public static final String INVALID_INPUT_MSG = "입력값에 허용되지 않는 패턴이 포함되어 있습니다.";
++
+ }
+diff --git a/src/main/java/com/lgcns/nscm/framework/base/BaseService.java b/src/main/java/com/lgcns/nscm/framework/base/BaseService.java
+index c79a723..50c45f5 100644
+--- a/src/main/java/com/lgcns/nscm/framework/base/BaseService.java
++++ b/src/main/java/com/lgcns/nscm/framework/base/BaseService.java
+@@ -4,10 +4,19 @@ import static com.lgcns.nscm.framework.base.BaseConstants.DB_SESIONFACTORY_KEY;
+ import static com.lgcns.nscm.framework.base.BaseConstants.DEFAULT_DATA_RESULT;
+ 
+ import java.io.PrintWriter;
++import java.math.BigDecimal;
++import java.sql.CallableStatement;
++import java.sql.Connection;
++import java.sql.PreparedStatement;
++import java.sql.ResultSet;
++import java.sql.ResultSetMetaData;
++import java.sql.Types;
+ import java.util.ArrayList;
+ import java.util.HashMap;
++import java.util.HashSet;
+ import java.util.List;
+ import java.util.Map;
++import java.util.Set;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
+@@ -15,10 +24,14 @@ import org.apache.ibatis.session.ResultHandler;
+ import org.apache.ibatis.session.SqlSession;
+ import org.springframework.beans.factory.annotation.Autowired;
+ 
++import com.fasterxml.jackson.core.JsonEncoding;
++import com.fasterxml.jackson.core.JsonFactory;
++import com.fasterxml.jackson.core.JsonGenerator;
+ import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.lgcns.nscm.framework.dao.NCommonDAO;
+ import com.lgcns.nscm.framework.exception.SqlException;
++import com.lgcns.nscm.framework.model.CustomMap;
+ import com.lgcns.nscm.framework.utils.MapUtils;
+ 
+ import jakarta.servlet.http.HttpServletResponse;
+@@ -336,6 +349,286 @@ public class BaseService {
+         }
+     }
+ 
++    /**
++     * @MethodName : callProcStream
++     * @Description: 동적 프로시저를 raw JDBC 로 실행하고 OUT 커서를 ResultSet -> JSON 으로
++     *   직접 스트리밍한다. CustomMap 재료화(행 객체 생성)와 별도 Jackson 패스를 건너뛰는 단일 패스 경로.
++     *   응답 형태는 기존 execBtn/callProc(BaseResponse)와 동일:
++     *   { "code":..., "message":..., "result": { "<커서COL_NM>":[..행..], "<스칼라OUT>":val } }
++     *   주의: 기존 callProc/execBtn 공용 경로와 분리된 실험 경로다(공용 경로 무영향).
++     */
++    @SuppressWarnings("unchecked")
++    public void callProcStream(Map<String, Object> params, HttpServletResponse response) throws Exception {
++
++        // 1. 프로시저 메타 (execBtn 과 동일 소스)
++        List<Map<String, Object>> procParam =
++                (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
++
++        // 2. JVARCHAR 처리 (execBtn 과 동일)
++        Set<String> jCols = new HashSet<>();
++        boolean isJvarchar = false;
++        for (Map<String, Object> o : procParam) {
++            if ("JVARCHAR".equals(o.get("DATA_TP_CD"))) { isJvarchar = true; jCols.add((String) o.get("COL_NM")); }
++        }
++        if (isJvarchar) MapUtils.cvtJsonToJVarchar(params, jCols);
++
++        // 3. {call PROC(?, ?, ...)} 생성
++        StringBuilder sb = new StringBuilder("{call ");
++        for (int i = 0; i < procParam.size(); i++) {
++            Map<String, Object> o = procParam.get(i);
++            if (i == 0) sb.append(o.get("PROC_NM").toString()).append("(");
++            else sb.append(", ");
++            sb.append("?");
++        }
++        if (!procParam.isEmpty()) sb.append(")");
++        sb.append("}");
++        String callSql = sb.toString();
++        log.debug("callProcStream: {}", callSql);
++
++        response.setContentType("application/json; charset=UTF-8");
++
++        long t0 = System.currentTimeMillis();
++        int totalRows = 0;
++        SqlSession sqlSession = "".equals(getDb(params)) ? ncommondao.getSqlSession() : ncommondao.getSqlSession(getDb(params));
++        CallableStatement cs = null;
++        try {
++            Connection conn = sqlSession.getConnection();
++            cs = conn.prepareCall(callSql);
++
++            List<Integer> cursorIdx = new ArrayList<>();
++            List<String> cursorKey = new ArrayList<>();
++            List<Integer> scalarIdx = new ArrayList<>();
++            List<String> scalarKey = new ArrayList<>();
++            for (int i = 0; i < procParam.size(); i++) {
++                Map<String, Object> o = procParam.get(i);
++                int idx = i + 1;
++                String colTp = String.valueOf(o.get("COL_TP_CD"));
++                String dataTp = String.valueOf(o.get("DATA_TP_CD"));
++                String colNm = String.valueOf(o.get("COL_NM"));
++                if ("IN".equals(colTp)) {
++                    cs.setObject(idx, params.get(colNm));
++                } else if ("OUT".equals(colTp)) {
++                    if ("CURSOR".equals(dataTp) || "PROC_RESULT".equals(dataTp)) {
++                        cs.registerOutParameter(idx, Types.REF_CURSOR);
++                        cursorIdx.add(idx); cursorKey.add(colNm);
++                    } else {
++                        cs.registerOutParameter(idx, Types.VARCHAR);
++                        scalarIdx.add(idx); scalarKey.add(colNm);
++                    }
++                }
++            }
++
++            cs.execute();
++
++            JsonGenerator gen = new JsonFactory().createGenerator(response.getOutputStream(), JsonEncoding.UTF8);
++            try {
++                gen.writeStartObject();
++                gen.writeStringField("code", BaseConstants.SUCCESS);
++                gen.writeStringField("message", BaseConstants.SUCCESS_MSG);
++                gen.writeFieldName("result");
++                gen.writeStartObject();
++
++                for (int k = 0; k < scalarIdx.size(); k++) {
++                    Object v = cs.getObject(scalarIdx.get(k));
++                    gen.writeStringField(scalarKey.get(k), v == null ? null : String.valueOf(v));
++                }
++                for (int k = 0; k < cursorIdx.size(); k++) {
++                    gen.writeArrayFieldStart(cursorKey.get(k));
++                    ResultSet rs = (ResultSet) cs.getObject(cursorIdx.get(k));
++                    try {
++                        rs.setFetchSize(1000);
++                        ResultSetMetaData md = rs.getMetaData();
++                        int cc = md.getColumnCount();
++                        String[] label = new String[cc + 1];
++                        int[] type = new int[cc + 1];
++                        for (int c = 1; c <= cc; c++) { label[c] = md.getColumnLabel(c); type[c] = md.getColumnType(c); }
++                        while (rs.next()) {
++                            totalRows++;
++                            gen.writeStartObject();
++                            for (int c = 1; c <= cc; c++) {
++                                gen.writeFieldName(label[c]);
++                                writeCell(gen, rs, c, type[c]);
++                            }
++                            gen.writeEndObject();
++                        }
++                    } finally {
++                        if (rs != null) rs.close();
++                    }
++                    gen.writeEndArray();
++                }
++                gen.writeEndObject(); // result
++                gen.writeEndObject(); // root
++                gen.flush();
++            } finally {
++                gen.close();
++            }
++        } catch (Exception e) {
++            log.debug(e.getMessage());
++            throw e;
++        } finally {
++            if (cs != null) try { cs.close(); } catch (Exception ignore) {}
++            sqlSession.close();
++            log.info("callProcStream done: {} ms, rows={}, mnuId={}, shtNm={}, mnuBtnCd={}",
++                    System.currentTimeMillis() - t0, totalRows, params.get("mnuId"), params.get("shtNm"), params.get("mnuBtnCd"));
++        }
++    }
++
++    /** callProcStream 셀 1개 값을 타입에 맞춰 JSON 으로 쓴다(숫자는 number, 그 외 문자열). */
++    private void writeCell(JsonGenerator gen, ResultSet rs, int c, int type) throws Exception {
++        switch (type) {
++            case Types.NUMERIC: case Types.DECIMAL: case Types.INTEGER:
++            case Types.BIGINT: case Types.SMALLINT: case Types.TINYINT:
++            case Types.FLOAT: case Types.DOUBLE: case Types.REAL: {
++                BigDecimal bd = rs.getBigDecimal(c);
++                if (bd == null) gen.writeNull(); else gen.writeNumber(bd);
++                break;
++            }
++            default: {
++                String s = rs.getString(c);
++                if (s == null) gen.writeNull(); else gen.writeString(s);
++            }
++        }
++    }
++
++    /**
++     * call-proc2 — SCM_ADM_PROC_M / procedures.d.ts 를 참조하지 않고, 살아있는 Oracle 카탈로그
++     * (ALL_ARGUMENTS)만으로 프로시저 IN/OUT 을 유도해 실행하는 경로. 신규/개선 화면의 점진 전환용.
++     *
++     * 파라미터 키 규약(카탈로그에서 유도 불가한 것만 여기서 보완):
++     * - IN 업무 파라미터: 오라클명에서 선두 'P_' 제거 + snake→camel 로 요청 키를 유도 (P_DIVISION_ID -> divisionId).
++     * - 세션 파라미터: 컨트롤러가 넣어준 ses* 값을 "요청에 없는 키의 default" 로만 채운다. 그래서
++     *   같은 오라클명 P_USER_ID 가 어떤 화면은 세션(요청에 userId 없음), 어떤 화면은 업무값(요청에 userId 있음)
++     *   이어도 충돌하지 않는다.
++     * - JVARCHAR: cvtJsonToVarchar 목록(요청 키)에 대해 data 그리드 배열을 '^' delim 으로 접는다(기존 규약 재사용).
++     * - OUT 커서/스칼라: 오라클명 소문자를 응답 키로 사용(O_RC1 -> o_rc1). 행 컬럼은 ResultSetMetaData 로 런타임 취득.
++     */
++    public Map<String, Object> callProc2(String procNm, Map<String, Object> params, Set<String> jvarcharCols) throws Exception {
++
++        // 0. PKG.PROC 분리
++        String pkg = null;
++        String obj = procNm;
++        int dot = procNm.indexOf('.');
++        if (dot > 0) { pkg = procNm.substring(0, dot); obj = procNm.substring(dot + 1); }
++
++        // 1. 세션 default (컨트롤러가 주입한 ses* 값 → 유도키에도 매핑). 요청에 키가 있으면 요청값이 이긴다.
++        Map<String, Object> sessionDefaults = new HashMap<>();
++        if (params.containsKey("sesUserId"))     { Object v = params.get("sesUserId");     sessionDefaults.put("sesUserId", v);     sessionDefaults.put("userId", v); }
++        if (params.containsKey("sesLangCd"))      { Object v = params.get("sesLangCd");      sessionDefaults.put("sesLangCd", v);      sessionDefaults.put("langCd", v); }
++        if (params.containsKey("sesDivisionId"))  { Object v = params.get("sesDivisionId");  sessionDefaults.put("sesDivisionId", v); }
++        if (params.containsKey("sesUserGrId"))    { Object v = params.get("sesUserGrId");    sessionDefaults.put("sesUserGrId", v); }
++        if (params.containsKey("sesMenuId"))      { Object v = params.get("sesMenuId");      sessionDefaults.put("sesMenuId", v); }
++
++        // 2. JVARCHAR 접기(그리드 배치) — 기존 규약 재사용
++        if (jvarcharCols != null && !jvarcharCols.isEmpty()) {
++            MapUtils.cvtJsonToJVarchar(params, jvarcharCols);
++        }
++
++        Map<String, Object> result = new HashMap<>();
++        SqlSession sqlSession = "".equals(getDb(params)) ? ncommondao.getSqlSession() : ncommondao.getSqlSession(getDb(params));
++        try {
++            Connection conn = sqlSession.getConnection();
++
++            // 3. 카탈로그에서 파라미터 시그니처 취득 (POSITION 순)
++            List<String[]> args = new ArrayList<>(); // {ARGUMENT_NAME, IN_OUT, DATA_TYPE}
++            String metaSql = "SELECT ARGUMENT_NAME, IN_OUT, DATA_TYPE FROM ALL_ARGUMENTS WHERE "
++                    + (pkg == null ? "PACKAGE_NAME IS NULL" : "PACKAGE_NAME = ?")
++                    + " AND OBJECT_NAME = ? AND DATA_LEVEL = 0 AND (OVERLOAD IS NULL OR OVERLOAD = '1') ORDER BY POSITION";
++            try (PreparedStatement ps = conn.prepareStatement(metaSql)) {
++                int bi = 1;
++                if (pkg != null) ps.setString(bi++, pkg);
++                ps.setString(bi, obj);
++                try (ResultSet rs = ps.executeQuery()) {
++                    while (rs.next()) args.add(new String[] { rs.getString(1), rs.getString(2), rs.getString(3) });
++                }
++            }
++            if (args.isEmpty()) throw new Exception("call_proc2: no catalog arguments for " + procNm);
++
++            // 4. {call PKG.PROC(?, ?, ...)}
++            StringBuilder sb = new StringBuilder("{call ").append(procNm).append("(");
++            for (int i = 0; i < args.size(); i++) { if (i > 0) sb.append(", "); sb.append("?"); }
++            sb.append(")}");
++            String callSql = sb.toString();
++            log.debug("call_proc2: {}", callSql);
++
++            List<Integer> cursorIdx = new ArrayList<>();
++            List<String> cursorKey = new ArrayList<>();
++            List<Integer> scalarIdx = new ArrayList<>();
++            List<String> scalarKey = new ArrayList<>();
++
++            try (CallableStatement cs = conn.prepareCall(callSql)) {
++                for (int i = 0; i < args.size(); i++) {
++                    String[] a = args.get(i);
++                    int idx = i + 1;
++                    String name = a[0];
++                    String inOut = a[1];
++                    String dataType = a[2];
++
++                    if ("OUT".equals(inOut) || "IN/OUT".equals(inOut)) {
++                        String key = name.toLowerCase();
++                        if ("REF CURSOR".equals(dataType)) {
++                            cs.registerOutParameter(idx, Types.REF_CURSOR);
++                            cursorIdx.add(idx); cursorKey.add(key);
++                        } else {
++                            cs.registerOutParameter(idx, Types.VARCHAR);
++                            scalarIdx.add(idx); scalarKey.add(key);
++                        }
++                    } else { // IN
++                        String key = toCamelKey(name);
++                        Object val = params.containsKey(key) ? params.get(key) : sessionDefaults.get(key);
++                        cs.setObject(idx, val);
++                    }
++                }
++
++                cs.execute();
++
++                for (int k = 0; k < scalarIdx.size(); k++) {
++                    Object v = cs.getObject(scalarIdx.get(k));
++                    result.put(scalarKey.get(k), v == null ? null : String.valueOf(v));
++                }
++                for (int k = 0; k < cursorIdx.size(); k++) {
++                    List<Map<String, Object>> rows = new ArrayList<>();
++                    try (ResultSet rs = (ResultSet) cs.getObject(cursorIdx.get(k))) {
++                        if (rs != null) {
++                            ResultSetMetaData md = rs.getMetaData();
++                            int cc = md.getColumnCount();
++                            String[] label = new String[cc + 1];
++                            for (int c = 1; c <= cc; c++) label[c] = md.getColumnLabel(c);
++                            while (rs.next()) {
++                                Map<String, Object> row = new CustomMap();
++                                for (int c = 1; c <= cc; c++) {
++                                    Object v = rs.getObject(c);
++                                    if (v != null) row.put(label[c], v); // null 은 담지 않음(기존 MyBatis 동작과 동일)
++                                }
++                                rows.add(row);
++                            }
++                        }
++                    }
++                    result.put(cursorKey.get(k), rows);
++                }
++            }
++        } catch (Exception e) {
++            log.error("call_proc2 error (procNm = {})", procNm, e);
++            throw e;
++        } finally {
++            sqlSession.close();
++        }
++        return result;
++    }
++
++    /** 오라클 IN 파라미터명 -> 요청 키. 선두 'P_' 제거 후 snake_case -> camelCase. (P_FROM_YYYYMMDD -> fromYyyymmdd) */
++    private String toCamelKey(String oracleName) {
++        String s = oracleName;
++        if (s.startsWith("P_") || s.startsWith("p_")) s = s.substring(2);
++        String[] parts = s.toLowerCase().split("_");
++        StringBuilder sb = new StringBuilder();
++        for (int i = 0; i < parts.length; i++) {
++            if (parts[i].isEmpty()) continue;
++            if (sb.length() == 0) sb.append(parts[i]);
++            else sb.append(Character.toUpperCase(parts[i].charAt(0))).append(parts[i].substring(1));
++        }
++        return sb.toString();
++    }
++
+     /**
+      * 동적 프로시저 생성 함수
+      * @MethodName : makeProcedure
+diff --git a/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java b/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
+index 683fb8d..06798a4 100644
+--- a/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
++++ b/src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
+@@ -18,6 +18,9 @@ public class CorsConfig {
+         // 허용할 Origin 설정
+         configuration.setAllowedOriginPatterns(List.of(
+             "http://localhost:3000",
++            "http://127.0.0.1:3000",
++            "http://localhost:5173",
++            "http://127.0.0.1:5173",
+             "http://10.34.220.80:8090",
+             "http://10.32.192.50:8090",
+             "http://10.34.220.74:8090",
+diff --git a/src/main/java/com/lgcns/nscm/framework/config/SecurityConfig.java b/src/main/java/com/lgcns/nscm/framework/config/SecurityConfig.java
+index dfefeb6..6fe8727 100644
+--- a/src/main/java/com/lgcns/nscm/framework/config/SecurityConfig.java
++++ b/src/main/java/com/lgcns/nscm/framework/config/SecurityConfig.java
+@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+ import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+ import org.springframework.security.web.SecurityFilterChain;
++import org.springframework.security.web.access.intercept.AuthorizationFilter;
+ import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ import org.springframework.security.web.authentication.logout.LogoutFilter;
+ import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+@@ -21,6 +22,7 @@ import com.lgcns.nscm.framework.security.CustomAuthenticationProvider;
+ import com.lgcns.nscm.framework.security.CustomAuthorizationManager;
+ import com.lgcns.nscm.framework.security.filter.ExceptionHandlingFilter;
+ import com.lgcns.nscm.framework.security.filter.JsonLoginFilter;
++import com.lgcns.nscm.framework.security.filter.SqlInjectionGuardFilter;
+ import com.lgcns.nscm.framework.security.handler.AccessDeniedExceptionHandler;
+ import com.lgcns.nscm.framework.security.handler.AuthenticationExceptionHandler;
+ import com.lgcns.nscm.framework.security.handler.LoginFailureHandler;
+@@ -110,12 +112,14 @@ public class SecurityConfig {
+                     )
+                 );
+ 
++        http.addFilterAfter(new SqlInjectionGuardFilter(), AuthorizationFilter.class);
++
+         return http.build();
+     }
+ 
+ 
+     private JsonLoginFilter _getJsonLoginFilter(SecurityContextRepository repository) throws Exception {
+-        JsonLoginFilter filter = new JsonLoginFilter();
++        JsonLoginFilter filter = new JsonLoginFilter(commonProperties.getSecurity().isIdLoginDisabled());
+         filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
+         filter.setFilterProcessesUrl("/user/login");
+         filter.setSecurityContextRepository(repository);
+diff --git a/src/main/java/com/lgcns/nscm/framework/config/WebServiceConfig.java b/src/main/java/com/lgcns/nscm/framework/config/WebServiceConfig.java
+index e323d49..42c5294 100644
+--- a/src/main/java/com/lgcns/nscm/framework/config/WebServiceConfig.java
++++ b/src/main/java/com/lgcns/nscm/framework/config/WebServiceConfig.java
+@@ -26,8 +26,9 @@ public class WebServiceConfig {
+     public SaajSoapMessageFactory messageFactory() {
+         SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+ 
+-        // SOAP 1.2 세팅 (기본값은 SOAP 1.1)
+-        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
++        // SOAP 1.1 — AS-IS ERP ASMX(UIC0001/UIC0003, WsiProfiles.BasicProfile1_1)와 규약 일치.
++        //   (종전 SOAP_12 는 ASMX document/literal 서비스와 버전 불일치로 호출 실패 위험이었음.)
++        messageFactory.setSoapVersion(SoapVersion.SOAP_11);
+         return messageFactory;
+     }
+ }
+diff --git a/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java b/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
+index 4c93b25..0c14523 100644
+--- a/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
++++ b/src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
+@@ -1,6 +1,7 @@
+ package com.lgcns.nscm.framework.dao;
+ 
+ import java.sql.SQLException;
++import java.util.ArrayList;
+ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -20,6 +21,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+ import org.springframework.stereotype.Repository;
+ 
+ import com.lgcns.nscm.framework.interceptor.QueryLogInterceptor;
++import com.lgcns.nscm.framework.interceptor.SqlLogWriter;
+ import com.lgcns.nscm.framework.property.CommonProperties;
+ import com.lgcns.nscm.framework.property.CommonProperties.Datasource;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+@@ -44,6 +46,8 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 
+ 	private Map<String, HikariDataSource> mDatasource = new LinkedHashMap();				// DataSource List
+ 	private static Map<String, SqlSessionFactory> mSessionFactory = new LinkedHashMap();	// Session Factory List
++	private List<SqlLogWriter> mLogWriters = new ArrayList<>();							// SQL 로그 워커 (DataSource별)
++	private List<HikariDataSource> mLogDatasource = new ArrayList<>();					// 로그 전용 풀 (DataSource별)
+ 
+ 
+ 	@Override
+@@ -68,14 +72,46 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 			if (sqlConType.equals("JNDI")) InitJNDI();
+ 			else InitDBCP();
+ 		} catch (Exception e) {
++			// 예외를 삼키면 DB 연결이 0개인 상태로 기동에 성공한 것처럼 보이고,
++			// 이후 모든 쿼리가 getSessionFactory()에서 NoSuchElementException으로 죽는다.
++			log.error("[NDBConnection] DB 초기화 실패. 등록된 DataSource가 없습니다.", e);
+ 			bRtn = false;
+ 		}
++		if (mSessionFactory.isEmpty()) {
++			log.error("[NDBConnection] SqlSessionFactory가 하나도 생성되지 않았습니다. config.datasources 설정을 확인하세요.");
++		} else {
++			log.info("[NDBConnection] 등록된 DataSource: {}", mSessionFactory.keySet());
++		}
+ 		return bRtn;
+ 	}
+ 
+ 	private void clean() {
+ 		cleanFactory();
+-		cleanDataSource();
++		cleanLogWriters();		// writer 종료 → 잔여 로그 flush (로그풀 살아있을 때)
++		cleanLogDataSource();	// 로그 전용 풀 종료
++		cleanDataSource();		// 업무 풀 종료
++	}
++
++	private void cleanLogWriters() {
++		for (SqlLogWriter w : mLogWriters) {
++			try {
++				w.close();
++			} catch (Exception e) {
++				e.printStackTrace();
++			}
++		}
++		mLogWriters.clear();
++	}
++
++	private void cleanLogDataSource() {
++		for (HikariDataSource ds : mLogDatasource) {
++			try {
++				ds.close();
++			} catch (Exception e) {
++				e.printStackTrace();
++			}
++		}
++		mLogDatasource.clear();
+ 	}
+ 
+ 	private void cleanFactory() {
+@@ -130,7 +166,7 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 			HikariDataSource ds = (HikariDataSource) envCtx.lookup(sDbNm);
+ 
+ 			mDatasource.put(sDbNm, ds);
+-			mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath));
++			mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath, null));
+ 		}
+ 	}
+ 
+@@ -201,7 +237,21 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 
+ 				HikariDataSource ds = new HikariDataSource(hikariConfig);
+ 				mDatasource.put(sDbNm, ds);
+-				mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath));
++
++				SqlLogWriter logWriter = null;
++				if (commonProperties.getMybatis().isLoggingEnabled()) {
++					HikariDataSource logDs = createLogDataSource(dbInfo);
++					mLogDatasource.add(logDs);
++					logWriter = new SqlLogWriter(
++							logDs,
++							commonProperties.getMybatis().getQueueCapacity(),
++							commonProperties.getMybatis().getBatchSize(),
++							commonProperties.getMybatis().getFlushIntervalMs());
++					logWriter.start();
++					mLogWriters.add(logWriter);
++				}
++
++				mSessionFactory.put(sDbNm, getSqlSesF(ds, sSqlPath, sSqlConfPath, logWriter));
+ 				log.info("["+sqlConType+": "+sDbNm+"("+sDbTp+")] create sqlSessionFactory. ");
+ 			} catch (NamingException e) {
+ 				log.error("["+sqlConType+": "+sDbNm+"("+sDbTp+")] is NamingException. "+e.getMessage());
+@@ -216,7 +266,26 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 		}
+ 	}
+ 
+-	private SqlSessionFactory getSqlSesF(DataSource dataSource, String sqlPath, String sqlConfPath) throws Exception {
++	/** 로그 전용 소형 HikariDataSource 생성. 업무 풀과 분리되어 로깅이 업무 커넥션과 경쟁하지 않게 한다. */
++	private HikariDataSource createLogDataSource(Datasource dbInfo) {
++		int logPoolSize = commonProperties.getMybatis().getLogPoolSize();
++		HikariConfig cfg = new HikariConfig();
++		cfg.setPoolName("sql-log-" + dbInfo.getDatabaseName());
++		cfg.setDriverClassName(dbInfo.getDriverClassName());
++		cfg.setJdbcUrl(dbInfo.getJdbcUrl());
++		cfg.setUsername(dbInfo.getUsername());
++		cfg.setPassword(dbInfo.getPassword());
++		cfg.setMaximumPoolSize(logPoolSize);
++		cfg.setMinimumIdle(1);
++		cfg.setConnectionTimeout(10000);	// 로그 풀은 빠르게 실패시킨다
++		cfg.setValidationTimeout(1000);
++		if (!NullUtils.isNone(dbInfo.getConnectionTestQuery())) {
++			cfg.setConnectionTestQuery(dbInfo.getConnectionTestQuery());
++		}
++		return new HikariDataSource(cfg);
++	}
++
++	private SqlSessionFactory getSqlSesF(DataSource dataSource, String sqlPath, String sqlConfPath, SqlLogWriter sqlLogWriter) throws Exception {
+ 
+ 	    SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+ 
+@@ -235,9 +304,9 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
+ 	        sessionFactoryBean.setConfigLocation(applicationContext.getResource(sqlConfPath));
+ 	    }
+ 
+-	    // 4. 로그데이터를 위해 QueryLogInterceptor에 데이터셋 추가
+-	    if (commonProperties.getMybatis().isLoggingEnabled()){
+-	    	sessionFactoryBean.setPlugins(new QueryLogInterceptor(dataSource, commonProperties));
++	    // 4. 로그데이터를 위해 QueryLogInterceptor에 SqlLogWriter 주입
++	    if (commonProperties.getMybatis().isLoggingEnabled() && sqlLogWriter != null){
++	    	sessionFactoryBean.setPlugins(new QueryLogInterceptor(sqlLogWriter, commonProperties.getMybatis().isLoggingOnlyError()));
+         }
+ 
+ 	    return sessionFactoryBean.getObject();
+diff --git a/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java b/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
+index e44bb0e..6e5f43d 100644
+--- a/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
++++ b/src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
+@@ -1,15 +1,10 @@
+ package com.lgcns.nscm.framework.interceptor;
+ 
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.Timestamp;
+ import java.time.LocalDateTime;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Properties;
+ 
+-import javax.sql.DataSource;
+-
+ import org.apache.ibatis.executor.Executor;
+ import org.apache.ibatis.mapping.BoundSql;
+ import org.apache.ibatis.mapping.MappedStatement;
+@@ -27,7 +22,6 @@ import org.slf4j.LoggerFactory;
+ 
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.lgcns.nscm.admin.user.UserSession;
+-import com.lgcns.nscm.framework.property.CommonProperties;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+ import com.lgcns.nscm.framework.utils.SecurityUtil;
+ 
+@@ -51,26 +45,21 @@ import com.lgcns.nscm.framework.utils.SecurityUtil;
+ public class QueryLogInterceptor implements Interceptor {
+ 
+     private static final Logger log = LoggerFactory.getLogger(QueryLogInterceptor.class);
+-    private static final ThreadLocal<Boolean> logging = ThreadLocal.withInitial(() -> false);
+ 
+-    private final DataSource dataSource;
+     private final ObjectMapper objectMapper = new ObjectMapper();
+-    private final CommonProperties commonProperties;
++    private final SqlLogWriter sqlLogWriter;
++    private final boolean loggingOnlyError;
+ 
+     private int thresholdMs = 0;
+ 
+-    public QueryLogInterceptor(DataSource dataSource, CommonProperties commonProperties) {
+-        this.dataSource = dataSource;
+-        this.commonProperties = commonProperties;
++    public QueryLogInterceptor(SqlLogWriter sqlLogWriter, boolean loggingOnlyError) {
++        this.sqlLogWriter = sqlLogWriter;
++        this.loggingOnlyError = loggingOnlyError;
+     }
+ 
+     @Override
+     public Object intercept(Invocation invocation) throws Throwable {
+ 
+-        if (Boolean.TRUE.equals(logging.get())) {
+-            return invocation.proceed();
+-        }
+-
+         long start = System.currentTimeMillis();
+ 
+         MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
+@@ -105,60 +94,20 @@ public class QueryLogInterceptor implements Interceptor {
+             long end = System.currentTimeMillis();
+             int elapsed = (int) (end - start);
+ 
+-            if (thresholdMs > 0 && elapsed < thresholdMs) {
+-                return null;
+-            }
++            // 주의: finally 안에서 절대 return 하지 않는다. finally 의 return 은 try 의 실제 쿼리 결과를 덮어쓴다.
++            boolean belowThreshold = thresholdMs > 0 && elapsed < thresholdMs;
++            boolean hasError = !NullUtils.isNone(exceptionMsg);
++            boolean skip = belowThreshold || (loggingOnlyError && !hasError);
+ 
+-            String paramsJson = toJsonSafe(parameter);
+-            UserSession userSession = SecurityUtil.getUserSession();
+-            String userId =  (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
+-            LocalDateTime now = LocalDateTime.now();
++            if (!skip) {
++                String paramsJson = toJsonSafe(parameter);
++                UserSession userSession = SecurityUtil.getUserSession();
++                String userId = (userSession != null && userSession.getUserId() != null) ? userSession.getUserId() : "GUEST";
++                LocalDateTime now = LocalDateTime.now();
+ 
+-            // logging.set(true);
+-            if(commonProperties.getMybatis().isLoggingOnlyError()) {
+-            	if(!NullUtils.isNone(exceptionMsg)) insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+-            } else insertSqlLog(sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg);
+-        }
+-    }
+-
+-    private void insertSqlLog(String sqlId,
+-                              String sqlType,
+-                              String sqlText,
+-                              int elapsedMs,
+-                              LocalDateTime executeTime,
+-                              String userId,
+-                              String paramsJson,
+-                              int resultCount,
+-                              String exceptionMsg) {
+-
+-        String insertSql =
+-            "INSERT INTO SCM_COM_SQL_LOG " +
+-            " (SQL_ID, SQL_TYPE, SQL_TEXT, ELAPSED_MS, EXECUTE_TIME, CREATED_BY, PARAMS, RESULT_COUNT, EXCEPTION) " +
+-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+-
+-        try (Connection conn = dataSource.getConnection();
+-             PreparedStatement ps = conn.prepareStatement(insertSql)) {
+-
+-            ps.setString(1, sqlId);
+-            ps.setString(2, sqlType);
+-            ps.setString(3, sqlText);
+-            ps.setInt(4, elapsedMs);
+-            ps.setTimestamp(5, Timestamp.valueOf(executeTime));
+-            ps.setString(6, userId);
+-            ps.setString(7, paramsJson);
+-
+-            if (resultCount < 0) {
+-                ps.setNull(8, java.sql.Types.INTEGER);
+-            } else {
+-                ps.setInt(8, resultCount);
++                sqlLogWriter.offer(new SqlLogRecord(
++                        sqlId, sqlType, sqlText, elapsed, now, userId, paramsJson, resultCount, exceptionMsg));
+             }
+-
+-            ps.setString(9, exceptionMsg);
+-
+-            ps.executeUpdate();
+-        } catch (Exception e) {
+-            log.warn("Failed to insert SCM_COM_SQL_LOG. sqlId={}, elapsedMs={}, error={}",
+-                    sqlId, elapsedMs, e.getMessage());
+         }
+     }
+ 
+diff --git a/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java b/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
+index 0a2d492..f02363b 100644
+--- a/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
++++ b/src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
+@@ -22,6 +22,13 @@ public class CustomMap extends HashMap<String, Object> {
+ 	 */
+     public Object put(String key, Object value) {
+ 
++        // callSettersOnNulls=true(mybatis-config.xml) 이면 커서의 NULL 컬럼도 여기로 들어온다.
++        // 아래 value.getClass() 가 NPE 를 내므로 null 은 변환 없이 그대로 담는다.
++        // 필수: 이 가드와 callSettersOnNulls 설정은 한 쌍이다 — 가드 없이 설정만 켜면 모든 조회가 NPE 로 실패한다.
++        if (value == null) {
++            return super.put(key, null);
++        }
++
+     	// CLOB 변환 로직
+         if (value instanceof java.sql.Clob) {
+         	try {
+diff --git a/src/main/java/com/lgcns/nscm/framework/property/CommonProperties.java b/src/main/java/com/lgcns/nscm/framework/property/CommonProperties.java
+index 11e0da0..35b257d 100644
+--- a/src/main/java/com/lgcns/nscm/framework/property/CommonProperties.java
++++ b/src/main/java/com/lgcns/nscm/framework/property/CommonProperties.java
+@@ -20,6 +20,8 @@ public class CommonProperties {
+     private final List<Datasource> datasources;
+     private final Domain domain;
+     private final Sso sso;
++    // 시스템 구분 — 메뉴 조회 PR_GET_MENU_LIST_V2 P_SYSTEM_CD 로 전달. NSCM/SPMS/COMMON, 배포 단위 상수
++    private final String systemCd;
+ 
+     @Getter
+     @RequiredArgsConstructor
+@@ -34,6 +36,8 @@ public class CommonProperties {
+     @RequiredArgsConstructor
+     public static class Security {
+     	private final List<String> skipUris;
++    	// ID 로그인(/user/login) 차단. prd 만 true 로 켜서 SSO 로만 로그인하게 한다. 미설정 profile 은 false(허용).
++    	private final boolean idLoginDisabled;
+     }
+ 
+     @Getter
+@@ -63,6 +67,10 @@ public class CommonProperties {
+     public static class Mybatis {
+     	private final boolean loggingEnabled;
+     	private final boolean loggingOnlyError;
++    	private final int queueCapacity;
++    	private final int batchSize;
++    	private final int logPoolSize;
++    	private final long flushIntervalMs;
+     }
+ 
+     @Getter
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java b/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
+index 2b66190..5c61e9f 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
+@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
+ 
+ import com.lgcns.nscm.admin.auth.AuthService;
+ import com.lgcns.nscm.framework.annotation.AuthCheck;
++import com.lgcns.nscm.framework.base.BaseConstants;
+ 
+ import jakarta.servlet.http.HttpServletRequest;
+ import lombok.RequiredArgsConstructor;
+@@ -76,10 +77,15 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
+     }
+ 
+     private AuthorizationDecision _authorize(HttpServletRequest request, Authentication auth) throws Exception {
++        // 미인증(anonymous, principal=String) 요청은 ClassCastException(500) 대신 정상 거부한다.
++        // 예: BE 재기동으로 세션 소실 후 옛 JSESSIONID 로 들어온 요청.
++        if (!_isValidAuthentication(auth)) return new AuthorizationDecision(false);
++
+         String lookupPath = (String) request.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE);
+ 
+         if (lookupPath == null
+         		|| (!pathMatcher.match("/*/*/*/call-proc", lookupPath)
++        		&& !pathMatcher.match("/*/*/*/call-proc-stream", lookupPath)
+         		&& !pathMatcher.match("/*/*/*/excel-upload", lookupPath))) {
+             return new AuthorizationDecision(false);
+         }
+@@ -89,7 +95,10 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
+ 
+         if (segments.length < 4) return new AuthorizationDecision(false);
+ 
+-        String userId = ((CustomUserDetails) auth.getPrincipal()).getUserId();
++        CustomUserDetails principal = (CustomUserDetails) auth.getPrincipal();
++        // 게스트는 메뉴를 공유 'Guest' 계정에서 빌려오므로 권한 판정도 'Guest' 기준으로 한다.
++        // (username 은 로그용 실제 사번이라 그대로 쓰면 권한이 없어 No Permission 이 됨)
++        String userId = principal.isGuest() ? BaseConstants.GUEST_USER_ID : principal.getUserId();
+         String mnuId = segments[1];
+         String shtNm = segments[2];
+         String mnuBtnCd = segments[3];
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetails.java b/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetails.java
+index d4a5b8e..40f0c74 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetails.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetails.java
+@@ -21,7 +21,12 @@ public class CustomUserDetails implements UserDetails {
+ 	private final String userEngNm;
+     private final Collection<? extends GrantedAuthority> authorities;
+     private String langCd;
++    private String tmzCd;
+     private List<MenuDto> menus;
++    private final boolean isGuest;
++    private List<String> groups;
++    private final String div;
++    private final String companyId;
+ 
+     @Override
+     public String getUsername() { return username; }
+@@ -42,10 +47,22 @@ public class CustomUserDetails implements UserDetails {
+ 
+     public String getLangCd() { return langCd; }
+ 
++    public String getTmzCd() { return tmzCd; }
++
+     public List<MenuDto> getMenus() { return menus; }
+ 
++    public boolean isGuest() { return isGuest; }
++
++    public List<String> getGroups() { return groups; }
++
++    public String getDiv() { return div; }
++
++    public String getCompanyId() { return companyId; }
++
+     public void setLangCd(String langCd) { this.langCd = langCd; }
+ 
++    public void setTmzCd(String tmzCd) { this.tmzCd = tmzCd; }
++
+     public void setMenus(List<MenuDto> menus) { this.menus = menus; }
+ 
+     @Override
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetailsService.java b/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetailsService.java
+index d25ff17..eadb8c5 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetailsService.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/CustomUserDetailsService.java
+@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
+ import org.springframework.stereotype.Service;
+ 
+ import com.lgcns.nscm.admin.menu.MenuService;
++import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
+ import com.lgcns.nscm.admin.user.User;
+ import com.lgcns.nscm.admin.user.UserService;
+@@ -25,11 +26,12 @@ public class CustomUserDetailsService implements UserDetailsService {
+     private final UserService userService;
+     private final MenuService menuService;
+ 
++
+     // 요청 받은 User 정보를 찾아서 인증 객체 반환
+     @Override
+     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+ 
+-    	User user = null;
++    	User user;
+ 
+     	try {
+     		user = userService.retrieveUser(userId);
+@@ -38,25 +40,84 @@ public class CustomUserDetailsService implements UserDetailsService {
+ 		}
+ 
+         if (user == null) {
+-        	throw new UsernameNotFoundException("User not found: " + userId);
++            // Case 3: 미등록 사용자 → 임시 Guest (DB 미저장).
++            // username 에 실제 사번을 유지해 로그/접속이력이 본래 계정으로 남게 한다.
++            log.info("미등록 사용자 게스트 폴백 로그인. userId={}", userId);
++            return CustomUserDetails.builder()
++                .username(userId)
++                .password("")
++                .userNm("Guest")
++                .userEngNm("Guest")
++                .langCd("KO")
++                .tmzCd("AS054")
++                .isGuest(true)
++                .menus(retrieveMenusSafely(BaseConstants.GUEST_USER_ID))
++                .groups(retrieveGroupsSafely(BaseConstants.GUEST_USER_ID))
++                .div(retrieveDivSafely(BaseConstants.GUEST_USER_ID))
++                .companyId(retrieveCompanyIdSafely(BaseConstants.GUEST_USER_ID))
++                .authorities(Collections.emptyList())
++                .build();
+         }
+ 
+-        List<MenuDto> menus = new ArrayList<>();
+-        try {
+-        	menus = menuService.retrieveMenus(user.getUserId());
+-        	log.info("menus found");
+-        } catch (Exception e) {
+-			log.info("menu retrieve exception");
+-		}
+-
++        // Case 1/2: 등록 사용자. 단 그룹이 GUEST 뿐(또는 없음)이면 권한 미부여 상태 → 게스트로 취급.
++        List<String> groups = retrieveGroupsSafely(user.getUserId());
++        boolean guest = isGuestOnly(groups);
+         return CustomUserDetails.builder()
+             .username(user.getUserId())
+             .password("")
+             .userNm(user.getUserNm())
+             .userEngNm(user.getUserEngNm())
+             .langCd(user.getLangCd())
+-            .menus(menus)
++            .tmzCd(user.getTmzCd())
++            .isGuest(guest)
++            // 게스트(권한 미부여)는 미등록 사용자와 동일하게 Guest 메뉴 기준으로 조회한다. 26.9.21
++            .menus(retrieveMenusSafely(guest ? BaseConstants.GUEST_USER_ID : user.getUserId()))
++            .groups(groups)
++            .div(retrieveDivSafely(user.getUserId()))
++            .companyId(retrieveCompanyIdSafely(user.getUserId()))
+             .authorities(Collections.emptyList())
+             .build();
+     }
++
++    /** 그룹이 없거나 전부 GUEST 그룹이면 게스트(권한 미부여)로 본다. */
++    private boolean isGuestOnly(List<String> groups) {
++        if (groups == null || groups.isEmpty()) return true;
++        return groups.stream().allMatch(g -> BaseConstants.GUEST_GROUP_NM.equalsIgnoreCase(g));
++    }
++
++    private List<MenuDto> retrieveMenusSafely(String userId) {
++        try {
++            return menuService.retrieveMenus(userId);
++        } catch (Exception e) {
++            log.info("menu retrieve exception. userId={}", userId);
++            return new ArrayList<>();
++        }
++    }
++
++    private List<String> retrieveGroupsSafely(String userId) {
++        try {
++            return userService.retrieveUserGroups(userId);
++        } catch (Exception e) {
++            log.info("group retrieve exception. userId={}", userId);
++            return new ArrayList<>();
++        }
++    }
++
++    private String retrieveDivSafely(String userId) {
++        try {
++            return userService.retrieveUserDefaultDiv(userId);
++        } catch (Exception e) {
++            log.info("div retrieve exception. userId={}", userId);
++            return null;
++        }
++    }
++
++    private String retrieveCompanyIdSafely(String userId) {
++        try {
++            return userService.retrieveUserCompanyId(userId);
++        } catch (Exception e) {
++            log.info("companyId retrieve exception. userId={}", userId);
++            return null;
++        }
++    }
+ }
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/SsoService.java b/src/main/java/com/lgcns/nscm/framework/security/SsoService.java
+index e620769..9a4143c 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/SsoService.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/SsoService.java
+@@ -1,174 +1,108 @@
+-// 2026.02.23 Minyong Lee : SSO 개발 임시 중단, QA 서버 구비 시 재개 예정
+-
+-// package com.lgcns.nscm.framework.security;
+-
+-// import java.io.IOException;
+-// import java.util.ArrayList;
+-// import java.util.List;
+-// import java.util.Vector;
+-
+-// import org.springframework.beans.factory.annotation.Value;
+-// import org.springframework.stereotype.Service;
+-
+-// import com.initech.eam.api.NXContext;
+-// import com.initech.eam.jakarta.api.NXNLSAPI;
+-// import com.initech.eam.jakarta.nls.CookieManager;
+-// import com.initech.eam.smartenforcer.SECode;
+-
+-// import jakarta.servlet.http.Cookie;
+-// import jakarta.servlet.http.HttpServletRequest;
+-// import jakarta.servlet.http.HttpServletResponse;
+-// import lombok.extern.slf4j.Slf4j;
+-
+-// @Slf4j
+-// @Service
+-// public class SsoService {
+-
+-//     @Value("${config.sso.service-name}")
+-//     private String SERVICE_NAME;
+-//     @Value("${config.sso.server-url}")
+-//     private String SERVER_URL;
+-//     @Value("${config.sso.server-port}")
+-//     private String SERVER_PORT;
+-//     private String ASCP_URL_SUFFIX = "/api/v1/sso/login_exec";
+-
+-//     @Value("${config.sso.nls-url}")
+-//     private String NLS_URL;
+-//     @Value("${config.sso.nls-port}")
+-//     private String NLS_PORT;
+-//     private String NLS_LOGIN_URL_SUFFIX = "/nls3/clientLogin.jsp";
+-//     private String NLS_LOGOUT_URL_SUFFIX = "/nls3/NCLogout.jsp";
+-//     private String NLS_ERROR_URL_SUFFIX = "/nls3/error.jsp";
+-
+-//     @Value("${config.sso.nd-url}")
+-//     private static String ND_URL;
+-//     private String SSO_DOMAIN = ".lgensol.com";
+-//     private String TOA = "1";
+-
+-//     private static int COOKIE_SESSION_TIMEOUT = 3000000;
+-//     private static int TIMEOUT = 15000;
+-
+-//     private static Vector<String> PROVIDER_LIST = new Vector<String>();
+-
+-//     private static NXContext context;
+-
+-//     static {
+-//         List<String> serverurlList = new ArrayList<>();
+-//         serverurlList.add(ND_URL);
+-
+-//         context = new NXContext(serverurlList, TIMEOUT);
+-
+-//         com.initech.provider.crypto.InitechProvider.isPrint = true;
+-
+-//         if (com.initech.provider.crypto.InitechProvider.isProvenMode())
+-//             com.initech.provider.crypto.InitechProvider.changeMode();
+-
+-//         if (java.security.Security.getProvider("Initech") != null) {
+-//             java.security.Security.removeProvider("Initech");
+-//         }
+-
+-//         com.initech.provider.crypto.InitechProvider.addAsProvider(false, false);
+-
+-//         CookieManager.setEncStatus(true);
+-
+-//         PROVIDER_LIST.add("ssodev.lgensol.com");
+-//         PROVIDER_LIST.add("ssolesdev.lgchem.com");
+-//         PROVIDER_LIST.add("gssodev.ultiumcell.com");
+-//         PROVIDER_LIST.add("gssodev.lgensol.com");
+-//         PROVIDER_LIST.add("sso.lgensol.com");
+-//         PROVIDER_LIST.add("ssoles.lgchem.com");
+-//         PROVIDER_LIST.add("gsso.lgensol.com");
+-//         PROVIDER_LIST.add("gssoles.lgchem.com");
+-//         PROVIDER_LIST.add("gsso.ultiumcell.com");
+-
+-//         SECode.setCookiePadding("");
+-//     }
+-
+-//     public String getSsoId(HttpServletRequest request) {
+-//         System.out.println("SsoService.getSsoId()");
+-//         System.out.println(request.toString());
+-//         String sso_id = null;
+-//         // sso_id = CookieManager.getCookieValue(SECode.USER_ID, request);
+-//         sso_id = CookieManager.getCookieValue(SECode.USER_ID, request);
+-//         System.out.println("sso_id: " + sso_id);
+-//         return sso_id;
+-//     }
+-
+-//     public void goLoginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+-//         System.out.println("SsoService.goLoginPage()");
+-//         System.out.println(response.toString());
+-//         System.out.println(NLS_URL);
+-//         System.out.println(NLS_PORT);
+-
+-//         String ascpUrl = SERVER_URL + ":" + SERVER_PORT + ASCP_URL_SUFFIX;
+-//         String nlsLoginUrl = NLS_URL + ":" + NLS_PORT + NLS_LOGIN_URL_SUFFIX;
+-
+-//         System.out.println("SECode.USER_URL: " + SECode.USER_URL);
+-//         System.out.println("ascpUrl: " + ascpUrl);
+-//         System.out.println("SSO_DOMAIN: " + SSO_DOMAIN);
+-//         System.out.println("nlsLoginUrl: " + nlsLoginUrl);
+-
+-//         // 문제가 되는 부분
+-//         Cookie[] cookies = request.getCookies();
+-//         log.info("Cookie InitechEamUURL : {}", CookieManager.getCookieValue("initechEamUURL", request));
+-//         CookieManager.addCookie("InitechEamUURL", ascpUrl, SSO_DOMAIN,
+-//         response);
+-//         log.info("Cookie InitechEamUURL : {}", CookieManager.getCookieValue("initechEamUURL", request));
+-
+-//         CookieManager.addCookie(SECode.R_TOA, "2", SSO_DOMAIN, response);
+-//         response.sendRedirect(nlsLoginUrl);
+-//     }
+-
+-//     public String getEamSessionCheckAndAgentVaild(HttpServletRequest request, HttpServletResponse response) {
+-//         System.out.println("SsoService.getEamSessionCheckAndAgentVaild()");
+-//         System.out.println(request.toString());
+-//         System.out.println(response.toString());
+-
+-//         try {
+-//             String retCode = CookieManager.verifyNexessCookieAndAgentVaild(request,
+-//                     response, 10, COOKIE_SESSION_TIMEOUT, PROVIDER_LIST, SERVER_URL, context);
+-//             System.out.println("retCode: " + retCode);
+-//             return retCode;
+-//         } catch (Exception npe) {
+-//             System.out.println("SsoService.getEamSessionCheckAndAgentVaild() - Error Catched");
+-//             npe.printStackTrace();
+-//             return "-1";
+-//         }
+-//     }
+-
+-//     public String getEamSessionCheck(HttpServletRequest request, HttpServletResponse response) {
+-//         String retCode = "";
+-//         try {
+-//             retCode = CookieManager.verifyNexessCookie(request, response, 10, COOKIE_SESSION_TIMEOUT, PROVIDER_LIST);
+-//         } catch (Exception npe) {
+-//             npe.printStackTrace();
+-//         }
+-//         return retCode;
+-//     }
+-
+-//     public String getEamSessionCheck2(HttpServletRequest request, HttpServletResponse response) {
+-//         String retCode = "";
+-//         try {
+-//             NXNLSAPI nxNLSAPI = new NXNLSAPI(context);
+-//             retCode = nxNLSAPI.readNexessCookie(request, response, 0, 0);
+-//         } catch (Exception npe) {
+-//             npe.printStackTrace();
+-//         }
+-//         return retCode;
+-//     }
+-
+-//     public void goErrorPage(HttpServletResponse response, int errorCode) throws IOException {
+-//         System.out.println("SsoService.goErrorPage()");
+-//         System.out.println(response.toString());
+-
+-//         String ascpUrl = SERVER_URL + ":" + SERVER_PORT + ASCP_URL_SUFFIX;
+-//         System.out.println(ascpUrl);
+-//         String nlsErrorUrl = NLS_URL + ":" + NLS_PORT + NLS_ERROR_URL_SUFFIX;
+-//         System.out.println(nlsErrorUrl);
+-
+-//         CookieManager.removeNexessCookie(SSO_DOMAIN, response);
+-//         CookieManager.addCookie(SECode.USER_URL, ascpUrl, SSO_DOMAIN,
+-//                 response);
+-//         response.sendRedirect(nlsErrorUrl + "?errorCode=" + errorCode);
+-//     }
+-// }
++package com.lgcns.nscm.framework.security;
++
++import java.io.IOException;
++import java.security.Security;
++import java.util.ArrayList;
++import java.util.List;
++
++import org.springframework.stereotype.Service;
++
++import com.initech.eam.api.NXContext;
++import com.initech.eam.jakarta.nls.CookieManager;
++import com.initech.eam.smartenforcer.SECode;
++import com.initech.provider.crypto.InitechProvider;
++import com.lgcns.nscm.framework.property.CommonProperties;
++import com.lgcns.nscm.framework.property.CommonProperties.Sso;
++
++import jakarta.annotation.PostConstruct;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import lombok.extern.slf4j.Slf4j;
++
++/**
++ * LG에너지솔루션 SSO(INISAFE Nexess) Agent 연동 서비스.
++ * SSO 가이드(nexess_Agent config.jsp)의 표준 구현을 Spring Bean으로 옮긴 것.
++ */
++@Slf4j
++@Service
++public class SsoService {
++
++    /** verifyNexessCookie 검증 옵션 (가이드 표준값) */
++    private static final int VERIFY_OPTION = 10;
++    /** 쿠키 검증 성공 코드 */
++    public static final String RET_CODE_SUCCESS = "0";
++
++    private final Sso sso;
++    private NXContext context;
++
++    public SsoService(CommonProperties commonProperties) {
++        this.sso = commonProperties.getSso();
++    }
++
++    @PostConstruct
++    public void init() {
++        List<String> serverUrlList = new ArrayList<>();
++        serverUrlList.add(sso.getNdUrl());
++        context = new NXContext(serverUrlList, sso.getTimeout());
++
++        // Initech 암호화 Provider 등록 (가이드 표준 초기화)
++        if (InitechProvider.isProvenMode()) {
++            InitechProvider.changeMode();
++        }
++        if (Security.getProvider("Initech") != null) {
++            Security.removeProvider("Initech");
++        }
++        InitechProvider.addAsProvider(false, false);
++
++        CookieManager.setEncStatus(true);
++        // NLS3 web.xml의 CookiePadding 설정과 일치해야 함
++        SECode.setCookiePadding("");
++
++        log.info("SsoService initialized. ndUrl={}, nlsUrl={}", sso.getNdUrl(), sso.getNlsUrl());
++    }
++
++    /** Nexess 쿠키에서 SSO 사용자 ID 조회. 미로그인 시 null */
++    public String getSsoId(HttpServletRequest request) {
++        return CookieManager.getCookieValue(SECode.USER_ID, request);
++    }
++
++    /** SSO 포탈 로그인 페이지로 이동 (복귀 URL/인증타입 쿠키 설정 후 redirect) */
++    public void goLoginPage(HttpServletResponse response) throws IOException {
++        String ascpUrl = ascpUrl();
++        String nlsLoginUrl = sso.getNlsUrl() + ":" + sso.getNlsPort() + sso.getNlsLoginUrlSuffix();
++
++        log.debug("SSO goLoginPage. ascpUrl={}, nlsLoginUrl={}", ascpUrl, nlsLoginUrl);
++
++        CookieManager.addCookie(SECode.USER_URL, ascpUrl, sso.getSsoDomain(), response);
++        CookieManager.addCookie(SECode.R_TOA, sso.getToa(), sso.getSsoDomain(), response);
++
++        response.sendRedirect(nlsLoginUrl);
++    }
++
++    /** Nexess 쿠키 유효성 검증. 성공 시 "0", 실패 시 에러코드, 예외 시 "-1" */
++    public String verifySession(HttpServletRequest request, HttpServletResponse response) {
++        try {
++            return CookieManager.verifyNexessCookie(
++                    request, response, VERIFY_OPTION, sso.getCookieSessionTimeout(), sso.getProviderList());
++        } catch (Exception e) {
++            log.error("SSO 쿠키 검증 중 예외 발생", e);
++            return "-1";
++        }
++    }
++
++    /** SSO 포탈 에러 페이지로 이동 (Nexess 쿠키 제거 후 redirect) */
++    public void goErrorPage(HttpServletResponse response, int errorCode) throws IOException {
++        String nlsErrorUrl = sso.getNlsUrl() + ":" + sso.getNlsPort() + sso.getNlsErrorUrlSuffix();
++
++        log.warn("SSO goErrorPage. errorCode={}", errorCode);
++
++        CookieManager.removeNexessCookie(sso.getSsoDomain(), response);
++        CookieManager.addCookie(SECode.USER_URL, ascpUrl(), sso.getSsoDomain(), response);
++
++        response.sendRedirect(nlsErrorUrl + "?errorCode=" + errorCode);
++    }
++
++    private String ascpUrl() {
++        return sso.getServerUrl() + ":" + sso.getServerPort() + sso.getAscpUrlSuffix();
++    }
++}
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/filter/JsonLoginFilter.java b/src/main/java/com/lgcns/nscm/framework/security/filter/JsonLoginFilter.java
+index 922c637..937fdc2 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/filter/JsonLoginFilter.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/filter/JsonLoginFilter.java
+@@ -20,10 +20,22 @@ public class JsonLoginFilter extends UsernamePasswordAuthenticationFilter {
+ 
+     private final ObjectMapper objectMapper = new ObjectMapper();
+ 
++    // true 면 ID 로그인을 받지 않는다(운영은 SSO 로만 로그인, config.security.id-login-disabled).
++    private final boolean idLoginDisabled;
++
++    public JsonLoginFilter(boolean idLoginDisabled) {
++        this.idLoginDisabled = idLoginDisabled;
++    }
++
+     @Override
+     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+             throws AuthenticationException {
+ 
++        if (idLoginDisabled) {
++            log.warn("ID 로그인 차단(SSO 전용). remoteAddr={}", request.getRemoteAddr());
++            throw new AuthenticationServiceException("ID login is disabled");
++        }
++
+         if (!request.getContentType().equals("application/json")) {
+             throw new AuthenticationServiceException("Authentication content-type not supported: " + request.getContentType());
+         }
+diff --git a/src/main/java/com/lgcns/nscm/framework/security/handler/LoginSuccessHandler.java b/src/main/java/com/lgcns/nscm/framework/security/handler/LoginSuccessHandler.java
+index 66f524d..c96cea3 100644
+--- a/src/main/java/com/lgcns/nscm/framework/security/handler/LoginSuccessHandler.java
++++ b/src/main/java/com/lgcns/nscm/framework/security/handler/LoginSuccessHandler.java
+@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.lgcns.nscm.admin.menu.MenuService;
+ import com.lgcns.nscm.admin.menu.dto.MenuDto;
++import com.lgcns.nscm.admin.user.UserService;
+ import com.lgcns.nscm.admin.user.UserSession;
+ import com.lgcns.nscm.framework.annotation.SystemLog;
+ import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
+@@ -26,13 +27,17 @@ import com.lgcns.nscm.framework.utils.SecurityUtil;
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import lombok.RequiredArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
+ 
++@Slf4j
+ @Component
+ @RequiredArgsConstructor
+ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+ 
+     private final ObjectMapper objectMapper = new ObjectMapper();
+ 
++    private final UserService userService;
++
+     @Override
+     @SystemLog(LogType.LOGIN)
+     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+@@ -41,6 +46,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+         response.setStatus(HttpStatus.OK.value());
+         response.setContentType("application/json;charset=UTF-8");
+ 
++        // 로그인 성공 시 최종 로그인 일시 기록. 실패해도 로그인 응답을 막지 않는다.
++        try {
++            userService.updateLognDtm(SecurityUtil.getUserSession(authentication).getUserId());
++        } catch (Exception e) {
++            log.warn("LOGN_DTM 갱신 실패. {}", e.getMessage());
++        }
++
+         Map<String, Object> body = new HashMap<>();
+         body.put("code", SUCCESS);
+         body.put("message", SUCCESS_MSG);
+diff --git a/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java b/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
+index afe017c..cfeb36f 100644
+--- a/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
++++ b/src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
+@@ -39,12 +39,79 @@ public class ExcelUtils {
+         return resultList;
+     }
+ 
++    /**
++     * 2단 헤더(그룹행 + 하위행) 엑셀을 List&lt;Map&gt; 구조로 변환한다.
++     * DMF0074(Metal Link Price) 전용 — Excel Form 다운로드가 그리드 그대로 내보내는
++     * 2단 헤더(1행 그룹명 병합 + 2행 원소명)를 그대로 재업로드할 수 있도록 지원한다.
++     *
++     * 그룹행(0)은 병합 셀이라 그룹의 첫 칸에만 값이 있고 나머지는 공란 — 좌측 값을 이어 채운다
++     * (forward-fill). 하위행(1)에 값이 있으면 "{그룹}_{하위}" 를, 없으면(그룹만 있는 단일 컬럼)
++     * 그룹값 그대로를 헤더키로 쓴다 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 토큰과 1:1.
++     * 데이터는 헤더 2행 다음(인덱스 2, 엑셀 3행)부터 읽는다.
++     */
++    public static List<Map<String, Object>> convertExcelToJsonTwoHeaderRows(MultipartFile file) throws Exception {
++        List<Map<String, Object>> resultList = new ArrayList<>();
++
++        try (InputStream is = file.getInputStream();
++             Workbook workbook = new XSSFWorkbook(is)) {
++
++            Sheet sheet = workbook.getSheetAt(0);
++            Row groupRow = sheet.getRow(0);
++            Row subRow = sheet.getRow(1);
++            // 그룹행은 병합 셀이라 getPhysicalNumberOfCells() 로 세면 병합 구간의 빈 셀이 누락돼
++            //   실제보다 적게 잡힐 수 있다 — 두 헤더행의 getLastCellNum()(마지막 셀 인덱스+1) 중
++            //   큰 값을 쓴다(빈 셀도 Cell 객체로 존재하면 포함되므로 병합에 더 안전).
++            int columnCount = Math.max(
++                    groupRow.getLastCellNum(),
++                    subRow != null ? subRow.getLastCellNum() : 0);
++
++            String[] columnHeaders = new String[columnCount];
++            String lastGroup = "";
++            for (int j = 0; j < columnCount; j++) {
++                String group = getHeaderCellValue(groupRow.getCell(j));
++                if (!group.isEmpty()) lastGroup = group;
++                String sub = subRow != null ? getHeaderCellValue(subRow.getCell(j)) : "";
++                columnHeaders[j] = sub.isEmpty() ? lastGroup : lastGroup + "_" + sub;
++            }
++
++            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
++                Row currentRow = sheet.getRow(i);
++                if (currentRow == null) continue;
++
++                Map<String, Object> rowData = new HashMap<>();
++                for (int j = 0; j < columnCount; j++) {
++                    Cell cell = currentRow.getCell(j);
++                    rowData.put(columnHeaders[j], getCellValue(cell));
++                }
++                resultList.add(rowData);
++            }
++        }
++        return resultList;
++    }
++
++    // 헤더 셀 문자열 추출 — 헤더는 항상 텍스트이나 병합으로 비는 셀(null)도 안전하게 처리
++    private static String getHeaderCellValue(Cell cell) {
++        if (cell == null) return "";
++        return switch (cell.getCellType()) {
++            case STRING -> cell.getStringCellValue().trim();
++            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
++            default -> "";
++        };
++    }
++
+     // 셀 타입별 데이터 추출 헬퍼 함수
+     private static Object getCellValue(Cell cell) {
+         if (cell == null) return "";
+         return switch (cell.getCellType()) {
+             case STRING -> cell.getStringCellValue();
+-            case NUMERIC -> DateUtil.isCellDateFormatted(cell) ? cell.getDateCellValue() : cell.getNumericCellValue();
++            case NUMERIC -> {
++                if (DateUtil.isCellDateFormatted(cell)) yield cell.getDateCellValue();
++                double d = cell.getNumericCellValue();
++                // 정수는 지수표기/소수점 없이 문자열화 (예: 20260720, 777).
++                //   double.toString 이면 20260720 -> "2.026072E7" 로 깨져 TO_DATE/TO_NUMBER 파싱 실패.
++                if (d == Math.rint(d) && !Double.isInfinite(d)) yield String.valueOf((long) d);
++                yield java.math.BigDecimal.valueOf(d).stripTrailingZeros().toPlainString();
++            }
+             case BOOLEAN -> cell.getBooleanCellValue();
+             case FORMULA -> cell.getCellFormula();
+             default -> "";
+diff --git a/src/main/java/com/lgcns/nscm/framework/utils/SecurityUtil.java b/src/main/java/com/lgcns/nscm/framework/utils/SecurityUtil.java
+index 56e933a..68dc658 100644
+--- a/src/main/java/com/lgcns/nscm/framework/utils/SecurityUtil.java
++++ b/src/main/java/com/lgcns/nscm/framework/utils/SecurityUtil.java
+@@ -30,7 +30,12 @@ public class SecurityUtil {
+                     .userNm(userDetails.getUserNm())
+                     .userEngNm(userDetails.getUserEngNm())
+                     .langCd(userDetails.getLangCd())
++                    .tmzCd(userDetails.getTmzCd())
+                     .menus(userDetails.getMenus())
++                    .isGuest(userDetails.isGuest())
++                    .groups(userDetails.getGroups())
++                    .div(userDetails.getDiv())
++                    .companyId(userDetails.getCompanyId())
+                     .build();
+         }
+ 
+diff --git a/src/main/java/com/lgcns/nscm/framework/webservice/WsdlCommonService.java b/src/main/java/com/lgcns/nscm/framework/webservice/WsdlCommonService.java
+index e41b222..d23b241 100644
+--- a/src/main/java/com/lgcns/nscm/framework/webservice/WsdlCommonService.java
++++ b/src/main/java/com/lgcns/nscm/framework/webservice/WsdlCommonService.java
+@@ -7,9 +7,13 @@ import javax.xml.transform.Source;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ import org.springframework.ws.client.core.WebServiceTemplate;
++import org.springframework.ws.soap.SoapMessage;
+ import org.springframework.xml.transform.StringResult;
+ import org.springframework.xml.transform.StringSource;
+ 
++import lombok.extern.slf4j.Slf4j;
++
++@Slf4j
+ @Service
+ public class WsdlCommonService {
+ 
+@@ -17,47 +21,63 @@ public class WsdlCommonService {
+     private WebServiceTemplate webServiceTemplate;
+ 
+     /**
+-     * 공통 WSDL 호출 메서드
+-     * @param endpoint 서버 주소
+-     * @param namespace XML 네임스페이스
+-     * @param methodName 호출할 메서드명
+-     * @param params 입력 데이터 MapWsdlCommonService
++     * 공통 WSDL 호출 메서드(래퍼/SOAPAction 없는 평면 호출) — 하위호환 유지.
+      */
+     public String callWsdl(String endpoint, String namespace, String methodName, Map<String, Object> params) {
++        return callWsdl(endpoint, namespace, methodName, null, null, params);
++    }
+ 
+-    	StringResult responseResult = new StringResult();
+-    	StringBuilder xmlReq = new StringBuilder();
+-
+-    	try {
+-	        // 1. 동적 SOAP Request XML 생성 (String 기반 빌드)
+-	        xmlReq.append("<")
+-	              .append(methodName)
+-	              .append(" xmlns=\"")
+-	              .append(namespace)
+-	              .append("\">");
+-
+-	        params.forEach((key, value) -> {
+-	            xmlReq.append("<").append(key).append(">")
+-	                  .append(value)
+-	                  .append("</").append(key).append(">");
+-	        });
++    /**
++     * 공통 WSDL(SOAP) 호출 — AS-IS ASMX 규약 일치용(래퍼 복합타입 + SOAPAction).
++     *
++     * @param endpoint   서버 주소
++     * @param namespace  XML 네임스페이스
++     * @param methodName 호출할 메서드명(SOAP body 루트)
++     * @param wrapper    파라미터를 감쌀 복합타입 엘리먼트명(예: UIC0001_CALL_FROM_SSPUI). null/빈값이면 평면.
++     * @param soapAction SOAPAction HTTP 헤더. null/빈값이면 설정 안 함.
++     * @param params     입력 데이터 Map(엘리먼트명:값)
++     * @return 응답 XML 문자열
++     */
++    public String callWsdl(String endpoint, String namespace, String methodName,
++            String wrapper, String soapAction, Map<String, Object> params) {
+ 
+-	        xmlReq.append("</").append(methodName).append(">");
++        StringResult responseResult = new StringResult();
++        StringBuilder xmlReq = new StringBuilder();
++        boolean useWrapper = wrapper != null && !wrapper.isEmpty();
+ 
+-	        // 2. 전송 준비
+-	        Source requestPayload = new StringSource(xmlReq.toString());
++        try {
++            // 1. 동적 SOAP Request XML 생성
++            xmlReq.append("<").append(methodName).append(" xmlns=\"").append(namespace).append("\">");
++            if (useWrapper) {
++                xmlReq.append("<").append(wrapper).append(">");
++            }
++            if (params != null) {
++                params.forEach((key, value) ->
++                    xmlReq.append("<").append(key).append(">")
++                          .append(value)
++                          .append("</").append(key).append(">"));
++            }
++            if (useWrapper) {
++                xmlReq.append("</").append(wrapper).append(">");
++            }
++            xmlReq.append("</").append(methodName).append(">");
+ 
++            Source requestPayload = new StringSource(xmlReq.toString());
+ 
+-	        // 3. WebServiceTemplate을 통한 호출
+-	        webServiceTemplate.sendSourceAndReceiveToResult(endpoint, requestPayload, responseResult);
++            // 2. SOAPAction 헤더를 세팅하며 호출(없으면 payload 만 전송)
++            webServiceTemplate.sendSourceAndReceiveToResult(endpoint, requestPayload,
++                message -> {
++                    if (soapAction != null && !soapAction.isEmpty() && message instanceof SoapMessage) {
++                        ((SoapMessage) message).setSoapAction(soapAction);
++                    }
++                },
++                responseResult);
+ 
+-	        // 4. 결과 XML 반환 (이후 XML 파서를 통해 Map으로 변환 가능)
+-    	} catch (Exception e) {
+-    		//
+-		}
+-//    	System.out.println("wsdlREQ>>>:  "+xmlReq.toString());
+-//    	System.out.println("wsdlTest>>>:  "+responseResult.toString());
++        } catch (Exception e) {
++            // 호출 실패 — 빈 결과 반환(호출부 판단). 기존 동작 유지하되 원인은 로그로 남긴다.
++            log.warn("callWsdl 실패 endpoint={} method={} : {}", endpoint, methodName, e.getMessage());
++        }
+ 
+-    	return responseResult.toString();
++        return responseResult.toString();
+     }
+ }
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralController.java b/src/main/java/com/lgcns/nscm/general/GeneralController.java
+index 78c6b75..de5a6b4 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralController.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralController.java
+@@ -16,9 +16,11 @@ import com.lgcns.nscm.framework.annotation.LoginUser;
+ import com.lgcns.nscm.framework.annotation.SystemLog;
+ import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
+ import com.lgcns.nscm.framework.base.BaseController;
++import com.lgcns.nscm.framework.property.CommonProperties;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+ 
+ import io.swagger.v3.oas.annotations.tags.Tag;
++import jakarta.servlet.http.HttpServletResponse;
+ import lombok.RequiredArgsConstructor;
+ import lombok.extern.slf4j.Slf4j;
+ 
+@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
+ public class GeneralController extends BaseController {
+ 
+     private final GeneralService generalService;
++    private final CommonProperties commonProperties;
+ 
+     /**
+      * @MethodName : callProc
+@@ -57,9 +60,59 @@ public class GeneralController extends BaseController {
+     	params.put("mnuId", mnuId);
+     	params.put("shtNm", shtNm);
+     	params.put("mnuBtnCd", mnuBtnCd);
++    	// 배포 시스템 구분(config.system-cd) 고정 주입 — PROC_M 에 sesSystemCd IN 을 등록한 proc(SYS0003 GET 등)만 사용.
++    	params.put("sesSystemCd", commonProperties.getSystemCd());
++    	// 세션 언어 주입 — 저장 실패 시 원시 DB 에러 마스킹 문구(MSG00003)를 세션 언어로 내리는 데 사용(execBtn).
++    	params.put("sesLangCd", userSession.getLangCd());
+     	return successResponseEntity(generalService.execBtn(params));
+     }
+ 
++    /**
++     * @MethodName : callProc2
++     * @Description: 카탈로그 기반 프로시저 호출(SCM_ADM_PROC_M / procedures.d.ts 미참조) — 신규/개선 화면 점진 전환용.
++     *   세션값은 여기서 고정 주입하여 FE 미전송 파라미터의 default 로 쓴다(오라클명 충돌 회피).
++     */
++    @SystemLog(LogType.BUTTON)
++    @AuthCheck(Type.ALL)
++    @PostMapping(value="/{mnuId}/{shtNm}/{mnuBtnCd}/call-proc2", produces = "application/json; charset=UTF-8")
++    public ResponseEntity callProc2(@LoginUser UserSession userSession
++    		, @RequestBody(required = false) Map<String, Object>  params
++    		, @PathVariable String mnuId
++    		, @PathVariable String shtNm
++    		, @PathVariable String mnuBtnCd
++    		) throws Exception {
++    	if(NullUtils.isNone(params)) params = new HashMap<String, Object>();
++    	params.put("mnuId", mnuId);
++    	params.put("shtNm", shtNm);
++    	params.put("mnuBtnCd", mnuBtnCd);
++    	// 세션값 컨트롤러 고정 주입 (요청에 없는 파라미터의 default 로만 적용됨)
++    	params.put("sesUserId", userSession.getUserId());
++    	params.put("sesLangCd", userSession.getLangCd());
++    	return successResponseEntity(generalService.callProc2(params));
++    }
++
++    /**
++     * @MethodName : callProcStream
++     * @Description: callProc 의 스트리밍 변형 — OUT 커서를 ResultSet -> JSON 으로 직접 스트리밍(단일 패스).
++     *   응답 형태는 call-proc 와 동일({code,message,result}). 대용량 wide 결과(예: DMF0020) 검증용 실험 엔드포인트.
++     *   주의: @SystemLog 미부착(응답 스트림 직접 쓰기와 로깅 aspect 충돌 방지).
++     */
++    @AuthCheck(Type.ALL)
++    @PostMapping(value="/{mnuId}/{shtNm}/{mnuBtnCd}/call-proc-stream", produces = "application/json; charset=UTF-8")
++    public void callProcStream(@LoginUser UserSession userSession
++    		, @RequestBody(required = false) Map<String, Object>  params
++    		, @PathVariable String mnuId
++    		, @PathVariable String shtNm
++    		, @PathVariable String mnuBtnCd
++    		, HttpServletResponse response
++    		) throws Exception {
++    	if(NullUtils.isNone(params)) params = new HashMap<String, Object>();
++    	params.put("mnuId", mnuId);
++    	params.put("shtNm", shtNm);
++    	params.put("mnuBtnCd", mnuBtnCd);
++    	generalService.execBtnStream(params, response);
++    }
++
+     /**
+      * @MethodName : retrieveGeneral
+      * @Description: 일반적인 조회쿼리 실행 Controller
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralService.java b/src/main/java/com/lgcns/nscm/general/GeneralService.java
+index 5c3f253..cd6a4e6 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralService.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralService.java
+@@ -2,6 +2,8 @@ package com.lgcns.nscm.general;
+ 
+ import java.util.Map;
+ 
++import jakarta.servlet.http.HttpServletResponse;
++
+ public interface GeneralService {
+ 
+ 	/**
+@@ -17,6 +19,14 @@ public interface GeneralService {
+ 	 */
+ 	Map<String, Object> callProc(Map<String, Object> params) throws Exception;
+ 
++	/**
++	 * call-proc2 — SCM_ADM_PROC_M / procedures.d.ts 미참조, 살아있는 Oracle 카탈로그(ALL_ARGUMENTS)로
++	 * IN/OUT 을 유도해 실행하는 신규 경로(점진 전환용). 프로시저명은 기존 버튼->API_M 해석을 재사용한다.
++	 * @param      : @param params (mnuId/shtNm/mnuBtnCd + 업무값 + 선택 cvtJsonToVarchar)
++	 * @return     : Map<String,Object> 커서키(o_rc1..)/스칼라OUT 을 담은 result
++	 */
++	Map<String, Object> callProc2(Map<String, Object> params) throws Exception;
++
+ 	/**
+ 	 * 버튼별 api 호출
+ 	 * @MethodName : execBtn
+@@ -30,6 +40,12 @@ public interface GeneralService {
+ 	 */
+ 	Map<String, Object> execBtn(Map<String, Object> params) throws Exception;
+ 
++	/**
++	 * 버튼별 api 호출 (스트리밍) — OUT 커서를 ResultSet -> JSON 으로 직접 스트리밍(단일 패스, CustomMap 미생성).
++	 * 응답은 execBtn 과 동일한 { code, message, result:{ 커서키:[..], 스칼라OUT:val } } 형태를 응답 스트림에 직접 쓴다.
++	 */
++	void execBtnStream(Map<String, Object> params, HttpServletResponse response) throws Exception;
++
+ 	/**
+ 	 *  select 처리
+ 	 * @MethodName : retrieveSql
+diff --git a/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java b/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
+index 3f639dc..03bfbb5 100644
+--- a/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
+@@ -4,6 +4,8 @@ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
+ 
+ import org.springframework.stereotype.Service;
+ 
+@@ -11,6 +13,7 @@ import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseService;
+ import com.lgcns.nscm.framework.utils.MapUtils;
+ 
++import jakarta.servlet.http.HttpServletResponse;
+ import lombok.extern.slf4j.Slf4j;
+ 
+ @Slf4j
+@@ -20,6 +23,12 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
+ 
+     private final String nameSpace = BaseConstants.MYBATIS_NAME_SPACE;
+ 
++    /** 프로시저 결과커서(O_RESULT_CURSOR 등)의 에러 메시지 필드명 — 원시 DB 에러 마스킹 대상. */
++    private static final Set<String> ERROR_MSG_KEYS =
++            Set.of("MSG", "ERR_MESSAGE", "ERR_MSG", "ERROR_MESSAGE", "SQLERRM");
++    /** 시스템 Oracle 에러코드 추출 패턴(ORA-NNNNN). 20000~20999 는 RAISE_APPLICATION_ERROR(업무 메시지)라 보존. */
++    private static final Pattern ORA_CODE = Pattern.compile("ORA-(\\d{5})");
++
+     /**
+      * 버튼별 api 호출
+      * @MethodName : retrieveProc
+@@ -44,7 +53,16 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
+     	}
+     	// 세션 정보 파라미터에 추가
+     	if(isJvarchar) MapUtils.cvtJsonToJVarchar(params, jCols);
+-    	return selectList("callProc", makeProcedure(params, procParam));
++    	Map<String, Object> result = selectList("callProc", makeProcedure(params, procParam));
++    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
++    }
++
++    /**
++     * execBtn 의 스트리밍 변형 — BaseService.callProcStream(raw JDBC, ResultSet->JSON 단일패스)에 위임.
++     */
++    @Override
++    public void execBtnStream(Map<String, Object> params, HttpServletResponse response) throws Exception {
++    	callProcStream(params, response);
+     }
+ 
+     /**
+@@ -59,7 +77,78 @@ public class GeneralServiceImpl extends BaseService implements GeneralService {
+      */
+     public Map<String, Object> callProc(Map<String, Object> params) throws Exception {
+     	List<Map<String, Object>> procParam = (List<Map<String, Object>>) selectList("retrieveProcInfoList", params).get("procInfo");
+-    	return selectList("callProc", makeProcedure(params, procParam));
++    	Map<String, Object> result = selectList("callProc", makeProcedure(params, procParam));
++    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
++    }
++
++    /**
++     * call-proc2 — 카탈로그 기반 프로시저 실행(SCM_ADM_PROC_M 파라미터 메타 미사용).
++     * 프로시저명(PROC_NM=API_URL)만 기존 버튼->API_M 해석(retrieveBtnInfoList)에서 취하고,
++     * IN/OUT 유도·바인딩은 BaseService.callProc2(살아있는 카탈로그)에 위임한다. 버튼권한(@AuthCheck)은 그대로.
++     */
++    @Override
++    public Map<String, Object> callProc2(Map<String, Object> params) throws Exception {
++    	List<Map<String, Object>> procInfo = (List<Map<String, Object>>) selectList("retrieveBtnInfoList", params).get("procInfo");
++    	if (procInfo == null || procInfo.isEmpty() || procInfo.get(0).get("PROC_NM") == null) {
++    		throw new Exception("call_proc2: cannot resolve PROC_NM for " + params.get("mnuId") + "/" + params.get("shtNm") + "/" + params.get("mnuBtnCd"));
++    	}
++    	String procNm = String.valueOf(procInfo.get(0).get("PROC_NM"));
++
++    	Set<String> jCols = new HashSet<>();
++    	Object cvt = params.get("cvtJsonToVarchar");
++    	if (cvt != null && !String.valueOf(cvt).isBlank()) {
++    		for (String c : String.valueOf(cvt).split(",")) {
++    			if (!c.trim().isEmpty()) jCols.add(c.trim());
++    		}
++    	}
++    	Map<String, Object> result = callProc2(procNm, params, jCols);
++    	return maskRawDbErrors(result, (String) params.get("sesLangCd"));
++    }
++
++    /**
++     * 프로시저 결과커서의 원시 DB 에러(SQLERRM/ORA-NNNNN)를 generic 문구로 치환한다(보안 — 스키마/제약조건/
++     * 테이블/컬럼명·입력값이 클라이언트로 유출되는 것을 막는다). 원문은 서버 로그(log.error)에만 남긴다.
++     *
++     * 판별: 결과 Map 의 List 값(각 커서) 각 행에서 에러메시지 필드({@link #ERROR_MSG_KEYS})가 시스템 Oracle
++     * 에러(ORA-NNNNN, 단 20000~20999 제외)를 포함하면 원시 DB 에러로 간주한다. 통제된 업무 에러(앱 코드
++     * 99010/99020 친화 메시지, RAISE_APPLICATION_ERROR ORA-20xxx)는 메시지에 시스템 ORA 코드가 없으므로
++     * 보존된다. CODE/ERR_CODE·행 식별자 필드는 그대로 둔다(FE 실패 판정·셀 색칠 로직 유지).
++     */
++    private Map<String, Object> maskRawDbErrors(Map<String, Object> result, String langCd) {
++    	if (result == null) return result;
++    	// MSG00003 (SCM_ADM_MSG_M 기준): KO="저장에 실패하였습니다." / EN·CN="Failed to save."
++    	//   AS-IS SCP0005 는 raw 저장오류에 generic MSG00006 만 띄웠으나(원문 표시 라인 주석처리), MSG00006 은
++    	//   TO-BE 미등록이라 등가 generic 코드 MSG00003 으로 대체한다. 메시지원문 drift 방지는 전역 공통 관리.
++    	boolean english = "EN".equalsIgnoreCase(langCd) || "CN".equalsIgnoreCase(langCd);
++    	String generic = english ? "Failed to save." : "저장에 실패하였습니다.";
++    	for (Object cursor : result.values()) {
++    		if (!(cursor instanceof List)) continue;
++    		for (Object rowObj : (List<Object>) cursor) {
++    			if (!(rowObj instanceof Map)) continue;
++    			Map<String, Object> row = (Map<String, Object>) rowObj;
++    			boolean raw = false;
++    			for (String key : ERROR_MSG_KEYS) {
++    				Object val = row.get(key);
++    				if (val != null && isSystemOraError(String.valueOf(val))) { raw = true; break; }
++    			}
++    			if (!raw) continue;
++    			log.error("[call-proc] 원시 DB 에러 마스킹: {}", row); // 원문은 서버에만 기록
++    			for (String key : ERROR_MSG_KEYS) {
++    				if (row.containsKey(key)) row.put(key, generic);
++    			}
++    		}
++    	}
++    	return result;
++    }
++
++    /** 메시지에 시스템 Oracle 에러코드(ORA-NNNNN, 20000~20999 제외)가 있으면 true. */
++    private boolean isSystemOraError(String msg) {
++    	Matcher m = ORA_CODE.matcher(msg);
++    	while (m.find()) {
++    		int code = Integer.parseInt(m.group(1));
++    		if (code < 20000 || code > 20999) return true;
++    	}
++    	return false;
+     }
+ 
+ 
+diff --git a/src/main/java/com/lgcns/nscm/general/file/FileController.java b/src/main/java/com/lgcns/nscm/general/file/FileController.java
+index 4f08848..4f8312d 100644
+--- a/src/main/java/com/lgcns/nscm/general/file/FileController.java
++++ b/src/main/java/com/lgcns/nscm/general/file/FileController.java
+@@ -3,7 +3,10 @@
+ import java.util.HashMap;
+ import java.util.Map;
+ 
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PathVariable;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
+@@ -18,9 +21,12 @@ import com.lgcns.nscm.framework.annotation.LoginUser;
+ import com.lgcns.nscm.framework.annotation.SystemLog;
+ import com.lgcns.nscm.framework.annotation.SystemLog.LogType;
+ import com.lgcns.nscm.framework.base.BaseController;
++import com.lgcns.nscm.framework.model.BaseResponse;
+ import com.lgcns.nscm.framework.utils.MapUtils;
+ import com.lgcns.nscm.framework.utils.NullUtils;
+ import com.lgcns.nscm.framework.utils.SecurityUtil;
++import com.lgcns.nscm.general.file.dto.ImageFileDto;
++import com.lgcns.nscm.general.file.dto.ImageUploadResponse;
+ 
+ import io.swagger.v3.oas.annotations.tags.Tag;
+ import lombok.RequiredArgsConstructor;
+@@ -35,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
+ public class FileController extends BaseController {
+ 
+     private final FileService fileService;
++    private final ImageFileService imageFileService;
+ 
+     @SystemLog(LogType.EXCELUPLOAD)
+     @AuthCheck(Type.ALL)
+@@ -53,4 +60,47 @@ public class FileController extends BaseController {
+     	return successResponseEntity(fileService.excelFileUplad(params));
+     }
+ 
++    /**
++     * @MethodName : imageUpload
++     * @Description: 에디터/공지사항 본문에 삽입할 이미지를 업로드한다.
++     *               응답의 url은 상대경로이므로, 프론트엔드에서 API baseURL을 앞에 붙여 &lt;img src&gt;를 조립한다.
++     * @param      : @param file 업로드 이미지 (jpg, jpeg, png, gif, webp / 최대 15MB)
++     * @param      : @param fileKdnCd 업무 구분 코드 (선택, 기본값 BASIC)
++     * @return     : ResponseEntity
++     *
++     * SystemLogAspect가 대상 메서드의 인자 전체를 JSON 직렬화하여
++     * 업로드 이미지 바이너리가 통째로 변환되므로 @SystemLog는 적용하지 않는다.
++     */
++    @AuthCheck(Type.LOGIN)
++    @PostMapping(value="/file/image-upload", produces = "application/json; charset=UTF-8")
++    public ResponseEntity<BaseResponse<ImageUploadResponse>> imageUpload(
++    		@LoginUser UserSession userSession
++    		, @RequestParam("file") MultipartFile file
++    		, @RequestParam(value = "fileKdnCd", required = false) String fileKdnCd
++    		) throws Exception {
++    	return successResponseEntity(imageFileService.upload(file, fileKdnCd, userSession.getUserId()));
++    }
++
++    /**
++     * @MethodName : getImage
++     * @Description: 업로드된 이미지를 조회한다. 브라우저의 &lt;img&gt; 태그가 직접 호출한다.
++     *               조회 로그가 과도하게 쌓이는 것을 막기 위해 @SystemLog는 적용하지 않는다.
++     * @param      : @param fileId 첨부파일 ID
++     * @return     : ResponseEntity
++     */
++    @AuthCheck(Type.LOGIN)
++    @GetMapping("/file/image/{fileId}")
++    public ResponseEntity<byte[]> getImage(@PathVariable String fileId) throws Exception {
++    	ImageFileDto image = imageFileService.get(fileId);
++    	if (image == null) return ResponseEntity.notFound().build();
++
++    	HttpHeaders headers = new HttpHeaders();
++    	headers.set(HttpHeaders.CONTENT_TYPE, ImageValidator.toContentType(image.getExtension()));
++    	headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline");
++    	headers.set(HttpHeaders.CACHE_CONTROL, "private, max-age=3600");
++    	headers.set("X-Content-Type-Options", "nosniff");
++
++    	return new ResponseEntity<byte[]>(image.getContent(), headers, HttpStatus.OK);
++    }
++
+ }
+diff --git a/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java b/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
+index f2faa0e..224ed23 100644
+--- a/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
++++ b/src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
+@@ -1,22 +1,24 @@
+ package com.lgcns.nscm.general.file;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Map;
++import java.util.Set;
++import java.util.stream.Collectors;
+ 
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.multipart.MultipartFile;
+ 
+-import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.databind.ObjectMapper;
+ import com.lgcns.nscm.framework.base.BaseConstants;
+ import com.lgcns.nscm.framework.base.BaseService;
+ import com.lgcns.nscm.framework.exception.BusinessException;
+ import com.lgcns.nscm.framework.utils.ExcelUtils;
+-import com.lgcns.nscm.framework.utils.MapUtils;
+-import com.lgcns.nscm.framework.utils.NullUtils;
++import com.lgcns.nscm.framework.utils.SecurityUtil;
++
+ 
+ import lombok.extern.slf4j.Slf4j;
+ 
+@@ -55,18 +57,52 @@ public class FileServiceImpl extends BaseService implements FileService {
+ 				validProc = (String) excelInfo.get("STORAGE_SQL_ID");
+ 
+ 				// 엑셀 파일 데이터 파싱
+-				List<Map<String, Object>> excelList = ExcelUtils.convertExcelToJson((MultipartFile) params.get("excelfile"));
+-				// 엑셀 데이터 > 엑셀 업로드용 데이터롷 변경
+-				excelJsonData = cvtListUploadJson(excelList, headerContent);
++				//   DMF0074(Metal Link Price) 는 Excel Form 다운로드가 그리드 그대로(2단 헤더:
++				//   그룹행+원소행)를 내보내므로 재업로드 시 전용 2단 헤더 파서를 쓴다.
++				//   PROGRAM_ID 는 'DMF0074'(대형) / 'DMF0074_40'(소형) 두 가지 모두 대상.
++				String mnuId = String.valueOf(params.get("mnuId"));
++				boolean isTwoHeaderRowMenu = mnuId.startsWith("DMF0074");
++				List<Map<String, Object>> excelList = isTwoHeaderRowMenu
++						? ExcelUtils.convertExcelToJsonTwoHeaderRows((MultipartFile) params.get("excelfile"))
++						: ExcelUtils.convertExcelToJson((MultipartFile) params.get("excelfile"));
++				/* 26.09.07
++					헤더 검증 — HEADER_CONTENT 필수 토큰('*' 접미)이 엑셀 1행 헤더에 그대로 없으면
++					(컬럼명 변경/오탈자 등) SP 까지 빈 값으로 흘러가 ORA-01403 등 원인불명 에러로 터진다.
++					 AS-IS 공용 ExcelUploadForm 의 MSG00450(헤더 미검출) 과 동일 시점의 방어.
++				*/
++				validateExcelHeader(excelList, headerContent);
++				// 엑셀 데이터 > 업로드용 행 리스트 (@TITLE + UPLOAD). 동적 기간 컬럼은 엑셀 날짜 행 기준.
++				//   2단 헤더 메뉴(DMF0074)는 컬럼이 헤더 2행에 전부 고정 선언돼 있어 titleDateRow
++				//   휴리스틱(3번째 행 값 유무로 컬럼을 골라내는 DMF0014 동적 주차 컬럼 전용 로직)이
++				//   불필요 — 오히려 3행 값이 우연히 빈칸인 컬럼을 통째로 누락시키는 회귀를 낸다
++				//   (2026-09-22 실사고: PeriodFr/PeriodTo 등 그룹 전체가 Error Detail 에서 사라짐).
++				//   isTwoHeaderRowMenu 는 항상 HEADER_CONTENT 순서 그대로 전 컬럼을 고정 노출한다.
++				//   DMF0014(Customer FCST Upload) — 1단 헤더 폼은 헤더 1행 자체가 이미 실제 날짜
++				//   문자열(예: '20260921')로 채워진 자기서술형 기간 컬럼이라, titleDateRow 휴리스틱
++				//   (2행 선두 식별컬럼이 빈칸인지로 날짜행을 추정)이 필요 없다. 오히려 2행이 우연히
++				//   정상 데이터(선두 식별컬럼 채움)이면 날짜행이 아니라고 오판해 기간 컬럼 전체가
++				//   HEADER_CONTENT 고정 13열로 되돌아가 통째로 유실되고, 스테이징 ATTRIBUTE14~ 가
++				//   비어 버킷타입(WEEKLY/MONTHLY) 판정이 어긋난다(2026-09-23 실사고 — Customer FCST
++				//   Upload 전건 Invalid Measure Upload Bucket). DMF0014 는 엑셀 헤더에 실제로 존재하는
++				//   컬럼 중 HEADER_CONTENT 에 없는 나머지를 전부 기간 컬럼으로 채택(오름차순 정렬)한다.
++				boolean useHeaderDefinedPeriodCols = mnuId.startsWith("DMF0014");
++				List<Map<String, Object>> uploadRows =
++						cvtListUploadRows(excelList, headerContent, isTwoHeaderRowMenu, useHeaderDefinedPeriodCols);
++				excelJsonData = objectMapper.writeValueAsString(uploadRows);
+ 				// 엑셀 업로드 temp 테이블에 insert
+ 				params.put("excelData", excelJsonData);
+-				params.put("colCnt", getPipeCount(headerContent));
++				// colCnt = 실제 _COL 개수 (동적 기간 컬럼 반영). 행 없으면 HEADER_CONTENT 토큰 수 fallback.
++				int colCnt = uploadRows.isEmpty() ? getPipeCount(headerContent)
++						: (int) uploadRows.get(0).keySet().stream().filter(k -> k.startsWith("_COL")).count();
++				params.put("colCnt", colCnt);
+ 				params.put("@O_RESULT_CURSOR", null);
+ 				selectList("admin.excel.excelUploadTmp", params);
+ 				// 유효성 체크 프로시저 실행
+ 				params.put("validProc", validProc);
+ 				params.put("mode", 0);
+ 				selectList("admin.excel.excelUploadValid", params);
++				// 동적 컬럼(DMF0082 월 / DMF0074 메탈 / DMF0014 기간)이 한 칸도 없는 행은 Error Detail 로 보낸다.
++				markRowsWithoutDynamicValue(params, uploadRows, headerContent, mnuId);
+ 				// 조회용 프로시저 실행
+ 				params.put("@O_CUR_CNT", null);
+ 				params.put("@O_CUR_LIST", null);
+@@ -84,50 +120,175 @@ public class FileServiceImpl extends BaseService implements FileService {
+         return parts.length;
+     }
+ 
+-	private String cvtListUploadJson(List<Map<String, Object>> excelList, String keyTemplate) {
++	// 'W27', 'W44' 같은 주차 라벨 토큰 — 매주 굴러가는 동적 컬럼이라 HEADER_CONTENT 에 특정 주차가
++	//   박혀 있어도 그 주차가 지나면 영원히 없는 컬럼이 된다(2026-09-23 실사고 — DMF0014 W27~31
++	//   토큰이 stale 화 되어 현재 주차 파일(W43~) 업로드가 전건 헤더 검증 실패). 고정 식별 컬럼만
++	//   필수로 보고, 주차 라벨은 있으면 검사하되 없어도 통과시킨다.
++	private static final java.util.regex.Pattern WEEK_LABEL_TOKEN = java.util.regex.Pattern.compile("^W\\d+$");
++
++	/* 26.09.22
++	   HEADER_CONTENT 토큰 전체(필수 '*' 여부 무관)가 엑셀 1행 헤더에 1건이라도 없으면 즉시 중단한다
++	   — 업로드 파일 헤더가 Excel Form(업로드 양식) 다운로드 헤더와 다르면 무조건 안내해야 한다는
++	   사용자 요구(2026-09-22). 종전엔 '*'(필수) 토큰만 체크해 DMF0074/DMF0082 처럼 HEADER_CONTENT 에
++	   '*' 토큰이 아예 없는 메뉴는 이 체크가 사실상 no-op 이었다 — 전체 토큰 비교로 그 구멍을 없앴다.
++	   (AS-IS ExcelUploadForm MSG00450 과 동일 시점의 방어 — 대상 범위만 필수→전체로 확장.)
++	   2026.09.23 — 주차 라벨(W\d+) 토큰은 이 "전체 필수" 대상에서 제외한다(WEEK_LABEL_TOKEN 참고).
++	*/
++	private void validateExcelHeader(List<Map<String, Object>> excelList, String headerContent) {
++		if (excelList.isEmpty() || isAllBlank(excelList)) {
++			// 헤더 밑에 데이터 행이 아예 없거나, 행은 있어도 값이 전부 공백인 경우
++			//   (AS-IS ExcelUploadForm MSG00451 과 동일 시점의 방어). 엑셀에서 값만 지워도
++			//   POI 상 빈 Row 객체가 남아 excelList 자체는 비어있지 않을 수 있어 값까지 확인한다.
++			throw new BusinessException("엑셀 파일에 업로드할 데이터가 존재하지 않습니다.");
++		}
++		Set<String> actualHeaders = excelList.get(0).keySet();
++		List<String> missing = Arrays.stream(headerContent.split("\\|", -1))
++				.map(String::trim)
++				.filter(tk -> !tk.isEmpty())
++				.filter(tk -> !WEEK_LABEL_TOKEN.matcher(tk).matches())
++				.filter(tk -> !actualHeaders.contains(tk))
++				.collect(Collectors.toList());
++		if (!missing.isEmpty()) {
++			// MSG01151("Invalid Column Header Title") — 업로드 양식과 실제 파일 헤더가 다를 때 안내.
++			//   잘못된(누락된) 헤더명을 메시지 본문에 줄바꿈으로 나열한다(2026-09-22 사용자 요청).
++			throw new BusinessException("Invalid Column Header Title\n\n" + String.join("\n", missing));
++		}
++	}
++
++	// DMF0082 월 버킷 토큰(M0~M12)
++	private static final java.util.regex.Pattern MONTH_TOKEN = java.util.regex.Pattern.compile("^M\\d+$");
++
++	// 동적 컬럼이 전부 빈 SUCCESS 행을 ERROR 로 바꾼다. @TITLE 행(_COLn = 헤더명)으로 ATTRIBUTE 번호를 찾는다.
++	private void markRowsWithoutDynamicValue(Map<String, Object> params, List<Map<String, Object>> uploadRows,
++			String headerContent, String mnuId) throws Exception {
++		if (uploadRows.isEmpty()) return;
++		Set<String> headerTokens = Arrays.stream(headerContent.split("\\|", -1))
++				.map(String::trim)
++				.collect(Collectors.toSet());
++
++		List<String> dynamicHeaders = new ArrayList<>();
++		List<String> blankConds = new ArrayList<>();
++		for (Map.Entry<String, Object> e : uploadRows.get(0).entrySet()) {
++			if (!e.getKey().startsWith("_COL")) continue;
++			String header = String.valueOf(e.getValue());
++			if (!isDynamicColumn(mnuId, header, headerTokens)) continue;
++			dynamicHeaders.add(header);
++			blankConds.add("TRIM(ATTRIBUTE" + Integer.parseInt(e.getKey().substring(4)) + ") IS NULL");
++		}
++		if (blankConds.isEmpty()) return;
++
++		params.put("dynamicBlankCond", String.join(" AND ", blankConds));
++		params.put("dynamicBlankMsg", "At least one value is required in "
++				+ dynamicHeaders.get(0) + " ~ " + dynamicHeaders.get(dynamicHeaders.size() - 1) + ".");
++		// update 경로는 sesUserId 를 자동 주입하지 않으므로(selectList 만 주입) 세션에서 직접 넣는다.
++		params.put("sesUserId", SecurityUtil.getUserSession().getUserId());
++		update("admin.excel.excelUploadDynamicBlank", params);
++	}
++
++	// 메인 조회 그리드 기준 동적 컬럼 판정 — DMF0082 월 / DMF0074 메탈 2단 헤더(그룹_원소) / DMF0014 기간
++	private boolean isDynamicColumn(String mnuId, String header, Set<String> headerTokens) {
++		if (mnuId.startsWith("DMF0082")) return MONTH_TOKEN.matcher(header).matches();
++		if (mnuId.startsWith("DMF0074")) return header.contains("_");
++		if (mnuId.startsWith("DMF0014")) {
++			return !headerTokens.contains(header) || WEEK_LABEL_TOKEN.matcher(header).matches();
++		}
++		return false;
++	}
++
++	// 모든 행의 모든 값이 공백인지 확인 — 값만 지운 빈 행은 POI 상 Row 객체가 남아있어
++	//   excelList 자체는 비어있지 않게 파싱될 수 있다.
++	private boolean isAllBlank(List<Map<String, Object>> excelList) {
++		return excelList.stream().allMatch(row ->
++				row.values().stream().allMatch(v -> v == null || v.toString().trim().isEmpty()));
++	}
++
++	private List<Map<String, Object>> cvtListUploadRows(
++			List<Map<String, Object>> excelList, String keyTemplate, boolean skipTitleDateRow,
++			boolean useHeaderDefinedPeriodCols) {
+ 	    List<Map<String, Object>> transformedList = new ArrayList<>();
+ 
+-	    // 1. 기준이 되는 키 목록을 배열로 분리 (limit -1로 마지막 공백 포함)
++	    // 기준 키 목록 (HEADER_CONTENT) — 식별 컬럼 매핑용. 기간 컬럼은 여기서 쓰지 않는다(동적 주차).
+ 	    String[] targetKeys = keyTemplate.split("\\|", -1);
+ 
+-	    // 2. 첫 번째 행에 헤더 정보 및 @TITLE 상태값 추가
++	    // 날짜(타이틀) 행 판별 — 2단 헤더(라벨 + 기간 시작일) 업로드에서, 선두 식별 컬럼(targetKeys[0])이
++	    //   공란이고 기간 컬럼에만 값이 있는 첫 행이 날짜 행이다.
++	    // ※ 날짜 행은 데이터에서 제외하지 않는다 — 검증 프로시저(P_DMF0014_CUST_FCST_EXCEL_UPLOAD, 07-08 fix)가
++	    //   스테이징에서 'ATTRIBUTE1 IS NULL 인 날짜행'을 직접 찾아 버킷을 산출한다. 여기선 기간 컬럼 순서 판별용.
++	    // skipTitleDateRow(2단 헤더 메뉴) 는 이 휴리스틱 자체를 건너뛴다 — 컬럼이 이미 헤더에 전부
++	    //   고정 선언돼 있어 날짜행 판별이 불필요하고, 잘못 걸리면 컬럼이 통째로 누락된다.
++	    Map<String, Object> titleDateRow = null;
++	    if (!useHeaderDefinedPeriodCols && !skipTitleDateRow && !excelList.isEmpty() && targetKeys.length > 0) {
++	        Map<String, Object> first = excelList.get(0);
++	        Object leadKeyVal = first.get(targetKeys[0].trim());
++	        if (leadKeyVal == null || leadKeyVal.toString().trim().isEmpty()) {
++	            titleDateRow = first;
++	        }
++	    }
++
++	    // 컬럼 순서(_COL1..N) 결정
++	    List<String> orderedCols = new ArrayList<>();
++	    if (useHeaderDefinedPeriodCols) {
++	        // DMF0014 전용 — 1단 헤더 자체가 이미 실제 날짜 문자열('20260921' 등)로 채워진 자기서술형
++	        //   기간 컬럼이라, "2행이 비어있으면 날짜행" 추정이 필요 없고 오히려 위험하다(2026-09-23
++	        //   실사고). 엑셀 헤더에 실제 존재하는 컬럼 중 HEADER_CONTENT 식별 토큰이 아닌 나머지를
++	        //   전부 기간 컬럼으로 채택 — 8자리 날짜 문자열 키라 사전식 정렬이 곧 시간순 정렬이다.
++	        Set<String> headerKeys = excelList.isEmpty() ? Set.of() : excelList.get(0).keySet();
++	        Set<String> targetKeySet = Arrays.stream(targetKeys).map(String::trim).collect(Collectors.toSet());
++	        for (String tk : targetKeys) {
++	            String key = tk.trim();
++	            if (headerKeys.contains(key)) orderedCols.add(key);
++	        }
++	        headerKeys.stream()
++	                .filter(k -> !targetKeySet.contains(k))
++	                .sorted()
++	                .forEach(orderedCols::add);
++	    } else if (titleDateRow != null) {
++	        final Map<String, Object> tdr = titleDateRow; // 람다/정렬용 final 별칭
++	        // 식별 컬럼 = HEADER_CONTENT 토큰 중 날짜 행에 존재하고 값이 비어있는 것 (Division*..Model 순서 보존).
++	        //   HEADER_CONTENT 의 stale 기간 토큰(W27 등)은 실제 파일에 없어(containsKey=false) 자동 제외된다.
++	        for (String tk : targetKeys) {
++	            String key = tk.trim();
++	            if (tdr.containsKey(key)) {
++	                Object dv = tdr.get(key);
++	                if (dv == null || dv.toString().trim().isEmpty()) orderedCols.add(key);
++	            }
++	        }
++	        // 기간 컬럼 = 날짜 행에 시작일이 채워진 엑셀 컬럼 전체(동적 주차), 시작일 오름차순(시트 기간 순).
++	        List<String> periodCols = new ArrayList<>();
++	        for (Map.Entry<String, Object> e : tdr.entrySet()) {
++	            Object dv = e.getValue();
++	            if (dv != null && !dv.toString().trim().isEmpty()) periodCols.add(e.getKey());
++	        }
++	        periodCols.sort((a, b) -> tdr.get(a).toString().trim()
++	                .compareTo(tdr.get(b).toString().trim()));
++	        orderedCols.addAll(periodCols);
++	    } else {
++	        // 날짜 행 없는 업로드(단일 헤더) → 기존 동작: HEADER_CONTENT 토큰 순서 그대로
++	        for (String tk : targetKeys) orderedCols.add(tk.trim());
++	    }
++
++	    // @TITLE(라벨) 행 — SP 는 버킷을 V_TITLE 이 아니라 날짜행에서 산출하므로 라벨만 싣는다.
+ 	    Map<String, Object> headerMap = new LinkedHashMap<>();
+ 	    headerMap.put("UPLOAD_STAT", "@TITLE"); // 헤더 행 식별자
+-
+-	    for (int i = 0; i < targetKeys.length; i++) {
+-	        String attrKey = "_COL" + (i + 1);
+-	        headerMap.put(attrKey, targetKeys[i].trim());
++	    for (int i = 0; i < orderedCols.size(); i++) {
++	        headerMap.put("_COL" + (i + 1), orderedCols.get(i));
+ 	    }
+ 	    transformedList.add(headerMap);
+ 
+-	    // 3. 실제 데이터 행 변환 및 UPLOAD 상태값 추가
+-	    for (Map<String, Object> excelRow : excelList) {
++	    // 실제 데이터 행 — 날짜 행 포함(제외 안 함). 날짜 행은 식별 컬럼이 공란("")이라 Oracle 에서
++	    //   ATTRIBUTE1=NULL 로 저장되고, 기간 컬럼엔 연속 시작일이 실려 SP 버킷 산출(ATTRIBUTE14~)의 근거가 된다.
++	    for (int r = 0; r < excelList.size(); r++) {
++	        Map<String, Object> excelRow = excelList.get(r);
+ 	        Map<String, Object> attrMap = new LinkedHashMap<>();
+ 	        attrMap.put("UPLOAD_STAT", "UPLOAD"); // 데이터 행 식별자
+-
+-	        for (int i = 0; i < targetKeys.length; i++) {
+-	            String targetKey = targetKeys[i].trim();
+-	            String attrKey = "_COL" + (i + 1);
+-	            Object value = excelRow.get(targetKey);
+-	            if (value != null) attrMap.put(attrKey, value.toString().trim());
+-	            else attrMap.put(attrKey, "");
++	        for (int i = 0; i < orderedCols.size(); i++) {
++	            String col = orderedCols.get(i);
++	            Object value = excelRow.get(col);
++	            attrMap.put("_COL" + (i + 1), value != null ? value.toString().trim() : "");
+ 	        }
+ 	        transformedList.add(attrMap);
+ 	    }
+ 
+-	    // 4. 최종 리스트를 JSON 문자열로 변환
+-	    try {
+-	    	return objectMapper.writeValueAsString(transformedList);
+-	    } catch (JsonProcessingException e) {
+-	        log.error("JSON conversion error: {}", e.getMessage());
+-	        return "[]";
+-	    }
++	    return transformedList;
+ 	}
+-
+-
+-/*========================================================================================================================== */
+-
+-
+-
+-
+-}
++}
+\ No newline at end of file
+diff --git a/src/main/resources/application.yml b/src/main/resources/application.yml
+index 6821029..56d8a98 100644
+--- a/src/main/resources/application.yml
++++ b/src/main/resources/application.yml
+@@ -31,6 +31,12 @@ spring:
+   aop:
+     proxy-target-class: true
+ 
++  # [E20261015-STREAMPROC] 스트리밍 응답(StreamingResponseBody)은 MVC 비동기 처리 — 기본 타임아웃(서버 기본 30초 내외)이면
++  #   대량 조회 전송 중 끊긴다. tomcat connection-timeout 과 같은 30분으로 맞춘다.
++  mvc:
++    async:
++      request-timeout: 1800000
++
+ 
+ 
+ server:
+@@ -40,6 +46,15 @@ server:
+   port: 8080
+   tomcat:
+     connection-timeout: 1800000
++  # [E20260824-GZIP] 응답 압축. 조회 응답이 컬럼명 반복이 많은 JSON 이라 압축률이 극단적으로 높다.
++  #   DMF0020 실측(div82 / 12개월 / 10,524행 × 102컬럼): 25.1MB -> 0.60MB (42배), 압축 비용 0.55s.
++  #   FE 계약은 그대로다(브라우저가 Accept-Encoding: gzip 으로 투명 해제).
++  #   min-response-size 미만(작은 응답)은 압축하지 않으므로 소형 API 에 부담이 없다.
++  compression:
++    enabled: true
++    # [E20261015-STREAMPROC] application/x-ndjson = 대량 조회 스트리밍(call-proc-stream) 응답
++    mime-types: application/json,application/json;charset=UTF-8,text/plain,text/css,text/html,application/javascript,application/x-ndjson
++    min-response-size: 2KB
+ 
+ config:
+   # Async 설정
+diff --git a/src/main/resources/config/config-local.yml b/src/main/resources/config/config-local.yml
+index f77c67b..ba46b09 100644
+--- a/src/main/resources/config/config-local.yml
++++ b/src/main/resources/config/config-local.yml
+@@ -3,13 +3,40 @@ config:
+   datasources[0]: # ORACLE
+     databaseName: nscm_oracle
+     databaseType: oracle
+-#    driverClassName: oracle.jdbc.OracleDriver
+-#    jdbc-url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
++# ⭐ [로컬 2026-08-14] 사내 Oracle 로 복구. 클라우드 소스의 기본값(10.34.220.81:2521:ESSCMD /
++#   SCMD_APP)은 사내망에서 도달할 수 없다. 계정도 다르다 — UI/BE 는 SCMP_APP 이다(≠ SCM_MGR).
++#   실측(2026-08-14): 100.65.143.121:1521 TCP 도달 OK · SCMP_APP 접속 OK(DB_NAME=OCGSCMD_P01).
++#                     구 주소 10.34.222.16:2521 은 도달 불가라 백업본을 그대로 쓰면 안 된다.
++#   ⭐ [2026-09-02] 사내 주소 변경 — 100.65.143.121:1521 → 175.211.29.206:3521(사용자 통보).
++#      동일 인스턴스 확인(SYS_CONTEXT SERVER_HOST=ol9-db · DB_NAME=OCGSCMD_P01), 계정/비밀번호 무변경.
++#   ⭐ [2026-09-07] DB 명 변경 — 175.211.29.206:2521/AJS → **175.211.29.206:2521/ZIOUI1**(사용자 통보. HOST/PORT/계정 동일).
++#   ⭐ [2026-09-05] DB 교체 — 175.211.29.206:3521/OCGSCMD_P01 → 175.211.29.206:2521/AJS(사용자 통보).
++#      다른 인스턴스다(SYS_CONTEXT SERVER_HOST=itx · DB_NAME=ZIOUI1 · Oracle 26ai 23.26.1).
++#      비밀번호도 변경 — SCM_MGR/SCMP_APP 모두 zionex1! 로 접속 실측(구 !ScMpaP_wndls@ 는 ORA-01017).
++#      SCMD_APP 계정은 신규 DB 에 존재하지 않는다.
++#   ⭐ [2026-09-21] 사내 IP 변경 — 175.211.29.206:2521/ZIOUI1 → **222.110.191.243:2521/ZIOUI1**(사용자 통보).
++#      동일 인스턴스 확인(SYS_CONTEXT SERVER_HOST=ol9-db · DB_NAME=ZIOUI1). PORT/서비스/계정/비밀번호 무변경.
++#      실측 2026-09-21: TCP 도달 OK · SCM_MGR·SCMP_APP 접속 OK. (구 IP 는 동일자 TCP 타임아웃)
++#   ⭐ [2026-10-13] 사내 IP 변경 — 222.110.191.243:2521/ZIOUI1 → **59.19.252.148:2521/ZIOUI1**(사용자 통보).
++#      PORT/서비스/계정/비밀번호 무변경. ⚠ 다른 인스턴스다(실측 2026-10-13: SERVER_HOST=localhost · DBID 71207375 ·
++#      PDB 생성 2026-10-08. 구 IP 는 SERVER_HOST=ol9-db · DBID 68425124 로 동일자에도 접속됨).
++#   ⚠ 클라우드 배포 시 아래 4줄을 주석 처리하고 cloud 블록을 되살릴 것.
+     driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+-    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+-    username: SCMD_APP
+-    password: "!SCMroqkf2026"
+-    maxPoolSize: 10
++    jdbc-url: jdbc:log4jdbc:oracle:thin:@59.19.252.148:2521/ZIOUI1
++    username: SCMP_APP
++    password: "zionex1!"
++# --- 이전 접속 정보 (보관 / DEPRECATED) ---
++#   2026-09-21~2026-10-13 : @222.110.191.243:2521/ZIOUI1                SCMP_APP / "zionex1!"
++#   2026-09-07~2026-09-21 : @175.211.29.206:2521/ZIOUI1                 SCMP_APP / "zionex1!"
++#   2026-09-02~09-05 : @175.211.29.206:3521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
++#   2026-07-27~09-02 : @100.65.143.121:1521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
++#   2026-06-17~07-27 : @121.162.245.167:2521/OCGSCMD_P01 SCMP_APP / "!ScMpaP_wndls@"
++# --- cloud 기본값 (배포 시 복원) ---
++#    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
++#    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
++#    username: SCMD_APP
++#    password: "!SCMroqkf2026"
++    maxPoolSize: 40   # 2026-10-29 10→40: 로컬 CheckList 5화면 동시 E2E 에서 풀 고갈(active=10 waiting=22 · 로그인 401 -9998). ZIOUI1 processes 600 중 SCMP_APP 세션 10 — 여유 충분. 적용 = BE 재기동
+     minIdel: 10
+ #    connectionTestQuery: "select 1 from dual"
+     mapperLocations: classpath:/sql/**/*.xml
+diff --git a/src/main/resources/mybatis/mybatis-config.xml b/src/main/resources/mybatis/mybatis-config.xml
+index 0c9e3b1..5207733 100644
+--- a/src/main/resources/mybatis/mybatis-config.xml
++++ b/src/main/resources/mybatis/mybatis-config.xml
+@@ -1,14 +1,25 @@
+-<?xml version="1.0" encoding="UTF-8" ?>
++﻿<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "./mybatis-3-config.dtd">
+ 
+ <configuration>
+     <settings>
+         <setting name="jdbcTypeForNull" value="NULL"/>	<!-- null 허용 -->
+-        <setting name="defaultFetchSize" value="0"/>
++        <!-- [E20260824-FETCHSIZE] 0 = 드라이버 기본값이고 Oracle JDBC 기본은 10행이다.
++             DB 가 원격(사내 175.211.29.206:2521/ZIOUI1 — 2026-09-07 DB명 변경, 구 .../AJS · .../OCGSCMD_P01)이라 대량 조회에서 왕복 횟수가 그대로 지연이 된다.
++             DMF0020 실측(div82 / 12개월 / 10,524행 x 102컬럼):
++               fetchSize 10 -> 약 1,052회 왕복, BE 내부 약 22초 (API TTFB 34초)
++               같은 커서를 arraysize 2000 으로 받으면 4초 (직접 측정)
++             1000 = 왕복 11회. 102컬럼이어도 1,000행 버퍼는 수 MB 라 힙 부담이 낮다. -->
++        <setting name="defaultFetchSize" value="1000"/>
++        <!-- callSettersOnNulls=true : 커서 컬럼 값이 NULL 이어도 결과 Map 에 키를 담는다.
++             꺼져 있으면 값이 NULL 인 컬럼은 응답 행에서 빠진다. 화면은 응답 행의 키로 동적(기간) 컬럼을 만들기 때문에
++             PIVOT 결과에서 값이 전부 NULL 인 기간은 컬럼째 사라진다 (DMF0020 Sales Price 2026-10-13 : SP 는 주차 41개를
++             내려주는데 화면은 값이 있는 5개만 표시. DMF0043 2026-06 과 같은 원인).
++             필수: framework/model/CustomMap.put 의 null 가드와 한 쌍이다. 가드 없이 이 설정만 켜면 모든 조회가 NPE 로 실패한다. -->
++        <setting name="callSettersOnNulls" value="true"/>
+ 		<!-- 
+         <setting name="mapUnderscoreToCamelCase" value="true"/>
+         <setting name="lazyLoadingEnabled" value="true"/>
+-        <setting name="callSettersOnNulls" value="true"/>
+ 		-->
+     </settings>
+ 
+@@ -47,4 +58,4 @@
+ -->
+ 
+ 
+-</configuration>
+\ No newline at end of file
++</configuration>
+diff --git a/src/main/resources/sql/CommonSql.xml b/src/main/resources/sql/CommonSql.xml
+index 0badb06..f818c37 100644
+--- a/src/main/resources/sql/CommonSql.xml
++++ b/src/main/resources/sql/CommonSql.xml
+@@ -36,6 +36,12 @@
+     <resultMap id="data6" type="com.lgcns.nscm.framework.model.CustomMap" />
+     <resultMap id="data7" type="com.lgcns.nscm.framework.model.CustomMap" />
+     <resultMap id="data8" type="com.lgcns.nscm.framework.model.CustomMap" />
++    <!-- OUT 커서가 8개를 넘는 프로시저 지원. procExec 는 커서 수(rtnNum)만큼 resultMap=data{N} 을
++         참조하므로(BaseService.makeProcQuery), data{N} 이 없으면 MyBatis 가
++         "Result Maps collection does not contain value for data{N}" 로 실패한다.
++         현재 배포된 SP 최대 커서 수 = 10 (예: PKG_SCP0125.P_SCP0125_GET_SEARCH_INFO 는 9개, DB 실측 2026-09-30). -->
++    <resultMap id="data9" type="com.lgcns.nscm.framework.model.CustomMap" />
++    <resultMap id="data10" type="com.lgcns.nscm.framework.model.CustomMap" />
+     <select id="callProc" statementType="CALLABLE" resultType="java.util.HashMap">
+         ${procExec}
+     </select>
+diff --git a/src/main/resources/sql/admin/Auth.xml b/src/main/resources/sql/admin/Auth.xml
+index 2d31692..e334963 100644
+--- a/src/main/resources/sql/admin/Auth.xml
++++ b/src/main/resources/sql/admin/Auth.xml
+@@ -54,5 +54,13 @@
+ 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
+ 		) }
+ 	</select>
+-    
++
++	<!-- 메뉴에 정의된 버튼 전체(사용자 무관) — 그리드 시트 단위 SAVE 자동잠금의 saveDefined 판정용.
++	     사용자 권한(PR_GET_MNU_BTN_AUTH)과 달리 "이 화면에 SAVE 버튼이 정의돼 있나"를 안다. -->
++	<select id="retrieveMenuBtnDefs" resultMap="authResultMap">
++		SELECT SHT_NM, MNU_BTN_CD
++		  FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M
++		 WHERE MNU_ID = #{mnuId}
++	</select>
++
+ </mapper>
+\ No newline at end of file
+diff --git a/src/main/resources/sql/admin/Excel.xml b/src/main/resources/sql/admin/Excel.xml
+index 755e61c..821960b 100644
+--- a/src/main/resources/sql/admin/Excel.xml
++++ b/src/main/resources/sql/admin/Excel.xml
+@@ -25,6 +25,24 @@
+     	]]>
+     </select>
+     
++    <!-- 동적 컬럼(월/메탈/기간)이 전부 빈 행을 ERROR 로 표시 — SP 검증 통과(SUCCESS) 행만 대상.
++         dynamicBlankCond 는 서버가 ATTRIBUTE 번호로만 조립한 조건이다. -->
++    <update id="excelUploadDynamicBlank">
++    	UPDATE  SCM_ADM_EXCEL_UPLOAD T
++    	   SET  T.UPLOAD_STATUS_CODE = 'ERROR'
++    	     ,  T.MESSAGE_TEXT       = #{dynamicBlankMsg}
++    	 WHERE  T.PROGRAM_ID         = #{mnuId}
++    	   AND  T.SHEET_NAME         = #{shtNm}
++    	   AND  T.CREATED_BY         = #{sesUserId}
++    	   AND  T.UPLOAD_STATUS_CODE = 'SUCCESS'
++    	   AND  T.CREATION_DATE      = ( SELECT  MAX(X.CREATION_DATE)
++    	                                   FROM  SCM_ADM_EXCEL_UPLOAD X
++    	                                  WHERE  X.PROGRAM_ID = #{mnuId}
++    	                                    AND  X.SHEET_NAME = #{shtNm}
++    	                                    AND  X.CREATED_BY = #{sesUserId} )
++    	   AND  ${dynamicBlankCond}
++    </update>
++
+     <resultMap id="uploadCnt" type="com.lgcns.nscm.framework.model.CustomMap" />
+     <resultMap id="uploadList" type="com.lgcns.nscm.framework.model.CustomMap" />
+     <select id="excelUploadResult" statementType="CALLABLE" >
+diff --git a/src/main/resources/sql/admin/File.xml b/src/main/resources/sql/admin/File.xml
+index c859368..c1e5a1b 100644
+--- a/src/main/resources/sql/admin/File.xml
++++ b/src/main/resources/sql/admin/File.xml
+@@ -16,6 +16,33 @@
+ 		VALUES(SYS_GUID() , #{fileName}, #{fileTpCd}, #{fileKdnCd}, #{ext}, #{size}, #{ctn, jdbcType=BLOB}, #{userId}, SYSDATE, #{userId}, SYSDATE);
+ 	</insert>
+ 	
++	<!-- 이미지 업로드: ATCH_FILE_ID를 애플리케이션에서 생성한 UUID로 저장한다.
++	     SYS_GUID()를 쓰면 insert 후 ID를 돌려받을 수 없어 조회 URL을 만들 수 없다. -->
++	<insert id="insertImageFile">
++		INSERT INTO SCM_MGR.SCM_COM_ATCH_FILE_M (ATCH_FILE_ID, ATCH_FILE_SAVE_NM, ATCH_FILE_TP_CD, ATCH_FILE_KDN_CD, ATCH_FILE_EFNM_NM, ATCH_FILE_SIZE, ATCH_FILE_CTN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
++		VALUES(#{fileId}, #{fileName}, #{fileTpCd}, #{fileKdnCd}, #{ext}, #{size}, #{ctn, jdbcType=BLOB}, #{userId}, SYSDATE, #{userId}, SYSDATE)
++	</insert>
++
++	<!-- 이미지 조회.
++	     resultType="java.util.HashMap"으로 두면 BLOB이 byte[]가 아니라 oracle.sql.BLOB 로케이터로 담긴다.
++	     조회 후 SqlSession이 닫히면 로케이터를 읽을 수 없으므로,
++	     resultMap으로 jdbcType/javaType을 명시해 매핑 시점에 byte[]로 실체화한다. -->
++	<resultMap id="imageFileMap" type="java.util.HashMap">
++		<result property="ATCH_FILE_SAVE_NM" column="ATCH_FILE_SAVE_NM" javaType="java.lang.String"/>
++		<result property="ATCH_FILE_EFNM_NM" column="ATCH_FILE_EFNM_NM" javaType="java.lang.String"/>
++		<result property="ATCH_FILE_SIZE"    column="ATCH_FILE_SIZE"    javaType="java.lang.Long"/>
++		<result property="ATCH_FILE_CTN"     column="ATCH_FILE_CTN"     javaType="_byte[]" jdbcType="BLOB"/>
++	</resultMap>
++
++	<select id="selectImageFile" resultMap="imageFileMap">
++		SELECT  ATCH_FILE_SAVE_NM,
++		        ATCH_FILE_EFNM_NM,
++		        ATCH_FILE_SIZE,
++		        ATCH_FILE_CTN
++		  FROM  SCM_MGR.SCM_COM_ATCH_FILE_M
++		 WHERE  ATCH_FILE_ID = #{fileId}
++	</select>
++
+     <update id="fileUploadTest">
+         UPDATE  SCM_MGR.SCM_COM_ATCH_FILE_M
+            SET  ATCH_FILE_SAVE_NM = #{name},
+diff --git a/src/main/resources/sql/admin/Menu.xml b/src/main/resources/sql/admin/Menu.xml
+index 5b3e688..c8359d6 100644
+--- a/src/main/resources/sql/admin/Menu.xml
++++ b/src/main/resources/sql/admin/Menu.xml
+@@ -5,9 +5,10 @@
+     <resultMap id="menuResultMap" type="java.util.HashMap" />
+ 
+     <select id="retrieveMenus" statementType="CALLABLE">
+-		{ CALL SCM_MGR.PKG_NSCM_UI_COM_MENU.PR_GET_MENU_LIST(
++		{ CALL SCM_MGR.PR_GET_MENU_LIST_V2(
+ 			#{userId},
+-			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap},
++			#{systemCd}
+ 		) }
+     </select>
+ 
+@@ -67,5 +68,33 @@
+ 			#{mnuId}
+ 		) }
+     </select>    
+-    
++	<select id="saveTitleSet" statementType="CALLABLE">
++		{ CALL SCM_MGR.SCM0002_SET_TITLESET_POPUP(
++			#{programId, mode=IN, jdbcType=VARCHAR},
++			#{sheetName, mode=IN, jdbcType=VARCHAR},
++			#{columnType, mode=IN, jdbcType=VARCHAR},
++			#{activeFlag, mode=IN, jdbcType=VARCHAR},
++			#{columnName, mode=IN, jdbcType=VARCHAR},
++			#{sortOrderNo, mode=IN, jdbcType=VARCHAR},
++			#{subTotalFlag, mode=IN, jdbcType=VARCHAR},
++			#{sortMethodCode, mode=IN, jdbcType=VARCHAR},
++			#{sesUserId, mode=IN, jdbcType=VARCHAR},
++			#{columnWidth, mode=IN, jdbcType=VARCHAR},
++			#{cellColor, mode=IN, jdbcType=VARCHAR},
++			#{textColor, mode=IN, jdbcType=VARCHAR},
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap},
++			#{resultCursor, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
++		) }
++    </select>
++    <select id="retrieveTitleSet" statementType="CALLABLE">
++		{ CALL SCM_MGR.DMF0002_GET_TITLESET_POPUP(
++			#{programId, mode=IN, jdbcType=VARCHAR},
++			#{sheetName, mode=IN, jdbcType=VARCHAR},
++			#{columnType, mode=IN, jdbcType=VARCHAR},
++			#{sesUserId, mode=IN, jdbcType=VARCHAR},
++			#{divisionId, mode=IN, jdbcType=VARCHAR},
++			#{mnuId, mode=IN, jdbcType=VARCHAR},
++			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=menuResultMap}
++		) }
++    </select>
+ </mapper>
+\ No newline at end of file
+diff --git a/src/main/resources/sql/admin/User.xml b/src/main/resources/sql/admin/User.xml
+index 24fcc28..b61a38e 100644
+--- a/src/main/resources/sql/admin/User.xml
++++ b/src/main/resources/sql/admin/User.xml
+@@ -3,19 +3,106 @@
+ <mapper namespace="com.lgcns.nscm.admin.user">
+ 
+     <resultMap id="userResultMap" type="java.util.HashMap" />
+-    
++
++    <!--
++      이관된 통합 프로시저 호출. Case 1(등록) / Case 2(SSO 명부 → 자동등록+GUEST 그룹) / Case 3(빈 커서).
++      Case 3(빈 커서)는 서비스단에서 null → 백엔드 게스트 폴백 로그인 처리.
++    -->
+     <select id="retrieveUser" statementType="CALLABLE">
+ 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER(
+ 			#{userId},
+ 			#{DATARESULT, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=userResultMap}
+ 		) }
+     </select>
+-        
++
+     <select id="updateLangCd" statementType="CALLABLE">
+ 		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_UPDATE_LANG_CD(
+ 			#{userId},
+ 			#{langCd}
+ 		) }
+     </select>
+-        
+-</mapper>
+\ No newline at end of file
++
++    <select id="updateTmzCd" statementType="CALLABLE">
++		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_UPDATE_TMZ_CD(
++			#{userId},
++			#{tmzCd}
++		) }
++    </select>
++
++    <!-- 로그인 성공 시 최종 로그인 일시(LOGN_DTM) 기록. proc 내부 자율 트랜잭션으로 독립 커밋. -->
++    <select id="updateLognDtm" statementType="CALLABLE">
++		{ CALL SCM_MGR.PKG_NSCM_UI_COM_USER.PR_UPDATE_LOGN_DTM(
++			#{userId}
++		) }
++    </select>
++
++    <!--
++      사용자가 속한 그룹 권한명(USER_GR_NM) 목록. (프로시저 없이 조회)
++      ⚠️ 그룹 마스터 테이블명(SCM_ADM_USER_GR_M) 은 대상 스키마에 맞게 확인/수정할 것.
++      실패해도 로그인은 유지되도록 서비스단에서 안전 처리(빈 배열)한다.
++    -->
++    <select id="retrieveUserGroups" resultType="string">
++        SELECT G.USER_GR_NM
++        FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M M
++        JOIN   SCM_MGR.SCM_ADM_USER_GR_M     G ON G.USER_GR_ID = M.USER_GR_ID
++        WHERE  M.USER_ID = #{userId}
++          AND  M.USE_YN  = 'Y'
++          AND  G.USE_YN  = 'Y'
++        ORDER BY G.USER_GR_NM
++    </select>
++
++    <!--
++      화면(SYS0002 User Management)의 Assign Group 조회용. 사용자 소속 그룹(ID+명).
++      AS-IS UserInfo.cs 의 Assign Group View 버튼 재현. 활성(USE_YN='Y') 그룹만 표시.
++    -->
++    <select id="retrieveUserGroupList" resultMap="userResultMap">
++        SELECT G.USER_GR_ID, G.USER_GR_NM
++        FROM   SCM_MGR.SCM_ADM_USER_GR_MPG_M M
++        JOIN   SCM_MGR.SCM_ADM_USER_GR_M     G ON G.USER_GR_ID = M.USER_GR_ID
++        WHERE  M.USER_ID = #{userId}
++          AND  M.USE_YN  = 'Y'
++          AND  G.USE_YN  = 'Y'
++        ORDER BY G.USER_GR_NM
++    </select>
++
++
++    <!--
++      로그인 사용자의 기본 사업부(권한 사업부 중 최상단 1건).
++      MyDivision 콤보 SQL 을 응용: 사용자 권한(SCM_ADM_USER_GR_UNIT_AUTH_MPG_M)으로 필터한 뒤
++      DIVISION_ID 정렬 최상단 1건을 기본값으로 사용. 없으면 null → FE 기본값 폴백.
++      실패해도 로그인은 유지되도록 서비스단에서 안전 처리(null)한다.
++    -->
++    <select id="retrieveUserDefaultDiv" resultType="string">
++        SELECT DIVISION_ID
++        FROM (
++            SELECT T1.DIVISION_ID
++            FROM   SCM_MGR.SCM_MST_DIVISION                 T1
++            JOIN   SCM_MGR.SCM_ADM_USER_GR_UNIT_AUTH_MPG_M  T2
++                   ON T1.DIVISION_ID = T2.UNIT_ID
++                  AND T2.UNIT_TP_CD  = 'D'
++            WHERE  T1.ATTRIBUTE3 &lt;&gt; 'EE'
++              AND  T1.VALID_YN = 'Y'
++              AND  T2.USE_YN   = 'Y'
++              AND  T2.USER_ID  = #{userId}
++            GROUP BY T1.DIVISION_ID, T1.ATTRIBUTE1
++            ORDER BY T1.DIVISION_ID || ' ' || MIN(T1.DIVISION_NAME)
++        )
++        WHERE ROWNUM = 1
++    </select>
++
++    <!--
++      로그인 사용자의 소속 회사(COMPANY_ID). SCM_MST_SSO_USER_INFO 는 USER_ID 유니크(1행).
++      SSP0015 등 My Model 기본체크(MY_MODEL_DEFAULT_CHECK whitelist 대조)에 사용.
++      AS-IS Data_SCP.Type.CompanyID(dtCompany.Rows[0]) 등가. 없으면 null → FE 미체크.
++    -->
++    <select id="retrieveUserCompanyId" resultType="string">
++        SELECT COMPANY_ID
++        FROM (
++            SELECT COMPANY_ID
++            FROM   SCM_MGR.SCM_MST_SSO_USER_INFO
++            WHERE  USER_ID = #{userId}
++        )
++        WHERE ROWNUM = 1
++    </select>
++
++</mapper>
+diff --git a/src/main/resources/sql/admin/log.xml b/src/main/resources/sql/admin/log.xml
+index a7b6e11..526a3b8 100644
+--- a/src/main/resources/sql/admin/log.xml
++++ b/src/main/resources/sql/admin/log.xml
+@@ -4,8 +4,8 @@
+ 
+     <!-- 로그 생성 -->
+     <insert id="insertSysLog">
+-		INSERT INTO SCM_MGR.SCM_COM_SYS_LOG (SYS_LOG_ID, LOG_TP_CD, SYS_LOG_MSG_CTN, CALL_PGM_URL, RQR_CLNT_IP, MNU_ID, SHT_NM, MNU_BTN_CD, EXCT_MSG_CTN, LOG_ST_DTM, TRNM_ST_DTM, DB_TRNM_ST_DTM, DB_TRNM_END_DTM, TRNM_END_DTM, LOG_END_DTM, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+-		VALUES(#{traceId}, #{typeCd} , #{params}, #{requestUrl}, #{clientIp}, #{menuId}, #{shtNm}, #{buttonCd}, SUBSTRB(#{exception}, 1, 4000), #{clientStTm}, #{serverStTm}, #{sqlStTm}, #{sqlEdTm}, #{serverEdTm}, #{clientEdTm}, #{userId}, SYSDATE , #{userId}, SYSDATE )
++		INSERT INTO SCM_MGR.SCM_COM_SYS_LOG (SYS_LOG_ID, LOG_TP_CD, SYS_LOG_MSG_CTN, CALL_PGM_URL, RQR_CLNT_IP, MNU_ID, MENU_DESCRIPTION, SHT_NM, MNU_BTN_CD, EXCT_MSG_CTN, LOG_ST_DTM, TRNM_ST_DTM, DB_TRNM_ST_DTM, DB_TRNM_END_DTM, TRNM_END_DTM, LOG_END_DTM, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
++		VALUES(#{traceId}, #{typeCd} , #{params}, #{requestUrl}, #{clientIp}, #{menuId}, (SELECT MNU_DESC FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = #{menuId}), #{shtNm}, #{buttonCd}, SUBSTRB(#{exception}, 1, 4000), #{clientStTm}, #{serverStTm}, #{sqlStTm}, #{sqlEdTm}, #{serverEdTm}, #{clientEdTm}, #{userId}, SYSDATE , #{userId}, SYSDATE )
+ 	</insert>
+ 	
+ 	<!-- 로그 최종시간 업데이트(front 도착시간) -->
+diff --git a/src/test/java/com/lgcns/nscm/admin/user/UserServiceImplTest.java b/src/test/java/com/lgcns/nscm/admin/user/UserServiceImplTest.java
+index e80243e..4689342 100644
+--- a/src/test/java/com/lgcns/nscm/admin/user/UserServiceImplTest.java
++++ b/src/test/java/com/lgcns/nscm/admin/user/UserServiceImplTest.java
+@@ -2,6 +2,7 @@ package com.lgcns.nscm.admin.user;
+ 
+ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+ import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertNull;
+ import static org.junit.jupiter.api.Assertions.fail;
+ 
+ import org.junit.jupiter.api.DisplayName;
+@@ -39,6 +40,19 @@ class UserServiceImplTest {
+         }
+     }
+ 
++    @Test
++    @DisplayName("DB 연동: 미등록 사용자 조회 시 예외 없이 null 을 반환한다")
++    void retrieveUserReturnsNullWhenNotFound() throws Exception {
++        // given: SCM_ADM_USER_M / SCM_MST_SSO_USER_INFO 어디에도 없는 사번
++        String unknownUserId = "__NO_SUCH_USER_9999__";
++
++        // when
++        User user = userService.retrieveUser(unknownUserId);
++
++        // then
++        assertNull(user);
++    }
++
+     @Test
+     @DisplayName("DB 연동: 특정 메뉴와 액션에 대한 권한 체크 쿼리 실행")
+     void checkAuthorizationFromDbTest() throws Exception {

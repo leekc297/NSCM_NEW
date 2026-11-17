@@ -1,0 +1,36 @@
+﻿kind,item,static,live,verdict,note
+SP,(endpoints.csv),없음,15종,ERROR,정적 사실 파일 없음(미측정) — Fact Pack 먼저
+SP,FP_SQL_LOG(로그 기록),,12회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,PR_UI_FP03033_MODEL_MEASURECONVERSION,,2회 · 구간 find,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SELECT,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: DECLARE @OPTBL AS TABLE,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT C.PROGRAM_ID,,6회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT COUNT(*) AS CNT,,6회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT AA.SEGMENT1 AS INSTANCE_ID, AA.SEG",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,"SQL: SELECT DISTINCT INSTANCE_ID,USER_ID, LINE_ID, DIVI",,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SQL: SELECT SEGMENT1 AS MENU_KEY,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,UI_FP_COMMON,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+CONDITION,btnSubImport,,layoutControlItem11,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnSearchAll,,layoutControlItem1,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,label1,,layoutControlItem10,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnGenerate,,layoutControlItem12,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnImport,,lblExcelImport,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,btnSql,,lblSql,LIVE,layout=usrLayoutControl2 visible=False
+CONDITION,cboSite,,Site,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbDivision,,Div,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbPlant,,Plant,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbFactory,,Building,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,clbOperation,,Operation,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,cboWideRange,,Wide Range,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtModel,,Model,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtItemID,,Material,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,txtPjtCode,,PJT Code,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,rdoGroup1,,Max Version,LIVE,layout=usrLayoutControl2 visible=True
+CONDITION,btnAdd,,layoutControlItem17,LIVE,layout=usrLayoutControl2 visible=True
+GRID,spdMain/MeasureConversion,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 27(보임 22) · 헤더 1단 · 행 11984 · 고정 14,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/Sub,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 19(보임 18) · 헤더 2단 · 행 2 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

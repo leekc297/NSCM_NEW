@@ -1,0 +1,703 @@
+{
+ "id": "DMF0014",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "DB : 1.797s, UI : 0.066s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "FCST Upload",
+     "rows": 0,
+     "cols": 42,
+     "visible": "True",
+     "frozen_cols": "14",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div*",
+        "Div*"
+       ],
+       "label": "Div*",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Sales Site*",
+        "Sales Site*"
+       ],
+       "label": "Sales Site*",
+       "tag": "SCM_SITE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "SCM_SITE_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant Site*",
+        "Plant Site*"
+       ],
+       "label": "Plant Site*",
+       "tag": "PLANT_SITE_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PLANT_SITE_ID",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Customer Project*",
+        "Customer Project*"
+       ],
+       "label": "Customer Project*",
+       "tag": "CUSTOMER_PROJECT_CODE",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "CUSTOMER_PROJECT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Customer Model*",
+        "Customer Model*"
+       ],
+       "label": "Customer Model*",
+       "tag": "CUSTOMER_MODEL",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "CUSTOMER_MODEL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Incoterms*",
+        "Incoterms*"
+       ],
+       "label": "Incoterms*",
+       "tag": "INCOTERMS",
+       "width": "40",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "INCOTERMS",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "FCST Type*",
+        "FCST Type*"
+       ],
+       "label": "FCST Type*",
+       "tag": "FCST_TYPE",
+       "width": "40",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "FCST_TYPE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Customs Handbook*",
+        "Customs Handbook*"
+       ],
+       "label": "Customs Handbook*",
+       "tag": "DOM_EXP",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "DOM_EXP",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Measure Group*",
+        "Measure Group*"
+       ],
+       "label": "Measure Group*",
+       "tag": "MEASURE_GROUP",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "MEASURE_GROUP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Measure*",
+        "Measure*"
+       ],
+       "label": "Measure*",
+       "tag": "MEASURE",
+       "width": "40",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "MEASURE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Upload UOM*",
+        "Upload UOM*"
+       ],
+       "label": "Upload UOM*",
+       "tag": "UPLOAD_UOM",
+       "width": "40",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "UPLOAD_UOM",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Project",
+        "Project"
+       ],
+       "label": "Project",
+       "tag": "PROJECT_CODE",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "PROJECT_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Model",
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "ITEM_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "EDIT_FLAG",
+        "EDIT_FLAG"
+       ],
+       "label": "EDIT_FLAG",
+       "tag": "EDIT_FLAG",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "EDIT_FLAG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "W46",
+        "20261109"
+       ],
+       "label": "20261109",
+       "tag": "D_20261109",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261109",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "W47",
+        "20261116"
+       ],
+       "label": "20261116",
+       "tag": "D_20261116",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261116",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "W48",
+        "20261123"
+       ],
+       "label": "20261123",
+       "tag": "D_20261123",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261123",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "W49",
+        "20261130"
+       ],
+       "label": "20261130",
+       "tag": "D_20261130",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261130",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "W50",
+        "20261207"
+       ],
+       "label": "20261207",
+       "tag": "D_20261207",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261207",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "W51",
+        "20261214"
+       ],
+       "label": "20261214",
+       "tag": "D_20261214",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261214",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "W52",
+        "20261221"
+       ],
+       "label": "20261221",
+       "tag": "D_20261221",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261221",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "W53",
+        "20261228"
+       ],
+       "label": "20261228",
+       "tag": "D_20261228",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20261228",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "W01",
+        "20270104"
+       ],
+       "label": "20270104",
+       "tag": "D_20270104",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270104",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "W02",
+        "20270111"
+       ],
+       "label": "20270111",
+       "tag": "D_20270111",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270111",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "W03",
+        "20270118"
+       ],
+       "label": "20270118",
+       "tag": "D_20270118",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270118",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "W04",
+        "20270125"
+       ],
+       "label": "20270125",
+       "tag": "D_20270125",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270125",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "W05",
+        "20270201"
+       ],
+       "label": "20270201",
+       "tag": "D_20270201",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270201",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "W06",
+        "20270208"
+       ],
+       "label": "20270208",
+       "tag": "D_20270208",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270208",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "W07",
+        "20270215"
+       ],
+       "label": "20270215",
+       "tag": "D_20270215",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270215",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "W08",
+        "20270222"
+       ],
+       "label": "20270222",
+       "tag": "D_20270222",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270222",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "W09",
+        "20270301"
+       ],
+       "label": "20270301",
+       "tag": "D_20270301",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270301",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "W10",
+        "20270308"
+       ],
+       "label": "20270308",
+       "tag": "D_20270308",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270308",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "W11",
+        "20270315"
+       ],
+       "label": "20270315",
+       "tag": "D_20270315",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270315",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "W12",
+        "20270322"
+       ],
+       "label": "20270322",
+       "tag": "D_20270322",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270322",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "W13",
+        "20270329"
+       ],
+       "label": "20270329",
+       "tag": "D_20270329",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270329",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "W14",
+        "20270405"
+       ],
+       "label": "20270405",
+       "tag": "D_20270405",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270405",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "W15",
+        "20270412"
+       ],
+       "label": "20270412",
+       "tag": "D_20270412",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270412",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "W16",
+        "20270419"
+       ],
+       "label": "20270419",
+       "tag": "D_20270419",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270419",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "W17",
+        "20270426"
+       ],
+       "label": "20270426",
+       "tag": "D_20270426",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270426",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "W18",
+        "20270503"
+       ],
+       "label": "20270503",
+       "tag": "D_20270503",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270503",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "W19",
+        "20270510"
+       ],
+       "label": "20270510",
+       "tag": "D_20270510",
+       "width": "50",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "D_20270510",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

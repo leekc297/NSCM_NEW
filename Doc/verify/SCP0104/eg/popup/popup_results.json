@@ -1,0 +1,466 @@
+[
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Column Setting'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-17T06:13:03.835Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'User Column Setting'(SCM002_CAPAColumnPopup) → TO-BE 룰 공용 모달 ColumnLayoutModal(tobe_catalog.csv 대응표)",
+  "actual": "TO-BE 제목 'Column Setting' · 대응 컴포넌트 ColumnLayoutModal · 제목 토큰 일치 [column] — AS-IS 와 달라도 TO-BE 룰 대체라 오류 아님",
+  "basis": "SCP0104_CAPA_Line_Assign.cs:6098 · tools/Harness/rules/tobe_catalog.csv",
+  "at": "2026-11-17T06:13:03.835Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "NA",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "OK/CLOSE 한 쌍 아님 — 버튼 [▶, ◀, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, ▼, Default, Save]",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "NA",
+  "expected": "No. 컬럼 1개·건수 표시",
+  "actual": "팝업에 그리드 없음",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 조건 라벨 []",
+  "actual": "TO-BE [] · 누락 [] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.SCP.Common.UIL/Popup/SCM002_CAPAColumnPopup.cs",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "NA",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · Search 버튼 없음 · 행 -1 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "NA",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "행 0 — 순서 대조 불가",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.836Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "GRID_OPS",
+  "egs": [
+   "EG384",
+   "EG403",
+   "EG437",
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "팝업 그리드 조작",
+  "actual": "팝업에 그리드 없음",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.837Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "FILTER",
+  "egs": [
+   "EG248",
+   "EG281",
+   "EG432",
+   "EG261",
+   "EG297",
+   "EG299",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "팝업 텍스트 조건 입력 → 필터",
+  "actual": "입력 가능한 텍스트 조건 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.844Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 []",
+  "basis": "",
+  "at": "2026-11-17T06:13:03.845Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":262,\"w\":1350,\"h\":556} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-17T06:13:03.845Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 0px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-17T06:13:03.845Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 []",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-17T06:13:03.845Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-17T06:13:03.845Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":285,\"y\":262,\"w\":1350,\"h\":556} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-17T06:13:04.713Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":285,\"y\":262,\"w\":1350,\"h\":556}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-17T06:13:05.593Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(556)",
+  "actual": "조절 후 {\"x\":210,\"y\":262,\"w\":1500,\"h\":556}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-17T06:13:06.383Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-17T06:13:07.170Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0104",
+  "call": 0,
+  "cls": "SCM002_CAPAColumnPopup",
+  "trig": "BTN:btnColumn",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "NA",
+  "expected": "축소 → 조건·버튼 간섭 없음",
+  "actual": "리사이즈 핸들 없음",
+  "basis": "",
+  "at": "2026-11-17T06:13:07.188Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 30,
+   "req": 0
+  }
+ }
+]

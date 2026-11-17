@@ -1,0 +1,3 @@
+﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,GET,11,DIFF:5 PASS:2 ROWS_ONLY:4,,1,find,54,"{""p_division_id"": ""81,40,82,EE,81_UC,EE_UC,81_HM,EE_HM,81_ST,EE_ST,81_HD,EE_HD,81_HG,EE_HG"", ""p_item_id"": """", ""p_valid"": """"}",BOTH,차등 검증·실측 모두 있음
+SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)

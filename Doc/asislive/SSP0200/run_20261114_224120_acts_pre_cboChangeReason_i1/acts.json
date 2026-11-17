@@ -1,0 +1,231 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+    "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     60
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     56
+    ],
+    [
+     "SSP0200_GET_SHIPMENT_CHANGE_REQUEST",
+     0
+    ],
+    [
+     "SSP0200_GET_SHIPMENT_REQUEST_DRAFTING",
+     0
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnApprovalUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0002_UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0200-S4f816c",
+    "SSP0200-S18a9c7",
+    "SSP0200-Sd6cc75",
+    "SSP0200-S0fb53e"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnApprovalUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0002_UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0200-S4f816c",
+    "SSP0200-S18a9c7",
+    "SSP0200-Sd6cc75",
+    "SSP0200-S0fb53e"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [
+    {
+     "automation": false,
+     "parent": 9408,
+     "started": "22:40:19",
+     "pid": 25036,
+     "title": "SSP0020_Delegate_CheckList_v2.xlsx - Excel",
+     "why": "자동화가 띄웠다는 근거 없음(사용자 것일 수 있음) — 닫지 않음"
+    }
+   ],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 29575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0200-Sea1449",
+    "SSP0200-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [
+    {
+     "automation": false,
+     "parent": 9408,
+     "started": "22:40:19",
+     "pid": 25036,
+     "title": "SSP0020_Delegate_CheckList_v2.xlsx - Excel",
+     "why": "자동화가 띄웠다는 근거 없음(사용자 것일 수 있음) — 닫지 않음"
+    }
+   ],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnCancel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 20
+  },
+  {
+   "control": "BtnChangeRe",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 28
+  },
+  {
+   "control": "BtnNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 8
+  },
+  {
+   "control": "BtnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 11
+  },
+  {
+   "control": "btnCancel",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 8
+  },
+  {
+   "control": "btnChangeRe2",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnInsertMultiple",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  },
+  {
+   "control": "btnNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 4
+  },
+  {
+   "control": "btnSave",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-14 22:39:21.707",
+ "preset": {
+  "name": "cboChangeReason",
+  "token": "cboChangeReason=i1",
+  "kw": {
+   "name": "cboChangeReason",
+   "index": "1"
+  },
+  "label": "cboChangeReason 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:",
+  "value": "",
+  "text": "",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ },
+ "excel_late": [],
+ "excel_left": [
+  {
+   "file_created": "03:37:54",
+   "path": "C:\\Projects\\NSCM\\Doc\\CheckList\\SSP0020_Delegate_CheckList_v2.xlsx",
+   "name": "SSP0020_Delegate_CheckList_v2.xlsx",
+   "why": "자동화가 만든 문서라는 근거 없음(사용자가 연 문서일 수 있음) — 닫지 않음",
+   "excel_pid": 25036
+  },
+  {
+   "why": "통합 문서 1 개가 남아 있어 끝내지 않음",
+   "pid": 25036
+  }
+ ]
+}

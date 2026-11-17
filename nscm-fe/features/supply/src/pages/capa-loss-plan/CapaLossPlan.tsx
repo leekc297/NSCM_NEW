@@ -4,14 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 
 import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { GridAction } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { MENU_ID, MSG } from './capa-loss-plan.constants';
-import type { Scp0106Row } from './capa-loss-plan.types';
 import { CapaLossPlanColumnModal } from './components/CapaLossPlanColumnModal';
 import { CapaLossPlanForm } from './components/CapaLossPlanForm';
 import { CapaLossPlanGrid } from './components/CapaLossPlanGrid';
@@ -216,30 +214,11 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures(targetSheet);
   };
 
-  /**
-   * Insert — **명시적 무동작**. AS-IS `InsertButton()` 본문이 완전히 빈 `{}` 다(03 R-26).
-   * `hotkeyConfig` 에서 키를 생략하면 공용 SubTitle 의 기본 `addRow` 가 살아나 AS-IS 에 없던
-   * 행 추가가 생기고, `false` 로 주면 버튼이 사라져 시각적으로 달라진다 — 둘 다 오답이다(V-52).
-   * AS-IS 캡처 툴바에 `(F8) Insert` 가 실제로 노출되고(decisions §B-4) 메타에도 등록한다(BLK-4 확정).
-   */
-  const handleInsert = () => undefined;
-
-  /**
-   * Delete — AS-IS `DeleteButton()`(03 R-25). 가드 3종(그리드 없음/빈 그리드/행 미선택)은 전부
-   * 무동작이고, 선택행이 `'I'`(신규)일 때만 로컬 제거한다. Insert 가 NO-OP 라 신규행이 생기지
-   * 않으므로 **실질 무동작**이다 — 기존 행이 지워지지 않는 것이 핵심이다(V-53).
-   */
-  const handleDelete = () => {
-    if (!isEditable) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    if (grid.rows.length === 0) return;
-    if (!grid.selectedRows?.length) return;
-    const selected = grid.selectedRows[0]?.dataItem as Scp0106Row | undefined;
-    if (selected?.CRUD_TYPE !== 'I') return;
-    GridAction.removeRow(grid, true);
-    grid.invalidate();
-  };
+  // Insert/Delete 버튼은 노출하지 않는다(hotkeyConfig 에서 false) — 사용자 지시 2026-11-11.
+  //   AS-IS 는 둘 다 툴바에 노출하지만(decisions §B-4 BLK-4) 실질 무동작이라 숨긴다:
+  //   Insert 는 AS-IS `InsertButton()` 본문이 빈 `{}`(03 R-26)라 행을 추가하지 않고, Delete 는
+  //   `CRUD_TYPE='I'` 신규행만 지우는데 Insert 가 무동작이라 그 행이 생기지 않는다(03 R-25, V-53).
+  //   편집은 셀 더블클릭 + Save(F7) 경로만 쓴다.
 
   const { handleCellEditEnded } = useCapaLossPlanCellEdit({
     gridRef,
@@ -272,16 +251,21 @@ export const CapaLossPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   /**
    * hotkeyConfig — `useTabBtnPermissions` 경유 의무(하드코딩 금지, CLAUDE.md §2 체크3).
-   * `insert` 는 **키를 존재시킨 채 명시적 무동작 함수**다(위 handleInsert 주석).
-   * `manual`/`upload` 는 AS-IS 에 없는 기능이라 false.
+   * `manual`/`upload` 는 AS-IS 에 없는 기능이라 false. `false` 면 공용 SubTitle 이 버튼을 숨긴다.
    *
    * Edit(AS-IS F2) 토글은 미이식이다 — 편집은 mount 시 `canEdit` 권한으로만 갈린다(convert-core §2.4).
+   *
+   * **의도적 AS-IS 이탈(사용자 지시 2026-11-11)**:
+   *   - `insert`/`delete` 는 실질 무동작이라 **항상 숨긴다**(false). AS-IS 는 노출하지만(BLK-4)
+   *     Insert 는 빈 구현(R-26)이고 Delete 는 지울 신규행이 없어(V-53) 둘 다 쓸모가 없다(위 주석).
+   *   - `save` 는 `isEditable`(권한 AND 편집게이트 통과)로 가려 읽기전용(Pre/2차컷오프/1차컷오프×MODEL)
+   *     에서는 숨긴다. AS-IS 는 항상 노출 후 동작 시 읽기전용 메시지로 막는 방식이라 파리티와 다르다.
    */
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
-    save: hasButton('SAVE') ? handleSave : false,
+    insert: false,
+    delete: false,
+    save: hasButton('SAVE') && isEditable ? handleSave : false,
     manual: false,
     upload: false,
   };

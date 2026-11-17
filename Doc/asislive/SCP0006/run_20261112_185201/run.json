@@ -1,0 +1,63 @@
+{
+ "id": "SCP0006",
+ "started": "2026-11-12 18:52:01.443",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:52:01.806",
+   "in_menu": false,
+   "ok": false,
+   "error": "InvalidOperationException: ProgramID not in this user's menu: SCP0006",
+   "done": "2026-11-12 18:52:01.806"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:52:02.143",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 18:52:02.656"
+  }
+ ],
+ "status": "FAIL",
+ "gate": {
+  "opened": false,
+  "grid_headers": false,
+  "grid_rows": false,
+  "shots": 0,
+  "calls": 0,
+  "calls_with_params": 0
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "dialogs": [],
+ "counts": {
+  "controls": 0,
+  "layout_items": 0,
+  "grids": 0,
+  "sheets": 0,
+  "header_cols": 0,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 0,
+  "calls_screen": 0,
+  "calls_find": 0,
+  "dialogs": 0
+ },
+ "why": "화면 열기 실패: InvalidOperationException: ProgramID not in this user's menu: SCP0006",
+ "ended": "2026-11-12 18:52:02.763",
+ "exit": 2
+}

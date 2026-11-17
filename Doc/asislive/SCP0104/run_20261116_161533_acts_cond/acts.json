@@ -1,0 +1,479 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersion",
+     "before": [
+      "202610",
+      27,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "202610",
+      20,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    },
+    {
+     "control": "clbFactory(clb)",
+     "before": [
+      "",
+      14,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      13,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      79,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      54,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlant(clb)",
+     "before": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0104-S1e0271",
+    "SCP0104-S484f86",
+    "SCP0104-S96bd28",
+    "SCP0104-S2a8740",
+    "SCP0104-Sdb45a9",
+    "SCP0104-Sf0a89a",
+    "SCP0104-S20acca",
+    "SCP0104-S2b86f0",
+    "SCP0104-S228de0",
+    "SCP0104-S449fc9",
+    "SCP0104-Saa86fe",
+    "SCP0104-Sbf28a0",
+    "SCP0104-S729111",
+    "SCP0104-S28eed5",
+    "SCP0104-S6413dc",
+    "SCP0104-S25d5d7",
+    "SCP0104-S876cc5",
+    "SCP0104-Sd49fd3",
+    "SCP0104-Sc5133f",
+    "SCP0104-S3ca6c1",
+    "SCP0104-S3ca6c1",
+    "SCP0104-S538e42",
+    "SCP0104-S5dd269",
+    "SCP0104-Sc2a20b",
+    "SCP0104-S0eab06",
+    "SCP0104-Sd8fa4a",
+    "SCP0104-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersion",
+     "before": [
+      "202610",
+      20,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "202610",
+      27,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    },
+    {
+     "control": "clbFactory(clb)",
+     "before": [
+      "",
+      13,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      14,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbLine(clb)",
+     "before": [
+      "",
+      54,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      79,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlant(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSite(clb)",
+     "before": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0104-S1e0271",
+    "SCP0104-S484f86",
+    "SCP0104-S96bd28",
+    "SCP0104-S2a8740",
+    "SCP0104-Sdb45a9",
+    "SCP0104-Sf0a89a",
+    "SCP0104-S20acca",
+    "SCP0104-S2b86f0",
+    "SCP0104-S228de0",
+    "SCP0104-S449fc9",
+    "SCP0104-Saa86fe",
+    "SCP0104-Sbf28a0",
+    "SCP0104-S729111",
+    "SCP0104-S28eed5",
+    "SCP0104-S6413dc",
+    "SCP0104-S25d5d7",
+    "SCP0104-S876cc5",
+    "SCP0104-Sd49fd3",
+    "SCP0104-Sc5133f",
+    "SCP0104-S3ca6c1",
+    "SCP0104-S3ca6c1",
+    "SCP0104-S538e42",
+    "SCP0104-S5dd269",
+    "SCP0104-Sc2a20b",
+    "SCP0104-S0eab06",
+    "SCP0104-Sd8fa4a",
+    "SCP0104-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboVersion",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:202609",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersionSeq",
+     "before": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ],
+     "after": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202609"
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0104-S2a8740",
+    "SCP0104-Sdb45a9",
+    "SCP0104-Sf0a89a",
+    "SCP0104-S2b86f0",
+    "SCP0104-Sbf28a0",
+    "SCP0104-S729111",
+    "SCP0104-S28eed5",
+    "SCP0104-S6413dc",
+    "SCP0104-S25d5d7",
+    "SCP0104-S876cc5",
+    "SCP0104-Sd49fd3",
+    "SCP0104-S538e42",
+    "SCP0104-Sc2a20b",
+    "SCP0104-S0eab06",
+    "SCP0104-Sd8fa4a",
+    "SCP0104-Sbd8fe2"
+   ]
+  },
+  {
+   "control": "cboVersion",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:202610",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboVersionSeq",
+     "before": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202609"
+     ],
+     "after": [
+      "1",
+      1,
+      0,
+      null,
+      true,
+      true,
+      "202610"
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0104-S2a8740",
+    "SCP0104-Sdb45a9",
+    "SCP0104-Sf0a89a",
+    "SCP0104-S2b86f0",
+    "SCP0104-Sbf28a0",
+    "SCP0104-S729111",
+    "SCP0104-S28eed5",
+    "SCP0104-S6413dc",
+    "SCP0104-S25d5d7",
+    "SCP0104-S876cc5",
+    "SCP0104-Sd49fd3",
+    "SCP0104-S538e42",
+    "SCP0104-Sc2a20b",
+    "SCP0104-S0eab06",
+    "SCP0104-Sd8fa4a",
+    "SCP0104-Sbd8fe2"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboVersionSeq",
+   "why": "콤보 항목이 1개라 바꿀 값이 없음",
+   "scenarios": 15
+  },
+  {
+   "control": "cboFromYYYY",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 9
+  },
+  {
+   "control": "rgrpDivisionType",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(RadioGroup)",
+   "scenarios": 22
+  }
+ ],
+ "at": "2026-11-16 16:14:51"
+}

@@ -33,7 +33,7 @@
 
 ### Reference
 - `features/master/src/pages/contribute-view/components/ContributeViewForm.module.scss` (DMF0043_01)
-- `features/master/src/pages/sales-site-project-model/components/SalesSiteProjectModelForm.module.scss` (DMF0005)
+- `features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.module.scss` (DMF0005) (2026-11-13 정정: 폴더 `components/` → 실제 폴더명 `componenets/`)
 - `features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.module.scss` (DMF0072, 2026-06-20 적용)
 
 ### POST-WRITE grep
@@ -50,7 +50,7 @@ rg -n "\\.inputWithSearch" features/<domain>/src/pages/<screen>/components | wc 
 ## §2. 조회조건 2단 초과 시 펼침/닫기 토글 의무
 
 ### 적용 조건
-화면 조회조건이 **2단 (= 6 FormItem, size=4) 초과** 일 때 (즉 7번째 FormItem 이상).
+화면 조회조건이 **2단 (= Grid size 합계 24 · 1단 4개(size=3) 기준 8 FormItem) 초과** 일 때 (즉 9번째 FormItem 이상). (2026-11-13 정정: '6 FormItem, size=4 / 7번째' → 1단 4개(size=3) 기준 '8 FormItem / 9번째' — hook #94 `search-condition-height-uniformity.md` · reference DMF0004/0006 Form 실물 `size={3}`. size=4 로 배치한 화면은 합계 24 초과 = 7번째부터. 아래 예시 코드는 size=4 배치 기준 그대로 둠)
 
 ### 안티패턴 (위반)
 ```tsx
@@ -105,7 +105,7 @@ rg -n "\\.inputWithSearch" features/<domain>/src/pages/<screen>/components | wc 
 rg -nc "<FormItem\b" features/<domain>/src/pages/<screen>/components | head -1
 # extraConditions prop 존재 확인 (≥ 7 FormItem 시 의무)
 rg -n "extraConditions=" features/<domain>/src/pages/<screen>/components
-# FormItem ≥ 7 이고 extraConditions= 0 hit → 위반
+# FormItem ≥ 9 (size=3 기준 · size=4 배치면 ≥ 7) 이고 extraConditions= 0 hit → 위반  # (11-13 정정)
 ```
 
 ---
@@ -127,8 +127,8 @@ rg -n "extraConditions=" features/<domain>/src/pages/<screen>/components
 
 PRE-WRITE 추가 (UI-MANDATORY 통합 체크리스트):
 - ✅ InputField + endAdornment Button 사용 시 `inputWithSearch` SCSS class 적용
-- ✅ FormItem ≥ 7 시 `extraConditions` prop 분리
+- ✅ FormItem ≥ 9 (size=3 기준 · size=4 배치면 ≥ 7) 시 `extraConditions` prop 분리 (11-13 정정)
 
 POST-WRITE grep:
-- `<Form>` 컴포넌트 안 FormItem 수 ≥ 7 → `extraConditions=` 1+ hit 의무
+- `<Form>` 컴포넌트 안 FormItem 수 ≥ 9 (size=3 기준 · size=4 배치면 ≥ 7) → `extraConditions=` 1+ hit 의무 (11-13 정정)
 - `endAdornment.*Button` 사용 시 `\.inputWithSearch` SCSS class 1+ hit 의무

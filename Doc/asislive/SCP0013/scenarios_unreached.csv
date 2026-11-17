@@ -1,0 +1,9 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0013-Seb6c4c,기타,ClearUsrCheckedList,SCP0013_ProductionPlanLine.cs:257,주석 안에서만 호출,SCP0013_ProductionPlanLine.cs:3856,
+SCP0013-Se31064,조회,GetExtraSpecAll,SCP0013_ProductionPlanLine.cs:469,같은 파일에서 호출,SCP0013_ProductionPlanLine.cs:89,
+SCP0013-S1d7d4f,조회,GetLastPlanVersion,SCP0013_ProductionPlanLine.cs:1922,호출 없음,,
+SCP0013-S0af853,조회,GetLastPlanVersion,SCP0013_ProductionPlanLine.cs:1941,호출 없음,,
+SCP0013-Sa9b66d,초기,SetChangedControlPart,SCP0013_ProductionPlanLine.cs:1897,주석 안에서만 호출,SCP0013_ProductionPlanLine.cs:880,
+SCP0013-S0ce700,팝업,SetColumnModelVisible,SCP0013_ProductionPlanLine.cs:3905,주석 안에서만 호출,SCP0013_ProductionPlanLine.cs:373,
+SCP0013-S905c18,기타,SetColumnModelVisible,SCP0013_ProductionPlanLine.cs:3916,주석 안에서만 호출,SCP0013_ProductionPlanLine.cs:373,
+SCP0013-S82e91c,기타,SetColumnModelVisible,SCP0013_ProductionPlanLine.cs:3919,주석 안에서만 호출,SCP0013_ProductionPlanLine.cs:373,

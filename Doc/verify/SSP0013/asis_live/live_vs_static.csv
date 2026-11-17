@@ -1,0 +1,58 @@
+﻿kind,item,static,live,verdict,note
+SP,SCM_SYS_GET_SPREAD_TITLE,,6회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SELECT,,1회 · 구간 load,LIVE_ONLY,실측에는 있는데 정적 사실(endpoints.csv)에 없음 — 공통 클래스 경유 호출이거나 정적 추출 누락 후보
+SP,SQL: SELECT *,,1회,INLINE,인라인 SQL(이름 없는 호출)
+SP,SSP0013_GET_SHIPMENT_PLAN_CHANGE,SSP0013_ShipmentPlanAdjustment.cs:742 FindData_Main,1회 · 구간 find,MATCH,
+SP,UP_FX_GETCOMMONDATALIST,,17회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETCOMMONDATALIST_SCP,,5회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETGSCMSECURITYACL,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_GETSEARCHCONDITION,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUCONNECT,,2회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,UP_FX_SAVEMENUEXECUTIONLOG,,1회,FRAMEWORK,공통 프레임워크 호출 — 화면 소스의 직접 호출이 아님
+SP,SSP0003_GET_SSP_PLAN_PROCESSING_CHECK,SSP0013_ShipmentPlanAdjustment.cs:2075 EngProcessingChk,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_DELETE_SHIPMENT_REQUEST_DRAFTING,SSP0013_ShipmentPlanAdjustment.cs:1966 GetErpIFCheck,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_GET_ERP_SO_NO_CNT,SSP0013_ShipmentPlanAdjustment.cs:1883 GetErpSoNoCnt,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_GET_SHIPMENT_STATUS,SSP0013_ShipmentPlanAdjustment.cs:1908 GetShipmentStatusChk,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_GET_STOCK_INFOMATION,SSP0013_ShipmentPlanAdjustment.cs:833 FindData_Sub,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM,SSP0013_ShipmentPlanAdjustment.cs:1020 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK,SSP0013_ShipmentPlanAdjustment.cs:1360 SaveData_Check,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0013_SAVE_SHIPMENT_REQUEST_DRAFTING,SSP0013_ShipmentPlanAdjustment.cs:1592 NonSoNo,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+SP,SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40,SSP0013_ShipmentPlanAdjustment.cs:1020 SaveData,0회,NOT_CALLED,로드·조회에서는 호출되지 않음(버튼·더블클릭·저장 등 다른 동작의 SP — 누락 아님)
+CONTROL,(선언 ↔ 실측),49개,41개,INFO,공통 23 · 선언만 26 · 실측만 18
+CONTROL,BaseRibbonCtl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,Change,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,cbo,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,chkAll,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,clb,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dp2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,dtp,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,lbl,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,panel1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pictureBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,pnlMain,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,statusStripBaseForm,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox1,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,textBox2,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txt,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONTROL,txtTextKeyin,,있음,LIVE_ONLY,실행 중 생성(코드로 추가)됐거나 상위 클래스·사용자 컨트롤 내부 컨트롤
+CONDITION,clbFromSite,Y,From Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboStatus,Y,Status,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,drpPeriod,Y,Shipment Date,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtRequest,Y,Model,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnItemId,Y,layoutControlItem2,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboChangeType,Y,Shipment Type,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtSoNo,Y,SO No,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,clbToSite,Y,To Site,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboDivision,Y,Div* [필수],LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,chkMyModel,Y,layoutControlItem8,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,cboChecked,Y,Checked,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,btnChecked,Y,layoutControlItem2,LIVE,layout=usrLayoutControl1 visible=True
+CONDITION,txtModel2,Y,Model,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnItemID2,Y,layoutControlItem5,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,btnSearch,Y,layoutControlItem6,LIVE,layout=usrLayoutControl3 visible=True
+CONDITION,txtCreateDate,Y,Created Date,LIVE,layout=usrLayoutControl3 visible=True
+GRID,spdMain/Shipment Plan Adjustment,정적 컬럼 사실 61행(시트 미지정 포함),컬럼 62(보임 34) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/Stock information,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 20(보임 19) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)
+GRID,spdSub/Stock information Detail,정적 컬럼 사실 0행(시트 미지정 포함),컬럼 26(보임 25) · 헤더 1단 · 행 0 · 고정 0,LIVE,실측 = 메타·코드가 실제로 만든 최종 컬럼(조건 분기 적용 결과)

@@ -1,0 +1,81 @@
+[
+ {
+  "row_id": "V-e5a58b4b",
+  "rule_id": "I1",
+  "target": "SSP0021 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-e5f95653",
+  "rule_id": "F10",
+  "target": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "same": []
+ },
+ {
+  "row_id": "V-b93a10f3",
+  "rule_id": "F10",
+  "target": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "same": []
+ },
+ {
+  "row_id": "V-b9d670a4",
+  "rule_id": "B6",
+  "target": "조회조건 Company",
+  "same": []
+ },
+ {
+  "row_id": "T-4fc30204",
+  "rule_id": "C1",
+  "target": "cboPlanDate / Plan-date / Plan Date",
+  "same": []
+ },
+ {
+  "row_id": "T-f77657eb",
+  "rule_id": "M4",
+  "target": "DIVISION_ID / Div",
+  "same": [
+   "T-2bdfa178",
+   "T-1eacfd50",
+   "T-0b96ede9",
+   "T-a6b72e08",
+   "T-4f61c06e",
+   "T-b7afeaa2"
+  ]
+ },
+ {
+  "row_id": "T-2bdfa178",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ },
+ {
+  "row_id": "T-1eacfd50",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ },
+ {
+  "row_id": "T-0b96ede9",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ },
+ {
+  "row_id": "T-a6b72e08",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ },
+ {
+  "row_id": "T-4f61c06e",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ },
+ {
+  "row_id": "T-b7afeaa2",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-f77657eb"
+ }
+]

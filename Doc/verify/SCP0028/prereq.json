@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-02 13:51:02",
+ "generated": "2026-11-14 05:03:49",
  "rc": 0,
  "items": [
   {
@@ -21,9 +21,9 @@
   {
    "key": "tobe_meta",
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
-   "status": "DONE",
+   "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "18시간 지난 메타 → 다시 export · rc=0 · 21s · _meta.csv 1440행 proc_params.csv 8074행 sheet_columns.csv 16372행 sheet_measures.csv 1568행 combo_sql.csv 743행 menu.csv 208행 msg_master.csv 4964행 btn_auth.csv 13451행 user_group.csv 23행 user_group_user.csv 13089행 user_group_menu.csv 2004행 users.csv 8612행 division.csv 14행 unit_auth.csv 25062행 tables.csv 5301행 columns.csv 15522행 procs_catalog.csv 1872행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
+   "evidence": "6.5시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -63,16 +63,16 @@
   {
    "key": "e2e_spec",
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
-   "status": "DONE",
-   "producer": "tools/E2E/gen-e2e.js <ID>",
-   "evidence": "rc=0 · 1s · SCP0028 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0028 → SCP0028 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행)"
+   "status": "OK",
+   "producer": "tools/E2E/gen-e2e.js",
+   "evidence": "최신"
   },
   {
    "key": "smoke",
-   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
-   "status": "OK",
-   "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 11-01 01:19 (FE 소스보다 최신)"
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 115s · oc\\e2e\\specs\\SCP0028.smoke.spec.ts:106:7 › SCP0028 Shipment_Lot_Size 스모크 @smoke › 조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인 2 passed (1.7m) # E2E 결과 — 2026-11-14 05:03 테스트 3 · PASS 2 · FAIL 1 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0028\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0028\\run_20261114_050154_smoke.log"
   }
  ]
 }

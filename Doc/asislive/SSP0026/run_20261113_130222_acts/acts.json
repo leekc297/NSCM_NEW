@@ -1,0 +1,320 @@
+{
+ "id": "SSP0026",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnItemID",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0026_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0026_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0026-S5f6ab6",
+    "SSP0026-S8cbf48"
+   ]
+  },
+  {
+   "control": "BtnItemID2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0026_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0026_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0026-Sf87f6b",
+    "SSP0026-S82ee9a"
+   ]
+  },
+  {
+   "control": "BtnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0026-S97242e",
+    "SSP0026-S6442a1",
+    "SSP0026-S569dec"
+   ]
+  },
+  {
+   "control": "BtnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0026_GET_REQUEST_DETAIL_PACK"
+   ],
+   "scenarios": [
+    "SSP0026-S96bd28",
+    "SSP0026-Sa782b1",
+    "SSP0026-S507644",
+    "SSP0026-S5cd96f",
+    "SSP0026-S7e5428",
+    "SSP0026-Sa9550e",
+    "SSP0026-S479af3",
+    "SSP0026-S0a9db2",
+    "SSP0026-Sd9c581",
+    "SSP0026-Sd851af",
+    "SSP0026-S83f96f",
+    "SSP0026-S8c10f3",
+    "SSP0026-Seb1ad4",
+    "SSP0026-Sf874b1",
+    "SSP0026-S6c59f3",
+    "SSP0026-S6a69a9",
+    "SSP0026-Sd59aae",
+    "SSP0026-Sf5f784",
+    "SSP0026-Sbb8d29",
+    "SSP0026-S252290",
+    "SSP0026-Sc14b34",
+    "SSP0026-S10779b",
+    "SSP0026-Sd738d5",
+    "SSP0026-S2e76bd",
+    "SSP0026-S72a490",
+    "SSP0026-Sf409b9",
+    "SSP0026-S6bd4b3",
+    "SSP0026-S109112"
+   ]
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0026-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemID2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0026_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0026_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0026-Sf87f6b",
+    "SSP0026-S82ee9a"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0026_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0026_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0026-S5f6ab6",
+    "SSP0026-S8cbf48"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0026-S0aa70a",
+    "SSP0026-S963877",
+    "SSP0026-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopupEx",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX"
+   ],
+   "scenarios": [
+    "SSP0026-S287784",
+    "SSP0026-S6ab4d3"
+   ]
+  },
+  {
+   "control": "btnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0026-S97242e",
+    "SSP0026-S6442a1",
+    "SSP0026-S569dec"
+   ]
+  },
+  {
+   "control": "btnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0026_GET_REQUEST_DETAIL_PACK"
+   ],
+   "scenarios": [
+    "SSP0026-Sa782b1",
+    "SSP0026-S507644",
+    "SSP0026-S479af3"
+   ]
+  },
+  {
+   "control": "formDown",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN"
+   ],
+   "scenarios": [
+    "SSP0026-Sc80266",
+    "SSP0026-S4c15ba",
+    "SSP0026-Sda4316",
+    "SSP0026-S9ae75e",
+    "SSP0026-S8ba9a2",
+    "SSP0026-S4ac210",
+    "SSP0026-S4d9416",
+    "SSP0026-Sbc9ae6",
+    "SSP0026-Sda05da",
+    "SSP0026-S4be28f",
+    "SSP0026-S0c2349",
+    "SSP0026-S2d31a6"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnExcelFormDownload",
+   "why": "파일·Excel·인쇄 버튼(이름 규칙)",
+   "scenarios": 12
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-13 12:59:16.865",
+ "fills": 0,
+ "fill_left": []
+}

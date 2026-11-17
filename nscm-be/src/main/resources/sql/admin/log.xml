@@ -4,8 +4,8 @@
 
     <!-- 로그 생성 -->
     <insert id="insertSysLog">
-		INSERT INTO SCM_MGR.SCM_COM_SYS_LOG (SYS_LOG_ID, LOG_TP_CD, SYS_LOG_MSG_CTN, CALL_PGM_URL, RQR_CLNT_IP, MNU_ID, SHT_NM, MNU_BTN_CD, EXCT_MSG_CTN, LOG_ST_DTM, TRNM_ST_DTM, DB_TRNM_ST_DTM, DB_TRNM_END_DTM, TRNM_END_DTM, LOG_END_DTM, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
-		VALUES(#{traceId}, #{typeCd} , #{params}, #{requestUrl}, #{clientIp}, #{menuId}, #{shtNm}, #{buttonCd}, SUBSTRB(#{exception}, 1, 4000), #{clientStTm}, #{serverStTm}, #{sqlStTm}, #{sqlEdTm}, #{serverEdTm}, #{clientEdTm}, #{userId}, SYSDATE , #{userId}, SYSDATE )
+		INSERT INTO SCM_MGR.SCM_COM_SYS_LOG (SYS_LOG_ID, LOG_TP_CD, SYS_LOG_MSG_CTN, CALL_PGM_URL, RQR_CLNT_IP, MNU_ID, MENU_DESCRIPTION, SHT_NM, MNU_BTN_CD, EXCT_MSG_CTN, LOG_ST_DTM, TRNM_ST_DTM, DB_TRNM_ST_DTM, DB_TRNM_END_DTM, TRNM_END_DTM, LOG_END_DTM, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+		VALUES(#{traceId}, #{typeCd} , #{params}, #{requestUrl}, #{clientIp}, #{menuId}, (SELECT MNU_DESC FROM SCM_MGR.SCM_ADM_MNU_M WHERE MNU_ID = #{menuId}), #{shtNm}, #{buttonCd}, SUBSTRB(#{exception}, 1, 4000), #{clientStTm}, #{serverStTm}, #{sqlStTm}, #{sqlEdTm}, #{serverEdTm}, #{clientEdTm}, #{userId}, SYSDATE , #{userId}, SYSDATE )
 	</insert>
 	
 	<!-- 로그 최종시간 업데이트(front 도착시간) -->

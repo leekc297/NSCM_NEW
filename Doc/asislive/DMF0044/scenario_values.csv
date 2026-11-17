@@ -1,0 +1,31 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+DMF0044-S96d263,DIVISION,,,,값 미도출,for (i < asDivision.Length),
+DMF0044-Sf2cd12,AUTH,,,,값 미도출,"if (this.fps != null) ▸ switch (UserInfoContext.Current[""NowGroupID""]) default:",
+DMF0044-S9dd0dd,AUTH,,,,값 미도출,"switch (UserInfoContext.Current[""NowGroupID""]) default:",
+DMF0044-Saa0463,DIVISION,,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (sDIVISION_ID == """" || sCURRENCY == """" || sUNIT_CURRENCY == """")",
+DMF0044-Sd86d88,DIVISION,40,40,,실행 대상,"if (this.fps != null) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)).ToString() == CAppSetting.StringY) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns",
+DMF0044-S236107,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"if (this.fps != null) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)).ToString() == CAppSetting.StringY) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns",
+DMF0044-Sc369ba,DIVISION,40,40,,실행 대상,"if (this.fps != null) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)).ToString() == CAppSetting.StringY) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns",
+DMF0044-S0970e2,DIVISION,40 (그 밖 값 필요),"40,81",,실행 대상,"if (this.fps != null) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)).ToString() == CAppSetting.StringY) ▸ else of (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns",
+DMF0044-Se9843f,DIVISION,,,,값 미도출,"switch (triggerControl) case ""MyDivision"":",
+DMF0044-S3faa0f,DIVISION,,,,값 미도출,"for (i < asDivision.Length) ▸ if (response.DataSet.Tables.Count != 0) ▸ if (response.DataSet.Tables[0].Rows[0][0].ToString() == ""MSG00156"")",
+DMF0044-Sae059b,DIVISION,,,,값 미도출,"for (i < asDivision.Length) ▸ if (response.DataSet.Tables.Count != 0) ▸ else of (response.DataSet.Tables[0].Rows[0][0].ToString() == ""MSG00156"") ▸ if (response.DataSet.Tables[0].Rows[0][0].ToString() == ""success"")",
+DMF0044-S634942,DIVISION,,,,값 미도출,"for (i < asDivision.Length) ▸ if (response.DataSet.Tables.Count != 0) ▸ else of (response.DataSet.Tables[0].Rows[0][0].ToString() == ""MSG00156"") ▸ else of (response.DataSet.Tables[0].Rows[0][0].ToString() == ""success"")",
+DMF0044-S24a7cd,DIVISION,,,,값 미도출,for (i < asDivision.Length) ▸ else of (response.DataSet.Tables.Count != 0),
+DMF0044-S341bf3,COND,txtSPVersion.Text = ,,,값 미도출,"if (txtSPVersion.Text == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0044-Sdba224,COND,txtSPVersion.Text = ,,,값 미도출,"if (txtSPVersion.Text == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0044-Sf882f7,COND,txtSPVersion.Text = ,,,값 미도출,"if (txtSPVersion.Text == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0044-Sfa668c,COND,txtSPVersion.Text = ,,,값 미도출,"if (txtSPVersion.Text == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0044-Scb3da3,COND,clbType.ControlValues = REPORT_SP_W,clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"if (clbType.ControlValues == ""REPORT_SP_W"")",
+DMF0044-Sa3b609,COND,clbType.ControlValues = REPORT_SP_W,clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"else of (clbType.ControlValues == ""REPORT_SP_W"")",
+DMF0044-Scca256,COND,"clbType.ControlValues = SP_W,BP_M,SP_M",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"if ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M""))",
+DMF0044-Sda2bc5,COND,"clbType.ControlValues = SP_W,BP_M,SP_M,SP_W,SP_M",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"if ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M"")) ▸ if ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""SP_M""))",
+DMF0044-S0f5d69,COND,"clbType.ControlValues = SP_W,BP_M,SP_M,SP_W,SP_M",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"if ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M"")) ▸ else of ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""SP_M""))",
+DMF0044-S40cd92,COND,"clbType.ControlValues = SP_W,BP_M,SP_M",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"else of ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M""))",
+DMF0044-S392794,COND,"clbType.ControlValues = SP_W,BP_M,SP_M,REPORT_SP_W",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"else of ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M"")) ▸ if (clbType.ControlValues == ""REPORT_SP_W"")",
+DMF0044-S034f0f,COND,"clbType.ControlValues = SP_W,BP_M,SP_M,REPORT_SP_W",clbType=i0 clbType=i1,clbType=i0 clbType=i1,실행함,"else of ((clbType.ControlValues == ""SP_W"") || (clbType.ControlValues == ""BP_M"") || (clbType.ControlValues == ""SP_M"")) ▸ else of (clbType.ControlValues == ""REPORT_SP_W"")",
+DMF0044-S265002,COND,chkResult.Checked,,,화면에 없는 컨트롤,if (iSelectedRow != -1) ▸ if (chkResult.Checked == false),화면 덤프에 chkResult 없음(팝업 안·다른 폼이거나 덤프 없음)
+DMF0044-Sea45c8,COND,chkMV.Checked,,,화면에 없는 컨트롤,if (chkMV.Checked == true),화면 덤프에 chkMV 없음(팝업 안·다른 폼이거나 덤프 없음)
+DMF0044-S3cfaac,COND,chkMV.Checked,,,화면에 없는 컨트롤,else of (chkMV.Checked == true),화면 덤프에 chkMV 없음(팝업 안·다른 폼이거나 덤프 없음)
+DMF0044-Sbfa4e7,COND,chkResult.Checked,,,화면에 없는 컨트롤,if (chkResult.Checked == true),화면 덤프에 chkResult 없음(팝업 안·다른 폼이거나 덤프 없음)
+DMF0044-Scd1557,COND,chkResult.Checked,,,화면에 없는 컨트롤,else of (chkResult.Checked == true),화면 덤프에 chkResult 없음(팝업 안·다른 폼이거나 덤프 없음)

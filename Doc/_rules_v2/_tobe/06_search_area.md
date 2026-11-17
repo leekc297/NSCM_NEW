@@ -36,7 +36,7 @@ export const {Name}Form = () => {
   const searchParams = useStore(state => state.searchParams);
   const setSearchParams = useStore(state => state.setSearchParams);
   const setFilters = useStore(state => state.setFilters);
-  const isOpenSearchArea = useStore(state => state.isOpenSearchArea);
+  const openSearchArea = useStore(state => state.openSearchArea);   // 2026-11-13 정정: isOpenSearchArea → openSearchArea (00 §8 #2 정준형 · §5 표의 `isHidden={!openSearchArea}` 와 통일)
   
   // [2] Modal state (필요 시)
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState(false);
@@ -53,7 +53,7 @@ export const {Name}Form = () => {
       <SearchArea
         searchButtonLabel={t('LBL00112', '_Search')}
         onSearch={setFilters}
-        isHidden={!isOpenSearchArea}
+        isHidden={!openSearchArea}   // 11-13 정정
         conditions={
           <>
             <Grid size={3}>
@@ -95,7 +95,7 @@ export const {Name}Form = () => {
 |---:|---|---|
 | 1 | `<SearchArea searchButtonLabel onSearch isHidden conditions extraConditions>` 5 props | 모든 화면 |
 | 2 | `onSearch = setFilters` (store action 그대로) | DMF0006:34 |
-| 3 | `isHidden = !isOpenSearchArea` (toggle) | 모든 화면 |
+| 3 | `isHidden = !openSearchArea` (toggle) (11-13 정정) | 모든 화면 |
 | 4 | `useTabComboQueries({ filters: [...] })` 표준 | DMF0006:26-28 |
 | 5 | 각 항목 = `<Grid size={N}><FormItem label labelAlign='right' render>` (N=3 기본, =4 (DMF0007 3-col)) | DMF0006 / DMF0007 |
 | 6 | `<CustomDropdown value options onChange>` 3 props | 모든 화면 |
@@ -227,7 +227,7 @@ useEffect(() => {
 | 3 | 4-column layout (4 items per row) | DMF0006 (단순한 화면) |
 | 4 | 3-column layout (3 items per row) | DMF0007 (필수 항목 강조) |
 
-→ 화면별 조회조건 항목 수에 따라 결정. 권장: 8 항목 이상 = size=3 / 5 항목 이하 = size=4.
+→ 화면별 조회조건 항목 수에 따라 결정. 권장: 8 항목 이상 = size=3 / 5 항목 이하 = size=4. (2026-11-13 정정: 항목 수별 권장 size 는 뒤에 신설된 §10 Grid size 균등 표준(2026-06-06 · 3 field = 3+3+3, 4/4/4 금지)이 우선 — 이 문장은 초안(06-03) 값)
 
 ---
 
@@ -363,7 +363,7 @@ grep -n "preSearchParams=\{\{ \.\.\." "$FORM"  # → useMemo 권장 (warning)
 
 > 메모리 `feedback_search_fields_catalog.md` — 신규 화면 Form 작성 시 표준 카탈로그 그대로 사용 의무.
 
-**의무**: `@master/components/searchFields/` 카탈로그 사용 (13 종 — 자매 화면 표준).
+**의무**: `features/master/src/components/searchFields/` 카탈로그 사용 (13 종 — 자매 화면 표준). (2026-11-13 정정: `@master/components/searchFields/` → 실제 위치 `features/master/src/components/searchFields/` · import = `from 'features/master/src/components'` — `@master/*` 별칭은 `pages/*/index.ts` 로만 풀림)
 
 | 카탈로그 컴포넌트 | 용도 | 자동 적용 |
 |---|---|---|
@@ -377,7 +377,7 @@ grep -n "preSearchParams=\{\{ \.\.\." "$FORM"  # → useMemo 권장 (warning)
 | `VersionField` | Version dropdown | (도메인별 lookup) |
 | `EndCustomerField` | End Customer multi | filter by divisionId/deptId |
 | `SalesSiteField` | Sales Site multi | filter by divisionId/end_customer |
-| `ActiveFlagField` | Active Y/N (extraConditions) | useTabComboQueries('YesOrNo') |
+| `ActiveFlagField` | Active Y/N (extraConditions) | useTabComboQueries('YesOrNo') (2026-11-13: 이 컴포넌트는 현재 저장소에 없음 — `SearchFields.tsx` export 목록에 `ActiveFlagField` 없음) |
 | `BizTypeField` | Business Type | filter by divisionId |
 | `PlantSiteField` | Plant Site | filter by divisionId/end_customer |
 
@@ -393,6 +393,8 @@ grep -n "preSearchParams=\{\{ \.\.\." "$FORM"  # → useMemo 권장 (warning)
 
 ```typescript
 // Phase 5 G2 후 표준
+// (2026-11-13: `useBigFilterDM` 훅은 현재 저장소에 없음 — nscm-fe packages·features src 검색 0건.
+//  현행 = features/master/src/components/searchFields (bigFilterCombo.ts 포함). 아래는 G2 구현 뒤 적용할 예정 형태)
 const { data: bigFilter } = useBigFilterDM({ divisionIds: searchParams.divisionId });
 
 // teambyDivision / endCustomer / salesSite 별도 useTabComboQueries 불필요

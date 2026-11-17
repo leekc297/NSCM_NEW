@@ -4,6 +4,7 @@
 > 2026-08-21~22 신고 3건. **AI 로 생산한 화면에서 같은 형태로 반복**되고 있어 규칙으로 묶는다.
 >
 > 적용 범위: **행 Insert 또는 컬럼 필터를 쓰는 모든 그리드 화면**. 카테고리 = `03_grid_column_meta`.
+> (2026-11-13 정정: 적용 범위 단서 추가 — **§1 Insert 위치("포커스 행 세트 바로 위")는 세트(그룹) 구조가 있는 화면(DMF0044/DMF0049 류) 전용**. 세트 구조가 없는 목록 그리드는 새 행이 **맨 위**(공용 DataGrid 기본)이며 오류가 아니다 — 확정 룰 CR-074(2026-10-27).)
 > 짝 룰: [[grid-insert-and-modal-derived-parity]](#143 — Insert **데이터** 복사·모달 파생) ·
 > [[wijmo-merge-row-data-only]](#141 — 병합 판정) · hook #133 `COMMON:UC-01`(Insert 시 필터 유지).
 > #143 이 "새 행에 **무엇을 담나**" 라면 본 룰은 "새 행이 **어디에 놓이고 어떻게 보이나**" 다.
@@ -269,7 +270,7 @@ _filter(e) {
 
 | # | 점검 | FAIL 시 |
 |---|---|---|
-| G-P1 | `[...block, ...prev]` / `[...insertedRows, ...spRows]` 형 **맨앞 삽입 0건** | 종료 선언 금지 |
+| G-P1 | `[...block, ...prev]` / `[...insertedRows, ...spRows]` 형 **맨앞 삽입 0건** (2026-11-13 정정: 세트(그룹) 구조가 있는 화면 한정 — 세트 구조가 없는 목록 그리드는 새 행 맨 위가 정상, CR-074 · 본 문서 머리말 적용 범위 단서) | 종료 선언 금지 |
 | G-P2 | anchor 를 **행 객체 참조**로 보유 (숫자 인덱스 ⛔) | 동 |
 | G-P3 | 화면 행 배열이 `useMemo` 계산 (합친 배열 `useState` 보유 ⛔) | 동 |
 | G-P4 | 포커스 행을 `g.rows[g.selection.row].dataItem` 로 취득 (`selectedItems[0]` ⛔) | 동 |
@@ -330,6 +331,7 @@ grep -rn "selectedItems\[0\]" --include=*.tsx features | grep -v BACKUP
 > (`captureGridFilter`/`restoreGridFilter`), 화면은 **Search 시에는 복원하지 않는다**고 결정해 뒀다
 > (`ForecastPriceGrid.tsx` "신규행이 없다 = 조회 결과 교체" 주석, 2026-08-13 — 유령 필터·`Positive number
 > expected` 사고 근거). 두 정책이 공존하며 어느 쪽이 이기는지는 **런타임 실측 전까지 단정하지 않는다.**
+> (2026-11-13 정정: 판정 기준은 확정 룰 CR-097(2026-11-06)로 정해졌다 — 재조회(Search) 시 필터는 공용 그리드 동작을 따르며, 필터 초기화도 필터 유지도 화면 결함이 아니다(건수 표시는 표시 행과 일치). 런타임에서 어느 쪽이 이기는지 자체는 여전히 미실측.)
 
 > ⚠ **`InsertBlock` / `setHeadIndexOf` / `buildSetKeyMap` 은 아직 저장소에 없다**(전수 grep 0건).
 > §1 의 코드는 **처방 형태**이고, 현행 등가물은 DMF0082 의 `PendingInsert` / `groupTopRowOf` 다.

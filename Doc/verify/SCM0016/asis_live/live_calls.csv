@@ -1,0 +1,8 @@
+﻿seq,at,phase,service,foxquery_id,sp,framework,exec_type,rows,rows_kind,ms,params
+1,2026-11-12 21:13:30.938,load,GSCM.BizService.WSL,SystemManager.UP_FX_GetCommonDataList,UP_FX_GetCommonDataList,Y,ExecuteDataSet,5,DataSet rows,31.38,"{""Code"": ""LookupCommon"", ""Param1"": ""JOB_RUN_STATUS"", ""Param2"": """", ""Param3"": """", ""Param4"": """", ""Param5"": """", ""TimeZone"": ""AS054""}"
+2,2026-11-12 21:13:31.056,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetGSCMSecurityACL,UP_FX_GetGSCMSecurityACL,Y,ExecuteDataSet,1,DataSet rows,5.02,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0207""}"
+3,2026-11-12 21:13:31.083,load,GSCM.BizService.WSL,,SELECT *,,ExecuteDataSet,874,DataSet rows,20.21,"{""USER_ID"": """"}"
+4,2026-11-12 21:13:31.569,load,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,303.24,"{""MenuID"": ""Batch Log"", ""CnntCode"": ""0104001"", ""UserID"": ""jaeuk.shin""}"
+5,2026-11-12 21:13:31.651,load,GSCM.BizService.WSL,MenuContainer.UP_FX_GetSearchCondition,UP_FX_GetSearchCondition,Y,ExecuteDataSet,0,DataSet rows,3.64,"{""GroupID"": ""ADMIN"", ""UserID"": ""jaeuk.shin"", ""MenuID"": ""SY0207""}"
+6,2026-11-12 21:13:40.572,find,GSCM.SCM.Master.WSL,SCM.SCM0016_GET_BATCH_LOG,SCM0016_GET_BATCH_LOG,,ExecuteDataSet,1,DataSet rows,262.16,"{""p_run_status"": ""0,1,2,3,4""}"
+7,2026-11-12 21:14:11.399,find,GSCM.BizService.WSL,MenuContainer.UP_FX_SaveMenuConnect,UP_FX_SaveMenuConnect,Y,ExecuteNonQuery,-1,Affected rows,8.93,"{""MenuID"": ""Batch Log"", ""CnntCode"": ""0104002"", ""UserID"": ""jaeuk.shin""}"

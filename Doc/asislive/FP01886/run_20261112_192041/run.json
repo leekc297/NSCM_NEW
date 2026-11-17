@@ -1,0 +1,141 @@
+{
+ "id": "FP01886",
+ "started": "2026-11-12 19:20:41.768",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:20:42.030",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Master.UIL.FP01886_Authority_Request",
+   "form_text": "FP Auth Request",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP01886_Authority_Request.UIL.dll",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:01.646"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:21:05.284",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01886\\run_20261112_192041\\dump_load.json",
+   "control_count": 98,
+   "grid_count": 2,
+   "total": "Total : 292",
+   "time_status": "DB : 1.209s, UI : 0.013s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:05.370"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:21:05.529",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01886\\run_20261112_192041\\shots\\FP01886_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:05.826"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:21:06.153",
+   "call_timed_out": false,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:07.119"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:21:12.471",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01886\\run_20261112_192041\\dump_find.json",
+   "control_count": 98,
+   "grid_count": 2,
+   "total": "Total : 292",
+   "time_status": "DB : 0.096s, UI : 0.12s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:12.538"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:21:12.711",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01886\\run_20261112_192041\\shots\\FP01886_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:13.028"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:21:13.366",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:21:14.010"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 72,
+  "calls_with_params": 72
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Master.UIL.FP01886_Authority_Request",
+  "form_text": "FP Auth Request",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP01886_Authority_Request.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.096s, UI : 0.12s",
+  "total": "Total : 292",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:20:41.976",
+ "t_find": "2026-11-12 19:21:05.847",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 98,
+  "layout_items": 32,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 47,
+  "data_rows": 50,
+  "grid_rows": 292,
+  "calls_total": 72,
+  "calls_screen": 72,
+  "calls_find": 18,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:34.911",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:34"
+}

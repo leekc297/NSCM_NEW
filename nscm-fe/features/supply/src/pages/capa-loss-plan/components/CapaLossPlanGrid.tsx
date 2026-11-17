@@ -62,6 +62,11 @@ interface Props {
  *  (h) 붙여넣기 차단 — AS-IS 클립보드 4핸들러가 전부 주석 처리라 **미지원이 파리티**(R-17, BLK-12 확정)
  * 컬럼 목록·머지헤더·컨텍스트메뉴·EditTracker 는 공용 DataGrid 소관이다.
  */
+// 셀 변경 비교용 문자열 정규화 — 셀 값은 문자열/숫자/널뿐이라 원시값만 변환한다.
+//   editOldValueRef/row[binding] 가 unknown 이라 String() 직접 호출은 no-base-to-string 위반이다.
+const cellText = (value: unknown): string =>
+  typeof value === 'string' ? value : typeof value === 'number' ? String(value) : '';
+
 export const CapaLossPlanGrid = ({
   sheetName,
   rows,
@@ -83,6 +88,28 @@ export const CapaLossPlanGrid = ({
   //   (`1ST_CUTOFF_LINE_ASSEMBLY.OPERATION_ID`)이 폭0 + 코드 숨김 이중 은닉이라 AS-IS 에서 렌더된
   //   적이 없다 — **미구현이 파리티**다(03 C-07, decisions §A BLK-17). prop 은 공용 규약 유지용.
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
+
+  /**
+   * 편집 시 소수 10자리 초과 입력 제한 — 공용 DataGrid 가 numberRules[binding].decimalPlaces 로 타이핑/
+   *   붙여넣기/확정을 막는다. 대상은 정적 수치 컬럼(PFRSLT_QTY/BASE_QTY) + 동적 기간 컬럼 전부.
+   *   주의: 동적 기간 컬럼은 중첩 ColumnGroup 이라 config 에 decimalPlaces 를 실으면 Wijmo 가
+   *   "Unknown property" assertion 으로 그리드 생성을 깨뜨린다 — 반드시 numberRules prop(평탄 binding
+   *   키)으로 준다. 데이터 10자리 보존과 일치시킨다.
+   */
+  const numberRules = useMemo(() => {
+    const rules: Record<string, { decimalPlaces: number }> = {
+      [COLUMN.PFRSLT_QTY]: { decimalPlaces: SCALE_EDIT },
+      [COLUMN.BASE_QTY]: { decimalPlaces: SCALE_EDIT },
+    };
+    const collectLeaves = (cols: FlexGridColumnConfig[]): void => {
+      for (const col of cols) {
+        if (col.columns?.length) collectLeaves(col.columns);
+        else if (col.binding) rules[col.binding] = { decimalPlaces: SCALE_EDIT };
+      }
+    };
+    collectLeaves(periodColumns);
+    return rules;
+  }, [periodColumns]);
 
   /**
    * (f) 숨김 컬럼 + (e) 폭 2모드를 메타 위에 덧씌운다.
@@ -159,20 +186,25 @@ export const CapaLossPlanGrid = ({
       );
       const inMeasureRange = measureNameIndex >= 0 && event.col >= measureNameIndex;
       const measure = typeof row[COLUMN.MEASURE] === 'string' ? (row[COLUMN.MEASURE] as string) : '';
-      const color = inMeasureRange ? MEASURE_COLOR_BY_CODE[measure] : undefined;
+      // 편집 가능 셀은 노란색(wj-cell-editable, #fff8cd)으로 표시한다 — AS-IS 수정모드의 편집셀 색이다.
+      //   TO-BE 는 별도 수정모드 토글이 없어, 편집 가능하면(권한+상태게이트) 바로 노란색으로 보여준다
+      //   (사용자 지시 2026-11-06). measure 행 배경색(!important)이 이 노란색을 덮으므로, 편집 가능 셀에는
+      //   measure 색을 입히지 않는다 — AS-IS 도 편집셀은 edit 노랑, 비편집 셀만 measure 색이다.
+      //   미해당 시에도 항상 클래스를 해제한다(DOM 재사용, hook #95 §1-4).
+      const editable = canEdit(binding, row);
+      const color = inMeasureRange && !editable ? MEASURE_COLOR_BY_CODE[measure] : undefined;
       event.cell.classList.toggle(styles.measureYellow, color === MEASURE_COLOR.YELLOW);
       event.cell.classList.toggle(styles.measureSky, color === MEASURE_COLOR.SKY);
       event.cell.classList.toggle(styles.measureOrange, color === MEASURE_COLOR.ORANGE);
       event.cell.classList.toggle(styles.measurePink, color === MEASURE_COLOR.PINK);
-
-      // 편집 가능 셀 표시 — 미해당 시에도 항상 클래스를 해제한다(DOM 재사용).
-      const editable = canEdit(binding, row);
       event.cell.classList.toggle('wj-cell-editable', editable);
 
       /**
-       * (d) 소수 자릿수 2모드 — 조회 1자리 / 편집 10자리(R-07, V-33).
-       * 공용 numberFormat 은 컬럼 단위라 행(measure)마다 다른 자릿수를 줄 수 없어 여기서 그린다.
-       * 대상은 `PFRSLT_QTY`/`BASE_QTY` + 전 기간 컬럼이다.
+       * (d) 소수 자릿수 2모드 — **뷰 셀은 항상 1자리 반올림**, 10자리는 **더블클릭으로 편집 진입한 그 셀만**
+       * (R-07, V-33, 사용자 지시 2026-11-06). 편집 중인 활성셀은 아래 editRange 가드로 이 그리기를 건너뛰고
+       * Wijmo 인라인 편집기가 10자리로 보여준다(prepareCellForEdit 가 editor 값을 toFixed(10)로 채움).
+       * 즉 편집모드여도 편집 중이 아닌 셀은 1자리다(그리드 전체 10자리 아님). 공용 numberFormat 은 컬럼
+       * 단위라 여기서 그린다. 대상은 `PFRSLT_QTY`/`BASE_QTY` + 전 기간 컬럼이다.
        */
       if (
         binding === COLUMN.PFRSLT_QTY ||
@@ -189,18 +221,11 @@ export const CapaLossPlanGrid = ({
         if (raw !== null && raw !== undefined && raw !== '') {
           const numeric = Number(raw);
           if (Number.isFinite(numeric)) {
-            // 소수 2모드(PI 2026-11-04 확정): 데이터는 10자리 보존, **표시는 평상시 1자리 반올림**,
-            //   **포커스(선택)된 편집가능 셀만 10자리**로 전개한다. 과거의 "그리드 전체 editMode 기준
-            //   일괄 1/10"에서 **셀 단위(활성셀)**로 바꿨다. 선택 이동 시 옛/새 활성셀 재포맷은 아래
-            //   selectionChanged → invalidate 가 유발한다. (editable = 위 canEdit 결과 재사용)
-            const isActiveEditable =
-              editable &&
-              sender.selection.row === event.row &&
-              sender.selection.col === event.col;
-            const scale = isActiveEditable ? SCALE_EDIT : SCALE_VIEW;
+            // 데이터는 10자리 보존하되 뷰 셀은 항상 1자리 반올림(SCALE_VIEW). 10자리 전개는 편집 진입한
+            //   활성셀에서만 일어나며, 그 셀은 위 editRange 가드로 이 분기를 건너뛴다(prepareCellForEdit 담당).
             event.cell.textContent = numeric.toLocaleString(undefined, {
-              minimumFractionDigits: scale,
-              maximumFractionDigits: scale,
+              minimumFractionDigits: SCALE_VIEW,
+              maximumFractionDigits: SCALE_VIEW,
             });
           }
         }
@@ -226,6 +251,35 @@ export const CapaLossPlanGrid = ({
       if (!event.cancel) editOldValueRef.current = row ? row[binding] : undefined;
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
+
+    /**
+     * (d-2) 편집기 10자리 전개 — 더블클릭/F2 로 편집 진입한 셀의 Wijmo 인라인 편집기에 원본값(10자리
+     *   보존)을 그대로 싣는다(R-07, V-33). formatItem 의 뷰 셀은 항상 1자리 반올림이라, 편집기는 별도로
+     *   원본을 노출해야 사용자가 10자리를 보고 편집할 수 있다. Wijmo 기본 편집기는 컬럼 포맷이 없어도
+     *   원본 10자리를 항상 노출하지는 않으므로(이 화면은 기간/수치 컬럼 format·editor 미설정) 여기서
+     *   명시 세팅한다 — String(numeric) 은 유효숫자를 그대로 보존(불필요한 trailing 0 없음). 대상은
+     *   formatItem 과 동일한 PFRSLT_QTY/BASE_QTY + 편집가능 기간 컬럼.
+     */
+    const prepareCellForEditHandler = (sender: FlexGridType, event: { row: number; col: number }) => {
+      const binding = sender.columns[event.col]?.binding ?? '';
+      if (
+        binding !== COLUMN.PFRSLT_QTY &&
+        binding !== COLUMN.BASE_QTY &&
+        !isEditablePeriodColumn(binding)
+      )
+        return;
+      const editor = sender.activeEditor;
+      if (!editor) return;
+      const row = sender.rows[event.row]?.dataItem as Scp0106Row | undefined;
+      const raw = row ? row[binding] : undefined;
+      if (raw === null || raw === undefined || raw === '') return;
+      const numeric = Number(raw);
+      if (!Number.isFinite(numeric)) return;
+      // AS-IS 편집 셀은 10자리 패딩 표시(예: 2 -> 2.0000000000). 편집기에도 같은 자릿수로 채운다.
+      editor.value = numeric.toFixed(SCALE_EDIT);
+      editor.select();
+    };
+    grid.prepareCellForEdit.addHandler(prepareCellForEditHandler);
 
     /**
      * (h) 붙여넣기 — AS-IS `ClipboardPasting`/`ClipboardChanged`/`ClipboardChanging`/
@@ -254,22 +308,10 @@ export const CapaLossPlanGrid = ({
       if (!canEdit(binding, row)) return;
       // 값이 실제로 바뀌지 않았으면 재계산/마킹을 건너뛴다 — 편집 진입·이탈만으로(값 무변경) derived
       //   measure 가 (부동소수 재계산 미세차로) '변경'으로 빨갛게 표시되는 오마킹 방지(신고 2026-11-04).
-      if (row && String(editOldValueRef.current ?? '') === String(row[binding] ?? '')) return;
+      if (row && cellText(editOldValueRef.current) === cellText(row[binding])) return;
       editEndedRef.current(event.row, binding);
     };
     grid.cellEditEnded.addHandler(cellEditEndedHandler);
-
-    /**
-     * 소수 2모드(PI 2026-11-04) — 포커스(선택)된 편집가능 셀만 10자리로 보이게 하는 재포맷 트리거.
-     * 선택이 바뀌면 formatItem 이 새 활성셀(10자리)·옛 활성셀(1자리)을 다시 평가하도록 가시영역을
-     * refresh 한다. Wijmo `invalidate` 는 다음 애니메이션 프레임에 병합돼 **가시 셀만** 다시 그리므로
-     * 화살표 연속 이동/대용량(5,659행)에서도 부담이 작다. 편집 중 셀은 formatItem 의 editRange 가드가
-     * 건너뛰므로 인라인 편집기는 유지된다.
-     */
-    const selectionChangedHandler = (sender: FlexGridType) => {
-      sender.invalidate();
-    };
-    grid.selectionChanged.addHandler(selectionChangedHandler);
 
     /**
      * (g) `Delete` 키 = 선택 범위에 **`0.0` 일괄 기입**(행 삭제도 DBNull 도 아니다) + `Ctrl+Z` 차단
@@ -338,9 +380,9 @@ export const CapaLossPlanGrid = ({
         grid.formatItem?.removeHandler(formatItemHandler);
         grid.updatedLayout?.removeHandler(applyHeaderHeight);
         grid.beginningEdit?.removeHandler(beginningEditHandler);
+        grid.prepareCellForEdit?.removeHandler(prepareCellForEditHandler);
         grid.pastingCell?.removeHandler(pastingCellHandler);
         grid.cellEditEnded?.removeHandler(cellEditEndedHandler);
-        grid.selectionChanged?.removeHandler(selectionChangedHandler);
         grid.hostElement?.removeEventListener('keydown', keyDownHandler);
       } catch {
         /* unmount race */
@@ -396,6 +438,7 @@ export const CapaLossPlanGrid = ({
       staticColumns={resolvedStaticColumns}
       dynamicColumns={periodColumns}
       comboParams={comboParams}
+      numberRules={numberRules}
       sheetName={sheetName}
       // 3단 헤더 총높이 48px — 컬럼 정의의 height 가 아니라 이 prop 이 단일 출처다(hook #93).
       headerRowHeight={HEADER_ROW_HEIGHT}

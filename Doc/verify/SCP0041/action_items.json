@@ -1,8 +1,14 @@
 [
  {
-  "row_id": "V-d7866b99",
-  "rule_id": "G3",
-  "target": "SCP0041 화면",
+  "row_id": "V-c1ce9e15",
+  "rule_id": "N1",
+  "target": "SCP0041 센티널 표시",
+  "same": []
+ },
+ {
+  "row_id": "V-4e045022",
+  "rule_id": "E3",
+  "target": "SCP0041 Excel 필수 칸 빈 업로드",
   "same": []
  },
  {
@@ -12,15 +18,35 @@
   "same": []
  },
  {
-  "row_id": "V-7952b39b",
-  "rule_id": "F10",
-  "target": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+  "row_id": "V-1d4e59c4",
+  "rule_id": "G2",
+  "target": "조회조건 Plant Site",
   "same": []
  },
  {
-  "row_id": "V-5e98adcc",
-  "rule_id": "MS1",
-  "target": "MSG00108",
+  "row_id": "V-51805658",
+  "rule_id": "H13",
+  "target": "Pack Hold Stock.QTY (수량)",
   "same": []
+ },
+ {
+  "row_id": "V-4dc694a5",
+  "rule_id": "D3",
+  "target": "siMain.LockRange",
+  "same": []
+ },
+ {
+  "row_id": "V-b7a11e18",
+  "rule_id": "D3",
+  "target": "siMain.LockRange",
+  "same": [
+   "V-0bd071e5"
+  ]
+ },
+ {
+  "row_id": "V-0bd071e5",
+  "rule_id": "D3",
+  "target": "",
+  "folded_into": "V-b7a11e18"
  }
 ]

@@ -1,0 +1,97 @@
+{
+ "mid": "SSP0014",
+ "asis_id": "SSP0014",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division*",
+   "scenario": "화면 초기(선택 Div=40)",
+   "tobe_n": 8,
+   "asis_src": "SSP_BIGFILTER MyDivisionCMM @InitControls (SSP0014_ShipmentModelPIC.cs:189 ← SSP0014_ShipmentModelPIC.c)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "공통 8건 CODE 정렬 일치",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0014_ShipmentModelPIC.cs:189) = TO-BE 표시 NAME (CODE≠NAME 후보 8/8건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Operation group",
+   "label": "Operation Group",
+   "scenario": "화면 초기(선택 Div=40)",
+   "tobe_n": 4,
+   "asis_src": "SSP_BIGFILTER OPERATION_GROUP @InitControls (SSP0014_ShipmentModelPIC.cs:190 ← SSP0014_ShipmentModelPIC.c)",
+   "asis_n": 3,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [
+    "?Warranty"
+   ],
+   "asis_only_n": 0,
+   "tobe_only_n": 1,
+   "explain": {},
+   "b4": "판정필요",
+   "why": "TO-BE 표시값 1건을 AS-IS 코드로 환산 못 함(표현 NAME) 예: ['?Warranty']",
+   "b3": "PASS",
+   "b3_why": "공통 3건 CODE 정렬 일치",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0014_ShipmentModelPIC.cs:190) = TO-BE 표시 NAME (CODE≠NAME 후보 3/3건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "화면 초기(선택 Div=40)",
+   "tobe_n": 32,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '인자 식 해석 불가: pDivisionID'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Active",
+   "label": "Valid",
+   "scenario": "화면 초기(선택 Div=40)",
+   "tobe_n": 2,
+   "asis_src": "STATIC YesOrNo @InitControls (SSP0014_ShipmentModelPIC.cs:191 ← SSP0014_ShipmentModelPIC.c)",
+   "asis_n": 2,
+   "rep": "CODE",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 2건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']",
+   "g7": "NA",
+   "g7_why": "AS-IS 후보 CODE=NAME(형식 구분 불가) · AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0014_ShipmentModelPIC.cs:191)",
+   "cr": [
+    "CR-059"
+   ]
+  },
+  {
+   "kind": "CASCADE",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "상위 Div=81",
+   "tobe_n": 30,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '인자 식 해석 불가: pDivisionID'"
+  }
+ ]
+}

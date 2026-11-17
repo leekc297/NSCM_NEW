@@ -47,6 +47,9 @@ const RESTORE_ARRAY_KEYS = new Set<keyof SearchParamProps>([
   'lineIds',
 ]);
 
+// dCalendar 기본기간(폴백) — 1차 경로는 WorkingTime.tsx 가 SP PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD 를
+//   사용자 timezone(tmzCd)과 함께 호출해 세팅한다(AS-IS 복원, 2026-11-12). 아래 dayjs 근사는 그 SP 가
+//   실패/빈값이거나 tmzCd 미보유일 때의 폴백 기본값으로만 남는다.
 // dCalendar 기본기간 — AS-IS DateUtil.GetDayRange → SP SCM0001_GET_SCP_MONTH_PERIOD(from_date=공란,
 //   offset_month=12) 1:1. 반환 규칙(DB 실측 2026-10-15, 예 오늘 20261015 → 20261015:20271010):
 //     start = 오늘, end = 오늘+12개월을 그 주 일요일(주 시작)로 week-align.

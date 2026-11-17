@@ -65,7 +65,7 @@ def tobe_order_by(body):
     def _unwrap(p):
         """NLSSORT(A.COL, 'NLS_SORT=…') · UPPER(COL) · NVL(COL, '/') 같은 래퍼의 첫 인자를 키로(2026-10-29 SCP0041 'NLSSORT' 가 키로 잡혀 1번째 키부터 다름 허위 FAIL)"""
         for _ in range(3):
-            m = re.match(r'(?i)^(NLSSORT|UPPER|LOWER|TRIM|LTRIM|RTRIM|NVL|NVL2|COALESCE|TO_CHAR|TO_NUMBER|TO_DATE|SUBSTR|CAST|DECODE|REGEXP_REPLACE|REGEXP_SUBSTR|TRANSLATE|REPLACE|LPAD|RPAD|ROUND|TRUNC|ABS|GREATEST|LEAST|INSTR|LENGTH)\s*\((.*)$', p.strip())
+            m = re.match(r'(?i)^(FN_ASIS_SORT_KEY|NLSSORT|UPPER|LOWER|TRIM|LTRIM|RTRIM|NVL|NVL2|COALESCE|TO_CHAR|TO_NUMBER|TO_DATE|SUBSTR|CAST|DECODE|REGEXP_REPLACE|REGEXP_SUBSTR|TRANSLATE|REPLACE|LPAD|RPAD|ROUND|TRUNC|ABS|GREATEST|LEAST|INSTR|LENGTH)\s*\((.*)$', p.strip())
             if not m: return p
             inner = m.group(2); d = 0; out = ''
             for ch in inner:
@@ -101,10 +101,162 @@ def effective(tobe_keys, guard):
         else:
             clits = set(re.findall(r"'([^']*)'", cond))
             if lits & clits: out.append(k + (' DESC' if desc else ''))
+    return dedup_adjacent(out)   # 2026-11-13 T290: 한 컬럼에 쓴 정렬 보정 식 2개 → 같은 키 연속 → 하나로
+
+
+def dedup_adjacent(keys):
+    """연달아 같은 키(방향 포함)는 하나로 — 떨어져 다시 나오는 같은 키는 그대로 둔다. T290"""
+    out = []
+    for k in keys:
+        if not out or out[-1] != k:
+            out.append(k)
     return out
 
 
+def selftest():
+    b1 = "OPEN O_RC1 FOR SELECT 1 FROM T A ORDER BY FN_ASIS_SORT_KEY(A.DIVISION_ID) NULLS FIRST , FN_ASIS_SORT_KEY(A.ITEM_ID) NULLS FIRST;"
+    b2 = "OPEN O_RC1 FOR SELECT 1 FROM T A ORDER BY NLSSORT(REGEXP_REPLACE(A.DIVISION_ID, '[^[:alnum:] ]', ''), 'NLS_SORT=BINARY_CI') , NLSSORT(A.DIVISION_ID, 'NLS_SORT=BINARY_CI') , A.CUTOFF_DATE DESC , UPPER(TRANSLATE(A.ITEM_ID, '_-', '/')) NULLS FIRST , UPPER(A.ITEM_ID);"
+    k1 = effective(tobe_order_by(b1)[1], ''); k2 = effective(tobe_order_by(b2)[1], '')
+    cases = [('T290 FN_ASIS_SORT_KEY 로 감싼 키 = 안쪽 컬럼', k1 == ['DIVISION_ID', 'ITEM_ID']),
+             ('T290 한 컬럼의 보정 식 2개 = 키 1개', k2 == ['DIVISION_ID', 'CUTOFF_DATE DESC', 'ITEM_ID']),
+             ('T290 떨어져 다시 나오는 키는 유지(변이)', dedup_adjacent(['A', 'B', 'A']) == ['A', 'B', 'A']),
+             ('T290 방향이 다르면 다른 키', dedup_adjacent(['A', 'A DESC']) == ['A', 'A DESC']),
+             ('T290 다른 컬럼은 여전히 다름(변이)', effective(tobe_order_by("OPEN O FOR SELECT 1 FROM T ORDER BY FN_ASIS_SORT_KEY(A.SITE_ID);")[1], '') != ['DIVISION_ID'])]
+    bad = 0
+    for n, ok in cases:
+        print(('PASS ' if ok else 'FAIL ') + n); bad += 0 if ok else 1
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
+
+
+_TOK = re.compile(r"'(?:[^']|'')*'|[()]|;|,|[A-Z_@#][\w@#$]*(?:\.[\w@#$\[\]]+)*|\[[^\]]*\](?:\.\[[^\]]*\])*|\d+(?:\.\d+)?|\S")
+# 최상위(괄호 깊이 0·CASE 밖) 문장 시작 키워드 — 여기서 앞 문장이 끝난다
+_STMT_KW = {'SELECT', 'END', 'IF', 'ELSE', 'INSERT', 'UPDATE', 'DELETE', 'SET', 'RETURN', 'DECLARE', 'BEGIN', 'EXEC', 'EXECUTE', 'OPEN', 'WITH',
+            'WHILE', 'PRINT', 'RAISERROR', 'THROW', 'TRUNCATE', 'DROP', 'CREATE', 'ALTER', 'FETCH', 'CLOSE', 'DEALLOCATE', 'GOTO', 'BREAK', 'CONTINUE',
+            'COMMIT', 'ROLLBACK', 'MERGE', 'USE', 'GRANT'}
+_SETOP = {'UNION', 'EXCEPT', 'INTERSECT', 'MINUS'}
+_AGGF = {'MIN', 'MAX', 'COUNT', 'SUM', 'AVG', 'COUNT_BIG', 'STDEV', 'VAR'}
+
+
+def _stmts(toks):
+    """토큰 → 최상위 문장 목록(각 문장 = 토큰 리스트). 괄호 안·CASE…END 안의 키워드는 경계로 보지 않는다"""
+    out = []; cur = []; d = 0; case = 0
+    for t in toks:
+        if t == '(': d += 1
+        elif t == ')': d -= 1
+        if d == 0 and t == 'CASE': case += 1
+        elif d == 0 and t == 'END' and case: case -= 1; cur.append(t); continue
+        if d == 0 and not case and (t in _STMT_KW or t == ';'):
+            if cur: out.append(cur)
+            cur = [] if t == ';' else [t]; continue
+        cur.append(t)
+    if cur: out.append(cur)
+    return out
+
+
+def _split0(toks, sep=','):
+    out = [[]]; d = 0
+    for t in toks:
+        if t == '(': d += 1
+        elif t == ')': d -= 1
+        if t == sep and d == 0: out.append([]); continue
+        out[-1].append(t)
+    return out
+
+
+def _agg_only(item):
+    """선택 항목이 집계 함수 호출·상수·연산자로만 구성(예 MIN(A)+':'+MAX(B)) — 집계 밖 컬럼·함수 참조가 하나라도 있으면 False"""
+    if item and item[-1] not in (')',) and len(item) >= 2 and re.match(r'^[A-Z_][\w]*$', item[-1]):  # 별칭 제거(… AS X / … X)
+        item = item[:-2] if item[-2] == 'AS' else item[:-1]
+    i = 0; nagg = 0
+    while i < len(item):
+        t = item[i]
+        if t in _AGGF and i + 1 < len(item) and item[i + 1] == '(':
+            d = 0; j = i + 1
+            while j < len(item):
+                if item[j] == '(': d += 1
+                elif item[j] == ')':
+                    d -= 1
+                    if d == 0: break
+                j += 1
+            nagg += 1; i = j + 1; continue
+        if t.startswith("'") or re.fullmatch(r'\d+(?:\.\d+)?|[+\-*/|()]', t): i += 1; continue
+        return False
+    return nagg > 0
+
+
+def _one_row(st):
+    """st = SELECT 로 시작하는 최상위 문장 토큰 — 결과가 구조상 최대 1행이면 True(증명 못 하면 False)"""
+    b = st[1:]
+    if b[:1] == ['DISTINCT']: b = b[1:]
+    if b[:2] == ['TOP', '1'] or b[:4] == ['TOP', '(', '1', ')']: return True  # TOP 1 = 최대 1행
+    d = 0; f = -1
+    for i, t in enumerate(b):
+        if t == '(': d += 1
+        elif t == ')': d -= 1
+        elif d == 0 and t in ('FROM', 'INTO'): f = i; break
+        elif d == 0 and t in _SETOP: return False
+    if f >= 0 and b[f] == 'INTO': return False  # SELECT … INTO 테이블 — 결과 집합 아님이지만 보수적으로 증명 불가
+    tail_ = b[f + 1:] if f >= 0 else []
+    d = 0
+    for t in tail_:
+        if t == '(': d += 1
+        elif t == ')': d -= 1
+        elif d == 0 and t in _SETOP | {'GROUP', 'HAVING'}: return False
+    if f < 0: return True  # FROM 없는 SELECT(변수·상수) = 1행
+    items = _split0(b[:f])
+    if items and all(_agg_only(x) for x in items): return True  # GROUP BY 없는 집계 = 정확히 1행
+    if not tail_ or tail_[0] != '(': return False
+    d = 0; j = 0
+    for j, t in enumerate(tail_):
+        if t == '(': d += 1
+        elif t == ')':
+            d -= 1
+            if d == 0: break
+    inner = tail_[1:j]; after = tail_[j + 1:]
+    d = 0
+    for t in after:
+        if t == '(': d += 1
+        elif t == ')': d -= 1
+        elif d == 0 and t in ('JOIN', ',', 'APPLY', 'PIVOT', 'UNPIVOT'): return False  # 다른 행원과 결합 — 증명 불가
+    inner_st = _stmts(inner)
+    return len(inner_st) == 1 and inner_st[0][:1] == ['SELECT'] and _one_row(inner_st[0])
+
+
+def _read_asis(rel):
+    p = rel if os.path.isabs(rel or '') else os.path.join(ROOT, (rel or '').replace(chr(92), os.sep))
+    try: return open(p, encoding='utf-8-sig', errors='replace').read() if rel and os.path.isfile(p) else ''
+    except OSError: return ''
+
+
+def single_row_result(sql):
+    """2026-11-10 T204(SSP0005 A6 허위 FAIL · SCM0001_GET_SCP_PERIOD = 'MIN:MAX' 기간 1행 1열 SP 가 골든 SKIP(asis_rows 없음)으로 그리드 SP 로 판정됨):
+       골든 실측 행 수가 없을 때 AS-IS 원문 구조로 결과 1행을 증명 — 결과 집합을 내는 최상위 SELECT 가 모두
+       FROM 없음 · GROUP BY 없는 집계만 · TOP 1 · 단일 파생표(같은 조건 재귀)일 때만 True.
+       변수 대입 SELECT @x= 는 결과 아님(제외). INSERT…SELECT · WITH · DECLARE/OPEN…FOR · UNION · JOIN · GROUP BY 는 증명 불가(False).
+       PROCEDURE 가 아니면(뷰·함수) False."""
+    if not sql: return False
+    up = strip_comments(sql).upper()
+    m = re.search(r'\bCREATE\s+(?:OR\s+ALTER\s+)?PROC(?:EDURE)?\b[\s\S]*?\bAS\b', up)
+    if not m: return False
+    toks = _TOK.findall(up[m.end():])
+    found = 0; prev = None
+    for st in _stmts(toks):
+        if st[0] in ('EXEC', 'EXECUTE'): return False  # 동적 SQL·다른 SP 가 결과 집합을 낼 수 있음(DM0004_GET_SALES_SITE_DATA2 표본) — 증명 불가
+        if st[0] == 'SELECT':
+            if prev and prev[0] in ('INSERT', 'WITH', 'DECLARE', 'OPEN', 'MERGE') and not any(t in ('VALUES',) for t in prev): return False
+            if prev and prev[-1:] and prev[-1] in _SETOP | {'ALL'}: return False
+            if len(st) > 2 and st[1].startswith('@') and st[2] == '=': prev = st; continue  # 변수 대입 — 결과 집합 아님
+            if len(st) > 3 and st[1] == 'TOP' and st[3].startswith('@'): prev = st; continue  # SELECT TOP 1 @x = …
+            if not _one_row(st): return False
+            found += 1
+        prev = st
+    return found > 0
+
+
 def main():
+    if '--selftest' in sys.argv[1:]:
+        return selftest()
     ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default='')
     a = ap.parse_args(); mid = a.menu.upper(); asis = (a.asis or asis_of(mid)).upper()
     rules = [r for r in rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis, 'sort_rules.csv')) if r['kind'] == 'SQL']
@@ -157,6 +309,7 @@ def main():
                         if is_save: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': '저장 SP — 결과 순서 대상 아님'})
                         elif sh and sh not in grid_sheets: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f"AS-IS·TO-BE 모두 ORDER BY 없음 — 그리드 비바인딩 룩업 SP(PROC_M sheet '{sh}' 는 SHEET_COLUMNS 없음) → CR-075 대상 아님"})
                         elif 0 <= nrows <= 1: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f'AS-IS·TO-BE 모두 ORDER BY 없음 — 결과 {nrows}행 집계 SP → CR-075 대상 아님'})
+                        elif nrows < 0 and single_row_result(_read_asis(r['file'])): out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': 'AS-IS·TO-BE 모두 ORDER BY 없음 — 골든 행 수 없음 · AS-IS 원문 구조상 결과 1행(GROUP BY 없는 집계/FROM 없는 SELECT/단일 파생표) → CR-075 ③ 대상 아님(T204)'})
                         else: out.append({**base, 'tobe_keys': '', 'verdict': 'FAIL', 'note': f"TO-BE PKG 에 ORDER BY 없음(AS-IS 도 없음) — 그리드 표시 조회 SP 는 결정적 순서 필수(TO-BE 룰 CR-075 · 사용자 판정 2026-10-28) → PKG {pkg}.{proc} 에 ORDER BY 추가(DB 객체 보완)"})
                     elif 'ORDER BY 없음' in r['note']: out.append({**base, 'tobe_keys': ','.join(effective(tkeys, '')), 'verdict': 'PASS', 'note': 'AS-IS 에 없던 ORDER BY 를 TO-BE 가 추가 — 결정적 순서(TO-BE 룰 CR-075 충족인'})
                     else: out.append({**base, 'tobe_keys': ','.join(effective(tkeys, r['guard'])), 'verdict': 'REVIEW', 'note': 'AS-IS 키 해석 실패 — 원문 확인: ' + r['raw'][:120]})

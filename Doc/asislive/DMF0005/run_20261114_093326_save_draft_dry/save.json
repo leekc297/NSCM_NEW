@@ -1,0 +1,218 @@
+{
+ "id": "DMF0005",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCM_MST_SITE_ITEM",
+  "pk": [
+   "DIVISION_ID",
+   "PROJECT_CODE",
+   "SCM_SITE_ID",
+   "ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "PROJECT_CODE": "END_CUSTOMER40",
+   "SCM_SITE_ID": "SCM_SITE_ID40",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "save_sp": "DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+  "side": [
+   {
+    "table": "SCM_MST_SITE_ITEM_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   },
+   {
+    "table": "DM_PLN_MKT_FCST_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION → SP DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "LIABILITY_PERIOD",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "LIABILITY_PERIOD",
+     "db_col": "LIABILITY_PERIOD",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "LIABILITY_PERIOD",
+    "db_col": "LIABILITY_PERIOD",
+    "rule": "plus1"
+   },
+   {
+    "col": "EDI_LT",
+    "db_col": "EDI_LT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-14 09:33:26",
+ "status": "DRY_OK",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "40",
+   "PROJECT_CODE": "Peopleworks",
+   "SCM_SITE_ID": "Peopleworks_KR_KUM",
+   "ITEM_ID": "ECE0074N5-01",
+   "CURRENCY": "KRW",
+   "CELL_PER_CAR": null,
+   "CELL_PER_MODULE": null,
+   "LIABILITY_PERIOD": 0,
+   "SALES_PLAN_ADJUST_YN": "",
+   "ITEM_HRCY_ID": "",
+   "VALID_YN": "Y",
+   "BPMS_EXIST": "",
+   "CUST_GROUP": "ESS전지",
+   "CUST_GROUP_DTL": "계약",
+   "OWNER": "hyelin.jung",
+   "APPLICATION": "ESS",
+   "ROUTE": "내수",
+   "CREATED_BY": "dbtommy",
+   "CREATION_DATE": "2019-06-14 14:14:28.967",
+   "LAST_UPDATED_BY": "eunjung_heo",
+   "LAST_UPDATE_DATE": "2024-07-17 12:15:55.450",
+   "ATTRIBUTE1": "ESS전지",
+   "ATTRIBUTE2": "ESS전지",
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": "KOREA, REPUBLIC OF",
+   "ATTRIBUTE5": "ECE0074N5-01",
+   "ATTRIBUTE6": "",
+   "ATTRIBUTE7": "99",
+   "ATTRIBUTE8": "",
+   "ATTRIBUTE9": "일반",
+   "ATTRIBUTE10": "",
+   "REPORT_GROUP1": "ESS",
+   "REPORT_GROUP2": "ESS전지",
+   "REPORT_GROUP3": "파우치형",
+   "REPORT_GROUP4": "일반",
+   "REPORT_GROUP5": "",
+   "REPORT_GROUP6": "",
+   "REPORT_GROUP7": "",
+   "REPORT_GROUP8": "",
+   "EDI_LT": 0,
+   "SCP_VMI_LT": 0,
+   "SALES_COMPANY": "NJ00",
+   "SALES_PLANT": "NJ01",
+   "PARTIAL_PLAN_YN": "N",
+   "CONSENSUS_MKT": "",
+   "CONSENSUS_ESS": "",
+   "CONSENSUS_SCM": "",
+   "INVENTORY_DAY": "0",
+   "CHANGE_REASON": "",
+   "ALT_SIM_YN": "N",
+   "DESCRIPTION": "",
+   "PROJECT_INFO": "N",
+   "PROJECT_S_OP_REPORT": null,
+   "CELL_S_OP_REPORT": "",
+   "PRJ_OWNR_ID": null,
+   "CRGE_ORG_NM": null,
+   "CUST_ENG_NM": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "40",
+    "PROJECT_CODE": "Peopleworks",
+    "SCM_SITE_ID": "Peopleworks_KR_KUM",
+    "ITEM_ID": "ECE0074N5-01"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "LIABILITY_PERIOD",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "40",
+   "PROJECT_CODE": "Peopleworks",
+   "SCM_SITE_ID": "Peopleworks_KR_KUM",
+   "ITEM_ID": "ECE0074N5-01",
+   "CURRENCY": "KRW",
+   "CELL_PER_CAR": null,
+   "CELL_PER_MODULE": null,
+   "LIABILITY_PERIOD": 0,
+   "SALES_PLAN_ADJUST_YN": "",
+   "ITEM_HRCY_ID": "",
+   "VALID_YN": "Y",
+   "BPMS_EXIST": "",
+   "CUST_GROUP": "ESS전지",
+   "CUST_GROUP_DTL": "계약",
+   "OWNER": "hyelin.jung",
+   "APPLICATION": "ESS",
+   "ROUTE": "내수",
+   "CREATED_BY": "dbtommy",
+   "CREATION_DATE": "2019-06-14 14:14:28.967",
+   "LAST_UPDATED_BY": "eunjung_heo",
+   "LAST_UPDATE_DATE": "2024-07-17 12:15:55.450",
+   "ATTRIBUTE1": "ESS전지",
+   "ATTRIBUTE2": "ESS전지",
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": "KOREA, REPUBLIC OF",
+   "ATTRIBUTE5": "ECE0074N5-01",
+   "ATTRIBUTE6": "",
+   "ATTRIBUTE7": "99",
+   "ATTRIBUTE8": "",
+   "ATTRIBUTE9": "일반",
+   "ATTRIBUTE10": "",
+   "REPORT_GROUP1": "ESS",
+   "REPORT_GROUP2": "ESS전지",
+   "REPORT_GROUP3": "파우치형",
+   "REPORT_GROUP4": "일반",
+   "REPORT_GROUP5": "",
+   "REPORT_GROUP6": "",
+   "REPORT_GROUP7": "",
+   "REPORT_GROUP8": "",
+   "EDI_LT": 0,
+   "SCP_VMI_LT": 0,
+   "SALES_COMPANY": "NJ00",
+   "SALES_PLANT": "NJ01",
+   "PARTIAL_PLAN_YN": "N",
+   "CONSENSUS_MKT": "",
+   "CONSENSUS_ESS": "",
+   "CONSENSUS_SCM": "",
+   "INVENTORY_DAY": "0",
+   "CHANGE_REASON": "",
+   "ALT_SIM_YN": "N",
+   "DESCRIPTION": "",
+   "PROJECT_INFO": "N",
+   "PROJECT_S_OP_REPORT": null,
+   "CELL_S_OP_REPORT": "",
+   "PRJ_OWNR_ID": null,
+   "CRGE_ORG_NM": null,
+   "CUST_ENG_NM": null
+  }
+ ]
+}

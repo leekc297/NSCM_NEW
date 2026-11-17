@@ -1,0 +1,9 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+DMF0043-Sb3a79b,COND,clbYear.ControlValues = ,,,화면에 없는 컨트롤,"if (clbYear.ControlValues == """")",화면 덤프에 clbYear 없음(팝업 안·다른 폼이거나 덤프 없음)
+DMF0043-S838baa,COND,,,,값 미도출,if (this.fps != null) ▸ if (usrHis.Checked == false),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0043-S3a5907,COND,,,,값 미도출,"if (this.fps != null) ▸ if (usrHis.Checked == false) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ if (siMain.GetValue(iRow, siMain.GetColumnIndex(DefColumns.EDIT_FLAG)).ToString() == CAppSetting.StringN)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0043-S82cdcb,COND,chkYear.Checked,chkYear=cT chkYear=cF,chkYear=cT chkYear=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (chkYear.Checked == true) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""Y#"") == 0)",
+DMF0043-Seeb486,COND,chkYear.Checked,chkYear=cT chkYear=cF,chkYear=cT chkYear=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ if (chkYear.Checked == true) ▸ else of (siMain.GetColumnTag(iCol).IndexOf(""Y#"") == 0)",
+DMF0043-Sf2376e,COND,chkYear.Checked,chkYear=cT chkYear=cF,chkYear=cT chkYear=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (chkYear.Checked == true) ▸ if (siMain.GetColumnTag(iCol).IndexOf(""Y#"") == 0)",
+DMF0043-S3f5b66,COND,chkYear.Checked,chkYear=cT chkYear=cF,chkYear=cT chkYear=cF,실행함,"for (iCol <= siMain.GetMaxColumnIndex()) ▸ else of (chkYear.Checked == true) ▸ else of (siMain.GetColumnTag(iCol).IndexOf(""Y#"") == 0)",
+DMF0043-S4dba68,COND,txtVersion.Text = ,,,화면에 없는 컨트롤,"if (txtVersion.Text == """")",화면 덤프에 txtVersion 없음(팝업 안·다른 폼이거나 덤프 없음)

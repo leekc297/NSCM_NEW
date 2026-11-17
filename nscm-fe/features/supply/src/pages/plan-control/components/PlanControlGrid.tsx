@@ -207,6 +207,31 @@ export const PlanControlGrid = ({
     return () => grid.hostElement?.removeEventListener('keydown', blockComboCellKey, true);
   }, [gridRef, isPlanIdEditableByMeta]);
 
+  // E07 — AS-IS ComboSelChange 는 드롭다운에서 고르는 순간 발생한다. Wijmo 는 목록에서 Enter 로
+  //   고르면 목록만 닫고 편집을 이어가서, 다른 곳을 클릭해야 cellEditEnded 가 나고 그때까지
+  //   이전 Plan ID 의 Update Time/User 가 남아 보였다. 목록에서 고르면 여기서 편집을 바로 끝낸다.
+  //   드롭다운 패널은 그리드 밖(body)에 생기므로 document 에 건다. Wijmo 자체 처리 뒤에 돌도록
+  //   setTimeout 으로 미루고, 이미 편집이 끝났으면(마우스 클릭 경로) 아무것도 하지 않는다.
+  useEffect(() => {
+    const finishPlanIdEdit = (domEvent: Event) => {
+      const target = domEvent.target instanceof HTMLElement ? domEvent.target : null;
+      if (!target?.closest('.wj-grid-listbox')) return;
+      if (domEvent instanceof KeyboardEvent && domEvent.key !== 'Enter') return;
+      setTimeout(() => {
+        const grid = gridRef.current;
+        const editCol = grid?.editRange?.col ?? -1;
+        if (!grid?.activeEditor || grid.columns[editCol]?.binding !== ACTION_COLUMN.PLAN_ID) return;
+        grid.finishEditing();
+      });
+    };
+    document.addEventListener('click', finishPlanIdEdit, true);
+    document.addEventListener('keydown', finishPlanIdEdit, true);
+    return () => {
+      document.removeEventListener('click', finishPlanIdEdit, true);
+      document.removeEventListener('keydown', finishPlanIdEdit, true);
+    };
+  }, [gridRef]);
+
   return (
     <DataGrid<PlanControlRow>
       gridRef={gridRef}

@@ -1,0 +1,419 @@
+{
+ "F09": {
+  "id": "F09",
+  "msg": "MSG00004",
+  "meth": "SaveData",
+  "result": "PASS",
+  "why": "F09 MSG00004(cs:523) 정상 저장(Division 전체 · 당일 하루 · 위임 행 생성) → 화면 문구 '13개의 데이터가 저장되었습니다.' · 저장 요청 1건 · 실행 뒤 조건 행 13건 — AS-IS 문구 '개의 데이터가 저장되었습니다.' 와 같음",
+  "shown": "13개의 데이터가 저장되었습니다.",
+  "saves": 1,
+  "ms": 1842,
+  "aspects": {
+   "single": {
+    "ok": true,
+    "note": "저장 요청 1건(버튼 1회)"
+   },
+   "noerror": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.'"
+   },
+   "noconfirm": {
+    "ok": true,
+    "note": "저장 전 확인창 없음 · 저장 요청 1건"
+   },
+   "loading": {
+    "ok": true,
+    "note": "응답 지연 1500ms 동안 로딩 표시 보임"
+   },
+   "reflect": {
+    "ok": true,
+    "note": "재조회 그리드의 대상 행 13건"
+   },
+   "count": {
+    "ok": true,
+    "note": "결과 문구 건수 13 ↔ 생긴 행 13건(중복·누락 없음 여부)"
+   },
+   "audit": {
+    "ok": true,
+    "note": "대상 행 13건 중 감사 칸 조건({\"LAST_UPDATED_BY\":\"~@ME\"}) 일치 13건"
+   },
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:40:59.190Z"
+ },
+ "F09b": {
+  "id": "F09b",
+  "msg": "MSG00004",
+  "meth": "SaveData",
+  "result": "PASS",
+  "why": "F09b MSG00004(cs:523) 정상 저장 2회차(Division 전체 · 다음 날 하루) — 그리드 행을 20행 이상으로 만든다(방향키 반복 이동 검사 전제) → 화면 문구 '13개의 데이터가 저장되었습니다.' · 저장 요청 1건 · 실행 뒤 조건 행 13건 — AS-IS 문구 '개의 데이터가 저장되었습니다.' 와 같음",
+  "shown": "13개의 데이터가 저장되었습니다.",
+  "saves": 1,
+  "ms": 66,
+  "aspects": {
+   "single": {
+    "ok": true,
+    "note": "저장 요청 1건(버튼 1회)"
+   },
+   "noerror": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.'"
+   },
+   "reflect": {
+    "ok": true,
+    "note": "재조회 그리드의 대상 행 13건"
+   },
+   "count": {
+    "ok": true,
+    "note": "결과 문구 건수 13 ↔ 생긴 행 13건(중복·누락 없음 여부)"
+   },
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:40:59.193Z"
+ },
+ "B01": {
+  "id": "B01",
+  "msg": "(동작)",
+  "meth": "SpdMain_SheetTabClick",
+  "result": "PASS",
+  "why": "B01 (동작)(cs:232) 시트 탭 전환 — AS-IS 는 첫 시트(Delegate)에서만 Save·UnSet 버튼을 보인다(cs:234~244) → 화면 문구 '(없음)' · 저장 요청 0건 — 단계 기대 전부 충족",
+  "shown": "",
+  "saves": 0,
+  "ms": -1,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "단계 기대 전부 충족"
+   }
+  },
+  "at": "2026-11-16T17:42:10.841Z"
+ },
+ "P01": {
+  "id": "P01",
+  "msg": "(동작)",
+  "meth": "UserPopup",
+  "result": "PASS",
+  "why": "P01 (동작)(cs:821) Delegatee 찾기 팝업 — AS-IS 는 칸 값을 팝업 검색어로 넘기고(cs:829 popup.strSearch = txtDelegatee.Text) 고른 사용자의 이름을 칸에 넣는다(cs:838~844) → 화면 문구 '(없음)' · 저장 요청 0건 — 단계 기대 전부 충족",
+  "shown": "",
+  "saves": 0,
+  "ms": -1,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "단계 기대 전부 충족"
+   }
+  },
+  "at": "2026-11-16T17:42:13.645Z"
+ },
+ "F16": {
+  "id": "F16",
+  "msg": "MSG00302",
+  "meth": "UserName_Search",
+  "result": "PASS",
+  "why": "F16 MSG00302(cs:802) Delegatee 빈값으로 Save(빈 검색어가 여러 사용자와 일치) → 화면 문구 '다중검색된 User입니다. 검색창을 여시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '다중검색된 User입니다. 검색창을 여시겠습니까?' 와 같음",
+  "shown": "다중검색된 User입니다. 검색창을 여시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 637,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '다중검색된 User입니다. 검색창을 여시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:15.995Z"
+ },
+ "F17": {
+  "id": "F17",
+  "msg": "MSG00301",
+  "meth": "UserName_Search",
+  "result": "PASS",
+  "why": "F17 MSG00301(cs:811) 없는 사용자명으로 Save → 화면 문구 '사용자를 찾지 못했습니다. 검색창을 여시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '사용자를 찾지 못했습니다. 검색창을 여시겠습니까?' 와 같음",
+  "shown": "사용자를 찾지 못했습니다. 검색창을 여시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 286,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '사용자를 찾지 못했습니다. 검색창을 여시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:18.417Z"
+ },
+ "F02": {
+  "id": "F02",
+  "msg": "MSG00305",
+  "meth": "Validation_Check",
+  "result": "PASS",
+  "why": "F02 MSG00305(cs:379) Delegatee 에 로그인 계정 입력 → 화면 문구 '위임자와 수임자가 동일 합니다. Confirm' · 저장 요청 0건 — AS-IS 문구 '위임자와 수임자가 동일 합니다.' 와 같음",
+  "shown": "위임자와 수임자가 동일 합니다. Confirm",
+  "saves": 0,
+  "ms": 216,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '위임자와 수임자가 동일 합니다. Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:20.609Z"
+ },
+ "F03": {
+  "id": "F03",
+  "msg": "MSG00134",
+  "meth": "Validation_Check",
+  "result": "PASS",
+  "why": "F03 MSG00134(cs:385) Period 빈값 → 화면 문구 '날짜 선택 후 입력하세요. Confirm' · 저장 요청 0건 — AS-IS 문구 '날짜 선택 후 입력하세요.' 와 같음",
+  "shown": "날짜 선택 후 입력하세요. Confirm",
+  "saves": 0,
+  "ms": 192,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '날짜 선택 후 입력하세요. Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:23.452Z"
+ },
+ "F04": {
+  "id": "F04",
+  "msg": "MSG00219",
+  "meth": "Validation_Check",
+  "result": "FAIL",
+  "why": "F04 MSG00219(cs:393) Period From > To → 화면 문구 'The start date can not be later than the end date. Confirm' · 저장 요청 0건 — 기대 문구 '시작일자가 종료일자보다 늦을 수 없습니다.' 없음 — 화면 문구 'The start date can not be later than the end date. Confirm'",
+  "shown": "The start date can not be later than the end date. Confirm",
+  "saves": 0,
+  "ms": 179,
+  "aspects": {
+   "pass": {
+    "ok": false,
+    "note": "기대 문구 '시작일자가 종료일자보다 늦을 수 없습니다.' 없음 — 화면 문구 'The start date can not be later than the end date. Confirm'"
+   }
+  },
+  "at": "2026-11-16T17:42:27.108Z"
+ },
+ "F08": {
+  "id": "F08",
+  "msg": "MSG00299",
+  "meth": "Validation_Check",
+  "result": "PASS",
+  "why": "F08 MSG00299(cs:462) Division 전부 해제 → 화면 문구 '선택된 Division ID가 없습니다. Confirm' · 저장 요청 0건 — AS-IS 문구 '선택된 Division ID가 없습니다.' 와 같음",
+  "shown": "선택된 Division ID가 없습니다. Confirm",
+  "saves": 0,
+  "ms": 229,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '선택된 Division ID가 없습니다. Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:31.359Z"
+ },
+ "F05": {
+  "id": "F05",
+  "msg": "MSG00105",
+  "meth": "Validation_Check",
+  "result": "PASS",
+  "why": "F05 MSG00105(cs:426) 같은 Division·기간으로 다시 Save → 화면 문구 '중첩된 기간이 있습니다. Confirm' · 저장 요청 0건 — AS-IS 문구 '중첩된 기간이 있습니다.' 와 같음",
+  "shown": "중첩된 기간이 있습니다. Confirm",
+  "saves": 0,
+  "ms": 315,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '중첩된 기간이 있습니다. Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:36.486Z"
+ },
+ "F12": {
+  "id": "F12",
+  "msg": "MSG00300",
+  "meth": "BtnUnSet_Click",
+  "result": "PASS",
+  "why": "F12 MSG00300(cs:576) 행 선택 없이 UnSet → 화면 문구 '리스트에서 선택 후 설정해제 해주세요. Confirm' · 저장 요청 0건 — AS-IS 문구 '리스트에서 선택 후 설정해제 해주세요.' 와 같음",
+  "shown": "리스트에서 선택 후 설정해제 해주세요. Confirm",
+  "saves": 0,
+  "ms": 149,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '리스트에서 선택 후 설정해제 해주세요. Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T17:42:38.452Z"
+ },
+ "U01": {
+  "id": "U01",
+  "msg": "MSG00298",
+  "meth": "Validation_Check",
+  "result": "NA",
+  "why": "MSG00298: 도달 불가(AS-IS 원문 근거) — BtnSave_Click(cs:341) 이 Validation_Check 앞에서 항상 UserName_Search(txtDelegatee.Text) 를 부르고 1건일 때만 통과하면서 txtDelegatee.Text 를 사용자 이름으로 채운다(cs:791~796). 빈 이름은 cs:802 MSG00302 또는 cs:811 MSG00301 에서 끝난다 · cs:372",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.454Z"
+ },
+ "U06": {
+  "id": "U06",
+  "msg": "MSG00296",
+  "meth": "Validation_Check",
+  "result": "NA",
+  "why": "MSG00296: 도달 불가(AS-IS 원문 근거) — cs:430 의 건수 조건은 cs:416 MSG00105 조건에 USER_ID == sDelegateeID 를 더한 것이라, 이 조건이 참이면 cs:416 이 먼저 참이 되어 cs:426 에서 끝난다 · cs:440",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.456Z"
+ },
+ "U07": {
+  "id": "U07",
+  "msg": "MSG00297",
+  "meth": "Validation_Check",
+  "result": "NA",
+  "why": "MSG00297: 도달 불가(AS-IS 원문 근거) — cs:444 의 건수 조건은 cs:416 MSG00105 조건에 DELEGATEE_ID == 로그인 계정을 더한 것이라, 이 조건이 참이면 cs:416 이 먼저 참이 되어 cs:426 에서 끝난다 · cs:454",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.460Z"
+ },
+ "E10": {
+  "id": "E10",
+  "msg": "MSG00284",
+  "meth": "SaveData",
+  "result": "NA",
+  "why": "MSG00284: 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 저장 SP 응답 첫 칸이 S 가 아닐 때(cs:521 else) · cs:528",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.463Z"
+ },
+ "E14": {
+  "id": "E14",
+  "msg": "MSG00284",
+  "meth": "UnSet",
+  "result": "NA",
+  "why": "MSG00284: 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 해제 성공 표시 bolSuessceChk 가 false 일 때(cs:747 else) · cs:757",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.467Z"
+ },
+ "E11": {
+  "id": "E11",
+  "msg": "(동적 메시지)",
+  "meth": "BtnSave_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · SaveData() 가 false 를 돌려줄 때 errorMsg·errCode 를 그대로 띄우는 분기(cs:357 else) · cs:359",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.470Z"
+ },
+ "E11c": {
+  "id": "E11c",
+  "msg": "(동적 메시지)",
+  "meth": "SaveData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 저장 호출 예외 catch 블록(cs:531) GMessageBoxForException · cs:535",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.473Z"
+ },
+ "E15": {
+  "id": "E15",
+  "msg": "(동적 메시지)",
+  "meth": "BtnUnSet_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · UnSet() 이 false 를 돌려줄 때 errorMsg·errCode 를 그대로 띄우는 분기(cs:569 else) · cs:571",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.476Z"
+ },
+ "E15c": {
+  "id": "E15c",
+  "msg": "(동적 메시지)",
+  "meth": "UnSet",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 해제 호출 예외 catch 블록(cs:760) GMessageBoxForException · cs:761",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-16T17:42:38.480Z"
+ },
+ "B02": {
+  "id": "B02",
+  "msg": "(동작)",
+  "meth": "SpdMain_CellClick",
+  "result": "PASS",
+  "why": "B02 (동작)(cs:850) 머리글 체크로 전 행 선택·해제 — AS-IS 는 CHK 머리글을 누르면 전 행 CHK 값을 뒤집는다(cs:852~875) → 화면 문구 '(없음)' · 저장 요청 0건 — 단계 기대 전부 충족",
+  "shown": "",
+  "saves": 0,
+  "ms": -1,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "단계 기대 전부 충족"
+   }
+  },
+  "at": "2026-11-16T17:42:40.115Z"
+ },
+ "F13": {
+  "id": "F13",
+  "msg": "MSG00004",
+  "meth": "UnSet",
+  "result": "PASS",
+  "why": "F13 MSG00004(cs:749) 검증용으로 만든 위임 행만 선택 후 UnSet → 화면 문구 '13개의 데이터가 저장되었습니다.' · 저장 요청 1건 · 실행 뒤 조건 행 0건 — AS-IS 문구 '개의 데이터가 저장되었습니다.' 와 같음",
+  "shown": "13개의 데이터가 저장되었습니다.",
+  "saves": 1,
+  "ms": 212,
+  "aspects": {
+   "single": {
+    "ok": true,
+    "note": "저장 요청 1건(버튼 1회)"
+   },
+   "noerror": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.'"
+   },
+   "time": {
+    "ok": true,
+    "note": "버튼 → 결과 문구 212ms(기준 3000ms)"
+   },
+   "reflect": {
+    "ok": true,
+    "note": "재조회 그리드의 대상 행 0건"
+   },
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T18:02:03.833Z"
+ },
+ "F13b": {
+  "id": "F13b",
+  "msg": "MSG00004",
+  "meth": "UnSet",
+  "result": "PASS",
+  "why": "F13b MSG00004(cs:749) 검증용으로 만든 다음 날 위임 행만 선택 후 UnSet → 화면 문구 '13개의 데이터가 저장되었습니다.' · 저장 요청 1건 · 실행 뒤 조건 행 0건 — AS-IS 문구 '개의 데이터가 저장되었습니다.' 와 같음",
+  "shown": "13개의 데이터가 저장되었습니다.",
+  "saves": 1,
+  "ms": 61,
+  "aspects": {
+   "single": {
+    "ok": true,
+    "note": "저장 요청 1건(버튼 1회)"
+   },
+   "noerror": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.'"
+   },
+   "reflect": {
+    "ok": true,
+    "note": "재조회 그리드의 대상 행 0건"
+   },
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '13개의 데이터가 저장되었습니다.' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-16T18:02:03.837Z"
+ }
+}

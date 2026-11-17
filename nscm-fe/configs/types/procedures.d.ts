@@ -2515,6 +2515,8 @@ interface RawProcedureMap extends Base {
         itemId: string;
         activeFlag: string;
         owner: string;
+        endCustReportYn: string;
+        projectInfoYn: string;
       };
       response: {
         production: {
@@ -2619,6 +2621,8 @@ interface RawProcedureMap extends Base {
         itemId: string;
         activeFlag: string;
         owner: string;
+        endCustReportYn: string;
+        projectInfoYn: string;
       };
       response: {
         production: {
@@ -3845,6 +3849,16 @@ interface RawProcedureMap extends Base {
       response: { o_rc1: { [key: string]: string | number } };
     };
   };
+  /**
+   * DMF0020_01 — Sales Price (82 Model Group 대표 판가 반영판, DMF0020 복제 화면)
+   *
+   * 패키지 PKG_DMF0020_01 (SCM_ADM_PROC_M 12개 프로시저, 2026-11-10 조회). 시트와 버튼은
+   * DMF0020 과 같다(SCM_ADM_MNU_BTN_MPG_M 대조, priceBatchInput 시트만 없음 — 화면 미사용).
+   * 인자 이름도 DMF0020 과 같아서 계약을 그대로 쓴다. 82 조회 결과에 더 붙는 칸
+   * (main: MDL_GR, PRC_RPSN / priceBatch: MDL_GR, PRC_RPSN, END_CUSTOMER /
+   *  exchange: IF_EXCHANGE_PRICE, USER_EXCHANGE_PRICE)은 response 의 index signature 로 받는다.
+   */
+  DMF0020_01: RawProcedureMap['DMF0020'];
   /**
    * DMF0083 — Sales Price Model Group (82 사업부 Model Group 단위 판가)
    *

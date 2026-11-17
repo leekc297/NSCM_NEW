@@ -1,33 +1,69 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-10-29T02:19:26+09:00",
+ "ts": "2026-11-14T09:56:54+09:00",
  "producer": "run_verify",
  "id": "SCP0007",
  "skip_e2e": false,
- "started": "2026-10-29 01:18:43",
+ "started": "2026-11-14 07:34:01",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-a282cefa",
-   "class": "DB-SYN",
+   "id": "V-c9113f26",
+   "class": "K3",
    "msg": "SCP0007 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC syn_check.py + E2E fixture dberr"
+     "ref": "E2E @verify @11-14 09:54"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-2fdb9660",
-   "class": "A6",
-   "msg": "SCP0007_GET_BOD",
+   "id": "V-db344fe6",
+   "class": "F2",
+   "msg": "SCP0007 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL 2026-10-28 11:25:17) + golden 실측 순서"
+     "ref": "E2E @verify 시나리오 @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3aea2c41",
+   "class": "L1",
+   "msg": "SCP0007 저장 응답 시간",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 세부 @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7015016",
+   "class": "F10",
+   "msg": "PKG_SCP0007.P_SCP0007_SAVE_BOD",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6474e997",
+   "class": "H13",
+   "msg": "bod.AFTER_LEAD_TIME (Additional Lead Time)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -39,7 +75,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-29 02:13"
+     "ref": "E2E @verify @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -51,7 +87,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-29 02:13"
+     "ref": "E2E @verify @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -63,7 +99,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-29 02:13"
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -75,7 +111,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-29 02:13"
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -87,31 +123,79 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-29 02:13"
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-70218ba2",
-   "class": "H2",
-   "msg": "D00-1-026 · §1 spdMain / FpSpread",
+   "id": "V-3ce5c2f4",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @verify @11-14 09:54"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-4b9d59d6",
-   "class": "H2",
-   "msg": "D00-1-027 · §1 spdMain_Sheet1 / SheetView",
+   "id": "V-9c58202f",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @verify @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fff9b72e",
+   "class": "F2",
+   "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b7c5958f",
+   "class": "C4",
+   "msg": "[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 · 건수 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-6ffd73f7",
+   "class": "A1",
+   "msg": "SCP0007 SCP0007_GET_BOD 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff KEYSET @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-48725bd0",
+   "class": "C6",
+   "msg": "TO_SITE_CODE / To Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -144,30 +228,6 @@
    "id": "T-0cfa87ef",
    "class": "D3",
    "msg": "D00-2-004 · §2 spdMain / ClipboardPasted",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-5ab515d4",
-   "class": "H2",
-   "msg": "D00-2-008 · §2 this / Load → Form_Load (InitForm·InitControls·CreateSpread·DefineP",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-197db1ce",
-   "class": "H2",
-   "msg": "D00-2-009 · §2 spdMain / TopChange → SpdMain_TopChange (`siMain.SmartColMerge()` 스",
    "evidence": [
     {
      "kind": "exec",
@@ -213,25 +273,37 @@
    "grade": "hard"
   },
   {
-   "id": "T-f1cd77d3",
-   "class": "H2",
-   "msg": "D00-3-038 · §3 Query / (ds)",
+   "id": "T-803c75b2",
+   "class": "D1",
+   "msg": "ROUTE_ID / Route Id",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-84fcd6aa",
-   "class": "A6",
-   "msg": "D00-3-040 · §3 SmartColMerge / ()",
+   "id": "T-a457e667",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP / Incoterms SSP",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @trace @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cd892e67",
+   "class": "D3",
+   "msg": "INCOTERMS / Incoterms",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -252,30 +324,6 @@
    "id": "T-86da3f3a",
    "class": "D3",
    "msg": "D00-3-040 · §3 SmartColMerge / ()",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-8da85062",
-   "class": "H2",
-   "msg": "D00-3-047 · §3 SetFGColor / (nStartColIdx..nEndColIdx,InvalidFGColor)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-134953fa",
-   "class": "H2",
-   "msg": "D00-3-048 · §3 SetFGColor / (nStartColIdx..nEndColIdx,DefaultForeColor)",
    "evidence": [
     {
      "kind": "exec",
@@ -309,52 +357,64 @@
    "grade": "hard"
   },
   {
-   "id": "T-0972ab37",
-   "class": "H2",
-   "msg": "D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChange",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-f9644978",
-   "class": "H2",
-   "msg": "D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-788a49eb",
-   "class": "A6",
-   "msg": "D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-f0e8023e",
-   "class": "A6",
+   "id": "T-707c92bf",
+   "class": "A1",
    "msg": "D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main",
    "evidence": [
     {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
     }
    ],
-   "grade": "hard"
+   "grade": "soft"
+  },
+  {
+   "id": "T-53ca162f",
+   "class": "F4",
+   "msg": "D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-bc5f52ca",
+   "class": "DB-SYN",
+   "msg": "D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-cdb800d2",
+   "class": "C2",
+   "msg": "D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-38dbb1de",
+   "class": "C3",
+   "msg": "D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
   },
   {
    "id": "T-fb51c663",
@@ -362,11 +422,35 @@
    "msg": "D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange",
    "evidence": [
     {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
     }
    ],
-   "grade": "hard"
+   "grade": "soft"
+  },
+  {
+   "id": "T-e768e7a5",
+   "class": "C2",
+   "msg": "D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-f4302652",
+   "class": "C3",
+   "msg": "D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
   },
   {
    "id": "T-0b2e1f31",
@@ -374,11 +458,35 @@
    "msg": "D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange",
    "evidence": [
     {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
     }
    ],
-   "grade": "hard"
+   "grade": "soft"
+  },
+  {
+   "id": "T-c2a1d40d",
+   "class": "C2",
+   "msg": "D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-a9699aeb",
+   "class": "C3",
+   "msg": "D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
   },
   {
    "id": "T-0dff160e",
@@ -386,23 +494,83 @@
    "msg": "D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange",
    "evidence": [
     {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
     }
    ],
-   "grade": "hard"
+   "grade": "soft"
   },
   {
-   "id": "T-509c1186",
-   "class": "H2",
-   "msg": "SCP0007_BOD.CreateSpread",
+   "id": "T-81904d28",
+   "class": "E1",
+   "msg": "D00-4e-010 · §4e dtToSiteOfSpdAll / SpdMain_ClipboardPasted",
    "evidence": [
     {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
     }
    ],
-   "grade": "hard"
+   "grade": "soft"
+  },
+  {
+   "id": "T-a35997ab",
+   "class": "C3",
+   "msg": "D00-4e-010 · §4e dtToSiteOfSpdAll / SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-c074cb4c",
+   "class": "E1",
+   "msg": "D00-4e-011 · §4e dtToSiteOfSpdAll1 / SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-a138efce",
+   "class": "C3",
+   "msg": "D00-4e-011 · §4e dtToSiteOfSpdAll1 / SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-d08b2369",
+   "class": "E1",
+   "msg": "D00-4e-012 · §4e dtToSiteOfSpdAll2 / SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-cf31c363",
+   "class": "C3",
+   "msg": "D00-4e-012 · §4e dtToSiteOfSpdAll2 / SpdMain_ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
   },
   {
    "id": "T-278dd19a",
@@ -448,6 +616,54 @@
     {
      "kind": "exec",
      "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-943eabe5",
+   "class": "D3",
+   "msg": "INCOTERMS,INCOTERMS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-aa95f6d2",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP,INCOTERMS_SSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f660d450",
+   "class": "D3",
+   "msg": "INCOTERMS,INCOTERMS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0c3aaaf4",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP,INCOTERMS_SSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 09:54"
     }
    ],
    "grade": "hard"
@@ -525,75 +741,49 @@
    "grade": "hard"
   },
   {
-   "id": "T-f1af76ac",
-   "class": "X-ROW",
-   "msg": "SCP0007_DistributionRoutePopup.InitSpread",
+   "id": "EG-6925ee53",
+   "class": "M4",
+   "msg": "SCP0007 팝업 SCP0007_DistributionRoutePopup CELL:ROUTE_ID PICK_OK",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-1ef63e86",
-   "class": "X-ROW",
-   "msg": "SCP0007_DistributionRoutePopup.btnButtonList_UsrButtonList_Click_Detected",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-1ad18cc7",
-   "class": "X-ROW",
-   "msg": "SCP0007_DistributionRoutePopup.btnFromSrch_Click",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-cd587e1e",
-   "class": "X-ROW",
-   "msg": "SCP0007_DistributionRoutePopup.btnToSrch_Click",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @eg-popup @11-14 09:54"
     }
    ],
    "grade": "hard"
   }
  ],
+ "warnings": [
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0007/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
+ ],
  "summary": {
-  "rows": 1979,
-  "PASS": 1407,
-  "FAIL": 47,
-  "판정필요": 15,
-  "미검증": 73,
-  "해당없음": 437,
+  "rows": 2759,
+  "PASS": 1422,
+  "FAIL": 62,
+  "판정필요": 37,
+  "미검증": 360,
+  "해당없음": 878,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1151,
-   "없음(판정 대기)": 15,
-   "없음(미검증)": 73,
-   "사람": 34,
-   "기계(상속·집계)": 700,
-   "출처 미기록": 6
+   "기계": 1774,
+   "없음(판정 대기)": 37,
+   "없음(미검증)": 360,
+   "사람": 36,
+   "기계(상속·집계)": 527,
+   "출처 미기록": 25
   },
-  "fail_listed": 47
+  "fail_listed": 62,
+  "coverage": {
+   "rules": 92,
+   "measured": 1147,
+   "not_run_error": 269,
+   "na": 311,
+   "suspect_na100": []
+  }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0007_Bod_CheckList_v87.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0007_Bod_ActionItemList_v87.xlsx"
+  "CheckList": "Doc/CheckList/SCP0007_Bod_CheckList_v94.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0007_Bod_ActionItemList_v94.xlsx"
  },
  "evidence": [
   {
@@ -605,5 +795,5 @@
    "ref": "Doc/verify/SCP0007/e2e_results.json"
   }
  ],
- "note": ""
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0007/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
 }

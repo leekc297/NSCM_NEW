@@ -1,0 +1,43 @@
+{
+ "id": "SCP0121",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnLeft",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnLeft failed: InvalidOperationException: control not found: btnLeft",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0121-S575e43"
+   ]
+  },
+  {
+   "control": "btnRight",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnRight failed: InvalidOperationException: control not found: btnRight",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0121-S575e43"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnPlanGroupReg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 6
+  },
+  {
+   "control": "btnPlanGroupReg",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 3
+  }
+ ],
+ "at": "2026-11-13 12:22:27.924",
+ "fills": 0,
+ "fill_left": []
+}

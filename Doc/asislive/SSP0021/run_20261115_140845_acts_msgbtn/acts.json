@@ -1,0 +1,55 @@
+{
+ "id": "SSP0021",
+ "group": "ADMIN",
+ "msgbtn": true,
+ "acts": [
+  {
+   "control": "BtnMeasure",
+   "kind": "msgbtn",
+   "state": "선택 없음",
+   "select": null,
+   "ok": true,
+   "error": null,
+   "expect": [
+    "MSG00007"
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "save_calls": [],
+   "popups": [
+    "SCM0002_TitleSetForm_Popup"
+   ]
+  },
+  {
+   "control": "BtnMeasure",
+   "kind": "msgbtn",
+   "state": "첫 행 선택",
+   "select": {
+    "ok": true,
+    "how": "첫 셀 클릭(CHK 열 없음)"
+   },
+   "ok": true,
+   "error": null,
+   "expect": [
+    "MSG00007"
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "save_calls": [],
+   "popups": [
+    "SCM0002_TitleSetForm_Popup"
+   ]
+  }
+ ],
+ "skipped": [],
+ "targets": {
+  "BtnMeasure_Click": [
+   "MSG00007"
+  ]
+ },
+ "at": "2026-11-15 14:07:25"
+}

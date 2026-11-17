@@ -201,7 +201,7 @@ DMF0005 SalesSiteProjectModelForm + 다수 화면이 사용하는 표준 popup �
 | **HotkeyConfig** | `@foundation/models` | `{ insert, save, delete, search, manual, upload }` → SubTitle 매핑 |
 | **GridAction** | `@foundation/utils` | addRow / removeRow / excelDownload / personalizeCondition 등 (#60 §5.2) |
 | **apiClient** | `@foundation/apis` | `apiClient.post/get` + `callProc` / `callMutationProc` 표준 path |
-| **CRUD_TYPE** | `@foundation/constants` | `'I' / 'U' / 'D'` |
+| **CRUD_TYPE** | `@foundation/constants` | `'C' / 'I' / 'M' / 'D'` (CREATE / INSERT / MODIFY / DELETE) (2026-11-13 정정: `'I' / 'U' / 'D'` → 실제 상수값 — 수정 행 = 'M', 'U' 없음) |
 
 ---
 
@@ -394,7 +394,7 @@ export const XxxForm = ({ setActiveTab, openDetail, setOpenDetail }: Props) => {
 [ ] 2. import: useTabProcQuery / useProcMutation / useSaveWithValidation 은 @shared/hooks
 [ ] 3. import: GridAction / HotkeyConfig / PageProps 는 @foundation
 [ ] 4. PageProps<MENU_ID> 화면 entry signature 사용
-[ ] 5. hotkeyConfig 6 항목 (insert/save/delete/search/manual/upload) 정의 → SubTitle 주입
+[ ] 5. hotkeyConfig 6 항목 (insert/save/delete/search/manual/upload) 정의 → SubTitle 주입 (2026-11-13 정정: insert/save/delete/upload 는 화면에 그 기능이 있을 때만 핸들러를 준다 — 없으면 주지 않음(기본 숨김 · CR-070). '6 항목'은 고정 개수가 아니며 키 전체는 `@foundation` `Hotkeys` enum)
 
 [Form]
 [ ] 6. SearchArea + FormItem + CustomDropdown + Grid (@shared/mui) 표준 5 종 import
@@ -544,5 +544,5 @@ const { t } = useTranslation();
 ## 12. 검증 — PR 차단 강도
 
 §7 grep 5 항목 모두 0 line 또는 명시 예외 (주석 + memory entry).
-§6 PRE-WRITE 12 + §10 적용 화면 표 의무.
+§6 PRE-WRITE 15 + §10 적용 화면 표 의무. (2026-11-13 정정: 12 → 15 — §6 제목 '15 항목'과 일치)
 위반 시 머지 차단 (anti-simplification 동등 강도). 사용자 결정 (2026-06-18).

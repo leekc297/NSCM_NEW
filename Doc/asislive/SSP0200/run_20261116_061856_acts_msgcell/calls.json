@@ -1,0 +1,22 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-16 06:18:49.075",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuConnect",
+   "sp": "UP_FX_SaveMenuConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveMenuConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 64.01,
+   "params": {
+    "MenuID": "Shipment Change Request Insert Multiple",
+    "CnntCode": "0104002",
+    "UserID": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuConnect @MenuID='Shipment Change Request Insert Multiple', @CnntCode='0104002', @UserID='jaeuk.shin'",
+   "phase": "action:msgcell:btnButtonList_UsrButtonList_Click_Detected"
+  }
+ ]
+}

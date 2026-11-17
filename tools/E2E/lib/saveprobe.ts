@@ -30,6 +30,7 @@ export async function typeRaw(nscm: Nscm, row: number, b: string, value: string)
     const pt = await probe.cellCenter(p, row, b); if (!pt) return '셀 위치 없음';
     await p.waitForTimeout(250 + k * 250); const pt2 = await probe.cellCenter(p, row, b); if (!pt2) return '셀 위치 없음';
     await p.mouse.dblclick(pt2.x, pt2.y); await p.waitForTimeout(300);
+    await nscm.dismissDblPopup(() => p.mouse.click(pt2.x, pt2.y));  // 2026-11-16 SCP0104: 더블클릭이 선택 팝업도 여는 화면 — 닫고 F2
     ed = String(await p.evaluate('(() => { const a = document.activeElement; return a ? a.tagName + ":" + (a.value ?? "") : "" })()').catch(() => ''));
     if (/^(INPUT|TEXTAREA)/.test(ed)) break;
   }
@@ -53,7 +54,13 @@ export async function typeCell(nscm: Nscm, row: number, b: string, value: string
 export const saveDurs: number[] = [];
 async function saveReload(nscm: Nscm): Promise<{ called: boolean; err: string; msg: string }> {
   const s = await nscm.save({ timeout: 20_000 }); const called = s.calls.length > 0;
-  const bad = s.calls.filter(c => c.status >= 400).map(c => `HTTP ${c.status}`).join(',') || (/ORA-|PLS-|SQL Error|SQLException/i.exec(`${s.message || ''} ${s.calls.map(c => c.res || '').join(' ')}`) || [''])[0];
+  // 2026-11-17 SCP0104 Y_2031(진단 04:2x: called=true · msg=''): 저장 실패 알림이 save() 반환 뒤에 떠서 문구를 못 읽고, 이어지는 재조회가 알림을 닫았다 → 재조회 전에 2초 안에 뜨는 알림 문구를 읽는다
+  if (called && !(s.message || '').trim()) {
+    const loc = nscm.page.locator('[role="dialog"], [role="alertdialog"], [role="alert"], .MuiSnackbar-root, .Toastify__toast'); const end = Date.now() + 2_000;
+    while (Date.now() < end) { const n = Math.min(await loc.count().catch(() => 0), 10); let got = ''; for (let i = 0; i < n; i++) { const e = loc.nth(i); if (await e.isVisible().catch(() => false)) { got = ((await e.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim(); if (got) break; } } if (got) { s.message = got; break; } await nscm.page.waitForTimeout(200); }
+  }
+  // 2026-11-17 SCP0104 Y_2031(ORA-01840): 응답 본문이 기록되지 않는 호출이 있어 'ORA-' 만으로는 저장 실패를 못 잡았다 — 화면 실패 문구·RESULT_CODE F 도 저장 오류로 본다
+  const bad = s.calls.filter(c => c.status >= 400).map(c => `HTTP ${c.status}`).join(',') || (/ORA-|PLS-|SQL Error|SQLException|저장에 실패|Failed to save|"RESULT_CO?DE?"\s*:\s*"F"/i.exec(`${s.message || ''} ${s.calls.map(c => c.res || '').join(' ')}`) || [''])[0];
   // 저장이 없으면 그리드에 수정이 남아 조회 버튼이 확인창을 띄운다 — 짧게 눌러 확인창을 닫고 조회를 기다린다(2026-10-31 차단 왕복 2분 24초 실측 · 재측정으로 효과 확인)
   if (called) await nscm.search(); else { await nscm.search({ timeout: 4_000 }); await nscm.clearDialogs(); await nscm.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined); }
   await nscm.page.waitForTimeout(800); await probe.waitRows(nscm.page, 30_000).catch(() => undefined); await nscm.clearDialogs();
@@ -89,9 +96,13 @@ export async function cellRoundTrip(nscm: Nscm, row: number, b: string, value?: 
   // 2026-11-07 T152(SCP0037 F6): 기록 값은 '편집 전' 행이어야 한다 — 입력(typeCell) 뒤에 읽은 dataItem 은 이미 바뀐 값(LT_DAY 6 · 빈값 None)이라 restore_touched 가 편집 값으로 '복원'한다
   recordTouched(item0, localAt);  // 저장 직전(편집 전) 값 기준 — 왕복 원복이 성공해도 SP 가 다른 칸을 바꿨을 수 있다(2026-11-02 SALES_PLAN_ADJUST_YN)
   const s1 = await saveReload(nscm); t.called = s1.called;
+  if (/^Y_|^M_/.test(b) && !orig) console.log(`[saveprobe 진단] ${b} r${row} 저장 called=${s1.called} err='${s1.err}' msg='${s1.msg.slice(0, 120)}'`);  // 2026-11-17 Y_2031 저장 실패 인식 진단
   if (!s1.called) { t.note = s1.msg ? `화면 메시지 '${s1.msg.slice(0, 80)}'` : '화면 메시지 없음'; t.blocked = classifyNoCall(s1.msg); t.restored = true; return t; }  // 재조회로 입력이 버려졌으므로 DB 변화 없음
   if (hooks.afterSave) await hooks.afterSave();  // 저장 직후 DB 스냅샷(2026-11-01 EG235·EG237·EG240)
   if (s1.err) t.note = `저장 오류 ${s1.err}`;
+  // 2026-11-17 SCP0104(Y_2031 저장 ORA-01840 뒤 '재조회 행 식별 0건'으로 중단 → 빈 값·0 값·2행 저장 3행 미검증): 저장이 DB 오류로 실패하면 SP 가 되돌려(ROLLBACK TO SAVEPOINT) DB 변화가 없다
+  //   → 실패(ok=false)로 세고 원복 불필요로 돌려준다. 다음 칸 진행을 막지 않는다
+  if (s1.err) { t.got = ''; t.ok = false; t.restored = true; t.note += ' · 저장 실패라 DB 변화 없음(원복 불필요)'; return t; }
   let h1 = await probe.findRowsByIdentity(p, ident, [b]); let sideEffect = '';
   if (h1.length !== 1) { const near = await probe.findRowNear(p, ident, [b]); if (near) { h1 = [near.row]; sideEffect = near.diff.join(', '); if (sideEffect) t.note += ` · ⚠ 저장이 다른 칸도 바꿈(restore_touched 가 DB 복원): ${sideEffect}`; } }
   if (h1.length !== 1) { t.note += ` 재조회 행 식별 ${h1.length}건`; t.stop = true; return t; }

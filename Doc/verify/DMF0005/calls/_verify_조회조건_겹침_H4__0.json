@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 329,
+  "at": "2026-11-13T22:15:27.179Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 739,
+  "at": "2026-11-13T22:15:27.215Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ }
+]

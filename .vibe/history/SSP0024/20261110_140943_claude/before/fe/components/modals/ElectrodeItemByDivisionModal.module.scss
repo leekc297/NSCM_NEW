@@ -1,0 +1,25 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+}
+
+// ResultArea 는 flex: 1 1 0 + min-height: 0 으로 부모 높이를 나눠 받는다.
+//   부모가 flex 컨테이너가 아니면 flex 가 무시되어 높이 0 으로 접히고 그리드가 안 보인다.
+//   그리드가 다이얼로그 높이를 채우도록 flex 로 둔다(고정 height 금지 — 공용 ItemByDivisionModal 동일,
+//   아래 빈 공간 방지, POP-06 flex 규약).
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+}

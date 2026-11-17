@@ -1,42 +1,67 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T22:09:51+09:00",
+ "ts": "2026-11-14T18:23:39+09:00",
  "producer": "run_verify",
  "id": "SCP0122",
  "skip_e2e": false,
- "started": "2026-11-08 21:59:47",
+ "started": "2026-11-14 17:09:02",
  "state": "completed",
- "verdict": "hold",
- "issues": [],
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-b2ab9f0a",
+   "class": "F5",
+   "msg": "SCP0122 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-21988288",
+   "class": "F5",
+   "msg": "SCP0122 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:22"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
  "warnings": [],
  "summary": {
-  "rows": 1504,
-  "PASS": 540,
-  "FAIL": 0,
-  "판정필요": 17,
-  "미검증": 70,
-  "해당없음": 877,
+  "rows": 1548,
+  "PASS": 581,
+  "FAIL": 2,
+  "판정필요": 6,
+  "미검증": 149,
+  "해당없음": 810,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 995,
-   "없음(판정 대기)": 17,
-   "없음(미검증)": 70,
+   "기계": 817,
+   "없음(판정 대기)": 6,
+   "없음(미검증)": 149,
    "사람": 2,
-   "기계(상속·집계)": 418,
-   "출처 미기록": 2
+   "기계(상속·집계)": 569,
+   "출처 미기록": 5
   },
-  "fail_listed": 0,
+  "fail_listed": 2,
   "coverage": {
    "rules": 84,
-   "measured": 351,
-   "not_run_error": 45,
-   "na": 185,
+   "measured": 385,
+   "not_run_error": 97,
+   "na": 138,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0122_PlanActivityMgmt_CheckList_v20.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0122_PlanActivityMgmt_ActionItemList_v20.xlsx"
+  "CheckList": "Doc/CheckList/SCP0122_PlanActivityMgmt_CheckList_v23.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0122_PlanActivityMgmt_ActionItemList_v23.xlsx"
  },
  "evidence": [
   {

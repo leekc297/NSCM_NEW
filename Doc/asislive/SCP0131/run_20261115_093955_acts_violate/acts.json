@@ -1,0 +1,614 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Sales Site Priority",
+     "rows_before": 61,
+     "rows_after": 62,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "SCM_SITE_ID",
+       "before": "ATL_DE_RDG",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "AMCOME782-A1-0A0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRIO_RANK",
+       "before": "3",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FROM_YYYYMMDD",
+       "before": "2025-04-21",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "TO_YYYYMMDD",
+       "before": "2999-12-31",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATED_BY",
+       "before": "SYSTEM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CREATION_DATE",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "SYSTEM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2025-12-03 오후 5:54:41",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0A0|20250421|29991231|3",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "AMCOME782-A1-0K0",
+       "after": "AMCOME782-A1-0A0"
+      },
+      {
+       "row": 1,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0K0|20250421|29991231|3",
+       "after": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0A0|20250421|29991231|3"
+      },
+      {
+       "row": 2,
+       "col": "SCM_SITE_ID",
+       "before": "Cummins(OTS)_US_CLU",
+       "after": "ATL_DE_RDG"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "AMVWGEVO0-A1-0E0",
+       "after": "AMCOME782-A1-0K0"
+      },
+      {
+       "row": 2,
+       "col": "PRIO_RANK",
+       "before": "1",
+       "after": "3"
+      },
+      {
+       "row": 2,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0E0|20250421|29991231|1",
+       "after": "81|PG0031|ATL_DE_RDG|AMCOME782-A1-0K0|20250421|29991231|3"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "AMVWGEVO0-A1-0L0",
+       "after": "AMVWGEVO0-A1-0E0"
+      },
+      {
+       "row": 3,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0L0|20250421|29991231|1",
+       "after": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0E0|20250421|29991231|1"
+      },
+      {
+       "row": 4,
+       "col": "SCM_SITE_ID",
+       "before": "FBPS(OTS)_US_ILD",
+       "after": "Cummins(OTS)_US_CLU"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "AMVWGEVO0-A1-0E0",
+       "after": "AMVWGEVO0-A1-0L0"
+      },
+      {
+       "row": 4,
+       "col": "PRIO_RANK",
+       "before": "2",
+       "after": "1"
+      },
+      {
+       "row": 4,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|FBPS(OTS)_US_ILD|AMVWGEVO0-A1-0E0|20250421|29991231|2",
+       "after": "81|PG0031|Cummins(OTS)_US_CLU|AMVWGEVO0-A1-0L0|20250421|29991231|1"
+      },
+      {
+       "row": 5,
+       "col": "ITEM_ID",
+       "before": "AMVWGEVO0-A1-0L0",
+       "after": "AMVWGEVO0-A1-0E0"
+      },
+      {
+       "row": 5,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0031|FBPS(OTS)_US_ILD|AMVWGEVO0-A1-0L0|20250421|29991231|2",
+       "after": "81|PG0031|FBPS(OTS)_US_ILD|AMVWGEVO0-A1-0E0|20250421|29991231|2"
+      },
+      {
+       "row": 6,
+       "col": "SCM_SITE_ID",
+       "before": "Ford_BE_ANR",
+       "after": "FBPS(OTS)_US_ILD"
+      },
+      {
+       "row": 6,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-A1-010",
+       "after": "AMVWGEVO0-A1-0L0"
+      },
+      {
+       "row": 6,
+       "col": "PRIO_RANK",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 6,
+       "col": "FROM_YYYYMMDD",
+       "before": "2025-01-01",
+       "after": "2025-04-21"
+      },
+      {
+       "row": 6,
+       "col": "TO_YYYYMMDD",
+       "before": "2027-03-31",
+       "after": "2999-12-31"
+      },
+      {
+       "row": 6,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_BE_ANR|AMFMCC727-A1-010|20250101|20270331|1",
+       "after": "81|PG0031|FBPS(OTS)_US_ILD|AMVWGEVO0-A1-0L0|20250421|29991231|2"
+      },
+      {
+       "row": 7,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-B1-010",
+       "after": "AMFMCC727-A1-010"
+      },
+      {
+       "row": 7,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_BE_ANR|AMFMCC727-B1-010|20250101|20270331|1",
+       "after": "81|PG0004|Ford_BE_ANR|AMFMCC727-A1-010|20250101|20270331|1"
+      },
+      {
+       "row": 8,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-F1-010",
+       "after": "AMFMCC727-B1-010"
+      },
+      {
+       "row": 8,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_BE_ANR|AMFMCC727-F1-010|20250101|20270331|1",
+       "after": "81|PG0004|Ford_BE_ANR|AMFMCC727-B1-010|20250101|20270331|1"
+      },
+      {
+       "row": 9,
+       "col": "SCM_SITE_ID",
+       "before": "Ford_MX_CTN",
+       "after": "Ford_BE_ANR"
+      },
+      {
+       "row": 9,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-A1",
+       "after": "AMFMCC727-F1-010"
+      },
+      {
+       "row": 9,
+       "col": "PRIO_RANK",
+       "before": "2",
+       "after": "1"
+      },
+      {
+       "row": 9,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_MX_CTN|AMFMCC727-A1|20250101|20270331|2",
+       "after": "81|PG0004|Ford_BE_ANR|AMFMCC727-F1-010|20250101|20270331|1"
+      },
+      {
+       "row": 10,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-B1",
+       "after": "AMFMCC727-A1"
+      },
+      {
+       "row": 10,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_MX_CTN|AMFMCC727-B1|20250101|20270331|2",
+       "after": "81|PG0004|Ford_MX_CTN|AMFMCC727-A1|20250101|20270331|2"
+      },
+      {
+       "row": 11,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-F1",
+       "after": "AMFMCC727-B1"
+      },
+      {
+       "row": 11,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_MX_CTN|AMFMCC727-F1|20250101|20270331|2",
+       "after": "81|PG0004|Ford_MX_CTN|AMFMCC727-B1|20250101|20270331|2"
+      },
+      {
+       "row": 12,
+       "col": "SCM_SITE_ID",
+       "before": "Ford_TR_KCO",
+       "after": "Ford_MX_CTN"
+      },
+      {
+       "row": 12,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-C1-010",
+       "after": "AMFMCC727-F1"
+      },
+      {
+       "row": 12,
+       "col": "PRIO_RANK",
+       "before": "1",
+       "after": "2"
+      },
+      {
+       "row": 12,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_TR_KCO|AMFMCC727-C1-010|20250101|20270331|1",
+       "after": "81|PG0004|Ford_MX_CTN|AMFMCC727-F1|20250101|20270331|2"
+      },
+      {
+       "row": 13,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-D1-010",
+       "after": "AMFMCC727-C1-010"
+      },
+      {
+       "row": 13,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_TR_KCO|AMFMCC727-D1-010|20250101|20270331|1",
+       "after": "81|PG0004|Ford_TR_KCO|AMFMCC727-C1-010|20250101|20270331|1"
+      },
+      {
+       "row": 14,
+       "col": "ITEM_ID",
+       "before": "AMFMCC727-E1-010",
+       "after": "AMFMCC727-D1-010"
+      },
+      {
+       "row": 14,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0004|Ford_TR_KCO|AMFMCC727-E1-010|20250101|20270331|1",
+       "after": "81|PG0004|Ford_TR_KCO|AMFMCC727-D1-010|20250101|20270331|1"
+      },
+      {
+       "row": 15,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "H5.5",
+       "after": ""
+      },
+      {
+       "row": 15,
+       "col": "SCM_SITE_ID",
+       "before": "GLOVIS_KR_SEL",
+       "after": "Ford_TR_KCO"
+      },
+      {
+       "row": 15,
+       "col": "ITEM_ID",
+       "before": "ACHP2005I-A1",
+       "after": "AMFMCC727-E1-010"
+      },
+      {
+       "row": 15,
+       "col": "PRE_KEY_VALUES",
+       "before": "81|PG0009|GLOVIS_KR_SEL|ACHP2005I-A1|20250101|20270331|1",
+       "after": "81|PG0004|Ford_TR_KCO|AMFMCC727-E1-010|20250101|20270331|1"
+      },
+      {
+       "row": 16,
+       "col": "OPMZ_PLAN_GR_ID",
+       "before": "H5.5A_WA",
+       "after": "H5.5"
+      },
+      {
+       "row": 16,
+       "col": "CREATED_BY",
+       "before": "fran.d.k",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 16,
+       "col": "CREATION_DATE",
+       "before": "2026-02-04 오후 3:30:13",
+       "after": "2025-12-03 오후 5:54:41"
+      },
+      {
+       "row": 16,
+       "col": "LAST_UPDATED_BY",
+       "before": "fran.d.k",
+       "after": "SYSTEM"
+      },
+      {
+       "row": 16,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2026-02-04 오후 3:30:13",
+       "after": "2025-12-03 오후 5:54:41"
+      }
+     ],
+     "more": 236
+    }
+   ],
+   "new_rows": {
+    "spdMain/Sales Site Priority": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:39:34.185",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Sales Site Priority",
+    "sheet": "Sales Site Priority",
+    "rows_total": 62,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "OPMZ_PLAN_GR_ID",
+      "label": "Plan Group*",
+      "data_field": "OPMZ_PLAN_GR_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "SCM_SITE_ID",
+      "label": "SCM site*",
+      "data_field": "SCM_SITE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "PRIO_RANK",
+      "label": "Priority*",
+      "data_field": "PRIO_RANK",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "FROM_YYYYMMDD",
+      "label": "Valid From*",
+      "data_field": "FROM_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "TO_YYYYMMDD",
+      "label": "Valid To*",
+      "data_field": "TO_YYYYMMDD",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "VALUE_DESCRIPTION",
+      "label": "Description",
+      "data_field": "VALUE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "VALID_YN",
+      "label": "Valid",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "CREATED_BY",
+      "label": "Create By",
+      "data_field": "CREATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "CREATION_DATE",
+      "label": "Creation Date",
+      "data_field": "CREATION_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Last Update By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Last Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "PRE_KEY_VALUES",
+      "label": "PRE_KEY_VALUES",
+      "data_field": "PRE_KEY_VALUES",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "110000000011110"
+    ],
+    "back": [
+     [
+      "Blue",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "81",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Y",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:39:34.193"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "모든 항목은 필수 입력입니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:38:44",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

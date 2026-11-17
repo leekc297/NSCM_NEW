@@ -30,10 +30,10 @@ import type { SearchParamProps } from './{kebab-name}.types';
 // [1] State interface
 interface {Name}State {
   initialized: boolean;
-  isOpenSearchArea: boolean;
+  isOpenSearchArea: boolean;   // 2026-11-13 정정: 정준 필드명 = openSearchArea (00 §8 #2 · §2.3 표) — 이 블록의 isOpenSearchArea 는 DMF0006 기존 일탈 표기이며 신규/수정 화면은 openSearchArea 사용
   searchParams: SearchParamProps;
   filters?: ProcRequest<MENU_ID, SHEETS>;
-  staticColumn: RawFlexGridColumnConfig[];
+  staticColumn: RawFlexGridColumnConfig[];   // 2026-11-13 정정: 정준 = staticColumns (RESPONSE_SET 키 객체, 00 §8 #3) — 단수 배열은 DMF0006 기존 일탈
 }
 
 // [2] Action interface
@@ -50,7 +50,7 @@ const init{Name}State: {Name}State = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: {
-    divisionId: '40',   // 또는 useSessionStore.getState().session.div ?? '40'
+    divisionId: useSessionStore.getState().session.div ?? '40',   // 2026-11-13 정정: '40' 하드코딩 → 세션 Division 우선 (00 §3.2 4)·§8 #4 하드코딩 금지 · useCustomerModelMappingStore.ts:36)
     // ... 다른 default
   },
   staticColumn: [],
@@ -185,7 +185,7 @@ apiClient.post(`/admin/menu/${MENU_ID}/column`, {
 | `openPurchaseGrid: boolean` | DMF0005 Purchase grid 토글 | DMF0005 |
 | `dateColumns: FlexGridColumnConfig[]` | 동적 일자 컬럼 | DMF0007 |
 
-→ 화면 특화 state 는 자유롭게 추가. 다만 표준 (initialized / filters / searchParams / staticColumn(s) / isOpenSearchArea) 은 의무.
+→ 화면 특화 state 는 자유롭게 추가. 다만 표준 (initialized / filters / searchParams / staticColumns / openSearchArea) 은 의무. (2026-11-13 정정: `staticColumn(s)` / `isOpenSearchArea` → 정준형 `staticColumns` / `openSearchArea` — 00 §8 #2·#3, 위 표 1행)
 
 ### §2.4 추가 action (동적 fetch / clear)
 
@@ -204,7 +204,7 @@ filters?: ProcRequest<MENU_ID, SHEETS>;  // SHEETS = 단일 enum
 staticColumn: RawFlexGridColumnConfig[]; // 배열 (객체 아님)
 ```
 
-→ DMF0006 는 RESPONSE_SET 정의 안 함 (data.o_rc1 직접 사용).
+→ DMF0006 는 RESPONSE_SET 정의 안 함 (data.o_rc1 직접 사용). (2026-11-13 정정: 현재 DMF0006 도 `export enum RESPONSE_SET { DATA = 'o_rc1' }` 를 정의함 — `customer-model-mapping.constants.ts:10-12` · 단일 sheet 도 RESPONSE_SET 정의 = 룰 05 §3.3)
 
 ### §2.6 명명 자유도 (Phase 7 PoC 추가, 2026-06-04)
 
@@ -238,6 +238,7 @@ staticColumn: RawFlexGridColumnConfig[]; // 배열 (객체 아님)
 | **사용자 작업물** (이미 동작) | 강제 변경 X | 강제 추가 X | 보존 + 후속 보강 |
 
 → DMF0008 ErpEdiMaster (read-only 조회 화면) 는 `fetchStaticColumns` 생략 + 명시적 column 정의 패턴 허용.
+  (2026-11-13 정정: 이 '생략 가능' 은 룰 07 변경 이력 2026-06-12 결정 — "DataGrid + Wijmo 직접 사용 화면 모두 staticColumns / staticMeasures 동적 fetch 의무" · 룰 07 §11.1 하드코딩 column 금지 — 로 대체됨. 위 표 3행 '선택 (생략 가능)' 도 같음)
 
 ---
 
@@ -371,8 +372,8 @@ grep -nE "useStore\.getState\(\)\." "$STORE" | grep -v "\.setX\|\.actions"  # �
 | 동작 | AS-IS | TO-BE 현재 | 신규 구현 필요 |
 |---|---|---|---|
 | GET (자동 restore) | `UP_FX_GetSearchCondition` SP | ✅ `apiClient.get('/admin/menu/{menuId}/search-conditions')` 구현됨 | ❌ 추가 작업 없음 |
-| POST (저장 — F6) | `Authentication.SaveSearchCondition` SP | ❌ 미구현 | ✅ 신규: `POST /admin/menu/{menuId}/search-conditions` |
-| DELETE (초기화 — F10) | `Authentication.ResetSearchCondition` SP | ❌ 미구현 | ✅ 신규: `DELETE /admin/menu/{menuId}/search-conditions` |
+| POST (저장 — F6) | `Authentication.SaveSearchCondition` SP | ❌ 미구현 (2026-11-13 정정: 현재 구현됨 — `POST /admin/menu/{mnuId}/search-conditions` · `MenuController.saveSearchConditions`) | ✅ 신규: `POST /admin/menu/{menuId}/search-conditions` |
+| DELETE (초기화 — F10) | `Authentication.ResetSearchCondition` SP | ❌ 미구현 (11-13 정정: 현재 구현됨 — `POST /admin/menu/{mnuId}/search-conditions/reset` · `MenuController.resetSearchConditions` · DELETE 메서드가 아님) | ✅ 신규: `DELETE /admin/menu/{menuId}/search-conditions` |
 
 → G1 의 실제 신규 구현 범위 = **POST + DELETE 2 endpoint** + FE SubTitle 의 condition/resetCondition action default 활성. `_mapping/asis_to_tobe.md` §G1 갱신 의무 (Phase 4).
 
@@ -425,6 +426,8 @@ export const useStore = createPersistedStoreWithTab<
 ---
 
 ## §10 fetchStaticColumns guard 패턴 (2026-06-09 신규)
+
+> (2026-11-13 정정) 이 절의 "guard 밖 호출"은 `fetchSearchConditions` 를 따로 두고 `initialized` 를 그쪽에서 세우는 구조에 해당한다. reference 3화면(DMF0004 `SalesSite.tsx:338-340` · `useSalesSiteStore.ts:158·175`)처럼 `fetchStaticColumns` 안에서 `initialized` 를 세우는 구조는 `if (!initialized) void fetchStaticColumns();` 가 표준 형태다(00_SCREEN_ANATOMY · 03_main_component 의 표준 줄과 같음).
 
 ### §10.1 사고
 

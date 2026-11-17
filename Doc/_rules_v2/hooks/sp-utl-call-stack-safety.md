@@ -77,8 +77,8 @@ SP_FILE="<path-to-sp-body.sql>"
 # 1. SUBPROGRAM(1)(N) (N>=2) 접근 인스턴스
 INSTANCES=$(grep -nE 'UTL_CALL_STACK\.SUBPROGRAM\(1\)\([2-9]\)' "$SP_FILE" | wc -l)
 
-# 2. 그 위에 .COUNT >= 체크 있는지
-SAFE_CHECKS=$(grep -nE 'UTL_CALL_STACK\.SUBPROGRAM\(1\)\.COUNT\s*>=' "$SP_FILE" | wc -l)
+# 2. 그 위에 .COUNT >= (또는 > ) 체크 있는지  (2026-11-13 정정: '>=' 만 세던 것 → '>' 도 인정 — §5 가 `.COUNT > 1` 을 안전 패턴으로 둠)
+SAFE_CHECKS=$(grep -nE 'UTL_CALL_STACK\.SUBPROGRAM\(1\)\.COUNT\s*>=?' "$SP_FILE" | wc -l)
 
 if [ "$INSTANCES" -gt 0 ] && [ "$SAFE_CHECKS" -eq 0 ]; then
   echo "❌ ERROR: SUBPROGRAM(1)(N) 접근 $INSTANCES 건 vs .COUNT 체크 0 건 — 안전 패턴 누락"

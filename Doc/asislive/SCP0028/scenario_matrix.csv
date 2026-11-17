@@ -1,0 +1,9 @@
+﻿control,group,division,mode,ok,popups,dialogs,calls,asis_timeout,grid_cells,varies,run
+btnInput,ADMIN,(기본),,실행,SCM0002_ShipmentLotSizePopup(행 0),,,,,같음,run_20261113_172918_acts
+btnInput,ADMIN,40,,실행,SCM0002_ShipmentLotSizePopup(행 0),,,,,같음,run_20261113_173536_acts_div40
+btnInput,ADMIN,82,,실행,SCM0002_ShipmentLotSizePopup(행 0),,,,,같음,run_20261113_173638_acts_div82
+btnInput,SCP Planner,(기본),,실행,SCM0002_ShipmentLotSizePopup(행 0),,,,,같음,run_20261113_170736_acts
+btnItemId,ADMIN,(기본),,실행,SCM0002_ItembyDivisionPopup(행 60187),,SCM0001_GET_DIVISION=14 ; SCM0001_GET_SITE_BY_DIVISION=447 ; SCM0001_GET_SITE_BY_DIVISION=447 ; SCM0002_GET_ITEM_BY_DIVISION_POPUP=60187,,,조건에 따라 다름,run_20261113_172918_acts
+btnItemId,ADMIN,40,,실행,SCM0002_ItembyDivisionPopup(행 29575),,SCM0001_GET_DIVISION=14 ; SCM0001_GET_SITE_BY_DIVISION=1294 ; SCM0001_GET_SITE_BY_DIVISION=1294 ; SCM0002_GET_ITEM_BY_DIVISION_POPUP=29575,,,조건에 따라 다름,run_20261113_173536_acts_div40
+btnItemId,ADMIN,82,,실행,SCM0002_ItembyDivisionPopup(행 65906),,SCM0001_GET_DIVISION=14 ; SCM0001_GET_SITE_BY_DIVISION=756 ; SCM0001_GET_SITE_BY_DIVISION=756 ; SCM0002_GET_ITEM_BY_DIVISION_POPUP=65906,,,조건에 따라 다름,run_20261113_173638_acts_div82
+btnItemId,SCP Planner,(기본),,실행,SCM0002_ItembyDivisionPopup(행 0) ; ExceptionDialog(행 -1),,SCM0001_GET_DIVISION=14 ; SCM0001_GET_SITE_BY_DIVISION=1294 ; SCM0001_GET_SITE_BY_DIVISION=1294 ; SCM0002_GET_ITEM_BY_DIVISION_POPUP=0,,,조건에 따라 다름,run_20261113_170736_acts

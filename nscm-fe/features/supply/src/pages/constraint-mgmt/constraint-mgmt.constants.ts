@@ -65,7 +65,11 @@ export const MSG = {
   /** Main 중복(LOOKUP_TYPE 1키) — "The same {0} exists.", {0}=Lookup Type. */
   DUPLICATE_MASTER: 'MSG01092',
   SELECT_LOOKUP_TYPE: 'MSG00624',
-  /** 하단 미저장 중 다른 Lookup Type 클릭 확인 — "수정 중인 데이터가 있습니다. 조회 하시겠습니까?" */
+  /**
+   * 미저장 변경 중 재조회 확인 — "수정 중인 데이터가 있습니다. 조회 하시겠습니까?"
+   * 원래는 하단 미저장 중 다른 Lookup Type 클릭 확인용이었으나, 상/하단 더블클릭 재조회
+   * (2026-11-09)에도 같은 문구를 그대로 재사용한다.
+   */
   CONFIRM_DISCARD_DETAIL: 'MSG00704',
   /** 조회권한 없음 — AS-IS R-29 CanSelect 불통과 시의 안내와 같은 자리. */
   NO_PERMISSION: 'MSG00096',

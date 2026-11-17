@@ -372,9 +372,9 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
+| GetMeasure | Measure:130, InitControl:152, Measure:167, InitControl:235, CheckAndGetMeasure:443 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetFilter | InitControls:182, InitControls:183, InitControls:184, InitControls:185, InitControls:205, InitControls:206, InitControls:221, GetBasisTime:288 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetCheckedListValue | InitControls:204, InitControls:221, SetChangeControl:311, SetChangeControl:318, SetChangeControl:324, SetChangeControl:330, SetChangeControl:339, SetChangeControl:344 | CString.GetCheckedListValue | CODE |
-| GetMeasure | CheckAndGetMeasure:443, Measure:130, InitControl:152, Measure:167, InitControl:235 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | EditQuery | RefreshHeader:485, Query:682 | FPExtensions.EditQuery | ROW_ID |
 | GetChanges | Save_Data:1303 | FPExtensions.GetChanges | ROW_ID |
 | SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1803 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
@@ -386,6 +386,10 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this | Load | Form_Load | .ctor:116 |
 | cboInstance | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:367 |
 | clbPlanner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:368 |
@@ -412,6 +416,10 @@
 | bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4177 |
 | memo_menu | Click | onMemoMenu | spdMain_CellClick:4189 |
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4203 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:345 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:382 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:407 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:408 |
 | this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:354 |
 | this.cboPlanId | DropDown | cboPlanId_DropDown | InitializeComponent:832 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:1118 |
@@ -447,24 +455,16 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:2087 |
 | this.btnCategory | Click | btnCatagory_Click | InitializeComponent:2125 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:2163 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:345 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:382 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:407 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:408 |
 
 ## 6. 컨트롤 (126개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | CheckBox | 23 | chk_month, chk_week, chk_day, chk_sspSimul_inventory, chk_sspSimul, chk_activated, chk_BOH_2nd, chk_ssp_inventory, chk_do, chk_inventory, chk_wpp_outqty, chk_wpp_inqty, chk_mpp_outqty, chk_mpp_inqty, chk_result … |
 | LayoutControlItem | 22 | lblPlanner, lblPlanID, lblSql, lblInstance, lblData, lblDivision, lblOperation, lblItem, lblNickName, lblModel, layoutControlItem13, lblFactory, lblLine, lblSite, layoutControlItem12 … |
-| UsrButton | 15 | btnToggleSave, btnSql, btnExcelImport, usrButton2, btnMemo, btnMrp, btnRelease, btnCreatePlan, btnBucket, btnCategory, btnColumn, usrButton1, usrButton2, usrButton1, usrButton2 |
-| Label | 14 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label1, label2 |
+| UsrButton | 15 | usrButton1, usrButton2, usrButton1, usrButton2, btnToggleSave, btnSql, btnExcelImport, usrButton2, btnMemo, btnMrp, btnRelease, btnCreatePlan, btnBucket, btnCategory, btnColumn |
+| Label | 14 | label1, label2, label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1 |
+| Panel | 8 | panel1, panel1, panel3, infoPanel, panel2, panel3, panel4, panel1 |
 | UsrCheckedList2 | 8 | clbLine, clbDivision, clbProdType, clbOperation, clbFactory, clbPlant, clbPlanner, cboSite |
-| Panel | 8 | infoPanel, panel2, panel3, panel4, panel1, panel1, panel1, panel3 |
 | EmptySpaceItem | 6 | emptySpaceItem4, emptySpaceItem2, emptySpaceItem1, emptySpaceItem6, emptySpaceItem5, emptySpaceItem3 |
 | UsrCombo | 3 | cboShipment, cboInstance, cboPlanId |
 | UsrTextBox | 3 | txtPjtGroup, txtItem, txtModel |

@@ -1,0 +1,1782 @@
+{
+ "_src": "2026-11-15 경로 메시지 셀 입력 시나리오. 값은 원문 분기 조건에서 정함. 저장하지 않고 닫음(대화상자 정책 no · 닫기 close)",
+ "SCP0020": [
+  {
+   "handler": "CheckDigitValueEntered",
+   "expect": "MSG00203",
+   "edit": true,
+   "why": "SCP0020_TactTime.cs:2877 nVal > checkMaxValue || nVal < nMinTactTime || TryParse 실패 · 검사 호출은 활성 시트 shtMain(Plant)일 때만(2612행) · Find 는 활성 시트로 Plant/Packer 조회를 나눔",
+   "steps": [
+    {
+     "cell": "TACT_TIME",
+     "value": "-1",
+     "mode": "value"
+    }
+   ],
+   "pre_set": [
+    {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "0",
+     "wait": 1
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ActiveSheetChanged"
+     },
+     "wait": 2
+    }
+   ]
+  },
+  {
+   "handler": "InsertButton",
+   "expect": "MSG00161",
+   "edit": false,
+   "grid": "spdExcept",
+   "sheet": 0,
+   "why": "SCP0020_TactTime.cs InsertButton fps=spdExcept · siExcept 잠금 해제 · nMainSelRow<0(주 그리드 더블클릭 전) → MSG00161",
+   "steps": [
+    {
+     "act": {
+      "target": "spdExcept",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "method": "OnClickInsertButton"
+    }
+   ]
+  },
+  {
+   "handler": "InsertButton",
+   "expect": "MSG00002",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 1,
+   "why": "SCP0020_TactTime.cs InsertButton fps=spdExcept · nMainSelRow 행(SpdMain_CellDoubleClick 258행)의 LINE_ID 빈 값 → MSG00002('Line') · DB 에 LINE_ID 빈 Packer 행 없음(사업부 82 857행 중 0, 11-16 05:12) → 주 그리드 새 행(LINE_ID 빈 값)을 더블클릭 · 행 추가는 활성 행 위치에 들어감(siMain.Insert) → 0행 클릭 뒤 추가하면 새 행 = 0행 · 예외 그리드 수정은 주 그리드 수정 모드(Action 열 표시)면 MSG00199 로 막힘(659행) → 주 그리드 수정 모드를 다시 눌러 끈 뒤 시도",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "method": "OnClickInsertButton"
+    },
+    {
+     "click": "DIVISION_ID",
+     "double": 1,
+     "row": 0,
+     "wait": 6
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "act": {
+      "target": "spdExcept",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "method": "OnClickInsertButton"
+    }
+   ],
+   "only": true
+  }
+ ],
+ "SCP0041": [
+  {
+   "handler": "ActiveSheet_CellChanged",
+   "expect": "MSG00108",
+   "edit": false,
+   "why": "SCP0041_StockOSP.cs:828 nDate1(DATE_FORECAST_START) > nDate2(DATE_FORECAST_FINISH) · 날짜 열은 Pack Hold Stock 시트(SCP0041_GET_PACK_HOLD_STOCK)에만 있음 · 원천 SCM_DNM_STOCK_LOT_CONTROL Division 82 1,621행 CUTOFF 20221211~20241227(11-15 조회) · 처리기는 InitEvent(224행) 시점 활성 시트에만 연결 · EditButton 은 iFocusTabIndex == 1 일 때만 Pack 시트 잠금 해제(259행) · iFocusTabIndex 는 SheetTabClick→SetTabIndex(855행) · 11-16 05:00 값 지정 입력 → 메시지 없음 · 편집 입력으로 재시험",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "SheetTabClick",
+      "index": "1"
+     }
+    },
+    {
+     "act": {
+      "cell": "0,1",
+      "double": "0",
+      "grid": "spdMain",
+      "sheet": "1"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cell": "DATE_FORECAST_FINISH",
+     "value": "2026-01-01",
+     "mode": "edit"
+    },
+    {
+     "cell": "DATE_FORECAST_START",
+     "value": "2099-12-31",
+     "mode": "edit"
+    }
+   ],
+   "pre_set": [
+    {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "1",
+     "wait": 2
+    },
+    {
+     "name": "dCalendar",
+     "prop": "Value1",
+     "value": "20220101"
+    },
+    {
+     "name": "dCalendar",
+     "prop": "Value2",
+     "value": "20261231"
+    },
+    {
+     "name": "dCalendarCutoff",
+     "prop": "Value1",
+     "value": "20221201"
+    },
+    {
+     "name": "dCalendarCutoff",
+     "prop": "Value2",
+     "value": "20241231"
+    }
+   ],
+   "grid": "spdMain",
+   "sheet": 1
+  }
+ ],
+ "SCP0005": [
+  {
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "edit": true,
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999 · 데이터 모델 Changed(CellsUpdated) 처리기 · 값 지정(SetValue)은 11-15 ArgumentException → 편집 입력으로 · 실측 11-16: 1000 편집 입력은 값 0 유지(05:22) · 600 은 반영, 600+600 에서 MSG00209 후 LT_VOYAGE 0 으로 되돌림(05:24)",
+   "steps": [
+    {
+     "cell": "LT_ARRIVAL_INLAND",
+     "value": "600",
+     "mode": "edit"
+    },
+    {
+     "cell": "LT_VOYAGE",
+     "value": "600",
+     "mode": "edit"
+    }
+   ]
+  },
+  {
+   "handler": "btnEaxel_Upload_Click",
+   "expect": "MSG00265",
+   "edit": false,
+   "why": "SCP0005_DistributionRoute.cs:373~381 업로드 창(ExcelUploadForm2) 닫힌 뒤 MSG00265(다시 조회?) · 업로드 창은 실행기가 닫음(업로드 안 함) · 대화상자 아니오",
+   "steps": [
+    {
+     "act": {
+      "click": "btnEaxel_Upload",
+      "wait": "8"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "(SP)SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+   "edit": false,
+   "why": "SCP0005_DistributionRoute.cs:1092 ROUTE_ID 열 더블클릭 → SCP0005_DistributionRoutePopup(이력 SP) · 팝업은 실행기가 닫음",
+   "steps": [
+    {
+     "click": "ROUTE_ID",
+     "double": 1,
+     "row": 0,
+     "wait": 10
+    }
+   ]
+  },
+  {
+   "handler": "FindButton",
+   "expect": "(SP)SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "edit": false,
+   "open": "SCP0102",
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SCP0005_DistributionRoute.cs:206·277 IgnoreSearchCondition 이면 FindDataReceive(ROUTEID SP) · 외부 진입 = SCP0102_BOD_Validation_Report.cs:1669~1686 주 그리드 ROUTE_ID 더블클릭 openSubMenu('SCP0005', true, true, ROUTE_ID 조건) · 조건: SCP0102_GET_BOD_VALIDATION_REPORT 직접 실행 사업부 81·20260601~28 → 13행, ROUTE_ID 10243 등(11-16 05:29) · ROUTE_ID 열 12 는 화면 밖이라 CellDoubleClick 이벤트로 실행",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellDoubleClick",
+      "row": "0",
+      "col": "12",
+      "wait": "15"
+     },
+     "keep_popup": 1
+    },
+    {
+     "sleep": 8
+    }
+   ],
+   "pre_set": [
+    {
+     "name": "clbDivision_ID",
+     "index": "1",
+     "wait": 3
+    },
+    {
+     "name": "drpPeriod",
+     "prop": "Value1",
+     "value": "20260601"
+    },
+    {
+     "name": "drpPeriod",
+     "prop": "Value2",
+     "value": "20260630"
+    }
+   ]
+  }
+ ],
+ "SSP0200": [
+  {
+   "handler": "SpdMain_CellClick",
+   "expect": "MSG00002",
+   "edit": true,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5473 INCOTERMS 빈 값에서 TRANSPORT_MODE 클릭",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "INCOTERMS",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "click": "TRANSPORT_MODE",
+     "row": "new"
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_EditChange",
+   "expect": "MSG00287",
+   "edit": true,
+   "why": "SSP0200_ShipmentChangeRequest.cs:6367 CHANGE_REASON_CODE 빈 값('-' 포함)에서 CHANGE_REASON_DETAIL 입력",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "CHANGE_REASON_DETAIL",
+     "value": "ASISLIVE",
+     "row": "new"
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00293",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5747~5753 TRANSPORT_MODE 콤보 변경 · dtTransMode == null(BOD 조회 FindData_BOD 전) → MSG00293 · dtTransMode 는 처음 빈 표(66행) · FindData_BOD(SSP0026_GET_BOD_ITEM) 0행이면 null(6704행) → 새 행 품목 'ASISLIVE_NO_BOD' 로 From Site 콤보 변경(5578~5590 FindData_BOD) 뒤 TRANSPORT_MODE 변경",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "ITEM_ID",
+     "value": "ASISLIVE_NO_BOD",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ComboSelChange",
+      "row": "new",
+      "col_tag": "FROM_SITE_DESCRIPTION",
+      "wait": "8"
+     }
+    },
+    {
+     "sleep": 4
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ComboSelChange",
+      "row": "new",
+      "col_tag": "TRANSPORT_MODE",
+      "wait": "4"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_EditChange",
+   "expect": "MSG00194",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:6301~6321 수정 중 SHIPMENT_DATE 편집 · 기준일(D-56)보다 이른 날짜 → MSG00194",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "SHIPMENT_DATE",
+     "value": "2020-01-01",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "EditChange",
+      "row": "new",
+      "col_tag": "SHIPMENT_DATE",
+      "wait": "4"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "shtMain_Change",
+   "expect": "MSG00189",
+   "edit": true,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:6415~6422 수정 중 ERP_STATUS='C' 행의 셀 변경(데이터 모델 CellsUpdated) → MSG00189 · 0행 REMARKS 잠김(06:13 실측) → 다른 칸을 차례로 편집 입력",
+   "steps": [
+    {
+     "row_where": {
+      "ERP_STATUS": "C"
+     },
+     "cell": "CHANGE_REASON_CODE",
+     "value": "01",
+     "mode": "edit"
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "C"
+     },
+     "cell": "SHIPMENT_CONFIRM_QTY",
+     "value": "1",
+     "mode": "edit"
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "C"
+     },
+     "cell": "REMARKS2",
+     "value": "asislive",
+     "mode": "edit"
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "C"
+     },
+     "cell": "SHIPMENT_DATE",
+     "value": "2026-12-01",
+     "mode": "edit"
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "C"
+     },
+     "cell": "NEW_LT_DAY",
+     "value": "1",
+     "mode": "edit"
+    }
+   ]
+  },
+  {
+   "handler": "btnButtonList_UsrButtonList_Click_Detected",
+   "expect": "MSG00050",
+   "edit": true,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequestInsertPopup.cs:114~128 확인(OK) · txtCurrentInsert_Qty 가 1~50 정수가 아니면 MSG00050 · 팝업 = 주 화면 2924행(btnInsertMultiple)",
+   "steps": [
+    {
+     "act": {
+      "click": "btnInsertMultiple",
+      "wait": "8"
+     },
+     "keep_popup": 1
+    },
+    {
+     "setc": {
+      "form": "SSP0200_ShipmentChangeRequestInsertPopup",
+      "name": "txtCurrentInsert_Qty",
+      "value": "0"
+     }
+    },
+    {
+     "popup_ok": "SSP0200_ShipmentChangeRequestInsertPopup"
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5107~5110 새 행 ITEM_ID 더블클릭 · From Site 빈 값 → MSG00098(From Site) · 새 행 Division 은 활성 행 복사·잠금(InsertRow) · 0행이면 행 추가 안 됨(11-16 07:03) → Div 빈 분기는 사용자 경로 없음",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "FROM_SITE_DESCRIPTION",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "click": "ITEM_ID",
+     "double": 1,
+     "row": "new",
+     "wait": 6
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "MSG00098",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5183~5186 새 행 PROJECT_CODE 더블클릭 · ITEM_ID 빈 값 → MSG00098(Model)",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "ITEM_ID",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellDoubleClick",
+      "row": "new",
+      "col_tag": "PROJECT_CODE",
+      "wait": "6"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5592~5602 새 행 TO_SITE_DESCRIPTION 콤보 변경 · FROM_SITE 빈 값 → MSG00098(From Site)",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "FROM_SITE_DESCRIPTION",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ComboSelChange",
+      "row": "new",
+      "col_tag": "TO_SITE_DESCRIPTION",
+      "wait": "4"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_ComboSelChange",
+   "expect": "MSG00098",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0200_ShipmentChangeRequest.cs:5708~5712 새 행 INCOTERMS 콤보 변경 · FROM_SITE 빈 값 → MSG00098(From Site)",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "cell": "FROM_SITE_DESCRIPTION",
+     "value": "",
+     "mode": "value",
+     "row": "new"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ComboSelChange",
+      "row": "new",
+      "col_tag": "INCOTERMS",
+      "wait": "4"
+     }
+    }
+   ]
+  }
+ ],
+ "DMF0005": [
+  {
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "1",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:635 fps=spdMain 이고 siSub 활성 시트가 잠금 해제(수정 중) · 사업부 81 은 상세 패널 표시(3822행) · 상세 수정 = fps=spdSub 에서 EditButton(864행 SwitchLock)",
+   "steps": [
+    {
+     "act": {
+      "target": "spdSub",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    }
+   ]
+  },
+  {
+   "handler": "EditButton",
+   "expect": "MSG00130",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "1",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:860 fps=spdSub 이고 siMain 활성 시트가 수정 중 · 주 수정 = fps=spdMain 에서 EditButton(640행)",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "act": {
+      "target": "spdSub",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    }
+   ]
+  },
+  {
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00128",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "1",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3329 주 시트 잠김 상태에서 siSub 활성 시트가 수정 중일 때 주 그리드 더블클릭 · 행 0개면 3324행 return",
+   "steps": [
+    {
+     "act": {
+      "target": "spdSub",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "click": "DIVISION_ID",
+     "double": 1,
+     "row": 0
+    }
+   ]
+  },
+  {
+   "handler": "EditButton",
+   "expect": "MSG00096",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "1",
+     "wait": 3
+    }
+   ],
+   "group": "SCP Planner",
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:618~622 Division 앞 두 자리 81·82 이고 NowGroupID == 'SCP Planner'",
+   "steps": [
+    {
+     "method": "OnClickEditButton"
+    }
+   ]
+  },
+  {
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00471",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "0",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3397~3431 주 시트 수정 중 Action=I 행의 ITEM_ID 더블클릭 → DM0002_ItembySmallDivPopup(다중 선택 true) · 여러 행 선택 뒤 확인이면 ItemID 에 ',' → MSG00471",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "click": "ITEM_ID",
+     "double": 1,
+     "row": "new",
+     "keep_popup": 1,
+     "wait": 10
+    },
+    {
+     "act": {
+      "form": "DM0002_ItembySmallDivPopup",
+      "select": "0,1",
+      "wait": "2"
+     },
+     "keep_popup": 1
+    },
+    {
+     "popup_ok": "DM0002_ItembySmallDivPopup"
+    }
+   ]
+  },
+  {
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "MSG00430",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "6",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3460~3479 Division 82 · 주 시트 수정 중 EditFlag=Y 또는 Action=I 행의 USER_ID_82 더블클릭 → DMF000_OwnerSet_Popup · 오른쪽 목록 2명 이상이면 owner 에 ',' → MSG00430",
+   "steps": [
+    {
+     "insert": true
+    },
+    {
+     "click": "USER_ID_82",
+     "double": 1,
+     "row": "new",
+     "keep_popup": 1,
+     "wait": 10
+    },
+    {
+     "act": {
+      "form": "DMF000_OwnerSet_Popup",
+      "grid": "spdBase",
+      "select": "0,1",
+      "wait": "2"
+     },
+     "keep_popup": 1
+    },
+    {
+     "act": {
+      "form": "DMF000_OwnerSet_Popup",
+      "click": "btnRight",
+      "wait": "2"
+     },
+     "keep_popup": 1
+    },
+    {
+     "popup_ok": "DMF000_OwnerSet_Popup"
+    }
+   ]
+  },
+  {
+   "handler": "spdSub_CellDoubleClick",
+   "expect": "MSG00430",
+   "edit": false,
+   "grid": "spdSub",
+   "sheet": 0,
+   "pre_set": [
+    {
+     "name": "clbDivision",
+     "index": "6",
+     "wait": 3
+    }
+   ],
+   "why": "DMF0005_SaleSite_PjtModelMapping.cs:3975~3995 Division 82 · 상세 시트 수정 중 EditFlag=Y 행의 USER_ID 더블클릭 → DMF000_OwnerSet_Popup · 상세 행은 주 그리드 잠금 상태 더블클릭(FindData_Sub 3345행)으로 채움",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "act": {
+      "grid": "spdMain",
+      "cell": "0,2",
+      "double": "1",
+      "wait": "8"
+     }
+    },
+    {
+     "act": {
+      "target": "spdSub",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "click": "USER_ID",
+     "double": 1,
+     "row": 0,
+     "keep_popup": 1,
+     "wait": 10
+    },
+    {
+     "act": {
+      "form": "DMF000_OwnerSet_Popup",
+      "grid": "spdBase",
+      "select": "0,1",
+      "wait": "2"
+     },
+     "keep_popup": 1
+    },
+    {
+     "act": {
+      "form": "DMF000_OwnerSet_Popup",
+      "click": "btnRight",
+      "wait": "2"
+     },
+     "keep_popup": 1
+    },
+    {
+     "popup_ok": "DMF000_OwnerSet_Popup"
+    }
+   ]
+  }
+ ],
+ "SCP0084": [
+  {
+   "handler": "ExcelButton",
+   "expect": "MSG00100",
+   "edit": false,
+   "dialogs": "cancel",
+   "why": "SCP0084_LongTermStock.cs:263 ExcelButton 진입 즉시 MSG00100(예/아니오/취소) · 취소면 return(270행) · 대화상자 정책 cancel 로 Excel 을 열지 않음",
+   "steps": [
+    {
+     "method": "OnClickExcelButton"
+    }
+   ]
+  }
+ ],
+ "SCP0028": [
+  {
+   "handler": "btnInput_Click",
+   "expect": "(SP)SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "edit": false,
+   "why": "SCP0028_Shipment_Lot_Size.cs btnInput_Click → SCM0002_ShipmentLotSizePopup.Form_Load('I') · 'I' 는 진입 자동조회 없음(146행 주석) · 팝업 조회 버튼 FindData(254행)는 From Site 가 ALL 이면 안내 후 return(261~264행) → From Site 1개 체크 뒤 팝업 FindButton · 팝업 확인(저장) 안 누름",
+   "steps": [
+    {
+     "act": {
+      "click": "btnInput",
+      "wait": "8"
+     },
+     "keep_popup": 1
+    },
+    {
+     "setc": {
+      "form": "SCM0002_ShipmentLotSizePopup",
+      "name": "clbFromSite",
+      "check": "1"
+     }
+    },
+    {
+     "act": {
+      "form": "SCM0002_ShipmentLotSizePopup",
+      "method": "FindButton",
+      "wait": "10"
+     },
+     "keep_popup": 1
+    },
+    {
+     "sleep": 12
+    }
+   ]
+  }
+ ],
+ "SSP0003": [
+  {
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "(SP)SSP0003_GET_DELEGATEE_LOAD+GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0003_ShipmentChangeRequestConfirm.cs SpdMain_CellDoubleClick: 주 시트 잠김 상태 더블클릭 → Delegate_Load(GET_DELEGATEE_LOAD) · FindData_Sub(GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING) · 승인·반려 버튼은 누르지 않음(사용자 결정 11-15)",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellDoubleClick",
+      "row": "0",
+      "col": "2",
+      "wait": "10"
+     }
+    },
+    {
+     "sleep": 10
+    }
+   ]
+  }
+ ],
+ "SSP0015": [
+  {
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch main0",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0015_ShipmentPSI.cs BtnSearch_Click: 상세 그리드 활성 시트별 상세 조회 SP · 주 시트 0/1(Packer) 분기 · 주 시트 0: Shipment Result(10)·Stock Detail(6)·WH In Plan Detail(9)·Hold stock Detail(5) · 상세 시트는 ActiveSheetIndex 지정 + SheetTabClick 이벤트(11-16 06:35 속성 지정만으로는 Plan Detail SP 만 불림)",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "10"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "10",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "6"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "6",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "9"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "9",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "5"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "5",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    }
+   ]
+  },
+  {
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch packer",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 1,
+   "pre_set": [
+    {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "1",
+     "wait": 1
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ActiveSheetChanged"
+     },
+     "wait": 2
+    }
+   ],
+   "why": "SSP0015_ShipmentPSI.cs BtnSearch_Click: 상세 그리드 활성 시트별 상세 조회 SP · 주 시트 0/1(Packer) 분기 · 주 시트 1(Packer): 조회 = SHIPMENT_PSI_PACKER(+_PAST) · 상세 Confirm Detail(0)·Shipment Result(10)·SCS Stock(7)·Stock Location(8)·Request Detail(1) · 상세 시트는 ActiveSheetIndex 지정 + SheetTabClick 이벤트(11-16 06:35 속성 지정만으로는 Plan Detail SP 만 불림)",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "10"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "10",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "7"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "7",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "8"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "8",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "1"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "1",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    }
+   ]
+  }
+ ],
+ "SSP0021": [
+  {
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0021_ShipmentPlan.cs BtnSearch_Click: spdDetail.ActiveSheetIndex 0~5 별 상세 조회(Detail·Stock Location·oWMS·MES Stock·MES Stock Detail·Shipment Result) · 상세 시트는 ActiveSheetIndex 지정 + SheetTabClick 이벤트(11-16 06:35 속성 지정만으로는 Plan Detail SP 만 불림)",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "5"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "5",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "1"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "1",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "2"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "2",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "3"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "3",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "4"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "4",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    }
+   ]
+  },
+  {
+   "handler": "SpdMain_CellDoubleClick",
+   "expect": "(SP)SSP0021_GET_HOLD_STOCK",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "post_find": [
+    {
+     "where": {
+      "BOH_TYPE": "HOLD"
+     },
+     "col_prefix": "BOH_QTY",
+     "nonzero": false
+    }
+   ],
+   "why": "SSP0021_ShipmentPlan.cs SpdMain_CellDoubleClick: BOH_QTY 칸 · BOH_TYPE == 'HOLD' → FindData_hold_stock(5283행 SSP0021_GET_HOLD_STOCK)",
+   "steps": [
+    {
+     "sleep": 8
+    }
+   ]
+  }
+ ],
+ "SSP0023": [
+  {
+   "handler": "BtnSearch_Click",
+   "expect": "(SP)BtnSearch",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs BtnSearch_Click: siDetail 활성 시트 Plan Detail·Stock Detail·Shipment Result 별 상세 조회 · 상세 시트는 ActiveSheetIndex 지정 + SheetTabClick 이벤트(11-16 06:35 속성 지정만으로는 Plan Detail SP 만 불림)",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "1"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "1",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "2"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "2",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    },
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 6
+    }
+   ]
+  },
+  {
+   "handler": "BtnMeasure_Click",
+   "expect": "MSG00007",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs:854~875 fps == null(그리드 클릭 전) → MSG00007",
+   "steps": [
+    {
+     "act": {
+      "click": "BtnMeasure",
+      "wait": "5"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "btnExcelUpload_Click",
+   "expect": "MSG00265",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs:6398~6406 업로드 창 닫힌 뒤 MSG00265 · 업로드 안 함 · 아니오",
+   "steps": [
+    {
+     "act": {
+      "click": "btnExcelUpload",
+      "wait": "8"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "SpdDetail_ComboSelChange",
+   "expect": "MSG00278",
+   "edit": false,
+   "grid": "spdDetail",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs:964~971 상세 TRANSPORT_MODE 콤보 변경 · 값 빈 값 → MSG00278 · 상세 행은 BtnSearch(Plan Detail)로 채움 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 5
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "!C"
+     },
+     "act": {
+      "target": "spdDetail",
+      "raise": "CellClick",
+      "row": "found",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cell": "TRANSPORT_MODE",
+     "value": "",
+     "mode": "value",
+     "row": "found"
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "ComboSelChange",
+      "row": "found",
+      "col_tag": "TRANSPORT_MODE",
+      "wait": "3"
+     }
+    }
+   ]
+  },
+  {
+   "handler": "shtPlanDetail_Change",
+   "expect": "MSG00278",
+   "edit": false,
+   "grid": "spdDetail",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs:6117~6199 상세 수정 중 데이터 변경 TRANSPORT_MODE 빈 값 → MSG00278 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 5
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "!C"
+     },
+     "act": {
+      "target": "spdDetail",
+      "raise": "CellClick",
+      "row": "found",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cell": "TRANSPORT_MODE",
+     "value": "",
+     "mode": "edit",
+     "row": "found"
+    }
+   ]
+  },
+  {
+   "handler": "SpdDetail_EditChange",
+   "expect": "MSG00287",
+   "edit": false,
+   "grid": "spdDetail",
+   "sheet": 0,
+   "why": "SSP0023_ShipmentPlanElectrode.cs:1569~1625 상세 수정 중 CHANGE_REASON_DETAIL 편집 · CHANGE_REASON_CODE '-'·빈 값 → MSG00287 · 11-16 07:00 첫 실행은 0행(ERP_STATUS C·잠김)에 값 지정 → 사용자 경로 아님 · ERP_STATUS != C 행으로",
+   "steps": [
+    {
+     "setc": {
+      "name": "spdDetail",
+      "prop": "ActiveSheetIndex",
+      "value": "0"
+     }
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "SheetTabClick",
+      "index": "0",
+      "wait": "3"
+     }
+    },
+    {
+     "act": {
+      "click": "BtnSearch",
+      "wait": "15"
+     }
+    },
+    {
+     "sleep": 5
+    },
+    {
+     "row_where": {
+      "ERP_STATUS": "!C"
+     },
+     "act": {
+      "target": "spdDetail",
+      "raise": "CellClick",
+      "row": "found",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cell": "CHANGE_REASON_CODE",
+     "value": "",
+     "mode": "value",
+     "row": "found"
+    },
+    {
+     "cell": "CHANGE_REASON_DETAIL",
+     "value": "asislive",
+     "mode": "value",
+     "row": "found"
+    },
+    {
+     "act": {
+      "target": "spdDetail",
+      "raise": "EditChange",
+      "row": "found",
+      "col_tag": "CHANGE_REASON_DETAIL",
+      "wait": "3"
+     }
+    }
+   ]
+  }
+ ],
+ "SCP0007": [
+  {
+   "handler": "EditButton",
+   "expect": "(STATE)INCOTERMS_SSP edit off",
+   "edit": false,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SCP0007_BOD.cs:437~488 EditButton 마다 boolEditChange 토글 · To Site SITE_TYPE='PLANT' 행 INCOTERMS_SSP: true(수정 켬)=잠금 해제+dtIncotermsEdit · false(두 번째 눌러 수정 끔)=잠금+dtIncoterms",
+   "steps": [
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "0",
+      "col": "0",
+      "wait": "2"
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cellstate": {
+      "col": "INCOTERMS_SSP",
+      "rows": 40
+     }
+    },
+    {
+     "method": "OnClickEditButton"
+    },
+    {
+     "cellstate": {
+      "col": "INCOTERMS_SSP",
+      "rows": 40
+     }
+    }
+   ]
+  }
+ ],
+ "SCP0122": [
+  {
+   "handler": "spdMain_CellClick",
+   "expect": "(STATE)spdMain_CellClick row",
+   "edit": true,
+   "grid": "spdMain",
+   "sheet": 0,
+   "why": "SCP0122_PlanActivityMgmt.cs:555~558 CellClick = _currRowIdx 갱신 · 224~243 ComboSelChange(OPMZ_ACTV_NAME) 가 _currRowIdx 행에 ACTV_CD·LINK_UI_TYPE·PROGRAM_NAME·CONFIRM_YN·AUTO_YN·OPTION_YN 채움 · 1행 ACTV_CD·LINK_UI_TYPE 비운 뒤 1행 클릭·콤보 변경 → 다시 채워지는지 관찰(저장 안 함)",
+   "steps": [
+    {
+     "cell": "OPMZ_ACTV_CD",
+     "value": "",
+     "mode": "value",
+     "row": 1
+    },
+    {
+     "cell": "LINK_UI_TYPE",
+     "value": "",
+     "mode": "value",
+     "row": 1
+    },
+    {
+     "values": {
+      "row": 1,
+      "cols": [
+       "OPMZ_ACTV_NAME",
+       "OPMZ_ACTV_CD",
+       "LINK_UI_TYPE",
+       "PROGRAM_NAME",
+       "CONFIRM_YN",
+       "AUTO_YN",
+       "OPTION_YN"
+      ]
+     }
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "CellClick",
+      "row": "1",
+      "col": "1",
+      "wait": "2"
+     }
+    },
+    {
+     "act": {
+      "target": "spdMain",
+      "raise": "ComboSelChange",
+      "row": "1",
+      "col_tag": "OPMZ_ACTV_NAME",
+      "wait": "3"
+     }
+    },
+    {
+     "values": {
+      "row": 1,
+      "cols": [
+       "OPMZ_ACTV_NAME",
+       "OPMZ_ACTV_CD",
+       "LINK_UI_TYPE",
+       "PROGRAM_NAME",
+       "CONFIRM_YN",
+       "AUTO_YN",
+       "OPTION_YN"
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 {
  "id": "SCP0037",
  "asis": "SCP0037",
- "at": "2026-11-08 11:47:57",
+ "at": "2026-11-14 11:11:42",
  "has_asis": true,
  "tobe_cols": 13,
  "buttons": [
@@ -33,11 +33,11 @@
   "p_delete": {
    "rows": 0,
    "why_not": [
-    "AS-IS 삭제가 신규 행만(DeleteButton 296 guard == StringI) → 기존 행 D 저장 대상 아님"
+    "AS-IS 삭제가 신규 행만(DeleteButton:296 guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"
    ]
   },
   "p_combo": {
-   "rows": 8,
+   "rows": 12,
    "why_not": []
   },
   "p_decimal": {
@@ -130,8 +130,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 15,
-   "used": 15
+   "rows": 19,
+   "used": 19
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -142,7 +142,7 @@
    "used": 0
   }
  },
- "rows": 15,
- "rows_used": 15,
+ "rows": 19,
+ "rows_used": 19,
  "dup_of_hand": 0
 }

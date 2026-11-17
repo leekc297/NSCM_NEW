@@ -1,0 +1,208 @@
+[
+ {
+  "row_id": "V-138b0147",
+  "rule_id": "K3",
+  "target": "SSP0015 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-1c5363a3",
+  "rule_id": "F10",
+  "target": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "same": [
+   "V-d5ac8e4b"
+  ]
+ },
+ {
+  "row_id": "V-b68cd291",
+  "rule_id": "F10",
+  "target": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "same": []
+ },
+ {
+  "row_id": "V-d4f2fbfe",
+  "rule_id": "F10",
+  "target": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+  "same": []
+ },
+ {
+  "row_id": "V-b0a1102e",
+  "rule_id": "B2",
+  "target": "조회조건 From Site",
+  "same": []
+ },
+ {
+  "row_id": "V-d4ac610c",
+  "rule_id": "D5",
+  "target": "Shipment PSI(IT & Mobile).FIGURE (Figure)",
+  "same": []
+ },
+ {
+  "row_id": "V-af882d42",
+  "rule_id": "D5",
+  "target": "Shipment PSI(Mobility & IT).FIGURE (Figure)",
+  "same": []
+ },
+ {
+  "row_id": "V-39f51fc8",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+  "same": []
+ },
+ {
+  "row_id": "V-2ede9355",
+  "rule_id": "K3",
+  "target": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+  "same": []
+ },
+ {
+  "row_id": "T-1e790a5d",
+  "rule_id": "M4",
+  "target": "DIVISION_ID / Div",
+  "same": [
+   "T-b25e6763",
+   "T-60a92a29",
+   "T-467ed6ab",
+   "T-5d40e2d4",
+   "T-d0505b11",
+   "T-78e20067",
+   "T-24551b01",
+   "T-bb090136",
+   "T-1f4b3f16",
+   "T-5c63ba28",
+   "T-53375c5e",
+   "T-68f0dd44",
+   "T-2e8d5285",
+   "T-2f1a6d12",
+   "T-9abda072",
+   "T-61a0b5aa",
+   "T-5e5396eb"
+  ]
+ },
+ {
+  "row_id": "T-72e4ecbc",
+  "rule_id": "G4",
+  "target": "txtBefore_Qty / Result Type / Before_Qty",
+  "same": []
+ },
+ {
+  "row_id": "EG-ebf78618",
+  "rule_id": "A5",
+  "target": "SSP0015 팝업 SCM0002_TitleSetForm_Popup BTN:btnMeasure TS_REQ_DIV",
+  "same": []
+ },
+ {
+  "row_id": "EG-c924d4d0",
+  "rule_id": "I2",
+  "target": "SSP0015 언어 전환 조회 버튼",
+  "same": []
+ },
+ {
+  "row_id": "V-d5ac8e4b",
+  "rule_id": "F10",
+  "target": "",
+  "folded_into": "V-1c5363a3"
+ },
+ {
+  "row_id": "T-b25e6763",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-60a92a29",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-467ed6ab",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-5d40e2d4",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-d0505b11",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-78e20067",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-24551b01",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-bb090136",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-1f4b3f16",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-5c63ba28",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-53375c5e",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-68f0dd44",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-2e8d5285",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-2f1a6d12",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-9abda072",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-61a0b5aa",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ },
+ {
+  "row_id": "T-5e5396eb",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-1e790a5d"
+ }
+]

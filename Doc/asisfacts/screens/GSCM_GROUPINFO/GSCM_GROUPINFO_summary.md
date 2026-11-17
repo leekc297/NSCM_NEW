@@ -13,6 +13,9 @@
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > FindData | 170 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
 | button:SaveButton | SaveButton > SaveData > FindData | 170 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
+| button:SaveButton | SaveButton > SaveData | 252 | SystemManager.UP_FX_SaveGroupInfo | MATCH | SP UP_FX_SaveGroupInfo |
+| button:SaveButton | SaveButton > SaveData | 253 | SystemManager.UP_FX_DeleteGroupInfo | MATCH | SP UP_FX_DeleteGroupInfo |
+| button:SaveButton | SaveButton > SaveData | 254 | SystemManager.UP_FX_SaveGroupInfo | MATCH | SP UP_FX_SaveGroupInfo |
 | event:this.Load | Form_Load > FindData | 170 | SystemManager.UP_FX_GetGroupInfoList | MATCH | SP UP_FX_GetGroupInfoList |
 | unreached:(진입점 미연결) | <field:dtYesOrNo> | 41 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 
@@ -20,7 +23,9 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteGroupInfo | MATCH | 1 | SP UP_FX_DeleteGroupInfo | EXEC:UP_FX_DELETEGROUPINFO, DELETE:TB_FX_GROUPMENUAUTHEXTENSION, DELETE:TB_FX_GROUPMENUAUTH, DELETE:TB_FX_USERGROUPINFO, DELETE:TB_FX_GROUPINFO |  |
 | SystemManager.UP_FX_GetGroupInfoList | MATCH | 1 | SP UP_FX_GetGroupInfoList | EXEC:UP_FX_GETGROUPINFOLIST, SELECT:TB_FX_GROUPINFO |  |
+| SystemManager.UP_FX_SaveGroupInfo | MATCH | 2 | SP UP_FX_SaveGroupInfo | EXEC:UP_FX_SAVEGROUPINFO, MERGE:TB_FX_GROUPINFO |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

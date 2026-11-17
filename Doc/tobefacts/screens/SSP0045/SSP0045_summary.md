@@ -9,13 +9,13 @@
 |---|---|---|
 | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.module.scss | component | 18 |
 | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx | component | 261 |
-| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | component | 351 |
+| features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | component | 352 |
 | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.module.scss | component | 70 |
 | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | component | 538 |
 | features/shipping/src/pages/shipment-request-semi/hooks/useShipmentRequestSemiSave.ts | hook | 183 |
 | features/shipping/src/pages/shipment-request-semi/hooks/useShipmentRequestSemiValidation.ts | hook | 71 |
 | features/shipping/src/pages/shipment-request-semi/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-request-semi/shipment-request-semi.constants.ts | constants | 247 |
+| features/shipping/src/pages/shipment-request-semi/shipment-request-semi.constants.ts | constants | 246 |
 | features/shipping/src/pages/shipment-request-semi/shipment-request-semi.types.ts | types | 82 |
 | features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx | page | 396 |
 | features/shipping/src/pages/shipment-request-semi/useShipmentRequestSemiStore.ts | store | 266 |
@@ -28,7 +28,7 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | SSP0045/bodPopup//call-proc | hook | 1 | Y | BodItemRouteModal.tsx:80 |
-| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestSemiForm.tsx:71 ShipmentRequestSemiForm.tsx:79 ShipmentRequestSemiForm.tsx:98 ShipmentRequestSemiGrid.tsx:200 |
+| (useTabComboQueries) | hook | 4 | Y | ShipmentRequestSemiForm.tsx:71 ShipmentRequestSemiForm.tsx:79 ShipmentRequestSemiForm.tsx:99 ShipmentRequestSemiGrid.tsx:200 |
 | /SSP0045/main/SAVE/call-proc | http | 1 | Y | useShipmentRequestSemiSave.ts:86 |
 | SSP0045/main//call-proc | hook | 1 | Y | ShipmentRequestSemi.tsx:108 |
 | SSP0045/calendar//call-proc | hook | 1 | Y | ShipmentRequestSemi.tsx:117 |
@@ -46,15 +46,15 @@
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx | 205 |
 | Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx | 246 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx | 253 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 179 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 198 |
-| CustomDropdown | onChange | <arrow> setOperationGroup,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 221 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 251 |
-| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 247 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 272 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 299 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 319 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 340 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 180 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 199 |
+| CustomDropdown | onChange | <arrow> setOperationGroup,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 222 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 252 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 248 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 273 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 300 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 320 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiForm.tsx | 341 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 329 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 345 |
 | g | pastingCell | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx | 347 |
@@ -131,7 +131,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SSP0045(10), SSP0024(2), SSP0200(2), SSP0060(2), SCP0033(1), SSP0025(1), COM0013(1), SCP0020(1), SSP0005(1), SSP0202(1), SCP0123(1), SCP0025(1)
-- SP/PKG: PKG_SSP0045(5), SCM0001_GET_SCP_DAY_PERIOD(3), FN_MULTY_TIME(3), P_SSP0045_GET_SHIPMENT_REQUEST(1), P_SSP0045_SAVE_SHIPMENT_REQUEST(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1)
+- SP/PKG: PKG_SSP0045(5), SCM0001_GET_SCP_DAY_PERIOD(3), FN_MULTY_TIME(2), P_SSP0045_GET_SHIPMENT_REQUEST(1), P_SSP0045_SAVE_SHIPMENT_REQUEST(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

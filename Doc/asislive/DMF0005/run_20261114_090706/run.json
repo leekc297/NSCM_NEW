@@ -1,0 +1,128 @@
+{
+ "id": "DMF0005",
+ "started": "2026-11-14 09:07:06.996",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-14 09:07:26.026",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0005_SaleSite_PjtModelMapping",
+   "form_text": "Sales Site Project Model",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0005_SaleSite_PjtModelMapping.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:07:34.558"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-14 09:07:38.494",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0005\\run_20261114_090706\\dump_load.json",
+   "control_count": 61,
+   "grid_count": 2,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:07:38.554"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-14 09:07:38.712",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0005\\run_20261114_090706\\shots\\DMF0005_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:07:38.945"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-14 09:07:39.274",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:07:40.671"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-14 09:08:09.136",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0005\\run_20261114_090706\\dump_find.json",
+   "control_count": 61,
+   "grid_count": 2,
+   "total": "",
+   "time_status": "DB : 23.859s, UI : 0.164s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:08:09.314"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-14 09:08:09.634",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0005\\run_20261114_090706\\shots\\DMF0005_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-14 09:08:09.915"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 67,
+  "calls_with_params": 67
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0005_SaleSite_PjtModelMapping",
+  "form_text": "Sales Site Project Model",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0005_SaleSite_PjtModelMapping.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 23.859s, UI : 0.164s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-14 09:07:25.923",
+ "t_find": "2026-11-14 09:07:39.047",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 61,
+  "layout_items": 18,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 69,
+  "data_rows": 50,
+  "grid_rows": 15657,
+  "calls_total": 76,
+  "calls_screen": 67,
+  "calls_find": 30,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-14 09:08:11.086",
+ "exit": 0
+}

@@ -30,7 +30,12 @@ public class SecurityUtil {
                     .userNm(userDetails.getUserNm())
                     .userEngNm(userDetails.getUserEngNm())
                     .langCd(userDetails.getLangCd())
+                    .tmzCd(userDetails.getTmzCd())
                     .menus(userDetails.getMenus())
+                    .isGuest(userDetails.isGuest())
+                    .groups(userDetails.getGroups())
+                    .div(userDetails.getDiv())
+                    .companyId(userDetails.getCompanyId())
                     .build();
         }
 

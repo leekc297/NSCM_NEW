@@ -1,0 +1,259 @@
+{
+ "id": "SCP0127",
+ "dry": false,
+ "name": "update",
+ "kind": "edit",
+ "scenario": {
+  "table": "SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID",
+   "STAGE",
+   "ITEM_ID",
+   "VALUE_TYPE",
+   "FROM_YYYYMMDD",
+   "TO_YYYYMMDD"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "STAGE": "STAGE",
+   "ITEM_ID": "ITEM_ID",
+   "VALUE_TYPE": "VALUE_TYPE",
+   "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+   "TO_YYYYMMDD": "TO_YYYYMMDD"
+  },
+  "save_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+  "side": [],
+  "related": [],
+  "basis": "foxml SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY → SP SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY WHERE 키 8컬럼(@v_pre_*) · 이력 표 없음 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+  "name": "update",
+  "title": "DB 에 있는 행의 TYPE_APPLY_DAY 수정(+1) 뒤 저장 · 복원",
+  "edits": [
+   {
+    "pick": {
+     "col": "TYPE_APPLY_DAY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "TYPE_APPLY_DAY",
+     "db_col": "TYPE_APPLY_DAY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 23:22:19",
+ "status": "OK",
+ "steps": [],
+ "raw_key_used": [
+  {
+   "row": 0,
+   "shown": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "E129A_E128A",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "2025-04-21",
+    "TO_YYYYMMDD": "2026-12-31"
+   },
+   "raw": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "20261231"
+   }
+  }
+ ],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "SCM_SITE_ID": "WA00-A",
+   "STAGE": "ASSY",
+   "ITEM_ID": "AAEN4128I-A1-000",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "20261231",
+   "TYPE_APPLY_DAY": "0",
+   "VALUE_DESCRIPTION": null,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-11-26 11:59:06.073",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-11-26 11:59:06.073"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "WA00-A",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "STAGE": "ASSY",
+    "ITEM_ID": "AAEN4128I-A1-000",
+    "VALUE_TYPE": "MAX",
+    "FROM_YYYYMMDD": "20250421",
+    "TO_YYYYMMDD": "20261231"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "TYPE_APPLY_DAY",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "save_call": [
+  {
+   "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+   "params": {
+    "p_active_flag": "M",
+    "p_value_type": "MAX",
+    "p_division_id": "81",
+    "p_opmz_plan_gr_id": "PG0001",
+    "p_scm_site_id": "WA00-A",
+    "p_item_id": "AAEN4128I-A1-000",
+    "p_stage": "ASSY",
+    "p_from_yyyymmdd": "20250421",
+    "p_to_yyyymmdd": "20261231",
+    "p_type_apply_day": "1",
+    "p_value_description": "",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "p_pre_value_type": "MAX",
+    "p_pre_division_id": "81",
+    "p_pre_opmz_plan_gr_id": "PG0001",
+    "p_pre_scm_site_id": "WA00-A",
+    "p_pre_item_id": "AAEN4128I-A1-000",
+    "p_pre_stage": "ASSY",
+    "p_pre_from_yyyymmdd": "20250421",
+    "p_pre_to_yyyymmdd": "20261231"
+   },
+   "rows": 1,
+   "ms": 140.85
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "1개의 데이터가 저장되었습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null,
+  "popups": []
+ },
+ "save_wait": [],
+ "save_timeout": false,
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "SCM_SITE_ID": "WA00-A",
+   "STAGE": "ASSY",
+   "ITEM_ID": "AAEN4128I-A1-000",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "20261231",
+   "TYPE_APPLY_DAY": "1",
+   "VALUE_DESCRIPTION": "",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-11-26 11:59:06.073",
+   "LAST_UPDATED_BY": "jaeuk.shin",
+   "LAST_UPDATE_DATE": "2026-11-13 23:22:58.527"
+  }
+ ],
+ "restore_sql": [
+  {
+   "op": "UPDATE(전 값으로)",
+   "key": [
+    "81",
+    "WA00-A",
+    "PG0001",
+    "ASSY",
+    "AAEN4128I-A1-000",
+    "MAX",
+    "20250421",
+    "20261231"
+   ],
+   "rows": 1
+  }
+ ],
+ "side_cleanup": [],
+ "db_restored": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "SCM_SITE_ID": "WA00-A",
+   "STAGE": "ASSY",
+   "ITEM_ID": "AAEN4128I-A1-000",
+   "VALUE_TYPE": "MAX",
+   "FROM_YYYYMMDD": "20250421",
+   "TO_YYYYMMDD": "20261231",
+   "TYPE_APPLY_DAY": "0",
+   "VALUE_DESCRIPTION": null,
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-11-26 11:59:06.073",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-11-26 11:59:06.073"
+  }
+ ],
+ "saved_check": [
+  true
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 12:10:47.051",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 1303.83,
+   "params": {
+    "p_division_id": "40",
+    "p_from_yyyymmdd": "",
+    "p_to_yyyymmdd": "",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_bod_id": "",
+    "p_exfactory_from_yyyymmdd": "20261113",
+    "p_exfactory_to_yyyymmdd": "20261213",
+    "p_fdest_from_yyyymmdd": "",
+    "p_fdest_to_yyyymmdd": "",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "inline": "EXEC SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL @p_division_id='40', @p_from_yyyymmdd='', @p_to_yyyymmdd='', @p_from_site='', @p_to_site='', @p_bod_id='', @p_route_id ='', @p_exfactory_from_yyyymmdd='20261113', @p_exfactory_to_yyyymmdd='20261213', @p_fdest_from_yyyymmdd='', @p_fdest_to_yyyymmdd='', @p_from_country='', @p_to_country='', @p_from_city='', @p_to_city='', @p_from_area='', @p_to_area=''",
+   "phase": "action:btn_Search"
+  }
+ ]
+}

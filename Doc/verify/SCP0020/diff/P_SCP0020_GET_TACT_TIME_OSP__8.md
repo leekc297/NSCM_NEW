@@ -1,0 +1,7 @@
+# SCP0020 · SCP0020_GET_TACT_TIME_OSP ↔ PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP
+
+- 실행 2026-11-14 10:58:35 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 호출 #8 sheet=packer btn=SEARCH user=minyonglee1 FE 응답 행 845 · 원천 Doc\verify\SCP0020\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"divisionId": "82", "plantSiteId": "ALL", "lineId": "AZL01,AZP01,AZPL01,AZPL02,C1D01,C1D01x,C1P01,C1P02,C1P03,C1P04,C1P05,C1P06,C1P07,C1P08,C1P09,C1P10,C1P11,C1P12,C1P13,C1R01,CHP01,CHP02,CHP03,CHP04,K2B01,K2B02,K2D01,K2P05,K2P06,K2P11,K2P12,K2P13,K2P15,K2P16,K2P17,K2R01,K3D01,PLS01,PLS02,PMS01,POS01,POS02,POS03,PWAZL01,SBP01,SBP02,SBP03,SHL01,SHP01", "operationGroupId": "P", "itemId": "ALL", "debugMode": "N"}`
+- AS-IS 인자(번역): `{"p_division_id": "82", "p_plant_site_id": "", "p_line_id": "AZL01,AZP01,AZPL01,AZPL02,C1D01,C1D01x,C1P01,C1P02,C1P03,C1P04,C1P05,C1P06,C1P07,C1P08,C1P09,C1P10,C1P11,C1P12,C1P13,C1R01,CHP01,CHP02,CHP03,CHP04,K2B01,K2B02,K2D01,K2P05,K2P06,K2P11,K2P12,K2P13,K2P15,K2P16,K2P17,K2R01,K3D01,PLS01,PLS02,PMS01,POS01,POS02,POS03,PWAZL01,SBP01,SBP02,SBP03,SHL01,SHP01", "p_operation_group_id": "P", "p_item_id": "", "debug_mode": ""}` · 번역 메모: p_plant_site_id: 'ALL'→''(all_semantics: 빈 값 = 전체) · p_item_id: 'ALL'→''(all_semantics: 빈 값 = 전체)
+- SKIP: 인자 미해결(UNRESOLVED): debug_mode — param_map.csv 에 값/대응 지정

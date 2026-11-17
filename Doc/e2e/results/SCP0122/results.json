@@ -6,7 +6,7 @@
       "test",
       "SCP0122",
       "--grep",
-      "@authcrud"
+      "@smoke"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -111,47 +111,51 @@
   },
   "suites": [
     {
-      "title": "SCP0122.authcrud.spec.ts",
-      "file": "SCP0122.authcrud.spec.ts",
+      "title": "SCP0122.smoke.spec.ts",
+      "file": "SCP0122.smoke.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "SCP0122 권한별 CRUD @authcrud [jooyong026 ADMIN/GUEST/SSP Planner]",
-          "file": "SCP0122.authcrud.spec.ts",
-          "line": 14,
-          "column": 8,
+          "title": "SCP0122 PlanActivityMgmt 스모크 @smoke",
+          "file": "SCP0122.smoke.spec.ts",
+          "line": 9,
+          "column": 6,
           "specs": [
             {
-              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
               "ok": true,
               "tags": [
-                "authcrud"
+                "smoke"
               ],
               "tests": [
                 {
-                  "timeout": 540000,
+                  "timeout": 180000,
                   "annotations": [
                     {
-                      "type": "authcrud",
-                      "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=EDIT|SEARCH|SAVE|DELETE|INSERT dataset=ADMIN matrix=-"
+                      "type": "console",
+                      "description": "열림 직후 오류 39(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
-                      "type": "cascade",
-                      "description": "jooyong026 div=40 선택=true 후보=[81,40,82,81_UC,EE_UC,81_HM,EE_HM,81_ST,EE_ST,81_HD,EE_HD,81_HG,EE_HG] 권한=[EE_ST,EE_UC,EE_HM,EE_HG,EE_HD,82,81_UC,81_ST,81_HM,81_HG,81_HD,81,40] 권한밖=0 대표포함=true 연동=-"
+                      "type": "labels",
+                      "description": "펼침=false 일치 3 / 누락 0"
                     },
                     {
-                      "type": "crud",
-                      "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 필수 칸 채움(T166): OPMZ_ACTV_SEQ=8, OPMZ_ACTV_NAME=Master Validation · 마커 저장 응답: main/SAVE:200 요청={\"activeFlag\":\"I\",\"prsCd\":\"P001\",\"planGrId\":\"PG0014\",\"actvCd\":\"A001\",\"actvSeq\":\"8\",\"preActvCd\":\"\",\"userId\":\"jooyong026\"} 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DA | main/SEARCH:200 알림=성공적으로 저장되었습니다."
+                      "type": "console",
+                      "description": "오류 42(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
-                      "type": "authcrud",
-                      "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=true found=true cleaned=true restored=true"
+                      "type": "columns",
+                      "description": "시트 Plan Activity Mgmt(main) 헤더 11 / 기대 11 / 누락 0: "
                     },
                     {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "type": "calls",
+                      "description": "[[\"main\",\"SEARCH\",200,8,939]]"
+                    },
+                    {
+                      "type": "i18n",
+                      "description": "'_' 노출 0"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -162,32 +166,36 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 71891,
+                      "duration": 5138,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T13:04:44.926Z",
+                      "startTime": "2026-11-14T08:09:17.466Z",
                       "annotations": [
                         {
-                          "type": "authcrud",
-                          "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=EDIT|SEARCH|SAVE|DELETE|INSERT dataset=ADMIN matrix=-"
+                          "type": "console",
+                          "description": "열림 직후 오류 39(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
-                          "type": "cascade",
-                          "description": "jooyong026 div=40 선택=true 후보=[81,40,82,81_UC,EE_UC,81_HM,EE_HM,81_ST,EE_ST,81_HD,EE_HD,81_HG,EE_HG] 권한=[EE_ST,EE_UC,EE_HM,EE_HG,EE_HD,82,81_UC,81_ST,81_HM,81_HG,81_HD,81,40] 권한밖=0 대표포함=true 연동=-"
+                          "type": "labels",
+                          "description": "펼침=false 일치 3 / 누락 0"
                         },
                         {
-                          "type": "crud",
-                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 필수 칸 채움(T166): OPMZ_ACTV_SEQ=8, OPMZ_ACTV_NAME=Master Validation · 마커 저장 응답: main/SAVE:200 요청={\"activeFlag\":\"I\",\"prsCd\":\"P001\",\"planGrId\":\"PG0014\",\"actvCd\":\"A001\",\"actvSeq\":\"8\",\"preActvCd\":\"\",\"userId\":\"jooyong026\"} 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"o_result_cursor\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DA | main/SEARCH:200 알림=성공적으로 저장되었습니다."
+                          "type": "console",
+                          "description": "오류 42(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
-                          "type": "authcrud",
-                          "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=true found=true cleaned=true restored=true"
+                          "type": "columns",
+                          "description": "시트 Plan Activity Mgmt(main) 헤더 11 / 기대 11 / 누락 0: "
                         },
                         {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "type": "calls",
+                          "description": "[[\"main\",\"SEARCH\",200,8,939]]"
+                        },
+                        {
+                          "type": "i18n",
+                          "description": "'_' 노출 0"
                         }
                       ],
                       "attachments": []
@@ -196,48 +204,44 @@
                   "status": "expected"
                 }
               ],
-              "id": "66843d9bdbf38d17f089-c29c8f3676656c42e047",
-              "file": "SCP0122.authcrud.spec.ts",
-              "line": 17,
-              "column": 9
-            }
-          ]
-        },
-        {
-          "title": "SCP0122 권한별 CRUD @authcrud [dana.robot SCP Planner]",
-          "file": "SCP0122.authcrud.spec.ts",
-          "line": 14,
-          "column": 8,
-          "specs": [
+              "id": "0596036a0ecff0707a07-e551938f493e021b737d",
+              "file": "SCP0122.smoke.spec.ts",
+              "line": 11,
+              "column": 7
+            },
             {
-              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
+              "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
               "ok": true,
               "tags": [
-                "authcrud"
+                "smoke"
               ],
               "tests": [
                 {
-                  "timeout": 540000,
+                  "timeout": 1200000,
                   "annotations": [
                     {
-                      "type": "authcrud",
-                      "description": "tobeGroups=SCP Planner menuAccess=N expected= dataset=SCP Planner matrix=-"
+                      "type": "cond",
+                      "description": "[OK] (기준 조회)(search) — call-proc 1"
                     },
                     {
-                      "type": "gap",
-                      "description": "메뉴 권한(user_group_menu) 없는 계정이 /view/SCP0122 직접 접근으로 열림"
+                      "type": "cond",
+                      "description": "[OK] Plan Group(combo) — 옵션 '18650_OC' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
-                      "type": "cascade",
-                      "description": "dana.robot div=40 선택=false 후보=[] 권한=[?] 권한밖=0 대표포함=null 연동=- 비고=Division 콤보 칸을 찾지 못함(라벨 Div/Div./Division)"
+                      "type": "cond",
+                      "description": "[WARN] Process(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
                     },
                     {
-                      "type": "crud",
-                      "description": "mode=no-save save=N insert=N delete=N editable=- inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 판정불가"
+                      "type": "cond",
+                      "description": "[OK] Division(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
-                      "type": "authcrud",
-                      "description": "dana.robot div=40 mode=no-save save=false insert=false delete=false editable=null saved=false found=false cleaned=true restored=true"
+                      "type": "cond",
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → plangroup → process"
+                    },
+                    {
+                      "type": "condsum",
+                      "description": "3/4 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -248,32 +252,36 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 134102,
+                      "duration": 12987,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T13:05:59.279Z",
+                      "startTime": "2026-11-14T08:09:25.104Z",
                       "annotations": [
                         {
-                          "type": "authcrud",
-                          "description": "tobeGroups=SCP Planner menuAccess=N expected= dataset=SCP Planner matrix=-"
+                          "type": "cond",
+                          "description": "[OK] (기준 조회)(search) — call-proc 1"
                         },
                         {
-                          "type": "gap",
-                          "description": "메뉴 권한(user_group_menu) 없는 계정이 /view/SCP0122 직접 접근으로 열림"
+                          "type": "cond",
+                          "description": "[OK] Plan Group(combo) — 옵션 '18650_OC' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
-                          "type": "cascade",
-                          "description": "dana.robot div=40 선택=false 후보=[] 권한=[?] 권한밖=0 대표포함=null 연동=- 비고=Division 콤보 칸을 찾지 못함(라벨 Div/Div./Division)"
+                          "type": "cond",
+                          "description": "[WARN] Process(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
                         },
                         {
-                          "type": "crud",
-                          "description": "mode=no-save save=N insert=N delete=N editable=- inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 판정불가"
+                          "type": "cond",
+                          "description": "[OK] Division(combo) — 옵션 '81 Automotive Battery' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
-                          "type": "authcrud",
-                          "description": "dana.robot div=40 mode=no-save save=false insert=false delete=false editable=null saved=false found=false cleaned=true restored=true"
+                          "type": "cond",
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → plangroup → process"
+                        },
+                        {
+                          "type": "condsum",
+                          "description": "3/4 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                         }
                       ],
                       "attachments": []
@@ -282,10 +290,160 @@
                   "status": "expected"
                 }
               ],
-              "id": "66843d9bdbf38d17f089-b573acdefb60932e33c8",
-              "file": "SCP0122.authcrud.spec.ts",
-              "line": 17,
-              "column": 9
+              "id": "0596036a0ecff0707a07-528c680a953b962f053c",
+              "file": "SCP0122.smoke.spec.ts",
+              "line": 106,
+              "column": 7
+            },
+            {
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 8"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 5개 중 기간 키 0 (divisionId, planGroupId, planGroupName, prsCd, prsName)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 3개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Excel 다운로드(common) — 'PlanActivityMgmt_20261114_051000.xlsx' 6508B"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T08:09:40.799Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 8"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 5개 중 기간 키 0 (divisionId, planGroupId, planGroupName, prsCd, prsName)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 3개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Excel 다운로드(common) — 'PlanActivityMgmt_20261114_051000.xlsx' 6508B"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0596036a0ecff0707a07-bfc45d26dcd8a6ac8a1c",
+              "file": "SCP0122.smoke.spec.ts",
+              "line": 115,
+              "column": 7
             }
           ]
         }
@@ -294,9 +452,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-08T13:04:44.567Z",
-    "duration": 212101.016,
-    "expected": 2,
+    "startTime": "2026-11-14T08:09:16.808Z",
+    "duration": 46560.804,
+    "expected": 3,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

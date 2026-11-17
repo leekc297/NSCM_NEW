@@ -63,7 +63,8 @@ v_seg := '"' || r.COLUMN_NAME || '"';
 v_seg := 'NVL(CAST("' || r.COLUMN_NAME || '" AS NUMBER(5,2)), 0) AS "' || r.COLUMN_NAME || '"';
 
 -- ✅ VARCHAR 컬럼
-v_seg := 'NVL("' || r.COLUMN_NAME || '", ''-'') AS "' || r.COLUMN_NAME || '"';
+-- (2026-11-13 정정: 대체값 '-' → '/' — 2026-10-15 센티널 개정, hook oracle-null-sentinel-and-notnull-default §0.5)
+v_seg := 'NVL("' || r.COLUMN_NAME || '", ''/'') AS "' || r.COLUMN_NAME || '"';
 
 -- ✅ DATE 컬럼 (필요 시)
 v_seg := 'NVL("' || r.COLUMN_NAME || '", DATE ''1900-01-01'') AS "' || r.COLUMN_NAME || '"';
@@ -133,7 +134,7 @@ NVL 적용 후 **NULL (미등록)** 과 **0 (등록된 0 값)** 시각 구분 �
 
 → 화면 비즈니스 의미 검토 후 NVL 의 default 값 결정. 일반적으로:
 - 숫자 컬럼: `NVL(..., 0)`
-- 코드/string 컬럼: `NVL(..., '-')`
+- 코드/string 컬럼: `NVL(..., '/')` (11-13 정정 — 원래 `'-'` 인 기존 데이터는 유지)
 - 날짜: `NVL(..., DATE '1900-01-01')`
 
 ---
@@ -166,4 +167,4 @@ First row dynamic col NULL count:
 - `sp-no-fake-data-extraction.md` — SP 데이터 추출 시 정밀 작업
 - `oracle-db-workflow.md` — Oracle 작업 전반 진입점
 - `anti-simplification.md` — DDL/SP body 추측 금지
-- 메모리 `feedback_be_no_modification_rule.md` — BE 변경 금지 정책 안에서 SP fix 우선
+- 메모리 `feedback_be_no_modification_rule.md` — BE 변경 금지 정책 안에서 SP fix 우선 (2026-11-13 정정: BE 직접 수정 여부는 작업 모드 `tools/Harness/harness.json` repairScope 를 따른다 — UI/DB MODE(DB_FE) 직접 수정 / DB MODE(DB_ONLY) 가이드만(실행 hook `check-work-mode`). 보완은 DB 객체(SP) 우선 — CLAUDE.md §1-8)

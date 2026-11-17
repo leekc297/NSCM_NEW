@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+OWNER,,,ALL,ROW,"MessageHelper.GMessageBox(""MSG00098"", new object[] { MessageHelper.GetTerm(""Language"") })","else of (siMain40.IsLock(siMain40.SheetName)) ▸ if (siMain40.GetText(e.Row, siMain40.GetColumnIndex(DefColumns40.EditFlag)) == ""Y"" || siMain40.GetText(e.Row, siMain40.GetCo…)",DM0005_SaleSite_PjtModelMappingTest98.cs:2453 DM0005_SaleSite_PjtModelMappingTest98.spdMain40_CellDoubleClick

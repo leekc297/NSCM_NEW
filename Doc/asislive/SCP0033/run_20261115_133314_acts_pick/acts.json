@@ -1,0 +1,105 @@
+{
+ "id": "SCP0033",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "새 행 · 열 ITEM_ID",
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_ItembyDivisionPopup",
+    "rows": 156657,
+    "note": "값 채운 뒤 다시 누름 · 기록 후 닫음"
+   },
+   "picked": null,
+   "scenarios": [
+    "SCP0033-Sc6b25a"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [
+    {
+     "text": "Division을(를) 선택하십시오.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "retry_fill": {
+    "ok": true,
+    "col": "DIVISION_ID",
+    "value": "40",
+    "after": "40 Mobility & IT Battery",
+    "how": "SetValue",
+    "error": null
+   },
+   "retry": {
+    "ok": true,
+    "error": null,
+    "popups": [
+     {
+      "form": "SCM0002_ItembyDivisionPopup",
+      "rows": 156657
+     }
+    ],
+    "calls": [
+     "SCM0001_GET_DIVISION",
+     "SCM0001_GET_SITE_BY_DIVISION",
+     "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+    ],
+    "dialogs": []
+   }
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:32:03",
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "ids": [
+    "SCP0033-Sc6b25a"
+   ],
+   "has_else": false,
+   "single": true
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Semi Dept Day": [
+     0
+    ]
+   }
+  }
+ ]
+}

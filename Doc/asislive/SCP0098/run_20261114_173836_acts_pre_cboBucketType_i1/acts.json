@@ -1,0 +1,247 @@
+{
+ "id": "SCP0098",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0098_GET_CAPA_MobilityIT"
+   ],
+   "rows": [
+    [
+     "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     475
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     18
+    ],
+    [
+     "SCP0098_GET_CAPA_MobilityIT",
+     1973
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0098-S7d95f9",
+    "SCP0098-S69448c",
+    "SCP0098-S8271f9",
+    "SCP0098-S5a1a8f",
+    "SCP0098-S67bbf1",
+    "SCP0098-S96bd28",
+    "SCP0098-S7a38e2",
+    "SCP0098-Sc684ba",
+    "SCP0098-S346303",
+    "SCP0098-Sede481",
+    "SCP0098-Sb78694",
+    "SCP0098-S1fcfe9",
+    "SCP0098-Sd30886",
+    "SCP0098-S08419d",
+    "SCP0098-Sff37b8",
+    "SCP0098-S342ef7",
+    "SCP0098-Sa30a83",
+    "SCP0098-S1877c9",
+    "SCP0098-S7b3573"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0098-S8d6699",
+    "SCP0098-S5d8aa7",
+    "SCP0098-S85a77c",
+    "SCP0098-S622c29",
+    "SCP0098-S44cfba",
+    "SCP0098-S139c28",
+    "SCP0098-S86399f",
+    "SCP0098-S7ed194",
+    "SCP0098-Sfaa454",
+    "SCP0098-S6aa31a",
+    "SCP0098-S8ca17f",
+    "SCP0098-S310202",
+    "SCP0098-S63c1ac",
+    "SCP0098-S83e171",
+    "SCP0098-S8ac070",
+    "SCP0098-S235118",
+    "SCP0098-Sa93ff1",
+    "SCP0098-S368c97",
+    "SCP0098-Sf2db85"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 29575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0098-Sea1449",
+    "SCP0098-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0098-S7d95f9",
+    "SCP0098-S69448c",
+    "SCP0098-S8271f9",
+    "SCP0098-S5a1a8f"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "rbOpt1",
+   "ok": false,
+   "error": "InvalidOperationException: click:rbOpt1 failed: InvalidOperationException: control not found: rbOpt1",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0098-S3e1173"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "rbOpt2",
+   "ok": false,
+   "error": "InvalidOperationException: click:rbOpt2 failed: InvalidOperationException: control not found: rbOpt2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0098-See437a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnCopyData",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 10
+  }
+ ],
+ "at": "2026-11-14 17:36:06.189",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i1",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "1"
+  },
+  "label": "cboBucketType 콤보 1번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:1:Weekly",
+  "value": "WEEKLY",
+  "text": "Weekly",
+  "checked": null,
+  "selected_index": 1
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

@@ -1,0 +1,209 @@
+[
+ {
+  "row_id": "V-500719ff",
+  "rule_id": "A5",
+  "target": "SSP0060 화면",
+  "same": [
+   "T-3b6b3ca6"
+  ]
+ },
+ {
+  "row_id": "V-17898347",
+  "rule_id": "F6",
+  "target": "SSP0060 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-71580525",
+  "rule_id": "I1",
+  "target": "SSP0060 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-6ffc13c4",
+  "rule_id": "F1",
+  "target": "SSP0060 컬럼별 저장 왕복",
+  "same": []
+ },
+ {
+  "row_id": "V-23552254",
+  "rule_id": "F6",
+  "target": "SSP0060 빈값 저장",
+  "same": []
+ },
+ {
+  "row_id": "V-4b42cf06",
+  "rule_id": "F6",
+  "target": "SSP0060 0 값 저장",
+  "same": []
+ },
+ {
+  "row_id": "V-dee9ca2c",
+  "rule_id": "F10",
+  "target": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "same": []
+ },
+ {
+  "row_id": "V-8533dfea",
+  "rule_id": "F10",
+  "target": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "same": []
+ },
+ {
+  "row_id": "V-542960bd",
+  "rule_id": "B6",
+  "target": "조회조건 Company",
+  "same": []
+ },
+ {
+  "row_id": "V-c169ea6c",
+  "rule_id": "H1",
+  "target": "Request Info.CONFIRM_ID (Confirm/Plan ID)",
+  "same": [
+   "V-810661da"
+  ]
+ },
+ {
+  "row_id": "V-c2145116",
+  "rule_id": "M3",
+  "target": "new SCM0002_TitleSetForm_Popup(\"SSP0060\", shtName, false)",
+  "same": []
+ },
+ {
+  "row_id": "V-337977ae",
+  "rule_id": "M3",
+  "target": "new SCM0002_ItembyDivisionPopup()",
+  "same": [
+   "V-7acfe98c"
+  ]
+ },
+ {
+  "row_id": "T-394ac258",
+  "rule_id": "M4",
+  "target": "ITEM_ID / Model",
+  "same": []
+ },
+ {
+  "row_id": "T-dfd290a7",
+  "rule_id": "M4",
+  "target": "ERP_SO_NO / SO No",
+  "same": [
+   "T-c4ffcb56",
+   "T-3e903752",
+   "T-19c5db85",
+   "T-e9c26091",
+   "T-4d180528",
+   "T-f5e8d2af",
+   "T-57d48d9f",
+   "T-8d062548"
+  ]
+ },
+ {
+  "row_id": "T-b27c680c",
+  "rule_id": "M4",
+  "target": "PROJECT_CODE / Project Code",
+  "same": []
+ },
+ {
+  "row_id": "T-3515484b",
+  "rule_id": "M4",
+  "target": "NICK_NAME / Nick Name",
+  "same": []
+ },
+ {
+  "row_id": "T-a94eb0c9",
+  "rule_id": "C1",
+  "target": "cboPlanDate / Plan-date / Plan Date",
+  "same": []
+ },
+ {
+  "row_id": "T-1ea292e3",
+  "rule_id": "M4",
+  "target": "PROJECT_NAME / Project Name",
+  "same": []
+ },
+ {
+  "row_id": "EG-f0cdd5e6",
+  "rule_id": "M3",
+  "target": "SSP0060 팝업 SCM0002_ItembyDivisionPopup CELL:ITEM_ID OPEN",
+  "same": []
+ },
+ {
+  "row_id": "EG-176d4df9",
+  "rule_id": "J4",
+  "target": "SSP0060 EG382 직접 접근 SSP/40/SSP Viewer",
+  "same": []
+ },
+ {
+  "row_id": "EG-cdad3092",
+  "rule_id": "I2",
+  "target": "SSP0060 언어 전환 조회 버튼",
+  "same": []
+ },
+ {
+  "row_id": "T-3b6b3ca6",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-500719ff"
+ },
+ {
+  "row_id": "V-810661da",
+  "rule_id": "H1",
+  "target": "",
+  "folded_into": "V-c169ea6c"
+ },
+ {
+  "row_id": "V-7acfe98c",
+  "rule_id": "M3",
+  "target": "",
+  "folded_into": "V-337977ae"
+ },
+ {
+  "row_id": "T-c4ffcb56",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-3e903752",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-19c5db85",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-e9c26091",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-4d180528",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-f5e8d2af",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-57d48d9f",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ },
+ {
+  "row_id": "T-8d062548",
+  "rule_id": "M4",
+  "target": "",
+  "folded_into": "T-dfd290a7"
+ }
+]

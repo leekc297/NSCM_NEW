@@ -4,7 +4,7 @@
 
 ### 1.1 보호 브랜치
 
-- `main` — 운영 배포 (직접 push 금지, PR만)
+- `main` — 운영 배포 (직접 push 금지, PR만) (2026-11-13 정정: 사내 GitLab(nscm-fe · nscm-be) 저장소 한정 — 개인 백업 원격(`leekc297/NSCM_NEW`)은 main 에 BACKUP_ 커밋을 직접 올린다 · 룰 28)
 - `dev` — 개발 통합 (직접 push 금지, PR만)
 
 ### 1.2 작업 브랜치 명명 규칙
@@ -116,7 +116,7 @@ fix(admin): 사용자 목록 조회 시 SSO 정보 누락 수정
 
 ## 체크리스트
 - [ ] `pnpm lint` / `./gradlew spotlessApply` 통과
-- [ ] `pnpm type-check` 통과
+- [ ] `pnpm type-check` 통과 (11-13 정정: 위 lint·type-check 통과 기준은 유지 — AI 는 직접 실행 금지, 사용자 요청 시에만 `_artifacts/_tools/fe-check.ps1`, 미실행이면 PASS 가 아니라 미실행(ERROR) 보고 · §5.1 단서)
 - [ ] 기존 화면 패턴(예: user-management) 참조
 - [ ] 네이밍 규약 준수
 - [ ] CLAUDE.md 의 "절대 금지" 위반 없음
@@ -169,6 +169,8 @@ pnpm install            # 의존성 설치 (husky 자동 설정됨)
 pnpm gen                # i18n + 아이콘 생성
 pnpm local              # 로컬 개발 서버
 
+# (2026-11-13 정정: 이 블록의 pnpm install/local/build/lint:fix/type-check 는 사람 개발자용 — AI 는 직접 실행 금지(실행 hook .claude/hooks/block-dev-commands.ps1 차단).
+#  AI 는 변경 파일 목록만 보고, 사용자가 "타입체크/린트 해줘" 요청 시에만 _artifacts/_tools/fe-check.ps1 (type-check | lint | all) 사용. 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 보고)
 # 빌드 / 검증
 pnpm build
 pnpm lint:fix
@@ -198,7 +200,7 @@ cd nscm-be
 # application.yml (개발)
 spring:
   datasource:
-    url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+    url: jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD   # (2026-11-14 정정: 2026-06 구 접속 정보. 계정 SCMD_APP 도 그때 값. 현행 사내 DB 앱 계정은 SCMP_APP, 접속 값은 .env.asis)
     username: SCMD_APP
     password: ********
 ```

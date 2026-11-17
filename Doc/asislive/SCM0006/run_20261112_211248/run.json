@@ -1,0 +1,141 @@
+{
+ "id": "SCM0006",
+ "started": "2026-11-12 21:12:48.412",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:12:48.664",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCM.Master.UIL.SCM0006_Mail_Setup",
+   "form_text": "Mail Setup",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:12:53.205"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:12:56.733",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0006\\run_20261112_211248\\dump_load.json",
+   "control_count": 38,
+   "grid_count": 4,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:12:56.743"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:12:57.053",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0006\\run_20261112_211248\\shots\\SCM0006_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:12:57.293"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:12:57.633",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:12:58.595"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:13:28.688",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0006\\run_20261112_211248\\dump_find.json",
+   "control_count": 42,
+   "grid_count": 4,
+   "total": "Total : 44",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:28.728"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:13:28.901",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0006\\run_20261112_211248\\shots\\SCM0006_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:29.172"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:13:29.511",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:30.257"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 15,
+  "calls_with_params": 15
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCM.Master.UIL.SCM0006_Mail_Setup",
+  "form_text": "Mail Setup",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 21:12:48.617",
+ "t_find": "2026-11-12 21:12:57.329",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 42,
+  "layout_items": 10,
+  "grids": 4,
+  "sheets": 4,
+  "header_cols": 36,
+  "data_rows": 44,
+  "grid_rows": 44,
+  "calls_total": 15,
+  "calls_screen": 15,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:42.348",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:42"
+}

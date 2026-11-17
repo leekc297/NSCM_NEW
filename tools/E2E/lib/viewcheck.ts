@@ -18,7 +18,7 @@ export function judgeDivCols(s: { div: string; expect: Record<string, string>; v
   }
   if (!n) return { result: 'ERROR', why: `[측정 경로 없음] Div ${s.div} 판정할 기대 컬럼 없음` };
   if (miss.length || extra.length) return { result: 'FAIL', why: `Div ${s.div} 대조 ${n}컬럼 · 있어야 하는데 없음 ${miss.length}개 ${miss.slice(0, 6).join(',')} · 없어야 하는데 있음 ${extra.length}개 ${extra.slice(0, 6).join(',')}` };
-  return { result: 'PASS', why: `Div ${s.div} 대조 ${n}컬럼 일치${opt.length ? ` · 개인화 가능(TO-BE DEFAULT=Y·USER_SELECTABLE=Y) 컬럼 미표시 ${opt.length}개 ${opt.slice(0, 6).join(',')} — 사용자 설정(TITLESET)으로 뺀 것, 결함 아님` : ''}` };
+  return { result: 'PASS', why: `Div ${s.div} 대조 ${n}컬럼 일치${opt.length ? ` · 개인화 가능(TO-BE DEFAULT=Y·USER_SELECTABLE=Y) 컬럼 미표시 ${opt.length}개 ${opt.slice(0, 6).join(',')} — 사용자가 개인화로 뺄 수 있는 컬럼이라 미표시는 결함 기준 아님(미표시 원인 = 개인화·화면 코드 중 무엇인지는 이 검사가 가리지 않음)` : ''}` };  // 2026-11-16 SCP0104 SOP: '사용자 설정으로 뺀 것'이라고 단정했으나 실제 원인은 화면 코드(capaLineAssignColumns.ts:143~148)였음 — 원인을 단정하지 않는다
 }
 
 /** 조회조건 칸 겹침 — 1px 이내 맞닿음은 겹침 아님 */

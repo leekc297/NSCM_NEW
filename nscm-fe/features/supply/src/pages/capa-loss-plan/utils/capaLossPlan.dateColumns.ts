@@ -53,6 +53,18 @@ export const assignPriorityKeyOf = (columnName: string): string =>
   `${columnName}${ASSIGN_PRIORITY_SUFFIX}`;
 
 /**
+ * leaf 헤더 표기 — 2단 그룹이 연도(`2026`)라 월 컬럼은 `MM`(월만) 보인다(사용자 지시 2026-11-06).
+ * 월 컬럼(`M_01`+yyyymm)만 키 뒤 2자리로 줄이고, 연 컬럼(`Y_yyyy`) 등 그 외는 메타 라벨 그대로 둔다.
+ */
+const toLeafHeader = (columnName: string, label: string): string => {
+  if (columnName.startsWith(PERIOD_PREFIX.MONTH)) {
+    const key = toPeriodKey(columnName);
+    if (/^\d{6}$/.test(key)) return key.slice(4);
+  }
+  return label;
+};
+
+/**
  * `p_from_yyyymm` — 선택한 Plan Month(`VER_ID`, yyyyMM) **+1개월**(03 §2.1, V-11).
  * 그냥 Plan Month 를 넘기면 첫 달이 통째로 어긋난다.
  * Version 이 비었으면 빈 문자열을 돌려 호출부가 헤더 조회를 건너뛰게 한다.
@@ -146,15 +158,16 @@ export const buildPeriodColumns = (
     }
     sub.columns.push({
       binding: row.COLUMN_NAME,
-      header: String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME),
+      header: toLeafHeader(row.COLUMN_NAME, String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME)),
       align: 'right',
       width: columnWidth,
       allowDragging: false,
       // 수치 셀은 병합 대상이 아니다 — 좌측 키 컬럼만 병합한다(03 R-14).
       allowMerging: false,
       allowResizing: true,
-      // 우클릭 Filter/Sort/Hide 는 동작해야 한다(03 V-20). 기본 정렬만 막지 않는다.
-      allowSorting: true,
+      // 월 헤더에 상시 정렬표시(◆)를 띄우지 않는다 — 정적 컬럼과 동일하게 꺼진 채 시작한다(사용자
+      //   지시 2026-11-06). F3 정렬 토글은 그대로 동작한다(DataGrid gridAction.toggleColumnSort).
+      allowSorting: false,
       visible: true,
       _display: true,
       _dynamic: true,

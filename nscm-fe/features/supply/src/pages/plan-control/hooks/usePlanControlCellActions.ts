@@ -471,6 +471,9 @@ export const usePlanControlCellActions = ({
       const row = rowAt(grid, e.row);
       if (!row) return;
       const planId = str(row.OPMZ_PLAN_ID);
+      // 폴링 대상(engineRunContext)은 여기서 옮기지 않는다 — 옮겨 두면 이어서 Status 를 눌렀을 때 같은
+      //   조회 키라 하단 Status 가 다시 조회되지 않았다. 이전 Plan ID 폴링 결과가 이 행을 덮어쓰는 것은
+      //   usePlanControlPolling 의 Plan ID 일치 가드가 막는다.
       void (async () => {
         const res = await apiClient.callProc<MENU_ID, SHEETS.PLAN_CONTROL>(
           MENU_ID,
@@ -485,15 +488,22 @@ export const usePlanControlCellActions = ({
           }
         );
         if (res.code !== '0') return;
+        // 응답을 기다리는 사이 Plan ID 를 다시 바꿨으면 이 응답은 버린다 — 늦게 도착한 이전 Plan ID
+        //   응답이 새 Plan ID 행의 4컬럼을 덮어쓰지 않게 한다.
+        if (str(row.OPMZ_PLAN_ID) !== planId) return;
         const status = res.result?.[RESPONSE_SET.PLAN_CONTROL]?.[0];
-        // AS-IS cs:1303 은 `if (ds.Tables[0].Rows.Count > 0)` 가드 안에서만 SetValue 한다 — 0행이면
-        //   기존 4컬럼 값을 그대로 유지한다. 가드가 없으면 조회 0행에서 화면 값이 공백으로 지워진다.
-        if (!status) return;
-        row.OPMZ_ACTV_RUN_STAT_CD = str(status.OPMZ_ACTV_RUN_STAT_CD);
-        row.OPMZ_ACTV_RUN_STAT_NAME = str(status.OPMZ_ACTV_RUN_STAT_NAME);
-        row.LAST_UPDATE_DATE = str(status.LAST_UPDATE_DATE);
-        row.LAST_UPDATED_BY = str(status.LAST_UPDATED_BY);
-        grid.collectionView?.refresh();
+        // 0행(= 선택한 Plan ID 의 실행 이력 없음)이면 4컬럼을 공백으로 비운다. AS-IS cs:1303 은
+        //   `Rows.Count > 0` 가드로 기존 값을 유지하지만, TO-BE 에서 그대로 두면 이전 Plan ID 의
+        //   상태(E 등)가 새 Plan ID 행에 남아 미실행 Plan ID 의 Engine Run 이 B24 로 막혔다
+        //   (실사고 2026-11-09). AS-IS 화면도 미실행 Plan ID 는 공백으로 보인다.
+        row.OPMZ_ACTV_RUN_STAT_CD = str(status?.OPMZ_ACTV_RUN_STAT_CD);
+        row.OPMZ_ACTV_RUN_STAT_NAME = str(status?.OPMZ_ACTV_RUN_STAT_NAME);
+        row.LAST_UPDATE_DATE = str(status?.LAST_UPDATE_DATE);
+        row.LAST_UPDATED_BY = str(status?.LAST_UPDATED_BY);
+        // collectionView.refresh() 는 쓰지 않는다 — 방금 Plan ID 를 고친 행은 아직 편집 중(_edtItem)이라
+        //   Wijmo 가 refresh 를 다른 행으로 옮길 때까지 미뤄서, 빈 셀을 눌러야 값이 보였다.
+        //   invalidate 는 행 객체를 그대로 다시 그리므로 바로 보인다.
+        grid.invalidate();
       })();
     },
     [rowAt]

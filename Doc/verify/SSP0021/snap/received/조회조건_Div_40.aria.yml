@@ -1,0 +1,193 @@
+- paragraph: Shipment Plan(Auto & ESS)
+- text: Shipping Shipping Schedule Shipment Plan(Auto & ESS) Search Area
+- switch [checked]
+- button "Full screen"
+- text: Div*
+- combobox: 81 Automotive Battery
+- button "Open"
+- text: Company*
+- combobox: ESOC
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: Bucket
+- combobox: Daily
+- button "Open"
+- text: Plan Date*
+- combobox: {DATE}
+- button "Open"
+- img
+- text: Period
+- textbox "YYYY.MM.DD" [disabled]: 2026.09.19
+- text: ~
+- textbox "YYYY.MM.DD" [disabled]: 2026.11.13
+- text: Model/Nickname
+- textbox
+- button
+- button "Search(F5)"
+- button
+- separator
+- checkbox "Sum"
+- text: Sum
+- paragraph
+- button "Measure":
+  - img
+- button "Insert(F8)"
+- button "Delete(F9)"
+- button "Save(F7)":
+  - img
+  - text: Save(F7)
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- grid:
+  - rowgroup:
+    - row "Div From Site Model Nick Name BOH PSI Measure {DATE} No":
+      - columnheader "Div"
+      - columnheader "From Site"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "BOH"
+      - columnheader "PSI"
+      - columnheader "Measure"
+      - columnheader "{DATE}"
+      - gridcell "No"
+    - row "{W} {W} {W}":
+      - columnheader "{W}"
+      - columnheader "{W}"
+      - columnheader "{W}"
+    - row "19 20 21 22 23 24 25 26 27 28 29 30":
+      - columnheader "19"
+      - columnheader "20"
+      - columnheader "21"
+      - columnheader "22"
+      - columnheader "23"
+      - columnheader "24"
+      - columnheader "25"
+      - columnheader "26"
+      - columnheader "27"
+      - columnheader "28"
+      - columnheader "29"
+      - columnheader "30"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- separator
+- img
+- text: Shipment Date
+- textbox "YYYY.MM.DD": 2026.09.19
+- text: ~
+- textbox "YYYY.MM.DD": 2026.11.13
+- text: Model/Nickname
+- textbox: FMC-HEVC
+- button
+- text: Requestor
+- textbox
+- button
+- button "Search"
+- button "Shipment Plan Detail"
+- button "Stock Location Detail"
+- button "oWMS Detail"
+- button "MES Stock"
+- button "MES Stock Detail"
+- button "Shipment Result"
+- grid:
+  - rowgroup:
+    - row "Div Status SO No Confirm/Plan ID Model Nick Name From Site To Site Project Code Project Name End Customer MKT Owner Team Shipment Requestor Shipment Qty No":
+      - columnheader "Div"
+      - columnheader "Status"
+      - columnheader "SO No"
+      - columnheader "Confirm/Plan ID"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Project Code"
+      - columnheader "Project Name"
+      - columnheader "End Customer"
+      - columnheader "MKT Owner"
+      - columnheader "Team"
+      - columnheader "Shipment Requestor"
+      - columnheader "Shipment Qty"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "0 Sum":
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell "0"
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell
+    - gridcell "Sum"
+    - gridcell
+  - row "Sum 0"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 22:37:30
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 22:37:30
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+# visual-order: Div > Company > From Site > Bucket > Plan Date > Period > Period > Model/Nickname > Sum > Shipment Date > Model/Nickname

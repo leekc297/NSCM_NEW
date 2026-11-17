@@ -1,0 +1,864 @@
+{
+ "id": "SCM0007",
+ "from": "dump_find.json",
+ "total": "Total : 34",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "Category",
+   "path": "/splitContainer1/SplitterPanel/Category",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Category",
+     "rows": 34,
+     "cols": 10,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "USE_TYPE_CODE",
+        "USE_TYPE_CODE"
+       ],
+       "label": "USE_TYPE_CODE",
+       "tag": "USE_TYPE_CODE",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "use_type_code",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Module*",
+        "Module*"
+       ],
+       "label": "Module*",
+       "tag": "MODULE_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "module_code",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Sub Module*",
+        "Sub Module*"
+       ],
+       "label": "Sub Module*",
+       "tag": "SUB_MODULE_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "sub_module_code",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "",
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATEGORY_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "category_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Category*",
+        "Category*"
+       ],
+       "label": "Category*",
+       "tag": "CATEGORY_DESC",
+       "width": "300",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "category_desc",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Active",
+        "Active"
+       ],
+       "label": "Active",
+       "tag": "ACTIVE_FLAG",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "active_flag",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Period",
+        "Main*"
+       ],
+       "label": "Main*",
+       "tag": "CYCLE_CLASS_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "cycle_class_code",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Period",
+        "Sub1"
+       ],
+       "label": "Sub1",
+       "tag": "DETAIL_CLASS_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "detail_class_code",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Period",
+        "Sub2"
+       ],
+       "label": "Sub2",
+       "tag": "SEND_TIME_TEXT",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "send_time_text",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 34,
+     "data": [
+      [
+       "",
+       "",
+       "COMMON",
+       "COMMON",
+       "21",
+       "Batch Job Error",
+       "Y",
+       "일 1회",
+       "9시",
+       ""
+      ],
+      [
+       "",
+       "",
+       "COMMON",
+       "COMMON",
+       "69",
+       "Error Process Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "COMMON",
+       "COMMON",
+       "70",
+       "Long Time Process Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "64",
+       "Customer Master (Soldto, Shipto) Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "102",
+       "DM Checked Beforehand",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "103",
+       "DM JOB ERROR Checked",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "98",
+       "MDF To DM Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "105",
+       "MKT FCST WEEKLY CUTOFF",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "62",
+       "Project DV Master Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "63",
+       "Project Item Mapping Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "61",
+       "Project Master Batch (BPMS) Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "66",
+       "Sales Result Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "65",
+       "SD0069 EDI Call off Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "73",
+       "Stock Sales Batch Error",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "DM",
+       "DM",
+       "79",
+       "VMI실적 BATCH ERROR",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SCP",
+       "SCP",
+       "104",
+       "NPP0220 Not Running Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SCP",
+       "SCP",
+       "18",
+       "Plan Mng End Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SCP",
+       "SCP",
+       "20",
+       "Plan Mng Err Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SCP",
+       "SCP",
+       "17",
+       "Plan Mng start Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SCP",
+       "SCP",
+       "60",
+       "SCP-ERP,FP I/F Data Check",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "55",
+       "Create Shipment Request End Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "54",
+       "Create Shipment Request Error Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "53",
+       "Create Shipment Request Start Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "46",
+       "Daily Confrim Batch End Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "45",
+       "Daily Confrim Batch Error Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "44",
+       "Daily Confrim Batch Start Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "58",
+       "Daily Plan Cutoff End Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "57",
+       "Daily Plan Cutoff Error Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "56",
+       "Daily Plan Cutoff Start Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "106",
+       "Daily Plan Delay Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "51",
+       "Daily Plan End Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "52",
+       "Daily Plan Error Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "50",
+       "Daily Plan Start Message",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ],
+      [
+       "",
+       "",
+       "SSP",
+       "SSP",
+       "67",
+       "I/F Data Check",
+       "Y",
+       "Real Time",
+       "Real Time",
+       ""
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Message",
+   "path": "/splitContainer1/SplitterPanel/tabControl1/tabPage1/Message",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Message",
+     "rows": 0,
+     "cols": 6,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "USE_TYPE_CODE"
+       ],
+       "label": "USE_TYPE_CODE",
+       "tag": "USE_TYPE_CODE",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "USE_TYPE_CODE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATEGORY_ID",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CATEGORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATEGORY_DESC",
+       "width": "300",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CATEGORY_DESC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Language*"
+       ],
+       "label": "Language*",
+       "tag": "LANGUAGE_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LANGUAGE_CODE",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 5,
+       "header": [
+        "SMS Content*"
+       ],
+       "label": "SMS Content*",
+       "tag": "MESSAGE_CONTENT",
+       "width": "400",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MESSAGE_CONTENT",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "All_Receiver",
+   "path": "/splitContainer1/SplitterPanel/tabControl1/tabPage2/splitContainer2/SplitterPanel/All_Receiver",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": false,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "All_Receiver",
+     "rows": 0,
+     "cols": 3,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Group Name*"
+       ],
+       "label": "Group Name*",
+       "tag": "SMS_GROUP_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SMS_GROUP_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Cell Phone*"
+       ],
+       "label": "Cell Phone*",
+       "tag": "SMS_PHONE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SMS_PHONE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "Sel_Receiver",
+   "path": "/splitContainer1/SplitterPanel/tabControl1/tabPage2/splitContainer2/SplitterPanel/Sel_Receiver",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": false,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Sel_Receiver",
+     "rows": 0,
+     "cols": 4,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Category"
+       ],
+       "label": "Category",
+       "tag": "CATEGORY_ID",
+       "width": "200",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CATEGORY_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Group Name"
+       ],
+       "label": "Group Name",
+       "tag": "SMS_GROUP_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "SMS_GROUP_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Cell Phone"
+       ],
+       "label": "Cell Phone",
+       "tag": "SMS_PHONE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SMS_PHONE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

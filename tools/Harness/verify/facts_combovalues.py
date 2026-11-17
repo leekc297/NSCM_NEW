@@ -38,7 +38,7 @@ def main():
         params = {}
         for r in rows:
             sp, var = (r.get('sp') or '').strip(), (r.get('var') or '').strip()
-            if not sp or sp in ('STATIC',) or sp.startswith('DM_BIGFILTER') or not var:
+            if not sp or sp in ('STATIC',) or sp.startswith(('DM_BIGFILTER', 'SSP_BIGFILTER')) or not var:
                 continue
             try:
                 args = json.loads(r.get('args') or '[]')

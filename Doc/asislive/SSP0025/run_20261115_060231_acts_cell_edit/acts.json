@@ -1,0 +1,212 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": true,
+ "acts": [
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-S5588d6",
+    "SSP0025-Sdd395e",
+    "SSP0025-S5998ab",
+    "SSP0025-Sfdd457",
+    "SSP0025-Sc9dc74"
+   ]
+  },
+  {
+   "control": "spdMain[SITE_DESCRIPTION]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-S5588d6",
+    "SSP0025-Sdd395e",
+    "SSP0025-S5998ab",
+    "SSP0025-Sfdd457",
+    "SSP0025-Sc9dc74"
+   ]
+  },
+  {
+   "control": "spdMain[ITEM_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-S5588d6",
+    "SSP0025-Sdd395e",
+    "SSP0025-S5998ab",
+    "SSP0025-Sfdd457",
+    "SSP0025-Sc9dc74"
+   ]
+  },
+  {
+   "control": "spdMain[USER_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ]
+  },
+  {
+   "control": "spdMain[PART_LEADER]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ]
+  },
+  {
+   "control": "spdMain[TEAM_LEADER]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 16,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 06:00:17",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true,
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 5,
+   "named_cols": [
+    "DIVISION_ID",
+    "SITE_DESCRIPTION",
+    "ITEM_ID"
+   ],
+   "used": [
+    "DIVISION_ID",
+    "SITE_DESCRIPTION",
+    "ITEM_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  },
+  {
+   "kind": "dbl",
+   "scenarios": 6,
+   "named_cols": [
+    "USER_ID",
+    "PART_LEADER",
+    "TEAM_LEADER"
+   ],
+   "used": [
+    "USER_ID",
+    "PART_LEADER",
+    "TEAM_LEADER"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

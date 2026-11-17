@@ -1,0 +1,1219 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_detail",
+   "target": "spdDetail/Shipment Plan Detail",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0002_GET_USER_INFO_LIST",
+    "SSP0002_GET_USER_INFO_LIST"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdDetail/Shipment Plan Detail",
+     "rows_before": 5,
+     "rows_after": 6,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "ERP_SO_NO",
+       "before": "1200022661",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SHIPMENT_STATUS",
+       "before": "Confirm",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REMARKS",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "Expected_Shipping_Date",
+       "before": "2026-10-12",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ERP_STATUS",
+       "before": "C",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDIT_MAIN",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "MERGE_NUM",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ERP_SO_NO",
+       "before": "1200022660",
+       "after": "1200022661"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_ID",
+       "before": "C20261007211126",
+       "after": "C20261007211127"
+      },
+      {
+       "row": 1,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 1,
+       "col": "GAP",
+       "before": "1,861,449.000",
+       "after": "1,864,689.000"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_QTY_ROLL_LENGTH",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 1,
+       "col": "PACKAGE_QTY",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 1,
+       "col": "REMARKS2",
+       "before": "SHP2609-A325241",
+       "after": "SHP2609-A325330"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_QTY_PANCAKE",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_QTY_JR",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 1,
+       "col": "CONFIRM_QTY_CELL",
+       "before": "468,002.000",
+       "after": "464,762.000"
+      },
+      {
+       "row": 2,
+       "col": "ERP_SO_NO",
+       "before": "1200022659",
+       "after": "1200022660"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_ID",
+       "before": "C20261007211125",
+       "after": "C20261007211126"
+      },
+      {
+       "row": 2,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 2,
+       "col": "GAP",
+       "before": "1,865,341.000",
+       "after": "1,861,449.000"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_QTY_ROLL_LENGTH",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 2,
+       "col": "PACKAGE_QTY",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 2,
+       "col": "REMARKS2",
+       "before": "SHP2609-A325256",
+       "after": "SHP2609-A325241"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_QTY_PANCAKE",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_QTY_JR",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_QTY_CELL",
+       "before": "464,110.000",
+       "after": "468,002.000"
+      },
+      {
+       "row": 3,
+       "col": "ERP_SO_NO",
+       "before": "1200022658",
+       "after": "1200022659"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_ID",
+       "before": "C20261007211124",
+       "after": "C20261007211125"
+      },
+      {
+       "row": 3,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 3,
+       "col": "GAP",
+       "before": "1,863,942.000",
+       "after": "1,865,341.000"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_QTY_ROLL_LENGTH",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 3,
+       "col": "PACKAGE_QTY",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 3,
+       "col": "REMARKS2",
+       "before": "SHP2609-A325343",
+       "after": "SHP2609-A325256"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_QTY_PANCAKE",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_QTY_JR",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 3,
+       "col": "CONFIRM_QTY_CELL",
+       "before": "465,509.000",
+       "after": "464,110.000"
+      },
+      {
+       "row": 4,
+       "col": "ERP_SO_NO",
+       "before": "1200022657",
+       "after": "1200022658"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_ID",
+       "before": "C20261007211123",
+       "after": "C20261007211124"
+      },
+      {
+       "row": 4,
+       "col": "SHIPMENT_CONFIRM_QTY",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 4,
+       "col": "GAP",
+       "before": "1,862,383.000",
+       "after": "1,863,942.000"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_QTY_ROLL_LENGTH",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 4,
+       "col": "PACKAGE_QTY",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 4,
+       "col": "REMARKS2",
+       "before": "SHP2609-A325174",
+       "after": "SHP2609-A325343"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_QTY_PANCAKE",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_QTY_JR",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 4,
+       "col": "CONFIRM_QTY_CELL",
+       "before": "467,068.000",
+       "after": "465,509.000"
+      },
+      {
+       "row": 5,
+       "col": "(행)",
+       "before": "없음",
+       "after": "있음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "new_rows": {
+    "spdDetail/Shipment Plan Detail": [
+     0,
+     5
+    ]
+   },
+   "rows_before": 5,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 10:41:41.468",
+    "grid": "spdDetail",
+    "sheet_index": 0,
+    "sheet_name": "Shipment Plan Detail",
+    "sheet": "Shipment Plan Detail",
+    "rows_total": 6,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "DIVISION_ID",
+      "label": "Div",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "ERP_SO_NO",
+      "label": "PO No",
+      "data_field": "ERP_SO_NO",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "CONFIRM_ID",
+      "label": "Confirm/Plan ID",
+      "data_field": "CONFIRM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "SHIPMENT_STATUS",
+      "label": "Status",
+      "data_field": "SHIPMENT_STATUS",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "MODEL_ID",
+      "label": "Model",
+      "data_field": "MODEL_ID",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "MODEL_ID_NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "MODEL_ID_NICK_NAME",
+      "visible": "False"
+     },
+     {
+      "index": 7,
+      "tag": "ITEM_ID",
+      "label": "Material",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "ITEM_ID_NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "ITEM_ID_NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "TO_SITE_DESCRIPTION",
+      "label": "To Site",
+      "data_field": "TO_SITE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "DOM_EXP",
+      "label": "DOM/EXP.",
+      "data_field": "DOM_EXP",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "DAYOFWEEK_NAME",
+      "label": "Day",
+      "data_field": "DAYOFWEEK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "SHIPMENT_DATE",
+      "label": "Shipment Date*",
+      "data_field": "SHIPMENT_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "SHIPPING_PLAN_QTY",
+      "label": "Shipping Plan Qty",
+      "data_field": "SHIPPING_PLAN_QTY",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "SHIPMENT_CONFIRM_QTY",
+      "label": "Confirm Qty*",
+      "data_field": "SHIPMENT_CONFIRM_QTY",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "GAP",
+      "label": "Gap",
+      "data_field": "GAP",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "CONFIRM_QTY_ROLL_LENGTH",
+      "label": "Confirm Qty (Cut)",
+      "data_field": "CONFIRM_QTY_ROLL_LENGTH",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "PACKAGE_TYPE",
+      "label": "Package Type *",
+      "data_field": "PACKAGE_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "PACKAGE_QTY",
+      "label": "Package Qty",
+      "data_field": "PACKAGE_QTY",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "REMARKS2",
+      "label": "Shipment No.",
+      "data_field": "REMARKS2",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "REMARKS",
+      "label": "Remarks",
+      "data_field": "REMARKS",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "FACTORY_ID",
+      "label": "Building Desc.*",
+      "data_field": "FACTORY_ID",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "ELECTRODE_POST_OPER",
+      "label": "Post Oper.",
+      "data_field": "ELECTRODE_POST_OPER",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "TRANSPORT_MODE",
+      "label": "Trans Mode*",
+      "data_field": "TRANSPORT_MODE",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "CONFIRM_QTY_PANCAKE",
+      "label": "Confirm Qty (Pancake m)",
+      "data_field": "CONFIRM_QTY_PANCAKE",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "CONFIRM_QTY_JR",
+      "label": "Confirm Qty (Jumboroll m)",
+      "data_field": "CONFIRM_QTY_JR",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "CONFIRM_QTY_CELL",
+      "label": "Confirm Qty (Cell)",
+      "data_field": "CONFIRM_QTY_CELL",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "CELL_TYPE",
+      "label": "Cell Type",
+      "data_field": "CELL_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "FROM_SITE_DESCRIPTION",
+      "label": "From Site",
+      "data_field": "FROM_SITE_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "REQUESTOR",
+      "label": "Shipment Requestor",
+      "data_field": "REQUESTOR",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "REMARKS3",
+      "label": "Customer Requirement",
+      "data_field": "REMARKS3",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "CHANGE_REASON_CODE",
+      "label": "Change Reason",
+      "data_field": "CHANGE_REASON_CODE",
+      "visible": "False"
+     },
+     {
+      "index": 32,
+      "tag": "CHANGE_REASON_DETAIL",
+      "label": "Reason Detail",
+      "data_field": "CHANGE_REASON_DETAIL",
+      "visible": "False"
+     },
+     {
+      "index": 33,
+      "tag": "INCOTERMS",
+      "label": "Incoterms",
+      "data_field": "INCOTERMS",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "LT_DAY",
+      "label": "L/T(Day)",
+      "data_field": "LT_DAY",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "ETD",
+      "label": "ETD",
+      "data_field": "ETD",
+      "visible": "True"
+     },
+     {
+      "index": 36,
+      "tag": "ETA",
+      "label": "ETA",
+      "data_field": "ETA",
+      "visible": "True"
+     },
+     {
+      "index": 37,
+      "tag": "Expected_Shipping_Date",
+      "label": "Expected Shipping Date",
+      "data_field": "EXPECTED_SHIPPING_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 38,
+      "tag": "UPDATED_BY",
+      "label": "Updated By",
+      "data_field": "UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 39,
+      "tag": "UPDATED_DATE",
+      "label": "Updated Date",
+      "data_field": "UPDATED_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 40,
+      "tag": "CHANGE_REQ_NO",
+      "label": "Change Request No",
+      "data_field": "CHANGE_REQ_NO",
+      "visible": "True"
+     },
+     {
+      "index": 41,
+      "tag": "MODEL_USER",
+      "label": "Model PIC",
+      "data_field": "MODEL_USER",
+      "visible": "True"
+     },
+     {
+      "index": 42,
+      "tag": "FROM_SITE",
+      "label": "From Site ID",
+      "data_field": "FROM_SITE",
+      "visible": "False"
+     },
+     {
+      "index": 43,
+      "tag": "SOLDTO_DESCRIPTION",
+      "label": "Sold To Party",
+      "data_field": "SOLDTO_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 44,
+      "tag": "SHIPTO_DESCRIPTION",
+      "label": "Ship To Party",
+      "data_field": "SHIPTO_DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 45,
+      "tag": "TO_SITE",
+      "label": "To Site ID",
+      "data_field": "TO_SITE",
+      "visible": "False"
+     },
+     {
+      "index": 46,
+      "tag": "ERP_STATUS",
+      "label": "erp_status",
+      "data_field": "ERP_STATUS",
+      "visible": "False"
+     },
+     {
+      "index": 47,
+      "tag": "BOD_ID",
+      "label": "bod_id",
+      "data_field": "BOD_ID",
+      "visible": "False"
+     },
+     {
+      "index": 48,
+      "tag": "CHANGE_TYPE",
+      "label": "CHANGE_TYPE",
+      "data_field": "CHANGE_TYPE",
+      "visible": "False"
+     },
+     {
+      "index": 49,
+      "tag": "NEW_ROUTE_ID",
+      "label": "Route",
+      "data_field": "NEW_ROUTE_ID",
+      "visible": "False"
+     },
+     {
+      "index": 50,
+      "tag": "NEW_BOD_ID",
+      "label": "new bod",
+      "data_field": "NEW_BOD_ID",
+      "visible": "False"
+     },
+     {
+      "index": 51,
+      "tag": "NEW_INCOTERMS",
+      "label": "new incoterms",
+      "data_field": "NEW_INCOTERMS",
+      "visible": "False"
+     },
+     {
+      "index": 52,
+      "tag": "NEW_D_COUNTRY",
+      "label": "D Country",
+      "data_field": "NEW_D_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 53,
+      "tag": "NEW_D_PORT_CODE",
+      "label": "D Port",
+      "data_field": "NEW_D_PORT_CODE",
+      "visible": "False"
+     },
+     {
+      "index": 54,
+      "tag": "NEW_A_COUNTRY",
+      "label": "A Country",
+      "data_field": "NEW_A_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 55,
+      "tag": "NEW_A_PORT_CODE",
+      "label": "A Port",
+      "data_field": "NEW_A_PORT_CODE",
+      "visible": "False"
+     },
+     {
+      "index": 56,
+      "tag": "NEW_CUSTOMER_LT",
+      "label": "Customer LT",
+      "data_field": "NEW_CUSTOMER_LT",
+      "visible": "False"
+     },
+     {
+      "index": 57,
+      "tag": "NEW_TO_COUNTRY",
+      "label": "To Country",
+      "data_field": "NEW_TO_COUNTRY",
+      "visible": "False"
+     },
+     {
+      "index": 58,
+      "tag": "NEW_TO_CITY",
+      "label": "To City",
+      "data_field": "NEW_TO_CITY",
+      "visible": "False"
+     },
+     {
+      "index": 59,
+      "tag": "NEW_ETA",
+      "label": "ETA",
+      "data_field": "NEW_ETA",
+      "visible": "False"
+     },
+     {
+      "index": 60,
+      "tag": "NEW_ETD",
+      "label": "ETD",
+      "data_field": "NEW_ETD",
+      "visible": "False"
+     },
+     {
+      "index": 61,
+      "tag": "NEW_LT_DAY",
+      "label": "L/T(Day)",
+      "data_field": "NEW_LT_DAY",
+      "visible": "False"
+     },
+     {
+      "index": 62,
+      "tag": "NEW_TRANSPORT_MODE",
+      "label": "Trans Mode",
+      "data_field": "NEW_TRANSPORT_MODE",
+      "visible": "False"
+     },
+     {
+      "index": 63,
+      "tag": "NEW_SHIPMENT_DATE",
+      "label": "Shipment Date*",
+      "data_field": "NEW_SHIPMENT_DATE",
+      "visible": "False"
+     },
+     {
+      "index": 64,
+      "tag": "EDIT_REMARKS",
+      "label": "EDIT_REMARKS",
+      "data_field": "EDIT_REMARKS",
+      "visible": "False"
+     },
+     {
+      "index": 65,
+      "tag": "EDIT_MAIN",
+      "label": "EDIT_MAIN",
+      "data_field": "EDIT_MAIN",
+      "visible": "False"
+     },
+     {
+      "index": 66,
+      "tag": "ELECTRODE_YN",
+      "label": "ELECTRODE_YN",
+      "data_field": "ELECTRODE_YN",
+      "visible": "False"
+     },
+     {
+      "index": 67,
+      "tag": "ELECTRODE_TYPE",
+      "label": "ELECTRODE_TYPE",
+      "data_field": "ELECTRODE_TYPE",
+      "visible": "False"
+     },
+     {
+      "index": 68,
+      "tag": "ORIGIN_FROM_DIVISION_ID",
+      "label": "ORIGIN_FROM_DIVISION_ID",
+      "data_field": "ORIGIN_FROM_DIVISION_ID",
+      "visible": "False"
+     },
+     {
+      "index": 69,
+      "tag": "ORIGIN_TO_DIVISION_ID",
+      "label": "ORIGIN_TO_DIVISION_ID",
+      "data_field": "ORIGIN_TO_DIVISION_ID",
+      "visible": "False"
+     },
+     {
+      "index": 70,
+      "tag": "MERGE_NUM",
+      "label": "SSP0023",
+      "data_field": "MERGE_NUM",
+      "visible": "False"
+     },
+     {
+      "index": 71,
+      "tag": "ATTRIBUTE10",
+      "label": "ATTRIBUTE10",
+      "data_field": "ATTRIBUTE10",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "111111111111010111111110111111111111111111111111111111111111111111111110"
+    ],
+    "back": [
+     [
+      "Blue",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "Red",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "40",
+      "",
+      "C20261007211127",
+      "",
+      "MCMM792027F1-M02",
+      "W80F1",
+      "APCCA3122A",
+      "W80F1",
+      "IM_US_TXT",
+      "",
+      "Monday",
+      "2026-10-12",
+      "2,329,451.000",
+      "464,762.000",
+      "1,864,689.000",
+      "464,762.000",
+      "",
+      "464,762.000",
+      "SHP2609-A325330",
+      "I",
+      "",
+      "",
+      "SEA",
+      "464,762.000",
+      "464,762.000",
+      "464,762.000",
+      "Cyl",
+      "LGESOC Elec HQ06",
+      "허은정(eunjung_heo)",
+      "",
+      "",
+      "",
+      "FCA",
+      "0",
+      "2026-10-12",
+      "2026-11-20",
+      "",
+      "강윤하(kangyh)",
+      "2026-10-07 18:54:39",
+      "R20261007548599",
+      "강윤하(kangyh)",
+      "HQ06-E",
+      "Tesla, Inc.",
+      "Tesla, Inc.",
+      "IM_US_TXT",
+      "",
+      "",
+      "C",
+      "8025",
+      "13717",
+      "FCA",
+      "KR",
+      "KRPUS",
+      "US",
+      "USLGB",
+      "0",
+      "US",
+      "USTXT",
+      "2026-11-20",
+      "2026-10-12",
+      "0",
+      "SEA",
+      "2026-10-12",
+      "N",
+      "Y",
+      "Y",
+      "CATHODE",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 0,
+    "done": "2026-11-15 10:41:41.468"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate_detail",
+   "target": "spdDetail/Shipment Plan Detail",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Package Type * 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 10:39:19",
+ "insert_src": {
+  "file": "C:\\Projects\\NSCM\\GSCM\\06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0023_ShipmentPlanElectrode.UIL\\SSP0023_ShipmentPlanElectrode.cs",
+  "exists": true,
+  "targets": [
+   {
+    "si": "siDetail",
+    "grid": "spdDetail",
+    "sheet_key": "shtPlanDetail",
+    "sheet_name": "Shipment Plan Detail",
+    "body_line": 1898
+   }
+  ],
+  "evidence": "GSCM\\06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0023_ShipmentPlanElectrode.UIL\\SSP0023_ShipmentPlanElectrode.cs:1893 InsertButton"
+ },
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:4x 실측: SSP0023_GET_SHIPMENT_PLAN_DETAIL(40·HQ00·HQ06-E·APCCA3122A·20260928~20261204·dbl N) 48행 2.4초 · 런처 상세 채우기 12칸 모두 0행(run_20261115_103031_acts_pick)",
+  "why": "기본 조건 메인 앞쪽 품목(APCAN1199A 등 5개)은 화면 기간 SSP_ANL_SHIP_CONFIRM 행 없음 → 상세(Shipment Plan Detail) 0행. 전극 품목 기준 뷰(SSP_MST_SITE_ITEM_EE_V)와 확정 데이터가 함께 있는 품목 중 최다 APCCA3122A(HQ00·HQ06-E, 128행)",
+  "done": [
+   {
+    "set": {
+     "value": "APCCA3122A",
+     "name": "txtItemId"
+    },
+    "ok": true,
+    "applied": "text",
+    "error": null
+   }
+  ]
+ },
+ "detail_insert": [
+  {
+   "target": {
+    "si": "siDetail",
+    "grid": "spdDetail",
+    "sheet_key": "shtPlanDetail",
+    "sheet_name": "Shipment Plan Detail",
+    "body_line": 1898
+   },
+   "rows_before": 5,
+   "focus": {
+    "ok": true,
+    "error": null
+   },
+   "edit_mode": true
+  }
+ ],
+ "feed": [
+  {
+   "target": "spdDetail[Shipment Plan Detail]",
+   "feeder": "spdMain[MEASURE 다음]",
+   "tries": [
+    {
+     "row": 4,
+     "col": "X_D_20261010",
+     "ok": true,
+     "detail_rows": 0,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 0
+      }
+     ]
+    },
+    {
+     "row": 4,
+     "col": "X_D_20261011",
+     "ok": true,
+     "detail_rows": 0,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 0
+      }
+     ]
+    },
+    {
+     "row": 4,
+     "col": "X_D_20261012",
+     "ok": true,
+     "detail_rows": 5,
+     "calls": [
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+       "rows": 255
+      },
+      {
+       "sp": "SSP0023_GET_SHIPMENT_PLAN_DETAIL",
+       "rows": 5
+      }
+     ]
+    }
+   ],
+   "found": true
+  }
+ ]
+}

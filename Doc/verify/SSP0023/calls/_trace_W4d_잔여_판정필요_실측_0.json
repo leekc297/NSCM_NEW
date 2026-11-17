@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 412,
+  "at": "2026-11-14T15:02:33.475Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 125,
+  "at": "2026-11-14T15:02:36.902Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1823,
+  "at": "2026-11-14T15:02:38.538Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260928\",\"endYyyymmdd\":\"20261204\"}",
+  "status": 200,
+  "rows": 255,
+  "dur": 110,
+  "at": "2026-11-14T15:03:38.726Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ },
+ {
+  "menu": "SSP0023",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0023/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261010\",\"fromYyyymmdd\":\"20260928\",\"toYyyymmdd\":\"20261204\",\"modelId\":\"\",\"itemId\":\"\",\"nickName\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0023\",\"sheetName\":\"Shipment Plan(Electrode)\",\"realFlag\":\"Y\",\"nonChk\":\"Y\",\"myModelChk\":\"N\",\"delegateeChk\":\"N\",\"partLeaderChk\":\"N\",\"teamLeaderChk\":\"N\"}",
+  "status": 200,
+  "rows": 308,
+  "dur": 1852,
+  "at": "2026-11-14T15:03:40.363Z",
+  "user": "minyonglee1",
+  "test": "W4d 잔여 판정필요 실측"
+ }
+]

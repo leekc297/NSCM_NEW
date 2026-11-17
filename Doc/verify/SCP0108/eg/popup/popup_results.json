@@ -11,13 +11,13 @@
   ],
   "result": "ERROR",
   "expected": "AS-IS btnColumn_Click 팝업(SCM002_CAPAColumnPopup) 열림",
-  "actual": "BTN: 버튼 [Column/Column] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, LOB Report, Close others, Close All, Search(F5), Insert(F8), Delete(F9), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10)]",
+  "actual": "BTN: 버튼 [Column/Column] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, Close others, Close All, Logout, Fcst&Price MGMT\nDemand > Demand Plan, 🗑️, Model Code Master\nSupply > Supply Master, 🗑️]",
   "basis": "SCP0108_CAPA_LOB_Report.cs:1616",
-  "at": "2026-11-09T01:43:09.716Z",
+  "at": "2026-11-14T08:23:10.000Z",
   "mut": "",
   "mctx": {
-   "calls": 1,
-   "rows": 30,
+   "calls": 0,
+   "rows": -1,
    "req": 0
   }
  }

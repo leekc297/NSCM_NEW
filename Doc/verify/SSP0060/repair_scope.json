@@ -1,0 +1,179 @@
+{
+ "at": "2026-11-11 14:41:12",
+ "menu_id": "SSP0060",
+ "since": "2026-11-10 21:37:58",
+ "changes": [
+  {
+   "type": "FE",
+   "file": "nscm-fe/features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx",
+   "at": "2026-11-11 13:00:26"
+  },
+  {
+   "type": "FE",
+   "file": "nscm-fe/features/shipping/src/pages/shipment-plan/utils/shipment-plan.save.ts",
+   "at": "2026-11-11 13:00:26"
+  }
+ ],
+ "change_counts": {
+  "FE": 2
+ },
+ "rows": [
+  {
+   "row_id": "V-500719ff",
+   "rule_id": "A5",
+   "result": "FAIL",
+   "target": "SSP0060 화면",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-455fa3da",
+   "rule_id": "F1",
+   "result": "FAIL",
+   "target": "SSP0060 화면",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-71580525",
+   "rule_id": "I1",
+   "result": "FAIL",
+   "target": "SSP0060 화면",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-6ffc13c4",
+   "rule_id": "F1",
+   "result": "FAIL",
+   "target": "SSP0060 컬럼별 저장 왕복",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-23552254",
+   "rule_id": "F6",
+   "result": "FAIL",
+   "target": "SSP0060 빈값 저장",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-4b42cf06",
+   "rule_id": "F6",
+   "result": "FAIL",
+   "target": "SSP0060 0 값 저장",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-dee9ca2c",
+   "rule_id": "F10",
+   "result": "FAIL",
+   "target": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-8533dfea",
+   "rule_id": "F10",
+   "result": "FAIL",
+   "target": "PKG_SSP0060.P_SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-542960bd",
+   "rule_id": "B6",
+   "result": "FAIL",
+   "target": "조회조건 Company",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-c169ea6c",
+   "rule_id": "H1",
+   "result": "FAIL",
+   "target": "Request Info.CONFIRM_ID (Confirm/Plan ID)",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "V-c2145116",
+   "rule_id": "M3",
+   "result": "FAIL",
+   "target": "new SCM0002_TitleSetForm_Popup(\"SSP0060\", shtName, false)",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "T-a94eb0c9",
+   "rule_id": "C1",
+   "result": "FAIL",
+   "target": "cboPlanDate / Plan-date / Plan Date",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "EG-f0cdd5e6",
+   "rule_id": "M3",
+   "result": "FAIL",
+   "target": "SSP0060 팝업 SCM0002_ItembyDivisionPopup CELL:ITEM_ID OPEN",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "EG-5ed94944",
+   "rule_id": "J4",
+   "result": "FAIL",
+   "target": "SSP0060 EG382 직접 접근 SSP/81/SSP Planner",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  },
+  {
+   "row_id": "EG-cdad3092",
+   "rule_id": "I2",
+   "result": "FAIL",
+   "target": "SSP0060 언어 전환 조회 버튼",
+   "reason": "FE 변경 — 열린 조치 필요 행",
+   "open": true
+  }
+ ],
+ "rules": [
+  "A5",
+  "B6",
+  "C1",
+  "F1",
+  "F10",
+  "F6",
+  "H1",
+  "I1",
+  "I2",
+  "J4",
+  "M3"
+ ],
+ "open_rows_hit": [
+  "V-500719ff",
+  "V-455fa3da",
+  "V-71580525",
+  "V-6ffc13c4",
+  "V-23552254",
+  "V-4b42cf06",
+  "V-dee9ca2c",
+  "V-8533dfea",
+  "V-542960bd",
+  "V-c169ea6c",
+  "V-c2145116",
+  "T-a94eb0c9",
+  "EG-f0cdd5e6",
+  "EG-5ed94944",
+  "EG-cdad3092"
+ ],
+ "full_recommended": true,
+ "why": [
+  "FE 파일 변경 — 파일에서 영향 규칙을 좁힐 사실이 없어 열린 조치 필요 행 전체를 대상에 넣고 전체 CheckList 를 권고"
+ ],
+ "notes": [
+  "측정 범위: PKG 6개(PKG_COM0000, PKG_SSP0002, PKG_SSP0003, PKG_SSP0060, P_SSP0300_GET_ORDER_DETAIL, SCM_SSP_CHECK_CONFIRM_CHANGETIME) · 시트 9개 · 콤보 13개"
+ ]
+}

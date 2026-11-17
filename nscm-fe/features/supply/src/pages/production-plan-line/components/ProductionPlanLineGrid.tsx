@@ -13,7 +13,7 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomMergeManager, type EditTracker, ensureTopLeftMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import type { BUCKET_TYPE } from '../production-plan-line.constants';
+import { BUCKET_TYPE } from '../production-plan-line.constants';
 import {
   CELL_COLOR,
   EDITABLE_MEASURE,
@@ -49,6 +49,8 @@ interface Props {
   chkSum: boolean;
   // chkAll(전체보기) — 드릴다운 가드: !chkAll 이고 현재 버킷 leaf(Monthly M_/Weekly W_) 더블클릭은 무시.
   chkAll: boolean;
+  // 회색(실적) 음영 기준 = 선택 Plan Date(AS-IS Set_ProductResult: D_(plan_start-1)까지 회색). 이 값 이전 날짜 셀만 회색.
+  planStartYyyymmdd: string;
   editContext: EditContext;
   visibilityCtx: VisibilityContext;
   adminColumns?: RawFlexGridColumnConfig[];
@@ -69,19 +71,25 @@ const pivotTag = (binding: string): string => binding.slice(2).replace(/[^0-9]/g
 //   (정적/1단=48 · 2단=24 · 3단=16). 빈 그리드(1단)가 DMF0082 처럼 48px 로 넉넉해진다.
 const HEADER_TOTAL_HEIGHT = 48;
 
-// leaf(최하단) 헤더 row 의 동적(pivot) 컬럼은 가로 병합하지 않는다 — leaf 가 전부 'SUM' 이라 기본
-//   CustomMergeManager(값 기준)에 맡기면 주/월 경계를 넘어 한 칸으로 합쳐진다(AS-IS 는 주마다 SUM 분리).
-//   월/주(상위 row 라벨 병합)·좌측 고정컬럼 세로 스팬·데이터 셀 병합은 super 에 위임해 그대로 둔다.
+// leaf(최하단) 헤더 row 의 동적(pivot) 컬럼은 '가로' 병합만 막는다 — leaf 가 전부 'SUM' 이라 기본
+//   CustomMergeManager(값 기준)에 맡기면 주/월 경계를 넘어 한 칸으로 합쳐질 수 있다(AS-IS 는 주마다 SUM 분리).
+//   단 '세로' 병합(월 SUM 컬럼의 2단='SUM' + 3단 leaf='SUM' → 한 칸)은 유지한다(사용자 지시 2026-11-11) —
+//   베이스가 이 월 SUM 2×1 세로 스팬을 이미 계산하므로(mergeManager _isSameHorizontalRange 주석), 세로
+//   범위는 그대로 돌려주고 가로 범위(여러 컬럼)일 때만 차단한다. 월/주 라벨 가로병합·좌측 고정컬럼 세로
+//   스팬·데이터 셀 병합은 super 에 위임해 그대로 둔다.
 class ProductionPlanLineMergeManager extends CustomMergeManager {
   getMergedRange(panel: GridPanel, currentRow: number, currentCol: number): CellRange | null {
+    const range = super.getMergedRange(panel, currentRow, currentCol);
     if (
+      range &&
+      range.col !== range.col2 && // 가로(여러 컬럼) 범위만 차단 — 세로(월 SUM 2×1)는 유지
       panel.cellType === CellType.ColumnHeader &&
       currentRow === panel.rows.length - 1 &&
       pivotKind(panel.columns[currentCol]?.binding ?? '') !== null
     ) {
       return null;
     }
-    return super.getMergedRange(panel, currentRow, currentCol);
+    return range;
   }
 }
 
@@ -115,6 +123,7 @@ export const ProductionPlanLineGrid = ({
   bucket,
   chkSum,
   chkAll,
+  planStartYyyymmdd,
   editContext,
   visibilityCtx,
   adminColumns,
@@ -169,7 +178,7 @@ export const ProductionPlanLineGrid = ({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     grid.mergeManager = new ProductionPlanLineMergeManager(grid);
     ensureTopLeftMergeManager(grid);
-    const applyHeaderHeight = () => {
+    const applyHeaderHeight = (canInvalidate: boolean) => {
       const hdrRows = grid.columnHeaders?.rows;
       if (!hdrRows || hdrRows.length === 0) return;
       const targetHeight = Math.round(HEADER_TOTAL_HEIGHT / hdrRows.length);
@@ -184,10 +193,15 @@ export const ProductionPlanLineGrid = ({
         hdrRows.defaultSize = targetHeight;
         changed = true;
       }
-      if (changed) grid.invalidate(true);
+      if (changed && canInvalidate) grid.invalidate(true);
     };
-    applyHeaderHeight();
-    grid.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight(true);
+    // refreshing(렌더 전)에도 맞춘다 — Weekly/Monthly Sum 토글로 pivot 컬럼이 재생성될 때, updatedLayout
+    //   (레이아웃 계산 후)에서만 줄이면 재생성된 다단 헤더가 '기본(큰) 높이'로 한 프레임 먼저 그려졌다
+    //   48/tier 로 줄어드는 깜빡임이 난다. refreshing 은 진행 중 refresh 라 invalidate 하면 재진입 루프가
+    //   되므로 여기선 크기만 세팅(canInvalidate=false)해 같은 refresh 가 처음부터 48/tier 로 그리게 한다.
+    grid.refreshing.addHandler(() => applyHeaderHeight(false));
+    grid.updatedLayout.addHandler(() => applyHeaderHeight(true));
   }, []);
 
   // 최신 값을 stale 없이 참조 (핸들러는 mount 후 등록).
@@ -203,6 +217,8 @@ export const ProductionPlanLineGrid = ({
   chkSumRef.current = chkSum;
   const chkAllRef = useRef(chkAll);
   chkAllRef.current = chkAll;
+  const planStartRef = useRef(planStartYyyymmdd);
+  planStartRef.current = planStartYyyymmdd;
   const allBindingsRef = useRef(allPivotBindings);
   allBindingsRef.current = allPivotBindings;
 
@@ -306,9 +322,12 @@ export const ProductionPlanLineGrid = ({
         if (!dataItem) return;
         const isLineTotal = s(dataItem.MEASURE).startsWith(LINE_TOTAL_MEASURE_PREFIX);
 
-        // 실적/과거(편집불가) 구간 회색 (design 03 §3.8 #34/#61 — SetCellBackColor 회색).
-        //   cutoff(이번 주 월요일) 이전 pivot 셀은 실적 확정 구간이라 회색 배경으로 재현.
-        if (isPastPivot(binding, cutoff)) ev.cell.style.backgroundColor = CELL_COLOR.PAST_GRAY;
+        // 실적/과거 구간 회색 (AS-IS Set_ProductResult cs:1130~1143) — '선택 Plan Date 이전' 날짜
+        //   (D_(plan_start-1)까지)를 실적으로 회색 처리한다. 편집잠금(cutoff=이번 주 월요일)과는 별개 기준이라
+        //   회색만 plan_start 로 맞춘다(사용자 지시 2026-11-11, 종전 cutoff 기준 오류 교정). Period from>=plan_start
+        //   면 이전 날짜 셀이 없어 자연히 회색 없음(AS-IS from<plan_start 게이트 + chkAll 상시 등가).
+        if (isPastPivot(binding, planStartRef.current))
+          ev.cell.style.backgroundColor = CELL_COLOR.PAST_GRAY;
 
         // 편집가능 pivot 셀 노란색 (수정가능 표시 — AS-IS Set_FPOperationColor 편집밴드의 TO-BE 치환).
         //   전건 INPUT_TP_CD='S' 라 공용 formatEditableColumns(wj-cell-editable) 이 안 걸리므로 여기서
@@ -343,8 +362,10 @@ export const ProductionPlanLineGrid = ({
           const raw = toNum(dataItem[binding]);
           if (raw !== null) {
             ev.cell.textContent = raw.toFixed(LINE_TOTAL_DECIMALS);
-            // 부하율 100% 미만 강조 (design 03 §3.8 #65 — LINE_TOTAL<100 SetCellForeColor).
-            if (raw < LINE_TOTAL_WARN_THRESHOLD) {
+            // 부하율 100% 미만 빨간 강조 (design 03 §3.8 #65 — LINE_TOTAL<100 SetCellForeColor).
+            //   Bucket=Daily 일 때만 표시한다(사용자 지시 2026-11-11) — Weekly/Monthly 버킷에서는 강조 안 함.
+            //   소수 표기(toFixed)는 버킷 무관 유지.
+            if (raw < LINE_TOTAL_WARN_THRESHOLD && bucketRef.current === BUCKET_TYPE.DAILY) {
               ev.cell.style.color = CELL_COLOR.UNDER_100;
               ev.cell.style.fontWeight = 'bold';
             }

@@ -28,6 +28,10 @@
 허용되는 상태 의존은 **하나뿐** — `cellEditEnded` 후 `invalidate()`.
 이건 상태가 아니라 **값이 바뀌어서 병합키가 바뀐 것**을 반영하는 것이다.
 
+(2026-11-13 정정: CR-031 "신규 행 입력·붙여넣기 중에는 셀 병합 해제"와 충돌하지 않는다 — 공용 구현은 편집 상태가 아니라
+**행 속성 `CRUD_TYPE='I'`** 로 Insert 행을 병합에서 제외한다(`mergeManager.ts` `isInsertRow` · `_getCellMergedRange` 의 `CRUD_TYPE.INSERT` 가드).
+위 금지 #2 는 `prepareCellForEdit`/`beginningEdit` 같은 **편집 이벤트**로 가르는 것만 가리킨다. DMF0049 는 CR-068 로 병합 유지 입력)
+
 ## §2. 이유 (3가지 모두 실제 증상)
 
 1. wijmo 는 **이미 선택된 셀을 다시 클릭해도** 선택 이벤트를 낸다(더블클릭의 두 번째 클릭 포함).
@@ -94,7 +98,7 @@ export class XxxMergeManager extends MergeManager {
 
 ### 5.4 검증
 
-- `tsc --noEmit` / `eslint` 통과
+- `tsc --noEmit` / `eslint` 통과 (2026-11-13 정정: 통과 기준은 유지 — AI 는 직접 실행 금지(실행 hook `block-dev-commands` 차단). 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`, 실행하지 않았으면 미실행(ERROR) 보고)
 - `git diff --ignore-cr-at-eol` 로 **로직 diff 가 0** 인지 확인한다.
   상태 의존은 대개 커밋 안 된 작업분이라, 제대로 걷어내면 커밋 baseline 과 로직이 정확히 일치한다.
   주석만 남으면 정상. 로직 diff 가 남으면 덜 걷어냈거나 다른 것까지 건드린 것이다.
@@ -165,3 +169,8 @@ etc-sales-reports/__asis-mapping__.md:96,125  REQ:CHAT-20260820-18 = '구현' �
 **후속 조치(미이행)**: §5 절차대로 위 5곳 + 헬퍼를 제거하고, `__asis-mapping__.md` 의
 `REQ:CHAT-20260820-18` 행을 **"결함 신고 → 원복"** 으로 정정해야 한다(§4). 제거 후 §5.4 검증
 (`git diff --ignore-cr-at-eol` 로직 diff 0)까지 통과해야 완료다.
+
+> (2026-11-13: 현재 코드 실측 — 위 2026-08-21 기록 이후 분리 로직은 **2026-09-21 비활성 확정**. `setActiveSetKey` 는 코드에 없고
+> `selectionChanged` → 세트 분리 배선은 주석 처리, `activeSetKey` 는 갱신되지 않는다(항상 null · 무동작).
+> 다만 `activeSetKey`/`MergeContext` 타입 필드와 분기는 "되돌릴 수 있게" **남겨 두기로** 코드 주석에 적혀 있어 '제거'는 되지 않았다 —
+> `etc-sales-reports.merge.ts:9~22·134~145·167~169`, `EtcSalesReportsGrid.tsx:104~106·370·480`. 위 줄 번호(62·75·105 / 458~492)는 2026-08-21 당시 기준)

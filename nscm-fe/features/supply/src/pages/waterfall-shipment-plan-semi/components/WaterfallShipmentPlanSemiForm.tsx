@@ -239,12 +239,12 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
-            {/* Version — 필수(*). 라벨 'Ver.' 하드코딩(SCP0016/FG 동일 방식, 사용자 지시 2026-10-20·2026-10-26) —
-                DB/번들에 'Ver.' 미등록 약어이고 KO/EN/CN 동일 표기라 i18n 불요(SCP0018.md 변경=O 명칭). */}
+            {/* Version — 필수(*). 라벨은 LBL.VER(=LBL01275, KO/EN/CN 모두 'Ver.', DB 등록 2026-11-12,
+                SCM_ADM_MSG_M MSG_TP_CD='LBL'). 과거 'Ver.' 하드코딩은 다국어 미처리라 i18n 코드로 교체. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label='Ver.'
+                label={t(LBL.VER, '_Ver.')}
                 labelAlign='right'
                 required
                 render={() => (

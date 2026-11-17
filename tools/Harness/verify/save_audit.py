@@ -60,6 +60,13 @@ def main():
         backs = {os.path.basename(b)[len(ts) + 1:-4]: read_csv(b) for b in glob.glob(os.path.join(os.path.dirname(sp), f'{ts}_*.csv'))}
         if any(backs.values()):
             break
+    # 2026-11-09 T176(SSP0025 F7 허위 FAIL): 백업 행이 있는 정리 기록이 하나도 없으면(수동 정리 파일·이름 규약 불일치·0행) 저장이 무엇을 기록했는지 모른다 —
+    #   빈 백업을 '기록 테이블 없음' 으로 읽어 F7 FAIL 을 내던 것을 측정 없음(NOT_RUN)으로 돌린다
+    if not any(backs.values()):
+        res['F8'] = res['F7'] = {'verdict': 'NOT_RUN', 'note': f"정리 기록 {len(sqls)}건에 짝이 맞는 백업 행 없음(<시각>_<테이블>.csv) — 저장이 기록한 테이블 미확인"}
+        json.dump(res, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        print(f"{mid}: 정리 백업 행 없음 — F7/F8 NOT_RUN")
+        return
     head = open(sp, encoding='utf-8', errors='ignore').read()
     user = (re.search(r'계정 (\S+)', head) or [None, ''])[1]
     if not user:  # 정리 SQL 머리글에 계정이 없으면 E2E 기본 계정 — 빈 값과 비교하면 정상 계정이 '불일치' 로 나온다(2026-11-02 SCP0028 허위 F8)

@@ -1,0 +1,24 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 00:09:17.206",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "",
+   "sp": "SSP0200_GET_PLANT_SITE_BY_DIVISION",
+   "caller": "GSCM.App.Common.DLL.CommonData::PseudoDataClient",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 5.55,
+   "params": {
+    "p_division_id": "40",
+    "p_company_id": "",
+    "p_valid_yn": "Y",
+    "p_now_group_id": "ADMIN",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SSP0200_GET_PLANT_SITE_BY_DIVISION @p_division_id=N'40',@p_company_id=N'',@p_valid_yn=N'Y',@p_now_group_id=N'ADMIN',@p_user_id=N'jaeuk.shin'",
+   "phase": "action:set:clbDivision"
+  }
+ ]
+}

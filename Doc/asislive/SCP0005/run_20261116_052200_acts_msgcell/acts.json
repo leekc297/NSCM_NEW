@@ -1,0 +1,234 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999 · 데이터 모델 Changed(CellsUpdated) 처리기 · 값 지정(SetValue)은 11-15 ArgumentException → 편집 입력으로",
+   "steps": [
+    {
+     "sheet": "Distribution Route",
+     "row": 0,
+     "col": 30,
+     "before": "0",
+     "after": "0",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "LT_ARRIVAL_INLAND",
+      "value": "1000",
+      "mode": "edit"
+     }
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "btnEaxel_Upload_Click",
+   "expect": "MSG00265",
+   "why": "SCP0005_DistributionRoute.cs:373~381 업로드 창(ExcelUploadForm2) 닫힌 뒤 MSG00265(다시 조회?) · 업로드 창은 실행기가 닫음(업로드 안 함) · 대화상자 아니오",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "click": "btnEaxel_Upload",
+       "wait": "8"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "click:btnEaxel_Upload",
+     "raised": null,
+     "edit_mode": false
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "다시 조회하시겠습니까?",
+     "action": "no_button(id=7)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [
+    "PR_SCM_ADM_GET_UPLOAD_INFO"
+   ],
+   "save_calls": [],
+   "ok": true
+  },
+  {
+   "kind": "msgcell",
+   "handler": "spdMain_CellDoubleClick",
+   "expect": "(SP)SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+   "why": "SCP0005_DistributionRoute.cs:1092 ROUTE_ID 열 더블클릭 → SCP0005_DistributionRoutePopup(이력 SP) · 팝업은 실행기가 닫음",
+   "steps": [
+    {
+     "set": {
+      "click": "ROUTE_ID",
+      "double": 1,
+      "row": 0,
+      "wait": 10
+     },
+     "row": 0,
+     "col": 1,
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "SCP0005_DistributionRoutePopup",
+       "rows": 2
+      }
+     ]
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID"
+   ],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:19:23",
+ "_pre_set": [],
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "rows": 39,
+   "ms": 6.08,
+   "at": "2026-11-16 05:19:34.375",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_COUNTRY_CITY",
+   "params": {
+    "p_country": "",
+    "p_city": "",
+    "p_city_name": "",
+    "debug_mode": "F"
+   },
+   "rows": 89426,
+   "ms": 1042.47,
+   "at": "2026-11-16 05:19:35.602",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "params": {
+    "p_from_country": "",
+    "p_from_city": "",
+    "p_to_country": "",
+    "p_to_city": "",
+    "p_transport_mode": "",
+    "p_valid_yn": ""
+   },
+   "rows": 8036,
+   "ms": 1239.79,
+   "at": "2026-11-16 05:19:35.789",
+   "phase": "find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "rows": 39,
+   "ms": 4.64,
+   "at": "2026-11-16 05:20:30.233",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_COUNTRY_CITY",
+   "params": {
+    "p_country": "",
+    "p_city": "",
+    "p_city_name": "",
+    "debug_mode": "F"
+   },
+   "rows": 89426,
+   "ms": 521.27,
+   "at": "2026-11-16 05:20:30.915",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "params": {
+    "p_from_country": "",
+    "p_from_city": "",
+    "p_to_country": "",
+    "p_to_city": "",
+    "p_transport_mode": "",
+    "p_valid_yn": ""
+   },
+   "rows": 8036,
+   "ms": 626.59,
+   "at": "2026-11-16 05:20:31.016",
+   "phase": "find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "rows": 39,
+   "ms": 6.42,
+   "at": "2026-11-16 05:21:19.634",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "params": {
+    "p_from_country": "",
+    "p_from_city": "",
+    "p_to_country": "",
+    "p_to_city": "",
+    "p_transport_mode": "",
+    "p_valid_yn": ""
+   },
+   "rows": 8036,
+   "ms": 418.51,
+   "at": "2026-11-16 05:21:20.204",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_COUNTRY_CITY",
+   "params": {
+    "p_country": "",
+    "p_city": "",
+    "p_city_name": "",
+    "debug_mode": "F"
+   },
+   "rows": 89426,
+   "ms": 636.46,
+   "at": "2026-11-16 05:21:20.425",
+   "phase": "find"
+  }
+ ],
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

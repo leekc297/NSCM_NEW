@@ -1,8 +1,11 @@
 {
- "baseline": "34052be2820422bb279a7aeec2f4675c112ec056",
- "baselineInfo": "34052be28 2026-11-09 13:21 eunjoo_hwang docs(memory): 조회조건 열거-vs-ALL 누수 패턴 reference 추가",
- "applied": "2026-11-09T13:22:19",
- "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261109\\README.md",
+ "baseline": "fdff7f17ee69fd89cff2233f5a11d7647c8ccb24",
+ "baselineInfo": "fdff7f17e 2026-11-12 17:50 eunjoo_hwang refactor(DMD0001): 대시보드를 @demand → @report/pages/dashboard 로 이동",
+ "applied": "2026-11-13T09:24:45",
+ "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261113\\README.md",
+ "baselineBeApplied": "2026-11-12T10:30:49",
+ "reportBe": "_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
+ "baselineBe": "3e1e0a081018e7121c5e7c323c3785532097f201",
  "history": [
   {
    "baseline": "965d11de5",
@@ -52,6 +55,49 @@
    "from": "eaeb291747d62647d15e8bf83f8bb17a9be5ca11",
    "applied": "2026-11-09T13:22:19",
    "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261109\\README.md"
+  },
+  {
+   "baseline": "900ffd6e347081184f41a46e6a4ed5b78d69c938",
+   "from": "34052be2820422bb279a7aeec2f4675c112ec056",
+   "applied": "2026-11-10T08:57:58",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261110\\README.md"
+  },
+  {
+   "baseline": "0d7ec9fc75aa57e432a530e272c56a9161625194",
+   "from": "900ffd6e347081184f41a46e6a4ed5b78d69c938",
+   "applied": "2026-11-11T13:00:23",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261111\\README.md"
+  },
+  {
+   "baseline": "1d476295b879af038aea42993d30cdf9c800a353",
+   "from": "0d7ec9fc75aa57e432a530e272c56a9161625194",
+   "applied": "2026-11-12T09:15:24",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261112\\README.md"
+  },
+  {
+   "baseline": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
+   "from": "1d476295b879af038aea42993d30cdf9c800a353",
+   "applied": "2026-11-12T10:09:11",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261112_100911\\README.md",
+   "be": {
+    "from": null,
+    "baseline": "61c936ba4e8a47a1aa3d7df069349480aaafc43b"
+   }
+  },
+  {
+   "beOnly": true,
+   "applied": "2026-11-12T10:30:49",
+   "report": "_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
+   "be": {
+    "from": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
+    "baseline": "3e1e0a081018e7121c5e7c323c3785532097f201"
+   }
+  },
+  {
+   "baseline": "fdff7f17ee69fd89cff2233f5a11d7647c8ccb24",
+   "from": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
+   "applied": "2026-11-13T09:24:45",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261113\\README.md"
   }
  ]
 }

@@ -1,0 +1,188 @@
+{
+ "id": "DMF0004",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0004_SAVE_SALES_SITE_DATA",
+   "save_sp": "DMF0004_SAVE_SALES_SITE_DATA",
+   "status": "고칠 열 후보 없음",
+   "table": "SCM_MST_SITE",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_MST_SITE_CUSTOMER_H",
+     "pk": [
+      "HISTORY_SEQ",
+      "DIVISION_ID",
+      "SCM_SITE_ID",
+      "SOLDTO_CODE",
+      "SHIPTO_CODE"
+     ]
+    },
+    {
+     "table": "SCM_MST_SITE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Sales Site",
+   "writes": {
+    "SCM_MST_SITE_CUSTOMER": [
+     "UPDATE"
+    ],
+    "SCM_MST_SITE": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml DMF0004_SAVE_SALES_SITE_DATA → SP DMF0004_SAVE_SALES_SITE_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_MST_SITE_CUSTOMER_H": [
+     "INSERT INTO"
+    ],
+    "SCM_MST_SITE_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "SCM_MST_SITE_CUSTOMER"
+   ],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0004_SAVE_SALES_SITE_BUCKET_DATA",
+   "save_sp": "DMF0004_SAVE_SALES_SITE_BUCKET_DATA",
+   "status": "키 일부 미대응",
+   "table": "dm_mst_bucket_conversion",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "INCOTERMS",
+    "ITEM_ID",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID"
+   },
+   "unmatched_pk": [
+    "PROJECT_CODE",
+    "INCOTERMS",
+    "ITEM_ID",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_MST_BUCKET_CONVERSION_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Sales Site",
+   "writes": {
+    "dm_mst_bucket_conversion": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml DMF0004_SAVE_SALES_SITE_BUCKET_DATA → SP DMF0004_SAVE_SALES_SITE_BUCKET_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_MST_BUCKET_CONVERSION_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "INCOTERMS": "p_Incoterms←Incoterms(변수)",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "p_yyyymmdd←YYYYMMDD(변수)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0004_SAVE_SALES_SITE_CUSTOMER_DATA",
+   "save_sp": "DMF0004_SAVE_SALES_SITE_CUSTOMER_DATA",
+   "status": "키가 없는 테이블",
+   "table": "SCM_MST_SITE_CUSTOMER",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_MST_SITE_CUSTOMER_H",
+     "pk": [
+      "HISTORY_SEQ",
+      "DIVISION_ID",
+      "SCM_SITE_ID",
+      "SOLDTO_CODE",
+      "SHIPTO_CODE"
+     ]
+    }
+   ],
+   "sheet": "spdSub/Sales Customer",
+   "writes": {
+    "SCM_MST_SITE_CUSTOMER": [
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml DMF0004_SAVE_SALES_SITE_CUSTOMER_DATA → SP DMF0004_SAVE_SALES_SITE_CUSTOMER_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_MST_SITE_CUSTOMER_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0004_SAVE_SALES_SITE_LOCATION_DATA",
+   "save_sp": "DMF0004_SAVE_SALES_SITE_LOCATION_DATA",
+   "status": "고칠 열 후보 없음",
+   "table": "SCM_MST_LOCATION",
+   "pk": [
+    "LOCATION_SEQ"
+   ],
+   "match": {
+    "LOCATION_SEQ": "LOCATION_SEQ"
+   },
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCM_MST_LOCATION_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdSub/Sales Location",
+   "writes": {
+    "SCM_MST_LOCATION": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml DMF0004_SAVE_SALES_SITE_LOCATION_DATA → SP DMF0004_SAVE_SALES_SITE_LOCATION_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCM_MST_LOCATION_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "edit_candidates": []
+  }
+ ]
+}

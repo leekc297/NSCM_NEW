@@ -1,0 +1,6 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0095-S93aed0,조회,AfterFindData,SCP0095_GlobalPSI_Elec.cs:668,같은 파일에서 호출,SCP0095_GlobalPSI_Elec.cs:761,FindDataMain
+SCP0095-S1e5843,조회,AfterFindDataParallel,SCP0095_GlobalPSI_Elec.cs:716,같은 파일에서 호출,SCP0095_GlobalPSI_Elec.cs:797,FindDataMainParallel
+SCP0095-S7b8803,조회,FindDataMainParallel,SCP0095_GlobalPSI_Elec.cs:796,같은 파일에서 호출,SCP0095_GlobalPSI_Elec.cs:650,FindData
+SCP0095-Sdeb4f7,조회,FindDataMainParallel,SCP0095_GlobalPSI_Elec.cs:821,같은 파일에서 호출,SCP0095_GlobalPSI_Elec.cs:650,FindData
+SCP0095-S60e4d0,기타,Set_CellType,SCP0095_GlobalPSI_Elec.cs:908,같은 파일에서 호출,SCP0095_GlobalPSI_Elec.cs:673; SCP0095_GlobalPSI_Elec.cs:742,"AfterFindData,AfterFindDataParallel"

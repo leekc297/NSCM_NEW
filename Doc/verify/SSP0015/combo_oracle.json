@@ -1,0 +1,49 @@
+{
+ "mid": "SSP0015",
+ "asis_id": "SSP0015",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "From Site",
+   "label": "From Site",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 8,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '인자 식 해석 불가: pDivisionID' / '인자 식 해석 불가: pDivisionID' / '인자 식 해석 불가: pDivisionID' / '인자 식 해석 불가: pDivisionID'"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Bucket",
+   "label": "Bucket",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 3,
+   "asis_src": "DM0003_GET_BUCKET_TYPE_CODE  @InitControls (SSP0015_ShipmentPSI.cs:577 ← SSP0015_ShipmentPSI.cs:576)",
+   "asis_n": 3,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 3건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "전용 SP DM0003_GET_BUCKET_TYPE_CODE 반환 순서 일치: TO-BE ['DAILY', 'WEEKLY', 'MONTHLY'] / AS-IS ['DAILY', 'WEEKLY', 'MONTHLY']",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCombo DisplayMember=NAME @SSP0015_ShipmentPSI.cs:577) = TO-BE 표시 NAME (CODE≠NAME 후보 3/3건 확인)"
+  },
+  {
+   "kind": "SEARCH",
+   "target": "Plan Date",
+   "label": "Plan-date*",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 6,
+   "b4": "판정필요",
+   "b3": "판정필요",
+   "why": "AS-IS 원천 실행 불가 — '인자 식 해석 불가: pDivisionID' / '인자 식 해석 불가: pDivisionID'"
+  }
+ ]
+}

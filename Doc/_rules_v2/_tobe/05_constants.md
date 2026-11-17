@@ -83,7 +83,7 @@ export enum SHEET_INDEX {
 | 단일 sheet (의미 있는 이름) | camelCase 자유 (`'customerModelMapping'` 등) | DMF0006 |
 | Multi-sheet | 각 sheet 의 camelCase 자유 | DMF0004 (`site/customer/location/bucket`) |
 
-> **⚠️ 메모리 의무**: 화면 메뉴 등록 시 FE 의 SHEETS value 와 DB `SCM_ADM_API_M.SHT_NM` 일치 의무. 불일치 → ORA-01403. 의무: BLOCK 6 의 `SHT_NM` = FE `SHEETS.MAIN = 'main'` 표준.
+> **⚠️ 메모리 의무**: 화면 메뉴 등록 시 FE 의 SHEETS value 와 DB `SCM_ADM_API_M.SHT_NM` 일치 의무. 불일치 → ORA-01403. 의무: BLOCK 6 의 `SHT_NM` = FE `SHEETS.MAIN = 'main'` 표준. (2026-11-13 정정: 저장소 SQL 의 `SCM_ADM_API_M` 에는 `SHT_NM` 컬럼이 없다 — `SHT_NM` 은 메뉴·시트·버튼 → API 매핑 `SCM_ADM_MNU_BTN_MPG_M (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID)` 의 컬럼이며 FE SHEETS value 와 맞출 대상도 이 테이블 — `_artifacts/41_DMF0043_meta.sql:50,70` · §변경 이력 2026-06-12. 'BLOCK 6' 은 룰 12 §1.1 번호로는 `SCM_MST_SHEET_COLUMNS`)
 
 ---
 

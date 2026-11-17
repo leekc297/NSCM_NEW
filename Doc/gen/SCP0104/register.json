@@ -1,0 +1,113 @@
+{
+  "menuId": "SCP0104",
+  "screenName": "CAPA_Line",
+  "feature": "supply",
+  "pageDir": "capa-line-assign",
+  "routePath": "supply/capa-line-assign",
+  "sheets": [
+    {
+      "sheetName": "ASSEMBLY",
+      "rule": "META+코드연결",
+      "columns": 20,
+      "popup": false
+    },
+    {
+      "sheetName": "ELTR",
+      "rule": "META+코드연결",
+      "columns": 23,
+      "popup": false
+    },
+    {
+      "sheetName": "LINE",
+      "rule": "META+코드연결",
+      "columns": 14,
+      "popup": false
+    },
+    {
+      "sheetName": "SOP_ASSEMBLY",
+      "rule": "META+코드연결",
+      "columns": 22,
+      "popup": false
+    },
+    {
+      "sheetName": "SOP_ELTR",
+      "rule": "META+코드연결",
+      "columns": 22,
+      "popup": false
+    },
+    {
+      "sheetName": "SOP_MODEL_ASSEMBLY",
+      "rule": "META+코드연결",
+      "columns": 19,
+      "popup": false
+    },
+    {
+      "sheetName": "SOP_MODEL_ELTR",
+      "rule": "META+코드연결",
+      "columns": 19,
+      "popup": false
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더(기간 컬럼) — SCP0104_GET_SPREAD_TITLE",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SCP.SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+      "asis_sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdAssign.Change",
+        "event:_defaultDataModel.Changed",
+        "event:spdAssign.Change",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "CheckNameOnDummyCodeDB"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0104.P_SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+      "sheet": "ASSEMBLY",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "RefreshValid"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0104.P_",
+      "sheet": "ASSEMBLY",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0104_GET_SPREAD_TITLE",
+      "asis_sp": "SCP0104_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:this.cboDivision.SelectedIndexChanged",
+        "event:this.cboVersion.SelectedIndexChanged",
+        "event:this.cboVersionSeq.SelectedIndexChanged",
+        "event:this.rgrpDivisionType.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetSpdTitleAssign"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0104.P_SCP0104_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

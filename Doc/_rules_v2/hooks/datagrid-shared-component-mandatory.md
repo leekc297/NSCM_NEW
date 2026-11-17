@@ -78,7 +78,7 @@ export const SalesSiteGrid = ({ gridRef, gridFilterRef, data, setActiveTab }: Sa
 
 | # | 기능 | 활성 조건 | 처리 위치 |
 |---:|---|---|---|
-| 1 | Combo 컬럼 자동 fetch | `cellCtrlObjTpCd === 'COMBO'` + `cellCboDataTp` (SQL_ID) | `useTabComboQueries({ filters: comboIds })` |
+| 1 | Combo 컬럼 자동 fetch | `cellCtrlObjTpCd === CELL_CONTROL_TYPE.COMBO`(값 `'FPComboBox'`) + `cellCboDataTp` (SQL_ID) (2026-11-13 정정: 값 `'COMBO'` → 열거 `CELL_CONTROL_TYPE.COMBO` = `'FPComboBox'`) | `useTabComboQueries({ filters: comboIds })` |
 | 2 | Raw column → Wijmo column 매핑 | 항상 (staticColumns.filter display) | `mapRawColumnsToWijmoColumns()` |
 | 3 | Frozen columns 자동 계산 | `_fixed` flag 마지막 index + 1 | `findLastIndex` |
 | 4 | FlexGridFilter 자동 생성 | `gridFilterRef` 주입 시 | `handleInitialized` |
@@ -155,7 +155,7 @@ import { GridAction } from '@foundation/utils';
 GridAction.addRow(grid, defaultValues)     // CRUD_TYPE='I' row 추가 (Insert 버튼)
 GridAction.removeRow(grid, hardDelete)     // CRUD_TYPE='D' 또는 splice (Delete 버튼)
 GridAction.clear(grid, editTrackerRef)     // 모든 변경 취소 + EditTracker reset
-GridAction.toggleEditMode(grid)            // 편집 모드 토글
+GridAction.toggleEditMode(grid)            // 편집 모드 토글 (2026-11-13 정정: 사용 대상 아님 — CR-084·093 TO-BE 는 Edit(F2) 버튼 없이 조회 즉시 상시 편집 · gridAction.ts 주석도 deprecated)
 GridAction.toggleColumnSort(grid)          // 정렬 토글
 GridAction.toggleColumnFilter(grid, filter)// 필터 토글
 GridAction.excelDownload(grid, fileName)   // Excel 다운로드 (Subtitle prop 자동 연결)

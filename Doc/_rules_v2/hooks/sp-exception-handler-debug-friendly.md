@@ -119,7 +119,7 @@ SELECT TO_CHAR(CREATION_DATE,'HH24:MI:SS') T, MNU_ID, MNU_BTN_CD, SUBSTR(EXCT_MS
 3. ⚠️ `SCM_COM_SQL_LOG.EXCEPTION` 은 래퍼 문자열로 잘려 저장 — 이 경로는 실오류 확보 불가.
 
 **격리 판정** (BE 문제 vs SP/DB 문제): 실패 payload 그대로 **anonymous block 으로 SP 직접 호출** —
-BE 접속 계정(SCMD_APP)으로도 실행. 직접호출 OK + BE 만 실패 = BE 경유 시에만 달라지는 것(세션 NLS 등,
+BE 접속 계정(SCMD_APP)으로도 실행(2026-11-13 정정: 계정명은 환경별 — 사내 ZIOUI1 = `SCMP_APP`(이 DB 에 SCMD_APP 계정 없음) / 클라우드 dev·qa·prd = `SCMD_APP` · `nscm-be/src/main/resources/config/config-*.yml`). 직접호출 OK + BE 만 실패 = BE 경유 시에만 달라지는 것(세션 NLS 등,
 `oracle-nls-implicit-conversion.md` #109) 의심. 직접호출도 실패 = SQLERRM 그대로 root cause.
 
 ---

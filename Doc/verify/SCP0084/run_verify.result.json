@@ -1,25 +1,13 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-08T17:06:26+09:00",
+ "ts": "2026-11-14T13:41:18+09:00",
  "producer": "run_verify",
  "id": "SCP0084",
- "skip_e2e": true,
- "started": "2026-11-08 17:03:26",
+ "skip_e2e": false,
+ "started": "2026-11-14 12:22:48",
  "state": "completed",
  "verdict": "fail",
  "issues": [
-  {
-   "id": "V-1215a8c2",
-   "class": "SC1",
-   "msg": "SCP0084 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "수동 사용자판정(CheckList)"
-    }
-   ],
-   "grade": "hard"
-  },
   {
    "id": "T-357c7c28",
    "class": "X-ROW",
@@ -37,41 +25,45 @@
   "커버리지 게이트 SUSPECT_NA100 D3 — Doc/verify/SCP0084/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
  ],
  "summary": {
-  "rows": 1629,
-  "PASS": 578,
-  "FAIL": 2,
-  "판정필요": 22,
-  "미검증": 71,
-  "해당없음": 956,
+  "rows": 1652,
+  "PASS": 570,
+  "FAIL": 1,
+  "판정필요": 15,
+  "미검증": 173,
+  "해당없음": 893,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1055,
-   "없음(미검증)": 71,
+   "기계": 909,
+   "없음(미검증)": 173,
    "사람": 6,
-   "없음(판정 대기)": 22,
-   "기계(상속·집계)": 473,
-   "출처 미기록": 2
+   "없음(판정 대기)": 15,
+   "기계(상속·집계)": 545,
+   "출처 미기록": 4
   },
-  "fail_listed": 2,
+  "fail_listed": 1,
   "coverage": {
    "rules": 85,
-   "measured": 387,
-   "not_run_error": 64,
-   "na": 270,
+   "measured": 401,
+   "not_run_error": 146,
+   "na": 216,
    "suspect_na100": [
     "D3"
    ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0084_LongTermStock_CheckList_v25.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0084_LongTermStock_ActionItemList_v25.xlsx"
+  "CheckList": "Doc/CheckList/SCP0084_LongTermStock_CheckList_v28.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0084_LongTermStock_ActionItemList_v28.xlsx"
  },
  "evidence": [
   {
    "kind": "exec",
    "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0084/e2e_results.json"
   }
  ],
- "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 D3 — Doc/verify/SCP0084/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 D3 — Doc/verify/SCP0084/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

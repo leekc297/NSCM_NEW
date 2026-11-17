@@ -1,0 +1,83 @@
+{
+ "id": "SCP0039",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCP0039_GET_VALIDATION_PLAN_GROUP",
+    "SCP0039_GET_VALIDATION_PROJECT_ROUTE_ELEC",
+    "SCP0039_GET_VALIDATION_YIELD",
+    "SCP0039_GET_VALIDATION_INTRANSIT_INVENTORY",
+    "SCP0039_GET_VALIDATION_BOM",
+    "SCP0039_GET_VALIDATION_PROJECT_ROUTE",
+    "SCP0039_GET_VALIDATION_LINE_ASSIGN",
+    "SCP0039_GET_VALIDATION_BOD",
+    "SCP0039_GET_VALIDATION_TACT_TIME"
+   ],
+   "scenarios": [
+    "SCP0039-S320de7",
+    "SCP0039-Scbd73f",
+    "SCP0039-S5bc1f8",
+    "SCP0039-Sacafa3",
+    "SCP0039-S033495",
+    "SCP0039-Scc5320"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "SCP0039-Sea1449",
+    "SCP0039-Sec3442",
+    "SCP0039-S7a932c",
+    "SCP0039-Sf3c779"
+   ]
+  },
+  {
+   "control": "btnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0039-S5bc1f8",
+    "SCP0039-Sacafa3",
+    "SCP0039-S033495",
+    "SCP0039-Scc5320"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 11:38:43.811",
+ "fills": 0,
+ "fill_left": []
+}

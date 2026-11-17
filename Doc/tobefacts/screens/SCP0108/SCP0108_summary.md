@@ -1,7 +1,7 @@
 # SCP0108 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-lob-report` · feature: supply · As-is Fact Pack 있음
-- 파일 16 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 57 · 하드코딩 컬럼 1 · 메시지 27
+- 파일 16 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 57 · 하드코딩 컬럼 1 · 메시지 28
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -114,6 +114,7 @@
 | LBL00055 | 1 |
 | LBL00001 | 1 |
 | LBL00053 | 1 |
+| LBL01275 | 1 |
 | LBL00014 | 1 |
 | LBL00015 | 1 |
 | LBL00030 | 1 |
@@ -125,7 +126,7 @@
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0108(18), SCP0105(17), SCP0104(5), SCP0106(4), SCP0025(2)
+- 화면ID: SCP0108(18), SCP0105(16), SCP0104(5), SCP0106(4), SCP0025(2)
 - SP/PKG: PKG_SCP0104(6), PKG_SCP0108(5), P_SCP0104_GET_SPREAD_TITLE(3), SCP0108_GET_CAPA_LOB_CURRENT(1), SCP0108_GET_CAPA_LOB(1), PKG_SCP0100(1), P_SCP0100_GET_GLOBAL_PSI_REPORT(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

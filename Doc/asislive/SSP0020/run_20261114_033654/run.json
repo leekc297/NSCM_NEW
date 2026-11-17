@@ -1,0 +1,51 @@
+{
+ "id": "SSP0020",
+ "started": "2026-11-14 03:36:54.176",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-14 03:37:10.020",
+   "in_menu": true,
+   "ok": false,
+   "error": "Exception: 파일이나 어셈블리 'file:///C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0020_Delegate.UIL.DLL' 또는 여기에 종속되어 있는 파일이나 어셈블리 중 하나를 로드할 수 없습니다. 지정된 파일을 찾을 수 없습니다.",
+   "done": "2026-11-14 03:37:10.026"
+  }
+ ],
+ "status": "FAIL",
+ "gate": {
+  "opened": false,
+  "grid_headers": false,
+  "grid_rows": false,
+  "shots": 0,
+  "calls": 0,
+  "calls_with_params": 0
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "dialogs": [],
+ "counts": {
+  "controls": 0,
+  "layout_items": 0,
+  "grids": 0,
+  "sheets": 0,
+  "header_cols": 0,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 9,
+  "calls_screen": 0,
+  "calls_find": 0,
+  "dialogs": 0
+ },
+ "why": "화면 열기 실패: Exception: 파일이나 어셈블리 'file:///C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0020_Delegate.UIL.DLL' 또는 여기에 종속되어 있는 파일이나 어셈블리 중 하나를 로드할 수 없습니다. 지정된 파일을 찾을 수 없습니다.",
+ "ended": "2026-11-14 03:37:10.780",
+ "exit": 2
+}

@@ -3,12 +3,13 @@ import { useEffect, useMemo, useRef } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useSessionStore, useTabid } from '@shared/stores';
 
 import type {
   BUCKET_TYPE} from '../shipment-request-semi.constants';
@@ -18,7 +19,6 @@ import {
   MENU_ID,
   MSG,
   PERIOD_OFFSET_DAY,
-  PERIOD_TIMEZONE,
 } from '../shipment-request-semi.constants';
 import { useShipmentRequestSemiStore } from '../useShipmentRequestSemiStore';
 
@@ -90,18 +90,19 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
   });
 
   // F7 Period 서버 산출 — 전역 기등록 콤보 `SCM0001_GET_SCP_DAY_PERIOD` 1회 조회.
-  //   반환 1행 CODE = 'YYYYMMDD:YYYYMMDD'(달력 마스터 clamp + FN_MULTY_TIME(AS054) 서버 KST, design 02 §5.4).
+  //   반환 1행 CODE = 'YYYYMMDD:YYYYMMDD'(달력 마스터 clamp + FN_MULTY_TIME(session.tmzCd) 사용자 등록 timezone, design 02 §5.4).
   //   call-proc(SSP0200 BTN_DAY_PERIOD) 대신 콤보를 쓴다 — 이 콤보가 전역 기등록이라 DB 등록이 0건이고,
   //   이 화면 Period 는 편집 불가(Enabled=false)·1회 산출이라 call-proc 의 반복호출(시작일 변동 재계산) 장점이
   //   발동하지 않는다(사용자 결정 2026-10-21, design 02 §5.4). @offsetDay 는 문자열로 넘긴다(SQL TO_NUMBER).
   //   파라미터 인용은 apiClient.getCombo(quoteComboParams)가 일괄 처리하므로 raw 로 전달한다(SRCH-04).
+  const tmzCd = sessionTimeZone(useSessionStore(state => state.session));
   const [dayPeriod] = useTabComboQueries({
     filters: [
       {
         comboId: COMBO.DAY_PERIOD,
         fromDate: '',
         offsetDay: String(PERIOD_OFFSET_DAY),
-        timeZone: PERIOD_TIMEZONE,
+        timeZone: tmzCd,
       },
     ],
   });

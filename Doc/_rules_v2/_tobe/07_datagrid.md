@@ -43,7 +43,7 @@ export const {Name}Grid = ({ gridRef, gridFilterRef, data }: GridProps) => {
   const editTrackerRef = useRef<EditTracker<ResponseData<MENU_ID, SHEETS.X>> | undefined>();
   
   // [3] Store selector (staticColumns + setDetailFilters 등)
-  const staticColumn = useStore(state => state.staticColumn);
+  const staticColumns = useStore(state => state.staticColumns);   // 2026-11-13 정정: staticColumn(단수) → staticColumns[RESPONSE_SET.X] (00 §8 #3 정준형 · §11.2 와 통일 · 단수는 DMF0006 기존 일탈)
   
   // [4] Modal state (cell 더블클릭 시 modal 열기)
   const [openProjectModal, setOpenProjectModal] = useState(false);
@@ -92,7 +92,7 @@ export const {Name}Grid = ({ gridRef, gridFilterRef, data }: GridProps) => {
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         itemsSource={data}
-        staticColumns={staticColumn ?? []}
+        staticColumns={staticColumns[RESPONSE_SET.X] ?? []}   // 11-13 정정
         dblClick={handleGridDblclick}
       />
       <ProjectByDivisionModal
@@ -288,6 +288,8 @@ import { CellType, type FlexGrid as FlexGridType, type FormatItemEventArgs } fro
 import { toggleClass } from '@mescius/wijmo';
 
 // 룰 12 §11.7: 조회 전용 grid 의 모든 cell 회색 표시
+// (2026-11-13 정정: 여기서 '룰 12' = 구 v1 `Doc/_dev_rules/_archive/12_GRID_COMMON.md` §11.7 — `_tobe/12_metadata_sql.md` 에는 §11.6·§11.7 없음.
+//  조회 grid 전체 회색칠은 hook `grid-cell-backcolor-standard.md` §금지 1 이 금지한 형태 — 기본 비편집 셀은 클래스 없음(흰색 + zebra))
 const applyReadOnlyColoring = (g: FlexGridType<unknown>): void => {
   g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
     if (e.panel.cellType !== CellType.Cell) return;
@@ -315,7 +317,7 @@ const applyReadOnlyColoring = (g: FlexGridType<unknown>): void => {
 
 ### §2.8 명시적 column 정의 (FlexGridColumn JSX) — Phase 7 추가
 
-- BE `staticColumns` API 미사용 (룰 04 의 `fetchStaticColumns` 도 미적용 가능)
+- BE `staticColumns` API 미사용 (룰 04 의 `fetchStaticColumns` 도 미적용 가능) (2026-11-13 정정: 변경 이력 2026-06-12 결정 — "DataGrid + Wijmo 직접 사용 화면 모두 staticColumns / staticMeasures 동적 fetch 의무" · §11.1 하드코딩 column 금지 — 로 대체됨. 이 '미사용/미적용 가능' 은 현행 아님)
 - column 메타가 코드에 직접 (소수 column 화면)
 - 룰 08 column meta (`_inputEditType`/`_ctrlType`/`_modalKey`) 도 적용 안 됨 (read-only)
 
@@ -326,7 +328,7 @@ const applyReadOnlyColoring = (g: FlexGridType<unknown>): void => {
 | 화면 특성 | DataGrid wrapper (§1) | FlexGrid 직접 (§2.7) |
 |---|---|---|
 | 편집 (Insert/Update/Delete) | ⭐ 의무 | 부적합 |
-| read-only 조회 | 가능 (allowEditing=false) | ⭐ 권장 (성능 + 유연성) |
+| read-only 조회 | 가능 (allowEditing=false) | ⭐ 권장 (성능 + 유연성) (2026-11-13 정정: 현행은 FlexGrid 직접 사용 금지 — §3.1 · 00 §3.5/§8 #8 · `.claude/rules/00-fe-screen.md` "Grid = 공용 DataGrid 만(FlexGrid JSX 직접 금지)". 이 표의 'FlexGrid 직접' 열 권장은 신규/수정 화면에 적용하지 않는다) |
 | EditTracker 사용 | ⭐ 의무 | 사용 안 함 |
 | column 메타 BE 동적 | ⭐ 의무 | 사용 안 함 |
 | `initialized` callback grid 직접 제어 | 어려움 | ⭐ 권장 |
@@ -394,7 +396,8 @@ const handleDuplicateCheck = (grid: FlexGrid, e: CellRangeEventArgs) => {
       content: t('MSG00060', '_중복된 SCM_SITE_ID 입니다.'),
     });
     // revert
-    const oldSite = editTrackerRef.current?.getOriginalValue(dataItem, 'SCM_SITE_ID') ?? '';
+    // 2026-11-13 정정: getOriginalValue(dataItem, binding) 는 없음 → getOriginalValues(): Map<row, Record<binding, value>> (editTracker.ts:130)
+    const oldSite = editTrackerRef.current?.getOriginalValues().get(dataItem)?.['SCM_SITE_ID'] ?? '';
     editTrackerRef.current?.storeChange(dataItem, 'SCM_SITE_ID', newSite, oldSite);
     dataItem.SCM_SITE_ID = oldSite;
     grid.refreshRange(new CellRange(e.row, e.col, e.row, e.col));
@@ -406,7 +409,7 @@ const handleDuplicateCheck = (grid: FlexGrid, e: CellRangeEventArgs) => {
 
 > **reference 2 종**:
 > - AS-IS DMF0008 SalesSite Branch (c)(d) — CountryName clear 시 Country + City + CityName cascade clear (`_asis/02_screens/DMF0008/cascade-mapping.md` §3.1)
-> - **AS-IS DMF0007 FCST Branch (c-modify) + PSI — ActiveFlag='N' 시 모든 D_ column 'N' cascade** (`_asis/02_screens/DMF0007/cascade-mapping.md` §1.3) — ⭐ **TO-BE 구현 사례** (`CustomerFcstMasterFcstGrid.tsx:32~54` + `CustomerFcstMasterPsiGrid.tsx:32~54`)
+> - **AS-IS DMF0007 FCST Branch (c-modify) + PSI — ActiveFlag='N' 시 모든 D_ column 'N' cascade** (`_asis/02_screens/DMF0007/cascade-mapping.md` §1.3) — ⭐ **TO-BE 구현 사례** (`CustomerFcstMasterFcstGrid.tsx:32~54` + `CustomerFcstMasterPsiGrid.tsx:32~54`) (2026-11-13: `CustomerFcstMasterPsiGrid.tsx` 는 현재 저장소에 없음. `CustomerFcstMasterFcstGrid.tsx` 는 있으나 32~54 줄은 지금 cascade 구현이 아님 — 화면 cascade 표는 2026-08-25 제거, 공용 DataGrid 가 컬럼 메타 attribute2 로 처리)
 
 ```typescript
 const handleCascadeClear = (grid: FlexGrid, e: CellRangeEventArgs) => {
@@ -442,6 +445,8 @@ const handleCascadeClear = (grid: FlexGrid, e: CellRangeEventArgs) => {
 // AS-IS dtSubBucket 의 NewRow / Modify / AcceptChanges 패턴은 TO-BE 에서
 // editTrackerRef.current.storeChange() 한 줄로 대체 + Save 시
 // editTrackerRef.current.getChangedItems() 호출하면 dirty row 만 반환.
+// (2026-11-13 정정: EditTracker 에 getChangedItems 는 없음 — 메서드는 storeChange / clearChanges / hasChanges / getOriginalValues.
+//  dirty row 추출은 data.filter(row => row.CRUD_TYPE) — 룰 03 §1.3 [저장 (F7)])
 ```
 
 #### §2.10.5 sub-pattern #5 — combo cascade reload (다른 cell 의 combo 옵션 reload)
@@ -464,14 +469,15 @@ const handleComboCascade = async (grid: FlexGrid, e: CellRangeEventArgs) => {
   if (!['PROJECT_CODE', 'TEAM_ID'].includes(binding)) return;
 
   // BE SP 호출 (또는 useTabComboQueries 의 동적 filter)
-  const newOptions = await apiClient.callQueryProc<MENU_ID, SHEETS.SSPM, 'salesPlant'>(
-    MENU_ID, SHEETS.SSPM, {
+  // 2026-11-13 정정: apiClient.callQueryProc 는 없음 → callProc<M, S>(menuId, sheetName, procedureAction, params) — axios.ts:135 · 반환 = ApiResponse({ result })
+  const newOptions = await apiClient.callProc<MENU_ID, SHEETS.SSPM>(
+    MENU_ID, SHEETS.SSPM, BUTTON_TYPE.SEARCH, {
       divisionId: dataItem.DIVISION_ID,
       projectCode: dataItem.PROJECT_CODE,
       itemId: dataItem.ITEM_ID,
     }
   );
-  setSalesPlantOptions(newOptions.o_rc1);
+  setSalesPlantOptions(newOptions.result.o_rc1);   // 11-13 정정: ApiResponse.result
 
   // column 의 dataMap 갱신 (전체 grid 의 SalesPlant cell 에 적용)
   const salesPlantCol = grid.columns.find(c => c.binding === 'SALES_PLANT');
@@ -690,6 +696,8 @@ if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT && binding === 'COUNTRY_NAME') {   �
 }
 ```
 
+> (2026-11-13 정정: 이 가드는 신규행에서만 입력하는 modal 셀(예 SalesSite COUNTRY_NAME — `SalesSiteGrid.tsx:123`)에 한한다. 기존행도 팝업으로 값을 바꾸는 셀(FPModal · CR-072)은 §1 표준대로 `GridUtils.isEditableCell` 검사만 둔다 — `CustomerModelMappingGrid.tsx:322-336`)
+
 → 메모리 `feedback_grid_popup_cell_mandatory.md`.
 
 ### §3.6 NUMBER → string 변환 누락 (메모리 사고 사례)
@@ -721,7 +729,7 @@ if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT && binding === 'COUNTRY_NAME') {   �
 />
 ```
 
-→ Wijmo merge sticky content 와 함께 룰 12 §11.6 참조.
+→ Wijmo merge sticky content 와 함께 룰 12 §11.6 참조. (11-13 정정: 구 v1 `Doc/_dev_rules/_archive/12_GRID_COMMON.md` §11.6)
 
 ### §3.8 useMemo 누락 (modal preSearchParams)
 
@@ -788,7 +796,7 @@ grep -A 3 "<.*Modal\b" "$GRID" | grep -n "preSearchParams=\{\{ \.\.\." # 사용 
 | `siMain.SetBGColor / SetBGColor2` | `.wj-cell-editable / .wj-cell-non-editable` CSS (DataGrid 자동) |
 | `siMain.SetValue` (Auto-Sync) | `cellEditEnded` handler + `editTrackerRef.storeChange` |
 | `siMain.AllowMerging = MergePolicy.Cells` | `allowMerging={AllowMerging.Cells}` |
-| `siMain.SmartColMerge` | `HierarchicalMergeManager` (룰 12 §11.6) |
+| `siMain.SmartColMerge` | `HierarchicalMergeManager` (룰 12 §11.6 — 11-13 정정: 구 v1 `_dev_rules/_archive/12_GRID_COMMON.md`) |
 | `cellTypeImage` (popup icon) | column meta `_ctrlType: 'FPModal'` + dblClick handler |
 | `spdMain.HitTest(e.X, e.Y)` | `grid.hitTest(mouseEvent)` |
 | `siMain.GetValue(row, "BINDING")` | `GridUtils.getRow(grid, row).BINDING` |
@@ -1038,7 +1046,7 @@ grep -rE "staticColumns=\{\[\s*\{\s*binding:" nscm-fe/features/
 ## §12 Insert cell ComboBox dropdown 표준 (2026-06-07 신규, DMF0003)
 
 > **DMF0003 (MKT FCST) 누적 보완사항 일반화** — Insert row 의 dropdown cell 적용 시 12 단계 보완사항을 1-pass 의무.
-> 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx`
+> 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx` (2026-11-13 정정: `SalesFuturePriceFlexGrid.tsx` 는 저장소에 없음 → 같은 폴더의 현행 Grid 파일 `SalesFuturePriceGrid.tsx`)
 > 상세: hook `wijmo-insert-cell-dropdown.md`
 
 ### §12.1 ❌ 절대 금지 (Anti-pattern, DMF0003 사고 5건)
@@ -1207,7 +1215,7 @@ grep -rn "new FlexGridFilter" features/*/src/pages/*/components/*.tsx | grep "in
 - hook `wijmo-insert-cell-dropdown.md` (12 단계 상세)
 - hook `localstorage-persist-pattern.md` (Measure 등 화면 close 후에도 유지 필요한 state)
 - 메모리: `feedback_wijmo_jsx_over_columnlayout`, `feedback_wijmo_selection_mode_default`, `feedback_cmbo_sql_at_division_param`, `feedback_localstorage_persist_callback`
-- 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx:65-432`
+- 자매 reference: `features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx` (11-13 정정: 파일명 · 옛 줄 범위 `:65-432` 는 현행 파일(1,320줄)과 맞지 않아 뺌)
 
 ---
 

@@ -2,7 +2,7 @@
  "menu_id": "DMF0005",
  "asis_id": "DMF0005",
  "area": "DM",
- "generated": "2026-11-05 06:14:38",
+ "generated": "2026-11-14 05:56:35",
  "division_cond": {
   "present": true,
   "labels": [
@@ -41,7 +41,7 @@
  "default": {
   "division": "40",
   "user": "",
-  "basis": "sheet_columns 단일 Division 칸 최다 40(23칸 · 분포 {'82': 14, '40': 23})"
+  "basis": "sheet_columns 단일 Division 칸 최다 40(23칸 · 분포 {'40': 23, '82': 14})"
  },
  "default_account": {
   "user": "minyonglee1",
@@ -69,8 +69,8 @@
  "popup_conds": [],
  "bucket_cond": "",
  "observed": {
-  "source": "e2e_results.json 2026-11-03 00:00 · 행 수 근거 118행",
-  "max_rows_after_search": 15674,
+  "source": "e2e_results.json 2026-11-12 23:47 · 행 수 근거 213행",
+  "max_rows_after_search": 47575,
   "zero_row_failures": [
    {
     "row_id": "V-44c10b42",

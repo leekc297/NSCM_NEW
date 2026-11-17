@@ -1,0 +1,23 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0015-Seb6c4c,기타,ClearUsrCheckedList,SSP0015_ShipmentPSI.cs:527,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:7964,
+SSP0015-Sbf4efb,조회,GetDivision,SSP0015_ShipmentPSI.cs:9192,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:560,
+SSP0015-S20f481,저장,GetErpIFCheck,SSP0015_ShipmentPSI.cs:7285,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:6903; SSP0015_ShipmentPSI.cs:7133,
+SSP0015-Sf834bb,조회,GetErpIFCheck,SSP0015_ShipmentPSI.cs:7300,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:6903; SSP0015_ShipmentPSI.cs:7133,
+SSP0015-S0801b6,조회,GetErpIFCheck,SSP0015_ShipmentPSI.cs:7307,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:6903; SSP0015_ShipmentPSI.cs:7133,
+SSP0015-Sc71a7e,조회,GetErpIFCheck,SSP0015_ShipmentPSI.cs:7312,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:6903; SSP0015_ShipmentPSI.cs:7133,
+SSP0015-Se42905,저장,GetErpIFCheckNew_,SSP0015_ShipmentPSI.cs:9731,호출 없음,,
+SSP0015-S56adab,조회,GetErpIFCheckNew_,SSP0015_ShipmentPSI.cs:9746,호출 없음,,
+SSP0015-Sb9aa4b,조회,GetErpIFCheckNew_,SSP0015_ShipmentPSI.cs:9753,호출 없음,,
+SSP0015-Sa92932,조회,GetErpIFCheckNew_,SSP0015_ShipmentPSI.cs:9758,호출 없음,,
+SSP0015-Saa0e5f,조회,GetNewERPInterface,SSP0015_ShipmentPSI.cs:9460,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:5647; SSP0015_ShipmentPSI.cs:5894,
+SSP0015-Sd86cd7,조회,GetNewERPInterface,SSP0015_ShipmentPSI.cs:9470,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:5647; SSP0015_ShipmentPSI.cs:5894,
+SSP0015-S967e91,저장,NewNonSoNo,SSP0015_ShipmentPSI.cs:9611,같은 파일에서 호출,SSP0015_ShipmentPSI.cs:9493,GetNewERPInterface
+SSP0015-S1dded5,저장,NewNonSoNo,SSP0015_ShipmentPSI.cs:9615,같은 파일에서 호출,SSP0015_ShipmentPSI.cs:9493,GetNewERPInterface
+SSP0015-S7df84c,기타,NewNonSoNo,SSP0015_ShipmentPSI.cs:9621,같은 파일에서 호출,SSP0015_ShipmentPSI.cs:9493,GetNewERPInterface
+SSP0015-Sa443dc,기타,NewNonSoNo,SSP0015_ShipmentPSI.cs:9685,같은 파일에서 호출,SSP0015_ShipmentPSI.cs:9493,GetNewERPInterface
+SSP0015-S0ba413,기타,NewNonSoNo,SSP0015_ShipmentPSI.cs:9708,같은 파일에서 호출,SSP0015_ShipmentPSI.cs:9493,GetNewERPInterface
+SSP0015-Sf582be,기타,SCM_SYS_LOG_BATCH,SSP0015_ShipmentPSI.cs:7876,호출 없음,,
+SSP0015-Sd2f3b0,기타,SetChangedPeriod,SSP0015_ShipmentPSI.cs:9207,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:7959; SSP0015_ShipmentPSI.cs:7970,
+SSP0015-Sb69d72,기타,SetChangedPeriod,SSP0015_ShipmentPSI.cs:9211,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:7959; SSP0015_ShipmentPSI.cs:7970,
+SSP0015-Sc2c5b0,기타,SetChangedPeriod,SSP0015_ShipmentPSI.cs:9218,주석 안에서만 호출,SSP0015_ShipmentPSI.cs:7959; SSP0015_ShipmentPSI.cs:7970,
+SSP0015-S07ade9,기타,SetImageCell,SSP0015_ShipmentPSI.cs:5007,호출 없음,,

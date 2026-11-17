@@ -75,8 +75,8 @@ TO-BE: `nscm-fe/features/supply/src/pages/constraint-mgmt/`
 | 셀 콤보 4슬롯 (`dtSystem`/`dtYesOrNo`, `isAddALL=false`) | cs:35~36·191·192·203·244 | `CELL_CONTROL_OBJECT_TYPE_CODE='FPComboBox'` + `CELL_COMBO_DATA_TYPE` = `SYSTEM` ×1 / `YesOrNo` ×3. PARAM2/9/10 전건 NULL(cascade 콤보 0건) | 구현 |
 | `Data.Type.LookupCommon`(param1='SYSTEM') | cs:35 | TO-BE 는 **`SYSTEM`** SQL_ID 를 쓴다 | 구현(사유: `LookupCommon` 은 `@lookupType` 바인드를 요구해 셀콤보 자동조회 경로에서 `''` 로 치환돼 0행이 되고 셀에 코드 원문이 노출된다. `SYSTEM` 은 상수를 SQL 에 박고 있어 결과가 5행으로 동일하다) |
 | `SetColumInfo` + Sub 컬럼 순회 동적 3축 (25슬롯) | cs:455~481·866~896 | `applyDynamicSubColumns(masterRow)` + `ConstraintMgmtDetailGrid` 파생 `staticColumns` useMemo | 구현 |
-| `spdMain.CellDoubleClick` → Sub 조회 | cs:849~864 | `click` → `applyDynamicSubColumns` + `setSubFilters` | 구현(사유: 사용자 요청으로 더블클릭 대신 단일 클릭으로 조회한다(2026-11-04). 같은 LOOKUP_TYPE 재클릭은 재조회하지 않는다) |
-| (AS-IS 없음) 하단 미저장 중 다른 Lookup Type 클릭 | — | `confirmDiscardDetail` → MSG00704 confirm, 취소 시 하단 유지(상단 선택은 클릭한 행에 둔다) | 신설(사유: 단일 클릭 전환으로 실수 이동이 쉬워져 미저장 변경 폐기를 확인한다, GRID-03, 2026-11-04) |
+| `spdMain.CellDoubleClick` → Sub 조회 | cs:849~864 | `LOOKUP_TYPE` 컬럼 `dblClick` → `applyDynamicSubColumns` + `setSubFilters` | 구현(사유: 2026-11-04 에 단일 클릭으로 바꿨으나 2026-11-09 사용자 지시로 다시 더블클릭으로 환원 — LOOKUP_TYPE 컬럼 한정이라 AS-IS 보다 좁다. 같은 LOOKUP_TYPE 재더블클릭은 drill-down 대신 재조회로 처리한다) |
+| (AS-IS 없음) 하단 미저장 중 다른 Lookup Type 더블클릭 | — | `confirmDiscardDetail` → MSG00704 confirm, 취소 시 하단 유지(상단 선택은 더블클릭한 행에 둔다) | 신설(사유: 미저장 변경 폐기를 확인한다, GRID-03, 2026-11-04 신설 · 2026-11-09 트리거를 더블클릭으로 환원) |
 | 더블클릭 가드 ① `siMain.IsLock(sheetName)==true` 일 때만 | cs:851 | **제거** | 제외(사유: 편집이 기본값인 TO-BE 에서는 이 가드가 Sub 조회를 영구 차단한다 — `decisions.md §2`) |
 | 더블클릭 가드 ② `Rows.Count<=0` | cs:853 | `if (!dataItem) return;` + `if (!lookupType) return;` | 구현 |
 | Main 신규행 기본값 `VALID_YN='Y'` 1건 | cs:811~815 | `EMPTY_MASTER_ROW` (34열 `''` + `VALID_YN:'Y'`) | 구현 |

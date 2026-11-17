@@ -1,0 +1,56 @@
+ M build.gradle
+ M gradle/wrapper/gradle-wrapper.properties
+ M settings.gradle
+ M src/main/java/com/lgcns/nscm/admin/auth/AuthService.java
+ M src/main/java/com/lgcns/nscm/admin/auth/AuthServiceImpl.java
+ M src/main/java/com/lgcns/nscm/admin/lookup/LookupServiceImpl.java
+ M src/main/java/com/lgcns/nscm/admin/menu/MenuController.java
+ M src/main/java/com/lgcns/nscm/admin/menu/MenuService.java
+ M src/main/java/com/lgcns/nscm/admin/menu/MenuServiceImpl.java
+ M src/main/java/com/lgcns/nscm/admin/menu/dto/MenuDto.java
+ M src/main/java/com/lgcns/nscm/framework/aspect/SystemLogAspect.java
+ M src/main/java/com/lgcns/nscm/framework/config/CorsConfig.java
+ M src/main/java/com/lgcns/nscm/framework/dao/NDBConnection.java
+ M src/main/java/com/lgcns/nscm/framework/handler/GlobalExceptionHandler.java
+ M src/main/java/com/lgcns/nscm/framework/interceptor/LogInterceptor.java
+ M src/main/java/com/lgcns/nscm/framework/interceptor/QueryLogInterceptor.java
+ M src/main/java/com/lgcns/nscm/framework/model/CustomMap.java
+ M src/main/java/com/lgcns/nscm/framework/security/CustomAuthorizationManager.java
+ M src/main/java/com/lgcns/nscm/framework/utils/ExcelUtils.java
+ M src/main/java/com/lgcns/nscm/general/GeneralController.java
+ M src/main/java/com/lgcns/nscm/general/GeneralService.java
+ M src/main/java/com/lgcns/nscm/general/GeneralServiceImpl.java
+ M src/main/java/com/lgcns/nscm/general/file/FileServiceImpl.java
+ M src/main/resources/application.yml
+ M src/main/resources/config/config-local.yml
+ M src/main/resources/mybatis/mybatis-config.xml
+ M src/main/resources/sql/admin/Auth.xml
+ M src/main/resources/sql/admin/Excel.xml
+ M src/main/resources/sql/admin/Menu.xml
+?? .bootrun.out
+?? .bootrun2.out
+?? .bootrun4.out
+?? .bootrun5.out
+?? _artifacts/
+?? bootrun.err
+?? lib/sso/
+?? src/main/java/com/lgcns/nscm/admin/dynamicquery/
+?? src/main/java/com/lgcns/nscm/admin/menu/dto/TitleSetSaveRequest.java
+?? src/main/java/com/lgcns/nscm/admin/menu/dto/TitleSetSearchRequest.java
+?? src/main/java/com/lgcns/nscm/admin/user/SsoDevController.java
+?? src/main/java/com/lgcns/nscm/framework/interceptor/SqlLogRecord.java
+?? src/main/java/com/lgcns/nscm/framework/interceptor/SqlLogWriter.java
+?? src/main/java/com/lgcns/nscm/general/NoticeController.java
+?? src/main/java/com/lgcns/nscm/general/file/ImageFileService.java
+?? src/main/java/com/lgcns/nscm/general/file/ImageFileServiceImpl.java
+?? src/main/java/com/lgcns/nscm/general/file/ImageValidator.java
+?? src/main/java/com/lgcns/nscm/general/file/dto/
+?? src/main/resources/config/config-local.yml.bak_20260729
+?? src/main/resources/config/config-local.yml.bak_20260905
+?? src/main/resources/config/config-local.yml.bak_20260907
+?? src/main/resources/config/config-local.yml.bak_20261029
+?? src/main/resources/sql/admin/DynamicQuery.xml
+?? src/main/resources/sql/general/
+?? src/test/java/com/lgcns/nscm/admin/user/SsoControllerTest.java
+?? src/test/java/com/lgcns/nscm/framework/security/
+?? src/test/java/com/lgcns/nscm/framework/utils/intercepotr/

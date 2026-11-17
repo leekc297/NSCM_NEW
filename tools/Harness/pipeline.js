@@ -2,7 +2,7 @@
 'use strict';
 // pipeline — 화면 ID 하나로 끝까지: FE 골격 → 등록 SQL → PKG 골격 → FE 수선 루프(게이트 PASS) → PKG 이식 루프 → E2E 스펙 → [E2E 실행] → 대조표 갱신
 //   node pipeline.js <ID> [--max 3] [--e2e] [--no-claude] [--regen-pkg] [--design <화면설계서.md>] [--config harness.json] [--phase 1[,2,…]]
-//   --phase N   : 그 단계만 실행(1 FE골격 · 2 등록SQL · 3 PKG골격 · 4 FE수선 · 5 PKG이식 · 6 E2E스펙 · 7 대조표). 단계 결과는 Doc/gen/<ID>/_pipeline_steps.json 에 누적되고
+//   --phase N   : 그 단계만 실행(1 FE골격 · 2 등록SQL · 3 PKG골격 · 4 FE수선 · 5 PKG이식 · 6 E2E스펙 · 7 대조표 · 8 DB 반영 확인). 단계 결과는 Doc/gen/<ID>/_pipeline_steps.json 에 누적되고
 //                 PIPELINE.md 는 누적본으로 다시 쓴다(Vibe_Manager 체인이 단계별 진행을 보여주기 위해 — 2026-10-20). 종료코드 = 이번에 실행한 단계의 실패 여부
 //   --regen-pkg : 이식 작업이 들어간 <ID>_PKG.sql 을 버리고 골격을 다시 만든다(기본은 보존)
 //   --no-claude : Claude 호출 없이 생성·게이트까지만 (골격 상태 확인용)   --e2e : FE/BE 가 떠 있을 때 스모크 실행까지
@@ -11,7 +11,7 @@ const fs = require('fs'); const path = require('path'); const { spawnSync } = re
 const a = process.argv.slice(2); const opt = (k, d) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : d; };
 const cfgPath = opt('--config', path.join(__dirname, 'harness.json')); const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8').replace(/^﻿/, ''));
 const ID = (a.find(x => !x.startsWith('--') && !['--max', '--config', '--phase', '--design'].includes(a[a.indexOf(x) - 1])) || '').toUpperCase(); if (!ID) { console.error('화면ID'); process.exit(2); }
-const PH = String(opt('--phase', '')).split(',').map(x => parseInt(x, 10)).filter(n => n >= 1 && n <= 7); const want = n => !PH.length || PH.includes(n);
+const PH = String(opt('--phase', '')).split(',').map(x => parseInt(x, 10)).filter(n => n >= 1 && n <= 8); const want = n => !PH.length || PH.includes(n);
 const MAX = opt('--max', '3'); const E2E = a.includes('--e2e'); const NOCLAUDE = a.includes('--no-claude');
 const DESIGN = opt('--design', ''); const DARGS = DESIGN ? ['--design', DESIGN] : [];
 const repo = path.dirname(cfg.feRoot); const genDir = path.join(cfg.genOutDir, ID); fs.mkdirSync(genDir, { recursive: true });
@@ -55,6 +55,14 @@ else if (pageDir && fs.existsSync(pageDir)) { if (want(4)) run('4 FE 게이트(-
 const e2eDir = path.join(repo, 'tools', 'E2E'); if (want(6) && fs.existsSync(path.join(e2eDir, 'gen-e2e.js'))) { run('6 E2E 스펙 생성(gen-e2e)', N, [path.join(e2eDir, 'gen-e2e.js'), ID]); if (E2E) run('6b E2E 스모크 실행(run-e2e smoke)', path.join(e2eDir, 'run-e2e.cmd'), ['smoke', ID], { cwd: e2eDir }); }
 // 7 대조표
 const reconDir = path.join(repo, 'tools', 'Recon'); if (want(7) && fs.existsSync(path.join(reconDir, 'recon.js'))) run('7 대조표 갱신(recon)', N, [path.join(reconDir, 'recon.js'), ...C]);
+// 8 DB 반영 확인(EN-22 · 2026-11-11) — 종전 체인은 '만들기' 뒤 곧바로 CheckList 로 넘어가 사내 DB 반영 여부를 아무도 재지 않았다(pipeline·repair-loop 에 적용·컴파일·배선 확인 호출 0).
+//   8a = PKG 파일 ↔ 사내 ALL_SOURCE 비교(meta_apply --check · 읽기 전용 · 다르면 exit 2) · 8b = 메뉴·FE 호출 배선·PROC 실재/유효·인자 메타·컬럼 메타·콤보를 사내 DB 실시간 조회(meta_live_check · FAIL 이면 exit 2)
+//   적용 자체는 하지 않는다 — 사내 DB 쓰기는 👀 META 미리보기 / ✅ META 커밋(meta_apply --commit) 단계의 일이다. 여기서는 '반영됐는가'만 잰다.
+if (want(8)) {
+  const PY = process.env.PYTHON || 'python';
+  if (fs.existsSync(path.join(genDir, `${ID}_PKG.sql`))) run('8a 사내 DB 반영 비교(meta_apply --check · PKG 파일↔사내 원문)', PY, [path.join(repo, 'tools', 'DbConn', 'meta_apply.py'), ID, '--check']);
+  run('8b 메타·배선 실시간 검증(meta_live_check · 사내 DB)', PY, [path.join(repo, 'tools', 'Harness', 'verify', 'meta_live_check.py'), ID]);
+}
 steps.sort((x, y) => (parseInt(String(x.name).trim(), 10) || 0) - (parseInt(String(y.name).trim(), 10) || 0)); saveSteps();
 // 결과 요약
 const chk = fs.existsSync(path.join(genDir, 'CHECK.md')) ? (/BLOCK (\d+) \/ WARN (\d+)/.exec(fs.readFileSync(path.join(genDir, 'CHECK.md'), 'utf8')) || []).slice(1) : [];

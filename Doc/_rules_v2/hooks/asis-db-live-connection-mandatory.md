@@ -43,7 +43,7 @@ cs = (f"DRIVER={{{drv}}};SERVER={host},{port};DATABASE={db};UID={usr};PWD={pwd};
 cn = pyodbc.connect(cs, timeout=30)
 ```
 - 정본 조회: `SELECT definition FROM sys.sql_modules WHERE object_id = OBJECT_ID('dbo.<SP>')`
-- 메타 동반 조회 의무: `sys.objects.create_date / modify_date` — **스냅샷 시점 고정** (hook `asis-dev-volatile-snapshot-gate` 연동)
+- 메타 동반 조회 의무: `sys.objects.create_date / modify_date` — **스냅샷 시점 고정** (hook `asis-dev-volatile-snapshot-gate` 연동) (2026-11-13: 이 이름의 hook 문서는 `Doc/_rules_v2/hooks` 에 없음. 메모리 `feedback_asis_dev_volatile_snapshot_gate.md` 로만 있음)
 - 어느 DB 인지 확인: `SELECT @@SERVERNAME, DB_NAME(), SUSER_SNAME(), GETDATE()`
 - **대상 DB 가 요청받은 환경(DEV/QA/PROD)인지 반드시 확인** — 다르면 그 사실을 먼저 보고한다.
   인스턴스 내 DB 열거 = `SELECT name, state_desc, HAS_DBACCESS(name) FROM sys.databases`

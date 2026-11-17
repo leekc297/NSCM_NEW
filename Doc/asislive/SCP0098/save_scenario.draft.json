@@ -1,0 +1,145 @@
+{
+ "id": "SCP0098",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+   "save_sp": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+   "status": "키 일부 미대응",
+   "table": "SCP_MST_CAPA_WORK",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "FACTORY_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "FACTORY_ID": "FACTORY_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID"
+   },
+   "unmatched_pk": [
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/CAPA_SMALL",
+   "writes": {
+    "SCP_MST_CAPA_WORK": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE → SP SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "MEASURE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0098_SAVE_SCP_CAPA",
+   "save_sp": "SCP0098_SAVE_SCP_CAPA",
+   "status": "키 일부 미대응",
+   "table": "SCP_MST_CAPA",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "FACTORY_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "ITEM_ID",
+    "YYYYMM"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "FACTORY_ID": "FACTORY_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "unmatched_pk": [
+    "YYYYMM"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/CAPA_SMALL",
+   "writes": {
+    "SCP_MST_CAPA": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0098_SAVE_SCP_CAPA → SP SCP0098_SAVE_SCP_CAPA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "YYYYMM": "p_yyyymm←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0098_SAVE_SCP_CAPA_WORK",
+   "save_sp": "SCP0098_SAVE_SCP_CAPA_WORK",
+   "status": "키 일부 미대응",
+   "table": "SCP_MST_CAPA_WORK",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_ID",
+    "FACTORY_ID",
+    "OPERATION_ID",
+    "LINE_ID",
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLANT_ID": "PLANT_ID",
+    "FACTORY_ID": "FACTORY_ID",
+    "OPERATION_ID": "OPERATION_ID",
+    "LINE_ID": "LINE_ID"
+   },
+   "unmatched_pk": [
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/CAPA_SMALL",
+   "writes": {
+    "SCP_MST_CAPA_WORK": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0098_SAVE_SCP_CAPA_WORK → SP SCP0098_SAVE_SCP_CAPA_WORK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "MEASURE": "p_measure←(그리드 열에서 오지 않음)",
+    "YYYYMMDD": "p_yyyymmdd←(그리드 열에서 오지 않음)"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "biz:AppService.GeneralRunProcedureCustomTable [procedure=SCP0098_COPY_MONTH_WEEK] | SCP\\Master\\SCP0098_CAPAReprotSmall#SCP0098_COPY_MONTH_WEEK",
+   "save_sp": "GeneralRunProcedureCustomTable [procedure=SCP0098_COPY_MONTH_WEEK] | SCP\\Master\\SCP0098_CAPAReprotSmall#SCP0098_COPY_MONTH_WEEK",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml GeneralRunProcedureCustomTable [procedure=SCP0098_COPY_MONTH_WEEK] | SCP\\Master\\SCP0098_CAPAReprotSmall#SCP0098_COPY_MONTH_WEEK → SP GeneralRunProcedureCustomTable [procedure=SCP0098_COPY_MONTH_WEEK] | SCP\\Master\\SCP0098_CAPAReprotSmall#SCP0098_COPY_MONTH_WEEK 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  }
+ ]
+}

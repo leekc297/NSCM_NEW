@@ -1,0 +1,4376 @@
+[
+ {
+  "screen": "SCP0005",
+  "call": 0,
+  "cls": "ExcelUploadForm2",
+  "trig": "BTN:Upload",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS btnEaxel_Upload_Click 팝업(ExcelUploadForm2) 열림",
+  "actual": "BTN: 버튼 [Upload/Upload/Eaxel_Upload] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, Distribution Route, Close others, Close All, Search(F5), Excel Form, Excel Upload, Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10)]",
+  "basis": "SCP0005_DistributionRoute.cs:376",
+  "at": "2026-11-13T22:10:25.379Z",
+  "mut": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Region Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 제목과 같은 팝업",
+  "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Region Popup'",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'Country' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 89431행)",
+  "actual": "행머리 폭 50px · No 컬럼 폭 0px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총89,431'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.578Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS 조건 칸 ↔ TO-BE",
+  "actual": "AS-IS 원문을 찾지 못함",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.579Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Country, City]",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.579Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 89431 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.811Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "ERROR",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "AS-IS 조회 SP 원문 없음()",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-13T22:10:39.812Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → COUNTRY 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 COUNTRY ASC · 2회 COUNTRY DESC · 첫 행 'AA'→'ZW'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:10:42.405Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 89431→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-13T22:10:52.857Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:10:52.857Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:10:53.256Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 잠금 호출 facts",
+  "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
+  "basis": "",
+  "at": "2026-11-13T22:10:53.260Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"ZW\",\"city\":\"\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:10:59.284Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' → 값 포함 행만(기준 89431행 중)",
+  "actual": "34행 · 전행 포함 true · 컬럼 'Country'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:10:59.284Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "부분 문자열",
+  "actual": "값 'ZW' 길이 부족",
+  "basis": "",
+  "at": "2026-11-13T22:10:59.284Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zw' 행수 = 'ZW' 행수",
+  "actual": "34 vs 34 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:11:01.350Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZW,ZM' → 두 값 모두 조회",
+  "actual": "79행 · 'ZW' true · 'ZM' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:11:03.424Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:11:07.629Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"\",\"city\":\"ZWBAT\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:11:10.253Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' → 값 포함 행만(기준 89431행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'City'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:11:10.253Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'WBA' → 포함 행(≥ 1)",
+  "actual": "14행 · 전행 포함 true · AS-IS LIKE=undefined",
+  "basis": "문서 DM-181·DM-212",
+  "at": "2026-11-13T22:11:12.801Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zwbat' 행수 = 'ZWBAT' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:11:15.415Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZWBAT,ZWBBG' → 두 값 모두 조회",
+  "actual": "2행 · 'ZWBAT' true · 'ZWBBG' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:11:18.446Z",
+  "mut": "",
+  "mctx": {
+   "calls": 12,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:11:22.545Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Country:text, City:text]",
+  "basis": "",
+  "at": "2026-11-13T22:11:22.545Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:11:22.546Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-13T22:11:22.546Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1450,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-13T22:11:22.546Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-13T22:11:22.546Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:11:23.743Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:11:24.729Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":98,\"y\":135,\"w\":1725,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:11:25.809Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:11:26.772Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T22:11:27.650Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-13T22:11:42.276Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 'AA' → 'AA'",
+  "basis": "문서 EG443",
+  "at": "2026-11-13T22:11:43.266Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "NA",
+  "expected": "단일/다중 선택 구분",
+  "actual": "AS-IS 인자 없음(multi='') 또는 행 89431",
+  "basis": "",
+  "at": "2026-11-13T22:11:46.672Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "[근거 불충분] 대상 'AA' → 'AA' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [COUNTRY]",
+  "basis": "",
+  "at": "2026-11-13T22:11:48.877Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
+  "basis": "",
+  "at": "2026-11-13T22:11:48.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_TYPE",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
+  "actual": "FROM_COUNTRY 메타 입력 방식 [FPTextModal,FPText] · 직접 편집 true (행 0)",
+  "basis": "문서 GAPPI-1·GAPPI-16 · ",
+  "at": "2026-11-13T22:11:59.796Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_KEYIN",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T22:11:59.796Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_ICON",
+  "egs": [
+   "EG137"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 셀 아이콘 표시",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-center wj-cell-editable wj-ce' · 메타 [FPTextModal,FPText]",
+  "basis": "",
+  "at": "2026-11-13T22:12:00.002Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_DELETE",
+  "egs": [
+   "EG104"
+  ],
+  "result": "NA",
+  "expected": "Delete 키 값 삭제 허용",
+  "actual": "'AA'→'AA'",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:12:00.540Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_PASTE",
+  "egs": [
+   "EG104",
+   "EG159"
+  ],
+  "result": "PASS",
+  "expected": "붙여넣기 → FROM_COUNTRY = 원천값 · 코드 컬럼 동반(문서 DM-18)",
+  "actual": "값 ''→'CA' (원천 'CA') · 바뀐 컬럼 [FROM_COUNTRY] · 원천과 같은 [FROM_COUNTRY]",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:12:02.215Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 100,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_COUNTRY",
+  "check": "CELL_BADKEY",
+  "egs": [
+   "EG176"
+  ],
+  "result": "PASS",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ' · 메시지 ''",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T22:12:03.706Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Region Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 제목과 같은 팝업",
+  "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Region Popup'",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'Country' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 89431행)",
+  "actual": "행머리 폭 50px · No 컬럼 폭 0px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총89,431'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.367Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS 조건 칸 ↔ TO-BE",
+  "actual": "AS-IS 원문을 찾지 못함",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.368Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Country, City]",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.368Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 89431 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.580Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "ERROR",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "AS-IS 조회 SP 원문 없음()",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.581Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-13T22:12:18.581Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → COUNTRY 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 COUNTRY ASC · 2회 COUNTRY DESC · 첫 행 'AA'→'ZW'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:12:21.239Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 89431→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-13T22:12:31.622Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:12:31.622Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:12:32.000Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 잠금 호출 facts",
+  "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
+  "basis": "",
+  "at": "2026-11-13T22:12:32.003Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"ZW\",\"city\":\"\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:12:37.692Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' → 값 포함 행만(기준 89431행 중)",
+  "actual": "34행 · 전행 포함 true · 컬럼 'Country'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:12:37.692Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "부분 문자열",
+  "actual": "값 'ZW' 길이 부족",
+  "basis": "",
+  "at": "2026-11-13T22:12:37.692Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zw' 행수 = 'ZW' 행수",
+  "actual": "34 vs 34 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:12:39.707Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZW,ZM' → 두 값 모두 조회",
+  "actual": "79행 · 'ZW' true · 'ZM' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:12:41.756Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:12:45.692Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"\",\"city\":\"ZWBAT\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:12:48.225Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' → 값 포함 행만(기준 89431행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'City'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:12:48.225Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'WBA' → 포함 행(≥ 1)",
+  "actual": "14행 · 전행 포함 true · AS-IS LIKE=undefined",
+  "basis": "문서 DM-181·DM-212",
+  "at": "2026-11-13T22:12:50.740Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zwbat' 행수 = 'ZWBAT' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:12:53.277Z",
+  "mut": "",
+  "mctx": {
+   "calls": 12,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZWBAT,ZWBBG' → 두 값 모두 조회",
+  "actual": "2행 · 'ZWBAT' true · 'ZWBBG' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:12:56.117Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Country:text, City:text]",
+  "basis": "",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1450,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-13T22:13:00.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:13:01.227Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:13:02.150Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":98,\"y\":135,\"w\":1725,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:13:03.183Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:13:04.103Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T22:13:05.052Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-13T22:13:19.699Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 'AATES' → 'AATES'",
+  "basis": "문서 EG443",
+  "at": "2026-11-13T22:13:20.703Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "NA",
+  "expected": "단일/다중 선택 구분",
+  "actual": "AS-IS 인자 없음(multi='') 또는 행 89431",
+  "basis": "",
+  "at": "2026-11-13T22:13:25.811Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "[근거 불충분] 대상 'AATES' → 'AATES' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [COUNTRY,CITY]",
+  "basis": "",
+  "at": "2026-11-13T22:13:28.240Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
+  "basis": "",
+  "at": "2026-11-13T22:13:28.244Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_TYPE",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
+  "actual": "FROM_CITY 메타 입력 방식 [FPTextModal,FPText] · 직접 편집 true (행 0)",
+  "basis": "문서 GAPPI-1·GAPPI-16 · ",
+  "at": "2026-11-13T22:13:40.624Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_KEYIN",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T22:13:40.624Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_ICON",
+  "egs": [
+   "EG137"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 셀 아이콘 표시",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-center wj-cell-editable wj-ce' · 메타 [FPTextModal,FPText]",
+  "basis": "",
+  "at": "2026-11-13T22:13:40.687Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_DELETE",
+  "egs": [
+   "EG104"
+  ],
+  "result": "NA",
+  "expected": "Delete 키 값 삭제 허용",
+  "actual": "'AATES'→'AATES'",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:13:41.476Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_PASTE",
+  "egs": [
+   "EG104",
+   "EG159"
+  ],
+  "result": "PASS",
+  "expected": "붙여넣기 → FROM_CITY = 원천값 · 코드 컬럼 동반(문서 DM-18)",
+  "actual": "값 'AATES'→'CAWND' (원천 'CAWND') · 바뀐 컬럼 [FROM_CITY,FROM_COUNTRY,FROM_CITY_NAME] · 원천과 같은 [FROM_CITY,FROM_COUNTRY,FROM_CITY_NAME]",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:13:42.870Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 101,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:FROM_CITY",
+  "check": "CELL_BADKEY",
+  "egs": [
+   "EG176"
+  ],
+  "result": "PASS",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ_E2' · 메시지 ''",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T22:13:44.335Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Region Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 제목과 같은 팝업",
+  "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Region Popup'",
+  "basis": "",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'Country' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 89431행)",
+  "actual": "행머리 폭 50px · No 컬럼 폭 0px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총89,431'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS 조건 칸 ↔ TO-BE",
+  "actual": "AS-IS 원문을 찾지 못함",
+  "basis": "",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Country, City]",
+  "basis": "",
+  "at": "2026-11-13T22:13:59.867Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 89431 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-13T22:14:00.050Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "ERROR",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "AS-IS 조회 SP 원문 없음()",
+  "basis": "",
+  "at": "2026-11-13T22:14:00.051Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-13T22:14:00.051Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → COUNTRY 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 COUNTRY ASC · 2회 COUNTRY DESC · 첫 행 'AA'→'ZW'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:14:02.593Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 89431→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-13T22:14:13.078Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:14:13.078Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:14:13.456Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 잠금 호출 facts",
+  "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
+  "basis": "",
+  "at": "2026-11-13T22:14:13.459Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"ZW\",\"city\":\"\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:14:19.580Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' → 값 포함 행만(기준 89431행 중)",
+  "actual": "34행 · 전행 포함 true · 컬럼 'Country'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:14:19.580Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "부분 문자열",
+  "actual": "값 'ZW' 길이 부족",
+  "basis": "",
+  "at": "2026-11-13T22:14:19.580Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zw' 행수 = 'ZW' 행수",
+  "actual": "34 vs 34 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:14:21.644Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZW,ZM' → 두 값 모두 조회",
+  "actual": "79행 · 'ZW' true · 'ZM' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:14:23.729Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:14:28.012Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"\",\"city\":\"ZWBAT\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:14:30.600Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' → 값 포함 행만(기준 89431행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'City'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:14:30.600Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'WBA' → 포함 행(≥ 1)",
+  "actual": "14행 · 전행 포함 true · AS-IS LIKE=undefined",
+  "basis": "문서 DM-181·DM-212",
+  "at": "2026-11-13T22:14:33.125Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zwbat' 행수 = 'ZWBAT' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:14:35.645Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZWBAT,ZWBBG' → 두 값 모두 조회",
+  "actual": "2행 · 'ZWBAT' true · 'ZWBBG' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:14:38.508Z",
+  "mut": "",
+  "mctx": {
+   "calls": 12,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:14:42.879Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Country:text, City:text]",
+  "basis": "",
+  "at": "2026-11-13T22:14:42.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:14:42.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-13T22:14:42.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1450,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-13T22:14:42.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-13T22:14:42.880Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:14:44.113Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:14:45.099Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":98,\"y\":135,\"w\":1725,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:14:46.206Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:14:47.149Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T22:14:48.118Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-13T22:15:03.632Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 'CL' → 'CL'",
+  "basis": "문서 EG443",
+  "at": "2026-11-13T22:15:04.626Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "NA",
+  "expected": "단일/다중 선택 구분",
+  "actual": "AS-IS 인자 없음(multi='') 또는 행 89431",
+  "basis": "",
+  "at": "2026-11-13T22:15:08.794Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "대상 'CL' → 'AA' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [COUNTRY]",
+  "basis": "",
+  "at": "2026-11-13T22:15:11.066Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
+  "basis": "",
+  "at": "2026-11-13T22:15:11.070Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_TYPE",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
+  "actual": "TO_COUNTRY 메타 입력 방식 [FPTextModal,FPText] · 직접 편집 true (행 0)",
+  "basis": "문서 GAPPI-1·GAPPI-16 · ",
+  "at": "2026-11-13T22:15:24.889Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_KEYIN",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T22:15:24.889Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_ICON",
+  "egs": [
+   "EG137"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 셀 아이콘 표시",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-center wj-cell-editable wj-ce' · 메타 [FPTextModal,FPText]",
+  "basis": "",
+  "at": "2026-11-13T22:15:25.117Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_DELETE",
+  "egs": [
+   "EG104"
+  ],
+  "result": "NA",
+  "expected": "Delete 키 값 삭제 허용",
+  "actual": "'CL'→'CL'",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:15:25.652Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_PASTE",
+  "egs": [
+   "EG104",
+   "EG159"
+  ],
+  "result": "PASS",
+  "expected": "붙여넣기 → TO_COUNTRY = 원천값 · 코드 컬럼 동반(문서 DM-18)",
+  "actual": "값 ''→'CA' (원천 'CA') · 바뀐 컬럼 [TO_COUNTRY] · 원천과 같은 [TO_COUNTRY]",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:15:27.344Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 102,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_COUNTRY",
+  "check": "CELL_BADKEY",
+  "egs": [
+   "EG176"
+  ],
+  "result": "PASS",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ' · 메시지 ''",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T22:15:28.874Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Region Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 팝업 제목과 같은 팝업",
+  "actual": "AS-IS 제목 facts 없음(AS-IS 원문 없음) · TO-BE 'Region Popup'",
+  "basis": "",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'Country' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(41px, 89431행)",
+  "actual": "행머리 폭 50px · No 컬럼 폭 0px",
+  "basis": "문서 DM-179",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총89,431'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 없음) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS 조건 칸 ↔ TO-BE",
+  "actual": "AS-IS 원문을 찾지 못함",
+  "basis": "",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Country, City]",
+  "basis": "",
+  "at": "2026-11-13T22:15:43.971Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 2건 · 행 89431 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-11-13T22:15:44.176Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "ERROR",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "AS-IS 조회 SP 원문 없음()",
+  "basis": "",
+  "at": "2026-11-13T22:15:44.177Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-11-13T22:15:44.177Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384",
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "F3(정렬 스위치) + 머리글 클릭 → COUNTRY 오름/내림 토글(공통 그리드 규칙 CR-034)",
+  "actual": "스위치 true · 1회 COUNTRY ASC · 2회 COUNTRY DESC · 첫 행 'AA'→'ZW'",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:15:46.784Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "ERROR",
+  "expected": "F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원",
+  "actual": "아이콘 0→2 · 행 89431→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]').",
+  "basis": "문서 DM-C8·DM-P64",
+  "at": "2026-11-13T22:15:57.220Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "GRID_FILTER_COUNT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "필터 후 건수 표시",
+  "actual": "''",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:15:57.220Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "PASS",
+  "expected": "↓ 키 → 다음 행 선택(공통 그리드 단축키)",
+  "actual": "선택 행 1",
+  "basis": "문서 DM-C8",
+  "at": "2026-11-13T22:15:57.611Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "NA",
+  "expected": "AS-IS 잠금 호출 facts",
+  "actual": "AS-IS 잠금 호출 없음 · 편집 가능 []",
+  "basis": "",
+  "at": "2026-11-13T22:15:57.615Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"ZW\",\"city\":\"\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:16:04.493Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'Country'='ZW' → 값 포함 행만(기준 89431행 중)",
+  "actual": "34행 · 전행 포함 true · 컬럼 'Country'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:16:04.493Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "부분 문자열",
+  "actual": "값 'ZW' 길이 부족",
+  "basis": "",
+  "at": "2026-11-13T22:16:04.493Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zw' 행수 = 'ZW' 행수",
+  "actual": "34 vs 34 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:16:06.569Z",
+  "mut": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZW,ZM' → 두 값 모두 조회",
+  "actual": "79행 · 'ZW' true · 'ZM' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:16:08.602Z",
+  "mut": "",
+  "mctx": {
+   "calls": 8,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:16:12.609Z",
+  "mut": "",
+  "mctx": {
+   "calls": 9,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ARG",
+  "egs": [
+   "EG281",
+   "EG288",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' 조회 요청 본문에 값 포함(고정 '%' 금지)",
+  "actual": "요청 1건 · 본문 {\"country\":\"\",\"city\":\"ZWBAT\"}",
+  "basis": "문서 GAPPI-23·DM-220",
+  "at": "2026-11-13T22:16:15.199Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ROWS",
+  "egs": [
+   "EG248",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "'City'='ZWBAT' → 값 포함 행만(기준 89431행 중)",
+  "actual": "1행 · 전행 포함 true · 컬럼 'City'",
+  "basis": "문서 DM-220·GAPPI-23",
+  "at": "2026-11-13T22:16:15.199Z",
+  "mut": "",
+  "mctx": {
+   "calls": 10,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_LIKE",
+  "egs": [
+   "EG261",
+   "EG432",
+   "EG338"
+  ],
+  "result": "PASS",
+  "expected": "부분 문자열 'WBA' → 포함 행(≥ 1)",
+  "actual": "14행 · 전행 포함 true · AS-IS LIKE=undefined",
+  "basis": "문서 DM-181·DM-212",
+  "at": "2026-11-13T22:16:17.729Z",
+  "mut": "",
+  "mctx": {
+   "calls": 11,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_CASE",
+  "egs": [
+   "EG297",
+   "EG432"
+  ],
+  "result": "PASS",
+  "expected": "대소문자 무시 — 'zwbat' 행수 = 'ZWBAT' 행수",
+  "actual": "1 vs 1 · AS-IS UPPER=undefined",
+  "basis": "문서 GAP-506·SSP45REQ-13",
+  "at": "2026-11-13T22:16:20.270Z",
+  "mut": "",
+  "mctx": {
+   "calls": 12,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_COMMA",
+  "egs": [
+   "EG299",
+   "EG432",
+   "EG071"
+  ],
+  "result": "PASS",
+  "expected": "콤마 'ZWBAT,ZWBBG' → 두 값 모두 조회",
+  "actual": "2행 · 'ZWBAT' true · 'ZWBBG' true · AS-IS 콤마 분해=undefined",
+  "basis": "문서 SSP45REQ-14",
+  "at": "2026-11-13T22:16:23.131Z",
+  "mut": "",
+  "mctx": {
+   "calls": 13,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "FILTER_ALL",
+  "egs": [
+   "EG261"
+  ],
+  "result": "PASS",
+  "expected": "조건 비우고 재조회 → 기준 89431행",
+  "actual": "89431행",
+  "basis": "문서 DM-P29",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "COMBO",
+  "egs": [
+   "EG261",
+   "EG069"
+  ],
+  "result": "NA",
+  "expected": "팝업 콤보 조건",
+  "actual": "활성 콤보 없음 — 조건 [Country:text, City:text]",
+  "basis": "",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=false paperH=false · 내용 초과 150px · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "PASS",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1450,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-11-13T22:16:27.291Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:16:28.608Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":210,\"y\":135,\"w\":1500,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:16:29.636Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":98,\"y\":135,\"w\":1725,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:16:30.684Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-11-13T22:16:31.622Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-11-13T22:16:32.631Z",
+  "mut": "",
+  "mctx": {
+   "calls": 14,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "NOSEL",
+  "egs": [
+   "EG439"
+  ],
+  "result": "NA",
+  "expected": "선택 없이 OK → 안내",
+  "actual": "팝업 열 때 기본 선택 1행 — 선택 없음 상태 없음",
+  "basis": "",
+  "at": "2026-11-13T22:16:48.917Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CLOSE_KEEP",
+  "egs": [
+   "EG443"
+  ],
+  "result": "PASS",
+  "expected": "Close → 칸 값 유지",
+  "actual": "Close 닫힘 · 칸 'CLANF' → 'CLANF'",
+  "basis": "문서 EG443",
+  "at": "2026-11-13T22:16:49.913Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "SELECT_MODE",
+  "egs": [
+   "EG341",
+   "EG446",
+   "EG166"
+  ],
+  "result": "NA",
+  "expected": "단일/다중 선택 구분",
+  "actual": "AS-IS 인자 없음(multi='') 또는 행 89431",
+  "basis": "",
+  "at": "2026-11-13T22:16:53.567Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "PICK_OK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "PASS",
+  "expected": "OK → 대상 칸에 선택 값",
+  "actual": "대상 'CLANF' → 'AATES' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [COUNTRY,CITY]",
+  "basis": "",
+  "at": "2026-11-13T22:16:55.922Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "PERIOD_BACK",
+  "egs": [
+   "EG447"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 → 메인 Period 반영",
+  "actual": "AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0",
+  "basis": "",
+  "at": "2026-11-13T22:16:55.925Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_TYPE",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 더블클릭 팝업 컬럼() → 메타 FPModal/FPTextModal",
+  "actual": "TO_CITY 메타 입력 방식 [FPTextModal,FPText] · 직접 편집 true (행 0)",
+  "basis": "문서 GAPPI-1·GAPPI-16 · ",
+  "at": "2026-11-13T22:17:07.203Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_KEYIN",
+  "egs": [
+   "EG137"
+  ],
+  "result": "PASS",
+  "expected": "FPTextModal = 키인 가능 + 팝업",
+  "actual": "editor 열림 true(행 0) — 행 조건 잠금이면 다른 행 필요",
+  "basis": "문서 GAPPI-16",
+  "at": "2026-11-13T22:17:07.203Z",
+  "mut": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_ICON",
+  "egs": [
+   "EG137"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 셀 아이콘 표시",
+  "actual": "아이콘 false · 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-center wj-cell-editable wj-ce' · 메타 [FPTextModal,FPText]",
+  "basis": "",
+  "at": "2026-11-13T22:17:07.281Z",
+  "mut": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_DELETE",
+  "egs": [
+   "EG104"
+  ],
+  "result": "NA",
+  "expected": "Delete 키 값 삭제 허용",
+  "actual": "'CLANF'→'CLANF'",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:17:08.118Z",
+  "mut": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_PASTE",
+  "egs": [
+   "EG104",
+   "EG159"
+  ],
+  "result": "PASS",
+  "expected": "붙여넣기 → TO_CITY = 원천값 · 코드 컬럼 동반(문서 DM-18)",
+  "actual": "값 ''→'CAWND' (원천 'CAWND') · 바뀐 컬럼 [TO_COUNTRY,TO_CITY,TO_CITY_NAME] · 원천과 같은 [TO_COUNTRY,TO_CITY,TO_CITY_NAME]",
+  "basis": "문서 DM-18",
+  "at": "2026-11-13T22:17:09.807Z",
+  "mut": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 89432,
+   "req": 0
+  }
+ },
+ {
+  "screen": "SCP0005",
+  "call": 103,
+  "cls": "(TO-BE 메타 팝업)",
+  "trig": "CELL:TO_CITY",
+  "check": "CELL_BADKEY",
+  "egs": [
+   "EG176"
+  ],
+  "result": "PASS",
+  "expected": "팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 · 저장 본문에 안 실림(서버 검증 거부 포함)",
+  "actual": "입력 'ZZ_E2E_BAD_KEY' → 값 'ZZ_E2' · 메시지 ''",
+  "basis": "문서 SSP45REQ-23",
+  "at": "2026-11-13T22:17:11.361Z",
+  "mut": "",
+  "mctx": {
+   "calls": 6,
+   "rows": 89432,
+   "req": 0
+  }
+ }
+]

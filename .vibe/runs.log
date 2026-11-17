@@ -1734,3 +1734,179 @@ AS-I
 2026-11-09T13:22:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge eaeb29174→34052be28 exit 0
 2026-11-09T13:22:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SSP0024
 2026-11-09T14:17:29+09:00	workbench	start		quick: ⬆️ Source Backup SCP0108
+2026-11-10T08:58:02+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 34052be28→900ffd6e3 exit 0
+2026-11-10T08:58:02+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0108
+2026-11-10T08:58:31+09:00	S8.verify	start		S8.verify: run_verify.py SCP0005
+2026-11-10T08:59:01+09:00	S8.verify	start		S8.verify: run_verify.py SSP0014
+2026-11-10T08:59:24+09:00	S8.verify	start		S8.verify: run_verify.py SCP0028
+2026-11-10T08:59:54+09:00	S8.verify	start		S8.verify: run_verify.py SSP0005
+2026-11-10T09:00:20+09:00	S8.verify	start		S8.verify: run_verify.py SSP0200
+2026-11-10T09:00:52+09:00	S8.verify	start		S8.verify: run_verify.py SSP0015
+2026-11-10T09:01:57+09:00	S8.verify	start		S8.verify: run_verify.py SSP0200
+2026-11-10T09:02:25+09:00	S8.verify	start		S8.verify: run_verify.py SSP0003
+2026-11-10T09:02:59+09:00	S8.verify	start		S8.verify: run_verify.py SSP0060
+2026-11-10T09:03:24+09:00	S8.verify	start		S8.verify: run_verify.py SSP0021
+2026-11-10T09:03:51+09:00	S8.verify	start		S8.verify: run_verify.py SSP0023
+2026-11-10T10:03:08+09:00	S8.verify	end	0	
+2026-11-10T10:03:10+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0005
+2026-11-10T10:03:10+09:00	S8.verify	end	0	
+2026-11-10T10:03:10+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0200
+2026-11-10T10:03:10+09:00	S8.verify	end	0	
+2026-11-10T10:03:10+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0014
+2026-11-10T10:03:10+09:00	S8.verify	end	0	
+2026-11-10T10:03:11+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0028
+2026-11-10T10:23:09+09:00	S8.verify	start		S8.verify: run_verify.py SCP0033
+2026-11-10T10:58:23+09:00	S8.verify	end	0	
+2026-11-10T10:58:24+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0033
+2026-11-10T14:06:12+09:00	S8.verifyIfStale	start		S8.verifyIfStale: verify_if_stale.py SSP0024
+2026-11-10T14:06:12+09:00	S8.verifyIfStale	end	0	
+2026-11-10T14:06:13+09:00	workbench	start		quick: 🛠️ 수동 보완 SSP0024
+2026-11-10T14:09:43+09:00	workbench	start		prompt: Material 앞뒤 like, 대소문자 넣어도 조회될 수 있도록 DB 객체 보완해주세요.
+2026-11-10T14:15:28+09:00	S5.cloudMod	start		S5.cloudMod: cloud_pkg.py SSP0024 --mode auto
+2026-11-10T14:15:30+09:00	S5.cloudMod	end	0	
+2026-11-10T14:15:30+09:00	workbench	start		quick: ☁️ 클라우드 이관 패키지(수정본) SSP0024
+2026-11-10T14:39:27+09:00	S8.verifyIfStale	start		S8.verifyIfStale: verify_if_stale.py SSP0024
+2026-11-10T14:49:11+09:00	S8.verifyIfStale	start		S8.verifyIfStale: verify_if_stale.py SSP0024
+2026-11-10T15:04:02+09:00	workbench	start		quick: 🛠️ 수동 보완 SSP0024
+2026-11-10T15:59:49+09:00	workbench	start		quick: 🛠️ 수동 보완 SCP0033
+2026-11-11T09:21:28+09:00	workbench	start		prompt: 클라우드에서 jaehun_cho 아이디 81 division, 조회 시 LOC 메저가 2개의 row 로 나오고 있습니다. 검증쿼리 제공해주세요. 
+2026-11-11T09:32:36+09:00	workbench	start		prompt: 위의 확인 검증쿼리 생성 시 감안해야할 사항으로, minyonglee1 계정으로 조회하면 정상 조회됩니다. jaegun_cho 계정으로 조회 시 Unit Price(LOC) 가 2개 Row 로 분리되어서 나옵니다. 
+2026-11-11T09:42:38+09:00	workbench	start		prompt: 81 DIVISION 에서 CELL_PROD_SITE_ID COLUMN이 비활성 COLUMN입니다. jaehun_cho 계정으로 조회 시 개인화에 저장되어 있더라도 해당 division 에서 제외되는 column은 
+2026-11-11T09:56:05+09:00	S5.cloudMod	start		S5.cloudMod: cloud_pkg.py DMF0021 --mode auto
+2026-11-11T09:56:10+09:00	S5.cloudMod	end	0	
+2026-11-11T09:56:11+09:00	workbench	start		quick: ☁️ 클라우드 이관 패키지(수정본) DMF0021
+2026-11-11T10:02:38+09:00	workbench	start		prompt: 20 실행 시 클라우드 DEV 에서는 정상 종료됩니다. QA에서 실행 시 아래 오류 발생합니다. 
+
+  
+
+Package PKG_DMF0021이(가) 컴파일되었습니다. 
+
+  
+
+  
+
+Package Body PKG
+2026-11-11T10:09:30+09:00	workbench	start		prompt: 네.. 뷰 이관 패키지 만들어 주세요.
+2026-11-11T13:00:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 900ffd6e3→0d7ec9fc7 exit 0
+2026-11-11T13:00:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge DMF0021
+2026-11-11T19:59:35+09:00	S5.cloudApplied	start		S5.cloudApplied: cloud_pkg.py DMF0021 --mode auto --applied
+2026-11-11T19:59:35+09:00	S5.cloudApplied	end	0	
+2026-11-11T19:59:36+09:00	workbench	start		quick: ☁️ 클라우드 이관 완료 표시 DMF0021
+2026-11-11T20:41:37+09:00	workbench	start		quick: 🔧 환경 노트 DMF0021
+2026-11-11T20:41:53+09:00	workbench	start		quick: 🔧 환경 노트 DMF0021
+2026-11-11T20:42:34+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) DMF0021
+2026-11-11T20:46:12+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) DMF0021
+2026-11-11T20:46:32+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) DMF0021
+2026-11-11T20:49:21+09:00	workbench	start		quick: ⬆️ Source Backup DMF0021
+2026-11-11T20:50:14+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) DMF0021
+2026-11-11T21:06:47+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) DMF0021
+2026-11-11T21:07:26+09:00	workbench	start		quick: ⬆️ Source Backup DMF0021
+2026-11-11T21:25:39+09:00	workbench	start		quick: ⬆️ Source Backup DMF0021
+2026-11-11T22:34:41+09:00	workbench	start		prompt: Flow 에서 Gate 는 어떤 작업 인가요?
+2026-11-12T09:15:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 0d7ec9fc7→1d476295b exit 0
+2026-11-12T09:15:27+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge DMF0021
+2026-11-12T09:22:04+09:00	workbench	start		quick: 🚀 ID 하나로 전체 (파싱→분석→생성→CheckList→오류분 자동보완→재판정→문서) ZZZ9999
+2026-11-12T09:22:04+09:00	workbench	start		quick: 🧩 새 화면 (from AS-IS) → 개발부터 테스트까지 ZZZ9999
+2026-11-12T09:22:04+09:00	workbench	start		quick: 📏 새 화면 (from 설계서) → 개발부터 테스트까지 ZZZ9999
+2026-11-12T14:35:26+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) DB MODE→UI/DB MODE
+2026-11-12T14:35:26+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) SSP0200
+2026-11-12T14:36:38+09:00	workbench	start		prompt: UI 의 하단 REPOEST INFO 부분을 접었다가 펼수 있고, 편 상태로 고정 하거나, 접은 상태로 고정할 수 있도록 기능 추가해주세요. 
+2026-11-12T14:41:01+09:00	workbench	start		prompt: 디자인도 표준을 따르지만 REQUESTOR, REQ DEPT_NAME, APPROVAL, APP_DEPT_NAME 4개를 하나의 라인으로, 그리고 TITLE, CHANGE REASON, REASON DETAIL 을 
+2026-11-12T15:03:17+09:00	workbench	start		prompt: DMF0008 ERP EDI MASTER VALIDATION UI 에서 첨부와 같이 Summary 와 같이 영역 Header 를 사용한 이력이 있습니다. 
+Request Info 을 이 Head 사용해 주세요. 
+그
+2026-11-12T15:05:48+09:00	workbench	start		prompt: Request Info 의 Boarder 를 상단 조회조건과 같이 좌, 우 를 조회조건과 같이 변경하면 좋을 것 같습니다. 
+2026-11-12T15:10:57+09:00	workbench	start		prompt: 이 화면도 REQUEST CONFIRM DETAIL 영역을 방금 수정한 형태로 변경해주세요. 
+2026-11-12T15:32:55+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) UI/DB MODE→DB MODE
+2026-11-12T15:32:55+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) SSP0202
+2026-11-12T16:34:46+09:00	workbench	start		quick: 🖥 AS-IS IIS Start 
+2026-11-12T16:34:47+09:00	workbench	start		quick: 🪟 AS-IS Launcher 
+2026-11-12T16:34:48+09:00	workbench	start		quick: ▶ AS-IS IIS & Launcher Start 
+2026-11-12T16:34:48+09:00	workbench	start		quick: T 
+2026-11-12T16:34:48+09:00	workbench	start		quick: T 
+2026-11-12T16:34:52+09:00	workbench	start		quick: T 
+2026-11-12T16:35:29+09:00	workbench	start		quick: 🚀 ID 하나로 전체 (파싱→분석→생성→CheckList→오류분 자동보완→재판정→문서) ZZZ9999
+2026-11-12T16:35:29+09:00	workbench	start		quick: 🧩 새 화면 (from AS-IS) → 개발부터 테스트까지 ZZZ9999
+2026-11-12T16:35:29+09:00	workbench	start		quick: 📏 새 화면 (from 설계서) → 개발부터 테스트까지 ZZZ9999
+2026-11-12T17:43:17+09:00	S1.live	start		S1.live: asis_live_run.py SSP0202
+2026-11-12T17:43:52+09:00	S1.live	end	0	
+2026-11-12T17:43:53+09:00	workbench	start		quick: 🎥 AS-IS 실측 (런처 구동 → 화면 열기·조회·캡처·호출 수집) SSP0202
+2026-11-13T09:19:29+09:00	S8.verify	start		S8.verify: run_verify.py SSP0020
+2026-11-13T09:19:40+09:00	S8.verify	end	1	
+2026-11-13T09:19:41+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0020
+2026-11-13T09:20:58+09:00	workbench	start		prompt: 소스 DOWNLOAD & MERGE 을 진행해주세요. 단 어제 FE MODE 에서 수정한 2개 UI 는 로컬 소스 유지해주세요. 
+2026-11-13T09:26:49+09:00	S8.verify	start		S8.verify: run_verify.py SSP0020
+2026-11-13T09:26:58+09:00	S8.verify	start		S8.verify: run_verify.py SCP0104
+2026-11-13T09:40:24+09:00	S8.verify	end	0	
+2026-11-13T09:40:26+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0104
+2026-11-13T10:42:26+09:00	S8.verify	start		S8.verify: run_verify.py SCP0104
+2026-11-13T12:09:02+09:00	S8.verify	end	0	
+2026-11-13T12:09:03+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0020
+2026-11-13T12:24:05+09:00	S8.verify	end	0	
+2026-11-13T12:24:06+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0104
+2026-11-13T15:14:18+09:00	workbench	start		prompt: A-SLOW
+2026-11-13T15:14:26+09:00	workbench	start		prompt: B
+2026-11-13T15:14:28+09:00	workbench	start		prompt: C
+2026-11-13T15:14:31+09:00	workbench	start		prompt: D-SLOW
+2026-11-13T15:14:33+09:00	workbench	start		prompt: F-now
+2026-11-13T15:14:36+09:00	workbench	start		prompt: E
+2026-11-13T15:14:38+09:00	workbench	start		prompt: G-SLOW
+2026-11-13T15:14:46+09:00	workbench	start		prompt: I
+2026-11-13T15:14:48+09:00	workbench	start		prompt: J
+2026-11-13T15:15:07+09:00	workbench	start		quick: 🚀 ID 하나로 전체 (파싱→분석→생성→CheckList→오류분 자동보완→재판정→문서) ZZZ9999
+2026-11-13T15:15:07+09:00	workbench	start		quick: 🧩 새 화면 (from AS-IS) → 개발부터 테스트까지 ZZZ9999
+2026-11-13T15:15:07+09:00	workbench	start		quick: 📏 새 화면 (from 설계서) → 개발부터 테스트까지 ZZZ9999
+2026-11-13T17:45:18+09:00	workbench	start		prompt: A-SLOW
+2026-11-13T17:45:25+09:00	workbench	start		prompt: B
+2026-11-13T17:45:28+09:00	workbench	start		prompt: C
+2026-11-13T17:45:31+09:00	workbench	start		prompt: D-SLOW
+2026-11-13T17:45:33+09:00	workbench	start		prompt: F-now
+2026-11-13T17:45:36+09:00	workbench	start		prompt: E
+2026-11-13T17:45:38+09:00	workbench	start		prompt: G-SLOW
+2026-11-13T17:45:46+09:00	workbench	start		prompt: I
+2026-11-13T17:45:49+09:00	workbench	start		prompt: J
+2026-11-13T17:45:52+09:00	workbench	start		prompt: A-SLOW
+2026-11-13T17:45:59+09:00	workbench	start		prompt: B
+2026-11-13T17:46:02+09:00	workbench	start		prompt: C
+2026-11-13T17:46:05+09:00	workbench	start		prompt: D-SLOW
+2026-11-13T17:46:07+09:00	workbench	start		prompt: F-now
+2026-11-13T17:46:10+09:00	workbench	start		prompt: E
+2026-11-13T17:46:13+09:00	workbench	start		prompt: G-SLOW
+2026-11-13T17:46:21+09:00	workbench	start		prompt: I
+2026-11-13T17:46:24+09:00	workbench	start		prompt: J
+2026-11-13T17:46:29+09:00	workbench	start		quick: 🚀 ID 하나로 전체 (파싱→분석→생성→CheckList→오류분 자동보완→재판정→문서) ZZZ9999
+2026-11-13T17:46:29+09:00	workbench	start		quick: 🧩 새 화면 (from AS-IS) → 개발부터 테스트까지 ZZZ9999
+2026-11-13T17:46:29+09:00	workbench	start		quick: 📏 새 화면 (from 설계서) → 개발부터 테스트까지 ZZZ9999
+2026-11-13T23:24:19+09:00	S8.verify	start		S8.verify: (선행 실패 — BE/FE 미기동) run_verify.py SSP0020
+2026-11-13T23:24:19+09:00	S8.verify	end	5	
+2026-11-13T23:24:19+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0020
+2026-11-14T01:12:35+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SSP0020
+2026-11-14T01:13:09+09:00	workbench	start		prompt: BE 기동실패 원인 찾아서 보완해주세요
+2026-11-14T01:27:50+09:00	S8.verify	start		S8.verify: run_verify.py SSP0020
+2026-11-14T01:33:58+09:00	S8.verify	start		S8.verify: run_verify.py SCP0104
+2026-11-14T02:46:24+09:00	S8.verify	end	0	
+2026-11-14T02:46:26+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0104
+2026-11-14T03:38:01+09:00	S8.verify	end	0	
+2026-11-14T03:38:03+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SSP0020
+2026-11-16T16:56:54+09:00	workbench	start		prompt: SHIP REQ, SHIP PLAN 데이터는 어디에서 생성된 데이터를 가져오나요?(CELL, PACK)
+2026-11-17T10:16:45+09:00	S5.cloudMod	start		S5.cloudMod: cloud_pkg.py SCP0104 --mode auto
+2026-11-17T10:17:24+09:00	S5.cloudMod	end	0	
+2026-11-17T10:17:26+09:00	workbench	start		quick: ☁️ 클라우드 이관 패키지(수정본) SCP0104
+2026-11-17T10:43:09+09:00	workbench	start		prompt: LINE ASSIGN TABPAGE 는 데이터 조회 됩니다. SOP 는 어떤 조회조건으로 데이터 조회 가능 한지 확인해주세요
+2026-11-17T13:40:21+09:00	workbench	start		prompt: 클로드에서 수행중인 CHECKLIST 보완이 수행되고 나면 UI_TEST 폴더에 테스트 SHEET 도 같이 생성이 되나요?
+2026-11-17T15:52:28+09:00	workbench	start		quick: ⬆️ Source Backup SCP0104
+2026-11-17T15:53:22+09:00	workbench	start		prompt: VM 의 SOURCE BACKUP 기능이 실패하였습니다. 원인 확인해서 보완 요청 합니다.
+2026-11-17T16:08:37+09:00	workbench	start		prompt: 소스 BACKUP 시 어느 GIT 에 올리는지 주소 다시 확인시켜주세요.
+2026-11-17T16:11:29+09:00	workbench	start		prompt: 간단한 질문인데 오래 고민하는 이유가 무엇일까요?
+2026-11-17T16:23:18+09:00	workbench	start		quick: ⬆️ Source Backup add exit 3221225477
+2026-11-17T17:16:39+09:00	workbench	start		prompt: 오류 사항으로 아래 항목 발생하였습니다. 원인 확인 요청 합니다. 
+
+PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN 가 AS-IS와 다르게 동작하는 부분이 있는 것으로 확인됨. V_ACTIVE_F
+2026-11-17T17:30:19+09:00	workbench	start		prompt: 작업을 아래 방법으로 진행하고자 합니다. 
+FE에서 작업해야할 것에 대한 가이드를 제공해주세요. 
+그리고 DB 객체에 대해서는 FE 가 수정될 것을 감안해서 작업 진행해주세요.
+
+FE 의 `buildAdminPayl
+2026-11-17T17:43:39+09:00	workbench	start		prompt: 위의 가이드에서 "단위 시험 A1~A4 를 추가" 는 어떤 의미 인가요?
+2026-11-17T17:49:40+09:00	workbench	start		prompt: EXCEL 이나 문서에 자연스러운 단어로 변경하도록 보완하는 것을 적용하였습니다. 
+FE 가이드 생성시에도 이 RULE 적용하도록 해주세요. 그리고 지금의 FE 가이드에 대해서도 보완한 것으로 다시 제공해주세요.

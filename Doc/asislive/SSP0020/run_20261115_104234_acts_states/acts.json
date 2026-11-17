@@ -1,0 +1,150 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "states": true,
+ "edit": false,
+ "acts": [],
+ "skipped": [],
+ "at": "2026-11-15 10:42:19",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:24 실측: 추가 뒤 SP 결과 1·1행 · 적용 SQL tools/AsisLocal/sql/20261115_SSP0020_DELEGATE_TEST_ROWS.sql(ATTRIBUTE10=ASISLIVE_TEST_20261115, 되돌리기 포함)",
+  "why": "SSP0020_GET_DELEGATE 조회 인자 = 로그인 사용자(p_user_id)·언어뿐. SSP_MST_DELEGATE 699행 중 jaeuk.shin 관련 0행이라 조회 0행. 시험 행 2개 추가(위임한 1·위임받은 1)",
+  "done": []
+ },
+ "cellstate": {
+  "cmd": "cellstate",
+  "at": "2026-11-15 10:42:31.001",
+  "grid": "spdMain",
+  "sheet_index": 0,
+  "sheet_name": "Delegate",
+  "sheet": "Delegate",
+  "rows_total": 1,
+  "from": 0,
+  "cols": [
+   {
+    "index": 0,
+    "tag": "Action",
+    "label": "A",
+    "data_field": "Action",
+    "visible": "False"
+   },
+   {
+    "index": 1,
+    "tag": "CHK",
+    "label": "False",
+    "data_field": "CHK",
+    "visible": "True"
+   },
+   {
+    "index": 2,
+    "tag": "DIVISION_ID",
+    "label": "Div",
+    "data_field": "DIVISION_ID",
+    "visible": "True"
+   },
+   {
+    "index": 3,
+    "tag": "FROM_DATE",
+    "label": "From",
+    "data_field": "FROM_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 4,
+    "tag": "TO_DATE",
+    "label": "To",
+    "data_field": "TO_DATE",
+    "visible": "True"
+   },
+   {
+    "index": 5,
+    "tag": "DELEGATEE",
+    "label": "Delegatee",
+    "data_field": "DELEGATEE",
+    "visible": "True"
+   },
+   {
+    "index": 6,
+    "tag": "VALID",
+    "label": "Valid",
+    "data_field": "VALID",
+    "visible": "True"
+   },
+   {
+    "index": 7,
+    "tag": "LAST_UPDATED_BY",
+    "label": "Last Updated By",
+    "data_field": "LAST_UPDATED_BY",
+    "visible": "True"
+   },
+   {
+    "index": 8,
+    "tag": "LAST_UPDATE_DATE",
+    "label": "Last Update Date",
+    "data_field": "LAST_UPDATE_DATE",
+    "visible": "True"
+   }
+  ],
+  "locked": [
+   "001111111"
+  ],
+  "back": [
+   [
+    "Window",
+    "Window",
+    "White",
+    "White",
+    "White",
+    "White",
+    "White",
+    "White",
+    "White"
+   ]
+  ],
+  "fore": [
+   [
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText",
+    "WindowText"
+   ]
+  ],
+  "text": [
+   [
+    "",
+    "",
+    "40",
+    "2026-11-15",
+    "2026-12-31",
+    "강주용(jooyong026)",
+    "Y",
+    "신재욱(jaeuk.shin)",
+    "2026-11-15 10:24:42"
+   ]
+  ],
+  "how": [
+   "GetStyleInfo"
+  ],
+  "sheet_locked": true,
+  "edit_mode": false,
+  "dialog_count": 0,
+  "done": "2026-11-15 10:42:31.007"
+ },
+ "summary": {
+  "rows": 1,
+  "rows_total": 1,
+  "cols": 9,
+  "lock_how": [
+   "GetStyleInfo"
+  ],
+  "locked_cells": 7,
+  "open_cells": 2,
+  "unknown": 0,
+  "cols_lock_varies_by_row": []
+ }
+}

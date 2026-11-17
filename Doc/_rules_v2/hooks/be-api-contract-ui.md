@@ -21,7 +21,7 @@ FE 의 `@foundation/apis` apiClient 메서드는 BE 의 Controller endpoint 와 
 { "code": "0", "message": "success", "result": { ... } }
 ```
 
-- BE: `successResponseEntity(data)` 사용 — `ResponseEntity` 직접 작성 금지 (CLAUDE.md §6).
+- BE: `successResponseEntity(data)` 사용 — `ResponseEntity` 직접 작성 금지 (CLAUDE.md §4 ⑨, `.claude/rules/01-be.md`). (2026-11-13 정정: CLAUDE.md §6 → §4 ⑨. 2026-10-12 재구성으로 구 §6 표준 응답은 `.claude/rules/01-be.md` 로 이동)
 - 에러: `ErrorResponse extends BaseResponse` + `GlobalExceptionHandler` (BusinessException/SystemException/SqlException/ConnectorException).
 - `CustomMap` = 공통 Data DTO (Clob, Date/Timestamp 자동 변환 HashMap) — SP 결과 매핑 시 사용.
 

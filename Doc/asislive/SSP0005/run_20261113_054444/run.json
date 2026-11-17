@@ -1,0 +1,150 @@
+{
+ "id": "SSP0005",
+ "started": "2026-11-13 05:44:44.797",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:44:45.160",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0005_ShipmentWorkingDay",
+   "form_text": "Shipment Working Day",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:48.861"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:44:52.694",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0005\\run_20261113_054444\\dump_load.json",
+   "control_count": 31,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 1.591s, UI : 0.138s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:52.703"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:44:52.861",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0005\\run_20261113_054444\\shots\\SSP0005_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:52.966"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 05:44:53.608",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:54.132"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 05:44:59.214",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0005\\run_20261113_054444\\dump_find.json",
+   "control_count": 31,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 0.221s, UI : 0.128s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:59.223"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 05:44:59.533",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0005\\run_20261113_054444\\shots\\SSP0005_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:44:59.736"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:45:00.062",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:45:00.698"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 17,
+  "calls_with_params": 17
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0005_ShipmentWorkingDay",
+  "form_text": "Shipment Working Day",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SSP.Plan.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.221s, UI : 0.128s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "t_open": "2026-11-13 05:44:45.008",
+ "t_find": "2026-11-13 05:44:53.361",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 31,
+  "layout_items": 9,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 363,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 17,
+  "calls_screen": 17,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 05:45:01.081",
+ "exit": 0
+}

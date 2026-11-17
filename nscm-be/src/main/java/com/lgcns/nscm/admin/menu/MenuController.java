@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lgcns.nscm.admin.auth.AuthService;
+import com.lgcns.nscm.admin.auth.dto.MnuBtnAuthSheet;
 import com.lgcns.nscm.admin.auth.dto.UnitDto;
 import com.lgcns.nscm.admin.menu.dto.ColumnRetrieveRequest;
 import com.lgcns.nscm.admin.menu.dto.FavoriteRequest;
@@ -25,8 +25,8 @@ import com.lgcns.nscm.admin.menu.dto.GridMeasure;
 import com.lgcns.nscm.admin.menu.dto.MenuAuthDto;
 import com.lgcns.nscm.admin.menu.dto.MenuDto;
 import com.lgcns.nscm.admin.menu.dto.SearchCondition;
+import com.lgcns.nscm.admin.menu.dto.TitleSetRetrieveRequest;
 import com.lgcns.nscm.admin.menu.dto.TitleSetSaveRequest;
-import com.lgcns.nscm.admin.menu.dto.TitleSetSearchRequest;
 import com.lgcns.nscm.admin.user.UserSession;
 import com.lgcns.nscm.framework.annotation.LoginUser;
 import com.lgcns.nscm.framework.base.BaseController;
@@ -63,16 +63,18 @@ public class MenuController extends BaseController {
 		return successResponseEntity();
     }
 
-	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다. divisionId(단일 Division)를 주면 그 Division 권한 그룹 기준의 버튼만 돌려준다(없음/ALL/복수 = 그룹 합집합).")
+	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다.")
 	@GetMapping(value="/admin/menu/{mnuId}/auth", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId,
-    		@RequestParam(required = false) String divisionId) throws Exception {
+    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
 
-		// 공통버튼 노출 = 사용자 × 선택 Division 권한 (2026-10-26) — PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV
-		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId, divisionId);
+		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId);
+		List<MnuBtnAuthSheet> mnuBtnAuthSheets = authService.retrieveMenuBtnAuthSheets(userSession.getUserId(), mnuId);
+		List<MnuBtnAuthSheet> mnuBtnDefs = authService.retrieveMenuBtnDefs(mnuId);
 		List<UnitDto> unitAuth = authService.retrieveUnitAuth(userSession.getUserId(), mnuId);
 		MenuAuthDto mnuAuthDto = MenuAuthDto.builder()
 			.mnuBtnAuth(mnuBtnAuth)
+			.mnuBtnAuthSheets(mnuBtnAuthSheets)
+			.mnuBtnDefs(mnuBtnDefs)
 			.unitAuth(unitAuth)
 			.build();
 
@@ -119,16 +121,16 @@ public class MenuController extends BaseController {
 		return successResponseEntity();
 	}
 
-	@Operation(summary = "컬럼 개인화 조회", description = "공용 Column 팝업의 저장된 컬럼 개인화를 조회합니다.")
-	@PostMapping(value="/admin/menu/{mnuId}/titleset/search", produces = "application/json; charset=UTF-8")
-	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> retrieveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSearchRequest dto) throws Exception {
-		return successResponseEntity(menuService.retrieveTitleSet(userSession.getUserId(), mnuId, dto));
-	}
-
 	@Operation(summary = "컬럼 개인화 저장", description = "공용 Column 팝업의 컬럼 표시/순서/폭/색을 저장합니다.")
 	@PostMapping(value="/admin/menu/{mnuId}/titleset", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> saveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetSaveRequest dto) throws Exception {
 		return successResponseEntity(menuService.saveTitleSet(userSession.getUserId(), mnuId, dto));
+	}
+
+	@Operation(summary = "컬럼 개인화 조회", description = "공용 Column 팝업이 저장한 컬럼 표시/순서/폭/색을 조회합니다.")
+	@PostMapping(value="/admin/menu/{mnuId}/titleset/search", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<BaseResponse<List<Map<String, Object>>>> retrieveTitleSet(@LoginUser UserSession userSession, @PathVariable String mnuId, @RequestBody TitleSetRetrieveRequest dto) throws Exception {
+		return successResponseEntity(menuService.retrieveTitleSet(userSession.getUserId(), mnuId, dto));
 	}
 
 	@Operation(summary = "검색조건 초기화", description = "검색조건을 초기화합니다.")

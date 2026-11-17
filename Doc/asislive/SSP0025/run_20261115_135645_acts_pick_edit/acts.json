@@ -1,0 +1,505 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 8,
+   "rule": "새 행 · 열 ITEM_ID",
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SSP0025_ItembyDivisionPopup",
+    "rows": 286,
+    "note": "값 채운 뒤 다시 누름 · 기록 후 닫음"
+   },
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sfdd457"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [
+    {
+     "text": "Division을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "retries": [
+    {
+     "term": "Division",
+     "fill": {
+      "ok": true,
+      "col": "DIVISION_ID",
+      "value": "81",
+      "raw": "81",
+      "after": "81 Automotive Battery",
+      "how": "value",
+      "error": null
+     },
+     "ok": true,
+     "error": null,
+     "popups": [],
+     "calls": [],
+     "dialogs": [
+      "Plant Site을(를) 선택하십시오."
+     ]
+    },
+    {
+     "term": "Plant Site",
+     "fill": {
+      "ok": true,
+      "col": "SITE_DESCRIPTION",
+      "value": "LGESOC Cell HQ07",
+      "raw": "LGESOC Cell HQ07",
+      "after": "LGESOC Cell HQ07",
+      "how": "edit",
+      "error": null
+     },
+     "ok": true,
+     "error": null,
+     "popups": [
+      {
+       "form": "SSP0025_ItembyDivisionPopup",
+       "rows": 286
+      }
+     ],
+     "calls": [
+      "SSP0025_GET_ITEM_BY_DIVISION_POPUP"
+     ],
+     "dialogs": []
+    }
+   ],
+   "retry": {
+    "term": "Plant Site",
+    "fill": {
+     "ok": true,
+     "col": "SITE_DESCRIPTION",
+     "value": "LGESOC Cell HQ07",
+     "raw": "LGESOC Cell HQ07",
+     "after": "LGESOC Cell HQ07",
+     "how": "edit",
+     "error": null
+    },
+    "ok": true,
+    "error": null,
+    "popups": [
+     {
+      "form": "SSP0025_ItembyDivisionPopup",
+      "rows": 286
+     }
+    ],
+    "calls": [
+     "SSP0025_GET_ITEM_BY_DIVISION_POPUP"
+    ],
+    "dialogs": []
+   }
+  },
+  {
+   "control": "PART_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 PART_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 17,
+     "rows_after": 17,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "PART_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [],
+   "retries": []
+  },
+  {
+   "control": "TEAM_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 TEAM_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 17,
+     "rows_after": 17,
+     "cells": [
+      {
+       "row": 0,
+       "col": "TEAM_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [],
+   "retries": []
+  },
+  {
+   "control": "USER_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 USER_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 17,
+     "rows_after": 17,
+     "cells": [
+      {
+       "row": 0,
+       "col": "USER_ID",
+       "before": "kyb0716",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [],
+   "retries": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:53:24",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "ids": [
+    "SSP0025-Sfdd457"
+   ],
+   "has_else": true,
+   "single": true
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "PART_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "TEAM_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "USER_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "has_else": false,
+   "single": false
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Requestor PIC": [
+     8,
+     16
+    ]
+   }
+  }
+ ]
+}

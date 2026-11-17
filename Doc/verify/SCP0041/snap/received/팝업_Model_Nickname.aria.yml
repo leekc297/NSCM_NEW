@@ -1,0 +1,225 @@
+- dialog:
+  - heading "Material by Division" [level=2]
+  - text: Div
+  - combobox [disabled]: Automotive Battery
+  - button "Open" [disabled]
+  - img
+  - text: Operation Group
+  - textbox [disabled]
+  - text: Material
+  - textbox
+  - button "Search"
+  - paragraph
+  - text: 총{N}건
+  - grid:
+    - rowgroup:
+      - row "No Div. Material Code Description Nickname Class Name":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Material Code"
+        - columnheader "Description"
+        - columnheader "Nickname"
+        - columnheader "Class Name"
+    - rowgroup:
+      - row "1 81 AAEF1001I-A1-000 ACEF1001I-A1-000 P ELFP-000 [ACACA]Cell Assembly":
+        - gridcell "1" [selected]
+        - gridcell "81"
+        - gridcell "AAEF1001I-A1-000"
+        - gridcell "ACEF1001I-A1-000 P"
+        - gridcell "ELFP-000"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "2 81 AAEF1001I-A1-100 ACEF1001I-A1-100 P ELFP-100 [ACACA]Cell Assembly":
+        - gridcell "2"
+        - gridcell "81"
+        - gridcell "AAEF1001I-A1-100"
+        - gridcell "ACEF1001I-A1-100 P"
+        - gridcell "ELFP-100"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "3 81 AAEF1001I-A1-200 ACEF1001I-A1-200 P ELFP-200 [ACACA]Cell Assembly":
+        - gridcell "3"
+        - gridcell "81"
+        - gridcell "AAEF1001I-A1-200"
+        - gridcell "ACEF1001I-A1-200 P"
+        - gridcell "ELFP-200"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "4 81 AAEF1001I-A1-300 ACEF1001I-A1-300 P ELFP-300 [ACACA]Cell Assembly":
+        - gridcell "4"
+        - gridcell "81"
+        - gridcell "AAEF1001I-A1-300"
+        - gridcell "ACEF1001I-A1-300 P"
+        - gridcell "ELFP-300"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "5 81 AAEF1047I-A1 ACEF1047I-A1 P E47A [ACACA]Cell Assembly":
+        - gridcell "5"
+        - gridcell "81"
+        - gridcell "AAEF1047I-A1"
+        - gridcell "ACEF1047I-A1 P"
+        - gridcell "E47A"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "6 81 AAEF1090I-A1-000 ACEF1090I-A1-000 P E90B-000 [ACACA]Cell Assembly":
+        - gridcell "6"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-000"
+        - gridcell "ACEF1090I-A1-000 P"
+        - gridcell "E90B-000"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "7 81 AAEF1090I-A1-100 ACEF1090I-A1-100 P E90B-100 [ACACA]Cell Assembly":
+        - gridcell "7"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-100"
+        - gridcell "ACEF1090I-A1-100 P"
+        - gridcell "E90B-100"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "8 81 AAEF1090I-A1-200 ACEF1090I-A1-200 P E90B-200 [ACACA]Cell Assembly":
+        - gridcell "8"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-200"
+        - gridcell "ACEF1090I-A1-200 P"
+        - gridcell "E90B-200"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "9 81 AAEF1090I-A1-300 ACEF1090I-A1-300 P E90B-300 [ACACA]Cell Assembly":
+        - gridcell "9"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-300"
+        - gridcell "ACEF1090I-A1-300 P"
+        - gridcell "E90B-300"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "10 81 AAEF1090I-A1-400 ACEF1090I-A1-400 P E90B-400 [ACACA]Cell Assembly":
+        - gridcell "10"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-400"
+        - gridcell "ACEF1090I-A1-400 P"
+        - gridcell "E90B-400"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "11 81 AAEF1090I-A1-500 ACEF1090I-A1-500 P E90B-500 [ACACA]Cell Assembly":
+        - gridcell "11"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-500"
+        - gridcell "ACEF1090I-A1-500 P"
+        - gridcell "E90B-500"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "12 81 AAEF1090I-A1-600 ACEF1090I-A1-600 P E90B-600 [ACACA]Cell Assembly":
+        - gridcell "12"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-600"
+        - gridcell "ACEF1090I-A1-600 P"
+        - gridcell "E90B-600"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "13 81 AAEF1090I-A1-700 ACEF1090I-A1-700 P E90B-700 [ACACA]Cell Assembly":
+        - gridcell "13"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-700"
+        - gridcell "ACEF1090I-A1-700 P"
+        - gridcell "E90B-700"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "14 81 AAEF1090I-A1-800 ACEF1090I-A1-800 P E90B-800 [ACACA]Cell Assembly":
+        - gridcell "14"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-800"
+        - gridcell "ACEF1090I-A1-800 P"
+        - gridcell "E90B-800"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "15 81 AAEF1090I-A1-900 ACEF1090I-A1-900 P E90B-900 [ACACA]Cell Assembly":
+        - gridcell "15"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1-900"
+        - gridcell "ACEF1090I-A1-900 P"
+        - gridcell "E90B-900"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "16 81 AAEF1090I-A1C000 ACEF1090I-A1C000 P E90B-C000 [ACACA]Cell Assembly":
+        - gridcell "16"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C000"
+        - gridcell "ACEF1090I-A1C000 P"
+        - gridcell "E90B-C000"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "17 81 AAEF1090I-A1C001 ACEF1090I-A1C001 P E90B-C001 [ACACA]Cell Assembly":
+        - gridcell "17"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C001"
+        - gridcell "ACEF1090I-A1C001 P"
+        - gridcell "E90B-C001"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "18 81 AAEF1090I-A1C002 ACEF1090I-A1C002 P E90B-C002 [ACACA]Cell Assembly":
+        - gridcell "18"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C002"
+        - gridcell "ACEF1090I-A1C002 P"
+        - gridcell "E90B-C002"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "19 81 AAEF1090I-A1C003 ACEF1090I-A1C003 P E90B-C003 [ACACA]Cell Assembly":
+        - gridcell "19"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C003"
+        - gridcell "ACEF1090I-A1C003 P"
+        - gridcell "E90B-C003"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "20 81 AAEF1090I-A1C004 ACEF1090I-A1C004 P E90B-C004 [ACACA]Cell Assembly":
+        - gridcell "20"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C004"
+        - gridcell "ACEF1090I-A1C004 P"
+        - gridcell "E90B-C004"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "21 81 AAEF1090I-A1C005 ACEF1090I-A1C005 P E90B-C005 [ACACA]Cell Assembly":
+        - gridcell "21"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1C005"
+        - gridcell "ACEF1090I-A1C005 P"
+        - gridcell "E90B-C005"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "22 81 AAEF1090I-A1R000 ACEF1090I-A1R000 P E90B-R000 [ACACA]Cell Assembly":
+        - gridcell "22"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1R000"
+        - gridcell "ACEF1090I-A1R000 P"
+        - gridcell "E90B-R000"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "23 81 AAEF1090I-A1T000 ACEF1090I-A1T000 P E90B-T000 [ACACA]Cell Assembly":
+        - gridcell "23"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T000"
+        - gridcell "ACEF1090I-A1T000 P"
+        - gridcell "E90B-T000"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "24 81 AAEF1090I-A1T001 ACEF1090I-A1T001 P E90B-T001 [ACACA]Cell Assembly":
+        - gridcell "24"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T001"
+        - gridcell "ACEF1090I-A1T001 P"
+        - gridcell "E90B-T001"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "25 81 AAEF1090I-A1T002 ACEF1090I-A1T002 P E90B-T002 [ACACA]Cell Assembly":
+        - gridcell "25"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T002"
+        - gridcell "ACEF1090I-A1T002 P"
+        - gridcell "E90B-T002"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "26 81 AAEF1090I-A1T003 ACEF1090I-A1T003 P E90B-T003 [ACACA]Cell Assembly":
+        - gridcell "26"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T003"
+        - gridcell "ACEF1090I-A1T003 P"
+        - gridcell "E90B-T003"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "27 81 AAEF1090I-A1T004 ACEF1090I-A1T004 P E90B-T004 [ACACA]Cell Assembly":
+        - gridcell "27"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T004"
+        - gridcell "ACEF1090I-A1T004 P"
+        - gridcell "E90B-T004"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "28 81 AAEF1090I-A1T005 ACEF1090I-A1T005 P E90B-T005 [ACACA]Cell Assembly":
+        - gridcell "28"
+        - gridcell "81"
+        - gridcell "AAEF1090I-A1T005"
+        - gridcell "ACEF1090I-A1T005 P"
+        - gridcell "E90B-T005"
+        - gridcell "[ACACA]Cell Assembly"
+      - row "Focus helper":
+        - gridcell "Focus helper"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

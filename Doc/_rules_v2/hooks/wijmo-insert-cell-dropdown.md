@@ -14,9 +14,9 @@
 
 | 시점 | 행위 |
 |---|---|
-| **PRE-WRITE** | 신규 Grid 작성 직전 — §1~§4 의무 적용 |
-| **POST-WRITE** | Grid + Master 작성 직후 — §5 자동 grep 검증 |
-| **PRE-SUBMIT** | PR 직전 — §6 lint + type-check + 화면 동작 검증 |
+| **PRE-WRITE** | 신규 Grid 작성 직전 — §1~§2 의무 적용 (2026-11-13 정정: 절 번호를 실제 절에 맞춤 — §1~§4→§1~§2 · §5→§3 · §6→§4) |
+| **POST-WRITE** | Grid + Master 작성 직후 — §3 자동 grep 검증 (11-13 정정) |
+| **PRE-SUBMIT** | PR 직전 — §4 lint + type-check + 화면 동작 검증 (11-13 정정) (2026-11-14 정정: lint, type-check 는 AI 가 직접 실행하지 않음. 사용자 요청 때 `_artifacts/_tools/fe-check.ps1`, 미실행은 ERROR 보고) |
 
 ---
 
@@ -43,6 +43,9 @@
 g.columnLayout = JSON.stringify({ columns: [...] });
 
 // ✅ JSX FlexGridColumn 평면 (자매 DMF0020 SalesFuturePriceFlexGrid:410-432 동등)
+// (2026-11-13 정정: 현행은 공용 DataGrid 필수 — <FlexGrid>/<FlexGridColumn> JSX 직접 작성 금지(hook datagrid-shared-component-mandatory §1, 2026-06-18).
+//  아래 JSX 는 2026-06-07 작성 당시 패턴. 인용한 SalesFuturePriceFlexGrid.tsx 는 현재 저장소에 없고, 같은 화면의 현행 Grid 는
+//  SalesFuturePriceGrid.tsx — @shared/components 의 DataGrid 를 쓰고 셀 콤보는 admin 컬럼 메타로 처리한다)
 {fixedColumns.map(c => (
   <FlexGridColumn
     key={c.key}
@@ -246,7 +249,7 @@ grep -rn "new FlexGridFilter" features/{domain}/src/pages/{screen}/components/*.
 
 ## §4. PRE-SUBMIT 동작 검증 (cell click → dropdown 펼침)
 
-1. start-all.ps1 → BE / FE / Docker 기동
+1. start-all.ps1 → BE / FE 기동 (2026-11-13 정정: 'Docker 기동' 삭제 — start-all.ps1 은 2026-06-10 사내 Oracle 직접 연결 전환으로 Docker 기동 단계 제거)
 2. 화면 진입 → F8 Insert → 신규 row 최상단 + 첫 editable cell auto-focus
 3. End Customer / Sales Site / Incoterms / Fcst Type / Customs Handbook / Plant Site / Measure cell click → **ComboBox dropdown 즉시 펼침**
 4. Project Code / Model double click → **popup modal 정상 오픈** (preSearchParams 의 divisionId 전달)
@@ -263,4 +266,4 @@ grep -rn "new FlexGridFilter" features/{domain}/src/pages/{screen}/components/*.
 - `hooks/grid-column-meta.md` (column meta 표준)
 - `hooks/runtime-error-prevention.md` (Wijmo column 사고 패턴)
 - `hooks/asis-button-mapping.md` (10 button + Sort/Filter hotkeyConfig)
-- 자매 검증 화면: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx`
+- 자매 검증 화면: `features/master/src/pages/sales-future-price/components/SalesFuturePriceFlexGrid.tsx` (2026-11-13: 이 파일은 현재 저장소에 없음 — 같은 폴더의 현행 Grid 파일은 `SalesFuturePriceGrid.tsx`(공용 DataGrid 사용))

@@ -1,0 +1,73 @@
+﻿section,step,programs,finding,name
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,반제품(SEMI) 선적요청 삭제,PR_SSP_ANL_SHIP_REQ_SEMI,AS-IS 객체 카탈로그에 없는 테이블 이름,DM_SHIP_OW_FROZEN
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,반제품(SEMI) 선적요청 삭제,PR_SSP_ANL_SHIP_REQ_SEMI,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_REQ
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,반제품(SEMI) 선적요청 생성,PR_SSP_ANL_SHIP_REQ_SEMI,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SITE_TYPE
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,제품(FG) 선적요청 삭제 · 생성,PR_SSP_ANL_SHIP_REQ_FG,AS-IS 객체 카탈로그에 없는 테이블 이름,SCP_OPT_SHIPMENT_PLAN_V
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,제품(FG) 선적요청 삭제 · 생성,PR_SSP_ANL_SHIP_REQ_FG,AS-IS 객체 카탈로그에 없는 테이블 이름,SCP_OPT_SHIPMENT_PLAN_PEGGING_V
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,제품(FG) 선적요청 삭제 · 생성,PR_SSP_ANL_SHIP_REQ_FG,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SITE_TYPE
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,A/S(Warranty) 선적요청,PR_SSP_ANL_SHIP_REQ_FG,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),AS_SITE_PLANT
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,Packer 선적요청 삭제 · 생성,PR_SSP_ANL_SHIP_REQ_P,AS-IS 객체 카탈로그에 없는 테이블 이름,SCP_OPT_SHIPMENT_PLAN_V
+[공통] SCP FINAL 확정 연계 → Shipment Request 산출,Packer 선적요청 삭제 · 생성,PR_SSP_ANL_SHIP_REQ_P,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),REQUEST_ID
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),진입 조건,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),IF_STOCK_CHECK
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),전일 확정 변경 반영,PR_SSP_ANL_SHIP_PLAN_40_BALANCE,원천 — AS-IS 본문 읽기·쓰기에 없음,SSP_ANL_SHIP_CONFIRM
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),SHIP_REQ 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_REQ
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),SHIP_CONFIRM 메저(Rolling),PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_CONFIRM
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),POSTP_PLAN
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PROD_PLAN
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),INCO_WIP
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),MES_FCS_HOLD
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),MES_FCS_RELEASE
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PROD_DATE
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),WH_IN
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),생산 메저,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),INSP_WIP
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),WH_STOCK · BALANCE,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),WH_STOCK
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),결과 적재,PR_SSP_ANL_SHIP_PLAN_40,AS-IS 객체 카탈로그에 없는 테이블 이름,GT_SSP_ANL_SHIP_PLAN_40
+[40] 소형 — PR_SSP_ANL_SHIP_PLAN_40_BALANCE → PR_SSP_ANL_SHIP_CONFIRM_BATCH_40 → PR_SSP_ANL_SHIP_PLAN_40 (법인별),결과 적재,PR_SSP_ANL_SHIP_PLAN_40,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PLAN_TYPE
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",진입 조건,PR_SSP_PLN_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),IF_STOCK_CHECK
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",OWMS 재고 CUTOFF,PR_SSP_PLN_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),AS_STORAGE
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",OWMS 재고 CUTOFF,PR_SSP_PLN_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CUTOFF_DATE
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",OWMS 재고 CUTOFF,PR_SSP_PLN_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),ERP_STOCK_CUTOFF_YN
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",OWMS 재고 CUTOFF,PR_SSP_PLN_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),OWMS_STOCK_CUTOFF_YN
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",SHIP_REQ 메저,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_REQ
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",SHIP_PLAN 메저(Rolling),PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_REQ
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",SHIP_PLAN 메저(Rolling),PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_PLAN
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",INTN_MOVEMENT · PROD_PLAN,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),INTN_MOVEMENT
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",INTN_MOVEMENT · PROD_PLAN,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PROD_PLAN
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",WH_STOCK · BALANCE · CONTAINER,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),OWMS_STOCK_STATUS
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",WH_STOCK · BALANCE · CONTAINER,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),WH_STOCK
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",결과 적재 · Hold 이월,PR_SSP_ANL_SHIP_PLAN_CUTOFF,AS-IS 객체 카탈로그에 없는 테이블 이름,GT_SSP_ANL_SHIP_PLAN_C
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",결과 적재 · Hold 이월,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),BIZ_TYPE
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",결과 적재 · Hold 이월,PR_SSP_ANL_SHIP_PLAN_CUTOFF,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),OPERATION_GROUP
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",생산 기반 출하계획,PR_SSP_ANL_SHIP_PLAN_CUTOFF_FP_AUTO,AS-IS 객체 카탈로그에 없는 테이블 이름,FP_AUTO_SHIP_FROM_TO
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",생산 기반 출하계획,PR_SSP_ANL_SHIP_PLAN_CUTOFF_FP_AUTO,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_PLAN
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CELL_SHIP_FROM_TO
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),ELECTRODE_SHIP_FROM_TO
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIPMENT_STATUS
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),TRANSFER_FLAG
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PLAN_C
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CONFIRM_FLAG
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",생산 기반 확정,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N_FP_AUTO,AS-IS 객체 카탈로그에 없는 테이블 이름,FP_AUTO_SHIP_FROM_TO
+"[81 계열 · 82] 자동차 · ESS — PR_SSP_PLN_SHIP_PLAN_CUTOFF (법인 루프, 한 트랜잭션)",생산 기반 확정,PR_SSP_ANL_SHIP_CONFIRM_BATCH_N_FP_AUTO,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),BATCH_N
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),진입 조건,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),AUTO_PLAN_CALL_FLAG
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),진입 조건,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),BASIS_START_TIME_PLANT
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),진입 조건,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),IF_STOCK_CHECK
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 CUTOFF · 기초재고,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),ELECTRODE_ASSY_PLANT_MAPPING
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 CUTOFF · 기초재고,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),MEASURE_TYPE
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,AS-IS 객체 카탈로그에 없는 테이블 이름,SCP_OPT_SHIPMENT_PLAN
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),SHIP_PLAN_AMEND
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),OPERATION_GROUP
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),ELECTRODE_SHIP_REQ_OW_PERIOD
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CREATED_BY
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하요청 생성(주 1회),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CONFIRM_FLAG
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하계획(P_SHIP_PLAN_SIMU_ETD),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),P_SHIP_PLAN_SIMU_ETD
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),출하 실적 반영(CUTOFF용),PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),R_SHIP_PLAN_ETD
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 시뮬레이션,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),P_INV_SIM
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 시뮬레이션,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),P_INV_CONFIRM
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 시뮬레이션,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),R_INV_SHIP_REQ
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),재고 시뮬레이션,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),R_INV_SHIP_PLAN
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),ELECTRODE_SHIP_FROM_TO
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CONFIRM_ID
+[전극] PR_SSP_ANL_SHIP_PLAN_EE (법인 루프),신규 확정 · ERP 송신,PR_SSP_ANL_SHIP_PLAN_EE,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CONFIRM_FLAG
+[Packer] PR_SSP_ANL_SHIP_PLAN_P → PR_SSP_ANL_SHIP_CONFIRM_P (07:15),PROD_PLAN · WH_STOCK · BALANCE,PR_SSP_ANL_SHIP_PLAN_P,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),PROD_PLAN
+[Packer] PR_SSP_ANL_SHIP_PLAN_P → PR_SSP_ANL_SHIP_CONFIRM_P (07:15),PROD_PLAN · WH_STOCK · BALANCE,PR_SSP_ANL_SHIP_PLAN_P,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),WH_STOCK
+[Packer] PR_SSP_ANL_SHIP_PLAN_P → PR_SSP_ANL_SHIP_CONFIRM_P (07:15),신규 확정 · 송신,PR_SSP_ANL_SHIP_CONFIRM_P,테이블 아님(메저 · 컬럼 · 룩업 코드 이름),CONFIRM_ID

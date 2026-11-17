@@ -1,0 +1,88 @@
+{
+ "id": "SCP0131",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "SCM0002_MaterialByDivisionPopup",
+    "title": "Material by Division Popup",
+    "rows": 9616
+   },
+   "picked": {
+    "sheet": "spdMain/Project",
+    "cols": [
+     "COLMERGE",
+     "Action",
+     "DIVISION_ID",
+     "DIVISION_NAME",
+     "ITEM_ID",
+     "ITEM_NAME",
+     "NICK_NAME",
+     "ITEM_CLASS_NAME"
+    ],
+    "row": [
+     "X",
+     "",
+     "81",
+     "Automotive Battery",
+     "AAEF1001I-A1-000",
+     "ACEF1001I-A1-000 P",
+     "ELFP-000",
+     "[ACACA]Cell Assembly"
+    ]
+   },
+   "scenarios": [
+    "SCP0131-Sdb912c",
+    "SCP0131-S7b4d50"
+   ],
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Sales Site Priority",
+     "rows_before": 61,
+     "rows_after": 61,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "AMCOME782-A1-0A0",
+       "after": "AAEF1001I-A1-000"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION"
+   ],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:40:45",
+ "edit_mode": true,
+ "plan": {
+  "scenarios": 2,
+  "used": [
+   "ITEM_ID"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

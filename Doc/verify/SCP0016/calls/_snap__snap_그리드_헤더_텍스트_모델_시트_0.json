@@ -7,8 +7,21 @@
   "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
   "status": 200,
   "rows": 440,
-  "dur": 197,
-  "at": "2026-11-07T12:44:43.200Z",
+  "dur": 130,
+  "at": "2026-11-14T00:44:50.445Z",
+  "user": "minyonglee1",
+  "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
+ },
+ {
+  "menu": "SCP0016",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "status": 200,
+  "rows": 991,
+  "dur": 8144,
+  "at": "2026-11-14T00:44:58.115Z",
   "user": "minyonglee1",
   "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
  }

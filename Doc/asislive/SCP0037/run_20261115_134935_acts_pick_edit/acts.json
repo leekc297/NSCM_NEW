@@ -1,0 +1,124 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "새 행 · 열 ITEM_ID",
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0037-S825bbb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [
+    {
+     "text": "Plant Site을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "retries": [
+    {
+     "term": "Plant Site",
+     "fill": {
+      "ok": true,
+      "col": "PLANT_SITE_ID",
+      "value": "HQ07-E",
+      "raw": "HQ07-E",
+      "after": "HQ07-E",
+      "how": "value",
+      "error": null
+     },
+     "ok": true,
+     "error": null,
+     "popups": [],
+     "calls": [],
+     "dialogs": [
+      "Plant Site을(를) 선택하십시오."
+     ]
+    },
+    {
+     "term": "Plant Site",
+     "why": "채운 뒤에도 같은 메시지"
+    }
+   ],
+   "retry": {
+    "term": "Plant Site",
+    "fill": {
+     "ok": true,
+     "col": "PLANT_SITE_ID",
+     "value": "HQ07-E",
+     "raw": "HQ07-E",
+     "after": "HQ07-E",
+     "how": "value",
+     "error": null
+    },
+    "ok": true,
+    "error": null,
+    "popups": [],
+    "calls": [],
+    "dialogs": [
+     "Plant Site을(를) 선택하십시오."
+    ]
+   }
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:48:26",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "ids": [
+    "SCP0037-S825bbb"
+   ],
+   "has_else": true,
+   "single": true
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Operation LT": [
+     0
+    ]
+   }
+  }
+ ]
+}

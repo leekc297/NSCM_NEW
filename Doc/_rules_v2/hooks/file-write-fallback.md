@@ -19,6 +19,8 @@
 | `Error writing file: disk full` | 디스크 공간 부족 | 사용자에게 보고 |
 | `tool_use_error` (기타) | 일시적 캐시 / lock | Bash 우회 |
 
+> (2026-11-13 정정: 예외 추가 — 실행 hook 차단으로 인한 실패는 우회 대상이 아니다. `check-work-mode`(DB MODE 에서 `nscm-fe`·`nscm-be` 수정 차단 · Write/Edit/Bash/PowerShell 전부 대상) · `check-rules-read` 등 `.claude/hooks` 가 막은 쓰기를 Bash `mv`/`cp`·`python` 으로 우회하지 않는다 — 차단 사유를 보고하고 가이드만 제시)
+
 ### §0.2 우선순위 (의무 결정)
 
 **1. 신규 파일 작성 의도 + 기존 파일 발견 시** (가장 흔한 사고):

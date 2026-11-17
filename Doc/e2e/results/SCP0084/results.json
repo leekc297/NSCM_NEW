@@ -151,15 +151,11 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,2038,1048]]"
+                      "description": "[[\"main\",\"SEARCH\",200,2038,2579]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -170,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5632,
+                      "duration": 6805,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:46:14.797Z",
+                      "startTime": "2026-11-14T03:23:05.917Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -195,15 +191,11 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,2038,1048]]"
+                          "description": "[[\"main\",\"SEARCH\",200,2038,2579]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": []
@@ -249,15 +241,11 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[OK] (기준표 순서)(order) — month → div → plant → longtermtype"
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 month → div → plant → longtermtype"
                     },
                     {
                       "type": "condsum",
-                      "description": "5/6 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                      "description": "4/5 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -268,12 +256,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26189,
+                      "duration": 27744,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:46:22.890Z",
+                      "startTime": "2026-11-14T03:23:15.190Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -297,15 +285,11 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[OK] (기준표 순서)(order) — month → div → plant → longtermtype"
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 month → div → plant → longtermtype"
                         },
                         {
                           "type": "condsum",
-                          "description": "5/6 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                          "description": "4/5 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
                         }
                       ],
                       "attachments": []
@@ -388,10 +372,6 @@
                     {
                       "type": "commonsum",
                       "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                     }
                   ],
                   "expectedStatus": "passed",
@@ -402,7 +382,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 95496,
+                      "duration": 94016,
                       "error": {
                         "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
                         "stack": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121",
@@ -426,7 +406,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-08T07:46:51.893Z",
+                      "startTime": "2026-11-14T03:23:45.779Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -487,10 +467,6 @@
                         {
                           "type": "commonsum",
                           "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": [
@@ -520,7 +496,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 95636,
+                      "duration": 93863,
                       "error": {
                         "message": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
                         "stack": "Error: 공통 기능 FAIL 1: Excel 다운로드\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0084.smoke.spec.ts:121:121",
@@ -544,7 +520,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-08T07:48:35.051Z",
+                      "startTime": "2026-11-14T03:25:25.114Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -605,10 +581,6 @@
                         {
                           "type": "commonsum",
                           "description": "11/12 OK · FAIL 1 · WARN 0 · ERROR 0 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
                         }
                       ],
                       "attachments": [
@@ -650,8 +622,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-08T07:46:14.405Z",
-    "duration": 246686.49,
+    "startTime": "2026-11-14T03:23:05.284Z",
+    "duration": 238332.252,
     "expected": 2,
     "skipped": 0,
     "unexpected": 1,

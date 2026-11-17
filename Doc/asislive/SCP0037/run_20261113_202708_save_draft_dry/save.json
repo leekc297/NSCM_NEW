@@ -1,0 +1,69 @@
+{
+ "id": "SCP0037",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_OPERATION_LT",
+  "pk": [
+   "DIVISION_ID",
+   "SCM_SITE_ID",
+   "ITEM_ID",
+   "LT_OPERATION"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "SCM_SITE_ID": "SCM_SITE_ID",
+   "ITEM_ID": "ITEM_ID",
+   "LT_OPERATION": "LT_OPERATION"
+  },
+  "save_sp": "SCP0037_SAVE_OPERATION_LT",
+  "side": [
+   {
+    "table": "SCP_MST_OPERATION_LT_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   },
+   {
+    "table": "SCP_MST_OPERATION_LT_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0037_SAVE_OPERATION_LT → SP SCP0037_SAVE_OPERATION_LT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "LT_DAY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "LT_DAY",
+     "db_col": "LT_DAY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 20:27:08",
+ "status": "ERROR",
+ "steps": [],
+ "db_before": [],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "SCM_SITE_ID": "LGESOC Elec HQ07",
+    "ITEM_ID": "APCAN0506B",
+    "LT_OPERATION": "Slitting"
+   }
+  }
+ ],
+ "note": "DB 대상 행 수가 기대(1)와 다름(0 · 조건 {'DIVISION_ID': '81', 'SCM_SITE_ID': 'LGESOC Elec HQ07', 'ITEM_ID': 'APCAN0506B', 'LT_OPERATION': 'Slitting'}) — 저장하지 않음"
+}

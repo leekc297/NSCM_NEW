@@ -1,0 +1,25 @@
+- dialog:
+  - heading "Region Popup" [level=2]
+  - text: Country
+  - textbox
+  - text: City
+  - textbox
+  - button "Search"
+  - paragraph
+  - grid:
+    - rowgroup:
+      - row "Country Country Name City City Name State Name No":
+        - columnheader "Country"
+        - columnheader "Country Name"
+        - columnheader "City"
+        - columnheader "City Name"
+        - columnheader "State Name"
+        - gridcell "No"
+    - rowgroup:
+      - row "Focus helper":
+        - gridcell "Focus helper"
+    - row "No"
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

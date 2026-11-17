@@ -15,6 +15,9 @@
 | button:FindButton | FindButton > FindData | 312 | DM.DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA | MATCH | SP DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA |
 | button:SaveButton | SaveButton > SaveData > FindData > InitSpread > GetSpdTitle | 251 | DM.DM0007_GET_SPREAD_TITLE | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > SaveData > FindData | 312 | DM.DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA | MATCH | SP DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA |
+| button:SaveButton | SaveButton > SaveData | 391 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 392 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
+| button:SaveButton | SaveButton > SaveData | 393 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
 | event:this.Load | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 251 | DM.DM0007_GET_SPREAD_TITLE | NOT_IN_FOXQUERY |  |
 | event:this.Load | Form_Load > InitControls > GetDivision | 446 | SCM.SCM0001_GET_DIVISION | MATCH | SP SCM0001_GET_DIVISION |
 | event:this.Load | Form_Load > InitControls > GetScmSitebyDivision | 460 | SCM.SCM0001_GET_SITE_BY_DIVISION | MATCH | SP SCM0001_GET_SITE_BY_DIVISION |
@@ -30,6 +33,9 @@
 | DM.DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA | MATCH | 1 | SP DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA | EXEC:DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:FN_GET_DEPT_LIST, SELECT:DM_MST_CUSTOMER_MODEL, SELECT:SCM_MST_DIVISION, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SITE_ITEM, SELECT:SCM_MST_SSO_USER_INFO, SELECT:SCM_MST_SSO_DEPT_INFO, REF:STRING_SPLIT, SELECT:DM_MST_ITEM_SINGLE_V, SELECT:SCM_MST_PROJECT, REF:UF_FX_STRING_SPLITFORIN, REF:UF_FX_STRING_SPLIT, SELECT:TB_FX_USER, SELECT:SPLIT |  |
 | SCM.SCM0001_GET_DIVISION | MATCH | 1 | SP SCM0001_GET_DIVISION | EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION |  |
 | SCM.SCM0001_GET_SITE_BY_DIVISION | MATCH | 1 | SP SCM0001_GET_SITE_BY_DIVISION | EXEC:SCM0001_GET_SITE_BY_DIVISION, SELECT:SCM_MST_SITE, REF:VALUE, REF:NODES |  |
+| xxxx.DeleteQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.InsertQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
+| xxxx.UpdateQueryId | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -66,10 +72,13 @@
 | SheetView | 1 | spdMain_Sheet1 |
 | FpSpread | 1 | spdMain |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 251 | GetSpdTitle | DM.DM0007_GET_SPREAD_TITLE | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: SELECT:TB_FX_USER, SELECT:SCM_SYS_CALENDAR_M, REF:FN_MULTY_TIME, EXEC:SP_EXECUTESQL, REF:FN_WEEKOFDAY_DATE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:CTE_DATE · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 391 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 392 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 393 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

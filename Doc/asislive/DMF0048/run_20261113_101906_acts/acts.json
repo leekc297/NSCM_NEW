@@ -1,0 +1,184 @@
+{
+ "id": "DMF0048",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 25,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0048-S5a4a23",
+    "DMF0048-S26ff5f",
+    "DMF0048-S18f2df",
+    "DMF0048-S6c59f3",
+    "DMF0048-S6a69a9",
+    "DMF0048-Sd59aae",
+    "DMF0048-Sf5f784",
+    "DMF0048-Sbb8d29",
+    "DMF0048-S252290",
+    "DMF0048-Sc14b34",
+    "DMF0048-S9c861b",
+    "DMF0048-S99d838",
+    "DMF0048-S695ed3",
+    "DMF0048-Sb20ce8",
+    "DMF0048-Sbd17c1",
+    "DMF0048-S20b711",
+    "DMF0048-Sd738d5",
+    "DMF0048-S2e76bd",
+    "DMF0048-S72a490",
+    "DMF0048-Sf409b9",
+    "DMF0048-S6bd4b3",
+    "DMF0048-S109112",
+    "DMF0048-Sac510b"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "title": "Progress...",
+     "modal": false,
+     "grid_rows": -1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0048-Sea1449"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 8,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0048-S5a4a23",
+    "DMF0048-S26ff5f",
+    "DMF0048-S18f2df",
+    "DMF0048-S6c59f3",
+    "DMF0048-S6a69a9",
+    "DMF0048-Sd59aae",
+    "DMF0048-Sf5f784",
+    "DMF0048-Sbb8d29",
+    "DMF0048-S252290",
+    "DMF0048-Sc14b34",
+    "DMF0048-S9c861b",
+    "DMF0048-S99d838",
+    "DMF0048-S695ed3",
+    "DMF0048-Sb20ce8",
+    "DMF0048-Sbd17c1",
+    "DMF0048-S20b711",
+    "DMF0048-Sd738d5",
+    "DMF0048-S2e76bd",
+    "DMF0048-S72a490",
+    "DMF0048-Sf409b9",
+    "DMF0048-S6bd4b3",
+    "DMF0048-S109112",
+    "DMF0048-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0048-S4fa471"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0048-S913dee",
+    "DMF0048-S67cd45"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0048-S669149"
+   ]
+  },
+  {
+   "control": "layoutControlItem3",
+   "ok": false,
+   "error": "InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationException: control not found: layoutControlItem3",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0048-S913dee",
+    "DMF0048-S67cd45"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 10:16:33.978",
+ "fills": 0,
+ "fill_left": []
+}

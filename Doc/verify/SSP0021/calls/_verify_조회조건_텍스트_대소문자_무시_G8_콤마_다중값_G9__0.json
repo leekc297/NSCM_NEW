@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0021",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 21,
+  "dur": 116,
+  "at": "2026-11-14T17:06:42.128Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0021/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 218,
+  "at": "2026-11-14T17:06:42.445Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 465,
+  "at": "2026-11-14T17:06:42.635Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260919\",\"endYyyymmdd\":\"20261113\"}",
+  "status": 200,
+  "rows": 71,
+  "dur": 116,
+  "at": "2026-11-14T17:06:43.255Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20260919\",\"endYyyymmdd\":\"20261113\"}",
+  "status": 200,
+  "rows": 71,
+  "dur": 122,
+  "at": "2026-11-14T17:06:45.283Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ },
+ {
+  "menu": "SSP0021",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0021/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"companyId\":\"HQ00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20260919\",\"fromYyyymmdd\":\"20260919\",\"toYyyymmdd\":\"20261113\",\"itemId\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0021\",\"sheetName\":\"Shipment Plan\",\"realFlag\":\"N\"}",
+  "status": 200,
+  "rows": 0,
+  "dur": 131,
+  "at": "2026-11-14T17:06:45.296Z",
+  "user": "minyonglee1",
+  "test": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)"
+ }
+]

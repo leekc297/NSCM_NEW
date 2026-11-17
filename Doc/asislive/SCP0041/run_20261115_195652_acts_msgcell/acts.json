@@ -1,0 +1,176 @@
+{
+ "id": "SCP0041",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "ActiveSheet_CellChanged",
+   "expect": "MSG00108",
+   "why": "SCP0041_StockOSP.cs:828 nDate1(DATE_FORECAST_START) > nDate2(DATE_FORECAST_FINISH) · 날짜 열은 Pack Hold Stock 시트(SCP0041_GET_PACK_HOLD_STOCK)에만 있음 · 원천 SCM_DNM_STOCK_LOT_CONTROL Division 82 1,621행 CUTOFF 20221211~20241227(11-15 조회) · 처리기는 InitEvent(224행) 시점 활성 시트에만 연결 · EditButton 은 iFocusTabIndex == 1 일 때만 Pack 시트 잠금 해제(259행) · iFocusTabIndex 는 SheetTabClick→SetTabIndex(855행)",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "SheetTabClick",
+       "index": "1"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.SheetTabClick",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "act": {
+       "cell": "0,1",
+       "double": "0",
+       "grid": "spdMain",
+       "sheet": "1"
+      }
+     },
+     "ok": true,
+     "error": null,
+     "did": "cellclick:0,1",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "method": "OnClickEditButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickEditButton",
+     "edit_mode": true
+    },
+    {
+     "sheet": "Pack Hold Stock",
+     "row": 0,
+     "col": 11,
+     "before": "2022-12-21",
+     "after": "2026-01-01",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DATE_FORECAST_FINISH",
+      "value": "2026-01-01",
+      "mode": "value"
+     }
+    },
+    {
+     "sheet": "Pack Hold Stock",
+     "row": 0,
+     "col": 10,
+     "before": "2022-12-09",
+     "after": "2099-12-31",
+     "locked": false,
+     "entered": false,
+     "how": "SetValue",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "DATE_FORECAST_START",
+      "value": "2099-12-31",
+      "mode": "value"
+     }
+    }
+   ],
+   "dialogs": [],
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 19:55:33",
+ "_pre_set": [
+  {
+   "name": "spdMain",
+   "prop": "ActiveSheetIndex",
+   "value": "1",
+   "wait": 2
+  },
+  {
+   "name": "dCalendar",
+   "prop": "Value1",
+   "value": "20220101"
+  },
+  {
+   "name": "dCalendar",
+   "prop": "Value2",
+   "value": "20261231"
+  },
+  {
+   "name": "dCalendarCutoff",
+   "prop": "Value1",
+   "value": "20221201"
+  },
+  {
+   "name": "dCalendarCutoff",
+   "prop": "Value2",
+   "value": "20241231"
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "spdMain",
+     "prop": "ActiveSheetIndex",
+     "value": "1"
+    },
+    "ok": true,
+    "applied": "prop:ActiveSheetIndex",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dCalendar",
+     "prop": "Value1",
+     "value": "20220101"
+    },
+    "ok": true,
+    "applied": "prop:Value1",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dCalendar",
+     "prop": "Value2",
+     "value": "20261231"
+    },
+    "ok": true,
+    "applied": "prop:Value2",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dCalendarCutoff",
+     "prop": "Value1",
+     "value": "20221201"
+    },
+    "ok": true,
+    "applied": "prop:Value1",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dCalendarCutoff",
+     "prop": "Value2",
+     "value": "20241231"
+    },
+    "ok": true,
+    "applied": "prop:Value2",
+    "error": null
+   }
+  ]
+ }
+}

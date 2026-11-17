@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0020",
+  "sheet": "packer",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/packer/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSiteId\":\"ALL\",\"lineId\":\"ALL\",\"operationGroupId\":\"P\",\"itemId\":\"ALL\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 863,
+  "dur": 3508,
+  "at": "2026-11-14T01:42:56.486Z",
+  "user": "minyonglee1",
+  "test": "셀 편집 표시·값 유지(A2·F6)"
+ },
+ {
+  "menu": "SCP0020",
+  "sheet": "except",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0020/except/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"plantSite\":\"US02182600_82-P\",\"operationId\":\"US02182600\",\"itemId\":\"EP096636PFB1-CG0\",\"lineId\":\"AZL01\",\"debugMode\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 111,
+  "at": "2026-11-14T01:43:00.962Z",
+  "user": "minyonglee1",
+  "test": "셀 편집 표시·값 유지(A2·F6)"
+ }
+]

@@ -1,0 +1,274 @@
+{
+ "id": "SCP0037",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0037-Sce4995",
+    "SCP0037-S870eb2",
+    "SCP0037-S5cdc15",
+    "SCP0037-Sa815ec",
+    "SCP0037-Sec5b61",
+    "SCP0037-Sd7fff5",
+    "SCP0037-S73b6de"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      4,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0037-Sce4995",
+    "SCP0037-S870eb2",
+    "SCP0037-S5cdc15",
+    "SCP0037-Sa815ec",
+    "SCP0037-Sec5b61",
+    "SCP0037-Sd7fff5",
+    "SCP0037-S73b6de"
+   ]
+  },
+  {
+   "control": "cboLTOperation",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:OSP LT",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(panel1)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "clbPlantSite(chkAll)",
+     "before": [
+      "ALL",
+      null,
+      null,
+      false,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    },
+    {
+     "control": "txtTextKeyin",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": []
+    }
+   ],
+   "scenarios": [
+    "SCP0037-Sce4995",
+    "SCP0037-S870eb2",
+    "SCP0037-S5cdc15",
+    "SCP0037-Sa815ec",
+    "SCP0037-Sec5b61",
+    "SCP0037-Sd7fff5",
+    "SCP0037-S73b6de"
+   ]
+  },
+  {
+   "control": "cboLTOperation",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:Slitting",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      7,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(panel1)",
+     "before": [],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(chkAll)",
+     "before": [],
+     "after": [
+      "ALL",
+      null,
+      null,
+      false,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtTextKeyin",
+     "before": [],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0037-Sce4995",
+    "SCP0037-S870eb2",
+    "SCP0037-S5cdc15",
+    "SCP0037-Sa815ec",
+    "SCP0037-Sec5b61",
+    "SCP0037-Sd7fff5",
+    "SCP0037-S73b6de"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "ClbDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 7
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 5
+  }
+ ],
+ "at": "2026-11-14 12:10:35"
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.admin.log">
+
+    <!-- 로그 생성 -->
+    <insert id="insertSysLog">
+		INSERT INTO SCM_MGR.SCM_COM_SYS_LOG (SYS_LOG_ID, LOG_TP_CD, SYS_LOG_MSG_CTN, CALL_PGM_URL, RQR_CLNT_IP, MNU_ID, SHT_NM, MNU_BTN_CD, EXCT_MSG_CTN, LOG_ST_DTM, TRNM_ST_DTM, DB_TRNM_ST_DTM, DB_TRNM_END_DTM, TRNM_END_DTM, LOG_END_DTM, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+		VALUES(#{traceId}, #{typeCd} , #{params}, #{requestUrl}, #{clientIp}, #{menuId}, #{shtNm}, #{buttonCd}, SUBSTRB(#{exception}, 1, 4000), #{clientStTm}, #{serverStTm}, #{sqlStTm}, #{sqlEdTm}, #{serverEdTm}, #{clientEdTm}, #{userId}, SYSDATE , #{userId}, SYSDATE )
+	</insert>
+	
+	<!-- 로그 최종시간 업데이트(front 도착시간) -->
+	<update id="updateSysLog">
+		UPDATE  SCM_MGR.SCM_COM_SYS_LOG
+		   SET  LOG_END_DTM = SYSTIMESTAMP,
+		        LAST_UPDATE_DATE = SYSDATE
+         WHERE  SYS_LOG_ID = #{traceId}   
+	</update>
+	
+	<select id="selectSysLog" resultType="java.util.HashMap">
+		SELECT  T.MNU_ID, NVL(MSG_MNU.MSG_NM, MNU.MNU_DESC) AS MNU_NM
+		      , T.LOG_TP_CD, NVL(MSG_TP.MSG_NM, LOOK.SEGMENT3) AS LOG_TP_NM
+		      , T.MNU_BTN_CD, NVL(MSG_BTN.MSG_NM, BTN.API_MSG_DESC) AS MNU_BTN_NM
+		      , T.DIFF_TOTAL, T.DIFF_TOTAL-T.DIFF_SVR AS DIFF_NET
+		 	  , T.DIFF_SVR-T.DIFF_DB AS DIFF_SVR, T.DIFF_DB 
+		      , T.RQR_CLNT_IP, T.EXCT_MSG_CTN
+		      , T.CREATED_BY AS USER_ID
+   		  FROM (SELECT  TO_NUMBER(TO_CHAR(DB_TRNM_END_DTM, 'SSSSS.FF3')) * 1000 - TO_NUMBER(TO_CHAR(DB_TRNM_ST_DTM, 'SSSSS.FF3')) * 1000 AS DIFF_DB
+		    		  , TO_NUMBER(TO_CHAR(TRNM_END_DTM, 'SSSSS.FF3')) * 1000 - TO_NUMBER(TO_CHAR(TRNM_ST_DTM, 'SSSSS.FF3')) * 1000 AS DIFF_SVR
+		    		  , TO_NUMBER(TO_CHAR(LOG_END_DTM, 'SSSSS.FF3')) * 1000 - TO_NUMBER(TO_CHAR(LOG_ST_DTM, 'SSSSS.FF3')) * 1000 AS DIFF_TOTAL
+		    		  , TT.*
+				  FROM  SCM_COM_SYS_LOG TT) T
+		  JOIN  SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+  			ON  T.LOG_TP_CD = LOOK.SEGMENT1 
+	 LEFT JOIN  (SELECT  BTN.MNU_ID, BTN.SHT_NM, BTN.MNU_BTN_CD, API.API_MSG_ID, API.API_MSG_DESC 
+  				   FROM  SCM_ADM_MNU_BTN_MPG_M BTN
+  				   JOIN  SCM_ADM_API_M API
+    				 ON  BTN.API_ID = API.API_ID ) BTN
+ 			ON  T.MNU_ID = BTN.MNU_ID
+ 		   AND  T.SHT_NM = BTN.SHT_NM
+		   AND  T.MNU_BTN_CD = BTN.MNU_BTN_CD
+	 LEFT JOIN  SCM_ADM_MNU_M MNU
+  			ON  T.MNU_ID = MNU.MNU_ID 
+	 LEFT JOIN  SCM_ADM_MSG_M MSG_MNU
+  			ON  MNU.MNU_MSG_ID = MSG_MNU.MSG_ID
+  		   AND  MSG_MNU.LANG_CD = #{langCd}
+	 LEFT JOIN  SCM_ADM_MSG_M MSG_TP
+  			ON  LOOK.SEGMENT2 = MSG_TP.MSG_ID 
+  		   AND  MSG_TP.LANG_CD = #{langCd}
+	 LEFT JOIN  SCM_ADM_MSG_M MSG_BTN
+  			ON  BTN.API_MSG_ID = MSG_BTN.MSG_ID 
+  		   AND  MSG_TP.LANG_CD = #{langCd}
+		 WHERE  1=1
+  		   AND  LOOK.LOOKUP_TYPE = 'LOG_TP_CD'
+ ORDER BY T.LAST_UPDATE_DATE DESC
+    </select>
+    
+</mapper>

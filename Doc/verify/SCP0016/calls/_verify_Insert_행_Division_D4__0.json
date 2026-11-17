@@ -7,8 +7,8 @@
   "postData": "{\"startYyyymmdd\":\"20260824\",\"endYyyymmdd\":\"20270822\"}",
   "status": 200,
   "rows": 440,
-  "dur": 189,
-  "at": "2026-11-07T13:03:36.684Z",
+  "dur": 122,
+  "at": "2026-11-14T01:13:00.183Z",
   "user": "minyonglee1",
   "test": "Insert 행 Division(D4)"
  },
@@ -17,11 +17,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0016/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"40\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
+  "postData": "{\"divisionId\":\"81\",\"fromYyyymmdd\":\"20260824\",\"toYyyymmdd\":\"20270822\",\"bizType\":\"P\",\"projectCode\":\"\",\"itemId\":\"\",\"versionNo\":\"SP_W_20260824\",\"electype\":\"ALL\",\"programId\":\"SCP0016\",\"sheetName\":\"Shipment Plan FG\"}",
   "status": 200,
-  "rows": 437,
-  "dur": 3166,
-  "at": "2026-11-07T13:03:39.550Z",
+  "rows": 991,
+  "dur": 8051,
+  "at": "2026-11-14T01:13:07.801Z",
   "user": "minyonglee1",
   "test": "Insert 행 Division(D4)"
  }

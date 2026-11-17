@@ -1,0 +1,202 @@
+{
+ "id": "SCP0016",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S6e3e4a",
+    "SCP0016-S908b8c",
+    "SCP0016-Sb7a7b7",
+    "SCP0016-Sd849d1",
+    "SCP0016-Sf92dc6",
+    "SCP0016-S9d67d7",
+    "SCP0016-Se775e1",
+    "SCP0016-S9402aa",
+    "SCP0016-Sddee9f",
+    "SCP0016-Se7543b",
+    "SCP0016-S481294",
+    "SCP0016-Sc91bf8",
+    "SCP0016-Sd9f09f",
+    "SCP0016-S8a009f",
+    "SCP0016-S400b22",
+    "SCP0016-Scf08d8",
+    "SCP0016-S31a9bd"
+   ]
+  },
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S647918",
+    "SCP0016-S6c43db"
+   ]
+  },
+  {
+   "control": "BtnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S354027",
+    "SCP0016-Sbfc2aa"
+   ]
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S6e3e4a"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S647918",
+    "SCP0016-S6c43db"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S908b8c",
+    "SCP0016-Sb7a7b7",
+    "SCP0016-Sd849d1",
+    "SCP0016-Sf92dc6",
+    "SCP0016-S9d67d7",
+    "SCP0016-Se775e1",
+    "SCP0016-S9402aa",
+    "SCP0016-Sddee9f",
+    "SCP0016-Se7543b",
+    "SCP0016-S481294",
+    "SCP0016-Sc91bf8",
+    "SCP0016-Sd9f09f",
+    "SCP0016-S8a009f",
+    "SCP0016-S400b22",
+    "SCP0016-Scf08d8",
+    "SCP0016-S31a9bd",
+    "SCP0016-S3e4aef",
+    "SCP0016-S955b86"
+   ]
+  },
+  {
+   "control": "btnProject",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ProjectbyDivisionPopup",
+     "title": "Project by Division",
+     "modal": true,
+     "grid_rows": 1091,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_PROJECT_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0016-S354027",
+    "SCP0016-Sbfc2aa"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:40:20.932",
+ "fills": 1,
+ "fill_left": []
+}

@@ -1,0 +1,3269 @@
+{
+ "id": "SCP0113",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer2/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Long Term Stock Management",
+     "rows": 0,
+     "cols": 52,
+     "visible": "True",
+     "frozen_cols": "24",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Plan Date",
+        "Plan Date"
+       ],
+       "label": "Plan Date",
+       "tag": "PLAN_DATE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Ending INV Month",
+        "Ending INV Month"
+       ],
+       "label": "Ending INV Month",
+       "tag": "BASE_YYYYMM",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "EOH Month",
+        "EOH Month"
+       ],
+       "label": "EOH Month",
+       "tag": "END_MONTH",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "END_MONTH",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIV",
+       "width": "20",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Company",
+        "Company"
+       ],
+       "label": "Company",
+       "tag": "COMPANY_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Plant",
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Plan TP CD",
+        "Plan TP CD"
+       ],
+       "label": "Plan TP CD",
+       "tag": "PLAN_TP_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Data TP CD",
+        "Data TP CD"
+       ],
+       "label": "Data TP CD",
+       "tag": "DATA_TP_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "SRCE TP CD",
+        "SRCE TP CD"
+       ],
+       "label": "SRCE TP CD",
+       "tag": "SRCE_TP_CD",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Item Type",
+        "Item Type"
+       ],
+       "label": "Item Type",
+       "tag": "ITEM_TYPE",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Occurrence Types",
+        "Occurrence Types"
+       ],
+       "label": "Occurrence Types",
+       "tag": "CREATION_TYPE",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Group Code",
+        "Group Code"
+       ],
+       "label": "Group Code",
+       "tag": "GROUP_CODE",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "MKT.Dept",
+        "MKT.Dept"
+       ],
+       "label": "MKT.Dept",
+       "tag": "MKT_DEPT",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "End Customer",
+        "End Customer"
+       ],
+       "label": "End Customer",
+       "tag": "END_CUSTOMER",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Item code",
+        "Item code"
+       ],
+       "label": "Item code",
+       "tag": "ITEM_ID",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Item Desc",
+        "Item Desc"
+       ],
+       "label": "Item Desc",
+       "tag": "ITEM_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "UOM",
+        "UOM"
+       ],
+       "label": "UOM",
+       "tag": "UOM",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "PIC",
+        "PIC"
+       ],
+       "label": "PIC",
+       "tag": "PIC",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "M-1 Price(KRW)",
+        "M-1 Price(KRW)"
+       ],
+       "label": "M-1 Price(KRW)",
+       "tag": "RESULT_PRICE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RESULT_PRICE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "M-1 Normal Qty",
+        "M-1 Normal Qty"
+       ],
+       "label": "M-1 Normal Qty",
+       "tag": "RESULT_NORMAL_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RESULT_NORMAL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "M-1 Long-term sign Qty",
+        "M-1 Long-term sign Qty"
+       ],
+       "label": "M-1 Long-term sign Qty",
+       "tag": "RESULT_LONG_TERM_EXPECT_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RESULT_LONG_TERM_EXPECT_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "M-1 Long-term Qty",
+        "M-1 Long-term Qty"
+       ],
+       "label": "M-1 Long-term Qty",
+       "tag": "RESULT_LONG_TERM_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RESULT_LONG_TERM_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "M-1 Long-term Amt (KRW)",
+        "M-1 Long-term Amt (KRW)"
+       ],
+       "label": "M-1 Long-term Amt (KRW)",
+       "tag": "RESULT_LONG_TERM_AMT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RESULT_LONG_TERM_AMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Demand Qty",
+        "Demand Qty"
+       ],
+       "label": "Demand Qty",
+       "tag": "RTF",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "RTF",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "EOH Price (KRW)",
+        "EOH Price (KRW)"
+       ],
+       "label": "EOH Price (KRW)",
+       "tag": "PRICE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "PRICE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "EOH Amount (KRW)",
+        "EOH Amount (KRW)"
+       ],
+       "label": "EOH Amount (KRW)",
+       "tag": "AMT",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "EX_TO_BAMT",
+        "EX_TO_BAMT"
+       ],
+       "label": "EX_TO_BAMT",
+       "tag": "EX_TO_BAMT",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "EX_TO_BAMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "EOH Amount (USD)",
+        "EOH Amount (USD)"
+       ],
+       "label": "EOH Amount (USD)",
+       "tag": "USD_AMT",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "USD_AMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "EOH Remain total Qty",
+        "EOH Remain total Qty"
+       ],
+       "label": "EOH Remain total Qty",
+       "tag": "REMAIN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "REMAIN",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "EOH Remain long-term Qty",
+        "EOH Remain long-term Qty"
+       ],
+       "label": "EOH Remain long-term Qty",
+       "tag": "REMAIN_LONG_TERM_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "REMAIN_LONG_TERM_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "EOH Remain long-term sign Qty",
+        "EOH Remain long-term sign Qty"
+       ],
+       "label": "EOH Remain long-term sign Qty",
+       "tag": "REMAIN_LONG_TERM_EXPECT_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "REMAIN_LONG_TERM_EXPECT_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "EOH Remain total Amt (KRW)",
+        "EOH Remain total Amt (KRW)"
+       ],
+       "label": "EOH Remain total Amt (KRW)",
+       "tag": "REMAIN_AMT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "REMAIN_AMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "EOH Remain total Amt (USD)",
+        "EOH Remain total Amt (USD)"
+       ],
+       "label": "EOH Remain total Amt (USD)",
+       "tag": "REMAIN_AMT_USD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "REMAIN_AMT_USD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "EOH Total Qty",
+        "EOH Total Qty"
+       ],
+       "label": "EOH Total Qty",
+       "tag": "TOTAL",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TOTAL",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "EOH Normal Qty",
+        "EOH Normal Qty"
+       ],
+       "label": "EOH Normal Qty",
+       "tag": "NORMAL_QTY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NORMAL_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "EOH long-term Qty",
+        "EOH long-term Qty"
+       ],
+       "label": "EOH long-term Qty",
+       "tag": "LONG_TERM_QTY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "EOH long-term sign Qty",
+        "EOH long-term sign Qty"
+       ],
+       "label": "EOH long-term sign Qty",
+       "tag": "LONG_TERM_EXPECT_QTY",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_EXPECT_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "EOH New long-term Qty",
+        "EOH New long-term Qty"
+       ],
+       "label": "EOH New long-term Qty",
+       "tag": "NEW_LONG_TERM_EXPECT_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NEW_LONG_TERM_EXPECT_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "EOH New long-term Amt (KRW)",
+        "EOH New long-term Amt (KRW)"
+       ],
+       "label": "EOH New long-term Amt (KRW)",
+       "tag": "NEW_LONG_TERM_EXPECT_AMT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "NEW_LONG_TERM_EXPECT_AMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "Consume point of long-term Inv.",
+        "Consume point of long-term Inv."
+       ],
+       "label": "Consume point of long-term Inv.",
+       "tag": "MIN_EXHT_YYYYMM",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "R&R.Dept",
+        "R&R.Dept"
+       ],
+       "label": "R&R.Dept",
+       "tag": "IMPU_DEPT_NM",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "*Occurrence Types",
+        "*Occurrence Types"
+       ],
+       "label": "*Occurrence Types",
+       "tag": "OCCR_RSN_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "OCCR_RSN_CD",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "Occurrence Desc(Max 150 txt)",
+        "Occurrence Desc(Max 150 txt)"
+       ],
+       "label": "Occurrence Desc(Max 150 txt)",
+       "tag": "OCCR_RSN_CTN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "*Reduction plan Type",
+        "*Reduction plan Type"
+       ],
+       "label": "*Reduction plan Type",
+       "tag": "EXHT_TP_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "EXHT_TP_CD",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "Reduction plan Desc(Max 150 txt)",
+        "Reduction plan Desc(Max 150 txt)"
+       ],
+       "label": "Reduction plan Desc(Max 150 txt)",
+       "tag": "EXHT_TP_CTN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "EDIT_TYPE",
+        "EDIT_TYPE"
+       ],
+       "label": "EDIT_TYPE",
+       "tag": "EDIT_TYPE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "Reduction Plan",
+        "26.09"
+       ],
+       "label": "26.09",
+       "tag": "QTY_1",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 48,
+       "header": [
+        "Reduction Plan",
+        "26.10"
+       ],
+       "label": "26.10",
+       "tag": "QTY_2",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 49,
+       "header": [
+        "Reduction Plan",
+        "26.11"
+       ],
+       "label": "26.11",
+       "tag": "QTY_3",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_3",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 50,
+       "header": [
+        "Entered by",
+        "Entered by"
+       ],
+       "label": "Entered by",
+       "tag": "USER_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "USER_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 51,
+       "header": [
+        "Date entered",
+        "Date entered"
+       ],
+       "label": "Date entered",
+       "tag": "UPDATE_DATE",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "UPDATE_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdSub",
+   "path": "/splitContainer2/SplitterPanel/spdSub",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "BOH Ending Inventory",
+     "rows": 0,
+     "cols": 69,
+     "visible": "True",
+     "frozen_cols": "10",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "YY.MM"
+       ],
+       "label": "YY.MM",
+       "tag": "YYYYMM",
+       "width": "65",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "50",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "PLANT_NAME",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "ITEM_DESCRIPTION",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Unit"
+       ],
+       "label": "Unit",
+       "tag": "ITEM_UOM",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Storage Location"
+       ],
+       "label": "Storage Location",
+       "tag": "STORAGE_LOCATION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "S.Lot Description"
+       ],
+       "label": "S.Lot Description",
+       "tag": "STORAGE_DESC",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Unrestricted Qty"
+       ],
+       "label": "Unrestricted Qty",
+       "tag": "UNRESTRICTED_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNRESTRICTED_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Blocked Stock"
+       ],
+       "label": "Blocked Stock",
+       "tag": "BLOCKED_STOCK",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "BLOCKED_STOCK",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "In-transit"
+       ],
+       "label": "In-transit",
+       "tag": "IN_TRANSIT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "IN_TRANSIT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Quantity"
+       ],
+       "label": "Quantity",
+       "tag": "QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Quantity"
+       ],
+       "label": "Quantity",
+       "tag": "QUANTITY_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QUANTITY_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Amount(KRW)"
+       ],
+       "label": "Amount(KRW)",
+       "tag": "AMOUNT_KRW_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT_KRW_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Amount(KRW)"
+       ],
+       "label": "Amount(KRW)",
+       "tag": "AMOUNT_KRW",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT_KRW",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Unit Price(KRW)"
+       ],
+       "label": "Unit Price(KRW)",
+       "tag": "UNIT_PRICE_KRW",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_KRW",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Unit Price(KRW)"
+       ],
+       "label": "Unit Price(KRW)",
+       "tag": "UNIT_PRICE_KRW_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_KRW_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Currency"
+       ],
+       "label": "Currency",
+       "tag": "CURRENCY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Amount"
+       ],
+       "label": "Amount",
+       "tag": "AMOUNT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Amount"
+       ],
+       "label": "Amount",
+       "tag": "AMOUNT_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Unit Price"
+       ],
+       "label": "Unit Price",
+       "tag": "UNIT_PRICE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Unit Price"
+       ],
+       "label": "Unit Price",
+       "tag": "UNIT_PRICE_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Exchange Rate"
+       ],
+       "label": "Exchange Rate",
+       "tag": "EX_TO_BAMT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "EX_TO_BAMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Item Type"
+       ],
+       "label": "Item Type",
+       "tag": "ITEM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Valuation class"
+       ],
+       "label": "Valuation class",
+       "tag": "VALUATION_CLASS",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Process Group"
+       ],
+       "label": "Process Group",
+       "tag": "PROCESS_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Material Group"
+       ],
+       "label": "Material Group",
+       "tag": "MATERIAL_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Cell Type"
+       ],
+       "label": "Cell Type",
+       "tag": "CELL_TYPE",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "CP Material"
+       ],
+       "label": "CP Material",
+       "tag": "CP_MODEL",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "CP Process Group"
+       ],
+       "label": "CP Process Group",
+       "tag": "CP_PROCESS_GROUP",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "CP Material Group"
+       ],
+       "label": "CP Material Group",
+       "tag": "CP_MATERIAL_GROUP",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "GPLM Cell Model"
+       ],
+       "label": "GPLM Cell Model",
+       "tag": "GPLM_CELL_MODEL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "MDM Project Nick name"
+       ],
+       "label": "MDM Project Nick name",
+       "tag": "MDM_PROJECT_NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Extra Spec"
+       ],
+       "label": "Extra Spec",
+       "tag": "EXTRA_SPEC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "GPLM Cell Conversion factor"
+       ],
+       "label": "GPLM Cell Conversion factor",
+       "tag": "CELL_CONVER_FACTOR",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "GPLM Cell Conversion factor"
+       ],
+       "label": "GPLM Cell Conversion factor",
+       "tag": "CELL_CONVER_FACTOR_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CELL_CONVER_FACTOR_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "Cell Conversion Quantity"
+       ],
+       "label": "Cell Conversion Quantity",
+       "tag": "CELL_CONVER_QUANTITY_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "CELL_CONVER_QUANTITY_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "Cell Conversion Quantity"
+       ],
+       "label": "Cell Conversion Quantity",
+       "tag": "CELL_CONVER_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "CELL CF"
+       ],
+       "label": "CELL CF",
+       "tag": "CELL_CF",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "CELL CF BOM"
+       ],
+       "label": "CELL CF BOM",
+       "tag": "CELL_CF_BOM",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "Use CELL CF BOM"
+       ],
+       "label": "Use CELL CF BOM",
+       "tag": "USE_CELL_CF_BOM",
+       "width": "140",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "ITEM Type Detail"
+       ],
+       "label": "ITEM Type Detail",
+       "tag": "ITEM_TYPE_DETAIL",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "MDM class_Lv1"
+       ],
+       "label": "MDM class_Lv1",
+       "tag": "LEVEL_1_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "MDM class_Lv2"
+       ],
+       "label": "MDM class_Lv2",
+       "tag": "LEVEL_2_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "MDM class_Lv3"
+       ],
+       "label": "MDM class_Lv3",
+       "tag": "LEVEL_3_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "MDM class_Lv4"
+       ],
+       "label": "MDM class_Lv4",
+       "tag": "LEVEL_4_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "Cell Type Gr"
+       ],
+       "label": "Cell Type Gr",
+       "tag": "CELL_TYPE_GR",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "CELL GROUP"
+       ],
+       "label": "CELL GROUP",
+       "tag": "CELL_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "PACK GROUP"
+       ],
+       "label": "PACK GROUP",
+       "tag": "PACK_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "Purchase Order Number"
+       ],
+       "label": "Purchase Order Number",
+       "tag": "PURCHASE_PO",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "Supplier Code"
+       ],
+       "label": "Supplier Code",
+       "tag": "SUPPLIER_CODE",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "Supplier Name"
+       ],
+       "label": "Supplier Name",
+       "tag": "SUPPLIER_NAME",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "Target Cell"
+       ],
+       "label": "Target Cell",
+       "tag": "TARGET_CELL",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "전극 MES Route"
+       ],
+       "label": "전극 MES Route",
+       "tag": "FLOW_ID",
+       "width": "120",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "Quantity 1M"
+       ],
+       "label": "Quantity 1M",
+       "tag": "M1_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M1_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "Quantity 2M"
+       ],
+       "label": "Quantity 2M",
+       "tag": "M2_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M2_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "Quantity 3M"
+       ],
+       "label": "Quantity 3M",
+       "tag": "M3_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M3_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "Quantity 4M"
+       ],
+       "label": "Quantity 4M",
+       "tag": "M4_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M4_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 60,
+       "header": [
+        "Quantity 5M"
+       ],
+       "label": "Quantity 5M",
+       "tag": "M5_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M5_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 61,
+       "header": [
+        "Quantity 6M"
+       ],
+       "label": "Quantity 6M",
+       "tag": "M6_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M6_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 62,
+       "header": [
+        "Quantity 7M"
+       ],
+       "label": "Quantity 7M",
+       "tag": "M7_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M7_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 63,
+       "header": [
+        "Quantity 8M"
+       ],
+       "label": "Quantity 8M",
+       "tag": "M8_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M8_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 64,
+       "header": [
+        "Quantity 9M"
+       ],
+       "label": "Quantity 9M",
+       "tag": "M9_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M9_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 65,
+       "header": [
+        "Quantity 10M"
+       ],
+       "label": "Quantity 10M",
+       "tag": "M10_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M10_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 66,
+       "header": [
+        "Quantity 11M"
+       ],
+       "label": "Quantity 11M",
+       "tag": "M11_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M11_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 67,
+       "header": [
+        "Quantity 12M"
+       ],
+       "label": "Quantity 12M",
+       "tag": "M12_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M12_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 68,
+       "header": [
+        "Quantity 13M ~"
+       ],
+       "label": "Quantity 13M ~",
+       "tag": "M13_QUANTITY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "M13_QUANTITY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "PSI Detail",
+     "rows": 0,
+     "cols": 28,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "COMPANY ID"
+       ],
+       "label": "COMPANY ID",
+       "tag": "COMPANY_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "PLANT ID"
+       ],
+       "label": "PLANT ID",
+       "tag": "PLANT_ID",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIV",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plan Type"
+       ],
+       "label": "Plan Type",
+       "tag": "PLAN_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Group Code"
+       ],
+       "label": "Group Code",
+       "tag": "GROUP_CODE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "MATERIAL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Material Desc"
+       ],
+       "label": "Material Desc",
+       "tag": "MATERIAL_Desc",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Origin Material"
+       ],
+       "label": "Origin Material",
+       "tag": "ORIGIN_MATERIAL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Sort"
+       ],
+       "label": "Sort",
+       "tag": "SORT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "SORT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Data Type"
+       ],
+       "label": "Data Type",
+       "tag": "DATA_TP_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "발생유형"
+       ],
+       "label": "발생유형",
+       "tag": "SRCE_TP_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "LongTerm Type"
+       ],
+       "label": "LongTerm Type",
+       "tag": "LONG_TERM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Version"
+       ],
+       "label": "Version",
+       "tag": "VERSION_NO",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "202609"
+       ],
+       "label": "202609",
+       "tag": "QTY_1",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 15,
+       "header": [
+        "202610"
+       ],
+       "label": "202610",
+       "tag": "QTY_2",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 16,
+       "header": [
+        "202611"
+       ],
+       "label": "202611",
+       "tag": "QTY_3",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_3",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 17,
+       "header": [
+        "202612"
+       ],
+       "label": "202612",
+       "tag": "QTY_4",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_4",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 18,
+       "header": [
+        "202701"
+       ],
+       "label": "202701",
+       "tag": "QTY_5",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_5",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 19,
+       "header": [
+        "202702"
+       ],
+       "label": "202702",
+       "tag": "QTY_6",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_6",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 20,
+       "header": [
+        "202703"
+       ],
+       "label": "202703",
+       "tag": "QTY_7",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_7",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 21,
+       "header": [
+        "202704"
+       ],
+       "label": "202704",
+       "tag": "QTY_8",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_8",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 22,
+       "header": [
+        "202705"
+       ],
+       "label": "202705",
+       "tag": "QTY_9",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_9",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 23,
+       "header": [
+        "202706"
+       ],
+       "label": "202706",
+       "tag": "QTY_10",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_10",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 24,
+       "header": [
+        "202707"
+       ],
+       "label": "202707",
+       "tag": "QTY_11",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_11",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 25,
+       "header": [
+        "202708"
+       ],
+       "label": "202708",
+       "tag": "QTY_12",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_12",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 26,
+       "header": [
+        "202709"
+       ],
+       "label": "202709",
+       "tag": "QTY_13",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_13",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Total"
+       ],
+       "label": "Total",
+       "tag": "TOTAL",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "TOTAL",
+       "cell_type": "NumberCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "BOH Long-Term Stock",
+     "rows": 0,
+     "cols": 60,
+     "visible": "True",
+     "frozen_cols": "8",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "YY.MM"
+       ],
+       "label": "YY.MM",
+       "tag": "YYYYMM",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "YYYYMM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "DIV"
+       ],
+       "label": "DIV",
+       "tag": "DIVISION_ID",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "PLANT_DESCRIPTION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLANT_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "PLANT_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Description"
+       ],
+       "label": "Description",
+       "tag": "ITEM_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Unit"
+       ],
+       "label": "Unit",
+       "tag": "ITEM_UOM",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "ITEM_UOM",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Group Code"
+       ],
+       "label": "Group Code",
+       "tag": "GROUP_CODE",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Marketing Department"
+       ],
+       "label": "Marketing Department",
+       "tag": "MARKETING_DEPARTMENT",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "End Customer"
+       ],
+       "label": "End Customer",
+       "tag": "END_CUSTOMER",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Long term Type"
+       ],
+       "label": "Long term Type",
+       "tag": "LONG_TERM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "LONG_TERM_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Item Type"
+       ],
+       "label": "Item Type",
+       "tag": "ITEM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ITEM_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Process Group"
+       ],
+       "label": "Process Group",
+       "tag": "PROCESS_GROUP",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PROCESS_GROUP",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Material Group"
+       ],
+       "label": "Material Group",
+       "tag": "PROCESS_DETAIL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PROCESS_DETAIL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "GPLM Cell Model"
+       ],
+       "label": "GPLM Cell Model",
+       "tag": "GPLM_CELL_MODEL",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "GPLM_CELL_MODEL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "MDM Project Nick name"
+       ],
+       "label": "MDM Project Nick name",
+       "tag": "MDM_NICK_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MDM_NICK_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Extra Spec"
+       ],
+       "label": "Extra Spec",
+       "tag": "SCP_EXTRA_SPEC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "SCP_EXTRA_SPEC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "GPLM Cell Conversion factor"
+       ],
+       "label": "GPLM Cell Conversion factor",
+       "tag": "GPLM_CELL_CONVERSION_FACTOR",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "GPLM_CELL_CONVERSION_FACTOR",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "MDM class_Lv1"
+       ],
+       "label": "MDM class_Lv1",
+       "tag": "LEVEL_1_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LEVEL_1_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "MDM class_Lv2"
+       ],
+       "label": "MDM class_Lv2",
+       "tag": "LEVEL_2_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LEVEL_2_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "MDM class_Lv3"
+       ],
+       "label": "MDM class_Lv3",
+       "tag": "LEVEL_3_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LEVEL_3_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "MDM class_Lv4"
+       ],
+       "label": "MDM class_Lv4",
+       "tag": "LEVEL_4_NAME",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "LEVEL_4_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Valuation class"
+       ],
+       "label": "Valuation class",
+       "tag": "VALUATION_CLASS",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "VALUATION_CLASS",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Devaluation Age"
+       ],
+       "label": "Devaluation Age",
+       "tag": "DEVALUATION_AGE",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "DEVALUATION_AGE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Q'ty(All)"
+       ],
+       "label": "Q'ty(All)",
+       "tag": "ENDING_STOCK_QTY",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "ENDING_STOCK_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Q'ty(Cell)"
+       ],
+       "label": "Q'ty(Cell)",
+       "tag": "ENDING_STOCK_CONVERSION_QTY",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "ENDING_STOCK_CONVERSION_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Quantity"
+       ],
+       "label": "Quantity",
+       "tag": "LONG_TERM_STOCK_QTY_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_STOCK_QTY_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "Quantity"
+       ],
+       "label": "Quantity",
+       "tag": "LONG_TERM_STOCK_QTY",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_STOCK_QTY",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "Amount(KRW)"
+       ],
+       "label": "Amount(KRW)",
+       "tag": "LONG_TERM_STOCK_AMOUNT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_STOCK_AMOUNT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "Amount(KRW)"
+       ],
+       "label": "Amount(KRW)",
+       "tag": "LONG_TERM_STOCK_AMOUNT_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LONG_TERM_STOCK_AMOUNT_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 31,
+       "header": [
+        "Unit Price(KRW)"
+       ],
+       "label": "Unit Price(KRW)",
+       "tag": "UNIT_PRICE_KRW",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_KRW",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 32,
+       "header": [
+        "Unit Price(KRW)"
+       ],
+       "label": "Unit Price(KRW)",
+       "tag": "UNIT_PRICE_KRW_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_KRW_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 33,
+       "header": [
+        "Currency"
+       ],
+       "label": "Currency",
+       "tag": "CURRENCY",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CURRENCY",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 34,
+       "header": [
+        "Amount"
+       ],
+       "label": "Amount",
+       "tag": "AMOUNT",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 35,
+       "header": [
+        "Amount"
+       ],
+       "label": "Amount",
+       "tag": "AMOUNT_XLS",
+       "width": "110",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "AMOUNT_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 36,
+       "header": [
+        "Unit Price"
+       ],
+       "label": "Unit Price",
+       "tag": "UNIT_PRICE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 37,
+       "header": [
+        "Unit Price"
+       ],
+       "label": "Unit Price",
+       "tag": "UNIT_PRICE_XLS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "UNIT_PRICE_XLS",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 38,
+       "header": [
+        "Exchange Rate"
+       ],
+       "label": "Exchange Rate",
+       "tag": "EX_TO_BAMT",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "EX_TO_BAMT",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 39,
+       "header": [
+        "Memo"
+       ],
+       "label": "Memo",
+       "tag": "MEMO",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MEMO",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 40,
+       "header": [
+        "YYYYMM_VAL"
+       ],
+       "label": "YYYYMM_VAL",
+       "tag": "YYYYMM_VAL",
+       "width": "50",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "YYYYMM_VAL",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 41,
+       "header": [
+        "CHARG"
+       ],
+       "label": "CHARG",
+       "tag": "CHARG",
+       "width": "50",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CHARG",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 42,
+       "header": [
+        "PIC"
+       ],
+       "label": "PIC",
+       "tag": "PIC",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PIC",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 43,
+       "header": [
+        "No usage in 3M"
+       ],
+       "label": "No usage in 3M",
+       "tag": "NO_USAGE_IN_3M",
+       "width": "55",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "NO_USAGE_IN_3M",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 44,
+       "header": [
+        "발생사유 유형"
+       ],
+       "label": "발생사유 유형",
+       "tag": "OCCR_RSN_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "OCCR_RSN_CD",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 45,
+       "header": [
+        "발생사유 상세"
+       ],
+       "label": "발생사유 상세",
+       "tag": "OCCR_RSN_CTN",
+       "width": "110",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 46,
+       "header": [
+        "소진방안 유형"
+       ],
+       "label": "소진방안 유형",
+       "tag": "EXHT_TP_CD",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "EXHT_TP_CD",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 47,
+       "header": [
+        "소진방안 상세"
+       ],
+       "label": "소진방안 상세",
+       "tag": "EXHT_TP_CTN",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 48,
+       "header": [
+        "QTY_1"
+       ],
+       "label": "QTY_1",
+       "tag": "QTY_1",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_1",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 49,
+       "header": [
+        "QTY_2"
+       ],
+       "label": "QTY_2",
+       "tag": "QTY_2",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_2",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 50,
+       "header": [
+        "QTY_3"
+       ],
+       "label": "QTY_3",
+       "tag": "QTY_3",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_3",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 51,
+       "header": [
+        "QTY_4"
+       ],
+       "label": "QTY_4",
+       "tag": "QTY_4",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_4",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 52,
+       "header": [
+        "QTY_5"
+       ],
+       "label": "QTY_5",
+       "tag": "QTY_5",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_5",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 53,
+       "header": [
+        "QTY_6"
+       ],
+       "label": "QTY_6",
+       "tag": "QTY_6",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_6",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 54,
+       "header": [
+        "QTY_7"
+       ],
+       "label": "QTY_7",
+       "tag": "QTY_7",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_7",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 55,
+       "header": [
+        "QTY_8"
+       ],
+       "label": "QTY_8",
+       "tag": "QTY_8",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_8",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 56,
+       "header": [
+        "QTY_9"
+       ],
+       "label": "QTY_9",
+       "tag": "QTY_9",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_9",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 57,
+       "header": [
+        "QTY_10"
+       ],
+       "label": "QTY_10",
+       "tag": "QTY_10",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_10",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 58,
+       "header": [
+        "QTY_11"
+       ],
+       "label": "QTY_11",
+       "tag": "QTY_11",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_11",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 59,
+       "header": [
+        "QTY_12"
+       ],
+       "label": "QTY_12",
+       "tag": "QTY_12",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "QTY_12",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

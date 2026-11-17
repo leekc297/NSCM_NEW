@@ -28,7 +28,7 @@
 **절차 (순서 고정)**:
 1. md 세트 존재 확인 (glob: `Doc/_figma/screens/{ID}.md` / `Doc/화면분석서/{ID}*` 4종)
 2. 부재분만 선분석·생성 — AS-IS `.cs`/`.Designer.cs`/팝업 `.cs` 전량 Read + 라인 인용 명기
-3. `asis_mapping_gate.py --init` 으로 대사표 스켈레톤 생성 (수기 표 금지)
+3. `asis_mapping_gate.py --init` 으로 대조표 스켈레톤 생성 (수기 표 금지) (2026-11-13 정정: 용어 대사표 → 대조표)
 4. 구현 — md 의 항목별 반영 여부를 md 에 표기 + **카운트 일치 의무** (분석 항목 수 = 적용 + 정당 제외 수)
 5. 완료 선언 = `asis_mapping_gate.py --check` PASS + `ui_gate_runner.py` 리포트 경로 첨부 (RULESET_MASTER §3.4 — 리포트 없는 완료 보고 = 미완료)
 

@@ -1,0 +1,113 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "clbDivision_ID",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      34,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      32,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0200-Sd3fdaf",
+    "SSP0200-Sd3fdaf",
+    "SSP0200-S5dcee3",
+    "SSP0200-S5dcee3"
+   ]
+  },
+  {
+   "control": "clbDivision_ID",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE",
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbFromSite(clb)",
+     "before": [
+      "",
+      32,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      34,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SSP0200-Sd3fdaf",
+    "SSP0200-Sd3fdaf",
+    "SSP0200-S5dcee3",
+    "SSP0200-S5dcee3"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "CboChangeType",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 3
+  },
+  {
+   "control": "cboChangeType",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 3
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 25
+  }
+ ],
+ "at": "2026-11-15 07:43:33"
+}

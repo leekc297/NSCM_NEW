@@ -32,10 +32,12 @@ interface Props {
  * 사용자 요청(2026-11-04) — 조회조건이 2줄을 넘어가면 접는다(2026-10-19 "3줄 고정" 결정을 번복).
  *   공용 SearchArea 는 `extraConditions` 가 있으면 chevron 토글을 자동 렌더한다(2줄까지 항상 노출,
  *   나머지는 펼침). 2줄 유지 기준으로 아래처럼 가른다(hook #52, 줄당 4필드).
- *   1줄 conditions      : Operation group · Material/Basic Nickname(+팝업) · Division · Plan Month
- *                          (Version 콤보+Plan Type 회색칸 50:50 은 2줄 머리로 밀린다)
- *   2줄 conditions      : Version(+Plan Type) · Site · Plant · Building
- *   접힘 extraConditions: Line · Operation · Line Type(Cell/Module.Pack 모드만) · Active
+ *   1줄 conditions      : Operation group · Material/Basic Nickname(+팝업) · Active · Division
+ *                          (AS-IS 1단 최상단 행 DivisionType·Item·Active 를 복원 — Active 를 Division 앞에 둔다.
+ *                           사용자 요청 2026-11-09. Plan Month 이하는 2줄 머리로 밀린다)
+ *   2줄 conditions      : Plan Month · Version(+Plan Type) · Site · Plant
+ *   접힘 extraConditions: Building · Line · Operation · Line Type(Cell/Module.Pack 모드만)
+ *                          (Building 은 2줄 유지 위해 접힘으로 내렸다 — 사용자 요청 2026-11-09)
  *
  * 축 A(`divisionType`) 는 조회조건이 아니라 화면 모드 스위치다 — Operation/Line Type 노출과
  * Item 라벨까지 동시에 가른다(R-04~R-06). Operation 과 Line Type 은 **서로 배타**이므로 한 자리에
@@ -179,14 +181,13 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
         onSearch={onSearch}
         conditions={
           <>
-            {/* 사용자 확정 배치(2026-10-19, Version/Plan Type 합병 2026-10-26) — 3줄 고정(접힘 영역
-                extraConditions 제거), 줄당 4필드.
-                1줄 Division · Plan Month · Version(콤보+Plan Type 회색칸 50:50) · Operation group
-                2줄 Site · Plant · Building · Line
-                3줄 (Operation·Line Type — Cell/Module.Pack 모드에서만 끼어든다) · Material · Active
+            {/* 현재 배치(줄당 4필드, size=3). AS-IS 1단 최상단 행(DivisionType·Item·Active)을 앞단에
+                복원한다 — 사용자 요청 2026-11-09 으로 Active 를 접힘 영역에서 Division 앞으로 끌어올렸다.
+                1줄 Operation group · Material/Basic Nickname(+팝업) · Active · Division
+                2줄 Plan Month · Version(콤보+Plan Type 회색칸 50:50) · Site · Plant
+                접힘 Building · Line (Operation·Line Type 은 Cell/Module.Pack 모드에서만 끼어든다)
                 Plan Type 은 AS-IS Designer 좌표대로 Version 콤보 뒤 라벨없는 회색칸으로 묶여 독립 칸을
-                쓰지 않는다(V-05). Operation/Line Type 은 Electrode 모드에서 숨으므로 기본 화면은 정확히
-                3줄이고, Cell/Module.Pack 모드에서만 2필드가 늘어 4줄째로 자연 흐른다(R-04/R-05 보존). */}
+                쓰지 않는다(V-05). Operation/Line Type 은 Electrode 모드에서 숨는다(R-04/R-05 보존). */}
             {/* S05 Division Type — 화면 모드 스위치. 변경 시 두 탭 전면 초기화(R-01).
                 AS-IS `lciDivisionType` 은 `TextVisible=false` = 라벨 없는 라디오 3택이었으나,
                 사용자 확정(DB 실측)으로 LBL00027 'Operation group' 라벨을 붙인다.
@@ -240,6 +241,12 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 )}
               />
             </Grid>
+            {/* S14 Valid(라벨 'Active', LBL00007 — DB 실측) — AS-IS 1단 최상단 행에서 DivisionType·Item 과
+                한 줄이던 필드. 사용자 요청(2026-11-09)으로 접힘 영역 맨 끝에서 Division 앞 상단 행으로
+                복원한다(AS-IS 물리 배치 `01_layout.md §1.1`). 'ALL' 은 SP 로 '' 로 나간다(V-18). */}
+            {singleField(LBL.VALID, 'Active', sc.validYn, validOptions, code =>
+              setSearchParams({ validYn: code || ALL })
+            )}
             {/* S01 Division — 단일선택, ALL 없음. 기본 포커스(AS-IS TabIndex 0).
                 Division 변경 = TO-BE 공통 요건: Division 을 제외한 검색조건 전부 초기화 + 두 그리드
                 초기화(store `setDivision`). AS-IS `cboDivision_SelectedIndexChanged`(cs:5510-5519)는
@@ -268,11 +275,13 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 X=600 폭155) 바로 뒤에 `txtPlanType`(X=755 폭45, `TextVisible=false`=라벨없음,
                 `Enabled=false`=읽기전용)이 붙어 한 칸처럼 보인다. 사용자 요청(2026-10-26, LOB Report
                 SCP0108 Version 패턴)으로 Version 라벨 하나 아래 콤보+회색칸을 `Box flex 50:50` 으로
-                가로로 묶는다. Plan Type 은 조회 파라미터가 아니라 파생 표시다(V-05). */}
+                가로로 묶는다. Plan Type 은 조회 파라미터가 아니라 파생 표시다(V-05).
+                라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12, MSG_TP_CD='LBL'). 과거 리터럴
+                하드코딩은 다국어 미처리라 i18n 코드로 교체(LBL00606 은 'Version' 이라 'Ver.' 약어엔 못 씀). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.VERSION, '_Version')}
+                label={t('LBL01275', '_Ver.')}
                 labelAlign='right'
                 render={() => (
                   <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>
@@ -306,14 +315,16 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
             {multiField(LBL.PLANT, 'Plant', sc.plantIds, cascade.plantOptions, codes =>
               setSearchParams({ plantIds: codes, factoryIds: [ALL], lineIds: [ALL] })
             )}
-            {/* S08 Building(컨트롤명은 Factory) — Site 가 아니라 Plant 에 종속된다(V-10). */}
-            {multiField(LBL.BUILDING, 'Building', sc.factoryIds, cascade.factoryOptions, codes =>
-              setSearchParams({ factoryIds: codes, lineIds: [ALL] })
-            )}
           </>
         }
         extraConditions={
           <>
+            {/* S08 Building(컨트롤명은 Factory) — Site 가 아니라 Plant 에 종속된다(V-10).
+                사용자 요청(2026-11-09)으로 접힘 영역으로 내린다(conditions 2줄 유지).
+                cascade 순서(Site→Plant→Building→Line) 유지를 위해 Line 앞에 둔다. */}
+            {multiField(LBL.BUILDING, 'Building', sc.factoryIds, cascade.factoryOptions, codes =>
+              setSearchParams({ factoryIds: codes, lineIds: [ALL] })
+            )}
             {/* S09 Line — `_A`/`_C` 접미 커스텀 정렬 적용분(V-19).
                 사용자 요청(2026-11-04)으로 접힘 영역으로 내린다. */}
             {multiField(LBL.LINE, 'Line', sc.lineIds, cascade.lineOptions, codes =>
@@ -339,10 +350,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 cascade.electrodeTypeOptions,
                 codes => setSearchParams({ electrodeTypes: codes })
               )}
-            {/* S14 Valid(라벨 'Active', LBL00007 — DB 실측) — 'ALL' 은 SP 로 '' 로 나간다(V-18). */}
-            {singleField(LBL.VALID, 'Active', sc.validYn, validOptions, code =>
-              setSearchParams({ validYn: code || ALL })
-            )}
           </>
         }
       />

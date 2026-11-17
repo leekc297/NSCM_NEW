@@ -19,7 +19,7 @@
 | 트리거 | 적용 시점 |
 |---|---|
 | 신규 화면 작성 (T01 신규화면) | PRE-WRITE + POST-WRITE |
-| Grid 컴포넌트 수정 (T07 Grid) | PRE-WRITE + POST-WRITE |
+| Grid 컴포넌트 수정 (T04 Grid) (2026-11-13 정정: T07 → T04 — `TRIGGER_ROUTER.md` T04 = Grid/DataGrid/컬럼 메타, T07 = Button/CRUD/SubTitle) | PRE-WRITE + POST-WRITE |
 | Store 신규 / 수정 (T04 store) | PRE-WRITE + POST-WRITE |
 | `staticColumns` 키워드 등장 | POST-WRITE 검증 |
 | Sheet 추가 / 변경 | PRE-WRITE 의무 |
@@ -94,7 +94,9 @@ fetchStaticColumns: async () => {
   const [site, customer, /* ... */] = await Promise.all([
     apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
       sheetNm: RESPONSE_SET.SITE,
-      divisionId: division === '40' ? '40' : undefined,   // ⚠ Division 별 메타 분기
+      divisionId: division,   // ⚠ Division 별 메타 분기 — 항상 전송
+      // (2026-11-13 정정: `division === '40' ? '40' : undefined` → `division` — 40 일 때만 보내면 81/82 전용 컬럼이
+      //  division 과 무관하게 결정된다. hook #113 ui-category-division-direct-compare §1-1 · DMF0004 useSalesSiteStore.ts 현행)
     }),
     apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
       sheetNm: RESPONSE_SET.CUSTOMER,
@@ -209,7 +211,7 @@ const COLS = [{ binding: 'A', header: 'A' }, /* ... */];
 - [ ] Store 에 `staticColumns: { [key in SHEETS]: RawFlexGridColumnConfig[] }` 정의?
 - [ ] Store 에 `fetchStaticColumns: () => Promise<void>` action 정의?
 - [ ] `fetchStaticColumns` 가 각 sheet 별 `apiClient.post('/admin/menu/{MENU_ID}/column', {...})` 호출?
-- [ ] Division 별 메타 분기 (`divisionId === '40' ? '40' : undefined`) 적용 (DMF0004/0005 표준)?
+- [ ] Division 별 메타 분기 — `divisionId` 를 **항상 전송**(현재 조회조건 Division) (DMF0004/0005 표준)? (11-13 정정: 구 `'40' ? '40' : undefined` 분기 폐기)
 - [ ] `setSearchParams` 안에서 `divisionId` 변경 감지 시 `fetchStaticColumns` 호출?
 - [ ] Component `useEffect(() => { if (!initialized) void fetchStaticColumns(); }, [tabId])` 존재?
 - [ ] Search 버튼 / SearchArea onSearch 가 `setFilter()` + `fetchStaticColumns()` 둘 다 호출?
@@ -288,7 +290,7 @@ useEffect(() => {
 
 ⚠ `initialized` 는 store persist 됨. mount 시 이미 true → fetch 안 함 → admin 변경 미반영.
 
-→ **fix**: `fetchStaticColumns` 자체는 매 호출 마다 실행 보장. `initialized` guard 는 fetchStaticColumns 안의 search-conditions 복원 부분에만 적용. 메모리 `feedback_fetchstaticcolumns_no_initialized_guard.md` 동일.
+→ **fix**: `fetchStaticColumns` 자체는 매 호출 마다 실행 보장. `initialized` guard 는 fetchStaticColumns 안의 search-conditions 복원 부분에만 적용. 메모리 `feedback_fetchstaticcolumns_no_initialized_guard.md` 동일. (2026-11-13 정정: 이 사고는 `initialized` 를 `fetchStaticColumns` 밖(별도 `fetchSearchConditions`)에서 세우는 구조에 해당 — §3 표준 줄 `if (!initialized) void fetchStaticColumns();` 는 reference 3화면처럼 `fetchStaticColumns` 안에서 `initialized` 를 세우는 구조의 표준 형태로 유지)
 
 ### 5.3 (실제 사례) Search 시 setFilter 만 호출, fetchStaticColumns 누락
 ```tsx
@@ -376,7 +378,7 @@ interface Action {
 
 fetchStaticMeasures: async () => {
   const result = await apiClient.post<MeasureMeta[]>(
-    `/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.MAIN }
+    `/admin/menu/${MENU_ID}/measure`, { sheetNm: SHEETS.MAIN, divisionId: get().searchParams.divisionId }   // (2026-11-13 정정: divisionId 항상 전송 — 컬럼 호출(§3)과 통일)
   );
   set(state => { state.staticMeasures[SHEETS.MAIN] = result.data.result; });
 },
@@ -413,7 +415,7 @@ SELECT * FROM (
 
 ## §9. 신규 화면 작성 시 신규 등록 의무 (admin UI 데이터 부재 케이스)
 
-> ⭐ **2026-06-12 사용자 명시 요구 추가** — 신규 UI 작성 시 `SCM_MST_SHEET_COLUMNS` / `SCM_MST_SHEET_MEASURE` 에 데이터 없으면 **반드시 신규 등록**.
+> ⭐ **2026-06-12 사용자 명시 요구 추가** — 신규 UI 작성 시 `SCM_MST_SHEET_COLUMNS` / `SCM_MST_SHEET_MEASURE` 에 데이터 없으면 **반드시 신규 등록**. (2026-11-13 정정: 등록 값은 화면설계서·AS-IS 실데이터 근거가 있거나 사용자가 요청한 것만 deploy SQL 로 넣는다 — 근거 없는 추정 값 INSERT 는 금지이며 그때는 사용자에게 보고한다(`ui-category-setup-no-arbitrary-data.md` §금지 1·§시나리오))
 
 ### 9.1 PRE-WRITE Step 1 (admin UI 데이터 존재 점검)
 
@@ -453,7 +455,7 @@ interface Props {
   staticMeasures?: MeasureMeta[];              // ⭐ PIVOT/measure 화면만
 }
 
-// Step 2: 통합 column meta useMemo (staticColumns 우선, MAIN_COLUMNS fallback)
+// Step 2: 통합 column meta useMemo (staticColumns 만 사용)   // (2026-11-13 정정: MAIN_COLUMNS fallback 제거 — 메타가 비면 빈 그리드 + deploy SQL 로 메타를 채운다 · §5.5 · #113)
 interface MergedColumnMeta {
   binding: string; header: string; width: number; align: 'L' | 'R' | 'C';
   visible: boolean; fixed: boolean; scale?: number;
@@ -462,8 +464,7 @@ interface MergedColumnMeta {
 
 const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
   if (!staticColumns || staticColumns.length === 0) {
-    // BE 실패 시 fallback — 화면 작동 보장
-    return MAIN_COLUMNS.map(c => ({ binding: c.key, header: c.header, width: c.width, ... }));
+    return [];   // (11-13 정정) 메타 미응답 = 컬럼 없음. MAIN_COLUMNS 대체 표시 금지(admin 설정 무효화)
   }
   return staticColumns.map(sc => {
     const fb = MAIN_COLUMNS.find(m => m.key === sc.colNm);
@@ -477,7 +478,7 @@ const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
       scale: sc.scale,
       _ctrlType: sc.cellCtrlObjTpCd ?? fb?._ctrlType,
       _inputEditType: sc.inputTpCd ?? fb?._inputEditType,
-      _modalKey: sc.attribute1 ?? fb?._modalKey,
+      _modalKey: (sc.cellCboDataTp ?? '').trim() || fb?._modalKey || sc.attribute1,   // (2026-11-13 정정) 표준 = CELL_COMBO_DATA_TYPE. ATTRIBUTE1 은 Division 토큰과 섞여 있어 마지막 순위(과도기) — 공백 1칸 값이 있어 trim 필요
       _comboKey: sc.attribute2 ?? fb?._comboKey,
     };
   });
@@ -504,8 +505,8 @@ const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [merg
 | fixed | `FIXED_FLAG` | `fixed` | `frozenColumns` count |
 | cellCtrlObjTpCd | `CELL_CONTROL_OBJECT_TYPE_CODE` | `cellCtrlObjTpCd` | (formatItem cell type) |
 | inputTpCd | `INPUT_TP_CD` | `inputTpCd` | `isReadOnly` (S=true) |
-| modalKey | `ATTRIBUTE1` | `attribute1` | (popup dblClick) |
-| comboKey | `ATTRIBUTE2` | `attribute2` | (DataMap) |
+| modalKey | `CELL_COMBO_DATA_TYPE` (표준 — 2026-11-13 사용자 확정 · `column-lookup-meta-standard.md` §1 과 통일. 과도기: 기존 `ATTRIBUTE1` 값 병행 읽기) | `cellCboDataTp` (과도기 `attribute1`) | (popup dblClick) (2026-11-13 사내 DB 실측: Modal 컨트롤 127행(FPTextModal 66 · FPModal 61) 중 ATTRIBUTE1 채움 25 · CELL_COMBO_DATA_TYPE 채움 18(그중 공백 1칸 16 · 'PROJECT' 1 · 'ITEM' 1). ATTRIBUTE1 에는 모달 키('PROJECT' 3 · 'ITEM' 3 · 'ProjectAuthRegModal' 3 · 'UserMgmt' 2 등)와 Division 토큰('81,82' 5 · '40' 2 등)이 섞여 있음) |
+| comboKey | `ATTRIBUTE2` | `attribute2` | (DataMap) (2026-11-13 정정: 공용 `DataGrid` 의 콤보 키는 `CELL_COMBO_DATA_TYPE`=`cellCboDataTp`(콤보 SQL_ID)이고 `attribute2` 는 콤보 필터 바인딩 자리 — `ui-meta-dictionary-mandatory.md` §4.2) |
 | uppercase | `UPPERCASE_APPLY_FLAG` | `uppercase` | (formatItem 변환) |
 | personalizable | `USER_SELECTABLE_FLAG` | `personalizable` | (column setting popup) |
 
@@ -518,7 +519,7 @@ const handleInsert = () => {
     .filter(m => m.VALID_YN !== 'N')
     .sort((a, b) => (a.SORT_ORDER_NO ?? 0) - (b.SORT_ORDER_NO ?? 0))
     .map(m => m.COLUMN_NAME);
-  const measures = validMeasures.length > 0 ? validMeasures : MEASURE_4;  // fallback
+  const measures = validMeasures;   // (11-13 정정: `: MEASURE_4` fallback 제거 — 바로 아래 금지 문장과 통일)
   // ...
 };
 ```
@@ -537,7 +538,7 @@ const handleInsert = () => {
 
 - [ ] Props 에 `staticColumns` + `staticMeasures` (PIVOT 시) 추가?
 - [ ] `MergedColumnMeta` interface 정의?
-- [ ] `mergedColumns` useMemo — staticColumns 있으면 그것 우선, 없으면 MAIN_COLUMNS fallback?
+- [ ] `mergedColumns` useMemo — staticColumns 만 사용(없으면 빈 배열 · MAIN_COLUMNS fallback 없음)?   (11-13 정정)
 - [ ] `visibleColumns = mergedColumns.filter(c => c.visible)` ?
 - [ ] FlexGridColumn map 이 `visibleColumns` 사용 (`MAIN_COLUMNS` 직접 X)?
 - [ ] formatItem / beginningEdit 안의 column meta find 가 `visibleColumns.find(c => c.binding === ...)` 사용?
@@ -591,7 +592,8 @@ const mainStaticColumns = useMemo(() =>
    코드로 처리한 동작(예: FarPoint `Freeze(0, N)`)은 TO-BE 에서 "메타 위임 + 메타 데이터 정비" 로
    변환한다. 메타 데이터가 비어 있으면 화면 코드가 아니라 deploy SQL(§9 BLOCK 6)로 채운다.
 3. 허용 예외 (2가지 뿐):
-   - **fallback 경로**: 메타 미응답(빈 배열) 시의 MAIN_COLUMNS fallback — 단 fallback 값도 "메타가
+   - (2026-11-13 정정: 아래 fallback 경로 예외는 폐지 — 메타 미응답 시 MAIN_COLUMNS 대체 표시 금지(§5.5 · #113). 허용 예외는 "메타 비관리 속성" 1가지)
+   - ~~**fallback 경로**~~: 메타 미응답(빈 배열) 시의 MAIN_COLUMNS fallback — 단 fallback 값도 "메타가
      있었다면 그 값" 스냅샷이어야 하며, 메타 응답이 있으면 절대 개입 금지 (§11.1 우선순위).
    - **메타 비관리 속성**: SHEET_COLUMNS 가 관리하지 않는 순수 렌더 속성 (allowSorting/allowMerging/
      format 문자열 조립/height(#93) 등) — 단 관리 속성에서 파생 가능하면 파생 사용.
@@ -603,7 +605,7 @@ const mainStaticColumns = useMemo(() =>
 # staticColumns 매핑 안에서 관리 속성의 리터럴 배선 검출 (히트 = 각 건 사유 소명 또는 fix)
 grep -nE "fixed: (true|false),|visible: (true|false),|inputTpCd: '(S|M|O|IM|IO)'|horzAlgnCd: '(L|R|C)'" \
   features/*/src/pages/{SCREEN}/components/*Grid.tsx
-# 허용 히트 = fallback 분기 내부 (staticColumns 부재 시) 뿐. 메타 매핑 경로의 히트는 전건 위반.
+# 허용 히트 = 없음(11-13 정정: fallback 분기 예외 폐지). 히트는 전건 위반.
 ```
 
 ### 12.4 재발 방지 계보

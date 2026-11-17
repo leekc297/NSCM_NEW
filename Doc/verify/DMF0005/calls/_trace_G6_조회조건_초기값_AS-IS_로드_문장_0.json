@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 368,
+  "at": "2026-11-13T20:58:53.711Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ },
+ {
+  "menu": "COM0004",
+  "sheet": "owner",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0004/owner/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"user\":\"\"}",
+  "status": 200,
+  "rows": 3098,
+  "dur": 383,
+  "at": "2026-11-13T20:58:53.724Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

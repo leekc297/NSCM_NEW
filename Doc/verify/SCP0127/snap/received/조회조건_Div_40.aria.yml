@@ -1,3 +1,4 @@
+- img
 - text: Div
 - combobox: 81 Automotive Battery
 - button "Open"
@@ -16,13 +17,14 @@
 - text: Model/Nickname
 - textbox
 - button
+- img
 - text: Period
 - button "Open calendar"
-- textbox "YYYY.MM.DD": 2026.11.02
+- textbox "YYYY.MM.DD": 2026.11.09
 - text: ~
 - button "Open calendar"
-- textbox "YYYY.MM.DD": 2027.11.01
+- textbox "YYYY.MM.DD": 2027.11.08
 - text: Active
 - combobox: ALL
 - button "Open"
-# visual-order: Div > SCM Site > Type > Stage > Plan Group > Model/Nickname > Active
+# visual-order: Div > SCM Site > Type > Stage > Plan Group > Model/Nickname > Period > Active

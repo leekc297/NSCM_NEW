@@ -195,7 +195,7 @@ SELECT TRIM(REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL)) AS TOK
 FROM DUAL
 WHERE P_ITEM_ID NOT IN ('ALL', '%')
   AND P_ITEM_ID IS NOT NULL
-  AND P_ITEM_ID <> ''
+  -- (2026-11-13 정정 — 사내 DB 실측: `'A' <> ''` 0행 · `'A' NOT IN ('ALL','%','')` 0행 · `NOT IN ('ALL','%')` 1행) → `AND P_ITEM_ID <> ''` 삭제: Oracle 에서 '' 는 NULL 이라 이 조건이 붙으면 항상 0행. 빈값 제외는 IS NOT NULL 로 충분
 CONNECT BY REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL) IS NOT NULL;
 
 -- 사용 위치 (SELECT 절):
@@ -220,7 +220,7 @@ WHERE  ( P_ITEM_ID IN ('ALL', '%')
 
 ### 3.3 GT (Global Temporary Table) 표준 명명 + DDL
 
-**명명 규약** — `GT_GGET_SPLIT_{소스 변수명 UPPER_SNAKE}`:
+**명명 규약** — `GT_GGET_SPLIT_{소스 변수명 UPPER_SNAKE}`: (2026-11-14 정정: 저장소 SQL 에는 화면별 2컬럼 GT 방식(`GT_DMF0082_PARAM_TOKEN`, `GT_DMF0020_PARAM_TOKEN`)도 쓰임)
 
 | 소스 변수 | GT 이름 |
 |---|---|
@@ -249,7 +249,7 @@ CREATE GLOBAL TEMPORARY TABLE SCM_MGR.GT_GGET_SPLIT_ITEM_ID (
 ) ON COMMIT PRESERVE ROWS;
 
 -- 권한 부여 (SCMD_APP 사용계정)
-GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_GGET_SPLIT_ITEM_ID TO SCMD_APP;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCM_MGR.GT_GGET_SPLIT_ITEM_ID TO SCMD_APP;   -- (2026-11-14 정정: 사내 DB 앱 계정은 SCMP_APP(SCMD_APP 없음). 다른 환경은 그 환경의 앱 계정으로 바꿔 적용. 사내 DB 실측 2026-11-13 21:51)
 CREATE OR REPLACE SYNONYM SCMD_APP.GT_GGET_SPLIT_ITEM_ID FOR SCM_MGR.GT_GGET_SPLIT_ITEM_ID;
 
 -- 인덱스 (TOK 빠른 lookup 시)
@@ -563,7 +563,7 @@ LEFT JOIN B ON A.X = B.Y
 | `TO_CHAR(num_col)` | 직접 비교 (type 일치 시) | type 검토 |
 | `TO_DATE(varchar_col)` | varchar 직접 비교 (8자리 YYYYMMDD) | type 검토 |
 | `col1 || col2 = X` | `col1 = X1 AND col2 = X2` | 분리 |
-| `col LIKE '%X%'` | `LIKE 'X%'` (prefix) | 또는 inverted/context index |
+| `col LIKE '%X%'` | `LIKE 'X%'` (prefix) | 또는 inverted/context index (2026-11-13 정정: 화면·팝업의 텍스트 조회조건은 부분일치 유지 — CR-050. prefix 전환은 조회조건이 아닌 내부 술어에 한함) |
 | `SUBSTR(col, 1, n) = X` | function-based index | DDL |
 | `col + n` (산술) | function-based index | DDL |
 | `NVL(A.X, '') = B.Y` | `A.X = B.Y` (NULL 무시) | OR 분기 |
@@ -647,7 +647,7 @@ INSERT INTO SCM_MGR.GT_GGET_SPLIT_ITEM_ID (TOK)
 SELECT TRIM(REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL))
 FROM   DUAL
 WHERE  P_ITEM_ID IS NOT NULL
-  AND  P_ITEM_ID NOT IN ('ALL', '%', '')   -- ⭐ skip 조건
+  AND  P_ITEM_ID NOT IN ('ALL', '%')   -- ⭐ skip 조건  (11-13 정정: NOT IN 목록의 '' 삭제 — '' = NULL 이라 NOT IN 전체가 항상 0행 · DB 실측)
 CONNECT BY REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL) IS NOT NULL;
 
 -- 후속 SELECT — OR 분기로 short-circuit
@@ -661,7 +661,7 @@ WHERE  ...
 ```
 
 **핵심 동작:**
-1. **INSERT 단계**: `WHERE P_X NOT IN ('ALL','%','')` 추가 → 'ALL' 시 INSERT 0 row (GT 비어 있음)
+1. **INSERT 단계**: `WHERE P_X NOT IN ('ALL','%') AND P_X IS NOT NULL` 추가 (11-13 정정: NOT IN 목록의 `''` 삭제 — DB 실측 항상 0행) → 'ALL' 시 INSERT 0 row (GT 비어 있음)
 2. **SELECT 단계**: `P_X IN ('ALL','%','') OR P_X IS NULL OR EXISTS (...)` — 옵티마이저 short-circuit:
    - 'ALL' 시 OR 첫 분기 TRUE → EXISTS 평가 skip → GT scan 0 (이미 비어 있음)
    - 'specific' 시 첫 분기 FALSE → EXISTS GT scan
@@ -692,7 +692,7 @@ Step 1: 매개변수 별 'ALL'/'%'/'' /NULL 가능성 식별
    - 각 매개변수의 default / 빈 값 처리 패턴 확인
 
 Step 2: GT INSERT 의 WHERE 절에 skip 조건 추가
-   WHERE P_X NOT IN ('ALL','%','') AND P_X IS NOT NULL
+   WHERE P_X NOT IN ('ALL','%') AND P_X IS NOT NULL   -- (11-13 정정: NOT IN 목록의 '' 삭제)
 
 Step 3: SELECT 의 WHERE / ON 절에 OR short-circuit 추가
    AND ( P_X IN ('ALL','%','') OR P_X IS NULL OR EXISTS (...) )
@@ -769,14 +769,14 @@ DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID;
 INSERT INTO SCM_MGR.GT_GGET_SPLIT_ITEM_ID (TOK)
 SELECT TRIM(REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL))
 FROM DUAL
-WHERE P_ITEM_ID NOT IN ('ALL','%') AND P_ITEM_ID IS NOT NULL AND P_ITEM_ID <> ''
+WHERE P_ITEM_ID NOT IN ('ALL','%') AND P_ITEM_ID IS NOT NULL   -- (11-13 정정: `AND P_ITEM_ID <> ''` 삭제 — 항상 0행 · DB 실측)
 CONNECT BY REGEXP_SUBSTR(P_ITEM_ID,'[^,]+',1,LEVEL) IS NOT NULL;
 
 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE;
 INSERT INTO SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE (TOK)
 SELECT TRIM(REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL))
 FROM DUAL
-WHERE LP_PROJECT_CODE NOT IN ('ALL','%') AND LP_PROJECT_CODE IS NOT NULL AND LP_PROJECT_CODE <> ''
+WHERE LP_PROJECT_CODE NOT IN ('ALL','%') AND LP_PROJECT_CODE IS NOT NULL   -- (11-13 정정: `<> ''` 삭제)
 CONNECT BY REGEXP_SUBSTR(LP_PROJECT_CODE,'[^,]+',1,LEVEL) IS NOT NULL;
 
 -- 메인 INSERT
@@ -835,7 +835,7 @@ WHERE F.DIVISION_ID = P_DIVISION_ID
 | `PIVOT (X FOR Y IN (z1, z2, ...))` | Oracle 동일 지원 | OK / 다만 동적 PIVOT 제한 |
 | `LEFT(col, n)` | Oracle `SUBSTR(col, 1, n)` | 1:1 변환 |
 | `CHARINDEX(',', col)` | Oracle `INSTR(col, ',')` | 1:1 변환 |
-| `ISNULL(a, b)` | Oracle `NVL(a, b)` | 1:1 변환 |
+| `ISNULL(a, b)` | Oracle `NVL(a, b)` | 1:1 변환 (2026-11-13 정정: 단 `ISNULL(x, '')` 는 1:1 아님 — `NVL(x, NULL)`/`NVL(x, '')` 금지, 위치별 치환은 hook #127 `oracle-nvl-null-antipattern.md` §3 · 센티널은 hook #119) |
 | `IIF(cond, t, f)` | Oracle `CASE WHEN cond THEN t ELSE f END` | 1:1 변환 |
 | `DATEADD(WEEK, n, d)` | Oracle `d + n*7` | type-cast 주의 |
 | `WITH (NOLOCK)` | Oracle 트랜잭션 일관성 자동 (제거) | 단순 제거 |
@@ -877,7 +877,7 @@ WHERE F.DIVISION_ID = P_DIVISION_ID
 ### 룰 v2
 - `_tobe/04_store.md` / `_tobe/12_metadata_sql.md` (FE 측 'ALL' 처리 비대칭 참조)
 - `hooks/oracle-db-workflow.md` (Oracle SP/DB 작업 단일 진입점 — 본 hook 의 상위)
-- `hooks/anti-simplification.md` (최우선 룰 — 본 hook 의 상위)
+- `anti-simplification.md` (최우선 룰 — 본 hook 의 상위) (2026-11-13 정정: `hooks/anti-simplification.md` → 실재 위치 `Doc/_rules_v2/anti-simplification.md`)
 
 ### DB 변환 룰
 - `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` 새 섹션 7 (성능 안티패턴) 추가 예정

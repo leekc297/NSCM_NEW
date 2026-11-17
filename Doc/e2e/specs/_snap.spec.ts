@@ -7,7 +7,7 @@ import * as path from 'node:path';
 import { createHash } from 'node:crypto';
 import { expect, test } from '../../../tools/E2E/fixtures/test';
 import { parseCsv } from '../../../tools/E2E/lib/probe';
-import { setCondByLabel, findCondAny } from '../../../tools/E2E/lib/smoke-extra';
+import { setCondByLabel, findCondAny, clickSheetTab, openSheetPopup, sheetNav } from '../../../tools/E2E/lib/smoke-extra';
 import { ariaOf, buttonBar, ensureDirs, headerTextOf, judgeText, keyOf, saveResults, searchAreaTagged, ROOT, type SnapKind, type SnapResult } from '../../../tools/E2E/lib/snap';
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
@@ -102,10 +102,17 @@ test.describe('@snap 스냅샷 형상 검사', () => {
     const r = await nscm.openScreen(ID); if (!r.authorized) return;
     await afterSearch(nscm);
     const sheets: { name: string }[] = (plan.mainSheets && plan.mainSheets.length ? plan.mainSheets : [{ name: 'main' }]);
-    const n = Math.min(await nscm.grids().count().catch(() => 0), Math.max(1, sheets.length));
-    for (let i = 0; i < n; i++) {
+    const n0 = await nscm.grids().count().catch(() => 0);
+    // 2026-11-16(SSP0020 '헤더 Delegated List' · SCP0104 7시트 중 6시트 미실행): 탭 화면은 한 번에 그리드 1개만 보인다 — 보이는 그리드 수만큼만 돌면 둘째 시트부터 빠진다.
+    //   보이는 그리드 수를 넘는 시트·시트 이동 사실이 있는 시트는 탭(또는 팝업)을 열고 그 그리드의 헤더를 읽는다
+    for (let i = 0; i < Math.max(1, sheets.length); i++) {
       const sc = (sheets[i] && sheets[i].name) || `grid${i + 1}`;
-      const t = await headerTextOf(nscm.grid(i));
+      let g = nscm.grid(i);
+      const nav = sheets.length > 1 ? sheetNav(ID, sc) as { popup?: string; base?: string } | null : null;
+      if (nav && nav.popup && nav.base) { const op = await openSheetPopup(nscm, sc); if (!op.ok) { put('헤더', sc, { key: keyOf('헤더', sc), kind: '헤더', scope: sc, status: 'ERROR', golden: '', received: '', diff: '', lines: 0, detail: `[측정 경로 없음] 팝업 시트 열기 실패 — ${op.how}`, at: '' }); continue; } g = nscm.page.locator('[role="dialog"]:visible .wj-flexgrid').last(); }
+      else if (nav || i >= n0) { if (!(await clickSheetTab(nscm, sc))) { put('헤더', sc, { key: keyOf('헤더', sc), kind: '헤더', scope: sc, status: 'ERROR', golden: '', received: '', diff: '', lines: 0, detail: `[측정 경로 없음] 탭 '${sc}' 전환 실패`, at: '' }); continue; } await nscm.page.waitForTimeout(800); g = nscm.grid(0); }
+      const t = await headerTextOf(g);
+      if (nav && nav.popup) { await nscm.page.keyboard.press('Escape').catch(() => undefined); await nscm.page.locator('[role="dialog"]:visible').last().getByRole('button', { name: /^(Close|닫기)$/i }).first().click({ timeout: 2_000 }).catch(() => undefined); await nscm.page.waitForTimeout(400); }
       if (t == null) { put('헤더', sc, { key: keyOf('헤더', sc), kind: '헤더', scope: sc, status: 'ERROR', golden: '', received: '', diff: '', lines: 0, detail: 'Wijmo 모델($WJ-CTRL) 헤더를 읽지 못함', at: '' }); continue; }
       put('헤더', sc, judgeText(ID, '헤더', sc, 'txt', t, `헤더 ${t.split('\n').filter(Boolean).length}행 · 칸 ${(t.split('\n')[0] || '').split(' | ').length}`));
     }
@@ -152,6 +159,14 @@ test.describe('@snap 스냅샷 형상 검사', () => {
       //   없으면 비교 결과를 적되 '골든 없음(승인 전)' = 판정필요(승인대기)로 둔다(chain6b 에서 확대 4화면 화면샷이 2회차에 PASS 된 결함)
       const approved = exists && (() => { try { const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'snap', 'manifest.json'), 'utf8')) as Record<string, unknown>; return !!man[key] && !key.startsWith('_'); } catch { return false; } })();
       try {
+        // 2026-11-13 점검: 골든 png 가 없는 첫 실행에서 toHaveScreenshot 은 후보를 쓰면서 테스트를 실패로 표시한다("A snapshot doesn't exist … writing actual" —
+        //   11-06~11-13 15화면 30회 · judge 가 '측정 전 실패한 검증엔진 테스트' 로 집계). 첫 캡처는 실패가 아니라 '승인 전 후보 저장' 이므로 직접 찍어 저장하고 NEW 로 둔다(판정 = 종전과 같은 판정필요).
+        if (!exists) {
+          fs.mkdirSync(path.dirname(expected), { recursive: true });
+          await nscm.page.screenshot({ path: expected, clip, mask, animations: 'disabled', caret: 'hide', scale: 'css', timeout: 15_000 });
+          put('화면샷', scope, { key, kind: '화면샷', scope, status: 'NEW', golden: path.relative(ROOT, expected), received: '', diff: '', lines: 0, detail: '골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)', at: '' }, { viewport: w });
+          continue;
+        }
         await expect(nscm.page).toHaveScreenshot(rel, { clip, mask, maxDiffPixelRatio: 0.002, animations: 'disabled', timeout: 15_000 });
         put('화면샷', scope, { key, kind: '화면샷', scope, status: approved ? 'MATCH' : 'NEW', golden: path.relative(ROOT, expected), received: '', diff: '', lines: 0, detail: approved ? '골든 화면샷과 일치(maxDiffPixelRatio 0.002)' : exists ? '골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요' : '골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)', at: '' }, { viewport: w });
       } catch (e) {

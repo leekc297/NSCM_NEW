@@ -1,77 +1,53 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-09T10:49:48+09:00",
+ "ts": "2026-11-14T18:04:51+09:00",
  "producer": "run_verify",
  "id": "SCP0108",
  "skip_e2e": false,
- "started": "2026-11-09 10:04:13",
+ "started": "2026-11-14 13:41:21",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-6316517e",
-   "class": "F5",
+   "id": "V-821dd2b1",
+   "class": "L1",
    "msg": "SCP0108 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-09 10:49"
+     "ref": "E2E @trace @11-14 18:04"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-3d8af6e6",
-   "class": "N1",
-   "msg": "SCP0108 기간 칸 이상값",
+   "id": "V-2595165f",
+   "class": "M2",
+   "msg": "SCP0108 전용 버튼 확인창",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 표시 묶음2 @11-09 10:49"
+     "ref": "E2E @verify @11-14 18:04"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-fffdaaaf",
-   "class": "K1",
-   "msg": "SCP0108 동적 칸 정렬·필터",
+   "id": "V-56edb3f6",
+   "class": "J4",
+   "msg": "SCP0108 탭 이름",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 동적·응답 @11-09 10:49"
+     "ref": "E2E @verify 화면 틀 @11-14 18:04"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-450984ff",
-   "class": "G8",
-   "msg": "조회조건 Basic Nickname",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-09 10:49"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ef9bb8ba",
-   "class": "H9",
-   "msg": "Main Grid 컬럼 폭",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-09 10:49"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-7ec43d9a",
-   "class": "G8",
-   "msg": "[SYS0003 결함 일반화] API Name 조회조건",
+   "id": "V-83a0bab4",
+   "class": "C1",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
    "evidence": [
     {
      "kind": "exec",
@@ -81,37 +57,61 @@
    "grade": "hard"
   },
   {
-   "id": "V-1b134739",
-   "class": "G8",
-   "msg": "[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPPER) · 쉼표 다중 입력",
+   "id": "V-6f1f5442",
+   "class": "L1",
+   "msg": "조회조건 텍스트 입력 중 그리드",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "E2E @trace @11-14 18:04"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-755177d9",
-   "class": "G8",
-   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
+   "id": "V-ff05c271",
+   "class": "H8",
+   "msg": "총 건수 표시",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "E2E @trace @11-14 18:04"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-b42a43de",
-   "class": "F5",
-   "msg": "SCP0108 화면",
+   "id": "V-4e4835bb",
+   "class": "A3",
+   "msg": "Sum 행",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-09 10:49"
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-745adec5",
+   "class": "H8",
+   "msg": "총 건수 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4bb79f4b",
+   "class": "C1",
+   "msg": "조회조건 Division 콤보(DIVISION_ID 단일 선택 화면) · 하위 조회조건 · 전 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
     }
    ],
    "grade": "hard"
@@ -163,37 +163,189 @@
     }
    ],
    "grade": "hard"
+  },
+  {
+   "id": "T-4011ab54",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.RefreshDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cd6ab79d",
+   "class": "C1",
+   "msg": "cboDivision / Division / Div / Div.",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5bad20fb",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.RefreshFactory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ba90725d",
+   "class": "C1",
+   "msg": "clbFactory / Building / Factory",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a83e1ced",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.RefreshLine",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b2c54bd0",
+   "class": "C1",
+   "msg": "clbLine / Line",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4696bf13",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.RefreshOperation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-08b32c52",
+   "class": "C1",
+   "msg": "clbOperation / Operation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3a87f98b",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.RefreshPlant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9a195eb8",
+   "class": "C1",
+   "msg": "clbPlant / Plant",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 18:04"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0ef8f8b8",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.btnColumn_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1612c626",
+   "class": "X-ROW",
+   "msg": "SCP0108_CAPA_LOB_Report.btnItem_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
   }
  ],
- "warnings": [],
+ "warnings": [
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0108/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)",
+  "커버리지 게이트 SUSPECT_NA100 D1, G3, H2, K-SA — Doc/verify/SCP0108/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
  "summary": {
-  "rows": 2003,
-  "PASS": 514,
-  "FAIL": 13,
-  "판정필요": 17,
-  "미검증": 336,
-  "해당없음": 1123,
+  "rows": 1808,
+  "PASS": 180,
+  "FAIL": 25,
+  "판정필요": 1,
+  "미검증": 654,
+  "해당없음": 948,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1189,
-   "없음(미검증)": 336,
-   "사람": 2,
-   "기계(상속·집계)": 454,
-   "없음(판정 대기)": 17,
-   "출처 미기록": 5
+   "기계": 707,
+   "없음(미검증)": 654,
+   "사람": 4,
+   "기계(상속·집계)": 421,
+   "출처 미기록": 21,
+   "없음(판정 대기)": 1
   },
-  "fail_listed": 13,
+  "fail_listed": 25,
   "coverage": {
    "rules": 84,
-   "measured": 338,
-   "not_run_error": 292,
-   "na": 473,
-   "suspect_na100": []
+   "measured": 138,
+   "not_run_error": 486,
+   "na": 329,
+   "suspect_na100": [
+    "D1",
+    "G3",
+    "H2",
+    "K-SA"
+   ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0108_LobReport_CheckList_v1.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0108_LobReport_ActionItemList_v1.xlsx"
+  "CheckList": "Doc/CheckList/SCP0108_LobReport_CheckList_v6.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0108_LobReport_ActionItemList_v6.xlsx"
  },
  "evidence": [
   {
@@ -205,5 +357,5 @@
    "ref": "Doc/verify/SCP0108/e2e_results.json"
   }
  ],
- "note": ""
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0108/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음) / 커버리지 게이트 SUSPECT_NA100 D1, G3, H2, K-SA — Doc/verify/SCP0108/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

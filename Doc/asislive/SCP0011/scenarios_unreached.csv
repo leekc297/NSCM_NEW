@@ -1,0 +1,19 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0011-S114320,기타,ClearEventInvocations,SCP0011_ProductionPlan.cs:3167,호출 없음,,
+SCP0011-Seb6c4c,기타,ClearUsrCheckedList,SCP0011_ProductionPlan.cs:209,호출 없음,,
+SCP0011-S9c6d64,조회,FindData_Model,SCP0011_ProductionPlan.cs:1175,주석 안에서만 호출,SCP0011_ProductionPlan.cs:615; SCP0011_ProductionPlan.cs:2841,
+SCP0011-Sbf4efb,조회,GetDivision,SCP0011_ProductionPlan.cs:3256,같은 파일에서 호출,SCP0011_ProductionPlan.cs:1065,RefreshDivsion
+SCP0011-S1d7d4f,조회,GetLastPlanVersion,SCP0011_ProductionPlan.cs:1134,호출 없음,,
+SCP0011-S0af853,조회,GetLastPlanVersion,SCP0011_ProductionPlan.cs:1151,호출 없음,,
+SCP0011-Sd2f3b0,기타,SetChangedPeriod,SCP0011_ProductionPlan.cs:3271,주석 안에서만 호출,SCP0011_ProductionPlan.cs:238; SCP0011_ProductionPlan.cs:3104; SCP0011_ProductionPlan.cs:3114,
+SCP0011-Sb69d72,기타,SetChangedPeriod,SCP0011_ProductionPlan.cs:3275,주석 안에서만 호출,SCP0011_ProductionPlan.cs:238; SCP0011_ProductionPlan.cs:3104; SCP0011_ProductionPlan.cs:3114,
+SCP0011-Sc2c5b0,기타,SetChangedPeriod,SCP0011_ProductionPlan.cs:3282,주석 안에서만 호출,SCP0011_ProductionPlan.cs:238; SCP0011_ProductionPlan.cs:3104; SCP0011_ProductionPlan.cs:3114,
+SCP0011-S0ce700,팝업,SetColumnModelVisible,SCP0011_ProductionPlan.cs:3042,주석 안에서만 호출,SCP0011_ProductionPlan.cs:425; SCP0011_ProductionPlan.cs:3036,
+SCP0011-S905c18,기타,SetColumnModelVisible,SCP0011_ProductionPlan.cs:3053,주석 안에서만 호출,SCP0011_ProductionPlan.cs:425; SCP0011_ProductionPlan.cs:3036,
+SCP0011-S82e91c,기타,SetColumnModelVisible,SCP0011_ProductionPlan.cs:3056,주석 안에서만 호출,SCP0011_ProductionPlan.cs:425; SCP0011_ProductionPlan.cs:3036,
+SCP0011-Sbe384e,기타,SetDataTableQtyData,SCP0011_ProductionPlan.cs:540,호출 없음,,
+SCP0011-S117af7,기타,Set_OnHandEOH,SCP0011_ProductionPlan.cs:1992,같은 파일에서 호출,SCP0011_ProductionPlan.cs:1258,FindData_Model
+SCP0011-Sf46d4c,기타,Set_OnHandEOH,SCP0011_ProductionPlan.cs:2004,같은 파일에서 호출,SCP0011_ProductionPlan.cs:1258,FindData_Model
+SCP0011-S97490a,기타,Set_OnHandEOH_Parallel,SCP0011_ProductionPlan.cs:2220,주석 안에서만 호출,SCP0011_ProductionPlan.cs:1566,
+SCP0011-S947234,기타,Set_OnHandEOH_Parallel,SCP0011_ProductionPlan.cs:2259,주석 안에서만 호출,SCP0011_ProductionPlan.cs:1566,
+SCP0011-Sbeb9b0,기타,Set_OnHandEOH_Parallel,SCP0011_ProductionPlan.cs:2270,주석 안에서만 호출,SCP0011_ProductionPlan.cs:1566,

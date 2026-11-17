@@ -1,0 +1,33 @@
+{
+ "id": "DMF0068",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnSPVer",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0068_VersionPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 30,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_LOOKUP_VALUES",
+    "DMF0068_GET_CONT_VIEW_VERSIONPOPUP"
+   ],
+   "scenarios": [
+    "DMF0068-S895f79",
+    "DMF0068-S927c39"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 07:59:41.391",
+ "fills": 1,
+ "fill_left": []
+}

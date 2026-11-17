@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 412,
+  "at": "2026-11-14T11:22:28.270Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7670,
+  "dur": 479,
+  "at": "2026-11-14T11:22:29.563Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7670,
+  "dur": 487,
+  "at": "2026-11-14T11:23:25.279Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"njzhoumengwei\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 112,
+  "at": "2026-11-14T11:23:27.202Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"njzhoumengwei\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 111,
+  "at": "2026-11-14T11:23:28.532Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 411,
+  "at": "2026-11-14T11:23:28.664Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"njzhoumengweiX\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 120,
+  "at": "2026-11-14T11:23:31.357Z",
+  "user": "minyonglee1",
+  "test": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+ }
+]

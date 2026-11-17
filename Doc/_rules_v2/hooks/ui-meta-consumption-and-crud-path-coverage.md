@@ -54,13 +54,13 @@
 ### A-3 적용 대상 메타 축 (전수)
 `VISIBLE_FLAG` / `INPUT_TP_CD` / `CELL_CONTROL_OBJECT_TYPE_CODE` / `CELL_COMBO_DATA_TYPE`
 / `ATTRIBUTE1~5`(콤보 파라미터) / `COLUMN_WIDTH` / `HORIZONTAL_ALIGN_CODE` / `SORT_ORDER_NO`
-— 각각 **FE 소비 지점(파일:라인)** 을 대사표에 적는다.
+— 각각 **FE 소비 지점(파일:라인)** 을 대조표에 적는다. (2026-11-13 정정: 용어 대사표 → 대조표)
 
 ---
 
 ## §2 B. 셀 컨트롤 3요소 — 하나라도 없으면 '미구현'
 
-셀 팝업/콤보는 **3요소가 모두 있어야** '구현'이다. 하나만 있어도 대사표에 '구현' 을 적지 않는다.
+셀 팝업/콤보는 **3요소가 모두 있어야** '구현'이다. 하나만 있어도 대조표에 '구현' 을 적지 않는다.
 
 | 요소 | 팝업(FPModal) | 콤보(FPComboBox) |
 |---|---|---|
@@ -71,8 +71,10 @@
 **판정 질문**:
 - ①이 없으면 → **사용자가 그 기능의 존재를 알 수 없다**(아이콘 미표시). 기능이 있어도 "미구현"에 가깝다.
 - ③이 `'ALL'`/공백 하드코딩이면 → AS-IS 보다 넓거나 좁은 후보가 나온다. **AS-IS 인자 목록과 1:1 대조**한다.
+  (2026-11-13 정정: CR-096(2026-11-06) — TO-BE **공용 검색 모달**은 Division·입력값 등 모달이 받는 인자만 연동하면 되고, 그 밖의 AS-IS 인자(scp_module_type 고정값·SCM_SITE_ID 필터·셀 더블클릭 자동 조회 등) 차이는 오류가 아니다. 결함은 팝업이 열리지 않거나 선택값이 칸에 반영되지 않는 경우뿐. 1:1 대조는 공용 모달이 아닌 경우에 적용.)
 - ⚠ `FPModal` 은 공용 그리드가 **인라인 편집을 cancel** 한다(값은 모달로만). 타이핑도 필요하면
-  `FPText` 등으로 두고 트리거만 유지한다 — **선택 결과를 사용자에게 알리고 결정받는다.**
+  `FPTextModal`(타이핑 + 아이콘 + 모달) 로 둔다 — **선택 결과를 사용자에게 알리고 결정받는다.**
+  (2026-11-13 정정: "`FPText` 등으로 두고 트리거만 유지" → `FPTextModal` — 2026-08-22 신설값, `ui-meta-dictionary-mandatory.md` §4.3 · FE `CELL_CONTROL_TYPE.TEXT_MODAL`)
 
 ---
 
@@ -125,7 +127,7 @@
 2. **완료 선언 전: division 별 `표시 라벨 중복 0`** — 같은 `COLUMN_LABEL_NAME` 을 가진 표시('Y') 컬럼이
    2개 이상이면 FAIL. AS-IS 대조는 `.Visible=false` 지정(코드) + 라벨(메타) 양쪽으로 한다.
 3. **AS-IS 인용은 정본 `.cs` 기준** — 같은 화면의 평면본(`GSCM.DM.Plan.UIL/`)과 정본
-   (`GSCM.DM.Forms.UIL/.../`)은 **라인번호가 밀린다**. 대사표 E00 의 정본 확정을 따른다.
+   (`GSCM.DM.Forms.UIL/.../`)은 **라인번호가 밀린다**. 대조표 E00 의 정본 확정을 따른다.
 4. **모달도 동일** — 모달 정적 컬럼이 자체 시트(예: `exchangeRate`)를 조회하는 화면은 그 시트의
    메타 행 수·라벨 중복까지 같은 기준으로 검증한다(FE 는 응답을 dedup 없이 그대로 렌더한다).
 
@@ -137,7 +139,7 @@
 |---|---|---|
 | A-1 하드코딩 | 화면 폴더에서 컬럼명 배열 상수 grep — `new Set\(\[\s*'[A-Z_]{3,}'` / `= \['[A-Z_]{3,}'` | 히트 = BLOCK(사유 필요) |
 | A-2 모순 | `SHEET_COLUMNS` 시트 전 행 `INPUT_TP_CD='S'` **AND** 화면에 편집 코드 존재 | WARN → 사유 필수 |
-| B-① | `CELL_CONTROL_OBJECT_TYPE_CODE='FPModal'` 컬럼 수 ↔ FE 모달 트리거 수 | 불일치 = FAIL |
+| B-① | `CELL_CONTROL_OBJECT_TYPE_CODE='FPModal'`·`'FPTextModal'` 컬럼 수 ↔ FE 모달 트리거 수 (2026-11-13 정정: `FPTextModal` 추가 — 2026-08-22 신설 모달 컨트롤, `ui-meta-dictionary-mandatory.md` §4 D4·§4.1) | 불일치 = FAIL |
 | C-1 | 화면 저장 SP 인벤토리 ↔ E2E 왕복 축 수 | 불일치 = **ERROR(미실행)** |
 | C-3 | 저장 직후 원장 delta = 0 | FAIL |
 

@@ -83,7 +83,7 @@ const handleApply = (newValue: string[]) => {
 |---|---|---|
 | 검색조건 (조회조건) | sessionStorage (`createPersistedStoreWithTab`) | F5 새로고침 유지 + tab close 시 reset (다음 진입 시 default) |
 | Grid sort/filter | sessionStorage | 동일 |
-| **Column 설정 / Measure 선택** | **localStorage** | **사용자 의도 — 화면 close/reopen 후에도 유지** |
+| **Column 설정 / Measure 선택** | **localStorage** | **사용자 의도 — 화면 close/reopen 후에도 유지** (2026-11-14 정정: 컬럼 설정의 현행 저장 위치는 서버 저장본(titleSet). `titleSetApi.ts`, `columnLayoutModal.utils.ts`. 공용 패키지에 localStorage 사용 0건. Measure 선택의 저장 위치는 미확인) |
 | User profile / 환경설정 | localStorage | 동일 |
 
 ---

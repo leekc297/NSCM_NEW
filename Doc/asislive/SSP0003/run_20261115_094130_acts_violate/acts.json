@@ -1,0 +1,82 @@
+{
+ "id": "SSP0003",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {},
+   "after_edit": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:40:07",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 06:18 실측: SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM(p_status=A, 20261001~20261026, p_from_site 빈값) 543행 · 상태별 건수 SELECT change_req_status, change_type, valid_yn GROUP BY",
+  "why": "기본 조건 Status=Drafting(D, SSP0003_ShipmentChangeRequestConfirm.cs:327 SelectedIndex=2)·기간 2026-11-01~11-15 은 SSP_ANL_SHIP_CONFIRM_CHG_REQ 에 행 없음(D·VALID_YN=Y 21건, 마지막 요청 2022-05-25). Approved(A) 는 2026-10-26 까지 있음",
+  "done": [
+   {
+    "set": {
+     "name": "cboStatus",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:Approved",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp1",
+     "prop": "Value",
+     "value": "20261001"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "dp2",
+     "prop": "Value",
+     "value": "20261026"
+    },
+    "ok": true,
+    "applied": "prop:Value",
+    "error": null
+   }
+  ]
+ },
+ "edit_focus": "누르지 못함",
+ "edit_mode": false
+}

@@ -1,0 +1,6 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCM0005-Se66ca1,DIVISION,,,,값 미도출,"if (siWhere.GetMaxRowIndex() >= 0) ▸ for (i <= siWhere.GetMaxRowIndex()) ▸ if (siWhere.GetText(i, siWhere.GetColumnIndex(WhereColumns.TYPE)) == ""Combo"") ▸ switch (sGubun) case ""DIVISION_ID"":",
+SCM0005-S371bda,COND,,,,값 미도출,if (tabQuery.SelectedIndex == 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCM0005-S6f9736,COND,,,,값 미도출,if (tabQuery.SelectedIndex == 0),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCM0005-Sf27eed,COND,,,,값 미도출,else of (tabQuery.SelectedIndex == 0) ▸ if (tabQuery.SelectedIndex == 1),조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+SCM0005-S2ca547,COND,,,,값 미도출,"if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (sPARAMETERData != """") ▸ for (j < dtParameter.Rows.Count)",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

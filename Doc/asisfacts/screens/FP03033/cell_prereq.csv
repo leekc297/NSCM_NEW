@@ -1,0 +1,2 @@
+﻿target,except,prereq,scope,cond_kind,msg,cond,ref
+VALUE,,PROD_VERSION_TYPE,ALL,ROW,"MessageHelper.GMessageBox(""MSG00086"", new object[] { ""Select Conversion Type is null.!"" })","if (siMain.ActiveSheet.Columns.Get(xCol1).Visible == true) ▸ else of (this._sPopupFlag.Equals(""UPDATE""))",FP03033_AddPopup.cs:1245 FP03033_AddPopup.spdMain_CellClick

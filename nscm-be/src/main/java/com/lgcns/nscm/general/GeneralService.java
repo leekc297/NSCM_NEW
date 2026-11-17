@@ -2,6 +2,8 @@ package com.lgcns.nscm.general;
 
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 public interface GeneralService {
 
 	/**
@@ -18,6 +20,14 @@ public interface GeneralService {
 	Map<String, Object> callProc(Map<String, Object> params) throws Exception;
 
 	/**
+	 * call-proc2 — SCM_ADM_PROC_M / procedures.d.ts 미참조, 살아있는 Oracle 카탈로그(ALL_ARGUMENTS)로
+	 * IN/OUT 을 유도해 실행하는 신규 경로(점진 전환용). 프로시저명은 기존 버튼->API_M 해석을 재사용한다.
+	 * @param      : @param params (mnuId/shtNm/mnuBtnCd + 업무값 + 선택 cvtJsonToVarchar)
+	 * @return     : Map<String,Object> 커서키(o_rc1..)/스칼라OUT 을 담은 result
+	 */
+	Map<String, Object> callProc2(Map<String, Object> params) throws Exception;
+
+	/**
 	 * 버튼별 api 호출
 	 * @MethodName : execBtn
 	 * @Description: 프로시저 호출처리
@@ -31,15 +41,10 @@ public interface GeneralService {
 	Map<String, Object> execBtn(Map<String, Object> params) throws Exception;
 
 	/**
-	 * 버튼별 api 호출 — 스트리밍(대량 조회용)
-	 * @MethodName : execBtnStream
-	 * @Description: execBtn 과 같은 메타(SCM_ADM_MNU_BTN_MPG_M → API_M → PROC_M)로 프로시저를 찾아 실행하고,
-	 *               OUT 커서를 읽는 즉시 묶음 단위 NDJSON 으로 내보낸다. 메타 해석은 호출 스레드에서 끝내고
-	 *               실행·전송은 반환한 StreamingResponseBody 안에서 한다. [E20261015-STREAMPROC]
-	 * @param      : @param params (mnuId/shtNm/mnuBtnCd/sesUserId/sesLangCd 포함)
-	 * @return     : StreamingResponseBody
+	 * 버튼별 api 호출 (스트리밍) — OUT 커서를 ResultSet -> JSON 으로 직접 스트리밍(단일 패스, CustomMap 미생성).
+	 * 응답은 execBtn 과 동일한 { code, message, result:{ 커서키:[..], 스칼라OUT:val } } 형태를 응답 스트림에 직접 쓴다.
 	 */
-	org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody execBtnStream(Map<String, Object> params) throws Exception;
+	void execBtnStream(Map<String, Object> params, HttpServletResponse response) throws Exception;
 
 	/**
 	 *  select 처리

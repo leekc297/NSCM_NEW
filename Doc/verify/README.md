@@ -361,3 +361,8 @@
 ## 감·예측 답변 금지 (사용자 상시 지시 2026-10-31 · hook #126 §0-1)
 
 수치·진행율·소요 시간·원인·결과를 감이나 예측으로 답하지 않는다. 답은 이번에 실행한 측정·로그·파일·DB 조회 결과만 인용하고 그 출처와 시각을 함께 적는다. 측정하지 못했으면 '미측정'이라고 쓰고 측정 방법을 제시한다. '~할 것으로 기대', '약 N분', 'N% 쯤' 같은 추정 표현과, 원인을 확인하지 않은 단정을 금지한다. 진행율은 분모·분자를 명시한 실측값만 쓴다(정합검증 = tools/Harness/verify/doc_proof.py 출력).
+
+## 2026-11-13 덧붙임 — 11월 이후 바뀐 것의 위치
+- 이 가이드 본문은 2026-10-31 까지의 내용이다. 그 뒤 추가된 단계(차등 검증 diff · AS-IS Live · 사후 검사 묶음)와 도구별 진입점은 `tools/Harness/README.md` 의 "2026-11-13 — CheckList 체인 현재 단계 · AS-IS Live · 도구 등록부" 절이 단일 출처다(등록부는 `python scripts/rules/inventory_check.py --write-registry` 로 생성).
+- 진행 기록 = `Doc/verify/_ENGINE_MASTER.md` · 검사기 결함 유형 = `_checker_defects.md` · 남은 일 = `_proof_backlog.md`.
+- §11 의 `cr_harness_gap.py` · `_cr_harness_gap.md` 는 `tobe_rule_registry.py`(→ `Doc/verify/_tobe_rule_registry.md`)로 대체돼 2026-11-13 `Doc/_archive/tools_retired/` 로 보관 이동됐다.

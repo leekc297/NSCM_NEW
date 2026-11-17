@@ -1,0 +1,105 @@
+{
+ "id": "SSP0003",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnRequestUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0003-S3e4258",
+    "SSP0003-S85e9fc"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0003-Sea1449",
+    "SSP0003-Sec3442"
+   ]
+  },
+  {
+   "control": "btnRequestUser",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0003-S3e4258",
+    "SSP0003-S85e9fc"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnApproval",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 30
+  },
+  {
+   "control": "BtnReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "BtnSelfReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "btnApproval",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 26
+  },
+  {
+   "control": "btnReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSelfReject",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 12:28:18.834",
+ "fills": 0,
+ "fill_left": []
+}

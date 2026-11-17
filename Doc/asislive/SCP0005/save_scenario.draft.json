@@ -1,0 +1,88 @@
+{
+ "id": "SCP0005",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE",
+   "save_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_DISTRIBUTION_ROUTE",
+   "pk": [
+    "ROUTE_ID"
+   ],
+   "match": {
+    "ROUTE_ID": "ROUTE_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PRIORITY",
+    "db_col": "PRIORITY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_DISTRIBUTION_ROUTE_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Distribution Route",
+   "writes": {
+    "scp_mst_distribution_route": [
+     "UPDATE"
+    ],
+    "SCP_MST_DISTRIBUTION_ROUTE": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml SCP0005_SAVE_DISTRIBUTION_ROUTE → SP SCP0005_SAVE_DISTRIBUTION_ROUTE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_DISTRIBUTION_ROUTE_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "scp_mst_distribution_route"
+   ],
+   "edit_candidates": [
+    {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    {
+     "col": "LT_DEPARTURE_INLAND",
+     "db_col": "LT_DEPARTURE_INLAND",
+     "rule": "plus1"
+    },
+    {
+     "col": "LT_WAIT_SHIPPING",
+     "db_col": "LT_WAIT_SHIPPING",
+     "rule": "plus1"
+    },
+    {
+     "col": "LT_VOYAGE",
+     "db_col": "LT_VOYAGE",
+     "rule": "plus1"
+    },
+    {
+     "col": "LT_LAY_OFF_CLEARANCE",
+     "db_col": "LT_LAY_OFF_CLEARANCE",
+     "rule": "plus1"
+    },
+    {
+     "col": "LT_ARRIVAL_INLAND",
+     "db_col": "LT_ARRIVAL_INLAND",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 20:30:22"
+   }
+  }
+ ]
+}

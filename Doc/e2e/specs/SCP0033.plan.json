@@ -1,0 +1,361 @@
+{
+  "id": "SCP0033",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 없음)",
+  "menuId": "SCP0033",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Model/Nickname",
+    "Active"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "ShipmentSemiDeptDay",
+  "routePath": "shipping/shipment-semi-dept-day",
+  "asisName": "Shipment_semi_dept_day",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-semi-dept-day\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Shipment Semi Dept Day",
+      "key": "SHIPMENT_SEMI_DEPT_DAY",
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Departure day",
+        "Division*",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Operation Group",
+        "S_VALID_YN",
+        "Valid"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0033.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0033.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+      "sheet": "Shipment Semi Dept Day",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Shipment Semi Dept Day": {
+      "40": [
+        "Div*",
+        "Operation Group",
+        "Model*",
+        "Nick Name",
+        "Departure day",
+        "Active",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Operation Group",
+        "Model*",
+        "Nick Name",
+        "Departure day",
+        "Active",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Operation Group",
+        "Model*",
+        "Nick Name",
+        "Departure day",
+        "Active",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "INSERT",
+        "DELETE",
+        "SEARCH",
+        "SAVE",
+        "EDIT",
+        "EXCEL"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE",
+      "EDIT",
+      "EXCEL"
+    ],
+    "CAPA Planner": [
+      "DELETE",
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "INSERT"
+    ],
+    "DM ADMIN": [
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "DM Planner": [
+      "EXCEL",
+      "INSERT",
+      "SEARCH",
+      "DELETE",
+      "SAVE"
+    ],
+    "DM Viewer": [
+      "INSERT",
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "DELETE"
+    ],
+    "FP Planner": [
+      "INSERT",
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "EDIT",
+      "EXCEL"
+    ],
+    "FP Viewer": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "EXCEL",
+      "DELETE"
+    ],
+    "SCM PI Admin": [
+      "EXCEL",
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE",
+      "EDIT"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "DELETE"
+    ],
+    "SCP Tester": [
+      "INSERT",
+      "DELETE",
+      "EDIT",
+      "EXCEL",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "EXCEL"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "EXCEL"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "SAVE",
+      "EXCEL",
+      "INSERT",
+      "DELETE"
+    ]
+  },
+  "menuBtnCodes": [
+    "INSERT",
+    "DELETE",
+    "SEARCH",
+    "SAVE",
+    "EDIT",
+    "EXCEL"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

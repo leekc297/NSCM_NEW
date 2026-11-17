@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "GET_SCP_DAY_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/GET_SCP_DAY_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetDay\":\"30\",\"timeZone\":\"AS054\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 217,
+  "at": "2026-11-14T20:44:25.838Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ },
+ {
+  "menu": "SSP0200",
+  "sheet": "sub",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0200/sub/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"\",\"toSite\":\"\",\"erpSoNo\":\"\",\"itemId\":\"\",\"bodId\":\"\",\"incoterms\":\"\",\"transportMode\":\"\",\"projectCode\":\"\",\"fcstType\":\"\",\"confirmId\":\"\",\"fromYyyymmdd\":\"20261115\",\"toYyyymmdd\":\"20261215\",\"changeRequestNo\":\"\",\"requestUserId\":\"minyonglee1\",\"requestStatus\":\"D\",\"language\":\"KO\",\"changeType\":\"C\",\"debugMode\":\"F\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 221,
+  "at": "2026-11-14T20:44:29.492Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ },
+ {
+  "menu": "SSP0200",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0200/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"fromSite\":\"ALL\",\"erpSoNo\":\"\",\"itemId\":\"\",\"fromYyyymmdd\":\"20261115\",\"toYyyymmdd\":\"20261215\",\"status\":\"ALL\",\"changeType\":\"C\",\"language\":\"KO\",\"debugMode\":\"F\",\"toSite\":\"ALL\",\"confirmId\":\"\"}",
+  "status": 200,
+  "rows": 26,
+  "dur": 1152,
+  "at": "2026-11-14T20:44:30.418Z",
+  "user": "minyonglee1",
+  "test": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)"
+ }
+]

@@ -1,0 +1,218 @@
+{
+ "id": "SCP0007",
+ "dry": false,
+ "name": "update",
+ "kind": "edit",
+ "scenario": {
+  "table": "SCP_MST_BOD",
+  "pk": [
+   "BOD_ID"
+  ],
+  "match": {
+   "BOD_ID": "BOD_ID"
+  },
+  "save_sp": "SCP0007_SAVE_BOD",
+  "side": [
+   {
+    "table": "SCP_MST_BOD_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "related": [
+   {
+    "table": "SCP_MST_BOD_ITEM",
+    "pk": [
+     "SEQ"
+    ],
+    "match": {
+     "BOD_ID": "BOD_ID"
+    }
+   }
+  ],
+  "basis": "foxml SCP0007_SAVE_BOD → SP SCP0007_SAVE_BOD 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 21:5x): 수정 경로 = MERGE SCP_MST_BOD(BOD_ID) + UPDATE SCP_MST_BOD_ITEM WHERE BOD_ID · COMMIT 뒤 PR_SCP_MST_BOD_ITEM(@v_bod_list) 가 그 BOD 의 SCP_MST_BOD_ITEM 에 없는 품목을 INSERT 하고 from/to 일자를 UPDATE · PR_SCP_MST_BOD_HIST 가 SCP_MST_BOD_H 에 이력 INSERT · 트리거 0 · SAFETY_STOCK 은 화면에서 잠긴 열(20:29 연습 실행) · 초안(save_scenario.draft.json) 연습 실행 통과분을 옮김(사용자 승인 11-13 21:4x)",
+  "name": "update",
+  "title": "DB 에 있는 행의 PRIORITY 수정(+1) 뒤 저장 · 복원",
+  "edits": [
+   {
+    "pick": {
+     "col": "PRIORITY",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ]
+ },
+ "at": "2026-11-13 21:52:00",
+ "status": "SAVE_NOT_CONFIRMED",
+ "steps": [],
+ "db_before": [
+  {
+   "BOD_ID": "20290",
+   "DIVISION_ID": "40",
+   "FROM_SITE": "AZ00-E",
+   "TO_SITE": "AZ00-A",
+   "INCOTERMS": "DAP",
+   "SAFETY_STOCK": null,
+   "PRIORITY": 4,
+   "ROUTE_ID": 10583,
+   "VALID_YN": "Y",
+   "CREATED_BY": "hwayoung.lim",
+   "CREATION_DATE": "2026-03-18 13:36:47.123",
+   "LAST_UPDATED_BY": "CSR",
+   "LAST_UPDATE_DATE": "2026-04-07 17:40:09.837",
+   "ATTRIBUTE1": "DAP",
+   "ATTRIBUTE2": "20260316",
+   "ATTRIBUTE3": "20991227",
+   "ATTRIBUTE4": "0",
+   "ATTRIBUTE5": "0",
+   "ATTRIBUTE6": "",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "BOD_ID": "20290"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "PRIORITY",
+   "old": "4",
+   "new": "5",
+   "ok": true,
+   "error": null,
+   "before": "4",
+   "after": "5",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "save_call": [
+  {
+   "sp": "SCP0007_SAVE_BOD",
+   "params": {
+    "p_active_flag": "M",
+    "p_bod_id": "20290",
+    "p_division_id": "40",
+    "p_customer_code": "",
+    "p_from_site": "AZ00-E",
+    "p_to_site": "AZ00-A",
+    "p_incoterms": "DAP",
+    "p_incoterms_ssp": "DAP",
+    "p_priority": "5",
+    "p_route_id": "10583",
+    "p_safety_stock": "",
+    "p_input_status": "C",
+    "p_vmi_yn": "N",
+    "p_from_yyyymmdd": "20260316",
+    "p_to_yyyymmdd": "20991227",
+    "p_before_lead_time": "0",
+    "p_after_lead_time": "0",
+    "p_remarks": "",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "rows": 1,
+   "ms": 100.79
+  }
+ ],
+ "save_dialogs": [
+  {
+   "text": "저장에 실패하였습니다.",
+   "action": "default_button(id=1)"
+  }
+ ],
+ "save_act": {
+  "ok": true,
+  "error": null,
+  "popups": []
+ },
+ "save_wait": [],
+ "save_timeout": false,
+ "db_after": [
+  {
+   "BOD_ID": "20290",
+   "DIVISION_ID": "40",
+   "FROM_SITE": "AZ00-E",
+   "TO_SITE": "AZ00-A",
+   "INCOTERMS": "DAP",
+   "SAFETY_STOCK": null,
+   "PRIORITY": 4,
+   "ROUTE_ID": 10583,
+   "VALID_YN": "Y",
+   "CREATED_BY": "hwayoung.lim",
+   "CREATION_DATE": "2026-03-18 13:36:47.123",
+   "LAST_UPDATED_BY": "CSR",
+   "LAST_UPDATE_DATE": "2026-04-07 17:40:09.837",
+   "ATTRIBUTE1": "DAP",
+   "ATTRIBUTE2": "20260316",
+   "ATTRIBUTE3": "20991227",
+   "ATTRIBUTE4": "0",
+   "ATTRIBUTE5": "0",
+   "ATTRIBUTE6": "",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "restore_sql": [],
+ "side_cleanup": [],
+ "db_restored": [
+  {
+   "BOD_ID": "20290",
+   "DIVISION_ID": "40",
+   "FROM_SITE": "AZ00-E",
+   "TO_SITE": "AZ00-A",
+   "INCOTERMS": "DAP",
+   "SAFETY_STOCK": null,
+   "PRIORITY": 4,
+   "ROUTE_ID": 10583,
+   "VALID_YN": "Y",
+   "CREATED_BY": "hwayoung.lim",
+   "CREATION_DATE": "2026-03-18 13:36:47.123",
+   "LAST_UPDATED_BY": "CSR",
+   "LAST_UPDATE_DATE": "2026-04-07 17:40:09.837",
+   "ATTRIBUTE1": "DAP",
+   "ATTRIBUTE2": "20260316",
+   "ATTRIBUTE3": "20991227",
+   "ATTRIBUTE4": "0",
+   "ATTRIBUTE5": "0",
+   "ATTRIBUTE6": "",
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "related_restore": [
+  {
+   "table": "SCP_MST_BOD_ITEM",
+   "before": 8,
+   "after": 8,
+   "changed_sql": 0,
+   "restored_same": true
+  }
+ ],
+ "saved_check": [
+  false
+ ]
+}

@@ -1,0 +1,86 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0005\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 17,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0005\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(18줄 · formItem 공통 조상) · 시각 순서 6칸",
+  "at": "2026-11-13T20:55:21.083Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0005\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 12,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0005\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,이 이민용,Home,Distribution Route,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Excel Form,Excel Upload,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
+  "at": "2026-11-13T20:55:21.224Z"
+ },
+ {
+  "key": "헤더_Distribution_Route",
+  "kind": "헤더",
+  "scope": "Distribution Route",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0005\\snap\\received\\헤더_Distribution_Route.txt",
+  "diff": "",
+  "lines": 2,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0005\\snap\\received\\헤더_Distribution_Route.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 2행 · 칸 39",
+  "at": "2026-11-13T20:55:30.454Z"
+ },
+ {
+  "key": "팝업_From_City",
+  "kind": "팝업",
+  "scope": "From City",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\SCP0005\\snap\\received\\팝업_From_City.aria.yml",
+  "diff": "",
+  "lines": 25,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SCP0005\\snap\\received\\팝업_From_City.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(26줄)",
+  "at": "2026-11-13T20:55:39.133Z"
+ },
+ {
+  "key": "팝업_To_City",
+  "kind": "팝업",
+  "scope": "To City",
+  "status": "ERROR",
+  "golden": "",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "팝업 열기/aria 실패 TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-e2e-cond=\"snap5\"]').f",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SCP0005\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "NEW",
+  "golden": "Doc\\verify\\SCP0005\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "at": ""
+ }
+]

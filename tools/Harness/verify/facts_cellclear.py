@@ -9,6 +9,7 @@
 자기 칸 비우기(입력 검증)·원천 분기 없는 문장은 제외. 컬럼 존재 확인 분기(GetColumnIndex > 0 등)는 조건으로 보지 않는다.
 """
 import csv, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 2026-11-09 T174: python -I 실행 시에도 같은 폴더 asis_variant 를 찾도록(import 보다 먼저)
 from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))

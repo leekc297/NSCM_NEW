@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0084",
  "asis_id": "SCP0084",
- "generated": "2026-11-08 17:03:27",
+ "generated": "2026-11-14 12:27:05",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "5.4시간 전 export(기준 12시간)"
+   "evidence": "1.2시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -54,11 +54,25 @@
    "evidence": "3건 있음 · TO-BE PROC 미매칭 2건(SCP0084:SCP0084_GET_MONTH_RANGE, SCP0084:PR_SCM_SYS_LOG_BATCH) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
   },
   {
-   "key": "e2e",
-   "what": "E2E 사전(plan·스펙·smoke)",
-   "status": "SKIP",
-   "producer": "-",
-   "evidence": "--skip-e2e"
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SCP0084 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0084 → SCP0084 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 27화면/28행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 250s · .ts:115:7 › SCP0084 LongTermStock 스모크 @smoke › 공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual 2 passed (4.0m) # E2E 결과 — 2026-11-14 12:27 테스트 3 · PASS 2 · FAIL 1 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0084\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0084\\run_20261114_122254_smoke.log"
   }
  ]
 }

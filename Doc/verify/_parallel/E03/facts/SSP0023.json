@@ -1,0 +1,6578 @@
+{
+"id": "SSP0023",
+"at": "2026-11-15 01:05:20",
+"asis": {
+"insertStmts": [
+{
+"kind": "CALL_LOCAL",
+"raw": "InsertRow()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1895",
+"method": "InsertButton"
+},
+{
+"kind": "LOCAL",
+"raw": "int activeRow = siDetail.ActiveSheet.ActiveRowIndex +1;",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1905",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.DIVISION_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1907",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ERP_SO_NO)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1908",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SHIPMENT_STATUS)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1909",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.MODEL_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1910",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.MODEL_ID_NICK_NAME)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1911",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ITEM_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1912",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ITEM_ID_NICK_NAME)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1913",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.TO_SITE_DESCRIPTION)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1914",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.DOM_EXP)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1915",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.DAYOFWEEK_NAME)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1916",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1917",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SHIPPING_PLAN_QTY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1918",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SHIPMENT_CONFIRM_QTY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1919",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.GAP)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1920",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CONFIRM_QTY_ROLL_LENGTH)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1921",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.PACKAGE_TYPE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1922",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.PACKAGE_QTY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1923",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.REMARKS2)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1924",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.FACTORY_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1927",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ELECTRODE_POST_OPER)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1928",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.TRANSPORT_MODE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1929",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CONFIRM_QTY_PANCAKE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1930",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CONFIRM_QTY_JR)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1931",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CONFIRM_QTY_CELL)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1932",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CELL_TYPE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1933",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.FROM_SITE_DESCRIPTION)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1934",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.REQUESTOR)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1935",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.REMARKS3)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1936",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CHANGE_REASON_CODE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1937",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CHANGE_REASON_DETAIL)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1938",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.INCOTERMS)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1939",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.LT_DAY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1940",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ETD)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1941",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ETA)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1942",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.UPDATED_BY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1944",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.UPDATED_DATE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1945",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CHANGE_REQ_NO)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1946",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.MODEL_USER)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1947",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CONFIRM_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1948",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.FROM_SITE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1949",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SOLDTO_DESCRIPTION)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1950",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.SHIPTO_DESCRIPTION)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1951",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.TO_SITE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1952",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.BOD_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1955",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.CHANGE_TYPE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1956",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_ROUTE_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1957",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_BOD_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1958",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_INCOTERMS)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1959",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_D_COUNTRY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1960",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_D_PORT_CODE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1961",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_A_COUNTRY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1962",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_A_PORT_CODE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1963",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_CUSTOMER_LT)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1964",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_TO_COUNTRY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1965",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_TO_CITY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1966",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_ETA)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1967",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_ETD)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1968",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_LT_DAY)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1969",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_TRANSPORT_MODE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1970",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.NEW_SHIPMENT_DATE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1971",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.EDIT_REMARKS)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1972",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.EDIT_MAIN)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1973",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ELECTRODE_YN)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1974",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ELECTRODE_TYPE)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1975",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ORIGIN_FROM_DIVISION_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1976",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.ORIGIN_TO_DIVISION_ID)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1977",
+"method": "InsertRow"
+},
+{
+"kind": "EXPR",
+"raw": "siDetail.GetValue(activeRow, siDetail.GetColumnIndex(DefColumns.MERGE_NUM)).ToString()",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:1978",
+"method": "InsertRow"
+}
+],
+"headerSpan": [
+{
+"raw": "spdInfo.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt, 20, sLargeSpanName, FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:754",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(1, iLargeStartCol, 2, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:755",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:760",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:769",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:778",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt, 20, sLargeSpanName, FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:780",
+"method": "InitSpreadDateColumn"
+},
+{
+"raw": "spdInfo.ColumnHeaderSpan(1, iLargeStartCol, 2, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "SSP0023_ShipmentPlanElectrode.cs:781",
+"method": "InitSpreadDateColumn"
+}
+],
+"planExcluded": [
+"chkDelegateeModel",
+"chkMyModel",
+"chkPartLeader",
+"chkTeamLeader",
+"txtItemId",
+"txtItemId2",
+"txtLotID",
+"txtModel2",
+"txtModelId",
+"txtRequestor"
+],
+"editRules": [
+{
+"column": "DIVISION_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "ERP_SO_NO",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "CONFIRM_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "SHIPMENT_STATUS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "MODEL_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "MODEL_ID_NICK_NAME",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "ITEM_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "ITEM_ID_NICK_NAME",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "TO_SITE_DESCRIPTION",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2283\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2283 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "DOM_EXP",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "DAYOFWEEK_NAME",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2284\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2284 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2053 LockRange"
+},
+{
+"column": "SHIPMENT_DATE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2"
+},
+{
+"column": "SHIPPING_PLAN_QTY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2285\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2285 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2054 LockRange"
+},
+{
+"column": "SHIPMENT_CONFIRM_QTY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2"
+},
+{
+"column": "GAP",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2286\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2286 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "CONFIRM_QTY_ROLL_LENGTH",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2286\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2286 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "PACKAGE_TYPE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "PACKAGE_QTY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2287\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2287 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "REMARKS2",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "REMARKS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "FACTORY_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "ELECTRODE_POST_OPER",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2288\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2288 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2055 LockRange"
+},
+{
+"column": "TRANSPORT_MODE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2"
+},
+{
+"column": "CONFIRM_QTY_PANCAKE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CONFIRM_QTY_JR",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CONFIRM_QTY_CELL",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CELL_TYPE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "FROM_SITE_DESCRIPTION",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "REQUESTOR",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "REMARKS3",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CHANGE_REASON_CODE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CHANGE_REASON_DETAIL",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "INCOTERMS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "LT_DAY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ETD",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ETA",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "EXPECTED_SHIPPING_DATE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "UPDATED_BY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "UPDATED_DATE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CHANGE_REQ_NO",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "MODEL_USER",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "FROM_SITE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "SOLDTO_DESCRIPTION",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "SHIPTO_DESCRIPTION",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\"\", \"lock\": \"Y\", \"ref\": \"EditButton:2289\"}, {\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2289 LockColumn | 기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "TO_SITE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ERP_STATUS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "BOD_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "CHANGE_TYPE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_ROUTE_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_BOD_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_INCOTERMS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_D_COUNTRY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_D_PORT_CODE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_A_COUNTRY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_A_PORT_CODE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_CUSTOMER_LT",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_TO_COUNTRY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_TO_CITY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_ETA",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_ETD",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_LT_DAY",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_TRANSPORT_MODE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "NEW_SHIPMENT_DATE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "EDIT_REMARKS",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "EDIT_MAIN",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ELECTRODE_YN",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ELECTRODE_TYPE",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ORIGIN_FROM_DIVISION_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ORIGIN_TO_DIVISION_ID",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "MERGE_NUM",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2 | 신규행 SSP0023_ShipmentPlanElectrode:2056 LockRange"
+},
+{
+"column": "ATTRIBUTE10",
+"cond": "RULES:[{\"g\": \"SHEET==\\\"Shipment Plan Detail\\\" && !(COL(SHIPMENT_STATUS)==\\\"C\\\" && COL(ERP_STATUS)!=\\\"C\\\")\", \"lock\": \"Y\", \"ref\": \"EditButton:2293\"}]",
+"ref": "기존행 SSP0023_ShipmentPlanElectrode:2293 LockRange2"
+}
+],
+"mainClass": "SSP0023_ShipmentPlanElectrode",
+"divControls": [
+"clbDivision_ID"
+],
+"changeMethods": [
+"clbDivision_ID_SelectedIndexChanged"
+],
+"loadMethods": [
+".ctor",
+"CreateSpread",
+"DefineProperty",
+"Form_Load",
+"GetBucketType",
+"GetSpdTitle",
+"InitControls",
+"InitEvent",
+"InitSpread",
+"InitSpreadDateColumn",
+"InitSpreadFooterSum",
+"SetChangeControl",
+"SetChangedControl",
+"SetSpreadColumn",
+"ShipmentResult_GetDayRange"
+],
+"states": [],
+"stateCountAll": 35,
+"defaults": [],
+"insertGuards": [],
+"deadExcluded": [
+"SSP0023_ShipmentPlanElectrode.ChangeData_Check",
+"SSP0023_ShipmentPlanElectrode.ChangeNotSendERP_Check",
+"SSP0023_ShipmentPlanElectrode.GetErpIFCheck",
+"SSP0023_ShipmentPlanElectrode.GetErpIFCheckNew_",
+"SSP0023_ShipmentPlanElectrode.GetNewERPInterface",
+"SSP0023_ShipmentPlanElectrode.NewNonSoNo",
+"SSP0023_ShipmentPlanElectrode.Set_Sum_Inventory"
+],
+"hasMerge": false
+},
+"db": {
+"menu": {
+"mnu_id": "SSP0023",
+"uppr_mnu_id": "Shipping_Schedule",
+"unit_tp_cd": "S",
+"use_yn": "Y",
+"n01_atr_ctn": "NSCM"
+},
+"menuGroups": [
+{
+"user_gr_id": "CAPA Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"use_yn": "Y"
+}
+],
+"btnAuth": [
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_REQ_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "shipmentResult",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "stockDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ORDER_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "IF_CHECK",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_ERP_SO_NO_CNT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "CHECK_CONFIRM_CHANGETIME",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "planDetail",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_STATUS",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "ERP_ERROR_CONFIRM",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Plan(Electrode)",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHEET_CALENDAR_3SPAN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_RESULT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "requestDraftingMain",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "excel",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "MANUAL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE_SHIPMENT_PLAN_SIMU",
+"use_yn": "N"
+}
+],
+"columns": [
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ATTRIBUTE10",
+"column_label_name": "ATTRIBUTE10",
+"sort_order_no": "71",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "BOD_ID",
+"column_label_name": "bod_id",
+"sort_order_no": "47",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CELL_TYPE",
+"column_label_name": "Cell Type",
+"sort_order_no": "27",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CHANGE_REASON_CODE",
+"column_label_name": "Change Reason",
+"sort_order_no": "31",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CHANGE_REASON_DETAIL",
+"column_label_name": "Reason Detail",
+"sort_order_no": "32",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CHANGE_REQ_NO",
+"column_label_name": "Change Request No",
+"sort_order_no": "40",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CHANGE_TYPE",
+"column_label_name": "CHANGE_TYPE",
+"sort_order_no": "48",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CONFIRM_ID",
+"column_label_name": "Confirm/Plan ID",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CONFIRM_QTY_CELL",
+"column_label_name": "Confirm Qty (Cell)",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CONFIRM_QTY_JR",
+"column_label_name": "Confirm Qty (Jumboroll m)",
+"sort_order_no": "25",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CONFIRM_QTY_PANCAKE",
+"column_label_name": "Confirm Qty (Pancake m)",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "CONFIRM_QTY_ROLL_LENGTH",
+"column_label_name": "Confirm Qty (Cut)",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "DAYOFWEEK_NAME",
+"column_label_name": "Day",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "DOM_EXP",
+"column_label_name": "DOM/EXP.",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "EDIT_MAIN",
+"column_label_name": "EDIT_MAIN",
+"sort_order_no": "65",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "EDIT_REMARKS",
+"column_label_name": "EDIT_REMARKS",
+"sort_order_no": "64",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ELECTRODE_POST_OPER",
+"column_label_name": "Post Oper.",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ELECTRODE_TYPE",
+"column_label_name": "ELECTRODE_TYPE",
+"sort_order_no": "67",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ELECTRODE_YN",
+"column_label_name": "ELECTRODE_YN",
+"sort_order_no": "66",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ERP_SO_NO",
+"column_label_name": "PO No",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ERP_STATUS",
+"column_label_name": "erp_status",
+"sort_order_no": "46",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ETA",
+"column_label_name": "ETA",
+"sort_order_no": "36",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ETD",
+"column_label_name": "ETD",
+"sort_order_no": "35",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "EXPECTED_SHIPPING_DATE",
+"column_label_name": "Expected Shipping Date",
+"sort_order_no": "37",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "FACTORY_ID",
+"column_label_name": "Building Desc.*",
+"sort_order_no": "21",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "FROM_SITE",
+"column_label_name": "From Site ID",
+"sort_order_no": "42",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "FROM_SITE_DESCRIPTION",
+"column_label_name": "From Site",
+"sort_order_no": "28",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "GAP",
+"column_label_name": "Gap",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms",
+"sort_order_no": "33",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ITEM_ID",
+"column_label_name": "Material",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ITEM_ID_NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "34",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "MERGE_NUM",
+"column_label_name": "SSP0023",
+"sort_order_no": "70",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "MODEL_ID",
+"column_label_name": "Model",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "MODEL_ID_NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "MODEL_USER",
+"column_label_name": "Model PIC",
+"sort_order_no": "41",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_A_COUNTRY",
+"column_label_name": "A Country",
+"sort_order_no": "54",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_A_PORT_CODE",
+"column_label_name": "A Port",
+"sort_order_no": "55",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_BOD_ID",
+"column_label_name": "new bod",
+"sort_order_no": "50",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_CUSTOMER_LT",
+"column_label_name": "Customer LT",
+"sort_order_no": "56",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_D_COUNTRY",
+"column_label_name": "D Country",
+"sort_order_no": "52",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_D_PORT_CODE",
+"column_label_name": "D Port",
+"sort_order_no": "53",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_ETA",
+"column_label_name": "ETA",
+"sort_order_no": "59",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_ETD",
+"column_label_name": "ETD",
+"sort_order_no": "60",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_INCOTERMS",
+"column_label_name": "new incoterms",
+"sort_order_no": "51",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_LT_DAY",
+"column_label_name": "L/T(Day)",
+"sort_order_no": "61",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_ROUTE_ID",
+"column_label_name": "Route",
+"sort_order_no": "49",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_SHIPMENT_DATE",
+"column_label_name": "Shipment Date*",
+"sort_order_no": "63",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_TO_CITY",
+"column_label_name": "To City",
+"sort_order_no": "58",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_TO_COUNTRY",
+"column_label_name": "To Country",
+"sort_order_no": "57",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "NEW_TRANSPORT_MODE",
+"column_label_name": "Trans Mode",
+"sort_order_no": "62",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ORIGIN_FROM_DIVISION_ID",
+"column_label_name": "ORIGIN_FROM_DIVISION_ID",
+"sort_order_no": "68",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "ORIGIN_TO_DIVISION_ID",
+"column_label_name": "ORIGIN_TO_DIVISION_ID",
+"sort_order_no": "69",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "PACKAGE_QTY",
+"column_label_name": "Package Qty",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "PACKAGE_TYPE",
+"column_label_name": "Package Type *",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "REMARKS",
+"column_label_name": "Remarks",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "REMARKS2",
+"column_label_name": "Shipment No.",
+"sort_order_no": "19",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "REMARKS3",
+"column_label_name": "Customer Requirement",
+"sort_order_no": "30",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "REQUESTOR",
+"column_label_name": "Shipment Requestor",
+"sort_order_no": "29",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SHIPMENT_CONFIRM_QTY",
+"column_label_name": "Confirm Qty*",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SHIPMENT_DATE",
+"column_label_name": "Shipment Date*",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SHIPMENT_STATUS",
+"column_label_name": "Status",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SHIPPING_PLAN_QTY",
+"column_label_name": "Shipping Plan Qty",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SHIPTO_DESCRIPTION",
+"column_label_name": "Ship To Party",
+"sort_order_no": "44",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "SOLDTO_DESCRIPTION",
+"column_label_name": "Sold To Party",
+"sort_order_no": "43",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "TO_SITE",
+"column_label_name": "To Site ID",
+"sort_order_no": "45",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "TO_SITE_DESCRIPTION",
+"column_label_name": "To Site",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "TRANSPORT_MODE",
+"column_label_name": "Trans Mode*",
+"sort_order_no": "23",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "UPDATED_BY",
+"column_label_name": "Updated By",
+"sort_order_no": "38",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail",
+"column_name": "UPDATED_DATE",
+"column_label_name": "Updated Date",
+"sort_order_no": "39",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "COMPANY_ID",
+"column_label_name": "Company*",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div*",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "FROM_SITE",
+"column_label_name": "FromSite*",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "ITEM_ID",
+"column_label_name": "Material*",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "QTY",
+"column_label_name": "Qty*",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan Detail Excel",
+"column_name": "YYYYMMDD",
+"column_label_name": "yyyyMMdd*",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "BACK_COLOR",
+"column_label_name": "Back Color",
+"sort_order_no": "8",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "CONFIRM_DAY",
+"column_label_name": "Confrim Day",
+"sort_order_no": "23",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "ELECTRODE_POST_OPER_LT",
+"column_label_name": "Oper. L/T",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "ELECTRODE_TYPE",
+"column_label_name": "Elec Type",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "FROM_SITE",
+"column_label_name": "From Site",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "GUBUN_NUM",
+"column_label_name": "GUBUN_NUM",
+"sort_order_no": "20",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "ITEM_ID",
+"column_label_name": "Material",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "JR_BOH_QTY",
+"column_label_name": "J/R",
+"sort_order_no": "12",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "JR_BOH_QTY_CELL",
+"column_label_name": "J/R",
+"sort_order_no": "18",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "JR_BOH_QTY_PCM",
+"column_label_name": "J/R",
+"sort_order_no": "15",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Requestor",
+"sort_order_no": "26",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "MEASURE",
+"column_label_name": "Measure",
+"sort_order_no": "25",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "MEASURE_NAME",
+"column_label_name": "Measure",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "MODEL_ID",
+"column_label_name": "Model",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "PC_BOH_QTY",
+"column_label_name": "Pancake",
+"sort_order_no": "13",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "PC_BOH_QTY_CELL",
+"column_label_name": "Pancake",
+"sort_order_no": "19",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "PC_BOH_QTY_PCM",
+"column_label_name": "Pancake",
+"sort_order_no": "16",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "PLANT_ID",
+"column_label_name": "Plant",
+"sort_order_no": "2",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "PSI_NAME",
+"column_label_name": "PSI",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "SCM_SITE_ID",
+"column_label_name": "SCM_SITE_ID",
+"sort_order_no": "5",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "TEMPCOLUMN",
+"column_label_name": "TEMPCOLUMN",
+"sort_order_no": "21",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "TOT_BOH_QTY",
+"column_label_name": "BOH",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "TOT_BOH_QTY_CELL",
+"column_label_name": "BOH",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "TOT_BOH_QTY_PCM",
+"column_label_name": "BOH",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "CONFIRM_ID",
+"column_label_name": "Confirm/Plan ID",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "END_CUSTOMER",
+"column_label_name": "End Customer",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "ERP_SO_NO",
+"column_label_name": "SO No",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "ETA_DATE",
+"column_label_name": "ETA",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "ETD_DATE",
+"column_label_name": "ETD",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "FROM_SITE",
+"column_label_name": "From Site",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "ITEM_ID",
+"column_label_name": "Material",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "MODEL_ID",
+"column_label_name": "Model",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "QTY",
+"column_label_name": "Shipment Qty",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "SHIP_TYPE",
+"column_label_name": "Ship Type",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "TO_SITE",
+"column_label_name": "To Site",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "TRANSPORT_MODE",
+"column_label_name": "Trans Mode",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "TYPE",
+"column_label_name": "Status",
+"sort_order_no": "2",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Result",
+"column_name": "YYYYMMDD",
+"column_label_name": "Shipment Date",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "AVAILABLE_YN",
+"column_label_name": "Available Stock YN",
+"sort_order_no": "21",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "CHANGE_STATUS",
+"column_label_name": "Change Status",
+"sort_order_no": "12",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "1",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "EXPIRATION_DATE",
+"column_label_name": "Expiration Date",
+"sort_order_no": "26",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "FROM_SITE",
+"column_label_name": "SCM Site",
+"sort_order_no": "2",
+"visible_flag": "N",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "GMES_QTY_PCM",
+"column_label_name": "Pancake M",
+"sort_order_no": "16",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "GMES_QTY_UOM",
+"column_label_name": "UOM",
+"sort_order_no": "15",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "ITEM_ID",
+"column_label_name": "Material",
+"sort_order_no": "5",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "IWMS_HOLD_YN",
+"column_label_name": "iWMS Hold YN",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "IWMS_QTY_PCM",
+"column_label_name": "Pancake M",
+"sort_order_no": "14",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "IWMS_QTY_UOM",
+"column_label_name": "UOM",
+"sort_order_no": "13",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "LANE",
+"column_label_name": "Lane",
+"sort_order_no": "8",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "LOT_ID",
+"column_label_name": "Lot ID",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "MES_HOLD_YN",
+"column_label_name": "MES Hold YN",
+"sort_order_no": "23",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "MODEL_ID",
+"column_label_name": "Model",
+"sort_order_no": "4",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "6",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "OPERATION_ID",
+"column_label_name": "Operation",
+"sort_order_no": "11",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "OWMS_HOLD_YN",
+"column_label_name": "oWMS Hold YN",
+"sort_order_no": "25",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "OWMS_QTY_PCM",
+"column_label_name": "Pancake M",
+"sort_order_no": "18",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "OWMS_QTY_UOM",
+"column_label_name": "UOM",
+"sort_order_no": "17",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "PACKAGE_TYPE_CODE",
+"column_label_name": "Package Type(oWMS)",
+"sort_order_no": "27",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "PALLET_ID",
+"column_label_name": "Pallet ID",
+"sort_order_no": "9",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "PLANT_ID",
+"column_label_name": "Plant",
+"sort_order_no": "3",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "QMS_HOLD_YN",
+"column_label_name": "QMS Hold YN",
+"sort_order_no": "24",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "STORAGE_ID",
+"column_label_name": "Storage",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "TOTAL_QTY_PCM",
+"column_label_name": "Pancake M",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "TOTAL_QTY_UOM",
+"column_label_name": "UOM",
+"sort_order_no": "19",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Stock Detail",
+"column_name": "VERSION",
+"column_label_name": "Version",
+"sort_order_no": "7",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "-",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"measures": [
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_FP_COATER_PLAN",
+"column_label_name": "Coater Plan",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_FP_COATER_POST_PLAN",
+"column_label_name": "Coater Plan+ Post Yield",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_FP_NPC_ASSY_PLAN",
+"column_label_name": "Assy Plan(Notching)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_INTRANSIT_ETA",
+"column_label_name": "Receipt(Intransit)+Shipment Plan(In)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_INV_CONFIRM",
+"column_label_name": "Inventory(Confirm)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_INV_SIM",
+"column_label_name": "Inventory(Simulation)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_SCP_PROD_PLAN",
+"column_label_name": "SCP Target (Coater)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_SCP_SHIP_PLAN_ETD",
+"column_label_name": "SCP Target (Shipping Target ETD)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_SHIP_CONFIRM_ETD",
+"column_label_name": "Shipment Plan Confirm(ETD)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_SHIP_PLAN_SIMU_ETD",
+"column_label_name": "Shipment Plan (ETD)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "SSP0023",
+"sheet_name": "Shipment Plan(Electrode)",
+"column_name": "P_SHIP_REQ_ETD",
+"column_label_name": "Shipment Request (ETD)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"lookupMeasure": [],
+"lookupAdmin": [
+{
+"segment1": "ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+}
+],
+"now": {
+"now_": "2026-11-15 01:05",
+"dow": "SUN",
+"hm": "0105"
+}
+},
+"accounts": [
+{
+"key": "SSP/40/SSP Planner",
+"keys": [
+"SSP/40/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 32
+},
+{
+"key": "SSP/40/SSP Viewer",
+"keys": [
+"SSP/40/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 32
+},
+{
+"key": "SSP/81/SSP Planner",
+"keys": [
+"SSP/81/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"81_HM"
+],
+"divsMenu": [
+"81_HM"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 32
+},
+{
+"key": "SSP/81/SSP Viewer",
+"keys": [
+"SSP/81/SSP Viewer",
+"SSP/82/SSP Viewer"
+],
+"groups": [
+"GUEST",
+"SSP Viewer"
+],
+"menuGroups": [
+"SSP Viewer"
+],
+"divsAll": [
+"40",
+"81",
+"82",
+"EE"
+],
+"divsMenu": [
+"40",
+"81",
+"82",
+"EE"
+],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0045",
+"Demand",
+"Demand_Master",
+"Popup",
+"SCM0002",
+"SCP0005",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0022",
+"SCP0028",
+"SCP0037",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"TEST"
+],
+"titleset": 32
+},
+{
+"key": "SSP/82/SSP Planner",
+"keys": [
+"SSP/82/SSP Planner"
+],
+"groups": [
+"GUEST",
+"SSP Planner"
+],
+"menuGroups": [
+"SSP Planner"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0012",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0003_01",
+"DMF0004",
+"DMF0005",
+"DMF0005_01",
+"DMF0035",
+"DMF0035_01",
+"DMF0040",
+"DMF0045",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0041",
+"SCP0055",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0020",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST"
+],
+"titleset": 32
+}
+],
+"btnDiv": {
+"__default__": {
+"40": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"82": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE_HD": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE_HG": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE_HM": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE_ST": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+],
+"EE_UC": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+]
+},
+"SSP/40/SSP Planner": {
+"40": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+]
+},
+"SSP/40/SSP Viewer": {
+"40": [
+"CHECK_CONFIRM_CHANGETIME",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"SEARCH"
+]
+},
+"SSP/81/SSP Planner": {
+"81_HM": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+]
+},
+"SSP/81/SSP Viewer": {
+"40": [
+"CHECK_CONFIRM_CHANGETIME",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"SEARCH"
+],
+"81": [
+"CHECK_CONFIRM_CHANGETIME",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"SEARCH"
+],
+"82": [
+"CHECK_CONFIRM_CHANGETIME",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"SEARCH"
+],
+"EE": [
+"CHECK_CONFIRM_CHANGETIME",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"SEARCH"
+]
+},
+"SSP/82/SSP Planner": {
+"82": [
+"CHECK_CONFIRM_CHANGETIME",
+"DELETE",
+"DELETE_SHIPMENT_REQUEST_DRAFTING",
+"DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+"ERP_ERROR_CONFIRM",
+"EXCEL",
+"GET_ERP_SO_NO_CNT",
+"GET_ORDER_DETAIL",
+"GET_REQ_DRAFTING",
+"GET_SHEET_CALENDAR_3SPAN",
+"GET_SHIPMENT_PLAN",
+"GET_SHIPMENT_PLAN_DETAIL",
+"GET_SHIPMENT_PLAN_DETAIL_EXCEL",
+"GET_SHIPMENT_PLAN_RESULT",
+"GET_SHIPMENT_PLAN_STOCK_DETAIL",
+"GET_SHIPMENT_STATUS",
+"IF_CHECK",
+"INSERT",
+"MANUAL",
+"SAVE",
+"SAVE_SHIPMENT_PLAN_SIMU",
+"SEARCH",
+"UPLOAD",
+"UPLOAD_SAVE"
+]
+}
+}
+}

@@ -1,0 +1,61 @@
+{
+ "id": "DMF0049",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0049_SAVE_SALES_ETC_REPORT_C",
+   "save_sp": "DMF0049_SAVE_SALES_ETC_REPORT_C",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_SALES_ETC_REPORT_C",
+   "pk": [
+    "VERSION_NO",
+    "DIVISION_ID",
+    "DATA_SEQ",
+    "MEASURE",
+    "YYYYMMDD"
+   ],
+   "match": {
+    "VERSION_NO": "VERSION_NO",
+    "DIVISION_ID": "DIVISION_ID",
+    "DATA_SEQ": "DATA_SEQ",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "YYYYMMDD"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_SALES_ETC_REPORT_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/MDF Reports",
+   "writes": {
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     "INSERT INTO"
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0049_SAVE_SALES_ETC_REPORT_C → SP DMF0049_SAVE_SALES_ETC_REPORT_C 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_MDF_VERSION": [
+     "UPDATE"
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

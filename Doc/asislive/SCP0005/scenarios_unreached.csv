@@ -1,0 +1,6 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0005-S440de6,기타,CSafeSetText,SCP0005_DistributionRoute.cs:162,이벤트·대리자 연결,SCP0005_DistributionRoute.cs:160,CSafeSetText
+SCP0005-S60f544,조회,GetBodType,SCP0005_DistributionRoute.cs:1207,호출 없음,,
+SCP0005-S12c82a,조회,GetFromSitebyDivision,SCP0005_DistributionRoute.cs:1187,주석 안에서만 호출,SCP0005_DistributionRoute.cs:887,
+SCP0005-Sa4f5dd,조회,GetToSitebyDivision,SCP0005_DistributionRoute.cs:1195,주석 안에서만 호출,SCP0005_DistributionRoute.cs:888,
+SCP0005-Scb8db3,조회,GetTransMode,SCP0005_DistributionRoute.cs:1217,호출 없음,,

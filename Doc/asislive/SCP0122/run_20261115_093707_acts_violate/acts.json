@@ -1,0 +1,524 @@
+{
+ "id": "SCP0122",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Plan Activity Mgmt",
+     "rows_before": 7,
+     "rows_after": 8,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A007",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Input Constraint",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LINK_UI_TYPE",
+       "before": "UI",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CONFIRM_YN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A007",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "1",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "2",
+       "after": "1"
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A008",
+       "after": "A007"
+      },
+      {
+       "row": 1,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Constraint Validation",
+       "after": "Input Constraint"
+      },
+      {
+       "row": 1,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A008",
+       "after": "A007"
+      },
+      {
+       "row": 1,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "2",
+       "after": "1"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "3",
+       "after": "2"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A002",
+       "after": "A008"
+      },
+      {
+       "row": 2,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Create Plan ID",
+       "after": "Constraint Validation"
+      },
+      {
+       "row": 2,
+       "col": "LINK_UI_TYPE",
+       "before": "Popup",
+       "after": "UI"
+      },
+      {
+       "row": 2,
+       "col": "CONFIRM_YN",
+       "before": "",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A002",
+       "after": "A008"
+      },
+      {
+       "row": 2,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "3",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "4",
+       "after": "3"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A003",
+       "after": "A002"
+      },
+      {
+       "row": 3,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Engine Run",
+       "after": "Create Plan ID"
+      },
+      {
+       "row": 3,
+       "col": "LINK_UI_TYPE",
+       "before": "",
+       "after": "Popup"
+      },
+      {
+       "row": 3,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A003",
+       "after": "A002"
+      },
+      {
+       "row": 3,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "4",
+       "after": "3"
+      },
+      {
+       "row": 4,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "5",
+       "after": "4"
+      },
+      {
+       "row": 4,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A004",
+       "after": "A003"
+      },
+      {
+       "row": 4,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Plan Out Review and Amend",
+       "after": "Engine Run"
+      },
+      {
+       "row": 4,
+       "col": "OPTION_YN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 4,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A004",
+       "after": "A003"
+      },
+      {
+       "row": 4,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "5",
+       "after": "4"
+      },
+      {
+       "row": 5,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "6",
+       "after": "5"
+      },
+      {
+       "row": 5,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A005",
+       "after": "A004"
+      },
+      {
+       "row": 5,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "FP Target I/F",
+       "after": "Plan Out Review and Amend"
+      },
+      {
+       "row": 5,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A005",
+       "after": "A004"
+      },
+      {
+       "row": 5,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "6",
+       "after": "5"
+      },
+      {
+       "row": 6,
+       "col": "OPMZ_ACTV_SEQ",
+       "before": "7",
+       "after": "6"
+      },
+      {
+       "row": 6,
+       "col": "OPMZ_ACTV_CD",
+       "before": "A006",
+       "after": "A005"
+      },
+      {
+       "row": 6,
+       "col": "OPMZ_ACTV_NAME",
+       "before": "Release",
+       "after": "FP Target I/F"
+      },
+      {
+       "row": 6,
+       "col": "OPTION_YN",
+       "before": "",
+       "after": "Y"
+      },
+      {
+       "row": 6,
+       "col": "PRE_OPMZ_ACTV_CD",
+       "before": "A006",
+       "after": "A005"
+      },
+      {
+       "row": 6,
+       "col": "PRE_OPMZ_ACTV_SEQ",
+       "before": "7",
+       "after": "6"
+      },
+      {
+       "row": 7,
+       "col": "(행)",
+       "before": "없음",
+       "after": "있음"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "new_rows": {
+    "spdMain/Plan Activity Mgmt": [
+     0,
+     7
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:36:46.944",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Plan Activity Mgmt",
+    "sheet": "Plan Activity Mgmt",
+    "rows_total": 8,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "DIVISION_ID",
+      "label": "Div.",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 2,
+      "tag": "OPMZ_PRS_CD",
+      "label": "Process CD",
+      "data_field": "OPMZ_PRS_CD",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "OPMZ_PRS_NAME",
+      "label": "Process",
+      "data_field": "OPMZ_PRS_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "OPMZ_PLAN_GR_ID",
+      "label": "Plan Group ID",
+      "data_field": "OPMZ_PLAN_GR_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "OPMZ_PLAN_GR_NAME",
+      "label": "Plan Group",
+      "data_field": "OPMZ_PLAN_GR_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "OPMZ_ACTV_SEQ",
+      "label": "Act. Seq",
+      "data_field": "OPMZ_ACTV_SEQ",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "OPMZ_ACTV_CD",
+      "label": "Activity Code",
+      "data_field": "OPMZ_ACTV_CD",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "OPMZ_ACTV_NAME",
+      "label": "Activity Name",
+      "data_field": "OPMZ_ACTV_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "LINK_UI_TYPE",
+      "label": "Link UI Type",
+      "data_field": "LINK_UI_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "PROGRAM_NAME",
+      "label": "Program Name",
+      "data_field": "PROGRAM_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "CONFIRM_YN",
+      "label": "Confirm Flag",
+      "data_field": "CONFIRM_YN",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "AUTO_YN",
+      "label": "Auto Flag",
+      "data_field": "AUTO_YN",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "OPTION_YN",
+      "label": "Option Flag",
+      "data_field": "OPTION_YN",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "PRE_OPMZ_ACTV_CD",
+      "label": "PRE_OPMZ_ACTV_CD",
+      "data_field": "PRE_OPMZ_ACTV_CD",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "PRE_OPMZ_ACTV_SEQ",
+      "label": "PRE_OPMZ_ACTV_SEQ",
+      "data_field": "PRE_OPMZ_ACTV_SEQ",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "1111110101111100"
+    ],
+    "back": [
+     [
+      "Blue",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "81",
+      "P001",
+      "SCP 엔진 최적화 프로세스",
+      "PG0001",
+      "E129A_E128A",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:36:46.951"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:35:57",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

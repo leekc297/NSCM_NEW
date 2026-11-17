@@ -1,0 +1,16 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0021-S9d69f9,기타,ControlClear,SSP0021_ShipmentPlan.cs:535,호출 없음,,
+SSP0021-S20f481,저장,GetErpIFCheck,SSP0021_ShipmentPlan.cs:3941,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:3571; SSP0021_ShipmentPlan.cs:3791,
+SSP0021-Sf834bb,조회,GetErpIFCheck,SSP0021_ShipmentPlan.cs:3956,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:3571; SSP0021_ShipmentPlan.cs:3791,
+SSP0021-S0801b6,조회,GetErpIFCheck,SSP0021_ShipmentPlan.cs:3963,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:3571; SSP0021_ShipmentPlan.cs:3791,
+SSP0021-Sc71a7e,조회,GetErpIFCheck,SSP0021_ShipmentPlan.cs:3968,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:3571; SSP0021_ShipmentPlan.cs:3791,
+SSP0021-Se42905,저장,GetErpIFCheckNew_,SSP0021_ShipmentPlan.cs:4404,호출 없음,,
+SSP0021-S56adab,조회,GetErpIFCheckNew_,SSP0021_ShipmentPlan.cs:4419,호출 없음,,
+SSP0021-Sb9aa4b,조회,GetErpIFCheckNew_,SSP0021_ShipmentPlan.cs:4426,호출 없음,,
+SSP0021-Sa92932,조회,GetErpIFCheckNew_,SSP0021_ShipmentPlan.cs:4431,호출 없음,,
+SSP0021-Saa0e5f,조회,GetNewERPInterface,SSP0021_ShipmentPlan.cs:4141,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:2716,
+SSP0021-Sd86cd7,조회,GetNewERPInterface,SSP0021_ShipmentPlan.cs:4151,주석 안에서만 호출,SSP0021_ShipmentPlan.cs:2716,
+SSP0021-S7df84c,저장,NewNonSoNo,SSP0021_ShipmentPlan.cs:4290,같은 파일에서 호출,SSP0021_ShipmentPlan.cs:4174,GetNewERPInterface
+SSP0021-Sa443dc,기타,NewNonSoNo,SSP0021_ShipmentPlan.cs:4358,같은 파일에서 호출,SSP0021_ShipmentPlan.cs:4174,GetNewERPInterface
+SSP0021-S0ba413,기타,NewNonSoNo,SSP0021_ShipmentPlan.cs:4381,같은 파일에서 호출,SSP0021_ShipmentPlan.cs:4174,GetNewERPInterface
+SSP0021-S0e6953,기타,SetLockSumColumn,SSP0021_ShipmentPlan.cs:4530,호출 없음,,

@@ -66,9 +66,13 @@ export const MSG = {
   //   의도('권한 있는 Division 없음') 1:1 일치 TO-BE 코드 MSG00667(EN 'No authority assigned.', ora.py 실측).
   REQUIRE_DIVISION: 'MSG00667',
   REQUIRED_FIELD: 'MSG00429', // {0} value is required. (조회 필수값)
-  PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (ora.py 실측 EN)
+  // 시작일 > 종료일 — AS-IS MSG00108 "The start date can not be later than the end date." /
+  //   KO "시작일자가 종료일자보다 늦을 수 없습니다." 를 문구 역조회(rule 6)한 TO-BE 코드 MSG01135(ora.py 실측).
+  //   (TO-BE MSG00108 은 "조회 기간이 잘못되었습니다 (시작일 > 종료일)." 로 AS-IS 와 문구가 달라 사용자 지시
+  //    2026-11-12 로 AS-IS 정확문구 MSG01135 로 통일 — SCP0018 파리티.)
+  PERIOD_RANGE: 'MSG01135',
   // 최대 조회기간 초과 (AS-IS DateUtil.Check_PeriodDate, param 364+7=371). 문구 역조회 TO-BE 코드
-  //   MSG01187(EN 'Maximum Period is From Date + {0}.', USE_YN='Y' ora.py 실측). {0}='371 days'.
+  //   MSG01187(EN 'Maximum Period is From Date + {0}.', USE_YN='Y' ora.py 실측). {0}='371'(AS-IS 하드코딩, days 없음).
   PERIOD_MAX: 'MSG01187',
 } as const;
 

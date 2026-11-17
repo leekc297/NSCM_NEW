@@ -89,7 +89,7 @@ rg -nE "refreshRange\\(new CellRange" {grid-tsx}
 
 - 룰 07 `_tobe/07_datagrid.md` §2.10.6 modal callback cascade
 - 룰 07 §3.5 CRUD_TYPE 가드 (modal cell)
-- 룰 23 `_dev_rules/23_FE_IMPORT_INVENTORY.md` (`@master/components` 공용 modal 11종)
+- 룰 23 `_dev_rules/_archive/23_FE_IMPORT_INVENTORY.md` (`@master/components` 공용 modal 11종) (2026-11-13 정정: 경로 `_dev_rules/` → `_dev_rules/_archive/` — 보관 이동된 문서)
 - Hook `cascade-pattern-check.md` (상위 — 전체 cascade 7 sub-pattern)
 - 메모리 `reference_public_modals_master_components.md` (공용 modal 인벤토리)
 - 메모리 `feedback_grid_popup_cell_mandatory.md` (popup cell 표준)

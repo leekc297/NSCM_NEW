@@ -1,0 +1,151 @@
+{
+ "id": "FP00601",
+ "started": "2026-11-12 18:44:41.589",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 18:44:41.881",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00601_PlanAmend_Line_Pack",
+   "form_text": "Plan Amend by Line(Pack)",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00601_PlanAmend_Line_Pack.UIL.dll",
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 18:44:47.466"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 18:44:51.073",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00601\\run_20261112_184441\\dump_load.json",
+   "control_count": 150,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 18:44:51.083"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 18:44:51.245",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00601\\run_20261112_184441\\shots\\FP00601_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 9,
+   "ok": true,
+   "done": "2026-11-12 18:44:51.418"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 18:44:51.899",
+   "call_timed_out": true,
+   "dialog_count": 10,
+   "ok": true,
+   "done": "2026-11-12 18:45:21.904"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 18:45:29.691",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00601\\run_20261112_184441\\dump_find.json",
+   "control_count": 150,
+   "grid_count": 3,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 10,
+   "ok": true,
+   "done": "2026-11-12 18:45:29.703"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 18:45:30.012",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00601\\run_20261112_184441\\shots\\FP00601_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 10,
+   "ok": true,
+   "done": "2026-11-12 18:45:30.218"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 18:45:30.544",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 10,
+   "ok": true,
+   "done": "2026-11-12 18:45:31.134"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 24,
+  "calls_with_params": 24
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00601_PlanAmend_Line_Pack",
+  "form_text": "Plan Amend by Line(Pack)",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00601_PlanAmend_Line_Pack.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "dialog"
+ },
+ "t_open": "2026-11-12 18:44:41.796",
+ "t_find": "2026-11-12 18:44:51.617",
+ "dialogs": [
+  {
+   "at": "2026-11-12 18:44:53.083",
+   "caption": "",
+   "text": "You need to select one plan to proceed",
+   "buttons": [
+    "확인"
+   ],
+   "action": "default_button(id=1)"
+  }
+ ],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 150,
+  "layout_items": 24,
+  "grids": 3,
+  "sheets": 1,
+  "header_cols": 17,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 24,
+  "calls_screen": 24,
+  "calls_find": 1,
+  "dialogs": 1
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:26.417",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:26"
+}

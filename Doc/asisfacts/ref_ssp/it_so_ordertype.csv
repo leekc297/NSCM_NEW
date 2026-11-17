@@ -1,0 +1,9 @@
+﻿block_title,오더타입,오더타입 이름,관찰된 From → To 유형 (A 판매 · B 공장 · C Packer),케이스
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZOR,Standard Order(내수오더),B → A (국내 고객) · 82 C → A · 82 B → B · 82 B → C (미국 내),S05-29 · S05-34 · S05-33
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZEX,Export Order(수출주문),B → A (해외 고객) · B → B 법인간 · B → C · C → A · C → B · C → C,S05-30 · S05-33 · S05-34
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZKB · ZKM,위탁품보충 · Consign Fill-up(POD),B → A · C → A (VMI 포함 위탁 고객),S05-31
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZSC,Subcon Cell,B → C 같은 법인 · 82 C → C,S05-32 · S05-35
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZEMM · ZSCM · ZSMM · ZEML,사급 주문(유상 · 무상 · Subcon),B → C (주로 다른 법인 Packer),S05-32
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZFD · ZFDC · ZEF · ZEFC,무상 주문(견본 · Claim · 수출 무상),B → A · C → A (FCST_TYPE 무상 · 샘플 · Claim),S05-41
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",ZORS,주문-SVC,81 B → A (A/S),S05-41
+"ERP SO 오더타입 ↔ From · To Site 유형 대응 (출고 실적 기준, ZIOUI1 2026-11-11)",-,STO 데이터,82 C → B · C → C (Packer 이동),S05-35

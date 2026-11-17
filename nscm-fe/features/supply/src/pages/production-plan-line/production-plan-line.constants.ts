@@ -81,6 +81,14 @@ export const MEASURE_ROW_ORDER = [
   'LINE_TOTAL_LOAD_AMEND',
 ] as const;
 
+// Measure 개인화(TitleSet) 영속 저장 키 — AS-IS SCM0002_TitleSetForm_Popup 'M'. measure 엔드포인트
+//   (PR_GET_SHEET_MEASURE_LIST)가 SCM_MST_TITLESET_USER(PROGRAM_ID='SCP0013', SHEET_NAME='Line', 'M')를
+//   읽어 DISPLAY_FLAG(저장선택)를 돌려준다 → 모달 체크상태·그리드 표시 measure 가 복원된다.
+//   SHEET_NAME 은 measure 메타·개인화플래그(SHEET_PRSL_YN)·컬럼 메타와 대소문자까지 'Line' 로 일치해야 한다
+//   (불일치 시 V_PRSL_YN 미매칭으로 개인화 OFF — 2026-11-11 대소문자 통일).
+export const MEASURE_SHEET_NAME = 'Line';
+export const TITLESET_MEASURE_TYPE = 'M';
+
 // division 특수 코드 (design 01 §2 B1/B3/B5, 02 §2.3).
 export const DIVISION_CELL_TYPE = '40'; // div=40 → CellTypeGr/ExtraSpec enable + 관련 컬럼 표시
 export const DIVISION_EE_PREFIX = 'EE'; // div 앞2자 EE → OperationGroup 코드셋 EE 전용 + EE 컬럼 표시

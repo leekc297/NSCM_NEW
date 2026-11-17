@@ -1,0 +1,16 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+BucketType,"{""comboId"":""BucketType"",""mnuId"":""SSP0015""}",3,3,,,PASS,응답 3건 = DB 3건
+MyDivisionInEE,"{""comboId"":""MyDivisionInEE"",""mnuId"":""SSP0015""}",14,14,,,PASS,응답 14건 = DB 14건
+ShipmentRequestPlantSite_SCP,"{""comboId"":""ShipmentRequestPlantSite_SCP"",""mnuId"":""SSP0015"",""divisionId"":""'40'"",""operationGroup"":""'P'"",""param3"":""'E'""}",8,8,,,PASS,응답 8건 = DB 8건
+SCM0001_GET_SCP_DAY_PERIOD,"{""comboId"":""SCM0001_GET_SCP_DAY_PERIOD"",""mnuId"":""SSP0015"",""fromDate"":""''"",""offsetDay"":""'31'"",""timeZone"":""'AS054'""}",1,1,,,PASS,응답 1건 = DB 1건
+SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SSP0015""}",14,14,,,PASS,응답 14건 = DB 14건
+PlanDateShip,"{""comboId"":""PlanDateShip"",""mnuId"":""SSP0015"",""divisionId"":""'40'"",""shipPlanType"":""'A'""}",6,6,,,PASS,응답 6건 = DB 6건
+SCM0001_GET_SCP_DAY_PERIOD,"{""comboId"":""SCM0001_GET_SCP_DAY_PERIOD"",""mnuId"":""SSP0015"",""fromDate"":""'20261010'"",""offsetDay"":""'31'"",""timeZone"":""'AS054'""}",1,1,,,PASS,응답 1건 = DB 1건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SHIPMENT_STATUS'"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",4,4,,,PASS,응답 4건 = DB 4건
+TransMode,"{""comboId"":""TransMode"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
+ShipToCodeByDivision,"{""comboId"":""ShipToCodeByDivision"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'SALES_TYPE_CODE'"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+ShipToCodeByDivision,"{""comboId"":""ShipToCodeByDivision"",""divisionId"":""''"",""scmSiteId"":""''"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
+LookupCommon3,"{""comboId"":""LookupCommon3"",""lookupType"":""'OWMS_STOCK_STATUS'"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",13,13,,,PASS,응답 13건 = DB 13건
+Division,"{""comboId"":""Division"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",14,14,,,PASS,응답 14건 = DB 14건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'MES_CHANGE_STATUS'"",""mnuId"":""SSP0015"",""validYn"":""'Y'""}",4,4,,,PASS,응답 4건 = DB 4건

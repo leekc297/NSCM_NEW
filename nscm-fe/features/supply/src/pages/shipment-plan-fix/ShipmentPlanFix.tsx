@@ -4,6 +4,7 @@ import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
@@ -30,6 +31,8 @@ import { buildUnfixPayload } from './utils/shipmentPlanFixSave';
 export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
+  const queryClient = useQueryClient();
   const { validateSearch } = useShipmentPlanFixValidation();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
@@ -57,10 +60,22 @@ export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.MAIN],
     enabled: !!filters[SHEETS.MAIN],
   });
+  // Unfix 성공 토스트의 {0} 은 전송 행 수 — AS-IS 는 SP 의 result_cnt(= 전송 데이터셋 행 수, cs:1156)를 쓴다.
+  //   공용 useProcMutation 의 onSuccess 는 응답 본문을 주지 않으므로 전송 시점의 건수를 ref 로 넘긴다(자매 SCP0024 동형).
+  const unfixCountRef = useRef(0);
   const { mutate: mutateMain } = useProcMutation<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
+    // 기본 onSuccess 의 invalidate(재조회)는 유지하고 성공 문구만 건수 포함으로 교체한다.
+    //   MSG00672 "{0}개의 데이터가 저장되었습니다." — {0} 는 i18next 보간자({{ }})가 아니라 수동 .replace 대상.
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: [tabId] });
+      setToast({
+        type: 'success',
+        message: t(MSG.SAVED_COUNT, '_{0} data saved.').replace('{0}', String(unfixCountRef.current)),
+      });
+    },
   });
 
   // R3 PlanExecYn 게이트 데이터 — division 기준 PLAN_STATUS 조회(design 01 R3, comboCall §4b #5).
@@ -154,6 +169,7 @@ export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
       return;
     }
+    unfixCountRef.current = payload.length; // MSG00672 {0} = 전송 행수(AS-IS result_cnt 등가)
     mutateMain(payload as unknown as MainRow[]);
   };
 
@@ -192,10 +208,15 @@ export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
-        customButtons={[
+        customButtons={
           // btnUnfix — 조회조건 우측 화면 고유 액션 버튼(design 01 §1).
-          { label: t(LBL.UNFIX, '_Unfix'), action: () => void handleUnfix() },
-        ]}
+          //   전용 Unfix BTN_CD 는 미등록이라 SAVE 권한으로 대리 게이트한다(자매 SCP0024 ProductionPlanFix 선례).
+          //   권한이 없으면 클릭 후 alert 이 아니라 버튼 자체를 그리지 않는다(AUTH-02 — 권한 없는 버튼은
+          //   비활성 표시 없이 그리지 않는다). handleUnfix 내부 R2 권한 체크는 방어적으로 유지.
+          hasButton('SAVE')
+            ? [{ label: t(LBL.UNFIX, '_Unfix'), action: () => void handleUnfix() }]
+            : []
+        }
       />
 
       <div className={styles.gridWrapper}>

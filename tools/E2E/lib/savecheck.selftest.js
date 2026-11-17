@@ -19,6 +19,12 @@ const cases = [
   ['변이: CREATION_DATE 덮어씀 → 감사 FAIL', judgeAudit(diffSnap(base, snap([row({ S: '1', V: '2', CREATION_DATE: 'c1', LAST_UPDATE_DATE: 't1', LAST_UPDATED_BY: 'me' })])), 'me'), 'FAIL'],
   ['변이: Updated 미갱신 → 감사 FAIL', judgeAudit(diffSnap(base, snap([row({ S: '1', V: '2', LAST_UPDATED_BY: 'me' })])), 'me'), 'FAIL'],
   ['변이: 수정자 다름 → 감사 FAIL', judgeAudit(diffSnap(base, snap([row({ S: '1', V: '2', LAST_UPDATE_DATE: 't1', LAST_UPDATED_BY: 'other' })])), 'me'), 'FAIL'],
+  ['T212 append 표 행 증가 = AS-IS 동일', m.exports.judgeTwice([{ table: 'SCM_MGR.SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', added: [{ A: '1' }], removed: [], changed: [] }, { table: 'SSP_ANL_SHIP_CONFIRM', added: [], removed: [], changed: [] }], 2, new Map([['SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', 'SP:500 NEXT VALUE FOR']])), 'PASS'],
+  ['T212 append 아닌 업무 표 행 증가', m.exports.judgeTwice([{ table: 'SSP_ANL_SHIP_CONFIRM', added: [{ A: '1' }], removed: [], changed: [] }], 2, new Map([['SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', 'x']])), 'FAIL'],
+  ['T212 append 표라도 삭제 생기면', m.exports.judgeTwice([{ table: 'SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', added: [{ A: '1' }], removed: [{ A: '0' }], changed: [] }], 2, new Map([['SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', 'x']])), 'FAIL'],
+  ['T222 append 표만 행 증가 → 행 수 PASS', m.exports.judgeRowCount([{ table: 'SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', keys: ['K'], added: [{ A: '1' }], removed: [], changed: [] }, { table: 'SSP_ANL_SHIP_CONFIRM', keys: ['K'], added: [], removed: [], changed: [{ before: {}, after: {} }] }], {}, new Map([['SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE', 'x']])), 'PASS'],
+  ['T222 체인이 안 쓰는 이력 표 → NA', m.exports.judgeHistory([{ table: 'SSP_ANL_SHIP_CONFIRM_H', keys: [], added: [], removed: [], changed: [] }], {}, new Set(['SSP_ANL_SHIP_CONFIRM_CHG_REQ'])), 'NA'],
+  ['T222 체인이 쓰는 이력 표 +0 → FAIL', m.exports.judgeHistory([{ table: 'SSP_ANL_SHIP_CONFIRM_H', keys: [], added: [], removed: [], changed: [] }], {}, new Set(['SSP_ANL_SHIP_CONFIRM_H'])), 'FAIL'],
 ];
 let bad = 0; for (const [n, r, w] of cases) { const ok = r.result === w; if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${n} → ${r.result}${ok ? '' : ' (기대 ' + w + ') ' + r.evidence}`); }
 console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

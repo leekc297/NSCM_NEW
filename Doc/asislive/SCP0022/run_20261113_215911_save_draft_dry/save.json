@@ -1,0 +1,83 @@
+{
+ "id": "SCP0022",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_FORMATION",
+  "pk": [
+   "DIVISION_ID",
+   "PLANT_SITE_ID",
+   "ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "PLANT_SITE_ID": "plant_site_id",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "save_sp": "SCP0022_SAVE_Formation",
+  "side": [
+   {
+    "table": "SCP_MST_FORMATION_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   },
+   {
+    "table": "SCP_MST_FORMATION_H",
+    "pk": [
+     "HISTORY_SEQ"
+    ]
+   }
+  ],
+  "basis": "foxml SCP0022_SAVE_Formation → SP SCP0022_SAVE_Formation 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "LT_FORMATION",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "LT_FORMATION",
+     "db_col": "LT_FORMATION",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "LT_FORMATION",
+    "db_col": "LT_FORMATION",
+    "rule": "plus1"
+   },
+   {
+    "col": "FORMATION_YIELD",
+    "db_col": "FORMATION_YIELD",
+    "rule": "plus1"
+   },
+   {
+    "col": "CHAR_YIELD",
+    "db_col": "CHAR_YIELD",
+    "rule": "plus1"
+   },
+   {
+    "col": "FORMATION_TOTAL_YIELD",
+    "db_col": "FORMATION_TOTAL_YIELD",
+    "rule": "plus1"
+   },
+   {
+    "col": "SSP_MODIFY_YIELD",
+    "db_col": "SSP_MODIFY_YIELD",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 21:59:11",
+ "status": "ERROR",
+ "steps": [],
+ "find_dialogs": [],
+ "note": "조회 결과 행 없음(메시지 [])"
+}

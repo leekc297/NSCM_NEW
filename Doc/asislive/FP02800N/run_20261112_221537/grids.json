@@ -1,0 +1,826 @@
+{
+ "id": "FP02800N",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Parent-Child",
+     "rows": 0,
+     "cols": 19,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Site"
+       ],
+       "label": "Site",
+       "tag": "SITE_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Plant"
+       ],
+       "label": "Plant",
+       "tag": "PLANT_ID",
+       "width": "80",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Level"
+       ],
+       "label": "Level",
+       "tag": "NLEVEL",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Parent Material Type"
+       ],
+       "label": "Parent Material Type",
+       "tag": "PARENT_ITEM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Parent Material"
+       ],
+       "label": "Parent Material",
+       "tag": "PARENT_ITEM_ID2",
+       "width": "220",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Parent Nick Name"
+       ],
+       "label": "Parent Nick Name",
+       "tag": "PARENT_NICK_NAME",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Parent Quantity"
+       ],
+       "label": "Parent Quantity",
+       "tag": "PARENT_QTY",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Parent UOM"
+       ],
+       "label": "Parent UOM",
+       "tag": "PARENT_UOM",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Parent Material Class 3"
+       ],
+       "label": "Parent Material Class 3",
+       "tag": "PARENT_LEVEL_3_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Child  Material Type"
+       ],
+       "label": "Child  Material Type",
+       "tag": "CHILD_ITEM_TYPE",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Child Material"
+       ],
+       "label": "Child Material",
+       "tag": "CHILD_ITEM_ID",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Child Nick Name"
+       ],
+       "label": "Child Nick Name",
+       "tag": "CHILD_NICK_NAME",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Child Quantity"
+       ],
+       "label": "Child Quantity",
+       "tag": "CHILD_QTY",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Child UOM"
+       ],
+       "label": "Child UOM",
+       "tag": "CHILD_UOM",
+       "width": "70",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Child Material Class 3"
+       ],
+       "label": "Child Material Class 3",
+       "tag": "CHILD_LEVEL_3_NAME",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Child Material Attribute"
+       ],
+       "label": "Child Material Attribute",
+       "tag": "CHILD_ITEM_ATTRIBUTE",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Child Setup Attribute"
+       ],
+       "label": "Child Setup Attribute",
+       "tag": "CHILD_SETUP_ATTRIBUTE",
+       "width": "180",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    },
+    {
+     "name": "Material Class",
+     "rows": 0,
+     "cols": 31,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Material",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ROOT",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Nick Name",
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "No",
+        "No"
+       ],
+       "label": "No",
+       "tag": "RNUM",
+       "width": "40",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Pack",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL1_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL1_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Pack",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL1",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Pack",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL1_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Module",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL2_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL2_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Module",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL2",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Module",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL2_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Cell",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL3_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL3_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Cell",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL3",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Cell",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL3_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Stacking & Folding",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL4_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL4_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Stacking & Folding",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL4",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Stacking & Folding",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL4_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "Bi_Cell",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL5_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL5_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "Bi_Cell",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL5",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "Bi_Cell",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL5_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "Notched Pancake",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL6_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL6_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "Notched Pancake",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL6",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 21,
+       "header": [
+        "Notched Pancake",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL6_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 22,
+       "header": [
+        "Pancake",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL8_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL8_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 23,
+       "header": [
+        "Pancake",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL8",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 24,
+       "header": [
+        "Pancake",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL8_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 25,
+       "header": [
+        "Slurry",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL9_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL9_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 26,
+       "header": [
+        "Slurry",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL9",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 27,
+       "header": [
+        "Slurry",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL9_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 28,
+       "header": [
+        "ETC",
+        "Alt"
+       ],
+       "label": "Alt",
+       "tag": "BLEVEL11_A",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "BLEVEL11_A",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 29,
+       "header": [
+        "ETC",
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "BLEVEL11",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 30,
+       "header": [
+        "ETC",
+        "B"
+       ],
+       "label": "B",
+       "tag": "BLEVEL11_P",
+       "width": "30",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

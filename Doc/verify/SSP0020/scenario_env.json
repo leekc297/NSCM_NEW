@@ -1,0 +1,74 @@
+{
+ "menu_id": "SSP0020",
+ "asis_id": "SSP0020",
+ "area": "SSP",
+ "generated": "2026-11-17 10:05:11",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "SAVE",
+   "SEARCH",
+   "UNSET",
+   "USER_CHECK"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Period",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 2026-11-17 09:10 · 행 수 근거 5행",
+  "max_rows_after_search": 26,
+  "zero_row_failures": [],
+  "zero_row_count": 0
+ },
+ "warnings": []
+}

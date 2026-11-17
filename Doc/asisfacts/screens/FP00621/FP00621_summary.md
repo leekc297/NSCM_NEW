@@ -653,6 +653,10 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.btnSet | Click | btnSet_Click | InitializeComponent:444 |
+| this.btnOK | Click | btnOK_Click | InitializeComponent:482 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:510 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:511 |
 | this | Load | Form_Load | .ctor:219 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:281 |
 | mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:282 |
@@ -714,26 +718,22 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:2295 |
 | this.btnCatagory | Click | btnCatagory_Click | InitializeComponent:2333 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:2371 |
-| this.btnSet | Click | btnSet_Click | InitializeComponent:444 |
-| this.btnOK | Click | btnOK_Click | InitializeComponent:482 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:510 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:511 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:279 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:360 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:361 |
 | this | Load | Form_Load | .ctor:96 |
 | this | Load | Form_Load | .ctor:107 |
 | this.btnExport | Click | btnExport_Click | InitializeComponent:151 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:246 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:279 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:360 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:361 |
 
 ## 6. 컨트롤 (154개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | LayoutControlItem | 28 | layoutControlItem2, layoutControlItem4, layoutControlItem3, layoutControlItem6, layoutControlItem7, layoutControlItem8, layoutControlItem9, Operation, layoutControlItem17, layoutControlItem5, lblImport, lblData, lblSql, layoutControlItem15, layoutControlItem13 … |
 | CheckBox | 24 | chk_memo, chk_result, chk_act, chk_actSim, chk_wipSimAD, chk_outqty, chk_wppOut, chk_wppIn, chk_mppOut, chk_mppIn, chk_wipAD, chk_pkgProcDate, chk_pkgQty, chk_wipSim, chk_wipSimBD … |
-| UsrButton | 20 | btnSql, btnExcelImport, btnToggleSave, btnMemo, btnMRP, usrButton2, btnDWSubmit, btnDppWppCopyDwSubmit, btnRePlan, btnSimulation, btnMenu, btnRelease, btnCreatePlan, btnBucket, btnCatagory … |
-| Label | 14 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label1, label2 |
-| Panel | 9 | infoPanel, menuPanel, panel2, panel5, panel3, panel4, panel1, panel1, panel3 |
+| UsrButton | 20 | btnSet, btnOK, btnSql, btnExcelImport, btnToggleSave, btnMemo, btnMRP, usrButton2, btnDWSubmit, btnDppWppCopyDwSubmit, btnRePlan, btnSimulation, btnMenu, btnRelease, btnCreatePlan … |
+| Label | 14 | label1, label2, label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1 |
+| Panel | 9 | panel1, panel3, infoPanel, menuPanel, panel2, panel5, panel3, panel4, panel1 |
 | UsrCheckedList2 | 8 | mcbo_nicknamelt, mcbo_line, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_site, mcbo_division, mcbo_planner |
 | UsrLayoutControl | 6 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 6 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |

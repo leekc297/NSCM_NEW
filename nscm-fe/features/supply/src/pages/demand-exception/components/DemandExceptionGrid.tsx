@@ -13,7 +13,11 @@ import { useMessageStore, useTabid } from '@shared/stores';
 import { COMBO, INIT_SET, MENU_ID, MSG, SHEETS } from '../demand-exception.constants';
 import type { MainRow } from '../demand-exception.types';
 import { toYmd8 } from '../utils/demand-exception.util';
-import { isMainCellEditable, isMainCellEditHighlighted } from '../utils/demandExceptionEditLock';
+import {
+  isMainCellEditable,
+  isMainCellEditHighlighted,
+  isMainCellPasteable,
+} from '../utils/demandExceptionEditLock';
 import { matchSiteByDivision } from '../utils/demandExceptionSiteCascade';
 
 // FROM/TO_YYYYMMDD 날짜 컬럼 — admin 메타가 FPDate 라 InputDate(달력) 에디터는 붙지만 dataType 미설정
@@ -151,7 +155,21 @@ export const DemandExceptionGrid = ({
       }
     };
     g.beginningEdit.addHandler(beginningEditHandler);
-    g.pastingCell.addHandler(beginningEditHandler as never);
+
+    // 붙여넣기는 inline 타이핑과 게이트가 다르다 — ITEM_ID(Model)는 팝업 전용이라 타이핑은 막지만
+    //   행 복사-붙여넣기로는 채워져야 한다(AS-IS 와 동일, demandExceptionEditLock.isMainCellPasteable
+    //   주석 참조). 잠금셋(DIVISION_ID·감사컬럼)만 붙여넣기를 차단한다.
+    const pastingCellHandler = (
+      sender: FlexGridType,
+      e: { cancel: boolean; row: number; col: number }
+    ) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      const row = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
+      if (!row || !isMainCellPasteable(binding, row)) {
+        e.cancel = true;
+      }
+    };
+    g.pastingCell.addHandler(pastingCellHandler as never);
 
     // 공용 formatItem 은 컬럼메타 INPUT_TP_CD(M/O)로 wj-cell-editable 을 판정하므로 DIVISION_ID
     //   (메타 M 이나 white-list 잠금)도 편집 가능처럼 강조된다. 화면이 isMainCellEditHighlighted 로
@@ -172,7 +190,7 @@ export const DemandExceptionGrid = ({
 
     // From>To 역전 시 TO_YYYYMMDD 공백 리셋. FROM/TO 는 그리드에서 Date(FPDate)라 String() 사전식
     //   비교(요일명까지 포함된 "Tue Jun 10 2025…")는 오탐을 낸다 — toYmd8 로 'YYYYMMDD' 8자리로
-    //   정규화해 날짜 대소를 바르게 비교한다(저장 검증 validateDemandExceptionRow 와 동일 규칙).
+    //   정규화해 날짜 대소를 바르게 비교한다(저장 검증 validateRowDetails 와 동일 규칙).
     //   참고: AS-IS SpdMain_EditChange 는 InitEvent 에서 주석처리(미배선)라 live 체크가 원래 없고
     //   저장 시 MSG00219 만 있었다 — 이 live 가드는 TO-BE 편의 추가분(저장 검증이 최종 방어선).
     const cellEditEndedHandler = (
@@ -216,7 +234,7 @@ export const DemandExceptionGrid = ({
     return () => {
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
-        g.pastingCell?.removeHandler(beginningEditHandler as never);
+        g.pastingCell?.removeHandler(pastingCellHandler as never);
         g.formatItem?.removeHandler(formatItemHandler);
         g.cellEditEnded?.removeHandler(cellEditEndedHandler as never);
         g.pastedCell?.removeHandler(pastedCellHandler as never);

@@ -1,0 +1,62 @@
+{
+ "id": "SSP0017",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0017-Sea1449",
+    "SSP0017-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0017-Se946c7",
+    "SSP0017-S26ff5f",
+    "SSP0017-Sd183f7",
+    "SSP0017-Sd04bb9",
+    "SSP0017-S963877",
+    "SSP0017-S3e4aef",
+    "SSP0017-S955b86"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:44:48.403",
+ "fills": 2,
+ "fill_left": []
+}

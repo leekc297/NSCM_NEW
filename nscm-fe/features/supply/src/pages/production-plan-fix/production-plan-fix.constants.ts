@@ -111,7 +111,6 @@ export const MSG = {
   PERIOD_MAX: 'MSG01187',
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater. (자매 정합)
   QTY_OVERFLOW: 'MSG00165', // You have exceeded the number of digits you can enter. (자매 정합). 번들 미포함
-  SEARCH_FIRST: 'MSG00662', // Edit mode is available after search. (자매 INSERT_GUIDE 정합)
 } as const;
 
 // i18n 라벨 — DB 실측 LBL ID(SCM_ADM_MSG_M MSG_TP_CD='LBL', ora.py). 값=LBL 코드, 호출은 t(LBL.KEY, '_Fallback'). 하드코딩 금지(Hook #87§L).

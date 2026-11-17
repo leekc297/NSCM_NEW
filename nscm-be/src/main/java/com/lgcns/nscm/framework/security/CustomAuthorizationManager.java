@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.lgcns.nscm.admin.auth.AuthService;
 import com.lgcns.nscm.framework.annotation.AuthCheck;
+import com.lgcns.nscm.framework.base.BaseConstants;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -76,11 +77,15 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     }
 
     private AuthorizationDecision _authorize(HttpServletRequest request, Authentication auth) throws Exception {
+        // 미인증(anonymous, principal=String) 요청은 ClassCastException(500) 대신 정상 거부한다.
+        // 예: BE 재기동으로 세션 소실 후 옛 JSESSIONID 로 들어온 요청.
+        if (!_isValidAuthentication(auth)) return new AuthorizationDecision(false);
+
         String lookupPath = (String) request.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE);
 
         if (lookupPath == null
         		|| (!pathMatcher.match("/*/*/*/call-proc", lookupPath)
-        		&& !pathMatcher.match("/*/*/*/call-proc-stream", lookupPath)   // [E20261015-STREAMPROC] call-proc 와 같은 버튼 권한 검사
+        		&& !pathMatcher.match("/*/*/*/call-proc-stream", lookupPath)
         		&& !pathMatcher.match("/*/*/*/excel-upload", lookupPath))) {
             return new AuthorizationDecision(false);
         }
@@ -90,7 +95,10 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
 
         if (segments.length < 4) return new AuthorizationDecision(false);
 
-        String userId = ((CustomUserDetails) auth.getPrincipal()).getUserId();
+        CustomUserDetails principal = (CustomUserDetails) auth.getPrincipal();
+        // 게스트는 메뉴를 공유 'Guest' 계정에서 빌려오므로 권한 판정도 'Guest' 기준으로 한다.
+        // (username 은 로그용 실제 사번이라 그대로 쓰면 권한이 없어 No Permission 이 됨)
+        String userId = principal.isGuest() ? BaseConstants.GUEST_USER_ID : principal.getUserId();
         String mnuId = segments[1];
         String shtNm = segments[2];
         String mnuBtnCd = segments[3];

@@ -1014,8 +1014,8 @@
 | 메서드 | 대상 | 컬럼 |
 |---|---|---|
 | ApplyAmendCalendarCondition | Filter | MONTH_INFO, BUCKET, WEEK_INFO, CATE_INFO |
-| ApplySearchCondition | LocalFilter | INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_DATE, PLAN_ID, AMEND_TABLE, AMEND_CUTOFF_BOH_TABLE, AMEND_BOR_TABLE, AMEND_SALES_TABLE, AMEND_UTIL_TABLE, PLAN_TYPE, MASTER_ID |
 | ApplySearchCondition | Filter | BUCKET_FROM, BUCKET_TO, PLAN_DATE, PLAN_ID, AMEND_TABLE, AMEND_CUTOFF_BOH_TABLE, AMEND_BOR_TABLE, AMEND_SALES_TABLE, AMEND_UTIL_TABLE, PLAN_TYPE, MASTER_ID, INSTANCE_ID |
+| ApplySearchCondition | LocalFilter | INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_DATE, PLAN_ID, AMEND_TABLE, AMEND_CUTOFF_BOH_TABLE, AMEND_BOR_TABLE, AMEND_SALES_TABLE, AMEND_UTIL_TABLE, PLAN_TYPE, MASTER_ID |
 | btnCreatePlan_Click | Filter | SITE_ID, INSTANCE_ID, FP_PLAN_ID, PLAN_DATE, PLAN_ID |
 | btnCreatePlan_Click | dtPlanRunFlag.Rows[0] | PLAN_ID, INSERT_ID |
 | btnCreatePlan_Click | Application.OpenForms | FP00590_PlanTotalPopup |
@@ -1025,11 +1025,11 @@
 | btnDwSubmit_Click | Filter | PLAN_ID, PLAN_TYPE, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_DATE, PLANT_ID, SITE_ID, FACTORY_ID, DIVISION_ID |
 | btnDwSubmit_Click | DwSubmit.Filter | SUBMIT_TYPE, MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, PLAN_ID, PLAN_DATE, PLANT_ID, SITE_ID, FACTORY_ID, DIVISION_ID, USER_ID |
 | btnExcelImport_Click | colPopup.KeyColumns | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, VERSION, PLM_EC_NO |
-| btnExcelImport_Click | Filter | IS_PDS |
-| btnExcelImport_Click | colPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, VERSION, PLM_EC_NO, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, LINE_NAME, ELECTRODE_TYPE |
-| btnExcelImport_Click | rowPopup.KeyColumns | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, VERSION, PLM_EC_NO, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, PLAN_DATE, QTY |
-| btnExcelImport_Click | rowPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, VERSION, PLM_EC_NO, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, LINE_NAME, ELECTRODE_TYPE, PLAN_DATE, QTY, MESSAGE |
+| btnExcelImport_Click | colPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, LINE_NAME, ELECTRODE_TYPE, VERSION, PLM_EC_NO |
+| btnExcelImport_Click | rowPopup.KeyColumns | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, PLAN_DATE, QTY, VERSION, PLM_EC_NO |
+| btnExcelImport_Click | rowPopup.ColumnTitle | DIVISION_ID, SITE_ID, PLANT_ID, TOP_ITEM_ID, ITEM_ID, NICK_NAME, ITEM_TYPE, OPERATION_ID, FACTORY_ID, LOCATION, PRODUCTION_TYPE, MARKET, LINE_ID, LINE_NAME, ELECTRODE_TYPE, PLAN_DATE, QTY, MESSAGE, VERSION, PLM_EC_NO |
 | btnExcelImport_Click | rowPopup.ColumnWidth | COMPANY_ID, SEQ |
+| btnExcelImport_Click | Filter | IS_PDS |
 | btnMemo_Click | Filter | MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, TOP_ITEM_ID, ITEM_ID, PLAN_ID, PLAN_DATE, DIVISION_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PLANT_ID, SITE_ID |
 | btnMemo_Click | memoPopup.Filter | MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, MODEL_ID, TOP_ITEM_ID, ITEM_ID, PLAN_ID, PLAN_DATE, DIVISION_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PLANT_ID, SITE_ID, USER_ID |
 | btnMRP_Click | Filter | PLAN_ID, PLAN_TYPE, MASTER_ID, INSTANCE_ID |
@@ -1051,9 +1051,9 @@
 | call_Excel_Col_Validation | popup.Filter | INSTANCE_ID, FP_PLAN_ID, COMPANY_ID, PLAN_DATE |
 | call_Excel_Col_Validation | result.Rows[0] | RESULT, EXCEPTION |
 | call_Excel_Row_Save | checkSave.Tables[0].Rows[0] | _TYPE |
-| call_Excel_Row_Save | popup.Filter | PLAN_TYPE, INSTANCE_ID, FP_PLAN_ID, NEW_SEQ, MPP_WPP |
-| call_Excel_Row_Save | row | INSTANCE_ID, FP_PLAN_ID, JOB_ORDER, MPP_WPP, NEW_SEQ, IN_QTY, OUT_QTY, CELL_IN_QTY, CELL_OUT_QTY, QTY |
+| call_Excel_Row_Save | popup.Filter | PLAN_TYPE, NEW_SEQ, MPP_WPP, FP_PLAN_ID, INSTANCE_ID |
 | call_Excel_Row_Save | nSeq.Tables[0].Rows[0] | NEW_SEQ |
+| call_Excel_Row_Save | row | JOB_ORDER, MPP_WPP, NEW_SEQ, IN_QTY, OUT_QTY, CELL_IN_QTY, CELL_OUT_QTY, QTY, INSTANCE_ID, FP_PLAN_ID |
 | call_Excel_Row_Search | popup.Filter | PLAN_TYPE |
 | call_Excel_Row_Validation | popup.Filter | PLAN_TYPE |
 | cbo_fpplanid_changed | dtPlanId.Rows[selected] | PLAN_START_DATE, PLAN_END_DATE, SITE_ID, DESCRIPTION, PLAN_TYPE, READ_ONLY, NAME, CODE, INSERT_ID, INSERT_Time, BASIC_VERSION, FACTORY_LT |
@@ -1066,14 +1066,14 @@
 | chk_allLine_onchanged | ds_ConditionFilter | ALL_LINE |
 | CreateDataLine | material_column | P_IN, P_IN_CELL, P_OUT, P_OUT_CELL |
 | CreateFilterDataSet | result_row | _MM_ |
-| CreateFilterDataSet | measure | chk_sales, chk_past_sales, chk_inqty, chk_outqty, chk_result, chk_mpp_inqty, chk_mpp_outqty, chk_wpp_inqty, chk_wpp_outqty, chk_inventory, chk_memo, chk_off, chk_setup, chk_load, chk_total, chk_wpp_inqty_tot, chk_wpp_outqty_tot, chk_mpp_inqty_tot, chk_mpp_outqty_tot, chk_inqty_tot, chk_outqty_tot, chk_result_tot, chk_sales_tot, chk_past_sales_tot, chk_inventory_tot, chk_total_2, chk_uom, chk_cell |
+| CreateFilterDataSet | measure | chk_sales, chk_past_sales, chk_inqty, chk_outqty, chk_result, chk_mpp_inqty, chk_mpp_outqty, chk_wpp_inqty, chk_wpp_outqty, chk_inventory, chk_total, chk_wpp_inqty_tot, chk_wpp_outqty_tot, chk_mpp_inqty_tot, chk_mpp_outqty_tot, chk_inqty_tot, chk_outqty_tot, chk_result_tot, chk_total_2, chk_uom, chk_cell, chk_memo, chk_off, chk_setup, chk_load, chk_sales_tot, chk_past_sales_tot, chk_inventory_tot |
 | CreateFilterDataSet | x | _MM_ |
 | EditCommon | clicked_row | PLANT_ID, TOP_ITEM_ID, ITEM_ID, DIVISION_ID, SITE_ID, FACTORY_ID, OPERATION_ID, LINE_ID, CATEGORY_ID, MEASURE_ID |
 | EditCommon | Filter | INSTANCE_ID, FP_PLAN_ID, PLAN_ID |
 | EditCommon | x | INSTANCE_ID, FP_PLAN_ID, DIVISION_ID, CATEGORY_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, LOCATION, PLAN_DATE, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, PLM_EC_NO, VERSION |
 | EditCommon | row | DIVISION_ID, CATEGORY_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, LOCATION, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, PLM_EC_NO, VERSION |
 | EditCommon | selected | ORIG_OUT_QTY, IN_QTY, OUT_QTY, M |
-| EditCommon | newrow | INSTANCE_ID, FP_PLAN_ID, DIVISION_ID, COMPANY_ID, CATEGORY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, LOCATION, PLAN_DATE, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, PLM_EC_NO, VERSION, IN_QTY, OUT_QTY, ORIG_IN_QTY, ORIG_OUT_QTY, M, USER_ID |
+| EditCommon | newrow | INSTANCE_ID, FP_PLAN_ID, DIVISION_ID, COMPANY_ID, CATEGORY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, LOCATION, PLAN_DATE, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, IN_QTY, OUT_QTY, ORIG_IN_QTY, ORIG_OUT_QTY, M, USER_ID, PLM_EC_NO, VERSION |
 | EditCommon | releated_row2 | IN_QTY, CELL_IN_QTY |
 | filter_getBasisTime | ds_ConditionOnload | INSTANCE_ID, PLAN_ID |
 | filter_getBasisTime | ds_ConditionFilter | INSTANCE_ID, PLAN_ID |
@@ -1109,15 +1109,15 @@
 | filter_onProdType | ds_ConditionFilter | PRODTYPE_ID |
 | filter_onSite | ds_ConditionFilter | SITE_ID |
 | filterForm_onload | ds_ConditionFilter | AMEND_INSTANCE, PLAN_DATE, AMEND_FLAG, ALL_LINE |
-| Find_Line_Savings_Index_FromData | x | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, TOP_ITEM_ID, ITEM_ID, PLM_EC_NO, VERSION |
-| Find_Line_Savings_Index_FromData | clicked_row | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, TOP_ITEM_ID, ITEM_ID, PLM_EC_NO, VERSION |
+| Find_Line_Savings_Index_FromData | x | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, FACTORY_ID, TOP_ITEM_ID, ITEM_ID, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, PLM_EC_NO, VERSION |
+| Find_Line_Savings_Index_FromData | clicked_row | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, FACTORY_ID, TOP_ITEM_ID, ITEM_ID, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE, PLM_EC_NO, VERSION |
 | Find_Line_Savings_Index_FromData | related_row | CATEGORY_ID, PRODUCTION_TYPE |
-| Find_MaterialData_Index_FromData | x | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, TOP_ITEM_ID, ITEM_ID, PLM_EC_NO, VERSION, ITEM_TYPE |
-| Find_MaterialData_Index_FromData | clicked_row | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, TOP_ITEM_ID, ITEM_ID, PLM_EC_NO, VERSION, ITEM_TYPE |
+| Find_MaterialData_Index_FromData | x | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, FACTORY_ID, LINE_ID, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, MARKET, ELECTRODE_TYPE, PLM_EC_NO, VERSION |
+| Find_MaterialData_Index_FromData | clicked_row | DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, FACTORY_ID, LINE_ID, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, MARKET, ELECTRODE_TYPE, PLM_EC_NO, VERSION |
 | Find_MaterialData_Index_FromData | related_row | CATEGORY_ID |
 | FindButton | Filter | PLAN_ID |
 | FindDataMaterial | set | NICK_NAME, SITE_ID, DIVISION_ID |
-| FindMainData | Filter | ALT_LINE, FP_PLAN_ID, PLAN_ID |
+| FindMainData | Filter | FP_PLAN_ID, PLAN_ID, ALT_LINE |
 | fn_Callback | ds_ConditionFilter | SHOP_ID, BASIS_START_TIME |
 | GetBasisTime | dtPeriod.Rows[0] | BASIS_TIME |
 | GetDivision | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID |
@@ -1125,7 +1125,7 @@
 | GetFpPlanId | Filter | PLAN_ID, PLAN_TYPE |
 | GetFpPlanId | dtPlanId.Rows[0] | PLAN_ID, PLAN_TYPE, DESCRIPTION, INSERT_ID, INSERT_Time, BASIC_VERSION, FACTORY_LT |
 | GetLine | Filter | ALL_LINE |
-| GetPlanGroup | Filter | USER_ID, MASTER_ID, INSTANCE_ID, USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, AMEND_INSTANCE |
+| GetPlanGroup | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, AMEND_INSTANCE, USER_ID, MASTER_ID, USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
 | GetPlanGroup | dtInstance.Rows[cbo_plan_group.SelectedIndex] | USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
 | GetPlant | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID |
 | GetSite | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID |
@@ -1133,7 +1133,7 @@
 | gfn_Service | service_param | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, AMEND_INSTANCE, OPERATION_GROUP_ID, PLAN_TYPE, BUILDING, MASTER_ID, PLAN_ID |
 | GoEditMode | Filter | PLAN_TYPE |
 | GoEditMode | row | DATA_TYPE, PSI, CATEGORY_ID, EDIT_YN |
-| InitControls | Filter | AMEND_INSTANCE, PLAN_DATE, AMEND_FLAG, ALL_LINE, AMEND_MAIN_FLAG, USER_ID, LOOKUP_TYPE_CODE, MENU_KEY, MASTER_ID, INSTANCE_ID, BUCKET_FROM, BUCKET_TO, AMENDUI, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
+| InitControls | Filter | AMEND_INSTANCE, PLAN_DATE, AMEND_FLAG, ALL_LINE, AMEND_MAIN_FLAG, USER_ID, INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID, MASTER_ID, BUCKET_FROM, BUCKET_TO, LOOKUP_TYPE_CODE, MENU_KEY, AMENDUI |
 | InitControls | dtInstance.Rows[cbo_plan_group.SelectedIndex] | USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
 | InsertButton | Filter | DONOTEDIT |
 | InsertButton | row | TOP_ITEM_ID, DIVISION_ID, SITE_ID, PLANT_ID |
@@ -1146,7 +1146,7 @@
 | mcbo_prodtype_changed | Filter | PRODTYPE_ID |
 | onAlarmMenu | row | PRODUCTION_TYPE |
 | onAlarmMenu | frm.Filter | MEMO_TYPE |
-| onNLFAmendMenu | frm.Filter | MASTER_ID, FP_PLAN_ID, INSTANCE_ID, PLAN_ID |
+| onNLFAmendMenu | frm.Filter | MASTER_ID, INSTANCE_ID, FP_PLAN_ID, PLAN_ID |
 | onNLFAmendMenu | Filter | INSTANCE_ID, PLAN_ID |
 | onZeroBucketMenu | row_to_test | CATEGORY_ID |
 | onZeroMaterialMenu | row_to_test | CATEGORY_ID |
@@ -1174,10 +1174,10 @@
 | SaveExcelRows | BohSet | PLAN_DATE, MASTER_ID, PLAN_ID, AMEND_CUTOFF_BOH_TABLE |
 | SaveExcelRows | data.Tables[0].Rows[0] | FP_PLAN_ID |
 | sCalendar_planday_datetime_changed | ds_ConditionFilter | PLAN_DATE |
-| SetBohQty | row | DATA_TYPE, OPERATION_ID, BOH_QTY, BOH_CELL_QTY, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
+| SetBohQty | row | DATA_TYPE, OPERATION_ID, BOH_QTY, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID, BOH_CELL_QTY |
 | SetBohQty | each_row | _TYPE, OPERATION_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | result.First() | QTY, BOH_CELL_QTY |
-| SetChangeControl | Filter | INSTANCE_ID, MASTER_ID, PLANT_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PRODTYPE_ID, PRODUCTION_TYPE, PROD_TYPE, PLANNER_ID, USER_LT, PLAN_ID, FP_PLAN_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLAN_TYPE, BUILDING |
+| SetChangeControl | Filter | INSTANCE_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, PLAN_TYPE, BUILDING, MASTER_ID, PLAN_ID, FACTORY_ID, OPERATION_ID, LINE_ID, PRODTYPE_ID, PRODUCTION_TYPE, PROD_TYPE, PLANNER_ID, USER_LT, FP_PLAN_ID |
 | SetChangeControl | dtInstance.Rows[cbo_plan_group.SelectedIndex] | USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
 | SetFpPlanId | Filter | PLAN_TYPE, FP_PLAN_ID, PLAN_ID, UI_END_DATE, BUCKET_FROM, BUCKET_TO |
 | SetFpPlanId | dtPlanId.Rows[selected] | PLAN_START_DATE, PLAN_END_DATE, SITE_ID, CODE, NAME, PLAN_TYPE, UI_END_DATE, READ_ONLY, BASIS_PLAN_ID, DESCRIPTION, INSERT_ID, INSERT_Time, BASIC_VERSION, FACTORY_LT |
@@ -1189,206 +1189,39 @@
 | SetPlanOutCell | row | DIVISION_ID, CATEGORY_ID, COMPANY_ID, SITE_ID, PLANT_ID, OPERATION_ID, FACTORY_ID, LOCATION, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, PRODUCTION_TYPE, MARKET, LINE_ID, ELECTRODE_TYPE |
 | SetPlanOutCell | selected | ORIG_OUT_QTY, IN_QTY, OUT_QTY, M |
 | SetPlanOutCell | newrow | INSTANCE_ID, FP_PLAN_ID, DIVISION_ID, COMPANY_ID, CATEGORY_ID, SITE_ID, PLANT_ID, OPERATION_ID, PRODUCTION_TYPE, MARKET, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, LOCATION, PLAN_DATE, TOP_ITEM_ID, ITEM_ID, ITEM_TYPE, IN_QTY, OUT_QTY, ORIG_IN_QTY, ORIG_OUT_QTY, M, USER_ID |
-| spdMain_CellClick | row | LINE_ID, PRODUCTION_TYPE, DATA_TYPE, OPERATION_ID, TOP_ITEM_ID |
 | spdMain_CellClick | dRow | CODE, NAME |
 | spdMain_CellClick | bindingRow | OPERATION_ID |
+| spdMain_CellClick | row | LINE_ID, PRODUCTION_TYPE, DATA_TYPE, OPERATION_ID, TOP_ITEM_ID |
 | spdMain_CellClick2 | row | DATA_TYPE, OPERATION_ID, TOP_ITEM_ID |
 | SwitchMemo | r | DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID, OPERATION_ID, LINE_ID, ELECTRODE_TYPE, EQUIPMENT_ID, ITEM_ID, TOP_ITEM_ID, PRODUCTION_TYPE, MARKET |
 | SwitchMemo | memoRow | PRODUCTION_TYPE, ITEM_ID |
 | SwitchMemo | memo[k] | ITEM_ID |
 | SwitchMemo | materialRow | PRODUCTION_TYPE |
 | tbNickName_OnSearchConditionChanged | Filter | ITEM_NAME, NICK_NAME |
-| UIFindData | Filter | PLAN_ID, FP_PLAN_ID, IS_PDS, DONOTEDIT, PLAN_TYPE, UI_END_DATE |
+| UIFindData | Filter | DONOTEDIT, PLAN_TYPE, PLAN_ID, FP_PLAN_ID, IS_PDS, UI_END_DATE |
 | UIFindData | dtPlanId.Rows[0] | UI_END_DATE |
 
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | InitControls:226, SetChangeControl:275, SetChangeControl:287, SetChangeControl:295, SetChangeControl:303, SetChangeControl:312, SetChangeControl:320, SetChangeControl:328 | CString.GetCheckedListValue | CODE |
-| SetFilter | GetBasisTime:253, SetChangePlanDate:258, SetChangeControl:277, SetChangeControl:278, SetChangeControl:279, UIFindData:814, Save_Data:1397, SetPlannerFilter:1962 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
-| GetInnerTable | SetChangeControl:271, SetChangeControl:280, SetChangeControl:288, SetChangeControl:296, SetChangeControl:304, SetChangeControl:313, SetChangeControl:321, GetPlanGroup:1981 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
-| GetMeasure | CheckAndGetMeasure:432, CheckAndGetMeasure:441, CheckAndGetMeasure:394, RefreshSpreadSheet:1547, Measure:129, InitControl:150, InitControl:151, Measure:200 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
-| EditQuery | Query:663, Query:668 | FPExtensions.EditQuery | ROW_ID |
-| SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1766, CreateFilterDataSet:1762, CreateFilterDataSet:1963, CreateFilterDataSet:1428 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
-| SetRowsUnVisible | CreateFilterDataSet:1767, CreateFilterDataSet:1763, CreateFilterDataSet:1964, CreateFilterDataSet:1429 | MeasureService.SetRowsUnVisible | _MM_ |
-| GetProdType | GetProdType:2126, mcbo_plant_changed:5139, GetProdType:2122, mcbo_plant_changed:5085, GetProdType:2356, mcbo_plant_changed:4489, mcbo_division_changed:3947 | DataService.GetProdType | CODE, DIVISION_ID, NAME |
-| FP_Log | call_Excel_Col_Save:2559, call_Excel_Col_Save:2580, call_Excel_Col_Save:2631, call_Excel_Col_Save:2635, call_Excel_Col_Save:2638, SaveExcelRows:2655, SaveExcelRows:2723, SaveExcelRows:2737 | DataService.FP_Log | LOGTYPE, NOTE, USER_ID |
-| FP_PseudoBatch | call_Excel_Col_Validation:2798, call_Excel_Col_Validation:2767 | DataService.FP_PseudoBatch | COUNT, EXCEPTION, RESULT |
-| FP_UpdateBatch | call_Excel_Row_Validation:3063, call_Excel_Row_Validation:3031, call_Excel_Col_Validation:2383, call_Excel_Row_Validation:2569, call_Excel_Row_Validation:2584 | DataService.FP_UpdateBatch | COUNT, RESULT |
-| FP_Log2 | cbo_plan_group_changed:5095, cbo_plan_group_changed:5101, cbo_plan_group_changed:5041, cbo_plan_group_changed:5047 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
-| GetChanges | Save_Data:1399 | FPExtensions.GetChanges | ROW_ID |
+| GetCheckedListValue | FindDataPlanAmendMAAsync:487, filter_onDivision:658, filter_onPlanGroup:683, filter_onSite:823, filter_onPlant:841, filter_onFactory:865, filter_onOperation:900, filter_onProdType:921 | CString.GetCheckedListValue | CODE |
 | AddServiceParam | InitLocalDataSet:1134, InitLocalDataSet:1135, InitLocalDataSet:1136, InitLocalDataSet:1138, InitLocalDataSet:1139, InitLocalDataSet:1140, InitLocalDataSet:1141, InitLocalDataSet:1143 | FilterDataSet.AddServiceParam | DESCRIPTOR, IN_DATASET_LIST, OUT_DATASET_LIST, SERVICE, SVC_ID, SYNC_YN |
+| SetFilter | InitControls:199, InitControls:200, GetBasisTime:224, SetChangePlanDate:229, SetChangeControl:247, SetChangeControl:250, SetChangeControl:253, SetChangeControl:259 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
+| GetMeasure | CheckAndGetMeasure:394, RefreshSpreadSheet:1547, CheckAndGetMeasure:432, Measure:129, InitControl:150, CheckAndGetMeasure:441, InitControl:151, Measure:200 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1428, CreateFilterDataSet:1762, CreateFilterDataSet:1963, CreateFilterDataSet:1766 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
+| SetRowsUnVisible | CreateFilterDataSet:1429, CreateFilterDataSet:1763, CreateFilterDataSet:1964, CreateFilterDataSet:1767 | MeasureService.SetRowsUnVisible | _MM_ |
+| FP_UpdateBatch | call_Excel_Col_Validation:2383, call_Excel_Row_Validation:2569, call_Excel_Row_Validation:2584, call_Excel_Row_Validation:3031, call_Excel_Row_Validation:3063 | DataService.FP_UpdateBatch | COUNT, RESULT |
+| GetProdType | mcbo_division_changed:3947, GetProdType:2122, mcbo_plant_changed:5085, GetProdType:2356, mcbo_plant_changed:4489, GetProdType:2126, mcbo_plant_changed:5139 | DataService.GetProdType | CODE, DIVISION_ID, NAME |
+| GetInnerTable | SetChangeControl:271, SetChangeControl:280, SetChangeControl:288, SetChangeControl:296, SetChangeControl:304, SetChangeControl:313, SetChangeControl:321, GetPlanGroup:1977 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
+| EditQuery | Query:663, Query:668 | FPExtensions.EditQuery | ROW_ID |
+| FP_Log | call_Excel_Col_Save:2536, call_Excel_Col_Save:2557, call_Excel_Col_Save:2600, call_Excel_Col_Save:2604, call_Excel_Col_Save:2607, SaveExcelRows:2624, SaveExcelRows:2692, SaveExcelRows:2706 | DataService.FP_Log | LOGTYPE, NOTE, USER_ID |
+| FP_PseudoBatch | call_Excel_Col_Validation:2767, call_Excel_Col_Validation:2798 | DataService.FP_PseudoBatch | COUNT, EXCEPTION, RESULT |
+| FP_Log2 | cbo_plan_group_changed:5041, cbo_plan_group_changed:5047, cbo_plan_group_changed:5095, cbo_plan_group_changed:5101 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| GetChanges | Save_Data:1399 | FPExtensions.GetChanges | ROW_ID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this | Load | Form_Load | .ctor:146 |
-| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:354 |
-| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:355 |
-| sCalendar_planday | ValueChanged | planday_changed | InitEvent:356 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:357 |
-| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:359 |
-| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:360 |
-| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:361 |
-| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:362 |
-| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:363 |
-| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:364 |
-| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:366 |
-| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:367 |
-| edt_item | TextChanged | edt_item_TextChanged | InitEvent:368 |
-| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:370 |
-| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:371 |
-| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:373 |
-| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:375 |
-| chk_all_line | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:377 |
-| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:378 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1456 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:5019 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick:5029 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5044 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5056 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5063 |
-| sCalendar_planday | ValueChanged | planday_changed | btnCreatePlan_Click:5626 |
-| sCalendar_planday | DateTimeChanged | planday_changed | btnCreatePlan_Click:5628 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6087 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6090 |
-| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
-| this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:487 |
-| this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:791 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:1077 |
-| this.btnExcelImport | Click | btnExcelImport_Click | InitializeComponent:1117 |
-| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1421 |
-| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1422 |
-| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1423 |
-| this.spdMain | ClipboardPasting | spdMain_ClipboardPasting | InitializeComponent:1424 |
-| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1425 |
-| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1426 |
-| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1427 |
-| this.spdMain | Change | spdMain_Change | InitializeComponent:1428 |
-| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1429 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1430 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1431 |
-| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1432 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1433 |
-| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1434 |
-| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1435 |
-| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1436 |
-| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1437 |
-| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1438 |
-| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1439 |
-| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1440 |
-| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1441 |
-| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1442 |
-| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1443 |
-| this.button1 | Click | button1_Click_1 | InitializeComponent:1608 |
-| this.btn_memo2 | Click | btn_memo2_Click | InitializeComponent:1791 |
-| this.btnReplan | Click | btn_replan_2_Click | InitializeComponent:1828 |
-| this.btn_mrp_transit2 | Click | btn_mrp_transit2_Click | InitializeComponent:1865 |
-| this.btn_ssp_plan2 | Click | btn_ssp_plan2_Click | InitializeComponent:1902 |
-| this.btnMenu | Click | btnMenu_Click | InitializeComponent:2055 |
-| this.btnRelease2 | Click | btn_release2_Click | InitializeComponent:2093 |
-| this.btnCreatePlan2 | Click | btn_create_plan2_Click | InitializeComponent:2131 |
-| this.btn_bucket | Click | btnBucket_Click | InitializeComponent:2169 |
-| this.btn_category | Click | btnCatagory_Click | InitializeComponent:2207 |
-| this.btn_column | Click | btnColumn_Click | InitializeComponent:2245 |
-| this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2469 |
-| this | Load | Form_Load | .ctor:146 |
-| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:354 |
-| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:355 |
-| sCalendar_planday | ValueChanged | planday_changed | InitEvent:356 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:357 |
-| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:359 |
-| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:360 |
-| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:361 |
-| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:362 |
-| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:363 |
-| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:364 |
-| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:366 |
-| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:367 |
-| edt_item | TextChanged | edt_item_TextChanged | InitEvent:368 |
-| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:370 |
-| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:371 |
-| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:373 |
-| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:375 |
-| chk_all_line | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:377 |
-| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:378 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1452 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4965 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick:4975 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4990 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5002 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5009 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5991 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5994 |
-| this | Load | Form_Load | .ctor:141 |
-| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:363 |
-| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:364 |
-| sCalendar_planday | ValueChanged | planday_changed | InitEvent:365 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:366 |
-| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:368 |
-| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:369 |
-| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:370 |
-| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:371 |
-| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:372 |
-| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:373 |
-| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:375 |
-| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:376 |
-| edt_item | TextChanged | edt_item_TextChanged | InitEvent:377 |
-| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:379 |
-| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:380 |
-| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:382 |
-| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:384 |
-| chk_allLine | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:386 |
-| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:387 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1704 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5451 |
-| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5454 |
-| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:5676 |
-| alarm_menu | Click | onAlarmMenu | spdMain_CellClick:5690 |
-| memo_menu | Click | onMemoMenu | spdMain_CellClick:5698 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5715 |
-| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5727 |
-| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5734 |
-| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
-| this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:489 |
-| this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:793 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:1079 |
-| this.btnExcelImport | Click | btnExcelImport_Click | InitializeComponent:1119 |
-| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1423 |
-| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1424 |
-| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1425 |
-| this.spdMain | ClipboardPasting | spdMain_ClipboardPasting | InitializeComponent:1426 |
-| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1427 |
-| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1428 |
-| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1429 |
-| this.spdMain | Change | spdMain_Change | InitializeComponent:1430 |
-| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1431 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1432 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1433 |
-| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1434 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1435 |
-| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1436 |
-| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1437 |
-| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1438 |
-| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1439 |
-| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1440 |
-| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1441 |
-| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1442 |
-| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1443 |
-| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1444 |
-| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1445 |
-| this.button1 | Click | button1_Click_1 | InitializeComponent:1610 |
-| this.btn_memo2 | Click | btn_memo2_Click | InitializeComponent:1793 |
-| this.btnReplan | Click | btn_replan_2_Click | InitializeComponent:1830 |
-| this.btn_mrp_transit2 | Click | btn_mrp_transit2_Click | InitializeComponent:1867 |
-| this.btn_ssp_plan2 | Click | btn_ssp_plan2_Click | InitializeComponent:1904 |
-| this.btnMenu | Click | btnMenu_click | InitializeComponent:2056 |
-| this.btnRelease2 | Click | btn_release2_Click | InitializeComponent:2094 |
-| this.btnCreatePlan | Click | btn_create_plan2_Click | InitializeComponent:2132 |
-| this.btn_bucket | Click | btnBucket_Click | InitializeComponent:2170 |
-| this.btn_category | Click | btnCatagory_Click | InitializeComponent:2208 |
-| this.btn_column | Click | btnColumn_Click | InitializeComponent:2246 |
-| this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2470 |
 | this | Load | Form_Load | .ctor:126 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:442 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | filterForm_onload:610 |
@@ -1495,10 +1328,107 @@
 | this.btn_release | Click | btnRelease_Click | InitializeComponent:2376 |
 | this.btn_memo | Click | btnMemo_Click | InitializeComponent:2415 |
 | this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2639 |
+| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
+| this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:487 |
+| this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:791 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:1077 |
+| this.btnExcelImport | Click | btnExcelImport_Click | InitializeComponent:1117 |
+| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1421 |
+| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1422 |
+| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1423 |
+| this.spdMain | ClipboardPasting | spdMain_ClipboardPasting | InitializeComponent:1424 |
+| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1425 |
+| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1426 |
+| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1427 |
+| this.spdMain | Change | spdMain_Change | InitializeComponent:1428 |
+| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1429 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1430 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1431 |
+| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1432 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1433 |
+| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1434 |
+| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1435 |
+| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1436 |
+| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1437 |
+| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1438 |
+| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1439 |
+| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1440 |
+| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1441 |
+| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1442 |
+| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1443 |
+| this.button1 | Click | button1_Click_1 | InitializeComponent:1608 |
+| this.btn_memo2 | Click | btn_memo2_Click | InitializeComponent:1791 |
+| this.btnReplan | Click | btn_replan_2_Click | InitializeComponent:1828 |
+| this.btn_mrp_transit2 | Click | btn_mrp_transit2_Click | InitializeComponent:1865 |
+| this.btn_ssp_plan2 | Click | btn_ssp_plan2_Click | InitializeComponent:1902 |
+| this.btnMenu | Click | btnMenu_Click | InitializeComponent:2055 |
+| this.btnRelease2 | Click | btn_release2_Click | InitializeComponent:2093 |
+| this.btnCreatePlan2 | Click | btn_create_plan2_Click | InitializeComponent:2131 |
+| this.btn_bucket | Click | btnBucket_Click | InitializeComponent:2169 |
+| this.btn_category | Click | btnCatagory_Click | InitializeComponent:2207 |
+| this.btn_column | Click | btnColumn_Click | InitializeComponent:2245 |
+| this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2469 |
+| this | Load | Form_Load | .ctor:146 |
+| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:354 |
+| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:355 |
+| sCalendar_planday | ValueChanged | planday_changed | InitEvent:356 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:357 |
+| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:359 |
+| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:360 |
+| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:361 |
+| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:362 |
+| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:363 |
+| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:364 |
+| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:366 |
+| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:367 |
+| edt_item | TextChanged | edt_item_TextChanged | InitEvent:368 |
+| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:370 |
+| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:371 |
+| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:373 |
+| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:375 |
+| chk_all_line | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:377 |
+| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:378 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1452 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4965 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick:4975 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4990 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5002 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5009 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5991 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5994 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:170 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
+| this | Load | Form_Load | .ctor:141 |
+| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:363 |
+| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:364 |
+| sCalendar_planday | ValueChanged | planday_changed | InitEvent:365 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:366 |
+| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:368 |
+| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:369 |
+| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:370 |
+| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:371 |
+| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:372 |
+| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:373 |
+| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:375 |
+| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:376 |
+| edt_item | TextChanged | edt_item_TextChanged | InitEvent:377 |
+| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:379 |
+| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:380 |
+| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:382 |
+| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:384 |
+| chk_allLine | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:386 |
+| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:387 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1704 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5451 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5454 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:5676 |
+| alarm_menu | Click | onAlarmMenu | spdMain_CellClick:5690 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick:5698 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5715 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5727 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5734 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:170 |
@@ -1507,42 +1437,112 @@
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:499 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:525 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:526 |
+| this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
+| this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:489 |
+| this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:793 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:1079 |
+| this.btnExcelImport | Click | btnExcelImport_Click | InitializeComponent:1119 |
+| this.spdMain | ChildControlDeactivated | spdMain_ChildControlDeactivated | InitializeComponent:1423 |
+| this.spdMain | EditModeOn | spdMain_EditModeOn | InitializeComponent:1424 |
+| this.spdMain | EditModeOff | spdMain_EditModeOff | InitializeComponent:1425 |
+| this.spdMain | ClipboardPasting | spdMain_ClipboardPasting | InitializeComponent:1426 |
+| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1427 |
+| this.spdMain | ActiveSheetChanged | spdMain_ActiveSheetChanged | InitializeComponent:1428 |
+| this.spdMain | TableChanged | spdMain_TableChanged | InitializeComponent:1429 |
+| this.spdMain | Change | spdMain_Change | InitializeComponent:1430 |
+| this.spdMain | DragFillBlockCompleted | spdMain_DragFillBlockCompleted | InitializeComponent:1431 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1432 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1433 |
+| this.spdMain | ButtonClicked | spdMain_ButtonClicked | InitializeComponent:1434 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1435 |
+| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1436 |
+| this.spdMain | EditorFocused | spdMain_EditorFocused | InitializeComponent:1437 |
+| this.spdMain | SubEditorClosed | spdMain_SubEditorClosed | InitializeComponent:1438 |
+| this.spdMain | SubEditorOpening | spdMain_SubEditorOpening | InitializeComponent:1439 |
+| this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:1440 |
+| this.spdMain | Enter | spdMain_Enter | InitializeComponent:1441 |
+| this.spdMain | KeyDown | spdMain_KeyDown | InitializeComponent:1442 |
+| this.spdMain | Leave | spdMain_Leave | InitializeComponent:1443 |
+| this.spdMain | Validating | spdMain_Validating | InitializeComponent:1444 |
+| this.spdMain | Validated | spdMain_Validated | InitializeComponent:1445 |
+| this.button1 | Click | button1_Click_1 | InitializeComponent:1610 |
+| this.btn_memo2 | Click | btn_memo2_Click | InitializeComponent:1793 |
+| this.btnReplan | Click | btn_replan_2_Click | InitializeComponent:1830 |
+| this.btn_mrp_transit2 | Click | btn_mrp_transit2_Click | InitializeComponent:1867 |
+| this.btn_ssp_plan2 | Click | btn_ssp_plan2_Click | InitializeComponent:1904 |
+| this.btnMenu | Click | btnMenu_click | InitializeComponent:2056 |
+| this.btnRelease2 | Click | btn_release2_Click | InitializeComponent:2094 |
+| this.btnCreatePlan | Click | btn_create_plan2_Click | InitializeComponent:2132 |
+| this.btn_bucket | Click | btnBucket_Click | InitializeComponent:2170 |
+| this.btn_category | Click | btnCatagory_Click | InitializeComponent:2208 |
+| this.btn_column | Click | btnColumn_Click | InitializeComponent:2246 |
+| this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2470 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:390 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:427 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:453 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:454 |
+| this | Load | Form_Load | .ctor:146 |
+| cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:354 |
+| mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:355 |
+| sCalendar_planday | ValueChanged | planday_changed | InitEvent:356 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | InitEvent:357 |
+| mcbo_division | SelectedIndexChanged | mcbo_division_changed | InitEvent:359 |
+| mcbo_site | SelectedIndexChanged | mcbo_site_changed | InitEvent:360 |
+| mcbo_plant | SelectedIndexChanged | mcbo_plant_changed | InitEvent:361 |
+| mcbo_factory | SelectedIndexChanged | mcbo_factory_changed | InitEvent:362 |
+| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitEvent:363 |
+| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitEvent:364 |
+| edt_PjtGroup | TextChanged | edtPjtGroup_TextChanged | InitEvent:366 |
+| edt_topItem | TextChanged | edt_topItem_TextChanged | InitEvent:367 |
+| edt_item | TextChanged | edt_item_TextChanged | InitEvent:368 |
+| tbNickName | BeforeOpenSearch | tbNickName_BeforeOpenSearch | InitEvent:370 |
+| tbNickName | OnSearchConditionChanged | tbNickName_OnSearchConditionChanged | InitEvent:371 |
+| mcbo_prodtype | SelectedIndexChanged | mcbo_prodtype_changed | InitEvent:373 |
+| dCalendar_planrange | ValueChanged | dCalendar_changed | InitEvent:375 |
+| chk_all_line | CheckedChanged | chk_allLine_CheckedChanged | InitEvent:377 |
+| chk_Info | CheckedChanged | chk_Info_CheckedChanged | InitEvent:378 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1456 |
+| bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:5019 |
+| memo_menu | Click | onMemoMenu | spdMain_CellClick:5029 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5044 |
+| bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5056 |
+| nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5063 |
+| sCalendar_planday | ValueChanged | planday_changed | btnCreatePlan_Click:5626 |
+| sCalendar_planday | DateTimeChanged | planday_changed | btnCreatePlan_Click:5628 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6087 |
+| cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6090 |
 
 ## 6. 컨트롤 (441개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| UsrButton | 67 | btnToggleSave, btnSql, btnExcelImport, usrButton2, btn_memo2, btnReplan, btn_mrp_transit2, btn_ssp_plan2, btnMenu, btnRelease2, btnCreatePlan2, btn_bucket, btn_category, btn_column, btnToggleSave … |
+| UsrButton | 67 | btnSql, btnExcelImport, usrButton2, btnBucket2, btnHiddenCata2, btnHiddenColumn2, btnReplan, usrButton6, usrButton5, usrButton4, usrButton3, usrButton1, btnToggleSave, btnSql, btnExcelImport … |
 | LayoutControlItem | 63 | layoutControlItem16, layoutControlItem5, layoutControlItem7, lblSql, layoutControlItem2, layoutControlItem29, layoutControlItem22, lblData, layoutControlItem8, layoutControlItem19, layoutControlItem9, layoutControlItem6, layoutControlItem20, layoutControlItem14, layoutControlItem12 … |
-| Label | 60 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label3, txtBuilding, txtBasic … |
+| Label | 60 | label9, label16, label15, label14, label13, label12, label11, label10, label9, label8, label7, label6, label5, label4, label3 … |
 | CheckBox | 58 | chk_Info, chk_allLine, chk_month, chk_week, chk_day, chk_month, chk_week, chk_day, chk_load, chk_setup, chk_off, chk_inventory, chk_result, chk_outqty, chk_inqty … |
-| Panel | 51 | infoPanel, menuPanel, panel2, panel3, panel4, panel1, infoPanel, menuPanel, panel2, panel3, panel4, panel1, panel7, FilterPanel, panel2 … |
-| UsrCheckedList2 | 32 | mcbo_line, mcbo_division, mcbo_prodtype, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_planner, mcbo_site, mcbo_line, mcbo_division, mcbo_prodtype, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_planner … |
-| UsrTextBox | 11 | edt_PjtGroup, edt_item, edt_topItem, edt_PjtGroup, edt_item, edt_topItem, edt_topItem, edt_item, edt_PjtGroup, edt_item, edt_topItem |
-| FpSpread | 10 | spdMain, spdEdit, spdInfo, spdMain, spdEdit, spdInfo, spdMain, spdMain, spdEdit, spdInfo |
-| SheetView | 10 | spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1 |
+| Panel | 51 | panel7, FilterPanel, panel2, panel17, panel16, panel15, panel14, panel13, panel12, panel11, panel10, panel9, panel8, panel7, panel6 … |
+| UsrCheckedList2 | 32 | mcbo_division, mcbo_operation, mcbo_site, mcbo_factory, mcbo_plant, mcbo_planner, mcbo_line, mcbo_prodtype, mcbo_line, mcbo_division, mcbo_prodtype, mcbo_operation, mcbo_factory, mcbo_plant, mcbo_planner … |
+| UsrTextBox | 11 | edt_topItem, edt_item, edt_PjtGroup, edt_item, edt_topItem, edt_PjtGroup, edt_item, edt_topItem, edt_PjtGroup, edt_item, edt_topItem |
+| FpSpread | 10 | spdMain, spdMain, spdEdit, spdInfo, spdMain, spdEdit, spdInfo, spdMain, spdEdit, spdInfo |
+| SheetView | 10 | spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1 |
 | EmptySpaceItem | 9 | emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem1 |
-| UsrCombo | 8 | cbo_plan_group, cbo_fpplanid, cbo_plan_group, cbo_fpplanid, cbo_fpplanid, cbo_plan_group, cbo_plan_group, cbo_fpplanid |
-| UsrLayoutControl | 7 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2 |
-| LayoutControlGroup | 7 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2 |
-| UsrCheckBox | 6 | chk_Info, chk_all_line, chk_Info, chk_allLine, chk_Info, chk_allLine |
+| UsrCombo | 8 | cbo_fpplanid, cbo_plan_group, cbo_plan_group, cbo_fpplanid, cbo_plan_group, cbo_fpplanid, cbo_plan_group, cbo_fpplanid |
+| UsrLayoutControl | 7 | usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 7 | layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
+| UsrCheckBox | 6 | chk_Info, chk_allLine, chk_Info, chk_all_line, chk_Info, chk_allLine |
 | UsrLabel | 6 | txtPlanId, usrLabel1, txtPlanId, usrLabel1, txtPlanId, usrLabel1 |
-| Button | 5 | button1, button1, button1, button1, btnMenu |
+| Button | 5 | button1, button1, btnMenu, button1, button1 |
 | UsrPopupTextBox | 4 | tbNickName, tbNickName, tbNickName, tbNickName |
+| UsrDateRangePicker2 | 3 | dCalendar_planrange, dCalendar_planrange, dCalendar_planrange |
+| UsrDatePicker2 | 3 | sCalendar_planday, sCalendar_planday, sCalendar_planday |
 | UsrConditionPanel | 3 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
 | SplitContainer | 3 | splitter, splitter, splitter |
 | ImageList | 3 | imageList1, imageList1, imageList1 |
 | GroupBox | 3 | groupBox1, groupBox1, groupBox1 |
 | TextBox | 3 | tbLog, tbLog, tbLog |
 | DataGridView | 3 | dgEdit, dgEdit, dgEdit |
-| UsrDatePicker2 | 3 | sCalendar_planday, sCalendar_planday, sCalendar_planday |
-| UsrDateRangePicker2 | 3 | dCalendar_planrange, dCalendar_planrange, dCalendar_planrange |
+| PictureBox | 1 | pictureBox1 |
 | UsrDatePickerWtWeek | 1 | sCalendar_planday |
 | UsrDateRangePickerWtWeek | 1 | dCalendar_planrange |
-| PictureBox | 1 | pictureBox1 |
 
 ## 7. 확인 필요 (93건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
@@ -1667,8 +1667,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: Amend, Main
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:725, SetSheetHeaderColumn_FP@RefreshHeaderOnly:729, SetSheetHeaderColumn_FP@SetSpreadInit:206, SetSheetHeaderColumn_FP@RefreshHeaderOnly:609
+- 코드에서 생성하는 시트: Main, Amend
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:206, SetSheetHeaderColumn_FP@RefreshHeaderOnly:609, SetSheetHeaderColumn_FP@RefreshHeaderOnly:725, SetSheetHeaderColumn_FP@RefreshHeaderOnly:729
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

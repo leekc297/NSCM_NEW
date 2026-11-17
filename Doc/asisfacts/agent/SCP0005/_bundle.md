@@ -1,0 +1,426 @@
+﻿# SCP0005 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| shared | 06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs | 06.UIL\GSCM.SCM.Popup.UIL\GSCM.SCM.Popup.UIL.csproj | 192 |
+| shared | 06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs | 06.UIL\GSCM.SCM.Popup.UIL\GSCM.SCM.Popup.UIL.csproj | 115 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.csproj | 1389 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.csproj | 619 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData | 171 | SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID | MATCH | SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID |
+| button:FindButton | FindButton > FindDataMain | 424 | SCP.SCP0005_GET_DISTRIBUTION_ROUTE | MATCH | SP SCP0005_GET_DISTRIBUTION_ROUTE |
+| button:FindButton | FindButton > FindDataReceive | 499 | SCP.SCP0005_GET_DISTRIBUTION_ROUTEID | MATCH | SP SCP0005_GET_DISTRIBUTION_ROUTEID |
+| button:FindButton | FindButton > GetData_Country | 916 | SCP.SCP0005_GET_COUNTRY_CITY | MATCH | SP SCP0005_GET_COUNTRY_CITY |
+| button:SaveButton | SaveButton > SaveData > FindDataMain | 424 | SCP.SCP0005_GET_DISTRIBUTION_ROUTE | MATCH | SP SCP0005_GET_DISTRIBUTION_ROUTE |
+| button:SaveButton | SaveButton > SaveData | 752 | SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE | MATCH | SP SCP0005_SAVE_DISTRIBUTION_ROUTE |
+| event:this.btnEaxel_Upload.Click | btnEaxel_Upload_Click > FindDataMain | 424 | SCP.SCP0005_GET_DISTRIBUTION_ROUTE | MATCH | SP SCP0005_GET_DISTRIBUTION_ROUTE |
+| event:this.Load | Form_Load > FindData | 171 | SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID | MATCH | SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID |
+| unreached:(진입점 미연결) | <field:dtFromCountry> | 44 | biz:CommonData.CommonDataList [code=COUNTRY_MST] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtToCountry> | 46 | biz:CommonData.CommonDataList [code=COUNTRY_MST] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtYesOrNo> | 48 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtTransMode> | 49 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtValidYN> | 51 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetFromSitebyDivision | 1187 | biz:CommonData.CommonDataList [code=FromSiteByDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetToSitebyDivision | 1195 | biz:CommonData.CommonDataList [code=ToSiteByDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetBodType | 1207 | biz:CommonData.CommonDataList [code=BodType] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetTransMode | 1217 | biz:CommonData.CommonDataList [code=TransportMode] | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=BodType] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=COUNTRY_MST] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_COUNTRY |
+| biz:CommonData.CommonDataList [code=FromSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=ToSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.CommonDataList [code=TransportMode] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
+| SCP.SCP0005_GET_COUNTRY_CITY | MATCH | 1 | SP SCP0005_GET_COUNTRY_CITY | EXEC:SCP0005_GET_COUNTRY_CITY, SELECT:SCM_MST_CITY |  |
+| SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID | MATCH | 1 | SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID | EXEC:SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE_H, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0005_GET_DISTRIBUTION_ROUTE | MATCH | 1 | SP SCP0005_GET_DISTRIBUTION_ROUTE | EXEC:SCP0005_GET_DISTRIBUTION_ROUTE, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0005_GET_DISTRIBUTION_ROUTEID | MATCH | 1 | SP SCP0005_GET_DISTRIBUTION_ROUTEID | EXEC:SCP0005_GET_DISTRIBUTION_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE | MATCH | 1 | SP SCP0005_SAVE_DISTRIBUTION_ROUTE | EXEC:SCP0005_SAVE_DISTRIBUTION_ROUTE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_DISTRIBUTION_ROUTE_HIST, UPDATE:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCP_MST_DISTRIBUTION_ROUTE, DELETE:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_DISTRIBUTION_ROUTE_H |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| <field:UserGroup> | UserInfoContext.Current | NowGroupID |
+| InitControls | c | ControlName |
+| InitControls | ManualSearchCondition.Tables[0].Rows[0] | ControlValue |
+| SaveData | dtErr.Rows[0] | ERR_MESSAGE |
+| SetCityCode | drsFrom[0] | COUNTRY, CITY, CITY_NAME |
+| SetCityCode | drsTo[0] | COUNTRY, CITY, CITY_NAME |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| SetSheetHeaderColumn | InitSpread:136, InitSpread:246 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | SaveButton:333 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| GetCheckedListValue | FindDataMain:404 | CString.GetCheckedListValue | CODE |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:98 |
+| this.btnToSrch | Click | btnToSrch_Click | InitializeComponent:244 |
+| this.btnFromSrch | Click | btnFromSrch_Click | InitializeComponent:280 |
+| this.btnExcel_Form | Click | btnExcel_Form_Click | InitializeComponent:327 |
+| this | Load | Form_Load | .ctor:144 |
+| spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitEvent:187 |
+| this.btnEaxel_Upload | Click | btnEaxel_Upload_Click | InitEvent:189 |
+| dsdm | Changed | spdMainDataModel_Changed | InitEvent:192 |
+| dsdm | Changed | spdMainDataModel_Changed | spdMainDataModel_Changed:970 |
+| dsdm | Changed | spdMainDataModel_Changed | spdMainDataModel_Changed:1082 |
+| dsdm | Changed | spdMainDataModel_Changed | spdMain_CellDoubleClick:1135 |
+| dsdm | Changed | spdMainDataModel_Changed | spdMain_CellDoubleClick:1164 |
+
+## 6. 컨트롤 (32개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 10 | layoutControlItem6, layoutControlItem7, layoutControlItem3, layoutControlItem4, layoutControlItem5, layoutControlItem2, layoutControlItem1, layoutControlItem8, layoutControlItem9, layoutControlItem10 |
+| TextBox | 4 | txtFromCountry, txtFromCity, txtToCountry, txtToCity |
+| FpSpread | 2 | spdMain, spdMain |
+| SheetView | 2 | spdMain_Sheet1, spdMain_Sheet1 |
+| UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup2 |
+| UsrButton | 2 | btnToSrch, btnFromSrch |
+| SimpleButton | 2 | btnEaxel_Upload, btnExcel_Form |
+| EmptySpaceItem | 2 | emptySpaceItem1, emptySpaceItem4 |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrCombo | 1 | cboValidYN |
+| UsrCheckedList | 1 | clbTransMode |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 20 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_ADM_EXCEL_COLUMNS | 1 | dbmeta_dbo_SCM_ADM_EXCEL_COLUMNS.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 55 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 16 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 13 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 32 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0005 | Distribution Route | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 | 39/0 |
+| SCM_MST_SHEET_COLUMNS | SCP0005 | POPUP | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 | 16/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: POPUP, Distribution Route
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:136, SetSheetHeaderColumn@InitSpread:246
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 65 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 66 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 67 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 68 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+| InitializeComponent |  | 515 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 516 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 517 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 518 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Distribution Route | META+코드연결 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 | 39 |
+| POPUP | META+코드연결 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (14 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:dtFromCountry>","44","derived","biz","CommonData.CommonDataList [code=COUNTRY_MST]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.COUNTRY_MST:Type.COUNTRY_MST] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:dtToCountry>","46","derived","biz","CommonData.CommonDataList [code=COUNTRY_MST]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.COUNTRY_MST:Type.COUNTRY_MST] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:dtYesOrNo>","48","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:dtTransMode>","49","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:dtValidYN>","51","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","FindDataMain","424","ctor","fox","SCP.SCP0005_GET_DISTRIBUTION_ROUTE","SCP.SCP0005_GET_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTE","EXEC:SCP0005_GET_DISTRIBUTION_ROUTE, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","FindDataReceive","499","ctor","fox","SCP.SCP0005_GET_DISTRIBUTION_ROUTEID","SCP.SCP0005_GET_DISTRIBUTION_ROUTEID","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTEID","EXEC:SCP0005_GET_DISTRIBUTION_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SaveData","752","ctor","fox","SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE","SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_SAVE_DISTRIBUTION_ROUTE","EXEC:SCP0005_SAVE_DISTRIBUTION_ROUTE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_DISTRIBUTION_ROUTE_HIST, UPDATE:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCP_MST_DISTRIBUTION_ROUTE, DELETE:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_DISTRIBUTION_ROUTE_H","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","GetData_Country","916","ctor","fox","SCP.SCP0005_GET_COUNTRY_CITY","SCP.SCP0005_GET_COUNTRY_CITY","MATCH","SP SCP0005_GET_COUNTRY_CITY","EXEC:SCP0005_GET_COUNTRY_CITY, SELECT:SCM_MST_CITY","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","GetFromSitebyDivision","1187","derived","biz","CommonData.CommonDataList [code=FromSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.FromSiteByDivision:Type.FromSiteByDivision] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","GetToSitebyDivision","1195","derived","biz","CommonData.CommonDataList [code=ToSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.ToSiteByDivision:Type.ToSiteByDivision] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","GetBodType","1207","derived","biz","CommonData.CommonDataList [code=BodType]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.BodType:Type.BodType] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","GetTransMode","1217","derived","biz","CommonData.CommonDataList [code=TransportMode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.TransportMode:Type.TransportMode] > Data.CallBizCommonData",""
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","FindData","171","ctor","fox","SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","MATCH","SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","EXEC:SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE_H, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+```
+
+### FILE flow.csv (17 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","event","this.Load","Form_Load > FindData","FindData","171","SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","MATCH","SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","EXEC:SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE_H, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","button","FindButton","FindButton > FindData","FindData","171","SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","MATCH","SP SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","EXEC:SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE_H, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","event","this.btnEaxel_Upload.Click","btnEaxel_Upload_Click > FindDataMain","FindDataMain","424","SCP.SCP0005_GET_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTE","EXEC:SCP0005_GET_DISTRIBUTION_ROUTE, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","button","FindButton","FindButton > GetData_Country","GetData_Country","916","SCP.SCP0005_GET_COUNTRY_CITY","MATCH","SP SCP0005_GET_COUNTRY_CITY","EXEC:SCP0005_GET_COUNTRY_CITY, SELECT:SCM_MST_CITY"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","button","FindButton","FindButton > FindDataMain","FindDataMain","424","SCP.SCP0005_GET_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTE","EXEC:SCP0005_GET_DISTRIBUTION_ROUTE, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","button","FindButton","FindButton > FindDataReceive","FindDataReceive","499","SCP.SCP0005_GET_DISTRIBUTION_ROUTEID","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTEID","EXEC:SCP0005_GET_DISTRIBUTION_ROUTEID, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","button","SaveButton","SaveButton > SaveData","SaveData","752","SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_SAVE_DISTRIBUTION_ROUTE","EXEC:SCP0005_SAVE_DISTRIBUTION_ROUTE, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_DISTRIBUTION_ROUTE_HIST, UPDATE:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCP_MST_DISTRIBUTION_ROUTE, DELETE:SCP_MST_DISTRIBUTION_ROUTE, SELECT:SCP_MST_DISTRIBUTION_ROUTE, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_DISTRIBUTION_ROUTE_H"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","button","SaveButton","SaveButton > SaveData > FindDataMain","FindDataMain","424","SCP.SCP0005_GET_DISTRIBUTION_ROUTE","MATCH","SP SCP0005_GET_DISTRIBUTION_ROUTE","EXEC:SCP0005_GET_DISTRIBUTION_ROUTE, SELECT:SCM_MST_CITY, REF:FN_GET_LOOKUP_CODE_DESC, SELECT:SCP_MST_DISTRIBUTION_ROUTE, REF:STRING_SPLIT, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","<field:dtYesOrNo>","<field:dtYesOrNo>","48","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","<field:dtValidYN>","<field:dtValidYN>","51","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","GetFromSitebyDivision","GetFromSitebyDivision","1187","biz:CommonData.CommonDataList [code=FromSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","GetToSitebyDivision","GetToSitebyDivision","1195","biz:CommonData.CommonDataList [code=ToSiteByDivision]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","GetTransMode","GetTransMode","1217","biz:CommonData.CommonDataList [code=TransportMode]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","GetBodType","GetBodType","1207","biz:CommonData.CommonDataList [code=BodType]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","<field:dtTransMode>","<field:dtTransMode>","49","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","<field:dtFromCountry>","<field:dtFromCountry>","44","biz:CommonData.CommonDataList [code=COUNTRY_MST]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","unreached","(진입점 미연결)","<field:dtToCountry>","<field:dtToCountry>","46","biz:CommonData.CommonDataList [code=COUNTRY_MST]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (12 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup",".ctor","98","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","244","this.btnToSrch","Click","btnToSrch_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","280","this.btnFromSrch","Click","btnFromSrch_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","327","this.btnExcel_Form","Click","btnExcel_Form_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute",".ctor","144","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitEvent","187","spdMain","CellDoubleClick","spdMain_CellDoubleClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitEvent","189","this.btnEaxel_Upload","Click","btnEaxel_Upload_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitEvent","192","dsdm","Changed","spdMainDataModel_Changed","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","spdMainDataModel_Changed","970","dsdm","Changed","spdMainDataModel_Changed","-="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","spdMainDataModel_Changed","1082","dsdm","Changed","spdMainDataModel_Changed","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","spdMain_CellDoubleClick","1135","dsdm","Changed","spdMainDataModel_Changed","-="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","spdMain_CellDoubleClick","1164","dsdm","Changed","spdMainDataModel_Changed","+="
+```
+
+### FILE controls.csv (32 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","spdMain","FarPoint.Win.Spread.FpSpread","this","31"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","32"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","cboValidYN","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","clbTransMode","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","btnToSrch","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","btnFromSrch","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","txtFromCountry","System.Windows.Forms.TextBox","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","txtFromCity","System.Windows.Forms.TextBox","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","txtToCountry","System.Windows.Forms.TextBox","usrLayoutControl2","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","txtToCity","System.Windows.Forms.TextBox","usrLayoutControl2","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","btnEaxel_Upload","DevExpress.XtraEditors.SimpleButton","usrLayoutControl2","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","btnExcel_Form","DevExpress.XtraEditors.SimpleButton","usrLayoutControl2","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem8","DevExpress.XtraLayout.LayoutControlItem","","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem9","DevExpress.XtraLayout.LayoutControlItem","","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","layoutControlItem10","DevExpress.XtraLayout.LayoutControlItem","","59"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","spdMain","FarPoint.Win.Spread.FpSpread","this","60"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","61"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","imageList1","System.Windows.Forms.ImageList","","62"
+```
+
+### FILE props.csv (62 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","42","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","48","spdMain","Size","new System.Drawing.Size(1387, 589)"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","99","this","Text","""DistributionRoute History"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","90","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","94","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","103","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","108","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","111","usrConditionPanel1","Size","new System.Drawing.Size(1227, 65)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","113","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","128","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","133","usrLayoutControl2","Size","new System.Drawing.Size(1227, 65)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","135","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","167","cboValidYN","Size","new System.Drawing.Size(168, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","203","clbTransMode","Size","new System.Drawing.Size(149, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","239","btnToSrch","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","275","btnFromSrch","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","286","txtFromCountry","Size","new System.Drawing.Size(139, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","293","txtFromCity","Size","new System.Drawing.Size(142, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","300","txtToCountry","Size","new System.Drawing.Size(169, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","307","txtToCity","Size","new System.Drawing.Size(177, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","314","btnEaxel_Upload","Size","new System.Drawing.Size(76, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","317","btnEaxel_Upload","Text","""Upload"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","323","btnExcel_Form","Size","new System.Drawing.Size(87, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","326","btnExcel_Form","Text","""Excel Form"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","348","layoutControlGroup2","Size","new System.Drawing.Size(1227, 74)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","356","emptySpaceItem1","Size","new System.Drawing.Size(61, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","361","layoutControlItem6","Control","this.btnToSrch"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","366","layoutControlItem6","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","373","layoutControlItem7","Control","this.btnFromSrch"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","379","layoutControlItem7","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","381","layoutControlItem7","Text","""layoutControlItem6"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","387","layoutControlItem3","Control","this.cboValidYN"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","390","layoutControlItem3","Size","new System.Drawing.Size(202, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","391","layoutControlItem3","Text","""Valid"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","398","layoutControlItem4","Control","this.clbTransMode"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","401","layoutControlItem4","Size","new System.Drawing.Size(222, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","402","layoutControlItem4","Text","""Trans Mode"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","412","emptySpaceItem4","Size","new System.Drawing.Size(783, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","417","layoutControlItem5","Control","this.txtFromCountry"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","422","layoutControlItem5","Size","new System.Drawing.Size(222, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","424","layoutControlItem5","Text","""From Country"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","431","layoutControlItem2","Control","this.txtFromCity"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","436","layoutControlItem2","Size","new System.Drawing.Size(202, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","438","layoutControlItem2","Text","""From City"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","445","layoutControlItem1","Control","this.txtToCountry"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","450","layoutControlItem1","Size","new System.Drawing.Size(240, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","452","layoutControlItem1","Text","""To Country"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","459","layoutControlItem8","Control","this.txtToCity"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","464","layoutControlItem8","Size","new System.Drawing.Size(225, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","466","layoutControlItem8","Text","""To City"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","473","layoutControlItem9","Control","this.btnEaxel_Upload"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","476","layoutControlItem9","Size","new System.Drawing.Size(80, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","482","layoutControlItem10","Control","this.btnExcel_Form"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","485","layoutControlItem10","Size","new System.Drawing.Size(91, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","493","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","498","spdMain","Size","new System.Drawing.Size(1227, 492)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","555","this","Text","""Distribution Route"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","CSafeSetText","162","ctl","Text","text"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","btnFromSrch_Click","350","txtFromCountry","Text","popCity.Country"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","btnFromSrch_Click","351","txtFromCity","Text","popCity.City"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","btnToSrch_Click","368","txtToCountry","Text","popCity.Country"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","btnToSrch_Click","369","txtToCity","Text","popCity.City"
+```
+
+### FILE grid_effective.csv (55 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Distribution Route","META+코드연결","A_COUNTRY","Country*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","A_PORT_CODE","Port Code*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","A_PORT_NAME","Port*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","D_COUNTRY","Country*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","D_PORT_CODE","Port Code*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","D_PORT_NAME","Port*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_FRI","Fri","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_MON","Mon","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_SAT","Sat","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_SUN","Sun","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_THU","Thu","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_TUE","Tue","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","DAYS_WED","Wed","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","FROM_CITY","City*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","FROM_CITY_NAME","City Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","FROM_COUNTRY","Country*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_ARRIVAL_INLAND","Arrival Inland","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_DEPARTURE_INLAND","Departure Inland","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_LAY_OFF_CLEARANCE","Lay Off/Customs Clearance","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_SUM","Total L/T","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_TYPE","L/T Type*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_VOYAGE","Voyage","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","LT_WAIT_SHIPPING","Waiting For Shipping","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","One_SEGMENT_COST","Pick Up Cost","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","PRIORITY","Priority*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","ROUTE_ID","Route Id","META","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수"
+"Distribution Route","META+코드연결","SHIP_DOC_PREPARATION_DATE","Shipping Document Preparation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","SHIPPING_COMPANY","Forwarder*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","Three_SEGMENT_COST","Delivery Cost","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","TO_CITY","City*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","TO_CITY_NAME","City Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","TO_COUNTRY","Country*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","TRANSPORT_MODE","Trans Mode*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","Two_SEGMENT_COST","Freight Cost","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Distribution Route","META+코드연결","VALID_YN","Valid*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_FRI","Fri","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_MON","Mon","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_SAT","Sat","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_SUN","Sun","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_THU","Thu","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_TUE","Tue","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","DAYS_WED","Wed","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_ARRIVAL_INLAND","Arrival Inland","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_DEPARTURE_INLAND","Departure Inland","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_LAY_OFF_CLEARANCE","Lay Off/Customs Clearance","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_SUM","Total L/T","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_VOYAGE","Voyage","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","LT_WAIT_SHIPPING","Waiting For Shipping","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"POPUP","META+코드연결","ROUTE_ID","Route Id","META","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수","필수"
+```
+
+### FILE grid_code.csv (21 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","CreateSpread","122","POPUP","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ POPUP ¦ POPUP ¦ 2 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 2 ¦ 1 ¦ 30"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","CreateSpread","123","POPUP","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","CreateSpread","125","POPUP","SHEET","ChangeSheet","EXPR","","","","","","",""
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","InitSpread","134","","SHEET","InitSheet","EXPR","","","","{?spreadInfo.SheetName}","","if(spreadInfo.SheetName == ""POPUP"")","spreadInfo.SheetName"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.cs","SCP0005_DistributionRoutePopup","InitSpread","136","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spreadInfo} ¦ 2","siObj,iColumnHeaderRowCount","if(spreadInfo.SheetName == ""POPUP"")","spreadInfo ¦ 2"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","65","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","66","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","67","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"shared","06.UIL\GSCM.SCM.Popup.UIL\SCP0005_DistributionRoutePopup.Designer.cs","SCP0005_DistributionRoutePopup","InitializeComponent","68","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","CreateSpread","233","Distribution Route","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Distribution Route ¦ Distribution Route ¦ 2 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 2 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","CreateSpread","234","Distribution Route","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","CreateSpread","236","Distribution Route","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitSpread","245","","SHEET","InitSheet","EXPR","","","","{?spreadInfo.SheetName}","","if(spreadInfo.SheetName == ""Distribution Route"")","spreadInfo.SheetName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitSpread","246","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spreadInfo} ¦ 2","siObj,iColumnHeaderRowCount","if(spreadInfo.SheetName == ""Distribution Route"")","spreadInfo ¦ 2"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","EditButton","318","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","if(this.fps != null) ⟫ if(fps.Name == ""spdMain"")","spdMain.Name ¦ fps.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","FindDataMain","452","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(ds != null && ds.Tables[0].Rows.Count > 0)","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","FindDataReceive","521","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(ds != null && ds.Tables[0].Rows.Count > 0)","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","515","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","516","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","517","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.Designer.cs","SCP0005_DistributionRoute","InitializeComponent","518","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (10 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","<field:UserGroup>","60","UserInfoContext.Current","NowGroupID","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitControls","208","c","ControlName","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","InitControls","210","ManualSearchCondition.Tables[0].Rows[0]","ControlValue","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SaveData","871","dtErr.Rows[0]","ERR_MESSAGE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1350","drsFrom[0]","COUNTRY","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1351","drsFrom[0]","CITY","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1352","drsFrom[0]","CITY_NAME","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1365","drsTo[0]","COUNTRY","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1366","drsTo[0]","CITY","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0005_DistributionRoute\SCP0005_DistributionRoute.cs","SCP0005_DistributionRoute","SetCityCode","1367","drsTo[0]","CITY_NAME","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

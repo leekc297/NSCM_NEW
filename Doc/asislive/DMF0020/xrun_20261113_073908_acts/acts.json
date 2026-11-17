@@ -1,0 +1,170 @@
+{
+ "id": "DMF0020",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0020-S02ee18"
+   ]
+  },
+  {
+   "control": "btnOwner",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0020_OwnerbyDivisionPopup",
+     "title": "Owner by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0020_GET_OWNER_DATA"
+   ],
+   "scenarios": [
+    "DMF0020-S4fa471"
+   ]
+  },
+  {
+   "control": "btnSPVer",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ExceptionDialog",
+     "title": "ExceptionDialog",
+     "modal": true,
+     "grid_rows": -1,
+     "closed": true
+    },
+    {
+     "form": "DMF0073_VersionBySalesPricePopup",
+     "title": "VersionBySalesPrice Popup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0000_GET_COMMON_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0020-S895f79",
+    "DMF0020-S7122a3",
+    "DMF0020-S583236"
+   ]
+  },
+  {
+   "control": "btnTemplate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0020-S13efcb"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0020-S669149"
+   ]
+  },
+  {
+   "control": "usrButton1",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0020-S96735e"
+   ]
+  },
+  {
+   "control": "usrButton2",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton2 failed: InvalidOperationException: control not found: usrButton2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0020-S4558a9"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnBatch",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 1
+  },
+  {
+   "control": "btnColumn",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 29
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 14
+  },
+  {
+   "control": "btnExchangeRate",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  },
+  {
+   "control": "btnModelType",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 1
+  },
+  {
+   "control": "btnSavePricePeriod",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSetPrice",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 4
+  }
+ ],
+ "at": "2026-11-13 07:37:00.471",
+ "fills": 0,
+ "fill_left": []
+}

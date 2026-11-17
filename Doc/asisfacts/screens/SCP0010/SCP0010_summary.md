@@ -180,10 +180,13 @@
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 | dbo.TB_FX_SearchCondition | 360 | dbmeta_dbo_TB_FX_SearchCondition.csv |
 
-## 9. 주석/비활성 처리된 호출 (6건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (9건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 2959 |  | commented:EMPTY |
+| 2969 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
+| 2970 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
+| 2971 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI | commented:MATCH |
 | 3015 | SCP.SCM0001_GET_SCP_DAY_PERIOD | commented:MATCH |
 | 4304 | SCP.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX | commented:MATCH |
 | 4629 | SCP.GET_DATE_RANGE_1MONTH | commented:MATCH |

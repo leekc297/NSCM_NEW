@@ -1,0 +1,17 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SSP0060-S9d69f9,기타,ControlClear,SSP0060_ShipmentPlan.cs:557,호출 없음,,
+SSP0060-S20f481,저장,GetErpIFCheck,SSP0060_ShipmentPlan.cs:4579,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:456; SSP0060_ShipmentPlanRequestPopup.cs:1209; SSP0060_ShipmentPlanRequestPopup.cs:1267; SSP0060_ShipmentPlanRequestPopup.cs:1424; SSP0060_ShipmentPlanRequestPopup.cs:1443,
+SSP0060-Sf834bb,조회,GetErpIFCheck,SSP0060_ShipmentPlan.cs:4594,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:456; SSP0060_ShipmentPlanRequestPopup.cs:1209; SSP0060_ShipmentPlanRequestPopup.cs:1267; SSP0060_ShipmentPlanRequestPopup.cs:1424; SSP0060_ShipmentPlanRequestPopup.cs:1443,
+SSP0060-S0801b6,조회,GetErpIFCheck,SSP0060_ShipmentPlan.cs:4601,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:456; SSP0060_ShipmentPlanRequestPopup.cs:1209; SSP0060_ShipmentPlanRequestPopup.cs:1267; SSP0060_ShipmentPlanRequestPopup.cs:1424; SSP0060_ShipmentPlanRequestPopup.cs:1443,
+SSP0060-Sc71a7e,조회,GetErpIFCheck,SSP0060_ShipmentPlan.cs:4606,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:456; SSP0060_ShipmentPlanRequestPopup.cs:1209; SSP0060_ShipmentPlanRequestPopup.cs:1267; SSP0060_ShipmentPlanRequestPopup.cs:1424; SSP0060_ShipmentPlanRequestPopup.cs:1443,
+SSP0060-Se42905,저장,GetErpIFCheckNew_,SSP0060_ShipmentPlan.cs:5042,호출 없음,,
+SSP0060-S56adab,조회,GetErpIFCheckNew_,SSP0060_ShipmentPlan.cs:5057,호출 없음,,
+SSP0060-Sb9aa4b,조회,GetErpIFCheckNew_,SSP0060_ShipmentPlan.cs:5064,호출 없음,,
+SSP0060-Sa92932,조회,GetErpIFCheckNew_,SSP0060_ShipmentPlan.cs:5069,호출 없음,,
+SSP0060-Saa0e5f,조회,GetNewERPInterface,SSP0060_ShipmentPlan.cs:4779,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:641; SSP0060_ShipmentPlan.cs:3352,
+SSP0060-Sd86cd7,조회,GetNewERPInterface,SSP0060_ShipmentPlan.cs:4789,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:641; SSP0060_ShipmentPlan.cs:3352,
+SSP0060-S7df84c,저장,NewNonSoNo,SSP0060_ShipmentPlan.cs:4928,같은 파일에서 호출,SSP0060_ShipmentPlan.cs:4812,GetNewERPInterface
+SSP0060-Sa443dc,기타,NewNonSoNo,SSP0060_ShipmentPlan.cs:4996,같은 파일에서 호출,SSP0060_ShipmentPlan.cs:4812,GetNewERPInterface
+SSP0060-S0ba413,기타,NewNonSoNo,SSP0060_ShipmentPlan.cs:5019,같은 파일에서 호출,SSP0060_ShipmentPlan.cs:4812,GetNewERPInterface
+SSP0060-S0e6953,기타,SetLockSumColumn,SSP0060_ShipmentPlan.cs:5223,호출 없음,,
+SSP0060-Sc3818a,저장,GetErpIFCheck,SSP0060_ShipmentPlanRequestPopup.cs:842,주석 안에서만 호출,SSP0060_ShipmentPlanRequestPopup.cs:456; SSP0060_ShipmentPlanRequestPopup.cs:1209; SSP0060_ShipmentPlanRequestPopup.cs:1267; SSP0060_ShipmentPlanRequestPopup.cs:1424; SSP0060_ShipmentPlanRequestPopup.cs:1443,

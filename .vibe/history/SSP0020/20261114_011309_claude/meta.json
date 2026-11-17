@@ -1,0 +1,39 @@
+{
+  "id": "SSP0020",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0020] · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0020/__asis-actions__.md · Doc/asisfacts/screens/SSP0020/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-14T01:13:09+09:00",
+  "end": "2026-11-14T01:50:06+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\delegate",
+      "files": 12
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0020",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0020",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "BE 기동실패 원인 찾아서 보완해주세요",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-14T01:50:06+09:00",
+  "changed": []
+}

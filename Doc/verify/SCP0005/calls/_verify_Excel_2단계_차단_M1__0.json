@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1961,
+  "at": "2026-11-13T21:29:39.585Z",
+  "user": "minyonglee1",
+  "test": "Excel 2단계 차단(M1)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 2046,
+  "at": "2026-11-13T21:29:45.249Z",
+  "user": "minyonglee1",
+  "test": "Excel 2단계 차단(M1)"
+ }
+]

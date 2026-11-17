@@ -1,0 +1,8 @@
+﻿scenario_id,type,axes,entry,method,guard,asis_cov,asis_evidence,linked_rows,tobe_verdicts,tobe_fail_checks,tobe_unverified_checks,call_compare,tobe_popup,tobe_rules,result,why,src
+GSCM_PROGRAMINFO-S207f89,저장,NONE,event:Form_Load | event:this.Load,CreateSpread,,NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:94
+GSCM_PROGRAMINFO-Sc79aa7,기타,NONE,button:EditButton,EditButton,,NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:156
+GSCM_PROGRAMINFO-S5bc1f8,조회,NONE,button:FindButton | button:SaveButton,FindData,,EXECUTED,호출로 분기 특정: UP_FX_GETPROGRAMINFOLIST,0,,,,,,,연결 없음,연결된 대조표 행·호출 대조 없음,ProgramInfo.cs:177
+GSCM_PROGRAMINFO-S96bd28,초기,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,InitSpread,,NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:103
+GSCM_PROGRAMINFO-Sc8ed80,저장,SHEET+DATA+STATE,button:InsertButton,InsertRow,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:298
+GSCM_PROGRAMINFO-S1bb36d,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:234
+GSCM_PROGRAMINFO-Saef96f,저장,SHEET+DATA+STATE,button:SaveButton,SaveData,if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.shtMain) ▸ if (cnt > 0),NO_CALL_EVIDENCE,,0,,,,,,,AS-IS 미실행,이 분기를 일으키는 조작을 아직 실행하지 않음,ProgramInfo.cs:253

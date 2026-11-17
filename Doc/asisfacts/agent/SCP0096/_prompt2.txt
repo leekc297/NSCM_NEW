@@ -3,8 +3,8 @@
 출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
 
 필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
-1. business_analysis.md 에 엔드포인트 5개 전부 원문 등장: `biz:CommonData.CommonDataList`, `biz:CommonData.YesOrNo`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`
-2. business_analysis.md 에 SP 3개 전부 등장: `DM0003_GET_BUCKET_TYPE_CODE`, `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`
+1. business_analysis.md 에 엔드포인트 6개 전부 원문 등장: `biz:CommonData.CommonDataList`, `biz:CommonData.YesOrNo`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`
+2. business_analysis.md 에 SP 4개 전부 등장: `DM0003_GET_BUCKET_TYPE_CODE`, `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`
 3. screen_design.md 에 컨트롤 12개 전부 등장: `usrButton1`, `usrConditionPanel1`, `usrLayoutControl2`, `dCalendar`, `btnInput`, `cboDivision`, `clbPlantSite`, `chkSum`, `cboInputValue`, `cboDayWeek`, `spdMain`, `spdMain_Sheet1`
 4. screen_design.md 에 시트 1개 전부 등장: `Shipment Working Day OSP`
 5. screen_design.md 에 이벤트 핸들러 8개와 엔드포인트 전부 등장: `Form_Load`, `SpdMain_CellDoubleClick`, `SpdMain_TopChange`, `CboDivision_SelectedIndexChanged`, `ClbPlantSite_SelectedIndexChanged`, `CboDayWeek_SelectedIndexChanged`, `BtnInput_Click`, `chkSum_CheckedChanged`
@@ -20,280 +20,225 @@
 # 1차 분석서 — analysis.md
 # SCP0096 — Shipment Working Day OSP: AS-IS 분석
 
-> 근거: AsisFacts가 정적으로 추출한 사실 묶음(Fact Pack)만 사용했습니다. 묶음에 없는 내용은 **확인 필요**로 표기했습니다.
+> 근거: AsisFacts 정적 추출(Fact Pack). 묶음에 없는 사항은 **확인 필요**로 적었습니다.
 
 ## 1. 화면 개요
-
 | 항목 | 값 |
 |---|---|
 | 화면 ID | SCP0096 |
-| 화면명 (Form Text, Designer.cs:663) | `Shipment Working Day OSP` |
-| 도메인 | SCP (경로 `06.UIL\GSCM.SCP.Forms.UIL\Master\`) |
+| 도메인 | SCP (`06.UIL\GSCM.SCP.Forms.UIL\Master\`) |
 | 클래스 | `SCP0096_Shipment_Working_Day_OSP` |
-| 프로젝트 | `06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.csproj` |
+| 화면 제목(Form Text) | `Shipment Working Day OSP` (Designer.cs:663) |
+| 프로젝트 | `SCP0096_Shipment_Working_Day_OSP.csproj` |
 
 ### 1-1. 파일 구성
-
 | 구분 | 파일 | 줄수 |
 |---|---|---:|
 | current | `...\SCP0096_Shipment_Working_Day_OSP\Properties\AssemblyInfo.cs` | 37 |
 | current | `...\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs` | 852 |
 | current | `...\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs` | 724 |
-| shared | 없음 (Fact Pack에 없음) | – |
-| legacy | 없음 (CSV에 legacy 행 0건) | – |
+| shared | 묶음에 따로 집계되지 않음(프레임워크 `SpreadInfo`, `CString`, `FPExtensions`, `Data.Common`만 호출 대상으로 확인됨) | — |
+| legacy | 본문 표에 없음. CSV에 legacy 행 없음 | — |
 
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
-
-| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP |
+| 진입점 | 호출 경로 | 줄 | 엔드포인트 | 상태 | SP |
 |---|---|---:|---|---|---|
-| event:this.Load | `Form_Load > InitControls > GetBucketType` | 394 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | DM0003_GET_BUCKET_TYPE_CODE |
-| event:this.Load | `Form_Load > CreateSpread > InitSpread > GetSpdTitle` | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
-| button:FindButton | `FindButton > FindData_Main` | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
-| button:FindButton | `FindButton > FindData_Main > InitSpread > GetSpdTitle` | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
-| button:SaveButton | `SaveButton > SaveData_Main > FindData_Main` | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
-| button:SaveButton | `SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle` | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
-| unreached (진입점 미연결) | `<field:dtDayWeek>` | 49 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | – |
-| unreached (진입점 미연결) | `<field:dtValidYN>` | 51 | `biz:CommonData.YesOrNo` | BIZ_MATCH | – |
+| `Form_Load` (this.Load) | Form_Load > InitControls > GetBucketType | 394 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | DM0003_GET_BUCKET_TYPE_CODE |
+| `Form_Load` (this.Load) | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| FindButton | FindButton > FindData_Main | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| FindButton | FindButton > FindData_Main > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| SaveButton | SaveButton > SaveData_Main | 608 | `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP |
+| SaveButton | SaveButton > SaveData_Main > FindData_Main | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| SaveButton | SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| (진입점 미연결) | `<field:dtDayWeek>` | 49 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | — |
+| (진입점 미연결) | `<field:dtValidYN>` | 51 | `biz:CommonData.YesOrNo` | BIZ_MATCH | — |
 
-> ⚠ **저장 SP 미검출**: `SaveButton > SaveData_Main` 경로에서 검출된 엔드포인트는 저장 후 재조회(`FindData_Main`)뿐입니다. 저장 자체를 수행하는 SP나 엔드포인트는 Fact Pack에 없습니다. SaveData_Main(558~609)이 `p_*` 파라미터 컬럼을 구성하는 사실만 확인됩니다(4장). → **확인 필요 (최우선)**
+- 저장한 뒤에는 `FindData_Main`으로 다시 조회합니다(SaveButton > SaveData_Main > FindData_Main).
+- `dtValidYN`은 진입점 미연결로 분류됐습니다. 하지만 `InitSpreadDateColumn:203`의 `AddComboColumn` 인자 `dt`에 `dtValidYN`이 쓰입니다(grid_code.csv raw). 그러므로 실제로는 Grid 콤보 데이터로 쓰입니다.
+- `dtDayWeek`(LookupCommon)를 소비하는 컨트롤은 **확인 필요**입니다. `cboDayWeek`일 가능성이 있지만, 바인딩 코드가 묶음에 없습니다.
+- 주석 처리됨: 줄 456의 `SCP.SCP0019_GET_WORKING_TIME`(commented:MATCH). 현행 기능이 아니므로 흐름 집계에서 뺐습니다.
 
 ## 3. 엔드포인트 전체 표
+| 엔드포인트 | 상태 | 호출 수 | SP | 참조 객체(EXEC 전이 포함) |
+|---|---|---:|---|---|
+| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | (UP_FX_GetCommonDataList 코드 분기) | SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `biz:CommonData.YesOrNo` | BIZ_MATCH | 1 | — | — |
+| `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | 1 | DM0003_GET_BUCKET_TYPE_CODE | SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | 1 | SCP0009_GET_SHEET_CALENDAR_3SPAN | SELECT:SCM_SYS_CALENDAR_M |
+| `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | 1 | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SCM_MST_SITE, SCM_SYS_CALENDAR_M, SCM_MST_LINE_OSP, SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, REF:STRING_SPLIT, DYNAMIC SQL |
+| `SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP` | MATCH | 1 | SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP | MERGE:SCP_MST_SHIPMENT_WORKING_DAY_OSP, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SCM_SYS_LOG_BATCH |
 
-| 엔드포인트 | 상태 | 호출 수 | SP | 참조 객체 (EXEC 전이 포함) | DB 보강 |
-|---|---|---:|---|---|---|
-| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | – | – | 코드분기 UP_FX_GetCommonDataList: SELECT SCM_ADM_LOOKUP_MASTER, SELECT SCM_ADM_LOOKUP_MASTER_DETAIL |
-| `biz:CommonData.YesOrNo` | BIZ_MATCH | 1 | – | – (via `Data.Common[case Type.YesOrNo] > Data.CallBizData`) | – |
-| `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | 1 | DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL | – |
-| `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | 1 | SCP0009_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M | – |
-| `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | 1 | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | – |
-
-### 3-1. 주석 처리된 호출 (활성 집계 제외)
-
-| 줄 | 값 | 상태 |
-|---:|---|---|
-| 456 | SCP.SCP0019_GET_WORKING_TIME | 주석 처리됨 (commented:MATCH) — 현재 기능 아님 |
-
-## 4. DB 데이터 컬럼 사용
-
-| 메서드 | 줄 | 대상 | 컬럼 |
+## 4. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 배선 위치 |
 |---|---|---|---|
-| SaveData_Main | 558 | dr | A |
-| SaveData_Main | 560~563 | dr | p_division_id, p_plant_site_id, p_measure, p_user_id |
-| SaveData_Main | 570~573 | dr | p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default |
-| SaveData_Main | 578~581 | dr | p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default |
-| SaveData_Main | 600 | row | A |
-| SaveData_Main | 609 | GetChanges (FPExtensions) | ROW_ID |
-| GetDayOfWeek | 815 | row (Field) | COLUMN_NAME |
-| GetDayOfWeek | 816 | dr | DAY_CODE |
+| this | Load | `Form_Load` | .ctor:103 |
+| spdMain | CellDoubleClick | `SpdMain_CellDoubleClick` | InitEvent:249 |
+| spdMain | TopChange | `SpdMain_TopChange` | InitEvent:250 |
+| cboDivision | SelectedIndexChanged | `CboDivision_SelectedIndexChanged` | InitEvent:251 |
+| clbPlantSite | SelectedIndexChanged | `ClbPlantSite_SelectedIndexChanged` | InitEvent:252 |
+| cboDayWeek | SelectedIndexChanged | `CboDayWeek_SelectedIndexChanged` | InitEvent:253 |
+| btnInput | Click | `BtnInput_Click` | InitEvent:254 |
+| this.chkSum | CheckedChanged | `chkSum_CheckedChanged` | InitEvent:255 |
 
-> 참고: `p_is_save_defalut`의 철자(defalut)는 원문 그대로입니다.
-> 570~573 블록과 578~581 블록이 각각 어떤 분기 조건에서 실행되는지는 Fact Pack에 없습니다 → 확인 필요.
+추출된 핸들러 동작:
+- `CboDayWeek_SelectedIndexChanged`: `GetCheckedListValue` 호출(672). 분기에 따라 `cboInputValue.Enabled = false`(675) 또는 `true`(679). 분기 조건은 **확인 필요**입니다.
+- `BtnInput_Click`: `GetCheckedListValue` 호출(695, 696). 그 뒤 Grid에 값을 넣는 로직은 **확인 필요**입니다.
+- `chkSum_CheckedChanged`: `SetSpreadColumn` 호출(330, 335)로 합계 컬럼(M_/W_)의 표시 여부를 바꿉니다.
+- `SpdMain_CellDoubleClick`, `SpdMain_TopChange`, `CboDivision_SelectedIndexChanged`, `ClbPlantSite_SelectedIndexChanged`: 내부 동작이 묶음에 없습니다. **확인 필요**.
+- 배선 없는 메서드: `cboBucketType_SelectedIndexChanged`(311/316에서 SetSpreadColumn 호출)는 존재하지만, 이벤트 배선 표에 없고 `cboBucketType` 컨트롤도 controls.csv에 없습니다. 사용 여부는 **확인 필요**입니다. `SetChangedControl`(417, 425)의 호출자도 **확인 필요**입니다.
 
-### 4-1. 프레임워크 메타 소비 메서드
-
-| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
-|---|---|---|---|
-| GetSpdTitle | InitSpread:151 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
-| SetSheetHeaderColumn | InitSpread:156 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1~5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
-| InitSpreadDateColumn | InitSpread:159 | (화면 자체 정의 — 프레임워크와 이름만 같음) | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
-| GetCheckedListValue | SetChangedControl:417·425, FindData_Main:442·443, CboDayWeek_SelectedIndexChanged:672, BtnInput_Click:695·696 | CString.GetCheckedListValue | CODE |
-| GetChanges | SaveData_Main:609 | FPExtensions.GetChanges | ROW_ID |
-
-## 5. 이벤트 배선
-
-| 대상 | 이벤트 | 핸들러 | 배선 위치 | 확인된 동작 (Fact Pack 기준) |
-|---|---|---|---|---|
-| this | Load | `Form_Load` | .ctor:103 | InitControls → GetBucketType (DM0003), CreateSpread → InitSpread → GetSpdTitle (SCP0009) |
-| spdMain | CellDoubleClick | `SpdMain_CellDoubleClick` | InitEvent:249 | 본문 확인 필요 |
-| spdMain | TopChange | `SpdMain_TopChange` | InitEvent:250 | 본문 확인 필요 |
-| cboDivision | SelectedIndexChanged | `CboDivision_SelectedIndexChanged` | InitEvent:251 | 본문 확인 필요 |
-| clbPlantSite | SelectedIndexChanged | `ClbPlantSite_SelectedIndexChanged` | InitEvent:252 | 본문 확인 필요 |
-| cboDayWeek | SelectedIndexChanged | `CboDayWeek_SelectedIndexChanged` | InitEvent:253 | GetCheckedListValue(672), cboInputValue.Enabled = false(675) / true(679) — 분기 조건 확인 필요 |
-| btnInput | Click | `BtnInput_Click` | InitEvent:254 | GetCheckedListValue(695, 696) — 이후 동작 확인 필요 |
-| this.chkSum | CheckedChanged | `chkSum_CheckedChanged` | InitEvent:255 | SetSpreadColumn 호출(330 / 335) |
-
-### 5-1. 배선되지 않은 메서드 (Fact Pack에서 발견)
-- `cboBucketType_SelectedIndexChanged` (311, 316): SetSpreadColumn을 호출하지만 events.csv에 배선이 없고, controls.csv에도 `cboBucketType` 컨트롤이 없습니다 → 사용되지 않는 코드일 가능성이 있습니다. 확인 필요.
-- `SetChangedControl` (417, 425): GetCheckedListValue를 호출하지만 어디서 호출되는지가 Fact Pack에 없습니다(프레임워크 override 여부) → 확인 필요.
-- `EditButton` (288): GetSheetInfo를 호출합니다. 진입점 표에는 없습니다 → 확인 필요.
-
-## 6. Grid 구성 방식
-
+## 5. Grid 구성 방식
 **구성 방식: `HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)`**
 
-1. **시트 생성 (코드)**: `CreateSpread:142` AddSheet(`Shipment Working Day OSP`, 헤더 3행, 인자 1, 35) → GetSheetInfo(143) → ChangeSheet(144)
-2. **META 고정 컬럼 (프레임워크)**: `InitSpread:156` SetSheetHeaderColumn(헤더 3행) → SCM_MST_SHEET_COLUMNS의 6개 컬럼: DIVISION_ID, LAST_INPUT_DATE, MEASURE, PLANT_SITE_ID, PLANT_SITE_NAME, WORKING_TIME_DEFAULT
-3. **날짜 컬럼 DB 루프 (코드)**: `InitSpread:159` InitSpreadDateColumn(spdInfo, MEASURE 컬럼 인덱스+1). 원천은 GetSpdTitle의 결과(`SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`)입니다.
-   - 컬럼명에 `"B_"` 포함(IndexOf > 0) → AddTextColumn: 폭 0, 숨김 (196)
-   - 그 외 → AddComboColumn: 폭 50, 표시, 데이터 `dtValidYN`(= Data.Common(YesOrNo)), 가로·세로 가운데 정렬 (203)
-   - DAY_CODE가 SAT/SUN이면 ForeColor = SAT 파랑, 그 외(SUN) 빨강 (208)
-   - 헤더 3단 Span: 0행 = LARGE_CLASS_LABEL_NAME, 1행 = SMALL_CLASS_LABEL_NAME, 각 그룹 시작 열에 "SUM" 헤더 (215~244)
-4. **표시 토글 (코드)**: `SetSpreadColumn` (FindData_Main:484, chkSum_CheckedChanged:330/335에서 호출)
-   - Tag가 `D_` 또는 `W_`로 시작 → Visible = true (350)
-   - Tag가 `M_` 또는 `W_`로 시작 → Visible = chkSum.Checked (355)
-   - `W_`는 두 조건에 모두 해당합니다. 두 if가 순차로 실행되면 최종값은 chkSum.Checked입니다 → 실행 확인 필요
-5. **Designer 헤더 스타일**: InitializeComponent 628~631 (General 정렬, NoteIndicatorColor Red, Parent `ColumnHeaderDefaultEnhanced`)
-
-### 6-1. Division별 차이
-- 메타: 40 / 81 / 81_HD / 81_HG / 81_HM / 81_ST / 81_UC / 82 / EE / EE_HD / EE_HG / EE_HM / EE_ST / EE_UC 14개 division 모두 **6/0**(필수+기본 6, 선택 0)으로 같습니다.
-- 최종 Grid(grid_effective): 모든 division에서 6개 컬럼이 "기본"으로 표시되고, 차이는 **없습니다**.
-- 코드 분기 조건은 division 변수를 비교하지 않습니다. 날짜 컬럼 수는 SCP0009 실행 결과(기간)에 따라 정해집니다.
-- 실제 SP 실행 결과와 맞는 시트는 없습니다(grid 단계를 실행하지 않았거나 시트명 불일치) → 확인 필요.
-
-## 7. 확인 필요 항목
-
-| # | 항목 | 근거 |
+| 단계 | 위치 | 내용 |
 |---|---|---|
-| 1 | **저장 SP/엔드포인트 미검출** — SaveData_Main이 `p_*` 행을 구성하지만 호출 대상은 추출되지 않음 | flow.csv의 SaveButton 경로에 FindData_Main만 있음 |
-| 2 | `biz:CommonData.CommonDataList` [code=LookupCommon] (`dtDayWeek`, 49)의 사용처(cboDayWeek 바인딩 여부) | 진입점 미연결로 분류됨 |
-| 3 | `biz:CommonData.YesOrNo` (`dtValidYN`, 51)는 진입점 미연결로 분류됐지만, grid_code 203 원문 인자에 `dtValidYN`이 있음(날짜 Combo 셀 데이터) | 분류 간 상충 |
-| 4 | DM0003_GET_BUCKET_TYPE_CODE 결과를 바인딩하는 컨트롤이 없음(cboBucketType 미존재) | controls.csv |
-| 5 | `chkSum`이 Designer에서 Visible=false(346), DefineProperty에서 Checked=false(121) → M_/W_ 컬럼이 항상 숨겨지는지 | props.csv |
-| 6 | `usrButton1`(75×23)의 용도와 배치(parent 없음) | controls.csv |
-| 7 | CellDoubleClick / TopChange / CboDivision / ClbPlantSite 핸들러 본문 | Fact Pack 미포함 |
-| 8 | 주석 처리된 `SCP.SCP0019_GET_WORKING_TIME`(456) — 주석 처리됨, 현행 아님 | commented_calls.csv |
-| 9 | TB_FX_GroupMenuAuth 4행의 권한 값 | 행 내용 미포함 |
+| 시트 생성 | CreateSpread:142 | `AddSheet(spdMain, "Shipment Working Day OSP", "Shipment Working Day OSP", 3, 1, 35)`. 인자 3/1/35의 의미는 **확인 필요** |
+| 메타 컬럼 | InitSpread:156 | `SetSheetHeaderColumn(siMain, 3)`: SCM_MST_SHEET_COLUMNS 메타 6개 컬럼 |
+| 날짜 헤더 조회 | InitSpread:151 > GetSpdTitle:831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` 결과(COLUMN_NAME, COLUMN_LABEL_NAME, DAY_CODE, LARGE/SMALL_CLASS_LABEL_NAME) |
+| DB 루프 컬럼 | InitSpreadDateColumn:196/203 | 컬럼명에 `B_`가 있으면(`IndexOf("B_") > 0`) `AddTextColumn`(폭 0, 숨김). 없으면 `AddComboColumn`(폭 50, 표시, 데이터 `dtValidYN`=YesOrNo, 가운데 정렬) |
+| 표시 변경 | InitSpreadDateColumn:208 | DAY_CODE가 SAT이면 ForeColor Blue, SUN이면 Red |
+| 헤더 3단 Span | InitSpreadDateColumn:215~244 | 0행 Large class 라벨, 1행 Small class 라벨, 1~2행 `"SUM"` 헤더 Span |
+| 표시 토글 | SetSpreadColumn:350/355 | 태그가 `D_`·`W_`로 시작하면 Visible=true. `M_`·`W_`로 시작하면 Visible=`chkSum.Checked` |
+| 날짜 컬럼 삽입 위치 | InitSpread:159 | `spdInfo.GetColumnIndex(DefColumns.MEASURE)` 기준(정확한 산식 **확인 필요**) |
+
+### 5-1. Division별 차이
+- 메타 규칙상 모든 division(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC)이 **6/0**(필수+기본 6, 선택 0)입니다. 최종 표시도 6으로 같습니다.
+- 코드 분기에 division 비교가 없습니다(판단 불가 0건). **division별 Grid 차이는 없습니다.**
+- 날짜·합계 컬럼 수는 조회 기간과 SCP0009 결과에 따라 런타임에 정해지므로 정적으로 셀 수 없습니다.
+
+## 6. 확인 필요 항목
+1. `dtDayWeek`(LookupCommon)의 lookup 코드값과 바인딩 컨트롤
+2. `GetBucketType`(DM0003) 결과를 쓰는 컨트롤. 화면에 BucketType 컨트롤이 없음
+3. `cboBucketType_SelectedIndexChanged`, `SetChangedControl`의 호출 경로
+4. `W_` 태그가 350·355 두 조건에 모두 해당될 때 최종 Visible 값(두 문장의 실행 순서)
+5. `SaveData_Main` 파라미터 두 블록(570~573 / 578~581)의 분기 조건
+6. `B_` 판정이 `IndexOf("B_") > 0`(위치 0 제외)인 의도
+7. `usrButton1`(부모 없음, Text 없음)의 용도
+8. SCM_MST_SHEET_COLUMNS 메타 6행의 정렬 순서(SORT_ORDER_NO), 폭, 정렬 원문
+9. 주석 처리됨: `SCP.SCP0019_GET_WORKING_TIME`(456). 현행 아님
 
 
 # 1차 분석서 — web_components.md
-# SCP0096 — Web 컴포넌트 매핑 (React + Wijmo)
+# SCP0096 웹 컴포넌트 매핑 (React + Wijmo)
 
-## 1. 컨트롤 → 컴포넌트 매핑
-
-| AS-IS 컨트롤 | 유형 | 라벨(원문) | LayoutItem | Size | TO-BE 컴포넌트 후보 | 비고 |
-|---|---|---|---|---|---|---|
-| cboDivision | UsrCombo | `Division*` | layoutControlItem4 (236×25) | 181×20 | Wijmo ComboBox (필수) | 변경 시 CboDivision_SelectedIndexChanged |
-| clbPlantSite | UsrCheckedList | `Plant Site` | layoutControlItem7 (226×25) | 165×21 | Wijmo MultiSelect | GetCheckedListValue(CODE) |
-| dCalendar | UsrDateRangePicker3 | `Period*` | layoutControlItem2 (260×25) | 210×22 | 기간 선택(Date Range, 필수) | |
-| cboDayWeek | UsrCombo | `Day of the week` | layoutControlItem3 (236×25) | 134×20 | Wijmo ComboBox 또는 MultiSelect (단일/다중 확인 필요) | 672에서 GetCheckedListValue 사용 |
-| cboInputValue | UsrCombo | `Input Value` | layoutControlItem1 (226×25) | 124×20 | Wijmo ComboBox | cboDayWeek 변경 시 Enabled false(675)/true(679) |
-| btnInput | UsrButton | `Input` (Text) | layoutControlItem10 (81×25) | 77×21 | Button | BtnInput_Click |
-| chkSum | UsrCheckBox | `Sum` (Text) | layoutSum (50×25) | 46×20 | CheckBox | **Visible=false**(DS:346), Checked=false(121) |
-| usrButton1 | UsrButton | (Text 없음) | – | 75×23 | 확인 필요 | parent 없음 |
-| usrConditionPanel1 | UsrConditionPanel | – | – | 1192×96, Dock Top, HidePanel | 조회조건 영역 | |
-| usrLayoutControl2 | UsrLayoutControl | – | – | 1192×96, Dock Fill | 조회조건 레이아웃 | |
-| spdMain / spdMain_Sheet1 | FpSpread / SheetView | – | – | 1192×553, Dock Fill | Wijmo FlexGrid | 시트 `Shipment Working Day OSP` |
-| emptySpaceItem1~6·9·10 | EmptySpaceItem | – | – | – | 여백(배치용) | 8개 |
+## 1. 컨트롤 매핑
+| AS-IS 컨트롤 | 유형 | 라벨(원문) | 크기 | TO-BE 후보 |
+|---|---|---|---|---|
+| cboDivision | UsrCombo | `Division*` (layoutControlItem4) | 181×20 | 단일 선택 ComboBox(필수) |
+| clbPlantSite | UsrCheckedList | `Plant Site` (layoutControlItem7) | 165×21 | 다중 선택 MultiSelect |
+| dCalendar | UsrDateRangePicker3 | `Period*` (layoutControlItem2) | 210×22 | 기간 DateRange(필수) |
+| cboDayWeek | UsrCombo | `Day of the week` (layoutControlItem3) | 134×20 | ComboBox. 데이터원은 확인 필요(dtDayWeek/LookupCommon 후보) |
+| cboInputValue | UsrCombo | `Input Value` (layoutControlItem1) | 124×20 | ComboBox. Day of the week 변경 시 Enabled 토글 |
+| btnInput | UsrButton | Text `Input` (layoutControlItem10) | 77×21 | 조회조건 영역 Button |
+| chkSum | UsrCheckBox | Text `Sum` (layoutSum) | 46×20 | CheckBox. Designer에서 Visible=false, 초기 Checked=false |
+| usrButton1 | UsrButton | (Text 없음, 부모 없음) | 75×23 | 확인 필요(미배치 추정 불가) |
+| usrConditionPanel1 | UsrConditionPanel | — | 1192×96, Dock Top, HidePanel | 조회조건 패널 |
+| usrLayoutControl2 / layoutControlGroup2 | UsrLayoutControl / LayoutControlGroup | — | 1192×96 | 조회조건 레이아웃 그리드 |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView | — | 1192×553, Dock Fill | Wijmo FlexGrid |
+| emptySpaceItem1~10 (8개) | EmptySpaceItem | — | — | 간격(레이아웃 전용) |
 
 ## 2. 화면 배치
-
-- props.csv에 SplitContainer는 **없습니다**. 분할 비율은 Dock과 Size 기준입니다.
-- 상단: `usrConditionPanel1` Dock=Top, 높이 96
-- 하단: `spdMain` Dock=Fill, 높이 553
-- 상/하 비율: 96 : 553 ≈ **14.8% : 85.2%** (폭 1192 공통)
-- 좌/우 분할: 없음
-- 조회조건 행 구성: LayoutItem Size 높이 25~26으로 보아 2행 이상입니다. 정확한 행·열 위치(Location)는 Fact Pack에 없어 확인 필요입니다.
+- props.csv에 SplitContainer 관련 값(Orientation, SplitterDistance)이 **없습니다**. 분할 컨테이너는 쓰지 않습니다.
+- 상하 배치(Dock 기준):
+  - 상단은 `usrConditionPanel1`(Dock Top)이며 높이 96입니다.
+  - 하단은 `spdMain`(Dock Fill)이며 높이 553입니다.
+  - Designer 크기 기준 비율은 96 : 553 = **약 14.8% : 85.2%**(합계 649)입니다.
+- 조회조건 행 구성: LayoutControlItem 높이가 25/26이고 EmptySpaceItem 높이 조합(25·26)으로 보아 2행 배치로 보입니다. 정확한 행·열 좌표(Location)는 묶음에 없어 **확인 필요**입니다.
 
 ## 3. 시트별 Grid 컬럼 — `Shipment Working Day OSP`
 
-연결 규칙: **META+코드연결** (메타 시트를 코드가 AddSheet/ChangeSheet로 사용). 헤더는 3행입니다.
+### 3-1. 메타 컬럼 (SCM_MST_SHEET_COLUMNS, grid_effective 기준)
+| COLUMN_NAME | 라벨 | 출처 | 전 division(14종) 표시 |
+|---|---|---|---|
+| DIVISION_ID | Division | META | 기본 |
+| PLANT_SITE_ID | Plant Site ID | META | 기본 |
+| PLANT_SITE_NAME | Plant Site | META | 기본 |
+| MEASURE | Measure | META | 기본 |
+| WORKING_TIME_DEFAULT | Working Time Default | META | 기본 |
+| LAST_INPUT_DATE | Last Input Date | META | 기본 |
 
-### 3-1. 메타 고정 컬럼 (grid_effective 기준)
+> 표의 순서는 CSV 순서가 아닌 나열 순서입니다. 실제 SORT_ORDER_NO, 폭, 정렬, 편집 속성은 **확인 필요**입니다(메타 원문 행이 묶음에 없음).
 
-| 순서 | COLUMN_NAME | 라벨 | 출처 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| (메타 정렬 확인 필요) | DIVISION_ID | Division | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
-| | LAST_INPUT_DATE | Last Input Date | META | 기본 | … 전 division 기본 | | | | | | | | | | | | |
-| | MEASURE | Measure | META | 기본 | … 전 division 기본 | | | | | | | | | | | | |
-| | PLANT_SITE_ID | Plant Site ID | META | 기본 | … 전 division 기본 | | | | | | | | | | | | |
-| | PLANT_SITE_NAME | Plant Site | META | 기본 | … 전 division 기본 | | | | | | | | | | | | |
-| | WORKING_TIME_DEFAULT | Working Time Default | META | 기본 | … 전 division 기본 | | | | | | | | | | | | |
+### 3-2. 코드 하드코딩·DB 루프 컬럼 (InitSpreadDateColumn)
+| 조건 | API | 헤더 / 필드 | 폭 | 표시 | 편집기 |
+|---|---|---|---:|---|---|
+| COLUMN_NAME에 `B_` 포함(`IndexOf > 0`) | AddTextColumn | COLUMN_LABEL_NAME / COLUMN_NAME | 0 | 숨김 | Text |
+| 그 외 | AddComboColumn | COLUMN_LABEL_NAME / COLUMN_NAME | 50 | 표시 | Combo(YesOrNo, `dtValidYN`), 가로·세로 Center |
+| DAY_CODE = SAT | set:ForeColor | — | — | — | 글자색 Blue |
+| DAY_CODE = SUN | set:ForeColor | — | — | — | 글자색 Red |
 
-> 14개 division 모두 6개 컬럼이 "기본"이며 division별 표시 차이는 없습니다. 메타의 SORT_ORDER_NO, 폭, 편집 여부 값은 Fact Pack에 없어 확인 필요입니다.
+- 헤더는 3단입니다(`SetSheetHeaderColumn(siMain, 3)`, AddSheet 인자 3).
+  - 0행: `LARGE_CLASS_LABEL_NAME` Span
+  - 1행: `SMALL_CLASS_LABEL_NAME` Span
+  - 대분류·소분류 시작 열: `"SUM"` 헤더 Span(1~2행, 높이 20/30)
+- 컬럼 태그 접두어별 표시 규칙(SetSpreadColumn):
+  - `D_`·`W_`: 항상 표시
+  - `M_`·`W_`: `chkSum.Checked`일 때만 표시. W_가 두 조건에 겹치는 경우의 최종 값은 확인 필요
+- 헤더 스타일(Designer 628~631): General 정렬, NoteIndicatorColor Red, Parent `ColumnHeaderDefaultEnhanced`
 
-### 3-2. 코드 생성 날짜 컬럼 (DB 루프, MEASURE 다음 열부터)
-
-| 조건 | API | 폭 | 표시 | 셀 | 정렬 | 스타일 |
-|---|---|---:|---|---|---|---|
-| COLUMN_NAME에 `"B_"` 포함(IndexOf > 0) | AddTextColumn | 0 | 숨김 | Text | – | – |
-| 그 외 | AddComboColumn | 50 | 표시 | Combo (`dtValidYN` = YesOrNo) | Center/Center | DAY_CODE SAT → 파랑, SUN → 빨강 |
-
-- 헤더 라벨은 COLUMN_LABEL_NAME이고, 원천은 `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` 결과입니다.
-- 헤더 3단 Span: 0행 LARGE_CLASS_LABEL_NAME, 1행 SMALL_CLASS_LABEL_NAME, 2행 컬럼 라벨. 각 Large/Small 그룹 시작 열에 `"SUM"` 헤더가 있습니다(높이 20, 222행만 30).
-
-### 3-3. 코드 표시 토글 (SetSpreadColumn, Tag 접두어)
-
-| Tag 접두어 | Visible | 근거 |
-|---|---|---|
-| `D_` | true | 350 |
-| `M_` | chkSum.Checked | 355 |
-| `W_` | 350에서 true → 355에서 chkSum.Checked (순차 실행 시 최종 chkSum.Checked, 확인 필요) | 350, 355 |
-
-- chkSum이 Visible=false이고 초기 Checked=false이므로, 사용자가 토글할 수 없어 `M_`/`W_` 컬럼은 숨겨진 상태로 남을 것으로 보입니다 → 실행 확인 필요.
-- Designer 헤더 스타일(628~631): HorizontalAlignment/VerticalAlignment General, NoteIndicatorColor Red, Parent `ColumnHeaderDefaultEnhanced`.
+### 3-3. Division별 표시 차이
+- 메타와 최종 표시 모두 14개 division에서 **6컬럼으로 같습니다**. 코드에 division 분기가 없습니다.
 
 ## 4. 시트 연결 규칙
+| 시트 | 연결 규칙 | 설명 |
+|---|---|---|
+| Shipment Working Day OSP | META+코드연결 | 메타 시트 이름을 코드가 `AddSheet`/`ChangeSheet`/`InitSheet`(142·144·155)로 사용합니다. 메타 6컬럼 뒤에 날짜 컬럼을 DB 루프로 붙입니다(삽입 기준 MEASURE 인덱스) |
 
-| 시트 | 연결 규칙 | 메타 행 | 코드 사용 |
-|---|---|---:|---|
-| Shipment Working Day OSP | META+코드연결 | 6 (SCM_MST_SHEET_COLUMNS) | AddSheet(142) → SetSheetHeaderColumn(156) → InitSpreadDateColumn(159) → SetSpreadColumn(160) |
-
-- 시트는 1개뿐이고, 마스터-디테일 같은 시트 간 연결은 없습니다.
-- 실제 SP 실행 결과와 맞는 시트가 없어(grid 단계 미실행) 실데이터 컬럼 대조는 확인 필요입니다.
+- 시트는 1개입니다. 마스터-디테일 같은 시트 간 연결은 없습니다.
 
 
 # 1차 분석서 — tobe_design.md
-# SCP0096 — TO-BE 설계 요약
+# SCP0096 TO-BE 설계 입력
 
-## 1. 조회조건 (컨트롤 기준)
-
-| 라벨(원문) | AS-IS 컨트롤 | 필수 | TO-BE | 비고 |
+## 1. 조회조건
+| 순서(배치 원문 미확인) | 라벨 | AS-IS 컨트롤 | 필수 | 비고 |
 |---|---|---|---|---|
-| Division* | cboDivision (UsrCombo) | 필수(`*`) | ComboBox | 변경 이벤트 있음(본문 확인 필요) |
-| Plant Site | clbPlantSite (UsrCheckedList) | – | MultiSelect | FindData_Main 442/443에서 GetCheckedListValue(CODE) 사용 |
-| Period* | dCalendar (UsrDateRangePicker3) | 필수(`*`) | Date Range | |
-| Day of the week | cboDayWeek (UsrCombo) | – | ComboBox (다중 여부 확인 필요) | 데이터 원천 후보 biz:CommonData.CommonDataList [code=LookupCommon] (dtDayWeek) — 확인 필요 |
-| Input Value | cboInputValue (UsrCombo) | – | ComboBox | Day of the week 선택에 따라 Enabled 토글 |
-| (버튼) Input | btnInput | – | Button | 일괄 입력 동작 |
-| Sum | chkSum (UsrCheckBox) | – | CheckBox | AS-IS **Visible=false** — TO-BE 노출 여부 확인 필요 |
+| — | Division* | cboDivision (UsrCombo) | 예(라벨 `*`) | 변경 이벤트 `CboDivision_SelectedIndexChanged`(동작 확인 필요) |
+| — | Plant Site | clbPlantSite (UsrCheckedList) | 확인 필요 | 다중 선택. `GetCheckedListValue`(CODE)로 값 추출(FindData_Main 442/443) |
+| — | Period* | dCalendar (UsrDateRangePicker3) | 예(라벨 `*`) | 기간 |
+| — | Day of the week | cboDayWeek (UsrCombo) | 확인 필요 | 변경 시 `cboInputValue.Enabled` 토글 |
+| — | Input Value | cboInputValue (UsrCombo) | 확인 필요 | Input 버튼으로 일괄 입력할 값(추정 금지, 동작 확인 필요) |
+| — | (버튼) Input | btnInput | — | `BtnInput_Click` |
+| — | (체크) Sum | chkSum | — | Designer Visible=false, Checked=false. 합계(M_/W_) 컬럼 표시 토글 |
 
-## 2. 액션별 호출 API 후보
+## 2. 액션별 API 후보
+| 액션 | AS-IS 경로 | 호출 SP | TO-BE API 후보 |
+|---|---|---|---|
+| 화면 진입 | Form_Load > InitControls > GetBucketType | DM0003_GET_BUCKET_TYPE_CODE | 공통 코드 조회 API(소비처 확인 필요) |
+| 화면 진입 / 조회 헤더 | CreateSpread·FindData_Main > InitSpread > GetSpdTitle | SCP0009_GET_SHEET_CALENDAR_3SPAN | 기간별 3단 헤더 조회 API |
+| 조회(FindButton) | FindData_Main | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | 조회 API(Division, Plant Site 다중, Period) |
+| 저장(SaveButton) | SaveData_Main → FindData_Main 재조회 | SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP | 저장 API(변경 행 일괄) → 저장 후 재조회 |
+| Input 버튼 | BtnInput_Click | 없음(클라이언트) | 그리드 일괄 값 입력(서버 호출 없음) |
+| Sum 체크 | chkSum_CheckedChanged > SetSpreadColumn | 없음 | 컬럼 표시 토글 |
+| Day of the week 변경 | CboDayWeek_SelectedIndexChanged | 없음 | Input Value 활성/비활성 |
+| 셀 더블클릭 / 스크롤 | SpdMain_CellDoubleClick / SpdMain_TopChange | 묶음상 호출 없음 | 동작 확인 필요 |
+| 공통코드 | dtDayWeek / dtValidYN | CommonDataList(LookupCommon) / YesOrNo | 공통 코드 API. YesOrNo는 날짜 셀 콤보 데이터 |
 
-| 액션 | AS-IS 경로 | 호출 API 후보 |
-|---|---|---|
-| 화면 진입 | Form_Load > InitControls > GetBucketType | DM0003_GET_BUCKET_TYPE_CODE (바인딩 대상 컨트롤 확인 필요) |
-| 화면 진입 | Form_Load > CreateSpread > InitSpread > GetSpdTitle | SCP0009_GET_SHEET_CALENDAR_3SPAN (Grid 날짜 헤더) |
-| 조회 | FindButton > FindData_Main | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP + SCP0009_GET_SHEET_CALENDAR_3SPAN(헤더 재생성) |
-| 저장 | SaveButton > SaveData_Main → FindData_Main | **저장 SP 확인 필요** → 이후 조회 API 재호출. 파라미터: p_division_id, p_plant_site_id, p_measure, p_user_id, p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default. 변경 행은 GetChanges(ROW_ID) |
-| Day of the week 변경 | CboDayWeek_SelectedIndexChanged | API 없음. cboInputValue Enabled 토글(675/679) |
-| Input 클릭 | BtnInput_Click | API 없음(추출 기준). GetCheckedListValue 695/696 이후 동작 확인 필요 |
-| Sum 토글 | chkSum_CheckedChanged | API 없음. SetSpreadColumn으로 M_/W_ 컬럼 표시 토글 |
-| Division 변경 | CboDivision_SelectedIndexChanged | 확인 필요 (Plant Site 재조회 여부 등) |
-| Plant Site 변경 | ClbPlantSite_SelectedIndexChanged | 확인 필요 |
-| Grid 더블클릭 | SpdMain_CellDoubleClick | 확인 필요 |
-| Grid 스크롤 | SpdMain_TopChange | 확인 필요 |
-| (주석 처리됨) | SCP.SCP0019_GET_WORKING_TIME (456) | 주석 처리됨 — 현행 아님, 구현 대상 아님 |
+> 주석 처리됨: `SCP.SCP0019_GET_WORKING_TIME`(456). API 후보에서 뺐습니다.
 
 ## 3. Division별 Grid 변형 요약
-
-- 시트는 `Shipment Working Day OSP` 1개입니다.
-- 메타 고정 6개 컬럼(DIVISION_ID, LAST_INPUT_DATE, MEASURE, PLANT_SITE_ID, PLANT_SITE_NAME, WORKING_TIME_DEFAULT)은 14개 division 모두 "기본"입니다. **division별 변형은 없습니다.**
-- 날짜 컬럼은 SCP0009 결과를 DB 루프로 돌려 동적으로 생성합니다(Combo Y/N, 폭 50, SAT 파랑 / SUN 빨강, `B_` 포함 컬럼은 숨김 Text).
-- 헤더 3단(Large / Small / 컬럼)에 그룹별 `"SUM"` 헤더가 있습니다.
-- Tag 접두어로 표시를 토글합니다: `D_` 표시, `M_`/`W_`는 chkSum.Checked를 따릅니다(`W_` 최종값은 확인 필요).
+- 시트 `Shipment Working Day OSP` 1개입니다. 14개 division 모두 메타 6컬럼(Division, Plant Site ID, Plant Site, Measure, Working Time Default, Last Input Date)이 같습니다.
+- 날짜 컬럼은 division이 아니라 **Period와 SCP0009 결과**에 따라 바뀝니다.
+  - Y/N 콤보(폭 50, 가운데 정렬)
+  - 토요일 파랑, 일요일 빨강
+  - `B_` 컬럼은 숨김
+  - 3단 헤더와 SUM 헤더
+  - `M_` 합계 컬럼은 Sum 체크에 연동
 
 ## 4. 권한(C/R/U/D) 관련 사실
-
-| 항목 | 사실 |
-|---|---|
-| 메뉴 권한 메타 | dbo.TB_FX_GroupMenuAuth 4행 (값 미포함 → C/R/U/D 확인 필요) |
-| 메뉴/프로그램 | TB_FX_MenuItemInfo 1행, TB_FX_ProgramInfo 1행, TB_FX_Favorite 1행 |
-| 사용 버튼 (코드 기준) | FindButton(조회), SaveButton(저장), EditButton(288, 진입점 표 미포함 — 확인 필요) |
-| 저장 사용자 | SaveData_Main이 p_user_id를 전달 |
+- `TB_FX_GroupMenuAuth`에 이 화면 행이 **4건** 있고, `TB_FX_MenuItemInfo`와 `TB_FX_ProgramInfo`에 각 1건, `TB_FX_Favorite`에 1건이 있습니다. 권한 컬럼 값(그룹별 C/R/U/D)은 묶음에 없어 **확인 필요**입니다.
+- 코드상 액션: 조회(FindButton), 저장(SaveButton), `EditButton`(288, GetSheetInfo 호출)이 확인됩니다. 삭제나 신규 행 버튼 코드는 묶음에 없습니다.
+- 저장 시 `p_user_id`가 전달되고, SAVE SP에서 `PR_SCM_SYS_LOG_BATCH`로 로그를 남깁니다.
 
 ## 5. 미확정 사항
-
-1. 저장 SP와 엔드포인트 (최우선)
-2. DM0003_GET_BUCKET_TYPE_CODE 결과의 사용처 (cboBucketType 컨트롤 없음, `cboBucketType_SelectedIndexChanged` 미배선)
-3. `biz:CommonData.CommonDataList` [code=LookupCommon]의 Lookup 그룹 키와 cboDayWeek 바인딩 여부
-4. `biz:CommonData.YesOrNo`가 진입점 미연결로 분류됐지만 grid_code 203에서 사용되는 상충
-5. chkSum 숨김(Visible=false) 상태에서 M_/W_ 컬럼을 노출할지에 대한 TO-BE 정책
-6. cboInputValue Enabled 토글 조건(675/679)과 BtnInput_Click의 일괄 입력 대상(행/열 범위)
-7. SaveData_Main 570~573 / 578~581 두 블록의 분기 조건
-8. CellDoubleClick / TopChange / CboDivision / ClbPlantSite 핸들러 본문
-9. usrButton1의 용도
-10. 메타 6개 컬럼의 정렬 순서, 폭, 편집 여부(SCM_MST_SHEET_COLUMNS 행 값 미포함)
-11. TB_FX_GroupMenuAuth 4행의 권한 값
+1. 조회조건 배치 순서와 행·열 좌표(Designer Location 미추출)
+2. `cboDayWeek`, `cboInputValue`의 데이터원과 `BtnInput_Click` 일괄 입력 규칙
+3. `GetBucketType`(DM0003) 결과의 사용처. BucketType 컨트롤 부재, `cboBucketType_SelectedIndexChanged` 미배선
+4. `SpdMain_CellDoubleClick`, `SpdMain_TopChange`, `CboDivision_SelectedIndexChanged`, `ClbPlantSite_SelectedIndexChanged` 내부 동작
+5. `W_` 컬럼 최종 Visible(350과 355가 겹침)과 `chkSum`이 Designer에서 숨김인 상태의 실사용 여부
+6. 저장 파라미터 두 블록(570~573 / 578~581)의 분기와 `p_is_save_defalut`(DEFAULT 테이블 MERGE 여부) 조건
+7. 메타 6컬럼의 정렬 순서, 폭, 편집 가능 여부(SCM_MST_SHEET_COLUMNS 원문)
+8. 그룹별 메뉴 권한 4행의 C/R/U/D 값
 
 
 # Fact Pack — SCP0096
@@ -314,6 +259,7 @@
 | button:FindButton | FindButton > FindData_Main | 457 | SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
 | button:FindButton | FindButton > FindData_Main > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
 | button:SaveButton | SaveButton > SaveData_Main > FindData_Main | 457 | SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| button:SaveButton | SaveButton > SaveData_Main | 608 | SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP | MATCH | SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP |
 | button:SaveButton | SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
 | event:this.Load | Form_Load > InitControls > GetBucketType | 394 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | SP DM0003_GET_BUCKET_TYPE_CODE |
 | event:this.Load | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
@@ -328,6 +274,7 @@
 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | 1 | SP SCP0009_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M |  |
 | SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | 1 | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |  |
+| SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP | MATCH | 1 | SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP | EXEC:SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP, EXEC:PR_SCM_SYS_LOG_BATCH, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_OSP, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, INSERT:SCM_SYS_LOG_BATCH |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -431,23 +378,25 @@
 분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
 
 
-### FILE endpoints.csv (5 rows)
+### FILE endpoints.csv (6 rows)
 ```csv
 "variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","<field:dtDayWeek>","49","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","<field:dtValidYN>","51","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetBucketType","394","ctor","fox","DM.DM0003_GET_BUCKET_TYPE_CODE","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","FindData_Main","457","ctor","fox","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","608","prop","fox","SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP","SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP, EXEC:PR_SCM_SYS_LOG_BATCH, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_OSP, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, INSERT:SCM_SYS_LOG_BATCH","",""
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetSpdTitle","831","ctor","fox","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M","",""
 ```
 
-### FILE flow.csv (8 rows)
+### FILE flow.csv (9 rows)
 ```csv
 "variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","event","this.Load","Form_Load > CreateSpread > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","event","this.Load","Form_Load > InitControls > GetBucketType","GetBucketType","394","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","FindButton","FindButton > FindData_Main","FindData_Main","457","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","FindButton","FindButton > FindData_Main > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","SaveButton","SaveButton > SaveData_Main","SaveData_Main","608","SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP, EXEC:PR_SCM_SYS_LOG_BATCH, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_OSP, MERGE:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, INSERT:SCM_SYS_LOG_BATCH"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","SaveButton","SaveButton > SaveData_Main > FindData_Main","FindData_Main","457","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","SaveButton","SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
 "current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","unreached","(진입점 미연결)","<field:dtValidYN>","<field:dtValidYN>","51","biz:CommonData.YesOrNo","BIZ_MATCH","",""

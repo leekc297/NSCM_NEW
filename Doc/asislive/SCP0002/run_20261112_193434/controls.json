@@ -1,0 +1,3043 @@
+{
+ "id": "SCP0002",
+ "from": "dump_find.json",
+ "screen": {
+  "type": "GSCM.SCP.Master.UIL.SCP0002_LineMaster",
+  "text": "Line Master",
+  "width": 1459,
+  "height": 834
+ },
+ "controls": [
+  {
+   "name": "spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "path": "/spdMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 71,
+   "w": 1459,
+   "h": 763,
+   "tab": 11
+  },
+  {
+   "name": "usrConditionPanel1",
+   "type": "GSCM.Windows.Forms.Controls.UsrConditionPanel",
+   "path": "/usrConditionPanel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1459,
+   "h": 71,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "usrLayoutControl2",
+   "type": "GSCM.Windows.Forms.Controls.UsrLayoutControl",
+   "path": "/usrConditionPanel1/usrLayoutControl2",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 1439,
+   "h": 71,
+   "tab": 0,
+   "text": "usrLayoutControl2"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.DPILabel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/DPILabel",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 71,
+   "w": 17,
+   "h": 17,
+   "tab": 2,
+   "text": ""
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.VTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/VTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 17,
+   "h": 71,
+   "tab": 0,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Scrolling.HTLScrollBar",
+   "path": "/usrConditionPanel1/usrLayoutControl2/HTLScrollBar",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 71,
+   "w": 1439,
+   "h": 17,
+   "tab": 1,
+   "text": "",
+   "value": "0"
+  },
+  {
+   "name": "",
+   "type": "DevExpress.XtraLayout.Helpers.FakeFocusContainer",
+   "path": "/usrConditionPanel1/usrLayoutControl2/FakeFocusContainer",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "cboValid",
+   "type": "GSCM.Windows.Forms.Controls.UsrComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboValid",
+   "visible": true,
+   "enabled": true,
+   "x": 358,
+   "y": 37,
+   "w": 216,
+   "h": 21,
+   "tab": 12,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": "ALL",
+   "items": [
+    "ALL",
+    "Y",
+    "N"
+   ],
+   "item_count": 3
+  },
+  {
+   "name": "clbLine",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine",
+   "visible": true,
+   "enabled": true,
+   "x": 39,
+   "y": 37,
+   "w": 277,
+   "h": 21,
+   "tab": 9,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 277,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "A1A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A1A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A1A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A1A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A1A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A1A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A1A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A1A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A1A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A1A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A1A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A1A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A1A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A1A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A1A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A1A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A1A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A1A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A1AP1   Assy Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A1AP1   Assy Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A1AP1   Assy Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A1AP2   Assy Pilot #02",
+     "checked": false
+    },
+    {
+     "text": "A1AP2   Assy Pilot #02",
+     "checked": false
+    },
+    {
+     "text": "A1AP2   Assy Pilot #02",
+     "checked": false
+    },
+    {
+     "text": "A1AP3   A1)Assy Solid Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A1AP3   A1)Assy Solid Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A1AP3   A1)Assy Solid Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A2A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A2A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A2A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A2A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A2A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A2A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A2A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A2A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A2A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A2A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A2A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A2A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A2AP1   Assy AR Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A2AP1   Assy AR Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A2AP1   Assy AR Pilot #01",
+     "checked": false
+    },
+    {
+     "text": "A2AP3   Assy Pilot #03",
+     "checked": false
+    },
+    {
+     "text": "A2AP3   Assy Pilot #03",
+     "checked": false
+    },
+    {
+     "text": "A2AP3   Assy Pilot #03",
+     "checked": false
+    },
+    {
+     "text": "A2AP4   Assy Pilot #04",
+     "checked": false
+    },
+    {
+     "text": "A2AP4   Assy Pilot #04",
+     "checked": false
+    },
+    {
+     "text": "A2AP4   Assy Pilot #04",
+     "checked": false
+    },
+    {
+     "text": "A2AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "A2AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "A2AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "A3A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A3A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A3A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A3A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A3A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A3A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A3A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A3A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A3A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A3A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A3A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A3A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A3A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A3A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A3A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A3A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A3A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A3A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A3A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A3A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A3A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A3A08   A3)Assy #07-2",
+     "checked": false
+    },
+    {
+     "text": "A3A08   A3)Assy #07-2",
+     "checked": false
+    },
+    {
+     "text": "A3A08   A3)Assy #07-2",
+     "checked": false
+    },
+    {
+     "text": "A4A01   A4)Assy #01(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A01   A4)Assy #01(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A01   A4)Assy #01(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A01   A4)Assy #01(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A02   A4)Assy #02(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A02   A4)Assy #02(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A02   A4)Assy #02(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A02   A4)Assy #02(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A03   A4)Assy #03(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A03   A4)Assy #03(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A03   A4)Assy #03(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A03   A4)Assy #03(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A04   A4)Assy #04(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A04   A4)Assy #04(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A04   A4)Assy #04(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A04   A4)Assy #04(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A05   A4)Assy #05(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A05   A4)Assy #05(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A05   A4)Assy #05(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A05   A4)Assy #05(old)",
+     "checked": false
+    },
+    {
+     "text": "A4A06   A4)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A4A06   A4)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A4A06   A4)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A4A06   A4)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A4A07   A4)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A4A07   A4)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A4A07   A4)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A4A07   A4)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A5A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A5A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A5A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A5A01   Assy #01",
+     "checked": false
+    },
+    {
+     "text": "A5A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A5A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A5A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A5A02   Assy #02",
+     "checked": false
+    },
+    {
+     "text": "A5A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A5A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A5A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A5A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A6A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A6A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A6A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A6A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A6A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A6A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A6A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A6A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A6A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A6A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A6A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A6A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A6A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A6A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A6A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A6A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A6A25   Assy #25",
+     "checked": false
+    },
+    {
+     "text": "A6A25   Assy #25",
+     "checked": false
+    },
+    {
+     "text": "A6A25   Assy #25",
+     "checked": false
+    },
+    {
+     "text": "A6A25   Assy #25",
+     "checked": false
+    },
+    {
+     "text": "A7A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A7A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A7A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A7A08   Assy #08",
+     "checked": false
+    },
+    {
+     "text": "A7A09   Assy #09",
+     "checked": false
+    },
+    {
+     "text": "A7A09   Assy #09",
+     "checked": false
+    },
+    {
+     "text": "A7A09   Assy #09",
+     "checked": false
+    },
+    {
+     "text": "A7A09   Assy #09",
+     "checked": false
+    },
+    {
+     "text": "A7A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A7A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A7A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A7A10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "A7A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A7A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A7A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A7A11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "A7A12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "A7A12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "A7A12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "A7A12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "A7A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A7A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A7A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A7A13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "A7A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A7A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A7A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A7A14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "A7A15   Assy #15",
+     "checked": false
+    },
+    {
+     "text": "A7A15   Assy #15",
+     "checked": false
+    },
+    {
+     "text": "A7A15   Assy #15",
+     "checked": false
+    },
+    {
+     "text": "A7A15   Assy #15",
+     "checked": false
+    },
+    {
+     "text": "A7A16   Assy #16",
+     "checked": false
+    },
+    {
+     "text": "A7A16   Assy #16",
+     "checked": false
+    },
+    {
+     "text": "A7A16   Assy #16",
+     "checked": false
+    },
+    {
+     "text": "A7A16   Assy #16",
+     "checked": false
+    },
+    {
+     "text": "A7A17   Assy #17",
+     "checked": false
+    },
+    {
+     "text": "A7A17   Assy #17",
+     "checked": false
+    },
+    {
+     "text": "A7A17   Assy #17",
+     "checked": false
+    },
+    {
+     "text": "A7A17   Assy #17",
+     "checked": false
+    },
+    {
+     "text": "A7A18   Assy #18",
+     "checked": false
+    },
+    {
+     "text": "A7A18   Assy #18",
+     "checked": false
+    },
+    {
+     "text": "A7A18   Assy #18",
+     "checked": false
+    },
+    {
+     "text": "A7A18   Assy #18",
+     "checked": false
+    },
+    {
+     "text": "A7A19   Assy #19",
+     "checked": false
+    },
+    {
+     "text": "A7A19   Assy #19",
+     "checked": false
+    },
+    {
+     "text": "A7A19   Assy #19",
+     "checked": false
+    },
+    {
+     "text": "A7A19   Assy #19",
+     "checked": false
+    },
+    {
+     "text": "A7A20   Assy #20",
+     "checked": false
+    },
+    {
+     "text": "A7A20   Assy #20",
+     "checked": false
+    },
+    {
+     "text": "A7A20   Assy #20",
+     "checked": false
+    },
+    {
+     "text": "A7A20   Assy #20",
+     "checked": false
+    },
+    {
+     "text": "A7A21   Assy #21",
+     "checked": false
+    },
+    {
+     "text": "A7A21   Assy #21",
+     "checked": false
+    },
+    {
+     "text": "A7A21   Assy #21",
+     "checked": false
+    },
+    {
+     "text": "A7A21   Assy #21",
+     "checked": false
+    },
+    {
+     "text": "A7A22   Assy #22",
+     "checked": false
+    },
+    {
+     "text": "A7A22   Assy #22",
+     "checked": false
+    },
+    {
+     "text": "A7A22   Assy #22",
+     "checked": false
+    },
+    {
+     "text": "A7A22   Assy #22",
+     "checked": false
+    },
+    {
+     "text": "A7A23   Assy #23",
+     "checked": false
+    },
+    {
+     "text": "A7A23   Assy #23",
+     "checked": false
+    },
+    {
+     "text": "A7A23   Assy #23",
+     "checked": false
+    },
+    {
+     "text": "A7A23   Assy #23",
+     "checked": false
+    },
+    {
+     "text": "A7A24   Assy #24",
+     "checked": false
+    },
+    {
+     "text": "A7A24   Assy #24",
+     "checked": false
+    },
+    {
+     "text": "A7A24   Assy #24",
+     "checked": false
+    },
+    {
+     "text": "A7A24   Assy #24",
+     "checked": false
+    },
+    {
+     "text": "A8A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A8A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A8A03   Assy #03",
+     "checked": false
+    },
+    {
+     "text": "A8A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A8A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A8A04   Assy #04",
+     "checked": false
+    },
+    {
+     "text": "A8A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A8A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A8A05   Assy #05",
+     "checked": false
+    },
+    {
+     "text": "A8A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A8A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A8A06   Assy #06",
+     "checked": false
+    },
+    {
+     "text": "A8A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A8A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A8A07   Assy #07",
+     "checked": false
+    },
+    {
+     "text": "A8AA1   Assy #01-1",
+     "checked": false
+    },
+    {
+     "text": "A8AA1   Assy #01-1",
+     "checked": false
+    },
+    {
+     "text": "A8AA1   Assy #01-1",
+     "checked": false
+    },
+    {
+     "text": "A8AA2   Assy #01-2",
+     "checked": false
+    },
+    {
+     "text": "A8AA2   Assy #01-2",
+     "checked": false
+    },
+    {
+     "text": "A8AA2   Assy #01-2",
+     "checked": false
+    },
+    {
+     "text": "A8AB1   Assy #02-1",
+     "checked": false
+    },
+    {
+     "text": "A8AB1   Assy #02-1",
+     "checked": false
+    },
+    {
+     "text": "A8AB1   Assy #02-1",
+     "checked": false
+    },
+    {
+     "text": "A8AB2   Assy #02-2",
+     "checked": false
+    },
+    {
+     "text": "A8AB2   Assy #02-2",
+     "checked": false
+    },
+    {
+     "text": "A8AB2   Assy #02-2",
+     "checked": false
+    },
+    {
+     "text": "A8AF1   Assy #06-1",
+     "checked": false
+    },
+    {
+     "text": "A8AF1   Assy #06-1",
+     "checked": false
+    },
+    {
+     "text": "A8AF1   Assy #06-1",
+     "checked": false
+    },
+    {
+     "text": "A8AF2   Assy #06-2",
+     "checked": false
+    },
+    {
+     "text": "A8AF2   Assy #06-2",
+     "checked": false
+    },
+    {
+     "text": "A8AF2   Assy #06-2",
+     "checked": false
+    },
+    {
+     "text": "A9A01   Assy GM LV #01",
+     "checked": false
+    },
+    {
+     "text": "A9A01   Assy GM LV #01",
+     "checked": false
+    },
+    {
+     "text": "A9A01   Assy GM LV #01",
+     "checked": false
+    },
+    {
+     "text": "A9AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "A9AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "A9AP5   Assy Pilot #05",
+     "checked": false
+    },
+    {
+     "text": "AAA10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AAA10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AAA10   Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AAA11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AAA11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AAA11   Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AAA12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "AAA12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "AAA12   Assy #12",
+     "checked": false
+    },
+    {
+     "text": "AAA13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "AAA13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "AAA13   Assy #13",
+     "checked": false
+    },
+    {
+     "text": "AAA14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "AAA14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "AAA14   Assy #14",
+     "checked": false
+    },
+    {
+     "text": "ACA26   Assy #26",
+     "checked": false
+    },
+    {
+     "text": "ACA26   Assy #26",
+     "checked": false
+    },
+    {
+     "text": "ACA26   Assy #26",
+     "checked": false
+    },
+    {
+     "text": "ACA26   Assy #26",
+     "checked": false
+    },
+    {
+     "text": "ACA27   Assy #27",
+     "checked": false
+    },
+    {
+     "text": "ACA27   Assy #27",
+     "checked": false
+    },
+    {
+     "text": "ACA27   Assy #27",
+     "checked": false
+    },
+    {
+     "text": "ACA27   Assy #27",
+     "checked": false
+    },
+    {
+     "text": "ACA28   Assy #28",
+     "checked": false
+    },
+    {
+     "text": "ACA28   Assy #28",
+     "checked": false
+    },
+    {
+     "text": "ACA28   Assy #28",
+     "checked": false
+    },
+    {
+     "text": "ACA28   Assy #28",
+     "checked": false
+    },
+    {
+     "text": "ACA29   Assy #29",
+     "checked": false
+    },
+    {
+     "text": "ACA29   Assy #29",
+     "checked": false
+    },
+    {
+     "text": "ACA29   Assy #29",
+     "checked": false
+    },
+    {
+     "text": "ACA29   Assy #29",
+     "checked": false
+    },
+    {
+     "text": "AFAP6   AF)Assy Pilot #06",
+     "checked": false
+    },
+    {
+     "text": "AFAP6   AF)Assy Pilot #06",
+     "checked": false
+    },
+    {
+     "text": "AFAP6   AF)Assy Pilot #06",
+     "checked": false
+    },
+    {
+     "text": "AHA01   AH)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "AHA01   AH)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "AHA02   AH)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "AHA02   AH)Assy #02",
+     "checked": false
+    },
+    {
+     "text": "AHA03   AH)Assy #03",
+     "checked": false
+    },
+    {
+     "text": "AHA03   AH)Assy #03",
+     "checked": false
+    },
+    {
+     "text": "AHA04   AH)Assy #04",
+     "checked": false
+    },
+    {
+     "text": "AHA04   AH)Assy #04",
+     "checked": false
+    },
+    {
+     "text": "AIA08   AI)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "AIA08   AI)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "AIA08   AI)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "AIA08   AI)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "AIA09   AI)Assy #09",
+     "checked": false
+    },
+    {
+     "text": "AIA09   AI)Assy #09",
+     "checked": false
+    },
+    {
+     "text": "AIA09   AI)Assy #09",
+     "checked": false
+    },
+    {
+     "text": "AIA09   AI)Assy #09",
+     "checked": false
+    },
+    {
+     "text": "AIA10   AI)Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AIA10   AI)Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AIA10   AI)Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AIA10   AI)Assy #10",
+     "checked": false
+    },
+    {
+     "text": "AIA11   AI)Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AIA11   AI)Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AIA11   AI)Assy #11",
+     "checked": false
+    },
+    {
+     "text": "AIA11   AI)Assy #11",
+     "checked": false
+    },
+    {
+     "text": "ALA01   AL)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "ALA01   AL)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "ALA01   AL)Assy #01",
+     "checked": false
+    },
+    {
+     "text": "ALA02   AL)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "ALA02   AL)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "ALA02   AL)Assy #08",
+     "checked": false
+    },
+    {
+     "text": "E5DP1   Elec Pilot #1-01",
+     "checked": false
+    },
+    {
+     "text": "E5DP1   Elec Pilot #1-01",
+     "checked": false
+    },
+    {
+     "text": "E5DP1   Elec Pilot #1-01",
+     "checked": false
+    },
+    {
+     "text": "E5DP2   E5)Elec Solid Pilot #1",
+     "checked": false
+    },
+    {
+     "text": "E5DP2   E5)Elec Solid Pilot #1",
+     "checked": false
+    },
+    {
+     "text": "E5DP2   E5)Elec Solid Pilot #1",
+     "checked": false
+    },
+    {
+     "text": "ESD01   ES)Elec #2-01(Auto)",
+     "checked": false
+    },
+    {
+     "text": "ESD01   ES)Elec #2-01(Auto)",
+     "checked": false
+    },
+    {
+     "text": "ESD01   ES)Elec #2-01(Auto)",
+     "checked": false
+    },
+    {
+     "text": "ESD01   ES)Elec #2-01(Auto)",
+     "checked": false
+    },
+    {
+     "text": "ETD02   ET)Elec #02",
+     "checked": false
+    },
+    {
+     "text": "ETD02   ET)Elec #02",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E5M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M01_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E6M02_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_E9M02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EAM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EBM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_A   Line 02(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM02_C   Line 02(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ECM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_A   Line 03(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM03_C   Line 03(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_A   Line 06(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_A   Line 06(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_A   Line 06(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_A   Line 06(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_C   Line 06(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_C   Line 06(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_C   Line 06(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM06_C   Line 06(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_A   Line 07(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_A   Line 07(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_A   Line 07(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_A   Line 07(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_C   Line 07(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_C   Line 07(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_C   Line 07(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EDM07_C   Line 07(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_A   Line 04(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM04_C   Line 04(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_A   Line 05(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EFM05_C   Line 05(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_A   EG Pilot 3(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_A   EG Pilot 3(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_A   EG Pilot 3(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_C   EG Pilot 3(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_C   EG Pilot 3(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EGM01_C   EG Pilot 3(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_A   Line 08(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_A   Line 08(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_A   Line 08(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_A   Line 08(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_C   Line 08(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_C   Line 08(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_C   Line 08(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM08_C   Line 08(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_A   Line 09(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_A   Line 09(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_A   Line 09(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_A   Line 09(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_C   Line 09(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_C   Line 09(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_C   Line 09(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM09_C   Line 09(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_A   Line 10(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_A   Line 10(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_A   Line 10(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_A   Line 10(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_C   Line 10(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_C   Line 10(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_C   Line 10(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_EJM10_C   Line 10(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_A   Line 01(-)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_C   Line 01(+)",
+     "checked": false
+    },
+    {
+     "text": "FP_ESM01_C   Line 01(+)",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbLine/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "clbOperation",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation",
+   "visible": true,
+   "enabled": true,
+   "x": 941,
+   "y": 12,
+   "w": 257,
+   "h": 21,
+   "tab": 8,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 257,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 116,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 116,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "Assembly",
+     "checked": false
+    },
+    {
+     "text": "BMA Packing",
+     "checked": false
+    },
+    {
+     "text": "CMA Packing",
+     "checked": false
+    },
+    {
+     "text": "Coating",
+     "checked": false
+    },
+    {
+     "text": "Core Assembly",
+     "checked": false
+    },
+    {
+     "text": "LINK Completion",
+     "checked": false
+    },
+    {
+     "text": "Packaging",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbOperation/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "clbBuilding",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding",
+   "visible": true,
+   "enabled": true,
+   "x": 632,
+   "y": 12,
+   "w": 238,
+   "h": 21,
+   "tab": 7,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 238,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "OC4_A",
+     "checked": false
+    },
+    {
+     "text": "OC5_A",
+     "checked": false
+    },
+    {
+     "text": "OC3_A",
+     "checked": false
+    },
+    {
+     "text": "OC8_A",
+     "checked": false
+    },
+    {
+     "text": "OC10_A",
+     "checked": false
+    },
+    {
+     "text": "OC10_A(Pilot)",
+     "checked": false
+    },
+    {
+     "text": "OC4_E",
+     "checked": false
+    },
+    {
+     "text": "OC5_E",
+     "checked": false
+    },
+    {
+     "text": "OC3_E(Pilot)",
+     "checked": false
+    },
+    {
+     "text": "OC8_E(Pilot)",
+     "checked": false
+    },
+    {
+     "text": "OC10_E(Pilot)",
+     "checked": false
+    },
+    {
+     "text": "OC4_P",
+     "checked": false
+    },
+    {
+     "text": "OC5_P",
+     "checked": false
+    },
+    {
+     "text": "OC2_P",
+     "checked": false
+    },
+    {
+     "text": "OC9_P",
+     "checked": false
+    },
+    {
+     "text": "MI1_A",
+     "checked": false
+    },
+    {
+     "text": "MI_LS_A",
+     "checked": false
+    },
+    {
+     "text": "(N/A)(AI)MI2_A",
+     "checked": false
+    },
+    {
+     "text": "MI1_E",
+     "checked": false
+    },
+    {
+     "text": "(N/A)(ES)MI2_E",
+     "checked": false
+    },
+    {
+     "text": "MI_LS_E",
+     "checked": false
+    },
+    {
+     "text": "MI_LS_F",
+     "checked": false
+    },
+    {
+     "text": "MI1_F",
+     "checked": false
+    },
+    {
+     "text": "(N2)MI_LS2_F(ESS)",
+     "checked": false
+    },
+    {
+     "text": "MI3_P",
+     "checked": false
+    },
+    {
+     "text": "HP_P",
+     "checked": false
+    },
+    {
+     "text": "MI4_P",
+     "checked": false
+    },
+    {
+     "text": "MI3_P2",
+     "checked": false
+    },
+    {
+     "text": "(SA)MI_LS2_A(ESS)",
+     "checked": false
+    },
+    {
+     "text": "NA1_A",
+     "checked": false
+    },
+    {
+     "text": "(N/A)Nanjing Automotive Bldg 1",
+     "checked": false
+    },
+    {
+     "text": "NA2_E",
+     "checked": false
+    },
+    {
+     "text": "NA1_P",
+     "checked": false
+    },
+    {
+     "text": "NB1_A",
+     "checked": false
+    },
+    {
+     "text": "NB2_A",
+     "checked": false
+    },
+    {
+     "text": "NB1_E",
+     "checked": false
+    },
+    {
+     "text": "NB2_E",
+     "checked": false
+    },
+    {
+     "text": "NB1_P",
+     "checked": false
+    },
+    {
+     "text": "NB2_P",
+     "checked": false
+    },
+    {
+     "text": "WA1_A",
+     "checked": false
+    },
+    {
+     "text": "WA3_A",
+     "checked": false
+    },
+    {
+     "text": "WA5_A",
+     "checked": false
+    },
+    {
+     "text": "WA8_A",
+     "checked": false
+    },
+    {
+     "text": "WA2_E",
+     "checked": false
+    },
+    {
+     "text": "WA4_E",
+     "checked": false
+    },
+    {
+     "text": "WA8_E",
+     "checked": false
+    },
+    {
+     "text": "WA10_P",
+     "checked": false
+    },
+    {
+     "text": "WA11_P",
+     "checked": false
+    },
+    {
+     "text": "WA12_P",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbBuilding/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "clbPlantSite",
+   "type": "GSCM.Windows.Forms.Controls.UsrCheckedList",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite",
+   "visible": true,
+   "enabled": true,
+   "x": 385,
+   "y": 12,
+   "w": 189,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "control_values": "ALL"
+  },
+  {
+   "name": "cbo",
+   "type": "System.Windows.Forms.ComboBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/cbo",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 189,
+   "h": 21,
+   "tab": 0,
+   "text": "ALL",
+   "selected_index": 0,
+   "selected_text": "ALL",
+   "selected_value": null,
+   "items": [
+    "ALL"
+   ],
+   "item_count": 1
+  },
+  {
+   "name": "pnlMain",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 22,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": ""
+  },
+  {
+   "name": "clb",
+   "type": "System.Windows.Forms.CheckedListBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/clb",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 20,
+   "w": 134,
+   "h": 308,
+   "tab": 3,
+   "text": "",
+   "items": [
+    {
+     "text": "LGESEG Automotive Waranty EG01",
+     "checked": false
+    },
+    {
+     "text": "LGESOC Automotive Waranty HQ05",
+     "checked": false
+    },
+    {
+     "text": "LGESOC Cell HQ07",
+     "checked": false
+    },
+    {
+     "text": "LGESOC Elec HQ07",
+     "checked": false
+    },
+    {
+     "text": "LGESOC Pack HQ07",
+     "checked": false
+    },
+    {
+     "text": "HQ OC2 Auto Prod-Cell",
+     "checked": false
+    },
+    {
+     "text": "OC_2 Auto Elec-Electrode",
+     "checked": false
+    },
+    {
+     "text": "OC_2 Auto Pack-Pack",
+     "checked": false
+    },
+    {
+     "text": "LGESMI Automotive Waranty MI00",
+     "checked": false
+    },
+    {
+     "text": "LGESMI Cell MI00",
+     "checked": false
+    },
+    {
+     "text": "LGESMI Elec MI00",
+     "checked": false
+    },
+    {
+     "text": "LGESMI Pack MI00",
+     "checked": false
+    },
+    {
+     "text": "MI_LS Auto Assy/Pack-Cell",
+     "checked": false
+    },
+    {
+     "text": "MI_LS Auto Elec-Electrode",
+     "checked": false
+    },
+    {
+     "text": "LGESMI Hazel Park Automotive Waranty MI03",
+     "checked": false
+    },
+    {
+     "text": "ESMI-Hazel Park-Pack",
+     "checked": false
+    },
+    {
+     "text": "LGESNA Cell NA00",
+     "checked": false
+    },
+    {
+     "text": "LGESNA Elec NA00",
+     "checked": false
+    },
+    {
+     "text": "LGESNA Pack NA00",
+     "checked": false
+    },
+    {
+     "text": "LGESNB Cell NB01",
+     "checked": false
+    },
+    {
+     "text": "LGESNB Electrode-Electrode NB01",
+     "checked": false
+    },
+    {
+     "text": "LGESNB Pack NB01",
+     "checked": false
+    },
+    {
+     "text": "LGESWA Automotive Waranty WA00",
+     "checked": false
+    },
+    {
+     "text": "LGESWA Cell WA00",
+     "checked": false
+    },
+    {
+     "text": "LGESWA Elec WA00",
+     "checked": false
+    },
+    {
+     "text": "LGESWA Pack WA00",
+     "checked": false
+    }
+   ]
+  },
+  {
+   "name": "panel1",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 134,
+   "h": 20,
+   "tab": 5,
+   "text": ""
+  },
+  {
+   "name": "txtTextKeyin",
+   "type": "System.Windows.Forms.TextBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1/txtTextKeyin",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 79,
+   "h": 21,
+   "tab": 5,
+   "text": "",
+   "read_only": "False"
+  },
+  {
+   "name": "chkAll",
+   "type": "System.Windows.Forms.CheckBox",
+   "path": "/usrConditionPanel1/usrLayoutControl2/clbPlantSite/pnlMain/panel1/chkAll",
+   "visible": true,
+   "enabled": true,
+   "x": 85,
+   "y": 0,
+   "w": 47,
+   "h": 18,
+   "tab": 4,
+   "text": "ALL",
+   "checked": false
+  },
+  {
+   "name": "cboDivision",
+   "type": "GSCM.Windows.Forms.Controls.UsrCombo",
+   "path": "/usrConditionPanel1/usrLayoutControl2/cboDivision",
+   "visible": true,
+   "enabled": true,
+   "x": 33,
+   "y": 12,
+   "w": 283,
+   "h": 21,
+   "tab": 1,
+   "text": "81 Automotive Battery",
+   "selected_index": 0,
+   "selected_text": "81 Automotive Battery",
+   "selected_value": "81",
+   "items": [
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "81_UC Automotive Battery(UC)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)"
+   ],
+   "item_count": 8,
+   "control_values": "81"
+  },
+  {
+   "name": "",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/usrConditionPanel1/Panel",
+   "visible": true,
+   "enabled": true,
+   "x": 1439,
+   "y": 0,
+   "w": 20,
+   "h": 71,
+   "tab": 1,
+   "text": ""
+  },
+  {
+   "name": "Change",
+   "type": "GSCM.Windows.Forms.Controls.UsrButton",
+   "path": "/usrConditionPanel1/Panel/Change",
+   "visible": true,
+   "enabled": true,
+   "x": 0,
+   "y": 56,
+   "w": 20,
+   "h": 15,
+   "tab": 0,
+   "text": "",
+   "control_values": ""
+  },
+  {
+   "name": "statusStripBaseForm",
+   "type": "System.Windows.Forms.StatusStrip",
+   "path": "/statusStripBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 538,
+   "w": 875,
+   "h": 26,
+   "tab": 1,
+   "text": "statusStrip1"
+  },
+  {
+   "name": "pnlBaseForm",
+   "type": "System.Windows.Forms.Panel",
+   "path": "/pnlBaseForm",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 31,
+   "tab": 0,
+   "text": ""
+  },
+  {
+   "name": "BaseRibbonCtl",
+   "type": "DevExpress.XtraBars.Ribbon.RibbonControl",
+   "path": "/pnlBaseForm/BaseRibbonCtl",
+   "visible": false,
+   "enabled": true,
+   "x": 0,
+   "y": 0,
+   "w": 875,
+   "h": 78,
+   "tab": 0,
+   "text": ""
+  }
+ ],
+ "layout_items": [
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlGroup2",
+   "label": "layoutControlGroup2",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem1",
+   "label": "emptySpaceItem1",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem2",
+   "label": "Plant Site",
+   "control": "clbPlantSite",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem6",
+   "label": "Line",
+   "control": "clbLine",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "emptySpaceItem5",
+   "label": "emptySpaceItem5",
+   "control": null,
+   "required": false,
+   "visible": "True",
+   "text_visible": "False"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem9",
+   "label": "Valid",
+   "control": "cboValid",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem4",
+   "label": "Building",
+   "control": "clbBuilding",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "Division",
+   "label": "Div",
+   "control": "cboDivision",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  },
+  {
+   "layout": "usrLayoutControl2",
+   "item": "layoutControlItem5",
+   "label": "Operation",
+   "control": "clbOperation",
+   "required": false,
+   "visible": "True",
+   "text_visible": "True"
+  }
+ ]
+}

@@ -1,408 +1,446 @@
 ﻿key,trace_row,check,layer,et,name,display,impl,result,why,rows,cs
 X-LOC|ROW:D00-1-001,T-7c94195d,X-LOC,GEN,ROW,D00-1-001,D00-1-001,Y,PASS,구현 위치 실존 1곳,1,
-G4|COND:clbDivision,T-0cbb704e,G4,DESIGN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
-SC1|SCREEN,T-224096ed,SC1,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke,7,
-G1|COND:clbDivision,T-c7f9aed4,G1,GEN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,5,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242
-G6|COND:clbDivision,T-c6498c41,G6,GEN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
-B1|COND:clbDivision,T-780b1a57,B1,COMBO,COND,clbDivision,clbDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B2|COND:clbDivision,T-8356d949,B2,COMBO,COND,clbDivision,clbDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B4|COND:clbDivision,T-39b86c8f,B4,COMBO,COND,clbDivision,clbDivision / Division,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B6|COND:clbDivision,T-5df0e9a1,B6,COMBO,COND,clbDivision,clbDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-X-LOC|ROW:D00-1-002,T-e5cd4483,X-LOC,GEN,ROW,D00-1-002,D00-1-002,Y,PASS,구현 위치 실존 1곳,1,
-G4|COND:txtItemId,T-cfc8f271,G4,DESIGN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,1,
-G1|COND:txtItemId,T-9a234a68,G1,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:243
-G6|COND:txtItemId,T-479088ac,G6,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,1,
-A1|ROW:D00-1-002,T-62048ac2,A1,GEN,ROW,D00-1-002,D00-1-002,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-J2|SCREEN,T-f299306c,J2,AUTH,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(auth·authcrud spec) — 실행 필요: auth,46,
+G4|COND:clbDivision,T-0cbb704e,G4,DESIGN,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-e98a441e SEARCH / E2E smoke labels,3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
+SC1|SCREEN,T-224096ed,SC1,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,NA,원장 V-4dd54aff RULE_SCREEN / 원장 V-3cbd77e1 CONFIRMED / E2E smoke cond order,8,
+G1|COND:clbDivision,T-c7f9aed4,G1,GEN,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-1b55cba0 SEARCH,4,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242
+G6|COND:clbDivision,T-c6498c41,G6,GEN,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,실측[T-c6498c41]: AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)',3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
+B1|COND:clbDivision,T-780b1a57,B1,COMBO,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-f85398b2 SEARCH,1,
+B2|COND:clbDivision,T-8356d949,B2,COMBO,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-cff640d6 SEARCH,1,
+B4|COND:clbDivision,T-39b86c8f,B4,COMBO,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-cdec5eb6 SEARCH,1,
+B6|COND:clbDivision,T-5df0e9a1,B6,COMBO,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,원장 V-d3deb407 SEARCH,1,
+X-LOC|ROW:D00-1-002,T-e5cd4483,X-LOC,GEN,ROW,D00-1-002,D00-1-002,Y,PASS,구현 위치 실존 2곳,1,
+G4|COND:txtItemId,T-cfc8f271,G4,DESIGN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,PASS,원장 V-c426fca5 SEARCH / E2E smoke labels,1,
+G1|COND:txtItemId,T-9a234a68,G1,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,NA,원장 V-eebf902c SEARCH,3,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:243
+G6|COND:txtItemId,T-479088ac,G6,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,PASS,실측[T-479088ac]: AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '(빈값)' 허용 (사용자 룰 2026-10-26),1,
+H6|COND:txtItemId,T-57284017,H6,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,PASS,E2E smoke cond popup,2,
+G5|COND:txtItemId,T-22be786d,G5,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,PASS,원장 V-e91f68bf SEARCH,2,
+M4|COND:txtItemId,T-fa4f4468,M4,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname / Nickname,Y,REVIEW,검증 엔진이 실행됐으나 이 대상(COND txtItemId)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장,2,
+D4|ROW:D00-1-002,T-c22af200,D4,EDIT,ROW,D00-1-002,D00-1-002,Y,ERROR,행 집계 — 대조표 D00-1-002 '§1 txtItemId / TextBox' 의 D4 12요소: PASS:10 · ERROR:2,1,
+D6|SCREEN,T-0d8104d8,D6,EDIT,SCREEN,SCP0033,SCP0033 화면,Y,PASS,원장 V-98d83c34 RULE_SCREEN / 원장 V-ef7383f7 RULE_SCREEN / 원장 V-437304e5 RULE_SCREEN / 원장 V-2ae4429e GENERAL / 원장 V-00a9c74f GENERAL / 원장 V-f7e0408f GENERAL / 원장 V-40d631a1 CONFIRMED / 실측[T-0d8104d8]: 조회,24,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:204 SCP0033_Shipment_semi_dept_day.cs:206 SCP0033_Shipment_semi_dept_day.cs:
+J2|SCREEN,T-f299306c,J2,AUTH,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-a211142c RULE_SCREEN / 원장 V-5e3332b7 DEFECT / 원장 V-a4c5f716 GENERAL / 원장 V-9f1f9955 GENERAL / 원장 V-7b6ecab9 GENERAL / 원장 V-861a2e16 GENERAL / 원장 V-9817c1d3 GENERAL / 원장 V-fe6da264 GENERAL / 원장 V-,46,
+A1|ROW:D00-1-002,T-62048ac2,A1,GEN,ROW,D00-1-002,D00-1-002,Y,REVIEW,행 집계 — 대조표 D00-1-002 '§1 txtItemId / TextBox' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
 X-LOC|ROW:D00-1-003,T-72f0267c,X-LOC,GEN,ROW,D00-1-003,D00-1-003,Y,PASS,구현 위치 실존 1곳,1,
-G4|COND:cboValidYN,T-07149065,G4,DESIGN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
-G1|COND:cboValidYN,T-850b0cb8,G1,GEN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:244
-G6|COND:cboValidYN,T-02bc521a,G6,GEN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
-B1|COND:cboValidYN,T-c7133d5f,B1,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B2|COND:cboValidYN,T-82df300d,B2,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B4|COND:cboValidYN,T-e215a977,B4,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B6|COND:cboValidYN,T-41f9cadb,B6,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+G4|COND:cboValidYN,T-07149065,G4,DESIGN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-e8d5fcf3 SEARCH / E2E smoke labels,4,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
+G1|COND:cboValidYN,T-850b0cb8,G1,GEN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-e6c61d68 SEARCH / E2E smoke cond combo,4,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:244
+G6|COND:cboValidYN,T-02bc521a,G6,GEN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,"실측[T-02bc521a]: AS-IS setListBox(…, true) = ALL 선택 ↔ TO-BE 초기 'ALL'",4,SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
+B1|COND:cboValidYN,T-c7133d5f,B1,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-a17ce590 SEARCH,2,
+B2|COND:cboValidYN,T-82df300d,B2,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-8244f4bd SEARCH,2,
+B4|COND:cboValidYN,T-e215a977,B4,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-d04733db SEARCH,2,
+B6|COND:cboValidYN,T-41f9cadb,B6,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-5c4e337f SEARCH,1,
 X-LOC|ROW:D00-1-004,T-19b148cd,X-LOC,GEN,ROW,D00-1-004,D00-1-004,Y,PASS,구현 위치 실존 2곳,1,
-K-SA|SCREEN,T-91120f7f,K-SA,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Search Area)) — 실행 필요: smoke,3,
-G3|SCREEN,T-7327941f,G3,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke,7,
-G4|ROW:D00-1-004,T-95478178,G4,DESIGN,ROW,D00-1-004,D00-1-004,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G1|ROW:D00-1-004,T-bcb9180f,G1,GEN,ROW,D00-1-004,D00-1-004,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G6|ROW:D00-1-004,T-80b812be,G6,GEN,ROW,D00-1-004,D00-1-004,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-D3|ROW:D00-1-004,T-73349113,D3,EDIT,ROW,D00-1-004,D00-1-004,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-H2|ROW:D00-1-004,T-09990196,H2,DESIGN,ROW,D00-1-004,D00-1-004,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+K-SA|SCREEN,T-91120f7f,K-SA,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,E2E smoke common Search Area 조회영역 토글,3,
+G3|SCREEN,T-7327941f,G3,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,PASS,원장 V-d9af6a6d RULE_SCREEN / 원장 V-04555683 GENERAL / 원장 V-3a6ebfdf GENERAL / 원장 V-716708c4 GENERAL / 원장 V-f06fc0a2 CONFIRMED / 원장 V-a8838809 CONFIRMED / E2E smoke common Condition(F6) 조회조건 저장 / E2E smo,7,
+G4|ROW:D00-1-004,T-95478178,G4,DESIGN,ROW,D00-1-004,D00-1-004,Y,PASS,행 집계 — 대조표 D00-1-004 '§1 usrConditionPanel1 / UsrConditionPanel' 의 G4 3요소: PASS:3,1,
+G1|ROW:D00-1-004,T-bcb9180f,G1,GEN,ROW,D00-1-004,D00-1-004,Y,PASS,행 집계 — 대조표 D00-1-004 '§1 usrConditionPanel1 / UsrConditionPanel' 의 G1 4요소: PASS:2 · NA:2,1,
+G6|ROW:D00-1-004,T-80b812be,G6,GEN,ROW,D00-1-004,D00-1-004,Y,NA,실측[T-80b812be]: 대조표 행 D00-1-004() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정),1,
+D3|ROW:D00-1-004,T-73349113,D3,EDIT,ROW,D00-1-004,D00-1-004,Y,NA,행 집계 — 대조표 D00-1-004 '§1 usrConditionPanel1 / UsrConditionPanel' 의 D3 8요소: NA:8,1,
+H2|ROW:D00-1-004,T-09990196,H2,DESIGN,ROW,D00-1-004,D00-1-004,Y,PASS,행 집계 — 대조표 D00-1-004 '§1 usrConditionPanel1 / UsrConditionPanel' 의 H2 4요소: PASS:4,1,
 X-LOC|ROW:D00-1-005,T-d916c1cd,X-LOC,GEN,ROW,D00-1-005,D00-1-005,Y,PASS,구현 위치 실존 1곳,1,
-X-ROW|ENTRY:D00-1-005,T-e117e2bf,X-ROW,GEN,ENTRY,D00-1-005,D00-1-005,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-ROW|ENTRY:D00-1-005,T-e117e2bf,X-ROW,GEN,ENTRY,D00-1-005,D00-1-005,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
 X-LOC|ROW:D00-1-006,T-75eb6da9,X-LOC,GEN,ROW,D00-1-006,D00-1-006,Y,PASS,구현 위치 실존 1곳,1,
-X-ROW|ENTRY:D00-1-006,T-b158c4d4,X-ROW,GEN,ENTRY,D00-1-006,D00-1-006,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-ROW|ENTRY:D00-1-006,T-b158c4d4,X-ROW,GEN,ENTRY,D00-1-006,D00-1-006,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
 X-LOC|ROW:D00-1-007,T-6f85fc11,X-LOC,GEN,ROW,D00-1-007,D00-1-007,Y,PASS,구현 위치 실존 1곳,1,
-X-ROW|ENTRY:D00-1-007,T-89285132,X-ROW,GEN,ENTRY,D00-1-007,D00-1-007,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-ROW|ENTRY:D00-1-007,T-89285132,X-ROW,GEN,ENTRY,D00-1-007,D00-1-007,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
 X-REASON|ROW:D00-1-008,T-f9e9f3ae,X-REASON,DESIGN,ROW,D00-1-008,D00-1-008,Y,PASS,사유 있음: DevExpress 레이아웃 그룹 컨테이너 = 데드 스캐폴딩(design 01 §1 경고). 자체 visua,1,
 X-REASON|ROW:D00-1-009,T-ced950e0,X-REASON,DESIGN,ROW,D00-1-009,D00-1-009,Y,PASS,사유 있음: 동일 계열 컨테이너 전용 레이아웃 그룹(visual 산출 없음). TO-BE SearchArea/Grid 배,1,
 X-REASON|ROW:D00-1-010,T-d3adb8be,X-REASON,DESIGN,ROW,D00-1-010,D00-1-010,Y,PASS,"사유 있음: 조회영역 레이아웃 컨트롤(데드 스캐폴딩, design 01 §1). TO-BE 공용 SearchArea 가 ",1,
 X-LOC|ROW:D00-1-011,T-9df49389,X-LOC,GEN,ROW,D00-1-011,D00-1-011,Y,PASS,구현 위치 실존 2곳,1,
-G4|ROW:D00-1-011,T-5a4cf557,G4,DESIGN,ROW,D00-1-011,D00-1-011,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G1|ROW:D00-1-011,T-c5e3fc6f,G1,GEN,ROW,D00-1-011,D00-1-011,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G6|ROW:D00-1-011,T-0a9899d9,G6,GEN,ROW,D00-1-011,D00-1-011,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:D00-1-011,T-67746469,A1,GEN,ROW,D00-1-011,D00-1-011,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-E4|MSG:MSG00667,T-9032546b,E4,EDIT,MSG,MSG00667,MSG00667,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
-I1|SCREEN,T-d7225a6f,I1,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta,30,SCP0033_Shipment_semi_dept_day.cs:291 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:400 SCP0033_Shipment_semi_dept_day.cs:409 SCP0033_Shipment_semi_dept_day.cs:417 SCP0033_Shipment_semi_dept_day.cs:466 SCP0033_Shipment_semi_dept_day.cs:533 SCP0033_Shipment_semi_dept_day.cs:
-H10|SCREEN,T-4c399ddb,H10,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,FAIL,표준 메시지 대신 브라우저 alert/confirm 직접 호출: components/ShipmentSemiDeptDayGrid.tsx,25,
+G4|ROW:D00-1-011,T-5a4cf557,G4,DESIGN,ROW,D00-1-011,D00-1-011,Y,PASS,행 집계 — 대조표 D00-1-011 '§1 usrLayoutControl2 / UsrLayoutControl' 의 G4 3요소: PASS:3,1,
+G1|ROW:D00-1-011,T-c5e3fc6f,G1,GEN,ROW,D00-1-011,D00-1-011,Y,PASS,행 집계 — 대조표 D00-1-011 '§1 usrLayoutControl2 / UsrLayoutControl' 의 G1 4요소: PASS:2 · NA:2,1,
+G6|ROW:D00-1-011,T-0a9899d9,G6,GEN,ROW,D00-1-011,D00-1-011,Y,NA,실측[T-0a9899d9]: 대조표 행 D00-1-011() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정),1,
+A1|ROW:D00-1-011,T-67746469,A1,GEN,ROW,D00-1-011,D00-1-011,Y,REVIEW,행 집계 — 대조표 D00-1-011 '§1 usrLayoutControl2 / UsrLayoutControl' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+E4|MSG:MSG00667,T-9032546b,E4,EDIT,MSG,MSG00667,MSG00667,Y,NA,실측[T-9032546b]: MSG00667: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,2,
+I1|SCREEN,T-d7225a6f,I1,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,PASS,원장 V-b2d28b02 RULE_SCREEN / 원장 V-d756294f RULE_SCREEN / 원장 V-d0df6718 RULE_SCREEN / 원장 V-38bb63f1 DEFECT / 원장 V-0bad8d71 DEFECT / 원장 V-a916bdf0 DEFECT / 원장 V-140c8fd2 GENERAL / 원장 V-f236e68a GENERAL /,30,SCP0033_Shipment_semi_dept_day.cs:291 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:400 SCP0033_Shipment_semi_dept_day.cs:409 SCP0033_Shipment_semi_dept_day.cs:417 SCP0033_Shipment_semi_dept_day.cs:466 SCP0033_Shipment_semi_dept_day.cs:533 SCP0033_Shipment_semi_dept_day.cs:
+H10|SCREEN,T-4c399ddb,H10,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,PASS,브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용,25,
 X-REASON|ROW:D00-1-012,T-f74df866,X-REASON,DESIGN,ROW,D00-1-012,D00-1-012,Y,PASS,"사유 있음: 레이아웃 여백 filler(정적, 기능 없음). TO-BE 는 MUI Grid size 배분으로 여백이 생성",1,
 X-LOC|ROW:D00-1-013,T-923aaf02,X-LOC,GEN,ROW,D00-1-013,D00-1-013,Y,PASS,구현 위치 실존 1곳,1,
-A5|ROW:D00-1-013,T-6528bd52,A5,DESIGN,ROW,D00-1-013,D00-1-013,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:D00-1-013,T-bd8b21a4,H5,DESIGN,ROW,D00-1-013,D00-1-013,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:D00-1-013,T-54eaa236,H2,DESIGN,ROW,D00-1-013,D00-1-013,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+A5|ROW:D00-1-013,T-6528bd52,A5,DESIGN,ROW,D00-1-013,D00-1-013,Y,PASS,행 집계 — 대조표 D00-1-013 '§1 spdMain / FpSpread' 의 A5 5요소: PASS:5,1,
+H5|ROW:D00-1-013,T-bd8b21a4,H5,DESIGN,ROW,D00-1-013,D00-1-013,Y,PASS,행 집계 — 대조표 D00-1-013 '§1 spdMain / FpSpread' 의 H5 5요소: PASS:5,1,
+H2|ROW:D00-1-013,T-54eaa236,H2,DESIGN,ROW,D00-1-013,D00-1-013,Y,PASS,행 집계 — 대조표 D00-1-013 '§1 spdMain / FpSpread' 의 H2 4요소: PASS:4,1,
 X-LOC|ROW:D00-1-014,T-e0d4af4a,X-LOC,GEN,ROW,D00-1-014,D00-1-014,Y,PASS,구현 위치 실존 2곳,1,
-A5|ROW:D00-1-014,T-f3d842cc,A5,DESIGN,ROW,D00-1-014,D00-1-014,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:D00-1-014,T-37e80d2d,H5,DESIGN,ROW,D00-1-014,D00-1-014,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:D00-1-014,T-b40cfe32,H2,DESIGN,ROW,D00-1-014,D00-1-014,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+A5|ROW:D00-1-014,T-f3d842cc,A5,DESIGN,ROW,D00-1-014,D00-1-014,Y,PASS,행 집계 — 대조표 D00-1-014 '§1 spdMain_Sheet1 / SheetView' 의 A5 5요소: PASS:5,1,
+H5|ROW:D00-1-014,T-37e80d2d,H5,DESIGN,ROW,D00-1-014,D00-1-014,Y,PASS,행 집계 — 대조표 D00-1-014 '§1 spdMain_Sheet1 / SheetView' 의 H5 5요소: PASS:5,1,
+H2|ROW:D00-1-014,T-b40cfe32,H2,DESIGN,ROW,D00-1-014,D00-1-014,Y,PASS,행 집계 — 대조표 D00-1-014 '§1 spdMain_Sheet1 / SheetView' 의 H2 4요소: PASS:4,1,
 X-REASON|ROW:D00-1-015,T-3fb4c87b,X-REASON,DESIGN,ROW,D00-1-015,D00-1-015,Y,PASS,사유 있음: WinForms Designer 의 비visual 컴포넌트 컨테이너 — 런타임 UI 산출이 없다. React,1,
 X-REASON|ROW:D00-1-016,T-5d7a6843,X-REASON,DESIGN,ROW,D00-1-016,D00-1-016,Y,PASS,사유 있음: WinForms 아이콘 리소스 목록(비visual). TO-BE 아이콘은 공용 lges-icons 컴포넌트가,1,
 X-LOC|ROW:D00-2-001,T-a33f9b32,X-LOC,GEN,ROW,D00-2-001,D00-2-001,Y,PASS,구현 위치 실존 2곳,1,
-H6|ROW:D00-2-001,T-b0f8dcf6,H6,POPUP,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:D00-2-001,T-b36a4b8c,G5,POPUP,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:D00-2-001,T-fef1098c,M4,POPUP,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-G1|ROW:D00-2-001,T-194ede8c,G1,GEN,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:D00-2-001,T-42310bfd,A1,GEN,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+H6|COL:DIVISION_ID,T-17d78d91,H6,POPUP,COL,DIVISION_ID,DIVISION_ID / Division,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+G5|COL:DIVISION_ID,T-657007ed,G5,POPUP,COL,DIVISION_ID,DIVISION_ID / Division,Y,NOPATH,검사기(popup_args_check.py · _verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+M4|COL:DIVISION_ID,T-8968351c,M4,POPUP,COL,DIVISION_ID,DIVISION_ID / Division,Y,REVIEW,"실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITEM_ID 더블클릭 → Distribution Route 팝업(new SCM0002_ItembyDivisionPopup) OK(현재 행 적용) → 대상 2개 중 채워짐 0 · 변경 0: ITEM_ID='', NICK_",2,
 X-LOC|ROW:D00-2-002,T-e5e45f2b,X-LOC,GEN,ROW,D00-2-002,D00-2-002,Y,PASS,구현 위치 실존 2곳,1,
-H6|COL:ITEM_ID,T-16afa44b,H6,POPUP,COL,ITEM_ID,ITEM_ID,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),13,SCP0033_Shipment_semi_dept_day.cs:477 SCP0033_Shipment_semi_dept_day.cs:479 SCP0033_Shipment_semi_dept_day.cs:481
-G5|COL:ITEM_ID,T-ae8e1b83,G5,POPUP,COL,ITEM_ID,ITEM_ID,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),13,SCP0033_Shipment_semi_dept_day.cs:477 SCP0033_Shipment_semi_dept_day.cs:479 SCP0033_Shipment_semi_dept_day.cs:481
-M4|COL:ITEM_ID,T-a0be1b20,M4,POPUP,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,10,
-D1|COL:ITEM_ID,T-65e4aaa9,D1,EDIT,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,3,
-D3|COL:ITEM_ID,T-1d826e84,D3,EDIT,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,3,
+H6|COL:ITEM_ID,T-16afa44b,H6,POPUP,COL,ITEM_ID,ITEM_ID / Model,Y,ERROR,원장 V-0e316d0e ASIS / 원장 V-83f3f141 ASIS / 원장 V-b4395b79 ASIS,14,SCP0033_Shipment_semi_dept_day.cs:477 SCP0033_Shipment_semi_dept_day.cs:479 SCP0033_Shipment_semi_dept_day.cs:481
+G5|COL:ITEM_ID,T-ae8e1b83,G5,POPUP,COL,ITEM_ID,ITEM_ID / Model,Y,PASS,원장 V-b4803739 ASIS / 원장 V-1599fc02 ASIS / 원장 V-e8804064 ASIS,14,SCP0033_Shipment_semi_dept_day.cs:477 SCP0033_Shipment_semi_dept_day.cs:479 SCP0033_Shipment_semi_dept_day.cs:481
+M4|COL:ITEM_ID,T-a0be1b20,M4,POPUP,COL,ITEM_ID,ITEM_ID / Model,Y,REVIEW,실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITEM_ID: ITEM_ID 더블클릭 → Distribution Route 팝업(new SCM0002_ItembyDivisionPopup) OK(현재 행 적용) → 대상 2개 중 채워짐 0 · 변경 0: ITEM_ID=,11,
+D1|COL:ITEM_ID,T-65e4aaa9,D1,EDIT,COL,ITEM_ID,ITEM_ID / Model,Y,PASS,원장 V-79f32ded COLUMN / 원장 V-c2c6ecba COLUMN / 실측[T-65e4aaa9]: [CR-072 팝업 입력 칸] ITEM_ID 는 셀 직접 편집을 막고 더블클릭 팝업으로 입력(TO-BE 메타 FPModal) — 기존행 r0 ITEM_ID 편집=false (AS-IS 잠금) | 신규행 r0 ITEM_ID 편집=false (AS-I,4,
+D3|COL:ITEM_ID,T-1d826e84,D3,EDIT,COL,ITEM_ID,ITEM_ID / Model,Y,NA,실측[T-1d826e84]: ITEM_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,4,
 X-LOC|ROW:D00-2-003,T-25b49a97,X-LOC,GEN,ROW,D00-2-003,D00-2-003,Y,PASS,구현 위치 실존 1곳,1,
-H2|ROW:D00-2-003,T-5fa47793,H2,DESIGN,ROW,D00-2-003,D00-2-003,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H4|SCREEN,T-8e38a684,H4,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)) — 실행 필요: trace,8,SCP0033_Shipment_semi_dept_day.cs:115 SCP0033_Shipment_semi_dept_day.cs:116 SCP0033_Shipment_semi_dept_day.cs:117
-H3|ROW:D00-2-003,T-135dfaa0,H3,DESIGN,ROW,D00-2-003,D00-2-003,Y,REVIEW,행 집계 — H3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:D00-2-003,T-5fa47793,H2,DESIGN,ROW,D00-2-003,D00-2-003,Y,PASS,행 집계 — 대조표 D00-2-003 '§2 spdMain / TopChange' 의 H2 4요소: PASS:4,1,
+H4|SCREEN,T-8e38a684,H4,DESIGN,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-11ddb94b RULE_SCREEN / 원장 V-4694fba8 RULE_SCREEN / 원장 V-9d289e96 RULE_SCREEN / 원장 V-ea3cf446 RULE_SCREEN / 원장 V-269f7836 RULE_SCREEN / 원장 V-632aea8e RULE_SCREEN / 원장 V-c828ee03 DEFECT / 원장 V-fda1,8,SCP0033_Shipment_semi_dept_day.cs:115 SCP0033_Shipment_semi_dept_day.cs:116 SCP0033_Shipment_semi_dept_day.cs:117
+H3|ROW:D00-2-003,T-135dfaa0,H3,DESIGN,ROW,D00-2-003,D00-2-003,Y,PASS,행 집계 — 대조표 D00-2-003 '§2 spdMain / TopChange' 의 H3 1요소: PASS:1,1,
 X-LOC|ROW:D00-3-001,T-b8f058ce,X-LOC,GEN,ROW,D00-3-001,D00-3-001,Y,PASS,구현 위치 실존 1곳,1,
-H2|ROW:D00-3-001,T-732c7393,H2,DESIGN,ROW,D00-3-001,D00-3-001,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H3|ROW:D00-3-001,T-418ec894,H3,DESIGN,ROW,D00-3-001,D00-3-001,Y,REVIEW,행 집계 — H3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:D00-3-001,T-732c7393,H2,DESIGN,ROW,D00-3-001,D00-3-001,Y,PASS,행 집계 — 대조표 D00-3-001 '§3 SmartColMerge / () (TopChange 재머지)' 의 H2 4요소: PASS:4,1,
+H3|ROW:D00-3-001,T-418ec894,H3,DESIGN,ROW,D00-3-001,D00-3-001,Y,PASS,행 집계 — 대조표 D00-3-001 '§3 SmartColMerge / () (TopChange 재머지)' 의 H3 1요소: PASS:1,1,
 X-LOC|ROW:D00-3-002,T-2dd4764a,X-LOC,GEN,ROW,D00-3-002,D00-3-002,Y,PASS,구현 위치 실존 2곳,1,
-H3|COL:DIVISION_ID,T-5272facb,H3,DESIGN,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b 셀 병합 — 컬럼 allowMerging 실측 ↔ AS-IS SmartColMerge 대상) — 실행 필요: trace,2,
+H3|COL:DIVISION_ID,T-5272facb,H3,DESIGN,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,실측[T-5272facb]: DIVISION_ID: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ T,2,
 X-REASON|ROW:D00-3-003,T-bfb5958d,X-REASON,DESIGN,ROW,D00-3-003,D00-3-003,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
 X-LOC|ROW:D00-3-004,T-2de9d158,X-LOC,GEN,ROW,D00-3-004,D00-3-004,Y,PASS,구현 위치 실존 1곳,1,
-F1|SCREEN,T-b5229d6e,F1,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud,89,SCP0033_Shipment_semi_dept_day.cs:185 SCP0033_Shipment_semi_dept_day.cs:186 SCP0033_Shipment_semi_dept_day.cs:188 SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:
-F5|SCREEN,T-9ba8ba2b,F5,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace,10,SCP0033_Shipment_semi_dept_day.cs:185 SCP0033_Shipment_semi_dept_day.cs:186 SCP0033_Shipment_semi_dept_day.cs:188
-X-LOC|ROW:D00-3-005,T-ee3afabe,X-LOC,GEN,ROW,D00-3-005,D00-3-005,Y,PASS,구현 위치 실존 2곳,1,
-D4|ROW:D00-3-005,T-7510d159,D4,EDIT,ROW,D00-3-005,D00-3-005,Y,REVIEW,행 집계 — D4 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
-D6|SCREEN,T-0d8104d8,D6,EDIT,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace,19,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:204 SCP0033_Shipment_semi_dept_day.cs:206 SCP0033_Shipment_semi_dept_day.cs:
-D1|ROW:D00-3-005,T-f5c80bf0,D1,EDIT,ROW,D00-3-005,D00-3-005,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:D00-3-005,T-72b00a0a,D3,EDIT,ROW,D00-3-005,D00-3-005,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
+F1|SCREEN,T-b5229d6e,F1,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-3f2d5e3d RULE_SCREEN / 원장 V-5cb058a3 RULE_SCREEN / 원장 V-64cb0621 RULE_SCREEN / 원장 V-702e31ac RULE_SCREEN / 원장 V-69c2a6ca GENERAL / 원장 V-02fc651f GENERAL / 원장 V-bbf0b0a7 GENERAL / 원장 V-b1060bfe GE,93,SCP0033_Shipment_semi_dept_day.cs:185 SCP0033_Shipment_semi_dept_day.cs:186 SCP0033_Shipment_semi_dept_day.cs:188 SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:
+F5|SCREEN,T-9ba8ba2b,F5,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-5aafccaa RULE_SCREEN / 원장 V-72f03c8e RULE_SCREEN / 원장 V-fb9f134d RULE_SCREEN / 원장 V-e38b57ce DEFECT / 원장 V-0cbe0cef GENERAL / 원장 V-e71264ef GENERAL / 원장 V-0ec1c1f6 GENERAL / 원장 V-cdbf5897 GENERAL,11,SCP0033_Shipment_semi_dept_day.cs:185 SCP0033_Shipment_semi_dept_day.cs:186 SCP0033_Shipment_semi_dept_day.cs:188
+X-LOC|ROW:D00-3-005,T-ee3afabe,X-LOC,GEN,ROW,D00-3-005,D00-3-005,Y,PASS,구현 위치 실존 1곳,1,
+F2|SCREEN,T-32fc508d,F2,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,PASS,원장 V-6195038f RULE_SCREEN / 원장 V-34a5726c RULE_SCREEN / 원장 V-8a949cd8 GENERAL / 원장 V-43665dd3 GENERAL / 원장 V-240a8c36 GENERAL / 원장 V-0badcd08 GENERAL / 원장 V-88d2c11e GENERAL / 원장 V-7f5f507c GENERAL / ,84,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
+D4|COL:VALID_YN,T-dc9387dc,D4,EDIT,COL,VALID_YN,VALID_YN / Valid,Y,ERROR,실측[T-dc9387dc]: 신규행 VALID_YN='Y' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값) — TO-BE 가 값을 채움: 의도 확인(연쇄 C3/팝업 M4 결과일 수 있음) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),5,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:206
+D1|COL:VALID_YN,T-4b25743a,D1,EDIT,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-2794fd7d COLUMN / 원장 V-44c3e89f COLUMN / 실측[T-4b25743a]: 기존행 r0 VALID_YN 편집=true (AS-IS 편집 가능) | 신규행 r0 VALID_YN 편집=true (AS-IS 편집 가능),3,
+D3|COL:VALID_YN,T-712b322a,D3,EDIT,COL,VALID_YN,VALID_YN / Valid,Y,NA,실측[T-712b322a]: VALID_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,3,
 X-LOC|ROW:D00-3-006,T-ff0e4f7a,X-LOC,GEN,ROW,D00-3-006,D00-3-006,Y,PASS,구현 위치 실존 2곳,1,
-B1|COL:DIVISION_ID,T-2ad4ff78,B1,COMBO,COL,DIVISION_ID,DIVISION_ID,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),5,SCP0033_Shipment_semi_dept_day.cs:204
-B2|COL:DIVISION_ID,T-4154bab7,B2,COMBO,COL,DIVISION_ID,DIVISION_ID,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),5,SCP0033_Shipment_semi_dept_day.cs:204
-B4|COL:DIVISION_ID,T-f43cdbbc,B4,COMBO,COL,DIVISION_ID,DIVISION_ID,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),5,SCP0033_Shipment_semi_dept_day.cs:204
-D5|COL:DIVISION_ID,T-4d524639,D5,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace,5,SCP0033_Shipment_semi_dept_day.cs:204
-E5|COL:DIVISION_ID,T-037e56b8,E5,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),4,
+B1|COL:DIVISION_ID,T-2ad4ff78,B1,COMBO,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-dfddb48d COLUMN,5,SCP0033_Shipment_semi_dept_day.cs:204
+B2|COL:DIVISION_ID,T-4154bab7,B2,COMBO,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-a611390e COLUMN,5,SCP0033_Shipment_semi_dept_day.cs:204
+B4|COL:DIVISION_ID,T-f43cdbbc,B4,COMBO,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-e401408c COLUMN,5,SCP0033_Shipment_semi_dept_day.cs:204
+D5|COL:DIVISION_ID,T-4d524639,D5,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,실측[T-4d524639]: DIVISION_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=Y,5,SCP0033_Shipment_semi_dept_day.cs:204
+E5|COL:DIVISION_ID,T-037e56b8,E5,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-92cd98da COLUMN,4,
 X-LOC|ROW:D00-3-007,T-fea87e82,X-LOC,GEN,ROW,D00-3-007,D00-3-007,Y,PASS,구현 위치 실존 2곳,1,
-D4|COL:VALID_YN,T-dc9387dc,D4,EDIT,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:206
 X-LOC|ROW:D00-3-008,T-d5bb40cd,X-LOC,GEN,ROW,D00-3-008,D00-3-008,Y,PASS,구현 위치 실존 2곳,1,
-D1|COL:OPERATION_GROUP,T-c9b590cd,D1,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:209
-D3|COL:OPERATION_GROUP,T-a1ed6a34,D3,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:209
+D1|COL:OPERATION_GROUP,T-c9b590cd,D1,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-dd253c83 COLUMN / 원장 V-f0d5d33e COLUMN / 실측[T-c9b590cd]: 기존행 r0 OPERATION_GROUP 편집=false (AS-IS 잠금) | 신규행 r0 OPERATION_GROUP 편집=false (AS-IS 잠금),3,SCP0033_Shipment_semi_dept_day.cs:209
+D3|COL:OPERATION_GROUP,T-a1ed6a34,D3,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,NA,실측[T-a1ed6a34]: OPERATION_GROUP: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,3,SCP0033_Shipment_semi_dept_day.cs:209
 X-LOC|ROW:D00-3-009,T-4c0ff2bd,X-LOC,GEN,ROW,D00-3-009,D00-3-009,Y,PASS,구현 위치 실존 2곳,1,
-D1|COL:NICK_NAME,T-e6bd08d9,D1,EDIT,COL,NICK_NAME,NICK_NAME,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:210
-D3|COL:NICK_NAME,T-ae548188,D3,EDIT,COL,NICK_NAME,NICK_NAME,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:210
+D1|COL:NICK_NAME,T-e6bd08d9,D1,EDIT,COL,NICK_NAME,NICK_NAME / Nick Name,Y,PASS,원장 V-f874df68 COLUMN / 원장 V-64eab77d COLUMN / 원장 V-ae3be655 ASIS / 실측[T-e6bd08d9]: 기존행 r0 NICK_NAME 편집=false (AS-IS 잠금) | 신규행 r0 NICK_NAME 편집=false (AS-IS 잠금),6,SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:210
+D3|COL:NICK_NAME,T-ae548188,D3,EDIT,COL,NICK_NAME,NICK_NAME / Nick Name,Y,NA,실측[T-ae548188]: NICK_NAME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,6,SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:210
 X-LOC|ROW:D00-3-010,T-427612c6,X-LOC,GEN,ROW,D00-3-010,D00-3-010,Y,PASS,구현 위치 실존 2곳,1,
-D1|COL:CREATED_BY,T-f50de7a4,D1,EDIT,COL,CREATED_BY,CREATED_BY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,7,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
-D1|COL:LAST_UPDATE_DATE,T-ab552162,D1,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
-D3|COL:CREATED_BY,T-0e49481e,D3,EDIT,COL,CREATED_BY,CREATED_BY,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,7,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
-D3|COL:LAST_UPDATE_DATE,T-07d15b26,D3,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
-X-REASON|ROW:D00-3-011,T-42ed5d10,X-REASON,DESIGN,ROW,D00-3-011,D00-3-011,Y,PASS,사유 있음: **사용자 지시(2026-09-23)로 미재현**: Edit 버튼을 두지 않고 진입부터 상시 편집한다. AS,1,
+D1|COL:CREATED_BY,T-f50de7a4,D1,EDIT,COL,CREATED_BY,CREATED_BY / Created By,Y,PASS,원장 V-8693468b COLUMN / 원장 V-b0eb0176 COLUMN / 원장 V-4c21013e ASIS / 실측[T-f50de7a4]: 기존행 r0 CREATED_BY 편집=false (AS-IS 잠금) | 신규행 r0 CREATED_BY 편집=false (AS-IS 잠금),7,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
+D1|COL:LAST_UPDATE_DATE,T-ab552162,D1,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE / Last Update Date,Y,PASS,원장 V-efa05781 COLUMN / 원장 V-b6c172c6 COLUMN / 원장 V-4c21013e ASIS / 실측[T-ab552162]: 기존행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금) | 신규행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금),6,SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
+D3|COL:CREATED_BY,T-0e49481e,D3,EDIT,COL,CREATED_BY,CREATED_BY / Created By,Y,NA,실측[T-0e49481e]: CREATED_BY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,7,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
+D3|COL:LAST_UPDATE_DATE,T-07d15b26,D3,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE / Last Update Date,Y,NA,실측[T-07d15b26]: LAST_UPDATE_DATE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,6,SCP0033_Shipment_semi_dept_day.cs:225 SCP0033_Shipment_semi_dept_day.cs:211
+X-REASON|ROW:D00-3-011,T-42ed5d10,X-REASON,DESIGN,ROW,D00-3-011,D00-3-011,Y,PASS,"사유 있음: **사용자 지시로 미재현**: Edit 버튼/토글을 두지 않고 진입부터 상시 편집하되, 수정 권한 게이트는 ",1,
 X-LOC|ROW:D00-3-012,T-7563fad4,X-LOC,GEN,ROW,D00-3-012,D00-3-012,Y,PASS,구현 위치 실존 2곳,1,
-D1|COL:DIVISION_ID,T-d57fc813,D1,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225
-D1|COL:VALID_YN,T-4b25743a,D1,EDIT,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,2,
-D1|COL:DEPARTURE_DAY,T-93669ad2,D1,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,2,
-D3|COL:DIVISION_ID,T-ceb664fc,D3,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225
-D3|COL:VALID_YN,T-712b322a,D3,EDIT,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,2,
-D3|COL:DEPARTURE_DAY,T-c13e3394,D3,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,2,
-G1|ROW:D00-3-012,T-038e8f2c,G1,GEN,ROW,D00-3-012,D00-3-012,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+D1|COL:DIVISION_ID,T-d57fc813,D1,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-62cc8e31 COLUMN / 원장 V-54ee719d COLUMN / 원장 V-ae3be655 ASIS / 실측[T-d57fc813]: 기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금) | 신규행 r0 DIVISION_ID 편집=true (AS-IS 편집 가능),5,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225
+D1|COL:DEPARTURE_DAY,T-93669ad2,D1,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-aacb0367 COLUMN / 원장 V-47dccd85 COLUMN / 실측[T-93669ad2]: 기존행 r0 DEPARTURE_DAY 편집=true (AS-IS 편집 가능) | 신규행 r0 DEPARTURE_DAY 편집=true (AS-IS 편집 가능),2,
+D3|COL:DIVISION_ID,T-ceb664fc,D3,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,NA,실측[T-ceb664fc]: DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,5,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220 SCP0033_Shipment_semi_dept_day.cs:224 SCP0033_Shipment_semi_dept_day.cs:225
+D3|COL:DEPARTURE_DAY,T-c13e3394,D3,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,NA,실측[T-c13e3394]: DEPARTURE_DAY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정,2,
+G1|ROW:D00-3-012,T-038e8f2c,G1,GEN,ROW,D00-3-012,D00-3-012,Y,PASS,"행 집계 — 대조표 D00-3-012 '§3 LockColumn / (DIVISION_ID..NICK_NAME, true) Edi' 의 G1 4요소: PASS:2 · NA:2",1,
 A1|SP:EDIT_SET,T-29ebd01d,A1,GEN,SP,EDIT_SET,EDIT_SET,Y,REVIEW,골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),1,
 X-LOC|ROW:D00-3-013,T-60b4e5bd,X-LOC,GEN,ROW,D00-3-013,D00-3-013,Y,PASS,구현 위치 실존 2곳,1,
 X-LOC|ROW:D00-3-014,T-a031dc35,X-LOC,GEN,ROW,D00-3-014,D00-3-014,Y,PASS,구현 위치 실존 2곳,1,
-G1|ROW:D00-3-014,T-99463f51,G1,GEN,ROW,D00-3-014,D00-3-014,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:D00-3-014,T-7b476f25,A1,GEN,ROW,D00-3-014,D00-3-014,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-X-REASON|ROW:D00-3-015,T-ba4c9108,X-REASON,DESIGN,ROW,D00-3-015,D00-3-015,Y,PASS,사유 있음: **사용자 지시(2026-09-23)로 미재현**: 상시 편집이라 조회 직후 전잠금 단계가 없다. 편집 가능,1,
+G1|ROW:D00-3-014,T-99463f51,G1,GEN,ROW,D00-3-014,D00-3-014,Y,PASS,행 집계 — 대조표 D00-3-014 '§3 Query / (ds) 조회결과 바인딩' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:D00-3-014,T-7b476f25,A1,GEN,ROW,D00-3-014,D00-3-014,Y,REVIEW,행 집계 — 대조표 D00-3-014 '§3 Query / (ds) 조회결과 바인딩' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+X-REASON|ROW:D00-3-015,T-ba4c9108,X-REASON,DESIGN,ROW,D00-3-015,D00-3-015,Y,PASS,"사유 있음: **사용자 지시로 미재현**: 상시 편집이라 ""조회 직후 전잠금"" 단계가 없다. 단 SAVE 권한이 없으면 ",1,
 X-LOC|ROW:D00-3-016,T-46959d3f,X-LOC,GEN,ROW,D00-3-016,D00-3-016,Y,PASS,구현 위치 실존 2곳,1,
-C3|COL:ITEM_ID,T-88bbfcba,C3,CASCADE,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:487 SCP0033_Shipment_semi_dept_day.cs:488
-D4|COL:ITEM_ID,T-1c97d711,D4,EDIT,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,2,
+C3|COL:ITEM_ID,T-88bbfcba,C3,CASCADE,COL,ITEM_ID,ITEM_ID / Model,Y,ERROR,"실측[T-88bbfcba]: ITEM_ID 연쇄 원천 컬럼 해석 불가 — AS-IS SpdMain_CellClick:487 siMain.SetValue(e.Row, siMain.GetColumnIndex(DefColumns.ITEM_ID), popItem.ItemID) [if (siMain.IsLock(siMain.SheetName) == false) ▸ ",3,SCP0033_Shipment_semi_dept_day.cs:487 SCP0033_Shipment_semi_dept_day.cs:488
+D4|COL:ITEM_ID,T-1c97d711,D4,EDIT,COL,ITEM_ID,ITEM_ID / Model,Y,PASS,실측[T-1c97d711]: 신규행 ITEM_ID='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),3,
 X-LOC|ROW:D00-3-017,T-d9c769b0,X-LOC,GEN,ROW,D00-3-017,D00-3-017,Y,PASS,구현 위치 실존 2곳,1,
-H6|COL:NICK_NAME,T-7ff97d89,H6,POPUP,COL,NICK_NAME,NICK_NAME,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
-G5|COL:NICK_NAME,T-23dcf43c,G5,POPUP,COL,NICK_NAME,NICK_NAME,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
-M4|COL:NICK_NAME,T-d56e9d9f,M4,POPUP,COL,NICK_NAME,NICK_NAME,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,3,
-C3|COL:NICK_NAME,T-03acca5b,C3,CASCADE,COL,NICK_NAME,NICK_NAME,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace,2,SCP0033_Shipment_semi_dept_day.cs:488
-D4|COL:NICK_NAME,T-ccca8aad,D4,EDIT,COL,NICK_NAME,NICK_NAME,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:210
+H6|COL:NICK_NAME,T-7ff97d89,H6,POPUP,COL,NICK_NAME,NICK_NAME / Nick Name,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
+G5|COL:NICK_NAME,T-23dcf43c,G5,POPUP,COL,NICK_NAME,NICK_NAME / Nick Name,Y,NOPATH,검사기(popup_args_check.py · _verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
+M4|COL:NICK_NAME,T-d56e9d9f,M4,POPUP,COL,NICK_NAME,NICK_NAME / Nick Name,Y,REVIEW,실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NICK_NAME: ITEM_ID 더블클릭 → Distribution Route 팝업(new SCM0002_ItembyDivisionPopup) OK(현재 행 적용) → 대상 2개 중 채워짐 0 · 변경 0: ITEM_I,3,
+C3|COL:NICK_NAME,T-03acca5b,C3,CASCADE,COL,NICK_NAME,NICK_NAME / Nick Name,Y,ERROR,실측[T-03acca5b]: NICK_NAME: 원천 ITEM_ID 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),2,SCP0033_Shipment_semi_dept_day.cs:488
+D4|COL:NICK_NAME,T-ccca8aad,D4,EDIT,COL,NICK_NAME,NICK_NAME / Nick Name,Y,PASS,원장 V-cab4c6b1 ASIS / 실측[T-ccca8aad]: 신규행 NICK_NAME='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),4,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:210
 X-LOC|ROW:D00-4b-001,T-44d46200,X-LOC,GEN,ROW,D00-4b-001,D00-4b-001,Y,PASS,구현 위치 실존 2곳,1,
-G4|ROW:D00-4b-001,T-f32a0916,G4,DESIGN,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G1|ROW:D00-4b-001,T-e07d5223,G1,GEN,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G6|ROW:D00-4b-001,T-cac7e6ed,G6,GEN,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:D00-4b-001,T-f2b1a6ca,A1,GEN,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-B3|COL:DIVISION_ID,T-453b4b21,B3,COMBO,COL,DIVISION_ID,DIVISION_ID,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+G4|ROW:D00-4b-001,T-f32a0916,G4,DESIGN,ROW,D00-4b-001,D00-4b-001,Y,PASS,행 집계 — 대조표 D00-4b-001 '§4b BLUtils.GetDivision / (false) / dtMyDivision' 의 G4 3요소: PASS:3,1,
+G1|ROW:D00-4b-001,T-e07d5223,G1,GEN,ROW,D00-4b-001,D00-4b-001,Y,PASS,행 집계 — 대조표 D00-4b-001 '§4b BLUtils.GetDivision / (false) / dtMyDivision' 의 G1 4요소: PASS:2 · NA:2,1,
+G6|ROW:D00-4b-001,T-cac7e6ed,G6,GEN,ROW,D00-4b-001,D00-4b-001,Y,NA,실측[T-cac7e6ed]: 대조표 행 D00-4b-001(false) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정),1,
+A1|ROW:D00-4b-001,T-f2b1a6ca,A1,GEN,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — 대조표 D00-4b-001 '§4b BLUtils.GetDivision / (false) / dtMyDivision' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+B3|COL:DIVISION_ID,T-453b4b21,B3,COMBO,COL,DIVISION_ID,DIVISION_ID / Division,Y,ERROR,원장 V-4c0a9b39 COLUMN,1,
 X-LOC|ROW:D00-4b-002,T-715e6907,X-LOC,GEN,ROW,D00-4b-002,D00-4b-002,Y,PASS,구현 위치 실존 2곳,1,
-B1|COL:DEPARTURE_DAY,T-84f4d748,B1,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-B2|COL:DEPARTURE_DAY,T-d1d1bb61,B2,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-B4|COL:DEPARTURE_DAY,T-858a916e,B4,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-D5|COL:DEPARTURE_DAY,T-1c7c6e07,D5,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace,2,
-E5|COL:DEPARTURE_DAY,T-3e463867,E5,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-B3|COL:DEPARTURE_DAY,T-e6e7c895,B3,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+B1|COL:DEPARTURE_DAY,T-84f4d748,B1,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-e93e422d COLUMN,2,
+B2|COL:DEPARTURE_DAY,T-d1d1bb61,B2,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-59dd7c90 COLUMN,2,
+B4|COL:DEPARTURE_DAY,T-858a916e,B4,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,ERROR,원장 V-5360185f COLUMN,2,
+D5|COL:DEPARTURE_DAY,T-1c7c6e07,D5,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-904c5e89 COLUMN / 실측[T-1c7c6e07]: DEPARTURE_DAY: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y,2,
+E5|COL:DEPARTURE_DAY,T-3e463867,E5,EDIT,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-d2b78473 COLUMN,2,
+B3|COL:DEPARTURE_DAY,T-e6e7c895,B3,COMBO,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-9f9c6050 COLUMN,1,
 X-LOC|ROW:D00-4b-003,T-71f40197,X-LOC,GEN,ROW,D00-4b-003,D00-4b-003,Y,PASS,구현 위치 실존 2곳,1,
-G4|ROW:D00-4b-003,T-762739ea,G4,DESIGN,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G1|ROW:D00-4b-003,T-d177a031,G1,GEN,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-G6|ROW:D00-4b-003,T-ae887da4,G6,GEN,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A5|COL:VALID_YN,T-37e7b443,A5,DESIGN,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,2,
-H5|COL:VALID_YN,T-6dabe645,H5,DESIGN,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,2,
-H2|COL:VALID_YN,T-16a7efcc,H2,DESIGN,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,2,
-B1|COL:VALID_YN,T-d49bba61,B1,COMBO,COL,VALID_YN,VALID_YN,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-B2|COL:VALID_YN,T-455a2697,B2,COMBO,COL,VALID_YN,VALID_YN,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-B4|COL:VALID_YN,T-348aff3a,B4,COMBO,COL,VALID_YN,VALID_YN,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-D5|COL:VALID_YN,T-f3bf83e2,D5,EDIT,COL,VALID_YN,VALID_YN,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace,2,
-E5|COL:VALID_YN,T-8ff6104b,E5,EDIT,COL,VALID_YN,VALID_YN,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
-A1|ROW:D00-4b-003,T-3a51c23b,A1,GEN,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-B3|COL:VALID_YN,T-d966f646,B3,COMBO,COL,VALID_YN,VALID_YN,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+A5|COL:VALID_YN,T-37e7b443,A5,DESIGN,COL,VALID_YN,VALID_YN / Valid,Y,PASS,E2E smoke columns / 실측[T-37e7b443]: VALID_YN: AS-IS(Div 40) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y),2,
+H5|COND:cboValidYN,T-e6d6918d,H5,DESIGN,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-be98b297 SEARCH,1,
+H5|COL:VALID_YN,T-6dabe645,H5,DESIGN,COL,VALID_YN,VALID_YN / Valid,Y,PASS,실측[T-6dabe645]: VALID_YN: AS-IS 'Valid' → TO-BE 헤더 'Active' — TO-BE 룰 CR-092: SCP·SSP 라벨 'Valid' 은 'Active' 로 변경(AS-IS 와 달라도 PASS),2,
+H2|COL:VALID_YN,T-16a7efcc,H2,DESIGN,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-d1a88478 COLUMN / 실측[T-16a7efcc]: VALID_YN: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치,2,
+B1|COL:VALID_YN,T-d49bba61,B1,COMBO,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-902ea8aa COLUMN,2,
+B2|COL:VALID_YN,T-455a2697,B2,COMBO,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-af19442f COLUMN,2,
+B4|COL:VALID_YN,T-348aff3a,B4,COMBO,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-1bd0b300 COLUMN,2,
+D5|COL:VALID_YN,T-f3bf83e2,D5,EDIT,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-30a2afe9 COLUMN / 실측[T-f3bf83e2]: VALID_YN: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y,2,
+E5|COL:VALID_YN,T-8ff6104b,E5,EDIT,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-82954566 COLUMN,2,
+A1|ROW:D00-4b-003,T-3a51c23b,A1,GEN,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — 대조표 D00-4b-003 '§4b Data.Common / YesOrNo / dtYesOrNo' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+B3|COND:cboValidYN,T-898437b3,B3,COMBO,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,원장 V-93833f06 SEARCH,1,
+B3|COL:VALID_YN,T-d966f646,B3,COMBO,COL,VALID_YN,VALID_YN / Valid,Y,PASS,원장 V-e5d89371 COLUMN,1,
 X-LOC|ROW:D00-4d-001,T-334900d5,X-LOC,GEN,ROW,D00-4d-001,D00-4d-001,Y,PASS,구현 위치 실존 1곳,1,
 X-LOC|ROW:D00-4d-002,T-979a86c6,X-LOC,GEN,ROW,D00-4d-002,D00-4d-002,Y,PASS,구현 위치 실존 2곳,1,
-D1|ROW:D00-4d-002,T-c04743b9,D1,EDIT,ROW,D00-4d-002,D00-4d-002,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:D00-4d-002,T-5b2486ee,D3,EDIT,ROW,D00-4d-002,D00-4d-002,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
+D1|ROW:D00-4d-002,T-c04743b9,D1,EDIT,ROW,D00-4d-002,D00-4d-002,Y,PASS,행 집계 — 대조표 D00-4d-002 '§4d SpdMain_KeyPress / (KeyPress)' 의 D1 12요소: PASS:8 · NA:4,1,
+D3|ROW:D00-4d-002,T-5b2486ee,D3,EDIT,ROW,D00-4d-002,D00-4d-002,Y,NA,행 집계 — 대조표 D00-4d-002 '§4d SpdMain_KeyPress / (KeyPress)' 의 D3 8요소: NA:8,1,
 X-LOC|ROW:D00-4d-003,T-c7b92441,X-LOC,GEN,ROW,D00-4d-003,D00-4d-003,Y,PASS,구현 위치 실존 2곳,1,
 X-LOC|ROW:D00-4d-004,T-db65ada1,X-LOC,GEN,ROW,D00-4d-004,D00-4d-004,Y,PASS,구현 위치 실존 1곳,1,
-A5|ROW:D00-4d-004,T-83122a88,A5,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:D00-4d-004,T-0bb0fe22,H5,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:D00-4d-004,T-446af02b,H2,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+A5|ROW:D00-4d-004,T-83122a88,A5,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,PASS,행 집계 — 대조표 D00-4d-004 '§4d SpdMain_CellClick / (CellClick)' 의 A5 5요소: PASS:5,1,
+H5|ROW:D00-4d-004,T-0bb0fe22,H5,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,PASS,행 집계 — 대조표 D00-4d-004 '§4d SpdMain_CellClick / (CellClick)' 의 H5 5요소: PASS:5,1,
+H2|ROW:D00-4d-004,T-446af02b,H2,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,PASS,행 집계 — 대조표 D00-4d-004 '§4d SpdMain_CellClick / (CellClick)' 의 H2 4요소: PASS:4,1,
 X-LOC|ROW:D00-4d-005,T-2b74c520,X-LOC,GEN,ROW,D00-4d-005,D00-4d-005,Y,PASS,구현 위치 실존 1곳,1,
-H6|ROW:D00-4d-005,T-05c89d04,H6,POPUP,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:D00-4d-005,T-45cd11d6,G5,POPUP,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:D00-4d-005,T-d01ce6e2,M4,POPUP,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-D1|ROW:D00-4d-005,T-99a145fc,D1,EDIT,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:D00-4d-005,T-802f727e,D3,EDIT,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
+H6|ROW:D00-4d-005,T-05c89d04,H6,POPUP,ROW,D00-4d-005,D00-4d-005,Y,ERROR,행 집계 — 대조표 D00-4d-005 '§4d SpdMain_CellClick / (CellClick)' 의 H6 8요소: ERROR:4 · NOPATH:2 · PASS:1 · NOT_RUN:1,1,
+G5|ROW:D00-4d-005,T-45cd11d6,G5,POPUP,ROW,D00-4d-005,D00-4d-005,Y,NA,행 집계 — 대조표 D00-4d-005 '§4d SpdMain_CellClick / (CellClick)' 의 G5 8요소: PASS:3 · NOPATH:3 · NA:2 (미실행 요소가 남아 판정필요),1,
+M4|ROW:D00-4d-005,T-d01ce6e2,M4,POPUP,ROW,D00-4d-005,D00-4d-005,Y,REVIEW,행 집계 — 대조표 D00-4d-005 '§4d SpdMain_CellClick / (CellClick)' 의 M4 5요소: REVIEW:3 · NOT_RUN:2 · FAIL 요소: DIVISION_ID / Division — 실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; ITEM_ID / Model — 실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; NICK_NAME / Nick Name — 실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NIC,1,
+D1|ROW:D00-4d-005,T-99a145fc,D1,EDIT,ROW,D00-4d-005,D00-4d-005,Y,PASS,행 집계 — 대조표 D00-4d-005 '§4d SpdMain_CellClick / (CellClick)' 의 D1 12요소: PASS:8 · NA:4,1,
+D3|ROW:D00-4d-005,T-802f727e,D3,EDIT,ROW,D00-4d-005,D00-4d-005,Y,NA,행 집계 — 대조표 D00-4d-005 '§4d SpdMain_CellClick / (CellClick)' 의 D3 8요소: NA:8,1,
 X-LOC|ROW:D00-4d-006,T-cbf4b6c8,X-LOC,GEN,ROW,D00-4d-006,D00-4d-006,Y,PASS,구현 위치 실존 2곳,1,
-X-ROW|ENTRY:D00-4d-006,T-b1a0d0c2,X-ROW,GEN,ENTRY,D00-4d-006,D00-4d-006,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-ROW|ENTRY:D00-4d-006,T-b1a0d0c2,X-ROW,GEN,ENTRY,D00-4d-006,D00-4d-006,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
 X-LOC|ROW:D00-4d-007,T-e7803506,X-LOC,GEN,ROW,D00-4d-007,D00-4d-007,Y,PASS,구현 위치 실존 2곳,1,
-H6|ROW:D00-4d-007,T-08259788,H6,POPUP,ROW,D00-4d-007,D00-4d-007,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:D00-4d-007,T-3681d27e,G5,POPUP,ROW,D00-4d-007,D00-4d-007,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:D00-4d-007,T-5edab73f,M4,POPUP,ROW,D00-4d-007,D00-4d-007,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+H6|ROW:D00-4d-007,T-08259788,H6,POPUP,ROW,D00-4d-007,D00-4d-007,Y,ERROR,행 집계 — 대조표 D00-4d-007 '§4d SpdMain_CellClick / (CellClick)' 의 H6 8요소: ERROR:4 · NOPATH:2 · PASS:1 · NOT_RUN:1,1,
+G5|ROW:D00-4d-007,T-3681d27e,G5,POPUP,ROW,D00-4d-007,D00-4d-007,Y,NA,행 집계 — 대조표 D00-4d-007 '§4d SpdMain_CellClick / (CellClick)' 의 G5 8요소: PASS:3 · NOPATH:3 · NA:2 (미실행 요소가 남아 판정필요),1,
+M4|ROW:D00-4d-007,T-5edab73f,M4,POPUP,ROW,D00-4d-007,D00-4d-007,Y,REVIEW,행 집계 — 대조표 D00-4d-007 '§4d SpdMain_CellClick / (CellClick)' 의 M4 5요소: REVIEW:3 · NOT_RUN:2 · FAIL 요소: DIVISION_ID / Division — 실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; ITEM_ID / Model — 실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; NICK_NAME / Nick Name — 실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NIC,1,
 X-LOC|ROW:D00-4d-008,T-c6bd6930,X-LOC,GEN,ROW,D00-4d-008,D00-4d-008,Y,PASS,구현 위치 실존 2곳,1,
-H6|ROW:D00-4d-008,T-5eda3cd4,H6,POPUP,ROW,D00-4d-008,D00-4d-008,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:D00-4d-008,T-1e06d528,G5,POPUP,ROW,D00-4d-008,D00-4d-008,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:D00-4d-008,T-16124629,M4,POPUP,ROW,D00-4d-008,D00-4d-008,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+H6|ROW:D00-4d-008,T-5eda3cd4,H6,POPUP,ROW,D00-4d-008,D00-4d-008,Y,ERROR,행 집계 — 대조표 D00-4d-008 '§4d SpdMain_CellClick / (CellClick)' 의 H6 8요소: ERROR:4 · NOPATH:2 · PASS:1 · NOT_RUN:1,1,
+G5|ROW:D00-4d-008,T-1e06d528,G5,POPUP,ROW,D00-4d-008,D00-4d-008,Y,NA,행 집계 — 대조표 D00-4d-008 '§4d SpdMain_CellClick / (CellClick)' 의 G5 8요소: PASS:3 · NOPATH:3 · NA:2 (미실행 요소가 남아 판정필요),1,
+M4|ROW:D00-4d-008,T-16124629,M4,POPUP,ROW,D00-4d-008,D00-4d-008,Y,REVIEW,행 집계 — 대조표 D00-4d-008 '§4d SpdMain_CellClick / (CellClick)' 의 M4 5요소: REVIEW:3 · NOT_RUN:2 · FAIL 요소: DIVISION_ID / Division — 실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; ITEM_ID / Model — 실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; NICK_NAME / Nick Name — 실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NIC,1,
 X-LOC|ROW:D00-4e-001,T-877017f3,X-LOC,GEN,ROW,D00-4e-001,D00-4e-001,Y,PASS,구현 위치 실존 1곳,1,
-A1|ROW:D00-4e-001,T-2c0ba245,A1,GEN,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-A6|ROW:D00-4e-001,T-42f5e91f,A6,GEN,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — A6 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
-F4|ROW:D00-4e-001,T-4ece9d42,F4,DB,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — F4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-DB-SYN|ROW:D00-4e-001,T-41f7bf6a,DB-SYN,DB,ROW,D00-4e-001,D00-4e-001,Y,PASS,행 집계 — DB-SYN 2요소: PASS:2,1,
-G1|ROW:D00-4e-001,T-121aa6e8,G1,GEN,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-E4|ROW:D00-4e-001,T-e481fb36,E4,EDIT,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — E4 13요소: NOT_RUN:13 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-4e-001,T-2c0ba245,A1,GEN,ROW,D00-4e-001,D00-4e-001,Y,REVIEW,행 집계 — 대조표 D00-4e-001 '§4e GMessageBoxForException / (FindData_Main catch' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+A6|ROW:D00-4e-001,T-42f5e91f,A6,GEN,ROW,D00-4e-001,D00-4e-001,Y,ERROR,행 집계 — 대조표 D00-4e-001 '§4e GMessageBoxForException / (FindData_Main catch' 의 A6 2요소: NOT_RUN:1 · PASS:1 (미실행 요소가 남아 판정필요),1,
+F4|ROW:D00-4e-001,T-4ece9d42,F4,DB,ROW,D00-4e-001,D00-4e-001,Y,ERROR,행 집계 — 대조표 D00-4e-001 '§4e GMessageBoxForException / (FindData_Main catch' 의 F4 3요소: PASS:2 · ERROR:1,1,
+DB-SYN|ROW:D00-4e-001,T-41f7bf6a,DB-SYN,DB,ROW,D00-4e-001,D00-4e-001,Y,PASS,행 집계 — 대조표 D00-4e-001 '§4e GMessageBoxForException / (FindData_Main catch' 의 DB-SYN 3요소: PASS:3,1,
+G1|ROW:D00-4e-001,T-121aa6e8,G1,GEN,ROW,D00-4e-001,D00-4e-001,Y,PASS,행 집계 — 대조표 D00-4e-001 '§4e GMessageBoxForException / (FindData_Main catch' 의 G1 4요소: PASS:2 · NA:2,1,
+E4|ROW:D00-4e-001,T-e481fb36,E4,EDIT,ROW,D00-4e-001,D00-4e-001,Y,NA,실측[T-e481fb36]: D00-4e-001: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
 X-LOC|ROW:D00-4e-002,T-df43db4e,X-LOC,GEN,ROW,D00-4e-002,D00-4e-002,Y,PASS,구현 위치 실존 2곳,1,
-E4|MSG:MSG00059,T-6ab8b66d,E4,EDIT,MSG,MSG00059,MSG00059,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:308
-E4|MSG:MSG00004,T-c822527b,E4,EDIT,MSG,MSG00004,MSG00004,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,5,SCP0033_Shipment_semi_dept_day.cs:400
+A5|ROW:D00-4e-002,T-0c084749,A5,DESIGN,ROW,D00-4e-002,D00-4e-002,Y,PASS,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 A5 5요소: PASS:5,1,
+H5|ROW:D00-4e-002,T-db0ba3a6,H5,DESIGN,ROW,D00-4e-002,D00-4e-002,Y,PASS,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 H5 5요소: PASS:5,1,
+H2|ROW:D00-4e-002,T-6a5b7bd3,H2,DESIGN,ROW,D00-4e-002,D00-4e-002,Y,PASS,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 H2 4요소: PASS:4,1,
+D4|ROW:D00-4e-002,T-acaf52d6,D4,EDIT,ROW,D00-4e-002,D00-4e-002,Y,ERROR,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 D4 12요소: PASS:10 · ERROR:2,1,
+G1|ROW:D00-4e-002,T-7e357931,G1,GEN,ROW,D00-4e-002,D00-4e-002,Y,PASS,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:D00-4e-002,T-e6cf4839,A1,GEN,ROW,D00-4e-002,D00-4e-002,Y,REVIEW,행 집계 — 대조표 D00-4e-002 '§4e MSG00059 / `RowCount <= 0`' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+E4|MSG:MSG00059,T-6ab8b66d,E4,EDIT,MSG,MSG00059,MSG00059,Y,NA,"원장 V-b66ffc3a ASIS / 실측[T-6ab8b66d]: MSG00059: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (siMain.ActiveSheet.RowCount <= 0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",3,SCP0033_Shipment_semi_dept_day.cs:308
+E4|MSG:MSG01091,T-3555d608,E4,EDIT,MSG,MSG01091,MSG01091,Y,NA,실측[T-3555d608]: MSG01091: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,2,
+E4|MSG:MSG00004,T-c822527b,E4,EDIT,MSG,MSG00004,MSG00004,Y,PASS,원장 V-d7c59ef7 ASIS / 실측[T-c822527b]: MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장 F1 최종 PASS: DEPARTURE_DAY r0 → TUE · 실패 문구 표시 '[저장 경로 시험] 강제 실패',5,SCP0033_Shipment_semi_dept_day.cs:400
 X-LOC|ROW:D00-4e-003,T-8a07df2e,X-LOC,GEN,ROW,D00-4e-003,D00-4e-003,Y,PASS,구현 위치 실존 3곳,1,
-F2|SCREEN,T-32fc508d,F2,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),80,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
-G1|ROW:D00-4e-003,T-aa9d3a9c,G1,GEN,ROW,D00-4e-003,D00-4e-003,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:D00-4e-003,T-d72ce7be,A1,GEN,ROW,D00-4e-003,D00-4e-003,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-E4|MSG:MSG00672,T-af484915,E4,EDIT,MSG,MSG00672,MSG00672,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,
+G1|ROW:D00-4e-003,T-aa9d3a9c,G1,GEN,ROW,D00-4e-003,D00-4e-003,Y,PASS,"행 집계 — 대조표 D00-4e-003 '§4e MSG00004 / `Rows[0][0]==""S""`' 의 G1 4요소: PASS:2 · NA:2",1,
+A1|ROW:D00-4e-003,T-d72ce7be,A1,GEN,ROW,D00-4e-003,D00-4e-003,Y,REVIEW,"행 집계 — 대조표 D00-4e-003 '§4e MSG00004 / `Rows[0][0]==""S""`' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde",1,
+E4|MSG:MSG00672,T-af484915,E4,EDIT,MSG,MSG00672,MSG00672,Y,NA,실측[T-af484915]: MSG00672: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,3,
 X-LOC|ROW:D00-4e-004,T-4489ed47,X-LOC,GEN,ROW,D00-4e-004,D00-4e-004,Y,PASS,구현 위치 실존 2곳,1,
-D4|ROW:D00-4e-004,T-877553fc,D4,EDIT,ROW,D00-4e-004,D00-4e-004,Y,REVIEW,행 집계 — D4 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
-E4|MSG:MSG00006,T-36af4c35,E4,EDIT,MSG,MSG00006,MSG00006,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SCP0033_Shipment_semi_dept_day.cs:409
-E4|MSG:MSG00003,T-20b8e1f0,E4,EDIT,MSG,MSG00003,MSG00003,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+D4|ROW:D00-4e-004,T-877553fc,D4,EDIT,ROW,D00-4e-004,D00-4e-004,Y,ERROR,"행 집계 — 대조표 D00-4e-004 '§4e MSG00006 / else(비""S"")' 의 D4 12요소: PASS:10 · ERROR:2",1,
+E4|MSG:MSG00006,T-36af4c35,E4,EDIT,MSG,MSG00006,MSG00006,Y,PASS,원장 V-6d49caa5 ASIS / 실측[T-36af4c35]: MSG00006: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장 F1 최종 PASS: DEPARTURE_DAY r0 → TUE · 실패 문구 표시 '[저장 경로 시험] 강제 실패',3,SCP0033_Shipment_semi_dept_day.cs:409
+E4|MSG:MSG00003,T-20b8e1f0,E4,EDIT,MSG,MSG00003,MSG00003,Y,NA,실측[T-20b8e1f0]: MSG00003: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,2,
 X-LOC|ROW:D00-4e-005,T-b0e24ef0,X-LOC,GEN,ROW,D00-4e-005,D00-4e-005,Y,PASS,구현 위치 실존 2곳,1,
-F6|SCREEN,T-70e7542c,F6,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),71,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
-F4|ROW:D00-4e-005,T-856429d4,F4,DB,ROW,D00-4e-005,D00-4e-005,Y,REVIEW,행 집계 — F4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-DB-SYN|ROW:D00-4e-005,T-5c5d2c1f,DB-SYN,DB,ROW,D00-4e-005,D00-4e-005,Y,PASS,행 집계 — DB-SYN 2요소: PASS:2,1,
-E4|ROW:D00-4e-005,T-96a455f1,E4,EDIT,ROW,D00-4e-005,D00-4e-005,Y,REVIEW,행 집계 — E4 13요소: NOT_RUN:13 (미실행 요소가 남아 판정필요),1,
+F6|SCREEN,T-70e7542c,F6,CRUD,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-523e02e6 RULE_SCREEN / 원장 V-f35dab49 RULE_SCREEN / 원장 V-1be46155 RULE_SCREEN / 원장 V-04ac2d34 RULE_SCREEN / 원장 V-63a93768 RULE_SCREEN / 원장 V-842d4fb3 GENERAL / 원장 V-5be1f21d GENERAL / 원장 V-bd93834,71,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
+F4|ROW:D00-4e-005,T-856429d4,F4,DB,ROW,D00-4e-005,D00-4e-005,Y,ERROR,행 집계 — 대조표 D00-4e-005 '§4e GMessageBoxForException / (SaveData_Main catch' 의 F4 3요소: PASS:2 · ERROR:1,1,
+DB-SYN|ROW:D00-4e-005,T-5c5d2c1f,DB-SYN,DB,ROW,D00-4e-005,D00-4e-005,Y,PASS,행 집계 — 대조표 D00-4e-005 '§4e GMessageBoxForException / (SaveData_Main catch' 의 DB-SYN 3요소: PASS:3,1,
+E4|ROW:D00-4e-005,T-96a455f1,E4,EDIT,ROW,D00-4e-005,D00-4e-005,Y,NA,실측[T-96a455f1]: D00-4e-005: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
 X-LOC|ROW:D00-4e-006,T-3e18d737,X-LOC,GEN,ROW,D00-4e-006,D00-4e-006,Y,PASS,구현 위치 실존 2곳,1,
-D1|ROW:D00-4e-006,T-97a0e4cf,D1,EDIT,ROW,D00-4e-006,D00-4e-006,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:D00-4e-006,T-2aea2b24,D3,EDIT,ROW,D00-4e-006,D00-4e-006,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-E4|MSG:MSG00093,T-2d6f3bd2,E4,EDIT,MSG,MSG00093,MSG00093,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:466
-E4|MSG:MSG00097,T-f22773c1,E4,EDIT,MSG,MSG00097,MSG00097,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,4,
+E4|MSG:MSG00093,T-2d6f3bd2,E4,EDIT,MSG,MSG00093,MSG00093,Y,ERROR,원장 V-0c8f3043 ASIS / 실측[T-2d6f3bd2]: MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),4,SCP0033_Shipment_semi_dept_day.cs:466
+E4|MSG:MSG00097,T-f22773c1,E4,EDIT,MSG,MSG00097,MSG00097,Y,NA,실측[T-f22773c1]: MSG00097: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,4,
 X-LOC|ROW:D00-4e-007,T-d6468975,X-LOC,GEN,ROW,D00-4e-007,D00-4e-007,Y,PASS,구현 위치 실존 3곳,1,
-E4|COL:ITEM_ID,T-1c355151,E4,EDIT,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,4,SCP0033_Shipment_semi_dept_day.cs:466
-E4|MSG:MSG00060,T-c8548fb5,E4,EDIT,MSG,MSG00060,MSG00060,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.cs:533 SCP0033_Shipment_semi_dept_day.cs:575
-E3|COL:ITEM_ID,T-ce698d32,E3,EDIT,COL,ITEM_ID,ITEM_ID,Y,PASS,필수 표시 AS-IS *('Model*') ↔ TO-BE *('Model*' INPUT_TP_CD=IM),3,
+E4|COL:ITEM_ID,T-1c355151,E4,EDIT,COL,ITEM_ID,ITEM_ID / Model,Y,ERROR,원장 V-0c8f3043 ASIS / 실측[T-1c355151]: MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),4,SCP0033_Shipment_semi_dept_day.cs:466
+E4|MSG:MSG00060,T-c8548fb5,E4,EDIT,MSG,MSG00060,MSG00060,Y,NA,"원장 V-32467fdb ASIS / 원장 V-086c9977 ASIS / 실측[T-c8548fb5]: MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",6,SCP0033_Shipment_semi_dept_day.cs:533 SCP0033_Shipment_semi_dept_day.cs:575
+E3|COL:ITEM_ID,T-ce698d32,E3,EDIT,COL,ITEM_ID,ITEM_ID / Model,Y,PASS,필수 표시 AS-IS *('Model*') ↔ TO-BE *('Model*' INPUT_TP_CD=IM),3,
 X-LOC|ROW:D00-4e-008,T-78e7d489,X-LOC,GEN,ROW,D00-4e-008,D00-4e-008,Y,PASS,구현 위치 실존 2곳,1,
-A5|ROW:D00-4e-008,T-5a9ce609,A5,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:D00-4e-008,T-ca37f213,H5,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:D00-4e-008,T-22217b81,H2,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-E3|ROW:D00-4e-008,T-c71c7f4a,E3,EDIT,ROW,D00-4e-008,D00-4e-008,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-X-LOC|ROW:MODAL:ItemByDivisionModal,T-9b9ae74f,X-LOC,GEN,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,FAIL,"구현 위치 실존 안 함: ItemByDivisionModal.tsx 없음, ItemByDivisionModal.tsx 없음, ItemByDivisionModal.tsx 없음",1,
-H6|ROW:MODAL:ItemByDivisionModal,T-3afcfba1,H6,POPUP,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:MODAL:ItemByDivisionModal,T-bb797de2,G5,POPUP,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:MODAL:ItemByDivisionModal,T-0ec93bc7,M4,POPUP,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-G1|ROW:MODAL:ItemByDivisionModal,T-09cf9022,G1,GEN,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:MODAL:ItemByDivisionModal,T-0840b442,A1,GEN,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-X-LOC|ROW:MODAL:ShowDialog,T-789d1817,X-LOC,GEN,ROW,MODAL:ShowDialog,MODAL:ShowDialog,Y,PASS,구현 위치 실존 2곳,1,
-M3|ROW:MODAL:ShowDialog,T-24ac0edf,M3,POPUP,ROW,MODAL:ShowDialog,MODAL:ShowDialog,Y,NA,검사 대상 아님 — 이 화면에 M3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A5|ROW:D00-4e-008,T-5a9ce609,A5,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,PASS,행 집계 — 대조표 D00-4e-008 '§4e MSG00060 / `!isPass` (checkValid1)' 의 A5 5요소: PASS:5,1,
+H5|ROW:D00-4e-008,T-ca37f213,H5,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,PASS,행 집계 — 대조표 D00-4e-008 '§4e MSG00060 / `!isPass` (checkValid1)' 의 H5 5요소: PASS:5,1,
+H2|ROW:D00-4e-008,T-22217b81,H2,DESIGN,ROW,D00-4e-008,D00-4e-008,Y,PASS,행 집계 — 대조표 D00-4e-008 '§4e MSG00060 / `!isPass` (checkValid1)' 의 H2 4요소: PASS:4,1,
+E3|ROW:D00-4e-008,T-c71c7f4a,E3,EDIT,ROW,D00-4e-008,D00-4e-008,Y,PASS,행 집계 — 대조표 D00-4e-008 '§4e MSG00060 / `!isPass` (checkValid1)' 의 E3 4요소: PASS:3 · NA:1,1,
+X-LOC|ROW:MODAL:ModelByDivisionPopup,T-6deda34a,X-LOC,GEN,ROW,MODAL:ModelByDivisionPopup,MODAL:ModelByDivisionPopup,Y,PASS,구현 위치 실존 3곳,1,
+A1|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,T-de901460,A1,GEN,SP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,Y,REVIEW,골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),2,
+A6|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,T-4ad882fe,A6,GEN,SP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,Y,REVIEW,검증 엔진이 실행됐으나 이 대상(SP PKG_SCM0002.P_SCM0002_GET_ITEM)을 판정하지 못함 — 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 시나리오 수동 확인 또는 엔진 확장,2,
+F4|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,T-18b73288,F4,DB,SP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,Y,ERROR,"실측[T-18b73288]: PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP: SCM0002/ModelPopup/SEARCH, SCP0033/popup/SEARCH, SSP0019/popup/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정) → 기계 판정 불가 — 수",2,
+DB-SYN|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,T-12cbc2a2,DB-SYN,DB,SP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,Y,PASS,시노님검사 OK,2,
+X-LOC|ROW:MODAL:MaterialByDivisionModal,T-188f73f4,X-LOC,GEN,ROW,MODAL:MaterialByDivisionModal,MODAL:MaterialByDivisionModal,Y,PASS,구현 위치 실존 3곳,1,
+G4|ROW:MODAL:MaterialByDivisionModal,T-7cd73bcb,G4,DESIGN,ROW,MODAL:MaterialByDivisionModal,MODAL:MaterialByDivisionModal,Y,PASS,행 집계 — 대조표 MODAL:MaterialByDivisionModal '조회조건 Model 팝업 (COM0013 — AS-IS 에 없는 TO-BE 추가)' 의 G4 3요소: PASS:3,1,
+G1|ROW:MODAL:MaterialByDivisionModal,T-e4a4d2bd,G1,GEN,ROW,MODAL:MaterialByDivisionModal,MODAL:MaterialByDivisionModal,Y,PASS,행 집계 — 대조표 MODAL:MaterialByDivisionModal '조회조건 Model 팝업 (COM0013 — AS-IS 에 없는 TO-BE 추가)' 의 G1 4요소: PASS:2 · NA:2,1,
+G6|ROW:MODAL:MaterialByDivisionModal,T-8763277f,G6,GEN,ROW,MODAL:MaterialByDivisionModal,MODAL:MaterialByDivisionModal,Y,NA,실측[T-8763277f]: 대조표 행 MODAL:MaterialByDivisionModal(COM0013 — AS-IS 에 없는 TO-BE 추가) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정),1,
+A1|ROW:MODAL:MaterialByDivisionModal,T-efc9c58b,A1,GEN,ROW,MODAL:MaterialByDivisionModal,MODAL:MaterialByDivisionModal,Y,REVIEW,행 집계 — 대조표 MODAL:MaterialByDivisionModal '조회조건 Model 팝업 (COM0013 — AS-IS 에 없는 TO-BE 추가)' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
 X-LOC|ROW:COMMON:UC-01,T-ff6997e5,X-LOC,GEN,ROW,COMMON:UC-01,COMMON:UC-01,Y,PASS,구현 위치 실존 2곳,1,
-K4|SCREEN,T-c511a127,K4,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace,5,
-A5|ROW:COMMON:UC-01,T-1df4f99a,A5,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:COMMON:UC-01,T-057ef6e9,H5,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:COMMON:UC-01,T-113af5c0,H2,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-D4|ROW:COMMON:UC-01,T-bedf61b5,D4,EDIT,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,행 집계 — D4 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+K4|SCREEN,T-c511a127,K4,COMMON,SCREEN,SCP0033,SCP0033 화면,Y,ERROR,원장 V-764125f0 GENERAL / 원장 V-7474c8df GENERAL / 원장 V-cd9cc329 GENERAL / 원장 V-10a43ee0 GENERAL / 원장 V-f4827e1b GENERAL / 원장 V-6268a3c8 CONFIRMED / 원장 V-5ec54f49 RULE_SCREEN / 원장 EG-7f2270e0 RULE_SCREEN,5,
+A5|ROW:COMMON:UC-01,T-1df4f99a,A5,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,PASS,행 집계 — 대조표 COMMON:UC-01 '필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (ke' 의 A5 5요소: PASS:5,1,
+H5|ROW:COMMON:UC-01,T-057ef6e9,H5,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,PASS,행 집계 — 대조표 COMMON:UC-01 '필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (ke' 의 H5 5요소: PASS:5,1,
+H2|ROW:COMMON:UC-01,T-113af5c0,H2,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,PASS,행 집계 — 대조표 COMMON:UC-01 '필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (ke' 의 H2 4요소: PASS:4,1,
+D4|ROW:COMMON:UC-01,T-bedf61b5,D4,EDIT,ROW,COMMON:UC-01,COMMON:UC-01,Y,ERROR,행 집계 — 대조표 COMMON:UC-01 '필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (ke' 의 D4 12요소: PASS:10 · ERROR:2,1,
 X-LOC|ROW:COMMON:UC-02,T-f65ca195,X-LOC,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,PASS,구현 위치 실존 3곳,1,
-A5|ROW:COMMON:UC-02,T-8c8b4d1a,A5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:COMMON:UC-02,T-f2df5415,H5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:COMMON:UC-02,T-3f1a5eb0,H2,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-G1|ROW:COMMON:UC-02,T-d8cdfd39,G1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:COMMON:UC-02,T-fff95734,A1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-E4|MSG:MSG00703,T-4722c8ed,E4,EDIT,MSG,MSG00703,MSG00703,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+A5|ROW:COMMON:UC-02,T-8c8b4d1a,A5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,PASS,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠"" 의 A5 5요소: PASS:5",1,
+H5|ROW:COMMON:UC-02,T-f2df5415,H5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,PASS,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠"" 의 H5 5요소: PASS:5",1,
+H2|ROW:COMMON:UC-02,T-3f1a5eb0,H2,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,PASS,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠"" 의 H2 4요소: PASS:4",1,
+G1|ROW:COMMON:UC-02,T-d8cdfd39,G1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,PASS,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠"" 의 G1 4요소: PASS:2 · NA:2",1,
+A1|ROW:COMMON:UC-02,T-fff95734,A1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,"행 집계 — 대조표 COMMON:UC-02 ""데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠"" 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde",1,
+E4|MSG:MSG00703,T-4722c8ed,E4,EDIT,MSG,MSG00703,MSG00703,Y,NA,실측[T-4722c8ed]: MSG00703: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
 X-REASON|ROW:COMMON:UC-03,T-de2168f7,X-REASON,DESIGN,ROW,COMMON:UC-03,COMMON:UC-03,Y,PASS,사유 있음: 이 화면에는 Column/Measure 설정 진입점이 없다 — PIVOT 화면이 아니고 SHEET_MEASU,1,
 X-LOC|ROW:COMMON:UC-04,T-a7a87807,X-LOC,GEN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,구현 위치 실존 1곳,1,
-E3|ROW:COMMON:UC-04,T-ad62895b,E3,EDIT,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
+A5|ROW:COMMON:UC-04,T-4562ce28,A5,DESIGN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,행 집계 — 대조표 COMMON:UC-04 'CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WD' 의 A5 5요소: PASS:5,1,
+H5|ROW:COMMON:UC-04,T-ee87ce7f,H5,DESIGN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,행 집계 — 대조표 COMMON:UC-04 'CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WD' 의 H5 5요소: PASS:5,1,
+H2|ROW:COMMON:UC-04,T-edc1f8ab,H2,DESIGN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,행 집계 — 대조표 COMMON:UC-04 'CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WD' 의 H2 4요소: PASS:4,1,
+E3|ROW:COMMON:UC-04,T-ad62895b,E3,EDIT,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,행 집계 — 대조표 COMMON:UC-04 'CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WD' 의 E3 4요소: PASS:3 · NA:1,1,
 X-LOC|ROW:COMMON:UC-05,T-21bcbc07,X-LOC,GEN,ROW,COMMON:UC-05,COMMON:UC-05,Y,PASS,구현 위치 실존 2곳,1,
-A5|COL:DIVISION_ID,T-30672641,A5,DESIGN,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,1,
-A5|COL:OPERATION_GROUP,T-a331dbed,A5,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,1,
-A5|COL:DEPARTURE_DAY,T-19e6ed1a,A5,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,1,
-H5|COL:DIVISION_ID,T-94e11282,H5,DESIGN,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,1,
-H5|COL:OPERATION_GROUP,T-26cd48ee,H5,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,1,
-H5|COL:DEPARTURE_DAY,T-3e7255a8,H5,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,1,
-H2|COL:DIVISION_ID,T-cbb3a122,H2,DESIGN,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,2,
-H2|COL:OPERATION_GROUP,T-a730fb37,H2,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,1,
-H2|COL:DEPARTURE_DAY,T-ad8c1d48,H2,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,1,
-B1|COL:OPERATION_GROUP,T-d58106aa,B1,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B2|COL:OPERATION_GROUP,T-3fb9e1dc,B2,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-B4|COL:OPERATION_GROUP,T-0eb719fa,B4,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-D5|COL:OPERATION_GROUP,T-e038f108,D5,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace,1,
-E5|COL:OPERATION_GROUP,T-7407104a,E5,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+A5|COL:DIVISION_ID,T-30672641,A5,DESIGN,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,E2E smoke columns / 실측[T-30672641]: DIVISION_ID: AS-IS(Div 40) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y),1,
+A5|COL:OPERATION_GROUP,T-a331dbed,A5,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,E2E smoke columns / 실측[T-a331dbed]: OPERATION_GROUP: AS-IS(Div 40) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y),1,
+A5|COL:DEPARTURE_DAY,T-19e6ed1a,A5,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,E2E smoke columns / 실측[T-19e6ed1a]: DEPARTURE_DAY: AS-IS(Div 40) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y),1,
+H5|COL:DIVISION_ID,T-94e11282,H5,DESIGN,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,"실측[T-94e11282]: DIVISION_ID: AS-IS 'Division' → TO-BE 헤더 'Div' = 메타 라벨(SHEET_COLUMNS 'Div') — TO-BE 룰(CR-071: 조회조건과 같은 컬럼은 기준표 라벨, 그 외는 메타 라벨이 정답) → AS-IS 와 달라도 PASS",1,
+H5|COL:OPERATION_GROUP,T-26cd48ee,H5,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,실측[T-26cd48ee]: OPERATION_GROUP: AS-IS 'Operation Group' = TO-BE 헤더 'Operation Group',1,
+H5|COL:DEPARTURE_DAY,T-3e7255a8,H5,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,실측[T-3e7255a8]: DEPARTURE_DAY: AS-IS 'Departure day' = TO-BE 헤더 'Departure day',1,
+H2|COL:DIVISION_ID,T-cbb3a122,H2,DESIGN,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-cf64d9c3 COLUMN / 실측[T-cbb3a122]: DIVISION_ID: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치,2,
+H2|COL:OPERATION_GROUP,T-a730fb37,H2,DESIGN,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-20557d1b COLUMN / 실측[T-a730fb37]: OPERATION_GROUP: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치,1,
+H2|COL:DEPARTURE_DAY,T-ad8c1d48,H2,DESIGN,COL,DEPARTURE_DAY,DEPARTURE_DAY / Departure day,Y,PASS,원장 V-3489b97c COLUMN / 실측[T-ad8c1d48]: DEPARTURE_DAY: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치,1,
+B1|COL:OPERATION_GROUP,T-d58106aa,B1,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-84218abe COLUMN,1,
+B2|COL:OPERATION_GROUP,T-3fb9e1dc,B2,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-51dab2e3 COLUMN,1,
+B4|COL:OPERATION_GROUP,T-0eb719fa,B4,COMBO,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,ERROR,원장 V-b29aa9f5 COLUMN,1,
+D5|COL:OPERATION_GROUP,T-e038f108,D5,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-376dc304 COLUMN / 실측[T-e038f108]: OPERATION_GROUP: AS-IS COMBO(cell_rules) ↔ TO-BE dataType=1 dataMap=Y,1,
+E5|COL:OPERATION_GROUP,T-7407104a,E5,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-85dfe1a5 COLUMN,1,
 X-REASON|ROW:COMMON:UC-06,T-ceed6733,X-REASON,DESIGN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
 X-LOC|ROW:COMMON:UC-07,T-a240f7a9,X-LOC,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,구현 위치 실존 2곳,1,
-A5|ROW:COMMON:UC-07,T-616439f4,A5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:COMMON:UC-07,T-7ccb96fe,H5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:COMMON:UC-07,T-e9f871a4,H2,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-G1|ROW:COMMON:UC-07,T-088ed7a5,G1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:COMMON:UC-07,T-fd5520bf,A1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-X-LOC|ROW:clbDivision (UsrCheckedList),T-be7cf6b1,X-LOC,GEN,ROW,clbDivision (UsrCheckedList),clbDivision (UsrCheckedList),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:clbDivision (UsrCheckedList),T-d32bce05,X-ROW,GEN,ENTRY,clbDivision (UsrCheckedList),clbDivision (UsrCheckedList),Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-"X-LOC|ROW:txtItemId (TextBox, ""Model"")",T-7a5a5cad,X-LOC,GEN,ROW,"txtItemId (TextBox, ""Model"")","txtItemId (TextBox, ""Model"")",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-H6|COND:txtItemId,T-57284017,H6,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,1,
-G5|COND:txtItemId,T-22be786d,G5,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-M4|COND:txtItemId,T-fa4f4468,M4,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,1,
-X-LOC|ROW:cboValidYN (UsrCombo),T-dbd825a0,X-LOC,GEN,ROW,cboValidYN (UsrCombo),cboValidYN (UsrCombo),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:cboValidYN (UsrCombo),T-2e2e7e3d,X-ROW,GEN,ENTRY,cboValidYN (UsrCombo),cboValidYN (UsrCombo),Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:usrConditionPanel1 (HidePanel),T-6d0f55f6,X-LOC,GEN,ROW,usrConditionPanel1 (HidePanel),usrConditionPanel1 (HidePanel),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:usrLayoutControl2 + SetDivisionAuthCheck,T-ab856ec3,X-LOC,GEN,ROW,usrLayoutControl2 + SetDivisionAuthCheck,usrLayoutControl2 + SetDivisionAuthCheck,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:usrLayoutControl1 / layoutControlGroup1,T-2c50b0f9,X-LOC,GEN,ROW,usrLayoutControl1 / layoutControlGroup1,usrLayoutControl1 / layoutControlGroup1,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:usrLayoutControl1 / layoutControlGroup1,T-3c81d0ed,X-ROW,GEN,ENTRY,usrLayoutControl1 / layoutControlGroup1,usrLayoutControl1 / layoutControlGroup1,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:layoutControlItem3/4/13 (라벨),T-200c5b91,X-LOC,GEN,ROW,layoutControlItem3/4/13 (라벨),layoutControlItem3/4/13 (라벨),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:layoutControlItem3/4/13 (라벨),T-3040085c,X-ROW,GEN,ENTRY,layoutControlItem3/4/13 (라벨),layoutControlItem3/4/13 (라벨),Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-8476ca31,X-LOC,GEN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-A5|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-29da90b0,A5,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-4b3bcafc,H5,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-382be6d0,H2,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-X-LOC|ROW:emptySpaceItem3 / components / imageList1,T-2669de93,X-LOC,GEN,ROW,emptySpaceItem3 / components / imageList1,emptySpaceItem3 / components / imageList1,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:emptySpaceItem3 / components / imageList1,T-f71d87c5,X-ROW,GEN,ENTRY,emptySpaceItem3 / components / imageList1,emptySpaceItem3 / components / imageList1,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:1,T-32eb25ec,X-LOC,GEN,ROW,1,1,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-X-LOC|ROW:2,T-dea0cdc1,X-LOC,GEN,ROW,2,2,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-X-LOC|ROW:3,T-69411ee6,X-LOC,GEN,ROW,3,3,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,4,
-A5|ROW:3,T-683bf132,A5,DESIGN,ROW,3,3,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),2,
-H5|ROW:3,T-ea8a8891,H5,DESIGN,ROW,3,3,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),2,
-H2|ROW:3,T-c4963516,H2,DESIGN,ROW,3,3,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),2,
-H3|ROW:3,T-9cd89979,H3,DESIGN,ROW,3,3,Y,REVIEW,행 집계 — H3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
-"X-LOC|ROW:1,2",T-c4f4990e,X-LOC,GEN,ROW,"1,2","1,2",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:4,T-44a5bdfa,X-LOC,GEN,ROW,4,4,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-X-LOC|ROW:5,T-b9ac44ef,X-LOC,GEN,ROW,5,5,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-D4|ROW:5,T-b8f937bd,D4,EDIT,ROW,5,5,Y,REVIEW,행 집계 — D4 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
-D1|ROW:5,T-9f91d493,D1,EDIT,ROW,5,5,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),2,
-D3|ROW:5,T-051d454d,D3,EDIT,ROW,5,5,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),2,
-X-LOC|ROW:6,T-a7758671,X-LOC,GEN,ROW,6,6,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-X-LOC|ROW:7,T-f9a3a941,X-LOC,GEN,ROW,7,7,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,3,
-"X-LOC|ROW:8,9,10",T-76ca0539,X-LOC,GEN,ROW,"8,9,10","8,9,10",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:11,T-fc3510d9,X-LOC,GEN,ROW,11,11,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-D1|ROW:11,T-1d518fc7,D1,EDIT,ROW,11,11,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:11,T-c2ed33e8,D3,EDIT,ROW,11,11,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-X-LOC|ROW:12,T-f7f919e3,X-LOC,GEN,ROW,12,12,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:13,T-362b468d,X-LOC,GEN,ROW,13,13,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:14,T-8f0d5660,X-LOC,GEN,ROW,14,14,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:14,T-e4745d20,X-ROW,GEN,ENTRY,14,14,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:15,T-f85694ea,X-LOC,GEN,ROW,15,15,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-D1|ROW:15,T-d6463b2f,D1,EDIT,ROW,15,15,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:15,T-38d13057,D3,EDIT,ROW,15,15,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-G1|ROW:15,T-a67e3b6e,G1,GEN,ROW,15,15,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:15,T-81094859,A1,GEN,ROW,15,15,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-"X-LOC|ROW:16,17",T-1216ebb3,X-LOC,GEN,ROW,"16,17","16,17",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-D1|ROW:2,T-4d0272a5,D1,EDIT,ROW,2,2,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:2,T-fa4a4532,D3,EDIT,ROW,2,2,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-X-ROW|ENTRY:4,T-99a6269f,X-ROW,GEN,ENTRY,4,4,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-ROW|ENTRY:6,T-05a2950e,X-ROW,GEN,ENTRY,6,6,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:8,T-239a5eee,X-LOC,GEN,ROW,8,8,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,2,
-E4|COL:DIVISION_ID,T-f07ee9f2,E4,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,
-G1|ROW:1,T-7ae5dcba,G1,GEN,ROW,1,1,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:1,T-5201b991,A1,GEN,ROW,1,1,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-E4|ROW:1,T-bf4f07dd,E4,EDIT,ROW,1,1,Y,REVIEW,행 집계 — E4 13요소: NOT_RUN:13 (미실행 요소가 남아 판정필요),1,
-E3|ROW:1,T-f6d6eddd,E3,EDIT,ROW,1,1,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-E3|ROW:2,T-fc5c289d,E3,EDIT,ROW,2,2,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-E3|ROW:3,T-08a67453,E3,EDIT,ROW,3,3,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-E3|ROW:4,T-1ceb4825,E3,EDIT,ROW,4,4,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-E4|ROW:5,T-f6140d43,E4,EDIT,ROW,5,5,Y,REVIEW,행 집계 — E4 13요소: NOT_RUN:13 (미실행 요소가 남아 판정필요),1,
-E3|ROW:5,T-6bbe2c7a,E3,EDIT,ROW,5,5,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-E3|COL:DIVISION_ID,T-96ec90b4,E3,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,PASS,필수 표시 AS-IS *('Division*') ↔ TO-BE *('Div*' INPUT_TP_CD=IM),2,
-E3|ROW:7,T-427514fb,E3,EDIT,ROW,7,7,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-A5|ROW:8,T-73148566,A5,DESIGN,ROW,8,8,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:8,T-57085e9d,H5,DESIGN,ROW,8,8,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:8,T-7d7f6982,H2,DESIGN,ROW,8,8,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-E3|ROW:8,T-3f605f0e,E3,EDIT,ROW,8,8,Y,PASS,행 집계 — E3 2요소: PASS:2,1,
-X-LOC|ROW:—,T-5cd81006,X-LOC,GEN,ROW,—,—,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-E4|MSG:MSG00429,T-2e20a59a,E4,EDIT,MSG,MSG00429,MSG00429,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
-X-LOC|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-7d44a5ca,X-LOC,GEN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-A5|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-005f9c48,A5,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,REVIEW,행 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
-H5|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-55d1cf32,H5,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,REVIEW,행 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-H2|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-588da244,H2,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,REVIEW,행 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-A1|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-1c82d56a,A1,GEN,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,REVIEW,골든 비교 케이스 없음(PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),37,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
-A6|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-e15acebd,A6,GEN,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",37,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
-F4|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-91530786,F4,DB,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,104,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
-DB-SYN|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-d13badd6,DB-SYN,DB,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,시노님검사 OK,5,SCP0033_Shipment_semi_dept_day.cs:254 SCP0033_Shipment_semi_dept_day.cs:258 SCP0033_Shipment_semi_dept_day.cs:265 SCP0033_Shipment_semi_dept_day.cs:395
-"X-LOC|ROW:SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)",T-9675b117,X-LOC,GEN,ROW,"SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)","SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-F4|SP:P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,T-dafbdaff,F4,DB,SP,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,70,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
-DB-SYN|SP:P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,T-305de6f0,DB-SYN,DB,SP,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,시노님검사 OK,3,SCP0033_Shipment_semi_dept_day.cs:380 SCP0033_Shipment_semi_dept_day.cs:395
-X-LOC|ROW:SCM0002_ItembyDivisionPopup,T-549b0953,X-LOC,GEN,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-H6|ROW:SCM0002_ItembyDivisionPopup,T-33016e4e,H6,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:SCM0002_ItembyDivisionPopup,T-cee60680,G5,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:SCM0002_ItembyDivisionPopup,T-ab5dcb5f,M4,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-X-LOC|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-78d951e1,X-LOC,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-D4|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-dc785262,D4,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — D4 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
-D1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-130ce9dc,D1,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — D1 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-D3|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-4a0f0e39,D3,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — D3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요),1,
-G1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-73d90d4a,G1,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
-A1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-89c91173,A1,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-X-LOC|ROW:prg (ProgressForm),T-792ed117,X-LOC,GEN,ROW,prg (ProgressForm),prg (ProgressForm),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-H6|ROW:prg (ProgressForm),T-22ecded3,H6,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,REVIEW,행 집계 — H6 4요소: NOPATH:2 · NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
-G5|ROW:prg (ProgressForm),T-ddbdd357,G5,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,REVIEW,행 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
-M4|ROW:prg (ProgressForm),T-e2f4babd,M4,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,REVIEW,행 집계 — M4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
-X-LOC|ROW:popItem (SCM0002_ItembyDivisionPopup),T-5bc263b6,X-LOC,GEN,ROW,popItem (SCM0002_ItembyDivisionPopup),popItem (SCM0002_ItembyDivisionPopup),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-LOC|ROW:GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,T-341b4699,X-LOC,GEN,ROW,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-H6|COND:clbDivision,T-2e2db482,H6,POPUP,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,1,
-G5|COND:clbDivision,T-831cc691,G5,POPUP,COND,clbDivision,clbDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
-M4|COND:clbDivision,T-39fd0e78,M4,POPUP,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,1,
-A1|ROW:GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,T-8fe08703,A1,GEN,ROW,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
-X-LOC|ROW:dsValiChkBinding = GET Table[1],T-a7a5b6d0,X-LOC,GEN,ROW,dsValiChkBinding = GET Table[1],dsValiChkBinding = GET Table[1],Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:dsValiChkBinding = GET Table[1],T-36dddca5,X-ROW,GEN,ENTRY,dsValiChkBinding = GET Table[1],dsValiChkBinding = GET Table[1],Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:CString.GetCheckedListValue,T-0c852b46,X-LOC,GEN,ROW,CString.GetCheckedListValue,CString.GetCheckedListValue,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:CString.GetCheckedListValue,T-09f40ce3,X-ROW,GEN,ENTRY,CString.GetCheckedListValue,CString.GetCheckedListValue,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
-X-LOC|ROW:VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),T-c9beeb33,X-LOC,GEN,ROW,VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
-X-ROW|ENTRY:VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),T-e6657aa8,X-ROW,GEN,ENTRY,VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+A5|ROW:COMMON:UC-07,T-616439f4,A5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 A5 5요소: PASS:5,1,
+H5|ROW:COMMON:UC-07,T-7ccb96fe,H5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 H5 5요소: PASS:5,1,
+H2|ROW:COMMON:UC-07,T-e9f871a4,H2,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 H2 4요소: PASS:4,1,
+G1|ROW:COMMON:UC-07,T-088ed7a5,G1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:COMMON:UC-07,T-fd5520bf,A1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+X-LOC|ROW:clbDivision (UsrCheckedList),T-be7cf6b1,X-LOC,GEN,ROW,clbDivision (UsrCheckedList),clbDivision (UsrCheckedList),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:clbDivision (UsrCheckedList),T-d32bce05,X-ROW,GEN,ENTRY,clbDivision (UsrCheckedList),clbDivision (UsrCheckedList),Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+"X-LOC|ROW:txtItemId (TextBox, ""Model"")",T-7a5a5cad,X-LOC,GEN,ROW,"txtItemId (TextBox, ""Model"")","txtItemId (TextBox, ""Model"")",Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+"D4|ROW:txtItemId (TextBox, ""Model"")",T-13b2a712,D4,EDIT,ROW,"txtItemId (TextBox, ""Model"")","txtItemId (TextBox, ""Model"")",Y,ERROR,"행 집계 — 대조표 txtItemId (TextBox, ""Model"") 'Form Model `InputField`(prefix) + Material 팝업 버튼(C' 의 D4 12요소: PASS:10 · ERROR:2",1,
+X-LOC|ROW:cboValidYN (UsrCombo),T-dbd825a0,X-LOC,GEN,ROW,cboValidYN (UsrCombo),cboValidYN (UsrCombo),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:cboValidYN (UsrCombo),T-2e2e7e3d,X-ROW,GEN,ENTRY,cboValidYN (UsrCombo),cboValidYN (UsrCombo),Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:usrConditionPanel1 (HidePanel),T-6d0f55f6,X-LOC,GEN,ROW,usrConditionPanel1 (HidePanel),usrConditionPanel1 (HidePanel),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:usrLayoutControl2 + SetDivisionAuthCheck,T-ab856ec3,X-LOC,GEN,ROW,usrLayoutControl2 + SetDivisionAuthCheck,usrLayoutControl2 + SetDivisionAuthCheck,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:usrLayoutControl1 / layoutControlGroup1,T-2c50b0f9,X-LOC,GEN,ROW,usrLayoutControl1 / layoutControlGroup1,usrLayoutControl1 / layoutControlGroup1,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:usrLayoutControl1 / layoutControlGroup1,T-3c81d0ed,X-ROW,GEN,ENTRY,usrLayoutControl1 / layoutControlGroup1,usrLayoutControl1 / layoutControlGroup1,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:layoutControlItem3/4/13 (라벨),T-200c5b91,X-LOC,GEN,ROW,layoutControlItem3/4/13 (라벨),layoutControlItem3/4/13 (라벨),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:layoutControlItem3/4/13 (라벨),T-3040085c,X-ROW,GEN,ENTRY,layoutControlItem3/4/13 (라벨),layoutControlItem3/4/13 (라벨),Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-8476ca31,X-LOC,GEN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+A5|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-29da90b0,A5,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,PASS,"행 집계 — 대조표 spdMain (FpSpread) / spdMain_Sheet1 ""공용 DataGrid (SHEETS.MAIN='main')"" 의 A5 5요소: PASS:5",1,
+H5|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-4b3bcafc,H5,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,PASS,"행 집계 — 대조표 spdMain (FpSpread) / spdMain_Sheet1 ""공용 DataGrid (SHEETS.MAIN='main')"" 의 H5 5요소: PASS:5",1,
+H2|ROW:spdMain (FpSpread) / spdMain_Sheet1,T-382be6d0,H2,DESIGN,ROW,spdMain (FpSpread) / spdMain_Sheet1,spdMain (FpSpread) / spdMain_Sheet1,Y,PASS,"행 집계 — 대조표 spdMain (FpSpread) / spdMain_Sheet1 ""공용 DataGrid (SHEETS.MAIN='main')"" 의 H2 4요소: PASS:4",1,
+X-LOC|ROW:emptySpaceItem3 / components / imageList1,T-2669de93,X-LOC,GEN,ROW,emptySpaceItem3 / components / imageList1,emptySpaceItem3 / components / imageList1,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:emptySpaceItem3 / components / imageList1,T-f71d87c5,X-ROW,GEN,ENTRY,emptySpaceItem3 / components / imageList1,emptySpaceItem3 / components / imageList1,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:1,T-32eb25ec,X-LOC,GEN,ROW,1,1,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+X-LOC|ROW:2,T-dea0cdc1,X-LOC,GEN,ROW,2,2,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+X-LOC|ROW:3,T-69411ee6,X-LOC,GEN,ROW,3,3,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,4,
+A5|ROW:3,T-683bf132,A5,DESIGN,ROW,3,3,Y,PASS,행 집계 — 대조표 3 'MSG00004' 의 A5 5요소: PASS:5,2,
+H5|ROW:3,T-ea8a8891,H5,DESIGN,ROW,3,3,Y,PASS,행 집계 — 대조표 3 'MSG00004' 의 H5 5요소: PASS:5,2,
+H2|ROW:3,T-c4963516,H2,DESIGN,ROW,3,3,Y,PASS,행 집계 — 대조표 3 'MSG00004' 의 H2 4요소: PASS:4,2,
+H3|ROW:3,T-9cd89979,H3,DESIGN,ROW,3,3,Y,PASS,행 집계 — 대조표 3 'MSG00004' 의 H3 1요소: PASS:1,1,
+"X-LOC|ROW:1,2",T-c4f4990e,X-LOC,GEN,ROW,"1,2","1,2",Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:4,T-44a5bdfa,X-LOC,GEN,ROW,4,4,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+X-LOC|ROW:5,T-b9ac44ef,X-LOC,GEN,ROW,5,5,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+D4|ROW:5,T-b8f937bd,D4,EDIT,ROW,5,5,Y,ERROR,행 집계 — 대조표 5 'GMessageBoxForException' 의 D4 12요소: PASS:10 · ERROR:2,1,
+D1|ROW:5,T-9f91d493,D1,EDIT,ROW,5,5,Y,PASS,행 집계 — 대조표 5 'GMessageBoxForException' 의 D1 12요소: PASS:8 · NA:4,2,
+D3|ROW:5,T-051d454d,D3,EDIT,ROW,5,5,Y,NA,행 집계 — 대조표 5 'GMessageBoxForException' 의 D3 8요소: NA:8,2,
+X-LOC|ROW:6,T-a7758671,X-LOC,GEN,ROW,6,6,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+X-LOC|ROW:7,T-f9a3a941,X-LOC,GEN,ROW,7,7,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,3,
+"X-LOC|ROW:8,9,10",T-76ca0539,X-LOC,GEN,ROW,"8,9,10","8,9,10",Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:11,T-fc3510d9,X-LOC,GEN,ROW,11,11,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+D1|ROW:11,T-1d518fc7,D1,EDIT,ROW,11,11,Y,PASS,행 집계 — 대조표 11 'SwitchLock (EditButton)' 의 D1 12요소: PASS:8 · NA:4,1,
+D3|ROW:11,T-c2ed33e8,D3,EDIT,ROW,11,11,Y,NA,행 집계 — 대조표 11 'SwitchLock (EditButton)' 의 D3 8요소: NA:8,1,
+X-LOC|ROW:12,T-f7f919e3,X-LOC,GEN,ROW,12,12,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:13,T-362b468d,X-LOC,GEN,ROW,13,13,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:14,T-8f0d5660,X-LOC,GEN,ROW,14,14,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:14,T-e4745d20,X-ROW,GEN,ENTRY,14,14,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:15,T-f85694ea,X-LOC,GEN,ROW,15,15,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+D1|ROW:15,T-d6463b2f,D1,EDIT,ROW,15,15,Y,PASS,"행 집계 — 대조표 15 'LockColumn(0, max, true) 조회 후 전잠금' 의 D1 12요소: PASS:8 · NA:4",1,
+D3|ROW:15,T-38d13057,D3,EDIT,ROW,15,15,Y,NA,"행 집계 — 대조표 15 'LockColumn(0, max, true) 조회 후 전잠금' 의 D3 8요소: NA:8",1,
+G1|ROW:15,T-a67e3b6e,G1,GEN,ROW,15,15,Y,PASS,"행 집계 — 대조표 15 'LockColumn(0, max, true) 조회 후 전잠금' 의 G1 4요소: PASS:2 · NA:2",1,
+A1|ROW:15,T-81094859,A1,GEN,ROW,15,15,Y,REVIEW,"행 집계 — 대조표 15 'LockColumn(0, max, true) 조회 후 전잠금' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde",1,
+"X-LOC|ROW:16,17",T-1216ebb3,X-LOC,GEN,ROW,"16,17","16,17",Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+D1|ROW:2,T-4d0272a5,D1,EDIT,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 D1 12요소: PASS:8 · NA:4,1,
+D3|ROW:2,T-fa4a4532,D3,EDIT,ROW,2,2,Y,NA,행 집계 — 대조표 2 'MSG00059' 의 D3 8요소: NA:8,1,
+X-ROW|ENTRY:4,T-99a6269f,X-ROW,GEN,ENTRY,4,4,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-ROW|ENTRY:6,T-05a2950e,X-ROW,GEN,ENTRY,6,6,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:8,T-239a5eee,X-LOC,GEN,ROW,8,8,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,2,
+E4|COL:DIVISION_ID,T-f07ee9f2,E4,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,NA,실측[T-f07ee9f2]: DIVISION_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,3,
+G1|ROW:1,T-7ae5dcba,G1,GEN,ROW,1,1,Y,PASS,행 집계 — 대조표 1 'GMessageBoxForException' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:1,T-5201b991,A1,GEN,ROW,1,1,Y,REVIEW,행 집계 — 대조표 1 'GMessageBoxForException' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+E4|ROW:1,T-bf4f07dd,E4,EDIT,ROW,1,1,Y,NA,실측[T-bf4f07dd]: 1: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
+E3|ROW:1,T-f6d6eddd,E3,EDIT,ROW,1,1,Y,PASS,행 집계 — 대조표 1 'GMessageBoxForException' 의 E3 4요소: PASS:3 · NA:1,1,
+A5|ROW:2,T-0e605a78,A5,DESIGN,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 A5 5요소: PASS:5,1,
+H5|ROW:2,T-a5ecdd12,H5,DESIGN,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 H5 5요소: PASS:5,1,
+H2|ROW:2,T-c7fe4f2c,H2,DESIGN,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 H2 4요소: PASS:4,1,
+D4|ROW:2,T-d352101f,D4,EDIT,ROW,2,2,Y,ERROR,행 집계 — 대조표 2 'MSG00059' 의 D4 12요소: PASS:10 · ERROR:2,1,
+G1|ROW:2,T-7f5a13c9,G1,GEN,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:2,T-02c1c73d,A1,GEN,ROW,2,2,Y,REVIEW,행 집계 — 대조표 2 'MSG00059' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+E3|ROW:2,T-fc5c289d,E3,EDIT,ROW,2,2,Y,PASS,행 집계 — 대조표 2 'MSG00059' 의 E3 4요소: PASS:3 · NA:1,1,
+E3|ROW:3,T-08a67453,E3,EDIT,ROW,3,3,Y,PASS,행 집계 — 대조표 3 'MSG00004' 의 E3 4요소: PASS:3 · NA:1,1,
+E3|ROW:4,T-1ceb4825,E3,EDIT,ROW,4,4,Y,PASS,행 집계 — 대조표 4 'MSG00006' 의 E3 4요소: PASS:3 · NA:1,1,
+E4|ROW:5,T-f6140d43,E4,EDIT,ROW,5,5,Y,NA,실측[T-f6140d43]: 5: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
+E3|ROW:5,T-6bbe2c7a,E3,EDIT,ROW,5,5,Y,PASS,행 집계 — 대조표 5 'GMessageBoxForException' 의 E3 4요소: PASS:3 · NA:1,1,
+E3|COL:DIVISION_ID,T-96ec90b4,E3,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,필수 표시 AS-IS *('Division*') ↔ TO-BE *('Div*' INPUT_TP_CD=IM),2,
+E3|ROW:7,T-427514fb,E3,EDIT,ROW,7,7,Y,PASS,행 집계 — 대조표 7 'MSG00060' 의 E3 4요소: PASS:3 · NA:1,1,
+A5|ROW:8,T-73148566,A5,DESIGN,ROW,8,8,Y,PASS,행 집계 — 대조표 8 'MSG00060' 의 A5 5요소: PASS:5,1,
+H5|ROW:8,T-57085e9d,H5,DESIGN,ROW,8,8,Y,PASS,행 집계 — 대조표 8 'MSG00060' 의 H5 5요소: PASS:5,1,
+H2|ROW:8,T-7d7f6982,H2,DESIGN,ROW,8,8,Y,PASS,행 집계 — 대조표 8 'MSG00060' 의 H2 4요소: PASS:4,1,
+E3|ROW:8,T-3f605f0e,E3,EDIT,ROW,8,8,Y,PASS,행 집계 — 대조표 8 'MSG00060' 의 E3 4요소: PASS:3 · NA:1,1,
+X-LOC|ROW:—,T-5cd81006,X-LOC,GEN,ROW,—,—,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+E4|MSG:MSG00429,T-2e20a59a,E4,EDIT,MSG,MSG00429,MSG00429,Y,NA,실측[T-2e20a59a]: MSG00429: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님,1,
+X-LOC|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-7d44a5ca,X-LOC,GEN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+A5|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-005f9c48,A5,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,PASS,행 집계 — 대조표 SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1]  'useTabProcQuery SHEETS.MAIN (o_rc1 rows / o_rc2 du' 의 A5 5요소: PASS:5,1,
+H5|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-55d1cf32,H5,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,PASS,행 집계 — 대조표 SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1]  'useTabProcQuery SHEETS.MAIN (o_rc1 rows / o_rc2 du' 의 H5 5요소: PASS:5,1,
+H2|ROW:SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,T-588da244,H2,DESIGN,ROW,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1] ,Y,PASS,행 집계 — 대조표 SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY (Table[0] 그리드 / Table[1]  'useTabProcQuery SHEETS.MAIN (o_rc1 rows / o_rc2 du' 의 H2 4요소: PASS:4,1,
+A1|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-1c82d56a,A1,GEN,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,"golden PASS AS-IS 53행 ↔ TO-BE 52행: Doc/golden/SCP0033/SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY.md · 데이터 기준: 공통 52행 / AS-IS 전용 1 / TO-BE 전용 0 (환경 데이터 차이 — 같은 행의 값은 A7, 순서는 A6 에서 대조)",38,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
+A6|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-e15acebd,A6,GEN,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,원장 V-bcae5046 SP / 정렬대조 PASS 분기 키 순서 동일 / 실측 순서대조 PASS 공통 52행(Doc/golden/SCP0033/SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY.order.csv) / 실측[T-e15acebd]: PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY: 결과 55,38,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
+F4|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-91530786,F4,DB,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,E2E smoke call-proc / 실측[T-91530786]: PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY: main/SEARCH HTTP 200 111행,105,SCP0033_Shipment_semi_dept_day.cs:172 SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:238 SCP0033_Shipment_semi_dept_day.cs:240 SCP0033_Shipment_semi_dept_day.cs:241 SCP0033_Shipment_semi_dept_day.cs:242 SCP0033_Shipment_semi_dept_day.cs:
+DB-SYN|SP:P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,T-d13badd6,DB-SYN,DB,SP,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,시노님검사 OK,6,SCP0033_Shipment_semi_dept_day.cs:254 SCP0033_Shipment_semi_dept_day.cs:258 SCP0033_Shipment_semi_dept_day.cs:265 SCP0033_Shipment_semi_dept_day.cs:395
+"X-LOC|ROW:SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)",T-9675b117,X-LOC,GEN,ROW,"SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)","SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY (^-delim, I/M, D 미전송)",Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+F4|SP:P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,T-dafbdaff,F4,DB,SP,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,"실측[T-dafbdaff]: PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY: 저장 호출 1회 HTTP 200 · SQL 오류 없음 · main/SAVE:200 응답={""code"":""0"",""message"":""success"",""result"":{""o_result_cursor"":[{""RESULT_CODE"":""0"",""RES",71,SCP0033_Shipment_semi_dept_day.cs:178 SCP0033_Shipment_semi_dept_day.cs:306 SCP0033_Shipment_semi_dept_day.cs:308 SCP0033_Shipment_semi_dept_day.cs:309 SCP0033_Shipment_semi_dept_day.cs:312 SCP0033_Shipment_semi_dept_day.cs:315 SCP0033_Shipment_semi_dept_day.cs:317 SCP0033_Shipment_semi_dept_day.cs:
+DB-SYN|SP:P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,T-305de6f0,DB-SYN,DB,SP,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,PKG_SCP0033.P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,Y,PASS,시노님검사 OK,4,SCP0033_Shipment_semi_dept_day.cs:380 SCP0033_Shipment_semi_dept_day.cs:395
+X-LOC|ROW:SCM0002_ItembyDivisionPopup,T-549b0953,X-LOC,GEN,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+H6|ROW:SCM0002_ItembyDivisionPopup,T-33016e4e,H6,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,ERROR,행 집계 — 대조표 SCM0002_ItembyDivisionPopup '공용 ModelByDivisionPopup (SHEETS.POPUP) -> PKG_SCM0' 의 H6 8요소: ERROR:4 · NOPATH:2 · PASS:1 · NOT_RUN:1,1,
+G5|ROW:SCM0002_ItembyDivisionPopup,T-cee60680,G5,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,NA,행 집계 — 대조표 SCM0002_ItembyDivisionPopup '공용 ModelByDivisionPopup (SHEETS.POPUP) -> PKG_SCM0' 의 G5 8요소: PASS:3 · NOPATH:3 · NA:2 (미실행 요소가 남아 판정필요),1,
+M4|ROW:SCM0002_ItembyDivisionPopup,T-ab5dcb5f,M4,POPUP,ROW,SCM0002_ItembyDivisionPopup,SCM0002_ItembyDivisionPopup,Y,REVIEW,행 집계 — 대조표 SCM0002_ItembyDivisionPopup '공용 ModelByDivisionPopup (SHEETS.POPUP) -> PKG_SCM0' 의 M4 5요소: REVIEW:3 · NOT_RUN:2 · FAIL 요소: DIVISION_ID / Division — 실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; ITEM_ID / Model — 실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; NICK_NAME / Nick Name — 실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NIC,1,
+X-LOC|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-78d951e1,X-LOC,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+D4|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-dc785262,D4,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,ERROR,행 집계 — 대조표 FindButton/SaveButton/DeleteButton/InsertButton 'hotkeyConfig + hasButton' 의 D4 12요소: PASS:10 · ERROR:2,1,
+D1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-130ce9dc,D1,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,PASS,행 집계 — 대조표 FindButton/SaveButton/DeleteButton/InsertButton 'hotkeyConfig + hasButton' 의 D1 12요소: PASS:8 · NA:4,1,
+D3|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-4a0f0e39,D3,EDIT,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,NA,행 집계 — 대조표 FindButton/SaveButton/DeleteButton/InsertButton 'hotkeyConfig + hasButton' 의 D3 8요소: NA:8,1,
+G1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-73d90d4a,G1,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,PASS,행 집계 — 대조표 FindButton/SaveButton/DeleteButton/InsertButton 'hotkeyConfig + hasButton' 의 G1 4요소: PASS:2 · NA:2,1,
+A1|ROW:FindButton/SaveButton/DeleteButton/InsertButton,T-89c91173,A1,GEN,ROW,FindButton/SaveButton/DeleteButton/InsertButton,FindButton/SaveButton/DeleteButton/InsertButton,Y,REVIEW,행 집계 — 대조표 FindButton/SaveButton/DeleteButton/InsertButton 'hotkeyConfig + hasButton' 의 A1 3요소: REVIEW:2 · PASS:1 · FAIL 요소: EDIT_SET — 골든 비교 케이스 없음(EDIT_SET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요); PKG_SCM0002.P_SCM0002_GET_ITEM — 골든 비교 케이스 없음(PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP — 팝업·보조 SP 는 golde,1,
+X-LOC|ROW:prg (ProgressForm),T-792ed117,X-LOC,GEN,ROW,prg (ProgressForm),prg (ProgressForm),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+H6|ROW:prg (ProgressForm),T-22ecded3,H6,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,ERROR,행 집계 — 대조표 prg (ProgressForm) '공용 로딩(useTabProcQuery isFetching / ProgressIndicat' 의 H6 8요소: ERROR:4 · NOPATH:2 · PASS:1 · NOT_RUN:1,1,
+G5|ROW:prg (ProgressForm),T-ddbdd357,G5,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,NA,행 집계 — 대조표 prg (ProgressForm) '공용 로딩(useTabProcQuery isFetching / ProgressIndicat' 의 G5 8요소: PASS:3 · NOPATH:3 · NA:2 (미실행 요소가 남아 판정필요),1,
+M4|ROW:prg (ProgressForm),T-e2f4babd,M4,POPUP,ROW,prg (ProgressForm),prg (ProgressForm),Y,REVIEW,행 집계 — 대조표 prg (ProgressForm) '공용 로딩(useTabProcQuery isFetching / ProgressIndicat' 의 M4 5요소: REVIEW:3 · NOT_RUN:2 · FAIL 요소: DIVISION_ID / Division — 실측[T-8968351c]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; ITEM_ID / Model — 실측[T-a0be1b20]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] ITE; NICK_NAME / Nick Name — 실측[T-d56e9d9f]: [증거 부족: 기대원천 GENERAL = FAIL 불가 순위(expected_source_rank.csv)] NIC,1,
+X-LOC|ROW:popItem (SCM0002_ItembyDivisionPopup),T-5bc263b6,X-LOC,GEN,ROW,popItem (SCM0002_ItembyDivisionPopup),popItem (SCM0002_ItembyDivisionPopup),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-LOC|ROW:GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,T-341b4699,X-LOC,GEN,ROW,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,GetAllDivisionCheckedElectrode(clbDivision) (팝업 division 재구성,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+H6|COND:clbDivision,T-2e2db482,H6,POPUP,COND,clbDivision,clbDivision / Division / Div / Div.,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,1,
+G5|COND:clbDivision,T-831cc691,G5,POPUP,COND,clbDivision,clbDivision / Division / Div / Div.,Y,NOPATH,검사기(popup_args_check.py · _verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+M4|COND:clbDivision,T-39fd0e78,M4,POPUP,COND,clbDivision,clbDivision / Division / Div / Div.,Y,REVIEW,검증 엔진이 실행됐으나 이 대상(COND clbDivision)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장,1,
+X-LOC|ROW:dsValiChkBinding = GET Table[1],T-a7a5b6d0,X-LOC,GEN,ROW,dsValiChkBinding = GET Table[1],dsValiChkBinding = GET Table[1],Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:dsValiChkBinding = GET Table[1],T-36dddca5,X-ROW,GEN,ENTRY,dsValiChkBinding = GET Table[1],dsValiChkBinding = GET Table[1],Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:CString.GetCheckedListValue,T-0c852b46,X-LOC,GEN,ROW,CString.GetCheckedListValue,CString.GetCheckedListValue,Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:CString.GetCheckedListValue,T-09f40ce3,X-ROW,GEN,ENTRY,CString.GetCheckedListValue,CString.GetCheckedListValue,Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
+X-LOC|ROW:VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),T-c9beeb33,X-LOC,GEN,ROW,VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),Y,NA,대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정,1,
+X-ROW|ENTRY:VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),T-e6657aa8,X-ROW,GEN,ENTRY,VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),VALID_YN AS S_VALUE_YN (별칭 오타 §6-D),Y,NA,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),1,
 G03-WIRE|SCREEN,T-4bbfd980,G03-WIRE,GEN,SCREEN,SCP0033,SCP0033 화면,Y,NOPATH,검사기(check.js G03)는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),7,SCP0033_Shipment_semi_dept_day.cs:80 SCP0033_Shipment_semi_dept_day.cs:83 SCP0033_Shipment_semi_dept_day.cs:84 SCP0033_Shipment_semi_dept_day.cs:85 SCP0033_Shipment_semi_dept_day.cs:107
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-2203307e,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
-A5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-de05fca8,A5,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,REVIEW,진입점 집계 — A5 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
-H2|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-6d6b4521,H2,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,REVIEW,진입점 집계 — H2 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
-H5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-d635d547,H5,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,REVIEW,진입점 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
-D5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-0e653407,D5,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,REVIEW,진입점 집계 — D5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
-X-REOPEN|SCREEN,T-11224c4d,X-REOPEN,GEN,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace,6,SCP0033_Shipment_semi_dept_day.Designer.cs:16 SCP0033_Shipment_semi_dept_day.Designer.cs:18 SCP0033_Shipment_semi_dept_day.Designer.cs:20 SCP0033_Shipment_semi_dept_day.cs:256 SCP0033_Shipment_semi_dept_day.cs:378
-D1|ENTRY:SCP0033_Shipment_semi_dept_day.EditButton,T-0d7ef5d6,D1,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.EditButton,SCP0033_Shipment_semi_dept_day.EditButton,Y,REVIEW,진입점 집계 — D1 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),2,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220
-D3|ENTRY:SCP0033_Shipment_semi_dept_day.EditButton,T-92df7db1,D3,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.EditButton,SCP0033_Shipment_semi_dept_day.EditButton,Y,REVIEW,진입점 집계 — D3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),2,SCP0033_Shipment_semi_dept_day.cs:219 SCP0033_Shipment_semi_dept_day.cs:220
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.FindButton,T-2ef3ccd4,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.FindButton,SCP0033_Shipment_semi_dept_day.FindButton,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:2 · REVIEW:1,1,SCP0033_Shipment_semi_dept_day.cs:172
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.FindData_Main,T-9c9a1d0b,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.FindData_Main,SCP0033_Shipment_semi_dept_day.FindData_Main,Y,REVIEW,진입점 집계 9검사 — NOT_RUN:7 · REVIEW:1 · PASS:1,13,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:252 SCP0033_Shipment_semi_dept_day.cs:253 SCP0033_Shipment_semi_dept_day.cs:259 SCP0033_Shipment_semi_dept_day.cs:275 SCP0033_Shipment_semi_dept_day.cs:291
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.Form_Load,T-f1eba547,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.Form_Load,SCP0033_Shipment_semi_dept_day.Form_Load,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0033_Shipment_semi_dept_day.cs:91 SCP0033_Shipment_semi_dept_day.cs:92 SCP0033_Shipment_semi_dept_day.cs:93 SCP0033_Shipment_semi_dept_day.cs:94 SCP0033_Shipment_semi_dept_day.cs:95
-A10|SCREEN,T-6b2d7cd9,A10,GEN,SCREEN,SCP0033,SCP0033 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace,20,SCP0033_Shipment_semi_dept_day.cs:91 SCP0033_Shipment_semi_dept_day.cs:92 SCP0033_Shipment_semi_dept_day.cs:93 SCP0033_Shipment_semi_dept_day.cs:94 SCP0033_Shipment_semi_dept_day.cs:95 SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 S
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitControls,T-64236d8d,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitControls,SCP0033_Shipment_semi_dept_day.InitControls,Y,REVIEW,진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
-C1|COND:clbDivision,T-0532977b,C1,CASCADE,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0033_Shipment_semi_dept_day.cs:133
-C1|COND:cboValidYN,T-566b689a,C1,CASCADE,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0033_Shipment_semi_dept_day.cs:134
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitEvent,T-2e84cb47,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitEvent,SCP0033_Shipment_semi_dept_day.InitEvent,Y,REVIEW,진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0033_Shipment_semi_dept_day.cs:107
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitSpread,T-5d15a728,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitSpread,SCP0033_Shipment_semi_dept_day.InitSpread,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),6,SCP0033_Shipment_semi_dept_day.cs:156 SCP0033_Shipment_semi_dept_day.cs:161 SCP0033_Shipment_semi_dept_day.cs:162 SCP0033_Shipment_semi_dept_day.cs:163
-D4|COL:DIVISION_ID,T-552c6851,D4,EDIT,COL,DIVISION_ID,DIVISION_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:204
-D4|COL:CREATED_BY,T-03714bd1,D4,EDIT,COL,CREATED_BY,CREATED_BY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:211
-D4|COL:OPERATION_GROUP,T-5f45d277,D4,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:209
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InsertButton,T-3d185175,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InsertButton,SCP0033_Shipment_semi_dept_day.InsertButton,Y,REVIEW,진입점 집계 19검사 — NOT_RUN:16 · NOPATH:3 (미실행 검사가 남아 판정필요),1,SCP0033_Shipment_semi_dept_day.cs:207
-D4|COL:LAST_UPDATE_DATE,T-05ec9065,D4,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,1,SCP0033_Shipment_semi_dept_day.cs:211
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SaveData_Main,T-ee953d60,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SaveData_Main,SCP0033_Shipment_semi_dept_day.SaveData_Main,Y,REVIEW,진입점 집계 12검사 — NOT_RUN:8 · NOPATH:2 · PASS:2 (미실행 검사가 남아 판정필요),3,SCP0033_Shipment_semi_dept_day.cs:318 SCP0033_Shipment_semi_dept_day.cs:417
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,T-2f21a105,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,Y,REVIEW,진입점 집계 8검사 — NOT_RUN:6 · NOPATH:2 (미실행 검사가 남아 판정필요),26,SCP0033_Shipment_semi_dept_day.cs:451 SCP0033_Shipment_semi_dept_day.cs:452 SCP0033_Shipment_semi_dept_day.cs:454 SCP0033_Shipment_semi_dept_day.cs:456 SCP0033_Shipment_semi_dept_day.cs:458 SCP0033_Shipment_semi_dept_day.cs:461 SCP0033_Shipment_semi_dept_day.cs:463 SCP0033_Shipment_semi_dept_day.cs:
-A5|COL:ITEM_ID,T-99a26d81,A5,DESIGN,COL,ITEM_ID,ITEM_ID,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,1,SCP0033_Shipment_semi_dept_day.cs:480
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-2203307e,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,ERROR,진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
+A5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-de05fca8,A5,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,PASS,실측[T-de05fca8]: AS-IS 기본 표시 컬럼 10 ⊆ TO-BE 그리드 10: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: S_VALID_YN),4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
+H2|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-6d6b4521,H2,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,PASS,진입점 집계 — 대조표 SCP0033_Shipment_semi_dept_day.CreateSpread 의 H2 4요소: PASS:4,4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
+H5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-d635d547,H5,DESIGN,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,PASS,진입점 집계 — 대조표 SCP0033_Shipment_semi_dept_day.CreateSpread 의 H5 5요소: PASS:5,4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
+D5|ENTRY:SCP0033_Shipment_semi_dept_day.CreateSpread,T-0e653407,D5,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.CreateSpread,SCP0033_Shipment_semi_dept_day.CreateSpread,Y,PASS,진입점 집계 — 대조표 SCP0033_Shipment_semi_dept_day.CreateSpread 의 D5 4요소: PASS:4,4,SCP0033_Shipment_semi_dept_day.cs:147 SCP0033_Shipment_semi_dept_day.cs:148 SCP0033_Shipment_semi_dept_day.cs:149 SCP0033_Shipment_semi_dept_day.cs:151
+X-REOPEN|SCREEN,T-11224c4d,X-REOPEN,GEN,SCREEN,SCP0033,SCP0033 화면,Y,PASS,실측[T-11224c4d]: 탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0),6,SCP0033_Shipment_semi_dept_day.Designer.cs:16 SCP0033_Shipment_semi_dept_day.Designer.cs:18 SCP0033_Shipment_semi_dept_day.Designer.cs:20 SCP0033_Shipment_semi_dept_day.cs:256 SCP0033_Shipment_semi_dept_day.cs:378
+D1|ENTRY:SCP0033_Shipment_semi_dept_day.EditButton,T-0d7ef5d6,D1,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.EditButton,SCP0033_Shipment_semi_dept_day.EditButton,Y,NA,원장 V-a0b84649 ASIS / 원장 V-ae3be655 ASIS / 원장 V-4c21013e ASIS,1,SCP0033_Shipment_semi_dept_day.cs:219
+D3|ENTRY:SCP0033_Shipment_semi_dept_day.EditButton,T-92df7db1,D3,EDIT,ENTRY,SCP0033_Shipment_semi_dept_day.EditButton,SCP0033_Shipment_semi_dept_day.EditButton,Y,NA,진입점 집계 — 대조표 SCP0033_Shipment_semi_dept_day.EditButton 의 D3 4요소: NA:4,1,SCP0033_Shipment_semi_dept_day.cs:219
+D1|LEDGER:V-a0b84649,T-c2477829,D1,EDIT,LEDGER,siMain.SwitchLock,siMain.SwitchLock,Y,NA,원장 V-a0b84649,1,SCP0033_Shipment_semi_dept_day.cs:220
+D1|LEDGER:V-ae3be655,T-92827faa,D1,EDIT,LEDGER,"DIVISION_ID,NICK_NAME","DIVISION_ID,NICK_NAME",Y,NA,원장 V-ae3be655,1,SCP0033_Shipment_semi_dept_day.cs:224
+D1|LEDGER:V-4c21013e,T-9f345cd5,D1,EDIT,LEDGER,"CREATED_BY,LAST_UPDATE_DATE","CREATED_BY,LAST_UPDATE_DATE",Y,NA,원장 V-4c21013e,1,SCP0033_Shipment_semi_dept_day.cs:225
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.FindButton,T-2ef3ccd4,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.FindButton,SCP0033_Shipment_semi_dept_day.FindButton,Y,PASS,진입점 집계 3검사 — PASS:3,1,SCP0033_Shipment_semi_dept_day.cs:172
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.FindData_Main,T-9c9a1d0b,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.FindData_Main,SCP0033_Shipment_semi_dept_day.FindData_Main,Y,PASS,진입점 집계 12검사 — PASS:8 · NA:4,13,SCP0033_Shipment_semi_dept_day.cs:233 SCP0033_Shipment_semi_dept_day.cs:236 SCP0033_Shipment_semi_dept_day.cs:252 SCP0033_Shipment_semi_dept_day.cs:253 SCP0033_Shipment_semi_dept_day.cs:259 SCP0033_Shipment_semi_dept_day.cs:275 SCP0033_Shipment_semi_dept_day.cs:291
+E3|LEDGER:V-194d6941,T-5e413cf6,E3,EDIT,LEDGER,DataUtil.checkRequiredOfSearch,DataUtil.checkRequiredOfSearch,Y,NA,원장 V-194d6941,2,SCP0033_Shipment_semi_dept_day.cs:236
+D1|LEDGER:V-9db1b431,T-ad7203cf,D1,EDIT,LEDGER,siMain.LockColumn,siMain.LockColumn,Y,NA,원장 V-9db1b431,1,SCP0033_Shipment_semi_dept_day.cs:275
+G1|LEDGER:V-35148746,T-30753945,G1,GEN,LEDGER,(동적 메시지),(동적 메시지),Y,NA,원장 V-35148746,1,SCP0033_Shipment_semi_dept_day.cs:291
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.Form_Load,T-f1eba547,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.Form_Load,SCP0033_Shipment_semi_dept_day.Form_Load,Y,PASS,진입점 집계 1검사 — PASS:1,2,SCP0033_Shipment_semi_dept_day.cs:91 SCP0033_Shipment_semi_dept_day.cs:92 SCP0033_Shipment_semi_dept_day.cs:93 SCP0033_Shipment_semi_dept_day.cs:94 SCP0033_Shipment_semi_dept_day.cs:95
+A10|SCREEN,T-6b2d7cd9,A10,GEN,SCREEN,SCP0033,SCP0033 화면,Y,PASS,원장 V-de39e303 RULE_SCREEN / 원장 V-3d3b353e GENERAL / 실측[T-6b2d7cd9]: 화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 없음 — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음),20,SCP0033_Shipment_semi_dept_day.cs:91 SCP0033_Shipment_semi_dept_day.cs:92 SCP0033_Shipment_semi_dept_day.cs:93 SCP0033_Shipment_semi_dept_day.cs:94 SCP0033_Shipment_semi_dept_day.cs:95 SCP0033_Shipment_semi_dept_day.cs:128 SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:131 S
+J1|LEDGER:V-b832d9af,T-4900bf64,J1,AUTH,LEDGER,this.SetDivisionAuthCheck,this.SetDivisionAuthCheck,Y,PASS,"원장 V-b832d9af / 실측[T-4900bf64]: Division 후보 13건 [40 Mobility & IT Battery, 81 Automotive Battery, 81_HD Automotive Battery(HD), 81_HG Automotive Battery(HG), 81_HM Automotive Battery(HM), 81_ST Automo",1,SCP0033_Shipment_semi_dept_day.cs:129
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitControls,T-64236d8d,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitControls,SCP0033_Shipment_semi_dept_day.InitControls,Y,PASS,진입점 집계 8검사 — PASS:8,4,SCP0033_Shipment_semi_dept_day.cs:129 SCP0033_Shipment_semi_dept_day.cs:133 SCP0033_Shipment_semi_dept_day.cs:134
+C1|COND:clbDivision,T-0532977b,C1,CASCADE,COND,clbDivision,clbDivision / Division / Div / Div.,Y,PASS,"원장 V-2063e539 SEARCH / 실측[T-0532977b]: AS-IS clbDivision 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",1,SCP0033_Shipment_semi_dept_day.cs:133
+C1|COND:cboValidYN,T-566b689a,C1,CASCADE,COND,cboValidYN,cboValidYN / Valid / Valid YN / Active,Y,PASS,"실측[T-566b689a]: AS-IS cboValidYN 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",1,SCP0033_Shipment_semi_dept_day.cs:134
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitEvent,T-2e84cb47,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitEvent,SCP0033_Shipment_semi_dept_day.InitEvent,Y,NA,진입점 집계 2검사 — NOPATH:1 · PASS:1 (미실행 검사가 남아 판정필요),2,SCP0033_Shipment_semi_dept_day.cs:107
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InitSpread,T-5d15a728,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InitSpread,SCP0033_Shipment_semi_dept_day.InitSpread,Y,PASS,진입점 집계 1검사 — PASS:1,6,SCP0033_Shipment_semi_dept_day.cs:156 SCP0033_Shipment_semi_dept_day.cs:161 SCP0033_Shipment_semi_dept_day.cs:162 SCP0033_Shipment_semi_dept_day.cs:163
+D4|COL:DIVISION_ID,T-552c6851,D4,EDIT,COL,DIVISION_ID,DIVISION_ID / Division,Y,PASS,원장 V-2d1892ac ASIS / 실측[T-552c6851]: 신규행 DIVISION_ID='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:204
+D4|COL:OPERATION_GROUP,T-5f45d277,D4,EDIT,COL,OPERATION_GROUP,OPERATION_GROUP / Operation Group,Y,PASS,원장 V-6401209f ASIS / 실측[T-5f45d277]: 신규행 OPERATION_GROUP='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:209
+D4|COL:CREATED_BY,T-03714bd1,D4,EDIT,COL,CREATED_BY,CREATED_BY / Created By,Y,PASS,원장 V-1415c0e2 ASIS / 실측[T-03714bd1]: 신규행 CREATED_BY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),2,SCP0033_Shipment_semi_dept_day.cs:194 SCP0033_Shipment_semi_dept_day.cs:196 SCP0033_Shipment_semi_dept_day.cs:198 SCP0033_Shipment_semi_dept_day.cs:201 SCP0033_Shipment_semi_dept_day.cs:202 SCP0033_Shipment_semi_dept_day.cs:211
+D4|LEDGER:V-2d1892ac,T-e546e762,D4,EDIT,LEDGER,DIVISION_ID,DIVISION_ID,Y,PASS,원장 V-2d1892ac,1,SCP0033_Shipment_semi_dept_day.cs:204
+D4|LEDGER:V-ecc9555c,T-c80f3b83,D4,EDIT,LEDGER,siMain.SetValue,siMain.SetValue,Y,ERROR,원장 V-ecc9555c,1,SCP0033_Shipment_semi_dept_day.cs:207
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.InsertButton,T-3d185175,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.InsertButton,SCP0033_Shipment_semi_dept_day.InsertButton,Y,ERROR,진입점 집계 24검사 — PASS:18 · NA:4 · ERROR:2,1,SCP0033_Shipment_semi_dept_day.cs:207
+D4|LEDGER:V-6401209f,T-cabfba53,D4,EDIT,LEDGER,"OPERATION_GROUP,OPERATION_GROUP","OPERATION_GROUP,OPERATION_GROUP",Y,PASS,원장 V-6401209f,1,SCP0033_Shipment_semi_dept_day.cs:209
+D4|LEDGER:V-cab4c6b1,T-a76e689c,D4,EDIT,LEDGER,"NICK_NAME,NICK_NAME","NICK_NAME,NICK_NAME",Y,PASS,원장 V-cab4c6b1,1,SCP0033_Shipment_semi_dept_day.cs:210
+D4|LEDGER:V-1415c0e2,T-791e3469,D4,EDIT,LEDGER,"CREATED_BY,LAST_UPDATE_DATE","CREATED_BY,LAST_UPDATE_DATE",Y,PASS,원장 V-1415c0e2,1,SCP0033_Shipment_semi_dept_day.cs:211
+D4|COL:LAST_UPDATE_DATE,T-05ec9065,D4,EDIT,COL,LAST_UPDATE_DATE,LAST_UPDATE_DATE / Last Update Date,Y,PASS,원장 V-1415c0e2 ASIS / 실측[T-05ec9065]: 신규행 LAST_UPDATE_DATE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값),1,SCP0033_Shipment_semi_dept_day.cs:211
+E4|LEDGER:V-b66ffc3a,T-a6fb2627,E4,EDIT,LEDGER,MSG00059,MSG00059,Y,NA,"원장 V-b66ffc3a / 실측[T-a6fb2627]: MSG00059: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (siMain.ActiveSheet.RowCount <= 0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",1,SCP0033_Shipment_semi_dept_day.cs:308
+E3|LEDGER:V-de1de7d1,T-446a3224,E3,EDIT,LEDGER,DataUtil.checkRequiredOfSpread,DataUtil.checkRequiredOfSpread,Y,PASS,원장 V-de1de7d1,2,SCP0033_Shipment_semi_dept_day.cs:318
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SaveData_Main,T-ee953d60,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SaveData_Main,SCP0033_Shipment_semi_dept_day.SaveData_Main,Y,ERROR,진입점 집계 17검사 — PASS:12 · NA:3 · ERROR:2,3,SCP0033_Shipment_semi_dept_day.cs:318 SCP0033_Shipment_semi_dept_day.cs:417
+E4|LEDGER:V-d7c59ef7,T-67f0b8d6,E4,EDIT,LEDGER,MSG00004,MSG00004,Y,PASS,원장 V-d7c59ef7 / 실측[T-67f0b8d6]: MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장 F1 최종 PASS: DEPARTURE_DAY r0 → TUE · 실패 문구 표시 '[저장 경로 시험] 강제 실패',1,SCP0033_Shipment_semi_dept_day.cs:400
+E4|LEDGER:V-6d49caa5,T-fa725432,E4,EDIT,LEDGER,MSG00006,MSG00006,Y,PASS,원장 V-6d49caa5 / 실측[T-fa725432]: MSG00006: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장 F1 최종 PASS: DEPARTURE_DAY r0 → TUE · 실패 문구 표시 '[저장 경로 시험] 강제 실패',1,SCP0033_Shipment_semi_dept_day.cs:409
+E4|LEDGER:V-80b795ce,T-375a6b2f,E4,EDIT,LEDGER,(동적 메시지),(동적 메시지),Y,NA,원장 V-80b795ce / 실측[T-375a6b2f]: 검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시),1,SCP0033_Shipment_semi_dept_day.cs:417
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,T-2f21a105,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,SCP0033_Shipment_semi_dept_day.SpdMain_CellClick,Y,ERROR,진입점 집계 16검사 — ERROR:10 · PASS:4 · NA:2,26,SCP0033_Shipment_semi_dept_day.cs:451 SCP0033_Shipment_semi_dept_day.cs:452 SCP0033_Shipment_semi_dept_day.cs:454 SCP0033_Shipment_semi_dept_day.cs:456 SCP0033_Shipment_semi_dept_day.cs:458 SCP0033_Shipment_semi_dept_day.cs:461 SCP0033_Shipment_semi_dept_day.cs:463 SCP0033_Shipment_semi_dept_day.cs:
+E4|LEDGER:V-0c8f3043,T-575ed269,E4,EDIT,LEDGER,MSG00093,MSG00093,Y,ERROR,원장 V-0c8f3043 / 실측[T-575ed269]: MSG00093 — SpdMain_CellClick 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(SpdMain_CellClick)에서 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),1,SCP0033_Shipment_semi_dept_day.cs:466
+G5|LEDGER:V-b4803739,T-59052003,G5,POPUP,LEDGER,new SCM0002_ItembyDivisionPopup(),new SCM0002_ItembyDivisionPopup(),Y,NA,원장 V-b4803739,1,SCP0033_Shipment_semi_dept_day.cs:477
+H6|LEDGER:V-0e316d0e,T-da128074,H6,POPUP,LEDGER,new SCM0002_ItembyDivisionPopup(),new SCM0002_ItembyDivisionPopup(),Y,ERROR,원장 V-0e316d0e,1,SCP0033_Shipment_semi_dept_day.cs:477
+M3|LEDGER:V-4454cc67,T-e84f2fd3,M3,POPUP,LEDGER,new SCM0002_ItembyDivisionPopup(),new SCM0002_ItembyDivisionPopup(),Y,ERROR,원장 V-4454cc67,1,SCP0033_Shipment_semi_dept_day.cs:477
+G5|LEDGER:V-1599fc02,T-308cac01,G5,POPUP,LEDGER,"popItem.Form_Load(false, division, sScmSite, sProject, sItemId)","popItem.Form_Load(false, division, sScmSite, sProject, sItemId)",Y,PASS,원장 V-1599fc02,1,SCP0033_Shipment_semi_dept_day.cs:479
+H6|LEDGER:V-83f3f141,T-976f3553,H6,POPUP,LEDGER,"popItem.Form_Load(false, division, sScmSite, sProject, sItemId)","popItem.Form_Load(false, division, sScmSite, sProject, sItemId)",Y,ERROR,원장 V-83f3f141,1,SCP0033_Shipment_semi_dept_day.cs:479
+A5|COL:ITEM_ID,T-99a26d81,A5,DESIGN,COL,ITEM_ID,ITEM_ID / Model,Y,PASS,E2E smoke columns / 실측[T-99a26d81]: ITEM_ID: AS-IS(Div 40) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y),1,SCP0033_Shipment_semi_dept_day.cs:480
+G5|LEDGER:V-e8804064,T-1b01af97,G5,POPUP,LEDGER,popItem.ShowDialog(),popItem.ShowDialog(),Y,NA,원장 V-e8804064,1,SCP0033_Shipment_semi_dept_day.cs:481
+H6|LEDGER:V-b4395b79,T-c68ca18f,H6,POPUP,LEDGER,popItem.ShowDialog(),popItem.ShowDialog(),Y,ERROR,원장 V-b4395b79,1,SCP0033_Shipment_semi_dept_day.cs:481
 X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SpdMain_KeyPress,T-5fc77afa,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SpdMain_KeyPress,SCP0033_Shipment_semi_dept_day.SpdMain_KeyPress,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/EXPR/RETURN/UI_PROP, 연결된 요소 검사 없음",7,SCP0033_Shipment_semi_dept_day.cs:438 SCP0033_Shipment_semi_dept_day.cs:440 SCP0033_Shipment_semi_dept_day.cs:442 SCP0033_Shipment_semi_dept_day.cs:444
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,T-fd351387,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),3,SCP0033_Shipment_semi_dept_day.cs:115 SCP0033_Shipment_semi_dept_day.cs:116 SCP0033_Shipment_semi_dept_day.cs:117
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.checkValid,T-f9dd08ed,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.checkValid,SCP0033_Shipment_semi_dept_day.checkValid,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),20,SCP0033_Shipment_semi_dept_day.cs:501 SCP0033_Shipment_semi_dept_day.cs:503 SCP0033_Shipment_semi_dept_day.cs:505 SCP0033_Shipment_semi_dept_day.cs:506 SCP0033_Shipment_semi_dept_day.cs:508 SCP0033_Shipment_semi_dept_day.cs:510 SCP0033_Shipment_semi_dept_day.cs:511 SCP0033_Shipment_semi_dept_day.cs:
-X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.checkValid1,T-2e7dad8f,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.checkValid1,SCP0033_Shipment_semi_dept_day.checkValid1,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),20,SCP0033_Shipment_semi_dept_day.cs:543 SCP0033_Shipment_semi_dept_day.cs:545 SCP0033_Shipment_semi_dept_day.cs:547 SCP0033_Shipment_semi_dept_day.cs:548 SCP0033_Shipment_semi_dept_day.cs:550 SCP0033_Shipment_semi_dept_day.cs:552 SCP0033_Shipment_semi_dept_day.cs:553 SCP0033_Shipment_semi_dept_day.cs:
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,T-fd351387,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,SCP0033_Shipment_semi_dept_day.SpdMain_TopChange,Y,ERROR,진입점 집계 1검사 — ERROR:1,3,SCP0033_Shipment_semi_dept_day.cs:115 SCP0033_Shipment_semi_dept_day.cs:116 SCP0033_Shipment_semi_dept_day.cs:117
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.checkValid,T-f9dd08ed,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.checkValid,SCP0033_Shipment_semi_dept_day.checkValid,Y,PASS,진입점 집계 3검사 — NA:2 · PASS:1,20,SCP0033_Shipment_semi_dept_day.cs:501 SCP0033_Shipment_semi_dept_day.cs:503 SCP0033_Shipment_semi_dept_day.cs:505 SCP0033_Shipment_semi_dept_day.cs:506 SCP0033_Shipment_semi_dept_day.cs:508 SCP0033_Shipment_semi_dept_day.cs:510 SCP0033_Shipment_semi_dept_day.cs:511 SCP0033_Shipment_semi_dept_day.cs:
+E4|LEDGER:V-32467fdb,T-3843eaff,E4,EDIT,LEDGER,MSG00060,MSG00060,Y,NA,"원장 V-32467fdb / 실측[T-3843eaff]: MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",1,SCP0033_Shipment_semi_dept_day.cs:533
+X-ROW|ENTRY:SCP0033_Shipment_semi_dept_day.checkValid1,T-2e7dad8f,X-ROW,GEN,ENTRY,SCP0033_Shipment_semi_dept_day.checkValid1,SCP0033_Shipment_semi_dept_day.checkValid1,Y,PASS,진입점 집계 3검사 — NA:2 · PASS:1,20,SCP0033_Shipment_semi_dept_day.cs:543 SCP0033_Shipment_semi_dept_day.cs:545 SCP0033_Shipment_semi_dept_day.cs:547 SCP0033_Shipment_semi_dept_day.cs:548 SCP0033_Shipment_semi_dept_day.cs:550 SCP0033_Shipment_semi_dept_day.cs:552 SCP0033_Shipment_semi_dept_day.cs:553 SCP0033_Shipment_semi_dept_day.cs:
+E4|LEDGER:V-086c9977,T-87d9dbac,E4,EDIT,LEDGER,MSG00060,MSG00060,Y,NA,"원장 V-086c9977 / 실측[T-87d9dbac]: MSG00060: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (!isPass)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",1,SCP0033_Shipment_semi_dept_day.cs:575

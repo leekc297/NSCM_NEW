@@ -1,0 +1,1004 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "grid_changes": [
+    {
+     "sheet": "spdAssign/ELTR",
+     "rows_before": 275,
+     "rows_after": 276,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SITE_ID",
+       "before": "A001",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SITE_NAME",
+       "before": "LGES Korea",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "COMPANY_ID",
+       "before": "HQ00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "COMPANY_NAME",
+       "before": "LG Energy Solution",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLANT_ID",
+       "before": "HQ07",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PLANT_NAME",
+       "before": "HQ OC1 Auto Prod",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FACTORY_ID",
+       "before": "E6",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "FACTORY_NAME",
+       "before": "OC5_E",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LINE_ID",
+       "before": "FP_E6M02_A",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LINE_NAME",
+       "before": "Line 04(-)",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "A7",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPERATION_ID",
+       "before": "E2000",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OPERATION_NAME",
+       "before": "Coating",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EQUIPMENT_ID",
+       "before": "A1ECOT009",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EQUIPMENT_NAME",
+       "before": "COT (A) #04",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LANE_QTY",
+       "before": "2",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 0,
+       "col": "DUMMY_YN",
+       "before": "Y",
+       "after": "N"
+      },
+      {
+       "row": 0,
+       "col": "M_01202611",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202612",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202701",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202702",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202703",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202704",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202705",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202706",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202707",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202708",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202709",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202710",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202711",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202712",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202801",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202802",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202803",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202804",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202805",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202806",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202807",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202808",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202809",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202810",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202811",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "M_01202812",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "Y_2029",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "Y_2030",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "Y_2031",
+       "before": "",
+       "after": "1"
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "APCAN0518A",
+       "after": "A7"
+      },
+      {
+       "row": 1,
+       "col": "NICK_NAME",
+       "before": "E52A",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "VALID_YN",
+       "before": "Y",
+       "after": "N"
+      },
+      {
+       "row": 1,
+       "col": "DUMMY_YN",
+       "before": "N",
+       "after": "Y"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "APCAN0525A",
+       "after": "APCAN0518A"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "F2-1",
+       "after": "E52A"
+      },
+      {
+       "row": 2,
+       "col": "LANE_QTY",
+       "before": "3",
+       "after": "2"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "APCAN1051A",
+       "after": "APCAN0525A"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "LV15A",
+       "after": "F2-1"
+      },
+      {
+       "row": 4,
+       "col": "ITEM_ID",
+       "before": "APCAN1522A",
+       "after": "APCAN1051A"
+      },
+      {
+       "row": 4,
+       "col": "NICK_NAME",
+       "before": "P1.7-001",
+       "after": "LV15A"
+      }
+     ],
+     "more": 337
+    }
+   ],
+   "new_rows": {
+    "spdAssign/ELTR": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 09:32:44.663",
+    "grid": "spdAssign",
+    "sheet_index": 1,
+    "sheet_name": "ELTR",
+    "sheet": "ELTR",
+    "rows_total": 276,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "VER_ID",
+      "label": "Ver",
+      "data_field": "VER_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "VER_SEQ",
+      "label": "Seq",
+      "data_field": "VER_SEQ",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "SITE_ID",
+      "label": "Site*",
+      "data_field": "SITE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "SITE_NAME",
+      "label": "Site Name",
+      "data_field": "SITE_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "COMPANY_ID",
+      "label": "Company*",
+      "data_field": "COMPANY_ID",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "COMPANY_NAME",
+      "label": "Company Name",
+      "data_field": "COMPANY_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "PLANT_ID",
+      "label": "Plant*",
+      "data_field": "PLANT_ID",
+      "visible": "True"
+     },
+     {
+      "index": 10,
+      "tag": "PLANT_NAME",
+      "label": "Plant Name",
+      "data_field": "PLANT_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "FACTORY_ID",
+      "label": "Building*",
+      "data_field": "FACTORY_ID",
+      "visible": "True"
+     },
+     {
+      "index": 12,
+      "tag": "FACTORY_NAME",
+      "label": "Building Name",
+      "data_field": "FACTORY_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "LINE_ID",
+      "label": "Line*",
+      "data_field": "LINE_ID",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "LINE_NAME",
+      "label": "Line Name",
+      "data_field": "LINE_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "NICK_NAME",
+      "label": "Nickname",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "OPERATION_ID",
+      "label": "Operation*",
+      "data_field": "OPERATION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "OPERATION_NAME",
+      "label": "Operation Name",
+      "data_field": "OPERATION_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "EQUIPMENT_ID",
+      "label": "Equipment",
+      "data_field": "EQUIPMENT_ID",
+      "visible": "False"
+     },
+     {
+      "index": 20,
+      "tag": "EQUIPMENT_NAME",
+      "label": "Equipment Name",
+      "data_field": "EQUIPMENT_NAME",
+      "visible": "False"
+     },
+     {
+      "index": 21,
+      "tag": "ELTR_LN_TP_CD",
+      "label": "Equipment Type",
+      "data_field": "ELTR_LN_TP_CD",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "LANE_QTY",
+      "label": "Lane Number",
+      "data_field": "LANE_QTY",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "VALID_YN",
+      "label": "Valid",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "DUMMY_YN",
+      "label": "Dummy",
+      "data_field": "DUMMY_YN",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "M_01202611",
+      "label": "11",
+      "data_field": "M_01202611",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "M_01202612",
+      "label": "12",
+      "data_field": "M_01202612",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "M_01202701",
+      "label": "01",
+      "data_field": "M_01202701",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "M_01202702",
+      "label": "02",
+      "data_field": "M_01202702",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "M_01202703",
+      "label": "03",
+      "data_field": "M_01202703",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "M_01202704",
+      "label": "04",
+      "data_field": "M_01202704",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "M_01202705",
+      "label": "05",
+      "data_field": "M_01202705",
+      "visible": "True"
+     },
+     {
+      "index": 32,
+      "tag": "M_01202706",
+      "label": "06",
+      "data_field": "M_01202706",
+      "visible": "True"
+     },
+     {
+      "index": 33,
+      "tag": "M_01202707",
+      "label": "07",
+      "data_field": "M_01202707",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "M_01202708",
+      "label": "08",
+      "data_field": "M_01202708",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "M_01202709",
+      "label": "09",
+      "data_field": "M_01202709",
+      "visible": "True"
+     },
+     {
+      "index": 36,
+      "tag": "M_01202710",
+      "label": "10",
+      "data_field": "M_01202710",
+      "visible": "True"
+     },
+     {
+      "index": 37,
+      "tag": "M_01202711",
+      "label": "11",
+      "data_field": "M_01202711",
+      "visible": "True"
+     },
+     {
+      "index": 38,
+      "tag": "M_01202712",
+      "label": "12",
+      "data_field": "M_01202712",
+      "visible": "True"
+     },
+     {
+      "index": 39,
+      "tag": "M_01202801",
+      "label": "01",
+      "data_field": "M_01202801",
+      "visible": "True"
+     },
+     {
+      "index": 40,
+      "tag": "M_01202802",
+      "label": "02",
+      "data_field": "M_01202802",
+      "visible": "True"
+     },
+     {
+      "index": 41,
+      "tag": "M_01202803",
+      "label": "03",
+      "data_field": "M_01202803",
+      "visible": "True"
+     },
+     {
+      "index": 42,
+      "tag": "M_01202804",
+      "label": "04",
+      "data_field": "M_01202804",
+      "visible": "True"
+     },
+     {
+      "index": 43,
+      "tag": "M_01202805",
+      "label": "05",
+      "data_field": "M_01202805",
+      "visible": "True"
+     },
+     {
+      "index": 44,
+      "tag": "M_01202806",
+      "label": "06",
+      "data_field": "M_01202806",
+      "visible": "True"
+     },
+     {
+      "index": 45,
+      "tag": "M_01202807",
+      "label": "07",
+      "data_field": "M_01202807",
+      "visible": "True"
+     },
+     {
+      "index": 46,
+      "tag": "M_01202808",
+      "label": "08",
+      "data_field": "M_01202808",
+      "visible": "True"
+     },
+     {
+      "index": 47,
+      "tag": "M_01202809",
+      "label": "09",
+      "data_field": "M_01202809",
+      "visible": "True"
+     },
+     {
+      "index": 48,
+      "tag": "M_01202810",
+      "label": "10",
+      "data_field": "M_01202810",
+      "visible": "True"
+     },
+     {
+      "index": 49,
+      "tag": "M_01202811",
+      "label": "11",
+      "data_field": "M_01202811",
+      "visible": "True"
+     },
+     {
+      "index": 50,
+      "tag": "M_01202812",
+      "label": "12",
+      "data_field": "M_01202812",
+      "visible": "True"
+     },
+     {
+      "index": 51,
+      "tag": "Y_2029",
+      "label": "2029",
+      "data_field": "Y_2029",
+      "visible": "True"
+     },
+     {
+      "index": 52,
+      "tag": "Y_2030",
+      "label": "2030",
+      "data_field": "Y_2030",
+      "visible": "True"
+     },
+     {
+      "index": 53,
+      "tag": "Y_2031",
+      "label": "2031",
+      "data_field": "Y_2031",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "100000000000000010000000000000000000000000000000000000"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red",
+      "Red"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "202610",
+      "1",
+      "81",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "S",
+      "",
+      "Y",
+      "N",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 09:32:44.663"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Site* 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 09:31:47",
+ "edit_focus": "누르지 못함",
+ "edit_mode": true
+}

@@ -1,0 +1,205 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+FROM_SITE,Y,Y,Y,,,정렬번호 0 동률(TO_SITE) — 범위 경계 포함 여부 확정 불가,,,Shipment Change Request
+TO_SITE,Y,Y,Y,,,정렬번호 0 동률(FROM_SITE) — 범위 경계 포함 여부 확정 불가,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+DIVISION_ID,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2767""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2893""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3424""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2767 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2893 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3424 LockRange,,Shipment Change Request
+ERP_SO_NO,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2768""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2894""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3425""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2768 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2894 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3425 LockRange,,Shipment Change Request
+SHIPMENT_STATUS,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2768""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2894""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3425""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2768 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2894 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3425 LockRange,,Shipment Change Request
+CONFIRM_ID,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ITEM_ID,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:827 LockRange,,Shipment Change Request
+NICK_NAME,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2769""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2895""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3426""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2769 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2895 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3426 LockRange,,Shipment Change Request
+PROJECT_CODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+PROJECT_NAME,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2770""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2896""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3427""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2770 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2896 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3427 LockRange,,Shipment Change Request
+END_CUSTOMER,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+FCST_TYPE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+FROM_SITE_DESCRIPTION,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+TO_SITE_DESCRIPTION,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+INCOTERMS,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+SHIPMENT_CONFIRM_QTY,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+SHIPMENT_DATE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+TRANSPORT_MODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+CHANGE_REASON_CODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+CHANGE_REASON_DETAIL,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+REMARKS2,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+REMARKS,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+SOLDTO_DESCRIPTION,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+REMARKS3,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,,Shipment Change Request
+SHIPTO_DESCRIPTION,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ERP_ATTR1,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ERP_ATTR2,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ERP_ATTR3,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+TO_SITE_SOLDTO_CODE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+TO_SITE_SHIPTO_CODE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+LT_DAY,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+ETD,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+ETA,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+EXPECTED_SHIPPING_DATE,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+MTK_OWNER,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+TEAM,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+REQUESTOR,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2771""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2897""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3428""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2771 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2897 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3428 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+UPDATED_BY,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+REQUEST_DATE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,,Shipment Change Request
+UPDATED_DATE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+CHANGE_REQ_NO,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+CHECK_NEED_YN,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+MODEL_USER,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ERP_STATUS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+BOD_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+CHANGE_TYPE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_ROUTE_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_BOD_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_INCOTERMS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_D_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_D_PORT_CODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_A_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_A_PORT_CODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_CUSTOMER_LT,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_TO_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_TO_CITY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_ETA,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_ETD,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_LT_DAY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_TRANSPORT_MODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+NEW_SHIPMENT_DATE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+EDIT_REMARKS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+EDIT_MAIN,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ELECTRODE_YN,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ELECTRODE_TYPE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ORIGIN_FROM_DIVISION_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ORIGIN_TO_DIVISION_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+ATTRIBUTE10,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,,Shipment Change Request
+FROM_SITE,Y,Y,Y,,,정렬번호 0 동률(TO_SITE) — 범위 경계 포함 여부 확정 불가,,siMain,Shipment Change Request
+TO_SITE,Y,Y,Y,,,정렬번호 0 동률(FROM_SITE) — 범위 경계 포함 여부 확정 불가,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+DIVISION_ID,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2767""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2893""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3424""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2767 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2893 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3424 LockRange,siMain,Shipment Change Request
+ERP_SO_NO,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2768""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2894""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3425""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2768 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2894 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3425 LockRange,siMain,Shipment Change Request
+SHIPMENT_STATUS,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2768""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2894""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3425""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2768 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2894 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3425 LockRange,siMain,Shipment Change Request
+CONFIRM_ID,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ITEM_ID,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:827 LockRange,siMain,Shipment Change Request
+NICK_NAME,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2769""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2895""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3426""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2769 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2895 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3426 LockRange,siMain,Shipment Change Request
+PROJECT_CODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+PROJECT_NAME,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2770""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2896""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3427""}]",,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2770 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2896 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3427 LockRange,siMain,Shipment Change Request
+END_CUSTOMER,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+FCST_TYPE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+FROM_SITE_DESCRIPTION,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+TO_SITE_DESCRIPTION,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:796 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+INCOTERMS,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+SHIPMENT_CONFIRM_QTY,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+SHIPMENT_DATE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+TRANSPORT_MODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+CHANGE_REASON_CODE,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+CHANGE_REASON_DETAIL,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+REMARKS2,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+REMARKS,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+SOLDTO_DESCRIPTION,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+REMARKS3,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 기존행 SSP0200_ShipmentChangeRequest:829 LockRange,siMain,Shipment Change Request
+SHIPTO_DESCRIPTION,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ERP_ATTR1,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ERP_ATTR2,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ERP_ATTR3,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+TO_SITE_SOLDTO_CODE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+TO_SITE_SHIPTO_CODE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+LT_DAY,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+ETD,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+ETA,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+EXPECTED_SHIPPING_DATE,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+MTK_OWNER,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+TEAM,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+REQUESTOR,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2771""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2897""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3428""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2771 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2897 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3428 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+UPDATED_BY,N,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+REQUEST_DATE,Y,COND,Y,"RULES:[{""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:2772""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""InsertRowMultiple:2898""}, {""g"": ""SHEET==\""Shipment Change Request\"""", ""lock"": ""Y"", ""ref"": ""BtnNew_Click:3429""}]",,,기존행 SSP0200_ShipmentChangeRequest:797 LockColumn | 기존행 SSP0200_ShipmentChangeRequest:819 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2772 LockRange | 신규행 SSP0200_ShipmentChangeRequest:2898 LockRange | 신규행 SSP0200_ShipmentChangeRequest:3429 LockRange,siMain,Shipment Change Request
+UPDATED_DATE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+CHANGE_REQ_NO,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+CHECK_NEED_YN,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+MODEL_USER,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ERP_STATUS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+BOD_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+CHANGE_TYPE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_ROUTE_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_BOD_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_INCOTERMS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_D_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_D_PORT_CODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_A_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_A_PORT_CODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_CUSTOMER_LT,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_TO_COUNTRY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_TO_CITY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_ETA,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_ETD,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_LT_DAY,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_TRANSPORT_MODE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+NEW_SHIPMENT_DATE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+EDIT_REMARKS,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+EDIT_MAIN,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ELECTRODE_YN,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ELECTRODE_TYPE,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ORIGIN_FROM_DIVISION_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ORIGIN_TO_DIVISION_ID,N,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+ATTRIBUTE10,Y,Y,Y,,,,기존행 SSP0200_ShipmentChangeRequest:819 LockRange,siMain,Shipment Change Request
+FROM_SITE,Y,Y,N,,,정렬번호 0 동률(TO_SITE) — 범위 경계 포함 여부 확정 불가,,siSub,Shipment Change Request
+TO_SITE,Y,Y,N,,,정렬번호 0 동률(FROM_SITE) — 범위 경계 포함 여부 확정 불가,,siSub,Shipment Change Request
+DIVISION_ID,Y,Y,N,,,,,siSub,Shipment Change Request
+ERP_SO_NO,Y,Y,N,,,,,siSub,Shipment Change Request
+SHIPMENT_STATUS,Y,Y,N,,,,,siSub,Shipment Change Request
+CONFIRM_ID,Y,Y,N,,,,,siSub,Shipment Change Request
+ITEM_ID,Y,Y,N,,,,,siSub,Shipment Change Request
+NICK_NAME,Y,Y,N,,,,,siSub,Shipment Change Request
+PROJECT_CODE,Y,Y,N,,,,,siSub,Shipment Change Request
+PROJECT_NAME,Y,Y,N,,,,,siSub,Shipment Change Request
+END_CUSTOMER,Y,Y,N,,,,,siSub,Shipment Change Request
+FCST_TYPE,Y,Y,N,,,,,siSub,Shipment Change Request
+FROM_SITE_DESCRIPTION,Y,Y,N,,,,,siSub,Shipment Change Request
+TO_SITE_DESCRIPTION,Y,Y,N,,,,,siSub,Shipment Change Request
+INCOTERMS,Y,Y,N,,,,,siSub,Shipment Change Request
+SHIPMENT_CONFIRM_QTY,Y,Y,N,,,,,siSub,Shipment Change Request
+SHIPMENT_DATE,Y,Y,N,,,,,siSub,Shipment Change Request
+TRANSPORT_MODE,Y,Y,N,,,,,siSub,Shipment Change Request
+CHANGE_REASON_CODE,Y,Y,N,,,,,siSub,Shipment Change Request
+CHANGE_REASON_DETAIL,Y,Y,N,,,,,siSub,Shipment Change Request
+REMARKS2,Y,Y,N,,,,,siSub,Shipment Change Request
+REMARKS,Y,Y,N,,,,,siSub,Shipment Change Request
+SOLDTO_DESCRIPTION,N,Y,N,,,,,siSub,Shipment Change Request
+REMARKS3,Y,Y,N,,,,,siSub,Shipment Change Request
+SHIPTO_DESCRIPTION,N,Y,N,,,,,siSub,Shipment Change Request
+ERP_ATTR1,Y,Y,N,,,,,siSub,Shipment Change Request
+ERP_ATTR2,Y,Y,N,,,,,siSub,Shipment Change Request
+ERP_ATTR3,Y,Y,N,,,,,siSub,Shipment Change Request
+TO_SITE_SOLDTO_CODE,Y,Y,N,,,,,siSub,Shipment Change Request
+TO_SITE_SHIPTO_CODE,Y,Y,N,,,,,siSub,Shipment Change Request
+LT_DAY,Y,Y,N,,,,,siSub,Shipment Change Request
+ETD,Y,Y,N,,,,,siSub,Shipment Change Request
+ETA,Y,Y,N,,,,,siSub,Shipment Change Request
+EXPECTED_SHIPPING_DATE,N,Y,N,,,,,siSub,Shipment Change Request
+MTK_OWNER,Y,Y,N,,,,,siSub,Shipment Change Request
+TEAM,N,Y,N,,,,,siSub,Shipment Change Request
+REQUESTOR,Y,Y,N,,,,,siSub,Shipment Change Request
+UPDATED_BY,N,Y,N,,,,,siSub,Shipment Change Request
+REQUEST_DATE,Y,Y,N,,,,,siSub,Shipment Change Request
+UPDATED_DATE,N,Y,N,,,,,siSub,Shipment Change Request
+CHANGE_REQ_NO,N,Y,N,,,,,siSub,Shipment Change Request
+CHECK_NEED_YN,N,Y,N,,,,,siSub,Shipment Change Request
+MODEL_USER,N,Y,N,,,,,siSub,Shipment Change Request
+ERP_STATUS,N,Y,N,,,,,siSub,Shipment Change Request
+BOD_ID,N,Y,N,,,,,siSub,Shipment Change Request
+CHANGE_TYPE,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_ROUTE_ID,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_BOD_ID,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_INCOTERMS,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_D_COUNTRY,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_D_PORT_CODE,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_A_COUNTRY,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_A_PORT_CODE,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_CUSTOMER_LT,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_TO_COUNTRY,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_TO_CITY,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_ETA,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_ETD,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_LT_DAY,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_TRANSPORT_MODE,N,Y,N,,,,,siSub,Shipment Change Request
+NEW_SHIPMENT_DATE,N,Y,N,,,,,siSub,Shipment Change Request
+EDIT_REMARKS,N,Y,N,,,,,siSub,Shipment Change Request
+EDIT_MAIN,Y,Y,N,,,,,siSub,Shipment Change Request
+ELECTRODE_YN,N,Y,N,,,,,siSub,Shipment Change Request
+ELECTRODE_TYPE,N,Y,N,,,,,siSub,Shipment Change Request
+ORIGIN_FROM_DIVISION_ID,N,Y,N,,,,,siSub,Shipment Change Request
+ORIGIN_TO_DIVISION_ID,N,Y,N,,,,,siSub,Shipment Change Request
+ATTRIBUTE10,Y,Y,N,,,,,siSub,Shipment Change Request

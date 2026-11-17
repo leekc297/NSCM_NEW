@@ -39,6 +39,11 @@
 └───────────────────────────────────────────────────────────────────┘
 ```
 
+> (2026-11-13 정정 — 위 그림과 현 PC 실제 상태의 차이)
+> - origin: `github.com/leekc297/NSCM.git` → 현재 `https://github.com/leekc297/NSCM_NEW.git` (`.git/config` 실측).
+> - `nscm-fe/`·`nscm-be/` "nested git 없음" → 현재 `nscm-fe/.git`·`nscm-be/.git` 디렉터리가 있음.
+> - `C:\Projects\NSCM_gitlab_backup\` 폴더는 현재 이 PC 에 없음(§5.1 복구 절차가 쓰는 폴더).
+
 ## §2. 초기 설정 (한 번만)
 
 ```bash
@@ -51,7 +56,7 @@ mv C:/Projects/NSCM/nscm-be/.git C:/Projects/NSCM_gitlab_backup/nscm-be.git
 cd C:/Projects/NSCM
 git init
 git branch -M main
-git remote add origin https://github.com/leekc297/NSCM.git
+git remote add origin https://github.com/leekc297/NSCM_NEW.git   # (11-13 정정: NSCM.git → 현재 origin NSCM_NEW.git)
 
 # 3) .gitignore 작성 (다음 §3 참조)
 
@@ -197,7 +202,7 @@ mv C:/Projects/NSCM/nscm-be/.git C:/Projects/NSCM_gitlab_backup/nscm-be.git
 | # | 항목 | 위반 시 |
 |---:|---|---|
 | 1 | GitHub repo 가 **Private** 인지 확인 | Public 이면 회사 자산 외부 노출 |
-| 2 | `git add .` 전에 `.gitignore` 가 적용되었는지 `git status -s` 로 확인 | 민감 파일 push → 즉시 BFG/filter-repo 로 history rewrite 필요 |
+| 2 | `git add .` 전에 `.gitignore` 가 적용되었는지 `git status -s` 로 확인 | 민감 파일 push → 즉시 BFG/filter-repo 로 history rewrite 필요 (2026-11-13 정정: history rewrite·force-push 는 실행 전 사용자 승인 의무 — CLAUDE.md §1-7) |
 | 3 | 100MB 초과 파일 push 시 GitHub 차단 | `*.7z/*.zip/.tar*` 패턴 이미 ignore. 신규 대용량 파일 발생 시 추가 ignore |
 | 4 | nested `.git` 폴더 (nscm-fe/.git 등) 가 NSCM root 안에 있으면 commit 불가 | `NSCM_gitlab_backup` 으로 외부 이동 후 commit |
 | 5 | `.gitignore` 추가 후 이미 staged 된 파일은 자동 제외 안 됨 | `rm .git/index && git add .` 로 re-stage |

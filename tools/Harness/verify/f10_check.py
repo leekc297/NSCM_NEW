@@ -26,7 +26,7 @@ def tail(s):
     return (s or '').split('.')[-1].upper()
 
 RX_BAD = [('COMMIT', re.compile(r'(?i)(?<![A-Z_])COMMIT\s*;')), ('ROLLBACK(전체)', re.compile(r'(?i)(?<![A-Z_])ROLLBACK\s*;')), ('TRUNCATE', re.compile(r'(?i)\bTRUNCATE\s+TABLE\b')),
-          ('DDL EXECUTE IMMEDIATE', re.compile(r'(?i)EXECUTE\s+IMMEDIATE\s*\'\s*(ALTER|CREATE|DROP|TRUNCATE)\b')), ('DBMS_STATS', re.compile(r'(?i)\bDBMS_STATS\.')), ('AUTONOMOUS_TRANSACTION', re.compile(r'(?i)PRAGMA\s+AUTONOMOUS_TRANSACTION'))]
+          ('DDL EXECUTE IMMEDIATE', re.compile(r'(?i)EXECUTE\s+IMMEDIATE\s*\'\s*(ALTER(?!\s+SESSION\b)|CREATE|DROP|TRUNCATE)\b')), ('DBMS_STATS', re.compile(r'(?i)\bDBMS_STATS\.')), ('AUTONOMOUS_TRANSACTION', re.compile(r'(?i)PRAGMA\s+AUTONOMOUS_TRANSACTION'))]
 RX_CALL = re.compile(r'(?i)\b((?:[A-Z0-9_]+\.)?P_[A-Z0-9_]+|PR_[A-Z0-9_]+)\s*\(')
 
 
@@ -102,6 +102,11 @@ def selftest():
     inloop = 'BEGIN FOR I IN 1..N LOOP UPDATE T SET A=1; COMMIT; END LOOP; END;'
     mid_ = 'BEGIN UPDATE T SET A=1; COMMIT; DELETE FROM T2; END;'
     cases += [('최종 COMMIT 허용', bad_hits([(0, 'X', fin)]) == [], True), ('반복 안 COMMIT 검출', len(bad_hits([(0, 'X', inloop)])) == 1, True), ('중간 COMMIT(뒤 DML) 검출', len(bad_hits([(0, 'X', mid_)])) == 1, True)]
+    # T287 — 세션 설정문은 암묵 확정이 아니다 · 다른 ALTER 는 그대로 검출
+    ddl_ = dict(RX_BAD)['DDL EXECUTE IMMEDIATE']
+    cases += [('ALTER SESSION 은 DDL 검출 아님', bool(ddl_.search("EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 0'")), False),
+              ('ALTER TABLE 은 검출(변이)', bool(ddl_.search("EXECUTE IMMEDIATE 'ALTER TABLE T ADD (A NUMBER)'")), True),
+              ('TRUNCATE 동적 실행 검출', bool(ddl_.search("execute immediate 'truncate table T'")), True)]
     bad = 0
     for nm, got, want in cases:
         k = got == want

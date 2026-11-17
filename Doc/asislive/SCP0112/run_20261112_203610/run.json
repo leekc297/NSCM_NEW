@@ -1,0 +1,141 @@
+{
+ "id": "SCP0112",
+ "started": "2026-11-12 20:36:10.588",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 20:36:10.891",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Report.UIL.SCP0112_CellTraySimulation",
+   "form_text": "Cell Tray Simulation",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0112_CellTraySimulation.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:17.458"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 20:36:21.147",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0112\\run_20261112_203610\\dump_load.json",
+   "control_count": 26,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:21.165"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 20:36:21.485",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0112\\run_20261112_203610\\shots\\SCP0112_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:21.659"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 20:36:21.985",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:22.571"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 20:36:35.341",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0112\\run_20261112_203610\\dump_find.json",
+   "control_count": 26,
+   "grid_count": 1,
+   "total": "Total : 17",
+   "time_status": "DB : 5.707s, UI : 0.092s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:35.439"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 20:36:35.598",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0112\\run_20261112_203610\\shots\\SCP0112_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:35.723"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 20:36:36.195",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 20:36:36.896"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 17,
+  "calls_with_params": 17
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCP.Report.UIL.SCP0112_CellTraySimulation",
+  "form_text": "Cell Tray Simulation",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Report\\SCP0112_CellTraySimulation.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 5.707s, UI : 0.092s",
+  "total": "Total : 17",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 20:36:10.800",
+ "t_find": "2026-11-12 20:36:21.752",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 26,
+  "layout_items": 8,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 399,
+  "data_rows": 17,
+  "grid_rows": 17,
+  "calls_total": 17,
+  "calls_screen": 17,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:57.263",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:57"
+}

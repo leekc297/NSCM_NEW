@@ -41,7 +41,7 @@
 
 | 항목 | SCM_MGR | SCMD_APP |
 |---|---|---|
-| 역할 | DDL owner / 모든 객체 소유 | BE 실 연결 계정 |
+| 역할 | DDL owner / 모든 객체 소유 | BE 실 연결 계정 (2026-11-13 정정: 환경별 — `nscm-be` `config-dev/qa/prd.yml` = `SCMD_APP` · 사내 ZIOUI1(`config-local.yml`) = `SCMP_APP`. 사내 DB 에는 `SCMD_APP` 계정이 없으므로 사내 GRANT/시노님 대상은 `SCMP_APP`) |
 | DDL 권한 | ALL | NONE (사용자 작업) |
 | 테이블 권한 | OWNER | SELECT/INSERT/UPDATE/DELETE (GRANT 필요) |
 | SP 권한 | OWNER | EXECUTE (GRANT 필요) |

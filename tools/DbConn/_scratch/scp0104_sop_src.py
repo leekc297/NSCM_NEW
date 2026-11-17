@@ -1,0 +1,10 @@
+import sys; sys.path.insert(0, r'C:\Projects\NSCM\tools\DbConn')
+from dbconn import connect
+c = connect('tobe'); cur = c.cursor()
+cur.execute("ALTER SESSION SET CURRENT_SCHEMA=SCM_MGR")
+cur.execute("""select owner,object_name,procedure_name from all_procedures where object_name like 'PKG_SCP0104%' order by 1,2,3""")
+for r in cur: print(r)
+cur.execute("""select owner,name,type,line,text from all_source where name like 'PKG_SCP0104%' and type='PACKAGE BODY' order by owner,name,line""")
+rows=cur.fetchall()
+open(r'C:\Projects\NSCM\tools\DbConn\_scratch\PKG_SCP0104_body.sql','w',encoding='utf-8').write(''.join(r[4] for r in rows))
+print(len(rows), set((r[0],r[1]) for r in rows))

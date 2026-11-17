@@ -1,0 +1,5 @@
+﻿kind,target,result,why
+TITLESET_MIG,SSP0015,ERROR,"[확인 대상] 이관 대상 1212행 중 TO-BE 없음 1117행(예 [('bejaykim', 'M', 'BALANCE'), ('bejaykim', 'M', 'INCO_WIP'), ('bejaykim', 'M', 'INSP_WIP')]) · AS-IS 전체 1532행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,SSP0015.Shipment PSI(Mobility & IT),NA,전 Division 공통 필수 컬럼 없음(USER_SELECTABLE_FLAG=N)
+TITLESET_REQ,SSP0015.Shipment PSI(Packer),NA,전 Division 공통 필수 컬럼 없음(USER_SELECTABLE_FLAG=N)
+MEASURE_ORDER,SSP0015.main,NA,이 사용자 Measure 셋팅 없음 · 사용자 minyonglee1

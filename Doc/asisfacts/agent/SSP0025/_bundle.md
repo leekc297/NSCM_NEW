@@ -1,0 +1,433 @@
+﻿# SSP0025 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 447 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 502 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 742 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 587 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedControl | 140 | biz:CommonData.CommonDataList [code=PlantCell] | BIZ_MATCH |  |
+| button:EditButton | EditButton > GetSSPUserCheck | 511 | SSP.SSP0002_GET_USER_INFO_LIST | MATCH | SP SSP0002_GET_USER_INFO_LIST |
+| button:FindButton | FindButton > FindData_Main | 274 | SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC | MATCH | SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC |
+| button:FindButton | FindButton > FindData | 296 | SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0025_GET_ITEM_BY_DIVISION_POPUP |
+| button:SaveButton | SaveButton > SaveData > FindData_Main | 274 | SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC | MATCH | SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC |
+| button:SaveButton | SaveButton > SaveData | 410 | SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC | MATCH | SP SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC |
+| button:SaveButton | SaveButton > SaveData > GetUserIDChk | 458 | SSP.SSP0025_GET_USER_ID_CHECK | MATCH | SP SSP0025_GET_USER_ID_CHECK |
+| event:spdMain.CellClick | SpdMain_CellClick | 639 | biz:CommonData.CommonDataList [code=PlantCell] | BIZ_MATCH |  |
+| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > FindData | 296 | SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0025_GET_ITEM_BY_DIVISION_POPUP |
+| event:this.clbDivisionId.SelectedIndexChanged | clbDivision_SelectedIndexChanged | 357 | biz:CommonData.CommonDataList [code=FromSiteByAssembly] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 140 | biz:CommonData.CommonDataList [code=PlantCell] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls | 206 | biz:CommonData.CommonDataList [code=FromSiteByAssembly] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > FindData | 296 | SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0025_GET_ITEM_BY_DIVISION_POPUP |
+| unreached:(진입점 미연결) | <field:dtMyDivision> | 37 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtMyDivision> | 45 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtYesOrNo> | 47 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=FromSiteByAssembly] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE |
+| biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.CommonDataList [code=PlantCell] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE |
+| biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SSP.SSP0002_GET_USER_INFO_LIST | MATCH | 1 | SP SSP0002_GET_USER_INFO_LIST | EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION |  |
+| SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP | MATCH | 1 | SP SSP0025_GET_ITEM_BY_DIVISION_POPUP | EXEC:SSP0025_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT |  |
+| SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC | MATCH | 1 | SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC | EXEC:SSP0025_GET_SHIPMENT_REQUESTOR_PIC, SELECT:SSP_MST_MODEL_USER_EE, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:TB_FX_USER, REF:STRING_SPLIT |  |
+| SSP.SSP0025_GET_USER_ID_CHECK | MATCH | 1 | SP SSP0025_GET_USER_ID_CHECK | EXEC:SSP0025_GET_USER_ID_CHECK, SELECT:TB_FX_USER, REF:STRING_SPLIT |  |
+| SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC | MATCH | 1 | SP SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC | EXEC:SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, MERGE:SSP_MST_MODEL_USER_EE, INSERT:SCM_SYS_LOG_BATCH |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| <field:dtMyDivision> | UserInfoContext.Current | NowGroupID |
+| clbDivision_SelectedIndexChanged | c | DIVISION_ID |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetCheckedListValue | SetChangedControl:139, FindData_Main:258, FindData_Main:259 | CString.GetCheckedListValue | CODE |
+| SetSheetHeaderColumn | InitSpread:159 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | SaveButton:234 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.clbDivisionId | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:188 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:281 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:362 |
+| this | Load | Form_Load | .ctor:172 |
+| this | Load | Form_Load | .ctor:102 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:170 |
+| spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitEvent:171 |
+| spdMain | CellClick | SpdMain_CellClick | InitEvent:172 |
+| spdMain | ComboSelChange | SpdMain_ComboSelChange | InitEvent:173 |
+| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:175 |
+| btnItemId | Click | btnItemId_Click | InitEvent:177 |
+| btnModelId | Click | btnModelId_Click | InitEvent:178 |
+
+## 6. 컨트롤 (40개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 12 | layoutControlItem1, lblFromSite, lblDivision, lbItemId, lbModelId, Division, layoutToSite, lblItemId, layoutControlItem4, layoutNickName, lblModelId, layoutControlItem1 |
+| UsrMultiLineEditor | 4 | txtItemId, txtModelId, txtModelId, txtItemId |
+| UsrLayoutControl | 3 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl2 |
+| LayoutControlGroup | 3 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup2 |
+| UsrCheckedList | 3 | clbDivisionId, clbFromSiteId, clbFromSite |
+| UsrButton | 3 | usrButton1, btnItemId, btnModelId |
+| UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
+| EmptySpaceItem | 2 | emptySpaceItem1, emptySpaceItem2 |
+| FpSpread | 2 | spdMain, spdMain |
+| SheetView | 2 | spdMain_Sheet1, spdMain_Sheet1 |
+| UsrButtonList | 1 | btnButtonList |
+| UsrCombo | 1 | cboDivision |
+| TextBox | 1 | txtNickName |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 6 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 19 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 5 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 12 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 4 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0025 | Shipment Requestor PIC | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 | 19/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Project, Shipment Requestor PIC
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:159
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpread |  | 243 | 하드코딩 | AddTextColumn | division | DIVISION_ID |  |
+| InitSpread |  | 244 | 하드코딩 | AddTextColumn | division | DIVISION_NAME |  |
+| InitSpread |  | 245 | 하드코딩 | AddTextColumn | From Site Code | FROM_SITE_CODE |  |
+| InitSpread |  | 246 | 하드코딩 | AddTextColumn | From Site | FROM_SITE |  |
+| InitSpread |  | 247 | 하드코딩 | AddTextColumn | Material | ITEM_ID |  |
+| InitSpread |  | 248 | 하드코딩 | AddTextColumn | Model | MODEL_ID |  |
+| InitSpread |  | 249 | 하드코딩 | AddTextColumn | Cell Type | CELL_TYPE |  |
+| InitSpread |  | 250 | 하드코딩 | AddTextColumn | Nick Name | NICK_NAME |  |
+| InitSpread |  | 251 | 하드코딩 | AddTextColumn | Electrode Type | ELECTRODE_TYPE |  |
+| InitSpread |  | 252 | 하드코딩 | AddTextColumn | UOM | ITEM_UOM |  |
+| InitSpread |  | 253 | 하드코딩 | AddNumColumnEx | Pancake (m/cell) | UOM_CONVERT_IN_TACT_TIME |  |
+| InitializeComponent |  | 378 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 379 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 380 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 381 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+| InitSpread | Shipment Requestor PIC | 162 | 표시/라벨 변경 | set:CellType | CellType = {?cellTypeImage} |  | if(spdInfo.SheetName == "Shipment Requestor PIC") |
+| InitSpread | Shipment Requestor PIC | 163 | 표시/라벨 변경 | set:CellType | CellType = {?cellTypeImage} |  | if(spdInfo.SheetName == "Shipment Requestor PIC") |
+| InitSpread | Shipment Requestor PIC | 164 | 표시/라벨 변경 | set:CellType | CellType = {?cellTypeImage} |  | if(spdInfo.SheetName == "Shipment Requestor PIC") |
+| InitializeComponent |  | 499 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 500 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 501 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 502 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Project | 코드 하드코딩 전용(메타 없음) | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 |
+| Shipment Requestor PIC | META+코드연결 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (12 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","<field:dtMyDivision>","37","derived","biz","CommonData.CommonDataList [code=MyDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.MyDivision:Type.MyDivision] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitControls","206","derived","biz","CommonData.CommonDataList [code=FromSiteByAssembly]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.FromSiteByAssembly:Type.FromSiteByAssembly] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","FindData","296","ctor","fox","SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP","SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0025_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0025_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","clbDivision_SelectedIndexChanged","357","derived","biz","CommonData.CommonDataList [code=FromSiteByAssembly]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.FromSiteByAssembly:Type.FromSiteByAssembly] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","<field:dtMyDivision>","45","derived","biz","CommonData.CommonDataList [code=MyDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.MyDivision:Type.MyDivision] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","<field:dtYesOrNo>","47","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","SetChangedControl","140","derived","biz","CommonData.CommonDataList [code=PlantCell]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantCell:Type.PlantCell] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","FindData_Main","274","ctor","fox","SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC","SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC","MATCH","SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC","EXEC:SSP0025_GET_SHIPMENT_REQUESTOR_PIC, SELECT:SSP_MST_MODEL_USER_EE, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:TB_FX_USER, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","SaveData","410","ctor","fox","SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC","SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC","MATCH","SP SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC","EXEC:SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, MERGE:SSP_MST_MODEL_USER_EE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","GetUserIDChk","458","ctor","fox","SSP.SSP0025_GET_USER_ID_CHECK","SSP.SSP0025_GET_USER_ID_CHECK","MATCH","SP SSP0025_GET_USER_ID_CHECK","EXEC:SSP0025_GET_USER_ID_CHECK, SELECT:TB_FX_USER, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","GetSSPUserCheck","511","ctor","fox","SSP.SSP0002_GET_USER_INFO_LIST","SSP.SSP0002_GET_USER_INFO_LIST","MATCH","SP SSP0002_GET_USER_INFO_LIST","EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","SpdMain_CellClick","639","derived","biz","CommonData.CommonDataList [code=PlantCell]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantCell:Type.PlantCell] > Data.CallBizCommonData",""
+```
+
+### FILE flow.csv (16 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","event","this.clbDivisionId.SelectedIndexChanged","clbDivision_SelectedIndexChanged","clbDivision_SelectedIndexChanged","357","biz:CommonData.CommonDataList [code=FromSiteByAssembly]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","event","this.btnButtonList.UsrButtonList_Click_Detected","btnButtonList_UsrButtonList_Click_Detected > FindData","FindData","296","SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0025_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0025_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","event","this.Load","Form_Load > FindData","FindData","296","SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0025_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0025_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","event","this.Load","Form_Load > InitControls","InitControls","206","biz:CommonData.CommonDataList [code=FromSiteByAssembly]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","button","FindButton","FindButton > FindData","FindData","296","SSP.SSP0025_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0025_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0025_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","unreached","(진입점 미연결)","<field:dtMyDivision>","<field:dtMyDivision>","37","biz:CommonData.CommonDataList [code=MyDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","140","biz:CommonData.CommonDataList [code=PlantCell]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","event","spdMain.CellClick","SpdMain_CellClick","SpdMain_CellClick","639","biz:CommonData.CommonDataList [code=PlantCell]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","event","cboDivision.SelectedIndexChanged","CboDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","140","biz:CommonData.CommonDataList [code=PlantCell]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","button","FindButton","FindButton > FindData_Main","FindData_Main","274","SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC","MATCH","SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC","EXEC:SSP0025_GET_SHIPMENT_REQUESTOR_PIC, SELECT:SSP_MST_MODEL_USER_EE, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:TB_FX_USER, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","button","EditButton","EditButton > GetSSPUserCheck","GetSSPUserCheck","511","SSP.SSP0002_GET_USER_INFO_LIST","MATCH","SP SSP0002_GET_USER_INFO_LIST","EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","button","SaveButton","SaveButton > SaveData","SaveData","410","SSP.SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC","MATCH","SP SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC","EXEC:SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, MERGE:SSP_MST_MODEL_USER_EE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","button","SaveButton","SaveButton > SaveData > FindData_Main","FindData_Main","274","SSP.SSP0025_GET_SHIPMENT_REQUESTOR_PIC","MATCH","SP SSP0025_GET_SHIPMENT_REQUESTOR_PIC","EXEC:SSP0025_GET_SHIPMENT_REQUESTOR_PIC, SELECT:SSP_MST_MODEL_USER_EE, SELECT:SCM_MST_SITE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:TB_FX_USER, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","button","SaveButton","SaveButton > SaveData > GetUserIDChk","GetUserIDChk","458","SSP.SSP0025_GET_USER_ID_CHECK","MATCH","SP SSP0025_GET_USER_ID_CHECK","EXEC:SSP0025_GET_USER_ID_CHECK, SELECT:TB_FX_USER, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","unreached","(진입점 미연결)","<field:dtYesOrNo>","<field:dtYesOrNo>","47","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","unreached","(진입점 미연결)","<field:dtMyDivision>","<field:dtMyDivision>","45","biz:CommonData.CommonDataList [code=MyDivision]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (12 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","188","this.clbDivisionId","SelectedIndexChanged","clbDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","281","this.btnButtonList","UsrButtonList_Click_Detected","btnButtonList_UsrButtonList_Click_Detected","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","362","this.spdMain","CellDoubleClick","spdMain_CellDoubleClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup",".ctor","172","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC",".ctor","102","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","170","spdMain","TopChange","SpdMain_TopChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","171","spdMain","CellDoubleClick","SpdMain_CellDoubleClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","172","spdMain","CellClick","SpdMain_CellClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","173","spdMain","ComboSelChange","SpdMain_ComboSelChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","175","cboDivision","SelectedIndexChanged","CboDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","177","btnItemId","Click","btnItemId_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitEvent","178","btnModelId","Click","btnModelId_Click","+="
+```
+
+### FILE controls.csv (40 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","clbDivisionId","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","clbFromSiteId","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","btnButtonList","GSCM.Windows.Forms.Controls.UsrButtonList","usrLayoutControl2","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","lblFromSite","DevExpress.XtraLayout.LayoutControlItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","lblDivision","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","lbItemId","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","spdMain","FarPoint.Win.Spread.FpSpread","this","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","txtModelId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","lbModelId","DevExpress.XtraLayout.LayoutControlItem","","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","txtModelId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","clbFromSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","txtNickName","System.Windows.Forms.TextBox","usrLayoutControl2","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","btnModelId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","Division","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","layoutToSite","DevExpress.XtraLayout.LayoutControlItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","lblItemId","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","layoutNickName","DevExpress.XtraLayout.LayoutControlItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","lblModelId","DevExpress.XtraLayout.LayoutControlItem","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","spdMain","FarPoint.Win.Spread.FpSpread","this","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","imageList1","System.Windows.Forms.ImageList","","54"
+```
+
+### FILE props.csv (79 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","75","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","79","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","88","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","93","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","96","usrConditionPanel1","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","98","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","108","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","112","usrLayoutControl2","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","114","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","146","txtItemId","Size","new System.Drawing.Size(150, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","182","clbDivisionId","Size","new System.Drawing.Size(141, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","222","clbFromSiteId","Size","new System.Drawing.Size(147, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","256","btnButtonList","Size","new System.Drawing.Size(105, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","296","layoutControlGroup2","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","301","layoutControlItem1","Control","this.btnButtonList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","304","layoutControlItem1","Size","new System.Drawing.Size(109, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","310","lblFromSite","Control","this.clbFromSiteId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","315","lblFromSite","Size","new System.Drawing.Size(216, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","316","lblFromSite","Text","""From Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","323","lblDivision","Control","this.clbDivisionId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","326","lblDivision","Size","new System.Drawing.Size(189, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","327","lblDivision","Text","""Division"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","334","lbItemId","Control","this.txtItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","338","lbItemId","Size","new System.Drawing.Size(208, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","339","lbItemId","Text","""Material"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","349","emptySpaceItem1","Size","new System.Drawing.Size(35, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","355","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","360","spdMain","Size","new System.Drawing.Size(985, 524)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","433","txtModelId","Size","new System.Drawing.Size(169, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","439","lbModelId","Control","this.txtModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","443","lbModelId","Size","new System.Drawing.Size(208, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","445","lbModelId","Text","""Model"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","456","this","Text","""Item by DivisionPopup"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitControls","201","txtItemId","Text","sItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitControls","202","txtModelId","Text","sModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitControls","204","clbDivisionId","Enabled","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitControls","205","clbFromSiteId","Enabled","true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","102","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","111","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","114","usrConditionPanel1","Size","new System.Drawing.Size(1192, 41)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","116","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","128","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","133","usrLayoutControl2","Size","new System.Drawing.Size(1192, 41)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","135","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","167","txtModelId","Size","new System.Drawing.Size(162, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","203","cboDivision","Size","new System.Drawing.Size(128, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","239","clbFromSite","Size","new System.Drawing.Size(140, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","250","txtNickName","Size","new System.Drawing.Size(135, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","282","btnItemId","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","318","txtItemId","Size","new System.Drawing.Size(151, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","351","btnModelId","Size","new System.Drawing.Size(39, 24)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","372","layoutControlGroup2","Size","new System.Drawing.Size(1192, 48)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","381","emptySpaceItem2","Size","new System.Drawing.Size(122, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","387","Division","Control","this.cboDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","391","Division","Size","new System.Drawing.Size(160, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","392","Division","Text","""Div*"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","399","layoutToSite","Control","this.clbFromSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","404","layoutToSite","Size","new System.Drawing.Size(201, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","406","layoutToSite","Text","""Plant Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","413","lblItemId","Control","this.txtItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","417","lblItemId","Size","new System.Drawing.Size(201, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","418","lblItemId","Text","""Material"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","425","layoutControlItem4","Control","this.btnItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","431","layoutControlItem4","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","433","layoutControlItem4","Text","""layoutControlItem2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","439","layoutNickName","Control","this.txtNickName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","444","layoutNickName","Size","new System.Drawing.Size(201, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","446","layoutNickName","Text","""Nick Name"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","453","lblModelId","Control","this.txtModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","456","lblModelId","Size","new System.Drawing.Size(201, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","457","lblModelId","Text","""Model"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","462","layoutControlItem1","Control","this.btnModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","468","layoutControlItem1","Size","new System.Drawing.Size(43, 28)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","470","layoutControlItem1","Text","""layoutControlItem2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","477","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","482","spdMain","Size","new System.Drawing.Size(1192, 608)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","539","this","Text","""SSP0014_ShipmentModelPIC"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","btnItemId_Click","718","txtItemId","Text","popItem.ItemId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","btnModelId_Click","736","txtModelId","Text","popItem.ModelId"
+```
+
+### FILE grid_effective.csv (30 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Project","코드 하드코딩 전용(메타 없음)","CELL_TYPE","Cell Type","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","DIVISION_ID","division","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","DIVISION_NAME","division","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","ELECTRODE_TYPE","Electrode Type","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","FROM_SITE","From Site","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","FROM_SITE_CODE","From Site Code","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","ITEM_ID","Material","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","ITEM_UOM","UOM","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","MODEL_ID","Model","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","NICK_NAME","Nick Name","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","UOM_CONVERT_IN_TACT_TIME","Pancake (m/cell)","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Shipment Requestor PIC","META+코드연결","CELL_TYPE","Cell Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","DIVISION_ID","Division","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","ELECTRODE_TYPE","Electrode Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","ITEM_ID","Material*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","MODEL_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","PART_LEADER","Part Leader","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","PART_LEADER_NAME","Part Leader Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","SITE_DESCRIPTION","Plant Site*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","TEAM_LEADER","Team Leader","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","TEAM_LEADER_NAME","Team Leader Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","TO_SITE","Plant Site Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","USER_ID","User ID*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","USER_NAME","User Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Requestor PIC","META+코드연결","VALID_YN","Valid*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (35 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","CreateSpread","231","Project","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Project ¦ Project ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","CreateSpread","232","Project","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","CreateSpread","233","Project","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","240","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","243","","COLUMN","AddTextColumn","HARDCODED","division","DIVISION_ID","","division ¦ DIVISION_ID ¦ {?FPMerge.None} ¦ 60 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.DivisionName ¦ DefColumns.Division ¦ FPMerge.None ¦ 60 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","244","","COLUMN","AddTextColumn","HARDCODED","division","DIVISION_NAME","","division ¦ DIVISION_NAME ¦ {?FPMerge.None} ¦ 80 ¦ {?false}","sHeaderText,sFieldName,merge,fWidth,bVisible","","DefColumnsLabel.DivisionName ¦ DefColumns.DivisionName ¦ FPMerge.None ¦ 80 ¦ false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","245","","COLUMN","AddTextColumn","HARDCODED","From Site Code","FROM_SITE_CODE","","From Site Code ¦ FROM_SITE_CODE ¦ {?FPMerge.None} ¦ 70 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","","DefColumnsLabel.FromSiteCode ¦ DefColumns.FromSiteCode ¦ FPMerge.None ¦ 70 ¦ true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","246","","COLUMN","AddTextColumn","HARDCODED","From Site","FROM_SITE","","From Site ¦ FROM_SITE ¦ {?FPMerge.None} ¦ 150 ¦ {?true} ¦ {?FPHAlign.Left} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.FromSite ¦ DefColumns.FromSite ¦ FPMerge.None ¦ 150 ¦ true ¦ FPHAlign.Left ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","247","","COLUMN","AddTextColumn","HARDCODED","Material","ITEM_ID","","Material ¦ ITEM_ID ¦ {?FPMerge.None} ¦ 100 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ItemId ¦ DefColumns.ItemId ¦ FPMerge.None ¦ 100 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","248","","COLUMN","AddTextColumn","HARDCODED","Model","MODEL_ID","","Model ¦ MODEL_ID ¦ {?FPMerge.None} ¦ 100 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ModelId ¦ DefColumns.ModelId ¦ FPMerge.None ¦ 100 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","249","","COLUMN","AddTextColumn","HARDCODED","Cell Type","CELL_TYPE","","Cell Type ¦ CELL_TYPE ¦ {?FPMerge.None} ¦ 80 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.CellType ¦ DefColumns.CellType ¦ FPMerge.None ¦ 80 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","250","","COLUMN","AddTextColumn","HARDCODED","Nick Name","NICK_NAME","","Nick Name ¦ NICK_NAME ¦ {?FPMerge.None} ¦ 100 ¦ {?true} ¦ {?FPHAlign.Left} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.NickName ¦ DefColumns.NickName ¦ FPMerge.None ¦ 100 ¦ true ¦ FPHAlign.Left ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","251","","COLUMN","AddTextColumn","HARDCODED","Electrode Type","ELECTRODE_TYPE","","Electrode Type ¦ ELECTRODE_TYPE ¦ {?FPMerge.None} ¦ 80 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ElectrodeType ¦ DefColumns.ElectrodeType ¦ FPMerge.None ¦ 80 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","252","","COLUMN","AddTextColumn","HARDCODED","UOM","ITEM_UOM","","UOM ¦ ITEM_UOM ¦ {?FPMerge.None} ¦ 60 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ITEM_UOM ¦ DefColumns.ItemUOM ¦ FPMerge.None ¦ 60 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","InitSpread","253","","COLUMN","AddNumColumnEx","HARDCODED","Pancake (m/cell)","UOM_CONVERT_IN_TACT_TIME","","Pancake (m/cell) ¦ UOM_CONVERT_IN_TACT_TIME ¦ {?FPMerge.None} ¦ 120 ¦ {?true} ¦ {?true} ¦ 5","sHeaderText,sFieldName,merge,fWidth,bVisible,blFixedPoint,iDecimalplace","","DefColumnsLabel.UomConvertInTactTime ¦ DefColumns.UomConvertInTactTime ¦ FPMerge.None ¦ 120 ¦ true ¦ true ¦ 5"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","378","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","379","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","380","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.Designer.cs","SSP0025_ItembyDivisionPopup","InitializeComponent","381","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","CreateSpread","146","Shipment Requestor PIC","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Requestor PIC ¦ Shipment Requestor PIC ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","CreateSpread","147","0","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ 0","","","spdMain.Name ¦ 0"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","CreateSpread","149","0","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitSpread","157","Shipment Requestor PIC","SHEET","InitSheet","HARDCODED","","","","Shipment Requestor PIC","","if(spdInfo.SheetName == ""Shipment Requestor PIC"")","SpdSheet.shtMain"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitSpread","159","Shipment Requestor PIC","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spdInfo} ¦ 1","siObj,iColumnHeaderRowCount","if(spdInfo.SheetName == ""Shipment Requestor PIC"")","spdInfo ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitSpread","162","Shipment Requestor PIC","OVERRIDE","set:CellType","EXPR","","","","{?cellTypeImage}","CellType","if(spdInfo.SheetName == ""Shipment Requestor PIC"")","cellTypeImage"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitSpread","163","Shipment Requestor PIC","OVERRIDE","set:CellType","EXPR","","","","{?cellTypeImage}","CellType","if(spdInfo.SheetName == ""Shipment Requestor PIC"")","cellTypeImage"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InitSpread","164","Shipment Requestor PIC","OVERRIDE","set:CellType","EXPR","","","","{?cellTypeImage}","CellType","if(spdInfo.SheetName == ""Shipment Requestor PIC"")","cellTypeImage"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","EditButton","220","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","if(fps != null) ⟫ if(fps.Name == ""spdMain"")","spdMain.Name ¦ fps.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InsertRow","318","","OTHER","SetCellTypeCombo","EXPR","","","DIVISION_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.DIVISION_ID)} ¦ {?Data.Common(Data.Type.MyDivision, false, UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId)}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Shipment Requestor PIC"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.DIVISION_ID) ¦ dtMyDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","InsertRow","320","","OTHER","SetCellTypeCombo","EXPR","","","SITE_DESCRIPTION","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION)} ¦ {?Data.Common(Data.Type.PlantCell, false, pDivisionID, """")} || {?Data.Common(Data.Type.PlantCell, false, sDivisionId, """")}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Shipment Requestor PIC"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION) ¦ dtToSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","SpdMain_CellClick","640","","OTHER","SetCellTypeCombo","EXPR","","","SITE_DESCRIPTION","{?e.Row} ¦ {?siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION)} ¦ {?Data.Common(Data.Type.PlantCell, false, pDivisionID, """")} || {?Data.Common(Data.Type.PlantCell, false, sDivisionId, """")}","iRow,iCol,dt","if(siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.GetText(e.Row, siMain.GetColumnIndex(CAppSetting.StringAction)) == ""I"") ⟫ if(e.Column == siMain.GetColumnIndex(""SITE_DESCRIPTION""))","e.Row ¦ siMain.GetColumnIndex(DefColumns.SITE_DESCRIPTION) ¦ dtToSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","499","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","500","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","501","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.Designer.cs","SSP0025_ShipmentRequestorPIC","InitializeComponent","502","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (3 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","<field:dtMyDivision>","37","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0025_ItembyDivisionPopup.cs","SSP0025_ItembyDivisionPopup","clbDivision_SelectedIndexChanged","358","c","DIVISION_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0025_ShipmentRequestorPIC.cs","SSP0025_ShipmentRequestorPIC","<field:dtMyDivision>","45","UserInfoContext.Current","NowGroupID","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

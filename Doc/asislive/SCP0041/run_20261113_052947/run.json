@@ -1,0 +1,125 @@
+{
+ "id": "SCP0041",
+ "started": "2026-11-13 05:29:47.214",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:29:47.444",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0041_StockOSP",
+   "form_text": "Stock OSP",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0041_StockOSP.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:29:51.724"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:29:55.438",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261113_052947\\dump_load.json",
+   "control_count": 54,
+   "grid_count": 1,
+   "total": "Total : ",
+   "time_status": "DB : 9.335s, UI : 0.229s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:29:55.448"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:29:55.609",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0041\\run_20261113_052947\\shots\\SCP0041_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:29:55.775"
+  },
+  {
+   "step": "set",
+   "cmd": "set",
+   "at": "2026-11-13 05:29:56.091",
+   "ok": false,
+   "error": "InvalidOperationException: property not writable: ControlValues",
+   "done": "2026-11-13 05:29:56.092"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:29:58.913",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-13 05:29:59.487"
+  }
+ ],
+ "status": "ERROR",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 1,
+  "calls": 14,
+  "calls_with_params": 14
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "scenario": {
+  "rule": "tobe",
+  "set": [
+   {
+    "name": "dCalendar",
+    "prop": "ControlValues",
+    "value": "20260813:20270813",
+    "param": "from_yyyymmdd+to_yyyymmdd",
+    "from": "20261109:20271009",
+    "sheet": "Pack Hold Stock"
+   }
+  ]
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0041_StockOSP",
+  "form_text": "Stock OSP",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0041_StockOSP.dll"
+ },
+ "t_open": "2026-11-13 05:29:47.423",
+ "t_find": "2026-11-13 05:29:58.683",
+ "dialogs": [],
+ "dump_used": "dump_load.json",
+ "counts": {
+  "controls": 54,
+  "layout_items": 12,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 31,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 14,
+  "calls_screen": 14,
+  "calls_find": 1,
+  "dialogs": 0
+ },
+ "why": "조건 설정 실패(dCalendar): InvalidOperationException: property not writable: ControlValues",
+ "ended": "2026-11-13 05:29:59.901",
+ "exit": 3
+}

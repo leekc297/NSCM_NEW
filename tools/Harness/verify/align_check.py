@@ -18,6 +18,7 @@ from ora import conn_info
 import oracledb
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+CR099_TAG = '[CR-099]'  # H1 AS-IS Center → TO-BE Left = TO-BE 룰 정렬 방식 변경(2026-11-09)
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 NORM = {'L': 'L', 'LEFT': 'L', 'C': 'C', 'CENTER': 'C', 'R': 'R', 'RIGHT': 'R', 'GENERAL': 'L'}
 WORD = {'L': 'left', 'C': 'center', 'R': 'right'}
@@ -105,6 +106,10 @@ def main():
             else:
                 v = 'PASS' if a == t_al else 'FAIL'
                 note = f"AS-IS {WORD[a]} ↔ TO-BE {WORD.get(t_al, t_al)}" + ('' if v == 'PASS' else ' — 정렬 다름')
+                # 2026-11-09 CR-099(사용자 판정 SSP0024 CheckList 2·3번 · SSP0025 10번): AS-IS Center → TO-BE Left 는 TO-BE 룰로 바뀐 정렬 방식 — 결함 아님(PASS · 근거 표시)
+                #   다른 방향(Right↔Left 등 숫자 칸 정렬 깨짐)은 그대로 FAIL
+                if v == 'FAIL' and a == 'C' and t_al == 'L':
+                    v, note = 'PASS', f"{CR099_TAG} {note.replace(' — 정렬 다름', '')} — TO-BE 룰 정렬 방식 변경(Center→Left · 사용자 판정 2026-11-09)"
                 if borrowed and not ov:
                     tag = f"TO-BE 원천 추정(같은 화면 시트 없음 · 컬럼 겹침 {ratio:.0%} 로 다른 화면 메타 {key[0]}/{key[1]} 사용 — TO-BE 팝업 실제 메타 미확인)"
                     if v == 'FAIL':

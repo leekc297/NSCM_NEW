@@ -2,7 +2,7 @@
  "menu_id": "SCP0041",
  "asis_id": "SCP0041",
  "area": "SCP",
- "generated": "2026-11-05 06:14:40",
+ "generated": "2026-11-14 12:13:42",
  "division_cond": {
   "present": true,
   "labels": [
@@ -85,10 +85,27 @@
  ],
  "bucket_cond": "",
  "observed": {
-  "source": "e2e_results.json 2026-10-31 14:21 · 행 수 근거 3행",
-  "max_rows_after_search": 1,
-  "zero_row_failures": [],
-  "zero_row_count": 0
+  "source": "e2e_results.json 2026-11-13 03:25 · 행 수 근거 12행",
+  "max_rows_after_search": 30245,
+  "zero_row_failures": [
+   {
+    "row_id": "V-82750974",
+    "via": "[측정 경로 없음] 조회 0행 — 스크롤 판정 불가"
+   },
+   {
+    "row_id": "V-fb62ea69",
+    "via": "ALL(Plant Site) 조회 0행 · 필수 안내 없음"
+   },
+   {
+    "row_id": "V-3f6c31cf",
+    "via": "[측정 경로 없음] 조회 0행"
+   },
+   {
+    "row_id": "V-f0d780e7",
+    "via": "[측정 경로 없음] 조회 0행 — 편집 가능 여부 판정 불가"
+   }
+  ],
+  "zero_row_count": 4
  },
  "warnings": []
 }

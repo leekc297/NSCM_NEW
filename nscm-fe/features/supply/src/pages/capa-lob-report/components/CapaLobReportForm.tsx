@@ -252,8 +252,8 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              // 'Ver.' 는 SCM_ADM_MSG_M 미등록(실측) — 자매 SCP0105(capa-teep-report)와 동일하게 리터럴 지정(사용자 지시 2026-11-04).
-              label='Ver.'
+              // 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12, MSG_TP_CD='LBL'). 과거 리터럴 하드코딩은 다국어 미처리라 교체.
+              label={t('LBL01275', '_Ver.')}
               labelAlign='right'
               render={() => (
                 <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>

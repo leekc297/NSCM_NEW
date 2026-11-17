@@ -1,0 +1,2 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCP0102-S3ab145,COND,cboAccuracy.ControlValues = ALL,cboAccuracy=i0 cboAccuracy=i1 cboAccuracy=i2 cboAccuracy=i3 cboAccuracy=i4,cboAccuracy=i0 cboAccuracy=i1 cboAccuracy=i2 cboAccuracy=i3 cboAccuracy=i4,실행함,"if (cboAccuracy.ControlValues != ""ALL"") ▸ if (siMain.ActiveSheet.RowCount > 0) ▸ if (GColumnVisible[3].Length != 0) ▸ for (i < siMain.ActiveSheet.RowCount) ▸ for (j >= 0) ▸ if (CheckNumber(siMain.GetValue(i, System.Convert.ToInt32(sep[j])).",

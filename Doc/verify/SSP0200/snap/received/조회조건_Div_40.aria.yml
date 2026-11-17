@@ -1,0 +1,198 @@
+- paragraph: Shipment Change Request
+- text: Shipping Shipping Schedule Shipment Change Request Search Area
+- switch [checked]
+- button "Full screen"
+- text: Div
+- combobox: 40 Mobility & IT Battery
+- button "Open"
+- text: From Site
+- combobox "ALL"
+- button "Open"
+- text: To Site
+- combobox "ALL"
+- button "Open"
+- text: Status
+- combobox: ALL
+- button "Open"
+- img
+- text: Shipment Date
+- textbox "YYYY.MM.DD": 2026.11.15
+- text: ~
+- textbox "YYYY.MM.DD": 2026.12.15
+- text: Model/Nickname
+- textbox
+- button
+- text: SO No
+- textbox
+- text: Confirm ID
+- textbox
+- button "Search(F5)"
+- button
+- paragraph
+- button "New"
+- button "Insert Multiple"
+- button "Insert(F8)"
+- button "Delete(F9)"
+- button "Save(F7)":
+  - img
+  - text: Save(F7)
+- button "Sort(F3)"
+- button "Filter(F4)"
+- button "Condition(F6)"
+- button "Reset Condition(F10)"
+- button
+- grid:
+  - rowgroup:
+    - row "Div SO No Status Confirm/Plan ID Model Nick Name End Customer FCST Type From Site To Site Incoterms Shipment Qty Shipment Date Trans Mode Building Remarks Customer Requirement No":
+      - columnheader "Div"
+      - columnheader "SO No"
+      - columnheader "Status"
+      - columnheader "Confirm/Plan ID"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "End Customer"
+      - columnheader "FCST Type"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Incoterms"
+      - columnheader "Shipment Qty"
+      - columnheader "Shipment Date"
+      - columnheader "Trans Mode"
+      - columnheader "Building"
+      - columnheader "Remarks"
+      - columnheader "Customer Requirement"
+      - gridcell "No"
+      - gridcell
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 05:42:09
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 05:42:09
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 05:42:09
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDateTime Input": {DATE} 05:42:09
+- button "Toggle Calendar"
+- button "Toggle Time List"
+- separator
+- text: Request Info
+- button
+- button
+- button "Request Complete"
+- button "Cancel"
+- text: Requestor
+- textbox [disabled]: 이민용
+- text: Dept Name
+- textbox [disabled]: LG CNS
+- img
+- text: Approval
+- textbox [disabled]
+- text: Dept Name
+- textbox [disabled]
+- button
+- img
+- text: Title
+- textbox
+- img
+- text: Change Reason
+- combobox
+- button "Open"
+- img
+- text: Reason Detail
+- textbox
+- separator
+- grid:
+  - rowgroup:
+    - row "all SO No Change Req.No Project Name Confirm id FCST Type Model Nick Name From Site To Site Incoterms Confirmed Change No":
+      - columnheader "all":
+        - checkbox "all" [disabled]
+      - columnheader "SO No"
+      - columnheader "Change Req.No"
+      - columnheader "Project Name"
+      - columnheader "Confirm id"
+      - columnheader "FCST Type"
+      - columnheader "Model"
+      - columnheader "Nick Name"
+      - columnheader "From Site"
+      - columnheader "To Site"
+      - columnheader "Incoterms"
+      - columnheader "Confirmed"
+      - columnheader "Change"
+      - gridcell "No"
+    - row "L/T(Day) ETD ETA Trans Mode Shipment Date Qty L/T(Day) ETD ETA Trans Mode":
+      - columnheader "L/T(Day)"
+      - columnheader "ETD"
+      - columnheader "ETA"
+      - columnheader "Trans Mode"
+      - columnheader "Shipment Date"
+      - columnheader "Qty"
+      - columnheader "L/T(Day)"
+      - columnheader "ETD"
+      - columnheader "ETA"
+      - columnheader "Trans Mode"
+  - rowgroup:
+    - row "Focus helper":
+      - gridcell "Focus helper"
+  - row "No"
+- status
+- text: "0"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- combobox "InputDate Input": {DATE}
+- button "Choose Date"
+- spinbutton "InputNumber Input": "0.000"
+# visual-order: Div > From Site > To Site > Status > Shipment Date > SO No > Confirm ID > Requestor > Requestor > Dept Name > Approval > Title > Change Reason > Reason Detail

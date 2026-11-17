@@ -1,0 +1,82 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "btnFromSrch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CitybyCountry",
+     "title": "City by Country",
+     "modal": true,
+     "grid_rows": 89418,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_CITY_BY_COUNTY_POPUP"
+   ],
+   "scenarios": [
+    "SCP0005-Sd6fc80",
+    "SCP0005-Sfc760a"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnToSrch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CitybyCountry",
+     "title": "City by Country",
+     "modal": true,
+     "grid_rows": 89418,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "DM0000_GET_COMMON_SPREAD_TITLE",
+    "SCM0002_GET_CITY_BY_COUNTY_POPUP"
+   ],
+   "scenarios": [
+    "SCP0005-S55ebc4",
+    "SCP0005-Sad92f9"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnEaxel_Upload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  }
+ ],
+ "at": "2026-11-14 07:24:49.395",
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

@@ -1,0 +1,107 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "spdMainDataModel_Changed",
+   "expect": "MSG00209",
+   "why": "SCP0005_DistributionRoute.cs:1005 LT 5개 합 > 999 · 데이터 모델 Changed(CellsUpdated) 처리기 · 값 지정(SetValue)은 11-15 ArgumentException → 편집 입력으로 · 11-16 05:22 1000 입력 뒤 값 0 유지(셀 상한으로 보고 600+600 으로 합 초과)",
+   "steps": [
+    {
+     "sheet": "Distribution Route",
+     "row": 0,
+     "col": 30,
+     "before": "0",
+     "after": "600",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "LT_ARRIVAL_INLAND",
+      "value": "600",
+      "mode": "edit"
+     }
+    },
+    {
+     "sheet": "Distribution Route",
+     "row": 0,
+     "col": 28,
+     "before": "0",
+     "after": "0",
+     "locked": false,
+     "entered": true,
+     "how": "edit",
+     "error": null,
+     "edit_error": null,
+     "set": {
+      "cell": "LT_VOYAGE",
+      "value": "600",
+      "mode": "edit"
+     }
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "Total L/T은 999 이하 입니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": true,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:22:27",
+ "_pre_set": [],
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "Distribution Route"
+   },
+   "rows": 39,
+   "ms": 4.74,
+   "at": "2026-11-16 05:22:37.889",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_COUNTRY_CITY",
+   "params": {
+    "p_country": "",
+    "p_city": "",
+    "p_city_name": "",
+    "debug_mode": "F"
+   },
+   "rows": 89426,
+   "ms": 403.85,
+   "at": "2026-11-16 05:22:38.455",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "params": {
+    "p_from_country": "",
+    "p_from_city": "",
+    "p_to_country": "",
+    "p_to_city": "",
+    "p_transport_mode": "",
+    "p_valid_yn": ""
+   },
+   "rows": 8036,
+   "ms": 633.54,
+   "at": "2026-11-16 05:22:38.679",
+   "phase": "find"
+  }
+ ],
+ "edit_focus": "셀 0,1",
+ "edit_mode": true
+}

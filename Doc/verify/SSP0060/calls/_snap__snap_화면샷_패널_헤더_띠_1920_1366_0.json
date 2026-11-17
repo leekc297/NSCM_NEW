@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0060",
+  "sheet": "division",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/division/SEARCH/call-proc",
+  "postData": "{\"param1\":\"\",\"param2\":\"minyonglee1\"}",
+  "status": 200,
+  "rows": 7,
+  "dur": 109,
+  "at": "2026-11-14T19:11:12.113Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"minyonglee1\",\"language\":\"KO\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 224,
+  "at": "2026-11-14T19:11:12.468Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 497,
+  "at": "2026-11-14T19:11:12.719Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 104,
+  "at": "2026-11-14T19:11:13.554Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261009\",\"endYyyymmdd\":\"20261023\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 103,
+  "at": "2026-11-14T19:11:14.926Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ },
+ {
+  "menu": "SSP0060",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0060/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"companyId\":\"GM00\",\"fromSite\":\"\",\"planStartYyyymmdd\":\"20261009\",\"fromYyyymmdd\":\"20261009\",\"toYyyymmdd\":\"20261023\",\"itemId\":\"\",\"productLevel1\":\"\",\"userId\":\"minyonglee1\",\"programId\":\"SSP0060\",\"sheetName\":\"Shipment Plan\",\"realFlag\":\"Y\"}",
+  "status": 200,
+  "rows": 24,
+  "dur": 154,
+  "at": "2026-11-14T19:11:14.937Z",
+  "user": "minyonglee1",
+  "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
+ }
+]

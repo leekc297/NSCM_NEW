@@ -21,7 +21,12 @@ public class CustomUserDetails implements UserDetails {
 	private final String userEngNm;
     private final Collection<? extends GrantedAuthority> authorities;
     private String langCd;
+    private String tmzCd;
     private List<MenuDto> menus;
+    private final boolean isGuest;
+    private List<String> groups;
+    private final String div;
+    private final String companyId;
 
     @Override
     public String getUsername() { return username; }
@@ -42,9 +47,21 @@ public class CustomUserDetails implements UserDetails {
 
     public String getLangCd() { return langCd; }
 
+    public String getTmzCd() { return tmzCd; }
+
     public List<MenuDto> getMenus() { return menus; }
 
+    public boolean isGuest() { return isGuest; }
+
+    public List<String> getGroups() { return groups; }
+
+    public String getDiv() { return div; }
+
+    public String getCompanyId() { return companyId; }
+
     public void setLangCd(String langCd) { this.langCd = langCd; }
+
+    public void setTmzCd(String tmzCd) { this.tmzCd = tmzCd; }
 
     public void setMenus(List<MenuDto> menus) { this.menus = menus; }
 

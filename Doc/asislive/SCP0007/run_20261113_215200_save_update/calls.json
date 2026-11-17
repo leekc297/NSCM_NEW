@@ -1,0 +1,40 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 21:52:49.845",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0007_SAVE_BOD",
+   "sp": "SCP0007_SAVE_BOD",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 100.79,
+   "params": {
+    "p_active_flag": "M",
+    "p_bod_id": "20290",
+    "p_division_id": "40",
+    "p_customer_code": "",
+    "p_from_site": "AZ00-E",
+    "p_to_site": "AZ00-A",
+    "p_incoterms": "DAP",
+    "p_incoterms_ssp": "DAP",
+    "p_priority": "5",
+    "p_route_id": "10583",
+    "p_safety_stock": "",
+    "p_input_status": "C",
+    "p_vmi_yn": "N",
+    "p_from_yyyymmdd": "20260316",
+    "p_to_yyyymmdd": "20991227",
+    "p_before_lead_time": "0",
+    "p_after_lead_time": "0",
+    "p_remarks": "",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0007_SAVE_BOD @p_active_flag='M', @p_bod_id='20290', @p_division_id='40', @p_customer_code='', @p_from_site='AZ00-E', @p_to_site='AZ00-A', @p_incoterms='DAP', @p_incoterms_ssp='DAP', @p_priority='5', @p_route_id='10583', @p_safety_stock='', @p_input_status='C', @p_vmi_yn='N', @p_from_yyyymmdd='20260316', @p_to_yyyymmdd='20991227', @p_before_lead_time='0', @p_after_lead_time='0', @p_remarks='', @p_valid_yn='Y', @p_user_id='jaeuk.shin', @debug_mode='F'",
+   "phase": "action:save"
+  }
+ ]
+}

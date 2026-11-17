@@ -14,6 +14,9 @@
 | button:FindButton | FindButton | 201 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
 | button:FindButton | FindButton > FindData | 280 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
 | button:SaveButton | SaveButton > SaveData > FindData | 280 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
+| button:SaveButton | SaveButton > SaveData | 406 | SystemManager.UP_FX_SaveBaseCode | MATCH | SP UP_FX_SaveBaseCode |
+| button:SaveButton | SaveButton > SaveData | 407 | SystemManager.UP_FX_DeleteBaseCode | MATCH | SP UP_FX_DeleteBaseCode |
+| button:SaveButton | SaveButton > SaveData | 408 | SystemManager.UP_FX_SaveBaseCode | MATCH | SP UP_FX_SaveBaseCode |
 | button:SaveButton | SaveButton > SaveData | 427 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
 | button:SaveButton | SaveButton > SaveData | 428 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
 | button:SaveButton | SaveButton > SaveData | 429 | SystemManager.UP_FX_GetBaseCodeList | MATCH | SP UP_FX_GetBaseCodeList |
@@ -29,7 +32,9 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| SystemManager.UP_FX_DeleteBaseCode | MATCH | 1 | SP UP_FX_DeleteBaseCode | EXEC:UP_FX_DELETEBASECODE, DELETE:TB_FX_BASECODE |  |
 | SystemManager.UP_FX_GetBaseCodeList | MATCH | 8 | SP UP_FX_GetBaseCodeList | EXEC:UP_FX_GETBASECODELIST, SELECT:TB_FX_BASECODE |  |
+| SystemManager.UP_FX_SaveBaseCode | MATCH | 2 | SP UP_FX_SaveBaseCode | EXEC:UP_FX_SAVEBASECODE, MERGE:TB_FX_BASECODE |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |

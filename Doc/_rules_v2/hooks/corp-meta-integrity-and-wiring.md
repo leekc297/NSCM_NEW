@@ -21,7 +21,7 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 
 ## §2. LBL 코드 할당 정책 (명칭 = 동일명칭 재사용 / 없으면 신규)
 1. **동일 명칭이 권위 원천(`SCM_ADM_MSG_M`)에 있으면 그 코드 재사용** (예 User ID(Name)=LBL00339).
-2. 없으면 **권위 DB 최대 LBL 이후** 신규 — ⚠️ **FE `public/locales/*.json` 의 stray 코드(DB 미등록)도 회피**. DB max=658 인데 FE에 659~670 stray 점유 → 신규는 **DB·FE 양쪽 충돌 없는 첫 번호**(671+)부터.
+2. 없으면 **권위 DB 최대 LBL 이후** 신규 — ⚠️ **FE `public/locales/*.json` 의 stray 코드(DB 미등록)도 회피**. DB max=658 인데 FE에 659~670 stray 점유 → 신규는 **DB·FE 양쪽 충돌 없는 첫 번호**(671+)부터. (2026-11-13 정정: 전 대역 max 이후(671+) 채번 → 2026-08-14 §7.1 로 대체 — 신규 채번은 `LBL01001`/`MSG01001` 이상 1000 대역 안 max+1 만, 전 대역 `MAX+1` 금지. FE stray 코드 회피 취지는 유지.)
 3. 신규 = **FE locales 3종(KO=EN, CN 번역) + corp `SCM_ADM_MSG_M` 등록 스크립트** 동반(§1 NOT NULL 준수). KO=EN([[feedback_i18n_ko_en_alignment]]).
 - ⚠️ `locales/*.json` 은 generated(원천 message DB)이나 커밋본이 런타임 SSOT → DB 맞아도 stray 가능. 사례: 22/23 register 스크립트.
 
@@ -32,7 +32,7 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 3. `SCM_ADM_PROC_M`(PROC_NM=proc): **COL_NM=camelCase(=FE payload key)**, **SORT_ORD=SP positional 정확 일치**, IN=VARCHAR/CLOB·OUT=CURSOR. ([[feedback_proc_meta_must_match_sp_signature]])
 - FE: `apiClient.post('/${MENU_ID}/${sht}/${btn}/call-proc', {camelKey:...})`. 단건 SP 는 변경분만큼 루프 호출.
 - 사례: SYS0013 Role 저장 — standalone `SYS0013_SAVE_USER_GROUP` 를 `28_sys0013_role_save_wiring.py`(API_M+BTN_MPG_M+PROC_M)로 배선, BE/SP 무변경.
-- 신규 SP 작성 전 기존 SP/메타 재사용 우선([[feedback_be_infrastructure_reuse]], BE 변경 금지 [[feedback_be_no_modification_rule]]).
+- 신규 SP 작성 전 기존 SP/메타 재사용 우선([[feedback_be_infrastructure_reuse]], BE 변경 금지 [[feedback_be_no_modification_rule]]). (2026-11-13 정정: BE 수정 가부는 작업 모드를 따름. `tools/Harness/harness.json` repairScope 가 DB MODE(DB_ONLY)면 직접 수정 금지, UI/DB MODE(DB_FE)면 직접 수정. CLAUDE.md §1-8)
 
 ## §4. SHEET_NAME 대소문자 / AS-IS 잔존 sheet
 - 조회 proc `PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_COLUMN_LIST` = `WHERE SHEET_NAME = :sheetNm`(case-sensitive). FE는 등록명 그대로 전송([[feedback_sheet_name_main_standard]]).
@@ -40,12 +40,13 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
   **rename·DELETE 하지 않는다.** 종전 이 항목에 있던 "dead data 정리 가능 / CTAS 백업 후 DELETE" 지침은 **폐기**한다.
   화면이 특정 시트를 안 쓰면 **행을 지우는 대신 화면이 올바른 SHEET_NAME 을 보내도록** 고친다.
   (행 무효화가 정말 필요하면 §9-3 의 `VALID_YN='N'` UPDATE — 물리 DELETE 금지.)
+  (2026-11-13: §9 는 2026-08-12 재작성되어 현재 §9-3 은 SHEET_NAME 개명 금지 조항임. `VALID_YN='N'` 지침은 이 문서에 없음)
 
 ## §5. 자기 점검
 ```
 ✅ INSERT 대상 테이블 NOT NULL 컬럼 전수 포함? (특히 MSG_TP_CD/USE_YN)
 ✅ CREATED_BY/LAST_UPDATED_BY = 'admin' 만? grep "'claude" = 0 건? (§1.1)
-✅ 신규 LBL = 동일명칭 재사용? 아니면 DB·FE 양쪽 max+1?
+✅ 신규 LBL = 동일명칭 재사용? 아니면 §7.1 1000 대역(LBL01001+/MSG01001+) 안 max+1?   # (11-13 정정: 'DB·FE 양쪽 max+1' → §7.1 대역 규칙)
 ✅ PROC_M COL_NM=camelCase / SORT_ORD=SP positional 일치?
 ✅ corp 변경 = 멱등(MERGE/NOT EXISTS) + 적용 후 count 검증?
 ✅ BE Java 무변경(메타 배선) / SP 무변경(기존 재사용)?
@@ -64,16 +65,16 @@ INSERT/MERGE 전 `user_tab_columns WHERE nullable='N'` 로 필수컬럼 확인 �
 ### §6.1 CTRL 화이트리스트 단언 (0행 기대)
 
 허용값 = FE `packages/foundation/src/constants/column-config.ts` 의 `CELL_CONTROL_TYPE` 실제 열거(전부 `FP*`):
-`FPModal / FPComboBox / FPButton / FPDate / FPDateMonth / FPDateTime / FPDateText / FPCheckBox / FPNumberText / FPTextBox / FPPercent / FPText / FPNumber / FPMultiLineTextBox`. 이 밖의 값(**`'C'`/`'S'` 등 AS-IS 한 글자 코드**)은 FE 가 인식하지 못해 **silent 미동작**.
+`FPModal / FPTextModal / FPComboBox / FPButton / FPDate / FPDateMonth / FPDateTime / FPDateText / FPCheckBox / FPNumberText / FPTextBox / FPPercent / FPText / FPNumber / FPMultiLineTextBox` (2026-11-13 정정: 14종 → `FPTextModal` 추가 15종 — column-config.ts `TEXT_MODAL` · CR-100). 이 밖의 값(**`'C'`/`'S'` 등 AS-IS 한 글자 코드**)은 FE 가 인식하지 못해 **silent 미동작**.
 
 ```sql
--- 검출 기대 0행 — 'C'/'S' 등 비표준 검출 시 즉시 교정 (NULL=컨트롤 없음 은 허용)
+-- 검출 기대 0행 — 'C' 등 미정의값 검출 시 즉시 교정 (NULL=컨트롤 없음 · 'S'=숨김 용도 는 허용)  (2026-11-13 정정: 'S' 를 교정 대상에서 제외 — 실행 hook check-meta-sql 허용 목록 · §6.2-T 와 통일)
 SELECT PROGRAM_ID, SHEET_NAME, COLUMN_NAME, CELL_CONTROL_OBJECT_TYPE_CODE
   FROM SCM_MST_SHEET_COLUMNS
  WHERE PROGRAM_ID = '{ID}'
    AND CELL_CONTROL_OBJECT_TYPE_CODE IS NOT NULL
    AND CELL_CONTROL_OBJECT_TYPE_CODE NOT IN
-       ('FPModal','FPComboBox','FPButton','FPDate','FPDateMonth','FPDateTime','FPDateText',
+       ('FPModal','FPTextModal','FPComboBox','FPButton','FPDate','FPDateMonth','FPDateTime','FPDateText',  -- (11-13 정정: FPTextModal 추가)
         'FPCheckBox','FPNumberText','FPTextBox','FPPercent','FPText','FPNumber','FPMultiLineTextBox');
 ```
 
@@ -121,7 +122,7 @@ SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
 | 1 | **채번 = 사내 권위 DB 실측 + ⭐1000 대역 규칙** — `SELECT MAX(MSG_ID) FROM SCM_ADM_MSG_M WHERE MSG_TP_CD='LBL'(/'MSG') AND MSG_ID >= 'LBL01001'(/'MSG01001')` 를 **적용 직전** 실행해 max+1. 대역이 비어 있으면 **`LBL01001` / `MSG01001` 부터**. ⚠ locales json 의 max 기준 금지 — json 은 DB 와 언싱크 | 2026-07-03 DMF0003 PR: json max(727) 기준 채번 → LBL00728~739 가 사내 타 화면 선점분과 **충돌** → 740~751 재채번 / 2026-08-14: 전 대역 max+1 이 **클라우드에서 사용자가 신규 생성한 코드를 재사용** (아래 §7.1) |
 | 2 | **locales json 3종**(KO/EN/CN) 동시 추가 | — |
 | 3 | **사내 SCM_ADM_MSG_M 등록** (3 LANG × 키, 멱등 NOT EXISTS, NOT NULL 전수 §1) — 등록 SQL 을 이관 패키지 `02_META/` 에 파일로 보존 | 미등록 시 사내 런타임 fallback 노출 |
-| 4 | **클라우드 이관 패키지 포함** — 해당 화면 배포 패키지에 i18n 등록 SQL + locales 변경 파일 명시. README 이관 순서에 기재 | 사내만 등록하고 이관 누락 시 클라우드 fallback |
+| 4 | **클라우드 이관 패키지 포함** — 해당 화면 배포 패키지에 i18n 등록 SQL + locales 변경 파일 명시. README 이관 순서에 기재 (2026-11-14 정정: locales 변경 파일은 목록만 기재한다. locale JSON 은 git 경로로 가고 DB 패키지에 넣지 않는다. `cloud-ui-db-object-fetch.md:42`) | 사내만 등록하고 이관 누락 시 클라우드 fallback |
 
 - 멱등 skip-if-exists 는 **충돌 감지가 아니다** — 기존재 키를 skip 하면 FE 는 신규 의미, DB 는 구 의미로 갈라진다. 적용 스크립트는 `max+1 ≤ 신규 시작번호` assert 로 **채번 충돌 시 중단**해야 한다.
 - 텍스트 interpolation 은 react-i18next `{{var}}` 표기 — DB 등록 텍스트도 동일 표기로 저장.
@@ -150,7 +151,7 @@ SELECT SHEET_NAME, INPUT_TP_CD, COUNT(*) CNT
 | 1 | 채번식 = `MAX(코드) + 1` 을 **1000 대역 안에서만** 구한다 — `WHERE MSG_ID >= 'LBL01001'`(/`'MSG01001'`). 대역이 비어 있으면 시작값이 `LBL01001` / `MSG01001`. |
 | 2 | ❌ **1000 미만의 빈 번호(공번)를 메우지 말 것.** 앞번호가 비어 있어도 건너뛴다. |
 | 3 | ❌ 전 대역 `MAX(...)+1` 금지 (종전 방식). |
-| 4 | 사내 DB 만 보고 채번하되, **1000 대역은 Claude 전용 예약 구간**이므로 사내/클라우드 어느 쪽이 앞서 있어도 충돌하지 않는다. |
+| 4 | 사내 DB 만 보고 채번하되, **1000 대역은 Claude 전용 예약 구간**이므로 사내/클라우드 어느 쪽이 앞서 있어도 충돌하지 않는다. (11-13 정정: '사내 DB 만' → 아래 2026-08-21 갱신대로 **사내 + 클라우드 양측** 대역 max 를 함께 본다 — 클라우드 동기화로 대역이 채워짐) |
 
 **근거 사고 (2026-08-14 사용자 리포트)**: 사용자가 **클라우드에서 직접 신규 생성한 LBL/MSG 코드**는 사내 DB 에
 아직 없다. 이 상태에서 전 대역 `MAX+1` 로 채번하면 Claude 가 **그 코드와 같은 번호를 다시 발급**해

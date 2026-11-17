@@ -29,3 +29,8 @@ projectRoot · toolsDir · harnessDir · outDir · tobeDir · tobeOutDir · rule
 - 사이드바 맨 위 **"Claude 프롬프트 · 빠른 실행"**: 프롬프트를 쓰고 Ctrl+Enter → 전용 터미널 "Claude Code (Vibe)" 안의 대화형 `claude` 로 그대로 전달. Claude Code 의 모든 기능(권한 응답·`/clear`·`/model`·`/compact`·파일 첨부 `@경로`)을 그 터미널에서 그대로 쓴다. Vibe 전용은 **화면ID 컨텍스트 첨부**(Doc/gen/<ID>/·Doc/asisfacts/screens/<ID>/ 경로를 앞에 붙임)와 **하네스 모드**(새 세션부터 `VIBE_HARNESS=1` — 룰 hook 2종 통과) 뿐.
 - 빠른 실행 버튼은 `tools/VibeManager/quick.json` 으로 정의(사용자 사본 `.vibe/quick.json` 이 있으면 우선). `·ID` 표시 버튼은 패널의 화면ID 입력을 쓴다. 종류: `terminal`(서버 기동) · `task`(steps.json 작업) · `open`(파일) · `claude`(프리셋 프롬프트 전송) · `browser`.
 - 서버 기동은 `00_ENV.md` 표준 명령으로 "NSCM BE"/"NSCM FE" 터미널을 연다(이미 열려 있으면 그 터미널로 이동).
+
+## 현행 안내 (2026-11-13 전수 점검에서 덧붙임)
+- 위 본문은 1.x 초기 설명이다. 그 뒤 바뀐 것은 `CHANGELOG.md`(판별 기록)가 정본이고, 작업·메뉴·체인의 현재 수와 정합은 `python scripts/rules/inventory_check.py`(VM_JSON)가 실측한다.
+- 사용자 사본 `.vibe/steps.json` · `.vibe/quick.json` 은 있을 때만 내장본 대신 쓰인다(2026-11-13 현재 둘 다 없음 = 저장소의 `tools/VibeManager/*.json` 이 읽힌다).
+- CheckList 체인 단계 · AS-IS Live · 검증 도구 등록부 = `tools/Harness/README.md` 의 2026-11-13 절.

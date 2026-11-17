@@ -1,0 +1,26 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 08:57:12.940",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0027_GET_PROJECTROUTE_ELECTRODE",
+   "sp": "SCP0027_GET_PROJECTROUTE_ELECTRODE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19060,
+   "rows_kind": "DataSet rows",
+   "ms": 63268.35,
+   "params": {
+    "p_division_id": "",
+    "p_plant_site": "",
+    "p_operation_group": "",
+    "p_item_id": "",
+    "p_from_yyyymm": "",
+    "p_to_yyyymm": "",
+    "p_valid_flag": ""
+   },
+   "inline": "EXEC SCP0027_GET_PROJECTROUTE_ELECTRODE @p_division_id='', @p_plant_site='', @p_operation_group='', @p_item_id='', @p_from_yyyymm='', @p_to_yyyymm='', @p_valid_flag=''",
+   "phase": "action:btnItemId"
+  }
+ ]
+}

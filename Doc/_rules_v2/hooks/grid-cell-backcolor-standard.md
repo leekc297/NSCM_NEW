@@ -25,7 +25,7 @@
 2-b. **팝업 입력 셀도 '편집 가능' 이다(CR-072, 사용자 의견 2026-10-27).** `SHEET_COLUMNS CELL=FPModal` 처럼 더블클릭 팝업으로 값을 바꾸는 셀(예 BOD Route Id)은 셀 에디터가 직접 열리지 않아도 사용자가 수정하는 셀이므로 **Yellow 가 정상**이다. 정합검증 H2(`_verify.spec.ts`)는 `asis_ref CELL=FPModal` 셀을 편집 가능으로 간주해 노랑 = PASS.
 3. **Gray(`wj-cell-non-editable`) = "원래 편집 가능하나 지금 잠긴" 특수 셀에만.** 예: DMF0020 LOC measure 동적셀의 **과거 주차**(이번 주 월요일 이전). **조회 전용 grid / 비편집 컬럼 전체를 회색칠 금지.**
 4. **상호배타 toggle**: Wijmo 셀 재활용으로 클래스 잔존 → 모든 분기에서 `toggleClass(cell,'wj-cell-editable',cond)` + `toggleClass(cell,'wj-cell-non-editable',cond2)` 양쪽 명시(false 포함).
-5. `alternatingRowStep` 은 Wijmo 기본 1(zebra ON). 공용 `DataGrid` 가 끄지 않음 — 화면이 0 으로 바꾸지 말 것(필요 시 `g.alternatingRowStep=1` 명시 보장).
+5. `alternatingRowStep` 은 Wijmo 기본 1(zebra ON). 공용 `DataGrid` 가 끄지 않음 — 화면이 0 으로 바꾸지 말 것(필요 시 `g.alternatingRowStep=1` 명시 보장). (11-13 정정: 병합 그리드는 예외 — §금지 5)
 
 ---
 
@@ -37,7 +37,7 @@
 | 2 | ❌ 비편집 전부에 `toggleClass('wj-cell-non-editable', !editable)` | DMF0020 초기 — 전체 회색 |
 | 3 | ❌ 편집셀에 inline `cell.style.backgroundColor='...'` (임의 hex/rgba) | DMF0008 Sspm/SalesSite — 표준색 불일치 |
 | 4 | ❌ 비편집 셀에 흰색 inline 강제 → `.wj-alt` zebra 제거 | zebra 소실 |
-| 5 | ❌ `alternatingRowStep=0` 으로 zebra OFF | 표준 위반 |
+| 5 | ❌ `alternatingRowStep=0` 으로 zebra OFF | 표준 위반 (2026-11-13 정정: 예외 = 셀 병합(merge) 그리드만 0 허용 — zebra 와 병합 셀 충돌 방지 · reference DMF0004 `SalesSiteGrid.tsx:153`) |
 
 ---
 
@@ -71,7 +71,7 @@ toggleClass(e.cell, 'wj-cell-non-editable', isLockedButEditable);
 - 색 클래스/zebra: `packages/foundation/src/styles/wijmo/parts/_grid.scss` (불변)
 - 공용 자동 coloring: `packages/shared/.../data-grid/dataGridUtils.ts formatEditableColumns` (불변)
 - 짝 hook: `grid-multi-tier-header-height.md`(#93) · `screen-grid-edit-merge-and-meta-mandatory.md`(#89) · `grid-column-meta.md`
-- 기준 화면: **DMF0020**(정립) / **DMF0008**(2026-06-28 표준 적용)
+- 기준 화면: **DMF0020**(정립) / **DMF0008**(2026-06-28 표준 적용) (2026-11-13 정정: 배경색 축에 한정한 기준 화면이다 — 화면 전체 reference 3개(DMF0004·0005·0006)와 별개)
 
 ## 변경 이력
 - **2026-10-27** §1 2-b 신설 — 팝업 입력 셀(FPModal) = 편집 가능(노랑 정상) CR-072. 계기: SCP0007 정합검증서 ROUTE_ID '수정 COLUMN' 허위 FAIL(사용자 의견).

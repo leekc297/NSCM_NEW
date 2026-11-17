@@ -1,0 +1,3 @@
+﻿menu_id,kind,run,at,evidence
+SCP0007,조건 데이터 없음,Doc/asislive/SCP0007/run_20261116_062457_acts_msgcell,2026-11-16 06:25,SCP0007_BOD.cs:437~488 EditButton boolEditChange 토글 · 런처 셀 상태 INCOTERMS_SSP(열 10) 앞 40행: 수정 켬 = 잠금 0(40행) · 두 번째 눌러 수정 끔 = 잠금 1(40행) · 원장 D3 'else of (boolEditChange == true)' 분기 = 수정 끔 상태 잠금
+SCP0122,동작 재현 시나리오,Doc/asislive/SCP0122/run_20261116_062814_acts_msgcell,2026-11-16 06:28,SCP0122_PlanActivityMgmt.cs:555~558 CellClick = _currRowIdx 갱신 · 수정 모드 1행 OPMZ_ACTV_CD·LINK_UI_TYPE 비움 → 1행 CellClick → OPMZ_ACTV_NAME ComboSelChange(224~243) → 1행 OPMZ_ACTV_CD 'A008'·LINK_UI_TYPE 'UI' 다시 채움(CONFIRM_YN Y·나머지 빈 값 유지) · 저장 SP 호출 0

@@ -12,7 +12,7 @@
 
 - [ ] **5종 자료 모두 작성** (룰 25 §1.5):
   - [ ] AS-IS `.cs` + `.Designer.cs` 정밀 분석 (`_asis/02_screens/{MENU_ID}/__analysis__.md` 13 category 100% 채움)
-  - [ ] xlsx 12 시트 (`_analysis/_screens/{27|28|29|30|31|32}_*/{prefix}{MENU_ID}.xlsx`)
+  - [ ] xlsx 13 시트 (`_analysis/_screens/{27|28|29|30|31|32}_*/{prefix}{MENU_ID}.xlsx`) (2026-11-13 정정: 12 시트 → 13 시트 — 실물 `1_화면개요`~`13_단위테스트시나리오` · `.claude/rules/03-analysis-docs.md` "화면 13시트 분석서")
   - [ ] 8 MD 폴더 (`_analysis/domain_{X}/screens/{MENU_ID}/`)
   - [ ] 룰셋 v2 의 적용 룰 진입점 3 파일 모두 read 완료
   - [ ] Hook (pre/post/이 hook) 모두 실행
@@ -32,9 +32,9 @@
   - [ ] SQL: INSERT ALL / MSSQL 키워드 / UPPR 대문자 / SHT_NM 자유명 = 0
 
 - [ ] **타입 / 빌드**:
-  - [ ] FE `pnpm type-check` 통과 (turbo 직접 호출 권장 — pnpm install 금지)
+  - [ ] FE `pnpm type-check` 통과 — 통과 기준은 유지하되 AI 는 `pnpm`/`turbo`/`eslint` 를 직접 실행하지 않는다(실행 hook `block-dev-commands` 차단). 변경 파일 목록을 보고하고, 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`(type-check | lint | all) 사용 · 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 보고 (2026-11-13 정정: "turbo 직접 호출 권장" → AI 직접 실행 금지 · 사용자 요청 시 fe-check.ps1)
   - [ ] BE `./gradlew compileJava` 통과
-  - [ ] Lint `pnpm lint` 또는 `./gradlew spotlessCheck` 통과
+  - [ ] Lint `pnpm lint` 또는 `./gradlew spotlessCheck` 통과 — FE lint 는 AI 직접 실행 금지 · 사용자 요청 시 `fe-check.ps1 lint` · 미실행이면 미실행(ERROR) 보고 (11-13 정정)
 
 ### §0.3 메타 SQL (7-BLOCK) 등록
 
@@ -89,10 +89,10 @@ done
 
 | 항목 | 룰 |
 |---|---|
-| 5종 자료 | 룰 25 §1.5 (현재 `_dev_rules/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` — Phase 4 archive 후 룰 v2 흡수) |
+| 5종 자료 | 룰 25 §1.5 (현재 `_dev_rules/_archive/25_NEW_SCREEN_MANDATORY_CHECKLIST.md` — Phase 4 archive 후 룰 v2 흡수) (2026-11-13 정정: `_dev_rules/25_…` → 실재 위치 `_dev_rules/_archive/25_…`) |
 | 4축 매핑 | `hooks/asis-coverage-check.md` |
 | FE 표준 | `_tobe/01~10.md` |
-| BE 표준 | `_tobe/11.md` |
-| 메타 SQL | `_tobe/12.md` |
-| Routing | `_tobe/13.md` |
+| BE 표준 | `_tobe/11_be_controller_service.md` (2026-11-13 정정: 축약 `11.md`·`12.md`·`13.md` → 실재 파일명) |
+| 메타 SQL | `_tobe/12_metadata_sql.md` (11-13 정정) |
+| Routing | `_tobe/13_routing_menu.md` (11-13 정정) |
 | 격차 | `_mapping/asis_to_tobe.md` |

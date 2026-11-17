@@ -82,6 +82,10 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 		if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
 		String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT)).get(0).get("SQL_DTL_CTN").toString(), params);
 		queryMap.put("sQuery", query);
+		// 길이가 4,000자(리터럴)·999개(함수 인자)를 넘길 수 있는 파라미터는 @ 치환 대신 #{} 바인드로
+		//   받는다. 콤보 본문이 #{endCustomer} 를 쓰면 execStmt 의 ${sQuery} 가 펼친 뒤 MyBatis 가
+		//   그 #{} 를 바인드로 잡는다. FE 가 홑따옴표로 감싸 보낸 값은 벗겨 raw 로 바인드한다.
+		if (!NullUtils.isNone(params.get("endCustomer"))) queryMap.put("endCustomer", unquote(params.get("endCustomer")));
 		result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
 
 		return result;
@@ -109,12 +113,11 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 										.get(0).get("SQL_DTL_CTN").toString()
 										, params);
 			queryMap.put("sQuery", query);
+			if (!NullUtils.isNone(params.get("endCustomer"))) queryMap.put("endCustomer", unquote(params.get("endCustomer")));
 			result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
 		}
 		return result;
 	}
-
-
 
 	/**
 	 * makeComboQuery 의 @키 는 bind 가 아니라 raw 문자열 치환이라, 문자열 값은 홑따옴표로 감싸야 SQL
@@ -126,6 +129,21 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 	private String quoteLiteral(Object value) {
 		String v = value.toString().trim();
 		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'")) ? v : "'" + v + "'";
+	}
+
+	/**
+	 * quoteComboValue(FE)/quoteLiteral 의 역 - #{} 바인드로 넘길 raw 값을 만든다. 겉 홑따옴표 한 겹을
+	 * 벗기고, 내부에서 '' 로 이스케이프된 홑따옴표는 ' 로 되돌린다. 안 벗기면 바인드 값에 따옴표가
+	 * 섞여 조건이 어긋난다(오류 없이 결과만 달라짐).
+	 * @MethodName : unquote
+	 * @param      : value 벗길 값(호출부에서 null/공백 여부는 미리 거른다)
+	 * @return     : String 홑따옴표를 벗긴 raw 값
+	 */
+	private String unquote(Object value) {
+		String v = value.toString().trim();
+		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'"))
+				? v.substring(1, v.length() - 1).replace("''", "'")
+				: v;
 	}
 
 }

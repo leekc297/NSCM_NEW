@@ -147,19 +147,15 @@
                     },
                     {
                       "type": "columns",
-                      "description": "시트 Project(main) 헤더 25 / 기대 0 / 누락 0: "
+                      "description": "시트 Ship Master Elec(main) 헤더 25 / 기대 25 / 누락 0: "
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,516,579]]"
+                      "description": "[[\"main\",\"SEARCH\",200,516,1333]]"
                     },
                     {
                       "type": "i18n",
                       "description": "'_' 노출 0"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 14건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
                     }
                   ],
                   "expectedStatus": "passed",
@@ -170,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4208,
+                      "duration": 5762,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:04:51.888Z",
+                      "startTime": "2026-11-14T17:12:23.576Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -191,19 +187,15 @@
                         },
                         {
                           "type": "columns",
-                          "description": "시트 Project(main) 헤더 25 / 기대 0 / 누락 0: "
+                          "description": "시트 Ship Master Elec(main) 헤더 25 / 기대 25 / 누락 0: "
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,516,579]]"
+                          "description": "[[\"main\",\"SEARCH\",200,516,1333]]"
                         },
                         {
                           "type": "i18n",
                           "description": "'_' 노출 0"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 14건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니 | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
                         }
                       ],
                       "attachments": []
@@ -237,7 +229,7 @@
                     },
                     {
                       "type": "cond",
-                      "description": "[WARN] Plant Site(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                      "description": "[OK] Plant Site(combo) — 옵션 'LGESMI Elec MI00' → 조회 정상 · 조회 인자 변화 있음"
                     },
                     {
                       "type": "cond",
@@ -253,11 +245,7 @@
                     },
                     {
                       "type": "condsum",
-                      "description": "2/5 OK · FAIL 0 · WARN 3 · ERROR 0 · NA 1"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 19건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다. | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                      "description": "3/5 OK · FAIL 0 · WARN 2 · ERROR 0 · NA 1"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -268,12 +256,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 52207,
+                      "duration": 59069,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:04:58.898Z",
+                      "startTime": "2026-11-14T17:12:31.670Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -285,7 +273,7 @@
                         },
                         {
                           "type": "cond",
-                          "description": "[WARN] Plant Site(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                          "description": "[OK] Plant Site(combo) — 옵션 'LGESMI Elec MI00' → 조회 정상 · 조회 인자 변화 있음"
                         },
                         {
                           "type": "cond",
@@ -301,11 +289,7 @@
                         },
                         {
                           "type": "condsum",
-                          "description": "2/5 OK · FAIL 0 · WARN 3 · ERROR 0 · NA 1"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 19건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다. | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_OPERATION_SN\\\"이(가) 존재하지 않습니"
+                          "description": "3/5 OK · FAIL 0 · WARN 2 · ERROR 0 · NA 1"
                         }
                       ],
                       "attachments": []
@@ -367,7 +351,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'ShipmentMasterElectrode_20261109_100610.xlsx' 6819B"
+                      "description": "[OK] Excel 다운로드(common) — 'ShipmentMasterElectrode_20261115_021355.xlsx' 6817B"
                     },
                     {
                       "type": "common",
@@ -375,7 +359,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[ERROR] Search Area 조회영역 토글(common) — 스위치 클릭에 상태 변화 없음(스위치 true→true→false) — 가림/포커스 문제 의심 · 조회영역 true→true→false"
+                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
                     },
                     {
                       "type": "common",
@@ -383,11 +367,7 @@
                     },
                     {
                       "type": "commonsum",
-                      "description": "10/11 OK · FAIL 0 · WARN 0 · ERROR 1 · NA 2"
-                    },
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 25건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                      "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -398,12 +378,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17491,
+                      "duration": 22283,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-09T01:05:53.278Z",
+                      "startTime": "2026-11-14T17:13:33.438Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -443,7 +423,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'ShipmentMasterElectrode_20261109_100610.xlsx' 6819B"
+                          "description": "[OK] Excel 다운로드(common) — 'ShipmentMasterElectrode_20261115_021355.xlsx' 6817B"
                         },
                         {
                           "type": "common",
@@ -451,7 +431,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[ERROR] Search Area 조회영역 토글(common) — 스위치 클릭에 상태 변화 없음(스위치 true→true→false) — 가림/포커스 문제 의심 · 조회영역 true→true→false"
+                          "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
                         },
                         {
                           "type": "common",
@@ -459,11 +439,7 @@
                         },
                         {
                           "type": "commonsum",
-                          "description": "10/11 OK · FAIL 0 · WARN 0 · ERROR 1 · NA 2"
-                        },
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 25건 (500 admin/log/menu-access | 500 admin/combo | 500 admin/combo?src=grid) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_FACTORY_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_OPERATION_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_FACTORY_SN\\\"이(가) 존재하지 않습니다."
+                          "description": "11/11 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
                         }
                       ],
                       "attachments": []
@@ -484,8 +460,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-09T01:04:51.205Z",
-    "duration": 82374.706,
+    "startTime": "2026-11-14T17:12:22.934Z",
+    "duration": 95885.349,
     "expected": 3,
     "skipped": 0,
     "unexpected": 0,

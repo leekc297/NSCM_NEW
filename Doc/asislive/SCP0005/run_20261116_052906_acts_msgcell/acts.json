@@ -1,0 +1,157 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "FindButton",
+   "expect": "(SP)SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "why": "SCP0005_DistributionRoute.cs:206·277 IgnoreSearchCondition 이면 FindDataReceive(ROUTEID SP) · 외부 진입 = SCP0102_BOD_Validation_Report.cs:1669~1686 주 그리드 ROUTE_ID 더블클릭 openSubMenu('SCP0005', true, true, ROUTE_ID 조건) · 조건: SCP0102_GET_BOD_VALIDATION_REPORT 직접 실행 사업부 81·20260601~28 → 13행, ROUTE_ID 10243 등(11-16 05:29) · ROUTE_ID 열 12 는 화면 밖이라 CellDoubleClick 이벤트로 실행",
+   "steps": [
+    {
+     "set": {
+      "act": {
+       "target": "spdMain",
+       "raise": "CellDoubleClick",
+       "row": "0",
+       "col": "12",
+       "wait": "15"
+      },
+      "keep_popup": 1
+     },
+     "ok": true,
+     "error": null,
+     "did": "raise:spdMain.CellDoubleClick",
+     "raised": "CellClickEventArgs(view=FarPoint.Win.Spread.SpreadView,row=0,column=12,x=0,y=0,button=None,columnHeader=False,rowHeader=False,columnFooter=False,actualRowLayoutIndex=0,actualColumnLayoutIndex=12)",
+     "edit_mode": false
+    },
+    {
+     "set": {
+      "sleep": 8
+     },
+     "ok": true
+    }
+   ],
+   "dialogs": [],
+   "group": "ADMIN",
+   "opened_from": "SCP0102",
+   "edit_mode": null,
+   "calls": [
+    "SELECT *",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0005_GET_DISTRIBUTION_ROUTEID",
+    "SCP0005_GET_COUNTRY_CITY"
+   ],
+   "save_calls": [],
+   "ok": true,
+   "screens_after": [
+    "GSCM_MainForm",
+    "SCP0102_BOD_Validation_Report",
+    "SCP0005_DistributionRoute"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 05:27:45",
+ "_pre_set": [
+  {
+   "name": "clbDivision_ID",
+   "index": "1",
+   "wait": 3
+  },
+  {
+   "name": "drpPeriod",
+   "prop": "Value1",
+   "value": "20260601"
+  },
+  {
+   "name": "drpPeriod",
+   "prop": "Value2",
+   "value": "20260630"
+  }
+ ],
+ "data_cond": {
+  "src": null,
+  "why": null,
+  "done": [
+   {
+    "set": {
+     "name": "clbDivision_ID",
+     "index": "1"
+    },
+    "ok": true,
+    "applied": "combo:1:81 Automotive Battery",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "drpPeriod",
+     "prop": "Value1",
+     "value": "20260601"
+    },
+    "ok": true,
+    "applied": "prop:Value1",
+    "error": null
+   },
+   {
+    "set": {
+     "name": "drpPeriod",
+     "prop": "Value2",
+     "value": "20260630"
+    },
+    "ok": true,
+    "applied": "prop:Value2",
+    "error": null
+   }
+  ]
+ },
+ "find_calls": [
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Main"
+   },
+   "rows": 17,
+   "ms": 5.41,
+   "at": "2026-11-16 05:28:11.021",
+   "phase": "find"
+  },
+  {
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "params": {
+    "p_program_id": "SCP0102",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "BOD Detail"
+   },
+   "rows": 65,
+   "ms": 9.2,
+   "at": "2026-11-16 05:28:11.034",
+   "phase": "find"
+  },
+  {
+   "sp": "SCP0102_GET_BOD_VALIDATION_REPORT",
+   "params": {
+    "p_division_id": "81",
+    "p_from_yyyymmdd": "20260601",
+    "p_to_yyyymmdd": "20260630",
+    "p_from_site": "",
+    "p_to_site": "",
+    "p_PIVOT_yyyymm": "[202606]",
+    "p_from_country": "",
+    "p_to_country": "",
+    "p_from_city": "",
+    "p_to_city": "",
+    "p_from_area": "",
+    "p_to_area": ""
+   },
+   "rows": 14,
+   "ms": 212.6,
+   "at": "2026-11-16 05:28:11.290",
+   "phase": "find"
+  }
+ ]
+}

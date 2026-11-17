@@ -1,0 +1,122 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "USER_ID",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "text": "statusStrip1 | usrLayoutControl1 | ButtonList | ",
+     "closed": true
+    }
+   ],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "PART_LEADER",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "grid_changes": [],
+   "late_popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "text": "statusStrip1 | usrLayoutControl1 | ButtonList | ",
+     "closed": true
+    }
+   ],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TEAM_LEADER",
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e",
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8",
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 16,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "text": "statusStrip1 | usrLayoutControl1 | ButtonList | ",
+     "closed": true
+    }
+   ],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:54:39",
+ "edit_mode": true,
+ "plan": {
+  "scenarios": 6,
+  "used": [
+   "USER_ID",
+   "PART_LEADER",
+   "TEAM_LEADER"
+  ],
+  "rule": "분기 조건식에 이름이 나온 열"
+ }
+}

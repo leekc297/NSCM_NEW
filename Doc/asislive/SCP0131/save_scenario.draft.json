@@ -1,0 +1,58 @@
+{
+ "id": "SCP0131",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0131_SAVE_SALES_SITE_PRIORITY",
+   "save_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+   "status": "키 대응 완료",
+   "table": "SCP_OPMZ_SALES_SITE_PRIORITY",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID",
+    "ITEM_ID",
+    "FROM_YYYYMMDD",
+    "TO_YYYYMMDD"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "ITEM_ID": "ITEM_ID",
+    "FROM_YYYYMMDD": "FROM_YYYYMMDD",
+    "TO_YYYYMMDD": "TO_YYYYMMDD"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "PRIO_RANK",
+    "db_col": "PRIO_RANK",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Sales Site Priority",
+   "writes": {
+    "SCP_OPMZ_SALES_SITE_PRIORITY": [
+     "DELETE",
+     "INSERT INTO",
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0131_SAVE_SALES_SITE_PRIORITY → SP SCP0131_SAVE_SALES_SITE_PRIORITY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "PRIO_RANK",
+     "db_col": "PRIO_RANK",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 21:55:53"
+   }
+  }
+ ]
+}

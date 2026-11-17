@@ -1,0 +1,462 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "SCP0033",
+      "--grep",
+      "@smoke"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/SCP0033/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0033\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0033\\results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0033\\html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "SCP0033.smoke.spec.ts",
+      "file": "SCP0033.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SCP0033 Shipment_semi_dept_day 스모크 @smoke",
+          "file": "SCP0033.smoke.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "console",
+                      "description": "열림 직후 오류 40(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "labels",
+                      "description": "펼침=false 일치 3 / 누락 0"
+                    },
+                    {
+                      "type": "console",
+                      "description": "오류 50(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                    },
+                    {
+                      "type": "columns",
+                      "description": "시트 Shipment Semi Dept Day(main) 헤더 10 / 기대 10 / 누락 0: "
+                    },
+                    {
+                      "type": "calls",
+                      "description": "[[\"main\",\"SEARCH\",200,60,883]]"
+                    },
+                    {
+                      "type": "i18n",
+                      "description": "'_' 노출 0"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4482,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T02:09:38.744Z",
+                      "annotations": [
+                        {
+                          "type": "console",
+                          "description": "열림 직후 오류 40(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "labels",
+                          "description": "펼침=false 일치 3 / 누락 0"
+                        },
+                        {
+                          "type": "console",
+                          "description": "오류 50(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                        },
+                        {
+                          "type": "columns",
+                          "description": "시트 Shipment Semi Dept Day(main) 헤더 10 / 기대 10 / 누락 0: "
+                        },
+                        {
+                          "type": "calls",
+                          "description": "[[\"main\",\"SEARCH\",200,60,883]]"
+                        },
+                        {
+                          "type": "i18n",
+                          "description": "'_' 노출 0"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9973649139a82893dbbe-f8dd132d46931556b35b",
+              "file": "SCP0033.smoke.spec.ts",
+              "line": 11,
+              "column": 7
+            },
+            {
+              "title": "조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "cond",
+                      "description": "[OK] (기준 조회)(search) — call-proc 1"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[WARN] Div(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AMDAU0348A' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[OK] Active(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
+                    },
+                    {
+                      "type": "cond",
+                      "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → modelnickname → active"
+                    },
+                    {
+                      "type": "condsum",
+                      "description": "3/4 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 28568,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T02:09:45.783Z",
+                      "annotations": [
+                        {
+                          "type": "cond",
+                          "description": "[OK] (기준 조회)(search) — call-proc 1"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[WARN] Div(combo) — 바꿀 옵션 없음(옵션 0 또는 ALL 만) — 값이 바뀌지 않음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Model/Nickname(popup) — 팝업 열림 · 닫히지 않음(Esc) · 값 'AMDAU0348A' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[OK] Active(combo) — 옵션 'Y' → 조회 정상 · 조회 인자 변화 있음"
+                        },
+                        {
+                          "type": "cond",
+                          "description": "[NA] (기준표 순서)(order) — [판정 제외·참고 CR-098] 일치 div → modelnickname → active"
+                        },
+                        {
+                          "type": "condsum",
+                          "description": "3/4 OK · FAIL 0 · WARN 1 · ERROR 0 · NA 1"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9973649139a82893dbbe-93655c25bf352bd6f923",
+              "file": "SCP0033.smoke.spec.ts",
+              "line": 106,
+              "column": 7
+            },
+            {
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 60"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 1개 중 기간 키 0 (divisionIds)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 3개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Excel 다운로드(common) — 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[ERROR] Search Area 조회영역 토글(common) — 스위치 클릭에 상태 변화 없음(스위치 true→true→false) — 가림/포커스 문제 의심 · 조회영역 true→true→false"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "10/11 OK · FAIL 0 · WARN 0 · ERROR 1 · NA 2"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16903,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-14T02:10:16.599Z",
+                      "annotations": [
+                        {
+                          "type": "common",
+                          "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 60"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 1"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 1개 중 기간 키 0 (divisionIds)"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 1개 재진입 후 그대로 복원"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 3개 유지"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[OK] Excel 다운로드(common) — 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[ERROR] Search Area 조회영역 토글(common) — 스위치 클릭에 상태 변화 없음(스위치 true→true→false) — 가림/포커스 문제 의심 · 조회영역 true→true→false"
+                        },
+                        {
+                          "type": "common",
+                          "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                        },
+                        {
+                          "type": "commonsum",
+                          "description": "10/11 OK · FAIL 0 · WARN 0 · ERROR 1 · NA 2"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9973649139a82893dbbe-53745fddae2293c1a0e7",
+              "file": "SCP0033.smoke.spec.ts",
+              "line": 115,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T02:09:38.028Z",
+    "duration": 58168.020000000004,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

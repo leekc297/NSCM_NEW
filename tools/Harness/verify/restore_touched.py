@@ -101,7 +101,17 @@ def keyless(mid, fp, tables, at):
                 print(f'[restore_touched] {t}: 키 없는 복원 · 시험 계정 변경 행 0'); continue
             cur.execute(f'SELECT * FROM {t} WHERE ROWNUM = 0'); names = [d[0] for d in cur.description]
             n_up = n_del = 0
+            # 2026-11-09 T175(SSP0024 ORA-01555): 이력 표(_H)는 키 있는 복원과 같은 규칙 — 시험 계정·기록 시각 이후 행은 시험이 만든 이력이므로 flashback 없이 삭제
+            #   (undo_retention 900초 · 체인 끝 복원은 저장 30분 뒤라 flashback 이 실패해 이력 행이 남았다)
+            if t.upper().endswith('_H'):
+                cur.execute(f"DELETE FROM {t} WHERE {' OR '.join(conds)}", u=ACCOUNT, a=at); n_del = cur.rowcount
+                print(f'[restore_touched] {t}: 키 없는 복원 · 이력 표 시험 계정 행 {len(rids)} → 삭제 {n_del}(flashback 불필요)'); continue
             for rid in rids:
+                # 2026-11-09 T175: 시험 계정이 기록 시각 뒤 '생성'한 행 = 시험이 만든 새 행 — flashback 결과와 무관하게 삭제(AS OF 부재와 같은 결론)
+                if {'CREATED_BY', 'CREATION_DATE'} <= cols:
+                    cur.execute(f'SELECT LOWER(CREATED_BY), CREATION_DATE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); cr = cur.fetchone()
+                    if cr and cr[0] == ACCOUNT and cr[1] is not None and cr[1] >= at:
+                        cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += 1; continue
                 try:
                     cur.execute(f'SELECT * FROM {t} AS OF TIMESTAMP :a WHERE ROWID = CHARTOROWID(:r)', a=at, r=rid); o1 = cur.fetchone()
                 except Exception as ex:
@@ -159,7 +169,15 @@ def main(mid):
                 try:
                     cur.execute(f'SELECT * FROM {t} AS OF TIMESTAMP :a WHERE {where}', {**kv, 'a': at}); names = [d[0] for d in cur.description]; old = cur.fetchall()
                 except Exception as ex:
-                    print(f'[restore_touched] {t} {list(kv.values())}: ERROR flashback 불가 {str(ex)[:80]} — 수동 복원 필요'); bad += 1
+                    # 2026-11-09 T175(SSP0025 ORA-01555 · 시험 신규 행 잔존): flashback 이 안 돼도 '시험 계정이 기록 시각 뒤 생성한 행' 은 시험이 만든 행 — 삭제한다.
+                    #   그 밖에 시험 계정이 고친 행은 이전 값을 알 수 없으므로 추정하지 않고 ERROR(수동 확인)
+                    nd = 0; nm = 0
+                    if {'CREATED_BY', 'CREATION_DATE'} <= cols:
+                        cur.execute(f"DELETE FROM {t} WHERE {where} AND LOWER(CREATED_BY)=:u AND CREATION_DATE>=:a", {**kv, 'u': ACCOUNT, 'a': at}); nd = cur.rowcount
+                    if {'LAST_UPDATED_BY', 'LAST_UPDATE_DATE'} <= cols:
+                        cur.execute(f"SELECT COUNT(*) FROM {t} WHERE {where} AND LOWER(LAST_UPDATED_BY)=:u AND LAST_UPDATE_DATE>=:a", {**kv, 'u': ACCOUNT, 'a': at}); nm = cur.fetchone()[0]
+                    print(f'[restore_touched] {t} {list(kv.values())}: flashback 불가 {str(ex)[:60]} · 시험 생성 행 삭제 {nd}' + (f' · ERROR 시험 계정 수정 행 {nm} — 이전 값 미상·수동 복원 필요' if nm else ' · 수정 행 0'))
+                    if nm: bad += 1
                     continue
                 cur.execute(f'SELECT * FROM {t} WHERE {where}', kv); now = cur.fetchall()
                 if len(now) != 1 or len(old) != 1:

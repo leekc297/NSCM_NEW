@@ -1,0 +1,4166 @@
+{
+ "menu_id": "SCP0111",
+ "at": "2026-11-14 16:46:09",
+ "windows": [
+  [
+   5918807,
+   5929430,
+   "2026-11-14 14:14",
+   "2026-11-14 16:40"
+  ]
+ ],
+ "rows_scanned": 10624,
+ "pkgs": [
+  "PKG_SCP0111"
+ ],
+ "user": "",
+ "calls": [
+  {
+   "seq": 5923286,
+   "at": "2026-11-14 15:41:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923334,
+   "at": "2026-11-14 15:42:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923382,
+   "at": "2026-11-14 15:42:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923390,
+   "at": "2026-11-14 15:42:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923398,
+   "at": "2026-11-14 15:42:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923413,
+   "at": "2026-11-14 15:42:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923419,
+   "at": "2026-11-14 15:42:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "MCCM134010A1",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923425,
+   "at": "2026-11-14 15:42:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "Y",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923473,
+   "at": "2026-11-14 15:42:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923481,
+   "at": "2026-11-14 15:42:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923489,
+   "at": "2026-11-14 15:42:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923504,
+   "at": "2026-11-14 15:43:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923510,
+   "at": "2026-11-14 15:43:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "MCCM134010A1",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923516,
+   "at": "2026-11-14 15:43:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "Y",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923564,
+   "at": "2026-11-14 15:43:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923570,
+   "at": "2026-11-14 15:43:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923717,
+   "at": "2026-11-14 15:44:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923808,
+   "at": "2026-11-14 15:44:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5923854,
+   "at": "2026-11-14 15:45:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924027,
+   "at": "2026-11-14 15:45:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924060,
+   "at": "2026-11-14 15:45:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924106,
+   "at": "2026-11-14 15:46:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924163,
+   "at": "2026-11-14 15:46:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924209,
+   "at": "2026-11-14 15:46:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924273,
+   "at": "2026-11-14 15:46:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924331,
+   "at": "2026-11-14 15:47:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924385,
+   "at": "2026-11-14 15:47:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924431,
+   "at": "2026-11-14 15:47:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924462,
+   "at": "2026-11-14 15:47:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924468,
+   "at": "2026-11-14 15:47:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924476,
+   "at": "2026-11-14 15:48:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924484,
+   "at": "2026-11-14 15:48:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "82",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924565,
+   "at": "2026-11-14 15:48:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924573,
+   "at": "2026-11-14 15:48:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924581,
+   "at": "2026-11-14 15:48:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261019",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924589,
+   "at": "2026-11-14 15:48:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261012",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924672,
+   "at": "2026-11-14 15:48:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924718,
+   "at": "2026-11-14 15:49:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924794,
+   "at": "2026-11-14 15:52:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924891,
+   "at": "2026-11-14 15:53:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924948,
+   "at": "2026-11-14 15:54:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5924979,
+   "at": "2026-11-14 15:54:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925070,
+   "at": "2026-11-14 15:59:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925092,
+   "at": "2026-11-14 16:01:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925096,
+   "at": "2026-11-14 16:01:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "1",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "3",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925100,
+   "at": "2026-11-14 16:01:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925106,
+   "at": "2026-11-14 16:01:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925110,
+   "at": "2026-11-14 16:01:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "-1",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "2",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925114,
+   "at": "2026-11-14 16:01:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925120,
+   "at": "2026-11-14 16:01:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925124,
+   "at": "2026-11-14 16:01:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "1",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "2",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925128,
+   "at": "2026-11-14 16:01:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925134,
+   "at": "2026-11-14 16:01:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925138,
+   "at": "2026-11-14 16:01:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "-2",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "0",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925142,
+   "at": "2026-11-14 16:01:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925148,
+   "at": "2026-11-14 16:01:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925152,
+   "at": "2026-11-14 16:01:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "2",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "2",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925156,
+   "at": "2026-11-14 16:01:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925162,
+   "at": "2026-11-14 16:01:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925166,
+   "at": "2026-11-14 16:02:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "-2",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925170,
+   "at": "2026-11-14 16:02:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925176,
+   "at": "2026-11-14 16:02:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925180,
+   "at": "2026-11-14 16:02:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "2",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "2",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925184,
+   "at": "2026-11-14 16:02:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925190,
+   "at": "2026-11-14 16:02:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925194,
+   "at": "2026-11-14 16:02:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "kind": "SAVE",
+   "fe": {
+    "incoterms": "-",
+    "toSite": "-",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "valuationType": "-",
+    "activeFlag": "M",
+    "toProduct": "-",
+    "planType": "FN",
+    "plantId": "WA00",
+    "lineId": "-",
+    "modiQty": "99999999999997",
+    "planStartYyyymmdd": "20260907",
+    "itemId": "AMDAU0098M",
+    "companyId": "WA00",
+    "measure": "INV",
+    "seqFlag": "260",
+    "cellitemId": "-",
+    "bohQty": "99999999999999",
+    "yyyymm": "202609"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925672,
+   "at": "2026-11-14 16:04:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925718,
+   "at": "2026-11-14 16:04:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925805,
+   "at": "2026-11-14 16:06:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925812,
+   "at": "2026-11-14 16:07:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925816,
+   "at": "2026-11-14 16:07:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925822,
+   "at": "2026-11-14 16:07:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925828,
+   "at": "2026-11-14 16:07:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925834,
+   "at": "2026-11-14 16:07:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925838,
+   "at": "2026-11-14 16:07:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925844,
+   "at": "2026-11-14 16:07:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925848,
+   "at": "2026-11-14 16:07:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925854,
+   "at": "2026-11-14 16:07:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925860,
+   "at": "2026-11-14 16:07:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925906,
+   "at": "2026-11-14 16:07:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925912,
+   "at": "2026-11-14 16:07:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925958,
+   "at": "2026-11-14 16:07:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5925964,
+   "at": "2026-11-14 16:08:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926010,
+   "at": "2026-11-14 16:08:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926056,
+   "at": "2026-11-14 16:08:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926102,
+   "at": "2026-11-14 16:08:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926152,
+   "at": "2026-11-14 16:08:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926160,
+   "at": "2026-11-14 16:08:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926168,
+   "at": "2026-11-14 16:08:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "82",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926358,
+   "at": "2026-11-14 16:09:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926378,
+   "at": "2026-11-14 16:09:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926398,
+   "at": "2026-11-14 16:09:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926458,
+   "at": "2026-11-14 16:09:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926489,
+   "at": "2026-11-14 16:10:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926522,
+   "at": "2026-11-14 16:10:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926553,
+   "at": "2026-11-14 16:10:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926586,
+   "at": "2026-11-14 16:10:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926632,
+   "at": "2026-11-14 16:10:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926678,
+   "at": "2026-11-14 16:10:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926724,
+   "at": "2026-11-14 16:11:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926732,
+   "at": "2026-11-14 16:11:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_HG",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926778,
+   "at": "2026-11-14 16:11:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926784,
+   "at": "2026-11-14 16:11:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926790,
+   "at": "2026-11-14 16:11:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "E2E",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926796,
+   "at": "2026-11-14 16:12:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926882,
+   "at": "2026-11-14 16:13:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926928,
+   "at": "2026-11-14 16:13:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5926978,
+   "at": "2026-11-14 16:13:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927089,
+   "at": "2026-11-14 16:14:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927095,
+   "at": "2026-11-14 16:14:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927103,
+   "at": "2026-11-14 16:14:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "40",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927111,
+   "at": "2026-11-14 16:14:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "82",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927119,
+   "at": "2026-11-14 16:14:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_UC",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927127,
+   "at": "2026-11-14 16:14:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_HM",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927135,
+   "at": "2026-11-14 16:14:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_ST",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927151,
+   "at": "2026-11-14 16:15:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_HD",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927167,
+   "at": "2026-11-14 16:16:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202703",
+    "nickName": "",
+    "planStartYyyymmdd": "20261026",
+    "fromYyyymm": "202610",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81_HG",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927217,
+   "at": "2026-11-14 16:16:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927267,
+   "at": "2026-11-14 16:16:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927540,
+   "at": "2026-11-14 16:25:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927571,
+   "at": "2026-11-14 16:25:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927602,
+   "at": "2026-11-14 16:26:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927606,
+   "at": "2026-11-14 16:26:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927637,
+   "at": "2026-11-14 16:26:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927668,
+   "at": "2026-11-14 16:26:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927761,
+   "at": "2026-11-14 16:27:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927845,
+   "at": "2026-11-14 16:28:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927876,
+   "at": "2026-11-14 16:28:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927907,
+   "at": "2026-11-14 16:28:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5927953,
+   "at": "2026-11-14 16:29:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928039,
+   "at": "2026-11-14 16:29:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928070,
+   "at": "2026-11-14 16:29:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928101,
+   "at": "2026-11-14 16:29:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928132,
+   "at": "2026-11-14 16:29:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928163,
+   "at": "2026-11-14 16:29:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928196,
+   "at": "2026-11-14 16:29:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928242,
+   "at": "2026-11-14 16:29:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928288,
+   "at": "2026-11-14 16:29:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928334,
+   "at": "2026-11-14 16:30:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928402,
+   "at": "2026-11-14 16:30:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928456,
+   "at": "2026-11-14 16:31:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928510,
+   "at": "2026-11-14 16:31:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928575,
+   "at": "2026-11-14 16:31:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928677,
+   "at": "2026-11-14 16:32:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928708,
+   "at": "2026-11-14 16:32:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928739,
+   "at": "2026-11-14 16:32:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928770,
+   "at": "2026-11-14 16:32:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928801,
+   "at": "2026-11-14 16:32:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928832,
+   "at": "2026-11-14 16:32:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928878,
+   "at": "2026-11-14 16:32:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928884,
+   "at": "2026-11-14 16:32:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "AMDAU0098M",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928890,
+   "at": "2026-11-14 16:32:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "amdau0098m",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928896,
+   "at": "2026-11-14 16:32:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "MDAU0098",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928902,
+   "at": "2026-11-14 16:32:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "AMDAU0098M,AMDAU0099M",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928908,
+   "at": "2026-11-14 16:32:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928914,
+   "at": "2026-11-14 16:32:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "-",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928920,
+   "at": "2026-11-14 16:32:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "acef1090i-a1-500",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928926,
+   "at": "2026-11-14 16:32:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "CEF1090I-A1-50",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928932,
+   "at": "2026-11-14 16:32:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "-,ACEF1090I-A1-500",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928938,
+   "at": "2026-11-14 16:33:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5928984,
+   "at": "2026-11-14 16:33:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5929162,
+   "at": "2026-11-14 16:36:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5929420,
+   "at": "2026-11-14 16:39:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+   "kind": "GET",
+   "fe": {
+    "planType": "",
+    "qtyYn": "N",
+    "toYyyymm": "202702",
+    "nickName": "",
+    "planStartYyyymmdd": "20260907",
+    "fromYyyymm": "202609",
+    "itemId": "AAEF1001I-A1-000",
+    "cellItemId": "",
+    "divisionId": "81",
+    "seq": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  }
+ ]
+}

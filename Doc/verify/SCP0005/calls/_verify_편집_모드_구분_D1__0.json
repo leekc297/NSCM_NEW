@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1979,
+  "at": "2026-11-13T21:41:26.719Z",
+  "user": "minyonglee1",
+  "test": "편집 모드 구분(D1)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8037,
+  "dur": 1364,
+  "at": "2026-11-13T21:41:26.901Z",
+  "user": "minyonglee1",
+  "test": "편집 모드 구분(D1)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"AATES\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 113,
+  "at": "2026-11-13T21:41:30.193Z",
+  "user": "minyonglee1",
+  "test": "편집 모드 구분(D1)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CLANF\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 131,
+  "at": "2026-11-13T21:41:35.183Z",
+  "user": "minyonglee1",
+  "test": "편집 모드 구분(D1)"
+ }
+]

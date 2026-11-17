@@ -81,6 +81,8 @@ if not "%RUNID%"=="" goto lock_ok
 echo [FAIL] E2E not started - see the [FAIL] reason above (another run in progress)
 exit /b 4
 :lock_ok
+REM (1b) 2026-11-12 T253: make sure the DB long-running-session watcher is up (warn 5 min, kill 30 min, own PC+OS user only). Failure does not stop the run.
+python "%~dp0..\Harness\verify\db_orphan_sessions.py" --ensure-watch
 set "LOG=%LDIR%\run_%RUNID%_%KIND%.log"
 echo ==== %date% %time% run-e2e %ARGS% RUNID %RUNID% LOG %LOG% RESULTS %E2E_RESULTS% >> "%INDEX%"
 echo ==== %date% %time% run-e2e %ARGS% > "%LOG%"

@@ -2,7 +2,7 @@
  "menu_id": "SCP0016",
  "asis_id": "SCP0016",
  "area": "SCP",
- "generated": "2026-11-08 16:12:33",
+ "generated": "2026-11-14 09:43:57",
  "division_cond": {
   "present": true,
   "labels": [
@@ -91,9 +91,13 @@
  ],
  "bucket_cond": "Bucket",
  "observed": {
-  "source": "e2e_results.json 2026-11-07 22:52 · 행 수 근거 15행",
-  "max_rows_after_search": 436,
+  "source": "e2e_results.json 2026-11-13 16:57 · 행 수 근거 16행",
+  "max_rows_after_search": 990,
   "zero_row_failures": [
+   {
+    "row_id": "V-0d84bf6d",
+    "via": "기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~"
+   },
    {
     "row_id": "EG-9de2d8f2",
     "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 "
@@ -119,7 +123,7 @@
     "via": "기대 권한 Div 행 · 실제 기본 조회 0행 · 기본 조회 0행 · 대안 기간 2년 확대(2024."
    }
   ],
-  "zero_row_count": 6
+  "zero_row_count": 7
  },
  "warnings": []
 }

@@ -1,9 +1,10 @@
 # SCP0084 · SCP0084_GET_LONG_TERM_STOCK ↔ PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK
 
-- 실행 2026-11-08 17:03:38 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-14 13:18:02 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 20행 전 컬럼 일치 · 단독행 AS-IS 59 / TO-BE 59 · 컬럼 집합 차이 AS-IS 전용 [] / TO-BE 전용 ['cellcfbomchk', 'cellcfchk', 'cellcftypechk'] · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+PLANT_ID+ITEM_ID+DEVALUATION_AGE+YYYYMM_VAL+CHARG · golden 집합 판정 DIFF
 - 호출 #6 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 80 · 원천 Doc\verify\SCP0084\calls\_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json
 - TO-BE 인자(FE 본문): `{"yyyymm": "202609", "divisionId": "81_HG", "plantId": "", "longTermTypeCode": "", "debugMode": "F"}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
 - AS-IS 인자(번역): `{"p_yyyymm": "202609", "p_division_id": "81_HG", "p_plant_id": "", "p_long_term_type_code": "", "debug_mode": "F"}`
 
 ### 결과셋 1  As-is 79행 ↔ To-Be O_RC1 79행

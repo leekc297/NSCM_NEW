@@ -1,0 +1,81 @@
+{
+ "id": "SCP0041",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA",
+   "save_sp": "SCP0040_SAVE_CHARACTERISTIC_CAPA",
+   "status": "키 일부 미대응",
+   "table": "SCP_MST_CHAR_CAPA",
+   "pk": [
+    "DIVISION_ID",
+    "PLANT_SITE_ID",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "ITEM_ID": "ITEM_ID"
+   },
+   "unmatched_pk": [
+    "PLANT_SITE_ID"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "SCP_MST_CHAR_CAPA_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Osp Stock",
+   "writes": {
+    "SCP_MST_CHAR_CAPA": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0040_SAVE_CHARACTERISTIC_CAPA → SP SCP0040_SAVE_CHARACTERISTIC_CAPA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_CHAR_CAPA_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [],
+   "unmatched_why": {
+    "PLANT_SITE_ID": "p_plant_site_id←SCM_SITE_ID"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "SCP.SCP0041_SAVE_PACKER_HOLD_STOCK",
+   "save_sp": "SCP0041_SAVE_PACKER_HOLD_STOCK",
+   "status": "키가 없는 테이블",
+   "table": "SCM_DNM_STOCK_LOT_CONTROL",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": {
+    "col": "QTY",
+    "db_col": "QTY",
+    "rule": "plus1"
+   },
+   "side": [],
+   "sheet": "spdMain/Osp Stock",
+   "writes": {
+    "SCM_DNM_STOCK_LOT_CONTROL": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0041_SAVE_PACKER_HOLD_STOCK → SP SCP0041_SAVE_PACKER_HOLD_STOCK 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "QTY",
+     "db_col": "QTY",
+     "rule": "plus1"
+    }
+   ]
+  }
+ ]
+}

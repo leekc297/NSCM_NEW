@@ -1,5 +1,5 @@
 {
- "at": "2026-11-07T08:31:33.625Z",
+ "at": "2026-11-14T02:19:40.477Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -684,6 +684,112 @@
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0037\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
+    "CODE",
+    "VALID_YN"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "EE Electrode"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0037\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlantByDivisionOperOsp21_SCP_ALL\",\"mnuId\":\"SCP0037\"}",
    "status": 200,
    "n": 31,
@@ -818,27 +924,6 @@
     {
      "c": "US02562600_82-P",
      "v": "Sebang Lithium Battery Ohio LLC"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0037\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
     }
    ],
    "user": "minyonglee1"
@@ -1159,91 +1244,6 @@
     {
      "c": "WA01-E",
      "v": "PL WRO ESS Prod-Electrode"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0037\"}",
-   "status": 200,
-   "n": 14,
-   "keys": [
-    "CREATED_BY",
-    "ATTRIBUTE3",
-    "ATTRIBUTE10",
-    "LAST_UPDATED_BY",
-    "ATTRIBUTE2",
-    "ATTRIBUTE1",
-    "DAILY_PLAN_PERIOD",
-    "CREATION_DATE",
-    "ATTRIBUTE9",
-    "ATTRIBUTE8",
-    "LAST_UPDATE_DATE",
-    "ATTRIBUTE7",
-    "ATTRIBUTE6",
-    "ATTRIBUTE5",
-    "NAME",
-    "ATTRIBUTE4",
-    "CODE",
-    "VALID_YN"
-   ],
-   "rows": [
-    {
-     "c": "81",
-     "v": "81 Automotive Battery"
-    },
-    {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
-    {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "EE",
-     "v": "EE Electrode"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "EE_UC",
-     "v": "EE_UC Electrode(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "EE_HM Electrode(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "EE_ST Electrode(ST)"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "EE_HD",
-     "v": "EE_HD Electrode(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
-    },
-    {
-     "c": "EE_HG",
-     "v": "EE_HG Electrode(HG)"
     }
    ],
    "user": "minyonglee1"
@@ -1690,36 +1690,6 @@
    "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0037\"}",
    "status": 200,
@@ -1789,6 +1759,15 @@
    "user": "minyonglee1"
   },
   {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"SCM0001_GET_FROM_SITE_BY_DIVISION\",\"divisionId\":\"''\",\"mnuId\":\"SCP0037\"}",
    "status": 200,
@@ -1799,29 +1778,21 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_LT'\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 4,
+   "n": 2,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "SLITTING",
-     "v": "Slitting"
+     "c": "Y",
+     "v": "Y"
     },
     {
-     "c": "OSP_LT",
-     "v": "OSP LT"
-    },
-    {
-     "c": "PRE_INSP",
-     "v": "Pre Inspection"
-    },
-    {
-     "c": "CTP_LT",
-     "v": "Coating to PKG"
+     "c": "N",
+     "v": "N"
     }
    ],
    "user": "minyonglee1"
@@ -2199,6 +2170,35 @@
     {
      "c": "US02562600_82-P",
      "v": "Sebang Lithium Battery Ohio LLC"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_LT'\",\"mnuId\":\"SCP0037\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 4,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "SLITTING",
+     "v": "Slitting"
+    },
+    {
+     "c": "OSP_LT",
+     "v": "OSP LT"
+    },
+    {
+     "c": "PRE_INSP",
+     "v": "Pre Inspection"
+    },
+    {
+     "c": "CTP_LT",
+     "v": "Coating to PKG"
     }
    ],
    "user": "minyonglee1"

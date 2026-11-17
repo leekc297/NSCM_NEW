@@ -1,0 +1,598 @@
+{
+ "id": "SCP0015",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "",
+ "grids": [
+  {
+   "name": "spdPlan",
+   "path": "/splitContainer1/SplitterPanel/spdPlan",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Plan Management",
+     "rows": 0,
+     "cols": 19,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Division Id",
+        "Division Id"
+       ],
+       "label": "Division Id",
+       "tag": "MODELING_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MODELING_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Division Id",
+        "Division Id"
+       ],
+       "label": "Division Id",
+       "tag": "PLAN_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Division Id",
+        "Division Id"
+       ],
+       "label": "Division Id",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Div",
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_NAME",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plan Type",
+        "Plan Type"
+       ],
+       "label": "Plan Type",
+       "tag": "PLAN_TYPE",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Plan Type",
+        "Plan Type"
+       ],
+       "label": "Plan Type",
+       "tag": "PLAN_TYPE_DESCRIPTION",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_TYPE_DESCRIPTION",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Action",
+        "Engine Run"
+       ],
+       "label": "Engine Run",
+       "tag": "RUN",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "RUN",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Action",
+        "Engine Cancel"
+       ],
+       "label": "Engine Cancel",
+       "tag": "CANCEL",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CANCEL",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Action",
+        "Confirm"
+       ],
+       "label": "Confirm",
+       "tag": "CONFIRM",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CONFIRM",
+       "cell_type": "ButtonCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Revision No",
+        "Revision No"
+       ],
+       "label": "Revision No",
+       "tag": "REVISION_NO",
+       "width": "120",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "REVISION_NO",
+       "cell_type": "ComboBoxCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Status",
+        "Status"
+       ],
+       "label": "Status",
+       "tag": "PLAN_STATUS_NAME",
+       "width": "170",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_STATUS_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Status",
+        "Status"
+       ],
+       "label": "Status",
+       "tag": "PLAN_STATUS",
+       "width": "170",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_STATUS",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Confirm Time",
+        "Confirm Time"
+       ],
+       "label": "Confirm Time",
+       "tag": "CONFIRM_TIME",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "CONFIRM_TIME",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Confirm User",
+        "Confirm User"
+       ],
+       "label": "Confirm User",
+       "tag": "CONFIRM_USER",
+       "width": "130",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CONFIRM_USER",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 15,
+       "header": [
+        "CONFIRM_YN",
+        "CONFIRM_YN"
+       ],
+       "label": "CONFIRM_YN",
+       "tag": "CONFIRM_YN",
+       "width": "130",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CONFIRM_YN",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 16,
+       "header": [
+        "CONFIRM_AUTH",
+        "CONFIRM_AUTH"
+       ],
+       "label": "CONFIRM_AUTH",
+       "tag": "CONFIRM_AUTH",
+       "width": "130",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CONFIRM_AUTH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 17,
+       "header": [
+        "RUN_AUTH",
+        "RUN_AUTH"
+       ],
+       "label": "RUN_AUTH",
+       "tag": "RUN_AUTH",
+       "width": "130",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "RUN_AUTH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 18,
+       "header": [
+        "CANCEL_AUTH",
+        "CANCEL_AUTH"
+       ],
+       "label": "CANCEL_AUTH",
+       "tag": "CANCEL_AUTH",
+       "width": "130",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "CANCEL_AUTH",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdEngin",
+   "path": "/splitContainer1/SplitterPanel/splitContainer2/SplitterPanel/spdEngin",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Engine Run",
+     "rows": 0,
+     "cols": 15,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 2,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "",
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "MODELING_ID",
+        "MODELING_ID"
+       ],
+       "label": "MODELING_ID",
+       "tag": "MODELING_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "MODELING_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 2,
+       "header": [
+        "PLAN_ID",
+        "PLAN_ID"
+       ],
+       "label": "PLAN_ID",
+       "tag": "PLAN_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 3,
+       "header": [
+        "PLAN_NAME",
+        "PLAN_NAME"
+       ],
+       "label": "PLAN_NAME",
+       "tag": "PLAN_NAME",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 4,
+       "header": [
+        "DIVISION_ID",
+        "DIVISION_ID"
+       ],
+       "label": "DIVISION_ID",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Plan Type",
+        "Plan Type"
+       ],
+       "label": "Plan Type",
+       "tag": "PLAN_TYPE",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_TYPE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Plan Seq",
+        "Plan Seq"
+       ],
+       "label": "Plan Seq",
+       "tag": "PLAN_SEQ",
+       "width": "60",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "PLAN_SEQ",
+       "cell_type": "TextCellType",
+       "merge_policy": "Always"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Step",
+        "Step"
+       ],
+       "label": "Step",
+       "tag": "STEP_NAME",
+       "width": "170",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_NAME",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Process Log",
+        "Step"
+       ],
+       "label": "Step",
+       "tag": "STEP_PROCESS1",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_PROCESS1",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Process Log",
+        "Step"
+       ],
+       "label": "Step",
+       "tag": "STEP_PROCESS2",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_PROCESS2",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Process Log",
+        "Step"
+       ],
+       "label": "Step",
+       "tag": "STEP_PROCESS3",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_PROCESS3",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Process Log",
+        "Step"
+       ],
+       "label": "Step",
+       "tag": "STEP_PROCESS4",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_PROCESS4",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 12,
+       "header": [
+        "STEP_STATUS",
+        "STEP_STATUS"
+       ],
+       "label": "STEP_STATUS",
+       "tag": "STEP_STATUS",
+       "width": "100",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "STEP_STATUS",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Start Time",
+        "Start Time"
+       ],
+       "label": "Start Time",
+       "tag": "START_TIME",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "START_TIME",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 14,
+       "header": [
+        "End Time",
+        "End Time"
+       ],
+       "label": "End Time",
+       "tag": "END_TIME",
+       "width": "200",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "END_TIME",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "None"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

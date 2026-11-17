@@ -1,0 +1,141 @@
+{
+ "id": "SCM0016",
+ "started": "2026-11-12 21:13:30.563",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 21:13:30.901",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCM.Master.UIL.SCM0016_BatchLog",
+   "form_text": "Batch Log",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:34.787"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 21:13:38.479",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0016\\run_20261112_211330\\dump_load.json",
+   "control_count": 27,
+   "grid_count": 3,
+   "total": "Total : 44",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:38.488"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 21:13:38.799",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0016\\run_20261112_211330\\shots\\SCM0016_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:39.014"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 21:13:39.348",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:13:40.306"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 21:14:10.651",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0016\\run_20261112_211330\\dump_find.json",
+   "control_count": 31,
+   "grid_count": 3,
+   "total": "Total : 1",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:10.663"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 21:14:10.820",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCM0016\\run_20261112_211330\\shots\\SCM0016_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:11.048"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 21:14:11.385",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 21:14:12.136"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 7,
+  "calls_with_params": 7
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.SCM.Master.UIL.SCM0016_BatchLog",
+  "form_text": "Batch Log",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.SCM.Master.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 21:13:30.768",
+ "t_find": "2026-11-12 21:13:39.077",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 31,
+  "layout_items": 3,
+  "grids": 3,
+  "sheets": 3,
+  "header_cols": 30,
+  "data_rows": 1,
+  "grid_rows": 1,
+  "calls_total": 7,
+  "calls_screen": 7,
+  "calls_find": 2,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:43.400",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:43"
+}

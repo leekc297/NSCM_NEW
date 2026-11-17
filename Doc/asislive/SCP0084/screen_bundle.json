@@ -1,0 +1,26 @@
+{
+ "id": "SCP0084",
+ "at": "2026-11-14 13:28:47",
+ "status": "ERROR",
+ "steps": [
+  {
+   "step": "기본 실측(열기·필수 조건 최근 값·조회·덤프·호출)",
+   "rc": 3,
+   "sec": 600.8,
+   "note": ""
+  }
+ ],
+ "reused": false,
+ "basic": {
+  "status": "OK",
+  "why": "",
+  "opened": "True",
+  "find_how": "status",
+  "total": "Total : 10,274",
+  "grid_rows": "10274",
+  "calls_find": "4",
+  "dialogs": "0",
+  "measured_at": "2026-11-12 20:12:27"
+ },
+ "note": "기본 실측 실패(rc 3) — 화면을 열지 못했거나 환경 미비"
+}

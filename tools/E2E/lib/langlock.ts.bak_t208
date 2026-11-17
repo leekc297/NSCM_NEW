@@ -1,0 +1,62 @@
+// langlock — 언어 전환 시험 동안 다른 실행이 화면을 열지 않게 하는 잠금(2026-11-10 T189).
+//   TO-BE 언어는 브라우저가 아니라 서버 사용자 설정(/user/session/lang-cd → SCM_ADM_USER_M)이라 같은 계정으로 동시에 도는
+//   다른 화면 실행까지 언어가 바뀐다(SSP0024 v5 팝업 첫 컬럼 '序号' · 건수 '9,616' 을 검색값으로 넣은 허위 FAIL 3건 — 같은 시각 SCP0033 시나리오 ENG→CHN).
+//   언어를 바꾸는 시험(I2 문구 덤프 · 시나리오 lang 단계)은 acquireLang → 바꾸고 → 원래 언어로 되돌린 뒤 releaseLang.
+//   다른 시험은 openScreen 에서 waitLangFree 로 잠금이 풀릴 때까지 기다린다(같은 프로세스 잠금은 무시 · 주인 프로세스가 죽었거나 30분 넘은 잠금은 낡은 잠금).
+import * as fs from 'fs';
+import * as path from 'path';
+
+const LOCK = path.join(__dirname, '..', '..', '..', 'Doc', 'e2e', '_run.lang.lock');
+const STALE_MS = 30 * 60_000;
+type L = { pid: number; at: number; tag: string };
+
+const alive = (pid: number) => { try { process.kill(pid, 0); return true; } catch (e) { return (e as NodeJS.ErrnoException).code === 'EPERM'; } };
+const read = (): L | null => { try { return JSON.parse(fs.readFileSync(LOCK, 'utf8')) as L; } catch { return null; } };
+const stale = (l: L) => !alive(l.pid) || Date.now() - l.at > STALE_MS;
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+/** 언어 전환 잠금 획득 — 최대 maxMs 기다림. 반환 = 기다린 ms(획득 실패 시 -1) */
+export async function acquireLang(tag: string, maxMs = 30 * 60_000): Promise<number> {
+  const t0 = Date.now();
+  for (;;) {
+    try { fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, at: Date.now(), tag }), { flag: 'wx' }); return Date.now() - t0; } catch { /* 이미 있음 */ }
+    const l = read();
+    if (l && l.pid === process.pid) { fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, at: Date.now(), tag })); return Date.now() - t0; }
+    if (!l || stale(l)) { try { fs.unlinkSync(LOCK); } catch { /* 경합 */ } continue; }
+    if (Date.now() - t0 > maxMs) return -1;
+    await sleep(2_000);
+  }
+}
+
+/** 2026-11-10 T200: 지금 E2E 를 돌리는 다른 화면(runlock 'verify <ID>' 잠금 · 주인 생존) — 언어 전환은 서버 계정 설정이라 이미 화면을 연 다른 실행까지 바꾼다(SSP0060 16:42 KOR 화면 측정) */
+export function othersRunning(myId: string): string[] {
+  const dir = path.dirname(LOCK); const out: string[] = [];
+  try { for (const f of fs.readdirSync(dir)) { const m = /^_run\.verify\.(.+)\.lock$/.exec(f); if (!m || m[1].toUpperCase() === myId.toUpperCase()) continue; try { const l = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')) as { pid?: number }; if (l.pid && alive(l.pid)) out.push(m[1]); } catch { /* 깨진 잠금 */ } } } catch { /* 폴더 없음 */ }
+  return out;
+}
+
+/** 다른 화면 E2E 가 하나도 없을 때만 언어 잠금 획득 — 최대 maxMs 기다리고 못 얻으면 -1(호출부는 언어 전환을 생략하고 측정 실패로 남긴다) */
+export async function acquireLangExclusive(tag: string, myId: string, maxMs = 15 * 60_000): Promise<{ waited: number; others: string[] }> {
+  const t0 = Date.now(); let said = false;
+  for (;;) {
+    const o = othersRunning(myId);
+    if (!o.length) { const w = await acquireLang(tag, Math.max(1, maxMs - (Date.now() - t0))); if (w >= 0) { if (othersRunning(myId).length === 0) return { waited: Date.now() - t0, others: [] }; releaseLang(); } }
+    if (Date.now() - t0 > maxMs) return { waited: -1, others: othersRunning(myId) };
+    if (!said) { console.log(`[langlock] ${tag}: 다른 화면 E2E 실행 중(${o.join(',')}) — 끝날 때까지 언어 전환 대기`); said = true; }
+    await sleep(5_000);
+  }
+}
+
+export function releaseLang(): void { const l = read(); if (l && l.pid === process.pid) { try { fs.unlinkSync(LOCK); } catch { /* 없음 */ } } }
+
+/** 다른 프로세스의 언어 전환이 끝날 때까지 기다림. 반환 = 기다린 ms */
+export async function waitLangFree(maxMs = 20 * 60_000): Promise<number> {
+  const t0 = Date.now(); let said = false;
+  for (;;) {
+    const l = read();
+    if (!l || l.pid === process.pid || stale(l)) return Date.now() - t0;
+    if (!said) { console.log(`[langlock] 다른 실행(${l.tag} · pid ${l.pid})이 언어 전환 중 — 끝날 때까지 대기`); said = true; }
+    if (Date.now() - t0 > maxMs) { console.log(`[langlock] ${Math.round(maxMs / 60_000)}분 대기 초과 — 진행(언어가 바뀐 상태일 수 있음)`); return Date.now() - t0; }
+    await sleep(2_000);
+  }
+}

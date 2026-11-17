@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 98,
+  "at": "2026-11-16T17:49:46.407Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 267,
+  "at": "2026-11-16T17:49:46.504Z",
+  "user": "minyonglee1",
+  "test": "조회조건 겹침(H4)"
+ }
+]

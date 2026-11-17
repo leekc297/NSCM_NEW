@@ -11,7 +11,7 @@
 | features/supply/src/pages/capa-mobility-it/capa-mobility-it.types.ts | types | 18 |
 | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.module.scss | style | 6 |
 | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx | page | 419 |
-| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | component | 225 |
+| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | component | 228 |
 | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | component | 348 |
 | features/supply/src/pages/capa-mobility-it/components/modals/BulkUpdateModal.module.scss | component | 13 |
 | features/supply/src/pages/capa-mobility-it/components/modals/BulkUpdateModal.tsx | component | 118 |
@@ -69,10 +69,10 @@
 | CustomDropdown | onChange | <arrow> onPick,str(picked).split(',').filter,str(picked).split,str,v.toUpperCase | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 120 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 138 |
 | CustomDropdown | onChange | <arrow>  | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 153 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 187 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 188 |
-| Button | onClick | <arrow> setOpenItem | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 183 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 200 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 189 |
+| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 190 |
+| Button | onClick | <arrow> setOpenItem | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 185 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 202 |
 | editor | beforeinput | <arrow> /[^0-9.-]/.test,ev.preventDefault | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 251 |
 | editor | input | <arrow> keepNumeric | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 254 |
 | editor | compositionend | keepNumeric | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 257 |
@@ -122,7 +122,7 @@
 | SearchArea | 1 |
 | FunctionSearchIcon | 1 |
 | PeriodRangePicker | 1 |
-| ItemByDivisionModal | 1 |
+| MaterialByDivisionModal | 1 |
 | DataGrid | 1 |
 
 ## 6. 하드코딩 Grid 컬럼

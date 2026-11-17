@@ -208,7 +208,7 @@ const handleSave = async () => {
     editedSet.has(r)
   );
   if (dirty.length === 0) {
-    void setAlert({ type: 'alert', content: t('MSG_NO_CHANGE') });
+    void setAlert({ type: 'alert', content: t('MSG00004', '_수정한 내용이 없습니다.') }); // 2026-11-13 정정: t('MSG_NO_CHANGE') → 표준 코드 + fallback 2 인자 (message-id.ts:5 NO_CHANGES)
     return;
   }
   // ... 이후 SP 호출
@@ -519,8 +519,8 @@ DMF0007 의 staticColumns 는 wrapper 가 이 값 자동 적용. dynamicColumns 
 
 ### 6.5 PRE-WRITE 체크
 
-- [ ] `dynamicColumns` 또는 `staticColumns` 에 nested 구조 (`{header, columns:[]}`) 가 있으면 다단 헤더 row 높이 강제 useEffect 추가
-- [ ] 디자인 토큰 (Figma) 우선 — 없으면 표준 값 (1단 28 / 다단 38) 사용
+- [ ] `dynamicColumns` 또는 `staticColumns` 에 nested 구조 (`{header, columns:[]}`) 가 있으면 다단 헤더 row 높이 강제 useEffect 추가 (2026-11-13 정정: 현행은 공용 `DataGrid` 의 `headerRowHeight` prop 으로 지정 — `DataGrid.tsx:535` · 화면별 useEffect 는 공용 DataGrid 를 쓰지 않는 그리드에만 해당)
+- [ ] 디자인 토큰 (Figma) 우선 — 없으면 표준 값 (1단 48 / 2단 24 / 3단 16) 사용 (2026-11-13 정정: 1단 28 / 다단 38 → §6.4 `HEIGHT_BY_COLUMN_DEPTH` 값 — `columnMapping.ts:30-34`)
 - [ ] DMF0007 처럼 nested 가 동적 (기간/그룹 변경 시 변동) 이면 dependency 에 해당 source 포함
 
 ### 6.6 POST-WRITE grep
@@ -578,7 +578,7 @@ useEffect(() => {
     // 동적 컬럼 (또는 EDIT_FLAG 무관 편집 의도 영역) 만 분기
     if (!col.binding.startsWith('Y#') && !col.binding.startsWith('M#')) return;
     if (col.binding.endsWith('RBU_0999')) return;  // readonly 의도 컬럼 제외
-    e.cancel = false;  // wrapper 의 cancel 강제 override
+    e.cancel = false;  // wrapper 의 cancel 강제 override   (2026-11-14 정정: 현행 DMF0043 코드는 e.cancel = !isRowEditable(행) 으로 EDIT_FLAG='Y' 행만 허용. ContributeMainGrid.tsx:256-271, 2026-08-11)
   };
   grid.beginningEdit.addHandler(handler);
   return () => grid.beginningEdit.removeHandler(handler);
@@ -706,7 +706,7 @@ grep -nE "filters=\{\{" features/**/pages/{screen}/**/*.tsx
   <div className={styles.wrap}>
     {/* content ... */}
     <div className={styles.footer}>
-      <Button onClick={handleSave}>{t('LBL00366') /* OK/Save */}</Button>
+      <Button onClick={handleSave}>{t('LBL00366') /* OK/Save */}</Button>   {/* (2026-11-14 정정: LBL00366 의 실제 값은 'Search User Info'(EN.json:651). 예시 코드이므로 실제 라벨 코드는 화면에서 확인하고 t(코드, '_기본문구') 2 인자로 쓴다) */}
       <Button variant="outlined" onClick={onClose}>{t('LBL00627') /* Close */}</Button>
     </div>
   </div>

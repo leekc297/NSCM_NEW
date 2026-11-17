@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "../../mybatis/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgcns.nscm.admin.file">
+
+ 
+	
+    <select id="selectFileInfo" resultType="java.util.HashMap">
+		SELECT  * 
+		  FROM  SCM_MGR.SCM_COM_ATCH_FILE_M
+		 WHERE  ATCH_FILE_ID = #{fileId}
+		   
+	</select>
+	
+	<insert id="saveFile">
+		INSERT INTO SCM_MGR.SCM_COM_ATCH_FILE_M (ATCH_FILE_ID, ATCH_FILE_SAVE_NM, ATCH_FILE_TP_CD, ATCH_FILE_KDN_CD, ATCH_FILE_EFNM_NM, ATCH_FILE_SIZE, ATCH_FILE_CTN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE) 
+		VALUES(SYS_GUID() , #{fileName}, #{fileTpCd}, #{fileKdnCd}, #{ext}, #{size}, #{ctn, jdbcType=BLOB}, #{userId}, SYSDATE, #{userId}, SYSDATE);
+	</insert>
+	
+    <update id="fileUploadTest">
+        UPDATE  SCM_MGR.SCM_COM_ATCH_FILE_M
+           SET  ATCH_FILE_SAVE_NM = #{name},
+                ATCH_FILE_EFNM_NM = #{ext},
+                ATCH_FILE_SIZE = #{size},
+                ATCH_FILE_CTN = #{ctn},
+                LAST_UPDATE_DATE = SYSDATE
+         WHERE  ATCH_FILE_ID = #{id}
+    </update>
+    
+</mapper>

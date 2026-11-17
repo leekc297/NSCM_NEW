@@ -1,0 +1,370 @@
+{
+ "id": "SCP0023",
+ "from": "dump_find.json",
+ "total": "Total : 8",
+ "time_status": "DB : 20.527s, UI : 0.083s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Outsourcing Capacity",
+     "rows": 8,
+     "cols": 14,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "division_id",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "division_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Site Code"
+       ],
+       "label": "Plant Site Code",
+       "tag": "scm_site_id",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "scm_site_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Vendor Code"
+       ],
+       "label": "Vendor Code",
+       "tag": "vendor_code",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "vendor_code",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Vendor Name"
+       ],
+       "label": "Vendor Name",
+       "tag": "vendor_name",
+       "width": "230",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "vendor_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Model"
+       ],
+       "label": "Model",
+       "tag": "item_id",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "item_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "nick_name",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "nick_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Daily Capacity*"
+       ],
+       "label": "Daily Capacity*",
+       "tag": "daily_capa_qty",
+       "width": "120",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "daily_capa_qty",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Daily Capacity Order"
+       ],
+       "label": "Daily Capacity Order",
+       "tag": "capa_order",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "capa_order",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "valid_yn"
+       ],
+       "label": "valid_yn",
+       "tag": "valid_yn",
+       "width": "0",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "valid_yn",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Created By"
+       ],
+       "label": "Created By",
+       "tag": "created_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "created_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "creation_date",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "creation_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Last Updated By"
+       ],
+       "label": "Last Updated By",
+       "tag": "last_updated_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "last_updated_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "last_update_date",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "last_update_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 8,
+     "data": [
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "AMGMCGEN2-B2-030",
+       "GM-GEN2(3P8S)-030",
+       "",
+       "1",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "AMTYTTNGA-A1-020",
+       "TYT E-TNGA-020",
+       "",
+       "1",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "AMVWGMC25-A1-010",
+       "VWG-MC25-010",
+       "",
+       "1",
+       "",
+       "",
+       "",
+       "",
+       ""
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "Total",
+       "",
+       "104",
+       "2",
+       "Y",
+       "kwhan",
+       "2018-10-01 16:06:49",
+       "kwhan",
+       "2018-10-01 16:06:49"
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "APCLCCART-A1",
+       "CLC-GOLF CART",
+       "104",
+       "2",
+       "Y",
+       "kwhan",
+       "2018-10-01 16:06:49",
+       "kwhan",
+       "2018-10-01 16:06:49"
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "APCLCCART-B1",
+       "CLC-CART-N2.1",
+       "104",
+       "2",
+       "Y",
+       "wonwoo200",
+       "2022-02-15 14:40:40",
+       "wonwoo200",
+       "2022-02-15 14:40:40"
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "APCLCCART-C1",
+       "CLC-CART-E65D",
+       "125",
+       "2",
+       "Y",
+       "minyonglee1",
+       "2026-10-14 12:12:41",
+       "minyonglee1",
+       "2026-10-14 12:12:41"
+      ],
+      [
+       "",
+       "81",
+       "KR02239900_81-P",
+       "KR02239900",
+       "CS enertech Co., LTD.",
+       "APFMCCX48-A1",
+       "FMC-CX482",
+       "123,456,790",
+       "2",
+       "Y",
+       "minyonglee1",
+       "2026-10-14 12:12:41",
+       "minyonglee1",
+       "2026-10-14 12:12:41"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -89,6 +89,13 @@ const isAlwaysEditableMeta = (meta: {
   meta._ctrlType !== 'FPTextModal' &&
   !isAutoMappedColumn(meta.binding ?? '');
 
+// 통화 미설정 판정 — 빈 값과 '/' 를 같이 본다. 조회 SP(DMF0020_GET_SCM_MST_FUTURE_PRICE)가 빈 통화를
+//   NVL(NULLIF(RTRIM(CURRENCY),''), '/') 로 내려주므로 '/' 도 통화가 없는 행이다(2026-11-10 사용자 확인).
+const isCurrencyUnset = (v: unknown): boolean => {
+  const s = typeof v === 'string' ? v.trim() : '';
+  return s === '' || s === '/';
+};
+
 // 셀 값 → 문자열 (unknown 안전 변환 — no-base-to-string 회피, 편집 전후 값 비교용)
 const cellStr = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -746,7 +753,7 @@ export const SalesFuturePriceGrid = ({
           return;
         }
         // Currency 빈값 가드 (MSG00447) — 통화 미설정 행은 가격(LOC) 편집 불가 (AS-IS spdMain_CellClick).
-        if (String(row?.CURRENCY ?? '').trim() === '') {
+        if (isCurrencyUnset(row?.CURRENCY)) {
           e.cancel = true;
           void useMessageStore.getState().setAlert({
             type: 'alert',
@@ -784,7 +791,7 @@ export const SalesFuturePriceGrid = ({
       const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
       if (String(row?.MEASURE ?? '') !== 'LOC') return; // LOC 행만
       if (isPastDynCol(binding)) return; // 과거 주차/월
-      if (String(row?.CURRENCY ?? '').trim() === '') return; // 통화 미설정 (alert 는 편집 진입 시에만)
+      if (isCurrencyUnset(row?.CURRENCY)) return; // 통화 미설정 (alert 는 편집 진입 시에만)
       e.cancel = false; // LOC + 현재/미래 + 통화 있음 → 붙여넣기 허용
     };
     g.pastingCell.addHandler(pastingCellHandler);

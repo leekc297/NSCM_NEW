@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation } from '@foundation/query-client';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -154,8 +155,22 @@ export const PlanManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
     return { ok, message: str(cursor?.MSG) || str(res.data?.message) };
   };
 
+  // 저장 SP 호출을 useMutation 으로 감싼다 — raw apiClient.post 는 react-query 밖이라
+  //   MDIContainer 의 useIsBusy([activeTabId]) 공통 로딩 스피너가 뜨지 않는다. mutationKey 를
+  //   [tabId,...] 로 두어 트랜잭션 동안 전역 프로그래스(스피너)가 표시되게 한다(ShipmentPlanMobilityIt·
+  //   DemandException 선례, 테스터 지적 2026-11-11). callSaveProc 는 {ok,message} 를 그대로 반환하므로
+  //   성패 분기(토스트/알럿)는 호출부(execAction)에서 종전과 동일하게 처리한다.
+  //   저장(엔진 RUN/Version 생성·취소/Ship Request)은 비멱등이라 재시도 금지(retry:0) — 전역 기본값
+  //   mutations.retry:1 을 그대로 두면 타임아웃 실패분 재전송이 엔진 2회 실행·버전 중복 생성으로
+  //   이어진다(Bod 선례). 하드/네트워크 오류만 재시도 대상이므로 여기서 차단한다.
+  const { mutateAsync: saveActionAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.MAIN_GRID, ACTION.EXECUTE],
+    retry: 0,
+    mutationFn: callSaveProc,
+  });
+
   const execAction = async (row: PlanRow, col: ActionColumn) => {
-    const { ok, message } = await callSaveProc({
+    const { ok, message } = await saveActionAsync({
       modelingId: str(row.MODELING_ID),
       divisionId: str(row.DIVISION_ID),
       planType: str(row.PLAN_TYPE),

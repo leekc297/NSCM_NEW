@@ -1,0 +1,39 @@
+{
+ "id": "SCP0084",
+ "group": "ADMIN",
+ "msgcell": true,
+ "acts": [
+  {
+   "kind": "msgcell",
+   "handler": "ExcelButton",
+   "expect": "MSG00100",
+   "why": "SCP0084_LongTermStock.cs:263 ExcelButton 진입 즉시 MSG00100(예/아니오/취소) · 취소면 return(270행) · 대화상자 정책 cancel 로 Excel 을 열지 않음",
+   "steps": [
+    {
+     "set": {
+      "method": "OnClickExcelButton"
+     },
+     "ok": true,
+     "error": null,
+     "did": "method:OnClickExcelButton",
+     "raised": null,
+     "edit_mode": false
+    }
+   ],
+   "dialogs": [
+    {
+     "text": "저장하지 않고 바로 열겠습니까?",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "group": "ADMIN",
+   "edit_mode": null,
+   "calls": [],
+   "save_calls": [],
+   "ok": true
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-16 04:47:09",
+ "_pre_set": []
+}

@@ -86,6 +86,592 @@
           "title_en": "Rebuild Fact Pack for one screen — ID (pack.ps1 <ID>, seconds)"
         },
         {
+          "id": "S1.liveCheck",
+          "title": "AS-IS 실행 환경 점검 — 로컬 서버(8086)·런처 접속 주소·사본 DB 대상·화면 DLL·FoxQuery 정의 (읽기 전용)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLocal/asis_env_check.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021)",
+              "default": "SSP0021"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS run environment check — local server (8086) · launcher address · DB target · screen DLL · FoxQuery (read-only)"
+        },
+        {
+          "id": "S1.live",
+          "title": "AS-IS 실측 — 런처를 실제 구동해 화면 열기·조회 → 컨트롤·그리드 덤프·캡처·서버 호출(SP·인자·건수) 수집 (Doc/asislive/<ID>)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021)",
+              "default": "SSP0021"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "gate": {
+            "type": "fileExists",
+            "file": "${root}/Doc/asislive/${input:id}/latest.json",
+            "label": "AS-IS 실측"
+          },
+          "title_en": "AS-IS live run — drive the real launcher: open screen · Find → control/grid dump · screenshots · server calls (SP · params · rows)"
+        },
+        {
+          "id": "S1.liveFill",
+          "title": "AS-IS 실측(필수 조건 최근 값 채움) — Version·Plan 등 필수 조회조건을 최근 값으로 채워 조회 (Doc/asislive/<ID>)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_batch.py",
+          "splitArgs": true,
+          "args": [
+            "--fill",
+            "recent",
+            "--find-timeout",
+            "1900",
+            "--only",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021 · 비우면 전 화면)",
+              "default": "SSP0021"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS live run with required conditions filled by most recent values"
+        },
+        {
+          "id": "S1.liveCond",
+          "title": "AS-IS↔TO-BE 조회 조건 대조 — TO-BE 검증이 보낸 조건과 런처 실측 인자·건수 비교 (Doc/asislive/<ID>/cond_compare.csv)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_cond.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021 · 비우면 전 화면)",
+              "default": "SSP0021"
+            }
+          ],
+          "title_en": "AS-IS vs TO-BE search condition comparison"
+        },
+        {
+          "id": "S1.liveScen",
+          "title": "AS-IS 조건 시나리오 반복 — TO-BE 조건을 AS-IS 화면에 넣어 재측정(대조 → 시나리오 → 재측정, 최대 3회)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_loop.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021 · 비우면 전 화면)",
+              "default": "SSP0021"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS scenario loop with TO-BE conditions"
+        },
+        {
+          "id": "S1.liveScenSrc",
+          "title": "소스 분기 시나리오 도출 — 화면 소스의 분기 사슬마다 시나리오 1개 + 검사 단위 연결 (Doc/asislive/<ID>/scenarios_src.csv)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_src.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SSP0021 · 비우면 전 화면)",
+              "default": "SSP0021"
+            }
+          ],
+          "title_en": "Derive scenarios from source branch chains and link to proof units"
+        },
+        {
+          "id": "S1.liveScenCov",
+          "title": "분기 시나리오 실행 현황 — 지금까지의 런처 실측으로 어떤 소스 분기가 실행됐는지 계산 (Doc/asislive/<ID>/scenarios_cov.csv)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_cov.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Branch scenario execution coverage from live runs"
+        },
+        {
+          "id": "S1.liveScenCmp",
+          "title": "분기별 AS-IS↔TO-BE 대조 — 소스 분기마다 AS-IS 실행 결과와 TO-BE 대조표 판정을 맞대고, TO-BE 룰로 정의된 차이는 오류 아님으로 표시",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_cmp.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Per-branch AS-IS vs TO-BE comparison (TO-BE rule differences are not errors)"
+        },
+        {
+          "id": "S1.liveScenSpec",
+          "title": "분기 시나리오 명세 — 소스 분기마다 조작(trigger)·전제·실행 수단 상태·AS-IS/TO-BE 실행 여부를 한 줄씩(빠지는 분기 없음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_spec.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Branch scenario spec (every source branch)"
+        },
+        {
+          "id": "S1.liveRuleMap",
+          "title": "AS-IS 관찰 문구→TO-BE 룰 대응표 다시 만들기 — 룰 원장의 메시지 코드 + AS-IS 메시지 사전(룰 원장을 고친 뒤 실행)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_rule_map.py",
+          "args": [],
+          "title_en": "Rebuild AS-IS message → TO-BE rule map"
+        },
+        {
+          "id": "S1.liveScenRun",
+          "title": "분기 시나리오 실행(화면 안 버튼) — 조회·팝업 분기를 버튼으로 실행(저장·상태 변경 버튼은 누르지 않고 목록으로 남김)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios via in-screen buttons (query/popup only)"
+        },
+        {
+          "id": "S1.liveSaveDry",
+          "title": "AS-IS 저장 시나리오 연습(저장 안 함) — 셀 1개 수정까지 하고 저장 없이 닫은 뒤 DB 가 그대로인지 확인 · 화면별 정의 Doc/asislive/<ID>/save_scenario.json 필요",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_save.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--dry"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS save scenario (dry run)"
+        },
+        {
+          "id": "S1.liveSave",
+          "title": "AS-IS 저장 시나리오 실행 — 셀 1개 수정 → 저장 → 저장 인자 포착 → 원래 값 복원·전 컬럼 대조(AS-IS 개발 DB 에 실제로 쓰고 되돌림) · 화면별 정의 save_scenario.json 필요",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_save.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS save scenario (save, capture args, restore)"
+        },
+        {
+          "id": "S1.liveSaveCmp",
+          "title": "AS-IS↔TO-BE 저장 인자 대조 — 런처 저장에서 포착한 저장 SP 인자와 TO-BE 저장 호출 인자(sqllog_calls.json)를 인자별로 맞댄다",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_save_cmp.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Compare AS-IS vs TO-BE save arguments"
+        },
+        {
+          "id": "S1.liveSaveDraft",
+          "title": "저장 정의 초안 생성: 저장 SP 원문, DB 키, 화면 그리드 열에서 근거를 모아 초안(save_scenario.draft.json)을 만든다(실행 정의는 만들지 않음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_save_draft.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Draft save-scenario definitions from SP text, DB keys and grid columns"
+        },
+        {
+          "id": "S1.liveSaveDraftDry",
+          "title": "저장 정의 초안 연습 실행: 초안으로 셀 입력과 변경 표시를 확인하고 저장 없이 닫는다(DB 그대로인지 확인)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_save.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--draft",
+            "--dry"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Dry-run a drafted save definition (no save)"
+        },
+        {
+          "id": "S1.liveScenRunGroup",
+          "title": "분기 시나리오 실행 — 그룹(권한) 지정: 런처 그룹을 바꾼 뒤 화면 안 버튼 분기를 실행(권한별 시나리오 · 저장·상태 변경 버튼은 누르지 않음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--group",
+            "${input:group}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            },
+            {
+              "name": "group",
+              "prompt": "런처 그룹(권한) — 측정 계정 jaeuk.shin 이 가진 그룹(11-13 06:56 실측 9개). 다른 계정이면 🪪 그룹 목록 읽기로 확인",
+              "options": [
+                {
+                  "value": "ADMIN",
+                  "description": "그룹 ADMIN"
+                },
+                {
+                  "value": "SCP Planner",
+                  "description": "그룹 SCP Planner"
+                },
+                {
+                  "value": "SCP Tester",
+                  "description": "그룹 SCP Tester"
+                },
+                {
+                  "value": "SSP Planner",
+                  "description": "그룹 SSP Planner"
+                },
+                {
+                  "value": "SSP Viewer",
+                  "description": "그룹 SSP Viewer"
+                },
+                {
+                  "value": "SCM PI Admin",
+                  "description": "그룹 SCM PI Admin"
+                },
+                {
+                  "value": "SCM Viewer",
+                  "description": "그룹 SCM Viewer"
+                },
+                {
+                  "value": "FP Planner",
+                  "description": "그룹 FP Planner"
+                },
+                {
+                  "value": "FP Viewer",
+                  "description": "그룹 FP Viewer"
+                }
+              ]
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios under a chosen group (role)"
+        },
+        {
+          "id": "S1.liveScenRunDiv",
+          "title": "분기 시나리오 실행 — Division 지정: 조회 전 Division 조건을 바꿔 화면 안 버튼 분기를 다시 실행(Division 별 시나리오 · 쉼표로 여러 개 · all = 그 화면 목록 전부)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--division",
+            "${input:division}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            },
+            {
+              "name": "division",
+              "prompt": "Division 코드(예 81,40 · all = 화면 목록 전부 · 공백 없이)",
+              "default": "all"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios per Division"
+        },
+        {
+          "id": "S1.liveScenRunCond",
+          "title": "분기 시나리오 실행 — 조건 값 변경: 콤보·체크 상자·체크 목록 값을 바꿔 값 변경 이벤트 분기를 실행(호출·메시지·다른 컨트롤 변화 기록 · 저장 없음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--conds"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios by changing condition values"
+        },
+        {
+          "id": "S1.liveScenRunCell",
+          "title": "분기 시나리오 실행, 셀 클릭: 조회 뒤 첫 행에서 분기 조건식에 나온 열을 클릭·더블클릭(팝업·새 화면·호출 기록, 조건식이 요구하면 수정 모드에서 한 번 더, 저장 없음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--cells"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios by clicking grid cells"
+        },
+        {
+          "id": "S1.liveScenInput",
+          "title": "분기 시나리오 실행, 셀 값 입력과 시트 전환: 수정 모드 첫 행에서 분기 조건식에 나온 열에 값을 넣고(메시지·호출·따라 바뀐 셀 기록) 저장 없이 닫는다. 그리드 시트도 차례로 활성화한다",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_input.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios by cell input and sheet switch (no save)"
+        },
+        {
+          "id": "S1.liveScenEvent",
+          "title": "분기 시나리오 실행, 스크롤과 키 입력과 붙여넣기: 그리드의 보이는 첫 행을 옮기고, 키 입력과 붙여넣기는 화면 처리기를 직접 불러 메시지·호출·바뀐 셀을 기록한다. 저장 없이 닫는다. 사용자 클립보드는 쓰지 않는다",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_event.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0132)",
+              "default": "SCP0132"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Run branch scenarios by scroll, key input and paste handlers (no save)"
+        },
+        {
+          "id": "S1.liveScenUnreached",
+          "title": "진입 경로 없는 분기 분류: 그 메서드를 부르는 곳을 현행 소스 원문에서 다시 찾아 호출 없음, 주석 안에서만 호출, 같은 파일에서 호출로 나눈다(화면ID 비우면 전 화면)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_unreached.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (비우면 전 화면)",
+              "default": ""
+            }
+          ],
+          "title_en": "Classify branches with no entry path"
+        },
+        {
+          "id": "S1.liveScenValues",
+          "title": "분기 조건식에서 Division, 그룹 값 도출 후 그 값으로 실행(계정에 없는 그룹, 화면 목록에 없는 Division 은 표시만)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_values.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--run"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Derive Division/group values from branch conditions and run them"
+        },
+        {
+          "id": "S1.liveScenMatrix",
+          "title": "그룹·Division 별 비교표 — 버튼 분기 실행 결과를 실행 조건(그룹·Division·수정 모드)별로 나란히 놓고 조건에 따라 달라지는 버튼을 표시",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_matrix.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "title_en": "Compare branch-run results across groups and Divisions"
+        },
+        {
+          "id": "S1.liveGroups",
+          "title": "AS-IS 런처 그룹(권한) 목록 읽기 — 로그인 계정이 가진 그룹과 현재 그룹(화면은 열지 않음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "args": [
+            "--groups-list"
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Read AS-IS launcher groups (roles) of the logged-in account"
+        },
+        {
+          "id": "S1.liveScreen",
+          "title": "AS-IS 실측 묶음(화면 1개) — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 실행 현황 → TO-BE 조건 대조 · CheckList 전체 실행 때 자동 구동되는 것과 같은 묶음",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_screen.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS live bundle (one screen) — basic run → source-branch scenarios → button branches (record & close popups/messages/Excel) → coverage → TO-BE condition compare"
+        },
+        {
           "id": "S1.screen",
           "title": "화면 Fact Pack 열기 — 화면ID",
           "kind": "open",
@@ -1006,13 +1592,6 @@
           "title_en": "Edit allowed_gaps.csv"
         },
         {
-          "id": "S6.regen",
-          "title": "룰 반영 후 GAP 재실행",
-          "kind": "node",
-          "script": "${harnessDir}/gap.js",
-          "title_en": "Re-run GAP after rule update"
-        },
-        {
           "id": "S6.docs",
           "title": "문서 3종 확정 — 화면ID (Agent -Phase docs 재실행)",
           "kind": "powershell",
@@ -1449,6 +2028,156 @@
           "title_en": "Verification if stale — run_verify only when FE source·PKG DDL·screen meta changed since the last verification (first step of Fix menus)"
         },
         {
+          "id": "S8.diagnose",
+          "title": "원인 계층 진단 — 조치 필요 행마다 원인(메타·PKG·FE)을 사내 DB·AS-IS 사실로 실측(layer_diagnosis.csv · 못 가른 행은 미확정으로 표시)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/diagnose_layer.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Cause-layer diagnosis — measure per action row whether the cause is meta·PKG·FE (layer_diagnosis.csv)"
+        },
+        {
+          "id": "S8.repairSnapshot",
+          "title": "보완 전 판정 스냅샷 — 보완 직전 원장·조치 필요 행을 저장(repair_before.json · 보완 뒤 종결·회귀 비교의 기준)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/repair_close.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--snapshot"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Pre-repair snapshot of the ledger (baseline for closed/regressed comparison)"
+        },
+        {
+          "id": "S8.repairCompare",
+          "title": "보완 결과 증명 — 보완 전 스냅샷 ↔ 재판정 원장 비교(종결·미종결·회귀 수 · repair_close.json · 재실행 없음)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/repair_close.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--compare"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Repair proof — compare pre-repair snapshot with the re-verified ledger (closed/open/regressed)"
+        },
+        {
+          "id": "S8.repairClose",
+          "title": "보완분만 재판정 — 직전 CheckList 이후 바뀐 DB 객체·메타·FE 에서 영향 규칙을 계산해 그 규칙만 다시 검사하고 종결·회귀를 기록",
+          "kind": "python",
+          "script": "${harnessDir}/verify/repair_close.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Re-verify only the rules impacted by changes since the last CheckList; record closed/regressed"
+        },
+        {
+          "id": "S8.metaLive",
+          "title": "메타·배선 실시간 검증 — 메뉴·FE 호출 배선·PROC 실재/유효·인자 메타·컬럼 메타·콤보를 사내 DB 로 실측(meta_live_check.csv)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/meta_live_check.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Live meta·wiring check against the corporate DB"
+        },
+        {
+          "id": "S8.pkgGate",
+          "title": "PKG 게이트 — 원문 반영·컴파일·시그니처·AS-IS↔TO-BE 실행 대조(화면 실전송 인자)를 실측(pkg_gate.json · SKIP 은 미측정으로 표시)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/pkg_gate.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "PKG gate — source applied·compile·signature·AS-IS↔TO-BE execution diff"
+        },
+        {
+          "id": "S8.feGate",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "FE 게이트 — 실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회를 실측(fe_gate.json · 서버가 내려가 있으면 미측정으로 표시)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/fe_gate.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "FE gate — open the screen in a real browser, 0 fatal console errors, one base search"
+        },
+        {
+          "id": "S8.precheck",
+          "title": "신규 화면 사전 점검 — 생성 전에 AS-IS 사실 묶음·SP 원문·호출 해석·컬럼 메타·분석 문서·사내 DB 메타 구비 여부를 실측(precheck.csv · 아무것도 만들거나 고치지 않음)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/new_screen_precheck.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "New-screen pre-check — measure whether generation inputs exist (read-only)"
+        },
+        {
           "id": "S8.scope",
           "title": "작업 모드 설정 (DB = DB MODE: DB·META 만, FE·BE 는 가이드 / UIDB = UI/DB MODE: 제약 없음)",
           "kind": "python",
@@ -1492,9 +2221,9 @@
         },
         {
           "id": "S8.folder",
-          "title": "CheckList·ActionItemList 폴더 열기 (Doc/CheckList)",
+          "title": "CheckList·ActionItemList 폴더 열기 (Doc/UI_CHECKLIST)",
           "kind": "open",
-          "path": "${root}/Doc/CheckList",
+          "path": "${root}/Doc/UI_CHECKLIST",
           "title_en": "Open CheckList folder"
         }
       ],

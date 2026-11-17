@@ -1,0 +1,169 @@
+{
+ "id": "SSP0200",
+ "started": "2026-11-13 05:51:10.202",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-13 05:51:10.529",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0200_ShipmentChangeRequest",
+   "form_text": "Shipment Change Request",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0200_ShipmentChangeRequest.UIL.dll",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:15.305"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-13 05:51:19.300",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0200\\run_20261113_055110\\dump_load.json",
+   "control_count": 90,
+   "grid_count": 2,
+   "total": "Total : 108",
+   "time_status": "DB : 1.628s, UI : 0.031s",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:19.318"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-13 05:51:19.483",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0200\\run_20261113_055110\\shots\\SSP0200_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:19.626"
+  },
+  {
+   "step": "set",
+   "cmd": "set",
+   "at": "2026-11-13 05:51:19.786",
+   "applied": "prop:InitValue",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:19.790"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-13 05:51:22.776",
+   "call_timed_out": false,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:23.691"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-13 05:51:31.000",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0200\\run_20261113_055110\\dump_find.json",
+   "control_count": 90,
+   "grid_count": 2,
+   "total": "Total : 1",
+   "time_status": "DB : 3.004s, UI : 0.006s",
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:31.009"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-13 05:51:31.323",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0200\\run_20261113_055110\\shots\\SSP0200_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:31.472"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-13 05:51:31.809",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 2,
+   "ok": true,
+   "done": "2026-11-13 05:51:32.524"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 30,
+  "calls_with_params": 30
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "scenario": {
+  "rule": "tobe",
+  "set": [
+   {
+    "name": "drpPeriod",
+    "prop": "InitValue",
+    "value": "20261111:20261211",
+    "param": "from_yyyymmdd+to_yyyymmdd",
+    "from": "20261113:20261213",
+    "sheet": "sub"
+   }
+  ],
+  "then_fill": []
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0200_ShipmentChangeRequest",
+  "form_text": "Shipment Change Request",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0200_ShipmentChangeRequest.UIL.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 3.004s, UI : 0.006s",
+  "total": "Total : 1",
+  "how": "status"
+ },
+ "t_open": "2026-11-13 05:51:10.415",
+ "t_find": "2026-11-13 05:51:22.460",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 90,
+  "layout_items": 39,
+  "grids": 2,
+  "sheets": 2,
+  "header_cols": 118,
+  "data_rows": 1,
+  "grid_rows": 1,
+  "calls_total": 30,
+  "calls_screen": 30,
+  "calls_find": 11,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-13 05:51:32.803",
+ "exit": 0
+}

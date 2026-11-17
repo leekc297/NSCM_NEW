@@ -117,3 +117,26 @@
 | 11:23~11:29 | 원본 ↔ 1104 전 행·전 열 직접 대조 1차(`_coldiff_full.py r1109`) | 커서3 `TODAY_TIME`(SYSDATE 시분 · 원본 L5372 = 1104 L16271 동일식)만 호출 시각 차이로 다름 → 판정식 보정 위해 중단 | `_coldiff_full_r1109_aborted.*` |
 | 11:31~ | 대조 2차(`r1109b` · TODAY_TIME = 호출 전후 DB 시각 범위 검사 · 나머지 전 열 값 원값 비교) | 진행 중 — 결과는 `_coldiff_full_r1109b.out` 끝 합계 줄 | `_coldiff_full_r1109b.*` |
 | 11:54~11:57 · 12:00~12:03 · 13:09~13:32 | 클라우드 패키지 사내 리허설 3회(`DMF0082_1104_CLOUD_20261109/build_package.py --rehearse`) — 사내에 `PKG_DMF0082_1104R` 생성 · `GRANT EXECUTE/DEBUG … TO RL_SCM_DML` · `GRANT EXECUTE … TO SCMP_APP` · `SCMP_APP.PKG_DMF0082_1104R` 시노님 · `ZB_DMF0082_1104R_BAK/_SPEED` 표 → 99 로 전부 삭제 | 문장 실패 0 · 남은 객체 0 · 남은 표 0 · 원문 글자 단위 동일 · QA 형 세션(3회) 6커서 SAME · 속도 비 0.88/0.80/0.72 | `_deploy_packages/DMF0082_1104_CLOUD_20261109/_rehearsal_*.log` |
+| 11:31~14:19:19 | 원본 ↔ 1104 전 행·전 열 대조 2차 종료 | **시나리오 112 · PASS 109 · FAIL 0 · DRIFT_RESOLVED 3(원본 1차 호출 중 운영 데이터 변경 · 원본 재호출 = 1104 전 행·전 열 동일) · ERROR 0 · 커서 672 중 669 동일 · 비교 셀 180,852,973 · 주 커서 0행 18** | `_coldiff_full_r1109b.*` |
+| 13:36~13:50 | (사용자) 클라우드 QA 1104 생성 + 30/40 측정 | 원본→1104 합계 40 27.27→16.02 · 81 25.56→14.77 · 82 56.48→40.63초 · NOTE OK · C3 9회 6커서 SAME | `_deploy_packages/DMF0082_1104_CLOUD_20261109/00_README.md` |
+| 14:02~14:03 | GET_MAIN_DATA 교체 패키지 사내 리허설(RH/RHX 사본 · 끝에 삭제) | 판정 실패 0 · 컴파일 실패 자동 복원 실증 | `_deploy_packages/DMF0082_GMD_REPLACE_CLOUD_20261109/_rehearsal_*.log` |
+| **14:20:20~14:20:32** | **사내 PKG_DMF0082 백업 → GET_MAIN_DATA 를 1104 구간으로 교체**(사용자 지시) — 파일 백업 · 백업 패키지 `PKG_DMF0082_BAK1109` · 백업표 `ZB_DMF0082_GMD_BAK/_FP` · BODY 14:20:29 VALID · 오류 0 · 90 V3/V4/V5 PASS · 새 BODY = 1104 글자 단위 동일 | 원복 = `_deploy_packages/DMF0082_GMD_REPLACE_CLOUD_20261109/A_DB/99_ROLLBACK.sql` 또는 `../DMF0082_GMD_REPLACE_20261109/00_BACKUP_PKG_DMF0082_BODY_20261109.sql` | `../DMF0082_GMD_REPLACE_20261109/_apply_apply_*.log` |
+| 14:17~14:21 | 클라우드 속도 진단 SQL 사내 리허설(ZB_DMF0082_DIAG_* 생성·삭제) | 문장 실패 0 | `_deploy_packages/DMF0082_PERF_DIAG_CLOUD_20261109/` |
+| 14:50:41~14:57:32 | **결함 재현** — 새 PKG_DMF0082 S1 이 GT_DMF0082_TEMP_SITE_ITEM 미삭제(원본 L1064 DELETE 누락) → 조회·COMMIT 뒤 다음 조회 값 다름(82 site · 82 전체) · 원본 동일 | 클라우드 30 의 82 '키마다 2행'·40/81 +46,977 원인 | 재현 로그 = 이 세션 출력(정리: 임시표 DELETE+COMMIT) |
+| **15:00:50~15:00:58** | **정정 적용(사내)** — `PKG_DMF0082`·`PKG_DMF0082_1104` S1 INSERT 앞 DELETE 1줄 `[E20261109-DMF0082TSICLEAR]` · BODY 15:00:52 / 15:00:55 VALID · 오류 0 · V1/V2 PASS | 원복 = `_deploy_packages/DMF0082_TSICLEAR_FIX_CLOUD_20261109/A_DB/99_ROLLBACK.sql` | `_deploy_packages/DMF0082_TSICLEAR_FIX_CLOUD_20261109/_apply_corp_*.log` |
+| 15:01:22~15:04:53 | 정정 확인 — COMMIT 사이 5회 연속 조회(82·82site·82·40·82site) 원본과 6커서 전 행·전 열 동일 · 같은 유형 GTT 잔존 위험 0(정적 점검) | | |
+| 16:48:39~16:48:41 | **사내 사용자 컬럼 설정 순번 중복 정리**(사용자 지시 '설정데이터정리') — DMF0082 donghoon.lee FcstNPrice C 13=APPLICATION·PLANT_SITE_ID → APPLICATION 이후 5행 +1 · 백업표 ZB_DMF0082_TSETTIE_BAK(18행) · 90 V1/V2/V3 PASS · 99 원복·재적용 리허설 포함 | 원복 = `_deploy_packages/DMF0082_TITLESET_TIE_FIX_20261109/A_DB/99_ROLLBACK.sql` | `_deploy_packages/DMF0082_TITLESET_TIE_FIX_20261109/_rehearsal_apply_corp.log` |
+
+## 5. 2026-11-09 저녁 — 판가 81/82 원장 전체 읽기 [E20261109-DMF0082PRICEFULL] (사용자 승인 11-09)
+| 시각 | 작업 | 결과 |
+|---|---|---|
+| 16:56~17:26 | 임시표 통계 갱신 패키지(A) 사내 리허설 2회 + 원복 단독 + 클라우드 경로 모사 | 사내 최종 상태 = 시작 상태(통계 없음·SESSION) · 사내 무변경 |
+| 17:26~17:33 | 판가 읽기 실험(B) 사내 리허설 | 측정표 정리 · 사내 무변경 |
+| 18:03:52 | FRESH 조회 PKG_DMF0082 BODY LAST_DDL 2026-11-09 15:00:52 | 대상 8줄 식별(GET_MAIN_DATA L8~L15544) |
+| 18:06~18:16 | 사본 PKG_DMF0082RHF 리허설 3회(1·2회 작성 결함 수정) | 3회차 판정 실패 0 · 사본 삭제 |
+| 18:23:42 | 비교용 사본 PKG_DMF0082_BAKPF(적용 전 원문) 생성 · 원문 파일 백업 `_deploy_packages/DMF0082_PRICEFULL_CLOUD_20261109/00_BACKUP_PKG_DMF0082_BODY_before_PRICEFULL.sql` | VALID |
+| 18:24:40 | 백업표 ZB_DMF0082_PRICEFULL_BAK | 1,577,426자 |
+| 18:25:35 | PKG_DMF0082 BODY 8줄 FULL(A) (L1388·1947·2437·2924·4469·6377·8216·10052) | VALID · 90 V1·V2 PASS · 파이썬 독립 계산과 동일 |
+| 18:25:57~18:51:47 | 동등성 BAKPF vs 적용본 112 시나리오 | PASS 112 · FAIL 0 · 커서 672 동일 |
+- 사내 정리(사용자 지시 · 2026-11-09 19:17:11): PKG_DMF0082_BAKPF(참조 객체 0 확인) · ZB_DMF0082_PRICEFULL_BAK 삭제 → 남은 수 0 · 본 PKG_DMF0082 VALID·마커 8 유지. 원복이 필요하면 원문 파일 `_deploy_packages/DMF0082_PRICEFULL_CLOUD_20261109/00_BACKUP_PKG_DMF0082_BODY_before_PRICEFULL.sql`.
+- 클라우드(사용자 실행 18:55~19:04): 전후 결과 SAME · 속도 RATIO 40 1.02 · 81 0.99 · 82 1.00 → **사용자 결정 '유지'**. 사내도 적용 상태 유지.

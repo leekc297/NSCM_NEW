@@ -1,0 +1,130 @@
+{
+ "id": "DMF0082",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0082-Sea1449",
+    "DMF0082-Sec3442"
+   ]
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 8,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0082-S3e4aef"
+   ]
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_VersionByWaterfallPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "scenarios": [
+    "DMF0082-S8f08c9",
+    "DMF0082-Sc9b6a0"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S669149"
+   ]
+  },
+  {
+   "control": "usrButton1",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton1 failed: InvalidOperationException: control not found: usrButton1",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S96735e"
+   ]
+  },
+  {
+   "control": "usrButton2",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton2 failed: InvalidOperationException: control not found: usrButton2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S4558a9"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnColumn",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 29
+  },
+  {
+   "control": "btnExchangeRate",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "btnSavePricePeriod",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 10:33:54.882",
+ "fills": 0,
+ "fill_left": []
+}

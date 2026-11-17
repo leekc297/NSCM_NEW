@@ -51,6 +51,6 @@
 ## §4. cross-ref
 
 - hook #139 `request-ledger-and-subclause-mapping` §전이 기준 (본 hook 이 전이의 '근거 품질'을 규정)
-- hook #145 `verification-evidence-and-scale` (기대값=실측값 대입 금지 — 동일 계보의 대사표 축)
+- hook #145 `verification-evidence-and-scale` (기대값=실측값 대입 금지 — 동일 계보의 대조표 축) (2026-11-13 정정: 용어 대사표 → 대조표)
 - `anti-simplification.md` §0 위반 사례 표 · §0.1 (속도 개선의 전제 = 재작업 없음)
 - 메모리 `feedback_remediation_closure_symptom_reproduction.md`

@@ -1,0 +1,185 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-13 12:07:24.975",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 259.84,
+   "params": {
+    "p_program_id": "SCP0101",
+    "p_sheet_name": "Inventory Trend",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0101', @p_sheet_name='Inventory Trend', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:BtnColumn"
+  },
+  {
+   "at": "2026-11-13 12:08:57.702",
+   "service": "GSCM.SCP.Analysis.WSL",
+   "foxquery_id": "SCP.SCP0101_GET_INVENTORY_TREND",
+   "sp": "SCP0101_GET_INVENTORY_TREND",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 33469,
+   "rows_kind": "DataSet rows",
+   "ms": 396892.15,
+   "params": {
+    "p_yyyymm": "202609",
+    "p_division_id": "81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "p_plant_id": "",
+    "p_item_id": "",
+    "debug_mode": "F"
+   },
+   "inline": "EXEC SCP0101_GET_INVENTORY_TREND @p_yyyymm='202609', @p_division_id='81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG', @p_plant_id='', @p_item_id='', @debug_mode='F'",
+   "phase": "action:BtnColumn"
+  },
+  {
+   "at": "2026-11-13 12:09:01.340",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.88,
+   "params": {
+    "p_menu_id": "SCP0101",
+    "p_log_type": "FIND",
+    "p_log_cnt": "33469",
+    "p_db_time": "398.749",
+    "p_ui_time": "1.757",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='SCP0101', @p_log_type='FIND', @p_log_cnt='33469', @p_db_time='398.749', @p_ui_time='1.757', @p_user_id='jaeuk.shin'",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:01.721",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.17,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:01.771",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2559,
+   "rows_kind": "DataSet rows",
+   "ms": 37.4,
+   "params": {
+    "p_division_id": "ALL",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='ALL', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:19.935",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156657,
+   "rows_kind": "DataSet rows",
+   "ms": 17643.66,
+   "params": {
+    "p_division_id": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:BtnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:23.740",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_TITLESET_POPUP",
+   "sp": "SCM0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 61.6,
+   "params": {
+    "p_program_id": "SCP0101",
+    "p_sheet_name": "Inventory Trend",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC SCM0002_GET_TITLESET_POPUP @p_program_id='SCP0101', @p_sheet_name='Inventory Trend', @p_column_type='C', @p_user_id='jaeuk.shin'",
+   "phase": "action:btnColumn"
+  },
+  {
+   "at": "2026-11-13 12:09:36.097",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_DIVISION",
+   "sp": "SCM0001_GET_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 3.57,
+   "params": {},
+   "inline": "EXEC SCM0001_GET_DIVISION",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:36.146",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2559,
+   "rows_kind": "DataSet rows",
+   "ms": 40.18,
+   "params": {
+    "p_division_id": "ALL",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='ALL', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:btnItem_Id"
+  },
+  {
+   "at": "2026-11-13 12:09:43.615",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 156657,
+   "rows_kind": "DataSet rows",
+   "ms": 7008.29,
+   "params": {
+    "p_division_id": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": ""
+   },
+   "inline": "EXEC SCM0002_GET_ITEM_BY_DIVISION_POPUP @p_division_id='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id=''",
+   "phase": "action:btnItem_Id"
+  }
+ ]
+}

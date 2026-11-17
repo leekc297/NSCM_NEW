@@ -189,7 +189,7 @@ SELECT DISTINCT c.CELL_COMBO_DATA_TYPE
 SELECT SHEET_NAME, COLUMN_NAME, INPUT_TP_CD
   FROM SCM_MST_SHEET_COLUMNS
  WHERE PROGRAM_ID = '{NEW_MENU_ID}'
-   AND INPUT_TP_CD NOT IN ('S','O','M','IO','IM','SS')
+   AND INPUT_TP_CD NOT IN ('S','O','M','IO','IM')   -- (2026-11-13 정정: 허용 목록의 'SS' 제거 — 표준 5종만, column-config.ts CELL_INPUT_EDIT_TYPE · check-meta-sql.ps1 $inputWhitelist)
    AND INPUT_TP_CD IS NOT NULL;
 -- 기대: 0 rows
 ```
@@ -217,6 +217,7 @@ SELECT c.PROGRAM_ID, c.SHEET_NAME, c.COLUMN_NAME, c.ATTRIBUTE1
 # 화면별 useTabComboQueries 직접 호출 검출 — DataGrid wrapper 가 자동 처리하므로 일반적으로 form 의 SearchArea 용도 만 허용
 grep -rn "useTabComboQueries" features/*/src/pages/{NEW_SCREEN}/ | grep -v "Form\|Search"
 # 기대: 0 매치 (Form / SearchArea 외 grid 용 직접 호출 X)
+# (2026-11-13 정정: 0 매치 기대는 **파라미터 없는 콤보 한정** — §1.3.1 의 `@mnuId`·`@divisionId` 파라미터 콤보는 Grid 에서 useTabComboQueries 직접 호출이 의무이므로 매치돼도 정상. 견본 DMF0003 MktFcstGrid.tsx)
 ```
 
 ---

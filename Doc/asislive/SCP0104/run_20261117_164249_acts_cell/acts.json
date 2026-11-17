@@ -1,0 +1,352 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdSOP[PLANT_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdSOP[FACTORY_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdSOP[LINE_NAME]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdSOP[ELTR_LN_TP_CD]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S7eda5c",
+    "SCP0104-S4398ea",
+    "SCP0104-Sdfc536",
+    "SCP0104-Seceb70",
+    "SCP0104-S10d6ef",
+    "SCP0104-S8bcfa2",
+    "SCP0104-S3d8bb5"
+   ]
+  },
+  {
+   "control": "spdSOP[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdSOP[PLANT_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdSOP[FACTORY_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdSOP[LINE_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdSOP[OPERATION_NAME]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  },
+  {
+   "control": "spdSOP[ELTR_LN_TP_CD]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0104-S235b83",
+    "SCP0104-S3b392e",
+    "SCP0104-S94a3c8",
+    "SCP0104-S032e68",
+    "SCP0104-Sde7843",
+    "SCP0104-S3519f2",
+    "SCP0104-Sf9ae0a",
+    "SCP0104-Sc10dab",
+    "SCP0104-Se9a42a"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-17 16:39:53",
+ "division_set": {
+  "ok": true,
+  "applied": "81_ST"
+ },
+ "sheet_target": {
+  "sheet": "SOP_ELTR",
+  "grid": "spdSOP",
+  "sheet_index": 1,
+  "tabs": [
+   {
+    "control": "tbcAll",
+    "index": 1,
+    "page": "tabSOP",
+    "pages": [
+     "tabAssign",
+     "tabSOP"
+    ],
+    "src": "SCP0104_CAPA_Line_Assign.Designer.cs:76",
+    "live": "Doc\\asislive\\SCP0104\\run_20261117_161814\\controls.json"
+   }
+  ],
+  "note": "",
+  "done": [
+   {
+    "set": {
+     "act": {
+      "tab": "tbcAll",
+      "index": 1,
+      "wait": 3
+     }
+    },
+    "ok": true,
+    "applied": "tab:tbcAll:1",
+    "error": null,
+    "why": "sheet SOP_ELTR 탭 tabSOP(SCP0104_CAPA_Line_Assign.Designer.cs:76)"
+   },
+   {
+    "set": {
+     "name": "rgrpDivisionType",
+     "prop": "SelectedIndex",
+     "value": "0"
+    },
+    "ok": true,
+    "applied": "prop:SelectedIndex",
+    "error": null,
+    "why": "sheet SOP_ELTR 조건(SCP0104_CAPA_Line_Assign.cs:2044~2056(_sheet_idx: Cell·Module/Pack=0, 그 밖=1) · :271(rgrpDivisionType.SelectedIndex) · Designer.cs:637~640(Electrode=0, Cell=1, Module/Pack=2))"
+   }
+  ],
+  "cond": {
+   "label": "Division 81_ST",
+   "ok": true,
+   "done": [
+    {
+     "op": {
+      "division": "81_ST"
+     },
+     "ok": true,
+     "note": null
+    }
+   ],
+   "src": "기록 Division"
+  }
+ },
+ "sheet_used": {
+  "grid": "spdSOP",
+  "sheet": "1"
+ },
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 7,
+   "named_cols": [
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME",
+    "ELTR_LN_TP_CD"
+   ],
+   "used": [
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME",
+    "ELTR_LN_TP_CD"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  },
+  {
+   "kind": "dbl",
+   "scenarios": 9,
+   "named_cols": [],
+   "used": [
+    "DIVISION_ID",
+    "PLANT_NAME",
+    "FACTORY_NAME",
+    "LINE_NAME",
+    "OPERATION_NAME",
+    "ELTR_LN_TP_CD"
+   ],
+   "rule": "이름이 나온 열이 없어 앞쪽 보이는 열 6개"
+  }
+ ]
+}

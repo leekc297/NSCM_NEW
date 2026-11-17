@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "SCP0104",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"p_from_yyyymm\":\"202611\",\"p_program_id\":\"SCP0104\",\"p_sheet_name\":\"\"}",
+  "status": 200,
+  "rows": 30,
+  "dur": 90,
+  "at": "2026-11-17T05:53:07.353Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "ELTR",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/ELTR/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81\",\"p_site_id\":\"A001,A002,A003,A004\",\"p_plant_id\":\"HQ07,HQ11,MI00,MI02,MI03,NA00,NB01,WA00\",\"p_factory_id\":\"E5,E6,E9,EA,EB,EC,ED,EF,EG,EJ,ES,ET,EY,EZ\",\"p_line_id\":\"E5DP1,E5DP2,DUM_MI2_E3_C,DUM_MI2_E3_A,ESD01,ETD02,EZD01,FP_E5M01_C,FP_E5M01_A,FP_E5M02_C,FP_E5M02_A,FP_E6M01_C,FP_E6M01_A,FP_E6M02_C,FP_E6M02_A,FP_E9M01_C,FP_E9M01_A,FP_E9M02_C,FP_E9M02_A,FP_EAM01_C,FP_EAM01_A,FP_EAM02_C,FP_EAM02_A,FP_EAM03_C,FP_EAM03_A,FP_EBM01_C,FP_EBM01_A,FP_EBM02_C,FP_EBM02_A,FP_ECM01_C,FP_ECM01_A,FP_ECM02_C,FP_ECM02_A,FP_ECM03_C,FP_ECM03_A,FP_EDM03_C,FP_EDM03_A,FP_EDM04_C,FP_EDM04_A,FP_EDM05_C,FP_EDM05_A,FP_EDM06_C,FP_EDM06_A,FP_EDM07_C,FP_EDM07_A,FP_EFM04_C,FP_EFM04_A,FP_EFM05_C,FP_EFM05_A,FP_EGM01_C,FP_EGM01_A,FP_EJM08_C,FP_EJM08_A,FP_EJM09_C,FP_EJM09_A,FP_EJM10_C,FP_EJM10_A,FP_ESM01_C,FP_ESM01_A,FP_ESM02_C,FP_ESM02_A,FP_ETM01_C,FP_ETM01_A,FP_ETM02_C,FP_ETM02_A,FP_ETM03_C,FP_ETM03_A,FP_ETM04_C,FP_ETM04_A,FP_EYM01_C,FP_EYM01_A,FP_EZM01_C,FP_EZM01_A,DMY_3801,DMY_3802,DMY_3803,DMY_3804,DMY_3805,DMY_3806,DMY_3807\",\"p_operation_id\":\"E2000\",\"p_electrode_type\":\"\",\"p_valid_flag\":\"\",\"p_program_id\":\"SCP0104\",\"debug_mode\":\"F\",\"p_item_id\":\"\",\"p_sheet_name\":\"ELTR\"}",
+  "status": 200,
+  "rows": 276,
+  "dur": 495,
+  "at": "2026-11-17T05:53:11.654Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "ELTR",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/ELTR/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81\",\"p_site_id\":\"A001,A002,A003,A004\",\"p_plant_id\":\"HQ07,HQ11,MI00,MI02,MI03,NA00,NB01,WA00\",\"p_factory_id\":\"E5,E6,E9,EA,EB,EC,ED,EF,EG,EJ,ES,ET,EY,EZ\",\"p_line_id\":\"E5DP1,E5DP2,DUM_MI2_E3_C,DUM_MI2_E3_A,ESD01,ETD02,EZD01,FP_E5M01_C,FP_E5M01_A,FP_E5M02_C,FP_E5M02_A,FP_E6M01_C,FP_E6M01_A,FP_E6M02_C,FP_E6M02_A,FP_E9M01_C,FP_E9M01_A,FP_E9M02_C,FP_E9M02_A,FP_EAM01_C,FP_EAM01_A,FP_EAM02_C,FP_EAM02_A,FP_EAM03_C,FP_EAM03_A,FP_EBM01_C,FP_EBM01_A,FP_EBM02_C,FP_EBM02_A,FP_ECM01_C,FP_ECM01_A,FP_ECM02_C,FP_ECM02_A,FP_ECM03_C,FP_ECM03_A,FP_EDM03_C,FP_EDM03_A,FP_EDM04_C,FP_EDM04_A,FP_EDM05_C,FP_EDM05_A,FP_EDM06_C,FP_EDM06_A,FP_EDM07_C,FP_EDM07_A,FP_EFM04_C,FP_EFM04_A,FP_EFM05_C,FP_EFM05_A,FP_EGM01_C,FP_EGM01_A,FP_EJM08_C,FP_EJM08_A,FP_EJM09_C,FP_EJM09_A,FP_EJM10_C,FP_EJM10_A,FP_ESM01_C,FP_ESM01_A,FP_ESM02_C,FP_ESM02_A,FP_ETM01_C,FP_ETM01_A,FP_ETM02_C,FP_ETM02_A,FP_ETM03_C,FP_ETM03_A,FP_ETM04_C,FP_ETM04_A,FP_EYM01_C,FP_EYM01_A,FP_EZM01_C,FP_EZM01_A,DMY_3801,DMY_3802,DMY_3803,DMY_3804,DMY_3805,DMY_3806,DMY_3807\",\"p_operation_id\":\"E2000\",\"p_electrode_type\":\"\",\"p_valid_flag\":\"\",\"p_program_id\":\"SCP0104\",\"debug_mode\":\"F\",\"p_item_id\":\"\",\"p_sheet_name\":\"ELTR\"}",
+  "status": 200,
+  "rows": 276,
+  "dur": 580,
+  "at": "2026-11-17T05:53:13.780Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "ELTR",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/ELTR/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81\",\"p_site_id\":\"A001,A002,A003,A004\",\"p_plant_id\":\"HQ07,HQ11,MI00,MI02,MI03,NA00,NB01,WA00\",\"p_factory_id\":\"E5,E6,E9,EA,EB,EC,ED,EF,EG,EJ,ES,ET,EY,EZ\",\"p_line_id\":\"E5DP1,E5DP2,DUM_MI2_E3_C,DUM_MI2_E3_A,ESD01,ETD02,EZD01,FP_E5M01_C,FP_E5M01_A,FP_E5M02_C,FP_E5M02_A,FP_E6M01_C,FP_E6M01_A,FP_E6M02_C,FP_E6M02_A,FP_E9M01_C,FP_E9M01_A,FP_E9M02_C,FP_E9M02_A,FP_EAM01_C,FP_EAM01_A,FP_EAM02_C,FP_EAM02_A,FP_EAM03_C,FP_EAM03_A,FP_EBM01_C,FP_EBM01_A,FP_EBM02_C,FP_EBM02_A,FP_ECM01_C,FP_ECM01_A,FP_ECM02_C,FP_ECM02_A,FP_ECM03_C,FP_ECM03_A,FP_EDM03_C,FP_EDM03_A,FP_EDM04_C,FP_EDM04_A,FP_EDM05_C,FP_EDM05_A,FP_EDM06_C,FP_EDM06_A,FP_EDM07_C,FP_EDM07_A,FP_EFM04_C,FP_EFM04_A,FP_EFM05_C,FP_EFM05_A,FP_EGM01_C,FP_EGM01_A,FP_EJM08_C,FP_EJM08_A,FP_EJM09_C,FP_EJM09_A,FP_EJM10_C,FP_EJM10_A,FP_ESM01_C,FP_ESM01_A,FP_ESM02_C,FP_ESM02_A,FP_ETM01_C,FP_ETM01_A,FP_ETM02_C,FP_ETM02_A,FP_ETM03_C,FP_ETM03_A,FP_ETM04_C,FP_ETM04_A,FP_EYM01_C,FP_EYM01_A,FP_EZM01_C,FP_EZM01_A,DMY_3801,DMY_3802,DMY_3803,DMY_3804,DMY_3805,DMY_3806,DMY_3807\",\"p_operation_id\":\"E2000\",\"p_electrode_type\":\"\",\"p_valid_flag\":\"\",\"p_program_id\":\"SCP0104\",\"debug_mode\":\"F\",\"p_item_id\":\"E2E\",\"p_sheet_name\":\"ELTR\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 468,
+  "at": "2026-11-17T05:53:15.689Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ },
+ {
+  "menu": "SCP0104",
+  "sheet": "ELTR",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0104/ELTR/SEARCH/call-proc",
+  "postData": "{\"p_version\":\"202610\",\"p_version_seq\":\"1\",\"p_division_id\":\"81\",\"p_site_id\":\"A001,A002,A003,A004\",\"p_plant_id\":\"HQ07,HQ11,MI00,MI02,MI03,NA00,NB01,WA00\",\"p_factory_id\":\"E5,E6,E9,EA,EB,EC,ED,EF,EG,EJ,ES,ET,EY,EZ\",\"p_line_id\":\"E5DP1,E5DP2,DUM_MI2_E3_C,DUM_MI2_E3_A,ESD01,ETD02,EZD01,FP_E5M01_C,FP_E5M01_A,FP_E5M02_C,FP_E5M02_A,FP_E6M01_C,FP_E6M01_A,FP_E6M02_C,FP_E6M02_A,FP_E9M01_C,FP_E9M01_A,FP_E9M02_C,FP_E9M02_A,FP_EAM01_C,FP_EAM01_A,FP_EAM02_C,FP_EAM02_A,FP_EAM03_C,FP_EAM03_A,FP_EBM01_C,FP_EBM01_A,FP_EBM02_C,FP_EBM02_A,FP_ECM01_C,FP_ECM01_A,FP_ECM02_C,FP_ECM02_A,FP_ECM03_C,FP_ECM03_A,FP_EDM03_C,FP_EDM03_A,FP_EDM04_C,FP_EDM04_A,FP_EDM05_C,FP_EDM05_A,FP_EDM06_C,FP_EDM06_A,FP_EDM07_C,FP_EDM07_A,FP_EFM04_C,FP_EFM04_A,FP_EFM05_C,FP_EFM05_A,FP_EGM01_C,FP_EGM01_A,FP_EJM08_C,FP_EJM08_A,FP_EJM09_C,FP_EJM09_A,FP_EJM10_C,FP_EJM10_A,FP_ESM01_C,FP_ESM01_A,FP_ESM02_C,FP_ESM02_A,FP_ETM01_C,FP_ETM01_A,FP_ETM02_C,FP_ETM02_A,FP_ETM03_C,FP_ETM03_A,FP_ETM04_C,FP_ETM04_A,FP_EYM01_C,FP_EYM01_A,FP_EZM01_C,FP_EZM01_A,DMY_3801,DMY_3802,DMY_3803,DMY_3804,DMY_3805,DMY_3806,DMY_3807\",\"p_operation_id\":\"E2000\",\"p_electrode_type\":\"\",\"p_valid_flag\":\"\",\"p_program_id\":\"SCP0104\",\"debug_mode\":\"F\",\"p_item_id\":\"\",\"p_sheet_name\":\"ELTR\"}",
+  "status": 200,
+  "rows": 276,
+  "dur": 626,
+  "at": "2026-11-17T05:54:47.746Z",
+  "user": "minyonglee1",
+  "test": "필터 항목·연속 조회 본문(K1·G6)"
+ }
+]

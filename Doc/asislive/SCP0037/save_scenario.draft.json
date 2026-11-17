@@ -1,0 +1,68 @@
+{
+ "id": "SCP0037",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0037_SAVE_OPERATION_LT",
+   "save_sp": "SCP0037_SAVE_OPERATION_LT",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_OPERATION_LT",
+   "pk": [
+    "DIVISION_ID",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "LT_OPERATION"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "ITEM_ID": "ITEM_ID",
+    "LT_OPERATION": "LT_OPERATION"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "LT_DAY",
+    "db_col": "LT_DAY",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_OPERATION_LT_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    },
+    {
+     "table": "SCP_MST_OPERATION_LT_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Operation LT",
+   "writes": {
+    "SCP_MST_OPERATION_LT_H": [
+     "INSERT INTO"
+    ],
+    "SCP_MST_OPERATION_LT": [
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml SCP0037_SAVE_OPERATION_LT → SP SCP0037_SAVE_OPERATION_LT 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "edit_candidates": [
+    {
+     "col": "LT_DAY",
+     "db_col": "LT_DAY",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 21:55:11"
+   }
+  }
+ ]
+}

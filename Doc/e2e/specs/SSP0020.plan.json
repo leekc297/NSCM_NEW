@@ -1,0 +1,383 @@
+{
+  "id": "SSP0020",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SSP0020",
+  "divCascade": [],
+  "divLabels": [
+    "Div.",
+    "Div",
+    "Division"
+  ],
+  "condOrder": [
+    "Delegatee",
+    "Div",
+    "All",
+    "Period"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "Delegate",
+  "routePath": "shipping/delegate",
+  "asisName": "Delegate",
+  "fields": [
+    {
+      "key": "delegatee",
+      "label": "Delegatee",
+      "lbl": "LBL01069",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtDelegatee",
+      "tobeLabel": "Delegatee",
+      "catalog": "",
+      "labels": [
+        "Delegatee"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "all",
+      "label": "All",
+      "lbl": "LBL00632",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkAll",
+      "tobeLabel": "ALL",
+      "catalog": "",
+      "labels": [
+        "All",
+        "ALL"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Div",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod",
+      "tobeLabel": "Period",
+      "catalog": "",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\delegate\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "save",
+      "label": "SAVE",
+      "lbl": "LBL00111",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.save",
+      "asis": "btnSave"
+    },
+    {
+      "key": "unSet",
+      "label": "UnSet",
+      "lbl": "LBL01128",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnUnSet"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "delegatee",
+      "label": "Delegatee",
+      "lbl": "LBL01069",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnDelegatee"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Delegate",
+      "key": "DELEGATE",
+      "labels": [
+        "ALL",
+        "Delegatee",
+        "Div",
+        "From",
+        "Last Update Date",
+        "Last Updated By",
+        "To",
+        "Valid"
+      ]
+    },
+    {
+      "name": "Delegated List",
+      "key": "DELEGATED_LIST",
+      "labels": [
+        "ALL",
+        "Delegator",
+        "Div",
+        "From",
+        "Last Update Date",
+        "Last Updated By",
+        "To",
+        "Valid"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "SSP0020_GET_DELEGATE",
+      "sheet": "Delegate",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0020.P_SSP0020_GET_DELEGATE",
+      "entries": [
+        "event:this.Load",
+        "event:btnSave.Click",
+        "event:btnUnSet.Click",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SSP0020_SAVE_DELEGATE",
+      "sheet": "Delegate",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0020.P_SSP0020_SAVE_DELEGATE",
+      "entries": [
+        "event:btnSave.Click"
+      ]
+    },
+    {
+      "sp": "SSP0020_SAVE_UNSET",
+      "sheet": "Delegate",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0020.P_SSP0020_SAVE_UNSET",
+      "entries": [
+        "event:btnUnSet.Click"
+      ]
+    },
+    {
+      "sp": "UP_FX_GetSSPUserUseInfoList",
+      "sheet": "Delegate",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0020.P_UP_FX_GETSSPUSERUSEINFOLIST",
+      "entries": [
+        "event:btnSave.Click"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Delegate": {
+      "40": [
+        "ALL",
+        "Div",
+        "From",
+        "To",
+        "Delegatee",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "ALL",
+        "Div",
+        "From",
+        "To",
+        "Delegatee",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "ALL",
+        "Div",
+        "From",
+        "To",
+        "Delegatee",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "Delegated List": {
+      "40": [
+        "Div",
+        "From",
+        "To",
+        "Delegator",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "From",
+        "To",
+        "Delegator",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "From",
+        "To",
+        "Delegator",
+        "Valid",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jinhuannj",
+      "name": "근환",
+      "groups": [
+        "SSP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SSP Planner"
+      },
+      "roleNote": "PLANNER",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SSP",
+      "tobeGroups": [
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "UNSET",
+        "SEARCH",
+        "USER_CHECK",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "USER_CHECK",
+      "UNSET",
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "UNSET",
+      "SAVE",
+      "USER_CHECK"
+    ],
+    "SCM PI Admin": [
+      "USER_CHECK",
+      "UNSET",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "USER_CHECK",
+      "SAVE",
+      "SEARCH",
+      "UNSET"
+    ],
+    "SSP ADMIN": [
+      "USER_CHECK",
+      "UNSET",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SSP Planner": [
+      "UNSET",
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "USER_CHECK",
+    "UNSET",
+    "SAVE",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

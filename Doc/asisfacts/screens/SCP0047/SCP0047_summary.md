@@ -87,10 +87,13 @@
 | dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
 | dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
 
-## 9. 주석/비활성 처리된 호출 (1건, 활성 집계 제외)
+## 9. 주석/비활성 처리된 호출 (4건, 활성 집계 제외)
 | 줄 | 값 | 상태 |
 |---:|---|---|
 | 388 |  | commented:EMPTY |
+| 400 | DM.DM0036_SAVE_CAPACITY_ALLOCATION_RATE | commented:MATCH |
+| 401 | DM.DM0036_SAVE_CAPACITY_ALLOCATION_RATE | commented:MATCH |
+| 402 | DM.DM0036_SAVE_CAPACITY_ALLOCATION_RATE | commented:MATCH |
 
 ## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
 규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.

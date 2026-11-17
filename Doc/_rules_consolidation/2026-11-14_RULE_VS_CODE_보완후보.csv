@@ -1,0 +1,1321 @@
+﻿category,file,line,detail
+01 공용 SubTitle 기본 동작,nscm-fe/packages/shared/src/components/organisms/sub-title/SubTitle.tsx,211,"[Hotkeys.F7]: () => undefined, // save 미구현 화면 — no-op (F5 와 동일한 이유)"
+01 공용 SubTitle 기본 동작,nscm-fe/packages/shared/src/components/organisms/sub-title/SubTitle.tsx,215,[Hotkeys.F8]: () => {
+01 공용 SubTitle 기본 동작,nscm-fe/packages/shared/src/components/organisms/sub-title/SubTitle.tsx,218,[Hotkeys.F9]: () =>
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/admin/src/pages/ui-catrgory-setup/UICategorySetup.tsx,84,없는 키: insert | save=있음
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,789,"없는 키: insert, delete | save=없음"
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/report/src/pages/dmf0052/Dmf0052.tsx,171,SubTitle 에 hotkeyConfig 속성 없음
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/report/src/pages/dmf0052/Dmf0052.tsx,181,SubTitle 에 hotkeyConfig 속성 없음
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/report/src/pages/dmf0052/Dmf0052.tsx,186,SubTitle 에 hotkeyConfig 속성 없음
+01-b 화면 hotkeyConfig 정의에 insert 또는 delete 키 없음(공용 기본 동작에 의존),nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,415,SubTitle 에 hotkeyConfig 속성 없음
+"01-c 화면 hotkeyConfig 정의에 save 키 없음(공용 기본은 빈 동작, 버튼은 보임)",nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,789,insert=없음 delete=없음
+02 measure 대체값,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,584,? sc.divisionId === DIVISION.POWER ? MEASURE_FALLBACK_82 : MEASURE_4 : measureOrder.length === 0
+02 measure 대체값,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,426,const measures: readonly string[] = validMeasures.length === 0 ? MEASURE_4 : measureOrder.length === 0
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/cust-psi-upload/components/CustPsiUploadGrid.tsx,83,if (!staticColumn || staticColumn.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/metal-link-price/components/MetalLinkPriceGrid.tsx,47,if (!staticColumn || staticColumn.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,337,if (!staticColumns || staticColumns.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,316,if (!staticColumns || staticColumns.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,248,if (!staticColumns || staticColumns.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx,124,if (!staticColumns || staticColumns.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(메타 빈 값 판정 뒤 상수 반환),nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,214,if (!staticColumns || staticColumns.length === 0) { → return MAIN_COLUMNS
+02 컬럼 대체값(삼항 대체),nscm-fe/features/admin/src/pages/batch-log/components/BatchHistGrid.tsx,37,adminColumns && adminColumns.length > 0 ? adminColumns : BATCH_LOG_HIST_COLUMNS
+02 컬럼 대체값(삼항 대체),nscm-fe/features/admin/src/pages/batch-log/components/BatchLogGrid.tsx,56,staticColumns={adminColumns && adminColumns.length > 0 ? adminColumns : BATCH_LOG_COLUMNS}
+02 컬럼 대체값(삼항 대체),nscm-fe/features/admin/src/pages/batch-log/components/BatchStepGrid.tsx,36,staticColumns={adminColumns && adminColumns.length > 0 ? adminColumns : STEP_INFO_COLUMNS}
+02-x 상수 컬럼 반환(대체값인지 문맥 확인 필요),nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts,58,const source = metaColumns.length ? metaColumns : FALLBACK_TEMPLATE_COLUMNS;
+02-x 상수 컬럼 반환(대체값인지 문맥 확인 필요),nscm-fe/features/demand/src/pages/mkt-fcst/components/modals/PrModal.tsx,113,": ['STORAGE_PLANT_ID', 'SLOC', 'ITEM_DETAIL'] ); return PR_DETAIL_COLUMNS.map(c =>"
+02-x 상수 컬럼 반환(대체값인지 문맥 확인 필요),nscm-fe/features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx,81,const isEE = division.startsWith('EE'); const is40 = division === '40'; return MAIN_COLUMNS.map(c => {
+02-x 상수 컬럼 반환(대체값인지 문맥 확인 필요),nscm-fe/features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx,86,const infoColumns = useMemo<MainColumnMeta[]>(() => { const isEE = division.startsWith('EE'); return MAIN_COLUMNS.map(c => {
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx,1118,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/demand/src/pages/mkt-fcst/MktFcst.tsx,1133,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,1181,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx,353,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,1011,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,401,fallbackColumns={MODEL_FIXED_COLUMNS}
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,431,fallbackColumns={LINE_FIXED_COLUMNS}
+02-y 컬럼 설정 팝업의 fallbackColumns 전달(룰 확인 필요),nscm-fe/features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx,565,"fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}"
+03 measure 호출에 divisionId 없음,nscm-fe/features/demand/src/pages/sales-price-model-group/useSalesPriceModelGroupStore.ts,177,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: SHEETS.MAIN,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/master/src/pages/sales-future-price/useSalesFuturePriceStore.ts,320,"apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {               sheetNm: ADMIN_SHEET_NAME[sheetNm] ?? sheetNm,             })           )"
+03 measure 호출에 divisionId 없음,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/useShipmentPlanAutoEssStore.ts,411,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? '',         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/shipping/src/pages/shipment-plan-electrode/useShipmentPlanElectrodeStore.ts,469,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN],         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts,462,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/shipping/src/pages/shipment-plan/useShipmentPlanStore.ts,460,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN],         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts,404,"`/admin/menu/${MENU_ID}/measure`,           { sheetNm: ADMIN_SHEET_NAME[sheetName] }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/capa-mobility-it/useCapaMobilityItStore.ts,153,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: ADMIN_SHEET_NAME,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/capa-speed-plan/useCapaSpeedPlanStore.ts,418,"`/admin/menu/${MENU_ID}/measure`,               { sheetNm: ADMIN_SHEET_NAME[sheet] }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/capa-teep-report/useCapaTeepReportStore.ts,409,"`/admin/menu/${MENU_ID}/measure`,               { sheetNm: ADMIN_SHEET_NAME[sheet] }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts,163,"const res = await apiClient.post<StaticMeasure[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: MEASURE_SHEET_NAME,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/production-plan-waterfall/useProductionPlanWaterfallStore.ts,313,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/shipment-plan-fg/useShipmentPlanFgStore.ts,205,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: MEASURE_SHEET_NAME,         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/shipment-plan-semi/useShipmentPlanSemiStore.ts,222,"const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: MEASURE_SHEET_NAME[group],         }"
+03 measure 호출에 divisionId 없음,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-semi/useWaterfallShipmentPlanSemiStore.ts,194,"const result = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {           sheetNm: sheetName,         }"
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/business-plan/useBusinessPlanStore.ts,433,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/cust-fcst-waterfall/useCustFcstWaterfallStore.ts,239,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts,278,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/forecast-price/useForecastPriceStore.ts,535,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts,457,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts,390,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/mkt-fcst/useMktFcstStore.ts,437,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts,327,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/sales-monitoring/useSalesMonitoringStore.ts,444,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/sales-plan/useSalesPlanStore.ts,458,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/sales-reports/useSalesReportsStore.ts,309,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/demand/src/pages/shipment-request/useShipmentRequestStore.ts,391,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/report/src/pages/demand-plan-waterfall/useDemandPlanWaterfallStore.ts,347,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/shipping/src/pages/shipment-request-electrode/useShipmentRequestElectrodeStore.ts,359,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/shipping/src/pages/shipment-request-pack/useShipmentRequestPackStore.ts,283,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts,169,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/global-psi-report/useGlobalPsiReportStore.ts,272,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/global-psi/useGlobalPsiStore.ts,199,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/integration-psi/useIntegrationPsiStore.ts,227,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/production-plan-line/useProductionPlanLineStore.ts,279,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/production-plan/useProductionPlanStore.ts,300,
+03-ok measure 호출에 divisionId 있음,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg/useWaterfallShipmentPlanFgStore.ts,277,
+04 진입 페이지 400줄 초과,nscm-fe/features/admin/src/pages/dynamic-query/DynamicQuery.tsx,782,782줄
+04 진입 페이지 400줄 초과,nscm-fe/features/admin/src/pages/group-user/GroupUser.tsx,444,444줄
+04 진입 페이지 400줄 초과,nscm-fe/features/admin/src/pages/mail-setup/MailSetup.tsx,585,585줄
+04 진입 페이지 400줄 초과,nscm-fe/features/admin/src/pages/sms-setup/SmsSetup.tsx,662,662줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,703,703줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx,543,543줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx,627,627줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,673,673줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,1210,1210줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx,406,406줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx,1208,1208줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/mkt-fcst/MktFcst.tsx,1223,1223줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,1347,1347줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx,437,437줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,632,632줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,759,759줄
+04 진입 페이지 400줄 초과,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,650,650줄
+04 진입 페이지 400줄 초과,nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx,694,694줄
+04 진입 페이지 400줄 초과,nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx,406,406줄
+04 진입 페이지 400줄 초과,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,1164,1164줄
+04 진입 페이지 400줄 초과,nscm-fe/features/master/src/pages/sales-site/SalesSite.tsx,413,413줄
+04 진입 페이지 400줄 초과,nscm-fe/features/report/src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx,521,521줄
+04 진입 페이지 400줄 초과,nscm-fe/features/sdm/src/pages/project-reg/ProjectReg.tsx,514,514줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/delegate/Delegate.tsx,493,493줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,693,693줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/ShipmentChangeRequestConfirm.tsx,516,516줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/ShipmentChangeRequestPlan.tsx,651,651줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx,1003,1003줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx,407,407줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx,483,483줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx,565,565줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx,1017,1017줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx,1077,1077줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,1849,1849줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx,1376,1376줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx,923,923줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1073,1073줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/ShipmentRequestorPic.tsx,537,537줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx,413,413줄
+04 진입 페이지 400줄 초과,nscm-fe/features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx,509,509줄
+04 진입 페이지 400줄 초과,nscm-fe/features/spms-demand/src/pages/project-master/ProjectMaster.tsx,484,484줄
+04 진입 페이지 400줄 초과,nscm-fe/features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx,530,530줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx,993,993줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/capa-line-master/CapaLineMaster.tsx,573,573줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx,419,419줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/capa/Capa.tsx,563,563줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx,571,571줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/formation/Formation.tsx,476,476줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/integration-psi/IntegrationPsi.tsx,532,532줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/opt-capa/OptCapa.tsx,412,412줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/plant-site/PlantSite.tsx,450,450줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,659,659줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,499,499줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/project-route/ProjectRoute.tsx,506,506줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx,410,410줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx,604,604줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx,581,581줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx,425,425줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/workbench/Workbench.tsx,460,460줄
+04 진입 페이지 400줄 초과,nscm-fe/features/supply/src/pages/working-time/WorkingTime.tsx,469,469줄
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/api-management/ApiManagement.tsx,153,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/batch-log/BatchLog.tsx,168,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/dynamic-query/DynamicQuery.tsx,782,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/group-management/GroupManagement.tsx,106,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/group-menu/GroupMenuManagement.tsx,200,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/group-user/GroupUser.tsx,444,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/lookup/Lookup.tsx,333,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/mail-setup/MailSetup.tsx,585,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/menu-button-management/MenuButtonManagement.tsx,106,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/menu-management/MenuManagement.tsx,310,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/message-management/MessageManagement.tsx,105,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/notice-setup/NoticeSetup.tsx,159,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/procedure-management/ProcedureManagement.tsx,118,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/program/Program.tsx,98,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/scp-if-blocking/ScpIfBlocking.tsx,211,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/sms-setup/SmsSetup.tsx,662,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/ui-catrgory-setup/UICategorySetup.tsx,133,
+04-all 진입 페이지,nscm-fe/features/admin/src/pages/user-management/UserManagement.tsx,105,
+04-all 진입 페이지,nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx,236,
+04-all 진입 페이지,nscm-fe/features/authority/src/pages/auth-request/AuthRequest.tsx,389,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,703,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/cust-fcst-waterfall/CustFcstWaterfall.tsx,304,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx,543,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx,627,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/demand-manager/DemandManager.tsx,383,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,673,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,1210,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx,406,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx,1208,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx,300,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/mkt-fcst/MktFcst.tsx,1223,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,1347,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx,437,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,632,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,343,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,759,
+04-all 진입 페이지,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,650,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/contribute-main/ContributeMain.tsx,343,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/contribute-view/ContributeView.tsx,293,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/customer-forecast-master/CustomerFcstMaster.tsx,243,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/customer-model-mapping/CustomerModelMapping.tsx,202,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx,694,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx,406,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,1164,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/sales-site-project-model-01/SalesSiteProjectModel01.tsx,328,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx,328,
+04-all 진입 페이지,nscm-fe/features/master/src/pages/sales-site/SalesSite.tsx,413,
+04-all 진입 페이지,nscm-fe/features/report/src/pages/dashboard/DemandAsDashboard.tsx,73,
+04-all 진입 페이지,nscm-fe/features/report/src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx,521,
+04-all 진입 페이지,nscm-fe/features/report/src/pages/dmf0052/Dmf0052.tsx,204,
+04-all 진입 페이지,nscm-fe/features/report/src/pages/sales-plan-waterfall/SalesPlanWaterfall.tsx,127,
+04-all 진입 페이지,nscm-fe/features/sdm/src/pages/project-list/ProjectList.tsx,342,
+04-all 진입 페이지,nscm-fe/features/sdm/src/pages/project-master/ProjectMaster.tsx,379,
+04-all 진입 페이지,nscm-fe/features/sdm/src/pages/project-reg/ProjectReg.tsx,514,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/delegate/Delegate.tsx,493,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/distribution-route/DistributionRoute.tsx,363,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/inventory-raw/InventoryRaw.tsx,188,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx,277,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,693,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/ShipmentChangeRequestConfirm.tsx,516,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/ShipmentChangeRequestPlan.tsx,651,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx,1003,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx,407,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx,483,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx,565,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/ShipmentPlanAutoEss.tsx,1017,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx,301,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx,1077,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,1849,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx,1376,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-request-electrode/ShipmentRequestElectrode.tsx,923,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1073,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx,396,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/ShipmentRequestorPic.tsx,537,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx,413,
+04-all 진입 페이지,nscm-fe/features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx,509,
+04-all 진입 페이지,nscm-fe/features/spms-demand/src/pages/plan-yield/PlanYield.tsx,346,
+04-all 진입 페이지,nscm-fe/features/spms-demand/src/pages/production-request/ProductionRequest.tsx,374,
+04-all 진입 페이지,nscm-fe/features/spms-demand/src/pages/project-list/ProjectList.tsx,378,
+04-all 진입 페이지,nscm-fe/features/spms-demand/src/pages/project-master/ProjectMaster.tsx,484,
+04-all 진입 페이지,nscm-fe/features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx,530,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,400,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/bod/Bod.tsx,331,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx,993,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-line-master/CapaLineMaster.tsx,573,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-lob-report/CapaLobReport.tsx,322,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx,351,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx,419,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx,308,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx,348,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/capa/Capa.tsx,563,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx,571,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/constraint-of-shipment-qty/ConstraintOfShipmentQty.tsx,208,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/demand-exception/DemandException.tsx,226,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/demand-group-master/DemandGroupMaster.tsx,265,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/ending-inventory/EndingInventory.tsx,179,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/formation/Formation.tsx,476,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx,292,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx,335,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/global-psi/GlobalPsi.tsx,285,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/group-code-management/GroupCodeManagement.tsx,362,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/integration-psi/IntegrationPsi.tsx,532,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/inventory-trend/InventoryTrend.tsx,216,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/line-master/LineMaster.tsx,236,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/long-term-stock/LongTermStock.tsx,188,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/master-validation/MasterValidation.tsx,346,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx,143,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx,212,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/opt-capa/OptCapa.tsx,412,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx,172,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx,206,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plan-control/PlanControl.tsx,276,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plan-group-dashboard/PlanGroupDashboard.tsx,122,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx,304,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plan-management/PlanManagement.tsx,306,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/plant-site/PlantSite.tsx,450,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/precede-safety-stock-day/PrecedeSafetyStockDay.tsx,273,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx,280,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,659,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx,388,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,499,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/project-route-electrode/ProjectRouteElectrode.tsx,364,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx,386,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/project-route/ProjectRoute.tsx,506,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/safety-stock/SafetyStock.tsx,219,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/sales-site-priority/SalesSitePriority.tsx,202,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx,410,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/scp-bom-elec/ScpBomElec.tsx,176,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/scp-bom/ScpBom.tsx,213,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/shipment-allo-report/ShipmentAlloReport.tsx,400,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx,604,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx,251,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx,581,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx,425,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/stock-osp/StockOspPage.tsx,365,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/tact-time/TactTime.tsx,348,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/validation-shipment-result/ValidationShipmentResult.tsx,154,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx,367,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg/WaterfallShipmentPlanFg.tsx,347,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-semi/WaterfallShipmentPlanSemi.tsx,253,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/workbench/Workbench.tsx,460,
+04-all 진입 페이지,nscm-fe/features/supply/src/pages/working-time/WorkingTime.tsx,469,
+05 모달 키를 attribute1 로 읽음,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,354,"_modalKey: fb?._modalKey ?? col.attribute1,"
+05 모달 키를 attribute1 로 읽음,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,280,"_modalKey: sc.attribute1 ?? fb?._modalKey,"
+05 모달 키를 attribute1 로 읽음,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,245,"_modalKey: sc.attribute1 ?? fb?._modalKey,"
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,622,col.dataMap = editDataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,663,col.dataMap = dataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx,288,projectCol.dataMap = projectDataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,823,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,707,col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1346,asCol.dataMap = asFromSiteMapRef.current;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1715,col.dataMap = dataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1725,col.dataMap = dataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1662,col.dataMap = dataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1672,col.dataMap = dataMapsRef.current[binding];
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx,762,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.gridCombos.ts,278,column.dataMap = dataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/master/src/pages/sales-site-project-model/sales-site-project-model.gridCombos.ts,278,column.dataMap = dataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,308,if (col && dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,329,if (col && base && col.dataMap !== base) col.dataMap = base;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,410,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,291,if (col && dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,312,if (col && base && col.dataMap !== base) col.dataMap = base;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,374,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,265,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,283,if (col && dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,375,if (dm && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx,446,if (col && col.dataMap !== changeReasonDataMap) col.dataMap = changeReasonDataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx,450,if (fromCol && fromCol.dataMap !== fromSiteDataMap) fromCol.dataMap = fromSiteDataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx,452,if (toCol && toCol.dataMap !== toSiteDataMap) toCol.dataMap = toSiteDataMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/components/newPlanModal/NewPlanModal.tsx,410,col.dataMap = map;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/bod/components/BodGrid.tsx,256,if (col && col.dataMap !== dm) col.dataMap = dm;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx,175,column.dataMap = new DataMap(
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx,190,column.dataMap = null;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx,237,column.dataMap = candidates.length > 0 ? new DataMap(candidates) : null;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx,128,col.dataMap = new DataMap(
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx,153,sender.columns[e.col].dataMap = scmSiteOriginalMap.current;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx,385,column.dataMap = new DataMap(
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx,459,"if (column?.dataMap && candidatesFor(binding, row)) column.dataMap = null;"
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/plan-management/components/PlanManagementGrid.tsx,131,"column.dataMap = new DataMap(candidatesOf(row), 'CODE', 'NAME');"
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/project-route-electrode/components/ProjectRouteElectrodeGrid.tsx,214,col.dataMap = rowMap;
+06 dataMap 교체(편집 진입 처리 안),nscm-fe/features/supply/src/pages/project-route-electrode/components/ProjectRouteElectrodeGrid.tsx,221,col.dataMap = plantBaseDataMapRef.current;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,629,"if (filtered.length > 0) col.dataMap = new DataMap(filtered, 'CODE', 'NAME');"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,991,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1382,"rsCol.dataMap = new DataMap(candidates as unknown[], 'CODE', 'NAME');"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1405,col.dataMap = asIncotermsMapRef.current;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1421,"col.dataMap = new DataMap(dedup, 'CODE', 'NAME');"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1429,col.dataMap = editMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1441,"col.dataMap = new DataMap([], 'CODE', 'NAME');"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1475,if (col) col.dataMap = origDataMapRef.current[binding] ?? null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,819,if (col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,821,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,919,col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,923,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1246,col.dataMap = candidates.length === src.length && memo ? memo : buildEditDataMap(candidates);
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1444,col.dataMap = buildEditDataMap(filtered);
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1977,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,2082,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1221,col.dataMap = candidates.length === src.length && memo ? memo : buildEditDataMap(candidates);
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1400,col.dataMap = buildEditDataMap(filtered);
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,2018,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,2127,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1272,if (col.dataMap !== measureDataMap) col.dataMap = measureDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1274,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1095,if (col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1097,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1203,col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1208,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx,276,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx,125,if (column && column.dataMap !== teamDataMap) column.dataMap = teamDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx,110,if (col && col.dataMap !== companyDataMap) col.dataMap = companyDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1204,if (col.dataMap !== measureDataMap) col.dataMap = measureDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1206,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,1058,if (col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,1060,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,1166,col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,1171,col.dataMap = null;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-site-project-model-01/sales-site-project-model-01.gridCombos.ts,229,if (column) column.dataMap = swapped.dataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/master/src/pages/sales-site-project-model/sales-site-project-model.gridCombos.ts,229,if (column) column.dataMap = swapped.dataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-history/components/ShipmentChangeHistoryGrid.tsx,98,if (fcstCol) fcstCol.dataMap = fcstTypeMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-history/components/ShipmentChangeHistoryGrid.tsx,100,if (reasonCol) reasonCol.dataMap = changeReasonMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/components/ShipmentChangeRequestConfirmMainGrid.tsx,119,"if (ctCol) ctCol.dataMap = ct?.length ? new DataMap(ct, 'CODE', 'NAME') : null;"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/components/ShipmentChangeRequestConfirmMainGrid.tsx,122,"if (stCol) stCol.dataMap = st?.length ? new DataMap(st, 'CODE', 'NAME') : null;"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx,181,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx,157,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssDetailGrid.tsx,143,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx,545,if (col && col.dataMap !== stockStatusDataMap) col.dataMap = stockStatusDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx,237,"col.dataMap = new DataMap(rows, 'CODE', 'NAME');"
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/spms-demand/src/pages/production-request/components/SampleDemandGrid.tsx,158,if (dm && col.dataMap !== dm) col.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/demand-exception/components/DemandExceptionGrid.tsx,134,if (col && col.dataMap !== siteDataMap) col.dataMap = siteDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx,271,if (col && map && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx,120,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/opt-capa/components/modals/NoWorkBatchModal.tsx,167,column.dataMap = new DataMap(
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/plant-site/components/PlantSiteGrid.tsx,120,if (col && col.dataMap !== operationGroupDataMap) col.dataMap = operationGroupDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/plant-site/components/PlantSiteGrid.tsx,163,if (col && col.dataMap !== logisticPlantDataMap) col.dataMap = logisticPlantDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx,123,if (col && col.dataMap !== siteDataMap) col.dataMap = siteDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanInsertModal.tsx,300,if (c && c.dataMap !== dm) c.dataMap = dm;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/project-route-electrode/components/ProjectRouteElectrodeGrid.tsx,245,if (col && col.dataMap !== divisionDataMap) col.dataMap = divisionDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/project-route-warranty/components/ProjectRouteWarrantyGrid.tsx,148,if (col && col.dataMap !== map) col.dataMap = map;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx,117,if (col && col.dataMap !== siteDataMap) col.dataMap = siteDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx,83,if (col && col.dataMap !== plantSiteDataMap) col.dataMap = plantSiteDataMap;
+"06-x dataMap 대입(편집 진입 처리 밖, 초기 설정 등)",nscm-fe/features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx,94,if (col && col.dataMap !== siteDataMap) col.dataMap = siteDataMap;
+07 화면 밖 상대경로 import,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx,7,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx,7,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx,18,../../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx,35,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx,15,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx,16,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterSalesSiteGrid.tsx,16,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx,19,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingForm.tsx,17,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx,18,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceForm.tsx,16,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,32,../../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx,16,../../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-future-price/utils/searchCombos.ts,35,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Form.tsx,17,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,18,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,19,../../../components/ownerModal/owner-modal.constants
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01PurchaseGrid.tsx,8,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01PurchaseGrid.tsx,9,../../../components/ownerModal/owner-modal.constants
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx,17,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,18,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,19,../../../components/ownerModal/owner-modal.constants
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx,8,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx,9,../../../components/ownerModal/owner-modal.constants
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site/components/SalesSiteCustomerGrid.tsx,11,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site/components/SalesSiteGrid.tsx,16,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/master/src/pages/sales-site/components/SalesSiteLocationGrid.tsx,9,../../../components
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/components/ShipmentChangeRequestConfirmSsp0003MainGrid.tsx,15,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/components/ShipmentChangeRequestConfirmSsp0003SubGrid.tsx,12,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/ChangeRequestPlanSubGrid.tsx,8,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx,9,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssDetailGrid.tsx,20,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx,17,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx,19,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx,12,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx,18,../../../hooks/usePinDashDateFormat
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,17,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,24,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,17,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,25,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.api.ts,8,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.api.ts,11,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.editLock.ts,5,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.editLock.ts,6,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.ts,4,../../../lib/bulk-save
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.ts,5,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/components/SampleDemandGrid.tsx,12,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/components/SampleDemandGrid.tsx,13,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/utils/production-request.api.ts,10,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/utils/production-request.api.ts,11,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/utils/production-request.api.ts,15,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/production-request/utils/production-request.tree.ts,6,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,19,../../../components/tag-layer
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,20,../../../lib/comboCascadeAutoFill
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,26,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.api.ts,10,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.api.ts,13,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.editLock.ts,6,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.ts,4,../../../lib/bulk-save
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.ts,5,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.ts,15,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.value.ts,2,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,19,../../../components/tag-layer
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,20,../../../lib/comboCascadeAutoFill
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,21,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,17,../../../components/tag-layer
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,18,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.api.ts,10,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.api.ts,13,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.editLock.ts,6,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.editLock.ts,17,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.validate.ts,4,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.validate.ts,14,../../../lib/date
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-master/utils/project-master.value.ts,2,../../../lib/call-proc
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/MyProjectGrid.tsx,10,../../../components/tag-layer
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/MyProjectGrid.tsx,11,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/ProjectGrid.tsx,19,../../../components/auth-management-popup
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/ProjectGrid.tsx,20,../../../components/tag-layer
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/ProjectGrid.tsx,21,../../../lib/comboCascadeAutoFill
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/ProjectGrid.tsx,22,../../../lib/grid
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/ProjectProcessFlow.tsx,5,../../../components/process-flow
+07 화면 밖 상대경로 import,nscm-fe/features/spms-demand/src/pages/project-registration/components/myWorkPopup/MyWorkPopup.tsx,12,../../../../lib/grid
+07-b master components index 의 MODAL_OWNER export,nscm-fe/features/master/src/components/index.ts,0,없음
+08 as unknown as,nscm-fe/features/admin/src/pages/dynamic-query/DynamicQuery.tsx,523,const res = result.result as unknown as { o_rc2: { DQ_ID: number }[] };
+08 as unknown as,nscm-fe/features/admin/src/pages/lookup/lookup.utils.test.ts,41,} as unknown as DetailRow;
+08 as unknown as,nscm-fe/features/admin/src/pages/menu-management/MenuManagement.tsx,301,"gridRefs[activeTab].current as unknown as FlexGrid<MessageEditableRow>,"
+08 as unknown as,nscm-fe/features/authority/src/pages/auth-approval/AuthApproval.tsx,208,const rows = (data?.o_rc ?? []) as unknown as ApprovalRow[];
+08 as unknown as,nscm-fe/features/authority/src/pages/auth-approval/useAuthApprovalStore.ts,74,state.filters[SHEETS.MAIN] = searchCondition as unknown as ProcRequest<
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,296,"(measureComboRows ?? []) as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,323,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,324,"block as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,327,"groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,330,) as unknown as BusinessPlanRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,370,"GridAction.removeRow(g as unknown as FlexGridType<WijmoRowItem>, true, true, {"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.tsx,371,"groupKey: row => (row as unknown as BusinessPlanRow).INSERT_GROUP_ID ?? '',"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,155,(c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' &&
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,198,"const arr = ((teamComboRows ?? []) as unknown as Record<string, string>[]).filter("
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,233,"rowsByBinding[c.colNm] = (comboResults[i] ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,258,"const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,484,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: BusinessPlanRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,1042,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx,1155,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/useBusinessPlanStore.ts,288,"const proto = makeInitSearch() as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/utils/business-plan.editLock.test.ts,43,const row = { CRUD_TYPE: 'I' } as unknown as BusinessPlanRow;
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/utils/business-plan.merge.test.ts,16,}) as unknown as GridPanel;
+08 as unknown as,nscm-fe/features/demand/src/pages/business-plan/utils/business-plan.merge.ts,55,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallGrid.tsx,396,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx,307,"const rec = item as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx,315,"const rec = item as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx,115,"const list = (projectOptions ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx,76,"((typeRows ?? []) as unknown as Array<Record<string, string>>).map(r => ({"
+08 as unknown as,nscm-fe/features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx,86,"const rows = (divisionRows ?? []) as unknown as Array<Record<string, string>>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/demand-manager/utils/demand-manager.merge.ts,60,const col = panel.columns[i] as unknown as { _hdrGroup?: string } | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/demand-manager/utils/demand-manager.merge.ts,91,"const item = (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,353,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,354,"block as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,357,"groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx,360,) as unknown as EtcSalesReportRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx,61,"((rows ?? []) as unknown as Array<Record<string, string>>).map(r => ({"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,163,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,198,"return i >= 0 ? ((comboResults[i] ?? []) as unknown as Record<string, unknown>[]) : [];"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,209,"() => (deptByDepartmentRows ?? []) as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,214,"() => (custReportRows ?? []) as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,663,"rec as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,671,"rec as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,723,"target as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx,882,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.merge.ts,205,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,267,"const d = buttonAuthData as unknown as Record<string, unknown[]>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,307,"const d = data as unknown as Record<string, unknown[]>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,316,"() => ((titleData as unknown as Record<string, unknown[]>)?.data ?? []) as SpreadTitleRow[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,348,for (const row of spRows as unknown as WijmoRowItem[]) {
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,372,if ((row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I') pending.push(row);
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,375,"(real as unknown as WijmoRowItem[]).sort((a, b) =>"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,386,"g as unknown as TFlexGrid<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,387,row as unknown as WijmoRowItem
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,388,) as unknown as ForecastPriceRow | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,497,const rec = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,515,const seed = seedRow as unknown as WijmoRowItem | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,570,} as unknown as ForecastPriceRow;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,578,"g as unknown as TFlexGrid<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,579,"[newRow] as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,582,"groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,585,) as unknown as ForecastPriceRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,635,if (gridRows.some(r => (r as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I')) {
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,659,g.editableCollectionView.remove(item as unknown as ForecastPriceRow);
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,685,const allRows = gridRows as unknown as WijmoRowItem[];
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,966,setPopupRow(row as unknown as ForecastPriceRow);
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,992,const target = popupRow as unknown as WijmoRowItem | null;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/ForecastPrice.tsx,1041,const target = popupRow as unknown as WijmoRowItem | null;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,341,"const arr = (editComboResults[i] ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,383,"const siteRows = (asSiteRows ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,394,"const rows = (asIncotermsRows ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,397,"((wsFcstTypeRows ?? []) as unknown as Record<string, unknown>[])"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,402,"(fcstTypeEditRows ?? []) as unknown as Record<string, unknown>[]"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,745,const item = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,767,const it = r as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,817,const item = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1114,row => (row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I'
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx,1998,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,429,"((titleData as unknown as Record<string, unknown[]>)?.data ?? []) as Array<"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,511,"const raw = ((data as unknown as Record<string, unknown[]>)?.data ?? []) as Array<"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,710,const item = (e.panel.rows[e.row] as unknown as { dataItem?: PriceRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,737,const item = (e.panel.rows[e.row] as unknown as { dataItem?: PriceRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,758,(view[i] as unknown as { dataItem?: PriceRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx,1162,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.save.test.ts,33,}) as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.save.test.ts,36,const emptyTracker = { getOriginalValues: () => new Map() } as unknown as EditTracker;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.save.test.ts,82,} as unknown as EditTracker;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.validate.test.ts,27,}) as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts,46,} as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts,73,"const dashRow = { ...rowWithLabel, AS_FROM_SITE: '-' } as unknown as WijmoRowItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts,85,"const codeRow = { ...rowWithLabel, FCST_TYPE: 'WS_C' } as unknown as WijmoRowItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts,97,"const filled = { ...rowWithLabel, AS_FROM_SITE: 'WA00-P' } as unknown as WijmoRowItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts,109,"const asSiteRow = { ...rowWithLabel, SCM_SITE_ID: 'AS_SITE_1' } as unknown as WijmoRowItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx,270,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/MktFcst01.tsx,576,const rec = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,871,"cellCtrlObjTpCd: c._ctrlType as unknown as RawFlexGridColumnConfig['cellCtrlObjTpCd'],"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1059,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: MktFcst01Row })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1339,"applyRowParamCombo(col, binding, row as unknown as Record<string, unknown> | undefined);"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1384,"const rowRec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1404,"const editRowRec = row as unknown as Record<string, unknown> | undefined;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1442,"const rowRec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,1607,"const editedRowRec = staticRow as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,2077,"rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/components/MktFcst01Grid.tsx,2126,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/useMktFcst01Store.ts,486,"const proto = (initSearch as unknown as Record<string, unknown>)[paramNm];"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-01/utils/mkt-fcst-01.merge.ts,151,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx,397,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/MktFcst.tsx,579,const rec = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,848,"cellCtrlObjTpCd: c._ctrlType as unknown as RawFlexGridColumnConfig['cellCtrlObjTpCd'],"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1036,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: MktFcstRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1314,"applyRowParamCombo(col, binding, row as unknown as Record<string, unknown> | undefined);"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1340,"const rowRec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1360,"const editRowRec = row as unknown as Record<string, unknown> | undefined;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1398,"const rowRec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,1575,"const editedRowRec = staticRow as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,2122,"rebindFilterColumns(g as unknown as FlexGridType<WijmoRowItem>, gridFilterRef?.current);"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx,2171,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/useMktFcstStore.ts,466,"const proto = (initSearch as unknown as Record<string, unknown>)[paramNm];"
+08 as unknown as,nscm-fe/features/demand/src/pages/mkt-fcst/utils/mkt-fcst.merge.ts,146,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,303,"row as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,615,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,616,"newRows as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx,627,) as unknown as FuturePriceRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,538,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: FuturePriceRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1105,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1144,origKeyOf(ra as unknown as FuturePriceRow) !==
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1145,origKeyOf(rb as unknown as FuturePriceRow)
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx,1373,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx,185,const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx,495,const row = (e.panel.rows[e.row] as unknown as { dataItem?: PivotRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx,598,(view[i] as unknown as { dataItem?: PivotRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,526,"() => (data?.o_rc1 ?? EMPTY_ROWS) as unknown as PriceBatchRow[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,927,"((teamQ ?? []) as unknown as Array<Record<string, string>>).map("
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,935,g.itemsSource = exportRows as unknown as typeof g.itemsSource;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,940,g.itemsSource = rows as unknown as typeof g.itemsSource;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,957,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: PriceBatchRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1017,(view[i] as unknown as { dataItem?: PriceBatchRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx,1394,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.tsx,277,itemsSource={localRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.tsx,290,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts,393,"...(patch as unknown as Partial<SearchCondition>),"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx,560,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx,684,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-monitoring/utils/sales-monitoring.merge.ts,88,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,379,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,380,"[newRow] as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,383,"groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,386,) as unknown as SalesPlanRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/SalesPlan.tsx,411,"GridAction.removeRow(g as unknown as FlexGridType<WijmoRowItem>, true, true);"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx,144,"() => (salesPlanItemRows ?? []) as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx,652,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: SalesPlanRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx,1118,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx,1248,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-plan/utils/sales-plan.merge.ts,119,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,125,"() => stampOriginBundleKey([...((data?.o_rc1 as unknown as ModelGroupRow[] | undefined) ?? [])]),"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,128,const axisRows = axisData?.o_rc1 as unknown as PeriodAxisRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,132,"() => buildExchangeRateMap(exchangeData?.o_rc1 as unknown as ExchangeRateRow[] | undefined),"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,202,"GridAction.addRowSet(g as unknown as FlexGrid<WijmoRowItem>, newRows, 'above', {"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/SalesPriceModelGroup.tsx,217,"GridAction.removeRow(g as unknown as FlexGrid<WijmoRowItem>, true, true, {"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupGrid.tsx,157,const row = (e.panel.rows[e.row] as unknown as { dataItem?: ModelGroupRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/components/modals/PriceBatchInputModal.tsx,162,"() => buildExchangeRateMap(exchangeData?.o_rc1 as unknown as ExchangeRateRow[] | undefined),"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/components/modals/PriceBatchInputModal.tsx,167,"() => (appliedCond ? ((data?.o_rc1 as unknown as ModelGroupRow[]) ?? EMPTY_ROWS) : EMPTY_ROWS),"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/components/modals/PriceBatchInputModal.tsx,208,const row = (e.panel.rows[e.row] as unknown as { dataItem?: ModelGroupRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-price-model-group/utils/sales-price-model-group.grid.ts,140,(panel.rows[i] as unknown as { dataItem?: ModelGroupRow } | undefined)?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,341,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,342,"block as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,345,"groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,348,) as unknown as SalesReportRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx,540,"const payload = buildBulkPayload(build.rows as unknown as Record<string, string>[]);"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx,55,"((rows ?? []) as unknown as Array<Record<string, string>>).map(r => ({"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx,139,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx,213,"m[id] = (rowComboResults[i] ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx,820,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx,421,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: ExchangeRatePivotRow })
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx,499,(view[i] as unknown as { dataItem?: ExchangeRatePivotRow })?.dataItem;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.test.ts,75,}) as unknown as SalesReportRow;
+08 as unknown as,nscm-fe/features/demand/src/pages/sales-reports/utils/sales-reports.merge.ts,255,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,433,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,434,"[newRow] as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,437,) as unknown as ShipmentRequestRow[] | undefined;
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/ShipmentRequest.tsx,457,"GridAction.removeRow(g as unknown as FlexGridType<WijmoRowItem>, true, true);"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx,529,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: ShipmentRequestRow })
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx,571,"i => (e.panel.rows[i] as unknown as { dataItem?: ShipmentRequestRow })?.dataItem,"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx,977,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/ShipmentRequestGrid.tsx,1097,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx,120,const r = row as unknown as { FROM_YYYYMMDD?: string; TO_YYYYMMDD?: string };
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx,126,}) as unknown as BodPopupRow[]
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx,141,"const r = row as unknown as Record<string, string | undefined>;"
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx,156,const selections = (grid.selectedItems ?? []) as unknown as BodPopupRow[];
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/components/modals/BodItemRouteModal.tsx,213,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/demand/src/pages/shipment-request/utils/shipment-request.merge.ts,120,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/master/src/components/columnSettingModal/ColumnSettingModal.tsx,106,"const beRows = useMemo(() => (data?.o_rc1 ?? []) as unknown as Record<string, string>[], [data]);"
+08 as unknown as,nscm-fe/features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx,300,"rows.some(row => !!(row as unknown as Record<string, unknown>)[colNm]);"
+08 as unknown as,nscm-fe/features/master/src/components/searchFields/SearchFields.tsx,98,"const arr = (rows ?? []) as unknown as Array<Record<string, string>>;"
+08 as unknown as,nscm-fe/features/master/src/components/searchFields/useCascadeFields.tsx,129,"onChange(next as unknown as Partial<V>, resolved[index].key);"
+08 as unknown as,nscm-fe/features/master/src/components/searchFields/yearField.util.ts,33,"const years = ((rows ?? []) as unknown as Array<Record<string, string>>)"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-main/components/ContributeMainGrid.repro.test.ts,30,}) as unknown as MainRow;
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-main/components/ContributeMainGrid.repro.test.ts,82,"expect((items[0] as unknown as Record<string, unknown>)['M#202601#RBU_0999']).toBe("
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-main/components/ContributeMainGrid.repro.test.ts,105,"const row = items[0] as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-main/components/ContributeMainGrid.repro.test.ts,151,"const data = [{ ...sampleRow(), 'M#202603#RBU_0001': 5 } as unknown as MainRow];"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-main/useContributeMainStore.ts,132,"(acc as unknown as Record<string, string>)[curr.paramNm] = curr.paramCtn;"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-view/ContributeView.tsx,141,const validCnt = (mainData?.o_rc3 ?? []) as unknown as ValidationCheckCount[];
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewForm.tsx,56,"() => (yearData?.o_rc1 ?? []) as unknown as VersionOption[],"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx,119,"() => (titleData?.o_rc1 ?? []) as unknown as SpreadTitleRow[],"
+08 as unknown as,nscm-fe/features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx,161,"() => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],"
+08 as unknown as,nscm-fe/features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx,515,"const src = (live ?? (isSS ? salesSiteRows : sspmRows)) as unknown as Record<string, string>[];"
+08 as unknown as,nscm-fe/features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts,105,"const raw = c as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,290,"row as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,457,"g as unknown as FlexGridType<WijmoRowItem>,"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,458,"newRows as unknown as Partial<WijmoRowItem>[],"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/SalesFuturePrice.tsx,469,) as unknown as FuturePriceRow[] | undefined;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,503,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: FuturePriceRow })?.dataItem;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1037,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1076,origKeyOf(ra as unknown as FuturePriceRow) !==
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1077,origKeyOf(rb as unknown as FuturePriceRow)
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx,1305,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx,135,const allRows = (data?.o_rc1 ?? []) as unknown as ExchangeRow[];
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx,295,(view[i] as unknown as { dataItem?: PivotRow })?.dataItem;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,501,"() => (data?.o_rc1 ?? EMPTY_ROWS) as unknown as PriceBatchRow[],"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,896,"((teamQ ?? []) as unknown as Array<Record<string, string>>).map("
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,904,g.itemsSource = exportRows as unknown as typeof g.itemsSource;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,909,g.itemsSource = rows as unknown as typeof g.itemsSource;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,926,const rowItem = (e.panel.rows[e.row] as unknown as { dataItem?: PriceBatchRow })?.dataItem;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,980,(view[i] as unknown as { dataItem?: PriceBatchRow })?.dataItem;
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx,1357,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx,277,itemsSource={localRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx,290,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/useSalesFuturePriceStore.ts,382,"...(patch as unknown as Partial<SearchCondition>),"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-future-price/utils/salesPriceAutoMap.test.ts,18,] as unknown as ComboResponse[];
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,203,"const rec = row as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,211,"const rec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,268,"if (toNum(row[binding]) === 0) setCell(row as unknown as Row, binding, null);"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,314,"const editedRec = edited as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx,325,"const rec = row as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,203,"const rec = row as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,211,"const rec = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,268,"if (toNum(row[binding]) === 0) setCell(row as unknown as Row, binding, null);"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,314,"const editedRec = edited as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx,325,"const rec = row as unknown as Record<string, WijmoPrimitive>;"
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site/utils/sales-site.util.test.ts,16,] as unknown as ComboResponse[];
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site/utils/sales-site.util.test.ts,35,] as unknown as ComboResponse[];
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site/utils/sales-site.util.test.ts,42,] as unknown as ComboResponse[];
+08 as unknown as,nscm-fe/features/master/src/pages/sales-site/utils/sales-site.util.test.ts,85,] as unknown as ComboResponse[];
+08 as unknown as,nscm-fe/features/report/src/pages/demand-plan-waterfall/DemandPlanWaterfall.tsx,217,active.data as unknown as { o_rc2?: Array<{ ISO_WEEK?: string | number }> } | undefined
+08 as unknown as,nscm-fe/features/report/src/pages/demand-plan-waterfall/components/DemandPlanWaterfallGrid.tsx,197,const userHidden = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/report/src/pages/demand-plan-waterfall/components/olap-field-rail/olapFieldRail.utils.ts,145,field.aggregate = aggregate as unknown as PivotField['aggregate'];
+08 as unknown as,nscm-fe/features/report/src/pages/demand-plan-waterfall/utils/waterfall.merge.ts,69,"(panel.rows[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,95,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,103,if ((c.cellCboDataTp as unknown as string) === CELLTYPE_SCOPED_COMBO) {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,131,c => (c.cellCboDataTp as unknown as string) === 'CellTypeByDivision'
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,155,"const arr = (stackScopedResults[i] ?? []) as unknown as Record<string, string>[];"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,231,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,254,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPCheckBox') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,269,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,294,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,344,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/components/ProjectListGrid.tsx,443,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/utils/project-list.editLock.test.ts,28,}) as unknown as MainRow;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/utils/project-list.validate.test.ts,123,} as unknown as MainRow;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-list/utils/project-list.validate.test.ts,144,const p = toReqPayload({ CRUD_TYPE: 'M' } as unknown as MainRow);
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,90,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,98,if ((c.cellCboDataTp as unknown as string) === CELLTYPE_SCOPED_COMBO) {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,125,c => (c.cellCboDataTp as unknown as string) === 'CellTypeByDivision'
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,149,"const arr = (stackScopedResults[i] ?? []) as unknown as Record<string, string>[];"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,215,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,253,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,278,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,327,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,407,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,67,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,142,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,157,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPCheckBox') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,173,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,195,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,216,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,298,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/utils/project-master.editLock.test.ts,25,}) as unknown as Tab1Row;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/utils/project-master.validate.test.ts,131,}) as unknown as Tab1Row;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-master/utils/project-master.validate.test.ts,166,} as unknown as Tab2Row;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,67,c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,95,"byBinding[c.colNm] = (comboResults[i] ?? []) as unknown as Record<string, string>[];"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,106,const i = comboColumns.findIndex(c => (c.cellCboDataTp as unknown as string) === 'MyDivision');
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,113,(DIVISION_SCOPED_COMBOS as readonly string[]).includes(c.cellCboDataTp as unknown as string)
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,137,"const raw = (scopedResults[i] ?? []) as unknown as Record<string, string>[];"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,156,.filter(c => (c.cellCboDataTp as unknown as string) === f.comboId)
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,221,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,235,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,263,if ((meta?.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,273,(meta?.cellCboDataTp as unknown as string) ?? ''
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,335,if ((meta?.cellCtrlObjTpCd as unknown as string) !== 'FPModal') return;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab1Grid.tsx,408,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab2Grid.tsx,74,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab2Grid.tsx,82,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab2Grid.tsx,100,if ((meta?.cellCtrlObjTpCd as unknown as string) !== 'FPModal') return;
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/ProjectRegTab2Grid.tsx,155,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/components/modals/MyWorkModal.tsx,69,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/utils/project-reg.editLock.test.ts,27,"({ DPJT_KEY: 'TEMP_20260813000000000001_000001', DPJT_REG_STATUS: status, ...over }) as unknown as Tab1Row;"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/utils/project-reg.editLock.test.ts,29,"({ DPJT_KEY: '', DPJT_REG_STATUS: '', CRUD_TYPE: 'C', ...over }) as unknown as Tab1Row;"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/utils/project-reg.editLock.test.ts,152,"({ colNm, inputTpCd }) as unknown as RawFlexGridColumnConfig;"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/utils/project-reg.validate.test.ts,88,"({ colNm, colLblNm, inputTpCd: 'IM' }) as unknown as RawFlexGridColumnConfig;"
+08 as unknown as,nscm-fe/features/sdm/src/pages/project-reg/utils/project-reg.validate.test.ts,107,}) as unknown as Tab1Row;
+08 as unknown as,nscm-fe/features/shipping/src/components/confirm-detail-modal/ConfirmDetailModal.tsx,172,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/hooks/usePinDashDateFormat.test.ts,39,"{ current: grid as unknown as FlexGridType },"
+08 as unknown as,nscm-fe/features/shipping/src/pages/delegate/Delegate.tsx,461,rows={delegateRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/delegate/Delegate.tsx,471,rows={delegatedRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/distribution-route/DistributionRoute.tsx,172,"dirty as unknown as DistributionRouteRow[],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/distribution-route/DistributionRoute.tsx,175,"if (!validateRows(changed as unknown as Record<string, unknown>[]).ok) return;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/distribution-route/components/DistributionRouteGrid.tsx,263,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx,86,"const raw = (data?.o_rc1 ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx,91,}) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-history/components/ShipmentChangeHistoryGrid.tsx,174,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-history/useShipmentChangeHistoryStore.ts,136,"} as unknown as ProcRequest<MENU_ID, SHEETS.MAIN>,"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,222,"computeInitialCheckedIds(subRows as unknown as Record<string, unknown>[], status)"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,296,"const subList = subRows as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,416,"const subList = subRows as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx,642,"? (subRows as unknown as Record<string, unknown>[]).map(r =>"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/components/ShipmentChangeRequestConfirmSsp0003MainGrid.tsx,128,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm-ssp0003/components/ShipmentChangeRequestConfirmSsp0003SubGrid.tsx,205,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/components/ShipmentChangeRequestConfirmMainGrid.tsx,170,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-confirm/components/ShipmentChangeRequestConfirmSubGrid.tsx,111,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/ShipmentChangeRequestPlan.tsx,460,"subRows: subRows as unknown as GridRowData[],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/ChangeRequestPlanSubGrid.tsx,99,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx,607,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/components/modals/ApprovalUserModal.tsx,211,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanSaveActions.ts,452,changed as unknown as ValidationRows
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx,479,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx,128,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx,198,"dirty as unknown as ShipmentLotSizeRow[],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx,150,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx,337,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx,263,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx,222,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts,52,const result = (res.data?.result ?? {}) as unknown as { o_rc1?: Row[] };
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/components/ShipmentPlanAutoEssMainGrid.tsx,503,itemsSource={visibleRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-auto-ess/components/modals/RequestorModal.tsx,101,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx,157,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx,682,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,383,: (packerData?.o_rc1 ?? [])) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,422,"(whStockData as unknown as { o_rc2?: WijmoRowItem[] })?.o_rc2 ?? [],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,424,"(holdStockData as unknown as { o_rc2?: WijmoRowItem[] })?.o_rc2 ?? [],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,1330,"mutateMes(dirty as unknown as ResponseData<MENU_ID, SHEETS.MES_STOCK, 'o_rc1'>[]);"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx,1504,"return (d as unknown as { o_rc3?: Record<string, unknown>[] })?.o_rc3 ?? [];"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx,484,"const memo = isMemoRow ? memoOfRef.current?.(row as unknown as MainRow, binding) : undefined;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx,493,"? prodNoteOfRef.current?.(row as unknown as MainRow, binding)"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx,673,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts,43,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx,737,"rowsRef.current as unknown as CalcRow[],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx,799,"rowsRef.current as unknown as CalcRow[],"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx,879,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx,103,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx,525,<DataGrid gridRef={gridRef} itemsSource={rows as unknown as WijmoRowItem[]} dynamicColumns={columns} />
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-electrode/utils/shipment-request-electrode.spreadHeader.ts,201,"(panel.rows[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,420,"const rec = row as unknown as Record<string, string | undefined>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,438,"const rec = row as unknown as Record<string, string | undefined>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,454,"const record = row as unknown as Record<string, string | number | null | undefined>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,569,"GridAction.addRow(grid, insertDefaults as unknown as Partial<CellRow>);"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,575,"GridAction.addRow(grid, insertDefaults as unknown as Partial<RequestDetailRow>);"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1033,"const rec = cellModelRow as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1042,"scmSiteId: (cellModelRow as unknown as { FROM_SITE?: string } | null)?.FROM_SITE ?? '',"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1044,"itemId: (cellModelRow as unknown as { MODEL_ID?: string } | null)?.MODEL_ID ?? '',"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1054,"itemId: (bodPopupRow as unknown as { MODEL_ID?: string } | null)?.MODEL_ID ?? '',"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx,1059,"const rec = bodPopupRow as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx,594,if (binding === 'MODEL_ID') onCellModelDblClick?.(row as unknown as Row);
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx,595,else if (binding === 'TR_MODE') onBodCellDblClick?.(row as unknown as Row);
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.tsx,145,const selections = (grid.selectedItems ?? []) as unknown as BodPopupRow[];
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.tsx,197,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts,75,"const record = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts,204,"const raw = (row as unknown as Record<string, unknown>)['YYYYMMDD'];"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts,239,"const record = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts,323,"const key = keyOf(r as unknown as Record<string, unknown>);"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.save.ts,327,"const rec = r as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-pack/utils/shipment-request-pack.spreadHeader.ts,193,"(panel.rows[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-semi/ShipmentRequestSemi.tsx,269,} as unknown as Partial<WijmoRowItem>) as unknown as ShipmentRequestRow | undefined;
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-semi/components/ShipmentRequestSemiGrid.tsx,522,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx,89,"const rows = useMemo(() => withRowNo((data?.o_rc1 ?? []) as unknown as BodPopupRow[]), [data]);"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx,127,const selections = (grid.selectedItems ?? []) as unknown as BodPopupRow[];
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-request-semi/components/modals/BodItemRouteModal.tsx,232,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/ShipmentRequestorPic.tsx,306,} as unknown as Partial<MainRow>);
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/components/ShipmentRequestorPicGrid.tsx,205,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/components/modals/RequestorPicItemByDivisionModal.tsx,302,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-requestor-pic/hooks/useShipmentRequestorPicValidation.ts,51,const result = (res.data?.result ?? {}) as unknown as { o_rc1?: Row[] };
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx,100,}) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx,145,} as unknown as Partial<MainRow>);
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx,154,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx,151,"(calendarData as unknown as Record<string, CalendarColumnRow[]>)?.[RESPONSE_SET.CALENDAR] ??"
+08 as unknown as,nscm-fe/features/shipping/src/pages/shipment-working-day/utils/shipmentWorkingDaySave.ts,32,"const record = item as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,109,((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [])[0]?.SES_DEPT_ID ?? ''
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,191,(authWriteData?.authWriteList as unknown as AuthMgmtUserRow[] | undefined) ?? [];
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,192,const readRows = (authReadData?.authReadList as unknown as AuthMgmtUserRow[] | undefined) ?? [];
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,200,"() => buildOrgTree((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [], sesDeptId),"
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,213,"hasUserCondition ? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? []) : [],"
+08 as unknown as,nscm-fe/features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx,217,"() => (authReqData?.authRequestList as unknown as AuthRequestRow[] | undefined) ?? [],"
+08 as unknown as,nscm-fe/features/spms-demand/src/components/user-search-popup/UserSearchPopup.tsx,76,((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [])[0]?.SES_DEPT_ID ?? ''
+08 as unknown as,nscm-fe/features/spms-demand/src/components/user-search-popup/UserSearchPopup.tsx,103,"() => buildOrgTree((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? [], sesDeptId),"
+08 as unknown as,nscm-fe/features/spms-demand/src/components/user-search-popup/UserSearchPopup.tsx,113,"hasUserCondition ? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? []) : [],"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/PlanYield.tsx,194,plantRows) as unknown as PlantRow[];
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/PlanYield.tsx,228,yieldRows) as unknown as YieldRow[];
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,49,(meta.attribute1 === MERGE_ATTR || (meta.cellCtrlObjTpCd as unknown as string) === 'FPCheckBox');
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,127,"() => plantProgress(rows as unknown as Record<string, unknown>[]),"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,162,"(g.collectionView?.sourceCollection ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,170,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,205,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,298,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,101,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,145,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,158,if (!meta || (meta.cellCtrlObjTpCd as unknown as string) !== 'FPCheckBox') return;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,210,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.test.ts,28,}) as unknown as PlantRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.test.ts,79,}) as unknown as YieldRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.ts,24,"const bulk = buildBulkSavePayload(rows as unknown as Record<string, unknown>[], PLANT_KEYS)[0];"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.ts,55,"const target = rows.filter(row => !isGroupRow(row as unknown as Record<string, unknown>));"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/plan-yield/utils/plan-yield.payload.ts,57,"const bulk = buildBulkSavePayload(target as unknown as Record<string, unknown>[], YIELD_KEYS)[0];"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/production-request/ProductionRequest.tsx,125,const buildRow = ((buildData?.data ?? []) as unknown as BuildRow[])[0] || undefined;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/production-request/components/SampleDemandGrid.tsx,180,itemsSource={(rows ?? []) as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,202,const isCheckboxColumn = (meta.cellCtrlObjTpCd as unknown as string) === 'FPCheckBox';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,225,if ((meta.cellCtrlObjTpCd as unknown as string) === 'FPModal') {
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,262,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,284,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,313,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx,421,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.editLock.test.ts,29,}) as unknown as MainRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.test.ts,119,} as unknown as MainRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.test.ts,140,const p = toReqPayload({ CRUD_TYPE: 'M' } as unknown as MainRow);
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-list/utils/project-list.validate.test.ts,163,}) as unknown as MainRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,148,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,230,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,250,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx,351,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,128,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,203,const ctrlType = (meta?.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,224,const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-master/components/ProjectMasterTab2Grid.tsx,308,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx,155,((projectData?.projectList as unknown as ProjectRow[] | undefined) ?? []).map(row =>
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx,162,"() => (myProjectData?.myProjectList as unknown as MyProjectRow[] | undefined) ?? [],"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx,236,} as unknown as ProjectRow;
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx,176,(authWriteData?.authWriteList as unknown as AuthMgmtUserRow[] | undefined) ?? [];
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx,177,const readRows = (authReadData?.authReadList as unknown as AuthMgmtUserRow[] | undefined) ?? [];
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx,185,"() => buildOrgTree((orgData?.orgList as unknown as OrgTreeRow[] | undefined) ?? []),"
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx,189,? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? [])
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx,192,(authReqData?.authRequestList as unknown as AuthRequestRow[] | undefined) ?? [];
+08 as unknown as,nscm-fe/features/spms-demand/src/pages/project-registration/components/myWorkPopup/MyWorkPopup.tsx,96,"() => (data?.scheduleList as unknown as MyWorkScheduleRow[] | undefined) ?? [],"
+08 as unknown as,nscm-fe/features/supply/src/components/newPlanModal/NewPlanBodModal.tsx,184,pickSelected((grid.selectedItems ?? []) as unknown as BodRow[]);
+08 as unknown as,nscm-fe/features/supply/src/components/newPlanModal/NewPlanBodModal.tsx,222,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/components/newPlanModal/NewPlanModal.tsx,681,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,167,const src = (grid.collectionView?.sourceCollection ?? []) as unknown as BodItemRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,202,const src = (grid.collectionView?.sourceCollection ?? []) as unknown as BodExcludedRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,246,const target = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,265,const target = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/BodItem.tsx,278,return newRow as unknown as Partial<BodExcludedRow>;
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/components/modals/GetBodItemModal.tsx,92,}) as unknown as BodPopupRow[]
+08 as unknown as,nscm-fe/features/supply/src/pages/bod-item/components/modals/GetBodItemModal.tsx,104,const selections = (grid.selectedItems ?? []) as unknown as BodPopupRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/bod/Bod.tsx,215,"const target = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx,225,"() => (assignQuery.data?.o_rc1 ?? []) as unknown as GridRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx,229,"() => (sopQuery.data?.o_rc1 ?? []) as unknown as GridRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/CapaLineAssign.tsx,641,const target = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/CapaLineAssignGrid.tsx,310,itemsSource={data as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/CapaLineSopGrid.tsx,138,itemsSource={data as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/modals/CapaLineAssignModelModal.tsx,218,"((data?.o_rc1 ?? []) as unknown as GridRow[]).map(row => ({ [COLUMN.CHK]: false, ...row })),"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/modals/CapaLineAssignModelModal.tsx,424,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/modals/CapaLineModal.tsx,227,"((data?.o_rc1 ?? []) as unknown as GridRow[]).map(row => ({ [COLUMN.CHK]: false, ...row })),"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-assign/components/modals/CapaLineModal.tsx,398,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-master/CapaLineMaster.tsx,312,"rowsByLevel[activeLevel] as unknown as Record<string, unknown>[]"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-master/CapaLineMaster.tsx,313,) as unknown as Partial<WijmoRowItem>
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-line-master/components/CapaLineMasterLevelGrid.tsx,177,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-lob-report/CapaLobReport.tsx,125,"() => (pickDataRows(spreadTitleQuery.data) as unknown as SpreadTitleRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx,174,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-lob-report/utils/capaLobReport.cursors.ts,47,"pickCursor(response, [RESPONSE_SET.DATA, 'O_RC1', 'data'], 0) as unknown as CapaLobRow[];"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx,437,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-loss-plan/utils/capaLossPlan.recalc.ts,128,"map.set(dayCntKeyOf(row as unknown as Record<string, unknown>, periodKey), {"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx,125,editTrackerRef.current = new EditTracker(g as unknown as FlexGrid);
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx,174,for (const other of dataRef.current as unknown as CapaRowItem[]) {
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-mobility-it/utils/capa-mobility-it.save.ts,46,const row = rawRow as unknown as CapaRowItem;
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx,496,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-speed-plan/utils/capaSpeedPlan.combos.test.ts,124,"{ DIVISION_ID: '81', CODE: '202509', VER_SEQ: '1', PROG_STAT: '1' } as unknown as ComboRow,"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-speed-plan/utils/capaSpeedPlan.combos.test.ts,132,"code => ({ CODE: code, NAME: `name-${code}` }) as unknown as ComboRow"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx,154,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-teep-report/utils/capaTeepReport.cursors.ts,44,"pickCursor(response, [RESPONSE_SET.DATA, 'O_RC1', 'data'], 0) as unknown as CapaTeepRow[];"
+08 as unknown as,nscm-fe/features/supply/src/pages/capa-teep-report/utils/capaTeepReport.cursors.ts,52,) as unknown as SpreadTitleRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/capa/Capa.tsx,257,setCalendar(cal as unknown as CalendarRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/capa/utils/capa.editLock.test.ts,48,}) as unknown as CapaRow;
+08 as unknown as,nscm-fe/features/supply/src/pages/capa/utils/capa.editLock.test.ts,204,}) as unknown as CapaRow;
+08 as unknown as,nscm-fe/features/supply/src/pages/constraint-of-shipment-qty/ConstraintOfShipmentQty.tsx,162,"dirty as unknown as ConstraintOfShipmentQtyRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/constraint-of-shipment-qty/ConstraintOfShipmentQty.tsx,164,rows => void submitSave(rows as unknown as ConstraintOfShipmentQtyRow[])
+08 as unknown as,nscm-fe/features/supply/src/pages/constraint-of-shipment-qty/components/ConstraintOfShipmentQtyGrid.tsx,116,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/demand-exception/DemandException.tsx,85,"FROM_YYYYMMDD: toGridDate(row.FROM_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/demand-exception/DemandException.tsx,86,"TO_YYYYMMDD: toGridDate(row.TO_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx,246,"rows={rows as unknown as Record<string, unknown>[]}"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx,212,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx,115,"return rows as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx,476,"SEARCH_MODE_OPTIONS as unknown as Option[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx,557,"UNIT_QTY_OPTIONS as unknown as Option[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx,324,itemsSource={scaledRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi/GlobalPsi.tsx,236,"rows={rows as unknown as Record<string, unknown>[]}"
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx,329,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/global-psi/utils/globalPsiMerge.ts,36,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.tsx,125,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/integration-psi/IntegrationPsi.tsx,394,"GridAction.addRow(grid, overrides as unknown as Partial<MainRow>, 'below');"
+08 as unknown as,nscm-fe/features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx,156,"rows as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx,186,"const sentinel = { CODE: LINE_ID_EMPTY, NAME: LINE_ID_EMPTY } as unknown as ComboResponse;"
+08 as unknown as,nscm-fe/features/supply/src/pages/integration-psi/components/IntegrationPsiGrid.tsx,545,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/integration-psi/utils/integrationPsiSave.test.ts,19,({ getOriginalValues: () => new Map(pairs) }) as unknown as EditTracker;
+08 as unknown as,nscm-fe/features/supply/src/pages/line-master/LineMaster.tsx,171,"saveWithValidation(dirty as unknown as PackerRow[], staticColumns[SHEETS.PACKER], rows =>"
+08 as unknown as,nscm-fe/features/supply/src/pages/line-master/LineMaster.tsx,172,"savePacker.mutate(rows as unknown as Record<string, unknown>[])"
+08 as unknown as,nscm-fe/features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx,72,"() => (siteComboRows ?? []) as unknown as Record<string, unknown>[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx,205,initialized={g => setGrid(g as unknown as FlexGridType)}
+08 as unknown as,nscm-fe/features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx,208,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/master-validation/MasterValidation.tsx,86,((lookupData ?? []) as unknown as MasterValidationRow[])
+08 as unknown as,nscm-fe/features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx,96,"saveWithValidation(dirty as unknown as MainRow[], staticColumns[SHEETS.MAIN], mutate);"
+08 as unknown as,nscm-fe/features/supply/src/pages/mdm-class-master/components/MdmClassMasterGrid.tsx,42,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx,153,"saveWithValidation(dirty as unknown as OperationLTRow[], staticColumns[SHEETS.MAIN], mutate);"
+08 as unknown as,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx,287,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/operation-lt/useOperationLTStore.ts,149,"const proto = initSearch as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/OptCapa.tsx,145,"() => (gridQuery.data?.o_rc1 ?? []) as unknown as GridRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx,587,itemsSource={data as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/components/modals/NoWorkBatchModal.tsx,219,const source = (grid?.collectionView?.sourceCollection ?? rows) as unknown as BatchGridRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/components/modals/NoWorkBatchModal.tsx,456,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,223,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as GridRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,338,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as GridRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,414,rowsForRequired as unknown as WijmoRowItem[]
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,441,[]) as unknown as GridRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,455,"row as unknown as WijmoRowItem,"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx,468,const target = row as unknown as WijmoRowItem;
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,109,"() => ((initData?.o_rc1 ?? []) as unknown as PlantRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,113,"() => ((initData?.o_rc2 ?? []) as unknown as LineRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,117,"() => ((initData?.o_rc3 ?? []) as unknown as OperationRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,121,"() => ((initData?.o_rc4 ?? []) as unknown as ExcludedSheetRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,125,"() => ((initData?.o_rc5 ?? []) as unknown as LineTypeRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts,134,"() => ((initData?.o_rc6 ?? []) as unknown as NoWorkTypeRow[]),"
+08 as unknown as,nscm-fe/features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx,105,"saveWithValidation(dirty as unknown as MainRow[], staticColumns[SHEETS.MAIN], mutate);"
+08 as unknown as,nscm-fe/features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx,103,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx,246,"const planInfoDynamic = planInfo as unknown as Record<string, string>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-control/utils/planControl.activity.test.ts,16,"const row = (patch: Record<string, unknown>) => patch as unknown as PlanControlRow;"
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-control/utils/planControl.activity.test.ts,109,] as unknown as Parameters<typeof buildDivisionOptions>[0];
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx,207,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as PlanGroupRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-group-master/PlanGroupMaster.tsx,283,"searchParam={searchParams as unknown as Record<keyof object, string>}"
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-group-master/components/modals/OwnerSelectModal.tsx,125,const selected = (grid.selectedItems ?? []) as unknown as OwnerRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx,168,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as PopupRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/precede-safety-stock-day/PrecedeSafetyStockDay.tsx,94,"FROM_YYYYMMDD: toGridDate(row.FROM_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/precede-safety-stock-day/PrecedeSafetyStockDay.tsx,95,"TO_YYYYMMDD: toGridDate(row.TO_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx,156,mutateMain(payload as unknown as MainRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx,64,"buildPivotColumns(rows as unknown as Record<string, unknown>[], bucket, chkSum, {"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-fix/components/ProductionPlanFixGrid.tsx,233,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-fix/utils/productionPlanFixSave.test.ts,48,} as unknown as FlexGrid;
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,107,const data = MOCK_MAIN_ENABLED ? (MOCK_MAIN_DATA as unknown as typeof rawMainData) : rawMainData;
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,132,"const rc1 = (d?.o_rc1 ?? []) as unknown as Record<string, unknown>[];"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,142,) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,151,"const fixKey = buildFixKey(r as unknown as Record<string, unknown>);"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,190,? (MOCK_EDIT_INFO_DATA as unknown as typeof rawEditInfoData)
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,376,mutateMain(dirty as unknown as MainRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx,427,mutateFix(payload as unknown as MainRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/ProductionPlanLineGrid.tsx,150,"for (const r of rows as unknown as Record<string, unknown>[]) {"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/ProductionPlanLineGrid.tsx,168,"() => buildPivotColumns(rows as unknown as Record<string, unknown>[], bucket, chkSum, drilldown),"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/ProductionPlanLineGrid.tsx,429,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanInsertModal.tsx,161,if (!cancelled) setItemPlantRows(res as unknown as ItemPlantRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanInsertModal.tsx,325,const opts = (res as unknown as { CODE?: string; NAME?: string }[]).map(r => ({
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanInsertModal.tsx,341,const opts = (res as unknown as { CODE?: string; NAME?: string }[]).map(r => ({
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanLineLoadModal.tsx,74,"() => buildPivotColumns(rows as unknown as Record<string, unknown>[], bucket, chkSum),"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/components/modals/ProductionPlanLineLoadModal.tsx,148,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-line/production-plan-line.mock.ts,62,"o_rc1: MOCK_ROWS as unknown as MainRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan-waterfall/utils/waterfall.merge.ts,66,"(panel.rows[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan/ProductionPlan.tsx,279,] as unknown as never[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/production-plan/components/ProductionPlanGrid.tsx,415,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-electrode/ProjectRouteElectrode.tsx,206,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx,99,"FROM_YYYYMMDD: toGridDate(row.FROM_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx,100,"TO_YYYYMMDD: toGridDate(row.TO_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx,199,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as MainRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/hooks/useProjectRouteWarrantyValidation.test.ts,23,}) as unknown as MainRow;
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/hooks/useProjectRouteWarrantyValidation.test.ts,31,"FROM_YYYYMMDD: new Date(2024, 0, 1) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/hooks/useProjectRouteWarrantyValidation.test.ts,32,"TO_YYYYMMDD: new Date(2023, 0, 1) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/hooks/useProjectRouteWarrantyValidation.test.ts,46,"FROM_YYYYMMDD: new Date(2024, 0, 1) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route-warranty/hooks/useProjectRouteWarrantyValidation.test.ts,47,"TO_YYYYMMDD: new Date(2024, 11, 31) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route/ProjectRoute.tsx,149,const source = grid?.collectionView?.sourceCollection as unknown as SiteRow[] | undefined;
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route/ProjectRoute.tsx,312,const source = (grid.collectionView?.sourceCollection ?? []) as unknown as PlantRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx,241,"const v = validatePlantSave(checked as unknown as PlantRow[], PROJECT_ROUTE_LIST_SAVE_MSG_IDS);"
+08 as unknown as,nscm-fe/features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx,248,"const toSave = checked.map(row => ({ ...row, CRUD_TYPE: 'I' })) as unknown as PlantSaveRow[];"
+08 as unknown as,nscm-fe/features/supply/src/pages/safety-stock/SafetyStock.tsx,82,"FROM_YYYYMMDD: toGridDate(row.FROM_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/safety-stock/SafetyStock.tsx,83,"TO_YYYYMMDD: toGridDate(row.TO_YYYYMMDD) as unknown as string,"
+08 as unknown as,nscm-fe/features/supply/src/pages/sales-site-priority/SalesSitePriority.tsx,74,}) as unknown as SalesSitePriorityRow[];
+08 as unknown as,nscm-fe/features/supply/src/pages/sales-site-priority/components/SalesSitePriorityGrid.tsx,190,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx,287,const originals = editTrackerRefs[SHEET_INDEX.VIRTUAL_BOM].current?.getOriginalValues() as unknown as
+08 as unknown as,nscm-fe/features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx,302,const originals = editTrackerRefs[SHEET_INDEX.SCHEDULED_RECEIPT].current?.getOriginalValues() as unknown as
+08 as unknown as,nscm-fe/features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx,323,const source = (grid?.collectionView?.sourceCollection ?? []) as unknown as {
+08 as unknown as,nscm-fe/features/supply/src/pages/scp-bom-elec/ScpBomElec.tsx,132,"saveWithValidation(dirty as unknown as ScpBomElecRow[], staticColumns, () => {"
+08 as unknown as,nscm-fe/features/supply/src/pages/scp-bom-elec/components/ScpBomElecGrid.tsx,113,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/scp-bom/ScpBom.tsx,149,"saveWithValidation(dirty as unknown as ScpBomRow[], staticColumns, () => {"
+08 as unknown as,nscm-fe/features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx,168,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-allo-report/ShipmentAlloReport.tsx,276,.map(([row]) => row as unknown as ShipmentAlloRow);
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportGrid.tsx,150,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx,487,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx,489,dynamicColumns={dynamicColumns as unknown as FlexGridColumnConfig[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.save.test.ts,46,"const tracker = { getOriginalValues: () => new Map([[row, { D_20260209: 3 }]]) } as unknown as EditTracker;"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.save.ts,84,"const r = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx,95,"() => mergeFixReason(rc1 as unknown as Record<string, unknown>[], rc2) as unknown as MainRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx,173,mutateMain(payload as unknown as MainRow[]);
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx,67,"() => buildPivotColumns(rows as unknown as Record<string, unknown>[], bucket, chkSumRef.current),"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx,256,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-fix/utils/shipmentPlanFixMerge.ts,36,"(view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx,276,"const r = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx,297,return next as unknown as MainRow;
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx,545,itemsSource={displayRows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx,547,dynamicColumns={dynamicColumns as unknown as FlexGridColumnConfig[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts,94,"const r = row as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx,116,"((calendarData as unknown as Record<string, CalendarColumnRow[]>)?.[RESPONSE_SET.CALENDAR] ?? [])"
+08 as unknown as,nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx,197,"const rec = item as unknown as Record<string, unknown>;"
+08 as unknown as,nscm-fe/features/supply/src/pages/stock-osp/StockOspPage.tsx,194,"saveWithValidation(dirty as unknown as PackHoldStockRow[], staticColumns[SHEETS.PACK] ?? [], () => {"
+08 as unknown as,nscm-fe/features/supply/src/pages/stock-osp/components/OspStockGrid.tsx,37,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx,167,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/tact-time/TactTime.tsx,216,"dirty as unknown as ExceptRow[],"
+08 as unknown as,nscm-fe/features/supply/src/pages/tact-time/TactTime.tsx,233,"saveWithValidation(dirty as unknown as PlantRow[], staticColumns[SHEETS.PLANT], mutatePlant);"
+08 as unknown as,nscm-fe/features/supply/src/pages/tact-time/TactTime.tsx,235,"saveWithValidation(dirty as unknown as PackerRow[], staticColumns[SHEETS.PACKER], mutatePacker);"
+08 as unknown as,nscm-fe/features/supply/src/pages/tact-time/components/TactTimeExceptGrid.tsx,142,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx,244,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx,121,"for (const w of (warehouseCombo ?? []) as unknown as Record<string, string>[]) {"
+08 as unknown as,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx,138,const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+08 as unknown as,nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg/utils/waterfall.merge.ts,61,"(panel.rows[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;"
+08 as unknown as,nscm-fe/features/supply/src/pages/workbench/Workbench.tsx,430,"searchParam={searchParams as unknown as Record<keyof object, string>}"
+08 as unknown as,nscm-fe/features/supply/src/pages/workbench/components/WorkbenchGrid.tsx,281,itemsSource={rows as unknown as WijmoRowItem[]}
+08 as unknown as,nscm-fe/features/supply/src/pages/working-time/WorkingTime.tsx,128,"const sidecar = (data as unknown as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS];"
+08 as unknown as,nscm-fe/features/supply/src/pages/working-time/WorkingTime.tsx,222,"const rec = item as unknown as Record<string, unknown>;"
+09 alternatingRowStep=0,nscm-fe/features/master/src/pages/contribute-main/components/ContributeMainGrid.tsx,372,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/master/src/pages/sales-site/components/SalesSiteGrid.tsx,153,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/report/src/pages/sales-plan-waterfall/components/SalesPlanWaterfallGrid.tsx,80,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/spms-demand/src/pages/plan-yield/components/RequestPlantPanel.tsx,153,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/spms-demand/src/pages/plan-yield/components/YieldLossGrid.tsx,89,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/supply/src/pages/demand-group-master/components/ModelListGrid.tsx,94,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/supply/src/pages/formation/components/FormationExceptGrid.tsx,121,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx,113,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/supply/src/pages/formation/components/FormationGrid.tsx,137,병합 사용 있음
+09 alternatingRowStep=0,nscm-fe/features/supply/src/pages/plant-site/components/PlantSiteGrid.tsx,345,병합 사용 없음
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00001 | KO=Div | EN=Div.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00098 | KO=로그아웃 | EN=Log out
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00103 | KO=메뉴 | EN=Menu
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00104 | KO=팝업 | EN=Popup
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00106 | KO=코드 | EN=Code
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00113 | KO=라벨 | EN=Label
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00115 | KO=메시지 | EN=Message
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00119 | KO=사용자아이디 | EN=User Id
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00380 | KO=공지사항 등록 | EN=Register Notice
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00381 | KO=오늘 하루 열지 않기 | EN=Do not open again today
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00382 | KO=팝업 노출 여부 | EN=Popup Exposure
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00385 | KO=미리보기 | EN=Preview
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00387 | KO=클릭 또는 드래그하여 업로드 · PNG / JPG · 권장 880×360 | EN=Click Select image or drag a PNG/JPG here · up to 1 MB · recommended 8
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00389 | KO=게시기간 | EN=Publication Period
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00390 | KO=시작일 | EN=Start Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00391 | KO=기본 정보 | EN=Basic Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00392 | KO=종료일 | EN=End Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00393 | KO=선택된 파일 없음 | EN=No File Selected
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00394 | KO=취소 | EN=Cancel
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00395 | KO=저장 | EN=Save
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00396 | KO=공지사항 수정 | EN=Edit Notice
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00397 | KO=제목 | EN=Enter a notice identifier
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00398 | KO=Y (사용) | EN=Y (Use)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00399 | KO=N (미사용) | EN=N (Unused)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00400 | KO=Active + 게시기간이 만족되어야 홈 리스트에 노출됩니다. | EN=Active and the publication period must both be valid for the notice to
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00401 | KO=N (미노출) | EN=N (Hidden)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00402 | KO=Y (노출) | EN=Y (Visible)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,"LBL00403 | KO=N이면 팝업이 뜨지 않습니다, | EN=If set to N, the popup will not be displayed."
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00404 | KO=팝업 상단에 노출될 제목 | EN=Title displayed at the top of the popup
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00405 | KO=(별도 컬럼 / 팝업 상단 이미지) | EN=(Separate column / image at the top of the popup)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00406 | KO=파일 선택 | EN=Select image
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00407 | KO=삭제 | EN=Remove
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00408 | KO=(에디터 / 이미지 컬럼과 분리) | EN=(Editor / separated from the image column)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00410 | KO=이미지 | EN=Image
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00412 | KO=내용 없음 | EN=There is no registered content
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00414 | KO=수정 | EN=Edit
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00415 | KO=홈 화면 리스트는 게시기간 + Active를 따릅니다. · 팝업 노출은 팝업 노출 여부(Y/N)를 따릅니다. | EN=Popup exposure follows the Main/Sub1/Sub2 cycle. The home list follows
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00416 | KO=이동계획 | EN=Move Plan
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00417 | KO=실적포함 | EN=Include Actual
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00418 | KO=최신화 | EN=Update Lastest
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00422 | KO=요청취소 | EN=Req. Cancel
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00655 | KO=정합성 체크 | EN=Validation Check
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00752 | KO=MKT FCST 미등록 제외 | EN=Exclude Unregistered MKT FCST
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00857 | KO=등록 완료일 | EN=Reg Complete Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00863 | KO=반려 | EN=Reject
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00864 | KO=나의 프로젝트 등록 | EN=Project Registration/Modification
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00865 | KO=등록요청 | EN=Registration Request
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00866 | KO=사용자 목록 | EN=User List
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00867 | KO=조회 | EN=View
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00868 | KO=권한관리 | EN=Project Authority Management
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00870 | KO=나의 프로젝트 조회/변경 | EN=Project Lookup
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00871 | KO=요청 | EN=Requests
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00872 | KO=입력 | EN=Input
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00875 | KO=권한등록 | EN=Authority Registration
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00876 | KO=작성중 | EN=Draft
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00878 | KO=등록 상태 | EN=Reg. Status
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL00879 | KO=나의 권한 | EN=My Authority
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01002 | KO=권한요청 | EN=Auth Request
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01003 | KO=고객 | EN=Customer
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01004 | KO=승인 | EN=Approve
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01005 | KO=Cell 유형 | EN=Cell Type
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01006 | KO=등록 요청일 | EN=Reg Req Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01007 | KO=현황 | EN=Develop Status
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01008 | KO=변경요청 | EN=Mod Request
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01020 | KO=샘플 현황 | EN=Sample Status
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01021 | KO=진행 샘플 현황 | EN=In-Progress Samples
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01022 | KO=샘플 빌드 등록 | EN=Sample Build Registration
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01023 | KO=샘플 수요 등록 | EN=Sample Demand Registration
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01025 | KO=Stack 공법 | EN=Stack Method
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01026 | KO=빌드 차수 | EN=Build No.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01027 | KO=특이사항 | EN=Note
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01028 | KO=신규 | EN=New
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01031 | KO=샘플 요청 법인 | EN=Sample Request Plant
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01032 | KO=수율/Loss 계획 점검 | EN=Yield/Loss Plan Review
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01033 | KO=진행률 | EN=Progress
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01034 | KO=확정 | EN=Confirm
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01035 | KO=셀 유형 | EN=Cell Type
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01036 | KO=등록 여부 | EN=IsRegistered
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01037 | KO=행추가 | EN=Add Row
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01038 | KO=DOE 상세 | EN=DOE Detail
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01039 | KO=확인버전 | EN=Confirmed Ver.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01040 | KO=샘플별 요청 수량 | EN=Production Qty. by Sample
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01041 | KO=열추가 | EN=Add Column
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01042 | KO=샘플 요청 리스트 | EN=Sample Request List
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01043 | KO=관리 No. | EN=Mgmt. No.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01045 | KO=샘플별 SPEC | EN=Spec by Sample
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01139 | KO=행제거 | EN=Remove Row
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01140 | KO=열제거 | EN=Remove Column
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01146 | KO=빌드 생산 총량 확정 | EN=Finalization of Total Build Production Volume
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01152 | KO=생산 요청일 | EN=Reg Prod Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01153 | KO=Cut-off 주차 | EN=Cut-off Week
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01154 | KO=결재 Version | EN=Appr Version
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01157 | KO=등록일 | EN=Reg Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01158 | KO=파일등록 | EN=File Upload
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01159 | KO=빌드 No. | EN=Build No.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01164 | KO=계획수율 확정을 취소하시겠습니까? | EN=Do you want to cancel the plan tyield confirmation?
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01165 | KO=계획수율 확정 취소에 실패하였습니다. | EN=Failed to cancel the plan yield confirmation.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01166 | KO=계획수율 확정이 취소되었습니다. | EN=The plan yield confirmation has been canceled.
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01168 | KO=제작 품의 목록 | EN=List of products
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01169 | KO=품의대상 | EN=Subject for Approval
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01170 | KO=샘플 요청정보 | EN=Sample Request Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01171 | KO=신규품의 작성 | EN=Drafting a New Proposal
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01172 | KO=샘플 규격 정보 | EN=Sample Specification Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01173 | KO=통보자지정 | EN= Designation of Notifier
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01174 | KO=샘플 제작 요청 | EN=Sample Production Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01175 | KO=결재의뢰 | EN=Request for Approval
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01176 | KO=신규품의 작성 | EN=Drafting a New Proposal
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01177 | KO=결재의뢰 작성 | EN=Request for Approval
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01178 | KO=결재요청 | EN=Request for Approval
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01179 | KO=결재자지정 | EN=Designation of Approver
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01180 | KO=임시저장 | EN=Save Draft
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01181 | KO=요청품의 목록 | EN= List of requested items
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01182 | KO=프로젝트 명 | EN= Project Name
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01183 | KO=SOP 생산지 | EN= SOP production site
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01184 | KO=SOP 일정 | EN=SOP schedule
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01185 | KO=고객 개발단계 | EN=Customer Development Stage
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01186 | KO=당사 개발단계 | EN=Our Development Stages
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01187 | KO=기타사항 | EN=Other Details
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01188 | KO=작성자 | EN=Author
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01189 | KO=작성일 | EN= Date Written
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01190 | KO=내용 | EN=detail
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01191 | KO=결재자 정보 | EN=Approver Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01192 | KO=통보자\n정보 | EN= Notifier Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01193 | KO=결재선 정보 | EN=Approval Chain Information
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01194 | KO=사용자 결재선 | EN=User Approval Workflow
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01195 | KO=결재선명 | EN=Approval Path Name
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01196 | KO=결재방법 | EN= Payment Method
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01197 | KO=통보자 | EN=Notifier
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01198 | KO=초기화 | EN= reset
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01199 | KO=-- 선택 -- | EN= -- select --
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01201 | KO=관리자 | EN=Manager
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01202 | KO=선택 | EN=select
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01203 | KO=관리자 지정 | EN=designate administrator
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01204 | KO=첨부파일 | EN=attachment
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01205 | KO=사용자 조회 | EN=user lookup
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,"LBL01206 | KO=* 빌드 차수 가이드\r\n  1) 변경이 있는 차수 구분  A1, A2, A3\r\n     - 공정 변경 : 공법 / Sp | EN=* Build Sequence Guide\r\n  1) Sequence with changes  A1, A2, A3\r\n  "
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01207 | KO=코팅은 생산 라인 폭(광폭 or 표준폭) 기준으로 작성 | EN=Coating: Enter Based on Production line width(Wide or Standard)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01208 | KO=필요 코팅 In[m] X 전극 로딩[kg/m2] X 코팅폭[m] / 고형분량[kg] | EN=Required Coating In[m] X Electrode Loading[kg/m2] X Coating Width[m] *
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01209 | KO=해당 요청 공정의 시작일 기준으로 작성 | EN=Enter based on the start date of the requested process
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,"LBL01210 | KO=미정일 경우 TBD로 수기 작성 | EN=If undecided, enter ""TBD"" manually"
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01211 | KO=파일 이름 | EN=File Name
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01212 | KO=파일 크기 | EN=File Size
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01213 | KO=업로드 날짜 | EN=Upload Date
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01214 | KO=다운로드 | EN=Download
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01215 | KO=파일추가 | EN=FileAttach
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01216 | KO=파일삭제 | EN=FileDelete
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01217 | KO=빌드 생산 총량 | EN=Total Build Production Volume
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01219 | KO=수율 시뮬레이터 최신 버전 기준 입력 | EN=INSERT THE NEWEST VERSION OF THE YIELD SIMULATION
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01222 | KO=출하품의 목록 | EN= List of shipped items
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01223 | KO=출하 평가 결과 | EN=Shipment Evaluation Results
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01225 | KO=샘플 검사 결과 여부 | EN=Status of sample test results
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,"LBL01228 | KO=기타 (Issue 등) | EN=Other (Issues, etc.)"
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01229 | KO=사전 테스트 계획서 | EN=Pre-test Plan
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01230 | KO=입력정보저장 | EN=Input Info Save
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01231 | KO=요청일 | EN= Date of Request
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01232 | KO=사업부 | EN=Business Unit
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01233 | KO=생산 법인 | EN=Plant Site
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01234 | KO=모델 코드 | EN=Model Code
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01235 | KO=관리자(최대 10인) | EN=Manager(Max 10)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01236 | KO=활성여부 | EN=Active Status
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01237 | KO=생산 코드 | EN=production code
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01238 | KO=셀 코드 | EN=Cell Code
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01239 | KO=전극 | EN= electrode
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01240 | KO=양극 | EN= anode
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01241 | KO=음극 | EN= Silver-screen drama
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01242 | KO=계열 구분 / 절연 여부 | EN=Category / Insulation Status
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01244 | KO=코팅폭(mm) | EN=Coating width (mm)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01245 | KO=코팅 패턴 / 슬리팅 레인 수 | EN= Coating Pattern / Number of Slitting Lanes
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01246 | KO=압연 (열간/냉간) | EN=Rolling (hot/cold)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01247 | KO=슬리팅 폭(mm) | EN=Slitting width (mm)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01248 | KO=활물질 | EN= active material
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01249 | KO=도전재 | EN=Conductive agent
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01250 | KO=바인더 | EN=bookbinder
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01251 | KO=첨가제 / CMC | EN=Additive / CMC
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01253 | KO=셀 타입 | EN= Cell type
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01254 | KO=셀 전장 (mm) | EN=Cell length (mm)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01255 | KO=셀 전폭 (mm) | EN=Cell overall width (mm)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01256 | KO=셀 두께 (mm) | EN=Cell thickness (mm)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01257 | KO=셀 무게 (g) | EN= Cell weight (g)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01258 | KO=배치 수 환산자 | EN=Batch Count Converter
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01259 | KO=단위 | EN= unit
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01261 | KO=상/하층 1batch 고형분량 | EN=Solids content per batch for the upper/lower layers
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01262 | KO=Total 1batch 고형분량 | EN=Total solids content for 1 batch
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01263 | KO=상+하층 Loading량 | EN= Loading amount for upper and lower layers
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01264 | KO=Lane당 코팅폭 | EN=Coating width per lane
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01265 | KO=Lane수 | EN= Number of lanes
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01266 | KO=1pitch  길이 | EN=1-pitch length
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01267 | KO=전극 낱장수 /cell | EN=Number of electrode sheets /cell
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01268 | KO=Foil 폭 | EN= Foil width
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01269 | KO=cell수/pancake m | EN= cell count/pancake m
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01270 | KO=cell수/batch | EN=number of cells/batch
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01272 | KO=표준폭 점보롤 m/batch | EN=Standard-width jumbo roll (m/batch)
+10 KO 와 EN 이 다른 라벨,nscm-fe/public/locales/KO.json,0,LBL01273 | KO=광폭 점보롤 m/batch | EN=Wide-width jumbo roll m/batch
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0020 / Sales Price / ITEM_ID | FPTextModal | ATTRIBUTE1=ITEM | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0020 / Sales Price / PROJECT_CODE | FPTextModal | ATTRIBUTE1=PROJECT | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0020_01 / Sales Price / ITEM_ID | FPTextModal | ATTRIBUTE1=ITEM | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0020_01 / Sales Price / PROJECT_CODE | FPTextModal | ATTRIBUTE1=PROJECT | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0083 / main / MDL_GR | FPTextModal | ATTRIBUTE1=ITEM | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,DMF0083 / main / PROJECT_CODE | FPTextModal | ATTRIBUTE1=PROJECT | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SDM1020 / Project List / DPJT_AUTH_MGMT | FPModal | ATTRIBUTE1=ProjectAuthRegModal | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SDM5010 / TAB1 / DPJT_ATUH_REG_STR | FPModal | ATTRIBUTE1=ProjectAuthRegModal | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SDM5010 / TAB2 / DPJT_ATUH_REG_STR | FPModal | ATTRIBUTE1=ProjectAuthRegModal | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0002 / userMgmt / DEPT_ID | FPModal | ATTRIBUTE1=UserMgmt | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0002 / userMgmt / USER_ID | FPModal | ATTRIBUTE1=UserMgmt | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0003 / levelOneMenu / MNU_MSG_NM | FPModal | ATTRIBUTE1=LevelOneMenu | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0003 / levelThreeMenu / MNU_MSG_NM | FPModal | ATTRIBUTE1=LevelThreeMenu | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0003 / levelTwoMenu / MNU_MSG_NM | FPModal | ATTRIBUTE1=LevelTwoMenu | CELL_COMBO_DATA_TYPE=None
+11 [DB] 모달 키가 ATTRIBUTE1 에 있는 컬럼 메타,SCM_MST_SHEET_COLUMNS,0,SYS0014 / UserInfo / USER_ID | FPModal | ATTRIBUTE1=SsoUser | CELL_COMBO_DATA_TYPE=None
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0004 / CountryPopup | 컬럼 6행 | 최초 등록 2018-07-31 | 마지막 수정 2026-08-27
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0004 / countryPopup | 컬럼 6행 | 최초 등록 2018-07-31 | 마지막 수정 2026-04-13
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005 / Production | 컬럼 85행 | 최초 등록 2018-07-17 | 마지막 수정 2026-09-03
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005 / production | 컬럼 83행 | 최초 등록 2018-07-17 | 마지막 수정 2026-09-17
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005 / Purchase | 컬럼 32행 | 최초 등록 2018-07-17 | 마지막 수정 2026-09-02
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005 / purchase | 컬럼 32행 | 최초 등록 2018-07-17 | 마지막 수정 2026-09-02
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005_01 / Production | 컬럼 85행 | 최초 등록 2026-11-03 | 마지막 수정 2026-11-03
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005_01 / production | 컬럼 83행 | 최초 등록 2026-11-03 | 마지막 수정 2026-11-03
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005_01 / Purchase | 컬럼 32행 | 최초 등록 2026-11-03 | 마지막 수정 2026-11-03
+12 [DB] 대소문자만 다른 중복 시트,SCM_MST_SHEET_COLUMNS,0,DMF0005_01 / purchase | 컬럼 32행 | 최초 등록 2026-11-03 | 마지막 수정 2026-11-03
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,'CountryPopup' → 0개 파일 
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,'Production' → 0개 파일 
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,"'Purchase' → 2개 파일 sales-site-project-model-01/componenets/SalesSiteProjectModel01Grid.tsx, sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx"
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,'countryPopup' → 0개 파일 
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,"'production' → 4개 파일 sales-site-project-model-01/SalesSiteProjectModel01.tsx, sales-site-project-model-01/sales-site-project-model-01.constants.ts, sales-site-project-model/SalesSiteProjectModel.tsx, sales-site-project-model/sales-site-project-model.constants.ts"
+12-b 중복 시트명의 FE 사용처(sales-site 계열 폴더),,0,"'purchase' → 4개 파일 sales-site-project-model-01/SalesSiteProjectModel01.tsx, sales-site-project-model-01/sales-site-project-model-01.constants.ts, sales-site-project-model/SalesSiteProjectModel.tsx, sales-site-project-model/sales-site-project-model.constants.ts"
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_SCP_XLS_PSI_GLOBAL_SMALL_CELL | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_SCP_XLS_USER_LOGIN_LOG | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_SNAPSHOT_BATCH_TARGET_TABLES | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_DM_DNM_SALES_RESULT | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_DM_DNM_EDI_CALL_OFF_HEAD | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_DM_PLN_CUST_PSI_TO_MKT_FCST | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_NERP_XLS_TOBE_CONVERTER | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_GSCM_XIF_DM_GSD0003_R | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PROCEDURE PR_DM_PLN_CUST_PSI_TO_MKT_FCST_WOS | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PACKAGE BODY PKG_SDM2020 | 마지막 DDL 2026-11-13 21:22
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PACKAGE BODY PKG_SDM2030 | 마지막 DDL 2026-11-13 21:21
+13 [DB] INVALID 객체(참고),ALL_OBJECTS,0,PACKAGE BODY PKG_SDM2010 | 마지막 DDL 2026-11-13 21:21

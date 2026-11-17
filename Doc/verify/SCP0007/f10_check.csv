@@ -1,0 +1,2 @@
+﻿menu_id,sheet,btn,proc,depth,callee,verdict,hits,note
+SCP0007,bod,SAVE,PKG_SCP0007.P_SCP0007_SAVE_BOD,2,PR_SCM_SYS_LOG_BATCH_CALL_TRAN;PR_SCP_MST_BOD_HIST;PR_SCP_MST_BOD_ITEM;PR_SCM_SYS_LOG_BATCH,FAIL,"PKG_SCP0007.P_SCP0007_SAVE_BOD:445 COMMIT «ure ##########', '', SYSDATE);          COMMIT;» | PKG_SCP0007.P_SCP0007_SAVE_BOD:483 ROLLBACK(전체) «L;         WHEN OTHERS THEN             ROLLBACK;             V_ERR_CODE := SQLCODE;»",저장 경로에 암묵 확정/파괴 문장 — 다건 저장 중 오류 시 부분 저장 가능(GAP-452·GAP-105)

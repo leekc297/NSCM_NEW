@@ -1,0 +1,36 @@
+{
+ "id": "SCP0053",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+    "SCP0053_GET_SCP_BOM"
+   ],
+   "scenarios": [
+    "SCP0053-Sea1449",
+    "SCP0053-Sec3442"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 09:28:32.596",
+ "fills": 0,
+ "fill_left": []
+}

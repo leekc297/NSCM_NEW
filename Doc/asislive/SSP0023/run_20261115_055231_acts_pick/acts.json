@@ -1,0 +1,130 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": false,
+ "acts": [
+  {
+   "control": "DIVISION_ID",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,2 failed: InvalidOperationException: cell not visible: 0,2",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MODEL_ID",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,4 failed: InvalidOperationException: cell not visible: 0,4",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "NICK_NAME",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,5 failed: InvalidOperationException: cell not visible: 0,5",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "FROM_SITE",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,7 failed: InvalidOperationException: cell not visible: 0,7",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ITEM_ID",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,8 failed: InvalidOperationException: cell not visible: 0,8",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "ELECTRODE_POST_OPER_LT",
+   "kind": "pick",
+   "ok": false,
+   "error": "InvalidOperationException: celldbl:0,10 failed: InvalidOperationException: cell not visible: 0,10",
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0023-S5cd96f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Se42af7",
+    "SSP0023-Sf0c6eb"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 05:51:28",
+ "plan": {
+  "scenarios": 4,
+  "used": [
+   "DIVISION_ID",
+   "MODEL_ID",
+   "NICK_NAME",
+   "FROM_SITE",
+   "ITEM_ID",
+   "ELECTRODE_POST_OPER_LT"
+  ],
+  "rule": "이름이 나온 열이 없어 앞쪽 보이는 열 6개"
+ }
+}

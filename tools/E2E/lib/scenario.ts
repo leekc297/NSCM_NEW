@@ -15,7 +15,9 @@ export function parseSteps(s: string): Step[] {
 }
 
 /** failed = 단계 실패 문구(재료 없음) · msgs = 단계 중 나온 문구 전부 · saves = 저장 요청 수 · editor = 마지막 더블클릭 뒤 편집기 열림 */
-export function judgeScenario(s: { failed: string; msgs: string[]; saves: number; editor: boolean | null; msgRe: string; noSave: boolean; noEditor: boolean; name: string; cellErr?: string; review?: string }): J {
+export function judgeScenario(s: { failed: string; msgs: string[]; saves: number; editor: boolean | null; msgRe: string; noSave: boolean; noEditor: boolean; name: string; cellErr?: string; review?: string; entryBlocked?: string }): J {
+  // 2026-11-17(SCP0104 SOP_DT): 없는 날짜를 넣으려 했는데 달력 편집기가 입력 단계에서 받지 않았으면(값이 그대로·다른 값) 저장 차단 메시지를 볼 대상이 없다 — 입력 단계 차단 = 기대 충족
+  if (s.entryBlocked && /없는 날짜/.test(s.name)) return { result: 'PASS', why: `${s.name}: 입력 단계에서 차단 — ${s.entryBlocked.slice(0, 160)} · 없는 날짜가 칸에 들어가지 않아 저장 차단 메시지 대상 아님` };
   if (s.failed) return { result: 'ERROR', why: `[측정 경로 없음] ${s.name}: ${s.failed}` };
   if (s.review) return { result: '판정필요', why: `${s.review} · ${s.name}` };
   const all = s.msgs.join(' | '); const bad: string[] = [];

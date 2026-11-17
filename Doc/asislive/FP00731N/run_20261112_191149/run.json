@@ -1,0 +1,142 @@
+{
+ "id": "FP00731N",
+ "started": "2026-11-12 19:11:49.991",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:11:50.296",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Planning.UIL.FP00731_Stock",
+   "form_text": "Stock",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00731_Stock.UIL.dll",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:11:59.007"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:12:02.416",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00731N\\run_20261112_191149\\dump_load.json",
+   "control_count": 65,
+   "grid_count": 1,
+   "total": "Total : 590",
+   "time_status": "DB : 27.222s, UI : 0.291s",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:02.436"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:12:02.597",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00731N\\run_20261112_191149\\shots\\FP00731N_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:02.848"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:12:03.323",
+   "call_timed_out": false,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:04.639"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:12:34.518",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00731N\\run_20261112_191149\\dump_find.json",
+   "control_count": 65,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:34.528"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:12:34.684",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP00731N\\run_20261112_191149\\shots\\FP00731N_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:34.818"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:12:35.145",
+   "close_timed_out": false,
+   "open_screens": 1,
+   "dialog_count": 1,
+   "ok": true,
+   "done": "2026-11-12 19:12:35.649"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": false,
+  "shots": 2,
+  "calls": 33,
+  "calls_with_params": 33
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Planning.UIL.FP00731_Stock",
+  "form_text": "Stock",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Planning\\FP00731_Stock.UIL.dll"
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal"
+ },
+ "t_open": "2026-11-12 19:11:50.198",
+ "t_find": "2026-11-12 19:12:02.993",
+ "dialogs": [],
+ "close_left": 1,
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 65,
+  "layout_items": 15,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 42,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 33,
+  "calls_screen": 33,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:32.160",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:32"
+}

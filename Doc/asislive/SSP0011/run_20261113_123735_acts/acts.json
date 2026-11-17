@@ -1,0 +1,47 @@
+{
+ "id": "SSP0011",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnNickName",
+   "ok": false,
+   "error": "InvalidOperationException: click:BtnNickName failed: InvalidOperationException: control not found: BtnNickName",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0011-S302278",
+    "SSP0011-S4444f3"
+   ]
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0011-Sea1449",
+    "SSP0011-Sec3442"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 12:36:44.023",
+ "fills": 3,
+ "fill_left": []
+}

@@ -1,0 +1,221 @@
+{
+ "id": "DMF0042",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0042_1_SAVE_DM_PLN_BP_FCST",
+   "save_sp": "DMF0042_1_SAVE_DM_PLN_BP_FCST",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml DMF0042_1_SAVE_DM_PLN_BP_FCST → SP DMF0042_1_SAVE_DM_PLN_BP_FCST 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  },
+  {
+   "endpoint": "DM.DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+   "save_sp": "DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+   "status": "키 일부 미대응",
+   "table": "DM_BP_EXCHANGE_RATE",
+   "pk": [
+    "DIVISION_ID",
+    "YYYYMMDD",
+    "CURRENCY",
+    "UNIT_CURRENCY"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "CURRENCY": "CURRENCY"
+   },
+   "unmatched_pk": [
+    "YYYYMMDD",
+    "UNIT_CURRENCY"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Biz Plan",
+   "writes": {
+    "DM_BP_EXCHANGE_RATE": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ]
+   },
+   "basis": "foxml DMF0042_SAVE_DM_BP_EXCHANGE_RATE → SP DMF0042_SAVE_DM_BP_EXCHANGE_RATE 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "YYYYMMDD": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "UNIT_CURRENCY": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0042_SAVE_DM_PLN_BP_FCST",
+   "save_sp": "DMF0042_SAVE_DM_PLN_BP_FCST",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_BP_FCST",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "MEASURE",
+    "PLANT_SITE_ID",
+    "DEPT_ID",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "YYYYMM",
+    "CURRENCY",
+    "ITEM_USE",
+    "UNIT_ENERGY",
+    "INCOTERMS",
+    "CELL_PROD_SITE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "FCST_TYPE": "FCST_TYPE",
+    "MEASURE": "MEASURE",
+    "CURRENCY": "CURRENCY",
+    "INCOTERMS": "INCOTERMS"
+   },
+   "unmatched_pk": [
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "PLANT_SITE_ID",
+    "DEPT_ID",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "YYYYMM",
+    "ITEM_USE",
+    "UNIT_ENERGY",
+    "CELL_PROD_SITE"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_PLN_BP_FCST_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Biz Plan",
+   "writes": {
+    "DM_PLN_BP_FCST": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "DM_PLN_BP_FCST_H": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0042_SAVE_DM_PLN_BP_FCST → SP DMF0042_SAVE_DM_PLN_BP_FCST 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "DEPT_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "END_CUSTOMER": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "BIZ_TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMM": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_USE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "UNIT_ENERGY": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "CELL_PROD_SITE": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  },
+  {
+   "endpoint": "DM.DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+   "save_sp": "DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+   "status": "SP 원문 없음",
+   "table": "",
+   "pk": [],
+   "match": {},
+   "unmatched_pk": [],
+   "edit": null,
+   "side": [],
+   "sheet": "",
+   "writes": {},
+   "basis": "foxml DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV → SP DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV 원문(sys.sql_modules) · 키 = sys.indexes PK"
+  },
+  {
+   "endpoint": "DM.DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+   "save_sp": "DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+   "status": "키 일부 미대응",
+   "table": "DM_PLN_BP_FCST",
+   "pk": [
+    "DIVISION_ID",
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "FCST_TYPE",
+    "MEASURE",
+    "PLANT_SITE_ID",
+    "DEPT_ID",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "YYYYMM",
+    "CURRENCY",
+    "ITEM_USE",
+    "UNIT_ENERGY",
+    "INCOTERMS",
+    "CELL_PROD_SITE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "FCST_TYPE": "FCST_TYPE",
+    "MEASURE": "MEASURE",
+    "CURRENCY": "CURRENCY",
+    "INCOTERMS": "INCOTERMS"
+   },
+   "unmatched_pk": [
+    "PROJECT_CODE",
+    "SCM_SITE_ID",
+    "ITEM_ID",
+    "PLANT_SITE_ID",
+    "DEPT_ID",
+    "END_CUSTOMER",
+    "BIZ_TYPE",
+    "YYYYMM",
+    "ITEM_USE",
+    "UNIT_ENERGY",
+    "CELL_PROD_SITE"
+   ],
+   "edit": null,
+   "side": [],
+   "sheet": "spdMain/Biz Plan",
+   "writes": {
+    "DM_PLN_BP_FCST": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV → SP DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {},
+   "other_tables": [],
+   "unmatched_why": {
+    "PROJECT_CODE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "SCM_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "PLANT_SITE_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "DEPT_ID": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "END_CUSTOMER": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "BIZ_TYPE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "YYYYMM": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "ITEM_USE": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "UNIT_ENERGY": "SP 원문에 '컬럼 = @인자' 꼴이 없음",
+    "CELL_PROD_SITE": "SP 원문에 '컬럼 = @인자' 꼴이 없음"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

@@ -37,7 +37,7 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **CRUD_TYPE** | `@foundation/constants` | 76 |  |  |
+| **CRUD_TYPE** | `@foundation/constants` | 77 |  |  |
 | **CRUD_MSG** | `@foundation/constants` | 20 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
 | **API_CONFIG** | `@foundation/constants` | 1 |  |  |
 | **CACHE_MAX_AGE** | `@foundation/lib` | 0 |  | 캐시 유지시간(8시간). gcTime 과 PersistQueryClientProvider 의 persist maxAge 를 동일하게 유지해야 영속화가 정상 동작한다(react-query: persist 하려면 gcTime >= maxAge 필요). P |
@@ -45,19 +45,19 @@ props/params:
 | **ROUTE_PATHS** | `@foundation/constants` | 0 |  | 라우트 경로 상수 화면(mnuId)별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH (세션 메뉴 응답의 menu.routePath 를 viewRegistry.resolveView 가 해석). 여기에는 메뉴 데이터가 아닌  |
 | **ROW_NO_BINDING** | `@foundation/utils` | 0 |  | No 컬럼/헤더 — SYS0011 그리드 공통 (사용자 요구 2026-06-28), 팝업(*Modal.tsx) 그리드 공통 적용 // (2026-09-03)으로 foundation 으로 승격. // · 체크박스 없는 그리드: rowHeader 인덱스  |
 | **VOLATILE_QUERY_OPTIONS** | `@foundation/lib` | 0 |  | 콤보/룩업 전용 캐시 정책 — useCustomQueryClient 의 콤보/룩업 훅에서 스프레드한다. staleTime: 0 = 화면을 새로 열 때(fresh mount)마다 다시 받는다. MDI 는 keep-alive 라 이미 열린 탭은 리마운트되 |
-| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 78 |  |  |
-| **CELL_CONTROL_TYPE** | `@foundation/constants` | 47 |  |  |
+| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 83 |  |  |
+| **CELL_CONTROL_TYPE** | `@foundation/constants` | 49 |  |  |
 | **BUTTON_TYPE** | `@foundation/constants` | 20 |  |  |
 | **Hotkeys** | `@foundation/models` | 0 |  |  |
 | **HTTP_STATUS** | `@foundation/constants` | 0 |  |  |
-| **safeString** | `@foundation/utils` | 56 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
-| **attachRowNoHeader** | `@foundation/utils` | 26 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
-| **toGridNumber** | `@foundation/utils` | 21 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
-| **paintNegativeText** | `@foundation/utils` | 19 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
+| **safeString** | `@foundation/utils` | 58 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
+| **attachRowNoHeader** | `@foundation/utils` | 29 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
+| **toGridNumber** | `@foundation/utils` | 22 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
+| **paintNegativeText** | `@foundation/utils` | 20 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
 | **buildNoColumn** | `@foundation/utils` | 18 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
 | **withRowNo** | `@foundation/utils` | 18 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
 | **isInsertRow** | `@foundation/utils` | 17 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
-| **sessionTimeZone** | `@foundation/utils` | 10 |  | SP 의 `p_time_zone`(또는 콤보 `@timeZone`) 인자로 보낼 사용자 타임존 코드. AS-IS 는 로그인 때 `TB_FX_User.TimeZone` 을 `UserInfoContext` 에 담아 모든 저장 SP 에 `p_time_zon |
+| **sessionTimeZone** | `@foundation/utils` | 16 |  | SP 의 `p_time_zone`(또는 콤보 `@timeZone`) 인자로 보낼 사용자 타임존 코드. AS-IS 는 로그인 때 `TB_FX_User.TimeZone` 을 `UserInfoContext` 에 담아 모든 저장 SP 에 `p_time_zon |
 | **keepRowVisibleUnderFilter** | `@foundation/utils` | 6 |  | 필터가 걸린 상태에서 추가한 신규행이 화면에서 사라지는 문제 보정. FlexGridFilter._filter 는 `grid._newAddedRowsSet`(WeakSet) 에 든 행을 조건 검사 없이 통과시킨다 — 편집한 행이 필터 때문에 눈앞에서 사 |
 | **parseComboFilterBindings** | `@foundation/utils` | 6 |  | 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다. 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다. 예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'` 형식에  |
 | **ensureTopLeftMergeManager** | `@foundation/utils` | 5 |  |  |
@@ -117,9 +117,9 @@ props/params:
 | **rowParamValue** | `@foundation/utils` | 0 |  | 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. |
 | **setQueryErrorHandler** | `@foundation/lib` | 0 |  |  |
 | **shouldPersistQuery** | `@foundation/lib` | 0 |  | IndexedDB 영속 대상 필터(PersistQueryClientProvider 의 dehydrateOptions). 기본 규칙(성공한 쿼리만 영속)은 유지하고, 콤보/룩업만 제외한다. 제외하지 않으면 새로고침해도 옛날 콤보가 복원돼 위 staleT |
-| **apiClient** | `@foundation/apis` | 318 |  |  |
+| **apiClient** | `@foundation/apis` | 324 |  |  |
 | **i18n** | `@foundation/lib` | 20 |  |  |
-| **queryClient** | `@foundation/lib` | 12 |  |  |
+| **queryClient** | `@foundation/lib` | 14 |  |  |
 | **mockApiClient** | `@foundation/apis` | 0 |  |  |
 | **primary** | `@foundation/styles` | 0 |  |  |
 | **secondary** | `@foundation/styles` | 0 |  |  |
@@ -613,7 +613,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<ComboResponse> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### getInsertAnchor  <sub>packages/foundation/src/utils/gridAction.ts:600</sub>
+### getInsertAnchor  <sub>packages/foundation/src/utils/gridAction.ts:604</sub>
 
 ```ts
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): T
@@ -1299,7 +1299,7 @@ props/params:
 (column: RawFlexGridColumnConfig): string
 ```
 
-### installInsertPinConverter  <sub>packages/foundation/src/utils/gridAction.ts:629</sub>
+### installInsertPinConverter  <sub>packages/foundation/src/utils/gridAction.ts:633</sub>
 
 ```ts
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>): void
@@ -1791,7 +1791,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### pinInsertedRow  <sub>packages/foundation/src/utils/gridAction.ts:578</sub>
+### pinInsertedRow  <sub>packages/foundation/src/utils/gridAction.ts:582</sub>
 
 ```ts
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, newRow: T, anchorItem?: T): void
@@ -1981,9 +1981,9 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MSG** | `features/master/src/components` | 262 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
-| **MSG** | `features/master/src/components` | 262 |  |  |
-| **COMBO** | `features/master/src/components` | 122 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
+| **MSG** | `features/master/src/components` | 267 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
+| **MSG** | `features/master/src/components` | 267 |  |  |
+| **COMBO** | `features/master/src/components` | 123 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
 | **REPORT_TYPE** | `features/master/src/components` | 6 |  |  |
 | **MODAL_OWNER** | `features/master/src/components` | 4 |  |  |
 | **ITEM_MODAL_CONDITION** | `features/master/src/components` | 2 |  | 팝업 검색조건 식별자 — visibleConditions prop 으로 호출 화면별 노출을 고른다. (문자열 리터럴 대신 이 상수를 쓸 것 — 오타는 "조건이 조용히 사라짐" 으로만 드러난다.) |
@@ -2049,8 +2049,8 @@ props/params:
 | **SMALL_DIVISION_WILDCARD** | `features/master/src/components` | 0 |  | 좁은 조회에서 "조건 없음"을 뜻하는 값. 넓은 조회는 빈 문자열을 조건 없음으로 받지만 좁은 쪽은 규약이 다르다. project/item 조건이 AND (EXISTS (... WHERE D.PROJECT_CODE LIKE P.TOKEN \|\| '% |
 | **VERSION_ACTION** | `features/master/src/components` | 0 |  |  |
 | **SHEET_INDEX** | `features/master/src/components` | 54 |  |  |
-| **buildComboOptions** | `features/master/src/components` | 19 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
-| **toSelectedCodes** | `features/master/src/components` | 11 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
+| **buildComboOptions** | `features/master/src/components` | 20 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
+| **toSelectedCodes** | `features/master/src/components` | 12 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
 | **cell** | `features/master/src/components` | 5 |  | 콤보 셀 값 읽기. 콤보 응답은 컬럼에 따라 NUMBER 로 내려오기도 해서 문자열로 맞춰야 Set 비교가 성립한다 (SearchFields.cellValue 와 같은 사정). |
 | **buildSalesSiteOptions** | `features/master/src/components` | 1 |  | 'SalesSite' 콤보 -> Sales Site 드롭다운 옵션. |
 | **logSearchReset** | `features/master/src/components` | 1 |  | // [reset] 상위 조회조건 변경 -> 하위 값 재세팅 // |
@@ -2879,18 +2879,18 @@ props/params:
 | **STANDARD_COLORS** | `@shared/components` | 0 |  | 표준 색 (엑셀 "표준 색" 행). |
 | **THEME_COLORS** | `@shared/components` | 0 |  | 개인화 색 선택 팔레트/hex 유틸 (ColorPickerButton 전용). // 테마 색 기준 행 (Office 유사 10색) — 각 열마다 명도(tint/shade) 변형을 생성한다. |
 | **VARIANT_LEVELS** | `@shared/components` | 0 |  | 테마색 그리드 명도 레벨. 0 = 기준행, +값 = tint(밝게), -값 = shade(어둡게). |
-| **SHEETS** | `@shared/components` | 646 |  |  |
-| **SHEETS** | `@shared/components` | 646 |  |  |
-| **SHEETS** | `@shared/components` | 646 |  |  |
+| **SHEETS** | `@shared/components` | 653 |  |  |
+| **SHEETS** | `@shared/components` | 653 |  |  |
+| **SHEETS** | `@shared/components` | 653 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **MoveType** | `@shared/components` | 0 |  |  |
-| **createPersistedStoreWithTab** | `@shared/stores` | 142 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
-| **confirmIfDirtyKey** | `@shared/stores` | 72 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
-| **tabDirtyKey** | `@shared/stores` | 72 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
-| **saveTitleSet** | `@shared/components` | 38 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
-| **createPersistedStore** | `@shared/stores` | 23 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
+| **createPersistedStoreWithTab** | `@shared/stores` | 143 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
+| **confirmIfDirtyKey** | `@shared/stores` | 73 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
+| **tabDirtyKey** | `@shared/stores` | 73 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
+| **saveTitleSet** | `@shared/components` | 41 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
+| **createPersistedStore** | `@shared/stores` | 26 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
 | **toColumnLayoutSettings** | `@shared/components` | 23 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
 | **buildSavePayload** | `@shared/components` | 19 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
 | **formatTotalCases** | `@shared/hooks` | 6 |  | TitleArea `totalCases` 에 넘길 건수 — 천 단위 쉼표(12345 → '12,345'). 디자인 시스템은 totalCases 를 서식 없이 그대로 그린다(타입은 number 지만 렌더는 children 출력뿐). 그래서 쉼표를 붙인  |
@@ -3609,7 +3609,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### attachGridContextMenu  <sub>packages/shared/src/components/organisms/data-grid/gridContextMenu.ts:359</sub>
+### attachGridContextMenu  <sub>packages/shared/src/components/organisms/data-grid/gridContextMenu.ts:399</sub>
 
 ```ts
 (grid: FlexGrid, options: GridContextMenuOptions): () => void

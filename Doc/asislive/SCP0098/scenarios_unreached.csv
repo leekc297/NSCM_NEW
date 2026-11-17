@@ -1,0 +1,31 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0098-S0c555f,저장,SaveData,SCP0098_CAPAReprotSmall.cs:2497,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:2493,
+SCP0098-S47c66a,저장,SaveData,SCP0098_CAPAReprotSmall.cs:2567,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:2493,
+SCP0098-Sa8a51f,저장,SaveData,SCP0098_CAPAReprotSmall.cs:2705,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:2493,
+SCP0098-Sa0cb3c,저장,SaveData,SCP0098_CAPAReprotSmall.cs:2745,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:2493,
+SCP0098-Sdbcae7,저장,SaveData_CAPA,SCP0098_CAPAReprotSmall.cs:2764,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2062; SCP0098_CAPAReprotSmall.cs:2218; SCP0098_CAPAReprotSmall.cs:2271; SCP0098_CAPAReprotSmall.cs:2274; SCP0098_CAPAReprotSmall.cs:2328,"SaveData,SaveDataFull,SaveData_CAPA,SaveData_CAPA_PRODUCT_RATE,SaveData_CAPA_PRODUCT_RATE_OLD,SaveData_CAPA_WORK"
+SCP0098-S334738,저장,SaveData_CAPA,SCP0098_CAPAReprotSmall.cs:2806,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2062; SCP0098_CAPAReprotSmall.cs:2218; SCP0098_CAPAReprotSmall.cs:2271; SCP0098_CAPAReprotSmall.cs:2274; SCP0098_CAPAReprotSmall.cs:2328,"SaveData,SaveDataFull,SaveData_CAPA,SaveData_CAPA_PRODUCT_RATE,SaveData_CAPA_PRODUCT_RATE_OLD,SaveData_CAPA_WORK"
+SCP0098-S5aa4e7,저장,SaveData_CAPA_PRODUCT_RATE,SCP0098_CAPAReprotSmall.cs:2832,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2017; SCP0098_CAPAReprotSmall.cs:2215; SCP0098_CAPAReprotSmall.cs:2585; SCP0098_CAPAReprotSmall.cs:2719; SCP0098_CAPAReprotSmall.cs:2827,"SaveData,SaveDataFull,SaveData_CAPA_PRODUCT_RATE"
+SCP0098-S75246f,저장,SaveData_CAPA_PRODUCT_RATE,SCP0098_CAPAReprotSmall.cs:2875,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2017; SCP0098_CAPAReprotSmall.cs:2215; SCP0098_CAPAReprotSmall.cs:2585; SCP0098_CAPAReprotSmall.cs:2719; SCP0098_CAPAReprotSmall.cs:2827,"SaveData,SaveDataFull,SaveData_CAPA_PRODUCT_RATE"
+SCP0098-S7f73a4,저장,SaveData_CAPA_PRODUCT_RATE,SCP0098_CAPAReprotSmall.cs:2880,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2017; SCP0098_CAPAReprotSmall.cs:2215; SCP0098_CAPAReprotSmall.cs:2585; SCP0098_CAPAReprotSmall.cs:2719; SCP0098_CAPAReprotSmall.cs:2827,"SaveData,SaveDataFull,SaveData_CAPA_PRODUCT_RATE"
+SCP0098-Sb515e5,저장,SaveData_CAPA_PRODUCT_RATE_OLD,SCP0098_CAPAReprotSmall.cs:2900,호출 없음,,
+SCP0098-S18cd73,저장,SaveData_CAPA_PRODUCT_RATE_OLD,SCP0098_CAPAReprotSmall.cs:2942,호출 없음,,
+SCP0098-Sb13e6a,저장,SaveData_CAPA_PRODUCT_RATE_OLD,SCP0098_CAPAReprotSmall.cs:2947,호출 없음,,
+SCP0098-S87cf98,저장,SaveData_CAPA_WORK,SCP0098_CAPAReprotSmall.cs:2969,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2116; SCP0098_CAPAReprotSmall.cs:2659; SCP0098_CAPAReprotSmall.cs:2729,"SaveData,SaveDataFull"
+SCP0098-Sfb81d3,저장,SaveData_CAPA_WORK,SCP0098_CAPAReprotSmall.cs:3010,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2116; SCP0098_CAPAReprotSmall.cs:2659; SCP0098_CAPAReprotSmall.cs:2729,"SaveData,SaveDataFull"
+SCP0098-Sb34fb8,저장,SaveData_CAPA_WORK,SCP0098_CAPAReprotSmall.cs:3015,같은 파일에서 호출,SCP0098_CAPAReprotSmall.cs:2116; SCP0098_CAPAReprotSmall.cs:2659; SCP0098_CAPAReprotSmall.cs:2729,"SaveData,SaveDataFull"
+SCP0098-S7b88da,기타,SetCellFormatNeo,SCP0098_CAPAReprotSmall.cs:1204,호출 없음,,
+SCP0098-Sbf2605,기타,SetCellFormatNeo,SCP0098_CAPAReprotSmall.cs:1215,호출 없음,,
+SCP0098-Sd4ed51,기타,SetCellFormatNeo,SCP0098_CAPAReprotSmall.cs:1226,호출 없음,,
+SCP0098-S550efb,기타,SetCellFormatNeo,SCP0098_CAPAReprotSmall.cs:1296,호출 없음,,
+SCP0098-Sd64024,기타,SetCellFormatNeo,SCP0098_CAPAReprotSmall.cs:1316,호출 없음,,
+SCP0098-S8ff212,기타,SetCellFormat_0909,SCP0098_CAPAReprotSmall.cs:1718,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:740,
+SCP0098-Sd1561d,기타,SetCellFormat_0909,SCP0098_CAPAReprotSmall.cs:1735,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:740,
+SCP0098-S364b05,기타,SetCellFormat_0909,SCP0098_CAPAReprotSmall.cs:1819,주석 안에서만 호출,SCP0098_CAPAReprotSmall.cs:740,
+SCP0098-Sb512ef,기타,SetCellFormat_LINE,SCP0098_CAPAReprotSmall.cs:1465,호출 없음,,
+SCP0098-Sde9680,기타,SetCellFormat_LINE,SCP0098_CAPAReprotSmall.cs:1478,호출 없음,,
+SCP0098-Sf333c6,기타,SetCellFormat_LINE,SCP0098_CAPAReprotSmall.cs:1489,호출 없음,,
+SCP0098-S09b357,기타,SetCellFormat_LINE,SCP0098_CAPAReprotSmall.cs:1561,호출 없음,,
+SCP0098-S77d34c,기타,SetCellFormat_LINE,SCP0098_CAPAReprotSmall.cs:1581,호출 없음,,
+SCP0098-S304248,기타,SetOption,SCP0098_CopySelect_Popup.cs:100,호출 없음,SCP0098_CAPAReprotSmall.cs:3734; SCP0098_CAPAReprotSmall.cs:3735,btnCopyData_Click
+SCP0098-Sbe96d4,기타,SetOption,SCP0098_CopySelect_Popup.cs:102,호출 없음,SCP0098_CAPAReprotSmall.cs:3734; SCP0098_CAPAReprotSmall.cs:3735,btnCopyData_Click

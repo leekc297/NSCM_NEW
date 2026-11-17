@@ -2,13 +2,15 @@ import { Globalize } from '@mescius/wijmo';
 import { CellType, Row, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
 import { useEffect, type MutableRefObject } from 'react';
 
+import { safeString } from '@foundation/utils';
+
 // 합계 서식 — AS-IS `SetAggregationFormat(0, iCol, "{0:#,##0.###}")`(cs:3630). ColumnFooter 에만 적용(데이터 셀 불변).
 const FOOTER_SUM_FORMAT = '#,##0.###';
 // 합계 셀 배경 — AS-IS `ColumnFooter.Cells[0,iCol].BackColor = Color.LightGray`(cs:3632).
 const FOOTER_SUM_BACKGROUND = '#d3d3d3';
 
 const toNumber = (v: unknown): number =>
-  typeof v === 'number' ? v : Number(String(v ?? '').replace(/,/g, ''));
+  typeof v === 'number' ? v : Number(safeString(v).replace(/,/g, ''));
 
 /**
  * 하단 상세 그리드 ColumnFooter 합계(Sum) — AS-IS InitSpreadFooterSum(cs:3597-3636) 이식.

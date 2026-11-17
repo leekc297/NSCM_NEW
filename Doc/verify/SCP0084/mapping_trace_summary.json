@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0084",
  "asis_id": "SCP0084",
- "generated": "2026-11-08T17:05:49",
+ "generated": "2026-11-14T13:40:32",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\long-term-stock\\__asis-mapping__.md",
  "rows": 372,
  "fe_rows": 22,
@@ -10,50 +10,51 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\long-term-stock",
  "fe_mapping_missing": false,
  "verdict": {
-  "FAIL": 9,
-  "미검증": 274,
-  "검증완료": 89
+  "미검증": 307,
+  "검증완료": 63,
+  "FAIL": 2
  },
- "instances": 212,
+ "instances": 240,
  "instance_result": {
-  "NA": 83,
-  "PASS": 88,
-  "FAIL": 3,
-  "ERROR": 23,
-  "REVIEW": 13,
-  "NOPATH": 2
+  "NA": 72,
+  "PASS": 98,
+  "ERROR": 57,
+  "REVIEW": 9,
+  "NOPATH": 2,
+  "FAIL": 2
  },
  "by_layer": {
   "동적 생성·조회": {
    "NA": 29,
-   "ERROR": 17,
-   "REVIEW": 10,
+   "ERROR": 18,
+   "REVIEW": 9,
    "PASS": 11,
    "NOPATH": 1,
    "FAIL": 2
   },
   "정적 디자인": {
-   "PASS": 47,
-   "FAIL": 1,
+   "PASS": 63,
    "ERROR": 1,
-   "NA": 2
+   "NA": 1
   },
   "DB 실행·접근": {
-   "PASS": 6,
+   "PASS": 7,
    "NOPATH": 1,
-   "NA": 3
+   "NA": 2
   },
   "권한": {
    "ERROR": 1,
    "PASS": 1
   },
   "콤보 후보": {
-   "REVIEW": 3,
-   "PASS": 3
+   "ERROR": 7,
+   "PASS": 1,
+   "NA": 2
   },
   "편집·검증": {
-   "NA": 39,
-   "PASS": 15
+   "ERROR": 14,
+   "PASS": 10,
+   "NA": 36
   },
   "공통 기능": {
    "PASS": 2
@@ -62,11 +63,12 @@
    "ERROR": 4
   },
   "Cascade": {
-   "NA": 8,
+   "ERROR": 10,
+   "NA": 2,
    "PASS": 3
   },
   "팝업": {
-   "NA": 2
+   "ERROR": 2
   }
  },
  "by_check": {
@@ -78,18 +80,20 @@
    "PASS": 1
   },
   "A5": {
-   "PASS": 11,
-   "NA": 2
+   "PASS": 17
   },
   "A6": {
-   "REVIEW": 1,
+   "ERROR": 1,
    "FAIL": 1
   },
   "B3": {
-   "PASS": 3
+   "PASS": 1,
+   "ERROR": 3,
+   "NA": 1
   },
   "B4": {
-   "REVIEW": 3
+   "ERROR": 4,
+   "NA": 1
   },
   "C1": {
    "PASS": 3
@@ -98,20 +102,21 @@
    "NA": 1
   },
   "C3": {
-   "NA": 6
+   "ERROR": 10
   },
   "C6": {
    "NA": 1
   },
   "D1": {
-   "PASS": 10,
-   "NA": 2
+   "ERROR": 8,
+   "PASS": 3,
+   "NA": 1
   },
   "D3": {
    "NA": 8
   },
   "D4": {
-   "NA": 2
+   "ERROR": 4
   },
   "D5": {
    "NA": 2
@@ -128,11 +133,12 @@
    "NA": 1
   },
   "E3": {
-   "PASS": 5,
+   "PASS": 7,
    "NA": 1
   },
   "E4": {
-   "NA": 22
+   "NA": 22,
+   "ERROR": 2
   },
   "F1": {
    "ERROR": 1
@@ -144,8 +150,7 @@
    "ERROR": 1
   },
   "F4": {
-   "PASS": 4,
-   "NA": 1
+   "PASS": 5
   },
   "F6": {
    "ERROR": 1
@@ -165,7 +170,7 @@
    "PASS": 7
   },
   "G5": {
-   "NA": 1
+   "ERROR": 1
   },
   "G6": {
    "NA": 4,
@@ -175,16 +180,17 @@
    "PASS": 1
   },
   "H2": {
-   "PASS": 13
+   "PASS": 16,
+   "NA": 1
   },
   "H3": {
-   "PASS": 2
+   "PASS": 4
   },
   "H5": {
-   "PASS": 13
+   "PASS": 17
   },
   "H6": {
-   "NA": 1
+   "ERROR": 1
   },
   "I1": {
    "ERROR": 1
@@ -199,7 +205,7 @@
    "PASS": 1
   },
   "SC1": {
-   "FAIL": 1
+   "PASS": 1
   },
   "X-LOC": {
    "NA": 22
@@ -216,8 +222,8 @@
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 454,
-  "REVIEW": 6,
-  "NOPATH": 6
+  "ERROR": 525,
+  "REVIEW": 9,
+  "NOPATH": 7
  }
 }

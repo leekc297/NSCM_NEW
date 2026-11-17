@@ -1,0 +1,207 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-15 10:14:16.901",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 3.34,
+   "params": {
+    "Code": "CompanySalesSite",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CompanySalesSite', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.913",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 77,
+   "rows_kind": "DataSet rows",
+   "ms": 3.0,
+   "params": {
+    "CODE": "SALES_PLANT",
+    "PARAM1": "",
+    "PARAM2": "",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='SALES_PLANT', @PARAM1='', @PARAM2='', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.948",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 25.58,
+   "params": {
+    "CODE": "SSPM_CRGE_ORG_NM",
+    "PARAM1": "",
+    "PARAM2": "",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='SSPM_CRGE_ORG_NM', @PARAM1='', @PARAM2='', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.955",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.UP_FX_GETCOMMONDATALIST_DM",
+   "sp": "UP_FX_GETCOMMONDATALIST_DM",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1073,
+   "rows_kind": "DataSet rows",
+   "ms": 7.57,
+   "params": {
+    "CODE": "SSPM_CUST_ENG_NM",
+    "PARAM1": "40",
+    "PARAM2": "",
+    "PARAM3": "",
+    "PARAM4": "",
+    "PARAM5": ""
+   },
+   "inline": "EXEC UP_FX_GETCOMMONDATALIST_DM @CODE='SSPM_CUST_ENG_NM', @PARAM1='40', @PARAM2='', @PARAM3='', @PARAM4='', @PARAM5=''",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.972",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 31,
+   "rows_kind": "DataSet rows",
+   "ms": 2.97,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP1"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP1'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.980",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 47,
+   "rows_kind": "DataSet rows",
+   "ms": 3.06,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP2"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP2'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.986",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 2.89,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP3"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP3'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.987",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 19,
+   "rows_kind": "DataSet rows",
+   "ms": 3.3,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP4"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP4'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:16.987",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 2.78,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP5"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP5'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:17.005",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_LOOKUP_VALUES",
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 144,
+   "rows_kind": "DataSet rows",
+   "ms": 3.16,
+   "params": {
+    "p_lookup_type": "REPORT_GROUP6"
+   },
+   "inline": "EXEC SCM0001_GET_LOOKUP_VALUES @p_lookup_type='REPORT_GROUP6'",
+   "phase": "action:insert_edit"
+  },
+  {
+   "at": "2026-11-15 10:14:29.653",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 25,
+   "rows_kind": "DataSet rows",
+   "ms": 3.62,
+   "params": {
+    "Code": "CompanySalesSite",
+    "Param1": "40",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='CompanySalesSite', @Param1='40', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:save_violate"
+  }
+ ]
+}

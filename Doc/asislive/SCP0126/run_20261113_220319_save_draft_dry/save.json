@@ -1,0 +1,65 @@
+{
+ "id": "SCP0126",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_DDLY_CAPA",
+  "pk": [
+   "DIVISION_ID",
+   "PLANT_ID",
+   "LINE_ID",
+   "OPERATION_ID",
+   "ITEM_ID",
+   "YYYYMM"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "PLANT_ID": "PLANT_ID",
+   "LINE_ID": "LINE_ID",
+   "OPERATION_ID": "OPERATION_ID",
+   "ITEM_ID": "ITEM_ID",
+   "YYYYMM": "YYYYMM"
+  },
+  "save_sp": "SCP0126_SAVE_DAILY_CAPA",
+  "side": [],
+  "basis": "foxml SCP0126_SAVE_DAILY_CAPA → SP SCP0126_SAVE_DAILY_CAPA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "CAPA",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "CAPA",
+     "db_col": "CAPA",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "CAPA",
+    "db_col": "CAPA",
+    "rule": "plus1"
+   },
+   {
+    "col": "LANE",
+    "db_col": "LANE",
+    "rule": "plus1"
+   },
+   {
+    "col": "PRDN_OPER_RT",
+    "db_col": "PRDN_OPER_RT",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:03:19",
+ "status": "ERROR",
+ "steps": [],
+ "exception": "ValueError: 'CAPA' is not in list"
+}

@@ -1,0 +1,991 @@
+{
+ "id": "DMF0005",
+ "group": "ADMIN",
+ "insert": true,
+ "violate": true,
+ "acts": [
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert_no_edit",
+   "ok": true,
+   "error": null,
+   "edit_mode": false,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 추가할 수 없습니다.",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": [],
+   "new_rows": {}
+  },
+  {
+   "control": "OnClickInsertButton",
+   "kind": "insert",
+   "ok": true,
+   "error": null,
+   "edit_mode": true,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "SCM0001_GET_LOOKUP_VALUES"
+   ],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Production",
+     "rows_before": 15657,
+     "rows_after": 15658,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "I"
+      },
+      {
+       "row": 0,
+       "col": "DEPT_ID2",
+       "before": "ESS.SCM.SCM2팀",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CUST_GROUP",
+       "before": "ESS전지",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "END_CUSTOMER40",
+       "before": "Peopleworks",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "OWNER",
+       "before": "HYE LIN JUNG",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "USER_ID",
+       "before": "hyelin.jung",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SOLDTO_CODE",
+       "before": "KR00797800",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SOLDTO_DESCRIPTION",
+       "before": "(주) 피플웍스",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SHIPTO_CODE",
+       "before": "KR00797800",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SHIPTO_DESCRIPTION",
+       "before": "(주) 피플웍스",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SOLDTO_CUSTOMER",
+       "before": "Peopleworks",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SCM_SITE_ID40",
+       "before": "Peopleworks_KR_KUM",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_TYPE",
+       "before": "Product",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_CLASS_NAME",
+       "before": "[EC]Cell",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_ID",
+       "before": "ECE0074N5-01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ITEM_NAME",
+       "before": "EC,E,7.4Ah,N5,01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ENERGE_WH",
+       "before": "27.000",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PRODUCTION_PROCESS",
+       "before": "일반",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SALES_COMPANY",
+       "before": "NJ00",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "SALES_PLANT",
+       "before": "NJ01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "NICK_NAME",
+       "before": "JE7.4",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ATTRIBUTE1",
+       "before": "ESS전지",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ATTRIBUTE2",
+       "before": "ESS전지",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CUST_GROUP_DTL",
+       "before": "계약",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "APPLICATION",
+       "before": "ESS",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ROUTE",
+       "before": "내수",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ALT_SIM_YN",
+       "before": "N",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LIABILITY_PERIOD",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "CURRENCY",
+       "before": "KRW",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDI_LT",
+       "before": "0",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATE_DATE",
+       "before": "2024-07-17 12:15:55",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "LAST_UPDATED_BY",
+       "before": "eunjung_heo",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ATTRIBUTE4",
+       "before": "KOREA, REPUBLIC OF",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REPORT_GROUP1",
+       "before": "ESS",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REPORT_GROUP2",
+       "before": "ESS전지",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REPORT_GROUP3",
+       "before": "파우치형",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "REPORT_GROUP4",
+       "before": "일반",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ATTRIBUTE5",
+       "before": "ECE0074N5-01",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "PROJECT_INFO",
+       "before": "N",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDIT_FLAG",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "EDIT_FLAG3",
+       "before": "N",
+       "after": ""
+      },
+      {
+       "row": 0,
+       "col": "ACTIVE_FLAG",
+       "before": "Y",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "ITEM_ID",
+       "before": "ECE0074N5-01-A01",
+       "after": "ECE0074N5-01"
+      },
+      {
+       "row": 1,
+       "col": "SALES_COMPANY",
+       "before": "HQ00",
+       "after": "NJ00"
+      },
+      {
+       "row": 1,
+       "col": "SALES_PLANT",
+       "before": "HQ06",
+       "after": "NJ01"
+      },
+      {
+       "row": 1,
+       "col": "ATTRIBUTE5",
+       "before": "ECE0074N5-01-A01",
+       "after": "ECE0074N5-01"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_CLASS_NAME",
+       "before": "[ES]Small Size Cell",
+       "after": "[EC]Cell"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_ID",
+       "before": "ESE0074N5-01",
+       "after": "ECE0074N5-01-A01"
+      },
+      {
+       "row": 2,
+       "col": "ITEM_NAME",
+       "before": "ES,E,7.4Ah,N5,01",
+       "after": "EC,E,7.4Ah,N5,01"
+      },
+      {
+       "row": 2,
+       "col": "SALES_COMPANY",
+       "before": "NJ00",
+       "after": "HQ00"
+      },
+      {
+       "row": 2,
+       "col": "SALES_PLANT",
+       "before": "NJ01",
+       "after": "HQ06"
+      },
+      {
+       "row": 2,
+       "col": "NICK_NAME",
+       "before": "JS1-DSF",
+       "after": "JE7.4"
+      },
+      {
+       "row": 2,
+       "col": "ROUTE",
+       "before": "기타",
+       "after": "내수"
+      },
+      {
+       "row": 2,
+       "col": "CURRENCY",
+       "before": "CNY",
+       "after": "KRW"
+      },
+      {
+       "row": 2,
+       "col": "EDI",
+       "before": "FOB",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "EDI_LT",
+       "before": "14",
+       "after": "0"
+      },
+      {
+       "row": 2,
+       "col": "ATTRIBUTE5",
+       "before": "ESE0074N5-01",
+       "after": "ECE0074N5-01-A01"
+      },
+      {
+       "row": 3,
+       "col": "ITEM_ID",
+       "before": "ESE0074N5-01-A02",
+       "after": "ESE0074N5-01"
+      },
+      {
+       "row": 3,
+       "col": "NICK_NAME",
+       "before": "JS1 WET SEPA",
+       "after": "JS1-DSF"
+      }
+     ],
+     "more": 318
+    }
+   ],
+   "new_rows": {
+    "spdMain/Production": [
+     0
+    ]
+   },
+   "after_edit": true,
+   "new_row_state": {
+    "cmd": "cellstate",
+    "at": "2026-11-15 10:14:29.065",
+    "grid": "spdMain",
+    "sheet_index": 0,
+    "sheet_name": "Production",
+    "sheet": "Production",
+    "rows_total": 15658,
+    "from": 0,
+    "cols": [
+     {
+      "index": 0,
+      "tag": "Action",
+      "label": "A",
+      "data_field": "Action",
+      "visible": "True"
+     },
+     {
+      "index": 1,
+      "tag": "COLMERGE",
+      "label": "B",
+      "data_field": "",
+      "visible": "False"
+     },
+     {
+      "index": 2,
+      "tag": "DIVISION_ID",
+      "label": "Div*",
+      "data_field": "DIVISION_ID",
+      "visible": "True"
+     },
+     {
+      "index": 3,
+      "tag": "DEPT_ID2",
+      "label": "Team",
+      "data_field": "DEPT_ID2",
+      "visible": "True"
+     },
+     {
+      "index": 4,
+      "tag": "CUST_GROUP",
+      "label": "Cust Group*",
+      "data_field": "CUST_GROUP",
+      "visible": "True"
+     },
+     {
+      "index": 5,
+      "tag": "END_CUSTOMER40",
+      "label": "End Customer*",
+      "data_field": "END_CUSTOMER40",
+      "visible": "True"
+     },
+     {
+      "index": 6,
+      "tag": "OWNER",
+      "label": "Owner Name",
+      "data_field": "OWNER",
+      "visible": "True"
+     },
+     {
+      "index": 7,
+      "tag": "USER_ID",
+      "label": "Owner*",
+      "data_field": "USER_ID",
+      "visible": "True"
+     },
+     {
+      "index": 8,
+      "tag": "SOLDTO_CODE",
+      "label": "Sold-To",
+      "data_field": "SOLDTO_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 9,
+      "tag": "SOLDTO_DESCRIPTION",
+      "label": "Sold-To",
+      "data_field": "SOLDTO_DESCRIPTION",
+      "visible": "False"
+     },
+     {
+      "index": 10,
+      "tag": "SHIPTO_CODE",
+      "label": "Rep Ship-To",
+      "data_field": "SHIPTO_CODE",
+      "visible": "True"
+     },
+     {
+      "index": 11,
+      "tag": "SHIPTO_DESCRIPTION",
+      "label": "Rep Ship-To",
+      "data_field": "SHIPTO_DESCRIPTION",
+      "visible": "False"
+     },
+     {
+      "index": 12,
+      "tag": "SOLDTO_CUSTOMER",
+      "label": "Sold-To Customer",
+      "data_field": "SOLDTO_CUSTOMER",
+      "visible": "True"
+     },
+     {
+      "index": 13,
+      "tag": "SCM_SITE_ID40",
+      "label": "Sales Site*",
+      "data_field": "SCM_SITE_ID40",
+      "visible": "True"
+     },
+     {
+      "index": 14,
+      "tag": "CELL_S_OP_REPORT",
+      "label": "Cell Prod. Site (S&OP Report)",
+      "data_field": "CELL_S_OP_REPORT",
+      "visible": "True"
+     },
+     {
+      "index": 15,
+      "tag": "ITEM_TYPE",
+      "label": "Item Type",
+      "data_field": "ITEM_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 16,
+      "tag": "CELL_TYPE",
+      "label": "Product Group",
+      "data_field": "CELL_TYPE",
+      "visible": "True"
+     },
+     {
+      "index": 17,
+      "tag": "ITEM_CLASS_NAME",
+      "label": "Model Type",
+      "data_field": "ITEM_CLASS_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 18,
+      "tag": "ITEM_ID",
+      "label": "Model*",
+      "data_field": "ITEM_ID",
+      "visible": "True"
+     },
+     {
+      "index": 19,
+      "tag": "ITEM_NAME",
+      "label": "Model Name",
+      "data_field": "ITEM_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 20,
+      "tag": "ENERGE_WH",
+      "label": "Energy(Wh)",
+      "data_field": "ENERGE_WH",
+      "visible": "True"
+     },
+     {
+      "index": 21,
+      "tag": "PRODUCTION_PROCESS",
+      "label": "Production Process*",
+      "data_field": "PRODUCTION_PROCESS",
+      "visible": "True"
+     },
+     {
+      "index": 22,
+      "tag": "SALES_COMPANY",
+      "label": "Sales Company",
+      "data_field": "SALES_COMPANY",
+      "visible": "True"
+     },
+     {
+      "index": 23,
+      "tag": "SALES_PLANT",
+      "label": "Sales Plant",
+      "data_field": "SALES_PLANT",
+      "visible": "True"
+     },
+     {
+      "index": 24,
+      "tag": "NICK_NAME",
+      "label": "Nick Name",
+      "data_field": "NICK_NAME",
+      "visible": "True"
+     },
+     {
+      "index": 25,
+      "tag": "ATTRIBUTE1",
+      "label": "Sold-to Cust.(Report)",
+      "data_field": "ATTRIBUTE1",
+      "visible": "True"
+     },
+     {
+      "index": 26,
+      "tag": "ATTRIBUTE2",
+      "label": "End Cust.(Report)",
+      "data_field": "ATTRIBUTE2",
+      "visible": "True"
+     },
+     {
+      "index": 27,
+      "tag": "CUST_GROUP_DTL",
+      "label": "Cust Group Detail",
+      "data_field": "CUST_GROUP_DTL",
+      "visible": "True"
+     },
+     {
+      "index": 28,
+      "tag": "APPLICATION",
+      "label": "Application*",
+      "data_field": "APPLICATION",
+      "visible": "True"
+     },
+     {
+      "index": 29,
+      "tag": "ROUTE",
+      "label": "Channel",
+      "data_field": "ROUTE",
+      "visible": "True"
+     },
+     {
+      "index": 30,
+      "tag": "ALT_SIM_YN",
+      "label": "대체/유사모델",
+      "data_field": "ALT_SIM_YN",
+      "visible": "True"
+     },
+     {
+      "index": 31,
+      "tag": "LIABILITY_PERIOD",
+      "label": "Liablity(Week)",
+      "data_field": "LIABILITY_PERIOD",
+      "visible": "True"
+     },
+     {
+      "index": 32,
+      "tag": "CURRENCY",
+      "label": "Currency*",
+      "data_field": "CURRENCY",
+      "visible": "True"
+     },
+     {
+      "index": 33,
+      "tag": "EDI",
+      "label": "EDI Incoterms",
+      "data_field": "EDI",
+      "visible": "True"
+     },
+     {
+      "index": 34,
+      "tag": "EDI_LT",
+      "label": "EDI Leadtime",
+      "data_field": "EDI_LT",
+      "visible": "True"
+     },
+     {
+      "index": 35,
+      "tag": "VALID_YN",
+      "label": "Active*",
+      "data_field": "VALID_YN",
+      "visible": "True"
+     },
+     {
+      "index": 36,
+      "tag": "DESCRIPTION",
+      "label": "Description",
+      "data_field": "DESCRIPTION",
+      "visible": "True"
+     },
+     {
+      "index": 37,
+      "tag": "LAST_UPDATE_DATE",
+      "label": "Update Date",
+      "data_field": "LAST_UPDATE_DATE",
+      "visible": "True"
+     },
+     {
+      "index": 38,
+      "tag": "LAST_UPDATED_BY",
+      "label": "Update By",
+      "data_field": "LAST_UPDATED_BY",
+      "visible": "True"
+     },
+     {
+      "index": 39,
+      "tag": "ATTRIBUTE4",
+      "label": "Destination",
+      "data_field": "ATTRIBUTE4",
+      "visible": "True"
+     },
+     {
+      "index": 40,
+      "tag": "REPORT_GROUP1",
+      "label": "Application Gr.",
+      "data_field": "REPORT_GROUP1",
+      "visible": "True"
+     },
+     {
+      "index": 41,
+      "tag": "REPORT_GROUP2",
+      "label": "Cust.(Report)",
+      "data_field": "REPORT_GROUP2",
+      "visible": "True"
+     },
+     {
+      "index": 42,
+      "tag": "REPORT_GROUP3",
+      "label": "Product Gr.(Report)",
+      "data_field": "REPORT_GROUP3",
+      "visible": "True"
+     },
+     {
+      "index": 43,
+      "tag": "REPORT_GROUP4",
+      "label": "Product Details.(Report)",
+      "data_field": "REPORT_GROUP4",
+      "visible": "True"
+     },
+     {
+      "index": 44,
+      "tag": "REPORT_GROUP5",
+      "label": "AS",
+      "data_field": "REPORT_GROUP5",
+      "visible": "False"
+     },
+     {
+      "index": 45,
+      "tag": "REPORT_GROUP6",
+      "label": "Cell Model Info",
+      "data_field": "REPORT_GROUP6",
+      "visible": "True"
+     },
+     {
+      "index": 46,
+      "tag": "ATTRIBUTE5",
+      "label": "Cell Model",
+      "data_field": "ATTRIBUTE5",
+      "visible": "True"
+     },
+     {
+      "index": 47,
+      "tag": "PROJECT_INFO",
+      "label": "Project",
+      "data_field": "PROJECT_INFO",
+      "visible": "True"
+     },
+     {
+      "index": 48,
+      "tag": "EDIT_FLAG",
+      "label": "Edit Flag",
+      "data_field": "EDIT_FLAG",
+      "visible": "False"
+     },
+     {
+      "index": 49,
+      "tag": "EDIT_FLAG2",
+      "label": "Edit Flag",
+      "data_field": "EDIT_FLAG2",
+      "visible": "False"
+     },
+     {
+      "index": 50,
+      "tag": "EDIT_FLAG3",
+      "label": "Edit Flag",
+      "data_field": "EDIT_FLAG3",
+      "visible": "False"
+     },
+     {
+      "index": 51,
+      "tag": "ACTIVE_FLAG",
+      "label": "MDM Active",
+      "data_field": "ACTIVE_FLAG",
+      "visible": "True"
+     }
+    ],
+    "locked": [
+     "1011001011111011110110001000001000000111000000100001"
+    ],
+    "back": [
+     [
+      "Blue",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "White",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "#FFFFFF86",
+      "White"
+     ]
+    ],
+    "fore": [
+     [
+      "White",
+      "WindowText",
+      "Red",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText",
+      "WindowText"
+     ]
+    ],
+    "text": [
+     [
+      "I",
+      "",
+      "40",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    ],
+    "how": [
+     "GetStyleInfo"
+    ],
+    "sheet_locked": true,
+    "edit_mode": true,
+    "dialog_count": 1,
+    "done": "2026-11-15 10:14:29.072"
+   }
+  },
+  {
+   "control": "OnClickSaveButton",
+   "kind": "save_violate",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "Active 값은 필수 입력입니다",
+     "action": "cancel_button(id=2)"
+    }
+   ],
+   "calls": [],
+   "grid_changes": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 10:13:03",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true
+}

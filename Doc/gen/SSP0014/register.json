@@ -1,0 +1,75 @@
+{
+  "menuId": "SSP0014",
+  "screenName": "ShipmentModelPIC",
+  "feature": "shipping",
+  "pageDir": "shipment-model-pic",
+  "routePath": "shipping/shipment-model-pic",
+  "sheets": [
+    {
+      "sheetName": "Shipment Model PIC",
+      "rule": "META+코드연결",
+      "columns": 21,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0014.P_",
+      "sheet": "Shipment Model PIC",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "asis_sp": "SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0014.P_SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "asis_sp": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0014.P_SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SSP.SSP0014_GET_USER_ID_CHECK",
+      "asis_sp": "SSP0014_GET_USER_ID_CHECK",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetUserIDChk"
+      ],
+      "tobe_pkg_candidate": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+      "sheet": "Shipment Model PIC",
+      "btn": "USER_ID_CHECK"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

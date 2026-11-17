@@ -1,0 +1,79 @@
+{
+ "id": "SCP0007",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "SCP.SCP0007_SAVE_BOD",
+   "save_sp": "SCP0007_SAVE_BOD",
+   "status": "키 대응 완료",
+   "table": "SCP_MST_BOD",
+   "pk": [
+    "BOD_ID"
+   ],
+   "match": {
+    "BOD_ID": "BOD_ID"
+   },
+   "unmatched_pk": [],
+   "edit": {
+    "col": "SAFETY_STOCK",
+    "db_col": "SAFETY_STOCK",
+    "rule": "plus1"
+   },
+   "side": [
+    {
+     "table": "SCP_MST_BOD_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/BOD",
+   "writes": {
+    "SCP_MST_BOD": [
+     "DELETE FROM",
+     "MERGE INTO"
+    ],
+    "SCP_MST_BOD_ITEM": [
+     "UPDATE"
+    ]
+   },
+   "basis": "foxml SCP0007_SAVE_BOD → SP SCP0007_SAVE_BOD 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "SCP_MST_BOD_H": [
+     "INSERT INTO"
+    ],
+    "scp_mst_bod_item": [
+     "INSERT INTO"
+    ],
+    "x": [
+     "UPDATE"
+    ]
+   },
+   "other_tables": [
+    "SCP_MST_BOD_ITEM"
+   ],
+   "edit_candidates": [
+    {
+     "col": "SAFETY_STOCK",
+     "db_col": "SAFETY_STOCK",
+     "rule": "plus1"
+    },
+    {
+     "col": "PRIORITY",
+     "db_col": "PRIORITY",
+     "rule": "plus1"
+    },
+    {
+     "col": "ROUTE_ID",
+     "db_col": "ROUTE_ID",
+     "rule": "plus1"
+    }
+   ],
+   "dry": {
+    "status": "DRY_OK",
+    "note": "",
+    "at": "2026-11-13 20:29:12"
+   }
+  }
+ ]
+}

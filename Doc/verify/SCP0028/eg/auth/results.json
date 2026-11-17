@@ -1,7 +1,19 @@
 {
   "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_auth",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
@@ -14,25 +26,14 @@
       "actualWorkers": 1
     },
     "preserveOutput": "always",
-    "reporter": [
-      [
-        "list"
-      ],
-      [
-        "json"
-      ]
-    ],
-    "reportSlowTests": {
-      "max": 5,
-      "threshold": 15000
-    },
-    "quiet": false,
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0028/eg/auth/artifacts",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -43,9 +44,60 @@
         "timeout": 180000
       }
     ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
     "shard": null,
-    "updateSnapshots": "missing",
-    "version": "1.49.1",
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
     "workers": 1,
     "webServer": null
   },
@@ -60,7 +112,7 @@
         {
           "title": "E03 Division·권한 SCP0028 @eg-auth",
           "file": "eg_auth.spec.ts",
-          "line": 67,
+          "line": 85,
           "column": 6,
           "specs": [
             {
@@ -79,8 +131,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 34993,
+                      "duration": 15271,
                       "errors": [],
                       "stdout": [
                         {
@@ -89,7 +142,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:03:36.895Z",
+                      "startTime": "2026-11-13T20:46:19.138Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -98,7 +152,7 @@
               ],
               "id": "fce9d8edbd378244cae8-1c180bb7a00e87a758bd",
               "file": "eg_auth.spec.ts",
-              "line": 73,
+              "line": 92,
               "column": 7
             },
             {
@@ -117,81 +171,82 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 271878,
+                      "duration": 104523,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 30s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 26s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 11s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 29s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/40/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/40/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/40/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/40/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 27s\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 28s\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP/81/SCP Planner 27s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 12s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 33s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 12s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/81/SCP Planner 12s\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] SCP/81/SCM Viewer 12s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/81/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/81/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/81/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/81/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 26s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 12s\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 26s\n"
+                          "text": "[eg_auth] SCP/82/SCM Viewer 12s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/82/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG374 FAIL DELETE 버튼 조회 전 [SCP/82/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/82/SCM Viewer] 기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
+                          "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/82/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {}\n"
@@ -199,7 +254,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:04:23.379Z",
+                      "startTime": "2026-11-13T20:46:37.288Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -208,7 +264,7 @@
               ],
               "id": "fce9d8edbd378244cae8-f6ca31f98b28509a7ff3",
               "file": "eg_auth.spec.ts",
-              "line": 230,
+              "line": 249,
               "column": 7
             },
             {
@@ -227,8 +283,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 29388,
+                      "duration": 9699,
                       "errors": [],
                       "stdout": [
                         {
@@ -237,7 +294,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:09:06.325Z",
+                      "startTime": "2026-11-13T20:48:25.580Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -246,7 +304,7 @@
               ],
               "id": "fce9d8edbd378244cae8-84c5c856340bfa65f61c",
               "file": "eg_auth.spec.ts",
-              "line": 330,
+              "line": 366,
               "column": 7
             },
             {
@@ -265,8 +323,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 65724,
+                      "duration": 26778,
                       "errors": [],
                       "stdout": [
                         {
@@ -284,7 +343,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:09:48.918Z",
+                      "startTime": "2026-11-13T20:48:38.929Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -293,7 +353,7 @@
               ],
               "id": "fce9d8edbd378244cae8-25e3af2b96dead289b27",
               "file": "eg_auth.spec.ts",
-              "line": 381,
+              "line": 417,
               "column": 7
             },
             {
@@ -312,8 +372,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2547,
+                      "duration": 288,
                       "errors": [],
                       "stdout": [
                         {
@@ -322,7 +383,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:11:07.762Z",
+                      "startTime": "2026-11-13T20:49:09.330Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -331,7 +393,7 @@
               ],
               "id": "fce9d8edbd378244cae8-a1048601e2c9044a11fe",
               "file": "eg_auth.spec.ts",
-              "line": 452,
+              "line": 488,
               "column": 7
             },
             {
@@ -350,8 +412,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20433,
+                      "duration": 4817,
                       "errors": [],
                       "stdout": [
                         {
@@ -360,7 +423,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:11:22.644Z",
+                      "startTime": "2026-11-13T20:49:13.271Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -369,7 +433,7 @@
               ],
               "id": "fce9d8edbd378244cae8-6def0b352080f2687100",
               "file": "eg_auth.spec.ts",
-              "line": 522,
+              "line": 558,
               "column": 7
             },
             {
@@ -388,8 +452,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1945,
+                      "duration": 295,
                       "errors": [],
                       "stdout": [
                         {
@@ -401,7 +466,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:11:57.532Z",
+                      "startTime": "2026-11-13T20:49:21.794Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -410,7 +476,7 @@
               ],
               "id": "fce9d8edbd378244cae8-f1f88438aa34d8bc6429",
               "file": "eg_auth.spec.ts",
-              "line": 536,
+              "line": 574,
               "column": 7
             },
             {
@@ -429,8 +495,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 19893,
+                      "duration": 4869,
                       "errors": [],
                       "stdout": [
                         {
@@ -439,7 +506,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:12:10.135Z",
+                      "startTime": "2026-11-13T20:49:25.704Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -448,7 +516,7 @@
               ],
               "id": "fce9d8edbd378244cae8-5391b674f2ac1d07277b",
               "file": "eg_auth.spec.ts",
-              "line": 566,
+              "line": 604,
               "column": 7
             },
             {
@@ -467,8 +535,9 @@
                   "results": [
                     {
                       "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2766,
+                      "duration": 307,
                       "errors": [],
                       "stdout": [
                         {
@@ -480,7 +549,8 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-02T06:12:40.911Z",
+                      "startTime": "2026-11-13T20:49:34.484Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -489,7 +559,7 @@
               ],
               "id": "fce9d8edbd378244cae8-29b89290151e193023c2",
               "file": "eg_auth.spec.ts",
-              "line": 591,
+              "line": 629,
               "column": 7
             }
           ]
@@ -499,8 +569,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-02T06:03:35.011Z",
-    "duration": 564885.492,
+    "startTime": "2026-11-13T20:46:18.730Z",
+    "duration": 200572.336,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

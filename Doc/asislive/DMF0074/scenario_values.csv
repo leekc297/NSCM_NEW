@@ -1,0 +1,15 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+DMF0074-Sde9bfa,DIVISION,,,,값 미도출,"if (p_division_id == """")",
+DMF0074-S69bb2b,DIVISION,"81,82","81,82",,실행 대상,"if ((sDivision.Substring(0, 2) == ""81"") || (sDivision == ""82""))",
+DMF0074-S43cb5f,DIVISION,"81,82 (그 밖 값 필요)","81,82,40",,실행 대상,"else of ((sDivision.Substring(0, 2) == ""81"") || (sDivision == ""82""))",
+DMF0074-S3d82d0,DIVISION,81,81,,실행 대상,"if (sDivision.IndexOf(""81"") != -1)",
+DMF0074-Se9843f,DIVISION,,,,값 미도출,"switch (triggerControl) case ""MyDivision"":",
+DMF0074-Scf3183,DIVISION,,,,값 미도출,"switch (triggerControl) case ""UserTeamByDivision"":",
+DMF0074-S9623cc,DIVISION,,,,값 미도출,"switch (triggerControl) case ""EndCustomerByDivision"":",
+DMF0074-S80ad57,DIVISION,,,,값 미도출,"switch (triggerControl) case ""UserPlantSiteByDivision"":",
+DMF0074-S1d7f0b,DIVISION,"81,82","81,82",,실행 대상,"if ((sDivision.Substring(0, 2) == ""81"") || (sDivision == ""82""))",
+DMF0074-S2a40ee,DIVISION,"81,82","81,82",,실행 대상,"if ((sDivision.Substring(0, 2) == ""81"") || (sDivision == ""82"")) ▸ if (sDivision.IndexOf(""81"") != -1)",
+DMF0074-Sae0c63,DIVISION,"81,82 (그 밖 값 필요)","81,82,40",,실행 대상,"else of ((sDivision.Substring(0, 2) == ""81"") || (sDivision == ""82""))",
+DMF0074-S1c85f5,COND,txtVersion.Text,,,값 미도출,"if (txtVersion.Text.Trim() == """")",값을 고르는 규칙이 없는 컨트롤 형식(UsrMultiLineEditor)
+DMF0074-S883346,COND,,,,값 미도출,"if (drpPeriodMonth.MonthText1 == """" || drpPeriodMonth.MonthText2 == """")",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)
+DMF0074-S33ed98,COND,,,,값 미도출,"if (Convert.ToDateTime(drpPeriodMonth.MonthText1 + ""-01"") > Convert.ToDateTime(drpPeriodMonth.MonthText2 + ""-01""))",조건식에 조건 컨트롤 값 비교가 없음(변수·메서드 결과로 정해짐)

@@ -237,6 +237,9 @@ def ctype_kind(r):
     if 'Date' in t:
         return 'date'
     # 날짜를 숫자 글자(yyyymmdd)로 받는 칸 — DMF0072 VALID_START_DATE = FPNumberText(2026-11-04 실측)
+    # 2026-11-17(SCP0104 SOP_ELTR.LAST_UPDATE_DATE P22 허위 FAIL): 감사 컬럼(시스템이 채우는 생성·수정 일시)은 사용자가 입력하는 날짜 칸이 아니다
+    if re.match(r'^(LAST_UPDATE|CREATION|CREATE|UPDATE|LAST_UPDATED|CREATED|MODIFY|MODIFIED)_?(DATE|DT|DTTM|TIME)$', (r.get('column_name') or '').upper()):
+        return 'text'
     if DATE_NAME.search(r.get('column_name') or '') and t in ('FPNumberText', 'FPText', 'FPTextBox', 'FPNumber', 'FPDateText'):
         return 'date'
     if 'Number' in t or t == 'FPPercent':
@@ -431,7 +434,7 @@ def p_dirty(S):
             if k in seen:
                 continue
             seen.add(k)
-            out.append(row(S, 'P15', 'H10', f'신규 행 있을 때 {lab} 차단 안내', f'{S.prefix()}search;insert;btn:{lab}', f"AS-IS {meth}:{a['line']} guard FlagI → {b}", msg_re=mre))
+            out.append(row(S, 'P15', 'H10', f'신규 행 있을 때 {lab} 차단 안내', f'{S.prefix()}search;insert;btn:{re.escape(lab)}', f"AS-IS {meth}:{a['line']} guard FlagI → {b}", msg_re=mre))
         else:
             why.append(f'{meth}:{a["line"]} 컨트롤 형식 미확인({ctl}={typ or "없음"})')
     # DM-52 일반 규칙(문서 general_rule=Y): 편집 중 데이터가 있을 때 다른 기능 실행 → 모든 화면 단일 코드 MSG00680
@@ -446,7 +449,7 @@ def p_dirty(S):
         if not lab or common.match(lab) or ('H10', lab) in seen or len(lab) > 30:
             continue
         seen.add(('H10', lab))
-        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f'{S.prefix()}search;insert;btn:{lab}', f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
+        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f'{S.prefix()}search;insert;btn:{re.escape(lab)}', f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
     if not out and not why:
         why.append('AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음')
     return out, why
@@ -547,9 +550,20 @@ def p_iscombo(S):
     if sc:
         # 2026-11-05 SCP0111 ERROR — AS-IS 라벨('Division*')로 찾으면 TO-BE('Div')와 달라 측정 불가 · Period 는 TO-BE 달력(콤보 아님)
         #   SCP·SSP = 조회조건 기준표(CR-071) TO-BE 이름 · 유형 '선택' · 사용(USE)만
-        labs = list(dict.fromkeys(r['tobe_name'].strip() for r in sc if r.get('usage') == 'USE' and r.get('tobe_type1') == '선택' and r.get('tobe_name', '').strip()))
+        # 2026-11-10 T201(SSP0003 2번 허위 FAIL): 기준표 'Reason Detail 선택' 이지만 AS-IS txtReasonDetail 은 ReadOnly 표시 칸(Designer.cs:957 · 비고 '자동입력 표시') —
+        #   사용자가 고르는 조회조건이 아니다. AS-IS 원문 ReadOnly 컨트롤(props.csv)에 대응하는 기준표 행은 뺀다(T192 E3 와 같은 원칙)
+        ro = set()
+        try:
+            with open(os.path.join(S.dir, 'props.csv'), encoding='utf-8-sig', newline='') as f:
+                ro = {r['target'] for r in csv.DictReader(f) if r.get('variant') != 'legacy' and r.get('prop') == 'ReadOnly' and (r.get('value') or '').strip().lower() == 'true'}
+        except OSError:
+            pass
+        nrm_l = lambda t: re.sub(r'[\s*.:]', '', t or '').lower()
+        ro_labels = {nrm_l(lab) for c, lab in S.label.items() if c in ro}
+        dropped = [r['tobe_name'].strip() for r in sc if nrm_l(r.get('asis_name')) in ro_labels or nrm_l(r.get('tobe_name')) in ro_labels]
+        labs = list(dict.fromkeys(r['tobe_name'].strip() for r in sc if r.get('usage') == 'USE' and r.get('tobe_type1') == '선택' and r.get('tobe_name', '').strip() and r['tobe_name'].strip() not in dropped))
         if not labs:
-            return [], ['조회조건 기준표에 TO-BE 선택(콤보) 조건 없음']
+            return [], ['조회조건 기준표에 TO-BE 선택(콤보) 조건 없음' + (f' (AS-IS ReadOnly 표시 칸 제외 {dropped})' if dropped else '')]
         return [row(S, 'P21', 'B1', f'조회조건 콤보 {len(labs)}종 = 콤보', ';'.join(f'iscombo:{re.escape(l)}' for l in labs), f"조회조건 기준표(search_cond.csv) TO-BE 선택 {', '.join(labs[:6])}")], []
     labs = []
     for c, lab in S.label.items():

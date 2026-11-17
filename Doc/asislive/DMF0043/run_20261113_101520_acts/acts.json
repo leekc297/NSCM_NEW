@@ -1,0 +1,80 @@
+{
+ "id": "DMF0043",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnColumn",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnColumn failed: InvalidOperationException: control not found: btnColumn",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0043-S82cdcb",
+    "DMF0043-Seeb486",
+    "DMF0043-Sf2376e",
+    "DMF0043-S3f5b66",
+    "DMF0043-Sd738d5",
+    "DMF0043-S2e76bd",
+    "DMF0043-Sf409b9",
+    "DMF0043-S6bd4b3",
+    "DMF0043-S109112",
+    "DMF0043-Sac510b",
+    "DMF0043-S0debf1"
+   ]
+  },
+  {
+   "control": "btnCutOff",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DMF0043_ContributeRatePopup",
+     "title": "기여율 버전관리",
+     "modal": true,
+     "grid_rows": 8,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0043_GET_CONTRIBUTE_RATE_POPUP"
+   ],
+   "scenarios": [
+    "DMF0043-Se7e3bc"
+   ]
+  },
+  {
+   "control": "btnSPVer",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnSPVer failed: InvalidOperationException: control not found: btnSPVer",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0043-S895f79",
+    "DMF0043-S927c39"
+   ]
+  },
+  {
+   "control": "usrDiscard",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0043_GET_MAIN_SPREAD_TITLE"
+   ],
+   "scenarios": [
+    "DMF0043-S40854f"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 10:14:01.169",
+ "fills": 0,
+ "fill_left": []
+}

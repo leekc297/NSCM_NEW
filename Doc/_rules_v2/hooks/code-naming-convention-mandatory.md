@@ -48,6 +48,7 @@
 | **CI Pipeline** | GitLab CI — Validation(Branch/Lint/Type) → Build(Turborepo) → Deploy | 서버 사이드, 위반 시 빌드/배포 즉시 Fail |
 
 > 작성 직후 self-check 로 lint+type 위반 0 을 확인한다(`type-check-error-patterns.md` #64 grep + `pnpm lint:fix` / `pnpm type-check`). 게이트는 로컬·CI 양쪽에서 동일 검사.
+> (2026-11-13 정정: AI 가 `pnpm lint:fix`/`pnpm type-check` 를 직접 실행 → AI 직접 실행 금지(실행 hook `block-dev-commands` 차단). AI 는 #64 grep 까지만 하고 변경 파일 목록을 보고하며, 사용자가 "타입체크/린트 해줘" 요청 시에만 `_artifacts/_tools/fe-check.ps1`(type-check | lint | all) 사용. 실행하지 않았으면 PASS 가 아니라 미실행(ERROR) 보고. 위반 0 요구 기준 자체는 유지.)
 
 ## 5. PRE-WRITE 체크리스트
 

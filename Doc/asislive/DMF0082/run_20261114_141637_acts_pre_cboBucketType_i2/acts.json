@@ -1,0 +1,208 @@
+{
+ "id": "DMF0082",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0082_GET_SPREAD_TITLE",
+    "DMF0082_GET_MAIN_DATA"
+   ],
+   "rows": [
+    [
+     "DMF0082_GET_SPREAD_TITLE",
+     234
+    ],
+    [
+     "DMF0082_GET_MAIN_DATA",
+     7368
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_ItembyDivisionPopupEx",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 15317,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx"
+   ],
+   "scenarios": [
+    "DMF0082-Sea1449",
+    "DMF0082-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "DM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 8,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "DMF0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "DMF0082-S3e4aef"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnVersion",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_VersionByWaterfallPopup",
+     "title": "Version Popup",
+     "modal": true,
+     "grid_rows": 1,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+   ],
+   "scenarios": [
+    "DMF0082-S8f08c9",
+    "DMF0082-Sc9b6a0"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "cboBucketType",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S669149"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrButton1",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton1 failed: InvalidOperationException: control not found: usrButton1",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S96735e"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "usrButton2",
+   "ok": false,
+   "error": "InvalidOperationException: click:usrButton2 failed: InvalidOperationException: control not found: usrButton2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "DMF0082-S4558a9"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnColumn",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 29
+  },
+  {
+   "control": "btnExchangeRate",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 23
+  },
+  {
+   "control": "btnSavePricePeriod",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-14 14:14:34.849",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i2",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "2"
+  },
+  "label": "cboBucketType 콤보 2번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:2:Monthly",
+  "value": "MONTHLY",
+  "text": "Monthly",
+  "checked": null,
+  "selected_index": 2
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

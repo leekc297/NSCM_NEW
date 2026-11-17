@@ -1,0 +1,8 @@
+﻿scenario_id,axis,guard_values,run_values,executed,status,guard,note
+SCM0008-S18b85e,AUTH,,,,값 미도출,"for (i <= siMyAuthList.GetMaxRowIndex()) ▸ if (!result.Equals(""REQUESTING"") && result.Length > 0) ▸ if (result.Equals(""REJECT""))",
+SCM0008-S4c77e2,AUTH,,,,값 미도출,"for (i <= siMyAuthList.GetMaxRowIndex()) ▸ if (!result.Equals(""REQUESTING"") && result.Length > 0) ▸ else of (result.Equals(""REJECT""))",
+SCM0008-Sa62c78,DIVISION,,,,값 미도출,else of (sheetName == SpdSheet.shtMain) ▸ if (sheetName == SpdSheet.shtDivision),
+SCM0008-Sccd292,DIVISION,,,,값 미도출,else of (sheetName == SpdSheet.shtMain) ▸ else of (sheetName == SpdSheet.shtDivision) ▸ if (sheetName == SpdSheet.shtMyAuthList),
+SCM0008-Sccd292,AUTH,,,,값 미도출,else of (sheetName == SpdSheet.shtMain) ▸ else of (sheetName == SpdSheet.shtDivision) ▸ if (sheetName == SpdSheet.shtMyAuthList),
+SCM0008-S5163be,AUTH,,,,값 미도출,if (dtMyAuthList.Rows.Count > 0) ▸ if (!string.IsNullOrWhiteSpace(sLanguage)),
+SCM0008-Sdcfe08,AUTH,,,,값 미도출,if (dtMyAuthList.Rows.Count > 0) ▸ if (!string.IsNullOrWhiteSpace(sTimeZone)),

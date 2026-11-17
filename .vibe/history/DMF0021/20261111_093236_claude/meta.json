@@ -1,0 +1,29 @@
+{
+  "id": "DMF0021",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0021] · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0021/__asis-actions__.md · Doc/asisfacts/screens/DMF0021/ · 룰: tools/VibeManager/rules",
+  "start": "2026-11-11T09:32:36+09:00",
+  "end": "2026-11-11T09:39:30+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0021",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "위의 확인 검증쿼리 생성 시 감안해야할 사항으로, minyonglee1 계정으로 조회하면 정상 조회됩니다. jaegun_cho 계정으로 조회 시 Unit Price(LOC) 가 2개 Row 로 분리되어서 나옵니다. 이는 개인화저장분과 영향이 있을 것으로 보이니 이것도 감안해서 검증쿼리 작업해주세요. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-11T09:39:30+09:00",
+  "changed": []
+}

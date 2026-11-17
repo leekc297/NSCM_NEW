@@ -19,6 +19,7 @@
 - 카탈로그 §1 = 화면 인덱스 (도메인/메뉴 경로/화면/행수/변경수) — 대상 화면 탐색 진입점.
 - 카탈로그 §2 = 화면별 표: `As-Is 명칭·유형·기능·팝업·필수·비고 → To-Be 명칭·유형·기능·팝업·비고 + 변경여부/변경내용`.
 - ⚠️ 카탈로그 파일은 원본 xlsx 의 변환본 — **임의 수정 금지**, 원본 개정 시 재생성.
+- (2026-11-13 정정: **SCP·SSP 화면**의 조회조건 기준은 §4.5(CR-071) 기준표 `tools/Harness/rules/search_cond.csv` 가 우선한다. 본 카탈로그(v0.4)를 그대로 적용하는 것은 **DM 화면** — §4.5 표 끝줄.)
 
 ## §1. 의무 절차 (PRE-WRITE — 조회조건 작성 전)
 
@@ -26,6 +27,7 @@
 [필수 1] 화면 탐색: 카탈로그 §1 인덱스에서 대상 화면(AS-IS 화면명) Grep.
   - 못 찾으면 유사명(약어/괄호 변형) 재검색. 그래도 없으면 "카탈로그 범위 밖" 명시
     (카탈로그는 SCP·DM 99화면 한정 — Common/SCM/FP/SSP 는 화면별 분석 MD 8종 기준).
+    (2026-11-13 정정: SSP 는 §4.5 기준표 search_cond.csv 기준 — CR-071 scope SCP;SSP)
 
 [필수 2] 해당 화면 표 "전 행" 대조 — 일부 조건만 보고 진행 금지 (anti-simplification).
   - To-Be 명칭·유형(단일/다중)·기능(검색/팝업/달력)·팝업구분을 그대로 적용. 임의 명칭/유형 결정 금지.
@@ -65,6 +67,7 @@
 | Result Type | **Type** | — | |
 
 > 위 표에 없는 rename 은 카탈로그 해당 행의 To-Be 명칭이 정답. **신규 유사 조건 작성 시에도 이 표준 준수** (예: 'Div' 라벨 신규 작성 금지 → 'Div.').
+> (2026-11-13 정정: 위 표·예시는 §0 카탈로그(v0.4) 기준으로 **DM 화면**에 적용. **SCP·SSP 화면**은 §4.5(CR-071) 기준표 `search_cond.csv` 의 `tobe_name` 이 우선 — 기준표 라벨은 'Div'(마침표 없음)이므로 SCP·SSP 에서 'Div' 는 금지 대상이 아님.)
 
 ### 2.2 유형 변경 (18 + 복합 16) — 지배 패턴
 
@@ -122,7 +125,7 @@ Demand Grouping · Characteristic Capacity · Outsourcing Capacity · Model Allo
 ## §4.5 ⭐ TO-BE 판정 룰 — SCP·SSP 조회조건 = 기준표 정의 항목·순서·라벨 (CR-071, 사용자 지시 2026-10-26)
 
 > SCP·SSP 화면은 **조회조건 기준표**(`tools/Harness/rules/search_cond.csv` · `tools/VibeManager/rules/40_SEARCH_COND.md`, 룰 E11)에 `USE` 로 정의된 조건만, `tobe_order` 순서대로, `tobe_name` 라벨로 구현한다.
-> 이것은 TO-BE 룰이므로 **기준표 라벨이 AS-IS 명칭과 달라도 정합검증은 PASS** 다(예 Division→Div. · Input Status→Status · Valid→Active). 기준표가 제외·이동(DROP/SUNSET/MERGED/BUTTON_AREA/IN_CALENDAR/COLUMN_PERSONAL/COMMON_BUTTON)한 AS-IS 조건이 조회영역에 없는 것도 결함이 아니다(NA).
+> 이것은 TO-BE 룰이므로 **기준표 라벨이 AS-IS 명칭과 달라도 정합검증은 PASS** 다(예 Division→Div · Input Status→Status · Valid→Active). (2026-11-13 정정: 'Div.' → 'Div' — CR-071 원문·기준표 tobe_name) 기준표가 제외·이동(DROP/SUNSET/MERGED/BUTTON_AREA/IN_CALENDAR/COLUMN_PERSONAL/COMMON_BUTTON)한 AS-IS 조건이 조회영역에 없는 것도 결함이 아니다(NA).
 > **결함**은 ① 기준표 조건 누락 ② 기준표에 없는 조건 노출 ③ 라벨이 기준표와 다름(AS-IS 명칭 그대로 쓴 경우 포함) ④ EDIT 형태(입력 유형: 선택/텍스트 · 단일/다중 · 검색/달력)가 기준표와 다름 뿐이다.
 >
 > ⭐ **CR-098 (사용자 지시 2026-11-09 · SCP0084 CheckList 조치 필요 1건 '오류 아닌 정상')**: Excel 조회조건 정리 대조는 **사용여부·EDIT 형태까지만** 판정한다. **조회조건 순서는 판정 대상 제외** — 화면 순서가 Excel List 시트 순서(`tobe_seq`)·정렬원칙 순서(`tobe_order`)·AS-IS 배치 어느 것과 달라도 FAIL·판정필요로 쓰지 않고 NA(실측 순서는 참고 증거로만 보존). 2026-11-06 지시 'Excel 순서와 다르면 FAIL' 은 폐기. 생성(gen.js) 시 기준표 순서 배치는 설계 기본값으로 유지(판정 아님).

@@ -96,7 +96,7 @@ describe('productionPlanLineDerive', () => {
       { ...key, MEASURE: 'PROD_PLAN_ENGINE_CELL_QTY' },
       { ...key, MEASURE: 'PROD_PLAN_ENGINE_STD_JR' },
     ];
-    const out = orderRowsByMeasure(rows, MEASURE_ORDER);
+    const out = orderRowsByMeasure(rows, MEASURE_ORDER, 'LINE_TOTAL');
     expect(out.map(r => r.MEASURE)).toEqual([
       'PROD_PLAN_ENGINE',
       'PROD_PLAN_AMEND',
@@ -116,7 +116,7 @@ describe('productionPlanLineDerive', () => {
       { ...l2, MEASURE: 'LINE_TOTAL_LOAD_AMEND' },
       { ...l2, MEASURE: 'PROD_PLAN_AMEND' },
     ];
-    const out = orderRowsByMeasure(rows, MEASURE_ORDER);
+    const out = orderRowsByMeasure(rows, MEASURE_ORDER, 'LINE_TOTAL');
     expect(out.map(r => `${String(r.LINE_ID)}:${String(r.MEASURE)}`)).toEqual([
       'L1:PROD_PLAN_ENGINE',
       'L1:LINE_TOTAL_LOAD_ENGINE',
@@ -128,11 +128,38 @@ describe('productionPlanLineDerive', () => {
   it('orderRowsByMeasure — 이미 올바른 순서면 멱등', () => {
     const key = { DIVISION_ID: '81', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: 'L1' };
     const rows = MEASURE_ORDER.map(m => ({ ...key, MEASURE: m }));
-    expect(orderRowsByMeasure(rows, MEASURE_ORDER).map(r => r.MEASURE)).toEqual(MEASURE_ORDER);
+    expect(orderRowsByMeasure(rows, MEASURE_ORDER, 'LINE_TOTAL').map(r => r.MEASURE)).toEqual(
+      MEASURE_ORDER
+    );
   });
 
-  it('orderRowsByMeasure — measureOrder 비면 원본 반환(참조 동일)', () => {
-    const rows = [{ MEASURE: 'PROD_PLAN_ENGINE' }];
-    expect(orderRowsByMeasure(rows, [])).toBe(rows);
+  it('orderRowsByMeasure — 한 라인(미배정 LINE_ID "-")에 품목 여럿: 품목별 measure 묶음 유지 + % 라인 맨 아래', () => {
+    // 같은 라인키('-')에 두 품목(I1·I2). SP 가 measure 를 품목 넘나들며 섞어 반환한 경우(분산 재현).
+    const line = { DIVISION_ID: '40', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: '-' };
+    const i1 = { ...line, ITEM_ID: 'I1', MODEL_ID: 'M1', NICK_NAME: 'N1' };
+    const i2 = { ...line, ITEM_ID: 'I2', MODEL_ID: 'M2', NICK_NAME: 'N2' };
+    const rows = [
+      { ...i1, MEASURE: 'PROD_PLAN_ENGINE' },
+      { ...i2, MEASURE: 'PROD_PLAN_ENGINE' },
+      { ...line, MEASURE: 'LINE_TOTAL_LOAD_ENGINE' }, // 라인 집계(품목 없음)
+      { ...i1, MEASURE: 'PROD_PLAN_AMEND' },
+      { ...i2, MEASURE: 'PROD_PLAN_AMEND' },
+    ];
+    const out = orderRowsByMeasure(rows, MEASURE_ORDER, 'LINE_TOTAL');
+    // I1 의 Engine/Amend 가 붙고, 그다음 I2, 마지막에 % 라인집계.
+    expect(
+      out.map(r => `${typeof r.ITEM_ID === 'string' ? r.ITEM_ID : '-'}:${String(r.MEASURE)}`)
+    ).toEqual([
+      'I1:PROD_PLAN_ENGINE',
+      'I1:PROD_PLAN_AMEND',
+      'I2:PROD_PLAN_ENGINE',
+      'I2:PROD_PLAN_AMEND',
+      '-:LINE_TOTAL_LOAD_ENGINE',
+    ]);
+  });
+
+  it('orderRowsByMeasure — 빈 rows 는 원본 반환(참조 동일)', () => {
+    const rows: Record<string, unknown>[] = [];
+    expect(orderRowsByMeasure(rows, MEASURE_ORDER, 'LINE_TOTAL')).toBe(rows);
   });
 });

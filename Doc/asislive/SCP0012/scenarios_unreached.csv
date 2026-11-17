@@ -1,0 +1,27 @@
+﻿scenario_id,type,method,src,class,callers,caller_methods
+SCP0012-Sfc3c37,조회,FindData_Main_Parallel,SCP0012_PSI.cs:815,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-Sd741d6,조회,FindData_Main_Parallel,SCP0012_PSI.cs:855,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-S1717ed,조회,FindData_Main_Parallel,SCP0012_PSI.cs:874,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-Sb40ffc,조회,FindData_Main_Parallel,SCP0012_PSI.cs:878,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-Sf875d1,조회,FindData_Main_Parallel,SCP0012_PSI.cs:882,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-Sfcf4e7,조회,FindData_Main_Parallel,SCP0012_PSI.cs:891,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-S1a4836,조회,FindData_Main_Parallel,SCP0012_PSI.cs:982,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-S52d5cf,조회,FindData_Main_Parallel,SCP0012_PSI.cs:997,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-S506237,조회,FindData_Main_Parallel,SCP0012_PSI.cs:1007,주석 안에서만 호출,SCP0012_PSI.cs:566,
+SCP0012-S681f1e,조회,GetFromSiteByDivision,SCP0012_PSI.cs:234,호출 없음,,
+SCP0012-S1d7d4f,조회,GetLastPlanVersion,SCP0012_PSI.cs:724,호출 없음,,
+SCP0012-S0af853,조회,GetLastPlanVersion,SCP0012_PSI.cs:739,호출 없음,,
+SCP0012-S96bd28,초기,InitSpread,SCP0012_PSI.cs:318,주석 안에서만 호출,SCP0012_PSI.cs:249; SCP0012_PSI.cs:793; SCP0012_PSI.cs:1042,
+SCP0012-Sd2f3b0,기타,SetChangedPeriod,SCP0012_PSI.cs:1721,호출 없음,,
+SCP0012-Sb69d72,기타,SetChangedPeriod,SCP0012_PSI.cs:1725,호출 없음,,
+SCP0012-Sc2c5b0,기타,SetChangedPeriod,SCP0012_PSI.cs:1732,호출 없음,,
+SCP0012-Sbe384e,기타,SetDataTableQtyData,SCP0012_PSI.cs:1541,같은 파일에서 호출,SCP0012_PSI.cs:915; SCP0012_PSI.cs:916; SCP0012_PSI.cs:917,FindData_Main_Parallel
+SCP0012-S9b1d28,기타,Set_PSI_Measure,SCP0012_PSI.cs:1446,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-S407bbc,기타,Set_PSI_Measure,SCP0012_PSI.cs:1455,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-S3c0fcf,기타,Set_PSI_Measure,SCP0012_PSI.cs:1463,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-Sc9a0be,기타,Set_PSI_Measure,SCP0012_PSI.cs:1484,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-S4a63f3,기타,Set_PSI_Measure,SCP0012_PSI.cs:1492,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-S633a93,기타,Set_PSI_Measure,SCP0012_PSI.cs:1501,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-Sbb8c23,기타,Set_PSI_Measure,SCP0012_PSI.cs:1510,같은 파일에서 호출,SCP0012_PSI.cs:1009,FindData_Main_Parallel
+SCP0012-S362018,기타,ValidateUserInput,SCP0012_PSI.cs:1623,호출 없음,,
+SCP0012-S0ab7cb,기타,ValidateUserInput,SCP0012_PSI.cs:1631,호출 없음,,

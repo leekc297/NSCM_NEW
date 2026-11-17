@@ -20,9 +20,21 @@ public class JsonLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // true 면 ID 로그인을 받지 않는다(운영은 SSO 로만 로그인, config.security.id-login-disabled).
+    private final boolean idLoginDisabled;
+
+    public JsonLoginFilter(boolean idLoginDisabled) {
+        this.idLoginDisabled = idLoginDisabled;
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
+
+        if (idLoginDisabled) {
+            log.warn("ID 로그인 차단(SSO 전용). remoteAddr={}", request.getRemoteAddr());
+            throw new AuthenticationServiceException("ID login is disabled");
+        }
 
         if (!request.getContentType().equals("application/json")) {
             throw new AuthenticationServiceException("Authentication content-type not supported: " + request.getContentType());

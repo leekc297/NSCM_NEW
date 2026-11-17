@@ -1,7 +1,7 @@
 # SCP0017 — To-Be Fact Pack 요약
 
 - page_key: `supply/production-plan-waterfall` · feature: supply · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 21 · 컴포넌트 사용 34 · 하드코딩 컬럼 2 · 메시지 32
+- 파일 13 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 21 · 컴포넌트 사용 34 · 하드코딩 컬럼 2 · 메시지 34
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -10,10 +10,10 @@
 | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallForm.tsx | component | 399 |
 | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | component | 375 |
 | features/supply/src/pages/production-plan-waterfall/index.ts | index | 2 |
-| features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.constants.ts | constants | 186 |
+| features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.constants.ts | constants | 190 |
 | features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.types.ts | types | 26 |
 | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.module.scss | style | 12 |
-| features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | page | 384 |
+| features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | page | 388 |
 | features/supply/src/pages/production-plan-waterfall/useProductionPlanWaterfallStore.ts | store | 374 |
 | features/supply/src/pages/production-plan-waterfall/utils/waterfall.columns.ts | util | 267 |
 | features/supply/src/pages/production-plan-waterfall/utils/waterfall.merge.ts | util | 124 |
@@ -57,11 +57,11 @@
 | g | scrollPositionChanged | onScroll | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 236 |
 | host | dblclick | onDblClick | addEventListener | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 291 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/production-plan-waterfall/components/ProductionPlanWaterfallGrid.tsx | 343 |
-| ProductionPlanWaterfallForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 289 |
-| ProductionPlanWaterfallForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 290 |
-| ProductionPlanWaterfallForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 291 |
-| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 369 |
-| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 379 |
+| ProductionPlanWaterfallForm | onSearch | handleSearch | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 293 |
+| ProductionPlanWaterfallForm | onModelSearch | <arrow> setOpenModel | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 294 |
+| ProductionPlanWaterfallForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 295 |
+| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 373 |
+| MeasureSelectModal | onApply | handleApplyMeasures | jsx | features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx | 383 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -96,10 +96,11 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
+| LBL01275 | 2 |
 | MSG00667 | 1 |
 | MSG01368 | 1 |
 | MSG00429 | 1 |
-| MSG00108 | 1 |
+| MSG01135 | 1 |
 | MSG01187 | 1 |
 | LBL00001 | 1 |
 | LBL00027 | 1 |
@@ -127,7 +128,7 @@
 | LBL00605 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0017(14), SCP0025(6), SCP0101(2), DMF0035(1), SCP0016(1)
+- 화면ID: SCP0017(14), SCP0025(6), SCP0018(2), SCP0101(2), DMF0035(1)
 - SP/PKG: PKG_SCP0017(5), P_DIVISION_ID(2), P_SCP0017_GET_SHEET_CALENDAR_3SPAN(2), P_SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), SCM0001_GET_SCP_MONTH_PERIOD(1), PR_GET_SHEET_MEASURE_LIST(1), P_BUCKET(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

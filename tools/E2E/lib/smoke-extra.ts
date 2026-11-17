@@ -404,7 +404,11 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
       else { const inp = sw.locator('input[type="checkbox"]').first(); const tgt = (await inp.count().catch(() => 0)) ? inp : sw;
         const checked = async () => tgt.evaluate(e => (e as HTMLInputElement).checked ?? (e.getAttribute('aria-checked') === 'true')).catch(() => null);
         const c0 = await checked(); const vis0 = await shown(); await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
-        const c1 = await checked(); const vis1 = await shown(); await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
+        let c1 = await checked(); let vis1 = await shown();
+        // 2026-11-17 SSP0020(13회차·스모크 재실행 2회 true→true→false · 12회차 PASS): 첫 클릭이 앞 단계 잔여(알림·포커스)에 먹히면 스위치가 그대로다 —
+        //   남은 대화상자를 닫고 한 번만 다시 누른다. 스위치 자체가 무반응이면 두 번째에도 그대로라 결함은 그대로 잡힌다
+        if (c1 === c0) { await nscm.clearDialogs().catch(() => undefined); await page.keyboard.press('Escape').catch(() => undefined); await page.waitForTimeout(400); await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900); c1 = await checked(); vis1 = await shown(); }
+        await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
         const c2 = await checked(); const vis2 = await shown();
         const swMoved = c0 !== c1; const sw3 = `스위치 ${c0}→${c1}→${c2}`;
         add('Search Area 조회영역 토글', vis0 && !vis1 && vis2 ? 'OK' : !swMoved ? 'ERROR' : 'FAIL',
@@ -573,6 +577,13 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
     return { rows, via: `${memo.via} (메모 재적용 → ${rows}행)` };
   }
   const tried: string[] = [];
+  // ⓪ 2026-11-17 시트별 데이터 조건(Doc/verify/<ID>/sheet_data_cond.json · tools/Harness/verify/sheet_data_cond.py 가 조회 SP 재실행으로 센 결과):
+  //    이 시트에서 행이 나온 Division 을 먼저 시도한다(SCP0104 SOP_ELTR·SOP_ASSEMBLY = 81_HG·81_ST 에만 행)
+  for (const code of sheetDataDivs(key.split('|')[0] === 'default' ? (process.env.VERIFY_ID || nscm.curMenu || '') : key.split('|')[0], curSheet)) {
+    if (!(await nscm.setDivision(code).catch(() => false))) { tried.push(`데이터 조건 Div ${code}:선택 실패`); continue; }
+    rows = await searchCount(); tried.push(`데이터 조건 Div ${code}:${rows}행`);
+    if (rows > 0) { const via = `시트 데이터 조건 Division '${code}' 조회(sheet_data_cond.json · ${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, div: code }); return { rows, via }; }
+  }
   // ① 모든 기간 칸의 시작을 2년 → 5년 앞으로(현재 Division 유지)
   let widened = 0;
   for (const years of [2, 5]) {
@@ -588,7 +599,9 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
       await combo.click({ timeout: 3_000 }).catch(() => undefined);
       const opts = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
       await p.keyboard.press('Escape').catch(() => undefined);
-      for (const o of opts.slice(0, maxDiv)) {
+      // 2026-11-17 사용자 지적(SCP0104 SOP 탭 오류 내역 없음 = 0행 미측정): 앞 maxDiv 개가 전부 0행이면 나머지 후보도 순회한다.
+      //   SOP 탭은 Div 81_ST·81_HG(후보 4번째 이후)에만 데이터가 있어 종전 3개 제한으로 측정하지 못했다. 찾으면 메모해 같은 시트 재시도 없음.
+      for (const o of opts) {
         const code = (o.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '');
         if (!code || /^all$/i.test(code)) continue;
         if (!(await nscm.setDivision(code))) continue;
@@ -613,8 +626,84 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
 }
 
 /** 화면 안 탭(시트) 클릭 — role=tab → button → 텍스트 순. 전환 못 하면 false(측정 경로 없음 → 호출부가 ERROR) */
+/** 화면별 시트 이동 사실(Doc/verify/<ID>/sheet_nav.json — 2026-11-16 SCP0104) — AS-IS 시트 이름이 TO-BE 탭 이름과 다르거나 조회조건 값·여러 단 탭으로 시트가 정해지는 화면용.
+ *  { sheets: { <AS-IS 시트>: { cond?: { 라벨: 값 }, tabs?: [바깥 탭, 안쪽 탭…], popup?: 이름 } } } · 없으면 null(종전 동작) */
+type SheetNav = { cond?: Record<string, string>; tabs?: string[]; popup?: string; base?: string; open?: string; cell?: string };
+const _NAV: Record<string, Record<string, SheetNav> | null> = {};
+/** 시트별 데이터 조건(Doc/verify/<ID>/sheet_data_cond.json — 2026-11-17): 그 시트 조회 SP 를 DB 에서 다시 실행해 행이 나온 Division 목록.
+ *  AS-IS·TO-BE 양쪽에 행이 있는 Division(both)을 먼저, 없으면 TO-BE 행 있는 Division(divs). 파일·시트가 없으면 [] */
+const _DATA: Record<string, Record<string, { both?: string[]; divs?: string[] }> | null> = {};
+export function sheetDataDivs(menuId: string, sheet: string): string[] {
+  const id = (menuId || '').toUpperCase(); if (!id || !sheet) return [];
+  if (!(id in _DATA)) { try { const j = JSON.parse(fs.readFileSync(`${__dirname}/../../../Doc/verify/${id}/sheet_data_cond.json`, 'utf8').replace(/^﻿/, '')) as { sheets?: Record<string, { both?: string[]; divs?: string[] }> }; _DATA[id] = j.sheets || null; } catch { _DATA[id] = null; } }
+  const m = _DATA[id]; if (!m) return []; const nz = (t: string) => String(t || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const k = Object.keys(m).find(x => nz(x) === nz(sheet)); if (!k) return [];
+  const both = m[k].both || []; return [...both, ...(m[k].divs || []).filter(d => !both.includes(d))];
+}
+export function sheetNav(menuId: string, sheet: string): SheetNav | null {
+  const id = (menuId || '').toUpperCase(); if (!id) return null;
+  if (!(id in _NAV)) { try { const j = JSON.parse(fs.readFileSync(`${__dirname}/../../../Doc/verify/${id}/sheet_nav.json`, 'utf8').replace(/^﻿/, '')) as { sheets?: Record<string, SheetNav> }; _NAV[id] = j.sheets || null; } catch { _NAV[id] = null; } }
+  const m = _NAV[id]; if (!m) return null; const nz = (t: string) => String(t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  const k = Object.keys(m).find(x => nz(x) === nz(sheet)); return k ? m[k] : null;
+}
+/** 팝업 안 그리드 시트 열기(sheet_nav.json popup + base + open · 2026-11-16 SCP0104 LINE·SOP_MODEL_*):
+ *  바탕 시트(base)로 간 뒤 open = 'insert'(Insert 버튼) 또는 'dblclick'(조회 뒤 cell 컬럼 첫 행 더블클릭)으로 팝업을 열고, 팝업 그리드가 0행이면 팝업의 Search 를 누른다 */
+export async function openSheetPopup(nscm: Nscm, name: string): Promise<{ ok: boolean; how: string }> {
+  const p = nscm.page; const nav = sheetNav(process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '', name);
+  if (!nav || !nav.popup || !nav.base || !nav.open) return { ok: false, how: '시트 이동 사실에 팝업 여는 방법(base·open) 없음' };
+  if (!(await clickSheetTab(nscm, nav.base))) return { ok: false, how: `바탕 시트 '${nav.base}' 전환 실패` };
+  const rowsIn = () => p.evaluate(`(() => { const d = [...document.querySelectorAll('[role="dialog"]')].filter(e => e.getClientRects().length).pop(); if (!d) return -1; const g = d.querySelector('.wj-flexgrid'); const c = g && g['$WJ-CTRL']; return c && c.rows ? c.rows.length : -1; })()`).catch(() => -1) as Promise<number>;
+  if (nav.open === 'insert') await p.locator('button', { hasText: /^\s*Insert/ }).first().click({ timeout: 10_000 }).catch(() => undefined);
+  else {
+    await nscm.search().catch(() => undefined);
+    const MAIN = `[...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null && !e.closest('[role="dialog"]'))`;
+    for (let k = 0; k < 60; k++) { const n = await p.evaluate(`(() => { const e = ${MAIN}; const c = e && e['$WJ-CTRL']; return c && c.rows ? c.rows.length : 0; })()`).catch(() => 0) as number; if (n > 0) break; await p.waitForTimeout(500); }
+    await nscm.clearDialogs().catch(() => undefined);
+    const COL = `(() => { const e = ${MAIN}; const c = e && e['$WJ-CTRL']; if (!c || !c.rows.length) return null; const want = ${JSON.stringify(nav.cell || '')}; let col = want ? c.columns.getColumn(want) : null; if (!col || col.visible === false) { col = null; for (let i = 0; i < c.columns.length; i++) { if (c.columns[i].visible !== false) { col = c.columns[i]; break; } } } return col ? { c, col } : null; })()`;
+    const sc = await p.evaluate(`(() => { const x = ${COL}; if (!x) return false; x.c.scrollIntoView(0, x.col.index); return true; })()`).catch(() => false);
+    if (!sc) return { ok: false, how: `바탕 시트 '${nav.base}' 조회 0행 — 셀 더블클릭 불가` };
+    await p.waitForTimeout(400);
+    const pt = await p.evaluate(`(() => { const x = ${COL}; if (!x) return null; const r = x.c.getCellBoundingRect(0, x.col.index); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`).catch(() => null) as { x: number; y: number } | null;
+    if (!pt) return { ok: false, how: `바탕 시트 '${nav.base}' 셀 좌표 없음` };
+    await p.mouse.click(pt.x, pt.y, { clickCount: 2 });
+  }
+  let n = -1; for (let k = 0; k < 25 && n < 0; k++) { await p.waitForTimeout(400); n = await rowsIn(); }
+  if (n < 0) return { ok: false, how: `${nav.open === 'insert' ? 'Insert' : '셀 더블클릭'} 뒤 팝업 그리드 없음` };
+  if (n === 0) { await p.locator('[role="dialog"]:visible').last().getByRole('button', { name: /^Search/i }).first().click({ timeout: 3_000 }).catch(() => undefined); for (let k = 0; k < 40 && n <= 0; k++) { await p.waitForTimeout(500); n = await rowsIn(); } }
+  return { ok: true, how: `바탕 시트 ${nav.base} · ${nav.open === 'insert' ? 'Insert' : (nav.cell || '첫 칸') + ' 더블클릭'} · 팝업 그리드 ${n}행` };
+}
 export async function clickSheetTab(nscm: Nscm, name: string): Promise<boolean> {
   const p = nscm.page; const rx = new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i');
+  // 시트 이동 사실이 있으면 그대로 따른다: 조회조건 값 → 탭을 바깥부터 차례로. 팝업 안 그리드(popup)는 탭으로 갈 수 없어 false(호출부가 측정 경로 없음으로 남김)
+  const nav = sheetNav(process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '', name);
+  if (nav) {
+    if (nav.popup && !(nav.tabs || []).length) return false;
+    // 2026-11-17: 시트 이동 사실에 Division 조건이 없고 시트 데이터 조건(sheet_data_cond.json)이 있으면 그 첫 Division 을 먼저 고른다
+    if (!Object.keys(nav.cond || {}).some(l => /^(div\.?|division)$/i.test(l.trim()))) { const dd = sheetDataDivs(process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '', name); const curDiv = dd.length ? ((await p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: /^\s*\*?\s*(Div\.?|Division)\s*\*?\s*$/i }) }).first().locator('[role="combobox"]').first().inputValue({ timeout: 2_000 }).catch(() => '')) || '').trim().split(/\s+/)[0] : ''; /* 현재 Division 에 이 시트 행이 있으면 그대로 둔다(계정·Division 별 시험이 고른 Division 을 바꾸지 않음) */ if (dd.length && !dd.includes(curDiv) && await nscm.setDivision(dd[0]).catch(() => false)) { console.log(`[sheetNav] ${name}: 데이터 조건 Division ${dd[0]}`); await nscm.clearDialogs().catch(() => undefined); } }
+    if (nav.cond && Object.keys(nav.cond).length) {
+      await nscm.expandSearchArea().catch(() => undefined);
+      for (const [label, value] of Object.entries(nav.cond)) {
+        const it = p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: new RegExp(`^\\s*\\*?\\s*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\*?\\s*$`, 'i') }) }).first();
+        const combo = it.locator('[role="combobox"]').first(); if (!(await combo.count().catch(() => 0))) { console.log(`[sheetNav] ${name}: 조회조건 '${label}' 칸 없음`); return false; }
+        if (((await combo.inputValue().catch(() => '')) || '').trim() === value) continue;
+        await combo.click({ timeout: 5_000 }).catch(() => undefined);
+        let opt = p.getByRole('option', { name: new RegExp(`^\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i') }).first();
+        if (!(await opt.isVisible({ timeout: 3_000 }).catch(() => false))) { await it.locator('button[aria-label="Open"]').first().click({ timeout: 3_000, force: true }).catch(() => undefined); opt = p.getByRole('option', { name: new RegExp(`^\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i') }).first(); }
+        if (!(await opt.isVisible({ timeout: 3_000 }).catch(() => false))) { await p.keyboard.press('Escape').catch(() => undefined); console.log(`[sheetNav] ${name}: '${label}' 후보에 '${value}' 없음`); return false; }
+        await opt.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200); await nscm.clearDialogs().catch(() => undefined);
+      }
+    }
+    for (const tab of nav.tabs || []) {
+      const trx = new RegExp(`^\\s*${tab.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i'); let hit = false;
+      for (const loc of [p.getByRole('tab', { name: trx }), p.getByRole('button', { name: trx })]) {
+        const n = await loc.count().catch(() => 0);
+        for (let i = n - 1; i >= 0 && !hit; i--) { const e = loc.nth(i); if (await e.isVisible().catch(() => false)) { await e.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(800); hit = true; } }
+        if (hit) break;
+      }
+      if (!hit) { console.log(`[sheetNav] ${name}: 탭 '${tab}' 없음`); return false; }
+    }
+    return true;
+  }
   for (const el of [p.getByRole('tab', { name: rx }).first(), p.getByRole('button', { name: rx }).first(), p.getByText(rx).first()]) {
     if (await el.isVisible({ timeout: 1_200 }).catch(() => false)) { await el.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(800); return true; }
   }

@@ -1,6 +1,9 @@
 package com.lgcns.nscm.admin.user;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,8 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.f4b6a3.ulid.UlidCreator;
+import com.lgcns.nscm.framework.interceptor.LogInterceptor;
 import com.lgcns.nscm.framework.property.CommonProperties;
 import com.lgcns.nscm.framework.security.CustomUserDetailsService;
+import com.lgcns.nscm.framework.utils.SecurityUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,6 +49,7 @@ public class SsoDevController {
     private final CustomUserDetailsService userDetailsService;
     private final SecurityContextRepository securityContextRepository;
     private final CommonProperties properties;
+    private final LogInterceptor logInterceptor;
 
     @Operation(summary = "[DEV] SSO 우회 로그인", description = "id 만으로 세션을 만들어 FE로 이동. local/dev 프로파일 전용.")
     @GetMapping("/sso/dev-login")
@@ -68,7 +75,37 @@ public class SsoDevController {
         SecurityContextHolder.setContext(context);
         securityContextRepository.saveContext(context, request, response);
 
+        // loginExec 와 동일 — JsonLoginFilter 를 안 거치므로 LOGIN 로그를 직접 적재한다.
+        recordLoginLog(request, authentication);
+
         log.warn("[DEV] SSO 우회 로그인 성공. userId={}", userId);
         response.sendRedirect(properties.getDomain().getFe());
+    }
+
+    /**
+     * 로그인 성공 시스템 로그 적재. SystemLogAspect 의 LOGIN 분기와 동일한 logParam 구성.
+     * insertSystemLog 는 @Async + 내부 try/catch 이며, logParam 구성 실패도 로그인을 막지 않도록 감싼다.
+     */
+    private void recordLoginLog(HttpServletRequest request, Authentication authentication) {
+        try {
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            Map<String, Object> logParam = new HashMap<>();
+            logParam.put("traceId", UlidCreator.getUlid().toString());
+            logParam.put("userId", SecurityUtil.getUserSession(authentication).getUserId());
+            logParam.put("typeCd", "LOGIN");
+            logParam.put("requestUrl", "LOGIN");
+            logParam.put("clientIp", logInterceptor.getClientIp(request));
+            logParam.put("menuId", "LOGIN");
+            logParam.put("buttonCd", "LOGIN");
+            logParam.put("clientStTm", ts);
+            logParam.put("serverStTm", ts);
+            logParam.put("sqlStTm", ts);
+            logParam.put("sqlEdTm", ts);
+            logParam.put("serverEdTm", ts);
+            logParam.put("clientEdTm", ts);
+            logInterceptor.insertSystemLog(logParam);
+        } catch (Exception e) {
+            log.warn("[DEV] 로그인 로그 적재 실패. {}", e.getMessage());
+        }
     }
 }

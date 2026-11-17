@@ -34,7 +34,8 @@ import {
   thisWeekMonday,
   weeksByMonthOf,
 } from './utils/sales-price-model-group.util';
-import { bundleKeyOf, cellOf, INSERT_GROUP_ID } from './utils/sales-price-model-group.util';
+import { cellOf, INSERT_GROUP_ID } from './utils/sales-price-model-group.util';
+import { originBundleKeyOf, stampOriginBundleKey } from './utils/sales-price-model-group.util';
 
 // DMF0083 Sales Price Model Group — 82 사업부 Model Group 단위 대표 판가 여부와 LOC 단가 (설계서 v8, 원천 DMF0020).
 export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -119,8 +120,9 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   // 행 추가(GridAction.addRowSet)가 이 배열에 신규 행을 끼워 넣는다 — 조회 결과마다 새 배열을 만든다.
+  //   조회된 행에는 조회 시점 묶음 키를 찍어 둔다 — Currency 를 고쳐도 묶음을 그대로 찾기 위해서다(util ORIGIN_BUNDLE_KEY).
   const rows = useMemo<ModelGroupRow[]>(
-    () => [...((data?.o_rc1 as unknown as ModelGroupRow[] | undefined) ?? [])],
+    () => stampOriginBundleKey([...((data?.o_rc1 as unknown as ModelGroupRow[] | undefined) ?? [])]),
     [data]
   );
   const axisRows = axisData?.o_rc1 as unknown as PeriodAxisRow[] | undefined;
@@ -199,7 +201,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
     }));
     GridAction.addRowSet(g as unknown as FlexGrid<WijmoRowItem>, newRows, 'above', {
       preserveMergeManager: true,
-      groupKey: row => (isInsertRow(row) ? `I:${cellOf(row, INSERT_GROUP_ID)}` : `E:${bundleKeyOf(row)}`),
+      groupKey: row => (isInsertRow(row) ? `I:${cellOf(row, INSERT_GROUP_ID)}` : `E:${originBundleKeyOf(row)}`),
     });
     setInsertCount(countInserted());
   };
@@ -270,7 +272,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
         grid={gridRef as never}
         gridFilter={gridFilterRef}
         dataCount={rows.length}
-        excelFileName='SalesPriceModelGroup'
+        excelFileName='ModelGroupSalesPrice'
         useHotkey
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
@@ -279,8 +281,8 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
           ...(canSave
             ? [
                 {
-                  label: t('LBL00662', '_Price Batch Input'),
-                  title: t('LBL00662', '_Price Batch Input'),
+                  label: t('LBL01274', '_Price Bulk Input'),
+                  title: t('LBL01274', '_Price Bulk Input'),
                   action: () => setOpenPriceBatch(true),
                 },
               ]

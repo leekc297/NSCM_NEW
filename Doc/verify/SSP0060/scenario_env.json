@@ -1,0 +1,135 @@
+{
+ "menu_id": "SSP0060",
+ "asis_id": "SSP0060",
+ "area": "SSP",
+ "generated": "2026-11-15 04:08:46",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "CHECK_CONFIRM_CHANGETIME",
+   "CHECK_CONFIRM_CHANGETIME_DE",
+   "DELETE",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "EDIT",
+   "ERP_ERROR_CONFIRM",
+   "GET_ERP_SO_NO_CNT",
+   "GET_ORDER_DETAIL",
+   "GET_SHIPMENT_STATUS",
+   "IF_CHECK",
+   "INSERT",
+   "SAVE",
+   "SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "SEARCH",
+   "SHIP_CONFIRM_CHG_BATCH_NEW_C",
+   "USER_CHECK"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Div",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Plan Date",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Period",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 2026-11-13 14:27 · 행 수 근거 17행",
+  "max_rows_after_search": 13,
+  "zero_row_failures": [
+   {
+    "row_id": "V-e588400d",
+    "via": "[측정 경로 없음] 조회 0행"
+   }
+  ],
+  "zero_row_count": 1
+ },
+ "warnings": []
+}

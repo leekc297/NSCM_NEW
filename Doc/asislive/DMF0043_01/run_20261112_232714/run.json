@@ -1,0 +1,187 @@
+{
+ "id": "DMF0043_01",
+ "started": "2026-11-12 23:27:14.219",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 23:27:14.562",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Master.UIL.DMF0043_Contribute_View",
+   "form_text": "해외법인 기여매출",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0043_Contribute_View.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:18.584"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 23:27:23.199",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043_01\\run_20261112_232714\\dump_load.json",
+   "control_count": 29,
+   "grid_count": 1,
+   "total": "Total : 292",
+   "time_status": "DB : 155.148s, UI : 0.342s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:23.203"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 23:27:23.369",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043_01\\run_20261112_232714\\shots\\DMF0043_01_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:23.473"
+  },
+  {
+   "step": "shot_fill",
+   "cmd": "shot",
+   "at": "2026-11-12 23:27:30.308",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043_01\\run_20261112_232714\\shots\\DMF0043_01_01b_fill.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:30.447"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 23:27:30.782",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:31.636"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 23:27:39.001",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043_01\\run_20261112_232714\\dump_find.json",
+   "control_count": 29,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 1.669s, UI : 0.077s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:39.007"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 23:27:39.168",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0043_01\\run_20261112_232714\\shots\\DMF0043_01_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:39.285"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 23:27:39.611",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-12 23:27:40.204"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 3,
+  "calls": 16,
+  "calls_with_params": 15
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Master.UIL.DMF0043_Contribute_View",
+  "form_text": "해외법인 기여매출",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Master\\DMF0043_Contribute_View.dll"
+ },
+ "fills": [
+  {
+   "rule": "Version 팝업 맨 위 행(Version)",
+   "set": {
+    "name": "txtVersion",
+    "popup": "DMF0043_VersionPopup",
+    "opener": "btnSPVer_Click"
+   },
+   "ok": true,
+   "applied": "popup:DMF0043_VersionPopup rows=30 value=R_S_20261028_V003",
+   "top": [
+    "R_S_20261028_V003",
+    "R_S_20261008_V004_C",
+    "R_S_20261008_V003_C",
+    "R_S_20261008_V002",
+    "R_S_20261007_V002_C"
+   ],
+   "error": null
+  }
+ ],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": [
+   {
+    "name": "txtVersion",
+    "popup": "DMF0043_VersionPopup",
+    "opener": "btnSPVer_Click"
+   }
+  ]
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 1.669s, UI : 0.077s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 23:27:14.429",
+ "t_find": "2026-11-12 23:27:30.569",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 29,
+  "layout_items": 11,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 28,
+  "data_rows": 1,
+  "grid_rows": 1,
+  "calls_total": 16,
+  "calls_screen": 16,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 23:27:40.693",
+ "exit": 0
+}

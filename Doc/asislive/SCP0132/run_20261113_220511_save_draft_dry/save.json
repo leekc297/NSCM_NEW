@@ -1,0 +1,192 @@
+{
+ "id": "SCP0132",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY",
+  "pk": [
+   "DIVISION_ID",
+   "OPMZ_PLAN_GR_ID",
+   "MDL_GR_NM",
+   "ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+   "MDL_GR_NM": "MDL_GR_NM",
+   "ITEM_ID": "ITEM_ID"
+  },
+  "save_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+  "side": [],
+  "basis": "foxml SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY → SP SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "SIPM_MIN_QYT",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "SIPM_MIN_QYT",
+     "db_col": "SIPM_MIN_QYT",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "SIPM_MIN_QYT",
+    "db_col": "SIPM_MIN_QYT",
+    "rule": "plus1"
+   },
+   {
+    "col": "SIPM_MAX_QTY",
+    "db_col": "SIPM_MAX_QTY",
+    "rule": "plus1"
+   },
+   {
+    "col": "SAT_SIPM_MIN_QTY",
+    "db_col": "SAT_SIPM_MIN_QTY",
+    "rule": "plus1"
+   },
+   {
+    "col": "SAT_SIPM_MAX_QTY",
+    "db_col": "SAT_SIPM_MAX_QTY",
+    "rule": "plus1"
+   },
+   {
+    "col": "SUN_SIPM_MIN_QTY",
+    "db_col": "SUN_SIPM_MIN_QTY",
+    "rule": "plus1"
+   },
+   {
+    "col": "SUN_SIPM_MAX_QTY",
+    "db_col": "SUN_SIPM_MAX_QTY",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:05:11",
+ "status": "DRY_OK",
+ "steps": [],
+ "raw_key_used": [
+  {
+   "row": 0,
+   "shown": {
+    "DIVISION_ID": "81",
+    "OPMZ_PLAN_GR_ID": "E129A_E128A",
+    "MDL_GR_NM": "87_MID_439",
+    "ITEM_ID": "AMRSAEV20-E1"
+   },
+   "raw": {
+    "DIVISION_ID": "81",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "MDL_GR_NM": "87_MID_439",
+    "ITEM_ID": "AMRSAEV20-E1"
+   }
+  }
+ ],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "MDL_GR_NM": "87_MID_439",
+   "ITEM_ID": "AMRSAEV20-E1",
+   "STAGE": "INSP",
+   "FROM_STE_ID": "WA00-P",
+   "TO_STE_ID": "Ampere Electricity_FR_DOI",
+   "FROM_YYYYMMDD": "20261109",
+   "TO_YYYYMMDD": "20261109",
+   "SIPM_MIN_QYT": "0",
+   "SIPM_MAX_QTY": "5400",
+   "SAT_SIPM_MIN_QTY": null,
+   "SAT_SIPM_MAX_QTY": null,
+   "SUN_SIPM_MIN_QTY": null,
+   "SUN_SIPM_MAX_QTY": null,
+   "VAL_TP_CD": "A",
+   "VALUE_DESCRIPTION": "",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-12-05 09:54:28.193",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-12-05 09:54:28.193"
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "OPMZ_PLAN_GR_ID": "PG0001",
+    "MDL_GR_NM": "87_MID_439",
+    "ITEM_ID": "AMRSAEV20-E1"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "SIPM_MIN_QYT",
+   "old": "0",
+   "new": "1",
+   "ok": true,
+   "error": null,
+   "before": "0",
+   "after": "1",
+   "action_before": "",
+   "action_after": "M",
+   "locked": false,
+   "entered": true
+  }
+ ],
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "OPMZ_PLAN_GR_ID": "PG0001",
+   "MDL_GR_NM": "87_MID_439",
+   "ITEM_ID": "AMRSAEV20-E1",
+   "STAGE": "INSP",
+   "FROM_STE_ID": "WA00-P",
+   "TO_STE_ID": "Ampere Electricity_FR_DOI",
+   "FROM_YYYYMMDD": "20261109",
+   "TO_YYYYMMDD": "20261109",
+   "SIPM_MIN_QYT": "0",
+   "SIPM_MAX_QTY": "5400",
+   "SAT_SIPM_MIN_QTY": null,
+   "SAT_SIPM_MAX_QTY": null,
+   "SUN_SIPM_MIN_QTY": null,
+   "SUN_SIPM_MAX_QTY": null,
+   "VAL_TP_CD": "A",
+   "VALUE_DESCRIPTION": "",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2025-12-05 09:54:28.193",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2025-12-05 09:54:28.193"
+  }
+ ]
+}

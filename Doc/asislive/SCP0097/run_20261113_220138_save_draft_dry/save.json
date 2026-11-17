@@ -1,0 +1,126 @@
+{
+ "id": "SCP0097",
+ "dry": true,
+ "name": "draft",
+ "kind": "edit",
+ "scenario": {
+  "name": "draft",
+  "title": "초안 연습 실행",
+  "table": "SCP_MST_BOM_ELEC",
+  "pk": [
+   "DIVISION_ID",
+   "PARENT_ITEM_ID",
+   "CHILD_ITEM_ID"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "PARENT_ITEM_ID": "PARENT_ITEM_ID",
+   "CHILD_ITEM_ID": "CHILD_ITEM_ID"
+  },
+  "save_sp": "SCP0097_SAVE_SCP_BOM_ELEC",
+  "side": [],
+  "basis": "foxml SCP0097_SAVE_SCP_BOM_ELEC → SP SCP0097_SAVE_SCP_BOM_ELEC 원문(sys.sql_modules) · 키 = sys.indexes PK",
+  "edits": [
+   {
+    "pick": {
+     "col": "USAGE",
+     "nonempty": true
+    },
+    "edit": {
+     "col": "USAGE",
+     "db_col": "USAGE",
+     "rule": "plus1"
+    },
+    "expect_before": 1
+   }
+  ],
+  "edit_candidates": [
+   {
+    "col": "USAGE",
+    "db_col": "USAGE",
+    "rule": "plus1"
+   }
+  ]
+ },
+ "at": "2026-11-13 22:01:38",
+ "status": "ERROR",
+ "steps": [],
+ "db_before": [
+  {
+   "DIVISION_ID": "81",
+   "PARENT_ITEM_ID": "AAEF1001I-A1-000",
+   "CHILD_ITEM_ID": "APCAN2503A",
+   "USAGE": "2.0940000000",
+   "SCP_YN": "Y",
+   "STOCK_SUM": "Y",
+   "ELECTRODE_TYPE": "ANODE",
+   "CREATED_BY": "PR_SCP_MST_BOM_ELEC",
+   "CREATION_DATE": "2023-11-06 07:01:21.297",
+   "LAST_UPDATED_BY": "PR_SCP_MST_BOM_ELEC",
+   "LAST_UPDATE_DATE": "2023-11-06 07:01:21.297",
+   "ATTRIBUTE1": "ES0301",
+   "ATTRIBUTE2": "1000000000000",
+   "ATTRIBUTE3": "000000000000",
+   "ATTRIBUTE4": "Y",
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ],
+ "targets": [
+  {
+   "row": 0,
+   "where": {
+    "DIVISION_ID": "81",
+    "PARENT_ITEM_ID": "AAEF1001I-A1-000",
+    "CHILD_ITEM_ID": "APCAN2503A"
+   }
+  }
+ ],
+ "edit_mode": true,
+ "cells": [
+  {
+   "row": 0,
+   "col": "USAGE",
+   "old": "2.0940000000",
+   "new": "3.0940000000",
+   "ok": true,
+   "error": null,
+   "before": "2.0940000000",
+   "after": "2.0940000000",
+   "action_before": "",
+   "action_after": "",
+   "locked": false,
+   "entered": false
+  }
+ ],
+ "note": "셀 값·변경 표시가 기대대로 바뀌지 않음 — 저장하지 않음",
+ "db_after": [
+  {
+   "DIVISION_ID": "81",
+   "PARENT_ITEM_ID": "AAEF1001I-A1-000",
+   "CHILD_ITEM_ID": "APCAN2503A",
+   "USAGE": "2.0940000000",
+   "SCP_YN": "Y",
+   "STOCK_SUM": "Y",
+   "ELECTRODE_TYPE": "ANODE",
+   "CREATED_BY": "PR_SCP_MST_BOM_ELEC",
+   "CREATION_DATE": "2023-11-06 07:01:21.297",
+   "LAST_UPDATED_BY": "PR_SCP_MST_BOM_ELEC",
+   "LAST_UPDATE_DATE": "2023-11-06 07:01:21.297",
+   "ATTRIBUTE1": "ES0301",
+   "ATTRIBUTE2": "1000000000000",
+   "ATTRIBUTE3": "000000000000",
+   "ATTRIBUTE4": "Y",
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null
+  }
+ ]
+}

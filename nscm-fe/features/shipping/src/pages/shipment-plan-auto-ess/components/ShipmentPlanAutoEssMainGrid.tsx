@@ -1,11 +1,17 @@
-import { AllowMerging, CellType, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import {
+  AllowMerging,
+  CellRange,
+  CellType,
+  type FlexGrid as FlexGridType,
+  type GridPanel,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_INPUT_EDIT_TYPE, CRUD_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils } from '@foundation/utils';
+import { CustomMergeManager, GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { BUCKET_TYPE, MENU_ID } from '../shipment-plan-auto-ess.constants';
@@ -48,6 +54,65 @@ const kindOf = (binding: string): DynKind | undefined =>
         ? 'M'
         : undefined;
 
+// AS-IS MergePolicy.Always 컬럼 (SSP0021_ShipmentPlan.cs L637/L639) — 좌측 컬럼과 무관하게 같은
+//   값이면 세로 병합한다. SSP0021 은 PSI 한 컬럼만 Always(자매 SSP0060 은 6컬럼, SSP0021 소스 실측은
+//   PSI 단일). 나머지 base 컬럼은 공용 CustomMergeManager 의 좌측 누적키(FPMerge.Restricted 등가)로 둔다.
+const ALWAYS_MERGE_BINDINGS: ReadonlySet<string> = new Set(['PSI']);
+
+// Main 병합 매니저 — 공용 CustomMergeManager 는 전 컬럼을 좌측 누적키로만 병합해, PSI 바로 왼쪽
+//   BOH_TYPE/BOH_QTY 가 행마다 바뀌면 S/P/I 밴드가 그 경계마다 갈라진다. PSI 만 값 기준으로 병합하고
+//   나머지는 공용 동작에 그대로 위임한다(빈 셀·신규행 제외는 공용 규칙 유지). 자매 SSP0060
+//   ShipmentPlanMainMergeManager 와 동일 처방(Always 집합만 다름).
+class ShipmentPlanAutoEssMainMergeManager extends CustomMergeManager {
+  constructor(grid: FlexGridType) {
+    super(grid as never);
+  }
+
+  override getMergedRange(
+    panel: GridPanel,
+    currentRow: number,
+    currentCol: number
+  ): CellRange | null {
+    const binding = panel.columns[currentCol]?.binding ?? '';
+    if (
+      panel.cellType !== CellType.Cell ||
+      !ALWAYS_MERGE_BINDINGS.has(binding) ||
+      !panel.columns[currentCol]?.allowMerging ||
+      currentRow < 0 ||
+      currentRow >= panel.rows.length
+    ) {
+      return super.getMergedRange(panel, currentRow, currentCol);
+    }
+
+    const cellAt = (row: number): WijmoPrimitive =>
+      panel.getCellData(row, currentCol, false) as WijmoPrimitive;
+    const value = cellAt(currentRow);
+    if (value === null || value === undefined || (typeof value === 'string' && value.trim() === ''))
+      return null;
+
+    const isInsert = (row: number): boolean =>
+      (panel.rows[row]?.dataItem as Record<string, unknown> | undefined)?.CRUD_TYPE ===
+      CRUD_TYPE.INSERT;
+    if (isInsert(currentRow)) return null;
+
+    // 공용 구현과 동일하게 현재 뷰포트 안에서만 확장한다(전 행 스캔은 셀마다 O(n) 이라 렌더가 늦다).
+    const minRow = panel.viewRange.row;
+    const maxRow = Math.min(panel.viewRange.row2, panel.rows.length - 1);
+    const rng = new CellRange(currentRow, currentCol);
+    while (rng.row > minRow) {
+      const r = rng.row - 1;
+      if (cellAt(r) !== value || isInsert(r)) break;
+      rng.row--;
+    }
+    while (rng.row2 < maxRow) {
+      const r = rng.row2 + 1;
+      if (cellAt(r) !== value || isInsert(r)) break;
+      rng.row2++;
+    }
+    return rng.isSingleCell ? null : rng;
+  }
+}
+
 // 3단(월>주/SUM>일) 동적 헤더의 행 높이 — GRID-11: nested columns 에 height 를 안 적으면 Wijmo 기본
 //   48px 이 단마다 적용돼 헤더가 48x3=144px 로 부풀고(AS-IS FarPoint 는 20px x3 ~= 60px), base 컬럼의
 //   세로 span 도 그 높이에 끌려간다. 공용 컬럼매핑의 depth 별 높이(ONE 48 / TWO 24 / THREE 16)와 같은
@@ -65,6 +130,28 @@ const MAIN_HEADER_HEIGHT = 54; // 48→54(18px/tier): 3단 헤더 가독성 상�
 //   LightSkyBlue = rgb(135,206,250), 알파 80/255 ≈ 0.314 → 흰 배경 위에서 옅은 하늘색.
 const SHIP_PLAN_MEASURE = 'SHIP_PLAN';
 const SHIP_PLAN_ROW_COLOR = 'rgba(135, 206, 250, 0.314)';
+
+// 확정구간(Frozen) 배경 — AS-IS Re_Design(cs L4749~4758 "확정일자 구분 처리").
+//   CONFIRM_DAY 가 있는 행의 첫 기간열 ~ D_{CONFIRM_DAY} 구간을 행별 BACK_COLOR 로 칠한다.
+//   BACK_COLOR 는 서버가 내리는 "r,g,b" 문자열(DB 실측 전 measure 242,242,242 = 옅은 회색 #F2F2F2).
+//   AS-IS 는 이 색을 Re_Design 앞에서 깔고 뒤의 SHIP_PLAN 하늘색(L4778)이 전 기간열을 덮으므로, 결국
+//   **SHIP_PLAN 외 measure 행**의 확정구간 일자셀에만 보인다 → 호출부는 SHIP_PLAN 행이 아닐 때만 쓴다.
+//   자매 SSP0060 `shipment-plan/components/ShipmentPlanMainGrid.tsx` confirmWindowBackground 과 동일.
+const parseRgb = (raw: string): string => {
+  const p = raw.split(',').map(s => s.trim());
+  if (p.length !== 3 || p.some(v => v === '' || Number.isNaN(Number(v)))) return '';
+  return `rgb(${Number(p[0])}, ${Number(p[1])}, ${Number(p[2])})`;
+};
+
+const confirmWindowBackground = (
+  row: Record<string, unknown> | undefined,
+  binding: string
+): string => {
+  if (!row || !binding.startsWith('D_')) return '';
+  const confirmDay = str(row.CONFIRM_DAY).trim();
+  if (!confirmDay || binding.slice(2) > confirmDay) return '';
+  return parseRgb(str(row.BACK_COLOR).trim());
+};
 
 // Bucket/chkSum 표시규칙 (design 03 §2.2 표 그대로)
 const isDynVisible = (kind: DynKind, bucket: BUCKET_TYPE, chkSum: boolean): boolean => {
@@ -246,6 +333,13 @@ export const ShipmentPlanAutoEssMainGrid = ({
     g.updatedLayout.addHandler(applyMerge);
     applyMerge();
 
+    // AS-IS MergePolicy.Always(PSI) 재현 — 공용 매니저는 좌측 누적키 전용이라 PSI 가 BOH_TYPE/BOH_QTY
+    //   차이로 갈라진다. 그리드 인스턴스당 1회만 교체(생성자가 grid 이벤트를 구독하므로 effect 재실행마다
+    //   새로 만들지 않는다 — 자매 SSP0060 선례).
+    if (!(g.mergeManager instanceof ShipmentPlanAutoEssMainMergeManager)) {
+      g.mergeManager = new ShipmentPlanAutoEssMainMergeManager(g);
+    }
+
     // 헤더 총높이 고정 — 정적 ONE_DEPTH 의 명시 height(48)가 동적 16 과 defaultSize 를 모두 이겨
     //   조회 후 48x3 으로 벌어지는 것을 실제 tier 수로 나눠 되돌린다(자매 SSP0060 과 동일 처방,
     //   선례 CustFcstWaterfallGrid). 목표값과 같으면 skip → updatedLayout 무한 루프 방지.
@@ -302,9 +396,13 @@ export const ShipmentPlanAutoEssMainGrid = ({
       //   `range1 = Cells[i, MEASURE+1, i, ColumnCount-1]; range1.BackColor = FromArgb(80, LightSkyBlue);`
       //   = MEASURE 다음 칸부터 끝까지(= 동적 D_/W_/M_ 전부) LightSkyBlue 를 알파 80/255 로 덮는다.
       //   AS-IS 캡처에서도 'Shipment Plan' 행만 옅은 하늘색으로 구분된다(사용자 제공 2026-10-12).
+      //   그 외 measure 행은 확정구간(Frozen) BACK_COLOR 밴드를 칠한다(AS-IS Re_Design L4749~4758;
+      //   SHIP_PLAN 하늘색이 전 기간열을 덮으므로 두 색이 겹치지 않는다 — 자매 SSP0060 과 동일 레이어링).
       //   필수: 비해당 셀은 명시적으로 비워야 한다 — Wijmo 가 셀 DOM 을 재사용해 스크롤 시 잔상이 남는다.
       e.cell.style.backgroundColor =
-        kindOf(binding) && str(row?.MEASURE) === SHIP_PLAN_MEASURE ? SHIP_PLAN_ROW_COLOR : '';
+        kindOf(binding) && str(row?.MEASURE) === SHIP_PLAN_MEASURE
+          ? SHIP_PLAN_ROW_COLOR
+          : confirmWindowBackground(row, binding);
     };
     g.formatItem.addHandler(formatItemHandler);
 

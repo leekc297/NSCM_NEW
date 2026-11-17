@@ -1,0 +1,916 @@
+{
+ "id": "SSP0014",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "MAIL_USER1",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MAIL_USER1",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "MAIL_USER1",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MAIL_USER2",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MAIL_USER2",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "MAIL_USER2",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MAIL_USER3",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MAIL_USER3",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "MAIL_USER3",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MAIL_USER4",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MAIL_USER4",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "MAIL_USER4",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "MAIL_USER5",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 MAIL_USER5",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "MAIL_USER5",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "PART_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 PART_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "PART_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TEAM_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 TEAM_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "TEAM_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "USER_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 USER_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Model PIC",
+     "rows_before": 7667,
+     "rows_after": 7667,
+     "cells": [
+      {
+       "row": 0,
+       "col": "USER_ID",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 07:20:27",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MAIL_USER1",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MAIL_USER2",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MAIL_USER3",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MAIL_USER4",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "MAIL_USER5",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "PART_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "TEAM_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b"
+   ],
+   "has_else": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "col": "USER_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e"
+   ],
+   "has_else": false
+  }
+ ]
+}

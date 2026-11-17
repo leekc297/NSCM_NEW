@@ -6,8 +6,8 @@
 > ⭐ **Figma 가 디자인 SSoT (Single Source of Truth)**.
 > 신규 화면 작업 시 Figma URL → REST API fetch → JSON 정리 → React 코드 작성에 직접 반영.
 > 작성: 2026-05-30
-> 관련 룰: [20](20_SCREEN_ANALYSIS_PIPELINE.md) / [23](23_FE_IMPORT_INVENTORY.md) / [25](25_NEW_SCREEN_MANDATORY_CHECKLIST.md)
-> 관련 hook: [anti-simplification](hooks/anti-simplification.md) (적용)
+> 관련 룰: [20](_archive/20_SCREEN_ANALYSIS_PIPELINE.md) / [23](_archive/23_FE_IMPORT_INVENTORY.md) / [25](_archive/25_NEW_SCREEN_MANDATORY_CHECKLIST.md) (2026-11-13 정정: 링크 → `_archive/` 보관 위치. 룰 v1 보관본 — v2 흡수 위치는 `README.md` §2 표)
+> 관련 hook: [anti-simplification](../_rules_v2/anti-simplification.md) (적용) (2026-11-13 정정: 링크 `hooks/anti-simplification.md` → `Doc/_rules_v2/anti-simplification.md`)
 
 ---
 
@@ -140,7 +140,7 @@ AS-IS `.cs` 에 button click 핸들러가 없으면 To-Be 에도 추가 X. 단, 
 
 #### 누락 검출 의무
 
-- Figma layout 의 button 목록 = AS-IS .cs 의 button 핸들러 목록 — 두 목록 합집합이 To-Be 매핑에 100% 등장해야 함.
+- Figma layout 의 button 목록 = AS-IS .cs 의 button 핸들러 목록 — 두 목록 합집합이 To-Be 매핑에 100% 등장해야 함. (2026-11-13 정정: TO-BE 룰로 버튼을 두지 않는 항목 — Edit(F2) 버튼(CR-093·CR-103: TO-BE 는 편집 버튼 없음) · AS-IS 가 기능 없이 노출한 공통버튼(CR-070: TO-BE 는 숨김) — 은 매핑 행에 '제외 + CR 번호'로 적으며 ❌ 로 세지 않는다)
 - 누락 1건이라도 → `__asis-mapping__.md` 에 ❌ + 사유 기재.
 - PR 머지 게이트: `## Button 매핑` 섹션 행에 ❌ 0건 필요.
 
@@ -154,10 +154,10 @@ AS-IS `.cs` 에 button click 핸들러가 없으면 To-Be 에도 추가 X. 단, 
 | `FRAME` (group / section) | `<Stack direction="row|col">` from `@shared/lges` | 룰 23 §3 |
 | `COMPONENT` name=Button | `<Button>` from `@shared/components` | 룰 23 §1 |
 | `COMPONENT` name=IconButton | `<IconButton>` from `@shared/lges` (note: `@shared/components` 없음) | 룰 23 §5.1 |
-| `COMPONENT` name=Input / TextField | `<CustomInput>` from `@shared/components` | 룰 23 |
+| `COMPONENT` name=Input / TextField | `<CustomInput>` from `@shared/components` (2026-11-13: `CustomInput` 은 현재 `nscm-fe/packages`·`features` 소스에 없음 — 실제 export 확인 후 사용) | 룰 23 |
 | `COMPONENT` name=Dropdown / Select | `<CustomDropdown>` from `@shared/components` | 룰 23 §1 |
 | `COMPONENT` name=Modal / Dialog | `<CustomDialog>` from `@shared/components` (⚠ `Dialog` 아님) | 룰 23 §1 |
-| `COMPONENT` name=Grid / Table | Wijmo `<FlexGrid>` (룰 12 표준 패턴) | 룰 12 |
+| `COMPONENT` name=Grid / Table | 공용 `<DataGrid>` from `@shared/components` (2026-11-13 정정: Wijmo `<FlexGrid>` 직접 사용 → 공용 DataGrid 필수 — hook `datagrid-shared-component-mandatory` §1) | 룰 12 |
 | `COMPONENT` name=Tab | `<TabWrapper>` + `<TabItem>` | 룰 23 §1 |
 | `TEXT` (header) | `<Typography variant="h3">` | MUI |
 | `TEXT` (label) | `<label>` 또는 form label prop | - |
@@ -277,7 +277,7 @@ AS-IS `.cs` 에 button click 핸들러가 없으면 To-Be 에도 추가 X. 단, 
 - 컴포넌트 사용 (룰 23 매핑):
   - <CustomDropdown> × 3 (부서 / 기간 / 거래처)
   - <DatePicker> × 1
-  - <FlexGrid> × 1 (8 컬럼, 위 8 자료 sheet 참조)
+  - <DataGrid> × 1 (8 컬럼, 위 8 자료 sheet 참조)   (11-13 정정: <FlexGrid> → 공용 <DataGrid>)
   - <Button> × 2 (저장 / 취소)
 - 색상: primary / secondary / divider
 - 간격: 16px (--space-md) gap 기본
@@ -289,10 +289,10 @@ AS-IS `.cs` 에 button click 핸들러가 없으면 To-Be 에도 추가 X. 단, 
 
 | 룰 | 관계 |
 |---|---|
-| [룰 20](20_SCREEN_ANALYSIS_PIPELINE.md) §3.4 | `figma_link.md` 위치 변경 (Doc/_analysis → Doc/_figma/screens) |
-| [룰 25](25_NEW_SCREEN_MANDATORY_CHECKLIST.md) §1 | 사전 자료 5종 → 6종 (Figma 6번째) |
-| [룰 23](23_FE_IMPORT_INVENTORY.md) | Figma 컴포넌트 → 실제 export 매핑 의무 |
-| [룰 19](19_MOCKUP_SVG_RULES.md) | 기존 mockup PNG/SVG 와 Figma 의 관계 (점진적 대체) |
+| [룰 20](_archive/20_SCREEN_ANALYSIS_PIPELINE.md) §3.4 | `figma_link.md` 위치 변경 (Doc/_analysis → Doc/_figma/screens) (11-13 정정: 이 표 룰 링크 4건 → `_archive/`) |
+| [룰 25](_archive/25_NEW_SCREEN_MANDATORY_CHECKLIST.md) §1 | 사전 자료 5종 → 6종 (Figma 6번째) |
+| [룰 23](_archive/23_FE_IMPORT_INVENTORY.md) | Figma 컴포넌트 → 실제 export 매핑 의무 |
+| [룰 19](_archive/19_MOCKUP_SVG_RULES.md) | 기존 mockup PNG/SVG 와 Figma 의 관계 (점진적 대체) |
 | 메모리 `feedback_figma_url_detected.md` | URL 감지 + 자동 fetch trigger |
 | 메모리 `reference_figma_token_location.md` | `.figma_token` 위치 |
 | 메모리 `reference_figma_file_key.md` | 메인 Figma 파일 key |

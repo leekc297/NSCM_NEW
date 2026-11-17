@@ -1,0 +1,69 @@
+{
+ "id": "DMF0007",
+ "note": "초안 — 사람이 소스와 SP 원문을 확인한 뒤 save_scenario.json 으로 옮겨야 실행된다",
+ "drafts": [
+  {
+   "endpoint": "DM.DMF0007_SAVE_CUST_FCST_DATA",
+   "save_sp": "DMF0007_SAVE_CUST_FCST_DATA",
+   "status": "키 일부 미대응",
+   "table": "DM_MST_CUSTOMER_FCST",
+   "pk": [
+    "DIVISION_ID",
+    "PLAN_WEEK",
+    "CUSTOMER_CODE",
+    "SCM_SITE_ID",
+    "SUMMARY_BUCKET_VALUE",
+    "MEASURE_GROUP",
+    "CUSTOMER_PSI",
+    "MEASURE"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "PLAN_WEEK": "PLAN_WEEK",
+    "CUSTOMER_CODE": "CUSTOMER_CODE",
+    "SCM_SITE_ID": "SCM_SITE_ID",
+    "MEASURE_GROUP": "MEASURE_GROUP",
+    "CUSTOMER_PSI": "CUSTOMER_PSI",
+    "MEASURE": "MEASURE"
+   },
+   "unmatched_pk": [
+    "SUMMARY_BUCKET_VALUE"
+   ],
+   "edit": null,
+   "side": [
+    {
+     "table": "DM_MST_CUSTOMER_FCST_H",
+     "pk": [
+      "HISTORY_SEQ"
+     ]
+    }
+   ],
+   "sheet": "spdMain/Customer PSI",
+   "writes": {
+    "DM_MST_CUSTOMER_FCST": [
+     "DELETE FROM",
+     "INSERT INTO"
+    ],
+    "T1": [
+     "DELETE"
+    ],
+    "DM_PLN_MKT_FCST": [
+     "INSERT INTO"
+    ]
+   },
+   "basis": "foxml DMF0007_SAVE_CUST_FCST_DATA → SP DMF0007_SAVE_CUST_FCST_DATA 원문(sys.sql_modules) · 키 = sys.indexes PK",
+   "writes_via_exec": {
+    "DM_MST_CUSTOMER_FCST_H": [
+     "INSERT INTO"
+    ]
+   },
+   "other_tables": [
+    "DM_PLN_MKT_FCST"
+   ],
+   "unmatched_why": {
+    "SUMMARY_BUCKET_VALUE": "p_summary_bucket_value←BucketValue(변수)"
+   },
+   "edit_candidates": []
+  }
+ ]
+}

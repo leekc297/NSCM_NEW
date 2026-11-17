@@ -47,13 +47,14 @@ CMBO_SQL_M SQL 의 substitution 변수 (mybatis `#{}` 아님):
 
 | 변수 | 출처 | Quote? | 타입 |
 |---|---|---|---|
-| `@sesUserId` | 세션 사용자 ID | ❌ raw | string |
-| `@sesLangCd` | 세션 언어 | ❌ raw | string |
-| `@mnuId` | 메뉴 ID | ❌ raw | string |
+| `@sesUserId` | 세션 사용자 ID | ✅ BE 가 `'…'` 부여 (2026-11-13 정정: ❌ raw → BE quoting — `LookupServiceImpl.retrieveCombo` 가 세션값을 홑따옴표로 감싸 넣음) | string |
+| `@sesLangCd` | 세션 언어 | ✅ BE 가 `'…'` 부여 (11-13 정정) | string |
+| `@mnuId` | 메뉴 ID | ✅ 값이 있으면 BE 가 `'…'` 부여(`quoteLiteral` · 이미 감싼 값은 그대로) (11-13 정정) | string |
 | `@divisionId` | useTabComboQueries filters | ❌ raw | string/number 모두 |
 | 그 외 화면별 인자 | useTabComboQueries 의 `{comboId: 'X', divisionId: '40'}` | ❌ raw | mixed |
 
 → **모든 `@varName` 은 quote 없이 raw 치환**. VARCHAR2 비교 시 항상 `TO_CHAR` wrap 의무.
+> (2026-11-13 정정: `makeComboQuery` 의 치환 자체는 raw 가 맞으나, `@sesUserId` · `@sesLangCd` · `@mnuId` 는 치환 전에 BE 가 홑따옴표를 붙인 값을 넣는다. raw 그대로 들어가는 것은 화면이 넘기는 사용자 파라미터다.)
 
 ## §3. 동일 패턴 사고 가능 컬럼 인벤토리
 

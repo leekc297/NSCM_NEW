@@ -1,0 +1,4076 @@
+{
+ "menu_id": "SSP0003",
+ "at": "2026-11-14 20:01:44",
+ "windows": [
+  [
+   5936233,
+   5958859,
+   "2026-11-14 17:57",
+   "2026-11-14 20:00"
+  ]
+ ],
+ "rows_scanned": 22627,
+ "pkgs": [
+  "PKG_SSP0003",
+  "PKG_SSP0200"
+ ],
+ "user": "",
+ "calls": [
+  {
+   "seq": 5950135,
+   "at": "2026-11-14 19:22:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950269,
+   "at": "2026-11-14 19:22:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950361,
+   "at": "2026-11-14 19:22:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950400,
+   "at": "2026-11-14 19:23:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950406,
+   "at": "2026-11-14 19:23:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950412,
+   "at": "2026-11-14 19:23:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950473,
+   "at": "2026-11-14 19:23:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950494,
+   "at": "2026-11-14 19:23:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "yongqian",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950531,
+   "at": "2026-11-14 19:23:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "P",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "yongqian",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950791,
+   "at": "2026-11-14 19:24:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950807,
+   "at": "2026-11-14 19:24:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950824,
+   "at": "2026-11-14 19:24:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950862,
+   "at": "2026-11-14 19:24:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950896,
+   "at": "2026-11-14 19:24:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950912,
+   "at": "2026-11-14 19:24:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "yongqian",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5950929,
+   "at": "2026-11-14 19:24:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "P",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "yongqian",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "AC00-A",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951095,
+   "at": "2026-11-14 19:25:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951102,
+   "at": "2026-11-14 19:25:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951203,
+   "at": "2026-11-14 19:25:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951209,
+   "at": "2026-11-14 19:26:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951349,
+   "at": "2026-11-14 19:27:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951445,
+   "at": "2026-11-14 19:27:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951494,
+   "at": "2026-11-14 19:27:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951755,
+   "at": "2026-11-14 19:28:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951815,
+   "at": "2026-11-14 19:29:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951865,
+   "at": "2026-11-14 19:29:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951924,
+   "at": "2026-11-14 19:29:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951974,
+   "at": "2026-11-14 19:29:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5951979,
+   "at": "2026-11-14 19:29:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952039,
+   "at": "2026-11-14 19:30:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952102,
+   "at": "2026-11-14 19:30:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952117,
+   "at": "2026-11-14 19:30:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952125,
+   "at": "2026-11-14 19:30:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952159,
+   "at": "2026-11-14 19:30:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952193,
+   "at": "2026-11-14 19:30:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952200,
+   "at": "2026-11-14 19:30:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "ALL"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952205,
+   "at": "2026-11-14 19:30:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952212,
+   "at": "2026-11-14 19:31:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "Q"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952329,
+   "at": "2026-11-14 19:31:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952335,
+   "at": "2026-11-14 19:31:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952341,
+   "at": "2026-11-14 19:31:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "P",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952347,
+   "at": "2026-11-14 19:31:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "C",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952549,
+   "at": "2026-11-14 19:32:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952555,
+   "at": "2026-11-14 19:32:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952562,
+   "at": "2026-11-14 19:32:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952610,
+   "at": "2026-11-14 19:32:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952645,
+   "at": "2026-11-14 19:32:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952661,
+   "at": "2026-11-14 19:32:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952667,
+   "at": "2026-11-14 19:32:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952769,
+   "at": "2026-11-14 19:33:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952819,
+   "at": "2026-11-14 19:33:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952878,
+   "at": "2026-11-14 19:33:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952927,
+   "at": "2026-11-14 19:33:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5952977,
+   "at": "2026-11-14 19:33:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953026,
+   "at": "2026-11-14 19:33:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953031,
+   "at": "2026-11-14 19:33:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953080,
+   "at": "2026-11-14 19:33:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953141,
+   "at": "2026-11-14 19:34:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953189,
+   "at": "2026-11-14 19:34:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953248,
+   "at": "2026-11-14 19:34:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953265,
+   "at": "2026-11-14 19:34:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953280,
+   "at": "2026-11-14 19:34:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953297,
+   "at": "2026-11-14 19:34:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953312,
+   "at": "2026-11-14 19:34:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "82",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953329,
+   "at": "2026-11-14 19:34:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953531,
+   "at": "2026-11-14 19:35:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953552,
+   "at": "2026-11-14 19:35:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "EN",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953575,
+   "at": "2026-11-14 19:35:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "CN",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953639,
+   "at": "2026-11-14 19:35:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953674,
+   "at": "2026-11-14 19:35:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953707,
+   "at": "2026-11-14 19:35:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953741,
+   "at": "2026-11-14 19:35:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953775,
+   "at": "2026-11-14 19:35:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953824,
+   "at": "2026-11-14 19:36:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953829,
+   "at": "2026-11-14 19:36:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953877,
+   "at": "2026-11-14 19:38:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953927,
+   "at": "2026-11-14 19:38:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953942,
+   "at": "2026-11-14 19:38:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953947,
+   "at": "2026-11-14 19:38:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5953995,
+   "at": "2026-11-14 19:40:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954001,
+   "at": "2026-11-14 19:40:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954007,
+   "at": "2026-11-14 19:40:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "E2E",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954012,
+   "at": "2026-11-14 19:40:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "E2E",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954017,
+   "at": "2026-11-14 19:41:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954022,
+   "at": "2026-11-14 19:41:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "Invalid Date",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "Invalid Date",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954113,
+   "at": "2026-11-14 19:43:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954162,
+   "at": "2026-11-14 19:43:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954212,
+   "at": "2026-11-14 19:43:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954331,
+   "at": "2026-11-14 19:44:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954347,
+   "at": "2026-11-14 19:44:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954355,
+   "at": "2026-11-14 19:44:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954361,
+   "at": "2026-11-14 19:44:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954367,
+   "at": "2026-11-14 19:44:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954373,
+   "at": "2026-11-14 19:44:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954379,
+   "at": "2026-11-14 19:44:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954386,
+   "at": "2026-11-14 19:44:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954391,
+   "at": "2026-11-14 19:44:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954440,
+   "at": "2026-11-14 19:44:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954475,
+   "at": "2026-11-14 19:44:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954509,
+   "at": "2026-11-14 19:45:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954543,
+   "at": "2026-11-14 19:45:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954591,
+   "at": "2026-11-14 19:45:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954698,
+   "at": "2026-11-14 19:45:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954750,
+   "at": "2026-11-14 19:46:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "CN",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954800,
+   "at": "2026-11-14 19:46:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954834,
+   "at": "2026-11-14 19:46:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954868,
+   "at": "2026-11-14 19:46:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954902,
+   "at": "2026-11-14 19:46:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5954936,
+   "at": "2026-11-14 19:46:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955339,
+   "at": "2026-11-14 19:47:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955497,
+   "at": "2026-11-14 19:47:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955540,
+   "at": "2026-11-14 19:47:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955592,
+   "at": "2026-11-14 19:47:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955690,
+   "at": "2026-11-14 19:47:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955792,
+   "at": "2026-11-14 19:47:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955839,
+   "at": "2026-11-14 19:47:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,82",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955879,
+   "at": "2026-11-14 19:48:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955913,
+   "at": "2026-11-14 19:48:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955947,
+   "at": "2026-11-14 19:48:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5955981,
+   "at": "2026-11-14 19:48:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956015,
+   "at": "2026-11-14 19:48:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956049,
+   "at": "2026-11-14 19:48:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956083,
+   "at": "2026-11-14 19:48:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956125,
+   "at": "2026-11-14 19:48:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956191,
+   "at": "2026-11-14 19:48:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956236,
+   "at": "2026-11-14 19:48:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956308,
+   "at": "2026-11-14 19:48:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956431,
+   "at": "2026-11-14 19:49:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956472,
+   "at": "2026-11-14 19:49:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956535,
+   "at": "2026-11-14 19:49:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956596,
+   "at": "2026-11-14 19:49:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956646,
+   "at": "2026-11-14 19:49:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956651,
+   "at": "2026-11-14 19:49:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956700,
+   "at": "2026-11-14 19:49:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956771,
+   "at": "2026-11-14 19:50:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956830,
+   "at": "2026-11-14 19:50:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956897,
+   "at": "2026-11-14 19:51:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5956955,
+   "at": "2026-11-14 19:51:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957070,
+   "at": "2026-11-14 19:52:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957076,
+   "at": "2026-11-14 19:52:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "HQ06-E",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957110,
+   "at": "2026-11-14 19:52:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957126,
+   "at": "2026-11-14 19:52:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957161,
+   "at": "2026-11-14 19:52:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957194,
+   "at": "2026-11-14 19:52:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957228,
+   "at": "2026-11-14 19:52:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957291,
+   "at": "2026-11-14 19:52:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957380,
+   "at": "2026-11-14 19:52:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957386,
+   "at": "2026-11-14 19:52:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957400,
+   "at": "2026-11-14 19:52:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957409,
+   "at": "2026-11-14 19:52:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957420,
+   "at": "2026-11-14 19:52:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "고원택(attackgo)",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957575,
+   "at": "2026-11-14 19:53:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "고원택(ATTACKGO)",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957581,
+   "at": "2026-11-14 19:54:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "원택(attackgo",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957595,
+   "at": "2026-11-14 19:54:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957601,
+   "at": "2026-11-14 19:54:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "APCAN1650A",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957608,
+   "at": "2026-11-14 19:54:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "apcan1650a",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957614,
+   "at": "2026-11-14 19:54:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "PCAN1650",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957620,
+   "at": "2026-11-14 19:54:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "APCAN1650A,ETD1550AFB33-CGB",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957626,
+   "at": "2026-11-14 19:54:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957632,
+   "at": "2026-11-14 19:54:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957638,
+   "at": "2026-11-14 19:54:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957643,
+   "at": "2026-11-14 19:54:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957649,
+   "at": "2026-11-14 19:54:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5957699,
+   "at": "2026-11-14 19:54:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5958576,
+   "at": "2026-11-14 19:59:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5958593,
+   "at": "2026-11-14 19:59:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5958716,
+   "at": "2026-11-14 19:59:29",
+   "by": "jinhuannj",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "EN",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "jinhuannj"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5958787,
+   "at": "2026-11-14 19:59:39",
+   "by": "kijung03.kim",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "KO",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "40",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "kijung03.kim"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 5958857,
+   "at": "2026-11-14 19:59:50",
+   "by": "iqromoh",
+   "proc": "PKG_SSP0003.P_SSP0003_GET_CHG_REQ_CONFIRM",
+   "kind": "GET",
+   "fe": {
+    "fromYyyymmdd": "20261031",
+    "changeType": "ALL",
+    "language": "EN",
+    "itemId": "",
+    "requestId": "",
+    "divisionId": "81_HM",
+    "fromSite": "ALL",
+    "toYyyymmdd": "20261114",
+    "status": "D"
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "iqromoh"
+   },
+   "rows": 0,
+   "params_parsed": true
+  }
+ ]
+}

@@ -52,8 +52,11 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
   const isOpenSearchArea = useWorkingTimeStore(state => state.isOpenSearchArea);
   const setOpenSearchArea = useWorkingTimeStore(state => state.setOpenSearchArea);
   const searchParams = useWorkingTimeStore(state => state.searchParams);
+  const setSearchParams = useWorkingTimeStore(state => state.setSearchParams);
   const filters = useWorkingTimeStore(state => state.filters);
   const setFilters = useWorkingTimeStore(state => state.setFilters);
+  // 사용자 세션 — Period 기본값 SP 호출에 등록 timezone(tmzCd)을 넘긴다.
+  const session = useSessionStore(state => state.session);
   const clearFilters = useWorkingTimeStore(state => state.clearFilters);
   const fetchStaticColumns = useWorkingTimeStore(state => state.fetchStaticColumns);
   const restoreSearchConditions = useWorkingTimeStore(state => state.restoreSearchConditions);
@@ -77,6 +80,39 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.MAIN],
     enabled: hasSearched && !!filters[SHEETS.MAIN],
   });
+
+  // Period 기본값 — AS-IS dCalendar.InitValue = DateUtil.GetDayRange(division, bucket) 재현.
+  //   AS-IS 는 서버 SP SCM0001_GET_SCP_MONTH_PERIOD 에 사용자 등록 timezone(UserInfoContext.TimeZone)을 넘겨
+  //   오늘/기간을 timezone + 달력테이블(SCM_SYS_CALENDAR_M) 기준으로 계산했다(브라우저 dayjs 근사는 기기 OS
+  //   timezone 의존이라 사용자 등록 timezone 과 날짜경계에서 어긋날 수 있었다 — 사용자 지시 2026-11-12 로 복원).
+  //   SP ELSE 분기(fromDate 공란)는 division/planCycle 미사용 — timeZone+offset(12)+달력만 쓰므로 mount 1회로 충분.
+  //   응답 o_rc1[0].PERIOD = 'YYYYMMDD:YYYYMMDD'(from:to). 실패/빈값이면 store 의 dayjs initPeriod 가 폴백으로 남는다.
+  const periodFilters = useMemo(
+    () => ({ divisionId: '', planCycle: '', fromDate: '', offsetMonth: '12', timeZone: session.tmzCd ?? '' }),
+    [session.tmzCd]
+  );
+  const periodQuery = useTabProcQuery<MENU_ID, SHEETS.PERIOD>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.PERIOD,
+    tabId,
+    filters: periodFilters,
+    enabled: !!session.tmzCd,
+  });
+  // SP 결과를 기본 Period 로 1회 반영(ref 가드). working-time 은 날짜를 F6 저장조건에서 제외하므로
+  //   restoreSearchConditions 와 충돌하지 않는다(날짜 축은 이 경로만 세팅).
+  const periodAppliedRef = useRef(false);
+  useEffect(() => {
+    if (periodAppliedRef.current) return;
+    const period = (periodQuery.data as Record<string, Array<{ PERIOD?: string }>> | undefined)?.[
+      RESPONSE_SET.MAIN
+    ]?.[0]?.PERIOD;
+    if (!period) return;
+    const [from, to] = period.split(':');
+    if (from?.length === 8 && to?.length === 8) {
+      setSearchParams({ startYyyymmdd: from, endYyyymmdd: to });
+    }
+    periodAppliedRef.current = true;
+  }, [periodQuery.data, setSearchParams]);
 
   // 참조 고정 필수: useMemo 없이 ?? [] 로 만들면 조회조건 타이핑/드롭다운마다 부모가 리렌더될 때 매번 새
   //   배열이 되어 Grid data/dynColumns prop 참조가 바뀐다 → grid dynamicColumns useMemo 재계산(깜빡임).

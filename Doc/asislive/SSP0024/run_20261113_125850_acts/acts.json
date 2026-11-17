@@ -1,0 +1,67 @@
+{
+ "id": "SSP0024",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnMaterialId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0024_ItembyDivisionPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 970,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0024_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0024-S87e7e4",
+    "SSP0024-Sf474d2"
+   ]
+  },
+  {
+   "control": "btnMaterialId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SSP0024_ItembyDivisionPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 970,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SSP0024_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0024-S87e7e4",
+    "SSP0024-Sf474d2"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnModelId",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  },
+  {
+   "control": "btnModelId",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-13 12:58:12.077",
+ "fills": 0,
+ "fill_left": []
+}

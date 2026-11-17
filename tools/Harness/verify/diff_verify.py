@@ -91,6 +91,68 @@ def flat(v):
     return str(v)
 
 
+_BIND_CACHE = {}
+
+
+def bind_map(cx, proc):
+    """[(PROC_M COL_NM, PKG 인자명)] — BE 는 SCM_ADM_PROC_M 의 IN 행을 SORT_ORD 순서로 PKG 인자 위치에 묶는다. 수가 다르면 [](묶지 않음)"""
+    k = proc.upper()
+    if k not in _BIND_CACHE:
+        cur = cx.cursor()
+        cur.execute("SELECT COL_NM FROM SCM_MGR.SCM_ADM_PROC_M WHERE UPPER(PROC_NM) = :1 AND UPPER(COL_TP_CD) IN ('IN', 'I') ORDER BY SORT_ORD", [k])
+        cols = [r[0] for r in cur.fetchall()]
+        pkg, _, name = k.rpartition('.')
+        cur.execute("""SELECT ARGUMENT_NAME FROM ALL_ARGUMENTS WHERE OWNER = 'SCM_MGR' AND OBJECT_NAME = :n AND NVL(PACKAGE_NAME, '~') = NVL(:p, '~')
+                         AND DATA_LEVEL = 0 AND ARGUMENT_NAME IS NOT NULL AND IN_OUT = 'IN' ORDER BY POSITION""", n=name, p=(pkg or None))
+        args = [r[0] for r in cur.fetchall()]
+        _BIND_CACHE[k] = list(zip(cols, args)) if cols and len(cols) == len(args) else []
+    return _BIND_CACHE[k]
+
+
+def bind_like_be(cx, proc, body, md=None):
+    """본문(FE 키 + 세션 키)을 PKG 인자명 키로도 채운 사본 — 인자명과 COL_NM 이 다른 자리(예 sesLangCd ↔ P_LANGUAGE)가 NULL 로 가지 않게"""
+    out = dict(body)
+    lk = {golden.nkey(k): k for k in body}
+    renamed = []
+    for col, arg in bind_map(cx, proc):
+        a = re.sub(r'^P_', '', arg)
+        src = lk.get(golden.nkey(col))
+        if src is None or golden.nkey(a) in lk or golden.nkey(arg) in lk:
+            continue
+        out[a] = body[src]
+        renamed.append(f'{col}→{arg}')
+    if renamed and md is not None:
+        md.append(f"- TO-BE 인자 묶음(PROC_M 순서 = BE 방식): {', '.join(renamed)}")
+    return out
+
+
+def load_sqllog(mid):
+    try:
+        with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'sqllog_calls.json'), encoding='utf-8') as f:
+            return [c for c in json.load(f).get('calls', []) if c.get('params_parsed')]
+    except (OSError, ValueError):
+        return []
+
+
+def session_of(calls, proc, body):
+    """같은 PROC·같은 FE 본문의 로그 호출들에서 세션 값 — 가장 많이 나온 조합(동률이면 최근). 반환 (ses dict, 설명)"""
+    want = {k: flat(v) for k, v in (body or {}).items()}
+    seen = {}
+    for c in calls:
+        if (c.get('proc') or '').upper() != (proc or '').upper():
+            continue
+        got = {k: flat(v) for k, v in (c.get('fe') or {}).items()}
+        if any(got.get(k, '') != v for k, v in want.items()):
+            continue
+        key = json.dumps(c.get('ses') or {}, ensure_ascii=False, sort_keys=True)
+        seen[key] = (seen.get(key, (0, 0))[0] + 1, c.get('seq') or 0)
+    if not seen:
+        return {}, ''
+    best = max(seen.items(), key=lambda kv: kv[1])
+    note = '' if len(seen) == 1 else f" · 같은 본문의 세션 조합 {len(seen)}종 중 최다({best[1][0]}회) 사용 — 나머지 {[json.loads(k) for k in seen if k != best[0]][:3]}"
+    return json.loads(best[0]), note
+
+
 def translate(body, pmap_rows):
     """FE body(camelCase) → AS-IS {@p_x: 값} · (params, unresolved[], notes[])"""
     ps, unresolved, notes = {}, [], []
@@ -116,7 +178,12 @@ def translate(body, pmap_rows):
                 notes.append(f"{an}: 'ALL'→''(all_semantics: 빈 값 = 전체)"); v = ''
             elif v == 'ALL' and sem == '' and semnote.startswith('AMBIG'):
                 notes.append(f"{an}: 'ALL' 유지(AMBIG)")
-            if raw is None and fk:
+            if raw is None and fk and re.match(r'ses[A-Z]', fk) and (m.get('default') or '') != '':
+                v = m.get('default')  # 호출 로그에 세션 값이 없을 때만 — 종전 동작(설정된 기본 계정) 유지 · 기본값이 없는 세션 인자(언어 등)는 아래에서 미해결
+                notes.append(f"{an}: 세션 인자 {fk} 값 미포착 → default '{v}'(호출 로그 없음)")
+            elif raw is None and fk and re.match(r'ses[A-Z]', fk):
+                unresolved.append(f"{an}(세션 인자 {fk} 값 없음 — sqllog_calls.py 로 호출 로그 수집)")  # 세션 값은 기본값으로 채우지 않는다
+            elif raw is None and fk:
                 v = m.get('default') or ''
                 notes.append(f"{an}: 본문에 {fk} 없음 → default '{v}'")
             ps[an] = v
@@ -218,6 +285,7 @@ def main():
     if calls:
         ca = dbconn.connect('asis', cfg)  # readOnly(write 미지정) — 쓰기 시도 자체가 거부된다
         ct = dbconn.connect('tobe', cfg)
+    sqllog = load_sqllog(mid)
     hdr = f"- 실행 {now} · AS-IS {dbconn.describe('asis', cfg)} (readOnly) · TO-BE {dbconn.describe('tobe', cfg)} (매 호출 rollback) · 호출 원천 {src_kind}"
     try:
         for n, c in enumerate(calls, 1):
@@ -249,7 +317,15 @@ def main():
             elif (pair.get('kind') or '') != 'GET':
                 row.update(verdict='SKIP', note=f"kind={pair.get('kind')} — GET 만 실행(쓰기 SP 실행 금지) · {pair.get('note', '')[:120]}"); md.append(f"- SKIP: {row['note']}")
             else:
+                # 2026-11-11 T235: 세션 인자(sesLangCd 등)는 FE 본문에 없다(BE 가 붙임) → 사내 호출 로그의 같은 PROC·같은 본문 호출에서 읽어 양쪽에 같은 값을 준다
+                #   실측(SSP0025 11-10 E2E 시간대): 같은 본문이 sesLangCd EN 9회·CN 6회 — 'KO' 로 가정했다면 틀렸다. 로그에 없으면 세션 인자는 미해결로 남긴다.
+                ses, ses_note = session_of(sqllog, proc, body)
+                if ses:
+                    body = dict(body, **ses); md.append(f"- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{json.dumps(ses, ensure_ascii=False)}`{ses_note}")
                 aps, unresolved, notes = translate(body, pmap.get(proc.upper(), []))
+                bad_in = [k for k, v in body.items() if isinstance(v, str) and v in ('Invalid Date', 'NaN', 'undefined')]
+                if bad_in:  # 2026-11-11 T239: E2E 가 잘못된 입력 상태에서 포착한 호출(FE 가 'Invalid Date' 전송) — 정상 조회가 아니라 대조 대상 아님(AS-IS 는 날짜 변환 오류)
+                    unresolved = [f"{k}='{body[k]}'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님)" for k in bad_in]
                 row['params_asis'] = json.dumps(aps, ensure_ascii=False)[:800]; row['unresolved'] = ','.join(unresolved)
                 md.append(f"- AS-IS 인자(번역): `{json.dumps(aps, ensure_ascii=False)[:1500]}`" + (f" · 번역 메모: {' · '.join(notes)[:600]}" if notes else ''))
                 if unresolved:
@@ -269,7 +345,7 @@ def main():
                                     break
                         row['retry'] = retry
                         try:
-                            t_sets, missing = golden.run_tobe(ct, proc, body)
+                            t_sets, missing = golden.run_tobe(ct, proc, bind_like_be(ct, proc, body, md))
                             if missing: md.append(f"- TO-BE 인자 중 값 없음(NULL 전달): {', '.join(missing)}")
                         finally:
                             ct.rollback()
@@ -291,7 +367,19 @@ def main():
                                    common=kp.get('key_rows', ''), asis_only=kp.get('asis_only_keys', ''), tobe_only=kp.get('tobe_only_keys', ''),
                                    cols_only_a=','.join(sorted(a1c - t1c))[:200], cols_only_t=','.join(sorted(t1c - a1c))[:200], diff_cells=kp.get('diff_cells', ''), order=op.get('order', ''))
                         kr = kp.get('key_rows') or 0
-                        if not kp.get('keys'):
+                        # 2026-11-11 T234: 키를 못 정해도 전 결과셋의 행 집합(중복 수 포함)이 완전히 같으면 대조는 이미 끝난 것 — SKIP 이 아니라 PASS
+                        #   실측: SCP0108 P_SCP0108_GET_CAPA_LOB_CURRENT 378행 ↔ 378행 '공통 378 · 한쪽 전용 0' 인데 키 후보 없음으로 SKIP 19건
+                        ops = list(golden.ORDERPROF)
+                        set_equal = bool(ops) and all(o.get('asis_rows', 0) > 0 and o.get('asis_rows') == o.get('tobe_rows') == o.get('common_rows') and not o.get('capped') for o in ops)
+                        if not kp.get('keys') and set_equal:
+                            v = 'PASS'; row['note'] = '키 없이 판정 — 전 결과셋 행 집합 완전 일치(' + ' · '.join(f"셋{o.get('set')} {o.get('asis_rows')}행" for o in ops) + ' · 한쪽 전용 0)'
+                            row.update(common=ops[0].get('common_rows', ''), asis_rows=ops[0].get('asis_rows', ''), tobe_rows=ops[0].get('tobe_rows', ''), asis_only=0, tobe_only=0, key_source='(행 집합)')
+                        elif not kp.get('keys') and ops:
+                            # 2026-11-11 CR-101: 양쪽 모두 조회는 됐다 — 키가 없어 셀 단위 대조는 못 하지만 행 집합 대조 수치는 실측값이다 → 미검증(SKIP)이 아니라 판정필요(ROWS_ONLY)
+                            v = 'ROWS_ONLY'; row['note'] = ('키 없이 행 집합 대조 — ' + ' · '.join(f"셋{o.get('set')} AS-IS {o.get('asis_rows')}행/TO-BE {o.get('tobe_rows')}행(공통 {o.get('common_rows')} · AS-IS 전용 {o.get('asis_only')} · TO-BE 전용 {o.get('tobe_only')})" for o in ops[:4])
+                                                            + ' · 행을 잇는 키 없음(key_map.csv 에 지정하면 셀 단위 대조) → 판정필요')
+                            row.update(common=ops[0].get('common_rows', ''), asis_rows=ops[0].get('asis_rows', ''), tobe_rows=ops[0].get('tobe_rows', ''), asis_only=ops[0].get('asis_only', ''), tobe_only=ops[0].get('tobe_only', ''), key_source='(행 집합)')
+                        elif not kp.get('keys'):
                             v = 'SKIP'; row['note'] = '행을 잇는 키를 정하지 못함(키 후보 없음) — key_map.csv 에 proc·key_cols 지정'
                         elif kr == 0:
                             v = 'ROWS_ONLY'; row['note'] = f"공통행 0(키 {kp.get('keys')}) — AS-IS {kp.get('asis_rows')}행 ↔ TO-BE {kp.get('tobe_rows')}행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요"
@@ -309,7 +397,10 @@ def main():
                             md.append(f"\n## 불일치 셀(≤50) — diff/{short}__{n}.csv"); md.append('| 키 | 컬럼 | AS-IS | TO-BE |'); md.append('|---|---|---|---|')
                             for e in kp['examples'][:50]: md.append(f"| {e['key']} | {e['column']} | {e['asis']} | {e['tobe']} |")
                     except Exception as ex:
-                        row.update(verdict='ERR', note=dbconn.mask(str(ex), cfg).splitlines()[0][:300]); md.append(f"- ERR: {row['note']}")
+                        em = dbconn.mask(str(ex), cfg).splitlines()[0][:300]
+                        # 2026-11-11 CR-101(사용자 결정): TO-BE 조회 자체가 실패한 것만 오류로 도출 — Oracle 오류(ORA-·PLS-)면 ERR_TOBE(FAIL), 그 밖(AS-IS·도구 쪽)은 ERR(미검증)
+                        tb = bool(re.search(r'ORA-\d{5}|PLS-\d{5}|ALL_ARGUMENTS 에 ', em))
+                        row.update(verdict='ERR_TOBE' if tb else 'ERR', note=('TO-BE 조회 실패 — ' if tb else '') + em); md.append(f"- {row['verdict']}: {row['note']}")
             mp = os.path.join(od, f'{short}__{n}.md')
             with open(mp, 'w', encoding='utf-8') as f: f.write('\n'.join(md) + '\n')
             row['md'] = os.path.relpath(mp, ROOT)

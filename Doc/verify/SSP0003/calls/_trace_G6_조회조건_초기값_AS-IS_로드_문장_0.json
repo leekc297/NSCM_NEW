@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 366,
+  "at": "2026-11-14T10:27:51.692Z",
+  "user": "minyonglee1",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

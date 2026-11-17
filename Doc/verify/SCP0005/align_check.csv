@@ -1,0 +1,56 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0005,Distribution Route,A_COUNTRY,Country*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,A_PORT_CODE,Port Code*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,A_PORT_NAME,Port*,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,CREATED_BY,Created By,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,CREATION_DATE,Creation Date,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_FRI,Fri,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_MON,Mon,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_SAT,Sat,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_SUN,Sun,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_THU,Thu,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_TUE,Tue,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,DAYS_WED,Wed,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,D_COUNTRY,Country*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,D_PORT_CODE,Port Code*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,D_PORT_NAME,Port*,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,FROM_CITY,City*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,FROM_CITY_NAME,City Name,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,FROM_COUNTRY,Country*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,LAST_UPDATE_DATE,Last Update Date,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,LT_ARRIVAL_INLAND,Arrival Inland,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,LT_DEPARTURE_INLAND,Departure Inland,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,LT_LAY_OFF_CLEARANCE,Lay Off/Customs Clearance,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,LT_SUM,Total L/T,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,LT_TYPE,L/T Type*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,LT_VOYAGE,Voyage,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,LT_WAIT_SHIPPING,Waiting For Shipping,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,One_SEGMENT_COST,Pick Up Cost,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,PRIORITY,Priority*,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,ROUTE_ID,Route Id,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,SHIPPING_COMPANY,Forwarder*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,SHIP_DOC_PREPARATION_DATE,Shipping Document Preparation Date,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,TO_CITY,City*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,TO_CITY_NAME,City Name,L,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,L,메타 SCP0005/Distribution Route,PASS,AS-IS left ↔ TO-BE left
+SCP0005,Distribution Route,TO_COUNTRY,Country*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,TRANSPORT_MODE,Trans Mode*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,Distribution Route,Three_SEGMENT_COST,Delivery Cost,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,Two_SEGMENT_COST,Freight Cost,R,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,R,메타 SCP0005/Distribution Route,PASS,AS-IS right ↔ TO-BE right
+SCP0005,Distribution Route,VALID_YN,Valid*,C,META SCM_MST_SHEET_COLUMNS(SCP0005/Distribution Route),SCP0005,Distribution Route,C,메타 SCP0005/Distribution Route,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_FRI,Fri,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_MON,Mon,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_SAT,Sat,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_SUN,Sun,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_THU,Thu,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_TUE,Tue,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,DAYS_WED,Wed,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,L,메타 SCP0005/POPUP,PASS,AS-IS left ↔ TO-BE left
+SCP0005,POPUP,LAST_UPDATE_DATE,Last Update Date,C,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,C,메타 SCP0005/POPUP,PASS,AS-IS center ↔ TO-BE center
+SCP0005,POPUP,LT_ARRIVAL_INLAND,Arrival Inland,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,LT_DEPARTURE_INLAND,Departure Inland,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,LT_LAY_OFF_CLEARANCE,Lay Off/Customs Clearance,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,LT_SUM,Total L/T,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,LT_VOYAGE,Voyage,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,LT_WAIT_SHIPPING,Waiting For Shipping,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right
+SCP0005,POPUP,ROUTE_ID,Route Id,R,META SCM_MST_SHEET_COLUMNS(SCP0005/POPUP),SCP0005,POPUP,R,메타 SCP0005/POPUP,PASS,AS-IS right ↔ TO-BE right

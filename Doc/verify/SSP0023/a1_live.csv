@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+SSP0023,main|행구성,SSP0023_GET_SHIPMENT_PLAN,PASS,308,308,"[행 구성] 키 ['ELECTRODE_TYPE', 'MODEL_ID', 'ITEM_ID', 'FROM_SITE', 'PSI_NAME', 'NICK_NAME', 'MEASURE_NAME'] · 키당 Measure 수 AS-IS [1] TO-BE [1] · 중복 (키,Measure) AS-IS 0 TO-BE 0 · Measure 11종 행 수 일치",
+SSP0023,main,SSP0023_GET_SHIPMENT_PLAN,REVIEW,308,308,"AS-IS 308행 · TO-BE 308행 · 키 ['ELECTRODE_TYPE', 'MODEL_ID', 'ITEM_ID', 'FROM_SITE', 'PSI_NAME', 'NICK_NAME', 'MEASURE', 'MEASURE_NAME'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 79794칸(숫자 컬럼 260) · 불일치 컬럼 234 · TOT_BOH_QTY 231건 예 15.0↔15416.0 · TOT_BOH_QTY_PCM 231건 예 15.0↔15416.0 · TOT_BOH_QTY_CELL 231건 예 15.0↔15416.0 · X_M_202611 8건 예 5203298.0↔5225520.0",

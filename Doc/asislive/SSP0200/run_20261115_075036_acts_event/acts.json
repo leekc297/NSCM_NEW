@@ -1,0 +1,21 @@
+{
+ "id": "SSP0200",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [],
+ "skipped": [
+  {
+   "control": "spdMain",
+   "why": "조회 결과 행이 없어 붙여넣을 셀이 없음",
+   "scenarios": [
+    "SSP0200-Sae259d",
+    "SSP0200-Sa21fb1",
+    "SSP0200-Se4684b"
+   ]
+  }
+ ],
+ "at": "2026-11-15 07:50:09",
+ "edit_mode": true,
+ "note": "실행한 조작 없음"
+}

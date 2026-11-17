@@ -1,3 +1,4 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"shipping/delegate","SSP0020","features/shipping/src/pages/delegate/Delegate.tsx","114","endpoint","진입 자동조회 금지 — keep-alive 잔여 filters 무효화(§5-7) + 컬럼메타 1회 fetch(2시트)."
+"shipping/delegate","SSP0020","features/shipping/src/pages/delegate/components/DelegateGrid.tsx","24","code","없어 SmartColMergeOld() 가 병합 기준 컬럼을 못 찾고 즉시 return(SpreadInfo.cs:13225-13240)."
+"shipping/delegate","SSP0020","features/shipping/src/pages/delegate/Delegate.tsx","195","code","`string.IsNullOrEmpty(sDelegateeID) && UserName_Search(txtDelegatee.Text) == false → return`"
 "shipping/delegate","SSP0020","features/shipping/src/pages/delegate/useDelegateStore.ts","96","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch (2시트) — 미등록/실패 시 빈 배열(그리드 constants fallback)."

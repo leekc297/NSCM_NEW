@@ -1,5 +1,5 @@
 {
- "at": "2026-11-02T05:15:49.516Z",
+ "at": "2026-11-13T20:09:51.665Z",
  "search": {
   "Division*": {
    "label": "Div",
@@ -35,6 +35,7 @@
    "label": "From Site",
    "opts": [
     "SELECT ALL",
+    "AU000062_81-P",
     "HQ05-W",
     "HQ07-A",
     "HQ07-E",
@@ -87,6 +88,7 @@
     "SELECT ALL",
     "EG00",
     "AC00-A",
+    "AU000062_81-P",
     "EG01_81-W",
     "HQ05-W",
     "HQ07-A",
@@ -579,6 +581,31 @@
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0028\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P",
+     "v": "Pack"
+    },
+    {
+     "c": "A",
+     "v": "Cell"
+    },
+    {
+     "c": "E",
+     "v": "Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
    "n": 14,
@@ -659,7 +686,29 @@
      "c": "EE_HG",
      "v": "EE_HG Electrode(HG)"
     }
-   ]
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -691,42 +740,23 @@
      "c": "RAI",
      "v": "RAIL"
     }
-   ]
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0028\"}",
-   "status": 200,
-   "n": 3,
-   "keys": [
-    "CODE",
-    "NAME"
    ],
-   "rows": [
-    {
-     "c": "P",
-     "v": "Pack"
-    },
-    {
-     "c": "A",
-     "v": "Cell"
-    },
-    {
-     "c": "E",
-     "v": "Electrode"
-    }
-   ]
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"FromSiteByDivision\",\"mnuId\":\"SCP0028\",\"divisionId\":\"''\"}",
    "status": 200,
-   "n": 106,
+   "n": 107,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
+    {
+     "c": "AU000062_81-P",
+     "v": "AU000062_81-P"
+    },
     {
      "c": "CN00254300_40-P",
      "v": "CN00254300_40-P"
@@ -1151,11 +1181,12 @@
      "c": "US02562600_82-P",
      "v": "US02562600_82-P"
     }
-   ]
+   ],
+   "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 2,
    "keys": [
@@ -1171,13 +1202,92 @@
      "c": "N",
      "v": "N"
     }
-   ]
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0028\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "40",
+     "v": "Mobility & IT Battery"
+    },
+    {
+     "c": "81",
+     "v": "Automotive Battery"
+    },
+    {
+     "c": "81_HD",
+     "v": "Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "Automotive Battery(HG)"
+    },
+    {
+     "c": "81_HM",
+     "v": "Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "Automotive Battery(ST)"
+    },
+    {
+     "c": "81_UC",
+     "v": "Automotive Battery(UC)"
+    },
+    {
+     "c": "82",
+     "v": "ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "Electrode"
+    },
+    {
+     "c": "EE_HD",
+     "v": "Electrode(HD)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "Electrode(HG)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "Electrode(HM)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "Electrode(ST)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "Electrode(UC)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"ToSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 2722,
+   "n": 2723,
    "keys": [
     "CODE",
     "NAME"
@@ -6594,6 +6704,10 @@
     {
      "c": "AC00-A",
      "v": "AC00-A"
+    },
+    {
+     "c": "AU000062_81-P",
+     "v": "AU000062_81-P"
     },
     {
      "c": "EG01_81-W",
@@ -12071,114 +12185,23 @@
      "c": "이엔테크_KR_KWJ",
      "v": "이엔테크_KR_KWJ"
     }
-   ]
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": []
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 2,
-   "keys": [
-    "CODE",
-    "NAME"
    ],
-   "rows": [
-    {
-     "c": "Y",
-     "v": "Y"
-    },
-    {
-     "c": "N",
-     "v": "N"
-    }
-   ]
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0028\"}",
-   "status": 200,
-   "n": 14,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "40",
-     "v": "Mobility & IT Battery"
-    },
-    {
-     "c": "81",
-     "v": "Automotive Battery"
-    },
-    {
-     "c": "81_HD",
-     "v": "Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "Automotive Battery(HG)"
-    },
-    {
-     "c": "81_HM",
-     "v": "Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "Automotive Battery(ST)"
-    },
-    {
-     "c": "81_UC",
-     "v": "Automotive Battery(UC)"
-    },
-    {
-     "c": "82",
-     "v": "ESS Battery"
-    },
-    {
-     "c": "EE",
-     "v": "Electrode"
-    },
-    {
-     "c": "EE_HD",
-     "v": "Electrode(HD)"
-    },
-    {
-     "c": "EE_HG",
-     "v": "Electrode(HG)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "Electrode(HM)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "Electrode(ST)"
-    },
-    {
-     "c": "EE_UC",
-     "v": "Electrode(UC)"
-    }
-   ]
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"FromSiteByDivision\",\"mnuId\":\"SCP0028\",\"divisionId\":\"'81'\"}",
    "status": 200,
-   "n": 29,
+   "n": 30,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
+    {
+     "c": "AU000062_81-P",
+     "v": "AU000062_81-P"
+    },
     {
      "c": "HQ05-W",
      "v": "HQ05-W"
@@ -12295,13 +12318,14 @@
      "c": "WA00-P",
      "v": "WA00-P"
     }
-   ]
+   ],
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"ToSiteByDivision\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 485,
+   "n": 486,
    "keys": [
     "CODE",
     "NAME"
@@ -12314,6 +12338,10 @@
     {
      "c": "AC00-A",
      "v": "AC00-A"
+    },
+    {
+     "c": "AU000062_81-P",
+     "v": "AU000062_81-P"
     },
     {
      "c": "EG01_81-W",
@@ -14247,7 +14275,8 @@
      "c": "kokam_KR_NSN",
      "v": "kokam_KR_NSN"
     }
-   ]
+   ],
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
@@ -14271,7 +14300,8 @@
      "c": "E",
      "v": "Electrode"
     }
-   ]
+   ],
+   "user": "minyonglee1"
   }
  ]
 }

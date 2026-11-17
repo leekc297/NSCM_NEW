@@ -30,6 +30,9 @@ export interface ModelPopupSelection {
   itemName: string;
   nickName: string;
   itemType: string;
+  // 팝업에 조회된 값 그대로 — 신규 행의 Model Group · Model Prod. Country 칸에 넣는다(사용자 요청 2026-11-12).
+  mdlGr: string;
+  mdlPrdnCtry: string;
 }
 
 interface ModelPopupModalProps {
@@ -45,6 +48,8 @@ const toSelection = (row: ModelRow): ModelPopupSelection => ({
   itemName: row.ITEM_NAME ?? '',
   nickName: row.NICK_NAME ?? '',
   itemType: row.ITEM_TYPE ?? '',
+  mdlGr: row.MDL_GR ?? '',
+  mdlPrdnCtry: row.MDL_PRDN_CTRY ?? '',
 });
 
 export const ModelPopupModal = ({ open, modalClose, preSearchParams, onSelect }: ModelPopupModalProps) => {

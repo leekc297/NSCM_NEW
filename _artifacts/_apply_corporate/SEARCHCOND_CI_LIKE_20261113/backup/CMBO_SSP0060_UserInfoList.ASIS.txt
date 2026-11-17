@@ -1,0 +1,8 @@
+SELECT USER_ID AS CODE
+     , USER_NM AS NAME
+  FROM SCM_ADM_USER_M
+ WHERE ( @userName IS NULL
+      OR USER_ID LIKE '%' || @userName || '%'
+      OR USER_NM LIKE '%' || @userName || '%'
+      OR USER_ENG_NM LIKE '%' || @userName || '%' )
+ ORDER BY UPPER(USER_ID)

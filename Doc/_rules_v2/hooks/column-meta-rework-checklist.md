@@ -165,7 +165,7 @@ python _artifacts/_diagnostics/test_<sp>_first_row_null.py
 | Contribute View | DMF0043_01 | ✅ (via SalesList) | `Y#YYYY#CODE`, `M#YYYYMM#CODE` | 검토 필요 |
 
 **재작업 시 의무**:
-1. DMF0008 / DMF0043_01 의 SP body NVL 확인 → 없으면 §3.1 fix 적용
+1. DMF0008 / DMF0043_01 의 SP body NVL 확인 → 없으면 `pivot-dynamic-column-nvl.md` §3.1 fix 적용 (2026-11-13 정정: 문서명 명시. 이 문서에는 §3.1 없음)
 2. 4 화면 모두 SHEET_COLUMNS 메타 ↔ FE BASE_COLUMNS binding 매칭 0 mismatch 확인
 3. 각 화면 메인 SP `python test_*_first_row_null.py` 실행 → 0 NULL 기대값
 4. 클라우드 patch 적용 후 화면 검증 (Network 탭 + 화면 표시)
@@ -198,5 +198,5 @@ python _artifacts/_diagnostics/test_<sp>_first_row_null.py
 - `oracle-db-workflow.md` — Oracle 작업 전반
 - `anti-simplification.md` — DDL 추측 금지 (최우선)
 - `screen-completion-gate.md` — 화면 종료 8 게이트
-- 메모리 `feedback_be_no_modification_rule.md` — BE 변경 절대 금지
+- 메모리 `feedback_be_no_modification_rule.md` — BE 변경 절대 금지 (2026-11-13 정정: BE 수정 가부는 작업 모드를 따름. `tools/Harness/harness.json` repairScope 가 DB MODE(DB_ONLY)면 직접 수정 금지, UI/DB MODE(DB_FE)면 직접 수정. CLAUDE.md §1-8)
 - 메모리 `feedback_shared_global_prop_change_forbidden.md` — shared/* 전역 변경 금지

@@ -1,0 +1,478 @@
+{
+ "id": "SSP0023",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN"
+   ],
+   "rows": [
+    [
+     "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+     255
+    ],
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     25
+    ],
+    [
+     "SSP0023_GET_SHIPMENT_PLAN",
+     308
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "BtnMaterialId2",
+   "ok": false,
+   "error": "InvalidOperationException: click:BtnMaterialId2 failed: InvalidOperationException: control not found: BtnMaterialId2",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0023-S02db5e",
+    "SSP0023-Sb76bed"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0023-S9b65c6",
+    "SSP0023-S69448c",
+    "SSP0023-S8271f9",
+    "SSP0023-S5a1a8f",
+    "SSP0023-S67bbf1",
+    "SSP0023-Se946c7",
+    "SSP0023-S162e8f",
+    "SSP0023-S92fbfa",
+    "SSP0023-S010895",
+    "SSP0023-Sf683ab",
+    "SSP0023-Sac59da",
+    "SSP0023-Sae1a99",
+    "SSP0023-Sb8d359",
+    "SSP0023-S7b31fe",
+    "SSP0023-S7a38e2",
+    "SSP0023-Sc684ba",
+    "SSP0023-S346303",
+    "SSP0023-Sede481",
+    "SSP0023-S00ad82",
+    "SSP0023-S26ff5f",
+    "SSP0023-S15bf3f",
+    "SSP0023-Sdcee05",
+    "SSP0023-S622f51",
+    "SSP0023-S65b487",
+    "SSP0023-Se5ed01",
+    "SSP0023-S3ddd6a",
+    "SSP0023-S1c1fb0",
+    "SSP0023-S193fc5",
+    "SSP0023-Sf4b884",
+    "SSP0023-Se3eb5d",
+    "SSP0023-S2a4e14",
+    "SSP0023-S8eaacc",
+    "SSP0023-Sa3dfc1",
+    "SSP0023-S6d9c87",
+    "SSP0023-S7bb818",
+    "SSP0023-S2ddc71",
+    "SSP0023-S538e65",
+    "SSP0023-Sd1eaf7",
+    "SSP0023-Sb9eb21",
+    "SSP0023-S74d881",
+    "SSP0023-S37dbbe",
+    "SSP0023-S3a85b3",
+    "SSP0023-S2dcf79",
+    "SSP0023-S1cb5f9",
+    "SSP0023-Se966b4",
+    "SSP0023-S96c871",
+    "SSP0023-Sdf6ddd",
+    "SSP0023-S0d3f95",
+    "SSP0023-S10779b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0023-S97242e",
+    "SSP0023-S6442a1",
+    "SSP0023-S569dec"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "BtnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "error": "UI thread busy (modal dialog?)"
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "scenarios": [
+    "SSP0023-S22b0e3",
+    "SSP0023-S7b6c51",
+    "SSP0023-S18b4f6",
+    "SSP0023-S5cd96f",
+    "SSP0023-S44e6e0",
+    "SSP0023-S459dcd",
+    "SSP0023-S67bbf1",
+    "SSP0023-Se946c7",
+    "SSP0023-S162e8f",
+    "SSP0023-S92fbfa",
+    "SSP0023-S010895",
+    "SSP0023-Sf683ab",
+    "SSP0023-Sac59da",
+    "SSP0023-Sae1a99",
+    "SSP0023-Sb8d359",
+    "SSP0023-S7b31fe",
+    "SSP0023-S7a38e2",
+    "SSP0023-Sc684ba",
+    "SSP0023-S346303",
+    "SSP0023-Sede481",
+    "SSP0023-S00ad82",
+    "SSP0023-S26ff5f",
+    "SSP0023-S15bf3f",
+    "SSP0023-S17c4a2",
+    "SSP0023-Sdcee05",
+    "SSP0023-S622f51",
+    "SSP0023-S65b487",
+    "SSP0023-Se5ed01",
+    "SSP0023-S3ddd6a",
+    "SSP0023-S1c1fb0",
+    "SSP0023-S193fc5",
+    "SSP0023-Sf4b884",
+    "SSP0023-Se3eb5d",
+    "SSP0023-S2a4e14",
+    "SSP0023-S8eaacc",
+    "SSP0023-Sa3dfc1",
+    "SSP0023-S6d9c87",
+    "SSP0023-S7bb818",
+    "SSP0023-S2ddc71",
+    "SSP0023-S538e65",
+    "SSP0023-Sd1eaf7",
+    "SSP0023-Sb9eb21",
+    "SSP0023-S74d881",
+    "SSP0023-S37dbbe",
+    "SSP0023-S3a85b3",
+    "SSP0023-S2dcf79",
+    "SSP0023-S1cb5f9",
+    "SSP0023-Se966b4",
+    "SSP0023-S96c871",
+    "SSP0023-Sdf6ddd",
+    "SSP0023-S0d3f95",
+    "SSP0023-S10779b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 29575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0023-Sea1449",
+    "SSP0023-Sec3442"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId2",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 29575,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SSP0023-S02db5e",
+    "SSP0023-Sb76bed"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnMeasure",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_TitleSetForm_Popup",
+     "title": "Measure Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SSP0023-S9b65c6",
+    "SSP0023-S69448c",
+    "SSP0023-S8271f9",
+    "SSP0023-S5a1a8f"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnRequestor",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SSP0023-S97242e",
+    "SSP0023-S6442a1",
+    "SSP0023-S569dec"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnSearch",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "ProgressForm",
+     "error": "UI thread busy (modal dialog?)"
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL"
+   ],
+   "scenarios": [
+    "SSP0023-S22b0e3",
+    "SSP0023-S7b6c51",
+    "SSP0023-S18b4f6",
+    "SSP0023-S44e6e0",
+    "SSP0023-S459dcd"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "formDown",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SSP0023_GET_SHEET_CALENDAR_3SPAN",
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL"
+   ],
+   "scenarios": [
+    "SSP0023-Sc80266",
+    "SSP0023-S4c15ba",
+    "SSP0023-Sda4316",
+    "SSP0023-S9ae75e",
+    "SSP0023-S8ba9a2",
+    "SSP0023-S4ac210",
+    "SSP0023-S4d9416",
+    "SSP0023-Sbc9ae6",
+    "SSP0023-Sda05da",
+    "SSP0023-S4be28f",
+    "SSP0023-S32e97d",
+    "SSP0023-S2d31a6"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [
+    {
+     "automation": true,
+     "parent": 33560,
+     "started": "20:38:29",
+     "pid": 31752,
+     "title": "SSP0023_ShipmentPlanElectrode[Shipment Plan Detail Excel]_20261114203829.xlsx - Excel",
+     "closed": true,
+     "path": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP0023_ShipmentPlanElectrode[Shipment Plan Detail Excel]_20261114203829.xlsx",
+     "file_bytes": 43109,
+     "sheets": [
+      {
+       "sheet": "Shipment Plan Detail Excel",
+       "rows": 1569,
+       "cols": 6
+      }
+     ]
+    }
+   ],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnSimulation",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 22
+  },
+  {
+   "control": "btnExcelFormDownload",
+   "why": "파일·Excel·인쇄 버튼(이름 규칙)",
+   "scenarios": 11
+  },
+  {
+   "control": "btnExcelUpload",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 16
+  },
+  {
+   "control": "btnSimulation",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 7
+  }
+ ],
+ "at": "2026-11-14 20:33:33.278",
+ "preset": {
+  "name": "cboBucketType",
+  "token": "cboBucketType=i0",
+  "kw": {
+   "name": "cboBucketType",
+   "index": "0"
+  },
+  "label": "cboBucketType 콤보 0번째 항목",
+  "ok": true,
+  "error": null,
+  "applied": "combo:0:Daily",
+  "value": "DAILY",
+  "text": "Daily",
+  "checked": null,
+  "selected_index": 0
+ },
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

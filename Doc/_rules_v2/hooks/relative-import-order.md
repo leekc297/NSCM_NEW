@@ -89,6 +89,7 @@ grep -nE "^import.*from '\./|^import.*from '\.\.\/" {FILE} | head -20
 ```bash
 # 권장 — ESLint 자동 정렬
 pnpm run lint:fix   # 또는 eslint --fix {FILE}
+# (2026-11-13 정정: 실행 주체 = 사용자. AI 직접 실행 금지 — 실행 hook block-dev-commands 차단. 사용자가 "린트 해줘" 요청 시에만 _artifacts/_tools/fe-check.ps1 lint 사용, 미실행이면 미실행(ERROR) 보고)
 ```
 
 ## §4. 자주 발생하는 패턴
@@ -101,4 +102,4 @@ pnpm run lint:fix   # 또는 eslint --fix {FILE}
 
 ## §5. eslint config 위치
 
-`packages/foundation/.eslintrc.cjs` 또는 root `.eslintrc.cjs` 의 `import/order` rule. 변경 시 모든 화면에 영향 — 신중 검토.
+`nscm-fe/configs/eslint.config.mjs` 의 `import/order` rule (root `nscm-fe/eslint.config.mjs` · `nscm-fe/packages/foundation/eslint.config.mjs` 는 flat config 진입 파일). (2026-11-13 정정: 없는 `.eslintrc.cjs` 2종 → 실제 flat config `eslint.config.mjs`) 변경 시 모든 화면에 영향 — 신중 검토.

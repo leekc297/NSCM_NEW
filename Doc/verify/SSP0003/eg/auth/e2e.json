@@ -1,0 +1,1570 @@
+[
+ {
+  "eg": "EG271",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+  "result": "ERROR",
+  "expected": "후보 Div 선택 후 표시값=코드",
+  "actual": "선택 실패",
+  "asis": "",
+  "note": "측정 경로 실패 — 해당 Div 판정 없음",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "AS-IS Div·GROUP 분기 문장",
+  "actual": "없음(살아있는 메서드 전체 상태 문장 6건 중 분기 0)",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG275",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "AS-IS Div·GROUP 분기 문장",
+  "actual": "없음(살아있는 메서드 전체 상태 문장 6건 중 분기 0)",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "AS-IS Div·GROUP 분기 문장",
+  "actual": "없음(살아있는 메서드 전체 상태 문장 6건 중 분기 0)",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "SSP0003",
+  "target": "CR-070 공통버튼",
+  "ctx": "Div ",
+  "result": "ERROR",
+  "expected": "권한 프로시저 결과",
+  "actual": "facts 에 이 Div 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG212",
+  "screen": "SSP0003",
+  "target": "Division 전환",
+  "ctx": "후보 14개 순회",
+  "result": "PASS",
+  "expected": "Division 전환 중 세션 오류(401/403) 0 — DM-163",
+  "actual": "0건(5xx 0건 별도)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG024",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "Div 전환",
+  "result": "NA",
+  "expected": "Div 2개 이상",
+  "actual": "선택 가능 Div 14개 — 전환 시나리오 없음(계정 권한 ,40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "Div 전환",
+  "result": "NA",
+  "expected": "Div 2개 이상",
+  "actual": "선택 가능 Div 14개",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0003",
+  "target": "메뉴 트리",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0003",
+  "target": "Division 후보",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0003",
+  "target": "자동 선택",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 40",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 40 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0003",
+  "target": "메뉴 트리",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0003",
+  "target": "Division 후보",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0003",
+  "target": "자동 선택",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 40",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 40 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0003",
+  "target": "메뉴 트리",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0003",
+  "target": "Division 후보",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81_HM",
+  "actual": "후보 81_HM",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0003",
+  "target": "자동 선택",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 81_HM",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 81_HM 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0003",
+  "target": "메뉴 트리",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0003",
+  "target": "Division 후보",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "판정필요",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,82,EE",
+  "actual": "후보 40,81,82 · 권한 있는데 없음 EE",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0003",
+  "target": "자동 선택",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "후보 다수 — 기본 선택",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 40,81,82 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0003",
+  "target": "메뉴 트리",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0003",
+  "target": "Division 후보",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
+  "actual": "후보 82",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0003",
+  "target": "자동 선택",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 82",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 82 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0003",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "40",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81_HD",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81_HG",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81_HM",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81_ST",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "81_UC",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "82",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "EE_HD",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "EE_HG",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "EE_HM",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "EE_ST",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Div 선택",
+  "ctx": "EE_UC",
+  "result": "ERROR",
+  "expected": "선택",
+  "actual": "실패",
+  "asis": "",
+  "note": "측정 경로 실패",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "SSP0003",
+  "target": "Measure 버튼",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "Measure 버튼",
+  "actual": "버튼·설정 창 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG402",
+  "screen": "SSP0003",
+  "target": "Measure 버튼",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "Measure 버튼",
+  "actual": "버튼·설정 창 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "SSP0003",
+  "target": "Column 버튼",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "Column Setting 버튼",
+  "actual": "버튼·설정 창 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG109",
+  "screen": "SSP0003",
+  "target": "Insert 그룹 차단",
+  "ctx": "SSP0003",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "InsertButton·InsertRow 경로에 GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG373",
+  "screen": "SSP0003",
+  "target": "Insert 차단 메시지",
+  "ctx": "SSP0003",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG126",
+  "screen": "SSP0003",
+  "target": "Insert",
+  "ctx": "Div 40",
+  "result": "ERROR",
+  "expected": "Insert 권한 있는 Div 에서 버튼",
+  "actual": "권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369)",
+  "asis": "CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG140",
+  "screen": "SSP0003",
+  "target": "Insert",
+  "ctx": "Div 40",
+  "result": "ERROR",
+  "expected": "Insert 권한 있는 Div 에서 버튼",
+  "actual": "권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369)",
+  "asis": "CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG319",
+  "screen": "SSP0003",
+  "target": "Insert",
+  "ctx": "Div 40",
+  "result": "ERROR",
+  "expected": "Insert 권한 있는 Div 에서 버튼",
+  "actual": "권한 코드는 있으나 버튼 비노출 — 이 조건에서 측정 불가(화면 기능·모드 확인 필요 · 노출 판정은 EG369)",
+  "asis": "CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG113",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=SSP0003)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=SSP0003)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG067",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=SSP0003)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/40/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "SSP0003",
+  "target": "SSP/81/SSP Planner",
+  "ctx": "Div ",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/81/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 4셀 · 불일치 4 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/81/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 4셀 · 불일치 4 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/81/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 4셀 · 불일치 4 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/81/SSP Viewer · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 4셀 · 불일치 4 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r1 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/82/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/82/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/82/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "SSP0003",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "SSP/82/SSP Planner · Div ",
+  "result": "FAIL",
+  "expected": "규칙 40컬럼 · 평가 불가 0",
+  "actual": "대조 2셀 · 불일치 2 · ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102]) ; ITEM_ID r0 편집=false/AS-IS 가능(기본(편집 모드 전체 해제) [그룹 GUEST 기준, 보유 그룹 합집합 CR-102])",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG315",
+  "screen": "SSP0003",
+  "target": "헤더 병합",
+  "ctx": "AS-IS 문장 28건",
+  "result": "ERROR",
+  "expected": "AS-IS 헤더 병합 (siSub.ColumnHeaderSpan(0, siSub.GetColumnIndex(DefColumns.LT)",
+  "actual": "[측정 전제 미충족] 헤더 1행 < 기대 2행(동적 컬럼·헤더 반영 전) — 화면 결함이 아니라 측정 실패(ERROR) · TO-BE 헤더 1행 병합 0개",
+  "asis": "SSP0003_ShipmentChangeRequestConfirm.cs:477",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG032",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "계정쌍",
+  "result": "ERROR",
+  "expected": "TITLESET_USER 보유·미보유 계정쌍",
+  "actual": "명부에 쌍 없음(보유 N · 미보유 Y)",
+  "asis": "SCM_MST_TITLESET_USER",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG395",
+  "screen": "SSP0003",
+  "target": "SSP0003",
+  "ctx": "저장 후 비움",
+  "result": "NA",
+  "expected": "Column 버튼",
+  "actual": "버튼 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG380",
+  "screen": "SSP0003",
+  "target": "무권한 첫 화면",
+  "ctx": "실계정 없음",
+  "result": "ERROR",
+  "expected": "Auth Request(권한 신청) 화면 메인 — DM-247",
+  "actual": "명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정)",
+  "asis": "DM-247·GAP-475",
+  "note": "메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ }
+]

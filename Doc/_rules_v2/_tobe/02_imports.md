@@ -58,8 +58,8 @@ import isoWeek from '@foundation/isoWeek';
 
 | 경로 | export | 사용 |
 |---|---|---|
-| `@master/components` | `ProjectByDivisionModal`, `ItemByDivisionModal`, `OwnerByDivisionModal`, `CustomerModal`, `TeamModal`, `RegionModal`, `StorageLocationModal`, `ColumnSettingModal`, `ProjectModal`, `OwnerModal` | 공용 modal |
-| `@master/components/searchFields` | (Phase 5 G9/G10 신규 추가 후) DivisionField, TeamField, ... | 조회조건 카탈로그 |
+| `features/master/src/components` | `ProjectByDivisionModal`, `ItemByDivisionModal`, `OwnerByDivisionModal`, `CustomerModal`, `TeamModal`, `RegionModal`, `StorageLocationModal`, `ColumnSettingModal`, `ProjectModal`, `OwnerModal` | 공용 modal (2026-11-13 정정: `@master/components` → `features/master/src/components` — `@master/*` 별칭은 `features/master/src/pages/*/index.ts` 로만 풀려 `@master/components` 는 존재하지 않음 · 실제 import = `from 'features/master/src/components'`) |
+| `features/master/src/components` (searchFields 는 같은 index.ts 에서 재export) | DivisionField, TeamField, ... | 조회조건 카탈로그 (11-13 정정) |
 
 ### §1.5 같은 화면 내부 import
 
@@ -73,13 +73,13 @@ import { MENU_ID, SHEETS } from './customer-model-mapping.constants';
 import { useCustomerModelMappingStore } from './useCustomerModelMappingStore';
 
 // sub-component → 상위 components (공용 modal)
-import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
+import { ItemByDivisionModal, ProjectByDivisionModal } from 'features/master/src/components'; // 2026-11-13 정정: '../../../components' → 비상대 경로 (§4 게이트 1 = 3단 상대경로 0건)
 ```
 
 **의무**:
 - 같은 폴더: `./X`
 - sub 폴더: `./components/X`
-- 부모 master 의 components: `../../../components` (master 도메인 안에서 상대 경로 허용 — 룰 03 §FE 의 예외)
+- 부모 master 의 components: `features/master/src/components` (2026-11-13 정정: `../../../components` 상대 경로 허용 → 비상대 경로 — §4 게이트 1(3단 상대경로 0건)·CLAUDE.md §4 ① 과 맞춤. 기존 master 화면의 `../../../components` 는 현황이며 신규 작성에 쓰지 않는다)
 
 ---
 
@@ -95,15 +95,15 @@ import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components
 - `Box` ← MUI 의 Box 직접 import 금지. `<div>` 또는 `<Stack>` 사용
 - `Container` / `Paper` ← 동일
 - `IconButton` ← `<Button>` 의 `iconComponent` prop 사용
-- `TextField` ← `<InputField>` 사용
+- `TextField` ← `<InputField>` 사용 (2026-11-13 정정: 현재 `@shared/lges` 는 `TextField` 를 export 함 — `packages/shared/src/lib/lges.ts` · '없음' 은 현행 코드와 다름)
 - `Dialog` ← `<CustomDialog>` 사용 (`@shared/components`)
 - `Autocomplete` ← `<CustomDropdown>` 사용
 
 ### §2.2 `@shared/mui` 정확 export
 
-✅ **있음**: `Grid` (MUI Grid v2)
+✅ **있음**: `Grid` (MUI Grid v2) · `Button` · `Typography` · `Tooltip` · `styled` · `Stack` · `useMediaQuery` · `useTheme` · `InputAdornment` · `Box` · `Popover` · `ThemeProvider` (2026-11-13 정정: `Grid` 만 → 현행 `packages/shared/src/lib/mui.ts` export 목록)
 
-❌ **없음**: 그 외 거의 모든 MUI 컴포넌트 (Box / Stack / Typography 등 → `@shared/lges` 또는 native HTML)
+❌ **없음**: 위 목록 외 MUI 컴포넌트 (→ `@shared/lges` 또는 native HTML) (11-13 정정: Box / Stack / Typography 는 현재 export 됨)
 
 ### §2.3 `@mescius/wijmo.grid` import 위치 (사고 사례)
 
@@ -131,7 +131,7 @@ import { GridAction } from '../../../../foundation/src/utils';      ❌
 
 **의무**: alias (`@shared/hooks` / `@foundation/utils`).
 
-**예외**: 같은 도메인 내부 `../../../components` (master/master 자기 자신 — DMF0006 grid 가 `@master/components` 대신 상대 경로 사용 — 변경 권장).
+**예외**: 같은 도메인 내부 `../../../components` (master/master 자기 자신 — DMF0006 grid 가 `@master/components` 대신 상대 경로 사용 — 변경 권장). (2026-11-13 정정: 이 예외는 신규 작성에 적용하지 않는다 — 화면 밖 공용 컴포넌트는 `'features/master/src/components'` 비상대 경로로 import. `@master/components` 별칭은 tsconfig paths 에 없음 · §2 표·예시와 같은 기준. 기존 화면의 `../../../components` 는 현황)
 
 ### §3.2 Feature 간 직접 import (admin → demand 등)
 
@@ -207,7 +207,7 @@ rg -n "import \{ FlexGrid \}" features/   # type 으로 변경 권장
 | `using GSCM.Windows.Forms.Controls;` (UsrCombo 등) | `import { CustomDropdown } from '@shared/components';` |
 | `using GSCM.Windows.Forms.Service;` (DataService) | `import { useTabProcQuery, useProcMutation } from '@shared/hooks';` |
 | `using GSCM.App.Core.Security;` (UserInfoContext) | `import { useSessionStore } from '@shared/stores';` (BE 가 자동 주입 — FE 사용 거의 X) |
-| `using GSCM.App.Core.Text;` (MessageHelper) | `import { useTranslation } from 'react-i18next';` + `setAlert/setConfirm` (`@shared/hooks`) |
+| `using GSCM.App.Core.Text;` (MessageHelper) | `useTranslation` (자동 주입 — import 하지 않음) + `useMessageStore` 의 `setAlert` (`@shared/stores`) (2026-11-13 정정: `react-i18next` import → 자동 주입(`configs/types/auto-imports.d.ts` = `@foundation/i18n`) · `setAlert/setConfirm (@shared/hooks)` → `useMessageStore.setAlert (@shared/stores)` — `@shared/hooks` 에 해당 export 없음 · `setConfirm` 은 저장소에 없음) |
 
 ---
 

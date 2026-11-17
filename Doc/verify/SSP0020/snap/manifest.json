@@ -1,0 +1,57 @@
+{
+ "조회조건_Div_40": {
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\조회조건_Div_40.aria.yml",
+  "sha8": "1412ea22",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 23:58",
+  "opinion": "누락 'All' 체크박스는 TO-BE Division 다중 선택 칸의 전체 선택 항목으로 옮겨 구현(AS-IS SSP0020_Delegate.cs:924~940 chkAll ↔ DelegateForm.tsx allOption · 정적 판정 T-08875613 PASS)",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "버튼_Div_40": {
+  "kind": "버튼",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\버튼_Div_40.aria.yml",
+  "sha8": "746c7ed3",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 23:58",
+  "opinion": "누락 USER_CHECK 는 버튼이 아닌 저장 전 위임자 실존 확인 SP 권한 코드(SCM_ADM_MNU_BTN_MPG_M SSP0020 · delegate.constants.ts:10·90). 툴바 버튼 Save·UnSet 은 있음",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "팝업_Delegatee": {
+  "kind": "팝업",
+  "scope": "Delegatee",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\팝업_Delegatee.aria.yml",
+  "sha8": "a60044bf",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 23:58",
+  "opinion": "User Popup 조회조건 User ID(Name) 1칸·그리드 User ID·User Name·English Name·Dept Name — 팝업 검사(eg_popup) 조회·필터·정렬 PASS(11-16 22:58)",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1920": {
+  "kind": "화면샷",
+  "scope": "1920",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\화면샷_1920.png",
+  "sha8": "b4061743",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 01:21",
+  "opinion": "11-17 01:2x 11회차 실측으로 기준본 교체 — 11-13 기준본은 그리드 0행 상태라 데이터 영역 크기가 달랐음(배치 차이 없음). 헤더 Valid 잔존은 CR-092 FAIL(V-d1f0e5dc) — 보완 뒤 재승인 필요",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1366": {
+  "kind": "화면샷",
+  "scope": "1366",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\화면샷_1366.png",
+  "sha8": "a8580906",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 01:21",
+  "opinion": "11-17 01:2x 11회차 실측으로 기준본 교체 — 11-13 기준본은 그리드 0행 상태라 데이터 영역 크기가 달랐음(배치 차이 없음). 헤더 Valid 잔존은 CR-092 FAIL(V-d1f0e5dc) — 보완 뒤 재승인 필요",
+  "validate": "NA",
+  "forced": false
+ }
+}

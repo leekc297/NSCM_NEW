@@ -1,0 +1,821 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 6개 전부 원문 등장: `SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP`, `SCM.SCM0001_GET_DIVISION`, `biz:CommonData.CommonDataList`, `SSP.SSP0024_GET_SHIP_MASTER`, `SSP.SSP0024_SAVE_SHIP_MASTER`, `SSP.SSP0002_GET_USER_INFO_LIST`
+2. business_analysis.md 에 SP 5개 전부 등장: `SSP0024_GET_ITEM_BY_DIVISION_POPUP`, `SCM0001_GET_DIVISION`, `SSP0024_GET_SHIP_MASTER`, `SSP0024_SAVE_SHIP_MASTER`, `SSP0002_GET_USER_INFO_LIST`
+3. screen_design.md 에 컨트롤 15개 전부 등장: `usrLayoutControl1`, `usrConditionPanel1`, `usrLayoutControl2`, `txtMaterialId`, `clbDivisionId`, `clbPlantSiteId`, `btnButtonList`, `spdMain`, `spdMain_Sheet1`, `btnModelId`, `cboPlantSite`, `cboDivision`, `btnMaterialId`, `txtNickName`, `txtModelId`
+4. screen_design.md 에 시트 2개 전부 등장: `Project`, `Ship Master Elec`
+5. screen_design.md 에 이벤트 핸들러 11개와 엔드포인트 전부 등장: `clbDivision_SelectedIndexChanged`, `btnButtonList_UsrButtonList_Click_Detected`, `spdMain_CellDoubleClick`, `Form_Load`, `ClbDivision_SelectedIndexChanged`, `SpdMain_CellClick`, `SpdMain_ComboSelChange`, `SpdMain_ClipboardPasted`, `SpdMain_KeyPress`, `BtnMaterialId_Click`, `BtnModelId_Click`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SSP0024-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SSP0024 As-is 분석서 — Shipment Master Electrode
+
+> 출처: AsisFacts 정적 추출 Fact Pack(SSP0024). 이 문서는 Fact Pack에 있는 사실만 담았습니다. Fact Pack에 없는 내용은 '확인 필요'로 적었습니다.
+> 주석 처리된 호출(commented_calls)은 0건입니다.
+
+## 1. 화면 개요
+
+| 항목 | 내용 |
+|---|---|
+| 화면 ID | SSP0024 |
+| 도메인 | SSP (프로젝트 `GSCM.SSP.Plan.UIL`) |
+| 메인 폼 클래스 | `SSP0024_ShipmentMasterElectrode` (Designer Text = `"SSP0024_ShipmentMasterElectrode"`) |
+| 팝업 클래스 | `SSP0024_ItembyDivisionPopup` (Designer Text = `"Item by DivisionPopup"`) |
+| Grid 구성 방식 | `HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)` |
+| 시트 | `Ship Master Elec`(메인, 메타+코드 연결), `Project`(팝업, 코드 하드코딩 전용) |
+
+### 1-1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs | GSCM.SSP.Plan.UIL.csproj | 902 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs | GSCM.SSP.Plan.UIL.csproj | 556 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs | GSCM.SSP.Plan.UIL.csproj | 422 |
+| current(only) | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs | GSCM.SSP.Plan.UIL.csproj | 450 |
+| shared | 없음 (Fact Pack에 shared 구분 파일 없음) | - | - |
+| legacy | 없음 (모든 파일이 variant `only`) | - | - |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+### 2-1. 메인 폼 `SSP0024_ShipmentMasterElectrode`
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP |
+|---|---|---:|---|---|---|
+| event:this.Load | `Form_Load` > InitControls > SetChangedControl | 191 | `biz:CommonData.CommonDataList` [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH | (UP_FX_GetCommonDataList 코드분기) |
+| event:cboDivision.SelectedIndexChanged | `ClbDivision_SelectedIndexChanged` > SetChangedControl | 191 | `biz:CommonData.CommonDataList` [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH | (UP_FX_GetCommonDataList 코드분기) |
+| button:FindButton | FindButton > FindData | 316 | `SSP.SSP0024_GET_SHIP_MASTER` | MATCH | SP SSP0024_GET_SHIP_MASTER |
+| button:SaveButton | SaveButton > SaveData | 467 | `SSP.SSP0024_SAVE_SHIP_MASTER` | MATCH | SP SSP0024_SAVE_SHIP_MASTER |
+| button:SaveButton | SaveButton > SaveData > FindData | 316 | `SSP.SSP0024_GET_SHIP_MASTER` | MATCH | SP SSP0024_GET_SHIP_MASTER (저장 후 재조회) |
+| button:EditButton | EditButton > GetSSPUserCheck | 883 | `SSP.SSP0002_GET_USER_INFO_LIST` | MATCH | SP SSP0002_GET_USER_INFO_LIST |
+| unreached(진입점 미연결) | `<field:dtMyDivision>` | 37 | `biz:CommonData.CommonDataList` [code=MyDivision] | BIZ_MATCH | - |
+| unreached(진입점 미연결) | `<field:dtPlantSiteByFactoryForSpread>` | 41 | `biz:CommonData.CommonDataList` [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH | - |
+| unreached(진입점 미연결) | `<field:dtElectrodePostOperCode>` | 49 | `biz:CommonData.CommonDataList` [code=ElectrodePostOperCode] | BIZ_MATCH | - |
+| unreached(진입점 미연결) | `<field:dtDomExpTypeCode>` | 51 | `biz:CommonData.CommonDataList` [code=DomExpTypeCode] | BIZ_MATCH | - |
+| unreached(진입점 미연결) | `<field:dtBuilding>` | 52 | `biz:CommonData.CommonDataList` [code=BuildingForShipMasterElec] | BIZ_MATCH | - |
+| unreached(진입점 미연결) | `<field:dtElectrodePackageType>` | 55 | `biz:CommonData.CommonDataList` [code=ElectrodePackageType] | BIZ_MATCH | - |
+
+> 위 `unreached` 6건은 필드 초기화식(`<field:...>`)입니다. 정적 파서는 이벤트 진입점에 연결하지 못했습니다. 다만 grid_code.csv의 InsertRow(374~377) 원문 인자에서 `dtPlantSiteByFactoryForSpread`, `dtElectrodePostOperCode`, `dtBuilding`이 셀 콤보 데이터로 쓰입니다. 필드 초기화식이 실행되는 시점(인스턴스 생성 시점인지)은 **확인 필요**입니다. `dtDomExpTypeCode`, `dtElectrodePackageType`이 어디에 쓰이는지도 **확인 필요**입니다.
+
+### 2-2. 팝업 `SSP0024_ItembyDivisionPopup`
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP |
+|---|---|---:|---|---|---|
+| event:this.Load | `Form_Load` > InitControls > GetDivision | 405 | `SCM.SCM0001_GET_DIVISION` | MATCH | SP SCM0001_GET_DIVISION |
+| event:this.Load | `Form_Load` > InitControls > GetDivisionbyPlantSiteCode | 415 | `biz:CommonData.CommonDataList` [code=PlantSiteByDivision] | BIZ_MATCH | (UP_FX_GetCommonDataList / UP_FX_GetCommonDataList_SCP 코드분기) |
+| event:this.Load | `Form_Load` > FindData | 267 | `SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP` | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+| event:this.clbDivisionId.SelectedIndexChanged | `clbDivision_SelectedIndexChanged` > GetDivisionbyPlantSiteCode | 415 | `biz:CommonData.CommonDataList` [code=PlantSiteByDivision] | BIZ_MATCH | - |
+| event:this.btnButtonList.UsrButtonList_Click_Detected | `btnButtonList_UsrButtonList_Click_Detected` > FindData | 267 | `SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP` | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+| button:FindButton | FindButton > FindData | 267 | `SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP` | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+
+## 3. 엔드포인트 전체 표
+| # | 엔드포인트 | 상태 | 호출 수 | 호출 위치(클래스.메서드:줄) | SP | 참조 객체(EXEC 전이 포함) |
+|---:|---|---|---:|---|---|---|
+| 1 | `SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP` | MATCH | 1 | ItembyDivisionPopup.FindData:267 | SSP0024_GET_ITEM_BY_DIVISION_POPUP | SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT |
+| 2 | `SCM.SCM0001_GET_DIVISION` | MATCH | 1 | ItembyDivisionPopup.GetDivision:405 | SCM0001_GET_DIVISION | SELECT:SCM_MST_DIVISION |
+| 3 | `biz:CommonData.CommonDataList` [code=PlantSiteByDivision] | BIZ_MATCH | 1 | ItembyDivisionPopup.GetDivisionbyPlantSiteCode:415 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, REF:STRING_SPLIT / UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, REF:STRING_SPLIT |
+| 4 | `biz:CommonData.CommonDataList` [code=MyDivision] | BIZ_MATCH | 1 | ShipmentMasterElectrode.`<field:dtMyDivision>`:37 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| 5 | `biz:CommonData.CommonDataList` [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH | 2 | ShipmentMasterElectrode.`<field:dtPlantSiteByFactoryForSpread>`:41, SetChangedControl:191 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, SELECT:SCM_MST_FACTORY_SN, REF:STRING_SPLIT |
+| 6 | `biz:CommonData.CommonDataList` [code=ElectrodePostOperCode] | BIZ_MATCH | 1 | ShipmentMasterElectrode.`<field:dtElectrodePostOperCode>`:49 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, REF:STRING_SPLIT |
+| 7 | `biz:CommonData.CommonDataList` [code=DomExpTypeCode] | BIZ_MATCH | 1 | ShipmentMasterElectrode.`<field:dtDomExpTypeCode>`:51 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| 8 | `biz:CommonData.CommonDataList` [code=BuildingForShipMasterElec] | BIZ_MATCH | 1 | ShipmentMasterElectrode.`<field:dtBuilding>`:52 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_MST_SITE, REF:STRING_SPLIT |
+| 9 | `biz:CommonData.CommonDataList` [code=ElectrodePackageType] | BIZ_MATCH | 1 | ShipmentMasterElectrode.`<field:dtElectrodePackageType>`:55 | - | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| 10 | `SSP.SSP0024_GET_SHIP_MASTER` | MATCH | 1 | ShipmentMasterElectrode.FindData:316 | SSP0024_GET_SHIP_MASTER | SELECT:SSP_MST_SHIP_MASTER_EE, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT |
+| 11 | `SSP.SSP0024_SAVE_SHIP_MASTER` | MATCH | 1 | ShipmentMasterElectrode.SaveData:467 | SSP0024_SAVE_SHIP_MASTER | EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_SHIP_MASTER_EE_H, MERGE:SSP_MST_SHIP_MASTER_EE, INSERT:SCM_SYS_LOG_BATCH |
+| 12 | `SSP.SSP0002_GET_USER_INFO_LIST` | MATCH | 1 | ShipmentMasterElectrode.GetSSPUserCheck:883 | SSP0002_GET_USER_INFO_LIST | SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+
+> InsertRow:375~377 원문에도 `Data.Common(Data.Type.PlantSiteByFactoryEEOperation, false, "40,81,82,81_UC")`, `Data.Common(Data.Type.ElectrodePostOperCode, false, "", "")`, `Data.Common(Data.Type.BuildingForShipMasterElec, false, "","")` 식이 나옵니다(grid_code.csv의 args 컬럼). 그런데 raw 컬럼에서 실제 인자는 필드 변수(`dtPlantSiteByFactoryForSpread` 등)입니다. 그래서 이 식은 필드 초기화식이 전개된 것으로 보이며, 이 위치에서 별도 호출이 일어나는지는 **확인 필요**입니다.
+
+## 4. 이벤트 배선 표
+| # | 클래스 | 대상 | 이벤트 | 핸들러 | 배선 위치 |
+|---:|---|---|---|---|---|
+| 1 | ItembyDivisionPopup | this.clbDivisionId | SelectedIndexChanged | `clbDivision_SelectedIndexChanged` | Designer InitializeComponent:184 |
+| 2 | ItembyDivisionPopup | this.btnButtonList | UsrButtonList_Click_Detected | `btnButtonList_UsrButtonList_Click_Detected` | Designer InitializeComponent:277 |
+| 3 | ItembyDivisionPopup | this.spdMain | CellDoubleClick | `spdMain_CellDoubleClick` | Designer InitializeComponent:357 |
+| 4 | ItembyDivisionPopup | this | Load | `Form_Load` | .ctor:156 |
+| 5 | ShipmentMasterElectrode | this | Load | `Form_Load` | .ctor:109 |
+| 6 | ShipmentMasterElectrode | cboDivision | SelectedIndexChanged | `ClbDivision_SelectedIndexChanged` | InitControls:177 |
+| 7 | ShipmentMasterElectrode | spdMain | CellClick | `SpdMain_CellClick` | InitControls:178 |
+| 8 | ShipmentMasterElectrode | spdMain | ComboSelChange | `SpdMain_ComboSelChange` | InitControls:179 |
+| 9 | ShipmentMasterElectrode | spdMain | ClipboardPasted | `SpdMain_ClipboardPasted` | InitControls:180 |
+| 10 | ShipmentMasterElectrode | spdMain | KeyPress | `SpdMain_KeyPress` | InitControls:181 |
+| 11 | ShipmentMasterElectrode | this.btnMaterialId | Click | `BtnMaterialId_Click` | InitControls:183 |
+| 12 | ShipmentMasterElectrode | this.btnModelId | Click | `BtnModelId_Click` | InitControls:184 |
+
+핸들러별 사실(Fact Pack 근거):
+- `ClbDivision_SelectedIndexChanged`: 메인의 `cboDivision`(UsrCombo)에 배선되어 있고, SetChangedControl을 거쳐 PlantSiteByFactoryEEOperation을 조회합니다(191). SetChangedControl:194~195는 `txtMaterialId.Text = ""`, `txtModelId.Text = ""`로 값을 비웁니다. 핸들러 이름은 `Clb`로 시작하지만 배선 대상은 UsrCombo입니다.
+- `SpdMain_ComboSelChange`: `c["CODE"]`(612), `row.Field("DIVISION_ID")`(616), `row.Field("CODE")`(617), `drOperLT["POST_OPER_LT"]`(621)를 읽습니다. POST_OPER_LT 값을 어느 셀에 반영하는지는 **확인 필요**입니다.
+- `SpdMain_ClipboardPasted`(700): 붙여넣은 범위를 순회합니다. 열이 DIVISION_ID이고 `rDivisionID`가 빈값이면(`else!(rDivisionID != "")`) PLANT_SITE_ID 셀 콤보를 빈 DataTable(`dtEmpty`)로 설정합니다.
+- `BtnMaterialId_Click`(746): `txtMaterialId.Text = sMaterialId`. `BtnModelId_Click`(767): `txtModelId.Text = sModelId`. 값을 어디서 받아오는지(SSP0024_ItembyDivisionPopup를 띄우는지 등)는 **확인 필요**입니다.
+- `SpdMain_CellClick`, `SpdMain_KeyPress`, `spdMain_CellDoubleClick`(팝업): 내부 동작이 Fact Pack에 없어 **확인 필요**입니다.
+- `clbDivision_SelectedIndexChanged`(팝업): GetDivisionbyPlantSiteCode를 거쳐 PlantSiteByDivision을 조회합니다(415).
+- `btnButtonList_UsrButtonList_Click_Detected`(팝업): FindData를 거쳐 SSP0024_GET_ITEM_BY_DIVISION_POPUP을 호출합니다(267).
+- `Form_Load`(팝업): InitControls(GetDivision, GetDivisionbyPlantSiteCode)를 실행한 뒤 FindData로 자동 조회합니다. InitControls:188 `txtMaterialId.Text = sMaterial`, :190 `clbDivisionId.Enabled = false`, :191 `clbPlantSiteId.Enabled = false`.
+- `Form_Load`(메인): InitControls를 거쳐 SetChangedControl을 실행합니다(191).
+
+## 5. Grid 구성 방식
+**구성 방식: `HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)`**
+
+| 시트 | 클래스 | 생성 | 컬럼 정의 | 연결 규칙 | 컬럼 수 |
+|---|---|---|---|---|---:|
+| `Ship Master Elec` | ShipmentMasterElectrode | CreateSpread:206 AddSheet(`Ship Master Elec`, 1, 1, 30) → GetSheetInfo:207 → ChangeSheet:208 | InitSpread:221 `SetSheetHeaderColumn(siMain, 1)`. 메타는 SCM_MST_SHEET_COLUMNS 25행 | META+코드연결 | 25 |
+| `Project` | ItembyDivisionPopup | CreateSpread:202 AddSheet(`Project`, 1, 1, 30) → GetSheetInfo:203 → ChangeSheet:204 | InitSpread:214~224 AddTextColumn 11개(하드코딩) | 코드 하드코딩 전용(메타 없음) | 11 (DIVISION_NAME은 bVisible=false) |
+
+> grid_effective는 `Project` 시트를 division마다 11개로 집계합니다. 하지만 grid_code 원문에서 DIVISION_NAME(215)은 `bVisible=false`입니다. 실제로 보이는 컬럼 수(10개인지)는 **확인 필요**입니다.
+
+코드 표시 변경(OVERRIDE)은 두 Designer 모두 ColumnHeader 스타일입니다: HorizontalAlignment=General, NoteIndicatorColor=Red, Parent=`"ColumnHeaderDefaultEnhanced"`, VerticalAlignment=General. 위치는 팝업 Designer 373~376, 메인 Designer 469~472입니다.
+
+`Ship Master Elec` 셀 콤보(코드 설정): InsertRow:374~377에서 조건 `siMain != null && siMain.IsLock(siMain.SheetName) == false` 및 `siMain.SheetName == "Ship Master Elec"`일 때 설정합니다.
+| 컬럼 | 데이터 |
+|---|---|
+| DIVISION_ID | `dtMyDivisionIns` |
+| PLANT_SITE_ID | `dtPlantSiteByFactoryForSpread` (PlantSiteByFactoryEEOperation, `"40,81,82,81_UC"`) |
+| POST_OPER | `dtElectrodePostOperCode` |
+| BUILDING | `dtBuilding` |
+그 밖에 SetCellCombo:852(조건 `"" != pdivision`)와 ClipboardPasted:700(PLANT_SITE_ID → dtEmpty)도 셀 콤보를 설정합니다.
+
+### 5-1. Division별 차이
+| 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `Project` | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 |
+| `Ship Master Elec` | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 |
+
+- 메타 규칙상 모든 division에서 25컬럼이 전부 `기본`이고 `선택`은 0입니다(필수+기본/선택 = 25/0).
+- 코드에 division 분기로 컬럼을 표시하거나 숨기는 변경은 없습니다(분기 판단불가 0건).
+- division에 따라 달라지는 부분은 셀 콤보 데이터입니다. PLANT_SITE_ID 콤보는 `"40,81,82,81_UC"` 인자로 조회하고, SetCellCombo는 pdivision 값에 따라 동작합니다.
+- 실제 SP 실행 결과와 시트를 대조하는 단계는 실행되지 않았습니다(Fact Pack 10장: "매칭되는 시트가 없습니다").
+
+## 6. 확인 필요 항목
+| # | 항목 | 근거 |
+|---:|---|---|
+| 1 | `<field:...>` 6건(MyDivision, PlantSiteByFactoryEEOperation, ElectrodePostOperCode, DomExpTypeCode, BuildingForShipMasterElec, ElectrodePackageType)의 실행 시점과 사용처 | flow.csv `unreached` |
+| 2 | DomExpTypeCode / ElectrodePackageType 데이터가 DOM_EXP_TYPE_CODE / PACKAGE_TYPE_CODE 셀 콤보에 연결되는지 | InsertRow에는 4컬럼 콤보만 추출됨 |
+| 3 | InsertRow:374 `dtMyDivisionIns`의 출처 | Fact Pack에 정의 없음 |
+| 4 | 4-2절 `SaveButton:282 → PersonalSettingPopup.SaveData` 매핑(같은 클래스의 SaveData:467과 충돌 — 파서 오매핑 가능성) | Fact Pack 4-2 |
+| 5 | EditButton → GetSSPUserCheck(SSP0002_GET_USER_INFO_LIST) 결과로 편집 가부를 어떻게 판단하는지 | flow.csv |
+| 6 | BtnMaterialId_Click / BtnModelId_Click이 여는 팝업과 반환값 | props.csv 746, 767 |
+| 7 | 팝업 spdMain_CellDoubleClick의 반환 동작 | events.csv |
+| 8 | 메인 SpdMain_CellClick / SpdMain_KeyPress 동작 | events.csv |
+| 9 | Project 시트에서 실제 보이는 컬럼 수(DIVISION_NAME bVisible=false) | grid_code.csv 215 |
+| 10 | 메타 테이블 행(TB_FX_GroupMenuAuth 12, TB_FX_SearchCondition 6, TB_FX_Favorite 3, SCM_ADM_DB_SCRIPT_BACKUP 7) 내용 | Fact Pack 8장(파일명만 제공) |
+| 11 | 메인 SetChangedControl:189, FindData:301/302, Re_Design:355, InsertRow:379의 GetCheckedListValue 대상 컨트롤 | Fact Pack 4-2 |
+
+
+# 1차 분석서 — web_components.md
+# SSP0024 Web 컴포넌트 매핑 (React + Wijmo)
+
+> 라벨은 props.csv의 LayoutControlItem.Text 원문을 그대로 옮겼습니다. 아래 React/Wijmo 컴포넌트는 매핑 **후보**이며, TO-BE 공용 컴포넌트 이름은 이 Fact Pack에 없어 일반 명칭으로 적었습니다.
+
+## 1. 메인 화면 `SSP0024_ShipmentMasterElectrode` 컨트롤 매핑
+| AS-IS 컨트롤 | 유형 | LayoutItem(라벨 원문) | 크기(컨트롤 / 아이템) | 기능 사실 | TO-BE 후보 |
+|---|---|---|---|---|---|
+| cboPlantSite | UsrCheckedList | PlanSite → `"Plant Site"` | 138×21 / 199×29 | 데이터: PlantSiteByFactoryEEOperation(SetChangedControl:191) | 다중선택 콤보(Wijmo MultiSelect) |
+| cboDivision | UsrCombo | Division → `"Div"` | 110×20 / 135×29 | SelectedIndexChanged → ClbDivision_SelectedIndexChanged → Plant Site 재조회, Material/Model 비움 | 단일 선택 콤보(Wijmo ComboBox) |
+| txtMaterialId | UsrMultiLineEditor | MaterialID → `"Material"` | 121×21 / 185×29 | BtnMaterialId_Click에서 값 설정 | 멀티라인 입력 |
+| btnMaterialId | UsrButton | layoutControlItem5 → `"layoutControlItem4"`(표시 여부 확인 필요) | 39×25 / 43×29 | Click → BtnMaterialId_Click | 돋보기 버튼(팝업 호출 여부 확인 필요) |
+| txtNickName | TextEdit | NickName → `"Nick Name"` | 134×20 / 198×29 | - | 텍스트 입력 |
+| txtModelId | UsrMultiLineEditor | ModelId → `"Model"` | 115×21 / 179×29 | BtnModelId_Click에서 값 설정 | 멀티라인 입력 |
+| btnModelId | UsrButton | layoutControlItem4 (Text 없음) | 28×25 / 32×29 | Click → BtnModelId_Click | 돋보기 버튼 |
+| emptySpaceItem1 | EmptySpaceItem | - | 102×29 | - | 여백 |
+| usrConditionPanel1 | UsrConditionPanel | - | 1093×41, Dock=Top, PanelType=HidePanel | 조회조건 영역 | 조회조건 패널(접기 가능) |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView | - | 1093×533, Dock=Fill | 시트 `Ship Master Elec` | Wijmo FlexGrid |
+| (공통 버튼) | FindButton / SaveButton / EditButton | - | - | flow.csv 진입점 | 공통 툴바 버튼(메뉴 버튼 메타 기준 — 확인 필요) |
+
+## 2. 팝업 `SSP0024_ItembyDivisionPopup` 컨트롤 매핑
+| AS-IS 컨트롤 | 유형 | LayoutItem(라벨 원문) | 크기(컨트롤 / 아이템) | 기능 사실 | TO-BE 후보 |
+|---|---|---|---|---|---|
+| clbPlantSiteId | UsrCheckedList | lblPlantSite → `"Plant Site"` | 147×21 / 216×30 | InitControls:191 Enabled=false. 데이터: PlantSiteByDivision | 다중선택 콤보(비활성) |
+| clbDivisionId | UsrCheckedList | lblDivision → `"Division"` | 141×21 / 189×30 | InitControls:190 Enabled=false. SelectedIndexChanged → Plant Site 재조회. 데이터: SCM0001_GET_DIVISION | 다중선택 콤보(비활성) |
+| txtMaterialId | UsrMultiLineEditor | lbMaterialID → `"Material"` | 150×21 / 208×30 | InitControls:188 초기값 = sMaterial | 멀티라인 입력 |
+| btnButtonList | UsrButtonList | layoutControlItem1 (Text 없음) | 175×26 / 179×30 | UsrButtonList_Click_Detected → FindData | 팝업 내 버튼 그룹 |
+| emptySpaceItem1 | EmptySpaceItem | - | 173×30 | - | 여백 |
+| usrConditionPanel1 | UsrConditionPanel | - | 985×50, Dock=Top, HidePanel | - | 조회조건 패널 |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView | - | 985×524, Dock=Fill | 시트 `Project`, CellDoubleClick | Wijmo FlexGrid(더블클릭 선택) |
+| 폼 | - | Text `"Item by DivisionPopup"` | - | - | 모달 팝업 |
+
+## 3. 화면 배치
+- props.csv에는 SplitContainer(Orientation·SplitterDistance)가 **없습니다**. 두 화면 모두 Dock 구성(위쪽 조건 패널 Dock=Top, 아래쪽 그리드 Dock=Fill)인 **상/하 2단**입니다.
+
+| 화면 | 상단(조건 패널) | 하단(그리드) | 상:하 비율(높이 기준 계산) |
+|---|---|---|---|
+| 메인 | usrConditionPanel1 1093×41 | spdMain 1093×533 | 41 : 533 ≈ 7.1% : 92.9% |
+| 팝업 | usrConditionPanel1 985×50 | spdMain 985×524 | 50 : 524 ≈ 8.7% : 91.3% |
+
+- 메인 조건 영역은 한 줄입니다. layoutControlGroup2는 1093×49이고, 아이템 높이는 모두 29입니다. 아이템 배치 순서(좌표)는 Fact Pack에 없어 **확인 필요**입니다. 컨트롤 선언 순서는 btnModelId, cboPlantSite, cboDivision, txtMaterialId, btnMaterialId, txtNickName, txtModelId입니다.
+- usrLayoutControl1(657×184, Dock=Fill)은 두 화면 모두 Designer에 있습니다. 화면에서의 역할은 **확인 필요**입니다.
+
+## 4. 시트별 Grid 컬럼
+
+### 4-1. `Ship Master Elec` (메인 · META+코드연결 · 메타 SCM_MST_SHEET_COLUMNS 25행)
+생성: InitSpread:221 `SetSheetHeaderColumn`. 메타 소비 컬럼은 COLUMN_NAME, COLUMN_LABEL_NAME, COLUMN_WIDTH, HORIZONTAL_ALIGN_CODE, CELL_CONTROL_OBJECT_TYPE_CODE, CELL_COMBO_DATA_TYPE, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, UPPERCASE_APPLY_FLAG, VISIBLE_FLAG, VALID_YN, ATTRIBUTE1~5입니다. 컬럼별 폭·정렬·셀 타입 값은 Fact Pack에 없어 **확인 필요**입니다.
+
+| # | 컬럼 | 라벨(메타 원문) | 메타 판정 | 코드 셀 콤보 |
+|---:|---|---|---|---|
+| 1 | DIVISION_ID | `Div*` | 기본 | InsertRow:374 dtMyDivisionIns |
+| 2 | PLANT_SITE_ID | `Plant Site*` | 기본 | InsertRow:375 dtPlantSiteByFactoryForSpread / Paste:700 dtEmpty |
+| 3 | PLANT_SITE_CODE | `Plant Site Code` | 기본 | - |
+| 4 | MATERIAL_ID | `Material*` | 기본 | - |
+| 5 | MODEL_ID | `Model` | 기본 | - |
+| 6 | NICK_NAME | `Nick Name` | 기본 | - |
+| 7 | CELL_TYPE | `Cell Type` | 기본 | - |
+| 8 | ELECTRODE_TYPE | `Electrode Type` | 기본 | - |
+| 9 | ITEM_UOM | `UOM` | 기본 | - |
+| 10 | UOM_CONVERT_IN_TACT_TIME | `Pancake (m/cell)` | 기본 | - |
+| 11 | PC_ROLL_LENGTH | `Pancake Roll Length` | 기본 | - |
+| 12 | DOM_EXP_TYPE_CODE | `DOM/EXP.*` | 기본 | 확인 필요(dtDomExpTypeCode 연결 여부) |
+| 13 | PACKAGE_TYPE_CODE | `Package Type*` | 기본 | 확인 필요(dtElectrodePackageType 연결 여부) |
+| 14 | POST_OPER | `Post Oper.*` | 기본 | InsertRow:376 dtElectrodePostOperCode |
+| 15 | POST_OPER_LT | `Post Oper.LT(Day)` | 기본 | ComboSelChange:621에서 POST_OPER_LT 읽음 |
+| 16 | BUILDING | `Building*` | 기본 | InsertRow:377 dtBuilding |
+| 17 | BUILDING_DESC | `Building Desc.` | 기본 | - |
+| 18 | BOX_PER_CUT | `Box/Cut*` | 기본 | - |
+| 19 | STEELCRATE_PER_CUT | `Steelcrate/Cut*` | 기본 | - |
+| 20 | STEELRACK_PER_CUT | `Steelrack/Cut*` | 기본 | - |
+| 21 | REMARKS | `Remarks` | 기본 | - |
+| 22 | CREATED_BY | `Created By` | 기본 | - |
+| 23 | CREATION_DATE | `Creation Date` | 기본 | - |
+| 24 | LAST_UPDATED_BY | `Last Updated By` | 기본 | - |
+| 25 | LAST_UPDATE_DATE | `Last Update Date` | 기본 | - |
+
+> 위 표의 컬럼 순서는 grid_effective.csv 행 순서(알파벳순)를 그대로 따른 것이 아니라 업무 그룹별로 다시 묶은 것입니다. 실제 표시 순서(메타 정렬 컬럼)는 Fact Pack에 없어 **확인 필요**입니다.
+
+### 4-2. `Project` (팝업 · 코드 하드코딩 전용, 메타 없음)
+| # | 컬럼 | 헤더 원문 | 폭 | 표시 | 정렬 |
+|---:|---|---|---:|---|---|
+| 1 | DIVISION_ID | `division` (DefColumnsLabel.DivisionName) | 60 | true | Center/Center |
+| 2 | DIVISION_NAME | `division` (DefColumnsLabel.DivisionName) | 80 | **false** | - |
+| 3 | PLANT_SITE_CODE | `Plant Site Code` | 80 | true | (지정 없음) |
+| 4 | PLANT_SITE_ID | `Plant Site` | 80 | true | Center/Center |
+| 5 | MATERIAL_ID | `Material` | 100 | true | Center/Center |
+| 6 | MODEL_ID | `Model` | 150 | true | Center/Center |
+| 7 | CELL_TYPE | `Cell Type` | 80 | true | Center/Center |
+| 8 | NICK_NAME | `Nick Name` | 150 | true | Center/Center |
+| 9 | ELECTRODE_TYPE | `Electrode Type` | 80 | true | Center/Center |
+| 10 | ITEM_UOM | `UOM` | 60 | true | Center/Center |
+| 11 | UOM_CONVERT_IN_TACT_TIME | `Pancake (m/cell)` | 120 | true | (지정 없음) |
+
+모든 컬럼이 AddTextColumn이며 병합(FPMerge)은 None입니다.
+
+### 4-3. Division별 표시 차이 (grid_effective 기준)
+| 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `Ship Master Elec` | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 |
+| `Project` | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 |
+→ division에 따른 컬럼 표시 차이는 없습니다. (`Project`의 DIVISION_NAME bVisible=false는 division과 관계없는 코드 속성입니다.)
+
+## 5. 시트 연결 규칙
+| 시트 | 연결 규칙 | 의미 |
+|---|---|---|
+| `Ship Master Elec` | META+코드연결 | 코드가 AddSheet(`Ship Master Elec`)로 만든 시트에 메타(SCM_MST_SHEET_COLUMNS, PROGRAM_ID=SSP0024)를 SetSheetHeaderColumn으로 적용합니다. 셀 콤보는 코드(InsertRow·SetCellCombo·ClipboardPasted)가 덧붙입니다. |
+| `Project` | 코드 하드코딩 전용(메타 없음) | 팝업에서 AddSheet(`Project`) 후 AddTextColumn 11개로 구성합니다. |
+| 두 시트 공통 | ColumnHeader 스타일 OVERRIDE | Designer에서 ColumnHeaderDefaultEnhanced 기반으로 정렬 General, NoteIndicatorColor Red를 지정합니다. |
+
+
+# 1차 분석서 — tobe_design.md
+# SSP0024 TO-BE 설계 입력 (Shipment Master Electrode)
+
+> Fact Pack 기반 TO-BE 설계 후보입니다. 확정 사항이 아닌 것은 '미확정'에 모았습니다.
+
+## 1. 조회조건 (컨트롤 기준)
+
+### 1-1. 메인
+| 라벨(원문) | AS-IS 컨트롤 | 유형 | 데이터 / 연동 | TO-BE 후보 |
+|---|---|---|---|---|
+| `Plant Site` | cboPlantSite | UsrCheckedList(다중) | PlantSiteByFactoryEEOperation (Div 변경 시 재조회) | 다중선택 콤보 |
+| `Div` | cboDivision | UsrCombo(단일) | 변경 시 → Plant Site 재조회, Material·Model 비움(SetChangedControl:191·194·195). 콤보 원천 데이터 = 확인 필요 | 단일 콤보 |
+| `Material` | txtMaterialId + btnMaterialId | UsrMultiLineEditor + 버튼 | 버튼 클릭 → `txtMaterialId.Text = sMaterialId` | 멀티 입력 + 팝업 버튼 |
+| `Nick Name` | txtNickName | TextEdit | - | 텍스트 입력 |
+| `Model` | txtModelId + btnModelId | UsrMultiLineEditor + 버튼 | 버튼 클릭 → `txtModelId.Text = sModelId` | 멀티 입력 + 팝업 버튼 |
+
+FindData:301~302에서 GetCheckedListValue를 2회 호출합니다. SSP0024_GET_SHIP_MASTER에 넘기는 파라미터 목록은 **미확정**입니다.
+
+### 1-2. 팝업 (Item by DivisionPopup)
+| 라벨(원문) | AS-IS 컨트롤 | 상태 | 데이터 |
+|---|---|---|---|
+| `Division` | clbDivisionId | Enabled=false | SCM.SCM0001_GET_DIVISION |
+| `Plant Site` | clbPlantSiteId | Enabled=false | CommonData PlantSiteByDivision |
+| `Material` | txtMaterialId | 초기값 sMaterial | - |
+
+## 2. 액션별 호출 API 후보
+| 화면 | 액션(버튼/이벤트) | AS-IS 경로 | 호출 엔드포인트 | TO-BE API 후보 |
+|---|---|---|---|---|
+| 메인 | 화면 로드 | Form_Load > InitControls > SetChangedControl | CommonData PlantSiteByFactoryEEOperation | 공통코드 조회 API |
+| 메인 | Div 변경 | ClbDivision_SelectedIndexChanged > SetChangedControl | CommonData PlantSiteByFactoryEEOperation | 공통코드 조회 API(division 파라미터) |
+| 메인 | 조회 | FindButton > FindData | SSP.SSP0024_GET_SHIP_MASTER | 조회 API → SSP0024_GET_SHIP_MASTER |
+| 메인 | 저장 | SaveButton > SaveData → FindData | SSP.SSP0024_SAVE_SHIP_MASTER → SSP.SSP0024_GET_SHIP_MASTER | 저장 API → SSP0024_SAVE_SHIP_MASTER, 성공 후 재조회 |
+| 메인 | 편집 | EditButton > GetSSPUserCheck | SSP.SSP0002_GET_USER_INFO_LIST | 사용자 권한 확인 API |
+| 메인 | 행 추가 | InsertRow (진입 버튼 = 확인 필요) | (셀 콤보 데이터: MyDivision(Ins), PlantSiteByFactoryEEOperation "40,81,82,81_UC", ElectrodePostOperCode, BuildingForShipMasterElec) | 공통코드 조회 API ×4 (화면 로드 때 미리 받아두는 방식 검토) |
+| 메인 | 셀 콤보 변경 | SpdMain_ComboSelChange | (API 호출 없음, POST_OPER_LT 등 로컬 데이터 참조) | FE 처리 |
+| 메인 | 붙여넣기 | SpdMain_ClipboardPasted | (API 호출 없음) DIVISION_ID 빈값이면 PLANT_SITE_ID 콤보를 비움 | FE 처리 |
+| 메인 | 셀 클릭 / 키 입력 | SpdMain_CellClick / SpdMain_KeyPress | 동작 확인 필요 | 미확정 |
+| 메인 | Material/Model 버튼 | BtnMaterialId_Click / BtnModelId_Click | 직접 호출 엔드포인트 없음. 팝업 연계 여부 확인 필요 | 팝업 컴포넌트 |
+| 팝업 | 로드 | Form_Load > InitControls / FindData | SCM.SCM0001_GET_DIVISION, CommonData PlantSiteByDivision, SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | division 조회 + 공통코드 + 팝업 조회 API |
+| 팝업 | Division 변경 | clbDivision_SelectedIndexChanged | CommonData PlantSiteByDivision | 공통코드 조회 API |
+| 팝업 | 조회(버튼) | FindButton / btnButtonList_UsrButtonList_Click_Detected > FindData | SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | 팝업 조회 API |
+| 팝업 | 행 더블클릭 | spdMain_CellDoubleClick | (동작 확인 필요) | 선택값 반환 |
+
+## 3. Division별 Grid 변형 요약
+| 시트 | 구성 | Division별 컬럼 수 | 변형 |
+|---|---|---|---|
+| `Ship Master Elec` | 메타 25컬럼(전부 기본) + 코드 셀 콤보 | 14개 division 모두 25 | 컬럼 표시 변형 없음. 셀 콤보 데이터만 division 영향(PLANT_SITE_ID: `"40,81,82,81_UC"` 인자, SetCellCombo `pdivision` 조건) |
+| `Project`(팝업) | 하드코딩 11컬럼 | 14개 division 모두 11 | 변형 없음. DIVISION_NAME은 bVisible=false |
+
+## 4. 권한(C/R/U/D) 관련 사실
+| 사실 | 출처 |
+|---|---|
+| 메뉴 권한 메타 TB_FX_GroupMenuAuth에 SSP0024 행 12건이 있음(값 내용은 미제공) | Fact Pack 8장 |
+| TB_FX_MenuItemInfo 1건, TB_FX_ProgramInfo 1건, TB_FX_SearchCondition 6건, TB_FX_Favorite 3건 | Fact Pack 8장 |
+| EditButton → GetSSPUserCheck → SSP0002_GET_USER_INFO_LIST(TB_FX_USER, TB_FX_USERGROUPINFO, TB_FX_GROUPINFO, TB_FX_USERGROUPAUTHEXTENTION, SCM_MST_SSO_DEPT_INFO 참조) — 편집 진입 시 사용자 정보 확인 | flow.csv |
+| MyDivision 공통코드가 `UserInfoContext.Current["NowGroupID"]`와 TB_FX_USERGROUPAUTHEXTENTION을 참조 — 사용자 그룹 기준 division 목록 | meta_reads.csv, 엔드포인트 표 |
+| InsertRow의 셀 콤보 설정 조건 `siMain.IsLock(siMain.SheetName) == false` — 시트 잠금 상태면 행 추가 시 콤보를 설정하지 않음 | grid_code.csv 374~377 |
+| 저장은 MERGE(C/U)와 이력 INSERT. 삭제(D) 처리 여부는 Fact Pack에 없음 | 엔드포인트 표 |
+
+## 5. 미확정 사항
+| # | 항목 | 필요한 확인 |
+|---:|---|---|
+| 1 | TB_FX_GroupMenuAuth 12행의 버튼별 권한 값 | 메타 CSV(dbmeta_dbo_TB_FX_GroupMenuAuth.csv) 확인 |
+| 2 | TB_FX_SearchCondition 6행(조회조건 저장 항목) | dbmeta_dbo_TB_FX_SearchCondition.csv 확인 |
+| 3 | GetSSPUserCheck 결과로 편집 가부를 판정하는 조건 | MAIN:883 주변 소스 |
+| 4 | 행 추가 버튼과 InsertRow의 연결, 삭제 기능 유무 | 메인 소스 |
+| 5 | DOM_EXP_TYPE_CODE / PACKAGE_TYPE_CODE 셀 콤보 설정 위치 | 메인 소스(dtDomExpTypeCode, dtElectrodePackageType 사용처) |
+| 6 | SpdMain_ComboSelChange에서 POST_OPER_LT를 반영하는 대상 셀 | MAIN:612~621 |
+| 7 | Material/Model 버튼이 여는 팝업(SSP0024_ItembyDivisionPopup 여부)과 넘기는 값 | MAIN:746, 767 |
+| 8 | 팝업 CellDoubleClick 반환 컬럼 | POP.D:357 핸들러 |
+| 9 | 메인 cboDivision 콤보 원천 데이터(MyDivision 여부) | 메인 InitControls |
+| 10 | 조회·저장 SP 파라미터 정의 | SP 원문 |
+| 11 | Ship Master Elec 메타 25행의 폭·정렬·셀 타입·고정·대문자 속성 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| 12 | 4-2절 SaveButton:282 → PersonalSettingPopup.SaveData 매핑의 진위 | 파서 결과 재검토 |
+
+
+# Fact Pack — SSP0024
+# SSP0024 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 422 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 450 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 902 |
+| only | 06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs | 06.UIL\GSCM.SSP.Plan.UIL\GSCM.SSP.Plan.UIL.csproj | 556 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:cboDivision.SelectedIndexChanged | ClbDivision_SelectedIndexChanged > SetChangedControl | 191 | biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH |  |
+| button:EditButton | EditButton > GetSSPUserCheck | 883 | SSP.SSP0002_GET_USER_INFO_LIST | MATCH | SP SSP0002_GET_USER_INFO_LIST |
+| button:FindButton | FindButton > FindData | 267 | SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+| button:FindButton | FindButton > FindData | 316 | SSP.SSP0024_GET_SHIP_MASTER | MATCH | SP SSP0024_GET_SHIP_MASTER |
+| button:SaveButton | SaveButton > SaveData > FindData | 316 | SSP.SSP0024_GET_SHIP_MASTER | MATCH | SP SSP0024_GET_SHIP_MASTER |
+| button:SaveButton | SaveButton > SaveData | 467 | SSP.SSP0024_SAVE_SHIP_MASTER | MATCH | SP SSP0024_SAVE_SHIP_MASTER |
+| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > FindData | 267 | SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+| event:this.clbDivisionId.SelectedIndexChanged | clbDivision_SelectedIndexChanged > GetDivisionbyPlantSiteCode | 415 | biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedControl | 191 | biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > FindData | 267 | SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | MATCH | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP |
+| event:this.Load | Form_Load > InitControls > GetDivision | 405 | SCM.SCM0001_GET_DIVISION | MATCH | SP SCM0001_GET_DIVISION |
+| event:this.Load | Form_Load > InitControls > GetDivisionbyPlantSiteCode | 415 | biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtMyDivision> | 37 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtPlantSiteByFactoryForSpread> | 41 | biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtElectrodePostOperCode> | 49 | biz:CommonData.CommonDataList [code=ElectrodePostOperCode] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtDomExpTypeCode> | 51 | biz:CommonData.CommonDataList [code=DomExpTypeCode] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtBuilding> | 52 | biz:CommonData.CommonDataList [code=BuildingForShipMasterElec] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtElectrodePackageType> | 55 | biz:CommonData.CommonDataList [code=ElectrodePackageType] | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=BuildingForShipMasterElec] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_FACTORY_SN, UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| biz:CommonData.CommonDataList [code=DomExpTypeCode] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=ElectrodePackageType] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.CommonDataList [code=ElectrodePostOperCode] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
+| biz:CommonData.CommonDataList [code=PlantSiteByDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT, UP_FX_GetCommonDataList_SCP:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList_SCP:REF:STRING_SPLIT |
+| biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:SELECT:SCM_MST_FACTORY_SN, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| SCM.SCM0001_GET_DIVISION | MATCH | 1 | SP SCM0001_GET_DIVISION | EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION |  |
+| SSP.SSP0002_GET_USER_INFO_LIST | MATCH | 1 | SP SSP0002_GET_USER_INFO_LIST | EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION |  |
+| SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP | MATCH | 1 | SP SSP0024_GET_ITEM_BY_DIVISION_POPUP | EXEC:SSP0024_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT |  |
+| SSP.SSP0024_GET_SHIP_MASTER | MATCH | 1 | SP SSP0024_GET_SHIP_MASTER | EXEC:SSP0024_GET_SHIP_MASTER, SELECT:SSP_MST_SHIP_MASTER_EE, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT |  |
+| SSP.SSP0024_SAVE_SHIP_MASTER | MATCH | 1 | SP SSP0024_SAVE_SHIP_MASTER | EXEC:SSP0024_SAVE_SHIP_MASTER, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_SHIP_MASTER_EE_H, MERGE:SSP_MST_SHIP_MASTER_EE, INSERT:SCM_SYS_LOG_BATCH |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| <field:dtMyDivision> | UserInfoContext.Current | NowGroupID |
+| DefineProperty | dr | CODE |
+| DefineProperty | drRow | CODE, NAME |
+| DefineProperty | drAllRow | CODE, NAME |
+| GetSelectedListName | dt.Rows[i] | CODE |
+| Re_Design | c | DIVISION_ID |
+| SetCellCombo | drRow | CODE, NAME |
+| SetCellCombo | dr | CODE, NAME |
+| SpdMain_ComboSelChange | c | CODE |
+| SpdMain_ComboSelChange | row | DIVISION_ID, CODE |
+| SpdMain_ComboSelChange | drOperLT | POST_OPER_LT |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetCheckedListValue | SetChangedControl:189, FindData:301, FindData:302, Re_Design:355, InsertRow:379 | CString.GetCheckedListValue | CODE |
+| SetSheetHeaderColumn | InitSpread:221 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | SaveButton:282 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.clbDivisionId | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:184 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:277 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:357 |
+| this | Load | Form_Load | .ctor:156 |
+| this | Load | Form_Load | .ctor:109 |
+| cboDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:177 |
+| spdMain | CellClick | SpdMain_CellClick | InitControls:178 |
+| spdMain | ComboSelChange | SpdMain_ComboSelChange | InitControls:179 |
+| spdMain | ClipboardPasted | SpdMain_ClipboardPasted | InitControls:180 |
+| spdMain | KeyPress | SpdMain_KeyPress | InitControls:181 |
+| this.btnMaterialId | Click | BtnMaterialId_Click | InitControls:183 |
+| this.btnModelId | Click | BtnModelId_Click | InitControls:184 |
+
+## 6. 컨트롤 (38개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 11 | layoutControlItem1, lblPlantSite, lblDivision, lbMaterialID, PlanSite, Division, MaterialID, layoutControlItem5, NickName, layoutControlItem4, ModelId |
+| UsrLayoutControl | 4 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 4 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
+| UsrMultiLineEditor | 3 | txtMaterialId, txtMaterialId, txtModelId |
+| UsrCheckedList | 3 | clbDivisionId, clbPlantSiteId, cboPlantSite |
+| UsrConditionPanel | 2 | usrConditionPanel1, usrConditionPanel1 |
+| EmptySpaceItem | 2 | emptySpaceItem1, emptySpaceItem1 |
+| FpSpread | 2 | spdMain, spdMain |
+| SheetView | 2 | spdMain_Sheet1, spdMain_Sheet1 |
+| UsrButton | 2 | btnModelId, btnMaterialId |
+| UsrButtonList | 1 | btnButtonList |
+| UsrCombo | 1 | cboDivision |
+| TextEdit | 1 | txtNickName |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 7 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 25 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 3 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 12 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 6 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SSP0024 | Ship Master Elec | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 | 25/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Project, Ship Master Elec
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:221
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpread |  | 214 | 하드코딩 | AddTextColumn | division | DIVISION_ID |  |
+| InitSpread |  | 215 | 하드코딩 | AddTextColumn | division | DIVISION_NAME |  |
+| InitSpread |  | 216 | 하드코딩 | AddTextColumn | Plant Site Code | PLANT_SITE_CODE |  |
+| InitSpread |  | 217 | 하드코딩 | AddTextColumn | Plant Site | PLANT_SITE_ID |  |
+| InitSpread |  | 218 | 하드코딩 | AddTextColumn | Material | MATERIAL_ID |  |
+| InitSpread |  | 219 | 하드코딩 | AddTextColumn | Model | MODEL_ID |  |
+| InitSpread |  | 220 | 하드코딩 | AddTextColumn | Cell Type | CELL_TYPE |  |
+| InitSpread |  | 221 | 하드코딩 | AddTextColumn | Nick Name | NICK_NAME |  |
+| InitSpread |  | 222 | 하드코딩 | AddTextColumn | Electrode Type | ELECTRODE_TYPE |  |
+| InitSpread |  | 223 | 하드코딩 | AddTextColumn | UOM | ITEM_UOM |  |
+| InitSpread |  | 224 | 하드코딩 | AddTextColumn | Pancake (m/cell) | UOM_CONVERT_IN_TACT_TIME |  |
+| InitializeComponent |  | 373 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 374 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 375 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 376 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+| InitializeComponent |  | 469 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 470 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 471 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 472 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Project | 코드 하드코딩 전용(메타 없음) | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 |
+| Ship Master Elec | META+코드연결 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (13 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","FindData","267","ctor","fox","SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP","SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0024_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0024_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","GetDivision","405","ctor","fox","SCM.SCM0001_GET_DIVISION","SCM.SCM0001_GET_DIVISION","MATCH","SP SCM0001_GET_DIVISION","EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","GetDivisionbyPlantSiteCode","415","derived","biz","CommonData.CommonDataList [code=PlantSiteByDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantSiteByDivision:Type.PlantSiteByDivision] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtMyDivision>","37","derived","biz","CommonData.CommonDataList [code=MyDivision]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.MyDivision:Type.MyDivision] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtPlantSiteByFactoryForSpread>","41","derived","biz","CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantSiteByFactoryEEOperation:Type.PlantSiteByFactoryEEOperation] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtElectrodePostOperCode>","49","derived","biz","CommonData.CommonDataList [code=ElectrodePostOperCode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.ElectrodePostOperCode:Type.ElectrodePostOperCode] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtDomExpTypeCode>","51","derived","biz","CommonData.CommonDataList [code=DomExpTypeCode]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.DomExpTypeCode:Type.DomExpTypeCode] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtBuilding>","52","derived","biz","CommonData.CommonDataList [code=BuildingForShipMasterElec]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.BuildingForShipMasterElec:Type.BuildingForShipMasterElec] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtElectrodePackageType>","55","derived","biz","CommonData.CommonDataList [code=ElectrodePackageType]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.ElectrodePackageType:Type.ElectrodePackageType] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetChangedControl","191","derived","biz","CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.PlantSiteByFactoryEEOperation:Type.PlantSiteByFactoryEEOperation] > Data.CallBizCommonData",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","FindData","316","ctor","fox","SSP.SSP0024_GET_SHIP_MASTER","SSP.SSP0024_GET_SHIP_MASTER","MATCH","SP SSP0024_GET_SHIP_MASTER","EXEC:SSP0024_GET_SHIP_MASTER, SELECT:SSP_MST_SHIP_MASTER_EE, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SaveData","467","ctor","fox","SSP.SSP0024_SAVE_SHIP_MASTER","SSP.SSP0024_SAVE_SHIP_MASTER","MATCH","SP SSP0024_SAVE_SHIP_MASTER","EXEC:SSP0024_SAVE_SHIP_MASTER, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_SHIP_MASTER_EE_H, MERGE:SSP_MST_SHIP_MASTER_EE, INSERT:SCM_SYS_LOG_BATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","GetSSPUserCheck","883","ctor","fox","SSP.SSP0002_GET_USER_INFO_LIST","SSP.SSP0002_GET_USER_INFO_LIST","MATCH","SP SSP0002_GET_USER_INFO_LIST","EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION","",""
+```
+
+### FILE flow.csv (18 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","event","this.clbDivisionId.SelectedIndexChanged","clbDivision_SelectedIndexChanged > GetDivisionbyPlantSiteCode","GetDivisionbyPlantSiteCode","415","biz:CommonData.CommonDataList [code=PlantSiteByDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","event","this.btnButtonList.UsrButtonList_Click_Detected","btnButtonList_UsrButtonList_Click_Detected > FindData","FindData","267","SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0024_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0024_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","event","this.Load","Form_Load > FindData","FindData","267","SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0024_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0024_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","event","this.Load","Form_Load > InitControls > GetDivisionbyPlantSiteCode","GetDivisionbyPlantSiteCode","415","biz:CommonData.CommonDataList [code=PlantSiteByDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","event","this.Load","Form_Load > InitControls > GetDivision","GetDivision","405","SCM.SCM0001_GET_DIVISION","MATCH","SP SCM0001_GET_DIVISION","EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","button","FindButton","FindButton > FindData","FindData","267","SSP.SSP0024_GET_ITEM_BY_DIVISION_POPUP","MATCH","SP SSP0024_GET_ITEM_BY_DIVISION_POPUP","EXEC:SSP0024_GET_ITEM_BY_DIVISION_POPUP, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","event","this.Load","Form_Load > InitControls > SetChangedControl","SetChangedControl","191","biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","event","cboDivision.SelectedIndexChanged","ClbDivision_SelectedIndexChanged > SetChangedControl","SetChangedControl","191","biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","button","FindButton","FindButton > FindData","FindData","316","SSP.SSP0024_GET_SHIP_MASTER","MATCH","SP SSP0024_GET_SHIP_MASTER","EXEC:SSP0024_GET_SHIP_MASTER, SELECT:SSP_MST_SHIP_MASTER_EE, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","button","EditButton","EditButton > GetSSPUserCheck","GetSSPUserCheck","883","SSP.SSP0002_GET_USER_INFO_LIST","MATCH","SP SSP0002_GET_USER_INFO_LIST","EXEC:SSP0002_GET_USER_INFO_LIST, SELECT:SCM_MST_SSO_DEPT_INFO, SELECT:TB_FX_GROUPINFO, SELECT:TB_FX_USERGROUPINFO, SELECT:TB_FX_USER, SELECT:TB_FX_USERGROUPAUTHEXTENTION"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","button","SaveButton","SaveButton > SaveData","SaveData","467","SSP.SSP0024_SAVE_SHIP_MASTER","MATCH","SP SSP0024_SAVE_SHIP_MASTER","EXEC:SSP0024_SAVE_SHIP_MASTER, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SSP_MST_SHIP_MASTER_EE_H, MERGE:SSP_MST_SHIP_MASTER_EE, INSERT:SCM_SYS_LOG_BATCH"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","button","SaveButton","SaveButton > SaveData > FindData","FindData","316","SSP.SSP0024_GET_SHIP_MASTER","MATCH","SP SSP0024_GET_SHIP_MASTER","EXEC:SSP0024_GET_SHIP_MASTER, SELECT:SSP_MST_SHIP_MASTER_EE, SELECT:SSP_MST_SITE_ITEM_EE_V, SELECT:SCM_MST_SITE, REF:STRING_SPLIT"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtMyDivision>","<field:dtMyDivision>","37","biz:CommonData.CommonDataList [code=MyDivision]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtBuilding>","<field:dtBuilding>","52","biz:CommonData.CommonDataList [code=BuildingForShipMasterElec]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtPlantSiteByFactoryForSpread>","<field:dtPlantSiteByFactoryForSpread>","41","biz:CommonData.CommonDataList [code=PlantSiteByFactoryEEOperation]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtElectrodePostOperCode>","<field:dtElectrodePostOperCode>","49","biz:CommonData.CommonDataList [code=ElectrodePostOperCode]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtDomExpTypeCode>","<field:dtDomExpTypeCode>","51","biz:CommonData.CommonDataList [code=DomExpTypeCode]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","unreached","(진입점 미연결)","<field:dtElectrodePackageType>","<field:dtElectrodePackageType>","55","biz:CommonData.CommonDataList [code=ElectrodePackageType]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (12 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","184","this.clbDivisionId","SelectedIndexChanged","clbDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","277","this.btnButtonList","UsrButtonList_Click_Detected","btnButtonList_UsrButtonList_Click_Detected","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","357","this.spdMain","CellDoubleClick","spdMain_CellDoubleClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup",".ctor","156","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode",".ctor","109","this","Load","Form_Load","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","177","cboDivision","SelectedIndexChanged","ClbDivision_SelectedIndexChanged","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","178","spdMain","CellClick","SpdMain_CellClick","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","179","spdMain","ComboSelChange","SpdMain_ComboSelChange","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","180","spdMain","ClipboardPasted","SpdMain_ClipboardPasted","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","181","spdMain","KeyPress","SpdMain_KeyPress","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","183","this.btnMaterialId","Click","BtnMaterialId_Click","+="
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitControls","184","this.btnModelId","Click","BtnModelId_Click","+="
+```
+
+### FILE controls.csv (38 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","txtMaterialId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","clbDivisionId","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","clbPlantSiteId","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","btnButtonList","GSCM.Windows.Forms.Controls.UsrButtonList","usrLayoutControl2","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","lblPlantSite","DevExpress.XtraLayout.LayoutControlItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","lblDivision","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","lbMaterialID","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","spdMain","FarPoint.Win.Spread.FpSpread","this","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","33"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","34"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","35"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","36"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","btnModelId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","37"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","cboPlantSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","38"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","39"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","txtMaterialId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","40"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","btnMaterialId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","41"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","txtNickName","DevExpress.XtraEditors.TextEdit","usrLayoutControl2","42"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","txtModelId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","43"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","44"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","PlanSite","DevExpress.XtraLayout.LayoutControlItem","","45"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","Division","DevExpress.XtraLayout.LayoutControlItem","","46"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","MaterialID","DevExpress.XtraLayout.LayoutControlItem","","47"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","48"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","NickName","DevExpress.XtraLayout.LayoutControlItem","","49"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","50"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","ModelId","DevExpress.XtraLayout.LayoutControlItem","","51"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","52"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","spdMain","FarPoint.Win.Spread.FpSpread","this","53"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","54"
+```
+
+### FILE props.csv (77 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","72","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","76","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","85","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","90","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","93","usrConditionPanel1","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","95","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","104","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","108","usrLayoutControl2","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","110","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","142","txtMaterialId","Size","new System.Drawing.Size(150, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","178","clbDivisionId","Size","new System.Drawing.Size(141, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","218","clbPlantSiteId","Size","new System.Drawing.Size(147, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","252","btnButtonList","Size","new System.Drawing.Size(175, 26)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","291","layoutControlGroup2","Size","new System.Drawing.Size(985, 50)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","296","layoutControlItem1","Control","this.btnButtonList"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","299","layoutControlItem1","Size","new System.Drawing.Size(179, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","305","lblPlantSite","Control","this.clbPlantSiteId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","310","lblPlantSite","Size","new System.Drawing.Size(216, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","311","lblPlantSite","Text","""Plant Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","318","lblDivision","Control","this.clbDivisionId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","321","lblDivision","Size","new System.Drawing.Size(189, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","322","lblDivision","Text","""Division"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","329","lbMaterialID","Control","this.txtMaterialId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","333","lbMaterialID","Size","new System.Drawing.Size(208, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","334","lbMaterialID","Text","""Material"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","344","emptySpaceItem1","Size","new System.Drawing.Size(173, 30)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","350","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","355","spdMain","Size","new System.Drawing.Size(985, 524)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","407","this","Text","""Item by DivisionPopup"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitControls","188","txtMaterialId","Text","sMaterial"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitControls","190","clbDivisionId","Enabled","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitControls","191","clbPlantSiteId","Enabled","false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","79","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","83","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","92","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","97","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","100","usrConditionPanel1","Size","new System.Drawing.Size(1093, 41)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","102","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","114","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","118","usrLayoutControl2","Size","new System.Drawing.Size(1093, 41)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","120","usrLayoutControl2","Text","""usrLayoutControl2"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","151","btnModelId","Size","new System.Drawing.Size(28, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","189","cboPlantSite","Size","new System.Drawing.Size(138, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","228","cboDivision","Size","new System.Drawing.Size(110, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","262","txtMaterialId","Size","new System.Drawing.Size(121, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","295","btnMaterialId","Size","new System.Drawing.Size(39, 25)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","305","txtNickName","Size","new System.Drawing.Size(134, 20)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","339","txtModelId","Size","new System.Drawing.Size(115, 21)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","358","layoutControlGroup2","Size","new System.Drawing.Size(1093, 49)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","363","PlanSite","Control","this.cboPlantSite"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","366","PlanSite","Size","new System.Drawing.Size(199, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","367","PlanSite","Text","""Plant Site"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","374","Division","Control","this.cboDivision"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","378","Division","Size","new System.Drawing.Size(135, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","379","Division","Text","""Div"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","386","MaterialID","Control","this.txtMaterialId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","390","MaterialID","Size","new System.Drawing.Size(185, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","391","MaterialID","Text","""Material"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","396","layoutControlItem5","Control","this.btnMaterialId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","402","layoutControlItem5","Size","new System.Drawing.Size(43, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","404","layoutControlItem5","Text","""layoutControlItem4"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","410","NickName","Control","this.txtNickName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","413","NickName","Size","new System.Drawing.Size(198, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","414","NickName","Text","""Nick Name"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","419","layoutControlItem4","Control","this.btnModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","422","layoutControlItem4","Size","new System.Drawing.Size(32, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","428","ModelId","Control","this.txtModelId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","432","ModelId","Size","new System.Drawing.Size(179, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","433","ModelId","Text","""Model"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","441","emptySpaceItem1","Size","new System.Drawing.Size(102, 29)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","447","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","452","spdMain","Size","new System.Drawing.Size(1093, 533)"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","503","this","Text","""SSP0024_ShipmentMasterElectrode"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetChangedControl","194","txtMaterialId","Text",""""""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetChangedControl","195","txtModelId","Text",""""""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","BtnMaterialId_Click","746","txtMaterialId","Text","sMaterialId"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","BtnModelId_Click","767","txtModelId","Text","sModelId"
+```
+
+### FILE grid_effective.csv (36 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Project","코드 하드코딩 전용(메타 없음)","CELL_TYPE","Cell Type","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","DIVISION_ID","division","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","DIVISION_NAME","division","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","ELECTRODE_TYPE","Electrode Type","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","ITEM_UOM","UOM","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","MATERIAL_ID","Material","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","MODEL_ID","Model","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","NICK_NAME","Nick Name","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","PLANT_SITE_CODE","Plant Site Code","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","PLANT_SITE_ID","Plant Site","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Project","코드 하드코딩 전용(메타 없음)","UOM_CONVERT_IN_TACT_TIME","Pancake (m/cell)","CODE","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가","코드추가"
+"Ship Master Elec","META+코드연결","BOX_PER_CUT","Box/Cut*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","BUILDING","Building*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","BUILDING_DESC","Building Desc.","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","CELL_TYPE","Cell Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","DIVISION_ID","Div*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","DOM_EXP_TYPE_CODE","DOM/EXP.*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","ELECTRODE_TYPE","Electrode Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","ITEM_UOM","UOM","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","MATERIAL_ID","Material*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","MODEL_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","PACKAGE_TYPE_CODE","Package Type*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","PC_ROLL_LENGTH","Pancake Roll Length","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","PLANT_SITE_CODE","Plant Site Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","PLANT_SITE_ID","Plant Site*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","POST_OPER","Post Oper.*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","POST_OPER_LT","Post Oper.LT(Day)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","REMARKS","Remarks","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","STEELCRATE_PER_CUT","Steelcrate/Cut*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","STEELRACK_PER_CUT","Steelrack/Cut*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Ship Master Elec","META+코드연결","UOM_CONVERT_IN_TACT_TIME","Pancake (m/cell)","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (35 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","CreateSpread","202","Project","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Project ¦ Project ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","CreateSpread","203","Project","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","CreateSpread","204","Project","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","211","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","214","","COLUMN","AddTextColumn","HARDCODED","division","DIVISION_ID","","division ¦ DIVISION_ID ¦ {?FPMerge.None} ¦ 60 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.DivisionName ¦ DefColumns.Division ¦ FPMerge.None ¦ 60 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","215","","COLUMN","AddTextColumn","HARDCODED","division","DIVISION_NAME","","division ¦ DIVISION_NAME ¦ {?FPMerge.None} ¦ 80 ¦ {?false}","sHeaderText,sFieldName,merge,fWidth,bVisible","","DefColumnsLabel.DivisionName ¦ DefColumns.DivisionName ¦ FPMerge.None ¦ 80 ¦ false"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","216","","COLUMN","AddTextColumn","HARDCODED","Plant Site Code","PLANT_SITE_CODE","","Plant Site Code ¦ PLANT_SITE_CODE ¦ {?FPMerge.None} ¦ 80 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","","DefColumnsLabel.PlantSiteCode ¦ DefColumns.PlantSiteCode ¦ FPMerge.None ¦ 80 ¦ true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","217","","COLUMN","AddTextColumn","HARDCODED","Plant Site","PLANT_SITE_ID","","Plant Site ¦ PLANT_SITE_ID ¦ {?FPMerge.None} ¦ 80 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.PlantSiteId ¦ DefColumns.PlantSiteId ¦ FPMerge.None ¦ 80 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","218","","COLUMN","AddTextColumn","HARDCODED","Material","MATERIAL_ID","","Material ¦ MATERIAL_ID ¦ {?FPMerge.None} ¦ 100 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.MaterialId ¦ DefColumns.MaterialId ¦ FPMerge.None ¦ 100 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","219","","COLUMN","AddTextColumn","HARDCODED","Model","MODEL_ID","","Model ¦ MODEL_ID ¦ {?FPMerge.None} ¦ 150 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ModelId ¦ DefColumns.ModelId ¦ FPMerge.None ¦ 150 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","220","","COLUMN","AddTextColumn","HARDCODED","Cell Type","CELL_TYPE","","Cell Type ¦ CELL_TYPE ¦ {?FPMerge.None} ¦ 80 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.CellType ¦ DefColumns.CellType ¦ FPMerge.None ¦ 80 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","221","","COLUMN","AddTextColumn","HARDCODED","Nick Name","NICK_NAME","","Nick Name ¦ NICK_NAME ¦ {?FPMerge.None} ¦ 150 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.NickName ¦ DefColumns.NickName ¦ FPMerge.None ¦ 150 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","222","","COLUMN","AddTextColumn","HARDCODED","Electrode Type","ELECTRODE_TYPE","","Electrode Type ¦ ELECTRODE_TYPE ¦ {?FPMerge.None} ¦ 80 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ElectrodeType ¦ DefColumns.ElectrodeType ¦ FPMerge.None ¦ 80 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","223","","COLUMN","AddTextColumn","HARDCODED","UOM","ITEM_UOM","","UOM ¦ ITEM_UOM ¦ {?FPMerge.None} ¦ 60 ¦ {?true} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,fph,fpv","","DefColumnsLabel.ITEM_UOM ¦ DefColumns.ItemUOM ¦ FPMerge.None ¦ 60 ¦ true ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.cs","SSP0024_ItembyDivisionPopup","InitSpread","224","","COLUMN","AddTextColumn","HARDCODED","Pancake (m/cell)","UOM_CONVERT_IN_TACT_TIME","","Pancake (m/cell) ¦ UOM_CONVERT_IN_TACT_TIME ¦ {?FPMerge.None} ¦ 120 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","","DefColumnsLabel.UomConvertInTactTime ¦ DefColumns.UomConvertInTactTime ¦ FPMerge.None ¦ 120 ¦ true"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","373","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","374","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","375","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\Popup\SSP0024_ItembyDivisionPopup.Designer.cs","SSP0024_ItembyDivisionPopup","InitializeComponent","376","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","CreateSpread","206","Ship Master Elec","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Ship Master Elec ¦ Ship Master Elec ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","CreateSpread","207","Ship Master Elec","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","CreateSpread","208","Ship Master Elec","SHEET","ChangeSheet","EXPR","","","","","","",""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitSpread","215","","SHEET","InitSheet","EXPR","","","","{?siMain.SheetName}","","","siMain.SheetName"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InitSpread","221","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ 1","siObj,iColumnHeaderRowCount","","siMain ¦ 1"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","EditButton","252","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","","spdMain.Name ¦ fps.ActiveSheetIndex"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InsertRow","374","","OTHER","SetCellTypeCombo","EXPR","","","DIVISION_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.DIVISION_ID)} ¦ {?new DataTable()}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Ship Master Elec"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.DIVISION_ID) ¦ dtMyDivisionIns"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InsertRow","375","","OTHER","SetCellTypeCombo","EXPR","","","PLANT_SITE_ID","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)} ¦ {?Data.Common(Data.Type.PlantSiteByFactoryEEOperation, false, ""40,81,82,81_UC"")}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Ship Master Elec"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID) ¦ dtPlantSiteByFactoryForSpread"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InsertRow","376","","OTHER","SetCellTypeCombo","EXPR","","","POST_OPER","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.POST_OPER)} ¦ {?Data.Common(Data.Type.ElectrodePostOperCode, false, """", """")}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Ship Master Elec"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.POST_OPER) ¦ dtElectrodePostOperCode"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","InsertRow","377","","OTHER","SetCellTypeCombo","EXPR","","","BUILDING","{?siMain.ActiveRowIndex} ¦ {?siMain.GetColumnIndex(DefColumns.BUILDING)} ¦ {?Data.Common(Data.Type.BuildingForShipMasterElec, false, """","""")}","iRow,iCol,dt","if(siMain != null && siMain.IsLock(siMain.SheetName) == false) ⟫ if(siMain.SheetName == ""Ship Master Elec"")","siMain.ActiveRowIndex ¦ siMain.GetColumnIndex(DefColumns.BUILDING) ¦ dtBuilding"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SpdMain_ClipboardPasted","700","","OTHER","SetCellTypeCombo","EXPR","","","PLANT_SITE_ID","{?e.CellRange.Row} ¦ {?siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID)} ¦ {?new DataTable()}","iRow,iCol,dt","for(iRow < e.CellRange.Row + e.CellRange.RowCount) ⟫ for(iCol < e.CellRange.Column + e.CellRange.ColumnCount) ⟫ if(iCol == siMain.GetColumnIndex(DefColumns.DIVISION_ID)) ⟫ else!(rDivisionID != """")","iRow ¦ siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID) ¦ dtEmpty"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","852","","OTHER","SetCellTypeCombo","EXPR","","","","{p:nRow} ¦ {p:nCol} ¦ {p:dtRstDataTable} || {?new DataTable()}","iRow,iCol,dt","if("""" != pdivision)","nRow ¦ nCol ¦ dtRstDataTable"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","469","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","470","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","471","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.Designer.cs","SSP0024_ShipmentMasterElectrode","InitializeComponent","472","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (20 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","<field:dtMyDivision>","37","UserInfoContext.Current","NowGroupID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","136","dr","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","147","drRow","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","147","dr","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","148","drRow","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","148","dr","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","156","drAllRow","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","DefineProperty","157","drAllRow","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","Re_Design","357","c","DIVISION_ID","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SpdMain_ComboSelChange","612","c","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SpdMain_ComboSelChange","616","row","DIVISION_ID","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SpdMain_ComboSelChange","617","row","CODE","Field"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SpdMain_ComboSelChange","621","drOperLT","POST_OPER_LT","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","838","drRow","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","838","dr","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","839","drRow","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","839","dr","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","846","drRow","CODE","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","SetCellCombo","847","drRow","NAME","[]"
+"only","06.UIL\GSCM.SSP.Plan.UIL\SSP0024_ShipmentMasterElectrode.cs","SSP0024_ShipmentMasterElectrode","GetSelectedListName","865","dt.Rows[i]","CODE","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

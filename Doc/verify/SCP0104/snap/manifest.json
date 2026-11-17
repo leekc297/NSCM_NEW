@@ -1,0 +1,123 @@
+{
+ "헤더_ASSEMBLY": {
+  "kind": "헤더",
+  "scope": "ASSEMBLY",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_ASSEMBLY.txt",
+  "sha8": "33543fa3",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "AS-IS 기대(snap_expect) 대조 OK 11-16 22:4x",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_ELTR": {
+  "kind": "헤더",
+  "scope": "ELTR",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_ELTR.txt",
+  "sha8": "ab11a644",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "AS-IS 기대(snap_expect) 대조 OK 11-16 22:4x",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_LINE": {
+  "kind": "헤더",
+  "scope": "LINE",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_LINE.txt",
+  "sha8": "d676449d",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "AS-IS 기대(snap_expect) 대조 OK 11-16 22:4x",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_SOP_MODEL_ASSEMBLY": {
+  "kind": "헤더",
+  "scope": "SOP_MODEL_ASSEMBLY",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_SOP_MODEL_ASSEMBLY.txt",
+  "sha8": "743a29cd",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "AS-IS 기대(snap_expect) 대조 OK 11-16 22:4x",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_SOP_MODEL_ELTR": {
+  "kind": "헤더",
+  "scope": "SOP_MODEL_ELTR",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_SOP_MODEL_ELTR.txt",
+  "sha8": "1802a7f3",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "AS-IS 기대(snap_expect) 대조 OK 11-16 22:4x",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_SOP_ASSEMBLY": {
+  "kind": "헤더",
+  "scope": "SOP_ASSEMBLY",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_SOP_ASSEMBLY.txt",
+  "sha8": "23f7df7e",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "누락 3컬럼(Site Name·Company Name·Operation)은 AS-IS 조회 상태 숨김과 같음(SCP0104_CAPA_Line_Assign.cs:4080~4093 EditButton SOP 분기 · TO-BE capaLineAssignColumns.ts:143~148). 기대(개인화 목록)가 조회 상태 숨김을 반영하지 않은 것",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "헤더_SOP_ELTR": {
+  "kind": "헤더",
+  "scope": "SOP_ELTR",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\헤더_SOP_ELTR.txt",
+  "sha8": "0acece4d",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "누락 3컬럼(Site Name·Company Name·Operation)은 AS-IS 조회 상태 숨김과 같음(SCP0104_CAPA_Line_Assign.cs:4080~4093 · TO-BE capaLineAssignColumns.ts:143~148)",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "조회조건_Div_40": {
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\조회조건_Div_40.aria.yml",
+  "sha8": "4583ccef",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "라벨 누락 0. 순서 차이만 있음 — 조회조건 순서는 판정 제외(TO-BE 룰 CR-098)",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "버튼_Div_40": {
+  "kind": "버튼",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\버튼_Div_40.aria.yml",
+  "sha8": "a4ab419f",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-16 22:46",
+  "opinion": "누락 3개 근거: EDIT = 편집 버튼 없음 TO-BE 룰(CR-084·093) · EXCEL = AS-IS 툴바 override 5종(Search·Insert·Edit·Delete·Save)에 없음(CapaLineAssign.tsx:559) · CHECK_NAME_ON_DUMMY_CODE = 버튼 아님(저장 중 Dummy 채번 호출 권한 코드)",
+  "validate": "MISMATCH",
+  "forced": true
+ },
+ "화면샷_1920": {
+  "kind": "화면샷",
+  "scope": "1920",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\화면샷_1920.png",
+  "sha8": "8452adaf",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 02:32",
+  "opinion": "11-17 6회차 첫 캡처(조회조건 Ver. 라벨 정상 · 11-13 후보의 '_Ver.' 는 다국어 파일 갱신 전 상태라 폐기)· 조회조건 8칸·버튼·탭 배치 AS-IS 와 같은 구성",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1366": {
+  "kind": "화면샷",
+  "scope": "1366",
+  "golden": "Doc\\verify\\SCP0104\\snap\\golden\\화면샷_1366.png",
+  "sha8": "46b84c1c",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 02:32",
+  "opinion": "11-17 6회차 첫 캡처(조회조건 Ver. 라벨 정상 · 11-13 후보의 '_Ver.' 는 다국어 파일 갱신 전 상태라 폐기)· 조회조건 8칸·버튼·탭 배치 AS-IS 와 같은 구성",
+  "validate": "NA",
+  "forced": false
+ }
+}

@@ -1,0 +1,1330 @@
+{
+ "id": "SCP0022",
+ "from": "dump_find.json",
+ "total": "",
+ "time_status": "DB : 1.398s, UI : 0.004s",
+ "grids": [
+  {
+   "name": "spdMain",
+   "path": "/splitContainer1/SplitterPanel/spdMain",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Formation",
+     "rows": 0,
+     "cols": 17,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "plant_site_name",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Model PIC"
+       ],
+       "label": "Model PIC",
+       "tag": "SHIPMENT_PIC_USER",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "SHIPMENT_PIC_USER",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "Formation L/T (Days)"
+       ],
+       "label": "Formation L/T (Days)",
+       "tag": "LT_FORMATION",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "LT_FORMATION",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Formation Add L/T (Days)"
+       ],
+       "label": "Formation Add L/T (Days)",
+       "tag": "ADD_LT_FORMATION",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "ADD_LT_FORMATION",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Formation Yield(%)"
+       ],
+       "label": "Formation Yield(%)",
+       "tag": "FORMATION_YIELD",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FORMATION_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Characteristic Yield(%)"
+       ],
+       "label": "Characteristic Yield(%)",
+       "tag": "CHAR_YIELD",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CHAR_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Formation Total Yield(%)"
+       ],
+       "label": "Formation Total Yield(%)",
+       "tag": "FORMATION_TOTAL_YIELD",
+       "width": "145",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FORMATION_TOTAL_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "User Modify Yield(%)"
+       ],
+       "label": "User Modify Yield(%)",
+       "tag": "SSP_MODIFY_YIELD",
+       "width": "145",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "SSP_MODIFY_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Created By"
+       ],
+       "label": "Created By",
+       "tag": "CREATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "CREATION_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "CREATION_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Last Updated By"
+       ],
+       "label": "Last Updated By",
+       "tag": "LAST_UPDATED_BY",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "LAST_UPDATE_DATE",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "LAST_UPDATE_DATE",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "PLANT_SITE_ID"
+       ],
+       "label": "PLANT_SITE_ID",
+       "tag": "plant_site_id",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  },
+  {
+   "name": "spdExcept",
+   "path": "/splitContainer1/SplitterPanel/spdExcept",
+   "type": "FarPoint.Win.Spread.FpSpread",
+   "visible": true,
+   "active_sheet_index": "0",
+   "sheets": [
+    {
+     "name": "Formation Except",
+     "rows": 17,
+     "cols": 21,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "division_id",
+       "width": "60",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "division_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "plant_site_name",
+       "width": "80",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "plant_site_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "item_id",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "item_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "nick_name",
+       "width": "95",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "nick_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Start Date*"
+       ],
+       "label": "Start Date*",
+       "tag": "formation_start_date",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "formation_start_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "End Date*"
+       ],
+       "label": "End Date*",
+       "tag": "formation_end_date",
+       "width": "90",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "formation_end_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Formation Yield(%)*"
+       ],
+       "label": "Formation Yield(%)*",
+       "tag": "formation_yield",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "formation_yield",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Characteristic Yield(%)*"
+       ],
+       "label": "Characteristic Yield(%)*",
+       "tag": "CHAR_YIELD",
+       "width": "140",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "CHAR_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Formation Total Yield(%)"
+       ],
+       "label": "Formation Total Yield(%)",
+       "tag": "FORMATION_TOTAL_YIELD",
+       "width": "145",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Right",
+       "data_field": "FORMATION_TOTAL_YIELD",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Comment"
+       ],
+       "label": "Comment",
+       "tag": "except_comment",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "except_comment",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Created By"
+       ],
+       "label": "Created By",
+       "tag": "created_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "created_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "creation_date",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "creation_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Last Updated By"
+       ],
+       "label": "Last Updated By",
+       "tag": "last_updated_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "last_updated_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "last_update_date",
+       "width": "150",
+       "visible": "True",
+       "locked": "True",
+       "h_align": "Center",
+       "data_field": "last_update_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "PLANT_SITE_ID"
+       ],
+       "label": "PLANT_SITE_ID",
+       "tag": "plant_site_id",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "plant_site_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "ORG_DIVISION_ID"
+       ],
+       "label": "ORG_DIVISION_ID",
+       "tag": "ORG_DIVISION_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ORG_DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "ORG_PLANT_SITE_ID"
+       ],
+       "label": "ORG_PLANT_SITE_ID",
+       "tag": "ORG_PLANT_SITE_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ORG_PLANT_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "ORG_ITEM_ID"
+       ],
+       "label": "ORG_ITEM_ID",
+       "tag": "ORG_ITEM_ID",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ORG_ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "ORG_FORMATION_START_DATE"
+       ],
+       "label": "ORG_FORMATION_START_DATE",
+       "tag": "ORG_FORMATION_START_DATE",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ORG_FORMATION_START_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 20,
+       "header": [
+        "ORG_FORMATION_END_DATE"
+       ],
+       "label": "ORG_FORMATION_END_DATE",
+       "tag": "ORG_FORMATION_END_DATE",
+       "width": "60",
+       "visible": "False",
+       "locked": "True",
+       "h_align": "Left",
+       "data_field": "ORG_FORMATION_END_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 17,
+     "data": [
+      [
+       "",
+       "81",
+       "LGESNB Cell NB01",
+       "AAEH1062I-A1",
+       "E62B",
+       "2025-10-01",
+       "2025-12-31",
+       "99.40",
+       "100.00",
+       "99.40",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "chae1",
+       "2025-12-05 13:40:31",
+       "NB01-A",
+       "81",
+       "NB01-A",
+       "AAEH1062I-A1",
+       "2025-10-01 오전 12:00:00",
+       "2025-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESNB Cell NB01",
+       "AAEH1062I-A1",
+       "E62B",
+       "2026-01-01",
+       "2027-12-31",
+       "99.10",
+       "100.00",
+       "99.10",
+       "",
+       "chae1",
+       "2025-09-09 09:17:54",
+       "NERP_SCP_3RD",
+       "2025-10-02 18:05:00",
+       "NB01-A",
+       "81",
+       "NB01-A",
+       "AAEH1062I-A1",
+       "2026-01-01 오전 12:00:00",
+       "2027-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESNB Cell NB01",
+       "AAEH1081I-A1-400",
+       "E81A-400",
+       "2026-01-01",
+       "2027-12-31",
+       "99.70",
+       "100.00",
+       "99.70",
+       "",
+       "chae1",
+       "2025-09-09 09:21:45",
+       "NERP_SCP_3RD",
+       "2025-10-02 18:05:00",
+       "NB01-A",
+       "81",
+       "NB01-A",
+       "AAEH1081I-A1-400",
+       "2026-01-01 오전 12:00:00",
+       "2027-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESNB Cell NB01",
+       "AAEN1063I-D1",
+       "E63F",
+       "2026-01-01",
+       "2027-12-31",
+       "99.30",
+       "100.00",
+       "99.30",
+       "",
+       "chae1",
+       "2025-09-09 09:21:45",
+       "NERP_SCP_3RD",
+       "2025-10-02 18:05:00",
+       "NB01-A",
+       "81",
+       "NB01-A",
+       "AAEN1063I-D1",
+       "2026-01-01 오전 12:00:00",
+       "2027-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEH1161I-A1-500",
+       "E161A-500",
+       "2025-11-01",
+       "2025-11-30",
+       "97.02",
+       "100.00",
+       "97.02",
+       "",
+       "namhyuk.kim",
+       "2025-04-17 11:20:40",
+       "namhyuk.kim",
+       "2025-05-20 10:53:17",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEH1161I-A1-500",
+       "2025-11-01 오전 12:00:00",
+       "2025-11-30 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEH1161I-A1-500",
+       "E161A-500",
+       "2025-12-01",
+       "2025-12-31",
+       "98.30",
+       "100.00",
+       "98.30",
+       "",
+       "namhyuk.kim",
+       "2025-05-13 11:48:16",
+       "namhyuk.kim",
+       "2025-05-20 10:53:17",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEH1161I-A1-500",
+       "2025-12-01 오전 12:00:00",
+       "2025-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN1066I-A1-600",
+       "E66C-600",
+       "2024-06-20",
+       "2124-06-20",
+       "99.00",
+       "100.00",
+       "99.00",
+       "",
+       "hyorip",
+       "2024-06-20 12:12:44",
+       "hyorip",
+       "2024-06-20 12:12:44",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN1066I-A1-600",
+       "2024-06-20 오전 12:00:00",
+       "2124-06-20 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4069I-A1-400",
+       "E71A-400",
+       "2026-01-01",
+       "2026-03-31",
+       "99.12",
+       "100.00",
+       "99.12",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4069I-A1-400",
+       "2026-01-01 오전 12:00:00",
+       "2026-03-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4069I-A1-400",
+       "E71A-400",
+       "2026-04-01",
+       "2026-06-30",
+       "99.19",
+       "100.00",
+       "99.19",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4069I-A1-400",
+       "2026-04-01 오전 12:00:00",
+       "2026-06-30 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4069I-A1-400",
+       "E71A-400",
+       "2026-07-01",
+       "2026-09-30",
+       "99.25",
+       "100.00",
+       "99.25",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4069I-A1-400",
+       "2026-07-01 오전 12:00:00",
+       "2026-09-30 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4069I-A1-400",
+       "E71A-400",
+       "2026-10-01",
+       "2026-12-31",
+       "99.30",
+       "100.00",
+       "99.30",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4069I-A1-400",
+       "2026-10-01 오전 12:00:00",
+       "2026-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4073I-A1-300",
+       "E73A-300",
+       "2026-07-01",
+       "2026-07-31",
+       "97.02",
+       "100.00",
+       "97.02",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4073I-A1-300",
+       "2026-07-01 오전 12:00:00",
+       "2026-07-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4073I-A1-300",
+       "E73A-300",
+       "2026-08-01",
+       "2026-08-31",
+       "98.01",
+       "100.00",
+       "98.01",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4073I-A1-300",
+       "2026-08-01 오전 12:00:00",
+       "2026-08-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4073I-A1-300",
+       "E73A-300",
+       "2026-09-01",
+       "2026-12-31",
+       "99.03",
+       "100.00",
+       "99.03",
+       "",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4073I-A1-300",
+       "2026-09-01 오전 12:00:00",
+       "2026-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4073I-A1-300",
+       "E73A-300",
+       "2027-01-01",
+       "2027-03-31",
+       "99.12",
+       "100.00",
+       "99.12",
+       "",
+       "taewonkk",
+       "2025-06-17 08:28:09",
+       "joonsung.kim",
+       "2025-09-09 07:30:57",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4073I-A1-300",
+       "2027-01-01 오전 12:00:00",
+       "2027-03-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4128I-A1-000",
+       "E128A-000",
+       "2025-11-01",
+       "2025-12-31",
+       "94.20",
+       "100.00",
+       "94.20",
+       "",
+       "namhyuk.kim",
+       "2025-10-28 16:03:59",
+       "namhyuk.kim",
+       "2025-10-28 16:03:59",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4128I-A1-000",
+       "2025-11-01 오전 12:00:00",
+       "2025-12-31 오전 12:00:00"
+      ],
+      [
+       "",
+       "81",
+       "LGESWA Cell WA00",
+       "AAEN4128I-A1-000",
+       "E128A-000",
+       "2026-01-01",
+       "2027-03-31",
+       "99.16",
+       "100.00",
+       "99.16",
+       "",
+       "cykang71",
+       "2025-09-09 13:02:54",
+       "namhyuk.kim",
+       "2025-10-28 16:03:59",
+       "WA00-A",
+       "81",
+       "WA00-A",
+       "AAEN4128I-A1-000",
+       "2026-01-01 오전 12:00:00",
+       "2027-03-31 오전 12:00:00"
+      ]
+     ]
+    },
+    {
+     "name": "Formation Except LT",
+     "rows": 0,
+     "cols": 20,
+     "visible": "True",
+     "frozen_cols": "0",
+     "frozen_rows": "0",
+     "operation_mode": "Normal",
+     "header_rows": 1,
+     "columns": [
+      {
+       "index": 0,
+       "header": [
+        "A"
+       ],
+       "label": "A",
+       "tag": "Action",
+       "width": "15",
+       "visible": "False",
+       "locked": "False",
+       "h_align": "General",
+       "data_field": "Action",
+       "cell_type": "TextCellType",
+       "merge_policy": "None"
+      },
+      {
+       "index": 1,
+       "header": [
+        "Div"
+       ],
+       "label": "Div",
+       "tag": "DIVISION_ID",
+       "width": "60",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "division_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 2,
+       "header": [
+        "Plant Site"
+       ],
+       "label": "Plant Site",
+       "tag": "plant_site_name",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "plant_site_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 3,
+       "header": [
+        "Material"
+       ],
+       "label": "Material",
+       "tag": "ITEM_ID",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "item_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 4,
+       "header": [
+        "Nick Name"
+       ],
+       "label": "Nick Name",
+       "tag": "NICK_NAME",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "nick_name",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 5,
+       "header": [
+        "Start Date*"
+       ],
+       "label": "Start Date*",
+       "tag": "formation_start_date",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "formation_start_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 6,
+       "header": [
+        "End Date*"
+       ],
+       "label": "End Date*",
+       "tag": "formation_end_date",
+       "width": "90",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "formation_end_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 7,
+       "header": [
+        "Formation L/T (Days)*"
+       ],
+       "label": "Formation L/T (Days)*",
+       "tag": "LT_FORMATION",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "LT_FORMATION",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 8,
+       "header": [
+        "Formation Add L/T (Days)"
+       ],
+       "label": "Formation Add L/T (Days)",
+       "tag": "ADD_LT_FORMATION",
+       "width": "140",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Right",
+       "data_field": "ADD_LT_FORMATION",
+       "cell_type": "NumberCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 9,
+       "header": [
+        "Comment"
+       ],
+       "label": "Comment",
+       "tag": "except_comment",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "except_comment",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 10,
+       "header": [
+        "Created By"
+       ],
+       "label": "Created By",
+       "tag": "created_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "created_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 11,
+       "header": [
+        "Creation Date"
+       ],
+       "label": "Creation Date",
+       "tag": "creation_date",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "creation_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 12,
+       "header": [
+        "Last Updated By"
+       ],
+       "label": "Last Updated By",
+       "tag": "last_updated_by",
+       "width": "100",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "last_updated_by",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 13,
+       "header": [
+        "Last Update Date"
+       ],
+       "label": "Last Update Date",
+       "tag": "last_update_date",
+       "width": "150",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Center",
+       "data_field": "last_update_date",
+       "cell_type": "DateTimeCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 14,
+       "header": [
+        "PLANT_SITE_ID"
+       ],
+       "label": "PLANT_SITE_ID",
+       "tag": "plant_site_id",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "plant_site_id",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 15,
+       "header": [
+        "ORG_DIVISION_ID"
+       ],
+       "label": "ORG_DIVISION_ID",
+       "tag": "ORG_DIVISION_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORG_DIVISION_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 16,
+       "header": [
+        "ORG_PLANT_SITE_ID"
+       ],
+       "label": "ORG_PLANT_SITE_ID",
+       "tag": "ORG_PLANT_SITE_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORG_PLANT_SITE_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 17,
+       "header": [
+        "ORG_ITEM_ID"
+       ],
+       "label": "ORG_ITEM_ID",
+       "tag": "ORG_ITEM_ID",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORG_ITEM_ID",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 18,
+       "header": [
+        "ORG_FORMATION_START_DATE"
+       ],
+       "label": "ORG_FORMATION_START_DATE",
+       "tag": "ORG_FORMATION_START_DATE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORG_FORMATION_START_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      },
+      {
+       "index": 19,
+       "header": [
+        "ORG_FORMATION_END_DATE"
+       ],
+       "label": "ORG_FORMATION_END_DATE",
+       "tag": "ORG_FORMATION_END_DATE",
+       "width": "0",
+       "visible": "True",
+       "locked": "False",
+       "h_align": "Left",
+       "data_field": "ORG_FORMATION_END_DATE",
+       "cell_type": "TextCellType",
+       "merge_policy": "Restricted"
+      }
+     ],
+     "data_rows": 0,
+     "data": []
+    }
+   ]
+  }
+ ]
+}

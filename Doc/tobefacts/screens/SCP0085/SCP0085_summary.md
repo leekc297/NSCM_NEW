@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | component | 384 |
+| features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | component | 399 |
 | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | component | 176 |
 | features/supply/src/pages/ending-inventory/ending-inventory.constants.ts | constants | 151 |
 | features/supply/src/pages/ending-inventory/ending-inventory.types.ts | types | 20 |
@@ -20,7 +20,7 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | EndingInventoryForm.tsx:76 |
-| (useTabLookupQueries) | hook | 1 | Y | EndingInventoryForm.tsx:113 |
+| (useTabLookupQueries) | hook | 1 | Y | EndingInventoryForm.tsx:128 |
 | SCP0085/main//call-proc | hook | 1 | Y | EndingInventory.tsx:51 |
 | SCP0085/daily//call-proc | hook | 1 | Y | EndingInventory.tsx:58 |
 | /admin/menu/SCP0085/search-conditions | http | 1 | Y | useEndingInventoryStore.ts:102 |
@@ -35,19 +35,19 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| input | input | onInput | addEventListener | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 144 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 152 |
-| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 163 |
-| DatePickerCalendar | onChange | <arrow> set,date?.isValid,date.format | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 181 |
-| DatePickerCalendar | onChange | <arrow> date?.isValid,date.format,set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 201 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 238 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 257 |
-| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 271 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 288 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 307 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 336 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 332 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 358 |
+| input | input | onInput | addEventListener | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 159 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 167 |
+| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 178 |
+| DatePickerCalendar | onChange | <arrow> set,date?.isValid,date.format | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 196 |
+| DatePickerCalendar | onChange | <arrow> date?.isValid,date.format,set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 216 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 253 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 272 |
+| Radio | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 286 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 303 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 322 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 351 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 347 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 373 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 86 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 121 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/ending-inventory/components/EndingInventoryGrid.tsx | 148 |
@@ -105,7 +105,7 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | `(v) => v && dayjs.isDayjs(v) && …` 가드라 키보드로 기간을 지우면(빈값) onChange 를 호출하지 | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 133 |
+| code | `(v) => v && dayjs.isDayjs(v) && …` 가드라 키보드로 기간을 지우면(빈값) onChange 를 호출하지 | features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx | 148 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

@@ -1,0 +1,32 @@
+{
+ "id": "FP00620",
+ "run_dir": "Doc/asislive/FP00620/run_20261112_190449",
+ "live_at": "2026-11-12 19:04:49.112",
+ "user": "jaeuk.shin",
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 2.48s, UI : 0.129s",
+  "total": "Total : ",
+  "how": "status"
+ },
+ "mixed_risk": true,
+ "live_calls": 51,
+ "live_sp_distinct": 15,
+ "static_vs_live": {
+  "SP:FRAMEWORK": 6,
+  "SP:LIVE_ONLY": 2,
+  "SP:MATCH": 1,
+  "SP:INLINE": 6,
+  "CONTROL:INFO": 1,
+  "CONTROL:LIVE_ONLY": 14,
+  "CONDITION:LIVE": 14,
+  "GRID:LIVE": 1
+ },
+ "diff_gap": {},
+ "param_hints": 0,
+ "limits": [
+  "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
+  "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",
+  "원장 행 미생성(같은 조건 실측 전에는 판정 근거 없음)"
+ ]
+}

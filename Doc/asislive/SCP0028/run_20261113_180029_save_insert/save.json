@@ -1,0 +1,122 @@
+{
+ "id": "SCP0028",
+ "dry": false,
+ "name": "insert",
+ "scenario": {
+  "table": "SCP_MST_SHIPMENT_LOT_SIZE",
+  "pk": [
+   "DIVISION_ID",
+   "OPERATION_GROUP",
+   "FROM_SITE",
+   "TO_SITE",
+   "ITEM_ID",
+   "TRANSPORT_MODE"
+  ],
+  "match": {
+   "DIVISION_ID": "DIVISION_ID",
+   "FROM_SITE": "FROM_SITE",
+   "TO_SITE": "TO_SITE",
+   "ITEM_ID": "ITEM_ID",
+   "TRANSPORT_MODE": "TRANS_MODE_CODE"
+  },
+  "save_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+  "basis": "SCP0028_Shipment_Lot_Size.cs:575 SaveData · :659 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE · SP 원문(MERGE: 있으면 UPDATE·없으면 INSERT / DELETE · SCP_MST_SHIPMENT_LOT_SIZE PK 6컬럼 · 트리거 0 — 11-13 실측)",
+  "name": "insert",
+  "title": "DB 에 없는 조합(화면에는 Lot Size 빈 행으로 보임)에 Lot Size 입력(MERGE 의 INSERT 경로) — 복원은 키로 DELETE",
+  "pick": {
+   "col": "LOT_SIZE",
+   "nonempty": false
+  },
+  "edit": {
+   "col": "LOT_SIZE",
+   "db_col": "LOT_SIZE",
+   "value": "1"
+  },
+  "expect_before": 0
+ },
+ "at": "2026-11-13 18:00:29",
+ "status": "SAVE_NOT_CONFIRMED",
+ "steps": [],
+ "grid_row": {
+  "index": 0,
+  "values": {
+   "Action": "",
+   "COLMERGE": "X",
+   "DIVISION_ID": "81",
+   "OPERATION_GROUP_ID": "Cell",
+   "FROM_SITE_DESCRIPTION": "LGESOC Cell HQ07",
+   "TO_SITE_DESCRIPTION": "Club Car_US_AGS",
+   "ITEM_ID": "ACEP2065I-B1",
+   "NICK_NAME": "E65D",
+   "TRANS_MODE_NAME": "AIR",
+   "LOT_SIZE": "",
+   "INCREMENT": "",
+   "VALID_YN": "Y",
+   "SPLIT_YN": "N",
+   "CREATED_BY": "",
+   "CREATION_DATE": "",
+   "LAST_UPDATED_BY": "",
+   "LAST_UPDATE_DATE": "",
+   "FROM_SITE": "HQ07-A",
+   "TO_SITE": "Club Car_US_AGS",
+   "TRANS_MODE_CODE": "AIR"
+  }
+ },
+ "where": {
+  "DIVISION_ID": "81",
+  "FROM_SITE": "HQ07-A",
+  "TO_SITE": "Club Car_US_AGS",
+  "ITEM_ID": "ACEP2065I-B1",
+  "TRANSPORT_MODE": "AIR"
+ },
+ "db_before": [],
+ "edit": {
+  "col": "LOT_SIZE",
+  "old": "",
+  "new": "1"
+ },
+ "edit_mode": true,
+ "cell": {
+  "ok": true,
+  "error": null,
+  "before": "",
+  "after": "1",
+  "action_before": "",
+  "action_after": "M",
+  "locked": false,
+  "entered": true,
+  "how": "edit",
+  "is_change": true,
+  "edit_error": null
+ },
+ "save_call": [
+  {
+   "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "params": {
+    "p_active_flag": "M",
+    "p_division_id": "81",
+    "p_operation_group": "A",
+    "p_from_site": "HQ07-A",
+    "p_to_site": "Club Car_US_AGS",
+    "p_item_id": "ACEP2065I-B1",
+    "p_transport_mode": "AIR",
+    "p_lot_size": "1",
+    "p_increment": "1",
+    "p_split_yn": "N",
+    "p_valid_yn": "Y",
+    "p_user_id": "jaeuk.shin",
+    "debug_mode": "F"
+   },
+   "rows": 0,
+   "ms": 30016.87
+  }
+ ],
+ "save_dialogs": [],
+ "save_act": {
+  "ok": true,
+  "error": null
+ },
+ "db_after": [],
+ "restore_sql": [],
+ "db_restored": []
+}

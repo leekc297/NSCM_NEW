@@ -4,7 +4,9 @@
 공통소스 다운로드 & 병합 (Vibe_Manager ⬇️🔀 Source Download & Merge) — 2026-10-22
 
 원천 = nscm-fe 의 remote `common`(eunjoo-hwang/nscm-fe, 다운로드 전용 · push URL no_push 확인 후에만 진행 · 푸시 없음)
-대상 = nscm-fe 의 apps · features · packages · public · configs (공통 트리는 모노레포라 `nscm-fe/` 접두)
+대상 = nscm-fe 의 apps · features · packages · public · configs (공통 트리는 모노레포라 `nscm-fe/` 접두) — 기본(--areas fe)
+     BE 는 따로: --areas be → nscm-be 의 src 만 (2026-11-12 · 공통 트리 `nscm-be/` 접두 · 기준선 = state.json baselineBe
+     · 환경 파일 항상 로컬 유지 · 로컬 기동용 설정 2개는 누락 키만 보충 · 로컬 ID 로그인 점검 실패 시 무변경 중단)
 방식 = git merge/pull 금지(사내 GitLab 이력과 섞임) → 직전 기준선..common/main 에서 바뀐 파일만 **파일 단위**로 판정·적용
 
 판정 규칙 (메모리 reference_repo_upload_download_commands §2 "내 것이 더 최신이면 내걸로" · 회차 README 08-25~10-14 그대로):
@@ -21,16 +23,119 @@
 사용:
   python common_sync.py --dry-run [--summary out.json]          분류만(파일 변경 없음) → .vibe/common_sync/PLAN_<시각>.md
   python common_sync.py --apply --target <sha> [--summary ...]   dry-run 때 본 커밋이 맞을 때만 적용 → 백업·README·기준선 갱신
-  옵션: --fe <nscm-fe 경로>  --remote common  --branch main  --base <기준선 sha(기본 state.json)>  --no-fetch
+  옵션: --fe <nscm-fe 경로>  --be <nscm-be 경로>  --no-be  --base-be <sha>  --be-work <사본>  --remote common  --branch main  --base <기준선 sha(기본 state.json)>  --no-fetch
 종료코드: 0 정상 / 2 사전조건 실패(no_push 아님·기준선 없음 등) / 3 target 불일치 / 4 적용 후 검증 실패
 """
-import argparse, datetime, difflib, hashlib, json, os, re, shutil, subprocess, sys, tempfile
+import argparse, datetime, difflib, fnmatch, hashlib, json, os, re, shutil, subprocess, sys, tempfile
 from collections import OrderedDict, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 STATE = os.path.join(HERE, 'state.json')
 SCOPE = ['apps', 'features', 'packages', 'public', 'configs']
+# BE(nscm-be · 2026-11-12) — 공통 트리 `nscm-be/` 의 소스(src)를 같은 규칙으로 받는다. 빌드 설정(build.gradle·settings.gradle·gradle/)·lib·바이너리는 대상 밖
+BE_SCOPE = ['src']
+# ── BE 로컬 작업환경 보호(사용자 지시 2026-11-12 "BE 다운로드 시 로컬 작업환경을 해치는 것은 차단") ──
+# ① 환경 파일 — 작업 모드와 무관하게 항상 로컬 유지(접속 정보·프로필·로그·MyBatis 설정·CORS 는 PC 마다 다르다). 로컬에 없을 때만 공통 원문을 새로 받는다
+BE_KEEP = ('src/main/resources/application*.yml', 'src/main/resources/application*.yaml', 'src/main/resources/application*.properties',
+           'src/main/resources/config/*', 'src/main/resources/mybatis/mybatis-config.xml',
+           'src/main/resources/logback*.xml', 'src/main/resources/log4j*', 'src/main/java/*/framework/config/CorsConfig.java')
+# ② 쓰기·삭제 허용 경로 = nscm-be/src 아래뿐. 아래 폴더 조각이 경로에 있으면 차단(저장소·빌드 산출물·IDE·로그)
+BE_DENY_PARTS = {'.git', '.gradle', '.idea', '.vscode', '.settings', 'build', 'bin', 'out', 'logs', 'node_modules'}
+# ③ BE 저장소(nscm-be/.git)에는 읽기 명령만 — 체크아웃·리셋·클린·스태시·커밋·머지 등 상태를 바꾸는 git 명령은 실행 자체를 막는다
+BE_GIT_READONLY = {'status', 'diff', 'config', 'rev-parse'}
+def be_local_keep():
+    """be_local_keep.txt — 환경 파일과 한 쌍으로 동작해 로컬에 그대로 둬야 하는 BE 소스(작업 모드 무관)"""
+    p = os.path.join(HERE, 'be_local_keep.txt')
+    if not os.path.exists(p): return ()
+    return tuple(l.strip() for l in open(p, encoding='utf-8-sig') if l.strip() and not l.strip().startswith('#'))
+def keep_match(rel, pats):
+    return any(fnmatch.fnmatchcase(rel, p) for p in pats)
+# ④ 환경 파일 중 로컬 기동에 쓰는 2개는 '공통에만 있는 설정 키'만 보충한다(사용자 지시 2026-11-12 — 환경설정이라 DB MODE 에서도 적용).
+#    기존 로컬 값·주석·순서는 그대로 두고, 부모 블록이 로컬에 이미 있는 단일 값 키만 공통 기본값으로 끼워 넣는다.
+#    접속·SSO·비밀 값 계열 키와 블록째 없는 설정은 넣지 않고 보고서에만 적는다(로컬은 SSO 에 접속하지 않고 ID 로그인을 유지한다).
+CFG_SUPPLEMENT = ('src/main/resources/application.yml', 'src/main/resources/config/config-local.yml')
+CFG_SKIP = re.compile(r'sso|datasource|password|passwd|username|secret|token|url|host|jdbc|id-login-disabled|domain|endpoint', re.I)
+SUPP_CLS = 'BE 환경 파일 — 누락 설정 키 보충(기존 값 유지)'
+BE_LOGIN_FILES = ('src/main/java/com/lgcns/nscm/framework/security/filter/JsonLoginFilter.java', 'src/main/java/com/lgcns/nscm/framework/config/SecurityConfig.java')
+YML_KEY = re.compile(r'^( *)([A-Za-z0-9_.\-\[\]"\']+)\s*:(?:\s+(.*))?$')
+def yml_index(t):
+    """들여쓰기 기반 YAML 색인 → (줄[], {경로: (줄 번호, 들여쓰기, 단일 값 여부)}). 목록(- ) 안쪽은 색인하지 않는다"""
+    lines = t.split('\n'); stack = []; ent = OrderedDict(); list_ind = None; doc = 0
+    for i, raw in enumerate(lines):
+        st = raw.strip()
+        if raw.startswith('---'): doc += 1; stack = []; list_ind = None; continue  # 문서 구분 — 경로 맨 앞에 문서 번호를 둔다
+        if not st or st.startswith('#'): continue
+        ind = len(raw) - len(raw.lstrip(' '))
+        if st.startswith('- ') or st == '-': list_ind = ind; continue
+        if list_ind is not None:
+            if ind > list_ind: continue
+            list_ind = None
+        m = YML_KEY.match(raw)
+        if not m: continue
+        key = m.group(2).strip('"\''); val = (m.group(3) or '').strip()
+        if val.startswith('#'): val = ''
+        while stack and stack[-1][0] >= ind: stack.pop()
+        path = (f'#{doc}',) + tuple(k for _, k in stack) + (key,)
+        ent.setdefault(path, (i, ind, bool(val) and val not in ('|', '>', '|-', '>-')))
+        stack.append((ind, key))
+    return lines, ent
+def yml_flat(obj, pre=()):
+    out = {}
+    if isinstance(obj, dict):
+        for k, v in obj.items(): out.update(yml_flat(v, pre + (str(k),)))
+    else: out[pre] = obj
+    return out
+def cfg_supplement(local_b, common_b, today):
+    """→ (보충본 LF bytes 또는 None, 보충한 키[], 블록째 없는 설정[], 일부러 넣지 않은 키[], 오류 문자열)"""
+    lt, ct = text(eoln(local_b)), text(eoln(common_b))
+    L, Le = yml_index(lt); C, Ce = yml_index(ct)
+    adds = defaultdict(list); blocks = []; skipped = []
+    for path, (i, ind, scalar) in Ce.items():
+        if path in Le: continue
+        miss = next((path[:k] for k in range(2, len(path)) if path[:k] not in Le), None)
+        if miss is not None:
+            if miss not in blocks: blocks.append(miss)
+            continue
+        if not scalar or len(path) <= 2:
+            if path not in blocks: blocks.append(path)
+            continue
+        if CFG_SKIP.search('.'.join(path[1:])): skipped.append(path); continue
+        adds[path[:-1]].append((path, C[i].strip()))
+    if not adds: return None, [], [b[1:] for b in blocks], [b[1:] for b in skipped], ''
+    ins = []  # (끼워 넣을 줄 번호, [줄…])
+    for parent, items in adds.items():
+        pi, pind, _ = Le[parent]
+        kids = [v[1] for k, v in Le.items() if len(k) == len(parent) + 1 and k[:len(parent)] == parent]
+        cind = min(kids) if kids else pind + 2
+        end = pi
+        for j in range(pi + 1, len(L)):
+            st = L[j].strip()
+            if not st: continue
+            if len(L[j]) - len(L[j].lstrip(' ')) <= pind and not st.startswith('#'): break
+            if len(L[j]) - len(L[j].lstrip(' ')) > pind: end = j
+        ins.append((end + 1, [' ' * cind + f'# [공통소스 BE 다운로드 {today}] 로컬에 없던 설정 키 보충 — 값은 공통 기본값'] + [' ' * cind + ln for _, ln in items]))
+    out = list(L)
+    for at, new in sorted(ins, key=lambda x: -x[0]): out[at:at] = new
+    merged = '\n'.join(out)
+    full = [p for items in adds.values() for p, _ in items]; added = ['.'.join(p[1:]) for p in full]
+    blocks = [b[1:] for b in blocks]; skipped = [b[1:] for b in skipped]
+    try:  # 보충본이 올바른 YAML 인지, 기존 로컬 값이 하나도 안 바뀌었는지, 보충 키가 실제로 읽히는지
+        import yaml
+        def flat_all(t):
+            o = {}
+            for n, d in enumerate(yaml.safe_load_all(t)): o.update(yml_flat(d, (f'#{n}',)))
+            return o
+        a0, a1 = flat_all(lt), flat_all(merged)
+        changed = [k for k, v in a0.items() if a1.get(k, object()) != v]
+        if changed: return None, [], blocks, skipped, f'보충 취소 — 기존 값이 달라짐: {".".join(changed[0])}'
+        lost = ['.'.join(p[1:]) for p in full if p not in a1]
+        if lost: return None, [], blocks, skipped, f'보충 취소 — 보충 키가 읽히지 않음: {lost[0]}'
+    except ImportError:
+        return None, [], blocks, skipped, '보충 취소 — PyYAML 없음(검증 불가)'
+    except Exception as e:
+        return None, [], blocks, skipped, f'보충 취소 — YAML 검증 실패: {str(e)[:120]}'
+    return merged.encode('utf-8', 'surrogateescape'), added, blocks, skipped, ''
 DTS = 'configs/types/procedures.d.ts'
 CODE_EXT = {'.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.scss', '.css', '.json', '.d.ts'}
 
@@ -62,6 +167,13 @@ class Git:
         return self.blob(r.stdout.decode().strip()) if r.returncode == 0 else None
     def close(self):
         if self._cat: self._cat.stdin.close(); self._cat.wait()
+class ReadOnlyGit(Git):
+    """BE 저장소용 — 읽기 명령만 통과(BE_GIT_READONLY). 그 밖의 명령은 실행하지 않고 오류"""
+    def run(self, *args, check=True, inp=None):
+        if not args or args[0] not in BE_GIT_READONLY or (args[0] == 'config' and '--get' not in args):
+            raise RuntimeError(f"⛔ BE 저장소에 허용되지 않은 git 명령 차단: git {' '.join(args)}")
+        return super().run(*args, check=check, inp=inp)
+    def blob(self, sha): raise RuntimeError('⛔ BE 저장소 객체 접근 차단')
 
 # ───────────────────────── 정규화·판정 보조 ─────────────────────────
 def lpath(p):
@@ -107,13 +219,23 @@ def eol_of(b):
     return '\r\n' if b is not None and not is_binary(b) and b'\r\n' in b else '\n'
 def has_bom(b): return b is not None and b.startswith(b'\xef\xbb\xbf')
 DECL = re.compile(r'^\s*(?:export\s+)?(?:default\s+)?(?:declare\s+)?(?:async\s+)?(?:const|let|var|function|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)', re.M)
-def decl_counts(b):
-    c = defaultdict(int)
-    for m in DECL.finditer(text(norm(b))): c[m.group(1)] += 1
+# BE: Java 메서드(이름+인자) · MyBatis XML 의 id — 양쪽이 같은 것을 각자 더한 병합은 충돌 0 이어도 컴파일/기동이 깨진다
+JAVA_DECL = re.compile(r'^[ \t]*(?:(?:public|private|protected|static|final|abstract|synchronized|default)\s+)+(?:<[^>]+>\s+)?[\w.<>\[\], ?]+?\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)\s*(?:throws\s+[\w., ]+)?\s*[{;]', re.M)
+XML_ID = re.compile(r'<(?:select|insert|update|delete|sql|resultMap)\b[^>]*?\bid\s*=\s*"([^"]+)"')
+def decl_counts(b, rel=''):
+    c = defaultdict(int); t = text(norm(b)); ext = os.path.splitext(rel or '')[1].lower()
+    if ext == '.java':
+        for m in JAVA_DECL.finditer(t): c[m.group(1) + '(' + re.sub(r'\s+', ' ', m.group(2)).strip() + ')'] += 1
+        for m in re.finditer(r'^\s*(?:public\s+|abstract\s+|final\s+)*(?:class|interface|enum|record)\s+([A-Za-z_$][\w$]*)', t, re.M): c[m.group(1)] += 1
+        return c
+    if ext == '.xml':
+        for m in XML_ID.finditer(t): c['id=' + m.group(1)] += 1
+        return c
+    for m in DECL.finditer(t): c[m.group(1)] += 1
     return c
-def dup_increase(merged, local, common):
+def dup_increase(merged, local, common, rel=''):
     """병합본에서 같은 이름 선언이 양쪽 원본보다 늘어난 것(양쪽이 같은 일을 각자 한 병합 = 선언 중복)"""
-    m, l, c = decl_counts(merged), decl_counts(local), decl_counts(common)
+    m, l, c = decl_counts(merged, rel), decl_counts(local, rel), decl_counts(common, rel)
     return sorted(k for k, v in m.items() if v > max(l.get(k, 0), c.get(k, 0)))
 def diff_size(a, b):
     sm = difflib.SequenceMatcher(None, text(a).split('\n'), text(b).split('\n'), autojunk=False)
@@ -141,10 +263,10 @@ def merge3(git, local_b, base_b, common_b):
 # ───────────────────────── 공통 이력 색인 ─────────────────────────
 class History:
     """common 이력의 경로별 blob 판본. path_all: 전 이력(common/main), path_upto: 기준선까지(base 후보), name_all: 파일명별(rename 추적)"""
-    def __init__(self, git, prefix, base, tip):
+    def __init__(self, git, prefix, base, tip, scope=None):
         self.git = git; self.path_all = defaultdict(list); self.path_upto = defaultdict(list); self.name_all = defaultdict(set)
         upto = set(git.out('rev-list', base).split()) if base else set()
-        log = git.out('log', '--format=@%H', '--raw', '--no-abbrev', '--no-renames', '-m', tip, '--', *[prefix + s for s in SCOPE])
+        log = git.out('log', '--format=@%H', '--raw', '--no-abbrev', '--no-renames', '-m', tip, '--', *[prefix + s for s in (scope or SCOPE)])
         cur = None
         for line in log.split('\n'):
             if line.startswith('@'): cur = line[1:].strip(); continue
@@ -289,14 +411,22 @@ def json_merge(local_b, base_b, common_b, upload=False):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--fe', default=os.path.join(ROOT, 'nscm-fe')); ap.add_argument('--remote', default='common'); ap.add_argument('--branch', default='main')
+    ap.add_argument('--be', default=os.path.join(ROOT, 'nscm-be'), help='BE 로컬 폴더(기본 nscm-be) — 공통 트리의 nscm-be/src 를 같은 규칙으로 받는다')
+    ap.add_argument('--be-work', help='BE 를 읽고 쓰는 사본 폴더(시험용). --work 시험에서는 이것을 줄 때만 BE 를 다룬다'); ap.add_argument('--no-be', action='store_true', help='BE 를 다루지 않는다(FE 만)')
+    ap.add_argument('--restore-be-from', help='되돌리기: 이 백업 폴더(…_PRE_COMMON_…)의 local_before/nscm-be 에서 BE 파일을 복원한다(--restore-be-paths 필수)')
+    ap.add_argument('--restore-be-paths', help='되돌릴 BE 파일(nscm-be 기준 경로, 쉼표 구분) — src 아래만')
+    ap.add_argument('--areas', choices=('fe', 'be', 'all'), default='fe', help='받을 영역 — fe(기본: nscm-fe 만) / be(nscm-be/src 만 — Source Download & Merge(BE)) / all')
+    ap.add_argument('--no-cfg-supplement', action='store_true', help='BE 환경 파일의 누락 설정 키 보충을 하지 않는다')
+    ap.add_argument('--base-be', help='BE 기준선 sha(기본 state.json baselineBe · 없으면 공통 최신 트리와 직접 대조)')
     ap.add_argument('--base'); ap.add_argument('--target'); ap.add_argument('--tip', help='비교 대상 커밋(기본 <remote>/<branch>) — 회차 재현 시험용'); ap.add_argument('--work', help='로컬 파일을 읽고 쓰는 폴더(기본 = --fe). 사본 시험용'); ap.add_argument('--summary'); ap.add_argument('--no-fetch', action='store_true')
-    g = ap.add_mutually_exclusive_group(required=True); g.add_argument('--dry-run', action='store_true'); g.add_argument('--apply', action='store_true')
+    g = ap.add_mutually_exclusive_group(required='--restore-be-from' not in sys.argv); g.add_argument('--dry-run', action='store_true'); g.add_argument('--apply', action='store_true')
     g.add_argument('--upload-prepare', action='store_true', help='Source Upload(UI) 준비 — 선택 파일별로 올릴 내용(전체/내 작업분만)을 --out 에 만든다')
     ap.add_argument('--overwrite-local', action='store_true', help='DB MODE — 로컬 소스를 보호하지 않는다: 공통에 있는 파일은 내 편집본도 공통 원문으로 덮어쓰고, 공통이 지운 파일은 내 편집본도 삭제한다. 공통에 없는 로컬 전용 파일은 유지')
     ap.add_argument('--keys', help='--upload-prepare: procedures.d.ts 에서 올릴 메뉴 키(쉼표) — 보통 화면 ID. 없으면 내 블록 전부')
     ap.add_argument('--files-from', help='--upload-prepare: 올릴 파일 목록(nscm-fe 기준 상대경로, 줄 단위)'); ap.add_argument('--out', help='--upload-prepare: 결과 폴더')
     a = ap.parse_args()
     if a.upload_prepare: return upload_prepare(a)
+    if a.restore_be_from: return restore_be(a)
     work = a.work or a.fe
     git = Git(a.fe); now = datetime.datetime.now(); stamp = now.strftime('%Y%m%d_%H%M%S')
     summary = {'ok': False, 'mode': 'apply' if a.apply else 'dry-run', 'stamp': stamp}
@@ -323,96 +453,162 @@ def main():
     tip_info = git.out('log', '-1', '--format=%h %cd %an %s', '--date=format:%Y-%m-%d %H:%M', tip).strip()
     ncommits = int(git.out('rev-list', '--count', f'{base}..{tip}').strip() or 0)
     print(f'기준선 {base[:9]} → 최신 {tip_info} · 신규 커밋 {ncommits}{"" if anc else " · ⚠ 기준선이 조상 아님(force-push 재작성)"}')
+    # 영역 — FE(nscm-fe) + BE(nscm-be · 2026-11-12 추가). BE 는 공통 트리에 `nscm-be/` 가 있고 로컬 폴더가 있을 때만.
+    #   사본 시험(--work)에서는 --be-work 를 줄 때만 BE 를 다룬다(실제 nscm-be 를 건드리지 않게)
+    want_fe, want_be = a.areas in ('fe', 'all'), a.areas in ('be', 'all')
+    areas = [{'key': 'fe', 'label': 'FE', 'prefix': prefix, 'work': work, 'scope': SCOPE, 'base': base, 'keep': (), 'show': ''}] if want_fe else []
+    be_work = a.be_work or (None if a.work else a.be); be_skip = ''
+    if a.no_be or not want_be: be_skip = '이번 실행 대상 아님(BE 는 --areas be 로 따로 받는다)'
+    elif not prefix or not git.out('ls-tree', '--name-only', tip, 'nscm-be/').strip(): be_skip = '공통 트리에 nscm-be/ 없음'
+    elif not be_work: be_skip = '사본 시험(--work) — --be-work 미지정'
+    elif not os.path.isdir(be_work): be_skip = f'로컬 폴더 없음({be_work})'
+    if be_skip:
+        if want_be: print(f'⛔ [BE] 받을 수 없음 — {be_skip}'); finish(2, error='be-unavailable', detail=be_skip)
+    else:
+        be_base = a.base_be or state.get('baselineBe')
+        if be_base and git.run('cat-file', '-e', be_base + '^{commit}', check=False).returncode != 0:
+            print(f'⚠ [BE] 기준선 커밋 {be_base} 이 로컬에 없음 — 기준선 없이 공통 최신 트리와 직접 대조'); be_base = None
+        if be_base: be_base = git.out('rev-parse', be_base).strip()
+        print(f'[BE] 기준선 {be_base[:9] if be_base else "없음(첫 회차)"} · 대상 nscm-be/{"·".join(BE_SCOPE)} · 환경 파일 항상 로컬 유지 {len(BE_KEEP)}종(설정·접속·로그·CORS) + 로컬 필수 유지 소스 {len(be_local_keep())}개')
+        areas.append({'key': 'be', 'label': 'BE', 'prefix': 'nscm-be/', 'work': be_work, 'scope': BE_SCOPE, 'base': be_base, 'keep': BE_KEEP + be_local_keep(), 'show': 'nscm-be/'})
     # DB MODE(--overwrite-local) 는 공통 새 커밋이 없어도 내 편집본을 공통 원문으로 되돌려야 하므로 여기서 끝내지 않는다
-    if base == tip and not a.overwrite_local: print('✅ 새 변경 없음'); finish(0, ok=True, tip=tip, base=base, counts={}, changed=0)
-    diff = git.out('diff', '--name-status', '--no-renames', base, tip, '--', *[prefix + s for s in SCOPE])
-    changes = []
-    for line in diff.split('\n'):
-        if not line.strip(): continue
-        st, _, p = line.partition('\t'); changes.append((st[0], p[len(prefix):]))
-    print(f'대상 {len(changes)}건 분류 중 …', flush=True)
-    hist = None if a.overwrite_local else History(git, prefix, base, tip)
-    plan = []  # dict(rel, status, cls, action, note, data)
-    if a.overwrite_local:
-        # DB MODE: 판정 없이 공통 최신 트리 기준으로 맞춘다 — 로컬 보호 안 함. ls-tree 로 blob id 를 한 번에 받아 파일별 프로세스 호출을 피한다
-        print('⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다', flush=True)
-        status_of = dict((rel, st) for st, rel in changes)
-        tree = {}
-        for rec in git.run('ls-tree', '-r', '-z', tip, '--', *[prefix + s for s in SCOPE]).stdout.split(b'\0'):
-            if not rec: continue
-            meta, _, pth = rec.partition(b'\t')
-            kind, sha = meta.decode().split()[1:3]
-            if kind == 'blob': tree[pth.decode('utf-8')[len(prefix):]] = sha
-        for rel, sha in tree.items():
-            lb = rfile(os.path.join(work, rel)); nb = git.blob(sha); st = status_of.get(rel, '-')
-            it = {'rel': rel, 'st': st, 'local': lb, 'common': nb, 'note': '', 'data': None}
-            if lb is None: it.update(cls='공통 파일 — 로컬 부재', action='write')
-            elif norm(lb) == norm(nb): it.update(cls='동일', action='none')
-            elif st != '-': it.update(cls='공통 변경분 — 공통 원문 적용(로컬 보호 안 함)', action='write')
-            else: it.update(cls='로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함)', action='write')
-            plan.append(it)
-        for st, rel in changes:
-            if st == 'D' and rel not in tree:
-                lb = rfile(os.path.join(work, rel))
-                plan.append({'rel': rel, 'st': st, 'local': lb, 'common': None, 'note': '', 'data': None, 'cls': '공통 삭제 — 로컬 삭제(로컬 보호 안 함)' if lb is not None else '삭제 — 이미 없음', 'action': 'delete' if lb is not None else 'none'})
-        known = set(tree) | {r for s, r in changes if s == 'D'}
-        for sc in SCOPE:
-            for dp, dns, fns in os.walk(os.path.join(work, sc)):
-                dns[:] = [d for d in dns if d not in ('node_modules', '.turbo', 'dist', '.next', '_sync_test')]
-                for fn in fns:
-                    rel = os.path.relpath(os.path.join(dp, fn), work).replace(os.sep, '/')
-                    if rel not in known: plan.append({'rel': rel, 'st': '-', 'local': None, 'common': None, 'note': '', 'data': None, 'cls': '로컬 전용(공통에 없음) — 유지', 'action': 'keep'})
-    for st, rel in ([] if a.overwrite_local else changes):
-        lb = rfile(os.path.join(work, rel))
-        bb = git.blob_at(base, prefix + rel); nb = git.blob_at(tip, prefix + rel)
-        ln, bn, nn = norm(lb), norm(bb), norm(nb)
-        it = {'rel': rel, 'st': st, 'local': lb, 'common': nb}
-        def put(cls, action, note='', data=None): it.update(cls=cls, action=action, note=note, data=data); plan.append(it)
-        if st == 'D':
-            if lb is None: put('삭제 — 이미 없음', 'none'); continue
-            mh = hist.matches_history(rel, ln) or (('포맷 차이만', '') if bb is not None and code_file(rel) and fmt_norm(lb) == fmt_norm(bb) else None)
-            if ln == bn or mh: put('삭제(D) — 로컬 = 공통 이력본', 'delete', mh[0] if mh else '기준선'); continue
-            put('로컬 유지 — 공통 삭제·내 편집(결정 대기)', 'keep', 'pending'); continue
-        if lb is None:
-            if st == 'A': put('신규(A) — 로컬 부재', 'write'); continue
-            put('로컬 부재 — 공통 수정 파일(결정 대기)', 'keep', 'pending'); continue
-        if ln == nn: put('동일', 'none'); continue
-        if is_binary(lb) or is_binary(nb):
-            if ln == bn or hist.matches_history(rel, ln): put('바이너리 — 공통 채택', 'write')
-            else: put('바이너리 — 로컬 유지(결정 대기)', 'keep', 'pending')
-            continue
-        if rel == DTS:
-            merged, info = dts_merge(git, lb, bb, nb)
-            if merged is None: put('d.ts — 파싱 실패 → 로컬 유지(결정 대기)', 'keep', 'pending'); continue
-            rows, checks, pend, dup = info
-            bad = checks['declare global'] != 1 or dup or checks['로컬 키 유실'] or checks['공통 키 유실']
-            put('d.ts 구조 병합' + (' — ⚠ 검사 실패 → 로컬 유지(결정 대기)' if bad else ''), 'keep' if bad else 'merge', 'pending' if (bad or pend) else '', {'merged': merged, 'rows': rows, 'checks': checks, 'pend': pend}); continue
-        if rel.lower().endswith('.json') and '/locales/' in '/' + rel.lower():
-            try:
-                pb = bb
-                if st == 'A' or bb is None: pb = None
-                merged, stt, conf = json_merge(lb, pb, nb)
-                if norm(merged) == ln: put('locales 키 병합 — 변경 없음(로컬 유지)', 'none', json.dumps(stt, ensure_ascii=False)); continue
-                put('locales 키 병합', 'merge', ('pending ' if conf else '') + json.dumps(stt, ensure_ascii=False), {'merged': merged, 'conflicts': conf}); continue
-            except Exception as e:
-                put(f'locales — JSON 파싱 실패({e}) → 로컬 유지(결정 대기)', 'keep', 'pending'); continue
-        mh = hist.matches_history(rel, ln) or (('기준선', '') if ln == bn else None)
-        if mh: put('수정(M) — 로컬 = 공통 이력본(무편집)' if st == 'M' else '신규(A) — 로컬 = 공통 이력본', 'write', f'{mh[0]} {mh[1]}'.strip()); continue
-        if code_file(rel) and fmt_norm(lb) == fmt_norm(nb): put('포맷 차이만 — 공통 채택', 'write', '공백·따옴표·세미콜론'); continue
-        mf = hist.matches_history_fmt(rel, ln)
-        if mf: put('포맷 차이만(이력본) — 공통 채택', 'write', f'{mf[0]} {mf[1]}'); continue
-        # 내 편집본
-        if st == 'A': put('로컬 유지 — 공통 신규·로컬 기존 파일 상이(결정 대기)', 'keep', 'pending'); continue
-        bkey, bsel = hist.pick_base(rel, ln, bb)
-        if bsel is None: put('로컬 유지 — base 후보 없음(결정 대기)', 'keep', 'pending'); continue
-        if norm(bsel) == nn: put('로컬 유지 — 공통 무변경·내 편집', 'keep', f'base {bkey}'); continue
-        merged, nconf = merge3(git, lb, bsel, nb)
-        if nconf:
-            put(f'3-way 충돌 {nconf} → 로컬 유지(결정 대기)', 'keep', f'pending base {bkey}', {'merged': merged, 'base': eoln(bsel)}); continue
-        dups = dup_increase(merged, lb, nb)
-        if dups: put('3-way 충돌 0 이나 선언 중복 → 로컬 유지(결정 대기)', 'keep', f'pending base {bkey} 중복 {",".join(dups[:5])}', {'merged': merged, 'base': eoln(bsel)}); continue
-        if norm(merged) == ln: put('로컬 유지 — 3-way 결과 = 로컬(공통 변경분 이미 포함)', 'none', f'base {bkey}'); continue
-        put('3-way 병합 — 충돌 0', 'merge', f'base {bkey}', {'merged': merged})
+    today = f'{now:%Y-%m-%d}'
+    if not want_fe: base_show = areas[0]['base'] or ''  # BE 전용 실행 — 요약의 기준선은 BE 기준선
+    else: base_show = base
+    if all(ar['base'] == tip for ar in areas) and not a.overwrite_local: print('✅ 새 변경 없음'); finish(0, ok=True, tip=tip, base=base_show, counts={}, changed=0, areas_sel=a.areas)
+    plan = []  # dict(rel, work, show, area, st, cls, action, note, data)
+    KEEP_CLS = '로컬 환경 파일·필수 유지 소스 — 항상 로컬 유지'
+    def classify(ar):
+        """한 영역(FE=nscm-fe / BE=nscm-be)의 파일을 판정해 plan 에 더한다 → 그 영역의 공통 변경 건수"""
+        aprefix, awork, ascope, abase, akeep, fe_area = ar['prefix'], ar['work'], ar['scope'], ar['base'], ar['keep'], ar['key'] == 'fe'
+        def tag(rel): return {'rel': rel, 'work': awork, 'show': ar['show'] + rel, 'area': ar['key']}
+        def keep_item(rel, lb, nb):
+            """환경 파일 → (구분, 처리, 비고, 자료). 기본 = 로컬 유지. 로컬 기동용 설정 2개는 누락 키만 보충"""
+            note = '' if norm(lb) == norm(nb) else ('공통이 삭제' if nb is None else '공통과 다름 — 필요하면 직접 반영')
+            if nb is not None and rel in CFG_SUPPLEMENT and not a.no_cfg_supplement and norm(lb) != norm(nb):
+                merged, added, blocks, skipped, err = cfg_supplement(lb, nb, today)
+                extra = (f' · 공통에만 있는 설정 블록(넣지 않음 — 직접 확인): {", ".join(".".join(b) for b in blocks[:8])}' if blocks else '') + \
+                        (f' · 접속·SSO 계열이라 넣지 않은 키: {", ".join(".".join(b) for b in skipped[:8])}' if skipped else '') + (f' · {err}' if err else '')
+                if added: return SUPP_CLS, 'merge', f'보충 {len(added)}개: {", ".join(added)}' + extra, {'merged': merged, 'added': added}
+                note += extra
+            return KEEP_CLS, 'keep', note, None
+        paths = [aprefix + s for s in ascope]
+        changes = []
+        if abase:
+            for line in git.out('diff', '--name-status', '--no-renames', abase, tip, '--', *paths).split('\n'):
+                if not line.strip(): continue
+                st, _, p = line.partition('\t'); changes.append((st[0], p[len(aprefix):]))
+        elif not a.overwrite_local:
+            # 기준선 없는 첫 회차(BE 2026-11-12) — 공통 최신 트리와 로컬을 직접 대조해 다른 파일만 대상으로 삼는다(삭제는 판정하지 않는다)
+            for rec in git.run('ls-tree', '-r', '-z', tip, '--', *paths).stdout.split(b'\0'):
+                if not rec: continue
+                meta, _, pth = rec.partition(b'\t'); kind, sha = meta.decode().split()[1:3]
+                if kind != 'blob': continue
+                rel = pth.decode('utf-8')[len(aprefix):]; lb = rfile(os.path.join(awork, rel))
+                if lb is None: changes.append(('A', rel))
+                elif norm(lb) != norm(git.blob(sha)): changes.append(('M', rel))
+        print(f'[{ar["label"]}] 대상 {len(changes)}건 분류 중 …' + ('' if abase else ' (기준선 없음 — 공통 최신 트리와 직접 대조)'), flush=True)
+        hist = None if a.overwrite_local else History(git, aprefix, abase or tip, tip, ascope)
+        if a.overwrite_local:
+            # DB MODE: 판정 없이 공통 최신 트리 기준으로 맞춘다 — 로컬 보호 안 함. ls-tree 로 blob id 를 한 번에 받아 파일별 프로세스 호출을 피한다
+            print('⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다', flush=True)
+            status_of = dict((rel, st) for st, rel in changes)
+            tree = {}
+            for rec in git.run('ls-tree', '-r', '-z', tip, '--', *[aprefix + s for s in ascope]).stdout.split(b'\0'):
+                if not rec: continue
+                meta, _, pth = rec.partition(b'\t')
+                kind, sha = meta.decode().split()[1:3]
+                if kind == 'blob': tree[pth.decode('utf-8')[len(aprefix):]] = sha
+            for rel, sha in tree.items():
+                lb = rfile(os.path.join(awork, rel)); nb = git.blob(sha); st = status_of.get(rel, '-')
+                it = {**tag(rel), 'st': st, 'local': lb, 'common': nb, 'note': '', 'data': None}
+                if lb is not None and keep_match(rel, akeep): kc, ka, kn, kd = keep_item(rel, lb, nb); it.update(cls=kc, action=ka, note=kn, data=kd)
+                elif lb is None: it.update(cls='공통 파일 — 로컬 부재', action='write')
+                elif norm(lb) == norm(nb): it.update(cls='동일', action='none')
+                elif st != '-': it.update(cls='공통 변경분 — 공통 원문 적용(로컬 보호 안 함)', action='write')
+                else: it.update(cls='로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함)', action='write')
+                plan.append(it)
+            for st, rel in changes:
+                if st == 'D' and rel not in tree:
+                    lb = rfile(os.path.join(awork, rel))
+                    if lb is not None and not fe_area and (keep_match(rel, akeep) or norm(lb) != norm(git.blob_at(abase, aprefix + rel) if abase else None)):
+                        plan.append({**tag(rel), 'st': st, 'local': lb, 'common': None, 'note': '', 'data': None, 'cls': 'BE 삭제 차단 — 내 편집본·환경 파일(로컬 유지)', 'action': 'keep'}); continue
+                    plan.append({**tag(rel), 'st': st, 'local': lb, 'common': None, 'note': '', 'data': None, 'cls': '공통 삭제 — 로컬 삭제(로컬 보호 안 함)' if lb is not None else '삭제 — 이미 없음', 'action': 'delete' if lb is not None else 'none'})
+            known = set(tree) | {r for s, r in changes if s == 'D'}
+            for sc in ascope:
+                for dp, dns, fns in os.walk(os.path.join(awork, sc)):
+                    dns[:] = [d for d in dns if d not in ('node_modules', '.turbo', 'dist', '.next', '_sync_test')]
+                    for fn in fns:
+                        rel = os.path.relpath(os.path.join(dp, fn), awork).replace(os.sep, '/')
+                        if rel not in known: plan.append({**tag(rel), 'st': '-', 'local': None, 'common': None, 'note': '', 'data': None, 'cls': '로컬 전용(공통에 없음) — 유지', 'action': 'keep'})
+        for st, rel in ([] if a.overwrite_local else changes):
+            lb = rfile(os.path.join(awork, rel))
+            bb = git.blob_at(abase, aprefix + rel) if abase else None; nb = git.blob_at(tip, aprefix + rel)
+            ln, bn, nn = norm(lb), norm(bb), norm(nb)
+            it = {**tag(rel), 'st': st, 'local': lb, 'common': nb}
+            def put(cls, action, note='', data=None): it.update(cls=cls, action=action, note=note, data=data); plan.append(it)
+            if lb is not None and keep_match(rel, akeep): put(*keep_item(rel, lb, nb)); continue
+            if st == 'D':
+                if lb is None: put('삭제 — 이미 없음', 'none'); continue
+                mh = hist.matches_history(rel, ln) or (('포맷 차이만', '') if bb is not None and code_file(rel) and fmt_norm(lb) == fmt_norm(bb) else None)
+                if ln == bn or mh: put('삭제(D) — 로컬 = 공통 이력본', 'delete', mh[0] if mh else '기준선'); continue
+                put('로컬 유지 — 공통 삭제·내 편집(결정 대기)', 'keep', 'pending'); continue
+            if lb is None:
+                if st == 'A': put('신규(A) — 로컬 부재', 'write'); continue
+                put('로컬 부재 — 공통 수정 파일(결정 대기)', 'keep', 'pending'); continue
+            if ln == nn: put('동일', 'none'); continue
+            if is_binary(lb) or is_binary(nb):
+                if ln == bn or hist.matches_history(rel, ln): put('바이너리 — 공통 채택', 'write')
+                else: put('바이너리 — 로컬 유지(결정 대기)', 'keep', 'pending')
+                continue
+            if fe_area and rel == DTS:
+                merged, info = dts_merge(git, lb, bb, nb)
+                if merged is None: put('d.ts — 파싱 실패 → 로컬 유지(결정 대기)', 'keep', 'pending'); continue
+                rows, checks, pend, dup = info
+                bad = checks['declare global'] != 1 or dup or checks['로컬 키 유실'] or checks['공통 키 유실']
+                put('d.ts 구조 병합' + (' — ⚠ 검사 실패 → 로컬 유지(결정 대기)' if bad else ''), 'keep' if bad else 'merge', 'pending' if (bad or pend) else '', {'merged': merged, 'rows': rows, 'checks': checks, 'pend': pend}); continue
+            if fe_area and rel.lower().endswith('.json') and '/locales/' in '/' + rel.lower():
+                try:
+                    pb = bb
+                    if st == 'A' or bb is None: pb = None
+                    merged, stt, conf = json_merge(lb, pb, nb)
+                    if norm(merged) == ln: put('locales 키 병합 — 변경 없음(로컬 유지)', 'none', json.dumps(stt, ensure_ascii=False)); continue
+                    put('locales 키 병합', 'merge', ('pending ' if conf else '') + json.dumps(stt, ensure_ascii=False), {'merged': merged, 'conflicts': conf}); continue
+                except Exception as e:
+                    put(f'locales — JSON 파싱 실패({e}) → 로컬 유지(결정 대기)', 'keep', 'pending'); continue
+            mh = hist.matches_history(rel, ln) or (('기준선', '') if ln == bn else None)
+            if mh: put('수정(M) — 로컬 = 공통 이력본(무편집)' if st == 'M' else '신규(A) — 로컬 = 공통 이력본', 'write', f'{mh[0]} {mh[1]}'.strip()); continue
+            if code_file(rel) and fmt_norm(lb) == fmt_norm(nb): put('포맷 차이만 — 공통 채택', 'write', '공백·따옴표·세미콜론'); continue
+            mf = hist.matches_history_fmt(rel, ln)
+            if mf: put('포맷 차이만(이력본) — 공통 채택', 'write', f'{mf[0]} {mf[1]}'); continue
+            # 내 편집본
+            if st == 'A': put('로컬 유지 — 공통 신규·로컬 기존 파일 상이(결정 대기)', 'keep', 'pending'); continue
+            bkey, bsel = hist.pick_base(rel, ln, bb)
+            if bsel is None: put('로컬 유지 — base 후보 없음(결정 대기)', 'keep', 'pending'); continue
+            if norm(bsel) == nn: put('로컬 유지 — 공통 무변경·내 편집', 'keep', f'base {bkey}'); continue
+            merged, nconf = merge3(git, lb, bsel, nb)
+            if nconf:
+                put(f'3-way 충돌 {nconf} → 로컬 유지(결정 대기)', 'keep', f'pending base {bkey}', {'merged': merged, 'base': eoln(bsel)}); continue
+            dups = dup_increase(merged, lb, nb, rel)
+            if dups: put('3-way 충돌 0 이나 선언 중복 → 로컬 유지(결정 대기)', 'keep', f'pending base {bkey} 중복 {",".join(dups[:5])}', {'merged': merged, 'base': eoln(bsel)}); continue
+            if norm(merged) == ln: put('로컬 유지 — 3-way 결과 = 로컬(공통 변경분 이미 포함)', 'none', f'base {bkey}'); continue
+            put('3-way 병합 — 충돌 0', 'merge', f'base {bkey}', {'merged': merged})
+        return len(changes)
+    for ar in areas: ar["changed"] = classify(ar)
+    def be_login_check(ar):
+        """로컬 ID 로그인 유지 점검 — '적용한 뒤' 내용 기준(미리보기에서는 적용될 내용). 로컬은 SSO 에 접속하지 않고 /user/login(ID) 으로 쓴다"""
+        def after(rel):
+            it = next((x for x in plan if x['area'] == 'be' and x['rel'] == rel), None)
+            if it is None or it['action'] in ('keep', 'none'): return rfile(os.path.join(ar['work'], rel))
+            if it['action'] == 'delete': return None
+            return it['data']['merged'] if it['action'] == 'merge' else it['common']
+        jf, sc = (after(p) for p in BE_LOGIN_FILES)
+        res = [(jf is not None and sc is not None and b'/user/login' in sc and b'JsonLoginFilter' in sc, 'ID 로그인 경로(/user/login · JsonLoginFilter) 유지')]
+        dis = [p for p in CFG_SUPPLEMENT if re.search(rb'^[ \t]*id-login-disabled[ \t]*:[ \t]*["\']?true', after(p) or b'', re.M | re.I)]
+        res.append((not dis, '로컬 설정에 ID 로그인 차단(id-login-disabled: true) 없음' + (f' — 발견: {", ".join(dis)}' if dis else '')))
+        return res
+    be_login = {ar['key']: be_login_check(ar) for ar in areas if ar['key'] == 'be'}
+    for ok_, msg in be_login.get('be', []): print(f'  [BE 로컬 로그인 점검] {"OK" if ok_ else "⛔ 실패"} — {msg}')
     # 집계
     counts = defaultdict(int)
     for it in plan: counts[it['cls']] += 1
@@ -422,7 +618,18 @@ def main():
     print('\n분류 결과')
     for k, v in sorted(counts.items(), key=lambda kv: -kv[1]): print(f'  {v:5d}  {k}')
     print(f'  → 적용: 공통 채택/신규 {act["write"]} · 병합 {act["merge"]} · 삭제 {act["delete"]} · 로컬 유지 {act["keep"]} · 변경 없음 {act["none"]} · 결정 대기 {len(pend)}')
-    summary.update(tip=tip, tip_info=tip_info, base=base, ancestor=anc, commits=ncommits, changed=len(changes), counts=dict(counts), actions=dict(act), pending=len(pend))
+    nchanged = sum(ar['changed'] for ar in areas)
+    # 영역별 집계(FE/BE) — 메뉴 확인창·보고서가 FE 와 BE 를 나눠 보여 준다
+    area_sum = {}
+    for ar in areas:
+        its = [it for it in plan if it['area'] == ar['key']]; ac = defaultdict(int)
+        for it in its: ac[it['action']] += 1
+        area_sum[ar['key']] = {'base': ar['base'], 'changed': ar['changed'], 'actions': dict(ac), 'pending': sum(1 for it in its if 'pending' in (it.get('note') or '')),
+                               'local_only': sum(1 for it in its if it['cls'] == '로컬 전용(공통에 없음) — 유지'), 'env_keep': sum(1 for it in its if it['cls'] == KEEP_CLS)}
+        if a.overwrite_local: area_sum[ar['key']]['changed'] = ac['write'] + ac['delete']
+        print(f'  [{ar["label"]}] 공통 채택/신규 {ac["write"]} · 병합 {ac["merge"]} · 삭제 {ac["delete"]} · 로컬 유지 {ac["keep"]} · 결정 대기 {area_sum[ar["key"]]["pending"]}')
+    summary.update(areas_sel=a.areas, be_login=[{'ok': ok_, 'msg': msg} for ok_, msg in be_login.get('be', [])])
+    summary.update(tip=tip, tip_info=tip_info, base=base_show, ancestor=anc, commits=ncommits, changed=nchanged, counts=dict(counts), actions=dict(act), pending=len(pend), areas=area_sum)
     if a.overwrite_local:  # 메뉴가 '새 변경 없음' 을 판단하는 값 = 실제로 바뀌는 파일 수
         summary.update(changed=act['write'] + act['delete'], overwrite_local=True, local_only=counts.get('로컬 전용(공통에 없음) — 유지', 0))
 
@@ -430,7 +637,10 @@ def main():
         L = [f'# 공통소스 다운로드 & 병합 {"회차 보고" if applied else "미리보기(dry-run)"} — {now:%Y-%m-%d %H:%M}', '',
              f'- 원천: remote `{a.remote}` ({git.out("config", "--get", f"remote.{a.remote}.url", check=False).strip()}) · push URL `no_push` 확인 — 푸시 없음',
              f'- 기준선 `{base[:9]}` → **{"신규 기준선" if applied else "최신"} `{tip[:9]}`** ({tip_info})' + ('' if anc else ' · ⚠ 기준선이 조상 아님(force-push 재작성)'),
-             f'- 공통 신규 커밋 {ncommits}건 · 대상(apps·features·packages·public·configs) 변경 {len(changes)}건 (이름변경은 삭제+신규로 풀어 집계)',
+             *([f'- 공통 신규 커밋 {ncommits}건 · FE 대상(nscm-fe: apps·features·packages·public·configs) 변경 {areas[0]["changed"]}건 (이름변경은 삭제+신규로 풀어 집계)'] if want_fe else ['- **BE 전용 실행(Source Download & Merge(BE))** — FE(nscm-fe)는 다루지 않는다']),
+             *([f'- BE 대상(nscm-be: {"·".join(BE_SCOPE)}) — 기준선 `{ar["base"][:9] if ar["base"] else "없음(첫 회차 — 공통 최신 트리와 직접 대조)"}` · 변경 {ar["changed"]}건 · 환경 파일 항상 로컬 유지 = {", ".join(f"`{k}`" for k in BE_KEEP)} · 빌드 설정(build.gradle 등)·lib·저장소·빌드 산출물은 대상 밖(쓰기 차단)'
+                for ar in areas if ar['key'] == 'be'] or [f'- BE(nscm-be) 미포함 — {be_skip}']),
+             *[f'- BE 로컬 ID 로그인 점검: {"OK" if ok_ else "⛔ 실패"} — {msg}' for ok_, msg in be_login.get('be', [])],
              ('- ⚠ **DB MODE — 로컬 소스 보호 안 함**: 공통 최신 트리 기준으로 다른 파일은 내 편집본도 공통 원문으로 덮어쓴다 · 공통이 지운 파일은 삭제 · 공통에 없는 로컬 전용 파일은 유지' if a.overwrite_local else
               '- 판정 = 내용 대조(개행·BOM 정규화) · 로컬이 공통 이력본과 일치하면 공통 채택, 내 편집본이면 유지/3-way(base = 로컬이 실제 출발한 공통 판본)'), '',
              '## 분류·처리 결과', '', '| 구분 | 건수 | 처리 |', '|---|---:|---|']
@@ -441,35 +651,41 @@ def main():
         fold = defaultdict(int)
         for it in plan:
             if it['action'] in ('write', 'merge'):
-                ps = it['rel'].split('/'); fold[ps[1] if ps[0] in ('features', 'packages') and len(ps) > 2 else ps[0]] += 1
+                ps = it['rel'].split('/'); fold['nscm-be' if it['area'] == 'be' else ps[1] if ps[0] in ('features', 'packages') and len(ps) > 2 else ps[0]] += 1
         if fold: L += ['', '적용 폴더별: ' + ' / '.join(f'{k} {v}' for k, v in sorted(fold.items(), key=lambda kv: -kv[1]))]
         pend_its = [it for it in plan if 'pending' in (it.get('note') or '')]
         L += ['', f'## ⚠️ 결정 대기 {len(pend_its)}건 (로컬 유지 상태 — 자동 적용 안 함)', '']
         if pend_its:
             L += ['| 파일 | 사유 | 비고 | 자료 |', '|---|---|---|---|']
             for it in pend_its:
-                ref = f'`conflicts/{it["rel"]}.*`' if backup_dir and it.get('data') and it['data'].get('merged') is not None and it['action'] == 'keep' else ''
-                L.append(f'| `{it["rel"]}` | {it["cls"]} | {(it.get("note") or "").replace("pending", "").strip()} | {ref} |')
+                ref = f'`conflicts/{it["show"]}.*`' if backup_dir and it.get('data') and it['data'].get('merged') is not None and it['action'] == 'keep' else ''
+                L.append(f'| `{it["show"]}` | {it["cls"]} | {(it.get("note") or "").replace("pending", "").strip()} | {ref} |')
         else: L.append('- 없음')
         for it in plan:
-            if it['rel'] == DTS and it.get('data'):
+            if it['area'] == 'fe' and it['rel'] == DTS and it.get('data'):
                 d = it['data']; L += ['', '## `procedures.d.ts` 병합 (RawProcedureMap 메뉴 키 블록 단위)', '', '| 처리 | 메뉴 키 |', '|---|---|']
                 for k, v in d['rows'].items(): L.append(f'| {k} ({len(v)}) | {"—" if k == "동일" else " · ".join(f"`{x}`" for x in v)} |')
                 L += ['', '검사: ' + ' / '.join(f'{k} {v}' for k, v in d['checks'].items())]
-        merges = [it for it in plan if it['action'] == 'merge' and it['rel'] != DTS]
+        merges = [it for it in plan if it['action'] == 'merge' and not (it['area'] == 'fe' and it['rel'] == DTS)]
         if merges:
             L += ['', '## 병합 적용', '', '| 파일 | 구분 | 비고 |', '|---|---|---|']
-            for it in merges: L.append(f'| `{it["rel"]}` | {it["cls"]} | {(it.get("note") or "").replace("pending", "").strip()} |')
+            for it in merges: L.append(f'| `{it["show"]}` | {it["cls"]} | {(it.get("note") or "").replace("pending", "").strip()} |')
         dels = [it for it in plan if it['action'] == 'delete']
         if dels:
-            L += ['', f'## 삭제 {len(dels)}건', ''] + [f'- `{it["rel"]}`' for it in dels]
-            refs = import_refs(work, [it['rel'] for it in dels]) if applied else {}
+            L += ['', f'## 삭제 {len(dels)}건', ''] + [f'- `{it["show"]}`' for it in dels]
+            refs = import_refs(work, [it['rel'] for it in dels if it['area'] == 'fe']) if applied else {}
             if applied: L += ['', '삭제 파일을 가리키는 import 후보: ' + ('0건' if not refs else ''), *[f'- `{k}` ← {", ".join(v[:5])}' for k, v in refs.items()]]
+        be_its = [it for it in plan if it['area'] == 'be' and (it['action'] != 'none' or it.get('note')) and it['cls'] != '로컬 전용(공통에 없음) — 유지']
+        if be_its:
+            L += ['', f'## BE(nscm-be) 파일별 처리 {len(be_its)}건', '', '| 파일 | 구분 | 처리 | 비고 |', '|---|---|---|---|']
+            for it in be_its: L.append(f'| `{it["show"]}` | {it["cls"]} | {name[it["action"]]} | {(it.get("note") or "").replace("pending", "").strip()} |')
         if applied:
             L += ['', '## 원복 자료', f'- `local_before/` — 덮어쓰거나 삭제한 로컬 원본', '- `worktree_tracked.patch` — 적용 직전 nscm-fe 추적파일 전체 diff',
-                  '- `git_status_before.txt` — 적용 직전 워킹트리 상태', '- `conflicts/` — 결정 대기 파일의 base · common · merged(충돌 마커 포함) 사본',
+                  '- `git_status_before.txt` — 적용 직전 워킹트리 상태',
+                  '- `local_before/nscm-be/` · `be_worktree_tracked.patch` · `be_git_status_before.txt` — BE(nscm-be) 분', '- `conflicts/` — 결정 대기 파일의 base · common · merged(충돌 마커 포함) 사본',
                   '', '## 검증', *[f'- {v}' for v in (verify or [])],
-                  '- 정적검증(type-check/lint) **미수행** — 사용자 지시(요청 시만). 공통 신규 소스 ↔ 내 화면 소스 타입 불일치는 type-check 로 확인 필요']
+                  '- 정적검증(type-check/lint) **미수행** — 사용자 지시(요청 시만). 공통 신규 소스 ↔ 내 화면 소스 타입 불일치는 type-check 로 확인 필요',
+                  *(['- BE 컴파일(gradlew build) **미수행** — BE 소스가 바뀌었으면 BE 재기동 전 빌드 확인 필요. 실행 중인 BE 는 재기동해야 반영된다'] if any(it['area'] == 'be' for it in plan if it['action'] in ('write', 'merge', 'delete')) else [])]
         os.makedirs(os.path.dirname(path), exist_ok=True); open(path, 'w', encoding='utf-8').write('\n'.join(L) + '\n')
         return path
 
@@ -479,16 +695,53 @@ def main():
 
     # ── 적용 ──
     test = bool(a.work)  # 사본 시험 — 백업은 사본 안, 기준선(state.json) 미갱신
-    bdir = os.path.join(work, '_sync_test', f'NSCMFE_PRE_COMMON_{now:%Y%m%d}') if test else os.path.join(ROOT, '_artifacts', '_backup', f'NSCMFE_PRE_COMMON_{now:%Y%m%d}')
+    bdir = os.path.join(work, '_sync_test', f'NSCMFE_PRE_COMMON_{now:%Y%m%d}') if test else os.path.join(ROOT, '_artifacts', '_backup', f'{"NSCMFE" if want_fe else "NSCMBE"}_PRE_COMMON_{now:%Y%m%d}')
     if os.path.exists(bdir): bdir += f'_{now:%H%M%S}'
     os.makedirs(bdir, exist_ok=False)
     open(os.path.join(bdir, 'git_status_before.txt'), 'wb').write(git.run('status', '--porcelain').stdout)
     open(os.path.join(bdir, 'worktree_tracked.patch'), 'wb').write(git.run('diff').stdout)
     autocrlf = git.out('config', '--get', 'core.autocrlf', check=False).strip().lower() == 'true'
+    acrlf = {'fe': autocrlf}
+    def be_outside(root):
+        """BE 루트의 대상 밖 파일(1단계 + gradle/ · lib/) → {경로: (크기, 수정시각)}"""
+        o = {}
+        for top in os.listdir(root):
+            p = os.path.join(root, top)
+            if os.path.isfile(p): st_ = os.stat(p); o[top] = (st_.st_size, st_.st_mtime_ns)
+            elif top in ('gradle', 'lib', 'scripts', 'db'):
+                for dp, dn, fn in os.walk(p):
+                    for f in fn:
+                        fp = os.path.join(dp, f); st_ = os.stat(fp); o[os.path.relpath(fp, root).replace(os.sep, '/')] = (st_.st_size, st_.st_mtime_ns)
+        return o
+    for ar in areas:
+        if ar['key'] == 'be': ar['outside'] = be_outside(ar['work'])
+    for ar in areas:
+        if ar['key'] != 'be': continue
+        # BE 는 별도 저장소(nscm-be/.git) — 적용 직전 상태·diff 를 따로 남긴다. 사본(저장소 아님)이면 건너뛴다
+        acrlf['be'] = False
+        if os.path.isdir(os.path.join(ar['work'], '.git')):
+            bg = ReadOnlyGit(ar['work'])
+            open(os.path.join(bdir, 'be_git_status_before.txt'), 'wb').write(bg.run('status', '--porcelain', check=False).stdout)
+            open(os.path.join(bdir, 'be_worktree_tracked.patch'), 'wb').write(bg.run('diff', check=False).stdout)
+            acrlf['be'] = bg.out('config', '--get', 'core.autocrlf', check=False).strip().lower() == 'true'
+    # ⓪ BE 작업환경 가드 — 하나라도 걸리면 아무 파일도 바꾸지 않고 중단
+    guard = []
+    for ar in areas:
+        if ar['key'] != 'be': continue
+        root = os.path.realpath(ar['work']); allow = [os.path.realpath(os.path.join(root, sc)) + os.sep for sc in ar['scope']]
+        for it in plan:
+            if it['area'] != 'be' or it['action'] not in ('write', 'merge', 'delete'): continue
+            rp_ = os.path.realpath(os.path.join(root, it['rel'].replace('/', os.sep))); parts = set(it['rel'].split('/'))
+            if not any(rp_.startswith(al) for al in allow): guard.append(f'{it["show"]} — 대상 경로(src) 밖')
+            elif parts & BE_DENY_PARTS: guard.append(f'{it["show"]} — 보호 폴더({", ".join(sorted(parts & BE_DENY_PARTS))})')
+            elif it['local'] is not None and keep_match(it['rel'], ar['keep']) and it['cls'] != SUPP_CLS: guard.append(f'{it["show"]} — 환경 파일 변경 시도')
+        guard += [f'로컬 ID 로그인 점검 실패 — {msg}' for ok_, msg in be_login_check(ar) if not ok_]
+    if guard:
+        print(f'⛔ BE 작업환경 가드 {len(guard)}건 — 로컬 파일 변경 없음:'); [print('   ' + g) for g in guard[:20]]; finish(4, error='be-guard', guard=guard[:50], backup=bdir)
     # ① 백업 전부 먼저 — 하나라도 실패하면 로컬 파일은 하나도 바꾸지 않고 중단(10-22 시험: 260자 초과 경로에서 중간 실패 → 일부만 적용될 뻔)
     try:
         for it in plan:
-            rel = it['rel']; lb = it['local']
+            rel = it['show']; lb = it['local']
             if it['action'] in ('write', 'merge', 'delete') and lb is not None: wfile(os.path.join(bdir, 'local_before', rel), lb)
             if it['action'] == 'keep' and it.get('data') and it['data'].get('merged') is not None:
                 cb = os.path.join(bdir, 'conflicts', rel)
@@ -501,12 +754,12 @@ def main():
     written = []; done = 0
     try:
         for it in plan:
-            rel = it['rel']; lp = os.path.join(work, rel); lb = it['local']
+            rel = it['rel']; lp = os.path.join(it['work'], rel); lb = it['local']
             if it['action'] == 'write':
                 # 공통 원문 — 내용은 그대로, 개행만 로컬 파일 방식(신규는 autocrlf=true 면 CRLF = 체크아웃과 같은 결과)
                 nb = it['common']
                 if not is_binary(nb):
-                    eol = eol_of(lb) if lb is not None else ('\r\n' if autocrlf else eol_of(nb))
+                    eol = eol_of(lb) if lb is not None else ('\r\n' if acrlf.get(it['area']) else eol_of(nb))
                     nb = conv(eoln(nb), eol, has_bom(nb))
                 wfile(lp, nb); written.append(it)
             elif it['action'] == 'merge':
@@ -521,25 +774,77 @@ def main():
         print(f'✖ 적용 중 실패({done}건 적용 후): {e}\n   원복 자료: {bdir}\\local_before (적용 전 원본) — 기준선 미갱신'); finish(4, error='apply', done=done, backup=bdir)
     # 적용 후 검증
     verify = []; bad = 0
-    mism = [it['rel'] for it in written if it['action'] == 'write' and norm(rfile(os.path.join(work, it['rel']))) != norm(it['common'])]
+    mism = [it['show'] for it in written if it['action'] == 'write' and norm(rfile(os.path.join(it['work'], it['rel']))) != norm(it['common'])]
     verify.append(f'공통 원문 적용 {sum(1 for i in written if i["action"] == "write")}건 — 개행 정규화 후 공통 원문과 불일치 {len(mism)}건' + (f': {mism[:5]}' if mism else '')); bad += len(mism)
-    marks = [it['rel'] for it in written if not is_binary(it['common']) and re.search(rb'^(<{7}|>{7}) ', rfile(os.path.join(work, it['rel'])), re.M)]
+    marks = [it['show'] for it in written if not is_binary(it['common']) and re.search(rb'^(<{7}|>{7}) ', rfile(os.path.join(it['work'], it['rel'])), re.M)]
     verify.append(f'적용 파일 충돌 마커 잔존 {len(marks)}건' + (f': {marks[:5]}' if marks else '')); bad += len(marks)
-    left = [it['rel'] for it in plan if it['action'] == 'delete' and os.path.exists(lpath(os.path.join(work, it['rel'])))]
+    left = [it['show'] for it in plan if it['action'] == 'delete' and os.path.exists(lpath(os.path.join(it['work'], it['rel'])))]
     verify.append(f'삭제 {sum(1 for i in plan if i["action"] == "delete")}건 — 잔존 {len(left)}'); bad += len(left)
     dts = os.path.join(work, DTS)
-    if os.path.exists(dts):
+    if want_fe and os.path.exists(dts):
         dg = rfile(dts).count(b'declare global'); verify.append(f'procedures.d.ts `declare global` {dg}건(기대 1)'); bad += dg != 1
+    for it in [x for x in plan if x['cls'] == SUPP_CLS]:  # 설정 키 보충 — 기존 줄이 하나도 빠지지 않았는지
+        b0 = text(eoln(it['local'])).split('\n'); b1 = text(eoln(rfile(os.path.join(it['work'], it['rel'])))).split('\n')
+        gone = sum(1 for d in difflib.ndiff(b0, b1) if d.startswith('- ')); plus = sum(1 for d in difflib.ndiff(b0, b1) if d.startswith('+ '))
+        verify.append(f'설정 키 보충 `{it["show"]}` — 추가 {plus}줄(키 {len(it["data"]["added"])}개 + 안내 주석) · 기존 줄 삭제·변경 {gone}건'); bad += gone
+    for ok_, msg in be_login.get('be', []):
+        verify.append(f'BE 로컬 ID 로그인 점검 — {"OK" if ok_ else "실패"}: {msg}'); bad += not ok_
+    kept = [it for it in plan if it['cls'] == KEEP_CLS]  # 환경 파일이 적용 전과 바이트까지 같은지
+    if kept:
+        diffk = [it['show'] for it in kept if rfile(os.path.join(it['work'], it['rel'])) != it['local']]
+        verify.append(f'BE 환경 파일 항상 로컬 유지 {len(kept)}건 — 적용 전과 다른 파일 {len(diffk)}건' + (f': {diffk[:5]}' if diffk else '')); bad += len(diffk)
+    for ar in areas:  # BE 대상 밖(빌드 설정 등)은 손대지 않았는지 — 적용 전후 수정 시각 대조
+        if ar['key'] == 'be' and ar.get('outside') is not None:
+            now_o = be_outside(ar['work']); ch = sorted(k for k in set(now_o) | set(ar['outside']) if now_o.get(k) != ar['outside'].get(k))
+            verify.append(f'BE 대상 밖(build.gradle·settings.gradle·gradle/·lib/ 등) 변경 {len(ch)}건' + (f': {ch[:5]}' if ch else '')); bad += len(ch)
     rp = report(os.path.join(bdir, 'README.md'), True, bdir, verify)
     if bad:
         print(f'\n✖ 적용 후 검증 실패 {bad}건 — 기준선 갱신 안 함 · 보고 {rp} · 원복 자료 {bdir}'); finish(4, report=rp, backup=bdir, verify=verify)
     if test: print(f'\n✅ 시험 적용 완료(기준선 미갱신) — 보고 {rp}'); finish(0, ok=True, report=rp, backup=bdir, verify=verify)
     hist_list = state.get('history', [])
-    hist_list.append({'baseline': tip, 'from': base, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT)})
-    json.dump({'baseline': tip, 'baselineInfo': tip_info, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT), 'history': hist_list},
-              open(STATE, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-    print(f'\n✅ 적용 완료 — 기준선 {base[:9]} → {tip[:9]} · 보고 {rp}')
+    be_ar = next((ar for ar in areas if ar['key'] == 'be'), None)
+    ent = {'baseline': tip, 'from': base, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT)}
+    if not want_fe: ent = {'beOnly': True, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT)}
+    if be_ar: ent['be'] = {'from': be_ar['base'], 'baseline': tip}
+    hist_list.append(ent)
+    new_state = {'baseline': tip, 'baselineInfo': tip_info, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT)}
+    if not want_fe:  # BE 전용 실행 — FE 기준선·보고는 그대로 둔다
+        new_state = {k: state[k] for k in ('baseline', 'baselineInfo', 'applied', 'report') if k in state}
+        new_state.update(baselineBeApplied=now.isoformat(timespec='seconds'), reportBe=os.path.relpath(rp, ROOT))
+    else:
+        for k in ('baselineBeApplied', 'reportBe'):
+            if k in state: new_state[k] = state[k]
+    # BE 기준선 — BE 를 다룬 회차에만 갱신(건너뛴 회차는 이전 값 유지)
+    if be_ar: new_state['baselineBe'] = tip
+    elif state.get('baselineBe'): new_state['baselineBe'] = state['baselineBe']
+    new_state['history'] = hist_list
+    json.dump(new_state, open(STATE, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    print('\n✅ 적용 완료' + (f' — 기준선 {base[:9]} → {tip[:9]}' if want_fe else ' — BE 전용') + (f' · BE 기준선 {be_ar["base"][:9] if be_ar["base"] else "없음"} → {tip[:9]}' if be_ar else '') + f' · 보고 {rp}')
     finish(0, ok=True, report=rp, backup=bdir, verify=verify)
+
+def restore_be(a):
+    """도구가 덮어쓴 BE 파일을 그 회차 백업(local_before/nscm-be)에서 되돌린다 — src 아래만 · 현재 파일은 먼저 백업 · 복원 후 바이트 대조"""
+    root = os.path.realpath(a.be_work or a.be); src = os.path.join(a.restore_be_from, 'local_before', 'nscm-be')
+    rels = [r.strip().replace('\\', '/') for r in (a.restore_be_paths or '').split(',') if r.strip()]
+    if not rels or not os.path.isdir(src): print(f'⛔ 되돌릴 경로(--restore-be-paths) 또는 백업 폴더({src}) 없음'); return 2
+    allow = [os.path.realpath(os.path.join(root, sc)) + os.sep for sc in BE_SCOPE]; bad = []
+    for rel in rels:
+        rp_ = os.path.realpath(os.path.join(root, rel.replace('/', os.sep)))
+        if not any(rp_.startswith(al) for al in allow) or set(rel.split('/')) & BE_DENY_PARTS: bad.append(f'{rel} — 대상 경로(src) 밖·보호 폴더')
+        elif rfile(os.path.join(src, rel)) is None: bad.append(f'{rel} — 백업에 없음')
+    if bad: print('⛔ 되돌리기 중단 — 파일 변경 없음:'); [print('   ' + b) for b in bad]; return 4
+    now = datetime.datetime.now(); bdir = os.path.join(ROOT, '_artifacts', '_backup', f'NSCMBE_RESTORE_{now:%Y%m%d_%H%M%S}')
+    for rel in rels:
+        cur = rfile(os.path.join(root, rel))
+        if cur is not None: wfile(os.path.join(bdir, 'current_before', 'nscm-be', rel), cur)
+    ng = 0
+    for rel in rels:
+        b = rfile(os.path.join(src, rel)); wfile(os.path.join(root, rel), b)
+        same = rfile(os.path.join(root, rel)) == b; ng += not same
+        print(f'{"복원" if same else "✖ 불일치"} nscm-be/{rel}')
+    open(os.path.join(bdir, 'README.md'), 'w', encoding='utf-8').write(f'# BE 되돌리기 — {now:%Y-%m-%d %H:%M}\n\n- 원본: `{a.restore_be_from}` local_before/nscm-be\n- 되돌린 파일 {len(rels)}건 (되돌리기 직전 내용 = `current_before/`)\n' + ''.join(f'  - `nscm-be/{r}`\n' for r in rels))
+    print(f'되돌린 파일 {len(rels) - ng}/{len(rels)} · 직전 내용 백업 {bdir}')
+    return 4 if ng else 0
 
 # 업로드 내용의 도구 흔적 — 공통 저장소에는 이 도구들의 소스는 물론 언급(경로·이름)도 남기지 않는다(사용자 지시 2026-10-22)
 TRACE = re.compile(r'Vibe_?Manager|VibeManager|tools[/\\](?:Harness|VibeManager|CommonSync|E2E|AsisFacts|TobeFacts|Recon|DbConn|Docs)\b|\.vibe[/\\]|\bHarness\b'

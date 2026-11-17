@@ -1,7 +1,7 @@
 {
  "id": "SSP0200",
  "asis": "SSP0200",
- "at": "2026-11-05 13:13:14",
+ "at": "2026-11-15 05:40:57",
  "has_asis": true,
  "tobe_cols": 58,
  "buttons": [
@@ -52,13 +52,13 @@
    ]
   },
   "p_combo": {
-   "rows": 8,
+   "rows": 12,
    "why_not": []
   },
   "p_decimal": {
    "rows": 0,
    "why_not": [
-    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+    "기존 행 편집 숫자 칸 중 소수 자릿수 > 0 없음"
    ]
   },
   "p_reqfp": {
@@ -76,7 +76,7 @@
   "p_clear": {
    "rows": 0,
    "why_not": [
-    "cell_clear.csv 없음"
+    "나머지(%) 조건 셀 비움 없음"
    ]
   },
   "p_dyn": {
@@ -142,8 +142,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 25,
-   "used": 25
+   "rows": 29,
+   "used": 29
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -154,7 +154,7 @@
    "used": 0
   }
  },
- "rows": 25,
- "rows_used": 25,
+ "rows": 29,
+ "rows_used": 29,
  "dup_of_hand": 0
 }

@@ -16,9 +16,9 @@
     "Div",
     "Plant Site",
     "Model/Nickname",
-    "관리번호",
     "Inventory Date",
     "Cutoff Date",
+    "관리번호",
     "Status"
   ],
   "condGone": [
@@ -449,9 +449,9 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "SEARCH",
-        "FORM_DATA",
         "UPLOAD_SAVE",
+        "FORM_DATA",
+        "SEARCH",
         "UPLOAD",
         "SAVE"
       ],
@@ -477,80 +477,80 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "SEARCH",
-      "FORM_DATA",
       "UPLOAD_SAVE",
+      "FORM_DATA",
+      "SEARCH",
       "UPLOAD",
       "SAVE"
     ],
     "CAPA Planner": [
-      "UPLOAD",
-      "FORM_DATA",
       "SEARCH",
       "UPLOAD_SAVE",
+      "FORM_DATA",
+      "UPLOAD",
       "SAVE"
     ],
     "FP Planner": [
-      "SEARCH",
-      "FORM_DATA",
       "UPLOAD_SAVE",
       "UPLOAD",
+      "FORM_DATA",
+      "SEARCH",
       "SAVE"
     ],
     "FP Viewer": [
-      "UPLOAD_SAVE",
       "FORM_DATA",
       "SEARCH",
       "UPLOAD",
+      "UPLOAD_SAVE",
       "SAVE"
     ],
     "SCM PI Admin": [
-      "UPLOAD_SAVE",
       "FORM_DATA",
       "SEARCH",
+      "UPLOAD_SAVE",
       "UPLOAD",
       "SAVE"
     ],
     "SCP Planner": [
-      "UPLOAD_SAVE",
-      "SEARCH",
       "FORM_DATA",
+      "UPLOAD_SAVE",
       "UPLOAD",
+      "SEARCH",
       "SAVE"
     ],
     "SCP Tester": [
-      "FORM_DATA",
       "SEARCH",
       "UPLOAD",
       "UPLOAD_SAVE",
+      "FORM_DATA",
       "SAVE"
     ],
     "SSP ADMIN": [
-      "SEARCH",
       "UPLOAD",
       "UPLOAD_SAVE",
+      "SEARCH",
       "FORM_DATA",
       "SAVE"
     ],
     "SSP Planner": [
+      "UPLOAD_SAVE",
       "UPLOAD",
       "FORM_DATA",
       "SEARCH",
-      "UPLOAD_SAVE",
       "SAVE"
     ],
     "SSP Viewer": [
-      "UPLOAD",
       "SEARCH",
-      "FORM_DATA",
+      "UPLOAD",
       "UPLOAD_SAVE",
+      "FORM_DATA",
       "SAVE"
     ]
   },
   "menuBtnCodes": [
-    "SEARCH",
-    "FORM_DATA",
     "UPLOAD_SAVE",
+    "FORM_DATA",
+    "SEARCH",
     "UPLOAD",
     "SAVE"
   ],

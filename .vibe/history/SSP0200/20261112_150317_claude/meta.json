@@ -1,0 +1,52 @@
+{
+  "id": "SSP0200",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0200] · Doc/gen/SSP0200/CHECK.md · Doc/gen/SSP0200/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0200/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-12T15:03:17+09:00",
+  "end": "2026-11-12T15:05:43+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\shipment-change-request-plan",
+      "files": 34
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0200",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0200",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "DMF0008 ERP EDI MASTER VALIDATION UI 에서 첨부와 같이 Summary 와 같이 영역 Header 를 사용한 이력이 있습니다. \nRequest Info 을 이 Head 사용해 주세요. \n그리고 Request Info 의 영역에 대한 Boarder 를 생성해서 Layout 을 하나 만들어 주면 좋을 것 같아요.. 앞쪽에 공백이 보이니 보기 좋지 않아요",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-12T15:05:43+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\RequestInfoPanel.module.scss",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\components\\RequestInfoPanel.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "modified"
+    }
+  ]
+}

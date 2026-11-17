@@ -1,0 +1,65 @@
+{
+ "ok": true,
+ "mode": "apply",
+ "stamp": "20261112_103049",
+ "areas_sel": "be",
+ "be_login": [
+  {
+   "ok": true,
+   "msg": "ID 로그인 경로(/user/login · JsonLoginFilter) 유지"
+  },
+  {
+   "ok": true,
+   "msg": "로컬 설정에 ID 로그인 차단(id-login-disabled: true) 없음"
+  }
+ ],
+ "tip": "3e1e0a081018e7121c5e7c323c3785532097f201",
+ "tip_info": "3e1e0a081 2026-11-12 10:27 Inhye Kim fix(SCP0025): Unfix 성공 토스트에 처리 건수 표시 — MSG00672 (AS-IS 파리티)",
+ "base": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
+ "ancestor": true,
+ "commits": 3,
+ "changed": 0,
+ "counts": {
+  "동일": 162,
+  "로컬 환경 파일·필수 유지 소스 — 항상 로컬 유지": 8,
+  "BE 환경 파일 — 누락 설정 키 보충(기존 값 유지)": 2,
+  "로컬 전용(공통에 없음) — 유지": 6
+ },
+ "actions": {
+  "none": 162,
+  "keep": 14,
+  "merge": 2,
+  "write": 0,
+  "delete": 0
+ },
+ "pending": 0,
+ "areas": {
+  "be": {
+   "base": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
+   "changed": 0,
+   "actions": {
+    "none": 162,
+    "keep": 14,
+    "merge": 2
+   },
+   "pending": 0,
+   "local_only": 6,
+   "env_keep": 8
+  }
+ },
+ "overwrite_local": true,
+ "local_only": 6,
+ "report": "c:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
+ "backup": "c:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112",
+ "verify": [
+  "공통 원문 적용 0건 — 개행 정규화 후 공통 원문과 불일치 0건",
+  "적용 파일 충돌 마커 잔존 0건",
+  "삭제 0건 — 잔존 0",
+  "설정 키 보충 `nscm-be/src/main/resources/application.yml` — 추가 5줄(키 4개 + 안내 주석) · 기존 줄 삭제·변경 0건",
+  "설정 키 보충 `nscm-be/src/main/resources/config/config-local.yml` — 추가 2줄(키 1개 + 안내 주석) · 기존 줄 삭제·변경 0건",
+  "BE 로컬 ID 로그인 점검 — OK: ID 로그인 경로(/user/login · JsonLoginFilter) 유지",
+  "BE 로컬 ID 로그인 점검 — OK: 로컬 설정에 ID 로그인 차단(id-login-disabled: true) 없음",
+  "BE 환경 파일 항상 로컬 유지 8건 — 적용 전과 다른 파일 0건",
+  "BE 대상 밖(build.gradle·settings.gradle·gradle/·lib/ 등) 변경 0건"
+ ]
+}

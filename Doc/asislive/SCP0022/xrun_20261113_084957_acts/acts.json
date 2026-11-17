@@ -1,0 +1,38 @@
+{
+ "id": "SCP0022",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_MaterialByDivisionPopup",
+     "title": "Material by Division Popup",
+     "modal": true,
+     "grid_rows": 1845,
+     "closed": true
+    },
+    {
+     "form": "ProgressForm",
+     "error": "창 핸들을 만들기 전까지 컨트롤에서 Invoke 또는 BeginInvoke를 호출할 수 없습니다."
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0002_GET_MATERIAL_BY_DIVISION",
+    "SCP0022_GET_FORMATION"
+   ],
+   "scenarios": [
+    "SCP0022-Sea1449",
+    "SCP0022-S82161d"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-13 08:49:31.554",
+ "fills": 0,
+ "fill_left": []
+}

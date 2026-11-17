@@ -1,0 +1,395 @@
+{
+ "id": "SSP0025",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 ITEM_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SSP0025-Sfdd457"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "PART_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 PART_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 16,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "PART_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "TEAM_LEADER",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 TEAM_LEADER",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 16,
+     "cells": [
+      {
+       "row": 0,
+       "col": "TEAM_LEADER",
+       "before": "",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  },
+  {
+   "control": "USER_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "열 USER_ID",
+   "row_conds": [],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": {
+    "form": "UserInfoPopup",
+    "title": "UserInfoPopup",
+    "rows": 1
+   },
+   "picked": {
+    "sheet": "spdMain/UserInfo",
+    "cols": [
+     "UserID",
+     "UserName",
+     "UserName_E",
+     "Dept_ID",
+     "Dept_Name"
+    ],
+    "row": [
+     "5QTTV0D",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "CWA JULIA NOWAKOWSKA 요청",
+     "GMES",
+     ""
+    ]
+   },
+   "scenarios": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "popup_find": {
+    "form": "UserInfoPopup",
+    "ok": true,
+    "error": null,
+    "rows_after": 1
+   },
+   "popup_inside": {
+    "form": "UserInfoPopup",
+    "controls": [
+     {
+      "name": "txtSearch",
+      "type": "UsrTextBox",
+      "label": "User ID(Name)",
+      "value": null,
+      "items": [],
+      "enabled": true
+     },
+     {
+      "name": "Change",
+      "type": "UsrButton",
+      "label": "",
+      "value": null,
+      "items": [],
+      "enabled": true
+     }
+    ],
+    "grids": [
+     {
+      "grid": "spdMain",
+      "sheet": "UserInfo",
+      "rows": 8587,
+      "cols": [
+       "UserID",
+       "UserName",
+       "UserName_E",
+       "Dept_Name"
+      ]
+     }
+    ]
+   },
+   "pick_act": {
+    "ok": true,
+    "error": null
+   },
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Requestor PIC",
+     "rows_before": 16,
+     "rows_after": 16,
+     "cells": [
+      {
+       "row": 0,
+       "col": "USER_ID",
+       "before": "kyb0716",
+       "after": "5QTTV0D"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": []
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 13:28:54",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sfdd457"
+   ],
+   "has_else": true,
+   "single": true
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "PART_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-S4485c8",
+    "SSP0025-S8a26f8"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "TEAM_LEADER",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sbf1a08",
+    "SSP0025-Sd9ae7b"
+   ],
+   "has_else": false,
+   "single": false
+  },
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "USER_ID",
+   "col_after": false,
+   "row_conds": [],
+   "ids": [
+    "SSP0025-Sdf96ef",
+    "SSP0025-Sd0c36e"
+   ],
+   "has_else": false,
+   "single": false
+  }
+ ]
+}

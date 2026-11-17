@@ -1,81 +1,153 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-10-30T12:27:41+09:00",
+ "ts": "2026-11-14T11:09:04+09:00",
  "producer": "run_verify",
  "id": "SCP0020",
- "skip_e2e": true,
- "started": "2026-10-30 12:16:57",
+ "skip_e2e": false,
+ "started": "2026-11-14 09:56:57",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-6c947c4c",
-   "class": "A5",
+   "id": "V-3207cf0e",
+   "class": "K3",
    "msg": "SCP0020 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
+     "ref": "E2E @verify @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-c8a74bd1",
-   "class": "B2",
-   "msg": "조회조건 Line",
+   "id": "V-cbdbcee5",
+   "class": "F1",
+   "msg": "SCP0020 시나리오 [자동] 기존 행 Delete → D 저장 요청",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-30 07:43"
+     "ref": "E2E @verify 시나리오 @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-91f5dc2a",
-   "class": "G5",
-   "msg": "조회조건 Model/Nickname",
+   "id": "V-b54abdfd",
+   "class": "F6",
+   "msg": "SCP0020 시나리오 [자동] YIELD 소수 2자리 저장 요청 유지",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC popup_args_check (AS-IS 팝업 인자 ↔ TO-BE 모달 전달값)"
+     "ref": "E2E @verify 시나리오 @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-56a410c3",
-   "class": "E1",
-   "msg": "Packer.PRIORITY (Priority*)",
+   "id": "V-108ec20d",
+   "class": "E4",
+   "msg": "SCP0020 시나리오 [자동] 기존 행 PRIORITY 수정 저장 → 입력된 필수 칸 오탐 없음",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-30 07:43"
+     "ref": "E2E @verify 시나리오 @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-bee68f3d",
-   "class": "E1",
-   "msg": "Plant.PRIORITY (Priority*)",
+   "id": "V-c9980418",
+   "class": "F8",
+   "msg": "SCP0020 이력 행 값",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-30 07:43"
+     "ref": "E2E @verify 저장 세부 DB @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-694fb5a7",
-   "class": "E1",
-   "msg": "Tact Time.PRIORITY (Priority*)",
+   "id": "V-639db3d0",
+   "class": "H12",
+   "msg": "SCP0020 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @10-30 07:43"
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d38ffb6e",
+   "class": "D1",
+   "msg": "Plant.LINE_ID (Line*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cd782314",
+   "class": "D1",
+   "msg": "Plant.DAILY_CAPACITY (Daily Capacity)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b2b749fb",
+   "class": "D1",
+   "msg": "Plant.DAILY_CAPACITY (Daily Capacity)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-981382e4",
+   "class": "D1",
+   "msg": "Plant.TACT_TIME (Tact Time*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-115fb8dc",
+   "class": "D1",
+   "msg": "Plant.TACT_TIME (Tact Time*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eacbd820",
+   "class": "D3",
+   "msg": "DAILY_CAPACITY,UOM_CONVERT_VALUE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-14 11:08"
     }
    ],
    "grade": "hard"
@@ -87,7 +159,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
+     "ref": "E2E @trace @11-14 11:08"
     }
    ],
    "grade": "hard"
@@ -99,27 +171,15 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
+     "ref": "E2E @trace @11-14 11:08"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-eeed5f03",
-   "class": "B8",
-   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-5e4e2a09",
-   "class": "G5",
-   "msg": "[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw)",
+   "id": "V-1a754537",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE)",
    "evidence": [
     {
      "kind": "exec",
@@ -129,9 +189,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-73c4ec0b",
-   "class": "G5",
-   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "id": "V-7a36ab8b",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] MKT_FCST[R+P] 편집",
    "evidence": [
     {
      "kind": "exec",
@@ -141,9 +201,33 @@
    "grade": "hard"
   },
   {
-   "id": "V-e92ff152",
-   "class": "G5",
-   "msg": "[DMF0005 결함 유형] Model 팝업 조회",
+   "id": "V-321e106a",
+   "class": "K3",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-54ddf1fb",
+   "class": "K3",
+   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-25a93871",
+   "class": "F1",
+   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
    "evidence": [
     {
      "kind": "exec",
@@ -153,69 +237,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-c911e5d7",
-   "class": "A5",
-   "msg": "[DMF0082 결함 유형] Project Name 컬럼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-1fabe562",
-   "class": "G5",
-   "msg": "[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-fa89dba1",
-   "class": "E1",
-   "msg": "[SCP0007 결함 유형] Additional Lead Time",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-f7417c59",
-   "class": "G5",
-   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-3c4be550",
-   "class": "B8",
-   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-274428ff",
-   "class": "A5",
-   "msg": "2 조회 · btnItemId / txtItemId",
+   "id": "T-99169ec9",
+   "class": "D1",
+   "msg": "LockColumn/LockRange (편집잠금 white-list) · 32",
    "evidence": [
     {
      "kind": "exec",
@@ -225,9 +249,9 @@
    "grade": "hard"
   },
   {
-   "id": "T-8356a25c",
-   "class": "A5",
-   "msg": "3 그리드 · spdExcept",
+   "id": "T-4a178d15",
+   "class": "D3",
+   "msg": "LockColumn/LockRange (편집잠금 white-list) · 32",
    "evidence": [
     {
      "kind": "exec",
@@ -237,9 +261,9 @@
    "grade": "hard"
   },
   {
-   "id": "T-c3a11315",
-   "class": "A5",
-   "msg": "SmartColMerge · 9",
+   "id": "T-28766009",
+   "class": "D1",
+   "msg": "SCP0020_TactTime.EditButton",
    "evidence": [
     {
      "kind": "exec",
@@ -249,61 +273,13 @@
    "grade": "hard"
   },
   {
-   "id": "T-800a4bd1",
-   "class": "A5",
-   "msg": "COMMON:UC-01 · 필터링 상태에서 신규행 Insert 시 필터를 유지한 채 추가 행이 보이도록 (keepRowVisibleUnderFilter ",
+   "id": "T-2e417e77",
+   "class": "D1",
+   "msg": "OSP_YN",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-e66888ba",
-   "class": "A5",
-   "msg": "COMMON:UC-05 · Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-27903ee5",
-   "class": "A5",
-   "msg": "COMMON:UC-07 · 필터가 걸린 상태에서 재조회해도 조회되고 필터도 그대로 적용",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-539108ed",
-   "class": "X-ROW",
-   "msg": "SCP0020_TactTime.InitSpread",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-6b72d463",
-   "class": "A5",
-   "msg": "OPERATION_NAME / Operation",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @10-30 07:43"
+     "ref": "E2E @trace @11-14 11:08"
     }
    ],
    "grade": "hard"
@@ -357,44 +333,386 @@
    "grade": "hard"
   },
   {
-   "id": "T-9526ae01",
-   "class": "X-ROW",
-   "msg": "SCP0020_TactTime.btnItemId_Click",
+   "id": "EG-a0f8c3a0",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Planner · Div 82",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-7264e17c",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-b2362cbf",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4bbad56e",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6357a1ba",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Tester · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-c929a169",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Tester · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-3c6b1cc1",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Tester · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-fcd97f4f",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCP Tester · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-23641786",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-2c7aae1b",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-450ec54b",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-271ace3e",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-9789abc6",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a0d2e9d7",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4af9ff07",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-25cea60f",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-ed60c204",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-60b86eca",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a91015b7",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-c5af69ef",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-068f40be",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-91f85682",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-df1c5d4c",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-38c7cb22",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-8683a787",
+   "class": "J3",
+   "msg": "SCP0020 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/82/SCM Viewer · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-f82cfd77",
+   "class": "D1",
+   "msg": "SCP0020 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/82/SCM Viewer · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-bb7f7382",
+   "class": "J3",
+   "msg": "SCP0020 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/82/SCM Viewer · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-2364c1b3",
+   "class": "D1",
+   "msg": "SCP0020 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/82/SCM Viewer · Div 82",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-14 11:08"
     }
    ],
    "grade": "hard"
   }
  ],
+ "warnings": [
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0020/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)",
+  "커버리지 게이트 SUSPECT_NA100 C5 — Doc/verify/SCP0020/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
  "summary": {
-  "rows": 1874,
-  "PASS": 715,
-  "FAIL": 30,
-  "판정필요": 24,
-  "미검증": 47,
-  "해당없음": 1058,
+  "rows": 2555,
+  "PASS": 846,
+  "FAIL": 55,
+  "판정필요": 17,
+  "미검증": 532,
+  "해당없음": 1105,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1092,
-   "없음(미검증)": 47,
-   "기계(상속·집계)": 699,
-   "사람": 12,
-   "없음(판정 대기)": 24
+   "기계": 1444,
+   "없음(미검증)": 532,
+   "사람": 14,
+   "없음(판정 대기)": 17,
+   "기계(상속·집계)": 546,
+   "출처 미기록": 2
   },
-  "fail_listed": 30
+  "fail_listed": 55,
+  "coverage": {
+   "rules": 93,
+   "measured": 673,
+   "not_run_error": 420,
+   "na": 535,
+   "suspect_na100": [
+    "C5"
+   ]
+  }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0020_TactTimeOsp_CheckList_v17.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0020_TactTimeOsp_ActionItemList_v16.xlsx"
+  "CheckList": "Doc/CheckList/SCP0020_TactTimeOsp_CheckList_v20.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0020_TactTimeOsp_ActionItemList_v19.xlsx"
  },
  "evidence": [
   {
    "kind": "exec",
    "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0020/e2e_results.json"
   }
  ],
- "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증"
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0020/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음) / 커버리지 게이트 SUSPECT_NA100 C5 — Doc/verify/SCP0020/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

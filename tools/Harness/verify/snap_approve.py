@@ -66,6 +66,8 @@ def main():
                 src = gp  # Playwright 가 첫 실행에 골든을 만들었다 — 그대로 승인
             else:
                 cands = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'e2e', 'results', '**', f'*{key}*actual.png'), recursive=True), key=os.path.getmtime)
+                # 2026-11-17: 11-06 화면별 폴더 이전 뒤 Playwright 산출물은 Doc/verify/<ID>/e2e/artifacts 아래 — 그 위치도 찾는다(SSP0020 화면샷 승인 '찾지 못함')
+                cands = sorted(cands + glob.glob(os.path.join(ROOT, 'Doc', 'verify', mid, 'e2e', 'artifacts', '**', f'*{key}*actual.png'), recursive=True), key=os.path.getmtime)
                 if not cands and r.get('received'):
                     cands = sorted(glob.glob(os.path.join(P(r['received']), '*actual.png')), key=os.path.getmtime)
                 if not cands:

@@ -1,0 +1,250 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-14 12:13:59.100",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0035_GET_MKT_FCST_WATERFALL",
+   "sp": "DMF0035_GET_MKT_FCST_WATERFALL",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 319,
+   "rows_kind": "DataSet rows",
+   "ms": 72294.53,
+   "params": {
+    "p_division_id": "81",
+    "p_scm_site_id": "ALL",
+    "p_plant_site_id": "ALL",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL",
+    "p_biz_type": "ALL",
+    "p_project_code": "",
+    "p_item_id": "",
+    "p_from_yyyymmdd": "20261101",
+    "p_to_yyyymmdd": "20270430",
+    "p_created_by": "jaeuk.shin",
+    "p_version_no": "Current",
+    "p_item_type": "ALL",
+    "p_owner": "",
+    "p_bucket": "DAILY",
+    "p_user_dept_id": "58183091",
+    "p_group_id": "ADMIN",
+    "p_cell_yn": "N",
+    "p_sender_code": "ALL"
+   },
+   "inline": "EXEC DMF0035_GET_MKT_FCST_WATERFALL @p_division_id='81', @p_scm_site_id='ALL', @p_plant_site_id='ALL', @p_dept_id='ALL', @p_end_customer='ALL', @p_biz_type='ALL', @p_project_code='', @p_item_id='', @p_from_yyyymmdd='20261101', @p_to_yyyymmdd='20270430', @p_created_by='jaeuk.shin', @p_version_no='Current', @p_item_type='ALL', @p_owner='', @p_bucket='DAILY', @p_user_dept_id='58183091', @p_group_id='ADMIN', @p_cell_yn='N', @p_sender_code='ALL'",
+   "phase": "action:cell:DIVISION_ID"
+  },
+  {
+   "at": "2026-11-14 12:13:59.368",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveMenuExecutionLog",
+   "sp": "UP_FX_SaveMenuExecutionLog",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 3.1,
+   "params": {
+    "p_menu_id": "DMF0035",
+    "p_log_type": "FIND",
+    "p_log_cnt": "319",
+    "p_db_time": "72.351",
+    "p_ui_time": "0.226",
+    "p_user_id": "jaeuk.shin"
+   },
+   "inline": "EXEC UP_FX_SaveMenuExecutionLog @p_menu_id='DMF0035', @p_log_type='FIND', @p_log_cnt='319', @p_db_time='72.351', @p_ui_time='0.226', @p_user_id='jaeuk.shin'",
+   "phase": "action:cell:DIVISION_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:02.732",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "DM.DMF0002_GET_TITLESET_POPUP",
+   "sp": "DMF0002_GET_TITLESET_POPUP",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 41,
+   "rows_kind": "DataSet rows",
+   "ms": 12.58,
+   "params": {
+    "p_program_id": "DMF0035",
+    "p_sheet_name": "Mkt Fcst Waterfall",
+    "p_column_type": "C",
+    "p_user_id": "jaeuk.shin",
+    "p_division_id": "81"
+   },
+   "inline": "EXEC DMF0002_GET_TITLESET_POPUP @p_program_id='DMF0035', @p_sheet_name='Mkt Fcst Waterfall', @p_column_type='C', @p_user_id='jaeuk.shin', @p_division_id='81'",
+   "phase": "action:cell:DIVISION_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.133",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 7,
+   "rows_kind": "DataSet rows",
+   "ms": 3.44,
+   "params": {
+    "Code": "MyDivision",
+    "Param1": "ADMIN",
+    "Param2": "jaeuk.shin",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyDivision', @Param1='ADMIN', @Param2='jaeuk.shin', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.171",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 30,
+   "rows_kind": "DataSet rows",
+   "ms": 27.25,
+   "params": {
+    "Code": "TeambyDivision",
+    "Param1": "81",
+    "Param2": "ADMIN",
+    "Param3": "jaeuk.shin",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='TeambyDivision', @Param1='81', @Param2='ADMIN', @Param3='jaeuk.shin', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.291",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 173,
+   "rows_kind": "DataSet rows",
+   "ms": 103.46,
+   "params": {
+    "Code": "EndCustomerByDivisionDept",
+    "Param1": "81",
+    "Param2": "70021362,58570391,71059518,71059515,58684594,30277380,30303316,70000597,71060742,70000346,58558163,70055754,70055755,58127819,70021298,71060741,70000342,58183074,70618869,58124293,70000344,70000347,70000345,58665469,58611459,70094904,70618870,58520304,70265668,58148696",
+    "Param3": "ADMIN",
+    "Param4": "jaeuk.shin",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivisionDept', @Param1='81', @Param2='70021362,58570391,71059518,71059515,58684594,30277380,30303316,70000597,71060742,70000346,58558163,70055754,70055755,58127819,70021298,71060741,70000342,58183074,70618869,58124293,70000344,70000347,70000345,58665469,58611459,70094904,70618870,58520304,70265668,58148696', @Param3='ADMIN', @Param4='jaeuk.shin', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.619",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 501,
+   "rows_kind": "DataSet rows",
+   "ms": 296.66,
+   "params": {
+    "Code": "SiteByEndCustomer",
+    "Param1": "ALL",
+    "Param2": ",Aeonus,Alte,Ampere Electricity,Ampherr,ANDURIL,ANODE,Arpiem,AS,ATL,Audi,AW,BAE,Banglilai,BEDEO,BMW,Celltech,China Effort(A),Cling Systems,Club Car,CMC,COENSYS,Corvus Norway,CRR,CS Enertech,CS Enertech_KR_OSN,Cummins,Cummins EP,Cummins EP(OTS),Cummins(OTS),Daechang,Daimler,DBH,dianchibao,DIS,DSMT,EDISON MOTORS,Edisoninno,EForce,EForce(OTS),EK,Epiroc,Epiroc Electrification,Equipmake,equipmake(OTS),ESMI(AS),ESOC(AS),ESS,ESST,ESWA(AS),EVT,Evyon,E-Works Mobility GmbH,FAW VW,FBPS,FBPS(OTS),FCA,FLASH,Ford,Ford AS,Ford(MX-VMI),Forsee,GCV,GEELY,GM,Guangdonglihua,Hanwha Aero,Hanwha Defense,HKI,HKMC,Honda Motor,Humanhorizons,Hyperstrong,ICPT,ICPT(OTS),IM,Irizar,Irizar EM,jemado,JIANGSU,JJ Solstice,JLR,JLR(OTS),JOBYAR,JSLH,KAIST,Karma,Karma(OTS),KGM Cheonan,KIA,Kokam,KRAKEN,KTC,Lamborghini,Landsuccess,LGE SYMC,LGESDJ,LGESEG,LGESGC,LGESMI,LGESNA,LGESOC,LGESOC2,LGESPI,LGESWA,Lion Bus,London Taxi,MacLaren,Magtec,Mahindra,Man Truck & Bus,Maserati,Maxion,MBAG,Misum Systech,MITSUBISHI,Monarch,NANO IN TECH,Nissan,Nivalis,Nivalis(OTS),Nordresa,Nysa Motor,Octave,Peopleworks,Porsche,Porsche AS,PSA,PWM,QEV,Raymond,Rempus,Renault,RVA,SAIC,SEMIROAD,SGM,Shanghai Feixiang,Siemens,Sime Darby,SKODA,Skysource,Skyworth,Solaris,Spear Power Systems,STB,STRIX,Suzhou Anjin,SYMC,Taiga,Temsa bus & Coach,TW sys,TY,VAL,Valmet,Vanderhall,VIA,VIA(OTS),Volta PS,Volvo,Volvo AS,Vremt,VW,VW AS,WATTPACK,WRSE,XL,Yamaha,Yuntong,ZEEBUS,ZeroEV,ZeroEV(OTS),코캄(논산)",
+    "Param3": "ADMIN",
+    "Param4": "jaeuk.shin",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='SiteByEndCustomer', @Param1='ALL', @Param2=',Aeonus,Alte,Ampere Electricity,Ampherr,ANDURIL,ANODE,Arpiem,AS,ATL,Audi,AW,BAE,Banglilai,BEDEO,BMW,Celltech,China Effort(A),Cling Systems,Club Car,CMC,COENSYS,Corvus Norway,CRR,CS Enertech,CS Enertech_KR_OSN,Cummins,Cummins EP,Cummins EP(OTS),Cummins(OTS),Daechang,Daimler,DBH,dianchibao,DIS,DSMT,EDISON MOTORS,Edisoninno,EForce,EForce(OTS),EK,Epiroc,Epiroc Electrification,Equipmake,equipmake(OTS),ESMI(AS),ESOC(AS),ESS,ESST,ESWA(AS),EVT,Evyon,E-Works Mobility GmbH,FAW VW,FBPS,FBPS(OTS),FCA,FLASH,Ford,Ford AS,Ford(MX-VMI),Forsee,GCV,GEELY,GM,Guangdonglihua,Hanwha Aero,Hanwha Defense,HKI,HKMC,Honda Motor,Humanhorizons,Hyperstrong,ICPT,ICPT(OTS),IM,Irizar,Irizar EM,jemado,JIANGSU,JJ Solstice,JLR,JLR(OTS),JOBYAR,JSLH,KAIST,Karma,Karma(OTS),KGM Cheonan,KIA,Kokam,KRAKEN,KTC,Lamborghini,Landsuccess,LGE SYMC,LGESDJ,LGESEG,LGESGC,LGESMI,LGESNA,LGESOC,LGESOC2,LGESPI,LGESWA,Lion Bus,London Taxi,MacLaren,Magtec,Mahindra,Man Truck & Bus,Maserati,Maxion,MBAG,Misum Systech,MITSUBISHI,Monarch,NANO IN TECH,Nissan,Nivalis,Nivalis(OTS),Nordresa,Nysa Motor,Octave,Peopleworks,Porsche,Porsche AS,PSA,PWM,QEV,Raymond,Rempus,Renault,RVA,SAIC,SEMIROAD,SGM,Shanghai Feixiang,Siemens,Sime Darby,SKODA,Skysource,Skyworth,Solaris,Spear Power Systems,STB,STRIX,Suzhou Anjin,SYMC,Taiga,Temsa bus & Coach,TW sys,TY,VAL,Valmet,Vanderhall,VIA,VIA(OTS),Volta PS,Volvo,Volvo AS,Vremt,VW,VW AS,WATTPACK,WRSE,XL,Yamaha,Yuntong,ZEEBUS,ZeroEV,ZeroEV(OTS),코캄(논산)', @Param3='ADMIN', @Param4='jaeuk.shin', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.709",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+   "sp": "SCM0001_GET_SITE_BY_DIVISION",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 447,
+   "rows_kind": "DataSet rows",
+   "ms": 10.73,
+   "params": {
+    "p_division_id": "81",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL"
+   },
+   "inline": "EXEC SCM0001_GET_SITE_BY_DIVISION @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.815",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+   "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 14,
+   "rows_kind": "DataSet rows",
+   "ms": 8.18,
+   "params": {
+    "p_start_yyyymmdd": "",
+    "p_end_yyyymmdd": "",
+    "p_created_by": "jaeuk.shin",
+    "p_program_id": "SCM0002_40",
+    "p_sheet_name": "ItemPopup",
+    "p_division_id": "81"
+   },
+   "inline": "EXEC DMF0000_GET_COMMON_SPREAD_TITLE @p_start_yyyymmdd='', @p_end_yyyymmdd='', @p_created_by='jaeuk.shin', @p_program_id='SCM0002_40', @p_sheet_name='ItemPopup', @p_division_id='81'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:33.902",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 507,
+   "rows_kind": "DataSet rows",
+   "ms": 75.11,
+   "params": {
+    "Code": "EndCustomerByDivisionDept",
+    "Param1": "",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='EndCustomerByDivisionDept', @Param1='', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "action:cell:ITEM_ID"
+  },
+  {
+   "at": "2026-11-14 12:14:47.911",
+   "service": "GSCM.DM.Master.WSL",
+   "foxquery_id": "DM.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+   "sp": "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 48459,
+   "rows_kind": "DataSet rows",
+   "ms": 13890.68,
+   "params": {
+    "p_division_id": "81",
+    "p_dept_id": "ALL",
+    "p_end_customer": "ALL",
+    "p_project_code": "",
+    "p_scm_site_id": "ALL",
+    "p_item_id": "",
+    "p_mdmActive_Sw": ""
+   },
+   "inline": "EXEC DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_project_code='', @p_scm_site_id='ALL', @p_item_id='', @p_mdmActive_Sw=''",
+   "phase": "action:cell:ITEM_ID"
+  }
+ ]
+}

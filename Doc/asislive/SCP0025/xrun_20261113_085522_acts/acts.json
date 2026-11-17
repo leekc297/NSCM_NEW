@@ -1,0 +1,149 @@
+{
+ "id": "SCP0025",
+ "group": "ADMIN",
+ "acts": [
+  {
+   "control": "BtnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0025-S647918",
+    "SCP0025-S6c43db"
+   ]
+  },
+  {
+   "control": "BtnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-S75f3d7"
+   ]
+  },
+  {
+   "control": "BtnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-Sb00579"
+   ]
+  },
+  {
+   "control": "BtnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-S5b9d5b"
+   ]
+  },
+  {
+   "control": "btnItem_Id",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_ItembyDivisionPopup",
+     "title": "Model by DivisionPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0001_GET_SITE_BY_DIVISION",
+    "SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ],
+   "scenarios": [
+    "SCP0025-S647918",
+    "SCP0025-S6c43db"
+   ]
+  },
+  {
+   "control": "btnW26",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-S75f3d7"
+   ]
+  },
+  {
+   "control": "btnW52",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-Sb00579"
+   ]
+  },
+  {
+   "control": "btnWLast",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM0001_GET_SCP_DAY_PERIOD"
+   ],
+   "scenarios": [
+    "SCP0025-S5b9d5b"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "BtnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 30
+  },
+  {
+   "control": "btnUnfix",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 30
+  }
+ ],
+ "at": "2026-11-13 08:52:31.758",
+ "fills": 0,
+ "fill_left": []
+}

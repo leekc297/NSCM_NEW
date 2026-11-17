@@ -52,7 +52,7 @@ WHILE V_FETCH_STATUS = 0 LOOP ...     -- 재할당이 어디에도 없음 → �
 - hang/폭주 세션이 SP 를 물고 있으면 `CREATE OR REPLACE` 가 **`library cache pin` 대기로 무한 hang** (배포 세션이 stuck 세션에 BLOCKING 당함). 배포 후 `LAST_DDL_TIME` 미변경 = 미반영 신호.
 - ✅ 순서: **① stuck 세션 전수 식별 → ② DBA kill → ③ 재배포 → ④ VALID + 변경문 반영 실측**.
 - ✅ **race 방지 기법**: kill 반복 경쟁 상황(요청이 계속 재유입)에서는 **배포를 먼저 백그라운드로 걸어 pin 대기열에 세운 뒤 kill** → kill 즉시 DDL 자동 완료.
-- ⚠️ `SCM_MGR` 은 `ALTER SYSTEM KILL SESSION` 불가(**ORA-01031**) → DBA 실행. SERIAL# 은 **kill 직전 재조회** (stale 값 = **ORA-00026**).
+- ⚠️ `SCM_MGR` 은 `ALTER SYSTEM KILL SESSION` 불가(**ORA-01031**) → DBA 실행. (2026-11-13 정정: 검증 실행이 남긴 장시간 세션 중 이 PC·본인 OS 사용자가 띄운 BE 앱 계정 세션은 `tools/Harness/verify/db_orphan_sessions.py --kill`/`--watch` 가 직접 `ALTER SYSTEM KILL SESSION` 한다(2026-11-12) — 그 밖의 세션은 종전대로 DBA) SERIAL# 은 **kill 직전 재조회** (stale 값 = **ORA-00026**).
 - ⚠️ 구버전 SP 가 남아있는 동안 **사용자 재시도 금지 안내** — 시도마다 새 폭주 세션이 생겨 배포를 또 막는다.
 
 ## §5 자기 점검
@@ -68,4 +68,4 @@ WHILE V_FETCH_STATUS = 0 LOOP ...     -- 재할당이 어디에도 없음 → �
 ---
 
 > Cross-ref: `oracle-db-workflow.md` §3 | `db_migration/01` 부록 C-2/C-10 | `sp-body-minimal-change.md` (최소 변경) | 메모리 `feedback_sp_gtt_truncate_mutex_contention`
-> 사고 원본: `_artifacts/_deploy_packages/_dmf0014_artifacts/sql/04·05_SP_PR_DM_PLN_*.sql` + `_README.md §4`
+> 사고 원본: `_artifacts/_deploy_packages/_dmf0014_artifacts/sql/04·05_SP_PR_DM_PLN_*.sql` + `_README.md §4` (2026-11-13: 이 경로는 현재 저장소에 없음)

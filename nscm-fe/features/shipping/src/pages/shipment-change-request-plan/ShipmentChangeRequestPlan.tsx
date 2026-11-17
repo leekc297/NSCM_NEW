@@ -18,6 +18,7 @@ import { RequestInfoPanel } from './components/RequestInfoPanel';
 import { ShipmentChangeRequestPlanForm } from './components/ShipmentChangeRequestPlanForm';
 import { ShipmentChangeRequestPlanMainGrid } from './components/ShipmentChangeRequestPlanMainGrid';
 import { ShipmentChangeRequestPlanModals } from './components/ShipmentChangeRequestPlanModals';
+import { useRequestInfoFold } from './hooks/useRequestInfoFold';
 import { useShipmentChangeRequestPlanCellCombos } from './hooks/useShipmentChangeRequestPlanCellCombos';
 import { useShipmentChangeRequestPlanRequestor } from './hooks/useShipmentChangeRequestPlanRequestor';
 import { useShipmentChangeRequestPlanSaveActions } from './hooks/useShipmentChangeRequestPlanSaveActions';
@@ -47,16 +48,12 @@ import {
   submitDraftingNewSave,
 } from './utils/shipmentChangeRequestPlanSave';
 
-// 요청정보 폼 패널의 고정 높이(px 문자열). min=max 로 이 값에 고정되어 스플리터가 폼을 리사이즈하지 못한다.
-//   컴팩트 폼(섹션 헤더 1줄 + 3행 + Reason Detail textarea) + 액션바가 들어갈 높이.
-//   패널은 overflow:hidden 이라 모자라면 **조용히 잘린다** — 내용이 늘면 이 값도 함께 올려야 한다.
-//   2026-10-08: AS-IS `usrLabel2`("Request Info") 섹션 헤더를 이식하면서 그 한 줄을 반영.
-//     헤더 폰트를 16px(가운데 정렬)로 키운 분(lineHeight 1.4 -> 약 22px)까지 포함한 값이다.
-//   2026-10-14: 224 -> 248. Request Complete 버튼 아래쪽이 잘려 보인다는 신고 — 폼+액션바 자연높이
-//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다. +24 중 4px 은 액션바 하단 여백
-//     증가분(8->12, RequestActionBar.module.scss)이고 나머지 20px 이 잘림 여유다. 자매 SSP0201 과
-//     같은 값을 유지한다(두 화면 조작감 일치).
-const FORM_PANEL_SIZE = '248px';
+// 요청정보 폼 패널 높이 — 2026-11-12 부터 고정 상수(종전 FORM_PANEL_SIZE 248px)가 아니라 내용 실측값이다
+//   (useRequestInfoFold.panelSize). 접기/펼치기·2행 재배치(사용자 지시)로 내용 높이가 바뀌는데, 패널은
+//   overflow:hidden 이라 상수가 내용보다 작으면 **조용히 잘린다**(2026-10-14 Request Complete 잘림 사고).
+//   min=max 로 고정하는 방식은 그대로라 스플리터는 여전히 Grid1·Grid2 만 리사이즈한다(폼 높이 불변).
+//   크기 제약이 바뀌면 react-resizable-panels(4.7.1)가 패널을 재등록하며 레이아웃을 제약에 맞춰 재검증한다
+//   (dist Panel useLayoutEffect deps minSize/maxSize → Group jt() B(layout, constraints)) — 줄어든/늘어난 몫은 그리드가 나눠 갖는다.
 
 // AS-IS GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.cs (정본 6,906행).
 //   상세 매핑·dead 미이식 근거: __asis-mapping__.md / design/04_react-gap.md.
@@ -110,6 +107,8 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   // 저장/요청확정/요청취소 서버 작업 중 로딩 — 조회 로딩(전역 useIsBusy 스피너)과 동일한 딤 오버레이 +
   //   원형 스피너를 렌더한다. 수동 apiClient post 경로라 전역 스피너가 안 잡혀 액션 훅이 토글한다(2026-10-01).
   const [actionLoading, setActionLoading] = useState(false);
+  // 요청정보 접기/펼치기·고정 + 패널 높이 실측(사용자 지시 2026-11-12).
+  const requestInfoFold = useRequestInfoFold();
 
   const { data: mainData, refetch: refetchMain } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -529,14 +528,14 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
       {/* 상/하 3분할: Grid1(main) / 요청정보 폼(고정) / Grid2(sub).
           사용자 지시 2026-09-29: 폼은 고정, 스플리터는 두 그리드만 커지고 줄어들게 한다.
-          → 폼 Panel 을 px 고정(min=max=FORM_PANEL_SIZE)으로 두면 위·아래 스플리터가 각각 Grid1·Grid2 만
+          → 폼 Panel 을 px 고정(min=max=요청정보 실측 높이)으로 두면 위·아래 스플리터가 각각 Grid1·Grid2 만
           리사이즈한다(폼 높이 불변). 그리드는 %(숫자) 기본크기 — 나머지 공간을 나눠 갖는다.
           (react-resizable-panels 4.7.1 은 px 문자열 크기를 지원한다.) */}
       <div className={styles.splitWrapper}>
         <PanelGroup className={styles.panelGroup} orientation='vertical'>
           {/* Grid1 (main) — 리사이즈 대상. defaultSize 를 **주지 않는다**: 이 라이브러리는 미지정 패널에
-              자동 크기를 배분한다(dist `defaultSize===void 0 && (o[id]=a)`). 폼(196px 고정)을 뺀 나머지를
-              Grid1·Grid2 가 자동 균등(50:50) 분배한다. %로 50/50 을 주면 100%+196px 가 넘쳐 Grid2 가
+              자동 크기를 배분한다(dist `defaultSize===void 0 && (o[id]=a)`). 폼(px 고정)을 뺀 나머지를
+              Grid1·Grid2 가 자동 균등(50:50) 분배한다. %로 50/50 을 주면 100%+폼 높이가 넘쳐 Grid2 가
               헤더만 남고 붕괴한다(2026-09-29 실측). minSize 만 %로 제약한다. */}
           <Panel minSize='10%'>
             <div className={styles.mainPane}>
@@ -562,24 +561,35 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
           <PanelSeparator className={styles.splitBar} />
 
-          {/* 요청정보 폼 + 액션바 — px 고정(리사이즈 비대상). min=max 로 스플리터가 이 패널을 건드리지 못한다. */}
-          <Panel defaultSize={FORM_PANEL_SIZE} minSize={FORM_PANEL_SIZE} maxSize={FORM_PANEL_SIZE}>
+          {/* 요청정보 폼(머리줄에 액션바 포함) — px 고정(리사이즈 비대상). min=max 로 스플리터가 이 패널을
+              건드리지 못한다. 크기 = 내용 실측(접힘이면 머리줄 1줄 높이). */}
+          <Panel
+            defaultSize={requestInfoFold.panelSize}
+            minSize={requestInfoFold.panelSize}
+            maxSize={requestInfoFold.panelSize}
+          >
             <div className={styles.formPane}>
-              <div className={styles.requestInfo}>
+              <div className={styles.requestInfo} ref={requestInfoFold.contentRef}>
                 <RequestInfoPanel
                   requestInfo={requestInfo}
                   canEdit={canEdit}
                   canSearchApproval={hasButton('EDIT')}
                   onChange={setRequestInfo}
                   onApprovalSearch={() => setOpenApproval(true)}
+                  collapsed={requestInfoFold.collapsed}
+                  pinned={requestInfoFold.pin !== null}
+                  onToggleCollapsed={requestInfoFold.toggleCollapsed}
+                  onTogglePin={requestInfoFold.togglePin}
+                  actions={
+                    <RequestActionBar
+                      canRequestComplete={hasButton('SAVE')}
+                      canCancel={hasButton('DELETE')}
+                      onRequestComplete={handleRequestComplete}
+                      onCancel={handleCancel}
+                    />
+                  }
                 />
               </div>
-              <RequestActionBar
-                canRequestComplete={hasButton('SAVE')}
-                canCancel={hasButton('DELETE')}
-                onRequestComplete={handleRequestComplete}
-                onCancel={handleCancel}
-              />
             </div>
           </Panel>
 

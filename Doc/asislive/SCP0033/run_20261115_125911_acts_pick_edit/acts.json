@@ -1,0 +1,80 @@
+{
+ "id": "SCP0033",
+ "group": "ADMIN",
+ "pick": true,
+ "edit": true,
+ "acts": [
+  {
+   "control": "ITEM_ID",
+   "grid": "spdMain",
+   "sheet": "0",
+   "row": 0,
+   "rule": "새 행 · 열 ITEM_ID",
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "kind": "pick",
+   "ok": true,
+   "error": null,
+   "popup": null,
+   "picked": null,
+   "scenarios": [
+    "SCP0033-Sc6b25a"
+   ],
+   "grid_changes": [],
+   "late_popups": [],
+   "calls": [],
+   "dialogs": [
+    {
+     "text": "Division을(를) 선택하십시오.",
+     "action": "cancel_button(id=2)"
+    }
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-15 12:58:18",
+ "edit_focus": "셀 0,1",
+ "edit_mode": true,
+ "plan": [
+  {
+   "grid": "spdMain",
+   "sheet_key": "",
+   "sheet_name": null,
+   "col": "ITEM_ID",
+   "col_after": false,
+   "row_conds": [
+    [
+     "#0",
+     "==",
+     "I"
+    ]
+   ],
+   "ids": [
+    "SCP0033-Sc6b25a"
+   ],
+   "has_else": false,
+   "single": true
+  }
+ ],
+ "new_row_for_pick": [
+  {
+   "grid": {
+    "grid": "spdMain",
+    "sheet": "0"
+   },
+   "edit_mode": true,
+   "edit_already": true,
+   "insert_ok": true,
+   "new_rows": {
+    "spdMain/Shipment Semi Dept Day": [
+     0
+    ]
+   }
+  }
+ ]
+}

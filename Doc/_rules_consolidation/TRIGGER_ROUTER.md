@@ -1,13 +1,13 @@
 # NSCM TRIGGER ROUTER — 작업 → 룰/Hook 분기표 (경량 진입)
 
-> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-10-21)
+> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-11-13)
 
 ## 사용법
 1. 요청문에서 **T# 를 1개 이상 고른다** (복수 가능. 판단 불가 시 T00 + 가장 가까운 T#).
 2. 해당 행의 **핵심 Hook 을 `Doc/_rules_v2/hooks/<name>.md` 에서 Read** 한다 — ⭐⭐⭐ 표기는 생략 불가.
 3. T01/T01M 이면 `UI_MANDATORY_CHECKLIST.md` 를 PRE-WRITE 로 통과한다.
 4. 첫 응답 머리에 `[T# 적용: T01, T04 / Read: hook-a, hook-b]` 1줄을 남긴다 (누락 추적용).
-5. 카탈로그 전체(142+ hook 한 줄 요약)가 필요할 때만 `RULESET_MASTER.md §4` 를 연다.
+5. 카탈로그 전체(hook 한 줄 요약 — 수는 RULESET_MASTER 상단 카운트 단일 소스 문단)가 필요할 때만 `RULESET_MASTER.md §4` 를 연다.
 
 ## §2. 트리거 매트릭스 / Trigger Matrix (작업 키워드 → 룰 + Hook)
 
@@ -36,7 +36,7 @@
 | **T17** | G1~G10 격차 신규 구현 | `_mapping/asis_to_tobe.md §2~§6` | pre-submit |
 | **T18** | 사내 DB 적용 / 클라우드 동기화 / 메타 INSERT / LBL 등록 / SP 호출 배선 | (메모리 corporate) | oracle-db-workflow §0-F + db-corporate-apply + db-schema-divergence-check + asis-msg-inventory + scmd-app-grant-mandatory + fe-cloud-type-lint-readiness + i18n-ko-en-alignment + ⭐⭐ **corp-meta-integrity-and-wiring** (#98 — 메타 INSERT NOT NULL 전수[MSG_TP_CD/USE_YN] + LBL 동일명칭/권위 max+1 + BE 무변경 generic call-proc 배선 + SHEET_NAME case-sensitive 잔존정리) + column-align-code-standard(#96) + ⭐⭐⭐ **msg-table-cloud-sync-and-insert-only §A** (#140 — "MSG TABLE 클라우드 기준(첨부) 으로 업데이트 해줘" 고정 절차) |
 | **T19** | MSSQL 변환 / SP 변환 / PKG 변환 | `Doc/_analysis/db_migration/01_*` + `02_SP_CONVERSION_PIPELINE` | oracle-db-workflow + sp-substr-zero-index-audit + sp-dual-cursor-pattern + proc-meta-signature-match + sp-no-fake-data-extraction + sp-json-table-array-pattern + oracle-sp-perf-anti-patterns + sp-patch-file-deploy |
-| **T20** | 화면 완료 / 작업 종료 / 다 됐어 / PR 제출 | (해당 작업 룰) | ⭐⭐ **screen-completion-gate(8 게이트)** → pre-submit |
+| **T20** | 화면 완료 / 작업 종료 / 다 됐어 / PR 제출 | (해당 작업 룰) | ⭐⭐ **screen-completion-gate(11 게이트)** → pre-submit |
 | **T21** | ⭐ **"MSG TABLE 클라우드 기준(첨부) 으로 업데이트 해줘"** / MSG·LBL 원장 클라우드 동기화 | (첨부 = 클라우드 `SCM_ADM_MSG_M` 추출본 CSV/TSV/JSON) | ⭐⭐⭐ **msg-table-cloud-sync-and-insert-only** (#140 §A 전문 = 요청문과 동등 적용 — `_artifacts/_cloud_to_corp/MSG_SYNC/msg_update.py` 1-명령 절차 · 절대준수 5항 · 완료 조건 재판정 0 수렴) |
 | **T00** | (모든 작업 공통) | — | pre-write · post-write · pre-submit · file-write-fallback · destructive-git-ops · type-check-error-patterns · react-query-foundation-reexport · relative-import-order |
 
@@ -77,7 +77,7 @@
 5. 4 파일 SQL 세트 (DBeaver 호환)
 6. 격차 G1~G10 적용 (화면별)
 7. 빌드/Lint/Type-check 0 + 기존 화면 regression 0 (Hard Boundary)
-8. screen-completion-gate 8 게이트 보고
+8. screen-completion-gate 11 게이트 보고
 ```
 
 ---

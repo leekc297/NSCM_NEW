@@ -1,0 +1,54 @@
+{
+ "table": "SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY",
+ "pk": [
+  "DIVISION_ID",
+  "OPMZ_PLAN_GR_ID",
+  "MDL_GR_NM",
+  "ITEM_ID"
+ ],
+ "match": {
+  "DIVISION_ID": "DIVISION_ID",
+  "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+  "MDL_GR_NM": "MDL_GR_NM",
+  "ITEM_ID": "ITEM_ID"
+ },
+ "save_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+ "side": [],
+ "related": [
+  {
+   "table": "SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY",
+   "pk": [
+    "DIVISION_ID",
+    "OPMZ_PLAN_GR_ID",
+    "MDL_GR_NM",
+    "ITEM_ID"
+   ],
+   "match": {
+    "DIVISION_ID": "DIVISION_ID",
+    "OPMZ_PLAN_GR_ID": "OPMZ_PLAN_GR_ID",
+    "MDL_GR_NM": "MDL_GR_NM"
+   }
+  }
+ ],
+ "basis": "foxml SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY → SP SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY 원문(sys.sql_modules) · 키 = sys.indexes PK · SP 원문 확인(11-13 22:4x): 수정 경로 = ① UPDATE WHERE 키 4컬럼 ② 같은 DIVISION_ID, OPMZ_PLAN_GR_ID, MDL_GR_NM 이고 VALID_YN=Y 인 행 전부의 수량·기간 컬럼 UPDATE(SP 444줄) — 그 묶음 전체를 함께 기록·복원 · 이력 표 없음 · 트리거 0 · 초안 연습 실행 통과분을 옮김(사용자 승인 11-13 '8개 화면 진행')",
+ "scenarios": [
+  {
+   "name": "update",
+   "title": "DB 에 있는 행의 SIPM_MIN_QYT 수정(+1) 뒤 저장 · 복원",
+   "edits": [
+    {
+     "pick": {
+      "col": "SIPM_MIN_QYT",
+      "nonempty": true
+     },
+     "edit": {
+      "col": "SIPM_MIN_QYT",
+      "db_col": "SIPM_MIN_QYT",
+      "rule": "plus1"
+     },
+     "expect_before": 1
+    }
+   ]
+  }
+ ]
+}

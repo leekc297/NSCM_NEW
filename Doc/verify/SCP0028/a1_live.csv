@@ -1,2 +1,2 @@
 ﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
-SCP0028,main,SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW,1810,1940,"AS-IS 1810행 · TO-BE 1940행 · 키 ['OPERATION_GROUP_ID', 'from_site_description', 'to_site_description', 'ITEM_ID', 'NICK_NAME', 'trans_mode_name', 'VALID_YN', 'SPLIT_YN'] AS-IS 전용 10 · TO-BE 전용 140 · 값 대조 2802칸(숫자 컬럼 3) · 불일치 컬럼 2 · LOT_SIZE 1건 예 14400.0↔15552.0 · INCREMENT 1건 예 14400.0↔15552.0",
+SCP0028,main,SCP0028_GET_SHIPMENT_LOT_SIZE,PASS,1940,1940,"AS-IS 1940행 · TO-BE 1940행 · 키 ['OPERATION_GROUP_ID', 'from_site_description', 'to_site_description', 'ITEM_ID', 'NICK_NAME', 'trans_mode_name', 'VALID_YN', 'SPLIT_YN'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 3030칸(숫자 컬럼 3) · 불일치 컬럼 0",

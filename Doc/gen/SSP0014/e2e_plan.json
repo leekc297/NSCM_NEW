@@ -1,0 +1,248 @@
+{
+  "menuId": "SSP0014",
+  "page": "ShipmentModelPic",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-model-pic",
+  "asisName": "ShipmentModelPIC",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "user",
+      "label": "User ID(Name)",
+      "lbl": "LBL00339",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtUser"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Shipment Model PIC",
+      "key": "SHIPMENT_MODEL_PIC",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "MAIL_USER1",
+        "MAIL_USER2",
+        "MAIL_USER3",
+        "MAIL_USER4",
+        "MAIL_USER5",
+        "NICK_NAME",
+        "OPERATION_GROUP",
+        "PART_LEADER",
+        "PART_LEADER_NAME",
+        "TEAM_LEADER",
+        "TEAM_LEADER_NAME",
+        "USER_ID",
+        "USER_NAME",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division",
+        "From Site",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Mail User1",
+        "Mail User2",
+        "Mail User3",
+        "Mail User4",
+        "Mail User5",
+        "Nick Name",
+        "Operation Group",
+        "Part Leader",
+        "Part Leader Name",
+        "Team Leader",
+        "Team Leader Name",
+        "User ID*",
+        "User Name",
+        "Valid*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Model PIC",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0014.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_GET_SHIPMENT_MODEL_PIC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "sheet": "Shipment Model PIC",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0014_GET_USER_ID_CHECK",
+      "sheet": "Shipment Model PIC",
+      "btn": "USER_ID_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

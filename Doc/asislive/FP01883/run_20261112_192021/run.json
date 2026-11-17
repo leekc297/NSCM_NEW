@@ -1,0 +1,141 @@
+{
+ "id": "FP01883",
+ "started": "2026-11-12 19:20:21.958",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-12 19:20:22.227",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.FP.Admin.UIL.FP01883_Instance_Authority",
+   "form_text": "Instance Authority",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP01883_Instance_Authority.UIL.dll",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:29.125"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-12 19:20:32.660",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01883\\run_20261112_192021\\dump_load.json",
+   "control_count": 46,
+   "grid_count": 1,
+   "total": "Total : 202",
+   "time_status": "DB : 0s, UI : 3.064s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:32.699"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-12 19:20:32.873",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01883\\run_20261112_192021\\shots\\FP01883_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:33.135"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-12 19:20:33.463",
+   "call_timed_out": false,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:35.452"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-12 19:20:40.055",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01883\\run_20261112_192021\\dump_find.json",
+   "control_count": 46,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "DB : 0s, UI : 1.176s",
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:40.085"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-12 19:20:40.248",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\FP01883\\run_20261112_192021\\shots\\FP01883_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:40.506"
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-12 19:20:40.842",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 5,
+   "ok": true,
+   "done": "2026-11-12 19:20:41.526"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 29,
+  "calls_with_params": 29
+ },
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [
+  "GSCM.Launcher.exe(34700)"
+ ],
+ "batch": true,
+ "screen": {
+  "form_type": "GSCM.FP.Admin.UIL.FP01883_Instance_Authority",
+  "form_text": "Instance Authority",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\FP\\Admin\\FP01883_Instance_Authority.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0s, UI : 1.176s",
+  "total": "",
+  "how": "status"
+ },
+ "t_open": "2026-11-12 19:20:22.167",
+ "t_find": "2026-11-12 19:20:33.188",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 46,
+  "layout_items": 22,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 17,
+  "data_rows": 51,
+  "grid_rows": 476,
+  "calls_total": 29,
+  "calls_screen": 29,
+  "calls_find": 8,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-12 21:24:34.675",
+ "exit": 0,
+ "calls_backfilled": "2026-11-12 21:24:34"
+}
